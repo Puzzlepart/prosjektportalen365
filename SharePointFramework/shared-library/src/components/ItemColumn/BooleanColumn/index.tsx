@@ -1,6 +1,7 @@
 import { TextField } from '@fluentui/react'
 import strings from 'SharedLibraryStrings'
 import React from 'react'
+import { isTrueBooleanValue } from '../../../util/isTrueBooleanValue'
 import { ColumnDataTypePropertyField, IColumnDataTypePropertyField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'
 import { IBooleanColumnProps } from './types'
@@ -17,7 +18,9 @@ import { Text } from '@fluentui/react-components'
  * @returns The rendered component.
  */
 export const BooleanColumn: ColumnRenderComponent<IBooleanColumnProps> = (props) => {
-  const displayValue = parseInt(props.columnValue) === 1 ? props.valueIfTrue : props.valueIfFalse
+  const displayValue = isTrueBooleanValue(props.columnValue)
+    ? props.valueIfTrue
+    : props.valueIfFalse
   return <Text size={200}>{displayValue}</Text>
 }
 

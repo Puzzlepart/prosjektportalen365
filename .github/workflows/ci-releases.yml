@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - releases/1.14
-      - feat/central-templates
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'
@@ -18,10 +17,27 @@ env:
   CI_CLIENT_ID: ${{ secrets.CI_CLIENT_ID }}
 
 jobs:
+  # Tags like [skip-ci] and [apps-only] must only be honored when present in the
+  # commit *subject* (first line). Squash-merge commit bodies inherit the PR's
+  # commit bullets, so matching the full message can skip or reroute builds
+  # unintentionally.
+  commit_subject:
+    name: Determine commit subject
+    runs-on: ubuntu-latest
+    outputs:
+      subject: ${{ steps.subject.outputs.subject }}
+    steps:
+      - name: Extract first line of commit message
+        id: subject
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        run: echo "subject=${COMMIT_MESSAGE%%$'\n'*}" >> "$GITHUB_OUTPUT"
+
   build_release_package:
+    needs: [commit_subject]
     name: Build release package
     runs-on: macos-latest
-    if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') && !contains(github.event.head_commit.message, '[apps-only') }}
+    if: ${{ !contains(needs.commit_subject.outputs.subject, '[skip-ci]') && !contains(needs.commit_subject.outputs.subject, '[apps-only') }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -47,10 +63,10 @@ jobs:
       sha_short: ${{ steps.vars.outputs.sha_short }}
 
   upgrade:
-    needs: [build_release_package]
+    needs: [commit_subject, build_release_package]
     name: Upgrade
     runs-on: macos-latest
-    if: ${{ !contains(github.event.head_commit.message, '[skip-upgrade]') }}
+    if: ${{ !contains(needs.commit_subject.outputs.subject, '[skip-upgrade]') }}
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -62,10 +78,10 @@ jobs:
         shell: powershell
 
   install:
-    needs: [build_release_package, upgrade]
+    needs: [commit_subject, build_release_package, upgrade]
     name: Install
     runs-on: macos-latest
-    if: ${{ !contains(github.event.head_commit.message, '[skip-install]') }}
+    if: ${{ !contains(needs.commit_subject.outputs.subject, '[skip-install]') }}
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -77,10 +93,10 @@ jobs:
         shell: powershell
 
   upgrade_all_sites_to_latest:
-    needs: [build_release_package, upgrade]
+    needs: [commit_subject, build_release_package, upgrade]
     name: Upgrade all sites to latest
     runs-on: macos-latest
-    if: ${{ contains(github.event.head_commit.message, '[upgrade-all-sites-to-latest]') }}
+    if: ${{ contains(needs.commit_subject.outputs.subject, '[upgrade-all-sites-to-latest]') }}
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -92,9 +108,10 @@ jobs:
         shell: powershell
 
   build_release_package_packages_only:
+    needs: [commit_subject]
     name: Build release package - packages only
     runs-on: macos-latest
-    if: ${{ contains(github.event.head_commit.message, '[apps-only') }}
+    if: ${{ contains(needs.commit_subject.outputs.subject, '[apps-only') }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -111,7 +128,7 @@ jobs:
       - name: Determine apps-only solutions
         id: appsonly
         env:
-          COMMIT_MSG: ${{ github.event.head_commit.message }}
+          COMMIT_MSG: ${{ needs.commit_subject.outputs.subject }}
         run: |
           $solutions = ''
           if ($env:COMMIT_MSG -match '\[apps-only:([^\]]+)\]') {

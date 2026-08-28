@@ -9,8 +9,12 @@ central **`prosjektportalen-hosting`** catalog. A portal administrator can:
 - **Mode A — "Kopier til min installasjon"** (`Importert`): download the `.pppkg`,
   unzip it, validate the manifest, provision the hub, store the project-level
   assets and write a Maloppsett item.
-- **Mode B — "Tilgjengeliggjør som skymal"** (`Sentral`): register a metadata-only
-  Maloppsett item that points at the hosting repo (no local provisioning).
+- **Mode B — "Tilgjengeliggjør som skymal"** (`Sentral`): provision the package's
+  **hub dependencies** (site fields, content types + their hub-list bindings, hub
+  configuration rows and — feature-flag gated — taxonomy) and register a Maloppsett
+  item that points at the hosting repo. Project-level content (template, extensions,
+  list content incl. folder structures) is pulled straight from the `.pppkg` at
+  project-setup time.
 - Update or remove already-imported / central templates.
 
 ## How it is wired
@@ -32,7 +36,8 @@ central **`prosjektportalen-hosting`** catalog. A portal administrator can:
 {
   "catalogUrl": "https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-hosting/main/catalog.json",
   "userGuideUrl": "https://…",
-  "featureFlagProvisioning": false
+  "featureFlagProvisioning": false,
+  "telemetryUrl": ""
 }
 ```
 
@@ -40,6 +45,10 @@ central **`prosjektportalen-hosting`** catalog. A portal administrator can:
   committed `services/sampleCatalog.ts` fixture on CORS/network failure.
 - `userGuideUrl` — target of the "Se brukerveiledning" footer link.
 - `featureFlagProvisioning` — see below.
+- `telemetryUrl` — install-telemetry ingestion endpoint. Defaults to
+  `https://assist.prosjektportalen.no/api/telemetry/catalog` when omitted; set to
+  an **empty string** to disable telemetry for the installation. See *Telemetry*
+  below.
 
 ## Feature flag — taxonomy provisioning
 
@@ -49,19 +58,55 @@ project setup template dialog uses), applied to the **hub web**.
 
 The **taxonomy / Term Store** step **runs by default**: `sp-js-provisioning` 1.3.12
 ships a Term Store handler (registered in its `DefaultHandlerMap`), so a package's
-bundled term sets are provisioned as part of `applyTemplate`.
+bundled term sets are provisioned as part of `applyTemplate`. The same flag and the
+`SPDataAdapter.hasTermStorePermission()` pre-check gate the taxonomy step of **both**
+Mode A import and Mode B publish-as-skymal
+(`PackageInstaller.provisionCloudTemplateHubDependencies`).
 
 Opt out of the taxonomy step via either:
 
 - `featureFlagProvisioning: false` on the CustomAction properties, or
 - `sessionStorage.setItem('PP_DISABLE_TAXONOMY', '1')` for local testing.
 
-When disabled, the step shows "Hoppet over (feature flag av)".
+When disabled, the import step shows "Hoppet over (feature flag av)" and publishing
+as skymal reports a warning that taxonomy was skipped.
 
 `sessionStorage.setItem('PP_DISABLE_IMPORT', '1')` disables the whole import action
 during a controlled pilot.
 
+## Telemetry
+
+To give Puzzlepart insight into what is installed and used, the catalog sends one
+fire-and-forget event per completed (or failed) catalog action — install, update,
+remove, publish-as-cloud-template — to the `telemetryUrl` endpoint
+(prosjektportalen-assist by default, admin-login protected storage).
+
+Each event contains: action + success/error (with a truncated error message),
+package id/version/type, previously registered version (updates/removals), the
+installed Prosjektportalen version, the tenant host (`*.sharepoint.com`), the hub
+site URL, the AAD tenant id, and a client timestamp. Nothing about end users or
+project content is sent.
+
+Telemetry never blocks or fails a catalog action — failures are swallowed with an
+Info log entry (`(TelemetryService)`).
+
+Opt out via any of:
+
+- the **`CatalogTelemetryEnabled`** row in the hub's *Globale innstillinger*
+  list — seeded as `1` (on); a portal admin sets the value to `0` to stop all
+  catalog telemetry for the installation. A missing row (installs provisioned
+  before the setting existed) counts as on, matching the seeded default.
+- `telemetryUrl: ""` on the CustomAction properties (whole installation), or
+- `sessionStorage.setItem('PP_DISABLE_TELEMETRY', '1')` for the current session.
+
 ## Dev / test
+
+- **Hidden packages**: packages marked `hidden` in `catalog.json` are staged and
+  never shown to users. To QA them, open the Maloppsett list with
+  `?showHidden=true` in the URL (persisted as the `PP_SHOW_HIDDEN` session flag,
+  so it survives SharePoint navigation; `?showHidden=false` turns it off, and it
+  resets when the tab closes). Surfaced hidden packages carry a "Skjult" tag on
+  the card and in the details pane.
 
 - The default `catalogUrl` points at the hosting `main` branch's raw `catalog.json`,
   which is now published — so browsing works out of the box. The committed

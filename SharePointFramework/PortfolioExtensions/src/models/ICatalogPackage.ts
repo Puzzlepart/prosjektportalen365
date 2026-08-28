@@ -92,9 +92,12 @@ export interface ICatalogPackage {
   changelogUrl?: string
 
   /**
-   * Whether the package can run as a **cloud template**. `false` means
-   * it needs hub-side provisioning the cloud path can't reproduce — publishing
-   * it as a cloud template warns "at own risk". Absent = treated as `true`.
+   * Whether the package can run as a **cloud template**. Publishing provisions
+   * the hub dependencies (site fields, content types, bindings, hub config
+   * rows and — feature-flag gated — taxonomy); `false` means the package needs
+   * hub-side content beyond that (e.g. hub files, property-bag entries or
+   * standalone hub libraries). The catalog disables the publish action;
+   * the setup wizard warns "at own risk". Absent = treated as `true`.
    */
   cloudCompatible?: boolean
 

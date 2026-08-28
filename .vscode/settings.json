@@ -22,5 +22,7 @@
         ".README": "markdown",
         ".development-guide/.README": "markdown"
     },
-    "codeQL.githubDatabase.download": "never"
+    "codeQL.githubDatabase.download": "never",
+    "typescript.tsdk": "SharePointFramework/PortfolioExtensions/node_modules/typescript/lib",
+    "typescript.enablePromptUseWorkspaceTsdk": true
 }

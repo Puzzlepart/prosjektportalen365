@@ -142,6 +142,14 @@
       <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_General}</pnp:DataValue>
     </pnp:DataRow>
     <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSettingsId">{e332305a-ec83-4eb6-a1ae-7139a3428e3a}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_General_CatalogTelemetryEnabled_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsKey">CatalogTelemetryEnabled</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsValue">1</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_General}</pnp:DataValue>
+    </pnp:DataRow>
+    <pnp:DataRow>
       <pnp:DataValue FieldName="GtSettingsId">{9f18d1fb-5dfc-4888-a4f4-df9eed305b74}</pnp:DataValue>
       <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_Assistant_UseAssistant_Title}</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsKey">UseAssistant</pnp:DataValue>

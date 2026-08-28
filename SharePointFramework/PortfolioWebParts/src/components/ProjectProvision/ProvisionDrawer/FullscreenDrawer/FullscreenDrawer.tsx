@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react'
 import {
   OverlayDrawer,
   Button,
+  Spinner,
   Tooltip,
   Toast,
   ToastBody,
@@ -42,11 +43,16 @@ export const FullscreenDrawer: FC<IFullscreenDrawerProps> = (props) => {
   const {
     context,
     onSave,
+    isSaving,
     isSaveDisabled,
     missingFieldsInfo,
     siteExists,
     setSiteExists,
+    requestExists,
+    setRequestExists,
     duplicateOwnerMembers,
+    insufficientOwners,
+    minimumOwners,
     namingConvention,
     enableSensitivityLabels,
     enableSensitivityLabelsLibrary,
@@ -60,6 +66,7 @@ export const FullscreenDrawer: FC<IFullscreenDrawerProps> = (props) => {
     isTeam,
     joinHub,
     usesDifferentHub,
+    hubResolveFailed,
     getField,
     fieldsToUse,
     fluentProviderId
@@ -73,13 +80,18 @@ export const FullscreenDrawer: FC<IFullscreenDrawerProps> = (props) => {
   const fieldConfigs = useFieldConfigs({
     siteExists,
     setSiteExists,
+    requestExists,
+    setRequestExists,
     duplicateOwnerMembers,
+    insufficientOwners,
+    minimumOwners,
     namingConvention,
     urlPrefix,
     aliasSuffix,
     isTeam,
     joinHub,
     usesDifferentHub,
+    hubResolveFailed,
     enableSensitivityLabels,
     enableSensitivityLabelsLibrary,
     enableRetentionLabels,
@@ -111,15 +123,30 @@ export const FullscreenDrawer: FC<IFullscreenDrawerProps> = (props) => {
 
   const handleSave = () => {
     onSave().then((response) => {
-      if (response) {
+      if (response === 'busy') return
+      if (response === true) {
         context.setState({ showProvisionConfirmation: true, properties: {} })
         setCurrentStep('siteType')
         context.reset()
       } else {
+        const isConflict = response === 'conflict'
+        const isUserResolveError = response === 'userResolveError'
         props.toast(
           <Toast appearance='inverted'>
-            <ToastTitle>{strings.Provision.ToastCreatedErrorTitle}</ToastTitle>
-            <ToastBody>{strings.Provision.ToastCreatedErrorBody}</ToastBody>
+            <ToastTitle>
+              {isConflict
+                ? strings.Provision.ToastNameConflictErrorTitle
+                : isUserResolveError
+                ? strings.Provision.ToastUserResolveErrorTitle
+                : strings.Provision.ToastCreatedErrorTitle}
+            </ToastTitle>
+            <ToastBody>
+              {isConflict
+                ? strings.Provision.ToastNameConflictErrorBody
+                : isUserResolveError
+                ? strings.Provision.ToastUserResolveErrorBody
+                : strings.Provision.ToastCreatedErrorBody}
+            </ToastBody>
           </Toast>,
           { intent: 'error' }
         )
@@ -272,7 +299,8 @@ export const FullscreenDrawer: FC<IFullscreenDrawerProps> = (props) => {
                 <Button
                   appearance='primary'
                   size='large'
-                  disabled={isSaveDisabled}
+                  disabled={isSaveDisabled || isSaving}
+                  icon={isSaving ? <Spinner size='tiny' /> : undefined}
                   onClick={handleSave}
                 >
                   {strings.Provision.ProvisionButtonLabel}
@@ -282,7 +310,8 @@ export const FullscreenDrawer: FC<IFullscreenDrawerProps> = (props) => {
               <Button
                 appearance='primary'
                 size='large'
-                disabled={isSaveDisabled}
+                disabled={isSaveDisabled || isSaving}
+                icon={isSaving ? <Spinner size='tiny' /> : undefined}
                 onClick={handleSave}
               >
                 {strings.Provision.ProvisionButtonLabel}

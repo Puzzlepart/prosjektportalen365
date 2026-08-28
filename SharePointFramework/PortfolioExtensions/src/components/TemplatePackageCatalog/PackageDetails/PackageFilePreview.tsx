@@ -18,7 +18,7 @@ import React, { FC, useMemo } from 'react'
 import { usePackageFilePreview } from './usePackageFilePreview'
 
 const CODE_FONT =
-  "'Cascadia Code', 'Cascadia Mono', 'JetBrains Mono', 'Fira Code', 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', 'Courier New', monospace"
+  '"Cascadia Code", "Cascadia Mono", "JetBrains Mono", "Fira Code", "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", "Courier New", monospace'
 
 const useStyles = makeStyles({
   surface: {

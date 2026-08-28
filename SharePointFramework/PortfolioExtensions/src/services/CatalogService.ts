@@ -109,8 +109,19 @@ export class CatalogService {
    * **Throws** on network/timeout failure so the caller can show a retryable
    * error instead of an indistinguishable "no history" state.
    */
-  public static async getChangelog(changelogUrl?: string): Promise<IChangelogEntry[]> {
-    if (!changelogUrl) return []
+  public static getChangelog(changelogUrl?: string): Promise<IChangelogEntry[]> {
+    if (!changelogUrl) return Promise.resolve([])
+    let cached = CatalogService._changelogCache.get(changelogUrl)
+    if (!cached) {
+      cached = CatalogService._fetchChangelog(changelogUrl)
+      CatalogService._changelogCache.set(changelogUrl, cached)
+      // Failures evict so the UI's retry actually refetches.
+      cached.catch(() => CatalogService._changelogCache.delete(changelogUrl))
+    }
+    return cached
+  }
+
+  private static async _fetchChangelog(changelogUrl: string): Promise<IChangelogEntry[]> {
     const response = await CatalogService._fetchWithTimeout(changelogUrl)
     if (!response.ok) return []
     return CatalogService._parseChangelog(await response.text())
@@ -128,7 +139,18 @@ export class CatalogService {
    * error. Individual provisioning/content files are best-effort — a failure on
    * one of them leaves a partial but valid result.
    */
-  public static async getPackageContents(
+  public static getPackageContents(pkg: ICatalogPackage): Promise<IPackageContents | undefined> {
+    let cached = CatalogService._contentsCache.get(pkg.id)
+    if (!cached) {
+      cached = CatalogService._fetchPackageContents(pkg)
+      CatalogService._contentsCache.set(pkg.id, cached)
+      // Failures evict so the UI's retry actually refetches.
+      cached.catch(() => CatalogService._contentsCache.delete(pkg.id))
+    }
+    return cached
+  }
+
+  private static async _fetchPackageContents(
     pkg: ICatalogPackage
   ): Promise<IPackageContents | undefined> {
     const baseUrl = CatalogService._derivePackageBaseUrl(pkg)
@@ -208,11 +230,34 @@ export class CatalogService {
    * Fetch the raw text of a package file (e.g. an extension/content JSON) for
    * the inline code preview.
    */
-  public static async getFileText(url: string): Promise<string> {
+  public static getFileText(url: string): Promise<string> {
+    let cached = CatalogService._fileTextCache.get(url)
+    if (!cached) {
+      cached = CatalogService._fetchFileText(url)
+      CatalogService._fileTextCache.set(url, cached)
+      // Failures evict so the UI's retry actually refetches.
+      cached.catch(() => CatalogService._fileTextCache.delete(url))
+    }
+    return cached
+  }
+
+  private static async _fetchFileText(url: string): Promise<string> {
     const response = await CatalogService._fetchWithTimeout(url)
     if (!response.ok) throw new Error(format(strings.CatalogResourceFetchError, response.status))
     return response.text()
   }
+
+  /**
+   * Session-scoped caches for per-package resources (changelog, contents
+   * summary, file previews). Package files are immutable within a session —
+   * the catalog itself already has its own 24h cache — so each resource is
+   * fetched at most once, keeping package switching instant after the first
+   * visit. The PROMISE is cached, which also dedupes in-flight requests;
+   * rejected promises are evicted (see call sites) so retry works.
+   */
+  private static _changelogCache = new Map<string, Promise<IChangelogEntry[]>>()
+  private static _contentsCache = new Map<string, Promise<IPackageContents | undefined>>()
+  private static _fileTextCache = new Map<string, Promise<string>>()
 
   private static _asArray(value: any): any[] {
     return Array.isArray(value) ? value : []

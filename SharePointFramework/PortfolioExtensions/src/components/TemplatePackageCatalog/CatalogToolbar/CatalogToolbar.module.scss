@@ -1,44 +1,102 @@
 .toolbar {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--spacingHorizontalM);
+  flex-direction: column;
+  gap: var(--spacingVerticalS);
   padding-bottom: var(--spacingVerticalS);
 
-  .search {
-    min-width: 240px;
-    flex: 1 1 240px;
-  }
-
-  .dropdown {
-    min-width: 180px;
-  }
-
-  .compatibleSwitch {
-    white-space: nowrap;
-  }
-
-  .spacer {
-    flex: 1 1 auto;
-  }
-
-  .count {
-    color: var(--colorNeutralForeground3);
-    white-space: nowrap;
-  }
-
-  .viewToggle {
+  .filterRow,
+  .actionsRow {
     display: flex;
-    gap: 2px;
+    align-items: center;
+    gap: var(--spacingHorizontalM);
+    width: 100%;
+    min-width: 0;
   }
 
-  @media (max-width: 720px) {
+  .dropdown > button > span:first-child {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .filterRow {
     .search {
-      flex-basis: 100%;
+      width: 240px;
+      min-width: 0;
+      flex: 0 1 240px;
     }
 
     .dropdown {
-      flex: 1 1 45%;
+      width: 180px;
+      min-width: 0;
+      max-width: 180px;
+      flex: 1 1 180px;
+    }
+  }
+
+  .actionsRow {
+    .dropdown {
+      width: 180px;
+      max-width: 180px;
+      flex: 0 0 180px;
+    }
+
+    .viewToggle {
+      display: flex;
+      gap: 2px;
+    }
+
+    .compatibleSwitch {
+      white-space: nowrap;
+    }
+
+    .clearFilters {
+      white-space: nowrap;
+    }
+
+    /* Keeps the link's box in the layout so the row doesn't re-flow when the
+       first filter becomes active (visibility also removes it from the a11y
+       tree and hover/click targets). */
+    .clearFiltersHidden {
+      visibility: hidden;
+    }
+
+    .spacer {
+      flex: 1 1 auto;
+    }
+
+    .count {
+      color: var(--colorNeutralForeground3);
+      white-space: nowrap;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .filterRow,
+    .actionsRow {
+      flex-wrap: wrap;
+    }
+
+    .filterRow {
+      .search {
+        width: auto;
+        flex: 1 1 100%;
+      }
+
+      .dropdown {
+        width: auto;
+        max-width: none;
+        flex: 1 1 45%;
+      }
+    }
+
+    .actionsRow {
+      .dropdown {
+        width: auto;
+        max-width: none;
+        flex: 1 1 45%;
+      }
     }
   }
 }

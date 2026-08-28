@@ -34,6 +34,7 @@ declare interface IProjectExtensionsStrings {
   ApplyTemplateClientSidePages: string
   ApplyTemplateComposedLook: string
   ApplyTemplateContentTypes: string
+  ApplyTemplateCustomActions: string
   ApplyTemplateErrorMessage: string
   ApplyTemplateFiles: string
   ApplyTemplateHooks: string
@@ -151,8 +152,10 @@ declare interface IProjectExtensionsStrings {
   SummaryMessage: string
   SyncLocalProjectPropertiesListText: string
   TemplateConfigMessage: string
-  CloudTemplateInfoMessage: string
+  CloudTemplateBadgeText: string
+  CloudTemplateBannerText: string
   CloudTemplateResolvingMessage: string
+  CloudContentConfigDestinationListMissing: string
   CloudTemplateResolveErrorMessage: string
   CloudTemplateNotCompatibleWarning: string
   TemplateConfigConjunction: string

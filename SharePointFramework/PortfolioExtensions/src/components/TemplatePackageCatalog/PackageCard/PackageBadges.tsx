@@ -1,5 +1,12 @@
 import { format } from '@fluentui/react/lib/Utilities'
-import { makeStyles, mergeClasses, Tag, tokens, Tooltip } from '@fluentui/react-components'
+import {
+  makeStyles,
+  mergeClasses,
+  Tag,
+  tagClassNames,
+  tokens,
+  Tooltip
+} from '@fluentui/react-components'
 import {
   ArrowSync16Regular,
   Box16Regular,
@@ -43,50 +50,50 @@ const useStyles = makeStyles({
     borderBottomColor: tokens.colorStatusDangerBorder1,
     borderLeftColor: tokens.colorStatusDangerBorder1
   },
+  // Requirement tags render flat — no border, no shadow (quiet meta under the
+  // category tags). Transparent border (not none) keeps the Tag's sizing
+  // identical to its default.
+  requirementTag: {
+    boxShadow: 'none',
+    borderTopColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderBottomColor: 'transparent',
+    borderLeftColor: 'transparent',
+    // The media (icon) slot hugs the tag's left edge by default; nudge it in
+    // so the inset matches the text inset of the (icon-less) category tags.
+    [`& .${tagClassNames.media}`]: {
+      paddingLeft: tokens.spacingHorizontalXS
+    }
+  },
   // Prosjektportalen brand (logo red #bc3e42), light-tint tag from the brand scale
   // used by prosjektportalen-web.
   ppTag: {
     backgroundColor: '#fbe5e7',
-    color: '#8b1a1f',
-    borderTopColor: '#e57a73',
-    borderRightColor: '#e57a73',
-    borderBottomColor: '#e57a73',
-    borderLeftColor: '#e57a73'
+    color: '#8b1a1f'
   },
   // Bestillingsportalen brand (purple #764ba2), from the brand scale used by
   // bestillingsportalen-web.
   bestillingTag: {
     backgroundColor: '#ebe7f7',
-    color: '#533672',
-    borderTopColor: '#b8a9e0',
-    borderRightColor: '#b8a9e0',
-    borderBottomColor: '#b8a9e0',
-    borderLeftColor: '#b8a9e0'
+    color: '#533672'
   },
   // Microsoft Entra brand (teal-cyan, ~#00A2AD — close to the Entra ID logo).
   entraTag: {
     backgroundColor: '#e2f4f6',
-    color: '#075e66',
-    borderTopColor: '#66c7ce',
-    borderRightColor: '#66c7ce',
-    borderBottomColor: '#66c7ce',
-    borderLeftColor: '#66c7ce'
+    color: '#075e66'
   },
   // Language/availability tag — neutral, to sit alongside the colored dependency
   // tags without competing with them.
   languageTag: {
     backgroundColor: tokens.colorNeutralBackground3,
-    color: tokens.colorNeutralForeground2,
-    borderTopColor: tokens.colorNeutralStroke2,
-    borderRightColor: tokens.colorNeutralStroke2,
-    borderBottomColor: tokens.colorNeutralStroke2,
-    borderLeftColor: tokens.colorNeutralStroke2
+    color: tokens.colorNeutralForeground2
   },
   requirements: {
     display: 'flex',
     flexWrap: 'wrap',
     alignItems: 'center',
-    columnGap: tokens.spacingHorizontalXS,
+    // Same inter-tag gap as the category TagGroup above (medium → 8px).
+    columnGap: tokens.spacingHorizontalS,
     rowGap: tokens.spacingVerticalXS
   }
 })
@@ -165,6 +172,29 @@ export const PackageUpdateTag: FC<{ packageId: string }> = ({ packageId }) => {
 }
 
 /**
+ * Debug/QA marker for packages the catalog feed marks `hidden` — these only
+ * appear at all when hidden packages are surfaced via `?showHidden=true` /
+ * the `PP_SHOW_HIDDEN` session flag (see `services/featureFlags.ts`), so this
+ * tag is what tells a staged package apart from a released one.
+ */
+export const PackageHiddenTag: FC<{ package: ICatalogPackage }> = ({ package: pkg }) => {
+  const styles = useStyles()
+  if (!pkg.hidden) return null
+  return (
+    <Tooltip content={strings.CatalogBadgeHiddenTooltip} relationship='description'>
+      <Tag
+        appearance='filled'
+        size='small'
+        className={mergeClasses(styles.badge, styles.updateTag)}
+        media={<Warning16Regular />}
+      >
+        {strings.CatalogBadgeHidden}
+      </Tag>
+    </Tooltip>
+  )
+}
+
+/**
  * Red tag shown when the package's `minPPVersion` is newer than the installed
  * Prosjektportalen version (the package can't be used until an upgrade).
  */
@@ -209,7 +239,7 @@ export const PackageRequirementTags: FC<{ package: ICatalogPackage }> = ({ packa
         <Tag
           appearance='filled'
           size='small'
-          className={mergeClasses(styles.badge, styles.ppTag)}
+          className={mergeClasses(styles.requirementTag, styles.ppTag)}
           media={<Box16Regular />}
         >
           {format(strings.CatalogRequiresPP, pkg.minPPVersion)}
@@ -227,7 +257,7 @@ export const PackageRequirementTags: FC<{ package: ICatalogPackage }> = ({ packa
         <Tag
           appearance='filled'
           size='small'
-          className={mergeClasses(styles.badge, styles.bestillingTag)}
+          className={mergeClasses(styles.requirementTag, styles.bestillingTag)}
           media={<MountainTrail20Regular />}
         >
           {strings.CatalogRequiresBestillingsportalen}
@@ -241,7 +271,7 @@ export const PackageRequirementTags: FC<{ package: ICatalogPackage }> = ({ packa
         <Tag
           appearance='filled'
           size='small'
-          className={mergeClasses(styles.badge, styles.entraTag)}
+          className={mergeClasses(styles.requirementTag, styles.entraTag)}
           media={<ShieldKeyhole16Regular />}
         >
           {strings.CatalogRequiresEntra}
@@ -255,7 +285,7 @@ export const PackageRequirementTags: FC<{ package: ICatalogPackage }> = ({ packa
         <Tag
           appearance='filled'
           size='small'
-          className={mergeClasses(styles.badge, styles.languageTag)}
+          className={mergeClasses(styles.requirementTag, styles.languageTag)}
           media={<LocalLanguage16Regular />}
         >
           {pkg.languages.map(languageLabel).join(', ')}

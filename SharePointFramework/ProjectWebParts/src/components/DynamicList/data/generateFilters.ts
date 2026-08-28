@@ -108,9 +108,11 @@ export function generateFilters(
       filters.push({
         // Forward only `dataType` (e.g. data type `Tags`) to the FilterPanel so
         // taxonomy/Tags fields can render as a hierarchy. We intentionally do
-        // NOT forward the full `data` object: it can carry `renderAs: 'boolean'`
-        // from the column configuration, which would route boolean filters
-        // through the boolean label mapping and break them.
+        // NOT forward the full `data` object: `renderAs` is only set for
+        // columns that have a match in the column configuration, so forwarding
+        // it would label those boolean filters `Ja`/`Nei` while the ones
+        // derived from the SharePoint field alone keep their raw value. It also
+        // carries `termSetId`, which decides hierarchy rendering.
         column: {
           key: column.key,
           fieldName,

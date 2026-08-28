@@ -1,7 +1,12 @@
 import { Skeleton, SkeletonItem } from '@fluentui/react-components'
 import React, { FC } from 'react'
-import { PAGE_SIZE } from '../types'
 import styles from './PackageList.module.scss'
+
+/**
+ * Number of placeholder cards in the loading grid — roughly one viewport's
+ * worth (the real list is unpaginated and scrolls).
+ */
+const SKELETON_CARD_COUNT = 8
 
 /**
  * Placeholder card shown while the catalog loads — mirrors {@link PackageCard}'s
@@ -17,12 +22,12 @@ const PackageCardSkeleton: FC = () => (
 )
 
 /**
- * A full grid of {@link PackageCardSkeleton}s (one page worth), used as the
+ * A grid of {@link PackageCardSkeleton}s (one viewport's worth), used as the
  * loading state in place of a single centered spinner.
  */
 export const PackageListSkeleton: FC = () => (
   <div role='presentation' className={styles.grid}>
-    {Array.from({ length: PAGE_SIZE }).map((_, index) => (
+    {Array.from({ length: SKELETON_CARD_COUNT }).map((_, index) => (
       <div key={index} className={styles.cell}>
         <PackageCardSkeleton />
       </div>

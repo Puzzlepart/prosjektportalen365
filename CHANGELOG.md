@@ -14,12 +14,16 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 ### Forbedringer
 
 - URL til `Bestillingsportalen` kan nå konfigureres sentralt i tenanten via storage entity (tenant property) `pp365_ProvisionUrl`. Teams-appen bruker denne fremfor den forhåndskonfigurerte standarden `/sites/bestillingsportalen`, slik at Teams-appen også fungerer i tenants hvor Bestillingsportal-området har en annen URL. Webdelen på SharePoint-sider bruker verdien som fallback dersom URL ikke er angitt i egenskapspanelet. Verdien kan settes med `Set-PnPStorageEntity -Key pp365_ProvisionUrl -Value <url>` mot tenant-appkatalogen, eller via ny `-ProvisionUrl`-parameter i installasjonsskriptet
+- Oppdatert bundlet `PnP.PowerShell` til `3.2.0`, og versjonskravet er nå samlet i det felles installasjonsskriptet slik at installasjons- og release-flyten bruker samme kilde.
 - Lagt til konfigurerbar standard tidsramme (`Standard startdato` og `Standard sluttdato`) i egenskapspanelet for `Prosjekttidslinje`-webdelen i porteføljen, slik at administrator kan velge hvor langt tilbake og frem i tid tidslinjen skal vises som standard
 - Lagt til mulighet for å ytterligere ekskludere områdetyper i egenskapspanelet for `Bestillingsportalen`-skjema, slik at administrator kan skjule enkelte områdetyper fra brukerne per instans av bestillingsskjemaet.
 - Forbedret visning av termsett-/taksonomifelt i aggregerte oversikter. Verdier fra søke-egenskaper med prefix `owstaxId` (f.eks. `owstaxIdGtProjectPhase`) vises nå som rene etiketter i stedet for rå søkeresultatformat med GUID-er, og flerverdier vises som separate merker (`tags`)
 - Felter med datatype `Tags` (typisk taksonomi-felt, f.eks. `Tjenesteområde`) hvor verdiene har overordnede termer vises nå som et innrykket, sammenleggbart hierarki i filterpanelet i stedet for som flate `:`-separerte tekststrenger (`Overordnet:Underordnet`).
 - Overgang til `sp-js-provisioning` `1.3.8` for malbasert opprettelse og oppdatering av innholdstyper med faste ID-er. De 15 site script-filene som kun opprettet tomme innholdstyper er fjernet fra releasepakken, slik at innholdstypene forvaltes gjennom JSON-malene. Eksisterende installasjoner med eldre content type-site scripts kan fortsatt oppgraderes uten egen opprydding av disse site scriptene. [#1744](https://github.com/Puzzlepart/prosjektportalen365/issues/1744)
-- Ved oppgradering migreres eksisterende verdier fra de gamle Choice-feltene automatisk til det nye taksonomifeltet per prosjektsite. Kundetilpassede choice-verdier opprettes som nye termer i term settet. De gamle feltene skjules (`Hidden=TRUE`), men data bevares.
+- SPFx-utvidelsene `Oppgradering av prosjekter`, `Malvelger` og `Footer` legges nå inn via `CustomActions` i JSON-malene (`Standardmal` og `Programmal`) i stedet for via site scripts, og de tre tilhørende site scriptene er fjernet fra releasepakken - området-designet består nå kun av `Regionale innstillinger` og `Setup extension`.
+- `Feltfilter` for vertikale faner i `Prosjektutlisting` støtter nå operatorer i tillegg til ren likhet: `$ne` (ikke lik), `$in` (én av) og `$nin` (ingen av).
+- Ny innstilling `Vis avsluttede prosjekter` i `Prosjektutlisting`. Prosjekter med Prosjektstatus `Avsluttet` ble tidligere fjernet før vertikalene ble filtrert, og kunne dermed ikke vise avsluttede prosjekter i noen av vertikalene. Innstillingen er av som standard.
+- `Bestillingsportalen`-app viser nå en advarsel på hubfeltet dersom standardhuben (`DefaultHub`) som er angitt på prosjekttypen ikke kan slås opp, i stedet for å falle tilbake til gjeldende hub uten tilbakemelding
 
 ### Feilrettinger
 
@@ -29,8 +33,16 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Kolonner i tidslinjelisten følger nå rekkefølgen som er definert på innholdstypen. Felt som er skjult på innholdstypen ekskluderes også fra kolonner og redigeringspanel
 - Kolonner i porteføljeoversikten respekterer nå innstillingen `Vis i porteføljeoversikt` i `Prosjektkolonner` listen og fjerner de fra visningen, selv om kolonnen er definert i visningen i `Porteføljevisninger` listen. Tidligere lå disse kolonnene fortsatt i visningen, selv om kolonnen ikke var tilgjengelig i vis/skjul kolonner panelet, og dermed kunne aldri fjernes
 - Rettet en feil hvor `Hent dokumentmal` gjorde gjentatte kall mot hubområdet og `Malbibliotek` ved innlasting av dokumentbibliotek, selv om brukeren ikke åpnet dialogen [#1749](https://github.com/Puzzlepart/prosjektportalen365/pull/1749)
-- Rettet en feil i `Dynamisk Liste` hvor Ja/Nei verdier alltid viser som "Nei"
+- Rettet en feil i `Aggregert oversikt` hvor kolonnene i visningene ikke ble oppdatert ved endring av visning [#1751](https://github.com/Puzzlepart/prosjektportalen365/pull/1751)
 - Rettet en feil i oppsettveiviseren hvor private og delte Teams-kanaler (som oppretter egne SharePoint-områder knyttet til huben) feilaktig trigget oppsettveiviseren. Områdene mangler en Microsoft 365-gruppe, noe som førte til feildialogen «Invalid object identifier 'null'.» ved hver sideinnlasting. Veiviseren oppdager nå kanalområder (`TEAMCHANNEL`) og fjernes stille uten å gjøre endringer på området [#1754](https://github.com/Puzzlepart/prosjektportalen365/issues/1754)
+- Rettet en feil i `Bestillingsportalen`-app hvor standardhuben (`DefaultHub`) fra prosjekttypen ble forkastet ved lagring dersom `JoinHub` ikke var avkrysset. Prosjekttyper med `DefaultHub` angitt behandles nå alltid som hubtilknyttet
+- Rettet en feil i `Bestillingsportalen`-app hvor `DefaultHub` ble sammenlignet med gjeldende hub uten å ta hensyn til store/små bokstaver og klammeparenteser (`{}`). Dette kunne føre til at meldingen om at området knyttes til en annen hub ble vist selv om det var samme hub, og at hub-ID-en ble lagret i uensartet format
+- Rettet en feil i `Bestillingsportalen`-app hvor hubfeltet fortsatte å vise forrige hub dersom brukeren byttet områdetype etter at appen var åpnet. Verdien som ble lagret var riktig, men visningen var utdatert
+- Rettet en feil i `Bestillingsportalen`-app hvor prosjektinformasjonen som opprettes ved bestilling av underområde ble lagt i gjeldende hub selv om områdetypen peker på en annen hub
+- Rettet en feil i `Bestillingsportalen`-app hvor innstillingen `MinimumOwners` fra `Innstillinger for bestilling` ikke ble respektert. Bestillingsskjemaet krever nå minst det konfigurerte antallet eiere før bestillingen kan sendes inn, og viser en valideringsmelding på eierfeltet frem til kravet er oppfylt
+- Rettet en feil i `Dynamisk Liste` hvor Ja/Nei verdier alltid viser som "Nei" [#1747](https://github.com/Puzzlepart/prosjektportalen365/pull/1747)
+- Rettet en feil i `Porteføljeoversikt` hvor Ja/Nei-kolonner viste råverdiene `0` og `1` i gruppeoverskriftene ved gruppering.
+- Ja/Nei-kolonner vises nå alltid med begge valgene i filterpanelet i `Porteføljeoversikt`, og valgene får riktig etikett uavhengig av hvilken kolonne det gjelder. `Eksporter til Excel` bruker nå samme filtrering som listen, slik at eksporten alltid inneholder de samme radene som vises
 
 ### Merk
 

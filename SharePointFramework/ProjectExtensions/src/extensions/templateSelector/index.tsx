@@ -131,9 +131,6 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
     }
   }
 
-  /**
-   * On open <DocumentTemplateDialog />
-   */
   private _onOpenTemplateSelector() {
     const placeholder = this._getPlaceholder()
     const element = (

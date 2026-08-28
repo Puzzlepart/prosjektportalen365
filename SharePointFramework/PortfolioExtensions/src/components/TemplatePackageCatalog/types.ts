@@ -15,6 +15,11 @@ export interface ITemplatePackageCatalogProps {
   catalogUrl?: string
   userGuideUrl?: string
   featureFlagProvisioning?: boolean
+  /**
+   * Install-telemetry ingestion endpoint; defaults to prosjektportalen-assist,
+   * empty string disables (see `services/TelemetryService.ts`).
+   */
+  telemetryUrl?: string
   onDismiss: () => void
 }
 
@@ -29,14 +34,20 @@ export type RenderMode = 'grid' | 'list'
 export const ALL_FILTER = 'all'
 
 /**
- * Status filter values. `update` = "Oppdatering tilgjengelig".
+ * Status filter values. `update` = "Oppdatering tilgjengelig". (`Lokal` is
+ * deliberately absent: the catalog only lists cloud packages, so no row can
+ * ever match a local-only Maloppsett item.)
  */
-export type StatusFilter = 'all' | 'Lokal' | 'Importert' | 'Sentral' | 'update'
+export type StatusFilter = 'all' | 'Importert' | 'Sentral' | 'update'
 
 export interface ICatalogFilters {
   search: string
   type: string
-  category: string
+  /**
+   * Selected category tags; empty = all. A package matches if it carries ANY
+   * of the selected tags (OR semantics).
+   */
+  categories: string[]
   status: StatusFilter
   /**
    * Available-language filter: {@link ALL_FILTER} or a BCP-47 group code
@@ -51,7 +62,7 @@ export interface ICatalogFilters {
 }
 
 export interface ICatalogNotification {
-  intent: 'success' | 'error'
+  intent: 'success' | 'warning' | 'error'
   text: string
 }
 
@@ -70,7 +81,6 @@ export interface ITemplatePackageCatalogState {
   filters: ICatalogFilters
   sort: SortKey
   renderMode: RenderMode
-  page: number
   selectedPackageId?: string
   installProgress?: IInstallProgress
   /**
@@ -92,11 +102,6 @@ export interface ITemplatePackageCatalogState {
   detailOpen: boolean
 }
 
-/**
- * Number of cards per page (client-side pagination).
- */
-export const PAGE_SIZE = 8
-
 export interface ITemplatePackageCatalogContext {
   props: ITemplatePackageCatalogProps
   state: ITemplatePackageCatalogState
@@ -109,11 +114,8 @@ export interface ITemplatePackageCatalogContext {
   open: boolean
   /** Close the catalog drawer and notify the host (`props.onDismiss`). */
   close: () => void
-  /** All packages after search/filter/sort (not paginated). */
+  /** All packages after search/filter/sort. */
   filteredPackages: ICatalogPackage[]
-  /** Current page slice of {@link filteredPackages}. */
-  pagedPackages: ICatalogPackage[]
-  pageCount: number
   /** Distinct categories derived from package tags. */
   categories: string[]
   /** Distinct available-language group codes (`nb`/`en`) present in the catalog. */
@@ -132,13 +134,14 @@ export interface ITemplatePackageCatalogContext {
   setFilter: (key: keyof ICatalogFilters, value: string) => void
   /** Toggle the "compatible only" filter (boolean, so it can't go via setFilter). */
   setCompatibleOnly: (value: boolean) => void
+  /** Set the selected category tags (string[], so it can't go via setFilter). */
+  setCategories: (categories: string[]) => void
   clearFilters: () => void
   /** Re-load the catalog from the network (used by the degraded-state retry). */
   reloadCatalog: () => void
   setSort: (sort: SortKey) => void
   setRenderMode: (renderMode: RenderMode) => void
   setSelected: (packageId: string) => void
-  setPage: (page: number) => void
   closeDetail: () => void
   importPackage: (pkg: ICatalogPackage) => Promise<void>
   publishCentral: (pkg: ICatalogPackage) => Promise<void>

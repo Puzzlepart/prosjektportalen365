@@ -77,6 +77,43 @@ export interface IPackageInstallOptions {
   onConflicts?: (report: ICompatibilityReport) => Promise<boolean>
 }
 
+export interface ICloudPublishOptions {
+  /**
+   * Command-set property gating the taxonomy provisioning step — same opt-out
+   * semantics as the import flow (see {@link featureFlags.enableTaxonomyProvisioning}).
+   */
+  featureFlagProvisioning?: boolean
+  /**
+   * Invoked when the pre-publish compatibility check finds conflicts. Resolve
+   * `true` to continue (conflicting entries are stripped/overwritten per their
+   * resolution) or `false` to cancel. When omitted, publishing proceeds as if
+   * confirmed.
+   */
+  onConflicts?: (report: ICompatibilityReport) => Promise<boolean>
+}
+
+export interface ICloudPublishResult {
+  /** `false` when the admin cancelled at the compatibility prompt — nothing was written. */
+  completed: boolean
+  /**
+   * `true` when the package ships taxonomy but the step was skipped because
+   * the feature flag is off.
+   */
+  taxonomySkipped: boolean
+  /**
+   * The locale-resolved package manifest, so the caller can enrich the
+   * Maloppsett item (e.g. `provisioning.projectPhaseTermSetId`).
+   */
+  manifest: IPackageManifest
+  /**
+   * Locale-resolved name/description for the Maloppsett item (set when the
+   * manifest carries a `provisioning.localized` variant matching the hub
+   * language) — same source `runImport` feeds to `upsertImported`.
+   */
+  localizedName?: string
+  localizedDescription?: string
+}
+
 /**
  * Mode A — download a `.pppkg`, validate it, then either:
  *
@@ -89,7 +126,9 @@ export interface IPackageInstallOptions {
  *   uses, store the project-level assets for the wizard, and write the Maloppsett
  *   item. The taxonomy step runs by default (sp-js-provisioning 1.3.12 ships a
  *   Term Store handler) and can be disabled per environment — see
- *   {@link featureFlags.enableTaxonomyProvisioning}.
+ *   {@link featureFlags.enableTaxonomyProvisioning}. The same flag and
+ *   Term Store pre-check also gate the taxonomy step of
+ *   {@link provisionCloudTemplateHubDependencies} (Mode B publish).
  */
 export class PackageInstaller {
   public static async runImport(options: IPackageInstallOptions): Promise<boolean> {
@@ -470,7 +509,8 @@ export class PackageInstaller {
 
   /**
    * Whether the package's hub template declares taxonomy content (a term group
-   * and/or term sets). Used to pre-gate the import on term-store permission.
+   * and/or term sets). Used to pre-gate the import and publish flows on
+   * term-store permission.
    *
    * @param zip - The opened package archive
    * @param manifest - The package manifest
@@ -529,59 +569,127 @@ export class PackageInstaller {
   }
 
   /**
-   * Provision a cloud template's **essential hub dependencies** when it is published as a
-   * cloud template ("Tilgjengeliggjør som skymal", admin context).
+   * Provision a cloud template's **hub dependencies** when it is published as a
+   * cloud template ("Tilgjengeliggjør som skymal", admin context) — the same
+   * hub provisioning a full import performs, minus project-level content.
    *
-   * A cloud template's content types must exist on the hub and be bound to the Prosjekter
-   * / Prosjektstatus lists so the portfolio recognizes projects created from it.
-   * This applies only that structural subset of the package's `hub-template.json`
-   * to the hub: `SiteFields` + `ContentTypes` + the content-type **bindings** to
-   * existing hub lists. List-content lists (entries carrying `DataRows`) are
-   * project content pulled from the `.pppkg` at setup time, not hub objects, so
-   * they are dropped. Returns the number of content types provisioned.
+   * Applies the (locale-resolved) `hub-template.json` filtered to what belongs
+   * on the hub: `SiteFields`, `ContentTypes`, the content-type **bindings** to
+   * existing hub lists, hub configuration rows (`DataRows` entries that are not
+   * list-content sources — e.g. Prosjektkolonner / Statusseksjoner rows) and,
+   * feature-flag gated exactly like the import flow, `Taxonomy`. List-content
+   * source lists are dropped — their rows and folder structures are project
+   * content pulled straight from the `.pppkg` at project-setup time. The same
+   * pre-flight compatibility check as the import flow runs against the applied
+   * subset (`options.onConflicts` decides whether to continue).
    */
   public static async provisionCloudTemplateHubDependencies(
     pkg: ICatalogPackage,
-    context: ListViewCommandSetContext
-  ): Promise<void> {
+    context: ListViewCommandSetContext,
+    options: ICloudPublishOptions = {}
+  ): Promise<ICloudPublishResult> {
     const buffer = await PackageInstaller._download(pkg.downloadUrl)
     const zip = await PackageInstaller._unzip(buffer)
-    const manifest = await PackageInstaller._readManifest(zip)
+    const baseManifest = await PackageInstaller._readManifest(zip)
+    // Same locale resolution as the import flow, so bilingual packages publish
+    // the hub template (and exclude the list-content sources) matching the hub
+    // language.
+    const locale = PackageInstaller._detectLocale(context)
+    const { manifest, localizedName, localizedDescription } = PackageInstaller._applyLocale(
+      baseManifest,
+      locale
+    )
+    const result: ICloudPublishResult = {
+      completed: true,
+      taxonomySkipped: false,
+      manifest,
+      localizedName,
+      localizedDescription
+    }
     const hubTemplate = manifest.provisioning?.hubTemplate
-    if (!hubTemplate) return
+    if (!hubTemplate) return result
     const file = zip.file(hubTemplate)
-    if (!file) return
+    if (!file) {
+      // A declared-but-missing hub template is a broken package — fail loudly
+      // like the import flow does, instead of "publishing" with zero hub deps.
+      throw new Error(format(strings.CatalogHubTemplateMissing, hubTemplate))
+    }
     const schema = JSON.parse(await file.async('string'))
 
     const filtered: Record<string, any> = {}
     if (schema.SiteFields?.length) filtered.SiteFields = schema.SiteFields
     if (schema.ContentTypes?.length) filtered.ContentTypes = schema.ContentTypes
-    // Keep only the content-type **binding** entries (the Prosjekter /
-    // Prosjektstatus / Prosjektdata bindings). Drop list-content sources
-    // (`DataRows`) and standalone project lists/document libraries (no bindings) —
-    // those are project content pulled from the .pppkg at setup time, not hub
-    // objects, and must not be created on the hub.
-    const bindingLists = (schema.Lists ?? []).filter(
-      (list: any) =>
-        Array.isArray(list.ContentTypeBindings) &&
-        list.ContentTypeBindings.length > 0 &&
-        !list.DataRows
+    // Lists: keep the content-type **binding** entries (the Prosjekter /
+    // Prosjektstatus / Prosjektdata bindings) and hub configuration rows
+    // (`DataRows` entries the import flow also writes to existing hub lists).
+    // Drop list-content sources — their rows/folders are project content
+    // delivered from the .pppkg at setup time — and standalone project
+    // lists/document libraries (no bindings, no rows), which must not be
+    // created on the hub.
+    const listContentSources = new Set(
+      (manifest.provisioning?.listContent ?? []).map((entry) => entry.sourceList)
     )
-    if (bindingLists.length) filtered.Lists = bindingLists
+    const hubLists = (schema.Lists ?? []).filter((list: any) => {
+      if (listContentSources.has(list.Title)) return false
+      const hasBindings =
+        Array.isArray(list.ContentTypeBindings) && list.ContentTypeBindings.length > 0
+      return (hasBindings && !list.DataRows) || !!list.DataRows
+    })
+    if (hubLists.length) filtered.Lists = hubLists
 
-    if (!filtered.ContentTypes && !filtered.SiteFields) return
+    // Taxonomy is provisioned just like a full import: gated by the same
+    // feature flag, pre-checked for Term Store reachability (see runImport for
+    // why this is a read probe only).
+    const enableTaxonomy = featureFlags.enableTaxonomyProvisioning({
+      featureFlagProvisioning: options.featureFlagProvisioning
+    })
+    const schemaHasTaxonomy = !!(
+      schema.Taxonomy &&
+      ((schema.Taxonomy.TermSets?.length ?? 0) > 0 || schema.Taxonomy.TermGroup)
+    )
+    if (schemaHasTaxonomy && enableTaxonomy) {
+      if (!(await SPDataAdapter.hasTermStorePermission())) {
+        throw new Error(strings.CatalogTaxonomyPermissionBlocked)
+      }
+      filtered.Taxonomy = schema.Taxonomy
+    } else if (schemaHasTaxonomy) {
+      result.taxonomySkipped = true
+    }
+
+    if (!filtered.SiteFields && !filtered.ContentTypes && !filtered.Lists && !filtered.Taxonomy) {
+      return result
+    }
+
+    // Same pre-flight conflict check as the import flow, scoped to the subset
+    // publish actually applies (bundled extensions are not touched here).
+    const report = await CompatibilityService.check(
+      zip,
+      manifest,
+      options.featureFlagProvisioning,
+      { schema: filtered, includeExtensions: false }
+    )
+    let schemaToApply: Record<string, any> = filtered
+    if (report.hasConflicts) {
+      const proceed = options.onConflicts ? await options.onConflicts(report) : true
+      if (!proceed) {
+        result.completed = false
+        return result
+      }
+      schemaToApply = CompatibilityService.stripConflicts(filtered, report)
+    }
 
     const { WebProvisioner } = await import('sp-js-provisioning')
     const provisioner = new WebProvisioner(SPDataAdapter.portalDataService.web).setup({
       spfxContext: context,
       logging: { prefix: '(TemplatePackageCatalog) (Cloud)', activeLogLevel: LogLevel.Info }
     } as any)
-    await provisioner.applyTemplate(filtered, null, (handler) => {
+    await provisioner.applyTemplate(schemaToApply, null, (handler) => {
       Logger.log({
         message: `(PackageInstaller) provisionCloudTemplateHubDependencies: applying handler ${handler}`,
         level: LogLevel.Info
       })
     })
+    return result
   }
 
   /**
@@ -679,9 +787,12 @@ export class PackageInstaller {
    * and return their item ids. Each config is upserted by `Title` (re-import
    * updates the existing item instead of duplicating it). These items tell the
    * setup wizard to copy rows from a hub `GtLccSourceList` into a project's
-   * `GtLccDestinationList`; the source list must already exist on the hub (it is
-   * provisioned by the hub template before this runs). The returned ids are
-   * linked to the Maloppsett item via `ListContentConfigLookup`.
+   * `GtLccDestinationList` — or, when the manifest entry carries a
+   * `plannerTitle`, to turn the source rows into **Planner tasks** (the item
+   * gets the Planner content-type variant + `GtPlannerName`, like the standard
+   * seeded «Planneroppgaver» config). The source list must already exist on the
+   * hub (it is provisioned by the hub template before this runs). The returned
+   * ids are linked to the Maloppsett item via `ListContentConfigLookup`.
    */
   private static async _addListContentConfigs(
     manifest: IPackageManifest
@@ -693,7 +804,7 @@ export class PackageInstaller {
 
     const result: Array<{ title: string; itemId: number }> = []
     for (const cfg of configs) {
-      const properties = {
+      const properties: Record<string, any> = {
         Title: cfg.title,
         GtDescription: cfg.description ?? manifest.description ?? '',
         GtLccSourceList: cfg.sourceList,
@@ -702,6 +813,13 @@ export class PackageInstaller {
         GtLccDefault: !!cfg.default,
         GtLccHidden: !!cfg.hidden,
         GtLccLocked: !!cfg.locked
+      }
+      if (cfg.plannerTitle) {
+        // Planner variant of the Listeinnhold content type (see
+        // Templates/Portfolio/Objects/Lists/Listeinnhold.xml) — makes the
+        // wizard route this config through PlannerConfiguration.
+        properties.ContentTypeId = '0x0100B8B4EE61A547B247B49CFC21B67D5B7D01'
+        properties.GtPlannerName = cfg.plannerTitle
       }
       const existing = await list.items
         .filter(`Title eq '${PackageInstaller._escapeOData(cfg.title)}'`)

@@ -1,6 +1,7 @@
 import type {
   CloudTemplatePackage,
-  IPackageDataRows
+  IPackageDataRows,
+  IPackageFolder
 } from '../services/CloudTemplate/CloudTemplatePackage'
 import { ContentConfig, IContentConfigSPItem } from './ContentConfig'
 import { IManifestListContent } from './IPackageManifest'
@@ -11,6 +12,13 @@ import { IManifestListContent } from './IPackageManifest'
  * {@link ContentConfig.type} resolving to `List`.
  */
 const LIST_CONTENT_BASE_CT = '0x0100B8B4EE61A547B247B49CFC21B67D5B7D'
+
+/**
+ * Planner variant of the Listeinnhold content type — resolves
+ * {@link ContentConfig.type} to `Planner`, so `CopyListData` routes the entry
+ * to `PlannerConfiguration` instead of a list copy.
+ */
+const LIST_CONTENT_PLANNER_CT = `${LIST_CONTENT_BASE_CT}01`
 
 /**
  * Normalize the manifest `fields` value for `GtLccFields`. The manifest schema
@@ -25,9 +33,9 @@ function normalizeFields(fields?: string): string {
 
 /**
  * A list-content configuration (Listeinnhold) that belongs to a **cloud template**.
- * The rows are read from the bundled `hub-template.json`
- * `Lists[]` entry (via {@link getCloudDataRows}) and applied to the project's
- * destination list — nothing is read from the hub.
+ * The rows and folder structures are read from the bundled `hub-template.json`
+ * `Lists[]` entry (via {@link getCloudDataRows} / {@link getCloudFolders}) and
+ * applied to the project's destination list — nothing is read from the hub.
  */
 export class CloudContentConfig extends ContentConfig {
   private _package: CloudTemplatePackage
@@ -50,7 +58,10 @@ export class CloudContentConfig extends ContentConfig {
   ): CloudContentConfig {
     const destinationList = entry.destinationList ?? entry.sourceList
     const spItem: IContentConfigSPItem = {
-      ContentTypeId: LIST_CONTENT_BASE_CT,
+      // `plannerTitle` marks the entry as Planner task content — the Planner
+      // content-type variant makes `type` resolve to `Planner` so the rows
+      // become plan tasks instead of a list copy.
+      ContentTypeId: entry.plannerTitle ? LIST_CONTENT_PLANNER_CT : LIST_CONTENT_BASE_CT,
       Id: id,
       Title: entry.title,
       GtDescription: entry.description ?? '',
@@ -60,7 +71,7 @@ export class CloudContentConfig extends ContentConfig {
       GtLccDefault: !!entry.default,
       GtLccHidden: !!entry.hidden,
       GtLccLocked: !!entry.locked,
-      GtPlannerName: undefined
+      GtPlannerName: entry.plannerTitle
     }
     const instance = new CloudContentConfig(spItem, undefined, undefined)
     instance._package = pkg
@@ -75,5 +86,14 @@ export class CloudContentConfig extends ContentConfig {
    */
   public async getCloudDataRows(): Promise<IPackageDataRows | undefined> {
     return this._package.getHubListDataRows(this.sourceListTitle)
+  }
+
+  /**
+   * The bundled folder hierarchy for this config (e.g. a «Standarddokumenter»
+   * structure), read from the package's hub-template `Lists[]` entry whose
+   * `Title === sourceListTitle`.
+   */
+  public async getCloudFolders(): Promise<IPackageFolder[] | undefined> {
+    return this._package.getHubListFolders(this.sourceListTitle)
   }
 }

@@ -15,11 +15,12 @@ import { Dismiss24Regular } from '@fluentui/react-icons'
 import { customLightTheme, UserMessage } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC } from 'react'
+import { CatalogSkeleton } from './CatalogSkeleton'
 import { CatalogToolbar } from './CatalogToolbar'
 import { CompatibilityDialog } from './CompatibilityDialog'
 import { InstallProgress } from './InstallProgress'
 import { PackageDetails } from './PackageDetails'
-import { PackageList, PackageListSkeleton } from './PackageList'
+import { PackageList } from './PackageList'
 import { TemplatePackageCatalogContext } from './context'
 import styles from './TemplatePackageCatalog.module.scss'
 import { ITemplatePackageCatalogProps } from './types'
@@ -92,7 +93,7 @@ export const TemplatePackageCatalog: FC<ITemplatePackageCatalogProps> = (props) 
               {state.loading ? (
                 <div className={styles.body} role='status' aria-busy={true}>
                   <span className={styles.srOnly}>{strings.CatalogLoadingText}</span>
-                  <PackageListSkeleton />
+                  <CatalogSkeleton />
                 </div>
               ) : (
                 <div className={styles.body}>

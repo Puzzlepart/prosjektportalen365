@@ -176,9 +176,7 @@ export const InstallProgress: FC = () => {
     }
     logGroups[index].entries.push(entry)
   }
-  const activeGroup = progress.log.length
-    ? progress.log[progress.log.length - 1].group
-    : undefined
+  const activeGroup = progress.log.length ? progress.log[progress.log.length - 1].group : undefined
   const groupStatus = (group: { name: string; entries: IInstallLogEntry[] }): InstallStepStatus => {
     if (group.entries.some((e) => e.level === 'error')) return 'error'
     if (!isTerminal && group.name === activeGroup) return 'running'

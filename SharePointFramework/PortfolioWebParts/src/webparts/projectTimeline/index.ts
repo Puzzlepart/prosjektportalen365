@@ -35,7 +35,7 @@ export default class PortfolioTimelineWebPart extends BasePortfolioWebPart<IProj
         {
           groups: [
             {
-              groupName: strings.ProjectDeliveriesGroupName,
+              groupName: strings.GeneralGroupName,
               groupFields: [
                 PropertyPaneDropdown('defaultTimeframeStart', {
                   label: strings.DefaultTimeframeStartLabel,
@@ -52,7 +52,12 @@ export default class PortfolioTimelineWebPart extends BasePortfolioWebPart<IProj
                     key: val.toString(),
                     text: format(strings.DefaultTimeframeEndValue, val[0])
                   }))
-                }),
+                })
+              ]
+            },
+            {
+              groupName: strings.ProjectDeliveriesGroupName,
+              groupFields: [
                 PropertyPaneTextField('dataSourceName', {
                   label: strings.DataSourceLabel
                 }),

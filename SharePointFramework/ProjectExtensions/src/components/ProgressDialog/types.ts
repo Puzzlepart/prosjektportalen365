@@ -47,4 +47,11 @@ export interface IProgressDialogProps extends IBaseDialogProps {
    * a close button is shown instead of auto-closing/redirecting.
    */
   isComplete?: boolean
+
+  /**
+   * Error that occurred during setup. When set, the advanced log is
+   * expanded and the error is shown beneath it, with a close button
+   * in the footer.
+   */
+  error?: Error
 }

@@ -33,8 +33,8 @@ class SPDataAdapter extends SPDataAdapterBase {
 
   /**
    * Best-effort Term Store reachability check, used to pre-gate the taxonomy
-   * provisioning step in Mode A. Returns `true` when the tenant Term Store can
-   * be read by the current user.
+   * provisioning step in Mode A import and Mode B publish-as-cloud-template.
+   * Returns `true` when the tenant Term Store can be read by the current user.
    *
    * This is intentionally a **read** check. A write probe via the REST term
    * store API (`POST /_api/v2.1/termstore/groups`) is rejected on tenants with

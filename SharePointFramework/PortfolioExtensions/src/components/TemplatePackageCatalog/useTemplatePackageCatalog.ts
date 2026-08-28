@@ -3,9 +3,11 @@ import strings from 'PortfolioExtensionsStrings'
 import { ICatalogPackage, ICompatibilityReport, ICrossReference } from 'models'
 import {
   CatalogService,
+  featureFlags,
   TemplateOptionsService,
   PackageInstaller,
-  ProjectExtensionsService
+  ProjectExtensionsService,
+  TelemetryService
 } from 'services'
 import { isNewerVersion } from 'services/version'
 import SPDataAdapter from 'data/SPDataAdapter'
@@ -14,7 +16,6 @@ import {
   ICatalogFilters,
   ITemplatePackageCatalogContext,
   ITemplatePackageCatalogProps,
-  PAGE_SIZE,
   RenderMode,
   SortKey
 } from './types'
@@ -27,11 +28,24 @@ import { useTemplatePackageCatalogState } from './useTemplatePackageCatalogState
 const COMBINING_MARK_MIN = 0x0300
 const COMBINING_MARK_MAX = 0x036f
 
+// Letters with no NFD canonical decomposition (ø, æ, …) need an explicit
+// transliteration fold. Applied after toLowerCase(), so the lowercase-only map
+// also covers Ø/Æ. (å is NOT needed here — NFD decomposes it to a + U+030A.)
+const LETTER_FOLDS: Record<string, string> = {
+  ø: 'o',
+  æ: 'ae',
+  œ: 'oe',
+  ß: 'ss'
+}
+const LETTER_FOLDS_PATTERN = /[øæœß]/g
+
 /**
  * Fold a string for diacritic-insensitive search: decompose, drop combining
- * marks, lower-case. So "anlegg" matches "Anlégg" and accented names match
- * their plain spelling. Avoids `\p{Diacritic}`/the `u`-flag for a safe SPFx TS
- * target.
+ * marks, lower-case, then transliterate letters NFD can't decompose (ø→o,
+ * æ→ae). So "anlegg" matches "Anlégg" and "leverandor" matches
+ * "Leverandørsamhandling". Applied to both the query and the haystack, so
+ * "leverandør" keeps matching too. Avoids `\p{Diacritic}`/the `u`-flag for a
+ * safe SPFx TS target.
  */
 const normalize = (value: string): string => {
   let folded = ''
@@ -39,7 +53,7 @@ const normalize = (value: string): string => {
     const code = char.charCodeAt(0)
     if (code < COMBINING_MARK_MIN || code > COMBINING_MARK_MAX) folded += char
   }
-  return folded.toLowerCase()
+  return folded.toLowerCase().replace(LETTER_FOLDS_PATTERN, (letter) => LETTER_FOLDS[letter])
 }
 
 /**
@@ -110,7 +124,14 @@ export function useTemplatePackageCatalog(
 
   // Hidden packages stay in the catalog feed but are never surfaced in the UI
   // (list, filters, search, selection) — used to stage not-yet-ready packages.
-  const allPackages = (state.catalog?.packages ?? []).filter((pkg) => !pkg.hidden)
+  // Debug/QA can surface them via `?showHidden=true` / the PP_SHOW_HIDDEN
+  // session flag (see featureFlags); they then carry a "Skjult" tag.
+  // Memoized so the derived useMemos below get a stable dependency.
+  const showHidden = featureFlags.showHiddenPackages()
+  const allPackages = useMemo(
+    () => (state.catalog?.packages ?? []).filter((pkg) => showHidden || !pkg.hidden),
+    [state.catalog, showHidden]
+  )
 
   const categories = useMemo(() => {
     const set = new Set<string>()
@@ -141,11 +162,25 @@ export function useTemplatePackageCatalog(
     !isNewerVersion(pkg.minPPVersion, state.installedVersion)
 
   const filteredPackages = useMemo(() => {
-    const { search, type, category, status, language, compatibleOnly } = state.filters
+    const {
+      search,
+      type,
+      categories: selectedCategories,
+      status,
+      language,
+      compatibleOnly
+    } = state.filters
     const term = normalize(search.trim())
     const result = allPackages.filter((pkg) => {
       if (type !== ALL_FILTER && pkg.type !== type) return false
-      if (category !== ALL_FILTER && !(pkg.tags ?? []).includes(category)) return false
+      // Multi-select categories: a package matches if it carries ANY of the
+      // selected tags (OR semantics); empty selection = all.
+      if (
+        selectedCategories.length > 0 &&
+        !(pkg.tags ?? []).some((tag) => selectedCategories.includes(tag))
+      ) {
+        return false
+      }
       if (status !== 'all') {
         const ref = state.crossRef.get(pkg.id.toLowerCase())
         if (status === 'update') {
@@ -177,17 +212,26 @@ export function useTemplatePackageCatalog(
     // `isSupported` reads `state.installedVersion`, so depend on it explicitly.
   }, [allPackages, state.filters, state.sort, state.crossRef, state.installedVersion])
 
-  const pageCount = Math.max(1, Math.ceil(filteredPackages.length / PAGE_SIZE))
-  const page = Math.min(state.page, pageCount)
-  const pagedPackages = filteredPackages.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
   const selectedPackage = allPackages.find((pkg) => pkg.id === state.selectedPackageId)
+
+  // Default-select the first package (per the current filters/sort) once the
+  // catalog has loaded, so the drawer opens with details showing instead of an
+  // empty pane. Never overrides an existing selection, and deliberately does
+  // NOT set `detailOpen` — the <720px collapsed layout stays on the list, and
+  // the details pane skips its select-focus behavior for this implicit
+  // selection (see usePackageDetails).
+  useEffect(() => {
+    if (state.loading || state.selectedPackageId) return
+    const first = filteredPackages[0]
+    if (first) setState({ selectedPackageId: first.id })
+  }, [state.loading, filteredPackages])
 
   // Cleared/default filter state — `template` stays selected, everything else
   // off. Shared by clearFilters() and the active-filter detection below.
   const defaultFilters: ICatalogFilters = {
     search: '',
     type: 'template',
-    category: ALL_FILTER,
+    categories: [],
     status: 'all',
     language: ALL_FILTER,
     compatibleOnly: false
@@ -196,25 +240,27 @@ export function useTemplatePackageCatalog(
   const activeFilterCount =
     (state.filters.search.trim() !== '' ? 1 : 0) +
     (state.filters.type !== defaultFilters.type ? 1 : 0) +
-    (state.filters.category !== defaultFilters.category ? 1 : 0) +
+    (state.filters.categories.length > 0 ? 1 : 0) +
     (state.filters.status !== defaultFilters.status ? 1 : 0) +
     (state.filters.language !== defaultFilters.language ? 1 : 0) +
     (state.filters.compatibleOnly ? 1 : 0)
   const hasActiveFilters = activeFilterCount > 0
 
   const setFilter = (key: keyof ICatalogFilters, value: string) =>
-    setState((current) => ({ filters: { ...current.filters, [key]: value }, page: 1 }))
+    setState((current) => ({ filters: { ...current.filters, [key]: value } }))
 
   const setCompatibleOnly = (value: boolean) =>
-    setState((current) => ({ filters: { ...current.filters, compatibleOnly: value }, page: 1 }))
+    setState((current) => ({ filters: { ...current.filters, compatibleOnly: value } }))
 
-  const clearFilters = () => setState({ filters: { ...defaultFilters }, page: 1 })
+  const setCategories = (categories: string[]) =>
+    setState((current) => ({ filters: { ...current.filters, categories } }))
 
-  const setSort = (sort: SortKey) => setState({ sort, page: 1 })
+  const clearFilters = () => setState({ filters: { ...defaultFilters } })
+
+  const setSort = (sort: SortKey) => setState({ sort })
   const setRenderMode = (renderMode: RenderMode) => setState({ renderMode })
   const setSelected = (packageId: string) =>
     setState({ selectedPackageId: packageId, detailOpen: true, installProgress: undefined })
-  const setPage = (newPage: number) => setState({ page: newPage })
   const closeDetail = () => setState({ detailOpen: false })
 
   const refreshCrossRef = async (): Promise<void> => {
@@ -235,14 +281,21 @@ export function useTemplatePackageCatalog(
   }
 
   const importPackage = async (pkg: ICatalogPackage): Promise<void> => {
-    setState({ notification: undefined, installProgress: { steps: [], status: 'running' } })
+    setState({
+      notification: undefined,
+      installProgress: { steps: [], status: 'running', log: [] }
+    })
+    // Snapshot BEFORE the install: refreshCrossRef() below overwrites the
+    // cross-reference, and its prior presence is what discriminates a fresh
+    // install from an update (for both the installer and telemetry).
+    const priorRef = crossRefFor(pkg.id)
+    const action = priorRef?.itemId ? ('update' as const) : ('install' as const)
     try {
-      const existingItemId = crossRefFor(pkg.id)?.itemId
       const completed = await PackageInstaller.runImport({
         package: pkg,
         context: props.context,
         featureFlagProvisioning: props.featureFlagProvisioning,
-        existingItemId,
+        existingItemId: priorRef?.itemId,
         onProgress: (installProgress) => setState({ installProgress }),
         // Surface compatibility conflicts via the dialog and pause on the
         // awaited promise until the admin chooses Avbryt / Fortsett likevel.
@@ -253,9 +306,18 @@ export function useTemplatePackageCatalog(
           })
       })
       // Cancelled at the compatibility prompt — the progress pane already shows
-      // the cancelled state; don't report success.
+      // the cancelled state; don't report success (and no telemetry event).
       if (!completed) return
       await refreshCrossRef()
+      void TelemetryService.track(props, {
+        action,
+        status: 'success',
+        packageId: pkg.id,
+        packageVersion: pkg.version,
+        packageType: pkg.type,
+        previousVersion: priorRef?.installedVersion,
+        ppVersion: state.installedVersion
+      })
       setState({
         notification: {
           intent: 'success',
@@ -266,6 +328,16 @@ export function useTemplatePackageCatalog(
         }
       })
     } catch (error) {
+      void TelemetryService.track(props, {
+        action,
+        status: 'error',
+        errorMessage: error?.message,
+        packageId: pkg.id,
+        packageVersion: pkg.version,
+        packageType: pkg.type,
+        previousVersion: priorRef?.installedVersion,
+        ppVersion: state.installedVersion
+      })
       setState({
         notification: { intent: 'error', text: error?.message || strings.CatalogInstallErrorTitle }
       })
@@ -275,16 +347,63 @@ export function useTemplatePackageCatalog(
   const publishCentral = async (pkg: ICatalogPackage): Promise<void> => {
     setState({ notification: undefined, busyAction: 'publish' })
     try {
-      // A cloud template's content types are real hub dependencies: provision them (and
-      // their Prosjekter/Prosjektstatus bindings) to the hub now, in this admin
-      // context, so projects later created from the cloud template are recognized by the
-      // portfolio. The rest (template, extensions, list content) is still pulled
-      // from the .pppkg at project-setup time.
-      await PackageInstaller.provisionCloudTemplateHubDependencies(pkg, props.context)
-      await TemplateOptionsService.createCentral(pkg)
+      // A cloud template's hub dependencies are provisioned now, in this admin
+      // context — site columns, content types (with their Prosjekter /
+      // Prosjektstatus bindings), hub configuration rows and, feature-flag
+      // gated like the import flow, taxonomy — so projects later created from
+      // the cloud template are recognized by the portfolio. Project-level
+      // content (template, extensions, list content incl. folder structures)
+      // is still pulled from the .pppkg at project-setup time.
+      const result = await PackageInstaller.provisionCloudTemplateHubDependencies(
+        pkg,
+        props.context,
+        {
+          featureFlagProvisioning: props.featureFlagProvisioning,
+          // Surface compatibility conflicts via the dialog and pause on the
+          // awaited promise until the admin chooses Avbryt / Fortsett likevel.
+          onConflicts: (report: ICompatibilityReport) =>
+            new Promise<boolean>((resolve) => {
+              conflictResolver.current = resolve
+              setState({ compatibilityReport: report })
+            })
+        }
+      )
+      // Cancelled at the compatibility prompt — nothing was written.
+      if (!result.completed) {
+        setState({ notification: { intent: 'warning', text: strings.CatalogPublishCancelledText } })
+        return
+      }
+      await TemplateOptionsService.createCentral(pkg, {
+        projectContentTypeId: result.manifest.provisioning?.projectContentTypeId,
+        projectPhaseTermSetId: result.manifest.provisioning?.projectPhaseTermSetId,
+        name: result.localizedName,
+        description: result.localizedDescription
+      })
       await refreshCrossRef()
-      setState({ notification: { intent: 'success', text: strings.CatalogPublishSuccessText } })
+      void TelemetryService.track(props, {
+        action: 'publishCentral',
+        status: 'success',
+        packageId: pkg.id,
+        packageVersion: pkg.version,
+        packageType: pkg.type,
+        ppVersion: state.installedVersion,
+        detail: { taxonomySkipped: result.taxonomySkipped }
+      })
+      setState({
+        notification: result.taxonomySkipped
+          ? { intent: 'warning', text: strings.CatalogPublishTaxonomySkippedText }
+          : { intent: 'success', text: strings.CatalogPublishSuccessText }
+      })
     } catch (error) {
+      void TelemetryService.track(props, {
+        action: 'publishCentral',
+        status: 'error',
+        errorMessage: error?.message,
+        packageId: pkg.id,
+        packageVersion: pkg.version,
+        packageType: pkg.type,
+        ppVersion: state.installedVersion
+      })
       setState({
         notification: { intent: 'error', text: error?.message || strings.CatalogPublishErrorText }
       })
@@ -305,12 +424,54 @@ export function useTemplatePackageCatalog(
     if (!ref) return
     setState({ notification: undefined, busyAction: 'remove' })
     try {
-      await TemplateOptionsService.remove(ref.itemId)
+      // An extension's cross-ref itemId points at the Prosjekttillegg library,
+      // not Maloppsett — route the delete to the right list.
+      if (pkg.type === 'extension') {
+        await ProjectExtensionsService.remove(ref.itemId)
+      } else {
+        await TemplateOptionsService.remove(ref.itemId)
+      }
       await refreshCrossRef()
-      setState({ notification: { intent: 'success', text: strings.CatalogRemoveSuccessText } })
-    } catch (error) {
+      void TelemetryService.track(props, {
+        action: 'remove',
+        status: 'success',
+        packageId: pkg.id,
+        packageVersion: pkg.version,
+        packageType: pkg.type,
+        previousVersion: ref.installedVersion,
+        ppVersion: state.installedVersion,
+        // What kind of registration was removed (Importert vs Sentral).
+        detail: { removedType: ref.packageType }
+      })
       setState({
-        notification: { intent: 'error', text: error?.message || strings.CatalogRemoveErrorText }
+        notification: {
+          intent: 'success',
+          text:
+            pkg.type === 'extension'
+              ? strings.CatalogRemoveSuccessTextExtension
+              : strings.CatalogRemoveSuccessText
+        }
+      })
+    } catch (error) {
+      void TelemetryService.track(props, {
+        action: 'remove',
+        status: 'error',
+        errorMessage: error?.message,
+        packageId: pkg.id,
+        packageVersion: pkg.version,
+        packageType: pkg.type,
+        previousVersion: ref.installedVersion,
+        ppVersion: state.installedVersion
+      })
+      setState({
+        notification: {
+          intent: 'error',
+          text:
+            error?.message ||
+            (pkg.type === 'extension'
+              ? strings.CatalogRemoveErrorTextExtension
+              : strings.CatalogRemoveErrorText)
+        }
       })
     } finally {
       setState({ busyAction: undefined })
@@ -319,13 +480,11 @@ export function useTemplatePackageCatalog(
 
   return {
     props,
-    state: { ...state, page },
+    state,
     setState,
     open,
     close,
     filteredPackages,
-    pagedPackages,
-    pageCount,
     categories,
     languages,
     activeFilterCount,
@@ -335,12 +494,12 @@ export function useTemplatePackageCatalog(
     isSupported,
     setFilter,
     setCompatibleOnly,
+    setCategories,
     clearFilters,
     reloadCatalog,
     setSort,
     setRenderMode,
     setSelected,
-    setPage,
     closeDetail,
     importPackage,
     publishCentral,

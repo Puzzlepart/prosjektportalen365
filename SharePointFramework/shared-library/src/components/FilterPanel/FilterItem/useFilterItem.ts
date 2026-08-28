@@ -1,5 +1,6 @@
 import strings from 'SharedLibraryStrings'
 import _ from 'lodash'
+import { isTrueBooleanValue } from '../../../util/isTrueBooleanValue'
 import { IFilterItemProps } from './types'
 
 export function useFilterItem(props: IFilterItemProps) {
@@ -15,7 +16,7 @@ export function useFilterItem(props: IFilterItemProps) {
         'column.data.dataTypeProperties.valueIfFalse',
         strings.BooleanNo
       )
-      return { label: parseInt(props.value) === 1 ? valueIfTrue : valueIfFalse }
+      return { label: isTrueBooleanValue(props.value) ? valueIfTrue : valueIfFalse }
     }
     default: {
       return { label: props.name }

@@ -112,7 +112,12 @@ $SHAREPOINT_FRAMEWORK_BASEPATH = "$ROOT_PATH/SharePointFramework"
 $PNP_TEMPLATES_BASEPATH = "$ROOT_PATH/Templates"
 $SITE_SCRIPTS_BASEPATH = "$ROOT_PATH/SiteScripts/Src"
 $PNP_BUNDLE_PATH = "$PSScriptRoot/PnP.PowerShell"
-$PNP_VERSION = "3.1.0"
+# Get-PnPVersion hentes fra SharedFunctions.ps1 i et isolert scope,
+# slik at StartAction/EndAction definert i denne filen ikke overskrives
+$PNP_VERSION = & {
+    . "$PSScriptRoot/Scripts/SharedFunctions.ps1"
+    Get-PnPVersion
+}
 $GIT_HASH = git log --pretty=format:'%h' -n 1
 $RELEASE_NAME = "$($NPM_PACKAGE_FILE.name)-$($NPM_PACKAGE_FILE.version).$($GIT_HASH)"
 if ($USE_CHANNEL_CONFIG) {
@@ -281,15 +286,24 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
     # step below instead: only the selected solutions' .sppkg are copied into the
     # release, and Install.ps1 deploys every .sppkg in the Apps folder — so an
     # [apps-only:<solution>] run still packages and deploys only those apps.
-    rush rebuild >$null 2>&1
+    # The build output is captured to a log file (kept out of the release and
+    # gitignored via **/*.build.log) and dumped if the build fails, so compile
+    # errors are never silently swallowed.
+    $RUSH_REBUILD_LOG = "$SHAREPOINT_FRAMEWORK_BASEPATH/rush-rebuild.build.log"
+    rush rebuild 2>&1 | Out-File -FilePath $RUSH_REBUILD_LOG -Encoding utf8
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "[ERROR] rush rebuild failed with exit code $LASTEXITCODE. Last 200 lines of $($RUSH_REBUILD_LOG):" -ForegroundColor Red
+        Get-Content $RUSH_REBUILD_LOG -Tail 200 | Write-Host
+        exit 1
+    }
     foreach ($Solution in $Solutions) {
         Get-ChildItem "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution/sharepoint/solution/" -Filter *.sppkg -ErrorAction SilentlyContinue | Copy-Item -Destination $RELEASE_PATH_APPS -Force
     }
-    # Fail loudly rather than ship a release with no apps (e.g. a build failure
-    # hidden by the redirection above, or an unrecognised solution name).
+    # Fail loudly rather than ship a release with no apps (e.g. an unrecognised
+    # solution name, or a solution that built without emitting an .sppkg).
     $PackagedApps = @(Get-ChildItem "$RELEASE_PATH_APPS" -Filter *.sppkg -ErrorAction SilentlyContinue)
     if ($PackagedApps.Count -eq 0) {
-        Write-Host "[ERROR] No .sppkg were packaged for solutions: $($Solutions -join ', '). Aborting." -ForegroundColor Red
+        Write-Host "[ERROR] No .sppkg were packaged for solutions: $($Solutions -join ', '). See $RUSH_REBUILD_LOG for build output. Aborting." -ForegroundColor Red
         exit 1
     }
     Write-Host "Packaged $($PackagedApps.Count) app(s): $(($PackagedApps | ForEach-Object { $_.Name }) -join ', ')" -ForegroundColor Green

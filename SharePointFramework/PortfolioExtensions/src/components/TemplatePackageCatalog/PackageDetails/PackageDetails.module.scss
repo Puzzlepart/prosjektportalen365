@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacingVerticalM);
+  padding-bottom: 28px;
 
   // Focused programmatically (not tab-reachable) when a package is selected, so
   // suppress the container outline — focus moving here is conveyed by content.
@@ -32,10 +33,24 @@
     gap: var(--spacingHorizontalS);
     flex-wrap: wrap;
 
-    .titleIcon {
-      font-size: 24px;
-      color: var(--colorBrandForeground1);
-      flex: 0 0 auto;
+    .titleGroup {
+      display: flex;
+      align-items: center;
+      gap: var(--spacingHorizontalS);
+      min-width: 0;
+
+      .titleIcon {
+        display: inline-flex;
+        align-items: center;
+        font-size: 24px;
+        color: var(--colorBrandForeground1);
+        flex: 0 0 auto;
+      }
+
+      .titleText {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
     }
   }
 
@@ -114,6 +129,14 @@
       color: var(--colorNeutralForeground3);
     }
 
+    .skeletonRows {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacingVerticalS);
+      padding: var(--spacingVerticalXXS) 0;
+      max-width: 320px;
+    }
+
     .history {
       display: flex;
       flex-direction: column;
@@ -141,13 +164,21 @@
   }
 
   .actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--spacingHorizontalS);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--spacingVerticalS) var(--spacingHorizontalS);
     margin-top: var(--spacingVerticalM);
     padding-top: var(--spacingVerticalM);
     padding-bottom: var(--spacingVerticalXL);
     border-top: 1px solid var(--colorNeutralStroke2);
+
+    .mainAction {
+      grid-column: 1;
+    }
+
+    .removeAction {
+      grid-column: 2;
+    }
   }
 }
 

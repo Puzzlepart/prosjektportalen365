@@ -69,6 +69,7 @@ declare interface IPortfolioExtensionsStrings {
   CatalogFilterCategoryLabel: string
   CatalogFilterStatusLabel: string
   CatalogFilterAllOption: string
+  CatalogFilterCategorySelectedCount: string
   CatalogClearFiltersText: string
   CatalogResultCount: string
   CatalogSortLabel: string
@@ -79,10 +80,11 @@ declare interface IPortfolioExtensionsStrings {
   CatalogTypeTemplate: string
   CatalogTypeExtension: string
   CatalogTypeContent: string
-  CatalogStatusLocal: string
   CatalogStatusImported: string
   CatalogStatusCentral: string
   CatalogStatusUpdate: string
+  CatalogBadgeHidden: string
+  CatalogBadgeHiddenTooltip: string
   CatalogBadgeImported: string
   CatalogBadgeCentral: string
   CatalogBadgeUpdate: string
@@ -90,9 +92,6 @@ declare interface IPortfolioExtensionsStrings {
   CatalogCardPublished: string
   CatalogEmptyTitle: string
   CatalogEmptyDescription: string
-  CatalogPaginationText: string
-  CatalogPaginationPrevious: string
-  CatalogPaginationNext: string
   CatalogDetailsEmptyText: string
   CatalogContentSummaryTitle: string
   CatalogContentSummaryUnavailable: string
@@ -122,7 +121,10 @@ declare interface IPortfolioExtensionsStrings {
   CatalogActionImport: string
   CatalogActionPublishCentral: string
   CatalogActionUpdate: string
+  CatalogActionReinstall: string
   CatalogActionRemove: string
+  CatalogActionRemoveImport: string
+  CatalogActionRemoveCentral: string
   CatalogStepDownload: string
   CatalogStepUnzip: string
   CatalogStepValidateManifest: string
@@ -150,8 +152,12 @@ declare interface IPortfolioExtensionsStrings {
   CatalogInstallErrorTitle: string
   CatalogPublishSuccessText: string
   CatalogPublishErrorText: string
+  CatalogPublishTaxonomySkippedText: string
+  CatalogPublishCancelledText: string
   CatalogRemoveSuccessText: string
+  CatalogRemoveSuccessTextExtension: string
   CatalogRemoveErrorText: string
+  CatalogRemoveErrorTextExtension: string
   CatalogLoadErrorTitle: string
   CatalogLoadErrorText: string
   CatalogRetryText: string
@@ -179,11 +185,18 @@ declare interface IPortfolioExtensionsStrings {
   CatalogBadgeUpdateTooltip: string
   CatalogActionImportTooltip: string
   CatalogActionUpdateTooltip: string
+  CatalogActionReinstallTooltip: string
+  CatalogActionReinstallExtensionTooltip: string
   CatalogActionPublishCentralTooltip: string
   CatalogActionPublishCentralIncompatibleTooltip: string
   CatalogActionRemoveTooltip: string
+  CatalogActionRemoveCentralTooltip: string
+  CatalogActionPublishCentralAlreadyTooltip: string
+  CatalogActionRemoveTooltipExtension: string
   CatalogRemoveConfirmTitle: string
   CatalogRemoveConfirmText: string
+  CatalogRemoveConfirmTitleExtension: string
+  CatalogRemoveConfirmTextExtension: string
   CatalogRemoveConfirmButton: string
   CatalogTagFilterTooltip: string
   CatalogContentCountTooltip: string
@@ -193,6 +206,7 @@ declare interface IPortfolioExtensionsStrings {
   CatalogStepStatusSkipped: string
   CatalogStepStatusPending: string
   CatalogActionAddExtension: string
+  CatalogActionReinstallExtension: string
   CatalogActionUpdateExtension: string
   CatalogActionAddExtensionTooltip: string
   CatalogExtensionInfo: string

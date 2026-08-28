@@ -34,7 +34,7 @@ export const ProjectInformationColumn: ColumnRenderComponent<IProjectInformation
       }}
       onRenderToggleElement={(onToggle) => (
         <Tooltip
-          content={<>{strings.ProjectInformationPanelButton}</>}
+          content={strings.ProjectInformationPanelButton}
           relationship='description'
           withArrow
         >

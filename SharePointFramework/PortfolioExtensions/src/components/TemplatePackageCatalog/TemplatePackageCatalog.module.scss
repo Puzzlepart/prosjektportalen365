@@ -1,5 +1,5 @@
 .surface {
-  --fui-Drawer--size: min(1040px, 100vw);
+  --fui-Drawer--size: min(1240px, 100vw);
 
   .drawerBody {
     display: flex;
@@ -22,7 +22,7 @@
 
       .grid {
         display: grid;
-        grid-template-columns: 1fr clamp(320px, 32%, 440px);
+        grid-template-columns: 1fr clamp(420px, calc(36% + 60px), 580px);
         gap: var(--spacingHorizontalL);
         min-height: 0;
         flex: 1;
@@ -43,6 +43,63 @@
           border-left: 1px solid var(--colorNeutralStroke2);
           padding-left: var(--spacingHorizontalL);
         }
+      }
+
+      .skeletonToolbar {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacingVerticalS);
+        padding-bottom: var(--spacingVerticalS);
+        flex-shrink: 0;
+      }
+
+      .skeletonToolbarRow {
+        display: flex;
+        align-items: center;
+        gap: var(--spacingHorizontalM);
+      }
+
+      .skeletonSearch {
+        width: 240px;
+        height: 32px;
+      }
+
+      .skeletonControl {
+        width: 180px;
+        height: 32px;
+      }
+
+      .skeletonToggle {
+        width: 72px;
+        height: 32px;
+      }
+
+      /* Detail-pane placeholder sketching the auto-selected package's view:
+         thumbnail, title, meta and description lines, action buttons. */
+      .skeletonDetail {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacingVerticalM);
+      }
+
+      .skeletonDetailThumbnail {
+        /* Matches .thumbnail in PackageDetails.module.scss. */
+        height: 180px;
+        border-radius: var(--borderRadiusMedium);
+      }
+
+      .skeletonDetailTitle {
+        width: 60%;
+      }
+
+      .skeletonDetailMeta {
+        width: 40%;
+      }
+
+      .skeletonDetailActions {
+        display: flex;
+        gap: var(--spacingHorizontalS);
+        margin-top: var(--spacingVerticalS);
       }
 
       /* Visually hidden, still announced by screen readers. */
@@ -74,12 +131,6 @@
       }
     }
   }
-}
-
-.loading {
-  display: flex;
-  justify-content: center;
-  padding: var(--spacingVerticalXXL) 0;
 }
 
 @media (max-width: 720px) {

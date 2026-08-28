@@ -3,7 +3,8 @@ import {
   Badge,
   Button,
   Link,
-  Spinner,
+  Skeleton,
+  SkeletonItem,
   Text,
   Tooltip,
   Tree,
@@ -73,21 +74,25 @@ export const PackageContentSummary: FC<IPackageContentSummaryProps> = ({ package
         )}
       </span>
     )
-    // Eye action: opens a code preview for nodes backed by a single file.
-    const actions = node.fileUrl ? (
-      <Tooltip content={strings.CatalogPreviewTooltip} relationship='label'>
-        <Button
-          appearance='subtle'
-          size='small'
-          icon={<Eye16Regular />}
-          aria-label={strings.CatalogPreviewTooltip}
-          onClick={(event) => {
-            event.stopPropagation()
-            openPreview({ title: node.label, url: node.fileUrl })
-          }}
-        />
-      </Tooltip>
-    ) : undefined
+    const actions = node.fileUrl
+      ? {
+          visible: true,
+          children: (
+            <Tooltip content={strings.CatalogPreviewTooltip} relationship='label'>
+              <Button
+                appearance='subtle'
+                size='small'
+                icon={<Eye16Regular />}
+                aria-label={strings.CatalogPreviewTooltip}
+                onClick={(event) => {
+                  event.stopPropagation()
+                  openPreview({ title: node.label, url: node.fileUrl })
+                }}
+              />
+            </Tooltip>
+          )
+        }
+      : undefined
     if (node.children && node.children.length > 0) {
       return (
         <TreeItem key={node.key} itemType='branch' value={node.key}>
@@ -109,7 +114,13 @@ export const PackageContentSummary: FC<IPackageContentSummaryProps> = ({ package
         {strings.CatalogContentSummaryTitle}
       </Text>
 
-      {loading && <Spinner size='tiny' />}
+      {loading && (
+        <Skeleton aria-hidden className={styles.skeletonRows}>
+          <SkeletonItem size={16} />
+          <SkeletonItem size={16} />
+          <SkeletonItem size={16} />
+        </Skeleton>
+      )}
 
       {!loading && error && (
         <Text size={200} className={styles.muted}>

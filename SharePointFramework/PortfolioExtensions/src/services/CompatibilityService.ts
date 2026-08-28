@@ -22,23 +22,36 @@ function attr(xml: string, name: string): string | undefined {
 }
 
 /**
- * Pre-import compatibility check (Mode A): compares a package's
- * `hub-template.json` (and its bundled extensions) against what already exists
- * on the hub web, and reports conflicts so the admin can fix them manually or
- * continue knowing items will be overwritten or skipped.
+ * Pre-flight compatibility check for the import (Mode A) and publish-as-cloud-
+ * template (Mode B) flows: compares a package's `hub-template.json` (and, for
+ * imports, its bundled extensions) against what already exists on the hub web,
+ * and reports conflicts so the admin can fix them manually or continue knowing
+ * items will be overwritten or skipped.
  *
  * Read-only — never mutates the hub. Resolution semantics: see
  * {@link ICompatibilityReport}.
  */
 export class CompatibilityService {
+  /**
+   * Run the compatibility check.
+   *
+   * @param zip - The opened package archive
+   * @param manifest - The package manifest
+   * @param featureFlagProvisioning - Taxonomy feature-flag opt-out (see `featureFlags`)
+   * @param options - `schema` overrides the hub schema read from the zip — the
+   * publish flow passes its already-filtered subset so only entries that will
+   * actually be applied are checked. `includeExtensions: false` skips the
+   * Prosjekttillegg check (publish never writes extensions).
+   */
   public static async check(
     zip: any,
     manifest: IPackageManifest,
-    featureFlagProvisioning?: boolean
+    featureFlagProvisioning?: boolean,
+    options: { schema?: any; includeExtensions?: boolean } = {}
   ): Promise<ICompatibilityReport> {
     const conflicts: ICompatibilityConflict[] = []
     try {
-      const schema = await CompatibilityService._readHubSchema(zip, manifest)
+      const schema = options.schema ?? (await CompatibilityService._readHubSchema(zip, manifest))
       if (schema) {
         const web = SPDataAdapter.portalDataService.web
 
@@ -64,7 +77,9 @@ export class CompatibilityService {
           await CompatibilityService._checkTaxonomy(schema, conflicts)
         }
       }
-      await CompatibilityService._checkExtensions(manifest, conflicts)
+      if (options.includeExtensions !== false) {
+        await CompatibilityService._checkExtensions(manifest, conflicts)
+      }
     } catch (error) {
       Logger.log({
         message: `(CompatibilityService) check failed: ${error?.message}`,
@@ -324,12 +339,28 @@ export class CompatibilityService {
   /**
    * Returns the schema with conflicting entries removed for the resolutions the
    * user accepted (`skip`/`blocked`): whole ContentTypes / SiteFields entries,
-   * and individual fields out of a `Lists[].Fields`/`FieldRefs` array. Mutates a
-   * shallow clone so the existing hub objects are left untouched on provisioning.
+   * individual fields out of a `Lists[].Fields`/`FieldRefs` array, and term sets
+   * out of `Taxonomy.TermSets` (so an existing term set with the same id but a
+   * different name really is left untouched, as the conflict dialog promises).
+   * Mutates a shallow clone so the existing hub objects are left untouched on
+   * provisioning.
    */
   public static stripConflicts(schema: any, report: ICompatibilityReport): any {
     if (!schema || !report?.conflicts?.length) return schema
     const next = { ...schema }
+    const termSetSkipIds = new Set(
+      report.conflicts.filter((c) => c.kind === 'taxonomy').map((c) => normGuid(c.targetId))
+    )
+    if (next.Taxonomy?.TermSets && termSetSkipIds.size > 0) {
+      const termSets = next.Taxonomy.TermSets.filter(
+        (set: any) => !termSetSkipIds.has(normGuid(set?.Id))
+      )
+      if (termSets.length > 0) {
+        next.Taxonomy = { ...next.Taxonomy, TermSets: termSets }
+      } else {
+        delete next.Taxonomy
+      }
+    }
     const ctSkip = new Set(
       report.conflicts.filter((c) => c.kind === 'contentType').map((c) => normCtId(c.targetId))
     )

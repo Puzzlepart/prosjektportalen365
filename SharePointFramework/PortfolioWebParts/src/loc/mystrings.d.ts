@@ -76,6 +76,7 @@ declare interface IPortfolioWebPartsStrings {
     SiteNamePrefixTooltipText: string
     SiteNameSuffixTooltipText: string
     SiteNameValidationErrorMessage: string
+    SiteNameRequestExistsErrorMessage: string
     SiteNameValidationSuccessMessage: string
     SiteDescriptionFieldLabel: string
     SiteDescriptionFieldDescription: string
@@ -91,6 +92,7 @@ declare interface IPortfolioWebPartsStrings {
     MemberFieldLabel: string
     MemberFieldDescription: string
     DuplicateOwnerMemberMessage: string
+    MinimumOwnersMessage: string
     RequestedByFieldLabel: string
     RequestedByFieldDescription: string
     TeamifyFieldLabel: string
@@ -124,6 +126,7 @@ declare interface IPortfolioWebPartsStrings {
     TimeZoneFieldLabel: string
     HubSiteFieldLabel: string
     DefaultHubInfoMessage: string
+    DefaultHubResolveErrorMessage: string
     ParentSiteFieldLabel: string
     ParentSiteFieldDescription: string
     ImageFieldLabel: string
@@ -139,6 +142,10 @@ declare interface IPortfolioWebPartsStrings {
     ToastCreatedBody: string
     ToastCreatedErrorTitle: string
     ToastCreatedErrorBody: string
+    ToastUserResolveErrorTitle: string
+    ToastUserResolveErrorBody: string
+    ToastNameConflictErrorTitle: string
+    ToastNameConflictErrorBody: string
     StatusMenuLabel: string
     SettingsMenuLabel: string
     SettingsSearchLabel: string
@@ -568,6 +575,8 @@ declare interface IPortfolioWebPartsStrings {
   ShowRenderModeSelectorLabel: string
   ShowSearchBoxDescription: string
   ShowSearchBoxLabel: string
+  ShowClosedProjectsLabel: string
+  ShowClosedProjectsDescription: string
   ShowSortByDescription: string
   ShowSortByLabel: string
   ShowViewSelectorLabel: string

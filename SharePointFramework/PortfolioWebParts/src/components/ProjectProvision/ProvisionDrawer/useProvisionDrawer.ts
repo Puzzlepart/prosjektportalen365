@@ -1,4 +1,4 @@
-import { useContext, useState, useMemo } from 'react'
+import { useContext, useState, useMemo, useRef } from 'react'
 import { useMotion } from '@fluentui/react-motion-preview'
 import { useMotionStyles } from './motionStyles'
 import { ProjectProvisionContext } from '../context'
@@ -7,6 +7,7 @@ import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
 import { useId } from '@fluentui/react-components'
 import strings from 'PortfolioWebPartsStrings'
 import { getFieldsForType } from '../getFieldsForType'
+import { normalizeHubSiteId } from 'utils/normalizeHubSiteId'
 import {
   applyProjectPropertiesFromMetadata,
   applyTaxonomyUpdatesAfterAdd
@@ -73,23 +74,39 @@ export const useProvisionDrawer = () => {
   const enableAutoApproval = getGlobalSetting('EnableAutoApproval')
   const managedPath = getGlobalSetting('SPOManagedPath')
 
+  // The settings list stores numbers as strings; anything unset/invalid/≤0
+  // falls back to 1 so tenants without the setting keep today's behavior.
+  const minimumOwnersSetting = parseInt(String(getGlobalSetting('MinimumOwners') ?? ''), 10)
+  const minimumOwners =
+    Number.isFinite(minimumOwnersSetting) && minimumOwnersSetting > 0 ? minimumOwnersSetting : 1
+
   const typeDefaults = context.state.types?.find((t) => t.title === selectedType)
   const enableExternalSharing = typeDefaults?.externalSharing
 
-  const namingConvention = getGlobalSetting('UseNamingConventions')
-    ? context.state.settings?.find((t) => t.title === 'NamingConvention')?.value
-    : context.state.types?.find((t) => t.title === context.column.get('type'))?.namingConvention
+  const namingConvention =
+    getGlobalSetting('UseNamingConventions') === 'true'
+      ? context.state.settings?.find((t) => t.title === 'NamingConvention')?.value
+      : context.state.types?.find((t) => t.title === context.column.get('type'))?.namingConvention
 
-  const urlPrefix = `${context.props.webAbsoluteUrl.split(managedPath)[0]}/${managedPath}/`
+  // `webAbsoluteUrl.split(managedPath)[0]` keeps its trailing slash, so it must
+  // not be joined with another '/' — the resulting double slash makes the URL
+  // differ from the one the provisioning engine creates.
+  const urlPrefix = `${context.props.webAbsoluteUrl
+    .split(managedPath)[0]
+    .replace(/\/+$/, '')}/${managedPath}/`
   const aliasSuffix = '@' + context.props.pageContext.user.loginName.split('@')[1]
 
-  const joinHub = !!context.state.types?.find((t) => t.title === context.column.get('type'))
-    ?.joinHub
+  // A type that points at a specific `DefaultHub` is always hub associated —
+  // otherwise the configured hub would be silently dropped on save.
+  const joinHub = !!currentTypeConfig?.joinHub || !!currentTypeConfig?.defaultHub
 
   const usesDifferentHub =
     joinHub &&
     !!context.column.get('hubSite') &&
-    context.column.get('hubSite') !== context.props.pageContext.legacyPageContext.hubSiteId
+    normalizeHubSiteId(context.column.get('hubSite')) !==
+      normalizeHubSiteId(context.props.pageContext.legacyPageContext.hubSiteId)
+
+  const hubResolveFailed = joinHub && !!context.column.get('hubSiteResolveFailed')
 
   const spaceTypeInternal = context.state.types?.find(
     (t) => t.title === context.column.get('type')
@@ -98,15 +115,41 @@ export const useProvisionDrawer = () => {
   const isTeam = spaceTypeInternal === 'Microsoft Teams Team'
   const isViva = spaceTypeInternal === 'Viva Engage Community'
 
-  const onSave = async (): Promise<boolean> => {
-    const baseUrl = `${context.props.webAbsoluteUrl.split(managedPath)[0]}${managedPath}/`
+  const [siteExists, setSiteExists] = useState(false)
+  const [requestExists, setRequestExists] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+  const isSavingRef = useRef(false)
 
-    const name = `${namingConvention?.prefixText}${context.column.get('name')}${
-      namingConvention?.suffixText
+  const hasUnresolvedProvisionUsers = () =>
+    ['owner', 'member', 'requestedBy'].some((field) => {
+      const users = context.column.get(field)
+      if (!Array.isArray(users)) return false
+      return users.some((user) => !user?.secondaryText && !user?.id)
+    })
+
+  const submitProvisionRequest = async (): Promise<boolean | 'conflict' | 'userResolveError'> => {
+    const name = `${namingConvention?.prefixText ?? ''}${context.column.get('name')}${
+      namingConvention?.suffixText ?? ''
     }`
-    const alias = `${namingConvention?.prefixText}${context.column.get('alias')}${
-      namingConvention?.suffixText
+    const alias = `${namingConvention?.prefixText ?? ''}${context.column.get('alias')}${
+      namingConvention?.suffixText ?? ''
     }`
+
+    // Re-validate right before submitting — the debounced check while typing
+    // can be stale or still in flight when the user clicks save.
+    const [existingSite, pendingRequest] = await Promise.all([
+      context.props.dataAdapter.siteExists(`${urlPrefix}${alias}`),
+      context.props.dataAdapter.provisionRequestExists(alias, context.props.provisionUrl)
+    ])
+    if (existingSite || pendingRequest) {
+      setSiteExists(existingSite)
+      setRequestExists(pendingRequest)
+      return 'conflict'
+    }
+
+    if (hasUnresolvedProvisionUsers()) {
+      return 'userResolveError'
+    }
 
     const sensitivityLabelId = context.state.sensitivityLabels?.find(
       (t) => t.labelName === context.column.get('sensitivityLabel')
@@ -147,9 +190,9 @@ export const useProvisionDrawer = () => {
         context.column.get('teamify') || isTeam
           ? context.state.properties.teamTemplate || 'standard'
           : '',
-      OwnersId: context.state.properties.owner,
-      MembersId: context.state.properties.member,
-      RequestedById: context.state.properties.requestedBy,
+      OwnersId: context.column.get('owner'),
+      MembersId: context.column.get('member'),
+      RequestedById: context.column.get('requestedBy'),
       ConfidentialData: context.column.get('isConfidential'),
       Metadata: context.column.get('metadata'),
       Visibility: context.state.properties.privacy || 'Private',
@@ -174,8 +217,8 @@ export const useProvisionDrawer = () => {
       RequestedSource: strings.Provision.RequestedSource,
       SpaceImage: context.column.get('image')?.split(',')[1],
       SiteURL: {
-        Description: `${baseUrl}${alias}`,
-        Url: `${baseUrl}${alias}`
+        Description: `${urlPrefix}${alias}`,
+        Url: `${urlPrefix}${alias}`
       },
       SiteAlias: alias,
       MailboxAlias: alias,
@@ -193,13 +236,14 @@ export const useProvisionDrawer = () => {
     }
 
     const isParentMode = !!context.props.parentMode
-    const hubUrl = isParentMode
-      ? parentSite.HubSiteUrl
-      : context.props.dataAdapter.portalDataService?.url
+    const targetHubSiteUrl = usesDifferentHub ? context.column.get('hubSiteUrl') : ''
+    const hubUrl =
+      targetHubSiteUrl ||
+      (isParentMode ? parentSite.HubSiteUrl : context.props.dataAdapter.portalDataService?.url)
     if (hubUrl) {
       const properties: Record<string, any> = {
         Title: context.column.get('name'),
-        GtSiteUrl: `${baseUrl}${alias}`
+        GtSiteUrl: `${urlPrefix}${alias}`
       }
       if (isParentMode) {
         properties.GtParentProjects = `[{"SiteId":"${parentSite.SiteId}","Title":"${parentSite.Title}","SPWebURL":"${parentSite.SPWebURL}","HubSiteUrl":"${parentSite.HubSiteUrl}"}]`
@@ -236,7 +280,30 @@ export const useProvisionDrawer = () => {
     )
   }
 
-  const [siteExists, setSiteExists] = useState(false)
+  /**
+   * Submits the provision request, guarding against double submits. Without
+   * the guard a double click fires two concurrent submits, and the duplicate
+   * check in `submitProvisionRequest` can't catch the second one — neither has
+   * added its request to the list by the time both run their check, so two
+   * requests for the same site end up in the list.
+   *
+   * The ref is what actually blocks the second click: `isSaving` may not have
+   * been committed yet when the two click events arrive back to back.
+   */
+  const onSave = async (): Promise<boolean | 'conflict' | 'busy' | 'userResolveError'> => {
+    if (isSavingRef.current) return 'busy'
+    isSavingRef.current = true
+    setIsSaving(true)
+    try {
+      return await submitProvisionRequest()
+    } catch (error) {
+      console.warn('(useProvisionDrawer) (onSave) Failed to submit provision request:', error)
+      return false
+    } finally {
+      isSavingRef.current = false
+      setIsSaving(false)
+    }
+  }
 
   const duplicateOwnerMembers = useMemo(() => {
     const owners: any[] = context.column.get('owner') || []
@@ -245,6 +312,12 @@ export const useProvisionDrawer = () => {
     const ownerEmails = new Set(owners.map((u) => u?.secondaryText?.toLowerCase()).filter(Boolean))
     return members.filter((m) => ownerEmails.has(m?.secondaryText?.toLowerCase()))
   }, [context.column])
+
+  const insufficientOwners = useMemo(() => {
+    if (minimumOwners <= 1) return false
+    const owners: any[] = context.column.get('owner') || []
+    return owners.length < minimumOwners
+  }, [context.column, minimumOwners])
 
   const isSaveDisabled = useMemo(() => {
     const requiredFields = fieldsToUse.filter((field) => field.required && !field.hidden)
@@ -281,7 +354,8 @@ export const useProvisionDrawer = () => {
         })),
         missingRequiredFields,
         siteExists,
-        isSaveDisabled: missingRequiredFields || siteExists,
+        requestExists,
+        isSaveDisabled: missingRequiredFields || siteExists || requestExists,
         currentTypeConfig,
         currentTemplate: currentTemplate
           ? {
@@ -293,12 +367,20 @@ export const useProvisionDrawer = () => {
       })
     }
 
-    return missingRequiredFields || siteExists || duplicateOwnerMembers.length > 0
+    return (
+      missingRequiredFields ||
+      siteExists ||
+      requestExists ||
+      duplicateOwnerMembers.length > 0 ||
+      insufficientOwners
+    )
   }, [
     fieldsToUse,
     context.column,
     siteExists,
+    requestExists,
     duplicateOwnerMembers,
+    insufficientOwners,
     selectedType,
     context.props.debugMode,
     currentTemplate,
@@ -325,12 +407,13 @@ export const useProvisionDrawer = () => {
       }))
 
     return {
-      hasErrors: missingFields.length > 0 || siteExists,
+      hasErrors: missingFields.length > 0 || siteExists || requestExists,
       missingFields,
       siteExists,
+      requestExists,
       totalRequired: requiredFields.length
     }
-  }, [fieldsToUse, context.column, siteExists, currentTemplate])
+  }, [fieldsToUse, context.column, siteExists, requestExists, currentTemplate])
 
   const fluentProviderId = useId('fp-provision-drawer')
 
@@ -343,11 +426,16 @@ export const useProvisionDrawer = () => {
     motionStyles,
     context,
     onSave,
+    isSaving,
     isSaveDisabled,
     missingFieldsInfo,
     siteExists,
     setSiteExists,
+    requestExists,
+    setRequestExists,
     duplicateOwnerMembers,
+    insufficientOwners,
+    minimumOwners,
     namingConvention,
     enableSensitivityLabels,
     enableSensitivityLabelsLibrary,
@@ -361,6 +449,7 @@ export const useProvisionDrawer = () => {
     isTeam,
     joinHub,
     usesDifferentHub,
+    hubResolveFailed,
     getField,
     fieldsToUse,
     fluentProviderId

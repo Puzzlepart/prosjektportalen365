@@ -238,7 +238,29 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         })
       }
     } catch (error) {
-      this._renderErrorDialog({ error })
+      if (this._taskProgress?.some((task) => task.status === 'error')) {
+        this._renderProgressDialog({
+          progressIndicator: {
+            label: strings.ProgressDialogLabel,
+            description: strings.ProgressDialogDescription
+          },
+          iconName: 'ErrorBadge',
+          title: this.properties.progressDialogTitle,
+          subText: this.properties.progressDialogSubText,
+          taskProgress: this._taskProgress,
+          currentStep: this._currentTaskIndex,
+          totalSteps: this._totalTasks,
+          error,
+          onDismiss: async () => {
+            if (this._isSetup) {
+              await deleteCustomizer(this)
+            }
+            this._unmount(this._getPlaceholder('ProgressDialog'))
+          }
+        })
+      } else {
+        this._renderErrorDialog({ error })
+      }
     }
   }
 
@@ -554,8 +576,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         spfxContext: this.context
       })
 
-      const [_templates, extensions, contentConfig, templateFiles, customActions, projectData] =
-        await Promise.all([
+      const [_templates, extensions, contentConfig, templateFiles, projectData] = await Promise.all(
+        [
           this._getTemplates(),
           this._portalDataService.getItems(
             resource.Lists_ProjectExtensions_Title,
@@ -577,9 +599,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             },
             ['File']
           ),
-          this.sp.web.userCustomActions(),
           this._portalDataService.getProjectData()
-        ])
+        ]
+      )
       const templates = _templates.map((tmpl) => {
         const [tmplFile] = templateFiles.filter((file) => file.id === tmpl.projectTemplateId)
         tmpl.projectTemplateUrl = tmplFile?.serverRelativeUrl
@@ -602,7 +624,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         extensions,
         contentConfig,
         templates,
-        customActions,
         projectData,
         hasExistingTemplate
       } as IProjectSetupData

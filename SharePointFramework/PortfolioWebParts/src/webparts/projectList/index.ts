@@ -111,6 +111,20 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   calloutWidth: 430,
                   checked: this.properties.showSearchBox
                 }),
+                PropertyFieldToggleWithCallout('showClosedProjects', {
+                  calloutTrigger: CalloutTriggers.Hover,
+                  key: 'showClosedProjectsFieldId',
+                  label: strings.ShowClosedProjectsLabel,
+                  calloutContent: React.createElement(
+                    'p',
+                    {},
+                    strings.ShowClosedProjectsDescription
+                  ),
+                  onText: strings.BooleanOn,
+                  offText: strings.BooleanOff,
+                  calloutWidth: 430,
+                  checked: propertiesWithDefaults.showClosedProjects
+                }),
                 PropertyFieldToggleWithCallout('showRenderModeSelector', {
                   calloutTrigger: CalloutTriggers.Hover,
                   key: 'showRenderModeSelectorFieldId',

@@ -60,6 +60,18 @@ export interface IEnrichedProjectsFields {
   secondaryUserField?: string
 
   /**
+   * Include projects with a closed lifecycle status (`Avsluttet` / `Closed`,
+   * depending on hub language).
+   * Defaults to `false`, which is the long-standing behaviour — closed projects
+   * are dropped after fetching. Opting in leaves them in the result so callers
+   * (e.g. the `ProjectList` verticals) can decide per view whether to show them.
+   *
+   * Note: this does not affect the query or the shared items cache, which have
+   * always contained closed projects; only the post-fetch filter.
+   */
+  includeClosed?: boolean
+
+  /**
    * Primary field
    */
   primaryField?: string
@@ -413,7 +425,10 @@ export interface IPortfolioWebPartsDataAdapter {
    * @param provisionUrl Url for the provisioning site
    *
    */
-  addProvisionRequests?(properties: IProvisionRequestItem, provisionUrl: string): Promise<boolean>
+  addProvisionRequests?(
+    properties: IProvisionRequestItem,
+    provisionUrl: string
+  ): Promise<boolean | 'userResolveError'>
 
   /**
    * Adds project data to the ProjectData list to store project information that
@@ -476,6 +491,15 @@ export interface IPortfolioWebPartsDataAdapter {
   siteExists?(siteUrl: string): Promise<boolean>
 
   /**
+   * Checks if an in-flight provisioning request with the same site alias
+   * already exists in the "Provisioning Requests" list
+   *
+   * @param siteAlias Full site alias (including naming convention prefix/suffix)
+   * @param provisionUrl URL of the provisioning site
+   */
+  provisionRequestExists?(siteAlias: string, provisionUrl: string): Promise<boolean>
+
+  /**
    * Retrieves the configuration from the "Idékonfigurasjon" list
    *
    * @returns A Promise that resolves to an array containing the configuration.
@@ -536,9 +560,11 @@ export interface IPortfolioWebPartsDataAdapter {
    * Resolve a hub site by its ID using the HubSites REST API.
    *
    * @param hubSiteId The hub site GUID
-   * @returns Hub site info with id and title, or null if not found
+   * @returns Hub site info with normalized id, title and site URL, or null if not found
    */
-  resolveHubSiteById?(hubSiteId: string): Promise<{ hubSiteId: string; title: string } | null>
+  resolveHubSiteById?(
+    hubSiteId: string
+  ): Promise<{ hubSiteId: string; title: string; url: string } | null>
 }
 
 export type PortfolioInstance = {

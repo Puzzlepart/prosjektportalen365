@@ -167,29 +167,57 @@ export class TemplateOptionsService {
   }
 
   /**
-   * Register a central "cloud template" (Mode B) — metadata only, no provisioning.
+   * Register a central "cloud template" (Mode B). The Maloppsett item itself is
+   * metadata — the hub dependencies (fields, content types, bindings, taxonomy)
+   * are provisioned separately by
+   * `PackageInstaller.provisionCloudTemplateHubDependencies` before this runs.
    *
    * `PpPkgSourceUrl` stores the resolvable `.pppkg` **download** URL (not the
    * changelog page): the project-setup wizard reads it to download and resolve
-   * the cloud template directly from its package at setup time. `sourceUrl` overrides it
-   * only when explicitly supplied.
+   * the cloud template directly from its package at setup time.
+   * `options.sourceUrl` overrides it only when explicitly supplied. When the
+   * manifest declares them (and the publish step has provisioned the term set /
+   * content type to the hub), `projectPhaseTermSetId` → `GtProjectPhaseTermId`
+   * and `projectContentTypeId` → `GtProjectContentType` are set like
+   * {@link upsertImported} does. `options.name`/`options.description` override
+   * the catalog values for a language-specific Maloppsett item (bilingual
+   * packages on a matching-language hub).
    */
-  public static async createCentral(pkg: ICatalogPackage, sourceUrl?: string): Promise<void> {
-    await SPDataAdapter.portalDataService.addItemToList('PROJECT_TEMPLATE_CONFIGURATION', {
-      Title: pkg.name,
+  public static async createCentral(
+    pkg: ICatalogPackage,
+    options: {
+      projectContentTypeId?: string
+      projectPhaseTermSetId?: string
+      sourceUrl?: string
+      name?: string
+      description?: string
+    } = {}
+  ): Promise<void> {
+    const properties: Record<string, any> = {
+      Title: options.name ?? pkg.name,
       GtProjectTemplateId: SENTINEL_PROJECT_TEMPLATE_ID,
-      GtDescription: pkg.description ?? '',
+      GtDescription: options.description ?? pkg.description ?? '',
       IconName: 'Cloud',
       PpPkgType: PpPkgType.Sentral,
       PpPkgId: pkg.id,
       PpPkgVersion: pkg.version,
       PpPkgLatestVersion: pkg.version,
       PpPkgSourceUrl: {
-        Url: sourceUrl || pkg.downloadUrl,
+        Url: options.sourceUrl || pkg.downloadUrl,
         Description: pkg.name
       },
       PpPkgInstalledDate: nowIso()
-    })
+    }
+    if (options.projectContentTypeId) {
+      properties.GtProjectContentType = options.projectContentTypeId
+    }
+    if (options.projectPhaseTermSetId) {
+      properties.GtProjectPhaseTermId = options.projectPhaseTermSetId
+    }
+    await SPDataAdapter.portalDataService.addItemToList(
+      'PROJECT_TEMPLATE_CONFIGURATION',
+      properties
+    )
   }
 
   /**

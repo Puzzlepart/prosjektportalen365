@@ -31,20 +31,22 @@ const useStyles = makeStyles({
   heading: {
     color: tokens.colorNeutralForeground2
   },
+  // FIXED height so the carousel doesn't resize between screenshots with
+  // different proportions — images letterbox inside (object-fit: contain).
   frame: {
     position: 'relative',
     width: '100%',
+    height: '320px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: tokens.colorNeutralBackground3,
     borderRadius: tokens.borderRadiusMedium,
-    overflow: 'hidden',
-    minHeight: '180px'
+    overflow: 'hidden'
   },
   image: {
     width: '100%',
-    maxHeight: '320px',
+    height: '100%',
     objectFit: 'contain',
     display: 'block',
     cursor: 'zoom-in'
@@ -96,27 +98,45 @@ const useStyles = makeStyles({
     padding: tokens.spacingVerticalL,
     color: tokens.colorNeutralForeground3
   },
+  // The lightbox surface has FIXED width AND height so the dialog never
+  // resizes/jumps when navigating between screenshots with different
+  // proportions — images letterbox (whitespace) inside the flex-filling
+  // frame instead (object-fit: contain).
   lightboxSurface: {
+    width: 'min(1100px, 92vw)',
     maxWidth: '92vw',
-    width: 'fit-content'
+    height: 'min(84vh, 800px)'
   },
   lightboxBody: {
     display: 'flex',
     flexDirection: 'column',
-    rowGap: tokens.spacingVerticalS
+    rowGap: tokens.spacingVerticalS,
+    height: '100%',
+    maxHeight: '100%'
   },
   lightboxBar: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    columnGap: tokens.spacingHorizontalS
+    columnGap: tokens.spacingHorizontalS,
+    flexShrink: 0
+  },
+  lightboxFrame: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    flexGrow: 1,
+    minHeight: 0,
+    backgroundColor: tokens.colorNeutralBackground3,
+    borderRadius: tokens.borderRadiusMedium,
+    overflow: 'hidden'
   },
   lightboxImage: {
-    maxWidth: '86vw',
-    maxHeight: '78vh',
+    width: '100%',
+    height: '100%',
     objectFit: 'contain',
-    display: 'block',
-    margin: '0 auto'
+    display: 'block'
   }
 })
 
@@ -250,7 +270,7 @@ export const PackageScreenshots: FC<{ screenshots?: string[] }> = ({ screenshots
                 onClick={() => setLightboxOpen(false)}
               />
             </div>
-            {renderImage(styles.lightboxImage)}
+            <div className={styles.lightboxFrame}>{renderImage(styles.lightboxImage)}</div>
             {count > 1 && (
               <div className={styles.controls}>
                 <Button
