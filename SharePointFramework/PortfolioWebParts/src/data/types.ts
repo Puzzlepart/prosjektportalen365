@@ -517,6 +517,15 @@ export interface IPortfolioWebPartsDataAdapter {
   getIdeasData?(configuration: IdeaConfigurationModel): Promise<Idea>
 
   /**
+   * Get the tenant-wide configured provision site URL from the tenant
+   * storage entity `pp365_ProvisionUrl`. The value is cached in
+   * `sessionStorage` to avoid an extra request per page load.
+   *
+   * @returns The configured provision site URL, or null if not configured
+   */
+  getTenantProvisionUrl?(): Promise<string | null>
+
+  /**
    * Load Teams app configuration from TeamsAppConfig.json
    *
    * @param provisionUrl The provision site URL

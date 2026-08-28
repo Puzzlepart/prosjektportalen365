@@ -1802,6 +1802,20 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
+  public async getTenantProvisionUrl(): Promise<string | null> {
+    const cacheKey = 'pp365_tenant_provision_url'
+    try {
+      const cached = sessionStorage.getItem(cacheKey)
+      if (cached !== null) return cached || null
+      const entity = await this._sp.web.getStorageEntity('pp365_ProvisionUrl')
+      const value = entity?.Value ?? ''
+      sessionStorage.setItem(cacheKey, value)
+      return value || null
+    } catch {
+      return null
+    }
+  }
+
   public async loadTeamsConfig(provisionUrl: string): Promise<any | null> {
     try {
       const provisionSite = Web([this._sp.web, provisionUrl])

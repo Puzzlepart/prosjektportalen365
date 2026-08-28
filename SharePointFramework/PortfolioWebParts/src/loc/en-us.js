@@ -234,6 +234,9 @@ define([], function () {
       ExpirationDateNoneOption: "No expiration date",
       ExpirationDateMonthOption: "{0} month(s)",
       NoProvisionAccessMessage: "You do not have access to the Provisioning Portal.",
+      SiteNotFoundTitle: "Provisioning Portal not found",
+      SiteNotFoundMessage:
+        "The Provisioning Portal was not found at {0}. Verify that the URL is configured correctly, or contact your administrator.",
       DefaultTeamTemplate: "Standard",
       ConfirmationTitle: "Request received!",
       ConfirmationMessage: "Your request has been received and will be processed. You will receive a notification when your site is ready.",

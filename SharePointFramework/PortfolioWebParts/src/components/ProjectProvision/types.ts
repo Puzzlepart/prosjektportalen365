@@ -67,6 +67,7 @@ export interface IProjectProvisionState {
   loading: boolean
   error?: Error
   accessDenied?: boolean
+  siteNotFound?: boolean
   showProvisionDrawer: boolean
   showProvisionStatus: boolean
   showProvisionSettings: boolean

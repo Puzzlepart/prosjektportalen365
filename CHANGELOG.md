@@ -13,6 +13,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 ### Forbedringer
 
+- URL til `Bestillingsportalen` kan nå konfigureres sentralt i tenanten via storage entity (tenant property) `pp365_ProvisionUrl`. Teams-appen bruker denne fremfor den forhåndskonfigurerte standarden `/sites/bestillingsportalen`, slik at Teams-appen også fungerer i tenants hvor Bestillingsportal-området har en annen URL. Webdelen på SharePoint-sider bruker verdien som fallback dersom URL ikke er angitt i egenskapspanelet. Verdien kan settes med `Set-PnPStorageEntity -Key pp365_ProvisionUrl -Value <url>` mot tenant-appkatalogen, eller via ny `-ProvisionUrl`-parameter i installasjonsskriptet
 - Oppdatert bundlet `PnP.PowerShell` til `3.2.0`, og versjonskravet er nå samlet i det felles installasjonsskriptet slik at installasjons- og release-flyten bruker samme kilde.
 - Lagt til konfigurerbar standard tidsramme (`Standard startdato` og `Standard sluttdato`) i egenskapspanelet for `Prosjekttidslinje`-webdelen i porteføljen, slik at administrator kan velge hvor langt tilbake og frem i tid tidslinjen skal vises som standard
 - Lagt til mulighet for å ytterligere ekskludere områdetyper i egenskapspanelet for `Bestillingsportalen`-skjema, slik at administrator kan skjule enkelte områdetyper fra brukerne per instans av bestillingsskjemaet.
@@ -26,6 +27,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 
 ### Feilrettinger
 
+- `Bestillingsportalen`-skjema viser nå en egen feilmelding («Fant ikke Bestillingsportalen på ...») når området ikke finnes på konfigurert URL, i stedet for den misvisende meldingen «Du har ikke tilgang til Bestillingsportalen». Tilgangsmeldingen vises nå kun når området faktisk finnes og brukeren mangler tilgang
 - Rettet en feil hvor valgte filter for Ja/Nei verdier ikke var krysset av når man åpnet filterpanelet på nytt i porteføljeoversikten, selv om filtrene var lagt på korrekt
 - Rettet en feil i `Prosjekttidslinje` hvor skjulte SharePoint-systemfelt (f.eks. `Vedlegg`, `Rekkefølge`, `Navn`) feilaktig dukket opp som kolonner i tidslinjelisten og som felter i redigeringspanelet. Felt som er skjult på den valgte innholdstypen (eller på malens innholdstype) ekskluderes nå fra både kolonner og redigeringspanel
 - Kolonner i tidslinjelisten følger nå rekkefølgen som er definert på innholdstypen. Felt som er skjult på innholdstypen ekskluderes også fra kolonner og redigeringspanel
