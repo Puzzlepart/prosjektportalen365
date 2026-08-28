@@ -425,7 +425,10 @@ export interface IPortfolioWebPartsDataAdapter {
    * @param provisionUrl Url for the provisioning site
    *
    */
-  addProvisionRequests?(properties: IProvisionRequestItem, provisionUrl: string): Promise<boolean>
+  addProvisionRequests?(
+    properties: IProvisionRequestItem,
+    provisionUrl: string
+  ): Promise<boolean | 'userResolveError'>
 
   /**
    * Adds project data to the ProjectData list to store project information that

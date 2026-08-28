@@ -141,6 +141,8 @@ declare interface IPortfolioWebPartsStrings {
     ToastCreatedBody: string
     ToastCreatedErrorTitle: string
     ToastCreatedErrorBody: string
+    ToastUserResolveErrorTitle: string
+    ToastUserResolveErrorBody: string
     ToastNameConflictErrorTitle: string
     ToastNameConflictErrorBody: string
     StatusMenuLabel: string

@@ -126,16 +126,21 @@ export const FullscreenDrawer: FC<IFullscreenDrawerProps> = (props) => {
         context.reset()
       } else {
         const isConflict = response === 'conflict'
+        const isUserResolveError = response === 'userResolveError'
         props.toast(
           <Toast appearance='inverted'>
             <ToastTitle>
               {isConflict
                 ? strings.Provision.ToastNameConflictErrorTitle
+                : isUserResolveError
+                ? strings.Provision.ToastUserResolveErrorTitle
                 : strings.Provision.ToastCreatedErrorTitle}
             </ToastTitle>
             <ToastBody>
               {isConflict
                 ? strings.Provision.ToastNameConflictErrorBody
+                : isUserResolveError
+                ? strings.Provision.ToastUserResolveErrorBody
                 : strings.Provision.ToastCreatedErrorBody}
             </ToastBody>
           </Toast>,
