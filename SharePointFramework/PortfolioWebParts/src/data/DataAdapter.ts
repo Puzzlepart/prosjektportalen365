@@ -1398,7 +1398,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       return true
     } catch (error) {
       console.error('(DataAdapter) (addProvisionRequests) Failed to add provision request:', error)
-      return error?.message?.indexOf('Missing user key') === 0 ? 'userResolveError' : false
+      return error?.code === 'ProvisionUserResolveError' ? 'userResolveError' : false
     }
   }
 
@@ -1434,7 +1434,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     const userValues = Array.isArray(users) ? users : users ? [users] : []
     const fieldValue = userValues.map((user) => ({ Key: this._getProvisionUserLoginKey(user) }))
     if (fieldValue.some((user) => !user.Key)) {
-      throw new Error(`Missing user key for ${fieldName}`)
+      throw this._createProvisionUserResolveError(`Missing user key for ${fieldName}`)
     }
 
     return {
@@ -1471,6 +1471,12 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       return ''
     }
     return key.includes('|') ? key.toLowerCase() : `i:0#.f|membership|${key}`.toLowerCase()
+  }
+
+  private _createProvisionUserResolveError(message: string): Error & { code: string } {
+    const error = new Error(message) as Error & { code: string }
+    error.code = 'ProvisionUserResolveError'
+    return error
   }
 
   public async addProjectData(
