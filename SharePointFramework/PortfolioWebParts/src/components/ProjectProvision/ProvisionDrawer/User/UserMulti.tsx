@@ -70,7 +70,7 @@ export const UserMulti = (props: { type: string; disabled?: boolean }) => {
 
   useEffect(() => {
     context.props.dataAdapter
-      .clientPeoplePickerSearchUser(query, context.column.get(props.type) || [])
+      .clientPeoplePickerSearchUser(query, [])
       .then((users) =>
         setMatchingUsers(
           users.map((user) => ({
@@ -80,7 +80,7 @@ export const UserMulti = (props: { type: string; disabled?: boolean }) => {
           }))
         )
       )
-  }, [query, columnValue])
+  }, [query])
 
   const children = useTagPickerFilter({
     query,

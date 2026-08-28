@@ -1370,7 +1370,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   public async addProvisionRequests(
     properties: IProvisionRequestItem,
     provisionUrl: string
-  ): Promise<boolean> {
+  ): Promise<boolean | 'userResolveError'> {
     try {
       const provisionSite = Web([this._sp.web, provisionUrl])
       const provisionRequestsList = provisionSite.lists.getByTitle('Provisioning Requests')
@@ -1380,20 +1380,25 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         const updateResults = await result.item.validateUpdateListItem(userFieldUpdates)
         const failedUpdates = updateResults.filter((updateResult) => updateResult.HasException)
         if (failedUpdates.length > 0) {
-          throw new Error(
+          console.error(
+            '(DataAdapter) (addProvisionRequests) Failed to resolve provision request users:',
             failedUpdates
-              .map(
-                (updateResult) =>
-                  `${updateResult.FieldName}: ${updateResult.ErrorMessage || 'Unknown error'}`
-              )
-              .join(', ')
           )
+          try {
+            await result.item.delete()
+          } catch (deleteError) {
+            console.error(
+              '(DataAdapter) (addProvisionRequests) Failed to delete incomplete provision request:',
+              deleteError
+            )
+          }
+          return 'userResolveError'
         }
       }
       return true
     } catch (error) {
       console.error('(DataAdapter) (addProvisionRequests) Failed to add provision request:', error)
-      return false
+      return error?.message?.indexOf('Missing user key') === 0 ? 'userResolveError' : false
     }
   }
 
@@ -1649,9 +1654,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     try {
       const provisionSite = Web([this._sp.web, provisionUrl])
       const provisionRequestsList = provisionSite.lists.getByTitle('Provisioning Requests')
+      const escapedAlias = siteAlias.replace(/'/g, '\'\'')
       const items = await provisionRequestsList.items
         .select('Id', 'SiteAlias', 'Status')
-        .filter(`SiteAlias eq '${siteAlias.replace(/'/g, "''")}'`)
+        .filter(`SiteAlias eq '${escapedAlias}'`)
         .top(10)()
       // Only requests that are still in flight block the alias. Rejected and
       // failed requests may be resubmitted, and created sites are detected by
@@ -1711,11 +1717,11 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const list = this._sp.web.lists.getById(listInfo.Id)
       const items = await list.items()
 
+      const gtFieldFilter =
+        'substringof(\'Gt\', InternalName) or InternalName eq \'Title\' or InternalName eq \'Id\''
       const fields = await list.fields
         .select(...getClassProperties(SPField))
-        .filter(
-          "substringof('Gt', InternalName) or InternalName eq 'Title' or InternalName eq 'Id'"
-        )<SPField[]>()
+        .filter(gtFieldFilter)<SPField[]>()
 
       const userFields = fields
         .filter((fld) => fld.TypeAsString.indexOf('User') === 0)
