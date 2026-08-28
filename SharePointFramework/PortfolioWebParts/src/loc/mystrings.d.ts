@@ -92,6 +92,7 @@ declare interface IPortfolioWebPartsStrings {
     MemberFieldLabel: string
     MemberFieldDescription: string
     DuplicateOwnerMemberMessage: string
+    MinimumOwnersMessage: string
     RequestedByFieldLabel: string
     RequestedByFieldDescription: string
     TeamifyFieldLabel: string

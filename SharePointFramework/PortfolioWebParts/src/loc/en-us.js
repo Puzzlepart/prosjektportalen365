@@ -33,6 +33,7 @@ define([], function () {
       MemberFieldLabel: "Member(s)",
       MemberFieldDescription: "Members have access based on permissions. You can add more members later.",
       DuplicateOwnerMemberMessage: "A user cannot be both owner and member. Please remove the duplicate(s).",
+      MinimumOwnersMessage: "At least {0} owners are required for this request. Please add more owners.",
       RequestedByFieldLabel: "Requested on behalf of",
       RequestedByFieldDescription: "If you're requesting on someone's behalf, enter their name here. Leave blank if it's for yourself.",
       UserFieldNoOptionsText: "No results...",

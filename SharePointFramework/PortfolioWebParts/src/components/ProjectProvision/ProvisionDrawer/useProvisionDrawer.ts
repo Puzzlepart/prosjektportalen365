@@ -74,6 +74,12 @@ export const useProvisionDrawer = () => {
   const enableAutoApproval = getGlobalSetting('EnableAutoApproval')
   const managedPath = getGlobalSetting('SPOManagedPath')
 
+  // The settings list stores numbers as strings; anything unset/invalid/≤0
+  // falls back to 1 so tenants without the setting keep today's behavior.
+  const minimumOwnersSetting = parseInt(String(getGlobalSetting('MinimumOwners') ?? ''), 10)
+  const minimumOwners =
+    Number.isFinite(minimumOwnersSetting) && minimumOwnersSetting > 0 ? minimumOwnersSetting : 1
+
   const typeDefaults = context.state.types?.find((t) => t.title === selectedType)
   const enableExternalSharing = typeDefaults?.externalSharing
 
@@ -307,6 +313,12 @@ export const useProvisionDrawer = () => {
     return members.filter((m) => ownerEmails.has(m?.secondaryText?.toLowerCase()))
   }, [context.column])
 
+  const insufficientOwners = useMemo(() => {
+    if (minimumOwners <= 1) return false
+    const owners: any[] = context.column.get('owner') || []
+    return owners.length < minimumOwners
+  }, [context.column, minimumOwners])
+
   const isSaveDisabled = useMemo(() => {
     const requiredFields = fieldsToUse.filter((field) => field.required && !field.hidden)
 
@@ -355,13 +367,20 @@ export const useProvisionDrawer = () => {
       })
     }
 
-    return missingRequiredFields || siteExists || requestExists || duplicateOwnerMembers.length > 0
+    return (
+      missingRequiredFields ||
+      siteExists ||
+      requestExists ||
+      duplicateOwnerMembers.length > 0 ||
+      insufficientOwners
+    )
   }, [
     fieldsToUse,
     context.column,
     siteExists,
     requestExists,
     duplicateOwnerMembers,
+    insufficientOwners,
     selectedType,
     context.props.debugMode,
     currentTemplate,
@@ -415,6 +434,8 @@ export const useProvisionDrawer = () => {
     requestExists,
     setRequestExists,
     duplicateOwnerMembers,
+    insufficientOwners,
+    minimumOwners,
     namingConvention,
     enableSensitivityLabels,
     enableSensitivityLabelsLibrary,
