@@ -15,16 +15,24 @@ import strings from 'PortfolioWebPartsStrings'
 import { useProjectProvisionContext } from 'components/ProjectProvision/context'
 import React, { useEffect, useState } from 'react'
 
+type UserOption = {
+  text?: string
+  secondaryText?: string
+  id?: string
+}
+
+const getUserKey = (user: UserOption) => user?.secondaryText || user?.id || user?.text || ''
+
 export const UserMulti = (props: { type: string; disabled?: boolean }) => {
   const context = useProjectProvisionContext()
   const [query, setQuery] = useState<string>('')
   const [selectedUsers, setSelectedUsers] = useState<string[]>(
-    context.column.get(props.type)?.map((user) => user?.text) || []
+    context.column.get(props.type)?.map(getUserKey).filter(Boolean) || []
   )
 
   const columnValue = context.column.get(props.type)
   useEffect(() => {
-    const next = Array.isArray(columnValue) ? columnValue.map((u) => u?.text).filter(Boolean) : []
+    const next = Array.isArray(columnValue) ? columnValue.map(getUserKey).filter(Boolean) : []
     setSelectedUsers((prev) =>
       prev.length === next.length && prev.every((t, i) => t === next[i]) ? prev : next
     )
@@ -35,71 +43,81 @@ export const UserMulti = (props: { type: string; disabled?: boolean }) => {
       return
     }
 
+    if (!data.selectedOptions) {
+      context.setColumn(props.type, [])
+      setSelectedUsers([])
+      return
+    }
+
+    const currentUsers = context.column.get(props.type) || []
     if (!data.selectedOptions.find((option) => option === data.value)) {
       context.setColumn(
         props.type,
-        context.column.get(props.type).filter((u) => u.text !== data.value)
+        currentUsers.filter((u) => getUserKey(u) !== data.value)
       )
     } else {
-      context.setColumn(props.type, [
-        ...context.column.get(props.type),
-        matchingUsers.find((u) => u.text === data.value)
-      ])
-    }
-
-    if (!data.selectedOptions) {
-      context.setColumn(props.type, [])
+      const selectedUser = matchingUsers.find((u) => getUserKey(u) === data.value)
+      if (selectedUser) {
+        context.setColumn(props.type, [...currentUsers, selectedUser])
+      }
     }
 
     setSelectedUsers(data.selectedOptions)
     setQuery('')
   }
 
-  const [matchingUsers, setMatchingUsers] = useState([])
+  const [matchingUsers, setMatchingUsers] = useState<UserOption[]>([])
 
   useEffect(() => {
     context.props.dataAdapter
       .clientPeoplePickerSearchUser(query, [])
       .then((users) =>
         setMatchingUsers(
-          users.map((user) => ({ text: user.text, secondaryText: user.secondaryText }))
+          users.map((user) => ({
+            text: user.text,
+            secondaryText: user.secondaryText,
+            id: (user as any).id
+          }))
         )
       )
   }, [query])
 
   const children = useTagPickerFilter({
     query,
-    options: matchingUsers.map((user) => user.text),
+    options: matchingUsers.map(getUserKey).filter(Boolean),
     noOptionsElement: (
       <TagPickerOption value='no-matches'>
         {strings.Provision.UserFieldNoOptionsText}
       </TagPickerOption>
     ),
-    renderOption: (user) => {
-      const secondaryText = matchingUsers.find((u) => u.text === user)?.secondaryText
+    renderOption: (userKey) => {
+      const user = matchingUsers.find((u) => getUserKey(u) === userKey)
 
       return (
         <TagPickerOption
           {...({
-            key: user,
-            value: user,
-            text: user
+            key: userKey,
+            value: userKey,
+            text: user?.text
           } as any)}
         >
           <Persona
             avatar={{
               image: {
-                src: `/_layouts/15/userphoto.aspx?size=S&username=${secondaryText}`
+                src: `/_layouts/15/userphoto.aspx?size=S&username=${user?.secondaryText}`
               }
             }}
-            name={user}
-            secondaryText={secondaryText}
+            name={user?.text}
+            secondaryText={user?.secondaryText}
           />
         </TagPickerOption>
       )
     },
     filter: (option) =>
-      !selectedUsers.includes(option) && option.toLowerCase().includes(query.toLowerCase())
+      !selectedUsers.includes(option) &&
+      [matchingUsers.find((u) => getUserKey(u) === option)?.text, option]
+        .filter(Boolean)
+        .some((value) => value.toLowerCase().includes(query.toLowerCase()))
   })
 
   return (
@@ -110,26 +128,28 @@ export const UserMulti = (props: { type: string; disabled?: boolean }) => {
     >
       <TagPickerControl>
         <TagPickerGroup>
-          {selectedUsers.map((option) => (
-            <Tag
-              key={option}
-              media={
-                <Avatar
-                  aria-hidden
-                  name={option}
-                  image={{
-                    src: `/_layouts/15/userphoto.aspx?size=S&username=${
-                      context.column.get(props.type)?.find((u) => u?.text === option)?.secondaryText
-                    }`
-                  }}
-                  color='colorful'
-                />
-              }
-              value={option}
-            >
-              {option}
-            </Tag>
-          ))}
+          {selectedUsers.map((option) => {
+            const user = context.column.get(props.type)?.find((u) => getUserKey(u) === option)
+            return (
+              <Tag
+                key={option}
+                media={
+                  <Avatar
+                    aria-hidden
+                    name={user?.text || option}
+                    image={{
+                      src: `/_layouts/15/userphoto.aspx?size=S&username=${user?.secondaryText}`
+                    }}
+                    color='colorful'
+                  />
+                }
+                secondaryText={user?.secondaryText}
+                value={option}
+              >
+                {user?.text || option}
+              </Tag>
+            )
+          })}
         </TagPickerGroup>
         <TagPickerInput
           value={query}

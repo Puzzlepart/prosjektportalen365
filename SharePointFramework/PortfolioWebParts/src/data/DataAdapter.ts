@@ -1160,15 +1160,33 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       PrincipalSource: 15,
       PrincipalType: 1
     })
-    const items = profiles.map((profile) => ({
-      text: profile.DisplayText,
-      secondaryText: profile.EntityData.Email,
-      tertiaryText: profile.EntityData.Title,
-      optionalText: profile.EntityData.Department,
-      imageUrl: `/_layouts/15/userphoto.aspx?AccountName=${profile.EntityData.Email}&size=L`,
-      id: profile.Key
-    }))
-    return items.filter(({ secondaryText }) => !_.findWhere(selectedItems, { secondaryText }))
+    const selectedKeys = selectedItems
+      .map((item) => this._getProvisionUserSearchKey(item))
+      .filter(Boolean)
+    const uniqueItems = profiles.reduce((items: IPersonaSharedProps[], profile) => {
+      const key = this._getProvisionUserSearchKey({
+        id: profile.Key,
+        secondaryText: profile.EntityData.Email,
+        text: profile.DisplayText
+      })
+      if (!key || items.some((item) => this._getProvisionUserSearchKey(item) === key)) {
+        return items
+      }
+      return [
+        ...items,
+        {
+          text: profile.DisplayText,
+          secondaryText: profile.EntityData.Email,
+          tertiaryText: profile.EntityData.Title,
+          optionalText: profile.EntityData.Department,
+          imageUrl: `/_layouts/15/userphoto.aspx?AccountName=${profile.EntityData.Email}&size=L`,
+          id: profile.Key
+        }
+      ]
+    }, [])
+    return uniqueItems.filter(
+      (item) => !selectedKeys.includes(this._getProvisionUserSearchKey(item))
+    )
   }
 
   public async getProvisionRequestSettings(provisionUrl: string): Promise<any[]> {
@@ -1352,15 +1370,113 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   public async addProvisionRequests(
     properties: IProvisionRequestItem,
     provisionUrl: string
-  ): Promise<boolean> {
+  ): Promise<boolean | 'userResolveError'> {
     try {
       const provisionSite = Web([this._sp.web, provisionUrl])
       const provisionRequestsList = provisionSite.lists.getByTitle('Provisioning Requests')
-      await provisionRequestsList.items.add(properties)
+      const { itemProperties, userFieldUpdates } = this._extractProvisionUserFields(properties)
+      const result = await provisionRequestsList.items.add(itemProperties)
+      if (userFieldUpdates.length > 0) {
+        const updateResults = await result.item.validateUpdateListItem(userFieldUpdates)
+        const failedUpdates = updateResults.filter((updateResult) => updateResult.HasException)
+        if (failedUpdates.length > 0) {
+          console.error(
+            '(DataAdapter) (addProvisionRequests) Failed to resolve provision request users:',
+            failedUpdates
+          )
+          try {
+            await result.item.delete()
+          } catch (deleteError) {
+            console.error(
+              '(DataAdapter) (addProvisionRequests) Failed to delete incomplete provision request:',
+              deleteError
+            )
+          }
+          return 'userResolveError'
+        }
+      }
       return true
     } catch (error) {
-      return false
+      console.error('(DataAdapter) (addProvisionRequests) Failed to add provision request:', error)
+      return error?.code === 'ProvisionUserResolveError' ? 'userResolveError' : false
     }
+  }
+
+  private _extractProvisionUserFields(properties: IProvisionRequestItem): {
+    itemProperties: IProvisionRequestItem
+    userFieldUpdates: { FieldName: string; FieldValue: string }[]
+  } {
+    const itemProperties = { ...properties }
+    const userFieldUpdates: { FieldName: string; FieldValue: string }[] = []
+    const userFields: { itemFieldName: keyof IProvisionRequestItem; updateFieldName: string }[] = [
+      { itemFieldName: 'OwnersId', updateFieldName: 'Owners' },
+      { itemFieldName: 'MembersId', updateFieldName: 'Members' },
+      { itemFieldName: 'RequestedById', updateFieldName: 'RequestedBy' }
+    ]
+
+    userFields.forEach(({ itemFieldName, updateFieldName }) => {
+      const value = itemProperties[itemFieldName]
+      if (Array.isArray(value) && value.length === 0) {
+        delete itemProperties[itemFieldName]
+      } else if (this._shouldValidateProvisionUserField(value)) {
+        userFieldUpdates.push(this._getProvisionUserFieldUpdate(updateFieldName, value))
+        delete itemProperties[itemFieldName]
+      }
+    })
+
+    return { itemProperties, userFieldUpdates }
+  }
+
+  private _getProvisionUserFieldUpdate(
+    fieldName: string,
+    users: any
+  ): { FieldName: string; FieldValue: string } {
+    const userValues = Array.isArray(users) ? users : users ? [users] : []
+    const fieldValue = userValues.map((user) => ({ Key: this._getProvisionUserLoginKey(user) }))
+    if (fieldValue.some((user) => !user.Key)) {
+      throw this._createProvisionUserResolveError(`Missing user key for ${fieldName}`)
+    }
+
+    return {
+      FieldName: fieldName,
+      FieldValue: JSON.stringify(fieldValue)
+    }
+  }
+
+  private _shouldValidateProvisionUserField(users: any): boolean {
+    const userValues = Array.isArray(users) ? users : users ? [users] : []
+    return userValues.length > 0 && userValues.every((user) => typeof user !== 'number')
+  }
+
+  private _getProvisionUserSearchKey(user: any): string {
+    if (!user) {
+      return ''
+    }
+    if (typeof user === 'string') {
+      return user.toLowerCase()
+    }
+    const key = (user.secondaryText || user.id || user.text || '').toLowerCase()
+    return key.includes('|') ? key.split('|').pop() || key : key
+  }
+
+  private _getProvisionUserLoginKey(user: any): string {
+    if (!user) {
+      return ''
+    }
+    if (typeof user === 'string') {
+      return user.toLowerCase()
+    }
+    const key = user.id || user.secondaryText || user.text || ''
+    if (!key) {
+      return ''
+    }
+    return key.includes('|') ? key.toLowerCase() : `i:0#.f|membership|${key}`.toLowerCase()
+  }
+
+  private _createProvisionUserResolveError(message: string): Error & { code: string } {
+    const error = new Error(message) as Error & { code: string }
+    error.code = 'ProvisionUserResolveError'
+    return error
   }
 
   public async addProjectData(
@@ -1544,9 +1660,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     try {
       const provisionSite = Web([this._sp.web, provisionUrl])
       const provisionRequestsList = provisionSite.lists.getByTitle('Provisioning Requests')
+      const escapedAlias = siteAlias.replace(/'/g, '\'\'')
       const items = await provisionRequestsList.items
         .select('Id', 'SiteAlias', 'Status')
-        .filter(`SiteAlias eq '${siteAlias.replace(/'/g, "''")}'`)
+        .filter(`SiteAlias eq '${escapedAlias}'`)
         .top(10)()
       // Only requests that are still in flight block the alias. Rejected and
       // failed requests may be resubmitted, and created sites are detected by
@@ -1606,11 +1723,11 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const list = this._sp.web.lists.getById(listInfo.Id)
       const items = await list.items()
 
+      const gtFieldFilter =
+        'substringof(\'Gt\', InternalName) or InternalName eq \'Title\' or InternalName eq \'Id\''
       const fields = await list.fields
         .select(...getClassProperties(SPField))
-        .filter(
-          "substringof('Gt', InternalName) or InternalName eq 'Title' or InternalName eq 'Id'"
-        )<SPField[]>()
+        .filter(gtFieldFilter)<SPField[]>()
 
       const userFields = fields
         .filter((fld) => fld.TypeAsString.indexOf('User') === 0)

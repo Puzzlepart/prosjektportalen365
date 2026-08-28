@@ -184,6 +184,8 @@ define([], function () {
       ToastCreatedBody: "The site has been requested and is being processed.",
       ToastCreatedErrorTitle: "Request error",
       ToastCreatedErrorBody: "An error occurred while requesting the site. Please try again or contact an administrator.",
+      ToastUserResolveErrorTitle: "People could not be added",
+      ToastUserResolveErrorBody: "One or more selected people are missing an email address and cannot be added to the request. Search for the person again, or contact an administrator.",
       ToastNameConflictErrorTitle: "The address is not available",
       ToastNameConflictErrorBody: "A site or a request with the same address already exists. Please change the name and try again.",
       StatusMenuLabel: "My requests",
