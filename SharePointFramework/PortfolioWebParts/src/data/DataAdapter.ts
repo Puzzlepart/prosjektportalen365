@@ -1440,7 +1440,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
   private _shouldValidateProvisionUserField(users: any): boolean {
     const userValues = Array.isArray(users) ? users : users ? [users] : []
-    return userValues.length > 0 && userValues.some((user) => typeof user !== 'number')
+    return userValues.length > 0 && userValues.every((user) => typeof user !== 'number')
   }
 
   private _getProvisionUserSearchKey(user: any): string {
