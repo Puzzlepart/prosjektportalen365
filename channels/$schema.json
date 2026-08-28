@@ -97,9 +97,6 @@
                                         "ResourceAllocationWebPart": {
                                             "$ref": "#/definitions/guid"
                                         },
-                                        "ProjectProvisionWebPart": {
-                                            "$ref": "#/definitions/guid"
-                                        },
                                         "IdeaModuleWebPart": {
                                             "$ref": "#/definitions/guid"
                                         },
@@ -114,7 +111,6 @@
                                         "ProjectListWebPart",
                                         "PortfolioTimelineWebPart",
                                         "ResourceAllocationWebPart",
-                                        "ProjectProvisionWebPart",
                                         "IdeaModuleWebPart",
                                         "ProjectCardWebPart"
                                     ]

@@ -27,7 +27,6 @@ export interface IIdeaModuleProps extends IPortfolioAggregationProps {
   listSize?: 'extra-small' | 'small' | 'medium'
   hiddenRegFields?: string[]
   hiddenProcFields?: string[]
-  provisionUrl?: string
 }
 
 export interface IIdeaModuleState {

@@ -47,6 +47,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 ### Merk
 
 - Etter oppgradering bør tenant-administrator regenerere `SearchConfiguration.xml` fra sitt miljø dersom `GtStakeholderGroups` skal brukes som refiner eller i aggregerte oversikter. Det nye feltet fungerer uten denne endringen for visning og redigering i listen.
+- **Bestillings-webdelen (Bestillingsportalen/ProjectProvision) er flyttet ut av `pp-portfolio-web-parts`** og vedlikeholdes nå i [Bestillingsportalen-repoet](https://github.com/Puzzlepart/bestillingsportalen) (fra Bestillingsportalen 2.1.0, pakken `bp-provision-web-parts`, samme komponent-id). Tenanter som bruker bestillingsflaten **må distribuere Bestillingsportalen ≥ 2.1.0 rett etter denne oppgraderingen** — `Bestillingsportalen.aspx`-siden viser «finner ikke komponenten» i mellomtiden. Rekkefølgen er obligatorisk (PP365 først, deretter Bestillingsportalen — appkatalogen avviser to pakker med samme komponent-id), se Bestillingsportalens `Upgrade.md`. Idémodulens innebygde bestillingsknapp og webdelegenskapen `provisionUrl` er fjernet. PnP-malen provisjonerer ikke lenger `Bestillingsportalen.aspx` på nye porteføljer; eksisterende sider og «Bestillingsportalen»-sikkerhetsgruppen beholdes.
 
 ---
 

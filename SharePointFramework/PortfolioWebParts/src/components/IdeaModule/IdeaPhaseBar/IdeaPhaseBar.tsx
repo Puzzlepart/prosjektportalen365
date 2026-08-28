@@ -5,7 +5,6 @@ import * as strings from 'PortfolioWebPartsStrings'
 import { getFluentIcon } from 'pp365-shared-library'
 import { useIdeaModuleContext } from '../context'
 import { IdeaPhase } from '../types'
-import { ProjectProvision } from 'components/ProjectProvision'
 
 export const IdeaPhaseBar: FC = () => {
   const context = useIdeaModuleContext()
@@ -36,22 +35,6 @@ export const IdeaPhaseBar: FC = () => {
     <>
       <TabList className={styles.ideaPhases} selectedValue={context.state.phase}>
         {phases.map((phase) => {
-          if (phase.phase === IdeaPhase.Provisioned && context.props.provisionUrl) {
-            return (
-              <ProjectProvision
-                {...context.props}
-                key={phase.phase}
-                icon={getFluentIcon('BoxToolbox')}
-                appearance={
-                  context.state.phase !== IdeaPhase.ApprovedForConcept ? 'transparent' : 'primary'
-                }
-                size='medium'
-                disabled={context.state.phase !== IdeaPhase.ApprovedForConcept}
-                provisionUrl={context.props.provisionUrl}
-              />
-            )
-          }
-
           return (
             <>
               <Tab
