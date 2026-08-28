@@ -143,6 +143,8 @@ define([], function () {
       ToastCreatedBody: 'Området er nå bestilt og sendt til behandling.',
       ToastCreatedErrorTitle: 'Feil ved bestilling',
       ToastCreatedErrorBody: 'Det oppstod en feil ved bestilling av området. Vennligst prøv igjen, eller kontakt administrator.',
+      ToastUserResolveErrorTitle: 'Personer kunne ikke legges til',
+      ToastUserResolveErrorBody: 'Én eller flere valgte personer mangler e-postadresse og kan ikke legges til i bestillingen. Søk opp personen på nytt, eller kontakt administrator.',
       ToastNameConflictErrorTitle: 'Adressen er ikke ledig',
       ToastNameConflictErrorBody: 'Det finnes allerede et område eller en bestilling med samme adresse. Endre navnet og prøv igjen.',
       StatusMenuLabel: 'Mine bestillinger',

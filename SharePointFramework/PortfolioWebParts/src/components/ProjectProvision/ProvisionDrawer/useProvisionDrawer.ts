@@ -114,7 +114,14 @@ export const useProvisionDrawer = () => {
   const [isSaving, setIsSaving] = useState(false)
   const isSavingRef = useRef(false)
 
-  const submitProvisionRequest = async (): Promise<boolean | 'conflict'> => {
+  const hasUnresolvedProvisionUsers = () =>
+    ['owner', 'member', 'requestedBy'].some((field) => {
+      const users = context.column.get(field)
+      if (!Array.isArray(users)) return false
+      return users.some((user) => !user?.secondaryText && !user?.id)
+    })
+
+  const submitProvisionRequest = async (): Promise<boolean | 'conflict' | 'userResolveError'> => {
     const name = `${namingConvention?.prefixText ?? ''}${context.column.get('name')}${
       namingConvention?.suffixText ?? ''
     }`
@@ -132,6 +139,10 @@ export const useProvisionDrawer = () => {
       setSiteExists(existingSite)
       setRequestExists(pendingRequest)
       return 'conflict'
+    }
+
+    if (hasUnresolvedProvisionUsers()) {
+      return 'userResolveError'
     }
 
     const sensitivityLabelId = context.state.sensitivityLabels?.find(
@@ -173,9 +184,9 @@ export const useProvisionDrawer = () => {
         context.column.get('teamify') || isTeam
           ? context.state.properties.teamTemplate || 'standard'
           : '',
-      OwnersId: context.state.properties.owner,
-      MembersId: context.state.properties.member,
-      RequestedById: context.state.properties.requestedBy,
+      OwnersId: context.column.get('owner'),
+      MembersId: context.column.get('member'),
+      RequestedById: context.column.get('requestedBy'),
       ConfidentialData: context.column.get('isConfidential'),
       Metadata: context.column.get('metadata'),
       Visibility: context.state.properties.privacy || 'Private',
@@ -273,7 +284,7 @@ export const useProvisionDrawer = () => {
    * The ref is what actually blocks the second click: `isSaving` may not have
    * been committed yet when the two click events arrive back to back.
    */
-  const onSave = async (): Promise<boolean | 'conflict' | 'busy'> => {
+  const onSave = async (): Promise<boolean | 'conflict' | 'busy' | 'userResolveError'> => {
     if (isSavingRef.current) return 'busy'
     isSavingRef.current = true
     setIsSaving(true)

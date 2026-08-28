@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { IProjectProvisionProps, IProjectProvisionState } from './types'
-import _ from 'lodash'
 import strings from 'PortfolioWebPartsStrings'
 import { normalizeHubSiteId } from 'utils/normalizeHubSiteId'
 import { calculateAliasValue } from './calculateAlias'
@@ -142,53 +141,23 @@ export function useEditableColumn(
           ],
           [
             'owner',
-            async () => {
+            () => {
               if (!value || !Array.isArray(value)) return []
-              if (!props.dataAdapter?.portalDataService) {
-                return []
-              }
-              try {
-                const users = await props.dataAdapter.getProvisionUsers(value, props.provisionUrl)
-                const values = await Promise.all(users)
-                return _.flatten(values)
-              } catch (error) {
-                console.warn(`Failed to get provision users for owner: ${error}`)
-                return []
-              }
+              return value.filter((user) => user?.secondaryText || user?.id)
             }
           ],
           [
             'member',
-            async () => {
+            () => {
               if (!value || !Array.isArray(value)) return []
-              if (!props.dataAdapter?.portalDataService) {
-                return []
-              }
-              try {
-                const users = await props.dataAdapter.getProvisionUsers(value, props.provisionUrl)
-                const values = await Promise.all(users)
-                return _.flatten(values)
-              } catch (error) {
-                console.warn(`Failed to get provision users for member: ${error}`)
-                return []
-              }
+              return value.filter((user) => user?.secondaryText || user?.id)
             }
           ],
           [
             'requestedBy',
-            async () => {
+            () => {
               if (!value || !Array.isArray(value)) return []
-              if (!props.dataAdapter?.portalDataService) {
-                return []
-              }
-              try {
-                const users = await props.dataAdapter.getProvisionUsers(value, props.provisionUrl)
-                const values = await Promise.all(users)
-                return _.flatten(values)
-              } catch (error) {
-                console.warn(`Failed to get provision users for requestedBy: ${error}`)
-                return []
-              }
+              return value.filter((user) => user?.secondaryText || user?.id)
             }
           ],
           [
