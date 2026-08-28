@@ -44,7 +44,7 @@ og som datakildenavn i visningsvelgeren i nytteoversikten. En samlet omlegging a
 datakildekategorien krever koordinert migrering (rader + webdel-egenskaper + kode) og
 er utsatt — kandidat for v7 eller det frivillige oppryddingsskriptet i område K.
 
-## Krav til område K (oppgraderingsstien)
+## Krav til område K (oppgraderingsstien) — ✅ LEVERT 2026-08-24 (punkt 1–4)
 
 1. **`UpgradeAllSitesToLatest`**: feltvisningsnavn på prosjektområdene oppdateres via
    `Set-PnPField -Values @{Title=...}` (allerede planlagt) — nå også for

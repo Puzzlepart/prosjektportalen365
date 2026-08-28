@@ -30,11 +30,10 @@ beslutningspunktstrukturen. Se «Hvorfor vi ikke rører fasestrukturen». Endrin
 det per prosjektmal, og mister ingenting av sine egne tilpasninger. Ingen duplikater oppstår,
 fordi ingen eksisterende rad endres.
 
-**Status (per fr 21.8, port M2 passert):** områdene A–G, J og innholdsdelene av H/I er
-gjennomført på branchen `claude/prosjektportalen-v6-update-70sbom` — se beslutningsloggen i
-`docs/prosjektveiviseren-v6/README.md`. Gjenstår: område K (kolonnekonfig for G,
-UpgradeAllSitesToLatest, frivillig opprydding), E2E-test i testleietaker (uke 35) og
-område L (release).
+**Status (per 24.8):** områdene A–K er gjennomført på branchen
+`claude/prosjektportalen-v6-update-70sbom` (M2 passert 21.8; K-skriptdelen levert 24.8, frivillig
+opprydding besluttet bort) — se beslutningsloggen i `docs/prosjektveiviseren-v6/README.md`.
+Gjenstår: E2E-testene i testleietaker (M3, kjøres av teamet) og område L (release).
 
 ---
 
@@ -587,7 +586,7 @@ der Prosjektveiviseren-lenken tidligere måtte oppdateres.
 
 ---
 
-### K. Oppgraderingssti  ·  *kritisk, men vesentlig enklere med område B*
+### K. Oppgraderingssti  ·  *kritisk, men vesentlig enklere med område B*  ·  ✅ SKRIPTDEL LEVERT 2026-08-24 *(punkt 4 besluttet bort; testene gjenstår — M3)*
 
 Side-om-side-strategien fjerner duplikat- og datatapsrisikoen. Det som gjenstår er
 omdøping, tilføyelser og konfigurasjon.
@@ -606,9 +605,7 @@ Taxonomy-malen ved `-Upgrade`** — endrede fasetekster og rollebeskrivelser nå
 - oppdater feltvisningsnavn fra område C (`Set-PnPField -Values @{Title=…}`; internnavn urørt)
 - ikke rør listedata
 
-**4. Frivillig opprydding, ikke automatisk:** et separat, dokumentert skript som virksomheten
-*kan* kjøre for å fjerne den gamle generasjonen (legacy-listene, v3.0-dokumentmalene) når de
-har byttet. Skal ikke inngå i den ordinære oppgraderingen.
+**4. Frivillig opprydding:** ~~separat skript~~ **besluttet bort 2026-08-24** — virksomheten rydder selv (legacy-listene og gamle malfiler kan slettes manuelt når de har byttet; !README.md i Malbibliotek forklarer hva som trygt kan slettes).
 
 **Ferdig når:** oppgradering av en testinstallasjon med v1.13-innhold og lokale tilpasninger
 gir uendret oppførsel for eksisterende prosjektmaler, v6-innholdet tilgjengelig som valg, og

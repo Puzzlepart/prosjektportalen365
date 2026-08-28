@@ -13,7 +13,9 @@ Param(
     [switch]$SkipLoadingBundle,
     [Parameter(Mandatory = $false, HelpMessage = "Language")]
     [ValidateSet('Norwegian', 'English')]
-    [string]$Language = "Norwegian"
+    [string]$Language = "Norwegian",
+    [Parameter(Mandatory = $false, HelpMessage = "Oppdater visningsnavn fra gevinst- til nytteterminologi (Prosjektveiviseren v6) på prosjektområdene. Kun visningsnavn og navigasjonstitler endres — interne feltnavn, URL-er og listedata røres aldri. Uten denne bryteren beholder prosjektområdene dagens terminologi.")]
+    [switch]$GevinstTilNytte
 )
 
 $ErrorActionPreference = "Stop"

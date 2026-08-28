@@ -311,6 +311,50 @@ if ($null -ne $LastInstall) {
             }
         }
 
+        # Terminologi (gevinst → nytte): omdøp seksjons- og konfigurasjonsrader PÅ PLASS.
+        # Statusseksjoner og Prosjektkolonnekonfigurasjon er nøklet på Title med Skip —
+        # uten omdøping legger hovedmalen til DUPLIKATRADER med de nye titlene
+        # (for Statusseksjoner betyr det at «Nytteoppnåelse»-seksjonen rendres dobbelt).
+        # Vakt: raden omdøpes KUN når dagens tittel er standardverdien fra tidligere
+        # versjoner — egne tilpasninger hos virksomheten røres aldri.
+        Write-Host "[INFO] Retitling status section and column configuration rows (gevinst -> nytte, in place)"
+        function RetitleRows([string]$ListResource, [scriptblock]$RowFilter, [hashtable[]]$RetitleMap) {
+            $List = Get-PnPList -Identity (Get-Resource -Name $ListResource) -ErrorAction SilentlyContinue
+            if ($null -eq $List) { return }
+            $Rows = Get-PnPListItem -List $List.Id | Where-Object $RowFilter
+            foreach ($Entry in $RetitleMap) {
+                $NewTitle = Get-Resource -Name $Entry.NewTitleResource
+                $Row = $Rows | Where-Object { $Entry.OldTitles -contains $_["Title"] } | Select-Object -First 1
+                if ($null -ne $Row -and $Row["Title"] -ne $NewTitle) {
+                    Set-PnPListItem -List $List.Id -Identity $Row.Id -Values @{ "Title" = $NewTitle } -UpdateType SystemUpdate >$null
+                    Write-Host "[SUCCESS] Retitled [$($Row["Title"])] to [$NewTitle] in [$(Get-Resource -Name $ListResource)] (id $($Row.Id))" -ForegroundColor Green
+                }
+            }
+        }
+
+        RetitleRows "Lists_StatusSections_Title" { $_["GtSecFieldName"] -eq "GtStatusGainAchievement" } @(
+            @{ OldTitles = @("Gevinstoppnåelse"); NewTitleResource = "Lists_StatusSections_StatusGainAchievement_Title" }
+        )
+
+        RetitleRows "Lists_ProjectColumnConfiguration_Title" { $true } @(
+            @{ OldTitles = @("Status gevinstoppnåelse (Foran plan)"); NewTitleResource = "Lists_ProjectColumnConfiguration_GtStatusGainAchievement_AheadOfSchedule_Title" },
+            @{ OldTitles = @("Status gevinstoppnåelse (Forsinket)"); NewTitleResource = "Lists_ProjectColumnConfiguration_GtStatusGainAchievement_BehindSchedule_Title" },
+            @{ OldTitles = @("Status gevinstoppnåelse (Mindre forsinkelser)"); NewTitleResource = "Lists_ProjectColumnConfiguration_GtStatusGainAchievement_MinorDelays_Title" },
+            @{ OldTitles = @("Status gevinstoppnåelse (Ikke påbegynt)"); NewTitleResource = "Lists_ProjectColumnConfiguration_GtStatusGainAchievement_NotStarted_Title" },
+            @{ OldTitles = @("Status gevinstoppnåelse (På plan)"); NewTitleResource = "Lists_ProjectColumnConfiguration_GtStatusGainAchievement_OnSchedule_Title" }
+        )
+
+        # Prosjektkolonner er nøklet på GtInternalName (ingen duplikatrisiko), men radene
+        # skippes ved reprovisjonering og ville ellers beholdt gamle visningstitler.
+        RetitleRows "Lists_ProjectColumns_Title" { $true } @(
+            @{ OldTitles = @("Gevinstansvarlig", "Gains responsible"); NewTitleResource = "SiteFields_GtGainsResponsible_DisplayName" },
+            @{ OldTitles = @("Gevinsteier", "Gains owner"); NewTitleResource = "SiteFields_GtGainsOwner_DisplayName" },
+            @{ OldTitles = @("Gevinstomsetting", "Gain turnover"); NewTitleResource = "SiteFields_GtGainsTurnover_DisplayName" },
+            @{ OldTitles = @("Gevinsttype", "Type of gain"); NewTitleResource = "SiteFields_GtGainsType_DisplayName" },
+            @{ OldTitles = @("Status gevinstoppnåelse", "Status gain achievement"); NewTitleResource = "SiteFields_GtStatusGainAchievement_DisplayName" },
+            @{ OldTitles = @("Kommentar, gevinstoppnåelse", "Comment, gain achievement"); NewTitleResource = "SiteFields_GtStatusGainAchievementComment_DisplayName" }
+        )
+
         ApplyUpgradeTemplate "1.14.0"
 
         Write-Host "[INFO] Removing duplicate 'Konfigurasjon av Prosjektportalen' Site Settings links"
