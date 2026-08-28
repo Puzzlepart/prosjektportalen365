@@ -567,7 +567,7 @@ forenklingsmekanisme.
 
 ---
 
-### J. Fasetekster, roller, tjenesteområder og lenker  ·  ✅ GJENNOMFØRT 2026-08-21 *(fasetekster i Taxonomy + 1.14.0-malen; ingen dyplenker fantes; tjenesteområder uendret — intet v6-motstykke)*
+### J. Fasetekster, roller, tjenesteområder og lenker  ·  ✅ GJENNOMFØRT 2026-08-21 *(fasetekster i Taxonomy — kun nyinstallasjoner, besluttet 2026-08-25; ingen dyplenker fantes; tjenesteområder uendret — intet v6-motstykke)*
 
 **Fasetekster:** `Templates/Taxonomy/Taxonomy.xml` — `PhaseSubText`, `PhaseDescription` og
 `_en-us`-variantene for alle sju termer. Navn, GUID og `CustomSortOrder` røres ikke.
@@ -596,9 +596,12 @@ omdøping, tilføyelser og konfigurasjon.
 - oppdater de to eksisterende `Listeinnhold`-radene på plass (bevar item-ID)
 
 **2. Versjonert oppgraderingsmal** — `Templates/Upgrade/1.14.0/1.14.0.xml`
-(mønster: `1.5.0`, `1.8.1`, `1.12.0`). Nødvendig fordi `Install/Install.ps1` **hopper over
-Taxonomy-malen ved `-Upgrade`** — endrede fasetekster og rollebeskrivelser når ellers ikke ut.
-`Install/Build-Release.ps1` pakker hver undermappe som egen `.pnp`.
+(mønster: `1.5.0`, `1.8.1`, `1.12.0`). `Install/Build-Release.ps1` pakker hver undermappe som
+egen `.pnp`. ~~Nødvendig for fasetekstene siden `-Upgrade` hopper over Taxonomy~~ **Besluttet
+2026-08-25: fasetekstene distribueres IKKE ved oppgradering** — de gjelder kun nye
+installasjoner (via Taxonomy.pnp). Endringen er kun noen ord i undertekst/beskrivelse;
+virksomheter som ønsker dem kan oppdatere termlageret manuelt. 1.14.0-malen brukes fortsatt
+av interessentgruppe-migreringen (#1742).
 
 **3. `UpgradeAllSitesToLatest/` — per prosjektområde:**
 - legg til nye statuskolonner fra område G
