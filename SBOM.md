@@ -2,15 +2,15 @@
 
 **Project:** Prosjektportalen 365  
 **Version:** 1.13.1  
-**Generated:** 2026-05-11T08:49:10.468Z  
+**Generated:** 2026-08-31T11:43:18.294Z  
 **Format:** CycloneDX-inspired Markdown
 
 ## Overview
 
 This SBOM documents all software dependencies used in the Prosjektportalen 365 project, including all packages in the monorepo.
 
-**Total Dependencies:** 127  
-**Production Dependencies:** 80  
+**Total Dependencies:** 125  
+**Production Dependencies:** 78  
 **Development Dependencies:** 47  
 **Projects in Monorepo:** 8
 
@@ -23,12 +23,12 @@ This SBOM documents all software dependencies used in the Prosjektportalen 365 p
 
 ### pp365-portfolioextensions (1.13.1)
 
-- **Production Dependencies:** 22
+- **Production Dependencies:** 24
 - **Development Dependencies:** 27
 
 ### pp365-portfoliowebparts (1.13.1)
 
-- **Production Dependencies:** 48
+- **Production Dependencies:** 44
 - **Development Dependencies:** 31
 
 ### pp365-programwebparts (1.13.1)
@@ -38,7 +38,7 @@ This SBOM documents all software dependencies used in the Prosjektportalen 365 p
 
 ### pp365-projectextensions (1.13.1)
 
-- **Production Dependencies:** 35
+- **Production Dependencies:** 36
 - **Development Dependencies:** 30
 
 ### pp365-projectwebparts (1.13.1)
@@ -48,7 +48,7 @@ This SBOM documents all software dependencies used in the Prosjektportalen 365 p
 
 ### pp365-shared-library (1.13.1)
 
-- **Production Dependencies:** 39
+- **Production Dependencies:** 40
 - **Development Dependencies:** 21
 
 ### pp365-templates (1.13.1)
@@ -60,18 +60,16 @@ This SBOM documents all software dependencies used in the Prosjektportalen 365 p
 
 This section lists all unique dependencies across all projects.
 
-### Production Dependencies (80)
+### Production Dependencies (78)
 
 | Package | Version(s) | Used By |
 |---------|-----------|----------|
 | @fluentui/react | 8.98.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | @fluentui/react-components | ~9.72.10 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| @fluentui/react-datepicker-compat | ~0.6.22 | pp365-portfoliowebparts, pp365-projectwebparts, pp365-shared-library |
+| @fluentui/react-datepicker-compat | ~0.6.22 | pp365-projectwebparts, pp365-shared-library |
 | @fluentui/react-file-type-icons | ~8.16.0 | pp365-shared-library |
 | @fluentui/react-hooks | 8.6.27 | pp365-portfoliowebparts |
 | @fluentui/react-icons | ~2.0.317 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| @fluentui/react-motion | ~9.11.6 | pp365-portfoliowebparts |
-| @fluentui/react-motion-preview | ~0.5.25 | pp365-portfoliowebparts |
 | @microsoft/decorators | 1.17.4 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-projectextensions, +1 more |
 | @microsoft/microsoft-graph-types | ~2.38.0 | pp365-projectextensions |
 | @microsoft/sp-adaptive-card-extension-base | 1.17.4 | pp365-programwebparts, pp365-projectwebparts |
@@ -109,6 +107,7 @@ This section lists all unique dependencies across all projects.
 | get-value | 3.0.1 | pp365-projectwebparts |
 | interactjs | 1.6.2 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectwebparts |
 | jsom-ctx | 1.2.0 | pp365-portfoliowebparts, pp365-programwebparts |
+| jszip | 3.10.1 | pp365-portfolioextensions, pp365-projectextensions, pp365-shared-library |
 | lodash | ~4.17.21 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectextensions, +2 more |
 | moment | 2.11.1, ~2.29.4 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectwebparts, +1 more |
 | msgraph-helper | 0.8.3 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectextensions, +1 more |
@@ -121,7 +120,6 @@ This section lists all unique dependencies across all projects.
 | react-beautiful-dnd | ~13.1.1 | pp365-portfoliowebparts |
 | react-calendar-timeline | 0.28.0 | pp365-shared-library |
 | react-dom | 17.0.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| react-dropzone | ~14.3.8 | pp365-portfoliowebparts |
 | react-error-boundary | ~4.0.11, ~4.0.10 | pp365-portfoliowebparts, pp365-projectwebparts |
 | react-fade-in | ~2.0.1 | pp365-portfoliowebparts |
 | react-gauge-component | ~1.2.61 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
@@ -135,7 +133,7 @@ This section lists all unique dependencies across all projects.
 | shade-blend-color | ~1.0.0 | pp365-projectwebparts, pp365-shared-library |
 | smoothscroll-polyfill | ~0.4.4 | pp365-projectwebparts |
 | sp-entityportal-service | 2.3.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| sp-js-provisioning | ~1.3.5 | pp365-projectextensions, pp365-shared-library |
+| sp-js-provisioning | 1.3.14 | pp365-portfolioextensions, pp365-projectextensions, pp365-shared-library |
 | spfx-jsom | 0.6.6 | pp365-projectextensions, pp365-projectwebparts, pp365-shared-library |
 | tslib | 2.3.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | underscore | ~1.13.6 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
@@ -215,7 +213,7 @@ This section provides a detailed view of dependencies for each project.
 
 ### pp365-portfolioextensions
 
-#### Production Dependencies (22)
+#### Production Dependencies (24)
 
 | Package | Version |
 |---------|----------|
@@ -232,6 +230,7 @@ This section provides a detailed view of dependencies for each project.
 | @pnp/logging | 3.17.0 |
 | @pnp/queryable | 3.17.0 |
 | @pnp/sp | 3.17.0 |
+| jszip | 3.10.1 |
 | pp365-shared-library | 1.13.1 |
 | react | 17.0.1 |
 | react-dom | 17.0.1 |
@@ -239,6 +238,7 @@ This section provides a detailed view of dependencies for each project.
 | react-markdown | ^8.0.3 |
 | rehype-raw | ^6.1.1 |
 | sp-entityportal-service | 2.3.0 |
+| sp-js-provisioning | 1.3.14 |
 | tslib | 2.3.1 |
 | underscore | ~1.13.6 |
 
@@ -276,17 +276,14 @@ This section provides a detailed view of dependencies for each project.
 
 ### pp365-portfoliowebparts
 
-#### Production Dependencies (48)
+#### Production Dependencies (44)
 
 | Package | Version |
 |---------|----------|
 | @fluentui/react | 8.98.1 |
 | @fluentui/react-components | ~9.72.10 |
-| @fluentui/react-datepicker-compat | ~0.6.22 |
 | @fluentui/react-hooks | 8.6.27 |
 | @fluentui/react-icons | ~2.0.317 |
-| @fluentui/react-motion | ~9.11.6 |
-| @fluentui/react-motion-preview | ~0.5.25 |
 | @microsoft/decorators | 1.17.4 |
 | @microsoft/sp-core-library | 1.17.4 |
 | @microsoft/sp-http | 1.17.4 |
@@ -318,7 +315,6 @@ This section provides a detailed view of dependencies for each project.
 | react | 17.0.1 |
 | react-beautiful-dnd | ~13.1.1 |
 | react-dom | 17.0.1 |
-| react-dropzone | ~14.3.8 |
 | react-error-boundary | ~4.0.11 |
 | react-fade-in | ~2.0.1 |
 | react-gauge-component | ~1.2.61 |
@@ -448,7 +444,7 @@ This section provides a detailed view of dependencies for each project.
 
 ### pp365-projectextensions
 
-#### Production Dependencies (35)
+#### Production Dependencies (36)
 
 | Package | Version |
 |---------|----------|
@@ -471,6 +467,7 @@ This section provides a detailed view of dependencies for each project.
 | @reduxjs/toolkit | 1.5.0 |
 | @uifabric/file-type-icons | 7.6.27 |
 | @uifabric/utilities | 6.45.1 |
+| jszip | 3.10.1 |
 | lodash | ~4.17.21 |
 | msgraph-helper | 0.8.3 |
 | pp365-shared-library | 1.13.1 |
@@ -481,7 +478,7 @@ This section provides a detailed view of dependencies for each project.
 | react-markdown | ^8.0.3 |
 | rehype-raw | ^6.1.1 |
 | sp-entityportal-service | 2.3.0 |
-| sp-js-provisioning | ~1.3.5 |
+| sp-js-provisioning | 1.3.14 |
 | spfx-jsom | 0.6.6 |
 | tslib | 2.3.1 |
 | underscore | ~1.13.6 |
@@ -618,7 +615,7 @@ This section provides a detailed view of dependencies for each project.
 
 ### pp365-shared-library
 
-#### Production Dependencies (39)
+#### Production Dependencies (40)
 
 | Package | Version |
 |---------|----------|
@@ -645,6 +642,7 @@ This section provides a detailed view of dependencies for each project.
 | array-sort | ~1.0.0 |
 | dotenv | ~16.1.3 |
 | file-saver | ^2.0.5 |
+| jszip | 3.10.1 |
 | lodash | ~4.17.21 |
 | moment | ~2.29.4 |
 | react | 17.0.1 |
@@ -655,7 +653,7 @@ This section provides a detailed view of dependencies for each project.
 | rehype-raw | ^6.1.1 |
 | shade-blend-color | ~1.0.0 |
 | sp-entityportal-service | 2.3.0 |
-| sp-js-provisioning | ~1.3.5 |
+| sp-js-provisioning | 1.3.14 |
 | spfx-jsom | 0.6.6 |
 | tslib | 2.3.1 |
 | underscore | ~1.13.6 |
