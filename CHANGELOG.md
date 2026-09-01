@@ -34,6 +34,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet en feil i `Dynamisk Liste` hvor Ja/Nei verdier alltid viser som "Nei" [#1747](https://github.com/Puzzlepart/prosjektportalen365/pull/1747)
 - Rettet en feil i `Porteføljeoversikt` hvor Ja/Nei-kolonner viste råverdiene `0` og `1` i gruppeoverskriftene ved gruppering.
 - Ja/Nei-kolonner vises nå alltid med begge valgene i filterpanelet i `Porteføljeoversikt`, og valgene får riktig etikett uavhengig av hvilken kolonne det gjelder. `Eksporter til Excel` bruker nå samme filtrering som listen, slik at eksporten alltid inneholder de samme radene som vises
+- Rettet en feil i `Porteføljeoversikt` hvor deler av webdelen kunne flimre hvitt når musepekeren ble flyttet over listen. Statusrapport-popoveren åpner nå med forsinkelse (500 ms) og skjules til den er ferdig posisjonert, overflødige tema-providere per celle er fjernet, og ikonkomponenter gjenbrukes mellom re-rendringer slik at inntoningsanimasjonen ikke starter på nytt
 
 ### Merk
 
