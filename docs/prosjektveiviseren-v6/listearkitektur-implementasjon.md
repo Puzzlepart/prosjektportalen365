@@ -29,11 +29,17 @@ side. Dette notatet dokumenterer endringene, rekkefølgekravene og avvikene fra 
   legacy-titlene («Fasesjekkliste (tidligere)» osv.). **Uten dette ville innholdsmalen
   omdøpt legacy-listen tilbake ved hver kjøring.** Radene (44+66) er ikke rørt — de
   provisjoneres fortsatt til legacy-listene (v6-radene kommer i område D/E).
-- `Install/Scripts/PreInstallUpgrade.ps1` → i 1.14.0-blokken, **før** malene:
-  1. hub-listene omdøpes på URL-oppslag til «… (tidligere)» (kun `Title`, idempotent)
+- `Install/Scripts/PreInstallUpgrade.ps1` → v6-splitten, **før** malene:
+  1. hub-listene omdøpes på URL-oppslag til «… (tidligere)» (kun `Title`, idempotent) —
+     **vaktet på kjente standardtitler**: har virksomheten selv omdøpt listen, røres
+     verken listen eller dens Listeinnhold-rad (varsel med manuell oppskrift i stedet)
   2. de to Listeinnhold-radene omdøpes **på plass** (samme item-ID via `SystemUpdate`) —
      `Title`, `GtDescription` og `GtLccSourceList` — slik at alle
      `Maloppsett.ListContentConfigLookup` (LookupMulti på ID) overlever uendret
+  3. splitten hoppes over ved `-SkipTemplate` (apps-only oppgradering — hovedmalen som
+     oppretter v6-listene kjører da ikke). Siden installasjonsloggen bumpes uansett,
+     re-trigges splitten på **tilstand** (v6-listen mangler), ikke bare versjon — en
+     senere full oppgradering fullfører migreringen
 - `Install/Scripts/PostInstall.ps1` →
   1. innholdstype-deaktivering identifiserer nå listene på **URL** (begge generasjoner),
      ikke tittel
@@ -42,7 +48,8 @@ side. Dette notatet dokumenterer endringene, rekkefølgekravene og avvikene fra 
      v6-radene og stille byttet innholdssett — feilen planen advarer mot i «Standardvalg».
 - `Install/Scripts/PostInstallUpgrade.ps1` → 1.14.0-verifisering: varsler (rødt) hvis
   legacy-listen fortsatt bærer originaltittelen — signalet på at omdøpingen feilet og
-  `getByTitle` vil treffe feil liste.
+  `getByTitle` vil treffe feil liste. Hoppes over ved `-SkipTemplate` (splitten er da
+  bevisst ikke kjørt, og varslene ville vært misvisende).
 
 ## Rekkefølgen som bærer alt
 

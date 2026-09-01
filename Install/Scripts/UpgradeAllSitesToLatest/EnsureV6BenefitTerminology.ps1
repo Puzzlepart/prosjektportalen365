@@ -8,7 +8,9 @@ beholder prosjektområdene dagens terminologi (opt-in per installasjon).
 Endrer bare visning: felt-DisplayName, listetitler og navigasjonstitler. Interne
 feltnavn (StaticName/Name), liste-URL-er og listedata røres aldri. Hver omdøping er
 vaktet på kjente standardtitler fra tidligere versjoner — har virksomheten selv
-omdøpt et felt eller en liste, hoppes den over.
+omdøpt et felt eller en liste, hoppes den over. Vakten gjelder PER NIVÅ: nettsteds-
+felt oppdateres uten -UpdateExistingLists, og hvert listefelt omdøpes separat kun
+når listefeltets egen tittel er en kjent standardtittel.
 #>
 
 if (-not $GevinstTilNytte.IsPresent) {
@@ -31,7 +33,10 @@ foreach ($Entry in $FieldRetitleMap) {
         if ($null -eq $Field) { continue }
         $NewTitle = Get-Resource -Name $Entry.NewTitleResource
         if ($Field.Title -ne $NewTitle -and $Entry.OldTitles -contains $Field.Title) {
-            Set-PnPField -Identity $Entry.InternalName -Values @{ Title = $NewTitle } -UpdateExistingLists >$null
+            # Bevisst UTEN -UpdateExistingLists: en tittel-pushdown ville overkjørt
+            # listefelt virksomheten selv har omdøpt. Listefeltene håndteres i stedet
+            # enkeltvis (og vaktet) i $ListFieldRetitleMap under.
+            Set-PnPField -Identity $Entry.InternalName -Values @{ Title = $NewTitle } >$null
             Write-Host "`t`t[SUCCESS] Field [$($Entry.InternalName)]: [$($Field.Title)] -> [$NewTitle]" -ForegroundColor Green
         }
     }
@@ -64,9 +69,15 @@ foreach ($Entry in $ListRetitleMap) {
     }
 }
 
-# Tittelfeltet på gevinstanalyse-listen («Gevinst» -> «Nyttevirkning») og
-# oppslagsfeltene på oppfølgingslisten.
+# Listefeltene på gevinstanalyse-listen (nettstedsfeltene over oppdateres uten
+# pushdown, så hvert listefelt omdøpes her — vaktet på listefeltets egen tittel),
+# tittelfeltet («Gevinst» -> «Nyttevirkning») og oppslagsfeltene på oppfølgingslisten.
 $ListFieldRetitleMap = @(
+    @{ ListUrl = $BenefitsAnalysisUrl; InternalName = "GtGainsResponsible"; OldTitles = @("Gevinstansvarlig", "Gains responsible"); NewTitleResource = "SiteFields_GtGainsResponsible_DisplayName" },
+    @{ ListUrl = $BenefitsAnalysisUrl; InternalName = "GtGainsOwner"; OldTitles = @("Gevinsteier", "Gains owner"); NewTitleResource = "SiteFields_GtGainsOwner_DisplayName" },
+    @{ ListUrl = $BenefitsAnalysisUrl; InternalName = "GtGainsTurnover"; OldTitles = @("Gevinstomsetting", "Gain turnover"); NewTitleResource = "SiteFields_GtGainsTurnover_DisplayName" },
+    @{ ListUrl = $BenefitsAnalysisUrl; InternalName = "GtGainsType"; OldTitles = @("Gevinsttype", "Type of gain"); NewTitleResource = "SiteFields_GtGainsType_DisplayName" },
+    @{ ListUrl = $BenefitsAnalysisUrl; InternalName = "GtPrereqProfitAchievement"; OldTitles = @("Forutsetninger for gevinstoppnåelse", "Prerequisites for gain achievement"); NewTitleResource = "SiteFields_GtPrereqProfitAchievement_DisplayName" },
     @{ ListUrl = $BenefitsAnalysisUrl; InternalName = "Title"; OldTitles = @("Gevinst", "Benefit"); NewTitleResource = "ListFields_Benefit_DisplayName" },
     @{ ListUrl = $BenefitsFollowupUrl; InternalName = "GtGainLookup"; OldTitles = @("Gevinst", "Gain"); NewTitleResource = "ListFields_GainLookup_DisplayName" },
     @{ ListUrl = $BenefitsFollowupUrl; InternalName = "GtGainLookup_ID"; OldTitles = @("Gevinst-ID", "Gain ID"); NewTitleResource = "ListFields_GainLookup_ID_DisplayName" }

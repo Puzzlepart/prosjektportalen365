@@ -279,10 +279,12 @@ if ($null -ne $LastInstall) {
         }
     }
 
-    if ($PreviousVersion -lt [version]"1.14.0") {
+    if ($PreviousVersion -lt [version]"1.14.0" -and -not $SkipTemplate.IsPresent) {
         # Prosjektveiviseren v6: verifiser generasjonssplitten. Hvis omdøpingen i
         # PreInstallUpgrade feilet, heter den GAMLE listen fortsatt «Fasesjekkliste» —
         # da treffer prosjektprovisjoneringens getByTitle feil liste (stille kildebytte).
+        # Ved -SkipTemplate hoppes hele splitten bevisst over (se PreInstallUpgrade),
+        # så verifiseringen ville bare gitt misvisende advarsler.
         Write-Host "[INFO] Verifying side-by-side list generations (Prosjektveiviseren v6)"
         $GenerationChecks = @(
             @{ LegacyUrl = (Get-Resource -Name "Lists_PhaseChecklistLegacy_Url"); LegacyTitle = (Get-Resource -Name "Lists_PhaseChecklistLegacy_Title"); V6Url = (Get-Resource -Name "Lists_PhaseChecklistV6_Url"); V6Title = (Get-Resource -Name "Lists_PhaseChecklistV6_Title") },
