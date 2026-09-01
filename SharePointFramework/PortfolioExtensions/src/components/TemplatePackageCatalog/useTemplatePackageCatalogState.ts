@@ -3,8 +3,7 @@ import { ALL_FILTER, ITemplatePackageCatalogState } from './types'
 
 /**
  * State hook for the catalog. `setState` shallow-merges into the current
- * state and supports the updater-function form for async flows. Mirrors the
- * `useProjectProvisionState` pattern.
+ * state and supports the updater-function form for async flows.
  */
 export function useTemplatePackageCatalogState() {
   const [state, $setState] = useState<ITemplatePackageCatalogState>({

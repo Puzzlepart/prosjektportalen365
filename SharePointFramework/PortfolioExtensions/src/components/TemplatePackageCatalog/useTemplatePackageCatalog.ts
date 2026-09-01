@@ -59,7 +59,7 @@ const normalize = (value: string): string => {
 /**
  * Orchestrates the catalog: loads the catalog + Maloppsett cross-reference,
  * derives the filtered/sorted/paginated package list, and exposes the import /
- * publish-central / remove actions. Mirrors `useProvisionDrawer`.
+ * publish-central / remove actions.
  */
 export function useTemplatePackageCatalog(
   props: ITemplatePackageCatalogProps

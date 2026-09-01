@@ -41,22 +41,11 @@ declare interface IPortfolioWebPartsStrings {
     MoveUpDisabled: string
     MoveDown: string
     MoveDownDisabled: string
-    Back: string
-    Settings: string
-    Close: string
   },
   Placeholder: {
     TextField: string
-    SiteName: string
-    SiteDescription: string
     Icon: string
-    ChoiceField: string
     MultiChoiceField: string
-    GuestField: string
-    UserField: string
-    BusinessJustificationField: string
-    AdditionalInfoField: string
-    DatePicker: string
   },
   NotSpecifiedText: string
   Idea: {
@@ -174,7 +163,6 @@ declare interface IPortfolioWebPartsStrings {
   ErrorBoundaryFallbackText: string
   ErrorFetchingProjectsTitle: string
   ErrorTitle: string
-  AccessTitle: string
   ExcelExportButtonLabel: string
   FiltersString: string
   FilterText: string

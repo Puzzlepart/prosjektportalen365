@@ -10,7 +10,7 @@ export interface IProjectNewsContext {
 export const ProjectNewsContext = createContext<IProjectNewsContext>(null)
 
 /**
- * Hook to get the `ProjectProvisionContext`
+ * Hook to get the `ProjectNewsContext`
  */
 export function useProjectNewsContext() {
   return useContext(ProjectNewsContext)

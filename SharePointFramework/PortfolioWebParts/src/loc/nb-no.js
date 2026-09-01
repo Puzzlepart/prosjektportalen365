@@ -41,23 +41,12 @@ define([], function () {
       MoveUp: 'Flytt opp',
       MoveUpDisabled: 'Kan ikke flytte opp, øverste element',
       MoveDown: 'Flytt ned',
-      MoveDownDisabled: 'Kan ikke flytte ned, nederste element',
-      Back: 'Forrige/tilbake',
-      Settings: 'Innstillinger',
-      Close: 'Lukk'
+      MoveDownDisabled: 'Kan ikke flytte ned, nederste element'
     },
     Placeholder: {
       TextField: 'Angi verdi her',
-      SiteName: 'Angi et navn for området',
-      SiteDescription: 'Angi en beskrivelse for området',
       Icon: 'Angi et ikon',
-      ChoiceField: 'Velg et alternativ',
-      MultiChoiceField: 'Velg ett eller flere alternativer',
-      GuestField: 'Angi gjester',
-      UserField: 'Angi brukere',
-      BusinessJustificationField: 'Angi en forretningsmessig begrunnelse',
-      AdditionalInfoField: 'Angi tilleggsinformasjon',
-      DatePicker: 'Velg en dato'
+      MultiChoiceField: 'Velg ett eller flere alternativer'
     },
     NotSpecifiedText: 'Ikke angitt',
     Idea: {
@@ -176,7 +165,6 @@ define([], function () {
     ErrorBoundaryFallbackText: 'Det oppstod en feil under lasting av {0}.',
     ErrorFetchingProjectsTitle: 'Det skjedde en feil under uthenting av prosjekter.',
     ErrorTitle: 'Det har oppstått en feil',
-    AccessTitle: 'Ingen tilgang',
     ExcelExportButtonLabel: 'Eksporter til Excel',
     FiltersString: 'Filtre',
     FilterText: 'Filtrer',

@@ -6,23 +6,12 @@ define([], function () {
       MoveUp: 'Move up',
       MoveUpDisabled: 'Move up disabled',
       MoveDown: 'Move down',
-      MoveDownDisabled: 'Move down disabled',
-      Back: 'Back',
-      Settings: 'Settings',
-      Close: 'Close'
+      MoveDownDisabled: 'Move down disabled'
     },
     Placeholder: {
       TextField: "Enter text here",
-      SiteName: "Enter a name for the site",
-      SiteDescription: "Enter a description for the site",
       Icon: "Enter an icon",
-      ChoiceField: "Select an option",
-      MultiChoiceField: "Select one or more options",
-      GuestField: "Enter guests",
-      UserField: "Enter users",
-      BusinessJustificationField: "Enter a business justification",
-      AdditionalInfoField: "Enter additional information",
-      DatePicker: "Pick a date"
+      MultiChoiceField: "Select one or more options"
     },
     ColumnCategoryDescription: 'The category of the column. This is used to group columns in the web part.',
     ColumnCategoryLabel: 'Column category',
@@ -319,7 +308,6 @@ define([], function () {
       HiddenProcessingFieldsDescription: 'Fields to hide from the idea module (Idea processing)',
     },
     NoViewFoundTitle: 'No view found',
-    AccessTitle: 'No access',
     ProjectNotFound: 'Project not specified...',
     PrimaryFieldLabel: 'Primary field',
     SecondaryFieldLabel: 'Secondary field',

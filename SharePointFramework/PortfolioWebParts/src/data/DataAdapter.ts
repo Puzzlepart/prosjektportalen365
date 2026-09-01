@@ -6,7 +6,6 @@ import { dateAdd, getHashCode, PnPClientStorage } from '@pnp/core'
 import { LogLevel } from '@pnp/logging'
 import { spfi, SPFx } from '@pnp/sp'
 import '@pnp/sp/items/get-all'
-import '@pnp/sp/groupsitemanager'
 import {
   ISearchResult,
   ISiteUserInfo,
@@ -14,8 +13,7 @@ import {
   QueryPropertyValueType,
   SearchQueryInit,
   SortDirection,
-  SPFI,
-  Web
+  SPFI
 } from '@pnp/sp/presets/all'
 import * as cleanDeep from 'clean-deep'
 import { Idea } from 'components/IdeaModule'
