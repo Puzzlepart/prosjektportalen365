@@ -27,4 +27,11 @@
   min-width: 280px;
   max-width: 400px;
   padding: 16px;
+
+  // The surface mounts at the top left of the viewport until Fluent UI's
+  // async positioning resolves and stamps data-popper-placement, so keep
+  // it invisible until then to avoid a white flash at the viewport corner.
+  &:not([data-popper-placement]) {
+    visibility: hidden;
+  }
 }

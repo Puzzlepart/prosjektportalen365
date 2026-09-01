@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - releases/1.14
-      - feat/multiple-projectstatuses
-      - feat/program-matrix
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'

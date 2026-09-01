@@ -7,6 +7,7 @@ export interface IStatusColumnProps extends IRenderItemColumnProps {
   statusReportListName?: string
   columnConfigListName?: string
   statusSectionsListName?: string
+  openDelay?: number
   animation?: {
     delay?: number
     transitionDuration?: number

@@ -1,7 +1,5 @@
 import { format } from '@fluentui/react'
 import {
-  FluentProvider,
-  IdPrefixProvider,
   InteractionTag,
   InteractionTagPrimary,
   Menu,
@@ -13,86 +11,77 @@ import {
   OverflowItem,
   Tag,
   TagGroup,
-  useId,
   useIsOverflowItemVisible,
   useOverflowMenu
 } from '@fluentui/react-components'
 import React, { FC } from 'react'
 import strings from 'SharedLibraryStrings'
 import _ from 'underscore'
-import { customLightTheme } from '../../util'
 import styles from './OverflowTagMenu.module.scss'
 import { IOverflowTagMenuProps, OverflowMenuItemProps } from './types'
 import { useOverflowTagMenu } from './useOverflowTagMenu'
+
+const OverflowMenuItem: FC<OverflowMenuItemProps> = (props) => {
+  const { tag } = props
+  const isVisible = useIsOverflowItemVisible(tag?.value ?? '')
+
+  if (isVisible || !tag?.value) return null
+
+  return (
+    <MenuItem key={tag.value} className={styles.menuItem}>
+      <Tag className={styles.tag} title={tag.value} appearance='brand' size='small'>
+        {tag.value}
+      </Tag>
+    </MenuItem>
+  )
+}
+
+const OverflowMenu: FC<{
+  tags: {
+    key: string
+    value: string
+    primaryText: string
+    children: string
+  }[]
+}> = (props) => {
+  const { tags } = props
+  const { isOverflowing, overflowCount } = useOverflowMenu<HTMLButtonElement>()
+
+  if (!isOverflowing) {
+    return null
+  }
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+  }
+
+  return (
+    <div onClick={handleClick} onMouseDown={handleClick}>
+      <Menu closeOnScroll>
+        <MenuTrigger disableButtonEnhancement>
+          <InteractionTag
+            aria-label={format(strings.Aria.MenuOverflowCount, overflowCount)}
+            title={format(strings.Aria.MenuOverflowCount, overflowCount)}
+            appearance='brand'
+          >
+            <InteractionTagPrimary primaryText={`+${overflowCount}`} />
+          </InteractionTag>
+        </MenuTrigger>
+        <MenuPopover style={{ maxWidth: 600 }}>
+          <MenuList hasCheckmarks={false}>
+            {!_.isEmpty(tags) &&
+              tags.slice(-overflowCount).map((tag) => <OverflowMenuItem key={tag.key} tag={tag} />)}
+          </MenuList>
+        </MenuPopover>
+      </Menu>
+    </div>
+  )
+}
 
 export const OverflowTagMenu: FC<IOverflowTagMenuProps> = (props) => {
   const { tags, icon } = useOverflowTagMenu(props)
   const Icon = icon
   const shouldApplyPreviewStyles = props.isTagPreview && tags.length > 1
-
-  const OverflowMenuItem = (props: OverflowMenuItemProps) => {
-    const { tag } = props
-    const isVisible = tag && tag.value ? useIsOverflowItemVisible(tag.value) : false
-
-    if (isVisible) return null
-
-    return (
-      <MenuItem key={tag.value} className={styles.menuItem}>
-        <Tag className={styles.tag} title={tag.value} appearance='brand' size='small'>
-          {tag.value}
-        </Tag>
-      </MenuItem>
-    )
-  }
-
-  const OverflowMenu = (props: {
-    tags: {
-      key: string
-      value: string
-      primaryText: string
-      children: string
-    }[]
-  }) => {
-    const fluentProviderId = useId('sp-overflow-menu')
-    const { tags } = props
-    const { isOverflowing, overflowCount } = useOverflowMenu<HTMLButtonElement>()
-
-    if (!isOverflowing) {
-      return null
-    }
-
-    const handleClick = (e: React.MouseEvent) => {
-      e.stopPropagation()
-    }
-
-    return (
-      <IdPrefixProvider value={fluentProviderId}>
-        <FluentProvider theme={customLightTheme} style={{ backgroundColor: 'transparent' }}>
-          <div onClick={handleClick} onMouseDown={handleClick}>
-            <Menu closeOnScroll>
-              <MenuTrigger disableButtonEnhancement>
-                <InteractionTag
-                  aria-label={format(strings.Aria.MenuOverflowCount, overflowCount)}
-                  title={format(strings.Aria.MenuOverflowCount, overflowCount)}
-                  appearance='brand'
-                >
-                  <InteractionTagPrimary primaryText={`+${overflowCount}`} />
-                </InteractionTag>
-              </MenuTrigger>
-              <MenuPopover style={{ maxWidth: 600 }}>
-                <MenuList hasCheckmarks={false}>
-                  {!_.isEmpty(tags) &&
-                    tags
-                      .slice(-overflowCount)
-                      .map((tag) => <OverflowMenuItem key={tag.key} tag={tag} />)}
-                </MenuList>
-              </MenuPopover>
-            </Menu>
-          </div>
-        </FluentProvider>
-      </IdPrefixProvider>
-    )
-  }
 
   return (
     <div className={styles.tags} hidden={props.hidden}>
