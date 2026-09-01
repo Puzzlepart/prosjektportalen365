@@ -2413,12 +2413,6 @@
   <data name="Security_SiteGroup_PortfolioInsight_Title" xml:space="preserve">
     <value>Portfolio insight</value>
   </data>
-  <data name="Security_SiteGroup_ProvisionPortal_Description" xml:space="preserve">
-    <value>Users who have access to the Provision Portal to order projects and areas.</value>
-  </data>
-  <data name="Security_SiteGroup_ProvisionPortal_Title" xml:space="preserve">
-    <value>Provision portal</value>
-  </data>
   <data name="SiteFields_ContentType_DisplayName" xml:space="preserve">
     <value>Content Type</value>
   </data>
