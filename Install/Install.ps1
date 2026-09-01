@@ -34,7 +34,7 @@ Param(
     [string]$SiteDesignSecurityGroupId,
     [Parameter(Mandatory = $false, HelpMessage = "Tenant App Catalog Url")]
     [string]$TenantAppCatalogUrl,
-    [Parameter(Mandatory = $false, HelpMessage = "URL to the provisioning portal site (Bestillingsportalen). Stored as tenant storage entity pp365_ProvisionUrl, used by the Bestillingsportalen Teams app and as fallback for the web part")]
+    [Parameter(Mandatory = $false, HelpMessage = "URL to the provisioning portal site (Bestillingsportalen). Stored as tenant storage entity pp365_ProvisionUrl, used by the Bestillingsportalen Teams app and web part")]
     [string]$ProvisionUrl,
     [Parameter(Mandatory = $false, HelpMessage = "Language")]
     [ValidateSet('Norwegian', 'English')]
@@ -464,7 +464,7 @@ if ($ProvisionUrl) {
             $TenantAppCatalogUrl = Get-PnPTenantAppCatalogUrl -ErrorAction SilentlyContinue
         }
         Connect-SharePoint -Url $TenantAppCatalogUrl -ConnectionInfo $ConnectionInfo
-        Set-PnPStorageEntity -Key "pp365_ProvisionUrl" -Value $ProvisionUrl -Description "URL til Bestillingsportalen. Brukes av Bestillingsportalen Teams-app og som fallback for webdelen." -ErrorAction Stop
+        Set-PnPStorageEntity -Key "pp365_ProvisionUrl" -Value $ProvisionUrl -Description "URL til Bestillingsportalen. Brukes av Bestillingsportalen Teams-app og bestillings-webdelen." -ErrorAction Stop
         EndAction
     }
     Catch {

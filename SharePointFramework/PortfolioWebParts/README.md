@@ -155,23 +155,7 @@ Når innstillingen slås på, får alle vertikaler uten filter på livssyklussta
 
 ## ProjectProvision (Bestillingsportalen)
 
-### Hubtilknytning og standardhub
-
-Hubtilknytning styres per prosjekttype i `Provisioning Types`-lista på bestillingsområdet:
-
-| Felt         | Beskrivelse                                                                            |
-| ------------ | -------------------------------------------------------------------------------------- |
-| `JoinHub`    | Angir at området som bestilles skal knyttes til en hub                                 |
-| `DefaultHub` | ID-en (GUID) til hubområdet som skal brukes i stedet for huben bestillingen gjøres fra |
-
-Dersom `DefaultHub` er tomt, knyttes området til huben bestillingen gjøres fra.
-
-Merk:
-
-- En prosjekttype med `DefaultHub` angitt behandles alltid som hubtilknyttet, også om `JoinHub` ikke er avkrysset
-- `DefaultHub` kan angis med eller uten klammeparenteser (`{}`) og med vilkårlige store/små bokstaver — ID-en normaliseres før den sammenlignes og lagres
-- Dersom `DefaultHub` peker på en hub som ikke finnes, eller som brukeren ikke har tilgang til, faller bestillingen tilbake til gjeldende hub og det vises en advarsel på hubfeltet i skjemaet
-- Ved bestilling av underområde fra et program/overordnet område legges prosjektinformasjonen i huben området faktisk knyttes til
+Bestillings-webdelen (`ProjectProvisionWebPart`) er flyttet ut av denne pakken og vedlikeholdes nå i [Bestillingsportalen-repoet](https://github.com/Puzzlepart/bestillingsportalen) (fra Bestillingsportalen 2.1.0, pakken `bp-provision-web-parts`). Komponent-id-en er beholdt, så eksisterende sider virker etter at den nye pakken er distribuert — se oppgraderingsrekkefølgen i Bestillingsportalens `Upgrade.md`.
 
 ## Serve
 

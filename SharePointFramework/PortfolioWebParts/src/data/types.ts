@@ -15,8 +15,6 @@ import {
   TimelineContentModel
 } from 'pp365-shared-library'
 import { IPortfolioAggregationConfiguration, IPortfolioOverviewConfiguration } from '../components'
-import { IPersonaSharedProps } from '@fluentui/react'
-import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
 import { Idea } from 'components/IdeaModule'
 import { IdeaConfigurationModel } from 'models'
 import strings from 'PortfolioWebPartsStrings'
@@ -378,128 +376,6 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<any[]>
 
   /**
-   * Search for users using `_sp.profiles.clientPeoplePickerSearchUser`.
-   *
-   * @param queryString Query string
-   * @param selectedItems Selected items that should be excluded from the result
-   * @param maximumEntitySuggestions Maximum entity suggestions
-   */
-  clientPeoplePickerSearchUser?(
-    queryString: string,
-    selectedItems: any[],
-    maximumEntitySuggestions?: number
-  ): Promise<IPersonaSharedProps[]>
-
-  /**
-   * Retrieves the configuration from the "Provisioning Request Settings" list
-   *
-   * @returns A Promise that resolves to an array containing the configuration.
-   */
-  getProvisionRequestSettings?(provisionUrl: string): Promise<any[]>
-
-  /**
-   * Retrieves the provision types from the "Provisioning Types" list
-   *
-   * @returns A Promise that resolves to a Map containing the types.
-   */
-  getProvisionTypes?(provisionUrl: string): Promise<Record<string, any>>
-
-  /**
-   * Retrieves the Site templates from the "Site Templates" list
-   *
-   * @returns A Promise that resolves to a Map containing the templates.
-   */
-  getSiteTemplates?(provisionUrl: string): Promise<Record<string, any>>
-
-  /**
-   * Ensure users in the provision site and return their IDs.
-   *
-   * @param users Users to ensure
-   */
-  getProvisionUsers?(users: any[], provisionUrl: string): Promise<Promise<number | null>[]>
-
-  /**
-   * Adds a new provision request to the provisioning requests list
-   *
-   * @param properties Properties for the new provision request (`Id` will be omitted)
-   * @param provisionUrl Url for the provisioning site
-   *
-   */
-  addProvisionRequests?(
-    properties: IProvisionRequestItem,
-    provisionUrl: string
-  ): Promise<boolean | 'userResolveError'>
-
-  /**
-   * Adds project data to the ProjectData list to store project information that
-   * will be used when setting up the project
-   *
-   * @param properties Properties to add to the ProjectData list
-   * @param hubUrl Url for the hub site
-   */
-  addProjectData?(
-    properties: Record<string, any>,
-    hubUrl: string
-  ): Promise<Record<string, any> | void>
-
-  /**
-   * Deletes a provision request item from the provisioning requests list
-   *
-   * @param requestId Id of the request to delete
-   * @param provisionUrl Url for the provisioning site
-   *
-   */
-  deleteProvisionRequest?(requestId: number, provisionUrl: string): Promise<boolean>
-
-  /**
-   * Retrieves the provision types from the "Provisioning Requests" list
-   *
-   * @param user User to fetch the provision requests for
-   * @param provisionUrl Url for the provisioning site
-   *
-   * @returns A Promise that resolves to an array of containing provision requests.
-   */
-  fetchProvisionRequests?(user: any, provisionUrl: string): Promise<any[]>
-
-  /**
-   * Retrieves the team templates from the "Teams Templates" list
-   *
-   * @returns A Promise that resolves to a Map containing the templates.
-   */
-  getTeamTemplates?(provisionUrl: string): Promise<Record<string, any>>
-
-  /**
-   * Retrieves the sensitivity labels from the "IP Labels" list
-   *
-   * @returns A Promise that resolves to a Map containing the labels.
-   */
-  getSensitivityLabels?(provisionUrl: string): Promise<Record<string, any>>
-
-  /**
-   * Retrieves the retention labels from the "Retention Labels" list
-   *
-   * @returns A Promise that resolves to a Map containing the labels.
-   */
-  getRetentionLabels?(provisionUrl: string): Promise<Record<string, any>>
-
-  /**
-   * Checks if a site exists based on its proposed URL
-   *
-   * @param siteUrl Site URL
-   *
-   */
-  siteExists?(siteUrl: string): Promise<boolean>
-
-  /**
-   * Checks if an in-flight provisioning request with the same site alias
-   * already exists in the "Provisioning Requests" list
-   *
-   * @param siteAlias Full site alias (including naming convention prefix/suffix)
-   * @param provisionUrl URL of the provisioning site
-   */
-  provisionRequestExists?(siteAlias: string, provisionUrl: string): Promise<boolean>
-
-  /**
    * Retrieves the configuration from the "Idékonfigurasjon" list
    *
    * @returns A Promise that resolves to an array containing the configuration.
@@ -515,56 +391,6 @@ export interface IPortfolioWebPartsDataAdapter {
    * @returns A Promise that resolves to an object containing the data for the ideas.
    */
   getIdeasData?(configuration: IdeaConfigurationModel): Promise<Idea>
-
-  /**
-   * Get the tenant-wide configured provision site URL from the tenant
-   * storage entity `pp365_ProvisionUrl`. The value is cached in
-   * `sessionStorage` to avoid an extra request per page load.
-   *
-   * @returns The configured provision site URL, or null if not configured
-   */
-  getTenantProvisionUrl?(): Promise<string | null>
-
-  /**
-   * Load Teams app configuration from TeamsAppConfig.json
-   *
-   * @param provisionUrl The provision site URL
-   * @returns Configuration object or null if file doesn't exist
-   */
-  loadTeamsConfig?(provisionUrl: string): Promise<any | null>
-
-  /**
-   * Save Teams app configuration to TeamsAppConfig.json
-   *
-   * @param provisionUrl The provision site URL
-   * @param config Configuration object to save
-   */
-  saveTeamsConfig?(provisionUrl: string, config: any): Promise<void>
-
-  /**
-   * Delete Teams app configuration file (TeamsAppConfig.json)
-   *
-   * @param provisionUrl The provision site URL
-   */
-  deleteTeamsConfig?(provisionUrl: string): Promise<void>
-
-  /**
-   * Check if current user is admin of the provision site
-   *
-   * @param provisionUrl The provision site URL
-   * @returns True if user is site admin
-   */
-  isProvisionSiteAdmin?(provisionUrl: string): Promise<boolean>
-
-  /**
-   * Resolve a hub site by its ID using the HubSites REST API.
-   *
-   * @param hubSiteId The hub site GUID
-   * @returns Hub site info with normalized id, title and site URL, or null if not found
-   */
-  resolveHubSiteById?(
-    hubSiteId: string
-  ): Promise<{ hubSiteId: string; title: string; url: string } | null>
 }
 
 export type PortfolioInstance = {
