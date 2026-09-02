@@ -60,7 +60,7 @@ export interface IManifestListContent {
   description?: string
   /**
    * Hub list the rows are copied **from** (`GtLccSourceList`). Typically a list
-   * provisioned by this package's hub template (e.g. `Enkel Fasesjekkliste`).
+   * provisioned by this package's hub template.
    */
   sourceList: string
   /**

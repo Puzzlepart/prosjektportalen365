@@ -9,14 +9,14 @@ side. Dette notatet dokumenterer endringene, rekkefølgekravene og avvikene fra 
 |---|---|---|
 | `Lists_PhaseChecklist_*` *(uendret)* | Fasesjekkliste / `Lists/Fasesjekkliste` | **Prosjektområdets destinasjonsliste** (JsonTemplates, SPFx `useProjectPhasesDataFetch`, `GtLccDestinationList`) |
 | `Lists_PhaseChecklistLegacy_*` *(ny)* | Fasesjekkliste (tidligere) / `Lists/Fasesjekkliste` | Hub, forrige generasjon — gammel URL, ny tittel |
-| `Lists_PhaseChecklistV6_*` *(ny)* | Fasesjekkliste / `Lists/Fasesjekklistev6` | Hub, v6-generasjonen — opprinnelig tittel, ny URL |
+| `Lists_PhaseChecklistV6_*` *(ny)* | Fasesjekkliste / `Lists/FasesjekklisteV6` | Hub, v6-generasjonen — opprinnelig tittel, ny URL |
 | `Lists_PlannerTasks[Legacy/V6]_*` | tilsvarende | tilsvarende |
 | `Lists_ListContent_PhaseCheckpointsLegacy_*`, `..._PlannerTasksLegacy_*` *(ny)* | «… (tidligere)» | Listeinnhold-radene for forrige generasjon |
 
 ## Endrede/nye filer
 
 - `Objects/Lists/Fasesjekkliste.xml`, `Planneroppgaver.xml` → Legacy-nøkler (tittel/URL/beskrivelse)
-- `Objects/Lists/Fasesjekklistev6.xml`, `Planneroppgaverv6.xml` → **nye**, V6-nøkler, samme
+- `Objects/Lists/FasesjekklisteV6.xml`, `PlanneroppgaverV6.xml` → **nye**, V6-nøkler, samme
   innholdstyper/visninger/sikkerhet som originalene
 - `Objects/Lists/@.xml` → de to nye listene registrert
 - `Objects/Lists/Listeinnhold.xml` → **5 rader**: Fasesjekkpunkter (v6-kilde),

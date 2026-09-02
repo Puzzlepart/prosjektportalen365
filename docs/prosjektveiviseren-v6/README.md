@@ -22,8 +22,8 @@ Sporing: [issue #1044](https://github.com/Puzzlepart/prosjektportalen365/issues/
 | ~~`kilder/`~~ | 74 innholdssider fra prosjektveiviseren.digdir.no (rådata for mapping) | **Fjernet fra branchen 2026-08-25** — finnes i git-historikken; dokumentene lenker nå direkte til Digdir |
 | `mapping-sjekkpunkter.csv` | 44 eksisterende sjekkpunkter mappet + 27 nye v6-punkter | **GODKJENT 2026-08-21** — avledet til `innhold-sjekkpunkter.csv`; beholdes som revisjonsspor |
 | `mapping-oppgaver.csv` | 66 eksisterende oppgaver mappet + 24 nye v6-oppgaver | **ERSTATTET 2026-08-21** av `innhold-oppgaver.csv` som fasit for nytt innhold — beholdes som revisjonsspor for hva som skjedde med de 66 gamle radene |
-| `innhold-sjekkpunkter.csv` | FASIT for Fasesjekklistev6: 63 sjekkpunkter, begge språk (avledet fra godkjent mapping) — kilde for Generate-V6ContentRows.js | **Generert inn i malverket 2026-08-21** |
-| `innhold-oppgaver.csv` | FASIT for Planneroppgaverv6: 26 oppgaver med beskrivelse og sjekkliste, begge språk (fra PLs regneark) — kilden til Generate-V6ContentRows.js | **Levert av PL, generert inn i malverket 2026-08-21** |
+| `innhold-sjekkpunkter.csv` | FASIT for FasesjekklisteV6: 63 sjekkpunkter, begge språk (avledet fra godkjent mapping) — kilde for Generate-V6ContentRows.js | **Generert inn i malverket 2026-08-21** |
+| `innhold-oppgaver.csv` | FASIT for PlanneroppgaverV6: 26 oppgaver med beskrivelse og sjekkliste, begge språk (fra PLs regneark) — kilden til Generate-V6ContentRows.js | **Levert av PL, generert inn i malverket 2026-08-21** |
 | `mapping-terminologi.csv` | Begrepspar gammel → v6 med fasit og kildebelegg | **VERIFISERT 2026-08-06** — TERM-003/004/006/007 trenger M1-beslutning |
 | `terminologi-implementasjon.md` | Gjennomført resx-/taksonomi-endring: hva som ble endret, frosne koblingsverdier, krav til område K | Gjennomført 2026-08-20 |
 | `listearkitektur-implementasjon.md` | Gjennomført generasjonssplitt av hub-listene (område B): nøkkelsplitt, rekkefølgekrav, avvik | Gjennomført 2026-08-20 |
@@ -67,16 +67,16 @@ id, fase, sortorder, gammel_tittel, gammel_tittel_en, ny_tittel, ny_tittel_en, h
 | Dato | Beslutning | Hvem |
 |---|---|---|
 | 2026-08-05 | Omfang: innhold + nye v6-konsepter; leveranse i kjerneproduktet; dokumentmaler byttes til v6-filer | Tarjei |
-| 2026-08-05 | Side-om-side-strategi: v6-innhold i nye hub-lister (`Fasesjekklistev6`, `Planneroppgaverv6`), eksisterende lister beholdes som «(tidligere)», virksomheten velger per prosjektmal | Tarjei |
+| 2026-08-05 | Side-om-side-strategi: v6-innhold i nye hub-lister (`FasesjekklisteV6`, `PlanneroppgaverV6`), eksisterende lister beholdes som «(tidligere)», virksomheten velger per prosjektmal | Tarjei |
 | 2026-08-05 | Interne feltnavn/URL-er endres aldri; kun visningsnavn følger v6-terminologien | Tarjei |
 | 2026-08-06 | Onboarding gjennomført; team etablert (Marit PL, Remi, Ole K, Tarjei TR) | Teamet |
 | 2026-08-06 | Egress-blokkeringen er borte: hele v6-kilden (74 sider + 11 maler) innhentet automatisk; terminologi verifisert. PLs kildeinnhenting utgår — PL verifiserer og godkjenner i stedet | AI/Tarjei |
 | 2026-08-20 | TERM-003 avgjort: «Gevinstansvarlig» (visningsnavnet på `GtGainsResponsible`) omdøpes til «Nytteeier» i malverket. Ingen forsøk på å oppdatere data/termer der gammelt begrep er brukt. Korreksjon: rollen er et personfelt, ikke en taksonomiterm — omdøpingen er datasikker | Tarjei |
 | 2026-08-20 | Område C gjennomført i malverket (64 no-NB + 21 en-US resx-verdier + 1 taksonomiterm). Datakildekategorien og 11 andre koblingsverdier frosset — se terminologi-implementasjon.md | Tarjei/AI |
-| 2026-08-20 | Område B gjennomført i malverket: hub-listene splittet i to generasjoner (Fasesjekklistev6/Planneroppgaverv6), Listeinnhold utvidet til 5 rader, omdøping lagt i PreInstallUpgrade, Standardmal-kobling gatet i PostInstall | Tarjei/AI |
+| 2026-08-20 | Område B gjennomført i malverket: hub-listene splittet i to generasjoner (FasesjekklisteV6/PlanneroppgaverV6), Listeinnhold utvidet til 5 rader, omdøping lagt i PreInstallUpgrade, Standardmal-kobling gatet i PostInstall | Tarjei/AI |
 | 2026-08-21 | BP-oppgavene utgår fra Planneroppgaver — beslutningspunktene er implisitte i fasesjekklisten | Teamet |
-| 2026-08-21 | Område E gjennomført: PLs regneark (26 oppgaver med sjekklister) konvertert til innhold-oppgaver.csv og generert inn i begge innholdsmalene (Planneroppgaverv6). Generate-V6ContentRows.js etablert | Teamet/AI |
-| 2026-08-21 | Sjekkpunkt-mappingen godkjent som den står. Område D gjennomført: 63 v6-sjekkpunkter avledet til innhold-sjekkpunkter.csv og generert inn i begge innholdsmalene (Fasesjekklistev6) | Teamet/AI |
+| 2026-08-21 | Område E gjennomført: PLs regneark (26 oppgaver med sjekklister) konvertert til innhold-oppgaver.csv og generert inn i begge innholdsmalene (PlanneroppgaverV6). Generate-V6ContentRows.js etablert | Teamet/AI |
+| 2026-08-21 | Sjekkpunkt-mappingen godkjent som den står. Område D gjennomført: 63 v6-sjekkpunkter avledet til innhold-sjekkpunkter.csv og generert inn i begge innholdsmalene (FasesjekklisteV6) | Teamet/AI |
 | 2026-08-21 | Områdene G, F og J gjennomført i malverket. **Port M2 passert:** alt innhold committet; build, validate-project-template og validate-loc grønne (kun pre-eksisterende loc-hull). Gjenstår før M3: område K (1.14.0-skriptene har alt B/C-stegene; kolonnekonfig for G + UpgradeAllSites gjenstår) og E2E-test i testleietaker | Teamet/AI |
 | 2026-08-21 | Område F revidert: ingen «(v6)»-mappe — v6-malene provisjoneres rett i «Fra Prosjektveiviseren» med Overwrite, og det gamle malsettet (15 filer, v2.2–v5.0) er fjernet fra malverket. Gamle filer består fysisk hos oppgraderte kunder til frivillig opprydding (K). Nynorsk v4-mappen beholdt i påvente av M1 | Tarjei |
 | 2026-08-24 | Område K skriptdel levert: (1) PreInstallUpgrade omdøper Statusseksjoner-, kolonnekonfig- og Prosjektkolonner-rader in place med gammel-tittel-vakt; (2) PostInstall sikrer kolonnekonfig-fargene for GtStatusScope/GtStatusSustainability med runtime-ID-oppslag; (3) nytt EnsureV6BenefitTerminology.ps1 i UpgradeAllSitesToLatest, gated på ny bryter -GevinstTilNytte (opt-in per installasjon). Frivillig oppryddingsskript besluttet BORT; M3-testene kjøres av teamet | Tarjei |
@@ -96,6 +96,6 @@ id, fase, sortorder, gammel_tittel, gammel_tittel_en, ny_tittel, ny_tittel_en, h
 
 ## Navnekonvensjon for framtidige versjoner
 
-Ny innholdsgenerasjon får versjonssuffiks i liste-URL (`Lists/Fasesjekklistev6`); forrige
+Ny innholdsgenerasjon får versjonssuffiks i liste-URL (`Lists/FasesjekklisteV6`); forrige
 generasjon får «(tidligere)» i visningstittelen. Maksimalt to generasjoner samtidig — ved
 v7 fjernes v5-generasjonen.

@@ -256,10 +256,10 @@ Det er *kilden* som blir to. Dermed berøres **ikke**: venstremenyen i prosjektm
 | Nivå | Visningstittel | URL | resx-nøkkel |
 |---|---|---|---|
 | Hub, gammel | Fasesjekkliste (tidligere) | `Lists/Fasesjekkliste` *(uendret)* | `Lists_PhaseChecklistLegacy_Title` / `_Url` |
-| Hub, ny | Fasesjekkliste | `Lists/Fasesjekklistev6` | `Lists_PhaseChecklistV6_Title` / `_Url` |
+| Hub, ny | Fasesjekkliste | `Lists/FasesjekklisteV6` | `Lists_PhaseChecklistV6_Title` / `_Url` |
 | Prosjekt | Fasesjekkliste | `Lists/Fasesjekkliste` *(uendret)* | `Lists_PhaseChecklist_Title` / `_Url` *(uendret)* |
 | Hub, gammel | Planneroppgaver (tidligere) | `Lists/Planneroppgaver` *(uendret)* | `Lists_PlannerTasksLegacy_Title` / `_Url` |
-| Hub, ny | Planneroppgaver | `Lists/Planneroppgaverv6` | `Lists_PlannerTasksV6_Title` / `_Url` |
+| Hub, ny | Planneroppgaver | `Lists/PlanneroppgaverV6` | `Lists_PlannerTasksV6_Title` / `_Url` |
 
 Planneroppgaver har ingen motsvarende liste på prosjektområdet — destinasjonen er
 Planner-planen «Prosjektoppgaver» via `GtPlannerName`. Splittet er derfor enklere der.
@@ -319,14 +319,14 @@ rekkefølgefeil gir stille datafeil.
 
 `v6`-suffikset gjentar problemet ved v7. Etabler konvensjonen nå og dokumenter den i
 `docs/prosjektveiviseren-v6/README.md`: ny liste får versjonssuffiks i URL
-(`Lists/Fasesjekklistev6`), forrige generasjon får «(tidligere)» i visningstittelen, og det
+(`Lists/FasesjekklisteV6`), forrige generasjon får «(tidligere)» i visningstittelen, og det
 finnes til enhver tid maksimalt to generasjoner. Ved v7 slettes v5-generasjonen.
 
 #### Filer
 
 - `Templates/Portfolio/Objects/Lists/Fasesjekkliste.xml` — bytt til `_Legacy`-nøklene
-- `Templates/Portfolio/Objects/Lists/Fasesjekklistev6.xml` — **ny**, kopi med `_V6`-nøkler
-- `Templates/Portfolio/Objects/Lists/Planneroppgaver.xml` + `Planneroppgaverv6.xml` — tilsvarende
+- `Templates/Portfolio/Objects/Lists/FasesjekklisteV6.xml` — **ny**, kopi med `_V6`-nøkler
+- `Templates/Portfolio/Objects/Lists/Planneroppgaver.xml` + `PlanneroppgaverV6.xml` — tilsvarende
 - `Templates/Portfolio/Objects/Lists/@.xml` — registrer de to nye
 - `Templates/Portfolio/Objects/Lists/Listeinnhold.xml` — to nye `DataRow`s
 - `Templates/Portfolio/Objects/ClientSidePages/Konfigurasjon.xml` — konfigurasjonssiden på hub
@@ -423,7 +423,7 @@ feltnavn, liste-URL eller sidefilnavn er endret; `npm run validate-loc` og
 
 ### D. Fasesjekkpunkter  ·  *inn i den nye listen*  ·  ✅ GJENNOMFØRT 2026-08-21
 
-**Hva:** v6-sjekkpunktene provisjoneres til `Fasesjekklistev6`. Konseptfasens punkter knyttes
+**Hva:** v6-sjekkpunktene provisjoneres til `FasesjekklisteV6`. Konseptfasens punkter knyttes
 til de seks obligatoriske spørsmålene i utredningsinstruksen. Nye punkter for faseoverganger
 (start av planleggings-, gjennomførings- og avslutningsfasen) og for avslutningsanbefaling i BP4.
 Bruk v6-terminologi fra område C.
@@ -437,7 +437,7 @@ innenfor hver fase kommer videreførte punkter først (gammel rekkefølge), dere
 
 **Filer:**
 - `Templates/Content/Portfolio_content.no-NB/Portfolio_content.no-NB.xml` — ny
-  `<pnp:ListInstance Title="Fasesjekkliste" Url="Lists/Fasesjekklistev6">` ✔; den eksisterende
+  `<pnp:ListInstance Title="Fasesjekkliste" Url="Lists/FasesjekklisteV6">` ✔; den eksisterende
   blokken uendret med `Title` «Fasesjekkliste (tidligere)» ✔ (gjort i område B).
 - `Templates/Content/Portfolio_content.en-US/Portfolio_content.en-US.xml` — tilsvarende ✔
 
@@ -455,7 +455,7 @@ innenfor hver fase kommer videreførte punkter først (gammel rekkefølge), dere
 oppgave — bredere oppgaver enn de gamle 66, i tråd med v6s aktivitetsstruktur). Konvertert
 til `docs/prosjektveiviseren-v6/innhold-oppgaver.csv` (begge språk, én kilde) og generert
 inn i begge innholdsmalene med `assets/scripts/Generate-V6ContentRows.js`:
-`<pnp:ListInstance Title="Planneroppgaver" Url="Lists/Planneroppgaverv6">` med feltene
+`<pnp:ListInstance Title="Planneroppgaver" Url="Lists/PlanneroppgaverV6">` med feltene
 Title, GtDescription, GtCategory, GtSortOrder og GtChecklist — beskrivelse og sjekkliste
 flyter til Planner-oppgavene via `CopyListData`.
 
@@ -661,7 +661,7 @@ sti fram til M2 og fungerer som buffer-arbeid for TR dersom A drar ut.
 |---|---|---|---|---|
 | ma 10.8 – on 12.8 | Fylle ut `mapping-sjekkpunkter.csv` og `mapping-oppgaver.csv`: hver av de 110 eksisterende radene får en `handling`, alle v6-aktiviteter representert | A | **AI** | PL avklarer tvilstilfeller |
 | ma 10.8 – on 12.8 | Verifisere `mapping-terminologi.csv` mot kilden: nyttevirkning/nytte, nytteansvarlig?, «Plan for nyttestyring», hva skjedde med gevinsteier | A/C | **PL** | AI lager tabellutkast |
-| ma 10.8 – fr 14.8 | Starte listearkitektur: splitte resx-nøkler, nye listedefinisjoner (`Fasesjekklistev6.xml`, `Planneroppgaverv6.xml`), `Listeinnhold`-rader, `@.xml` | B | **TR** | |
+| ma 10.8 – fr 14.8 | Starte listearkitektur: splitte resx-nøkler, nye listedefinisjoner (`FasesjekklisteV6.xml`, `PlanneroppgaverV6.xml`), `Listeinnhold`-rader, `@.xml` | B | **TR** | |
 | to 13.8 | Gjennomgangsmøte: PL går gjennom mappingtabellene med AI-begrunnelsene | A | PL | AI |
 | **fr 14.8** | **Port M1: PL godkjenner de tre mappingtabellene.** Uten M1 stopper D, E og C. | A | **PL** | |
 

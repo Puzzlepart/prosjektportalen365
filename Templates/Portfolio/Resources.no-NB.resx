@@ -1690,14 +1690,11 @@
   <data name="Lists_PhaseChecklistLegacy_Url" xml:space="preserve">
     <value>Lists/Fasesjekkliste</value>
   </data>
-  <data name="Lists_PhaseChecklistLegacy_Description" xml:space="preserve">
-    <value>Fasesjekkpunkter fra tidligere versjon av Prosjektveiviseren (før versjon 6)</value>
-  </data>
   <data name="Lists_PhaseChecklistV6_Title" xml:space="preserve">
     <value>Fasesjekkliste</value>
   </data>
   <data name="Lists_PhaseChecklistV6_Url" xml:space="preserve">
-    <value>Lists/Fasesjekklistev6</value>
+    <value>Lists/FasesjekklisteV6</value>
   </data>
   <data name="Lists_PhaseChecklistV6_Description" xml:space="preserve">
     <value>Standard fasesjekkpunkter fra Prosjektveiviseren versjon 6</value>
@@ -1717,14 +1714,11 @@
   <data name="Lists_PlannerTasksLegacy_Url" xml:space="preserve">
     <value>Lists/Planneroppgaver</value>
   </data>
-  <data name="Lists_PlannerTasksLegacy_Description" xml:space="preserve">
-    <value>Prosjektoppgaver fra tidligere versjon av Prosjektveiviseren (før versjon 6)</value>
-  </data>
   <data name="Lists_PlannerTasksV6_Title" xml:space="preserve">
     <value>Planneroppgaver</value>
   </data>
   <data name="Lists_PlannerTasksV6_Url" xml:space="preserve">
-    <value>Lists/Planneroppgaverv6</value>
+    <value>Lists/PlanneroppgaverV6</value>
   </data>
   <data name="Lists_PlannerTasksV6_Description" xml:space="preserve">
     <value>Standard prosjektoppgaver fra Prosjektveiviseren versjon 6</value>
