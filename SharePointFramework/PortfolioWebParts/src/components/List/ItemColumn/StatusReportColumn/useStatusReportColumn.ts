@@ -7,9 +7,10 @@ import { IStatusColumnProps } from './types'
  * Hook for the status report column.
  *
  * The popover open state is controlled here to add a show delay
- * (`props.openDelay`) - Fluent UI v9 `Popover` with `openOnHover`
- * opens instantly on `mouseenter`, which makes surfaces flash white
- * when sweeping the cursor across the list.
+ * (`props.openDelay`), as v9 `Popover` with `openOnHover` opens instantly on
+ * `mouseenter`. `cancelPendingOpen` must be wired to the trigger's own
+ * `pointerleave` — Fluent delays the close notification by `mouseLeaveDelay`,
+ * so a pending open could otherwise fire after the pointer has left the cell.
  *
  * @param props Props for the status report column
  */
@@ -33,11 +34,16 @@ export function useStatusReportColumn(props: IStatusColumnProps) {
     [props.openDelay]
   )
 
+  const cancelPendingOpen = useCallback(() => {
+    window.clearTimeout(openTimeout.current)
+  }, [])
+
   useEffect(() => () => window.clearTimeout(openTimeout.current), [])
 
   return {
     status,
     open,
-    onOpenChange
+    onOpenChange,
+    cancelPendingOpen
   }
 }

@@ -11,6 +11,7 @@ import { FluentProvider, IdPrefixProvider, useId } from '@fluentui/react-compone
 import { customLightTheme } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { ListContext } from './context'
+import styles from './List.module.scss'
 import { IListProps } from './types'
 import { useList } from './useList'
 
@@ -20,7 +21,7 @@ export const List: FC<IListProps<any>> = (props) => {
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
-      <FluentProvider theme={customLightTheme}>
+      <FluentProvider className={styles.root} theme={customLightTheme}>
         <ListContext.Provider value={{ props: listProps }}>
           <ScrollablePane {...props.scrollablePane}>
             <MarqueeSelection selection={props.selection}>

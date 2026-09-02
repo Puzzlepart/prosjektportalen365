@@ -4,11 +4,15 @@ import React, { CSSProperties } from 'react'
 import { iconCatalog } from './iconCatalog'
 import { FluentIconName, GetFluentIconOptions } from './types'
 
-// `bundleIcon` creates a new component type on every call. Cache the bundled
-// icons so repeated renders reuse the same component - otherwise React
-// remounts the icon each render, restarting any CSS mount animations.
 const bundledIcons = new Map<FluentIconName, ReturnType<typeof bundleIcon>>()
 
+/**
+ * Returns a cached bundled icon for the specified name. `bundleIcon` creates
+ * a new component type on every call, which would make React remount the icon
+ * (restarting any CSS animations) on each render.
+ *
+ * @param name - The name of the icon to retrieve.
+ */
 function getBundledIcon(name: FluentIconName) {
   if (!bundledIcons.has(name)) {
     const icon = iconCatalog[name]
