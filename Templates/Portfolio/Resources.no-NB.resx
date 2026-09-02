@@ -2315,7 +2315,7 @@
     <value>Nytteoppfølging</value>
   </data>
   <data name="Navigation_BenefitsFollowup_Url" xml:space="preserve">
-    <value>Lists/Nytteoppfolging/AllItems.aspx</value>
+    <value>Lists/Nytteoppflging/AllItems.aspx</value>
   </data>
   <data name="Navigation_BenefitsOverview_Title" xml:space="preserve">
     <value>Nytteoversikt</value>

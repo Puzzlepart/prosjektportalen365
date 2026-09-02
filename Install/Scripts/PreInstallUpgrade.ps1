@@ -373,12 +373,40 @@ if ($null -ne $LastInstall) {
         # skippes ved reprovisjonering og ville ellers beholdt gamle visningstitler.
         RetitleRows "Lists_ProjectColumns_Title" { $true } @(
             @{ OldTitles = @("Gevinstansvarlig", "Gains responsible"); NewTitleResource = "SiteFields_GtGainsResponsible_DisplayName" },
-            @{ OldTitles = @("Gevinsteier", "Gains owner"); NewTitleResource = "SiteFields_GtGainsOwner_DisplayName" },
-            @{ OldTitles = @("Gevinstomsetting", "Gain turnover"); NewTitleResource = "SiteFields_GtGainsTurnover_DisplayName" },
-            @{ OldTitles = @("Gevinsttype", "Type of gain"); NewTitleResource = "SiteFields_GtGainsType_DisplayName" },
             @{ OldTitles = @("Status gevinstoppnåelse", "Status gain achievement"); NewTitleResource = "SiteFields_GtStatusGainAchievement_DisplayName" },
             @{ OldTitles = @("Kommentar, gevinstoppnåelse", "Comment, gain achievement"); NewTitleResource = "SiteFields_GtStatusGainAchievementComment_DisplayName" }
         )
+
+        # Prosjektinnholdskolonner er nøklet på GtInternalName (ingen duplikatrisiko), men radene
+        # skippes ved reprovisjonering og ville ellers beholdt gamle visningstitler.
+        RetitleRows "Lists_ProjectContentColumns_Title" { $true } @(
+            @{ OldTitles = @("Gevinstansvarlig", "Gains responsible"); NewTitleResource = "SiteFields_GtGainsResponsible_DisplayName" },
+            @{ OldTitles = @("Gevinsteier", "Gains owner"); NewTitleResource = "SiteFields_GtGainsOwner_DisplayName" },
+            @{ OldTitles = @("Gevinstomsetting", "Gain turnover"); NewTitleResource = "SiteFields_GtGainsTurnover_DisplayName" },
+            @{ OldTitles = @("Gevinsttype", "Type of gain"); NewTitleResource = "SiteFields_GtGainsType_DisplayName" }
+        )
+
+        # Kategori-verdien (GtDataSourceCategory) på OOTB-radene i Prosjektinnholdskolonner
+        # beholder v5-verdien «Gevinstoversikt» siden radene skippes ved reprovisjonering.
+        # Oppdateres til gjeldende verdi fra resx («Nytteoversikt»). Vakt: kun standard-
+        # kolonnene fra Prosjektportalen røres — egne kolonner hos virksomheten røres aldri.
+        Write-Host "[INFO] Updating category (Gevinstoversikt -> Nytteoversikt) on default project content columns"
+        $OotbBenefitColumns = @(
+            'GtGainsResponsible', 'GtGainsOwner', 'GtDesiredValue', 'GtMeasurementUnit',
+            'GtStartValue', 'GtMeasurementValue', 'GtMeasurementComment', 'GtMeasurementDate',
+            'GtGainsTurnover', 'GtGainsType', 'GtPrereqProfitAchievement', 'GtRealizationTime',
+            'MeasurementIndicator', 'LastMeasurementValue', 'MeasurementAchievement', 'Measurements'
+        )
+        $ProjectContentColumnsList = Get-PnPList -Identity (Get-Resource -Name "Lists_ProjectContentColumns_Title") -ErrorAction SilentlyContinue
+        if ($null -ne $ProjectContentColumnsList) {
+            $BenefitCategory = Get-Resource -Name "Lists_DataSources_Category_BenefitOverview"
+            Get-PnPListItem -List $ProjectContentColumnsList.Id | Where-Object {
+                $_["GtDataSourceCategory"] -eq "Gevinstoversikt" -and $OotbBenefitColumns -contains $_["GtInternalName"]
+            } | ForEach-Object {
+                Set-PnPListItem -List $ProjectContentColumnsList.Id -Identity $_.Id -Values @{ "GtDataSourceCategory" = $BenefitCategory } -UpdateType SystemUpdate >$null
+                Write-Host "[SUCCESS] Updated category to [$BenefitCategory] for [$($_["GtInternalName"])] (id $($_.Id))" -ForegroundColor Green
+            }
+        }
     }
 
     if ($PreviousVersion -lt [version]"1.14.0") {
