@@ -2413,12 +2413,6 @@
   <data name="Security_SiteGroup_PortfolioInsight_Title" xml:space="preserve">
     <value>Porteføljeinnsyn</value>
   </data>
-  <data name="Security_SiteGroup_ProvisionPortal_Description" xml:space="preserve">
-    <value>Brukere som har tilgang til Bestillingsportalen for å bestille prosjekter og områder.</value>
-  </data>
-  <data name="Security_SiteGroup_ProvisionPortal_Title" xml:space="preserve">
-    <value>Bestillingsportalen</value>
-  </data>
   <data name="SiteFields_ContentType_DisplayName" xml:space="preserve">
     <value>Innholdstype</value>
   </data>
