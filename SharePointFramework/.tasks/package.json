@@ -1,6 +1,6 @@
 {
     "name": "pp365-spfx-tasks",
-    "version": "1.13.1",
+    "version": "1.14.0",
     "scripts": {
       "build": "echo \"No build for pp365-spfx-tasks; build.js is invoked per-solution as 'node ../.tasks/build.js --channel <name>'\"",
       "lint": "echo \"No linting configured\"",
