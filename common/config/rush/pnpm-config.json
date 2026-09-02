@@ -1,6 +1,9 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/pnpm-config.schema.json",
   "globalOverrides": {
-    "caniuse-lite": "^1.0.30001700"
+    "caniuse-lite": "^1.0.30001700",
+    "@fluentui/react-tabster": "9.26.13",
+    "keyborg": "2.6.0",
+    "tabster": "8.7.0"
   }
 }
