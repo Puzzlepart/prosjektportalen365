@@ -85,132 +85,6 @@
   <data name="Choice_GtAllocationStatus_Requested" xml:space="preserve">
     <value>Forespurt</value>
   </data>
-  <data name="Choice_GtBAProjectEnv_EventRegistered" xml:space="preserve">
-    <value>Hendelse registrert siste måned</value>
-  </data>
-  <data name="Choice_GtBAProjectEnv_NoEvents" xml:space="preserve">
-    <value>Ingen hendelser siste måned</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_F0" xml:space="preserve">
-    <value>F0</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_F1" xml:space="preserve">
-    <value>F1</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_F2" xml:space="preserve">
-    <value>F2</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_F3" xml:space="preserve">
-    <value>F3</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_NotRelevant" xml:space="preserve">
-    <value>Ikke relevant</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_SeckePost" xml:space="preserve">
-    <value>S (Sekkepost)</value>
-  </data>
-  <data name="Choice_GtBAProjectSHA_EventRegistered" xml:space="preserve">
-    <value>Hendelse registrert siste måned</value>
-  </data>
-  <data name="Choice_GtBAProjectSHA_NoEvents" xml:space="preserve">
-    <value>Ingen hendelser siste måned</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_ComplaintUnderReview" xml:space="preserve">
-    <value>Klage under behandling</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_FrameworkApplicationInProgress" xml:space="preserve">
-    <value>Rammesøknad under utarbeidelse</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_FrameworkApplicationSent" xml:space="preserve">
-    <value>Rammesøknad sendt</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_FrameworkPermitGranted" xml:space="preserve">
-    <value>Rammetillatelse gitt</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_IGGranted" xml:space="preserve">
-    <value>IG gitt</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_IGSent" xml:space="preserve">
-    <value>IG sendt</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_PreConferenceHeld" xml:space="preserve">
-    <value>Forhåndskonferanse avholdt</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_RegulationPlanAnnounced" xml:space="preserve">
-    <value>Reguleringsplan annonsert</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_RegulationPlanApproved" xml:space="preserve">
-    <value>Reguleringsplan godkjent</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_RegulationPlanFirstTreated" xml:space="preserve">
-    <value>Reguleringsplan 1.gangsbehandlet</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_AppliedForPayment" xml:space="preserve">
-    <value>Søkt utbetaling</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_DialogWithGrantorEstablished" xml:space="preserve">
-    <value>Dialog med tilskuddsyter opprettet</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_HasApplied" xml:space="preserve">
-    <value>Har søkt</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_HasReceivedApproval" xml:space="preserve">
-    <value>Har fått tilsagn</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_HasReceivedPayment" xml:space="preserve">
-    <value>Har fått utbetalt</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_HasReceivedRejection" xml:space="preserve">
-    <value>Har fått avslag</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_NotApplicable" xml:space="preserve">
-    <value>Ikke aktuelt</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_ToBeInvestigated" xml:space="preserve">
-    <value>Skal undersøkes/vurderes</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_Businesses" xml:space="preserve">
-    <value>Virksomheter</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_CollaborationPartners" xml:space="preserve">
-    <value>Samarbeidspartnere</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_CouncilsAndCommittees" xml:space="preserve">
-    <value>Råd og utvalg</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_ExternalAssociations" xml:space="preserve">
-    <value>Foreninger (eksterne)</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_MunicipalAdministration" xml:space="preserve">
-    <value>Kommuneadministrasjon</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_Neighbors" xml:space="preserve">
-    <value>Naboer</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_OtherActors" xml:space="preserve">
-    <value>Andre aktører</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_Political" xml:space="preserve">
-    <value>Politisk</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_PublicAuthorities" xml:space="preserve">
-    <value>Offentlige myndigheter</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_SupervisionAndAgencies" xml:space="preserve">
-    <value>Tilsyn og vesener</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_Transport" xml:space="preserve">
-    <value>Transport</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_UnionRepresentatives" xml:space="preserve">
-    <value>Tillitsvalgte</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_Users" xml:space="preserve">
-    <value>Brukere</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_UtilityProviders" xml:space="preserve">
-    <value>Nettleverandører</value>
-  </data>
   <data name="Choice_GtChecklistStatus_Archived" xml:space="preserve">
     <value>Arkivert</value>
   </data>
@@ -284,19 +158,19 @@
     <value>Avvist</value>
   </data>
   <data name="Choice_GtIdeaEconomicBenefit_LargeBenefit" xml:space="preserve">
-    <value>5=Prosjektets leveranser gir stor målbar og realiserbar økonomisk gevinst</value>
+    <value>5=Prosjektets leveranser gir stor målbar og realiserbar økonomisk nyttevirkning</value>
   </data>
   <data name="Choice_GtIdeaEconomicBenefit_LimitedBenefit" xml:space="preserve">
-    <value>2=Prosjektets leveranser gir begrenset målbar og realiserbar gevinst</value>
+    <value>2=Prosjektets leveranser gir begrenset målbar og realiserbar nyttevirkning</value>
   </data>
   <data name="Choice_GtIdeaEconomicBenefit_MeasurableBenefit" xml:space="preserve">
-    <value>4=Prosjektets leveranser forventes å gi både målbar og realiserbar gevinst. Gevinsten kan tas ut i form av redusert kostnader</value>
+    <value>4=Prosjektets leveranser forventes å gi både målbar og realiserbar nyttevirkning. Nyttevirkningen kan tas ut i form av reduserte kostnader</value>
   </data>
   <data name="Choice_GtIdeaEconomicBenefit_NoKnownBenefit" xml:space="preserve">
-    <value>1=Prosjektets leveranser gir ikke noen kjent økonomisk gevinst, eller vil lede til negativ økonomisk gevinst (f.eks. prosjekter som er lovpålagte/må gjennomføres, men som vil medføre kost)</value>
+    <value>1=Prosjektets leveranser gir ingen kjent økonomisk nyttevirkning, eller gir negative økonomiske virkninger (f.eks. prosjekter som er lovpålagte/må gjennomføres, men som vil medføre kost)</value>
   </data>
   <data name="Choice_GtIdeaEconomicBenefit_PotentialBenefit" xml:space="preserve">
-    <value>3=Prosjektets leveranser gir potensielt målbar gevinst, men realiserbarheten er usikker. Det kan være vanskelig å ta ut gevinst</value>
+    <value>3=Prosjektets leveranser gir potensielt målbar nyttevirkning, men realiserbarheten er usikker. Det kan være vanskelig å ta ut nyttevirkningen</value>
   </data>
   <data name="Choice_GtIdeaOperationalNeed_LegallyRequired" xml:space="preserve">
     <value>5=Prosjektet er lovpålagt, juridisk nødvendig og må fullføres senest det tiden det tar å gjennomføre prosjektet. Manglende gjennomføring vil medføre vesentlig pålegg, påpakning fra eier eller tilsynsmyndighet (riksrevisjonen, datatilsynet m.v.)</value>
@@ -320,7 +194,7 @@
     <value>1=Prosjektets leveranser har ikke dokumenterbar kvalitetshevende effekt, men kan ha indirekte påvirkning på kvalitet</value>
   </data>
   <data name="Choice_GtIdeaQualityBenefit_QualitativeGain" xml:space="preserve">
-    <value>2=Prosjektets leveranser gir kvalitativ gevinst som er vanskelig å dokumentere, da også andre faktorer vil ha innvirkning</value>
+    <value>2=Prosjektets leveranser gir kvalitativ nyttevirkning som er vanskelig å dokumentere, da også andre faktorer vil ha innvirkning</value>
   </data>
   <data name="Choice_GtIdeaQualityBenefit_SignificantImprovement" xml:space="preserve">
     <value>5=Prosjektets leveranser gir vesentlig og dokumenterbar kvalitativ forbedring på områder som er strategisk viktige og på parametre det måles på.</value>
@@ -338,16 +212,16 @@
     <value>Avvist</value>
   </data>
   <data name="Choice_GtIdeaRisk_CriticalRisk" xml:space="preserve">
-    <value>1=Kritisk risiko: Prosjektet har svært høy risiko, og det er stor sannsynlighet for ikke å lykkes med de viktigste målene eller med å realisere gevinster. Feil kan medføre store økonomiske tap. Kjernevirksomhet kan stoppe opp</value>
+    <value>1=Kritisk risiko: Prosjektet har svært høy risiko, og det er stor sannsynlighet for ikke å lykkes med de viktigste målene eller med å realisere nyttevirkninger. Feil kan medføre store økonomiske tap. Kjernevirksomhet kan stoppe opp</value>
   </data>
   <data name="Choice_GtIdeaRisk_LowRisk" xml:space="preserve">
-    <value>5=Lav risiko: Prosjektet har lav risiko. Det er god tilgang til ressurser og kompetanse for prosjektgjennomføring, og organisasjonens evne til å realisere gevinster er godt kjent</value>
+    <value>5=Lav risiko: Prosjektet har lav risiko. Det er god tilgang til ressurser og kompetanse for prosjektgjennomføring, og organisasjonens evne til å realisere nyttevirkninger er godt kjent</value>
   </data>
   <data name="Choice_GtIdeaRisk_MediumRisk" xml:space="preserve">
-    <value>3=Middels risiko: Prosjektet har middels høy risiko. Det er risiko knyttet til evner om å realisere gevinster. Prosjektet kan mislykkes i å nå alle sine mål</value>
+    <value>3=Middels risiko: Prosjektet har middels høy risiko. Det er risiko knyttet til evnen til å realisere nyttevirkninger. Prosjektet kan mislykkes i å nå alle sine mål</value>
   </data>
   <data name="Choice_GtIdeaRisk_SignificantRisk" xml:space="preserve">
-    <value>2=Betydelig risiko: Prosjektet har høy risiko i gjennomføring og/eller i muligheten for å realisere gevinst etter at prosjektets leveranser er ferdigstilt</value>
+    <value>2=Betydelig risiko: Prosjektet har høy risiko i gjennomføring og/eller i muligheten for å realisere nyttevirkninger etter at prosjektets leveranser er ferdigstilt</value>
   </data>
   <data name="Choice_GtIdeaRisk_SomeRisk" xml:space="preserve">
     <value>4=Noe risiko: Prosjektet har ordinær risiko knyttet til tilgang på ressurser, beslutningskapasitet, kostnader etc. Risikoen er håndterbar ved å sette inn sannsynlighetsreduserende og konsekvensreduserende tiltak ved behov</value>
@@ -598,60 +472,6 @@
   <data name="Choice_GtSettingsCategory_UncertaintyPlanner" xml:space="preserve">
     <value>Usikkerhetstiltak i Planner</value>
   </data>
-  <data name="Choice_GtStakeholderGroup_Academia" xml:space="preserve">
-    <value>Akademia</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Academics" xml:space="preserve">
-    <value>Akademia</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Business" xml:space="preserve">
-    <value>Næringsliv</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Citizens" xml:space="preserve">
-    <value>Innbyggere</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Colleagues" xml:space="preserve">
-    <value>Medarbeidere</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Employees" xml:space="preserve">
-    <value>Medarbeidere</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Inhabitants" xml:space="preserve">
-    <value>Innbyggere</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_InstrumentDevice" xml:space="preserve">
-    <value>Virkemiddelapparat</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Leaders" xml:space="preserve">
-    <value>Ledelse</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Management" xml:space="preserve">
-    <value>Ledelse</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_OtherPublicActors" xml:space="preserve">
-    <value>Andre offentlige aktører</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_OtherPublicStakeholders" xml:space="preserve">
-    <value>Andre offentlige aktører</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_PolicyInstruments" xml:space="preserve">
-    <value>Virkemiddelapparat</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_TradeUnion" xml:space="preserve">
-    <value>Fagforening</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Union" xml:space="preserve">
-    <value>Fagforening</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Users" xml:space="preserve">
-    <value>Brukere</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Volenteers" xml:space="preserve">
-    <value>Frivillighet/Organisasjon</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_VoluntaryOrganization" xml:space="preserve">
-    <value>Frivillighet/Organisasjon</value>
-  </data>
   <data name="Choice_GtStakeholderInfluence_Large" xml:space="preserve">
     <value>Stor</value>
   </data>
@@ -755,10 +575,10 @@
     <value>Overordnet</value>
   </data>
   <data name="ClientSidePages_BenefitOverview_PageName" xml:space="preserve">
-    <value>Gevinstoversikt.aspx</value>
+    <value>Nytteoversikt.aspx</value>
   </data>
   <data name="ClientSidePages_BenefitOverview_Title" xml:space="preserve">
-    <value>Gevinstoversikt</value>
+    <value>Nytteoversikt</value>
   </data>
   <data name="ClientSidePages_Configuration_CustomActionTitle" xml:space="preserve">
     <value>Konfigurasjon av Prosjektportalen</value>
@@ -774,12 +594,6 @@
   </data>
   <data name="ClientSidePages_DeliveryOverview_Title" xml:space="preserve">
     <value>Leveranseoversikt</value>
-  </data>
-  <data name="ClientSidePages_ProjectProvision_PageName" xml:space="preserve">
-    <value>Bestillingsportalen.aspx</value>
-  </data>
-  <data name="ClientSidePages_ProjectProvision_Title" xml:space="preserve">
-    <value>Bestillingsportalen</value>
   </data>
   <data name="ClientSidePages_ExperienceLog_PageName" xml:space="preserve">
     <value>Erfaringslogg.aspx</value>
@@ -809,13 +623,13 @@
     <value>Administrasjon av underområder</value>
   </data>
   <data name="ClientSidePages_ParentBenefitOverview_PageName" xml:space="preserve">
-    <value>OverordnetGevinster.aspx</value>
+    <value>OverordnetNyttevirkninger.aspx</value>
   </data>
   <data name="ClientSidePages_ParentBenefitOverview_Title" xml:space="preserve">
-    <value>Gevinster</value>
+    <value>Nyttevirkninger</value>
   </data>
   <data name="ClientSidePages_ParentBenefitOverview_WebPartTitle" xml:space="preserve">
-    <value>Gevinster for underområder</value>
+    <value>Nyttevirkninger for underområder</value>
   </data>
   <data name="ClientSidePages_ParentCommunicationPlan_PageName" xml:space="preserve">
     <value>OverordnetKommunikasjon.aspx</value>
@@ -884,10 +698,10 @@
     <value>Kommunikasjonsplaner</value>
   </data>
   <data name="ClientSidePages_ProgramBenefitOverview_PageName" xml:space="preserve">
-    <value>ProgramGevinster.aspx</value>
+    <value>ProgramNyttevirkninger.aspx</value>
   </data>
   <data name="ClientSidePages_ProgramBenefitOverview_Title" xml:space="preserve">
-    <value>Gevinster</value>
+    <value>Nyttevirkninger</value>
   </data>
   <data name="ClientSidePages_ProgramCommunicationPlan_PageName" xml:space="preserve">
     <value>ProgramKommunikasjon.aspx</value>
@@ -905,7 +719,7 @@
     <value>Oversikt</value>
   </data>
   <data name="ClientSidePages_ProgramProjectTimeline_PageName" xml:space="preserve">
-    <value>Programtidslinje.aspx</value>
+    <value>Tidslinje.aspx</value>
   </data>
   <data name="ClientSidePages_ProgramProjectTimeline_Title" xml:space="preserve">
     <value>Programtidslinje</value>
@@ -974,10 +788,10 @@
     <value>Arkiveringsloggelement</value>
   </data>
   <data name="ContentTypes_Benefit_Name" xml:space="preserve">
-    <value>Gevinst</value>
+    <value>Nyttevirkning</value>
   </data>
   <data name="ContentTypes_BenefitFollowup_Name" xml:space="preserve">
-    <value>Gevinstoppfølging</value>
+    <value>Nytteoppfølging</value>
   </data>
   <data name="ContentTypes_Change_Name" xml:space="preserve">
     <value>Endring</value>
@@ -1120,12 +934,6 @@
   <data name="ContentTypes_ProjectAdminRoleSiteAdmin_Name" xml:space="preserve">
     <value>Prosjektadministrasjonsrolle - Områdeadministrator</value>
   </data>
-  <data name="ContentTypes_ProjectBA_Description" xml:space="preserve">
-    <value>Prosjekt innholdstype for bygg- og anleggsprosjekter</value>
-  </data>
-  <data name="ContentTypes_ProjectBA_Name" xml:space="preserve">
-    <value>Prosjekt (ByggAnlegg)</value>
-  </data>
   <data name="ContentTypes_ProjectColumn_Description" xml:space="preserve">
     <value>Opprett en ny prosjektkolonne</value>
   </data>
@@ -1170,12 +978,6 @@
   </data>
   <data name="ContentTypes_ProjectStatus_Name" xml:space="preserve">
     <value>Prosjektstatus</value>
-  </data>
-  <data name="ContentTypes_ProjectStatusBA_Description" xml:space="preserve">
-    <value>Prosjektstatus innholdstype for bygg- og anleggsprosjekter</value>
-  </data>
-  <data name="ContentTypes_ProjectStatusBA_Name" xml:space="preserve">
-    <value>Prosjektstatus (ByggAnlegg)</value>
   </data>
   <data name="ContentTypes_ProjectTask_Name" xml:space="preserve">
     <value>Prosjektoppgave</value>
@@ -1250,13 +1052,13 @@
     <value>&lt;10% ekstrainnsats</value>
   </data>
   <data name="ListFields_Benefit_DisplayName" xml:space="preserve">
-    <value>Gevinst</value>
+    <value>Nyttevirkning</value>
   </data>
   <data name="ListFields_Change_DisplayName" xml:space="preserve">
     <value>Endring</value>
   </data>
   <data name="ListFields_ChangeLookup_Description" xml:space="preserve">
-    <value>Hvilken endring fra endringsanalysen skal gevinsten knyttes mot?</value>
+    <value>Hvilken endring fra endringsanalysen skal nyttevirkningen knyttes mot?</value>
   </data>
   <data name="ListFields_ChangeLookup_DisplayName" xml:space="preserve">
     <value>Endring</value>
@@ -1277,10 +1079,10 @@
     <value>Dokumenttype</value>
   </data>
   <data name="ListFields_GainLookup_DisplayName" xml:space="preserve">
-    <value>Gevinst</value>
+    <value>Nyttevirkning</value>
   </data>
   <data name="ListFields_GainLookup_ID_DisplayName" xml:space="preserve">
-    <value>Gevinst-ID</value>
+    <value>Nyttevirknings-ID</value>
   </data>
   <data name="ListFields_MeasureIndicatorLookup_Description" xml:space="preserve">
     <value>Målindikator</value>
@@ -1316,10 +1118,10 @@
     <value>Lists/Arkiveringslogg</value>
   </data>
   <data name="Lists_BenefitsAnalysis_Title" xml:space="preserve">
-    <value>Gevinstanalyse og gevinstrealiseringsplan</value>
+    <value>Nytteanalyse og plan for nyttestyring</value>
   </data>
   <data name="Lists_BenefitsFollowup_Title" xml:space="preserve">
-    <value>Gevinstoppfølging</value>
+    <value>Nytteoppfølging</value>
   </data>
   <data name="Lists_ChangeAnalysis_Title" xml:space="preserve">
     <value>Endringsanalyse</value>
@@ -1343,19 +1145,19 @@
     <value>Konfigurasjonsfiler</value>
   </data>
   <data name="Lists_DataSources_Category_BenefitOverview" xml:space="preserve">
-    <value>Gevinstoversikt</value>
+    <value>Nytteoversikt</value>
   </data>
   <data name="Lists_DataSources_Category_BenefitOverview_All" xml:space="preserve">
-    <value>Alle gevinstelementer</value>
+    <value>Alle nyttevirkningselementer</value>
   </data>
   <data name="Lists_DataSources_Category_BenefitOverview_Children" xml:space="preserve">
-    <value>Alle gevinstelementer for underområder</value>
+    <value>Alle nyttevirkningselementer for underområder</value>
   </data>
   <data name="Lists_DataSources_Category_BenefitOverview_PortfolioLevel" xml:space="preserve">
-    <value>Gevinstelementer på porteføljenivå</value>
+    <value>Nyttevirkningselementer på porteføljenivå</value>
   </data>
   <data name="Lists_DataSources_Category_BenefitOverview_Project" xml:space="preserve">
-    <value>Alle gevinstelementer for prosjektet</value>
+    <value>Alle nyttevirkningselementer for prosjektet</value>
   </data>
   <data name="Lists_DataSources_Category_CommunicationPlan" xml:space="preserve">
     <value>Kommunikasjonsoversikt</value>
@@ -1447,18 +1249,6 @@
   <data name="Lists_Documents_Title" xml:space="preserve">
     <value>Dokumenter</value>
   </data>
-  <data name="Lists_DocumentsBuilding_Title" xml:space="preserve">
-    <value>Standarddokumenter Bygg</value>
-  </data>
-  <data name="Lists_DocumentsBuilding_Url" xml:space="preserve">
-    <value>Standarddokumenter_Bygg</value>
-  </data>
-  <data name="Lists_DocumentsConstruction_Title" xml:space="preserve">
-    <value>Standarddokumenter Anlegg</value>
-  </data>
-  <data name="Lists_DocumentsConstruction_Url" xml:space="preserve">
-    <value>Standarddokumenter_Anlegg</value>
-  </data>
   <data name="Lists_Global_Settings_Category_Assistant" xml:space="preserve">
     <value>Assistent</value>
   </data>
@@ -1500,6 +1290,12 @@
   </data>
   <data name="Lists_Global_Settings_Category_General_ProjectNewsHubUrl_Title" xml:space="preserve">
     <value>URL til område for nyhetspublisering</value>
+  </data>
+  <data name="Lists_Global_Settings_Category_General_ShowChildProjectInfoInProgram_Title" xml:space="preserve">
+    <value>Vis prosjektinformasjon for alle prosjekter i program og overordnede prosjekter</value>
+  </data>
+  <data name="Lists_Global_Settings_Category_General_CatalogTelemetryEnabled_Title" xml:space="preserve">
+    <value>Send bruksstatistikk for malpakkekatalogen</value>
   </data>
   <data name="Lists_Global_Settings_Category_General_ShowFooter_Title" xml:space="preserve">
     <value>Vis/skjul footer i Prosjektportalen</value>
@@ -1583,16 +1379,16 @@
     <value>Type</value>
   </data>
   <data name="Lists_HelpContent_BenefitAnalysisUserManual" xml:space="preserve">
-    <value>Gevinstanalyse og gevinstrealiseringsplan Brukermanual</value>
+    <value>Nytteanalyse og plan for nyttestyring Brukermanual</value>
   </data>
   <data name="Lists_HelpContent_BenefitFollowUpUserManual" xml:space="preserve">
-    <value>Gevinstoppfølging Brukermanual</value>
+    <value>Nytteoppfølging Brukermanual</value>
   </data>
   <data name="Lists_HelpContent_BenefitOverviewPortfolioUserManual" xml:space="preserve">
-    <value>Gevinstoversikt Portefølje Brukermanual</value>
+    <value>Nytteoversikt Portefølje Brukermanual</value>
   </data>
   <data name="Lists_HelpContent_BenefitOverviewUserManual" xml:space="preserve">
-    <value>Gevinstoversikt Brukermanual</value>
+    <value>Nytteoversikt Brukermanual</value>
   </data>
   <data name="Lists_HelpContent_ChangeAnalysisUserManual" xml:space="preserve">
     <value>Endringsanalyse Brukermanual</value>
@@ -1801,20 +1597,14 @@
   <data name="Lists_ListContent_Description" xml:space="preserve">
     <value>Oppsett av listeinnhold for nye områder</value>
   </data>
-  <data name="Lists_ListContent_PhaseChecklistBuilding_Description" xml:space="preserve">
-    <value>Fasesjekkpunkter for byggeprosjekter.</value>
-  </data>
-  <data name="Lists_ListContent_PhaseChecklistBuilding_Title" xml:space="preserve">
-    <value>Fasesjekkliste Bygg</value>
-  </data>
-  <data name="Lists_ListContent_PhaseChecklistConstruction_Description" xml:space="preserve">
-    <value>Fasesjekkpunkter for anleggsprosjekter.</value>
-  </data>
-  <data name="Lists_ListContent_PhaseChecklistConstruction_Title" xml:space="preserve">
-    <value>Fasesjekkliste Anlegg</value>
-  </data>
   <data name="Lists_ListContent_PhaseCheckpoints_Description" xml:space="preserve">
     <value>Fasesjekkpunkter basert på Prosjektveiviserens beslutningspunkter.</value>
+  </data>
+  <data name="Lists_ListContent_PhaseCheckpointsLegacy_Title" xml:space="preserve">
+    <value>Fasesjekkpunkter (tidligere)</value>
+  </data>
+  <data name="Lists_ListContent_PhaseCheckpointsLegacy_Description" xml:space="preserve">
+    <value>Fasesjekkpunkter fra tidligere versjon av Prosjektveiviseren.</value>
   </data>
   <data name="Lists_ListContent_PhaseCheckpoints_Title" xml:space="preserve">
     <value>Fasesjekkpunkter</value>
@@ -1825,38 +1615,14 @@
   <data name="Lists_ListContent_PlannerTasks_Description" xml:space="preserve">
     <value>Standard Planneroppgaver for prosjekter.</value>
   </data>
+  <data name="Lists_ListContent_PlannerTasksLegacy_Title" xml:space="preserve">
+    <value>Planneroppgaver (tidligere)</value>
+  </data>
+  <data name="Lists_ListContent_PlannerTasksLegacy_Description" xml:space="preserve">
+    <value>Planneroppgaver fra tidligere versjon av Prosjektveiviseren.</value>
+  </data>
   <data name="Lists_ListContent_PlannerTasks_Title" xml:space="preserve">
     <value>Planneroppgaver</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksBuilding_Description" xml:space="preserve">
-    <value>Standard Planneroppgaver for byggeprosjekter.</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksBuilding_PlanName" xml:space="preserve">
-    <value>Byggeoppgaver</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksBuilding_Title" xml:space="preserve">
-    <value>Planneroppgaver Bygg</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksConstruction_Description" xml:space="preserve">
-    <value>Standard Planneroppgaver for anleggsprosjekter.</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksConstruction_PlanName" xml:space="preserve">
-    <value>Anleggsoppgaver</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksConstruction_Title" xml:space="preserve">
-    <value>Planneroppgaver Anlegg</value>
-  </data>
-  <data name="Lists_ListContent_StandardDocsConstruction_Description" xml:space="preserve">
-    <value>Standarddokumenter for anleggsprosjekter.</value>
-  </data>
-  <data name="Lists_ListContent_StandardDocsConstruction_Title" xml:space="preserve">
-    <value>Standarddokumenter Anlegg</value>
-  </data>
-  <data name="Lists_ListContent_StandardDocumentsBuilding_Description" xml:space="preserve">
-    <value>Standarddokumenter for byggeprosjekter.</value>
-  </data>
-  <data name="Lists_ListContent_StandardDocumentsBuilding_Title" xml:space="preserve">
-    <value>Standarddokumenter Bygg</value>
   </data>
   <data name="Lists_ListContent_Title" xml:space="preserve">
     <value>Listeinnhold</value>
@@ -1918,17 +1684,20 @@
   <data name="Lists_PhaseChecklist_Url" xml:space="preserve">
     <value>Lists/Fasesjekkliste</value>
   </data>
-  <data name="Lists_PhaseChecklistBuilding_Title" xml:space="preserve">
-    <value>Fasesjekkliste Bygg</value>
+  <data name="Lists_PhaseChecklistLegacy_Title" xml:space="preserve">
+    <value>Fasesjekkliste (tidligere)</value>
   </data>
-  <data name="Lists_PhaseChecklistBuilding_Url" xml:space="preserve">
-    <value>Lists/Fasesjekkliste_Bygg</value>
+  <data name="Lists_PhaseChecklistLegacy_Url" xml:space="preserve">
+    <value>Lists/Fasesjekkliste</value>
   </data>
-  <data name="Lists_PhaseChecklistConstruction_Title" xml:space="preserve">
-    <value>Fasesjekkliste Anlegg</value>
+  <data name="Lists_PhaseChecklistV6_Title" xml:space="preserve">
+    <value>Fasesjekkliste</value>
   </data>
-  <data name="Lists_PhaseChecklistConstruction_Url" xml:space="preserve">
-    <value>Lists/Fasesjekkliste_Anlegg</value>
+  <data name="Lists_PhaseChecklistV6_Url" xml:space="preserve">
+    <value>Lists/FasesjekklisteV6</value>
+  </data>
+  <data name="Lists_PhaseChecklistV6_Description" xml:space="preserve">
+    <value>Standard fasesjekkpunkter fra Prosjektveiviseren versjon 6</value>
   </data>
   <data name="Lists_PlannerTasks_Description" xml:space="preserve">
     <value>Standard prosjektoppgaver fra Prosjektveiviseren</value>
@@ -1939,17 +1708,20 @@
   <data name="Lists_PlannerTasks_Url" xml:space="preserve">
     <value>Lists/Planneroppgaver</value>
   </data>
-  <data name="Lists_PlannerTasksBuilding_Title" xml:space="preserve">
-    <value>Planneroppgaver Bygg</value>
+  <data name="Lists_PlannerTasksLegacy_Title" xml:space="preserve">
+    <value>Planneroppgaver (tidligere)</value>
   </data>
-  <data name="Lists_PlannerTasksBuilding_Url" xml:space="preserve">
-    <value>Lists/Planneroppgaver_Bygg</value>
+  <data name="Lists_PlannerTasksLegacy_Url" xml:space="preserve">
+    <value>Lists/Planneroppgaver</value>
   </data>
-  <data name="Lists_PlannerTasksConstruction_Title" xml:space="preserve">
-    <value>Planneroppgaver Anlegg</value>
+  <data name="Lists_PlannerTasksV6_Title" xml:space="preserve">
+    <value>Planneroppgaver</value>
   </data>
-  <data name="Lists_PlannerTasksConstruction_Url" xml:space="preserve">
-    <value>Lists/Planneroppgaver_Anlegg</value>
+  <data name="Lists_PlannerTasksV6_Url" xml:space="preserve">
+    <value>Lists/PlanneroppgaverV6</value>
+  </data>
+  <data name="Lists_PlannerTasksV6_Description" xml:space="preserve">
+    <value>Standard prosjektoppgaver fra Prosjektveiviseren versjon 6</value>
   </data>
   <data name="Lists_PortfolioViews_AllProjects_Title" xml:space="preserve">
     <value>Alle prosjekter</value>
@@ -2050,18 +1822,6 @@
   <data name="Lists_ProjectColumnConfiguration_Description" xml:space="preserve">
     <value>Administrer prosjektkolonneverdier (farge/ikon/navn) for statusfelter</value>
   </data>
-  <data name="Lists_ProjectColumnConfiguration_GtBAProjectEnv_EventRegistered_Title" xml:space="preserve">
-    <value>Status miljø (Hendelse)</value>
-  </data>
-  <data name="Lists_ProjectColumnConfiguration_GtBAProjectEnv_NoEvents_Title" xml:space="preserve">
-    <value>Status miljø (Ingen)</value>
-  </data>
-  <data name="Lists_ProjectColumnConfiguration_GtBAProjectSHA_EventRegistered_Title" xml:space="preserve">
-    <value>Status SHA (Hendelse)</value>
-  </data>
-  <data name="Lists_ProjectColumnConfiguration_GtBAProjectSHA_NoEvents_Title" xml:space="preserve">
-    <value>Status SHA (Ingen)</value>
-  </data>
   <data name="Lists_ProjectColumnConfiguration_GtStatusBudget_BelowBudget_Title" xml:space="preserve">
     <value>Status økonomi (Under budsjett)</value>
   </data>
@@ -2078,19 +1838,19 @@
     <value>Status økonomi (Vet ikke)</value>
   </data>
   <data name="Lists_ProjectColumnConfiguration_GtStatusGainAchievement_AheadOfSchedule_Title" xml:space="preserve">
-    <value>Status gevinstoppnåelse (Foran plan)</value>
+    <value>Status nytteoppnåelse (Foran plan)</value>
   </data>
   <data name="Lists_ProjectColumnConfiguration_GtStatusGainAchievement_BehindSchedule_Title" xml:space="preserve">
-    <value>Status gevinstoppnåelse (Forsinket)</value>
+    <value>Status nytteoppnåelse (Forsinket)</value>
   </data>
   <data name="Lists_ProjectColumnConfiguration_GtStatusGainAchievement_MinorDelays_Title" xml:space="preserve">
-    <value>Status gevinstoppnåelse (Mindre forsinkelser)</value>
+    <value>Status nytteoppnåelse (Mindre forsinkelser)</value>
   </data>
   <data name="Lists_ProjectColumnConfiguration_GtStatusGainAchievement_NotStarted_Title" xml:space="preserve">
-    <value>Status gevinstoppnåelse (Ikke påbegynt)</value>
+    <value>Status nytteoppnåelse (Ikke påbegynt)</value>
   </data>
   <data name="Lists_ProjectColumnConfiguration_GtStatusGainAchievement_OnSchedule_Title" xml:space="preserve">
-    <value>Status gevinstoppnåelse (På plan)</value>
+    <value>Status nytteoppnåelse (På plan)</value>
   </data>
   <data name="Lists_ProjectColumnConfiguration_GtStatusOpportunities_High_Title" xml:space="preserve">
     <value>Status muligheter (Høy)</value>
@@ -2284,26 +2044,14 @@
   <data name="Lists_StatusSections_Description" xml:space="preserve">
     <value>Oppsett av prosjektstatusrapport</value>
   </data>
-  <data name="Lists_StatusSections_Environment_Title" xml:space="preserve">
-    <value>Miljø</value>
-  </data>
   <data name="Lists_StatusSections_OverallStatus_Title" xml:space="preserve">
     <value>Overordnet status</value>
-  </data>
-  <data name="Lists_StatusSections_ProjectSupport_Title" xml:space="preserve">
-    <value>Tilskudd</value>
-  </data>
-  <data name="Lists_StatusSections_SHA_Title" xml:space="preserve">
-    <value>SHA</value>
   </data>
   <data name="Lists_StatusSections_StatusBudget_Title" xml:space="preserve">
     <value>Økonomi</value>
   </data>
-  <data name="Lists_StatusSections_StatusCase_Title" xml:space="preserve">
-    <value>Plan- og byggesak</value>
-  </data>
   <data name="Lists_StatusSections_StatusGainAchievement_Title" xml:space="preserve">
-    <value>Gevinstoppnåelse</value>
+    <value>Nytteoppnåelse</value>
   </data>
   <data name="Lists_StatusSections_StatusOpportunities_Title" xml:space="preserve">
     <value>Muligheter</value>
@@ -2332,18 +2080,6 @@
   <data name="Lists_TemplateLibrary_Url" xml:space="preserve">
     <value>Malbibliotek</value>
   </data>
-  <data name="Lists_TemplateOptions_BuildingProject_Description" xml:space="preserve">
-    <value>Dette er malen for byggeprosjekter. Byggeprosjekter har egne faser, egne prosjektegenskaper og egne felter i prosjektstatus.</value>
-  </data>
-  <data name="Lists_TemplateOptions_BuildingProject_Title" xml:space="preserve">
-    <value>Byggprosjekt</value>
-  </data>
-  <data name="Lists_TemplateOptions_ConstructionProject_Description" xml:space="preserve">
-    <value>Anleggsprosjekter har egne faser, egne prosjektegenskaper og egne felter i prosjektstatus.</value>
-  </data>
-  <data name="Lists_TemplateOptions_ConstructionProject_Title" xml:space="preserve">
-    <value>Anleggsprosjekt</value>
-  </data>
   <data name="Lists_TemplateOptions_Description" xml:space="preserve">
     <value>Oppsett av maler for nye områder</value>
   </data>
@@ -2352,6 +2088,27 @@
   </data>
   <data name="Lists_TemplateOptions_Fields_FieldConfigurationName_DisplayName" xml:space="preserve">
     <value>Feltkonfigurasjon</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgType_DisplayName" xml:space="preserve">
+    <value>Malpakketype</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgId_DisplayName" xml:space="preserve">
+    <value>Malpakke-ID</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgVersion_DisplayName" xml:space="preserve">
+    <value>Malpakkeversjon</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgSourceUrl_DisplayName" xml:space="preserve">
+    <value>Malpakke kildeadresse</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgInstalledDate_DisplayName" xml:space="preserve">
+    <value>Malpakke installert dato</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgUpdatedDate_DisplayName" xml:space="preserve">
+    <value>Malpakke oppdatert dato</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgLatestVersion_DisplayName" xml:space="preserve">
+    <value>Malpakke siste versjon</value>
   </data>
   <data name="Lists_TemplateOptions_Fields_GtDocumentTemplateLibrary_Description" xml:space="preserve">
     <value>Velg malbibliotek som skal brukes som kilde for maler som kan hentes inn til dokumentbibliotekene i prosjektet.</value>
@@ -2464,6 +2221,12 @@
   <data name="Lists_TemplateOptions_ProgramTemplate_Description" xml:space="preserve">
     <value>Dette er standardmalen for program som følger med Prosjektportalen 365.</value>
   </data>
+  <data name="Lists_TemplateOptions_BuildingProject_Title" xml:space="preserve">
+    <value>Byggprosjekt</value>
+  </data>
+  <data name="Lists_TemplateOptions_ConstructionProject_Title" xml:space="preserve">
+    <value>Anleggsprosjekt</value>
+  </data>
   <data name="Lists_TemplateOptions_ProgramTemplate_FileName" xml:space="preserve">
     <value>Programmal.txt</value>
   </data>
@@ -2543,19 +2306,19 @@
     <value>Usikkerhet</value>
   </data>
   <data name="Navigation_BenefitsAnalysis_Title" xml:space="preserve">
-    <value>Gevinstanalyse og gevinstrealiseringsplan</value>
+    <value>Nytteanalyse og plan for nyttestyring</value>
   </data>
   <data name="Navigation_BenefitsAnalysis_Url" xml:space="preserve">
-    <value>Lists/Gevinstanalyse og gevinstrealiseringsplan/AllItems.aspx</value>
+    <value>Lists/Nytteanalyse og plan for nyttestyring/AllItems.aspx</value>
   </data>
   <data name="Navigation_BenefitsFollowup_Title" xml:space="preserve">
-    <value>Gevinstoppfølging</value>
+    <value>Nytteoppfølging</value>
   </data>
   <data name="Navigation_BenefitsFollowup_Url" xml:space="preserve">
-    <value>Lists/Gevinstoppflging/AllItems.aspx</value>
+    <value>Lists/Nytteoppflging/AllItems.aspx</value>
   </data>
   <data name="Navigation_BenefitsOverview_Title" xml:space="preserve">
-    <value>Gevinstoversikt</value>
+    <value>Nytteoversikt</value>
   </data>
   <data name="Navigation_ChangeAnalysis_Title" xml:space="preserve">
     <value>Endringsanalyse</value>
@@ -2692,15 +2455,6 @@
   <data name="Security_SiteGroup_PortfolioInsight_Title" xml:space="preserve">
     <value>Porteføljeinnsyn</value>
   </data>
-  <data name="Security_SiteGroup_ProvisionPortal_Description" xml:space="preserve">
-    <value>Brukere som har tilgang til Bestillingsportalen for å bestille prosjekter og områder.</value>
-  </data>
-  <data name="Security_SiteGroup_ProvisionPortal_Title" xml:space="preserve">
-    <value>Bestillingsportalen</value>
-  </data>
-  <data name="SiteFields_BA_Group" xml:space="preserve">
-    <value>Kolonner for Prosjektportalen (Bygg og anlegg)</value>
-  </data>
   <data name="SiteFields_ContentType_DisplayName" xml:space="preserve">
     <value>Innholdstype</value>
   </data>
@@ -2814,96 +2568,6 @@
   </data>
   <data name="SiteFields_GtAttachments_DisplayName" xml:space="preserve">
     <value>Vedlegg</value>
-  </data>
-  <data name="SiteFields_GtBAEndDateOriginal_Description" xml:space="preserve">
-    <value>Hva er (planlagt) overtakelsesdato hvor bestiller overtar prosjektleveransene</value>
-  </data>
-  <data name="SiteFields_GtBAEndDateOriginal_DisplayName" xml:space="preserve">
-    <value>Opprinnelig overtakelsesdato</value>
-  </data>
-  <data name="SiteFields_GtBAProjectEnv_Description" xml:space="preserve">
-    <value>Har det vært hendelser knyttet til miljø i siste periode?</value>
-  </data>
-  <data name="SiteFields_GtBAProjectEnv_DisplayName" xml:space="preserve">
-    <value>Status miljø</value>
-  </data>
-  <data name="SiteFields_GtBAProjectEnvComment_Description" xml:space="preserve">
-    <value>Oppsummer kort det totale miljø-bildet for prosjektet og hvilke tiltak det planlegges for i neste periode</value>
-  </data>
-  <data name="SiteFields_GtBAProjectEnvComment_DisplayName" xml:space="preserve">
-    <value>Kommentar, miljø</value>
-  </data>
-  <data name="SiteFields_GtBAProjectInvestementPhase_Description" xml:space="preserve">
-    <value>Investeringsfasen for prosjektet?</value>
-  </data>
-  <data name="SiteFields_GtBAProjectInvestementPhase_DisplayName" xml:space="preserve">
-    <value>HP-fase</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPolitical_Description" xml:space="preserve">
-    <value>Når ble siste politiske vedtak som påvirker prosjektet fattet?</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPolitical_DisplayName" xml:space="preserve">
-    <value>Siste politiske vedtak</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPoliticalComment_Description" xml:space="preserve">
-    <value>Kommentar til hvordan siste politiske vedtak påvirker prosjektet</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPoliticalComment_DisplayName" xml:space="preserve">
-    <value>Kommentar, siste politiske vedtak</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPoliticalLink_Description" xml:space="preserve">
-    <value>Lenke til f. eks dokument/artikkel om siste politiske vedtak</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPoliticalLink_DisplayName" xml:space="preserve">
-    <value>Lenke til siste politiske vedtak</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPrognosisThisYear_Description" xml:space="preserve">
-    <value>Prognosen for dette året for prosjektet?</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPrognosisThisYear_DisplayName" xml:space="preserve">
-    <value>Prognose i år</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSHA_Description" xml:space="preserve">
-    <value>Har det vært hendelser knyttet til SHA (Sikkerhet, helse, arbeidsmiljø) i siste periode?</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSHA_DisplayName" xml:space="preserve">
-    <value>Status SHA</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSHAComment_Description" xml:space="preserve">
-    <value>Oppsummer kort det totale SHA-bildet for prosjektet og hvilke tiltak det planlegges for i neste periode</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSHAComment_DisplayName" xml:space="preserve">
-    <value>Kommentar, SHA</value>
-  </data>
-  <data name="SiteFields_GtBAProjectStatusCase_Description" xml:space="preserve">
-    <value>Hva er status på plan- og byggsak for prosjektet?</value>
-  </data>
-  <data name="SiteFields_GtBAProjectStatusCase_DisplayName" xml:space="preserve">
-    <value>Status plan- og byggesak</value>
-  </data>
-  <data name="SiteFields_GtBAProjectStatusCaseComment_Description" xml:space="preserve">
-    <value>Beskriv eventuelle utfordringer knyttet til plan- og byggesak, samt planlagte tiltak for neste periode</value>
-  </data>
-  <data name="SiteFields_GtBAProjectStatusCaseComment_DisplayName" xml:space="preserve">
-    <value>Kommentar, plan- og byggesak</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSupport_Description" xml:space="preserve">
-    <value>Hva er status på eventuelle tilskuddsmuligheter for prosjektet?</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSupport_DisplayName" xml:space="preserve">
-    <value>Status tilskudd</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSupportComment_Description" xml:space="preserve">
-    <value>Hvis relevant, beskriv hvor i søknadsprosessen prosjektet er og hva som er planlagt for neste periode</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSupportComment_DisplayName" xml:space="preserve">
-    <value>Kommentar, tilskudd</value>
-  </data>
-  <data name="SiteFields_GtBAStakeholderGroup_Description" xml:space="preserve">
-    <value>Hvilken interessentgruppe tilhører interessenten?</value>
-  </data>
-  <data name="SiteFields_GtBAStakeholderGroup_DisplayName" xml:space="preserve">
-    <value>Interessentgruppe</value>
   </data>
   <data name="SiteFields_GtBudgetLastReportDate_Description" xml:space="preserve">
     <value>Legg inn dato for når siste kostnadsrapportering ble gjort</value>
@@ -3089,7 +2753,7 @@
     <value>Beskrivelse</value>
   </data>
   <data name="SiteFields_GtDesiredValue_Description" xml:space="preserve">
-    <value>Oppgi verdien når gevinsten anses som realisert</value>
+    <value>Oppgi verdien når nyttevirkningen anses som realisert</value>
   </data>
   <data name="SiteFields_GtDesiredValue_DisplayName" xml:space="preserve">
     <value>Ønsket verdi</value>
@@ -3167,28 +2831,28 @@
     <value>Tilpassede feltinnstillinger</value>
   </data>
   <data name="SiteFields_GtGainsOwner_Description" xml:space="preserve">
-    <value>Dersom gevinstene skal realiseres i ulike deler av organisasjonen (eller i flere virksomheter) anbefales det å oppnevne en gevinsteier i de ulike delene av linjeorganisasjonen (eller virksomhetene) som eier ulike deler av de planlagte gevinstene. Gevinsteiere har da et distribuert ansvar for sin del av gevinstene, og har en viktig rolle som den gevinstansvarliges forlengede arm og lokale støttespiller.</value>
+    <value>Dersom nyttevirkningene skal realiseres i ulike deler av organisasjonen (eller i flere virksomheter), kan nytteeier delegere deler av nyttestyringsansvaret til nytteansvarlige som følger opp hver sin del av nyttevirkningene. Nytteansvarlig har et delegert ansvar for sin del av nyttevirkningene, og er nytteeiers forlengede arm og lokale støttespiller.</value>
   </data>
   <data name="SiteFields_GtGainsOwner_DisplayName" xml:space="preserve">
-    <value>Gevinsteier</value>
+    <value>Nytteansvarlig</value>
   </data>
   <data name="SiteFields_GtGainsResponsible_Description" xml:space="preserve">
-    <value>Hvem er gevinstansvarlig for prosjektet?</value>
+    <value>Hvem er nytteeier for prosjektet? Nytteeier har det overordnede ansvaret for at prosjektets nyttevirkninger blir realisert.</value>
   </data>
   <data name="SiteFields_GtGainsResponsible_DisplayName" xml:space="preserve">
-    <value>Gevinstansvarlig</value>
+    <value>Nytteeier</value>
   </data>
   <data name="SiteFields_GtGainsTurnover_Description" xml:space="preserve">
-    <value>Hvordan skal gevinsten realiseres?</value>
+    <value>Hvordan skal nyttevirkningen realiseres?</value>
   </data>
   <data name="SiteFields_GtGainsTurnover_DisplayName" xml:space="preserve">
-    <value>Gevinstomsetting</value>
+    <value>Realisering av nyttevirkning</value>
   </data>
   <data name="SiteFields_GtGainsType_Description" xml:space="preserve">
     <value>Direkte (økonomiske - NOK), Indirekte (frigjort tid - årsverk), Kvalitative (f.eks. omdømme)</value>
   </data>
   <data name="SiteFields_GtGainsType_DisplayName" xml:space="preserve">
-    <value>Gevinsttype</value>
+    <value>Type nyttevirkning</value>
   </data>
   <data name="SiteFields_GtGroupId_Description" xml:space="preserve">
     <value>ID til gruppen elementet er en del av.</value>
@@ -3275,16 +2939,16 @@
     <value>Kommentar til beslutning</value>
   </data>
   <data name="SiteFields_GtIdeaEconomicBenefit_Description" xml:space="preserve">
-    <value>Den økonomiske gevinsten for idéen</value>
+    <value>Den økonomiske nyttevirkningen for idéen</value>
   </data>
   <data name="SiteFields_GtIdeaEconomicBenefit_DisplayName" xml:space="preserve">
-    <value>Økonomisk gevinst</value>
+    <value>Økonomisk nyttevirkning</value>
   </data>
   <data name="SiteFields_GtIdeaEconomicNumber_Description" xml:space="preserve">
-    <value>Økonomisk gevinst for idéen (tall)</value>
+    <value>Økonomisk nyttevirkning for idéen (tall)</value>
   </data>
   <data name="SiteFields_GtIdeaEconomicNumber_DisplayName" xml:space="preserve">
-    <value>Økonomisk gevinst (tall)</value>
+    <value>Økonomisk nyttevirkning (tall)</value>
   </data>
   <data name="SiteFields_GtIdeaExecutionPlan_Description" xml:space="preserve">
     <value>Overordnet gjennomføringsplan for idéen</value>
@@ -3311,10 +2975,10 @@
     <value>Gjennomføringsplan: Suksessfaktorer</value>
   </data>
   <data name="SiteFields_GtIdeaExpectedGain_Description" xml:space="preserve">
-    <value>Forventede gevinster for idéen</value>
+    <value>Forventede nyttevirkninger for idéen</value>
   </data>
   <data name="SiteFields_GtIdeaExpectedGain_DisplayName" xml:space="preserve">
-    <value>Forventede gevinster</value>
+    <value>Forventede nyttevirkninger</value>
   </data>
   <data name="SiteFields_GtIdeaIssue_Description" xml:space="preserve">
     <value>Problemstilling for idéen</value>
@@ -3359,10 +3023,10 @@
     <value>Idéeier</value>
   </data>
   <data name="SiteFields_GtIdeaPossibleGains_Description" xml:space="preserve">
-    <value>Mulige gevinster for idéen</value>
+    <value>Mulige nyttevirkninger for idéen</value>
   </data>
   <data name="SiteFields_GtIdeaPossibleGains_DisplayName" xml:space="preserve">
-    <value>Mulige gevinster</value>
+    <value>Mulige nyttevirkninger</value>
   </data>
   <data name="SiteFields_GtIdeaPriority_Description" xml:space="preserve">
     <value>Prioritering for idéen</value>
@@ -3389,16 +3053,16 @@
     <value>Prosjektdata-tilknytning</value>
   </data>
   <data name="SiteFields_GtIdeaQualityBenefit_Description" xml:space="preserve">
-    <value>Den kvalitative gevinsten for idéen</value>
+    <value>Den kvalitative nyttevirkningen for idéen</value>
   </data>
   <data name="SiteFields_GtIdeaQualityBenefit_DisplayName" xml:space="preserve">
-    <value>Kvalitativ gevinst</value>
+    <value>Kvalitativ nyttevirkning</value>
   </data>
   <data name="SiteFields_GtIdeaQualityNumber_Description" xml:space="preserve">
-    <value>Kvalitativ gevinst for idéen (tall)</value>
+    <value>Kvalitativ nyttevirkning for idéen (tall)</value>
   </data>
   <data name="SiteFields_GtIdeaQualityNumber_DisplayName" xml:space="preserve">
-    <value>Kvalitativ gevinst (tall)</value>
+    <value>Kvalitativ nyttevirkning (tall)</value>
   </data>
   <data name="SiteFields_GtIdeaRecommendation_Description" xml:space="preserve">
     <value>Anbefaling for idéen</value>
@@ -3806,10 +3470,10 @@
     <value>Filter</value>
   </data>
   <data name="SiteFields_GtPrereqProfitAchievement_Description" xml:space="preserve">
-    <value>Hvilke forutsetninger må ligge til grunn for gevinstoppnåelse?</value>
+    <value>Hvilke forutsetninger må ligge til grunn for nytteoppnåelse?</value>
   </data>
   <data name="SiteFields_GtPrereqProfitAchievement_DisplayName" xml:space="preserve">
-    <value>Forutsetninger for gevinstoppnåelse</value>
+    <value>Forutsetninger for nytteoppnåelse</value>
   </data>
   <data name="SiteFields_GtProcess_Description" xml:space="preserve">
     <value>Dersom endringen påvirker en prosess, oppgi denne her. Eks 'Onboarding'</value>
@@ -4019,7 +3683,7 @@
     <value>Prosjekttype (tekst)</value>
   </data>
   <data name="SiteFields_GtRealizationTime_Description" xml:space="preserve">
-    <value>Forventet tidspunkt for realisering av gevinsten</value>
+    <value>Forventet tidspunkt for realisering av nyttevirkningen</value>
   </data>
   <data name="SiteFields_GtRealizationTime_DisplayName" xml:space="preserve">
     <value>Realiseringstidspunkt</value>
@@ -4321,11 +3985,11 @@
   <data name="SiteFields_GtStakeholderContext_DisplayName" xml:space="preserve">
     <value>Arena/Møteplass/Nettverk</value>
   </data>
-  <data name="SiteFields_GtStakeholderGroup_Description" xml:space="preserve">
-    <value>Hvilken interessentgruppe tilhører interessenten?</value>
+  <data name="SiteFields_GtStakeholderGroups_Description" xml:space="preserve">
+    <value>Hvilke interessentgrupper tilhører interessenten? Administreres som termer i termlageret under Prosjektportalen › Interessentgrupper.</value>
   </data>
-  <data name="SiteFields_GtStakeholderGroup_DisplayName" xml:space="preserve">
-    <value>Interessentgruppe</value>
+  <data name="SiteFields_GtStakeholderGroups_DisplayName" xml:space="preserve">
+    <value>Interessentgrupper</value>
   </data>
   <data name="SiteFields_GtStakeholderInfluence_Description" xml:space="preserve">
     <value>I hvilken grad påvirkes interessentgruppen av prosjektet?</value>
@@ -4376,16 +4040,16 @@
     <value>Kommentar, økonomi</value>
   </data>
   <data name="SiteFields_GtStatusGainAchievement_Description" xml:space="preserve">
-    <value>Hva er status på prosjektets gevinstoppnåelse?</value>
+    <value>Hva er status på prosjektets nytteoppnåelse?</value>
   </data>
   <data name="SiteFields_GtStatusGainAchievement_DisplayName" xml:space="preserve">
-    <value>Status gevinstoppnåelse</value>
+    <value>Status nytteoppnåelse</value>
   </data>
   <data name="SiteFields_GtStatusGainAchievementComment_Description" xml:space="preserve">
-    <value>Legg inn eventuelle tilleggs-/utfyllende kommentarer til gevinstrapporteringen</value>
+    <value>Legg inn eventuelle tilleggs-/utfyllende kommentarer til nytterapporteringen</value>
   </data>
   <data name="SiteFields_GtStatusGainAchievementComment_DisplayName" xml:space="preserve">
-    <value>Kommentar, gevinstoppnåelse</value>
+    <value>Kommentar, nytteoppnåelse</value>
   </data>
   <data name="SiteFields_GtStatusOpportunities_Description" xml:space="preserve">
     <value>Hva er status på prosjektets muligheter?</value>
@@ -4407,6 +4071,72 @@
   </data>
   <data name="SiteFields_GtStatusQualityComment_Description" xml:space="preserve">
     <value>Beskriv årsaken til eventuelle kvalitetsavvik og hvilke tiltak prosjektet har planlagt eller allerede implementert</value>
+  </data>
+  <data name="SiteFields_GtStatusScope_DisplayName" xml:space="preserve">
+    <value>Status omfang</value>
+  </data>
+  <data name="SiteFields_GtStatusScope_Description" xml:space="preserve">
+    <value>Hva er status på prosjektets omfang, er det for eksempel endringer i hva som inngår og ikke inngår?</value>
+  </data>
+  <data name="SiteFields_GtStatusScopeComment_DisplayName" xml:space="preserve">
+    <value>Kommentar, omfang</value>
+  </data>
+  <data name="SiteFields_GtStatusScopeComment_Description" xml:space="preserve">
+    <value>Beskriv årsaken til eventuelle omfangsendringer og hvilke tiltak prosjektet har planlagt eller allerede implementert</value>
+  </data>
+  <data name="Choice_GtStatusScope_AsPlanned" xml:space="preserve">
+    <value>Iht. planlagt omfang</value>
+  </data>
+  <data name="Choice_GtStatusScope_MinorChanges" xml:space="preserve">
+    <value>Mindre endringer i omfang</value>
+  </data>
+  <data name="Choice_GtStatusScope_MajorChanges" xml:space="preserve">
+    <value>Større endringer i omfang</value>
+  </data>
+  <data name="Lists_StatusSections_StatusScope_Title" xml:space="preserve">
+    <value>Omfang</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusScope_AsPlanned_Title" xml:space="preserve">
+    <value>Status omfang (Iht. plan)</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusScope_MinorChanges_Title" xml:space="preserve">
+    <value>Status omfang (Mindre endringer)</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusScope_MajorChanges_Title" xml:space="preserve">
+    <value>Status omfang (Større endringer)</value>
+  </data>
+  <data name="SiteFields_GtStatusSustainability_DisplayName" xml:space="preserve">
+    <value>Status bærekraft</value>
+  </data>
+  <data name="SiteFields_GtStatusSustainability_Description" xml:space="preserve">
+    <value>Hva er status på prosjektets bærekraftskrav, både for gjennomføringen og for leveransene?</value>
+  </data>
+  <data name="SiteFields_GtStatusSustainabilityComment_DisplayName" xml:space="preserve">
+    <value>Kommentar, bærekraft</value>
+  </data>
+  <data name="SiteFields_GtStatusSustainabilityComment_Description" xml:space="preserve">
+    <value>Beskriv årsaken til eventuelle avvik fra bærekraftskravene og hvilke tiltak prosjektet har planlagt eller allerede implementert</value>
+  </data>
+  <data name="Choice_GtStatusSustainability_AsPlanned" xml:space="preserve">
+    <value>Iht. bærekraftskravene</value>
+  </data>
+  <data name="Choice_GtStatusSustainability_MinorDeviation" xml:space="preserve">
+    <value>Mindre avvik fra bærekraftskravene</value>
+  </data>
+  <data name="Choice_GtStatusSustainability_MajorDeviation" xml:space="preserve">
+    <value>Større avvik fra bærekraftskravene</value>
+  </data>
+  <data name="Lists_StatusSections_StatusSustainability_Title" xml:space="preserve">
+    <value>Bærekraft</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusSustainability_AsPlanned_Title" xml:space="preserve">
+    <value>Status bærekraft (Iht. krav)</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusSustainability_MinorDeviation_Title" xml:space="preserve">
+    <value>Status bærekraft (Mindre avvik)</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusSustainability_MajorDeviation_Title" xml:space="preserve">
+    <value>Status bærekraft (Større avvik)</value>
   </data>
   <data name="SiteFields_GtStatusQualityComment_DisplayName" xml:space="preserve">
     <value>Kommentar, kvalitet</value>
@@ -4580,7 +4310,7 @@
     <value>Arkivert</value>
   </data>
   <data name="View_ByBenefitType_DisplayName" xml:space="preserve">
-    <value>Etter gevinsttype</value>
+    <value>Etter type nyttevirkning</value>
   </data>
   <data name="View_ByProcess_DisplayName" xml:space="preserve">
     <value>Etter prosess</value>
@@ -4631,13 +4361,13 @@
     <value>Uten ansvarlig</value>
   </data>
   <data name="WebParts_BenefitsOverview_Title" xml:space="preserve">
-    <value>Gevinstoversikt</value>
+    <value>Nytteoversikt</value>
   </data>
   <data name="WebParts_BenefitsOverviewCategory_Title" xml:space="preserve">
-    <value>Gevinstoversikt</value>
+    <value>Nytteoversikt</value>
   </data>
   <data name="WebParts_BenefitsOverviewDataSource_Title" xml:space="preserve">
-    <value>Alle gevinstelementer for prosjektet</value>
+    <value>Alle nyttevirkningselementer for prosjektet</value>
   </data>
   <data name="WebParts_CurrentPhase_Title" xml:space="preserve">
     <value>Nåværende fase</value>

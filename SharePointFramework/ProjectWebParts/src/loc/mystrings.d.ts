@@ -15,14 +15,10 @@ declare interface IProjectWebPartsStrings {
   SynchronizingProjectPropertiesToPortfolioSiteErrorText: string
   UpdatingProjectPropertiesStatusText: string
   SynchronizingProjectPropertiesToPortfolioSiteStatusText: string
-  UnknownConfigurationName: any
   SiteAssetsConfigurationFolder: string
   RiskMatrixConfigurationFolder: string
-  ManualConfigurationNotFoundOrInvalid: stringg
   ToggleOnText: string
   ToggleOffText: string
-  ManualConfigurationPathLabel: string
-  PublishingReportLabel: string
   AdminPageLinkLabel: string
   AdvancedGroupName: string
   ProjectPropertiesTitleLabel: string
@@ -221,7 +217,7 @@ declare interface IProjectWebPartsStrings {
   ToggleUncertaintyPostActionOffText: string
   ToggleUncertaintyPostActionOnText: string
   TypeLabel: string
-  UnknownConfigurationName: any
+  UnknownConfigurationName: string
   UnpublishedStatusReportInfo: string
   PublishedStatusReportInfo: string
   AlreadyPublishedReportInfo: string
@@ -316,6 +312,8 @@ declare interface IProjectWebPartsStrings {
   ArchiveStatusTotalCount: string
   DynamicList: {
     DefaultTitle: string
+    SelectAll: string
+    SelectRow: string
     NoListSelected: string
     NoListSelectedMessage: string
     RefetchingData: string

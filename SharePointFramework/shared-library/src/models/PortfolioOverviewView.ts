@@ -184,10 +184,15 @@ export class PortfolioOverviewView {
    * the columns will be sorted according to the `sortOrder` property on the
    * columns.
    *
+   * Filters out columns that are not configured to be visible in Portfolio
+   * (GtShowFieldPortfolio = false) even if they are in the view's columnIds.
+   *
    * @param columns Columns to configure the view with
    */
   public configure(columns: ProjectColumn[] = []): PortfolioOverviewView {
-    this.columns = this.columnIds.map((id) => _.find(columns, (col) => col.id === id))
+    this.columns = this.columnIds
+      .map((id) => _.find(columns, (col) => col.id === id))
+      .filter((col) => col && col.isVisible('Portfolio'))
     if (!_.isEmpty(this.columnOrder)) {
       this.columns = this.columns.sort(
         (a, b) => this.columnOrder.indexOf(a.id) - this.columnOrder.indexOf(b.id)
@@ -197,8 +202,10 @@ export class PortfolioOverviewView {
     }
     this.refiners = this.refinerIds
       .map((id) => _.find(columns, (col) => col.id === id))
+      .filter((col) => col && col.isVisible('Portfolio'))
       .sort((a, b) => a.sortOrder - b.sortOrder)
-    this.groupBy = _.find(columns, (col) => col.id === this.groupById)
+    const groupByColumn = _.find(columns, (col) => col.id === this.groupById)
+    this.groupBy = groupByColumn?.isVisible('Portfolio') ? groupByColumn : undefined
     return this
   }
 

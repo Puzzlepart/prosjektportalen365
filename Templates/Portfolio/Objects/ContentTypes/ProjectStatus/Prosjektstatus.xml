@@ -19,6 +19,10 @@
         <pnp:FieldRef ID="ce6c7ed6-39cf-46a1-b238-a1ad51ad8aca" Name="GtStatusOpportunitiesComment" UpdateChildren="true" />
         <pnp:FieldRef ID="b1958607-cd56-4ecb-9ad7-65fb7d3c22c7" Name="GtStatusGainAchievement" Required="true" UpdateChildren="true" />
         <pnp:FieldRef ID="cb41572a-78c6-4e33-8505-b97bfd8fd162" Name="GtStatusGainAchievementComment" UpdateChildren="true" />
+        <pnp:FieldRef ID="c23bdbce-6464-420f-bca1-df849cfaf540" Name="GtStatusScope" UpdateChildren="true" />
+        <pnp:FieldRef ID="fcd55872-af7c-45ce-a054-bd69ade37395" Name="GtStatusScopeComment" UpdateChildren="true" />
+        <pnp:FieldRef ID="4c76ca9c-43b9-4b5e-a9e3-dbacf3ca27ca" Name="GtStatusSustainability" UpdateChildren="true" />
+        <pnp:FieldRef ID="ed16aa81-46c3-4941-96c3-47c4bcd08b32" Name="GtStatusSustainabilityComment" UpdateChildren="true" />
         <pnp:FieldRef ID="9a81b4e1-64ea-40c2-9be1-946f20e78999" Name="GtModerationStatus" UpdateChildren="true" />
         <pnp:FieldRef ID="fba7ced6-9970-4b14-ab9c-7c809310d86d" Name="GtSiteId" UpdateChildren="true" />
         <pnp:FieldRef ID="B3004225-79DE-42CC-A4B7-80968A9AFC58" Name="GtLastReportDate" UpdateChildren="true" />

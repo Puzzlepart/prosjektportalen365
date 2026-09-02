@@ -26,6 +26,23 @@ Param(
     [switch]$SkipImportModule
 )  
 
+#region Normalize selected solutions
+# Canonical SPFx solution folder names. The -Solutions parameter (and the
+# [apps-only:<names>] CI commit tag) is matched case- and dash-insensitively
+# against these, so 'SharedLibrary'/'sharedlibrary' resolves to 'shared-library',
+# 'portfolioextensions' to 'PortfolioExtensions', and so on.
+$ALL_SOLUTIONS = @("shared-library", "PortfolioExtensions", "PortfolioWebParts", "ProgramWebParts", "ProjectExtensions", "ProjectWebParts")
+$Solutions = @($Solutions | ForEach-Object {
+        $Name = $_.Trim()
+        $Match = $ALL_SOLUTIONS | Where-Object { ($_ -replace '-', '') -ieq ($Name -replace '-', '') }
+        if ($Match) { $Match } else { Write-Host "[WARNING] Unknown solution '$Name' - skipping" -ForegroundColor Yellow }
+    })
+if ($Solutions.Count -eq 0) {
+    Write-Host "[ERROR] No valid solutions selected. Aborting build of release." -ForegroundColor Red
+    exit 1
+}
+#endregion
+
 #region Variables and functions
 $USE_CHANNEL_CONFIG = -not ([string]::IsNullOrEmpty($Channel))
 $CHANNEL_CONFIG_NAME = "main"
@@ -95,7 +112,12 @@ $SHAREPOINT_FRAMEWORK_BASEPATH = "$ROOT_PATH/SharePointFramework"
 $PNP_TEMPLATES_BASEPATH = "$ROOT_PATH/Templates"
 $SITE_SCRIPTS_BASEPATH = "$ROOT_PATH/SiteScripts/Src"
 $PNP_BUNDLE_PATH = "$PSScriptRoot/PnP.PowerShell"
-$PNP_VERSION = "3.1.0"
+# Get-PnPVersion hentes fra SharedFunctions.ps1 i et isolert scope,
+# slik at StartAction/EndAction definert i denne filen ikke overskrives
+$PNP_VERSION = & {
+    . "$PSScriptRoot/Scripts/SharedFunctions.ps1"
+    Get-PnPVersion
+}
 $GIT_HASH = git log --pretty=format:'%h' -n 1
 $RELEASE_NAME = "$($NPM_PACKAGE_FILE.name)-$($NPM_PACKAGE_FILE.version).$($GIT_HASH)"
 if ($USE_CHANNEL_CONFIG) {
@@ -232,10 +254,6 @@ if (-not $SkipBuildPnPTemplates.IsPresent) {
     StartAction("Building Taxonomy PnP template")
     Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Taxonomy.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Taxonomy" -Force
     EndAction
-
-    StartAction("Building Taxonomy BA PnP template")
-    Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/TaxonomyBA.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/TaxonomyBA" -Force
-    EndAction
 }
 #endregion
 
@@ -262,8 +280,33 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
         }
     }
     Set-Location $SHAREPOINT_FRAMEWORK_BASEPATH
-    rush rebuild >$null 2>&1
-    Get-ChildItem "*/sharepoint/solution/" *.sppkg -Recurse -ErrorAction SilentlyContinue | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$RELEASE_PATH/Apps/$_")) } | Copy-Item -Destination $RELEASE_PATH_APPS -Force
+    # Always run the full, dependency-ordered `rush rebuild`. Building a subset
+    # with `rush --to <project>` did not reliably emit the .sppkg in CI (shared-library
+    # is a workspace-linked dependency), so the scope is applied at the *packaging*
+    # step below instead: only the selected solutions' .sppkg are copied into the
+    # release, and Install.ps1 deploys every .sppkg in the Apps folder — so an
+    # [apps-only:<solution>] run still packages and deploys only those apps.
+    # The build output is captured to a log file (kept out of the release and
+    # gitignored via **/*.build.log) and dumped if the build fails, so compile
+    # errors are never silently swallowed.
+    $RUSH_REBUILD_LOG = "$SHAREPOINT_FRAMEWORK_BASEPATH/rush-rebuild.build.log"
+    rush rebuild 2>&1 | Out-File -FilePath $RUSH_REBUILD_LOG -Encoding utf8
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "[ERROR] rush rebuild failed with exit code $LASTEXITCODE. Last 200 lines of $($RUSH_REBUILD_LOG):" -ForegroundColor Red
+        Get-Content $RUSH_REBUILD_LOG -Tail 200 | Write-Host
+        exit 1
+    }
+    foreach ($Solution in $Solutions) {
+        Get-ChildItem "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution/sharepoint/solution/" -Filter *.sppkg -ErrorAction SilentlyContinue | Copy-Item -Destination $RELEASE_PATH_APPS -Force
+    }
+    # Fail loudly rather than ship a release with no apps (e.g. an unrecognised
+    # solution name, or a solution that built without emitting an .sppkg).
+    $PackagedApps = @(Get-ChildItem "$RELEASE_PATH_APPS" -Filter *.sppkg -ErrorAction SilentlyContinue)
+    if ($PackagedApps.Count -eq 0) {
+        Write-Host "[ERROR] No .sppkg were packaged for solutions: $($Solutions -join ', '). See $RUSH_REBUILD_LOG for build output. Aborting." -ForegroundColor Red
+        exit 1
+    }
+    Write-Host "Packaged $($PackagedApps.Count) app(s): $(($PackagedApps | ForEach-Object { $_.Name }) -join ', ')" -ForegroundColor Green
     if ($USE_CHANNEL_CONFIG) {
         foreach ($Solution in $Solutions) {
             Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution"

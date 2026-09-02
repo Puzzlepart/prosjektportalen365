@@ -13,7 +13,8 @@ export function useProjectListDataFetch(
         primaryUserField: props.primaryUserField,
         secondaryUserField: props.secondaryUserField,
         primaryField: props.primaryField,
-        secondaryField: props.secondaryField
+        secondaryField: props.secondaryField,
+        includeClosed: props.showClosedProjects
       }),
       props.dataAdapter.isUserInGroup(resource.Security_SiteGroup_PortfolioInsight_Title)
     ]).then(([projects, isUserInPortfolioManagerGroup]) => {

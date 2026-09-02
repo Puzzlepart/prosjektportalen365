@@ -24,19 +24,18 @@ export class DataSourceService {
   }
 
   /**
-   * Get data sources by name.
+   * Get a single data source using the specified OData filter. Returns `null`
+   * if no data source matches the filter or if the fetch fails.
    *
-   * @param name The name of the data source
-   *
-   * @returns Data source
+   * @param filter OData filter to fetch the data source with
    */
-  public async getByName(name: string): Promise<DataSource> {
+  private async _getSingle(filter: string): Promise<DataSource> {
     try {
       const [[item], columns] = await Promise.all([
-        this._dataSourcesList.items
-          .select(...Object.keys(new SPDataSourceItem()))
-          .filter(`Title eq '${name}'`)<SPDataSourceItem[]>(),
-        this._columnsList.items()
+        this._dataSourcesList.items.select(...Object.keys(new SPDataSourceItem())).filter(filter)<
+          SPDataSourceItem[]
+        >(),
+        this._columnsList.items.top(500)()
       ])
       return item
         ? new DataSource(
@@ -45,9 +44,35 @@ export class DataSourceService {
           )
         : null
     } catch (error) {
-      console.warn(`(DataSourceService) (getByName) Failed to fetch data source '${name}':`, error)
+      console.warn(
+        `(DataSourceService) (_getSingle) Failed to fetch data source with filter '${filter}':`,
+        error
+      )
       return null
     }
+  }
+
+  /**
+   * Get data sources by name.
+   *
+   * @param name The name of the data source
+   *
+   * @returns Data source
+   */
+  public async getByName(name: string): Promise<DataSource> {
+    return this._getSingle(`Title eq '${name}'`)
+  }
+
+  /**
+   * Get data sources by data source ID (`GtDataSourceId`). Unlike the title,
+   * the data source ID is stable across install languages and renames.
+   *
+   * @param dataSourceId The ID (GUID) of the data source
+   *
+   * @returns Data source
+   */
+  public async getById(dataSourceId: string): Promise<DataSource> {
+    return this._getSingle(`GtDataSourceId eq '${dataSourceId}'`)
   }
 
   /**
@@ -68,7 +93,8 @@ export class DataSourceService {
     }
     const items = await this._dataSourcesList.items
       .select(...Object.keys(new SPDataSourceItem()))
-      .filter(filter)<SPDataSourceItem[]>()
+      .filter(filter)
+      .top(500)<SPDataSourceItem[]>()
     return items.map((item) => new DataSource(item, columns))
   }
 }

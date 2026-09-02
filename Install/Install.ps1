@@ -43,8 +43,6 @@ Param(
     [string]$Tenant,
     [Parameter(Mandatory = $false, HelpMessage = "Base64 encoded certificate")]
     [string]$CertificateBase64Encoded,
-    [Parameter(Mandatory = $false, HelpMessage = "Do you want to include Bygg & Anlegg content (only when upgrading)")]
-    [switch]$IncludeBAContent,
     [Parameter(Mandatory = $false, HelpMessage = "Which handlers to exclude when performing an upgrade")]
     [string[]]$UpgradeExcludeHandlers = @("Navigation", "SupportedUILanguages", "Files")
 )
@@ -57,6 +55,7 @@ $ConnectionInfo = [PSCustomObject]@{
     Tenant                   = $Tenant
     CertificateBase64Encoded = $CertificateBase64Encoded
 }
+$RequiredPnPVersion = Get-PnPVersion
 
 #region Handling installation language and culture
 $LanguageIds = @{
@@ -116,17 +115,17 @@ Write-Host "########################################################" -Foregroun
 
 if ($CI.IsPresent -and $null -eq (Get-Module -Name PnP.PowerShell)) {
     Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
-    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop -RequiredVersion 3.1.0
+    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop -RequiredVersion $RequiredPnPVersion
     $PnPVersion = (Get-Command Connect-PnPOnline -ErrorAction SilentlyContinue).Version
     Write-Host "[INFO] Installed module PnP.PowerShell v$($PnPVersion) from PowerShell Gallery"
 }
 else {
     if (-not $SkipLoadingBundle.IsPresent) {
-        $PnPVersion = LoadBundle -Version 3.1.0
+        $PnPVersion = LoadBundle -Version $RequiredPnPVersion
         if ($null -eq $PnPVersion) {
-            Write-Host "[ERROR] Failed to load bundled PnP.PowerShell v3.1.0 from '$PSScriptRoot/PnP.PowerShell/3.1.0'." -ForegroundColor Red
+            Write-Host "[ERROR] Failed to load bundled PnP.PowerShell v$RequiredPnPVersion from '$PSScriptRoot/PnP.PowerShell/$RequiredPnPVersion'." -ForegroundColor Red
             Write-Host "[ERROR] Make sure the release archive was extracted with the PnP.PowerShell folder intact, or install PnP.PowerShell manually and rerun with -SkipLoadingBundle:" -ForegroundColor Red
-            Write-Host "        Install-Module -Name PnP.PowerShell -Scope CurrentUser -RequiredVersion 3.1.0" -ForegroundColor Red
+            Write-Host "        Install-Module -Name PnP.PowerShell -Scope CurrentUser -RequiredVersion $RequiredPnPVersion" -ForegroundColor Red
             exit 1
         }
         Write-Host "[INFO] Loaded module PnP.PowerShell v$($PnPVersion) from bundle"
@@ -135,18 +134,18 @@ else {
         $PnPVersion = (Get-Command Connect-PnPOnline -ErrorAction SilentlyContinue).Version
         if ($null -eq $PnPVersion) {
             Write-Host "[ERROR] -SkipLoadingBundle was specified but PnP.PowerShell is not available in this session. Install it with:" -ForegroundColor Red
-            Write-Host "        Install-Module -Name PnP.PowerShell -Scope CurrentUser -RequiredVersion 3.1.0" -ForegroundColor Red
+            Write-Host "        Install-Module -Name PnP.PowerShell -Scope CurrentUser -RequiredVersion $RequiredPnPVersion" -ForegroundColor Red
             exit 1
         }
         Write-Host "[INFO] Loaded PnP.PowerShell v$($PnPVersion) from your environment"
     }
-    if ($PnPVersion -lt [version]"3.1.0") {
-        Write-Host "[ERROR] PnP.PowerShell v$PnPVersion is too old. v3.1.0 or newer is required." -ForegroundColor Red
+    if ($PnPVersion -lt $RequiredPnPVersion) {
+        Write-Host "[ERROR] PnP.PowerShell v$PnPVersion is too old. v$RequiredPnPVersion or newer is required." -ForegroundColor Red
         exit 1
     }
     Write-Host "[INFO] As part of the authentication process with Microsoft 365, this script will open a browser window to authenticate."
-    Write-Host "[INFO] Make sure you have the correct browser active. You can also copy the URL and open it in the correct browser if needed."
-    Show-Countdown -Seconds 15
+    Write-Host "[INFO] Make sure you use the correct browser profile. You can copy the authentication URL and open it in the correct browser."
+    Show-Countdown -Seconds 10
 }
 #region Setting variables based on input from user
 [System.Uri]$Uri = $Url.TrimEnd('/')
@@ -486,17 +485,7 @@ if (-not $SkipTemplate.IsPresent) {
         if (-not $SkipTaxonomy.IsPresent -and -not $Upgrade.IsPresent) {
             StartAction("Applying PnP template Taxonomy to $($Uri.AbsoluteUri)")
             Invoke-PnPSiteTemplate "$TemplatesBasePath/Taxonomy.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
-            Invoke-PnPSiteTemplate "$TemplatesBasePath/TaxonomyBA.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
             EndAction
-        }
-        elseif (-not $SkipTaxonomy.IsPresent -and $Upgrade.IsPresent) {
-            $TermSetA = Get-PnPTermSet -Identity "cc6cdd18-c7d5-42e1-8d19-a336dd78f3f2" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
-            $TermSetB = Get-PnPTermSet -Identity "ec5ceb95-7259-4282-811f-7c57304be71e" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
-            if (-not $TermSetA -or -not $TermSetB) {
-                StartAction("Applying PnP template Taxonomy (B&A) to $($Uri.AbsoluteUri)")
-                Invoke-PnPSiteTemplate "$TemplatesBasePath/TaxonomyBA.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
-                EndAction
-            }
         }
 
         # Shared retry configuration
@@ -526,23 +515,13 @@ if (-not $SkipTemplate.IsPresent) {
             EndAction
 
             if (Test-Path "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp") {
-                StartAction -Action "Applying PnP content template to $($Uri.AbsoluteUri)"
-                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop -WarningAction SilentlyContinue
-                EndAction
+                $null = Invoke-SiteTemplateSafely `
+                    -TemplatePath "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" `
+                    -ActionDescription "Applying PnP content template to $($Uri.AbsoluteUri)" `
+                    -Handlers Files
             }
             else {
                 Write-Host "[WARNING] No content template found for language $LanguageCode. Skipping content template." -ForegroundColor Yellow
-            }
-
-            if ($IncludeBAContent.IsPresent) {
-                if (Test-Path "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp") {
-                    StartAction -Action "Applying PnP B&A content template to $($Uri.AbsoluteUri)"
-                    Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
-                    EndAction
-                }
-                else {
-                    Write-Host "[WARNING] No B&A content template found for language $LanguageCode. Skipping B&A content template." -ForegroundColor Yellow
-                }
             }
         }
         else {
@@ -576,17 +555,9 @@ if (-not $SkipTemplate.IsPresent) {
             EndAction
 
             if (Test-Path "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp") {
-                StartAction -Action "Applying PnP content template to $($Uri.AbsoluteUri)"
-                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
-                EndAction
-            }
-
-            if ($IncludeBAContent.IsPresent) {
-                if (Test-Path "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp") {
-                    StartAction -Action "Applying PnP B&A content template to $($Uri.AbsoluteUri)"
-                    Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
-                    EndAction
-                }
+                $null = Invoke-SiteTemplateSafely `
+                    -TemplatePath "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" `
+                    -ActionDescription "Applying PnP content template to $($Uri.AbsoluteUri)"
             }
         }
     }

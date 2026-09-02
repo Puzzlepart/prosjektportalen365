@@ -1,7 +1,7 @@
 define([], function () {
   return {
-    EditTimelineContentText: "Edit timeline item",
-    NewTimelineContentText: "New timeline item",
+    EditTimelineContentText: "Edit item",
+    NewTimelineContentText: "New item",
     TimelineEndDateMilestoneDescription: "End date is required for element types displayed as a point on the timeline ({0})",
     NewStatusPanelTitle: "New status report",
     EditStatusPanelText: "Edit status report",
@@ -331,7 +331,6 @@ define([], function () {
     PreviewLabel: 'Preview selected template',
     NoPreviewAvailable: 'Preview unavailable',
     SynchronizingProjectPropertiesToPortfolioSiteErrorText: 'An error occurred while syncing project properties to the portfolio site. Please try again later.',
-    ColorPickerStrings: 'Color picker strings',
     NewsCreateSuccess: 'News article created successfully',
     SiteUrlLabel: 'Site URL',
     SiteUrlDescription: 'Enter the URL of the site where the news should be published.',
@@ -345,6 +344,8 @@ define([], function () {
     ArchiveStatusTotalCount: 'Sent to archive: ',
     DynamicList: {
       DefaultTitle: 'Dynamic List',
+      SelectAll: 'Select all',
+      SelectRow: 'Select row',
       NoListSelected: 'No list selected',
       NoListSelectedMessage: 'Please select a list in the web part properties to display content.',
       RefetchingData: 'Refreshing and fetching data...',

@@ -1,13 +1,6 @@
 <pnp:Security xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
     <pnp:SiteGroups>
         <pnp:SiteGroup
-            Title="{resource:Security_SiteGroup_ProvisionPortal_Title}"
-            Description="{resource:Security_SiteGroup_ProvisionPortal_Description}"
-            Owner="{associatedownergroupid}"
-            AllowMembersEditMembership="false"
-            OnlyAllowMembersViewMembership="true">
-        </pnp:SiteGroup>
-        <pnp:SiteGroup
             Title="{resource:Security_SiteGroup_AssistantUsers_Title}"
             Description="{resource:Security_SiteGroup_AssistantUsers_Description}"
             Owner="{associatedownergroupid}"

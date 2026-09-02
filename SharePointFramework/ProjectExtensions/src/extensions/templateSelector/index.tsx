@@ -17,14 +17,13 @@ import { ITemplateSelectorCommandProperties } from './types'
 import { themeColor } from 'pp365-shared-library'
 import resource from 'SharedResources'
 
-Logger.subscribe(ConsoleListener())
-Logger.activeLogLevel = LogLevel.Info
-
 export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITemplateSelectorCommandProperties> {
   private _openCmd: Command
   private _ctxValue: ITemplateSelectorContext = {}
   private _placeholderIds = { DocumentTemplateDialog: getId('documenttemplatedialog') }
   private _hasAccessToTemplateLibrary: boolean = true
+  private _isDataLoaded: boolean = false
+  private _loadDataPromise: Promise<boolean> = null
 
   @override
   public async onInit() {
@@ -34,11 +33,7 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
       level: LogLevel.Info
     })
     Logger.subscribe(ConsoleListener())
-    Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
-    await SPDataAdapter.configure(this.context, {
-      siteId: this.context.pageContext.site.id.toString(),
-      webUrl: this.context.pageContext.web.absoluteUrl
-    })
+    Logger.activeLogLevel = sessionStorage.DEBUG === '1' || DEBUG ? LogLevel.Info : LogLevel.Warning
     this._openCmd = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR')
     if (!this._openCmd) return
 
@@ -50,36 +45,6 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
       '%23'
     )}'/%3E%3C/svg%3E`
     this._openCmd.iconImageUrl = exportSvg
-
-    try {
-      const templateLib = this.properties.templateLibrary || resource.Lists_TemplateLibrary_Title
-      this._ctxValue.templateLibrary = {
-        title: templateLib,
-        url: `${SPDataAdapter.portalDataService.url}/${templateLib}`
-      }
-      this._hasAccessToTemplateLibrary = SPDataAdapter.portalDataService?.isAvailable ?? false
-      if (!this._hasAccessToTemplateLibrary) {
-        Logger.log({
-          message:
-            '(TemplateSelectorCommand) onInit: Hub is unavailable for current user. Command will be disabled.',
-          level: LogLevel.Info
-        })
-        return
-      }
-      this._ctxValue.templates = await SPDataAdapter.getDocumentTemplates(
-        templateLib,
-        '<View Scope="RecursiveAll"></View>'
-      )
-      Logger.log({
-        message: `(TemplateSelectorCommand) onInit: Retrieved ${this._ctxValue.templates.length} templates from the specified template library`,
-        level: LogLevel.Info
-      })
-    } catch (error) {
-      Logger.log({
-        message: '(TemplateSelectorCommand) onInit: Failed to initialize',
-        level: LogLevel.Warning
-      })
-    }
   }
 
   @override
@@ -94,10 +59,10 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
 
   @override
   public async onExecute(event: IListViewCommandSetExecuteEventParameters): Promise<void> {
-    if (!this._hasAccessToTemplateLibrary) return
     // eslint-disable-next-line default-case
     switch (event.itemId) {
       case this._openCmd.id:
+        if (!(await this._ensureDataLoaded())) return
         this._ctxValue.libraries = await SPDataAdapter.getLibraries()
         this._ctxValue.currentLibrary = find(
           this._ctxValue.libraries,
@@ -114,9 +79,58 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
     }
   }
 
-  /**
-   * On open <DocumentTemplateDialog />
-   */
+  private async _ensureDataLoaded(): Promise<boolean> {
+    if (this._isDataLoaded) return true
+    if (this._loadDataPromise) return this._loadDataPromise
+
+    this._loadDataPromise = this._loadData()
+    return this._loadDataPromise
+  }
+
+  private async _loadData(): Promise<boolean> {
+    try {
+      await SPDataAdapter.configure(this.context, {
+        siteId: this.context.pageContext.site.id.toString(),
+        webUrl: this.context.pageContext.web.absoluteUrl
+      })
+
+      const templateLib = this.properties.templateLibrary || resource.Lists_TemplateLibrary_Title
+      this._ctxValue.templateLibrary = {
+        title: templateLib,
+        url: `${SPDataAdapter.portalDataService.url}/${templateLib}`
+      }
+      this._hasAccessToTemplateLibrary = SPDataAdapter.portalDataService?.isAvailable ?? false
+      if (!this._hasAccessToTemplateLibrary) {
+        Logger.log({
+          message:
+            '(TemplateSelectorCommand) _loadData: Hub is unavailable for current user. Command will be disabled.',
+          level: LogLevel.Info
+        })
+        this.raiseOnChange()
+        return false
+      }
+      this._ctxValue.templates = await SPDataAdapter.getDocumentTemplates(
+        templateLib,
+        '<View Scope="RecursiveAll"></View>'
+      )
+      this._isDataLoaded = true
+      Logger.log({
+        message: `(TemplateSelectorCommand) _loadData: Retrieved ${this._ctxValue.templates.length} templates from the specified template library`,
+        level: LogLevel.Info
+      })
+      return true
+    } catch (error) {
+      this._loadDataPromise = null
+      this._hasAccessToTemplateLibrary = false
+      this.raiseOnChange()
+      Logger.log({
+        message: '(TemplateSelectorCommand) _loadData: Failed to initialize',
+        level: LogLevel.Warning
+      })
+      return false
+    }
+  }
+
   private _onOpenTemplateSelector() {
     const placeholder = this._getPlaceholder()
     const element = (

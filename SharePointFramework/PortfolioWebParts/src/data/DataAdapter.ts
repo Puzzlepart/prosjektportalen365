@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 
-import { IPersonaProps, IPersonaSharedProps } from '@fluentui/react'
 import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, getHashCode, PnPClientStorage } from '@pnp/core'
@@ -14,18 +13,15 @@ import {
   QueryPropertyValueType,
   SearchQueryInit,
   SortDirection,
-  SPFI,
-  Web
+  SPFI
 } from '@pnp/sp/presets/all'
 import * as cleanDeep from 'clean-deep'
 import { Idea } from 'components/IdeaModule'
-import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
 import msGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
 import {
   DataSource,
   DataSourceService,
-  DefaultCaching,
   getClassProperties,
   getItemFieldValues,
   getOrFetchProjectsCache,
@@ -510,22 +506,32 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
-    const timelineItems = await this._sp.web.lists
-      .getByTitle(resource.Lists_TimelineContent_Title)
-      .items.select(
-        'Title',
-        'GtTimelineTypeLookup/Title',
-        'GtStartDate',
-        'GtEndDate',
-        'GtBudgetTotal',
-        'GtCostsTotal',
-        'GtDescription',
-        'GtTag',
-        'GtSiteIdLookup/Title',
-        'GtSiteIdLookup/GtSiteId'
-      )
-      .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-      .getAll()
+    const baseFields = [
+      'Title',
+      'GtTimelineTypeLookup/Title',
+      'GtStartDate',
+      'GtEndDate',
+      'GtBudgetTotal',
+      'GtCostsTotal',
+      'GtDescription',
+      'GtSiteIdLookup/Title',
+      'GtSiteIdLookup/GtSiteId'
+    ]
+
+    let timelineItems: any[]
+    try {
+      timelineItems = await this._sp.web.lists
+        .getByTitle(resource.Lists_TimelineContent_Title)
+        .items.select(...baseFields, 'GtTag')
+        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+        .getAll()
+    } catch {
+      timelineItems = await this._sp.web.lists
+        .getByTitle(resource.Lists_TimelineContent_Title)
+        .items.select(...baseFields)
+        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+        .getAll()
+    }
 
     return timelineItems
       .map((item) => {
@@ -841,12 +847,14 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       fields?.secondaryUserField,
       templateMap
     )
-    projects = projects.filter(
-      (m) =>
-        m.lifecycleStatus !== strings.LifecycleStatus_Completed &&
-        m.lifecycleStatus !== strings.LifecycleStatus_Closed
-    )
-    projects = projects.sort((a, b) => a.title.localeCompare(b.title))
+    if (!fields?.includeClosed) {
+      projects = projects.filter(
+        (m) =>
+          m.lifecycleStatus !== strings.LifecycleStatus_Completed &&
+          m.lifecycleStatus !== strings.LifecycleStatus_Closed
+      )
+    }
+    projects = projects.sort((a, b) => (a.title ?? '').localeCompare(b.title ?? ''))
     return projects
   }
 
@@ -866,12 +874,14 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
     const result: IProjectsData = { items, sites: [], memberOfGroups: [], users: [] }
     let projects = this._combineResultData(result, undefined, undefined, templateMap)
-    projects = projects.filter(
-      (m) =>
-        m.lifecycleStatus !== strings.LifecycleStatus_Completed &&
-        m.lifecycleStatus !== strings.LifecycleStatus_Closed
-    )
-    projects = projects.sort((a, b) => a.title.localeCompare(b.title))
+    if (!fields?.includeClosed) {
+      projects = projects.filter(
+        (m) =>
+          m.lifecycleStatus !== strings.LifecycleStatus_Completed &&
+          m.lifecycleStatus !== strings.LifecycleStatus_Closed
+      )
+    }
+    projects = projects.sort((a, b) => (a.title ?? '').localeCompare(b.title ?? ''))
     return projects
   }
 
@@ -1132,374 +1142,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
-  public async clientPeoplePickerSearchUser(
-    queryString: string,
-    selectedItems: any[],
-    maximumEntitySuggestions = 50
-  ): Promise<IPersonaSharedProps[]> {
-    const profiles = await this._sp.profiles.clientPeoplePickerSearchUser({
-      QueryString: queryString,
-      MaximumEntitySuggestions: maximumEntitySuggestions,
-      AllowEmailAddresses: true,
-      PrincipalSource: 15,
-      PrincipalType: 1
-    })
-    const items = profiles.map((profile) => ({
-      text: profile.DisplayText,
-      secondaryText: profile.EntityData.Email,
-      tertiaryText: profile.EntityData.Title,
-      optionalText: profile.EntityData.Department,
-      imageUrl: `/_layouts/15/userphoto.aspx?AccountName=${profile.EntityData.Email}&size=L`,
-      id: profile.Key
-    }))
-    return items.filter(({ secondaryText }) => !_.findWhere(selectedItems, { secondaryText }))
-  }
-
-  public async getProvisionRequestSettings(provisionUrl: string): Promise<any[]> {
-    try {
-      const provisionSite = Web([this._sp.web, provisionUrl])
-      const settingsList = provisionSite.lists.getByTitle('Provisioning Request Settings')
-      const spItems = await settingsList.items
-        .select(
-          'Id',
-          'Title',
-          'Description',
-          'Value',
-          'PrefixText',
-          'PrefixUseAttribute',
-          'PrefixAttribute',
-          'SuffixText',
-          'SuffixUseAttribute',
-          'SuffixAttribute',
-          'ExternalSharingSetting',
-          'PowerAppOnly'
-        )
-        .using(DefaultCaching)()
-
-      return spItems
-        .filter((item) => !item.PowerAppOnly)
-        .map((item) => {
-          let value = item.Value === 'true' ? true : item.Value === 'false' ? false : item.Value
-          if (item.Title === 'NamingConvention') {
-            value = {
-              value: item.Value,
-              prefixText: item.PrefixText || '',
-              prefixUseAttribute: item.PrefixUseAttribute,
-              prefixAttribute: item.PrefixAttribute,
-              suffixText: item.SuffixText || '',
-              suffixUseAttribute: item.SuffixUseAttribute,
-              suffixAttribute: item.SuffixAttribute
-            }
-          } else if (item.Title === 'DefaultExternalSharingSetting') {
-            value = {
-              value: item.Value,
-              externalSharingSetting: item.ExternalSharingSetting
-            }
-          }
-
-          return {
-            title: item.Title,
-            value,
-            description: item.Description
-          }
-        })
-    } catch (error) {
-      throw new Error(
-        format(
-          strings.Provision.ProvisionError,
-          'Provisioning Request Settings',
-          error.message || error
-        )
-      )
-    }
-  }
-
-  public async getProvisionTypes(provisionUrl: string): Promise<Record<string, any>> {
-    try {
-      const provisionSite = Web([this._sp.web, provisionUrl])
-      const typesList = provisionSite.lists.getByTitle('Provisioning Types')
-      const spItems = await typesList.items
-        .select(
-          'Id',
-          'Title',
-          'SortOrder',
-          'Description',
-          'Allowed',
-          'Image',
-          'InternalTitle',
-          'PrefixText',
-          'PrefixUseAttribute',
-          'PrefixAttribute',
-          'SuffixText',
-          'SuffixUseAttribute',
-          'SuffixAttribute',
-          'VisibleTo/EMail',
-          'DefaultVisibility',
-          'DefaultConfidentialData',
-          'DefaultMetadata',
-          'ExternalSharing',
-          'Teamify',
-          'JoinHub',
-          'DefaultHub',
-          'DefaultSensitivityLabel',
-          'DefaultSensitivityLabelLibrary',
-          'DefaultRetentionLabel',
-          'TemplateId'
-        )
-        .expand('VisibleTo')
-        .using(DefaultCaching)()
-      return spItems
-        .filter((item) => item.Allowed)
-        .sort((a, b) => (a.SortOrder > b.SortOrder ? 1 : -1))
-        .map((item) => {
-          return {
-            order: item.SortOrder,
-            title: item.Title,
-            description: item.Description,
-            image: item.Image,
-            type: item.InternalTitle,
-            namingConvention: {
-              prefixText: item.PrefixText || '',
-              prefixUseAttribute: item.PrefixUseAttribute,
-              prefixAttribute: item.PrefixAttribute,
-              suffixText: item.SuffixText || '',
-              suffixUseAttribute: item.SuffixUseAttribute,
-              suffixAttribute: item.SuffixAttribute
-            },
-            visibleTo: item.VisibleTo,
-            defaultVisibility: item.DefaultVisibility,
-            defaultConfidentialData: item.DefaultConfidentialData,
-            defaultMetadata: item.DefaultMetadata,
-            externalSharing: item.ExternalSharing,
-            templateId: item.TemplateId,
-            teamify: item.Teamify,
-            joinHub: item.JoinHub,
-            defaultHub: item.DefaultHub,
-            defaultSensitivityLabel: item.DefaultSensitivityLabel,
-            defaultSensitivityLabelLibrary: item.DefaultSensitivityLabelLibrary,
-            defaultRetentionLabel: item.DefaultRetentionLabel
-          }
-        })
-    } catch (error) {
-      throw new Error(
-        format(strings.Provision.ProvisionError, 'Provisioning Types', error.message || error)
-      )
-    }
-  }
-
-  public async getSiteTemplates(provisionUrl: string): Promise<Record<string, any>> {
-    try {
-      const provisionSite = Web([this._sp.web, provisionUrl])
-      const templatesList = provisionSite.lists.getByTitle('Site Templates')
-      const spItems = await templatesList.items
-        .select('Id', 'Title', 'ApplyPnPTemplate', 'PnPTemplateURL')
-        .using(DefaultCaching)()
-      return spItems.map((item) => {
-        return {
-          id: item.Id,
-          title: item.Title,
-          applyPnPTemplate: item.ApplyPnPTemplate,
-          pnpTemplateUrl: item.PnPTemplateURL?.Url || ''
-        }
-      })
-    } catch (error) {
-      throw new Error(
-        format(strings.Provision.ProvisionError, 'Site Templates', error.message || error)
-      )
-    }
-  }
-
-  public async getProvisionUsers(
-    users: any[],
-    provisionUrl: string
-  ): Promise<Promise<number | null>[]> {
-    try {
-      const provisionSite = Web([this._sp.web, provisionUrl])
-      return users.map(async (val: IPersonaProps) => {
-        try {
-          const result = await provisionSite.ensureUser(val.secondaryText)
-          return result?.data?.Id ?? null
-        } catch (error) {
-          console.warn(
-            `(DataAdapter) (getProvisionUsers) ensureUser failed for ${val.secondaryText}:`,
-            error
-          )
-          return null
-        }
-      })
-    } catch (error) {
-      console.warn('(DataAdapter) (getProvisionUsers) Failed to resolve provision site:', error)
-      return []
-    }
-  }
-
-  public async addProvisionRequests(
-    properties: IProvisionRequestItem,
-    provisionUrl: string
-  ): Promise<boolean> {
-    try {
-      const provisionSite = Web([this._sp.web, provisionUrl])
-      const provisionRequestsList = provisionSite.lists.getByTitle('Provisioning Requests')
-      await provisionRequestsList.items.add(properties)
-      return true
-    } catch (error) {
-      return false
-    }
-  }
-
-  public async addProjectData(properties: Record<string, any>, hubUrl: string): Promise<void> {
-    try {
-      const hubSite = Web([this._sp.web, hubUrl])
-      const list = hubSite.lists.getByTitle(resource.Lists_ProjectData_Title)
-      const itemAddResult = await list.items.add(properties)
-      return itemAddResult.data
-    } catch (error) {
-      console.warn('Failed to add project data to ProjectData list:', error)
-    }
-  }
-
-  public async deleteProvisionRequest(requestId: number, provisionUrl: string): Promise<boolean> {
-    try {
-      const provisionSite = Web([this._sp.web, provisionUrl])
-      const provisionRequestsList = provisionSite.lists.getByTitle('Provisioning Requests')
-      await provisionRequestsList.items.getById(requestId).delete()
-      return true
-    } catch (error) {
-      return false
-    }
-  }
-
-  public async fetchProvisionRequests(user: string, provisionUrl: string): Promise<any[]> {
-    try {
-      const provisionSite = Web([this._sp.web, provisionUrl])
-      const provisionRequestsList = provisionSite.lists.getByTitle('Provisioning Requests')
-      const spItems = await provisionRequestsList.items
-        .select(
-          'Id',
-          'Title',
-          'SpaceDisplayName',
-          'SpaceType',
-          'SiteURL',
-          'Status',
-          'Stage',
-          'Comments',
-          'ApprovedDate',
-          'Created',
-          'Author/EMail',
-          'RequestedBy/EMail'
-        )
-        .expand('Author', 'RequestedBy')
-        .getAll()
-      return spItems
-        .filter((item) => item.Author?.EMail === user || item?.RequestedBy?.EMail === user)
-        .sort((a, b) => (a.Created > b.Created ? 1 : -1))
-        .map((item) => {
-          return {
-            id: item.Id,
-            title: item.Title,
-            displayName: item.SpaceDisplayName,
-            type: item.SpaceType,
-            siteUrl: item.SiteURL?.Url,
-            status: item.Status,
-            stage: item.Stage,
-            comments: item.Comments,
-            approvedDate: item.ApprovedDate,
-            created: item.Created,
-            author: item.Author?.EMail,
-            requestedBy: item.RequestedBy?.EMail
-          }
-        })
-    } catch (error) {
-      throw new Error(
-        format(strings.Provision.ProvisionError, 'Provisioning Requests', error.message || error)
-      )
-    }
-  }
-
-  public async getTeamTemplates(provisionUrl: string): Promise<Record<string, any>> {
-    try {
-      const provisionSite = Web([this._sp.web, provisionUrl])
-      const templatesList = provisionSite.lists.getByTitle('Teams Templates')
-      const spItems = await templatesList.items
-        .select('Id', 'Title', 'TemplateId', 'Description')
-        .using(DefaultCaching)()
-      return [
-        {
-          title: 'Standard',
-          templateId: 'standard',
-          description: strings.Provision.StandardTeamTemplate
-        },
-        ...spItems.map((item) => {
-          return {
-            title: item.Title,
-            templateId: item.TemplateId,
-            description: item.Description
-          }
-        })
-      ].sort((a, b) => (a.title > b.title ? 1 : -1))
-    } catch (error) {
-      throw new Error(
-        format(strings.Provision.ProvisionError, 'Teams Templates', error.message || error)
-      )
-    }
-  }
-
-  public async getSensitivityLabels(provisionUrl: string): Promise<Record<string, any>> {
-    try {
-      const provisionSite = Web([this._sp.web, provisionUrl])
-      const templatesList = provisionSite.lists.getByTitle('IP Labels')
-      const spItems = await templatesList.items
-        .select('Id', 'Title', 'LabelName', 'LabelId', 'LabelDescription', 'Enabled', 'IsLibrary')
-        .using(DefaultCaching)()
-      return spItems
-        .filter((item) => item.Enabled)
-        .sort((a, b) => (a.Title > b.Title ? 1 : -1))
-        .map((item) => {
-          return {
-            title: item.Title,
-            labelName: item.LabelName,
-            labelId: item.LabelId,
-            labelDescription: item.LabelDescription,
-            isLibrary: item.IsLibrary
-          }
-        })
-    } catch (error) {
-      throw new Error(format(strings.Provision.ProvisionError, 'IP Labels', error.message || error))
-    }
-  }
-
-  public async getRetentionLabels(provisionUrl: string): Promise<Record<string, any>> {
-    try {
-      const provisionSite = Web([this._sp.web, provisionUrl])
-      const templatesList = provisionSite.lists.getByTitle('Retention Labels')
-      const spItems = await templatesList.items
-        .select('Id', 'Title', 'LabelName', 'LabelDescription')
-        .using(DefaultCaching)()
-      return spItems
-        .sort((a, b) => (a.Title > b.Title ? 1 : -1))
-        .map((item) => {
-          return {
-            title: item.Title,
-            labelName: item.LabelName,
-            labelDescription: item.LabelDescription
-          }
-        })
-    } catch (error) {
-      throw new Error(
-        format(strings.Provision.ProvisionError, 'Retention Labels', error.message || error)
-      )
-    }
-  }
-
-  public async siteExists(siteUrl: string): Promise<boolean> {
-    try {
-      const exists = await this._sp.site.exists(siteUrl)
-      return exists
-    } catch (error) {
-      return false
-    }
-  }
-
   public async getIdeaConfiguration(
     listName: string = resource.Lists_Idea_Configuration_Title,
     configurationName: string = 'Standard'
@@ -1537,11 +1179,11 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const list = this._sp.web.lists.getById(listInfo.Id)
       const items = await list.items()
 
+      const gtFieldFilter =
+        'substringof(\'Gt\', InternalName) or InternalName eq \'Title\' or InternalName eq \'Id\''
       const fields = await list.fields
         .select(...getClassProperties(SPField))
-        .filter(
-          "substringof('Gt', InternalName) or InternalName eq 'Title' or InternalName eq 'Id'"
-        )<SPField[]>()
+        .filter(gtFieldFilter)<SPField[]>()
 
       const userFields = fields
         .filter((fld) => fld.TypeAsString.indexOf('User') === 0)
@@ -1613,101 +1255,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         },
         columns
       }
-    }
-  }
-
-  public async loadTeamsConfig(provisionUrl: string): Promise<any | null> {
-    try {
-      const provisionSite = Web([this._sp.web, provisionUrl])
-
-      const file = await provisionSite
-        .getFolderByServerRelativePath('SiteAssets')
-        .files.getByUrl('TeamsAppConfig.json')
-
-      const content = await file.getText()
-      return JSON.parse(content)
-    } catch (error) {
-      console.log('TeamsAppConfig.json not found or error loading:', error.message)
-      return null
-    }
-  }
-
-  public async saveTeamsConfig(provisionUrl: string, config: any): Promise<void> {
-    try {
-      const provisionSite = Web([this._sp.web, provisionUrl])
-      const hasPermission = await provisionSite.currentUserHasPermissions(PermissionKind.ManageWeb)
-
-      if (!hasPermission) {
-        throw new Error(
-          'You do not have permission to edit configuration. Site administrator access required.'
-        )
-      }
-
-      const folder = provisionSite.getFolderByServerRelativePath('SiteAssets')
-      const jsonContent = JSON.stringify(config, null, 2)
-
-      try {
-        const file = await provisionSite
-          .getFolderByServerRelativePath('SiteAssets')
-          .files.getByUrl('TeamsAppConfig.json')
-        await file.setContent(jsonContent)
-      } catch {
-        await folder.files.addUsingPath('TeamsAppConfig.json', jsonContent, { Overwrite: true })
-      }
-    } catch (error) {
-      throw new Error(`Failed to save TeamsAppConfig.json: ${error.message || error}`)
-    }
-  }
-
-  public async deleteTeamsConfig(provisionUrl: string): Promise<void> {
-    try {
-      const provisionSite = Web([this._sp.web, provisionUrl])
-      const file = provisionSite
-        .getFolderByServerRelativePath('SiteAssets')
-        .files.getByUrl('TeamsAppConfig.json')
-      await file.recycle()
-    } catch (error: any) {
-      throw new Error(`Failed to delete TeamsAppConfig.json: ${error?.message || error}`)
-    }
-  }
-
-  public async isProvisionSiteAdmin(provisionUrl: string): Promise<boolean> {
-    try {
-      const provisionSite = Web([this._sp.web, provisionUrl])
-      const hasPermission = await provisionSite.currentUserHasPermissions(PermissionKind.ManageWeb)
-      return hasPermission
-    } catch (error) {
-      console.warn('Failed to check provision site admin status:', error)
-      return false
-    }
-  }
-
-  /**
-   * Resolve a hub site by its ID using the SharePoint HubSites REST API.
-   * Returns the hub site title and ID, or null if the hub site could not be resolved.
-   *
-   * @param hubSiteId Hub site ID (GUID)
-   */
-  public async resolveHubSiteById(
-    hubSiteId: string
-  ): Promise<{ hubSiteId: string; title: string } | null> {
-    if (!hubSiteId) return null
-    try {
-      const webAbsoluteUrl = this._spfxContext.pageContext.web.absoluteUrl
-      const response = await fetch(`${webAbsoluteUrl}/_api/HubSites/GetById('${hubSiteId}')`, {
-        method: 'GET',
-        headers: { Accept: 'application/json;odata=nometadata' },
-        credentials: 'include'
-      })
-      if (!response.ok) return null
-      const hubSite = await response.json()
-      return {
-        hubSiteId: hubSiteId,
-        title: hubSite.Title || ''
-      }
-    } catch (error) {
-      console.warn('Failed to resolve hub site by ID:', error)
-      return null
     }
   }
 }

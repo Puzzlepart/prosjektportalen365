@@ -2,6 +2,47 @@
 
 Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
+## 1.14.0 - TBA
+
+### Ny funksjonalitet
+
+- **Prosjektveiviseren versjon 6.** Hele malverket er oppdatert til Prosjektveiviseren v6 (Digdir, juni 2026): nye v6-fasesjekkpunkter og -prosjektoppgaver i egne hub-lister med valgbart innholdssett per prosjektmal, terminologiskifte gevinst → nytte i alle brukervendte tekster, nye statusseksjoner for omfang og bærekraft, v6-dokumentmaler og v6-fasetekster, samt egen oppgraderingssti med opt-in-bryter (`-GevinstTilNytte`) for nytteterminologi på eksisterende prosjektområder. Se [releasenotes for 1.14.0](./releasenotes/1.14.0.md#prosjektveiviseren-versjon-6) for detaljer. [#1044](https://github.com/Puzzlepart/prosjektportalen365/issues/1044)
+- **Sentral malpakkekatalog (`Malpakkekatalog`).** Administratorer kan nå bla i og installere malpakker (maler, prosjekttillegg og innholdspakker) direkte fra hubområdet via den nye `Malpakkekatalog`-kommandoen. Pakkene hentes live fra det sentrale katalog-repoet, slik at nye maler kan publiseres uten en ny Prosjektportalen-release. Katalogen viser skjermbilder, avhengigheter/krav (minimumsversjon, Bestillingsportalen, Microsoft Entra og tilgjengelige språk), innholdsoversikt og versjonshistorikk. Importflyten provisjonerer huben (innholdstyper, felt, lister, taksonomi, tillegg og listeinnhold) med kompatibilitetssjekk og stegvis fremdriftsvisning. Maler kan også publiseres som **skymaler** og settes opp direkte i oppsettveiviseren fra `.pppkg`. [#1706](https://github.com/Puzzlepart/prosjektportalen365/issues/1706)
+- **Bygg- og anleggsinnhold flyttet ut av kjernen.** B&A-spesifikke lister, kolonner, innholdstyper og taksonomi er fjernet fra standardmalene og gjøres i stedet tilgjengelig som valgfrie malpakker (`Byggprosjekt`, `Anleggsprosjekt`) i malpakkekatalogen. Eksisterende prosjekter påvirkes ikke, men nye miljøer som trenger B&A-funksjonalitet installerer den nå fra katalogen.
+- `Interessentgruppe` på `Interessentregister` er konvertert til et nytt multi-select taksonomifelt `GtStakeholderGroups`, med verdier vedlikeholdt sentralt i termlageret under `Prosjektportalen › Interessentgrupper`. Dette erstatter de tidligere Choice-feltene `GtStakeholderGroup` og BA-varianten `GtBAStakeholderGroup`, som er slått sammen til ett felles felt. Endringen fjerner behovet for å skripte ut oppdateringer til alle prosjektsider ved endring av gruppevalgene. [#1742](https://github.com/Puzzlepart/prosjektportalen365/issues/1742)
+
+### Forbedringer
+
+- Oppdatert bundlet `PnP.PowerShell` til `3.2.0`, og versjonskravet er nå samlet i det felles installasjonsskriptet slik at installasjons- og release-flyten bruker samme kilde.
+- Lagt til konfigurerbar standard tidsramme (`Standard startdato` og `Standard sluttdato`) i egenskapspanelet for `Prosjekttidslinje`-webdelen i porteføljen, slik at administrator kan velge hvor langt tilbake og frem i tid tidslinjen skal vises som standard
+- Forbedret visning av termsett-/taksonomifelt i aggregerte oversikter. Verdier fra søke-egenskaper med prefix `owstaxId` (f.eks. `owstaxIdGtProjectPhase`) vises nå som rene etiketter i stedet for rå søkeresultatformat med GUID-er, og flerverdier vises som separate merker (`tags`)
+- Felter med datatype `Tags` (typisk taksonomi-felt, f.eks. `Tjenesteområde`) hvor verdiene har overordnede termer vises nå som et innrykket, sammenleggbart hierarki i filterpanelet i stedet for som flate `:`-separerte tekststrenger (`Overordnet:Underordnet`).
+- Overgang til `sp-js-provisioning` `1.3.8` for malbasert opprettelse og oppdatering av innholdstyper med faste ID-er. De 15 site script-filene som kun opprettet tomme innholdstyper er fjernet fra releasepakken, slik at innholdstypene forvaltes gjennom JSON-malene. Eksisterende installasjoner med eldre content type-site scripts kan fortsatt oppgraderes uten egen opprydding av disse site scriptene. [#1744](https://github.com/Puzzlepart/prosjektportalen365/issues/1744)
+- SPFx-utvidelsene `Oppgradering av prosjekter`, `Malvelger` og `Footer` legges nå inn via `CustomActions` i JSON-malene (`Standardmal` og `Programmal`) i stedet for via site scripts, og de tre tilhørende site scriptene er fjernet fra releasepakken - området-designet består nå kun av `Regionale innstillinger` og `Setup extension`.
+- `Feltfilter` for vertikale faner i `Prosjektutlisting` støtter nå operatorer i tillegg til ren likhet: `$ne` (ikke lik), `$in` (én av) og `$nin` (ingen av).
+- Ny innstilling `Vis avsluttede prosjekter` i `Prosjektutlisting`. Prosjekter med Prosjektstatus `Avsluttet` ble tidligere fjernet før vertikalene ble filtrert, og kunne dermed ikke vise avsluttede prosjekter i noen av vertikalene. Innstillingen er av som standard.
+
+### Feilrettinger
+
+- Rettet en feil hvor valgte filter for Ja/Nei verdier ikke var krysset av når man åpnet filterpanelet på nytt i porteføljeoversikten, selv om filtrene var lagt på korrekt
+- Rettet en feil i `Prosjekttidslinje` hvor skjulte SharePoint-systemfelt (f.eks. `Vedlegg`, `Rekkefølge`, `Navn`) feilaktig dukket opp som kolonner i tidslinjelisten og som felter i redigeringspanelet. Felt som er skjult på den valgte innholdstypen (eller på malens innholdstype) ekskluderes nå fra både kolonner og redigeringspanel
+- Kolonner i tidslinjelisten følger nå rekkefølgen som er definert på innholdstypen. Felt som er skjult på innholdstypen ekskluderes også fra kolonner og redigeringspanel
+- Kolonner i porteføljeoversikten respekterer nå innstillingen `Vis i porteføljeoversikt` i `Prosjektkolonner` listen og fjerner de fra visningen, selv om kolonnen er definert i visningen i `Porteføljevisninger` listen. Tidligere lå disse kolonnene fortsatt i visningen, selv om kolonnen ikke var tilgjengelig i vis/skjul kolonner panelet, og dermed kunne aldri fjernes
+- Rettet en feil hvor `Hent dokumentmal` gjorde gjentatte kall mot hubområdet og `Malbibliotek` ved innlasting av dokumentbibliotek, selv om brukeren ikke åpnet dialogen [#1749](https://github.com/Puzzlepart/prosjektportalen365/pull/1749)
+- Rettet en feil i `Aggregert oversikt` hvor kolonnene i visningene ikke ble oppdatert ved endring av visning [#1751](https://github.com/Puzzlepart/prosjektportalen365/pull/1751)
+- Rettet en feil i oppsettveiviseren hvor private og delte Teams-kanaler (som oppretter egne SharePoint-områder knyttet til huben) feilaktig trigget oppsettveiviseren. Områdene mangler en Microsoft 365-gruppe, noe som førte til feildialogen «Invalid object identifier 'null'.» ved hver sideinnlasting. Veiviseren oppdager nå kanalområder (`TEAMCHANNEL`) og fjernes stille uten å gjøre endringer på området [#1754](https://github.com/Puzzlepart/prosjektportalen365/issues/1754)
+- Rettet en feil i `Dynamisk Liste` hvor Ja/Nei verdier alltid viser som "Nei" [#1747](https://github.com/Puzzlepart/prosjektportalen365/pull/1747)
+- Rettet en feil i `Porteføljeoversikt` hvor Ja/Nei-kolonner viste råverdiene `0` og `1` i gruppeoverskriftene ved gruppering.
+- Ja/Nei-kolonner vises nå alltid med begge valgene i filterpanelet i `Porteføljeoversikt`, og valgene får riktig etikett uavhengig av hvilken kolonne det gjelder. `Eksporter til Excel` bruker nå samme filtrering som listen, slik at eksporten alltid inneholder de samme radene som vises
+- Rettet en feil hvor `Porteføljeoversikt` viste hvite, flimrende felter, kun på macOS i Chrome/Edge.
+
+### Merk
+
+- Etter oppgradering bør tenant-administrator regenerere `SearchConfiguration.xml` fra sitt miljø dersom `GtStakeholderGroups` skal brukes som refiner eller i aggregerte oversikter. Det nye feltet fungerer uten denne endringen for visning og redigering i listen.
+- Bestillings-webdelen er flyttet ut av Prosjektportalen-koden og vedlikeholdes nå i [Bestillingsportalen-repoet](https://github.com/Puzzlepart/bestillingsportalen). Les mer om dette i relasenotes for 1.14.0.
+
+---
+
 ## 1.13.1 - 11.05.2026
 
 ### Feilrettinger
@@ -10,6 +51,8 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet en feil i visning av taksonomi-/termsettfelt i `Prosjektinformasjon` hvor etiketten kunne vises som et tall (WssId) i stedet for den faktiske verdien.
 
 NB! Dersom dere nylig har oppgradert til 1.13.0 og opplever at `Title`-feltet hanver i bunnen i skjemaer og visninger for noen av de nevnte innholdstypene er det anbefalt å oppgradere til 1.13.1. Dersom dere har egne tilpassede maler eller tillegg som påvirker innholdstyper er det viktig at disse blir oppdatert slik at `Title`-feltet er det første feltet i `FieldRefs`-seksjonen, ellers vil det fortsatt vises nederst i skjemaer og visninger.
+
+---
 
 ## 1.13.0 - 23.04.2026
 

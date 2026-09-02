@@ -1,3 +1,4 @@
+import { IColumn } from '@fluentui/react'
 import { IFilterProps } from 'pp365-shared-library'
 import { IDynamicListData } from '../types'
 import { get } from '@microsoft/sp-lodash-subset'
@@ -105,12 +106,20 @@ export function generateFilters(
       })
 
       filters.push({
+        // Forward only `dataType` (e.g. data type `Tags`) to the FilterPanel so
+        // taxonomy/Tags fields can render as a hierarchy. We intentionally do
+        // NOT forward the full `data` object: `renderAs` is only set for
+        // columns that have a match in the column configuration, so forwarding
+        // it would label those boolean filters `Ja`/`Nei` while the ones
+        // derived from the SharePoint field alone keep their raw value. It also
+        // carries `termSetId`, which decides hierarchy rendering.
         column: {
           key: column.key,
-          fieldName: fieldName,
+          fieldName,
           name: column.name,
-          minWidth: column.minWidth
-        },
+          minWidth: column.minWidth,
+          dataType: (column as any).dataType
+        } as IColumn,
         items: filterItems
       })
     }

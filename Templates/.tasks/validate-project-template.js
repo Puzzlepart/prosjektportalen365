@@ -2,8 +2,21 @@
 
 const fs = require('fs')
 const path = require('path')
-const glob = require('glob')
 const { getFileContent } = require('./util')
+
+// Recursively find all files with the given extension in a directory
+function findFilesRecursive(dir, extension) {
+    const files = []
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const entryPath = path.join(dir, entry.name)
+        if (entry.isDirectory()) {
+            files.push(...findFilesRecursive(entryPath, extension))
+        } else if (entry.isFile() && entry.name.endsWith(extension)) {
+            files.push(entryPath)
+        }
+    }
+    return files
+}
 
 // Default token regex for project templates JSON files
 const TOKEN_REGEX = /{{(.*?)}}/g
@@ -100,7 +113,7 @@ function validatePnPFile(filePath) {
 }
 
 // For all files recursively in PORTFOLIO_TEMPLATE_DIR, look for tokens matching the PNP_TOKEN_REGEX
-const portfolioTemplateFiles = glob.sync(`${PORTFOLIO_TEMPLATE_DIR}/**/*.xml`, { nodir: true })
+const portfolioTemplateFiles = findFilesRecursive(PORTFOLIO_TEMPLATE_DIR, '.xml')
 for (const filePath of portfolioTemplateFiles) {
     validatePnPFile(filePath)
 }

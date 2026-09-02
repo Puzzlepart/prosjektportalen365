@@ -81,6 +81,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             strings.NoGroupIdErrorStack
           )
         }
+        case ProjectSetupValidation.IsTeamChannel: {
+          Logger.write(
+            `(ProjectSetup) Site is a Teams channel (${this.context.pageContext.web.absoluteUrl}); removing setup customizer silently.`,
+            LogLevel.Info
+          )
+          await deleteCustomizer(this)
+          return
+        }
         case ProjectSetupValidation.InvalidWebLanguage: {
           await deleteCustomizer(this)
           throw new ProjectSetupError(
@@ -230,7 +238,29 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         })
       }
     } catch (error) {
-      this._renderErrorDialog({ error })
+      if (this._taskProgress?.some((task) => task.status === 'error')) {
+        this._renderProgressDialog({
+          progressIndicator: {
+            label: strings.ProgressDialogLabel,
+            description: strings.ProgressDialogDescription
+          },
+          iconName: 'ErrorBadge',
+          title: this.properties.progressDialogTitle,
+          subText: this.properties.progressDialogSubText,
+          taskProgress: this._taskProgress,
+          currentStep: this._currentTaskIndex,
+          totalSteps: this._totalTasks,
+          error,
+          onDismiss: async () => {
+            if (this._isSetup) {
+              await deleteCustomizer(this)
+            }
+            this._unmount(this._getPlaceholder('ProgressDialog'))
+          }
+        })
+      } else {
+        this._renderErrorDialog({ error })
+      }
     }
   }
 
@@ -546,8 +576,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         spfxContext: this.context
       })
 
-      const [_templates, extensions, contentConfig, templateFiles, customActions, projectData] =
-        await Promise.all([
+      const [_templates, extensions, contentConfig, templateFiles, projectData] = await Promise.all(
+        [
           this._getTemplates(),
           this._portalDataService.getItems(
             resource.Lists_ProjectExtensions_Title,
@@ -569,9 +599,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             },
             ['File']
           ),
-          this.sp.web.userCustomActions(),
           this._portalDataService.getProjectData()
-        ])
+        ]
+      )
       const templates = _templates.map((tmpl) => {
         const [tmplFile] = templateFiles.filter((file) => file.id === tmpl.projectTemplateId)
         tmpl.projectTemplateUrl = tmplFile?.serverRelativeUrl
@@ -594,7 +624,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         extensions,
         contentConfig,
         templates,
-        customActions,
         projectData,
         hasExistingTemplate
       } as IProjectSetupData
@@ -612,6 +641,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    */
   private async _validateProjectSetup(): Promise<ProjectSetupValidation> {
     const { isSiteAdmin, groupId, hubSiteId, siteId } = this.context.pageContext.legacyPageContext
+
+    // `WebTemplate` returns the template name without its config number, so this
+    // matches both `TEAMCHANNEL#0` (private) and `TEAMCHANNEL#1` (shared) channels.
+    const { WebTemplate } = await this.sp.web.select('WebTemplate')()
+    if (WebTemplate === 'TEAMCHANNEL') return ProjectSetupValidation.IsTeamChannel
+
+    // Must precede the `groups/{groupId}/members` call below, which fails on a null id.
+    if (!groupId) return ProjectSetupValidation.NoGroupId
 
     this._portalDataService = await new PortalDataService().configure({
       spfxContext: this.context

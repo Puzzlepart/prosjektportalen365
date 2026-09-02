@@ -123,10 +123,6 @@ export default class IdeaModuleWebPart extends BasePortfolioWebPart<IIdeaModuleP
                   multiline: true,
                   resizable: true,
                   rows: 6
-                }),
-                PropertyPaneTextField('provisionUrl', {
-                  label: strings.Idea.ProvisionUrlFieldLabel,
-                  description: strings.Idea.ProvisionUrlFieldDescription
                 })
               ]
             },

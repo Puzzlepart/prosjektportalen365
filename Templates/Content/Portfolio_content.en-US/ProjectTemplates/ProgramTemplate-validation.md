@@ -1,4 +1,4 @@
-_The template was validated 5/11/2026, 10:58:33 AM_
+_The template was validated 9/2/2026, 3:15:56 PM_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -10,7 +10,7 @@ _No tokens with missing translations or replacement values found._
 
 ```txt
 {
-    "Version": "1.13.1",
+    "Version": "1.14.0",
     "Parameters": {
         "ProvisionSiteFields": "Project Portal Columns (Project)",
         "CustomSiteFields": "Project Portal Columns (Custom)",
@@ -109,8 +109,8 @@ _No tokens with missing translations or replacement values found._
                     "Name": "Title"
                 },
                 {
-                    "ID": "2847b3b0-ed22-4c47-b7c0-3ebfc83dae4a",
-                    "Name": "GtStakeholderGroup"
+                    "ID": "ba8e9bcd-d8af-41e2-a24c-d279e07f1b56",
+                    "Name": "GtStakeholderGroups"
                 },
                 {
                     "ID": "970ed1b2-9e71-45aa-8f8d-c391a15f067f",
@@ -549,7 +549,7 @@ _No tokens with missing translations or replacement values found._
                 "Title": "Program Deliveries"
             },
             {
-                "Url": "SitePages/Tidslinje.aspx",
+                "Url": "SitePages/Timeline.aspx",
                 "Title": "Program Timeline"
             },
             {
@@ -561,6 +561,31 @@ _No tokens with missing translations or replacement values found._
     "WebSettings": {
         "WelcomePage": "SitePages/ProgramHome.aspx"
     },
+    "CustomActions": [
+        {
+            "Name": "ProjectUpgrade",
+            "Title": "Oppgradering av prosjekter",
+            "Location": "ClientSideExtension.ApplicationCustomizer",
+            "ClientSideComponentId": "453a6c1e-e1d0-4b12-a3fc-690a36da1f0c",
+            "ClientSideComponentProperties": "{}"
+        },
+        {
+            "Name": "TemplateSelectorCommandSet",
+            "Title": "Malvelger",
+            "Location": "ClientSideExtension.ListViewCommandSet.CommandBar",
+            "ClientSideComponentId": "c9080212-e63e-47cc-8278-00ad38c3f5a5",
+            "ClientSideComponentProperties": "{\"templateLibrary\": \"Malbibliotek\"}",
+            "RegistrationId": "101",
+            "RegistrationType": 1
+        },
+        {
+            "Name": "Footer",
+            "Title": "Footer",
+            "Location": "ClientSideExtension.ApplicationCustomizer",
+            "ClientSideComponentId": "84f27cec-ffde-4e00-a4cf-25c69f691054",
+            "ClientSideComponentProperties": "{}"
+        }
+    ],
     "ClientSidePages": [
         {
             "Name": "ProgramHome.aspx",
@@ -859,7 +884,7 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Name": "Tidslinje.aspx",
+            "Name": "Timeline.aspx",
             "Title": "Program Timeline",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
@@ -872,6 +897,7 @@ _No tokens with missing translations or replacement values found._
                                 {
                                     "Id": "d156652b-9121-47af-89ae-1fe8427c53da",
                                     "Properties": {
+                                        "title": "Program Timeline",
                                         "listName": "Timeline Content",
                                         "showTimeline": true,
                                         "showTimelineListCommands": true,
@@ -1023,7 +1049,7 @@ _No tokens with missing translations or replacement values found._
                     "Title": "All Items",
                     "ViewFields": [
                         "LinkTitle",
-                        "GtStakeholderGroup",
+                        "GtStakeholderGroups",
                         "GtStakeholderContext",
                         "GtStakeholderStrategy",
                         "GtStakeholderInterest",
@@ -1379,7 +1405,7 @@ _No tokens with missing translations or replacement values found._
                     "AdditionalSettings": {
                         "RowLimit": 30,
                         "Paged": true,
-                        "ViewQuery": ""
+                        "ViewQuery": "<OrderBy><FieldRef Name='LinkFilename' /></OrderBy>"
                     }
                 },
                 {
@@ -1394,14 +1420,14 @@ _No tokens with missing translations or replacement values found._
                     "AdditionalSettings": {
                         "RowLimit": 30,
                         "Paged": true,
-                        "ViewQuery": "",
+                        "ViewQuery": "<OrderBy><FieldRef Name='LinkFilename' /></OrderBy>",
                         "Scope": 1
                     }
                 }
             ]
         },
         {
-            "Title": "Benefits analysis and realization plan",
+            "Title": "Benefit analysis and benefit management plan",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
@@ -1526,8 +1552,8 @@ _No tokens with missing translations or replacement values found._
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"Lookup\" DisplayName=\"Gain\" List=\"{listid:Benefits analysis and realization plan}\" ShowField=\"Title\" ID=\"{8d70fa93-b547-46f1-84e7-4982f8c9c675}\" StaticName=\"GtGainLookup\" Name=\"GtGainLookup\"  />",
-                "<Field Type=\"Lookup\" DisplayName=\"Gain ID\" List=\"{listid:Benefits analysis and realization plan}\" ShowField=\"ID\" FieldRef=\"8d70fa93-b547-46f1-84e7-4982f8c9c675\" ReadOnly=\"TRUE\" UnlimitedLengthInDocumentLibrary=\"FALSE\" ID=\"{c239539c-8672-46cc-be77-fb53322f71ae}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtGainLookup_ID\" Name=\"GtGainLookup_ID\" />"
+                "<Field Type=\"Lookup\" DisplayName=\"Benefit\" List=\"{listid:Benefit analysis and benefit management plan}\" ShowField=\"Title\" ID=\"{8d70fa93-b547-46f1-84e7-4982f8c9c675}\" StaticName=\"GtGainLookup\" Name=\"GtGainLookup\"  />",
+                "<Field Type=\"Lookup\" DisplayName=\"Benefit ID\" List=\"{listid:Benefit analysis and benefit management plan}\" ShowField=\"ID\" FieldRef=\"8d70fa93-b547-46f1-84e7-4982f8c9c675\" ReadOnly=\"TRUE\" UnlimitedLengthInDocumentLibrary=\"FALSE\" ID=\"{c239539c-8672-46cc-be77-fb53322f71ae}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtGainLookup_ID\" Name=\"GtGainLookup_ID\" />"
             ],
             "Views": [
                 {

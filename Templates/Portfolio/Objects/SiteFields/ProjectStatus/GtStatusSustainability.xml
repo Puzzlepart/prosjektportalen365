@@ -1,0 +1,7 @@
+﻿<Field Description="{resource:SiteFields_GtStatusSustainability_Description}" DisplayName="{resource:SiteFields_GtStatusSustainability_DisplayName}" Format="RadioButtons" Group="{resource:SiteFields_Portfolio_Group}" ID="{4c76ca9c-43b9-4b5e-a9e3-dbacf3ca27ca}" Name="GtStatusSustainability" StaticName="GtStatusSustainability" Type="Choice">
+    <CHOICES>
+        <CHOICE>{resource:Choice_GtStatusSustainability_AsPlanned}</CHOICE>
+        <CHOICE>{resource:Choice_GtStatusSustainability_MinorDeviation}</CHOICE>
+        <CHOICE>{resource:Choice_GtStatusSustainability_MajorDeviation}</CHOICE>
+    </CHOICES>
+</Field>

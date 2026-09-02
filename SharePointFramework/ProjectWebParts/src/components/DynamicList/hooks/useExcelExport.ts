@@ -38,7 +38,15 @@ export function useExcelExport() {
               return Object.keys(context.state.activeFilters).every((key) => {
                 const filterValues = context.state.activeFilters[key]
                 return filterValues.some((filterValue) => {
-                  return item[key] === filterValue || item[key]?.includes(filterValue)
+                  const value = item[key]
+                  if (value === filterValue) return true
+                  // Only strings and arrays have `includes` - a boolean value
+                  // from a Yes/No column would throw. Those are compared
+                  // against the string the filter was built from.
+                  if (typeof value === 'string' || Array.isArray(value)) {
+                    return value.includes(filterValue)
+                  }
+                  return String(value) === filterValue
                 })
               })
             })

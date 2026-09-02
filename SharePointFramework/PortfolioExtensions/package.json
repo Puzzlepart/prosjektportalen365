@@ -1,6 +1,6 @@
 {
   "name": "pp365-portfolioextensions",
-  "version": "1.13.1",
+  "version": "1.14.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -14,6 +14,9 @@
     "postwatch": "node ../.tasks/post-watch.js",
     "serve": "concurrently \"gulp serve-deprecated --nobrowser NODE --max-old-space-size=8192\"",
     "build": "gulp bundle --ship && gulp package-solution --ship",
+    "build:test": "node ../.tasks/build.js --channel test",
+    "build:i18n": "node ../.tasks/build.js --channel i18n",
+    "build:kurs": "node ../.tasks/build.js --channel kurs",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color --fix --config ../.eslintrc.yaml && npm run prettier",
     "prettier": "prettier '**/*.ts*' --write --loglevel silent --config ../.prettierrc.yaml",
@@ -32,7 +35,7 @@
     "@pnp/core": "3.17.0",
     "@pnp/logging": "3.17.0",
     "@pnp/sp": "3.17.0",
-    "pp365-shared-library": "1.13.1",
+    "pp365-shared-library": "1.14.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "tslib": "2.3.1",
@@ -41,7 +44,9 @@
     "sp-entityportal-service": "2.3.0",
     "@fluentui/react-components": "~9.72.10",
     "@fluentui/react-icons": "~2.0.317",
-    "react-gauge-component": "~1.2.61"
+    "react-gauge-component": "~1.2.61",
+    "jszip": "3.10.1",
+    "sp-js-provisioning": "1.3.14"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.17.4",

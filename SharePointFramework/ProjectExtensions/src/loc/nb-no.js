@@ -35,6 +35,7 @@ define([], function () {
     ApplyTemplateClientSidePages: 'Legger inn filer og webdeler',
     ApplyTemplateComposedLook: 'Legger på farge og fonter',
     ApplyTemplateContentTypes: 'Legger inn innholdstyper',
+    ApplyTemplateCustomActions: 'Legger inn utvidelser',
     ApplyTemplateErrorMessage: 'Det skjedde en feil i steg {0} under konfigurering av området',
     ApplyTemplateFiles: 'Legger inn filer og webdeler',
     ApplyTemplateHooks: 'Kjører hooks definert i prosjektmalen',
@@ -152,6 +153,15 @@ define([], function () {
     SummaryMessage: '{0} element(er) ble kopiert til prosjektområdet.',
     SyncLocalProjectPropertiesListText: 'Synkroniserer liste for prosjektegenskaper',
     TemplateConfigMessage: '**{0}** inneholder konfigurasjon for {1}. Dette er valgt som standard.',
+    CloudTemplateBadgeText: 'Skymal',
+    CloudTemplateBannerText:
+      'Malpakken lastes ned og settes opp automatisk når du fortsetter – prosjektinnholdet hentes direkte fra pakken.',
+    CloudTemplateResolvingMessage: 'Laster ned og leser skymal…',
+    CloudContentConfigDestinationListMissing:
+      'Fant ikke listen «{0}» i prosjektet. Innholdet fra «{1}» kan ikke kopieres.',
+    CloudTemplateResolveErrorMessage: 'Kunne ikke laste ned skymalen. Prøv å velge den på nytt.',
+    CloudTemplateNotCompatibleWarning:
+      '**{0}** krever innhold på hub-området (f.eks. filer eller dokumentbiblioteker på hub-området) som ikke settes opp når pakken tilgjengeliggjøres som skymal. Tillegg og listeinnhold blir lagt til, men dette hub-innholdet hoppes over. Fortsett på eget ansvar.',
     TemplateConfigConjunction: ' og ',
     DataGridSelectAllLabel: 'Velg alle',
     PlannerMemberWarningMessage: 'Du må være medlem av Microsoft 365 gruppa for å kunne konfigurere Planner. Vennligst legg deg selv til som medlem eller spør en administrator og prøv deretter igjen.',

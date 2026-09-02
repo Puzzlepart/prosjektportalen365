@@ -4,7 +4,7 @@ import * as uniq from 'array-unique'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import _ from 'underscore'
 import { IPortfolioOverviewContext } from '../context'
-import strings from 'PortfolioWebPartsStrings'
+import { getBooleanDisplayValue, isBooleanColumn } from './booleanColumn'
 
 /**
  * Returns an array of filters for the portfolio overview based on the current view and items.
@@ -19,6 +19,18 @@ export function usePortfolioOverviewFilters(context: IPortfolioOverviewContext) 
     (ref) => context.state.currentView.refiners.indexOf(ref) !== -1
   )
   const filters = selectedFilters.map((column) => {
+    // Boolean columns always offer both options. Search omits properties
+    // without a value, so a Yes/No column often has only one distinct value in
+    // the results, which would otherwise leave the filter with a single item -
+    // and `FilterPanel` hides filters with less than two items.
+    if (isBooleanColumn(column)) {
+      // Sorted by value to match the ordering the generic path below produces.
+      const items: IFilterItemProps[] = ['0', '1'].map((value) => ({
+        name: getBooleanDisplayValue(column, value),
+        value
+      }))
+      return { column, items }
+    }
     const uniqueValues = uniq(
       // eslint-disable-next-line prefer-spread
       [].concat.apply(
@@ -28,18 +40,7 @@ export function usePortfolioOverviewFilters(context: IPortfolioOverviewContext) 
     )
     let items: IFilterItemProps[] = uniqueValues
       .filter((value: string) => !stringIsNullOrEmpty(value))
-      .map((value: string) => {
-        const name =
-          column.fieldName.includes('GtIsProgram') || column.fieldName.includes('GtIsParentProject')
-            ? value === '1'
-              ? strings.BooleanYes
-              : value === '0'
-              ? strings.BooleanNo
-              : value
-            : value
-
-        return { name: name, value }
-      })
+      .map((value: string) => ({ name: value, value }))
     items = items.sort((a, b) => (a.value > b.value ? 1 : -1))
     return { column, items }
   })
@@ -52,7 +53,7 @@ export function usePortfolioOverviewFilters(context: IPortfolioOverviewContext) 
         if (filter.column.fieldName === key) {
           activeFilters[key].forEach((value) => {
             filter.items.forEach((item) => {
-              if (value === item.name) {
+              if (value === item.value) {
                 item.selected = true
               }
             })

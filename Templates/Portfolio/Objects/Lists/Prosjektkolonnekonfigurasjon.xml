@@ -198,31 +198,45 @@
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectColumnConfiguration_GtBAProjectSHA_NoEvents_Title}</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectColumnConfiguration_GtStatusScope_AsPlanned_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">43</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioColumnValue">{resource:Choice_GtBAProjectSHA_NoEvents}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnValue">{resource:Choice_GtStatusScope_AsPlanned}</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#2da748</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectColumnConfiguration_GtBAProjectSHA_EventRegistered_Title}</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectColumnConfiguration_GtStatusScope_MinorChanges_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">43</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioColumnValue">{resource:Choice_GtBAProjectSHA_EventRegistered}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnValue">{resource:Choice_GtStatusScope_MinorChanges}</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#e9b359</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectColumnConfiguration_GtBAProjectEnv_NoEvents_Title}</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectColumnConfiguration_GtStatusScope_MajorChanges_Title}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumn">43</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnValue">{resource:Choice_GtStatusScope_MajorChanges}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnColor">#ea5c73</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectColumnConfiguration_GtStatusSustainability_AsPlanned_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">45</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioColumnValue">{resource:Choice_GtBAProjectEnv_NoEvents}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnValue">{resource:Choice_GtStatusSustainability_AsPlanned}</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#2da748</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectColumnConfiguration_GtBAProjectEnv_EventRegistered_Title}</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectColumnConfiguration_GtStatusSustainability_MinorDeviation_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">45</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioColumnValue">{resource:Choice_GtBAProjectEnv_EventRegistered}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnValue">{resource:Choice_GtStatusSustainability_MinorDeviation}</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#e9b359</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">{resource:Lists_ProjectColumnConfiguration_GtStatusSustainability_MajorDeviation_Title}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumn">45</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnValue">{resource:Choice_GtStatusSustainability_MajorDeviation}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnColor">#ea5c73</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>

@@ -1,4 +1,13 @@
-import { Combobox, Option, Radio, RadioGroup, Text } from '@fluentui/react-components'
+import {
+  Badge,
+  Combobox,
+  Option,
+  Radio,
+  RadioGroup,
+  Spinner,
+  Text
+} from '@fluentui/react-components'
+import { Cloud16Regular, Cloud24Regular } from '@fluentui/react-icons'
 import strings from 'ProjectExtensionsStrings'
 import { FieldContainer, getFluentIconWithFallback, UserMessage } from 'pp365-shared-library'
 import React from 'react'
@@ -6,6 +15,7 @@ import { ProjectSetupDialogSectionComponent } from '../types'
 import styles from './TemplateSelector.module.scss'
 import { useTemplateSelector } from './useTemplateSelector'
 
+/** Renders the template-selection section in the project setup dialog. */
 export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
   const {
     mode,
@@ -16,6 +26,10 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
     isSingleTemplate,
     validationMessage,
     showPlannerWarning,
+    isCloudTemplate,
+    isResolvingCloudTemplate,
+    cloudTemplateError,
+    cloudIncompatibleMessage,
     onModeChanged,
     onTemplateSelect,
     onClearTemplate,
@@ -65,9 +79,25 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
                       </span>
                     )}
                     <div className={styles.optionContent}>
-                      <Text weight='semibold'>{template.text}</Text>
+                      <div className={styles.optionTitleRow}>
+                        <Text weight='semibold'>{template.text}</Text>
+                        {template.isCloudTemplate && (
+                          <Badge
+                            appearance='tint'
+                            color='brand'
+                            size='small'
+                            icon={<Cloud16Regular />}
+                          >
+                            {strings.CloudTemplateBadgeText}
+                          </Badge>
+                        )}
+                      </div>
                       {template.subText && (
-                        <Text size={200} wrap>
+                        <Text
+                          size={200}
+                          className={styles.optionDescription}
+                          title={template.subText}
+                        >
                           {template.subText}
                         </Text>
                       )}
@@ -86,6 +116,27 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
       {showPlannerWarning && (
         <UserMessage text={strings.PlannerMemberWarningMessage} intent='warning' />
       )}
+      {isCloudTemplate && !cloudTemplateError && (
+        <div className={styles.cloudBanner}>
+          <div className={styles.cloudBannerIcon}>
+            <Cloud24Regular />
+          </div>
+          <div className={styles.cloudBannerContent}>
+            <div className={styles.cloudBannerHeader}>
+              <Text weight='semibold'>{selectedTemplate?.text}</Text>
+              <Badge appearance='filled' color='brand' icon={<Cloud16Regular />}>
+                {strings.CloudTemplateBadgeText}
+              </Badge>
+            </div>
+            <Text size={200}>{strings.CloudTemplateBannerText}</Text>
+          </div>
+        </div>
+      )}
+      {cloudIncompatibleMessage && <UserMessage text={cloudIncompatibleMessage} intent='warning' />}
+      {isResolvingCloudTemplate && (
+        <Spinner size='tiny' label={strings.CloudTemplateResolvingMessage} />
+      )}
+      {cloudTemplateError && <UserMessage text={cloudTemplateError} intent='error' />}
       {validationMessage && <UserMessage text={validationMessage} intent='info' />}
     </div>
   )

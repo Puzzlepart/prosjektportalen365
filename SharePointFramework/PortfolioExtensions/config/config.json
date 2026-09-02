@@ -33,6 +33,14 @@
           "manifest": "./src/extensions/footer/manifest.json"
         }
       ]
+    },
+    "template-package-catalog-command-set": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/templatePackageCatalog/index.js",
+          "manifest": "./src/extensions/templatePackageCatalog/manifest.json"
+        }
+      ]
     }
   },
   "externals": {},

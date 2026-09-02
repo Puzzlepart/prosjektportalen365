@@ -39,3 +39,5 @@ Templates/*-report*.json
 Templates/Portfolio/Objects/ClientSidePages/*.json
 *.env
 .claude/*
+logs/*
+SharePointFramework/.tasks/__last_run_data.json

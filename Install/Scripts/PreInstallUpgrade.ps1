@@ -1,3 +1,19 @@
+<#
+Applies a versioned PnP upgrade template (Templates/<version>.pnp). Skipped when
+template application is turned off via -SkipTemplate — e.g. an [apps-only] release,
+which is built with -SkipBuildPnPTemplates and therefore ships no .pnp templates.
+Mirrors the main template gate in Install.ps1.
+#>
+function ApplyUpgradeTemplate([string]$Version) {
+    if ($SkipTemplate.IsPresent) {
+        Write-Host "[INFO] Skipping PnP upgrade template [$Version] (-SkipTemplate)" -ForegroundColor Yellow
+        return
+    }
+    Write-Host "[INFO] Applying PnP upgrade template [$Version] to [$Url]"
+    Invoke-PnPSiteTemplate -Path "$TemplatesBasePath/$Version.pnp" -ErrorAction Stop
+    Write-Host "[SUCCESS] Successfully applied PnP template [$Version] to [$Url]" -ForegroundColor Green
+}
+
 $InstallationEntriesList = Get-PnPList -Identity (Get-Resource -Name "Lists_InstallationLog_Title") -ErrorAction Stop
 $LastInstall = Get-PnPListItem -List $InstallationEntriesList.Id -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>" | Select-Object -First 1 -Wait
 if ($null -ne $LastInstall) {
@@ -21,9 +37,7 @@ if ($null -ne $LastInstall) {
     }
 
     if ($PreviousVersion -lt [version]"1.5.0") {
-        Write-Host "[INFO] Applying PnP upgrade template [1.5.0] to [$Url]"
-        Invoke-PnPSiteTemplate -Path "$TemplatesBasePath/1.5.0.pnp" -ErrorAction Stop
-        Write-Host "[SUCCESS] Successfully applied PnP template [1.5.0] to [$Url]" -ForegroundColor Green
+        ApplyUpgradeTemplate "1.5.0"
     }
     
     if ($PreviousVersion -lt [version]"1.7.0") {
@@ -42,46 +56,8 @@ if ($null -ne $LastInstall) {
         }
     }
 
-    if ($PreviousVersion -lt [version]"1.8.2" -or $PreviousVersion -like "*BA*") {
-        Write-Host "[INFO] In version v1.8.0 we have integrated the 'Bygg & Anlegg' addon with standard installation. Checking to see if addon has been previously installed..." 
-
-        $TermSetA = Get-PnPTermSet -Identity "cc6cdd18-c7d5-42e1-8d19-a336dd78f3f2" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
-        $TermSetB = Get-PnPTermSet -Identity "ec5ceb95-7259-4282-811f-7c57304be71e" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
-        if ($TermSetA -or $TermSetB) {
-            Write-Host "[INFO] 'Bygg & Anlegg' addon detected. Renaming old contenttypes to avoid conflicts and confusion..." 
-
-            $ProjectStatusBACT = Get-PnPContentType -Identity "Prosjektstatus (Bygg og anlegg)" -ErrorAction SilentlyContinue
-            if ($ProjectStatusBACT) {
-                $ProjectStatusList = Get-PnPList -Identity "Prosjektstatus" -ErrorAction SilentlyContinue
-                if ($null -ne $ProjectStatusList) {
-                    $ProjectStatusListBACT = Get-PnPContentType -Identity "Prosjektstatus (Bygg og anlegg)" -List $ProjectStatusList -ErrorAction SilentlyContinue
-                    if ($null -ne $ProjectStatusListBACT) {
-                        $ContentTypeOut = Set-PnPContentType -Identity $ProjectStatusListBACT -Name "Prosjektstatus (Bygg og anlegg) - UTDATERT"
-                    }
-                }
-                $ContentTypeOut = Set-PnPContentType -Identity $ProjectStatusBACT -Name "Prosjektstatus (Bygg og anlegg) - UTDATERT" -UpdateChildren
-            }
-
-            $ProjectBACT = Get-PnPContentType -Identity "Prosjekt (Bygg og anlegg)" -ErrorAction SilentlyContinue
-            if ($ProjectBACT) {
-                $ProjectList = Get-PnPList -Identity "Prosjekter" -ErrorAction SilentlyContinue
-                if ($null -ne $ProjectList) {
-                    $ProjectListBACT = Get-PnPContentType -Identity "Prosjekt (Bygg og anlegg)" -List $ProjectList -ErrorAction SilentlyContinue
-                    if ($null -ne $ProjectListBACT) {
-                        $ContentTypeOut = Set-PnPContentType -Identity $ProjectListBACT -Name "Prosjekt (Bygg og anlegg) - UTDATERT"
-                    }
-                }
-                $ContentTypeOut = Set-PnPContentType -Identity $ProjectBACT -Name "Prosjekt (Bygg og anlegg) - UTDATERT" -UpdateChildren
-            }
-            
-            Write-Host "[SUCCESS] 'Bygg & Anlegg' contenttypes re-named" -ForegroundColor Green
-        }
-    }
-
     if ($PreviousVersion -lt [version]"1.8.2") {
-        Write-Host "[INFO] Applying PnP upgrade template [$TemplatesBasePath/1.8.1.pnp] to [$Url]"
-        Invoke-PnPSiteTemplate -Path "$TemplatesBasePath/1.8.1.pnp" -ErrorAction Stop
-        Write-Host "[SUCCESS] Successfully applied PnP template [1.8.1] to [$Url]" -ForegroundColor Green
+        ApplyUpgradeTemplate "1.8.1"
     }
 
     if ($PreviousVersion -lt [version]"1.9.1") {
@@ -134,9 +110,7 @@ if ($null -ne $LastInstall) {
     }
 
     if ($PreviousVersion -lt [version]"1.12.0") {
-        Write-Host "[INFO] Applying PnP upgrade template [1.12.0] to [$Url]"
-        Invoke-PnPSiteTemplate -Path "$TemplatesBasePath/1.12.0.pnp" -ErrorAction Stop
-        Write-Host "[SUCCESS] Successfully applied PnP template [1.12.0] to [$Url]" -ForegroundColor Green
+        ApplyUpgradeTemplate "1.12.0"
     }
 
     if ($PreviousVersion -lt [version]"1.13.0") {
@@ -285,7 +259,159 @@ if ($null -ne $LastInstall) {
         }
     }
 
+    # Prosjektveiviseren v6 (side om side): splitten under forutsetter at hovedmalen
+    # provisjonerer v6-listene, og hoppes derfor over ved -SkipTemplate (apps-only
+    # oppgradering). Installasjonsloggen bumpes uansett versjon, så behovet detekteres
+    # på TILSTAND (v6-listen mangler) i tillegg til versjon — dermed fullfører en senere
+    # full oppgradering migreringen selv om en apps-only-oppgradering kom først.
+    $V6SplitPending = $null -eq (Get-PnPList -Identity (Get-Resource -Name "Lists_PhaseChecklistV6_Url") -ErrorAction SilentlyContinue)
+    if ($SkipTemplate.IsPresent -and ($PreviousVersion -lt [version]"1.14.0" -or $V6SplitPending)) {
+        Write-Host "[WARNING] Skipping the Prosjektveiviseren v6 content migration: -SkipTemplate is set and the migration depends on the main template provisioning the v6 lists. Run a full installation (with templates) to complete it." -ForegroundColor Yellow
+    }
+    if (-not $SkipTemplate.IsPresent -and ($PreviousVersion -lt [version]"1.14.0" -or $V6SplitPending)) {
+        # Hub-listene «Fasesjekkliste» og «Planneroppgaver» MÅ døpes om til «… (tidligere)»
+        # FØR hovedmalen kjører — malen oppretter nye v6-lister med de opprinnelige
+        # visningsnavnene, og prosjektprovisjoneringen slår opp kildelisten på visningstittel
+        # (ContentConfig getByTitle). Kun Title endres; URL-en består. Omdøpingen er vaktet
+        # på kjente standardtitler — har virksomheten selv omdøpt listen, røres verken listen
+        # eller dens Listeinnhold-rad.
+        Write-Host "[INFO] Renaming hub lists to '(tidligere)' before provisioning the v6 lists"
+        $ListContentList = Get-PnPList -Identity (Get-Resource -Name "Lists_ListContent_Title") -ErrorAction SilentlyContinue
+        $ListContentRows = @()
+        if ($null -ne $ListContentList) {
+            $ListContentRows = Get-PnPListItem -List $ListContentList.Id
+        }
+        @(
+            @{
+                Url            = (Get-Resource -Name "Lists_PhaseChecklistLegacy_Url");
+                StandardTitles = @("Fasesjekkliste", "Phase Checklist");
+                LegacyTitle    = (Get-Resource -Name "Lists_PhaseChecklistLegacy_Title");
+                RowTitle       = (Get-Resource -Name "Lists_ListContent_PhaseCheckpoints_Title");
+                RowLegacyTitle = (Get-Resource -Name "Lists_ListContent_PhaseCheckpointsLegacy_Title");
+                RowLegacyDesc  = (Get-Resource -Name "Lists_ListContent_PhaseCheckpointsLegacy_Description")
+            },
+            @{
+                Url            = (Get-Resource -Name "Lists_PlannerTasksLegacy_Url");
+                StandardTitles = @("Planneroppgaver", "Planner Tasks");
+                LegacyTitle    = (Get-Resource -Name "Lists_PlannerTasksLegacy_Title");
+                RowTitle       = (Get-Resource -Name "Lists_ListContent_PlannerTasks_Title");
+                RowLegacyTitle = (Get-Resource -Name "Lists_ListContent_PlannerTasksLegacy_Title");
+                RowLegacyDesc  = (Get-Resource -Name "Lists_ListContent_PlannerTasksLegacy_Description")
+            }
+        ) | ForEach-Object {
+            $Config = $_
+            $List = Get-PnPList -Identity $Config.Url -ErrorAction SilentlyContinue
+            if ($null -eq $List) {
+                Write-Host "[WARNING] List at [$($Config.Url)] was not found - skipping the v6 split for this list" -ForegroundColor Yellow
+                return
+            }
+            $ReadyForRowUpdate = $false
+            if ($List.Title -eq $Config.LegacyTitle) {
+                # Allerede omdøpt (re-kjøring) — sørg for at raden også er oppdatert
+                $ReadyForRowUpdate = $true
+            }
+            elseif ($Config.StandardTitles -contains $List.Title) {
+                Set-PnPList -Identity $List.Id -Title $Config.LegacyTitle >$null
+                Write-Host "[SUCCESS] Renamed list at [$($Config.Url)] to [$($Config.LegacyTitle)]" -ForegroundColor Green
+                $ReadyForRowUpdate = $true
+            }
+            else {
+                Write-Host "[WARNING] List at [$($Config.Url)] has a custom title [$($List.Title)] - leaving the list and its list content row untouched. NOTE: the v6 list content row [$($Config.RowTitle)] will not be provisioned (Listeinnhold is keyed on Title with Skip) until the existing row is renamed to [$($Config.RowLegacyTitle)] manually." -ForegroundColor Yellow
+            }
+            if ($ReadyForRowUpdate -and $null -ne $ListContentList) {
+                # Oppdater Listeinnhold-raden PÅ PLASS (samme item-ID), slik at alle
+                # Maloppsett-radenes ListContentConfigLookup (LookupMulti på ID) overlever
+                # uendret. Raden får «(tidligere)»-tittel og peker på den omdøpte kilde-
+                # listen. Hovedmalen legger deretter til ny v6-rad med den opprinnelige
+                # radtittelen (KeyColumn=Title).
+                $Row = $ListContentRows | Where-Object { $_["Title"] -eq $Config.RowTitle } | Select-Object -First 1
+                if ($null -ne $Row) {
+                    Set-PnPListItem -List $ListContentList.Id -Identity $Row.Id -Values @{
+                        "Title"           = $Config.RowLegacyTitle;
+                        "GtDescription"   = $Config.RowLegacyDesc;
+                        "GtLccSourceList" = $Config.LegacyTitle
+                    } -UpdateType SystemUpdate >$null
+                    Write-Host "[SUCCESS] Retitled list content row [$($Config.RowTitle)] to [$($Config.RowLegacyTitle)] (id $($Row.Id))" -ForegroundColor Green
+                }
+            }
+        }
+
+        # Terminologi (gevinst → nytte): omdøp seksjons- og konfigurasjonsrader PÅ PLASS.
+        # Statusseksjoner og Prosjektkolonnekonfigurasjon er nøklet på Title med Skip —
+        # uten omdøping legger hovedmalen til DUPLIKATRADER med de nye titlene
+        # (for Statusseksjoner betyr det at «Nytteoppnåelse»-seksjonen rendres dobbelt).
+        # Vakt: raden omdøpes KUN når dagens tittel er standardverdien fra tidligere
+        # versjoner — egne tilpasninger hos virksomheten røres aldri.
+        Write-Host "[INFO] Retitling status section and column configuration rows (gevinst -> nytte, in place)"
+        function RetitleRows([string]$ListResource, [scriptblock]$RowFilter, [hashtable[]]$RetitleMap) {
+            $List = Get-PnPList -Identity (Get-Resource -Name $ListResource) -ErrorAction SilentlyContinue
+            if ($null -eq $List) { return }
+            $Rows = Get-PnPListItem -List $List.Id | Where-Object $RowFilter
+            foreach ($Entry in $RetitleMap) {
+                $NewTitle = Get-Resource -Name $Entry.NewTitleResource
+                $Row = $Rows | Where-Object { $Entry.OldTitles -contains $_["Title"] } | Select-Object -First 1
+                if ($null -ne $Row -and $Row["Title"] -ne $NewTitle) {
+                    Set-PnPListItem -List $List.Id -Identity $Row.Id -Values @{ "Title" = $NewTitle } -UpdateType SystemUpdate >$null
+                    Write-Host "[SUCCESS] Retitled [$($Row["Title"])] to [$NewTitle] in [$(Get-Resource -Name $ListResource)] (id $($Row.Id))" -ForegroundColor Green
+                }
+            }
+        }
+
+        RetitleRows "Lists_StatusSections_Title" { $_["GtSecFieldName"] -eq "GtStatusGainAchievement" } @(
+            @{ OldTitles = @("Gevinstoppnåelse"); NewTitleResource = "Lists_StatusSections_StatusGainAchievement_Title" }
+        )
+
+        RetitleRows "Lists_ProjectColumnConfiguration_Title" { $true } @(
+            @{ OldTitles = @("Status gevinstoppnåelse (Foran plan)"); NewTitleResource = "Lists_ProjectColumnConfiguration_GtStatusGainAchievement_AheadOfSchedule_Title" },
+            @{ OldTitles = @("Status gevinstoppnåelse (Forsinket)"); NewTitleResource = "Lists_ProjectColumnConfiguration_GtStatusGainAchievement_BehindSchedule_Title" },
+            @{ OldTitles = @("Status gevinstoppnåelse (Mindre forsinkelser)"); NewTitleResource = "Lists_ProjectColumnConfiguration_GtStatusGainAchievement_MinorDelays_Title" },
+            @{ OldTitles = @("Status gevinstoppnåelse (Ikke påbegynt)"); NewTitleResource = "Lists_ProjectColumnConfiguration_GtStatusGainAchievement_NotStarted_Title" },
+            @{ OldTitles = @("Status gevinstoppnåelse (På plan)"); NewTitleResource = "Lists_ProjectColumnConfiguration_GtStatusGainAchievement_OnSchedule_Title" }
+        )
+
+        # Prosjektkolonner er nøklet på GtInternalName (ingen duplikatrisiko), men radene
+        # skippes ved reprovisjonering og ville ellers beholdt gamle visningstitler.
+        RetitleRows "Lists_ProjectColumns_Title" { $true } @(
+            @{ OldTitles = @("Gevinstansvarlig", "Gains responsible"); NewTitleResource = "SiteFields_GtGainsResponsible_DisplayName" },
+            @{ OldTitles = @("Status gevinstoppnåelse", "Status gain achievement"); NewTitleResource = "SiteFields_GtStatusGainAchievement_DisplayName" },
+            @{ OldTitles = @("Kommentar, gevinstoppnåelse", "Comment, gain achievement"); NewTitleResource = "SiteFields_GtStatusGainAchievementComment_DisplayName" }
+        )
+
+        # Prosjektinnholdskolonner er nøklet på GtInternalName (ingen duplikatrisiko), men radene
+        # skippes ved reprovisjonering og ville ellers beholdt gamle visningstitler.
+        RetitleRows "Lists_ProjectContentColumns_Title" { $true } @(
+            @{ OldTitles = @("Gevinstansvarlig", "Gains responsible"); NewTitleResource = "SiteFields_GtGainsResponsible_DisplayName" },
+            @{ OldTitles = @("Gevinsteier", "Gains owner"); NewTitleResource = "SiteFields_GtGainsOwner_DisplayName" },
+            @{ OldTitles = @("Gevinstomsetting", "Gain turnover"); NewTitleResource = "SiteFields_GtGainsTurnover_DisplayName" },
+            @{ OldTitles = @("Gevinsttype", "Type of gain"); NewTitleResource = "SiteFields_GtGainsType_DisplayName" }
+        )
+
+        # Kategori-verdien (GtDataSourceCategory) på OOTB-radene i Prosjektinnholdskolonner
+        # beholder v5-verdien «Gevinstoversikt» siden radene skippes ved reprovisjonering.
+        # Oppdateres til gjeldende verdi fra resx («Nytteoversikt»). Vakt: kun standard-
+        # kolonnene fra Prosjektportalen røres — egne kolonner hos virksomheten røres aldri.
+        Write-Host "[INFO] Updating category (Gevinstoversikt -> Nytteoversikt) on default project content columns"
+        $OotbBenefitColumns = @(
+            'GtGainsResponsible', 'GtGainsOwner', 'GtDesiredValue', 'GtMeasurementUnit',
+            'GtStartValue', 'GtMeasurementValue', 'GtMeasurementComment', 'GtMeasurementDate',
+            'GtGainsTurnover', 'GtGainsType', 'GtPrereqProfitAchievement', 'GtRealizationTime',
+            'MeasurementIndicator', 'LastMeasurementValue', 'MeasurementAchievement', 'Measurements'
+        )
+        $ProjectContentColumnsList = Get-PnPList -Identity (Get-Resource -Name "Lists_ProjectContentColumns_Title") -ErrorAction SilentlyContinue
+        if ($null -ne $ProjectContentColumnsList) {
+            $BenefitCategory = Get-Resource -Name "Lists_DataSources_Category_BenefitOverview"
+            Get-PnPListItem -List $ProjectContentColumnsList.Id | Where-Object {
+                $_["GtDataSourceCategory"] -eq "Gevinstoversikt" -and $OotbBenefitColumns -contains $_["GtInternalName"]
+            } | ForEach-Object {
+                Set-PnPListItem -List $ProjectContentColumnsList.Id -Identity $_.Id -Values @{ "GtDataSourceCategory" = $BenefitCategory } -UpdateType SystemUpdate >$null
+                Write-Host "[SUCCESS] Updated category to [$BenefitCategory] for [$($_["GtInternalName"])] (id $($_.Id))" -ForegroundColor Green
+            }
+        }
+    }
+
     if ($PreviousVersion -lt [version]"1.14.0") {
+        ApplyUpgradeTemplate "1.14.0"
+
         Write-Host "[INFO] Removing duplicate 'Konfigurasjon av Prosjektportalen' Site Settings links"
         Get-PnPCustomAction -Scope Web |
             Where-Object { $_.Location -eq "Microsoft.SharePoint.SiteSettings" -and

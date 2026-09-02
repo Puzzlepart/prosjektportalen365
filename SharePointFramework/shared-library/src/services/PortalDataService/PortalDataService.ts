@@ -153,29 +153,35 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       this.hubSiteId =
         this._configuration.spfxContext.pageContext?.legacyPageContext?.hubSiteId || ''
       try {
-        const response = await fetch(
-          `${
-            this._configuration.spfxContext.pageContext.web.absoluteUrl
-          }/_api/HubSites/GetById('${encodeURIComponent(this.hubSiteId)}')`,
-          {
-            method: 'GET',
-            headers: {
-              Accept: 'application/json;odata=nometadata'
-            },
-            credentials: 'include'
-          }
+        this.url = await new PnPClientStorage().local.getOrPut(
+          `hubsite_${(this.hubSiteId ?? '').replace(/-/g, '')}_url`,
+          async () => {
+            const response = await fetch(
+              `${
+                this._configuration.spfxContext.pageContext.web.absoluteUrl
+              }/_api/HubSites/GetById('${encodeURIComponent(this.hubSiteId)}')`,
+              {
+                method: 'GET',
+                headers: {
+                  Accept: 'application/json;odata=nometadata'
+                },
+                credentials: 'include'
+              }
+            )
+            if (!response.ok) {
+              throw new Error(
+                `HubSites/GetById responded with ${response.status} ${response.statusText}`
+              )
+            }
+            const contentType = response.headers.get('content-type') ?? ''
+            if (!contentType.includes('application/json')) {
+              throw new Error(`HubSites/GetById returned non-JSON content-type: ${contentType}`)
+            }
+            const hubSite = await response.json()
+            return hubSite?.SiteUrl ?? ''
+          },
+          expire
         )
-        if (!response.ok) {
-          throw new Error(
-            `HubSites/GetById responded with ${response.status} ${response.statusText}`
-          )
-        }
-        const contentType = response.headers.get('content-type') ?? ''
-        if (!contentType.includes('application/json')) {
-          throw new Error(`HubSites/GetById returned non-JSON content-type: ${contentType}`)
-        }
-        const hubSite = await response.json()
-        this.url = hubSite?.SiteUrl ?? ''
       } catch (error) {
         Logger.write(
           `(PortalDataService) (onInit) HubSites/GetById failed, falling back to search: ${
@@ -423,9 +429,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   public async getProjectColumns(): Promise<ProjectColumn[]> {
     if (!this.isAvailable) return []
     try {
-      const spItems = await this._getList('PROJECT_COLUMNS').items.select(
-        ...getClassProperties(SPProjectColumnItem)
-      )<SPProjectColumnItem[]>()
+      const spItems = await this._getList('PROJECT_COLUMNS')
+        .items.select(...getClassProperties(SPProjectColumnItem))
+        .top(500)<SPProjectColumnItem[]>()
       return spItems.map((item) => new ProjectColumn(item))
     } catch (error) {
       this._handleAvailabilityError(error, 'getProjectColumns')
@@ -900,9 +906,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   ) {
     try {
       const list = this._getList(_list)
-      const columnItems = await list.items.select(
-        ...Object.keys(new SPProjectContentColumnItem())
-      )()
+      const columnItems = await list.items
+        .select(...Object.keys(new SPProjectContentColumnItem()))
+        .top(500)()
 
       // If no category specified, return all columns
       if (stringIsNullOrEmpty(dataSourceCategory)) {

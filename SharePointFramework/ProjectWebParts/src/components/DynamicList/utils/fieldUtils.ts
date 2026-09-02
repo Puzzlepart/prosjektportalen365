@@ -1,3 +1,5 @@
+import { isSystemSPField } from 'pp365-shared-library/lib/util'
+
 /**
  * SharePoint views store certain fields under alias names (e.g. "LinkTitle" instead of "Title").
  * This map normalizes those aliases to the actual field InternalName so that view field lookups
@@ -34,19 +36,14 @@ export function isVisibleListField(
   field: any,
   projectContentColumns: Array<{ internalName?: string; fieldName?: string }>
 ): boolean {
-  const showInEditForm = field.ShowInEditForm ?? true
-  const hidden = field.Hidden ?? false
-  const readOnlyField = field.SchemaXml ? field.SchemaXml.indexOf('ReadOnly="TRUE"') !== -1 : false
+  if (isSystemSPField(field)) return false
+  if (field.InternalName === 'Attachments') return false
 
+  const showInEditForm = field.ShowInEditForm ?? true
+  const readOnlyField = field.SchemaXml ? field.SchemaXml.indexOf('ReadOnly="TRUE"') !== -1 : false
   const isInProjectContentColumns = projectContentColumns.some(
     (c) => c.internalName === field.InternalName || c.fieldName === field.InternalName
   )
 
-  return (
-    showInEditForm &&
-    !hidden &&
-    (!readOnlyField || isInProjectContentColumns) &&
-    !field.InternalName.startsWith('_') &&
-    field.InternalName !== 'Attachments'
-  )
+  return showInEditForm && (!readOnlyField || isInProjectContentColumns)
 }

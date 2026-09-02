@@ -20,7 +20,9 @@ import '@pnp/sp/lists'
 import '@pnp/sp/items'
 import '@pnp/sp/batching'
 import { createBatch } from '@pnp/sp/batching'
-import { ContentConfig, ContentConfigType } from 'pp365-shared-library'
+import { CloudContentConfig, ContentConfig, ContentConfigType } from 'pp365-shared-library'
+import { LogLevel } from '@pnp/logging'
+import { WebProvisioner } from 'sp-js-provisioning'
 import { IPlannerTaskSPItem } from './types'
 
 export class CopyListData extends BaseTask {
@@ -55,6 +57,15 @@ export class CopyListData extends BaseTask {
           message: `Processing content config: ${contentConfig.text} (${contentConfig.type})`,
           level: 'info'
         })
+        // Cloud rows come from the package; Planner rows still use PlannerConfiguration.
+        if (contentConfig instanceof CloudContentConfig) {
+          if (contentConfig.type === ContentConfigType.Planner) {
+            await this._applyCloudPlannerConfig(contentConfig, params, onProgress)
+          } else {
+            await this._applyCloudContentConfig(contentConfig, params)
+          }
+          continue
+        }
         await contentConfig.load()
         // eslint-disable-next-line default-case
         switch (contentConfig.type) {
@@ -72,12 +83,12 @@ export class CopyListData extends BaseTask {
                   'GtPlannerPreviewType'
                 ])
               )
-                .sort((a, b) => a.GtSortOrder - b.GtSortOrder)
-                .sort((a, b) => {
-                  if (a.GtCategory === b.GtCategory) {
-                    return b.GtSortOrder - a.GtSortOrder
-                  }
-                })
+                // Group by category, then ascending GtSortOrder within each category.
+                .sort((a, b) =>
+                  a.GtCategory === b.GtCategory
+                    ? a.GtSortOrder - b.GtSortOrder
+                    : (a.GtCategory ?? '').localeCompare(b.GtCategory ?? '')
+                )
 
               const labels = _.uniq(
                 _.flatten(
@@ -116,6 +127,152 @@ export class CopyListData extends BaseTask {
     } catch (error) {
       throw new BaseTaskError(this.taskName, strings.CopyListDataErrorMessage, error)
     }
+  }
+
+  /**
+   * Apply a **cloud template** Planner config: read the bundled task rows from
+   * the `.pppkg` and create the Planner plan/buckets/tasks via
+   * {@link PlannerConfiguration} — the same path the hub flow's Planner-type
+   * Listeinnhold configs take, with the hub list swapped for the bundled
+   * `DataRows`. Nothing is read from the hub.
+   *
+   * @param config Cloud content config (type `Planner`, from a manifest entry
+   * carrying `plannerTitle`)
+   * @param params Task parameters
+   * @param onProgress On progress function
+   */
+  private async _applyCloudPlannerConfig(
+    config: CloudContentConfig,
+    params: IBaseTaskParams,
+    onProgress: OnProgressCallbackFunction
+  ): Promise<void> {
+    const dataRows = await config.getCloudDataRows()
+    const items = ((dataRows?.Rows ?? []) as IPlannerTaskSPItem[])
+      // Group by category, then ascending GtSortOrder within each category —
+      // mirrors the hub flow's sorting of the source items.
+      .sort((a, b) =>
+        a.GtCategory === b.GtCategory
+          ? a.GtSortOrder - b.GtSortOrder
+          : (a.GtCategory ?? '').localeCompare(b.GtCategory ?? '')
+      )
+    if (items.length === 0) {
+      this.logInformation(`No bundled tasks for cloud Planner config ${config.text}`)
+      return
+    }
+    const labels = _.uniq(
+      _.flatten(
+        items.map((item) => {
+          if (!stringIsNullOrEmpty(item.GtPlannerTags)) {
+            return item.GtPlannerTags.split(';')
+          }
+        })
+      )
+    ).filter((label) => label)
+    const configuration = this.parsePlannerConfiguration(items)
+    await new PlannerConfiguration(config.plannerTitle, this.data, configuration, labels).execute(
+      params,
+      onProgress
+    )
+  }
+
+  /**
+   * Apply a **cloud template** list-content config: read the bundled rows and
+   * folder hierarchy from the `.pppkg`, project the rows to the config's
+   * `fields` subset, and write them into the project's destination list via
+   * the sp-js-provisioning `DataRows`/`Folders` handlers (run on the project
+   * web, after `SetTaxonomyFields` so the `GtProjectPhase` term field is
+   * already bound). Folder structures (e.g. «Standarddokumenter») come from
+   * the bundled list's `Folders` block. Nothing is read from the hub.
+   *
+   * @param config Cloud content config
+   * @param params Task parameters
+   */
+  private async _applyCloudContentConfig(
+    config: CloudContentConfig,
+    params: IBaseTaskParams
+  ): Promise<void> {
+    const [dataRows, folders] = await Promise.all([
+      config.getCloudDataRows(),
+      config.getCloudFolders()
+    ])
+    const hasRows = (dataRows?.Rows?.length ?? 0) > 0
+    const hasFolders = (folders?.length ?? 0) > 0
+    if (!hasRows && !hasFolders) {
+      this.logInformation(`No bundled rows or folders for cloud content config ${config.text}`)
+      return
+    }
+    const fields = config.fields
+    const rows = (dataRows?.Rows ?? []).map((row) => {
+      if (fields.length === 0) return row
+      return fields.reduce((projected: Record<string, any>, fieldName) => {
+        if (row[fieldName] !== undefined) projected[fieldName] = row[fieldName]
+        return projected
+      }, {})
+    })
+    // Recursive count so a folders-only config reports the whole tree, not just
+    // the top level.
+    const countFolders = (items: Array<{ Folders?: any[] }>): number =>
+      items.reduce((sum, folder) => sum + 1 + countFolders(folder.Folders ?? []), 0)
+    this.onProgress(
+      hasRows
+        ? format(
+            strings.CopyListItemsText,
+            rows.length,
+            config.sourceListTitle,
+            config.destinationListTitle
+          )
+        : format(
+            strings.CopyFilesText,
+            countFolders(folders),
+            config.sourceListTitle,
+            config.destinationListTitle
+          ),
+      '',
+      hasRows ? 'List' : 'Documentation'
+    )
+    // DataRows/Folders uses lists.ensure, which updates existing list settings.
+    // Mirror destination metadata and fail when missing to avoid a stray generic list.
+    let destinationProps: {
+      BaseTemplate?: number
+      Description?: string
+      ContentTypesEnabled?: boolean
+    }
+    try {
+      destinationProps = await params.web.lists
+        .getByTitle(config.destinationListTitle)
+        .select('BaseTemplate', 'Description', 'ContentTypesEnabled')()
+    } catch {
+      throw new Error(
+        format(
+          strings.CloudContentConfigDestinationListMissing,
+          config.destinationListTitle,
+          config.sourceListTitle
+        )
+      )
+    }
+    const listSchema: Record<string, any> = {
+      Title: config.destinationListTitle,
+      Description: destinationProps.Description ?? '',
+      Template:
+        typeof destinationProps.BaseTemplate === 'number' ? destinationProps.BaseTemplate : 100,
+      ContentTypesEnabled: !!destinationProps.ContentTypesEnabled
+    }
+    if (hasRows) {
+      listSchema.DataRows = {
+        KeyColumn: dataRows.KeyColumn ?? 'Title',
+        UpdateBehavior: dataRows.UpdateBehavior ?? 'Overwrite',
+        Rows: rows
+      }
+    }
+    if (hasFolders) {
+      listSchema.Folders = folders
+    }
+    const schema = { Lists: [listSchema] }
+    const provisioner = new WebProvisioner(params.web).setup({
+      spfxContext: params.context,
+      logging: { prefix: '(ProjectSetup) (CopyListData) (Cloud)', activeLogLevel: LogLevel.Info }
+    } as any)
+    await provisioner.applyTemplate(schema as any, null)
   }
 
   /**

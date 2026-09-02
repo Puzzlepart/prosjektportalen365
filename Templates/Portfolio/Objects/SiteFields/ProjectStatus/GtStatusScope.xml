@@ -1,0 +1,7 @@
+﻿<Field Description="{resource:SiteFields_GtStatusScope_Description}" DisplayName="{resource:SiteFields_GtStatusScope_DisplayName}" Format="RadioButtons" Group="{resource:SiteFields_Portfolio_Group}" ID="{c23bdbce-6464-420f-bca1-df849cfaf540}" Name="GtStatusScope" StaticName="GtStatusScope" Type="Choice">
+    <CHOICES>
+        <CHOICE>{resource:Choice_GtStatusScope_AsPlanned}</CHOICE>
+        <CHOICE>{resource:Choice_GtStatusScope_MinorChanges}</CHOICE>
+        <CHOICE>{resource:Choice_GtStatusScope_MajorChanges}</CHOICE>
+    </CHOICES>
+</Field>

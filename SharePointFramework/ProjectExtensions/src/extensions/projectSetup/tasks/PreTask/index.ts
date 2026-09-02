@@ -1,6 +1,6 @@
 import { IProjectSetupData } from 'extensions/projectSetup'
 import * as strings from 'ProjectExtensionsStrings'
-import { PortalDataService } from 'pp365-shared-library/lib/services'
+import { CloudTemplatePackage, PortalDataService } from 'pp365-shared-library/lib/services'
 import { SpEntityPortalService } from 'sp-entityportal-service'
 import initSpfxJsom, { ExecuteJsomQuery } from 'spfx-jsom'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
@@ -23,9 +23,25 @@ export class PreTask extends BaseTask {
     super.initExecute(params)
 
     if (this.data.selectedTemplate && this.data.selectedTemplate.id !== NO_TEMPLATE_ID) {
-      params.templateSchema = await this.data.selectedTemplate.getSchema()
-      if (!params.properties.forceTemplate) {
-        await this.validateParameters(params)
+      if (this.data.selectedTemplate.isCloudTemplate) {
+        // Forced/auto setup can bypass dialog resolution, so download on demand.
+        // Hub-bound validation remains disabled because cloud publication provisions
+        // dependencies; thin packages fall back to the standard schema below.
+        const cloudPackage =
+          this.data.resolvedCloudTemplate?.package ??
+          (await CloudTemplatePackage.fromUrl(this.data.selectedTemplate.cloudSourceUrl))
+        const bundled = await cloudPackage.getProjectTemplateSchema()
+        // Thin packages omit Parameters and rely on the standard template for base
+        // schema. This only reads the hub; later tasks apply bundled artifacts.
+        params.templateSchema =
+          bundled.Parameters && Object.keys(bundled.Parameters).length > 0
+            ? bundled
+            : await this.data.selectedTemplate.getSchema()
+      } else {
+        params.templateSchema = await this.data.selectedTemplate.getSchema()
+        if (!params.properties.forceTemplate) {
+          await this.validateParameters(params)
+        }
       }
     } else {
       params.templateSchema = { Parameters: {} }

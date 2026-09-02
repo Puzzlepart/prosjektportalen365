@@ -1,4 +1,4 @@
-_The template was validated 5/11/2026, 10:58:33 AM_
+_The template was validated 9/2/2026, 3:15:56 PM_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -10,7 +10,7 @@ _No tokens with missing translations or replacement values found._
 
 ```txt
 {
-    "Version": "1.13.1",
+    "Version": "1.14.0",
     "Parameters": {
         "ProvisionSiteFields": "Kolonner for Prosjektportalen (Prosjekt)",
         "CustomSiteFields": "Egendefinerte kolonner for Prosjektportalen",
@@ -109,8 +109,8 @@ _No tokens with missing translations or replacement values found._
                     "Name": "Title"
                 },
                 {
-                    "ID": "2847b3b0-ed22-4c47-b7c0-3ebfc83dae4a",
-                    "Name": "GtStakeholderGroup"
+                    "ID": "ba8e9bcd-d8af-41e2-a24c-d279e07f1b56",
+                    "Name": "GtStakeholderGroups"
                 },
                 {
                     "ID": "970ed1b2-9e71-45aa-8f8d-c391a15f067f",
@@ -334,7 +334,7 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x010039EAFDC2A1624C1BA1A444FC8FE85DEC",
-            "Name": "Gevinstoppfølging",
+            "Name": "Nytteoppfølging",
             "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
@@ -357,7 +357,7 @@ _No tokens with missing translations or replacement values found._
         },
         {
             "ID": "0x01004F466123309D46BAB9D5C6DE89A6CF67",
-            "Name": "Gevinst",
+            "Name": "Nyttevirkning",
             "Group": "Prosjektportalen innholdstyper",
             "FieldRefs": [
                 {
@@ -535,28 +535,28 @@ _No tokens with missing translations or replacement values found._
                 "Title": "Notatblokk"
             },
             {
-                "Url": "SitePages/Gevinstoversikt.aspx",
-                "Title": "Gevinstoversikt",
+                "Url": "SitePages/Nytteoversikt.aspx",
+                "Title": "Nytteoversikt",
                 "Children": [
                     {
                         "Url": "Lists/Endringsanalyse/AllItems.aspx",
                         "Title": "Endringsanalyse"
                     },
                     {
-                        "Url": "Lists/Gevinstanalyse og gevinstrealiseringsplan/AllItems.aspx",
-                        "Title": "Gevinstanalyse og gevinstrealiseringsplan"
+                        "Url": "Lists/Nytteanalyse og plan for nyttestyring/AllItems.aspx",
+                        "Title": "Nytteanalyse og plan for nyttestyring"
                     },
                     {
                         "Url": "Lists/Mleindikatorer/AllItems.aspx",
                         "Title": "Måleindikatorer"
                     },
                     {
-                        "Url": "Lists/Gevinstoppflging/AllItems.aspx",
-                        "Title": "Gevinstoppfølging"
+                        "Url": "Lists/Nytteoppflging/AllItems.aspx",
+                        "Title": "Nytteoppfølging"
                     },
                     {
-                        "Url": "SitePages/Gevinstoversikt.aspx",
-                        "Title": "Gevinstoversikt"
+                        "Url": "SitePages/Nytteoversikt.aspx",
+                        "Title": "Nytteoversikt"
                     }
                 ]
             },
@@ -581,6 +581,31 @@ _No tokens with missing translations or replacement values found._
     "WebSettings": {
         "WelcomePage": "SitePages/ProjectHome.aspx"
     },
+    "CustomActions": [
+        {
+            "Name": "ProjectUpgrade",
+            "Title": "Oppgradering av prosjekter",
+            "Location": "ClientSideExtension.ApplicationCustomizer",
+            "ClientSideComponentId": "453a6c1e-e1d0-4b12-a3fc-690a36da1f0c",
+            "ClientSideComponentProperties": "{}"
+        },
+        {
+            "Name": "TemplateSelectorCommandSet",
+            "Title": "Malvelger",
+            "Location": "ClientSideExtension.ListViewCommandSet.CommandBar",
+            "ClientSideComponentId": "c9080212-e63e-47cc-8278-00ad38c3f5a5",
+            "ClientSideComponentProperties": "{\"templateLibrary\": \"Malbibliotek\"}",
+            "RegistrationId": "101",
+            "RegistrationType": 1
+        },
+        {
+            "Name": "Footer",
+            "Title": "Footer",
+            "Location": "ClientSideExtension.ApplicationCustomizer",
+            "ClientSideComponentId": "84f27cec-ffde-4e00-a4cf-25c69f691054",
+            "ClientSideComponentProperties": "{}"
+        }
+    ],
     "ClientSidePages": [
         {
             "Name": "ProjectHome.aspx",
@@ -693,8 +718,8 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Name": "Gevinstoversikt.aspx",
-            "Title": "Gevinstoversikt",
+            "Name": "Nytteoversikt.aspx",
+            "Title": "Nytteoversikt",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -706,9 +731,9 @@ _No tokens with missing translations or replacement values found._
                                 {
                                     "Id": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
                                     "Properties": {
-                                        "title": "Gevinstoversikt",
-                                        "dataSource": "Alle gevinstelementer for prosjektet",
-                                        "dataSourceCategory": "Gevinstoversikt",
+                                        "title": "Nytteoversikt",
+                                        "dataSource": "Alle nyttevirkningselementer for prosjektet",
+                                        "dataSourceCategory": "Nytteoversikt",
                                         "dataSourceLevel": "Prosjekt",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
@@ -859,7 +884,7 @@ _No tokens with missing translations or replacement values found._
                     "Title": "Alle elementer",
                     "ViewFields": [
                         "LinkTitle",
-                        "GtStakeholderGroup",
+                        "GtStakeholderGroups",
                         "GtStakeholderContext",
                         "GtStakeholderStrategy",
                         "GtStakeholderInterest",
@@ -1237,7 +1262,7 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Title": "Gevinstanalyse og gevinstrealiseringsplan",
+            "Title": "Nytteanalyse og plan for nyttestyring",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
@@ -1251,14 +1276,14 @@ _No tokens with missing translations or replacement values found._
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"LookupMulti\" DisplayName=\"Endring\" List=\"{listid:Endringsanalyse}\" ShowField=\"LinkTitleNoMenu\" UnlimitedLengthInDocumentLibrary=\"FALSE\" RelationshipDeleteBehavior=\"None\" ID=\"{1d5752af-4d26-4aed-b20a-6229ac14ed5d}\" StaticName=\"GtChangeLookup\" Name=\"GtChangeLookup\" Group=\"\" Description=\"Hvilken endring fra endringsanalysen skal gevinsten knyttes mot?\" Mult=\"TRUE\" />"
+                "<Field Type=\"LookupMulti\" DisplayName=\"Endring\" List=\"{listid:Endringsanalyse}\" ShowField=\"LinkTitleNoMenu\" UnlimitedLengthInDocumentLibrary=\"FALSE\" RelationshipDeleteBehavior=\"None\" ID=\"{1d5752af-4d26-4aed-b20a-6229ac14ed5d}\" StaticName=\"GtChangeLookup\" Name=\"GtChangeLookup\" Group=\"\" Description=\"Hvilken endring fra endringsanalysen skal nyttevirkningen knyttes mot?\" Mult=\"TRUE\" />"
             ],
             "FieldRefs": [
                 {
                     "ID": "fa564e0f-0c70-4ab9-b863-0177e6ddd247",
                     "Name": "Title",
                     "Required": true,
-                    "DisplayName": "Gevinst"
+                    "DisplayName": "Nyttevirkning"
                 }
             ],
             "Views": [
@@ -1280,7 +1305,7 @@ _No tokens with missing translations or replacement values found._
                     }
                 },
                 {
-                    "Title": "Etter gevinsttype",
+                    "Title": "Etter type nyttevirkning",
                     "ViewFields": [
                         "GtChangeLookup",
                         "Title",
@@ -1362,8 +1387,8 @@ _No tokens with missing translations or replacement values found._
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"Lookup\" DisplayName=\"Gevinst\" List=\"{listid:Gevinstanalyse og gevinstrealiseringsplan}\" ShowField=\"Title\" ID=\"{8d70fa93-b547-46f1-84e7-4982f8c9c675}\" StaticName=\"GtGainLookup\" Name=\"GtGainLookup\"  />",
-                "<Field Type=\"Lookup\" DisplayName=\"Gevinst-ID\" List=\"{listid:Gevinstanalyse og gevinstrealiseringsplan}\" ShowField=\"ID\" FieldRef=\"8d70fa93-b547-46f1-84e7-4982f8c9c675\" ReadOnly=\"TRUE\" UnlimitedLengthInDocumentLibrary=\"FALSE\" ID=\"{c239539c-8672-46cc-be77-fb53322f71ae}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtGainLookup_ID\" Name=\"GtGainLookup_ID\" />"
+                "<Field Type=\"Lookup\" DisplayName=\"Nyttevirkning\" List=\"{listid:Nytteanalyse og plan for nyttestyring}\" ShowField=\"Title\" ID=\"{8d70fa93-b547-46f1-84e7-4982f8c9c675}\" StaticName=\"GtGainLookup\" Name=\"GtGainLookup\"  />",
+                "<Field Type=\"Lookup\" DisplayName=\"Nyttevirknings-ID\" List=\"{listid:Nytteanalyse og plan for nyttestyring}\" ShowField=\"ID\" FieldRef=\"8d70fa93-b547-46f1-84e7-4982f8c9c675\" ReadOnly=\"TRUE\" UnlimitedLengthInDocumentLibrary=\"FALSE\" ID=\"{c239539c-8672-46cc-be77-fb53322f71ae}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtGainLookup_ID\" Name=\"GtGainLookup_ID\" />"
             ],
             "Views": [
                 {
@@ -1384,7 +1409,7 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Title": "Gevinstoppfølging",
+            "Title": "Nytteoppfølging",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": false,

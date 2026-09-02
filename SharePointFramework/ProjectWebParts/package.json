@@ -1,6 +1,6 @@
 {
   "name": "pp365-projectwebparts",
-  "version": "1.13.1",
+  "version": "1.14.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -13,6 +13,9 @@
     "postwatch": "node ../.tasks/post-watch.js",
     "serve": "concurrently \"gulp serve-deprecated --nobrowser NODE --max-old-space-size=8192\"",
     "build": "gulp bundle --ship && gulp package-solution --ship",
+    "build:test": "node ../.tasks/build.js --channel test",
+    "build:i18n": "node ../.tasks/build.js --channel i18n",
+    "build:kurs": "node ../.tasks/build.js --channel kurs",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color --fix --config ../.eslintrc.yaml && npm run prettier",
     "prettier": "prettier '**/*.ts*' --write --loglevel silent --config ../.prettierrc.yaml",
@@ -40,7 +43,7 @@
     "get-value": "3.0.1",
     "interactjs": "1.6.2",
     "msgraph-helper": "0.8.3",
-    "pp365-shared-library": "1.13.1",
+    "pp365-shared-library": "1.14.0",
     "pzl-spfx-components": "0.0.11",
     "react": "17.0.1",
     "react-dom": "17.0.1",

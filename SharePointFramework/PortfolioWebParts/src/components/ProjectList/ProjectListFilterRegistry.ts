@@ -25,6 +25,44 @@ function parseConfig(configJson: string): Record<string, any> {
   }
 }
 
+/**
+ * Matches a single `fieldFilter` condition against a raw SP item value.
+ *
+ * A plain value means equality, compared loosely (`==`) so SP boolean
+ * variations (`true` / `1` / `"1"`) match. An object value is read as a set of
+ * operators, all of which must hold:
+ *
+ * - `$ne` — not equal to the given value, e.g. `{"$ne": "Avslutte"}`
+ * - `$in` — equal to one of the given values, e.g. `{"$in": ["Planlegge", "Gjennomføre"]}`
+ * - `$nin` — equal to none of the given values
+ *
+ * An operator object with no recognized keys matches everything, so a typo
+ * widens the vertical rather than silently emptying it.
+ */
+function matchesFieldCondition(actual: any, expected: any): boolean {
+  if (expected === null || typeof expected !== 'object' || Array.isArray(expected)) {
+    // eslint-disable-next-line eqeqeq
+    return actual == expected
+  }
+
+  // eslint-disable-next-line eqeqeq
+  if ('$ne' in expected && actual == expected.$ne) return false
+
+  if ('$in' in expected) {
+    const values = Array.isArray(expected.$in) ? expected.$in : [expected.$in]
+    // eslint-disable-next-line eqeqeq
+    if (!values.some((value: any) => actual == value)) return false
+  }
+
+  if ('$nin' in expected) {
+    const values = Array.isArray(expected.$nin) ? expected.$nin : [expected.$nin]
+    // eslint-disable-next-line eqeqeq
+    if (values.some((value: any) => actual == value)) return false
+  }
+
+  return true
+}
+
 /** Builds a client-side filter function from a vertical filter config. */
 function buildFilterFunction(
   config: IVerticalFilterConfig
@@ -47,11 +85,11 @@ function buildFilterFunction(
     }
 
     // 2. Check field-filter conditions against raw SP item data.
-    //    Uses loose equality (==) to handle SP boolean variations (true/1/"1").
+    //    Values are either a plain value (equality) or an operator object
+    //    (`$ne` / `$in` / `$nin`) — see `matchesFieldCondition`.
     if (hasFieldFilter && project.data) {
       for (const [key, expected] of Object.entries(config.fieldFilter)) {
-        // eslint-disable-next-line eqeqeq
-        if ((project.data as any)[key] != expected) return false
+        if (!matchesFieldCondition((project.data as any)[key], expected)) return false
       }
     }
 

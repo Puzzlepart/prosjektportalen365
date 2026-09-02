@@ -15,8 +15,6 @@ import {
   TimelineContentModel
 } from 'pp365-shared-library'
 import { IPortfolioAggregationConfiguration, IPortfolioOverviewConfiguration } from '../components'
-import { IPersonaSharedProps } from '@fluentui/react'
-import { IProvisionRequestItem } from 'interfaces/IProvisionRequestItem'
 import { Idea } from 'components/IdeaModule'
 import { IdeaConfigurationModel } from 'models'
 import strings from 'PortfolioWebPartsStrings'
@@ -58,6 +56,18 @@ export interface IEnrichedProjectsFields {
    * Secondary user field
    */
   secondaryUserField?: string
+
+  /**
+   * Include projects with a closed lifecycle status (`Avsluttet` / `Closed`,
+   * depending on hub language).
+   * Defaults to `false`, which is the long-standing behaviour — closed projects
+   * are dropped after fetching. Opting in leaves them in the result so callers
+   * (e.g. the `ProjectList` verticals) can decide per view whether to show them.
+   *
+   * Note: this does not affect the query or the shared items cache, which have
+   * always contained closed projects; only the post-fetch filter.
+   */
+  includeClosed?: boolean
 
   /**
    * Primary field
@@ -225,6 +235,14 @@ export interface IPortfolioWebPartsDataAdapter {
   isUserInGroup?(groupName: string): Promise<boolean>
 
   /**
+   * Global settings loaded from the portal site, indexed by `GtSettingsKey`.
+   * Only populated when the adapter was configured with `loadGlobalSettings: true`
+   * (currently true for `BaseProgramWebPart`, but not for the portfolio-side
+   * `DataAdapter`). Optional so consumers can read it null-safely.
+   */
+  globalSettings?: Map<string, string>
+
+  /**
    * Fetches data for the Projecttimeline project.
    *
    * @param timelineConfig Timeline configuration
@@ -358,113 +376,6 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<any[]>
 
   /**
-   * Search for users using `_sp.profiles.clientPeoplePickerSearchUser`.
-   *
-   * @param queryString Query string
-   * @param selectedItems Selected items that should be excluded from the result
-   * @param maximumEntitySuggestions Maximum entity suggestions
-   */
-  clientPeoplePickerSearchUser?(
-    queryString: string,
-    selectedItems: any[],
-    maximumEntitySuggestions?: number
-  ): Promise<IPersonaSharedProps[]>
-
-  /**
-   * Retrieves the configuration from the "Provisioning Request Settings" list
-   *
-   * @returns A Promise that resolves to an array containing the configuration.
-   */
-  getProvisionRequestSettings?(provisionUrl: string): Promise<any[]>
-
-  /**
-   * Retrieves the provision types from the "Provisioning Types" list
-   *
-   * @returns A Promise that resolves to a Map containing the types.
-   */
-  getProvisionTypes?(provisionUrl: string): Promise<Record<string, any>>
-
-  /**
-   * Retrieves the Site templates from the "Site Templates" list
-   *
-   * @returns A Promise that resolves to a Map containing the templates.
-   */
-  getSiteTemplates?(provisionUrl: string): Promise<Record<string, any>>
-
-  /**
-   * Ensure users in the provision site and return their IDs.
-   *
-   * @param users Users to ensure
-   */
-  getProvisionUsers?(users: any[], provisionUrl: string): Promise<Promise<number | null>[]>
-
-  /**
-   * Adds a new provision request to the provisioning requests list
-   *
-   * @param properties Properties for the new provision request (`Id` will be omitted)
-   * @param provisionUrl Url for the provisioning site
-   *
-   */
-  addProvisionRequests?(properties: IProvisionRequestItem, provisionUrl: string): Promise<boolean>
-
-  /**
-   * Adds project data to the ProjectData list to store project information that
-   * will be used when setting up the project
-   *
-   * @param properties Properties to add to the ProjectData list
-   * @param hubUrl Url for the hub site
-   */
-  addProjectData?(properties: Record<string, any>, hubUrl: string): Promise<void>
-
-  /**
-   * Deletes a provision request item from the provisioning requests list
-   *
-   * @param requestId Id of the request to delete
-   * @param provisionUrl Url for the provisioning site
-   *
-   */
-  deleteProvisionRequest?(requestId: number, provisionUrl: string): Promise<boolean>
-
-  /**
-   * Retrieves the provision types from the "Provisioning Requests" list
-   *
-   * @param user User to fetch the provision requests for
-   * @param provisionUrl Url for the provisioning site
-   *
-   * @returns A Promise that resolves to an array of containing provision requests.
-   */
-  fetchProvisionRequests?(user: any, provisionUrl: string): Promise<any[]>
-
-  /**
-   * Retrieves the team templates from the "Teams Templates" list
-   *
-   * @returns A Promise that resolves to a Map containing the templates.
-   */
-  getTeamTemplates?(provisionUrl: string): Promise<Record<string, any>>
-
-  /**
-   * Retrieves the sensitivity labels from the "IP Labels" list
-   *
-   * @returns A Promise that resolves to a Map containing the labels.
-   */
-  getSensitivityLabels?(provisionUrl: string): Promise<Record<string, any>>
-
-  /**
-   * Retrieves the retention labels from the "Retention Labels" list
-   *
-   * @returns A Promise that resolves to a Map containing the labels.
-   */
-  getRetentionLabels?(provisionUrl: string): Promise<Record<string, any>>
-
-  /**
-   * Checks if a site exists based on its proposed URL
-   *
-   * @param siteUrl Site URL
-   *
-   */
-  siteExists?(siteUrl: string): Promise<boolean>
-
-  /**
    * Retrieves the configuration from the "Idékonfigurasjon" list
    *
    * @returns A Promise that resolves to an array containing the configuration.
@@ -480,45 +391,6 @@ export interface IPortfolioWebPartsDataAdapter {
    * @returns A Promise that resolves to an object containing the data for the ideas.
    */
   getIdeasData?(configuration: IdeaConfigurationModel): Promise<Idea>
-
-  /**
-   * Load Teams app configuration from TeamsAppConfig.json
-   *
-   * @param provisionUrl The provision site URL
-   * @returns Configuration object or null if file doesn't exist
-   */
-  loadTeamsConfig?(provisionUrl: string): Promise<any | null>
-
-  /**
-   * Save Teams app configuration to TeamsAppConfig.json
-   *
-   * @param provisionUrl The provision site URL
-   * @param config Configuration object to save
-   */
-  saveTeamsConfig?(provisionUrl: string, config: any): Promise<void>
-
-  /**
-   * Delete Teams app configuration file (TeamsAppConfig.json)
-   *
-   * @param provisionUrl The provision site URL
-   */
-  deleteTeamsConfig?(provisionUrl: string): Promise<void>
-
-  /**
-   * Check if current user is admin of the provision site
-   *
-   * @param provisionUrl The provision site URL
-   * @returns True if user is site admin
-   */
-  isProvisionSiteAdmin?(provisionUrl: string): Promise<boolean>
-
-  /**
-   * Resolve a hub site by its ID using the HubSites REST API.
-   *
-   * @param hubSiteId The hub site GUID
-   * @returns Hub site info with id and title, or null if not found
-   */
-  resolveHubSiteById?(hubSiteId: string): Promise<{ hubSiteId: string; title: string } | null>
 }
 
 export type PortfolioInstance = {

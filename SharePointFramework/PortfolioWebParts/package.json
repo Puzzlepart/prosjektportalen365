@@ -1,6 +1,6 @@
 {
   "name": "pp365-portfoliowebparts",
-  "version": "1.13.1",
+  "version": "1.14.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -13,6 +13,9 @@
     "postwatch": "node ../.tasks/post-watch.js",
     "serve": "concurrently \"gulp serve-deprecated --nobrowser NODE --max-old-space-size=12288\"",
     "build": "gulp bundle --ship && gulp package-solution --ship",
+    "build:test": "node ../.tasks/build.js --channel test",
+    "build:i18n": "node ../.tasks/build.js --channel i18n",
+    "build:kurs": "node ../.tasks/build.js --channel kurs",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color --fix --config ../.eslintrc.yaml && npm run prettier",
     "prettier": "prettier '**/*.ts*' --write --loglevel silent --config ../.prettierrc.yaml",
@@ -43,7 +46,7 @@
     "moment": "2.11.1",
     "msgraph-helper": "0.8.3",
     "object-assign": "4.1.1",
-    "pp365-shared-library": "1.13.1",
+    "pp365-shared-library": "1.14.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "tslib": "2.3.1",
@@ -61,12 +64,8 @@
     "react-error-boundary": "~4.0.11",
     "react-window": "~1.8.10",
     "react-virtualized-auto-sizer": "~1.0.24",
-    "@fluentui/react-datepicker-compat": "~0.6.22",
     "react-gauge-component": "~1.2.61",
-    "react-fade-in": "~2.0.1",
-    "react-dropzone": "~14.3.8",
-    "@fluentui/react-motion": "~9.11.6",
-    "@fluentui/react-motion-preview": "~0.5.25"
+    "react-fade-in": "~2.0.1"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.17.4",
@@ -93,7 +92,7 @@
     "find": "0.3.0",
     "gulp": "4.0.2",
     "livereload": "0.9.3",
-    "pp365-projectwebparts": "1.13.1",
+    "pp365-projectwebparts": "1.14.0",
     "prettier": "2.7.1",
     "typescript": "4.5.5",
     "webpack": "5.74.0",

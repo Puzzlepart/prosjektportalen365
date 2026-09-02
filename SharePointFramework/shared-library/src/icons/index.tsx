@@ -4,6 +4,23 @@ import React, { CSSProperties } from 'react'
 import { iconCatalog } from './iconCatalog'
 import { FluentIconName, GetFluentIconOptions } from './types'
 
+const bundledIcons = new Map<FluentIconName, ReturnType<typeof bundleIcon>>()
+
+/**
+ * Returns a cached bundled icon for the specified name. `bundleIcon` creates
+ * a new component type on every call, which would make React remount the icon
+ * (restarting any CSS animations) on each render.
+ *
+ * @param name - The name of the icon to retrieve.
+ */
+function getBundledIcon(name: FluentIconName) {
+  if (!bundledIcons.has(name)) {
+    const icon = iconCatalog[name]
+    bundledIcons.set(name, bundleIcon(icon.filled, icon.regular))
+  }
+  return bundledIcons.get(name)
+}
+
 /**
  * Returns the Fluent icon with the specified name.
  *
@@ -24,7 +41,7 @@ export function getFluentIcon<T = JSX.Element>(
   const filled = options?.filled ?? false
   const jsx = options?.jsx ?? true
   const icon = iconCatalog[name]
-  const Icon = bundle ? bundleIcon(icon.filled, icon.regular) : icon.regular
+  const Icon = bundle ? getBundledIcon(name) : icon.regular
   if (!jsx) return Icon as unknown as T
   const props: { style?: CSSProperties } = {}
   if (color) props.style = { color }

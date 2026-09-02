@@ -98,8 +98,8 @@
                     "Name": "Title"
                 },
                 {
-                    "ID": "2847b3b0-ed22-4c47-b7c0-3ebfc83dae4a",
-                    "Name": "GtStakeholderGroup"
+                    "ID": "ba8e9bcd-d8af-41e2-a24c-d279e07f1b56",
+                    "Name": "GtStakeholderGroups"
                 },
                 {
                     "ID": "970ed1b2-9e71-45aa-8f8d-c391a15f067f",
@@ -550,6 +550,31 @@
     "WebSettings": {
         "WelcomePage": "SitePages/ProgramHome.aspx"
     },
+    "CustomActions": [
+        {
+            "Name": "ProjectUpgrade",
+            "Title": "Oppgradering av prosjekter",
+            "Location": "ClientSideExtension.ApplicationCustomizer",
+            "ClientSideComponentId": "{{ControlId_ProjectUpgrade}}",
+            "ClientSideComponentProperties": "{}"
+        },
+        {
+            "Name": "TemplateSelectorCommandSet",
+            "Title": "Malvelger",
+            "Location": "ClientSideExtension.ListViewCommandSet.CommandBar",
+            "ClientSideComponentId": "{{ControlId_TemplateSelectorCommand}}",
+            "ClientSideComponentProperties": "{\"templateLibrary\": \"Malbibliotek\"}",
+            "RegistrationId": "101",
+            "RegistrationType": 1
+        },
+        {
+            "Name": "Footer",
+            "Title": "Footer",
+            "Location": "ClientSideExtension.ApplicationCustomizer",
+            "ClientSideComponentId": "{{ControlId_Footer}}",
+            "ClientSideComponentProperties": "{}"
+        }
+    ],
     "ClientSidePages": [
         {
             "Name": "ProgramHome.aspx",
@@ -861,6 +886,7 @@
                                 {
                                     "Id": "{{ControlId_ProjectTimelineWebPart}}",
                                     "Properties": {
+                                        "title": "{{ClientSidePages_ProgramProjectTimeline_Title}}",
                                         "listName": "{{Lists_TimelineContent_Title}}",
                                         "showTimeline": true,
                                         "showTimelineListCommands": true,
@@ -1012,7 +1038,7 @@
                     "Title": "{{View_AllItems_DisplayName}}",
                     "ViewFields": [
                         "LinkTitle",
-                        "GtStakeholderGroup",
+                        "GtStakeholderGroups",
                         "GtStakeholderContext",
                         "GtStakeholderStrategy",
                         "GtStakeholderInterest",
@@ -1368,7 +1394,7 @@
                     "AdditionalSettings": {
                         "RowLimit": 30,
                         "Paged": true,
-                        "ViewQuery": ""
+                        "ViewQuery": "<OrderBy><FieldRef Name='LinkFilename' /></OrderBy>"
                     }
                 },
                 {
@@ -1383,7 +1409,7 @@
                     "AdditionalSettings": {
                         "RowLimit": 30,
                         "Paged": true,
-                        "ViewQuery": "",
+                        "ViewQuery": "<OrderBy><FieldRef Name='LinkFilename' /></OrderBy>",
                         "Scope": 1
                     }
                 }

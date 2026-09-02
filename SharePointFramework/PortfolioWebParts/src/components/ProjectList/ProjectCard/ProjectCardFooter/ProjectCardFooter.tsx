@@ -22,7 +22,7 @@ export const ProjectCardFooter: FC = () => {
       action={context.actions.map((action) => (
         <Tooltip
           key={action.id}
-          content={<>{strings.ProjectInformationPanelButton}</>}
+          content={strings.ProjectInformationPanelButton}
           relationship='description'
           withArrow
         >

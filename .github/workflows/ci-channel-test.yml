@@ -16,10 +16,27 @@ env:
   CI_CLIENT_ID: ${{ secrets.CI_CLIENT_ID }}
 
 jobs:
+  # Tags like [skip-ci] and [apps-only] must only be honored when present in the
+  # commit *subject* (first line). Squash-merge commit bodies inherit the PR's
+  # commit bullets, so matching the full message can skip or reroute builds
+  # unintentionally.
+  commit_subject:
+    name: Determine commit subject
+    runs-on: ubuntu-latest
+    outputs:
+      subject: ${{ steps.subject.outputs.subject }}
+    steps:
+      - name: Extract first line of commit message
+        id: subject
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        run: echo "subject=${COMMIT_MESSAGE%%$'\n'*}" >> "$GITHUB_OUTPUT"
+
   build_release_package_test:
+    needs: [commit_subject]
     name: Build release package (test channel)
     runs-on: macos-latest
-    if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') && !contains(github.event.head_commit.message, '[apps-only]') }}
+    if: ${{ !contains(needs.commit_subject.outputs.subject, '[skip-ci]') && !contains(needs.commit_subject.outputs.subject, '[apps-only') }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -45,10 +62,10 @@ jobs:
       sha_short: ${{ steps.vars.outputs.sha_short }}
 
   upgrade_channel_test:
-    needs: [build_release_package_test]
+    needs: [commit_subject, build_release_package_test]
     name: Upgrade (test channel)
     runs-on: macos-latest
-    if: ${{ !contains(github.event.head_commit.message, '[skip-upgrade]') }}
+    if: ${{ !contains(needs.commit_subject.outputs.subject, '[skip-upgrade]') }}
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -60,10 +77,10 @@ jobs:
         shell: powershell
 
   upgrade_all_sites_to_latest:
-    needs: [build_release_package_test, upgrade_channel_test]
+    needs: [commit_subject, build_release_package_test, upgrade_channel_test]
     name: Upgrade all sites to latest (test channel)
     runs-on: macos-latest
-    if: ${{ contains(github.event.head_commit.message, '[upgrade-all-sites-to-latest]') }}
+    if: ${{ contains(needs.commit_subject.outputs.subject, '[upgrade-all-sites-to-latest]') }}
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -75,9 +92,10 @@ jobs:
         shell: powershell
 
   build_release_package_test_packages_only:
+    needs: [commit_subject]
     name: Build release package - packages only (test channel)
     runs-on: macos-latest
-    if: ${{ contains(github.event.head_commit.message, '[apps-only]')}}
+    if: ${{ contains(needs.commit_subject.outputs.subject, '[apps-only')}}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -91,8 +109,28 @@ jobs:
         with:
           node-version: ${{ vars.NODE_VERSION }}
 
+      - name: Determine apps-only solutions
+        id: appsonly
+        env:
+          COMMIT_MSG: ${{ needs.commit_subject.outputs.subject }}
+        run: |
+          $solutions = ''
+          if ($env:COMMIT_MSG -match '\[apps-only:([^\]]+)\]') {
+            $solutions = (($matches[1] -split ',') | ForEach-Object { $_.Trim() } | Where-Object { $_ }) -join ','
+          }
+          "solutions=$solutions" >> $env:GITHUB_OUTPUT
+        shell: pwsh
+
       - name: Run Install/Build-Release.ps1 in CI mode for channel test
-        run: Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test
+        env:
+          SOLUTIONS: ${{ steps.appsonly.outputs.solutions }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:SOLUTIONS)) {
+            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test
+          }
+          else {
+            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test -Solutions ($env:SOLUTIONS -split ',')
+          }
         shell: pwsh
 
       - uses: actions/upload-artifact@v4
@@ -103,10 +141,10 @@ jobs:
       sha_short: ${{ steps.vars.outputs.sha_short }}
 
   upgrade_channel_test_packages_only:
-    needs: [build_release_package_test_packages_only]
+    needs: [commit_subject, build_release_package_test_packages_only]
     name: Upgrade packages only (test channel)
     runs-on: macos-latest
-    if: ${{ !contains(github.event.head_commit.message, '[skip-upgrade]') }}
+    if: ${{ !contains(needs.commit_subject.outputs.subject, '[skip-upgrade]') }}
     steps:
       - uses: actions/download-artifact@v4
         with:

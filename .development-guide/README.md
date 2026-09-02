@@ -35,6 +35,7 @@
 	* [Bygging for utvikling](#bygging-for-utvikling)
 	* [Legge til en ny npm-pakke med Rush](#legge-til-en-ny-npm-pakke-med-rush)
 	* [Oppdateringer til delt-bibliotek (shared-library)](#oppdateringer-til-delt-bibliotek-shared-library)
+	* [Full tilbakestilling av Rush-tilstand](#full-tilbakestilling-av-rush-tilstand)
 	* [Overvåk konfigurasjon og kanaler](#overvk-konfigurasjon-og-kanaler)
 	* [Bygg bare spesifikke komponenter](#bygg-bare-spesifikke-komponenter)
 	* [Oppgaver](#oppgaver)
@@ -229,7 +230,7 @@ feat(shared): add new utility function [apps-only]
 | IdeaProjectData               | PortfolioExtensions | Listeutvidelse for Idé - Prosjektdata                  | 69a7f6eb-e7ce-40eb-81e1-6f172a802619 |
 | IdeaRegistration              | PortfolioExtensions | Listeutvidelse for Idéregistrering                     | 5d26712e-bdad-4ebf-b33f-9c759042bef6 |
 | LatestProjectsWebPart         | PortfolioWebParts   | Siste prosjekter                                       | 941fd73c-b957-41c3-8d4f-082268407f10 |
-| PortfolioAggregationWebPart   | PortfolioWebParts   | Portefølje aggregeringsoversikt (eks: Gevinstoversikt) | 6c0e484d-f6da-40d4-81fc-ec1389ef29a8 |
+| PortfolioAggregationWebPart   | PortfolioWebParts   | Portefølje aggregeringsoversikt (eks: Nytteoversikt) | 6c0e484d-f6da-40d4-81fc-ec1389ef29a8 |
 | PortfolioOverviewWebPart      | PortfolioWebParts   | Porteføljeoversikt                                     | e58e3d32-057a-4418-97ce-172b92482ba2 |
 | ProjectListWebPart            | PortfolioWebParts   | Prosjektutlisting (porteføljeforside)                  | 54fbeb7d-e463-4dcc-8873-50a3ab2f0f68 |
 | PortfolioTimelineWebPart      | PortfolioWebParts   | Prosjekttidslinje (Porteføljenivå)                     | 7284c568-f66c-4218-bb2c-3734a3cfa581 |
@@ -383,6 +384,31 @@ rush rebuild -o pp365-shared-library
 
 _Det bør ikke ta mer enn 30 sekunder._
 
+### Full tilbakestilling av Rush-tilstand
+
+Når du støter på rare bygg- eller installasjonsfeil som ikke lar seg løse med `rush update` alene — typisk etter en branch-bytte som endrer mange `package.json`-filer, merge-konflikter i lockfilen, eller når `pp365-shared-library`-symlinker virker utdaterte — kan du gjøre en full tilbakestilling:
+
+```pwsh
+rush unlink && rush purge && rush update && rush rebuild
+```
+
+Hva de fire kommandoene gjør:
+
+- `rush unlink`: Fjerner de lokale symlinkene Rush oppretter i hver løsnings `node_modules` mot andre prosjekter i monorepoet (f.eks. `pp365-shared-library`). Nyttig når symlinker har blitt utdaterte eller ødelagte.
+- `rush purge`: Sletter Rush sin midlertidige tilstand under `common/temp` og alle `node_modules`-mapper i hver løsning. Den tyngste opprydningen.
+- `rush update`: Reinstallerer alle avhengigheter på nytt fra lockfilen og kobler prosjektene sammen igjen.
+- `rush rebuild`: Tvinger en ren bygging av alle løsningene og ignorerer mellomlagret byggetilstand.
+
+Når dette er nyttig:
+
+- Etter å ha byttet til en branch som endrer mange `package.json`-filer eller lockfilen
+- Etter at en merge-konflikt i lockfilen er løst
+- Når du ser «module not found», versjonskonflikter, eller at endringer i `shared-library` ikke slår igjennom selv etter `rush rebuild -o pp365-shared-library`
+- Når du mistenker at mellomlagret tilstand i `common/temp` eller `node_modules` er problemet
+- Etter en større dependency-oppgradering
+
+Merk at hele sekvensen tar flere minutter — bruk den som «nullstilling» når mindre tiltak ikke holder, ikke som førstevalg.
+
 ### Overvåk konfigurasjon og kanaler
 
 Hvis du vil overvåke endringer for en spesifikk kanal, kan du sette `SERVE_CHANNEL` i `.env`-filen til løsningen din.
@@ -428,6 +454,7 @@ Skriptene i roten styrer monorepoet som helhet: Rush-operasjoner, generering av 
 | `generate-site-scripts`        | `node ./.tasks/generate-site-scripts.js --silent`                                                         | Genererer site scripts fra kildefilene i `SiteScripts/src`-mappen til klar-til-bruk JSON. Se [Site Design / Site Scripts](../maler/site-design-og-site-scripts.md).                              |
 | `generate-sbom`                | `node ./.tasks/generate-sbom.js`                                                                          | Genererer `SBOM.md` med komplett oversikt over avhengigheter i alle pakker. Se [SBOM-generering](../ci/sbom.md).                                                                                |
 | `postversion`                  | `npm run generate-readme && npm run sync-version && npm run generate-sbom`                                | Kjøres automatisk av npm etter `npm version patch/minor`. Regenererer README, synkroniserer versjoner og oppdaterer SBOM i ett steg.                                                             |
+| `rush:init`                    | `npm run rush:update && npm run rush:build`                                                               | Førstegangsoppsett av repoet. Kjører `rush:update` etterfulgt av `rush:build` slik at avhengigheter installeres og alle løsningene bygges i riktig rekkefølge. Se [Rush og bygging](./rush.md).  |
 | `rush:update`                  | `node common/scripts/install-run-rush.js update`                                                          | Kjører `rush update` uten at Rush er installert globalt. Installerer avhengigheter og sikrer konsistente versjoner på tvers av løsningene.                                                       |
 | `rush:build`                   | `node common/scripts/install-run-rush.js rebuild --verbose`                                               | Kjører `rush rebuild` med detaljerte logger. Bygger alle løsningene i monorepoet i riktig avhengighetsrekkefølge.                                                                                |
 | `rush:lint`                    | `node common/scripts/install-run-rush.js lint`                                                            | Kjører `lint`-skriptet i alle SPFx-løsningene via Rush. Brukes også i `automatic_chores.yml` for å rette formateringsfeil automatisk.                                                            |
@@ -444,6 +471,9 @@ Hver SPFx-løsning under `SharePointFramework/` (`PortfolioExtensions`, `Portfol
 | `postwatch`     | `node ../.tasks/post-watch.js`                                                                                                   | Kjøres automatisk etter `watch` avsluttes. Rydder opp i midlertidige filer og tilbakestiller `config.json` til opprinnelig tilstand.                                                                              |
 | `serve`         | `concurrently "gulp serve-deprecated --nobrowser NODE --max-old-space-size=8192"`                                                | Starter `gulp serve` med økt minnegrense. `PortfolioWebParts` bruker `12288` MB i stedet for `8192`, og `ProgramWebParts` bruker `--locale=nb-no` som standardspråk.                                                |
 | `build`         | `gulp bundle --ship && gulp package-solution --ship`                                                                             | Bygger og pakker løsningen som en `.sppkg`-fil klar for distribusjon. `--ship` gir optimalisert produksjonsbygg.                                                                                                   |
+| `build:test`    | `node ../.tasks/build.js --channel test`                                                                                         | Bygger en kanalspesifikk `.sppkg` for `test`-kanalen i ett steg. Bytter inn IDer fra `channels/test.json`, kjører `gulp bundle && package-solution`, og tilbakestiller manifestene etterpå.                       |
+| `build:i18n`    | `node ../.tasks/build.js --channel i18n`                                                                                         | Som `build:test`, men for `i18n`-kanalen.                                                                                                                                                                          |
+| `build:kurs`    | `node ../.tasks/build.js --channel kurs`                                                                                         | Som `build:test`, men for `kurs`-kanalen.                                                                                                                                                                          |
 | `postversion`   | `tsc && npm publish`                                                                                                             | Kjøres automatisk etter `npm version`. Kompilerer TypeScript og publiserer pakken til npm (brukes for pakker som publiseres uavhengig).                                                                            |
 | `lint`          | `eslint --ext .ts,.tsx ./src --color --fix --config ../.eslintrc.yaml && npm run prettier`                                       | Kjører ESLint med automatisk feilretting (`--fix`), etterfulgt av Prettier. Felles konfigurasjon ligger i `SharePointFramework/.eslintrc.yaml`.                                                                    |
 | `prettier`      | `prettier '**/*.ts*' --write --loglevel silent --config ../.prettierrc.yaml`                                                     | Formaterer alle `.ts`/`.tsx`-filer i henhold til felles Prettier-konfigurasjon. Kalt automatisk av `lint`.                                                                                                         |
@@ -456,6 +486,7 @@ Hver SPFx-løsning under `SharePointFramework/` (`PortfolioExtensions`, `Portfol
 | Skript         | Kommando                                                                                                                                  | Hva det gjør / hvorfor                                                                                                                    |
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | `build`        | `gulp bundle --ship && gulp package-solution --ship`                                                                                      | Bygger biblioteket. Kalles typisk via `rush rebuild -o pp365-shared-library` for å oppdatere biblioteket som andre løsninger avhenger av. |
+| `build:test`   | `node ../.tasks/build.js --channel test`                                                                                                  | Bygger en kanalspesifikk `.sppkg` for `test`-kanalen. Tilsvarende finnes for `build:i18n` og `build:kurs`.                                |
 | `postversion`  | `tsc && npm publish`                                                                                                                      | Kompilerer TypeScript og publiserer biblioteket til npm som [`pp365-shared-library`](https://www.npmjs.com/package/pp365-shared-library). |
 | `lint`         | `eslint --ext .ts,.tsx ./src --color --fix --config ../.eslintrc.yaml && npm run prettier`                                                | Kjører ESLint med automatisk feilretting og Prettier.                                                                                      |
 | `prettier`     | `prettier '**/*.ts*' --write --loglevel silent --config ../.prettierrc.yaml`                                                              | Formaterer alle `.ts`/`.tsx`-filer etter felles Prettier-regler.                                                                           |
@@ -493,7 +524,7 @@ Oversikt over hvilke skript som brukes i typiske arbeidsflyter:
 
 | Arbeidsflyt                                 | Skript                                                                          |
 | ------------------------------------------- | ------------------------------------------------------------------------------- |
-| Første gangs oppsett av repoet              | `npm run rush:update && npm run rush:build` i rot                               |
+| Første gangs oppsett av repoet              | `npm run rush:init` i rot                                                       |
 | Oppdater `shared-library` og bygg på nytt   | `rush rebuild -o pp365-shared-library`                                          |
 | Daglig utvikling på en webdel/utvidelse     | `npm run watch` i den aktuelle SPFx-pakken                                      |
 | Rett opp formatering og linting             | `npm run rush:lint` i rot, eller `npm run lint` i én pakke                      |
@@ -803,7 +834,7 @@ Det finnes 8 maler for smoke test:
 | smoketest-portfoliowebparts.yml | PortfolioWebParts (porteføljeoversikt, prosjektliste, idémodul m.m.) |
 | smoketest-programwebparts.yml | ProgramWebParts (programadministrasjon, aggregering, prosjektoversikt, tidslinje, status) |
 | smoketest-projectextensions.yml | ProjectExtensions (oppsettveiviser, dokumentmalvelger, usikkerhetstiltak) |
-| smoketest-projectwebparts.yml | ProjectWebParts (prosjektinformasjon, faser, status, tidslinje, matriser, gevinstoversikt, dynamisk liste, nyheter) |
+| smoketest-projectwebparts.yml | ProjectWebParts (prosjektinformasjon, faser, status, tidslinje, matriser, nytteoversikt, dynamisk liste, nyheter) |
 | smoketest-sharepoint-sider.yml | SharePoint-sider (porteføljehjem, konfigurasjon, navigasjon, konfigurasjonslister) |
 | smoketest-dokumentasjon.yml | Dokumentasjon og hjelpeinnhold |
 
@@ -912,6 +943,7 @@ Nøkkelord kan brukes i commit-meldingen for å unngå (eller tvinge) at CI kjø
 - `[skip-main-ci]` for å hoppe over hovedbygging (build-release.yml).
 - `[skip-test-ci]` for å hoppe over test-kanal bygging.
 - `[apps-only]` for å bygge kun pakker (appkatalog), hopper over utrulling av maler. Brukes dersom du ikke har gjort noen endringer på .xml-filene i Templates.
+- `[apps-only:<løsninger>]` som `[apps-only]`, men bygger og ruller ut **kun de oppgitte SPFx-løsningene** (komma-separert) i stedet for alle. Navnene matches uten hensyn til store/små bokstaver og bindestrek, f.eks. `ApplyUpgradeTemplate` eller `[apps-only:PortfolioExtensions,shared-library]`. Gyldige navn: `shared-library`, `PortfolioExtensions`, `PortfolioWebParts`, `ProgramWebParts`, `ProjectExtensions`, `ProjectWebParts`.
 - `[upgrade-all-sites-to-latest]` for å kjøre skriptet `UpgradeAllSitesToLatest.ps1` i CI-modus.
 
 ### Bygg og installer (dev)

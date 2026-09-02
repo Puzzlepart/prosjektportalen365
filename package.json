@@ -1,6 +1,6 @@
 {
   "name": "pp365",
-  "version": "1.13.1",
+  "version": "1.14.0",
   "description": "Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.",
   "scripts": {
     "sync-version": "node ./.tasks/automatic-versioning.js",
@@ -11,6 +11,7 @@
     "generate-site-scripts": "node ./.tasks/generate-site-scripts.js --silent",
     "generate-sbom": "node ./.tasks/generate-sbom.js",
     "postversion": "npm run generate-readme && npm run sync-version && npm run generate-sbom",
+    "rush:init": "npm run rush:update && npm run rush:build",
     "rush:update": "node common/scripts/install-run-rush.js update",
     "rush:build": "node common/scripts/install-run-rush.js rebuild --verbose",
     "rush:lint": "node common/scripts/install-run-rush.js lint",

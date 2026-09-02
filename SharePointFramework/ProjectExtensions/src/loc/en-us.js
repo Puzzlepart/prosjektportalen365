@@ -48,6 +48,7 @@ define([], function () {
     ApplyTemplateClientSidePages: 'Applying files and web parts',
     ApplyTemplateComposedLook: 'Applying color and fonts',
     ApplyTemplateContentTypes: 'Applying content types',
+    ApplyTemplateCustomActions: 'Applying extensions',
     ApplyTemplateErrorMessage: 'An error occurred in step {0} during configuration of the site',
     ApplyTemplateFiles: 'Applying files and web parts',
     ApplyTemplateHooks: 'Running hooks defined in the project template',
@@ -152,6 +153,15 @@ define([], function () {
     SummaryMessage: '{0} item(s) were copied to the project.',
     SyncLocalProjectPropertiesListText: 'Synchronizing list for project properties',
     TemplateConfigMessage: '**{0}** contains configuration for {1}. This is selected by default.',
+    CloudTemplateBadgeText: 'Cloud template',
+    CloudTemplateBannerText:
+      'The template package is downloaded and set up automatically when you continue — the project content is fetched straight from the package.',
+    CloudTemplateResolvingMessage: 'Downloading and reading cloud template…',
+    CloudContentConfigDestinationListMissing:
+      'The list "{0}" was not found in the project. The content from "{1}" cannot be copied.',
+    CloudTemplateResolveErrorMessage: 'Could not download the cloud template. Try selecting it again.',
+    CloudTemplateNotCompatibleWarning:
+      '**{0}** requires hub content (e.g. files or document libraries on the hub site) that is not set up when the package is published as a cloud template. Extensions and list content are still applied, but that hub content is skipped. Continue at your own risk.',
     TemplateConfigConjunction: ' and ',
     DataGridSelectAllLabel: 'Select all',
     PlannerMemberWarningMessage: 'You must be a member of the Microsoft 365 group to configure Planner. Please add yourself as a member or ask an administrator and try again.',

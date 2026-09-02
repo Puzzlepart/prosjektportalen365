@@ -11,7 +11,8 @@
           "Footer": "84f27cec-ffde-4e00-a4cf-25c69f691054",
           "IdeaProcessing": "b28cba0d-922c-44e0-a035-e4ea57d80e6d",
           "IdeaProjectData": "69a7f6eb-e7ce-40eb-81e1-6f172a802619",
-          "IdeaRegistration": "5d26712e-bdad-4ebf-b33f-9c759042bef6"
+          "IdeaRegistration": "5d26712e-bdad-4ebf-b33f-9c759042bef6",
+          "TemplatePackageCatalog": "75f97492-8b9f-4af6-8c0e-6cc6ce354bdd"
         }
       },
       "PortfolioWebParts": {
@@ -25,7 +26,6 @@
           "ProjectListWebPart": "54fbeb7d-e463-4dcc-8873-50a3ab2f0f68",
           "PortfolioTimelineWebPart": "7284c568-f66c-4218-bb2c-3734a3cfa581",
           "ResourceAllocationWebPart": "2ef269b2-6370-4841-8b35-2185b7ccb22a",
-          "ProjectProvisionWebPart": "e88cea29-09a0-4ce4-a38c-e0d74b65f619",
           "IdeaModuleWebPart": "20f151a9-6891-4408-a6d6-77e749b9e3e7",
           "ProjectCardWebPart": "92d23158-485a-4103-96bb-d3036b347412"
         }

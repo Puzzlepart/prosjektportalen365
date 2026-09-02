@@ -15,6 +15,7 @@
     "outDir": "lib",
     "inlineSources": false,
     "strictNullChecks": false,
+    "useUnknownInCatchVariables": false,
     "noUnusedLocals": false,
     "noImplicitAny": false,
     "typeRoots": [
@@ -36,6 +37,9 @@
       ],
       "models": [
         "models"
+      ],
+      "services": [
+        "services"
       ],
       "interfaces": [
         "interfaces"

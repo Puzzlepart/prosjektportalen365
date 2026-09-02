@@ -85,132 +85,6 @@
   <data name="Choice_GtAllocationStatus_Requested" xml:space="preserve">
     <value>Requested</value>
   </data>
-  <data name="Choice_GtBAProjectEnv_EventRegistered" xml:space="preserve">
-    <value>Event registered last month</value>
-  </data>
-  <data name="Choice_GtBAProjectEnv_NoEvents" xml:space="preserve">
-    <value>No events registered last month</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_F0" xml:space="preserve">
-    <value>F0</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_F1" xml:space="preserve">
-    <value>F1</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_F2" xml:space="preserve">
-    <value>F2</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_F3" xml:space="preserve">
-    <value>F3</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_NotRelevant" xml:space="preserve">
-    <value>Not relevant</value>
-  </data>
-  <data name="Choice_GtBAProjectInvestementPhase_SeckePost" xml:space="preserve">
-    <value>S (Contingency)</value>
-  </data>
-  <data name="Choice_GtBAProjectSHA_EventRegistered" xml:space="preserve">
-    <value>Event registered last month</value>
-  </data>
-  <data name="Choice_GtBAProjectSHA_NoEvents" xml:space="preserve">
-    <value>No events registered last month</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_ComplaintUnderReview" xml:space="preserve">
-    <value>Complaint under review</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_FrameworkApplicationInProgress" xml:space="preserve">
-    <value>Framework application in progress</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_FrameworkApplicationSent" xml:space="preserve">
-    <value>Framework application sent</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_FrameworkPermitGranted" xml:space="preserve">
-    <value>Framework permit granted</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_IGGranted" xml:space="preserve">
-    <value>Building permit granted</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_IGSent" xml:space="preserve">
-    <value>Building permit application sent</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_PreConferenceHeld" xml:space="preserve">
-    <value>Pre-conference held</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_RegulationPlanAnnounced" xml:space="preserve">
-    <value>Regulation plan announced</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_RegulationPlanApproved" xml:space="preserve">
-    <value>Regulation plan approved</value>
-  </data>
-  <data name="Choice_GtBAProjectStatusCase_RegulationPlanFirstTreated" xml:space="preserve">
-    <value>Regulation plan first treated</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_AppliedForPayment" xml:space="preserve">
-    <value>Applied for payment</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_DialogWithGrantorEstablished" xml:space="preserve">
-    <value>Dialog with grantor established</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_HasApplied" xml:space="preserve">
-    <value>Has applied</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_HasReceivedApproval" xml:space="preserve">
-    <value>Has received approval</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_HasReceivedPayment" xml:space="preserve">
-    <value>Has received payment</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_HasReceivedRejection" xml:space="preserve">
-    <value>Has received rejection</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_NotApplicable" xml:space="preserve">
-    <value>Not applicable</value>
-  </data>
-  <data name="Choice_GtBAProjectSupport_ToBeInvestigated" xml:space="preserve">
-    <value>To be investigated/evaluated</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_Businesses" xml:space="preserve">
-    <value>Businesses</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_CollaborationPartners" xml:space="preserve">
-    <value>Collaboration partners</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_CouncilsAndCommittees" xml:space="preserve">
-    <value>Councils and committees</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_ExternalAssociations" xml:space="preserve">
-    <value>External associations</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_MunicipalAdministration" xml:space="preserve">
-    <value>Municipal administration</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_Neighbors" xml:space="preserve">
-    <value>Neighbors</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_OtherActors" xml:space="preserve">
-    <value>Other actors</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_Political" xml:space="preserve">
-    <value>Political</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_PublicAuthorities" xml:space="preserve">
-    <value>Public authorities</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_SupervisionAndAgencies" xml:space="preserve">
-    <value>Supervision and agencies</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_Transport" xml:space="preserve">
-    <value>Transport</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_UnionRepresentatives" xml:space="preserve">
-    <value>Union representatives</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_Users" xml:space="preserve">
-    <value>Users</value>
-  </data>
-  <data name="Choice_GtBAStakeholderGroup_UtilityProviders" xml:space="preserve">
-    <value>Utility providers</value>
-  </data>
   <data name="Choice_GtChecklistStatus_Archived" xml:space="preserve">
     <value>Archived</value>
   </data>
@@ -598,60 +472,6 @@
   <data name="Choice_GtSettingsCategory_UncertaintyPlanner" xml:space="preserve">
     <value>Uncertainty measures in Planner</value>
   </data>
-  <data name="Choice_GtStakeholderGroup_Academia" xml:space="preserve">
-    <value>Academia</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Academics" xml:space="preserve">
-    <value>Academia</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Business" xml:space="preserve">
-    <value>Business</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Citizens" xml:space="preserve">
-    <value>Citizens</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Colleagues" xml:space="preserve">
-    <value>Colleagues</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Employees" xml:space="preserve">
-    <value>Employees</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Inhabitants" xml:space="preserve">
-    <value>Inhabitants</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_InstrumentDevice" xml:space="preserve">
-    <value>Instrument device</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Leaders" xml:space="preserve">
-    <value>Leadership</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Management" xml:space="preserve">
-    <value>Management</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_OtherPublicActors" xml:space="preserve">
-    <value>Other public actors</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_OtherPublicStakeholders" xml:space="preserve">
-    <value>Other public stakeholders</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_PolicyInstruments" xml:space="preserve">
-    <value>Policy instruments</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_TradeUnion" xml:space="preserve">
-    <value>Trade union</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Union" xml:space="preserve">
-    <value>Union</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Users" xml:space="preserve">
-    <value>Users</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_Volenteers" xml:space="preserve">
-    <value>Volunteering/Organization</value>
-  </data>
-  <data name="Choice_GtStakeholderGroup_VoluntaryOrganization" xml:space="preserve">
-    <value>Voluntary/Organization</value>
-  </data>
   <data name="Choice_GtStakeholderInfluence_Large" xml:space="preserve">
     <value>Large</value>
   </data>
@@ -774,12 +594,6 @@
   </data>
   <data name="ClientSidePages_DeliveryOverview_Title" xml:space="preserve">
     <value>Delivery Overview</value>
-  </data>
-  <data name="ClientSidePages_ProjectProvision_PageName" xml:space="preserve">
-    <value>ProjectProvision.aspx</value>
-  </data>
-  <data name="ClientSidePages_ProjectProvision_Title" xml:space="preserve">
-    <value>Provisioning Portal</value>
   </data>
   <data name="ClientSidePages_ExperienceLog_PageName" xml:space="preserve">
     <value>ExperienceLog.aspx</value>
@@ -905,7 +719,7 @@
     <value>Overview</value>
   </data>
   <data name="ClientSidePages_ProgramProjectTimeline_PageName" xml:space="preserve">
-    <value>Tidslinje.aspx</value>
+    <value>Timeline.aspx</value>
   </data>
   <data name="ClientSidePages_ProgramProjectTimeline_Title" xml:space="preserve">
     <value>Program Timeline</value>
@@ -1120,12 +934,6 @@
   <data name="ContentTypes_ProjectAdminRoleSiteAdmin_Name" xml:space="preserve">
     <value>Project Administration Role - Site Administrator</value>
   </data>
-  <data name="ContentTypes_ProjectBA_Description" xml:space="preserve">
-    <value>Project content type for construction and building projects</value>
-  </data>
-  <data name="ContentTypes_ProjectBA_Name" xml:space="preserve">
-    <value>Project (CB)</value>
-  </data>
   <data name="ContentTypes_ProjectColumn_Description" xml:space="preserve">
     <value>A project related column</value>
   </data>
@@ -1170,12 +978,6 @@
   </data>
   <data name="ContentTypes_ProjectStatus_Name" xml:space="preserve">
     <value>Project Status</value>
-  </data>
-  <data name="ContentTypes_ProjectStatusBA_Description" xml:space="preserve">
-    <value>Project Status content type for construction and building projects</value>
-  </data>
-  <data name="ContentTypes_ProjectStatusBA_Name" xml:space="preserve">
-    <value>Project Status (CB)</value>
   </data>
   <data name="ContentTypes_ProjectTask_Name" xml:space="preserve">
     <value>Project Task</value>
@@ -1277,10 +1079,10 @@
     <value>Document type</value>
   </data>
   <data name="ListFields_GainLookup_DisplayName" xml:space="preserve">
-    <value>Gain</value>
+    <value>Benefit</value>
   </data>
   <data name="ListFields_GainLookup_ID_DisplayName" xml:space="preserve">
-    <value>Gain ID</value>
+    <value>Benefit ID</value>
   </data>
   <data name="ListFields_MeasureIndicatorLookup_Description" xml:space="preserve">
     <value>What is the measurement indicator that the benefit is related to?</value>
@@ -1316,7 +1118,7 @@
     <value>Lists/ArchiveLog</value>
   </data>
   <data name="Lists_BenefitsAnalysis_Title" xml:space="preserve">
-    <value>Benefits analysis and realization plan</value>
+    <value>Benefit analysis and benefit management plan</value>
   </data>
   <data name="Lists_BenefitsFollowup_Title" xml:space="preserve">
     <value>Benefits follow-up</value>
@@ -1447,18 +1249,6 @@
   <data name="Lists_Documents_Title" xml:space="preserve">
     <value>Documents</value>
   </data>
-  <data name="Lists_DocumentsBuilding_Title" xml:space="preserve">
-    <value>Standard Documents Building</value>
-  </data>
-  <data name="Lists_DocumentsBuilding_Url" xml:space="preserve">
-    <value>StandardDocuments_Building</value>
-  </data>
-  <data name="Lists_DocumentsConstruction_Title" xml:space="preserve">
-    <value>Standard Documents Construction</value>
-  </data>
-  <data name="Lists_DocumentsConstruction_Url" xml:space="preserve">
-    <value>StandardDocuments_Construction</value>
-  </data>
   <data name="Lists_Global_Settings_Category_Assistant" xml:space="preserve">
     <value>Assistant</value>
   </data>
@@ -1500,6 +1290,12 @@
   </data>
   <data name="Lists_Global_Settings_Category_General_ProjectNewsHubUrl_Title" xml:space="preserve">
     <value>URL for news publishing site</value>
+  </data>
+  <data name="Lists_Global_Settings_Category_General_ShowChildProjectInfoInProgram_Title" xml:space="preserve">
+    <value>Show project information for all projects in programs and parent projects</value>
+  </data>
+  <data name="Lists_Global_Settings_Category_General_CatalogTelemetryEnabled_Title" xml:space="preserve">
+    <value>Send usage statistics for the template package catalog</value>
   </data>
   <data name="Lists_Global_Settings_Category_General_ShowFooter_Title" xml:space="preserve">
     <value>Show/hide footer in Project Portal</value>
@@ -1583,7 +1379,7 @@
     <value>Type</value>
   </data>
   <data name="Lists_HelpContent_BenefitAnalysisUserManual" xml:space="preserve">
-    <value>Benefit Analysis and Realization Plan User Manual</value>
+    <value>Benefit Analysis and Benefit Management Plan User Manual</value>
   </data>
   <data name="Lists_HelpContent_BenefitFollowUpUserManual" xml:space="preserve">
     <value>Benefit Followup User Manual</value>
@@ -1801,20 +1597,14 @@
   <data name="Lists_ListContent_Description" xml:space="preserve">
     <value>Setup of list content for new project sites</value>
   </data>
-  <data name="Lists_ListContent_PhaseChecklistBuilding_Description" xml:space="preserve">
-    <value>Phase checklist for building projects.</value>
-  </data>
-  <data name="Lists_ListContent_PhaseChecklistBuilding_Title" xml:space="preserve">
-    <value>Phase Checklist Building</value>
-  </data>
-  <data name="Lists_ListContent_PhaseChecklistConstruction_Description" xml:space="preserve">
-    <value>Phase checklist for construction projects.</value>
-  </data>
-  <data name="Lists_ListContent_PhaseChecklistConstruction_Title" xml:space="preserve">
-    <value>Phase Checklist Construction</value>
-  </data>
   <data name="Lists_ListContent_PhaseCheckpoints_Description" xml:space="preserve">
     <value>Phase checkpoints based on Project Wizard decision points.</value>
+  </data>
+  <data name="Lists_ListContent_PhaseCheckpointsLegacy_Title" xml:space="preserve">
+    <value>Phase checkpoints (legacy)</value>
+  </data>
+  <data name="Lists_ListContent_PhaseCheckpointsLegacy_Description" xml:space="preserve">
+    <value>Phase checkpoints from the previous version of Prosjektveiviseren.</value>
   </data>
   <data name="Lists_ListContent_PhaseCheckpoints_Title" xml:space="preserve">
     <value>Phase checkpoints</value>
@@ -1825,38 +1615,14 @@
   <data name="Lists_ListContent_PlannerTasks_Description" xml:space="preserve">
     <value>Standard Planner tasks for projects.</value>
   </data>
+  <data name="Lists_ListContent_PlannerTasksLegacy_Title" xml:space="preserve">
+    <value>Planner Tasks (legacy)</value>
+  </data>
+  <data name="Lists_ListContent_PlannerTasksLegacy_Description" xml:space="preserve">
+    <value>Planner tasks from the previous version of Prosjektveiviseren.</value>
+  </data>
   <data name="Lists_ListContent_PlannerTasks_Title" xml:space="preserve">
     <value>Planner Tasks</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksBuilding_Description" xml:space="preserve">
-    <value>Standard Planner tasks for facility projects.</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksBuilding_PlanName" xml:space="preserve">
-    <value>Facility Tasks</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksBuilding_Title" xml:space="preserve">
-    <value>Planner Tasks Facility</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksConstruction_Description" xml:space="preserve">
-    <value>Standard Planner tasks for construction projects.</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksConstruction_PlanName" xml:space="preserve">
-    <value>Construction Tasks</value>
-  </data>
-  <data name="Lists_ListContent_PlannerTasksConstruction_Title" xml:space="preserve">
-    <value>Planner Tasks Construction</value>
-  </data>
-  <data name="Lists_ListContent_StandardDocsConstruction_Description" xml:space="preserve">
-    <value>Standard documents for construction projects.</value>
-  </data>
-  <data name="Lists_ListContent_StandardDocsConstruction_Title" xml:space="preserve">
-    <value>Standard Documents Construction</value>
-  </data>
-  <data name="Lists_ListContent_StandardDocumentsBuilding_Description" xml:space="preserve">
-    <value>Standard documents for building projects.</value>
-  </data>
-  <data name="Lists_ListContent_StandardDocumentsBuilding_Title" xml:space="preserve">
-    <value>Standard Documents Building</value>
   </data>
   <data name="Lists_ListContent_Title" xml:space="preserve">
     <value>List Content</value>
@@ -1918,17 +1684,20 @@
   <data name="Lists_PhaseChecklist_Url" xml:space="preserve">
     <value>Lists/Phase Checklist</value>
   </data>
-  <data name="Lists_PhaseChecklistBuilding_Title" xml:space="preserve">
-    <value>Phase Checklist Building</value>
+  <data name="Lists_PhaseChecklistLegacy_Title" xml:space="preserve">
+    <value>Phase Checklist (legacy)</value>
   </data>
-  <data name="Lists_PhaseChecklistBuilding_Url" xml:space="preserve">
-    <value>Lists/PhaseChecklist_Building</value>
+  <data name="Lists_PhaseChecklistLegacy_Url" xml:space="preserve">
+    <value>Lists/Phase Checklist</value>
   </data>
-  <data name="Lists_PhaseChecklistConstruction_Title" xml:space="preserve">
-    <value>Phase Checklist Construction</value>
+  <data name="Lists_PhaseChecklistV6_Title" xml:space="preserve">
+    <value>Phase Checklist</value>
   </data>
-  <data name="Lists_PhaseChecklistConstruction_Url" xml:space="preserve">
-    <value>Lists/PhaseChecklist_Construction</value>
+  <data name="Lists_PhaseChecklistV6_Url" xml:space="preserve">
+    <value>Lists/PhaseChecklistV6</value>
+  </data>
+  <data name="Lists_PhaseChecklistV6_Description" xml:space="preserve">
+    <value>Standard phase checkpoints from Prosjektveiviseren version 6</value>
   </data>
   <data name="Lists_PlannerTasks_Description" xml:space="preserve">
     <value>Planner tasks for the projects.</value>
@@ -1939,17 +1708,20 @@
   <data name="Lists_PlannerTasks_Url" xml:space="preserve">
     <value>Lists/PlannerTasks</value>
   </data>
-  <data name="Lists_PlannerTasksBuilding_Title" xml:space="preserve">
-    <value>Planner Tasks Building</value>
+  <data name="Lists_PlannerTasksLegacy_Title" xml:space="preserve">
+    <value>Planner Tasks (legacy)</value>
   </data>
-  <data name="Lists_PlannerTasksBuilding_Url" xml:space="preserve">
-    <value>Lists/PlannerTasks_Building</value>
+  <data name="Lists_PlannerTasksLegacy_Url" xml:space="preserve">
+    <value>Lists/PlannerTasks</value>
   </data>
-  <data name="Lists_PlannerTasksConstruction_Title" xml:space="preserve">
-    <value>Planner Tasks Construction</value>
+  <data name="Lists_PlannerTasksV6_Title" xml:space="preserve">
+    <value>Planner Tasks</value>
   </data>
-  <data name="Lists_PlannerTasksConstruction_Url" xml:space="preserve">
-    <value>Lists/PlannerTasks_Construction</value>
+  <data name="Lists_PlannerTasksV6_Url" xml:space="preserve">
+    <value>Lists/PlannerTasksV6</value>
+  </data>
+  <data name="Lists_PlannerTasksV6_Description" xml:space="preserve">
+    <value>Standard planner tasks from Prosjektveiviseren version 6</value>
   </data>
   <data name="Lists_PortfolioViews_AllProjects_Title" xml:space="preserve">
     <value>All projects</value>
@@ -2049,18 +1821,6 @@
   </data>
   <data name="Lists_ProjectColumnConfiguration_Description" xml:space="preserve">
     <value>Administrate project column values (color/icon/name) for status fields</value>
-  </data>
-  <data name="Lists_ProjectColumnConfiguration_GtBAProjectEnv_EventRegistered_Title" xml:space="preserve">
-    <value>Environment status (Event)</value>
-  </data>
-  <data name="Lists_ProjectColumnConfiguration_GtBAProjectEnv_NoEvents_Title" xml:space="preserve">
-    <value>Environment status (None)</value>
-  </data>
-  <data name="Lists_ProjectColumnConfiguration_GtBAProjectSHA_EventRegistered_Title" xml:space="preserve">
-    <value>Health and Safety status (Event)</value>
-  </data>
-  <data name="Lists_ProjectColumnConfiguration_GtBAProjectSHA_NoEvents_Title" xml:space="preserve">
-    <value>Health and Safety status (None)</value>
   </data>
   <data name="Lists_ProjectColumnConfiguration_GtStatusBudget_BelowBudget_Title" xml:space="preserve">
     <value>Budget status (Below budget)</value>
@@ -2284,23 +2044,11 @@
   <data name="Lists_StatusSections_Description" xml:space="preserve">
     <value>Setup of project status report</value>
   </data>
-  <data name="Lists_StatusSections_Environment_Title" xml:space="preserve">
-    <value>Environment</value>
-  </data>
   <data name="Lists_StatusSections_OverallStatus_Title" xml:space="preserve">
     <value>Overall Status</value>
   </data>
-  <data name="Lists_StatusSections_ProjectSupport_Title" xml:space="preserve">
-    <value>Support</value>
-  </data>
-  <data name="Lists_StatusSections_SHA_Title" xml:space="preserve">
-    <value>SHA</value>
-  </data>
   <data name="Lists_StatusSections_StatusBudget_Title" xml:space="preserve">
     <value>Financials</value>
-  </data>
-  <data name="Lists_StatusSections_StatusCase_Title" xml:space="preserve">
-    <value>Planning and Building Case</value>
   </data>
   <data name="Lists_StatusSections_StatusGainAchievement_Title" xml:space="preserve">
     <value>Benefit Achievement</value>
@@ -2332,18 +2080,6 @@
   <data name="Lists_TemplateLibrary_Url" xml:space="preserve">
     <value>Template Library</value>
   </data>
-  <data name="Lists_TemplateOptions_BuildingProject_Description" xml:space="preserve">
-    <value>This is the template for building projects. Building projects have their own phases, project properties and fields in the project status.</value>
-  </data>
-  <data name="Lists_TemplateOptions_BuildingProject_Title" xml:space="preserve">
-    <value>Building Project</value>
-  </data>
-  <data name="Lists_TemplateOptions_ConstructionProject_Description" xml:space="preserve">
-    <value>Construction projects have their own phases, project properties and fields in the project status.</value>
-  </data>
-  <data name="Lists_TemplateOptions_ConstructionProject_Title" xml:space="preserve">
-    <value>Construction Project</value>
-  </data>
   <data name="Lists_TemplateOptions_Description" xml:space="preserve">
     <value>Setup of templates for new project sites</value>
   </data>
@@ -2352,6 +2088,27 @@
   </data>
   <data name="Lists_TemplateOptions_Fields_FieldConfigurationName_DisplayName" xml:space="preserve">
     <value>Field configuration</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgType_DisplayName" xml:space="preserve">
+    <value>Template package type</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgId_DisplayName" xml:space="preserve">
+    <value>Template package ID</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgVersion_DisplayName" xml:space="preserve">
+    <value>Template package version</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgSourceUrl_DisplayName" xml:space="preserve">
+    <value>Template package source URL</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgInstalledDate_DisplayName" xml:space="preserve">
+    <value>Template package installed date</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgUpdatedDate_DisplayName" xml:space="preserve">
+    <value>Template package updated date</value>
+  </data>
+  <data name="Lists_TemplateOptions_Fields_PpPkgLatestVersion_DisplayName" xml:space="preserve">
+    <value>Template package latest version</value>
   </data>
   <data name="Lists_TemplateOptions_Fields_GtDocumentTemplateLibrary_Description" xml:space="preserve">
     <value>Pick the template library to be used as a source for templates that can be imported into the project document libraries.</value>
@@ -2464,6 +2221,12 @@
   <data name="Lists_TemplateOptions_ProgramTemplate_Description" xml:space="preserve">
     <value>This is the default program template that comes with Project Portal 365.</value>
   </data>
+  <data name="Lists_TemplateOptions_BuildingProject_Title" xml:space="preserve">
+    <value>Building Project</value>
+  </data>
+  <data name="Lists_TemplateOptions_ConstructionProject_Title" xml:space="preserve">
+    <value>Construction Project</value>
+  </data>
   <data name="Lists_TemplateOptions_ProgramTemplate_FileName" xml:space="preserve">
     <value>ProgramTemplate.txt</value>
   </data>
@@ -2543,7 +2306,7 @@
     <value>Uncertainty</value>
   </data>
   <data name="Navigation_BenefitsAnalysis_Title" xml:space="preserve">
-    <value>Benefits Analysis and Realization Plan</value>
+    <value>Benefit Analysis and Benefit Management Plan</value>
   </data>
   <data name="Navigation_BenefitsAnalysis_Url" xml:space="preserve">
     <value>Lists/Benefits analysis and realization plan/AllItems.aspx</value>
@@ -2692,15 +2455,6 @@
   <data name="Security_SiteGroup_PortfolioInsight_Title" xml:space="preserve">
     <value>Portfolio insight</value>
   </data>
-  <data name="Security_SiteGroup_ProvisionPortal_Description" xml:space="preserve">
-    <value>Users who have access to the Provision Portal to order projects and areas.</value>
-  </data>
-  <data name="Security_SiteGroup_ProvisionPortal_Title" xml:space="preserve">
-    <value>Provision portal</value>
-  </data>
-  <data name="SiteFields_BA_Group" xml:space="preserve">
-    <value>Project Portal Columns (Construction and Building)</value>
-  </data>
   <data name="SiteFields_ContentType_DisplayName" xml:space="preserve">
     <value>Content Type</value>
   </data>
@@ -2814,96 +2568,6 @@
   </data>
   <data name="SiteFields_GtAttachments_DisplayName" xml:space="preserve">
     <value>Attachments</value>
-  </data>
-  <data name="SiteFields_GtBAEndDateOriginal_Description" xml:space="preserve">
-    <value>What is the (planned) handover date where the customer takes over the project deliveries?</value>
-  </data>
-  <data name="SiteFields_GtBAEndDateOriginal_DisplayName" xml:space="preserve">
-    <value>Original handover date</value>
-  </data>
-  <data name="SiteFields_GtBAProjectEnv_Description" xml:space="preserve">
-    <value>Have there been events related to the environment in the last period?</value>
-  </data>
-  <data name="SiteFields_GtBAProjectEnv_DisplayName" xml:space="preserve">
-    <value>Status environment</value>
-  </data>
-  <data name="SiteFields_GtBAProjectEnvComment_Description" xml:space="preserve">
-    <value>Summarize briefly the total environmental picture for the project and what measures are planned for in the next period</value>
-  </data>
-  <data name="SiteFields_GtBAProjectEnvComment_DisplayName" xml:space="preserve">
-    <value>Comment, environment</value>
-  </data>
-  <data name="SiteFields_GtBAProjectInvestementPhase_Description" xml:space="preserve">
-    <value>The current phase of the investment process in the HP project</value>
-  </data>
-  <data name="SiteFields_GtBAProjectInvestementPhase_DisplayName" xml:space="preserve">
-    <value>HP phase</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPolitical_Description" xml:space="preserve">
-    <value>When was the last political decision that affects the project made?</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPolitical_DisplayName" xml:space="preserve">
-    <value>Last political decision</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPoliticalComment_Description" xml:space="preserve">
-    <value>Comment on how the last political decision affects the project</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPoliticalComment_DisplayName" xml:space="preserve">
-    <value>Comment, last political decision</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPoliticalLink_Description" xml:space="preserve">
-    <value>Link to e.g. document/article about the last political decision</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPoliticalLink_DisplayName" xml:space="preserve">
-    <value>Link to last political decision</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPrognosisThisYear_Description" xml:space="preserve">
-    <value>Estimated prospects of the project for the current year</value>
-  </data>
-  <data name="SiteFields_GtBAProjectPrognosisThisYear_DisplayName" xml:space="preserve">
-    <value>Prognosis this year</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSHA_Description" xml:space="preserve">
-    <value>Have there been any events related to SHA (Sikkerhet, helse, arbeidsmiljø) in the last period?</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSHA_DisplayName" xml:space="preserve">
-    <value>Status SHA</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSHAComment_Description" xml:space="preserve">
-    <value>Summarize briefly the total SHA picture for the project and what measures are planned for in the next period</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSHAComment_DisplayName" xml:space="preserve">
-    <value>Comment, SHA</value>
-  </data>
-  <data name="SiteFields_GtBAProjectStatusCase_Description" xml:space="preserve">
-    <value>What is the status of the planning and construction case for the project?</value>
-  </data>
-  <data name="SiteFields_GtBAProjectStatusCase_DisplayName" xml:space="preserve">
-    <value>Status of planning and construction case</value>
-  </data>
-  <data name="SiteFields_GtBAProjectStatusCaseComment_Description" xml:space="preserve">
-    <value>Describe any challenges related to the planning and construction case, as well as planned measures for the next period</value>
-  </data>
-  <data name="SiteFields_GtBAProjectStatusCaseComment_DisplayName" xml:space="preserve">
-    <value>Comment, planning and construction case</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSupport_Description" xml:space="preserve">
-    <value>What is the status of possible grant opportunities for the project?</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSupport_DisplayName" xml:space="preserve">
-    <value>Status of grant</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSupportComment_Description" xml:space="preserve">
-    <value>If relevant, describe where in the application process the project currently is and what is planned for the next period</value>
-  </data>
-  <data name="SiteFields_GtBAProjectSupportComment_DisplayName" xml:space="preserve">
-    <value>Comment, grants</value>
-  </data>
-  <data name="SiteFields_GtBAStakeholderGroup_Description" xml:space="preserve">
-    <value>Which stakeholder group does the stakeholder belong to?</value>
-  </data>
-  <data name="SiteFields_GtBAStakeholderGroup_DisplayName" xml:space="preserve">
-    <value>Stakeholder group</value>
   </data>
   <data name="SiteFields_GtBudgetLastReportDate_Description" xml:space="preserve">
     <value>Enter the date when the last cost reporting was done</value>
@@ -3089,7 +2753,7 @@
     <value>Description</value>
   </data>
   <data name="SiteFields_GtDesiredValue_Description" xml:space="preserve">
-    <value>Indicate the value when the gain is considered realized</value>
+    <value>Indicate the value when the benefit is considered realized</value>
   </data>
   <data name="SiteFields_GtDesiredValue_DisplayName" xml:space="preserve">
     <value>Desired value</value>
@@ -3167,28 +2831,28 @@
     <value>Field overrides</value>
   </data>
   <data name="SiteFields_GtGainsOwner_Description" xml:space="preserve">
-    <value>If the benefits are to be realized in different parts of the organization (or in several businesses), it is recommended to appoint a benefit owner in the different parts of the line organization (or the businesses) that own different parts of the planned benefits. Benefit owners then have a distributed responsibility for their part of the benefits, and play an important role as the benefit responsible's extended arm and local supporter.</value>
+    <value>If the benefits are to be realized in different parts of the organization (or in several businesses), the benefit owner may delegate parts of the benefit management responsibility to benefit managers who each follow up their part of the benefits. A benefit manager has a delegated responsibility for their part of the benefits, acting as the benefit owner's extended arm and local supporter.</value>
   </data>
   <data name="SiteFields_GtGainsOwner_DisplayName" xml:space="preserve">
-    <value>Gains owner</value>
+    <value>Benefit manager</value>
   </data>
   <data name="SiteFields_GtGainsResponsible_Description" xml:space="preserve">
-    <value>Who is responsible for the project's gains?</value>
+    <value>Who is the benefit owner for the project? The benefit owner has the overall responsibility for realizing the project's benefits.</value>
   </data>
   <data name="SiteFields_GtGainsResponsible_DisplayName" xml:space="preserve">
-    <value>Gains responsible</value>
+    <value>Benefit owner</value>
   </data>
   <data name="SiteFields_GtGainsTurnover_Description" xml:space="preserve">
-    <value>How will the gain be realized?</value>
+    <value>How will the benefit be realized?</value>
   </data>
   <data name="SiteFields_GtGainsTurnover_DisplayName" xml:space="preserve">
-    <value>Gain turnover</value>
+    <value>Benefit realization</value>
   </data>
   <data name="SiteFields_GtGainsType_Description" xml:space="preserve">
     <value>Direct (financial - NOK), Indirect (freed time - man-years), Qualitative (e.g. reputation)</value>
   </data>
   <data name="SiteFields_GtGainsType_DisplayName" xml:space="preserve">
-    <value>Type of gain</value>
+    <value>Type of benefit</value>
   </data>
   <data name="SiteFields_GtGroupId_Description" xml:space="preserve">
     <value>Identifier for this group.</value>
@@ -3311,10 +2975,10 @@
     <value>Execution plan: Success factors</value>
   </data>
   <data name="SiteFields_GtIdeaExpectedGain_Description" xml:space="preserve">
-    <value>Expected gains for the idea</value>
+    <value>Expected benefits for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaExpectedGain_DisplayName" xml:space="preserve">
-    <value>Expected gains</value>
+    <value>Expected benefits</value>
   </data>
   <data name="SiteFields_GtIdeaIssue_Description" xml:space="preserve">
     <value>Problem statement for the idea</value>
@@ -3359,10 +3023,10 @@
     <value>Idea owner</value>
   </data>
   <data name="SiteFields_GtIdeaPossibleGains_Description" xml:space="preserve">
-    <value>Possible gains for the idea</value>
+    <value>Possible benefits for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaPossibleGains_DisplayName" xml:space="preserve">
-    <value>Possible gains</value>
+    <value>Possible benefits</value>
   </data>
   <data name="SiteFields_GtIdeaPriority_Description" xml:space="preserve">
     <value>Priority for the idea</value>
@@ -4321,11 +3985,11 @@
   <data name="SiteFields_GtStakeholderContext_DisplayName" xml:space="preserve">
     <value>Arena/Meeting Place/Network</value>
   </data>
-  <data name="SiteFields_GtStakeholderGroup_Description" xml:space="preserve">
-    <value>Which stakeholder group does the stakeholder belong to?</value>
+  <data name="SiteFields_GtStakeholderGroups_Description" xml:space="preserve">
+    <value>Which stakeholder groups does the stakeholder belong to? Managed as terms in the term store under Prosjektportalen › Interessentgrupper.</value>
   </data>
-  <data name="SiteFields_GtStakeholderGroup_DisplayName" xml:space="preserve">
-    <value>Stakeholder Group</value>
+  <data name="SiteFields_GtStakeholderGroups_DisplayName" xml:space="preserve">
+    <value>Stakeholder groups</value>
   </data>
   <data name="SiteFields_GtStakeholderInfluence_Description" xml:space="preserve">
     <value>To what extent is the stakeholder group influenced by the project?</value>
@@ -4376,16 +4040,16 @@
     <value>Comment, budget</value>
   </data>
   <data name="SiteFields_GtStatusGainAchievement_Description" xml:space="preserve">
-    <value>What is the status of the project's gain achievement?</value>
+    <value>What is the status of the project's benefit achievement?</value>
   </data>
   <data name="SiteFields_GtStatusGainAchievement_DisplayName" xml:space="preserve">
-    <value>Status gain achievement</value>
+    <value>Status benefit achievement</value>
   </data>
   <data name="SiteFields_GtStatusGainAchievementComment_Description" xml:space="preserve">
-    <value>Enter any additional/supplementary comments to the gain achievement status reporting</value>
+    <value>Enter any additional/supplementary comments to the benefit achievement status reporting</value>
   </data>
   <data name="SiteFields_GtStatusGainAchievementComment_DisplayName" xml:space="preserve">
-    <value>Comment, gain achievement</value>
+    <value>Comment, benefit achievement</value>
   </data>
   <data name="SiteFields_GtStatusOpportunities_Description" xml:space="preserve">
     <value>What is the status of the project's opportunities?</value>
@@ -4407,6 +4071,72 @@
   </data>
   <data name="SiteFields_GtStatusQualityComment_Description" xml:space="preserve">
     <value>Describe the reason for any quality deviations and what measures the project has planned or already implemented</value>
+  </data>
+  <data name="SiteFields_GtStatusScope_DisplayName" xml:space="preserve">
+    <value>Status scope</value>
+  </data>
+  <data name="SiteFields_GtStatusScope_Description" xml:space="preserve">
+    <value>What is the status of the project's scope, e.g. are there changes to what is and is not included?</value>
+  </data>
+  <data name="SiteFields_GtStatusScopeComment_DisplayName" xml:space="preserve">
+    <value>Comment, scope</value>
+  </data>
+  <data name="SiteFields_GtStatusScopeComment_Description" xml:space="preserve">
+    <value>Describe the reason for any scope changes and what measures the project has planned or already implemented</value>
+  </data>
+  <data name="Choice_GtStatusScope_AsPlanned" xml:space="preserve">
+    <value>According to planned scope</value>
+  </data>
+  <data name="Choice_GtStatusScope_MinorChanges" xml:space="preserve">
+    <value>Minor scope changes</value>
+  </data>
+  <data name="Choice_GtStatusScope_MajorChanges" xml:space="preserve">
+    <value>Major scope changes</value>
+  </data>
+  <data name="Lists_StatusSections_StatusScope_Title" xml:space="preserve">
+    <value>Scope</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusScope_AsPlanned_Title" xml:space="preserve">
+    <value>Status scope (According to plan)</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusScope_MinorChanges_Title" xml:space="preserve">
+    <value>Status scope (Minor changes)</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusScope_MajorChanges_Title" xml:space="preserve">
+    <value>Status scope (Major changes)</value>
+  </data>
+  <data name="SiteFields_GtStatusSustainability_DisplayName" xml:space="preserve">
+    <value>Status sustainability</value>
+  </data>
+  <data name="SiteFields_GtStatusSustainability_Description" xml:space="preserve">
+    <value>What is the status of the project's sustainability requirements, for both the execution and the deliverables?</value>
+  </data>
+  <data name="SiteFields_GtStatusSustainabilityComment_DisplayName" xml:space="preserve">
+    <value>Comment, sustainability</value>
+  </data>
+  <data name="SiteFields_GtStatusSustainabilityComment_Description" xml:space="preserve">
+    <value>Describe the reason for any deviations from the sustainability requirements and what measures the project has planned or already implemented</value>
+  </data>
+  <data name="Choice_GtStatusSustainability_AsPlanned" xml:space="preserve">
+    <value>According to the sustainability requirements</value>
+  </data>
+  <data name="Choice_GtStatusSustainability_MinorDeviation" xml:space="preserve">
+    <value>Minor deviation from the sustainability requirements</value>
+  </data>
+  <data name="Choice_GtStatusSustainability_MajorDeviation" xml:space="preserve">
+    <value>Major deviation from the sustainability requirements</value>
+  </data>
+  <data name="Lists_StatusSections_StatusSustainability_Title" xml:space="preserve">
+    <value>Sustainability</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusSustainability_AsPlanned_Title" xml:space="preserve">
+    <value>Status sustainability (According to requirements)</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusSustainability_MinorDeviation_Title" xml:space="preserve">
+    <value>Status sustainability (Minor deviation)</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusSustainability_MajorDeviation_Title" xml:space="preserve">
+    <value>Status sustainability (Major deviation)</value>
   </data>
   <data name="SiteFields_GtStatusQualityComment_DisplayName" xml:space="preserve">
     <value>Comment, quality</value>

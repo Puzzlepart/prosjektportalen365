@@ -4,6 +4,7 @@ import { PermissionKind } from '@pnp/sp/presets/all'
 import strings from 'ProjectWebPartsStrings'
 import {
   CustomError,
+  ItemFieldValues,
   ListLogger,
   ProjectAdminPermission,
   ProjectInformationParentProject,
@@ -58,7 +59,17 @@ const fetchData: DataFetchFunction<
   try {
     const isFrontpage = context.props.page === 'Frontpage'
     const shouldFetchArchiveStatus = isFrontpage && !context.props.hideArchiveStatus
-    const projectInformationData = await SPDataAdapter.project.getProjectInformationData()
+    // Empty fallback for users without read access to the project site (e.g. the
+    // Portfolio Insight panel opened from a portfolio overview) instead of a hard error.
+    const projectInformationData = await safeCall(
+      () => SPDataAdapter.project.getProjectInformationData(),
+      {
+        fieldValues: new ItemFieldValues(),
+        fields: [],
+        propertiesListId: null,
+        templateParameters: {}
+      }
+    )
 
     let hubIsAvailable = SPDataAdapter.portalDataService?.isAvailable ?? false
     const columns = hubIsAvailable ? await SPDataAdapter.portalDataService.getProjectColumns() : []

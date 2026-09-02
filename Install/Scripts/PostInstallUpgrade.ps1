@@ -41,74 +41,10 @@ if ($null -ne $LastInstall) {
 
     if ($PreviousVersion -lt [version]"1.7.0") {
         Write-Host "[INFO] In version v1.7.0 we reworked the aggregated webparts. Adding these navigation items now as part of the upgrade" 
-        Add-PnPNavigationNode -Location TopNavigationBar -Title "Gevinstoversikt" -Url "$($Uri.LocalPath)/SitePages/Gevinstoversikt.aspx"
+        Add-PnPNavigationNode -Location TopNavigationBar -Title "Nytteoversikt" -Url "$($Uri.LocalPath)/SitePages/Nytteoversikt.aspx"
         Add-PnPNavigationNode -Location TopNavigationBar -Title "Erfaringslogg" -Url "$($Uri.LocalPath)/SitePages/Erfaringslogg.aspx"
         Add-PnPNavigationNode -Location TopNavigationBar -Title "Leveranseoversikt" -Url "$($Uri.LocalPath)/SitePages/Leveranseoversikt.aspx"
         Add-PnPNavigationNode -Location TopNavigationBar -Title "Usikkerhetsoversikt" -Url "$($Uri.LocalPath)/SitePages/Usikkerhetsoversikt.aspx"
-    }
-
-    if ($PreviousVersion -lt [version]"1.8.0" -or $PreviousVersion -like "*BA*") {
-        Write-Host "[INFO] In version v1.8.0 we have integrated the 'Bygg & Anlegg' addon with standard installation. Checking to see if addon has been previously installed..." 
-
-        $TermSetA = Get-PnPTermSet -Identity "cc6cdd18-c7d5-42e1-8d19-a336dd78f3f2" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
-        $TermSetB = Get-PnPTermSet -Identity "ec5ceb95-7259-4282-811f-7c57304be71e" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
-        if ($TermSetA -or $TermSetB) {
-            Write-Host "[INFO] 'Bygg & Anlegg' addon detected. Setting up list content for 'Bygg & Anlegg' templates..." 
-
-            # If Either Bygg or Anlegg changes title in the list, rename these.
-            $TemplateMap = @{
-                "Bygg"   = "Byggprosjekt";
-                "Anlegg" = "Anleggsprosjekt"
-            }
-
-            # If any of the titles are changed, change here.
-            $ListContentMap = @{
-                "FasesjekkBygg"   = "Fasesjekkliste Bygg";
-                "PlannerBygg"     = "Planneroppgaver Bygg";
-                "DokumentBygg"    = "Standarddokumenter Bygg";
-                "FasesjekkAnlegg" = "Fasesjekkliste Anlegg";
-                "PlannerAnlegg"   = "Planneroppgaver Anlegg";
-                "DokumentAnlegg"  = "Standarddokumenter Anlegg";
-            }
-
-            $ListContent = Get-PnPListItem -List Listeinnhold
-            $TemplateOptions = Get-PnPListItem -List Maloppsett
-
-            $Bygg = $TemplateOptions | Where-Object { $_["Title"] -eq $TemplateMap["Bygg"] }
-            if ($Bygg) {
-                $ByggPlanner = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["PlannerBygg"] }
-                $ByggPhaseChecklist = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["FasesjekkBygg"] }
-                $ByggDocuments = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["DokumentBygg"] }
-                $ByggItems = @()
-                $ByggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $ByggPlanner.Id }
-                $ByggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $ByggPhaseChecklist.Id }
-                $ByggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $ByggDocuments.Id }
-                $Bygg["ListContentConfigLookup"] = $ByggItems
-                $Bygg.SystemUpdate()
-                $Bygg.Context.ExecuteQuery()
-            }
-            else {
-                Write-Host "[WARNING] Failed to find Byggprosjekt template. Please check the Maloppsett list." -ForegroundColor Yellow
-            }
-            $Anlegg = $TemplateOptions | Where-Object { $_["Title"] -eq $TemplateMap["Anlegg"] }
-            if ($Anlegg) {
-                $AnleggPlanner = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["PlannerAnlegg"] }
-                $AnleggPhaseChecklist = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["FasesjekkAnlegg"] }
-                $AnleggDocuments = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["DokumentAnlegg"] }     
-
-                # Adds Standard List Content to B&A template options
-                $AnleggItems = @()
-                $AnleggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $AnleggPlanner.Id }
-                $AnleggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $AnleggPhaseChecklist.Id }
-                $AnleggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $AnleggDocuments.Id }
-                $Anlegg["ListContentConfigLookup"] = $AnleggItems
-                $Anlegg.SystemUpdate()
-                $Anlegg.Context.ExecuteQuery()
-            }
-            else {
-                Write-Host "[WARNING] Failed to find Anleggsprosjekt template. Please check the Maloppsett list." -ForegroundColor Yellow
-            }            
-        }
     }
 
     if ($PreviousVersion -lt [version]"1.8.2") {
@@ -305,6 +241,67 @@ if ($null -ne $LastInstall) {
             Write-Host "[INFO] Added 'AssistantAccessMode' global setting with default value 'group'" -ForegroundColor Green
         } else {
             Write-Host "[INFO] 'AssistantAccessMode' global setting already exists, skipping"
+        }
+    }
+
+    if ($PreviousVersion -lt [version]"1.13.0") {
+        Write-Host "[INFO] Ensuring 'AvailableProgramHubs' global setting exists and has an absolute URL value..."
+        # The Program administration web part resolves this setting to a hub site id. A missing
+        # value, or a server-relative value (e.g. '/sites/...'), fails to resolve and both the
+        # existing programs list and the 'Add subareas' dialog silently render empty. Ensure the
+        # setting exists and holds the absolute URL of this portfolio (hub) site.
+        $GlobalSettingsList = Get-Resource -Name "Lists_Global_Settings_Title"
+        $AvailableProgramHubsSettingId = "{21bcf4a5-1979-44cb-b42e-3209fc95ce90}"
+        $HubUrl = (Get-PnPWeb -Includes Url).Url
+        $ExistingSetting = Get-PnPListItem -List $GlobalSettingsList | Where-Object { $_["GtSettingsKey"] -eq "AvailableProgramHubs" }
+        if ($null -eq $ExistingSetting) {
+            $GeneralCategory = Get-Resource -Name "Lists_Global_Settings_Category_General"
+            $SettingTitle = Get-Resource -Name "Lists_Global_Settings_Category_General_AvailableProgramHubs_Title"
+            Add-PnPListItem -List $GlobalSettingsList -Values @{
+                "GtSettingsId"       = $AvailableProgramHubsSettingId
+                "Title"              = $SettingTitle
+                "GtSettingsKey"      = "AvailableProgramHubs"
+                "GtSettingsValue"    = $HubUrl
+                "GtSettingsEnabled"  = $true
+                "GtSettingsCategory" = $GeneralCategory
+            } | Out-Null
+            Write-Host "[INFO] Added 'AvailableProgramHubs' global setting with value '$HubUrl'" -ForegroundColor Green
+        } else {
+            $CurrentValue = $ExistingSetting["GtSettingsValue"]
+            if ([string]::IsNullOrWhiteSpace($CurrentValue) -or $CurrentValue.StartsWith("/")) {
+                Set-PnPListItem -List $GlobalSettingsList -Identity $ExistingSetting.Id -Values @{
+                    "GtSettingsValue" = $HubUrl
+                } | Out-Null
+                Write-Host "[INFO] Repaired 'AvailableProgramHubs' global setting value from '$CurrentValue' to '$HubUrl'" -ForegroundColor Green
+            } else {
+                Write-Host "[INFO] 'AvailableProgramHubs' global setting already has an absolute value, skipping"
+            }
+        }
+    }
+
+    if ($PreviousVersion -lt [version]"1.14.0" -and -not $SkipTemplate.IsPresent) {
+        # Prosjektveiviseren v6: verifiser generasjonssplitten. Hvis omdøpingen i
+        # PreInstallUpgrade feilet, heter den GAMLE listen fortsatt «Fasesjekkliste» —
+        # da treffer prosjektprovisjoneringens getByTitle feil liste (stille kildebytte).
+        # Ved -SkipTemplate hoppes hele splitten bevisst over (se PreInstallUpgrade),
+        # så verifiseringen ville bare gitt misvisende advarsler.
+        Write-Host "[INFO] Verifying side-by-side list generations (Prosjektveiviseren v6)"
+        $GenerationChecks = @(
+            @{ LegacyUrl = (Get-Resource -Name "Lists_PhaseChecklistLegacy_Url"); LegacyTitle = (Get-Resource -Name "Lists_PhaseChecklistLegacy_Title"); V6Url = (Get-Resource -Name "Lists_PhaseChecklistV6_Url"); V6Title = (Get-Resource -Name "Lists_PhaseChecklistV6_Title") },
+            @{ LegacyUrl = (Get-Resource -Name "Lists_PlannerTasksLegacy_Url"); LegacyTitle = (Get-Resource -Name "Lists_PlannerTasksLegacy_Title"); V6Url = (Get-Resource -Name "Lists_PlannerTasksV6_Url"); V6Title = (Get-Resource -Name "Lists_PlannerTasksV6_Title") }
+        )
+        $GenerationChecks | ForEach-Object {
+            $LegacyList = Get-PnPList -Identity $_.LegacyUrl -ErrorAction SilentlyContinue
+            $V6List = Get-PnPList -Identity $_.V6Url -ErrorAction SilentlyContinue
+            if ($null -eq $V6List) {
+                Write-Host "[WARNING] v6 list at [$($_.V6Url)] was not provisioned" -ForegroundColor Yellow
+            }
+            if ($null -eq $LegacyList) {
+                Write-Host "[WARNING] Legacy list at [$($_.LegacyUrl)] was not found" -ForegroundColor Yellow
+            }
+            elseif ($LegacyList.Title -eq $_.V6Title) {
+                Write-Host "[WARNING] Legacy list at [$($_.LegacyUrl)] is still titled [$($LegacyList.Title)] - the rename in PreInstallUpgrade did not run. Project provisioning will resolve the WRONG source list until it is renamed to [$($_.LegacyTitle)]." -ForegroundColor Red
+            }
         }
     }
 }

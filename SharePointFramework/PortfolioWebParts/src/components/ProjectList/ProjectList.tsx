@@ -197,6 +197,7 @@ ProjectList.defaultProps = {
   showSearchBox: true,
   showRenderModeSelector: true,
   showSortBy: true,
+  showClosedProjects: false,
   defaultRenderMode: 'tiles',
   verticalConfigs: [
     {
