@@ -41,7 +41,7 @@ if ($null -ne $LastInstall) {
 
     if ($PreviousVersion -lt [version]"1.7.0") {
         Write-Host "[INFO] In version v1.7.0 we reworked the aggregated webparts. Adding these navigation items now as part of the upgrade" 
-        Add-PnPNavigationNode -Location TopNavigationBar -Title "Gevinstoversikt" -Url "$($Uri.LocalPath)/SitePages/Gevinstoversikt.aspx"
+        Add-PnPNavigationNode -Location TopNavigationBar -Title "Nytteoversikt" -Url "$($Uri.LocalPath)/SitePages/Nytteoversikt.aspx"
         Add-PnPNavigationNode -Location TopNavigationBar -Title "Erfaringslogg" -Url "$($Uri.LocalPath)/SitePages/Erfaringslogg.aspx"
         Add-PnPNavigationNode -Location TopNavigationBar -Title "Leveranseoversikt" -Url "$($Uri.LocalPath)/SitePages/Leveranseoversikt.aspx"
         Add-PnPNavigationNode -Location TopNavigationBar -Title "Usikkerhetsoversikt" -Url "$($Uri.LocalPath)/SitePages/Usikkerhetsoversikt.aspx"
@@ -275,6 +275,32 @@ if ($null -ne $LastInstall) {
                 Write-Host "[INFO] Repaired 'AvailableProgramHubs' global setting value from '$CurrentValue' to '$HubUrl'" -ForegroundColor Green
             } else {
                 Write-Host "[INFO] 'AvailableProgramHubs' global setting already has an absolute value, skipping"
+            }
+        }
+    }
+
+    if ($PreviousVersion -lt [version]"1.14.0" -and -not $SkipTemplate.IsPresent) {
+        # Prosjektveiviseren v6: verifiser generasjonssplitten. Hvis omdøpingen i
+        # PreInstallUpgrade feilet, heter den GAMLE listen fortsatt «Fasesjekkliste» —
+        # da treffer prosjektprovisjoneringens getByTitle feil liste (stille kildebytte).
+        # Ved -SkipTemplate hoppes hele splitten bevisst over (se PreInstallUpgrade),
+        # så verifiseringen ville bare gitt misvisende advarsler.
+        Write-Host "[INFO] Verifying side-by-side list generations (Prosjektveiviseren v6)"
+        $GenerationChecks = @(
+            @{ LegacyUrl = (Get-Resource -Name "Lists_PhaseChecklistLegacy_Url"); LegacyTitle = (Get-Resource -Name "Lists_PhaseChecklistLegacy_Title"); V6Url = (Get-Resource -Name "Lists_PhaseChecklistV6_Url"); V6Title = (Get-Resource -Name "Lists_PhaseChecklistV6_Title") },
+            @{ LegacyUrl = (Get-Resource -Name "Lists_PlannerTasksLegacy_Url"); LegacyTitle = (Get-Resource -Name "Lists_PlannerTasksLegacy_Title"); V6Url = (Get-Resource -Name "Lists_PlannerTasksV6_Url"); V6Title = (Get-Resource -Name "Lists_PlannerTasksV6_Title") }
+        )
+        $GenerationChecks | ForEach-Object {
+            $LegacyList = Get-PnPList -Identity $_.LegacyUrl -ErrorAction SilentlyContinue
+            $V6List = Get-PnPList -Identity $_.V6Url -ErrorAction SilentlyContinue
+            if ($null -eq $V6List) {
+                Write-Host "[WARNING] v6 list at [$($_.V6Url)] was not provisioned" -ForegroundColor Yellow
+            }
+            if ($null -eq $LegacyList) {
+                Write-Host "[WARNING] Legacy list at [$($_.LegacyUrl)] was not found" -ForegroundColor Yellow
+            }
+            elseif ($LegacyList.Title -eq $_.V6Title) {
+                Write-Host "[WARNING] Legacy list at [$($_.LegacyUrl)] is still titled [$($LegacyList.Title)] - the rename in PreInstallUpgrade did not run. Project provisioning will resolve the WRONG source list until it is renamed to [$($_.LegacyTitle)]." -ForegroundColor Red
             }
         }
     }

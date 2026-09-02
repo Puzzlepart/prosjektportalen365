@@ -1,4 +1,4 @@
-_The template was validated 11.6.2026, 10:50:52_
+_The template was validated 9/2/2026, 11:57:29 AM_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -32,8 +32,8 @@ _No tokens with missing translations or replacement values found._
                         "Title": "Oversikt"
                     },
                     {
-                        "Url": "SitePages/OverordnetGevinster.aspx",
-                        "Title": "Gevinster"
+                        "Url": "SitePages/OverordnetNyttevirkninger.aspx",
+                        "Title": "Nyttevirkninger"
                     },
                     {
                         "Url": "SitePages/OverordnetTidslinje.aspx",
@@ -112,8 +112,8 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Name": "OverordnetGevinster.aspx",
-            "Title": "Gevinster",
+            "Name": "OverordnetNyttevirkninger.aspx",
+            "Title": "Nyttevirkninger",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
             "Sections": [
@@ -125,9 +125,9 @@ _No tokens with missing translations or replacement values found._
                                 {
                                     "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
-                                        "title": "Gevinster for underområder",
-                                        "dataSource": "Alle gevinstelementer for underområder",
-                                        "dataSourceCategory": "Gevinstoversikt",
+                                        "title": "Nyttevirkninger for underområder",
+                                        "dataSource": "Alle nyttevirkningselementer for underområder",
+                                        "dataSourceCategory": "Nytteoversikt",
                                         "dataSourceLevel": "Overordnet/Program",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
@@ -288,6 +288,6 @@ _No tokens with missing translations or replacement values found._
 ## Template Path
 
 ```txt
-C:\code\prosjektportalen365\Templates\Content\Portfolio_content.no-NB\ProjectTemplates\Overordnet.txt
+/Users/remi.blom-ohlsen/code/Prosjektportalen/prosjektportalen365/Templates/Content/Portfolio_content.no-NB/ProjectTemplates/Overordnet.txt
 ```
 

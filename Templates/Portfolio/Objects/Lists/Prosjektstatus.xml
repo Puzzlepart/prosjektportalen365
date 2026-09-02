@@ -25,6 +25,10 @@
                 <FieldRef Name="GtStatusOpportunitiesComment" />
                 <FieldRef Name="GtStatusGainAchievement" />
                 <FieldRef Name="GtStatusGainAchievementComment" />
+                <FieldRef Name="GtStatusScope" />
+                <FieldRef Name="GtStatusScopeComment" />
+                <FieldRef Name="GtStatusSustainability" />
+                <FieldRef Name="GtStatusSustainabilityComment" />
                 <FieldRef Name="GtModerationStatus" />
                 <FieldRef Name="GtSiteId" />
                 <FieldRef Name="GtLastReportDate"/>
@@ -42,6 +46,10 @@
         <pnp:FieldRef ID="b1958607-cd56-4ecb-9ad7-65fb7d3c22c7" Name="GtStatusGainAchievement" DisplayName="{resource:SiteFields_GtStatusGainAchievement_DisplayName}" Required="true" />
         <pnp:FieldRef ID="09e5a74f-7ec9-467e-9474-f6870c933143" Name="GtStatusOpportunities" DisplayName="{resource:SiteFields_GtStatusOpportunities_DisplayName}" Required="true" />
         <pnp:FieldRef ID="ce6c7ed6-39cf-46a1-b238-a1ad51ad8aca" Name="GtStatusOpportunitiesComment" DisplayName="{resource:SiteFields_GtStatusOpportunitiesComment_DisplayName}" />
+        <pnp:FieldRef ID="c23bdbce-6464-420f-bca1-df849cfaf540" Name="GtStatusScope" DisplayName="{resource:SiteFields_GtStatusScope_DisplayName}" />
+        <pnp:FieldRef ID="fcd55872-af7c-45ce-a054-bd69ade37395" Name="GtStatusScopeComment" DisplayName="{resource:SiteFields_GtStatusScopeComment_DisplayName}" />
+        <pnp:FieldRef ID="4c76ca9c-43b9-4b5e-a9e3-dbacf3ca27ca" Name="GtStatusSustainability" DisplayName="{resource:SiteFields_GtStatusSustainability_DisplayName}" />
+        <pnp:FieldRef ID="ed16aa81-46c3-4941-96c3-47c4bcd08b32" Name="GtStatusSustainabilityComment" DisplayName="{resource:SiteFields_GtStatusSustainabilityComment_DisplayName}" />
         <pnp:FieldRef ID="b4f13c2a-897b-4f68-8854-6da3eb2bf184" Name="GtAiStatusComments" DisplayName="{resource:SiteFields_GtAiStatusComments_DisplayName}" />
         <pnp:FieldRef ID="9c90a42d-fc01-4e41-a5ae-5bb8a4433d39" Name="GtAiStatus" DisplayName="{resource:SiteFields_GtAiStatus_DisplayName}" />
         <pnp:FieldRef ID="3cb8e63c-bd94-4793-af08-efa8b2dcdaaf" Name="GtAiRecommendations" DisplayName="{resource:SiteFields_GtAiRecommendations_DisplayName}" />

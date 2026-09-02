@@ -84,7 +84,7 @@ define([], function () {
     ColumnRenderOptionDialogLinkTextLabel: 'Tekst for lenke',
     ColumnRenderOptionDialogShowInfoTextLabel: 'Vis infotekst',
     ColumnRenderOptionDialogInfoTextTemplateLabel: 'Mal for infotekst',
-    ColumnRenderOptionDialogInfoTextTemplateDescription: 'Mal for infotekst. Bruk {{GtMeasurementOWSCHCS}} for å vise måleindikatoren, {{GtStartValueOWSNMBR}} for å vise startverdien og {{GtDesiredValueOWSNMBR}} for å vise målet. Du kan også bruke andre kolonnenavn fra gevinstarbeidet.',
+    ColumnRenderOptionDialogInfoTextTemplateDescription: 'Mal for infotekst. Bruk {{GtMeasurementOWSCHCS}} for å vise måleindikatoren, {{GtStartValueOWSNMBR}} for å vise startverdien og {{GtDesiredValueOWSNMBR}} for å vise målet. Du kan også bruke andre kolonnenavn fra nyttevirkningsarbeidet.',
     ColumnRenderOptionFilename: 'Filnavn',
     ColumnRenderOptionInstrument: 'Instrument',
     ColumnRenderOptionNumber: 'Tall',

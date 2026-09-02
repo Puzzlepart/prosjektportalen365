@@ -1,4 +1,4 @@
-_The template was validated 11.6.2026, 10:50:52_
+_The template was validated 9/2/2026, 11:57:29 AM_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -544,7 +544,7 @@ _No tokens with missing translations or replacement values found._
                     },
                     {
                         "Url": "Lists/Benefits analysis and realization plan/AllItems.aspx",
-                        "Title": "Benefits Analysis and Realization Plan"
+                        "Title": "Benefit Analysis and Benefit Management Plan"
                     },
                     {
                         "Url": "Lists/Measurement indicators/AllItems.aspx",
@@ -581,6 +581,31 @@ _No tokens with missing translations or replacement values found._
     "WebSettings": {
         "WelcomePage": "SitePages/ProjectHome.aspx"
     },
+    "CustomActions": [
+        {
+            "Name": "ProjectUpgrade",
+            "Title": "Oppgradering av prosjekter",
+            "Location": "ClientSideExtension.ApplicationCustomizer",
+            "ClientSideComponentId": "453a6c1e-e1d0-4b12-a3fc-690a36da1f0c",
+            "ClientSideComponentProperties": "{}"
+        },
+        {
+            "Name": "TemplateSelectorCommandSet",
+            "Title": "Malvelger",
+            "Location": "ClientSideExtension.ListViewCommandSet.CommandBar",
+            "ClientSideComponentId": "c9080212-e63e-47cc-8278-00ad38c3f5a5",
+            "ClientSideComponentProperties": "{\"templateLibrary\": \"Malbibliotek\"}",
+            "RegistrationId": "101",
+            "RegistrationType": 1
+        },
+        {
+            "Name": "Footer",
+            "Title": "Footer",
+            "Location": "ClientSideExtension.ApplicationCustomizer",
+            "ClientSideComponentId": "84f27cec-ffde-4e00-a4cf-25c69f691054",
+            "ClientSideComponentProperties": "{}"
+        }
+    ],
     "ClientSidePages": [
         {
             "Name": "ProjectHome.aspx",
@@ -1237,7 +1262,7 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Title": "Benefits analysis and realization plan",
+            "Title": "Benefit analysis and benefit management plan",
             "Description": "",
             "Template": 100,
             "ContentTypesEnabled": true,
@@ -1362,8 +1387,8 @@ _No tokens with missing translations or replacement values found._
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"Lookup\" DisplayName=\"Gain\" List=\"{listid:Benefits analysis and realization plan}\" ShowField=\"Title\" ID=\"{8d70fa93-b547-46f1-84e7-4982f8c9c675}\" StaticName=\"GtGainLookup\" Name=\"GtGainLookup\"  />",
-                "<Field Type=\"Lookup\" DisplayName=\"Gain ID\" List=\"{listid:Benefits analysis and realization plan}\" ShowField=\"ID\" FieldRef=\"8d70fa93-b547-46f1-84e7-4982f8c9c675\" ReadOnly=\"TRUE\" UnlimitedLengthInDocumentLibrary=\"FALSE\" ID=\"{c239539c-8672-46cc-be77-fb53322f71ae}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtGainLookup_ID\" Name=\"GtGainLookup_ID\" />"
+                "<Field Type=\"Lookup\" DisplayName=\"Benefit\" List=\"{listid:Benefit analysis and benefit management plan}\" ShowField=\"Title\" ID=\"{8d70fa93-b547-46f1-84e7-4982f8c9c675}\" StaticName=\"GtGainLookup\" Name=\"GtGainLookup\"  />",
+                "<Field Type=\"Lookup\" DisplayName=\"Benefit ID\" List=\"{listid:Benefit analysis and benefit management plan}\" ShowField=\"ID\" FieldRef=\"8d70fa93-b547-46f1-84e7-4982f8c9c675\" ReadOnly=\"TRUE\" UnlimitedLengthInDocumentLibrary=\"FALSE\" ID=\"{c239539c-8672-46cc-be77-fb53322f71ae}\" ShowInDisplayForm=\"FALSE\" StaticName=\"GtGainLookup_ID\" Name=\"GtGainLookup_ID\" />"
             ],
             "Views": [
                 {
@@ -1493,6 +1518,6 @@ _No tokens with missing translations or replacement values found._
 ## Template Path
 
 ```txt
-C:\code\prosjektportalen365\Templates\Content\Portfolio_content.en-US\ProjectTemplates\DefaultTemplate.txt
+/Users/remi.blom-ohlsen/code/Prosjektportalen/prosjektportalen365/Templates/Content/Portfolio_content.en-US/ProjectTemplates/DefaultTemplate.txt
 ```
 

@@ -108,7 +108,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">{resource:Lists_ListContent_PhaseCheckpoints_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDescription">{resource:Lists_ListContent_PhaseCheckpoints_Description}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtLccSourceList">{resource:Lists_PhaseChecklist_Title}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccSourceList">{resource:Lists_PhaseChecklistV6_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccDestinationList">{resource:Lists_PhaseChecklist_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccFields">GtSortOrder,Title,GtProjectPhase</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccDefault">0</pnp:DataValue>
@@ -118,7 +118,7 @@
             <pnp:DataValue FieldName="ContentTypeId">0x0100B8B4EE61A547B247B49CFC21B67D5B7D01</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_ListContent_PlannerTasks_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDescription">{resource:Lists_ListContent_PlannerTasks_Description}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtLccSourceList">{resource:Lists_PlannerTasks_Title}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccSourceList">{resource:Lists_PlannerTasksV6_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccFields">-</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccDefault">0</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccHidden">0</pnp:DataValue>
