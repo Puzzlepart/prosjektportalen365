@@ -1,0 +1,60 @@
+@import "~@fluentui/react/dist/sass/References.scss";
+
+.element {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 4px;
+    min-width: 0;
+
+    .main {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 4px;
+      min-width: 0;
+      flex: 0 0 auto;
+
+      img, span {
+        margin: 1px;
+      }
+
+      .content {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+        flex: 1 1 auto;
+
+        .label {
+          font-size: 16px;
+          font-weight: 400;
+          overflow-wrap: anywhere;
+        }
+      }
+    }
+  }
+
+  .value {
+    font-size: 14px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+}
+
+.tooltipHost {
+  cursor: pointer;
+}
+
+.tooltipContent {
+  padding: 16px;
+  max-width: 300px;
+}
