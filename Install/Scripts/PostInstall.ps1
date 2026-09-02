@@ -74,11 +74,12 @@ Set-PnPList -Identity (Get-Resource -Name "Lists_PlannerTasksLegacy_Url") -Enabl
 Set-PnPList -Identity (Get-Resource -Name "Lists_PlannerTasksV6_Url") -EnableContentTypes:$false >$null 2>&1
 
 Write-Host "[INFO] Post-install action: Ensuring project column configuration for v6 status fields"
-# Fargekonfigurasjonen for de nye statusfeltene (område G) kan ikke seedes statisk:
-# GtPortfolioColumn er en lookup mot Prosjektkolonner på item-ID, og ID-ene varierer
-# mellom installasjoner (jf. at eksisterende konfigrader refererer ID-er som ikke
-# stemmer med radposisjonen i malen). Radene opprettes derfor her, med oppslag på
-# GtInternalName ved kjøring. Idempotent — eksisterende rader røres ikke.
+# Fargekonfigurasjonen for de nye statusfeltene (område G) seedes også statisk i
+# Prosjektkolonnekonfigurasjon.xml, men med hardkodede lookup-ID-er (43/45) som kun
+# stemmer for nyinstallasjoner. GtPortfolioColumn er en lookup mot Prosjektkolonner
+# på item-ID, og ID-ene varierer mellom installasjoner. Dette steget sikrer derfor
+# radene med oppslag på GtInternalName ved kjøring, slik at oppgraderte miljøer får
+# riktige rader. Idempotent — eksisterende rader røres ikke.
 $ProjectColumnsItems = Get-PnPListItem -List (Get-Resource -Name "Lists_ProjectColumns_Title")
 $ColumnConfigList = Get-Resource -Name "Lists_ProjectColumnConfiguration_Title"
 $ColumnConfigItems = Get-PnPListItem -List $ColumnConfigList
