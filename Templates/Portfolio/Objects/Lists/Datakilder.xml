@@ -126,7 +126,7 @@
             <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_Portfolio}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtDataSourceId">fbac5398-13bb-433b-999f-ddd4e8cd59a9</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceId">6a82a38e-ced3-40d6-ac4c-5e6dd6e6d4f3</pnp:DataValue>
             <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_BenefitOverview_All}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeID:0x010039EAFDC2A1624C1BA1A444FC8FE85DEC* OR ContentTypeID:0x01004F466123309D46BAB9D5C6DE89A6CF67* OR ContentTypeID:0x010073043EFE3E814A2BBEF96B8457623F95*) DepartmentId:{{sitecollectionid}}</pnp:DataValue>
@@ -138,7 +138,7 @@
             <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_Portfolio}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtDataSourceId">a3b18405-acb6-4c2e-a785-9e98e98df142</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceId">7e9e0bdb-aed6-4a1f-9ff7-11eda64be838</pnp:DataValue>
             <pnp:DataValue FieldName="GtSortOrder">90</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_BenefitOverview_PortfolioLevel}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeID:0x010039EAFDC2A1624C1BA1A444FC8FE85DEC* OR (ContentTypeID:0x01004F466123309D46BAB9D5C6DE89A6CF67* AND GtShowInPortfolioOWSBOOL:1) OR ContentTypeID:0x010073043EFE3E814A2BBEF96B8457623F95*) DepartmentId:{{sitecollectionid}}</pnp:DataValue>
@@ -149,7 +149,7 @@
             <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_Portfolio}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtDataSourceId">31cfd343-383c-47c6-ac97-f253fc9dde6b</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceId">bb8016ad-8a97-4a56-a585-69357ce95db2</pnp:DataValue>
             <pnp:DataValue FieldName="GtSortOrder">100</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_BenefitOverview_Project}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeID:0x010039EAFDC2A1624C1BA1A444FC8FE85DEC* OR ContentTypeID:0x01004F466123309D46BAB9D5C6DE89A6CF67* OR ContentTypeID:0x010073043EFE3E814A2BBEF96B8457623F95*) Path:{SiteCollection.URL}</pnp:DataValue>
@@ -182,7 +182,7 @@
             <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_ParentProgram}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
-            <pnp:DataValue FieldName="GtDataSourceId">efd72d49-736d-47a1-923e-46a133efa299</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceId">3c2316af-3c58-4440-909f-01ceae938a81</pnp:DataValue>
             <pnp:DataValue FieldName="GtSortOrder">130</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_BenefitOverview_Children}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeID:0x010039EAFDC2A1624C1BA1A444FC8FE85DEC* OR ContentTypeID:0x01004F466123309D46BAB9D5C6DE89A6CF67* OR ContentTypeID:0x010073043EFE3E814A2BBEF96B8457623F95*) DepartmentId:{{sitecollectionid}}</pnp:DataValue>
