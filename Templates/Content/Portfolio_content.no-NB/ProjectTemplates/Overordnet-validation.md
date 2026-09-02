@@ -1,4 +1,4 @@
-_The template was validated 21.8.2026, 14:55:22_
+_The template was validated 9/2/2026, 11:57:29 AM_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -126,8 +126,8 @@ _No tokens with missing translations or replacement values found._
                                     "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
                                     "Properties": {
                                         "title": "Nyttevirkninger for underområder",
-                                        "dataSource": "Alle gevinstelementer for underområder",
-                                        "dataSourceCategory": "Gevinstoversikt",
+                                        "dataSource": "Alle nyttevirkningselementer for underområder",
+                                        "dataSourceCategory": "Nytteoversikt",
                                         "dataSourceLevel": "Overordnet/Program",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
@@ -288,6 +288,6 @@ _No tokens with missing translations or replacement values found._
 ## Template Path
 
 ```txt
-C:\code\prosjektportalen365\Templates\Content\Portfolio_content.no-NB\ProjectTemplates\Overordnet.txt
+/Users/remi.blom-ohlsen/code/Prosjektportalen/prosjektportalen365/Templates/Content/Portfolio_content.no-NB/ProjectTemplates/Overordnet.txt
 ```
 

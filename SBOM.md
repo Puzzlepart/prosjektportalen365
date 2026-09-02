@@ -2,7 +2,7 @@
 
 **Project:** Prosjektportalen 365  
 **Version:** 1.13.1  
-**Generated:** 2026-09-02T08:59:57.847Z  
+**Generated:** 2026-09-02T09:55:37.935Z  
 **Format:** CycloneDX-inspired Markdown
 
 ## Overview

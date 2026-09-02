@@ -1,4 +1,4 @@
-_The template was validated 21.8.2026, 14:55:22_
+_The template was validated 9/2/2026, 11:57:29 AM_
 
 The template contains the following tokens that has not been found in the .resx files:
 
@@ -535,7 +535,7 @@ _No tokens with missing translations or replacement values found._
                 "Title": "Notatblokk"
             },
             {
-                "Url": "SitePages/Gevinstoversikt.aspx",
+                "Url": "SitePages/Nytteoversikt.aspx",
                 "Title": "Nytteoversikt",
                 "Children": [
                     {
@@ -543,7 +543,7 @@ _No tokens with missing translations or replacement values found._
                         "Title": "Endringsanalyse"
                     },
                     {
-                        "Url": "Lists/Gevinstanalyse og gevinstrealiseringsplan/AllItems.aspx",
+                        "Url": "Lists/Nytteanalyse og plan for nyttestyring/AllItems.aspx",
                         "Title": "Nytteanalyse og plan for nyttestyring"
                     },
                     {
@@ -551,11 +551,11 @@ _No tokens with missing translations or replacement values found._
                         "Title": "Måleindikatorer"
                     },
                     {
-                        "Url": "Lists/Gevinstoppflging/AllItems.aspx",
+                        "Url": "Lists/Nytteoppfolging/AllItems.aspx",
                         "Title": "Nytteoppfølging"
                     },
                     {
-                        "Url": "SitePages/Gevinstoversikt.aspx",
+                        "Url": "SitePages/Nytteoversikt.aspx",
                         "Title": "Nytteoversikt"
                     }
                 ]
@@ -581,6 +581,31 @@ _No tokens with missing translations or replacement values found._
     "WebSettings": {
         "WelcomePage": "SitePages/ProjectHome.aspx"
     },
+    "CustomActions": [
+        {
+            "Name": "ProjectUpgrade",
+            "Title": "Oppgradering av prosjekter",
+            "Location": "ClientSideExtension.ApplicationCustomizer",
+            "ClientSideComponentId": "453a6c1e-e1d0-4b12-a3fc-690a36da1f0c",
+            "ClientSideComponentProperties": "{}"
+        },
+        {
+            "Name": "TemplateSelectorCommandSet",
+            "Title": "Malvelger",
+            "Location": "ClientSideExtension.ListViewCommandSet.CommandBar",
+            "ClientSideComponentId": "c9080212-e63e-47cc-8278-00ad38c3f5a5",
+            "ClientSideComponentProperties": "{\"templateLibrary\": \"Malbibliotek\"}",
+            "RegistrationId": "101",
+            "RegistrationType": 1
+        },
+        {
+            "Name": "Footer",
+            "Title": "Footer",
+            "Location": "ClientSideExtension.ApplicationCustomizer",
+            "ClientSideComponentId": "84f27cec-ffde-4e00-a4cf-25c69f691054",
+            "ClientSideComponentProperties": "{}"
+        }
+    ],
     "ClientSidePages": [
         {
             "Name": "ProjectHome.aspx",
@@ -693,7 +718,7 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Name": "Gevinstoversikt.aspx",
+            "Name": "Nytteoversikt.aspx",
             "Title": "Nytteoversikt",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
@@ -707,8 +732,8 @@ _No tokens with missing translations or replacement values found._
                                     "Id": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
                                     "Properties": {
                                         "title": "Nytteoversikt",
-                                        "dataSource": "Alle gevinstelementer for prosjektet",
-                                        "dataSourceCategory": "Gevinstoversikt",
+                                        "dataSource": "Alle nyttevirkningselementer for prosjektet",
+                                        "dataSourceCategory": "Nytteoversikt",
                                         "dataSourceLevel": "Prosjekt",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
@@ -1493,6 +1518,6 @@ _No tokens with missing translations or replacement values found._
 ## Template Path
 
 ```txt
-C:\code\prosjektportalen365\Templates\Content\Portfolio_content.no-NB\ProjectTemplates\Standardmal.txt
+/Users/remi.blom-ohlsen/code/Prosjektportalen/prosjektportalen365/Templates/Content/Portfolio_content.no-NB/ProjectTemplates/Standardmal.txt
 ```
 
