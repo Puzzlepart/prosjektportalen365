@@ -232,12 +232,12 @@
             <pnp:DataValue FieldName="GtFieldOverrides">{
             "Program": {
                 "nb-no": {
-                    "displayName": "Gevinstansvarlig",
-                    "description": "Hvem er gevinstansvarlig for programmet?"
+                    "displayName": "Nytteeier",
+                    "description": "Hvem er nytteeier for prosjektet? Nytteeier har det overordnede ansvaret for at prosjektets nyttevirkninger blir realisert."
                 },
                 "en-us": {
-                    "displayName": "Benefits responsible",
-                    "description": "Who is responsible for benefits for the program?"
+                    "displayName": "Benefits owner",
+                    "description": "Who is the benefit owner for the project? The benefit owner has the overall responsibility for realizing the project's benefits."
                 }
             }}</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>

@@ -48,7 +48,7 @@ define([], function () {
     ColumnRenderOptionDateIncludeTimeLabel: 'Inkluder tidspunkt',
     ColumnRenderOptionInstrument: 'Instrument',
     ColumnRenderOptionDialog: 'Modal',
-    ColumnRenderOptionDialogInfoTextTemplateDescription: 'Mal for infotekst. Bruk {{GtMeasurementOWSCHCS}} for å vise måleindikatoren, {{GtStartValueOWSNMBR}} for å vise startverdien og {{GtDesiredValueOWSNMBR}} for å vise målet. Du kan også bruke andre kolonnenavn fra gevinstarbeidet.',
+    ColumnRenderOptionDialogInfoTextTemplateDescription: 'Mal for infotekst. Bruk {{GtMeasurementOWSCHCS}} for å vise måleindikatoren, {{GtStartValueOWSNMBR}} for å vise startverdien og {{GtDesiredValueOWSNMBR}} for å vise målet. Du kan også bruke andre kolonnenavn fra nyttevirkningsarbeidet.',
     ColumnRenderOptionDialogInfoTextTemplateLabel: 'Mal for infotekst',
     ColumnRenderOptionDialogLinkTextLabel: 'Tekst for lenke',
     ColumnRenderOptionDialogShowInfoTextLabel: 'Vis infotekst',

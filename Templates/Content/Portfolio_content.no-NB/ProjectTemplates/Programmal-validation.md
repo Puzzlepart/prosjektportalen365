@@ -515,7 +515,7 @@ _No tokens with missing translations or replacement values found._
                         "Title": "Oversikt"
                     },
                     {
-                        "Url": "SitePages/ProgramGevinster.aspx",
+                        "Url": "SitePages/ProgramNyttevirkninger.aspx",
                         "Title": "Nyttevirkninger"
                     },
                     {
@@ -716,7 +716,7 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Name": "ProgramGevinster.aspx",
+            "Name": "ProgramNyttevirkninger.aspx",
             "Title": "Nyttevirkninger",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,

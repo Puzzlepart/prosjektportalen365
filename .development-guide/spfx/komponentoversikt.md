@@ -7,7 +7,7 @@
 | IdeaProjectData               | PortfolioExtensions | Listeutvidelse for Idé - Prosjektdata                  | 69a7f6eb-e7ce-40eb-81e1-6f172a802619 |
 | IdeaRegistration              | PortfolioExtensions | Listeutvidelse for Idéregistrering                     | 5d26712e-bdad-4ebf-b33f-9c759042bef6 |
 | LatestProjectsWebPart         | PortfolioWebParts   | Siste prosjekter                                       | 941fd73c-b957-41c3-8d4f-082268407f10 |
-| PortfolioAggregationWebPart   | PortfolioWebParts   | Portefølje aggregeringsoversikt (eks: Gevinstoversikt) | 6c0e484d-f6da-40d4-81fc-ec1389ef29a8 |
+| PortfolioAggregationWebPart   | PortfolioWebParts   | Portefølje aggregeringsoversikt (eks: Nytteoversikt) | 6c0e484d-f6da-40d4-81fc-ec1389ef29a8 |
 | PortfolioOverviewWebPart      | PortfolioWebParts   | Porteføljeoversikt                                     | e58e3d32-057a-4418-97ce-172b92482ba2 |
 | ProjectListWebPart            | PortfolioWebParts   | Prosjektutlisting (porteføljeforside)                  | 54fbeb7d-e463-4dcc-8873-50a3ab2f0f68 |
 | PortfolioTimelineWebPart      | PortfolioWebParts   | Prosjekttidslinje (Porteføljenivå)                     | 7284c568-f66c-4218-bb2c-3734a3cfa581 |

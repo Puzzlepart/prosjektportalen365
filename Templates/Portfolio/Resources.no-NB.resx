@@ -575,7 +575,7 @@
     <value>Overordnet</value>
   </data>
   <data name="ClientSidePages_BenefitOverview_PageName" xml:space="preserve">
-    <value>Gevinstoversikt.aspx</value>
+    <value>Nytteoversikt.aspx</value>
   </data>
   <data name="ClientSidePages_BenefitOverview_Title" xml:space="preserve">
     <value>Nytteoversikt</value>
@@ -623,7 +623,7 @@
     <value>Administrasjon av underområder</value>
   </data>
   <data name="ClientSidePages_ParentBenefitOverview_PageName" xml:space="preserve">
-    <value>OverordnetGevinster.aspx</value>
+    <value>OverordnetNyttevirkninger.aspx</value>
   </data>
   <data name="ClientSidePages_ParentBenefitOverview_Title" xml:space="preserve">
     <value>Nyttevirkninger</value>
@@ -698,7 +698,7 @@
     <value>Kommunikasjonsplaner</value>
   </data>
   <data name="ClientSidePages_ProgramBenefitOverview_PageName" xml:space="preserve">
-    <value>ProgramGevinster.aspx</value>
+    <value>ProgramNyttevirkninger.aspx</value>
   </data>
   <data name="ClientSidePages_ProgramBenefitOverview_Title" xml:space="preserve">
     <value>Nyttevirkninger</value>
@@ -1145,19 +1145,19 @@
     <value>Konfigurasjonsfiler</value>
   </data>
   <data name="Lists_DataSources_Category_BenefitOverview" xml:space="preserve">
-    <value>Gevinstoversikt</value>
+    <value>Nytteoversikt</value>
   </data>
   <data name="Lists_DataSources_Category_BenefitOverview_All" xml:space="preserve">
-    <value>Alle gevinstelementer</value>
+    <value>Alle nyttevirkningselementer</value>
   </data>
   <data name="Lists_DataSources_Category_BenefitOverview_Children" xml:space="preserve">
-    <value>Alle gevinstelementer for underområder</value>
+    <value>Alle nyttevirkningselementer for underområder</value>
   </data>
   <data name="Lists_DataSources_Category_BenefitOverview_PortfolioLevel" xml:space="preserve">
-    <value>Gevinstelementer på porteføljenivå</value>
+    <value>Nyttevirkningselementer på porteføljenivå</value>
   </data>
   <data name="Lists_DataSources_Category_BenefitOverview_Project" xml:space="preserve">
-    <value>Alle gevinstelementer for prosjektet</value>
+    <value>Alle nyttevirkningselementer for prosjektet</value>
   </data>
   <data name="Lists_DataSources_Category_CommunicationPlan" xml:space="preserve">
     <value>Kommunikasjonsoversikt</value>
@@ -2309,13 +2309,13 @@
     <value>Nytteanalyse og plan for nyttestyring</value>
   </data>
   <data name="Navigation_BenefitsAnalysis_Url" xml:space="preserve">
-    <value>Lists/Gevinstanalyse og gevinstrealiseringsplan/AllItems.aspx</value>
+    <value>Lists/Nytteanalyse og plan for nyttestyring/AllItems.aspx</value>
   </data>
   <data name="Navigation_BenefitsFollowup_Title" xml:space="preserve">
     <value>Nytteoppfølging</value>
   </data>
   <data name="Navigation_BenefitsFollowup_Url" xml:space="preserve">
-    <value>Lists/Gevinstoppflging/AllItems.aspx</value>
+    <value>Lists/Nytteoppfolging/AllItems.aspx</value>
   </data>
   <data name="Navigation_BenefitsOverview_Title" xml:space="preserve">
     <value>Nytteoversikt</value>
@@ -4364,10 +4364,10 @@
     <value>Nytteoversikt</value>
   </data>
   <data name="WebParts_BenefitsOverviewCategory_Title" xml:space="preserve">
-    <value>Gevinstoversikt</value>
+    <value>Nytteoversikt</value>
   </data>
   <data name="WebParts_BenefitsOverviewDataSource_Title" xml:space="preserve">
-    <value>Alle gevinstelementer for prosjektet</value>
+    <value>Alle nyttevirkningselementer for prosjektet</value>
   </data>
   <data name="WebParts_CurrentPhase_Title" xml:space="preserve">
     <value>Nåværende fase</value>

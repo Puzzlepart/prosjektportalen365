@@ -32,7 +32,7 @@ _No tokens with missing translations or replacement values found._
                         "Title": "Oversikt"
                     },
                     {
-                        "Url": "SitePages/OverordnetGevinster.aspx",
+                        "Url": "SitePages/OverordnetNyttevirkninger.aspx",
                         "Title": "Nyttevirkninger"
                     },
                     {
@@ -112,7 +112,7 @@ _No tokens with missing translations or replacement values found._
             ]
         },
         {
-            "Name": "OverordnetGevinster.aspx",
+            "Name": "OverordnetNyttevirkninger.aspx",
             "Title": "Nyttevirkninger",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
