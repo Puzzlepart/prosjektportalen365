@@ -1,4 +1,4 @@
-import { ToolbarButton, Tooltip } from '@fluentui/react-components'
+import { ToolbarButton } from '@fluentui/react-components'
 import React, { CSSProperties } from 'react'
 import { createStyle } from './createStyle'
 import { createIcon } from './createIcon'
@@ -23,21 +23,16 @@ export function useToolbarButtonRender() {
   ) {
     return (
       <div hidden={item.hidden}>
-        <Tooltip
-          content={item.description}
-          relationship={Boolean(item.text) ? 'description' : 'label'}
-          withArrow
+        <ToolbarButton
+          icon={createIcon(item)}
+          title={item.description ?? item.text}
+          aria-label={item.text ? undefined : item.description}
+          style={createStyle(item, buttonStyle)}
+          onClick={item.onClick}
+          disabled={item.disabled}
         >
-          <ToolbarButton
-            icon={createIcon(item)}
-            title={item.text}
-            style={createStyle(item, buttonStyle)}
-            onClick={item.onClick}
-            disabled={item.disabled}
-          >
-            {item.text && <span style={labelStyle}>{item.text}</span>}
-          </ToolbarButton>
-        </Tooltip>
+          {item.text && <span style={labelStyle}>{item.text}</span>}
+        </ToolbarButton>
       </div>
     )
   }

@@ -128,7 +128,7 @@ export const createPortfolioAggregationReducer = (
           return (indexA === -1 ? Infinity : indexA) - (indexB === -1 ? Infinity : indexB)
         })
 
-      let selectedColumns = !_.isEmpty(viewColumns) ? viewColumns : (props.columns ?? [])
+      let selectedColumns = !_.isEmpty(viewColumns) ? viewColumns : props.columns ?? []
 
       let allColumnsForCategory = availableColumns.map((c) => {
         const col =

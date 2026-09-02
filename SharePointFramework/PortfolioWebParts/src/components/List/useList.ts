@@ -34,6 +34,7 @@ export function useList(props: IListProps<any>) {
   const onColumnHeaderContextMenu = (column: IColumn, ev: React.MouseEvent<HTMLElement>) => {
     props.onColumnContextMenu({ column, target: ev.target as Target })
   }
+
   return {
     ...props,
     onRenderItemColumn,

@@ -5,7 +5,7 @@ import React, { FC, ReactNode, useContext } from 'react'
 import { ListContext } from '../../context'
 import { usePortfolioOverviewContext } from '../../../PortfolioOverview/context'
 import { ITitleColumnProps } from './types'
-import { Text, Button, Link, Tooltip } from '@fluentui/react-components'
+import { Text, Button, Link } from '@fluentui/react-components'
 import {
   bundleIcon,
   EyeOffFilled,
@@ -51,18 +51,14 @@ export const TitleColumn: FC<ITitleColumnProps> = (props) => {
         page='Portfolio'
         hideAllActions={true}
         onRenderToggleElement={(onToggle) => (
-          <Tooltip
-            content={<>{strings.ProjectInformationPanelButton}</>}
-            relationship='description'
-            withArrow
-          >
-            <Button
-              appearance='transparent'
-              size='small'
-              icon={<Icons.PanelRight />}
-              onClick={onToggle}
-            />
-          </Tooltip>
+          <Button
+            appearance='transparent'
+            size='small'
+            icon={<Icons.PanelRight />}
+            title={strings.ProjectInformationPanelButton}
+            aria-label={strings.ProjectInformationPanelButton}
+            onClick={onToggle}
+          />
         )}
       >
         {children}
@@ -77,14 +73,14 @@ export const TitleColumn: FC<ITitleColumnProps> = (props) => {
     return (
       <span>
         <Text size={200}>{props.item.Title}</Text>
-        <Tooltip content={strings.NoProjectData} relationship='label' withArrow>
-          <Button
-            style={{ cursor: 'default' }}
-            appearance='transparent'
-            size='small'
-            icon={<Icons.EyeOff />}
-          />
-        </Tooltip>
+        <Button
+          style={{ cursor: 'default' }}
+          appearance='transparent'
+          size='small'
+          icon={<Icons.EyeOff />}
+          title={strings.NoProjectData}
+          aria-label={strings.NoProjectData}
+        />
       </span>
     )
   }

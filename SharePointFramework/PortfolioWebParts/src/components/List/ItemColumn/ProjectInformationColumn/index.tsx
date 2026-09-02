@@ -9,7 +9,7 @@ import {
   PanelRightContractFilled,
   PanelRightContractRegular
 } from '@fluentui/react-icons'
-import { Button, Link, Tooltip } from '@fluentui/react-components'
+import { Button, Link } from '@fluentui/react-components'
 
 /**
  * Object containing icons used in the component.
@@ -33,18 +33,14 @@ export const ProjectInformationColumn: ColumnRenderComponent<IProjectInformation
         headerText: props.columnValue
       }}
       onRenderToggleElement={(onToggle) => (
-        <Tooltip
-          content={<>{strings.ProjectInformationPanelButton}</>}
-          relationship='description'
-          withArrow
-        >
-          <Button
-            appearance='transparent'
-            size='small'
-            icon={<Icons.PanelRight />}
-            onClick={onToggle}
-          />
-        </Tooltip>
+        <Button
+          appearance='transparent'
+          size='small'
+          icon={<Icons.PanelRight />}
+          title={strings.ProjectInformationPanelButton}
+          aria-label={strings.ProjectInformationPanelButton}
+          onClick={onToggle}
+        />
       )}
     >
       <Link href={url} rel='noopener noreferrer' target='_blank'>

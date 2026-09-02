@@ -12,7 +12,7 @@ import { TooltipContent } from './TooltipContent'
 export const StatusReportColumn: ColumnRenderComponent<IStatusColumnProps> = (
   props
 ): JSX.Element => {
-  const { status, open, onOpenChange } = useStatusReportColumn(props)
+  const { status, open, onOpenChange, cancelPendingOpen } = useStatusReportColumn(props)
 
   return (
     <Popover
@@ -24,16 +24,9 @@ export const StatusReportColumn: ColumnRenderComponent<IStatusColumnProps> = (
       onOpenChange={onOpenChange}
     >
       <PopoverTrigger disableButtonEnhancement>
-        <div className={styles.root}>
-          {status?.sections?.map(({ fieldName, iconName, color }, idx) => (
-            <span
-              key={fieldName}
-              className={styles.icon}
-              style={{
-                color,
-                animationDelay: `${idx * props.animation.delay}ms`
-              }}
-            >
+        <div className={styles.root} onPointerLeave={cancelPendingOpen}>
+          {status?.sections?.map(({ fieldName, iconName, color }) => (
+            <span key={fieldName} className={styles.icon} style={{ color }}>
               {getFluentIconWithFallback(iconName, true, color)}
             </span>
           ))}
@@ -50,10 +43,6 @@ StatusReportColumn.defaultProps = {
   columnConfigListName: resource.Lists_ProjectColumnConfiguration_Title,
   statusSectionsListName: resource.Lists_StatusSections_Title,
   openDelay: 500,
-  animation: {
-    delay: 100,
-    transitionDuration: 250
-  },
   tooltip: {
     animation: {
       delay: 50,

@@ -4,6 +4,16 @@
   position: relative !important;
 }
 
+.root {
+  // v8 row animations/transitions keep every virtualized row composited,
+  // exhausting Chromium's raster budget on high-DPI displays (white tiles)
+  :global(.ms-DetailsRow),
+  :global(.ms-DetailsRow) * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
 [class*="stickyAbove"] .headerColumns {
   padding-left: 32px;
 }
