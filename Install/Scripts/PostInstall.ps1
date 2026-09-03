@@ -1,4 +1,4 @@
-Write-Host "[INFO] Post-install action: Restoring Idea calculated field formulas"
+﻿Write-Host "[INFO] Post-install action: Restoring Idea calculated field formulas"
 # The 5 *Number calc fields and GtIdeaScore ship with a placeholder formula =0 because SharePoint
 # rejects formulas that reference list-level columns at FieldRef time on a freshly created list.
 # Now that the list is fully provisioned, restore the real formulas. Source field titles are read
@@ -63,15 +63,36 @@ else {
 }
 
 Write-Host "[INFO] Post-install action: Disabling content types for lists"
-Set-PnPList -Identity (Get-Resource -Name "Lists_ProjectColumnConfiguration_Title") -EnableContentTypes:$false >$null 2>&1  
-Set-PnPList -Identity (Get-Resource -Name "Lists_PhaseChecklistLegacy_Url") -EnableContentTypes:$false >$null 2>&1
-Set-PnPList -Identity (Get-Resource -Name "Lists_PhaseChecklistV6_Url") -EnableContentTypes:$false >$null 2>&1
-Set-PnPList -Identity (Get-Resource -Name "Lists_Configuration_Title") -EnableContentTypes:$false >$null 2>&1  
-Set-PnPList -Identity (Get-Resource -Name "Lists_PortfolioViews_Title") -EnableContentTypes:$false >$null 2>&1  
-Set-PnPList -Identity (Get-Resource -Name "Lists_ProjectColumns_Title") -EnableContentTypes:$false >$null 2>&1  
-Set-PnPList -Identity (Get-Resource -Name "Lists_ResourceAllocation_Title") -EnableContentTypes:$false >$null 2>&1  
-Set-PnPList -Identity (Get-Resource -Name "Lists_PlannerTasksLegacy_Url") -EnableContentTypes:$false >$null 2>&1
-Set-PnPList -Identity (Get-Resource -Name "Lists_PlannerTasksV6_Url") -EnableContentTypes:$false >$null 2>&1
+# Listene «Fasesjekkliste» (Lists/Fasesjekkliste) og «Planneroppgaver» (Lists/Planneroppgaver)
+# finnes KUN i oppgraderte miljøer - v6-splitten døper dem om til «... (tidligere)», men
+# nyinstallasjoner provisjonerer bare v6-listene. Install.ps1 setter $ErrorActionPreference =
+# "Stop", og PostInstall.ps1 dot-sources inn i den scopen: et manglende liste-oppslag ble derfor
+# en terminerende feil som avbrøt HELE PostInstall ved nyinstallasjon - inkludert IsDefaultTemplate
+# og koblingen av listeinnhold til Standardmal lenger ned. Stream-omdirigering ($null 2>&1) stopper
+# ikke den konverteringen, så hvert kall må vaktes eksplisitt.
+function Disable-ListContentTypes {
+    param([string]$Identity)
+    if ([string]::IsNullOrWhiteSpace($Identity)) { return }
+    try {
+        $List = Get-PnPList -Identity $Identity -ErrorAction SilentlyContinue
+        if ($null -eq $List) { return }
+        Set-PnPList -Identity $List.Id -EnableContentTypes:$false -ErrorAction Stop >$null
+    }
+    catch {
+        Write-Host "[WARNING] Failed to disable content types for [$Identity]: $($_.Exception.Message)" -ForegroundColor Yellow
+    }
+}
+@(
+    (Get-Resource -Name "Lists_ProjectColumnConfiguration_Title"),
+    (Get-Resource -Name "Lists_PhaseChecklistLegacy_Url"),
+    (Get-Resource -Name "Lists_PhaseChecklistV6_Url"),
+    (Get-Resource -Name "Lists_Configuration_Title"),
+    (Get-Resource -Name "Lists_PortfolioViews_Title"),
+    (Get-Resource -Name "Lists_ProjectColumns_Title"),
+    (Get-Resource -Name "Lists_ResourceAllocation_Title"),
+    (Get-Resource -Name "Lists_PlannerTasksLegacy_Url"),
+    (Get-Resource -Name "Lists_PlannerTasksV6_Url")
+) | ForEach-Object { Disable-ListContentTypes -Identity $_ }
 
 Write-Host "[INFO] Post-install action: Ensuring project column configuration for v6 status fields"
 # Fargekonfigurasjonen for de nye statusfeltene (område G) seedes også statisk i
