@@ -176,6 +176,13 @@ export interface IPackageManifest {
      */
     projectContentTypeId?: string
     /**
+     * Content type ID (defined by the hub template) to record as
+     * `GtProjectStatusContentType` on the imported Maloppsett item, so status
+     * reports for projects created from this template use that content type
+     * instead of the standard one.
+     */
+    projectStatusContentTypeId?: string
+    /**
      * Term set ID (provisioned by the hub template) to record as
      * `GtProjectPhaseTermId` on the imported Maloppsett item, so projects created
      * from this template use this template's phase term set instead of the

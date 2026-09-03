@@ -380,6 +380,7 @@ export class PackageInstaller {
       setStatus(InstallStepKey.UpdateTemplateOptions, 'running')
       await TemplateOptionsService.upsertImported(pkg, existingItemId, {
         projectContentTypeId: manifest.provisioning?.projectContentTypeId,
+        projectStatusContentTypeId: manifest.provisioning?.projectStatusContentTypeId,
         projectPhaseTermSetId: manifest.provisioning?.projectPhaseTermSetId,
         extensionItemIds: extensionItems.map((e) => e.itemId),
         listContentItemIds: listContentItems.map((l) => l.itemId),

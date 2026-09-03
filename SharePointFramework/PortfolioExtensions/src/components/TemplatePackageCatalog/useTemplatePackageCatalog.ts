@@ -375,6 +375,7 @@ export function useTemplatePackageCatalog(
       }
       await TemplateOptionsService.createCentral(pkg, {
         projectContentTypeId: result.manifest.provisioning?.projectContentTypeId,
+        projectStatusContentTypeId: result.manifest.provisioning?.projectStatusContentTypeId,
         projectPhaseTermSetId: result.manifest.provisioning?.projectPhaseTermSetId,
         name: result.localizedName,
         description: result.localizedDescription

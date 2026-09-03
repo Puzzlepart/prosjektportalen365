@@ -106,6 +106,9 @@ export class TemplateOptionsService {
    * when supplied:
    * - `projectContentTypeId` → `GtProjectContentType` (the hub content type the
    *   setup wizard provisions projects with),
+   * - `projectStatusContentTypeId` → `GtProjectStatusContentType` (the hub
+   *   content type status reports for projects created from this template use
+   *   instead of the standard one),
    * - `projectPhaseTermSetId` → `GtProjectPhaseTermId` (the phase term set
    *   projects created from this template use instead of the standard one),
    * - `extensionItemIds` → `GtProjectExtensions` (Utvidelser — the Prosjekttillegg
@@ -118,6 +121,7 @@ export class TemplateOptionsService {
     existingItemId?: number,
     options: {
       projectContentTypeId?: string
+      projectStatusContentTypeId?: string
       projectPhaseTermSetId?: string
       extensionItemIds?: number[]
       listContentItemIds?: number[]
@@ -140,6 +144,9 @@ export class TemplateOptionsService {
     }
     if (options.projectContentTypeId) {
       properties.GtProjectContentType = options.projectContentTypeId
+    }
+    if (options.projectStatusContentTypeId) {
+      properties.GtProjectStatusContentType = options.projectStatusContentTypeId
     }
     if (options.projectPhaseTermSetId) {
       properties.GtProjectPhaseTermId = options.projectPhaseTermSetId
@@ -177,8 +184,9 @@ export class TemplateOptionsService {
    * the cloud template directly from its package at setup time.
    * `options.sourceUrl` overrides it only when explicitly supplied. When the
    * manifest declares them (and the publish step has provisioned the term set /
-   * content type to the hub), `projectPhaseTermSetId` → `GtProjectPhaseTermId`
-   * and `projectContentTypeId` → `GtProjectContentType` are set like
+   * content type to the hub), `projectPhaseTermSetId` → `GtProjectPhaseTermId`,
+   * `projectContentTypeId` → `GtProjectContentType` and
+   * `projectStatusContentTypeId` → `GtProjectStatusContentType` are set like
    * {@link upsertImported} does. `options.name`/`options.description` override
    * the catalog values for a language-specific Maloppsett item (bilingual
    * packages on a matching-language hub).
@@ -187,6 +195,7 @@ export class TemplateOptionsService {
     pkg: ICatalogPackage,
     options: {
       projectContentTypeId?: string
+      projectStatusContentTypeId?: string
       projectPhaseTermSetId?: string
       sourceUrl?: string
       name?: string
@@ -210,6 +219,9 @@ export class TemplateOptionsService {
     }
     if (options.projectContentTypeId) {
       properties.GtProjectContentType = options.projectContentTypeId
+    }
+    if (options.projectStatusContentTypeId) {
+      properties.GtProjectStatusContentType = options.projectStatusContentTypeId
     }
     if (options.projectPhaseTermSetId) {
       properties.GtProjectPhaseTermId = options.projectPhaseTermSetId
