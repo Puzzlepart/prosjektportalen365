@@ -742,7 +742,11 @@ export class PackageInstaller {
    * Upload the package's extension provisioning file(s) into the hub
    * **Prosjekttillegg** (Project Extensions) document library, setting the
    * `Title` and description (`GtDescription`) on each, plus `GtExtensionDefault`
-   * from the manifest's `defaultSelected`. Re-import overwrites the file by name.
+   * from the manifest's `defaultSelected`, and `GtExtensionLocked` from `locked`
+   * when the manifest declares it (a locked extension linked to the template is
+   * always applied for that template and hidden in the wizard; leaving `locked`
+   * out keeps whatever lock the item already has). Re-import overwrites the file
+   * by name.
    * Returns the created/updated Prosjekttillegg items so a template's Maloppsett
    * entry can link them via `GtProjectExtensions` (Utvidelser).
    */
@@ -776,7 +780,10 @@ export class PackageInstaller {
       await item.update({
         Title: ext.name,
         GtDescription: ext.description ?? manifest.description ?? '',
-        GtExtensionDefault: !!ext.defaultSelected
+        GtExtensionDefault: !!ext.defaultSelected,
+        // Only sent when the manifest states it, so a lock set by an
+        // administrator on the Prosjekttillegg item survives a re-import.
+        ...(ext.locked === undefined ? {} : { GtExtensionLocked: !!ext.locked })
       })
       added.push({ extensionId: ext.id, itemId: item.Id, name: ext.name })
     }

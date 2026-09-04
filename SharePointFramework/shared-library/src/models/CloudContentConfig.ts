@@ -81,6 +81,16 @@ export class CloudContentConfig extends ContentConfig {
   }
 
   /**
+   * A bundled list-content configuration always belongs to its cloud template.
+   * The base implementation compares hub item ids, which the synthetic cloud ids
+   * never match, so it is overridden here (this also makes `locked` bundled
+   * entries mandatory through `isMandatoryForTemplate`).
+   */
+  public isDefaultForTemplate(): boolean {
+    return true
+  }
+
+  /**
    * The bundled rows for this config, read from the package's hub-template
    * `Lists[]` entry whose `Title === sourceListTitle`.
    */

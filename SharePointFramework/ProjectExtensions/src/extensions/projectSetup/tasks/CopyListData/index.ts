@@ -416,6 +416,7 @@ export class CopyListData extends BaseTask {
       )
 
       const list = config.destList
+      const failed: Array<{ properties: Record<string, any>; error: any }> = []
       for (let i = 0, j = 0; i < itemsToAdd.length; i += batchChunkSize, j++) {
         const [batch, execute] = createBatch(list)
         const batchItems = itemsToAdd.slice(i, i + batchChunkSize)
@@ -425,8 +426,40 @@ export class CopyListData extends BaseTask {
           format(strings.ProcessListItemText, j + 1, batchItems.length),
           'List'
         )
-        batchItems.forEach((properties) => list.items.using(batch).add(properties))
+        // Keep the per-item promises: a rejected add (e.g. a property the
+        // destination list lacks) must be reported, not become an unhandled
+        // rejection while the task reports success.
+        const adds = batchItems.map((properties) =>
+          list.items
+            .using(batch)
+            .add(properties)
+            .then(() => null)
+            .catch((error) => ({ properties, error }))
+        )
         await execute()
+        const batchFailures = (await Promise.all(adds)).filter(Boolean)
+        for (const failure of batchFailures) {
+          this.logError(
+            `Failed to add item '${failure.properties?.Title ?? ''}' to list '${
+              config.destListProps.Title
+            }': ${failure.error?.message ?? failure.error}`,
+            { properties: failure.properties, error: failure.error }
+          )
+        }
+        failed.push(...batchFailures)
+      }
+      if (failed.length > 0) {
+        this.logWarning(
+          `${failed.length} of ${itemsToAdd.length} item(s) could not be copied from '${config.sourceListProps.Title}' to '${config.destListProps.Title}'`,
+          { failedItems: failed.map((failure) => failure.properties?.Title) }
+        )
+        if (failed.length === itemsToAdd.length) {
+          throw new Error(
+            `None of the ${itemsToAdd.length} item(s) could be copied to list '${
+              config.destListProps.Title
+            }': ${failed[0].error?.message ?? failed[0].error}`
+          )
+        }
       }
     } catch (error) {
       throw error

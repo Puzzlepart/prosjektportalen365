@@ -33,14 +33,15 @@ export class ProjectExtension extends UserSelectableObject {
 
   /**
    * Checks if the project extension is mandatory for the specified template. It's either
-   * locked and default on the project extension element itself, or it's connected to the
-   * template and `isDefaultExtensionsLocked` is set to true.
+   * locked and default for the template (default on the project extension element itself,
+   * or connected to the template), or it's connected to the template and
+   * `isDefaultExtensionsLocked` is set to true on the template.
    *
    * @param template Project template
    */
   public isMandatoryForTemplate(template: ProjectTemplate): boolean {
     return (
-      (this.isLocked && this.isDefault) ||
+      (this.isLocked && this.isDefaultForTemplate(template)) ||
       (template?.isDefaultExtensionsLocked && template?.extensions.includes(this.id))
     )
   }

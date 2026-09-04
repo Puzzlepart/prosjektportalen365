@@ -15,8 +15,25 @@ export interface IManifestExtension {
    * (e.g. `provisioning/extensions/EnkeltProsjekt.json`).
    */
   file: string
+  /**
+   * Informational only (not read by Prosjektportalen). Use `locked` to make the
+   * extension mandatory for its template.
+   */
   optional?: boolean
+  /**
+   * Pre-select the extension in the setup wizard (`GtExtensionDefault`). Note
+   * that the hub item flag is hub-wide: the extension is then pre-selected for
+   * every template, not only the one it is linked to.
+   */
   defaultSelected?: boolean
+  /**
+   * Lock the extension (`GtExtensionLocked`). For the template it is linked to
+   * (import: Maloppsett `GtProjectExtensions`; cloud: bundled in the `.pppkg`)
+   * it is always applied and cannot be deselected. Combined with
+   * `defaultSelected: false` it is also hidden in the wizard, which mirrors a
+   * hidden, template-bound Prosjekttillegg item.
+   */
+  locked?: boolean
 }
 
 /**
