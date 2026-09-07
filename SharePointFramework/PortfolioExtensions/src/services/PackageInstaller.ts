@@ -6,6 +6,7 @@ import '@pnp/sp/lists'
 import '@pnp/sp/folders'
 import '@pnp/sp/files'
 import '@pnp/sp/items'
+import { TEMPLATE_PACKAGE_STORE_FOLDER } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
 import resource from 'SharedResources'
 import SPDataAdapter from 'data/SPDataAdapter'
@@ -26,8 +27,10 @@ import { isNewerVersion } from './version'
 /**
  * Folder (under the hub Template Library) where imported project-level
  * provisioning assets are stored for later use by the setup wizard (Phase 3).
+ * Shared constant — the document template selector (ProjectExtensions)
+ * excludes this folder from its listing.
  */
-const PACKAGE_STORE_FOLDER = 'pp-packages'
+const PACKAGE_STORE_FOLDER = TEMPLATE_PACKAGE_STORE_FOLDER
 
 /**
  * Routes every PnP `Logger` line (sp-js-provisioning's per-field / per-content-type /
@@ -852,7 +855,7 @@ export class PackageInstaller {
    * defense-in-depth rather than untrusted-input handling.
    */
   private static _escapeOData(value: string): string {
-    return value.replace(/'/g, "''")
+    return value.replace(/'/g, '\'\'')
   }
 
   /**

@@ -2,7 +2,7 @@ import { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
 import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
 import * as strings from 'ProjectExtensionsStrings'
 import { TemplateItem } from 'models/TemplateItem'
-import { SPFolder } from 'pp365-shared-library'
+import { SPFolder, TEMPLATE_PACKAGE_STORE_FOLDER } from 'pp365-shared-library'
 import { DefaultCaching, SPDataAdapterBase } from 'pp365-shared-library/lib/data'
 import { IProjectDataServiceParams, ProjectDataService } from 'pp365-shared-library/lib/services'
 import validFilename from 'valid-filename'
@@ -72,13 +72,20 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param viewXml View XML (CAML query)
    */
   public async getDocumentTemplates(libraryName: string, viewXml: string) {
-    return await this.portalDataService.getItems(
+    const items = await this.portalDataService.getItems(
       libraryName,
       TemplateItem,
       {
         ViewXml: viewXml
       },
       ['File', 'Folder', 'FieldValuesAsText']
+    )
+    // The template package catalog stores imported packages' provisioning
+    // assets under <library>/pp-packages/ — wizard inputs, not document
+    // templates — so that folder and everything in it is excluded here.
+    return items.filter(
+      (item) =>
+        !(item.serverRelativeUrl ?? '').split('/').includes(TEMPLATE_PACKAGE_STORE_FOLDER)
     )
   }
 
