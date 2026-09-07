@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import React, { FC, useContext, useState } from 'react'
+import React, { FC, useContext } from 'react'
 import * as strings from 'PortfolioExtensionsStrings'
 import { FooterContext } from '../context'
 import {
@@ -22,13 +22,13 @@ import {
 import { customLightTheme, getFluentIcon } from 'pp365-shared-library'
 import styles from './Assistant.module.scss'
 import resource from 'SharedResources'
+import { useAssistant } from './useAssistant'
 
 export const Assistant: FC = () => {
   const context = useContext(FooterContext)
   const fluentProviderId = useId('fp-assistant')
   const isUnavailable = false
-  const [open, setOpen] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const { open, hasOpened, loading, close, toggle, setDrawerOpen, setLoading } = useAssistant()
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
@@ -38,7 +38,7 @@ export const Assistant: FC = () => {
           position='end'
           size='medium'
           open={open}
-          onOpenChange={(_, { open }) => setOpen(open)}
+          onOpenChange={(_, { open }) => setDrawerOpen(open)}
         >
           <DrawerHeader>
             <DrawerHeaderNavigation>
@@ -61,7 +61,7 @@ export const Assistant: FC = () => {
                     title={strings.CloseLabel}
                     appearance='subtle'
                     icon={getFluentIcon('Dismiss')}
-                    onClick={() => setOpen(false)}
+                    onClick={close}
                   />
                 </ToolbarGroup>
               </Toolbar>
@@ -75,14 +75,16 @@ export const Assistant: FC = () => {
                 style={{ padding: 10, minHeight: '20px' }}
               />
             )}
-            <iframe
-              src={`${context.props.assistantEndpointUrl}?source=${context.props.pageContext.web.absoluteUrl}`}
-              style={{ display: loading ? 'none' : 'block', border: 'none' }}
-              title={strings.AssistantIframeTitle}
-              width='100%'
-              height='100%'
-              onLoad={() => setLoading(false)}
-            />
+            {hasOpened && (
+              <iframe
+                src={`${context.props.assistantEndpointUrl}?source=${context.props.pageContext.web.absoluteUrl}`}
+                style={{ display: loading ? 'none' : 'block', border: 'none' }}
+                title={strings.AssistantIframeTitle}
+                width='100%'
+                height='100%'
+                onLoad={() => setLoading(false)}
+              />
+            )}
           </DrawerBody>
         </OverlayDrawer>
         <Tooltip
@@ -96,7 +98,7 @@ export const Assistant: FC = () => {
             appearance='primary'
             disabled={isUnavailable}
             icon={isUnavailable ? getFluentIcon('Bot') : getFluentIcon('BotSparkle')}
-            onClick={() => setOpen(!open)}
+            onClick={toggle}
           >
             {strings.AssistantButtonLabel}
           </Button>

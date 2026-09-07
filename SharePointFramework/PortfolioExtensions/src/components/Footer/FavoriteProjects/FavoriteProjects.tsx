@@ -11,7 +11,8 @@ import {
   IdPrefixProvider,
   useId,
   Link,
-  Divider
+  Divider,
+  Spinner
 } from '@fluentui/react-components'
 import { getFluentIcon, customLightTheme, WebPartTitle } from 'pp365-shared-library'
 
@@ -22,7 +23,11 @@ export const FavoriteProjects: FC = () => {
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>
-        <Popover withArrow positioning='above-start'>
+        <Popover
+          withArrow
+          positioning='above-start'
+          onOpenChange={(_, { open }) => open && context.loadFavoriteProjects()}
+        >
           <PopoverTrigger disableButtonEnhancement>
             <Tooltip
               relationship='description'
@@ -40,11 +45,13 @@ export const FavoriteProjects: FC = () => {
               description={strings.FavoriteProjectsDescription}
             />
             <Divider style={{ padding: '12px' }} />
-            {context.props.favoriteProjects.length === 0 ? (
+            {!context.areFavoriteProjectsLoaded || context.isFavoriteProjectsLoading ? (
+              <Spinner size='tiny' label={strings.FavoriteProjectsLabel} />
+            ) : context.favoriteProjects.length === 0 ? (
               <div style={{ padding: '4px 8px' }}>{strings.FavoriteProjectsNoItemsMessage}</div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                {context.props.favoriteProjects.map((project) => (
+                {context.favoriteProjects.map((project) => (
                   <Link
                     key={project.url}
                     href={project.url}

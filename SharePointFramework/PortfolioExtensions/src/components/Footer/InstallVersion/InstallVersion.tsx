@@ -20,7 +20,11 @@ export const InstallVersion: FC = () => {
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>
-        <Popover withArrow positioning='above-start'>
+        <Popover
+          withArrow
+          positioning='above-start'
+          onOpenChange={(_, { open }) => open && context.loadGitHubReleases()}
+        >
           <PopoverTrigger disableButtonEnhancement>
             <Tooltip relationship='description' withArrow content={strings.LastInstallDescription}>
               <Button size='small' appearance='subtle' icon={getFluentIcon('BoxToolbox')}>

@@ -10,7 +10,8 @@ import {
   Label,
   FluentProvider,
   IdPrefixProvider,
-  useId
+  useId,
+  Spinner
 } from '@fluentui/react-components'
 import resource from 'SharedResources'
 
@@ -67,7 +68,11 @@ export const InstallVersionTooltipContent: FC = () => {
             >
               <span className={styles.label}>{strings.SeeAllInstallationsLinkText}</span>
             </Button>
-            <LatestGitHubRelease />
+            {!context.areGitHubReleasesLoaded || context.isGitHubReleasesLoading ? (
+              <Spinner size='tiny' label={strings.LatestGitHubReleaseLabel} />
+            ) : (
+              context.gitHubReleases.length > 0 && <LatestGitHubRelease />
+            )}
           </div>
         </div>
       </FluentProvider>
