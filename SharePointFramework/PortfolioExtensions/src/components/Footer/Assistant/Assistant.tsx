@@ -37,6 +37,9 @@ export const Assistant: FC = () => {
           role='panel'
           position='end'
           size='medium'
+          // Litt bredere enn Fluents 'medium' (592px). Settes som inline variabel fordi
+          // Fluent-klassen setter samme variabel, og max-width: 100vw fanger små skjermer.
+          style={{ '--fui-Drawer--size': '720px' } as React.CSSProperties}
           open={open}
           onOpenChange={(_, { open }) => setOpen(open)}
         >
@@ -67,7 +70,9 @@ export const Assistant: FC = () => {
               </Toolbar>
             </DrawerHeaderNavigation>
           </DrawerHeader>
-          <DrawerBody className={styles.body}>
+          {/* padding må settes inline: Fluent har en `.fui-DrawerBody:last-child`-regel med
+              padding-bottom som slår klassen vår, og gir en hvit stripe under footeren i iframen. */}
+          <DrawerBody className={styles.body} style={{ padding: 0 }}>
             {loading && (
               <Spinner
                 size='extra-tiny'
@@ -77,7 +82,7 @@ export const Assistant: FC = () => {
             )}
             <iframe
               src={`${context.props.assistantEndpointUrl}?source=${context.props.pageContext.web.absoluteUrl}`}
-              style={{ display: loading ? 'none' : 'block', border: 'none' }}
+              style={{ display: loading ? 'none' : 'block', border: 'none', width: '100%', height: '100%' }}
               title={strings.AssistantIframeTitle}
               width='100%'
               height='100%'
