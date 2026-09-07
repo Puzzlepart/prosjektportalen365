@@ -116,6 +116,8 @@ define([], function () {
     CatalogContentFieldFallback: 'Field',
     CatalogContentTaxonomy: 'Taxonomy',
     CatalogContentTermSets: 'Term sets',
+    CatalogContentClientSidePages: 'Pages',
+    CatalogContentListContent: 'List content',
     CatalogContentExtensions: 'Project extensions',
     CatalogContentFiles: 'Files',
     CatalogShowDetails: 'Show details',

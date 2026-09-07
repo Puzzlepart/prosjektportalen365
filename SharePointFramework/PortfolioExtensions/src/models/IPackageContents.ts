@@ -3,6 +3,7 @@
  */
 export type ContentIconName =
   | 'lists'
+  | 'clientSidePages'
   | 'contentTypes'
   | 'siteFields'
   | 'taxonomy'

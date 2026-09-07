@@ -16,6 +16,7 @@ import {
   Column20Regular,
   Document20Regular,
   DocumentBulletList20Regular,
+  DocumentOnePage20Regular,
   Eye16Regular,
   PuzzlePiece20Regular,
   Tag20Regular,
@@ -31,6 +32,7 @@ import { usePackageContentSummary } from './usePackageContentSummary'
 const ICONS: Record<ContentIconName, JSX.Element> = {
   content: <ClipboardTaskListLtr20Regular />,
   lists: <TextBulletListSquare20Regular />,
+  clientSidePages: <DocumentOnePage20Regular />,
   contentTypes: <DocumentBulletList20Regular />,
   siteFields: <Column20Regular />,
   taxonomy: <Tag20Regular />,
