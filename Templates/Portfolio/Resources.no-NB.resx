@@ -4126,6 +4126,9 @@
   <data name="Choice_GtStatusSustainability_MajorDeviation" xml:space="preserve">
     <value>Større avvik fra bærekraftskravene</value>
   </data>
+  <data name="Choice_GtStatusSustainability_NotDetermined" xml:space="preserve">
+    <value>Ikke tatt stilling til</value>
+  </data>
   <data name="Lists_StatusSections_StatusSustainability_Title" xml:space="preserve">
     <value>Bærekraft</value>
   </data>
@@ -4137,6 +4140,9 @@
   </data>
   <data name="Lists_ProjectColumnConfiguration_GtStatusSustainability_MajorDeviation_Title" xml:space="preserve">
     <value>Status bærekraft (Større avvik)</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusSustainability_NotDetermined_Title" xml:space="preserve">
+    <value>Status bærekraft (Ikke tatt stilling til)</value>
   </data>
   <data name="SiteFields_GtStatusQualityComment_DisplayName" xml:space="preserve">
     <value>Kommentar, kvalitet</value>

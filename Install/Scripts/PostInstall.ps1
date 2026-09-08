@@ -110,7 +110,8 @@ $V6StatusColumnConfig = @(
     @{ Field = "GtStatusScope"; Choice = "Choice_GtStatusScope_MajorChanges"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusScope_MajorChanges_Title"; Color = "#ea5c73" },
     @{ Field = "GtStatusSustainability"; Choice = "Choice_GtStatusSustainability_AsPlanned"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusSustainability_AsPlanned_Title"; Color = "#2da748" },
     @{ Field = "GtStatusSustainability"; Choice = "Choice_GtStatusSustainability_MinorDeviation"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusSustainability_MinorDeviation_Title"; Color = "#e9b359" },
-    @{ Field = "GtStatusSustainability"; Choice = "Choice_GtStatusSustainability_MajorDeviation"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusSustainability_MajorDeviation_Title"; Color = "#ea5c73" }
+    @{ Field = "GtStatusSustainability"; Choice = "Choice_GtStatusSustainability_MajorDeviation"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusSustainability_MajorDeviation_Title"; Color = "#ea5c73" },
+    @{ Field = "GtStatusSustainability"; Choice = "Choice_GtStatusSustainability_NotDetermined"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusSustainability_NotDetermined_Title"; Color = "#e9b359" }
 )
 foreach ($Config in $V6StatusColumnConfig) {
     $Column = $ProjectColumnsItems | Where-Object { $_["GtInternalName"] -eq $Config.Field } | Select-Object -First 1

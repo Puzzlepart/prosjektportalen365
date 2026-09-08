@@ -3,5 +3,6 @@
         <CHOICE>{resource:Choice_GtStatusSustainability_AsPlanned}</CHOICE>
         <CHOICE>{resource:Choice_GtStatusSustainability_MinorDeviation}</CHOICE>
         <CHOICE>{resource:Choice_GtStatusSustainability_MajorDeviation}</CHOICE>
+        <CHOICE>{resource:Choice_GtStatusSustainability_NotDetermined}</CHOICE>
     </CHOICES>
 </Field>

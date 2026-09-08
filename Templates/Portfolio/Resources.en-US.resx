@@ -4126,6 +4126,9 @@
   <data name="Choice_GtStatusSustainability_MajorDeviation" xml:space="preserve">
     <value>Major deviation from the sustainability requirements</value>
   </data>
+  <data name="Choice_GtStatusSustainability_NotDetermined" xml:space="preserve">
+    <value>Not yet determined</value>
+  </data>
   <data name="Lists_StatusSections_StatusSustainability_Title" xml:space="preserve">
     <value>Sustainability</value>
   </data>
@@ -4137,6 +4140,9 @@
   </data>
   <data name="Lists_ProjectColumnConfiguration_GtStatusSustainability_MajorDeviation_Title" xml:space="preserve">
     <value>Status sustainability (Major deviation)</value>
+  </data>
+  <data name="Lists_ProjectColumnConfiguration_GtStatusSustainability_NotDetermined_Title" xml:space="preserve">
+    <value>Status sustainability (Not yet determined)</value>
   </data>
   <data name="SiteFields_GtStatusQualityComment_DisplayName" xml:space="preserve">
     <value>Comment, quality</value>
