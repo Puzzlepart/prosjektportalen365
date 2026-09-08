@@ -855,7 +855,7 @@ export class PackageInstaller {
    * defense-in-depth rather than untrusted-input handling.
    */
   private static _escapeOData(value: string): string {
-    return value.replace(/'/g, '\'\'')
+    return value.replace(/'/g, "''")
   }
 
   /**

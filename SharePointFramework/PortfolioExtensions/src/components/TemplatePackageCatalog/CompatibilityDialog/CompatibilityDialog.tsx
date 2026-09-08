@@ -70,7 +70,6 @@ const useStyles = makeStyles({
   }
 })
 
-// Most severe first.
 const ORDER: Record<ConflictResolution, number> = { blocked: 0, skip: 1, overwrite: 2 }
 
 /**

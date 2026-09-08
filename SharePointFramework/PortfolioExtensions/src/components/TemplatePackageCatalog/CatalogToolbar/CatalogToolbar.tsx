@@ -58,8 +58,6 @@ export const CatalogToolbar: FC = () => {
     { value: 'extension', text: strings.CatalogTypeExtension },
     { value: 'content', text: strings.CatalogTypeContent }
   ]
-  // No 'Lokal' option: the catalog only lists cloud packages, so a local-only
-  // status can never match (see StatusFilter in ../types).
   const statusOptions = [
     { value: 'all', text: strings.CatalogFilterAllOption },
     { value: 'Importert', text: strings.CatalogStatusImported },
@@ -129,8 +127,6 @@ export const CatalogToolbar: FC = () => {
             placeholder={strings.CatalogFilterCategoryLabel}
             value={categoryValue}
             button={{ children: <span>{categoryValue}</span> }}
-            // 'Alle' doubles as the empty selection: it renders checked when no
-            // categories are picked, and picking it clears the selection.
             selectedOptions={filters.categories.length === 0 ? [ALL_FILTER] : filters.categories}
             onOptionSelect={(_, data) =>
               setCategories(

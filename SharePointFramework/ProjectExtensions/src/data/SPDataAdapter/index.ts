@@ -84,8 +84,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     // assets under <library>/pp-packages/ — wizard inputs, not document
     // templates — so that folder and everything in it is excluded here.
     return items.filter(
-      (item) =>
-        !(item.serverRelativeUrl ?? '').split('/').includes(TEMPLATE_PACKAGE_STORE_FOLDER)
+      (item) => !(item.serverRelativeUrl ?? '').split('/').includes(TEMPLATE_PACKAGE_STORE_FOLDER)
     )
   }
 

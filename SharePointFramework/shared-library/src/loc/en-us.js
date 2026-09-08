@@ -66,7 +66,6 @@ define([], function () {
     SyncListAddingField: 'Adding field {0} to project properties...',
     BooleanYes: 'Yes',
     BooleanNo: 'No',
-    // ItemColumn strings
     ColumnPersistRenderGloballyFieldLabel: 'Update globally',
     ColumnPersistRenderGloballyFieldDescription: 'If you want to change the display mode for the columns as for all web parts and views, tick the check box above.',
     ColumnRenderOptionText: 'Text',
