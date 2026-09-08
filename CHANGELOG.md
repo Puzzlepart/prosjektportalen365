@@ -1,8 +1,8 @@
 # Endringslogg
 
-Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
+Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
-## 1.14.0 - TBA
+## 1.14.0 - 10.09.2026
 
 ### Ny funksjonalitet
 
@@ -17,10 +17,12 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Lagt til konfigurerbar standard tidsramme (`Standard startdato` og `Standard sluttdato`) i egenskapspanelet for `Prosjekttidslinje`-webdelen i porteføljen, slik at administrator kan velge hvor langt tilbake og frem i tid tidslinjen skal vises som standard
 - Forbedret visning av termsett-/taksonomifelt i aggregerte oversikter. Verdier fra søke-egenskaper med prefix `owstaxId` (f.eks. `owstaxIdGtProjectPhase`) vises nå som rene etiketter i stedet for rå søkeresultatformat med GUID-er, og flerverdier vises som separate merker (`tags`)
 - Felter med datatype `Tags` (typisk taksonomi-felt, f.eks. `Tjenesteområde`) hvor verdiene har overordnede termer vises nå som et innrykket, sammenleggbart hierarki i filterpanelet i stedet for som flate `:`-separerte tekststrenger (`Overordnet:Underordnet`).
-- Overgang til `sp-js-provisioning` `1.3.8` for malbasert opprettelse og oppdatering av innholdstyper med faste ID-er. De 15 site script-filene som kun opprettet tomme innholdstyper er fjernet fra releasepakken, slik at innholdstypene forvaltes gjennom JSON-malene. Eksisterende installasjoner med eldre content type-site scripts kan fortsatt oppgraderes uten egen opprydding av disse site scriptene. [#1744](https://github.com/Puzzlepart/prosjektportalen365/issues/1744)
+- Overgang til `sp-js-provisioning` `1.3.15` for malbasert opprettelse og oppdatering av innholdstyper med faste ID-er. De 15 site script-filene som kun opprettet tomme innholdstyper er fjernet fra releasepakken, slik at innholdstypene forvaltes gjennom JSON-malene. Eksisterende installasjoner med eldre content type-site scripts kan fortsatt oppgraderes uten egen opprydding av disse site scriptene. [#1744](https://github.com/Puzzlepart/prosjektportalen365/issues/1744)
 - SPFx-utvidelsene `Oppgradering av prosjekter`, `Malvelger` og `Footer` legges nå inn via `CustomActions` i JSON-malene (`Standardmal` og `Programmal`) i stedet for via site scripts, og de tre tilhørende site scriptene er fjernet fra releasepakken - området-designet består nå kun av `Regionale innstillinger` og `Setup extension`.
 - `Feltfilter` for vertikale faner i `Prosjektutlisting` støtter nå operatorer i tillegg til ren likhet: `$ne` (ikke lik), `$in` (én av) og `$nin` (ingen av).
 - Ny innstilling `Vis avsluttede prosjekter` i `Prosjektutlisting`. Prosjekter med Prosjektstatus `Avsluttet` ble tidligere fjernet før vertikalene ble filtrert, og kunne dermed ikke vise avsluttede prosjekter i noen av vertikalene. Innstillingen er av som standard.
+- Listeelementer som ikke kunne kopieres under oppsett av et prosjekt (f.eks. fordi målisten mangler et felt) logges nå enkeltvis i oppsettveiviserens avanserte logg med en oppsummerende advarsel, i stedet for at steget rapporterte suksess. Steget feiler kun dersom ingen av elementene kunne kopieres
+- `Footer` henter nå GitHub-releaser, hjelpeinnhold, lenker og favorittprosjekter først når den aktuelle knappen åpnes, i stedet for ved hver sideinnlasting. Dette gir raskere innlasting av prosjekt- og porteføljesider
 
 ### Feilrettinger
 
@@ -39,7 +41,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 ### Merk
 
 - Etter oppgradering bør tenant-administrator regenerere `SearchConfiguration.xml` fra sitt miljø dersom `GtStakeholderGroups` skal brukes som refiner eller i aggregerte oversikter. Det nye feltet fungerer uten denne endringen for visning og redigering i listen.
-- Bestillings-webdelen er flyttet ut av Prosjektportalen-koden og vedlikeholdes nå i [Bestillingsportalen-repoet](https://github.com/Puzzlepart/bestillingsportalen). Les mer om dette i relasenotes for 1.14.0.
+- Bestillingsportalen-appen for bestilling og provisjonering av prosjekter er flyttet ut av Prosjektportalen-koden og vedlikeholdes nå i [Bestillingsportalen-repoet](https://github.com/Puzzlepart/bestillingsportalen) fra Bestillingsportalen 1.0.0. Oppgrader Prosjektportalen først og deploy og installer deretter Bestillingsportalen v1.0.0. Les mer om dette i releasenotes for 1.14.0.
 
 ---
 
