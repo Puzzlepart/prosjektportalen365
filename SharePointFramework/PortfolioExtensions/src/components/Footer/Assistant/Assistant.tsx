@@ -12,10 +12,8 @@ import {
   Button,
   DrawerHeader,
   DrawerBody,
-  DrawerHeaderNavigation,
   Toolbar,
   ToolbarButton,
-  ToolbarGroup,
   Spinner,
   DrawerHeaderTitle
 } from '@fluentui/react-components'
@@ -36,38 +34,37 @@ export const Assistant: FC = () => {
         <OverlayDrawer
           role='panel'
           position='end'
-          size='medium'
+          className={styles.drawer}
           open={open}
           onOpenChange={(_, { open }) => setDrawerOpen(open)}
         >
-          <DrawerHeader>
-            <DrawerHeaderNavigation>
-              <Toolbar className={styles.toolbar}>
-                <DrawerHeaderTitle>{strings.AssistantDrawerTitle}</DrawerHeaderTitle>
-                <ToolbarGroup>
-                  <ToolbarButton
-                    appearance='subtle'
-                    title={strings.AssistantSettingsTooltip}
-                    disabled={!context.props.pageContext.legacyPageContext.isSiteAdmin}
-                    icon={getFluentIcon('Settings')}
-                    onClick={() =>
-                      window.open(
-                        `${context.props.portalUrl}/${resource.Lists_Global_Settings_Url}`,
-                        '_blank'
-                      )
-                    }
-                  />
-                  <ToolbarButton
-                    title={strings.CloseLabel}
-                    appearance='subtle'
-                    icon={getFluentIcon('Dismiss')}
-                    onClick={close}
-                  />
-                </ToolbarGroup>
-              </Toolbar>
-            </DrawerHeaderNavigation>
+          <DrawerHeader className={styles.header}>
+            <div className={styles.title}>
+              {getFluentIcon('BotSparkle', { filled: true, size: '24px' })}
+              <DrawerHeaderTitle>{strings.AssistantDrawerTitle}</DrawerHeaderTitle>
+            </div>
+            <Toolbar className={styles.actions}>
+              <ToolbarButton
+                appearance='subtle'
+                title={strings.AssistantSettingsTooltip}
+                disabled={!context.props.pageContext.legacyPageContext.isSiteAdmin}
+                icon={getFluentIcon('Settings')}
+                onClick={() =>
+                  window.open(
+                    `${context.props.portalUrl}/${resource.Lists_Global_Settings_Url}`,
+                    '_blank'
+                  )
+                }
+              />
+              <ToolbarButton
+                title={strings.CloseLabel}
+                appearance='subtle'
+                icon={getFluentIcon('Dismiss')}
+                onClick={close}
+              />
+            </Toolbar>
           </DrawerHeader>
-          <DrawerBody className={styles.body}>
+          <DrawerBody className={styles.body} style={{ padding: 0 }}>
             {loading && (
               <Spinner
                 size='extra-tiny'
