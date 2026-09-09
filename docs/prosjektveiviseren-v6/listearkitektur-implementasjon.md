@@ -23,12 +23,20 @@ side. Dette notatet dokumenterer endringene, rekkefølgekravene og avvikene fra 
   Fasesjekkpunkter (tidligere), Planneroppgaver (v6-kilde), Planneroppgaver (tidligere),
   Tidslinje (uendret). Destinasjonen er alltid prosjektlisten `Lists_PhaseChecklist_Title` /
   Planner-planen — den splittes ikke.
+  *Status etter D/E (2026-09):* malen har nå **3 rader** — de to «(tidligere)»-radene er
+  tatt ut og finnes kun på oppgraderte områder, der PreInstallUpgrade omdøper de
+  eksisterende radene på plass.
 - `Objects/ClientSidePages/Konfigurasjon.xml` → konfigurasjonssidens to lenker peker på
   v6-listene (tittel/beskrivelse/URL)
 - `Portfolio_content.{no-NB,en-US}.xml` → de to `ListInstance Title`-attributtene satt til
   legacy-titlene («Fasesjekkliste (tidligere)» osv.). **Uten dette ville innholdsmalen
   omdøpt legacy-listen tilbake ved hver kjøring.** Radene (44+66) er ikke rørt — de
   provisjoneres fortsatt til legacy-listene (v6-radene kommer i område D/E).
+  *Status etter D/E (2026-09):* innholdsmalene inneholder nå **kun** de to v6-listene
+  (63+26 rader) — legacy-radene er tatt ut. Legacy-listene er heller ikke inkludert i
+  `Objects/Lists/@.xml`, så en ren installasjon provisjonerer bare v6-generasjonen; legacy-
+  listene finnes kun på oppgraderte områder. Oppgradering fyller v6-listene via
+  PostInstallUpgrade (se under).
 - `Install/Scripts/PreInstallUpgrade.ps1` → v6-splitten, **før** malene:
   1. hub-listene omdøpes på URL-oppslag til «… (tidligere)» (kun `Title`, idempotent) —
      **vaktet på kjente standardtitler**: har virksomheten selv omdøpt listen, røres
@@ -46,10 +54,19 @@ side. Dette notatet dokumenterer endringene, rekkefølgekravene og avvikene fra 
   2. **Standardmal-koblingen gates**: `ListContentConfigLookup` settes kun når feltet er
      tomt (ren installasjon). Uten gaten ville oppgradering re-koblet Standardmal til
      v6-radene og stille byttet innholdssett — feilen planen advarer mot i «Standardvalg».
-- `Install/Scripts/PostInstallUpgrade.ps1` → 1.14.0-verifisering: varsler (rødt) hvis
-  legacy-listen fortsatt bærer originaltittelen — signalet på at omdøpingen feilet og
-  `getByTitle` vil treffe feil liste. Hoppes over ved `-SkipTemplate` (splitten er da
-  bevisst ikke kjørt, og varslene ville vært misvisende).
+- `Install/Scripts/PostInstallUpgrade.ps1` →
+  1. **v6-innholdsfylling** (tilstandsstyrt, ikke versjonsstyrt): v6-radene ligger kun i
+     den språkspesifikke innholdsmalen, og ved oppgradering kjøres den med `-Handlers Files`
+     (Install.ps1) for å ikke røre virksomhetens listedata. Steget leser
+     `Portfolio_content.<lang>.pnp`, fjerner alle ListInstance-er unntatt de to v6-listene
+     og kjører Lists-handleren på restene — **etter** hovedmalen (listene har da fullt
+     skjema). Gate: v6-listen finnes og er tom. Dermed fullføres migreringen både ved
+     re-kjøring og når en apps-only-oppgradering kom først. Manglende fasetermer gir
+     advarsel, ikke feil; steget re-trigges så lenge listen er tom.
+  2. 1.14.0-verifisering: varsler (rødt) hvis legacy-listen fortsatt bærer
+     originaltittelen — signalet på at omdøpingen feilet og `getByTitle` vil treffe feil
+     liste — og (gult) hvis v6-listen fortsatt er tom. Hoppes over ved `-SkipTemplate`
+     (splitten er da bevisst ikke kjørt, og varslene ville vært misvisende).
 
 ## Rekkefølgen som bærer alt
 
@@ -60,9 +77,11 @@ ligger først i 1.14.0-blokken. Kjeden ved oppgradering:
 2. PreInstallUpgrade: Listeinnhold-radene omdøpes på plass, kilde → legacy-tittel
 3. Portfolio.pnp: oppretter v6-listene (originaltitlene) og de to nye Listeinnhold-radene
    (`KeyColumn="Title"` — de omdøpte radene skippes, de nye legges til)
-4. Innholdsmalen: fyller legacy-listene (uendrede rader, skip) — v6-lister står tomme til D/E
+4. Innholdsmalen: kjøres med `-Handlers Files` ved oppgradering — **ingen** DataRows
+   provisjoneres her, verken til legacy- eller v6-listene. v6-listene står tomme.
 5. PostInstall: Standardmal-kobling hoppes over (feltet er ikke tomt)
-6. PostInstallUpgrade: verifiserer generasjonene
+6. PostInstallUpgrade: fyller de tomme v6-listene med radene fra innholdsmalen (kun de to
+   v6-ListInstance-ene, Lists-handler, gated på tom liste), og verifiserer generasjonene
 
 ## Avvik fra planteksten (bevisste)
 

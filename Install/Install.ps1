@@ -514,6 +514,10 @@ if (-not $SkipTemplate.IsPresent) {
             }
             EndAction
 
+            # Ved oppgradering kjøres innholdsmalen kun med Files-handleren, slik at
+            # virksomhetens listedata ikke røres. DataRows i innholdsmalen provisjoneres
+            # dermed IKKE her — nye lister som skal fylles ved oppgradering (f.eks. v6-hub-
+            # listene i 1.14.0) håndteres tilstandsstyrt i Scripts/PostInstallUpgrade.ps1.
             if (Test-Path "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp") {
                 $null = Invoke-SiteTemplateSafely `
                     -TemplatePath "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" `

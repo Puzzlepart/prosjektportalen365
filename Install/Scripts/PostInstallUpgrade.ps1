@@ -279,6 +279,62 @@ if ($null -ne $LastInstall) {
         }
     }
 
+    # Prosjektveiviseren v6: fyll de nye hub-listene med v6-innholdet. Radene (63 sjekkpunkter,
+    # 26 oppgaver) ligger KUN i den språkspesifikke innholdsmalen, og ved oppgradering kjøres
+    # den med -Handlers Files (Install.ps1) for å ikke røre virksomhetens listedata. v6-listene
+    # står derfor tomme etter hovedmalen. Her leses innholdsmalen, alt annet enn de to v6-
+    # ListInstance-ene fjernes, og Lists-handleren kjøres på restene — ETTER hovedmalen (listene
+    # har da fullt skjema) og gated på TILSTAND (listen finnes og er tom), ikke versjon. Dermed
+    # fullføres migreringen både ved re-kjøring og når en apps-only-oppgradering kom først.
+    # DataRows har KeyColumn=Title/UpdateBehavior=Skip, så eventuelle egne rader røres ikke.
+    if (-not $SkipTemplate.IsPresent) {
+        $V6ContentTargets = @(
+            @(
+                (Get-Resource -Name "Lists_PhaseChecklistV6_Url"),
+                (Get-Resource -Name "Lists_PlannerTasksV6_Url")
+            ) | Where-Object {
+                $V6List = Get-PnPList -Identity $_ -Includes ItemCount -ErrorAction SilentlyContinue
+                $null -ne $V6List -and $V6List.ItemCount -eq 0
+            }
+        )
+        if ($V6ContentTargets.Count -gt 0) {
+            $ContentTemplatePath = "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp"
+            if (Test-Path $ContentTemplatePath) {
+                Write-Host "[INFO] Provisioning Prosjektveiviseren v6 content to empty hub lists [$($V6ContentTargets -join ', ')]"
+                try {
+                    $ContentTemplate = Read-PnPSiteTemplate -Path $ContentTemplatePath
+                    # Materialiser før fjerning — endring under enumerering kaster.
+                    $ListsToRemove = @($ContentTemplate.Lists | Where-Object { $V6ContentTargets -notcontains $_.Url })
+                    foreach ($ListInstance in $ListsToRemove) {
+                        $ContentTemplate.Lists.Remove($ListInstance) >$null
+                    }
+                    if ($ContentTemplate.Lists.Count -eq 0) {
+                        Write-Host "[WARNING] The content template [$([System.IO.Path]::GetFileName($ContentTemplatePath))] contains no list instances for [$($V6ContentTargets -join ', ')] - the v6 hub lists remain empty" -ForegroundColor Yellow
+                    }
+                    else {
+                        Invoke-PnPSiteTemplate -InputInstance $ContentTemplate -Handlers Lists -ErrorAction Stop -WarningAction SilentlyContinue
+                        $V6ContentTargets | ForEach-Object {
+                            $V6List = Get-PnPList -Identity $_ -Includes ItemCount -ErrorAction SilentlyContinue
+                            Write-Host "[SUCCESS] Provisioned v6 content to [$_] ($($V6List.ItemCount) items)" -ForegroundColor Green
+                        }
+                    }
+                }
+                catch {
+                    $msg = $_.Exception.Message
+                    $isMissingTerm = ($msg -match "GetTerm") -or ($msg -match "Object reference not set") -or ($msg -match "Term .* (not found|does not exist)")
+                    Write-Host "[WARNING] Failed to provision Prosjektveiviseren v6 content to [$($V6ContentTargets -join ', ')]: $msg" -ForegroundColor Yellow
+                    if ($isMissingTerm) {
+                        Write-Host "          Most likely cause: project phase terms (e.g. Idé, Konsept, Planlegge, Avslutte) have been deleted or renamed in the 'Prosjektportalen' term group. Restore the terms and re-run the install with -Upgrade; the step re-triggers as long as the v6 lists are empty." -ForegroundColor Yellow
+                    }
+                    Write-ErrorDetails $_
+                }
+            }
+            else {
+                Write-Host "[WARNING] No content template found for language $LanguageCode - the v6 hub lists [$($V6ContentTargets -join ', ')] remain empty" -ForegroundColor Yellow
+            }
+        }
+    }
+
     if ($PreviousVersion -lt [version]"1.14.0" -and -not $SkipTemplate.IsPresent) {
         # Prosjektveiviseren v6: verifiser generasjonssplitten. Hvis omdøpingen i
         # PreInstallUpgrade feilet, heter den GAMLE listen fortsatt «Fasesjekkliste» —
@@ -292,9 +348,12 @@ if ($null -ne $LastInstall) {
         )
         $GenerationChecks | ForEach-Object {
             $LegacyList = Get-PnPList -Identity $_.LegacyUrl -ErrorAction SilentlyContinue
-            $V6List = Get-PnPList -Identity $_.V6Url -ErrorAction SilentlyContinue
+            $V6List = Get-PnPList -Identity $_.V6Url -Includes ItemCount -ErrorAction SilentlyContinue
             if ($null -eq $V6List) {
                 Write-Host "[WARNING] v6 list at [$($_.V6Url)] was not provisioned" -ForegroundColor Yellow
+            }
+            elseif ($V6List.ItemCount -eq 0) {
+                Write-Host "[WARNING] v6 list at [$($_.V6Url)] is empty - the v6 content step above did not populate it. Re-run the install with -Upgrade once the cause is fixed (the step re-triggers while the list is empty)." -ForegroundColor Yellow
             }
             if ($null -eq $LegacyList) {
                 Write-Host "[WARNING] Legacy list at [$($_.LegacyUrl)] was not found" -ForegroundColor Yellow
