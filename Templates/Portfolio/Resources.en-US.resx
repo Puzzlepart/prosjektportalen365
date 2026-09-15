@@ -3262,6 +3262,42 @@
   <data name="SiteFields_GtLogArchiveUrl_DisplayName" xml:space="preserve">
     <value>Archived URL</value>
   </data>
+  <data name="SiteFields_GtLogBatchId_Description" xml:space="preserve">
+    <value>Identifier for the archive batch.</value>
+  </data>
+  <data name="SiteFields_GtLogBatchId_DisplayName" xml:space="preserve">
+    <value>Archive batch ID</value>
+  </data>
+  <data name="SiteFields_GtLogCaseId_Description" xml:space="preserve">
+    <value>Identifier for the case in the archive system.</value>
+  </data>
+  <data name="SiteFields_GtLogCaseId_DisplayName" xml:space="preserve">
+    <value>Case ID</value>
+  </data>
+  <data name="SiteFields_GtLogCaseResponsibleEmail_Description" xml:space="preserve">
+    <value>Email address of the person responsible for the case.</value>
+  </data>
+  <data name="SiteFields_GtLogCaseResponsibleEmail_DisplayName" xml:space="preserve">
+    <value>Case responsible email</value>
+  </data>
+  <data name="SiteFields_GtLogFromPhase_Description" xml:space="preserve">
+    <value>Project phase before the phase transition.</value>
+  </data>
+  <data name="SiteFields_GtLogFromPhase_DisplayName" xml:space="preserve">
+    <value>From phase</value>
+  </data>
+  <data name="SiteFields_GtLogJournalPostId_Description" xml:space="preserve">
+    <value>Identifier for the journal post in the archive system.</value>
+  </data>
+  <data name="SiteFields_GtLogJournalPostId_DisplayName" xml:space="preserve">
+    <value>Journal post ID</value>
+  </data>
+  <data name="SiteFields_GtLogToPhase_Description" xml:space="preserve">
+    <value>Project phase after the phase transition.</value>
+  </data>
+  <data name="SiteFields_GtLogToPhase_DisplayName" xml:space="preserve">
+    <value>To phase</value>
+  </data>
   <data name="SiteFields_GtLogComponentName_Description" xml:space="preserve">
     <value>The name of the component that the log refers to.</value>
   </data>

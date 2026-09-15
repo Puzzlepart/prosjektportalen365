@@ -1,0 +1,1 @@
+<Field Description="{resource:SiteFields_GtLogFromPhase_Description}" DisplayName="{resource:SiteFields_GtLogFromPhase_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{c506f3c0-1c82-4e95-baa7-8580e3ff3fca}" Name="GtLogFromPhase" StaticName="GtLogFromPhase" Type="Text" />

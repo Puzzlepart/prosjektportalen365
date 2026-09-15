@@ -3262,6 +3262,42 @@
   <data name="SiteFields_GtLogArchiveUrl_DisplayName" xml:space="preserve">
     <value>Arkivert URL</value>
   </data>
+  <data name="SiteFields_GtLogBatchId_Description" xml:space="preserve">
+    <value>Identifikator for arkiveringsbatchen.</value>
+  </data>
+  <data name="SiteFields_GtLogBatchId_DisplayName" xml:space="preserve">
+    <value>Arkiveringsbatch-ID</value>
+  </data>
+  <data name="SiteFields_GtLogCaseId_Description" xml:space="preserve">
+    <value>Identifikator for saken i arkivsystemet.</value>
+  </data>
+  <data name="SiteFields_GtLogCaseId_DisplayName" xml:space="preserve">
+    <value>Saks-ID</value>
+  </data>
+  <data name="SiteFields_GtLogCaseResponsibleEmail_Description" xml:space="preserve">
+    <value>E-postadressen til den saksansvarlige.</value>
+  </data>
+  <data name="SiteFields_GtLogCaseResponsibleEmail_DisplayName" xml:space="preserve">
+    <value>Saksansvarlig e-post</value>
+  </data>
+  <data name="SiteFields_GtLogFromPhase_Description" xml:space="preserve">
+    <value>Prosjektfasen før faseovergangen.</value>
+  </data>
+  <data name="SiteFields_GtLogFromPhase_DisplayName" xml:space="preserve">
+    <value>Fra fase</value>
+  </data>
+  <data name="SiteFields_GtLogJournalPostId_Description" xml:space="preserve">
+    <value>Identifikator for journalposten i arkivsystemet.</value>
+  </data>
+  <data name="SiteFields_GtLogJournalPostId_DisplayName" xml:space="preserve">
+    <value>Journalpost-ID</value>
+  </data>
+  <data name="SiteFields_GtLogToPhase_Description" xml:space="preserve">
+    <value>Prosjektfasen etter faseovergangen.</value>
+  </data>
+  <data name="SiteFields_GtLogToPhase_DisplayName" xml:space="preserve">
+    <value>Til fase</value>
+  </data>
   <data name="SiteFields_GtLogComponentName_Description" xml:space="preserve">
     <value>Navnet på komponenten som loggen refererer til.</value>
   </data>

@@ -10,5 +10,11 @@
         <pnp:FieldRef ID="95468edd-45dd-45d9-a7d4-5e1d543e8aa6" Name="GtLogReference" UpdateChildren="true" />
         <pnp:FieldRef ID="6e368e9d-f64b-4212-85a9-ff86c69dce50" Name="GtLogItemId" UpdateChildren="true" />
         <pnp:FieldRef ID="436e52e0-3c7c-4711-aa1a-3a477d2b14ad" Name="GtLogArchiveUrl" UpdateChildren="true" />
+        <pnp:FieldRef ID="621b5c57-897d-447d-907e-9509847897c2" Name="GtLogBatchId" UpdateChildren="true" />
+        <pnp:FieldRef ID="873802fc-fb39-409d-99c5-ef0152cb75a6" Name="GtLogCaseId" UpdateChildren="true" />
+        <pnp:FieldRef ID="8de1cdc8-bf8c-4b38-a55e-7eed800d5906" Name="GtLogJournalPostId" UpdateChildren="true" />
+        <pnp:FieldRef ID="eb6bcf43-00b7-4743-acae-bf1c0905e014" Name="GtLogCaseResponsibleEmail" UpdateChildren="true" />
+        <pnp:FieldRef ID="c506f3c0-1c82-4e95-baa7-8580e3ff3fca" Name="GtLogFromPhase" UpdateChildren="true" />
+        <pnp:FieldRef ID="bf5a246f-e34d-407f-bf97-d30130fcd178" Name="GtLogToPhase" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>

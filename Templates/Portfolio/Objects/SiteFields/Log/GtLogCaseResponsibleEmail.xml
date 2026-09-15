@@ -1,0 +1,1 @@
+<Field Description="{resource:SiteFields_GtLogCaseResponsibleEmail_Description}" DisplayName="{resource:SiteFields_GtLogCaseResponsibleEmail_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{eb6bcf43-00b7-4743-acae-bf1c0905e014}" Name="GtLogCaseResponsibleEmail" StaticName="GtLogCaseResponsibleEmail" Type="Text" />

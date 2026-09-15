@@ -1,0 +1,1 @@
+<Field Description="{resource:SiteFields_GtLogBatchId_Description}" DisplayName="{resource:SiteFields_GtLogBatchId_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{621b5c57-897d-447d-907e-9509847897c2}" Name="GtLogBatchId" StaticName="GtLogBatchId" Type="Text" />
