@@ -1,0 +1,1 @@
+<Field Description="{resource:SiteFields_GtLogJournalPostId_Description}" DisplayName="{resource:SiteFields_GtLogJournalPostId_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{8de1cdc8-bf8c-4b38-a55e-7eed800d5906}" Name="GtLogJournalPostId" StaticName="GtLogJournalPostId" Type="Text" />

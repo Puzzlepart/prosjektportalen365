@@ -1,0 +1,1 @@
+<Field Description="{resource:SiteFields_GtLogCaseId_Description}" DisplayName="{resource:SiteFields_GtLogCaseId_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{873802fc-fb39-409d-99c5-ef0152cb75a6}" Name="GtLogCaseId" StaticName="GtLogCaseId" Type="Text" />
