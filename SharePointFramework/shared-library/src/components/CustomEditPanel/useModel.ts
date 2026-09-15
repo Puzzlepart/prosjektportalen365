@@ -1,5 +1,4 @@
 import { IPersonaProps } from '@fluentui/react'
-import _ from 'lodash'
 import { ITermInfo } from '@pnp/sp/taxonomy'
 import { useState } from 'react'
 import { EditableSPField } from '../../models'
@@ -98,21 +97,23 @@ export function useModel(props: ICustomEditPanelProps) {
       [
         'User',
         async () => {
+          // `null` only when the user intentionally cleared the field — an
+          // `ensureUser` failure must propagate rather than silently wipe
+          // the stored person on save.
           const email = value[0]?.secondaryText
-          let val = null
-          if (email) val = (await webContext.ensureUser(email)).data.Id
+          const val = email ? (await webContext.ensureUser(email)).data.Id : null
           return [val, `${field.internalName}Id`]
         }
       ],
       [
         'UserMulti',
         async () => {
-          const values = await Promise.all(
+          const values = await Promise.all<number>(
             value.map(
               async (v: IPersonaProps) => (await webContext.ensureUser(v.secondaryText)).data.Id
             )
           )
-          return [_.flatten(values), `${field.internalName}Id`]
+          return [values, `${field.internalName}Id`]
         }
       ],
       [
@@ -136,7 +137,20 @@ export function useModel(props: ICustomEditPanelProps) {
    * @param value Value to set (will be transformed to the correct type for the field)
    */
   const set = async <T>(field: EditableSPField, value: T) => {
-    const [internalName, transformedValue] = await transformValue(value, field)
+    let internalName: string
+    let transformedValue: any
+    try {
+      ;[internalName, transformedValue] = await transformValue(value, field)
+    } catch (error) {
+      // A failed transform (e.g. `ensureUser` against the hub) must not put a
+      // destructive value in the update payload — leave both the model and
+      // the pending properties untouched so the stored value survives save.
+      console.error(
+        `(CustomEditPanel) (useModel) Failed to transform value for field '${field.internalName}':`,
+        error
+      )
+      return
+    }
     model.set(field.internalName, value)
     setModel(new Map(model))
     setProperties({ ...properties, [internalName]: transformedValue })

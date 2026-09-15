@@ -92,7 +92,18 @@ define([], function () {
       'Dette lar deg velge en mal, tillegg eller standardinnhold som skal legges til prosjektet. Dette kan brukes for feilsøking eller for å legge til ny funksjonalitet.',
     RunProjectSetupDialogProgressText: 'Kjører oppsettveiviser',
     CurrentPhaseViewNameFieldLabel: 'Visningsnavn for gjeldende fase',
+    DataFetchModeAutoText: 'Automatisk (datakilde for overordnede områder)',
+    DataFetchModeDataSourceText: 'Datakilde',
+    DataFetchModeLabel: 'Datainnhenting',
+    DataFetchModeListText: 'Lokal liste',
     DataGroupName: 'Data',
+    DataSourceDescription:
+      'Navn på datakilden i Datakilder-listen på porteføljeområdet. Lar du feltet stå tomt, brukes standard datakilde for underliggende prosjekter.',
+    DataSourceError:
+      'Det skjedde en feil under uthenting av data fra datakilde med navn {0}. Oppdater siden og prøv igjen.',
+    DataSourceLabel: 'Datakilde',
+    DataSourceNotFound: 'Finner ingen datakilde med navn {0}.',
+    FilterByShowInPortfolioLabel: "Vis kun elementer flagget med 'Vis i porteføljen'",
     DefaultGroupByLabel: 'Standard gruppering',
     DefaultTimeframeEndLabel: 'Standard sluttdato',
     DefaultTimeframeEndValue: '{0} måneder frem i tid',
@@ -173,6 +184,16 @@ define([], function () {
     NoPropertiesMessage:
       'Det finnes ingen informasjon om prosjektet. Trykk på _Rediger prosjektinformasjon_ for å fortsette.',
     NoReportsFoundTitle: 'Ingen rapporter funnet',
+    MultiReportingGroupName: 'Multirapportering',
+    MultiReportingToggleLabel: 'Aktiver multirapportering',
+    SubProjectsFieldLabel: 'Delprosjekter',
+    SubProjectsFieldDescription:
+      'Ett delprosjekt per linje på formatet nøkkel eller nøkkel|etikett (f.eks. DP1|Delprosjekt 1). Nøkkelen identifiserer rapportserien og bør ikke endres etter at rapportering har startet — etiketten kan endres fritt.',
+    DefaultScopeLabel: 'Hovedrapportering',
+    ExcludeSectionsFieldLabel: 'Ekskluderte seksjoner',
+    ExcludeSectionsFieldDescription:
+      'Seksjoner som ikke skal vises på statussiden — én seksjonstittel per linje (matcher Tittel i Statusseksjoner-listen). Tom verdi viser alle seksjoner.',
+    ScopeSelectorDescription: 'Velg hvilket delprosjekt du vil se og rapportere status for',
     NoStatusReportsMessage:
       'Det er ennå ikke rapportert status for prosjektet. Hvis du er eier av området, kan du rapportere status ved å klikke på _Ny statusrapport_ i menyen over.',
     NotPublishedStatusReport: 'Kladd, sist endret {0}',
@@ -246,6 +267,8 @@ define([], function () {
     ShowPhaseSitePageMessageLabel: 'Vis infomelding (dynamisk hjemmeside)',
     ShowProjectDeliveriesLabel: 'Vis prosjektleveranser',
     ShowSubTextFieldLabel: 'Vis fasetekst',
+    ShowTitleLabel: 'Vis tittel',
+    TitleLabel: 'Tittel',
     ShowTimelineLabel: 'Vis tidslinje',
     ShowTimelineListCommandsLabel: 'Vis kommandolinje for liste',
     ShowTimelineListLabel: 'Vis liste',

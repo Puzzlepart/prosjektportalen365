@@ -1,6 +1,6 @@
 export interface IMatrixElementModel<T = any> {
   item: T
-  id: number
+  id: number | string
   tooltip: string
 }
 

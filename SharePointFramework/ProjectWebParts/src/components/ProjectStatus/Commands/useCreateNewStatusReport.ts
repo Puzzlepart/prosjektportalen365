@@ -1,7 +1,8 @@
 import { format } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
-import { ItemFieldValue } from 'pp365-shared-library'
+import { ItemFieldValue, buildScopedSiteId } from 'pp365-shared-library'
 import { useProjectStatusContext } from '../context'
+import { getScopeLabel, parseSubProjects } from '../parseSubProjects'
 import { OPEN_PANEL } from '../reducer'
 import resource from 'SharedResources'
 
@@ -24,18 +25,29 @@ export function useCreateNewStatusReport() {
 
   /**
    * Creates a new status report with the given properties and passes the parameters to the edit status panel.
-   * If there is a last report, it will use its field values for the new report.
+   * If there is a last report, it will use its field values for the new report (the report list is
+   * already scoped to the selected report series). When a report scope ("delprosjekt") is selected,
+   * the scope key is appended to the project's existing site ID (`GtSiteId = {siteId}-{scopeKey}`)
+   * so the report series can be distinguished from the project's other series.
    */
   const createNewStatusReport = async () => {
+    const selectedScope = (state.selectedScope ?? '').trim()
+    const scopeLabel = getScopeLabel(parseSubProjects(props.subProjects), selectedScope)
     let properties: Record<string, any> = {
-      Title: format(strings.NewStatusReportTitle, props.webTitle),
-      GtSiteId: props.siteId,
+      Title: selectedScope
+        ? format(strings.NewStatusReportTitle, `${props.webTitle} – ${scopeLabel}`)
+        : format(strings.NewStatusReportTitle, props.webTitle),
+      GtSiteId: buildScopedSiteId(props.siteId, selectedScope),
       GtModerationStatus: resource.Choice_GtModerationStatus_Draft
     }
     if (lastReport?.fieldValues) {
       properties = reportFields.reduce((obj, field) => {
-        const fieldValue = lastReport.fieldValues.get<ItemFieldValue>(field.internalName)?.value
-        if (fieldValue && !obj[field.internalName]) obj[field.internalName] = fieldValue
+        const valueFieldName =
+          field.type === 'User' || field.type === 'UserMulti'
+            ? `${field.internalName}Id`
+            : field.internalName
+        const fieldValue = lastReport.fieldValues.get<ItemFieldValue>(valueFieldName)?.value
+        if (fieldValue && !obj[valueFieldName]) obj[valueFieldName] = fieldValue
         return obj
       }, properties)
     }

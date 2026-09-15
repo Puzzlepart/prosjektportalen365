@@ -6,9 +6,20 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 
 ### Ny funksjonalitet
 
+- **Multirapportering av prosjektstatus.** Et prosjekt kan nå ha flere parallelle rapporteringsserier («delprosjekter») i tillegg til hovedrapporteringen, med delprosjekt-velger i `Prosjektstatus`-webdelen og én rad per serie i porteføljeoversikten. Ingen nye felter eller oppgraderingssteg. Se releasenotes for 1.15.0 for detaljer
+- **Risiko- og mulighetsmatrise for program og overordnede prosjekter.** Matrisewebdelene kan nå aggregere usikkerhetselementer fra underprosjekter via søk — automatisk på program-/overordnede områder, uten endringer for vanlige prosjekter. Se releasenotes for 1.15.0 for detaljer
+- Ny egenskap `Vis tittel` med valgfri egendefinert tittel på risiko- og mulighetsmatrisewebdelene
+- Ny egenskap `Ekskluderte seksjoner` i `Prosjektstatus`-webdelen — én seksjonstittel per linje for å skjule seksjoner fra statussiden
+
 ### Forbedringer
 
+- Henting av brukerfeltverdier på statusrapporter gjøres nå som en egen, feiltolerant spørring — statusrapportene vises selv om brukerfelt-berikelsen skulle feile
+
 ### Feilrettinger
+
+- Rettet en feil hvor person-/brukerfelter på statusrapporter ble lagret med bruker-ID fra prosjektområdet i stedet for hubområdet, slik at feil person kunne vises i porteføljen
+- Rettet en latent feil hvor egenskapsruten til risiko- og mulighetsmatrisewebdelene krasjet dersom initialiseringen av webdelen hadde feilet
+- Matrise-elementer med ID over 99 vises nå korrekt (tidligere «99+»)
 
 ---
 

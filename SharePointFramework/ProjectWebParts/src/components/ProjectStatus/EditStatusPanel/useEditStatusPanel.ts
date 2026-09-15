@@ -26,6 +26,7 @@ export function useEditStatusPanel() {
     onDismiss,
     fieldValues,
     fields,
-    submit
+    submit,
+    reportListId: context.state.data?.reportListId
   }
 }

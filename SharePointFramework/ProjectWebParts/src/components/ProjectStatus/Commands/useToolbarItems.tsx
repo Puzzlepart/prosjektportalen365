@@ -15,6 +15,7 @@ import { OPEN_PANEL, SELECT_REPORT } from '../reducer'
 import { useCreateNewStatusReport } from './useCreateNewStatusReport'
 import { useDeleteReport } from './useDeleteReport'
 import { usePublishReport } from './usePublishReport'
+import { useScopeSelector } from './useScopeSelector'
 
 /**
  * Returns an array of menu items for the toolbar in the ProjectStatus component.
@@ -26,6 +27,7 @@ export function useToolbarItems() {
   const createNewStatusReport = useCreateNewStatusReport()
   const deleteReport = useDeleteReport()
   const publishReport = usePublishReport()
+  const scopeSelector = useScopeSelector()
   const hasUnpublishedReports = state.data.reports.some((report) => !report.published)
 
   const menuItems = useMemo<ListMenuItem[]>(
@@ -88,6 +90,7 @@ export function useToolbarItems() {
   const farMenuItems = useMemo<ListMenuItem[]>(
     () =>
       [
+        scopeSelector,
         state.sourceUrl &&
           new ListMenuItem(strings.NavigateToSourceUrlText, strings.NavigateToSourceUrlText)
             .setIcon('ArrowLeft')
@@ -157,7 +160,7 @@ export function useToolbarItems() {
               deleteReport()
             })
       ].filter(Boolean),
-    [state]
+    [state, scopeSelector]
   )
 
   return { menuItems, farMenuItems }

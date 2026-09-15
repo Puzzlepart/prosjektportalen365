@@ -24,6 +24,20 @@ export interface IFetchDataForViewItemResult extends ISearchResult {
   _hubId?: string
   _hubTitle?: string
   _hubUrl?: string
+
+  /**
+   * Synthetic unique row key on the format `${SiteId}_${scopeKey}`. A project
+   * with multiple report series ("delprosjekter") yields one row per series,
+   * so `SiteId` alone is not unique. Matches the `key` property Fluent UI
+   * `DetailsList`/`Selection` use for row identity.
+   */
+  key?: string
+
+  /**
+   * Scope key ("delprosjekt") for the report series the row represents.
+   * `undefined` for the default series row.
+   */
+  ScopeKey?: string
   [key: string]: any
 }
 

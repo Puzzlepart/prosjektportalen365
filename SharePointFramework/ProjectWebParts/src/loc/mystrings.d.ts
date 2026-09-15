@@ -58,7 +58,16 @@ declare interface IProjectWebPartsStrings {
   RunProjectSetupDialogSubText: string
   RunProjectSetupDialogProgressText: string
   CurrentPhaseViewNameFieldLabel: string
+  DataFetchModeAutoText: string
+  DataFetchModeDataSourceText: string
+  DataFetchModeLabel: string
+  DataFetchModeListText: string
   DataGroupName: string
+  DataSourceDescription: string
+  DataSourceError: string
+  DataSourceLabel: string
+  DataSourceNotFound: string
+  FilterByShowInPortfolioLabel: string
   DefaultGroupByLabel: string
   DefaultTimeframeEndLabel: string
   DefaultTimeframeEndValue: string
@@ -132,6 +141,14 @@ declare interface IProjectWebPartsStrings {
   NoPropertiesMessage: string
   NoReportsFoundTitle: string
   NoStatusReportsMessage: string
+  MultiReportingGroupName: string
+  MultiReportingToggleLabel: string
+  SubProjectsFieldLabel: string
+  SubProjectsFieldDescription: string
+  DefaultScopeLabel: string
+  ExcludeSectionsFieldLabel: string
+  ExcludeSectionsFieldDescription: string
+  ScopeSelectorDescription: string
   NotPublishedStatusReport: string
   OpportunityMatrixGroupName: string
   OverrideHeadersLabel: string
@@ -192,6 +209,8 @@ declare interface IProjectWebPartsStrings {
   ShowPhaseSitePageMessageLabel: string
   ShowProjectDeliveriesLabel: string
   ShowSubTextFieldLabel: string
+  ShowTitleLabel: string
+  TitleLabel: string
   ShowTimelineLabel: string
   ShowTimelineListCommandsLabel: string
   ShowTimelineListLabel: string

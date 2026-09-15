@@ -1016,7 +1016,8 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     filter = '',
     top,
     select,
-    useCaching = true
+    useCaching = true,
+    userFields = []
   }: GetStatusReportsOptions): Promise<StatusReport[]> {
     if (!this.isAvailable) return []
     if (!this._configuration.spfxContext.pageContext) {
@@ -1036,18 +1037,87 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       if (select) items = items.select(...select)
       if (useCaching) items = items.using(DefaultCaching)
       const reportItems = await items()
+      const userFieldValues = await this._getStatusReportUserFieldValues(
+        filter,
+        userFields,
+        useCaching
+      )
       const reports = reportItems.map((i) => {
         const itemFieldValues = ItemFieldValues.create({
-          fieldValues: i,
+          fieldValues: { ...i, ...(userFieldValues.get(i.Id) ?? {}) },
           fieldValuesAsText: i.FieldValuesAsText
         })
         return new StatusReport(itemFieldValues)
       })
       return reports
     } catch (error) {
+      Logger.write(
+        `(PortalDataService) (getStatusReports) Failed to fetch status reports using filter '${filter}': ${error?.message}`,
+        LogLevel.Error
+      )
+      // eslint-disable-next-line no-console
+      console.error('(PortalDataService) (getStatusReports) Failed to fetch status reports.', {
+        filter,
+        error
+      })
       this._handleAvailabilityError(error, 'getStatusReports')
       return []
     }
+  }
+
+  /**
+   * Get expanded values (`Id`, `Title`, `EMail`) for the specified user fields on
+   * the status reports matching `filter`, keyed by item ID. This is fetched in a
+   * separate query because expanding user fields requires an explicit `$select`,
+   * which does not combine with the `FieldValuesAsText`/`AttachmentFiles` expands
+   * used for the reports themselves. Failures are logged and yield an empty map —
+   * the report list must never fail because person values could not be expanded.
+   *
+   * @param filter Filter for the status reports
+   * @param userFields Internal names of the user fields to expand
+   * @param useCaching Whether to use caching
+   */
+  private async _getStatusReportUserFieldValues(
+    filter: string,
+    userFields: string[],
+    useCaching: boolean
+  ): Promise<Map<number, Record<string, any>>> {
+    const userFieldValues = new Map<number, Record<string, any>>()
+    if (userFields.length === 0) return userFieldValues
+    try {
+      let items = this._getList('PROJECT_STATUS')
+        .items.filter(filter)
+        .select(
+          'Id',
+          ...userFields.map((fieldName) => `${fieldName}/Id`),
+          ...userFields.map((fieldName) => `${fieldName}/Title`),
+          ...userFields.map((fieldName) => `${fieldName}/EMail`)
+        )
+        .expand(...userFields)
+      if (useCaching) items = items.using(DefaultCaching)
+      for (const item of await items()) {
+        userFieldValues.set(
+          item.Id,
+          userFields.reduce((values, fieldName) => {
+            if (item[fieldName]) values[fieldName] = item[fieldName]
+            return values
+          }, {} as Record<string, any>)
+        )
+      }
+    } catch (error) {
+      Logger.write(
+        `(PortalDataService) (getStatusReports) Failed to expand user fields [${userFields.join(
+          ', '
+        )}]: ${error?.message}`,
+        LogLevel.Warning
+      )
+      // eslint-disable-next-line no-console
+      console.warn('(PortalDataService) (getStatusReports) Failed to expand user fields.', {
+        userFields,
+        error
+      })
+    }
+    return userFieldValues
   }
 
   /**
@@ -1076,15 +1146,17 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   }
 
   /**
-   * Get status report list props
+   * Get status report list props (`Id` and `DefaultEditFormUrl`). The list ID
+   * is used as `targetListId` for the edit panel, so user/taxonomy/lookup
+   * values are resolved against the hub list the reports are stored in.
    *
    * TODO: Use caching with @pnp/sp v3
    */
-  public getStatusReportListProps(): Promise<{ DefaultEditFormUrl: string }> {
+  public getStatusReportListProps(): Promise<{ Id: string; DefaultEditFormUrl: string }> {
     try {
       return this._getList('PROJECT_STATUS')
-        .select('DefaultEditFormUrl')
-        .expand('DefaultEditFormUrl')<{ DefaultEditFormUrl: string }>()
+        .select('Id', 'DefaultEditFormUrl')
+        .expand('DefaultEditFormUrl')<{ Id: string; DefaultEditFormUrl: string }>()
     } catch (error) {
       throw error
     }

@@ -12,6 +12,11 @@ export interface IRiskMatrixProps
    * The items to render in the matrix
    */
   items?: UncertaintyElementModel[]
+
+  /**
+   * Whether to render the web part title above the matrix (default `false`)
+   */
+  showTitle?: boolean
 }
 
 /**

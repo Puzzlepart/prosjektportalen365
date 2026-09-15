@@ -1,5 +1,6 @@
 import { ItemFieldValues } from './ItemFieldValues'
 import resource from 'SharedResources'
+import { parseScopedSiteId } from '../util/statusReportScope'
 
 export type StatusReportAttachment = {
   name?: string
@@ -69,14 +70,36 @@ export class StatusReport {
   }
 
   /**
-   * Get url for the report page
+   * Get url for the report page. Reports in a scoped report series get a
+   * `scope` query parameter so the status page opens with the right series
+   * selected.
    *
    * @param urlSourceParam - URL source param
    */
   public url(urlSourceParam: string) {
+    const scopeParam = this.scopeKey ? `&scope=${encodeURIComponent(this.scopeKey)}` : ''
     return `${resource.Navigation_ProjectStatus_Url}?selectedReport=${
       this.id
-    }&Source=${encodeURIComponent(urlSourceParam)}`
+    }${scopeParam}&Source=${encodeURIComponent(urlSourceParam)}`
+  }
+
+  /**
+   * Scope key ("delprosjekt") for the report series the report belongs to,
+   * parsed from the `GtSiteId` suffix. An empty string means the report
+   * belongs to the project's default report series.
+   */
+  public get scopeKey(): string {
+    return parseScopedSiteId(this.fieldValues.get('GtSiteId', { format: 'text', defaultValue: '' }))
+      .scopeKey
+  }
+
+  /**
+   * The project's site ID (the base GUID), parsed from the potentially
+   * scoped `GtSiteId` value.
+   */
+  public get projectSiteId(): string {
+    return parseScopedSiteId(this.fieldValues.get('GtSiteId', { format: 'text', defaultValue: '' }))
+      .siteId
   }
 
   /**

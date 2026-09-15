@@ -1,5 +1,4 @@
 import { format } from '@fluentui/react/lib/Utilities'
-import { flatten } from '@microsoft/sp-lodash-subset'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { PnPClientStorage, dateAdd } from '@pnp/core'
 import '@pnp/sp/items/get-all'
@@ -15,7 +14,11 @@ import { IProgramAdministrationProject } from 'components/ProgramAdministration/
 import MSGraph from 'msgraph-helper'
 import { IPortfolioOverviewConfiguration } from 'pp365-portfoliowebparts/lib/components'
 import { IPortfolioAggregationConfiguration } from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
-import { IPortfolioViewData, IPortfolioWebPartsDataAdapter } from 'pp365-portfoliowebparts/lib/data'
+import {
+  IFetchDataForViewItemResult,
+  IPortfolioViewData,
+  IPortfolioWebPartsDataAdapter
+} from 'pp365-portfoliowebparts/lib/data'
 import * as PortfolioWebPartsDataConfig from 'pp365-portfoliowebparts/lib/data/config'
 import {
   Benefit,
@@ -23,9 +26,13 @@ import {
   BenefitMeasurementIndicator
 } from 'pp365-portfoliowebparts/lib/models'
 import {
+  buildAggregatedSiteIdQueries,
   DataSource,
   DataSourceService,
+  expandRowsPerStatusSeries,
   getOrFetchProjectsCache,
+  groupLatestReportBySeries,
+  parseScopedSiteId,
   IGraphGroup,
   IProjectDataServiceParams,
   ISPDataAdapterBaseConfiguration,
@@ -35,6 +42,8 @@ import {
   ProjectDataService,
   ProjectInformationChildProject,
   ProjectListModel,
+  searchAggregatedItems,
+  sortStatusReportsLatestFirst,
   SPDataAdapterBase,
   SPProjectItem,
   TimelineConfigurationModel,
@@ -206,24 +215,30 @@ export class SPDataAdapter
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IPortfolioViewData> {
     try {
-      const { projects, sites, statusReports } = await this._fetchDataForView(
+      const { projects, sites, statusReportsBySite } = await this._fetchDataForView(
         view,
         configuration,
         siteId,
         siteIdProperty
       )
-      const items = sites.map((site) => {
+      const items = sites.reduce<IFetchDataForViewItemResult[]>((acc, site) => {
         const project = projects.find((res) => res[siteIdProperty] === site['SiteId'])
-        const statusReport = statusReports.find((res) => res[siteIdProperty] === site['SiteId'])
-        return {
-          ...(statusReport ?? {}),
-          ...(project ?? {}),
-          Title: site.Title,
-          Path: site?.Path,
-          SPWebUrl: site?.SPWebUrl,
-          SiteId: site['SiteId']
-        }
-      })
+        const series = statusReportsBySite.get(site['SiteId'])
+        return acc.concat(
+          expandRowsPerStatusSeries(
+            (statusReport) => ({
+              ...(statusReport ?? {}),
+              ...(project ?? {}),
+              Title: site.Title,
+              Path: site?.Path,
+              SPWebUrl: site?.SPWebUrl,
+              SiteId: site['SiteId']
+            }),
+            series,
+            siteIdProperty
+          )
+        )
+      }, [])
 
       return { items }
     } catch (err) {
@@ -238,25 +253,29 @@ export class SPDataAdapter
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IPortfolioViewData> {
     try {
-      const { projects, sites, statusReports } = await this._fetchDataForView(
+      const { projects, sites, statusReportsBySite } = await this._fetchDataForView(
         view,
         configuration,
         siteId,
         siteIdProperty
       )
-      const items = projects.map((project) => {
-        const statusReport = statusReports.find(
-          (res) => res[siteIdProperty] === project[siteIdProperty]
-        )
+      const items = projects.reduce<IFetchDataForViewItemResult[]>((acc, project) => {
         const site = sites.find((res) => res['SiteId'] === project[siteIdProperty])
-        return {
-          ...(statusReport ?? {}),
-          ...project,
-          Path: site?.Path,
-          SPWebUrl: site?.SPWebUrl,
-          SiteId: project[siteIdProperty]
-        }
-      })
+        const series = statusReportsBySite.get(project[siteIdProperty])
+        return acc.concat(
+          expandRowsPerStatusSeries(
+            (statusReport) => ({
+              ...(statusReport ?? {}),
+              ...project,
+              Path: site?.Path,
+              SPWebUrl: site?.SPWebUrl,
+              SiteId: project[siteIdProperty]
+            }),
+            series,
+            siteIdProperty
+          )
+        )
+      }, [])
 
       return { items }
     } catch (err) {
@@ -276,27 +295,12 @@ export class SPDataAdapter
     maxQueryLength: number = 2500,
     maxProjects: number = 25
   ): string[] {
-    if (!this.childProjects?.length) return []
-    const aggregatedQueries = []
-    let queryString = ''
-    if (this.childProjects.length > maxProjects) {
-      this.childProjects.forEach((childProject, index) => {
-        queryString += `${queryProperty}:${childProject.siteId} `
-        if (queryString.length > maxQueryLength) {
-          aggregatedQueries.push(queryString)
-          queryString = ''
-        }
-        if (index === this.childProjects.length - 1) {
-          aggregatedQueries.push(queryString)
-        }
-      })
-    } else {
-      this.childProjects.forEach((childProject) => {
-        queryString += `${queryProperty}:${childProject.siteId} `
-      })
-      aggregatedQueries.push(queryString)
-    }
-    return aggregatedQueries.filter(Boolean)
+    return buildAggregatedSiteIdQueries(
+      this.childProjects?.map((childProject) => childProject.siteId) ?? [],
+      queryProperty,
+      maxQueryLength,
+      maxProjects
+    )
   }
 
   public async fetchDataForViewBatch(
@@ -307,27 +311,30 @@ export class SPDataAdapter
   ): Promise<IPortfolioViewData> {
     const queryArray = this.aggregatedQueryBuilder(siteIdProperty)
     const promises = queryArray.map(async (query) => {
-      const { projects, sites, statusReports } = await this._fetchDataForView(
+      const { projects, sites, statusReportsBySite } = await this._fetchDataForView(
         view,
         configuration,
         siteId,
         siteIdProperty,
         query
       )
-      return projects.map((project) => {
-        const statusReport = statusReports.find(
-          (res) => res[siteIdProperty] === project[siteIdProperty]
-        )
+      return projects.reduce<IFetchDataForViewItemResult[]>((acc, project) => {
         const site = sites.find((res) => res['SiteId'] === project[siteIdProperty])
-
-        return {
-          ...(statusReport ?? {}),
-          ...project,
-          Path: site?.Path,
-          SPWebUrl: site?.SPWebUrl,
-          SiteId: project[siteIdProperty]
-        }
-      })
+        const series = statusReportsBySite.get(project[siteIdProperty])
+        return acc.concat(
+          expandRowsPerStatusSeries(
+            (statusReport) => ({
+              ...(statusReport ?? {}),
+              ...project,
+              Path: site?.Path,
+              SPWebUrl: site?.SPWebUrl,
+              SiteId: project[siteIdProperty]
+            }),
+            series,
+            siteIdProperty
+          )
+        )
+      }, [])
     })
     const items = await Promise.all(promises).then((results) => _.flatten(results))
     return { items, managedProperties: [] }
@@ -349,6 +356,16 @@ export class SPDataAdapter
     queryArray?: string
   ) {
     const searchQuery = `${queryArray ?? ''} ${view.searchQuery}`.trim()
+
+    // Status reports for a scoped report series store
+    // `GtSiteId` as `{siteId}-{scopeKey}`, so the child project site terms need
+    // a trailing wildcard to match those reports as well. A full site GUID can
+    // never be a prefix of another site GUID, so this cannot widen the result
+    // set to other projects.
+    const statusReportQueryArray = (queryArray ?? '').replace(
+      new RegExp(`${siteIdProperty}:(\\S+)`, 'g'),
+      `${siteIdProperty}:$1*`
+    )
 
     const fetchAllResults = async (
       queryTemplate: string,
@@ -390,23 +407,27 @@ export class SPDataAdapter
         'SiteId'
       ]),
       fetchAllResults(
-        `${queryArray} DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:${resource.Choice_GtModerationStatus_Published}`,
-        [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
+        `${statusReportQueryArray} DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:${resource.Choice_GtModerationStatus_Published}`,
+        [...configuration.columns.map((f) => f.fieldName), siteIdProperty, 'ListItemId'],
         configuration.refiners.map((ref) => ref.fieldName).join(',')
       )
     ])
 
     projects = projects.map((item) => cleanDeep({ ...item }))
     sites = sites.map((item) => cleanDeep({ ...item }))
-    statusReports = statusReports.map((item) => cleanDeep({ ...item }))
+    statusReports = sortStatusReportsLatestFirst(statusReports).map((item) =>
+      cleanDeep({ ...item })
+    )
     sites = sites.filter(
       (site) => projects.filter((res) => res[siteIdProperty] === site['SiteId']).length === 1
     )
+    const statusReportsBySite = groupLatestReportBySeries(statusReports, siteIdProperty)
 
     return {
       projects,
       sites,
-      statusReports
+      statusReports,
+      statusReportsBySite
     } as const
   }
 
@@ -426,6 +447,9 @@ export class SPDataAdapter
     )
 
     const data = items
+      // Timeline rows are project-level facts — skip the extra rows a project
+      // gets per scoped report series.
+      .filter((item) => !item.ScopeKey)
       .map((item) => {
         const properties = _.reduce(
           item,
@@ -457,8 +481,9 @@ export class SPDataAdapter
     )
 
     const reports = statusReports
+      .filter((report) => !parseScopedSiteId(report?.['GtSiteIdOWSTEXT']).scopeKey)
       .map((report) => ({
-        siteId: report?.['GtSiteIdOWSTEXT'],
+        siteId: parseScopedSiteId(report?.['GtSiteIdOWSTEXT']).siteId,
         costsTotal: report?.['GtCostsTotalOWSCURR'],
         budgetTotal: report?.['GtBudgetTotalOWSCURR']
       }))
@@ -886,23 +911,14 @@ export class SPDataAdapter
     includeSelf: boolean = false,
     siteIdManagedProperty: string = 'SiteId'
   ) {
-    const siteId = this.spfxContext.pageContext.site.id.toString()
-    const queries = this.childProjects?.length
-      ? this.aggregatedQueryBuilder(siteIdManagedProperty)
-      : []
-    if (includeSelf) queries.unshift(`${siteIdManagedProperty}:${siteId}`)
-    if (queries.length === 0) return []
-    const promises = queries.map((q) =>
-      this.sp.search({
-        QueryTemplate: `${q} ${queryTemplate}`,
-        Querytext: '*',
-        RowLimit: 500,
-        TrimDuplicates: false,
-        SelectProperties: [...selectProperties, 'Path', 'Title', 'SiteTitle', 'SPWebURL']
-      })
-    )
-    const responses = await Promise.all(promises)
-    return flatten(responses.map((r) => r?.PrimarySearchResults ?? []))
+    return searchAggregatedItems(this.sp, {
+      siteIds: this.childProjects?.map((childProject) => childProject.siteId) ?? [],
+      queryTemplate,
+      selectProperties,
+      includeSelf,
+      selfSiteId: this.spfxContext.pageContext.site.id.toString(),
+      siteIdManagedProperty
+    })
   }
 
   /**
