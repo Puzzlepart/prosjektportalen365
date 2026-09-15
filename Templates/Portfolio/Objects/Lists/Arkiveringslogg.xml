@@ -20,6 +20,12 @@
         <FieldRef Name="GtLogWebUrl" />
         <FieldRef Name="GtLogReference" />
         <FieldRef Name="GtLogArchiveUrl" />
+        <FieldRef Name="GtLogBatchId" />
+        <FieldRef Name="GtLogCaseId" />
+        <FieldRef Name="GtLogJournalPostId" />
+        <FieldRef Name="GtLogCaseResponsibleEmail" />
+        <FieldRef Name="GtLogFromPhase" />
+        <FieldRef Name="GtLogToPhase" />
         <FieldRef Name="Created" />
         <FieldRef Name="Author" />
       </ViewFields>
