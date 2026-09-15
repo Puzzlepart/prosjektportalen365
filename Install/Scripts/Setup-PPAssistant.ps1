@@ -134,7 +134,7 @@ $ErrorActionPreference = 'Stop'
 
 # --- Konstanter (Prosjektportalen-teamets apper) ---
 $AssistantAppId  = 'b999a3f6-a817-41f9-a2ec-f695f59151f5'   # «Prosjektportalen Assistent» (klient)
-$ApiAppId        = '1bf9å43-3416-493d-8709-b222cf5ac32a'   # «Prosjektportalen Assistent API»
+$ApiAppId        = '1bf9aa43-3416-493d-8709-b222cf5ac32a'   # «Prosjektportalen Assistent API»
 $ApiScope        = "api://$ApiAppId/Assistant.Access"
 $ConsentRedirect = 'https://pp365-ai-d2dge4fqc2bhbba9.norwayeast-01.azurewebsites.net/consent-done'
 $SharePointAppId = '00000003-0000-0ff1-ce00-000000000000'
