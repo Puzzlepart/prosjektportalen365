@@ -5,7 +5,10 @@ import { useProjectStatusContext } from '../context'
 import { ISubProject, getScopeLabel, parseSubProjects } from '../parseSubProjects'
 import { SELECT_SCOPE } from '../reducer'
 
-const DEFAULT_SCOPE_VALUE = '$default'
+// Sentinel for the default series option. Contains `#`, a character
+// `isValidScopeKey` forbids, so it can never collide with a configured
+// sub-project key.
+const DEFAULT_SCOPE_VALUE = '#default'
 
 /**
  * Hook for the report scope ("delprosjekt") selector menu item. The options

@@ -64,19 +64,29 @@ export async function searchAggregatedItems(
   const queries = buildAggregatedSiteIdQueries(siteIds, siteIdManagedProperty)
   if (includeSelf && selfSiteId) queries.unshift(`${siteIdManagedProperty}:${selfSiteId}`)
   if (queries.length === 0) return []
-  const responses = await Promise.all(
-    queries.map((q) =>
-      sp.search({
-        QueryTemplate: `${q} ${queryTemplate}`,
-        Querytext: '*',
-        RowLimit: rowLimit,
-        TrimDuplicates: false,
-        SelectProperties: [...selectProperties, 'Path', 'Title', 'SiteTitle', 'SPWebURL']
-      })
-    )
+  const results = await Promise.all(
+    queries.map(async (q) => {
+      // Search caps each response at `rowLimit`, so page with `StartRow`
+      // until `TotalRows` is reached — a chunk can match more than one page.
+      const items: Record<string, any>[] = []
+      let startRow = 0
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        const response = await sp.search({
+          QueryTemplate: `${q} ${queryTemplate}`,
+          Querytext: '*',
+          RowLimit: rowLimit,
+          StartRow: startRow,
+          TrimDuplicates: false,
+          SelectProperties: [...selectProperties, 'Path', 'Title', 'SiteTitle', 'SPWebURL']
+        })
+        const pageItems = response?.PrimarySearchResults ?? []
+        items.push(...pageItems)
+        startRow += pageItems.length
+        if (pageItems.length === 0 || startRow >= (response?.TotalRows ?? 0)) break
+      }
+      return items
+    })
   )
-  return responses.reduce<Record<string, any>[]>(
-    (items, response) => items.concat(response?.PrimarySearchResults ?? []),
-    []
-  )
+  return results.flat()
 }

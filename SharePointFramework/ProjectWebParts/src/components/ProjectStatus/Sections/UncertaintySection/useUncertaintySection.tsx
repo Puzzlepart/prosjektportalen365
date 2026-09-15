@@ -25,6 +25,10 @@ export function useUncertaintySection() {
   const shouldRenderContent = !_.isEmpty(state.data?.items)
 
   useEffect(() => {
+    // Ignore completions from a previous report/scope: a stale request
+    // resolving after a scope switch must not overwrite the reset section
+    // cache with data from the wrong list.
+    let cancelled = false
     const persistedData = selectedReport.persistedSectionData
     if (persistedData) {
       const persistedSectionData = selectedReport.persistedSectionData[section.id]
@@ -32,6 +36,7 @@ export function useUncertaintySection() {
     } else {
       fetchListData()
         .then((_data) => {
+          if (cancelled) return
           const contentTypeIndex = parseInt(
             _.first(_data?.items)?.ContentType?.Id?.StringValue?.substring(38, 40) ?? '-1'
           )
@@ -51,8 +56,12 @@ export function useUncertaintySection() {
           setState({ data, isDataLoaded: true })
         })
         .catch((error) => {
+          if (cancelled) return
           setState({ error, isDataLoaded: true })
         })
+    }
+    return () => {
+      cancelled = true
     }
   }, [context.state.selectedReport, context.state.selectedScope])
 

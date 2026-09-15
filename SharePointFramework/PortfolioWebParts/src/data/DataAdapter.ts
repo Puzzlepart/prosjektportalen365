@@ -22,6 +22,7 @@ import * as strings from 'PortfolioWebPartsStrings'
 import {
   DataSource,
   DataSourceService,
+  expandRowsPerStatusSeries,
   getClassProperties,
   getItemFieldValues,
   getOrFetchProjectsCache,

@@ -24,6 +24,10 @@ export function useListSection() {
   const shouldRenderList = !_.isEmpty(state.data?.items)
 
   useEffect(() => {
+    // Ignore completions from a previous report/scope: a stale request
+    // resolving after a scope switch must not overwrite the reset section
+    // cache with data from the wrong list.
+    let cancelled = false
     const persistedData = selectedReport.persistedSectionData
     if (persistedData) {
       const persistedSectionData = selectedReport.persistedSectionData[section.id]
@@ -31,6 +35,7 @@ export function useListSection() {
     } else {
       fetchListData()
         .then((_data) => {
+          if (cancelled) return
           const data: IListSectionData = {
             ..._data,
             summation: _data ? calculateValues(section?.sumField, _data.items) : undefined
@@ -40,8 +45,12 @@ export function useListSection() {
           setState({ data, isDataLoaded: true })
         })
         .catch((error) => {
+          if (cancelled) return
           setState({ error, isDataLoaded: true })
         })
+    }
+    return () => {
+      cancelled = true
     }
   }, [context.state.selectedReport, context.state.selectedScope])
 
