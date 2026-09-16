@@ -74,7 +74,7 @@
     "@types/heft-jest": "1.0.2",
     "@types/jest": "30.0.0",
     "css-loader": "7.1.2",
-    "pp365-eslint-config": "1.14.0"
+    "pp365-eslint-config": "workspace:*"
   },
   "gitmoji": {
     "build": [

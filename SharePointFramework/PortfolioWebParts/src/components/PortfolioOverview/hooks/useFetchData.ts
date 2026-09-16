@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { MessageBarType } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import { ColumnRenderComponentRegistry } from '../../List'
@@ -86,16 +85,16 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
             context.props.configuration
           )
         : context.props.isParentProject
-        ? context.props.dataAdapter.fetchDataForViewBatch(
-            currentView,
-            context.props.configuration,
-            context.props.configuration.hubSiteId
-          )
-        : context.props.dataAdapter.fetchDataForView(
-            currentView,
-            context.props.configuration,
-            context.props.configuration.hubSiteId
-          )
+          ? context.props.dataAdapter.fetchDataForViewBatch(
+              currentView,
+              context.props.configuration,
+              context.props.configuration.hubSiteId
+            )
+          : context.props.dataAdapter.fetchDataForView(
+              currentView,
+              context.props.configuration,
+              context.props.configuration.hubSiteId
+            )
 
       const [{ items, managedProperties }, isUserInPortfolioManagerGroup] = await Promise.all([
         fetchViewData,

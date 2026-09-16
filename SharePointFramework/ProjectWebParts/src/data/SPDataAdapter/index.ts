@@ -119,8 +119,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     }
     const dataSource = name
       ? await this.dataSourceService.getByName(name)
-      : (await this.dataSourceService.getById(defaultDataSourceId)) ??
-        (await this.dataSourceService.getByName(defaultName))
+      : ((await this.dataSourceService.getById(defaultDataSourceId)) ??
+        (await this.dataSourceService.getByName(defaultName)))
     if (!dataSource) {
       throw new Error(format(strings.DataSourceNotFound, displayName))
     }
@@ -270,8 +270,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       return files.map((file) => ({
         name: file.Name,
         title:
-          file['ListItemAllFields']?.['Title'] ??
-          `${strings.UnknownConfigurationName} (${file.Name})`,
+          file.ListItemAllFields?.Title ?? `${strings.UnknownConfigurationName} (${file.Name})`,
         url: file.ServerRelativeUrl
       }))
     } catch (error) {
@@ -297,16 +296,14 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         .filter('FSObjType eq 0')
         .using(DefaultCaching)()
 
-      return documents.map(
-        (doc): IArchiveDocumentItem => ({
-          id: doc.Id,
-          title: doc.FileLeafRef || doc.Title,
-          projectPhaseId: doc?.GtProjectPhase?.TermGuid,
-          documentTypeId: doc?.GtDocumentType?.TermGuid,
-          url: doc.FileRef,
-          type: 'file'
-        })
-      )
+      return documents.map((doc): IArchiveDocumentItem => ({
+        id: doc.Id,
+        title: doc.FileLeafRef || doc.Title,
+        projectPhaseId: doc?.GtProjectPhase?.TermGuid,
+        documentTypeId: doc?.GtDocumentType?.TermGuid,
+        url: doc.FileRef,
+        type: 'file'
+      }))
     } catch (error) {
       Logger.log({
         message: `(${this._name}) (getDocumentsForArchive) Error fetching documents: ${error.message}`,
@@ -344,15 +341,13 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
           list.Title !== 'Web Part Gallery'
       )
 
-      return filteredLists.map(
-        (list): IArchiveListItem => ({
-          id: list.Id,
-          title: list.Title,
-          url: list.DefaultViewUrl,
-          type: 'list',
-          itemCount: list.ItemCount || 0
-        })
-      )
+      return filteredLists.map((list): IArchiveListItem => ({
+        id: list.Id,
+        title: list.Title,
+        url: list.DefaultViewUrl,
+        type: 'list',
+        itemCount: list.ItemCount || 0
+      }))
     } catch (error) {
       Logger.log({
         message: `(${this._name}) (getListsForArchive) Error fetching lists: ${error.message}`,

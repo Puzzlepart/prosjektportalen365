@@ -5,7 +5,8 @@ import { UncertaintyElementModel } from '../../models'
 import { IDynamicMatrixProps } from '../DynamicMatrix'
 
 export interface IRiskMatrixProps
-  extends Omit<HTMLProps<HTMLDivElement>, 'size'>,
+  extends
+    Omit<HTMLProps<HTMLDivElement>, 'size'>,
     IBaseWebPartComponentProps,
     Pick<IDynamicMatrixProps, 'fullWidth' | 'manualConfigurationPath' | 'calloutTemplate'> {
   /**

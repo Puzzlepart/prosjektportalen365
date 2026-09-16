@@ -27,7 +27,6 @@ export interface IResolvedCloudTemplate {
   contentConfig: CloudContentConfig[]
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface ITemplateSelectDialogSectionProps extends HTMLProps<HTMLDivElement> {}
 
 export type ProjectSetupDialogSectionComponent = FC<ITemplateSelectDialogSectionProps>

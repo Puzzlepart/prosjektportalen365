@@ -1,7 +1,11 @@
 import { MessageBarType } from '@fluentui/react'
 
 export class CustomError extends Error {
-  public constructor(error: Error, public type: MessageBarType, public customMessage: string = '') {
+  public constructor(
+    error: Error,
+    public type: MessageBarType,
+    public customMessage: string = ''
+  ) {
     super(error.message)
     this.name = error.name
     this.stack = error.stack

@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { IWeb } from '@pnp/sp/webs'
 import { Schema } from 'sp-js-provisioning'
 import { ProjectTemplate } from './ProjectTemplate'
@@ -19,7 +18,10 @@ export interface IProjectExtensionSPItem {
 export class ProjectExtension extends UserSelectableObject {
   public serverRelativeUrl: string
 
-  constructor(spItem: IProjectExtensionSPItem, public web: IWeb) {
+  constructor(
+    spItem: IProjectExtensionSPItem,
+    public web: IWeb
+  ) {
     super(
       spItem.Id,
       spItem.File.Title,

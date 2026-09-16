@@ -1,4 +1,3 @@
-/* eslint-disable prefer-spread */
 import { AnyAction } from '@reduxjs/toolkit'
 import { createContext, useContext } from 'react'
 import { IProjectStatusProps, IProjectStatusState } from './types'

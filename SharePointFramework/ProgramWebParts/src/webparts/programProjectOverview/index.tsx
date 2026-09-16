@@ -62,7 +62,6 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
    * @returns An array of dropdown options for the specified target property.
    */
   protected _getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {
-    // eslint-disable-next-line default-case
     switch (targetProperty) {
       case 'defaultViewId':
         {

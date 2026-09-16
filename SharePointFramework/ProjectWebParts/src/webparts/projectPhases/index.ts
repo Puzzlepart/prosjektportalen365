@@ -19,7 +19,7 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
   public async onInit() {
     await super.onInit()
     this._fields = await this.sp.web.fields
-      // eslint-disable-next-line quotes
+
       .filter("TypeAsString eq 'TaxonomyFieldType'")
       .select('Title', 'InternalName')()
   }

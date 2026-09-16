@@ -64,7 +64,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     try {
       this._isSetup = await this._isProjectSetup()
       this._validation = await this._validateProjectSetup()
-      // eslint-disable-next-line default-case
+
       switch (this._validation) {
         case ProjectSetupValidation.NotSiteAdmin: {
           throw new ProjectSetupError(
@@ -380,7 +380,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         }
         this._unmount(placeholder)
       },
-      intent: props.error['messageType'],
+      intent: props.error.messageType,
       onSetupClick: () => {
         this._initializeSetup({
           sp: this.sp,
@@ -534,7 +534,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     try {
       const webAllProperties = (
         await this.sp.web.select('Title', 'AllProperties').expand('AllProperties')()
-      )['AllProperties']
+      ).AllProperties
       const lockedTemplateProperty = Object.keys(webAllProperties).find((key) =>
         propertyBagRegex.test(key)
       )

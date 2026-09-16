@@ -161,7 +161,6 @@ export async function fetchTimelineData(
     filter = `${filter} and (startswith(ContentTypeId, '${timelineContentTypeId}'))`
   }
 
-  // eslint-disable-next-line prefer-const
   let timelineContentItems = await timelineContentList.items
     .select(
       'Id',

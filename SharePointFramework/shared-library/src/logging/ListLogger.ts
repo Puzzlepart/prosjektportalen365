@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { IList } from '@pnp/sp/lists'
 import {
   defaultListLoggerMemberMap,

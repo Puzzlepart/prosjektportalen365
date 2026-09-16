@@ -1,4 +1,3 @@
-/* eslint-disable prefer-spread */
 import { ButtonProps, useId } from '@fluentui/react-components'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'

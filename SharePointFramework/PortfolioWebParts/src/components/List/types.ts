@@ -9,11 +9,10 @@ export type OnColumnContextMenu = {
   target: any
 }
 
-export interface IListProps<T extends IColumn = IColumn>
-  extends Omit<
-    IShimmeredDetailsListProps,
-    'layoutMode' | 'onColumnHeaderClick' | 'onColumnHeaderContextMenu'
-  > {
+export interface IListProps<T extends IColumn = IColumn> extends Omit<
+  IShimmeredDetailsListProps,
+  'layoutMode' | 'onColumnHeaderClick' | 'onColumnHeaderContextMenu'
+> {
   /**
    * Title to display in the list header
    */

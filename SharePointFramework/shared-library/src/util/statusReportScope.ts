@@ -203,17 +203,15 @@ export function expandRowsPerStatusSeries<TRow extends Record<string, any>>(
   siteIdProperty = 'GtSiteIdOWSTEXT'
 ): Array<TRow & IStatusScopeRowProps> {
   const baseRow = buildRow(series?.defaultReport)
-  const rows: Array<TRow & IStatusScopeRowProps> = [
-    { ...baseRow, key: `${baseRow['SiteId'] ?? ''}_` }
-  ]
+  const rows: Array<TRow & IStatusScopeRowProps> = [{ ...baseRow, key: `${baseRow.SiteId ?? ''}_` }]
   for (const report of series?.additionalReports ?? []) {
     const { scopeKey } = parseScopedSiteId(report[siteIdProperty])
     const row = buildRow(report)
     rows.push({
       ...row,
-      Title: scopeKey ? `${baseRow['Title']} – ${scopeKey}` : baseRow['Title'],
+      Title: scopeKey ? `${baseRow.Title} – ${scopeKey}` : baseRow.Title,
       ScopeKey: scopeKey,
-      key: `${row['SiteId'] ?? ''}_${getScopeSeriesKey(scopeKey)}`
+      key: `${row.SiteId ?? ''}_${getScopeSeriesKey(scopeKey)}`
     })
   }
   return rows

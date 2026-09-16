@@ -47,7 +47,8 @@ export abstract class BaseUncertaintyMatrixWebPart<
       const defaultConfiguration = _.find(
         configurations,
         (config) =>
-          config.name === SPDataAdapter.globalSettings.get(this.config.defaultConfigurationSettingKey)
+          config.name ===
+          SPDataAdapter.globalSettings.get(this.config.defaultConfigurationSettingKey)
       )
       this._data = { items, configurations, defaultConfiguration }
     } catch (error) {

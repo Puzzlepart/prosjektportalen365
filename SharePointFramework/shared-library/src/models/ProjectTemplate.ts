@@ -78,7 +78,10 @@ export class ProjectTemplate extends UserSelectableObject {
    * @param web The `Web` instance (from `@pnp/sp`) to use when loading the template schema.
    * Does not need to be specified if the schema doesn't need to be loaded.
    */
-  constructor(spItem: IProjectTemplateSPItem, public web?: IWeb) {
+  constructor(
+    spItem: IProjectTemplateSPItem,
+    public web?: IWeb
+  ) {
     super(
       spItem.Id,
       spItem.FieldValuesAsText.Title,

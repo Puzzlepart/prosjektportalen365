@@ -49,7 +49,7 @@ export abstract class BaseProjectWebPart<
     render(
       <ErrorBoundary
         fallbackRender={({ error }) => (
-          <ErrorBoundaryFallback title={combinedProps['title']} error={error} />
+          <ErrorBoundaryFallback title={combinedProps.title} error={error} />
         )}
       >
         {element}

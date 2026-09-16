@@ -70,7 +70,7 @@ export async function searchAggregatedItems(
       // until `TotalRows` is reached — a chunk can match more than one page.
       const items: Record<string, any>[] = []
       let startRow = 0
-      // eslint-disable-next-line no-constant-condition
+
       while (true) {
         const response = await sp.search({
           QueryTemplate: `${q} ${queryTemplate}`,

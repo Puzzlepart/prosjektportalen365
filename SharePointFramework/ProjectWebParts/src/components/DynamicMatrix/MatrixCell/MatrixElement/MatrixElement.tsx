@@ -18,7 +18,7 @@ export const MatrixElement: FC<IMatrixElementProps> = (props) => {
               dangerouslySetInnerHTML={{
                 __html: replaceTokens(context.props?.calloutTemplate, props.model.item)
               }}
-            ></span>
+            />
           </div>
         )
       }

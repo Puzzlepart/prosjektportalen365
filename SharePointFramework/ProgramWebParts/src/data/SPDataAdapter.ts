@@ -222,8 +222,8 @@ export class SPDataAdapter
         siteIdProperty
       )
       const items = sites.reduce<IFetchDataForViewItemResult[]>((acc, site) => {
-        const project = projects.find((res) => res[siteIdProperty] === site['SiteId'])
-        const series = statusReportsBySite.get(site['SiteId'])
+        const project = projects.find((res) => res[siteIdProperty] === site.SiteId)
+        const series = statusReportsBySite.get(site.SiteId)
         return acc.concat(
           expandRowsPerStatusSeries(
             (statusReport) => ({
@@ -232,7 +232,7 @@ export class SPDataAdapter
               Title: site.Title,
               Path: site?.Path,
               SPWebUrl: site?.SPWebUrl,
-              SiteId: site['SiteId']
+              SiteId: site.SiteId
             }),
             series,
             siteIdProperty
@@ -260,7 +260,7 @@ export class SPDataAdapter
         siteIdProperty
       )
       const items = projects.reduce<IFetchDataForViewItemResult[]>((acc, project) => {
-        const site = sites.find((res) => res['SiteId'] === project[siteIdProperty])
+        const site = sites.find((res) => res.SiteId === project[siteIdProperty])
         const series = statusReportsBySite.get(project[siteIdProperty])
         return acc.concat(
           expandRowsPerStatusSeries(
@@ -319,7 +319,7 @@ export class SPDataAdapter
         query
       )
       return projects.reduce<IFetchDataForViewItemResult[]>((acc, project) => {
-        const site = sites.find((res) => res['SiteId'] === project[siteIdProperty])
+        const site = sites.find((res) => res.SiteId === project[siteIdProperty])
         const series = statusReportsBySite.get(project[siteIdProperty])
         return acc.concat(
           expandRowsPerStatusSeries(
@@ -419,7 +419,7 @@ export class SPDataAdapter
       cleanDeep({ ...item })
     )
     sites = sites.filter(
-      (site) => projects.filter((res) => res[siteIdProperty] === site['SiteId']).length === 1
+      (site) => projects.filter((res) => res[siteIdProperty] === site.SiteId).length === 1
     )
     const statusReportsBySite = groupLatestReportBySeries(statusReports, siteIdProperty)
 
@@ -464,7 +464,7 @@ export class SPDataAdapter
         )
 
         return {
-          siteId: item?.['GtSiteIdOWSTEXT'],
+          siteId: item?.GtSiteIdOWSTEXT,
           properties
         }
       })
@@ -481,11 +481,11 @@ export class SPDataAdapter
     )
 
     const reports = statusReports
-      .filter((report) => !parseScopedSiteId(report?.['GtSiteIdOWSTEXT']).scopeKey)
+      .filter((report) => !parseScopedSiteId(report?.GtSiteIdOWSTEXT).scopeKey)
       .map((report) => ({
-        siteId: parseScopedSiteId(report?.['GtSiteIdOWSTEXT']).siteId,
-        costsTotal: report?.['GtCostsTotalOWSCURR'],
-        budgetTotal: report?.['GtBudgetTotalOWSCURR']
+        siteId: parseScopedSiteId(report?.GtSiteIdOWSTEXT).siteId,
+        costsTotal: report?.GtCostsTotalOWSCURR,
+        budgetTotal: report?.GtBudgetTotalOWSCURR
       }))
       .filter(Boolean)
 
@@ -662,7 +662,7 @@ export class SPDataAdapter
         }
       ]
     })
-    return PrimarySearchResults.filter((site) => hubSiteId !== site['SiteId'])
+    return PrimarySearchResults.filter((site) => hubSiteId !== site.SiteId)
   }
 
   /**
@@ -717,7 +717,7 @@ export class SPDataAdapter
       MSGraph.Get<IGraphGroup[]>(
         '/me/memberOf/$/microsoft.graph.group',
         ['id', 'displayName'],
-        // eslint-disable-next-line quotes
+
         "groupTypes/any(a:a%20eq%20'unified')"
       )
     )
@@ -813,7 +813,7 @@ export class SPDataAdapter
       const [siteGroup] = await this.sp.web.siteGroups
         .select('CanCurrentUserViewMembership', 'Title')
         .filter(`Title eq '${groupName}'`)()
-      return siteGroup && siteGroup['CanCurrentUserViewMembership']
+      return siteGroup && siteGroup.CanCurrentUserViewMembership
     } catch (error) {
       return false
     }
@@ -1160,19 +1160,19 @@ export class SPDataAdapter
         return items
           .filter(
             (item) =>
-              item['GtSiteIdOWSTEXT'] &&
-              item['GtSiteIdOWSTEXT'] !== '00000000-0000-0000-0000-000000000000'
+              item.GtSiteIdOWSTEXT &&
+              item.GtSiteIdOWSTEXT !== '00000000-0000-0000-0000-000000000000'
           )
           .map<IProgramAdministrationProject>((item) => {
-            const site = sts_sites.find((site) => site['SiteId'] === item['GtSiteIdOWSTEXT'])
-            const rawHubSiteId = site?.['DepartmentId']
+            const site = sts_sites.find((site) => site.SiteId === item.GtSiteIdOWSTEXT)
+            const rawHubSiteId = site?.DepartmentId
             const hubSiteId = rawHubSiteId
               ? rawHubSiteId.replace(/[{}]/g, '').toLowerCase()
               : rawHubSiteId
             const hub = hubs?.find((h) => h.hubSiteId === hubSiteId)
             return {
-              SiteId: item['GtSiteIdOWSTEXT'],
-              Title: site?.Title ?? item['Title'],
+              SiteId: item.GtSiteIdOWSTEXT,
+              Title: site?.Title ?? item.Title,
               SPWebURL: site?.SPWebUrl,
               Path: site?.Path,
               HubSiteId: hubSiteId,

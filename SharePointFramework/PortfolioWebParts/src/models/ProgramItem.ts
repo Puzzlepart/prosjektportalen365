@@ -13,8 +13,10 @@ export class ProgramItem {
   public name: string
   public url: string
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  constructor(private _item: IProgramSPItem, _web?: IWeb) {
+  constructor(
+    private _item: IProgramSPItem,
+    _web?: IWeb
+  ) {
     this.id = _item.GtSiteId
     this.name = _item.Title
     this.url = _item.GtSiteUrl

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PlannerTask } from '@microsoft/microsoft-graph-types'
 import { FieldCustomizerContext } from '@microsoft/sp-listview-extensibility'
 import { GraphFI, SPFx as graphSPFx, graphfi } from '@pnp/graph'

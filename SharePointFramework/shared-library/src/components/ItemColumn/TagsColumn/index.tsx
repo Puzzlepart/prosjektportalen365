@@ -20,7 +20,7 @@ export const TagsColumn: ColumnRenderComponent<ITagsColumnProps> = (props) => {
 
   let icon = TagMultipleFilled
 
-  switch (props.column['internalName']) {
+  switch (props.column.internalName) {
     case 'GtProjectServiceArea':
       icon = GlobeLocationFilled
       break

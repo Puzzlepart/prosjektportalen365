@@ -36,7 +36,11 @@ export class ContentConfig extends UserSelectableObject {
   private _sourceListName: string
   private _destinationListName: string
 
-  constructor(private _spItem: IContentConfigSPItem, public web: IWeb, private _sp?: SPFI) {
+  constructor(
+    private _spItem: IContentConfigSPItem,
+    public web: IWeb,
+    private _sp?: SPFI
+  ) {
     super(
       _spItem.Id,
       _spItem.Title,

@@ -1,7 +1,5 @@
-/* eslint-disable max-classes-per-file */
 import { Version } from '@microsoft/sp-core-library'
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface IFooterApplicationCustomizerProperties {
   publicMediaBasePath: string
 }
@@ -91,7 +89,10 @@ export class HelpContentModel {
   public externalUrl: string
   private _publicMediaBasePath: string
 
-  constructor(spItem: Record<string, any>, public web: any) {
+  constructor(
+    spItem: Record<string, any>,
+    public web: any
+  ) {
     this.title = spItem.Title
     this.iconName = spItem.GtIconName
     this.urlPattern = spItem.GtURL

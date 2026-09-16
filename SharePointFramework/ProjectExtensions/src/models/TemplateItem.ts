@@ -78,7 +78,10 @@ export class TemplateItem {
    */
   public errorMessage: string
 
-  constructor(private _item: ITemplateSPItem, public web: IWeb) {
+  constructor(
+    private _item: ITemplateSPItem,
+    public web: IWeb
+  ) {
     this.id = _item.File?.UniqueId || _item.Folder.UniqueId
     this.name = _item.File?.Name || _item.Folder?.Name
     this.title = _item.File?.Title || this.nameWithoutExtension || _item.Folder?.Name
@@ -104,7 +107,7 @@ export class TemplateItem {
         return await this.copyFolderWithContents(folder, shouldOverwrite)
       } else {
         const content = await this.web.getFileByServerRelativePath(this.serverRelativeUrl).getBlob()
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
+
         const fileAddResult = await folder.files.addUsingPath(this.newName, content, {
           Overwrite: shouldOverwrite
         })

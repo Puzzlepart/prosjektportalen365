@@ -18,8 +18,9 @@ export type ItemColumnRenderFunction = (props: IRenderItemColumnProps) => JSX.El
  *
  * @template T - The type of the props passed to the component.
  */
-export interface ColumnRenderComponent<T extends IRenderItemColumnProps = IRenderItemColumnProps>
-  extends React.FunctionComponent<T> {
+export interface ColumnRenderComponent<
+  T extends IRenderItemColumnProps = IRenderItemColumnProps
+> extends React.FunctionComponent<T> {
   /**
    * The key of the data type for internal use. This is used to identify the data type
    * in the data type field dropdown.

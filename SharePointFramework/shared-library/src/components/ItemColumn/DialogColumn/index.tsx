@@ -107,7 +107,7 @@ DialogColumn.getDataTypeProperties = (onChange, dataTypeProperties) => [
   ColumnDataTypePropertyField(TextField, {
     label: strings.ColumnRenderOptionDialogLinkTextLabel,
     placeholder: DialogColumn.defaultProps.linkText,
-    value: dataTypeProperties['linkText'],
+    value: dataTypeProperties.linkText,
     onChange: (_, value) => onChange('linkText', value)
   }),
   ColumnDataTypePropertyField(Checkbox, {

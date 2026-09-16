@@ -267,9 +267,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       const uniqueProjects = new Map<string, T>()
 
       childProjectItems
-        .filter((p) => (p['childProjects'] ? p['childProjects'].includes(webUrl) : true))
+        .filter((p) => (p.childProjects ? p.childProjects.includes(webUrl) : true))
         .forEach((p) => {
-          if (p['url']) uniqueProjects.set(p['url'], p)
+          if (p.url) uniqueProjects.set(p.url, p)
         })
 
       if (currentProject?.GtParentProjects) {
@@ -305,8 +305,8 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
 
               parentProjectItems.forEach((item) => {
                 const project = new constructor(item, parentHubWeb)
-                if (project['url']) {
-                  uniqueProjects.set(project['url'], project)
+                if (project.url) {
+                  uniqueProjects.set(project.url, project)
                 }
               })
             } catch (error) {
@@ -1098,10 +1098,13 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       for (const item of await items()) {
         userFieldValues.set(
           item.Id,
-          userFields.reduce((values, fieldName) => {
-            if (item[fieldName]) values[fieldName] = item[fieldName]
-            return values
-          }, {} as Record<string, any>)
+          userFields.reduce(
+            (values, fieldName) => {
+              if (item[fieldName]) values[fieldName] = item[fieldName]
+              return values
+            },
+            {} as Record<string, any>
+          )
         )
       }
     } catch (error) {

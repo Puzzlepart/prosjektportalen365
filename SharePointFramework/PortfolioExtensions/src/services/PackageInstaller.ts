@@ -50,8 +50,8 @@ function ensureLogCaptureSubscribed(): void {
         entry.level === LogLevel.Error
           ? 'error'
           : entry.level === LogLevel.Warning
-          ? 'warning'
-          : 'info'
+            ? 'warning'
+            : 'info'
       // Drop the redundant catalog prefix (and the optional cloud marker) so the
       // leading "(Handler):" stays first — that's what the advanced log groups on.
       _logCapture(

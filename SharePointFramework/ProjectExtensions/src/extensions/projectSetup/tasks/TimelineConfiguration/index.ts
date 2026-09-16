@@ -17,7 +17,10 @@ export class TimelineConfiguration extends BaseTask {
    * @param data Project setup data
    * @param _contentConfig Content configuration with source timeline elements
    */
-  constructor(data: IProjectSetupData, private _contentConfig: ContentConfig) {
+  constructor(
+    data: IProjectSetupData,
+    private _contentConfig: ContentConfig
+  ) {
     super('TimelineConfiguration', data)
   }
 

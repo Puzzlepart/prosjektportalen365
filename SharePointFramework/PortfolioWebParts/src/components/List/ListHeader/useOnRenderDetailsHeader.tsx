@@ -5,7 +5,8 @@ import { ListHeader } from './ListHeader'
 
 export const useOnRenderDetailsHeader = (props: IListProps): IRenderFunction<IDetailsHeaderProps> =>
   useMemo(
-    () => (headerProps, defaultRender) =>
-      <ListHeader {...props} headerProps={headerProps} defaultRender={defaultRender} />,
+    () => (headerProps, defaultRender) => (
+      <ListHeader {...props} headerProps={headerProps} defaultRender={defaultRender} />
+    ),
     [props]
   )

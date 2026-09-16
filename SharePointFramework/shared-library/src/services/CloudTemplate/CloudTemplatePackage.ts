@@ -33,7 +33,10 @@ export interface IPackageFolder {
  * entrypoint bundle.
  */
 export class CloudTemplatePackage {
-  private constructor(private _zip: JSZip, public readonly manifest: IPackageManifest) {}
+  private constructor(
+    private _zip: JSZip,
+    public readonly manifest: IPackageManifest
+  ) {}
 
   /**
    * Download a `.pppkg` from `url`, unzip it and parse `manifest.json`.

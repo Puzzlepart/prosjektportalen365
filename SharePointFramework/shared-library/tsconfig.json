@@ -16,8 +16,8 @@
       "es2015.iterable",
       "es2015.promise",
       "es2015.proxy",
-      "es2015",
-      "es2020"
+      "es2020",
+      "es2015"
     ]
   }
 }

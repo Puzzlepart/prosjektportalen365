@@ -67,7 +67,7 @@ export class CopyListData extends BaseTask {
           continue
         }
         await contentConfig.load()
-        // eslint-disable-next-line default-case
+
         switch (contentConfig.type) {
           case ContentConfigType.Planner:
             {

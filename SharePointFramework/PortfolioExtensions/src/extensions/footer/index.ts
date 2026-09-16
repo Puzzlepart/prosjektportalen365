@@ -102,7 +102,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       const [siteGroup] = await this._portalDataService.web.siteGroups
         .select('CanCurrentUserViewMembership', 'Title')
         .filter(`Title eq '${groupName}'`)()
-      return siteGroup && siteGroup['CanCurrentUserViewMembership']
+      return siteGroup && siteGroup.CanCurrentUserViewMembership
     } catch (error) {
       return false
     }

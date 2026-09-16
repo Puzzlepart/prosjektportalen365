@@ -1,4 +1,3 @@
-/* eslint-disable quotes */
 import { IPropertyPaneConfiguration, PropertyPaneToggle } from '@microsoft/sp-property-pane'
 import {
   PropertyFieldDropdownWithCallout,

@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import {
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState,
@@ -117,8 +116,7 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   className?: string
 }
 
-export interface IProjectInformationState
-  extends IBaseWebPartComponentState<IProjectInformationData> {
+export interface IProjectInformationState extends IBaseWebPartComponentState<IProjectInformationData> {
   /**
    * Properties to display sorted by `column.sortOrder`. The properties
    * must be sent through a visibility check to determine if they should
@@ -187,7 +185,8 @@ export interface IProjectInformationState
 }
 
 export interface IProjectInformationData
-  extends ProjectDataService.IProjectInformationData,
+  extends
+    ProjectDataService.IProjectInformationData,
     Pick<IProjectStatusData, 'reports' | 'sections' | 'columnConfig'> {
   /**
    * Column configuration

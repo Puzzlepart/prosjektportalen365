@@ -391,7 +391,7 @@ export class CompatibilityService {
         const e = { ...entry }
         if (Array.isArray(e.Fields)) {
           e.Fields = e.Fields.filter((f: any) => {
-            const id = typeof f === 'string' ? attr(f, 'ID') : f?.ID ?? f?.Id
+            const id = typeof f === 'string' ? attr(f, 'ID') : (f?.ID ?? f?.Id)
             return !listFieldSkipIds.has(normGuid(id))
           })
         }

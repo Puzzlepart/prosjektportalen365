@@ -76,8 +76,8 @@ export const CatalogToolbar: FC = () => {
     filters.categories.length === 0
       ? strings.CatalogFilterAllOption
       : filters.categories.length <= 2
-      ? filters.categories.join(', ')
-      : format(strings.CatalogFilterCategorySelectedCount, filters.categories.length)
+        ? filters.categories.join(', ')
+        : format(strings.CatalogFilterCategorySelectedCount, filters.categories.length)
   }`
   const statusValue = `${strings.CatalogFilterStatusLabel}: ${textFor(
     statusOptions,

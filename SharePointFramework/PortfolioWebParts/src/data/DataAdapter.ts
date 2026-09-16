@@ -83,7 +83,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
    * @param _spfxContext SPFx context
    * @param _sp SPFI instance
    */
-  constructor(private _spfxContext: SPFxContext, private _sp: SPFI) {
+  constructor(
+    private _spfxContext: SPFxContext,
+    private _sp: SPFI
+  ) {
     this.portalDataService = new PortalDataService()
   }
 
@@ -322,8 +325,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       await this._fetchDataForView(view, configuration, siteId, siteIdProperty)
 
     const items = sites.reduce<IFetchDataForViewItemResult[]>((acc, site) => {
-      const project = projects.find((res) => res[siteIdProperty] === site['SiteId'])
-      const series = statusReportsBySite.get(site['SiteId'])
+      const project = projects.find((res) => res[siteIdProperty] === site.SiteId)
+      const series = statusReportsBySite.get(site.SiteId)
       return acc.concat(
         expandRowsPerStatusSeries(
           (statusReport) => ({
@@ -332,7 +335,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
             Title: site.Title,
             Path: site?.Path,
             SPWebUrl: site?.SPWebUrl,
-            SiteId: site['SiteId']
+            SiteId: site.SiteId
           }),
           series,
           siteIdProperty
@@ -353,7 +356,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       await this._fetchDataForView(view, configuration, siteId, siteIdProperty)
 
     const items = projects.reduce<IFetchDataForViewItemResult[]>((acc, project) => {
-      const site = sites.find((res) => res['SiteId'] === project[siteIdProperty])
+      const site = sites.find((res) => res.SiteId === project[siteIdProperty])
       const series = statusReportsBySite.get(project[siteIdProperty])
       return acc.concat(
         expandRowsPerStatusSeries(
@@ -451,7 +454,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       cleanDeep({ ...item })
     )
     sites = sites.filter(
-      (site) => projects.filter((res) => res[siteIdProperty] === site['SiteId']).length === 1
+      (site) => projects.filter((res) => res[siteIdProperty] === site.SiteId).length === 1
     )
     const statusReportsBySite = groupLatestReportBySeries(statusReports, siteIdProperty)
 
@@ -489,17 +492,17 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         )
 
         return {
-          siteId: item?.['GtSiteIdOWSTEXT'],
+          siteId: item?.GtSiteIdOWSTEXT,
           properties
         }
       })
 
       const reports = statusReports
-        .filter((report) => !parseScopedSiteId(report?.['GtSiteIdOWSTEXT']).scopeKey)
+        .filter((report) => !parseScopedSiteId(report?.GtSiteIdOWSTEXT).scopeKey)
         .map((report) => ({
-          siteId: parseScopedSiteId(report?.['GtSiteIdOWSTEXT']).siteId,
-          costsTotal: report?.['GtCostsTotalOWSCURR'],
-          budgetTotal: report?.['GtBudgetTotalOWSCURR']
+          siteId: parseScopedSiteId(report?.GtSiteIdOWSTEXT).siteId,
+          costsTotal: report?.GtCostsTotalOWSCURR,
+          budgetTotal: report?.GtBudgetTotalOWSCURR
         }))
         .filter(Boolean)
 
@@ -646,7 +649,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         }
       ]
     })
-    return PrimarySearchResults.filter((site) => hubSiteId !== site['SiteId'])
+    return PrimarySearchResults.filter((site) => hubSiteId !== site.SiteId)
   }
 
   /**
@@ -698,7 +701,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
         const model = new ProjectListModel(group?.displayName ?? item.Title, itemWithTemplate)
         model.isUserMember = !!group
-        model.hasUserAccess = _.any(sites, (site) => site['SiteId'] === item.GtSiteId)
+        model.hasUserAccess = _.any(sites, (site) => site.SiteId === item.GtSiteId)
         model.primaryUser = createUserPersona(primaryUser, primaryUserField)
         model.secondaryUser = createUserPersona(secondaryUser, secondaryUserField)
         return model
@@ -967,7 +970,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         .Get<IGraphGroup[]>(
           '/me/memberOf/$/microsoft.graph.group',
           ['id', 'displayName'],
-          // eslint-disable-next-line quotes
+
           "groupTypes/any(a:a%20eq%20'unified')"
         )
         .then((value) => resolve(value))
@@ -996,7 +999,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const [siteGroup] = await this._sp.web.siteGroups
         .select('CanCurrentUserViewMembership', 'Title')
         .filter(`Title eq '${groupName}'`)()
-      return siteGroup && siteGroup['CanCurrentUserViewMembership']
+      return siteGroup && siteGroup.CanCurrentUserViewMembership
     } catch (error) {
       return false
     }

@@ -64,7 +64,6 @@ export const Actions: FC = () => {
 
   const getNextView = () => (context.props.useArchive ? View.Archive : View.Confirm)
 
-  // eslint-disable-next-line default-case
   switch (state.view) {
     case View.Initial:
       {

@@ -57,6 +57,32 @@ const BUNDLE_LINKED_PACKAGES = [
 /** Default output folder when no `outDir` can be resolved from the tsconfig chain. */
 const DEFAULT_OUT_DIR = 'lib'
 
+/**
+ * Legacy package names that must be redirected to their modern equivalents.
+ *
+ * `office-ui-fabric-react` was renamed to `@fluentui/react` at v8. Some older transitive
+ * dependencies (notably `pzl-spfx-components`, which declares no runtime dependencies at all)
+ * still import the old name and used to resolve it through npm's flat node_modules. pnpm's
+ * strict layout no longer provides it, so map it onto the Fluent v8 copy this solution already
+ * bundles. Mapping to an absolute path is deliberate: a bare package name would be resolved
+ * relative to the importing module, which cannot see this solution's dependencies.
+ */
+const COMPAT_ALIASES = { 'office-ui-fabric-react': '@fluentui/react' }
+
+/**
+ * Subpaths that exist on disk but are not listed in their package's `exports` map.
+ *
+ * `@fluentui/react` 8.106.4 exports `./dist/sass/*` but not `./dist/css/*`, while five web parts
+ * import `@fluentui/react/dist/css/fabric.min.css` for the Fabric core classes. The gulp toolchain's
+ * webpack did not enforce `exports`; the Heft toolchain's does. Aliasing the folder to its absolute
+ * location bypasses the export map without changing which file is loaded.
+ *
+ * Each entry maps an alias prefix to [package name, subpath within that package].
+ */
+const UNEXPORTED_SUBPATH_ALIASES = {
+  '@fluentui/react/dist/css': ['@fluentui/react', 'dist/css']
+}
+
 /** Parse a tsconfig-style JSON file (tolerates comments and trailing commas). */
 function readJsonc(filePath) {
   const raw = fs.readFileSync(filePath, 'utf8').replace(/^\uFEFF/, '')
@@ -129,20 +155,52 @@ function stripWildcard(value) {
   return String(value).replace(/[\\/]\*$/, '')
 }
 
-/** tsconfig `compilerOptions.paths` -> webpack `resolve.alias`, rooted at `outDir`. */
+/** Resolve a package's root folder from this solution, or undefined when it is not installed. */
+function resolvePackageRoot(packageName) {
+  try {
+    const requireFromSolution = Module.createRequire(path.join(PROJECT_FOLDER, 'package.json'))
+    return path.dirname(requireFromSolution.resolve(`${packageName}/package.json`))
+  } catch (e) {
+    return undefined
+  }
+}
+
+/** tsconfig `compilerOptions.paths` -> webpack `resolve.alias`, rooted at `outDir`, plus compat aliases. */
 function applyTsconfigAliases(webpackConfig, log) {
   const { paths, outDir } = readTsconfig(path.join(PROJECT_FOLDER, 'tsconfig.json'), new Set())
-  if (!paths) return
   const outDirPath = outDir || path.join(PROJECT_FOLDER, DEFAULT_OUT_DIR)
   webpackConfig.resolve = webpackConfig.resolve || {}
   const alias = { ...(webpackConfig.resolve.alias || {}) }
-  for (const key of Object.keys(paths)) {
+  for (const key of Object.keys(paths || {})) {
     const target = Array.isArray(paths[key]) ? paths[key][0] : paths[key]
     if (!target) continue
     alias[stripWildcard(key)] = path.join(outDirPath, stripWildcard(target))
   }
+  for (const [legacyName, modernName] of Object.entries(COMPAT_ALIASES)) {
+    if (alias[legacyName]) continue
+    const modernRoot = resolvePackageRoot(modernName)
+    if (modernRoot) {
+      alias[legacyName] = modernRoot
+      log(`compat alias: ${legacyName} -> ${modernName}`)
+    }
+  }
+  for (const [request, [packageName, subPath]] of Object.entries(UNEXPORTED_SUBPATH_ALIASES)) {
+    if (alias[request]) continue
+    const packageRoot = resolvePackageRoot(packageName)
+    if (packageRoot) {
+      alias[request] = path.join(packageRoot, subPath)
+      log(`unexported subpath alias: ${request}`)
+    }
+  }
   webpackConfig.resolve.alias = alias
   log(`resolve.alias: ${Object.keys(alias).join(', ') || '(none)'} -> ${outDirPath}`)
+
+  // Node core modules that transitive dependencies probe for but do not need in a browser.
+  // `sax` (pulled in by the XML tooling) does `try { require('stream') } catch { /* fallback */ }`;
+  // webpack 5 no longer polyfills Node builtins and reports the unresolved request as a warning on
+  // every build. Declaring it as `false` resolves it to an empty module, which the existing catch
+  // path already handles, and keeps the build log free of noise that would mask real warnings.
+  webpackConfig.resolve.fallback = { stream: false, ...(webpackConfig.resolve.fallback || {}) }
 }
 
 /** Remove the workspace package names from a webpack `externals` value. */

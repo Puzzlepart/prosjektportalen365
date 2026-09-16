@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { format, IColumn } from '@fluentui/react'
 import * as FileSaver from 'file-saver'
 import strings from 'SharedLibraryStrings'
@@ -74,7 +73,7 @@ class ExcelExportService {
       const parsed = JSON.parse(value)
       if (!Array.isArray(parsed)) return []
       return parsed.map((entry: any) => ({
-        [titleKey]: item['Title'],
+        [titleKey]: item.Title,
         ...Object.fromEntries(
           Object.entries(entry)
             .filter(([key, val]) => typeof val !== 'object' && !skipKeys.includes(key))

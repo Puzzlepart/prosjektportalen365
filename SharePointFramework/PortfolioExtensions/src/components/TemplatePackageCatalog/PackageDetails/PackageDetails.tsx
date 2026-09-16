@@ -175,18 +175,21 @@ export const PackageDetails: FC = () => {
               ? isUnmanaged
                 ? strings.CatalogBadgeLocalTooltip
                 : updateAvailable
+                  ? strings.CatalogActionUpdateTooltip
+                  : isUpToDate
+                    ? format(
+                        strings.CatalogActionReinstallExtensionTooltip,
+                        ref?.installedVersion || pkg.version
+                      )
+                    : strings.CatalogActionAddExtensionTooltip
+              : updateAvailable
                 ? strings.CatalogActionUpdateTooltip
                 : isUpToDate
-                ? format(
-                    strings.CatalogActionReinstallExtensionTooltip,
-                    ref?.installedVersion || pkg.version
-                  )
-                : strings.CatalogActionAddExtensionTooltip
-              : updateAvailable
-              ? strings.CatalogActionUpdateTooltip
-              : isUpToDate
-              ? format(strings.CatalogActionReinstallTooltip, ref?.installedVersion || pkg.version)
-              : strings.CatalogActionImportTooltip
+                  ? format(
+                      strings.CatalogActionReinstallTooltip,
+                      ref?.installedVersion || pkg.version
+                    )
+                  : strings.CatalogActionImportTooltip
           }
           relationship='description'
         >
@@ -201,15 +204,15 @@ export const PackageDetails: FC = () => {
               ? isUnmanaged
                 ? strings.CatalogActionReplaceExtension
                 : updateAvailable
-                ? format(strings.CatalogActionUpdateExtension, pkg.version)
-                : isUpToDate
-                ? strings.CatalogActionReinstallExtension
-                : strings.CatalogActionAddExtension
+                  ? format(strings.CatalogActionUpdateExtension, pkg.version)
+                  : isUpToDate
+                    ? strings.CatalogActionReinstallExtension
+                    : strings.CatalogActionAddExtension
               : updateAvailable
-              ? format(strings.CatalogActionUpdate, pkg.version)
-              : isUpToDate
-              ? strings.CatalogActionReinstall
-              : strings.CatalogActionImport}
+                ? format(strings.CatalogActionUpdate, pkg.version)
+                : isUpToDate
+                  ? strings.CatalogActionReinstall
+                  : strings.CatalogActionImport}
           </Button>
         </Tooltip>
         {/* Row 1's remove: the local install (or the extension file). Only
@@ -244,9 +247,9 @@ export const PackageDetails: FC = () => {
                 isCentral
                   ? strings.CatalogActionPublishCentralAlreadyTooltip
                   : notCloudCompatible
-                  ? pkg.cloudCompatibleReason ??
-                    strings.CatalogActionPublishCentralIncompatibleTooltip
-                  : strings.CatalogActionPublishCentralTooltip
+                    ? (pkg.cloudCompatibleReason ??
+                      strings.CatalogActionPublishCentralIncompatibleTooltip)
+                    : strings.CatalogActionPublishCentralTooltip
               }
               relationship='description'
             >

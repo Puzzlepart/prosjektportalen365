@@ -9,11 +9,11 @@ import { IInstrumentColumnProps } from './types'
  * @returns An object containing the necessary props for rendering a popover for the instrument column.
  */
 export function useInstrumentColumn(props: IInstrumentColumnProps) {
-  const startValue = props.item[props.startValueField] || props.item['GtStartValueOWSNMBR']
-  const endValue = props.item[props.endValueField] || props.item['GtDesiredValueOWSNMBR']
-  const currentValue = props.item[props.currentValueField] || props.item['LastMeasurementValue']
-  const unit = props.item[props.unitField] || props.item['GtMeasurementUnitOWSCHCS']
-  const description = props.item[props.descriptionField] || props.item['MeasurementIndicator']
+  const startValue = props.item[props.startValueField] || props.item.GtStartValueOWSNMBR
+  const endValue = props.item[props.endValueField] || props.item.GtDesiredValueOWSNMBR
+  const currentValue = props.item[props.currentValueField] || props.item.LastMeasurementValue
+  const unit = props.item[props.unitField] || props.item.GtMeasurementUnitOWSCHCS
+  const description = props.item[props.descriptionField] || props.item.MeasurementIndicator
 
   let subArcs: SubArc[] = []
   let minimumValue: number

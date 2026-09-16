@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
 import { format, Selection } from '@fluentui/react'
 import { Button } from '@fluentui/react-components'
 import * as strings from 'ProjectExtensionsStrings'

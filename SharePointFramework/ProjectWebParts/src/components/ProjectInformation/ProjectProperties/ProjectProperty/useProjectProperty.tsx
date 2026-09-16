@@ -180,7 +180,7 @@ export function useProjectProperty(props: IProjectPropertyProps) {
             dangerouslySetInnerHTML={{
               __html: textValue.replace(/\n/g, '<br />')
             }}
-          ></div>
+          />
         )
       ],
       [

@@ -60,6 +60,6 @@ export function getBooleanDisplayValue(column: ProjectColumn, value: any): strin
   // `??` and not `||`, so that an empty label stays empty, like the
   // `defaultProps` of `BooleanColumn` which only apply when it's `undefined`.
   return normalizeBooleanValue(value) === '1'
-    ? valueIfTrue ?? strings.BooleanYes
-    : valueIfFalse ?? strings.BooleanNo
+    ? (valueIfTrue ?? strings.BooleanYes)
+    : (valueIfFalse ?? strings.BooleanNo)
 }

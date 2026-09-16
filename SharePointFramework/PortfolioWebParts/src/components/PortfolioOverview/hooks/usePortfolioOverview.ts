@@ -109,7 +109,7 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
         ...context,
         items,
         groups
-      } as IPortfolioOverviewContext),
+      }) as IPortfolioOverviewContext,
     [context, items, groups]
   )
 

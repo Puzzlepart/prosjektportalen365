@@ -329,8 +329,8 @@ export function transformListItem(
               typeof v === 'object' && 'TermGuid' in v
                 ? v.TermGuid
                 : typeof v === 'string'
-                ? v
-                : null
+                  ? v
+                  : null
 
             if (termGuid) {
               const term = terms.find((t) => t.id === termGuid)

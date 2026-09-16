@@ -14,21 +14,21 @@ function sortColumns({ columns, customColumnOrder, sortMode }: IEditViewColumnsP
   return [...columns]
     .filter((c) => (c.data?.visibility ? c.data.visibility.includes('Portfolio') : true))
     .sort((a, b) => {
-      const columnOrderA = customColumnOrder.indexOf(a['id'])
-      const customColumnOrderIndexB = customColumnOrder.indexOf(b['id'])
+      const columnOrderA = customColumnOrder.indexOf(a.id)
+      const customColumnOrderIndexB = customColumnOrder.indexOf(b.id)
       if (a.data.isSelected && !b.data.isSelected) {
         return -1
       } else if (!a.data.isSelected && b.data.isSelected) {
         return 1
       } else if (columnOrderA !== -1 && customColumnOrderIndexB !== -1) {
-        return columnOrderA - customColumnOrderIndexB || a['sortOrder'] - b['sortOrder']
+        return columnOrderA - customColumnOrderIndexB || a.sortOrder - b.sortOrder
       } else if (columnOrderA !== -1) {
         return -1
       } else if (customColumnOrderIndexB !== -1) {
         return 1
       } else {
         return sortMode === EditViewColumnsPanelSortMode.CustomSelectedOnTop
-          ? a['sortOrder'] - b['sortOrder']
+          ? a.sortOrder - b.sortOrder
           : 0
       }
     })

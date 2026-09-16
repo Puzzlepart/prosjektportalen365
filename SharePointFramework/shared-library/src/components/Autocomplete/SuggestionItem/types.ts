@@ -18,7 +18,6 @@ export interface ISuggestionItem<T = any> extends IDropdownOption {
  * @category Autocomplete
  */
 export interface ISuggestionItemProps
-  extends React.HTMLProps<HTMLDivElement>,
-    Pick<IAutocompleteProps, 'itemIcons'> {
+  extends React.HTMLProps<HTMLDivElement>, Pick<IAutocompleteProps, 'itemIcons'> {
   item: ISuggestionItem
 }
