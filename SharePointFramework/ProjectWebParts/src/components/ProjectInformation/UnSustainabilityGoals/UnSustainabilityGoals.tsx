@@ -13,7 +13,7 @@ export const UnSustainabilityGoals: FC<UnSustainabilityGoalsProps> = () => {
   if (!model || model.isEmpty) return null
   return (
     <IdPrefixProvider value={fluentProviderId}>
-      <FluentProvider theme={customLightTheme}>
+      <FluentProvider theme={customLightTheme} style={{ minWidth: 0, width: '100%' }}>
         <ProjectProperty model={model} />
       </FluentProvider>
     </IdPrefixProvider>

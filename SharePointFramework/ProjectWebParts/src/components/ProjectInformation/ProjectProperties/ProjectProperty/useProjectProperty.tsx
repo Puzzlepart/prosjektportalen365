@@ -157,18 +157,26 @@ export function useProjectProperty(props: IProjectPropertyProps) {
               return numA - numB
             })
             return (
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 6 }}>
-                {sorted.map((entry: any, i: number) => {
+              <div
+                style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: 4,
+                  marginTop: 6,
+                  minWidth: 0,
+                  maxWidth: '100%',
+                  boxSizing: 'border-box'
+                }}
+              >
+                {sorted.map((entry: any) => {
                   const iconUrl = goalIconUrls[entry.Label]
                   return iconUrl ? (
-                    <Tooltip key={i} withArrow relationship='description' content={<div style={{ padding: '16px', maxWidth: '300px' }}>{entry.Label}</div>}>
-                      <span style={{ display: 'inline-flex', cursor: 'default' }}>
+                    <Tooltip key={entry.TermGuid ?? entry.Label} withArrow relationship='description' content={<div style={{ padding: '16px', maxWidth: '300px' }}>{entry.Label}</div>}>
                         <img
                           src={iconUrl}
                           alt={entry.Label}
                           style={{ width: iconSize, height: iconSize, flexShrink: 0 }}
                         />
-                      </span>
                     </Tooltip>
                   ) : null
                 })}
