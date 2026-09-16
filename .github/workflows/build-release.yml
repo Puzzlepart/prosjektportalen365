@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feat/toolchain-upgrade
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'
