@@ -270,7 +270,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       return files.map((file) => ({
         name: file.Name,
         title:
-          file.ListItemAllFields?.Title ?? `${strings.UnknownConfigurationName} (${file.Name})`,
+          file['ListItemAllFields']?.Title ?? `${strings.UnknownConfigurationName} (${file.Name})`,
         url: file.ServerRelativeUrl
       }))
     } catch (error) {

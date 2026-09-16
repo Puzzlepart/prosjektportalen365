@@ -195,12 +195,19 @@ function applyTsconfigAliases(webpackConfig, log) {
   webpackConfig.resolve.alias = alias
   log(`resolve.alias: ${Object.keys(alias).join(', ') || '(none)'} -> ${outDirPath}`)
 
-  // Node core modules that transitive dependencies probe for but do not need in a browser.
-  // `sax` (pulled in by the XML tooling) does `try { require('stream') } catch { /* fallback */ }`;
+  // `sax` (reached through the XML tooling) does `try { require('stream') } catch { /* fallback */ }`.
   // webpack 5 no longer polyfills Node builtins and reports the unresolved request as a warning on
-  // every build. Declaring it as `false` resolves it to an empty module, which the existing catch
-  // path already handles, and keeps the build log free of noise that would mask real warnings.
-  webpackConfig.resolve.fallback = { stream: false, ...(webpackConfig.resolve.fallback || {}) }
+  // every build. Resolve it to an empty module, which sax's own catch path already handles.
+  //
+  // Deliberately scoped to sax with a module rule rather than set resolver-wide: a repo-wide
+  // `resolve.fallback` would also silence a genuine missing polyfill anywhere else in the bundle,
+  // turning a build error into a runtime failure.
+  webpackConfig.module = webpackConfig.module || {}
+  webpackConfig.module.rules = webpackConfig.module.rules || []
+  webpackConfig.module.rules.push({
+    test: /[\\/]node_modules[\\/]sax[\\/]/,
+    resolve: { fallback: { stream: false } }
+  })
 }
 
 /** Remove the workspace package names from a webpack `externals` value. */

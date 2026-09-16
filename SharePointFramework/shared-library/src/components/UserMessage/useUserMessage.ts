@@ -6,7 +6,7 @@ export function useUserMessage(props: IUserMessageProps): { styles: CSSPropertie
 
   if (props.fixedCenter) {
     styles = {
-      ...(styles.root as any),
+      ...(styles['root'] as any),
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',

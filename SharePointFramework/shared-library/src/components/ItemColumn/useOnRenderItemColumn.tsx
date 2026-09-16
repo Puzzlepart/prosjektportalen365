@@ -15,8 +15,8 @@ import { IRenderItemColumnProps } from './types'
 export function renderItemColumn(item: Record<string, any>, column: IColumn): ReactNode {
   if (!column.fieldName) return null
   if (column.onRender) return column.onRender(item, undefined, column)
-  if (!stringIsNullOrEmpty(column.fieldNameDisplay)) {
-    return get(item, column.fieldNameDisplay, null)
+  if (!stringIsNullOrEmpty(column['fieldNameDisplay'])) {
+    return get(item, column['fieldNameDisplay'], null)
   }
   const columnValue = item[column.fieldName]
   const dataTypeProperties: Record<string, any> = column.data?.dataTypeProperties ?? {}
@@ -34,7 +34,7 @@ export function renderItemColumn(item: Record<string, any>, column: IColumn): Re
   }
 
   // Get the data type from column
-  const dataType = column.dataType || column.data?.type || column.data?.renderAs
+  const dataType = column['dataType'] || column.data?.type || column.data?.renderAs
 
   const renderFunction = ColumnRenderComponentRegistry.getComponent(dataType as string)
 

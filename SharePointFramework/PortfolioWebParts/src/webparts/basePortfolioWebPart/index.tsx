@@ -60,7 +60,7 @@ export abstract class BasePortfolioWebPart<
     render(
       <ErrorBoundary
         fallbackRender={(p) => {
-          return <ErrorBoundaryFallback {...p} title={combinedProps.title} />
+          return <ErrorBoundaryFallback {...p} title={combinedProps['title']} />
         }}
       >
         {element}

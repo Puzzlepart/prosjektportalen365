@@ -5,8 +5,8 @@
  */
 export function removeMenuBorder<P = any>(items: P[]): P[] {
   return items.map((item) => {
-    item.style = item.style || {}
-    item.style.border = 'none'
+    item['style'] = item['style'] || {}
+    item['style'].border = 'none'
     return item
   })
 }

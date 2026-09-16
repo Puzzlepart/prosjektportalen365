@@ -111,6 +111,14 @@ module.exports = function createProsjektportalenEslintConfig(solutionDir) {
         // this to a bare 'error' (flat-profiles/default.js:32), so a bare
         // 'warn' is the exact severity-only downgrade. Under Heft, ESLint
         // warnings never fail the build; errors always do.
+        // `dot-notation` is inherited from the rushstack profile and is AUTOFIXABLE, which makes it
+        // actively dangerous here: `eslint --fix` rewrites `result['GtSiteIdOWSTEXT']` into
+        // `result.GtSiteIdOWSTEXT`, and PnP result types (ISearchResult, ISiteGroupInfo, ...) do not
+        // declare those SharePoint-specific properties, so the "fix" breaks compilation. Bracket
+        // access on loosely-typed SharePoint payloads is deliberate in this codebase. The pre-migration
+        // .eslintrc.yaml never enabled this rule.
+        'dot-notation': 'off',
+
         '@typescript-eslint/no-floating-promises': 'warn',
 
         // Two more severity-only relaxations for the migration. Both are 'error' in the

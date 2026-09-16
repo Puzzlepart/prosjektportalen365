@@ -492,17 +492,17 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         )
 
         return {
-          siteId: item?.GtSiteIdOWSTEXT,
+          siteId: item?.['GtSiteIdOWSTEXT'],
           properties
         }
       })
 
       const reports = statusReports
-        .filter((report) => !parseScopedSiteId(report?.GtSiteIdOWSTEXT).scopeKey)
+        .filter((report) => !parseScopedSiteId(report?.['GtSiteIdOWSTEXT']).scopeKey)
         .map((report) => ({
-          siteId: parseScopedSiteId(report?.GtSiteIdOWSTEXT).siteId,
-          costsTotal: report?.GtCostsTotalOWSCURR,
-          budgetTotal: report?.GtBudgetTotalOWSCURR
+          siteId: parseScopedSiteId(report?.['GtSiteIdOWSTEXT']).siteId,
+          costsTotal: report?.['GtCostsTotalOWSCURR'],
+          budgetTotal: report?.['GtBudgetTotalOWSCURR']
         }))
         .filter(Boolean)
 
@@ -999,7 +999,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const [siteGroup] = await this._sp.web.siteGroups
         .select('CanCurrentUserViewMembership', 'Title')
         .filter(`Title eq '${groupName}'`)()
-      return siteGroup && siteGroup.CanCurrentUserViewMembership
+      return siteGroup && siteGroup['CanCurrentUserViewMembership']
     } catch (error) {
       return false
     }

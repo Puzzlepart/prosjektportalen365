@@ -156,7 +156,7 @@ export class SitePermissions extends BaseTask {
     ).reduce(
       (grps, grp) => ({
         ...grps,
-        [grp.Title]: grp.Users && grp.Users.map((u: ISiteUserProps) => u.LoginName)
+        [grp.Title]: grp['Users'] && grp['Users'].map((u: ISiteUserProps) => u.LoginName)
       }),
       {}
     )
@@ -171,7 +171,7 @@ export class SitePermissions extends BaseTask {
         .getByName(groupName)
         .select('Title', 'Users')
         .expand('Users')()
-      return group.Users && group.Users.map((u: ISiteUserProps) => u.LoginName)
+      return group['Users'] && group['Users'].map((u: ISiteUserProps) => u.LoginName)
     } catch (error) {
       throw new Error(`Failed to get site group by name ${groupName}. ${error}`)
     }

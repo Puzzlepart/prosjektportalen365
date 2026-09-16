@@ -13,7 +13,7 @@ Written for: the next AI coding agent (GitHub Copilot or Claude Code) and the de
 | Repo-specific companion skill | `.claude/skills/pp365-toolchain/SKILL.md` and `.github/skills/pp365-toolchain/SKILL.md` | Rush translation rules, report quirks, shared-library exceptions, verification checklist. Identical copies. |
 | `.gitignore` | root | `!.claude/skills/` appended so the skills are committed. `.github/skills` was never ignored. |
 
-Nothing in `SharePointFramework/`, `rush.json`, `common/`, `Install/` or `.github/workflows/` has been changed yet. Phase 1 has not started.
+**Status: Phase 1 is implemented and green** (see "Phase 1 progress" below). The working tree carries the full migration; nothing has been committed.
 
 ## What was verified (do not re-derive)
 
@@ -107,16 +107,24 @@ Build failures encountered and fixed, all of them the newer toolchain enforcing 
 
 Also fixed along the way: three ESLint errors (two `eslint-disable` comments naming `@typescript-eslint/ban-types`, deleted in typescript-eslint 8; one self-assigning `document.location.href` reload, now `location.reload()`, which was also a latent bug); six legacy `.eslintignore` files that ESLint 9 ignores, with their one still-needed pattern (`src/loc/**/*.js`) moved into the shared config; and a pre-existing `validate-loc` script in `pp365-spfx-tasks` that pointed at a non-existent `./src/loc`.
 
-**Review note: `rush lint` reformatted 148 source files.** `npm run lint` is now `npm run prettier && eslint ./src --fix`, and this was the first run under Prettier 3 with the `prettier/prettier` rule enabled. The changes are formatting only, but they are mixed into the migration diff. Consider committing them separately.
+**`rush rebuild` exited 1 on lint warnings, which broke the whole release pipeline (fixed).** Rush returns a nonzero exit code when any project "succeeds with warnings". Under gulp this never fired because lint was disabled during the build (`build.lintCmd.enabled = false`); Heft runs ESLint in `heft build` and the repo carries ~700 warnings. `Install/build-release.ps1` treats a nonzero `rush rebuild` as fatal, so it aborted before packaging: empty `Apps/`, no zip, and CI would have failed on the first release push. Fixed with `"allowWarningsInSuccessfulBuild": true` on the `build` command in `common/config/rush/command-line.json`. Errors still fail the build. Do NOT also declare a bulk command named `rebuild`: that makes Rush look for a `rebuild` script, which no project has. The single `build` override governs `rush rebuild` too (verified: both exit 0).
+
+**`build-release.ps1` shipped stale packages (pre-existing bug, fixed).** The copy loop globbed every `.sppkg` in each solution's gitignored `sharepoint/solution` folder, so a local release picked up 14 packages: the 6 real ones plus `-arkiv` packages from June and `-test` channel packages. `Install.ps1` deploys every `.sppkg` in `Apps`, so that would have pushed obsolete and wrong-channel apps to a tenant. Invisible in CI, where a fresh clone holds only the current build. It now copies only the package each solution declares in its own `config/package-solution.json`. Verified: 6 packages, 54 MB zip (was 112 MB with the duplicates).
+
+**The `dot-notation` trap (found the hard way, now fixed).** The rushstack ESLint profile enables `dot-notation`, which is AUTOFIXABLE. The first `rush lint` rewrote 49 bracket accesses such as `result['GtSiteIdOWSTEXT']` into `result.GtSiteIdOWSTEXT`. Those properties are not declared on PnP's types (`ISearchResult`, `ISiteGroupInfo`, `IColumn`, `IWebInfo`, `IFileInfo`) because SharePoint payloads are deliberately accessed loosely here, so the "fix" broke compilation in five of six solutions. The old `.eslintrc.yaml` never enabled the rule. It is now `'off'` in `SharePointFramework/.eslint-config/index.js` with the reasoning inline, and all 49 sites were restored by driving the edit from `tsc`'s own error positions. **Do not re-enable it.** The lint loop is now idempotent: a second `rush lint` leaves every solution type-checking clean.
+
+Note this nearly escaped: all six solutions were built BEFORE the first `rush lint`, so every build was green at the time. The next compile after linting was a channel build, which is the only reason it surfaced. When changing lint configuration, always re-compile afterwards, not just re-lint.
+
+**Review note: the first `rush lint` reformatted 148 source files.** `npm run lint` is now `npm run prettier && eslint ./src --fix`, and this was the first run under Prettier 3 with the `prettier/prettier` rule enabled. The changes are formatting only, but they are mixed into the migration diff. Consider committing them separately.
 
 Not done yet (needs tenant or repository access):
 
-- The GitHub repository variable `NODE_VERSION` still says `16.18.0`; set it to `22.22.2`.
-- A channel build (`npm run build:test`) to exercise the id-swapping path in `.tasks/build.js`, which was changed but not run.
-- `Install/build-release.ps1 -CI`, which exercises the Rush bootstrap change and the new Node 22 guard.
+- ~~The GitHub repository variable `NODE_VERSION`~~ is no longer used by the active workflows. All four now use `node-version-file: '.nvmrc'`, so each branch selects its own Node version and no repository-wide variable has to be flipped at merge time (flipping it would have broken CI on `main` and `releases/1.15`, which still build with gulp on Node 16). The variable can be deleted once the workflows under `.github/workflows/unused/` are retired; they still reference it.
+- ~~A channel build~~ has been run (`npm run build:test` on ProgramWebParts): it produced `pp-program-web-parts-test.sppkg` and reverted the tree cleanly. The revert path was also proven by a failing run.
+- ~~`Install/build-release.ps1`~~ has been run locally end to end (exit 0, 6 packages, zip produced). The `-CI` path additionally runs `npm ci` and installs PnP.PowerShell, which has not been exercised.
 - A smoke test in the test tenant. This is the only way to prove the bundles load; an accidental externalization shows up as a missing-module error in the browser, not at build time.
 - Commit the refreshed `common/scripts`, `repo-state.json` and the regenerated lockfile, which Rush explicitly asked for.
-- `.development-guide/README.md` is generated; run `npm run generate-readme`.
+- ~~`.development-guide/README.md`~~ has been regenerated (`npm run generate-readme`); it now has zero gulp references.
 
 Sequence for the first build:
 

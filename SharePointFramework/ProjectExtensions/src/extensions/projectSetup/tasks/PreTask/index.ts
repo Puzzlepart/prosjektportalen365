@@ -60,7 +60,7 @@ export class PreTask extends BaseTask {
       params.portalDataService = await new PortalDataService().configure({
         spfxContext: params.context
       })
-      params.spfxJsomContext.jsomContext.web.set_isMultilingual(false)
+      params.spfxJsomContext.jsomContext.web['set_isMultilingual'](false)
       params.spfxJsomContext.jsomContext.web.update()
       await ExecuteJsomQuery(params.spfxJsomContext.jsomContext)
       return params

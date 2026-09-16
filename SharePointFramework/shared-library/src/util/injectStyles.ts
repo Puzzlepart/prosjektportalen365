@@ -10,8 +10,8 @@ export function injectStyles(css: string): HTMLStyleElement {
   const style = document.createElement('style')
   head.appendChild(style)
   style.type = 'text/css'
-  if (style.styleSheet) {
-    style.styleSheet.cssText = css
+  if (style['styleSheet']) {
+    style['styleSheet'].cssText = css
   } else {
     style.appendChild(document.createTextNode(css))
   }

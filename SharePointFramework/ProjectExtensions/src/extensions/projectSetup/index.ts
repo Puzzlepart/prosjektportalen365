@@ -380,7 +380,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         }
         this._unmount(placeholder)
       },
-      intent: props.error.messageType,
+      intent: props.error['messageType'],
       onSetupClick: () => {
         this._initializeSetup({
           sp: this.sp,
@@ -534,7 +534,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     try {
       const webAllProperties = (
         await this.sp.web.select('Title', 'AllProperties').expand('AllProperties')()
-      ).AllProperties
+      )['AllProperties']
       const lockedTemplateProperty = Object.keys(webAllProperties).find((key) =>
         propertyBagRegex.test(key)
       )

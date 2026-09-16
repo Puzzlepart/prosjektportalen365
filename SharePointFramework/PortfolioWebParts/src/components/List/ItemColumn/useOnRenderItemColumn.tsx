@@ -26,8 +26,8 @@ import { HubColumn } from './HubColumn'
 function renderItemColumn(item: Record<string, any>, column: IColumn): ReactNode {
   if (!column.fieldName) return null
   if (column.onRender) return column.onRender(item, undefined, column)
-  if (!stringIsNullOrEmpty(column.fieldNameDisplay)) {
-    return get(item, column.fieldNameDisplay, null)
+  if (!stringIsNullOrEmpty(column['fieldNameDisplay'])) {
+    return get(item, column['fieldNameDisplay'], null)
   }
   const columnValue = item[column.fieldName]
   const dataTypeProperties: Record<string, any> = column.data?.dataTypeProperties ?? {}
@@ -36,7 +36,7 @@ function renderItemColumn(item: Record<string, any>, column: IColumn): ReactNode
   }
 
   // Special handling for Title column
-  if (column.fieldName === 'Title' && column.dataType === 'text') {
+  if (column.fieldName === 'Title' && column['dataType'] === 'text') {
     return <TitleColumn item={item} />
   }
 
@@ -47,7 +47,7 @@ function renderItemColumn(item: Record<string, any>, column: IColumn): ReactNode
     ...dataTypeProperties
   }
 
-  const renderFunction = ColumnRenderComponentRegistry.getComponent(column.dataType as string)
+  const renderFunction = ColumnRenderComponentRegistry.getComponent(column['dataType'] as string)
 
   if (renderFunction) {
     return createElement(renderFunction, columnRenderProps)

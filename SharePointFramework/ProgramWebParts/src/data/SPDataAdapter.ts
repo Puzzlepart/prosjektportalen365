@@ -813,7 +813,7 @@ export class SPDataAdapter
       const [siteGroup] = await this.sp.web.siteGroups
         .select('CanCurrentUserViewMembership', 'Title')
         .filter(`Title eq '${groupName}'`)()
-      return siteGroup && siteGroup.CanCurrentUserViewMembership
+      return siteGroup && siteGroup['CanCurrentUserViewMembership']
     } catch (error) {
       return false
     }
@@ -1160,18 +1160,18 @@ export class SPDataAdapter
         return items
           .filter(
             (item) =>
-              item.GtSiteIdOWSTEXT &&
-              item.GtSiteIdOWSTEXT !== '00000000-0000-0000-0000-000000000000'
+              item['GtSiteIdOWSTEXT'] &&
+              item['GtSiteIdOWSTEXT'] !== '00000000-0000-0000-0000-000000000000'
           )
           .map<IProgramAdministrationProject>((item) => {
-            const site = sts_sites.find((site) => site.SiteId === item.GtSiteIdOWSTEXT)
-            const rawHubSiteId = site?.DepartmentId
+            const site = sts_sites.find((site) => site.SiteId === item['GtSiteIdOWSTEXT'])
+            const rawHubSiteId = site?.['DepartmentId']
             const hubSiteId = rawHubSiteId
               ? rawHubSiteId.replace(/[{}]/g, '').toLowerCase()
               : rawHubSiteId
             const hub = hubs?.find((h) => h.hubSiteId === hubSiteId)
             return {
-              SiteId: item.GtSiteIdOWSTEXT,
+              SiteId: item['GtSiteIdOWSTEXT'],
               Title: site?.Title ?? item.Title,
               SPWebURL: site?.SPWebUrl,
               Path: site?.Path,

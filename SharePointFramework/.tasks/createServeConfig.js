@@ -37,6 +37,21 @@ const environmentsFile = path.join(solutionRoot, 'environments.json')
 
 const readJson = (file) => JSON.parse(fs.readFileSync(file, { encoding: 'utf8' }))
 
+/**
+ * Resolves the `{tenantDomain}` token that the SPFx serve plugin understands.
+ *
+ * Heft substitutes it from the `SPFX_SERVE_TENANT_DOMAIN` environment variable at serve time, but
+ * `heft start` is launched directly by the npm script and never loads the solution's `.env` - only
+ * these pre-watch tasks do. Substituting here means the documented `.env` workflow actually works.
+ * When the variable is unset the token is left intact, so Heft can still resolve it from a real
+ * environment variable.
+ */
+function resolveTenantDomain(value) {
+  const domain = process.env.SPFX_SERVE_TENANT_DOMAIN
+  if (!domain) return value
+  return JSON.parse(JSON.stringify(value).split('{tenantDomain}').join(domain))
+}
+
 /** Joins a site URL and a server-relative page path, then appends any extra query parameters. */
 function buildPageUrl({ siteUrl, page, queryParameters }) {
   const url = new URL(`${String(siteUrl).replace(/\/+$/, '')}/${String(page).replace(/^\/+/, '')}`)
@@ -69,7 +84,8 @@ function createServeConfig() {
   // and leave the developer's own edits alone.
   if (!hasEnvironments) {
     if (hasSample && !fs.existsSync(serveFile)) {
-      fs.copyFileSync(sampleFile, serveFile)
+      const sample = resolveTenantDomain(readJson(sampleFile))
+      fs.writeFileSync(serveFile, JSON.stringify(sample, null, 2) + '\n', { encoding: 'utf8' })
       log(
         `${colors.magenta('config/serve.json')} was generated from ${colors.magenta('config/serve.sample.json')}`,
         'createServeConfig'
@@ -102,7 +118,13 @@ function createServeConfig() {
     )
   }
 
-  const serveConfig = { port: 4321, https: true, ...base, $schema: SERVE_SCHEMA, serveConfigurations }
+  const serveConfig = resolveTenantDomain({
+    port: 4321,
+    https: true,
+    ...base,
+    $schema: SERVE_SCHEMA,
+    serveConfigurations
+  })
   // initialPage is only a fallback for projects without serveConfigurations, and it still points at
   // the retiring hosted workbench in the committed samples.
   delete serveConfig.initialPage

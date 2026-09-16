@@ -316,7 +316,21 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
         exit 1
     }
     foreach ($Solution in $Solutions) {
-        Get-ChildItem "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution/sharepoint/solution/" -Filter *.sppkg -ErrorAction SilentlyContinue | Copy-Item -Destination $RELEASE_PATH_APPS -Force
+        # Copy ONLY the package this solution declares in config/package-solution.json, not every
+        # .sppkg lying in sharepoint/solution. That folder is gitignored build output and accumulates
+        # stale packages from earlier channel builds (pp-*-test.sppkg) and older releases
+        # (pp-*-arkiv.sppkg); Install.ps1 deploys every .sppkg it finds in Apps, so copying them all
+        # would deploy obsolete and wrong-channel apps to the tenant. On a fresh CI clone the folder
+        # happens to hold only the current build, which is why this never bit in CI.
+        $SOLUTION_CONFIG_PATH = "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution/config/package-solution.json"
+        $ZIPPED_PACKAGE = (Get-Content $SOLUTION_CONFIG_PATH -Raw | ConvertFrom-Json).paths.zippedPackage
+        $SPPKG_PATH = "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution/sharepoint/$ZIPPED_PACKAGE"
+        if (Test-Path $SPPKG_PATH) {
+            Copy-Item $SPPKG_PATH -Destination $RELEASE_PATH_APPS -Force
+        }
+        else {
+            Write-Host "[WARNING] $Solution did not emit $ZIPPED_PACKAGE - skipping" -ForegroundColor Yellow
+        }
     }
     # Fail loudly rather than ship a release with no apps (e.g. an unrecognised
     # solution name, or a solution that built without emitting an .sppkg).

@@ -27,7 +27,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ vars.NODE_VERSION }}
+          node-version-file: '.nvmrc'
 
       - name: Run Install/Build-Release.ps1 in CI mode
         run: Install/Build-Release.ps1 -CI
@@ -59,7 +59,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ vars.NODE_VERSION }}
+          node-version-file: '.nvmrc'
 
       - name: Run Install/Build-Release.ps1 in CI mode for channel test
         run: Install/Build-Release.ps1 -CI -Channel test
@@ -91,7 +91,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ vars.NODE_VERSION }}
+          node-version-file: '.nvmrc'
 
       - name: Run Install/Build-Release.ps1 in CI mode for channel kurs
         run: Install/Build-Release.ps1 -CI -Channel kurs
