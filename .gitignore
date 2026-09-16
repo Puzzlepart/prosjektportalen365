@@ -41,3 +41,4 @@ Templates/Portfolio/Objects/ClientSidePages/*.json
 .claude/*
 logs/*
 SharePointFramework/.tasks/__last_run_data.json
+!.claude/skills/

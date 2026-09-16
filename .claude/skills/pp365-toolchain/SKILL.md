@@ -1,0 +1,86 @@
+---
+name: pp365-toolchain
+description: 'Repo-specific rules for the Prosjektportalen 365 SPFx monorepo toolchain (Rush + pnpm + Heft). Use together with the generic `spfx` skill when: "upgrade SPFx", "gulp to Heft", "m365 spfx project upgrade", "rush update", "add a dependency", "heft build", "channel build", "watch / serve / debug a web part", "shared-library not picked up", "sppkg". Encodes what the generic skill does not know: Rush/pnpm translation of npm commands, the six-solution layout, the shared library, channel builds, and the traps found during the 1.17.4 to 1.23.2 migration.'
+argument-hint: 'Describe the toolchain task (upgrade step, dependency change, build/serve problem)'
+---
+
+# PP365 toolchain (Rush + pnpm + Heft)
+
+Read first when the task is the SPFx/Heft migration: `docs/plans/spfx-1.23-heft-toolchain.md` (the plan and its decisions) and, per solution, `docs/plans/spfx-1.23-heft-toolchain/reports/<solution>.md` (the raw CLI for Microsoft 365 report). The generic `spfx` skill (`.claude/skills/spfx`) covers the upstream procedure; this skill overrides it wherever the two disagree.
+
+## Layout
+
+- Six SPFx solutions under `SharePointFramework/`: `shared-library` (SPFx **Library** component, npm name `pp365-shared-library`), `PortfolioExtensions`, `PortfolioWebParts`, `ProgramWebParts`, `ProjectExtensions`, `ProjectWebParts`. Plus two non-SPFx Rush projects: `SharePointFramework/.tasks` (shared build scripts) and `Templates`.
+- The other five solutions import `pp365-shared-library` (barrel and deep `pp365-shared-library/lib/...` paths). `PortfolioWebParts` and `ProgramWebParts` also import `pp365-projectwebparts/lib/...`; `ProgramWebParts` imports `pp365-portfoliowebparts`. Rush symlinks these; `rush build` orders them.
+- All solutions share one script set (`build`, `build:<channel>`, `watch`, `lint`, `prettier`, `validate-loc`). Change them in all six at once.
+
+## Package management (never bypass Rush)
+
+- **Never run `npm install`, `npm i`, `pnpm i`, `pnpm add` or `pnpm un` inside a solution.** They corrupt the Rush-managed `node_modules` and ignore the shared lockfile.
+- To change a dependency: edit the solution's `package.json` with an **exact** version (no `^`/`~` for SPFx, React, Fluent, PnP controls), then run `npm run rush:update` from the repo root (equivalent: `node common/scripts/install-run-rush.js update`). Alternative: `rush add -p <pkg>@<version> --exact [--dev] [--all -m]` from a solution folder.
+- Version overrides go in `common/config/rush/pnpm-config.json` under `globalOverrides`. A report line such as `pnpm pkg set overrides.@rushstack/heft=1.2.17` or a `"resolutions"` block means: add it to `globalOverrides`, not to the solution.
+- The lockfile is `common/config/rush/pnpm-lock.yaml`. Regenerate it only when the plan says so (`rush update --full`), and say so in the commit.
+- Keep versions consistent across solutions (`@fluentui/react` exactly `8.106.4` so PnP controls share one copy; React `17.0.1`; `@types/react` `17.0.45`).
+
+## Translating a CLI for Microsoft 365 upgrade report
+
+Generate a report per solution, read-only, from inside the solution folder:
+
+```
+npx -y -p @pnp/cli-microsoft365@latest m365 spfx project upgrade --toVersion <version> --packageManager pnpm --shell bash --output md
+```
+
+Then:
+
+1. **Apply the final state only.** The report concatenates every intermediate SPFx version. Known superseded steps: `@microsoft/rush-stack-compiler-5.3` and the tsconfig `extends` pointing at it (FN002029, FN012017) are replaced by the Heft tsconfig that extends `@microsoft/spfx-web-build-rig/profiles/default/tsconfig-base.json` (FN015011).
+2. **Shared library exceptions.** Ignore "remove `main`" (FN021001) and "remove `src/index.ts`" (FN015005) for `shared-library`: `main: lib/index.js` and `src/index.ts` are its public entry. For the other solutions, check whether `src/index.ts` exists and is referenced before deleting it.
+3. Package commands become `package.json` edits (see above). `dependencies` vs `devDependencies` as the report states.
+4. Per-solution `.gitignore` additions (`lib-commonjs`, `lib-dts`, `lib-esm`, `jest-output`, `.heft`) are fine; the root `.gitignore` already ignores `lib`, `dist`, `temp`, `release`.
+5. SCSS: replace `@import '~@fluentui/react/dist/sass/References.scss'` with the `pkg:` form the report gives. Do not add the import to files that never had it.
+6. Run `rush update` once after editing all `package.json` files, then build in dependency order (`shared-library` first).
+
+## Heft toolchain map
+
+| gulp (until 1.21) | Heft (1.22+) |
+|---|---|
+| `gulp bundle --ship && gulp package-solution --ship` | `heft build --clean --production && heft package-solution --production` |
+| `gulp serve-deprecated --nobrowser` | `heft start --nobrowser [--serve-config <name>]` |
+| `gulp clean` | `heft clean` |
+| `gulpfile.js` `configureWebpack.mergeConfig` | `config/spfx-customize-webpack.js` exporting `function (webpackConfig, taskSession, heftConfiguration, webpack)` (runs last), or `config/webpack-patch.json` `patchFiles` |
+| custom gulp tasks | `config/heft.json` extending `@microsoft/spfx-web-build-rig/profiles/default/config/heft.json`, or a Node script called from `.tasks/build.js` |
+| `build.addSuppression(...)` | not needed; Sass deprecations are silenced by the rig's `config/sass.json` |
+| `src/**/*.module.scss.ts` generated in `src` | typings emitted to `temp/sass-ts`; never commit or hand-edit them |
+| lint disabled in build | ESLint runs inside `heft build` (flat `eslint.config.js`); lint errors fail the build |
+
+Still used unchanged: `config/config.json` (bundles, externals, localizedResources), `config/package-solution.json`, `config/serve.json`, `config/write-manifests.json`. The rig tsconfig base is `strict: true`; each solution re-applies the repo's looser options in its own `tsconfig.json`.
+
+## Shared library: bundled or runtime component?
+
+Heft externalizes a linked dependency as a runtime library component only when the dependency's `dist` folder holds exactly one manifest. Channel builds (`.tasks/build.js --channel test|kurs|i18n`) leave extra manifests in `shared-library/dist`, so behaviour flips with stale output. Follow Decision A in the plan; whatever it says, always verify after a build:
+
+```
+head -c 600 SharePointFramework/PortfolioWebParts/dist/portfolio-overview-web-part.js | grep -o 'define("[^"]*",\[[^]]*\]'
+```
+
+`pp365-shared-library` present in that AMD dependency list means externalized (runtime component); absent means bundled. Build with `--clean` so `dist` never carries stale manifests.
+
+## Channel builds
+
+`node ../.tasks/build.js --channel <name>` (or `npm run build:<name>`) rewrites `config/package-solution.json` and every `manifest.json` with the channel ids from `channels/<name>.json`, runs the production build, then reverts. If a build aborts, revert manually with `node ../.tasks/modifySolutionFiles.js --revert --force` and `node ../.tasks/setBundleConfig.js --revert`. Never commit `*.bak`, `config/.generated-solution-config.json`, or channel ids in manifests.
+
+## Verification checklist after any toolchain change
+
+1. `npm run rush:update` succeeds without peer warnings you did not expect.
+2. `rush rebuild` is green; every solution emits `sharepoint/solution/*.sppkg`.
+3. AMD define header check above matches Decision A.
+4. `npm run rush:lint` and `rush validate-loc` pass (localization triad stays balanced, see `AGENTS.md`).
+5. `heft start --nobrowser` in one web part solution serves a real page via the debug query string (`?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/build/manifests.js`), and a change in `shared-library/src` is picked up after rebuilding the library.
+6. One channel build (`npm run build:test`) succeeds and leaves the working tree clean.
+7. `Install/build-release.ps1 -CI -SkipBundle` (or the CI workflow) produces the release folder on Node 22.
+
+## Do not
+
+- Do not pin Node below 22 or run the Heft toolchain on Node 16/18.
+- Do not add `"overrides"` or `"resolutions"` to a solution's `package.json`.
+- Do not delete `config/config.json`; Heft still reads it.
+- Do not `import * as Icons from '@fluentui/react-icons'` (see `.eslintrc`/flat config rule and `AGENTS.md`).
