@@ -13,11 +13,13 @@ export const ProjectProperty: FC<IProjectPropertyProps> = (props) => {
     }
     default: {
       return (
-        <div style={props.style}>
+        <div style={{ minWidth: 0, maxWidth: '100%', ...props.style }}>
           <Text title={props.model.displayName} weight='semibold' size={200} block truncate>
             {props.model.displayName}
           </Text>
-          <Text color='var(--colorNeutralForeground2)'>{renderValueForField()}</Text>
+          <Text color='var(--colorNeutralForeground2)' block>
+            {renderValueForField()}
+          </Text>
         </div>
       )
     }

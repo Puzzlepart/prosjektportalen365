@@ -1,10 +1,11 @@
 import { IPersonaProps, Link } from '@fluentui/react'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useProjectInformationContext } from '../../context'
 import { IProjectPropertyProps } from './types'
-import { Persona, Text } from '@fluentui/react-components'
+import { Persona, Text, Tooltip } from '@fluentui/react-components'
 import { OverflowTagMenu } from 'pp365-shared-library'
 import * as strings from 'ProjectWebPartsStrings'
+import styles from '../../UnSustainabilityGoals/UnSustainabilityGoals.module.scss'
 import {
   ChevronCircleRightFilled,
   EarthFilled,
@@ -23,6 +24,39 @@ import {
  */
 export function useProjectProperty(props: IProjectPropertyProps) {
   const context = useProjectInformationContext()
+
+  const rawGoals =
+    props.model.internalName === 'GtUNSustDevGoals'
+      ? context.state.data.fieldValues.get('GtUNSustDevGoals')
+      : null
+
+  const [goalIconUrls, setGoalIconUrls] = useState<Record<string, string>>({})
+
+  useEffect(() => {
+    if (!rawGoals?.value?.length) return
+    const fetchIconUrls = async () => {
+      const urls: Record<string, string> = {}
+      const termSet = context.props.sp.termStore
+        .groups.getById('c56bb677-f782-4cf6-a6d6-17685ee9f19d')
+        .sets.getById('abdc8d0f-cf79-4d49-82e2-d94d9122ad65')
+       await Promise.all(
+         rawGoals.value.map(async (entry) => {
+           try {
+             const term = (await termSet.getTermById(entry.TermGuid).select('localProperties')()) as any
+             const localProps = term.localProperties?.find(
+               (lp: any) => lp.setId === 'abdc8d0f-cf79-4d49-82e2-d94d9122ad65'
+             )
+             const iconUrl = localProps?.properties?.find((p: any) => p.key === 'AssetUrl')?.value
+             if (iconUrl) urls[entry.Label] = iconUrl
+           } catch (e) {
+             console.warn(`[useProjectProperty] Failed to fetch icon for term: ${entry.Label}`, e)
+           }
+         })
+       )
+      setGoalIconUrls(urls)
+    }
+    fetchIconUrls()
+  }, [rawGoals, context.props.sp])
 
   /**
    * Renders the value for the field based on the field type.
@@ -116,6 +150,32 @@ export function useProjectProperty(props: IProjectPropertyProps) {
       [
         'TaxonomyFieldTypeMulti',
         (tags: any[]) => {
+          if (props.model.internalName === 'GtUNSustDevGoals' && Object.keys(goalIconUrls).length > 0) {
+            const iconSize = context.props.iconSize ?? 24
+            const sorted = [...(rawGoals?.value ?? [])].sort((a: any, b: any) => {
+              const numA = parseInt(a.Label.match(/^(\d+)\./)?.[1] ?? '999', 10)
+              const numB = parseInt(b.Label.match(/^(\d+)\./)?.[1] ?? '999', 10)
+              return numA - numB
+            })
+            return (
+              <div className={styles.goalsContainer}>
+                {sorted.map((entry: any) => {
+                  const iconUrl = goalIconUrls[entry.Label]
+                  return iconUrl ? (
+                    <Tooltip key={entry.TermGuid ?? entry.Label} withArrow relationship='description' content={<div className={styles.tooltipContent}>{entry.Label}</div>}>
+                        <img
+                          src={iconUrl}
+                          alt={entry.Label}
+                          className={styles.goalIcon}
+                          style={{ width: iconSize, height: iconSize }}
+                        />
+                    </Tooltip>
+                  ) : null
+                })}
+              </div>
+            )
+          }
+
           const tagNames = tags
             ?.filter(Boolean)
             .map((tag) => {

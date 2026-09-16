@@ -2,7 +2,8 @@ import {
   IPropertyPaneConfiguration,
   PropertyPaneSlider,
   PropertyPaneTextField,
-  PropertyPaneToggle
+  PropertyPaneToggle,
+  PropertyPaneDropdown
 } from '@microsoft/sp-property-pane'
 import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls/lib/PropertyFieldMultiSelect'
 import { IProjectInformationProps, ProjectInformation } from 'components/ProjectInformation'
@@ -95,6 +96,25 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
                 PropertyPaneTextField('adminPageLink', {
                   label: strings.AdminPageLinkLabel
                 })
+              ].filter(Boolean)
+            },
+            {
+              groupName: strings.UnSustainabilityGoalsHeader,
+              groupFields: [
+                PropertyPaneToggle('hideUnSustainabilityGoals', {
+                  label: strings.HideUnSustainabilityGoalsLabel,
+                  checked: propertiesWithDefaults.hideUnSustainabilityGoals
+                }),
+                !propertiesWithDefaults.hideUnSustainabilityGoals &&
+                  PropertyPaneDropdown('iconSize', {
+                    label: strings.IconSizeLabel,
+                    options: [
+                      { key: 32, text: '32' },
+                      { key: 64, text: '64' },
+                      { key: 96, text: '96' }
+                    ],
+                    selectedKey: propertiesWithDefaults.iconSize
+                  })
               ].filter(Boolean)
             },
             {
