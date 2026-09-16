@@ -5,5 +5,4 @@ arrowParens: always
 printWidth: 100
 trailingComma: none
 bracketSpacing: true
-jsxBracketSameLine: true
 jsxSingleQuote: true

@@ -1,6 +1,6 @@
 # Plan: SPFx 1.17.4 (gulp) to 1.23.2 (Heft) toolchain migration
 
-Date: 2026-09-16. Status: Phase 0 (analysis and preparation) done, Phase 1 not started. Branch: `feat/toolchain-upgrade`.
+Date: 2026-09-16. Status: Phase 0 (analysis and preparation) done, all decisions settled, Phase 1 not started. Branch: `feat/toolchain-upgrade`.
 
 ## Context
 
@@ -30,9 +30,9 @@ Inputs: the six CLI for Microsoft 365 reports in `docs/plans/spfx-1.23-heft-tool
 
 ## Decisions
 
-Status legend: **Pending** means the maintainers must confirm; the recommended default is what the execution steps assume.
+All five decisions were confirmed by the maintainers on 2026-09-16; each follows the recommended option. The execution steps assume them.
 
-### A. Shared library: keep bundled into consumers (Pending, recommended: keep bundled)
+### A. Shared library: keep bundled into consumers (Decided)
 
 Facts. The five consumers import `pp365-shared-library` as an npm package (barrel plus deep `lib/...` paths). Release builds bundle the library code into every consumer bundle; consumer manifests have no component dependency on the library id `0f65a874-dc9d-491d-b979-6ce1d943dd00`. Heft's manifest discovery (`CumulativeManifestProcessor`) attaches a package name, and therefore externalizes the package as a runtime library component, only when the dependency's `dist` folder contains exactly one manifest. `shared-library/dist` currently contains four (main `0f65a874`, `test` `dbbc7e1a`, `kurs` `6cff2075` and `de08518e`, a stale id that matches no channel file), which is why it is bundled today. Heft cleans `dist` on every build, so after migration a clean build would flip the library into a runtime dependency without anyone deciding it.
 
@@ -40,7 +40,9 @@ Mechanics (from `@microsoft/spfx-heft-plugins` source). The consumer manifest de
 
 Options.
 1. **Keep bundled (recommended for Phase 1).** Add the externals filter below to every consumer. Behaviour identical to today; no deployment coupling; `pp-shared-library.sppkg` keeps being deployed as before.
-2. **Runtime library component.** Let Heft externalize. Consumer manifests then pin the library id and version; every release must deploy the library sppkg first, channel builds must swap the library id consistently (they do), and bundles shrink by roughly the library's size times the 29 components in `src` (20 web parts plus 9 extension components). Worth a dedicated later change with its own smoke tests, not a side effect of the toolchain switch.
+2. **Runtime library component.** Let Heft externalize. Consumer manifests then pin the library id and version; every release must deploy the library sppkg first, channel builds must swap the library id consistently (they do), and bundles shrink by roughly the library's size times the 29 components in `src` (20 web parts plus 9 extension components). Deferred to its own phase with its own smoke tests, not a side effect of the toolchain switch (see "Deferred to later phases").
+
+**Decision: option 1.** Phase 1 keeps the current bundling behaviour; the move to a runtime library component becomes a separate, planned change once the toolchain migration has shipped.
 
 `pp365-projectwebparts` and `pp365-portfoliowebparts` are also linked packages. Their `src` holds 8 WebPart manifests each (ProgramWebParts has 4), so they are never "single package" and are always bundled. Today's `dist` counts (32 and 31) are stale channel-build leftovers, not real component counts. Include both in the filter anyway for determinism.
 
@@ -57,20 +59,20 @@ module.exports = function (webpackConfig) {
 Verification after every build: the AMD header of a consumer bundle must not list the library.
 
 ```sh
-head -c 600 SharePointFramework/PortfolioWebParts/dist/portfolio-overview-web-part.js | grep -o 'define("[^"]*",\[[^]]*\]'
+grep -o 'define(\[[^]]*\]' SharePointFramework/PortfolioWebParts/dist/*.js | grep pp365 || echo "OK: no pp365-* external"
 ```
 
 ### B. TypeScript strictness: keep today's options via overrides (Decided)
 
 The rig base sets `strict: true`, `noImplicitAny: true` and a minimal `lib`. Every solution re-applies its current looseness (`strict: false`, `noImplicitAny: false`, `strictNullChecks: false`, `useUnknownInCatchVariables: false`, `noUnusedLocals: false`) plus `downlevelIteration`, `allowSyntheticDefaultImports`, the wider `lib`, and its `baseUrl`/`paths`. Tightening is a separate effort.
 
-### C. ESLint: SPFx flat React profile plus repo rules, shared file (Pending, recommended as described)
+### C. ESLint: SPFx flat React profile plus repo rules, shared file (Decided)
 
-Adopt the flat `eslint.config.js` the report generates, but compose it from one shared file `SharePointFramework/eslint.shared.config.js` that adds `eslint-plugin-prettier`, `eslint-plugin-unused-imports` and every rule from today's `.eslintrc.yaml`. The SPFx profile makes `@typescript-eslint/no-floating-promises` an error and several other rules errors (`guard-for-in`, `no-throw-literal`, `@typescript-eslint/no-use-before-define`, `@typescript-eslint/no-var-requires`); because lint runs inside `heft build`, each of these fails the build. Start with `no-floating-promises` downgraded to `warn` and downgrade others only if the first build shows mass violations; track the warnings as debt. Prettier 3 is required by `eslint-plugin-prettier` 5; the repo's `.prettierrc.yaml` already sets `trailingComma: none` and `semi: false`, so the format delta should be small, but run Prettier once as its own commit.
+**Decision: adopt the recommendation below.** Adopt the flat `eslint.config.js` the report generates, but compose it from one shared file `SharePointFramework/eslint.shared.config.js` that adds `eslint-plugin-prettier`, `eslint-plugin-unused-imports` and every rule from today's `.eslintrc.yaml`. The SPFx profile makes `@typescript-eslint/no-floating-promises` an error and several other rules errors (`guard-for-in`, `no-throw-literal`, `@typescript-eslint/no-use-before-define`, `@typescript-eslint/no-var-requires`); because lint runs inside `heft build`, each of these fails the build. Start with `no-floating-promises` downgraded to `warn` and downgrade others only if the first build shows mass violations; track the warnings as debt. Prettier 3 is required by `eslint-plugin-prettier` 5; the repo's `.prettierrc.yaml` already sets `trailingComma: none` and `semi: false`, so the format delta should be small, but run Prettier once as its own commit.
 
-### D. Serve and debug: serve.json `serveConfigurations` from `environments.json` (Pending, recommended)
+### D. Serve and debug: serve.json `serveConfigurations` from `environments.json` (Decided)
 
-`heft start` (alias of `heft build-watch --serve`) opens `serveConfigurations.<name>.pageUrl` when `--serve-config <name>` is given, otherwise `serveConfigurations.default`, otherwise `initialPage`, and appends `?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/build/manifests.js` (plus `loadSPFX`/`customActions` for extensions). A `default` entry is mandatory once `serveConfigurations` exists. `{tenantDomain}` in a URL is replaced from the `SPFX_SERVE_TENANT_DOMAIN` environment variable. The hosted workbench (`_layouts/workbench.aspx`, used by the web part solutions' `serve.sample.json`) is retired on 2026-12-01. Recommendation: `.tasks/createServeConfig.js` generates `config/serve.json` with one `serveConfigurations` entry per `environments.json` environment (name to `siteUrl/page`), keeps the extension solutions' existing `customActions` entries, and developers run `npm run watch -- --serve-config <name>` (or set `SERVE_ENVIRONMENT`, which the script maps to the `default` entry). `livereload`/`concurrently` go away: webpack-dev-server reloads the page.
+**Decision: adopt the recommendation below.** `heft start` (alias of `heft build-watch --serve`) opens `serveConfigurations.<name>.pageUrl` when `--serve-config <name>` is given, otherwise `serveConfigurations.default`, otherwise `initialPage`, and appends `?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/build/manifests.js` (plus `loadSPFX`/`customActions` for extensions). A `default` entry is mandatory once `serveConfigurations` exists. `{tenantDomain}` in a URL is replaced from the `SPFX_SERVE_TENANT_DOMAIN` environment variable. The hosted workbench (`_layouts/workbench.aspx`, used by the web part solutions' `serve.sample.json`) is retired on 2026-12-01. Recommendation: `.tasks/createServeConfig.js` generates `config/serve.json` with one `serveConfigurations` entry per `environments.json` environment (name to `siteUrl/page`), keeps the extension solutions' existing `customActions` entries, and developers run `npm run watch -- --serve-config <name>` (or set `SERVE_ENVIRONMENT`, which the script maps to the `default` entry). `livereload`/`concurrently` go away: webpack-dev-server reloads the page.
 
 ### E. Rush 5.179.0 with pnpm 10.34.5 (Decided)
 
@@ -637,6 +639,7 @@ Escape hatch: the branch is isolated; `releases/1.15` keeps building with Node 1
 - **Phase 2, PnPjs 4.21**: blockers are `sp-js-provisioning` (pins 3.17.0; own repo) and `sp-entityportal-service` (pins 3.9.0; used in 5 files; inline or bump). Code changes found: `@pnp/sp/taxonomy` removed (6 imports; Graph term store needs a `TermStore.Read.All` permission request, or hand-written REST), `getAll()` removed (18 uses), `.data` gone from add/update results (3 sites).
 - **Phase 3, Fluent v9 completion and dependency hygiene**: v8 still in ~214 files (DetailsList, Panel, Callout, Shimmer, people pickers); `format` from `@fluentui/react` (58) and `@uifabric/*` (10 files) are quick wins; Redux Toolkit 2, react-markdown 10, xlsx 0.18.
 - **Phase 4, React 18** with SPFx 1.24 GA.
+- **Phase 5, shared library as a runtime library component** (Decision A, option 2). Stop filtering `pp365-shared-library` out of `webpackConfig.externals` and let Heft externalize it, so consumer manifests declare a component dependency on the library id and version instead of inlining its code. Scope: confirm a clean `shared-library/dist` holds exactly one manifest per build (stale channel ids must be gone); verify every channel's `channels/*.json` library id flows into both the library manifest and the consumer manifests; make `Install.ps1` deploy `pp-shared-library.sppkg` before the consumer packages and verify the upgrade path for sites running an older library; measure the bundle-size win across the 29 components; smoke-test every web part and extension for missing-module errors, which is the failure mode when a consumer loads before the library. Prerequisite: Phase 1 shipped and stable.
 
 ## Appendix
 

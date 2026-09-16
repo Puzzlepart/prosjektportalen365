@@ -73,10 +73,10 @@ module.exports = function (webpackConfig) {
 Follow Decision A in the plan; whatever it says, verify after a build:
 
 ```
-head -c 600 SharePointFramework/PortfolioWebParts/dist/portfolio-overview-web-part.js | grep -o 'define("[^"]*",\[[^]]*\]'
+grep -o 'define(\[[^]]*\]' SharePointFramework/PortfolioWebParts/dist/*.js | grep pp365 || echo "OK: no pp365-* external"
 ```
 
-`pp365-shared-library` present in that AMD dependency list means externalized (runtime component); absent means bundled. Build with `--clean` so `dist` never carries stale manifests.
+`pp365-shared-library` present in that AMD dependency list means externalized (runtime component); absent means bundled. The manifest in `dist/*.manifest.json` is the authoritative source: a runtime dependency shows up in `loaderConfig.scriptResources` with `"type": "component"`. Note `SharedLibraryStrings` legitimately appears as a `localizedPath`; that is the localization bundle, not the library. Build with `--clean` so `dist` never carries stale manifests.
 
 ## Channel builds
 

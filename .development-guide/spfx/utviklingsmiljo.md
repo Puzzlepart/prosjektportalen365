@@ -16,7 +16,8 @@ En delt `.env.template`-fil finnes i `.tasks/`-mappen og definerer standardverdi
 |---|---|---|
 | `SERVE_CHANNEL` | Hvilken kanal som brukes for `environments.json`-oppslag. Tilgjengelige kanaler: `main`, `test`, `i18n`. | `main` |
 | `SERVE_BUNDLE_REGEX` | Regulært uttrykk for å filtrere hvilke bundler som bygges under `watch`. Sett til et bundlenavn for raskere bygging. | _(tom – alle bundler bygges)_ |
-| `SERVE_ENVIRONMENT` | Navn på miljøet fra `environments.json` som skal brukes. | _(ikke satt)_ |
+| `SERVE_ENVIRONMENT` | Navn på miljøet fra `environments.json` som blir `default` i `config/serve.json`. Kan overstyres per kjøring med `npm run watch -- --serve-config <navn>`. | _(ikke satt)_ |
+| `SPFX_SERVE_TENANT_DOMAIN` | Fyller ut `{tenantDomain}` i `config/serve.json` (f.eks. `contoso.sharepoint.com`). | _(ikke satt)_ |
 
 Eksempel `.env`:
 
@@ -35,19 +36,22 @@ SERVE_ENVIRONMENT=Porteføljeoversikt
 Overvåkingsskriptene knytter alt sammen:
 
 ```json
-"watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
+"watch": "heft start --nobrowser",
+"start": "heft start",
 "prewatch": "node ../.tasks/pre-watch.js",
 "postwatch": "node ../.tasks/post-watch.js",
 ```
 
 - **prewatch**: Kjøres før hovedovervåkingsskriptet via skript i `.tasks/`-mappen:
   - Oppretter `.env` fra mal (med bundlenavn fra `config/config.json`)
-  - Oppretter `serve.json` fra `serve.sample.json`
+  - Genererer `config/serve.json` fra `environments.json` (én `serveConfigurations`-oppføring per miljø) med `config/serve.sample.json` som grunnlag
   - Oppretter `.vscode/launch.json` fra konfigurasjon
   - Filtrerer bundler i `config/config.json` basert på `SERVE_BUNDLE_REGEX`
   - Håndterer kanalbytte for ikke-main-kanaler via `modifySolutionFiles`
 
-- **watch**: Kjører utviklingsserveren med miljøkonfigurasjonen
+- **watch**: Kjører utviklingsserveren (webpack-dev-server via Heft) med miljøkonfigurasjonen. Heft legger selv på feilsøkingsparametrene `debug`, `noredir` og `debugManifestsFile=https://localhost:4321/temp/build/manifests.js`, samt `loadSPFX`/`customActions` for utvidelser. Live-reload er innebygd, så `concurrently` og `livereload` er ikke lenger i bruk.
+
+> **Merk:** Den SharePoint-hostede workbenchen (`_layouts/workbench.aspx`) pensjoneres 1. desember 2026. Derfor peker miljøene mot ekte sider.
 
 - **postwatch**: Rydder opp i midlertidige filer og konfigurasjoner
 

@@ -20,6 +20,11 @@ SharePointFramework/**/config/.generated-solution-config.json
 .dist
 Templates/*.ps1
 common/temp
+SharePointFramework/**/lib-commonjs
+SharePointFramework/**/lib-dts
+SharePointFramework/**/lib-esm
+SharePointFramework/**/jest-output
+SharePointFramework/**/.heft
 **/.rush/temp/
 **/*.build.log
 **/*.build.error.log

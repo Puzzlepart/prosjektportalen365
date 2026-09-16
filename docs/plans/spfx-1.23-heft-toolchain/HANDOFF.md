@@ -6,7 +6,7 @@ Written for: the next AI coding agent (GitHub Copilot or Claude Code) and the de
 
 | Artifact | Path | State |
 |---|---|---|
-| The plan (read this first) | `docs/plans/spfx-1.23-heft-toolchain.md` | Complete, 646 lines, corrections from three review passes applied. Decisions A, C, D marked Pending with recommended defaults. |
+| The plan (read this first) | `docs/plans/spfx-1.23-heft-toolchain.md` | Complete, 646 lines, corrections from three review passes applied. All five decisions settled; Phase 5 (runtime library component) written up as future work. |
 | Raw upgrade reports (one per solution) | `docs/plans/spfx-1.23-heft-toolchain/reports/<solution>.md` | Generated read-only with CLI for Microsoft 365 (`m365 spfx project upgrade --toVersion 1.23.2 --packageManager pnpm --shell bash --output md`). |
 | Machine-distilled final state | `docs/plans/spfx-1.23-heft-toolchain/reports/_distilled.json` | Per solution: `finalPackages`, `filesRemove/Add/Modify`, `scss.requiredFix`, `ignoreSteps`, `repo` facts (alias imports, cross-package imports, gulpfile customisations, non-TS assets). `aggregate` has the cross-solution package tables. |
 | Generic SPFx skill (Microsoft) | `.claude/skills/spfx/` and `.github/skills/spfx/` | Copy of `plugins/spfx/skills/spfx` from github.com/SharePoint/spfx-dev-skills, commit 31010d2 (2026-09-02). Identical copies; keep in sync. |
@@ -49,17 +49,107 @@ Still unverified, so treat as assumptions until checked (this is what the two mi
 - Whether lint warnings (not just errors) fail a `--production` Heft build.
 - Whether `eslint-plugin-prettier/recommended` is the correct flat-config export in 5.5.6, whether the `createRequire` plugin-resolution trick in the shared config works under pnpm, and whether `.prettierrc.yaml`'s `jsxBracketSameLine` must be renamed to `bracketSameLine` for Prettier 3.
 
-## Open decisions
+## Decisions (all settled 2026-09-16)
 
-The plan's "Decisions" section marks A, C and D as Pending with a recommended default; B and E are decided.
+| # | Decision | Outcome |
+|---|---|---|
+| A | Shared library bundling | **Keep bundled** in Phase 1 via the externals filter in `config/spfx-customize-webpack.js`. Moving to a runtime library component is deferred to Phase 5, which is now written up at the end of the plan. |
+| B | TypeScript strictness | Keep today's looser options as overrides on the rig base; tighten later. |
+| C | ESLint | SPFx flat React profile plus the repo's rules in one shared config, with `@typescript-eslint/no-floating-promises` downgraded to a warning for the migration. |
+| D | Serve and debug | Generate `serveConfigurations` from `environments.json`; the hosted workbench retires 2026-12-01. |
+| E | Rush and pnpm | Rush 5.179.0 with pnpm 10.34.5. |
 
-- **A. Shared library**: keep it bundled in Phase 1 via the externals filter (recommended), or adopt runtime library components as a separate change.
-- **C. ESLint**: SPFx flat React profile plus the repo's rules, with `@typescript-eslint/no-floating-promises` downgraded to a warning for the migration.
-- **D. Serve and debug**: generate `serveConfigurations` from `environments.json`; the hosted workbench retires 2026-12-01.
+Nothing is blocked on the maintainers. Phase 1 can start.
 
 ## Not yet written (Phase 1 work)
 
 `SharePointFramework/eslint.shared.config.js`, the new `.tasks/createServeConfig.js` logic, `.tasks/build.js` Heft commands, per-solution `config/rig.json`, `config/sass.json`, `config/typescript.json`, `config/spfx-customize-webpack.js`, `eslint.config.js`, new `tsconfig.json` files, all `package.json` edits, Rush and pnpm config, the `NODE_VERSION` variable, `Install/build-release.ps1`, and the documentation updates. The plan gives the content for each.
+
+## Phase 1 progress (started 2026-09-16)
+
+Done, in the working tree, not yet built or committed:
+
+- **Node**: all seven `.nvmrc` files say `22.22.2`; every solution `package.json` has `engines.node` `>=22.14.0 <23.0.0`.
+- **Rush and pnpm**: `rush.json` at Rush 5.179.0 / pnpm 10.34.5 with `nodeSupportedVersionRange`; `common/config/rush/pnpm-config.json` rewritten with `useWorkspaces`, `resolutionMode`, `autoInstallPeers`, `strictPeerDependencies`, the `@rushstack/heft` and React type overrides, and an empty `globalOnlyBuiltDependencies` to fill from the first `rush update` error.
+- **package.json x6** via `migrate-package-json.js` (263 changes): gulp toolchain and dead packages removed, every `@microsoft/sp-*` at 1.23.2, Heft rig and plugins added, ESLint 9 / Prettier 3 stack, TypeScript ~5.8.3, Fluent v8 pinned 8.106.4, PnP controls 3.25.0/3.24.0, scripts rewritten for Heft, `main` dropped from PortfolioExtensions only.
+- **Heft config x6** via `migrate-config.js` (36 changes): `config/rig.json`, `config/sass.json`, `config/typescript.json`, a new `tsconfig.json` extending the rig base while restoring each solution's looseness, `lib` union and path aliases, per-solution `.gitignore` additions, `.yo-rc.json` at 1.23.2 with `useGulp: false` (and PortfolioExtensions' existing `sdksVersions` teams-js bumped in place).
+- **SCSS**: all 28 `~@fluentui/...` imports rewritten to `pkg:@fluentui/...` (9 PortfolioWebParts, 15 ProjectWebParts, 2 ProgramWebParts, 1 ProjectExtensions, 1 shared-library).
+- **Deleted**: six `gulpfile.js`; the five placeholder `src/index.ts` (the library's barrel is untouched).
+- **Channel builds**: `.tasks/build.js` runs `heft build --clean --production` and `heft package-solution --production`.
+- **Serve and debug (Decision D)**: `.tasks/createServeConfig.js` rewritten to generate `serveConfigurations` from `environments.json`, mapping `componentType`/`componentId`/`componentProperties` onto Heft `customActions`/`fieldCustomizers`, honouring `SERVE_ENVIRONMENT` for the required `default` entry; verified by generating a config for both an application customizer and a command set. The three web part `serve.sample.json` files moved off the retiring hosted workbench, ProjectExtensions' obsolete `core-build` schema fixed, and `.env.template` documents `SERVE_ENVIRONMENT` and `SPFX_SERVE_TENANT_DOMAIN`.
+- **Release**: `Install/build-release.ps1` calls Rush through `common/scripts/install-run-rush.js` (CI uses `install`, local uses `update`) and fails fast unless Node is 22.
+- **Docs**: `AGENTS.md` (Heft, Node 22, Sass typings now in `temp/sass-ts`, new commands), `.development-guide/spfx/npm-skript.md` and `utviklingsmiljo.md` rewritten for Heft. `.development-guide/README.md` is generated; regenerate with `npm run generate-readme`.
+
+Two helper scripts live beside this file, `migrate-package-json.js` and `migrate-config.js`. Both are idempotent, take `--dry`, and should be deleted once Phase 1 ships.
+
+Verified by reading the compiled toolchain sources, then landed:
+
+- **Decision A is mandatory, not cosmetic.** `pp365-shared-library` declares exactly one component, so after a clean Heft build its `dist` holds one manifest and Heft *would* externalize it into a runtime library component, changing today's behaviour. `ManifestPlugin` emits a `type: "component"` dependency only for requests webpack turned into an `ExternalModule`, so dropping the name from `webpackConfig.externals` both bundles the code and removes the runtime dependency. `config/spfx-customize-webpack.js` (identical in all six solutions) does that and rebuilds `resolve.alias` from the tsconfig `extends` chain. It installs the filter as a property setter, so a later reassignment by the third-party externals plugin is re-filtered regardless of task ordering. Verified locally against the real tsconfig: aliases resolve to `<solution>/lib/*`, React and SPFx externals are preserved, `pp365-*` are removed, and a simulated late reassignment is re-filtered.
+- **ESLint structure changed from the plan.** The shared file at `SharePointFramework/eslint.shared.config.js` resolves correctly via `createRequire`, but it sits outside every Rush project, so it is not an input to any build-cache key and nothing version-checks the plugin set. It is now a real Rush project, `SharePointFramework/.eslint-config` (`pp365-eslint-config`, registered in `rush.json`), which owns the whole lint stack. Each solution has a one-line `eslint.config.js` and keeps only `eslint`, `prettier` and `typescript`.
+- **Other verified corrections applied**: `eslint-plugin-prettier/recommended` is an object, not an array, so it must not be spread; `react` and `react-hooks` must not be re-registered or ESLint 9 throws `Cannot redefine plugin`; `@typescript-eslint/eslint-plugin` must be declared explicitly or `unused-imports` silently degrades; `jsxBracketSameLine` was deleted rather than renamed, because the tree is already formatted as if it were off and renaming would rewrite roughly 580 JSX brackets; `prettier/prettier` is set to `warn` because the old config never enforced it and `--production` disables autofix.
+- **Lint severity, decided during implementation.** Heft fails the build on ESLint errors and never on warnings, and lint does not run in watch mode. Beyond Decision C's `no-floating-promises`, two more rules are relaxed to `warn` for the migration: `@typescript-eslint/no-use-before-define` and `require-atomic-updates`. Both are `error` in the rushstack profile, neither was enforced before, and neither can be measured without running ESLint. Tighten all three once the tree is clean.
+- **One behaviour change.** `CopyListData` used `new Promise(async (resolve) => ...)`, which `no-async-promise-executor` blocks. It is now an async `map` callback. This also fixes a latent bug: a failing `getBlob()` previously left the promise unsettled so `Promise.all` would hang, and now it rejects. It was the only such case in the repo.
+
+Phase 1 is BUILT AND GREEN as of 2026-09-16 evening:
+
+- `rush update` succeeds on Node 22 with Rush 5.179.0 / pnpm 10.34.5.
+- **All six solutions build** and emit their `.sppkg`: shared-library 2.0 MB, project-web-parts 7.2 MB, portfolio-web-parts 10.5 MB, program-web-parts 4.8 MB, project-extensions 1.3 MB, portfolio-extensions 1.5 MB.
+- `rush lint` passes 9/9 projects; `rush validate-loc` passes 9/9.
+- **Decision A verified in real output**: zero `pp365-*` entries in any consumer's AMD dependency list and zero manifest component dependencies on the workspace packages. `SharedLibraryStrings` correctly remains a `localizedPath`. Note the shared library's `dist` dropped from four stale manifests to exactly one on a clean build, which is the condition that would have made Heft externalize it, so the filter is load-bearing.
+
+Build failures encountered and fixed, all of them the newer toolchain enforcing something the old one ignored:
+
+1. **TS1503, named capture groups** in `shared-library/src/models/ProjectColumn.ts`. TypeScript 5.5+ validates regex against the compile target and the rig targets ES5. Rewritten to numbered groups, parity verified against six inputs. Raising `target` was rejected: it would stop ES5 downleveling for every bundle.
+2. **TS2550, `Object.entries` / `getOwnPropertyDescriptors`**. The six solutions had drifted to different, too-narrow `lib` lists while the code already used ES2017-2019 APIs; shared-library was the only one with `es2020`, which is why it alone compiled. All six are now `es2020`. `lib` is types-only and does not change emitted output.
+3. **`office-ui-fabric-react` unresolved**. `pzl-spfx-components` declares no runtime dependencies and imports the old Fabric name implicitly, which npm's flat layout used to satisfy. Aliased to the `@fluentui/react` copy already bundled (Fabric v7 was renamed to Fluent v8). Only `ProjectInformation.tsx` uses it; dropping the package belongs to Phase 3.
+4. **`@fluentui/react/dist/css/fabric.min.css` not exported**. Five web parts import it; Fluent 8.106.4's `exports` map exposes only `./dist/sass/*`, and webpack 5.105 enforces `exports` where the old build did not. Aliased the folder to its absolute path, so the same file still loads.
+5. **`sax` requiring Node's `stream`** (warning only, in the two extensions). It is inside a `try/catch` with a fallback. Declared `resolve.fallback = { stream: false }` so the log stays free of noise that would mask real warnings.
+
+Also fixed along the way: three ESLint errors (two `eslint-disable` comments naming `@typescript-eslint/ban-types`, deleted in typescript-eslint 8; one self-assigning `document.location.href` reload, now `location.reload()`, which was also a latent bug); six legacy `.eslintignore` files that ESLint 9 ignores, with their one still-needed pattern (`src/loc/**/*.js`) moved into the shared config; and a pre-existing `validate-loc` script in `pp365-spfx-tasks` that pointed at a non-existent `./src/loc`.
+
+**Review note: `rush lint` reformatted 148 source files.** `npm run lint` is now `npm run prettier && eslint ./src --fix`, and this was the first run under Prettier 3 with the `prettier/prettier` rule enabled. The changes are formatting only, but they are mixed into the migration diff. Consider committing them separately.
+
+Not done yet (needs tenant or repository access):
+
+- The GitHub repository variable `NODE_VERSION` still says `16.18.0`; set it to `22.22.2`.
+- A channel build (`npm run build:test`) to exercise the id-swapping path in `.tasks/build.js`, which was changed but not run.
+- `Install/build-release.ps1 -CI`, which exercises the Rush bootstrap change and the new Node 22 guard.
+- A smoke test in the test tenant. This is the only way to prove the bundles load; an accidental externalization shows up as a missing-module error in the browser, not at build time.
+- Commit the refreshed `common/scripts`, `repo-state.json` and the regenerated lockfile, which Rush explicitly asked for.
+- `.development-guide/README.md` is generated; run `npm run generate-readme`.
+
+Sequence for the first build:
+
+1. `node common/scripts/install-run-rush.js update --full --purge` on Node 22, after deleting `common/config/rush/pnpm-lock.yaml`. Expect it to fail once on pnpm 10 build-script approval; put the packages it names into `globalOnlyBuiltDependencies` in `common/config/rush/pnpm-config.json`.
+2. Build `shared-library` first, then ProjectWebParts, PortfolioWebParts, ProgramWebParts, then the two extensions.
+3. Run a non-production `heft build --fix` per solution before `npm run build`, so ESLint can autofix what it can. `--production` force-disables `--fix`, and `unused-imports/no-unused-imports` is still an error.
+4. Triage lint output from `release/analysis-logs/lint.sarif`, which the rig writes on every run.
+5. Escape hatch if a solution drowns in lint errors: rename its `eslint.config.js` to `eslint.config.js.disabled`. The lint task then logs "No ESLint config file found" and does nothing. Do not hand-write a `config/heft.json`; it replaces the rig's configuration wholesale unless it carries the right `extends`.
+6. Verify Decision A after the first clean build of a consumer: the AMD header must not list `pp365-shared-library`.
+
+```sh
+grep -o 'define(\[[^]]*\]' SharePointFramework/PortfolioWebParts/dist/*.js | grep pp365 || echo "OK: no pp365-* external"
+```
+
+## Re-creating the toolchain sources for the two unfinished checks
+
+The claims in the plan were read out of the compiled toolchain packages, not from documentation. Those extracts lived in a temporary folder that is now gone. To re-create them anywhere (they are read-only npm tarballs, nothing is installed into the repo):
+
+```sh
+mkdir -p /tmp/spfx-src && cd /tmp/spfx-src
+for p in @microsoft/spfx-web-build-rig@1.23.2 @microsoft/spfx-heft-plugins@1.23.2 \
+         @rushstack/heft@1.2.17 @rushstack/heft-lint-plugin@1.2.7 \
+         @microsoft/eslint-config-spfx@1.23.2; do
+  d=$(echo "$p" | tr '/@' '__'); mkdir -p "$d" && (cd "$d" && npm pack "$p" --silent >/dev/null && tar -xzf *.tgz)
+done
+```
+
+The files that matter:
+
+- externals and manifests: `spfx-heft-plugins/package/lib-commonjs/plugins/webpackConfigurationPlugin/WebpackConfigurationGenerator.js`, `.../spfxManifests/webpack/ManifestPlugin.js`, `.../spfxManifests/cumulativeManifestProcessor/CumulativeManifestProcessor.js`, `.../plugins/thirdPartyExternalsPlugin/{ThirdPartyExternalsPlugin,LegacyExternals}.js`, `.../plugins/CustomizeWebpackConfigurationPlugin.js`
+- serve and debug: `.../plugins/webpackConfigurationPlugin/{WebpackServeConfigurationPlugin,ConfigureServe,updateServeConfigAsync,SPFxDebugPageUrl,SPFxDebugPageUrlUtilities}.js`, `.../spfxConfig/schemas/spfx-serve.schema.json`, and `spfx-heft-plugins/package/heft-plugin.json` for the CLI parameters
+- build phases and defaults: `spfx-web-build-rig/package/profiles/default/config/heft.json`, `tsconfig-base.json`, `config/{sass,typescript}.json`
+- lint: `heft-lint-plugin/package/lib-commonjs/{Eslint,LintPlugin,LinterBase}.js`, `eslint-config-spfx/package/lib-commonjs/flat-profiles/{default,react}.js`
 
 ## How to continue with an agent
 
@@ -72,7 +162,7 @@ Working rules that were in effect and should stay:
 - The developer runs git and builds themselves; the agent edits files and proposes commands.
 - Localization triad rule and other conventions: `AGENTS.md`.
 - Regenerate a report if needed from a solution folder: `npx -y -p @pnp/cli-microsoft365@latest m365 spfx project upgrade --toVersion 1.23.2 --packageManager pnpm --shell bash --output md`.
-- Verify bundling after any build: `head -c 600 SharePointFramework/PortfolioWebParts/dist/portfolio-overview-web-part.js | grep -o 'define("[^"]*",\[[^]]*\]'` must not list `pp365-shared-library`.
+- Verify bundling after any build: `grep -o 'define(\[[^]]*\]' SharePointFramework/PortfolioWebParts/dist/*.js | grep pp365 || echo "OK: no pp365-* external"
 
 ## Later phases (not started)
 

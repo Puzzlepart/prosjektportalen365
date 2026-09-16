@@ -475,14 +475,10 @@ export class CopyListData extends BaseTask {
   private async _getFileContents(web: IWeb, files: any[]): Promise<any[]> {
     try {
       const fileContents = await Promise.all(
-        files.map(
-          (file) =>
-            new Promise<any>(async (resolve) => {
-              const blob = await web.getFileByServerRelativePath(file.FileRef).getBlob()
-              file.Blob = blob
-              resolve(file)
-            })
-        )
+        files.map(async (file) => {
+          file.Blob = await web.getFileByServerRelativePath(file.FileRef).getBlob()
+          return file
+        })
       )
       return fileContents
     } catch (error) {

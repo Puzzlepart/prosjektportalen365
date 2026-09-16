@@ -126,6 +126,23 @@ if ($USE_CHANNEL_CONFIG) {
 $RELEASE_PATH = "$ROOT_PATH/release/$($RELEASE_NAME)"
 #endregion
 
+#region Node version guard
+# The SPFx 1.23 Heft toolchain requires Node 22 (see rush.json nodeSupportedVersionRange and the
+# .nvmrc files). Building on another major silently produces a stale or broken .sppkg, so fail here
+# rather than shipping one.
+$NODE_VERSION_RAW = (node -v) 2>$null
+if ($LASTEXITCODE -ne 0 -or -not $NODE_VERSION_RAW) {
+    Write-Host "[ERROR] Node.js was not found on PATH. Node.js 22 is required." -ForegroundColor Red
+    exit 1
+}
+$NODE_MAJOR = [int]($NODE_VERSION_RAW.TrimStart('v').Split('.')[0])
+if ($NODE_MAJOR -ne 22) {
+    Write-Host "[ERROR] Node.js 22 is required for the SPFx Heft toolchain, found $NODE_VERSION_RAW." -ForegroundColor Red
+    Write-Host "        Run 'nvm use' in the repository root (see .nvmrc) and try again." -ForegroundColor Yellow
+    exit 1
+}
+#endregion
+
 #region Pre-build
 if ($null -ne $CHANNEL_CONFIG) {
     Write-Host "[Building release $RELEASE_NAME for channel $($CHANNEL_CONFIG_NAME)]" -ForegroundColor Cyan
@@ -140,14 +157,16 @@ if ($CI.IsPresent) {
     Write-Host "[Running in CI mode]" -ForegroundColor Yellow
     StartAction("Updating npm packages using rush")
     npm ci >$null 2>&1
-    npm i @microsoft/rush@5.98.0 -g >$null 2>&1
-    rush update >$null 2>&1
+    # Rush is launched through the repo-pinned bootstrap script, so the version always
+    # follows rush.json (no global install to keep in sync). `install` requires the
+    # committed lockfile to match; use `update` locally when dependencies change.
+    node "$ROOT_PATH/common/scripts/install-run-rush.js" install >$null 2>&1
     npm run generate-channel-replace-map >$null 2>&1
     EndAction
 }
 else {
     StartAction("Updating npm packages using rush")
-    rush update >$null 2>&1
+    node "$ROOT_PATH/common/scripts/install-run-rush.js" update >$null 2>&1
     npm run generate-channel-replace-map >$null 2>&1
     EndAction
 }
@@ -290,7 +309,7 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
     # gitignored via **/*.build.log) and dumped if the build fails, so compile
     # errors are never silently swallowed.
     $RUSH_REBUILD_LOG = "$SHAREPOINT_FRAMEWORK_BASEPATH/rush-rebuild.build.log"
-    rush rebuild 2>&1 | Out-File -FilePath $RUSH_REBUILD_LOG -Encoding utf8
+    node "$ROOT_PATH/common/scripts/install-run-rush.js" rebuild 2>&1 | Out-File -FilePath $RUSH_REBUILD_LOG -Encoding utf8
     if ($LASTEXITCODE -ne 0) {
         Write-Host "[ERROR] rush rebuild failed with exit code $LASTEXITCODE. Last 200 lines of $($RUSH_REBUILD_LOG):" -ForegroundColor Red
         Get-Content $RUSH_REBUILD_LOG -Tail 200 | Write-Host

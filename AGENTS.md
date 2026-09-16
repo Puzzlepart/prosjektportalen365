@@ -2,6 +2,8 @@
 
 Operational guide for AI coding agents working in **Prosjektportalen 365** — an open-source (Puzzlepart) SharePoint Framework (SPFx) monorepo managed with **Rush + pnpm**.
 
+The build toolchain is **Heft** (SPFx 1.23.2, Rush Stack). The gulp toolchain was retired in the 1.17.4 to 1.23.2 migration; see `docs/plans/spfx-1.23-heft-toolchain.md` and the `pp365-toolchain` skill.
+
 This is a thin operational index. The authoritative, detailed conventions live in **`.development-guide/`** (Norwegian) — read it for depth on anything below. Human contributors: see also `CONTRIBUTING.md`.
 
 ## Repository map
@@ -17,9 +19,9 @@ This is a thin operational index. The authoritative, detailed conventions live i
 
 1. **The localization triad must stay balanced.** Each solution has `src/loc/{myStrings.d.ts, nb-no.js, en-us.js}`. A key added to one must be added to all three (identical key sets) or `validate-loc` and the build fail. `nb-no.js` is the default (Norwegian). Never leave a double comma (`,,`) in the `.js` files — it crashes the module at runtime.
 2. **Do not hand-edit generated files** — they are gitignored and regenerated on build:
-   - `**/*.module.scss.ts` — regenerated from the sibling `.module.scss`. Edit the `.scss`; keep the set of class names stable.
+   - Sass typings — generated into `temp/sass-ts/` by the Heft build (they used to sit next to the source as `**/*.module.scss.ts`). Edit the `.scss`; keep the set of class names stable. Never edit or commit anything under `temp/`.
    - `**/src/loc/shared/*` — regenerated from `Templates/Portfolio/Resources.*.resx` (via the `Templates` `generate-resx-ts` task).
-3. **Node 16** (`.nvmrc` = `16.18.0`). The SPFx/gulp toolchain targets it; a newer Node can fail **silently** and produce a stale `.sppkg` — especially `build-release`.
+3. **Node 22** (`.nvmrc` = `22.22.2`, `rush.json` enforces `>=22.14.0 <23.0.0`). The SPFx 1.23 Heft toolchain requires it; another major fails the build, and `build-release` refuses to run.
 
 ## Conventions (summary — full details in `.development-guide/spfx/kodemonster.md`)
 
@@ -43,14 +45,15 @@ From the **repo root** unless noted:
 | Build all solutions (dependency order) | `npm run rush:build` |
 | Rebuild only `shared-library` | `rush rebuild -o pp365-shared-library` |
 | Lint + format all solutions | `npm run rush:lint` |
-| Build a release package (needs Node 16) | `npm run build-release` |
+| Build a release package (needs Node 22) | `npm run build-release` |
 
 Inside a solution (`SharePointFramework/<Solution>/`):
 
 | Task | Command |
 |---|---|
-| Dev server + live-reload | `npm run watch` |
-| Build a shippable `.sppkg` | `npm run build` |
+| Dev server + live-reload (`heft start --nobrowser`) | `npm run watch` |
+| Dev server against a named environment | `npm run watch -- --serve-config <name>` |
+| Build a shippable `.sppkg` (`heft build` + `heft package-solution`) | `npm run build` |
 | Lint + Prettier | `npm run lint` |
 | Validate localization balance | `npm run validate-loc` |
 | Type-check only | `npx tsc --noEmit` |

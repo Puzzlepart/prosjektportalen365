@@ -1,7 +1,8 @@
 {
     "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/rush.schema.json",
-    "rushVersion": "5.98.0",
-    "pnpmVersion": "5.18.9",
+    "rushVersion": "5.179.0",
+    "pnpmVersion": "10.34.5",
+    "nodeSupportedVersionRange": ">=22.14.0 <23.0.0",
     "repository": {
         "url": "https://github.com/Puzzlepart/prosjektportalen365"
     },
@@ -43,6 +44,11 @@
         {
             "packageName": "pp365-spfx-tasks",
             "projectFolder": "SharePointFramework/.tasks"
+        },
+        {
+            "packageName": "pp365-eslint-config",
+            "projectFolder": "SharePointFramework/.eslint-config",
+            "shouldPublish": false
         }
     ]
 }

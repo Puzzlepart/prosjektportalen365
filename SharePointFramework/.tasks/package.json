@@ -1,21 +1,21 @@
 {
-    "name": "pp365-spfx-tasks",
-    "version": "1.14.0",
-    "scripts": {
-      "build": "echo \"No build for pp365-spfx-tasks; build.js is invoked per-solution as 'node ../.tasks/build.js --channel <name>'\"",
-      "lint": "echo \"No linting configured\"",
-      "validate-loc": "node ./validateLoc.js --path ./src/loc --interface IStrings --dts mystrings.d.ts --output ./localization-report.md --summary"
-    },
-    "dependencies": {
-      "dotenv": "16.1.3",
-      "yargs": "17.7.2",
-      "glob": "10.2.6",
-      "colors": "1.4.0",
-      "lodash": "4.17.21",
-      "ts-morph": "25.0.1"
-    },
-    "devDependencies": {
-      "@types/lodash": "4.14.195",
-      "@types/colors": "1.2.1"
-    }
+  "name": "pp365-spfx-tasks",
+  "version": "1.14.0",
+  "scripts": {
+    "build": "echo \"No build for pp365-spfx-tasks; build.js is invoked per-solution as 'node ../.tasks/build.js --channel <name>'\"",
+    "lint": "echo \"No linting configured\"",
+    "validate-loc": "echo \"No localization in pp365-spfx-tasks\""
+  },
+  "dependencies": {
+    "dotenv": "16.1.3",
+    "yargs": "17.7.2",
+    "glob": "10.2.6",
+    "colors": "1.4.0",
+    "lodash": "4.17.21",
+    "ts-morph": "25.0.1"
+  },
+  "devDependencies": {
+    "@types/lodash": "4.14.195",
+    "@types/colors": "1.2.1"
+  }
 }

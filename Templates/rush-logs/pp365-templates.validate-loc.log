@@ -1,0 +1,12 @@
+Invoking (initial): node ../SharePointFramework/.tasks/validateLoc.js --path ../SharePointFramework/PortfolioWebParts/src/loc/shared --interface ISharedResources --dts shared.d.ts --output ./resx-ts-report.json && npm run validate-project-template 
+[validateLoc] Validating localization files
+[validateLoc] Found 2 resource files (en-us.js, nb-no.js)
+[validateLoc] Found 1477 keys in interface ISharedResources
+[validateLoc] 0 missing keys in en-us
+[validateLoc] 0 missing keys in nb-no
+[validateLoc] JSON file generated at ./resx-ts-report.json
+[validateLoc] Validation completed
+
+> pp365-templates@1.14.0 validate-project-template
+> node ./.tasks/validate-project-template.js
+

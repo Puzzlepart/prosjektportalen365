@@ -1,5 +1,6 @@
 {
   "@microsoft/generator-sharepoint": {
-    "version": "1.17.4"
+    "version": "1.23.2",
+    "useGulp": false
   }
 }
