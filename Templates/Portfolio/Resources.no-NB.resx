@@ -2897,7 +2897,7 @@
     <value>Hub-ID</value>
   </data>
   <data name="SiteFields_GtIconName_Description" xml:space="preserve">
-    <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
+    <value>Navn på ikon fra Prosjektportalens Fluent UI-ikonsett (f.eks. "DataBarVertical"). Der ikonet vises, rendres det som strek og fylles ved hover. Se https://react.fluentui.dev/?path=/docs/icons-catalog--docs. Ikonnavn fra UI Fabric (https://uifabricicons.azurewebsites.net/) støttes fortsatt.</value>
   </data>
   <data name="SiteFields_GtIconName_DisplayName" xml:space="preserve">
     <value>Ikonnavn</value>
@@ -3410,7 +3410,7 @@
     <value>Farge</value>
   </data>
   <data name="SiteFields_GtPortfolioColumnIconName_Description" xml:space="preserve">
-    <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
+    <value>Navn på ikon fra Prosjektportalens Fluent UI-ikonsett (f.eks. "DataBarVertical"). Der ikonet vises, rendres det som strek og fylles ved hover. Se https://react.fluentui.dev/?path=/docs/icons-catalog--docs. Ikonnavn fra UI Fabric (https://uifabricicons.azurewebsites.net/) støttes fortsatt. I selve listevisningen vises kun UI Fabric-navn (f.eks. "CircleFill").</value>
   </data>
   <data name="SiteFields_GtPortfolioColumnIconName_DisplayName" xml:space="preserve">
     <value>Ikonnavn</value>
@@ -3440,7 +3440,7 @@
     <value>Kolonneverdi</value>
   </data>
   <data name="SiteFields_GtPortfolioFabricIcon_Description" xml:space="preserve">
-    <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
+    <value>Navn på ikon fra Prosjektportalens Fluent UI-ikonsett (f.eks. "DataBarVertical"). Der ikonet vises, rendres det som strek og fylles ved hover. Se https://react.fluentui.dev/?path=/docs/icons-catalog--docs. Ikonnavn fra UI Fabric (https://uifabricicons.azurewebsites.net/) støttes fortsatt.</value>
   </data>
   <data name="SiteFields_GtPortfolioFabricIcon_DisplayName" xml:space="preserve">
     <value>Ikon</value>
@@ -3821,7 +3821,7 @@
     <value>Feltnavn</value>
   </data>
   <data name="SiteFields_GtSecIcon_Description" xml:space="preserve">
-    <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
+    <value>Navn på ikon fra Prosjektportalens Fluent UI-ikonsett (f.eks. "DataBarVertical"). Der ikonet vises, rendres det som strek og fylles ved hover. Se https://react.fluentui.dev/?path=/docs/icons-catalog--docs. Ikonnavn fra UI Fabric (https://uifabricicons.azurewebsites.net/) støttes fortsatt.</value>
   </data>
   <data name="SiteFields_GtSecIcon_DisplayName" xml:space="preserve">
     <value>Ikon</value>

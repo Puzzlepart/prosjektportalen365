@@ -75,7 +75,7 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
                   <div className={styles.option}>
                     {template.iconProps?.iconName && (
                       <span className={styles.optionIcon}>
-                        {getFluentIconWithFallback(template.iconProps.iconName, true)}
+                        {getFluentIconWithFallback(template.iconProps.iconName)}
                       </span>
                     )}
                     <div className={styles.optionContent}>

@@ -164,7 +164,7 @@ export class PortfolioOverviewView {
     this.title = title
     this.sortOrder = view ? view.sortOrder + 1 : sortOrder
     this.searchQuery = view?.searchQuery ?? ''
-    this.iconName = 'LocationCircle'
+    this.iconName = 'Location'
     this.isDefaultView = false
     this.isPersonal = isPersonal
     this.$map = this._toMap()

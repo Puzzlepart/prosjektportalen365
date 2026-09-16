@@ -14,6 +14,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 ### Forbedringer
 
 - Henting av brukerfeltverdier på statusrapporter gjøres nå som en egen, feiltolerant spørring — statusrapportene vises selv om brukerfelt-berikelsen skulle feile
+- Seksjonsikoner i `Prosjektstatus`, visningsikoner i `Porteføljeoversikt`/aggregerte oversikter og kolonneikoner i porteføljen rendres nå med Fluent UI-ikoner (strek som fylles ved hover), med automatisk oversetting av gamle UI Fabric-ikonnavn og fallback til UI Fabric for ukjente navn. Eksisterende ikonnavn fungerer uendret og krever ingen migrering; nye installasjoner får Fluent-navn som standard. Ukjente ikonnavn på vertikaler i `Prosjektliste` vises nå som UI Fabric-ikon i stedet for standardikonet [#1287](https://github.com/Puzzlepart/prosjektportalen365/issues/1287)
 
 ### Feilrettinger
 

@@ -110,7 +110,7 @@ define([], function () {
     FilterText: 'Filtrer',
     GeneralGroupName: 'Generelt',
     GroupByColumnLabel: 'Grupper etter {0}',
-    IconNameDescription: 'Navn på ikon fra UI Fabric. Se oversikt på https://uifabricicons.azurewebsites.net/.',
+    IconNameDescription: 'Navn på ikon fra Prosjektportalens Fluent UI-ikonsett (f.eks. "DataBarVertical"). Der ikonet vises, rendres det som strek og fylles ved hover. Se https://react.fluentui.dev/?path=/docs/icons-catalog--docs. Ikonnavn fra UI Fabric (https://uifabricicons.azurewebsites.net/) støttes fortsatt.',
     IconNameLabel: 'Ikonnavn',
     InternalNameDescription: 'Internt feltnavn for denne kolonnen.',
     InternalNameLabel: 'Internt feltnavn',

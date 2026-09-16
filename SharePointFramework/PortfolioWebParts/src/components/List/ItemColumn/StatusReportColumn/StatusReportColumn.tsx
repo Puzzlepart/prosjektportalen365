@@ -27,7 +27,7 @@ export const StatusReportColumn: ColumnRenderComponent<IStatusColumnProps> = (
         <div className={styles.root} onPointerLeave={cancelPendingOpen}>
           {status?.sections?.map(({ fieldName, iconName, color }) => (
             <span key={fieldName} className={styles.icon} style={{ color }}>
-              {getFluentIconWithFallback(iconName, true, color)}
+              {getFluentIconWithFallback(iconName, { color })}
             </span>
           ))}
         </div>

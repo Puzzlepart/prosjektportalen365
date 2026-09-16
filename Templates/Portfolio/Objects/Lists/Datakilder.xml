@@ -55,7 +55,7 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_ProjectDeliveries}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,2,37,3,4,5,38</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentRefiners">4,40,42,50</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIconName">TimelineDelivery</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">Timeline</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_Portfolio}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
@@ -66,7 +66,7 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_ProjectDeliveries}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,2,37,3,4,5,38</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentRefiners">4,40,42,50</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIconName">TimelineDelivery</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">Timeline</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_ParentProgram}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
@@ -77,7 +77,7 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_UncertaintyOverview}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,6,7,8,9,10,45</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentRefiners">45,46,47,35</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIconName">Asterisk</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">Warning</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_Portfolio}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
@@ -89,7 +89,7 @@
             <pnp:DataValue FieldName="GtDataSourceDefault">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,6,7,8,9,10,45</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentRefiners">45,46,47,35</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIconName">Asterisk</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">Warning</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_Portfolio}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
@@ -100,7 +100,7 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_UncertaintyOverview}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,6,7,8,9,10,45</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentRefiners">45,46,47,35</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIconName">BranchCommit</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">BranchFork</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_Portfolio}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
@@ -111,7 +111,7 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_UncertaintyOverview}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,6,7,8,9,10,45</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentRefiners">45,46,47,35</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIconName">BranchCommit</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">BranchFork</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_Portfolio}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
@@ -122,7 +122,7 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_ExperienceLog}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,11,12,13,14,15,48,49</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentRefiners">12,13,48,49</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIconName">BacklogList</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">TaskListLtr</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_Portfolio}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
@@ -167,7 +167,7 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_UncertaintyOverview}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,6,7,8,9,10,45</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentRefiners">45,46,47,35</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIconName">Asterisk</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">Warning</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_ParentProgram}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
@@ -178,7 +178,7 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_UncertaintyOverview}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,6,7,8,9,10,45</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentRefiners">45,46,47,35</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIconName">BranchCommit</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">BranchFork</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_ParentProgram}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
@@ -209,7 +209,7 @@
             <pnp:DataValue FieldName="Title">{resource:Lists_DataSources_Category_ResourceAllocation_All}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeId:0x010004EAFF7AFCC94C2680042E6881264120* OR ContentTypeId:0x010029F45E75BA9CE340A83EFFB2927E11F4*) DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_ResourceAllocation}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIconName">SizeLegacy</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">PeopleTeam</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_Portfolio}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
@@ -220,7 +220,7 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">{resource:Lists_DataSources_Category_ResourceAllocation}</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">57,58,59,60,61,62,63</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentRefiners">57,58,62</pnp:DataValue>
-            <pnp:DataValue FieldName="GtIconName">SizeLegacy</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">PeopleTeam</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceLevel">{resource:Lists_DataSources_Level_ParentProgram}</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>

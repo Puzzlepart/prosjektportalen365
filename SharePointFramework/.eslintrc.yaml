@@ -41,6 +41,15 @@ rules:
     - "never"
     - {}
   "unused-imports/no-unused-imports": "error"
+  "no-restricted-syntax":
+    - "error"
+    - selector: "ImportDeclaration[source.value='@fluentui/react-icons'] > ImportNamespaceSpecifier"
+      message: "Never `import * as ... from '@fluentui/react-icons'` (bloats every bundle). Use named imports via the shared-library icon catalog (SharePointFramework/shared-library/src/icons/iconCatalog.ts)."
+  "no-restricted-imports":
+    - "error"
+    - paths:
+        - name: "pp365-shared-library/lib/icons/iconCatalog"
+          message: "Do not deep-import the icon catalog. Use getFluentIcons/resolveFluentIcon from 'pp365-shared-library'."
 settings:
   react:
     version: "detect"

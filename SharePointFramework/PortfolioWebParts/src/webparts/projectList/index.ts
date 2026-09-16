@@ -14,8 +14,7 @@ import * as strings from 'PortfolioWebPartsStrings'
 import { IProjectListProps, ProjectList } from 'components/ProjectList'
 import React from 'react'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
-import { PortalDataService, ProjectColumn } from 'pp365-shared-library'
-import { iconCatalog } from 'pp365-shared-library/lib/icons/iconCatalog'
+import { PortalDataService, ProjectColumn, getFluentIcons } from 'pp365-shared-library'
 
 function renderJsonTextarea(
   field: any,
@@ -193,9 +192,9 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                       title: strings.VerticalConfigIconTitle,
                       type: CustomCollectionFieldType.dropdown,
                       defaultValue: 'Cube',
-                      options: Object.keys(iconCatalog).map((key) => ({
-                        key,
-                        text: key
+                      options: getFluentIcons().map(({ name }) => ({
+                        key: name,
+                        text: name
                       }))
                     },
                     {

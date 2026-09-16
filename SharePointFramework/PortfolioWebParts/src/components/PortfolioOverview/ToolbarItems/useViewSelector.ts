@@ -59,7 +59,7 @@ export function useViewSelector(context: IPortfolioOverviewContext) {
               ? [
                   ListMenuItemDivider,
                   new ListMenuItem(strings.MergedViewLabel)
-                    .setIcon('BulletedTreeList')
+                    .setIcon('TextBulletListTree')
                     .makeCheckable({
                       name: 'views',
                       value: 'merged'
