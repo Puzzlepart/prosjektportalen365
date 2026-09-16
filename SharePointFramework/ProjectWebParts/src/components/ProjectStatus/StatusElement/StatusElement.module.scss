@@ -76,6 +76,23 @@
   cursor: pointer;
 }
 
+// Bundled Fluent icons (bundleIcon) render both the regular and the filled SVG and
+// let griffel show/hide them. Fluent Button/MenuItem toggle to the filled glyph on
+// hover themselves; plain cards do not, so we do it here for the card (.element)
+// and for the iconsOnly host (.tooltipHost). Both rules are required - hiding the
+// regular glyph without showing the filled one (or vice versa) shows two icons or none.
+.element:hover,
+.tooltipHost:hover,
+.tooltipHost:focus-visible {
+  :global(.fui-Icon-filled) {
+    display: inline;
+  }
+
+  :global(.fui-Icon-regular) {
+    display: none;
+  }
+}
+
 .tooltipContent {
   padding: 16px;
   max-width: 300px;

@@ -12,7 +12,7 @@ export function useEditableView() {
     new Map([
       ['title', ''],
       ['searchQuery', ''],
-      ['iconName', 'ViewList']
+      ['iconName', 'AppsList']
     ])
   )
   const isEditing = !!context.state.viewForm.view
@@ -31,7 +31,7 @@ export function useEditableView() {
         new Map([
           ['title', ''],
           ['searchQuery', context.state.currentView?.searchQuery ?? ''],
-          ['iconName', 'ViewList']
+          ['iconName', 'AppsList']
         ])
       )
     }

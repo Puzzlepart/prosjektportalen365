@@ -1,11 +1,7 @@
 import strings from 'PortfolioWebPartsStrings'
+import { getIconComponentWithFallback } from 'pp365-shared-library'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
 import { IProjectListVertical, IProjectListState, IVerticalConfig } from './types'
-import { bundleIcon, CubeFilled, CubeRegular } from '@fluentui/react-icons'
-import { FluentIcon } from '@fluentui/react-icons/lib/utils/createFluentIcon'
-import { iconCatalog } from 'pp365-shared-library/lib/icons/iconCatalog'
-
-const defaultIcon = bundleIcon(CubeFilled, CubeRegular)
 
 /** Parsed filter/visibility configuration for a vertical tab. */
 export interface IVerticalFilterConfig {
@@ -127,13 +123,6 @@ function buildIsHiddenFunction(
   }
 }
 
-/** Resolves an icon name to a FluentUI bundled icon. Falls back to `Cube`. */
-function resolveIcon(iconName: string): FluentIcon {
-  const entry = iconCatalog[iconName]
-  if (entry) return bundleIcon(entry.filled, entry.regular)
-  return defaultIcon
-}
-
 /** Converts `IVerticalConfig[]` from webpart properties into `IProjectListVertical[]`. */
 export function convertConfigsToVerticals(configs: IVerticalConfig[]): IProjectListVertical[] {
   return configs.map((cfg, index) => {
@@ -151,7 +140,7 @@ export function convertConfigsToVerticals(configs: IVerticalConfig[]): IProjectL
       key,
       value: key,
       text: cfg.title,
-      icon: resolveIcon(cfg.iconName),
+      icon: getIconComponentWithFallback(cfg.iconName, 'Cube'),
       searchBoxPlaceholder: cfg.searchBoxPlaceholder || strings.SearchBoxPlaceholderText,
       filter
     }

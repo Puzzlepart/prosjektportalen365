@@ -40,7 +40,7 @@ export function usePortfolioSelector(context: IPortfolioOverviewContext) {
       items.push(
         ...context.props.portfolios.map<ListMenuItem>((portfolio) =>
           new ListMenuItem(portfolio.title)
-            .setIcon(portfolio.iconName || 'FabricFolder')
+            .setIcon(portfolio.iconName || 'Folder')
             .makeCheckable({
               name: 'portfolios',
               value: portfolio.uniqueId.toString()
@@ -62,7 +62,7 @@ export function usePortfolioSelector(context: IPortfolioOverviewContext) {
       items.push(
         ListMenuItemDivider,
         new ListMenuItem(strings.MergedViewLabel)
-          .setIcon('BulletedTreeList')
+          .setIcon('TextBulletListTree')
           .makeCheckable({
             name: 'portfolios',
             value: 'merged'

@@ -39,7 +39,7 @@
             <pnp:DataValue FieldName="Title">{resource:Lists_PortfolioViews_AllProjects_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} NOT GtProjectLifecycleStatusOWSCHCS="{resource:Choice_GtProjectLifecycleStatus_Closed}" ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioIsDefaultView">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioFabricIcon">PhotoCollection</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioFabricIcon">ImageMultiple</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumns">1,3,5,6,7,8,9,13</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioRefiners">5,6,7,8,9</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioGroupBy" />
@@ -49,7 +49,7 @@
             <pnp:DataValue FieldName="Title">{resource:Lists_PortfolioViews_PortfolioStatus_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} NOT GtProjectLifecycleStatusOWSCHCS="{resource:Choice_GtProjectLifecycleStatus_Closed}" ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioIsDefaultView">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioFabricIcon">BarChart4</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioFabricIcon">DataBarVertical</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumns">1,7,8,9,21,25,23,19,27,30</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioRefiners">5,6,7,8,9</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioGroupBy" />
@@ -59,7 +59,7 @@
             <pnp:DataValue FieldName="Title">{resource:Lists_PortfolioViews_MyProjects_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} NOT GtProjectLifecycleStatusOWSCHCS="{resource:Choice_GtProjectLifecycleStatus_Closed}" ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* (GtProjectManagerOWSUSER:{User.Name} OR GtProjectOwnerOWSUSER:{User.Name})</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioIsDefaultView">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioFabricIcon">Contact</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioFabricIcon">Person</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumns">1,3,5,6,7,8,9,13</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioRefiners">5,6,7,8,9</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioGroupBy" />
@@ -79,7 +79,7 @@
             <pnp:DataValue FieldName="Title">{resource:Lists_PortfolioViews_ClosedProjects_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* GtProjectLifecycleStatusOWSCHCS="{resource:Choice_GtProjectLifecycleStatus_Closed}"</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioIsDefaultView">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioFabricIcon">CircleStop</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioFabricIcon">RecordStop</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumns">1,3,5,6,7,8,9,13</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioRefiners">5,6,7,8,9</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioGroupBy" />
@@ -89,7 +89,7 @@
             <pnp:DataValue FieldName="Title">{resource:Lists_PortfolioViews_Programs_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} NOT GtProjectLifecycleStatusOWSCHCS="{resource:Choice_GtProjectLifecycleStatus_Closed}" ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* GtIsProgramOWSBOOL="1"</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioIsDefaultView">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioFabricIcon">PhotoCollection</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioFabricIcon">ImageMultiple</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumns">1,3,5,6,7,8,9,13</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioRefiners">5,6,7,8,9</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioGroupBy" />
@@ -99,7 +99,7 @@
             <pnp:DataValue FieldName="Title">{resource:Lists_PortfolioViews_ParentProjects_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">DepartmentId:{{sitecollectionid}} NOT GtProjectLifecycleStatusOWSCHCS="{resource:Choice_GtProjectLifecycleStatus_Closed}" ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* GtIsParentProjectOWSBOOL="1"</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioIsDefaultView">True</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioFabricIcon">PhotoCollection</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioFabricIcon">ImageMultiple</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumns">1,3,5,6,7,8,9,13</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioRefiners">5,6,7,8,9</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioGroupBy" />

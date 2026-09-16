@@ -2897,7 +2897,7 @@
     <value>Hub-ID</value>
   </data>
   <data name="SiteFields_GtIconName_Description" xml:space="preserve">
-    <value>Name of the icon from UI Fabric. See https://uifabricicons.azurewebsites.net/.</value>
+    <value>Name of an icon from Prosjektportalen's Fluent UI icon set (e.g. "DataBarVertical"). Where the icon is shown, it renders as an outline and fills on hover. See https://react.fluentui.dev/?path=/docs/icons-catalog--docs. UI Fabric icon names (https://uifabricicons.azurewebsites.net/) are still supported.</value>
   </data>
   <data name="SiteFields_GtIconName_DisplayName" xml:space="preserve">
     <value>Icon name</value>
@@ -3410,7 +3410,7 @@
     <value>Color</value>
   </data>
   <data name="SiteFields_GtPortfolioColumnIconName_Description" xml:space="preserve">
-    <value>Name of the icon from UI Fabric. See https://uifabricicons.azurewebsites.net/.</value>
+    <value>Name of an icon from Prosjektportalen's Fluent UI icon set (e.g. "DataBarVertical"). Where the icon is shown, it renders as an outline and fills on hover. See https://react.fluentui.dev/?path=/docs/icons-catalog--docs. UI Fabric icon names (https://uifabricicons.azurewebsites.net/) are still supported. The list view itself only renders UI Fabric names (e.g. "CircleFill").</value>
   </data>
   <data name="SiteFields_GtPortfolioColumnIconName_DisplayName" xml:space="preserve">
     <value>Icon Name</value>
@@ -3440,7 +3440,7 @@
     <value>Column Value</value>
   </data>
   <data name="SiteFields_GtPortfolioFabricIcon_Description" xml:space="preserve">
-    <value>Name of the icon from UI Fabric. See https://uifabricicons.azurewebsites.net/.</value>
+    <value>Name of an icon from Prosjektportalen's Fluent UI icon set (e.g. "DataBarVertical"). Where the icon is shown, it renders as an outline and fills on hover. See https://react.fluentui.dev/?path=/docs/icons-catalog--docs. UI Fabric icon names (https://uifabricicons.azurewebsites.net/) are still supported.</value>
   </data>
   <data name="SiteFields_GtPortfolioFabricIcon_DisplayName" xml:space="preserve">
     <value>Icon</value>
@@ -3821,7 +3821,7 @@
     <value>Field name</value>
   </data>
   <data name="SiteFields_GtSecIcon_Description" xml:space="preserve">
-    <value>Name of icon from UI Fabric. See https://uifabricicons.azurewebsites.net/.</value>
+    <value>Name of an icon from Prosjektportalen's Fluent UI icon set (e.g. "DataBarVertical"). Where the icon is shown, it renders as an outline and fills on hover. See https://react.fluentui.dev/?path=/docs/icons-catalog--docs. UI Fabric icon names (https://uifabricicons.azurewebsites.net/) are still supported.</value>
   </data>
   <data name="SiteFields_GtSecIcon_DisplayName" xml:space="preserve">
     <value>Icon</value>

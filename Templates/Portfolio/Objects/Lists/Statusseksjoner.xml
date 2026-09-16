@@ -30,7 +30,7 @@
     <pnp:DataRow>
       <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
       <pnp:DataValue FieldName="Title">{resource:Lists_StatusSections_OverallStatus_Title}</pnp:DataValue>
-      <pnp:DataValue FieldName="GtSecIcon">BarChart4</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecIcon">DataBarVertical</pnp:DataValue>
       <pnp:DataValue FieldName="GtSecShowInNavbar">False</pnp:DataValue>
       <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtSecShowAsSection">False</pnp:DataValue>
@@ -40,7 +40,7 @@
     <pnp:DataRow>
       <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
       <pnp:DataValue FieldName="Title">{resource:Lists_StatusSections_StatusTime_Title}</pnp:DataValue>
-      <pnp:DataValue FieldName="GtSecIcon">DateTime</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecIcon">CalendarClock</pnp:DataValue>
       <pnp:DataValue FieldName="GtSecShowInNavbar">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
@@ -67,7 +67,7 @@
     <pnp:DataRow>
       <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
       <pnp:DataValue FieldName="Title">{resource:Lists_StatusSections_StatusQuality_Title}</pnp:DataValue>
-      <pnp:DataValue FieldName="GtSecIcon">Product</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecIcon">Box</pnp:DataValue>
       <pnp:DataValue FieldName="GtSecShowInNavbar">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
@@ -115,7 +115,7 @@
     <pnp:DataRow>
       <pnp:DataValue FieldName="GtSortOrder">70</pnp:DataValue>
       <pnp:DataValue FieldName="Title">{resource:Lists_StatusSections_StatusOpportunities_Title}</pnp:DataValue>
-      <pnp:DataValue FieldName="GtSecIcon">BranchCommit</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecIcon">BranchFork</pnp:DataValue>
       <pnp:DataValue FieldName="GtSecShowInNavbar">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>
@@ -144,7 +144,7 @@
     <pnp:DataRow>
       <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
       <pnp:DataValue FieldName="Title">{resource:Lists_StatusSections_StatusScope_Title}</pnp:DataValue>
-      <pnp:DataValue FieldName="GtSecIcon">BulletedList</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSecIcon">TextBulletList</pnp:DataValue>
       <pnp:DataValue FieldName="GtSecShowInNavbar">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtSecShowInStatusSection">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtSecShowAsSection">True</pnp:DataValue>

@@ -15,7 +15,7 @@ export const TooltipContent = (props: IStatusColumnProps): JSX.Element => {
           style={{ animationDelay: `${idx * props.animation.delay}ms` }}
         >
           <div className={styles.iconContainer} style={{ color }}>
-            {getFluentIconWithFallback(iconName, true, color)}
+            {getFluentIconWithFallback(iconName, { color })}
           </div>
           <div className={styles.body}>
             <Text weight='semibold' className={styles.name}>

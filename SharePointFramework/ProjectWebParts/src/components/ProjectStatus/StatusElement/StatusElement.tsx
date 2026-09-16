@@ -27,7 +27,14 @@ export const StatusElement: FC<IStatusElementProps> = (props) => {
                 </div>
               }
             >
-              <span className={styles.tooltipHost}>{children}</span>
+              <span
+                className={styles.tooltipHost}
+                {...(props.iconsOnly
+                  ? { tabIndex: 0, role: 'img', 'aria-label': headerProps.label }
+                  : {})}
+              >
+                {children}
+              </span>
             </Tooltip>
           )}
         >

@@ -132,7 +132,7 @@ define([], function () {
     ExcelExportButtonLabel: 'Export to Excel',
     FilterText: 'Filter',
     GroupByColumnLabel: 'Group by {0}',
-    IconNameDescription: 'Name of icon from UI Fabric. See overview at https://uifabricicons.azurewebsites.net/.',
+    IconNameDescription: 'Name of an icon from Prosjektportalen\'s Fluent UI icon set (e.g. "DataBarVertical"). Where the icon is shown, it renders as an outline and fills on hover. See https://react.fluentui.dev/?path=/docs/icons-catalog--docs. UI Fabric icon names (https://uifabricicons.azurewebsites.net/) are still supported.',
     IconNameLabel: 'Icon name',
     InternalNameDescription: 'Internal field name for this column.',
     InternalNameLabel: 'Internal field name',
