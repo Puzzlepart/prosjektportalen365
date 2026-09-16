@@ -5,6 +5,7 @@ import { IProjectPropertyProps } from './types'
 import { Persona, Text, Tooltip } from '@fluentui/react-components'
 import { OverflowTagMenu } from 'pp365-shared-library'
 import * as strings from 'ProjectWebPartsStrings'
+import styles from '../../UnSustainabilityGoals/UnSustainabilityGoals.module.scss'
 import {
   ChevronCircleRightFilled,
   EarthFilled,
@@ -157,25 +158,16 @@ export function useProjectProperty(props: IProjectPropertyProps) {
               return numA - numB
             })
             return (
-              <div
-                style={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  gap: 4,
-                  marginTop: 6,
-                  minWidth: 0,
-                  maxWidth: '100%',
-                  boxSizing: 'border-box'
-                }}
-              >
+              <div className={styles.goalsContainer}>
                 {sorted.map((entry: any) => {
                   const iconUrl = goalIconUrls[entry.Label]
                   return iconUrl ? (
-                    <Tooltip key={entry.TermGuid ?? entry.Label} withArrow relationship='description' content={<div style={{ padding: '16px', maxWidth: '300px' }}>{entry.Label}</div>}>
+                    <Tooltip key={entry.TermGuid ?? entry.Label} withArrow relationship='description' content={<div className={styles.tooltipContent}>{entry.Label}</div>}>
                         <img
                           src={iconUrl}
                           alt={entry.Label}
-                          style={{ width: iconSize, height: iconSize, flexShrink: 0 }}
+                          className={styles.goalIcon}
+                          style={{ width: iconSize, height: iconSize }}
                         />
                     </Tooltip>
                   ) : null

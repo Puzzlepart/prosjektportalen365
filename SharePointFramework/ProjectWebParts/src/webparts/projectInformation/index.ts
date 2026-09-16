@@ -95,20 +95,26 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
                 }),
                 PropertyPaneTextField('adminPageLink', {
                   label: strings.AdminPageLinkLabel
-                }),
-                PropertyPaneDropdown('iconSize', {
-                  label: strings.IconSizeLabel,
-                  options: [
-                    { key: 32, text: '32' },
-                    { key: 64, text: '64' },
-                    { key: 96, text: '96' },
-                  ],
-                  selectedKey: propertiesWithDefaults.iconSize
-                }),
+                })
+              ].filter(Boolean)
+            },
+            {
+              groupName: strings.UnSustainabilityGoalsHeader,
+              groupFields: [
                 PropertyPaneToggle('hideUnSustainabilityGoals', {
                   label: strings.HideUnSustainabilityGoalsLabel,
                   checked: propertiesWithDefaults.hideUnSustainabilityGoals
-                })
+                }),
+                !propertiesWithDefaults.hideUnSustainabilityGoals &&
+                  PropertyPaneDropdown('iconSize', {
+                    label: strings.IconSizeLabel,
+                    options: [
+                      { key: 32, text: '32' },
+                      { key: 64, text: '64' },
+                      { key: 96, text: '96' }
+                    ],
+                    selectedKey: propertiesWithDefaults.iconSize
+                  })
               ].filter(Boolean)
             },
             {
