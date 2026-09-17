@@ -13,10 +13,14 @@ import {
   MenuTrigger,
   Nav,
   NavItem,
+  Popover,
+  PopoverSurface,
+  PopoverTrigger,
   Spinner,
   Subtitle2,
   Text,
   Title3,
+  Tooltip,
   useId
 } from '@fluentui/react-components'
 import {
@@ -72,59 +76,122 @@ function countByStatus(items: IDocumentLogItem[]) {
   return { total: items.length, arkivert, tilArkiv, feil, advarsel }
 }
 
-/** Status-count summary cards displayed above the dokumenter / lister tables (display only). */
-const StatCards: FC<{ items: IDocumentLogItem[] }> = ({ items }) => {
+/** Inline style applied to a stat card that acts as a filter toggle. */
+function statCardStyle(active: boolean): React.CSSProperties {
+  return {
+    cursor: 'pointer',
+    boxShadow: active ? 'inset 0 0 0 2px #0078D4' : undefined,
+    background: active ? '#f3f9fd' : undefined
+  }
+}
+
+/**
+ * Status-count summary cards displayed above the dokumenter / lister / arkivlogg tables.
+ * Clicking a card filters the table below to that status; clicking the active card clears it.
+ */
+const StatCards: FC<{
+  items: IDocumentLogItem[]
+  activeStatus?: string[]
+  onToggle?: (status: string) => void
+}> = ({ items, activeStatus = [], onToggle }) => {
   const c = countByStatus(items)
+  const sv = strings.ArchiveOverview
+  const isActive = (status: string) => activeStatus.length === 1 && activeStatus[0] === status
   return (
     <div className={styles.statGrid}>
-      <div className={styles.statCard}>
+      <div className={styles.statCard} style={{ cursor: 'default' }}>
         <div className={styles.statCardNumber} style={{ color: '#0078D4' }}>{c.total}</div>
-        <Caption1 style={{ color: '#605e5c' }}>{strings.ArchiveOverview.StatTotalLabel}</Caption1>
+        <Caption1 style={{ color: '#605e5c' }}>{sv.StatTotalLabel}</Caption1>
       </div>
-      <div className={styles.statCard}>
+      <div
+        className={styles.statCard}
+        style={statCardStyle(isActive(sv.StatusValueArchived))}
+        onClick={() => onToggle?.(sv.StatusValueArchived)}
+      >
         <div className={styles.statCardNumber} style={{ color: '#107C10' }}>{c.arkivert}</div>
-        <Caption1 style={{ color: '#605e5c' }}>{strings.ArchiveOverview.StatusLabelArchived}</Caption1>
+        <Caption1 style={{ color: '#605e5c' }}>{sv.StatusLabelArchived}</Caption1>
       </div>
-      <div className={styles.statCard}>
+      <div
+        className={styles.statCard}
+        style={statCardStyle(isActive(sv.StatusValueToArchive))}
+        onClick={() => onToggle?.(sv.StatusValueToArchive)}
+      >
         <div className={styles.statCardNumber} style={{ color: '#0078D4' }}>{c.tilArkiv}</div>
-        <Caption1 style={{ color: '#605e5c' }}>{strings.ArchiveOverview.StatusLabelToArchive}</Caption1>
+        <Caption1 style={{ color: '#605e5c' }}>{sv.StatusLabelToArchive}</Caption1>
       </div>
-      <div className={styles.statCard}>
+      <div
+        className={styles.statCard}
+        style={statCardStyle(isActive(sv.StatusValueFailed))}
+        onClick={() => onToggle?.(sv.StatusValueFailed)}
+      >
         <div className={styles.statCardNumber} style={{ color: '#D13438' }}>{c.feil}</div>
-        <Caption1 style={{ color: '#605e5c' }}>{strings.ArchiveOverview.StatusLabelFailed}</Caption1>
+        <Caption1 style={{ color: '#605e5c' }}>{sv.StatusLabelFailed}</Caption1>
       </div>
-      <div className={styles.statCardLastRow}>
+      <div
+        className={styles.statCardLastRow}
+        style={statCardStyle(isActive(sv.StatusValueWarning))}
+        onClick={() => onToggle?.(sv.StatusValueWarning)}
+      >
         <div className={styles.statCardNumber} style={{ color: '#D86C00' }}>{c.advarsel}</div>
-        <Caption1 style={{ color: '#605e5c' }}>{strings.ArchiveOverview.StatusLabelWarning}</Caption1>
+        <Caption1 style={{ color: '#605e5c' }}>{sv.StatusLabelWarning}</Caption1>
       </div>
     </div>
   )
 }
 
-/** Status-count summary cards displayed above the prosjekter table (display only). */
-const ProsjekterStatCards: FC<{ projects: IProjectSummary[] }> = ({ projects }) => {
-  let updated = 0, warning = 0, never = 0
+/**
+ * Status-count summary cards displayed above the prosjekter table.
+ * Clicking a card filters the table below to that status; clicking the active card clears it.
+ */
+const ProsjekterStatCards: FC<{
+  projects: IProjectSummary[]
+  activeStatus?: string[]
+  onToggle?: (status: string) => void
+}> = ({ projects, activeStatus = [], onToggle }) => {
+  let updated = 0, warning = 0, failed = 0, never = 0
   for (const p of projects) {
     if (p.status === 'updated') updated++
     else if (p.status === 'warning') warning++
+    else if (p.status === 'failed') failed++
     else if (p.status === 'never') never++
   }
+  const isActive = (status: string) => activeStatus.length === 1 && activeStatus[0] === status
   return (
-    <div className={styles.statGrid4}>
-      <div className={styles.statCard}>
+    <div className={styles.statGrid}>
+      <div className={styles.statCard} style={{ cursor: 'default' }}>
         <div className={styles.statCardNumber} style={{ color: '#0078D4' }}>{projects.length}</div>
         <Caption1 style={{ color: '#605e5c' }}>{strings.ArchiveOverview.StatTotalLabel}</Caption1>
       </div>
-      <div className={styles.statCard}>
+      <div
+        className={styles.statCard}
+        style={statCardStyle(isActive('updated'))}
+        onClick={() => onToggle?.('updated')}
+      >
         <div className={styles.statCardNumber} style={{ color: '#107C10' }}>{updated}</div>
         <Caption1 style={{ color: '#605e5c' }}>{strings.ArchiveOverview.StatusUpdated}</Caption1>
       </div>
-      <div className={styles.statCard}>
+      <div
+        className={styles.statCard}
+        style={statCardStyle(isActive('warning'))}
+        onClick={() => onToggle?.('warning')}
+      >
         <div className={styles.statCardNumber} style={{ color: '#D86C00' }}>{warning}</div>
         <Caption1 style={{ color: '#605e5c' }}>{strings.ArchiveOverview.StatusWarning}</Caption1>
       </div>
-      <div className={styles.statCardLastRow}>
-        <div className={styles.statCardNumber} style={{ color: '#D13438' }}>{never}</div>
+      <div
+        className={styles.statCard}
+        style={statCardStyle(isActive('failed'))}
+        onClick={() => onToggle?.('failed')}
+      >
+        <div className={styles.statCardNumber} style={{ color: '#D13438' }}>{failed}</div>
+        <Caption1 style={{ color: '#605e5c' }}>{strings.ArchiveOverview.StatusLabelFailed}</Caption1>
+      </div>
+      <div
+        className={styles.statCardLastRow}
+        style={statCardStyle(isActive('never'))}
+        onClick={() => onToggle?.('never')}
+      >
+        <div className={styles.statCardNumber} style={{ color: '#69797E' }}>{never}</div>
         <Caption1 style={{ color: '#605e5c' }}>{strings.ArchiveOverview.StatusNeverArchived}</Caption1>
       </div>
     </div>
@@ -140,6 +207,14 @@ const QUICK_STAT_ICONS = [
   <ArrowClockwiseRegular key='1' fontSize={23} />,
   <DocumentRegular key='2' fontSize={23} />,
   <WarningRegular key='3' fontSize={23} />
+]
+
+// Mirrors the order quick stats are built in useArchiveData (Archived, ToArchive, Failed, Warning).
+const QUICK_STAT_STATUS_VALUES = [
+  strings.ArchiveOverview.StatusValueArchived,
+  strings.ArchiveOverview.StatusValueToArchive,
+  strings.ArchiveOverview.StatusValueFailed,
+  strings.ArchiveOverview.StatusValueWarning
 ]
 
 // ─────────────────────────────────────────────────────
@@ -190,6 +265,17 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
     arkivloggToolbarItems,
     arkivloggFarItems,
     arkivloggFilterPanelProps,
+    refetch,
+    goToArkivlogg,
+    goToProsjekter,
+    toggleDokumenterStatus,
+    toggleListerStatus,
+    toggleArkivloggStatus,
+    toggleProsjekterStatus,
+    dokumenterActiveStatus,
+    listerActiveStatus,
+    arkivloggActiveStatus,
+    prosjekterActiveStatus,
   } = useArchiveOverview(props)
 
   const sortArrowFor = (sort: { col: string; dir: 'asc' | 'desc' }, col: string) =>
@@ -235,7 +321,13 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                 <Title3>{strings.ArchiveOverview.DashboardTitle}</Title3>
               </div>
               <div className={styles.headerRight}>
-                <Button appearance='subtle' icon={<ArrowClockwiseRegular />} size='small'>
+                <Button
+                  appearance='subtle'
+                  icon={<ArrowClockwiseRegular />}
+                  size='small'
+                  disabled={loading}
+                  onClick={() => refetch()}
+                >
                   {loading
                     ? strings.ArchiveOverview.LoadingLabel
                     : strings.ArchiveOverview.RefreshLabel}
@@ -305,7 +397,11 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                 <div className={styles.sectionHeader}>
                   <Subtitle2>{strings.ArchiveOverview.NavProsjekter}</Subtitle2>
                 </div>
-                <ProsjekterStatCards projects={projects} />
+                <ProsjekterStatCards
+                  projects={projects}
+                  activeStatus={prosjekterActiveStatus}
+                  onToggle={toggleProsjekterStatus}
+                />
                 <Toolbar
                   items={prosjekterToolbarItems}
                   farItems={prosjekterFarItems}
@@ -338,7 +434,16 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                         <th data-col-key='activity' onClick={() => handleProjectSort('activity')}>
                           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                             {strings.ArchiveOverview.ColumnActivityLevel}
-                            <InfoRegular fontSize={17} style={{ color: '#605e5c', flexShrink: 0 }} />
+                            <Tooltip
+                              content={strings.ArchiveOverview.ActivityLevelTooltip}
+                              relationship='description'
+                            >
+                              <InfoRegular
+                                fontSize={17}
+                                style={{ color: '#605e5c', flexShrink: 0 }}
+                                onClick={(e) => e.stopPropagation()}
+                              />
+                            </Tooltip>
                           </span>
                           {sortArrow('activity')}
                           <div className={styles.resizeHandle} onMouseDown={(e) => prosjekterStartResize('activity', e)} />
@@ -399,7 +504,11 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                 <div className={styles.sectionHeader}>
                   <Subtitle2>{strings.ArchiveOverview.NavDokumenter}</Subtitle2>
                 </div>
-                <StatCards items={documentItems} />
+                <StatCards
+                  items={documentItems}
+                  activeStatus={dokumenterActiveStatus}
+                  onToggle={toggleDokumenterStatus}
+                />
                 <Toolbar
                   items={dokumenterToolbarItems}
                   farItems={dokumenterFarItems}
@@ -487,7 +596,11 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                 <div className={styles.sectionHeader}>
                   <Subtitle2>{strings.ArchiveOverview.ListerViewTitle}</Subtitle2>
                 </div>
-                <StatCards items={listItems} />
+                <StatCards
+                  items={listItems}
+                  activeStatus={listerActiveStatus}
+                  onToggle={toggleListerStatus}
+                />
                 <Toolbar
                   items={listerToolbarItems}
                   farItems={listerFarItems}
@@ -575,7 +688,11 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                 <div className={styles.sectionHeader}>
                   <Subtitle2>{strings.ArchiveOverview.NavArkivlogg}</Subtitle2>
                 </div>
-                <StatCards items={logItems} />
+                <StatCards
+                  items={logItems}
+                  activeStatus={arkivloggActiveStatus}
+                  onToggle={toggleArkivloggStatus}
+                />
                 <Toolbar
                   items={arkivloggToolbarItems}
                   farItems={arkivloggFarItems}
@@ -672,6 +789,15 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                   </div>
                 )}
               </div>
+            ) : selectedNav === 'innstillinger' ? (
+              <div className={styles.tableViewBody}>
+                <div className={styles.sectionHeader}>
+                  <Subtitle2>{strings.ArchiveOverview.NavInnstillinger}</Subtitle2>
+                </div>
+                <Caption1 style={{ color: '#605e5c' }}>
+                  {strings.ArchiveOverview.SettingsComingSoonLabel}
+                </Caption1>
+              </div>
             ) : (
               <div className={styles.body}>
                 {/* ══ Main column ══ */}
@@ -682,7 +808,11 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
 
                     </div>
                     <div className={styles.pendingGrid}>
-                      <div className={styles.card}>
+                      <div
+                        className={styles.card}
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => goToArkivlogg(strings.ArchiveOverview.StatusValueToArchive)}
+                      >
                         <Text size={300} weight='semibold'>
                           {strings.ArchiveOverview.ToArchiveCardTitle}
                         </Text>
@@ -691,7 +821,11 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                           {strings.ArchiveOverview.ToArchiveCardDescription}
                         </Caption1>
                       </div>
-                      <div className={styles.card}>
+                      <div
+                        className={styles.card}
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => goToArkivlogg(strings.ArchiveOverview.StatusValueFailed)}
+                      >
                         <Text size={300} weight='semibold'>
                           {strings.ArchiveOverview.FailedCardTitle}
                         </Text>
@@ -734,7 +868,7 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                       <Subtitle2>{strings.ArchiveOverview.ProjectOverviewTitle}</Subtitle2>
                     </div>
                     <div className={styles.projectTableWrap}>
-                      <table className={styles.projectTable}>
+                      <table className={`${styles.projectTable} ${styles.projectTableStatic}`}>
                         <thead>
                           <tr>
                             <th>{strings.ArchiveOverview.ColumnProjectName}</th>
@@ -747,10 +881,15 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                                 style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}
                               >
                                 {strings.ArchiveOverview.ColumnActivityLevel}
-                                <InfoRegular
-                                  fontSize={17}
-                                  style={{ color: '#605e5c', flexShrink: 0 }}
-                                />
+                                <Tooltip
+                                  content={strings.ArchiveOverview.ActivityLevelTooltip}
+                                  relationship='description'
+                                >
+                                  <InfoRegular
+                                    fontSize={17}
+                                    style={{ color: '#605e5c', flexShrink: 0 }}
+                                  />
+                                </Tooltip>
                               </span>
                             </th>
                             <th>{strings.ArchiveOverview.ColumnStatus}</th>
@@ -808,6 +947,7 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                         iconPosition='after'
                         size='small'
                         style={{ color: '#0078D4', padding: 0 }}
+                        onClick={goToProsjekter}
                       >
                         {strings.ArchiveOverview.SeeAllProjectsLabel}
                       </Button>
@@ -864,6 +1004,7 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                       iconPosition='after'
                       size='small'
                       style={{ color: '#0078D4', padding: 0 }}
+                      onClick={() => goToArkivlogg()}
                     >
                       {strings.ArchiveOverview.SeeAllElementsLabel}
                     </Button>
@@ -874,7 +1015,11 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                     <Subtitle2>{strings.ArchiveOverview.QuickOverviewTitle}</Subtitle2>
                     <div className={styles.quickList}>
                       {quickStats.map((s: IQuickStat, i: number) => (
-                        <div key={i} className={styles.quickRow}>
+                        <div
+                          key={i}
+                          className={styles.quickRow}
+                          onClick={() => goToArkivlogg(QUICK_STAT_STATUS_VALUES[i])}
+                        >
                           <div className={styles.quickRowIcon}>{QUICK_STAT_ICONS[i]}</div>
                           <span className={styles.quickRowLabel}>{s.label}</span>
                           <span className={styles.quickRowValue}>{s.value}</span>
@@ -895,15 +1040,43 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                     <Caption1 style={{ color: '#605e5c', display: 'block', marginBottom: 10 }}>
                       {strings.ArchiveOverview.AboutArchiveStatusDescription}
                     </Caption1>
-                    <Button
-                      appearance='transparent'
-                      icon={<ChevronRightRegular />}
-                      iconPosition='after'
-                      size='small'
-                      style={{ color: '#0078D4', padding: 0 }}
-                    >
-                      {strings.ArchiveOverview.ReadMoreLabel}
-                    </Button>
+                    <Popover withArrow>
+                      <PopoverTrigger disableButtonEnhancement>
+                        <Button
+                          appearance='transparent'
+                          icon={<ChevronRightRegular />}
+                          iconPosition='after'
+                          size='small'
+                          style={{ color: '#0078D4', padding: 0 }}
+                        >
+                          {strings.ArchiveOverview.ReadMoreLabel}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverSurface>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxWidth: 280 }}>
+                          <div className={styles.statusLegendRow}>
+                            <span className={styles.legendDot} style={{ backgroundColor: '#75b964' }} />
+                            <Text weight='semibold' size={200}>{strings.ArchiveOverview.StatusLabelArchived}</Text>
+                          </div>
+                          <Caption1 style={{ color: '#605e5c' }}>{strings.ArchiveOverview.StatusDescArchived}</Caption1>
+                          <div className={styles.statusLegendRow}>
+                            <span className={styles.legendDot} style={{ backgroundColor: '#6b8fba' }} />
+                            <Text weight='semibold' size={200}>{strings.ArchiveOverview.StatusLabelToArchive}</Text>
+                          </div>
+                          <Caption1 style={{ color: '#605e5c' }}>{strings.ArchiveOverview.StatusDescToArchive}</Caption1>
+                          <div className={styles.statusLegendRow}>
+                            <span className={styles.legendDot} style={{ backgroundColor: '#de534a' }} />
+                            <Text weight='semibold' size={200}>{strings.ArchiveOverview.StatusLabelFailed}</Text>
+                          </div>
+                          <Caption1 style={{ color: '#605e5c' }}>{strings.ArchiveOverview.StatusDescFailed}</Caption1>
+                          <div className={styles.statusLegendRow}>
+                            <span className={styles.legendDot} style={{ backgroundColor: '#efc33d' }} />
+                            <Text weight='semibold' size={200}>{strings.ArchiveOverview.StatusLabelWarning}</Text>
+                          </div>
+                          <Caption1 style={{ color: '#605e5c' }}>{strings.ArchiveOverview.StatusDescWarning}</Caption1>
+                        </div>
+                      </PopoverSurface>
+                    </Popover>
                   </div>
                 </div>
               </div>

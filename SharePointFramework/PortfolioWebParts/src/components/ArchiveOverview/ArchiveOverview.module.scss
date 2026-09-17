@@ -240,6 +240,18 @@
   }
 }
 
+// Modifier for project tables that aren't sortable (e.g. the overview front page):
+// suppresses the pointer cursor / hover affordance inherited from .projectTable th.
+.projectTableStatic {
+  th {
+    cursor: default;
+
+    &:hover {
+      background: transparent;
+    }
+  }
+}
+
 .resizeHandle {
   position: absolute;
   right: 0;
@@ -441,14 +453,6 @@
 .statGrid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.statGrid4 {
-  width: 70%;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
   gap: 12px;
   margin-bottom: 16px;
 }

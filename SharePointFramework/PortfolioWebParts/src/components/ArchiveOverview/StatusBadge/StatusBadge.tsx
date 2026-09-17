@@ -20,6 +20,10 @@ export const StatusBadge: FC<{ status: ProjectStatus }> = ({ status }) => {
       backgroundColor = tokens.colorStatusWarningBackground2
       label = strings.ArchiveOverview.StatusWarning
       break
+    case 'failed':
+      backgroundColor = tokens.colorStatusDangerBackground2
+      label = strings.ArchiveOverview.StatusLabelFailed
+      break
     default:
       backgroundColor = tokens.colorStatusDangerBackground2
       label = strings.ArchiveOverview.StatusNeverArchived

@@ -379,6 +379,12 @@ declare interface IPortfolioWebPartsStrings {
     AboutArchiveStatusTitle: string
     AboutArchiveStatusDescription: string
     ReadMoreLabel: string
+    StatusDescArchived: string
+    StatusDescToArchive: string
+    StatusDescFailed: string
+    StatusDescWarning: string
+    ActivityLevelTooltip: string
+    SettingsComingSoonLabel: string
     // Date formatting
     NeverArchivedLabel: string
     TodayAtLabel: string
