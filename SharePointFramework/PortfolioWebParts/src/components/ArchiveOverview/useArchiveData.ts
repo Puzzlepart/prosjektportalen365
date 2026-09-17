@@ -62,7 +62,7 @@ interface IProjectItem {
 }
 
 export type ActivityLevel = 'high' | 'medium' | 'low' | 'none'
-export type ProjectStatus = 'updated' | 'warning' | 'never'
+export type ProjectStatus = 'updated' | 'warning' | 'failed' | 'never'
 
 export interface IProjectSummary {
   id: number
@@ -125,6 +125,7 @@ export interface IArchiveData {
   documentItems: IDocumentLogItem[]
   listItems: IDocumentLogItem[]
   logItems: IDocumentLogItem[]
+  refetch: () => void
 }
 
 // ─────────────────────────────────────────────────────
@@ -163,8 +164,8 @@ function getActivityLevel(lastArchivedMs: number): ActivityLevel {
 
 function getProjectStatus(siteItems: IArchiveLogItem[]): ProjectStatus {
   if (!siteItems.length) return 'never'
-  if (siteItems.some((i) => i.GtLogStatus === strings.ArchiveOverview.StatusValueFailed || i.GtLogStatus === strings.ArchiveOverview.StatusValueWarning))
-    return 'warning'
+  if (siteItems.some((i) => i.GtLogStatus === strings.ArchiveOverview.StatusValueFailed)) return 'failed'
+  if (siteItems.some((i) => i.GtLogStatus === strings.ArchiveOverview.StatusValueWarning)) return 'warning'
   return 'updated'
 }
 
@@ -176,7 +177,7 @@ function processData(
   projectItems: IProjectItem[],
   archiveItems: IArchiveLogItem[],
   dayRange: number
-): Omit<IArchiveData, 'loading' | 'error'> {
+): Omit<IArchiveData, 'loading' | 'error' | 'refetch'> {
   const statusMap = getStatusMap()
 
   const archiveMap = new Map<string, IArchiveLogItem[]>()
@@ -342,7 +343,8 @@ const INITIAL_STATE: IArchiveData = {
   dailyActivity: [],
   documentItems: [],
   listItems: [],
-  logItems: []
+  logItems: [],
+  refetch: () => undefined
 }
 
 interface IRawData {
@@ -353,9 +355,12 @@ interface IRawData {
 export function useArchiveData(props: IArchiveOverviewProps, dayRange: number): IArchiveData {
   const [state, setState] = useState<IArchiveData>(INITIAL_STATE)
   const [rawData, setRawData] = useState<IRawData | null>(null)
+  const [refreshKey, setRefreshKey] = useState(0)
 
   useEffect(() => {
     if (!props.sp) return
+
+    setState((prev) => ({ ...prev, loading: true, error: null }))
 
     Promise.all([
       props.sp.web.lists
@@ -373,16 +378,17 @@ export function useArchiveData(props: IArchiveOverviewProps, dayRange: number): 
       .catch((error: Error) => {
         setState((prev) => ({ ...prev, loading: false, error }))
       })
-  }, [])
+  }, [props.sp, refreshKey])
 
   useEffect(() => {
     if (!rawData) return
-    setState({
+    setState((prev) => ({
+      ...prev,
       loading: false,
       error: null,
       ...processData(rawData.projectItems, rawData.archiveItems, dayRange)
-    })
+    }))
   }, [rawData, dayRange])
 
-  return state
+  return { ...state, refetch: () => setRefreshKey((k) => k + 1) }
 }

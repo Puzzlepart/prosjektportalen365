@@ -27,7 +27,7 @@ function scaleThemeFonts(theme: any, factor: number): any {
 export const scaledTheme = scaleThemeFonts(customLightTheme, 1.3)
 
 const ACTIVITY_ORDER: Record<string, number> = { high: 3, medium: 2, low: 1, none: 0 }
-const STATUS_ORDER: Record<string, number> = { updated: 2, warning: 1, never: 0 }
+const STATUS_ORDER: Record<string, number> = { updated: 3, warning: 2, failed: 1, never: 0 }
 
 // ─────────────────────────────────────────────────────
 // Hook
@@ -53,6 +53,16 @@ export function useArchiveOverview(props: IArchiveOverviewProps) {
 
   const sortArrow = (col: string) =>
     projectSort.col === col ? (projectSort.dir === 'asc' ? ' ↑' : ' ↓') : ''
+
+  // ── Cross-view navigation helpers ─────────────────────
+  const toggleStatusFilter =
+    (setFilters: React.Dispatch<React.SetStateAction<Record<string, string[]>>>) =>
+    (status: string) =>
+      setFilters((prev) => {
+        const current = prev.status ?? []
+        const isActive = current.length === 1 && current[0] === status
+        return { ...prev, status: isActive ? [] : [status] }
+      })
 
   const sortedProjects = useMemo(
     () =>
@@ -253,6 +263,7 @@ export function useArchiveOverview(props: IArchiveOverviewProps) {
       items: [
         { name: strings.ArchiveOverview.StatusUpdated,       value: 'updated', selected: prosjekterActiveFilters.status?.includes('updated') ?? false },
         { name: strings.ArchiveOverview.StatusWarning,       value: 'warning', selected: prosjekterActiveFilters.status?.includes('warning') ?? false },
+        { name: strings.ArchiveOverview.StatusLabelFailed,   value: 'failed',  selected: prosjekterActiveFilters.status?.includes('failed')  ?? false },
         { name: strings.ArchiveOverview.StatusNeverArchived, value: 'never',   selected: prosjekterActiveFilters.status?.includes('never')   ?? false },
       ]
     },
@@ -303,6 +314,7 @@ export function useArchiveOverview(props: IArchiveOverviewProps) {
                                              : strings.ArchiveOverview.ActivityNone,
       statusLabel:   p.status === 'updated' ? strings.ArchiveOverview.StatusUpdated
                    : p.status === 'warning' ? strings.ArchiveOverview.StatusWarning
+                   : p.status === 'failed'  ? strings.ArchiveOverview.StatusLabelFailed
                                             : strings.ArchiveOverview.StatusNeverArchived,
     }))
     ExcelExportService.export(exportItems, exportCols)
@@ -422,12 +434,40 @@ export function useArchiveOverview(props: IArchiveOverviewProps) {
     onFilterChange: handleArkivloggFilterChange,
   }
 
+  // ── Per-view status filter toggles (stat cards) ───────
+  const toggleDokumenterStatus = toggleStatusFilter(setDokumenterActiveFilters)
+  const toggleListerStatus = toggleStatusFilter(setListerActiveFilters)
+  const toggleArkivloggStatus = toggleStatusFilter(setArkivloggActiveFilters)
+  const toggleProsjekterStatus = toggleStatusFilter(setProsjekterActiveFilters)
+
+  // ── Drill-down navigation (quick stats, pending cards, "see all" links) ──
+  const goToArkivlogg = (statusValue?: string) => {
+    setArkivloggActiveFilters(statusValue ? { status: [statusValue] } : {})
+    setSelectedNav('arkivlogg')
+  }
+  const goToProsjekter = () => {
+    setProsjekterActiveFilters({})
+    setSelectedNav('prosjekter')
+  }
+
   return {
     selectedNav,
     setSelectedNav,
     dayRange,
     setDayRange,
     ...archiveData,
+    // Drill-down navigation
+    goToArkivlogg,
+    goToProsjekter,
+    // Status filter toggles (stat cards)
+    toggleDokumenterStatus,
+    toggleListerStatus,
+    toggleArkivloggStatus,
+    toggleProsjekterStatus,
+    dokumenterActiveStatus: dokumenterActiveFilters.status ?? [],
+    listerActiveStatus: listerActiveFilters.status ?? [],
+    arkivloggActiveStatus: arkivloggActiveFilters.status ?? [],
+    prosjekterActiveStatus: prosjekterActiveFilters.status ?? [],
     // Project sort
     sortedProjects,
     handleProjectSort,
