@@ -79,6 +79,7 @@ export const Assistant: FC = () => {
                 title={strings.AssistantIframeTitle}
                 width='100%'
                 height='100%'
+                allow='clipboard-write'
                 onLoad={() => setLoading(false)}
               />
             )}
