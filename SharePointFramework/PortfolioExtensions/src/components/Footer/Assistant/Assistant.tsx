@@ -79,9 +79,6 @@ export const Assistant: FC = () => {
                 title={strings.AssistantIframeTitle}
                 width='100%'
                 height='100%'
-                // Assistenten legger rapporter på utklippstavlen som formatert tekst (text/html).
-                // Det krever clipboard-write i en cross-origin iframe; uten det faller den
-                // tilbake til ren tekst (markdown).
                 allow='clipboard-write'
                 onLoad={() => setLoading(false)}
               />
