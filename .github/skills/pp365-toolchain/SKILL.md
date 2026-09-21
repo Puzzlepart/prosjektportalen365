@@ -105,6 +105,8 @@ grep -o 'define(\[[^]]*\]' SharePointFramework/PortfolioWebParts/dist/*.js | gre
 
 - Workflows run on `ubuntu-latest` (16 GB) with `NODE_OPTIONS=--max-old-space-size=8192` and `RUSH_PARALLELISM=2` set at workflow level; `Install/Build-Release.ps1` defaults the same heap when the variable is unset. The 7 GB macOS runner ran out of heap in PortfolioWebParts (fails at 2 GB, passes at 3 GB), so do not move the build jobs back to macOS without keeping these.
 - Deploy jobs use `shell: pwsh`; `shell: powershell` is Windows-only and is not valid on Ubuntu.
+- Linux is case sensitive: `SiteScripts/src`, `Install/Build-Release.ps1`. Audit path literals in `.tasks/*.js`, `Templates/.tasks/*.js` and `Install/*.ps1` after renaming anything; macOS will not catch it.
+- Tests: see the `pp365-testing` skill. `heft test` is part of every build; `e2e/` is the Playwright project run after the test-channel deploy.
 
 ## Do not
 

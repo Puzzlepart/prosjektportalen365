@@ -23,7 +23,8 @@ This is a thin operational index. The authoritative, detailed conventions live i
    - `**/src/loc/shared/*` — regenerated from `Templates/Portfolio/Resources.*.resx` (via the `Templates` `generate-resx-ts` task).
 3. **Node 22** (`.nvmrc` = `22.22.2`, `rush.json` enforces `>=22.14.0 <23.0.0`). The SPFx 1.23 Heft toolchain requires it; another major fails the build, and `build-release` refuses to run.
 4. **Production builds need more than Node's default heap on small machines.** The PortfolioWebParts build fails at a 2 GB heap and passes at 3 GB. CI (`ubuntu-latest`) and `Install/Build-Release.ps1` set `NODE_OPTIONS=--max-old-space-size=8192`; if a local `heft build --production` or `rush rebuild` dies with "Reached heap limit", export the same variable first.
-5. **PnPjs is v4 (4.21.0)**, and three v3 habits no longer compile or silently misbehave: `items.getAll()` and `import '@pnp/sp/items/get-all'` are gone (use `getAllItems(query)` from `pp365-shared-library`, which always sends `$top`; for a single row use `.top(1)()`); `sp.termStore` and `@pnp/sp/taxonomy` are gone (use `getTermStore(sp.web)` from `pp365-shared-library`, and `getTermLabel` for labels, which applies the fixed chain web language, then `nb-NO`, then `en-US`); `add`/`update`/`ensureUser`/`addUsingPath` resolve to the payload itself (`IFileInfo`, `IFolderInfo`, `ISiteUserInfo`, the created item), never to `{ data, file, folder, group, node }` wrappers. `sp-entityportal-service` is vendored as `SpEntityPortalService` in the shared library. Unit tests (`src/**/*.test.ts`, run by every Heft build) must not import `@pnp/*` (ESM-only under the CommonJS Jest runner); test against structural stand-ins as `shared-library/src/taxonomy/*.test.ts` does.
+5. **CI runs on Linux, so every path is case sensitive.** macOS hid mismatches such as `SiteScripts/Src` vs the real `SiteScripts/src` and `build-release.ps1` vs `Build-Release.ps1`; on `ubuntu-latest` they fail the release build. Spell paths in scripts, workflows and imports exactly as the filesystem does, and check with `ls` when in doubt.
+6. **PnPjs is v4 (4.21.0)**, and three v3 habits no longer compile or silently misbehave: `items.getAll()` and `import '@pnp/sp/items/get-all'` are gone (use `getAllItems(query)` from `pp365-shared-library`, which always sends `$top`; for a single row use `.top(1)()`); `sp.termStore` and `@pnp/sp/taxonomy` are gone (use `getTermStore(sp.web)` from `pp365-shared-library`, and `getTermLabel` for labels, which applies the fixed chain web language, then `nb-NO`, then `en-US`); `add`/`update`/`ensureUser`/`addUsingPath` resolve to the payload itself (`IFileInfo`, `IFolderInfo`, `ISiteUserInfo`, the created item), never to `{ data, file, folder, group, node }` wrappers. `sp-entityportal-service` is vendored as `SpEntityPortalService` in the shared library. Unit tests (`src/**/*.test.ts`, run by every Heft build) must not import `@pnp/*` (ESM-only under the CommonJS Jest runner); test against structural stand-ins as `shared-library/src/taxonomy/*.test.ts` does.
 
 ## Conventions (summary — full details in `.development-guide/spfx/kodemonster.md`)
 
@@ -59,8 +60,16 @@ Inside a solution (`SharePointFramework/<Solution>/`):
 | Lint + Prettier | `npm run lint` |
 | Validate localization balance | `npm run validate-loc` |
 | Type-check only | `npx tsc --noEmit` |
+| Run the solution's unit and component tests (`heft test`, builds first) | `npm test` |
+| Run one test file | `npx heft test --test-path-pattern <name>` |
 
 After changing the loc files, run `validate-loc`. After changing `shared-library`, rebuild it (`rush rebuild -o pp365-shared-library`) so dependent solutions pick up the change.
+
+End-to-end smoke tests live in `e2e/` (Rush project `pp365-e2e`, Playwright) and run in CI after the test-channel upgrade; locally `cd e2e && npm test` with an `e2e/.env` from `.env.example`.
+
+## Testing
+
+Every Heft build runs the solution's `src/**/*.test.ts(x)` with Jest; a failing test fails the build. The shared harness is `pp365-jest-config` (`SharePointFramework/.jest-config`): jsdom, jest-dom, SPFx string modules resolved like at runtime, `@pnp/*` and `@microsoft/sp-*` stubbed. Components are tested with React Testing Library and `jest.mock` of their hook or data adapter; never import `@pnp/*` in a test. Full regime, failure handling and the Playwright suite: `.development-guide/spfx/testing.md` and the `pp365-testing` skill.
 
 ## Notes
 

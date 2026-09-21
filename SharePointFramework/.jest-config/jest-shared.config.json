@@ -1,0 +1,48 @@
+{
+  // Shared Jest configuration for the Prosjektportalen 365 SPFx solutions. Each solution's
+  // config/jest.config.json extends this file; this file extends the SPFx rig's configuration, so
+  // the rig's jsdom environment, lib-commonjs roots, coverage and JUnit reporting stay in place.
+  //
+  // What is added on top of the rig:
+  //  - setup.js: @testing-library/jest-dom matchers and the browser APIs Fluent UI expects that
+  //    jsdom lacks (matchMedia, ResizeObserver, IntersectionObserver, scrollTo).
+  //  - resolver.js: resolves SPFx localized string modules (SharedLibraryStrings, SharedResources,
+  //    <Solution>Strings, ...) exactly as SPFx does, from config/config.json "localizedResources",
+  //    to the nb-no bundle of that solution.
+  //  - moduleNameMapper: workspace packages to their lib-commonjs output, @pnp/* to a stub.
+  //  - amdTransform.js: converts those AMD `define([], function () { ... })` string bundles to
+  //    CommonJS so Jest can require them.
+  "extends": "@microsoft/spfx-web-build-rig/profiles/default/config/jest.config.json",
+
+  "setupFilesAfterEnv": ["<configDir>/lib/setup.js"],
+
+  "resolver": "<configDir>/lib/resolver.js",
+
+  // Workspace packages publish ESM in lib/ (for webpack) and CommonJS in lib-commonjs/ (for Jest).
+  // Node's `main` points at lib/, so redirect the three cross-solution packages to lib-commonjs/.
+  // `@pnp/*` is ESM-only and cannot be required at all; see lib/pnpStub.js. `@microsoft/sp-*` need
+  // Microsoft-internal modules and are page-provided externals at runtime; see lib/spfxStub.js.
+  "moduleNameMapper": {
+    "^(pp365-shared-library|pp365-projectwebparts|pp365-portfoliowebparts)$": "<rootDir>/node_modules/$1/lib-commonjs/index.js",
+    "^(pp365-shared-library|pp365-projectwebparts|pp365-portfoliowebparts)/lib/(.*)$": "<rootDir>/node_modules/$1/lib-commonjs/$2",
+    "^@pnp/.*$": "<configDir>/lib/pnpStub.js",
+    "^react-markdown$": "<configDir>/lib/reactMarkdownStub.js",
+    "^(rehype|remark)-[a-z-]+$": "<configDir>/lib/noopPluginStub.js",
+    "^@microsoft/sp-lodash-subset$": "<configDir>/lib/lodashSubset.js",
+    "^@microsoft/sp-.*$": "<configDir>/lib/spfxStub.js"
+  },
+
+  // The rig ignores everything in lib-commonjs for transformation because TypeScript already
+  // emitted CommonJS there. The localized string bundles are copied verbatim (they are hand
+  // written AMD), so they must be allowed through to the AMD transform.
+  "transformIgnorePatterns": ["[\\/]lib-commonjs[\\/](?!loc[\\/]).*\\.js$"],
+
+  "transform": {
+    "[\\/]loc[\\/](shared[\\/])?[a-z]{2}-[a-z]{2}\\.js$": "<configDir>/lib/amdTransform.js"
+  },
+
+  // Coverage is collected by the rig; the thresholds are deliberately not enforced yet.
+  // Component and unit tests are being introduced incrementally, see
+  // .development-guide/spfx/testing.md.
+  "collectCoverage": true
+}

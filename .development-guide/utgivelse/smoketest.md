@@ -1,5 +1,7 @@
 ## Smoke test-prosessen
 
+> Automatiske tester tar over stadig mer av dette: enhets- og komponenttester kjører i hvert bygg, og Playwright-røyktester kjører mot testkanalen etter hver utrulling. Se kapittelet «Testregime». Den manuelle smoke-testen dekker skriveflytene som ennå ikke er automatisert, og skal alltid lenke til siste E2E-kjøring.
+
 Denne siden forklarer hvordan smoke test gjennomføres for Prosjektportalen før hver release. Smoke test sikrer at alle hovedfunksjoner virker etter oppgradering eller ny installasjon.
 
 ### Hva er en smoke test?

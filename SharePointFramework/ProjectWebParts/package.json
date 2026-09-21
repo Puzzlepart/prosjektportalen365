@@ -75,41 +75,46 @@
   },
   "devDependencies": {
     "@microsoft/sp-module-interfaces": "1.23.2",
-    "@types/dom-to-image": "2.6.4",
-    "@types/get-value": "3.0.1",
-    "@types/react": "17.0.45",
-    "@types/react-dom": "17.0.17",
-    "@types/underscore": "~1.11.5",
-    "@types/webpack-env": "~1.15.2",
-    "dotenv": "~16.1.3",
-    "eslint": "9.37.0",
-    "prettier": "3.9.7",
-    "typescript": "~5.8.3",
-    "@types/lodash": "~4.14.195",
-    "@types/smoothscroll-polyfill": "~0.3.3",
-    "@types/shade-blend-color": "~1.0.3",
     "@microsoft/spfx-heft-plugins": "1.23.2",
     "@microsoft/spfx-web-build-rig": "1.23.2",
     "@rushstack/heft": "1.2.17",
+    "@testing-library/dom": "8.20.1",
+    "@testing-library/jest-dom": "6.6.3",
+    "@testing-library/react": "12.1.5",
+    "@testing-library/user-event": "14.6.7",
+    "@types/dom-to-image": "2.6.4",
+    "@types/get-value": "3.0.1",
     "@types/heft-jest": "1.0.2",
     "@types/jest": "30.0.0",
+    "@types/lodash": "~4.14.195",
+    "@types/react": "17.0.45",
+    "@types/react-dom": "17.0.17",
+    "@types/shade-blend-color": "~1.0.3",
+    "@types/smoothscroll-polyfill": "~0.3.3",
+    "@types/underscore": "~1.11.5",
+    "@types/webpack-env": "~1.15.2",
     "css-loader": "7.1.2",
-    "pp365-eslint-config": "workspace:*"
+    "dotenv": "~16.1.3",
+    "eslint": "9.37.0",
+    "pp365-eslint-config": "workspace:*",
+    "pp365-jest-config": "workspace:*",
+    "prettier": "3.9.7",
+    "typescript": "~5.8.3"
   },
   "gitmoji": {
     "build": [
-      "🏗️",
+      "\ud83c\udfd7\ufe0f",
       "Make architectural changes"
     ],
     "ci": [
-      "👷",
+      "\ud83d\udc77",
       "Add or update CI build system",
       [
         "integration"
       ]
     ],
     "chore": [
-      "💄",
+      "\ud83d\udc84",
       "Boring chores",
       [
         "boring",
@@ -117,7 +122,7 @@
       ]
     ],
     "docs": [
-      "📝",
+      "\ud83d\udcdd",
       "Added or updated documentation",
       [
         "doc",
@@ -125,70 +130,70 @@
       ]
     ],
     "feat": [
-      "✨",
+      "\u2728",
       "Introduced new features"
     ],
     "fix": [
-      "🐛",
+      "\ud83d\udc1b",
       "Fixed a bug",
       [
         "bugfix"
       ]
     ],
     "perf": [
-      "⚡",
+      "\u26a1",
       "Improved performance"
     ],
     "refactor": [
-      "♻️",
+      "\u267b\ufe0f",
       "Refactored code"
     ],
     "revert": [
-      "⏪",
+      "\u23ea",
       "Reverted changes"
     ],
     "style": [
-      "💄",
+      "\ud83d\udc84",
       "Added or updated the UI and style files"
     ],
     "test": [
-      "✅",
+      "\u2705",
       "Added or updated tests"
     ],
     "dev": [
-      "🔨",
+      "\ud83d\udd28",
       "Add or update development scripts"
     ],
     "i18n": [
-      "🌐",
+      "\ud83c\udf10",
       "Internationalization and localization"
     ],
     "changelog": [
-      "📓",
+      "\ud83d\udcd3",
       "Updated changelog"
     ],
     "readme": [
-      "📝",
+      "\ud83d\udcdd",
       "Updated readme"
     ],
     "typo": [
-      "✏️",
+      "\u270f\ufe0f",
       "Fixed typos"
     ],
     "rename": [
-      "🚚",
+      "\ud83d\ude9a",
       "Moved or renamed resources (e.g.: files, paths, routes)"
     ],
     "merge": [
-      "🔀",
+      "\ud83d\udd00",
       "Merged a branch into this one"
     ],
     "auth": [
-      "🛂",
+      "\ud83d\udec2",
       "Worked on code related to authorization, roles and permissions"
     ],
     "syntax": [
-      "✏️",
+      "\u270f\ufe0f",
       "Adjusted code syntax"
     ]
   },

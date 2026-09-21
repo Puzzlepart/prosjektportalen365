@@ -2,16 +2,16 @@
 
 **Project:** Prosjektportalen 365  
 **Version:** 1.14.0  
-**Generated:** 2026-09-21T07:41:58.408Z  
+**Generated:** 2026-09-21T11:13:28.121Z  
 **Format:** CycloneDX-inspired Markdown
 
 ## Overview
 
 This SBOM documents all software dependencies used in the Prosjektportalen 365 project, including all packages in the monorepo.
 
-**Total Dependencies:** 109  
+**Total Dependencies:** 114  
 **Production Dependencies:** 74  
-**Development Dependencies:** 35  
+**Development Dependencies:** 40  
 **Projects in Monorepo:** 8
 
 ## Projects in Monorepo
@@ -24,32 +24,32 @@ This SBOM documents all software dependencies used in the Prosjektportalen 365 p
 ### pp365-portfolioextensions (1.14.0)
 
 - **Production Dependencies:** 23
-- **Development Dependencies:** 18
+- **Development Dependencies:** 23
 
 ### pp365-portfoliowebparts (1.14.0)
 
 - **Production Dependencies:** 41
-- **Development Dependencies:** 21
+- **Development Dependencies:** 26
 
 ### pp365-programwebparts (1.14.0)
 
 - **Production Dependencies:** 35
-- **Development Dependencies:** 19
+- **Development Dependencies:** 24
 
 ### pp365-projectextensions (1.14.0)
 
 - **Production Dependencies:** 35
-- **Development Dependencies:** 19
+- **Development Dependencies:** 24
 
 ### pp365-projectwebparts (1.14.0)
 
 - **Production Dependencies:** 47
-- **Development Dependencies:** 21
+- **Development Dependencies:** 26
 
 ### pp365-shared-library (1.14.0)
 
 - **Production Dependencies:** 37
-- **Development Dependencies:** 18
+- **Development Dependencies:** 23
 
 ### pp365-templates (1.14.0)
 
@@ -139,7 +139,7 @@ This section lists all unique dependencies across all projects.
 | xlsx | ^0.16.9 | pp365-shared-library |
 | xmldom | 0.6.0 | pp365-shared-library |
 
-### Development Dependencies (35)
+### Development Dependencies (40)
 
 | Package | Version(s) | Used By |
 |---------|-----------|----------|
@@ -147,6 +147,10 @@ This section lists all unique dependencies across all projects.
 | @microsoft/spfx-heft-plugins | 1.23.2 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | @microsoft/spfx-web-build-rig | 1.23.2 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | @rushstack/heft | 1.2.17 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @testing-library/dom | 8.20.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @testing-library/jest-dom | 6.6.3 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @testing-library/react | 12.1.5 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @testing-library/user-event | 14.6.7 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | @types/dom-to-image | 2.6.4 | pp365-projectwebparts |
 | @types/get-value | 3.0.1 | pp365-projectwebparts |
 | @types/heft-jest | 1.0.2 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
@@ -170,6 +174,7 @@ This section lists all unique dependencies across all projects.
 | fs-extra | 11.1.0 | pp365 |
 | glob | 7.2.0 | pp365 |
 | pp365-eslint-config | workspace:* | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| pp365-jest-config | workspace:* | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | pp365-portfoliowebparts | workspace:* | pp365-programwebparts |
 | pp365-projectwebparts | workspace:* | pp365-portfoliowebparts, pp365-programwebparts |
 | prettier | 3.9.7 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
@@ -225,7 +230,7 @@ This section provides a detailed view of dependencies for each project.
 | tslib | 2.8.1 |
 | underscore | ~1.13.6 |
 
-#### Development Dependencies (18)
+#### Development Dependencies (23)
 
 | Package | Version |
 |---------|----------|
@@ -233,6 +238,10 @@ This section provides a detailed view of dependencies for each project.
 | @microsoft/spfx-heft-plugins | 1.23.2 |
 | @microsoft/spfx-web-build-rig | 1.23.2 |
 | @rushstack/heft | 1.2.17 |
+| @testing-library/dom | 8.20.1 |
+| @testing-library/jest-dom | 6.6.3 |
+| @testing-library/react | 12.1.5 |
+| @testing-library/user-event | 14.6.7 |
 | @types/heft-jest | 1.0.2 |
 | @types/jest | 30.0.0 |
 | @types/lodash | ~4.14.195 |
@@ -245,6 +254,7 @@ This section provides a detailed view of dependencies for each project.
 | dotenv | ~16.1.3 |
 | eslint | 9.37.0 |
 | pp365-eslint-config | workspace:* |
+| pp365-jest-config | workspace:* |
 | prettier | 3.9.7 |
 | typescript | ~5.8.3 |
 
@@ -296,7 +306,7 @@ This section provides a detailed view of dependencies for each project.
 | underscore | ~1.13.6 |
 | use-image-color | ~0.0.9 |
 
-#### Development Dependencies (21)
+#### Development Dependencies (26)
 
 | Package | Version |
 |---------|----------|
@@ -304,6 +314,10 @@ This section provides a detailed view of dependencies for each project.
 | @microsoft/spfx-heft-plugins | 1.23.2 |
 | @microsoft/spfx-web-build-rig | 1.23.2 |
 | @rushstack/heft | 1.2.17 |
+| @testing-library/dom | 8.20.1 |
+| @testing-library/jest-dom | 6.6.3 |
+| @testing-library/react | 12.1.5 |
+| @testing-library/user-event | 14.6.7 |
 | @types/heft-jest | 1.0.2 |
 | @types/jest | 30.0.0 |
 | @types/lodash | ~4.14.195 |
@@ -318,6 +332,7 @@ This section provides a detailed view of dependencies for each project.
 | dotenv | ~16.1.3 |
 | eslint | 9.37.0 |
 | pp365-eslint-config | workspace:* |
+| pp365-jest-config | workspace:* |
 | pp365-projectwebparts | workspace:* |
 | prettier | 3.9.7 |
 | typescript | ~5.8.3 |
@@ -364,7 +379,7 @@ This section provides a detailed view of dependencies for each project.
 | tslib | 2.8.1 |
 | underscore | ~1.13.6 |
 
-#### Development Dependencies (19)
+#### Development Dependencies (24)
 
 | Package | Version |
 |---------|----------|
@@ -372,6 +387,10 @@ This section provides a detailed view of dependencies for each project.
 | @microsoft/spfx-heft-plugins | 1.23.2 |
 | @microsoft/spfx-web-build-rig | 1.23.2 |
 | @rushstack/heft | 1.2.17 |
+| @testing-library/dom | 8.20.1 |
+| @testing-library/jest-dom | 6.6.3 |
+| @testing-library/react | 12.1.5 |
+| @testing-library/user-event | 14.6.7 |
 | @types/heft-jest | 1.0.2 |
 | @types/jest | 30.0.0 |
 | @types/lodash | ~4.14.195 |
@@ -383,6 +402,7 @@ This section provides a detailed view of dependencies for each project.
 | dotenv | ~16.1.3 |
 | eslint | 9.37.0 |
 | pp365-eslint-config | workspace:* |
+| pp365-jest-config | workspace:* |
 | pp365-portfoliowebparts | workspace:* |
 | pp365-projectwebparts | workspace:* |
 | prettier | 3.9.7 |
@@ -430,7 +450,7 @@ This section provides a detailed view of dependencies for each project.
 | usehooks-ts | ~2.9.1 |
 | valid-filename | 3.1.0 |
 
-#### Development Dependencies (19)
+#### Development Dependencies (24)
 
 | Package | Version |
 |---------|----------|
@@ -438,6 +458,10 @@ This section provides a detailed view of dependencies for each project.
 | @microsoft/spfx-heft-plugins | 1.23.2 |
 | @microsoft/spfx-web-build-rig | 1.23.2 |
 | @rushstack/heft | 1.2.17 |
+| @testing-library/dom | 8.20.1 |
+| @testing-library/jest-dom | 6.6.3 |
+| @testing-library/react | 12.1.5 |
+| @testing-library/user-event | 14.6.7 |
 | @types/heft-jest | 1.0.2 |
 | @types/jest | 30.0.0 |
 | @types/lodash | ~4.14.195 |
@@ -451,6 +475,7 @@ This section provides a detailed view of dependencies for each project.
 | dotenv | ~16.1.3 |
 | eslint | 9.37.0 |
 | pp365-eslint-config | workspace:* |
+| pp365-jest-config | workspace:* |
 | prettier | 3.9.7 |
 | typescript | ~5.8.3 |
 
@@ -508,7 +533,7 @@ This section provides a detailed view of dependencies for each project.
 | underscore | ~1.13.6 |
 | usehooks-ts | ~2.9.1 |
 
-#### Development Dependencies (21)
+#### Development Dependencies (26)
 
 | Package | Version |
 |---------|----------|
@@ -516,6 +541,10 @@ This section provides a detailed view of dependencies for each project.
 | @microsoft/spfx-heft-plugins | 1.23.2 |
 | @microsoft/spfx-web-build-rig | 1.23.2 |
 | @rushstack/heft | 1.2.17 |
+| @testing-library/dom | 8.20.1 |
+| @testing-library/jest-dom | 6.6.3 |
+| @testing-library/react | 12.1.5 |
+| @testing-library/user-event | 14.6.7 |
 | @types/dom-to-image | 2.6.4 |
 | @types/get-value | 3.0.1 |
 | @types/heft-jest | 1.0.2 |
@@ -531,6 +560,7 @@ This section provides a detailed view of dependencies for each project.
 | dotenv | ~16.1.3 |
 | eslint | 9.37.0 |
 | pp365-eslint-config | workspace:* |
+| pp365-jest-config | workspace:* |
 | prettier | 3.9.7 |
 | typescript | ~5.8.3 |
 
@@ -578,7 +608,7 @@ This section provides a detailed view of dependencies for each project.
 | xlsx | ^0.16.9 |
 | xmldom | 0.6.0 |
 
-#### Development Dependencies (18)
+#### Development Dependencies (23)
 
 | Package | Version |
 |---------|----------|
@@ -586,6 +616,10 @@ This section provides a detailed view of dependencies for each project.
 | @microsoft/spfx-heft-plugins | 1.23.2 |
 | @microsoft/spfx-web-build-rig | 1.23.2 |
 | @rushstack/heft | 1.2.17 |
+| @testing-library/dom | 8.20.1 |
+| @testing-library/jest-dom | 6.6.3 |
+| @testing-library/react | 12.1.5 |
+| @testing-library/user-event | 14.6.7 |
 | @types/heft-jest | 1.0.2 |
 | @types/jest | 30.0.0 |
 | @types/lodash | ~4.14.195 |
@@ -598,6 +632,7 @@ This section provides a detailed view of dependencies for each project.
 | css-loader | 7.1.2 |
 | eslint | 9.37.0 |
 | pp365-eslint-config | workspace:* |
+| pp365-jest-config | workspace:* |
 | prettier | 3.9.7 |
 | typescript | ~5.8.3 |
 

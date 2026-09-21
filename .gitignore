@@ -47,3 +47,5 @@ Templates/Portfolio/Objects/ClientSidePages/*.json
 logs/*
 SharePointFramework/.tasks/__last_run_data.json
 !.claude/skills/
+# Playwright CLI output (may contain credentials)
+.playwright-cli/

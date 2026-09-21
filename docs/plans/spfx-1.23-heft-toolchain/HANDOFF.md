@@ -184,6 +184,10 @@ The first Phase 1 CI run failed on `macos-latest` with `FATAL ERROR: Reached hea
 
 Working rule for tests: Heft runs Jest on `src/**/*.test.ts` during every build. `@pnp/*` 4 is ESM-only and the Jest runner is CommonJS, so tests for code that talks to PnPjs are written against structural stand-ins (see `shared-library/src/services/EntityPortalService/pnpShapes.ts` and `src/taxonomy/*.test.ts`), never by importing `@pnp/*` in a test.
 
+## Testing regime (added 2026-09-21)
+
+Automated tests now gate every build and the test-channel deploy. Read `.development-guide/spfx/testing.md` and the `pp365-testing` skill before writing or fixing tests. Summary: `heft test` runs `src/**/*.test.ts(x)` in every solution build through the shared harness `pp365-jest-config` (SharePointFramework/.jest-config); `Install/Build-Release.ps1` fails when a solution does not emit a fresh `.sppkg` or when a bundle lists a `pp365-*` external; `e2e/` (Rush project `pp365-e2e`, Playwright) runs read-only smoke tests against the test tenant in `ci-channel-test.yml` after the upgrade job. The e2e job needs the `E2E_USERNAME`/`E2E_PASSWORD` secrets and the `E2E_PROJECT_URL` variable; the specs were written without tenant access and may need healing on the first run (use the `playwright-cli` skill).
+
 ## Later phases (not started)
 
 Phase 3 Fluent v8 to v9 completion (v8 in ~214 files) and dependency hygiene. Phase 4 React 18 with SPFx 1.24 GA. Phase 5 runtime library component for `pp365-shared-library`. Details at the end of the Phase 1 plan.

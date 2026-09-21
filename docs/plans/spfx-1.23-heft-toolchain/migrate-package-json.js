@@ -60,6 +60,12 @@ const DEV = {
   // It must use the workspace protocol: Rush runs pnpm with --link-workspace-packages false,
   // so a plain version range is fetched from the registry, and this package is private.
   'pp365-eslint-config': 'workspace:*',
+  // Testing harness (see .development-guide/spfx/testing.md)
+  'pp365-jest-config': 'workspace:*',
+  '@testing-library/react': '12.1.5',
+  '@testing-library/dom': '8.20.1',
+  '@testing-library/jest-dom': '6.6.3',
+  '@testing-library/user-event': '14.6.7',
   eslint: '9.37.0',
   prettier: '3.9.7',
   typescript: '~5.8.3'

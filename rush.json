@@ -49,6 +49,16 @@
             "packageName": "pp365-eslint-config",
             "projectFolder": "SharePointFramework/.eslint-config",
             "shouldPublish": false
+        },
+        {
+            "packageName": "pp365-jest-config",
+            "projectFolder": "SharePointFramework/.jest-config",
+            "shouldPublish": false
+        },
+        {
+            "packageName": "pp365-e2e",
+            "projectFolder": "e2e",
+            "shouldPublish": false
         }
     ]
 }

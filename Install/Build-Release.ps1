@@ -110,7 +110,7 @@ $START_PATH = Get-Location
 $ROOT_PATH = "$PSScriptRoot/.."
 $SHAREPOINT_FRAMEWORK_BASEPATH = "$ROOT_PATH/SharePointFramework"
 $PNP_TEMPLATES_BASEPATH = "$ROOT_PATH/Templates"
-$SITE_SCRIPTS_BASEPATH = "$ROOT_PATH/SiteScripts/Src"
+$SITE_SCRIPTS_BASEPATH = "$ROOT_PATH/SiteScripts/src"
 $PNP_BUNDLE_PATH = "$PSScriptRoot/PnP.PowerShell"
 # Get-PnPVersion hentes fra SharedFunctions.ps1 i et isolert scope,
 # slik at StartAction/EndAction definert i denne filen ikke overskrives
@@ -319,6 +319,7 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
     # gitignored via **/*.build.log) and dumped if the build fails, so compile
     # errors are never silently swallowed.
     $RUSH_REBUILD_LOG = "$SHAREPOINT_FRAMEWORK_BASEPATH/rush-rebuild.build.log"
+    $RUSH_REBUILD_STARTED = (Get-Date).ToUniversalTime()
     node "$ROOT_PATH/common/scripts/install-run-rush.js" rebuild 2>&1 | Out-File -FilePath $RUSH_REBUILD_LOG -Encoding utf8
     if ($LASTEXITCODE -ne 0) {
         Write-Host "[ERROR] rush rebuild failed with exit code $LASTEXITCODE. Last 200 lines of $($RUSH_REBUILD_LOG):" -ForegroundColor Red
@@ -335,12 +336,30 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
         $SOLUTION_CONFIG_PATH = "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution/config/package-solution.json"
         $ZIPPED_PACKAGE = (Get-Content $SOLUTION_CONFIG_PATH -Raw | ConvertFrom-Json).paths.zippedPackage
         $SPPKG_PATH = "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution/sharepoint/$ZIPPED_PACKAGE"
-        if (Test-Path $SPPKG_PATH) {
-            Copy-Item $SPPKG_PATH -Destination $RELEASE_PATH_APPS -Force
+        # Packaging proof, part 1: every selected solution must have emitted its declared package
+        # during THIS run. A missing or stale .sppkg (left over from an earlier build) means the
+        # build did not produce what Install.ps1 will deploy, so fail instead of shipping it.
+        if (-not (Test-Path $SPPKG_PATH)) {
+            Write-Host "[ERROR] $Solution did not emit $ZIPPED_PACKAGE. See $RUSH_REBUILD_LOG." -ForegroundColor Red
+            exit 1
         }
-        else {
-            Write-Host "[WARNING] $Solution did not emit $ZIPPED_PACKAGE - skipping" -ForegroundColor Yellow
+        if ((Get-Item $SPPKG_PATH).LastWriteTimeUtc -lt $RUSH_REBUILD_STARTED) {
+            Write-Host "[ERROR] $ZIPPED_PACKAGE for $Solution predates this build ($((Get-Item $SPPKG_PATH).LastWriteTimeUtc) UTC); rush rebuild did not re-emit it." -ForegroundColor Red
+            exit 1
         }
+        # Packaging proof, part 2: the shared library must be bundled, never a runtime dependency
+        # (Decision A in docs/plans/spfx-1.23-heft-toolchain.md). Heft externalizes a linked
+        # workspace package when its dist holds exactly one manifest, and the only symptom at
+        # runtime is a missing-module error in the browser. Catch it here: no AMD define header
+        # in dist may list a pp365-* package.
+        $ExternalHits = Get-ChildItem "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution/dist" -Filter *.js -File -ErrorAction SilentlyContinue |
+            Select-String -Pattern 'define\(\[[^\]]*pp365-[^\]]*\]' -List
+        if ($ExternalHits) {
+            Write-Host "[ERROR] $Solution bundles reference a pp365-* package as an external (shared library not bundled):" -ForegroundColor Red
+            $ExternalHits | ForEach-Object { Write-Host "        $($_.Filename)" -ForegroundColor Red }
+            exit 1
+        }
+        Copy-Item $SPPKG_PATH -Destination $RELEASE_PATH_APPS -Force
     }
     # Fail loudly rather than ship a release with no apps (e.g. an unrecognised
     # solution name, or a solution that built without emitting an .sppkg).
