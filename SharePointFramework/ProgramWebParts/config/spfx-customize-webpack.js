@@ -262,6 +262,42 @@ function keepLinkedPackagesBundled(webpackConfig, log) {
  * @param {import('webpack').Configuration} webpackConfig
  * @param {{ logger: { terminal: { writeVerboseLine: (message: string) => void } } }} taskSession
  */
+/**
+ * Plain stylesheets imported from node_modules are global CSS, not CSS modules.
+ *
+ * The rig routes every `.css` file that is not named `*.global.css` through the CSS-modules loader
+ * (`CSS_MODULE_RULE_TEST` in spfx-heft-plugins' WebpackConfigurationGenerator), which hashes the
+ * class names. That is right for our own `.module.scss`, but wrong for third-party stylesheets
+ * such as `react-calendar-timeline/lib/Timeline.css` and `@fluentui/react/dist/css/fabric.min.css`:
+ * the library's DOM uses the plain class names, so the hashed rules never match and the timeline
+ * collapsed into an unclickable overlay after the Heft migration. The gulp toolchain treated
+ * node_modules CSS as global; this restores that by excluding node_modules from the module rule
+ * and adding a node_modules-only rule that reuses the rig's global-CSS loader chain.
+ */
+function treatNodeModulesCssAsGlobal(webpackConfig, log) {
+  const rules = webpackConfig?.module?.rules
+  if (!Array.isArray(rules)) return
+  const NODE_MODULES = /[\\/]node_modules[\\/]/
+  const isRegExp = (value) => value instanceof RegExp
+  const moduleRule = rules.find(
+    (rule) => isRegExp(rule?.test) && rule.test.source.startsWith('(?<!\\.global') && rule.test.source.endsWith('\\.css$')
+  )
+  const globalRule = rules.find(
+    (rule) => isRegExp(rule?.test) && rule.test.source.startsWith('\\.global') && rule.test.source.endsWith('\\.css$')
+  )
+  if (!moduleRule || !globalRule) {
+    log('CSS rules of the rig not found; node_modules stylesheets keep the default handling')
+    return
+  }
+  moduleRule.exclude = moduleRule.exclude ? [].concat(moduleRule.exclude, NODE_MODULES) : NODE_MODULES
+  rules.splice(rules.indexOf(globalRule) + 1, 0, {
+    ...globalRule,
+    test: /\.css$/i,
+    include: NODE_MODULES
+  })
+  log('node_modules .css files are compiled as global stylesheets')
+}
+
 module.exports = function customizeWebpackConfiguration(webpackConfig, taskSession) {
   const log = (message) => {
     try {
@@ -275,5 +311,6 @@ module.exports = function customizeWebpackConfiguration(webpackConfig, taskSessi
     if (!configuration) continue
     applyTsconfigAliases(configuration, log)
     keepLinkedPackagesBundled(configuration, log)
+    treatNodeModulesCssAsGlobal(configuration, log)
   }
 }

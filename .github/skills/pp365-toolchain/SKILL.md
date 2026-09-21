@@ -108,6 +108,10 @@ grep -o 'define(\[[^]]*\]' SharePointFramework/PortfolioWebParts/dist/*.js | gre
 - Linux is case sensitive: `SiteScripts/src`, `Install/Build-Release.ps1`. Audit path literals in `.tasks/*.js`, `Templates/.tasks/*.js` and `Install/*.ps1` after renaming anything; macOS will not catch it.
 - Tests: see the `pp365-testing` skill. `heft test` is part of every build; `e2e/` is the Playwright project run after the test-channel deploy.
 
+## CSS from node_modules
+
+The rig runs every `.css` that is not `*.global.css` through the CSS-modules loader and hashes the class names. Third-party stylesheets (`react-calendar-timeline/lib/Timeline.css`, `@fluentui/react/dist/css/fabric.min.css`) are global by nature, so `config/spfx-customize-webpack.js` (`treatNodeModulesCssAsGlobal`) excludes node_modules from the module rule and adds a node_modules-only rule on the rig's global-CSS loaders. Symptom when this is missing: the timeline collapses into an unclickable overlay. Verify after a build: `grep -c 'react-calendar-timeline_' dist/project-timeline-web-part_*.js` must be 0.
+
 ## Do not
 
 - Do not pin Node below 22 or run the Heft toolchain on Node 16/18.

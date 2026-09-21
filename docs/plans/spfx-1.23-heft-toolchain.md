@@ -634,6 +634,10 @@ Escape hatch: the branch is isolated; `releases/1.15` keeps building with Node 1
 | `@uifabric/utilities`, `@uifabric/file-type-icons` | 6.45.1, 7.6.27 | unchanged | replace in Phase 3 |
 | `sp-js-provisioning`, `sp-entityportal-service`, `spfx-jsom`, `msgraph-helper`, `pzl-spfx-components` | current | unchanged | Puzzlepart packages; PnPjs 4 work in Phase 2 |
 
+## Defects found after deployment (2026-09-21)
+
+- **Third-party CSS hashed as CSS modules.** The rig's webpack config treats every `.css` not named `*.global.css` as a CSS module, so `react-calendar-timeline/lib/Timeline.css` and `fabric.min.css` got hashed class names and the project timeline rendered as an unclickable overlay (its DOM uses the plain names). Fixed in `config/spfx-customize-webpack.js` (`treatNodeModulesCssAsGlobal`): node_modules stylesheets bypass the module rule and use the rig's global-CSS loaders. Found by manual smoke testing; the Playwright suite only checks that the timeline web part mounts, not its layout.
+
 ## Deferred to later phases
 
 - **Phase 2, PnPjs 4.21**: implemented 2026-09-21, see `docs/plans/pnpjs-4-migration.md` (scoping corrected several of the numbers first written here: 27 result-shape sites, not 3; `presets/all` still exists; taxonomy was ported into shared-library rather than moved to Graph; `sp-entityportal-service` was vendored; `sp-js-provisioning` gets a PnPjs 4 minor release, 1.4.0).
