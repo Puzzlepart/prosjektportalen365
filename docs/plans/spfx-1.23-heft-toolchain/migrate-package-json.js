@@ -80,7 +80,11 @@ const BUMP_IF_PRESENT = {
 
 const scriptsFor = (solution, existing) => {
   const s = { ...existing }
-  s.build = 'heft build --clean --production && heft package-solution --production'
+  // `heft test` runs the build phase first and then Jest, so this is a superset of `heft build`.
+  // The Jest plugin defaults to passWithNoTests, so solutions without tests are unaffected, and
+  // adding a test to any solution makes it gate both `npm run build` and CI.
+  s.build = 'heft test --clean --production && heft package-solution --production'
+  s.test = 'heft test'
   s.clean = 'heft clean'
   if (solution !== LIBRARY) {
     s.start = 'heft start'

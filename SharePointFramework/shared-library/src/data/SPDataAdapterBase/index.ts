@@ -4,10 +4,11 @@ import { IPnPClientStore, PnPClientStorage } from '@pnp/core'
 import { SPFI } from '@pnp/sp'
 import '@pnp/sp/presets/all'
 import { IWeb, PermissionKind } from '@pnp/sp/presets/all'
-import { SpEntityPortalService } from 'sp-entityportal-service'
 import _ from 'underscore'
 import { ItemFieldValue, ItemFieldValues, ProjectAdminRoleType, SPField } from '../../models'
+import { SpEntityPortalService } from '../../services/EntityPortalService'
 import { PortalDataService } from '../../services/PortalDataService/PortalDataService'
+import { getTermLabel, getTermStore } from '../../taxonomy'
 import { SPFxContext } from '../../types'
 import { DefaultCaching } from '../cache'
 import { createSpfiInstance } from '../createSpfiInstance'
@@ -131,7 +132,7 @@ export class SPDataAdapterBase<
    */
   private async getCurrentUser(user: SPUser) {
     try {
-      const { data: currentUser } = await this.sp.web.ensureUser(user.loginName ?? user.email)
+      const currentUser = await this.sp.web.ensureUser(user.loginName ?? user.email)
       return currentUser
     } catch (error) {
       console.warn(
@@ -283,7 +284,12 @@ export class SPDataAdapterBase<
 
   /**
    * Get terms from term set as `ITag[]`. The result is filtered by `filter` and `selectedItems`.
-   * Specify `languageTag` to get terms in a specific language (default `nb-NO`).
+   * Specify `languageTag` to get terms in a specific language (default `nb-NO`). Labels are
+   * resolved with `getTermLabel`, so a term without a label in that language falls back to
+   * `nb-NO`, then `en-US`, then its first label.
+   *
+   * Reads the SharePoint term store through the shared taxonomy client, which follows server
+   * paging so term sets larger than one page are returned in full.
    *
    * @param termSetId Term set ID
    * @param filter Filter string
@@ -296,19 +302,13 @@ export class SPDataAdapterBase<
     selectedItems: any[],
     languageTag = 'nb-NO'
   ): Promise<ITag[]> {
-    const terms = await this.sp.termStore.sets.getById(termSetId).terms()
+    const terms = await getTermStore(this.sp.web).sets.getById(termSetId).terms.all()
     const tags = terms
       .filter((term) => !term.isDeprecated)
-      .map<ITag>((term) => {
-        const label =
-          term.labels.find((label) => label.languageTag === languageTag) ||
-          term.labels.find((label) => label.languageTag === 'en-US')
-        const name = label ? label.name : ''
-        return {
-          key: term.id,
-          name
-        }
-      })
+      .map<ITag>((term) => ({
+        key: term.id,
+        name: getTermLabel(term, languageTag)
+      }))
     return tags
       .filter((tag) => tag.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1)
       .filter((tag) => !selectedItems.find((item) => item.name === tag.name))
@@ -462,7 +462,7 @@ export class SPDataAdapterBase<
                 return properties
               }
               const destinationUserId =
-                (await destinationWeb.ensureUser(user.LoginName))?.data?.Id ?? null
+                (await destinationWeb.ensureUser(user.LoginName))?.Id ?? null
               properties[userFieldName] = destinationUserId
             }
             break
@@ -482,7 +482,7 @@ export class SPDataAdapterBase<
                 users.map(({ LoginName }) => destinationWeb.ensureUser(LoginName))
               )
               const destinationUserIds = ensureResults.flatMap((r) =>
-                r.status === 'fulfilled' && r.value?.data?.Id ? [r.value.data.Id] : []
+                r.status === 'fulfilled' && r.value?.Id ? [r.value.Id] : []
               )
               properties[userFieldName] = options.wrapMultiValuesInResultsArray
                 ? { results: destinationUserIds }

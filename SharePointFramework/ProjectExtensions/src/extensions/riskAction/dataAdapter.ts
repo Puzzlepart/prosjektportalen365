@@ -77,8 +77,12 @@ export class DataAdapter extends SPDataAdapterBase {
     const buckets = await this.graph.planner.plans.getById(planId).buckets()
     const bucket = buckets.find(({ name }) => name === bucketName)
     if (bucket) return bucket.id
-    const bucketAddResult = await this.graph.planner.buckets.add(bucketName, planId, ' !')
-    return bucketAddResult.data.id
+    const addedBucket = await this.graph.planner.buckets.add({
+      name: bucketName,
+      planId,
+      orderHint: ' !'
+    })
+    return addedBucket.id
   }
 
   /**
@@ -121,13 +125,14 @@ export class DataAdapter extends SPDataAdapterBase {
       }
       const defaultPlan = await this._getDefaultGroupPlan()
       const bucketId = await this._ensureBucket(defaultPlan.id)
-      const { task, data } = await this.graph.planner.tasks.add(
-        defaultPlan.id,
-        model.get('title'),
-        null,
+      const createdTask = await this.graph.planner.tasks.add({
+        planId: defaultPlan.id,
+        title: model.get('title'),
         bucketId
-      )
-      let eTag = data['@odata.etag']
+      })
+      const task = this.graph.planner.tasks.getById(createdTask.id)
+      // PnPjs 4 resolves `add` to the created task payload, which carries the Planner ETag.
+      let eTag = createdTask['@odata.etag'] ?? '*'
       const taskUpdate = {
         assignments,
         startDateTime: model.get('startDate') ?? null,
@@ -149,7 +154,7 @@ export class DataAdapter extends SPDataAdapterBase {
         },
         eTag
       )
-      return data
+      return createdTask
     } catch (e) {
       return null
     }

@@ -165,8 +165,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
 
   /**
    * Sync property item from site to associated hub. `this.getMappedProjectProperties` is used to
-   * map the properties item fields to the hub fields. `updateEntityItem` from `sp-entityportal-service`
-   * is used to update the hub entity item. If any errors occur, the original error is passed to the caller.
+   * map the properties item fields to the hub fields. `updateEntityItem` from `SpEntityPortalService`
+   * (pp365-shared-library) is used to update the hub entity item. If any errors occur, the original
+   * error is passed to the caller.
    *
    * @param title Title of the project
    * @param fieldValues Field values for the properties item

@@ -22,6 +22,7 @@ import '@pnp/sp/items'
 import '@pnp/sp/folders'
 import '@pnp/sp/files'
 import '@pnp/sp/files/folder'
+import type { IFileInfo } from '@pnp/sp/files'
 import _ from 'lodash'
 import { useExcelExport, useCustomActionDialog } from './hooks'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
@@ -228,7 +229,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         const listRootPath = listData.RootFolder.ServerRelativeUrl
 
         for (const file of files) {
-          let addedFile
+          let addedFile: IFileInfo
           if (folderPath) {
             const folderServerRelativeUrl = `${listRootPath}/${folderPath}`
             sessionStorage.DEBUG ||
@@ -247,7 +248,12 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
           }
 
           if (context.props.useSiteIdFiltering && addedFile) {
-            await stampSiteIdFieldsOnFile(addedFile, context.props.siteId, context.props.webTitle)
+            await stampSiteIdFieldsOnFile(
+              context.web,
+              addedFile,
+              context.props.siteId,
+              context.props.webTitle
+            )
           }
         }
 
@@ -324,7 +330,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         }
 
         const emptyFile = new Blob([], { type: contentType })
-        let addedFile
+        let addedFile: IFileInfo
         if (folderPath) {
           const folderServerRelativeUrl = `${listRootPath}/${folderPath}`
           sessionStorage.DEBUG ||
@@ -345,7 +351,12 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         }
 
         if (context.props.useSiteIdFiltering && addedFile) {
-          await stampSiteIdFieldsOnFile(addedFile, context.props.siteId, context.props.webTitle)
+          await stampSiteIdFieldsOnFile(
+            context.web,
+            addedFile,
+            context.props.siteId,
+            context.props.webTitle
+          )
         }
 
         context.setState({ refetch: Date.now() })
@@ -388,7 +399,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
           }
 
           const result = await list.items.add(properties)
-          const newItemId = result.data.ID
+          const newItemId = result.ID
 
           await dismissPanelWithNewItem(newItemId)
         }

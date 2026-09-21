@@ -1,4 +1,5 @@
-import { IListEnsureResult } from '@pnp/sp/lists'
+// IListEnsureResult still exists in PnPjs 4 but is no longer re-exported from the lists barrel.
+import { IListEnsureResult } from '@pnp/sp/lists/types'
 import { SPField } from '../../models'
 import { SPFxContext } from '../../types'
 import strings from 'SharedLibraryStrings'

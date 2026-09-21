@@ -5,7 +5,6 @@ import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, getHashCode, PnPClientStorage } from '@pnp/core'
 import { LogLevel } from '@pnp/logging'
 import { spfi, SPFx } from '@pnp/sp'
-import '@pnp/sp/items/get-all'
 import {
   ISearchResult,
   ISiteUserInfo,
@@ -23,6 +22,7 @@ import {
   DataSource,
   DataSourceService,
   expandRowsPerStatusSeries,
+  getAllItems,
   getClassProperties,
   getItemFieldValues,
   getOrFetchProjectsCache,
@@ -532,17 +532,19 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
     let timelineItems: any[]
     try {
-      timelineItems = await this._sp.web.lists
-        .getByTitle(resource.Lists_TimelineContent_Title)
-        .items.select(...baseFields, 'GtTag')
-        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-        .getAll()
+      timelineItems = await getAllItems(
+        this._sp.web.lists
+          .getByTitle(resource.Lists_TimelineContent_Title)
+          .items.select(...baseFields, 'GtTag')
+          .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+      )
     } catch {
-      timelineItems = await this._sp.web.lists
-        .getByTitle(resource.Lists_TimelineContent_Title)
-        .items.select(...baseFields)
-        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-        .getAll()
+      timelineItems = await getAllItems(
+        this._sp.web.lists
+          .getByTitle(resource.Lists_TimelineContent_Title)
+          .items.select(...baseFields)
+          .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+      )
     }
 
     return timelineItems
@@ -738,7 +740,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     const selectFields = this._buildProjectItemsSelectFields(fields)
     const fieldsHash = getHashCode(selectFields.slice().sort().join(','))
     return getOrFetchProjectsCache('items', `${siteId}_${fieldsHash}`, () =>
-      list.items.select(...selectFields).getAll()
+      getAllItems(list.items.select(...selectFields))
     )
   }
 
@@ -930,10 +932,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       cacheKey,
       async () =>
         await Promise.all([
-          list.items
-            .select(...selectFields)
-            .filter(`GtSiteId eq '${siteId}'`)
-            .getAll(),
+          getAllItems(list.items.select(...selectFields).filter(`GtSiteId eq '${siteId}'`)),
           this._fetchItems(`SiteId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId']),
           this.fetchMemberGroups(),
           spHub.web.siteUsers.select('Id', 'Title', 'Email')()

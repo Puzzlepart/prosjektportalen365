@@ -276,8 +276,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       }
       const addedNode = await this.sp.web.navigation.quicklaunch.add(node.Title, node.SimpleUrl)
       if (node.Nodes.length > 0) {
+        const children = this.sp.web.navigation.quicklaunch.getById(addedNode.Id).children
         for await (const childNode of node.Nodes) {
-          await addedNode.node.children.add(childNode.Title, childNode.SimpleUrl)
+          await children.add(childNode.Title, childNode.SimpleUrl)
         }
       }
     }

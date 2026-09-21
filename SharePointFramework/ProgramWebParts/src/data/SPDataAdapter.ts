@@ -1,7 +1,6 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { PnPClientStorage, dateAdd } from '@pnp/core'
-import '@pnp/sp/items/get-all'
 import {
   ISearchResult,
   QueryPropertyValueType,
@@ -30,6 +29,7 @@ import {
   DataSource,
   DataSourceService,
   expandRowsPerStatusSeries,
+  getAllItems,
   getOrFetchProjectsCache,
   groupLatestReportBySeries,
   parseScopedSiteId,
@@ -511,17 +511,19 @@ export class SPDataAdapter
 
     let timelineItems: any[]
     try {
-      timelineItems = await this.portalDataService.web.lists
-        .getByTitle(resource.Lists_TimelineContent_Title)
-        .items.select(...baseFields, 'GtTag')
-        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-        .getAll()
+      timelineItems = await getAllItems(
+        this.portalDataService.web.lists
+          .getByTitle(resource.Lists_TimelineContent_Title)
+          .items.select(...baseFields, 'GtTag')
+          .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+      )
     } catch {
-      timelineItems = await this.portalDataService.web.lists
-        .getByTitle(resource.Lists_TimelineContent_Title)
-        .items.select(...baseFields)
-        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-        .getAll()
+      timelineItems = await getAllItems(
+        this.portalDataService.web.lists
+          .getByTitle(resource.Lists_TimelineContent_Title)
+          .items.select(...baseFields)
+          .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+      )
     }
 
     return timelineItems
@@ -563,19 +565,20 @@ export class SPDataAdapter
    * @description Used in `ProjectTimeline`
    */
   public async fetchTimelineConfiguration() {
-    const timelineConfig = await this.portalDataService.web.lists
-      .getByTitle(resource.Lists_TimelineConfiguration_Title)
-      .items.select(
-        'GtSortOrder',
-        'Title',
-        'GtHexColor',
-        'GtTimelineCategory',
-        'GtElementType',
-        'GtShowElementPortfolio',
-        'GtShowElementProgram',
-        'GtTimelineFilter'
-      )
-      .getAll()
+    const timelineConfig = await getAllItems(
+      this.portalDataService.web.lists
+        .getByTitle(resource.Lists_TimelineConfiguration_Title)
+        .items.select(
+          'GtSortOrder',
+          'Title',
+          'GtHexColor',
+          'GtTimelineCategory',
+          'GtElementType',
+          'GtShowElementPortfolio',
+          'GtShowElementProgram',
+          'GtTimelineFilter'
+        )
+    )
 
     return timelineConfig.map((item) => new TimelineConfigurationModel(item)).filter((p) => p)
   }
@@ -701,14 +704,15 @@ export class SPDataAdapter
    */
   private async _fetchProjectItems(siteId: string): Promise<SPProjectItem[]> {
     return getOrFetchProjectsCache('items', siteId, () =>
-      this.portalDataService.web.lists
-        .getByTitle(resource.Lists_Projects_Title)
-        .items.select(...Object.keys(new SPProjectItem()))
-        .filter(
-          `GtProjectLifecycleStatus ne '${resource.Choice_GtProjectLifecycleStatus_Closed}' and GtProjectLifecycleStatus ne '${strings.LifecycleStatus_Closed}'`
-        )
-        .orderBy('Title')
-        .getAll<SPProjectItem>()
+      getAllItems<SPProjectItem>(
+        this.portalDataService.web.lists
+          .getByTitle(resource.Lists_Projects_Title)
+          .items.select(...Object.keys(new SPProjectItem()))
+          .filter(
+            `GtProjectLifecycleStatus ne '${resource.Choice_GtProjectLifecycleStatus_Closed}' and GtProjectLifecycleStatus ne '${strings.LifecycleStatus_Closed}'`
+          )
+          .orderBy('Title')
+      )
     )
   }
 

@@ -1,3 +1,6 @@
+import type { IWeb } from '@pnp/sp/webs'
+import type { IFileInfo } from '@pnp/sp/files'
+import '@pnp/sp/files'
 import type { IDynamicListContext } from '../context'
 
 /**
@@ -39,21 +42,26 @@ export async function stampSiteIdFields(
 }
 
 /**
- * Stamps GtSiteId and GtSiteTitle on a file item (via file.getItem()) when site ID filtering is enabled.
+ * Stamps GtSiteId and GtSiteTitle on a file item when site ID filtering is enabled.
  *
- * @param addedFile - The PnPJS file result from addUsingPath
+ * PnPjs v4 `files.addUsingPath` resolves to the created file's `IFileInfo` (no `IFile` handle),
+ * so the list item is resolved through `web.getFileByServerRelativePath(...).getItem()`.
+ *
+ * @param web - The web the file was added to
+ * @param addedFile - The `IFileInfo` returned by `files.addUsingPath`
  * @param siteId - The site ID to set
  * @param siteTitle - The site title to set
  */
 export async function stampSiteIdFieldsOnFile(
-  addedFile: any,
+  web: IWeb,
+  addedFile: IFileInfo,
   siteId?: string,
   siteTitle?: string
 ): Promise<void> {
   if (!siteId && !siteTitle) return
 
   try {
-    const fileItem = await addedFile.file.getItem()
+    const fileItem = await web.getFileByServerRelativePath(addedFile.ServerRelativeUrl).getItem()
     const updateProps: Record<string, any> = {}
     if (siteId) updateProps.GtSiteId = siteId
     if (siteTitle) updateProps.GtSiteTitle = siteTitle

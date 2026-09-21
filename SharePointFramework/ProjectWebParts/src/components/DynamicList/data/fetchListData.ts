@@ -1,14 +1,17 @@
 import { IColumn } from '@fluentui/react'
 import { IDynamicListProps, IDynamicListData } from '../types'
 import SPDataAdapter from '../../../data'
-import { EditableSPField, ProjectContentColumn } from 'pp365-shared-library'
+import {
+  EditableSPField,
+  ProjectContentColumn,
+  getAllItems,
+  getTermStore
+} from 'pp365-shared-library'
 import type { IWeb } from '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/fields'
 import '@pnp/sp/items'
-import '@pnp/sp/items/get-all'
 import '@pnp/sp/views'
-import '@pnp/sp/taxonomy'
 import { TaxonomyTermModel } from '../models/TaxonomyTermModel'
 import { isVisibleListField, normalizeViewFieldNames } from '../utils/fieldUtils'
 
@@ -263,10 +266,7 @@ async function fetchAllItemsChunked(
       ]
   const baseExpand = isDocumentLibrary ? ['Author', 'Editor', 'File'] : ['Author', 'Editor']
 
-  const baseItems = await list.items
-    .select(...baseSelect)
-    .expand(...baseExpand)
-    .getAll()
+  const baseItems = await getAllItems(list.items.select(...baseSelect).expand(...baseExpand))
 
   if (userExpands.length === 0) {
     return baseItems
@@ -276,11 +276,9 @@ async function fetchAllItemsChunked(
 
   const chunkResults = await Promise.all(
     chunk(userExpands, MAX_USER_FIELD_EXPANDS_PER_QUERY).map((fieldNames) =>
-      list.items
-        .select('Id', ...userFieldSelects(fieldNames))
-        .expand(...fieldNames)
-        .getAll()
-        .then((rows: any[]) => ({ fieldNames, rows }))
+      getAllItems(
+        list.items.select('Id', ...userFieldSelects(fieldNames)).expand(...fieldNames)
+      ).then((rows: any[]) => ({ fieldNames, rows }))
     )
   )
 
@@ -387,9 +385,10 @@ async function fetchTaxonomyTermsForColumns(
     await Promise.all(
       termSetIds.map(async (termSetId) => {
         try {
-          const terms = await SPDataAdapter.sp.termStore.sets
-            .getById(termSetId)
-            .terms.select('*', 'localProperties')()
+          const terms = await getTermStore(SPDataAdapter.sp.web)
+            .sets.getById(termSetId)
+            .terms.select('*', 'localProperties')
+            .all()
           const taxonomyTerms = terms.map((term) => new TaxonomyTermModel(term, termSetId, lcid))
           termsMap.set(termSetId, taxonomyTerms)
         } catch (error) {

@@ -2,15 +2,15 @@
 
 **Project:** Prosjektportalen 365  
 **Version:** 1.14.0  
-**Generated:** 2026-09-16T19:20:15.087Z  
+**Generated:** 2026-09-21T06:30:15.969Z  
 **Format:** CycloneDX-inspired Markdown
 
 ## Overview
 
 This SBOM documents all software dependencies used in the Prosjektportalen 365 project, including all packages in the monorepo.
 
-**Total Dependencies:** 110  
-**Production Dependencies:** 75  
+**Total Dependencies:** 109  
+**Production Dependencies:** 74  
 **Development Dependencies:** 35  
 **Projects in Monorepo:** 8
 
@@ -23,32 +23,32 @@ This SBOM documents all software dependencies used in the Prosjektportalen 365 p
 
 ### pp365-portfolioextensions (1.14.0)
 
-- **Production Dependencies:** 24
+- **Production Dependencies:** 23
 - **Development Dependencies:** 18
 
 ### pp365-portfoliowebparts (1.14.0)
 
-- **Production Dependencies:** 42
+- **Production Dependencies:** 41
 - **Development Dependencies:** 21
 
 ### pp365-programwebparts (1.14.0)
 
-- **Production Dependencies:** 36
+- **Production Dependencies:** 35
 - **Development Dependencies:** 19
 
 ### pp365-projectextensions (1.14.0)
 
-- **Production Dependencies:** 36
+- **Production Dependencies:** 35
 - **Development Dependencies:** 19
 
 ### pp365-projectwebparts (1.14.0)
 
-- **Production Dependencies:** 48
+- **Production Dependencies:** 47
 - **Development Dependencies:** 21
 
 ### pp365-shared-library (1.14.0)
 
-- **Production Dependencies:** 39
+- **Production Dependencies:** 37
 - **Development Dependencies:** 18
 
 ### pp365-templates (1.14.0)
@@ -60,7 +60,7 @@ This SBOM documents all software dependencies used in the Prosjektportalen 365 p
 
 This section lists all unique dependencies across all projects.
 
-### Production Dependencies (75)
+### Production Dependencies (74)
 
 | Package | Version(s) | Used By |
 |---------|-----------|----------|
@@ -83,11 +83,11 @@ This section lists all unique dependencies across all projects.
 | @microsoft/sp-page-context | 1.23.2 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | @microsoft/sp-property-pane | 1.23.2 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectwebparts, +1 more |
 | @microsoft/sp-webpart-base | 1.23.2 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectwebparts, +1 more |
-| @pnp/core | 3.17.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| @pnp/graph | 3.17.0 | pp365-projectextensions |
-| @pnp/logging | 3.17.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| @pnp/queryable | 3.17.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| @pnp/sp | 3.17.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @pnp/core | 4.21.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @pnp/graph | 4.21.0 | pp365-projectextensions |
+| @pnp/logging | 4.21.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @pnp/queryable | 4.21.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @pnp/sp | 4.21.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | @pnp/spfx-controls-react | 3.25.0 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectwebparts, +1 more |
 | @pnp/spfx-property-controls | 3.24.0 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectwebparts |
 | @ptkdev/json-token-replace | ^1.2.2 | pp365-templates |
@@ -129,8 +129,7 @@ This section lists all unique dependencies across all projects.
 | resx-json-typescript-converter | ^1.0.1 | pp365-templates |
 | shade-blend-color | ~1.0.0 | pp365-projectwebparts, pp365-shared-library |
 | smoothscroll-polyfill | ~0.4.4 | pp365-projectwebparts |
-| sp-entityportal-service | 2.3.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| sp-js-provisioning | 1.3.15 | pp365-portfolioextensions, pp365-projectextensions, pp365-shared-library |
+| sp-js-provisioning | 1.3.15 | pp365-portfolioextensions, pp365-projectextensions |
 | spfx-jsom | 0.6.6 | pp365-projectextensions, pp365-projectwebparts, pp365-shared-library |
 | tslib | 2.8.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | underscore | ~1.13.6 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
@@ -198,7 +197,7 @@ This section provides a detailed view of dependencies for each project.
 
 ### pp365-portfolioextensions
 
-#### Production Dependencies (24)
+#### Production Dependencies (23)
 
 | Package | Version |
 |---------|----------|
@@ -211,10 +210,10 @@ This section provides a detailed view of dependencies for each project.
 | @microsoft/sp-dialog | 1.23.2 |
 | @microsoft/sp-listview-extensibility | 1.23.2 |
 | @microsoft/sp-page-context | 1.23.2 |
-| @pnp/core | 3.17.0 |
-| @pnp/logging | 3.17.0 |
-| @pnp/queryable | 3.17.0 |
-| @pnp/sp | 3.17.0 |
+| @pnp/core | 4.21.0 |
+| @pnp/logging | 4.21.0 |
+| @pnp/queryable | 4.21.0 |
+| @pnp/sp | 4.21.0 |
 | jszip | 3.10.1 |
 | pp365-shared-library | workspace:* |
 | react | 17.0.1 |
@@ -222,7 +221,6 @@ This section provides a detailed view of dependencies for each project.
 | react-gauge-component | ~1.2.61 |
 | react-markdown | ^8.0.3 |
 | rehype-raw | ^6.1.1 |
-| sp-entityportal-service | 2.3.0 |
 | sp-js-provisioning | 1.3.15 |
 | tslib | 2.8.1 |
 | underscore | ~1.13.6 |
@@ -252,7 +250,7 @@ This section provides a detailed view of dependencies for each project.
 
 ### pp365-portfoliowebparts
 
-#### Production Dependencies (42)
+#### Production Dependencies (41)
 
 | Package | Version |
 |---------|----------|
@@ -268,10 +266,10 @@ This section provides a detailed view of dependencies for each project.
 | @microsoft/sp-page-context | 1.23.2 |
 | @microsoft/sp-property-pane | 1.23.2 |
 | @microsoft/sp-webpart-base | 1.23.2 |
-| @pnp/core | 3.17.0 |
-| @pnp/logging | 3.17.0 |
-| @pnp/queryable | 3.17.0 |
-| @pnp/sp | 3.17.0 |
+| @pnp/core | 4.21.0 |
+| @pnp/logging | 4.21.0 |
+| @pnp/queryable | 4.21.0 |
+| @pnp/sp | 4.21.0 |
 | @pnp/spfx-controls-react | 3.25.0 |
 | @pnp/spfx-property-controls | 3.24.0 |
 | @reduxjs/toolkit | ~1.9.5 |
@@ -294,7 +292,6 @@ This section provides a detailed view of dependencies for each project.
 | react-gauge-component | ~1.2.61 |
 | react-virtualized-auto-sizer | ~1.0.24 |
 | react-window | ~1.8.10 |
-| sp-entityportal-service | 2.3.0 |
 | tslib | 2.8.1 |
 | underscore | ~1.13.6 |
 | use-image-color | ~0.0.9 |
@@ -327,7 +324,7 @@ This section provides a detailed view of dependencies for each project.
 
 ### pp365-programwebparts
 
-#### Production Dependencies (36)
+#### Production Dependencies (35)
 
 | Package | Version |
 |---------|----------|
@@ -342,10 +339,10 @@ This section provides a detailed view of dependencies for each project.
 | @microsoft/sp-page-context | 1.23.2 |
 | @microsoft/sp-property-pane | 1.23.2 |
 | @microsoft/sp-webpart-base | 1.23.2 |
-| @pnp/core | 3.17.0 |
-| @pnp/logging | 3.17.0 |
-| @pnp/queryable | 3.17.0 |
-| @pnp/sp | 3.17.0 |
+| @pnp/core | 4.21.0 |
+| @pnp/logging | 4.21.0 |
+| @pnp/queryable | 4.21.0 |
+| @pnp/sp | 4.21.0 |
 | @pnp/spfx-controls-react | 3.25.0 |
 | @pnp/spfx-property-controls | 3.24.0 |
 | @reduxjs/toolkit | ~1.9.5 |
@@ -364,7 +361,6 @@ This section provides a detailed view of dependencies for each project.
 | react | 17.0.1 |
 | react-dom | 17.0.1 |
 | react-gauge-component | ~1.2.61 |
-| sp-entityportal-service | 2.3.0 |
 | tslib | 2.8.1 |
 | underscore | ~1.13.6 |
 
@@ -394,7 +390,7 @@ This section provides a detailed view of dependencies for each project.
 
 ### pp365-projectextensions
 
-#### Production Dependencies (36)
+#### Production Dependencies (35)
 
 | Package | Version |
 |---------|----------|
@@ -409,11 +405,11 @@ This section provides a detailed view of dependencies for each project.
 | @microsoft/sp-listview-extensibility | 1.23.2 |
 | @microsoft/sp-office-ui-fabric-core | 1.23.2 |
 | @microsoft/sp-page-context | 1.23.2 |
-| @pnp/core | 3.17.0 |
-| @pnp/graph | 3.17.0 |
-| @pnp/logging | 3.17.0 |
-| @pnp/queryable | 3.17.0 |
-| @pnp/sp | 3.17.0 |
+| @pnp/core | 4.21.0 |
+| @pnp/graph | 4.21.0 |
+| @pnp/logging | 4.21.0 |
+| @pnp/queryable | 4.21.0 |
+| @pnp/sp | 4.21.0 |
 | @reduxjs/toolkit | ~1.9.5 |
 | @uifabric/file-type-icons | 7.6.27 |
 | @uifabric/utilities | 6.45.1 |
@@ -427,7 +423,6 @@ This section provides a detailed view of dependencies for each project.
 | react-gauge-component | ~1.2.61 |
 | react-markdown | ^8.0.3 |
 | rehype-raw | ^6.1.1 |
-| sp-entityportal-service | 2.3.0 |
 | sp-js-provisioning | 1.3.15 |
 | spfx-jsom | 0.6.6 |
 | tslib | 2.8.1 |
@@ -461,7 +456,7 @@ This section provides a detailed view of dependencies for each project.
 
 ### pp365-projectwebparts
 
-#### Production Dependencies (48)
+#### Production Dependencies (47)
 
 | Package | Version |
 |---------|----------|
@@ -480,10 +475,10 @@ This section provides a detailed view of dependencies for each project.
 | @microsoft/sp-page-context | 1.23.2 |
 | @microsoft/sp-property-pane | 1.23.2 |
 | @microsoft/sp-webpart-base | 1.23.2 |
-| @pnp/core | 3.17.0 |
-| @pnp/logging | 3.17.0 |
-| @pnp/queryable | 3.17.0 |
-| @pnp/sp | 3.17.0 |
+| @pnp/core | 4.21.0 |
+| @pnp/logging | 4.21.0 |
+| @pnp/queryable | 4.21.0 |
+| @pnp/sp | 4.21.0 |
 | @pnp/spfx-controls-react | 3.25.0 |
 | @pnp/spfx-property-controls | 3.24.0 |
 | @reduxjs/toolkit | ~1.9.5 |
@@ -508,7 +503,6 @@ This section provides a detailed view of dependencies for each project.
 | rehype-raw | ^6.1.1 |
 | shade-blend-color | ~1.0.0 |
 | smoothscroll-polyfill | ~0.4.4 |
-| sp-entityportal-service | 2.3.0 |
 | spfx-jsom | 0.6.6 |
 | tslib | 2.8.1 |
 | underscore | ~1.13.6 |
@@ -542,7 +536,7 @@ This section provides a detailed view of dependencies for each project.
 
 ### pp365-shared-library
 
-#### Production Dependencies (39)
+#### Production Dependencies (37)
 
 | Package | Version |
 |---------|----------|
@@ -558,10 +552,10 @@ This section provides a detailed view of dependencies for each project.
 | @microsoft/sp-page-context | 1.23.2 |
 | @microsoft/sp-property-pane | 1.23.2 |
 | @microsoft/sp-webpart-base | 1.23.2 |
-| @pnp/core | 3.17.0 |
-| @pnp/logging | 3.17.0 |
-| @pnp/queryable | 3.17.0 |
-| @pnp/sp | 3.17.0 |
+| @pnp/core | 4.21.0 |
+| @pnp/logging | 4.21.0 |
+| @pnp/queryable | 4.21.0 |
+| @pnp/sp | 4.21.0 |
 | @pnp/spfx-controls-react | 3.25.0 |
 | @reduxjs/toolkit | ~1.9.5 |
 | @types/react-calendar-timeline | 0.28.0 |
@@ -578,8 +572,6 @@ This section provides a detailed view of dependencies for each project.
 | react-markdown | ^8.0.3 |
 | rehype-raw | ^6.1.1 |
 | shade-blend-color | ~1.0.0 |
-| sp-entityportal-service | 2.3.0 |
-| sp-js-provisioning | 1.3.15 |
 | spfx-jsom | 0.6.6 |
 | tslib | 2.8.1 |
 | underscore | ~1.13.6 |

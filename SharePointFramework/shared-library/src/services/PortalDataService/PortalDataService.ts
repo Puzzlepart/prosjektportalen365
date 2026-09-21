@@ -5,7 +5,7 @@ import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { IFolder } from '@pnp/sp/folders'
 import { ICamlQuery, IList } from '@pnp/sp/lists'
 import '@pnp/sp/presets/all'
-import { IItemUpdateResult, IItemUpdateResultData, Site, spfi, SPFI } from '@pnp/sp/presets/all'
+import { Site, spfi, SPFI } from '@pnp/sp/presets/all'
 import { PermissionKind } from '@pnp/sp/security'
 import { IWeb, Web } from '@pnp/sp/webs'
 import { merge } from 'lodash'
@@ -52,6 +52,14 @@ import {
   PortalDataServiceList,
   SyncListParams
 } from './types'
+
+/**
+ * Result of a list item update. PnPjs 4 resolves `item.update()` to this shape directly
+ * (v3 wrapped it as `IItemUpdateResult.data`); the type itself is no longer exported.
+ */
+export interface IItemUpdateResultData {
+  etag: string
+}
 
 export class PortalDataService extends DataService<IPortalDataServiceConfiguration> {
   private _sp: SPFI
@@ -465,8 +473,8 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       await list.rootFolder.folders.getByUrl(folderName)()
       return list.rootFolder.folders.getByUrl(folderName)
     } catch (error) {
-      const { folder } = await list.rootFolder.folders.addUsingPath(folderName)
-      return folder
+      await list.rootFolder.folders.addUsingPath(folderName)
+      return list.rootFolder.folders.getByUrl(folderName)
     }
   }
 
@@ -501,9 +509,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
           })
         )
       ])
-      attachments = attachmentResults.map(({ data }) => ({
-        name: data.Name,
-        url: data.ServerRelativeUrl
+      attachments = attachmentResults.map((info) => ({
+        name: info.Name,
+        url: info.ServerRelativeUrl
       }))
       return report.initAttachments(attachments).setValues({
         GtModerationStatus: publishedString,
@@ -582,7 +590,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       const portfolioViewsList = this._getList('PORTFOLIO_VIEWS')
       const column = await projectColumnsList.items.add(_.omit(properties, ['Id']))
       portfolioViewsList.items.getById(view.id as any).update({
-        GtPortfolioColumnsId: [...view.columns.map((c) => c.id), column.data.Id]
+        GtPortfolioColumnsId: [...view.columns.map((c) => c.id), column.Id]
       })
       return true
     } catch (error) {
@@ -835,7 +843,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     _list: PortalDataServiceList,
     columnItem: SPProjectContentColumnItem,
     persistRenderAs = false
-  ): Promise<IItemUpdateResult> {
+  ): Promise<IItemUpdateResultData> {
     try {
       const list = this._getList(_list)
       const properties: SPProjectContentColumnItem = _.pick(
@@ -868,7 +876,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     properties: SPDataSourceItem,
     dataSourceTitle: string,
     shouldReplace: boolean = false
-  ): Promise<IItemUpdateResult> {
+  ): Promise<IItemUpdateResultData> {
     try {
       const list = this._getList(_list)
       const [item] = await list.items.filter(`Title eq '${dataSourceTitle}'`)()
@@ -945,7 +953,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       const dataSourceList = this._getList('DATA_SOURCES')
       const column = await projectContentColumnsList.items.add(_.omit(properties, ['Id']))
       dataSourceList.items.getById(dataSource.id as any).update({
-        GtProjectContentColumnsId: [...dataSource.columns.map((c) => c.id), column.data.Id]
+        GtProjectContentColumnsId: [...dataSource.columns.map((c) => c.id), column.Id]
       })
       return true
     } catch (error) {
@@ -965,7 +973,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   ): Promise<T> {
     try {
       const itemAddResult = await this._getList(list).items.add(properties)
-      return itemAddResult.data as T
+      return itemAddResult as T
     } catch (error) {
       throw new Error(error)
     }
@@ -985,7 +993,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   ): Promise<T> {
     try {
       const itemUpdateResult = await this._getList(list).items.getById(itemId).update(properties)
-      return itemUpdateResult.data as unknown as T
+      return itemUpdateResult as unknown as T
     } catch (error) {
       throw new Error(error)
     }

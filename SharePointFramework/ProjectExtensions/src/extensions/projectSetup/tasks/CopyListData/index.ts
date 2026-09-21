@@ -14,13 +14,17 @@ import {
 import { TimelineConfiguration } from '../TimelineConfiguration'
 import _ from 'underscore'
 import { IWeb } from '@pnp/sp/webs'
-import '@pnp/sp/items/get-all'
 import '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/items'
 import '@pnp/sp/batching'
 import { createBatch } from '@pnp/sp/batching'
-import { CloudContentConfig, ContentConfig, ContentConfigType } from 'pp365-shared-library'
+import {
+  CloudContentConfig,
+  ContentConfig,
+  ContentConfigType,
+  getAllItems
+} from 'pp365-shared-library'
 import { LogLevel } from '@pnp/logging'
 import { WebProvisioner } from 'sp-js-provisioning'
 import { IPlannerTaskSPItem } from './types'
@@ -362,13 +366,14 @@ export class CopyListData extends BaseTask {
    */
   private async _getSourceItems<T = any>(config: ContentConfig, fields?: string[]): Promise<T[]> {
     try {
-      return await config.sourceList.items
-        .select(...(fields || config.fields), 'TaxCatchAll/ID', 'TaxCatchAll/Term')
-        .expand('TaxCatchAll')
-        .getAll()
+      return await getAllItems<T>(
+        config.sourceList.items
+          .select(...(fields || config.fields), 'TaxCatchAll/ID', 'TaxCatchAll/Term')
+          .expand('TaxCatchAll')
+      )
     } catch (error) {
       try {
-        return await config.sourceList.items.select(...(fields || config.fields)).getAll()
+        return await getAllItems<T>(config.sourceList.items.select(...(fields || config.fields)))
       } catch (error) {
         return []
       }
@@ -536,10 +541,11 @@ export class CopyListData extends BaseTask {
       )
       this.onProgress(progressText, '', 'Documentation')
 
-      const spItems = await config.sourceList.items
-        .expand('Folder')
-        .select('Title', 'LinkFilename', 'FileRef', 'FileDirRef', 'Folder/ServerRelativeUrl')
-        .getAll()
+      const spItems = await getAllItems(
+        config.sourceList.items
+          .expand('Folder')
+          .select('Title', 'LinkFilename', 'FileRef', 'FileDirRef', 'Folder/ServerRelativeUrl')
+      )
 
       const folders: string[] = []
       const files: any[] = []
@@ -566,10 +572,10 @@ export class CopyListData extends BaseTask {
             'Documentation'
           )
           const filename = file.LinkFilename
-          const fileAddResult = await this.params.web
+          const fileInfo = await this.params.web
             .getFolderByServerRelativePath(destFolderUrl)
             .files.addUsingPath(filename, file.Blob, { Overwrite: true })
-          filesCopied.push(fileAddResult)
+          filesCopied.push(fileInfo)
           this.logInformation(`Successfully copied file ${file.LinkFilename}`)
         } catch (err) {}
       }

@@ -1,4 +1,4 @@
-import { Schema } from 'sp-js-provisioning'
+import { ProvisioningSchema } from './ProvisioningSchema'
 import type { CloudTemplatePackage } from '../services/CloudTemplate/CloudTemplatePackage'
 import { IManifestExtension } from './IPackageManifest'
 import { ProjectExtension, IProjectExtensionSPItem } from './ProjectExtension'
@@ -52,7 +52,7 @@ export class CloudProjectExtension extends ProjectExtension {
   /**
    * Returns the bundled extension schema from the `.pppkg` (no hub read).
    */
-  public async getSchema(): Promise<Schema> {
+  public async getSchema(): Promise<ProvisioningSchema> {
     return this._package.getExtensionSchema(this._file)
   }
 }

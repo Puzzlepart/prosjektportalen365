@@ -1,8 +1,8 @@
 import { IPersonaProps } from '@fluentui/react'
-import { ITermInfo } from '@pnp/sp/taxonomy'
 import { useState } from 'react'
 import { EditableSPField } from '../../models'
 import { DefaultCaching } from '../../data/cache'
+import { getTermLabel, ITermInfo } from '../../taxonomy'
 import { ICustomEditPanelProps } from './types'
 
 /**
@@ -64,10 +64,7 @@ export function useModel(props: ICustomEditPanelProps) {
             props.dataAdapter.spfxContext.pageContext.cultureInfo.currentUICultureName || 'nb-NO'
           return [
             (value as ITermInfo[])
-              .map((v) => {
-                const label = v.labels.find((l) => l.languageTag === languageTag)
-                return `-1;#${label?.name}|${v.id}`
-              })
+              .map((v) => `-1;#${getTermLabel(v, languageTag)}|${v.id}`)
               .join(';#'),
             textField.InternalName
           ]
@@ -85,10 +82,7 @@ export function useModel(props: ICustomEditPanelProps) {
             props.dataAdapter.spfxContext.pageContext.cultureInfo.currentUICultureName || 'nb-NO'
           return [
             (value as ITermInfo[])
-              .map((v) => {
-                const label = v.labels.find((l) => l.languageTag === languageTag)
-                return `-1;#${label?.name}|${v.id}`
-              })
+              .map((v) => `-1;#${getTermLabel(v, languageTag)}|${v.id}`)
               .join(';#'),
             textField.InternalName
           ]
@@ -101,7 +95,7 @@ export function useModel(props: ICustomEditPanelProps) {
           // `ensureUser` failure must propagate rather than silently wipe
           // the stored person on save.
           const email = value[0]?.secondaryText
-          const val = email ? (await webContext.ensureUser(email)).data.Id : null
+          const val = email ? (await webContext.ensureUser(email)).Id : null
           return [val, `${field.internalName}Id`]
         }
       ],
@@ -109,9 +103,7 @@ export function useModel(props: ICustomEditPanelProps) {
         'UserMulti',
         async () => {
           const values = await Promise.all<number>(
-            value.map(
-              async (v: IPersonaProps) => (await webContext.ensureUser(v.secondaryText)).data.Id
-            )
+            value.map(async (v: IPersonaProps) => (await webContext.ensureUser(v.secondaryText)).Id)
           )
           return [values, `${field.internalName}Id`]
         }

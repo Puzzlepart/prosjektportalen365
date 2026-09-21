@@ -92,6 +92,15 @@ grep -o 'define(\[[^]]*\]' SharePointFramework/PortfolioWebParts/dist/*.js | gre
 6. One channel build (`npm run build:test`) succeeds and leaves the working tree clean.
 7. `Install/build-release.ps1 -CI -SkipBundle` (or the CI workflow) produces the release folder on Node 22.
 
+## PnPjs 4 conventions (Phase 2, see `docs/plans/pnpjs-4-migration.md`)
+
+- All six solutions are on `@pnp/{sp,core,queryable,logging,graph}` 4.21.0; the only other PnPjs in the bundles is the 2.5.0 nested inside `@pnp/spfx-controls-react`, which is isolated and must not be forced onto v4 via `globalOverrides`.
+- `getAll()` is gone: `getAllItems(items.select(...).filter(...))` from `pp365-shared-library` (always sets `$top`, default 2000). One row: `.top(1)()`.
+- Taxonomy is the ported SharePoint term store client in `shared-library/src/taxonomy`: `getTermStore(sp.web).sets.getById(id).terms.select('*', 'localProperties').all()`. Term labels go through `getTermLabel(term, languageTag)` (fixed fallback nb-NO, then en-US, then first label). Never reach for `@pnp/graph/taxonomy`: it has no `localProperties` and needs tenant-admin consent.
+- Results of `add`, `update`, `ensureUser`, `files.addUsingPath`, `folders.addUsingPath`, `siteGroups.add`, `navigation.*.add` are the payloads (`IFileInfo`, `IFolderInfo`, `ISiteUserInfo`, `ISiteGroupInfo`, `INavNodeInfo`, created item JSON). Re-resolve handles via `web.getFileByServerRelativePath(info.ServerRelativeUrl)`, `web.siteGroups.getById(info.Id)`, etc. Types `IItemAddResult`, `IItemUpdateResult`, `IFileAddResult`, `IFolderAddResult` no longer exist; `IListEnsureResult` moved to `@pnp/sp/lists/types`.
+- `sp-js-provisioning` must be on a PnPjs 4 release (1.4.0 or later, `@pnp/*` as peer dependencies). Bump it with `node docs/plans/pnpjs-4-migration-bump.js --provisioning-version=<v>` and `rush update`; a v3 release makes every `new WebProvisioner(web)` site fail with "IWeb is not assignable".
+- Heft runs Jest on `src/**/*.test.ts` in every build (`heft test` gates `npm run build`). `@pnp/*` 4 is ESM-only and the Jest runner is CommonJS, so tests use structural stand-ins (`shared-library/src/services/EntityPortalService/pnpShapes.ts`) instead of importing `@pnp/*`.
+
 ## Do not
 
 - Do not pin Node below 22 or run the Heft toolchain on Node 16/18.

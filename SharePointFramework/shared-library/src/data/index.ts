@@ -1,6 +1,7 @@
 export * from './SPDataAdapterBase'
 export * from './createSpfiInstance'
 export * from './cache'
+export * from './getAllItems'
 export * from './getItemFieldValues'
 export * from './projectsCache'
 export * from './searchAggregatedItems'

@@ -13,7 +13,7 @@ Written for: the next AI coding agent (GitHub Copilot or Claude Code) and the de
 | Repo-specific companion skill | `.claude/skills/pp365-toolchain/SKILL.md` and `.github/skills/pp365-toolchain/SKILL.md` | Rush translation rules, report quirks, shared-library exceptions, verification checklist. Identical copies. |
 | `.gitignore` | root | `!.claude/skills/` appended so the skills are committed. `.github/skills` was never ignored. |
 
-**Status: Phase 1 is implemented and green** (see "Phase 1 progress" below). The working tree carries the full migration; nothing has been committed.
+**Status: Phase 1 is implemented and green** (see "Phase 1 progress" below); **Phase 2 (PnPjs 4) is implemented** (see the Phase 2 section near the end and `docs/plans/pnpjs-4-migration.md`). Commit Phase 1 and Phase 2 as separate commits.
 
 ## What was verified (do not re-derive)
 
@@ -172,6 +172,14 @@ Working rules that were in effect and should stay:
 - Regenerate a report if needed from a solution folder: `npx -y -p @pnp/cli-microsoft365@latest m365 spfx project upgrade --toVersion 1.23.2 --packageManager pnpm --shell bash --output md`.
 - Verify bundling after any build: `grep -o 'define(\[[^]]*\]' SharePointFramework/PortfolioWebParts/dist/*.js | grep pp365 || echo "OK: no pp365-* external"
 
+## Phase 2: PnPjs 3.17 to 4.21 (implemented 2026-09-21)
+
+Plan, decisions A to E, per-solution status, verification and the finishing steps are in `docs/plans/pnpjs-4-migration.md`; read that before touching any data adapter. In short: `@pnp/*` is 4.21.0 in all six solutions; `getAll()` became `getAllItems()` from `pp365-shared-library`; the v3 taxonomy module was ported into `shared-library/src/taxonomy` (`getTermStore(sp.web)`, `getTermLabel` with the fixed nb-NO then en-US fallback chain); `sp-entityportal-service` was vendored into `shared-library/src/services/EntityPortalService`; add/update/ensureUser/addUsingPath results are the payloads themselves (no `.data`/`.file`/`.folder`).
+
+Open item: `sp-js-provisioning` 1.4.0 (PnPjs 4, peer dependencies) is ready in its own repository but not published. Until the developer publishes it and runs `node docs/plans/pnpjs-4-migration-bump.js --provisioning-version=1.4.0` followed by `rush update`, the five `new WebProvisioner(web)` sites (ProjectExtensions `ApplyTemplate`, `Hooks`, `CopyListData`; PortfolioExtensions `PackageInstaller` x2) fail type-checking with "IWeb is not assignable", and `ApplyTemplate` additionally fails on the `LogLevel` enum it passes to `setup()` (a PnPjs 4 `@pnp/logging` enum against the 1.3.15 typings). Six expected errors in total; do not add casts.
+
+Working rule for tests: Heft runs Jest on `src/**/*.test.ts` during every build. `@pnp/*` 4 is ESM-only and the Jest runner is CommonJS, so tests for code that talks to PnPjs are written against structural stand-ins (see `shared-library/src/services/EntityPortalService/pnpShapes.ts` and `src/taxonomy/*.test.ts`), never by importing `@pnp/*` in a test.
+
 ## Later phases (not started)
 
-Phase 2 PnPjs 3.17 to 4.21 (blockers: `sp-js-provisioning` pins 3.17.0, `sp-entityportal-service` pins 3.9.0, `@pnp/sp/taxonomy` removed, `getAll()` removed, `.data` gone from add/update). Phase 3 Fluent v8 to v9 completion (v8 in ~214 files) and dependency hygiene. Phase 4 React 18 with SPFx 1.24 GA. Details at the end of the plan.
+Phase 3 Fluent v8 to v9 completion (v8 in ~214 files) and dependency hygiene. Phase 4 React 18 with SPFx 1.24 GA. Phase 5 runtime library component for `pp365-shared-library`. Details at the end of the Phase 1 plan.

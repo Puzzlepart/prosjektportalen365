@@ -1,7 +1,7 @@
 import { LogLevel } from '@pnp/logging'
 import { IItem } from '@pnp/sp/items'
 import { IList } from '@pnp/sp/lists'
-import { SpEntityPortalService } from 'sp-entityportal-service'
+import { SpEntityPortalService } from '../EntityPortalService'
 import { ItemFieldValues, SPField } from '../../models'
 import { SPFxContext } from '../../types'
 

@@ -163,7 +163,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
       GtIdeaProjectDataId: item.Id
     })
     Log.info(LOG_SOURCE, '_updateItem: Updated item with new GtIdeaProjectDataId')
-    return itemUpdateResult.data
+    return itemUpdateResult
   }
 
   /**
@@ -175,7 +175,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
     const list = this._sp.web.lists.getByTitle(resource.Lists_ProjectData_Title)
     const itemAddResult = await list.items.add(properties)
     Log.info(LOG_SOURCE, '_updateItem: Added item to IdeaProjectData list')
-    return itemAddResult.data
+    return itemAddResult
   }
 
   /**

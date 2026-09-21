@@ -7,8 +7,8 @@ import {
   TimelineContentModel
 } from 'pp365-shared-library/lib/models'
 import { getClassProperties, isSystemSPField } from 'pp365-shared-library/lib/util'
+import { getAllItems } from 'pp365-shared-library'
 import { IProjectTimelineProps } from '../types'
-import '@pnp/sp/items/get-all'
 import { IColumn } from '@fluentui/react'
 import resource from 'SharedResources'
 
@@ -52,7 +52,7 @@ export async function fetchTimelineData(
 
   try {
     projectDeliveries = props.showProjectDeliveries
-      ? await props.sp.web.lists.getByTitle(props.projectDeliveriesListName).items.getAll()
+      ? await getAllItems(props.sp.web.lists.getByTitle(props.projectDeliveriesListName).items)
       : []
   } catch (error) {}
 
@@ -161,22 +161,23 @@ export async function fetchTimelineData(
     filter = `${filter} and (startswith(ContentTypeId, '${timelineContentTypeId}'))`
   }
 
-  let timelineContentItems = await timelineContentList.items
-    .select(
-      'Id',
-      'ContentTypeId',
-      'GtTimelineTypeLookup/Title',
-      'GtSiteIdLookupId',
-      'GtSiteIdLookup/Title',
-      'GtSiteIdLookup/GtSiteId',
-      ...defaultViewColumns.filter((col) => userFields.indexOf(col) === -1),
-      ...userFields.map((fieldName) => `${fieldName}/Id`),
-      ...userFields.map((fieldName) => `${fieldName}/Title`),
-      ...userFields.map((fieldName) => `${fieldName}/EMail`)
-    )
-    .expand('GtSiteIdLookup', 'GtTimelineTypeLookup', ...userFields)
-    .filter(filter)
-    .getAll()
+  let timelineContentItems = await getAllItems(
+    timelineContentList.items
+      .select(
+        'Id',
+        'ContentTypeId',
+        'GtTimelineTypeLookup/Title',
+        'GtSiteIdLookupId',
+        'GtSiteIdLookup/Title',
+        'GtSiteIdLookup/GtSiteId',
+        ...defaultViewColumns.filter((col) => userFields.indexOf(col) === -1),
+        ...userFields.map((fieldName) => `${fieldName}/Id`),
+        ...userFields.map((fieldName) => `${fieldName}/Title`),
+        ...userFields.map((fieldName) => `${fieldName}/EMail`)
+      )
+      .expand('GtSiteIdLookup', 'GtTimelineTypeLookup', ...userFields)
+      .filter(filter)
+  )
 
   const timelineListItems = timelineContentItems
 

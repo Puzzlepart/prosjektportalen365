@@ -776,10 +776,12 @@ export class PackageInstaller {
       // later detect that an installed extension is outdated (version-in-file).
       const stamped = PackageInstaller._stampExtension(content, manifest, ext.id)
       const fileName = ext.file.split('/').pop() as string
-      const addResult = await web
+      const fileInfo = await web
         .getFolderByServerRelativePath(folderUrl)
         .files.addUsingPath(fileName, stamped, { Overwrite: true })
-      const item = await addResult.file.getItem<{ Id: number }>('Id')
+      const item = await web
+        .getFileByServerRelativePath(fileInfo.ServerRelativeUrl)
+        .getItem<{ Id: number }>('Id')
       await item.update({
         Title: ext.name,
         GtDescription: ext.description ?? manifest.description ?? '',
@@ -842,7 +844,7 @@ export class PackageInstaller {
         await list.items.getById(itemId).update(properties)
       } else {
         const addResult = await list.items.add(properties)
-        itemId = addResult.data.Id
+        itemId = addResult.Id
       }
       result.push({ title: cfg.title, itemId })
     }

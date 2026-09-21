@@ -1,6 +1,9 @@
-import { ITermInfo } from '@pnp/sp/taxonomy'
-import _ from 'underscore'
-import { supportedLocalesMap } from 'pp365-shared-library'
+import {
+  getLocalProperties,
+  getTermLabel,
+  ITermInfo,
+  supportedLocalesMap
+} from 'pp365-shared-library'
 
 /**
  * Model for a Taxonomy Term used in list columns.
@@ -12,7 +15,7 @@ export class TaxonomyTermModel {
   /**
    * Constructor for `TaxonomyTermModel`
    *
-   * @param term Term info from taxonomy API
+   * @param term Term info from the term store
    * @param _termSetId Term set ID
    * @param lcid Language code ID (default: `1044`)
    */
@@ -27,15 +30,11 @@ export class TaxonomyTermModel {
 
   /**
    * Term name is the localized label of the term.
-   * Uses the `lcid` property to get the correct label.
-   * Falls back to the first label if localized label is not found.
+   * It uses the `lcid` property to get the correct label, then steps through
+   * `nb-NO` and `en-US` before falling back to the first label (see `getTermLabel`).
    */
   public get name(): string {
-    const localizedLabel = _.find(
-      this.term.labels,
-      (l) => l.languageTag.toLowerCase() === this._languageTag
-    )
-    return localizedLabel?.name ?? _.first(this.term.labels)?.name
+    return getTermLabel(this.term, this._languageTag)
   }
 
   /**
@@ -43,12 +42,7 @@ export class TaxonomyTermModel {
    * the term set ID.
    */
   public get properties(): Record<string, string> {
-    const { properties } = _.find(this.term.localProperties, (p) => p.setId === this._termSetId)
-    if (!properties) return {}
-    return properties.reduce((acc, p) => {
-      acc[p.key] = p.value
-      return acc
-    }, {})
+    return getLocalProperties(this.term, this._termSetId)
   }
 
   /**

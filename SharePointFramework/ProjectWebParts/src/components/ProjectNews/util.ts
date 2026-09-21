@@ -316,7 +316,7 @@ export async function setOriginalSourceSiteId(
     .getByTitle(resource.Lists_Projects_Title)
     .items.select(...projectFields)
     .filter(`GtSiteId eq '${siteId}'`)
-    .getAll()
+    .top(1)()
 
   const updateBody: any = {
     GtSiteId: siteId,

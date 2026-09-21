@@ -1,7 +1,7 @@
 import { IIconProps } from '@fluentui/react/lib/Icon'
 import { stringIsNullOrEmpty } from '@pnp/core'
-import { IFileAddResult } from '@pnp/sp/files'
-import { IFolder } from '@pnp/sp/folders'
+import { fileFromServerRelativePath, IFileInfo } from '@pnp/sp/files'
+import { folderFromServerRelativePath, IFolder } from '@pnp/sp/folders'
 import { IWeb } from '@pnp/sp/webs'
 import { FileIconType, getFileTypeIconProps, IFileTypeIconOptions } from '@uifabric/file-type-icons'
 import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
@@ -101,18 +101,18 @@ export class TemplateItem {
    *
    * @returns {true} if the operation is successful
    */
-  public async copyTo(folder: IFolder, shouldOverwrite: boolean = true): Promise<IFileAddResult> {
+  public async copyTo(folder: IFolder, shouldOverwrite: boolean = true): Promise<IFileInfo> {
     try {
       if (this.isFolder) {
         return await this.copyFolderWithContents(folder, shouldOverwrite)
       } else {
         const content = await this.web.getFileByServerRelativePath(this.serverRelativeUrl).getBlob()
 
-        const fileAddResult = await folder.files.addUsingPath(this.newName, content, {
+        const fileInfo = await folder.files.addUsingPath(this.newName, content, {
           Overwrite: shouldOverwrite
         })
-        await (await fileAddResult.file.getItem()).update({ Title: this.newTitle })
-        return fileAddResult
+        await this.setFileTitle(folder, fileInfo, this.newTitle)
+        return fileInfo
       }
     } catch (error) {
       throw error
@@ -130,9 +130,10 @@ export class TemplateItem {
   private async copyFolderWithContents(
     targetFolder: IFolder,
     shouldOverwrite: boolean = true
-  ): Promise<IFileAddResult> {
+  ): Promise<IFileInfo> {
     try {
-      const newFolder = await targetFolder.folders.addUsingPath(this.newName, true)
+      const newFolderInfo = await targetFolder.folders.addUsingPath(this.newName, true)
+      const newFolder = folderFromServerRelativePath(targetFolder, newFolderInfo.ServerRelativeUrl)
 
       const sourceFolder = this.web.getFolderByServerRelativePath(this.serverRelativeUrl)
       const [files, subFolders] = await Promise.all([
@@ -140,21 +141,21 @@ export class TemplateItem {
         sourceFolder.folders.select('Name', 'ServerRelativeUrl')()
       ])
 
-      let firstFileResult: IFileAddResult = null
+      let firstFileResult: IFileInfo = null
 
       for (const file of files) {
         try {
           const content = await this.web
             .getFileByServerRelativePath(file.ServerRelativeUrl)
             .getBlob()
-          const fileAddResult = await newFolder.folder.files.addUsingPath(file.Name, content, {
+          const fileInfo = await newFolder.files.addUsingPath(file.Name, content, {
             Overwrite: shouldOverwrite
           })
           if (!firstFileResult) {
-            firstFileResult = fileAddResult
+            firstFileResult = fileInfo
           }
           if (file.Title) {
-            await (await fileAddResult.file.getItem()).update({ Title: file.Title })
+            await this.setFileTitle(newFolder, fileInfo, file.Title)
           }
         } catch (error) {
           // Continue with next file if one fails
@@ -166,7 +167,7 @@ export class TemplateItem {
           continue
         }
         try {
-          await this.copySubFolder(subFolder.ServerRelativeUrl, newFolder.folder, shouldOverwrite)
+          await this.copySubFolder(subFolder.ServerRelativeUrl, newFolder, shouldOverwrite)
         } catch (error) {
           // Continue with next folder if one fails
         }
@@ -198,18 +199,19 @@ export class TemplateItem {
         sourceFolder.folders.select('Name', 'ServerRelativeUrl')()
       ])
 
-      const newFolder = await targetFolder.folders.addUsingPath(folderInfo.Name, true)
+      const newFolderInfo = await targetFolder.folders.addUsingPath(folderInfo.Name, true)
+      const newFolder = folderFromServerRelativePath(targetFolder, newFolderInfo.ServerRelativeUrl)
 
       for (const file of files) {
         try {
           const content = await this.web
             .getFileByServerRelativePath(file.ServerRelativeUrl)
             .getBlob()
-          const fileAddResult = await newFolder.folder.files.addUsingPath(file.Name, content, {
+          const fileInfo = await newFolder.files.addUsingPath(file.Name, content, {
             Overwrite: shouldOverwrite
           })
           if (file.Title) {
-            await (await fileAddResult.file.getItem()).update({ Title: file.Title })
+            await this.setFileTitle(newFolder, fileInfo, file.Title)
           }
         } catch (error) {
           // Continue with next file if one fails
@@ -221,7 +223,7 @@ export class TemplateItem {
           continue
         }
         try {
-          await this.copySubFolder(subFolder.ServerRelativeUrl, newFolder.folder, shouldOverwrite)
+          await this.copySubFolder(subFolder.ServerRelativeUrl, newFolder, shouldOverwrite)
         } catch (error) {
           // Continue with next folder if one fails
         }
@@ -229,6 +231,22 @@ export class TemplateItem {
     } catch (error) {
       throw error
     }
+  }
+
+  /**
+   * Sets the `Title` of the list item behind a file that was just added.
+   *
+   * PnPjs 4 resolves `files.addUsingPath` to the file payload only, so the file is
+   * re-addressed from `folder` (the web it was added to) rather than from `this.web`,
+   * which is the web the template was read from.
+   *
+   * @param folder Folder the file was added to
+   * @param fileInfo File payload returned by `addUsingPath`
+   * @param title Title to set
+   */
+  private async setFileTitle(folder: IFolder, fileInfo: IFileInfo, title: string): Promise<void> {
+    const item = await fileFromServerRelativePath(folder, fileInfo.ServerRelativeUrl).getItem()
+    await item.update({ Title: title })
   }
 
   /**
