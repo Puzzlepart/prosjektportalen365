@@ -101,44 +101,6 @@ jobs:
         run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url ${{ vars.SP_URL_TEST }} -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }}
         shell: pwsh
 
-  e2e_smoke_test_channel:
-    needs: [commit_subject, upgrade_channel_test]
-    name: End-to-end smoke (test channel)
-    runs-on: ubuntu-latest
-    # Runs whenever the upgrade succeeded, also when later optional jobs are skipped.
-    if: ${{ always() && needs.upgrade_channel_test.result == 'success' && !contains(needs.commit_subject.outputs.subject, '[skip-e2e]') }}
-    env:
-      E2E_BASE_URL: ${{ vars.SP_URL_TEST }}
-      E2E_PROJECT_URL: ${{ vars.E2E_PROJECT_URL }}
-      E2E_USERNAME: ${{ secrets.E2E_USERNAME }}
-      E2E_PASSWORD: ${{ secrets.E2E_PASSWORD }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-
-      - name: Install pp365-e2e
-        run: node common/scripts/install-run-rush.js install --to pp365-e2e
-
-      - name: Install Chromium for Playwright
-        run: npx playwright install --with-deps chromium
-        working-directory: e2e
-
-      - name: Run smoke tests against the test channel
-        run: npx playwright test
-        working-directory: e2e
-
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-report-test-channel
-          path: |
-            e2e/playwright-report
-            e2e/test-results
-          retention-days: 14
-
   build_release_package_test_packages_only:
     needs: [commit_subject]
     name: Build release package - packages only (test channel)
@@ -202,3 +164,42 @@ jobs:
       - name: Upgrade
         run: release/Install.ps1 -Url "${{ vars.SP_URL_TEST }}" -Upgrade -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }} -SkipTemplate
         shell: pwsh
+
+  e2e_smoke_test_channel:
+    # Two upgrade paths lead here: the full upgrade, and the packages-only upgrade used by
+    # [apps-only] commits. Exactly one of them runs; the smoke tests follow whichever succeeded.
+    needs: [commit_subject, upgrade_channel_test, upgrade_channel_test_packages_only]
+    name: End-to-end smoke (test channel)
+    runs-on: ubuntu-latest
+    if: ${{ always() && (needs.upgrade_channel_test.result == 'success' || needs.upgrade_channel_test_packages_only.result == 'success') && !contains(needs.commit_subject.outputs.subject, '[skip-e2e]') }}
+    env:
+      E2E_BASE_URL: ${{ vars.SP_URL_TEST }}
+      E2E_PROJECT_URL: ${{ vars.E2E_PROJECT_URL }}
+      E2E_USERNAME: ${{ secrets.E2E_USERNAME }}
+      E2E_PASSWORD: ${{ secrets.E2E_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Install pp365-e2e
+        run: node common/scripts/install-run-rush.js install --to pp365-e2e
+
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+        working-directory: e2e
+
+      - name: Run smoke tests against the test channel
+        run: npx playwright test
+        working-directory: e2e
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-test-channel
+          path: |
+            e2e/playwright-report
+            e2e/test-results
+          retention-days: 14

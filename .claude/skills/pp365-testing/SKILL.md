@@ -14,7 +14,7 @@ Authoritative description (Norwegian): `.development-guide/spfx/testing.md`. Thi
 | Unit + component tests | `SharePointFramework/<Solution>/src/**/*.test.ts(x)` | `heft test` inside every build (`npm run build`, `rush build`, CI). A failing test fails the build. Output: `jest-output/JUnit.xml`, `jest-output/coverage/`. |
 | Runtime contract tests | `SharePointFramework/shared-library/test/runtime/*.test.mjs` (`node --test`, real ESM PnPjs 4 with a fake transport, emulating SPFx's relative URLs via `pre.prepend`) | `npm run test:runtime`, part of shared-library's `build` after `heft test`. Add one whenever code composes PnPjs queryables: Jest stand-ins missed `getTermStore` throwing under SPFx. |
 | Packaging proof | `Install/Build-Release.ps1` | Every release build: each selected solution must emit a fresh `.sppkg`; no AMD `define([...])` header in `dist` may list a `pp365-*` external. |
-| E2E smoke | `e2e/` (Rush project `pp365-e2e`, Playwright) | Job "End-to-end smoke (test channel)" in `ci-channel-test.yml`, after the test-channel upgrade. `[skip-e2e]` skips it. |
+| E2E smoke | `e2e/` (Rush project `pp365-e2e`, Playwright) | Job "End-to-end smoke (test channel)" in `ci-channel-test.yml`, after the test-channel upgrade, full or packages-only (`[apps-only]`). `[skip-e2e]` skips it. |
 
 ## Running
 
