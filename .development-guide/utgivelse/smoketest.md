@@ -41,7 +41,7 @@ Det finnes 8 maler for smoke test:
 ### Vedlikehold av malene
 
 - Smoke test-maler må holdes oppdatert når det skjer endringer i kodebasen (f.eks. nye webdeler, endrede felter, fjernede funksjoner).
-- Malene ligger i `.github/ISSUE_TEMPLATE/` og bør revideres ved større endringer i funksjonalitet.
+- Malene ligger i `.github/ISSUE_TEMPLATE/` i det private repoet [prosjektportalen365-testing](https://github.com/Puzzlepart/prosjektportalen365-testing) (issue-skjemaer), og bør revideres ved større endringer i funksjonalitet. Nytt issue: «New issue» i det repoet og velg malen, eller åpne `https://github.com/Puzzlepart/prosjektportalen365-testing/issues/new?template=<malnavn>.yml`.
 - Se også kommentarer i YAML-filene for detaljer om hvert testpunkt.
 
 ### Tips

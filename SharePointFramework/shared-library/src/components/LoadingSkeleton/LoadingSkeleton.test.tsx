@@ -15,7 +15,7 @@ describe('LoadingSkeleton', () => {
   })
 
   it('forwards Fluent Skeleton props', () => {
-    const { container } = render(<LoadingSkeleton aria-label="Laster" />)
+    const { container } = render(<LoadingSkeleton aria-label='Laster' />)
     expect(container.firstElementChild).toHaveAttribute('aria-label', 'Laster')
   })
 })

@@ -35,7 +35,9 @@ function renderCommands(overrides: Partial<IProgramAdministrationContext['state'
 describe('ProgramAdministration Commands', () => {
   it('opens the add dialog', async () => {
     const { dispatch } = renderCommands()
-    await userEvent.setup().click(screen.getByText(strings.ProgramAdministrationAddChildsButtonLabel))
+    await userEvent
+      .setup()
+      .click(screen.getByText(strings.ProgramAdministrationAddChildsButtonLabel))
     expect(dispatch).toHaveBeenCalledWith(TOGGLE_ADD_PROJECT_DIALOG())
   })
 
@@ -51,7 +53,11 @@ describe('ProgramAdministration Commands', () => {
 
   it('disables both commands without manage permission', () => {
     renderCommands({ userHasManagePermission: false })
-    expect(screen.getByText(strings.ProgramAdministrationAddChildsButtonLabel).closest('button')).toBeDisabled()
-    expect(screen.getByText(strings.ProgramRemoveChildsButtonLabel).closest('button')).toBeDisabled()
+    expect(
+      screen.getByText(strings.ProgramAdministrationAddChildsButtonLabel).closest('button')
+    ).toBeDisabled()
+    expect(
+      screen.getByText(strings.ProgramRemoveChildsButtonLabel).closest('button')
+    ).toBeDisabled()
   })
 })

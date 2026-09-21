@@ -17,7 +17,9 @@ describe('ProjectStatus Header', () => {
   it('renders the title as the heading and exposes the description on the info label', () => {
     render(<Header />)
     // WebPartTitle renders an <h2> around a span[role=heading]; both carry the text, so target the span.
-    expect(screen.getByText('Prosjektstatus – Delprosjekt A', { selector: 'span' })).toBeInTheDocument()
+    expect(
+      screen.getByText('Prosjektstatus – Delprosjekt A', { selector: 'span' })
+    ).toBeInTheDocument()
     // WebPartTitle shows the description in a popover; its trigger carries the description in the title.
     expect(screen.getByTitle(/Publisert/)).toBeInTheDocument()
   })
