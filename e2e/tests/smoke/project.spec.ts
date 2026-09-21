@@ -1,3 +1,4 @@
+import { baseURL } from '../../playwright.config'
 import { configuredUrl, expect, test, webPartByAlias } from '../fixtures/pp365'
 
 /**
@@ -10,10 +11,15 @@ import { configuredUrl, expect, test, webPartByAlias } from '../fixtures/pp365'
  * parts load their data before rendering any text, and the texts are phase names, not labels.
  */
 const projectUrl = configuredUrl(process.env.E2E_PROJECT_URL)
+const hubUrl = baseURL.replace(/\/+$/, '').toLowerCase()
+const pointsAtHub = !!projectUrl && projectUrl.toLowerCase() === hubUrl
 const MOUNT_TIMEOUT = { timeout: 60_000 }
 
 test.describe('project site', () => {
   test.skip(!projectUrl, 'E2E_PROJECT_URL is not set (or is the .env.example placeholder); skipping project site smoke tests')
+  // The hub also has a ProjectHome.aspx (the page listing all projects), so pointing the variable
+  // at the hub would run these tests against the wrong page and fail them for the wrong reason.
+  test.skip(pointsAtHub, `E2E_PROJECT_URL points at the hub (${projectUrl}); set it to a provisioned project site`)
 
   test('project home mounts project information and lists the phases', async ({ page, openPage, resolvePage }) => {
     await openPage(await resolvePage(projectUrl!, ['ProjectHome.aspx', 'Hjem.aspx', 'Home.aspx']))

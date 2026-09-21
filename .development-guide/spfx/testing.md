@@ -101,7 +101,7 @@ Variabler og hemmeligheter i GitHub:
 | Navn | Type | Innhold |
 |---|---|---|
 | `SP_URL_TEST` | variabel (finnes) | Hub-URL for testkanalen |
-| `E2E_PROJECT_URL` | variabel | Et eksisterende, ferdig oppsatt prosjekt i huben (prosjekttestene hoppes over uten) |
+| `E2E_PROJECT_URL` | variabel | Et eksisterende, ferdig oppsatt prosjektområde i huben, ikke huben selv (prosjekttestene hoppes over med melding hvis variabelen mangler eller peker på huben) |
 | `E2E_USERNAME` | hemmelighet | Testbrukerens UPN |
 | `E2E_PASSWORD` | hemmelighet | Testbrukerens passord |
 
