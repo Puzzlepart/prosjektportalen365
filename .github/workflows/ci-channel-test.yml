@@ -9,7 +9,10 @@ on:
       - 'SharePointFramework/**'
       - 'Install/**'
       - 'Templates/**'
+      - 'e2e/**'
       - .github/workflows/ci-channel-test.yml
+  # Manual runs, for example to re-run the end-to-end smoke after fixing a secret or a spec.
+  workflow_dispatch:
 
 env:
   # Heft's TypeScript and webpack steps need more than V8's default heap (about 2 GB on a small
