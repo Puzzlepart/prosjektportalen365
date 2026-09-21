@@ -144,7 +144,7 @@ node common/scripts/install-run-rush.js update --full --purge
 ### CI and release
 
 - GitHub repository variable `NODE_VERSION`: `16.18.0` to `22.22.2` (used by `actions/setup-node` in `build-release.yml`, `ci-releases.yml`, `ci-channel-test.yml` and `generate-sbom.yml`).
-- `Install/build-release.ps1` line 143 hard-codes `npm i @microsoft/rush@5.98.0 -g`; replace all three `rush` invocations (`rush update` on lines 144 and 150, `rush rebuild` on line 293) with `node common/scripts/install-run-rush.js <command>` so the version follows `rush.json`, and fail fast if `node -v` is not 22.x. In CI mode prefer `install-run-rush.js install` (exact lockfile) over `update`; it requires the regenerated lockfile and the four refreshed `common/scripts` files to be committed.
+- `Install/Build-Release.ps1` line 143 hard-codes `npm i @microsoft/rush@5.98.0 -g`; replace all three `rush` invocations (`rush update` on lines 144 and 150, `rush rebuild` on line 293) with `node common/scripts/install-run-rush.js <command>` so the version follows `rush.json`, and fail fast if `node -v` is not 22.x. In CI mode prefer `install-run-rush.js install` (exact lockfile) over `update`; it requires the regenerated lockfile and the four refreshed `common/scripts` files to be committed.
 - `package.json` root script `build-release` and the docs: state Node 22.
 
 ### Root files and docs
@@ -539,7 +539,7 @@ The old gulpfiles pointed aliases at `outDir` (`lib`) too, so behaviour is ident
 
 ### `setHiddenToolbox` (ProjectWebParts only)
 
-**It is not part of any build today.** The gulp task is registered with `gulp.task('setHiddenToolbox', ...)` but never hooked into the rig and never called by a script, `build-release.ps1` or a workflow; it only ran if someone typed `gulp setHiddenToolbox --ship`. The committed manifests already carry the intended values (hidden: `ProjectPhasesWebPart`, `ProjectStatusWebPart`, `ProjectTimelineWebPart`; visible: `RiskMatrixWebPart`, `ProjectNewsWebPart`, `OpportunityMatrixWebPart`, `ProjectInformationWebPart`, `DynamicListWebPart`).
+**It is not part of any build today.** The gulp task is registered with `gulp.task('setHiddenToolbox', ...)` but never hooked into the rig and never called by a script, `Build-Release.ps1` or a workflow; it only ran if someone typed `gulp setHiddenToolbox --ship`. The committed manifests already carry the intended values (hidden: `ProjectPhasesWebPart`, `ProjectStatusWebPart`, `ProjectTimelineWebPart`; visible: `RiskMatrixWebPart`, `ProjectNewsWebPart`, `OpportunityMatrixWebPart`, `ProjectInformationWebPart`, `DynamicListWebPart`).
 
 Therefore: do **not** wire a port into `.tasks/build.js`. Doing so would hide `ProjectInformation`, `OpportunityMatrix` and `DynamicList` in release builds, a behaviour change. Either drop the task with the gulpfile, or port it as an opt-in helper `node ../.tasks/setHiddenToolbox.js --hide|--show` that nothing calls automatically. Note also that channel builds do not need it: `modifySolutionFiles.js` already forces `hiddenFromToolbox: true` for every WebPart, with no skip list.
 
@@ -593,7 +593,7 @@ Do the work on `feat/toolchain-upgrade` in this order; nothing builds until step
 2. **shared-library**: common template + its deltas. Verification: `heft build --clean --production && heft package-solution --production` in the folder emits `sharepoint/solution/pp-shared-library.sppkg`; `dist` has exactly one manifest; `lib/index.js` exists.
 3. **ProjectWebParts, then PortfolioWebParts, then ProgramWebParts** (import order). Verification per solution: build green; sppkg emitted; AMD header check shows no `pp365-*` externals; `npm run lint` and `npm run validate-loc` pass.
 4. **PortfolioExtensions, ProjectExtensions**. Same verification; additionally `heft start --serve-config default` loads the command set / application customizer on the configured page.
-5. **Whole repo**: `npm run rush:build` green; `npm run rush:lint`; `rush validate-loc`; one channel build (`npm run build:test` in one solution) leaves a clean tree; `Install/build-release.ps1 -CI -SkipBundle -Channel test` on Node 22 produces a release folder with six sppkg files.
+5. **Whole repo**: `npm run rush:build` green; `npm run rush:lint`; `rush validate-loc`; one channel build (`npm run build:test` in one solution) leaves a clean tree; `Install/Build-Release.ps1 -CI -SkipBundle -Channel test` on Node 22 produces a release folder with six sppkg files.
 6. **Smoke test in the test tenant** via the existing CI (`ci-channel-test.yml`) after setting `NODE_VERSION`: deploy, open portfolio, project and program pages, run one project setup, check the browser console for missing module errors (the symptom of an accidental library externalization).
 7. **Docs and skills**: `AGENTS.md`, `.development-guide`, `.tasks/README.md`, `.claude/skills/pp365-toolchain/SKILL.md` (mark Decision A as decided, record any renamed flags).
 

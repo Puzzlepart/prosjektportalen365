@@ -90,7 +90,7 @@ grep -o 'define(\[[^]]*\]' SharePointFramework/PortfolioWebParts/dist/*.js | gre
 4. `npm run rush:lint` and `rush validate-loc` pass (localization triad stays balanced, see `AGENTS.md`).
 5. `heft start --nobrowser` in one web part solution serves a real page via the debug query string (`?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/build/manifests.js`), and a change in `shared-library/src` is picked up after rebuilding the library.
 6. One channel build (`npm run build:test`) succeeds and leaves the working tree clean.
-7. `Install/build-release.ps1 -CI -SkipBundle` (or the CI workflow) produces the release folder on Node 22.
+7. `Install/Build-Release.ps1 -CI -SkipBundle` (or the CI workflow) produces the release folder on Node 22.
 
 ## PnPjs 4 conventions (Phase 2, see `docs/plans/pnpjs-4-migration.md`)
 
@@ -100,6 +100,11 @@ grep -o 'define(\[[^]]*\]' SharePointFramework/PortfolioWebParts/dist/*.js | gre
 - Results of `add`, `update`, `ensureUser`, `files.addUsingPath`, `folders.addUsingPath`, `siteGroups.add`, `navigation.*.add` are the payloads (`IFileInfo`, `IFolderInfo`, `ISiteUserInfo`, `ISiteGroupInfo`, `INavNodeInfo`, created item JSON). Re-resolve handles via `web.getFileByServerRelativePath(info.ServerRelativeUrl)`, `web.siteGroups.getById(info.Id)`, etc. Types `IItemAddResult`, `IItemUpdateResult`, `IFileAddResult`, `IFolderAddResult` no longer exist; `IListEnsureResult` moved to `@pnp/sp/lists/types`.
 - `sp-js-provisioning` must be on a PnPjs 4 release (1.4.0 or later, `@pnp/*` as peer dependencies). Bump it with `node docs/plans/pnpjs-4-migration-bump.js --provisioning-version=<v>` and `rush update`; a v3 release makes every `new WebProvisioner(web)` site fail with "IWeb is not assignable".
 - Heft runs Jest on `src/**/*.test.ts` in every build (`heft test` gates `npm run build`). `@pnp/*` 4 is ESM-only and the Jest runner is CommonJS, so tests use structural stand-ins (`shared-library/src/services/EntityPortalService/pnpShapes.ts`) instead of importing `@pnp/*`.
+
+## CI and memory
+
+- Workflows run on `ubuntu-latest` (16 GB) with `NODE_OPTIONS=--max-old-space-size=8192` and `RUSH_PARALLELISM=2` set at workflow level; `Install/Build-Release.ps1` defaults the same heap when the variable is unset. The 7 GB macOS runner ran out of heap in PortfolioWebParts (fails at 2 GB, passes at 3 GB), so do not move the build jobs back to macOS without keeping these.
+- Deploy jobs use `shell: pwsh`; `shell: powershell` is Windows-only and is not valid on Ubuntu.
 
 ## Do not
 

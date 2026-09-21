@@ -2,7 +2,7 @@
 
 Scoped 2026-09-16, implemented 2026-09-21. Depends on Phase 1 (`spfx-1.23-heft-toolchain.md`).
 
-**Status (2026-09-21):** implemented in all six solutions. `pp365-shared-library` builds and its 107 unit tests pass. The five consumer solutions compile, except for six expected errors at the `sp-js-provisioning` boundary (five `new WebProvisioner(web)` sites where a PnPjs 4 `IWeb` meets the 1.3.15 typings, plus one `LogLevel` enum passed to `setup()` in `ApplyTemplate`): those stay red until `sp-js-provisioning` 1.4.0 (ported to PnPjs 4, ready in its own repo) is published and the repo is bumped to it. See "Finishing steps" at the end.
+**Status (2026-09-21): complete.** All six solutions build on PnPjs 4.21.0 and `sp-js-provisioning` 1.4.0 (published the same day): `rush rebuild` exit 0, 0 TypeScript errors, 0 lint errors, 107 Jest tests passing, no `pp365-*` externals, and the built bundles carry PnPjs 4.21.0 plus only the 2.5.0 nested in `@pnp/spfx-controls-react`. The lock file no longer contains any `@pnp/*@3.x` or `@pnp/nodejs`. Remaining work is verification in the test tenant (see Verification).
 
 ## Context
 
@@ -46,9 +46,9 @@ Ported as a read-only client in `shared-library/src/taxonomy/` over `_api/v2.1/t
 
 Bumping was impossible (2.3.0 is the only version, last published 2023-08-07) and forking was impossible (no repository URL; the tarball is the only source). Vendored to `shared-library/src/services/EntityPortalService/` with MIT attribution, ported to v4, operations unit tested. Behaviour change: `fetchEntity` and `updateEntityItem` throw when no entity matches the identity (the package silently read `undefined`); `getEntityItem` still returns `undefined`, so "create when missing" flows are unchanged.
 
-### C. `sp-js-provisioning`: bump to PnPjs 4 as a minor release, 1.4.0 (decided, publish pending)
+### C. `sp-js-provisioning`: bump to PnPjs 4 as a minor release, 1.4.0 (decided, done)
 
-Ported in its own repository: `@pnp/*` moved to `peerDependencies ^4.21.0` (plus devDependencies), `@pnp/nodejs` to devDependencies, handlers fixed for v4 shapes, 17 unit tests under `node:test`, CHANGELOG entry `1.4.0`. `package.json` is intentionally still 1.3.15: `npm version minor` produces 1.4.0 and its `postversion` script builds and publishes. The peer dependency makes the consumer's PnPjs the only copy, so `IWeb` becomes assignable again and the two sides share one `@pnp/logging`.
+Ported in its own repository: `@pnp/*` moved to `peerDependencies ^4.21.0` (plus devDependencies), `@pnp/nodejs` to devDependencies, handlers fixed for v4 shapes, 17 unit tests under `node:test`, CHANGELOG entry `1.4.0`. Published as 1.4.0 on 2026-09-21 and both importers (PortfolioExtensions, ProjectExtensions) bumped; the nested `@pnp/*@3.17.0` tree is gone from the lock file. The peer dependency makes the consumer's PnPjs the only copy, so `IWeb` becomes assignable again and the two sides share one `@pnp/logging`.
 
 ### D. Term label resolution: one fixed chain (decided 2026-09-21)
 
@@ -75,9 +75,9 @@ shared-library only imported the `Schema` type. It now declares `ProvisioningSch
 |---|---|---|
 | PortfolioWebParts | 5 `getAll` in `DataAdapter.ts` | clean build |
 | ProgramWebParts | 4 `getAll` in `SPDataAdapter.ts` (one generic `getAll<T>()` missed by scoping) | clean build |
-| PortfolioExtensions | result shapes in `ideaProjectData`, `PackageInstaller`; term store probe and `CompatibilityService` on `getTermStore` (the `any` casts are gone) | clean except the 2 expected boundary errors |
+| PortfolioExtensions | result shapes in `ideaProjectData`, `PackageInstaller`; term store probe and `CompatibilityService` on `getTermStore` (the `any` casts are gone) | clean build |
 | ProjectWebParts | 7 `getAll` (two `const [x]` sites became `.top(1)()`), `TaxonomyTermModel` and `fetchListData` on the ported taxonomy, `stampSiteIdFieldsOnFile` takes the web plus `IFileInfo` and re-resolves the item | clean build |
-| ProjectExtensions | `getAll` x4, entity service imports, `PreTask` term set validation on `getTermStore` wrapped in `BaseTaskError`, `TemplateItem`/`DocumentTemplateDialog` on `IFileInfo` (new handles anchored on the target folder's web, not the hub web), `SitePermissions` via `siteGroups.getById(info.Id)`, quick launch children via `getById(info.Id).children`, Planner `IAddable` payloads with the ETag read from the POST body | clean except the 4 expected boundary errors |
+| ProjectExtensions | `getAll` x4, entity service imports, `PreTask` term set validation on `getTermStore` wrapped in `BaseTaskError`, `TemplateItem`/`DocumentTemplateDialog` on `IFileInfo` (new handles anchored on the target folder's web, not the hub web), `SitePermissions` via `siteGroups.getById(info.Id)`, quick launch children via `getById(info.Id).children`, Planner `IAddable` payloads with the ETag read from the POST body | clean build |
 
 ## Verification
 
@@ -108,12 +108,12 @@ The unit tests exercise our logic against stand-ins; they do not execute SharePo
 | Taxonomy | Phase wheel, document type filtering, term set validation in project setup, term store probe in the template catalog |
 | Term labels (Decision D) | Phase names on an nb-NO web and on an en-US web |
 
-## Finishing steps
+## Finishing steps (done 2026-09-21)
 
-1. In `sp-js-provisioning`: `npm version minor` (gives 1.4.0, matching the CHANGELOG; `postversion` runs `tsc && npm publish`).
-2. In this repo: `node docs/plans/pnpjs-4-migration-bump.js --provisioning-version=1.4.0`, then `node common/scripts/install-run-rush.js update`.
-3. `node common/scripts/install-run-rush.js build`: the five `IWeb` boundary errors disappear, and the lock file drops `@pnp/*@3.17.0` entirely (only the PnP controls' 2.5.0 remains beside 4.21.0).
-4. Tenant smoke run per the table above.
+1. `sp-js-provisioning` 1.4.0 published from its own repository.
+2. `node docs/plans/pnpjs-4-migration-bump.js --provisioning-version=1.4.0` and `rush update` applied; the bump script can be deleted once this branch is merged.
+3. `rush rebuild`: 9 of 9 projects green, no boundary errors left.
+4. Still open: the tenant smoke run per the table above. CI now runs on `ubuntu-latest` with an 8 GB Node heap (see `spfx-1.23-heft-toolchain/HANDOFF.md`, "CI runner").
 
 ## Prerequisite
 

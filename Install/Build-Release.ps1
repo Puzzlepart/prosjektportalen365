@@ -143,6 +143,16 @@ if ($NODE_MAJOR -ne 22) {
 }
 #endregion
 
+#region Node heap
+# Heft runs TypeScript and webpack in one Node process per solution, and the largest solution
+# (PortfolioWebParts) needs more than V8's default heap on machines with 8 GB or less (it fails at
+# a 2 GB cap and passes at 3 GB). Give every heft process the same 8 GB ceiling the gulp toolchain
+# used, unless the caller already set NODE_OPTIONS. RUSH_PARALLELISM is left to the caller.
+if ([string]::IsNullOrEmpty($env:NODE_OPTIONS)) {
+    $env:NODE_OPTIONS = "--max-old-space-size=8192"
+}
+#endregion
+
 #region Pre-build
 if ($null -ne $CHANNEL_CONFIG) {
     Write-Host "[Building release $RELEASE_NAME for channel $($CHANNEL_CONFIG_NAME)]" -ForegroundColor Cyan
@@ -352,7 +362,9 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
 
 #region Compressing release to a zip file
 if (-not $CI.IsPresent) {
-    rimraf "$($RELEASE_PATH).zip"
+    # Remove-Item instead of rimraf: rimraf is not a dependency of this repo, so the call only
+    # worked on machines that happened to have it installed globally.
+    Remove-Item -Path "$($RELEASE_PATH).zip" -Force -ErrorAction SilentlyContinue
     Add-Type -Assembly "System.IO.Compression.FileSystem"
     [IO.Compression.ZipFile]::CreateFromDirectory($RELEASE_PATH, "$($RELEASE_PATH).zip")  
     $StopWatch.Stop()

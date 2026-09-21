@@ -11,6 +11,12 @@ on:
       - .github/workflows/ci-channel-test.yml
 
 env:
+  # Heft's TypeScript and webpack steps need more than V8's default heap (about 2 GB on a small
+  # runner): the PortfolioWebParts production build dies at 2 GB and passes at 3 GB. 8 GB matches
+  # the headroom the gulp toolchain used. RUSH_PARALLELISM bounds concurrent solution builds so
+  # the heap ceilings cannot add up past the runner's memory.
+  NODE_OPTIONS: --max-old-space-size=8192
+  RUSH_PARALLELISM: 2
   CI_CERT_BASE64: ${{ secrets.CI_CERT_BASE64 }}
   CI_TENANT: ${{ secrets.CI_TENANT }}
   CI_CLIENT_ID: ${{ secrets.CI_CLIENT_ID }}
@@ -35,7 +41,7 @@ jobs:
   build_release_package_test:
     needs: [commit_subject]
     name: Build release package (test channel)
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     if: ${{ !contains(needs.commit_subject.outputs.subject, '[skip-ci]') && !contains(needs.commit_subject.outputs.subject, '[apps-only') }}
     steps:
       - uses: actions/checkout@v4
@@ -64,7 +70,7 @@ jobs:
   upgrade_channel_test:
     needs: [commit_subject, build_release_package_test]
     name: Upgrade (test channel)
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     if: ${{ !contains(needs.commit_subject.outputs.subject, '[skip-upgrade]') }}
     steps:
       - uses: actions/download-artifact@v4
@@ -74,12 +80,12 @@ jobs:
 
       - name: Upgrade
         run: release/Install.ps1 -Url "${{ vars.SP_URL_TEST }}" -Upgrade -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }}
-        shell: powershell
+        shell: pwsh
 
   upgrade_all_sites_to_latest:
     needs: [commit_subject, build_release_package_test, upgrade_channel_test]
     name: Upgrade all sites to latest (test channel)
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     if: ${{ contains(needs.commit_subject.outputs.subject, '[upgrade-all-sites-to-latest]') }}
     steps:
       - uses: actions/download-artifact@v4
@@ -89,12 +95,12 @@ jobs:
 
       - name: Run script UpgradeAllSitesToLatest.ps1 in CI mode
         run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url ${{ vars.SP_URL_TEST }} -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }}
-        shell: powershell
+        shell: pwsh
 
   build_release_package_test_packages_only:
     needs: [commit_subject]
     name: Build release package - packages only (test channel)
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     if: ${{ contains(needs.commit_subject.outputs.subject, '[apps-only')}}
     steps:
       - uses: actions/checkout@v4
@@ -143,7 +149,7 @@ jobs:
   upgrade_channel_test_packages_only:
     needs: [commit_subject, build_release_package_test_packages_only]
     name: Upgrade packages only (test channel)
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     if: ${{ !contains(needs.commit_subject.outputs.subject, '[skip-upgrade]') }}
     steps:
       - uses: actions/download-artifact@v4
@@ -153,4 +159,4 @@ jobs:
 
       - name: Upgrade
         run: release/Install.ps1 -Url "${{ vars.SP_URL_TEST }}" -Upgrade -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }} -SkipTemplate
-        shell: powershell
+        shell: pwsh

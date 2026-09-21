@@ -140,8 +140,8 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1
       sp-js-provisioning:
-        specifier: 1.3.15
-        version: 1.3.15(@types/node@22.20.3)(@types/react-dom@17.0.17)(@types/react@17.0.45)
+        specifier: 1.4.0
+        version: 1.4.0(@pnp/core@4.21.0)(@pnp/logging@4.21.0)(@pnp/queryable@4.21.0)(@pnp/sp@4.21.0)(@types/node@22.20.3)(@types/react-dom@17.0.17)(@types/react@17.0.45)
       tslib:
         specifier: 2.8.1
         version: 2.8.1
@@ -650,8 +650,8 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1
       sp-js-provisioning:
-        specifier: 1.3.15
-        version: 1.3.15(@types/node@22.20.3)(@types/react-dom@17.0.17)(@types/react@17.0.45)
+        specifier: 1.4.0
+        version: 1.4.0(@pnp/core@4.21.0)(@pnp/logging@4.21.0)(@pnp/queryable@4.21.0)(@pnp/sp@4.21.0)(@types/node@22.20.3)(@types/react-dom@17.0.17)(@types/react@17.0.45)
       spfx-jsom:
         specifier: 0.6.6
         version: 0.6.6(@types/node@22.20.3)(@types/react-dom@17.0.17)(@types/react@17.0.45)
@@ -1176,15 +1176,6 @@ packages:
   '@azure/logger@1.4.0':
     resolution: {integrity: sha512-rbAE25KUfjU/s3XHUdJgceoCP5dEOpMx85J04kF+QMdta73XkuG9JGHHinch+XIoKpBdqljin+KqURpJriSzLA==}
     engines: {node: '>=22.0.0'}
-
-  '@azure/msal-common@13.2.0':
-    resolution: {integrity: sha512-rnstQ7Zgn3fSTKNQO+/YNV34/QXJs0vni7IA0/3QB1EEyrJg14xyRmTqlw9ta+pdSuT5OJwUP8kI3D/rBwUIBw==}
-    engines: {node: '>=0.8.0'}
-
-  '@azure/msal-node@1.18.0':
-    resolution: {integrity: sha512-N6GX1Twxw524e7gaJvj7hKtrPRmZl9qGY7U4pmUdx4XzoWYRFfYk4H1ZjVhQ7pwb5Ks88NNhbXVCagsuYPTEFg==}
-    engines: {node: 10 || 12 || 14 || 16 || 18}
-    deprecated: A newer major version of this library is available. Please upgrade to the latest available version.
 
   '@azure/storage-blob@12.26.0':
     resolution: {integrity: sha512-SriLPKezypIsiZ+TtlFfE46uuBIap2HeaQVS78e1P7rz5OSbq0rsd52WE1mC5f7vAeLiXqv7I7oRhL3WFZEw3Q==}
@@ -2873,9 +2864,6 @@ packages:
   '@microsoft/microsoft-graph-types-beta@0.29.0-preview':
     resolution: {integrity: sha512-83PCHDH7GxW8KM1J+MM6FPbaahIuj7VIgnY4UbMGQkkq2fBaHeKOmgjVbohvLVeIOOCTLmorPh6JtXH0VtFurA==}
 
-  '@microsoft/microsoft-graph-types@2.35.0':
-    resolution: {integrity: sha512-3jCQyKaYbNuzVG884SNuWKS19FPUxBwHfDAb3DqZWBwPYcX3HbDe2D22z9Ue+UV+JGuw917cH75RTSgrdnutFg==}
-
   '@microsoft/microsoft-graph-types@2.43.0':
     resolution: {integrity: sha512-sB9TZugdGH2SnN2mcV5rfKhhfDLPSAvF5VQ+94wtbKAqRpVLFKl9IfqZ+q2/264adkb8iBmgiUEbyrVmOmE2/g==}
 
@@ -3217,17 +3205,9 @@ packages:
   '@pnp/common@2.5.0':
     resolution: {integrity: sha512-ea4zTNC3sjLolrHZXP+/2SrJM+yC8PygmPW/yRfgbErdvdwYMUSogT69dW+NUaqhkfYZfkkAoWn42irlLMSpdw==}
 
-  '@pnp/core@3.17.0':
-    resolution: {integrity: sha512-h+nu1eHEQ0VpiRcLDQjPyVJHnrHruFJ/v8ZsSbJx1Vg2EoP/X5wDaZNXSjEmF3Xy3yD9aURDkdMw7eVb7PMfEw==}
-    engines: {node: '>=14.15.1'}
-
   '@pnp/core@4.21.0':
     resolution: {integrity: sha512-3BNaE9cDDdFaA/QKF3U3zaR5tfqATTPSTa1QLh6TbyjUafTwvQIwNIDPf1S1ezfMNXtKV+2B8SwI4dqU4m6rGw==}
     engines: {node: '>=18.12.0'}
-
-  '@pnp/graph@3.17.0':
-    resolution: {integrity: sha512-lfIN5yLx5g42kUzqbU7F2nEBfy1Oac8IwcpitAPxH0t7F99cztrHIjaBTgZKQ1u4ruPpgtLlv+h4++lP9e1RWA==}
-    engines: {node: '>=14.15.1'}
 
   '@pnp/graph@4.21.0':
     resolution: {integrity: sha512-uIz5at+qUMfVVY3aZjmY3eyWKz8vGU659OBk74uytfq4jjLm6TgoqbuH+cY3SQiOknwXxFzZL3IBNgq5dS2YAA==}
@@ -3236,24 +3216,12 @@ packages:
   '@pnp/logging@2.5.0':
     resolution: {integrity: sha512-SnmMCN6oADjiHKAIR23FfTqXeQZeXPBnWeVfyZAgzJfRn9uEQoUlkyET3jHjl9kkrFOVkiOD1CRI7TWMIxURbA==}
 
-  '@pnp/logging@3.17.0':
-    resolution: {integrity: sha512-AdsPdecbzvvNrm4DzSrgzRXyMkF87PZ+XBaZotXLw4r4NQZFTKfB9agEO5aSfjOCaBbbij81m3D0ZGo4gGvzqg==}
-    engines: {node: '>=14.15.1'}
-
   '@pnp/logging@4.21.0':
     resolution: {integrity: sha512-jImkkE87ww48C+IJ8vR6j/+frofB9qAwIXlH5leX1ZStsrHOuDoGlslhfWOyx8PG+yGY7iSEDbFcO/ex06vpig==}
     engines: {node: '>=18.12.0'}
 
-  '@pnp/nodejs@3.17.0':
-    resolution: {integrity: sha512-fgMGzeu9EY5hPpmgvC0LOmNg5iYzEFLSfuiG7ZrHaP8XstCRWpshmyOzv9INnUR9UyQZ0+Can2bfxLUQerE76A==}
-    engines: {node: '>=14.15.1'}
-
   '@pnp/odata@2.5.0':
     resolution: {integrity: sha512-AeP01jDvnkiUVn7V+4FT07chz+G/yzrJDH0Gk+qzujJ393ZO6FwJpJEiOCRh9cxF48gqSj/f7r/IIyDHe0+IpQ==}
-
-  '@pnp/queryable@3.17.0':
-    resolution: {integrity: sha512-kF2fi1pRZr70jGi9qrlA7wLi9Eh1AS+szPGT8C665cko18pahY8OLd8ra8d08Cw8TTuNG/AvJ6Z4BU1I3kSWYg==}
-    engines: {node: '>=14.15.1'}
 
   '@pnp/queryable@4.21.0':
     resolution: {integrity: sha512-MjZKngDKE8pBFXDy7BVpUF8xAyaNo/lOqxphSX2FdX8UgTCX/TzFZ/hHPkobkHZUW/LDXsZboYN/82OKkq/S+g==}
@@ -3261,10 +3229,6 @@ packages:
 
   '@pnp/sp@2.5.0':
     resolution: {integrity: sha512-4s2p+X5qvkXR72NViKb8DIfC+pvj/a3psZ3Im5PRIan2ErMtu9ch3Lb9nkSaMCF3NTJxWOhkUQ/R6tx8ApaUkg==}
-
-  '@pnp/sp@3.17.0':
-    resolution: {integrity: sha512-PTeLI+D5oddALX+Xogs9PzcebfSXdidS0QU8Ral7HU8797lFSzlMx3FTG+nAPHTLerTHsUvAAtkmCw1rI6MBXQ==}
-    engines: {node: '>=14.15.1'}
 
   '@pnp/sp@4.21.0':
     resolution: {integrity: sha512-oemGbx/1lmxVopwhTDPDrjtmEdjKlamFa+OPNylB0pKJc8LCoUkf0TiABkvtD5u/pwvthFUFvE1dq6Ia7OiTDQ==}
@@ -4596,9 +4560,6 @@ packages:
   buffer-builder@0.2.0:
     resolution: {integrity: sha512-7VPMEPuYznPSoR21NE1zvd2Xna6c/CloiZCfcMXR1Jny6PjX0N4Nsa38zcBFo/FMK+BlA+FLKbJCQ0i2yxp+Xg==}
 
-  buffer-equal-constant-time@1.0.1:
-    resolution: {integrity: sha512-zRpUiDwd/xk6ADqPMATG8vc9VPrkck7T07OIx0gnjmJAnHnTVXNQG3vfvWNuiZIkwu9KrKdA1iJKfsfTVxE6NA==}
-
   buffer-from@1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
 
@@ -5099,10 +5060,6 @@ packages:
     resolution: {integrity: sha512-e1U46jVP+w7Iut8Jt8ri1YsPOvFpg46k+K8TpCb0P+zjCkjkPnV7WzfDJzMHy1LnA+wj5pLT1wjO901gLXeEhA==}
     engines: {node: '>=12'}
 
-  data-uri-to-buffer@4.0.1:
-    resolution: {integrity: sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==}
-    engines: {node: '>= 12'}
-
   data-urls@5.0.0:
     resolution: {integrity: sha512-ZYP5VBHshaDAiVZxjbRVcFJpc+4xGgT0bK3vzy1HLN8jTO975HEbuYzZJcHoQEY5K1a0z8YayJkyVETa08eNTg==}
     engines: {node: '>=18'}
@@ -5294,9 +5251,6 @@ packages:
 
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
-
-  ecdsa-sig-formatter@1.0.11:
-    resolution: {integrity: sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==}
 
   ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
@@ -5689,10 +5643,6 @@ packages:
   fela@10.8.2:
     resolution: {integrity: sha512-rdF2h6U9gBhLged2WpOE43zqDG3f9rV7PNmcCoTuMIoKZqN0tYsc71nJRS7aNQtk+kRB5VsvMpoK0JGbs4s0qA==}
 
-  fetch-blob@3.2.0:
-    resolution: {integrity: sha512-7yAQpD2UMJzLi1Dqv7qFYnPbaPx7ZfFK6PiIxQ4PfkGPyNyl2Ugx+a/umUonmKqjhM4DnfbMvdX6otXq83soQQ==}
-    engines: {node: ^12.20 || >= 14.13}
-
   fflate@0.3.11:
     resolution: {integrity: sha512-Rr5QlUeGN1mbOHlaqcSYMKVpPbgLy0AWT/W0EHxA6NGI12yO1jpoui2zBBvU2G824ltM6Ut8BFgfHSBGfkmS0A==}
 
@@ -5759,10 +5709,6 @@ packages:
   foreground-child@3.3.1:
     resolution: {integrity: sha512-gIXjKqtFuWEgzFRJA9WCQeSJLZDjgJUOMCMzxtvFq/37KojM1BFGufqsCy0r4qSQmYLsZYMeyRqzIWOMup03sw==}
     engines: {node: '>=14'}
-
-  formdata-polyfill@4.0.10:
-    resolution: {integrity: sha512-buewHzMvYL29jdeQTVILecSaZKnt/RJWjoZCF5OW60Z67/GmSLBkOFM7qh1PI3zFNtJbaZL5eQu1vLfazOwj4g==}
-    engines: {node: '>=12.20.0'}
 
   forwarded@0.2.0:
     resolution: {integrity: sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==}
@@ -6609,10 +6555,6 @@ packages:
     engines: {node: '>=18.0.0'}
     hasBin: true
 
-  jsonwebtoken@9.0.3:
-    resolution: {integrity: sha512-MT/xP0CrubFRNLNKvxJ2BYfy53Zkm++5bX9dtuPbqAeQpTVe0MQTFhao8+Cp//EmJp244xt6Drw/GVEGCUj40g==}
-    engines: {node: '>=12', npm: '>=6'}
-
   jspath@0.4.0:
     resolution: {integrity: sha512-2/R8wkot8NCXrppBT/onp+4mcAUAZqtPxsW6aSJU3hrFAVqKqtFYcat2XJZ7inN4RtATUxfv0UQSYOmvJKiIGA==}
     engines: {node: '>= 0.4.0'}
@@ -6626,12 +6568,6 @@ packages:
 
   jszip@3.8.0:
     resolution: {integrity: sha512-cnpQrXvFSLdsR9KR5/x7zdf6c3m8IhZfZzSblFEHSqBaVwD2nvJ4CuCKLyvKvwBgZm08CgfSoiTBQLm5WW9hGw==}
-
-  jwa@2.0.1:
-    resolution: {integrity: sha512-hRF04fqJIP8Abbkq5NKGN0Bbr3JxlQ+qhZufXVr0DvujKy93ZCbXZMHDL4EOtodSbCWxOqR8MS1tXA5hwqCXDg==}
-
-  jws@4.0.1:
-    resolution: {integrity: sha512-EKI/M/yqPncGUUh44xz0PxSidXFr/+r0pA70+gIYhjv+et7yxM+s29Y+VGDkovRofQem0fs7Uvf4+YmAdyRduA==}
 
   kdbush@4.1.0:
     resolution: {integrity: sha512-e9vurzrXJQrFX6ckpHP3bvj5l+9CnYzkxDNnNQ1h2QTqdWsUAJgXiKdGNcOa1EY85dU8KbQ+z/FdQdB7P+9yfQ==}
@@ -6718,12 +6654,6 @@ packages:
     resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
     deprecated: This package is deprecated. Use the optional chaining (?.) operator instead.
 
-  lodash.includes@4.3.0:
-    resolution: {integrity: sha512-W3Bx6mdkRTGtlJISOvVD/lbqjTlPPUDTMnlXZFnVwi9NKJ6tiAk6LVdlhZMm17VZisqhKcgzpO5Wz91PCt5b0w==}
-
-  lodash.isboolean@3.0.3:
-    resolution: {integrity: sha512-Bz5mupy2SVbPHURB98VAcw+aHh4vRV5IPNhILUCsOzRmsTmSQ17jIuqopAentWoehktxGd9e/hbIXq980/1QJg==}
-
   lodash.isempty@4.4.0:
     resolution: {integrity: sha512-oKMuF3xEeqDltrGMfDxAPGIVMSSRv8tbRSODbrs4KGsRRLEhrW8N8Rd4DRgB2+621hY8A8XwwrTVhXWpxFvMzg==}
 
@@ -6731,17 +6661,8 @@ packages:
     resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
     deprecated: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
 
-  lodash.isinteger@4.0.4:
-    resolution: {integrity: sha512-DBwtEWN2caHQ9/imiNeEA5ys1JoRtRfY3d7V9wkqtbycnAmTvRRmbHKDV4a0EYc678/dia0jrte4tjYwVBaZUA==}
-
-  lodash.isnumber@3.0.3:
-    resolution: {integrity: sha512-QYqzpfwO3/CWf3XP+Z+tkQsfaLL/EnUlXWVkIk5FUPc4sBdTehEqZONuyRt2P67PXAk+NXmTBcc97zw9t1FQrw==}
-
   lodash.isplainobject@4.0.6:
     resolution: {integrity: sha512-oSXzaWypCMHkPC3NvBEaPHf0KsA5mvPrOPgQWDsbg8n7orZ290M0BmC/jgRZ4vcJ6DTAhjrsSYgdsW/F+MFOBA==}
-
-  lodash.isstring@4.0.1:
-    resolution: {integrity: sha512-0wJxfxH1wgO3GrbuP+dTTk7op+6L41QCXbGINEmD+ny/G/eCqGzxyCsh7159S+mgDDcoarnBw6PC1PS5+wUGgw==}
 
   lodash.memoize@4.1.2:
     resolution: {integrity: sha512-t7j+NzmgnQzTAYXcsHYLgimltOV1MXHtlOWf6GjL9Kj8GK5FInw5JotxvbOs+IvV1/Dzo04/fCGfLVs7aXb4Ag==}
@@ -6752,9 +6673,6 @@ packages:
   lodash.omit@4.5.0:
     resolution: {integrity: sha512-XeqSp49hNGmlkj2EJlfrQFIzQ6lXdNro9sddtQzcJY8QaoC2GO0DT7xaIokHeyM+mIT0mPMlPvkYzg2xCuHdZg==}
     deprecated: This package is deprecated. Use destructuring assignment syntax instead.
-
-  lodash.once@4.1.1:
-    resolution: {integrity: sha512-Sb487aTOCr9drQVL8pIxOzVhafOjZN9UU54hiN8PU3uAiSV7lx1yYNpbNmex2PK6dSJoNTSJUUswT651yww3Mg==}
 
   lodash.throttle@4.1.1:
     resolution: {integrity: sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==}
@@ -7066,11 +6984,6 @@ packages:
   no-case@3.0.4:
     resolution: {integrity: sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg==}
 
-  node-domexception@1.0.0:
-    resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
-    engines: {node: '>=10.5.0'}
-    deprecated: Use your platform's native DOMException instead
-
   node-exports-info@1.6.2:
     resolution: {integrity: sha512-kXs9Go0cah0qHVV2v389IXQLdLCeE1xfFtjOAF+iobu0OIoG1pje8At2vMHyaPMiPMnG/LWP50twML21eMcAag==}
     engines: {node: '>= 0.4'}
@@ -7086,10 +6999,6 @@ packages:
     peerDependenciesMeta:
       encoding:
         optional: true
-
-  node-fetch@3.3.1:
-    resolution: {integrity: sha512-cRVc/kyto/7E5shrWca1Wsea4y6tL9iYJE5FBCius3JQfb/4P4I295PfhgbJQBLTx6lATE4z+wK0rPM4VS2uow==}
-    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
   node-forge@1.4.0:
     resolution: {integrity: sha512-LarFH0+6VfriEhqMMcLX2F7SwSXeWwnEAJEsYm5QKWchiVYVvJyV9v7UDvUv+w5HO23ZpQTXDv/GxdDdMyOuoQ==}
@@ -8311,8 +8220,14 @@ packages:
     resolution: {integrity: sha512-i5uvt8C3ikiWeNZSVZNWcfZPItFQOsYTUAOkcUPGd8DqDy1uOUikjt5dG+uRlwyvR108Fb9DOd4GvXfT0N2/uQ==}
     engines: {node: '>= 12'}
 
-  sp-js-provisioning@1.3.15:
-    resolution: {integrity: sha512-cVnXeBqHDPyNQ4IIinT6tO8TxnQudZvpsx8xwuWRTzcBNbem75Udr4aZuM0omPTc38ZxMzaw02b7hIAh6WSJhA==}
+  sp-js-provisioning@1.4.0:
+    resolution: {integrity: sha512-JLA+gdoY4sz50QYXIFAcdIsxDU0bB6fxrMflu86rnWQU+JFbfLmqeIRGHITBfO6loAeZHOA6X3SgS/rtY9VUTg==}
+    engines: {node: '>=18.12.0'}
+    peerDependencies:
+      '@pnp/core': ^4.21.0
+      '@pnp/logging': ^4.21.0
+      '@pnp/queryable': ^4.21.0
+      '@pnp/sp': ^4.21.0
 
   space-separated-tokens@2.0.2:
     resolution: {integrity: sha512-PEGlAwrG8yXGXRjW32fGbg66JAlOAwbObuqVoJpv/mRgoWDQfgH1wDPvtzWyUSNAXBGSk8h755YDbbcEy3SH2Q==}
@@ -8675,12 +8590,6 @@ packages:
   tslib@2.3.1:
     resolution: {integrity: sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==}
 
-  tslib@2.4.1:
-    resolution: {integrity: sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==}
-
-  tslib@2.6.0:
-    resolution: {integrity: sha512-7At1WUettjcSRHXCyYtTselblcHl9PJFFVKiCAy/bY97+BPZXSQ2wbq0P9s8tK2G7dFQfNnlJnPAiArVBVBsfA==}
-
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
@@ -8906,10 +8815,6 @@ packages:
 
   web-namespaces@2.0.1:
     resolution: {integrity: sha512-bKr1DkiNa2krS7qxNtdrtHAmzuYGFQLiQ13TsorsdT6ULTkPLKuu5+GsFpDlg6JFjUTwX2DyhMPG2be8uPrqsQ==}
-
-  web-streams-polyfill@3.3.3:
-    resolution: {integrity: sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==}
-    engines: {node: '>= 8'}
 
   webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
@@ -9240,14 +9145,6 @@ snapshots:
       tslib: 2.8.1
     transitivePeerDependencies:
       - supports-color
-
-  '@azure/msal-common@13.2.0': {}
-
-  '@azure/msal-node@1.18.0':
-    dependencies:
-      '@azure/msal-common': 13.2.0
-      jsonwebtoken: 9.0.3
-      uuid: 8.3.2
 
   '@azure/storage-blob@12.26.0':
     dependencies:
@@ -13132,8 +13029,6 @@ snapshots:
 
   '@microsoft/microsoft-graph-types-beta@0.29.0-preview': {}
 
-  '@microsoft/microsoft-graph-types@2.35.0': {}
-
   '@microsoft/microsoft-graph-types@2.43.0': {}
 
   '@microsoft/recognizers-text-data-types-timex-expression@1.3.0': {}
@@ -14246,20 +14141,9 @@ snapshots:
     dependencies:
       tslib: 2.2.0
 
-  '@pnp/core@3.17.0':
-    dependencies:
-      tslib: 2.4.1
-
   '@pnp/core@4.21.0':
     dependencies:
       tslib: 2.8.1
-
-  '@pnp/graph@3.17.0':
-    dependencies:
-      '@microsoft/microsoft-graph-types': 2.35.0
-      '@pnp/core': 3.17.0
-      '@pnp/queryable': 3.17.0
-      tslib: 2.6.0
 
   '@pnp/graph@4.21.0':
     dependencies:
@@ -14272,35 +14156,15 @@ snapshots:
     dependencies:
       tslib: 2.2.0
 
-  '@pnp/logging@3.17.0':
-    dependencies:
-      tslib: 2.4.1
-
   '@pnp/logging@4.21.0':
     dependencies:
       tslib: 2.8.1
-
-  '@pnp/nodejs@3.17.0':
-    dependencies:
-      '@azure/msal-node': 1.18.0
-      '@pnp/core': 3.17.0
-      '@pnp/graph': 3.17.0
-      '@pnp/logging': 3.17.0
-      '@pnp/queryable': 3.17.0
-      '@pnp/sp': 3.17.0
-      node-fetch: 3.3.1
-      tslib: 2.6.0
 
   '@pnp/odata@2.5.0':
     dependencies:
       '@pnp/common': 2.5.0
       '@pnp/logging': 2.5.0
       tslib: 2.2.0
-
-  '@pnp/queryable@3.17.0':
-    dependencies:
-      '@pnp/core': 3.17.0
-      tslib: 2.4.1
 
   '@pnp/queryable@4.21.0':
     dependencies:
@@ -14313,12 +14177,6 @@ snapshots:
       '@pnp/logging': 2.5.0
       '@pnp/odata': 2.5.0
       tslib: 2.2.0
-
-  '@pnp/sp@3.17.0':
-    dependencies:
-      '@pnp/core': 3.17.0
-      '@pnp/queryable': 3.17.0
-      tslib: 2.4.1
 
   '@pnp/sp@4.21.0':
     dependencies:
@@ -16047,8 +15905,6 @@ snapshots:
 
   buffer-builder@0.2.0: {}
 
-  buffer-equal-constant-time@1.0.1: {}
-
   buffer-from@1.1.2: {}
 
   bundle-name@4.1.0:
@@ -16602,8 +16458,6 @@ snapshots:
       d3-transition: 3.0.1(d3-selection@3.0.0)
       d3-zoom: 3.0.0
 
-  data-uri-to-buffer@4.0.1: {}
-
   data-urls@5.0.0:
     dependencies:
       whatwg-mimetype: 4.0.0
@@ -16784,10 +16638,6 @@ snapshots:
   earcut@3.2.3: {}
 
   eastasianwidth@0.2.0: {}
-
-  ecdsa-sig-formatter@1.0.11:
-    dependencies:
-      safe-buffer: 5.2.1
 
   ee-first@1.1.1: {}
 
@@ -17353,11 +17203,6 @@ snapshots:
       fela-utils: 10.8.2
       isobject: 3.0.1
 
-  fetch-blob@3.2.0:
-    dependencies:
-      node-domexception: 1.0.0
-      web-streams-polyfill: 3.3.3
-
   fflate@0.3.11: {}
 
   fflate@0.8.3: {}
@@ -17419,10 +17264,6 @@ snapshots:
     dependencies:
       cross-spawn: 7.0.6
       signal-exit: 4.1.0
-
-  formdata-polyfill@4.0.10:
-    dependencies:
-      fetch-blob: 3.2.0
 
   forwarded@0.2.0: {}
 
@@ -18483,19 +18324,6 @@ snapshots:
       '@jsep-plugin/regex': 1.0.4(jsep@1.4.0)
       jsep: 1.4.0
 
-  jsonwebtoken@9.0.3:
-    dependencies:
-      jws: 4.0.1
-      lodash.includes: 4.3.0
-      lodash.isboolean: 3.0.3
-      lodash.isinteger: 4.0.4
-      lodash.isnumber: 3.0.3
-      lodash.isplainobject: 4.0.6
-      lodash.isstring: 4.0.1
-      lodash.once: 4.1.1
-      ms: 2.1.3
-      semver: 7.8.5
-
   jspath@0.4.0: {}
 
   jsx-ast-utils@3.3.5:
@@ -18518,17 +18346,6 @@ snapshots:
       pako: 1.0.11
       readable-stream: 2.3.8
       set-immediate-shim: 1.0.1
-
-  jwa@2.0.1:
-    dependencies:
-      buffer-equal-constant-time: 1.0.1
-      ecdsa-sig-formatter: 1.0.11
-      safe-buffer: 5.2.1
-
-  jws@4.0.1:
-    dependencies:
-      jwa: 2.0.1
-      safe-buffer: 5.2.1
 
   kdbush@4.1.0: {}
 
@@ -18608,29 +18425,17 @@ snapshots:
 
   lodash.get@4.4.2: {}
 
-  lodash.includes@4.3.0: {}
-
-  lodash.isboolean@3.0.3: {}
-
   lodash.isempty@4.4.0: {}
 
   lodash.isequal@4.5.0: {}
 
-  lodash.isinteger@4.0.4: {}
-
-  lodash.isnumber@3.0.3: {}
-
   lodash.isplainobject@4.0.6: {}
-
-  lodash.isstring@4.0.1: {}
 
   lodash.memoize@4.1.2: {}
 
   lodash.merge@4.6.2: {}
 
   lodash.omit@4.5.0: {}
-
-  lodash.once@4.1.1: {}
 
   lodash.throttle@4.1.1: {}
 
@@ -19045,8 +18850,6 @@ snapshots:
       lower-case: 2.0.2
       tslib: 2.8.1
 
-  node-domexception@1.0.0: {}
-
   node-exports-info@1.6.2:
     dependencies:
       array.prototype.flatmap: 1.3.3
@@ -19064,12 +18867,6 @@ snapshots:
       whatwg-url: 5.0.0
     optionalDependencies:
       encoding: 0.1.13
-
-  node-fetch@3.3.1:
-    dependencies:
-      data-uri-to-buffer: 4.0.1
-      fetch-blob: 3.2.0
-      formdata-polyfill: 4.0.10
 
   node-forge@1.4.0: {}
 
@@ -20362,13 +20159,12 @@ snapshots:
 
   source-map@0.7.6: {}
 
-  sp-js-provisioning@1.3.15(@types/node@22.20.3)(@types/react-dom@17.0.17)(@types/react@17.0.45):
+  sp-js-provisioning@1.4.0(@pnp/core@4.21.0)(@pnp/logging@4.21.0)(@pnp/queryable@4.21.0)(@pnp/sp@4.21.0)(@types/node@22.20.3)(@types/react-dom@17.0.17)(@types/react@17.0.45):
     dependencies:
-      '@pnp/core': 3.17.0
-      '@pnp/logging': 3.17.0
-      '@pnp/nodejs': 3.17.0
-      '@pnp/queryable': 3.17.0
-      '@pnp/sp': 3.17.0
+      '@pnp/core': 4.21.0
+      '@pnp/logging': 4.21.0
+      '@pnp/queryable': 4.21.0
+      '@pnp/sp': 4.21.0
       object.omit: 3.0.0
       spfx-jsom: 0.6.6(@types/node@22.20.3)(@types/react-dom@17.0.17)(@types/react@17.0.45)
       xml-js: 1.6.11
@@ -20726,10 +20522,6 @@ snapshots:
 
   tslib@2.3.1: {}
 
-  tslib@2.4.1: {}
-
-  tslib@2.6.0: {}
-
   tslib@2.8.1: {}
 
   tsyringe@4.10.0:
@@ -20997,8 +20789,6 @@ snapshots:
   wc-react@0.5.1: {}
 
   web-namespaces@2.0.1: {}
-
-  web-streams-polyfill@3.3.3: {}
 
   webidl-conversions@3.0.1: {}
 

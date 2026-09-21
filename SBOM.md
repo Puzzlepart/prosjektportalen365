@@ -2,7 +2,7 @@
 
 **Project:** Prosjektportalen 365  
 **Version:** 1.14.0  
-**Generated:** 2026-09-21T06:30:15.969Z  
+**Generated:** 2026-09-21T07:41:58.408Z  
 **Format:** CycloneDX-inspired Markdown
 
 ## Overview
@@ -71,7 +71,7 @@ This section lists all unique dependencies across all projects.
 | @fluentui/react-hooks | 8.6.27 | pp365-portfoliowebparts |
 | @fluentui/react-icons | ~2.0.317 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | @microsoft/decorators | 1.23.2 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-projectextensions, +1 more |
-| @microsoft/microsoft-graph-types | ~2.38.0 | pp365-projectextensions |
+| @microsoft/microsoft-graph-types | 2.43.0 | pp365-projectextensions |
 | @microsoft/sp-adaptive-card-extension-base | 1.23.2 | pp365-programwebparts, pp365-projectwebparts |
 | @microsoft/sp-application-base | 1.23.2 | pp365-portfolioextensions, pp365-projectextensions, pp365-shared-library |
 | @microsoft/sp-core-library | 1.23.2 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
@@ -129,7 +129,7 @@ This section lists all unique dependencies across all projects.
 | resx-json-typescript-converter | ^1.0.1 | pp365-templates |
 | shade-blend-color | ~1.0.0 | pp365-projectwebparts, pp365-shared-library |
 | smoothscroll-polyfill | ~0.4.4 | pp365-projectwebparts |
-| sp-js-provisioning | 1.3.15 | pp365-portfolioextensions, pp365-projectextensions |
+| sp-js-provisioning | 1.4.0 | pp365-portfolioextensions, pp365-projectextensions |
 | spfx-jsom | 0.6.6 | pp365-projectextensions, pp365-projectwebparts, pp365-shared-library |
 | tslib | 2.8.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | underscore | ~1.13.6 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
@@ -221,7 +221,7 @@ This section provides a detailed view of dependencies for each project.
 | react-gauge-component | ~1.2.61 |
 | react-markdown | ^8.0.3 |
 | rehype-raw | ^6.1.1 |
-| sp-js-provisioning | 1.3.15 |
+| sp-js-provisioning | 1.4.0 |
 | tslib | 2.8.1 |
 | underscore | ~1.13.6 |
 
@@ -398,7 +398,7 @@ This section provides a detailed view of dependencies for each project.
 | @fluentui/react-components | ~9.72.10 |
 | @fluentui/react-icons | ~2.0.317 |
 | @microsoft/decorators | 1.23.2 |
-| @microsoft/microsoft-graph-types | ~2.38.0 |
+| @microsoft/microsoft-graph-types | 2.43.0 |
 | @microsoft/sp-application-base | 1.23.2 |
 | @microsoft/sp-core-library | 1.23.2 |
 | @microsoft/sp-dialog | 1.23.2 |
@@ -423,7 +423,7 @@ This section provides a detailed view of dependencies for each project.
 | react-gauge-component | ~1.2.61 |
 | react-markdown | ^8.0.3 |
 | rehype-raw | ^6.1.1 |
-| sp-js-provisioning | 1.3.15 |
+| sp-js-provisioning | 1.4.0 |
 | spfx-jsom | 0.6.6 |
 | tslib | 2.8.1 |
 | underscore | ~1.13.6 |

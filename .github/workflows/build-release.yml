@@ -11,10 +11,18 @@ on:
       - 'Templates/**'
       - .github/workflows/build-release.yml
 
+env:
+  # Heft's TypeScript and webpack steps need more than V8's default heap (about 2 GB on a small
+  # runner): the PortfolioWebParts production build dies at 2 GB and passes at 3 GB. 8 GB matches
+  # the headroom the gulp toolchain used. RUSH_PARALLELISM bounds concurrent solution builds so
+  # the heap ceilings cannot add up past the runner's memory.
+  NODE_OPTIONS: --max-old-space-size=8192
+  RUSH_PARALLELISM: 2
+
 jobs:
   build-release:
     name: Build release (CI)
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     if: ${{ !contains(github.event.head_commit.message, '[skip-main-ci]') }}
     steps:
       - uses: actions/checkout@v4
@@ -43,7 +51,7 @@ jobs:
   build_release_package_test:
     needs: [build-release]
     name: Build test channel release (CI)
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.ref }}_build_test_channel_release_ci
       cancel-in-progress: true
@@ -75,7 +83,7 @@ jobs:
   build_release_package_kurs:
     needs: [build-release]
     name: Build kurs channel release (CI)
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.ref }}_build_kurs_channel_release_ci
       cancel-in-progress: true
