@@ -1,4 +1,4 @@
-import { AssignFrom, combine } from '@pnp/core'
+import { combine, isUrlAbsolute } from '@pnp/core'
 import { parseBinderWithErrorCheck } from '@pnp/queryable'
 import {
   extractWebUrl,
@@ -112,13 +112,20 @@ export interface ITerm extends ISPInstance<ITermInfo> {}
  */
 export function getTermStore(base: SPFI | ISPQueryable): ITermStore {
   const source = resolveSource(base)
-  const webUrl = extractWebUrl(source?.toUrl?.() ?? '')
-  if (!webUrl) {
+  if (!source || typeof source.toUrl !== 'function') {
     throw new Error(
-      'Cannot resolve a web URL for the term store. Pass a configured queryable, for example getTermStore(sp.web).'
+      'Cannot resolve the term store: pass a configured queryable, for example getTermStore(sp.web).'
     )
   }
-  return TermStore(SPQueryable(combine(webUrl, TERM_STORE_API_PATH)).using(AssignFrom(source)))
+  const sourceUrl = source.toUrl()
+  // Inside SPFx, `spfi().using(SPFx(context))` keeps every URL relative ("_api/web") and the SPFx
+  // behaviour prefixes the current web's URL at request time. A relative source therefore gets a
+  // relative term store URL, resolved by the same behaviour. An absolute source (`spfi(hubUrl)`)
+  // pins the term store to that web, so the term store of another site can be read explicitly.
+  const webUrl = isUrlAbsolute(sourceUrl) ? extractWebUrl(sourceUrl) : ''
+  const termStoreUrl = webUrl ? combine(webUrl, TERM_STORE_API_PATH) : TERM_STORE_API_PATH
+  // The [parent, url] form reuses the source's observers (auth, caching, fetch) with this URL.
+  return TermStore(SPQueryable([source, termStoreUrl]))
 }
 
 /**

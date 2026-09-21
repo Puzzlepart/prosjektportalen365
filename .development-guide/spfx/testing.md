@@ -12,7 +12,9 @@ Dette kapittelet beskriver hvordan Prosjektportalen testes automatisk, hva som k
 | Ende-til-ende (E2E) | Hub og prosjektområde i testtenanten: sidene laster, webdelene monteres, ingen ødelagte bundler | Playwright (`e2e/`) | Etter utrulling til testkanalen i `ci-channel-test.yml` | Ja |
 | Manuell smoke-test | Skriveflyter som ennå ikke er automatisert (prosjektoppsett, publisering av statusrapport, idéflyt) | Issue-maler, se «Smoke test-prosessen» | Før utgivelse, til E2E dekker flytene | Ja |
 
-Kontraktstester for dataadapterne (PnPjs-kall mot innspilte svar) er planlagt, men ikke satt opp: PnPjs 4 er ESM-only og Heft kjører Jest på CommonJS-utdata, så `@pnp/*` kan ikke lastes i Jest i dag (se «Delt oppsett»).
+| Kjøretidskontrakt | Kode som komponerer PnPjs-spørringer, kjørt mot det ekte PnPjs 4-biblioteket med falsk transport | `node --test` (`shared-library/test/runtime/*.test.mjs`, `npm run test:runtime`) | I byggeskriptet til shared-library, etter `heft test` | Nei |
+
+Kjøretidskontraktene finnes fordi Jest ikke kan laste `@pnp/*` (ESM-only under CommonJS-kjøreren) og stand-ins ikke fanger feil i selve PnPjs-koblingen: `getTermStore` kastet i SPFx fordi `spfi().using(SPFx(context))` holder URL-er relative til forespørselen sendes, noe stand-ins aldri viste. Node kan importere ESM-PnPjs, så disse testene kjører pipelinen med både relative (SPFx-stil) og absolutte (`spfi(url)`) URL-er. Legg flere slike tester her når kode kobler seg direkte på PnPjs-kjøringen.
 
 ### Hva skjer i et bygg
 
@@ -133,5 +135,5 @@ Lokalt: `cp e2e/.env.example e2e/.env`, fyll inn, `npx playwright install chromi
 
 1. Komponenttester for komponentene som konverteres fra Fluent UI v8 til v9 (fase 3), skrevet før konverteringen.
 2. Skriveflyter i E2E: prosjektoppsett, publisering av statusrapport, opprettelse av idé. Krever oppryddingslogikk i testtenanten.
-3. Kontraktstester for dataadapterne når `@pnp/*` kan lastes under Jest (transform av ESM) eller ved å kjøre dem som `node:test` i ESM, slik `sp-js-provisioning` gjør.
+3. Flere kjøretidskontrakter (`test/runtime`) for dataadapterne, mot innspilte svar.
 4. Dekningsgrenser per løsning når grunnlinjen er kjent.

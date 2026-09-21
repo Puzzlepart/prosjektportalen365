@@ -89,6 +89,8 @@ Phase 1 made Heft's Jest phase part of every build (`heft test` gates `npm run b
 | `sp-js-provisioning` handlers (lists, navigation, custom actions, web provisioner, package metadata) | 17 `node:test` tests (`npm test` in that repo) |
 | Result-shape edits, taxonomy calls, `IWeb` boundary | type-checked against the v4 typings by `heft build` in each solution |
 
+**Defect found by the first end-to-end run (2026-09-21, fixed):** on the test tenant the phase selector rendered empty because `getTermStore` threw "Cannot resolve a web URL for the term store". Inside SPFx, `spfi().using(SPFx(context))` keeps URLs relative (`sp.web.toUrl()` is `_api/web`) and the SPFx behaviour prefixes the web URL only at request time, so the guard that required an absolute URL rejected every SPFx call site. Fixed by building the term store URL relative when the source is relative, and reusing the source's observers through the `SPQueryable([source, url])` form. The Jest tests could not catch it because they run against stand-ins; a `node --test` runtime contract test against the real PnPjs 4 now covers both URL modes and runs in the shared-library build.
+
 Behaviour changes a tester should know about, all deliberate:
 
 - `SpEntityPortalService.getEntityItem` throws when the identity is empty (a project web without a Microsoft 365 group), where the old package created a hub row with an empty `GtGroupId`. Project setup now fails with `SetupProjectInformationErrorMessage` on such a web.
