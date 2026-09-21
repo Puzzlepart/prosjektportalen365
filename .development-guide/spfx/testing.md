@@ -77,7 +77,22 @@ Kjør testene i en løsning med `npm test` (`heft test`), eller bare bygg-og-tes
 
 `e2e/` er Rush-prosjektet `pp365-e2e`. Testene er lesende røyk-tester mot testtenanten: de logger inn som en dedikert testbruker, åpner hub-sidene og et prosjektområde, venter på at SPFx-lerretet rendrer, sjekker at forventede webdeler monteres, og feiler på nettleserfeil som betyr at en bundle er ødelagt («Cannot find module», «Failed to load component», «ChunkLoadError»). Det siste er nettopp symptomet på et delt bibliotek som ikke er pakket inn, og er det pakkebeviset i `Build-Release.ps1` sikrer på byggetidspunktet.
 
-Kjøring i CI: jobben «End-to-end smoke (test channel)» i `ci-channel-test.yml` kjører etter en vellykket «Upgrade (test channel)». Rapporten (`playwright-report`, sporinger og video ved feil) lastes opp som artefakt og ligger i 14 dager. `[skip-e2e]` i commit-emnet hopper over jobben.
+Kjøring i CI: jobben «End-to-end smoke (test channel)» i `ci-channel-test.yml` kjører etter en vellykket «Upgrade (test channel)», altså mot den pakken som nettopp ble rullet ut til `SP_URL_TEST`. Arbeidsflyten utløses av push til grenene i `on.push.branches` (i dag `releases/1.15` og `feat/toolchain-upgrade`) når filer under `SharePointFramework/`, `Install/`, `Templates/` eller `e2e/` er endret, og kan startes manuelt fra Actions-fanen (`workflow_dispatch`). Merk at en push til en av disse grenene oppgraderer testtenanten. `[skip-e2e]` i commit-emnet hopper over E2E-jobben; `[skip-upgrade]` hopper over oppgraderingen og dermed også E2E.
+
+#### Finne og lese E2E-rapporten fra CI
+
+- **Rask oversikt**: jobbloggen lister hver test som bestått, feilet eller hoppet over, og skriver ut påstanden og lokatoren for hver feil (`github`-reporteren). Feil vises også som annotasjoner på kjøringens oppsummeringsside.
+- **Full rapport**: nederst på oppsummeringssiden, under «Artifacts», ligger `playwright-report-test-channel` (14 dager). Zip-filen inneholder `playwright-report/` (HTML-rapporten) og `test-results/` (per feilet test: `error-context.md` med sidens tilgjengelighetssnapshot, skjermbilde, video og ved nytt forsøk `trace.zip`), samt `test-results/junit.xml`.
+- **Åpne rapporten lokalt**: fra `e2e/`:
+
+  ```bash
+  gh run download <run-id> -n playwright-report-test-channel -D ci-report
+  npx playwright show-report ci-report/playwright-report   # åpner http://localhost:9323
+  npx playwright show-trace ci-report/test-results/<test>/trace.zip
+  ```
+
+  `index.html` kan også åpnes rett fra filsystemet, men sporinger krever `show-report` eller trace.playwright.dev.
+- Rapporten inneholder snapshot av sider i testtenanten. Den publiseres ikke utenfor GitHub, og artefakt-tilgangen på repoet skal ikke utvides.
 
 Variabler og hemmeligheter i GitHub:
 

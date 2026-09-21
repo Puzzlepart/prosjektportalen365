@@ -16,6 +16,7 @@ Nøkkelord kan brukes i commit-meldingen for å unngå (eller tvinge) at CI kjø
 - `[apps-only]` for å bygge kun pakker (appkatalog), hopper over utrulling av maler. Brukes dersom du ikke har gjort noen endringer på .xml-filene i Templates.
 - `[apps-only:<løsninger>]` som `[apps-only]`, men bygger og ruller ut **kun de oppgitte SPFx-løsningene** (komma-separert) i stedet for alle. Navnene matches uten hensyn til store/små bokstaver og bindestrek, f.eks. `ApplyUpgradeTemplate` eller `[apps-only:PortfolioExtensions,shared-library]`. Gyldige navn: `shared-library`, `PortfolioExtensions`, `PortfolioWebParts`, `ProgramWebParts`, `ProjectExtensions`, `ProjectWebParts`.
 - `[upgrade-all-sites-to-latest]` for å kjøre skriptet `UpgradeAllSitesToLatest.ps1` i CI-modus.
+- `[skip-e2e]` for å hoppe over Playwright-røyktestene som kjører etter oppgraderingen av testkanalen (se «Testregime»). `[skip-upgrade]` hopper over dem indirekte.
 
 ### Bygg og installer (dev)
 
@@ -29,7 +30,7 @@ Med gjeldende tilnærming, uten hurtigbuffer (da den kjører `npm ci`), tar en f
 
 ### CI (channels/test)
 
-[ci-channel-test](../../.github/workflows/ci-channel-test.yml) bygger en pakke for kanalen [test](../../channels/test.json) og distribuerer den til URL-en som er spesifisert i `SP_URL_TEST`.
+[ci-channel-test](../../.github/workflows/ci-channel-test.yml) bygger en pakke for kanalen [test](../../channels/test.json), distribuerer den til URL-en som er spesifisert i `SP_URL_TEST`, og kjører deretter Playwright-røyktestene i `e2e/` mot den (jobben «End-to-end smoke (test channel)»). Rapporten lastes opp som artefaktet `playwright-report-test-channel`; hvordan den leses står under «Testregime». Arbeidsflyten kan også startes manuelt fra Actions-fanen.
 
 ### Bygg utgivelse (main)
 

@@ -60,6 +60,7 @@
 	* [Skrive enhetstester](#skrive-enhetstester)
 	* [Skrive komponenttester](#skrive-komponenttester)
 	* [Ende-til-ende med Playwright (`e2e/`)](#ende-til-ende-med-playwright-e2e)
+		* [Finne og lese E2E-rapporten fra CI](#finne-og-lese-e2e-rapporten-fra-ci)
 	* [Når en test feiler](#nr-en-test-feiler)
 	* [Veikart](#veikart)
 * [➤ Site Design / Site Scripts](#-site-design--site-scripts)
@@ -732,7 +733,22 @@ Kjør testene i en løsning med `npm test` (`heft test`), eller bare bygg-og-tes
 
 `e2e/` er Rush-prosjektet `pp365-e2e`. Testene er lesende røyk-tester mot testtenanten: de logger inn som en dedikert testbruker, åpner hub-sidene og et prosjektområde, venter på at SPFx-lerretet rendrer, sjekker at forventede webdeler monteres, og feiler på nettleserfeil som betyr at en bundle er ødelagt («Cannot find module», «Failed to load component», «ChunkLoadError»). Det siste er nettopp symptomet på et delt bibliotek som ikke er pakket inn, og er det pakkebeviset i `Build-Release.ps1` sikrer på byggetidspunktet.
 
-Kjøring i CI: jobben «End-to-end smoke (test channel)» i `ci-channel-test.yml` kjører etter en vellykket «Upgrade (test channel)». Rapporten (`playwright-report`, sporinger og video ved feil) lastes opp som artefakt og ligger i 14 dager. `[skip-e2e]` i commit-emnet hopper over jobben.
+Kjøring i CI: jobben «End-to-end smoke (test channel)» i `ci-channel-test.yml` kjører etter en vellykket «Upgrade (test channel)», altså mot den pakken som nettopp ble rullet ut til `SP_URL_TEST`. Arbeidsflyten utløses av push til grenene i `on.push.branches` (i dag `releases/1.15` og `feat/toolchain-upgrade`) når filer under `SharePointFramework/`, `Install/`, `Templates/` eller `e2e/` er endret, og kan startes manuelt fra Actions-fanen (`workflow_dispatch`). Merk at en push til en av disse grenene oppgraderer testtenanten. `[skip-e2e]` i commit-emnet hopper over E2E-jobben; `[skip-upgrade]` hopper over oppgraderingen og dermed også E2E.
+
+#### Finne og lese E2E-rapporten fra CI
+
+- **Rask oversikt**: jobbloggen lister hver test som bestått, feilet eller hoppet over, og skriver ut påstanden og lokatoren for hver feil (`github`-reporteren). Feil vises også som annotasjoner på kjøringens oppsummeringsside.
+- **Full rapport**: nederst på oppsummeringssiden, under «Artifacts», ligger `playwright-report-test-channel` (14 dager). Zip-filen inneholder `playwright-report/` (HTML-rapporten) og `test-results/` (per feilet test: `error-context.md` med sidens tilgjengelighetssnapshot, skjermbilde, video og ved nytt forsøk `trace.zip`), samt `test-results/junit.xml`.
+- **Åpne rapporten lokalt**: fra `e2e/`:
+
+  ```bash
+  gh run download <run-id> -n playwright-report-test-channel -D ci-report
+  npx playwright show-report ci-report/playwright-report   # åpner http://localhost:9323
+  npx playwright show-trace ci-report/test-results/<test>/trace.zip
+  ```
+
+  `index.html` kan også åpnes rett fra filsystemet, men sporinger krever `show-report` eller trace.playwright.dev.
+- Rapporten inneholder snapshot av sider i testtenanten. Den publiseres ikke utenfor GitHub, og artefakt-tilgangen på repoet skal ikke utvides.
 
 Variabler og hemmeligheter i GitHub:
 
@@ -744,6 +760,8 @@ Variabler og hemmeligheter i GitHub:
 | `E2E_PASSWORD` | hemmelighet | Testbrukerens passord |
 
 Krav til testbrukeren: en egen konto (for eksempel `pp365-e2e@<tenant>.onmicrosoft.com`) som er medlem av porteføljen og prosjektet, med minst mulig rettigheter ellers, ekskludert fra MFA gjennom en Conditional Access-policy som gjelder bare denne kontoen, og med passord som roteres og bare finnes som GitHub-hemmelighet. Ikke bruk en personlig konto, og ikke gjenbruk sertifikat-appen som utrullingen bruker: E2E trenger en brukersesjon i nettleseren.
+
+Sidenavn varierer mellom norsk og engelsk provisjonering og mellom tenanter. Hver test slår derfor opp siden i hubens eget SitePages-bibliotek (første eksisterende kandidat vinner, `E2E_PAGE_*` først) og hopper over med listen over sider som finnes når ingen kandidat passer. En hub-URL uten avsluttende skråstrek normaliseres, og en 404 rapporteres med URL-en som ble forsøkt. Testene venter på `[data-sp-web-part-id]`, som finnes både på lerretssider (Home.aspx) og på enkeltwebdel-appsider (Porteføljeoversikt, Prosjekttidslinje, Nytteoversikt).
 
 Lokalt: `cp e2e/.env.example e2e/.env`, fyll inn, `npx playwright install chromium`, så `npm test` eller `npm run test:ui` i `e2e/`. Nye tester planlegges, genereres og repareres med Playwright-CLI-ferdigheten i `.claude/skills/playwright-cli` (`references/test-generation.md`).
 
@@ -1086,6 +1104,7 @@ Nøkkelord kan brukes i commit-meldingen for å unngå (eller tvinge) at CI kjø
 - `[apps-only]` for å bygge kun pakker (appkatalog), hopper over utrulling av maler. Brukes dersom du ikke har gjort noen endringer på .xml-filene i Templates.
 - `[apps-only:<løsninger>]` som `[apps-only]`, men bygger og ruller ut **kun de oppgitte SPFx-løsningene** (komma-separert) i stedet for alle. Navnene matches uten hensyn til store/små bokstaver og bindestrek, f.eks. `ApplyUpgradeTemplate` eller `[apps-only:PortfolioExtensions,shared-library]`. Gyldige navn: `shared-library`, `PortfolioExtensions`, `PortfolioWebParts`, `ProgramWebParts`, `ProjectExtensions`, `ProjectWebParts`.
 - `[upgrade-all-sites-to-latest]` for å kjøre skriptet `UpgradeAllSitesToLatest.ps1` i CI-modus.
+- `[skip-e2e]` for å hoppe over Playwright-røyktestene som kjører etter oppgraderingen av testkanalen (se «Testregime»). `[skip-upgrade]` hopper over dem indirekte.
 
 ### Bygg og installer (dev)
 
@@ -1099,7 +1118,7 @@ Med gjeldende tilnærming, uten hurtigbuffer (da den kjører `npm ci`), tar en f
 
 ### CI (channels/test)
 
-[ci-channel-test](../../.github/workflows/ci-channel-test.yml) bygger en pakke for kanalen [test](../../channels/test.json) og distribuerer den til URL-en som er spesifisert i `SP_URL_TEST`.
+[ci-channel-test](../../.github/workflows/ci-channel-test.yml) bygger en pakke for kanalen [test](../../channels/test.json), distribuerer den til URL-en som er spesifisert i `SP_URL_TEST`, og kjører deretter Playwright-røyktestene i `e2e/` mot den (jobben «End-to-end smoke (test channel)»). Rapporten lastes opp som artefaktet `playwright-report-test-channel`; hvordan den leses står under «Testregime». Arbeidsflyten kan også startes manuelt fra Actions-fanen.
 
 ### Bygg utgivelse (main)
 

@@ -44,7 +44,7 @@ Every solution's `config/jest.config.json` extends `pp365-jest-config/jest-share
 ## When a test fails
 
 - In a build: the build stops. Reproduce with `npm test` in the solution, decide code vs test, fix the code for regressions; update the test in the same commit only for intentional behaviour changes. Never delete an assertion to go green.
-- E2E: open the `playwright-report-test-channel` artifact. Environment (sign-in, MFA, missing page) → fix secret/policy/variable and rerun. Regression → issue labelled `bug` + `e2e` with the run link; release blocked. Intentional UI change → heal the spec in its own commit. One CI retry exists; three consecutive flaky runs → `test.fixme` plus an issue, not more retries.
+- E2E: the job log lists each test and prints the assertion and locator per failure (`github` reporter). The full report is the `playwright-report-test-channel` artifact (14 days): `playwright-report/` (HTML) and `test-results/` (`error-context.md` page snapshot, screenshot, video, `trace.zip` on retry, `junit.xml`). Fetch and open from `e2e/` with `gh run download <run-id> -n playwright-report-test-channel -D ci-report && npx playwright show-report ci-report/playwright-report`. The workflow triggers on push to its listed branches when `SharePointFramework/**`, `Install/**`, `Templates/**` or `e2e/**` change, and manually via `workflow_dispatch`; a push also upgrades the test tenant. Environment (sign-in, MFA, missing page) → fix secret/policy/variable and rerun. Regression → issue labelled `bug` + `e2e` with the run link; release blocked. Intentional UI change → heal the spec in its own commit. One CI retry exists; three consecutive flaky runs → `test.fixme` plus an issue, not more retries.
 
 ## Do not
 
