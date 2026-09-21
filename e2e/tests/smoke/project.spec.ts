@@ -1,28 +1,42 @@
-import { expect, test, webPart } from '../fixtures/pp365'
+import { configuredUrl, expect, test, webPartByAlias } from '../fixtures/pp365'
 
 /**
  * Read-only smoke of one provisioned project site. E2E_PROJECT_URL must point at an existing,
  * fully set up project in the test tenant (project setup itself is a write flow and is not part
- * of the smoke suite yet). Skipped with a clear message when the variable is missing.
+ * of the smoke suite yet). Skipped with a clear message when the variable is missing or still
+ * holds the placeholder from .env.example.
+ *
+ * Web parts are located by component alias (data-sp-feature-tag), because the PP365 project web
+ * parts load their data before rendering any text, and the texts are phase names, not labels.
  */
-const projectUrl = process.env.E2E_PROJECT_URL
+const projectUrl = configuredUrl(process.env.E2E_PROJECT_URL)
+const MOUNT_TIMEOUT = { timeout: 60_000 }
 
 test.describe('project site', () => {
-  test.skip(!projectUrl, 'E2E_PROJECT_URL is not set; skipping project site smoke tests')
+  test.skip(!projectUrl, 'E2E_PROJECT_URL is not set (or is the .env.example placeholder); skipping project site smoke tests')
 
-  test('project home renders project information and phases', async ({ page, openPage }) => {
-    await openPage(`${projectUrl!.replace(/\/+$/, '')}/SitePages/ProjectHome.aspx`)
-    await expect(webPart(page, /prosjektinformasjon|project information/i).first()).toBeVisible()
-    await expect(webPart(page, /fase|phase/i).first()).toBeVisible()
+  test('project home mounts project information and lists the phases', async ({ page, openPage, resolvePage }) => {
+    await openPage(await resolvePage(projectUrl!, ['ProjectHome.aspx', 'Hjem.aspx', 'Home.aspx']))
+    await expect(webPartByAlias(page, 'ProjectInformation').first()).toBeVisible(MOUNT_TIMEOUT)
+    const phases = webPartByAlias(page, 'ProjectPhases')
+    await expect(phases.first()).toBeVisible(MOUNT_TIMEOUT)
+    // The phase selector renders a <ul class="phaseList_*"> with one <li> per phase from the term
+    // set. An empty list means the phases did not load, which is a defect for the user even though
+    // the web part itself mounted, so this stays strict.
+    await expect(phases.locator('[class*="phaseList"] li').first()).toBeVisible(MOUNT_TIMEOUT)
   })
 
-  test('project status page renders', async ({ page, openPage }) => {
-    await openPage(`${projectUrl!.replace(/\/+$/, '')}/SitePages/Prosjektstatus.aspx`)
-    await expect(webPart(page, /status/i).first()).toBeVisible()
+  test('project status page mounts its web part', async ({ page, openPage, resolvePage }) => {
+    // Prosjektstatus.aspx is a single web part app page: SharePoint sets no data-sp-feature-tag
+    // there, so the mount is asserted through the generic web part container (openPage does that).
+    // Content is not asserted yet: what the web part shows depends on published reports.
+    await openPage(await resolvePage(projectUrl!, ['Prosjektstatus.aspx', 'ProjectStatus.aspx', 'Status.aspx']))
+    await expect(page.locator('[data-sp-web-part-id]')).toHaveCount(1)
   })
 
-  test('tasks page renders the dynamic list', async ({ page, openPage }) => {
-    await openPage(`${projectUrl!.replace(/\/+$/, '')}/SitePages/Oppgaver.aspx`)
-    await expect(page.getByRole('grid').or(page.getByRole('table')).first()).toBeVisible({ timeout: 60_000 })
+  test('tasks page renders the Planner board', async ({ page, openPage, resolvePage }) => {
+    await openPage(await resolvePage(projectUrl!, ['Oppgaver.aspx', 'Tasks.aspx']))
+    // Oppgaver.aspx hosts Microsoft's Planner web part: a board with one column heading per bucket.
+    await expect(page.getByRole('heading', { level: 3 }).first()).toBeVisible(MOUNT_TIMEOUT)
   })
 })

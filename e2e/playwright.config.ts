@@ -11,11 +11,15 @@ export const STORAGE_STATE = path.join(__dirname, '.auth', 'user.json')
  * Base URL of the portfolio hub under test. In CI this is the `SP_URL_TEST` repository variable,
  * the same site the test channel is deployed to.
  */
-export const baseURL = process.env.E2E_BASE_URL
+const configuredBaseURL = process.env.E2E_BASE_URL
 
-if (!baseURL) {
+if (!configuredBaseURL) {
   throw new Error('E2E_BASE_URL is not set. Copy e2e/.env.example to e2e/.env or set the variable in CI.')
 }
+
+// A site URL must end with "/" for relative paths to resolve inside the site: without it,
+// "SitePages/Hjem.aspx" against ".../sites/hub" becomes ".../sites/SitePages/Hjem.aspx" (a 404).
+export const baseURL = configuredBaseURL.replace(/\/+$/, '') + '/'
 
 export default defineConfig({
   testDir: './tests',
