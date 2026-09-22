@@ -112,6 +112,10 @@ grep -o 'define(\[[^]]*\]' SharePointFramework/PortfolioWebParts/dist/*.js | gre
 
 The rig runs every `.css` that is not `*.global.css` through the CSS-modules loader and hashes the class names. Third-party stylesheets (`react-calendar-timeline/lib/Timeline.css`, `@fluentui/react/dist/css/fabric.min.css`) are global by nature, so `config/spfx-customize-webpack.js` (`treatNodeModulesCssAsGlobal`) routes third-party `.css` from node_modules to the rig's global-CSS loaders. The predicate must EXCLUDE workspace packages (`node_modules/pp365-*`, bundled from there) and any `*.module.*` file: making those global leaves `styles` undefined at runtime ("Cannot read properties of undefined (reading 'accordionChevron')", every shared component broken on the tenant, caught by e2e only after deploy). Symptom when the rule is missing entirely: the timeline collapses into an unclickable overlay. Verify after a production build: `grep -c 'react-calendar-timeline_' dist/project-timeline-web-part_*.js` is 0 AND `grep -c 'accordionChevron_[0-9a-f]' dist/project-information-web-part_*.js` is at least 1.
 
+## Node globals under webpack 5
+
+webpack 4 (gulp) polyfilled Node globals silently; webpack 5 (Heft) does not. `xml-js` (used by sp-js-provisioning for field/view XML) evaluates `json instanceof Buffer`, which threw "Buffer is not defined" the first time the template package catalog provisioned a list. Solutions that bundle such code (PortfolioExtensions, ProjectExtensions) declare `buffer` as a devDependency and `config/spfx-customize-webpack.js` (`provideNodeGlobals`) binds `Buffer` through `webpack.ProvidePlugin` when the package resolves. The hook receives `webpack` as its fourth argument. If another Node global surfaces (`process` is already defined by the rig, `stream` for sax is handled), extend `provideNodeGlobals` rather than adding a global `resolve.fallback`.
+
 ## Do not
 
 - Do not pin Node below 22 or run the Heft toolchain on Node 16/18.

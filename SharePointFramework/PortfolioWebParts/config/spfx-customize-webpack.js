@@ -311,7 +311,31 @@ function treatNodeModulesCssAsGlobal(webpackConfig, log) {
   log('third-party .css files from node_modules are compiled as global stylesheets')
 }
 
-module.exports = function customizeWebpackConfiguration(webpackConfig, taskSession) {
+/**
+ * Provides the Node `Buffer` global to third-party code that still references it.
+ *
+ * webpack 4 (the gulp toolchain) injected polyfills for Node globals automatically; webpack 5 does
+ * not. `xml-js`, which sp-js-provisioning uses to serialize field and view XML, evaluates
+ * `json instanceof Buffer`, so the first list provisioned from the template package catalog failed
+ * with "Buffer is not defined". Solutions that bundle such code declare the `buffer` package as a
+ * devDependency; when it resolves, webpack's ProvidePlugin binds the free identifier to it. Other
+ * solutions are left untouched, so the polyfill is only paid for where it is needed.
+ */
+function provideNodeGlobals(webpackConfig, webpack, log) {
+  const bufferRoot = resolvePackageRoot('buffer')
+  if (!bufferRoot) return
+  if (!webpack || !webpack.ProvidePlugin) {
+    log('buffer is installed but the webpack instance was not passed to the hook; Buffer is not provided')
+    return
+  }
+  webpackConfig.plugins = webpackConfig.plugins || []
+  webpackConfig.plugins.push(
+    new webpack.ProvidePlugin({ Buffer: [path.join(bufferRoot, 'index.js'), 'Buffer'] })
+  )
+  log('Buffer provided from the buffer package')
+}
+
+module.exports = function customizeWebpackConfiguration(webpackConfig, taskSession, heftConfiguration, webpack) {
   const log = (message) => {
     try {
       taskSession.logger.terminal.writeVerboseLine(`[spfx-customize-webpack] ${message}`)
@@ -325,5 +349,6 @@ module.exports = function customizeWebpackConfiguration(webpackConfig, taskSessi
     applyTsconfigAliases(configuration, log)
     keepLinkedPackagesBundled(configuration, log)
     treatNodeModulesCssAsGlobal(configuration, log)
+    provideNodeGlobals(configuration, webpack, log)
   }
 }
