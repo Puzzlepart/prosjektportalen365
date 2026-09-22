@@ -15,16 +15,19 @@ export function useProjectList(props: IProjectListProps) {
   const groupedData = useMemo(() => {
     if (!shouldEnableGrouping || !props.programHubs) return null
 
-    const groups = props.items.reduce((acc, item) => {
-      const hubSiteId = item.HubSiteId
-      const hub = props.programHubs?.find((h) => h.hubSiteId === hubSiteId)
-      const hubKey = hub?.title || hub?.url || item.HubSiteId
-      if (!acc[hubKey]) {
-        acc[hubKey] = []
-      }
-      acc[hubKey].push(item)
-      return acc
-    }, {} as Record<string, any[]>)
+    const groups = props.items.reduce(
+      (acc, item) => {
+        const hubSiteId = item.HubSiteId
+        const hub = props.programHubs?.find((h) => h.hubSiteId === hubSiteId)
+        const hubKey = hub?.title || hub?.url || item.HubSiteId
+        if (!acc[hubKey]) {
+          acc[hubKey] = []
+        }
+        acc[hubKey].push(item)
+        return acc
+      },
+      {} as Record<string, any[]>
+    )
 
     if (searchTerm) {
       Object.keys(groups).forEach((hubKey) => {

@@ -176,9 +176,10 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
       let projectContentColumns = []
       try {
         if (SPDataAdapter.portalDataService?.isConfigured) {
-          projectContentColumns = await SPDataAdapter.portalDataService.fetchProjectContentColumns(
-            'PROJECT_CONTENT_COLUMNS'
-          )
+          projectContentColumns =
+            await SPDataAdapter.portalDataService.fetchProjectContentColumns(
+              'PROJECT_CONTENT_COLUMNS'
+            )
         }
       } catch (error) {
         console.warn('Could not fetch ProjectContentColumns configuration:', error)

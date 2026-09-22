@@ -15,7 +15,10 @@ import { PortfolioInstance } from 'data/types'
 import { IWeb } from '@pnp/sp/webs'
 
 export class PortfolioOverviewErrorMessage extends Error {
-  constructor(public message: string, public type: MessageBarType) {
+  constructor(
+    public message: string,
+    public type: MessageBarType
+  ) {
     super(message)
   }
 }
@@ -68,8 +71,7 @@ export interface IPortfolioOverviewConfiguration {
 }
 
 export interface IPortfolioOverviewProps
-  extends IBaseComponentProps,
-    Pick<IListProps<ProjectColumn>, 'isListLayoutModeJustified'> {
+  extends IBaseComponentProps, Pick<IListProps<ProjectColumn>, 'isListLayoutModeJustified'> {
   /**
    * Configuration (columns and views etc).
    */
@@ -179,8 +181,10 @@ export interface IPortfolioOverviewProps
   onSetPortfolio?: (portfolioId: string | null) => void
 }
 
-export interface IPortfolioOverviewState
-  extends Pick<IListProps<ProjectColumn>, 'items' | 'columns'> {
+export interface IPortfolioOverviewState extends Pick<
+  IListProps<ProjectColumn>,
+  'items' | 'columns'
+> {
   /**
    * Whether the component is loading
    */

@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import * as _ from 'underscore'
 import { ProjectColumn } from './ProjectColumn'
 import { tryParseJson } from '../util/tryParseJson'

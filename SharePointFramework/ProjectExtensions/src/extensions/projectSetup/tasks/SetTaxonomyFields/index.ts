@@ -16,7 +16,7 @@ export class SetTaxonomyFields extends BaseTask {
    * @param params Task parameters
    * @param onProgress On progress function
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   public async execute(params: IBaseTaskParams): Promise<IBaseTaskParams> {
     if (this.data.selectedTemplate?.id === NO_TEMPLATE_ID) {
       this.logInformation('Skipping taxonomy field configuration (no template selected)')

@@ -13,7 +13,11 @@ export class BaseWebPartComponent<
    * @param props Props
    * @param state Initial state
    */
-  constructor(private _name: string, props: T1, state: T2) {
+  constructor(
+    private _name: string,
+    props: T1,
+    state: T2
+  ) {
     super(props)
     this.state = state
   }

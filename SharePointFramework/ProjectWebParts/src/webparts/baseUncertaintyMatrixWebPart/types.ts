@@ -9,8 +9,12 @@ export type UncertaintyMatrixDataFetchMode = 'auto' | 'list' | 'dataSource'
  * Shared properties for the Risk Matrix and Opportunity Matrix web parts.
  */
 export interface IBaseUncertaintyMatrixWebPartProps
-  extends IBaseWebPartComponentProps,
-    Pick<IDynamicMatrixProps, 'fullWidth' | 'width' | 'calloutTemplate' | 'manualConfigurationPath'> {
+  extends
+    IBaseWebPartComponentProps,
+    Pick<
+      IDynamicMatrixProps,
+      'fullWidth' | 'width' | 'calloutTemplate' | 'manualConfigurationPath'
+    > {
   /**
    * How to retrieve the items rendered in the matrix:
    * - `auto` (default): use the data source when the current site is a parent

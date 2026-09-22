@@ -2,6 +2,8 @@
 
 Operational guide for AI coding agents working in **Prosjektportalen 365** — an open-source (Puzzlepart) SharePoint Framework (SPFx) monorepo managed with **Rush + pnpm**.
 
+The build toolchain is **Heft** (SPFx 1.23.2, Rush Stack). The gulp toolchain was retired in the 1.17.4 to 1.23.2 migration; see `docs/plans/spfx-1.23-heft-toolchain.md` and the `pp365-toolchain` skill.
+
 This is a thin operational index. The authoritative, detailed conventions live in **`.development-guide/`** (Norwegian) — read it for depth on anything below. Human contributors: see also `CONTRIBUTING.md`.
 
 ## Repository map
@@ -17,9 +19,12 @@ This is a thin operational index. The authoritative, detailed conventions live i
 
 1. **The localization triad must stay balanced.** Each solution has `src/loc/{myStrings.d.ts, nb-no.js, en-us.js}`. A key added to one must be added to all three (identical key sets) or `validate-loc` and the build fail. `nb-no.js` is the default (Norwegian). Never leave a double comma (`,,`) in the `.js` files — it crashes the module at runtime.
 2. **Do not hand-edit generated files** — they are gitignored and regenerated on build:
-   - `**/*.module.scss.ts` — regenerated from the sibling `.module.scss`. Edit the `.scss`; keep the set of class names stable.
+   - Sass typings — generated into `temp/sass-ts/` by the Heft build (they used to sit next to the source as `**/*.module.scss.ts`). Edit the `.scss`; keep the set of class names stable. Never edit or commit anything under `temp/`.
    - `**/src/loc/shared/*` — regenerated from `Templates/Portfolio/Resources.*.resx` (via the `Templates` `generate-resx-ts` task).
-3. **Node 16** (`.nvmrc` = `16.18.0`). The SPFx/gulp toolchain targets it; a newer Node can fail **silently** and produce a stale `.sppkg` — especially `build-release`.
+3. **Node 22** (`.nvmrc` = `22.22.2`, `rush.json` enforces `>=22.14.0 <23.0.0`). The SPFx 1.23 Heft toolchain requires it; another major fails the build, and `build-release` refuses to run.
+4. **Production builds need more than Node's default heap on small machines.** The PortfolioWebParts build fails at a 2 GB heap and passes at 3 GB. CI (`ubuntu-latest`) and `Install/Build-Release.ps1` set `NODE_OPTIONS=--max-old-space-size=8192`; if a local `heft build --production` or `rush rebuild` dies with "Reached heap limit", export the same variable first.
+5. **CI runs on Linux, so every path is case sensitive.** macOS hid mismatches such as `SiteScripts/Src` vs the real `SiteScripts/src` and `build-release.ps1` vs `Build-Release.ps1`; on `ubuntu-latest` they fail the release build. Spell paths in scripts, workflows and imports exactly as the filesystem does, and check with `ls` when in doubt.
+6. **PnPjs is v4 (4.21.0)**, and three v3 habits no longer compile or silently misbehave: `items.getAll()` and `import '@pnp/sp/items/get-all'` are gone (use `getAllItems(query)` from `pp365-shared-library`, which always sends `$top`; for a single row use `.top(1)()`); `sp.termStore` and `@pnp/sp/taxonomy` are gone (use `getTermStore(sp.web)` from `pp365-shared-library`, and `getTermLabel` for labels, which applies the fixed chain web language, then `nb-NO`, then `en-US`); `add`/`update`/`ensureUser`/`addUsingPath` resolve to the payload itself (`IFileInfo`, `IFolderInfo`, `ISiteUserInfo`, the created item), never to `{ data, file, folder, group, node }` wrappers. `sp-entityportal-service` is vendored as `SpEntityPortalService` in the shared library. Unit tests (`src/**/*.test.ts`, run by every Heft build) must not import `@pnp/*` (ESM-only under the CommonJS Jest runner); test against structural stand-ins as `shared-library/src/taxonomy/*.test.ts` does.
 
 ## Conventions (summary — full details in `.development-guide/spfx/kodemonster.md`)
 
@@ -43,19 +48,28 @@ From the **repo root** unless noted:
 | Build all solutions (dependency order) | `npm run rush:build` |
 | Rebuild only `shared-library` | `rush rebuild -o pp365-shared-library` |
 | Lint + format all solutions | `npm run rush:lint` |
-| Build a release package (needs Node 16) | `npm run build-release` |
+| Build a release package (needs Node 22) | `npm run build-release` |
 
 Inside a solution (`SharePointFramework/<Solution>/`):
 
 | Task | Command |
 |---|---|
-| Dev server + live-reload | `npm run watch` |
-| Build a shippable `.sppkg` | `npm run build` |
+| Dev server + live-reload (`heft start --nobrowser`) | `npm run watch` |
+| Dev server against a named environment | `npm run watch -- --serve-config <name>` |
+| Build a shippable `.sppkg` (`heft build` + `heft package-solution`) | `npm run build` |
 | Lint + Prettier | `npm run lint` |
 | Validate localization balance | `npm run validate-loc` |
 | Type-check only | `npx tsc --noEmit` |
+| Run the solution's unit and component tests (`heft test`, builds first) | `npm test` |
+| Run one test file | `npx heft test --test-path-pattern <name>` |
 
 After changing the loc files, run `validate-loc`. After changing `shared-library`, rebuild it (`rush rebuild -o pp365-shared-library`) so dependent solutions pick up the change.
+
+End-to-end smoke tests live in `e2e/` (Rush project `pp365-e2e`, Playwright) and run in CI after the test-channel upgrade; locally `cd e2e && npm test` with an `e2e/.env` from `.env.example`.
+
+## Testing
+
+Every Heft build runs the solution's `src/**/*.test.ts(x)` with Jest; a failing test fails the build. The shared harness is `pp365-jest-config` (`SharePointFramework/.jest-config`): jsdom, jest-dom, SPFx string modules resolved like at runtime, `@pnp/*` and `@microsoft/sp-*` stubbed. Components are tested with React Testing Library and `jest.mock` of their hook or data adapter; never import `@pnp/*` in a test. Full regime, failure handling and the Playwright suite: `.development-guide/spfx/testing.md` and the `pp365-testing` skill.
 
 ## Notes
 

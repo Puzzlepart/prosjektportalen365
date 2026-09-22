@@ -16,6 +16,7 @@ import '@pnp/sp/lists'
 import '@pnp/sp/folders'
 import '@pnp/sp/files'
 import '@pnp/sp/files/folder'
+import type { IFileInfo } from '@pnp/sp/files'
 import styles from './DocumentLibraryView.module.scss'
 import * as strings from 'ProjectWebPartsStrings'
 
@@ -257,7 +258,7 @@ export const DocumentLibraryView: FC = () => {
         const listRootPath = listData.RootFolder.ServerRelativeUrl
 
         for (const file of files) {
-          let addedFile
+          let addedFile: IFileInfo
           if (folderPath) {
             const folderServerRelativeUrl = `${listRootPath}/${folderPath}`
             sessionStorage.DEBUG ||
@@ -276,7 +277,12 @@ export const DocumentLibraryView: FC = () => {
           }
 
           if (context.props.useSiteIdFiltering && addedFile) {
-            await stampSiteIdFieldsOnFile(addedFile, context.props.siteId, context.props.webTitle)
+            await stampSiteIdFieldsOnFile(
+              context.web,
+              addedFile,
+              context.props.siteId,
+              context.props.webTitle
+            )
           }
         }
 

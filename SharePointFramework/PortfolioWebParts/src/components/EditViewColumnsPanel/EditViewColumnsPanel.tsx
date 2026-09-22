@@ -99,8 +99,8 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
                                 !col.data.isSelected
                                   ? strings.Aria.MoveDisabled
                                   : idx === 0
-                                  ? strings.Aria.MoveUpDisabled
-                                  : strings.Aria.MoveUp
+                                    ? strings.Aria.MoveUpDisabled
+                                    : strings.Aria.MoveUp
                               }
                               disabled={!col.data.isSelected || idx === 0}
                               onClick={() => moveColumn(col, -1)}
@@ -113,8 +113,8 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
                                 !col.data.isSelected
                                   ? strings.Aria.MoveDisabled
                                   : idx === selectedColumns.length - 1
-                                  ? strings.Aria.MoveDownDisabled
-                                  : strings.Aria.MoveDown
+                                    ? strings.Aria.MoveDownDisabled
+                                    : strings.Aria.MoveDown
                               }
                               disabled={!col.data.isSelected || idx === selectedColumns.length - 1}
                               onClick={() => moveColumn(col, 1)}

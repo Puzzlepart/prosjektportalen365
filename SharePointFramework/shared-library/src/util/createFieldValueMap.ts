@@ -14,8 +14,8 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
       ({ value, $ }) => {
         try {
           if ($ && typeof $ === 'object') {
-            const url = $['Url'] ?? ''
-            const description = $['Description'] ?? url
+            const url = $.Url ?? ''
+            const description = $.Description ?? url
             return { url, description }
           }
 

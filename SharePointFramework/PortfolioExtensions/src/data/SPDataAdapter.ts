@@ -2,7 +2,7 @@ import { Logger, LogLevel } from '@pnp/logging'
 import '@pnp/sp/lists'
 import '@pnp/sp/items'
 import '@pnp/sp/security'
-import '@pnp/sp/taxonomy'
+import { getTermStore } from 'pp365-shared-library'
 import { SPDataAdapterBase } from 'pp365-shared-library/lib/data'
 import resource from 'SharedResources'
 
@@ -48,7 +48,7 @@ class SPDataAdapter extends SPDataAdapterBase {
    */
   public async hasTermStorePermission(): Promise<boolean> {
     try {
-      await this.sp.termStore()
+      await getTermStore(this.sp.web)()
       return true
     } catch (error) {
       Logger.log({

@@ -110,7 +110,7 @@ $START_PATH = Get-Location
 $ROOT_PATH = "$PSScriptRoot/.."
 $SHAREPOINT_FRAMEWORK_BASEPATH = "$ROOT_PATH/SharePointFramework"
 $PNP_TEMPLATES_BASEPATH = "$ROOT_PATH/Templates"
-$SITE_SCRIPTS_BASEPATH = "$ROOT_PATH/SiteScripts/Src"
+$SITE_SCRIPTS_BASEPATH = "$ROOT_PATH/SiteScripts/src"
 $PNP_BUNDLE_PATH = "$PSScriptRoot/PnP.PowerShell"
 # Get-PnPVersion hentes fra SharedFunctions.ps1 i et isolert scope,
 # slik at StartAction/EndAction definert i denne filen ikke overskrives
@@ -124,6 +124,33 @@ if ($USE_CHANNEL_CONFIG) {
     $RELEASE_NAME = "$($RELEASE_NAME)-$($CHANNEL_CONFIG_NAME)"
 }
 $RELEASE_PATH = "$ROOT_PATH/release/$($RELEASE_NAME)"
+#endregion
+
+#region Node version guard
+# The SPFx 1.23 Heft toolchain requires Node 22 (see rush.json nodeSupportedVersionRange and the
+# .nvmrc files). Building on another major silently produces a stale or broken .sppkg, so fail here
+# rather than shipping one.
+$NODE_VERSION_RAW = (node -v) 2>$null
+if ($LASTEXITCODE -ne 0 -or -not $NODE_VERSION_RAW) {
+    Write-Host "[ERROR] Node.js was not found on PATH. Node.js 22 is required." -ForegroundColor Red
+    exit 1
+}
+$NODE_MAJOR = [int]($NODE_VERSION_RAW.TrimStart('v').Split('.')[0])
+if ($NODE_MAJOR -ne 22) {
+    Write-Host "[ERROR] Node.js 22 is required for the SPFx Heft toolchain, found $NODE_VERSION_RAW." -ForegroundColor Red
+    Write-Host "        Run 'nvm use' in the repository root (see .nvmrc) and try again." -ForegroundColor Yellow
+    exit 1
+}
+#endregion
+
+#region Node heap
+# Heft runs TypeScript and webpack in one Node process per solution, and the largest solution
+# (PortfolioWebParts) needs more than V8's default heap on machines with 8 GB or less (it fails at
+# a 2 GB cap and passes at 3 GB). Give every heft process the same 8 GB ceiling the gulp toolchain
+# used, unless the caller already set NODE_OPTIONS. RUSH_PARALLELISM is left to the caller.
+if ([string]::IsNullOrEmpty($env:NODE_OPTIONS)) {
+    $env:NODE_OPTIONS = "--max-old-space-size=8192"
+}
 #endregion
 
 #region Pre-build
@@ -140,14 +167,16 @@ if ($CI.IsPresent) {
     Write-Host "[Running in CI mode]" -ForegroundColor Yellow
     StartAction("Updating npm packages using rush")
     npm ci >$null 2>&1
-    npm i @microsoft/rush@5.98.0 -g >$null 2>&1
-    rush update >$null 2>&1
+    # Rush is launched through the repo-pinned bootstrap script, so the version always
+    # follows rush.json (no global install to keep in sync). `install` requires the
+    # committed lockfile to match; use `update` locally when dependencies change.
+    node "$ROOT_PATH/common/scripts/install-run-rush.js" install >$null 2>&1
     npm run generate-channel-replace-map >$null 2>&1
     EndAction
 }
 else {
     StartAction("Updating npm packages using rush")
-    rush update >$null 2>&1
+    node "$ROOT_PATH/common/scripts/install-run-rush.js" update >$null 2>&1
     npm run generate-channel-replace-map >$null 2>&1
     EndAction
 }
@@ -290,14 +319,59 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
     # gitignored via **/*.build.log) and dumped if the build fails, so compile
     # errors are never silently swallowed.
     $RUSH_REBUILD_LOG = "$SHAREPOINT_FRAMEWORK_BASEPATH/rush-rebuild.build.log"
-    rush rebuild 2>&1 | Out-File -FilePath $RUSH_REBUILD_LOG -Encoding utf8
+    $RUSH_REBUILD_STARTED = (Get-Date).ToUniversalTime()
+    node "$ROOT_PATH/common/scripts/install-run-rush.js" rebuild 2>&1 | Out-File -FilePath $RUSH_REBUILD_LOG -Encoding utf8
     if ($LASTEXITCODE -ne 0) {
         Write-Host "[ERROR] rush rebuild failed with exit code $LASTEXITCODE. Last 200 lines of $($RUSH_REBUILD_LOG):" -ForegroundColor Red
         Get-Content $RUSH_REBUILD_LOG -Tail 200 | Write-Host
         exit 1
     }
     foreach ($Solution in $Solutions) {
-        Get-ChildItem "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution/sharepoint/solution/" -Filter *.sppkg -ErrorAction SilentlyContinue | Copy-Item -Destination $RELEASE_PATH_APPS -Force
+        # Copy ONLY the package this solution declares in config/package-solution.json, not every
+        # .sppkg lying in sharepoint/solution. That folder is gitignored build output and accumulates
+        # stale packages from earlier channel builds (pp-*-test.sppkg) and older releases
+        # (pp-*-arkiv.sppkg); Install.ps1 deploys every .sppkg it finds in Apps, so copying them all
+        # would deploy obsolete and wrong-channel apps to the tenant. On a fresh CI clone the folder
+        # happens to hold only the current build, which is why this never bit in CI.
+        $SOLUTION_CONFIG_PATH = "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution/config/package-solution.json"
+        $ZIPPED_PACKAGE = (Get-Content $SOLUTION_CONFIG_PATH -Raw | ConvertFrom-Json).paths.zippedPackage
+        $SPPKG_PATH = "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution/sharepoint/$ZIPPED_PACKAGE"
+        # Packaging proof, part 1: every selected solution must have emitted its declared package
+        # during THIS run. A missing or stale .sppkg (left over from an earlier build) means the
+        # build did not produce what Install.ps1 will deploy, so fail instead of shipping it.
+        if (-not (Test-Path $SPPKG_PATH)) {
+            Write-Host "[ERROR] $Solution did not emit $ZIPPED_PACKAGE. See $RUSH_REBUILD_LOG." -ForegroundColor Red
+            exit 1
+        }
+        if ((Get-Item $SPPKG_PATH).LastWriteTimeUtc -lt $RUSH_REBUILD_STARTED) {
+            Write-Host "[ERROR] $ZIPPED_PACKAGE for $Solution predates this build ($((Get-Item $SPPKG_PATH).LastWriteTimeUtc) UTC); rush rebuild did not re-emit it." -ForegroundColor Red
+            exit 1
+        }
+        # Packaging proof, part 2: the shared library must be bundled, never a runtime dependency
+        # (Decision A in docs/plans/spfx-1.23-heft-toolchain.md). Heft externalizes a linked
+        # workspace package when its dist holds exactly one manifest, and the only symptom at
+        # runtime is a missing-module error in the browser. Catch it here: no AMD define header
+        # in dist may list a pp365-* package.
+        $ExternalHits = Get-ChildItem "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution/dist" -Filter *.js -File -ErrorAction SilentlyContinue |
+            Select-String -Pattern 'define\(\[[^\]]*pp365-[^\]]*\]' -List
+        if ($ExternalHits) {
+            Write-Host "[ERROR] $Solution bundles reference a pp365-* package as an external (shared library not bundled):" -ForegroundColor Red
+            $ExternalHits | ForEach-Object { Write-Host "        $($_.Filename)" -ForegroundColor Red }
+            exit 1
+        }
+        # Packaging proof, part 3: third-party stylesheets must stay global. The Heft rig compiles
+        # every .css as a CSS module unless spfx-customize-webpack.js exempts node_modules; when that
+        # exemption is missing, react-calendar-timeline's and Fabric's class names are hashed, the
+        # library DOM no longer matches its own rules, and the timeline renders as an unclickable
+        # overlay. A hashed third-party class name in a bundle is therefore a build error.
+        $HashedCssHits = Get-ChildItem "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution/dist" -Filter *.js -File -ErrorAction SilentlyContinue |
+            Select-String -Pattern '(react-calendar-timeline|rct-(outer|scroll|header-root|sidebar|calendar-header|items)|ms-Fabric|ms-Grid-row|ms-Grid-col)_[0-9a-f]{8}\b' -List
+        if ($HashedCssHits) {
+            Write-Host "[ERROR] $Solution bundles contain hashed class names from third-party stylesheets (node_modules CSS compiled as CSS modules):" -ForegroundColor Red
+            $HashedCssHits | ForEach-Object { Write-Host "        $($_.Filename): $($_.Matches[0].Value)" -ForegroundColor Red }
+            exit 1
+        }
+        Copy-Item $SPPKG_PATH -Destination $RELEASE_PATH_APPS -Force
     }
     # Fail loudly rather than ship a release with no apps (e.g. an unrecognised
     # solution name, or a solution that built without emitting an .sppkg).
@@ -319,7 +393,9 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
 
 #region Compressing release to a zip file
 if (-not $CI.IsPresent) {
-    rimraf "$($RELEASE_PATH).zip"
+    # Remove-Item instead of rimraf: rimraf is not a dependency of this repo, so the call only
+    # worked on machines that happened to have it installed globally.
+    Remove-Item -Path "$($RELEASE_PATH).zip" -Force -ErrorAction SilentlyContinue
     Add-Type -Assembly "System.IO.Compression.FileSystem"
     [IO.Compression.ZipFile]::CreateFromDirectory($RELEASE_PATH, "$($RELEASE_PATH).zip")  
     $StopWatch.Stop()

@@ -1,6 +1,6 @@
 import { TemplateItem } from 'models/TemplateItem'
 import { ICopyProgressScreenProps } from './CopyProgressScreen/types'
-import { IFileAddResult } from '@pnp/sp/files'
+import { IFileInfo } from '@pnp/sp/files'
 
 export interface IDocumentTemplateDialogDismissProps {
   reload?: boolean
@@ -47,7 +47,7 @@ export interface IDocumentTemplateDialogState {
   /**
    * Uploaded files
    */
-  uploaded?: IFileAddResult[]
+  uploaded?: IFileInfo[]
 }
 
 export enum DocumentTemplateDialogScreen {

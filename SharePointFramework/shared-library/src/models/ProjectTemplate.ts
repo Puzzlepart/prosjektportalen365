@@ -1,5 +1,5 @@
 import { IIconProps } from '@fluentui/react'
-import { Schema } from 'sp-js-provisioning'
+import { ProvisioningSchema } from './ProvisioningSchema'
 import { isArray } from 'underscore'
 import { ContentConfig } from './ContentConfig'
 import { ProjectExtension } from './ProjectExtension'
@@ -78,7 +78,10 @@ export class ProjectTemplate extends UserSelectableObject {
    * @param web The `Web` instance (from `@pnp/sp`) to use when loading the template schema.
    * Does not need to be specified if the schema doesn't need to be loaded.
    */
-  constructor(spItem: IProjectTemplateSPItem, public web?: IWeb) {
+  constructor(
+    spItem: IProjectTemplateSPItem,
+    public web?: IWeb
+  ) {
     super(
       spItem.Id,
       spItem.FieldValuesAsText.Title,
@@ -185,7 +188,7 @@ export class ProjectTemplate extends UserSelectableObject {
    *
    * @returns The schema for the template
    */
-  public async getSchema(): Promise<Schema> {
+  public async getSchema(): Promise<ProvisioningSchema> {
     const schema = await this.web.getFileByServerRelativePath(this.projectTemplateUrl).getJSON()
     schema.Parameters = {
       ...(schema.Parameters ?? {}),

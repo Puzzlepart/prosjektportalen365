@@ -88,15 +88,15 @@ export const CompatibilityDialog: FC = () => {
     resolution === 'overwrite'
       ? strings.CatalogResolutionOverwrite
       : resolution === 'skip'
-      ? strings.CatalogResolutionSkip
-      : strings.CatalogResolutionBlocked
+        ? strings.CatalogResolutionSkip
+        : strings.CatalogResolutionBlocked
 
   const resolutionClass = (resolution: ConflictResolution): string =>
     resolution === 'overwrite'
       ? styles.overwriteTag
       : resolution === 'skip'
-      ? styles.skipTag
-      : styles.blockedTag
+        ? styles.skipTag
+        : styles.blockedTag
 
   const conflicts = [...(report?.conflicts ?? [])].sort(
     (a, b) => ORDER[a.resolution] - ORDER[b.resolution]

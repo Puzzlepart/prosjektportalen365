@@ -59,7 +59,6 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
 
   @override
   public async onExecute(event: IListViewCommandSetExecuteEventParameters): Promise<void> {
-    // eslint-disable-next-line default-case
     switch (event.itemId) {
       case this._openCmd.id:
         if (!(await this._ensureDataLoaded())) return
@@ -139,7 +138,7 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
           title={strings.TemplateLibrarySelectModalTitle}
           onDismiss={(props) => {
             this._unmount(placeholder)
-            if (props.reload) document.location.href = document.location.href
+            if (props.reload) document.location.reload()
           }}
         />
       </TemplateSelectorContext.Provider>

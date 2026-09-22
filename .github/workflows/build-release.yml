@@ -4,16 +4,25 @@ on:
   push:
     branches:
       - main
+      - feat/toolchain-upgrade
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'
       - 'Templates/**'
       - .github/workflows/build-release.yml
 
+env:
+  # Heft's TypeScript and webpack steps need more than V8's default heap (about 2 GB on a small
+  # runner): the PortfolioWebParts production build dies at 2 GB and passes at 3 GB. 8 GB matches
+  # the headroom the gulp toolchain used. RUSH_PARALLELISM bounds concurrent solution builds so
+  # the heap ceilings cannot add up past the runner's memory.
+  NODE_OPTIONS: --max-old-space-size=8192
+  RUSH_PARALLELISM: 2
+
 jobs:
   build-release:
     name: Build release (CI)
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     if: ${{ !contains(github.event.head_commit.message, '[skip-main-ci]') }}
     steps:
       - uses: actions/checkout@v4
@@ -26,7 +35,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ vars.NODE_VERSION }}
+          node-version-file: '.nvmrc'
 
       - name: Run Install/Build-Release.ps1 in CI mode
         run: Install/Build-Release.ps1 -CI
@@ -42,7 +51,7 @@ jobs:
   build_release_package_test:
     needs: [build-release]
     name: Build test channel release (CI)
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.ref }}_build_test_channel_release_ci
       cancel-in-progress: true
@@ -58,7 +67,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ vars.NODE_VERSION }}
+          node-version-file: '.nvmrc'
 
       - name: Run Install/Build-Release.ps1 in CI mode for channel test
         run: Install/Build-Release.ps1 -CI -Channel test
@@ -74,7 +83,7 @@ jobs:
   build_release_package_kurs:
     needs: [build-release]
     name: Build kurs channel release (CI)
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.ref }}_build_kurs_channel_release_ci
       cancel-in-progress: true
@@ -90,7 +99,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ vars.NODE_VERSION }}
+          node-version-file: '.nvmrc'
 
       - name: Run Install/Build-Release.ps1 in CI mode for channel kurs
         run: Install/Build-Release.ps1 -CI -Channel kurs

@@ -45,15 +45,15 @@ export const ChangePhaseDialog: FC = () => {
                     {state.view === View.Archive
                       ? strings.ArchiveViewDescription
                       : context.state.phase
-                      ? format(
-                          strings.ChangePhaseDialogSubtitle,
-                          context.state.phase?.name,
-                          context.state.confirmPhase.name
-                        )
-                      : format(
-                          strings.ChangeFirstPhaseDialogSubtitle,
-                          context.state.confirmPhase.name
-                        )}
+                        ? format(
+                            strings.ChangePhaseDialogSubtitle,
+                            context.state.phase?.name,
+                            context.state.confirmPhase.name
+                          )
+                        : format(
+                            strings.ChangeFirstPhaseDialogSubtitle,
+                            context.state.confirmPhase.name
+                          )}
                   </Label>
                   {state.view === View.Confirm &&
                     format(strings.ConfirmChangePhase, context.state.confirmPhase.name)}

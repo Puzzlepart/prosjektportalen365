@@ -33,12 +33,12 @@ export function useArchiveStatus() {
       status === strings.ArchiveLogStatusSuccess
         ? 'CheckmarkCircle'
         : status === strings.ArchiveLogStatusError
-        ? 'DismissCircle'
-        : status === strings.ArchiveLogStatusWarning
-        ? 'Warning'
-        : status === strings.ArchiveLogStatusInProgress
-        ? 'HourglassHalf'
-        : 'HourglassHalf'
+          ? 'DismissCircle'
+          : status === strings.ArchiveLogStatusWarning
+            ? 'Warning'
+            : status === strings.ArchiveLogStatusInProgress
+              ? 'HourglassHalf'
+              : 'HourglassHalf'
 
     return getFluentIcon(iconName, {
       color: ARCHIVE_STATUS_COLORS[status] || 'inherit',

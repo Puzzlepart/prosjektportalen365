@@ -114,7 +114,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
             'BaseTemplate eq 101',
             'IsCatalog eq false',
             'IsApplicationList eq false',
-            // eslint-disable-next-line quotes
+
             "ListItemEntityTypeFullName ne 'SP.Data.FormServerTemplatesItem'"
           ].join(' and ')
         )()) ?? []

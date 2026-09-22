@@ -4,7 +4,6 @@ import _ from 'lodash'
 import { TimelineConfigurationModel, TimelineContentModel } from 'pp365-shared-library/lib/models'
 import strings from 'ProjectWebPartsStrings'
 import { IProjectTimelineProps } from '../types'
-import '@pnp/sp/items/get-all'
 import resource from 'SharedResources'
 
 /**
@@ -22,7 +21,7 @@ export async function fetchProjectData(
       .getByTitle(resource.Lists_Projects_Title)
       .items.select('Id', 'GtStartDate', 'GtEndDate')
       .filter(`GtSiteId eq '${props.siteId}'`)
-      .getAll()
+      .top(1)()
 
     const config = _.find(
       timelineConfig,

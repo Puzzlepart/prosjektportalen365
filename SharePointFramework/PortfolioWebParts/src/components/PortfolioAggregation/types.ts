@@ -9,7 +9,10 @@ import { IViewFormPanel } from './ViewFormPanel/types'
 import { ISearchResult } from '@pnp/sp/search'
 
 export class PortfolioAggregationErrorMessage extends Error {
-  constructor(public message: string, public type: MessageBarType) {
+  constructor(
+    public message: string,
+    public type: MessageBarType
+  ) {
     super(message)
   }
 }
@@ -77,8 +80,7 @@ export interface IPortfolioAggregationConfiguration {
 }
 
 export interface IPortfolioAggregationProps<T = any>
-  extends IBaseComponentProps,
-    Pick<IListProps, 'isListLayoutModeJustified' | 'hiddenColumns'> {
+  extends IBaseComponentProps, Pick<IListProps, 'isListLayoutModeJustified' | 'hiddenColumns'> {
   /**
    * Configuration (columns and views etc)
    */
@@ -166,8 +168,10 @@ export interface IPortfolioAggregationProps<T = any>
   isParentProject?: boolean
 }
 
-export interface IPortfolioAggregationState
-  extends Pick<IPortfolioAggregationProps, 'dataSourceLevel' | 'dataSourceCategory' | 'columns'> {
+export interface IPortfolioAggregationState extends Pick<
+  IPortfolioAggregationProps,
+  'dataSourceLevel' | 'dataSourceCategory' | 'columns'
+> {
   /**
    * `true` if the component is loading data. The list will be
    * rendered with shimmer placeholders if the component is loading.

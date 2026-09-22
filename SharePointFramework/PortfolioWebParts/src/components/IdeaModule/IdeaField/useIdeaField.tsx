@@ -141,7 +141,7 @@ export function useIdeaField(props: IIdeaFieldProps) {
               dangerouslySetInnerHTML={{
                 __html: safeValue.replace(/\n/g, '<br />')
               }}
-            ></div>
+            />
           )
         }
       ],

@@ -181,10 +181,7 @@ async function fetchData(
 
     const scopeKeysWithReports = allReports.reduce<string[]>((keys, report) => {
       const scopeKey = report.scopeKey
-      if (
-        scopeKey &&
-        !keys.some((key) => getScopeSeriesKey(key) === getScopeSeriesKey(scopeKey))
-      ) {
+      if (scopeKey && !keys.some((key) => getScopeSeriesKey(key) === getScopeSeriesKey(scopeKey))) {
         keys.push(scopeKey)
       }
       return keys
@@ -215,9 +212,8 @@ async function fetchData(
     }
 
     if (initialSelectedReport?.published) {
-      initialSelectedReport = await SPDataAdapter.portalDataService.getStatusReportAttachments(
-        initialSelectedReport
-      )
+      initialSelectedReport =
+        await SPDataAdapter.portalDataService.getStatusReportAttachments(initialSelectedReport)
       sortedReports = sortedReports.map((report) => {
         if (report.id === initialSelectedReport.id) {
           return initialSelectedReport

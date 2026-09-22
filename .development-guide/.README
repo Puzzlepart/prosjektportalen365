@@ -20,6 +20,8 @@
 
 [[load:.development-guide/spfx/utviklingsmiljo.md]]
 
+[[load:.development-guide/spfx/testing.md]]
+
 [[load:.development-guide/maler/site-design-og-site-scripts.md]]
 
 [[load:.development-guide/maler/js-provisjoneringsmal.md]]

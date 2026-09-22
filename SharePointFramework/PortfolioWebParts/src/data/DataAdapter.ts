@@ -5,7 +5,6 @@ import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, getHashCode, PnPClientStorage } from '@pnp/core'
 import { LogLevel } from '@pnp/logging'
 import { spfi, SPFx } from '@pnp/sp'
-import '@pnp/sp/items/get-all'
 import {
   ISearchResult,
   ISiteUserInfo,
@@ -23,6 +22,7 @@ import {
   DataSource,
   DataSourceService,
   expandRowsPerStatusSeries,
+  getAllItems,
   getClassProperties,
   getItemFieldValues,
   getOrFetchProjectsCache,
@@ -83,7 +83,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
    * @param _spfxContext SPFx context
    * @param _sp SPFI instance
    */
-  constructor(private _spfxContext: SPFxContext, private _sp: SPFI) {
+  constructor(
+    private _spfxContext: SPFxContext,
+    private _sp: SPFI
+  ) {
     this.portalDataService = new PortalDataService()
   }
 
@@ -322,8 +325,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       await this._fetchDataForView(view, configuration, siteId, siteIdProperty)
 
     const items = sites.reduce<IFetchDataForViewItemResult[]>((acc, site) => {
-      const project = projects.find((res) => res[siteIdProperty] === site['SiteId'])
-      const series = statusReportsBySite.get(site['SiteId'])
+      const project = projects.find((res) => res[siteIdProperty] === site.SiteId)
+      const series = statusReportsBySite.get(site.SiteId)
       return acc.concat(
         expandRowsPerStatusSeries(
           (statusReport) => ({
@@ -332,7 +335,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
             Title: site.Title,
             Path: site?.Path,
             SPWebUrl: site?.SPWebUrl,
-            SiteId: site['SiteId']
+            SiteId: site.SiteId
           }),
           series,
           siteIdProperty
@@ -353,7 +356,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       await this._fetchDataForView(view, configuration, siteId, siteIdProperty)
 
     const items = projects.reduce<IFetchDataForViewItemResult[]>((acc, project) => {
-      const site = sites.find((res) => res['SiteId'] === project[siteIdProperty])
+      const site = sites.find((res) => res.SiteId === project[siteIdProperty])
       const series = statusReportsBySite.get(project[siteIdProperty])
       return acc.concat(
         expandRowsPerStatusSeries(
@@ -451,7 +454,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       cleanDeep({ ...item })
     )
     sites = sites.filter(
-      (site) => projects.filter((res) => res[siteIdProperty] === site['SiteId']).length === 1
+      (site) => projects.filter((res) => res[siteIdProperty] === site.SiteId).length === 1
     )
     const statusReportsBySite = groupLatestReportBySeries(statusReports, siteIdProperty)
 
@@ -529,17 +532,19 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
     let timelineItems: any[]
     try {
-      timelineItems = await this._sp.web.lists
-        .getByTitle(resource.Lists_TimelineContent_Title)
-        .items.select(...baseFields, 'GtTag')
-        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-        .getAll()
+      timelineItems = await getAllItems(
+        this._sp.web.lists
+          .getByTitle(resource.Lists_TimelineContent_Title)
+          .items.select(...baseFields, 'GtTag')
+          .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+      )
     } catch {
-      timelineItems = await this._sp.web.lists
-        .getByTitle(resource.Lists_TimelineContent_Title)
-        .items.select(...baseFields)
-        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-        .getAll()
+      timelineItems = await getAllItems(
+        this._sp.web.lists
+          .getByTitle(resource.Lists_TimelineContent_Title)
+          .items.select(...baseFields)
+          .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+      )
     }
 
     return timelineItems
@@ -646,7 +651,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         }
       ]
     })
-    return PrimarySearchResults.filter((site) => hubSiteId !== site['SiteId'])
+    return PrimarySearchResults.filter((site) => hubSiteId !== site.SiteId)
   }
 
   /**
@@ -698,7 +703,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
         const model = new ProjectListModel(group?.displayName ?? item.Title, itemWithTemplate)
         model.isUserMember = !!group
-        model.hasUserAccess = _.any(sites, (site) => site['SiteId'] === item.GtSiteId)
+        model.hasUserAccess = _.any(sites, (site) => site.SiteId === item.GtSiteId)
         model.primaryUser = createUserPersona(primaryUser, primaryUserField)
         model.secondaryUser = createUserPersona(secondaryUser, secondaryUserField)
         return model
@@ -735,7 +740,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     const selectFields = this._buildProjectItemsSelectFields(fields)
     const fieldsHash = getHashCode(selectFields.slice().sort().join(','))
     return getOrFetchProjectsCache('items', `${siteId}_${fieldsHash}`, () =>
-      list.items.select(...selectFields).getAll()
+      getAllItems(list.items.select(...selectFields))
     )
   }
 
@@ -927,10 +932,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       cacheKey,
       async () =>
         await Promise.all([
-          list.items
-            .select(...selectFields)
-            .filter(`GtSiteId eq '${siteId}'`)
-            .getAll(),
+          getAllItems(list.items.select(...selectFields).filter(`GtSiteId eq '${siteId}'`)),
           this._fetchItems(`SiteId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId']),
           this.fetchMemberGroups(),
           spHub.web.siteUsers.select('Id', 'Title', 'Email')()
@@ -967,7 +969,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         .Get<IGraphGroup[]>(
           '/me/memberOf/$/microsoft.graph.group',
           ['id', 'displayName'],
-          // eslint-disable-next-line quotes
+
           "groupTypes/any(a:a%20eq%20'unified')"
         )
         .then((value) => resolve(value))

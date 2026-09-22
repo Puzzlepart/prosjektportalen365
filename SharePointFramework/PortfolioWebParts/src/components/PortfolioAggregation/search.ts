@@ -18,7 +18,7 @@ export const searchItem = (item: any, searchTerm: string, columns: IColumn[]) =>
         return { ...obj, [index]: get(item, col.fieldName, null) }
       },
       {
-        [columns.length]: item['SiteTitle']
+        [columns.length]: item.SiteTitle
       } as Record<string, any>
     )
     return JSON.stringify(searchObj).toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1

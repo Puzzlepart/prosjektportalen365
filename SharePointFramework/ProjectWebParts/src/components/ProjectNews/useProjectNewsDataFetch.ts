@@ -36,18 +36,16 @@ export function useProjectNewsDataFetch(
         const res = await props.spHttpClient.get(url, SPHttpClient.configurations.v1)
         const data = await res.json()
         const news = (data.value || [])
-          .map(
-            (item): INewsItem => ({
-              id: item.Id,
-              promotedState: item.PromotedState || 0,
-              name: item.File?.Name || item.Title,
-              url: item.File?.ServerRelativeUrl || '#',
-              authorName: item.Editor?.Title || item.Author?.Title,
-              modifiedDate: item.File?.TimeLastModified || item.Modified,
-              imageUrl: getNewsImageUrl(item),
-              description: item.Description
-            })
-          )
+          .map((item): INewsItem => ({
+            id: item.Id,
+            promotedState: item.PromotedState || 0,
+            name: item.File?.Name || item.Title,
+            url: item.File?.ServerRelativeUrl || '#',
+            authorName: item.Editor?.Title || item.Author?.Title,
+            modifiedDate: item.File?.TimeLastModified || item.Modified,
+            imageUrl: getNewsImageUrl(item),
+            description: item.Description
+          }))
           .sort(
             (a, b) =>
               new Date(b.modifiedDate ?? 0).getTime() - new Date(a.modifiedDate ?? 0).getTime()

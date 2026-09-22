@@ -6,6 +6,7 @@ import '@pnp/sp/fields'
 import '@pnp/sp/content-types'
 import '@pnp/sp/views'
 import '@pnp/sp/files'
+import { getTermStore } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
 import SPDataAdapter from 'data/SPDataAdapter'
 import { ICompatibilityConflict, ICompatibilityReport, IPackageManifest } from 'models'
@@ -283,13 +284,11 @@ export class CompatibilityService {
     conflicts: ICompatibilityConflict[]
   ): Promise<void> {
     try {
-      const sp: any = SPDataAdapter.sp
+      const termStore = getTermStore(SPDataAdapter.sp.web)
       for (const set of schema.Taxonomy?.TermSets ?? []) {
         if (!set?.Id) continue
         try {
-          const existing: any = await sp.termStore.sets
-            .getById(set.Id)
-            .select('id', 'localizedNames')()
+          const existing = await termStore.sets.getById(set.Id).select('id', 'localizedNames')()
           const existingName = existing?.localizedNames?.[0]?.name
           if (existingName && set.Name && existingName !== set.Name) {
             conflicts.push({
@@ -391,7 +390,7 @@ export class CompatibilityService {
         const e = { ...entry }
         if (Array.isArray(e.Fields)) {
           e.Fields = e.Fields.filter((f: any) => {
-            const id = typeof f === 'string' ? attr(f, 'ID') : f?.ID ?? f?.Id
+            const id = typeof f === 'string' ? attr(f, 'ID') : (f?.ID ?? f?.Id)
             return !listFieldSkipIds.has(normGuid(id))
           })
         }

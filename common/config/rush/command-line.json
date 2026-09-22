@@ -2,6 +2,21 @@
     "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/command-line.schema.json",
     "commands": [
       {
+        // Rush returns a nonzero exit code when any project "succeeds with warnings". Under the gulp
+        // toolchain lint was disabled during the build, so builds emitted no warnings and this never
+        // fired. Heft runs ESLint as part of `heft build`, and the repo carries ~700 lint warnings
+        // (errors still fail the build, per Decision C), so without this the whole release pipeline
+        // aborts: `Install/build-release.ps1` treats a nonzero `rush rebuild` as a fatal error.
+        //
+        // Warnings remain visible in the build log and in release/analysis-logs/lint.sarif.
+        "commandKind": "bulk",
+        "name": "build",
+        "summary": "Build all projects that haven't been built, or have changed since they were last built.",
+        "enableParallelism": true,
+        "incremental": true,
+        "allowWarningsInSuccessfulBuild": true
+      },
+      {
         "commandKind": "bulk",
         "name": "lint",
         "summary": "Runs eslint on all projects.",

@@ -2,16 +2,16 @@
 
 **Project:** Prosjektportalen 365  
 **Version:** 1.14.0  
-**Generated:** 2026-09-02T13:15:35.285Z  
+**Generated:** 2026-09-21T11:13:28.121Z  
 **Format:** CycloneDX-inspired Markdown
 
 ## Overview
 
 This SBOM documents all software dependencies used in the Prosjektportalen 365 project, including all packages in the monorepo.
 
-**Total Dependencies:** 125  
-**Production Dependencies:** 78  
-**Development Dependencies:** 47  
+**Total Dependencies:** 114  
+**Production Dependencies:** 74  
+**Development Dependencies:** 40  
 **Projects in Monorepo:** 8
 
 ## Projects in Monorepo
@@ -23,33 +23,33 @@ This SBOM documents all software dependencies used in the Prosjektportalen 365 p
 
 ### pp365-portfolioextensions (1.14.0)
 
-- **Production Dependencies:** 24
-- **Development Dependencies:** 27
+- **Production Dependencies:** 23
+- **Development Dependencies:** 23
 
 ### pp365-portfoliowebparts (1.14.0)
 
-- **Production Dependencies:** 44
-- **Development Dependencies:** 31
+- **Production Dependencies:** 41
+- **Development Dependencies:** 26
 
 ### pp365-programwebparts (1.14.0)
 
-- **Production Dependencies:** 38
-- **Development Dependencies:** 31
+- **Production Dependencies:** 35
+- **Development Dependencies:** 24
 
 ### pp365-projectextensions (1.14.0)
 
-- **Production Dependencies:** 36
-- **Development Dependencies:** 30
+- **Production Dependencies:** 35
+- **Development Dependencies:** 24
 
 ### pp365-projectwebparts (1.14.0)
 
-- **Production Dependencies:** 48
-- **Development Dependencies:** 33
+- **Production Dependencies:** 47
+- **Development Dependencies:** 26
 
 ### pp365-shared-library (1.14.0)
 
-- **Production Dependencies:** 40
-- **Development Dependencies:** 21
+- **Production Dependencies:** 37
+- **Development Dependencies:** 23
 
 ### pp365-templates (1.14.0)
 
@@ -60,40 +60,38 @@ This SBOM documents all software dependencies used in the Prosjektportalen 365 p
 
 This section lists all unique dependencies across all projects.
 
-### Production Dependencies (78)
+### Production Dependencies (74)
 
 | Package | Version(s) | Used By |
 |---------|-----------|----------|
-| @fluentui/react | 8.98.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @fluentui/react | 8.106.4 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | @fluentui/react-components | ~9.72.10 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | @fluentui/react-datepicker-compat | ~0.6.22 | pp365-projectwebparts, pp365-shared-library |
 | @fluentui/react-file-type-icons | ~8.16.0 | pp365-shared-library |
 | @fluentui/react-hooks | 8.6.27 | pp365-portfoliowebparts |
 | @fluentui/react-icons | ~2.0.317 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| @microsoft/decorators | 1.17.4 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-projectextensions, +1 more |
-| @microsoft/microsoft-graph-types | ~2.38.0 | pp365-projectextensions |
-| @microsoft/sp-adaptive-card-extension-base | 1.17.4 | pp365-programwebparts, pp365-projectwebparts |
-| @microsoft/sp-application-base | 1.17.4 | pp365-portfolioextensions, pp365-projectextensions, pp365-shared-library |
-| @microsoft/sp-core-library | 1.17.4 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| @microsoft/sp-dialog | 1.17.4 | pp365-portfolioextensions, pp365-projectextensions, pp365-projectwebparts |
-| @microsoft/sp-http | 1.17.4 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectwebparts |
-| @microsoft/sp-listview-extensibility | 1.17.4 | pp365-portfolioextensions, pp365-projectextensions, pp365-projectwebparts, +1 more |
-| @microsoft/sp-lodash-subset | 1.17.4 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectwebparts, +1 more |
-| @microsoft/sp-office-ui-fabric-core | 1.17.4 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectextensions, +1 more |
-| @microsoft/sp-page-context | 1.17.4 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| @microsoft/sp-property-pane | 1.17.4 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectwebparts, +1 more |
-| @microsoft/sp-webpart-base | 1.17.4 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectwebparts, +1 more |
-| @pnp/core | 3.17.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| @pnp/graph | 3.17.0 | pp365-projectextensions |
-| @pnp/logging | 3.17.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| @pnp/odata | 2.15.0 | pp365-shared-library |
-| @pnp/queryable | 3.17.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| @pnp/sp | 3.17.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| @pnp/sp-taxonomy | 1.3.8 | pp365-portfoliowebparts, pp365-programwebparts |
-| @pnp/spfx-controls-react | ~3.15.0, 3.17.0 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectwebparts, +1 more |
-| @pnp/spfx-property-controls | ~3.19.0 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectwebparts |
+| @microsoft/decorators | 1.23.2 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-projectextensions, +1 more |
+| @microsoft/microsoft-graph-types | 2.43.0 | pp365-projectextensions |
+| @microsoft/sp-adaptive-card-extension-base | 1.23.2 | pp365-programwebparts, pp365-projectwebparts |
+| @microsoft/sp-application-base | 1.23.2 | pp365-portfolioextensions, pp365-projectextensions, pp365-shared-library |
+| @microsoft/sp-core-library | 1.23.2 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @microsoft/sp-dialog | 1.23.2 | pp365-portfolioextensions, pp365-projectextensions, pp365-projectwebparts |
+| @microsoft/sp-http | 1.23.2 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectwebparts |
+| @microsoft/sp-listview-extensibility | 1.23.2 | pp365-portfolioextensions, pp365-projectextensions, pp365-projectwebparts, +1 more |
+| @microsoft/sp-lodash-subset | 1.23.2 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectwebparts, +1 more |
+| @microsoft/sp-office-ui-fabric-core | 1.23.2 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectextensions, +1 more |
+| @microsoft/sp-page-context | 1.23.2 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @microsoft/sp-property-pane | 1.23.2 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectwebparts, +1 more |
+| @microsoft/sp-webpart-base | 1.23.2 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectwebparts, +1 more |
+| @pnp/core | 4.21.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @pnp/graph | 4.21.0 | pp365-projectextensions |
+| @pnp/logging | 4.21.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @pnp/queryable | 4.21.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @pnp/sp | 4.21.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @pnp/spfx-controls-react | 3.25.0 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectwebparts, +1 more |
+| @pnp/spfx-property-controls | 3.24.0 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectwebparts |
 | @ptkdev/json-token-replace | ^1.2.2 | pp365-templates |
-| @reduxjs/toolkit | 1.5.0, ~1.9.5 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectextensions, +2 more |
+| @reduxjs/toolkit | ~1.9.5 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectextensions, +2 more |
 | @types/array-sort | 1.0.0 | pp365-portfoliowebparts, pp365-programwebparts |
 | @types/react-calendar-timeline | 0.28.0 | pp365-shared-library |
 | @uifabric/file-type-icons | 7.6.27 | pp365-projectextensions |
@@ -106,14 +104,13 @@ This section lists all unique dependencies across all projects.
 | file-saver | ^2.0.5 | pp365-shared-library |
 | get-value | 3.0.1 | pp365-projectwebparts |
 | interactjs | 1.6.2 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectwebparts |
-| jsom-ctx | 1.2.0 | pp365-portfoliowebparts, pp365-programwebparts |
 | jszip | 3.10.1 | pp365-portfolioextensions, pp365-projectextensions, pp365-shared-library |
 | lodash | ~4.17.21 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectextensions, +2 more |
-| moment | 2.11.1, ~2.29.4 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectwebparts, +1 more |
+| moment | ~2.29.4 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectwebparts, +1 more |
 | msgraph-helper | 0.8.3 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectextensions, +1 more |
 | object-assign | 4.1.1 | pp365-portfoliowebparts, pp365-programwebparts |
-| pp365-shared-library | 1.14.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +2 more |
-| pzl-react-reusable-components | ~0.3.1, ^0.0.14 | pp365-portfoliowebparts, pp365-programwebparts |
+| pp365-shared-library | workspace:* | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +2 more |
+| pzl-react-reusable-components | ~0.3.1 | pp365-portfoliowebparts, pp365-programwebparts |
 | pzl-spfx-components | 0.0.11 | pp365-projectwebparts |
 | react | 17.0.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | react-autocomplete | 1.8.1 | pp365-projectextensions |
@@ -132,10 +129,9 @@ This section lists all unique dependencies across all projects.
 | resx-json-typescript-converter | ^1.0.1 | pp365-templates |
 | shade-blend-color | ~1.0.0 | pp365-projectwebparts, pp365-shared-library |
 | smoothscroll-polyfill | ~0.4.4 | pp365-projectwebparts |
-| sp-entityportal-service | 2.3.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| sp-js-provisioning | 1.3.14 | pp365-portfolioextensions, pp365-projectextensions, pp365-shared-library |
+| sp-js-provisioning | 1.4.0 | pp365-portfolioextensions, pp365-projectextensions |
 | spfx-jsom | 0.6.6 | pp365-projectextensions, pp365-projectwebparts, pp365-shared-library |
-| tslib | 2.3.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| tslib | 2.8.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | underscore | ~1.13.6 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | use-image-color | ~0.0.9 | pp365-portfoliowebparts |
 | usehooks-ts | ~2.9.1 | pp365-projectextensions, pp365-projectwebparts |
@@ -143,18 +139,22 @@ This section lists all unique dependencies across all projects.
 | xlsx | ^0.16.9 | pp365-shared-library |
 | xmldom | 0.6.0 | pp365-shared-library |
 
-### Development Dependencies (47)
+### Development Dependencies (40)
 
 | Package | Version(s) | Used By |
 |---------|-----------|----------|
-| @microsoft/eslint-config-spfx | 1.17.4 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +2 more |
-| @microsoft/eslint-plugin-spfx | 1.17.4 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +2 more |
-| @microsoft/rush-stack-compiler-4.5 | 0.2.2 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| @microsoft/sp-build-web | 1.17.4 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| @microsoft/sp-module-interfaces | 1.17.4 | pp365-portfolioextensions, pp365-programwebparts, pp365-projectwebparts, +1 more |
-| @rushstack/eslint-config | 2.5.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +2 more |
+| @microsoft/sp-module-interfaces | 1.23.2 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @microsoft/spfx-heft-plugins | 1.23.2 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @microsoft/spfx-web-build-rig | 1.23.2 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @rushstack/heft | 1.2.17 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @testing-library/dom | 8.20.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @testing-library/jest-dom | 6.6.3 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @testing-library/react | 12.1.5 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @testing-library/user-event | 14.6.7 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | @types/dom-to-image | 2.6.4 | pp365-projectwebparts |
 | @types/get-value | 3.0.1 | pp365-projectwebparts |
+| @types/heft-jest | 1.0.2 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @types/jest | 30.0.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | @types/lodash | ~4.14.195 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +4 more |
 | @types/object-assign | 4.0.30 | pp365-portfoliowebparts, pp365-programwebparts |
 | @types/react | 17.0.45 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
@@ -166,34 +166,23 @@ This section lists all unique dependencies across all projects.
 | @types/sharepoint | 2016.1.10 | pp365-portfolioextensions, pp365-projectextensions |
 | @types/smoothscroll-polyfill | ~0.3.3 | pp365-projectwebparts |
 | @types/underscore | ~1.11.5 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| @types/webpack-env | 1.18.0, ~1.15.2 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| @types/webpack-env | ~1.15.2 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | @types/xmldom | ^0.1.29 | pp365-shared-library |
-| @typescript-eslint/eslint-plugin | 5.40.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| @typescript-eslint/parser | 5.40.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| ajv | 6.12.5, ^6.12.5 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| colors | 1.4.0 | pp365-projectextensions, pp365-projectwebparts |
-| concurrently | 7.4.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +2 more |
+| css-loader | 7.1.2 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | dotenv | ~16.1.3 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +4 more |
-| eslint | 8.25.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| eslint-config-prettier | 8.5.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| eslint-plugin-prettier | 4.2.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| eslint-plugin-react | 7.31.10 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| eslint-plugin-react-hooks | 4.3.0 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectextensions, +1 more |
-| eslint-plugin-unused-imports | 2.0.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| find | 0.3.0 | pp365-portfoliowebparts, pp365-programwebparts, pp365-projectextensions, +1 more |
+| eslint | 9.37.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | fs-extra | 11.1.0 | pp365 |
 | glob | 7.2.0 | pp365 |
-| gulp | 4.0.2 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
-| livereload | 0.9.3 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +2 more |
-| pp365-portfoliowebparts | 1.14.0 | pp365-programwebparts |
-| pp365-projectwebparts | 1.14.0 | pp365-portfoliowebparts, pp365-programwebparts |
-| prettier | 2.7.1 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| pp365-eslint-config | workspace:* | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| pp365-jest-config | workspace:* | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| pp365-portfoliowebparts | workspace:* | pp365-programwebparts |
+| pp365-projectwebparts | workspace:* | pp365-portfoliowebparts, pp365-programwebparts |
+| prettier | 3.9.7 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | replace | 1.2.2 | pp365, pp365-templates |
-| typescript | 4.5.5 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
+| typescript | ~5.8.3 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +3 more |
 | uuid | 9.0.0 | pp365 |
-| webpack | 5.74.0 | pp365-portfolioextensions, pp365-portfoliowebparts, pp365-programwebparts, +2 more |
 | xml2js | ~0.6.2 | pp365-templates |
-| yargs | 17.7.1, 14.2.0 | pp365, pp365-programwebparts |
+| yargs | 17.7.1 | pp365 |
 
 ## Detailed Breakdown by Project
 
@@ -213,104 +202,97 @@ This section provides a detailed view of dependencies for each project.
 
 ### pp365-portfolioextensions
 
-#### Production Dependencies (24)
+#### Production Dependencies (23)
 
 | Package | Version |
 |---------|----------|
-| @fluentui/react | 8.98.1 |
+| @fluentui/react | 8.106.4 |
 | @fluentui/react-components | ~9.72.10 |
 | @fluentui/react-icons | ~2.0.317 |
-| @microsoft/decorators | 1.17.4 |
-| @microsoft/sp-application-base | 1.17.4 |
-| @microsoft/sp-core-library | 1.17.4 |
-| @microsoft/sp-dialog | 1.17.4 |
-| @microsoft/sp-listview-extensibility | 1.17.4 |
-| @microsoft/sp-page-context | 1.17.4 |
-| @pnp/core | 3.17.0 |
-| @pnp/logging | 3.17.0 |
-| @pnp/queryable | 3.17.0 |
-| @pnp/sp | 3.17.0 |
+| @microsoft/decorators | 1.23.2 |
+| @microsoft/sp-application-base | 1.23.2 |
+| @microsoft/sp-core-library | 1.23.2 |
+| @microsoft/sp-dialog | 1.23.2 |
+| @microsoft/sp-listview-extensibility | 1.23.2 |
+| @microsoft/sp-page-context | 1.23.2 |
+| @pnp/core | 4.21.0 |
+| @pnp/logging | 4.21.0 |
+| @pnp/queryable | 4.21.0 |
+| @pnp/sp | 4.21.0 |
 | jszip | 3.10.1 |
-| pp365-shared-library | 1.14.0 |
+| pp365-shared-library | workspace:* |
 | react | 17.0.1 |
 | react-dom | 17.0.1 |
 | react-gauge-component | ~1.2.61 |
 | react-markdown | ^8.0.3 |
 | rehype-raw | ^6.1.1 |
-| sp-entityportal-service | 2.3.0 |
-| sp-js-provisioning | 1.3.14 |
-| tslib | 2.3.1 |
+| sp-js-provisioning | 1.4.0 |
+| tslib | 2.8.1 |
 | underscore | ~1.13.6 |
 
-#### Development Dependencies (27)
+#### Development Dependencies (23)
 
 | Package | Version |
 |---------|----------|
-| @microsoft/eslint-config-spfx | 1.17.4 |
-| @microsoft/eslint-plugin-spfx | 1.17.4 |
-| @microsoft/rush-stack-compiler-4.5 | 0.2.2 |
-| @microsoft/sp-build-web | 1.17.4 |
-| @microsoft/sp-module-interfaces | 1.17.4 |
-| @rushstack/eslint-config | 2.5.1 |
+| @microsoft/sp-module-interfaces | 1.23.2 |
+| @microsoft/spfx-heft-plugins | 1.23.2 |
+| @microsoft/spfx-web-build-rig | 1.23.2 |
+| @rushstack/heft | 1.2.17 |
+| @testing-library/dom | 8.20.1 |
+| @testing-library/jest-dom | 6.6.3 |
+| @testing-library/react | 12.1.5 |
+| @testing-library/user-event | 14.6.7 |
+| @types/heft-jest | 1.0.2 |
+| @types/jest | 30.0.0 |
 | @types/lodash | ~4.14.195 |
 | @types/react | 17.0.45 |
 | @types/react-dom | 17.0.17 |
 | @types/sharepoint | 2016.1.10 |
 | @types/underscore | ~1.11.5 |
-| @types/webpack-env | 1.18.0 |
-| @typescript-eslint/eslint-plugin | 5.40.0 |
-| @typescript-eslint/parser | 5.40.0 |
-| ajv | 6.12.5 |
-| concurrently | 7.4.0 |
+| @types/webpack-env | ~1.15.2 |
+| css-loader | 7.1.2 |
 | dotenv | ~16.1.3 |
-| eslint | 8.25.0 |
-| eslint-config-prettier | 8.5.0 |
-| eslint-plugin-prettier | 4.2.1 |
-| eslint-plugin-react | 7.31.10 |
-| eslint-plugin-unused-imports | 2.0.0 |
-| gulp | 4.0.2 |
-| livereload | 0.9.3 |
-| prettier | 2.7.1 |
-| typescript | 4.5.5 |
-| webpack | 5.74.0 |
+| eslint | 9.37.0 |
+| pp365-eslint-config | workspace:* |
+| pp365-jest-config | workspace:* |
+| prettier | 3.9.7 |
+| typescript | ~5.8.3 |
 
 ### pp365-portfoliowebparts
 
-#### Production Dependencies (44)
+#### Production Dependencies (41)
 
 | Package | Version |
 |---------|----------|
-| @fluentui/react | 8.98.1 |
+| @fluentui/react | 8.106.4 |
 | @fluentui/react-components | ~9.72.10 |
 | @fluentui/react-hooks | 8.6.27 |
 | @fluentui/react-icons | ~2.0.317 |
-| @microsoft/decorators | 1.17.4 |
-| @microsoft/sp-core-library | 1.17.4 |
-| @microsoft/sp-http | 1.17.4 |
-| @microsoft/sp-lodash-subset | 1.17.4 |
-| @microsoft/sp-office-ui-fabric-core | 1.17.4 |
-| @microsoft/sp-page-context | 1.17.4 |
-| @microsoft/sp-property-pane | 1.17.4 |
-| @microsoft/sp-webpart-base | 1.17.4 |
-| @pnp/core | 3.17.0 |
-| @pnp/logging | 3.17.0 |
-| @pnp/queryable | 3.17.0 |
-| @pnp/sp | 3.17.0 |
-| @pnp/sp-taxonomy | 1.3.8 |
-| @pnp/spfx-controls-react | ~3.15.0 |
-| @pnp/spfx-property-controls | ~3.19.0 |
-| @reduxjs/toolkit | 1.5.0 |
+| @microsoft/decorators | 1.23.2 |
+| @microsoft/sp-core-library | 1.23.2 |
+| @microsoft/sp-http | 1.23.2 |
+| @microsoft/sp-lodash-subset | 1.23.2 |
+| @microsoft/sp-office-ui-fabric-core | 1.23.2 |
+| @microsoft/sp-page-context | 1.23.2 |
+| @microsoft/sp-property-pane | 1.23.2 |
+| @microsoft/sp-webpart-base | 1.23.2 |
+| @pnp/core | 4.21.0 |
+| @pnp/logging | 4.21.0 |
+| @pnp/queryable | 4.21.0 |
+| @pnp/sp | 4.21.0 |
+| @pnp/spfx-controls-react | 3.25.0 |
+| @pnp/spfx-property-controls | 3.24.0 |
+| @reduxjs/toolkit | ~1.9.5 |
 | @types/array-sort | 1.0.0 |
 | array-sort | 1.0.0 |
 | array-unique | 0.3.2 |
 | clean-deep | 3.0.2 |
 | interactjs | 1.6.2 |
-| jsom-ctx | 1.2.0 |
 | lodash | ~4.17.21 |
-| moment | 2.11.1 |
+| moment | ~2.29.4 |
 | msgraph-helper | 0.8.3 |
 | object-assign | 4.1.1 |
-| pp365-shared-library | 1.14.0 |
+| pp365-shared-library | workspace:* |
 | pzl-react-reusable-components | ~0.3.1 |
 | react | 17.0.1 |
 | react-beautiful-dnd | ~13.1.1 |
@@ -320,20 +302,24 @@ This section provides a detailed view of dependencies for each project.
 | react-gauge-component | ~1.2.61 |
 | react-virtualized-auto-sizer | ~1.0.24 |
 | react-window | ~1.8.10 |
-| sp-entityportal-service | 2.3.0 |
-| tslib | 2.3.1 |
+| tslib | 2.8.1 |
 | underscore | ~1.13.6 |
 | use-image-color | ~0.0.9 |
 
-#### Development Dependencies (31)
+#### Development Dependencies (26)
 
 | Package | Version |
 |---------|----------|
-| @microsoft/eslint-config-spfx | 1.17.4 |
-| @microsoft/eslint-plugin-spfx | 1.17.4 |
-| @microsoft/rush-stack-compiler-4.5 | 0.2.2 |
-| @microsoft/sp-build-web | 1.17.4 |
-| @rushstack/eslint-config | 2.5.1 |
+| @microsoft/sp-module-interfaces | 1.23.2 |
+| @microsoft/spfx-heft-plugins | 1.23.2 |
+| @microsoft/spfx-web-build-rig | 1.23.2 |
+| @rushstack/heft | 1.2.17 |
+| @testing-library/dom | 8.20.1 |
+| @testing-library/jest-dom | 6.6.3 |
+| @testing-library/react | 12.1.5 |
+| @testing-library/user-event | 14.6.7 |
+| @types/heft-jest | 1.0.2 |
+| @types/jest | 30.0.0 |
 | @types/lodash | ~4.14.195 |
 | @types/object-assign | 4.0.30 |
 | @types/react | 17.0.45 |
@@ -341,213 +327,186 @@ This section provides a detailed view of dependencies for each project.
 | @types/react-dom | 17.0.17 |
 | @types/react-window | ~1.8.8 |
 | @types/underscore | ~1.11.5 |
-| @types/webpack-env | 1.18.0 |
-| @typescript-eslint/eslint-plugin | 5.40.0 |
-| @typescript-eslint/parser | 5.40.0 |
-| ajv | 6.12.5 |
-| concurrently | 7.4.0 |
+| @types/webpack-env | ~1.15.2 |
+| css-loader | 7.1.2 |
 | dotenv | ~16.1.3 |
-| eslint | 8.25.0 |
-| eslint-config-prettier | 8.5.0 |
-| eslint-plugin-prettier | 4.2.1 |
-| eslint-plugin-react | 7.31.10 |
-| eslint-plugin-react-hooks | 4.3.0 |
-| eslint-plugin-unused-imports | 2.0.0 |
-| find | 0.3.0 |
-| gulp | 4.0.2 |
-| livereload | 0.9.3 |
-| pp365-projectwebparts | 1.14.0 |
-| prettier | 2.7.1 |
-| typescript | 4.5.5 |
-| webpack | 5.74.0 |
+| eslint | 9.37.0 |
+| pp365-eslint-config | workspace:* |
+| pp365-jest-config | workspace:* |
+| pp365-projectwebparts | workspace:* |
+| prettier | 3.9.7 |
+| typescript | ~5.8.3 |
 
 ### pp365-programwebparts
 
-#### Production Dependencies (38)
+#### Production Dependencies (35)
 
 | Package | Version |
 |---------|----------|
-| @fluentui/react | 8.98.1 |
+| @fluentui/react | 8.106.4 |
 | @fluentui/react-components | ~9.72.10 |
 | @fluentui/react-icons | ~2.0.317 |
-| @microsoft/sp-adaptive-card-extension-base | 1.17.4 |
-| @microsoft/sp-core-library | 1.17.4 |
-| @microsoft/sp-http | 1.17.4 |
-| @microsoft/sp-lodash-subset | 1.17.4 |
-| @microsoft/sp-office-ui-fabric-core | 1.17.4 |
-| @microsoft/sp-page-context | 1.17.4 |
-| @microsoft/sp-property-pane | 1.17.4 |
-| @microsoft/sp-webpart-base | 1.17.4 |
-| @pnp/core | 3.17.0 |
-| @pnp/logging | 3.17.0 |
-| @pnp/queryable | 3.17.0 |
-| @pnp/sp | 3.17.0 |
-| @pnp/sp-taxonomy | 1.3.8 |
-| @pnp/spfx-controls-react | ~3.15.0 |
-| @pnp/spfx-property-controls | ~3.19.0 |
-| @reduxjs/toolkit | 1.5.0 |
+| @microsoft/sp-adaptive-card-extension-base | 1.23.2 |
+| @microsoft/sp-core-library | 1.23.2 |
+| @microsoft/sp-http | 1.23.2 |
+| @microsoft/sp-lodash-subset | 1.23.2 |
+| @microsoft/sp-office-ui-fabric-core | 1.23.2 |
+| @microsoft/sp-page-context | 1.23.2 |
+| @microsoft/sp-property-pane | 1.23.2 |
+| @microsoft/sp-webpart-base | 1.23.2 |
+| @pnp/core | 4.21.0 |
+| @pnp/logging | 4.21.0 |
+| @pnp/queryable | 4.21.0 |
+| @pnp/sp | 4.21.0 |
+| @pnp/spfx-controls-react | 3.25.0 |
+| @pnp/spfx-property-controls | 3.24.0 |
+| @reduxjs/toolkit | ~1.9.5 |
 | @types/array-sort | 1.0.0 |
 | @types/underscore | ~1.11.5 |
 | @uifabric/utilities | 6.45.1 |
 | array-sort | 1.0.0 |
 | clean-deep | 3.0.2 |
 | interactjs | 1.6.2 |
-| jsom-ctx | 1.2.0 |
 | lodash | ~4.17.21 |
-| moment | 2.11.1 |
+| moment | ~2.29.4 |
 | msgraph-helper | 0.8.3 |
 | object-assign | 4.1.1 |
-| pp365-shared-library | 1.14.0 |
-| pzl-react-reusable-components | ^0.0.14 |
+| pp365-shared-library | workspace:* |
+| pzl-react-reusable-components | ~0.3.1 |
 | react | 17.0.1 |
 | react-dom | 17.0.1 |
 | react-gauge-component | ~1.2.61 |
-| sp-entityportal-service | 2.3.0 |
-| tslib | 2.3.1 |
+| tslib | 2.8.1 |
 | underscore | ~1.13.6 |
 
-#### Development Dependencies (31)
+#### Development Dependencies (24)
 
 | Package | Version |
 |---------|----------|
-| @microsoft/eslint-config-spfx | 1.17.4 |
-| @microsoft/eslint-plugin-spfx | 1.17.4 |
-| @microsoft/rush-stack-compiler-4.5 | 0.2.2 |
-| @microsoft/sp-build-web | 1.17.4 |
-| @microsoft/sp-module-interfaces | 1.17.4 |
-| @rushstack/eslint-config | 2.5.1 |
+| @microsoft/sp-module-interfaces | 1.23.2 |
+| @microsoft/spfx-heft-plugins | 1.23.2 |
+| @microsoft/spfx-web-build-rig | 1.23.2 |
+| @rushstack/heft | 1.2.17 |
+| @testing-library/dom | 8.20.1 |
+| @testing-library/jest-dom | 6.6.3 |
+| @testing-library/react | 12.1.5 |
+| @testing-library/user-event | 14.6.7 |
+| @types/heft-jest | 1.0.2 |
+| @types/jest | 30.0.0 |
 | @types/lodash | ~4.14.195 |
 | @types/object-assign | 4.0.30 |
 | @types/react | 17.0.45 |
 | @types/react-dom | 17.0.17 |
-| @types/webpack-env | 1.18.0 |
-| @typescript-eslint/eslint-plugin | 5.40.0 |
-| @typescript-eslint/parser | 5.40.0 |
-| ajv | 6.12.5 |
-| concurrently | 7.4.0 |
+| @types/webpack-env | ~1.15.2 |
+| css-loader | 7.1.2 |
 | dotenv | ~16.1.3 |
-| eslint | 8.25.0 |
-| eslint-config-prettier | 8.5.0 |
-| eslint-plugin-prettier | 4.2.1 |
-| eslint-plugin-react | 7.31.10 |
-| eslint-plugin-react-hooks | 4.3.0 |
-| eslint-plugin-unused-imports | 2.0.0 |
-| find | 0.3.0 |
-| gulp | 4.0.2 |
-| livereload | 0.9.3 |
-| pp365-portfoliowebparts | 1.14.0 |
-| pp365-projectwebparts | 1.14.0 |
-| prettier | 2.7.1 |
-| typescript | 4.5.5 |
-| webpack | 5.74.0 |
-| yargs | 14.2.0 |
+| eslint | 9.37.0 |
+| pp365-eslint-config | workspace:* |
+| pp365-jest-config | workspace:* |
+| pp365-portfoliowebparts | workspace:* |
+| pp365-projectwebparts | workspace:* |
+| prettier | 3.9.7 |
+| typescript | ~5.8.3 |
 
 ### pp365-projectextensions
 
-#### Production Dependencies (36)
+#### Production Dependencies (35)
 
 | Package | Version |
 |---------|----------|
-| @fluentui/react | 8.98.1 |
+| @fluentui/react | 8.106.4 |
 | @fluentui/react-components | ~9.72.10 |
 | @fluentui/react-icons | ~2.0.317 |
-| @microsoft/decorators | 1.17.4 |
-| @microsoft/microsoft-graph-types | ~2.38.0 |
-| @microsoft/sp-application-base | 1.17.4 |
-| @microsoft/sp-core-library | 1.17.4 |
-| @microsoft/sp-dialog | 1.17.4 |
-| @microsoft/sp-listview-extensibility | 1.17.4 |
-| @microsoft/sp-office-ui-fabric-core | 1.17.4 |
-| @microsoft/sp-page-context | 1.17.4 |
-| @pnp/core | 3.17.0 |
-| @pnp/graph | 3.17.0 |
-| @pnp/logging | 3.17.0 |
-| @pnp/queryable | 3.17.0 |
-| @pnp/sp | 3.17.0 |
-| @reduxjs/toolkit | 1.5.0 |
+| @microsoft/decorators | 1.23.2 |
+| @microsoft/microsoft-graph-types | 2.43.0 |
+| @microsoft/sp-application-base | 1.23.2 |
+| @microsoft/sp-core-library | 1.23.2 |
+| @microsoft/sp-dialog | 1.23.2 |
+| @microsoft/sp-listview-extensibility | 1.23.2 |
+| @microsoft/sp-office-ui-fabric-core | 1.23.2 |
+| @microsoft/sp-page-context | 1.23.2 |
+| @pnp/core | 4.21.0 |
+| @pnp/graph | 4.21.0 |
+| @pnp/logging | 4.21.0 |
+| @pnp/queryable | 4.21.0 |
+| @pnp/sp | 4.21.0 |
+| @reduxjs/toolkit | ~1.9.5 |
 | @uifabric/file-type-icons | 7.6.27 |
 | @uifabric/utilities | 6.45.1 |
 | jszip | 3.10.1 |
 | lodash | ~4.17.21 |
 | msgraph-helper | 0.8.3 |
-| pp365-shared-library | 1.14.0 |
+| pp365-shared-library | workspace:* |
 | react | 17.0.1 |
 | react-autocomplete | 1.8.1 |
 | react-dom | 17.0.1 |
 | react-gauge-component | ~1.2.61 |
 | react-markdown | ^8.0.3 |
 | rehype-raw | ^6.1.1 |
-| sp-entityportal-service | 2.3.0 |
-| sp-js-provisioning | 1.3.14 |
+| sp-js-provisioning | 1.4.0 |
 | spfx-jsom | 0.6.6 |
-| tslib | 2.3.1 |
+| tslib | 2.8.1 |
 | underscore | ~1.13.6 |
 | usehooks-ts | ~2.9.1 |
 | valid-filename | 3.1.0 |
 
-#### Development Dependencies (30)
+#### Development Dependencies (24)
 
 | Package | Version |
 |---------|----------|
-| @microsoft/eslint-config-spfx | 1.17.4 |
-| @microsoft/eslint-plugin-spfx | 1.17.4 |
-| @microsoft/rush-stack-compiler-4.5 | 0.2.2 |
-| @microsoft/sp-build-web | 1.17.4 |
-| @rushstack/eslint-config | 2.5.1 |
+| @microsoft/sp-module-interfaces | 1.23.2 |
+| @microsoft/spfx-heft-plugins | 1.23.2 |
+| @microsoft/spfx-web-build-rig | 1.23.2 |
+| @rushstack/heft | 1.2.17 |
+| @testing-library/dom | 8.20.1 |
+| @testing-library/jest-dom | 6.6.3 |
+| @testing-library/react | 12.1.5 |
+| @testing-library/user-event | 14.6.7 |
+| @types/heft-jest | 1.0.2 |
+| @types/jest | 30.0.0 |
 | @types/lodash | ~4.14.195 |
 | @types/react | 17.0.45 |
 | @types/react-autocomplete | ^1.8.6 |
 | @types/react-dom | 17.0.17 |
 | @types/sharepoint | 2016.1.10 |
 | @types/underscore | ~1.11.5 |
-| @types/webpack-env | 1.18.0 |
-| @typescript-eslint/eslint-plugin | 5.40.0 |
-| @typescript-eslint/parser | 5.40.0 |
-| ajv | 6.12.5 |
-| colors | 1.4.0 |
-| concurrently | 7.4.0 |
+| @types/webpack-env | ~1.15.2 |
+| css-loader | 7.1.2 |
 | dotenv | ~16.1.3 |
-| eslint | 8.25.0 |
-| eslint-config-prettier | 8.5.0 |
-| eslint-plugin-prettier | 4.2.1 |
-| eslint-plugin-react | 7.31.10 |
-| eslint-plugin-react-hooks | 4.3.0 |
-| eslint-plugin-unused-imports | 2.0.0 |
-| find | 0.3.0 |
-| gulp | 4.0.2 |
-| livereload | 0.9.3 |
-| prettier | 2.7.1 |
-| typescript | 4.5.5 |
-| webpack | 5.74.0 |
+| eslint | 9.37.0 |
+| pp365-eslint-config | workspace:* |
+| pp365-jest-config | workspace:* |
+| prettier | 3.9.7 |
+| typescript | ~5.8.3 |
 
 ### pp365-projectwebparts
 
-#### Production Dependencies (48)
+#### Production Dependencies (47)
 
 | Package | Version |
 |---------|----------|
-| @fluentui/react | 8.98.1 |
+| @fluentui/react | 8.106.4 |
 | @fluentui/react-components | ~9.72.10 |
 | @fluentui/react-datepicker-compat | ~0.6.22 |
 | @fluentui/react-icons | ~2.0.317 |
-| @microsoft/decorators | 1.17.4 |
-| @microsoft/sp-adaptive-card-extension-base | 1.17.4 |
-| @microsoft/sp-core-library | 1.17.4 |
-| @microsoft/sp-dialog | 1.17.4 |
-| @microsoft/sp-http | 1.17.4 |
-| @microsoft/sp-listview-extensibility | 1.17.4 |
-| @microsoft/sp-lodash-subset | 1.17.4 |
-| @microsoft/sp-office-ui-fabric-core | 1.17.4 |
-| @microsoft/sp-page-context | 1.17.4 |
-| @microsoft/sp-property-pane | 1.17.4 |
-| @microsoft/sp-webpart-base | 1.17.4 |
-| @pnp/core | 3.17.0 |
-| @pnp/logging | 3.17.0 |
-| @pnp/queryable | 3.17.0 |
-| @pnp/sp | 3.17.0 |
-| @pnp/spfx-controls-react | ~3.15.0 |
-| @pnp/spfx-property-controls | ~3.19.0 |
-| @reduxjs/toolkit | 1.5.0 |
+| @microsoft/decorators | 1.23.2 |
+| @microsoft/sp-adaptive-card-extension-base | 1.23.2 |
+| @microsoft/sp-core-library | 1.23.2 |
+| @microsoft/sp-dialog | 1.23.2 |
+| @microsoft/sp-http | 1.23.2 |
+| @microsoft/sp-listview-extensibility | 1.23.2 |
+| @microsoft/sp-lodash-subset | 1.23.2 |
+| @microsoft/sp-office-ui-fabric-core | 1.23.2 |
+| @microsoft/sp-page-context | 1.23.2 |
+| @microsoft/sp-property-pane | 1.23.2 |
+| @microsoft/sp-webpart-base | 1.23.2 |
+| @pnp/core | 4.21.0 |
+| @pnp/logging | 4.21.0 |
+| @pnp/queryable | 4.21.0 |
+| @pnp/sp | 4.21.0 |
+| @pnp/spfx-controls-react | 3.25.0 |
+| @pnp/spfx-property-controls | 3.24.0 |
+| @reduxjs/toolkit | ~1.9.5 |
 | @uifabric/utilities | 6.45.1 |
 | array-sort | 1.0.0 |
 | colors-convert | ~1.4.1 |
@@ -555,9 +514,9 @@ This section provides a detailed view of dependencies for each project.
 | get-value | 3.0.1 |
 | interactjs | 1.6.2 |
 | lodash | ~4.17.21 |
-| moment | 2.11.1 |
+| moment | ~2.29.4 |
 | msgraph-helper | 0.8.3 |
-| pp365-shared-library | 1.14.0 |
+| pp365-shared-library | workspace:* |
 | pzl-spfx-components | 0.0.11 |
 | react | 17.0.1 |
 | react-dom | 17.0.1 |
@@ -569,74 +528,65 @@ This section provides a detailed view of dependencies for each project.
 | rehype-raw | ^6.1.1 |
 | shade-blend-color | ~1.0.0 |
 | smoothscroll-polyfill | ~0.4.4 |
-| sp-entityportal-service | 2.3.0 |
 | spfx-jsom | 0.6.6 |
-| tslib | 2.3.1 |
+| tslib | 2.8.1 |
 | underscore | ~1.13.6 |
 | usehooks-ts | ~2.9.1 |
 
-#### Development Dependencies (33)
+#### Development Dependencies (26)
 
 | Package | Version |
 |---------|----------|
-| @microsoft/eslint-config-spfx | 1.17.4 |
-| @microsoft/eslint-plugin-spfx | 1.17.4 |
-| @microsoft/rush-stack-compiler-4.5 | 0.2.2 |
-| @microsoft/sp-build-web | 1.17.4 |
-| @microsoft/sp-module-interfaces | 1.17.4 |
-| @rushstack/eslint-config | 2.5.1 |
+| @microsoft/sp-module-interfaces | 1.23.2 |
+| @microsoft/spfx-heft-plugins | 1.23.2 |
+| @microsoft/spfx-web-build-rig | 1.23.2 |
+| @rushstack/heft | 1.2.17 |
+| @testing-library/dom | 8.20.1 |
+| @testing-library/jest-dom | 6.6.3 |
+| @testing-library/react | 12.1.5 |
+| @testing-library/user-event | 14.6.7 |
 | @types/dom-to-image | 2.6.4 |
 | @types/get-value | 3.0.1 |
+| @types/heft-jest | 1.0.2 |
+| @types/jest | 30.0.0 |
 | @types/lodash | ~4.14.195 |
 | @types/react | 17.0.45 |
 | @types/react-dom | 17.0.17 |
 | @types/shade-blend-color | ~1.0.3 |
 | @types/smoothscroll-polyfill | ~0.3.3 |
 | @types/underscore | ~1.11.5 |
-| @types/webpack-env | 1.18.0 |
-| @typescript-eslint/eslint-plugin | 5.40.0 |
-| @typescript-eslint/parser | 5.40.0 |
-| ajv | 6.12.5 |
-| colors | 1.4.0 |
-| concurrently | 7.4.0 |
+| @types/webpack-env | ~1.15.2 |
+| css-loader | 7.1.2 |
 | dotenv | ~16.1.3 |
-| eslint | 8.25.0 |
-| eslint-config-prettier | 8.5.0 |
-| eslint-plugin-prettier | 4.2.1 |
-| eslint-plugin-react | 7.31.10 |
-| eslint-plugin-react-hooks | 4.3.0 |
-| eslint-plugin-unused-imports | 2.0.0 |
-| find | 0.3.0 |
-| gulp | 4.0.2 |
-| livereload | 0.9.3 |
-| prettier | 2.7.1 |
-| typescript | 4.5.5 |
-| webpack | 5.74.0 |
+| eslint | 9.37.0 |
+| pp365-eslint-config | workspace:* |
+| pp365-jest-config | workspace:* |
+| prettier | 3.9.7 |
+| typescript | ~5.8.3 |
 
 ### pp365-shared-library
 
-#### Production Dependencies (40)
+#### Production Dependencies (37)
 
 | Package | Version |
 |---------|----------|
-| @fluentui/react | 8.98.1 |
+| @fluentui/react | 8.106.4 |
 | @fluentui/react-components | ~9.72.10 |
 | @fluentui/react-datepicker-compat | ~0.6.22 |
 | @fluentui/react-file-type-icons | ~8.16.0 |
 | @fluentui/react-icons | ~2.0.317 |
-| @microsoft/sp-application-base | 1.17.4 |
-| @microsoft/sp-core-library | 1.17.4 |
-| @microsoft/sp-listview-extensibility | 1.17.4 |
-| @microsoft/sp-lodash-subset | 1.17.4 |
-| @microsoft/sp-page-context | 1.17.4 |
-| @microsoft/sp-property-pane | 1.17.4 |
-| @microsoft/sp-webpart-base | 1.17.4 |
-| @pnp/core | 3.17.0 |
-| @pnp/logging | 3.17.0 |
-| @pnp/odata | 2.15.0 |
-| @pnp/queryable | 3.17.0 |
-| @pnp/sp | 3.17.0 |
-| @pnp/spfx-controls-react | 3.17.0 |
+| @microsoft/sp-application-base | 1.23.2 |
+| @microsoft/sp-core-library | 1.23.2 |
+| @microsoft/sp-listview-extensibility | 1.23.2 |
+| @microsoft/sp-lodash-subset | 1.23.2 |
+| @microsoft/sp-page-context | 1.23.2 |
+| @microsoft/sp-property-pane | 1.23.2 |
+| @microsoft/sp-webpart-base | 1.23.2 |
+| @pnp/core | 4.21.0 |
+| @pnp/logging | 4.21.0 |
+| @pnp/queryable | 4.21.0 |
+| @pnp/sp | 4.21.0 |
+| @pnp/spfx-controls-react | 3.25.0 |
 | @reduxjs/toolkit | ~1.9.5 |
 | @types/react-calendar-timeline | 0.28.0 |
 | array-sort | ~1.0.0 |
@@ -652,21 +602,26 @@ This section provides a detailed view of dependencies for each project.
 | react-markdown | ^8.0.3 |
 | rehype-raw | ^6.1.1 |
 | shade-blend-color | ~1.0.0 |
-| sp-entityportal-service | 2.3.0 |
-| sp-js-provisioning | 1.3.14 |
 | spfx-jsom | 0.6.6 |
-| tslib | 2.3.1 |
+| tslib | 2.8.1 |
 | underscore | ~1.13.6 |
 | xlsx | ^0.16.9 |
 | xmldom | 0.6.0 |
 
-#### Development Dependencies (21)
+#### Development Dependencies (23)
 
 | Package | Version |
 |---------|----------|
-| @microsoft/rush-stack-compiler-4.5 | 0.2.2 |
-| @microsoft/sp-build-web | 1.17.4 |
-| @microsoft/sp-module-interfaces | 1.17.4 |
+| @microsoft/sp-module-interfaces | 1.23.2 |
+| @microsoft/spfx-heft-plugins | 1.23.2 |
+| @microsoft/spfx-web-build-rig | 1.23.2 |
+| @rushstack/heft | 1.2.17 |
+| @testing-library/dom | 8.20.1 |
+| @testing-library/jest-dom | 6.6.3 |
+| @testing-library/react | 12.1.5 |
+| @testing-library/user-event | 14.6.7 |
+| @types/heft-jest | 1.0.2 |
+| @types/jest | 30.0.0 |
 | @types/lodash | ~4.14.195 |
 | @types/react | 17.0.45 |
 | @types/react-dom | 17.0.17 |
@@ -674,17 +629,12 @@ This section provides a detailed view of dependencies for each project.
 | @types/underscore | ~1.11.5 |
 | @types/webpack-env | ~1.15.2 |
 | @types/xmldom | ^0.1.29 |
-| @typescript-eslint/eslint-plugin | 5.40.0 |
-| @typescript-eslint/parser | 5.40.0 |
-| ajv | ^6.12.5 |
-| eslint | 8.25.0 |
-| eslint-config-prettier | 8.5.0 |
-| eslint-plugin-prettier | 4.2.1 |
-| eslint-plugin-react | 7.31.10 |
-| eslint-plugin-unused-imports | 2.0.0 |
-| gulp | 4.0.2 |
-| prettier | 2.7.1 |
-| typescript | 4.5.5 |
+| css-loader | 7.1.2 |
+| eslint | 9.37.0 |
+| pp365-eslint-config | workspace:* |
+| pp365-jest-config | workspace:* |
+| prettier | 3.9.7 |
+| typescript | ~5.8.3 |
 
 ### pp365-templates
 

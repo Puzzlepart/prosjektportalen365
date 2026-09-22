@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { PopoverProps } from '@fluentui/react-components'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'ProjectExtensionsStrings'

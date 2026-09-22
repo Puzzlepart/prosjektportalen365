@@ -32,7 +32,6 @@ export function usePortfolioOverviewFilters(context: IPortfolioOverviewContext) 
       return { column, items }
     }
     const uniqueValues = uniq(
-      // eslint-disable-next-line prefer-spread
       [].concat.apply(
         [],
         context.state.items.map((i) => get(i, column.fieldName, '').split(';'))

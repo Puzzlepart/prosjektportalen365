@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { IList } from '@pnp/sp/lists'
 import {
   defaultListLoggerMemberMap,
@@ -6,7 +5,6 @@ import {
   IListLoggerMemberMap,
   ListLoggerEntryLevel
 } from './types'
-import { IItemAddResult } from '@pnp/sp/items'
 
 class ListLogger {
   public list: any
@@ -40,8 +38,10 @@ class ListLogger {
    * Will fail silently.
    *
    * @param entry Entry
+   * @returns The created list item as returned by SharePoint (PnPjs 4 resolves `items.add`
+   * to the item payload itself), or `undefined` when building the entry failed
    */
-  public log(entry: IListLoggerEntry): Promise<IItemAddResult> {
+  public log(entry: IListLoggerEntry): Promise<Record<string, any>> {
     try {
       const spItem = this._getSpItem({ ...this._getEntryDefaults(), ...entry })
       return (this.list as IList).items.add(spItem)
@@ -61,7 +61,7 @@ class ListLogger {
     message: string,
     functionName?: string,
     level: ListLoggerEntryLevel = 'Info'
-  ): Promise<IItemAddResult> {
+  ): Promise<Record<string, any>> {
     return this.log({
       message,
       level,

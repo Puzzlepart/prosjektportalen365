@@ -8,42 +8,45 @@
   },
   "license": "MIT",
   "scripts": {
-    "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
+    "watch": "heft start --nobrowser",
     "prewatch": "node ../.tasks/pre-watch.js",
     "postwatch": "node ../.tasks/post-watch.js",
-    "serve": "concurrently \"gulp serve-deprecated --nobrowser NODE --max-old-space-size=8192\"",
-    "build": "gulp bundle --ship && gulp package-solution --ship",
+    "build": "heft test --clean --production && heft package-solution --production",
     "build:test": "node ../.tasks/build.js --channel test",
     "build:i18n": "node ../.tasks/build.js --channel i18n",
     "build:kurs": "node ../.tasks/build.js --channel kurs",
-    "postversion": "tsc && npm publish",
-    "lint": "eslint --ext .ts,.tsx ./src --color --fix --config ../.eslintrc.yaml && npm run prettier",
-    "prettier": "prettier '**/*.ts*' --write --loglevel silent --config ../.prettierrc.yaml",
-    "validate-loc": "node ../.tasks/validateLoc.js --path ./src/loc --interface IProjectWebPartsStrings --dts mystrings.d.ts --output ./localization-report.md --summary"
+    "postversion": "heft build --production && npm publish",
+    "lint": "npm run prettier && eslint ./src --fix",
+    "prettier": "prettier \"**/*.ts*\" --write --log-level warn --config ../.prettierrc.yaml",
+    "validate-loc": "node ../.tasks/validateLoc.js --path ./src/loc --interface IProjectWebPartsStrings --dts mystrings.d.ts --output ./localization-report.md --summary",
+    "clean": "heft clean",
+    "start": "heft start",
+    "eject-webpack": "heft eject-webpack",
+    "test": "heft test"
   },
   "dependencies": {
-    "@fluentui/react": "8.98.1",
-    "@microsoft/decorators": "1.17.4",
-    "@microsoft/sp-adaptive-card-extension-base": "1.17.4",
-    "@microsoft/sp-core-library": "1.17.4",
-    "@microsoft/sp-dialog": "1.17.4",
-    "@microsoft/sp-listview-extensibility": "1.17.4",
-    "@microsoft/sp-lodash-subset": "1.17.4",
-    "@microsoft/sp-office-ui-fabric-core": "1.17.4",
-    "@microsoft/sp-page-context": "1.17.4",
-    "@microsoft/sp-property-pane": "1.17.4",
-    "@microsoft/sp-webpart-base": "1.17.4",
-    "@pnp/logging": "3.17.0",
-    "@pnp/sp": "3.17.0",
-    "@pnp/spfx-controls-react": "~3.15.0",
-    "@pnp/spfx-property-controls": "~3.19.0",
-    "@reduxjs/toolkit": "1.5.0",
+    "@fluentui/react": "8.106.4",
+    "@microsoft/decorators": "1.23.2",
+    "@microsoft/sp-adaptive-card-extension-base": "1.23.2",
+    "@microsoft/sp-core-library": "1.23.2",
+    "@microsoft/sp-dialog": "1.23.2",
+    "@microsoft/sp-listview-extensibility": "1.23.2",
+    "@microsoft/sp-lodash-subset": "1.23.2",
+    "@microsoft/sp-office-ui-fabric-core": "1.23.2",
+    "@microsoft/sp-page-context": "1.23.2",
+    "@microsoft/sp-property-pane": "1.23.2",
+    "@microsoft/sp-webpart-base": "1.23.2",
+    "@pnp/logging": "4.21.0",
+    "@pnp/sp": "4.21.0",
+    "@pnp/spfx-controls-react": "3.25.0",
+    "@pnp/spfx-property-controls": "3.24.0",
+    "@reduxjs/toolkit": "~1.9.5",
     "@uifabric/utilities": "6.45.1",
     "dom-to-image": "2.6.0",
     "get-value": "3.0.1",
     "interactjs": "1.6.2",
     "msgraph-helper": "0.8.3",
-    "pp365-shared-library": "1.14.0",
+    "pp365-shared-library": "workspace:*",
     "pzl-spfx-components": "0.0.11",
     "react": "17.0.1",
     "react-dom": "17.0.1",
@@ -51,15 +54,14 @@
     "react-markdown": "^8.0.3",
     "react-scroll": "1.7.11",
     "rehype-raw": "^6.1.1",
-    "sp-entityportal-service": "2.3.0",
     "spfx-jsom": "0.6.6",
-    "tslib": "2.3.1",
+    "tslib": "2.8.1",
     "underscore": "~1.13.6",
     "lodash": "~4.17.21",
-    "moment": "2.11.1",
+    "moment": "~2.29.4",
     "array-sort": "1.0.0",
-    "@pnp/core": "3.17.0",
-    "@pnp/queryable": "3.17.0",
+    "@pnp/core": "4.21.0",
+    "@pnp/queryable": "4.21.0",
     "react-error-boundary": "~4.0.10",
     "@fluentui/react-components": "~9.72.10",
     "@fluentui/react-icons": "~2.0.317",
@@ -69,57 +71,50 @@
     "react-gauge-component": "~1.2.61",
     "shade-blend-color": "~1.0.0",
     "colors-convert": "~1.4.1",
-    "@microsoft/sp-http": "1.17.4"
+    "@microsoft/sp-http": "1.23.2"
   },
   "devDependencies": {
-    "@microsoft/eslint-config-spfx": "1.17.4",
-    "@microsoft/eslint-plugin-spfx": "1.17.4",
-    "@microsoft/rush-stack-compiler-4.5": "0.2.2",
-    "@microsoft/sp-build-web": "1.17.4",
-    "@microsoft/sp-module-interfaces": "1.17.4",
-    "@rushstack/eslint-config": "2.5.1",
+    "@microsoft/sp-module-interfaces": "1.23.2",
+    "@microsoft/spfx-heft-plugins": "1.23.2",
+    "@microsoft/spfx-web-build-rig": "1.23.2",
+    "@rushstack/heft": "1.2.17",
+    "@testing-library/dom": "8.20.1",
+    "@testing-library/jest-dom": "6.6.3",
+    "@testing-library/react": "12.1.5",
+    "@testing-library/user-event": "14.6.7",
     "@types/dom-to-image": "2.6.4",
     "@types/get-value": "3.0.1",
+    "@types/heft-jest": "1.0.2",
+    "@types/jest": "30.0.0",
+    "@types/lodash": "~4.14.195",
     "@types/react": "17.0.45",
     "@types/react-dom": "17.0.17",
-    "@types/underscore": "~1.11.5",
-    "@types/webpack-env": "1.18.0",
-    "@typescript-eslint/eslint-plugin": "5.40.0",
-    "@typescript-eslint/parser": "5.40.0",
-    "ajv": "6.12.5",
-    "colors": "1.4.0",
-    "concurrently": "7.4.0",
-    "dotenv": "~16.1.3",
-    "eslint": "8.25.0",
-    "eslint-config-prettier": "8.5.0",
-    "eslint-plugin-prettier": "4.2.1",
-    "eslint-plugin-react": "7.31.10",
-    "eslint-plugin-react-hooks": "4.3.0",
-    "eslint-plugin-unused-imports": "2.0.0",
-    "find": "0.3.0",
-    "gulp": "4.0.2",
-    "livereload": "0.9.3",
-    "prettier": "2.7.1",
-    "typescript": "4.5.5",
-    "webpack": "5.74.0",
-    "@types/lodash": "~4.14.195",
+    "@types/shade-blend-color": "~1.0.3",
     "@types/smoothscroll-polyfill": "~0.3.3",
-    "@types/shade-blend-color": "~1.0.3"
+    "@types/underscore": "~1.11.5",
+    "@types/webpack-env": "~1.15.2",
+    "css-loader": "7.1.2",
+    "dotenv": "~16.1.3",
+    "eslint": "9.37.0",
+    "pp365-eslint-config": "workspace:*",
+    "pp365-jest-config": "workspace:*",
+    "prettier": "3.9.7",
+    "typescript": "~5.8.3"
   },
   "gitmoji": {
     "build": [
-      "🏗️",
+      "\ud83c\udfd7\ufe0f",
       "Make architectural changes"
     ],
     "ci": [
-      "👷",
+      "\ud83d\udc77",
       "Add or update CI build system",
       [
         "integration"
       ]
     ],
     "chore": [
-      "💄",
+      "\ud83d\udc84",
       "Boring chores",
       [
         "boring",
@@ -127,7 +122,7 @@
       ]
     ],
     "docs": [
-      "📝",
+      "\ud83d\udcdd",
       "Added or updated documentation",
       [
         "doc",
@@ -135,71 +130,74 @@
       ]
     ],
     "feat": [
-      "✨",
+      "\u2728",
       "Introduced new features"
     ],
     "fix": [
-      "🐛",
+      "\ud83d\udc1b",
       "Fixed a bug",
       [
         "bugfix"
       ]
     ],
     "perf": [
-      "⚡",
+      "\u26a1",
       "Improved performance"
     ],
     "refactor": [
-      "♻️",
+      "\u267b\ufe0f",
       "Refactored code"
     ],
     "revert": [
-      "⏪",
+      "\u23ea",
       "Reverted changes"
     ],
     "style": [
-      "💄",
+      "\ud83d\udc84",
       "Added or updated the UI and style files"
     ],
     "test": [
-      "✅",
+      "\u2705",
       "Added or updated tests"
     ],
     "dev": [
-      "🔨",
+      "\ud83d\udd28",
       "Add or update development scripts"
     ],
     "i18n": [
-      "🌐",
+      "\ud83c\udf10",
       "Internationalization and localization"
     ],
     "changelog": [
-      "📓",
+      "\ud83d\udcd3",
       "Updated changelog"
     ],
     "readme": [
-      "📝",
+      "\ud83d\udcdd",
       "Updated readme"
     ],
     "typo": [
-      "✏️",
+      "\u270f\ufe0f",
       "Fixed typos"
     ],
     "rename": [
-      "🚚",
+      "\ud83d\ude9a",
       "Moved or renamed resources (e.g.: files, paths, routes)"
     ],
     "merge": [
-      "🔀",
+      "\ud83d\udd00",
       "Merged a branch into this one"
     ],
     "auth": [
-      "🛂",
+      "\ud83d\udec2",
       "Worked on code related to authorization, roles and permissions"
     ],
     "syntax": [
-      "✏️",
+      "\u270f\ufe0f",
       "Adjusted code syntax"
     ]
+  },
+  "engines": {
+    "node": ">=22.14.0 <23.0.0"
   }
 }

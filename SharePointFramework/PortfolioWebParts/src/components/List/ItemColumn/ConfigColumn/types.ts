@@ -2,7 +2,6 @@ import { IRenderItemColumnProps, ProjectColumnConfigDictionaryItem } from 'pp365
 import { ICalloutProps } from '@fluentui/react'
 
 export interface IConfigColumnProps
-  extends Omit<IRenderItemColumnProps, 'color'>,
-    ProjectColumnConfigDictionaryItem {
+  extends Omit<IRenderItemColumnProps, 'color'>, ProjectColumnConfigDictionaryItem {
   calloutProps?: ICalloutProps
 }

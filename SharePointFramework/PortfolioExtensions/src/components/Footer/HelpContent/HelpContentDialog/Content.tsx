@@ -7,7 +7,7 @@ import { HelpContentModel } from 'extensions/footer/types'
 
 export const Content = React.memo(({ content }: { content: HelpContentModel }) => (
   <div className={styles.contentItem} title={content.title}>
-    <p dangerouslySetInnerHTML={{ __html: content.textContent }}></p>
+    <p dangerouslySetInnerHTML={{ __html: content.textContent }} />
     {content.markdownContent && (
       <ReactMarkdown linkTarget='_blank' rehypePlugins={[rehypeRaw]} transformImageUri={null}>
         {content.markdownContent}

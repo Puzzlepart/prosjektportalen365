@@ -161,7 +161,7 @@ export function getFluentIconWithFallback(
   color?: string
 ): JSX.Element | null {
   const opts: GetFluentIconWithFallbackOptions =
-    typeof options === 'boolean' ? { bundle: options, color } : options ?? {}
+    typeof options === 'boolean' ? { bundle: options, color } : (options ?? {})
   if (!name) return null
   const resolved = resolveFluentIcon(name)
   if (resolved) {

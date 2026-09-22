@@ -27,7 +27,7 @@ export const ProjectPhase: FC<IProjectPhaseProps> = (props) => {
             ref={targetRef}
           >
             <span title={props.phase.name}>{props.phase.name}</span>
-            <div {...subTextProps}></div>
+            <div {...subTextProps} />
           </li>
         </PopoverTrigger>
         <PopoverSurface>

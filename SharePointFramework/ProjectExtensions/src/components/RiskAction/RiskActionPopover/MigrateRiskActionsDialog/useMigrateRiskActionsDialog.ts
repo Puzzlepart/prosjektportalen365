@@ -20,8 +20,8 @@ export function useMigrateRiskActionsDialog() {
       separator === strings.MigrateRiskActionsDialogSeparatorOptionLinebreak
         ? '\n'
         : separator === strings.MigrateRiskActionsDialogSeparatorOptionCommaNoSpaces
-        ? ','
-        : ', '
+          ? ','
+          : ', '
     )
     .filter(Boolean)
 

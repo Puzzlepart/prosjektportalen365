@@ -1,4 +1,3 @@
-/* eslint-disable prefer-spread */
 import { useReducer } from 'react'
 import { IProjectStatusContext } from './context'
 import reducer, { initialState } from './reducer'

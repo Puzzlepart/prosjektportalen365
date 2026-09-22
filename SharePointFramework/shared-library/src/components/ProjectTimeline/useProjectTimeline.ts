@@ -112,7 +112,6 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     const hiddenItems = config.filter((item) => !item?.timelineFilter).map((item) => item.title)
     return columns.map((col) => {
       const uniqueValues = uniq(
-        // eslint-disable-next-line prefer-spread
         [].concat.apply(
           [],
           data.items
@@ -132,8 +131,8 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
               ? value === '1'
                 ? strings.BooleanYes
                 : value === '0'
-                ? strings.BooleanNo
-                : value
+                  ? strings.BooleanNo
+                  : value
               : value
           return { name: name, value, selected }
         })

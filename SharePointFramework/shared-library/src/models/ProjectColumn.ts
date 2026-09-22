@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { stringIsNullOrEmpty } from '@pnp/core'
 import { pick } from 'underscore'
 import { IProjectColumn } from '../interfaces/IProjectColumn'
@@ -108,8 +107,13 @@ export class ProjectColumn implements IProjectColumn {
    */
   private _getCustomSorts(value: string): ProjectColumnCustomSort[] {
     if (stringIsNullOrEmpty(value)) return []
-    const regex = /(?<name>[\w\søæå]*)(\((?<icon>[\w\søæå,]*)\))?:(?<order>[\w\søæå,]*)/gm
-    const matches = [...value.matchAll(regex)].map((m) => m.groups).filter((g) => !!g.name)
+    // Numbered groups rather than named ones: TypeScript 5.5+ validates regex syntax against
+    // the compile target, and the SPFx build rig targets ES5, where named capture groups are
+    // a syntax error (TS1503). Groups: 1 = name, 3 = icon (inside the optional group 2), 4 = order.
+    const regex = /([\w\søæå]*)(\(([\w\søæå,]*)\))?:([\w\søæå,]*)/gm
+    const matches = [...value.matchAll(regex)]
+      .map((m) => ({ name: m[1], icon: m[3], order: m[4] }))
+      .filter((g) => !!g.name)
     return matches.map(({ name, icon, order }) => ({
       name,
       iconName: icon,

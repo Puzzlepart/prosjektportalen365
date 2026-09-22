@@ -1,4 +1,3 @@
-/* eslint-disable prefer-spread */
 import { useState } from 'react'
 import { IProjectCardState } from './types'
 

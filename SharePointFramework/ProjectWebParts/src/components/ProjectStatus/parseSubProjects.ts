@@ -53,8 +53,7 @@ export function parseSubProjects(subProjects: string): ISubProject[] {
     if (!trimmedLine) continue
     const separatorIndex = trimmedLine.indexOf('|')
     const key = (separatorIndex === -1 ? trimmedLine : trimmedLine.slice(0, separatorIndex)).trim()
-    const label =
-      (separatorIndex === -1 ? '' : trimmedLine.slice(separatorIndex + 1)).trim() || key
+    const label = (separatorIndex === -1 ? '' : trimmedLine.slice(separatorIndex + 1)).trim() || key
     if (!isValidScopeKey(key)) continue
     const normalizedKey = key.toLowerCase()
     if (seenKeys.has(normalizedKey)) continue

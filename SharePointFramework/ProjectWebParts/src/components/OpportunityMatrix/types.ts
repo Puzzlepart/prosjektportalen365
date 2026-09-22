@@ -5,7 +5,8 @@ import { IDynamicMatrixProps } from '../DynamicMatrix'
 import { IBaseWebPartComponentProps } from 'pp365-shared-library'
 
 export interface IOpportunityMatrixProps
-  extends Omit<HTMLProps<HTMLDivElement>, 'size'>,
+  extends
+    Omit<HTMLProps<HTMLDivElement>, 'size'>,
     IBaseWebPartComponentProps,
     Pick<IDynamicMatrixProps, 'fullWidth' | 'manualConfigurationPath' | 'calloutTemplate'> {
   /**

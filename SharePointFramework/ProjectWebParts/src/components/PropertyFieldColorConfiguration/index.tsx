@@ -4,9 +4,7 @@ import { render, unmountComponentAtNode } from 'react-dom'
 import { ColorConfigurator } from './ColorConfigurator'
 import { IPropertyFieldColorConfigurationProps } from './types'
 
-class PropertyFieldColorConfigurationBuilder
-  implements IPropertyPaneField<IPropertyFieldColorConfigurationProps>
-{
+class PropertyFieldColorConfigurationBuilder implements IPropertyPaneField<IPropertyFieldColorConfigurationProps> {
   public targetProperty: string
   public type: PropertyPaneFieldType = PropertyPaneFieldType.Custom
   public properties: IPropertyFieldColorConfigurationProps

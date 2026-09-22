@@ -18,12 +18,7 @@
  */
 
 export type ProjectsCacheSource =
-  | 'items'
-  | 'sites'
-  | 'memberOf'
-  | 'users'
-  | 'templates'
-  | 'refiners'
+  'items' | 'sites' | 'memberOf' | 'users' | 'templates' | 'refiners'
 
 const DEFAULT_TTL_MINUTES = 30
 const SESSION_SIZE_LIMIT_BYTES = 1_000_000 // 1 MB per entry

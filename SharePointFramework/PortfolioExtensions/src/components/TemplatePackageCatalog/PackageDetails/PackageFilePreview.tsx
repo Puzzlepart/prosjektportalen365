@@ -69,12 +69,12 @@ function highlight(json: string, styles: Styles): React.ReactNode[] {
     const className = match[1]
       ? styles.key
       : match[2]
-      ? styles.string
-      : match[3]
-      ? styles.boolean
-      : match[4]
-      ? styles.null
-      : styles.number
+        ? styles.string
+        : match[3]
+          ? styles.boolean
+          : match[4]
+            ? styles.null
+            : styles.number
     nodes.push(
       <span key={key++} className={className}>
         {match[0]}

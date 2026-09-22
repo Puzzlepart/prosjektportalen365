@@ -16,7 +16,10 @@ export class ProjectInformationChildProject {
   public siteId: string
   public icon: FluentIcon
 
-  constructor(spItem: Record<string, any>, public web: IWeb) {
+  constructor(
+    spItem: Record<string, any>,
+    public web: IWeb
+  ) {
     this.title = spItem.Title
     this.url = spItem.GtSiteUrl
     this.siteId = spItem.GtSiteId

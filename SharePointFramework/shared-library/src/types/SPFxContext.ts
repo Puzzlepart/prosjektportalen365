@@ -6,7 +6,4 @@ import {
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 
 export type SPFxContext =
-  | ApplicationCustomizerContext
-  | ListViewCommandSetContext
-  | WebPartContext
-  | FieldCustomizerContext
+  ApplicationCustomizerContext | ListViewCommandSetContext | WebPartContext | FieldCustomizerContext

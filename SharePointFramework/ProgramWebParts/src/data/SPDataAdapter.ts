@@ -1,7 +1,6 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { PnPClientStorage, dateAdd } from '@pnp/core'
-import '@pnp/sp/items/get-all'
 import {
   ISearchResult,
   QueryPropertyValueType,
@@ -30,6 +29,7 @@ import {
   DataSource,
   DataSourceService,
   expandRowsPerStatusSeries,
+  getAllItems,
   getOrFetchProjectsCache,
   groupLatestReportBySeries,
   parseScopedSiteId,
@@ -222,8 +222,8 @@ export class SPDataAdapter
         siteIdProperty
       )
       const items = sites.reduce<IFetchDataForViewItemResult[]>((acc, site) => {
-        const project = projects.find((res) => res[siteIdProperty] === site['SiteId'])
-        const series = statusReportsBySite.get(site['SiteId'])
+        const project = projects.find((res) => res[siteIdProperty] === site.SiteId)
+        const series = statusReportsBySite.get(site.SiteId)
         return acc.concat(
           expandRowsPerStatusSeries(
             (statusReport) => ({
@@ -232,7 +232,7 @@ export class SPDataAdapter
               Title: site.Title,
               Path: site?.Path,
               SPWebUrl: site?.SPWebUrl,
-              SiteId: site['SiteId']
+              SiteId: site.SiteId
             }),
             series,
             siteIdProperty
@@ -260,7 +260,7 @@ export class SPDataAdapter
         siteIdProperty
       )
       const items = projects.reduce<IFetchDataForViewItemResult[]>((acc, project) => {
-        const site = sites.find((res) => res['SiteId'] === project[siteIdProperty])
+        const site = sites.find((res) => res.SiteId === project[siteIdProperty])
         const series = statusReportsBySite.get(project[siteIdProperty])
         return acc.concat(
           expandRowsPerStatusSeries(
@@ -319,7 +319,7 @@ export class SPDataAdapter
         query
       )
       return projects.reduce<IFetchDataForViewItemResult[]>((acc, project) => {
-        const site = sites.find((res) => res['SiteId'] === project[siteIdProperty])
+        const site = sites.find((res) => res.SiteId === project[siteIdProperty])
         const series = statusReportsBySite.get(project[siteIdProperty])
         return acc.concat(
           expandRowsPerStatusSeries(
@@ -419,7 +419,7 @@ export class SPDataAdapter
       cleanDeep({ ...item })
     )
     sites = sites.filter(
-      (site) => projects.filter((res) => res[siteIdProperty] === site['SiteId']).length === 1
+      (site) => projects.filter((res) => res[siteIdProperty] === site.SiteId).length === 1
     )
     const statusReportsBySite = groupLatestReportBySeries(statusReports, siteIdProperty)
 
@@ -464,7 +464,7 @@ export class SPDataAdapter
         )
 
         return {
-          siteId: item?.['GtSiteIdOWSTEXT'],
+          siteId: item?.GtSiteIdOWSTEXT,
           properties
         }
       })
@@ -481,11 +481,11 @@ export class SPDataAdapter
     )
 
     const reports = statusReports
-      .filter((report) => !parseScopedSiteId(report?.['GtSiteIdOWSTEXT']).scopeKey)
+      .filter((report) => !parseScopedSiteId(report?.GtSiteIdOWSTEXT).scopeKey)
       .map((report) => ({
-        siteId: parseScopedSiteId(report?.['GtSiteIdOWSTEXT']).siteId,
-        costsTotal: report?.['GtCostsTotalOWSCURR'],
-        budgetTotal: report?.['GtBudgetTotalOWSCURR']
+        siteId: parseScopedSiteId(report?.GtSiteIdOWSTEXT).siteId,
+        costsTotal: report?.GtCostsTotalOWSCURR,
+        budgetTotal: report?.GtBudgetTotalOWSCURR
       }))
       .filter(Boolean)
 
@@ -511,17 +511,19 @@ export class SPDataAdapter
 
     let timelineItems: any[]
     try {
-      timelineItems = await this.portalDataService.web.lists
-        .getByTitle(resource.Lists_TimelineContent_Title)
-        .items.select(...baseFields, 'GtTag')
-        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-        .getAll()
+      timelineItems = await getAllItems(
+        this.portalDataService.web.lists
+          .getByTitle(resource.Lists_TimelineContent_Title)
+          .items.select(...baseFields, 'GtTag')
+          .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+      )
     } catch {
-      timelineItems = await this.portalDataService.web.lists
-        .getByTitle(resource.Lists_TimelineContent_Title)
-        .items.select(...baseFields)
-        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-        .getAll()
+      timelineItems = await getAllItems(
+        this.portalDataService.web.lists
+          .getByTitle(resource.Lists_TimelineContent_Title)
+          .items.select(...baseFields)
+          .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+      )
     }
 
     return timelineItems
@@ -563,19 +565,20 @@ export class SPDataAdapter
    * @description Used in `ProjectTimeline`
    */
   public async fetchTimelineConfiguration() {
-    const timelineConfig = await this.portalDataService.web.lists
-      .getByTitle(resource.Lists_TimelineConfiguration_Title)
-      .items.select(
-        'GtSortOrder',
-        'Title',
-        'GtHexColor',
-        'GtTimelineCategory',
-        'GtElementType',
-        'GtShowElementPortfolio',
-        'GtShowElementProgram',
-        'GtTimelineFilter'
-      )
-      .getAll()
+    const timelineConfig = await getAllItems(
+      this.portalDataService.web.lists
+        .getByTitle(resource.Lists_TimelineConfiguration_Title)
+        .items.select(
+          'GtSortOrder',
+          'Title',
+          'GtHexColor',
+          'GtTimelineCategory',
+          'GtElementType',
+          'GtShowElementPortfolio',
+          'GtShowElementProgram',
+          'GtTimelineFilter'
+        )
+    )
 
     return timelineConfig.map((item) => new TimelineConfigurationModel(item)).filter((p) => p)
   }
@@ -662,7 +665,7 @@ export class SPDataAdapter
         }
       ]
     })
-    return PrimarySearchResults.filter((site) => hubSiteId !== site['SiteId'])
+    return PrimarySearchResults.filter((site) => hubSiteId !== site.SiteId)
   }
 
   /**
@@ -701,14 +704,15 @@ export class SPDataAdapter
    */
   private async _fetchProjectItems(siteId: string): Promise<SPProjectItem[]> {
     return getOrFetchProjectsCache('items', siteId, () =>
-      this.portalDataService.web.lists
-        .getByTitle(resource.Lists_Projects_Title)
-        .items.select(...Object.keys(new SPProjectItem()))
-        .filter(
-          `GtProjectLifecycleStatus ne '${resource.Choice_GtProjectLifecycleStatus_Closed}' and GtProjectLifecycleStatus ne '${strings.LifecycleStatus_Closed}'`
-        )
-        .orderBy('Title')
-        .getAll<SPProjectItem>()
+      getAllItems<SPProjectItem>(
+        this.portalDataService.web.lists
+          .getByTitle(resource.Lists_Projects_Title)
+          .items.select(...Object.keys(new SPProjectItem()))
+          .filter(
+            `GtProjectLifecycleStatus ne '${resource.Choice_GtProjectLifecycleStatus_Closed}' and GtProjectLifecycleStatus ne '${strings.LifecycleStatus_Closed}'`
+          )
+          .orderBy('Title')
+      )
     )
   }
 
@@ -717,7 +721,7 @@ export class SPDataAdapter
       MSGraph.Get<IGraphGroup[]>(
         '/me/memberOf/$/microsoft.graph.group',
         ['id', 'displayName'],
-        // eslint-disable-next-line quotes
+
         "groupTypes/any(a:a%20eq%20'unified')"
       )
     )
@@ -1164,7 +1168,7 @@ export class SPDataAdapter
               item['GtSiteIdOWSTEXT'] !== '00000000-0000-0000-0000-000000000000'
           )
           .map<IProgramAdministrationProject>((item) => {
-            const site = sts_sites.find((site) => site['SiteId'] === item['GtSiteIdOWSTEXT'])
+            const site = sts_sites.find((site) => site.SiteId === item['GtSiteIdOWSTEXT'])
             const rawHubSiteId = site?.['DepartmentId']
             const hubSiteId = rawHubSiteId
               ? rawHubSiteId.replace(/[{}]/g, '').toLowerCase()
@@ -1172,7 +1176,7 @@ export class SPDataAdapter
             const hub = hubs?.find((h) => h.hubSiteId === hubSiteId)
             return {
               SiteId: item['GtSiteIdOWSTEXT'],
-              Title: site?.Title ?? item['Title'],
+              Title: site?.Title ?? item.Title,
               SPWebURL: site?.SPWebUrl,
               Path: site?.Path,
               HubSiteId: hubSiteId,

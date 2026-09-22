@@ -9,7 +9,6 @@ import {
  * Extends IBaseUncertaintyMatrixWebPartProps and IRiskMatrixProps interfaces.
  */
 export interface IRiskMatrixWebPartProps
-  extends IBaseUncertaintyMatrixWebPartProps,
-    IRiskMatrixProps {}
+  extends IBaseUncertaintyMatrixWebPartProps, IRiskMatrixProps {}
 
 export type IRiskMatrixWebPartData = IUncertaintyMatrixWebPartData

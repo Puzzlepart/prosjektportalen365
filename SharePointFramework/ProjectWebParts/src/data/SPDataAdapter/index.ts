@@ -119,8 +119,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     }
     const dataSource = name
       ? await this.dataSourceService.getByName(name)
-      : (await this.dataSourceService.getById(defaultDataSourceId)) ??
-        (await this.dataSourceService.getByName(defaultName))
+      : ((await this.dataSourceService.getById(defaultDataSourceId)) ??
+        (await this.dataSourceService.getByName(defaultName)))
     if (!dataSource) {
       throw new Error(format(strings.DataSourceNotFound, displayName))
     }
@@ -165,8 +165,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
 
   /**
    * Sync property item from site to associated hub. `this.getMappedProjectProperties` is used to
-   * map the properties item fields to the hub fields. `updateEntityItem` from `sp-entityportal-service`
-   * is used to update the hub entity item. If any errors occur, the original error is passed to the caller.
+   * map the properties item fields to the hub fields. `updateEntityItem` from `SpEntityPortalService`
+   * (pp365-shared-library) is used to update the hub entity item. If any errors occur, the original
+   * error is passed to the caller.
    *
    * @param title Title of the project
    * @param fieldValues Field values for the properties item
@@ -270,8 +271,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       return files.map((file) => ({
         name: file.Name,
         title:
-          file['ListItemAllFields']?.['Title'] ??
-          `${strings.UnknownConfigurationName} (${file.Name})`,
+          file['ListItemAllFields']?.Title ?? `${strings.UnknownConfigurationName} (${file.Name})`,
         url: file.ServerRelativeUrl
       }))
     } catch (error) {
@@ -297,16 +297,14 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         .filter('FSObjType eq 0')
         .using(DefaultCaching)()
 
-      return documents.map(
-        (doc): IArchiveDocumentItem => ({
-          id: doc.Id,
-          title: doc.FileLeafRef || doc.Title,
-          projectPhaseId: doc?.GtProjectPhase?.TermGuid,
-          documentTypeId: doc?.GtDocumentType?.TermGuid,
-          url: doc.FileRef,
-          type: 'file'
-        })
-      )
+      return documents.map((doc): IArchiveDocumentItem => ({
+        id: doc.Id,
+        title: doc.FileLeafRef || doc.Title,
+        projectPhaseId: doc?.GtProjectPhase?.TermGuid,
+        documentTypeId: doc?.GtDocumentType?.TermGuid,
+        url: doc.FileRef,
+        type: 'file'
+      }))
     } catch (error) {
       Logger.log({
         message: `(${this._name}) (getDocumentsForArchive) Error fetching documents: ${error.message}`,
@@ -344,15 +342,13 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
           list.Title !== 'Web Part Gallery'
       )
 
-      return filteredLists.map(
-        (list): IArchiveListItem => ({
-          id: list.Id,
-          title: list.Title,
-          url: list.DefaultViewUrl,
-          type: 'list',
-          itemCount: list.ItemCount || 0
-        })
-      )
+      return filteredLists.map((list): IArchiveListItem => ({
+        id: list.Id,
+        title: list.Title,
+        url: list.DefaultViewUrl,
+        type: 'list',
+        itemCount: list.ItemCount || 0
+      }))
     } catch (error) {
       Logger.log({
         message: `(${this._name}) (getListsForArchive) Error fetching lists: ${error.message}`,

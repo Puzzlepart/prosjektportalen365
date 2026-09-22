@@ -7,7 +7,10 @@ export class IdeaListModel {
    * @param title - Title
    * @param item - Item
    */
-  constructor(public title?: string, item?: any) {
+  constructor(
+    public title?: string,
+    item?: any
+  ) {
     this.ideaId = item.ListItemId
   }
 }

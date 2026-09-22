@@ -65,8 +65,8 @@ export class SitePermissions extends BaseTask {
                 `Creating group ${groupName} with permission level ${permissionLevel}...`
               )
               const added = await params.web.siteGroups.add({ Title: groupName })
-              group = added.group
-              groupId = added.data.Id
+              group = params.web.siteGroups.getById(added.Id)
+              groupId = added.Id
             }
             // An existing role assignment must not abort the user-add loop.
             try {
@@ -141,7 +141,7 @@ export class SitePermissions extends BaseTask {
         ({
           groupName: item.GtSPGroupName,
           permissionLevel: item.GtPermissionLevel
-        } as IPermissionConfiguration)
+        }) as IPermissionConfiguration
     )
   }
 

@@ -49,7 +49,7 @@ export default (data: IProjectSetupData) =>
       // For a cloud template the available set is the bundled (resolved) list content,
       // not the hub `data.contentConfig`.
       const available = state.selectedTemplate?.isCloudTemplate
-        ? state.resolvedCloudTemplate?.contentConfig ?? []
+        ? (state.resolvedCloudTemplate?.contentConfig ?? [])
         : data.contentConfig
       const mandatoryContentConfig = available.filter((contentConfig) =>
         contentConfig.isMandatoryForTemplate(state.selectedTemplate)
@@ -65,7 +65,7 @@ export default (data: IProjectSetupData) =>
       { payload }: ReturnType<typeof ON_EXTENSIONS_CHANGED>
     ) => {
       const available = state.selectedTemplate?.isCloudTemplate
-        ? state.resolvedCloudTemplate?.extensions ?? []
+        ? (state.resolvedCloudTemplate?.extensions ?? [])
         : data.extensions
       const mandatoryExtensions = available.filter((ext) =>
         ext.isMandatoryForTemplate(state.selectedTemplate)

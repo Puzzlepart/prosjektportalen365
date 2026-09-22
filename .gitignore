@@ -20,6 +20,11 @@ SharePointFramework/**/config/.generated-solution-config.json
 .dist
 Templates/*.ps1
 common/temp
+SharePointFramework/**/lib-commonjs
+SharePointFramework/**/lib-dts
+SharePointFramework/**/lib-esm
+SharePointFramework/**/jest-output
+SharePointFramework/**/.heft
 **/.rush/temp/
 **/*.build.log
 **/*.build.error.log
@@ -41,3 +46,6 @@ Templates/Portfolio/Objects/ClientSidePages/*.json
 .claude/*
 logs/*
 SharePointFramework/.tasks/__last_run_data.json
+!.claude/skills/
+# Playwright CLI output (may contain credentials)
+.playwright-cli/

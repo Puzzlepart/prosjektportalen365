@@ -19,8 +19,8 @@ export function useCheckListItem(item: ChecklistItemModel) {
     item.status === strings.StatusOpen
       ? 'Circle'
       : item.status === strings.StatusClosed
-      ? 'CheckmarkCircle'
-      : 'DismissCircle',
+        ? 'CheckmarkCircle'
+        : 'DismissCircle',
     { color: STATUS_COLORS[item.status], size: 24 }
   )
 

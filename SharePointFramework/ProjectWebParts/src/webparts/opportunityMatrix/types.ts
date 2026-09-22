@@ -9,7 +9,6 @@ import {
  * Extends IBaseUncertaintyMatrixWebPartProps and IOpportunityMatrixProps interfaces.
  */
 export interface IOpportunityMatrixWebPartProps
-  extends IBaseUncertaintyMatrixWebPartProps,
-    IOpportunityMatrixProps {}
+  extends IBaseUncertaintyMatrixWebPartProps, IOpportunityMatrixProps {}
 
 export type IOpportunityMatrixWebPartData = IUncertaintyMatrixWebPartData

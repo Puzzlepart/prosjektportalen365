@@ -15,7 +15,7 @@ export function useProjectCardHeader() {
 
   const colors =
     context.useDynamicColors && context.showProjectLogo
-      ? imageColorData?.colors ?? ['transparent', 'transparent']
+      ? (imageColorData?.colors ?? ['transparent', 'transparent'])
       : ['transparent', 'transparent']
 
   const headerProps: HTMLProps<HTMLDivElement> = {
@@ -31,8 +31,8 @@ export function useProjectCardHeader() {
       width: context.showProjectLogo
         ? '216px'
         : context.shouldDisplay('ProjectPhase')
-        ? '178px'
-        : '216px'
+          ? '178px'
+          : '216px'
     }
   }
 

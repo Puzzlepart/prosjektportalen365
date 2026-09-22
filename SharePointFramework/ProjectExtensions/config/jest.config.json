@@ -1,0 +1,4 @@
+{
+  // Shared Jest setup for all pp365 solutions; see SharePointFramework/.jest-config/README.md
+  "extends": "pp365-jest-config/jest-shared.config.json"
+}

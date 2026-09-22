@@ -12,6 +12,7 @@ import {
   ProjectPhaseModel,
   SPField
 } from '../../models'
+import { getTermStore } from '../../taxonomy'
 import { getClassProperties, tryParseJson } from '../../util'
 import {
   ILocalProjectInformationItemContext,
@@ -352,10 +353,11 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
     checklistData: { [termGuid: string]: ProjectPhaseChecklistData } = {}
   ): Promise<ProjectPhaseModel[]> {
     const [terms, web] = await Promise.all([
-      this._sp.termStore.sets
-        .getById(termSetId)
+      getTermStore(this._sp.web)
+        .sets.getById(termSetId)
         .terms.select('*', 'localProperties')
-        .using(DefaultCaching)(),
+        .using(DefaultCaching)
+        .all(),
       this._sp.web.select('Language')()
     ])
     return terms.map(
@@ -370,10 +372,11 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
    */
   public async getDocumentTypes(termSetId: string): Promise<DocumentTypeModel[]> {
     const [terms, web] = await Promise.all([
-      this._sp.termStore.sets
-        .getById(termSetId)
+      getTermStore(this._sp.web)
+        .sets.getById(termSetId)
         .terms.select('*', 'localProperties')
-        .using(DefaultCaching)(),
+        .using(DefaultCaching)
+        .all(),
       this._sp.web.select('Language')()
     ])
     return terms.map((term) => new DocumentTypeModel(term, termSetId, web.Language))

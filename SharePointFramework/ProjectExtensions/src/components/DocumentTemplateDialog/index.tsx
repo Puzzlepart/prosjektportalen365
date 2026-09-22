@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
 import { format, Selection } from '@fluentui/react'
 import { Button } from '@fluentui/react-components'
 import * as strings from 'ProjectExtensionsStrings'
@@ -22,7 +21,7 @@ import reducer, {
 import { SelectScreen } from './SelectScreen'
 import { TargetFolderScreen } from './TargetFolderScreen'
 import { DocumentTemplateDialogScreen, IDocumentTemplateDialogProps } from './types'
-import { IFileAddResult } from '@pnp/sp/files'
+import { IFileInfo } from '@pnp/sp/files'
 import { UserMessage } from 'pp365-shared-library'
 
 export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
@@ -39,7 +38,7 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
   async function onStartCopy(templates: TemplateItem[]): Promise<void> {
     dispatch(START_COPY())
     const folder = SPDataAdapter.sp.web.getFolderByServerRelativePath(state.targetFolder)
-    const filesAdded: IFileAddResult[] = []
+    const filesAdded: IFileInfo[] = []
 
     for (let i = 0; i < templates.length; i++) {
       const template = templates[i]

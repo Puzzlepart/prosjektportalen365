@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { SPBaseItem } from './SPBaseItem'
 
 export class SPTimelineConfigurationItem extends SPBaseItem {

@@ -59,8 +59,8 @@ export function transformItems(
                 ? moment(new Date(item.endDate))
                 : undefined
               : item.startDate
-              ? moment(new Date(item.startDate))
-              : undefined,
+                ? moment(new Date(item.startDate))
+                : undefined,
           end_time: item.endDate ? moment(new Date(item.endDate)) : undefined,
           itemProps: { style }
         }

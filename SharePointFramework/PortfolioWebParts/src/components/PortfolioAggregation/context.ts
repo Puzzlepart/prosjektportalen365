@@ -5,8 +5,10 @@ import { IPortfolioAggregationProps, IPortfolioAggregationState } from './types'
 /**
  * Represents the context object for the Portfolio Aggregation component.
  */
-export interface IPortfolioAggregationContext
-  extends Pick<IPortfolioAggregationState, 'items' | 'columns'> {
+export interface IPortfolioAggregationContext extends Pick<
+  IPortfolioAggregationState,
+  'items' | 'columns'
+> {
   props: IPortfolioAggregationProps
   state: IPortfolioAggregationState
   dispatch: Dispatch<AnyAction>

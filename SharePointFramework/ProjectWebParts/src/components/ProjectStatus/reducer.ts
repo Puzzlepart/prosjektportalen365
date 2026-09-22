@@ -1,4 +1,3 @@
-/* eslint-disable prefer-spread */
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import _ from 'lodash'
 import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage/types'
