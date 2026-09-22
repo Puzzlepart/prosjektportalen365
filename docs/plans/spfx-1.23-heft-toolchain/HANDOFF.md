@@ -188,6 +188,10 @@ Working rule for tests: Heft runs Jest on `src/**/*.test.ts` during every build.
 
 Automated tests now gate every build and the test-channel deploy. Read `.development-guide/spfx/testing.md` and the `pp365-testing` skill before writing or fixing tests. Summary: `heft test` runs `src/**/*.test.ts(x)` in every solution build through the shared harness `pp365-jest-config` (SharePointFramework/.jest-config); `Install/Build-Release.ps1` fails when a solution does not emit a fresh `.sppkg` or when a bundle lists a `pp365-*` external; `e2e/` (Rush project `pp365-e2e`, Playwright) runs read-only smoke tests against the test tenant in `ci-channel-test.yml` after the upgrade job. The e2e job needs the `E2E_USERNAME`/`E2E_PASSWORD` secrets and the `E2E_PROJECT_URL` variable; the specs were written without tenant access and may need healing on the first run (use the `playwright-cli` skill).
 
+## Phase 3 (started 2026-09-22 on `feat/fluent-v9-migration`)
+
+Plan, inventory, decisions A to F, slices and the rules for the executing agent: `docs/plans/fluent-v9-migration.md`. Phases 0 to 2 are merged to `releases/1.15`; the two workflows follow `feat/fluent-v9-migration`. Start with slice 0 (version bump) and read the plan's "Rules for the executing agent" before the first edit.
+
 ## Later phases (not started)
 
-Phase 3 Fluent v8 to v9 completion (v8 in ~214 files) and dependency hygiene. Phase 4 React 18 with SPFx 1.24 GA. Phase 5 runtime library component for `pp365-shared-library`. Details at the end of the Phase 1 plan.
+Phase 4 React 18 with SPFx 1.24 GA. Phase 5 runtime library component for `pp365-shared-library`. Details at the end of the Phase 1 plan.
