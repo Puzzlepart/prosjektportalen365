@@ -60,11 +60,23 @@ Seven files use `NormalPeoplePicker`. v9 has no people picker; the options are t
 
 Each solution drops `@fluentui/react` from `package.json` the moment `grep -rl "from '@fluentui/react'" src` is empty. Until every solution is free, the shared library keeps the dependency (Decisions A and B). The packaging proof in `Install/Build-Release.ps1` gains a check that fails when a bundle still contains Fabric core classes once `fabric.min.css` has been removed (extend the existing hashed-CSS guard's pattern list). The compat alias for `office-ui-fabric-react` and the `fabric.min.css` alias are deleted together with `pzl-spfx-components`, which is the first hygiene slice.
 
-### D. Tests before conversion, per slice (decided)
+### D. Tests before conversion, and full component coverage as a workstream of this phase (decided)
 
-The harness from Phase 2 is ready. For every slice, the agent first writes component tests for the components it will convert (render with data, visible texts and roles, one interaction), against the v8 implementation, and only then converts. Tests must not assert on Fluent internals (class names, DOM structure); roles, names and texts survive the switch. The slice is done when the same tests pass on v9 and the browser suite is green on the test channel.
+The harness from Phase 2 is ready. For every slice, the agent first writes component tests for the components it will convert, against the v8 implementation, and only then converts. Tests must not assert on Fluent internals (class names, DOM structure); roles, names and texts survive the switch. The slice is done when the same tests pass on v9 and the browser suite is green on the test channel.
 
-Additions to the browser suite in this phase: a program site (`E2E_PROGRAM_URL`, ProgramWebParts was the one solution the suite never opened), and the first write flows with cleanup: upload a document through the dynamic list, copy a document template.
+Because the conversion touches nearly every component, this phase also carries the goal of complete component coverage, not only for the files a slice converts. Targets, checked at the lint close-out:
+
+| Level | Target | How |
+|---|---|---|
+| Web part root components (20 web parts, 9 extension components) | One test file each: renders with a mocked data adapter and minimal SPFx context, asserts the main UI, and exercises every toolbar command or primary action once (click, type, select, open and close) | `jest.mock` of the solution's data adapter and hooks; roles and Norwegian texts as selectors |
+| Interactive components (panels, dialogs, pickers, menus, editors, matrices, timeline, list toolbars) | Every user interaction the component offers has an assertion on its effect: callback called with the right payload, state visible in the UI, dialog opened and closed, validation message shown | `@testing-library/user-event`; one file per feature folder |
+| Hooks and pure logic (`useXxx`, reducers, mappers, formatters) | Unit tests for every branch that decides what the user sees | Plain Jest; `renderHook` for hooks; no PnPjs (stand-ins, see Phase 2) |
+| Data adapters and services | Runtime contract tests against real PnPjs 4 with a fake transport, as `shared-library/test/runtime` does, for every method that composes queries | `node --test`, extended to the consumers that own adapters |
+| Navigation and cross-page flows | Playwright, not Jest: hub to project via the project list, phase change dialog open and cancel, view switching in the portfolio overview, program site pages, and the first write flows with cleanup (upload through the dynamic list, copy a document template) | `e2e/tests/smoke` plus a new `e2e/tests/flows` folder; `E2E_PROGRAM_URL` added |
+
+Coverage is measured, not guessed: Heft writes `jest-output/coverage` for every solution already; slice 0 records the baseline per solution, slice 3 sets the first thresholds in `pp365-jest-config` at the values then reached, and each later slice may only raise them. Components already on v9 (not touched by any conversion slice) are covered in a dedicated pass, slice 3b, so the workstream does not depend on the conversion order.
+
+Flaky or slow tests are a defect of the test: the first Fluent import in a test file costs 15 to 45 seconds, so tests are grouped per feature folder, and any test that needs a retry is fixed or removed, never retried.
 
 ### E. Lint debt is paid in the files a slice touches, and the three relaxed rules return to `error` at the end (decided)
 
@@ -84,6 +96,7 @@ Each slice is one PR-sized commit series on this branch, verified by `rush rebui
 | 1 | `format` and ids | Shared `format` helper; replace all 72 `format` imports and the 9 `getId`/`useId` imports | `@uifabric/utilities`, `@fluentui/react-hooks`, `lib/Utilities` imports |
 | 2 | Hygiene | Replace `pzl-spfx-components` (1 file), `@uifabric/file-type-icons` (1 file); delete the two webpack aliases; remove `fabric.min.css` from the five web parts after replacing the `ms-Grid` mixins in `SummarySection.module.scss` with flex/grid CSS | two aliases, `fabric.min.css`, `@uifabric/*` |
 | 3 | Easy components | `Icon`, `MessageBar`, `Shimmer`, form controls (57 files across all solutions), tests first per Decision D | most v8 imports in ProjectExtensions, PortfolioExtensions, ProgramWebParts; those three solutions drop `@fluentui/react` |
+| 3b | Coverage pass | Tests for every web part root and interactive component not touched by slices 3 to 7 (already on v9), hook and adapter tests, first coverage thresholds; `E2E_PROGRAM_URL` and the `flows` folder in the browser suite | untested components |
 | 4 | Panels and menus | `Panel` → `OverlayDrawer` (18), `ContextualMenu`/`Callout` → `Menu`/`Popover` (10), `Dialog`/`Breadcrumb`/`ProgressIndicator` (6) | v8 overlay components |
 | 5 | People picker | Shared wrapper per Decision B, seven call sites | scattered `NormalPeoplePicker` |
 | 6 | Lists, part 1 | Confine `DetailsList`/`IColumn` to the two hubs; convert renderers and toolbars around them; `DataGrid` for lists that need no grouping/sticky | `IColumn` outside the hubs |
@@ -112,4 +125,4 @@ Slices 3 to 6 are per solution internally: shared-library first (consumers compi
 
 ## Definition of done
 
-`grep -rl "from '@fluentui/react'" SharePointFramework/*/src` lists only the shared list and people picker wrappers (or nothing); `@fluentui/react` is a dependency of the shared library only (or of none); no `@uifabric/*`, `pzl-spfx-components`, `fabric.min.css` or compat aliases remain; the three relaxed lint rules are `error` and `rush rebuild` reports zero warnings, or a documented, short allow-list; the browser suite includes a program site and two write flows; the release notes for the version carrying this phase describe it as a technical change with no intended functional difference.
+`grep -rl "from '@fluentui/react'" SharePointFramework/*/src` lists only the shared list and people picker wrappers (or nothing); `@fluentui/react` is a dependency of the shared library only (or of none); no `@uifabric/*`, `pzl-spfx-components`, `fabric.min.css` or compat aliases remain; the three relaxed lint rules are `error` and `rush rebuild` reports zero warnings, or a documented, short allow-list; every web part root and interactive component has a test file meeting the Decision D targets, coverage thresholds are enforced in `pp365-jest-config` at or above the slice 3 baseline, the browser suite includes a program site, the navigation flows and two write flows; the release notes for the version carrying this phase describe it as a technical change with no intended functional difference.
