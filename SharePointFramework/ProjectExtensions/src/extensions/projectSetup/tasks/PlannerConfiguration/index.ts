@@ -1,7 +1,6 @@
 import { PageContext } from '@microsoft/sp-page-context'
 import { getGUID } from '@pnp/core'
 import { default as MSGraphHelper } from 'msgraph-helper'
-import { format } from '@fluentui/react/lib/Utilities'
 import { sleep, retryWithBackoff } from 'pp365-shared-library/lib/util'
 import * as strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'extensions/projectSetup'
@@ -12,6 +11,7 @@ import { SPDataAdapter } from 'data'
 import { IPlannerBucket, IPlannerConfiguration, IPlannerPlan, ITaskDetails } from './types'
 import _ from 'underscore'
 import resource from 'SharedResources'
+import { format } from 'pp365-shared-library'
 
 /**
  * @class PlannerConfiguration

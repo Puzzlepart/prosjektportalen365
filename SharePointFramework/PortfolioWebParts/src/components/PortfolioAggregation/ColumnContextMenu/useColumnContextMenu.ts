@@ -1,4 +1,4 @@
-import { ContextualMenuItemType, IContextualMenuItem, format } from '@fluentui/react'
+import { ContextualMenuItemType, IContextualMenuItem } from '@fluentui/react'
 import _ from 'lodash'
 import * as strings from 'PortfolioWebPartsStrings'
 import { indexOf } from 'underscore'
@@ -12,6 +12,7 @@ import {
 } from '../reducer'
 import { useEffect, useState } from 'react'
 import { MenuProps, useId } from '@fluentui/react-components'
+import { format } from 'pp365-shared-library'
 
 /**
  * Component logic hook for `ColumnContextMenu`. Handles state and dispatches actions to the reducer.

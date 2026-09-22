@@ -1,8 +1,8 @@
-import { format } from '@fluentui/react'
 import { ProjectPhasesContext } from '../../../../ProjectPhases/context'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { Field, ProgressBar } from '@fluentui/react-components'
+import { format } from 'pp365-shared-library'
 
 export const ChangingPhaseView: FC = () => {
   const context = useContext(ProjectPhasesContext)

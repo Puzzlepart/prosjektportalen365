@@ -4,7 +4,7 @@ import styles from './InitialView.module.scss'
 import { useInitialView } from './useInitialView'
 import { Field, Label, Tab, TabList, Textarea } from '@fluentui/react-components'
 import { StatusActions } from './StatusActions/StatusActions'
-import { format } from '@fluentui/react'
+import { format } from 'pp365-shared-library'
 
 export const InitialView: FC = () => {
   const { checklistItem, checklistItems, setComment, comment, actions } = useInitialView()

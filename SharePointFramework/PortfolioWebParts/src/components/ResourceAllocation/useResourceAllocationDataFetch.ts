@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react/lib/Utilities'
 import sortArray from 'array-sort'
 import { IAllocationSearchResult, IEnrichedAllocationSearchResult } from 'interfaces'
 import _ from 'lodash'
@@ -14,6 +13,7 @@ import {
   ITimelineItem,
   TimelineGroupType
 } from 'pp365-shared-library/lib/interfaces'
+import { format } from 'pp365-shared-library'
 
 /**
  * Enriches search results with department information from user profiles

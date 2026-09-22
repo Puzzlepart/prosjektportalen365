@@ -265,3 +265,122 @@ from the baseline table, as expected with no source change.
 Still open: the visual and focus behaviour of the v9 surfaces already in use, which only a tenant can
 show. The tabster bump is the part most likely to surface there, and it affects v9 surfaces only — the
 v8 panels the browser suite already opens use v8's own `FocusTrapZone` and are not touched by it.
+
+### Slice 1 — `format` and ids (2026-09-22)
+
+**Done and verified**
+
+Two helpers in the shared library, written test-first per Decision D:
+
+- `shared-library/src/util/format.ts` replaces v8's `format`. Semantics are identical to
+  `@fluentui/utilities/lib/string.js` 8.17.2 *including its quirks*, because the strings it formats
+  are user-visible: only `null`/`undefined` blank out (`0`, `false` and `''` render), tokens are
+  matched as `{digits}` only, and the index is looked up with the token's own digits rather than a
+  parsed number, so `{00}` renders empty instead of falling back to argument 0. `format.test.ts`
+  (13 cases) asserts each case explicitly *and* differentially against a verbatim copy of the v8
+  source kept in the test file as the oracle.
+- `shared-library/src/util/getId.ts` replaces v8's `getId`. This is a **deviation from the plan**,
+  which expected `useId` from `@fluentui/react-components` to cover every id site. It cannot: v9
+  ships only the `useId` *hook* (plus `resetIdsForTests`) and 6 of the 10 id sites are in module
+  scope, a class field or a plain function, where a hook is illegal. The counter lives on `window`
+  (`__pp365CurrentId__`), as v8's did, because several solutions can be on the same page each with
+  its own bundled copy of the library, and a module-local counter would hand out `name0` twice.
+  `getId.test.ts`, 5 cases.
+
+`format` is fully migrated: **81 files** across all six solutions, `@fluentui/react` /
+`@fluentui/react/lib/Utilities` / `@uifabric/utilities` alike, verified zero leftovers. Consumers
+import it from the `pp365-shared-library` barrel, shared-library's own files from the relative `util`
+barrel, matching the dominant convention in each. One import was multi-line and was handled.
+
+A trap worth recording: the rewrite script's import regex ended `\s*\n`, which greedily swallowed the
+blank line *after* an import statement, so merged imports lost the blank line before the code and
+inserted imports landed after it. Caught by reading the output rather than by any tool. Repaired by
+normalising the import block in the affected files, on the evidence that 99.3 % of the 595 untouched
+files with an import block have exactly one blank line after it and 0.2 % have one inside it. Use
+`[ \t]*\n` in any future rewrite script.
+
+**The ten id sites**
+
+Four are inside a component or hook and became `useId` from `@fluentui/react-components`:
+`PortfolioWebParts` `PortfolioAggregation/reducer/index.ts`,
+`PortfolioOverview/hooks/usePortfolioOverview.ts` and
+`PortfolioOverview/ViewFormPanel/ViewFormPanelFooter/index.tsx` (all three were `useId` from
+`@fluentui/react-hooks`, a like-for-like swap), plus `ProjectExtensions`
+`DocumentTemplateDialog/EditCopyScreen/DocumentTemplateItem/index.tsx`. Six are in module scope, a
+class field or a plain function and moved to the shared `getId`: `PortfolioExtensions`
+`extensions/templatePackageCatalog/index.tsx`; `ProjectExtensions`
+`DocumentTemplateDialog/SelectScreen/columns.tsx`,
+`DocumentTemplateDialog/TargetFolderScreen/columns.tsx`, `extensions/projectSetup/index.ts`,
+`extensions/templateSelector/index.tsx`; and `shared-library`
+`components/PropertyPaneDescription/PropertyPaneDescription.tsx`.
+
+`DocumentTemplateItem` was the one real behaviour change, and it fixed a live defect. The component
+uses its two ids as *dispatch keys*, not just DOM ids: `onInputChange` reads `event.target.id` and
+compares it against `nameId`/`titleId` to decide whether the edit was a file name or a title. With
+`getId` those ids were regenerated on every render, so the inputs' `id` attributes changed on every
+keystroke. The component test written first against the v8 implementation proved it — six of its
+seven cases passed, and the seventh failed with `name194` → `name196` after a single keypress. Under
+`useId` the ids are stable and all seven pass. Nothing user-visible was broken by the old behaviour,
+but it was rewriting DOM attributes on every render and was one refactor away from mis-routing an
+edit.
+
+**A harness fix this needed**
+
+The first component test could not run at all: `Cannot find module 'data'`. The five consumer
+solutions compile with `baseUrl: "src"` plus `paths`, so their sources import siblings bare
+(`from 'data'`, `from 'models'`, `from 'components/X'`), TypeScript resolves that at compile time and
+emits it unchanged, and Jest had no equivalent. `pp365-jest-config` now sets
+`moduleDirectories: ["node_modules", "lib-commonjs"]`, which is the run-time equivalent of `baseUrl`:
+node_modules is searched first so real packages still win. Without this, *no* component test in the
+five consumers that touches a data adapter or a cross-folder import can run, so slice 3b would have
+hit it immediately. shared-library has no `baseUrl` and is unaffected.
+
+**Dependencies dropped**
+
+`@uifabric/utilities` from ProgramWebParts, ProjectExtensions and ProjectWebParts, and
+`@fluentui/react-hooks` from PortfolioWebParts — all four were unused once the call sites moved.
+`@uifabric/file-type-icons` stays in ProjectExtensions; that is slice 2. `rush update` regenerated
+the lockfile.
+
+**Lint debt (Decision E), partly deferred with reasons**
+
+The slice touched 95 files, but 82 of them only had an import line change. Of the 137 warnings in
+those files, only 11 are in the 13 files the slice substantively rewrote, and those were dealt with:
+two Prettier violations in the new code, an unused `catch` binding, and three floating promises
+marked with `void` rather than `await`, since `await` would change timing and this phase is not
+allowed a functional change.
+
+Four are deliberately left, because the fix is not behaviour-preserving and belongs to the slice that
+rewrites the file: `require-await` on `templateSelector`'s `onInit` and `_ensureDataLoaded` (both
+must keep returning a promise — `onInit` is an SPFx override contract and `_ensureDataLoaded` is
+declared `Promise<boolean>` and awaited by callers, so dropping `async` would break the type), and
+four `pair-react-dom-render-unmount` in `projectSetup`, where the unmount genuinely happens in the
+extension's dispose path and the rule cannot see it.
+
+The remaining ~126 warnings sit in six data-layer files (`PortalDataService`, two `SPDataAdapter`s,
+`DataAdapter`, `SPDataAdapterBase`, `CopyListData`) that this slice touched only by moving a `format`
+import. Paying them down means rewriting error handling and logging in the data layer inside what is
+otherwise an import migration, which is exactly the mix the Phase 1 handoff warned about. They are
+better taken either as their own commit or in slice 8, and the decision is the maintainer's.
+
+Net movement is only −1 (384 → 383), and the accounting is worth stating plainly: three
+`no-floating-promises` and one unused `catch` binding went away, two Prettier violations in the new
+code were fixed, and the three `void` operators that fixed the floating promises created three new
+`no-void` warnings (12 → 15). That is a deliberate trade rather than a wash — `no-floating-promises`
+is one of the three rules Decision E returns to `error` at the end of the phase and `no-void` is not,
+so the debt moved from a rule that will fail the build to one that will not. Slice 8 should decide
+whether `no-void` stays enabled at all, given Decision E prescribes `void` as the fix.
+
+A second trap, same family as the first: the import rewrite left a handful of files with
+non-Prettier-canonical import formatting, which surfaced as 11 `prettier/prettier` warnings rather
+than as anything visible. Running the repo's own Prettier over the 95 touched files cleared them.
+Prettier only — never `eslint --fix` across the tree, per the `dot-notation` incident in the Phase 1
+handoff.
+
+**Verification**
+
+`rush rebuild` exit 0 in 7 min 47 s, 11 operations (5 clean, 6 with warnings), **146 tests pass, 0
+fail**, zero errors. Both packaging guards hold: no `pp365-*` external in any AMD header in any of
+the six solutions, `react-calendar-timeline_` is 0 in the timeline bundle and `accordionChevron_<hash>`
+is present in the project information bundle. Package sizes are unchanged against slice 0 except
+ProjectExtensions, which drops 4 KB with `@uifabric/utilities` gone (26 948 KB total, −4 KB).

@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { usePortfolioOverviewContext } from '../context'
 import styles from './ResultsCount.module.scss'
 import strings from 'PortfolioWebPartsStrings'
-import { format } from '@fluentui/react'
+import { format } from 'pp365-shared-library'
 
 export const ResultsCount: FC<{ displayCount: number }> = (props) => {
   const context = usePortfolioOverviewContext()

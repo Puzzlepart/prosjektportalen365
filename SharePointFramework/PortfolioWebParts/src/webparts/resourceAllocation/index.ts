@@ -2,7 +2,7 @@ import { IPropertyPaneConfiguration, PropertyPaneDropdown } from '@microsoft/sp-
 import { IResourceAllocationProps, ResourceAllocation } from 'components/ResourceAllocation'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 import strings from 'PortfolioWebPartsStrings'
-import { format } from '@fluentui/react'
+import { format } from 'pp365-shared-library'
 
 export default class ResourceAllocationWebPart extends BasePortfolioWebPart<IResourceAllocationProps> {
   public async onInit(): Promise<void> {

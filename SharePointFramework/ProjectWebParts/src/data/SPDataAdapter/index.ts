@@ -5,7 +5,8 @@ import {
   DataSource,
   ItemFieldValues,
   ProjectInformationChildProject,
-  searchAggregatedItems
+  searchAggregatedItems,
+  format
 } from 'pp365-shared-library'
 import { DefaultCaching, SPDataAdapterBase } from 'pp365-shared-library/lib/data'
 import {
@@ -25,7 +26,6 @@ import {
   ISPDataAdapterConfiguration
 } from './types'
 import resource from 'SharedResources'
-import { format } from '@fluentui/react'
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService

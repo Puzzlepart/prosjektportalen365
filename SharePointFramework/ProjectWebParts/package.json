@@ -41,7 +41,6 @@
     "@pnp/spfx-controls-react": "3.25.0",
     "@pnp/spfx-property-controls": "3.24.0",
     "@reduxjs/toolkit": "~1.9.5",
-    "@uifabric/utilities": "6.45.1",
     "dom-to-image": "2.6.0",
     "get-value": "3.0.1",
     "interactjs": "1.6.2",

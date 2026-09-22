@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react/lib/Utilities'
 import { dateAdd, getHashCode, PnPClientStorage } from '@pnp/core'
 import { Logger, LogLevel } from '@pnp/logging'
 import strings from 'PortfolioExtensionsStrings'
@@ -12,6 +11,7 @@ import {
   IPackageManifest
 } from 'models'
 import { sampleCatalog } from './sampleCatalog'
+import { format } from 'pp365-shared-library'
 
 /**
  * Default location of the central catalog (hosting repo, `main` branch). Can

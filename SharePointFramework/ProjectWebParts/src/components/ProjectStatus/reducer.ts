@@ -5,7 +5,7 @@ import { SectionModel, StatusReport } from 'pp365-shared-library/lib/models'
 import { formatDate, getUrlParam } from 'pp365-shared-library/lib/util'
 import { FetchDataResult, IProjectStatusState } from './types'
 import strings from 'ProjectWebPartsStrings'
-import { format } from '@fluentui/react'
+import { format } from 'pp365-shared-library'
 
 /**
  * `INIT_DATA`: Dispatched by `useProjectStatusDataFetch` when data is loaded

@@ -1,7 +1,6 @@
-import { format } from '@fluentui/react'
 import { TableRowId } from '@fluentui/react-components'
 import strings from 'ProjectExtensionsStrings'
-import { ListMenuItem, ProjectExtension } from 'pp365-shared-library'
+import { ListMenuItem, ProjectExtension, format } from 'pp365-shared-library'
 import { useState } from 'react'
 import { useProjectSetupDialogContext } from '../context'
 import { ON_EXTENSIONS_CHANGED } from '../reducer'

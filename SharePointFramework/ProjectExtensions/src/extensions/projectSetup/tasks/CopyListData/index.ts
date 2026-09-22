@@ -1,6 +1,5 @@
 import { stringIsNullOrEmpty } from '@pnp/core'
 import { IProjectSetupData } from 'extensions/projectSetup'
-import { format } from '@fluentui/react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import { SPField } from 'pp365-shared-library/lib/models/SPField'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
@@ -23,7 +22,8 @@ import {
   CloudContentConfig,
   ContentConfig,
   ContentConfigType,
-  getAllItems
+  getAllItems,
+  format
 } from 'pp365-shared-library'
 import { LogLevel } from '@pnp/logging'
 import { WebProvisioner } from 'sp-js-provisioning'

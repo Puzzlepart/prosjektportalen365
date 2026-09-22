@@ -5,7 +5,6 @@ import {
   IListViewCommandSetExecuteEventParameters
 } from '@microsoft/sp-listview-extensibility'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
-import { getId } from '@uifabric/utilities'
 import { DocumentTemplateDialog } from 'components'
 import { SPDataAdapter } from 'data'
 import * as strings from 'ProjectExtensionsStrings'
@@ -14,7 +13,7 @@ import { render, unmountComponentAtNode } from 'react-dom'
 import { find, first } from 'underscore'
 import { ITemplateSelectorContext, TemplateSelectorContext } from './context'
 import { ITemplateSelectorCommandProperties } from './types'
-import { themeColor } from 'pp365-shared-library'
+import { getId, themeColor } from 'pp365-shared-library'
 import resource from 'SharedResources'
 
 export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITemplateSelectorCommandProperties> {
@@ -118,7 +117,7 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
         level: LogLevel.Info
       })
       return true
-    } catch (error) {
+    } catch {
       this._loadDataPromise = null
       this._hasAccessToTemplateLibrary = false
       this.raiseOnChange()

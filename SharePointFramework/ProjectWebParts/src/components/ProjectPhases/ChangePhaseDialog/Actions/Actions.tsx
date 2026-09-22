@@ -1,6 +1,5 @@
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'
-import { format } from '@fluentui/react'
 import { DISMISS_CHANGE_PHASE_DIALOG } from '../../reducer'
 import { ProjectPhasesContext } from '../../context'
 import { useChangePhase } from '../../useChangePhase'
@@ -11,6 +10,7 @@ import { SET_VIEW } from '../reducer'
 import { Button, DialogActions } from '@fluentui/react-components'
 import SPDataAdapter from '../../../../data'
 import { IArchiveConfiguration } from '../Views/ArchiveView/types'
+import { format } from 'pp365-shared-library'
 
 /**
  * Log archive operations to the Archive Log list

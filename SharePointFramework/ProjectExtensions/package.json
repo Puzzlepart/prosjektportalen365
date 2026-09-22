@@ -38,7 +38,6 @@
     "@pnp/graph": "4.21.0",
     "@reduxjs/toolkit": "~1.9.5",
     "@uifabric/file-type-icons": "7.6.27",
-    "@uifabric/utilities": "6.45.1",
     "msgraph-helper": "0.8.3",
     "pp365-shared-library": "workspace:*",
     "react": "17.0.1",

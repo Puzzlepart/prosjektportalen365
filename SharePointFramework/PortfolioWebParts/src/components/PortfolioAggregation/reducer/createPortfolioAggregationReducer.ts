@@ -1,4 +1,4 @@
-import { format, MessageBarType } from '@fluentui/react'
+import { MessageBarType } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import { createReducer, current } from '@reduxjs/toolkit'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -47,6 +47,7 @@ import {
 import { persistSelectedColumnsInWebPartProperties } from './persistSelectedColumnsInWebPartProperties'
 import resource from 'SharedResources'
 import { ProjectContentColumn } from 'pp365-shared-library/lib/models/ProjectContentColumn'
+import { format } from 'pp365-shared-library'
 
 /**
  * Parses a raw SharePoint field value into a display-friendly string.

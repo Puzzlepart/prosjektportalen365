@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react/lib/Utilities'
 import sortArray from 'array-sort'
 import _ from 'lodash'
 import moment from 'moment'
@@ -13,6 +12,7 @@ import {
 import { ProjectListModel, TimelineContentModel } from '../../models'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
 import resource from 'SharedResources'
+import { format } from '../../util'
 
 /**
  * Creating groups based on projects title

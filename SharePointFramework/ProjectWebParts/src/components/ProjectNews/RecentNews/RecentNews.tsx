@@ -1,5 +1,4 @@
 import React, { FC, useState } from 'react'
-import { format } from '@fluentui/react'
 import {
   Card,
   CardHeader,
@@ -11,7 +10,7 @@ import {
 } from '@fluentui/react-components'
 import * as strings from 'ProjectWebPartsStrings'
 import styles from './RecentNews.module.scss'
-import { getFluentIcon } from 'pp365-shared-library'
+import { getFluentIcon, format } from 'pp365-shared-library'
 import { IRecentNewsProps } from './types'
 
 export const RecentNews: FC<IRecentNewsProps> = ({ news, maxVisible = 4 }) => {

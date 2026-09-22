@@ -1,10 +1,9 @@
 import { Combobox, Option, Persona } from '@fluentui/react-components'
 import strings from 'ProjectExtensionsStrings'
-import { FieldContainer } from 'pp365-shared-library'
+import { FieldContainer, format } from 'pp365-shared-library'
 import React, { FC, useEffect, useState } from 'react'
 import { useRiskActionFieldCustomizerContext } from '../../../../../extensions/riskAction/context'
 import { IResponsibleFieldProps } from './types'
-import { format } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
 
 export const ResponsibleField: FC<IResponsibleFieldProps> = (props) => {

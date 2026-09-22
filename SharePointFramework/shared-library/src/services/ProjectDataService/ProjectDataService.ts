@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react'
 import { AssignFrom, IPnPClientStore, PnPClientStorage, dateAdd } from '@pnp/core'
 import { ConsoleListener, Logger } from '@pnp/logging'
 import { IWeb, SPFI, spfi } from '@pnp/sp/presets/all'
@@ -13,7 +12,7 @@ import {
   SPField
 } from '../../models'
 import { getTermStore } from '../../taxonomy'
-import { getClassProperties, tryParseJson } from '../../util'
+import { getClassProperties, tryParseJson, format } from '../../util'
 import {
   ILocalProjectInformationItemContext,
   IPhaseField,

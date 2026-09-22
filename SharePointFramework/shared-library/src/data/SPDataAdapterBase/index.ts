@@ -1,4 +1,4 @@
-import { format, IPersonaSharedProps, ITag } from '@fluentui/react'
+import { IPersonaSharedProps, ITag } from '@fluentui/react'
 import { SPUser } from '@microsoft/sp-page-context'
 import { IPnPClientStore, PnPClientStorage } from '@pnp/core'
 import { SPFI } from '@pnp/sp'
@@ -19,6 +19,7 @@ import {
   ProjectPropertiesMapType
 } from './types'
 import resource from 'SharedResources'
+import { format } from '../../util'
 
 export class SPDataAdapterBase<
   T extends ISPDataAdapterBaseConfiguration = ISPDataAdapterBaseConfiguration

@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react'
 import {
   Dialog,
   DialogBody,
@@ -20,7 +19,7 @@ import { DynamicHomepageContent } from './DynamicHomepageContent/DynamicHomepage
 import { View } from './Views'
 import { ChangePhaseDialogContext } from './context'
 import { useChangePhaseDialog } from './useChangePhaseDialog'
-import { customLightTheme } from 'pp365-shared-library'
+import { customLightTheme, format } from 'pp365-shared-library'
 
 export const ChangePhaseDialog: FC = () => {
   const context = useContext(ProjectPhasesContext)

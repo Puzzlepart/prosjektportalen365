@@ -1,4 +1,4 @@
-import { useId } from '@fluentui/react-hooks'
+import { useId } from '@fluentui/react-components'
 import { useMemo, useReducer } from 'react'
 import { IPortfolioAggregationContext } from '../context'
 import { IPortfolioAggregationProps } from '../types'

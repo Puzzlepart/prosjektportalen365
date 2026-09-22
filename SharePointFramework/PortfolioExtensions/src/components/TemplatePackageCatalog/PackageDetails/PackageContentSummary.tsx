@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react/lib/Utilities'
 import {
   Badge,
   Button,
@@ -28,6 +27,7 @@ import { ContentIconName, ICatalogPackage, IHierarchyNode } from 'models'
 import { PackageFilePreview } from './PackageFilePreview'
 import styles from './PackageDetails.module.scss'
 import { usePackageContentSummary } from './usePackageContentSummary'
+import { format } from 'pp365-shared-library'
 
 const ICONS: Record<ContentIconName, JSX.Element> = {
   content: <ClipboardTaskListLtr20Regular />,

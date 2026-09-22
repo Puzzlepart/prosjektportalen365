@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { BaseDialog, IDialogConfiguration } from '@microsoft/sp-dialog'
 import strings from 'PortfolioExtensionsStrings'
-import { UserMessage, customLightTheme } from 'pp365-shared-library'
+import { UserMessage, customLightTheme, format } from 'pp365-shared-library'
 import {
   Button,
   Field,
@@ -21,7 +21,6 @@ import { Choice, IIdeaApprovalDialogProps } from './types'
 import { FC, useContext } from 'react'
 import { IDeaApprovalDialogContext } from './context'
 import { useIdeaApprovalDialogState } from './useIdeaApprovalDialogState'
-import { format } from '@fluentui/react'
 import styles from './IdeaApprovalDialog.module.scss'
 
 export const IdeaApprovalDialog: FC<IIdeaApprovalDialogProps> = (props) => {

@@ -1,5 +1,4 @@
-import { format } from '@fluentui/react/lib/Utilities'
-import { formatDate } from 'pp365-shared-library'
+import { formatDate, format } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
 import React, { useMemo, useState } from 'react'
 import { ICatalogPackage } from 'models'

@@ -18,7 +18,7 @@ import strings from 'ProjectWebPartsStrings'
 import { useProjectInformationContext } from '../context'
 import { OPEN_DIALOG, OPEN_PANEL } from '../reducer'
 import { ActionType } from './types'
-import { format } from '@fluentui/react'
+import { format } from 'pp365-shared-library'
 
 /**
  * Logic hook for `<Actions />` component.

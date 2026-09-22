@@ -9,7 +9,7 @@ import { IProjectInformationProps, ProjectInformation } from 'components/Project
 import * as strings from 'ProjectWebPartsStrings'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
 import resource from 'SharedResources'
-import { format } from '@fluentui/react'
+import { format } from 'pp365-shared-library'
 
 export default class ProjectInformationWebPart extends BaseProjectWebPart<IProjectInformationProps> {
   public async onInit() {

@@ -1,5 +1,5 @@
 import { Icon, TextField } from '@fluentui/react'
-import { getId } from '@uifabric/utilities'
+import { useId } from '@fluentui/react-components'
 import { DocumentTemplateDialogContext } from 'components/DocumentTemplateDialog/context'
 import { SPDataAdapter } from 'data'
 import * as strings from 'ProjectExtensionsStrings'
@@ -11,8 +11,8 @@ const MAX_LENGTH = 255
 
 export const DocumentTemplateItem: FC<IDocumentTemplateItemProps> = (props) => {
   const { state } = useContext(DocumentTemplateDialogContext)
-  const nameId = getId('name')
-  const titleId = getId('title')
+  const nameId = useId('name')
+  const titleId = useId('title')
   let changeTimeout: any
   const [isExpanded, setIsExpanded] = useState(false)
   const [nameLength, setNameLength] = useState(
@@ -60,14 +60,16 @@ export const DocumentTemplateItem: FC<IDocumentTemplateItemProps> = (props) => {
   }
 
   useEffect(() => {
-    SPDataAdapter.isFilenameValid(state.targetFolder, props.item.name, props.item.isFolder).then(
-      (errorMessage) => {
-        props.onInputChanged(props.item.id, {}, errorMessage)
-        if (errorMessage) {
-          setIsExpanded(true)
-        }
+    void SPDataAdapter.isFilenameValid(
+      state.targetFolder,
+      props.item.name,
+      props.item.isFolder
+    ).then((errorMessage) => {
+      props.onInputChanged(props.item.id, {}, errorMessage)
+      if (errorMessage) {
+        setIsExpanded(true)
       }
-    )
+    })
   }, [state.targetFolder])
 
   return (

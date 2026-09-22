@@ -1,4 +1,4 @@
-import { ContextualMenuItemType, format, IContextualMenuItem } from '@fluentui/react'
+import { ContextualMenuItemType, IContextualMenuItem } from '@fluentui/react'
 import _ from 'lodash'
 import strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared-library/lib/util/getObjectValue'
@@ -12,6 +12,7 @@ import {
 } from '../reducer'
 import { useAddColumn } from '../../List'
 import { MenuProps, useId } from '@fluentui/react-components'
+import { format } from 'pp365-shared-library'
 
 /**
  * Hook for the column header context menu. Handles the logic for the context menu. Creates a context menu

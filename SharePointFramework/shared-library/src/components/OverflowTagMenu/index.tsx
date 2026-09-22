@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react'
 import {
   InteractionTag,
   InteractionTagPrimary,
@@ -20,6 +19,7 @@ import _ from 'underscore'
 import styles from './OverflowTagMenu.module.scss'
 import { IOverflowTagMenuProps, OverflowMenuItemProps } from './types'
 import { useOverflowTagMenu } from './useOverflowTagMenu'
+import { format } from '../../util'
 
 const OverflowMenuItem: FC<OverflowMenuItemProps> = (props) => {
   const { tag } = props

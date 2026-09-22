@@ -1,8 +1,13 @@
 import { Button, FluentProvider, IdPrefixProvider, Spinner } from '@fluentui/react-components'
 import React, { FC } from 'react'
-import { format } from '@fluentui/react'
 import { IProjectNewsProps } from './types'
-import { customLightTheme, getFluentIcon, UserMessage, WebPartTitle } from 'pp365-shared-library'
+import {
+  customLightTheme,
+  getFluentIcon,
+  UserMessage,
+  WebPartTitle,
+  format
+} from 'pp365-shared-library'
 import { useProjectNews } from './useProjectNews'
 import { ProjectNewsContext } from './context'
 import strings from 'ProjectWebPartsStrings'

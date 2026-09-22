@@ -1,5 +1,4 @@
-import { Button, FluentProvider, IdPrefixProvider } from '@fluentui/react-components'
-import { useId } from '@fluentui/react-hooks'
+import { Button, FluentProvider, IdPrefixProvider, useId } from '@fluentui/react-components'
 import strings from 'PortfolioWebPartsStrings'
 import { usePortfolioOverviewContext } from '../../context'
 import { customLightTheme } from 'pp365-shared-library'

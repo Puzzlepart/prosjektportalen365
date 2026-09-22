@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react'
 import { find } from '@microsoft/sp-lodash-subset'
 import { AssignFrom, dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
@@ -39,7 +38,8 @@ import {
   getClassProperties,
   isUnauthorizedError,
   makeUrlAbsolute,
-  transformFieldXml
+  transformFieldXml,
+  format
 } from '../../util'
 import { DataService } from '../DataService'
 import {

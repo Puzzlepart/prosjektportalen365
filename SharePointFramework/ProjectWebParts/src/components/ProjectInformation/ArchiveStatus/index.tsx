@@ -1,6 +1,12 @@
 import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
-import { WebPartTitle, customLightTheme, formatDate, getFluentIcon } from 'pp365-shared-library'
+import {
+  WebPartTitle,
+  customLightTheme,
+  formatDate,
+  getFluentIcon,
+  format
+} from 'pp365-shared-library'
 import {
   FluentProvider,
   IdPrefixProvider,
@@ -9,7 +15,6 @@ import {
   PopoverSurface,
   MessageBar
 } from '@fluentui/react-components'
-import { format } from '@fluentui/react'
 import { ArchiveStatusPopover } from './ArchiveStatusPopover'
 import { useArchiveStatus } from './useArchiveStatus'
 import styles from './ArchiveStatus.module.scss'

@@ -1,11 +1,10 @@
 import SPDataAdapter from '../../../data'
-import { CustomEditPanel } from 'pp365-shared-library'
+import { CustomEditPanel, format } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { useProjectInformationContext } from '../context'
 import strings from 'ProjectWebPartsStrings'
 import { CLOSE_PANEL } from '../reducer'
 import { useEditPropertiesPanelSubmit } from './useEditPropertiesPanelSubmit'
-import { format } from '@fluentui/react'
 
 /**
  * Edit properties panel uses `CustomEditPanel` to render an edit

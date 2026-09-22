@@ -1,4 +1,4 @@
-import { format, Selection } from '@fluentui/react'
+import { Selection } from '@fluentui/react'
 import { Button } from '@fluentui/react-components'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { useReducer } from 'react'
@@ -22,7 +22,7 @@ import { SelectScreen } from './SelectScreen'
 import { TargetFolderScreen } from './TargetFolderScreen'
 import { DocumentTemplateDialogScreen, IDocumentTemplateDialogProps } from './types'
 import { IFileInfo } from '@pnp/sp/files'
-import { UserMessage } from 'pp365-shared-library'
+import { UserMessage, format } from 'pp365-shared-library'
 
 export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
   const [state, dispatch] = useReducer(reducer, initState())

@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 
-import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, getHashCode, PnPClientStorage } from '@pnp/core'
 import { LogLevel } from '@pnp/logging'
@@ -43,7 +42,8 @@ import {
   SPProjectItem,
   SPTimelineConfigurationItem,
   TimelineConfigurationModel,
-  TimelineContentModel
+  TimelineContentModel,
+  format
 } from 'pp365-shared-library'
 import resource from 'SharedResources'
 import _ from 'underscore'

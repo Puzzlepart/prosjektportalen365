@@ -1,5 +1,4 @@
 import {
-  format,
   MarqueeSelection,
   DetailsList,
   SelectionMode,
@@ -14,7 +13,7 @@ import { isEmpty } from 'underscore'
 import { FolderNavigation } from '../FolderNavigation'
 import columns from './columns'
 import { ISelectScreenProps } from './types'
-import { UserMessage } from 'pp365-shared-library'
+import { UserMessage, format } from 'pp365-shared-library'
 
 export const SelectScreen = (props: ISelectScreenProps) => {
   const context = useContext(TemplateSelectorContext)

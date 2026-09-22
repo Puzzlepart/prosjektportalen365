@@ -1,8 +1,8 @@
-import { Selection, format } from '@fluentui/react'
+import { Selection } from '@fluentui/react'
 import { SearchBoxProps } from '@fluentui/react-components'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'PortfolioWebPartsStrings'
-import { IFilterPanelProps, ProjectContentColumn } from 'pp365-shared-library'
+import { IFilterPanelProps, ProjectContentColumn, format } from 'pp365-shared-library'
 import { useEffect, useMemo } from 'react'
 import { OnColumnContextMenu } from '../List'
 import {

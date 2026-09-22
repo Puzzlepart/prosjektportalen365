@@ -2,9 +2,9 @@
 import strings from 'ProjectWebPartsStrings'
 import styles from './ErrorBoundaryFallback.module.scss'
 import React, { FC } from 'react'
-import { format } from '@fluentui/react'
 import { IErrorBoundaryFallbackProps } from './types'
 
+import { format } from 'pp365-shared-library'
 export const ErrorBoundaryFallback: FC<IErrorBoundaryFallbackProps> = ({ title, error }) => {
   console.error(error)
   return (

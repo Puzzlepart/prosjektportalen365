@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { PnPClientStorage, dateAdd } from '@pnp/core'
 import {
@@ -47,7 +46,8 @@ import {
   SPDataAdapterBase,
   SPProjectItem,
   TimelineConfigurationModel,
-  TimelineContentModel
+  TimelineContentModel,
+  format
 } from 'pp365-shared-library'
 import { Logger, LogLevel } from '@pnp/logging'
 import _ from 'underscore'

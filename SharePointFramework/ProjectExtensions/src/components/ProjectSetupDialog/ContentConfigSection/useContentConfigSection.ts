@@ -1,7 +1,6 @@
-import { format } from '@fluentui/react'
 import { TableRowId } from '@fluentui/react-components'
 import strings from 'ProjectExtensionsStrings'
-import { ContentConfig, ListMenuItem } from 'pp365-shared-library'
+import { ContentConfig, ListMenuItem, format } from 'pp365-shared-library'
 import { useState } from 'react'
 import { useProjectSetupDialogContext } from '../context'
 import { ON_LIST_CONTENT_CONFIG_CHANGED } from '../reducer'

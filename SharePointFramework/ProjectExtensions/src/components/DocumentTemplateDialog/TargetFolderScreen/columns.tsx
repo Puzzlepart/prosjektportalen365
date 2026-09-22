@@ -4,9 +4,8 @@ import {
   getFileTypeIconProps,
   initializeFileTypeIcons
 } from '@uifabric/file-type-icons'
-import { getId } from '@uifabric/utilities'
 import * as ProjectExtensionsStrings from 'ProjectExtensionsStrings'
-import { SPFolder } from 'pp365-shared-library'
+import { getId, SPFolder } from 'pp365-shared-library'
 import React from 'react'
 
 initializeFileTypeIcons()

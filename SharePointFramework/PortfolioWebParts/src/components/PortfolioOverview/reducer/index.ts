@@ -1,11 +1,12 @@
-import { format, MessageBarType } from '@fluentui/react'
+import { MessageBarType } from '@fluentui/react'
 import { createReducer } from '@reduxjs/toolkit'
 import strings from 'PortfolioWebPartsStrings'
 import {
   ProjectColumn,
   setUrlHash,
   sortAlphabetically,
-  sortNumerically
+  sortNumerically,
+  format
 } from 'pp365-shared-library'
 import _ from 'underscore'
 import { IPortfolioOverviewHashState, IPortfolioOverviewState } from '../types'

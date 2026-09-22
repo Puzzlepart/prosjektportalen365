@@ -22,6 +22,15 @@
   // Node's `main` points at lib/, so redirect the three cross-solution packages to lib-commonjs/.
   // `@pnp/*` is ESM-only and cannot be required at all; see lib/pnpStub.js. `@microsoft/sp-*` need
   // Microsoft-internal modules and are page-provided externals at runtime; see lib/spfxStub.js.
+  // The five consumer solutions compile with `baseUrl: "src"` plus `paths`, so their
+  // sources import siblings bare: `from 'data'`, `from 'models'`, `from 'components/X'`.
+  // TypeScript resolves those at compile time and emits them unchanged, so Jest has to
+  // resolve them too. Naming the compiled output directory here is the run-time
+  // equivalent of `baseUrl`: a bare specifier is looked up in node_modules first (so real
+  // packages still win) and then in lib-commonjs. shared-library has no baseUrl and is
+  // unaffected.
+  "moduleDirectories": ["node_modules", "lib-commonjs"],
+
   "moduleNameMapper": {
     "^(pp365-shared-library|pp365-projectwebparts|pp365-portfoliowebparts)$": "<rootDir>/node_modules/$1/lib-commonjs/index.js",
     "^(pp365-shared-library|pp365-projectwebparts|pp365-portfoliowebparts)/lib/(.*)$": "<rootDir>/node_modules/$1/lib-commonjs/$2",

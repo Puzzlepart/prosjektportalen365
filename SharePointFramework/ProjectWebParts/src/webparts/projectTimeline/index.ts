@@ -9,8 +9,8 @@ import { ProjectTimeline } from 'components/ProjectTimeline/ProjectTimeline'
 import '@fluentui/react/dist/css/fabric.min.css'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
 import * as strings from 'ProjectWebPartsStrings'
-import { format } from '@fluentui/react'
 import resource from 'SharedResources'
+import { format } from 'pp365-shared-library'
 
 export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectTimelineProps> {
   public render(): void {

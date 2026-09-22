@@ -2,11 +2,11 @@ import strings from 'SharedLibraryStrings'
 import React from 'react'
 import { ColumnRenderComponent } from '../types'
 import styles from './InstrumentColumn.module.scss'
-import { format } from '@fluentui/react'
 import { IInstrumentColumnProps } from './types'
 import { useInstrumentColumn } from './useInstrumentColumn'
 import { Link, Popover, PopoverSurface, PopoverTrigger, Text } from '@fluentui/react-components'
 import GaugeComponent from 'react-gauge-component'
+import { format } from '../../../util'
 
 /**
  * A column render component that displays a link in the cell. When the link is clicked, a dialog is displayed

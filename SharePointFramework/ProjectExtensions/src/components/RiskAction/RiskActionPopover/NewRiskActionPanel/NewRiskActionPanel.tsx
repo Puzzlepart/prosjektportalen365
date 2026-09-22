@@ -1,4 +1,4 @@
-import { IPanelProps, Panel, format } from '@fluentui/react'
+import { IPanelProps, Panel } from '@fluentui/react'
 import {
   FluentProvider,
   IdPrefixProvider,
@@ -6,7 +6,7 @@ import {
   Switch,
   Textarea
 } from '@fluentui/react-components'
-import { customLightTheme } from 'pp365-shared-library'
+import { customLightTheme, format } from 'pp365-shared-library'
 import strings from 'ProjectExtensionsStrings'
 import React, { FC } from 'react'
 import { Footer } from './Footer'

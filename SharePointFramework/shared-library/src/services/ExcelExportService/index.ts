@@ -1,9 +1,14 @@
-import { format, IColumn } from '@fluentui/react'
+import { IColumn } from '@fluentui/react'
 import * as FileSaver from 'file-saver'
 import strings from 'SharedLibraryStrings'
 import _ from 'underscore'
 import * as XLSX from 'xlsx'
-import { getObjectValue as get, getDateForExcelExport, stringToArrayBuffer } from '../../util'
+import {
+  getObjectValue as get,
+  getDateForExcelExport,
+  stringToArrayBuffer,
+  format
+} from '../../util'
 import { ExcelExportServiceDefaultConfiguration } from './ExcelExportServiceDefaultConfiguration'
 import { IExcelExportServiceConfiguration } from './IExcelExportServiceConfiguration'
 

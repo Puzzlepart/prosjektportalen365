@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react/lib/Utilities'
 import { LogLevel } from '@pnp/logging'
 import * as strings from 'ProjectExtensionsStrings'
 import { WebProvisioner } from 'sp-js-provisioning'
@@ -8,6 +7,7 @@ import { NO_TEMPLATE_ID } from '../../constants'
 import { BaseTask, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../types'
 import { APPLY_TEMPLATE_STATUS_MAP, ApplyTemplateTaskError } from './types'
+import { format } from 'pp365-shared-library'
 
 export class ApplyTemplate extends BaseTask {
   constructor(data: IProjectSetupData) {
