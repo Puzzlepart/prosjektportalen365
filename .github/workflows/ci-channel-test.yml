@@ -175,6 +175,7 @@ jobs:
     env:
       E2E_BASE_URL: ${{ vars.SP_URL_TEST }}
       E2E_PROJECT_URL: ${{ vars.E2E_PROJECT_URL }}
+      E2E_PROGRAM_URL: ${{ vars.E2E_PROGRAM_URL }}
       E2E_USERNAME: ${{ secrets.E2E_USERNAME }}
       E2E_PASSWORD: ${{ secrets.E2E_PASSWORD }}
     steps:
