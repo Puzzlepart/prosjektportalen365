@@ -45,6 +45,12 @@ test.describe('portfolio hub', () => {
     await expect(webPart(page, /porteføljeoversikt|portfolio overview/i).first()).toBeVisible()
     // The overview renders a Fluent list; grid/table are its stable roles.
     await expect(page.getByRole('grid').or(page.getByRole('table')).first()).toBeVisible({ timeout: 60_000 })
+    // Searching narrows the list: the results counter reports 0 of N for a nonsense term. This
+    // exercises the toolbar (a covered or dead search box fails the fill) and the list binding.
+    const search = page.getByPlaceholder(/søk|search/i).first()
+    await search.fill('zzz-e2e-ingen-treff')
+    await expect(page.getByText(/^viser 0 av \d+|^showing 0 of \d+/i)).toBeVisible({ timeout: 20_000 })
+    await search.clear()
   })
 
   test('project status aggregation page loads', async ({ page, openPage, resolvePage }) => {
@@ -52,14 +58,32 @@ test.describe('portfolio hub', () => {
     await expect(webPart(page, /status/i).first()).toBeVisible()
   })
 
-  test('project timeline page loads', async ({ page, openPage, resolvePage }) => {
+  test('project timeline page loads and its controls can be reached', async ({ page, openPage, resolvePage }) => {
     await openPage(await resolvePage(hub, PAGES.timeline))
     await expect(webPart(page, /tidslinje|timeline/i).first()).toBeVisible()
+    // The timeline is react-calendar-timeline; its group list holds one link per project. A trial
+    // click runs Playwright's actionability checks (visible, stable, not covered by another
+    // element) without navigating, which is exactly what a stylesheet or z-index regression breaks:
+    // when the library's CSS lost its class names, the header covered these links.
+    const firstProjectLink = page.locator('.react-calendar-timeline a[href]').first()
+    await expect(firstProjectLink).toBeVisible({ timeout: 60_000 })
+    await firstProjectLink.click({ trial: true })
+    // The filter toolbar button must open its panel and close again.
+    await page.getByRole('button', { name: /^filtrer$|^filter$/i }).first().click()
+    // The filter panel is a Fluent v8 Panel: its role=dialog root has no box of its own, so the
+    // visible proof is the panel heading.
+    await expect(page.getByRole('heading', { name: /^filtr|^filter/i, level: 1 })).toBeVisible()
+    await page.keyboard.press('Escape')
   })
 
   test('benefit overview page loads', async ({ page, openPage, resolvePage }) => {
     await openPage(await resolvePage(hub, PAGES.benefits))
     await expect(webPart(page, /nytte|benefit/i).first()).toBeVisible()
+    await page.getByRole('button', { name: /^filtrer$|^filter$/i }).first().click()
+    // The filter panel is a Fluent v8 Panel: its role=dialog root has no box of its own, so the
+    // visible proof is the panel heading.
+    await expect(page.getByRole('heading', { name: /^filtr|^filter/i, level: 1 })).toBeVisible()
+    await page.keyboard.press('Escape')
   })
 
   test('footer application customizer renders the version', async ({ page, openPage, resolvePage }) => {

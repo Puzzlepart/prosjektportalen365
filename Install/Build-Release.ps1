@@ -359,6 +359,18 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
             $ExternalHits | ForEach-Object { Write-Host "        $($_.Filename)" -ForegroundColor Red }
             exit 1
         }
+        # Packaging proof, part 3: third-party stylesheets must stay global. The Heft rig compiles
+        # every .css as a CSS module unless spfx-customize-webpack.js exempts node_modules; when that
+        # exemption is missing, react-calendar-timeline's and Fabric's class names are hashed, the
+        # library DOM no longer matches its own rules, and the timeline renders as an unclickable
+        # overlay. A hashed third-party class name in a bundle is therefore a build error.
+        $HashedCssHits = Get-ChildItem "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution/dist" -Filter *.js -File -ErrorAction SilentlyContinue |
+            Select-String -Pattern '(react-calendar-timeline|rct-(outer|scroll|header-root|sidebar|calendar-header|items)|ms-Fabric|ms-Grid-row|ms-Grid-col)_[0-9a-f]{8}\b' -List
+        if ($HashedCssHits) {
+            Write-Host "[ERROR] $Solution bundles contain hashed class names from third-party stylesheets (node_modules CSS compiled as CSS modules):" -ForegroundColor Red
+            $HashedCssHits | ForEach-Object { Write-Host "        $($_.Filename): $($_.Matches[0].Value)" -ForegroundColor Red }
+            exit 1
+        }
         Copy-Item $SPPKG_PATH -Destination $RELEASE_PATH_APPS -Force
     }
     # Fail loudly rather than ship a release with no apps (e.g. an unrecognised

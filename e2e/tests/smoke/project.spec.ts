@@ -30,6 +30,19 @@ test.describe('project site', () => {
     // set. An empty list means the phases did not load, which is a defect for the user even though
     // the web part itself mounted, so this stays strict.
     await expect(phases.locator('[class*="phaseList"] li').first()).toBeVisible(MOUNT_TIMEOUT)
+    // Every phase must be clickable (trial click: actionability checks without opening the
+    // change-phase dialog, which would be a write flow).
+    for (const phase of await phases.locator('[class*="phaseList"] li').all()) {
+      await phase.click({ trial: true })
+    }
+    // "Show all project information" opens a panel and is read only.
+    await webPartByAlias(page, 'ProjectInformation')
+      .getByRole('button', { name: /vis all prosjektinformasjon|show all project information/i })
+      .click()
+    await expect(
+      page.getByRole('heading', { name: /^prosjektinformasjon$|^project information$/i, level: 1 })
+    ).toBeVisible()
+    await page.keyboard.press('Escape')
   })
 
   test('project status page mounts its web part', async ({ page, openPage, resolvePage }) => {

@@ -8,6 +8,10 @@ import { expect, test as base, Page } from '@playwright/test'
 const FATAL_CONSOLE_PATTERNS = [
   /cannot find module/i,
   /failed to load component/i,
+  // SPFx's module loader reporting that a web part bundle threw while being required, for example
+  // "Could not load portfolio-overview-web-part in require. TypeError: ..." when a stylesheet
+  // import resolved to undefined.
+  /could not load .+ in require/i,
   /chunkloaderror/i,
   /is not a function/i,
   /webpackJsonp/i
@@ -77,6 +81,12 @@ export const test = base.extend<Pp365Fixtures>({
         throw new Error(`Page not found: ${response.url()}`)
       }
       await expectCanvasRendered(page)
+      // Every PP365 web part renders the same error boundary when its bundle or data fails; one
+      // of these headings on a smoke page is a failure regardless of what else mounted.
+      await expect(
+        page.getByRole('heading', { name: /noe gikk galt|something went wrong/i }),
+        'a web part rendered its error boundary'
+      ).toHaveCount(0)
     })
   },
   resolvePage: async ({ page }, use) => {

@@ -278,6 +278,17 @@ function treatNodeModulesCssAsGlobal(webpackConfig, log) {
   const rules = webpackConfig?.module?.rules
   if (!Array.isArray(rules)) return
   const NODE_MODULES = /[\\/]node_modules[\\/]/
+  // Workspace packages (pp365-shared-library and the two published web part packages) are bundled
+  // from node_modules too, but their `*.module.scss.css` files ARE CSS modules; compiling them as
+  // global stylesheets leaves `styles` undefined at runtime ("Cannot read properties of undefined
+  // (reading 'accordionChevron')" took down every shared component on the test tenant). Only
+  // plain third-party stylesheets qualify as global.
+  const WORKSPACE_PACKAGE = /[\\/]node_modules[\\/]pp365-[^\\/]+[\\/]/
+  const CSS_MODULE_FILE = /\.module\.(?:s[ac]ss|css)(?:\.css)?$/i
+  const isThirdPartyGlobalCss = (resourcePath) =>
+    NODE_MODULES.test(resourcePath) &&
+    !WORKSPACE_PACKAGE.test(resourcePath) &&
+    !CSS_MODULE_FILE.test(resourcePath)
   const isRegExp = (value) => value instanceof RegExp
   const moduleRule = rules.find(
     (rule) => isRegExp(rule?.test) && rule.test.source.startsWith('(?<!\\.global') && rule.test.source.endsWith('\\.css$')
@@ -289,13 +300,15 @@ function treatNodeModulesCssAsGlobal(webpackConfig, log) {
     log('CSS rules of the rig not found; node_modules stylesheets keep the default handling')
     return
   }
-  moduleRule.exclude = moduleRule.exclude ? [].concat(moduleRule.exclude, NODE_MODULES) : NODE_MODULES
+  moduleRule.exclude = moduleRule.exclude
+    ? [].concat(moduleRule.exclude, isThirdPartyGlobalCss)
+    : isThirdPartyGlobalCss
   rules.splice(rules.indexOf(globalRule) + 1, 0, {
     ...globalRule,
     test: /\.css$/i,
-    include: NODE_MODULES
+    include: isThirdPartyGlobalCss
   })
-  log('node_modules .css files are compiled as global stylesheets')
+  log('third-party .css files from node_modules are compiled as global stylesheets')
 }
 
 module.exports = function customizeWebpackConfiguration(webpackConfig, taskSession) {
