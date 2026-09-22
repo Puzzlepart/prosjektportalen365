@@ -38,11 +38,62 @@ What they import, grouped by the v9 answer:
 | `NormalPeoplePicker`, `IPersonaProps` | 7 | No v9 people picker. Decision B. | Hard |
 | `DetailsList`, `ShimmeredDetailsList`, `IColumn`, `Selection`, `IGroup`, `IDetailsHeaderProps` | 44 | No v9 equivalent with grouping, sticky headers and column resizing together. Decision A. | Hard |
 
-Related hygiene: `pzl-spfx-components` (1 file in ProjectWebParts; the only reason for the `office-ui-fabric-react` alias in `spfx-customize-webpack.js`), `@fluentui/react/dist/css/fabric.min.css` (5 web parts; only `ms-Grid` mixins in `SummarySection.module.scss` still depend on Fabric core), `@uifabric/file-type-icons` (1 file; `@fluentui/react-file-type-icons` is already a dependency), four packages with React 15/16-era peers (`react-autocomplete`, `react-image-fade-in`, `react-scroll`, `react-calendar-timeline` via `create-react-context`), Redux Toolkit 1.9 (2.x available), `xlsx` 0.16 (0.18.5 is the last npm release), `react-markdown` 8 (10 is ESM-only; fine under webpack, stubbed under Jest).
+Related hygiene: `pzl-spfx-components` (1 file in ProjectWebParts; the only reason for the `office-ui-fabric-react` alias in `spfx-customize-webpack.js`), `@fluentui/react/dist/css/fabric.min.css` (5 web parts; only `ms-Grid` mixins in `SummarySection.module.scss` still depend on Fabric core), `@uifabric/file-type-icons` (1 file; `@fluentui/react-file-type-icons` is already a dependency), `pzl-react-reusable-components` (2 files in PortfolioWebParts, both only for `useConfirmationDialog`; declared but never imported in ProgramWebParts — see the slice 0 log for what it drags in), four packages with React 15/16-era peers (`react-autocomplete`, `react-image-fade-in`, `react-scroll`, `react-calendar-timeline` via `create-react-context`), Redux Toolkit 1.9 (2.x available), `xlsx` 0.16 (0.18.5 is the last npm release), `react-markdown` 8 (10 is ESM-only; fine under webpack, stubbed under Jest).
 
 Versions: `@fluentui/react-components` ~9.72.10 → 9.74.8, `@fluentui/react-icons` ~2.0.317 → 2.0.341, `@fluentui/react-datepicker-compat` → 0.6.38. `@fluentui/react` stays pinned at 8.106.4 until Decision A and B are closed, then it is removed.
 
 Lint debt: 414 warnings (ProjectWebParts 111, shared-library 85, ProgramWebParts 85, ProjectExtensions 55, PortfolioExtensions 40, PortfolioWebParts 38). Top rules: `no-floating-promises` 79, `no-console` 74, `no-unused-vars` 72, `no-useless-catch` 29, `require-await` 26, `no-lone-blocks` 24, `no-new-null` 20, `no-empty` 17, `no-void` 14, `require-atomic-updates` 10. Three rules were relaxed to `warn` in Phase 1 pending this clean-up: `no-floating-promises`, `no-use-before-define`, `require-atomic-updates`.
+
+## Baselines (recorded at slice 0, 2026-09-22)
+
+Measured before the version bump, so the end of the phase has something to compare against. Sizes and
+coverage come from the 2026-09-21 `rush rebuild`; re-measure all four tables from the slice 0 rebuild
+and from the last slice's rebuild.
+
+Package sizes, the `.sppkg` each solution declares in its own `config/package-solution.json` (the
+channel and `-arkiv` packages next to them are stale local output and are not part of the baseline):
+
+| Solution | Package | Size |
+|---|---|---|
+| shared-library | `pp-shared-library.sppkg` | 1 996 KB |
+| ProjectWebParts | `pp-project-web-parts.sppkg` | 7 064 KB |
+| PortfolioWebParts | `pp-portfolio-web-parts.sppkg` | 10 068 KB |
+| ProgramWebParts | `pp-program-web-parts.sppkg` | 4 780 KB |
+| ProjectExtensions | `pp-project-extensions.sppkg` | 1 284 KB |
+| PortfolioExtensions | `pp-portfolio-extensions.sppkg` | 1 456 KB |
+
+Test coverage, from each solution's `jest-output/coverage/coverage-summary.json`. These are the values
+Decision D's first thresholds are set from in slice 3; ProgramWebParts is high only because it has few
+instrumented files, not because it is well tested:
+
+| Solution | Test files | Statements | Branches | Functions | Lines |
+|---|---|---|---|---|---|
+| shared-library | 7 | 11.33 % (2 435/21 478) | 33.26 % | 10.14 % | 11.33 % |
+| ProjectWebParts | 1 | 6.56 % (1 487/22 640) | 1.31 % | 0.66 % | 6.56 % |
+| PortfolioWebParts | 1 | 1.76 % (332/18 863) | 3.63 % | 0.94 % | 1.76 % |
+| ProgramWebParts | 1 | 29.89 % (1 807/6 045) | 32.60 % | 7.69 % | 29.89 % |
+| ProjectExtensions | 1 | 0.18 % (22/11 995) | 2.45 % | 0.83 % | 0.18 % |
+| PortfolioExtensions | 1 | 0.27 % (36/13 121) | 2.97 % | 2.00 % | 0.27 % |
+
+Twelve test files in total: one component test per solution plus six unit tests and one component test
+in the shared library, and `shared-library/test/runtime/termStore.runtime.test.mjs`.
+
+Lint warnings the build tolerates, counted from each solution's `release/analysis-logs/lint.sarif`
+(written by the lint task inside `heft build`; zero errors everywhere). These differ from the 414 in
+the inventory above, which came from a `rush lint` run, and the files carry different dates, so treat
+the slice 0 rebuild's numbers as the real baseline:
+
+| Solution | Warnings | SARIF date |
+|---|---|---|
+| ProjectWebParts | 117 | 2026-09-21 |
+| shared-library | 66 | 2026-09-21 |
+| ProjectExtensions | 55 | 2026-09-21 |
+| PortfolioWebParts | 54 | 2026-09-21 |
+| PortfolioExtensions | 40 | 2026-09-22 |
+| ProgramWebParts | 29 | 2026-09-21 |
+
+v8 import counts were re-counted at slice 0 and match the inventory table exactly (214 files), so the
+inventory is current.
 
 ## Decisions
 
@@ -94,7 +145,7 @@ Each slice is one PR-sized commit series on this branch, verified by `rush rebui
 |---|---|---|---|
 | 0 | Version bump | Fluent v9 packages to current, all six solutions | version drift |
 | 1 | `format` and ids | Shared `format` helper; replace all 72 `format` imports and the 9 `getId`/`useId` imports | `@uifabric/utilities`, `@fluentui/react-hooks`, `lib/Utilities` imports |
-| 2 | Hygiene | Replace `pzl-spfx-components` (1 file), `@uifabric/file-type-icons` (1 file); delete the two webpack aliases; remove `fabric.min.css` from the five web parts after replacing the `ms-Grid` mixins in `SummarySection.module.scss` with flex/grid CSS | two aliases, `fabric.min.css`, `@uifabric/*` |
+| 2 | Hygiene | Replace `pzl-spfx-components` (1 file), `@uifabric/file-type-icons` (1 file) and `pzl-react-reusable-components` (`useConfirmationDialog` → a v9 `Dialog` in the shared library, 2 files; drop the dead dependency in ProgramWebParts); delete the two webpack aliases; remove `fabric.min.css` from the five web parts after replacing the `ms-Grid` mixins in `SummarySection.module.scss` with flex/grid CSS | two aliases, `fabric.min.css`, `@uifabric/*`, a duplicate Fluent v8+v9+React copy |
 | 3 | Easy components | `Icon`, `MessageBar`, `Shimmer`, form controls (57 files across all solutions), tests first per Decision D | most v8 imports in ProjectExtensions, PortfolioExtensions, ProgramWebParts; those three solutions drop `@fluentui/react` |
 | 3b | Coverage pass | Tests for every web part root and interactive component not touched by slices 3 to 7 (already on v9), hook and adapter tests, first coverage thresholds; `E2E_PROGRAM_URL` and the `flows` folder in the browser suite | untested components |
 | 4 | Panels and menus | `Panel` → `OverlayDrawer` (18), `ContextualMenu`/`Callout` → `Menu`/`Popover` (10), `Dialog`/`Breadcrumb`/`ProgressIndicator` (6) | v8 overlay components |
@@ -126,3 +177,65 @@ Slices 3 to 6 are per solution internally: shared-library first (consumers compi
 ## Definition of done
 
 `grep -rl "from '@fluentui/react'" SharePointFramework/*/src` lists only the shared list and people picker wrappers (or nothing); `@fluentui/react` is a dependency of the shared library only (or of none); no `@uifabric/*`, `pzl-spfx-components`, `fabric.min.css` or compat aliases remain; the three relaxed lint rules are `error` and `rush rebuild` reports zero warnings, or a documented, short allow-list; every web part root and interactive component has a test file meeting the Decision D targets, coverage thresholds are enforced in `pp365-jest-config` at or above the slice 3 baseline, the browser suite includes a program site, the navigation flows and two write flows; the release notes for the version carrying this phase describe it as a technical change with no intended functional difference.
+
+## Slice log
+
+### Slice 0 — version bump (2026-09-22)
+
+Done. `@fluentui/react-components` `~9.72.10` → `~9.74.8`, `@fluentui/react-icons` `~2.0.317` →
+`~2.0.341` and `@fluentui/react-datepicker-compat` `~0.6.22` → `~0.6.38` in all six solutions; no
+source file touched. All three are the current `latest` on npm, and React 17 is inside every peer
+range.
+
+The focus-management pins in `common/config/rush/pnpm-config.json` were raised with them, which is
+the re-evaluation the Phase 1 plan deferred to this phase (`@fluentui/react-tabster` 9.26.13 →
+9.26.18, `keyborg` 2.6.0 → 2.14.1, `tabster` 8.7.0 → 8.8.1). Fluent 9.74.8 asks for
+`react-tabster ^9.26.18`, which in turn asks for `keyborg ^2.14.1` and `tabster ^8.8.0`; left at the
+old values the overrides would have forced the whole focus stack *below* its own minimums, since a
+pnpm override wins whether or not it satisfies the range. `keyborg` 3.x is deliberately skipped:
+react-tabster still asks for the 2.x line. The rule is now a comment in the file — re-check the three
+pins on every Fluent v9 bump.
+
+Checked before the bump, so the build does not have to find it:
+
+- **The CommonJS build moves from `.js` to `.cjs`.** `@fluentui/react-components@9.74.8` and every
+  sub-package now publish `lib-commonjs/index.cjs`, `main` points at it, and the `"node"` export
+  condition is gone. Harmless in all three consumers: webpack takes the `import` condition
+  (`lib/index.js`) as before; TypeScript is on `moduleResolution: "node"`, ignores `exports`, and
+  still finds the unchanged root `typings`; Jest takes the `require` condition, has `cjs` first in
+  the rig's `moduleFileExtensions`, and never transformed these files anyway (no `transform` pattern
+  matches `.cjs`, so `transformIgnorePatterns` not covering it is moot).
+- **Every icon name still exists.** All 301 distinct symbols imported from `@fluentui/react-icons`
+  across the six solutions resolve in 2.0.341, `iconCatalog.ts` included. An icon import is a named
+  import, so a removal would be a compile error rather than a missing glyph.
+- **`Alert` survives.** The three `ProjectExtensions` files that import `Alert` from
+  `@fluentui/react-components/unstable` still compile: `/unstable` re-exports it in 9.74.8 and
+  `@fluentui/react-alert`'s public types are byte-identical to the installed version.
+
+Two things the lockfile made visible while checking the bump:
+
+- **The bump should collapse a duplicate Fluent v9 copy.** `@pnp/spfx-controls-react` 3.25.0 and
+  `@microsoft/sp-dialog` both pull `@fluentui/react-migration-v8-v9`, which requires
+  `@fluentui/react-components ^9.74.7`. Against the old `~9.72.10` that could not dedupe, so the
+  lockfile carries 9.72.11 *and* 9.74.7 and the PnP-controls path bundles a second complete Fluent v9.
+  `~9.74.8` satisfies both, and the `rush update` confirmed it: the lockfile went from three copies
+  (9.37.4, 9.72.11, 9.74.7) to two (9.37.4, 9.74.8), so the PnP-controls path and our own code now
+  share one Fluent v9. The remaining 9.37.4 is `pzl-react-reusable-components`, which slice 2 removes.
+  `@fluentui/react-tabster` 9.26.18, `keyborg` 2.14.1 and `tabster` 8.8.1 each resolved to exactly one
+  copy. The bundle half of this is still open: compare the six `.sppkg` sizes in the baseline table
+  against the post-bump rebuild.
+  `@fluentui/react-icons` was already resolving to 2.0.341 under `~2.0.317`, so that bump only moves
+  the declared floor up to what is installed; `@fluentui/react-datepicker-compat` was likewise already
+  at 0.6.37. `@fluentui/react-icons@2.0.314` under `@microsoft/sp-property-pane` stays separate and
+  does not matter — SPFx is a page-provided external.
+- **`pzl-react-reusable-components` 0.3.4 is a third Fluent copy** and is not in the hygiene list
+  above (it is a different package from `pzl-spfx-components`). It declares, as hard dependencies and
+  all exact, `@fluentui/react-components` 9.37.4, `@fluentui/react` 8.97.0, `react`/`react-dom` 17.0.2,
+  `react-markdown` 8.0.3 and `underscore` 1.13.6 — so PortfolioWebParts bundles a second React and a
+  second Fluent v8 as well. It is used in exactly two files (`PortfolioAggregation` and
+  `PortfolioOverview` `ColumnFormPanelFooter`) for one hook, `useConfirmationDialog`, whose whole job
+  is a confirm dialog with two buttons. ProgramWebParts declares it and never imports it. Replacing it
+  with a v9 `Dialog` in the shared library is now part of slice 2.
+
+Not verified without a build and a tenant: bundle sizes after the bump, and the visual and focus
+behaviour of the v9 surfaces already in use (the tabster bump is the part most likely to show).

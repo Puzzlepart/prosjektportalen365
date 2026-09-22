@@ -59,8 +59,8 @@
     "@types/underscore": "~1.11.5",
     "@pnp/core": "4.21.0",
     "@pnp/queryable": "4.21.0",
-    "@fluentui/react-components": "~9.72.10",
-    "@fluentui/react-icons": "~2.0.317",
+    "@fluentui/react-components": "~9.74.8",
+    "@fluentui/react-icons": "~2.0.341",
     "react-gauge-component": "~1.2.61",
     "@microsoft/sp-http": "1.23.2"
   },

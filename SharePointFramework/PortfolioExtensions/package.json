@@ -43,8 +43,8 @@
     "tslib": "2.8.1",
     "underscore": "~1.13.6",
     "@pnp/queryable": "4.21.0",
-    "@fluentui/react-components": "~9.72.10",
-    "@fluentui/react-icons": "~2.0.317",
+    "@fluentui/react-components": "~9.74.8",
+    "@fluentui/react-icons": "~2.0.341",
     "react-gauge-component": "~1.2.61",
     "jszip": "3.10.1",
     "sp-js-provisioning": "1.4.0"
