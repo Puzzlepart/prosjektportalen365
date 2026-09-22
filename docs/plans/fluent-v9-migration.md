@@ -51,16 +51,19 @@ coverage come from the 2026-09-21 `rush rebuild`; re-measure all four tables fro
 and from the last slice's rebuild.
 
 Package sizes, the `.sppkg` each solution declares in its own `config/package-solution.json` (the
-channel and `-arkiv` packages next to them are stale local output and are not part of the baseline):
+channel and `-arkiv` packages next to them are stale local output and are not part of the baseline).
+"Before" is the 2026-09-21 rebuild on Fluent 9.72.11, "after" the 2026-09-22 rebuild on 9.74.8, so the
+delta is the cost of slice 0 alone:
 
-| Solution | Package | Size |
-|---|---|---|
-| shared-library | `pp-shared-library.sppkg` | 1 996 KB |
-| ProjectWebParts | `pp-project-web-parts.sppkg` | 7 064 KB |
-| PortfolioWebParts | `pp-portfolio-web-parts.sppkg` | 10 068 KB |
-| ProgramWebParts | `pp-program-web-parts.sppkg` | 4 780 KB |
-| ProjectExtensions | `pp-project-extensions.sppkg` | 1 284 KB |
-| PortfolioExtensions | `pp-portfolio-extensions.sppkg` | 1 456 KB |
+| Solution | Package | Before | After slice 0 | Delta |
+|---|---|---|---|---|
+| shared-library | `pp-shared-library.sppkg` | 1 996 KB | 2 024 KB | +28 KB (+1.4 %) |
+| ProjectWebParts | `pp-project-web-parts.sppkg` | 7 064 KB | 7 160 KB | +96 KB (+1.4 %) |
+| PortfolioWebParts | `pp-portfolio-web-parts.sppkg` | 10 068 KB | 10 188 KB | +120 KB (+1.2 %) |
+| ProgramWebParts | `pp-program-web-parts.sppkg` | 4 780 KB | 4 828 KB | +48 KB (+1.0 %) |
+| ProjectExtensions | `pp-project-extensions.sppkg` | 1 284 KB | 1 296 KB | +12 KB (+0.9 %) |
+| PortfolioExtensions | `pp-portfolio-extensions.sppkg` | 1 456 KB | 1 456 KB | 0 KB |
+| **Total** | | **26 648 KB** | **26 952 KB** | **+304 KB (+1.1 %)** |
 
 Test coverage, from each solution's `jest-output/coverage/coverage-summary.json`. These are the values
 Decision D's first thresholds are set from in slice 3; ProgramWebParts is high only because it has few
@@ -79,18 +82,23 @@ Twelve test files in total: one component test per solution plus six unit tests 
 in the shared library, and `shared-library/test/runtime/termStore.runtime.test.mjs`.
 
 Lint warnings the build tolerates, counted from each solution's `release/analysis-logs/lint.sarif`
-(written by the lint task inside `heft build`; zero errors everywhere). These differ from the 414 in
-the inventory above, which came from a `rush lint` run, and the files carry different dates, so treat
-the slice 0 rebuild's numbers as the real baseline:
+after the slice 0 `rush rebuild` (written by the lint task inside `heft build`; zero errors anywhere).
+384, not the 414 in the inventory above, which came from a `rush lint` run rather than from the build:
 
-| Solution | Warnings | SARIF date |
-|---|---|---|
-| ProjectWebParts | 117 | 2026-09-21 |
-| shared-library | 66 | 2026-09-21 |
-| ProjectExtensions | 55 | 2026-09-21 |
-| PortfolioWebParts | 54 | 2026-09-21 |
-| PortfolioExtensions | 40 | 2026-09-22 |
-| ProgramWebParts | 29 | 2026-09-21 |
+| Solution | Warnings |
+|---|---|
+| ProjectWebParts | 117 |
+| shared-library | 92 |
+| ProjectExtensions | 55 |
+| PortfolioWebParts | 54 |
+| PortfolioExtensions | 40 |
+| ProgramWebParts | 26 |
+| **Total** | **384** |
+
+By rule: `no-console` 83, `no-floating-promises` 75, `no-unused-vars` 60, `no-useless-catch` 24,
+`no-lone-blocks` 23, `require-await` 23, `no-new-null` 15, `no-empty` 15, `no-void` 12,
+`require-atomic-updates` 10, `no-unused-expressions` 10, `pair-react-dom-render-unmount` 9. Decision E
+pays these down in the files each slice touches, so this table is the number to watch falling.
 
 v8 import counts were re-counted at slice 0 and match the inventory table exactly (214 files), so the
 inventory is current.
@@ -214,16 +222,27 @@ Checked before the bump, so the build does not have to find it:
 
 Two things the lockfile made visible while checking the bump:
 
-- **The bump should collapse a duplicate Fluent v9 copy.** `@pnp/spfx-controls-react` 3.25.0 and
-  `@microsoft/sp-dialog` both pull `@fluentui/react-migration-v8-v9`, which requires
-  `@fluentui/react-components ^9.74.7`. Against the old `~9.72.10` that could not dedupe, so the
-  lockfile carries 9.72.11 *and* 9.74.7 and the PnP-controls path bundles a second complete Fluent v9.
-  `~9.74.8` satisfies both, and the `rush update` confirmed it: the lockfile went from three copies
-  (9.37.4, 9.72.11, 9.74.7) to two (9.37.4, 9.74.8), so the PnP-controls path and our own code now
-  share one Fluent v9. The remaining 9.37.4 is `pzl-react-reusable-components`, which slice 2 removes.
-  `@fluentui/react-tabster` 9.26.18, `keyborg` 2.14.1 and `tabster` 8.8.1 each resolved to exactly one
-  copy. The bundle half of this is still open: compare the six `.sppkg` sizes in the baseline table
-  against the post-bump rebuild.
+- **The bump collapsed a duplicate Fluent v9 in the lockfile, but that bought nothing in the
+  bundles.** `@pnp/spfx-controls-react` 3.25.0 and `@microsoft/sp-dialog` both pull
+  `@fluentui/react-migration-v8-v9`, which requires `@fluentui/react-components ^9.74.7`; against the
+  old `~9.72.10` that could not dedupe, so the lockfile carried 9.72.11 *and* 9.74.7. `~9.74.8`
+  satisfies both and `rush update` collapsed three copies (9.37.4, 9.72.11, 9.74.7) into two
+  (9.37.4, 9.74.8); `@fluentui/react-tabster` 9.26.18, `keyborg` 2.14.1 and `tabster` 8.8.1 each
+  resolved to exactly one copy. The remaining 9.37.4 is `pzl-react-reusable-components`, which slice 2
+  removes. The predicted *bundle* win did not happen, and the reason is worth recording so nobody
+  chases it again: `react-migration-v8-v9` does not appear in any `dist` bundle at all. The PnP
+  controls this repo actually uses never reach it, so webpack tree-shakes it, and the 9.74.7 copy only
+  ever existed in `node_modules`. Every bundle contained exactly one Fluent v9 before and after
+  (`fui-FluentProvider` occurs once per bundle). The dedupe is still worth having — one copy on disk,
+  and no way for a future control to drag in a second tabster — but it is hygiene, not size.
+- **The packages grew 1.1 %,** which is Fluent's own growth over two minors, not a regression. The
+  eight sub-packages this repo leans on hardest grew 19.6 % between the 9.72 and 9.74 dependency sets
+  (`react-menu` +37 KB, `react-positioning` +24 KB, `react-tree` +24 KB, `react-tabster` +17 KB,
+  `react-motion` +15 KB, `react-button` +14 KB, `react-dialog` +12 KB, `react-accordion` +8 KB
+  packed); tree-shaking means only a slice of that reaches a bundle, which is the +0.9 to +1.4 % seen
+  per solution. If bundle size becomes a goal in its own right, the levers are slice 2
+  (`pzl-react-reusable-components` carries a whole second React + Fluent v8 + Fluent v9) and slice 7
+  (dropping v8), not the Fluent version.
   `@fluentui/react-icons` was already resolving to 2.0.341 under `~2.0.317`, so that bump only moves
   the declared floor up to what is installed; `@fluentui/react-datepicker-compat` was likewise already
   at 0.6.37. `@fluentui/react-icons@2.0.314` under `@microsoft/sp-property-pane` stays separate and
@@ -237,5 +256,12 @@ Two things the lockfile made visible while checking the bump:
   is a confirm dialog with two buttons. ProgramWebParts declares it and never imports it. Replacing it
   with a v9 `Dialog` in the shared library is now part of slice 2.
 
-Not verified without a build and a tenant: bundle sizes after the bump, and the visual and focus
-behaviour of the v9 surfaces already in use (the tabster bump is the part most likely to show).
+`rush rebuild` is green: 8 min 46 s, exit 0, 11 operations (5 clean, 6 with warnings), tests included,
+zero errors. Both packaging guards hold — no `pp365-*` in any AMD `define([...])` header in any of the
+six solutions, `react-calendar-timeline_` is 0 in the timeline bundle and `accordionChevron_<hash>` is
+present in the project information bundle, so the CSS-module routing is intact. Coverage is unchanged
+from the baseline table, as expected with no source change.
+
+Still open: the visual and focus behaviour of the v9 surfaces already in use, which only a tenant can
+show. The tabster bump is the part most likely to surface there, and it affects v9 surfaces only — the
+v8 panels the browser suite already opens use v8's own `FocusTrapZone` and are not touched by it.
