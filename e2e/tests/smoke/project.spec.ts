@@ -39,8 +39,11 @@ test.describe('project site', () => {
     await webPartByAlias(page, 'ProjectInformation')
       .getByRole('button', { name: /vis all prosjektinformasjon|show all project information/i })
       .click()
+    // Scoped to the panel: the web part also renders a heading with this title.
     await expect(
-      page.getByRole('heading', { name: /^prosjektinformasjon$|^project information$/i })
+      page
+        .getByRole('dialog')
+        .getByRole('heading', { name: /^prosjektinformasjon$|^project information$/i })
     ).toBeVisible()
     await page.keyboard.press('Escape')
   })

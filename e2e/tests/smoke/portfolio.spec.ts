@@ -75,7 +75,9 @@ test.describe('portfolio hub', () => {
     // The filter panel's own root has no box, so the visible proof is its heading.
     // The level is deliberately not asserted: it is the panel implementation's
     // choice (v8 rendered an h1, the v9 drawer renders an h2) and not a contract.
-    await expect(page.getByRole('heading', { name: /^filtr|^filter/i })).toBeVisible()
+    await expect(
+      page.getByRole('dialog').getByRole('heading', { name: /^filtr|^filter/i })
+    ).toBeVisible()
     await page.keyboard.press('Escape')
   })
 
@@ -86,7 +88,9 @@ test.describe('portfolio hub', () => {
     // The filter panel's own root has no box, so the visible proof is its heading.
     // The level is deliberately not asserted: it is the panel implementation's
     // choice (v8 rendered an h1, the v9 drawer renders an h2) and not a contract.
-    await expect(page.getByRole('heading', { name: /^filtr|^filter/i })).toBeVisible()
+    await expect(
+      page.getByRole('dialog').getByRole('heading', { name: /^filtr|^filter/i })
+    ).toBeVisible()
     await page.keyboard.press('Escape')
   })
 

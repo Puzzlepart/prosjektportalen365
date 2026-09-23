@@ -43,7 +43,14 @@ export const BasePanel: FC<IBasePanelProps> = ({
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
-      <FluentProvider theme={customLightTheme} applyStylesToPortals={false}>
+      {/*
+        `applyStylesToPortals` must stay at its default of true. A modal drawer
+        renders in a portal, and with the flag off the portal receives none of
+        the theme's styles, so the panel renders invisible. The old v8 BasePanel
+        set it to false, but on a provider that sat *inside* the panel, where it
+        only affected nested portals such as callouts.
+      */}
+      <FluentProvider theme={customLightTheme}>
         <OverlayDrawer
           className={className}
           open={isOpen}
