@@ -1,4 +1,3 @@
-import { ContextualMenuItemType, IContextualMenuItem } from '@fluentui/react'
 import _ from 'lodash'
 import * as strings from 'PortfolioWebPartsStrings'
 import { indexOf } from 'underscore'
@@ -12,7 +11,7 @@ import {
 } from '../reducer'
 import { useEffect, useState } from 'react'
 import { MenuProps, useId } from '@fluentui/react-components'
-import { format } from 'pp365-shared-library'
+import { IMenuItem, format } from 'pp365-shared-library'
 
 /**
  * Component logic hook for `ColumnContextMenu`. Handles state and dispatches actions to the reducer.
@@ -93,7 +92,7 @@ export function useColumnContextMenu() {
       },
       {
         key: 'DIVIDER_01',
-        itemType: ContextualMenuItemType.Divider
+        itemType: 'divider'
       },
       {
         key: 'GROUP_BY',
@@ -106,7 +105,7 @@ export function useColumnContextMenu() {
       },
       {
         key: 'DIVIDER_02',
-        itemType: ContextualMenuItemType.Divider
+        itemType: 'divider'
       },
       {
         key: 'COLUMN_SETTINGS',
@@ -125,7 +124,7 @@ export function useColumnContextMenu() {
             },
             {
               key: 'DIVIDER_03',
-              itemType: ContextualMenuItemType.Divider
+              itemType: 'divider'
             },
             {
               key: 'SHOW_HIDE_COLUMNS',
@@ -143,7 +142,7 @@ export function useColumnContextMenu() {
           ]
         }
       }
-    ].filter(Boolean) as IContextualMenuItem[]
+    ].filter(Boolean) as IMenuItem[]
   }
 
   return columnContextMenu

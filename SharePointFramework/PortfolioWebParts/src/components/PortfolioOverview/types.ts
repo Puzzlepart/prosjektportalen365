@@ -1,4 +1,3 @@
-import { Target } from '@fluentui/react'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { ProgramItem } from 'models/ProgramItem'
 import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
@@ -265,7 +264,7 @@ export interface IPortfolioOverviewState extends Pick<
    * Column context menu contains the `column` and `target` (mouse event target)
    * that is used to show the context menu in the correct position.
    */
-  columnContextMenu?: { column: ProjectColumn; target: Target }
+  columnContextMenu?: { column: ProjectColumn; target: HTMLElement }
 
   /**
    * Column form panel props. Consists of two properties:

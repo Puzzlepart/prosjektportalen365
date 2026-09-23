@@ -1,4 +1,3 @@
-import { IProgressIndicatorProps } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import { ListLogger } from 'pp365-shared-library/lib/logging'
 import { sleep } from 'pp365-shared-library/lib/util'
@@ -7,6 +6,7 @@ import { IProjectInformationContext } from './context'
 import { IProjectInformationData, ProjectInformation } from './index'
 import { SET_PROGRESS } from './reducer'
 import resource from 'SharedResources'
+import { IProgressProps } from 'pp365-shared-library'
 
 interface IUsePropertiesSyncParams {
   /**
@@ -72,7 +72,7 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
    */
   const syncPropertyItemToHub = async (
     data = context.state.data,
-    progressFunc: (progress: IProgressIndicatorProps) => void = () => null
+    progressFunc: (progress: IProgressProps) => void = () => null
   ) => {
     const { fieldValues, templateParameters } = data
     await SPDataAdapter.syncPropertyItemToHub(

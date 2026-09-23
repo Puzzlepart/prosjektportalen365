@@ -1,10 +1,7 @@
 import {
   ConstrainMode,
-  DefaultButton,
   DetailsList,
   DetailsListLayoutMode,
-  DialogFooter,
-  PrimaryButton,
   SelectionMode
 } from '@fluentui/react'
 import { SPDataAdapter } from 'data'
@@ -19,6 +16,7 @@ import { FolderNavigation } from '../FolderNavigation'
 import { SET_SCREEN, SET_TARGET } from '../reducer'
 import columns from './columns'
 import styles from './TargetFolderScreen.module.scss'
+import { Button, DialogActions } from '@fluentui/react-components'
 
 export const TargetFolderScreen: FC = () => {
   const { state, dispatch } = useContext(DocumentTemplateDialogContext)
@@ -72,20 +70,21 @@ export const TargetFolderScreen: FC = () => {
           onItemInvoked={onFolderClick}
         />
       )}
-      <DialogFooter>
-        <PrimaryButton
-          text={strings.CopyHereText}
+      <DialogActions>
+        <Button
+          appearance='primary'
           disabled={folder === null}
           onClick={() => {
             dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.EditCopy }))
             dispatch(SET_TARGET({ folder: folder || root.url }))
           }}
-        />
-        <DefaultButton
-          text={strings.OnGoBackText}
-          onClick={() => dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select }))}
-        />
-      </DialogFooter>
+        >
+          {strings.CopyHereText}
+        </Button>
+        <Button onClick={() => dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select }))}>
+          {strings.OnGoBackText}
+        </Button>
+      </DialogActions>
     </div>
   )
 }

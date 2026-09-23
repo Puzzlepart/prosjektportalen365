@@ -1,5 +1,5 @@
-import { Icon, ProgressIndicator } from '@fluentui/react'
-import { Text, Divider, Button } from '@fluentui/react-components'
+import { Icon } from '@fluentui/react'
+import { Button, Divider, Field, ProgressBar, Text } from '@fluentui/react-components'
 import { ChevronDownRegular, ChevronUpRegular } from '@fluentui/react-icons'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { FC, useEffect, useState } from 'react'
@@ -54,14 +54,18 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
           />
         </div>
         <div className={styles.indicator}>
-          <ProgressIndicator
-            {...props.progressIndicator}
-            percentComplete={
-              props.totalSteps > 0
-                ? Math.min((props.currentStep ?? 0) + 1, props.totalSteps) / props.totalSteps
-                : undefined
-            }
-          />
+          <Field
+            label={props.progressIndicator?.label}
+            hint={props.progressIndicator?.description}
+          >
+            <ProgressBar
+              value={
+                props.totalSteps > 0
+                  ? Math.min((props.currentStep ?? 0) + 1, props.totalSteps) / props.totalSteps
+                  : undefined
+              }
+            />
+          </Field>
           {props.totalSteps > 0 && (
             <Text size={200} className={styles.stepCount}>
               {format(

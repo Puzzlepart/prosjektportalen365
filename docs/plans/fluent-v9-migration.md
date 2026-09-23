@@ -708,3 +708,39 @@ matching the two drawers already in the product (the footer assistant and the te
 catalog), and exposes the prop for the rare case that wants otherwise. Check the side by eye on every
 remaining panel this slice converts; only the `smallFixedFar` and `medium` panel types are in use and
 both are right-hand, so `end` is correct everywhere.
+
+**Slice 4's named families are done.** `Panel`, `PanelType`, `IPanelProps`, `ContextualMenu`,
+`ContextualMenuItemType`, `IContextualMenuItem`, `Target`, `Dialog`, `DialogType`, `DialogFooter`,
+`IDialogContentProps`, `ProgressIndicator`, `IProgressIndicatorProps`, `Breadcrumb` and
+`IBreadcrumbItem` are all gone from the repository, along with the last v8 `MessageBar` (a deep
+`@fluentui/react/lib/MessageBar` import the `MessageBarType` pass in slice 3 had missed — the web
+part now uses the shared `UserMessage` it already used in the sibling branch).
+
+**The same shape recurred three times: v8 types used as data models, not props.**
+`IContextualMenuItem`, `IProgressIndicatorProps` and `IBreadcrumbItem` were each being passed between
+hooks, reducers and data adapters rather than spread onto a component — in the menus' case the
+rendering was already v9 and only the item model was v8. Each is now a small explicit type in the
+shared library (`IMenuItem`, `IProgressProps`) or beside its component (`IFolderNavigationItem`),
+declaring the handful of fields actually set. That removed more v8 coupling than converting the
+rendering did, and it is worth looking for the same pattern in the list work.
+
+Feature gaps handled rather than dropped: v8's `maxDisplayedItems` on `Breadcrumb` has no v9 prop, but
+`partitionBreadcrumbItems` is Fluent's own helper for it, so the five-item limit survives. The v9
+`ProgressBar` has no label or description, so those moved to a wrapping `Field`.
+
+**Two `Callout` sites are deliberately left, because they are whole-component conversions:**
+`shared-library`'s `Autocomplete` (its `Callout` is entangled with v8 `SearchBox`, `List`,
+`FocusZone`) and `ColorConfigElement` (entangled with v8 `ColorPicker` and a `Slider` using
+`valueFormat`, inside the unreferenced `PropertyFieldColorConfiguration`). Picking off the `Callout`
+alone would leave both components substantially v8 while risking their positioning and focus
+behaviour.
+
+**Stock-take after slice 4.** 88 files still import v8, and they group cleanly: **lists** 77 imports
+(slice 6/7, by far the bulk), **icons** 15 (Decision G's file-type hold-out plus the `IIconProps` data
+models), **people picker** 10 (slice 5), and **37 uncategorised** — which is the useful part of this
+count, because the plan never assigned them. Those 37 are: the `ColumnDataTypeField` cluster deferred
+from slice 3 (~14), `Autocomplete` (7), the unreferenced `PropertyFieldColorConfiguration` (6), four
+list-adjacent leftovers (`LayerHost`, `ScrollbarVisibility`, `IScrollablePaneProps`,
+`IShimmeredDetailsListProps`), the two `ShimmeredDetailsList` wrappers deferred from slice 3, and a
+lone `DayOfWeek` in the `DatePicker` call site. `Autocomplete` in particular is a composite component
+no slice owns; it should be given one before slice 6 starts.

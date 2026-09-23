@@ -1,6 +1,7 @@
-import { IColumn, IContextualMenuItem } from '@fluentui/react'
+import { IColumn } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import styles from './List.module.scss'
+import { IMenuItem } from 'pp365-shared-library'
 
 /**
  * Hook for an add column used in a list for adding a new column and
@@ -43,7 +44,7 @@ export function useAddColumn(
     onToggleEditViewColumnsPanel: () => void,
     _isToggleColumnFormPanelDisabled = true,
     isToggleEditViewColumnsPanelDisabled = false
-  ): IContextualMenuItem[] => [
+  ): IMenuItem[] => [
     {
       key: 'TOGGLE_COLUMN_FORM_PANEL',
       text: strings.ToggleColumnFormPanelLabel,

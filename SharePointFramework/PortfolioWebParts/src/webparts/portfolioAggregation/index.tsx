@@ -5,14 +5,13 @@ import {
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { IMessageBarProps, MessageBar } from '@fluentui/react/lib/MessageBar'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { ISPHttpClientOptions, SPHttpClient } from '@microsoft/sp-http'
 import * as strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import React, { createElement } from 'react'
 import { render } from 'react-dom'
-import { ErrorWithIntent, UserMessage } from 'pp365-shared-library'
+import { ErrorWithIntent, IUserMessageProps, UserMessage } from 'pp365-shared-library'
 import {
   IPortfolioAggregationConfiguration,
   IPortfolioAggregationProps,
@@ -26,8 +25,11 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
 
   public render(): void {
     if (!this.properties.dataSource) {
-      this.renderComponent<IMessageBarProps>(MessageBar, {
-        children: <span>{strings.PortfolioAggregationNotConfiguredMessage}</span>
+      // The sibling branch below already renders a UserMessage; use it here too
+      // rather than the v8 MessageBar. `info` matches the v8 default appearance.
+      this.renderComponent<IUserMessageProps>(UserMessage, {
+        text: strings.PortfolioAggregationNotConfiguredMessage,
+        intent: 'info'
       })
       return
     }

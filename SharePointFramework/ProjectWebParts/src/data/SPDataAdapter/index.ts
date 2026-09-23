@@ -1,4 +1,3 @@
-import { IProgressIndicatorProps } from '@fluentui/react/lib/ProgressIndicator'
 import { LogLevel, Logger } from '@pnp/logging'
 import * as strings from 'ProjectWebPartsStrings'
 import {
@@ -26,6 +25,7 @@ import {
   ISPDataAdapterConfiguration
 } from './types'
 import resource from 'SharedResources'
+import { IProgressProps } from 'pp365-shared-library'
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService
@@ -178,7 +178,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     title: string,
     fieldValues: ItemFieldValues,
     templateParameters: Record<string, any>,
-    progressFunc: (props: IProgressIndicatorProps) => void
+    progressFunc: (props: IProgressProps) => void
   ): Promise<void> {
     if (!this.entityService) {
       throw new Error(

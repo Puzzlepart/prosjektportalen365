@@ -1,4 +1,3 @@
-import { ContextualMenuItemType, IContextualMenuItem } from '@fluentui/react'
 import _ from 'lodash'
 import strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared-library/lib/util/getObjectValue'
@@ -12,7 +11,7 @@ import {
 } from '../reducer'
 import { useAddColumn } from '../../List'
 import { MenuProps, useId } from '@fluentui/react-components'
-import { format } from 'pp365-shared-library'
+import { IMenuItem, format } from 'pp365-shared-library'
 
 /**
  * Hook for the column header context menu. Handles the logic for the context menu. Creates a context menu
@@ -64,7 +63,7 @@ export function useColumnContextMenu() {
       context.state.currentView?.isProgramView
     )
   } else {
-    const columnCustomSorts = column.data?.customSorts.map<IContextualMenuItem>(
+    const columnCustomSorts = column.data?.customSorts.map<IMenuItem>(
       (customSort, idx) => ({
         key: `CUSTOM_SORT_${idx}`,
         text: customSort.name,
@@ -110,10 +109,10 @@ export function useColumnContextMenu() {
           subMenuProps: {
             items: columnCustomSorts
           }
-        } as IContextualMenuItem),
+        } as IMenuItem),
       {
         key: 'DIVIDER_01',
-        itemType: ContextualMenuItemType.Divider
+        itemType: 'divider'
       },
       {
         key: 'GROUP_BY',
@@ -126,7 +125,7 @@ export function useColumnContextMenu() {
       },
       {
         key: 'DIVIDER_02',
-        itemType: ContextualMenuItemType.Divider
+        itemType: 'divider'
       },
       {
         key: 'COLUMN_SETTINGS',
@@ -143,7 +142,7 @@ export function useColumnContextMenu() {
             },
             {
               key: 'DIVIDER_03',
-              itemType: ContextualMenuItemType.Divider
+              itemType: 'divider'
             },
             {
               key: 'ADD_COLUMN',

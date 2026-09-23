@@ -1,8 +1,8 @@
-import { IContextualMenuItem } from '@fluentui/react'
 import { MenuProps } from '@fluentui/react-components'
 import { useContext, useEffect, useState } from 'react'
 import * as strings from 'ProjectWebPartsStrings'
 import { DynamicListContext } from '../../context'
+import { IMenuItem } from 'pp365-shared-library'
 
 /**
  * Hook for the column header context menu in DynamicList.
@@ -41,7 +41,7 @@ export function useColumnContextMenu() {
 
   const columnName = column.renderHeaderCell ? column.renderHeaderCell() : column.columnId
 
-  const menuItems: IContextualMenuItem[] = [
+  const menuItems: IMenuItem[] = [
     {
       key: 'GROUP_BY',
       text: strings.DynamicList.GroupByColumn.replace('{0}', columnName as string),
