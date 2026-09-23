@@ -1,9 +1,64 @@
-import { IPanelProps } from '@fluentui/react'
+import React from 'react'
 
-export interface IBasePanelProps<T extends string = string> extends IPanelProps {
+/**
+ * Size of the panel. Kept as the two values the repository actually used from
+ * the Fluent UI v8 `PanelType`, mapped onto the Fluent UI v9 drawer sizes.
+ */
+export type BasePanelSize = 'small' | 'medium' | 'large' | 'full'
+
+export interface IBasePanelProps<T extends string = string> {
+  /**
+   * Class name applied to the drawer.
+   */
+  className?: string
+
   /**
    * The type of the panel. Used for deciding if the
    * panel should be open or not.
    */
   $type?: T
+
+  /**
+   * Whether the panel is open.
+   */
+  isOpen?: boolean
+
+  /**
+   * Called when the panel should close, whether from the close button, a click
+   * outside or the Escape key.
+   */
+  onDismiss?: () => void
+
+  /**
+   * Text shown in the panel header.
+   */
+  headerText?: string
+
+  /**
+   * Width of the panel. Defaults to `medium`.
+   */
+  size?: BasePanelSize
+
+  /**
+   * Whether a click outside the panel closes it. Defaults to `true`.
+   */
+  isLightDismiss?: boolean
+
+  /**
+   * Accessible name for the close button.
+   */
+  closeButtonAriaLabel?: string
+
+  /**
+   * Renders the panel body. Kept as a render prop because that is how the v8
+   * `Panel` was used across the solutions; `children` works too.
+   */
+  onRenderBody?: () => React.ReactNode
+
+  /**
+   * Renders the panel footer.
+   */
+  onRenderFooterContent?: () => React.ReactNode
+
+  children?: React.ReactNode
 }

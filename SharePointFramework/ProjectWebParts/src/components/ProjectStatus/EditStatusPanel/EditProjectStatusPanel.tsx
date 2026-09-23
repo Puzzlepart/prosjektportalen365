@@ -24,7 +24,6 @@ export const EditStatusPanel: FC = () => {
         targetListId={reportListId}
         submit={submit}
         hiddenFields={['Title']}
-        onLightDismissClick={onDismiss}
         onDismiss={onDismiss}
       />
       <Toaster id='toaster-test' />

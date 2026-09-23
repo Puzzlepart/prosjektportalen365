@@ -176,7 +176,7 @@ Each slice is one PR-sized commit series on this branch, verified by `rush rebui
 | 5 | People picker | Shared wrapper per Decision B, seven call sites | scattered `NormalPeoplePicker` |
 | 6 | Lists, part 1 | Confine `DetailsList`/`IColumn` to the two hubs; convert renderers and toolbars around them; `DataGrid` for lists that need no grouping/sticky | `IColumn` outside the hubs |
 | 7 | Lists, part 2 | Decide per remaining list (`DataGrid` vs wrapped v8); `@fluentui/react` removed from every solution that is free | v8 in the web part solutions |
-| 8 | Lint close-out | Relaxed rules back to `error`, `allowWarningsInSuccessfulBuild` revisited, `Redux Toolkit` 2 / `xlsx` 0.18 / React-15-era peers evaluated with a one-line verdict each | tolerated warnings |
+| 8 | Lint close-out | Relaxed rules back to `error`, `allowWarningsInSuccessfulBuild` revisited, `Redux Toolkit` 2 / `xlsx` 0.18 / React-15-era peers evaluated with a one-line verdict each; decide the fate of the unreferenced `PropertyFieldColorConfiguration` and of the dormant column form panel (see the slice 2 and 3 logs) | tolerated warnings |
 
 Slices 3 to 6 are per solution internally: shared-library first (consumers compile against its `lib`), then ProjectExtensions, PortfolioExtensions, ProgramWebParts, ProjectWebParts, PortfolioWebParts.
 
@@ -625,3 +625,30 @@ onto `Skeleton`/`LoadingSkeleton`, and the form controls (`TextField`, `Toggle`,
 not mention: `shared-library/src/icons/index.tsx` uses the v8 `Icon` deliberately, as the
 `getFabricIcon` fallback that renders legacy MDL2 icon names. It cannot move to `getFluentIcon`
 without removing the fallback mechanism itself, so it stays on v8 until that fallback is retired.
+
+### Slice 4 — panels, menus and dialogs (2026-09-23, in progress)
+
+44 files in scope: 17 PortfolioWebParts, 12 ProjectWebParts, 10 ProjectExtensions, 5 shared-library.
+The prop surface is far smaller than that count suggests — across every panel in the repository only
+`isOpen`, `headerText`, `onDismiss`, `onRenderBody`, `onRenderFooterContent`, `isLightDismiss` and
+`type` are ever passed, and only two `PanelType` values are used at all (`medium` three times,
+`smallFixedFar` once), mapping onto the v9 drawer's `medium` and `small`.
+
+**`BasePanel` converted, and the call sites did not have to move.** It is the hub: `IBasePanelProps`
+used to extend `IPanelProps`, and both `CustomEditPanel` and `AllPropertiesPanel` build on it. It now
+renders a v9 `OverlayDrawer` behind the same v8 prop names, so consumers changed in only two places —
+`CustomEditPanel` dropped a v8 `styles={{ main: { overflow } }}` (the drawer body is the scroll
+container in v9, so the stylesheet owns it now) and `EditProjectStatusPanel` dropped
+`onLightDismissClick`, which is redundant because v9's `onOpenChange` fires for the close button,
+Escape and an outside click alike. `IBasePanelProps` is now self-contained rather than extending a
+Fluent prop type, which is what let the surface stay stable across the switch.
+
+**The v8 `Panel` was making the test suite pathologically slow.** `BasePanel.test.tsx` written
+against the v8 implementation took **774 seconds** for five cases; the same five take **6.3 seconds**
+on the v9 drawer. A 123x difference, from the v8 `Layer` portal under jsdom. Worth remembering as the
+remaining panels convert, and worth checking if any other suite is mysteriously slow.
+
+One thing the v8 baseline could not assert: `toBeVisible()` fails for content inside a v8 `Layer`
+because jsdom cannot resolve a computed visibility through that portal, even though the content is in
+the document. The tests assert presence instead, which is what actually matters for the conversion,
+and they pass on both implementations.

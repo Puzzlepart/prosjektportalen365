@@ -1,3 +1,10 @@
+// TODO: This property pane field is not wired up to anything. No web part imports
+// it, it is not in the components barrel, and the only references to its strings
+// outside this folder are the loc declarations. Kept because it may be needed
+// later; decide in the Fluent v9 phase's clean-up (slice 8) whether to wire it up
+// or delete it. Its controls were converted to Fluent UI v9 in slice 3, so it is
+// ready to use as it stands.
+
 import { IPropertyPaneField, PropertyPaneFieldType } from '@microsoft/sp-property-pane'
 import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'

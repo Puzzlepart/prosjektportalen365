@@ -4,3 +4,15 @@
   gap: 16px;
   padding: 20px 24px;
 }
+
+.body {
+  // The v8 Panel set `main { overflow: hidden }` at one call site; the drawer
+  // body is the scroll container in v9, so it owns the overflow instead.
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.footer {
+  display: flex;
+  gap: 8px;
+}

@@ -17,11 +17,6 @@ export const CustomEditPanel: FC<ICustomEditPanelProps> = (props) => {
       <BasePanel
         {...props}
         className={styles.customEditPanel}
-        styles={{
-          main: {
-            overflow: 'hidden'
-          }
-        }}
         onRenderFooterContent={() => (
           <CustomEditPanelFooter isSaveDisabled={context.isSaveDisabled()} />
         )}
