@@ -40,7 +40,7 @@ test.describe('project site', () => {
       .getByRole('button', { name: /vis all prosjektinformasjon|show all project information/i })
       .click()
     await expect(
-      page.getByRole('heading', { name: /^prosjektinformasjon$|^project information$/i, level: 1 })
+      page.getByRole('heading', { name: /^prosjektinformasjon$|^project information$/i })
     ).toBeVisible()
     await page.keyboard.press('Escape')
   })

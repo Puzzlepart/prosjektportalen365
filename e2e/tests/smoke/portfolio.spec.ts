@@ -72,9 +72,10 @@ test.describe('portfolio hub', () => {
     await firstProjectLink.click({ trial: true })
     // The filter toolbar button must open its panel and close again.
     await page.locator(WEB_PART).first().getByRole('button', { name: /^filtrer$|^filter$/i }).click()
-    // The filter panel is a Fluent v8 Panel: its role=dialog root has no box of its own, so the
-    // visible proof is the panel heading.
-    await expect(page.getByRole('heading', { name: /^filtr|^filter/i, level: 1 })).toBeVisible()
+    // The filter panel's own root has no box, so the visible proof is its heading.
+    // The level is deliberately not asserted: it is the panel implementation's
+    // choice (v8 rendered an h1, the v9 drawer renders an h2) and not a contract.
+    await expect(page.getByRole('heading', { name: /^filtr|^filter/i })).toBeVisible()
     await page.keyboard.press('Escape')
   })
 
@@ -82,9 +83,10 @@ test.describe('portfolio hub', () => {
     await openPage(await resolvePage(hub, PAGES.benefits))
     await expect(webPart(page, /nytte|benefit/i).first()).toBeVisible()
     await page.locator(WEB_PART).first().getByRole('button', { name: /^filtrer$|^filter$/i }).click()
-    // The filter panel is a Fluent v8 Panel: its role=dialog root has no box of its own, so the
-    // visible proof is the panel heading.
-    await expect(page.getByRole('heading', { name: /^filtr|^filter/i, level: 1 })).toBeVisible()
+    // The filter panel's own root has no box, so the visible proof is its heading.
+    // The level is deliberately not asserted: it is the panel implementation's
+    // choice (v8 rendered an h1, the v9 drawer renders an h2) and not a contract.
+    await expect(page.getByRole('heading', { name: /^filtr|^filter/i })).toBeVisible()
     await page.keyboard.press('Escape')
   })
 

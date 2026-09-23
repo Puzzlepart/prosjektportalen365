@@ -45,13 +45,15 @@ export const BasePanel: FC<IBasePanelProps> = ({
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme} applyStylesToPortals={false}>
         <OverlayDrawer
-          className={[className, styles.root].filter(Boolean).join(' ')}
+          className={className}
           open={isOpen}
           size={size}
           position={position}
-          // `modalType` is how v9 expresses light dismiss: a modal drawer keeps
-          // focus and ignores clicks outside, an alert drawer does not dismiss.
-          modalType={isLightDismiss ? 'non-modal' : 'alert'}
+          // Both branches are modal on purpose. A `non-modal` drawer renders
+          // inline, so it stays inside the web part's stacking context and ends
+          // up behind it; only a modal drawer portals out. `modal` dismisses on
+          // a click on the dimmed background, `alert` requires an action.
+          modalType={isLightDismiss ? 'modal' : 'alert'}
           onOpenChange={(_event, data) => {
             if (!data.open) onDismiss?.()
           }}
