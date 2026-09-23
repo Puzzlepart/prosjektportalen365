@@ -652,3 +652,13 @@ One thing the v8 baseline could not assert: `toBeVisible()` fails for content in
 because jsdom cannot resolve a computed visibility through that portal, even though the content is in
 the document. The tests assert presence instead, which is what actually matters for the conversion,
 and they pass on both implementations.
+
+**A trap the tests could not catch: the drawer opens on the wrong side by default.** The v8 `Panel`
+always slid in from the right; the v9 `OverlayDrawer` defaults to `position='start'`, the left. The
+conversion therefore moved both converted panels to the left-hand side, which the tests had no way of
+seeing — position is a visual concern, and Decision D forbids asserting on Fluent internals, so there
+is no clean hook for it. Caught by looking at the tenant. `BasePanel` now defaults to `position='end'`,
+matching the two drawers already in the product (the footer assistant and the template package
+catalog), and exposes the prop for the rare case that wants otherwise. Check the side by eye on every
+remaining panel this slice converts; only the `smallFixedFar` and `medium` panel types are in use and
+both are right-hand, so `end` is correct everywhere.

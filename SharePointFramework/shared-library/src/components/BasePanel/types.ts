@@ -40,6 +40,13 @@ export interface IBasePanelProps<T extends string = string> {
   size?: BasePanelSize
 
   /**
+   * Which edge the panel slides in from. Defaults to `end`, the right-hand
+   * side, which is where the v8 `Panel` always opened and where the other
+   * drawers in the solutions open.
+   */
+  position?: 'start' | 'end' | 'bottom'
+
+  /**
    * Whether a click outside the panel closes it. Defaults to `true`.
    */
   isLightDismiss?: boolean

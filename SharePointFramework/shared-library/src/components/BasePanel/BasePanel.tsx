@@ -28,6 +28,7 @@ export const BasePanel: FC<IBasePanelProps> = ({
   onDismiss,
   headerText,
   size = 'medium',
+  position = 'end',
   isLightDismiss = true,
   closeButtonAriaLabel = strings.CloseText,
   onRenderBody,
@@ -45,6 +46,7 @@ export const BasePanel: FC<IBasePanelProps> = ({
           className={[className, styles.root].filter(Boolean).join(' ')}
           open={isOpen}
           size={size}
+          position={position}
           // `modalType` is how v9 expresses light dismiss: a modal drawer keeps
           // focus and ignores clicks outside, an alert drawer does not dismiss.
           modalType={isLightDismiss ? 'non-modal' : 'alert'}
