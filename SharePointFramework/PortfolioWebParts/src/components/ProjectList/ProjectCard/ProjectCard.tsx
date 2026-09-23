@@ -1,5 +1,4 @@
-import { Shimmer, ShimmerElementsGroup, ShimmerElementType } from '@fluentui/react'
-import { Card, Tooltip } from '@fluentui/react-components'
+import { Card, Skeleton, SkeletonItem, Tooltip } from '@fluentui/react-components'
 import { DismissCircle20Regular } from '@fluentui/react-icons'
 import strings from 'PortfolioWebPartsStrings'
 import React, { FC, useContext } from 'react'
@@ -15,24 +14,20 @@ export const ProjectCard: FC = (props) => {
   const { isDataLoaded, setIsImageLoaded } = useProjectCard()
   const phase = context.project?.phase ? context.project.phase : strings.NotSet
 
-  return (
-    <Shimmer
-      className={styles.root}
-      isDataLoaded={isDataLoaded}
-      customElementsGroup={
+  if (!isDataLoaded) {
+    return (
+      <div className={styles.root}>
         <div className={styles.shimmerGroup}>
-          <ShimmerElementsGroup
-            shimmerElements={[
-              {
-                type: ShimmerElementType.line,
-                width: '100%',
-                height: 274
-              }
-            ]}
-          />
+          <Skeleton>
+            <SkeletonItem style={{ width: '100%', height: 274 }} />
+          </Skeleton>
         </div>
-      }
-    >
+      </div>
+    )
+  }
+
+  return (
+    <div className={styles.root}>
       <Card
         className={styles.card}
         {...props}
@@ -58,6 +53,6 @@ export const ProjectCard: FC = (props) => {
         <ProjectCardContent />
         <ProjectCardFooter />
       </Card>
-    </Shimmer>
+    </div>
   )
 }

@@ -1,4 +1,4 @@
-import { Shimmer, ShimmerElementType } from '@fluentui/react'
+import { Skeleton, SkeletonItem } from '@fluentui/react-components'
 import { ProjectListModel } from 'pp365-shared-library'
 import React, { FC, useMemo } from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
@@ -115,12 +115,9 @@ export function useProjectListRenderer({
           return (
             <div className={styles.listSkeleton} role='presentation' aria-busy='true'>
               {Array.from({ length: 8 }).map((_, i) => (
-                <Shimmer
-                  key={`list-skeleton-${i}`}
-                  shimmerElements={[
-                    { type: ShimmerElementType.line, width: '100%', height: rowHeight }
-                  ]}
-                />
+                <Skeleton key={`list-skeleton-${i}`}>
+                  <SkeletonItem style={{ width: '100%', height: rowHeight }} />
+                </Skeleton>
               ))}
             </div>
           )

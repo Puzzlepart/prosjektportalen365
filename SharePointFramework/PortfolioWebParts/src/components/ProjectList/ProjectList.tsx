@@ -1,3 +1,4 @@
+import { Skeleton, SkeletonItem } from '@fluentui/react-components'
 import {
   FluentProvider,
   IdPrefixProvider,
@@ -14,7 +15,6 @@ import {
   useIsOverflowItemVisible,
   useOverflowMenu
 } from '@fluentui/react-components'
-import { Shimmer, ShimmerElementType } from '@fluentui/react'
 import { MoreHorizontalRegular } from '@fluentui/react-icons'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
@@ -150,11 +150,9 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
                   {Array.from({
                     length: Math.max(context.verticals.length, 3)
                   }).map((_, i) => (
-                    <Shimmer
-                      key={`tab-skeleton-${i}`}
-                      shimmerElements={[{ type: ShimmerElementType.line, width: 140, height: 36 }]}
-                      styles={{ root: { width: 140 } }}
-                    />
+                    <Skeleton key={`tab-skeleton-${i}`} style={{ width: 140 }}>
+                      <SkeletonItem style={{ width: 140, height: 36 }} />
+                    </Skeleton>
                   ))}
                 </div>
               )}

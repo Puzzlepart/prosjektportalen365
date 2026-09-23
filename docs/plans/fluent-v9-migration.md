@@ -571,6 +571,35 @@ file-type icons. The options are to keep `@fluentui/react` in the two solutions 
 replace them with a mapping onto the Fluent v9 catalog (losing the distinct Office file-type
 glyphs), or to render the file-type icons as images from the CDN the package already points at.
 
+**Shimmer, done.** The v8 `Shimmer` is gone from the repository. Five render sites moved to v9
+`Skeleton`/`SkeletonItem` keeping their exact dimensions (the 140x36 tab placeholders in
+`ProjectList`, the full-width row placeholders in `useProjectListRenderer`, the 274px card placeholder
+in `ProjectCard`) and two wrapper sites in ProjectStatus became a conditional `LoadingSkeleton`.
+`IShimmerProps` is gone too: it was only ever used as `Pick<IShimmerProps, 'isDataLoaded'>` in three
+interfaces, which now declare the boolean themselves.
+
+`LoadingSkeleton` gained an optional `rows` prop, defaulting to the three rows it has always
+rendered so no existing call site changes. `Commands` asks for one row, because a three-row, 32px
+padded placeholder standing in for a single toolbar moves the page far more than the real content
+does. Two cases added to its test.
+
+Two files keep the v8 `Shimmer` deliberately: `ListSection` and `UncertaintySection` wrap a
+`ShimmeredDetailsList`, and converting the outer shimmer while the inner list keeps its own would give
+one component two different loading placeholders. They convert with the list, in slice 6.
+
+**Form controls: mostly simple, with one cluster that is not.** 28 files touch them. Most are direct
+swaps (`Spinner`, `Toggle` → `Switch`, `DefaultButton`/`PrimaryButton` → `Button`, `Link`, `Label`) or
+type-only (`ITextFieldProps`, `IDropdownOption`). The exception is
+`shared-library/src/components/ItemColumn/ColumnDataTypeField`, which is a sub-system rather than a
+control: a v8 `Dropdown` (already carrying a `TODO: Use new Combobox from Fluent UI 9`), an
+`ISelectableOption`-based option model with icon props, an `IRenderFunction` custom option renderer,
+and a `ColumnDataTypePropertyField(type, props)` factory that five `ItemColumn` renderers feed v8
+`TextField`/`Toggle` into. Its own type already defaults to the v9 `InputProps | SwitchProps`, so the
+abstraction was half-migrated and the call sites were left behind. Converting it means moving the
+option model and the render function to v9 and translating the props at all five call sites, since
+v9 `Input` has no `label`, `multiline` or `description`. It is best treated as its own piece of work
+alongside the `ItemColumn` renderers in slice 6 rather than as an "easy component".
+
 **Still to do in this slice:** `Icon` and `IIconProps` (11 files) onto `getFluentIcon`, `Shimmer` (7)
 onto `Skeleton`/`LoadingSkeleton`, and the form controls (`TextField`, `Toggle`, `Slider`, `Checkbox`,
 `Dropdown`, `DefaultButton`/`PrimaryButton`, `Link`, `Label`, `Spinner`). One constraint the plan does
