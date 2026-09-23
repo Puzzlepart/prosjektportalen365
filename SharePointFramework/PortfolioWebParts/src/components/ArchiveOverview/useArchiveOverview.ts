@@ -1,5 +1,5 @@
 import { IColumn } from '@fluentui/react'
-import { customLightTheme, IFilterPanelProps, ListMenuItem } from 'pp365-shared-library'
+import { IFilterPanelProps, ListMenuItem } from 'pp365-shared-library'
 import { IFilterItemProps, IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import strings from 'PortfolioWebPartsStrings'
@@ -7,24 +7,6 @@ import React, { useMemo, useState } from 'react'
 import { useColumnResize } from './useColumnResize'
 import { IArchiveOverviewProps } from './types'
 import { useArchiveData } from './useArchiveData'
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function scaleThemeFonts(theme: any, factor: number): any {
-  const scaled: Record<string, string> = {}
-  for (const key of Object.keys(theme)) {
-    const val: unknown = theme[key]
-    if (
-      (key.startsWith('fontSize') || key.startsWith('lineHeight')) &&
-      typeof val === 'string' &&
-      val.endsWith('px')
-    ) {
-      scaled[key] = `${Math.round(parseFloat(val) * factor)}px`
-    }
-  }
-  return { ...theme, ...scaled }
-}
-
-export const scaledTheme = scaleThemeFonts(customLightTheme, 1.3)
 
 const ACTIVITY_ORDER: Record<string, number> = { high: 3, medium: 2, low: 1, none: 0 }
 const STATUS_ORDER: Record<string, number> = { updated: 3, warning: 2, failed: 1, never: 0 }
