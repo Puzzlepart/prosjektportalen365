@@ -136,11 +136,6 @@ export interface IProjectInformationState extends IBaseWebPartComponentState<IPr
   message?: IUserMessageProps
 
   /**
-   * Confirm action props
-   */
-  confirmActionProps?: any
-
-  /**
    * Is the project a parent project
    */
   isParentProject?: boolean

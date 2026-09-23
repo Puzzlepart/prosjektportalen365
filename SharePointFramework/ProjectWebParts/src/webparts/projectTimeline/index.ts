@@ -6,7 +6,6 @@ import {
 } from '@microsoft/sp-property-pane'
 import { IProjectTimelineProps } from 'components/ProjectTimeline'
 import { ProjectTimeline } from 'components/ProjectTimeline/ProjectTimeline'
-import '@fluentui/react/dist/css/fabric.min.css'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
 import * as strings from 'ProjectWebPartsStrings'
 import resource from 'SharedResources'

@@ -15,7 +15,6 @@ import {
 } from '@pnp/spfx-property-controls/lib/PropertyFieldCollectionData'
 import { IDynamicListProps, DynamicListMode, WebContextMode } from 'components/DynamicList'
 import { DynamicList } from 'components/DynamicList/DynamicList'
-import '@fluentui/react/dist/css/fabric.min.css'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
 import * as strings from 'ProjectWebPartsStrings'
 import SPDataAdapter from '../../data'

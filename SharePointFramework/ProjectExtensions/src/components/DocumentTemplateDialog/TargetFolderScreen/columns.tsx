@@ -3,7 +3,7 @@ import {
   FileIconType,
   getFileTypeIconProps,
   initializeFileTypeIcons
-} from '@uifabric/file-type-icons'
+} from '@fluentui/react-file-type-icons'
 import * as ProjectExtensionsStrings from 'ProjectExtensionsStrings'
 import { getId, SPFolder } from 'pp365-shared-library'
 import React from 'react'

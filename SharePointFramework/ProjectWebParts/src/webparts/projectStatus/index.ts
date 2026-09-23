@@ -1,4 +1,3 @@
-import '@fluentui/react/dist/css/fabric.min.css'
 import {
   IPropertyPaneConfiguration,
   PropertyPaneDropdown,

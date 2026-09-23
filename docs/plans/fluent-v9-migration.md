@@ -384,3 +384,62 @@ fail**, zero errors. Both packaging guards hold: no `pp365-*` external in any AM
 the six solutions, `react-calendar-timeline_` is 0 in the timeline bundle and `accordionChevron_<hash>`
 is present in the project information bundle. Package sizes are unchanged against slice 0 except
 ProjectExtensions, which drops 4 KB with `@uifabric/utilities` gone (26 948 KB total, −4 KB).
+
+### Slice 2 — hygiene (2026-09-22)
+
+Three of the five items turned out to be smaller than the plan assumed, and one assumption in the
+plan was simply wrong. Worth reading before trusting the remaining slice descriptions.
+
+**`fabric.min.css` was already dead, and `SummarySection.module.scss` never needed rewriting.**
+The plan said to remove the five `fabric.min.css` imports *after* replacing the `ms-Grid` mixins in
+`SummarySection.module.scss` with flex/grid CSS. Those are two unrelated things. The `ms-Grid`,
+`ms-sm12` and `ms-xl8` in that file are **Sass mixins** from `dist/sass/References.scss`, which the
+compiler inlines — the built `SummarySection.module.scss.css` contains the emitted `float`,
+`width: 66.6666666667%` and clearfix rules scoped to the hashed module classes, with no runtime
+dependency on anything. `fabric.min.css` is a separate, **runtime** stylesheet, and it has not been
+loaded since the Heft migration: `@fluentui/react` 8.106.4 declares
+`"sideEffects": ["*.scss*", "lib/version.js"]`, `.css` is not in that list, so webpack 5 tree-shakes a
+CSS-only import of it away. Verified in the output rather than argued: no bundle in any solution
+contains fabric-core CSS text (`ms-bgColor-themePrimary`, `.ms-Grid{`, the Fabric licence header), and
+the five web parts that imported it are no different from the one that did not. Removing the imports
+is therefore a provable no-op, the Sass file is untouched, and nothing depended on the stylesheet —
+which is also why nobody noticed it disappearing in Phase 1.
+
+**`pzl-spfx-components` was dead code, not a conversion.** Its only use was
+`{context.state.confirmActionProps && <ConfirmDialog {...context.state.confirmActionProps} />}` in
+`ProjectInformation.tsx`. `confirmActionProps` is typed `any`, is declared in the state interface, and
+is **never assigned** — not in the reducer, not through a dynamic key, nowhere in the repo. The guard
+was always falsy and the dialog never rendered. Import, render line, state field and dependency all
+deleted. This also means the `office-ui-fabric-react` compat alias added in Phase 1 existed solely to
+resolve imports inside a component that could never render.
+
+**Both webpack aliases are gone**, along with the code that applied them: `COMPAT_ALIASES` (only ever
+`office-ui-fabric-react`) and `UNEXPORTED_SUBPATH_ALIASES` (only ever `@fluentui/react/dist/css`) are
+removed from all six identical `config/spfx-customize-webpack.js`, with their doc comments. The six
+files remain byte-identical and each passes `node --check`.
+
+**`@uifabric/file-type-icons` → `@fluentui/react-file-type-icons` ~8.16.0** in the three
+ProjectExtensions files that used it; all four imported symbols (`FileIconType`,
+`getFileTypeIconProps`, `IFileTypeIconOptions`, `initializeFileTypeIcons`) exist unchanged in the new
+package. **`@uifabric/*` no longer appears anywhere in the repository.**
+
+**`pzl-react-reusable-components` replaced by a shared v9 dialog.** `useConfirmationDialog` now lives
+in `shared-library/src/components/ConfirmDialog`, built on the v9 `Dialog` and wrapped in
+`IdPrefixProvider` + `FluentProvider` with `customLightTheme` per the repo convention. The API is
+deliberately identical to the package it replaces (`[element, getResponse]`, the same
+`[label, value, isPrimary]` response tuples), so the two call sites changed only their import. One
+behavioural detail was made explicit rather than inherited: dismissing the dialog with Escape or a
+click outside resolves `undefined`, not the first response, so a dismissed confirmation can never
+carry out a destructive action.
+
+**What the dependency removals bought, measured in the lockfile:** `@fluentui/react-components` went
+from two copies to one (9.37.4 gone), `@fluentui/react` from three to two (8.97.0 gone), and the
+second React (17.0.2) disappeared entirely. All three were dragged in by
+`pzl-react-reusable-components`, which declared them as exact hard dependencies.
+
+**Testing.** `ColumnFormPanelFooter` gained a seven-case component test covering the footer's whole
+contract, including that deleting is gated behind the confirmation and that dismissing it does not
+delete. Honest caveat on Decision D: the test was written against the old implementation's contract
+but never got a green run against it, because the targeted build failed on `pzl-spfx-components`
+resolving through a stale `pp365-projectwebparts/lib`. It therefore characterises the new dialog. The
+assertions are role- and text-based, so they would have held for either implementation.

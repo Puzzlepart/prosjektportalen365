@@ -37,7 +37,7 @@
     "@pnp/sp": "4.21.0",
     "@pnp/graph": "4.21.0",
     "@reduxjs/toolkit": "~1.9.5",
-    "@uifabric/file-type-icons": "7.6.27",
+    "@fluentui/react-file-type-icons": "~8.16.0",
     "msgraph-helper": "0.8.3",
     "pp365-shared-library": "workspace:*",
     "react": "17.0.1",
