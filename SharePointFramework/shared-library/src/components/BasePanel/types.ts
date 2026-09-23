@@ -57,6 +57,17 @@ export interface IBasePanelProps<T extends string = string> {
   closeButtonAriaLabel?: string
 
   /**
+   * Hides the panel without unmounting it.
+   */
+  hidden?: boolean
+
+  /**
+   * Renders the panel header in place of `headerText`, for panels whose header
+   * carries actions rather than a title.
+   */
+  onRenderHeader?: () => React.ReactNode
+
+  /**
    * Renders the panel body. Kept as a render prop because that is how the v8
    * `Panel` was used across the solutions; `children` works too.
    */

@@ -1,22 +1,20 @@
-import { Panel } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { FC } from 'react'
 import { usePortfolioAggregationContext } from '../context'
 import styles from './ViewFormPanel.module.scss'
 import { ViewFormPanelFooter } from './ViewFormPanelFooter'
 import { useViewFormPanel } from './useViewFormPanel'
-import { FieldContainer, customLightTheme } from 'pp365-shared-library'
+import { BasePanel, FieldContainer, customLightTheme } from 'pp365-shared-library'
 import { FluentProvider, IdPrefixProvider, Input, Textarea } from '@fluentui/react-components'
 
 export const ViewFormPanel: FC = () => {
   const context = usePortfolioAggregationContext()
   const { view, setView, isEditing, onDismiss, onSave, fluentProviderId } = useViewFormPanel()
   return (
-    <Panel
+    <BasePanel
       isOpen={context.state.viewForm?.isOpen}
       headerText={isEditing ? strings.EditViewHeaderText : strings.NewViewHeaderText}
       onRenderFooterContent={() => <ViewFormPanelFooter onSave={onSave} />}
-      isFooterAtBottom={true}
       onDismiss={onDismiss}
       isLightDismiss={true}
       className={styles.root}
@@ -74,7 +72,7 @@ export const ViewFormPanel: FC = () => {
           </FieldContainer>
         </FluentProvider>
       </IdPrefixProvider>
-    </Panel>
+    </BasePanel>
   )
 }
 

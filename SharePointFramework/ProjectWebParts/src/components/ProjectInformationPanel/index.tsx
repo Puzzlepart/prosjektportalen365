@@ -1,9 +1,9 @@
-import { Panel, PanelType } from '@fluentui/react'
 import React, { FC, useEffect } from 'react'
 import { useBoolean } from 'usehooks-ts'
 import { ProjectInformation } from '../ProjectInformation'
 import { IProjectInformationPanelProps } from './types'
 import styles from './ProjectInformationPanel.module.scss'
+import { BasePanel } from 'pp365-shared-library'
 
 export const ProjectInformationPanel: FC<IProjectInformationPanelProps> = (props) => {
   const panelState = useBoolean(!props.hidden)
@@ -16,15 +16,15 @@ export const ProjectInformationPanel: FC<IProjectInformationPanelProps> = (props
     <>
       {props.children}
       {props.onRenderToggleElement && props.onRenderToggleElement(panelState.toggle)}
-      <Panel
+      <BasePanel
         isOpen={panelState.value}
-        type={PanelType.medium}
+        size={'medium'}
         isLightDismiss={true}
         onDismiss={panelState.setFalse}
         {...props.panelProps}
       >
         <ProjectInformation {...props} className={styles.projectInformation} />
-      </Panel>
+      </BasePanel>
     </>
   )
 }

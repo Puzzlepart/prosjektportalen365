@@ -1,11 +1,10 @@
-import { Panel } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import styles from './ColumnFormPanel.module.scss'
 import { useColumnFormPanel } from './useColumnFormPanel'
 import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
-import { ColumnSearchPropertyField, FieldContainer, customLightTheme } from 'pp365-shared-library'
+import { BasePanel, ColumnSearchPropertyField, FieldContainer, customLightTheme } from 'pp365-shared-library'
 import { ColumnDataTypeField } from 'pp365-shared-library/lib/components/ItemColumn/ColumnDataTypeField'
 import {
   Combobox,
@@ -36,7 +35,7 @@ export const ColumnFormPanel: FC = () => {
   if (!context) return null
 
   return (
-    <Panel
+    <BasePanel
       isOpen={context.state.columnForm.isOpen}
       headerText={isEditing ? strings.EditColumnHeaderText : strings.NewColumnHeaderText}
       onRenderFooterContent={() => (
@@ -47,11 +46,9 @@ export const ColumnFormPanel: FC = () => {
           isSaveDisabled={isSaveDisabled}
         />
       )}
-      isFooterAtBottom={true}
       onDismiss={onDismiss}
       isLightDismiss={true}
       className={styles.root}
-      styles={{ commands: { paddingBottom: 12 } }}
     >
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme} className={styles.content}>
@@ -207,7 +204,7 @@ export const ColumnFormPanel: FC = () => {
           </FieldContainer>
         </FluentProvider>
       </IdPrefixProvider>
-    </Panel>
+    </BasePanel>
   )
 }
 

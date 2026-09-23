@@ -31,6 +31,8 @@ export const BasePanel: FC<IBasePanelProps> = ({
   position = 'end',
   isLightDismiss = true,
   closeButtonAriaLabel = strings.CloseText,
+  onRenderHeader,
+  hidden,
   onRenderBody,
   onRenderFooterContent,
   children,
@@ -54,7 +56,7 @@ export const BasePanel: FC<IBasePanelProps> = ({
             if (!data.open) onDismiss?.()
           }}
         >
-          <DrawerHeader>
+          <DrawerHeader hidden={hidden}>
             <DrawerHeaderTitle
               action={
                 <Button
@@ -65,7 +67,7 @@ export const BasePanel: FC<IBasePanelProps> = ({
                 />
               }
             >
-              {headerText}
+              {onRenderHeader ? onRenderHeader() : headerText}
             </DrawerHeaderTitle>
           </DrawerHeader>
           <DrawerBody className={styles.body}>

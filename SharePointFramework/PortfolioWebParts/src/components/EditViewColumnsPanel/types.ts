@@ -1,5 +1,6 @@
-import { IColumn, IPanelProps } from '@fluentui/react'
+import { IColumn } from '@fluentui/react'
 import { ButtonProps } from '@fluentui/react-components'
+import { IBasePanelProps } from 'pp365-shared-library'
 
 interface IRevertOrderButtonProps extends Omit<ButtonProps, 'onClick'> {
   /**
@@ -10,7 +11,13 @@ interface IRevertOrderButtonProps extends Omit<ButtonProps, 'onClick'> {
   onClick(columns: IColumn[]): void
 }
 
-export interface IEditViewColumnsPanelProps extends IPanelProps {
+export interface IEditViewColumnsPanelProps extends IBasePanelProps {
+  /**
+   * Title shown above the column list. Previously inherited from the Fluent UI
+   * v8 `IPanelProps`.
+   */
+  title?: string
+
   /**
    * Callback to call when the user clicks the save button.
    *

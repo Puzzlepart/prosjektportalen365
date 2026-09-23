@@ -137,6 +137,33 @@ Coverage is measured, not guessed: Heft writes `jest-output/coverage` for every 
 
 Flaky or slow tests are a defect of the test: the first Fluent import in a test file costs 15 to 45 seconds, so tests are grouped per feature folder, and any test that needs a retry is fixed or removed, never retried.
 
+### H. `BasePanel` keeps its name; its props are modernised at the end of slice 4 (decided 2026-09-23)
+
+`BasePanel` now renders a v9 `OverlayDrawer`, which raises the question of renaming it to
+`BaseDrawer` and sweeping "Panel" out of the vocabulary. Measured first: **610 occurrences of "Panel"
+across 154 files**, 8 stylesheets and about ten localisation keys (`FilterPanelEmptyMessage`,
+`NewRiskActionPanelTitle`, `EditViewColumnsPanelHeaderText` and friends), plus 15 uses of
+`AccordionPanel`, which is a Fluent v9 component name and must not be swept up.
+
+Rule, in three parts:
+
+1. **Keep the name `BasePanel`.** It is a domain name — the side panel every feature opens — not a
+   claim about the implementation. It just absorbed an entire framework swap with two line changes at
+   its call sites, which is the abstraction doing its job; renaming it to match the current
+   implementation would leak that detail into the name and invite another rename at Fluent v10. The
+   Norwegian UI calls these panels as well.
+2. **Modernise the props once every panel routes through it**, as the closing step of slice 4:
+   `isOpen` → `open`, `onDismiss` → `onClose`, and the `onRenderBody` / `onRenderFooterContent`
+   render props → children and a `footer` slot. Render props for body content are a v8 idiom. Roughly
+   ten call sites, mechanical, and cheaper in one pass than piecemeal later. Keeping the v8 names
+   during the conversion is what made it cheap; keeping them forever is not the goal.
+3. **No repo-wide "Panel" → "Drawer" rename.** A 610-occurrence cosmetic diff inside a functional
+   migration is exactly what the Phase 1 handoff warns against, and the localisation keys would drag
+   the triad in every solution through `validate-loc` for no user-visible benefit.
+
+Timing is part of the decision: eight panels still render a v8 `Panel`, so any renaming before they
+are converted would produce names that describe the wrong thing.
+
 ### G. File type icons keep Fluent v8, and the definition of done makes room for it (decided 2026-09-23)
 
 `@fluentui/react-file-type-icons` produces props for the Fluent UI v8 `Icon`, and Fluent v9 has no
@@ -652,6 +679,25 @@ One thing the v8 baseline could not assert: `toBeVisible()` fails for content in
 because jsdom cannot resolve a computed visibility through that portal, even though the content is in
 the document. The tests assert presence instead, which is what actually matters for the conversion,
 and they pass on both implementations.
+
+**All nine panels are converted.** `FilterPanel` routes through `BasePanel` (dropping its own
+duplicated `IdPrefixProvider`/`FluentProvider`, which `BasePanel` supplies), and the seven consumer
+panels — the two `ColumnFormPanel`s, the two `ViewFormPanel`s, `EditViewColumnsPanel`,
+`ProjectInformationPanel` and `NewRiskActionPanel` — now render `BasePanel` instead of a v8 `Panel`.
+The v8 `Panel`, `PanelType` and `IPanelProps` are gone from the repository.
+
+The compiler surfaced four things the call sites had been leaning on, each resolved rather than
+papered over:
+
+- `isFooterAtBottom={true}` at four sites. The v9 `DrawerFooter` sits at the bottom by construction,
+  so the prop is gone rather than reimplemented.
+- A v8 `styles={{ main: ... }}` override on one `ColumnFormPanel`, dropped like the one in
+  `CustomEditPanel`.
+- `onRenderHeader`, which `EditViewColumnsPanel` uses to put action buttons in the header instead of
+  a title. Added to `BasePanel` as a proper prop and rendered in place of `headerText`.
+- `title` and `hidden`, which were being inherited silently from `IPanelProps`. They are now declared
+  where they are actually used — `title` on `IEditViewColumnsPanelProps`, `hidden` on
+  `IBasePanelProps`.
 
 **A trap the tests could not catch: the drawer opens on the wrong side by default.** The v8 `Panel`
 always slid in from the right; the v9 `OverlayDrawer` defaults to `position='start'`, the left. The

@@ -1,4 +1,3 @@
-import { IPanelProps, Panel } from '@fluentui/react'
 import {
   FluentProvider,
   IdPrefixProvider,
@@ -6,7 +5,7 @@ import {
   Switch,
   Textarea
 } from '@fluentui/react-components'
-import { customLightTheme, format } from 'pp365-shared-library'
+import { BasePanel, IBasePanelProps, customLightTheme, format } from 'pp365-shared-library'
 import strings from 'ProjectExtensionsStrings'
 import React, { FC } from 'react'
 import { Footer } from './Footer'
@@ -16,15 +15,14 @@ import { useNewRiskActionPanel } from './useNewRiskActionPanel'
 import { FieldContainer } from 'pp365-shared-library'
 import { useRiskActionFieldCustomizerContext } from '../../../../extensions/riskAction/context'
 
-export const NewRiskActionPanel: FC<IPanelProps> = (props) => {
+export const NewRiskActionPanel: FC<IBasePanelProps> = (props) => {
   const context = useRiskActionFieldCustomizerContext()
   const { model, setModel, onSave, isSaving, fluentProviderId } = useNewRiskActionPanel(props)
   return (
-    <Panel
+    <BasePanel
       {...props}
       isLightDismiss={true}
       headerText={format(strings.NewRiskActionPanelTitle, context.itemContext.title)}
-      isFooterAtBottom={true}
       onRenderFooterContent={() => (
         <Footer
           onSave={onSave}
@@ -64,7 +62,7 @@ export const NewRiskActionPanel: FC<IPanelProps> = (props) => {
           </FieldContainer>
         </FluentProvider>
       </IdPrefixProvider>
-    </Panel>
+    </BasePanel>
   )
 }
 

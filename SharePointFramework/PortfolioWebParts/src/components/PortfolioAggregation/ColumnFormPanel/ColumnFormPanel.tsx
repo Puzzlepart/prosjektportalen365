@@ -1,6 +1,5 @@
-import { Panel } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
-import { ColumnSearchPropertyField, FieldContainer, customLightTheme } from 'pp365-shared-library'
+import { BasePanel, ColumnSearchPropertyField, FieldContainer, customLightTheme } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { usePortfolioAggregationContext } from '../context'
 import styles from './ColumnFormPanel.module.scss'
@@ -27,7 +26,7 @@ export const ColumnFormPanel: FC = () => {
   } = useColumnFormPanel()
 
   return (
-    <Panel
+    <BasePanel
       isOpen={context.state.columnForm.isOpen}
       headerText={isEditing ? strings.EditColumnHeaderText : strings.NewColumnHeaderText}
       onRenderFooterContent={() => (
@@ -167,7 +166,7 @@ export const ColumnFormPanel: FC = () => {
           </FieldContainer>
         </FluentProvider>
       </IdPrefixProvider>
-    </Panel>
+    </BasePanel>
   )
 }
 

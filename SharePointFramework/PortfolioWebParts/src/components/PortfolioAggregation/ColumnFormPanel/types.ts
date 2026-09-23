@@ -1,6 +1,5 @@
-import { IPanelProps } from '@fluentui/react'
-import { ProjectContentColumn } from 'pp365-shared-library'
+import { IBasePanelProps, ProjectContentColumn } from 'pp365-shared-library'
 
-export interface IColumnFormPanel extends Pick<IPanelProps, 'isOpen'> {
+export interface IColumnFormPanel extends Pick<IBasePanelProps, 'isOpen'> {
   column?: ProjectContentColumn
 }

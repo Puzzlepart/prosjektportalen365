@@ -1,6 +1,5 @@
-import { IPanelProps } from '@fluentui/react'
-import { PortfolioOverviewView } from 'pp365-shared-library'
+import { IBasePanelProps, PortfolioOverviewView } from 'pp365-shared-library'
 
-export interface IViewFormPanel extends Pick<IPanelProps, 'isOpen'> {
+export interface IViewFormPanel extends Pick<IBasePanelProps, 'isOpen'> {
   view?: PortfolioOverviewView
 }

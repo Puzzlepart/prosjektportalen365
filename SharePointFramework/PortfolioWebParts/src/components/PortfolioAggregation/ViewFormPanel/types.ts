@@ -1,6 +1,5 @@
-import { IPanelProps } from '@fluentui/react'
-import { DataSource } from 'pp365-shared-library'
+import { DataSource, IBasePanelProps } from 'pp365-shared-library'
 
-export interface IViewFormPanel extends Pick<IPanelProps, 'isOpen'> {
+export interface IViewFormPanel extends Pick<IBasePanelProps, 'isOpen'> {
   view?: DataSource
 }

@@ -1,8 +1,9 @@
-import { IPanelProps, IColumn } from '@fluentui/react'
+import { IColumn } from '@fluentui/react'
+import { IBasePanelProps } from '../BasePanel'
 import { IFilterProps } from './Filter/types'
 import { IFilterItemProps } from './FilterItem/types'
 
-export interface IFilterPanelProps extends IPanelProps {
+export interface IFilterPanelProps extends IBasePanelProps {
   /**
    * Filters
    */

@@ -1,8 +1,8 @@
-import { IPanelProps } from '@fluentui/react'
 import { useId } from '@fluentui/react-components'
 import { useCallback, useState } from 'react'
 import { useRiskActionFieldCustomizerContext } from '../../../../extensions/riskAction/context'
 import { useRiskActionContext } from '../../context'
+import { IBasePanelProps } from 'pp365-shared-library'
 
 /**
  * A custom React hook that provides state and functions for the NewRiskActionPanel component.
@@ -11,7 +11,7 @@ import { useRiskActionContext } from '../../context'
  *
  * @returns An object containing the model, setModel function, onSave function, isSaving boolean, and fluentProviderId string.
  */
-export function useNewRiskActionPanel(props: IPanelProps) {
+export function useNewRiskActionPanel(props: IBasePanelProps) {
   const context = useRiskActionFieldCustomizerContext()
   const { itemContext, setItemContext } = useRiskActionContext()
   const [isSaving, setIsSaving] = useState(false)
