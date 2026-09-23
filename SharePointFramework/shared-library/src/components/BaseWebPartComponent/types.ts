@@ -1,4 +1,3 @@
-import { IShimmerProps } from '@fluentui/react'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { SPFI } from '@pnp/sp'
 import { DOMAttributes } from 'react'
@@ -26,7 +25,14 @@ export interface IBaseWebPartComponentProps extends DOMAttributes<HTMLDivElement
   sp?: SPFI
 }
 
-export interface IBaseWebPartComponentState<T> extends Pick<IShimmerProps, 'isDataLoaded'> {
+export interface IBaseWebPartComponentState<T> {
+  /**
+   * Whether the component's data has finished loading. Named after the Fluent UI
+   * v8 `Shimmer` prop it used to be picked from; the v9 `Skeleton` has no
+   * equivalent, so it is declared here.
+   */
+  isDataLoaded?: boolean
+
   /**
    * Data for the component
    */

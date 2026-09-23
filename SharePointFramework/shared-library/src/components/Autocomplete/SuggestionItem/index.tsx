@@ -1,8 +1,8 @@
-import { Icon } from '@fluentui/react'
 import React, { FC } from 'react'
 import _ from 'underscore'
 import styles from './SuggestionItem.module.scss'
 import { ISuggestionItemProps } from './types'
+import { getFluentIconWithFallback } from '../../../icons'
 
 /**
  * @category Autocomplete
@@ -26,7 +26,7 @@ export const SuggestionItem: FC<ISuggestionItemProps> = (props) => {
     >
       <div className={styles.container}>
         <div className={styles.icon} style={iconStyles} hidden={!props.itemIcons}>
-          <Icon iconName={props.item.iconName || 'Page'} />
+          {getFluentIconWithFallback(props.item.iconName || 'Page')}
         </div>
         <div className={styles.content}>
           <div className={styles.text}>{props.item.text}</div>

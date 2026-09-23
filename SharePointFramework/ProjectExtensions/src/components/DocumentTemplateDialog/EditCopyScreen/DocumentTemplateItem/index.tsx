@@ -1,5 +1,6 @@
 import { Icon, TextField } from '@fluentui/react'
 import { useId } from '@fluentui/react-components'
+import { getFluentIconWithFallback } from 'pp365-shared-library'
 import { DocumentTemplateDialogContext } from 'components/DocumentTemplateDialog/context'
 import { SPDataAdapter } from 'data'
 import * as strings from 'ProjectExtensionsStrings'
@@ -80,7 +81,7 @@ export const DocumentTemplateItem: FC<IDocumentTemplateItemProps> = (props) => {
         </div>
         <div className={styles.title}>{props.item.name}</div>
         <div className={styles.chevronIcon}>
-          <Icon iconName={isExpanded ? 'ChevronDown' : 'ChevronUp'} />
+          {getFluentIconWithFallback(isExpanded ? 'ChevronDown' : 'ChevronUp')}
         </div>
       </div>
       <div hidden={!isExpanded}>

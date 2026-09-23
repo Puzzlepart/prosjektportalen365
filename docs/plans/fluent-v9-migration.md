@@ -137,6 +137,22 @@ Coverage is measured, not guessed: Heft writes `jest-output/coverage` for every 
 
 Flaky or slow tests are a defect of the test: the first Fluent import in a test file costs 15 to 45 seconds, so tests are grouped per feature folder, and any test that needs a retry is fixed or removed, never retried.
 
+### G. File type icons keep Fluent v8, and the definition of done makes room for it (decided 2026-09-23)
+
+`@fluentui/react-file-type-icons` produces props for the Fluent UI v8 `Icon`, and Fluent v9 has no
+file-type icon equivalent. Five render sites depend on it: `FileNameColumn` in the shared library,
+and `TemplateItem.getIconProps()` plus the three document template dialog screens in
+ProjectExtensions. The alternatives were to map file types onto the v9 catalog, which loses the
+distinct coloured Office glyphs, or to render the CDN images directly via the package's own
+`getFileTypeIconAsUrl`, which keeps them but is new code.
+
+Rule: **keep them as they are.** The correct, coloured file type icons are wanted, so
+`@fluentui/react` stays a dependency of shared-library and ProjectExtensions for that purpose alone,
+alongside the list and people picker hold-outs of Decisions A and B. The same applies to
+`shared-library/src/icons/index.tsx`, whose v8 `Icon` is the deliberate UI Fabric fallback behind
+`getFluentIconWithFallback`. If the v8 dependency later becomes worth removing, `getFileTypeIconAsUrl`
+is the route that preserves the glyphs.
+
 ### E. Lint debt is paid in the files a slice touches, and the three relaxed rules return to `error` at the end (decided)
 
 No separate lint sweep. When a file is converted, its warnings are fixed in the same commit (`no-console` becomes `Logger`, `no-floating-promises` gets `void` or `await`, unused variables go). At the end of the phase the three relaxed rules in `SharePointFramework/.eslint-config/index.js` are set back to `error`, and `allowWarningsInSuccessfulBuild` in `common/config/rush/command-line.json` is reconsidered.
@@ -184,7 +200,7 @@ Slices 3 to 6 are per solution internally: shared-library first (consumers compi
 
 ## Definition of done
 
-`grep -rl "from '@fluentui/react'" SharePointFramework/*/src` lists only the shared list and people picker wrappers (or nothing); `@fluentui/react` is a dependency of the shared library only (or of none); no `@uifabric/*`, `pzl-spfx-components`, `fabric.min.css` or compat aliases remain; the three relaxed lint rules are `error` and `rush rebuild` reports zero warnings, or a documented, short allow-list; every web part root and interactive component has a test file meeting the Decision D targets, coverage thresholds are enforced in `pp365-jest-config` at or above the slice 3 baseline, the browser suite includes a program site, the navigation flows and two write flows; the release notes for the version carrying this phase describe it as a technical change with no intended functional difference.
+`grep -rl "from '@fluentui/react'" SharePointFramework/*/src` lists only the deliberate hold-outs — the shared list wrapper (Decision A), the people picker (Decision B), the file type icon render sites and the UI Fabric icon fallback (Decision G) — and `@fluentui/react` is a dependency of shared-library and ProjectExtensions only, for those reasons; no `@uifabric/*`, `pzl-spfx-components`, `fabric.min.css` or compat aliases remain; the three relaxed lint rules are `error` and `rush rebuild` reports zero warnings, or a documented, short allow-list; every web part root and interactive component has a test file meeting the Decision D targets, coverage thresholds are enforced in `pp365-jest-config` at or above the slice 3 baseline, the browser suite includes a program site, the navigation flows and two write flows; the release notes for the version carrying this phase describe it as a technical change with no intended functional difference.
 
 ## Slice log
 
@@ -516,6 +532,44 @@ use nothing**. Removing those is provably neutral: `_References.scss` says so in
 any file that references an `ms-` mixin or `$ms-` variable. Only those two stylesheets now depend on
 Fluent v8 Sass, and they are the last thing keeping `@fluentui/react` in ProjectExtensions and
 ProjectWebParts once their TypeScript is converted.
+
+
+**Sass: ProgressDialog converted, SummarySection deferred as agreed.**
+`ProgressDialog.module.scss` moved off the four v8 `$ms-color-*` variables onto v9 CSS custom
+properties, which the surrounding `FluentProvider` (in `@BaseDialog`) already emits. Worth knowing
+what those variables actually were: not hex, but SharePoint theme tokens
+(`"[theme:neutralSecondary, default: #605e5c]"`) substituted at runtime by SPFx, so the dialog used
+to follow the *site* theme for its neutrals while every v9 surface around it used the Fluent theme.
+The mapping is documented in a comment at the top of the file; tokens were chosen for the closest
+value inside the right family (`Foreground3` #616161 for #605e5c rather than the semantically tidier
+`Foreground2` #424242, which would have visibly darkened the text). One pre-existing hardcoded
+`#605e5c` in the same file was tokenised with them. `SummarySection.module.scss` and its `ms-Grid`
+mixins are deliberately left for slice 7, where the status page is being worked on anyway: that one
+is a float-based 12-column grid and replacing it is a layout rewrite with visual risk, not a rename.
+It is now the **only** thing in the repository that needs Fluent v8 Sass.
+
+**Icon is not one job, it is three.** The plan lists `Icon`/`IIconProps` as 11 easy files; it is 16,
+and only a minority are a simple swap:
+
+1. *Name-based* — `<Icon iconName='X' />`. Two sites, both converted to `getFluentIconWithFallback`,
+   which resolves catalog names and legacy MDL2 aliases alike.
+2. *File-type icons* — five sites spread `getFileTypeIconProps(...)` or `TemplateItem.getIconProps()`
+   into a v8 `Icon`. **These cannot move to v9 at all.** `@fluentui/react-file-type-icons` is a
+   v8-family package whose whole output is props for the v8 `Icon`, and Fluent v9 has no file-type
+   icon equivalent. This is the same root cause as the unregistered-icons defect noted above, and it
+   means `@fluentui/react` cannot leave shared-library or ProjectExtensions while file-type icons are
+   rendered the way they are today.
+3. *`IIconProps` carried in data models* — `BenefitMeasurement.TrendIconProps`,
+   `ProjectTemplate.iconProps`, `TemplateItem.getIconProps()`, and the props threaded into
+   `CopyProgressScreen` and `ProgressDialog`. Converting these means changing the model's shape from
+   a v8 props bag to a name plus options, then updating each renderer. That is a real refactor, not a
+   find-and-replace, and it should travel with the `ItemColumn` work in slice 6 rather than sit in an
+   "easy components" slice.
+
+So the phase's definition of done needs a decision it does not currently contain: what happens to
+file-type icons. The options are to keep `@fluentui/react` in the two solutions that render them, to
+replace them with a mapping onto the Fluent v9 catalog (losing the distinct Office file-type
+glyphs), or to render the file-type icons as images from the CDN the package already points at.
 
 **Still to do in this slice:** `Icon` and `IIconProps` (11 files) onto `getFluentIcon`, `Shimmer` (7)
 onto `Skeleton`/`LoadingSkeleton`, and the form controls (`TextField`, `Toggle`, `Slider`, `Checkbox`,

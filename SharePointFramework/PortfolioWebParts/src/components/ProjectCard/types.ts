@@ -1,4 +1,3 @@
-import { IShimmerProps } from '@fluentui/react'
 import { ButtonProps } from '@fluentui/react-components'
 import { IPortfolioAggregationProps } from 'components/PortfolioAggregation'
 import { ProjectColumn, ProjectListModel } from 'pp365-shared-library'
@@ -76,7 +75,14 @@ export interface IProjectCardProps extends IPortfolioAggregationProps {
   hubContext?: IHubContext
 }
 
-export interface IProjectCardState extends Pick<IShimmerProps, 'isDataLoaded'> {
+export interface IProjectCardState {
+  /**
+   * Whether the component's data has finished loading. Named after the Fluent UI
+   * v8 `Shimmer` prop it used to be picked from; the v9 `Skeleton` has no
+   * equivalent, so it is declared here.
+   */
+  isDataLoaded?: boolean
+
   loading?: boolean
   refetch?: number
 
