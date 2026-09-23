@@ -21,7 +21,6 @@
   :global(.fui-NavItem) {
     border-radius: 6px;
     background: transparent;
-    font-size: 18px;
     width: 80%;
   }
 
@@ -33,10 +32,6 @@
   :global(.fui-NavItem[aria-current='false']:hover) {
     background-color: rgba(0, 0, 0, 0.04) !important;
     border-radius: 6px;
-  }
-
-  :global(.fui-NavItem__icon) {
-    font-size: 26px;
   }
 }
 
@@ -165,7 +160,7 @@
 }
 
 .cardNumber {
-  font-size: 44px;
+  font-size: 32px;
   font-weight: 700;
   color: #e65e00;
   line-height: 1.1;
@@ -209,7 +204,7 @@
     position: relative;
     text-align: left;
     padding: 6px 28px 6px 12px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
     color: #605e5c;
     border-bottom: 1px solid #edebe9;
@@ -376,19 +371,19 @@
 
 .legendLabel {
   flex: 1;
-  font-size: 18px;
+  font-size: 14px;
 }
 
 .legendCount {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 600;
   color: #242424;
 }
 
 .legendPct {
-  font-size: 17px;
+  font-size: 12px;
   color: #605e5c;
-  min-width: 70px;
+  min-width: 60px;
   text-align: right;
 }
 
@@ -430,12 +425,12 @@
 
 .quickRowLabel {
   flex: 1;
-  font-size: 18px;
+  font-size: 14px;
   color: #242424;
 }
 
 .quickRowValue {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 600;
   color: #242424;
 }
@@ -475,7 +470,7 @@
 }
 
 .statCardNumber {
-  font-size: 40px;
+  font-size: 28px;
   font-weight: 700;
   line-height: 1.1;
 }

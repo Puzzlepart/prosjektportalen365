@@ -42,14 +42,14 @@ import { format } from '@fluentui/react'
 import { DonutChart, IChartProps, ILineChartPoints, LineChart } from '@fluentui/react-charting'
 import strings from 'PortfolioWebPartsStrings'
 import React, { FC } from 'react'
-import { Toolbar } from 'pp365-shared-library'
+import { customLightTheme, Toolbar } from 'pp365-shared-library'
 import { ActivityBars } from './ActivityBars'
 import styles from './ArchiveOverview.module.scss'
 import { LogStatusBadge } from './LogStatusBadge'
 import { StatusBadge } from './StatusBadge'
 import { IArchiveOverviewProps } from './types'
 import { IDailyActivity, IDocumentLogItem, IProjectSummary, IQuickStat } from './useArchiveData'
-import { scaledTheme, useArchiveOverview } from './useArchiveOverview'
+import { useArchiveOverview } from './useArchiveOverview'
 
 // ─────────────────────────────────────────────────────
 // Helpers
@@ -203,10 +203,10 @@ const ProsjekterStatCards: FC<{
 // ─────────────────────────────────────────────────────
 
 const QUICK_STAT_ICONS = [
-  <ArchiveRegular key='0' fontSize={23} />,
-  <ArrowClockwiseRegular key='1' fontSize={23} />,
-  <DocumentRegular key='2' fontSize={23} />,
-  <WarningRegular key='3' fontSize={23} />
+  <ArchiveRegular key='0' fontSize={20} />,
+  <ArrowClockwiseRegular key='1' fontSize={20} />,
+  <DocumentRegular key='2' fontSize={20} />,
+  <WarningRegular key='3' fontSize={20} />
 ]
 
 // Mirrors the order quick stats are built in useArchiveData (Archived, ToArchive, Failed, Warning).
@@ -283,7 +283,7 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
-      <FluentProvider theme={scaledTheme} style={{ background: 'transparent' }}>
+      <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
         <div className={styles.root}>
           {/* ── Left nav ── */}
           <nav className={styles.navSidebar}>
@@ -317,7 +317,7 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
             {/* Header */}
             <div className={styles.header}>
               <div className={styles.headerLeft}>
-                <ArchiveRegular fontSize={36} />
+                <ArchiveRegular fontSize={28} />
                 <Title3>{strings.ArchiveOverview.DashboardTitle}</Title3>
               </div>
               <div className={styles.headerRight}>
@@ -439,7 +439,7 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                               relationship='description'
                             >
                               <InfoRegular
-                                fontSize={17}
+                                fontSize={14}
                                 style={{ color: '#605e5c', flexShrink: 0 }}
                                 onClick={(e) => e.stopPropagation()}
                               />
@@ -886,7 +886,7 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                                   relationship='description'
                                 >
                                   <InfoRegular
-                                    fontSize={17}
+                                    fontSize={14}
                                     style={{ color: '#605e5c', flexShrink: 0 }}
                                   />
                                 </Tooltip>
@@ -1032,7 +1032,7 @@ export const ArchiveOverview: FC<IArchiveOverviewProps> = (props) => {
                   {/* Om arkivstatus */}
                   <div className={styles.sideSection}>
                     <div className={styles.omArkivHeader}>
-                      <InfoRegular fontSize={21} />
+                      <InfoRegular fontSize={16} />
                       <Text weight='semibold' size={300}>
                         {strings.ArchiveOverview.AboutArchiveStatusTitle}
                       </Text>

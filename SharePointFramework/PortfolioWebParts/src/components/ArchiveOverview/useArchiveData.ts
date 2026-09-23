@@ -302,8 +302,10 @@ function processData(
     if (key) projectNameMap.set(key, { name: proj.Title, siteUrl: proj.GtSiteUrl })
   }
 
+  // Respect the selected day range for the document/list/log views; the project
+  // overview intentionally keeps showing full history regardless of dayRange.
   const buildScopeItems = (scope: string): IDocumentLogItem[] =>
-    archiveItems
+    periodItems
       .filter((item) => item.GtLogScope === scope)
       .map((item) => {
         const key = extractSiteName(item.GtLogWebUrl)
