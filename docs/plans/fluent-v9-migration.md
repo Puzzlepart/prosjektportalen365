@@ -443,3 +443,83 @@ delete. Honest caveat on Decision D: the test was written against the old implem
 but never got a green run against it, because the targeted build failed on `pzl-spfx-components`
 resolving through a stale `pp365-projectwebparts/lib`. It therefore characterises the new dialog. The
 assertions are role- and text-based, so they would have held for either implementation.
+
+**Two things found during slice 2 that are deliberately not fixed in it.**
+
+*File type icons never render outside ProjectExtensions.* `initializeFileTypeIcons()` is called in
+exactly two places, both inside ProjectExtensions' document template dialog
+(`SelectScreen/columns.tsx`, `TargetFolderScreen/columns.tsx`). Nothing in shared-library,
+ProjectWebParts or PortfolioWebParts calls it, and each solution bundles its own copy of the icon
+set, so registering it in one does not help the others. `FileNameColumn` therefore calls
+`getFileTypeIconProps` against an unregistered set, and the file-name icon in Dynamisk liste's
+document library view does not render. Confirmed pre-existing, not caused by this phase: reproduced
+on an earlier build on the main channel, where the icons are equally absent. `FileNameColumn` itself
+was already on `@fluentui/react-file-type-icons` before slice 2 and was not touched by it. The fix is
+one `initializeFileTypeIcons()` call where the `ItemColumn` renderers register; it belongs with the
+renderer work in slice 6, or as its own small commit, not in a hygiene pass that is meant to change
+nothing.
+
+*The shared confirm dialog has no reachable caller.* Its only two consumers are the
+`ColumnFormPanelFooter`s in PortfolioOverview and PortfolioAggregation, and both sit behind
+`EDIT_COLUMN` / `ADD_COLUMN` menu items that are hard-coded `disabled: true` in
+`useColumnContextMenu.ts`. The panel cannot be opened in the product, so the conversion is covered by
+its component test and nothing else. Open question for slice 7: if that menu item is not coming back,
+the dialog, both footers and the column form panel are all deletable, which is worth more than slice
+2's 148 KB; if it is coming back, the dialog is now ready for it.
+
+### Slice 3 — easy components (2026-09-23, in progress)
+
+Re-inventoried first, because the plan's counts predate slices 1 and 2. 148 files still imported v8
+at the start of this slice, not the 214 in the inventory table, and the split across solutions had
+moved. Two of the plan's expectations for this slice were already wrong:
+
+- **PortfolioExtensions was already free of v8** — zero imports — while still declaring
+  `@fluentui/react` in its `package.json`. Nothing to convert, just a dependency to drop.
+- **ProjectExtensions will not be freed by this slice.** Beyond the easy components it still uses
+  `DetailsList`, `Panel`, `Dialog`, `Breadcrumb` and `ProgressIndicator`, which belong to slices 4,
+  6 and 7.
+
+Classified by whether a file's *whole* v8 import set is inside this slice's scope: **42 files convert
+fully** (their v8 import disappears) and **21 partially** (other v8 symbols stay for later slices).
+
+**MessageBar, done.** `MessageBarType` is gone from the repository: 13 files converted, plus the two
+error models that carry the severity. The v8 numeric enum became the v9 `MessageBarProps['intent']`
+string union — `error` → `'error'` (9 sites), `warning` → `'warning'` (3), and `severeWarning` →
+`'error'` (1), since v9 has no severe-warning intent and error is what v8 rendered closest to.
+
+This fixed a live defect rather than only moving an import. `UserMessage` in the shared library has
+been fully v9 for some time and takes `intent`, but `ProjectSetupError` still carried a v8
+`MessageBarType`, and `projectSetup/index.ts` passed it straight through as
+`intent: props.error['messageType']`. A number reaching a v9 `intent` does not match the string union,
+so the bar fell back to default styling: **project setup errors and warnings were rendering as neutral
+informational messages instead of red or amber.** `ErrorWithIntent` in the shared library was already
+the correct v9-native shape; the other models have now been brought onto it. `CustomError.test.ts`
+pins the severity as a string for exactly this reason.
+
+**Two solutions dropped `@fluentui/react` entirely:** ProgramWebParts (its last v8 file was a single
+`MessageBarType` in `programAggregation/types.ts`) and PortfolioExtensions (already free). Four
+solutions still declare it: shared-library 42 files, PortfolioWebParts 42, ProjectWebParts 33,
+ProjectExtensions 19.
+
+**A gap in how "free of v8" was being measured, found by the build.** Dropping `@fluentui/react`
+from ProgramWebParts broke its Sass compile: two `.module.scss` files carried
+`@import 'pkg:@fluentui/react/dist/sass/References.scss'`. Being free of v8 means free in the
+stylesheets too, not only in TypeScript, and the earlier inventory only counted `.ts`/`.tsx`.
+
+Surveying all 28 stylesheets that carried that import, only **two actually use anything from it**:
+`ProjectExtensions/.../ProgressDialog.module.scss` (`$ms-color-*` variables) and
+`ProjectWebParts/.../SummarySection.module.scss` (the `ms-Grid` mixins). The other **26 import it and
+use nothing**. Removing those is provably neutral: `_References.scss` says so in its own header —
+"Variables and mixins that can be referenced without outputting any CSS" — and it imports only
+`variables/*` and `mixins/*`, never the CSS-emitting partials such as `_Font.scss`, `_Grid.scss` or
+`_Responsive.scss`. All 26 removed, with a guard in the script that refuses to strip an import from
+any file that references an `ms-` mixin or `$ms-` variable. Only those two stylesheets now depend on
+Fluent v8 Sass, and they are the last thing keeping `@fluentui/react` in ProjectExtensions and
+ProjectWebParts once their TypeScript is converted.
+
+**Still to do in this slice:** `Icon` and `IIconProps` (11 files) onto `getFluentIcon`, `Shimmer` (7)
+onto `Skeleton`/`LoadingSkeleton`, and the form controls (`TextField`, `Toggle`, `Slider`, `Checkbox`,
+`Dropdown`, `DefaultButton`/`PrimaryButton`, `Link`, `Label`, `Spinner`). One constraint the plan does
+not mention: `shared-library/src/icons/index.tsx` uses the v8 `Icon` deliberately, as the
+`getFabricIcon` fallback that renders legacy MDL2 icon names. It cannot move to `getFluentIcon`
+without removing the fallback mechanism itself, so it stays on v8 until that fallback is retired.

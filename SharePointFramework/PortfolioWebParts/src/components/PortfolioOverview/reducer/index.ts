@@ -1,4 +1,3 @@
-import { MessageBarType } from '@fluentui/react'
 import { createReducer } from '@reduxjs/toolkit'
 import strings from 'PortfolioWebPartsStrings'
 import {
@@ -96,7 +95,7 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         state.error = {
           name: payload.error?.name,
           message,
-          type: MessageBarType.error
+          type: 'error'
         }
       })
       .addCase(EXECUTE_SEARCH, (state, { payload }) => {

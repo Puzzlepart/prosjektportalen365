@@ -1,4 +1,3 @@
-import { MessageBarType } from '@fluentui/react'
 import { override } from '@microsoft/decorators'
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base'
 import { isArray, stringIsNullOrEmpty } from '@pnp/core'
@@ -111,7 +110,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             'NoHubConnection',
             strings.NoHubSiteErrorMessage,
             strings.NoHubSiteErrorStack,
-            MessageBarType.warning
+            'warning'
           )
         }
         case ProjectSetupValidation.AlreadySetup: {

@@ -1,4 +1,3 @@
-import { MessageBarType } from '@fluentui/react'
 import { LogLevel } from '@pnp/logging'
 import { AnyAction } from '@reduxjs/toolkit'
 import strings from 'ProjectWebPartsStrings'
@@ -278,7 +277,7 @@ export const useProjectStatusDataFetch = (
           FETCH_DATA_ERROR({
             error: CustomError.createError(
               error instanceof Error ? error : new Error(String(error)),
-              MessageBarType.warning
+              'warning'
             )
           })
         )

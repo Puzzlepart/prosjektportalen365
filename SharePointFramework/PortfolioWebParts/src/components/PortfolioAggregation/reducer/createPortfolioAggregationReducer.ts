@@ -1,4 +1,3 @@
-import { MessageBarType } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import { createReducer, current } from '@reduxjs/toolkit'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -368,7 +367,7 @@ export const createPortfolioAggregationReducer = (
         currentView = _.first(state.views)
       }
       if (!currentView) {
-        state.error = new PortfolioAggregationErrorMessage(errorMessage, MessageBarType.error)
+        state.error = new PortfolioAggregationErrorMessage(errorMessage, 'error')
         return
       }
       const obj: IPortfolioAggregationHashState = {}

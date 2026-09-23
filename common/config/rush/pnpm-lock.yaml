@@ -97,9 +97,6 @@ importers:
 
   ../../SharePointFramework/PortfolioExtensions:
     dependencies:
-      '@fluentui/react':
-        specifier: 8.106.4
-        version: 8.106.4(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)
       '@fluentui/react-components':
         specifier: ~9.74.8
         version: 9.74.8(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(scheduler@0.20.2)
@@ -441,9 +438,6 @@ importers:
 
   ../../SharePointFramework/ProgramWebParts:
     dependencies:
-      '@fluentui/react':
-        specifier: 8.106.4
-        version: 8.106.4(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)
       '@fluentui/react-components':
         specifier: ~9.74.8
         version: 9.74.8(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(scheduler@0.20.2)

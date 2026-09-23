@@ -1,4 +1,3 @@
-import { MessageBarType } from '@fluentui/react'
 import { LogLevel } from '@pnp/logging'
 import { PermissionKind } from '@pnp/sp/presets/all'
 import strings from 'ProjectWebPartsStrings'
@@ -185,7 +184,7 @@ export const useProjectInformationDataFetch = (context: IProjectInformationConte
       fetchData(context)
         .then((state) => context.dispatch(INIT_DATA({ state })))
         .catch((e) => {
-          const error = CustomError.createError(e, MessageBarType.severeWarning)
+          const error = CustomError.createError(e, 'error')
           context.dispatch(FETCH_DATA_ERROR({ error }))
         })
     })

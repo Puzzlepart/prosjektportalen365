@@ -1,4 +1,4 @@
-import { MessageBarType, Target } from '@fluentui/react'
+import { Target } from '@fluentui/react'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { ProgramItem } from 'models/ProgramItem'
 import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
@@ -13,11 +13,12 @@ import { IColumnFormPanel } from './ColumnFormPanel/types'
 import { IViewFormPanel } from './ViewFormPanel/types'
 import { PortfolioInstance } from 'data/types'
 import { IWeb } from '@pnp/sp/webs'
+import { MessageBarProps } from '@fluentui/react-components'
 
 export class PortfolioOverviewErrorMessage extends Error {
   constructor(
     public message: string,
-    public type: MessageBarType
+    public type: MessageBarProps['intent']
   ) {
     super(message)
   }

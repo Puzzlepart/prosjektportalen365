@@ -1,4 +1,3 @@
-import { MessageBarType } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import { ColumnRenderComponentRegistry } from '../../List'
 import _ from 'lodash'
@@ -32,22 +31,22 @@ function getCurrentView(
   if (viewIdUrlParam) {
     currentView = _.find(views, (v) => v.id.toString() === viewIdUrlParam)
     if (!currentView) {
-      throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
+      throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, 'error')
     }
   } else if (hashState.has('viewId')) {
     currentView = _.find(views, (v) => v.id === hashState.get('viewId'))
     if (!currentView) {
-      throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
+      throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, 'error')
     }
   } else if (context.props.defaultViewId) {
     currentView = _.find(views, (v) => v.id.toString() === context.props.defaultViewId.toString())
     if (!currentView) {
-      throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
+      throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, 'error')
     }
   } else {
     currentView = _.find(views, (v) => v.isDefaultView)
     if (!currentView) {
-      throw new PortfolioOverviewErrorMessage(strings.NoDefaultViewMessage, MessageBarType.error)
+      throw new PortfolioOverviewErrorMessage(strings.NoDefaultViewMessage, 'error')
     }
   }
   return currentView

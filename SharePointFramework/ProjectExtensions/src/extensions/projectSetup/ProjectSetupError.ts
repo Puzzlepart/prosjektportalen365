@@ -1,5 +1,5 @@
 import { parseErrorStack } from 'pp365-shared-library/lib/util/parseErrorStack'
-import { MessageBarType } from '@fluentui/react/lib/MessageBar'
+import { MessageBarProps } from '@fluentui/react-components'
 
 export class ProjectSetupError extends Error {
   /**
@@ -14,7 +14,7 @@ export class ProjectSetupError extends Error {
     name: string,
     message: string,
     stack: any,
-    public messageType: MessageBarType = MessageBarType.error
+    public messageType: MessageBarProps['intent'] = 'error'
   ) {
     super(message)
     this.name = name

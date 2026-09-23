@@ -28,7 +28,6 @@
     "test": "heft test"
   },
   "dependencies": {
-    "@fluentui/react": "8.106.4",
     "@microsoft/sp-adaptive-card-extension-base": "1.23.2",
     "@microsoft/sp-core-library": "1.23.2",
     "@microsoft/sp-lodash-subset": "1.23.2",

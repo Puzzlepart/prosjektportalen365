@@ -1,4 +1,3 @@
-import { MessageBarType } from '@fluentui/react'
 import { IProjectTimelineProps, IProjectTimelineState } from '../types'
 import { createTimelineGroups } from './createTimelineGroups'
 import { fetchProjectData } from './fetchProjectData'
@@ -66,7 +65,7 @@ export async function fetchData(
     return {
       error: CustomError.createError(
         error instanceof Error ? error : new Error(String(error)),
-        MessageBarType.warning
+        'warning'
       )
     }
   }

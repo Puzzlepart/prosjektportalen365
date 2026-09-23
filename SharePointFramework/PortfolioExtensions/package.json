@@ -25,7 +25,6 @@
     "test": "heft test"
   },
   "dependencies": {
-    "@fluentui/react": "8.106.4",
     "@microsoft/decorators": "1.23.2",
     "@microsoft/sp-core-library": "1.23.2",
     "@microsoft/sp-dialog": "1.23.2",
