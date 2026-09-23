@@ -1,7 +1,7 @@
-import { IPersonaProps, ITag, Link } from '@fluentui/react'
+import { IPersonaProps, ITag } from '@fluentui/react'
 import React from 'react'
 import { IIdeaFieldProps } from './types'
-import { Persona, Tag } from '@fluentui/react-components'
+import { Link, Persona, Tag } from '@fluentui/react-components'
 import { getFluentIcon, OverflowTagMenu } from 'pp365-shared-library'
 import {
   ChevronCircleRightFilled,

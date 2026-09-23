@@ -1,4 +1,5 @@
-import { Callout, FocusZone, FocusZoneDirection, Label, List, SearchBox } from '@fluentui/react'
+import { Callout, FocusZone, FocusZoneDirection, List, SearchBox } from '@fluentui/react'
+import { Label } from '@fluentui/react-components'
 import React, { FC } from 'react'
 import _ from 'underscore'
 import { IAutocompleteProps } from '.'

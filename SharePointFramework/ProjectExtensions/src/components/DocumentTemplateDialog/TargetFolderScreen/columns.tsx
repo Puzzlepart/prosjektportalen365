@@ -1,4 +1,5 @@
-import { Icon, Link, IColumn } from '@fluentui/react'
+import { Link } from '@fluentui/react-components'
+import { Icon, IColumn } from '@fluentui/react'
 import {
   FileIconType,
   getFileTypeIconProps,

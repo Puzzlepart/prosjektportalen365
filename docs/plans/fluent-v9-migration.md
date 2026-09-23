@@ -600,6 +600,25 @@ option model and the render function to v9 and translating the props at all five
 v9 `Input` has no `label`, `multiline` or `description`. It is best treated as its own piece of work
 alongside the `ItemColumn` renderers in slice 6 rather than as an "easy component".
 
+**Form controls, the simple ones done.** `Toggle`, `Spinner`, `Link`, `Label`, `Slider`,
+`DefaultButton`/`PrimaryButton` and `TextField` converted where they were not entangled with a v8
+container. Three of the conversions were not one-for-one and are worth knowing about:
+
+- `ProjectPropertyEdit`'s v8 `Toggle` had an `onText`/`offText` pair; the v9 `Switch` has a single
+  label, so the value is now held in the component and the label follows it. Same behaviour, more
+  code.
+- `DocumentTemplateItem`'s `TextField` became `Field` + `Input`: v9's `Input` has no `label`,
+  `suffix` or `errorMessage`, so the label and validation moved to `Field` and the character counter
+  to `contentAfter`, and the change handler now reads `data.value` instead of a second argument.
+  **The seven tests written against the v8 implementation in slice 1 passed unchanged**, which is
+  Decision D doing exactly what it is for.
+- `ColorConfigurator`'s v8 `Slider` reported `(value)`; the v9 one reports `(event, data)`.
+
+Deliberately left with their v8 containers, to avoid touching the same file in two slices:
+`CreateParentDialog`, `RunProjectSetupDialog`, `EditCopyScreen` and `TargetFolderScreen/index.tsx`
+put their buttons inside a v8 `Dialog`/`DialogFooter` (slice 4), and `ColorConfigElement`'s `Slider`
+sits inside a v8 `Callout` (slice 4) and uses `valueFormat`, which v9 has no equivalent for.
+
 **Still to do in this slice:** `Icon` and `IIconProps` (11 files) onto `getFluentIcon`, `Shimmer` (7)
 onto `Skeleton`/`LoadingSkeleton`, and the form controls (`TextField`, `Toggle`, `Slider`, `Checkbox`,
 `Dropdown`, `DefaultButton`/`PrimaryButton`, `Link`, `Label`, `Spinner`). One constraint the plan does

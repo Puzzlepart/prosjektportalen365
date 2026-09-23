@@ -1,4 +1,5 @@
-import { Icon, Link, IColumn } from '@fluentui/react'
+import { Link } from '@fluentui/react-components'
+import { Icon, IColumn } from '@fluentui/react'
 import { initializeFileTypeIcons } from '@fluentui/react-file-type-icons'
 import { getId } from 'pp365-shared-library'
 import { TemplateItem } from 'models'

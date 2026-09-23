@@ -1,4 +1,4 @@
-import { DefaultButton, Label, PrimaryButton, Slider } from '@fluentui/react'
+import { Button, Label, Slider } from '@fluentui/react-components'
 import { get } from '@microsoft/sp-lodash-subset'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
@@ -17,7 +17,7 @@ export const ColorConfigurator: FC<IColorConfiguratorProps> = (props) => {
         min={props.minColors}
         max={props.maxColors}
         value={state.config.length}
-        onChange={(count) => dispatch(SET_CONFIG({ count }))}
+        onChange={(_event, data) => dispatch(SET_CONFIG({ count: data.value }))}
       />
       <div className={styles.container}>
         {state.config.map((config, index) => (
@@ -32,16 +32,12 @@ export const ColorConfigurator: FC<IColorConfiguratorProps> = (props) => {
         ))}
       </div>
       <div className={styles.actions}>
-        <PrimaryButton
-          text={strings.SaveColorConfigurationText}
-          onClick={onSave && onSave}
-          disabled={!onSave}
-        />
-        <DefaultButton
-          text={strings.RevertDefaultColorConfigurationText}
-          onClick={onRevertDefault && onRevertDefault}
-          disabled={!onRevertDefault}
-        />
+        <Button appearance='primary' onClick={onSave && onSave} disabled={!onSave}>
+          {strings.SaveColorConfigurationText}
+        </Button>
+        <Button onClick={onRevertDefault && onRevertDefault} disabled={!onRevertDefault}>
+          {strings.RevertDefaultColorConfigurationText}
+        </Button>
       </div>
     </div>
   )

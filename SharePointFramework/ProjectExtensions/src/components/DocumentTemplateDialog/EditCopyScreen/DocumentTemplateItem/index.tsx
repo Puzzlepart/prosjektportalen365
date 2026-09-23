@@ -1,10 +1,10 @@
-import { Icon, TextField } from '@fluentui/react'
-import { useId } from '@fluentui/react-components'
+import { Icon } from '@fluentui/react'
+import { Field, Input, useId } from '@fluentui/react-components'
 import { getFluentIconWithFallback } from 'pp365-shared-library'
 import { DocumentTemplateDialogContext } from 'components/DocumentTemplateDialog/context'
 import { SPDataAdapter } from 'data'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { FormEvent, FC, useContext, useEffect, useState } from 'react'
+import React, { ChangeEvent, FC, useContext, useEffect, useState } from 'react'
 import styles from './DocumentTemplateItem.module.scss'
 import { IDocumentTemplateItemProps } from './types'
 
@@ -29,10 +29,11 @@ export const DocumentTemplateItem: FC<IDocumentTemplateItemProps> = (props) => {
    * @param resolveDelay Resolve delay in ms
    */
   function onInputChange(
-    event: FormEvent<HTMLInputElement | HTMLTextAreaElement>,
-    newValue: string,
+    event: ChangeEvent<HTMLInputElement>,
+    data: { value: string },
     resolveDelay: number = 400
   ) {
+    const newValue = data.value
     clearTimeout(changeTimeout)
     const targetId = (event.target as HTMLInputElement).id
     if (targetId === nameId) setNameLength(newValue?.length || 0)
@@ -86,31 +87,36 @@ export const DocumentTemplateItem: FC<IDocumentTemplateItemProps> = (props) => {
       </div>
       <div hidden={!isExpanded}>
         <div className={styles.inputField}>
-          <TextField
-            id={nameId}
+          <Field
             label={props.item.isFolder ? strings.FolderNameLabel : strings.FileNameLabel}
-            placeholder={props.item.isFolder ? strings.FolderNameLabel : strings.FileNameLabel}
-            defaultValue={props.item.isFolder ? props.item.name : props.item.nameWithoutExtension}
-            maxLength={MAX_LENGTH}
-            suffix={
-              props.item.isFolder
-                ? `${nameLength}/${MAX_LENGTH}`
-                : `${nameLength}/${MAX_LENGTH} .${props.item.fileExtension}`
-            }
-            errorMessage={props.item.errorMessage}
-            onChange={onInputChange}
-          />
+            validationMessage={props.item.errorMessage}
+            validationState={props.item.errorMessage ? 'error' : 'none'}
+          >
+            <Input
+              id={nameId}
+              placeholder={props.item.isFolder ? strings.FolderNameLabel : strings.FileNameLabel}
+              defaultValue={props.item.isFolder ? props.item.name : props.item.nameWithoutExtension}
+              maxLength={MAX_LENGTH}
+              contentAfter={
+                props.item.isFolder
+                  ? `${nameLength}/${MAX_LENGTH}`
+                  : `${nameLength}/${MAX_LENGTH} .${props.item.fileExtension}`
+              }
+              onChange={onInputChange}
+            />
+          </Field>
         </div>
         <div className={styles.inputField}>
-          <TextField
-            id={titleId}
-            label={strings.TitleLabel}
-            placeholder={strings.TitleLabel}
-            defaultValue={props.item.title}
-            maxLength={MAX_LENGTH}
-            suffix={`${titleLength}/${MAX_LENGTH}`}
-            onChange={onInputChange}
-          />
+          <Field label={strings.TitleLabel}>
+            <Input
+              id={titleId}
+              placeholder={strings.TitleLabel}
+              defaultValue={props.item.title}
+              maxLength={MAX_LENGTH}
+              contentAfter={`${titleLength}/${MAX_LENGTH}`}
+              onChange={onInputChange}
+            />
+          </Field>
         </div>
       </div>
     </div>

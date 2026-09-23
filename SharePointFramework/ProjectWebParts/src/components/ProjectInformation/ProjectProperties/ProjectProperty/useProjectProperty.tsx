@@ -1,8 +1,8 @@
-import { IPersonaProps, Link } from '@fluentui/react'
+import { IPersonaProps } from '@fluentui/react'
 import React from 'react'
 import { useProjectInformationContext } from '../../context'
 import { IProjectPropertyProps } from './types'
-import { Persona, Text } from '@fluentui/react-components'
+import { Link, Persona, Text } from '@fluentui/react-components'
 import { OverflowTagMenu } from 'pp365-shared-library'
 import * as strings from 'ProjectWebPartsStrings'
 import {

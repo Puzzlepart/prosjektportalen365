@@ -1,6 +1,7 @@
-import { IButtonProps, IColumn, IPanelProps } from '@fluentui/react'
+import { IColumn, IPanelProps } from '@fluentui/react'
+import { ButtonProps } from '@fluentui/react-components'
 
-interface IRevertOrderButtonProps extends Omit<IButtonProps, 'onClick'> {
+interface IRevertOrderButtonProps extends Omit<ButtonProps, 'onClick'> {
   /**
    * Callback to call when the user clicks the revert order button.
    *

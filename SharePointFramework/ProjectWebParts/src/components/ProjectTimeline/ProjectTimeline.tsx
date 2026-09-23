@@ -1,4 +1,4 @@
-import { Spinner } from '@fluentui/react'
+import { Spinner } from '@fluentui/react-components'
 import { ItemFieldValues, WebPartTitle, format } from 'pp365-shared-library'
 import { CustomEditPanel, Timeline, UserMessage } from 'pp365-shared-library/lib/components'
 import * as strings from 'ProjectWebPartsStrings'
