@@ -91,9 +91,9 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
 
   const filterPanelProps: IFilterPanelProps = useMemo(
     () => ({
-      isOpen: context.state.isFilterPanelOpen,
+      open: context.state.isFilterPanelOpen,
       layerHostId: context.layerHostId,
-      onDismiss: () => context.dispatch(TOGGLE_FILTER_PANEL()),
+      onClose: () => context.dispatch(TOGGLE_FILTER_PANEL()),
       filters: filters,
       onFilterChange: (column: ProjectColumn, selectedItems: IFilterItemProps[]) => {
         context.dispatch(ON_FILTER_CHANGED({ column, selectedItems }))

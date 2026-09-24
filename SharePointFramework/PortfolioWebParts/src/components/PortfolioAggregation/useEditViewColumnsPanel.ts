@@ -15,7 +15,7 @@ import { useMemo } from 'react'
 export function useEditViewColumnsPanel(
   context: IPortfolioAggregationContext
 ): IEditViewColumnsPanelProps {
-  const onDismiss = () => context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: false }))
+  const onClose = () => context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: false }))
 
   /**
    * On save view columns callback sent to `EditViewColumnsPanel`.
@@ -30,16 +30,16 @@ export function useEditViewColumnsPanel(
       .updateDataSourceItem('DATA_SOURCES', properties, context.state.currentView?.title, true)
       .then(() => {
         context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: false, columns }))
-        onDismiss()
+        onClose()
       })
   }
 
   return useMemo<IEditViewColumnsPanelProps>(
     () => ({
-      isOpen: context.state.isEditViewColumnsPanelOpen,
+      open: context.state.isEditViewColumnsPanelOpen,
       columns: context.state.allColumnsForCategory,
       onSave: onSaveViewColumns,
-      onDismiss,
+      onClose,
       sortMode: EditViewColumnsPanelSortMode.SelectedOnTop,
       customColumnOrder: context.state.columns.map((c) => c.id)
     }),

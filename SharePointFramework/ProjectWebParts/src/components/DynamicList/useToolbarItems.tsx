@@ -830,9 +830,9 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
     () =>
       context.props.showFilters
         ? {
-            isOpen: context.state.showFilterPanel,
+            open: context.state.showFilterPanel,
             filters: context.state.filters || [],
-            onDismiss: () => context.setState({ showFilterPanel: false }),
+            onClose: () => context.setState({ showFilterPanel: false }),
             onFilterChange: (column: any, selectedItems: any[]) => {
               const newActiveFilters = { ...context.state.activeFilters }
 

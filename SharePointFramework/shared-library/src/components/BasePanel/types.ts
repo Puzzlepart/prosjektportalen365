@@ -74,4 +74,21 @@ export interface IBasePanelProps<T extends string = string> {
   footer?: React.ReactNode
 
   children?: React.ReactNode
+
+  /**
+   * Renamed to `open`. Declared as `never` rather than removed because several
+   * call sites build a props object and hand it to a component that spreads it;
+   * a spread is not excess-property-checked, so a leftover `isOpen` there would
+   * otherwise compile and silently leave the panel shut.
+   *
+   * @deprecated Use `open`.
+   */
+  isOpen?: never
+
+  /**
+   * Renamed to `onClose`. `never` for the same reason as `isOpen`.
+   *
+   * @deprecated Use `onClose`.
+   */
+  onDismiss?: never
 }

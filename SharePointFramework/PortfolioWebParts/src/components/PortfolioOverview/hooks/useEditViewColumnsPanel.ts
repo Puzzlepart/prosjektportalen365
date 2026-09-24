@@ -78,10 +78,10 @@ export function useEditViewColumnsPanel(
   }
 
   return {
-    isOpen: context.state.isEditViewColumnsPanelOpen,
+    open: context.state.isEditViewColumnsPanelOpen,
     columns: columnsWithSelectedState,
     onSave: onSaveViewColumns,
-    onDismiss: () => context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: false })),
+    onClose: () => context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: false })),
     revertOrder: {
       disabled: _.isEmpty(context.state.currentView?.columnOrder),
       onClick: onRevertViewColumnOrder

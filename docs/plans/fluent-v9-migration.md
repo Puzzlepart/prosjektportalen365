@@ -765,3 +765,46 @@ import unused — and `unused-imports/no-unused-imports` is one of the few rules
 *error*, so it failed the build rather than joining the warning pile. The per-solution
 `npx tsc --noEmit` used throughout these slices as a quick check does not run ESLint, so error-level
 lint rules only surface in a full `heft build`. Run one before declaring a slice done.
+
+**The rename escaped the compiler in five places, and e2e caught one of them.** The CI run for
+`126306ce` failed on `benefit overview page loads`: the "Filtrer" button did nothing. The claim above
+that "the compiler found eleven more" was true but incomplete — it only holds for call sites that
+pass props *as JSX attributes*, which is where excess-property checking applies.
+
+Five sites instead build a props **object** typed as the panel's props interface and hand it to a
+component that spreads it (`<FilterPanel {...props.filterPanel} />` in `Toolbar`,
+`<EditViewColumnsPanel {...props} />`). A spread is not excess-property-checked, and because `open`
+is optional, a leftover `isOpen` was neither an error nor a missing required prop. The panels
+compiled, deployed, and silently never opened:
+
+| Site | Surface |
+|---|---|
+| `PortfolioOverview/hooks/usePortfolioOverview.ts` | Porteføljeoversikt — filter panel |
+| `PortfolioOverview/hooks/useEditViewColumnsPanel.ts` | Porteføljeoversikt — Vis kolonner |
+| `PortfolioAggregation/usePortfolioAggregation.ts` | Porteføljeaggregering / Nytteoversikt — filter panel |
+| `PortfolioAggregation/useEditViewColumnsPanel.ts` | Porteføljeaggregering — Vis kolonner |
+| `DynamicList/useToolbarItems.tsx` | Dynamisk liste — filter panel |
+
+One of the five used `as IEditViewColumnsPanelProps`, which suppresses the check outright.
+
+The fix renames all five. The guard against a recurrence is to declare the old names as `never` on
+`IBasePanelProps` rather than deleting them:
+
+```ts
+/** @deprecated Use `open`. */
+isOpen?: never
+/** @deprecated Use `onClose`. */
+onDismiss?: never
+```
+
+A `never` mismatch is a *type* error (`TS2322: Type 'boolean' is not assignable to type 'never'`),
+not an excess property, so it is reported through spreads and through `as` assertions alike. Verified
+by reintroducing the bug: silent before the guard, an error after it.
+
+**Lesson for the remaining slices.** When renaming a prop, the compiler only covers JSX call sites.
+Grep for props objects typed as the interface (`useMemo<IXProps>`, `: IXProps =`, `as IXProps`)
+before trusting a green build — the more a codebase builds props in hooks, the less a rename is
+mechanical.
+
+The e2e suite covered one of the five surfaces. `portfolio overview renders its list` now opens its
+filter panel too; the other three are still uncovered and belong to slice 3b.

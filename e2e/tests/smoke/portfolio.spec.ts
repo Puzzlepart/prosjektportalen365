@@ -53,6 +53,11 @@ test.describe('portfolio hub', () => {
     await search.fill('zzz-e2e-ingen-treff')
     await expect(overview.getByText(/^viser 0 av \d+|^showing 0 of \d+/i)).toBeVisible({ timeout: 20_000 })
     await search.clear()
+    // The filter panel is wired through a props object that the toolbar spreads, which type
+    // checking does not see into, so only opening it here proves the wiring survives a rename.
+    await overview.getByRole('button', { name: /^filtrer$|^filter$/i }).click()
+    await expect(page.getByRole('dialog').getByRole('heading', { name: /^filtr|^filter/i })).toBeVisible()
+    await page.keyboard.press('Escape')
   })
 
   test('project status aggregation page loads', async ({ page, openPage, resolvePage }) => {

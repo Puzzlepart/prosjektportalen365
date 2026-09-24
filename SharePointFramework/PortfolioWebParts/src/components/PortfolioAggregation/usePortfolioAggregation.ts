@@ -65,9 +65,9 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
 
   const filterPanelProps = useMemo<IFilterPanelProps>(
     () => ({
-      isOpen: context.state.isFilterPanelOpen,
+      open: context.state.isFilterPanelOpen,
       layerHostId: context.layerHostId,
-      onDismiss: () => context.dispatch(TOGGLE_FILTER_PANEL()),
+      onClose: () => context.dispatch(TOGGLE_FILTER_PANEL()),
       filters: context.state.filters,
       onFilterChange: (column: ProjectContentColumn, selectedItems) => {
         context.dispatch(ON_FILTER_CHANGE({ column, selectedItems }))
