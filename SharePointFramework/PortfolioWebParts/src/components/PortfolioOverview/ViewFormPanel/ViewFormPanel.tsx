@@ -20,10 +20,10 @@ export const ViewFormPanel: FC = () => {
   if (!context) return null
   return (
     <BasePanel
-      isOpen={context.state.viewForm.isOpen}
+      open={context.state.viewForm.isOpen}
       headerText={isEditing ? strings.EditViewHeaderText : strings.NewViewHeaderText}
-      onRenderFooterContent={() => <ViewFormPanelFooter onSave={onSave} />}
-      onDismiss={onDismiss}
+      footer={<ViewFormPanelFooter onSave={onSave} />}
+      onClose={onDismiss}
       isLightDismiss={true}
       className={styles.root}
     >

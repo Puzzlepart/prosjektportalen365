@@ -178,7 +178,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
               hideAllActions={true}
               panelProps={{
                 headerText: context.state.showProjectInfo?.title,
-                onDismiss: () => {
+                onClose: () => {
                   context.setState({ showProjectInfo: null })
                 }
               }}

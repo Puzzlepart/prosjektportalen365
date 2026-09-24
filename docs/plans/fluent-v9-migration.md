@@ -744,3 +744,24 @@ list-adjacent leftovers (`LayerHost`, `ScrollbarVisibility`, `IScrollablePanePro
 `IShimmeredDetailsListProps`), the two `ShimmeredDetailsList` wrappers deferred from slice 3, and a
 lone `DayOfWeek` in the `DatePicker` call site. `Autocomplete` in particular is a composite component
 no slice owns; it should be given one before slice 6 starts.
+
+**Slice 4 closed with the prop modernisation of Decision H.** `BasePanel` now takes `open`,
+`onClose`, and `header` / `footer` / `children` as content rather than the v8 render props. Two
+things are worth recording about the fan-out:
+
+I enumerated nine call sites; the compiler found **eleven more**. The rename ripples through every
+props type that *extends* `IBasePanelProps` — `ICustomEditPanelProps`, `IEditViewColumnsPanelProps`,
+`NewRiskActionPanel` — so `EditPropertiesPanel`, `EditProjectStatusPanel`, `DynamicList`,
+`ProjectTimeline`, `ProjectCard` and `ProjectList` all had to change without ever naming `BasePanel`.
+Doing this as one isolated pass, after every panel had been converted, was the right call.
+
+Four state interfaces did `Pick<IBasePanelProps, 'isOpen'>`. Renaming those would have pushed `open`
+into reducer state and action payloads, so they declare `isOpen` themselves instead: it is component
+state, not a panel prop, and `open={state.viewForm.isOpen}` is clearer for being explicit.
+
+**A gap in the fast feedback loop, found the hard way.** Replacing the last v8 `MessageBar` with
+`UserMessage` removed the only JSX from `portfolioAggregation/index.tsx`, leaving its default `React`
+import unused — and `unused-imports/no-unused-imports` is one of the few rules configured as an
+*error*, so it failed the build rather than joining the warning pile. The per-solution
+`npx tsc --noEmit` used throughout these slices as a quick check does not run ESLint, so error-level
+lint rules only surface in a full `heft build`. Run one before declaring a slice done.

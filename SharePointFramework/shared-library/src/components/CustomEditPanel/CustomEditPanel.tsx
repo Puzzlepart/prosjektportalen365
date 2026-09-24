@@ -17,18 +17,17 @@ export const CustomEditPanel: FC<ICustomEditPanelProps> = (props) => {
       <BasePanel
         {...props}
         className={styles.customEditPanel}
-        onRenderFooterContent={() => (
-          <CustomEditPanelFooter isSaveDisabled={context.isSaveDisabled()} />
-        )}
-        onRenderBody={() => <CustomEditPanelBody />}
-      />
+        footer={<CustomEditPanelFooter isSaveDisabled={context.isSaveDisabled()} />}
+      >
+        <CustomEditPanelBody />
+      </BasePanel>
     </CustomEditPanelContext.Provider>
   )
 }
 
 CustomEditPanel.displayName = 'CustomEditPanel'
 CustomEditPanel.defaultProps = {
-  isOpen: false,
+  open: false,
   hiddenFields: [],
   fields: [],
   submit: {

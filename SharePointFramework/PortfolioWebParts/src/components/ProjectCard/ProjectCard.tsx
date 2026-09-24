@@ -30,7 +30,7 @@ export const ProjectCard: FC<IProjectCardProps> = (props) => {
           hideAllActions={true}
           panelProps={{
             headerText: state.showProjectInfo?.title,
-            onDismiss: () => {
+            onClose: () => {
               setState({ showProjectInfo: null })
             }
           }}

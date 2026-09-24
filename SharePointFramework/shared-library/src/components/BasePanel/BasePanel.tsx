@@ -17,29 +17,30 @@ import styles from './BasePanel.module.scss'
 import { IBasePanelProps } from './types'
 
 /**
- * The panel every side panel in the solutions is built on. Renders a Fluent UI
- * v9 `OverlayDrawer` behind the prop names the v8 `Panel` used (`isOpen`,
- * `onDismiss`, `headerText`, `onRenderBody`, `onRenderFooterContent`), so call
- * sites did not have to change when it moved from v8 to v9.
+ * The panel every side panel in the solutions is built on, rendering a Fluent
+ * UI v9 `OverlayDrawer`.
+ *
+ * The v8 `Panel` prop names were kept during the conversion so that call sites
+ * did not have to move at the same time as the implementation; they have since
+ * been brought in line with v9 and with React (`open`, `onClose`, and `header`,
+ * `footer` and `children` as content rather than render props).
  */
 export const BasePanel: FC<IBasePanelProps> = ({
   $type,
-  isOpen,
-  onDismiss,
+  open,
+  onClose,
   headerText,
   size = 'medium',
   position = 'end',
   isLightDismiss = true,
   closeButtonAriaLabel = strings.CloseText,
-  onRenderHeader,
+  header,
   hidden,
-  onRenderBody,
-  onRenderFooterContent,
+  footer,
   children,
   className
 }) => {
   const fluentProviderId = useId('fp-base-panel')
-  const footer = onRenderFooterContent?.()
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
@@ -53,7 +54,7 @@ export const BasePanel: FC<IBasePanelProps> = ({
       <FluentProvider theme={customLightTheme}>
         <OverlayDrawer
           className={className}
-          open={isOpen}
+          open={open}
           size={size}
           position={position}
           // Both branches are modal on purpose. A `non-modal` drawer renders
@@ -62,7 +63,7 @@ export const BasePanel: FC<IBasePanelProps> = ({
           // a click on the dimmed background, `alert` requires an action.
           modalType={isLightDismiss ? 'modal' : 'alert'}
           onOpenChange={(_event, data) => {
-            if (!data.open) onDismiss?.()
+            if (!data.open) onClose?.()
           }}
         >
           <DrawerHeader hidden={hidden}>
@@ -72,15 +73,14 @@ export const BasePanel: FC<IBasePanelProps> = ({
                   appearance='subtle'
                   aria-label={closeButtonAriaLabel}
                   icon={getFluentIcon('Dismiss')}
-                  onClick={() => onDismiss?.()}
+                  onClick={() => onClose?.()}
                 />
               }
             >
-              {onRenderHeader ? onRenderHeader() : headerText}
+              {header ?? headerText}
             </DrawerHeaderTitle>
           </DrawerHeader>
           <DrawerBody className={styles.body}>
-            {onRenderBody?.()}
             {children}
           </DrawerBody>
           {footer && <DrawerFooter className={styles.footer}>{footer}</DrawerFooter>}

@@ -23,13 +23,11 @@ export const NewRiskActionPanel: FC<IBasePanelProps> = (props) => {
       {...props}
       isLightDismiss={true}
       headerText={format(strings.NewRiskActionPanelTitle, context.itemContext.title)}
-      onRenderFooterContent={() => (
-        <Footer
+      footer={<Footer
           onSave={onSave}
-          closePanel={props.onDismiss}
+          closePanel={props.onClose}
           isSaveDisabled={!model.get('title') || isSaving}
-        />
-      )}
+        />}
     >
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider

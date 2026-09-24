@@ -17,10 +17,10 @@ export const ProjectInformationPanel: FC<IProjectInformationPanelProps> = (props
       {props.children}
       {props.onRenderToggleElement && props.onRenderToggleElement(panelState.toggle)}
       <BasePanel
-        isOpen={panelState.value}
+        open={panelState.value}
         size={'medium'}
         isLightDismiss={true}
-        onDismiss={panelState.setFalse}
+        onClose={panelState.setFalse}
         {...props.panelProps}
       >
         <ProjectInformation {...props} className={styles.projectInformation} />

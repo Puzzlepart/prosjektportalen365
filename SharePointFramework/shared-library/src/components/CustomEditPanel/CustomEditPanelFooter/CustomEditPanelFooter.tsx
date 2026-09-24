@@ -63,7 +63,7 @@ export const CustomEditPanelFooter: FC<ICustomEditPanelFooterProps> = ({ isSaveD
               >
                 {context.props.submit.text ?? strings.SaveText}
               </Button>
-              <Button appearance='secondary' onClick={context.props.onDismiss}>
+              <Button appearance='secondary' onClick={context.props.onClose}>
                 {strings.CloseText}
               </Button>
             </>

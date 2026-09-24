@@ -21,13 +21,13 @@ export interface IBasePanelProps<T extends string = string> {
   /**
    * Whether the panel is open.
    */
-  isOpen?: boolean
+  open?: boolean
 
   /**
    * Called when the panel should close, whether from the close button, a click
    * outside or the Escape key.
    */
-  onDismiss?: () => void
+  onClose?: () => void
 
   /**
    * Text shown in the panel header.
@@ -62,21 +62,16 @@ export interface IBasePanelProps<T extends string = string> {
   hidden?: boolean
 
   /**
-   * Renders the panel header in place of `headerText`, for panels whose header
+   * Header content shown in place of `headerText`, for panels whose header
    * carries actions rather than a title.
    */
-  onRenderHeader?: () => React.ReactNode
+  header?: React.ReactNode
 
   /**
-   * Renders the panel body. Kept as a render prop because that is how the v8
-   * `Panel` was used across the solutions; `children` works too.
+   * Content pinned to the bottom of the panel, typically its save and cancel
+   * buttons.
    */
-  onRenderBody?: () => React.ReactNode
-
-  /**
-   * Renders the panel footer.
-   */
-  onRenderFooterContent?: () => React.ReactNode
+  footer?: React.ReactNode
 
   children?: React.ReactNode
 }

@@ -12,10 +12,10 @@ export const ViewFormPanel: FC = () => {
   const { view, setView, isEditing, onDismiss, onSave, fluentProviderId } = useViewFormPanel()
   return (
     <BasePanel
-      isOpen={context.state.viewForm?.isOpen}
+      open={context.state.viewForm?.isOpen}
       headerText={isEditing ? strings.EditViewHeaderText : strings.NewViewHeaderText}
-      onRenderFooterContent={() => <ViewFormPanelFooter onSave={onSave} />}
-      onDismiss={onDismiss}
+      footer={<ViewFormPanelFooter onSave={onSave} />}
+      onClose={onDismiss}
       isLightDismiss={true}
       className={styles.root}
     >

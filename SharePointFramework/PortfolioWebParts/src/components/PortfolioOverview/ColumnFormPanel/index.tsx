@@ -36,17 +36,15 @@ export const ColumnFormPanel: FC = () => {
 
   return (
     <BasePanel
-      isOpen={context.state.columnForm.isOpen}
+      open={context.state.columnForm.isOpen}
       headerText={isEditing ? strings.EditColumnHeaderText : strings.NewColumnHeaderText}
-      onRenderFooterContent={() => (
-        <ColumnFormPanelFooter
+      footer={<ColumnFormPanelFooter
           onSave={onSave}
           onDeleteColumn={onDeleteColumn}
           isEditing={isEditing}
           isSaveDisabled={isSaveDisabled}
-        />
-      )}
-      onDismiss={onDismiss}
+        />}
+      onClose={onDismiss}
       isLightDismiss={true}
       className={styles.root}
     >

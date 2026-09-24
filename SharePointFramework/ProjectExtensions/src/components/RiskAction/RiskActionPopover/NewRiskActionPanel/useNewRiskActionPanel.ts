@@ -58,7 +58,7 @@ export function useNewRiskActionPanel(props: IBasePanelProps) {
     setIsSaving(false)
     if (!createMultiple) {
       resetModel()
-      props.onDismiss()
+      props.onClose()
     }
   }, [itemContext, model])
 

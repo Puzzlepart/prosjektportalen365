@@ -15,7 +15,7 @@ export const EditPropertiesPanel: FC = () => {
   const submit = useEditPropertiesPanelSubmit()
   return (
     <CustomEditPanel
-      isOpen={context.state.activePanel === 'EditPropertiesPanel'}
+      open={context.state.activePanel === 'EditPropertiesPanel'}
       headerText={format(strings.EditProjectInformationText, context.props.title?.toLowerCase())}
       fieldValues={context.state.data.fieldValues}
       fields={context.state.properties}
@@ -23,7 +23,7 @@ export const EditPropertiesPanel: FC = () => {
       hiddenFields={['GtProjectPhase']}
       submit={submit}
       targetListId={context.state.data.propertiesListId}
-      onDismiss={() => context.dispatch(CLOSE_PANEL())}
+      onClose={() => context.dispatch(CLOSE_PANEL())}
     />
   )
 }

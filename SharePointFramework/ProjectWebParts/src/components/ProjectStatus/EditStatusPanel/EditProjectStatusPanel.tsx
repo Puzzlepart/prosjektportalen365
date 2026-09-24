@@ -15,7 +15,7 @@ export const EditStatusPanel: FC = () => {
   return (
     <>
       <CustomEditPanel
-        isOpen={isOpen}
+        open={isOpen}
         headerText={headerText}
         fieldValues={fieldValues}
         fields={fields}
@@ -24,7 +24,7 @@ export const EditStatusPanel: FC = () => {
         targetListId={reportListId}
         submit={submit}
         hiddenFields={['Title']}
-        onDismiss={onDismiss}
+        onClose={onDismiss}
       />
       <Toaster id='toaster-test' />
     </>

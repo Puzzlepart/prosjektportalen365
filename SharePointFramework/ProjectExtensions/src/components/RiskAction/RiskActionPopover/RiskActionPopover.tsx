@@ -88,7 +88,7 @@ export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
           </div>
         </PopoverSurface>
       </Popover>
-      <NewRiskActionPanel isOpen={isPanelOpen} onDismiss={onClosePanel} />
+      <NewRiskActionPanel open={isPanelOpen} onClose={onClosePanel} />
     </>
   )
 }

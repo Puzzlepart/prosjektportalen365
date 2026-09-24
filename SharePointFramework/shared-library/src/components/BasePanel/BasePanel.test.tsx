@@ -16,7 +16,7 @@ import { BasePanel } from './BasePanel'
 describe('BasePanel', () => {
   it('renders nothing while closed', () => {
     render(
-      <BasePanel isOpen={false} headerText='Alle egenskaper'>
+      <BasePanel open={false} headerText='Alle egenskaper'>
         <div>Innhold</div>
       </BasePanel>
     )
@@ -26,7 +26,7 @@ describe('BasePanel', () => {
 
   it('shows its header and children when open', () => {
     render(
-      <BasePanel isOpen headerText='Alle egenskaper'>
+      <BasePanel open headerText='Alle egenskaper'>
         <div>Innhold</div>
       </BasePanel>
     )
@@ -34,27 +34,31 @@ describe('BasePanel', () => {
     expect(screen.getByText('Innhold')).toBeInTheDocument()
   })
 
-  it('renders the body render prop', () => {
-    render(<BasePanel isOpen headerText='Tittel' onRenderBody={() => <div>Kropp</div>} />)
+  it('renders its children', () => {
+    render(
+      <BasePanel open headerText='Tittel'>
+        <div>Kropp</div>
+      </BasePanel>
+    )
     expect(screen.getByText('Kropp')).toBeInTheDocument()
   })
 
-  it('renders the footer render prop', () => {
+  it('renders its footer', () => {
     render(
       <BasePanel
-        isOpen
+        open
         headerText='Tittel'
-        onRenderFooterContent={() => <button>Lagre</button>}
+        footer={<button>Lagre</button>}
       />
     )
     expect(screen.getByRole('button', { name: 'Lagre' })).toBeInTheDocument()
   })
 
   it('dismisses when the close button is used', async () => {
-    const onDismiss = jest.fn()
+    const onClose = jest.fn()
     const user = userEvent.setup()
     render(
-      <BasePanel isOpen headerText='Tittel' onDismiss={onDismiss}>
+      <BasePanel open headerText='Tittel' onClose={onClose}>
         <div>Innhold</div>
       </BasePanel>
     )
@@ -65,6 +69,6 @@ describe('BasePanel', () => {
       .find((b) => /lukk|close/i.test(b.getAttribute('aria-label') ?? ''))
     expect(close).toBeTruthy()
     await user.click(close)
-    await waitFor(() => expect(onDismiss).toHaveBeenCalled())
+    await waitFor(() => expect(onClose).toHaveBeenCalled())
   })
 })

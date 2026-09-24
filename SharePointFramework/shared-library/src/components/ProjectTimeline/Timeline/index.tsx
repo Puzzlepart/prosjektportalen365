@@ -69,12 +69,12 @@ export const Timeline: FC<ITimelineProps> = (props) => {
           </ReactTimeline>
         </div>
         <FilterPanel
-          isOpen={showFilterPanel}
+          open={showFilterPanel}
           headerText={strings.FilterText}
           filters={props.filters}
           onFilterChange={props.onFilterChange}
           isLightDismiss
-          onDismiss={() => setShowFilterPanel(false)}
+          onClose={() => setShowFilterPanel(false)}
         />
         {showDetails && (
           <DetailsPopover timelineItem={showDetails} onDismiss={() => setShowDetails(null)} />
