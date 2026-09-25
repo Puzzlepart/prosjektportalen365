@@ -1,8 +1,8 @@
-import { IPersonaProps, ITag } from '@fluentui/react'
+import { ITag } from '@fluentui/react'
 import React from 'react'
 import { IIdeaFieldProps } from './types'
 import { Link, Persona, Tag } from '@fluentui/react-components'
-import { getFluentIcon, OverflowTagMenu } from 'pp365-shared-library'
+import { getFluentIcon, IPersonaItem, OverflowTagMenu } from 'pp365-shared-library'
 import {
   ChevronCircleRightFilled,
   EarthFilled,
@@ -54,7 +54,7 @@ export function useIdeaField(props: IIdeaFieldProps) {
     const renderMap = new Map<string, (value: any) => JSX.Element>([
       [
         'User',
-        ([user]: IPersonaProps[]) => {
+        ([user]: IPersonaItem[]) => {
           if (user) {
             return (
               <Persona
@@ -77,7 +77,7 @@ export function useIdeaField(props: IIdeaFieldProps) {
       ],
       [
         'UserMulti',
-        (users: IPersonaProps[]) => {
+        (users: IPersonaItem[]) => {
           return (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {users.map((user, key) => (

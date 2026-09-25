@@ -42,6 +42,7 @@ define([], function () {
     FiltersString: 'Filters',
     FilterText: 'Filter',
     FilterPanelEmptyTitle: 'No filters available',
+    PeoplePickerNoResults: 'No people found',
     FilterPanelEmptyMessage: 'There are no filters to display. Filters are only shown for columns that have more than one unique value across the current data set. This means there is either no data loaded, or all columns contain the same value for every item.',
     FilterPanelGroupProjectInformation: 'Project information',
     GroupByLabel: 'Group by',

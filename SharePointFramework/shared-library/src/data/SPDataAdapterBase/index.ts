@@ -1,4 +1,4 @@
-import { IPersonaSharedProps, ITag } from '@fluentui/react'
+import { ITag } from '@fluentui/react'
 import { SPUser } from '@microsoft/sp-page-context'
 import { IPnPClientStore, PnPClientStorage } from '@pnp/core'
 import { SPFI } from '@pnp/sp'
@@ -10,6 +10,7 @@ import { SpEntityPortalService } from '../../services/EntityPortalService'
 import { PortalDataService } from '../../services/PortalDataService/PortalDataService'
 import { getTermLabel, getTermStore } from '../../taxonomy'
 import { SPFxContext } from '../../types'
+import { IPersonaItem } from '../../types'
 import { DefaultCaching } from '../cache'
 import { createSpfiInstance } from '../createSpfiInstance'
 import {
@@ -264,7 +265,7 @@ export class SPDataAdapterBase<
     queryString: string,
     selectedItems: any[],
     maximumEntitySuggestions = 50
-  ): Promise<IPersonaSharedProps[]> {
+  ): Promise<IPersonaItem[]> {
     const profiles = await this.sp.profiles.clientPeoplePickerSearchUser({
       QueryString: queryString,
       MaximumEntitySuggestions: maximumEntitySuggestions,

@@ -1,9 +1,8 @@
-import { IPersonaProps } from '@fluentui/react'
 import React from 'react'
 import { useProjectInformationContext } from '../../context'
 import { IProjectPropertyProps } from './types'
 import { Link, Persona, Text } from '@fluentui/react-components'
-import { OverflowTagMenu } from 'pp365-shared-library'
+import { IPersonaItem, OverflowTagMenu } from 'pp365-shared-library'
 import * as strings from 'ProjectWebPartsStrings'
 import {
   ChevronCircleRightFilled,
@@ -72,7 +71,7 @@ export function useProjectProperty(props: IProjectPropertyProps) {
     const renderMap = new Map<string, (value: any) => JSX.Element>([
       [
         'User',
-        ([user]: IPersonaProps[]) => {
+        ([user]: IPersonaItem[]) => {
           return (
             <Persona
               {...user}
@@ -91,7 +90,7 @@ export function useProjectProperty(props: IProjectPropertyProps) {
       ],
       [
         'UserMulti',
-        (users: IPersonaProps[]) => {
+        (users: IPersonaItem[]) => {
           return (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {users.map((user, key) => (

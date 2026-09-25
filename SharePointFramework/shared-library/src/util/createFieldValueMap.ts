@@ -1,5 +1,5 @@
-import { IPersonaProps } from '@fluentui/react'
 import { ISPFieldUser } from '../interfaces'
+import { IPersonaItem } from '../types'
 import { EditableSPFieldValue } from '../models/EditableSPFieldValue'
 import { getUserPhoto } from './getUserPhoto'
 
@@ -74,7 +74,7 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
     [
       'User',
       ({ $ }) =>
-        ([$].filter(Boolean) as ISPFieldUser[])?.map<IPersonaProps>(
+        ([$].filter(Boolean) as ISPFieldUser[])?.map<IPersonaItem>(
           ({ Id: key, Title: text, EMail: secondaryText }) => ({
             key,
             text,
@@ -86,7 +86,7 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
     [
       'UserMulti',
       ({ $ }) =>
-        ($ as ISPFieldUser[])?.map<IPersonaProps>(
+        ($ as ISPFieldUser[])?.map<IPersonaItem>(
           ({ Id: key, Title: text, EMail: secondaryText }) => ({
             key,
             text,

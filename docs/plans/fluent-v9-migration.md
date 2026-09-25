@@ -111,9 +111,45 @@ inventory is current.
 
 Rule: convert everything around the lists first (toolbars, panels, column pickers, renderers) so that `DetailsList` is reached only through `PortfolioWebParts/src/components/List` and the equivalent in the shared library, with `IColumn` confined to those modules behind our own `ProjectColumn`/`ProjectContentColumn` types. The last slice then decides per list: `DataGrid` where the list needs none of grouping, sticky header or virtualization (most `DynamicList` views, admin lists), and the v8 `DetailsList` kept inside the one shared wrapper where it does, until v9 has parity. `@fluentui/react` remains a dependency of the shared library only, in that case.
 
-### B. People picker: one shared wrapper, v8 inside (decided)
+### B. People picker: one shared wrapper, v8 inside (decided; confirmed the hard way 2026-09-25)
 
 Seven files use `NormalPeoplePicker`. v9 has no people picker; the options are the PnP `PeoplePicker` (also v8 inside), a `TagPicker`-based component with our own Graph/people search, or keeping v8. Rule: create one `PeoplePicker` component in the shared library with a v9-shaped API (`selected`, `onChange`, `multi`, resolver), implemented on the v8 `NormalPeoplePicker` for now, and route all seven call sites through it. Replacing the inside later is a one-file change.
+
+**Amended when the slice was executed.** Two premises were wrong. First, only **two** files render
+`NormalPeoplePicker` — `User.tsx` and `UserMulti.tsx`, which are identical apart from an icon and an
+item limit. The other five use `IPersonaProps` as a *data model* passed between the adapter, the
+field value map, the edit panel's model and two renderers, the same pattern as `IContextualMenuItem`
+and `IProgressIndicatorProps` in slice 4; it is replaced by `IPersonaItem` in `shared-library/src/types`.
+
+Second, "v9 has no people picker" looked out of date: `@fluentui/react-tag-picker` ships inside
+`@fluentui/react-components@9.74.8` and exports `TagPicker` with its control, group, input, list and
+option parts — option (b) of the three weighed above. The wrapper was therefore built on `TagPicker`
+first, to avoid doing the work twice.
+
+**That did not survive contact with the stack, and the rule stands as written.** Typing into the
+picker sends it into an endless render loop: 100% CPU, the Jest worker dies with
+`Jest worker encountered 4 child process exceptions, exceeding retry limit`. Static rendering is
+fine — a probe covering empty, multi-with-selection and single-with-selection passes — and the loop
+appears only on input. Two plausible causes in our own code were found and fixed along the way and
+neither was it:
+
+- `TagPickerInput` must stay **uncontrolled**. `useTagPickerInput` does `const { value = contextValue } = fieldProps`
+  and also calls the picker context's `setValue`, so supplying `value` gives it two sources of truth.
+- a `TagPickerOption` with an empty `value` collides in the option registry, which is easy to hit
+  because the no-results entry renders in the window between the keystroke and the search answering.
+
+The loop persisted with both fixed, and then reproduced on **Fluent's own documented `TagPicker`
+usage with none of our code in it**. The cause is almost certainly the React version: SPFx 1.23 pins
+React 17 and `TagPicker` is built against React 18 semantics. Retry when the SPFx React version
+moves; the component carries a note saying so.
+
+So the wrapper is the v8 `NormalPeoplePicker` behind the v9-shaped API, exactly as the rule says.
+The API and `IPersonaItem` are unaffected, and swapping the inside remains the one-file change.
+
+Worth knowing for the slices ahead: a v9 component shipping in `@fluentui/react-components` is not
+by itself evidence that it works here. `ResponsibleField` shows a `Combobox` with `Persona` options
+does work on React 17, so the combobox family is not wholesale broken — but anything newer than the
+React 18 cutover needs a typing-level test before it is adopted, not just a render.
 
 ### C. v8 is removed from a solution when its last v8 import is gone, and checked by the build (decided)
 
