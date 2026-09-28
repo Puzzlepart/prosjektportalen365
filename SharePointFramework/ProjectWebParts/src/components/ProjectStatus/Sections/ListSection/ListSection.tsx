@@ -1,18 +1,22 @@
 import {
-  DetailsListLayoutMode,
-  SelectionMode,
-  Shimmer,
-  ShimmeredDetailsList
-} from '@fluentui/react'
+  DataGrid,
+  DataGridBody,
+  DataGridCell,
+  DataGridHeader,
+  DataGridHeaderCell,
+  DataGridRow
+} from '@fluentui/react-components'
+import { LoadingSkeleton, createDataGridColumns } from 'pp365-shared-library'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection/BaseSection'
 import { useListSection } from './useListSection'
 
 export const ListSection: FC = () => {
   const { state, items, columns, summation, shouldRenderList } = useListSection()
+  const grid = useMemo(() => createDataGridColumns(columns), [columns])
 
   /**
    * Render content for the List section. Handles potential errors and renders the list of items.
@@ -26,16 +30,29 @@ export const ListSection: FC = () => {
           intent='error'
         />
       )
+    if (!state.isDataLoaded) return <LoadingSkeleton />
     return (
-      <Shimmer isDataLoaded={state.isDataLoaded}>
-        <ShimmeredDetailsList
-          enableShimmer={!state.isDataLoaded}
-          items={items}
-          columns={columns}
-          selectionMode={SelectionMode.none}
-          layoutMode={DetailsListLayoutMode.justified}
-        />
-      </Shimmer>
+      <DataGrid
+        items={items}
+        columns={grid.columns}
+        columnSizingOptions={grid.columnSizingOptions}
+        resizableColumns
+      >
+      <DataGridHeader>
+        <DataGridRow>
+            {({ renderHeaderCell }) => (
+            <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
+            )}
+          </DataGridRow>
+        </DataGridHeader>
+      <DataGridBody>
+          {({ item, rowId }) => (
+          <DataGridRow key={rowId}>
+              {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
+            </DataGridRow>
+          )}
+        </DataGridBody>
+      </DataGrid>
     )
   }
 

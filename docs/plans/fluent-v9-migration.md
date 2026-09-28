@@ -782,7 +782,7 @@ not mention: `shared-library/src/icons/index.tsx` uses the v8 `Icon` deliberatel
 `getFabricIcon` fallback that renders legacy MDL2 icon names. It cannot move to `getFluentIcon`
 without removing the fallback mechanism itself, so it stays on v8 until that fallback is retired.
 
-### Slice 6 — lists, part 1 (2026-09-28, in progress)
+### Slice 6 — lists, part 1 (2026-09-28, complete)
 
 Started from `docs/plans/fluent-v9-migration/HANDOFF-slice-6.md`, whose measurements this log does
 not repeat.
@@ -836,8 +836,38 @@ the file type and fallback icons (G), the data type dropdown (above), `Autocompl
 and four type-only imports — `DayOfWeek`, `ITag`, `IObjectWithKey`, `IIconProps` in
 `ProjectTemplate` — that are the same data-model pattern and belong to the next batch.
 
-Next batch: the three no-selection lists (`TargetFolderScreen`, `UncertaintySection`,
-`ListSection`) to `DataGrid`, tests first, modelled on the two `DataGrid` sites in production.
+**Batch 2: the three no-selection lists are on `DataGrid`.** One shared adapter,
+`createDataGridColumns` in `shared-library/src/util`, maps `IListColumn[]` onto `DataGrid`'s column
+definitions and sizing options — `name` to the header, a column's own `onRender` to the cell,
+`fieldName` to the text otherwise, `minWidth`/`maxWidth` to sizing, `isMultiline` to wrapping. It is
+the one place a column meets the v9 grid, and all three conversions use it. The grid boilerplate is
+repeated inline at the three sites on purpose: Decision I puts the shared v9 grid at the opening of
+slice 7, built from the two production sites, and pre-empting it here would be the churn it warns
+against.
+
+Tests first, every time, and each conversion passed its own tests unchanged from the v8 baseline:
+`TargetFolderScreen` 7 (folders listed and sorted, navigation into a folder, the empty message, both
+buttons' dispatches, the library switch), `ListSection` 5, `UncertaintySection` 4 (matrix chosen from
+the content type), the adapter 6. The shimmer wrappers those sections had were dead code — a section
+renders its list only once it has items, which implies its data is loaded — so they became a
+`LoadingSkeleton` on the one path that can still show. `TargetFolderScreen` keeps the v8 file-type
+`Icon` in its columns under Decision G, and keeps row double-click as the v8 list's "invoke".
+
+Three test-writing mistakes worth not repeating: a `mockReset()` inside the render helper wiped the
+value each test had just primed (only the tests needing no value passed, which was the clue); a
+section stand-in without `sumField` made `calculateValues` throw and sent the component down its
+error branch, which the error test then happily confirmed; and four header strings rendered under one
+parent become one text node, so `getByText` needs one element per header.
+
+**Batch 2 closed.** `rush rebuild` exit 0, **228 tests** (206 → 228), zero errors. Files importing
+v8: ProjectWebParts **7 → 5**, ProjectExtensions **12 → 11**; the rest unchanged. Only two v8 list
+renders remain in the repository: the hub (Decision A) and `SelectScreen` (slice 7). What ProjectWebParts
+has left is `Sticky`/`ScrollablePane` in the status page layout and `PropertyFieldColorConfiguration`
+(slice 8); ProjectExtensions has the file-type icons (G) and `Selection` for `SelectScreen` (slice 7).
+
+Slice 6 is complete against its plan row: `IColumn` is confined to the hub, the renderers and
+form fields around the lists are v9, and every list that needs neither grouping nor selection is on
+`DataGrid`. Slice 7 opens with the shared v9 grid and `SelectScreen`.
 
 ### Slice 4 — panels, menus and dialogs (2026-09-23, in progress)
 

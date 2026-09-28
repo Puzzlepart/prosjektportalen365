@@ -1,12 +1,15 @@
 import {
-  DetailsListLayoutMode,
-  SelectionMode,
-  Shimmer,
-  ShimmeredDetailsList
-} from '@fluentui/react'
+  DataGrid,
+  DataGridBody,
+  DataGridCell,
+  DataGridHeader,
+  DataGridHeaderCell,
+  DataGridRow
+} from '@fluentui/react-components'
+import { LoadingSkeleton, createDataGridColumns } from 'pp365-shared-library'
 import * as strings from 'ProjectWebPartsStrings'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
-import React, { FC, ReactElement } from 'react'
+import React, { FC, ReactElement, useMemo } from 'react'
 import { OpportunityMatrix } from '../../../OpportunityMatrix'
 import { RiskMatrix } from '../../../RiskMatrix'
 import { StatusElement } from '../../StatusElement'
@@ -18,6 +21,7 @@ export const UncertaintySection: FC = () => {
   const context = useProjectStatusContext()
   const { state, matrixElements, items, columns, summation, shouldRenderContent } =
     useUncertaintySection()
+  const grid = useMemo(() => createDataGridColumns(columns), [columns])
 
   /**
    * Render content for the Uncertainty section. Handles potential errors and renders OpportunityMatrix
@@ -58,18 +62,32 @@ export const UncertaintySection: FC = () => {
         }
         break
     }
+    if (!state.isDataLoaded) return <LoadingSkeleton />
     return (
-      <Shimmer isDataLoaded={state.isDataLoaded}>
+      <>
         {matrix}
-        <ShimmeredDetailsList
-          styles={{ root: { borderRadius: 10 } }}
-          enableShimmer={!state.isDataLoaded}
+        <DataGrid
           items={items}
-          columns={columns}
-          selectionMode={SelectionMode.none}
-          layoutMode={DetailsListLayoutMode.justified}
-        />
-      </Shimmer>
+          columns={grid.columns}
+          columnSizingOptions={grid.columnSizingOptions}
+          resizableColumns
+        >
+          <DataGridHeader>
+            <DataGridRow>
+              {({ renderHeaderCell }) => (
+                <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
+              )}
+            </DataGridRow>
+          </DataGridHeader>
+          <DataGridBody>
+            {({ item, rowId }) => (
+              <DataGridRow key={rowId}>
+                {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
+              </DataGridRow>
+            )}
+          </DataGridBody>
+        </DataGrid>
+      </>
     )
   }
 

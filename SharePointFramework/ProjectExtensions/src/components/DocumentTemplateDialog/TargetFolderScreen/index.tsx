@@ -1,13 +1,17 @@
 import {
-  ConstrainMode,
-  DetailsList,
-  DetailsListLayoutMode,
-  SelectionMode
-} from '@fluentui/react'
+  Button,
+  DataGrid,
+  DataGridBody,
+  DataGridCell,
+  DataGridHeader,
+  DataGridHeaderCell,
+  DataGridRow,
+  DialogActions
+} from '@fluentui/react-components'
 import { SPDataAdapter } from 'data'
-import { SPFolder, UserMessage } from 'pp365-shared-library'
+import { SPFolder, UserMessage, createDataGridColumns } from 'pp365-shared-library'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { FC, useContext, useEffect, useState } from 'react'
+import React, { FC, useContext, useEffect, useMemo, useState } from 'react'
 import { TemplateSelectorContext } from '../../../extensions/templateSelector/context'
 import { isEmpty } from 'underscore'
 import { DocumentTemplateDialogScreen } from '..'
@@ -16,7 +20,6 @@ import { FolderNavigation } from '../FolderNavigation'
 import { SET_SCREEN, SET_TARGET } from '../reducer'
 import columns from './columns'
 import styles from './TargetFolderScreen.module.scss'
-import { Button, DialogActions } from '@fluentui/react-components'
 
 export const TargetFolderScreen: FC = () => {
   const { state, dispatch } = useContext(DocumentTemplateDialogContext)
@@ -30,6 +33,10 @@ export const TargetFolderScreen: FC = () => {
     setFolder(clickedFolder.url)
   }
 
+  // Built once: the column keys are generated, and a new set on every render would reset the
+  // grid's column state. The click handler only uses state setters, which are stable.
+  const grid = useMemo(() => createDataGridColumns<SPFolder>(columns({ onFolderClick })), [])
+
   useEffect(() => {
     if (folder === null) {
       setFolders(context.libraries)
@@ -37,6 +44,8 @@ export const TargetFolderScreen: FC = () => {
       setFolders(root.folders)
     } else SPDataAdapter.getFolders(folder).then(setFolders)
   }, [folder])
+
+  const sortedFolders = [...folders].sort((a, b) => (a.name > b.name ? 1 : -1))
 
   return (
     <div className={styles.root}>
@@ -61,14 +70,29 @@ export const TargetFolderScreen: FC = () => {
       {folders.length === 0 && folder !== null ? (
         <UserMessage text={strings.NoFoldersAvailableText} intent='info' />
       ) : (
-        <DetailsList
-          items={folders.sort((a, b) => (a.name > b.name ? 1 : -1))}
-          columns={columns({ onFolderClick })}
-          selectionMode={SelectionMode.none}
-          layoutMode={DetailsListLayoutMode.justified}
-          constrainMode={ConstrainMode.horizontalConstrained}
-          onItemInvoked={onFolderClick}
-        />
+        <DataGrid
+          items={sortedFolders}
+          columns={grid.columns}
+          columnSizingOptions={grid.columnSizingOptions}
+          resizableColumns
+          getRowId={(item: SPFolder) => item.url}
+        >
+          <DataGridHeader>
+            <DataGridRow>
+              {({ renderHeaderCell }) => (
+                <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
+              )}
+            </DataGridRow>
+          </DataGridHeader>
+          <DataGridBody<SPFolder>>
+            {({ item, rowId }) => (
+              // Double-clicking a row opens the folder, as invoking a row did in the v8 list.
+              <DataGridRow<SPFolder> key={rowId} onDoubleClick={() => onFolderClick(item)}>
+                {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
+              </DataGridRow>
+            )}
+          </DataGridBody>
+        </DataGrid>
       )}
       <DialogActions>
         <Button

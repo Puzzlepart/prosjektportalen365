@@ -33,18 +33,18 @@ The user builds and deploys themselves by default, but has repeatedly asked for 
 
 ## State at handoff
 
-**Updated after slice 6 batch 1 (2026-09-28).** `rush rebuild` is green: exit 0, **206 tests pass**, zero lint errors (warnings only, see slice 8). The `IColumn` swap, the `ItemColumn` form controls and the trend icon are done; see the slice 6 log in the plan.
+**Slice 6 is complete (2026-09-28).** `rush rebuild` is green: exit 0, **228 tests pass**, zero lint errors (warnings only, see slice 8). The `IColumn` swap, the `ItemColumn` form controls, the trend icon and the three no-selection lists are done; see the slice 6 log in the plan. This document stays as the record of what was measured; slice 7 starts from the plan's Decision I and the slice 6 log.
 
 | Solution | Files importing v8 (at handoff → after batch 1) | `@fluentui/react` in `package.json` |
 |---|---|---|
 | shared-library | 32 → **12** | yes |
 | PortfolioWebParts | 22 → **16** | yes |
-| ProjectWebParts | 17 → **7** | yes |
-| ProjectExtensions | 12 → 12 | yes |
+| ProjectWebParts | 17 → **5** | yes |
+| ProjectExtensions | 12 → **11** | yes |
 | ProgramWebParts | **0** | no |
 | PortfolioExtensions | **0** | no |
 
-Test counts per solution: shared-library 182, ProjectExtensions 10, PortfolioWebParts 9, ProgramWebParts 3, ProjectWebParts 1, PortfolioExtensions 1.
+Test counts per solution: shared-library 188, ProjectExtensions 17, ProjectWebParts 10, PortfolioWebParts 9, ProgramWebParts 3, PortfolioExtensions 1.
 
 ## What was verified on 2026-09-28 — do not re-derive
 
