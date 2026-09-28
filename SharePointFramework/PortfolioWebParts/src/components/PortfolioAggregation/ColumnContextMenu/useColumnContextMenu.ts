@@ -19,10 +19,11 @@ import { IMenuItem, format } from 'pp365-shared-library'
 export function useColumnContextMenu() {
   const context = usePortfolioAggregationContext()
   const [open, setOpen] = useState(false)
-  const { isAddColumn, createContextualMenuItems } = useAddColumn(
-    true,
-    context.props.pageContext.legacyPageContext.isSiteAdmin
-  )
+  // Only decides what the menu offers: `PROJECT_CONTENT_COLUMNS` lives in the hub's portal site
+  // and SharePoint enforces write permission on it server side.
+  const userCanManageColumns = context.props.pageContext.legacyPageContext.isSiteAdmin
+
+  const { isAddColumn, createContextualMenuItems } = useAddColumn(true, userCanManageColumns)
   const onOpenChange: MenuProps['onOpenChange'] = (_, data) => setOpen(data.open)
   const [checkedValues, setCheckedValues] = useState<MenuProps['checkedValues']>({})
   const onCheckedValueChange: MenuProps['onCheckedValueChange'] = (_event, data) => {
@@ -119,7 +120,7 @@ export function useColumnContextMenu() {
               key: 'EDIT_COLUMN',
               text: strings.EditColumnLabel,
               onClick: () => context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column })),
-              disabled: true,
+              disabled: !userCanManageColumns,
               iconProps: { iconName: 'TableCellEdit' }
             },
             {
@@ -137,7 +138,7 @@ export function useColumnContextMenu() {
               text: strings.AddColumnLabel,
               onClick: () => context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true })),
               iconProps: { iconName: 'Add' },
-              disabled: true
+              disabled: !userCanManageColumns
             }
           ]
         }

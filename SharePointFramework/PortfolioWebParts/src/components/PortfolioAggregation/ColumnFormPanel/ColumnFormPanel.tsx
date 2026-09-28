@@ -1,5 +1,5 @@
 import * as strings from 'PortfolioWebPartsStrings'
-import { BasePanel, ColumnSearchPropertyField, FieldContainer, customLightTheme } from 'pp365-shared-library'
+import { BasePanel, ColumnSearchPropertyField, FieldContainer, UserMessage, customLightTheme } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { usePortfolioAggregationContext } from '../context'
 import styles from './ColumnFormPanel.module.scss'
@@ -22,6 +22,7 @@ export const ColumnFormPanel: FC = () => {
     persistRenderGlobally,
     setPersistRenderGlobally,
     isEditing,
+    saveError,
     fluentProviderId
   } = useColumnFormPanel()
 
@@ -42,6 +43,13 @@ export const ColumnFormPanel: FC = () => {
     >
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme} className={styles.content}>
+          {saveError && (
+            <UserMessage
+              intent='error'
+              title={strings.ErrorTitle}
+              text={saveError.message}
+            />
+          )}
           <FieldContainer
             iconName='NumberSymbolSquare'
             label={strings.SortOrderLabel}

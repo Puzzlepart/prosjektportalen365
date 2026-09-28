@@ -26,10 +26,12 @@ export function useColumnContextMenu() {
     context?.props.pageContext?.user?.email ?? context?.props.pageContext?.user?.loginName
   const isViewAuthor = context?.state.currentView?.author === userEmail
 
-  const { isAddColumn, createContextualMenuItems } = useAddColumn(
-    true,
-    (context?.props.isSiteAdmin || isViewAuthor) ?? false
-  )
+  // Site administrators may manage the columns of any view; the author of a view may manage its
+  // own. This only decides what the menu offers: `PROJECT_COLUMNS` lives in the hub's portal site
+  // and SharePoint enforces write permission on it server side.
+  const userCanManageColumns = (context?.props.isSiteAdmin || isViewAuthor) ?? false
+
+  const { isAddColumn, createContextualMenuItems } = useAddColumn(true, userCanManageColumns)
   const onOpenChange: MenuProps['onOpenChange'] = (_, data) => setOpen(data.open)
   const onCheckedValueChange: MenuProps['onCheckedValueChange'] = (_event, data) => {
     setCheckedValues({ ...checkedValues, [data.name]: [_.last(data.checkedItems)].filter(Boolean) })
@@ -137,7 +139,7 @@ export function useColumnContextMenu() {
               key: 'EDIT_COLUMN',
               text: strings.EditColumnLabel,
               onClick: () => context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column })),
-              disabled: true,
+              disabled: !userCanManageColumns,
               iconProps: { iconName: 'TableCellEdit' }
             },
             {
@@ -148,7 +150,7 @@ export function useColumnContextMenu() {
               key: 'ADD_COLUMN',
               text: strings.AddColumnLabel,
               onClick: () => context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true })),
-              disabled: true,
+              disabled: !userCanManageColumns,
               iconProps: { iconName: 'Add' }
             }
           ]

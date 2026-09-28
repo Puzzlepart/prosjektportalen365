@@ -4,7 +4,7 @@ import { PortfolioOverviewContext } from '../context'
 import styles from './ColumnFormPanel.module.scss'
 import { useColumnFormPanel } from './useColumnFormPanel'
 import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
-import { BasePanel, ColumnSearchPropertyField, FieldContainer, customLightTheme } from 'pp365-shared-library'
+import { BasePanel, ColumnSearchPropertyField, FieldContainer, UserMessage, customLightTheme } from 'pp365-shared-library'
 import { ColumnDataTypeField } from 'pp365-shared-library/lib/components/ItemColumn/ColumnDataTypeField'
 import {
   Combobox,
@@ -29,6 +29,7 @@ export const ColumnFormPanel: FC = () => {
     isSaveDisabled,
     onDeleteColumn,
     findMatchingSearchProperty,
+    saveError,
     fluentProviderId
   } = useColumnFormPanel()
 
@@ -50,6 +51,13 @@ export const ColumnFormPanel: FC = () => {
     >
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme} className={styles.content}>
+          {saveError && (
+            <UserMessage
+              intent='error'
+              title={strings.ErrorTitle}
+              text={saveError.message}
+            />
+          )}
           <FieldContainer
             iconName='NumberSymbolSquare'
             label={strings.SortOrderLabel}
