@@ -75,7 +75,7 @@ Nye områdekolonner i `Templates/Portfolio/Objects/SiteFields/ResourceAllocation
 
 Nye innholdstyper (`Objects/ContentTypes/`):
 
-- `Prosjektallokering.xml` – **ny ID** (ikke gjenbruk av `0x010004EAFF…`, slik at migrering, søk og webdeler kan skille legacy fra hubelementer). Felt i rekkefølge: `Title` (skjult), `GtSiteIdLookup` (påkrevd), `GtResourceRole` (påkrevd), `GtResourceUser` (valgfri – tom betyr «ubesatt rolle»), `GtStartDate`, `GtEndDate` (påkrevd), `GtResourceLoad` (påkrevd), `GtTimelineElementLookup`, `GtFollowElementDates`, `GtAllocationStatus`, `GtAllocationComment`, `GtRequestedBy`, `GtRequestedDate`, `GtApprovedBy`, `GtApprovedDate`, `GtAllocationDecisionComment`, `GtAllocationSourceRef` (skjult).
+- `Prosjektallokering.xml` – **ny ID** (ikke gjenbruk av `0x010004EAFF…`, slik at migrering, søk og webdeler kan skille legacy fra hubelementer). Felt i rekkefølge: `Title` (skjult), `GtSiteIdLookup` (påkrevd), `GtResourceRole` (påkrevd), `GtResourceUser` (valgfri – tom betyr «ubesatt rolle»; behov meldes som hovedregel på rolle-/fagnivå, person settes av ressurskontoret ved tildeling), `GtStartDate`, `GtEndDate` (påkrevd), `GtResourceLoad` (påkrevd), `GtTimelineElementLookup`, `GtFollowElementDates`, `GtAllocationStatus`, `GtAllocationComment`, `GtRequestedBy`, `GtRequestedDate`, `GtApprovedBy`, `GtApprovedDate`, `GtAllocationDecisionComment`, `GtAllocationSourceRef` (skjult).
 - `Ressurs.xml` – for `Ressurspool`: `Title`, `GtResourceUser` (påkrevd), `GtResourceRole` (primærrolle), `GtResourceCompetence`, `GtResourceCapacity`, `GtResourceDepartment`, `GtResourceActive`, `GtDescription`.
 - Eksisterende `Ressursallokering.xml` (`0x010029F45E…`) beholdes uendret for linje/fravær.
 
@@ -84,7 +84,7 @@ Ny liste `Objects/Lists/Ressurspool.xml` (TemplateType 100, CT `Ressurs`, visnin
 Bevisste utelatelser:
 
 - **Ikke eget `GtAllocationKind`-felt.** Type (prosjekt / linje / fravær) avledes av innholdstype og `GtResourceAbsence` (`Linjeoppgaver` → linje, øvrige → fravær). Dagens webdel skiller allerede på `ContentTypeId`; et redundant valgfelt inviterer til inkonsistens.
-- **Ikke eget kompetanse-termsett.** Etterspurt rolle (`GtResourceRole`, én verdi) og personens kompetanse (`GtResourceCompetence`, flere verdier) bruker samme termsett «Ressursroller», slik at matching mellom behov og person er triviell og kunden vedlikeholder én vokabular. Finere inndeling løses med undertermer. Dermed trengs ingen `Templates/Upgrade/1.15.0`-taksonomidelta.
+- **Ikke eget kompetanse-termsett.** Etterspurt rolle (`GtResourceRole`, én verdi) og personens kompetanse (`GtResourceCompetence`, flere verdier) bruker samme termsett «Ressursroller», slik at matching mellom behov og person er triviell og kunden vedlikeholder én vokabular. Finere inndeling løses med undertermer: termsettet kan bygges hierarkisk med **fagmiljø** som toppnivå og roller som undertermer, slik at et behov kan meldes på fagmiljø alene («Arkitektur») eller på en konkret rolle under det. Dermed trengs ingen `Templates/Upgrade/1.15.0`-taksonomidelta.
 
 ### D4. Kobling til prosjekt og tidslinjeelementer
 
@@ -94,8 +94,8 @@ En allokering knyttes først til prosjekt (`GtSiteIdLookup`). Deretter kan den v
 
 - Ny SharePoint-gruppe `Ressurskontor` i `Objects/Security.xml` (eier `{associatedownergroupid}`).
 - Ny prosjektadministrasjonstilgang `RequestResources` (rad i `Lists/Prosjektadministrasjonstilganger.xml`, enum i `shared-library/src/data/SPDataAdapterBase/types.ts`), tildelt prosjektleder/eier/støtte/prosjektkontor i oppgraderingsskriptet etter mønsteret for `AssistantAccess` (1.13.0).
-- Globale innstillinger (`Lists/Globale innstillinger.xml`, ny kategori Ressursstyring): `ResourceManagementEnabled` (1), `ResourceOfficeGroup` (gruppenavn, default `Ressurskontor`), `ResourcePoolMode` (`pool` | `hubmembers` | `group`), `ResourcePoolGroup`, `ResourceAllocationRequireApproval` (1), `ResourceAllocationShowOnlyActive` (1).
-- Lesetilgang: alle med hubtilgang. Forespørsel: hubmedlemmer (Contribute + rediger egne) med UI-gating på `RequestResources`. Godkjenne/tildele/avvise/redigere alt: medlemmer av gruppen i `ResourceOfficeGroup`. Kansellere: forespørrer eller ressurskontor. UI sjekker gruppemedlemskap via `sp.web.currentUser` + `siteUsers.getById().groups` (cache per sesjon) og skjuler knapper; serveren håndhever uansett.
+- Globale innstillinger (`Lists/Globale innstillinger.xml`, ny kategori Ressursstyring): `ResourceManagementEnabled` (1), `ResourceOfficeGroup` (gruppenavn, default `Ressurskontor`), `ResourcePoolMode` (`pool` | `hubmembers` | `group`), `ResourcePoolGroup`, `ResourceAllocationRequireApproval` (1), `ResourceAllocationAllowRequestedPerson` (0 – når av skjules personvelgeren i forespørselsskjemaet, og behov meldes kun på rolle/fagmiljø; ressurskontoret velger person ved tildeling), `ResourceAllocationShowOnlyActive` (1).
+- Lesetilgang: alle med hubtilgang, inkludert `Ressurspool` (prosjektledere kan se hvem som finnes, kompetanse og kapasitet, som referanse når de melder behov). Forespørsel: hubmedlemmer (Contribute + rediger egne) med UI-gating på `RequestResources`. Forespørrere «henter» ikke personer fra poolen; de velger rolle/fagmiljø fra samme termsett som poolen bruker. Kun `Ressurskontor` kan sette `GtResourceUser` på en prosjektallokering og flytte status til Godkjent/Tildelt; tjenesten avviser statusendring og personfelt fra andre, og listen beskytter i tillegg via «rediger egne». Godkjenne/tildele/avvise/redigere alt: medlemmer av gruppen i `ResourceOfficeGroup`. Kansellere: forespørrer eller ressurskontor. UI sjekker gruppemedlemskap via `sp.web.currentUser` + `siteUsers.getById().groups` (cache per sesjon) og skjuler knapper; serveren håndhever uansett.
 
 ### D6. Snapshot og historikk (v1)
 
@@ -167,7 +167,7 @@ Tilstand i `reducer.ts` (Redux Toolkit `createReducer`): `rangeStart`, `granular
 |---|---|---|
 | Type | `RadioGroup` (kun porteføljemodus) | påkrevd |
 | Prosjekt | `Combobox` over hubens `Prosjekter` (porteføljemodus) | påkrevd for prosjekt |
-| Ressurs | `PeoplePicker` (`@pnp/spfx-controls-react`, brukes allerede i `CustomEditPanel`) | påkrevd for linje/fravær og for status Tildelt; valgfri for Forespurt |
+| Ressurs | `PeoplePicker` (`@pnp/spfx-controls-react`, brukes allerede i `CustomEditPanel`) | påkrevd for linje/fravær og for status Tildelt; skjult for forespørrere når `ResourceAllocationAllowRequestedPerson` er av; kun ressurskontoret kan sette person på prosjektallokeringer |
 | Rolle / kompetanse | `ModernTaxonomyPicker` mot termsett `54da9f47-…` | påkrevd for prosjekt |
 | Tidslinjeelement | `Combobox` over prosjektets `Tidslinjeinnhold` (type + datoer) | valgfri |
 | Følg elementets datoer | `Switch` | låser datofelt, kopierer datoer |
