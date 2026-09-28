@@ -1,7 +1,7 @@
 import { Link } from '@fluentui/react-components'
-import { Icon, IColumn } from '@fluentui/react'
+import { Icon } from '@fluentui/react'
 import { initializeFileTypeIcons } from '@fluentui/react-file-type-icons'
-import { getId } from 'pp365-shared-library'
+import { IListColumn, getId } from 'pp365-shared-library'
 import { TemplateItem } from 'models'
 import * as ProjectExtensionsStrings from 'ProjectExtensionsStrings'
 import React from 'react'
@@ -53,4 +53,4 @@ export default ({ setFolder }: { setFolder: (folder: TemplateItem) => void }) =>
       name: ProjectExtensionsStrings.ModifiedLabel,
       minWidth: 150
     }
-  ] as IColumn[]
+  ] as IListColumn[]

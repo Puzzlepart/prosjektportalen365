@@ -1,4 +1,3 @@
-import { IColumn } from '@fluentui/react'
 import { AssignFrom } from '@pnp/core'
 import { spfi } from '@pnp/sp'
 import { ICamlQuery } from '@pnp/sp/lists'
@@ -10,6 +9,7 @@ import { getScopeLabel, parseSubProjects } from '../../parseSubProjects'
 import { SectionContext } from '../context'
 import { escapeXmlValue, replaceScopeTokens } from '../scopeTokens'
 import { IListSectionData } from './types'
+import { IListColumn } from 'pp365-shared-library'
 
 const COLUMN_MAX_WIDTH: Record<string, number> = { Text: 250, Note: 250, Choice: 150, Number: 100 }
 
@@ -64,7 +64,7 @@ export function useFetchListData() {
       const columns = view.ViewFields.Items.map<string>((vf) => (vf === 'LinkTitle' ? 'Title' : vf))
         .map<SPField>((vf) => fields.find((fld) => fld.InternalName === vf))
         .filter(Boolean)
-        .map<IColumn>((field) => ({
+        .map<IListColumn>((field) => ({
           key: field.InternalName,
           fieldName: field.InternalName,
           name: field.Title,

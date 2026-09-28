@@ -1,7 +1,7 @@
-import { IColumn } from '@fluentui/react'
 import { IBasePanelProps } from '../BasePanel'
 import { IFilterProps } from './Filter/types'
 import { IFilterItemProps } from './FilterItem/types'
+import { IListColumn } from '../../types'
 
 export interface IFilterPanelProps extends IBasePanelProps {
   /**
@@ -12,7 +12,7 @@ export interface IFilterPanelProps extends IBasePanelProps {
   /**
    * On filter change function
    */
-  onFilterChange: (column: IColumn, selectedItems: IFilterItemProps[]) => void
+  onFilterChange: (column: IListColumn, selectedItems: IFilterItemProps[]) => void
 
   /**
    * Id for the layer host

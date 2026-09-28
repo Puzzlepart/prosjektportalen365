@@ -1,9 +1,9 @@
-import { IColumn } from '@fluentui/react'
 import { OnDragEndResponder } from 'react-beautiful-dnd'
 import { IEditViewColumnsPanelProps } from './types'
 import { useSelectableColumns } from './useSelectableColumns'
 import _ from 'lodash'
 import { useId } from '@fluentui/react-components'
+import { IListColumn } from 'pp365-shared-library'
 
 /**
  * Hook that provides functionality for editing and selecting columns in a view, including
@@ -33,7 +33,7 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
    * @param col Column item
    * @param isSelected Selected state
    */
-  const onChange = (col: IColumn, isSelected: boolean) => {
+  const onChange = (col: IListColumn, isSelected: boolean) => {
     selectColumn(col, isSelected)
   }
 
@@ -57,7 +57,7 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
     selectableColumns,
     onChange,
     onSave,
-    moveColumn: (column: IColumn, moveIndex: number) => {
+    moveColumn: (column: IListColumn, moveIndex: number) => {
       const columnIndex = selectedColumns.findIndex((c) => c.fieldName === column.fieldName)
       if (columnIndex > -1) {
         moveColumn(columnIndex, columnIndex + moveIndex)

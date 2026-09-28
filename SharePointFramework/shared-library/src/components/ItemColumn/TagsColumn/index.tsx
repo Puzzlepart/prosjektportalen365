@@ -1,8 +1,7 @@
-import { TextField } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'SharedLibraryStrings'
 import React from 'react'
-import { ColumnDataTypePropertyField } from '../ColumnDataTypeField'
+import { textField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'
 import { ITagsColumnProps } from './types'
 import {
@@ -58,11 +57,11 @@ TagsColumn.id = 'Tags'
 TagsColumn.displayName = strings.ColumnRenderOptionTags
 TagsColumn.iconName = 'Tag'
 TagsColumn.getDataTypeProperties = (onChange, dataTypeProperties: Record<string, any>) => [
-  ColumnDataTypePropertyField(TextField, {
+  textField({
     label: strings.ColumnRenderOptionTagsValueSeparatorLabel,
     description: strings.ColumnRenderOptionTagsValueSeparatorDescription,
     placeholder: TagsColumn.defaultProps.valueSeparator,
     value: dataTypeProperties.valueSeparator,
-    onChange: (_, value) => onChange('valueSeparator', value)
+    onChange: (value) => onChange('valueSeparator', value)
   })
 ]

@@ -1,6 +1,5 @@
-import { IColumn } from '@fluentui/react'
 import _ from 'lodash'
-import { getObjectValue as get, calculateValues } from 'pp365-shared-library'
+import { IListColumn, calculateValues, getObjectValue as get } from 'pp365-shared-library'
 import { useContext, useEffect, useState } from 'react'
 import { useProjectStatusContext } from '../../../ProjectStatus/context'
 import { PERSIST_SECTION_DATA } from '../../reducer'
@@ -57,7 +56,7 @@ export function useListSection() {
   return {
     state,
     items: get<any[]>(state, 'data.items', []),
-    columns: get<IColumn[]>(state, 'data.columns', []),
+    columns: get<IListColumn[]>(state, 'data.columns', []),
     summation: get<ISummation>(state, 'data.summation', {}),
     shouldRenderList
   } as const

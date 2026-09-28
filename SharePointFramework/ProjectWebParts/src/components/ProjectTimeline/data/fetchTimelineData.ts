@@ -7,9 +7,8 @@ import {
   TimelineContentModel
 } from 'pp365-shared-library/lib/models'
 import { getClassProperties, isSystemSPField } from 'pp365-shared-library/lib/util'
-import { getAllItems } from 'pp365-shared-library'
+import { IListColumn, getAllItems } from 'pp365-shared-library'
 import { IProjectTimelineProps } from '../types'
-import { IColumn } from '@fluentui/react'
 import resource from 'SharedResources'
 
 // Item-list-specific extras on top of the shared `isSystemSPField` denylist.
@@ -181,7 +180,7 @@ export async function fetchTimelineData(
 
   const timelineListItems = timelineContentItems
 
-  const columns: IColumn[] = defaultViewColumns
+  const columns: IListColumn[] = defaultViewColumns
     .filter((columnName) => columnName !== 'GtSiteIdLookup')
     .map((columnName) => {
       const column = defaultViewFields.find((fld) => fld.InternalName === columnName)

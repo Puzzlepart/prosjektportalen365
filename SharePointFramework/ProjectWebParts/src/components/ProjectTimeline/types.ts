@@ -1,15 +1,4 @@
-import { IColumn } from '@fluentui/react'
-import {
-  EditableSPField,
-  IBaseWebPartComponentProps,
-  IBaseWebPartComponentState,
-  ICustomEditPanelProps,
-  IFilterProps,
-  IProjectInformationData,
-  ITimelineItem,
-  ProjectColumn,
-  TimelineConfigurationModel
-} from 'pp365-shared-library'
+import { EditableSPField, IBaseWebPartComponentProps, IBaseWebPartComponentState, ICustomEditPanelProps, IFilterProps, IListColumn, IProjectInformationData, ITimelineItem, ProjectColumn, TimelineConfigurationModel } from 'pp365-shared-library'
 
 export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
   listName?: string
@@ -104,7 +93,7 @@ export interface ITimelineData {
   /**
    * Columns for timeline content
    */
-  listColumns?: IColumn[]
+  listColumns?: IListColumn[]
 
   /**
    * Editable fields for timeline content

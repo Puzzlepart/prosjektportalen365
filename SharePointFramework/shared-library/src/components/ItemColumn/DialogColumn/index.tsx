@@ -1,7 +1,6 @@
-import { Checkbox, TextField } from '@fluentui/react'
 import strings from 'SharedLibraryStrings'
 import React from 'react'
-import { ColumnDataTypePropertyField } from '../ColumnDataTypeField'
+import { checkboxField, textField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'
 import styles from './DialogColumn.module.scss'
 import { IDialogColumnProps } from './types'
@@ -104,25 +103,24 @@ DialogColumn.displayName = strings.ColumnRenderOptionDialog
 DialogColumn.iconName = 'WindowEdit'
 DialogColumn.isDisabled = true
 DialogColumn.getDataTypeProperties = (onChange, dataTypeProperties) => [
-  ColumnDataTypePropertyField(TextField, {
+  textField({
     label: strings.ColumnRenderOptionDialogLinkTextLabel,
     placeholder: DialogColumn.defaultProps.linkText,
     value: dataTypeProperties.linkText,
-    onChange: (_, value) => onChange('linkText', value)
+    onChange: (value) => onChange('linkText', value)
   }),
-  ColumnDataTypePropertyField(Checkbox, {
+  checkboxField({
     label: strings.ColumnRenderOptionDialogShowInfoTextLabel,
-    defaultChecked: DialogColumn.defaultProps.showInfoText,
-    checked: dataTypeProperties.showInfoText,
-    onChange: (_, value) => onChange('showInfoText', value)
+    checked: dataTypeProperties.showInfoText ?? DialogColumn.defaultProps.showInfoText,
+    onChange: (checked) => onChange('showInfoText', checked)
   }),
-  ColumnDataTypePropertyField(TextField, {
+  textField({
     label: strings.ColumnRenderOptionDialogInfoTextTemplateLabel,
     description: strings.ColumnRenderOptionDialogInfoTextTemplateDescription,
     placeholder: DialogColumn.defaultProps.infoTextTemplate,
     value: dataTypeProperties.infoTextTemplate,
     multiline: true,
     disabled: !dataTypeProperties.showInfoText,
-    onChange: (_, value) => onChange('infoTextTemplate', value)
+    onChange: (value) => onChange('infoTextTemplate', value)
   })
 ]

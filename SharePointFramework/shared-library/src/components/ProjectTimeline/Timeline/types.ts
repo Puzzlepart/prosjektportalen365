@@ -1,7 +1,7 @@
 import { ITimelineItem, ITimelineGroup } from '../../../interfaces'
 import moment from 'moment'
-import { IColumn } from '@fluentui/react'
 import { IFilterItemProps, IFilterProps } from '../../FilterPanel'
+import { IListColumn } from '../../../types'
 
 export type TimelineTimeframe = [
   [number, moment.unitOfTime.DurationConstructor],
@@ -40,7 +40,7 @@ export interface ITimelineProps {
    * @param column Column
    * @param selectedItems Selected items
    */
-  onFilterChange: (column: IColumn, selectedItems: IFilterItemProps[]) => void
+  onFilterChange: (column: IListColumn, selectedItems: IFilterItemProps[]) => void
 
   /**
    * On Group change

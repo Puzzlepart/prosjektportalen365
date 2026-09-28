@@ -181,6 +181,10 @@ import {
   TimelineRegular,
   ToggleLeftFilled,
   ToggleLeftRegular,
+  ArrowTrendingDownFilled,
+  ArrowTrendingDownRegular,
+  ArrowTrendingFilled,
+  ArrowTrendingRegular,
   TrophyFilled,
   TrophyRegular,
   NewsFilled,
@@ -576,6 +580,14 @@ export const iconCatalog = {
   Trophy: {
     regular: TrophyRegular,
     filled: TrophyFilled
+  },
+  ArrowTrending: {
+    regular: ArrowTrendingRegular,
+    filled: ArrowTrendingFilled
+  },
+  ArrowTrendingDown: {
+    regular: ArrowTrendingDownRegular,
+    filled: ArrowTrendingDownFilled
   },
   BranchFork: {
     regular: BranchForkRegular,

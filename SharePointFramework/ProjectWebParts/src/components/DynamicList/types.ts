@@ -1,11 +1,4 @@
-import { IColumn } from '@fluentui/react'
-import {
-  EditableSPField,
-  IBaseWebPartComponentProps,
-  IBaseWebPartComponentState,
-  ICustomEditPanelProps,
-  IFilterProps
-} from 'pp365-shared-library'
+import { EditableSPField, IBaseWebPartComponentProps, IBaseWebPartComponentState, ICustomEditPanelProps, IFilterProps, IListColumn } from 'pp365-shared-library'
 
 export enum DynamicListMode {
   /**
@@ -432,7 +425,7 @@ export interface IDynamicListData {
   /**
    * Columns configuration for the grid
    */
-  listColumns: IColumn[]
+  listColumns: IListColumn[]
 
   /**
    * Columns that should be hidden by default because they are not present

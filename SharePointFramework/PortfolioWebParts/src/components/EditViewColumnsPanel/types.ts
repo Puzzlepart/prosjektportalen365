@@ -1,6 +1,5 @@
-import { IColumn } from '@fluentui/react'
 import { ButtonProps } from '@fluentui/react-components'
-import { IBasePanelProps } from 'pp365-shared-library'
+import { IBasePanelProps, IListColumn } from 'pp365-shared-library'
 
 interface IRevertOrderButtonProps extends Omit<ButtonProps, 'onClick'> {
   /**
@@ -8,7 +7,7 @@ interface IRevertOrderButtonProps extends Omit<ButtonProps, 'onClick'> {
    *
    * @param columns The selected columns
    */
-  onClick(columns: IColumn[]): void
+  onClick(columns: IListColumn[]): void
 }
 
 export interface IEditViewColumnsPanelProps extends IBasePanelProps {
@@ -24,12 +23,12 @@ export interface IEditViewColumnsPanelProps extends IBasePanelProps {
    * @param columns The selected columns
    * @param columnIds The selected column IDs
    */
-  onSave(columns: IColumn[], columnIds?: number[]): void
+  onSave(columns: IListColumn[], columnIds?: number[]): void
 
   /**
    * Columns with selected state in the `data.isSelected` property.
    */
-  columns?: IColumn[]
+  columns?: IListColumn[]
 
   /**
    * Help text to display at the top of the panel in

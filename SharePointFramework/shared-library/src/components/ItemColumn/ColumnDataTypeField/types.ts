@@ -1,34 +1,92 @@
-import { IDropdownProps, IIconProps, ISelectableOption } from '@fluentui/react'
-import { InputProps, SwitchProps } from '@fluentui/react-components'
-import { FunctionComponent } from 'react'
+import { SwitchProps } from '@fluentui/react-components'
 
-export interface IColumnDataTypePropertyFieldProps<T = InputProps | SwitchProps> {
+interface IColumnDataTypePropertyFieldBase {
   /**
-   * A function component with the props specified by `T`.
+   * Label shown for the field.
    */
-  type: FunctionComponent<T>
+  label: string
 
   /**
-   * The property field props for the component.
+   * Help text shown under the field.
    */
-  props: T
+  description?: string
+
+  /**
+   * Whether the field can be edited.
+   */
+  disabled?: boolean
 }
-export type IColumnDataTypePropertyField<T = any> = IColumnDataTypePropertyFieldProps<T>
 
 /**
- * Creates an object with a function component and its props.
- *
- * @template T The type of the props for the function component.
- * @param type A function component with the props specified by `T`.
- * @param props The property field props for the component.
- *
- * @returns An object with the function component and its props.
+ * A boolean property, shown as a switch or a checkbox.
  */
-export function ColumnDataTypePropertyField<T>(
-  type: FunctionComponent<T>,
-  props: T
-): IColumnDataTypePropertyField<T> {
-  return { type, props } as IColumnDataTypePropertyField<T>
+export interface IBooleanPropertyField extends IColumnDataTypePropertyFieldBase {
+  kind: 'switch' | 'checkbox'
+  checked?: boolean
+  onChange: (checked: boolean) => void
+}
+
+/**
+ * A text property, single-line unless `multiline`.
+ */
+export interface ITextPropertyField extends IColumnDataTypePropertyFieldBase {
+  kind: 'text'
+  value?: string
+  placeholder?: string
+  multiline?: boolean
+  onChange: (value: string) => void
+}
+
+/**
+ * A numeric property. `onChange` receives a number, or `undefined` when the field is cleared.
+ */
+export interface INumberPropertyField extends IColumnDataTypePropertyFieldBase {
+  kind: 'number'
+  value?: number
+  placeholder?: string
+  onChange: (value: number | undefined) => void
+}
+
+/**
+ * A property a column renderer lets the user configure, as the column form shows it.
+ *
+ * A renderer describes its properties in these terms and nothing else; `DataTypeFields` is the one
+ * place that turns a kind into a control. Renderers used to hand over a Fluent UI v8 component
+ * reference with v8 props, which tied every renderer to v8 for the sake of a form it never rendered.
+ */
+export type IColumnDataTypePropertyField =
+  | IBooleanPropertyField
+  | ITextPropertyField
+  | INumberPropertyField
+
+type FieldInput<T extends IColumnDataTypePropertyField> = Omit<T, 'kind'>
+
+/**
+ * Describes a boolean property shown as a switch.
+ */
+export function switchField(field: FieldInput<IBooleanPropertyField>): IBooleanPropertyField {
+  return { kind: 'switch', ...field }
+}
+
+/**
+ * Describes a boolean property shown as a checkbox.
+ */
+export function checkboxField(field: FieldInput<IBooleanPropertyField>): IBooleanPropertyField {
+  return { kind: 'checkbox', ...field }
+}
+
+/**
+ * Describes a text property.
+ */
+export function textField(field: FieldInput<ITextPropertyField>): ITextPropertyField {
+  return { kind: 'text', ...field }
+}
+
+/**
+ * Describes a numeric property.
+ */
+export function numberField(field: FieldInput<INumberPropertyField>): INumberPropertyField {
+  return { kind: 'number', ...field }
 }
 
 export type GetDataTypeProperties = (
@@ -36,28 +94,55 @@ export type GetDataTypeProperties = (
   dataTypeProperties: Record<string, any>
 ) => IColumnDataTypePropertyField[]
 
-type IColumnDataTypeFieldOptionData = {
+/**
+ * An entry in the data type dropdown. Built by `ColumnRenderComponentRegistry` from the registered
+ * column renderers; replaces the Fluent UI v8 `ISelectableOption` it used to be.
+ */
+export interface IColumnDataTypeFieldOption {
   /**
-   * Icon props for the option. Only `iconName` is supported,
-   * as we've not implemented propert support for any
-   * additional icon props.
+   * The renderer's key, for internal use.
    */
-  iconProps: Pick<IIconProps, 'iconName'>
+  key: string
 
   /**
-   * Get properties for the data type.
-   *
-   * @param onChange On change handler for the property field
-   * @param dataTypeProperties Current data type properties for the data type
+   * The value stored in the column's data type field.
    */
-  getDataTypeProperties?: GetDataTypeProperties
+  id: string
+
+  /**
+   * Text shown for the option.
+   */
+  text: string
+
+  /**
+   * Whether the option can be chosen. A disabled option is still listed.
+   */
+  disabled?: boolean
+
+  data?: {
+    /**
+     * Icon shown with the option, by name.
+     */
+    iconProps: { iconName: string }
+
+    /**
+     * Get properties for the data type.
+     *
+     * @param onChange On change handler for the property field
+     * @param dataTypeProperties Current data type properties for the data type
+     */
+    getDataTypeProperties?: GetDataTypeProperties
+  }
 }
 
-export type IColumnDataTypeFieldOption = ISelectableOption<IColumnDataTypeFieldOptionData>
-
-export interface IColumnDataTypeFieldProps extends Pick<IDropdownProps, 'defaultSelectedKey'> {
+export interface IColumnDataTypeFieldProps {
   label: string
   description: string
+
+  /**
+   * Key of the data type selected when the field first renders.
+   */
+  defaultSelectedKey?: string
 
   /**
    * Change event handler for the data type field.

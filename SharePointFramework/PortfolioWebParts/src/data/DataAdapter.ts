@@ -1083,7 +1083,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         MeasurementAchievement: JSON.stringify({
           Achievement: firstMeasurement?.Achievement,
           AchievementDisplay: firstMeasurement?.AchievementDisplay,
-          TrendIconProps: firstMeasurement?.TrendIconProps
+          TrendIcon: firstMeasurement?.TrendIcon
         }),
         Measurements: JSON.stringify(
           measurements?.map((m) => {
@@ -1095,7 +1095,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
               Achievement: m.Achievement,
               AchievementDisplay: m.AchievementDisplay,
               DateDisplay: m.DateDisplay,
-              TrendIconProps: m.TrendIconProps
+              TrendIcon: m.TrendIcon
             }
           })
         )

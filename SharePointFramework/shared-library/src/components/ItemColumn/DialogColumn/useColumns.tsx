@@ -1,7 +1,8 @@
 import { TableCellLayout, TableColumnDefinition, Text } from '@fluentui/react-components'
 import React from 'react'
 import * as strings from 'SharedLibraryStrings'
-import { Icon } from '@fluentui/react'
+import { getFluentIcon } from '../../../icons'
+import { ITrendIcon } from '../../../types'
 
 export interface IColumn extends TableColumnDefinition<any> {
   minWidth?: number
@@ -57,11 +58,12 @@ export const useColumns = (): IColumn[] => {
         return strings.MeasurementAchievementLabel
       },
       renderCell: (item) => {
+        const icon: ITrendIcon | undefined = item.TrendIcon
         return (
           <TableCellLayout truncate title={item.Achievement}>
             <span>
               <span style={{ display: 'inline-block', width: 20 }}>
-                {item.TrendIconProps && <Icon {...item.TrendIconProps} />}
+                {icon && getFluentIcon(icon.iconName, { color: icon.color })}
               </span>
               <Text size={200}>{item.AchievementDisplay}</Text>
             </span>

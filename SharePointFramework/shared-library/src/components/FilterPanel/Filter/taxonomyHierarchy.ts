@@ -1,5 +1,5 @@
-import { IColumn } from '@fluentui/react'
 import { IFilterItemProps } from '../FilterItem/types'
+import { IListColumn } from '../../../types'
 
 /**
  * Delimiter SharePoint search uses between the levels of a taxonomy term path
@@ -49,7 +49,7 @@ export interface ITaxonomyTreeNode {
  *
  * @param column Column for the filter
  */
-export function isTaxonomyColumn(column?: IColumn): boolean {
+export function isTaxonomyColumn(column?: IListColumn): boolean {
   if (!column) return false
   const dataType = (column as any).dataType || column.data?.type || column.data?.renderAs
   return dataType === 'tags'
@@ -63,7 +63,7 @@ export function isTaxonomyColumn(column?: IColumn): boolean {
  * @param column Column for the filter
  * @param items Flat filter items
  */
-export function shouldRenderAsHierarchy(column: IColumn, items: IFilterItemProps[]): boolean {
+export function shouldRenderAsHierarchy(column: IListColumn, items: IFilterItemProps[]): boolean {
   if (!isTaxonomyColumn(column)) return false
   return (items ?? []).some((i) => (i.value ?? '').indexOf(TAXONOMY_PATH_DELIMITER) !== -1)
 }

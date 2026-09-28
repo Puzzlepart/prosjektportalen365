@@ -1,4 +1,3 @@
-import { IColumn } from '@fluentui/react/lib/DetailsList'
 import { get, uniq } from '@microsoft/sp-lodash-subset'
 import sortArray from 'array-sort'
 import { IFilterProps } from '../FilterPanel/Filter/types'
@@ -11,6 +10,7 @@ import { IProjectTimelineProps, IProjectTimelineState } from './types'
 import { useProjectTimelineDataFetch } from './useProjectTimelineDataFetch'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import resource from 'SharedResources'
+import { IListColumn } from '../../types'
 
 /**
  * Component logic hook for `ProjectTimeline`
@@ -154,7 +154,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
    * @param column Column
    * @param selectedItems Selected items
    */
-  const onFilterChange = (column: IColumn, selectedItems: IFilterItemProps[]) => {
+  const onFilterChange = (column: IListColumn, selectedItems: IFilterItemProps[]) => {
     const { activeFilters } = state
 
     if (selectedItems.length > 0) {

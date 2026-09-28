@@ -1,4 +1,3 @@
-import { IColumn } from '@fluentui/react'
 import * as FileSaver from 'file-saver'
 import strings from 'SharedLibraryStrings'
 import _ from 'underscore'
@@ -11,6 +10,7 @@ import {
 } from '../../util'
 import { ExcelExportServiceDefaultConfiguration } from './ExcelExportServiceDefaultConfiguration'
 import { IExcelExportServiceConfiguration } from './IExcelExportServiceConfiguration'
+import { IListColumn } from '../../types'
 
 /**
  * Parses a raw SharePoint field value into a display-friendly string.
@@ -121,7 +121,7 @@ class ExcelExportService {
    */
   public export(
     items: Record<string, any>[],
-    columns: IColumn[],
+    columns: IListColumn[],
     fileNamePart?: string,
     sheetNamePrefix: string = 'Sheet'
   ) {
@@ -186,4 +186,4 @@ class ExcelExportService {
 
 export default new ExcelExportService()
 
-export { IColumn as ExcelExportColumn }
+export { IListColumn as ExcelExportColumn }

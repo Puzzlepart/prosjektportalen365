@@ -147,9 +147,19 @@ So the wrapper is the v8 `NormalPeoplePicker` behind the v9-shaped API, exactly 
 The API and `IPersonaItem` are unaffected, and swapping the inside remains the one-file change.
 
 Worth knowing for the slices ahead: a v9 component shipping in `@fluentui/react-components` is not
-by itself evidence that it works here. `ResponsibleField` shows a `Combobox` with `Persona` options
-does work on React 17, so the combobox family is not wholesale broken — but anything newer than the
-React 18 cutover needs a typing-level test before it is adopted, not just a render.
+by itself evidence that it works here. Anything built on `@fluentui/react-combobox` needs an
+interaction-level test before it is adopted, not just a render.
+
+**Generalised in slice 6 (2026-09-28).** The v9 `Dropdown` does the same thing as `TagPicker`: it
+renders, and the moment it *opens* it loops and kills the Jest worker, in Fluent's own documented form
+with nothing of ours in it. `Dropdown`, `Combobox` and `TagPicker` are all built on
+`@fluentui/react-combobox`, so treat the family as unusable in the harness on React 17. The data type
+dropdown in `ColumnDataTypeField` therefore stays on the v8 `Dropdown`, behind our own option type, and
+the component says so.
+
+This also withdraws the sentence above about `ResponsibleField`: its v9 `Combobox` is in production,
+but it has no test, and nothing here shows that it survives being opened. It should be verified by
+hand on the test tenant, and if it misbehaves it is the same hold-out as this one.
 
 ### C. v8 is removed from a solution when its last v8 import is gone, and checked by the build (decided)
 
@@ -200,6 +210,89 @@ Rule, in three parts:
 Timing is part of the decision: eight panels still render a v8 `Panel`, so any renaming before they
 are converted would produce names that describe the wrong thing.
 
+### I. The six list-bearing web parts: what to share, and when (analysed 2026-09-28; decision pending)
+
+Asked because slice 6 touches the lists: PortfolioOverview, PortfolioAggregation, DynamicList,
+ProjectList (list view), the timeline list and IdeaModule all "do a list", some share components,
+some do not. Measured on 2026-09-28 at `1e1820e4` before anything in slice 6 was changed.
+
+#### What is there today
+
+| Web part | Renders | State | Grouping | Selection | Column management | Tests |
+|---|---|---|---|---|---|---|
+| PortfolioOverview | **v8** `List` hub (`ShimmeredDetailsList`, sticky header, marquee) | Redux Toolkit reducer, 381 lines | yes | multi | own `ColumnContextMenu` (sort, custom sorts, group, add/edit column), `ColumnFormPanel`, `ViewFormPanel`; `EditViewColumnsPanel` shared with aggregation | 2 files |
+| PortfolioAggregation | the same v8 hub | reducer, 748 lines | yes | multi | its own parallel set of the three, against a different list and model | 0 |
+| IdeaModule | **not a list** — a nav shell that embeds `<PortfolioAggregation>` | `useState` | inherits | inherits | inherits | 0 |
+| DynamicList | **v9** `Table` + `useTableFeatures` (sort, selection, column sizing), four views | hooks | no | multi | own `ColumnContextMenu` — group-by only | 0 |
+| ProjectList (list view) | **v9** `DataGrid` (sortable, resizable) | `useState` | no | none | none | 0 |
+| Timeline list | **v9** `DataGrid` (sortable, resizable, multiselect) | `useState` | no | multi | none | 0 |
+
+Two facts fall out of the table that the plan did not know:
+
+- **Three of the six are already on v9**, and two of them run `DataGrid` with sorting, column resize and
+  multiselect in production on React 17. The React 17 concern about `DataGrid` is answered; only
+  components newer than the React 18 cutover (as `TagPicker` was, slice 5) still need proving.
+- The repository has **three list implementations for one job**: the v8 hub, `DataGrid` twice, and
+  `useTableFeatures` once. Decision A's "one shared list" is the v8 hub; nothing currently makes the
+  v9 sites share anything with it or with each other.
+
+#### What is already shared, and what only looks shared
+
+Shared, in the shared library, used by all the list-bearing web parts that need them: `Toolbar`,
+`FilterPanel`, `CustomEditPanel`, `ListMenuItem`, and the **cell-renderer registry**
+(`ColumnRenderComponentRegistry`, `renderItemColumn`, `useColumnRenderComponentRegistry`).
+PortfolioOverview, PortfolioAggregation *and* DynamicList all render cells through that registry.
+The PortfolioWebParts `List/ItemColumn` folder is not a second renderer tree: it holds five
+portfolio-specific renderers (`ConfigColumn`, `HubColumn`, `ProjectInformationColumn`,
+`StatusReportColumn`, `TitleColumn`) that register themselves into the shared registry. Six
+directories in it that made it look like a duplicate of the shared tree were **empty** — leftovers
+from the move to the shared library, never tracked by git — and were deleted on 2026-09-28. The
+slice 6 handoff's "two parallel renderer trees" was wrong; the merge it asked for is already the
+architecture.
+
+Not shared: the three grids; the three column context menus (two rich, one group-by only); the
+overview/aggregation panel pair; the `ProjectColumn` and `ProjectContentColumn` models.
+
+The overview/aggregation pair deserves precision, because it is the one that *looks* like copy-paste.
+It is not. `useColumnContextMenu` differs in 94 of ~160 lines, `useColumnFormPanel` in 139 of ~180,
+`useViewFormPanel` in 132 of ~110. They target different lists (`PROJECT_COLUMNS` and
+`PORTFOLIO_VIEWS` against `PROJECT_CONTENT_COLUMNS` and `DATA_SOURCES`), different models, different
+field sets and different save paths. What they share is shape. Merging them yields one component with
+two modes, which is not simpler than two components with one mode each.
+
+#### Candidates
+
+| # | Candidate | For | Against | When |
+|---|---|---|---|---|
+| 1 | Merge the two `ItemColumn` trees | — | Already merged: the registry is the merge. | Done. Nothing to do beyond the empty directories, removed. |
+| 2 | `IProjectColumn` stops extending v8 `IColumn` | Frees the type from ~19 files; is the migration | Fallout in sorting, grouping and the column panels, found by the compiler | **Now — slice 6.** This is the migration, not a refactor. |
+| 3 | One shared v9 grid wrapper (ProjectList list view + timeline list, later the hub) | Their hooks already return the same shape (`columns`, `columnSizingOptions`, `defaultSortState`); one place for sort/resize/selection; it is what the hub would convert *into* under Decision A, and cheaper to build from two working `DataGrid` sites than from the v8 hub | Two call sites with zero tests, so Decision D says tests come first; DynamicList is on a different primitive (`useTableFeatures`) and would stay out | **First act of slice 7**, when the hub's fate is decided — not before, and not as part of slice 6. |
+| 4 | Parameterise the overview/aggregation panels and context menu | ~40% of the lines are structural | The other 60% is the actual behaviour; a two-mode component is harder to read and test than two; no third consumer exists to justify the abstraction | **After the migration, if a third consumer appears.** Probably never. |
+| 5 | Fold DynamicList's group-by-only menu into the rich context menu | One menu | DynamicList deliberately exposes less; it has no column management to offer | No. Revisit only if DynamicList gains column management. |
+| 6 | Unify `ProjectColumn` and `ProjectContentColumn` | One model | Different lists, different visibility flags, different semantics | No. But both take candidate 2. |
+| 7 | Move the four state models to one pattern (reducer vs hooks) | Consistency | Pure churn on working code with no tests | No. |
+| 8 | Anything in IdeaModule | — | It is a host, not a list; it gets whatever PortfolioAggregation gets | Nothing. |
+
+#### Verdict on timing
+
+**Wait until after the migration, with two exceptions that *are* the migration: candidate 2 in
+slice 6, and candidate 3 as the opening of slice 7.**
+
+The reasoning is the phase's own rules. The release note for this phase says "no intended
+functional difference", and a structural merge of working components is a functional risk by
+definition. Decision D requires tests before conversion; five of the six web parts have none, and the
+v8 hub and the renderer registry have none, so any merge now starts by writing the tests the
+migration would have written anyway — doing it inside the migration only interleaves two kinds of
+change in one diff. And the three v9 sites are stable; touching them now to share code, then again
+when the hub converts, churns them twice.
+
+The two exceptions are not really exceptions. Dropping `extends IColumn` is the slice 6 leverage
+point and is a type change, not a component merge. A shared v9 grid is the thing the hub converts
+into if Decision A ever lets it convert — building it first, from the two sites that already work,
+means the hub's conversion in slice 7 is a move onto proven ground rather than a rewrite. Whether the
+hub converts at all is still Decision A's per-list call (grouping and the sticky header are the
+blockers, unchanged), and that is slice 7's question.
+
 ### G. File type icons keep Fluent v8, and the definition of done makes room for it (decided 2026-09-23)
 
 `@fluentui/react-file-type-icons` produces props for the Fluent UI v8 `Icon`, and Fluent v9 has no
@@ -237,7 +330,7 @@ Each slice is one PR-sized commit series on this branch, verified by `rush rebui
 | 3b | Coverage pass | Tests for every web part root and interactive component not touched by slices 3 to 7 (already on v9), hook and adapter tests, first coverage thresholds; `E2E_PROGRAM_URL` and the `flows` folder in the browser suite | untested components |
 | 4 | Panels and menus | `Panel` → `OverlayDrawer` (18), `ContextualMenu`/`Callout` → `Menu`/`Popover` (10), `Dialog`/`Breadcrumb`/`ProgressIndicator` (6) | v8 overlay components |
 | 5 | People picker | Shared wrapper per Decision B, seven call sites | scattered `NormalPeoplePicker` |
-| 6 | Lists, part 1 | Confine `DetailsList`/`IColumn` to the two hubs; convert renderers and toolbars around them; `DataGrid` for lists that need no grouping/sticky | `IColumn` outside the hubs |
+| 6 | Lists, part 1 | Confine `DetailsList`/`IColumn` to the two hubs; convert renderers and toolbars around them; `DataGrid` for lists that need no grouping/sticky. **Measured and handed off: `docs/plans/fluent-v9-migration/HANDOFF-slice-6.md`** | `IColumn` outside the hubs |
 | 7 | Lists, part 2 | Decide per remaining list (`DataGrid` vs wrapped v8); `@fluentui/react` removed from every solution that is free | v8 in the web part solutions |
 | 8 | Lint close-out | Relaxed rules back to `error`, `allowWarningsInSuccessfulBuild` revisited, `Redux Toolkit` 2 / `xlsx` 0.18 / React-15-era peers evaluated with a one-line verdict each; decide the fate of the unreferenced `PropertyFieldColorConfiguration` and of the dormant column form panel (see the slice 2 and 3 logs) | tolerated warnings |
 
@@ -688,6 +781,63 @@ onto `Skeleton`/`LoadingSkeleton`, and the form controls (`TextField`, `Toggle`,
 not mention: `shared-library/src/icons/index.tsx` uses the v8 `Icon` deliberately, as the
 `getFabricIcon` fallback that renders legacy MDL2 icon names. It cannot move to `getFluentIcon`
 without removing the fallback mechanism itself, so it stays on v8 until that fallback is retired.
+
+### Slice 6 — lists, part 1 (2026-09-28, in progress)
+
+Started from `docs/plans/fluent-v9-migration/HANDOFF-slice-6.md`, whose measurements this log does
+not repeat.
+
+**The `IColumn` swap was the leverage point, and it was a type change only.** `IListColumn` in
+`shared-library/src/types` declares the fifteen members the repository actually reads and writes,
+measured before it was written (`fieldName` 107 reads, `data` 43, `key` 33, `name` 19, then a long
+tail). It is a structural subset of the v8 `IColumn` with the same names and types, so it passes
+straight into the v8 list hub without a cast and a v8 column reads as one of ours. `IProjectColumn`
+and `IProjectContentColumn` extend it instead of `IColumn`; 28 files were swept in one scripted pass;
+all three consumers type-checked clean against the rebuilt library on the first try. Only the four
+hub files in `PortfolioWebParts/src/components/List` still import `IColumn`, which is Decision A.
+
+**The `ItemColumn` form controls were a descriptor problem, not a rendering one.** The renderers never
+rendered `Toggle` or `TextField`; they handed the *component reference* and v8 props to a
+`ColumnDataTypePropertyField(type, props)` descriptor that `DataTypeFields` `createElement`ed. So the
+v8 coupling was the descriptor contract, and the descriptor type already defaulted to v9 props while
+every caller still passed v8 — a half-finished migration. The fix is a discriminated descriptor
+(`switch` | `checkbox` | `text` | `number`) with small factories, so a renderer knows no Fluent at all
+and `DataTypeFields` is the one place a kind becomes a control. All thirteen descriptor callers were
+inside the shared library, so the contract could change freely. Tests first: eleven cases against v8,
+green; the same eleven against v9 found one real difference — v8 `TextField` with `value: undefined`
+was uncontrolled so typing accumulated, while a v9 `Input` fed `''` is controlled from the first
+keystroke. The fix keeps the typed text in local state seeded from the stored value, which also
+avoids the uncontrolled-to-controlled switch React warns about.
+
+**`TrendIconProps` was a fourth v8 type used as a payload**, built in PortfolioWebParts'
+`BenefitMeasurement` as `IIconProps` and serialised through the adapter to `TrendColumn`. It is now
+`ITrendIcon` — a catalog icon name and a colour — and `ArrowTrending`/`ArrowTrendingDown` join the
+catalog for `StockUp`/`StockDown`. Derived at load time, never persisted, so nothing stored changes.
+
+**The v9 `Dropdown` is the same hold-out as `TagPicker`**; see the amendment under Decision B. Two
+probes, one with our code and one with Fluent's bare documented `Dropdown`, both killed the worker on
+open. Reverted the data type dropdown to v8 behind the new option type; its six-case test is green on
+v8. The `promise/param-names` rule is another error-level lint that only surfaces in a full build — a
+probe was rejected by it before it ran.
+
+**One more v8 payload turned up in the closing sweep.** `DialogColumn`'s measurements grid rendered
+`item.TrendIconProps` with a v8 `Icon`, and ProgramWebParts' adapter — which imports
+`BenefitMeasurement` from `pp365-portfoliowebparts/lib/models`, a cross-solution dependency worth
+knowing about — serialised the same key. Both now use `TrendIcon`. Lesson: when a payload key is
+renamed, grep *every* solution for the old name, including the ones with zero v8 imports; a stale
+key compiles fine through `any` and only shows as a missing icon.
+
+**Batch 1 closed.** `rush rebuild` exit 0, **206 tests** (180 → 206; new: `DataTypeFields` 11,
+`ColumnDataTypeField` 6, `TrendColumn` 5, `DialogColumn/useColumns` 4), zero lint or type errors.
+Files importing v8: shared-library **32 → 12**, PortfolioWebParts **22 → 16**, ProjectWebParts
+**17 → 7**, ProjectExtensions 12 (untouched), ProgramWebParts and PortfolioExtensions 0.
+shared-library's twelve are all named hold-outs: the list hub's types (A), the people picker (B),
+the file type and fallback icons (G), the data type dropdown (above), `Autocomplete` (its own slot),
+and four type-only imports — `DayOfWeek`, `ITag`, `IObjectWithKey`, `IIconProps` in
+`ProjectTemplate` — that are the same data-model pattern and belong to the next batch.
+
+Next batch: the three no-selection lists (`TargetFolderScreen`, `UncertaintySection`,
+`ListSection`) to `DataGrid`, tests first, modelled on the two `DataGrid` sites in production.
 
 ### Slice 4 — panels, menus and dialogs (2026-09-23, in progress)
 

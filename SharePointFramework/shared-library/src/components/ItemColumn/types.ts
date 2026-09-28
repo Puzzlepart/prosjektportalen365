@@ -1,11 +1,10 @@
-import { IColumn } from '@fluentui/react'
 import { ProjectColumn } from '../../models'
-import { ColumnDataType } from '../../types'
+import { ColumnDataType, IListColumn } from '../../types'
 import { GetDataTypeProperties, IColumnDataTypeFieldOption } from './ColumnDataTypeField'
 import { IWeb } from '@pnp/sp/webs'
 
 export interface IRenderItemColumnProps extends React.HTMLAttributes<HTMLDivElement> {
-  column?: IColumn
+  column?: IListColumn
   item?: Record<string, any>
   columnValue?: string
   dataTypeProperties?: Map<string, any>
