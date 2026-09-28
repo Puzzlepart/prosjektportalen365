@@ -182,18 +182,18 @@ Tilstand i `reducer.ts` (Redux Toolkit `createReducer`): `rangeStart`, `granular
 
 | Nivå / type | Fyll | Merknad |
 |---|---|---|
-| Full (95–100 %) | `colorPaletteGreenBackground3` | mål |
-| Under (1–94 %) | `colorPaletteYellowBackground3` | |
-| Over (> 100 %) | `colorPaletteRedBackground3` (101–120 `colorPaletteDarkOrangeBackground3`) | |
-| Utilgjengelig (fravær ≥ 100 %) | `colorPaletteTealBackground2` | |
-| Ingen | `colorNeutralBackground3`, tekst «–» | |
+| Full (95–100 %) | `colorPaletteGreenBackground3` | fullt belagt (mål) |
+| Under (1–94 %) | `colorPaletteYellowBackground3` | ledig kapasitet |
+| Over (> 100 %) | `colorPaletteDarkGreenBackground3` (mørkegrønn) | overbelastet |
+| Utilgjengelig (fravær ≥ 100 %) | `colorNeutralBackground5` (grå) | |
+| Ingen (0 %) | `colorPaletteRedBackground3`, tekst «0 %» | ingen allokering – ressursen står uten arbeid |
 | Prosjektstolpe | heltrukket `colorBrandBackground2` | |
 | Linjestolpe | `colorNeutralBackground4` med 45° striper | skilles uten farge |
 | Fraværsstolpe | teal med prikket toppkant | |
 | Status Forespurt | stiplet ramme, opacity .75, `QuestionCircle`-ikon | |
 | Status Avvist / Kansellert | gjennomstreket, opacity .5, skjult som standardfilter | |
 
-Prosenttekst vises alltid i cellen; tooltip og `aria-label` bærer samme informasjon (WCAG 1.4.1).
+Prosenttekst vises alltid i cellen; tooltip og `aria-label` bærer samme informasjon (WCAG 1.4.1). Full og Over skilles i tillegg med et ikon (`Warning`) i Over-cellen, siden grønn og mørkegrønn ligger nær hverandre.
 
 ### 4. PortfolioWebParts – omskriving av `components/ResourceAllocation`
 
@@ -331,7 +331,7 @@ Rekkefølge: WP0 → WP1/2 og WP3 parallelt → WP4 → WP5/6 parallelt med WP8 
 
 1. Fersk installasjon 1.15.0: hubliste med to CT-er, `Ressurspool`, gruppe, side, navigasjon, innstillinger; prosjektmal gir side `Ressursallokering.aspx` uten lokal liste.
 2. Oppgraderingsøvelse 1.14.0 → 1.15.0 med legacy-data i tre prosjektområder: `Install.ps1 -Upgrade`, `UpgradeAllSitesToLatest.ps1`, `MigrateResourceAllocations.ps1 -WhatIf` → CSV korrekt → ekte kjøring → hubelementer med riktig prosjekt, person, rolle, status; legacy-lister skjult; kjør migrering på nytt → 0 nye elementer.
-3. Porteføljeside: standard ukevisning 8 uker fra forrige mandag, i-dag-markør riktig dag, header «september 2026 / 21–27»; person med 50 % + 33 % → «83 % (2)» gul; 100 % grønn; 120 % rød; fravær hel uke teal; ekspander → stolper over riktige uker; Forespurt stiplet.
+3. Porteføljeside: standard ukevisning 8 uker fra forrige mandag, i-dag-markør riktig dag, header «september 2026 / 21–27»; person med 50 % + 33 % → «83 % (2)» gul; 100 % grønn; 120 % mørkegrønn; 0 % rød; fravær hel uke grå; ekspander → stolper over riktige uker; Forespurt stiplet.
 4. Uke/måned, ‹ ›, i dag; «kun aktive» av → poolressurser uten allokeringer vises.
 5. Filtre (rolle, avdeling, prosjekt, status, type) kombineres med OG; søk på navn/UPN.
 6. Ressurskontor: godkjenn forespørsel, tildel person fra pool (sortert på kompetansetreff og belastning), avvis med kommentar; sporingsfelt fylles; bruker utenfor gruppen ser ikke knappene og får 403 ved direkte forsøk.
