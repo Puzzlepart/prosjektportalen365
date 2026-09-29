@@ -6,12 +6,6 @@ import styles from './DialogColumn.module.scss'
 import { IDialogColumnProps } from './types'
 import { useDialogColumn } from './useDialogColumn'
 import {
-  DataGrid,
-  DataGridBody,
-  DataGridCell,
-  DataGridHeader,
-  DataGridHeaderCell,
-  DataGridRow,
   Dialog,
   DialogBody,
   DialogContent,
@@ -22,6 +16,7 @@ import {
   Text
 } from '@fluentui/react-components'
 import { stringIsNullOrEmpty } from '@pnp/core'
+import { DataGridList } from '../../DataGridList'
 import { UserMessage } from '../../UserMessage'
 
 /**
@@ -38,8 +33,7 @@ import { UserMessage } from '../../UserMessage'
  * @param props.showInfoText - Whether to show the information text.
  */
 export const DialogColumn: ColumnRenderComponent<IDialogColumnProps> = (props) => {
-  const { infoText, title, subTitle, items, columns, columnSizingOptions, shouldRenderList } =
-    useDialogColumn(props)
+  const { infoText, title, subTitle, items, columns, shouldRenderList } = useDialogColumn(props)
 
   return (
     <Dialog>
@@ -59,27 +53,7 @@ export const DialogColumn: ColumnRenderComponent<IDialogColumnProps> = (props) =
               </Text>
             )}
             {shouldRenderList ? (
-              <DataGrid
-                items={items}
-                columns={columns}
-                resizableColumns
-                columnSizingOptions={columnSizingOptions}
-              >
-                <DataGridHeader>
-                  <DataGridRow>
-                    {({ renderHeaderCell }) => (
-                      <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-                    )}
-                  </DataGridRow>
-                </DataGridHeader>
-                <DataGridBody>
-                  {({ item, rowId }) => (
-                    <DataGridRow key={rowId}>
-                      {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
-                    </DataGridRow>
-                  )}
-                </DataGridBody>
-              </DataGrid>
+              <DataGridList items={items} columns={columns} />
             ) : (
               <UserMessage
                 title={strings.ModalColumnEmptyListTitle}

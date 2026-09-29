@@ -1,10 +1,9 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import { TemplateItem } from 'models'
-import { Selection } from '@fluentui/react/lib/DetailsList'
 import { DocumentTemplateDialogScreen, IDocumentTemplateDialogState } from './types'
 import { IFileInfo } from '@pnp/sp/files'
 
-export const SELECTION_CHANGED = createAction<{ selection: Selection }>('SELECTION_CHANGED')
+export const SELECTION_CHANGED = createAction<{ selected: TemplateItem[] }>('SELECTION_CHANGED')
 export const START_COPY = createAction('START_COPY')
 export const COPY_PROGRESS = createAction<any>('COPY_PROGRESS')
 export const COPY_DONE = createAction<{ files: IFileInfo[] }>('COPY_DONE')
@@ -20,7 +19,7 @@ export const initState = (): IDocumentTemplateDialogState => ({
 
 export default createReducer(initState(), {
   [SELECTION_CHANGED.type]: (state, { payload }: ReturnType<typeof SELECTION_CHANGED>) => {
-    state.selected = payload.selection.getSelection() as TemplateItem[]
+    state.selected = payload.selected
   },
   [START_COPY.type]: (state) => {
     state.screen = DocumentTemplateDialogScreen.CopyProgress

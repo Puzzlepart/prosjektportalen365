@@ -1,17 +1,17 @@
 import {
   TableCellLayout,
-  TableColumnDefinition,
   TableColumnSizingOptions,
   createTableColumn
 } from '@fluentui/react-components'
 import React from 'react'
+import { IDataGridColumn } from '../components/DataGridList/types'
 import { IListColumn } from '../types'
 
 export interface IDataGridColumns<TItem> {
   /**
-   * Column definitions for `DataGrid`.
+   * Column definitions for `DataGrid`, carrying their widths for `DataGridList` to size them by.
    */
-  columns: TableColumnDefinition<TItem>[]
+  columns: IDataGridColumn<TItem>[]
 
   /**
    * Sizing options for `DataGrid`, keyed by column, from each column's `minWidth` and `maxWidth`.
@@ -34,8 +34,8 @@ export function createDataGridColumns<TItem extends Record<string, any>>(
   columns: IListColumn<TItem>[]
 ): IDataGridColumns<TItem> {
   return {
-    columns: columns.map((column) =>
-      createTableColumn<TItem>({
+    columns: columns.map((column) => ({
+      ...createTableColumn<TItem>({
         columnId: column.key,
         renderHeaderCell: () => column.name,
         renderCell: (item) => {
@@ -50,8 +50,10 @@ export function createDataGridColumns<TItem extends Record<string, any>>(
             </TableCellLayout>
           )
         }
-      })
-    ),
+      }),
+      minWidth: column.minWidth,
+      defaultWidth: column.maxWidth ?? column.minWidth
+    })),
     columnSizingOptions: columns.reduce<TableColumnSizingOptions>(
       (options, column) => ({
         ...options,

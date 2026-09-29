@@ -33,7 +33,7 @@ The user builds and deploys themselves by default, but has repeatedly asked for 
 
 ## State at handoff
 
-**Slice 6 is complete (2026-09-28).** `rush rebuild` is green: exit 0, **228 tests pass**, zero lint errors (warnings only, see slice 8). The `IColumn` swap, the `ItemColumn` form controls, the trend icon and the three no-selection lists are done; see the slice 6 log in the plan. This document stays as the record of what was measured; slice 7 starts from the plan's Decision I and the slice 6 log.
+**Slice 6 is complete (2026-09-28).** `rush rebuild` is green: exit 0, **228 tests pass**, zero lint errors (warnings only, see slice 8). The `IColumn` swap, the `ItemColumn` form controls, the trend icon and the three no-selection lists are done; see the slice 6 log in the plan. This document stays as the record of what was measured. **Slice 7 is also complete (2026-09-29):** every list outside the hub is on the shared `DataGridList`, `SelectScreen`'s v8 `Selection` is gone, 254 tests pass, and the hub's fate is recorded in the slice 7 log as a recommendation awaiting the user.
 
 | Solution | Files importing v8 (at handoff → after batch 1) | `@fluentui/react` in `package.json` |
 |---|---|---|

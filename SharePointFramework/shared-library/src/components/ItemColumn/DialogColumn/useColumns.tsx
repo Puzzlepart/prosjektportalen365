@@ -1,15 +1,12 @@
-import { TableCellLayout, TableColumnDefinition, Text } from '@fluentui/react-components'
+import { TableCellLayout, Text } from '@fluentui/react-components'
 import React from 'react'
 import * as strings from 'SharedLibraryStrings'
 import { getFluentIcon } from '../../../icons'
 import { ITrendIcon } from '../../../types'
 
-export interface IColumn extends TableColumnDefinition<any> {
-  minWidth?: number
-  defaultWidth?: number
-}
+import { IDataGridColumn } from '../../DataGridList/types'
 
-export const useColumns = (): IColumn[] => {
+export const useColumns = (): IDataGridColumn[] => {
   return [
     {
       columnId: 'measurementValue',

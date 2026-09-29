@@ -2,7 +2,6 @@ import { tryParseJson } from '../../../util'
 import { IDialogColumnProps } from './types'
 import { useInfoText } from './useInfoText'
 import _ from 'lodash'
-import { TableColumnSizingOptions } from '@fluentui/react-components'
 import { useColumns } from './useColumns'
 
 /**
@@ -20,24 +19,12 @@ export function useDialogColumn(props: IDialogColumnProps) {
   const shouldRenderList = !_.isEmpty(items)
   const columns = useColumns()
 
-  const columnSizingOptions: TableColumnSizingOptions = columns.reduce(
-    (options, col) => ({
-      ...options,
-      [col.columnId]: {
-        defaultWidth: col.defaultWidth,
-        minWidth: col.minWidth
-      }
-    }),
-    {}
-  )
-
   return {
     infoText,
     title,
     subTitle,
     items,
     columns,
-    columnSizingOptions,
     shouldRenderList
   } as const
 }

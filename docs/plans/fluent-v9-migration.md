@@ -782,6 +782,61 @@ not mention: `shared-library/src/icons/index.tsx` uses the v8 `Icon` deliberatel
 `getFabricIcon` fallback that renders legacy MDL2 icon names. It cannot move to `getFluentIcon`
 without removing the fallback mechanism itself, so it stays on v8 until that fallback is retired.
 
+### Slice 7 — lists, part 2 (2026-09-29, complete except for the hub decision)
+
+**Opened, as Decision I said, with the shared v9 grid built from the two sites already in
+production.** Before building it: an interaction-level probe, because slice 6 had only ever
+*rendered* a `DataGrid` and the combobox family had shown that rendering proves nothing about
+clicking. Sorting by header click and multiselect by checkbox both work in the harness; the probe's
+one failure was its own `aria-label` on the selection cell, not the grid, and it was deleted once the
+wrapper's own test covered the same ground.
+
+`DataGridList` in the shared library takes `IDataGridColumn` — a column definition plus the widths
+to size it by, the shape the project list, the timeline list and the measurements dialog had each
+declared locally — and gives sorting, resizable columns, single or multi selection reported as row
+ids, row double-click as the v8 "invoke", and an empty state. `createDataGridColumns` now emits that
+shape, so the `IListColumn`-fed lists take the same road. Eight interaction tests on the wrapper, six
+on the adapter.
+
+**Four sites folded, each with its tests unchanged from the baseline written first:** the project
+list view (5), the timeline list (5), the measurements dialog (4 + 4) and `SelectScreen` (4). The
+three local column types collapsed into the shared one. `SelectScreen` was the one with behaviour to
+rewrite: the v8 `Selection` class was constructed in the dialog root, passed to the screen, and read
+back in the reducer with `getSelection()`. The reducer now carries the selected templates directly,
+the screen reads and dispatches through the dialog context, and the object is gone from all three
+files. Two behaviours were kept deliberately: opening another folder starts the selection over, as
+the v8 list did when its key changed, and double-clicking a folder row opens it. One was dropped:
+marquee (drag) selection, which v9 does not have.
+
+Three harness lessons, recorded so they are not re-learned: `@microsoft/sp-lodash-subset` is already
+mapped to a real lodash, so no mock is needed; every `@pnp/*` export is a truthy proxy, so a renderer
+that decides "has a value" with `stringIsNullOrEmpty` from `@pnp/core` renders every cell empty under
+test — the timeline's renderer now uses a local check, which is also the right dependency for a pure
+renderer; and a `jest.mock` factory that *replaces* the `@pnp/core` stub takes `Caching` and friends
+with it and breaks module loading, so an override must wrap the stub, not replace it.
+
+**Decision A, per list — recommendation, for the user to ratify: the hub stays on v8 for this phase.**
+What is left on v8 is exactly the hub in `PortfolioWebParts/src/components/List`, the two portfolio
+web parts that use it (and `IdeaModule` through them), and the four files where their reducers hold
+the hub's `Selection` object as state. Measured against `useList.ts`, `ListHeader.tsx` and
+`types.ts`, the hub gives three things `DataGridList` does not: **grouping** (both portfolio views
+group rows), a **sticky header** (`ScrollablePane` + `Sticky`) that carries the web part title, the
+search box, the toolbar and the filter panel while the list scrolls, and **marquee selection**.
+Converting means emulating grouping with flattened group rows and expand/collapse state, rebuilding
+the sticky header with CSS `position: sticky` in a scroll container the web part does not own,
+rewriting selection as row ids in two reducers, and dropping marquee — the largest single piece of the
+migration, on a component with zero tests, under a release note that promises no functional
+difference. Decision A's rule was written for this case. The cost is recorded here so that whoever
+picks it up starts from the list above, not from the plan's one-line row.
+
+**Slice 7 closed.** `rush rebuild` exit 0, **254 tests** (228 → 254), zero errors. Files importing
+v8: ProjectExtensions **11 → 7** (all seven are Decision G's file-type icons and their `IIconProps`),
+the rest unchanged; no solution drops `@fluentui/react` in this phase, and the plan's definition of
+done already makes room for that (Decisions A, B, G). Remaining outside the hub and its reducers:
+`Sticky`/`ScrollablePane` in the status page layout (a CSS-sticky job, small, untested),
+`PropertyFieldColorConfiguration` (the user's call), the data type dropdown and the people picker
+(combobox family), `Autocomplete`, and four type-only imports in the shared library. All slice 8.
+
 ### Slice 6 — lists, part 1 (2026-09-28, complete)
 
 Started from `docs/plans/fluent-v9-migration/HANDOFF-slice-6.md`, whose measurements this log does
