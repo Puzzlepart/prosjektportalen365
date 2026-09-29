@@ -65,7 +65,7 @@ export function DataGridList<TItem = any>(props: IDataGridListProps<TItem>) {
   return (
     <DataGrid
       key={columnsKey}
-      className={className}
+      className={className ? `${styles.root} ${className}` : styles.root}
       items={items}
       columns={columns}
       getRowId={getRowId}

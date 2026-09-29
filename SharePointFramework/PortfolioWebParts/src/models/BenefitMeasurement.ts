@@ -68,9 +68,9 @@ export class BenefitMeasurement extends BenefitBase {
     if (prevMeasurement && prevMeasurement.Value !== this.Value) {
       const hasIncreased = this.Value > prevMeasurement.Value
       if ((shouldIncrease && hasIncreased) || (!shouldIncrease && !hasIncreased)) {
-        this.TrendIcon = { iconName: 'ChevronUp', color: '#27ae60' }
+        this.TrendIcon = { iconName: 'CaretUp', color: '#27ae60' }
       } else {
-        this.TrendIcon = { iconName: 'ChevronDown', color: '#e74c3c' }
+        this.TrendIcon = { iconName: 'CaretDown', color: '#e74c3c' }
       }
     }
     return this

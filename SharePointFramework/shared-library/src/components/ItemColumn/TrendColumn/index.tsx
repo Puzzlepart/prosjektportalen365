@@ -30,7 +30,7 @@ export const TrendColumn: ColumnRenderComponent<ITrendColumnProps> = (props) => 
       <span className={styles.iconContainer}>
         {icon &&
           props.showTrendIcon &&
-          getFluentIcon(icon.iconName, { color: icon.color, size: TREND_ICON_SIZE })}
+          getFluentIcon(icon.iconName, { color: icon.color, size: TREND_ICON_SIZE, filled: true })}
       </span>
       <span>{trend.AchievementDisplay}</span>
     </span>

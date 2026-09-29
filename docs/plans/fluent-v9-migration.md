@@ -820,6 +820,32 @@ Five findings from the user's manual pass over slice 6, and one bonus bug older 
 
 Test counts unchanged at 254 after a one-in, one-out; `rush rebuild` green.
 
+### Second feedback round on slices 6 and 7 (2026-09-29)
+
+- **Target folder: no double-click.** A row selects the folder as the copy target, its name enters
+  it, and nothing happens on double-click. `SelectScreen` still enters a folder on double-click as
+  the v8 list did; the user has not asked for that to change.
+- **Trend icons: filled carets, centred.** `CaretUp` and `CaretDown` join the catalog (the chevrons
+  from the first round were the wrong glyph), drawn filled at 20px, and both cells centre the icon
+  against the text with a 6px gap.
+- **Status section typography, second attempt.** The first attempt put 12px and
+  `--colorNeutralForeground2` on the cell as a single class. Two things were wrong with it, found by
+  reading Fluent's styles rather than guessing: Fluent sets the header's *regular* weight on the
+  button it renders inside the header cell, not on the cell, and the row's colour on the row; and
+  `Foreground2` (#424242) is barely lighter than the headers' `Foreground1`, where the v8 values were
+  `neutralSecondary` (#605e5c). The rules are now scoped under the grid root so they outrank Fluent's
+  single-class rules whatever the injection order, the header's semibold reaches the button, and the
+  values use `--colorNeutralForeground3` (#616161), the v8 grey's nearest token. Headers 12px
+  semibold, values 12px grey, as the v8 list drew every list.
+- **Timeline list: a horizontal scrollbar whatever the column widths.** Pre-existing, as the user
+  said, and diagnosed rather than fixed: the container is already `overflow: auto`, so the grid is
+  genuinely wider than it — each column's starting width is its `maxWidth` (150–250px) and there is
+  one per view field, while Fluent's auto-fit only ever grows the last column to fill spare room and
+  never shrinks anything. The v8 justified layout shrank columns to fit. The candidate fix is to start
+  columns at `minWidth` (100px, so eight columns fit a web part) and let users widen them, or to size
+  them to the container on first render. Either changes the look for every timeline user, so it
+  waits for the user's word.
+
 ### The slice 7 CI failure (2026-09-29)
 
 The slice 7 commit failed CI in both workflows with `1 Jest test failed` in `pp365-shared-library`,
@@ -845,10 +871,18 @@ runner-only behaviour inside Fluent's focus and sizing machinery under jsdom, th
 combobox family, one layer down. The browser is unaffected: "Vis alle målinger" was verified by hand
 in the slice 6 review.
 
-The fix is in the test, where the cost was: the grid is stubbed with a plain table over the dialog's
-*real* column definitions, so every assertion about headers and cells still exercises `useColumns`,
-and the grid itself stays covered by its own suite. A longer wait had been tried first and was the
-wrong instrument — the limit hit was the test's, not the wait's.
+The first fix stubbed the grid inside the dialog with a plain table over the dialog's *real* column
+definitions, so every assertion about headers and cells still exercises `useColumns` and the grid
+stays covered by its own suite. That removed the grid's cost but was not the whole story: the same
+test then failed **locally**, only inside a full parallel `rush rebuild`, with the one-second
+`findBy` wait elapsing before the dialog appeared. The test is **load-sensitive**, not
+runner-specific — in isolation the dialog opens in milliseconds; with every suite running at once
+the worker is starved of CPU and wall-clock waits elapse. CI's two starved vCPUs tripped the
+five-second test limit inside the click; a loaded Mac trips the one-second wait after it. Both
+dialog-opening cases now wait up to ten seconds for the dialog and allow twenty for the test, sized
+for that load; a dialog that never opens still fails, later. Lesson for the harness: a wall-clock
+wait in a suite that renders a Fluent surface must be sized for the full parallel run, not for the
+suite alone, and a green focused run proves nothing about it.
 
 ### Slice 7 — lists, part 2 (2026-09-29, complete except for the hub decision)
 

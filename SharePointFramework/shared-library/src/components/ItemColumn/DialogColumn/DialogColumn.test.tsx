@@ -60,6 +60,17 @@ function renderCell(items: unknown[] = measurements, props: Record<string, any> 
 
 const setupUser = () => userEvent.setup({ pointerEventsCheck: 0 })
 
+/**
+ * Opening the dialog is load-sensitive: in isolation it appears within milliseconds, but with every
+ * suite running at once on a busy machine — the CI runner, or a full local rebuild — the worker is
+ * starved and the default one-second wait elapses before it does, while the click itself can run
+ * past Jest's five-second test limit. The waits below are sized for that load, which does not hide
+ * a failure: a dialog that never opens still fails, just later.
+ */
+const DIALOG_TIMEOUT = 10_000
+const TEST_TIMEOUT = 20_000
+const findDialog = () => screen.findByRole('dialog', {}, { timeout: DIALOG_TIMEOUT })
+
 describe('DialogColumn', () => {
   it('shows a link with the default text', () => {
     renderCell()
@@ -75,19 +86,19 @@ describe('DialogColumn', () => {
     const user = setupUser()
     renderCell()
     await user.click(screen.getByText(strings.ShowAllMeasurementsLinkText))
-    const dialog = await screen.findByRole('dialog')
+    const dialog = await findDialog()
     expect(dialog).toHaveTextContent('Gevinst 1')
     expect(dialog).toHaveTextContent(strings.MeasurementValueLabel)
     expect(dialog).toHaveTextContent('Første måling')
     expect(dialog).toHaveTextContent('80 %')
     expect(dialog).toHaveTextContent('01.06.2026')
-  })
+  }, TEST_TIMEOUT)
 
   it('says so when there are no measurements', async () => {
     const user = setupUser()
     renderCell([])
     await user.click(screen.getByText(strings.ShowAllMeasurementsLinkText))
-    const dialog = await screen.findByRole('dialog')
+    const dialog = await findDialog()
     expect(dialog).toHaveTextContent(strings.ModalColumnEmptyListTitle)
-  })
+  }, TEST_TIMEOUT)
 })

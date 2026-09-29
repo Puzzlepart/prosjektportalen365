@@ -59,9 +59,14 @@ export const useColumns = (): IDataGridColumn[] => {
         const icon: ITrendIcon | undefined = item.TrendIcon
         return (
           <TableCellLayout truncate title={item.Achievement}>
-            <span>
-              <span style={{ display: 'inline-block', width: 20 }}>
-                {icon && getFluentIcon(icon.iconName, { color: icon.color, size: TREND_ICON_SIZE })}
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', width: 20 }}>
+                {icon &&
+                  getFluentIcon(icon.iconName, {
+                    color: icon.color,
+                    size: TREND_ICON_SIZE,
+                    filled: true
+                  })}
               </span>
               <Text size={200}>{item.AchievementDisplay}</Text>
             </span>

@@ -181,6 +181,10 @@ import {
   TimelineRegular,
   ToggleLeftFilled,
   ToggleLeftRegular,
+  CaretDownFilled,
+  CaretDownRegular,
+  CaretUpFilled,
+  CaretUpRegular,
   TrophyFilled,
   TrophyRegular,
   NewsFilled,
@@ -576,6 +580,14 @@ export const iconCatalog = {
   Trophy: {
     regular: TrophyRegular,
     filled: TrophyFilled
+  },
+  CaretUp: {
+    regular: CaretUpRegular,
+    filled: CaretUpFilled
+  },
+  CaretDown: {
+    regular: CaretDownRegular,
+    filled: CaretDownFilled
   },
   BranchFork: {
     regular: BranchForkRegular,

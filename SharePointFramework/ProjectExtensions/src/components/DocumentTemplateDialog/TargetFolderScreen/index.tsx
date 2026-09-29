@@ -66,8 +66,7 @@ export const TargetFolderScreen: FC = () => {
         {folders.length === 0 && folder !== null ? (
           <UserMessage text={strings.NoFoldersAvailableText} intent='info' />
         ) : (
-          // Selecting a row picks that folder as the target; clicking its name, or double-clicking
-          // the row, enters it instead.
+          // Selecting a row picks that folder as the target; clicking its name enters it instead.
           <DataGridList<SPFolder>
             items={sortedFolders}
             columns={grid.columns}
@@ -75,7 +74,6 @@ export const TargetFolderScreen: FC = () => {
             selectionMode='single'
             selectedItems={selectedFolder ? [selectedFolder] : []}
             onSelectionChange={(ids) => setSelectedFolder((ids[0] as string) ?? null)}
-            onRowDoubleClick={onFolderClick}
           />
         )}
       </div>

@@ -1,6 +1,11 @@
 .root {
-    .iconContainer {
-        display: inline-block;
-        width: 20px;
-    }
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  .iconContainer {
+    display: inline-flex;
+    align-items: center;
+    width: 20px;
+  }
 }
