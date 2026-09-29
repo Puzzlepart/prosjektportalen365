@@ -1,4 +1,3 @@
-import { ITag } from '@fluentui/react'
 import { SPUser } from '@microsoft/sp-page-context'
 import { IPnPClientStore, PnPClientStorage } from '@pnp/core'
 import { SPFI } from '@pnp/sp'
@@ -10,7 +9,7 @@ import { SpEntityPortalService } from '../../services/EntityPortalService'
 import { PortalDataService } from '../../services/PortalDataService/PortalDataService'
 import { getTermLabel, getTermStore } from '../../taxonomy'
 import { SPFxContext } from '../../types'
-import { IPersonaItem } from '../../types'
+import { IPersonaItem, ITagItem } from '../../types'
 import { DefaultCaching } from '../cache'
 import { createSpfiInstance } from '../createSpfiInstance'
 import {
@@ -285,7 +284,7 @@ export class SPDataAdapterBase<
   }
 
   /**
-   * Get terms from term set as `ITag[]`. The result is filtered by `filter` and `selectedItems`.
+   * Get terms from term set as `ITagItem[]`. The result is filtered by `filter` and `selectedItems`.
    * Specify `languageTag` to get terms in a specific language (default `nb-NO`). Labels are
    * resolved with `getTermLabel`, so a term without a label in that language falls back to
    * `nb-NO`, then `en-US`, then its first label.
@@ -303,11 +302,11 @@ export class SPDataAdapterBase<
     filter: string,
     selectedItems: any[],
     languageTag = 'nb-NO'
-  ): Promise<ITag[]> {
+  ): Promise<ITagItem[]> {
     const terms = await getTermStore(this.sp.web).sets.getById(termSetId).terms.all()
     const tags = terms
       .filter((term) => !term.isDeprecated)
-      .map<ITag>((term) => ({
+      .map<ITagItem>((term) => ({
         key: term.id,
         name: getTermLabel(term, languageTag)
       }))

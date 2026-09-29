@@ -1,15 +1,16 @@
 .root {
   margin: 0;
 
-  .sticky {
+  // Pinned at the top of the page's scroll region while the report scrolls under it. The suite
+  // bar sits outside that region, so no offset is needed.
+  .stickyTabs {
+    position: sticky;
+    top: 0;
+    z-index: 1;
     margin: 0;
     padding-top: 16px;
     padding-bottom: 16px;
-
-    .header,
-    .commandBar {
-      display: none;
-    }
+    background-color: var(--colorNeutralBackground1);
   }
 
   .header {

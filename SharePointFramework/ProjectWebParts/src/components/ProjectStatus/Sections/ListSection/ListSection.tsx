@@ -1,12 +1,4 @@
-import {
-  DataGrid,
-  DataGridBody,
-  DataGridCell,
-  DataGridHeader,
-  DataGridHeaderCell,
-  DataGridRow
-} from '@fluentui/react-components'
-import { LoadingSkeleton, createDataGridColumns } from 'pp365-shared-library'
+import { DataGridList, LoadingSkeleton, createDataGridColumns } from 'pp365-shared-library'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useMemo } from 'react'
@@ -31,29 +23,9 @@ export const ListSection: FC = () => {
         />
       )
     if (!state.isDataLoaded) return <LoadingSkeleton />
-    return (
-      <DataGrid
-        items={items}
-        columns={grid.columns}
-        columnSizingOptions={grid.columnSizingOptions}
-        resizableColumns
-      >
-      <DataGridHeader>
-        <DataGridRow>
-            {({ renderHeaderCell }) => (
-            <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-            )}
-          </DataGridRow>
-        </DataGridHeader>
-      <DataGridBody>
-          {({ item, rowId }) => (
-          <DataGridRow key={rowId}>
-              {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
-            </DataGridRow>
-          )}
-        </DataGridBody>
-      </DataGrid>
-    )
+    // The v8 list was justified, so the columns shared the section's width; the shared grid does
+    // the same when asked to fit, and carries the list typography the sections are meant to have.
+    return <DataGridList items={items} columns={grid.columns} fitColumnsToContainer />
   }
 
   return (

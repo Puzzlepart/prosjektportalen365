@@ -105,11 +105,20 @@ inventory is current.
 
 ## Decisions
 
-### A. Lists: one shared `List` on v8 for now, converted last, behind its own interface (decided)
+### A. Lists: one shared `List` on v8 for now, converted last, behind its own interface (decided; ratified 2026-09-29)
 
 44 files touch `DetailsList`; almost all of them do so through two hubs, `PortfolioWebParts/src/components/List` (`ShimmeredDetailsList` with grouping, sticky header, selection, column resize and context menus) and the `ItemColumn` renderers in the shared library. v9's `DataGrid` has sorting, selection and resizable columns but no grouping, no sticky header and no built-in virtualization, and Microsoft's list replacement is still `@fluentui/react-list-preview`. Rewriting the portfolio list on `DataGrid` today would lose grouping or force a home-made one.
 
 Rule: convert everything around the lists first (toolbars, panels, column pickers, renderers) so that `DetailsList` is reached only through `PortfolioWebParts/src/components/List` and the equivalent in the shared library, with `IColumn` confined to those modules behind our own `ProjectColumn`/`ProjectContentColumn` types. The last slice then decides per list: `DataGrid` where the list needs none of grouping, sticky header or virtualization (most `DynamicList` views, admin lists), and the v8 `DetailsList` kept inside the one shared wrapper where it does, until v9 has parity. `@fluentui/react` remains a dependency of the shared library only, in that case.
+
+**Ratified after slice 7 (2026-09-29).** Every list outside the hub is on the shared v9
+`DataGridList`; the hub in `PortfolioWebParts/src/components/List` stays on v8 for this phase, with
+its four `Selection`-as-state files. Its conversion — grouping emulated with flattened group rows and
+expand/collapse state, a CSS sticky header carrying the title, search and toolbar, selection as row
+ids in both reducers, marquee dropped — is **its own later phase**, started only after slice 3b has
+put tests around the hub, which has none today. Consequence for the sentence above: `@fluentui/react`
+also remains a dependency of PortfolioWebParts in this phase, for the hub alone; the definition of
+done is amended to say so.
 
 ### B. People picker: one shared wrapper, v8 inside (decided; confirmed the hard way 2026-09-25)
 
@@ -342,7 +351,7 @@ Each slice is one PR-sized commit series on this branch, verified by `rush rebui
 | 5 | People picker | Shared wrapper per Decision B, seven call sites | scattered `NormalPeoplePicker` |
 | 6 | Lists, part 1 | Confine `DetailsList`/`IColumn` to the two hubs; convert renderers and toolbars around them; `DataGrid` for lists that need no grouping/sticky. **Measured and handed off: `docs/plans/fluent-v9-migration/HANDOFF-slice-6.md`** | `IColumn` outside the hubs |
 | 7 | Lists, part 2 | Decide per remaining list (`DataGrid` vs wrapped v8); `@fluentui/react` removed from every solution that is free | v8 in the web part solutions |
-| 8 | Lint close-out | Relaxed rules back to `error`, `allowWarningsInSuccessfulBuild` revisited, `Redux Toolkit` 2 / `xlsx` 0.18 / React-15-era peers evaluated with a one-line verdict each; decide the fate of the unreferenced `PropertyFieldColorConfiguration` and of the dormant column form panel (see the slice 2 and 3 logs) | tolerated warnings |
+| 8 | Close-out | **Decided 2026-09-29:** the timeline list fits its columns to the web part (a `DataGridList` feature); the status page's section tabs go to CSS `position: sticky`; `PropertyFieldColorConfiguration` is deleted (unreferenced since slice 3); the four type-only v8 imports left in the shared library (`ITag`, `IObjectWithKey`, `IIconProps`, `DayOfWeek`) become our own types. Then the close-out proper: relaxed rules back to `error`, `allowWarningsInSuccessfulBuild` revisited, coverage thresholds enforced in `pp365-jest-config`, `Redux Toolkit` 2 / `xlsx` 0.18 / React-15-era peers with a one-line verdict each, the definition of done and the release note. The column form panel was enabled in `1e1820e4`. | tolerated warnings, the tail of v8 |
 
 Slices 3 to 6 are per solution internally: shared-library first (consumers compile against its `lib`), then ProjectExtensions, PortfolioExtensions, ProgramWebParts, ProjectWebParts, PortfolioWebParts.
 
@@ -366,7 +375,7 @@ Slices 3 to 6 are per solution internally: shared-library first (consumers compi
 
 ## Definition of done
 
-`grep -rl "from '@fluentui/react'" SharePointFramework/*/src` lists only the deliberate hold-outs — the shared list wrapper (Decision A), the people picker (Decision B), the file type icon render sites and the UI Fabric icon fallback (Decision G) — and `@fluentui/react` is a dependency of shared-library and ProjectExtensions only, for those reasons; no `@uifabric/*`, `pzl-spfx-components`, `fabric.min.css` or compat aliases remain; the three relaxed lint rules are `error` and `rush rebuild` reports zero warnings, or a documented, short allow-list; every web part root and interactive component has a test file meeting the Decision D targets, coverage thresholds are enforced in `pp365-jest-config` at or above the slice 3 baseline, the browser suite includes a program site, the navigation flows and two write flows; the release notes for the version carrying this phase describe it as a technical change with no intended functional difference.
+`grep -rl "from '@fluentui/react'" SharePointFramework/*/src` lists only the deliberate hold-outs — the shared list wrapper (Decision A), the people picker (Decision B), the file type icon render sites and the UI Fabric icon fallback (Decision G) — and `@fluentui/react` is a dependency of shared-library, ProjectExtensions and — for the hub alone, per Decision A as ratified — PortfolioWebParts only, for those reasons; no `@uifabric/*`, `pzl-spfx-components`, `fabric.min.css` or compat aliases remain; the three relaxed lint rules are `error` and `rush rebuild` reports zero warnings, or a documented, short allow-list; every web part root and interactive component has a test file meeting the Decision D targets, coverage thresholds are enforced in `pp365-jest-config` at or above the slice 3 baseline, the browser suite includes a program site, the navigation flows and two write flows; the release notes for the version carrying this phase describe it as a technical change with no intended functional difference.
 
 ## Slice log
 
@@ -820,6 +829,102 @@ Five findings from the user's manual pass over slice 6, and one bonus bug older 
 
 Test counts unchanged at 254 after a one-in, one-out; `rush rebuild` green.
 
+### Slice 8 — close-out (2026-09-29, in progress)
+
+Scoped by the four decisions of 2026-09-29 (Decision A ratified; timeline fit; sticky tabs to CSS;
+`PropertyFieldColorConfiguration` deleted). The inventory below was measured before any of it was
+touched, so the close-out has numbers to close against.
+
+**Timeline list, why it always scrolled.** Read from Fluent's `columnResizeUtils`: the grid measures
+its *parent* and its auto-fit does shrink columns — from the last one backwards, down to each
+`minWidth` — so with every timeline column at `minWidth: 100` and one column per view field, a view
+with more columns than the web part has hundreds of pixels can never fit, whatever Fluent or the
+user does. Two changes: `DataGridList` gains `fitColumnsToContainer`, which measures the container
+itself and hands the grid ideal widths that already share it in proportion to the preferred widths
+(`fitColumnWidths`, a pure function with its own tests), as the v8 justified layout did; and the
+timeline columns' floor drops from 100 to 80, so eleven columns fit a web part where eight did. The
+second is one number in `fetchTimelineData` and the user can push it back.
+The status report's list and uncertainty sections take the same fit, since their v8 list was
+justified too; see the third feedback round for why they were not on the shared grid.
+
+**The status page's sticky tabs, and the pane that scrolled them.** The v8 `ScrollablePane` in
+`ProjectStatus` scrolled the report inside its own box, and `SectionTabs` used the v8 `Sticky` to pin
+the tabs to that box's top; choosing a tab found the pane by its v8 class name and scrolled it by
+arithmetic. The page now scrolls the report as it does every other web part — the web part's
+container had no height or overflow the pane relied on — the tabs are `position: sticky; top: 0`
+(the suite bar sits outside the page's scroll region, so no offset), a tab calls the section's own
+`scrollIntoView`, and the sections carry a `scroll-margin-top` that keeps them clear of the pinned
+tabs. Test first: the tabs render per section, then choosing one requests the scroll. The old
+`.sticky` rule that hid the header and command bar in the pinned copy went with the pinned copy.
+
+**`PropertyFieldColorConfiguration` is deleted.** Zero references anywhere; three loc keys it used
+(`ColorPickerStrings`, `RevertDefaultColorConfigurationText`, `SaveColorConfigurationText`) remain in
+the triad unused, which `validate-loc` does not mind. Git keeps the component.
+
+**The shared library's last four type-only v8 imports are our own types.** `ITag` was the term
+search's return shape and the idea fields' input — `ITagItem` now, the same data-model story as
+`IMenuItem`, `IPersonaItem`, `IListColumn` and `ITrendIcon`; `ProjectTemplate.iconProps` is a plain
+`{ iconName }`, all any reader took from it; `UserSelectableObject` no longer *implements* the v8
+`IObjectWithKey`, since its `key` is what made it selectable and the v8 hub only needs the property;
+and `DayOfWeek` is a numeric enum the compat date picker declares but does not export, so Monday is named locally as the number the prop takes. shared-library is down to **six** v8 files, and every one is a named hold-out: `Autocomplete`
+(three files, its own slot), `FileNameColumn` and the icon fallback (Decision G), and the people
+picker (Decision B).
+
+**Coverage floors are set.** Each solution's `config/jest.config.json` now carries a
+`coverageThreshold.global` at the close-out's measured totals rounded down — statements / branches /
+functions / lines: shared-library 28/59/27/28, PortfolioWebParts 12/16/12/12, ProjectWebParts
+12/19/7/12, ProjectExtensions 19/48/18/19, ProgramWebParts 29/32/7/29, PortfolioExtensions 0/2/2/0.
+Every `heft test` enforces them, so coverage can only rise from here; raising a floor is a
+one-line change when it does.
+
+**ProjectWebParts drops `@fluentui/react`.** With the sticky tabs converted and the colour
+configurator gone it has no v8 import left, so per Decision C the dependency leaves its
+`package.json` through `rush update`, as ProgramWebParts' and PortfolioExtensions' did in slice 3.
+Three solutions keep it, each for a documented reason: shared-library (B, G, `Autocomplete`),
+PortfolioWebParts (the hub, A as ratified), ProjectExtensions (G).
+
+**A category the sweep never counted: v8 Sass.** Dropping `@fluentui/react` from ProjectWebParts
+failed its build at once — not in TypeScript but in Sass: `SummarySection.module.scss` imported
+`@fluentui/react/dist/sass/References.scss` for the Fabric grid mixins, the item the slice 2 log had
+deferred and every later `grep` over `.ts`/`.tsx` was blind to. It was the only one in the repository
+(checked across all six solutions' stylesheets). The float grid is now the same layout in flex, with
+the same widths, 8px gutters and 1366px breakpoint, and the class names unchanged; the section gets a
+render test, since jsdom cannot see layout and a v8 baseline for a pure stylesheet change would have
+proved nothing. Lesson for the definition of done: sweep `.scss` for `@fluentui/react` and `ms-`
+mixins as well as the TypeScript imports.
+
+**Verified.** `rush rebuild` with `NODE_OPTIONS=--max-old-space-size=8192`: all eleven operations
+succeed, **264 tests pass** (shared-library 203, ProjectExtensions 22, ProjectWebParts 21,
+PortfolioWebParts 14, ProgramWebParts 3, PortfolioExtensions 1), zero lint errors, and every
+coverage floor holds. v8 imports per solution: shared-library 6, PortfolioWebParts 15,
+ProjectExtensions 6, the other three 0; `@fluentui/react` is a dependency of shared-library,
+PortfolioWebParts and ProjectExtensions only. The `.scss` sweep finds no v8 import or Fabric mixin
+(the one match is the comment in `SummarySection.module.scss` that says what it replaced). The
+status web part's bundle now carries the grid's typography rules, checked by `grep` for their
+hashed class — the check that found the third-round cause.
+
+**Lint, the starting line.** Four rules are relaxed to `warn` in `.eslint-config/index.js` for the
+migration: `@typescript-eslint/no-floating-promises` (70 warnings), `@typescript-eslint/no-use-before-define`
+(0), `require-atomic-updates` (10) and `prettier/prettier` (68). The rest of the tree's warnings are
+house rules that were always `warn`: `no-console` 62, `no-unused-vars` 59, `no-useless-catch` 24,
+`no-lone-blocks` 23, `require-await` 21, `no-void` 17, `no-empty` 14, `no-new-null` 13,
+`no-unused-expressions` 10, `pair-react-dom-render-unmount` 9, `eqeqeq` 5. **415 in all**:
+shared-library 111, ProjectWebParts 124, PortfolioWebParts 59, ProjectExtensions 59,
+PortfolioExtensions 40, ProgramWebParts 22. `allowWarningsInSuccessfulBuild` is not set anywhere.
+Prettier and unused-vars are mechanical; the floating promises are the ones that need reading.
+
+**Coverage, the starting line.** No thresholds exist. Totals (statements): shared-library 28.3 %,
+ProgramWebParts 29.9 %, ProjectExtensions 19.9 %, PortfolioWebParts 12.6 %, ProjectWebParts 11.6 %,
+PortfolioExtensions 0.3 %. Each solution's `config/jest.config.json` only `extends` the shared
+config, so per-solution thresholds go there, at these floors rounded down, and may only rise.
+
+**Dependencies, the verdicts the plan asked for.** `@reduxjs/toolkit` is `~1.9.5` in five
+solutions; 2.x changes `createSlice`/`createAction` typing and drops the `AnyAction` export this
+tree imports in its reducers — a real migration, not part of this phase. `xlsx` is `^0.16.9` in one;
+0.18 is a rewrite with a changed `utils` surface — same verdict. The React-15-era peers are
+`react-beautiful-dnd ~13.1.1` and `react-calendar-timeline 0.28.0`, both pinned to peer ranges that
+include 17; neither needs to move for this phase.
+
 ### Second feedback round on slices 6 and 7 (2026-09-29)
 
 - **Target folder: no double-click.** A row selects the folder as the copy target, its name enters
@@ -845,6 +950,27 @@ Test counts unchanged at 254 after a one-in, one-out; `rush rebuild` green.
   columns at `minWidth` (100px, so eight columns fit a web part) and let users widen them, or to size
   them to the container on first render. Either changes the look for every timeline user, so it
   waits for the user's word.
+- **Status section typography, third round — the rules never reached the report.** The second
+  attempt's rules were right and the user still saw 14px regular in `Foreground1`, with a pasted row
+  whose cells carried no module class. The cause was not the stylesheet: `ListSection` and
+  `UncertaintySection` still rendered Fluent's `DataGrid` directly, as slice 6 batch 2 had left
+  them, and slice 7's fold onto `DataGridList` had passed them by — the status web part's bundle did
+  not contain the grid's stylesheet at all (`grep` for its hashed class over every ProjectWebParts
+  bundle: present in the timeline and dynamic list bundles, absent from the status one). Both
+  sections now render `DataGridList`, and since their v8 `ShimmeredDetailsList` was justified they
+  fit their columns to the section as the timeline does. Three lists still render `DataGrid`
+  directly — the program administration's project list and the two project setup sections — but
+  those were on v9 before this phase, with checkbox labels and grouping the shared grid has no props
+  for; they never had a v8 look to match, so they are noted here, not changed.
+- **Status sections: row lines past the section's edge.** Reported on the same test. Fluent's
+  column sizing sets `min-width: fit-content` on the grid root whenever columns are resizable, so a
+  grid whose columns do not fit grows past its parent — every row line with it — instead of
+  shrinking; the sections had nothing around the grid to stop it. The v8 list scrolled
+  horizontally inside its own content wrapper (`constrainMode` horizontal, its default), so the
+  shared grid now always renders inside a container with `overflow-x: auto`, for every list on it,
+  and measures that container only when asked to fit (the width hook takes an `enabled` flag, so
+  the other lists do not re-render on resize). Together with the fit, a section's list shares the
+  section's width and scrolls only when the columns' floors exceed it, as in v8.
 
 ### The slice 7 CI failure (2026-09-29)
 
@@ -883,6 +1009,19 @@ dialog-opening cases now wait up to ten seconds for the dialog and allow twenty 
 for that load; a dialog that never opens still fails, later. Lesson for the harness: a wall-clock
 wait in a suite that renders a Fluent surface must be sized for the full parallel run, not for the
 suite alone, and a green focused run proves nothing about it.
+
+**A third face of the same test (2026-09-29, slice 8 verification).** The full rebuild failed it
+once more, differently: the ten seconds elapsed with the dialog *in the DOM*, open, its rows
+rendered — and `aria-hidden="true"` on the surface, which Testing Library's role query rightly
+skips. Fluent puts that attribute on a surface only when a closed dialog is kept mounted, and this
+one unmounts on close (the default). Tabster puts it there: its modalizer marks every dialog surface
+that is not the *active* one hidden, on a 250 ms timer keyed to where focus is
+(`Modalizer._hiddenUpdate`, `hiddenElements` are all inactive modalizers whatever else is active),
+so an open dialog that focus has not entered, or has left, is hidden until focus returns. Under
+load that state outlasted the query; the identical rebuild minutes earlier had passed. The test now
+finds the dialog with `hidden: true` — honest, since a surface that is found is an open one — and
+asserts on its content as before. Lesson: a role query for a Fluent dialog encodes Tabster's focus
+state, not the component's; assert on what the component renders.
 
 ### Slice 7 — lists, part 2 (2026-09-29, complete except for the hub decision)
 

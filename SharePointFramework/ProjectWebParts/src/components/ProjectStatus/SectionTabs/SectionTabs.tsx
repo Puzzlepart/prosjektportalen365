@@ -1,5 +1,4 @@
 import React, { FC } from 'react'
-import { Sticky, StickyPositionType } from '@fluentui/react'
 import {
   Menu,
   MenuItem,
@@ -62,23 +61,13 @@ export const SectionTabs: FC = () => {
   const sections = useSections()
 
   const scrollIntoView = (sectionId) => {
-    const scrollablePane = document.querySelector('.ms-ScrollablePane--contentContainer')
     const section = document.getElementById(`${strings.ListSectionElementIdPrefix}${sectionId}`)
-
-    if (scrollablePane && section) {
-      const relativeTop = section.offsetTop - scrollablePane.scrollTop
-
-      if (relativeTop !== 0) {
-        scrollablePane.scrollTo({
-          top: scrollablePane.scrollTop + relativeTop - 80,
-          behavior: 'smooth'
-        })
-      }
-    }
+    // The section's `scroll-margin-top` keeps it clear of the pinned tabs.
+    section?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   return (
-    <Sticky stickyClassName={styles.sticky} stickyPosition={StickyPositionType.Header}>
+    <div className={styles.stickyTabs}>
       <Overflow>
         <TabList
           className={styles.sectionTabs}
@@ -100,6 +89,6 @@ export const SectionTabs: FC = () => {
           <OverflowMenu sections={sections} onSelect={scrollIntoView} />
         </TabList>
       </Overflow>
-    </Sticky>
+    </div>
   )
 }

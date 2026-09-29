@@ -17,3 +17,12 @@
     color: var(--colorNeutralForeground3);
   }
 }
+
+// Fluent's column sizing sets `min-width: fit-content` on the grid, so where the columns do not
+// fit, the grid — and every row line in it — grows past its parent rather than shrinking. The v8
+// list scrolled horizontally inside its own box (`constrainMode` horizontal, its default); the
+// container gives this grid the same, so a list never draws outside the section or dialog that
+// holds it.
+.container {
+  overflow-x: auto;
+}

@@ -1,4 +1,6 @@
 .baseSection {
+  // Clear of the pinned section tabs when scrolled into view.
+  scroll-margin-top: 80px;
   box-shadow: var(--shadow4);
   border-radius: var(--borderRadiusMedium);
 

@@ -190,7 +190,7 @@ export async function fetchTimelineData(
             name: column.Title,
             fieldName: column.InternalName,
             data: { type: column.TypeAsString },
-            minWidth: 100,
+            minWidth: 80,
             maxWidth: 200
           }
         : null

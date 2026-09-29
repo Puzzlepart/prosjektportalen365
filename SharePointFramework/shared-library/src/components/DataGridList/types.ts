@@ -88,4 +88,11 @@ export interface IDataGridListProps<TItem = any> {
    * Shown instead of the grid while there is nothing to show.
    */
   emptyContent?: ReactNode
+
+  /**
+   * Shares the container's width across the columns in proportion to their preferred widths, as
+   * the v8 justified layout did, instead of starting each at its preferred width and letting the
+   * grid overflow. Columns never go below their `minWidth`.
+   */
+  fitColumnsToContainer?: boolean
 }

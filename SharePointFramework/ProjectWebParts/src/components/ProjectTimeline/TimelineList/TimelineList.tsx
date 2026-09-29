@@ -31,6 +31,7 @@ export const TimelineList: FC = () => {
             selectedItems={context.state.selectedItems}
             onSelectionChange={onSelection}
             subtleSelection
+            fitColumnsToContainer
           />
         </div>
       </FluentProvider>

@@ -41,8 +41,20 @@ import { DialogColumn } from './index'
  */
 
 const measurements = [
-  { Value: 5, ValueDisplay: '5', Comment: 'Første måling', AchievementDisplay: '50 %', DateDisplay: '01.03.2026' },
-  { Value: 8, ValueDisplay: '8', Comment: 'Andre måling', AchievementDisplay: '80 %', DateDisplay: '01.06.2026' }
+  {
+    Value: 5,
+    ValueDisplay: '5',
+    Comment: 'Første måling',
+    AchievementDisplay: '50 %',
+    DateDisplay: '01.03.2026'
+  },
+  {
+    Value: 8,
+    ValueDisplay: '8',
+    Comment: 'Andre måling',
+    AchievementDisplay: '80 %',
+    DateDisplay: '01.06.2026'
+  }
 ]
 
 function renderCell(items: unknown[] = measurements, props: Record<string, any> = {}) {
@@ -69,7 +81,14 @@ const setupUser = () => userEvent.setup({ pointerEventsCheck: 0 })
  */
 const DIALOG_TIMEOUT = 10_000
 const TEST_TIMEOUT = 20_000
-const findDialog = () => screen.findByRole('dialog', {}, { timeout: DIALOG_TIMEOUT })
+
+/**
+ * The open dialog. Found with `hidden: true` because Tabster, Fluent's focus manager, marks every
+ * dialog surface `aria-hidden` while it is not the *active* one — on a timer keyed to where focus
+ * is — and under load that state has been seen to outlast the query, with the dialog open and its
+ * rows rendered. The dialog unmounts when closed, so a surface that is found is an open one.
+ */
+const findDialog = () => screen.findByRole('dialog', { hidden: true }, { timeout: DIALOG_TIMEOUT })
 
 describe('DialogColumn', () => {
   it('shows a link with the default text', () => {
@@ -82,23 +101,31 @@ describe('DialogColumn', () => {
     expect(screen.getByText('Se målinger')).toBeInTheDocument()
   })
 
-  it('opens a dialog with the title and the measurements', async () => {
-    const user = setupUser()
-    renderCell()
-    await user.click(screen.getByText(strings.ShowAllMeasurementsLinkText))
-    const dialog = await findDialog()
-    expect(dialog).toHaveTextContent('Gevinst 1')
-    expect(dialog).toHaveTextContent(strings.MeasurementValueLabel)
-    expect(dialog).toHaveTextContent('Første måling')
-    expect(dialog).toHaveTextContent('80 %')
-    expect(dialog).toHaveTextContent('01.06.2026')
-  }, TEST_TIMEOUT)
+  it(
+    'opens a dialog with the title and the measurements',
+    async () => {
+      const user = setupUser()
+      renderCell()
+      await user.click(screen.getByText(strings.ShowAllMeasurementsLinkText))
+      const dialog = await findDialog()
+      expect(dialog).toHaveTextContent('Gevinst 1')
+      expect(dialog).toHaveTextContent(strings.MeasurementValueLabel)
+      expect(dialog).toHaveTextContent('Første måling')
+      expect(dialog).toHaveTextContent('80 %')
+      expect(dialog).toHaveTextContent('01.06.2026')
+    },
+    TEST_TIMEOUT
+  )
 
-  it('says so when there are no measurements', async () => {
-    const user = setupUser()
-    renderCell([])
-    await user.click(screen.getByText(strings.ShowAllMeasurementsLinkText))
-    const dialog = await findDialog()
-    expect(dialog).toHaveTextContent(strings.ModalColumnEmptyListTitle)
-  }, TEST_TIMEOUT)
+  it(
+    'says so when there are no measurements',
+    async () => {
+      const user = setupUser()
+      renderCell([])
+      await user.click(screen.getByText(strings.ShowAllMeasurementsLinkText))
+      const dialog = await findDialog()
+      expect(dialog).toHaveTextContent(strings.ModalColumnEmptyListTitle)
+    },
+    TEST_TIMEOUT
+  )
 })

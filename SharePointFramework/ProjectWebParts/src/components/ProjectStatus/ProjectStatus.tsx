@@ -1,4 +1,3 @@
-import { ScrollablePane } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import { Fluent, UserMessage } from 'pp365-shared-library'
 import React, { FC } from 'react'
@@ -25,30 +24,28 @@ export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
     <ProjectStatusContext.Provider value={context}>
       <Fluent>
         <div className={styles.root}>
-          <ScrollablePane>
-            <div className={styles.header}>
-              <Header />
-              <PublishedStatus />
+          <div className={styles.header}>
+            <Header />
+            <PublishedStatus />
+          </div>
+          <UserMessages />
+          {context.state.error || showNoHubAccessMessage ? (
+            <div className={styles.messageContainer}>
+              <UserMessage
+                title={strings.ErrorTitle}
+                text={context.state.error?.message ?? strings.ProjectStatusNoHubAccessErrorText}
+                intent='warning'
+              />
             </div>
-            <UserMessages />
-            {context.state.error || showNoHubAccessMessage ? (
-              <div className={styles.messageContainer}>
-                <UserMessage
-                  title={strings.ErrorTitle}
-                  text={context.state.error?.message ?? strings.ProjectStatusNoHubAccessErrorText}
-                  intent='warning'
-                />
+          ) : (
+            <>
+              <Commands />
+              <SectionTabs />
+              <div className={styles.container}>
+                <Sections />
               </div>
-            ) : (
-              <>
-                <Commands />
-                <SectionTabs />
-                <div className={styles.container}>
-                  <Sections />
-                </div>
-              </>
-            )}
-          </ScrollablePane>
+            </>
+          )}
         </div>
         <EditStatusPanel />
       </Fluent>

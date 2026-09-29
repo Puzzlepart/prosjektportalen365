@@ -1,6 +1,4 @@
-import { IObjectWithKey } from '@fluentui/react'
-
-export class UserSelectableObject implements IObjectWithKey {
+export class UserSelectableObject {
   /**
    * The `key` is the same as the `id` and corresponds to the item ID
    * in the SharePoint list

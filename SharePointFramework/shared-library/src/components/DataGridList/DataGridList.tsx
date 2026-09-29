@@ -7,9 +7,11 @@ import {
   DataGridRow,
   TableColumnSizingOptions
 } from '@fluentui/react-components'
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef } from 'react'
 import styles from './DataGridList.module.scss'
+import { fitColumnWidths } from './fitColumnWidths'
 import { IDataGridColumn, IDataGridListProps } from './types'
+import { useContainerWidth } from './useContainerWidth'
 
 /**
  * Sizing options for the grid, from each column's widths.
@@ -52,17 +54,28 @@ export function DataGridList<TItem = any>(props: IDataGridListProps<TItem>) {
     size,
     onRowDoubleClick,
     className,
-    emptyContent
+    emptyContent,
+    fitColumnsToContainer
   } = props
 
-  const columnSizingOptions = useMemo(() => createColumnSizingOptions(columns), [columns])
+  // The grid measures its own parent for its auto-fit; the fit here needs the width too, to hand
+  // the grid ideal widths that already add up to it.
+  const containerRef = useRef<HTMLDivElement>(null)
+  const containerWidth = useContainerWidth(containerRef, fitColumnsToContainer)
+  const columnSizingOptions = useMemo(
+    () =>
+      fitColumnsToContainer
+        ? fitColumnWidths(columns, containerWidth)
+        : createColumnSizingOptions(columns),
+    [columns, fitColumnsToContainer, containerWidth]
+  )
   // A changed set of columns remounts the grid, so its sort and sizing state start over rather
   // than pointing at columns that are gone.
   const columnsKey = columns.map((column) => column.columnId).join('|')
 
   if (emptyContent !== undefined && items.length === 0) return <>{emptyContent}</>
 
-  return (
+  const grid = (
     <DataGrid
       key={columnsKey}
       className={className ? `${styles.root} ${className}` : styles.root}
@@ -85,7 +98,9 @@ export function DataGridList<TItem = any>(props: IDataGridListProps<TItem>) {
       <DataGridHeader>
         <DataGridRow>
           {({ renderHeaderCell }) => (
-            <DataGridHeaderCell className={styles.headerCell}>{renderHeaderCell()}</DataGridHeaderCell>
+            <DataGridHeaderCell className={styles.headerCell}>
+              {renderHeaderCell()}
+            </DataGridHeaderCell>
           )}
         </DataGridRow>
       </DataGridHeader>
@@ -95,11 +110,22 @@ export function DataGridList<TItem = any>(props: IDataGridListProps<TItem>) {
             key={rowId}
             onDoubleClick={onRowDoubleClick && (() => onRowDoubleClick(item))}
           >
-            {({ renderCell }) => <DataGridCell className={styles.cell}>{renderCell(item)}</DataGridCell>}
+            {({ renderCell }) => (
+              <DataGridCell className={styles.cell}>{renderCell(item)}</DataGridCell>
+            )}
           </DataGridRow>
         )}
       </DataGridBody>
     </DataGrid>
+  )
+
+  // Fluent's column sizing sets `min-width: fit-content` on the grid, so where the columns do not
+  // fit the grid grows past its parent rather than shrinking; the container scrolls it instead,
+  // as the v8 list's content wrapper did.
+  return (
+    <div ref={containerRef} className={styles.container}>
+      {grid}
+    </div>
   )
 }
 

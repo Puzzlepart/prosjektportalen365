@@ -1,12 +1,4 @@
-import {
-  DataGrid,
-  DataGridBody,
-  DataGridCell,
-  DataGridHeader,
-  DataGridHeaderCell,
-  DataGridRow
-} from '@fluentui/react-components'
-import { LoadingSkeleton, createDataGridColumns } from 'pp365-shared-library'
+import { DataGridList, LoadingSkeleton, createDataGridColumns } from 'pp365-shared-library'
 import * as strings from 'ProjectWebPartsStrings'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import React, { FC, ReactElement, useMemo } from 'react'
@@ -63,30 +55,12 @@ export const UncertaintySection: FC = () => {
         break
     }
     if (!state.isDataLoaded) return <LoadingSkeleton />
+    // The v8 list was justified, so the columns shared the section's width; the shared grid does
+    // the same when asked to fit, and carries the list typography the sections are meant to have.
     return (
       <>
         {matrix}
-        <DataGrid
-          items={items}
-          columns={grid.columns}
-          columnSizingOptions={grid.columnSizingOptions}
-          resizableColumns
-        >
-          <DataGridHeader>
-            <DataGridRow>
-              {({ renderHeaderCell }) => (
-                <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-              )}
-            </DataGridRow>
-          </DataGridHeader>
-          <DataGridBody>
-            {({ item, rowId }) => (
-              <DataGridRow key={rowId}>
-                {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
-              </DataGridRow>
-            )}
-          </DataGridBody>
-        </DataGrid>
+        <DataGridList items={items} columns={grid.columns} fitColumnsToContainer />
       </>
     )
   }

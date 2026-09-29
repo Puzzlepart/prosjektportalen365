@@ -33,18 +33,18 @@ The user builds and deploys themselves by default, but has repeatedly asked for 
 
 ## State at handoff
 
-**Slice 6 is complete (2026-09-28).** `rush rebuild` is green: exit 0, **228 tests pass**, zero lint errors (warnings only, see slice 8). The `IColumn` swap, the `ItemColumn` form controls, the trend icon and the three no-selection lists are done; see the slice 6 log in the plan. This document stays as the record of what was measured. **Slice 7 is also complete (2026-09-29):** every list outside the hub is on the shared `DataGridList`, `SelectScreen`'s v8 `Selection` is gone, 254 tests pass, and the hub's fate is recorded in the slice 7 log as a recommendation awaiting the user.
+**Slice 6 is complete (2026-09-28).** `rush rebuild` is green: exit 0, **228 tests pass**, zero lint errors (warnings only, see slice 8). The `IColumn` swap, the `ItemColumn` form controls, the trend icon and the three no-selection lists are done; see the slice 6 log in the plan. This document stays as the record of what was measured. **Slice 7 is also complete (2026-09-29):** every list outside the hub is on the shared `DataGridList`, `SelectScreen`'s v8 `Selection` is gone, 254 tests pass, and the hub's fate is recorded in the slice 7 log — decided on 2026-09-29: the hub stays v8 this phase (Decision A, ratified). **Slice 8 (2026-09-29)** converted the last v8 pieces outside the hold-outs — the status page's sticky tabs, the shared library's four type-only imports, the Fabric grid mixins in `SummarySection.module.scss` — deleted `PropertyFieldColorConfiguration`, dropped `@fluentui/react` from ProjectWebParts and set coverage floors; see the slice 8 log in the plan.
 
-| Solution | Files importing v8 (at handoff → after batch 1) | `@fluentui/react` in `package.json` |
+| Solution | Files importing v8 (at handoff → after batch 1 → after slice 8) | `@fluentui/react` in `package.json` |
 |---|---|---|
-| shared-library | 32 → **12** | yes |
-| PortfolioWebParts | 22 → **16** | yes |
-| ProjectWebParts | 17 → **5** | yes |
-| ProjectExtensions | 12 → **11** | yes |
+| shared-library | 32 → 12 → **6** (Autocomplete ×3, `FileNameColumn`, the people picker, the icon fallback) | yes (B, G, Autocomplete) |
+| PortfolioWebParts | 22 → 16 → **15** (the hub and its `Selection`) | yes (the hub, A as ratified) |
+| ProjectWebParts | 17 → 5 → **0** | no (dropped in slice 8) |
+| ProjectExtensions | 12 → 11 → **6** (Decision G icons) | yes (G) |
 | ProgramWebParts | **0** | no |
 | PortfolioExtensions | **0** | no |
 
-Test counts per solution: shared-library 188, ProjectExtensions 17, ProjectWebParts 10, PortfolioWebParts 9, ProgramWebParts 3, PortfolioExtensions 1.
+Test counts per solution at handoff: shared-library 188, ProjectExtensions 17, ProjectWebParts 10, PortfolioWebParts 9, ProgramWebParts 3, PortfolioExtensions 1. After slice 8: shared-library 203, ProjectExtensions 22, ProjectWebParts 21, PortfolioWebParts 14, ProgramWebParts 3, PortfolioExtensions 1 — 264 in all.
 
 ## What was verified on 2026-09-28 — do not re-derive
 

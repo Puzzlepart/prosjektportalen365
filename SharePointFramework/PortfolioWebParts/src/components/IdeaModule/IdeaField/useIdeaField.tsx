@@ -1,8 +1,7 @@
-import { ITag } from '@fluentui/react'
 import React from 'react'
 import { IIdeaFieldProps } from './types'
 import { Link, Persona, Tag } from '@fluentui/react-components'
-import { getFluentIcon, IPersonaItem, OverflowTagMenu } from 'pp365-shared-library'
+import { getFluentIcon, IPersonaItem, ITagItem, OverflowTagMenu } from 'pp365-shared-library'
 import {
   ChevronCircleRightFilled,
   EarthFilled,
@@ -101,7 +100,7 @@ export function useIdeaField(props: IIdeaFieldProps) {
       ],
       [
         'TaxonomyFieldTypeMulti',
-        (tags: ITag[]) => (
+        (tags: ITagItem[]) => (
           <div style={{ marginTop: 6 }}>
             <OverflowTagMenu
               text={props.model.displayName}
@@ -113,7 +112,7 @@ export function useIdeaField(props: IIdeaFieldProps) {
       ],
       [
         'TaxonomyFieldType',
-        ([tag]: ITag[]) => (
+        ([tag]: ITagItem[]) => (
           <div style={{ marginTop: 6 }}>
             <OverflowTagMenu text={props.model.displayName} tags={[tag.name]} icon={icon} />
           </div>
