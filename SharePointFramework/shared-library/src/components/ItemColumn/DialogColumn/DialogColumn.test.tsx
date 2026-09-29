@@ -1,3 +1,33 @@
+// The grid inside the dialog is stubbed with a plain table over the real column definitions. The
+// grid has its own suite; here it only needs to show what the dialog hands it. Rendering the real
+// DataGrid inside the modal takes milliseconds locally and more than Jest's five seconds on the CI
+// runner, for reasons that stay inside Fluent's focus and sizing machinery under jsdom.
+jest.mock('../../DataGridList', () => {
+  const React = jest.requireActual('react')
+  return {
+    DataGridList: ({ items, columns }: { items: any[]; columns: any[] }) => (
+      <table>
+        <thead>
+          <tr>
+            {columns.map((column) => (
+              <th key={column.columnId}>{column.renderHeaderCell()}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {items.map((item, index) => (
+            <tr key={index}>
+              {columns.map((column) => (
+                <td key={column.columnId}>{column.renderCell(item)}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )
+  }
+})
+
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import * as React from 'react'
@@ -6,8 +36,8 @@ import { DialogColumn } from './index'
 
 /**
  * The measurements cell: a link that opens a dialog listing the measurements behind a benefit.
- * Asserted through the link, the dialog role and the text in it, so it holds whichever grid draws
- * the rows.
+ * Asserted through the link, the dialog role and the text in it. The rows are drawn by the stub
+ * above from the dialog's real columns, so a column that stops rendering its value fails here.
  */
 
 const measurements = [
@@ -30,12 +60,6 @@ function renderCell(items: unknown[] = measurements, props: Record<string, any> 
 
 const setupUser = () => userEvent.setup({ pointerEventsCheck: 0 })
 
-/**
- * The dialog renders a whole grid on open, and the first Fluent render in a Jest worker pays for
- * its style injection; on a shared CI runner that can take longer than the default one second.
- */
-const findDialog = () => screen.findByRole('dialog', {}, { timeout: 5000 })
-
 describe('DialogColumn', () => {
   it('shows a link with the default text', () => {
     renderCell()
@@ -51,7 +75,7 @@ describe('DialogColumn', () => {
     const user = setupUser()
     renderCell()
     await user.click(screen.getByText(strings.ShowAllMeasurementsLinkText))
-    const dialog = await findDialog()
+    const dialog = await screen.findByRole('dialog')
     expect(dialog).toHaveTextContent('Gevinst 1')
     expect(dialog).toHaveTextContent(strings.MeasurementValueLabel)
     expect(dialog).toHaveTextContent('Første måling')
@@ -63,7 +87,7 @@ describe('DialogColumn', () => {
     const user = setupUser()
     renderCell([])
     await user.click(screen.getByText(strings.ShowAllMeasurementsLinkText))
-    const dialog = await findDialog()
+    const dialog = await screen.findByRole('dialog')
     expect(dialog).toHaveTextContent(strings.ModalColumnEmptyListTitle)
   })
 })

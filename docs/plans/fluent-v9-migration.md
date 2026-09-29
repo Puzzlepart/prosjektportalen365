@@ -835,11 +835,20 @@ tracked), case-sensitive paths (the Linux build resolved every import, and no sh
 uses `jest.mock`), tests reading the environment, version or clock (none). No Docker on the machine
 for a true Linux run.
 
-Two changes, neither a diagnosis: `Build-Release.ps1` now prints the Jest failure blocks from every
-project's own `rush-logs/*.build.log` when the rebuild fails, so the next failure names its test;
-and `DialogColumn.test` waits up to five seconds for its dialog instead of one, since the first
-Fluent render in a worker on a shared runner can plausibly exceed one, and a longer wait does not
-hide a real hang. If the next run fails again, the block is in the log and the fix follows from it.
+`Build-Release.ps1` now prints the Jest failure blocks from every project's own
+`rush-logs/*.build.log` when the rebuild fails. The next run named the test:
+`DialogColumn › opens a dialog with the title and the measurements`, Jest's five-second whole-test
+limit, thrown while still inside the click that opens the dialog. What passes on the same runner
+narrows it: the dialog with an empty list, and `DataGridList`'s own eight tests. It is the grid
+rendered *inside the modal dialog* that exceeds five seconds there and takes milliseconds locally —
+runner-only behaviour inside Fluent's focus and sizing machinery under jsdom, the same class as the
+combobox family, one layer down. The browser is unaffected: "Vis alle målinger" was verified by hand
+in the slice 6 review.
+
+The fix is in the test, where the cost was: the grid is stubbed with a plain table over the dialog's
+*real* column definitions, so every assertion about headers and cells still exercises `useColumns`,
+and the grid itself stays covered by its own suite. A longer wait had been tried first and was the
+wrong instrument — the limit hit was the test's, not the wait's.
 
 ### Slice 7 — lists, part 2 (2026-09-29, complete except for the hub decision)
 
