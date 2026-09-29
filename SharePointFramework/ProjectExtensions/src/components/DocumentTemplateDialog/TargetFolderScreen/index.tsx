@@ -1,15 +1,6 @@
-import {
-  Button,
-  DataGrid,
-  DataGridBody,
-  DataGridCell,
-  DataGridHeader,
-  DataGridHeaderCell,
-  DataGridRow,
-  DialogActions
-} from '@fluentui/react-components'
+import { Button, DialogActions } from '@fluentui/react-components'
 import { SPDataAdapter } from 'data'
-import { SPFolder, UserMessage, createDataGridColumns } from 'pp365-shared-library'
+import { DataGridList, SPFolder, UserMessage, createDataGridColumns } from 'pp365-shared-library'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { FC, useContext, useEffect, useMemo, useState } from 'react'
 import { TemplateSelectorContext } from '../../../extensions/templateSelector/context'
@@ -27,9 +18,12 @@ export const TargetFolderScreen: FC = () => {
   const [root, setRoot] = useState(context.currentLibrary)
   const [folders, setFolders] = useState(root.folders)
   const [folder, setFolder] = useState(state.targetFolder || context.currentFolderUrl || '')
+  // A folder chosen by selecting its row, without entering it. Cleared when the view moves on.
+  const [selectedFolder, setSelectedFolder] = useState<string>(null)
 
   function onFolderClick(clickedFolder: SPFolder) {
     if (clickedFolder.isLibrary) setRoot(clickedFolder)
+    setSelectedFolder(null)
     setFolder(clickedFolder.url)
   }
 
@@ -38,6 +32,7 @@ export const TargetFolderScreen: FC = () => {
   const grid = useMemo(() => createDataGridColumns<SPFolder>(columns({ onFolderClick })), [])
 
   useEffect(() => {
+    setSelectedFolder(null)
     if (folder === null) {
       setFolders(context.libraries)
     } else if (isEmpty(folder)) {
@@ -67,40 +62,30 @@ export const TargetFolderScreen: FC = () => {
         currentFolder={folder}
         setFolder={setFolder}
       />
-      {folders.length === 0 && folder !== null ? (
-        <UserMessage text={strings.NoFoldersAvailableText} intent='info' />
-      ) : (
-        <DataGrid
-          items={sortedFolders}
-          columns={grid.columns}
-          columnSizingOptions={grid.columnSizingOptions}
-          resizableColumns
-          getRowId={(item: SPFolder) => item.url}
-        >
-          <DataGridHeader>
-            <DataGridRow>
-              {({ renderHeaderCell }) => (
-                <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-              )}
-            </DataGridRow>
-          </DataGridHeader>
-          <DataGridBody<SPFolder>>
-            {({ item, rowId }) => (
-              // Double-clicking a row opens the folder, as invoking a row did in the v8 list.
-              <DataGridRow<SPFolder> key={rowId} onDoubleClick={() => onFolderClick(item)}>
-                {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
-              </DataGridRow>
-            )}
-          </DataGridBody>
-        </DataGrid>
-      )}
+      <div className={styles.folders}>
+        {folders.length === 0 && folder !== null ? (
+          <UserMessage text={strings.NoFoldersAvailableText} intent='info' />
+        ) : (
+          // Selecting a row picks that folder as the target; clicking its name, or double-clicking
+          // the row, enters it instead.
+          <DataGridList<SPFolder>
+            items={sortedFolders}
+            columns={grid.columns}
+            getRowId={(item) => item.url}
+            selectionMode='single'
+            selectedItems={selectedFolder ? [selectedFolder] : []}
+            onSelectionChange={(ids) => setSelectedFolder((ids[0] as string) ?? null)}
+            onRowDoubleClick={onFolderClick}
+          />
+        )}
+      </div>
       <DialogActions>
         <Button
           appearance='primary'
           disabled={folder === null}
           onClick={() => {
             dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.EditCopy }))
-            dispatch(SET_TARGET({ folder: folder || root.url }))
+            dispatch(SET_TARGET({ folder: selectedFolder || folder || root.url }))
           }}
         >
           {strings.CopyHereText}

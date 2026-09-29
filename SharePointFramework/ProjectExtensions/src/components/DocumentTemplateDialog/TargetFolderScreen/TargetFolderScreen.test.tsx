@@ -113,6 +113,21 @@ describe('TargetFolderScreen', () => {
     expect(dispatch).toHaveBeenCalledWith(SET_TARGET({ folder: '/sites/x/Dokumenter' }))
   })
 
+  it('copies to the folder whose row is selected, without entering it', async () => {
+    const user = setupUser()
+    const { dispatch, getFolders } = renderScreen({
+      currentLibrary: folder('Dokumenter', {
+        isLibrary: true,
+        folders: [folder('Rapporter'), folder('Avtaler')]
+      })
+    })
+    // The row, not the name: the name enters the folder.
+    await user.click(screen.getByText('Rapporter').closest('[role=row]'))
+    expect(getFolders).not.toHaveBeenCalled()
+    await user.click(screen.getByRole('button', { name: strings.CopyHereText }))
+    expect(dispatch).toHaveBeenCalledWith(SET_TARGET({ folder: '/sites/x/Rapporter' }))
+  })
+
   it('goes back to the template selection', async () => {
     const user = setupUser()
     const { dispatch } = renderScreen()

@@ -8,6 +8,7 @@ import {
   TableColumnSizingOptions
 } from '@fluentui/react-components'
 import React, { useMemo } from 'react'
+import styles from './DataGridList.module.scss'
 import { IDataGridColumn, IDataGridListProps } from './types'
 
 /**
@@ -83,7 +84,9 @@ export function DataGridList<TItem = any>(props: IDataGridListProps<TItem>) {
     >
       <DataGridHeader>
         <DataGridRow>
-          {({ renderHeaderCell }) => <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>}
+          {({ renderHeaderCell }) => (
+            <DataGridHeaderCell className={styles.headerCell}>{renderHeaderCell()}</DataGridHeaderCell>
+          )}
         </DataGridRow>
       </DataGridHeader>
       <DataGridBody<TItem>>
@@ -92,7 +95,7 @@ export function DataGridList<TItem = any>(props: IDataGridListProps<TItem>) {
             key={rowId}
             onDoubleClick={onRowDoubleClick && (() => onRowDoubleClick(item))}
           >
-            {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
+            {({ renderCell }) => <DataGridCell className={styles.cell}>{renderCell(item)}</DataGridCell>}
           </DataGridRow>
         )}
       </DataGridBody>

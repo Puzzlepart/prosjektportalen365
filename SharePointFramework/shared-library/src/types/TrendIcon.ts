@@ -10,7 +10,7 @@ export interface ITrendIcon {
   /**
    * Name of the icon in the shared catalog.
    */
-  iconName: 'Trophy' | 'ArrowTrending' | 'ArrowTrendingDown'
+  iconName: 'Trophy' | 'ChevronUp' | 'ChevronDown'
 
   /**
    * CSS colour the icon is drawn in.

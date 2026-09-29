@@ -51,10 +51,13 @@ export function renderMenuItem(item: IMenuItem, onOpenChange: MenuProps['onOpenC
         )
       }
       if (item.subMenuProps?.items) {
+        const { onClick: _closeMenu, ...triggerProps } = baseProps
         return (
           <Menu>
             <MenuTrigger disableButtonEnhancement>
-              <MenuItem {...baseProps}>{item.text}</MenuItem>
+              <MenuItem {...triggerProps} hasSubmenu>
+                {item.text}
+              </MenuItem>
             </MenuTrigger>
             <MenuPopover>
               {item.subMenuProps?.items.map((item) => renderMenuItem(item, onOpenChange))}

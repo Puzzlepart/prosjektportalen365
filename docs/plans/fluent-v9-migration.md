@@ -161,6 +161,16 @@ This also withdraws the sentence above about `ResponsibleField`: its v9 `Combobo
 but it has no test, and nothing here shows that it survives being opened. It should be verified by
 hand on the test tenant, and if it misbehaves it is the same hold-out as this one.
 
+**Corrected by production evidence (2026-09-29).** The user tested the column form on the test
+tenant: the v9 `Combobox` for column visibility, in the same drawer, works. So the loop is a
+**Jest/jsdom artefact on React 17**, not a product defect, and the rule becomes: the combobox family
+— and, found the same day, the v9 `Menu` popover — is unusable *in the harness* but fine in the
+browser. Consequences: the data type dropdown is now the v9 `Dropdown` after all, because the v8
+one rendered its list in the v8 layer underneath the v9 drawer (the user's bug report); its test
+keeps every case that does not open it, and opening is a manual check. The wrapper around the people
+picker stays on v8 only because it is a full picker, not because v9's `TagPicker` is known to fail in
+the browser — that is now an open question, not a settled one.
+
 ### C. v8 is removed from a solution when its last v8 import is gone, and checked by the build (decided)
 
 Each solution drops `@fluentui/react` from `package.json` the moment `grep -rl "from '@fluentui/react'" src` is empty. Until every solution is free, the shared library keeps the dependency (Decisions A and B). The packaging proof in `Install/Build-Release.ps1` gains a check that fails when a bundle still contains Fabric core classes once `fabric.min.css` has been removed (extend the existing hashed-CSS guard's pattern list). The compat alias for `office-ui-fabric-react` and the `fabric.min.css` alias are deleted together with `pzl-spfx-components`, which is the first hygiene slice.
@@ -781,6 +791,55 @@ onto `Skeleton`/`LoadingSkeleton`, and the form controls (`TextField`, `Toggle`,
 not mention: `shared-library/src/icons/index.tsx` uses the v8 `Icon` deliberately, as the
 `getFabricIcon` fallback that renders legacy MDL2 icon names. It cannot move to `getFluentIcon`
 without removing the fallback mechanism itself, so it stays on v8 until that fallback is retired.
+
+### Slice 6 and 7 feedback round (2026-09-29)
+
+Five findings from the user's manual pass over slice 6, and one bonus bug older than the migration.
+
+- **"Visningsmodus" listed underneath the drawer.** The data type dropdown was the v8 `Dropdown`
+  kept as a hold-out; its callout rendered in the v8 layer, below the v9 `OverlayDrawer`. Its sibling
+  "Synlighet for kolonne" is a v9 `Combobox` and works — the production evidence recorded under
+  Decision B. Converted to the v9 `Dropdown` to match; the open-and-pick test case is gone with a
+  comment saying why, the other five stay.
+- **Trend icons too small, and arrows instead of chevrons.** `ITrendIcon` now names `ChevronUp` and
+  `ChevronDown`; the two cells draw them at 20px, the size the v8 font icon had in its 20px
+  container. The two `ArrowTrending` catalog entries added in batch 1 are removed again.
+- **Target folder: row should select, name should enter.** A behaviour change, asked for: the grid
+  is single-select, selecting a row picks it as the copy target without entering it, the name link
+  and row double-click enter it, and entering clears the selection. "Kopier hit" copies to the
+  selected folder, else the current one, else the library root. One test case added.
+- **24px above the dialog buttons.** A `.folders` wrapper with bottom padding.
+- **Status sections: values greyer and smaller than headers, like the portfolio lists.** Applied in
+  `DataGridList` itself — cells at 12px in `--colorNeutralForeground2`, headers at 12px — which is
+  what the v8 list gave every list. It reaches the project list view, the timeline list and the
+  measurements dialog too, which were 14px on their own before; consistent with the hub now.
+- **Bonus: clicking "Kolonneinnstillinger" closed the menu instead of opening its submenu.** The
+  submenu trigger inherited the `onClick` that closes the whole menu. It no longer does, and it is
+  marked `hasSubmenu`. A regression test was written and then removed: opening a v9 `Menu` popover
+  hangs the Jest worker the way the combobox family does, so this one is verified by hand.
+
+Test counts unchanged at 254 after a one-in, one-out; `rush rebuild` green.
+
+### The slice 7 CI failure (2026-09-29)
+
+The slice 7 commit failed CI in both workflows with `1 Jest test failed` in `pp365-shared-library`,
+after passing `rush rebuild` locally twice. The test's name is not recoverable: `Build-Release.ps1`
+prints the last 200 lines of the rebuild log on failure, and those are Rush's summary, which omits
+the middle of a long failing log ("...308 lines omitted...") — exactly where Jest names the test and
+prints its assertion. The per-project `rush-logs` file that has the block stays on the runner and is
+not uploaded. Neither workflow's job log contains it.
+
+Ruled out locally, all 199 green: `CI=true` with `TZ=UTC` and a C locale; two Jest workers as in
+CI; three further consecutive runs. Ruled out by inspection: a tracked throwaway probe test (none
+tracked), case-sensitive paths (the Linux build resolved every import, and no shared-library test
+uses `jest.mock`), tests reading the environment, version or clock (none). No Docker on the machine
+for a true Linux run.
+
+Two changes, neither a diagnosis: `Build-Release.ps1` now prints the Jest failure blocks from every
+project's own `rush-logs/*.build.log` when the rebuild fails, so the next failure names its test;
+and `DialogColumn.test` waits up to five seconds for its dialog instead of one, since the first
+Fluent render in a worker on a shared runner can plausibly exceed one, and a longer wait does not
+hide a real hang. If the next run fails again, the block is in the log and the fix follows from it.
 
 ### Slice 7 — lists, part 2 (2026-09-29, complete except for the hub decision)
 

@@ -1,54 +1,59 @@
-import { IDropdownOption, IDropdownProps, IRenderFunction } from '@fluentui/react'
-import _ from 'lodash'
-import React, { useEffect, useState } from 'react'
-import { getFluentIconWithFallback } from '../../../icons'
+import { DropdownProps } from '@fluentui/react-components'
+import { useEffect, useState } from 'react'
 import { ColumnRenderComponentRegistry } from '../registry'
 import { IColumnDataTypeFieldOption, IColumnDataTypeFieldProps } from './types'
 
-interface IUseDataTypeDropdown extends IDropdownProps {
+export interface IUseDataTypeDropdown {
+  /**
+   * The option currently selected, if any.
+   */
   selectedOption: IColumnDataTypeFieldOption
+
+  /**
+   * Every registered data type, in registry order.
+   */
+  options: IColumnDataTypeFieldOption[]
+
+  /**
+   * Selects the option whose key the dropdown reports.
+   */
+  onOptionSelect: DropdownProps['onOptionSelect']
+
+  /**
+   * Whether the dropdown is disabled. It is when the selected type cannot be chosen any more.
+   */
+  disabled: boolean
 }
 
 /**
- * Props for the data type dropdown: which registered column renderer is selected, and the
+ * State for the data type dropdown: which registered column renderer is selected, and the
  * registry's options to choose from. Reports the selection to the caller by the renderer's stored
  * id, including the default on first render, which is how the column forms learn the initial type.
  *
- * The dropdown is the Fluent UI v8 `Dropdown` on purpose. The v9 `Dropdown` — like `TagPicker`,
- * and for the same reason: both are built on `@fluentui/react-combobox` — sends itself into an
- * endless render loop the moment it opens on this stack (SPFx 1.23 pins React 17), which kills the
- * Jest worker even in Fluent's own documented form. The option type is our own; the casts are
- * where v8 hands back its structurally identical option.
+ * The dropdown is the v9 `Dropdown`, like the visibility `Combobox` beside it in the column form.
+ * The v8 `Dropdown` it replaced rendered its list in the v8 layer, underneath the v9 drawer. Both
+ * are built on `@fluentui/react-combobox`, which opens fine in the browser and loops under Jest on
+ * React 17, so the tests cover everything but opening it; that is checked by hand.
  *
  * @param props Props for the column data type field.
  */
-export function useDataTypeDropdown(props: IColumnDataTypeFieldProps) {
+export function useDataTypeDropdown(props: IColumnDataTypeFieldProps): IUseDataTypeDropdown {
   const [selectedOption, setSelectedOption] = useState<IColumnDataTypeFieldOption>(
     ColumnRenderComponentRegistry.getOption(props.defaultSelectedKey)
   )
+  const options = ColumnRenderComponentRegistry.getOptions()
 
   useEffect(() => {
     if (selectedOption) props.onChange(selectedOption.id)
   }, [selectedOption])
 
-  /**
-   * Renders an option as its icon and text. Icons are catalog names, resolved with the UI Fabric
-   * fallback for the renderers that still name Fabric icons.
-   */
-  const onRenderOption: IRenderFunction<IDropdownOption> = (option) => (
-    <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-      {getFluentIconWithFallback((option as IColumnDataTypeFieldOption).data?.iconProps?.iconName)}
-      <span>{option.text}</span>
-    </span>
-  )
-
   return {
     selectedOption,
-    options: ColumnRenderComponentRegistry.getOptions(),
-    selectedKey: selectedOption?.key,
-    onChange: (_event, option) => setSelectedOption(option as IColumnDataTypeFieldOption),
-    onRenderTitle: (options) => onRenderOption(_.first(options)),
-    onRenderOption,
-    disabled: selectedOption?.disabled
-  } as IUseDataTypeDropdown
+    options,
+    onOptionSelect: (_event, data) => {
+      const option = options.find((o) => o.key === data.optionValue)
+      if (option) setSelectedOption(option)
+    },
+    disabled: !!selectedOption?.disabled
+  }
 }

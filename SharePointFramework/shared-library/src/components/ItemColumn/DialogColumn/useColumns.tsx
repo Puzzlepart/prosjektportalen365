@@ -3,6 +3,7 @@ import React from 'react'
 import * as strings from 'SharedLibraryStrings'
 import { getFluentIcon } from '../../../icons'
 import { ITrendIcon } from '../../../types'
+import { TREND_ICON_SIZE } from '../TrendColumn'
 
 import { IDataGridColumn } from '../../DataGridList/types'
 
@@ -60,7 +61,7 @@ export const useColumns = (): IDataGridColumn[] => {
           <TableCellLayout truncate title={item.Achievement}>
             <span>
               <span style={{ display: 'inline-block', width: 20 }}>
-                {icon && getFluentIcon(icon.iconName, { color: icon.color })}
+                {icon && getFluentIcon(icon.iconName, { color: icon.color, size: TREND_ICON_SIZE })}
               </span>
               <Text size={200}>{item.AchievementDisplay}</Text>
             </span>

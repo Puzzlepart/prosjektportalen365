@@ -30,6 +30,12 @@ function renderCell(items: unknown[] = measurements, props: Record<string, any> 
 
 const setupUser = () => userEvent.setup({ pointerEventsCheck: 0 })
 
+/**
+ * The dialog renders a whole grid on open, and the first Fluent render in a Jest worker pays for
+ * its style injection; on a shared CI runner that can take longer than the default one second.
+ */
+const findDialog = () => screen.findByRole('dialog', {}, { timeout: 5000 })
+
 describe('DialogColumn', () => {
   it('shows a link with the default text', () => {
     renderCell()
@@ -45,7 +51,7 @@ describe('DialogColumn', () => {
     const user = setupUser()
     renderCell()
     await user.click(screen.getByText(strings.ShowAllMeasurementsLinkText))
-    const dialog = await screen.findByRole('dialog')
+    const dialog = await findDialog()
     expect(dialog).toHaveTextContent('Gevinst 1')
     expect(dialog).toHaveTextContent(strings.MeasurementValueLabel)
     expect(dialog).toHaveTextContent('Første måling')
@@ -57,7 +63,7 @@ describe('DialogColumn', () => {
     const user = setupUser()
     renderCell([])
     await user.click(screen.getByText(strings.ShowAllMeasurementsLinkText))
-    const dialog = await screen.findByRole('dialog')
+    const dialog = await findDialog()
     expect(dialog).toHaveTextContent(strings.ModalColumnEmptyListTitle)
   })
 })

@@ -17,13 +17,20 @@ import { ITrendColumnProps } from './types'
  *
  * @returns The rendered component.
  */
+/**
+ * The size the v8 font icon rendered at inside the cell's 20px icon container.
+ */
+export const TREND_ICON_SIZE = 20
+
 export const TrendColumn: ColumnRenderComponent<ITrendColumnProps> = (props) => {
   const trend = tryParseJson(props.columnValue)
   const icon: ITrendIcon | undefined = trend?.TrendIcon
   return trend ? (
     <span className={styles.root}>
       <span className={styles.iconContainer}>
-        {icon && props.showTrendIcon && getFluentIcon(icon.iconName, { color: icon.color })}
+        {icon &&
+          props.showTrendIcon &&
+          getFluentIcon(icon.iconName, { color: icon.color, size: TREND_ICON_SIZE })}
       </span>
       <span>{trend.AchievementDisplay}</span>
     </span>
