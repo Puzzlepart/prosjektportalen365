@@ -1007,6 +1007,13 @@ include 17; neither needs to move for this phase.
   The dialog's local variant is written but has not passed: with the debug manifests the deployed
   custom action's command did not render, with or without a `customActions` parameter, so the
   dialog is covered by its smoke test and by the shared grid's fix that the timeline proved.
+- **Target folder: a chosen folder could not be unchosen (2026-09-30).** Fluent's single
+  selection is a radio: its row handler re-selects a selected row on a second click, and runs
+  before any handler of ours. `DataGridList` now clears a controlled single selection when its
+  selected row is clicked, or toggled with Space, again — reported after Fluent's re-select, so the
+  clear wins — which takes the target folder screen back to "copy here" for the current folder.
+  Grid and screen tests cover it, and the dialog's smoke test has a third case that pinned the
+  defect on the deployed build (the row stayed `aria-selected` after the second click).
 
 ### The slice 7 CI failure (2026-09-29)
 

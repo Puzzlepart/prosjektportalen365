@@ -84,6 +84,15 @@ export async function measureDialogGrids(dialog: import('@playwright/test').Loca
   })
 }
 
+/** Picks the first template and goes on to the target folder screen. */
+export async function openTargetFolderScreen(dialog: import('@playwright/test').Locator) {
+  await dialog.locator('.fui-DataGridBody .fui-DataGridSelectionCell').first().click()
+  await dialog.getByRole('button', { name: /^velg$|^select$/i }).click()
+  await expect(dialog.getByRole('button', { name: /kopier hit|copy here/i })).toBeVisible({
+    timeout: 60_000
+  })
+}
+
 /** Measures the selection screen, then the target folder screen (when the library has subfolders). */
 export async function measureBothScreens(
   page: import('@playwright/test').Page,
@@ -92,11 +101,7 @@ export async function measureBothScreens(
 ) {
   await page.waitForTimeout(2000)
   const selectScreen = await measureDialogGrids(dialog)
-  await dialog.locator('.fui-DataGridBody .fui-DataGridSelectionCell').first().click()
-  await dialog.getByRole('button', { name: /^velg$|^select$/i }).click()
-  await expect(dialog.getByRole('button', { name: /kopier hit|copy here/i })).toBeVisible({
-    timeout: 60_000
-  })
+  await openTargetFolderScreen(dialog)
   await page.waitForTimeout(2000)
   const targetScreen =
     (await dialog.locator('.fui-DataGrid').count()) > 0 ? await measureDialogGrids(dialog) : []
@@ -145,4 +150,30 @@ test.describe('document template dialog', () => {
       expectDialogGridsToFit(await measureBothScreens(page, dialog, testInfo))
     })
   }
+
+  test('a chosen target folder can be unchosen by clicking it again', async ({
+    page,
+    consoleGuard
+  }) => {
+    void consoleGuard
+    await page.setViewportSize({ width: 1600, height: 1000 })
+    await page.goto(await findDocumentLibrary(page, projectUrl!))
+    const dialog = await openDocumentTemplateDialog(page)
+    await openTargetFolderScreen(dialog)
+    const rows = dialog.locator('.fui-DataGridBody [role="row"]')
+    test.skip(
+      (await rows.count()) === 0,
+      'the library has no subfolders, so there is nothing to choose'
+    )
+    // The last cell of the row, not the name: the name enters the folder.
+    const row = rows.first()
+    await row.locator('.fui-DataGridCell').last().click()
+    await expect(row).toHaveAttribute('aria-selected', 'true')
+    await row.locator('.fui-DataGridCell').last().click()
+    await expect(row, 'a second click should clear the choice').toHaveAttribute(
+      'aria-selected',
+      'false'
+    )
+    await page.keyboard.press('Escape')
+  })
 })

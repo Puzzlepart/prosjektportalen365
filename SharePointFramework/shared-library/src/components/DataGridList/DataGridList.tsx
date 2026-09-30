@@ -81,6 +81,17 @@ export function DataGridList<TItem = any>(props: IDataGridListProps<TItem>) {
   // than pointing at columns that are gone.
   const columnsKey = columns.map((column) => column.columnId).join('|')
 
+  // A single selection is a radio to Fluent: clicking the selected row again keeps it selected.
+  // The lists on this mode pick a target rather than answer a question, so a second click on the
+  // row, or Space on it, clears the choice. Fluent's own handler runs first and re-selects the
+  // row, so the clear is reported last and wins; it needs the selection to be controlled.
+  const selectedSet = useMemo(() => new Set<string | number>(selectedItems ?? []), [selectedItems])
+  const clearIfReselected = (rowId: string | number) => {
+    if (selectionMode === 'single' && onSelectionChange && selectedSet.has(rowId)) {
+      onSelectionChange([])
+    }
+  }
+
   if (emptyContent !== undefined && items.length === 0) return <>{emptyContent}</>
 
   const grid = (
@@ -115,6 +126,14 @@ export function DataGridList<TItem = any>(props: IDataGridListProps<TItem>) {
         {({ item, rowId }) => (
           <DataGridRow<TItem>
             key={rowId}
+            onClick={selectionMode === 'single' ? () => clearIfReselected(rowId) : undefined}
+            onKeyDown={
+              selectionMode === 'single'
+                ? (event) => {
+                    if (event.key === ' ') clearIfReselected(rowId)
+                  }
+                : undefined
+            }
             onDoubleClick={onRowDoubleClick && (() => onRowDoubleClick(item))}
           >
             {({ renderCell }) => (

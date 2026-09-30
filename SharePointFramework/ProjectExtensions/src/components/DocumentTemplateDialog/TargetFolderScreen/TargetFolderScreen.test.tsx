@@ -128,11 +128,28 @@ describe('TargetFolderScreen', () => {
     expect(dispatch).toHaveBeenCalledWith(SET_TARGET({ folder: '/sites/x/Rapporter' }))
   })
 
+  it('copies to the library root again when the selected folder is clicked a second time', async () => {
+    const user = setupUser()
+    const { dispatch } = renderScreen({
+      currentLibrary: folder('Dokumenter', {
+        isLibrary: true,
+        folders: [folder('Rapporter'), folder('Avtaler')]
+      })
+    })
+    const row = () => screen.getByText('Rapporter').closest('[role=row]')
+    await user.click(row())
+    await user.click(row())
+    await user.click(screen.getByRole('button', { name: strings.CopyHereText }))
+    expect(dispatch).toHaveBeenCalledWith(SET_TARGET({ folder: '/sites/x/Dokumenter' }))
+  })
+
   it('goes back to the template selection', async () => {
     const user = setupUser()
     const { dispatch } = renderScreen()
     await user.click(screen.getByRole('button', { name: strings.OnGoBackText }))
-    expect(dispatch).toHaveBeenCalledWith(SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select }))
+    expect(dispatch).toHaveBeenCalledWith(
+      SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select })
+    )
   })
 
   it('offers the other libraries when there are several, and cannot copy to the list of them', async () => {

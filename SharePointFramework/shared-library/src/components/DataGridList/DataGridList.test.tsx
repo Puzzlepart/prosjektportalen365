@@ -125,6 +125,29 @@ describe('DataGridList', () => {
     expect(checkboxes[1]).not.toBeChecked()
   })
 
+  it('clears a single selection when the selected row is clicked again', async () => {
+    const user = setupUser()
+    const onSelectionChange = jest.fn()
+    const grid = (selected: string[]) => (
+      <DataGridList
+        items={items}
+        columns={columns}
+        getRowId={(item) => item.id}
+        selectionMode='single'
+        selectedItems={selected}
+        onSelectionChange={onSelectionChange}
+      />
+    )
+    const { rerender } = render(grid([]))
+    const row = () => screen.getByText('Alfa').closest('[role=row]')
+    await user.click(row())
+    expect(onSelectionChange).toHaveBeenLastCalledWith(['a'])
+    // The owner keeps the selection, as the target folder screen does.
+    rerender(grid(['a']))
+    await user.click(row())
+    expect(onSelectionChange).toHaveBeenLastCalledWith([])
+  })
+
   it('invokes a row on double-click', async () => {
     const user = setupUser()
     const onRowDoubleClick = jest.fn()
@@ -141,9 +164,7 @@ describe('DataGridList', () => {
   })
 
   it('shows the empty content instead of an empty grid', () => {
-    render(
-      <DataGridList items={[]} columns={columns} emptyContent={<p>Ingen elementer</p>} />
-    )
+    render(<DataGridList items={[]} columns={columns} emptyContent={<p>Ingen elementer</p>} />)
     expect(screen.getByText('Ingen elementer')).toBeInTheDocument()
     expect(screen.queryByRole('grid')).toBeNull()
   })
