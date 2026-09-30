@@ -8,6 +8,7 @@ import {
   TableColumnSizingOptions
 } from '@fluentui/react-components'
 import React, { useMemo, useRef } from 'react'
+import strings from 'SharedLibraryStrings'
 import styles from './DataGridList.module.scss'
 import { fitColumnWidths } from './fitColumnWidths'
 import { IDataGridColumn, IDataGridListProps } from './types'
@@ -94,6 +95,22 @@ export function DataGridList<TItem = any>(props: IDataGridListProps<TItem>) {
 
   if (emptyContent !== undefined && items.length === 0) return <>{emptyContent}</>
 
+  // The selection cells' checkbox (or radio, in single mode) carries a label for screen readers;
+  // the project setup sections used to set their own, the other lists had none. Given only when
+  // there is a selection: Fluent renders the cell whenever the slot is given, selectable or not.
+  const selectAllCell = selectionMode
+    ? {
+        checkboxIndicator: { 'aria-label': strings.DataGridSelectAllLabel },
+        radioIndicator: { 'aria-label': strings.DataGridSelectAllLabel }
+      }
+    : undefined
+  const selectRowCell = selectionMode
+    ? {
+        checkboxIndicator: { 'aria-label': strings.DataGridSelectRowLabel },
+        radioIndicator: { 'aria-label': strings.DataGridSelectRowLabel }
+      }
+    : undefined
+
   const grid = (
     <DataGrid
       key={columnsKey}
@@ -114,7 +131,7 @@ export function DataGridList<TItem = any>(props: IDataGridListProps<TItem>) {
       size={size}
     >
       <DataGridHeader>
-        <DataGridRow>
+        <DataGridRow selectionCell={selectAllCell}>
           {({ renderHeaderCell }) => (
             <DataGridHeaderCell className={styles.headerCell}>
               {renderHeaderCell()}
@@ -126,6 +143,7 @@ export function DataGridList<TItem = any>(props: IDataGridListProps<TItem>) {
         {({ item, rowId }) => (
           <DataGridRow<TItem>
             key={rowId}
+            selectionCell={selectRowCell}
             onClick={selectionMode === 'single' ? () => clearIfReselected(rowId) : undefined}
             onKeyDown={
               selectionMode === 'single'

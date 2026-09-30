@@ -11,7 +11,7 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
   const [programHubs, setProgramHubs] = useState<IProgramHub[] | undefined>(undefined)
 
   useEffect(() => {
-    props.dataAdapter.project.getProjectInformationData().then(async (properties) => {
+    void props.dataAdapter.project.getProjectInformationData().then(async (properties) => {
       const [userHasManagePermission, availableProgramHubsRaw] = await Promise.all([
         props.dataAdapter.checkProjectAdminPermissions(
           ProjectAdminPermission.ChildProjectsAdmin,
@@ -72,8 +72,8 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
   /**
    * Callback function for handling selection change in the `ProjectList` component.
    */
-  const onSelectionChange = (_: any, { selectedItems }) => {
-    dispatch(SET_SELECTED_TO_DELETE(Array.from(selectedItems)))
+  const onSelectionChange = (selectedItems: (string | number)[]) => {
+    dispatch(SET_SELECTED_TO_DELETE(selectedItems as string[]))
   }
 
   const childProjects = [...state.childProjects]

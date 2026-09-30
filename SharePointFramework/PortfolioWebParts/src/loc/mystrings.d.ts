@@ -41,12 +41,12 @@ declare interface IPortfolioWebPartsStrings {
     MoveUpDisabled: string
     MoveDown: string
     MoveDownDisabled: string
-  },
+  }
   Placeholder: {
     TextField: string
     Icon: string
     MultiChoiceField: string
-  },
+  }
   NotSpecifiedText: string
   Idea: {
     MenuLabel: string
@@ -79,7 +79,7 @@ declare interface IPortfolioWebPartsStrings {
     HiddenRegistrationFieldsDescription: string
     HiddenProcessingFieldsLabel: string
     HiddenProcessingFieldsDescription: string
-  },
+  }
   NoViewFoundTitle: string
   AddColumnLabel: string
   AllProjectsHeaderText: string

@@ -141,10 +141,10 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
   }
 
   useEffect(() => {
-    fetchInitialData()
+    void fetchInitialData()
   }, [context.state.currentView, context.state.isMergedView])
 
   useEffect(() => {
-    fetchInitialData(true)
+    void fetchInitialData(true)
   }, [context.props.selectedPortfolioId])
 }

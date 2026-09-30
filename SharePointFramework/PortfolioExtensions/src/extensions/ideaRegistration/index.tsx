@@ -87,20 +87,20 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
 
           if (selectedChoice) {
             if (this._isIdeaRecommended(row)) {
-              Dialog.alert(strings.IdeaAlreadyApproved)
+              void Dialog.alert(strings.IdeaAlreadyApproved)
             } else {
               switch (selectedChoice) {
                 case Choice.Approve:
-                  this._onSubmit(row, dialog.comment)
+                  void this._onSubmit(row, dialog.comment)
                   break
                 case Choice.Consideration:
-                  this._onSubmitConsideration(row, dialog.comment)
+                  void this._onSubmitConsideration(row, dialog.comment)
                   break
                 case Choice.Reject:
-                  this._onSubmitRejected(row, dialog.comment)
+                  void this._onSubmitRejected(row, dialog.comment)
                   break
                 default:
-                  this._onSubmitOther(row, dialog.comment, dialog.selectedChoice)
+                  void this._onSubmitOther(row, dialog.comment, dialog.selectedChoice)
                   break
               }
             }

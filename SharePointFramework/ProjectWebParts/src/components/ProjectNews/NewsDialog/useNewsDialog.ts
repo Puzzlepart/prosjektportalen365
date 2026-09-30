@@ -37,7 +37,7 @@ export const useNewsDialog = () => {
 
   useEffect(() => {
     if (context.state.isDialogOpen) {
-      getTemplates(context.props.siteUrl, context.props.spHttpClient).then(setTemplates)
+      void getTemplates(context.props.siteUrl, context.props.spHttpClient).then(setTemplates)
     }
   }, [context.state.isDialogOpen, context.props.siteUrl, context.props.spHttpClient])
 

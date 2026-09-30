@@ -1,5 +1,11 @@
 import * as strings from 'PortfolioWebPartsStrings'
-import { BasePanel, ColumnSearchPropertyField, FieldContainer, UserMessage, customLightTheme } from 'pp365-shared-library'
+import {
+  BasePanel,
+  ColumnSearchPropertyField,
+  FieldContainer,
+  UserMessage,
+  customLightTheme
+} from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { usePortfolioAggregationContext } from '../context'
 import styles from './ColumnFormPanel.module.scss'
@@ -30,13 +36,15 @@ export const ColumnFormPanel: FC = () => {
     <BasePanel
       open={context.state.columnForm.isOpen}
       headerText={isEditing ? strings.EditColumnHeaderText : strings.NewColumnHeaderText}
-      footer={<ColumnFormPanelFooter
+      footer={
+        <ColumnFormPanelFooter
           onSave={onSave}
           onDeleteColumn={onDeleteColumn}
           isEditing={isEditing}
           isSaveDisabled={isSaveDisabled}
           isDeleteDisabled={isDeleteDisabled}
-        />}
+        />
+      }
       onClose={onDismiss}
       isLightDismiss={true}
       className={styles.root}
@@ -44,11 +52,7 @@ export const ColumnFormPanel: FC = () => {
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme} className={styles.content}>
           {saveError && (
-            <UserMessage
-              intent='error'
-              title={strings.ErrorTitle}
-              text={saveError.message}
-            />
+            <UserMessage intent='error' title={strings.ErrorTitle} text={saveError.message} />
           )}
           <FieldContainer
             iconName='NumberSymbolSquare'

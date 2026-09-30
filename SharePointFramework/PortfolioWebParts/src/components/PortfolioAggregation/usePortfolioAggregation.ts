@@ -36,11 +36,10 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
     }
   }, [props.dataSourceCategory, props.defaultViewId])
 
-  const onSelectionChanged = () => {
-    context.dispatch(SELECTION_CHANGED(selection))
-  }
-
-  const selection = new Selection({ onSelectionChanged })
+  // The callback dispatches the selection it belongs to, so it is declared with it.
+  const selection = new Selection({
+    onSelectionChanged: () => context.dispatch(SELECTION_CHANGED(selection))
+  })
 
   usePortfolioAggregationDataFetch(context, [context.state.currentView])
 

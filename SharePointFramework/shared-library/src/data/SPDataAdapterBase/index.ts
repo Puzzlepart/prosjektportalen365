@@ -80,7 +80,7 @@ export class SPDataAdapterBase<
       obj[key] = format(this._storageKeys[key], this.settings.siteId.replace(/-/g, ''))
       return obj
     }, {})
-    this._storage.deleteExpired()
+    void this._storage.deleteExpired()
   }
 
   /**
@@ -163,16 +163,22 @@ export class SPDataAdapterBase<
         return await this.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
       }
 
-      if (!properties) {
-        const propertiesList = this.sp.web.lists.getByTitle(resource.Lists_ProjectProperties_Title)
-        const [propertiesItem] = await propertiesList.items.top(1)()
-        if (!propertiesItem) return false
-        properties = new ItemFieldValues(propertiesItem)
-      }
+      // The properties given, or the project's own; the parameter is never reassigned across
+      // the awaits below.
+      const projectProperties =
+        properties ??
+        (await (async () => {
+          const propertiesList = this.sp.web.lists.getByTitle(
+            resource.Lists_ProjectProperties_Title
+          )
+          const [propertiesItem] = await propertiesList.items.top(1)()
+          return propertiesItem ? new ItemFieldValues(propertiesItem) : undefined
+        })())
+      if (!projectProperties) return false
 
       const permissions = await (async () => {
         const userPermissions = []
-        const rolesToCheck = properties.get('GtProjectAdminRoles').value
+        const rolesToCheck = projectProperties.get('GtProjectAdminRoles').value
         if (!_.isArray(rolesToCheck) || _.isEmpty(rolesToCheck)) {
           const currentUserHasManageWebPermisson = await this.sp.web.currentUserHasPermissions(
             PermissionKind.ManageWeb
@@ -203,7 +209,7 @@ export class SPDataAdapterBase<
             case ProjectAdminRoleType.ProjectProperty:
               {
                 if (!currentUser) break
-                const projectFieldValue = properties.get(role.projectFieldName).value
+                const projectFieldValue = projectProperties.get(role.projectFieldName).value
                 if (
                   _.isArray(projectFieldValue) &&
                   projectFieldValue.indexOf(currentUser.Id) !== -1

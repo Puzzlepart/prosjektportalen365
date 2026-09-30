@@ -40,7 +40,7 @@ export const ColumnFormPanelFooter: FC<IColumnFormPanelFooterProps> = ({
                   [strings.ConfirmDeleteResponseAbort, false, false]
                 ]
               })
-              if (response) onDeleteColumn()
+              if (response) void onDeleteColumn()
             }}
           >
             {strings.DeleteButtonLabel}

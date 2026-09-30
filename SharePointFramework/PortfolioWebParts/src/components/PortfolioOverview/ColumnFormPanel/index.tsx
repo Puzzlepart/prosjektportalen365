@@ -4,7 +4,13 @@ import { PortfolioOverviewContext } from '../context'
 import styles from './ColumnFormPanel.module.scss'
 import { useColumnFormPanel } from './useColumnFormPanel'
 import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
-import { BasePanel, ColumnSearchPropertyField, FieldContainer, UserMessage, customLightTheme } from 'pp365-shared-library'
+import {
+  BasePanel,
+  ColumnSearchPropertyField,
+  FieldContainer,
+  UserMessage,
+  customLightTheme
+} from 'pp365-shared-library'
 import { ColumnDataTypeField } from 'pp365-shared-library/lib/components/ItemColumn/ColumnDataTypeField'
 import {
   Combobox,
@@ -39,12 +45,14 @@ export const ColumnFormPanel: FC = () => {
     <BasePanel
       open={context.state.columnForm.isOpen}
       headerText={isEditing ? strings.EditColumnHeaderText : strings.NewColumnHeaderText}
-      footer={<ColumnFormPanelFooter
+      footer={
+        <ColumnFormPanelFooter
           onSave={onSave}
           onDeleteColumn={onDeleteColumn}
           isEditing={isEditing}
           isSaveDisabled={isSaveDisabled}
-        />}
+        />
+      }
       onClose={onDismiss}
       isLightDismiss={true}
       className={styles.root}
@@ -52,11 +60,7 @@ export const ColumnFormPanel: FC = () => {
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme} className={styles.content}>
           {saveError && (
-            <UserMessage
-              intent='error'
-              title={strings.ErrorTitle}
-              text={saveError.message}
-            />
+            <UserMessage intent='error' title={strings.ErrorTitle} text={saveError.message} />
           )}
           <FieldContainer
             iconName='NumberSymbolSquare'

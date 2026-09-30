@@ -589,7 +589,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       const projectColumnsList = this._getList('PROJECT_COLUMNS')
       const portfolioViewsList = this._getList('PORTFOLIO_VIEWS')
       const column = await projectColumnsList.items.add(_.omit(properties, ['Id']))
-      portfolioViewsList.items.getById(view.id as any).update({
+      await portfolioViewsList.items.getById(view.id as any).update({
         GtPortfolioColumnsId: [...view.columns.map((c) => c.id), column.Id]
       })
       return true
@@ -733,7 +733,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       await executeQuery(jsomContext)
     } catch {}
     if (ensureList.created && params.properties) {
-      ensureList.list.items.add(params.properties)
+      await ensureList.list.items.add(params.properties)
     }
     return { ...ensureList, fieldsAdded }
   }
@@ -952,7 +952,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       const projectContentColumnsList = this._getList('PROJECT_CONTENT_COLUMNS')
       const dataSourceList = this._getList('DATA_SOURCES')
       const column = await projectContentColumnsList.items.add(_.omit(properties, ['Id']))
-      dataSourceList.items.getById(dataSource.id as any).update({
+      await dataSourceList.items.getById(dataSource.id as any).update({
         GtProjectContentColumnsId: [...dataSource.columns.map((c) => c.id), column.Id]
       })
       return true

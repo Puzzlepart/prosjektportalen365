@@ -114,6 +114,8 @@ define([], function () {
     ShowAllMeasurementsLinkText: 'Show all measurements',
     ShowInstrumentLinkText: 'Show instrument',
     ProjectInformationPanelButton: 'Project information panel',
-    MeasurementSheetName: 'Measurements'
+    MeasurementSheetName: 'Measurements',
+    DataGridSelectAllLabel: 'Select all',
+    DataGridSelectRowLabel: 'Select row'
   }
 })

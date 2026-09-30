@@ -1,4 +1,15 @@
-import { EditableSPField, IBaseWebPartComponentProps, IBaseWebPartComponentState, ICustomEditPanelProps, IFilterProps, IListColumn, IProjectInformationData, ITimelineItem, ProjectColumn, TimelineConfigurationModel } from 'pp365-shared-library'
+import {
+  EditableSPField,
+  IBaseWebPartComponentProps,
+  IBaseWebPartComponentState,
+  ICustomEditPanelProps,
+  IFilterProps,
+  IListColumn,
+  IProjectInformationData,
+  ITimelineItem,
+  ProjectColumn,
+  TimelineConfigurationModel
+} from 'pp365-shared-library'
 
 export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
   listName?: string

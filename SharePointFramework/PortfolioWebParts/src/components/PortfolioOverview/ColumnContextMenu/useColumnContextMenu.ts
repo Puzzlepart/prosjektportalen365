@@ -65,19 +65,17 @@ export function useColumnContextMenu() {
       context.state.currentView?.isProgramView
     )
   } else {
-    const columnCustomSorts = column.data?.customSorts.map<IMenuItem>(
-      (customSort, idx) => ({
-        key: `CUSTOM_SORT_${idx}`,
-        text: customSort.name,
-        data: {
-          name: 'sort',
-          value: customSort.name
-        },
-        canCheck: true,
-        checked: column.isSorted && context.state.sortBy?.customSort?.name === customSort.name,
-        onClick: () => context.dispatch(SET_SORT({ column, customSort }))
-      })
-    )
+    const columnCustomSorts = column.data?.customSorts.map<IMenuItem>((customSort, idx) => ({
+      key: `CUSTOM_SORT_${idx}`,
+      text: customSort.name,
+      data: {
+        name: 'sort',
+        value: customSort.name
+      },
+      canCheck: true,
+      checked: column.isSorted && context.state.sortBy?.customSort?.name === customSort.name,
+      onClick: () => context.dispatch(SET_SORT({ column, customSort }))
+    }))
     columnContextMenu.items = [
       {
         key: 'SORT_DESC',

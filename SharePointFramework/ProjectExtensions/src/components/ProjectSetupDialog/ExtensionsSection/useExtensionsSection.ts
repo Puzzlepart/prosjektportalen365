@@ -46,19 +46,14 @@ export function useExtensionsSection() {
     context.state.selectedExtensions.map((e) => String(e.key))
   )
 
-  const onSelectionChange = (_: any, data: { selectedItems: Set<TableRowId> }) => {
-    const newSelection = new Set(data.selectedItems)
+  const onSelectionChange = (selectedIds: (string | number)[]) => {
+    const newSelection = new Set(selectedIds.map(String))
     mandatoryKeys.forEach((key) => newSelection.add(key))
     const selectedItems = allItems.filter((item) => newSelection.has(String(item.key)))
     context.dispatch(ON_EXTENSIONS_CHANGED(selectedItems))
   }
 
   const columns = useColumns(mandatoryKeys)
-
-  const columnSizingOptions = {
-    text: { minWidth: 150, defaultWidth: 200 },
-    subText: { minWidth: 250, defaultWidth: 400 }
-  }
 
   // Hidden selections are applied but never listed, so they are not counted.
   const visibleSelectedCount = context.state.selectedExtensions.filter(
@@ -82,7 +77,6 @@ export function useExtensionsSection() {
     onSelectionChange,
     searchTerm,
     onSearch: setSearchTerm,
-    columnSizingOptions,
     toolbarItems
   }
 }

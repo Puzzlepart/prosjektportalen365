@@ -35,7 +35,7 @@ export function useToolbarItems() {
         new ListMenuItem(strings.Idea.ApproveButtonText, strings.Idea.ApproveButtonDescription)
           .setIcon('CloudArrowUp')
           .setOnClick(() => {
-            decideIdea()
+            void decideIdea()
           })
       ].filter(Boolean),
     [context.state]
@@ -47,7 +47,7 @@ export function useToolbarItems() {
         new ListMenuItem(strings.Idea.DeleteButtonText, strings.Idea.DeleteButtonDescription)
           .setIcon('Delete')
           .setOnClick(() => {
-            deleteIdea()
+            void deleteIdea()
           })
       ].filter(Boolean),
     [context.state]

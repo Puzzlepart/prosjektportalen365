@@ -1,9 +1,12 @@
-import { DataGridProps, SearchBoxProps } from '@fluentui/react-components'
+import { SearchBoxProps } from '@fluentui/react-components'
 import { IProgramHub } from 'data/types'
 
 export interface IProjectListProps {
   items: Record<string, any>[]
-  onSelectionChange: DataGridProps['onSelectionChange']
+  /**
+   * Called with the site ids of the rows selected in the grid the user clicked in.
+   */
+  onSelectionChange: (selectedItems: (string | number)[]) => void
   search: Pick<SearchBoxProps, 'placeholder'>
   renderLinks?: boolean
   hideCommands?: boolean

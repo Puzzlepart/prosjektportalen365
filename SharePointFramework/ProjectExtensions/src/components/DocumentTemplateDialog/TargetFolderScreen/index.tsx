@@ -37,7 +37,7 @@ export const TargetFolderScreen: FC = () => {
       setFolders(context.libraries)
     } else if (isEmpty(folder)) {
       setFolders(root.folders)
-    } else SPDataAdapter.getFolders(folder).then(setFolders)
+    } else void SPDataAdapter.getFolders(folder).then(setFolders)
   }, [folder])
 
   const sortedFolders = [...folders].sort((a, b) => (a.name > b.name ? 1 : -1))
@@ -88,7 +88,9 @@ export const TargetFolderScreen: FC = () => {
         >
           {strings.CopyHereText}
         </Button>
-        <Button onClick={() => dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select }))}>
+        <Button
+          onClick={() => dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select }))}
+        >
           {strings.OnGoBackText}
         </Button>
       </DialogActions>

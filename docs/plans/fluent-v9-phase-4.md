@@ -23,20 +23,20 @@ web part roots under `src/webparts`, extensions under `src/extensions`):
 | shared-library | 20 | 21 | – | – | 28/59/27/28 |
 | PortfolioWebParts | 3 | 11 | 9 | – | 12/16/12/12 |
 | ProjectWebParts | 6 | 11 | 10 | – | 12/19/7/12 |
-| ProjectExtensions | 4 | 6 | – | 4 | 19/48/18/19 |
-| ProgramWebParts | 1 | 1 | 5 | – | 29/32/7/29 |
+| ProjectExtensions | 6 | 6 | – | 4 | 19/48/18/19 |
+| ProgramWebParts | 2 | 1 | 5 | – | 29/32/7/29 |
 | PortfolioExtensions | 1 | 4 | – | 5 | 0/2/2/0 |
 
 No web part root or extension has a test. Component folders with none, by size (`.tsx` files):
 PortfolioWebParts `List` 13, `PortfolioAggregation` 9, `IdeaModule` 7, `EditViewColumnsPanel` 3,
 `ProjectCard` 2, `LatestProjects`, `ResourceAllocation`; ProjectWebParts `ProjectInformation` 21,
 `ProjectPhases` 17, `DynamicList` 11, `DynamicMatrix` 7, `ProjectNews` 5, `ProjectInformationPanel`,
-`OpportunityMatrix`, `RiskMatrix`; ProjectExtensions `ProjectSetupDialog` 6, `@BaseDialog`,
+`OpportunityMatrix`, `RiskMatrix`; ProjectExtensions `ProjectSetupDialog` 6 (two of its sections tested at the close-out), `@BaseDialog`,
 `ErrorDialog`, `ProgressDialog`; PortfolioExtensions `Footer` 17, `IdeaApprovalDialog`, `IdeaDialog`;
 shared-library `CustomEditPanel` 23 (one test), `FilterPanel` 7, `ProjectTimeline` 7, `Toolbar` 6,
 `Autocomplete`, `FieldContainer`, `PeoplePicker`, `UserMessage` and the small ones. Folders with a
 test already: `ProjectStatus` 5, `DocumentTemplateDialog` 3, `PortfolioOverview` 2, `DataGridList` 2,
-`ProjectTimeline` (ProjectWebParts) 1, `ProjectList` 1, `ProgramAdministration` 1, `RiskAction` 1,
+`ProjectTimeline` (ProjectWebParts) 1, `ProjectList` 1, `ProgramAdministration` 2, `RiskAction` 1,
 `TemplatePackageCatalog` 1, `ItemColumn` 5.
 
 **Browser suite.** Six files, 18 tests: sign-in, the hub's pages, a project's pages, a program

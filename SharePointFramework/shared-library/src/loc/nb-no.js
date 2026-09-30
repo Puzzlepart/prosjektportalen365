@@ -114,6 +114,8 @@ define([], function () {
     ShowAllMeasurementsLinkText: 'Vis alle målinger',
     ShowInstrumentLinkText: '{0} (vis instrument)',
     ProjectInformationPanelButton: 'Åpne prosjektinformasjonspanel',
-    MeasurementSheetName: 'Målinger'
+    MeasurementSheetName: 'Målinger',
+    DataGridSelectAllLabel: 'Velg alle',
+    DataGridSelectRowLabel: 'Velg rad'
   }
 })

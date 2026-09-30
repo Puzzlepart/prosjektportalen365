@@ -233,6 +233,6 @@ export const useResourceAllocationDataFetch = (
   fetchCallback: (data: ITimelineData) => void
 ) => {
   useEffect(() => {
-    fetchData(props).then(fetchCallback)
+    void fetchData(props).then(fetchCallback)
   }, [])
 }

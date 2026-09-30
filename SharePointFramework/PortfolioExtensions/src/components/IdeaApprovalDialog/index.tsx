@@ -127,6 +127,6 @@ export default class RecommendationDialog extends BaseDialog {
   private _submit = (choice: string, comment: string) => {
     this.selectedChoice = choice
     this.comment = comment
-    this.close()
+    void this.close()
   }
 }

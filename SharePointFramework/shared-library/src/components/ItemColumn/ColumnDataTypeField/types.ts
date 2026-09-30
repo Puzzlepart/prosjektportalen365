@@ -55,9 +55,7 @@ export interface INumberPropertyField extends IColumnDataTypePropertyFieldBase {
  * reference with v8 props, which tied every renderer to v8 for the sake of a form it never rendered.
  */
 export type IColumnDataTypePropertyField =
-  | IBooleanPropertyField
-  | ITextPropertyField
-  | INumberPropertyField
+  IBooleanPropertyField | ITextPropertyField | INumberPropertyField
 
 type FieldInput<T extends IColumnDataTypePropertyField> = Omit<T, 'kind'>
 

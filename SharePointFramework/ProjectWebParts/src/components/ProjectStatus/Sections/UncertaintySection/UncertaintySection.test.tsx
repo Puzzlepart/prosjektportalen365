@@ -7,7 +7,11 @@ jest.mock('../../../RiskMatrix', () => ({ RiskMatrix: () => <div>risikomatrise</
 jest.mock('../../../OpportunityMatrix', () => ({
   OpportunityMatrix: () => <div>mulighetsmatrise</div>
 }))
-jest.mock('../../../../models', () => ({ UncertaintyElementModel: function (item: any) { return item } }))
+jest.mock('../../../../models', () => ({
+  UncertaintyElementModel: function (item: any) {
+    return item
+  }
+}))
 
 import { render, screen } from '@testing-library/react'
 import * as React from 'react'

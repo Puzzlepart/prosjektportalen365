@@ -15,7 +15,7 @@ export function useProjectCardDataFetch(
   setState: (newState: Partial<IProjectCardState>) => void
 ) {
   useEffect(() => {
-    Promise.all([
+    void Promise.all([
       props.dataAdapter.fetchEnrichedProject(props.projectSiteId, props.hubContext)
     ]).then(([project]) => {
       setState({

@@ -958,6 +958,47 @@ that carries phases 3 and 4 is **1.15**, and it is not cut before phase 4 is don
 The coverage pass (slice 3b), the hub conversion (Decision A, after the coverage pass) and the
 hold-outs are phase 4.
 
+**Close-out, done 2026-09-30.** Steps 1 to 4 landed the same day, verified by one full
+`rush rebuild` (all eleven operations, **277 tests**, zero lint errors, every floor held).
+
+1. *The three lists.* The program administration's project list and the two project setup sections
+   render `DataGridList`; their column hooks return `IDataGridColumn` with the widths that were
+   separate sizing options, and their selection handlers take ids. `DataGridList` labels its
+   selection cells for screen readers (`DataGridSelectAllLabel`, `DataGridSelectRowLabel` in the
+   shared strings) — only on selectable grids, since Fluent renders the cell whenever the slot is
+   given, which the project list's tests caught as an empty first cell on lists without selection.
+   Render tests for all three (four cases for the program list, three each for the sections).
+2. *Version stamping.* `modifySolutionFiles.js` stamps `PP365_BUILD_NUMBER` into the fourth segment
+   of the solution's and its features' versions; both channel build jobs pass `github.run_number`.
+   Dry-run on a copy: `1.14.0.0` becomes `1.14.0.1234` and the revert restores it. Documented in
+   `.tasks/README.md`.
+3. *Lint.* The four rules are `error` again. `no-floating-promises` flagged 70 sites: 67 are
+   deliberate fire-and-forget calls — effects that start a fetch, toolbar clicks that run an async
+   command, `context.model.set` in the field elements, `ListLogger.log` in catch blocks — and are
+   marked `void` (with `no-void` allowing it as a statement); 3 in `PortalDataService` were real
+   misses, an `update` and an `add` after an `await` that the caller could observe half done, and
+   are awaited. `require-atomic-updates` keeps `allowProperties` (the setup tasks write step
+   results into a shared params object by design) and three variable reassignments after awaits
+   are restructured (`ensurePlan`, the status report's attachments, the admin permission check).
+   `no-use-before-define` ignores hoisted functions and classes used inside methods, and the one
+   variable case declares the selection with its callback; the archive view's configuration
+   function moved above its effect. Prettier ran over every solution's sources.
+   **Allow-list**, the 248 house-rule warnings left, by rule: no-console 62, no-unused-vars 59,
+   no-useless-catch 24, no-lone-blocks 23, require-await 21, no-empty 14, no-new-null 13,
+   no-unused-expressions 10, pair-react-dom-render-unmount 9, eqeqeq 5, import-requires-chunk-name 4,
+   no-unsafe-regexp 2, react/jsx-key 1, no-void 1 (an expression, not a statement). Phase 4 pays
+   them in the files its slices touch; `allowWarningsInSuccessfulBuild` stays unset.
+4. *Definition of done, swept.* `grep -rl "from '@fluentui/react'"`: shared-library 6 (the people
+   picker, the file type icon column and fallback, `Autocomplete` ×3), PortfolioWebParts 15 (the
+   hub and the two web parts' v8 types), ProjectExtensions 6 (the file type icon sites) — every one
+   a named hold-out; `@fluentui/react` is a dependency of those three solutions only. No
+   `@uifabric/*`, `pzl-spfx-components`, `fabric.min.css`, compat aliases or v8 Sass remain. The
+   relaxed rules are `error` and the warnings left are the documented allow-list above. Coverage
+   floors are enforced per solution. **Open, carried into phase 4:** a test for every web part root
+   and interactive component (no root has one yet), and the browser suite's program site (present,
+   skipped without `E2E_PROGRAM_URL`), navigation flows and two write flows. The release note for
+   1.15 has its Fluent UI v9 paragraph with the four intended visible differences.
+
 ### Second feedback round on slices 6 and 7 (2026-09-29)
 
 - **Target folder: no double-click.** A row selects the folder as the copy target, its name enters

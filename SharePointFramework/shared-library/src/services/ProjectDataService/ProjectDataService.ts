@@ -102,7 +102,7 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
       obj[key] = format(this._storageKeys[key], this._params.siteId.replace(/-/g, ''))
       return obj
     }, {})
-    this._storage.deleteExpired()
+    void this._storage.deleteExpired()
   }
 
   /**

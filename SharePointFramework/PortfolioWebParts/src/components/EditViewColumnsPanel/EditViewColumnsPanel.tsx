@@ -24,7 +24,8 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
     <BasePanel
       open={props.open}
       size={'medium'}
-      header={<IdPrefixProvider value={fluentProviderHeaderId}>
+      header={
+        <IdPrefixProvider value={fluentProviderHeaderId}>
           <FluentProvider theme={customLightTheme}>
             <div className={styles.panelActions}>
               <Button
@@ -52,7 +53,8 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
               )}
             </div>
           </FluentProvider>
-        </IdPrefixProvider>}
+        </IdPrefixProvider>
+      }
       onClose={props.onClose}
       isLightDismiss={true}
       className={styles.root}

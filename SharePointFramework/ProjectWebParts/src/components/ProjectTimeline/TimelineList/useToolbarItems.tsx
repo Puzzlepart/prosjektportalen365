@@ -177,7 +177,7 @@ export function useToolbarItems() {
           .setIcon('Delete')
           .setDisabled(context.state.selectedItems.length === 0)
           .setOnClick(() => {
-            deleteTimelineItem()
+            void deleteTimelineItem()
           })
       ].filter(Boolean),
     [context.props, context.state.selectedItems]

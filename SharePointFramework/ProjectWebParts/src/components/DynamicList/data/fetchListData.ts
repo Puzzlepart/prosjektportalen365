@@ -1,6 +1,12 @@
 import { IDynamicListProps, IDynamicListData } from '../types'
 import SPDataAdapter from '../../../data'
-import { EditableSPField, IListColumn, ProjectContentColumn, getAllItems, getTermStore } from 'pp365-shared-library'
+import {
+  EditableSPField,
+  IListColumn,
+  ProjectContentColumn,
+  getAllItems,
+  getTermStore
+} from 'pp365-shared-library'
 import type { IWeb } from '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/fields'

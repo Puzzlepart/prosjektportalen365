@@ -1,12 +1,4 @@
-import {
-  DataGrid,
-  DataGridBody,
-  DataGridCell,
-  DataGridHeader,
-  DataGridHeaderCell,
-  DataGridRow,
-  SearchBox
-} from '@fluentui/react-components'
+import { SearchBox } from '@fluentui/react-components'
 import React, { FC, useContext, useState } from 'react'
 import { ProgramAdministrationContext } from '../context'
 import styles from './ProjectList.module.scss'
@@ -14,20 +6,13 @@ import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
 import { Commands } from '../Commands'
 import { isEmpty } from '@microsoft/sp-lodash-subset'
-import { getFluentIcon, UserMessage } from 'pp365-shared-library'
+import { DataGridList, getFluentIcon, UserMessage } from 'pp365-shared-library'
 import strings from 'ProgramWebPartsStrings'
 
 export const ProjectList: FC<IProjectListProps> = (props) => {
   const context = useContext(ProgramAdministrationContext)
-  const {
-    items,
-    columns,
-    columnSizingOptions,
-    defaultSortState,
-    onSearch,
-    groupedData,
-    shouldEnableGrouping
-  } = useProjectList(props)
+  const { items, columns, defaultSortState, onSearch, groupedData, shouldEnableGrouping } =
+    useProjectList(props)
 
   const initialExpandedGroups =
     props.defaultGroupsExpanded && shouldEnableGrouping
@@ -89,66 +74,32 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
                     <span className={styles.groupCount}>({groupItems.length})</span>
                   </div>
                   {isExpanded && (
-                    <DataGrid
+                    <DataGridList
                       items={groupItems}
                       columns={columns}
+                      getRowId={({ SiteId }) => SiteId}
                       sortable
                       defaultSortState={defaultSortState}
-                      resizableColumns
-                      columnSizingOptions={columnSizingOptions}
                       selectionMode={
                         context.state.userHasManagePermission ? 'multiselect' : undefined
                       }
                       onSelectionChange={props.onSelectionChange}
-                      getRowId={({ SiteId }) => SiteId}
-                    >
-                      <DataGridHeader>
-                        <DataGridRow>
-                          {({ renderHeaderCell }) => (
-                            <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-                          )}
-                        </DataGridRow>
-                      </DataGridHeader>
-                      <DataGridBody<Record<string, any>>>
-                        {({ item, rowId }) => (
-                          <DataGridRow<Record<string, any>> key={rowId}>
-                            {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
-                          </DataGridRow>
-                        )}
-                      </DataGridBody>
-                    </DataGrid>
+                    />
                   )}
                 </div>
               )
             })}
           </div>
         ) : (
-          <DataGrid
+          <DataGridList
             items={items}
             columns={columns}
+            getRowId={({ SiteId }) => SiteId}
             sortable
             defaultSortState={defaultSortState}
-            resizableColumns
-            columnSizingOptions={columnSizingOptions}
             selectionMode={context.state.userHasManagePermission ? 'multiselect' : undefined}
             onSelectionChange={props.onSelectionChange}
-            getRowId={({ SiteId }) => SiteId}
-          >
-            <DataGridHeader>
-              <DataGridRow>
-                {({ renderHeaderCell }) => (
-                  <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-                )}
-              </DataGridRow>
-            </DataGridHeader>
-            <DataGridBody<Record<string, any>>>
-              {({ item, rowId }) => (
-                <DataGridRow<Record<string, any>> key={rowId}>
-                  {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
-                </DataGridRow>
-              )}
-            </DataGridBody>
-          </DataGrid>
+          />
         )
       ) : (
         <UserMessage

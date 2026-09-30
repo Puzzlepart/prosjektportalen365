@@ -210,15 +210,14 @@ async function fetchData(
       initialSelectedReport = reportFromUrl
     }
 
-    if (initialSelectedReport?.published) {
-      initialSelectedReport =
-        await SPDataAdapter.portalDataService.getStatusReportAttachments(initialSelectedReport)
-      sortedReports = sortedReports.map((report) => {
-        if (report.id === initialSelectedReport.id) {
-          return initialSelectedReport
-        }
-        return report
-      })
+    // A published report is shown with its attachments, and the list carries the same instance.
+    const selectedReport = initialSelectedReport?.published
+      ? await SPDataAdapter.portalDataService.getStatusReportAttachments(initialSelectedReport)
+      : initialSelectedReport
+    if (selectedReport !== initialSelectedReport) {
+      sortedReports = sortedReports.map((report) =>
+        report.id === selectedReport.id ? selectedReport : report
+      )
     }
 
     return {
@@ -233,7 +232,7 @@ async function fetchData(
         userHasAdminPermission,
         scopeKeysWithReports
       },
-      initialSelectedReport,
+      initialSelectedReport: selectedReport,
       sourceUrl,
       resolvedScope
     }

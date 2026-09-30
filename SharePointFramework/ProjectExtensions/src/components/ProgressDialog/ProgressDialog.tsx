@@ -54,10 +54,7 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
           />
         </div>
         <div className={styles.indicator}>
-          <Field
-            label={props.progressIndicator?.label}
-            hint={props.progressIndicator?.description}
-          >
+          <Field label={props.progressIndicator?.label} hint={props.progressIndicator?.description}>
             <ProgressBar
               value={
                 props.totalSteps > 0

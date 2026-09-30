@@ -1,4 +1,11 @@
-import { EditableSPField, IBaseWebPartComponentProps, IBaseWebPartComponentState, ICustomEditPanelProps, IFilterProps, IListColumn } from 'pp365-shared-library'
+import {
+  EditableSPField,
+  IBaseWebPartComponentProps,
+  IBaseWebPartComponentState,
+  ICustomEditPanelProps,
+  IFilterProps,
+  IListColumn
+} from 'pp365-shared-library'
 
 export enum DynamicListMode {
   /**

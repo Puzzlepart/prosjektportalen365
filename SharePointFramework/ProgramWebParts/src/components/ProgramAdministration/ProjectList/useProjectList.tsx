@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { IProjectListProps } from './types'
 import { useColumns } from './useColumns'
-import { SearchBoxProps, SortDirection, TableColumnSizingOptions } from '@fluentui/react-components'
+import { SearchBoxProps, SortDirection } from '@fluentui/react-components'
 
 export function useProjectList(props: IProjectListProps) {
   const [searchTerm, setSearchTerm] = useState('')
@@ -49,16 +49,6 @@ export function useProjectList(props: IProjectListProps) {
   )
 
   const columns = useColumns(props.renderLinks)
-  const columnSizingOptions: TableColumnSizingOptions = columns.reduce(
-    (options, col) => ({
-      ...options,
-      [col.columnId]: {
-        defaultWidth: col.defaultWidth,
-        minWidth: col.minWidth
-      }
-    }),
-    {}
-  )
 
   const defaultSortState = { sortColumn: 'title', sortDirection: 'ascending' as SortDirection }
 
@@ -69,7 +59,6 @@ export function useProjectList(props: IProjectListProps) {
   return {
     items,
     columns,
-    columnSizingOptions,
     defaultSortState,
     onSearch,
     searchTerm,

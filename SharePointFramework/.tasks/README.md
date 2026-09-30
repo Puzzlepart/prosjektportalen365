@@ -14,6 +14,8 @@ Oppretter en `config/serve.json`-fil fra malen `config/serve.sample.json` for gj
 
 Modifiserer `config/package-solution.json` og alle `manifest.json`-filer for en løsning slik at de samsvarer med ID-er fra den valgte kanalen.
 
+Når miljøvariabelen `PP365_BUILD_NUMBER` er satt (kanal-arbeidsflytene setter den til kjørenummeret i GitHub Actions), stemples den også inn som fjerde segment i løsningens og funksjonenes versjon (`1.14.0.<kjørenummer>`). Hver utrulling blir dermed en ny versjon for SharePoint, slik at klientene henter manifestene på nytt i stedet for å bruke dem de har mellomlagret for en versjon de har sett før. Utgivelsesbygget (`main`) berøres ikke.
+
 ## post-watch.js
 
 Kjører `modifySolutionFiles.js` og `setBundleConfig.js`.

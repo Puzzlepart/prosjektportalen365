@@ -12,7 +12,7 @@ export const ResponsibleField: FC<IResponsibleFieldProps> = (props) => {
   const [matchingUsers, setMatchingUsers] = useState([])
 
   useEffect(() => {
-    context.dataAdapter
+    void context.dataAdapter
       .clientPeoplePickerSearchUser(value, [])
       .then((users) => setMatchingUsers(users))
   }, [value])

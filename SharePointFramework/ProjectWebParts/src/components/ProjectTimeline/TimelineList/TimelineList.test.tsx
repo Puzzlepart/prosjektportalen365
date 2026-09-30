@@ -17,9 +17,28 @@ import { TimelineList } from './TimelineList'
  */
 
 const listColumns = [
-  { key: 'Title', fieldName: 'Title', name: 'Tittel', minWidth: 100, maxWidth: 200, data: { type: 'Text' } },
-  { key: 'GtStartDate', fieldName: 'GtStartDate', name: 'Start', minWidth: 80, data: { type: 'DateTime' } },
-  { key: 'GtBudget', fieldName: 'GtBudget', name: 'Budsjett', minWidth: 80, data: { type: 'Number' } },
+  {
+    key: 'Title',
+    fieldName: 'Title',
+    name: 'Tittel',
+    minWidth: 100,
+    maxWidth: 200,
+    data: { type: 'Text' }
+  },
+  {
+    key: 'GtStartDate',
+    fieldName: 'GtStartDate',
+    name: 'Start',
+    minWidth: 80,
+    data: { type: 'DateTime' }
+  },
+  {
+    key: 'GtBudget',
+    fieldName: 'GtBudget',
+    name: 'Budsjett',
+    minWidth: 80,
+    data: { type: 'Number' }
+  },
   { key: 'GtOwner', fieldName: 'GtOwner', name: 'Eier', minWidth: 120, data: { type: 'User' } }
 ]
 
@@ -98,7 +117,9 @@ describe('TimelineList', () => {
     // The first checkbox selects all; the rest are one per row.
     await user.click(checkboxes[1])
     await waitFor(() =>
-      expect(setState).toHaveBeenCalledWith({ selectedItems: expect.arrayContaining([expect.anything()]) })
+      expect(setState).toHaveBeenCalledWith({
+        selectedItems: expect.arrayContaining([expect.anything()])
+      })
     )
     expect(setState.mock.calls[setState.mock.calls.length - 1][0].selectedItems).toHaveLength(1)
   })

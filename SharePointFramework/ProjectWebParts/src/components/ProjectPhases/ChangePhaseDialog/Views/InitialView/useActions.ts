@@ -26,7 +26,7 @@ export function useActions(
         : strings.CheckpointNotRelevantTooltipCommentEmpty,
       onClick: () => {
         isDisabled.setTrue()
-        onNextChecklistItem(strings.StatusNotRelevant).then(isDisabled.setFalse)
+        void onNextChecklistItem(strings.StatusNotRelevant).then(isDisabled.setFalse)
       },
       icon: getFluentIcon('DismissCircle')
     },
@@ -38,7 +38,7 @@ export function useActions(
         : strings.CheckpointStillOpenTooltipCommentEmpty,
       onClick: () => {
         isDisabled.setTrue()
-        onNextChecklistItem(strings.StatusStillOpen).then(isDisabled.setFalse)
+        void onNextChecklistItem(strings.StatusStillOpen).then(isDisabled.setFalse)
       },
       icon: getFluentIcon('Circle')
     },
@@ -48,7 +48,7 @@ export function useActions(
       title: strings.CheckpointDoneTooltip,
       onClick: () => {
         isDisabled.setTrue()
-        onNextChecklistItem(strings.StatusClosed).then(isDisabled.setFalse)
+        void onNextChecklistItem(strings.StatusClosed).then(isDisabled.setFalse)
       },
       icon: getFluentIcon('CheckmarkCircle')
     }

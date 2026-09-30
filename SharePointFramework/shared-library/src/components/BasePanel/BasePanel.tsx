@@ -80,9 +80,7 @@ export const BasePanel: FC<IBasePanelProps> = ({
               {header ?? headerText}
             </DrawerHeaderTitle>
           </DrawerHeader>
-          <DrawerBody className={styles.body}>
-            {children}
-          </DrawerBody>
+          <DrawerBody className={styles.body}>{children}</DrawerBody>
           {footer && <DrawerFooter className={styles.footer}>{footer}</DrawerFooter>}
         </OverlayDrawer>
       </FluentProvider>

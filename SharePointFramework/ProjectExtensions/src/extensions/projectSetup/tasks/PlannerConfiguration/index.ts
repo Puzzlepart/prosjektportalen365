@@ -105,23 +105,19 @@ export class PlannerConfiguration extends BaseTask {
     try {
       const existingGroupPlans = await this._fetchPlans(plan.owner)
       const existingPlan = _.find(existingGroupPlans, (p) => p.title === plan.title)
-      if (existingPlan) {
-        plan = existingPlan
-      } else {
-        plan = await retryWithBackoff(
-          () => MSGraphHelper.Post('planner/plans', JSON.stringify(plan)),
-          {
-            onRetry: (attempt, error, delay) =>
-              this.logWarning(
-                `Retry ${attempt} creating plan ${plan.title} after ${delay}s (${
-                  error.statusCode ?? error.message
-                })`
-              )
-          }
-        )
-      }
-      if (setupLabels) await this._setupLabels(plan, pageContext)
-      return plan
+      // The plan that exists, or the one created now; `plan` itself stays the template.
+      const ensuredPlan: IPlannerPlan =
+        existingPlan ??
+        (await retryWithBackoff(() => MSGraphHelper.Post('planner/plans', JSON.stringify(plan)), {
+          onRetry: (attempt, error, delay) =>
+            this.logWarning(
+              `Retry ${attempt} creating plan ${plan.title} after ${delay}s (${
+                error.statusCode ?? error.message
+              })`
+            )
+        }))
+      if (setupLabels) await this._setupLabels(ensuredPlan, pageContext)
+      return ensuredPlan
     } catch (error) {
       throw error
     }

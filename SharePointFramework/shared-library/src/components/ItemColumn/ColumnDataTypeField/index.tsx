@@ -50,7 +50,12 @@ export const ColumnDataTypeField: FC<IColumnDataTypeFieldProps> = (props) => {
           button={selectedOption ? <OptionContent option={selectedOption} /> : undefined}
         >
           {dropdown.options.map((option) => (
-            <Option key={option.key} value={option.key} text={option.text} disabled={option.disabled}>
+            <Option
+              key={option.key}
+              value={option.key}
+              text={option.text}
+              disabled={option.disabled}
+            >
               <OptionContent option={option} />
             </Option>
           ))}

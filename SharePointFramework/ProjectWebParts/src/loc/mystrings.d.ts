@@ -286,29 +286,29 @@ declare interface IProjectWebPartsStrings {
   CreateNewsLinkLabel: string
   NewsTitleRequired: string
   NewsCreateError: string
-  NewsCreateSuccess: string,
-  TemplateRequired: string,
-  TemplatePlaceholder: string,
-  TemplateLabel: string,
-  NoRecentNews: string,
-  ShowMoreNews: string,
-  ShowLessNews: string,
-  ModifiedTooltipText: string,
-  MaxVisibleNewsDescription: string,
-  MaxVisibleNewsLabel: string,
-  SiteUrlLabel: string,
-  SiteUrlDescription: string,
-  NewsFolderNameDescription: string,
-  NewsFolderNameDefault: string,
-  NewsFolderNameLabel: string,
-  FileNameRequired: string,
-  FileNameTooLong: string,
-  FileNameInvalid: string,
-  FileNameNoLeadingTrailingSpaces: string,
-  FileNameReserved: string,
-  NewsFolderError: string,
-  LoadingLabel: string,
-  GenericErrorMessage: string,
+  NewsCreateSuccess: string
+  TemplateRequired: string
+  TemplatePlaceholder: string
+  TemplateLabel: string
+  NoRecentNews: string
+  ShowMoreNews: string
+  ShowLessNews: string
+  ModifiedTooltipText: string
+  MaxVisibleNewsDescription: string
+  MaxVisibleNewsLabel: string
+  SiteUrlLabel: string
+  SiteUrlDescription: string
+  NewsFolderNameDescription: string
+  NewsFolderNameDefault: string
+  NewsFolderNameLabel: string
+  FileNameRequired: string
+  FileNameTooLong: string
+  FileNameInvalid: string
+  FileNameNoLeadingTrailingSpaces: string
+  FileNameReserved: string
+  NewsFolderError: string
+  LoadingLabel: string
+  GenericErrorMessage: string
   NewsCreateDuplicateFileError: string
   PreviewLabel: string
   NoPreviewAvailable: string
@@ -415,5 +415,5 @@ declare interface IProjectWebPartsStrings {
 
 declare module 'ProjectWebPartsStrings' {
   const strings: IProjectWebPartsStrings
-  export = strings;
+  export = strings
 }

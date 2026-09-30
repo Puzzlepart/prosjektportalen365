@@ -113,7 +113,7 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
         window.location.reload()
       }
     } catch (error) {
-      ListLogger.log({
+      void ListLogger.log({
         message: error.message,
         level: 'Error',
         functionName: 'onSyncProperties',

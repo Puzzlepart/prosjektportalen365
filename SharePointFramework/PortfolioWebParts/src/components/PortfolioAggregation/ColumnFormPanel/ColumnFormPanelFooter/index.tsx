@@ -35,7 +35,7 @@ export const ColumnFormPanelFooter: FC<ColumnFormPanelFooterProps> = (props) => 
                   [strings.ConfirmDeleteResponseAbort, false, false]
                 ]
               })
-              if (response) props.onDeleteColumn()
+              if (response) void props.onDeleteColumn()
             }}
             disabled={props.isDeleteDisabled}
           >

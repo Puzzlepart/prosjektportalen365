@@ -59,7 +59,7 @@ export const getPhaseSitePages: DataFetchFunction<
 const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = async (props) => {
   try {
     if (!SPDataAdapter.isConfigured) {
-      SPDataAdapter.configure(props.spfxContext, {
+      void SPDataAdapter.configure(props.spfxContext, {
         siteId: props.siteId,
         webUrl: props.webAbsoluteUrl,
         logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
@@ -121,7 +121,7 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
       ...(props.useArchive && { archiveDocuments, archiveLists, documentTypes, archiveStatus })
     } as IProjectPhasesData
   } catch (error) {
-    ListLogger.log({
+    void ListLogger.log({
       message: error.message,
       level: 'Error',
       functionName: 'fetchData',

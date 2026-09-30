@@ -44,13 +44,7 @@ describe('BasePanel', () => {
   })
 
   it('renders its footer', () => {
-    render(
-      <BasePanel
-        open
-        headerText='Tittel'
-        footer={<button>Lagre</button>}
-      />
-    )
+    render(<BasePanel open headerText='Tittel' footer={<button>Lagre</button>} />)
     expect(screen.getByRole('button', { name: 'Lagre' })).toBeInTheDocument()
   })
 
