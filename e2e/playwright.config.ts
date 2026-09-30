@@ -14,7 +14,9 @@ export const STORAGE_STATE = path.join(__dirname, '.auth', 'user.json')
 const configuredBaseURL = process.env.E2E_BASE_URL
 
 if (!configuredBaseURL) {
-  throw new Error('E2E_BASE_URL is not set. Copy e2e/.env.example to e2e/.env or set the variable in CI.')
+  throw new Error(
+    'E2E_BASE_URL is not set. Copy e2e/.env.example to e2e/.env or set the variable in CI.'
+  )
 }
 
 // A site URL must end with "/" for relative paths to resolve inside the site: without it,
@@ -23,6 +25,9 @@ export const baseURL = configuredBaseURL.replace(/\/+$/, '') + '/'
 
 export default defineConfig({
   testDir: './tests',
+  // tests/local/* load a solution's local bundle through SPFx's debug manifests and need a dev
+  // server; they run only when asked for (E2E_LOCAL_BUNDLE=1), never in CI.
+  testIgnore: process.env.E2E_LOCAL_BUNDLE ? [] : ['**/local/**'],
   // SharePoint pages are slow to settle; one retry in CI absorbs transient throttling without
   // hiding a real regression (a test that only passes on retry is reported as "flaky").
   retries: process.env.CI ? 1 : 0,

@@ -14,6 +14,11 @@ import { IDataGridColumn, IDataGridListProps } from './types'
 import { useContainerWidth } from './useContainerWidth'
 
 /**
+ * Width of Fluent's selection cell (`CELL_WIDTH` in `@fluentui/react-table`, not exported).
+ */
+const TABLE_SELECTION_CELL_WIDTH = 44
+
+/**
  * Sizing options for the grid, from each column's widths.
  */
 function createColumnSizingOptions(columns: IDataGridColumn[]): TableColumnSizingOptions {
@@ -59,15 +64,18 @@ export function DataGridList<TItem = any>(props: IDataGridListProps<TItem>) {
   } = props
 
   // The grid measures its own parent for its auto-fit; the fit here needs the width too, to hand
-  // the grid ideal widths that already add up to it.
+  // the grid ideal widths that already add up to it. A selection mode adds a checkbox cell of
+  // Fluent's fixed width to every row, outside the columns, so only the rest is theirs to share:
+  // sharing all of it put every row one cell past the container, whatever the columns did.
   const containerRef = useRef<HTMLDivElement>(null)
   const containerWidth = useContainerWidth(containerRef, fitColumnsToContainer)
+  const selectionCellWidth = selectionMode ? TABLE_SELECTION_CELL_WIDTH : 0
   const columnSizingOptions = useMemo(
     () =>
       fitColumnsToContainer
-        ? fitColumnWidths(columns, containerWidth)
+        ? fitColumnWidths(columns, containerWidth - selectionCellWidth)
         : createColumnSizingOptions(columns),
-    [columns, fitColumnsToContainer, containerWidth]
+    [columns, fitColumnsToContainer, containerWidth, selectionCellWidth]
   )
   // A changed set of columns remounts the grid, so its sort and sizing state start over rather
   // than pointing at columns that are gone.
@@ -92,7 +100,6 @@ export function DataGridList<TItem = any>(props: IDataGridListProps<TItem>) {
       subtleSelection={subtleSelection}
       resizableColumns={resizableColumns}
       columnSizingOptions={columnSizingOptions}
-      containerWidthOffset={0}
       size={size}
     >
       <DataGridHeader>

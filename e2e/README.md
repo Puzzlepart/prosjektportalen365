@@ -15,3 +15,17 @@ npm test               # or: npm run test:ui
 
 The Playwright CLI skill in `.claude/skills/playwright-cli` documents how to plan, generate and heal
 tests interactively. See `.development-guide/spfx/testing.md` for the testing regime.
+
+## Checking a fix on the tenant before it is deployed
+
+`tests/local/*` load a solution's *local* bundle onto the real page through SPFx's debug manifests
+and make the same assertions as their `tests/smoke/*` counterparts. They are ignored unless asked
+for, since they need a dev server:
+
+```bash
+cd SharePointFramework/ProjectWebParts && npx heft start --nobrowser   # serves https://localhost:4321
+cd e2e && E2E_LOCAL_BUNDLE=1 npx playwright test tests/local/timeline-list.spec.ts
+```
+
+The browser is launched with the self-signed dev certificate accepted and Chromium's local-network
+check disabled, which is what makes a public SharePoint page able to load scripts from localhost.

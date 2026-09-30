@@ -971,6 +971,42 @@ include 17; neither needs to move for this phase.
   and measures that container only when asked to fit (the width hook takes an `enabled` flag, so
   the other lists do not re-render on resize). Together with the fit, a section's list shares the
   section's width and scrolls only when the columns' floors exceed it, as in v8.
+- **The timeline's scrollbar "no matter what", and the template dialog's (2026-09-30, measured
+  with Playwright on the tenant).** Fluent's `DataGrid` subtracts its selection cell's width (44px,
+  `CELL_WIDTH` in `react-table`) from the container it auto-fits to whenever a `selectionMode` is
+  set — unless `containerWidthOffset` is passed, and `DataGridList` passed `0`, copied from the
+  program administration list. The data columns then filled the whole container and the checkbox
+  cell pushed every row 44px past it, whatever the columns did. Measured on the deployed build:
+  the timeline grid 1578px in a 1534px container at 1920px wide; the template dialog's target
+  folder screen 844px in an 800px content area (the name column stretched to 800, plus the cell),
+  on a library with subfolders — the select screen happened to fit at that width. `DataGridList`
+  no longer passes the offset, its own fit shares `container − 44` when there is a selection, and
+  the program administration list loses the same override.
+- **The fit's second blind spot: Fluent's per-column padding.** Verified with the local bundle
+  loaded onto the tenant page through SPFx's debug manifests (Playwright with the dev certificate
+  and Chromium's local-network check relaxed): the grid then matched its container exactly, 894px
+  at a 1280px viewport and 1534px at 1920px, but the columns were not the even shares the fit
+  computes — the last ones were squeezed to their floor. Fluent's column state carries a `padding`
+  of 16 per column that its auto-fit counts (`getTotalWidth` sums `width + padding`) while its cells
+  render it outside the width they are given, so shares that summed to the container were one
+  padding per column too wide and the auto-fit took the difference from the end. `fitColumnWidths`
+  now sets that padding aside first; measured again, every column is 106px at 1280 and 186px at
+  1920, the last one two pixels wider with the rounding remainder, and the grid still fills its
+  container to the pixel.
+- **Deployment note from the same measurements.** The tenant served ProjectExtensions at
+  `be4d347` (the footer says so) but a ProjectWebParts timeline bundle from before slice 8 — the
+  columns still had the old 100px floor and the grid no wrapper — although CI had deployed both
+  from the same commit. Every package keeps version `1.14.0.0` across channel builds, which is the
+  cached-manifest trap already noted for releases; a tester who does not see a change should clear
+  the site's client-side data before doubting the build.
+- **Where the measurements live now.** Two smoke tests pin both defects against the deployed
+  build: `e2e/tests/smoke/timeline-list.spec.ts` (grid no wider than its container, columns
+  sharing its whole width, at 1280 and 1920) and `document-template-dialog.spec.ts` (both screens
+  of the dialog, at 1280 and 1600, read only). Their local-bundle variants under `e2e/tests/local/`
+  run only with `E2E_LOCAL_BUNDLE=1` and a dev server; the timeline one is what verified the fix.
+  The dialog's local variant is written but has not passed: with the debug manifests the deployed
+  custom action's command did not render, with or without a `customActions` parameter, so the
+  dialog is covered by its smoke test and by the shared grid's fix that the timeline proved.
 
 ### The slice 7 CI failure (2026-09-29)
 

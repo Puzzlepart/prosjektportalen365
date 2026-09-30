@@ -96,7 +96,6 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
                       defaultSortState={defaultSortState}
                       resizableColumns
                       columnSizingOptions={columnSizingOptions}
-                      containerWidthOffset={0}
                       selectionMode={
                         context.state.userHasManagePermission ? 'multiselect' : undefined
                       }
@@ -131,7 +130,6 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
             defaultSortState={defaultSortState}
             resizableColumns
             columnSizingOptions={columnSizingOptions}
-            containerWidthOffset={0}
             selectionMode={context.state.userHasManagePermission ? 'multiselect' : undefined}
             onSelectionChange={props.onSelectionChange}
             getRowId={({ SiteId }) => SiteId}
