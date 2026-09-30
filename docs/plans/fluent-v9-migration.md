@@ -925,6 +925,39 @@ tree imports in its reducers — a real migration, not part of this phase. `xlsx
 `react-beautiful-dnd ~13.1.1` and `react-calendar-timeline 0.28.0`, both pinned to peer ranges that
 include 17; neither needs to move for this phase.
 
+**Close-out, decided 2026-09-30.** With slice 8 tested and committed, the phase closes in this
+order on this branch, each step its own commit, then the branch merges into `main` and the next
+phase starts on a new branch with its own plan (`docs/plans/fluent-v9-phase-4.md`). The release
+that carries phases 3 and 4 is **1.15**, and it is not cut before phase 4 is done.
+
+1. **The three lists onto the shared grid.** The program administration's project list and the two
+   project setup sections still render `DataGrid` directly and miss the typography, the containment
+   and the fit; `DataGridList` gains the checkbox labels they set on their selection cells, and the
+   program list keeps its grouping by rendering one grid per hub. A render test each.
+2. **Version stamping for channel builds.** Every channel build ships the packages as `1.14.0.0`, so
+   SharePoint clients keep cached manifests and serve stale bundles — the tenant ran ProjectExtensions
+   at `be4d347` next to a ProjectWebParts bundle from before slice 8. `modifySolutionFiles.js`
+   already rewrites `package-solution.json` per channel; it will also set the fourth version segment
+   from the CI run number when the workflow provides it, so every deployment is a new version. The
+   release build keeps its own stamping.
+3. **Lint close-out.** The four relaxed rules go back to `error` and what they flag is fixed: 70
+   floating promises read one by one, 38 Prettier, 10 atomic updates, 3 use-before-define. The 264
+   house-rule warnings (no-console 62, unused-vars 59, useless-catch 24, lone-blocks 23,
+   require-await 21, no-void 17, no-empty 14, no-new-null 13, unused-expressions 10,
+   pair-react-dom-render-unmount 9, eqeqeq 5, import-requires-chunk-name 4, no-unsafe-regexp 2,
+   jsx-key 1) stay warnings and are recorded per rule as the allow-list the definition of done
+   permits; phase 4 revisits them.
+4. **Definition-of-done sweep and the release note.** The sweep is recorded here, the release note
+   for 1.15 is drafted as unreleased: a technical change with no intended functional difference, plus
+   the visible ones made on purpose (sticky section tabs, the timeline and status lists fitting their
+   container, the column form panel for site admins, the target folder's row selection and unselection).
+5. **Merge gate.** `rush rebuild` green, the test-channel CI green *including the four browser smoke
+   tests added on 2026-09-30* (timeline fit at two widths, dialog fit at two widths, folder unchoose),
+   which pass only when the tenant serves the new bundles — so the gate also proves step 2.
+
+The coverage pass (slice 3b), the hub conversion (Decision A, after the coverage pass) and the
+hold-outs are phase 4.
+
 ### Second feedback round on slices 6 and 7 (2026-09-29)
 
 - **Target folder: no double-click.** A row selects the folder as the copy target, its name enters
