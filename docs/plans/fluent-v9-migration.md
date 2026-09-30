@@ -1048,6 +1048,14 @@ that one floor is at its measured 58.
 Verified by a full `rush rebuild`: all eleven operations, **286 tests**, zero lint errors, no floor
 missed; the two local-bundle flows green against the tenant.
 
+**The CI run of that commit** deployed cleanly (the stamped version took) and its browser job showed
+the overview column last after the reload on the deployed build, which is the fix verified where it
+matters. The flow still failed on its own clean-up check: the overview shows the columns it
+persisted in local storage as placeholders until its data arrives, and the check read those, with
+the deleted column still in them. The header helper now waits for the results counter to show a
+count, and the flows drop the persisted set before a reload. The dialog smoke test was flaky once
+on a 30 s navigation timeout to the library and passes on retry; its navigation now allows 90 s.
+
 ### Second feedback round on slices 6 and 7 (2026-09-29)
 
 - **Target folder: no double-click.** A row selects the folder as the copy target, its name enters

@@ -5,7 +5,8 @@ import {
   COLUMN_PREFIX,
   columnHeaders,
   deleteTestColumns,
-  fieldInput
+  fieldInput,
+  clearPersistedColumns
 } from '../fixtures/portfolio-overview-column'
 
 /**
@@ -77,6 +78,7 @@ test('local: a new column keeps its place at the end after a reload', async ({
       timeout: 30_000
     })
     expect(await columnHeaders(page), 'last right after saving').toEqual([...before, columnName])
+    await clearPersistedColumns(page)
     await openWithLocalBundle(page, pagePath)
     await expect(overview.getByRole('columnheader', { name: columnName })).toBeVisible({
       timeout: 60_000

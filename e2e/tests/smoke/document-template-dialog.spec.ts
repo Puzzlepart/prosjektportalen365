@@ -40,7 +40,8 @@ test.describe('document template dialog', () => {
       void consoleGuard
       await page.setViewportSize(viewport)
       // A library view is not an SPFx web part page, so the canvas wait of `openPage` does not apply.
-      await page.goto(await findDocumentLibrary(page, projectUrl!))
+      // A library view is heavy; the CI runner has timed out on its default 30 s once.
+      await page.goto(await findDocumentLibrary(page, projectUrl!), { timeout: 90_000 })
       const dialog = await openDocumentTemplateDialog(page)
       expectDialogGridsToFit(await measureBothScreens(page, dialog, testInfo))
     })

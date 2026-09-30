@@ -3,7 +3,8 @@ import {
   columnHeaders,
   deleteTestColumns,
   fieldInput,
-  findTestColumns
+  findTestColumns,
+  clearPersistedColumns
 } from '../fixtures/portfolio-overview-column'
 import { baseURL } from '../../playwright.config'
 import { expect, test, webPart } from '../fixtures/pp365'
@@ -121,6 +122,8 @@ test.describe('portfolio overview, adding a column', () => {
         columnName
       ])
 
+      await clearPersistedColumns(page)
+      await clearPersistedColumns(page)
       await page.reload()
       await expect(overview.getByRole('columnheader').first()).toBeVisible({ timeout: 60_000 })
       await expect(overview.getByRole('columnheader', { name: columnName })).toBeVisible({
@@ -135,6 +138,7 @@ test.describe('portfolio overview, adding a column', () => {
       await deleteTestColumns(page)
     }
 
+    await clearPersistedColumns(page)
     await page.reload()
     await expect(overview.getByRole('columnheader').first()).toBeVisible({ timeout: 60_000 })
     expect(await columnHeaders(page), 'the column should be gone after the clean-up').toEqual(

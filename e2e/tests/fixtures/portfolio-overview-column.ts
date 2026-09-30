@@ -1,4 +1,4 @@
-import { expect } from '@playwright/test'
+import { expect, Page } from '@playwright/test'
 import { baseURL } from '../../playwright.config'
 import { webPart } from './pp365'
 
@@ -10,7 +10,7 @@ import { webPart } from './pp365'
 const hub = baseURL.replace(/\/+$/, '')
 export const COLUMN_PREFIX = 'E2E kolonne'
 /** The hub's project columns list, whatever the installation language named it. */
-export async function findColumnsList(page: import('@playwright/test').Page) {
+export async function findColumnsList(page: Page) {
   const response = await page.request.get(
     // The configuration lists are hidden, so no filter on Hidden here.
     `${hub}/_api/web/lists?$select=Title,Id&$top=500`,
@@ -24,7 +24,7 @@ export async function findColumnsList(page: import('@playwright/test').Page) {
 }
 
 /** The columns whose title starts with the prefix, as SharePoint has them. */
-export async function findTestColumns(page: import('@playwright/test').Page) {
+export async function findTestColumns(page: Page) {
   const list = await findColumnsList(page)
   const items = await page.request.get(
     `${hub}/_api/web/lists(guid'${list.Id}')/items?$select=Id,Title,GtShowFieldPortfolio&$filter=startswith(Title,'${COLUMN_PREFIX}')`,
@@ -38,7 +38,7 @@ export async function findTestColumns(page: import('@playwright/test').Page) {
 }
 
 /** Deletes every column whose title starts with the prefix, through the REST API. */
-export async function deleteTestColumns(page: import('@playwright/test').Page) {
+export async function deleteTestColumns(page: Page) {
   const list = await findColumnsList(page)
   const items = await page.request.get(
     `${hub}/_api/web/lists(guid'${list.Id}')/items?$select=Id,Title&$filter=startswith(Title,'${COLUMN_PREFIX}')`,
@@ -82,13 +82,32 @@ export function fieldInput(panel: import('@playwright/test').Locator, label: Reg
 
 /**
  * The overview's column headers, in order, without the "add column" header the list ends with and
- * without the blank selection header. Waits until the list has settled: "Tittel" is always there.
+ * without the blank selection header. Waits until the overview's data has arrived: until then it
+ * shows the columns it persisted in local storage as placeholders, which can be a stale set.
  */
-export async function columnHeaders(page: import('@playwright/test').Page) {
+export async function columnHeaders(page: Page) {
   const overview = webPart(page, /porteføljeoversikt|portfolio overview/i).first()
+  // The counter has no box of its own, so its text is what to wait for; it reads "0 av 0" while
+  // the data loads.
+  await expect(overview.locator('[class*="resultsCount"]').first()).toHaveText(
+    /viser [1-9]\d* av \d+|showing [1-9]\d* of \d+/i,
+    { timeout: 60_000 }
+  )
   await expect(overview.getByRole('columnheader', { name: /^tittel$|^title$/i })).toBeVisible({
     timeout: 60_000
   })
   const headers = await overview.getByRole('columnheader').allInnerTexts()
   return headers.map((h) => h.trim()).filter((h) => h && !/legg til kolonne|add column/i.test(h))
+}
+
+/**
+ * Drops the columns the overview persisted in local storage, so a reload shows the server's
+ * columns from the first render rather than a placeholder set from before a change.
+ */
+export async function clearPersistedColumns(page: Page) {
+  await page.evaluate(() => {
+    for (const key of Object.keys(localStorage)) {
+      if (key.startsWith('portfolio-overview-persisted-columns')) localStorage.removeItem(key)
+    }
+  })
 }
