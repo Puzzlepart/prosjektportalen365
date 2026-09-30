@@ -226,6 +226,7 @@ else {
 }
 Copy-Item -Path "$PSScriptRoot/../Templates/Portfolio/*.resx" -Filter *.resx -Destination $RELEASE_PATH -Force
 Copy-Item -Path "$PSScriptRoot/Install.ps1" -Destination $RELEASE_PATH -Force
+Copy-Item -Path "$PSScriptRoot/Start-Install.cmd" -Destination $RELEASE_PATH -Force
 Copy-Item -Path "$PSScriptRoot/Scripts/*" -Recurse -Destination $RELEASE_PATH_SCRIPTS -Force
 Copy-Item -Path "$PSScriptRoot/SearchConfiguration.xml" -Destination $RELEASE_PATH -Force
 Copy-Item -Path "$PSScriptRoot/../.current-channel-config.json" -Destination $RELEASE_PATH -Force -ErrorAction SilentlyContinue
@@ -237,7 +238,7 @@ if (-not $SkipBundle.IsPresent) {
     EndAction
 }
 
-(Get-Content "$RELEASE_PATH/Install.ps1") -Replace '{VERSION_PLACEHOLDER}', "$($NPM_PACKAGE_FILE.version).$($GIT_HASH)" -Replace "{CHANNEL_PLACEHOLDER}", $CHANNEL_CONFIG_NAME | Set-Content "$RELEASE_PATH/Install.ps1"
+(Get-Content "$RELEASE_PATH/Install.ps1") -Replace '{VERSION_PLACEHOLDER}', "$($NPM_PACKAGE_FILE.version).$($GIT_HASH)" -Replace "{CHANNEL_PLACEHOLDER}", $CHANNEL_CONFIG_NAME | Set-Content "$RELEASE_PATH/Install.ps1" -Encoding utf8BOM
 #endregion
 
 #region Build PnP templates
