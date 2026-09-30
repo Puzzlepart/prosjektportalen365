@@ -40,6 +40,7 @@ export const AddProjectDialog: FC = () => {
             <DialogContent className={styles.content}>
               <ProjectList
                 items={availableProjects}
+                selectedItems={context.state.addProjectDialog?.selectedProjects ?? []}
                 onSelectionChange={(selectedItems) => {
                   context.dispatch(SET_SELECTED_TO_ADD(selectedItems as string[]))
                 }}

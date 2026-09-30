@@ -193,8 +193,14 @@ export class PortfolioOverviewView {
       .map((id) => _.find(columns, (col) => col.id === id))
       .filter((col) => col && col.isVisible('Portfolio'))
     if (!_.isEmpty(this.columnOrder)) {
+      // A column the order does not know — one added since the order was saved — goes after the
+      // ordered ones, by its own sort order, rather than first as `indexOf`'s -1 would put it.
+      const position = (column: ProjectColumn) => {
+        const index = this.columnOrder.indexOf(column.id)
+        return index === -1 ? Number.MAX_SAFE_INTEGER : index
+      }
       this.columns = this.columns.sort(
-        (a, b) => this.columnOrder.indexOf(a.id) - this.columnOrder.indexOf(b.id)
+        (a, b) => position(a) - position(b) || a.sortOrder - b.sortOrder
       )
     } else {
       this.columns = this.columns.sort((a, b) => a.sortOrder - b.sortOrder)

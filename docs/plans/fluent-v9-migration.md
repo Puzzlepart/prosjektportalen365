@@ -999,6 +999,55 @@ hold-outs are phase 4.
    skipped without `E2E_PROGRAM_URL`), navigation flows and two write flows. The release note for
    1.15 has its Fluent UI v9 paragraph with the four intended visible differences.
 
+### Feedback round on the close-out (2026-09-30)
+
+Three findings from the user's test of the close-out batch, each fixed with a unit test and, for
+the two the user asked to see verified, an end-to-end flow that was run against the tenant with the
+*local* bundle before deployment.
+
+- **A new overview column sorted first after a reload, and its sort order did nothing.** A
+  portfolio view keeps its own column order (`GtPortfolioColumnOrder`) once a user has arranged
+  the columns, and `configure()` sorted by it alone: a column added later was not in it, `indexOf`
+  said -1, and the column came first; the column's own sort order is bypassed by design while a view
+  has an order, which is why "changing the sort order does nothing". The aggregation's data sources
+  have no such order, so it never showed there. Fixes: `addColumnToPortfolioView` appends the new
+  column to the view's order and returns its id (the form used to dispatch a column without one, so
+  it could not be edited or deleted before a reload), the reducer appends it to the view in the
+  state, and `configure()` puts a column the order does not know after the ordered ones, by its sort
+  order. Both add-column calls now throw on failure instead of returning `false`, so the form shows
+  the error instead of closing as if saved. Model test for the three orderings.
+- **A report's snapshot opened in the same tab.** `window.open(url, '_self')`; now `_blank`.
+- **Program administration: a removed project haunted the selection, a collapsed hub group lost
+  its visible selection, and small groups needed a click.** The grid's selection was Fluent's own,
+  uncontrolled, so it outlived the rows it named and the groups' unmounting; the state was right
+  all along. The list is controlled now: each hub group's grid shows its share of the selection and
+  reports the whole selection back, groups with fewer than ten projects start open, and every group
+  opens while a search is active (the add dialog groups its hundreds of projects per hub, all
+  collapsed, so a search hit was hidden). Reducer and list tests.
+
+**Two write flows, `e2e/tests/flows/`.** The user asked for both to be verified end to end:
+`portfolio-overview-column.spec.ts` adds a column as a site admin, reloads and expects it last,
+and removes it through the REST API (leftovers first); `program-administration.spec.ts` selects
+and unselects, removes the first child project and adds it back through the dialog, and re-adds it
+in the clean-up if the flow fails half-way. They pin the defects on the deployed build and pass
+with the local bundles. These are the two write flows phase 4's slice 1 asked for, so that slice
+starts here. Two lessons for the browser suite: a spec must not import helpers from another spec,
+since Playwright registers the imported file's tests too (the helpers live in `tests/fixtures/`
+now), and a local dev build must carry the *channel's* component ids or the tenant's page never
+asks it for a bundle — the timeline site happened to be on the main channel, the program and hub
+pages are on the test channel (`modifySolutionFiles.js --force` with `SERVE_CHANNEL=test`, as
+`npm run watch` does).
+
+**Two things the run surfaced.** The program's child project the flow removed was not put back
+on its first runs (the add dialog's groups were collapsed) and was restored from the program item's
+version history through REST; the flow's clean-up now handles the groups. And Jest reported the
+shared library's branches floor missed (58.65 % against 59) while the Heft build still succeeded:
+the floors are *reported*, not enforced, so `Build-Release.ps1` now fails on a missed floor, and
+that one floor is at its measured 58.
+
+Verified by a full `rush rebuild`: all eleven operations, **286 tests**, zero lint errors, no floor
+missed; the two local-bundle flows green against the tenant.
+
 ### Second feedback round on slices 6 and 7 (2026-09-29)
 
 - **Target folder: no double-click.** A row selects the folder as the copy target, its name enters

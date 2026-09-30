@@ -1,5 +1,5 @@
 import { SearchBox } from '@fluentui/react-components'
-import React, { FC, useContext, useState } from 'react'
+import React, { FC, useContext, useMemo, useState } from 'react'
 import { ProgramAdministrationContext } from '../context'
 import styles from './ProjectList.module.scss'
 import { IProjectListProps } from './types'
@@ -9,17 +9,47 @@ import { isEmpty } from '@microsoft/sp-lodash-subset'
 import { DataGridList, getFluentIcon, UserMessage } from 'pp365-shared-library'
 import strings from 'ProgramWebPartsStrings'
 
+/**
+ * Groups with fewer projects than this start expanded.
+ */
+const AUTO_EXPAND_BELOW = 10
+
 export const ProjectList: FC<IProjectListProps> = (props) => {
   const context = useContext(ProgramAdministrationContext)
-  const { items, columns, defaultSortState, onSearch, groupedData, shouldEnableGrouping } =
-    useProjectList(props)
+  const {
+    items,
+    columns,
+    defaultSortState,
+    onSearch,
+    searchTerm,
+    groupedData,
+    shouldEnableGrouping
+  } = useProjectList(props)
 
+  // Groups start open when asked to, or when they are small enough to scan at a glance.
   const initialExpandedGroups =
-    props.defaultGroupsExpanded && shouldEnableGrouping
-      ? new Set(Object.keys(groupedData))
+    shouldEnableGrouping && groupedData
+      ? new Set(
+          Object.keys(groupedData).filter(
+            (hub) => props.defaultGroupsExpanded || groupedData[hub].length < AUTO_EXPAND_BELOW
+          )
+        )
       : new Set<string>()
 
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(initialExpandedGroups)
+
+  // The selection is the owner's: each group's grid shows its share of it and reports the whole
+  // selection back, so choosing in one group keeps what was chosen in the others.
+  const selected = useMemo(() => new Set(props.selectedItems ?? []), [props.selectedItems])
+  const selectionOfGroup = (groupItems: Record<string, any>[]) => {
+    if (!props.selectedItems) return undefined
+    return groupItems.map(({ SiteId }) => SiteId).filter((id) => selected.has(id))
+  }
+  const onGroupSelectionChange = (groupItems: Record<string, any>[]) => {
+    const groupIds = new Set(groupItems.map(({ SiteId }) => SiteId))
+    return (ids: (string | number)[]) =>
+      props.onSelectionChange([...Array.from(selected).filter((id) => !groupIds.has(id)), ...ids])
+  }
 
   const toggleGroup = (hubName: string) => {
     setExpandedGroups((prev) => {
@@ -54,7 +84,8 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         shouldEnableGrouping && groupedData ? (
           <div className={styles.groupedList}>
             {Object.entries(groupedData).map(([hubName, groupItems]) => {
-              const isExpanded = expandedGroups.has(hubName)
+              // A search shows its few hits at once, whatever the groups' own state.
+              const isExpanded = expandedGroups.has(hubName) || !!searchTerm
               return (
                 <div key={hubName} className={styles.group}>
                   <div
@@ -83,7 +114,8 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
                       selectionMode={
                         context.state.userHasManagePermission ? 'multiselect' : undefined
                       }
-                      onSelectionChange={props.onSelectionChange}
+                      selectedItems={selectionOfGroup(groupItems)}
+                      onSelectionChange={onGroupSelectionChange(groupItems)}
                     />
                   )}
                 </div>
@@ -98,6 +130,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
             sortable
             defaultSortState={defaultSortState}
             selectionMode={context.state.userHasManagePermission ? 'multiselect' : undefined}
+            selectedItems={props.selectedItems}
             onSelectionChange={props.onSelectionChange}
           />
         )

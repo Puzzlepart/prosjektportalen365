@@ -68,7 +68,9 @@ export function useColumnFormPanel() {
           _.omit(columnItem, ['Id', 'GtInternalName', 'GtManagedProperty'])
         )
       } else {
-        await context.props.dataAdapter.portalDataService.addColumnToPortfolioView(
+        // The id comes back from the list, so the column in the state can be edited and deleted
+        // without a reload.
+        columnItem.Id = await context.props.dataAdapter.portalDataService.addColumnToPortfolioView(
           columnItem,
           context.state.currentView
         )

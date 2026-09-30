@@ -103,7 +103,8 @@ export function useToolbarItems() {
             .setIcon('Image')
             .setWidth('fit-content')
             .setOnClick(() => {
-              window.open(state.selectedReport?.snapshotUrl, '_self')
+              // In a new tab: the report the user is reading stays where it is.
+              window.open(state.selectedReport?.snapshotUrl, '_blank', 'noopener')
             }),
         new ListMenuItem(
           state.selectedReport

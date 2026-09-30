@@ -29,3 +29,8 @@ cd e2e && E2E_LOCAL_BUNDLE=1 npx playwright test tests/local/timeline-list.spec.
 
 The browser is launched with the self-signed dev certificate accepted and Chromium's local-network
 check disabled, which is what makes a public SharePoint page able to load scripts from localhost.
+
+The dev build must carry the component ids of the channel the page uses (the test tenant's hub
+and program pages are on the test channel), or the page never asks the dev server for a bundle:
+`npm run watch` applies them through `pre-watch`, and a bare `npx heft start` needs
+`SERVE_CHANNEL=test node ../.tasks/modifySolutionFiles.js --force` first (and `--revert` after).

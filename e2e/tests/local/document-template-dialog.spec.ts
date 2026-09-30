@@ -4,8 +4,8 @@ import {
   findDocumentLibrary,
   measureBothScreens,
   openDocumentTemplateDialog
-} from '../smoke/document-template-dialog.spec'
-import { localBundles, openWithLocalBundle } from './timeline-list.spec'
+} from '../fixtures/document-template-dialog'
+import { localBundleUse, localBundles, openWithLocalBundle } from '../fixtures/local-bundle'
 
 /**
  * The "Hent dokumentmal" dialog measured with the *local* ProjectExtensions bundle. Opt in with
@@ -19,15 +19,7 @@ import { localBundles, openWithLocalBundle } from './timeline-list.spec'
  */
 const siteUrl = configuredUrl(process.env.E2E_LOCAL_SITE_URL ?? process.env.E2E_PROJECT_URL)
 
-test.use({
-  ignoreHTTPSErrors: true,
-  launchOptions: {
-    args: [
-      '--ignore-certificate-errors',
-      '--disable-features=LocalNetworkAccessChecks,PrivateNetworkAccessSendPreflights,PrivateNetworkAccessRespectPreflightResults'
-    ]
-  }
-})
+test.use(localBundleUse)
 
 test.describe('document template dialog, local bundle', () => {
   test.skip(!siteUrl, 'E2E_LOCAL_SITE_URL or E2E_PROJECT_URL must point at a project site')

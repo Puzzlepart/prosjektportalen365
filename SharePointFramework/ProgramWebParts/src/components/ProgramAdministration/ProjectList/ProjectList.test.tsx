@@ -81,19 +81,57 @@ describe('ProjectList', () => {
     expect(screen.queryByRole('checkbox')).toBeNull()
   })
 
-  it('groups the projects per hub and opens a group on click', async () => {
+  it('shows the rows given as selected', () => {
+    renderList({ props: { selectedItems: ['b'] } })
+    const checkboxes = screen.getAllByRole('checkbox')
+    expect(checkboxes[2]).toBeChecked()
+    expect(checkboxes[1]).not.toBeChecked()
+  })
+
+  it('groups the projects per hub, opens small groups at once and large ones on click', async () => {
     const user = setupUser()
+    const many = Array.from({ length: 10 }, (_, i) => ({
+      SiteId: `p${i}`,
+      Title: `Prosjekt ${i + 1}`,
+      HubSiteId: 'hub-1'
+    }))
     renderList({
+      hook: { shouldEnableGrouping: true, groupedData: { 'Hub 1': many, 'Hub 2': [items[1]] } },
+      props: { defaultGroupsExpanded: false }
+    })
+    expect(screen.getByText('Hub 1')).toBeInTheDocument()
+    expect(screen.queryByText('Prosjekt 1')).toBeNull()
+    expect(screen.getByText('Bravo')).toBeInTheDocument()
+    await user.click(screen.getByText('Hub 1'))
+    expect(screen.getByText('Prosjekt 1')).toBeInTheDocument()
+  })
+
+  it('opens every group while a search is active', () => {
+    const many = Array.from({ length: 10 }, (_, i) => ({
+      SiteId: `p${i}`,
+      Title: `Prosjekt ${i + 1}`,
+      HubSiteId: 'hub-1'
+    }))
+    renderList({
+      hook: { shouldEnableGrouping: true, groupedData: { 'Hub 1': many }, searchTerm: 'pro' },
+      props: { defaultGroupsExpanded: false }
+    })
+    expect(screen.getByText('Prosjekt 1')).toBeInTheDocument()
+  })
+
+  it("keeps the other groups' selections when one group changes", async () => {
+    const user = setupUser()
+    const { onSelectionChange } = renderList({
       hook: {
         shouldEnableGrouping: true,
         groupedData: { 'Hub 1': [items[0]], 'Hub 2': [items[1]] }
       },
-      props: { defaultGroupsExpanded: false }
+      props: { defaultGroupsExpanded: true, selectedItems: ['a'] }
     })
-    expect(screen.getByText('Hub 1')).toBeInTheDocument()
-    expect(screen.queryByText('Alfa')).toBeNull()
-    await user.click(screen.getByText('Hub 1'))
-    expect(screen.getByText('Alfa')).toBeInTheDocument()
-    expect(screen.queryByText('Bravo')).toBeNull()
+    // Two grids, each with a select-all checkbox and one row: [all, a, all, b].
+    const checkboxes = screen.getAllByRole('checkbox')
+    expect(checkboxes[1]).toBeChecked()
+    await user.click(checkboxes[3])
+    expect(onSelectionChange).toHaveBeenLastCalledWith(['a', 'b'])
   })
 })

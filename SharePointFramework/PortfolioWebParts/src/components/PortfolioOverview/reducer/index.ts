@@ -196,6 +196,11 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
       .addCase(COLUMN_FORM_PANEL_ON_SAVED, (state, { payload }) => {
         if (payload.isNew) {
           state.columns = [...state.columns, payload.column]
+          // The view's own column order, when it has one, gets the new column at the end — as the
+          // list does, and as the service saved it.
+          if (!_.isEmpty(state.currentView?.columnOrder)) {
+            state.currentView.columnOrder = [...state.currentView.columnOrder, payload.column.id]
+          }
         } else {
           state.columns = state.columns.map((col) =>
             col.key === payload.column.key ? payload.column : col

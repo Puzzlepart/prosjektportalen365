@@ -341,6 +341,16 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
             }
         exit 1
     }
+    # Jest reports a missed coverage floor (`coverageThreshold` in a solution's jest.config.json)
+    # but Heft's test phase still succeeds, so the floors are only enforced by this check.
+    $missedFloors = Get-ChildItem -Path $SHAREPOINT_FRAMEWORK_BASEPATH -Recurse -Depth 2 -Filter "*.build.log" |
+        Where-Object { $_.DirectoryName -like "*rush-logs*" } |
+        Select-String -Pattern "coverage threshold for .* not met"
+    if ($missedFloors) {
+        Write-Host "[ERROR] A coverage floor was missed. Raise the coverage, or lower the floor in that solution's config/jest.config.json:" -ForegroundColor Red
+        $missedFloors | ForEach-Object { "$($_.Filename): $($_.Line)" } | Write-Host
+        exit 1
+    }
     foreach ($Solution in $Solutions) {
         # Copy ONLY the package this solution declares in config/package-solution.json, not every
         # .sppkg lying in sharepoint/solution. That folder is gitignored build output and accumulates

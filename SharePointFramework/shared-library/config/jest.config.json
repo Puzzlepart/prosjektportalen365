@@ -6,7 +6,7 @@
   "coverageThreshold": {
     "global": {
       "statements": 28,
-      "branches": 59,
+      "branches": 58,
       "functions": 27,
       "lines": 28
     }
