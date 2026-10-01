@@ -1,0 +1,2 @@
+# Batch files with LF line endings can break labels and goto in cmd.exe; the release is built on macOS
+*.cmd text eol=crlf

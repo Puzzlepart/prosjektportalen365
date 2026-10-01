@@ -19,6 +19,10 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Oppsettveiviseren for nye prosjektområder lister maler alfabetisk, og `Utvidelser` og `Listeinnhold` viser malens obligatoriske elementer først, deretter de valgte, deretter resten — hver gruppe alfabetisk
 - Nytteoversiktens trendikoner er fylte piler (`CaretUp`/`CaretDown`) sentrert mot teksten
 - Henting av brukerfeltverdier på statusrapporter gjøres nå som en egen, feiltolerant spørring — statusrapportene vises selv om brukerfelt-berikelsen skulle feile
+- **Enklere og mer robust installasjon.** Ny `Start-Install.cmd` i releasepakken, som kan dobbeltklikkes: den sjekker at zip-filen er pakket ut, at PowerShell 7.4 eller nyere finnes (med veiledning hvis ikke), fjerner «lastet ned fra Internett»-merkingen på filene og forklarer det hvis gruppepolicy krever signerte skript. Deretter starter en veiviser som spør etter valgene, viser tilsvarende PowerShell-kommando og kjører installasjon, oppgradering eller `UpgradeAllSitesToLatest.ps1`. `Install.ps1` fungerer som før og kan fortsatt kjøres direkte med parametere
+- `Install.ps1` og `UpgradeAllSitesToLatest.ps1` gir nå en tydelig melding med veiledning når de startes med Windows PowerShell 5.1 eller en for gammel PowerShell 7, i stedet for en syntaksfeil
+- Ny parameter `-NonInteractive` på `Install.ps1` hopper over nedtellinger og spørsmål (settes automatisk med `-CI` og når stdin er omdirigert)
+- `Install.ps1` skriver en oppsummering av alle advarsler til slutt, og lagrer et transkript av hele kjøringen (`Install_Transcript_*.txt`) som legges ved installasjonsloggen sammen med sporingsloggen
 - Seksjonsikoner i `Prosjektstatus`, visningsikoner i `Porteføljeoversikt`/aggregerte oversikter og kolonneikoner i porteføljen rendres nå med Fluent UI-ikoner (strek som fylles ved hover), med automatisk oversetting av gamle UI Fabric-ikonnavn og fallback til UI Fabric for ukjente navn. Eksisterende ikonnavn fungerer uendret og krever ingen migrering; nye installasjoner får Fluent-navn som standard. Ukjente ikonnavn på vertikaler i `Prosjektliste` vises nå som UI Fabric-ikon i stedet for standardikonet [#1287](https://github.com/Puzzlepart/prosjektportalen365/issues/1287)
 
 ### Feilrettinger
@@ -30,6 +34,10 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - `Åpne øyeblikksbilde` i `Prosjektstatus` åpner nå øyeblikksbildet i en ny fane
 - Rettet en feil i `Administrasjon av underområder` hvor et fjernet underområde ble hengende igjen i utvalget slik at `Fjern underområder` var aktiv uten noe valgt, og hvor en sammenslått og gjenåpnet hub-gruppe mistet det synlige utvalget; grupper med færre enn ti prosjekter åpnes nå automatisk, og alle grupper åpnes under søk
 - Rettet en feil hvor lister med utvalg (`Prosjekttidslinje`, `Hent dokumentmal`) alltid fikk et vannrett rullefelt tilsvarende avkrysningskolonnens bredde
+- URL-en til porteføljeområdet valideres nå før innlogging, slik at feil som rotområde eller admin-URL rapporteres umiddelbart
+- `UpgradeAllSitesToLatest.ps1` avslutter nå med feilkode når PnP.PowerShell mangler, sjekker minimumsversjonen og installerer riktig PnP.PowerShell-versjon i CI
+- Loggfilen fra installasjonen brukte 12-timersklokke i filnavnet, slik at kjøringer før og etter kl. 12 kunne få samme navn
+- Hintet om `UpgradeAllSitesToLatest.ps1` på slutten av installasjonen pekte på en sti som ikke finnes i releasepakken
 
 ---
 

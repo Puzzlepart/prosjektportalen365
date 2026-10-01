@@ -1,4 +1,4 @@
-Param(
+﻿Param(
     [Parameter(Mandatory = $true)]
     [string]$Url,
     [Parameter(Mandatory = $false, HelpMessage = "Used by Continuous Integration")]
@@ -18,31 +18,20 @@ Param(
     [switch]$GevinstTilNytte
 )
 
+# Must stay parseable by Windows PowerShell 5.1 (the file is saved with BOM for the same reason)
+if ($PSVersionTable.PSVersion -lt [version]"7.4") {
+    Write-Host "[ERROR] This script requires PowerShell 7.4 or newer. You are running PowerShell $($PSVersionTable.PSVersion)." -ForegroundColor Red
+    Write-Host "        Double-click Start-Install.cmd in the release folder; it tells you how to get PowerShell 7." -ForegroundColor Red
+    exit 1
+}
+
 $ErrorActionPreference = "Stop"
 
-. $PSScriptRoot\SharedFunctions.ps1
-. $PSScriptRoot\Resources.ps1
+. "$PSScriptRoot/SharedFunctions.ps1"
+. "$PSScriptRoot/Resources.ps1"
 
-
-if ($CI.IsPresent -and $null -eq (Get-Module -Name PnP.PowerShell)) {
-    Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
-    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop
-}
-else {
-    if (-not $SkipLoadingBundle.IsPresent) {
-        $PnPVersion = LoadBundle
-        Write-Host "Loaded module PnP.PowerShell v$($PnPVersion) from bundle"
-    }
-    else {
-        if ($null -eq (Get-Command Connect-PnPOnline -ErrorAction SilentlyContinue)) {
-            Write-Host "[ERROR] PnP.PowerShell is not loaded. Please install the module or use the bundled version." -ForegroundColor Red
-            exit 0
-        }
-        else {
-            Write-Host "Loaded module PnP.PowerShell v$((Get-Command Connect-PnPOnline).Version) from your environment"
-        }     
-    }
-}
+$global:PP365NonInteractive = $CI.IsPresent
+$PnPVersion = Initialize-PnPModule -CI:$CI -SkipLoadingBundle:$SkipLoadingBundle
 
 $ConnectionInfo = [PSCustomObject]@{
     ClientId                 = $ClientId
