@@ -1,8 +1,10 @@
 # Fluent UI v9, phase 4: coverage, the hub, and the hold-outs
 
-Planned 2026-09-30 at the close of phase 3 (`docs/plans/fluent-v9-migration.md`). Runs on a new
-branch off `main` once phase 3 has merged. The release that carries phases 3 and 4 is **1.15**; it
-is not cut before this phase is done.
+Planned 2026-09-30 at the close of phase 3 (`docs/plans/fluent-v9-migration.md`); updated
+2026-10-01 after the merge. Runs on a new branch off `releases/1.15`, the integration line for
+1.15 (phase 3 merged there as #1777; `main` still ends at 1.14). **1.15 is not cut before this
+phase and phase 5, the dependency upgrades (`docs/plans/dependency-upgrades-phase-5.md`), are
+done, and the user says when 1.15 is done.**
 
 ## Goal and non-goals
 
@@ -10,8 +12,8 @@ Goal: every web part root and interactive component has a test that meets Decisi
 suite covers a program site, the navigation flows and two write flows, the v8 list hub in
 PortfolioWebParts is on v9, and the three hold-outs (people picker, file type icons, `Autocomplete`)
 are converted or re-decided — so that `@fluentui/react` leaves the repository, or stays only where
-a decision in this document says so. Non-goals: Redux Toolkit 2 and xlsx 0.18 (separate migrations,
-verdicts in the phase 3 plan), new features, and the lint allow-list beyond what a slice touches.
+a decision in this document says so. Non-goals: new features, and the lint allow-list beyond what a slice touches. Redux Toolkit 2,
+xlsx 0.18 and React 18 are phase 5, which follows this phase on the way to 1.15.
 
 ## Inventory (2026-09-30)
 
@@ -75,7 +77,7 @@ a slice touches), **G** (file type icons stay v8 until a v9 route exists).
 
 | # | Slice | Scope | Exit |
 |---|---|---|---|
-| 0 | Branch and baselines | New branch off `main`; record the inventory above as the baseline, plus the six `.sppkg` sizes; confirm the channel version stamping from phase 3 works (a test-channel run whose bundles are new to the tenant) | Baselines in this document |
+| 0 | Branch and baselines | New branch off `releases/1.15`; record the inventory above as the baseline, plus the six `.sppkg` sizes; confirm the channel version stamping from phase 3 works (a test-channel run whose bundles are new to the tenant) | Baselines in this document |
 | 1 | Browser flows | A program site through `E2E_PROGRAM_URL` (its pages and the program administration list); the navigation flows (hub → project → back, the status page's section tabs, the project pages); two write flows that undo themselves — copy a document template into a test folder and delete the copy; create a status report draft and delete it — in a `tests/flows` folder | The flows run in the test-channel CI; the timeline and dialog smoke tests green |
 | 2 | PortfolioWebParts tests | Render tests for the nine web part roots; behaviour tests for the hub (`List`: grouping, sorting, selection, column menu, sticky header presence) **before** it is converted, and for `PortfolioAggregation`, `IdeaModule`, `EditViewColumnsPanel`, `ProjectCard`, `LatestProjects`, `ResourceAllocation`; floors raised to the new totals | Every folder has a test; floors raised |
 | 3 | ProjectWebParts tests | The ten roots; `ProjectInformation`, `ProjectPhases`, `DynamicList`, `DynamicMatrix`, `ProjectNews`, the matrices and the panel; the status page's remaining sections | Same |
@@ -83,7 +85,7 @@ a slice touches), **G** (file type icons stay v8 until a v9 route exists).
 | 5 | shared-library tests | `CustomEditPanel` field elements, `FilterPanel`, `Toolbar`, `ProjectTimeline`, `Autocomplete`, `PeoplePicker`, the small components; adapter tests against structural stand-ins as `taxonomy/*.test.ts` does | Same; shared-library floor raised |
 | 6 | The hub | `List` onto v9: `DataGridList` for rows, grouping rendered as group header rows with collapse state of our own, the sticky header in CSS, multiselect with shift-click ranges in place of marquee, the column context menu and the column form as they are (already v9); `IColumn` and `Selection` gone, `IListColumn` stays the data model; `PortfolioOverview` and `PortfolioAggregation` drop their v8 types; PortfolioWebParts drops `@fluentui/react` (Decision C) | Slice 2's hub tests green on v9; manual check of the overview and aggregation on the test tenant |
 | 7 | The hold-outs | People picker on a v9 `TagPicker` with the Graph people search behind it, if the combobox family's harness loop is solved or worked around (Decision B's test in production stands); file type icons through `getFileTypeIconAsHTMLString` or the document icons of `@fluentui/react-icons` (Decision G re-decided on what looks right); `Autocomplete` on v9 `Combobox`; shared-library and ProjectExtensions drop `@fluentui/react` — or the decision that keeps it is written down | `grep -rl "from '@fluentui/react'"` is empty, or lists what a decision names |
-| 8 | Close-out and release | Lint allow-list revisited (the house rules the slices touched), bundle sizes against slice 0, the definition of done, the release note for 1.15, `Install/` and the upgrade path checked on the test tenant | 1.15 cut |
+| 8 | Close-out | Lint allow-list revisited (the house rules the slices touched), bundle sizes against slice 0, the definition of done, the release note's technical section brought up to date, `Install/` and the upgrade path checked on the test tenant | Phase 5 starts |
 
 Slices 2 to 5 are per solution and may run in a different order if a slice 1 finding says so.
 
@@ -120,6 +122,6 @@ Every web part root, extension and interactive component has a test file meeting
 targets, and the floors in each solution's `jest.config.json` sit at the new totals; the browser
 suite runs a program site, the navigation flows and two write flows in CI; the hub is on v9 and
 PortfolioWebParts has no `@fluentui/react`; the hold-outs are converted or named by a decision in
-this document; the lint allow-list is shorter than phase 3 left it; the release notes for 1.15
-describe phases 3 and 4 as a technical change with no intended functional difference, listing the
-visible differences made on purpose.
+this document; the lint allow-list is shorter than phase 3 left it; the release note's technical
+section describes phases 3 and 4 as a technical change with no intended functional difference,
+listing the visible differences made on purpose. The release itself is phase 5's.

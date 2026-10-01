@@ -928,7 +928,8 @@ include 17; neither needs to move for this phase.
 **Close-out, decided 2026-09-30.** With slice 8 tested and committed, the phase closes in this
 order on this branch, each step its own commit, then the branch merges into `main` and the next
 phase starts on a new branch with its own plan (`docs/plans/fluent-v9-phase-4.md`). The release
-that carries phases 3 and 4 is **1.15**, and it is not cut before phase 4 is done.
+that carries phases 3 to 5 is **1.15**, and it is not cut before phases 4 and 5 are done (decided
+2026-10-01: the dependency upgrades are part of 1.15 too, and the user says when it is done).
 
 1. **The three lists onto the shared grid.** The program administration's project list and the two
    project setup sections still render `DataGrid` directly and miss the typography, the containment
