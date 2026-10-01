@@ -1,10 +1,10 @@
-import { IColumn } from '@fluentui/react'
 import {
   EditableSPField,
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState,
   ICustomEditPanelProps,
   IFilterProps,
+  IListColumn,
   IProjectInformationData,
   ITimelineItem,
   ProjectColumn,
@@ -104,7 +104,7 @@ export interface ITimelineData {
   /**
    * Columns for timeline content
    */
-  listColumns?: IColumn[]
+  listColumns?: IListColumn[]
 
   /**
    * Editable fields for timeline content

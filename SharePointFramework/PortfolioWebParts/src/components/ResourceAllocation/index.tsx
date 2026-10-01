@@ -4,9 +4,14 @@ import styles from './ResourceAllocation.module.scss'
 import * as strings from 'PortfolioWebPartsStrings'
 import { IResourceAllocationProps } from './types'
 import { useResourceAllocation } from './useResourceAllocation'
-import { LoadingSkeleton, Timeline, UserMessage, customLightTheme } from 'pp365-shared-library'
+import {
+  LoadingSkeleton,
+  Timeline,
+  UserMessage,
+  customLightTheme,
+  format
+} from 'pp365-shared-library'
 import resource from 'SharedResources'
-import { format } from '@fluentui/react'
 
 export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
   const { state, filters, onFilterChange, items, groups, defaultTimeframe, fluentProviderId } =

@@ -8,7 +8,7 @@ export function useProjectListDataFetch(
   setState: (newState: Partial<IProjectListState>) => void
 ) {
   useEffect(() => {
-    Promise.all([
+    void Promise.all([
       props.dataAdapter.fetchEnrichedProjects({
         primaryUserField: props.primaryUserField,
         secondaryUserField: props.secondaryUserField,

@@ -685,9 +685,9 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
             .setDisabled(!hasSelectedItems)
             .setOnClick(() => {
               if (actionType === CustomActionType.Trigger) {
-                handleTriggerAction(action)
+                void handleTriggerAction(action)
               } else if (actionType === CustomActionType.Dialog) {
-                openDialog(action)
+                void openDialog(action)
               }
             })
         )
@@ -760,7 +760,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
           })
           .setDisabled(true)
           .setOnClick(() => {
-            onViewChange(view.id)
+            void onViewChange(view.id)
           })
       )
 
@@ -800,7 +800,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
               context.state.selectedItems.length === 0
           )
           .setOnClick(() => {
-            deleteItems()
+            void deleteItems()
           })
       )
     }
@@ -830,9 +830,9 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
     () =>
       context.props.showFilters
         ? {
-            isOpen: context.state.showFilterPanel,
+            open: context.state.showFilterPanel,
             filters: context.state.filters || [],
-            onDismiss: () => context.setState({ showFilterPanel: false }),
+            onClose: () => context.setState({ showFilterPanel: false }),
             onFilterChange: (column: any, selectedItems: any[]) => {
               const newActiveFilters = { ...context.state.activeFilters }
 

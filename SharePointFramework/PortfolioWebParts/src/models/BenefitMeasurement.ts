@@ -1,6 +1,6 @@
 import { BenefitBase, BenefitMeasurementIndicator } from './'
 import { IBenefitsSearchResult } from 'interfaces'
-import { IIconProps } from '@fluentui/react/lib/Icon'
+import { ITrendIcon } from 'pp365-shared-library'
 
 export class BenefitMeasurement extends BenefitBase {
   public Date: Date
@@ -10,7 +10,7 @@ export class BenefitMeasurement extends BenefitBase {
   public ValueDisplay: string
   public Achievement: number
   public AchievementDisplay: string
-  public TrendIconProps: IIconProps
+  public TrendIcon: ITrendIcon
   public IndicatorId: number
   public Indicator: BenefitMeasurementIndicator
 
@@ -59,18 +59,18 @@ export class BenefitMeasurement extends BenefitBase {
    *
    * @param prevMeasurement Previous measurement
    */
-  public setTrendIconProps(prevMeasurement: BenefitMeasurement): BenefitMeasurement {
+  public setTrendIcon(prevMeasurement: BenefitMeasurement): BenefitMeasurement {
     const shouldIncrease = this.Indicator.DesiredValue > this.Indicator.StartValue
     if (this.Achievement >= 100) {
-      this.TrendIconProps = { iconName: 'Trophy', style: { color: 'gold' } }
+      this.TrendIcon = { iconName: 'Trophy', color: 'gold' }
       return this
     }
     if (prevMeasurement && prevMeasurement.Value !== this.Value) {
       const hasIncreased = this.Value > prevMeasurement.Value
       if ((shouldIncrease && hasIncreased) || (!shouldIncrease && !hasIncreased)) {
-        this.TrendIconProps = { iconName: 'StockUp', style: { color: '#27ae60' } }
+        this.TrendIcon = { iconName: 'CaretUp', color: '#27ae60' }
       } else {
-        this.TrendIconProps = { iconName: 'StockDown', style: { color: '#e74c3c' } }
+        this.TrendIcon = { iconName: 'CaretDown', color: '#e74c3c' }
       }
     }
     return this

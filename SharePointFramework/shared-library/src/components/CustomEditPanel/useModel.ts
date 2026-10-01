@@ -1,6 +1,6 @@
-import { IPersonaProps } from '@fluentui/react'
 import { useState } from 'react'
 import { EditableSPField } from '../../models'
+import { IPersonaItem } from '../../types'
 import { DefaultCaching } from '../../data/cache'
 import { getTermLabel, ITermInfo } from '../../taxonomy'
 import { ICustomEditPanelProps } from './types'
@@ -103,7 +103,7 @@ export function useModel(props: ICustomEditPanelProps) {
         'UserMulti',
         async () => {
           const values = await Promise.all<number>(
-            value.map(async (v: IPersonaProps) => (await webContext.ensureUser(v.secondaryText)).Id)
+            value.map(async (v: IPersonaItem) => (await webContext.ensureUser(v.secondaryText)).Id)
           )
           return [values, `${field.internalName}Id`]
         }

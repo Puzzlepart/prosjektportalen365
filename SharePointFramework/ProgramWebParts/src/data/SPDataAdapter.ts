@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { PnPClientStorage, dateAdd } from '@pnp/core'
 import {
@@ -47,7 +46,8 @@ import {
   SPDataAdapterBase,
   SPProjectItem,
   TimelineConfigurationModel,
-  TimelineContentModel
+  TimelineContentModel,
+  format
 } from 'pp365-shared-library'
 import { Logger, LogLevel } from '@pnp/logging'
 import _ from 'underscore'
@@ -880,7 +880,7 @@ export class SPDataAdapter
         MeasurementAchievement: JSON.stringify({
           Achievement: firstMeasurement?.Achievement,
           AchievementDisplay: firstMeasurement?.AchievementDisplay,
-          TrendIconProps: firstMeasurement?.TrendIconProps
+          TrendIcon: firstMeasurement?.TrendIcon
         }),
         Measurements: JSON.stringify(
           measurements?.map((m) => {
@@ -892,7 +892,7 @@ export class SPDataAdapter
               Achievement: m.Achievement,
               AchievementDisplay: m.AchievementDisplay,
               DateDisplay: m.DateDisplay,
-              TrendIconProps: m.TrendIconProps
+              TrendIcon: m.TrendIcon
             }
           })
         )

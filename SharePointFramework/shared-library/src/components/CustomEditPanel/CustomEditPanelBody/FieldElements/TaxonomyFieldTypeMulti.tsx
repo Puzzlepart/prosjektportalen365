@@ -20,7 +20,7 @@ export const TaxonomyFieldTypeMulti: FieldElementComponent = ({ field }) => {
   const handleChange = useCallback(
     (items?: Term[]) => {
       const normalized = normalizeTerms(items)
-      context.model.set(field, normalized)
+      void context.model.set(field, normalized)
     },
     [context.model, field, normalizeTerms]
   )

@@ -1,14 +1,13 @@
-import { TableCellLayout, TableColumnDefinition, Text } from '@fluentui/react-components'
+import { TableCellLayout, Text } from '@fluentui/react-components'
 import React from 'react'
 import * as strings from 'SharedLibraryStrings'
-import { Icon } from '@fluentui/react'
+import { getFluentIcon } from '../../../icons'
+import { ITrendIcon } from '../../../types'
+import { TREND_ICON_SIZE } from '../TrendColumn'
 
-export interface IColumn extends TableColumnDefinition<any> {
-  minWidth?: number
-  defaultWidth?: number
-}
+import { IDataGridColumn } from '../../DataGridList/types'
 
-export const useColumns = (): IColumn[] => {
+export const useColumns = (): IDataGridColumn[] => {
   return [
     {
       columnId: 'measurementValue',
@@ -57,11 +56,17 @@ export const useColumns = (): IColumn[] => {
         return strings.MeasurementAchievementLabel
       },
       renderCell: (item) => {
+        const icon: ITrendIcon | undefined = item.TrendIcon
         return (
           <TableCellLayout truncate title={item.Achievement}>
-            <span>
-              <span style={{ display: 'inline-block', width: 20 }}>
-                {item.TrendIconProps && <Icon {...item.TrendIconProps} />}
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', width: 20 }}>
+                {icon &&
+                  getFluentIcon(icon.iconName, {
+                    color: icon.color,
+                    size: TREND_ICON_SIZE,
+                    filled: true
+                  })}
               </span>
               <Text size={200}>{item.AchievementDisplay}</Text>
             </span>

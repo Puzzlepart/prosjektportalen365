@@ -1,14 +1,9 @@
-import { Link, TableCellLayout, TableColumnDefinition } from '@fluentui/react-components'
+import { Link, TableCellLayout } from '@fluentui/react-components'
 import strings from 'ProgramWebPartsStrings'
-import { ProjectLogo } from 'pp365-shared-library'
+import { IDataGridColumn, ProjectLogo } from 'pp365-shared-library'
 import React from 'react'
 
-export interface IListColumn extends TableColumnDefinition<Record<string, any>> {
-  minWidth?: number
-  defaultWidth?: number
-}
-
-export const useColumns = (renderLinks: boolean): IListColumn[] => {
+export const useColumns = (renderLinks: boolean): IDataGridColumn<Record<string, any>>[] => {
   return [
     {
       columnId: 'logo',

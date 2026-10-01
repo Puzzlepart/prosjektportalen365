@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react/lib/Utilities'
 import {
   Dropdown,
   Link,
@@ -17,6 +16,7 @@ import { useCatalogContext } from '../context'
 import { languageLabel } from '../language'
 import { ALL_FILTER, SortKey } from '../types'
 import styles from './CatalogToolbar.module.scss'
+import { format } from 'pp365-shared-library'
 
 export const CatalogToolbar: FC = () => {
   const {

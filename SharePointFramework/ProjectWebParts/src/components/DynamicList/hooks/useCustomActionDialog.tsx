@@ -150,7 +150,7 @@ export function useCustomActionDialog() {
         }
       }
 
-      poll()
+      void poll()
     },
     [dispatchToast]
   )

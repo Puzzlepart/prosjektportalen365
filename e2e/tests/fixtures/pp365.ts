@@ -45,7 +45,9 @@ export async function listSitePages(page: Page, siteUrl: string): Promise<string
     { headers: { Accept: 'application/json;odata=nometadata' } }
   )
   if (!response.ok()) {
-    throw new Error(`Could not list SitePages of ${site}: HTTP ${response.status()} ${await response.text()}`)
+    throw new Error(
+      `Could not list SitePages of ${site}: HTTP ${response.status()} ${await response.text()}`
+    )
   }
   const body = (await response.json()) as { value: { Name: string }[] }
   return body.value.map((file) => file.Name)
@@ -56,19 +58,28 @@ export const test = base.extend<Pp365Fixtures>({
     const errors: string[] = []
     page.on('console', (message) => {
       // SharePoint's own telemetry (clarity.ms) trips the page CSP on every load; not ours.
-      if (message.type() === 'error' && !/clarity\.ms|Content Security Policy/.test(message.text())) {
+      if (
+        message.type() === 'error' &&
+        !/clarity\.ms|Content Security Policy/.test(message.text())
+      ) {
         errors.push(message.text())
       }
     })
-    page.on('pageerror', (error) => errors.push(`pageerror: ${error.message} ${error.stack ?? ''}`.trim()))
+    page.on('pageerror', (error) =>
+      errors.push(`pageerror: ${error.message} ${error.stack ?? ''}`.trim())
+    )
     await use({ errors })
     // Every browser error is attached to the report as evidence (the deployed build throws an
     // unhandled rejection with an undefined reason on app pages, for example); only the patterns
     // that mean a broken bundle fail the test.
     if (errors.length > 0) {
-      await base.info().attach('browser-errors.txt', { body: errors.join('\n'), contentType: 'text/plain' })
+      await base
+        .info()
+        .attach('browser-errors.txt', { body: errors.join('\n'), contentType: 'text/plain' })
     }
-    const fatal = errors.filter((text) => FATAL_CONSOLE_PATTERNS.some((pattern) => pattern.test(text)))
+    const fatal = errors.filter((text) =>
+      FATAL_CONSOLE_PATTERNS.some((pattern) => pattern.test(text))
+    )
     expect(fatal, `Fatal browser errors:\n${fatal.join('\n')}`).toEqual([])
   },
   openPage: async ({ page, consoleGuard }, use) => {

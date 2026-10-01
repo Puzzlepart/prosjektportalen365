@@ -96,7 +96,7 @@ export function useListPermissions(
       }
     }
 
-    checkPermissions()
+    void checkPermissions()
   }, [listName, webUrl, webContextMode])
 
   return permissions

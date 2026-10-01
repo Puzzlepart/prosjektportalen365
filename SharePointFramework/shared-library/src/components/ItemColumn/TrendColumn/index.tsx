@@ -1,8 +1,9 @@
-import { Checkbox, ICheckboxProps, Icon } from '@fluentui/react'
 import strings from 'SharedLibraryStrings'
 import { tryParseJson } from '../../../util'
+import { getFluentIcon } from '../../../icons'
+import { ITrendIcon } from '../../../types'
 import React from 'react'
-import { IColumnDataTypePropertyField } from '../ColumnDataTypeField'
+import { checkboxField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'
 import styles from './TrendColumn.module.scss'
 import { ITrendColumnProps } from './types'
@@ -16,12 +17,20 @@ import { ITrendColumnProps } from './types'
  *
  * @returns The rendered component.
  */
+/**
+ * The size the v8 font icon rendered at inside the cell's 20px icon container.
+ */
+export const TREND_ICON_SIZE = 20
+
 export const TrendColumn: ColumnRenderComponent<ITrendColumnProps> = (props) => {
   const trend = tryParseJson(props.columnValue)
+  const icon: ITrendIcon | undefined = trend?.TrendIcon
   return trend ? (
     <span className={styles.root}>
       <span className={styles.iconContainer}>
-        {trend.TrendIconProps && props.showTrendIcon && <Icon {...trend.TrendIconProps} />}
+        {icon &&
+          props.showTrendIcon &&
+          getFluentIcon(icon.iconName, { color: icon.color, size: TREND_ICON_SIZE, filled: true })}
       </span>
       <span>{trend.AchievementDisplay}</span>
     </span>
@@ -37,13 +46,9 @@ TrendColumn.displayName = strings.ColumnRenderOptionTrend
 TrendColumn.iconName = 'Trending12'
 TrendColumn.isDisabled = true
 TrendColumn.getDataTypeProperties = (onChange, dataTypeProperties: Record<string, any>) => [
-  {
-    type: Checkbox,
-    props: {
-      label: strings.ColumnRenderOptionTrendShowTrendIconLabel,
-      defaultChecked: TrendColumn.defaultProps.showTrendIcon,
-      checked: dataTypeProperties.showTrendIcon,
-      onChange: (_, checked) => onChange('showTrendIcon', checked)
-    }
-  } as IColumnDataTypePropertyField<ICheckboxProps>
+  checkboxField({
+    label: strings.ColumnRenderOptionTrendShowTrendIconLabel,
+    checked: dataTypeProperties.showTrendIcon ?? TrendColumn.defaultProps.showTrendIcon,
+    onChange: (checked) => onChange('showTrendIcon', checked)
+  })
 ]

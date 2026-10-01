@@ -1,10 +1,10 @@
-import { format } from '@fluentui/react'
 import SPDataAdapter from 'data/SPDataAdapter'
 import _ from 'lodash'
 import { TimelineConfigurationModel, TimelineContentModel } from 'pp365-shared-library/lib/models'
 import strings from 'ProjectWebPartsStrings'
 import { IProjectTimelineProps } from '../types'
 import resource from 'SharedResources'
+import { format } from 'pp365-shared-library'
 
 /**
  * Fetch project data

@@ -1,11 +1,9 @@
-import { MessageBarType } from '@fluentui/react'
 import { override } from '@microsoft/decorators'
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base'
 import { isArray, stringIsNullOrEmpty } from '@pnp/core'
 import { ConsoleListener, LogLevel, Logger } from '@pnp/logging'
 import { SPFI } from '@pnp/sp'
 import { IMenuNode } from '@pnp/sp/navigation'
-import { format, getId } from '@uifabric/utilities'
 import strings from 'ProjectExtensionsStrings'
 import resource from 'SharedResources'
 import { SPDataAdapter } from 'data'
@@ -17,7 +15,9 @@ import {
   ProjectExtension,
   ProjectTemplate,
   ProjectTemplateFile,
-  createSpfiInstance
+  createSpfiInstance,
+  format,
+  getId
 } from 'pp365-shared-library'
 import { createElement } from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
@@ -110,7 +110,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             'NoHubConnection',
             strings.NoHubSiteErrorMessage,
             strings.NoHubSiteErrorStack,
-            MessageBarType.warning
+            'warning'
           )
         }
         case ProjectSetupValidation.AlreadySetup: {
@@ -138,7 +138,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
       await this._removeAlternativeLanguages()
 
-      this._initializeSetup({
+      void this._initializeSetup({
         sp: this.sp,
         web: this.sp.web,
         webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
@@ -383,7 +383,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       },
       intent: props.error['messageType'],
       onSetupClick: () => {
-        this._initializeSetup({
+        void this._initializeSetup({
           sp: this.sp,
           web: this.sp.web,
           webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,

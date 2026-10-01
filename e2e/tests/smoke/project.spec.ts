@@ -16,12 +16,22 @@ const pointsAtHub = !!projectUrl && projectUrl.toLowerCase() === hubUrl
 const MOUNT_TIMEOUT = { timeout: 60_000 }
 
 test.describe('project site', () => {
-  test.skip(!projectUrl, 'E2E_PROJECT_URL is not set (or is the .env.example placeholder); skipping project site smoke tests')
+  test.skip(
+    !projectUrl,
+    'E2E_PROJECT_URL is not set (or is the .env.example placeholder); skipping project site smoke tests'
+  )
   // The hub also has a ProjectHome.aspx (the page listing all projects), so pointing the variable
   // at the hub would run these tests against the wrong page and fail them for the wrong reason.
-  test.skip(pointsAtHub, `E2E_PROJECT_URL points at the hub (${projectUrl}); set it to a provisioned project site`)
+  test.skip(
+    pointsAtHub,
+    `E2E_PROJECT_URL points at the hub (${projectUrl}); set it to a provisioned project site`
+  )
 
-  test('project home mounts project information and lists the phases', async ({ page, openPage, resolvePage }) => {
+  test('project home mounts project information and lists the phases', async ({
+    page,
+    openPage,
+    resolvePage
+  }) => {
     await openPage(await resolvePage(projectUrl!, ['ProjectHome.aspx', 'Hjem.aspx', 'Home.aspx']))
     await expect(webPartByAlias(page, 'ProjectInformation').first()).toBeVisible(MOUNT_TIMEOUT)
     const phases = webPartByAlias(page, 'ProjectPhases')
@@ -39,8 +49,11 @@ test.describe('project site', () => {
     await webPartByAlias(page, 'ProjectInformation')
       .getByRole('button', { name: /vis all prosjektinformasjon|show all project information/i })
       .click()
+    // Scoped to the panel: the web part also renders a heading with this title.
     await expect(
-      page.getByRole('heading', { name: /^prosjektinformasjon$|^project information$/i, level: 1 })
+      page
+        .getByRole('dialog')
+        .getByRole('heading', { name: /^prosjektinformasjon$|^project information$/i })
     ).toBeVisible()
     await page.keyboard.press('Escape')
   })
@@ -49,7 +62,9 @@ test.describe('project site', () => {
     // Prosjektstatus.aspx is a single web part app page: SharePoint sets no data-sp-feature-tag
     // there, so the mount is asserted through the generic web part container (openPage does that).
     // Content is not asserted yet: what the web part shows depends on published reports.
-    await openPage(await resolvePage(projectUrl!, ['Prosjektstatus.aspx', 'ProjectStatus.aspx', 'Status.aspx']))
+    await openPage(
+      await resolvePage(projectUrl!, ['Prosjektstatus.aspx', 'ProjectStatus.aspx', 'Status.aspx'])
+    )
     await expect(page.locator('[data-sp-web-part-id]')).toHaveCount(1)
   })
 

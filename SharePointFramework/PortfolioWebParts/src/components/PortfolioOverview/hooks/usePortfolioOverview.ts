@@ -1,8 +1,7 @@
-import { Selection, format } from '@fluentui/react'
-import { SearchBoxProps } from '@fluentui/react-components'
-import { useId } from '@fluentui/react-hooks'
+import { Selection } from '@fluentui/react'
+import { SearchBoxProps, useId } from '@fluentui/react-components'
 import strings from 'PortfolioWebPartsStrings'
-import { IFilterItemProps, IFilterPanelProps, ProjectColumn } from 'pp365-shared-library'
+import { IFilterItemProps, IFilterPanelProps, ProjectColumn, format } from 'pp365-shared-library'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { createElement, useEffect, useMemo, useReducer } from 'react'
 import { OnColumnContextMenu } from '../../List'
@@ -92,9 +91,9 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
 
   const filterPanelProps: IFilterPanelProps = useMemo(
     () => ({
-      isOpen: context.state.isFilterPanelOpen,
+      open: context.state.isFilterPanelOpen,
       layerHostId: context.layerHostId,
-      onDismiss: () => context.dispatch(TOGGLE_FILTER_PANEL()),
+      onClose: () => context.dispatch(TOGGLE_FILTER_PANEL()),
       filters: filters,
       onFilterChange: (column: ProjectColumn, selectedItems: IFilterItemProps[]) => {
         context.dispatch(ON_FILTER_CHANGED({ column, selectedItems }))

@@ -1,7 +1,6 @@
-import { format } from '@fluentui/react'
 import { TableRowId } from '@fluentui/react-components'
 import strings from 'ProjectExtensionsStrings'
-import { ContentConfig, ListMenuItem } from 'pp365-shared-library'
+import { ListMenuItem, format } from 'pp365-shared-library'
 import { useState } from 'react'
 import { useProjectSetupDialogContext } from '../context'
 import { ON_LIST_CONTENT_CONFIG_CHANGED } from '../reducer'
@@ -29,11 +28,12 @@ export function useContentConfigSection() {
 
   const selectedKeys = new Set(context.state.selectedContentConfig.map((e) => String(e.key)))
 
-  const sortedItems = [...allItems].sort((a: ContentConfig, b: ContentConfig) => {
-    const aOrder = mandatoryKeys.has(String(a.key)) ? 0 : selectedKeys.has(String(a.key)) ? 1 : 2
-    const bOrder = mandatoryKeys.has(String(b.key)) ? 0 : selectedKeys.has(String(b.key)) ? 1 : 2
-    return aOrder - bOrder
-  })
+  // Mandatory items first, then the selected ones, then the rest, each group in title order.
+  const rank = (item: { key: string | number }) =>
+    mandatoryKeys.has(String(item.key)) ? 0 : selectedKeys.has(String(item.key)) ? 1 : 2
+  const sortedItems = [...allItems].sort(
+    (a, b) => rank(a) - rank(b) || a.text.localeCompare(b.text, 'nb')
+  )
 
   const items = searchTerm
     ? sortedItems.filter(
@@ -47,19 +47,14 @@ export function useContentConfigSection() {
     context.state.selectedContentConfig.map((e) => String(e.key))
   )
 
-  const onSelectionChange = (_: any, data: { selectedItems: Set<TableRowId> }) => {
-    const newSelection = new Set(data.selectedItems)
+  const onSelectionChange = (selectedIds: (string | number)[]) => {
+    const newSelection = new Set(selectedIds.map(String))
     mandatoryKeys.forEach((key) => newSelection.add(key))
     const selectedItems = allItems.filter((item) => newSelection.has(String(item.key)))
     context.dispatch(ON_LIST_CONTENT_CONFIG_CHANGED(selectedItems))
   }
 
   const columns = useColumns(mandatoryKeys)
-
-  const columnSizingOptions = {
-    text: { minWidth: 150, defaultWidth: 200 },
-    subText: { minWidth: 250, defaultWidth: 400 }
-  }
 
   // Hidden selections are applied but never listed, so they are not counted.
   const visibleSelectedCount = context.state.selectedContentConfig.filter(
@@ -83,7 +78,6 @@ export function useContentConfigSection() {
     onSelectionChange,
     searchTerm,
     onSearch: setSearchTerm,
-    columnSizingOptions,
     toolbarItems
   }
 }

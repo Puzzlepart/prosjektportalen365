@@ -24,7 +24,7 @@ export function usePhaseHooks() {
         headers
       }
 
-      fetch(context.props.hookUrl, postRequest)
+      void fetch(context.props.hookUrl, postRequest)
     } catch (error) {}
   }
 
@@ -50,7 +50,7 @@ export function usePhaseHooks() {
         headers
       }
 
-      fetch(context.props.hookArchiveUrl, postRequest)
+      void fetch(context.props.hookArchiveUrl, postRequest)
     } catch (error) {
       console.error('Error running archive hook:', error)
     }

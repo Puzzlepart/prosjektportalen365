@@ -324,6 +324,31 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
     if ($LASTEXITCODE -ne 0) {
         Write-Host "[ERROR] rush rebuild failed with exit code $LASTEXITCODE. Last 200 lines of $($RUSH_REBUILD_LOG):" -ForegroundColor Red
         Get-Content $RUSH_REBUILD_LOG -Tail 200 | Write-Host
+        # Rush's summary omits the middle of a long failing log, which is where Jest names the
+        # test that failed and prints its assertion; the tail above then only says how many failed.
+        # Each project's own log under rush-logs/ is complete, so print the failure blocks from
+        # those. The bullet Jest marks a failure with is built from its code point, so this file
+        # needs no non-ASCII characters.
+        $JEST_FAILURE_MARK = [string][char]0x25CF
+        Get-ChildItem -Path $SHAREPOINT_FRAMEWORK_BASEPATH -Recurse -Depth 2 -Filter "*.build.log" |
+            Where-Object { $_.DirectoryName -like "*rush-logs*" } |
+            ForEach-Object {
+                $jestFailures = Select-String -Path $_.FullName -Pattern "$JEST_FAILURE_MARK|\[test:jest\] FAIL" -Context 0, 30
+                if ($jestFailures) {
+                    Write-Host "[ERROR] Jest failures in $($_.FullName):" -ForegroundColor Red
+                    $jestFailures | ForEach-Object { $_.Line; $_.Context.PostContext } | Write-Host
+                }
+            }
+        exit 1
+    }
+    # Jest reports a missed coverage floor (`coverageThreshold` in a solution's jest.config.json)
+    # but Heft's test phase still succeeds, so the floors are only enforced by this check.
+    $missedFloors = Get-ChildItem -Path $SHAREPOINT_FRAMEWORK_BASEPATH -Recurse -Depth 2 -Filter "*.build.log" |
+        Where-Object { $_.DirectoryName -like "*rush-logs*" } |
+        Select-String -Pattern "coverage threshold for .* not met"
+    if ($missedFloors) {
+        Write-Host "[ERROR] A coverage floor was missed. Raise the coverage, or lower the floor in that solution's config/jest.config.json:" -ForegroundColor Red
+        $missedFloors | ForEach-Object { "$($_.Filename): $($_.Line)" } | Write-Host
         exit 1
     }
     foreach ($Solution in $Solutions) {

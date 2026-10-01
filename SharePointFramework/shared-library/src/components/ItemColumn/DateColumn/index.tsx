@@ -1,8 +1,7 @@
-import { Toggle } from '@fluentui/react'
 import strings from 'SharedLibraryStrings'
 import { formatDate } from '../../../util'
 import React from 'react'
-import { ColumnDataTypePropertyField } from '../ColumnDataTypeField'
+import { switchField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'
 import { IDateColumnProps } from './types'
 
@@ -19,9 +18,9 @@ DateColumn.id = 'Date'
 DateColumn.displayName = strings.ColumnRenderOptionDate
 DateColumn.iconName = 'Calendar'
 DateColumn.getDataTypeProperties = (onChange, dataTypeProperties: Record<string, any>) => [
-  ColumnDataTypePropertyField(Toggle, {
+  switchField({
     label: strings.ColumnRenderOptionDateIncludeTimeLabel,
     checked: dataTypeProperties.includeTime ?? false,
-    onChange: (_, checked) => onChange('includeTime', checked)
+    onChange: (checked) => onChange('includeTime', checked)
   })
 ]

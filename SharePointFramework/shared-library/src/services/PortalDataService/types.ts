@@ -3,11 +3,11 @@ import { IListEnsureResult } from '@pnp/sp/lists/types'
 import { SPField } from '../../models'
 import { SPFxContext } from '../../types'
 import strings from 'SharedLibraryStrings'
-import { format } from '@fluentui/react'
 import { ErrorWithIntent } from '../../interfaces'
 import { LogLevel } from '@pnp/logging'
 import resource from 'SharedResources'
 
+import { format } from '../../util'
 export type PortalDataServiceList =
   | 'PROJECTS'
   | 'STATUS_SECTIONS'

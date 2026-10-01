@@ -1,7 +1,7 @@
-import { format } from '@uifabric/utilities'
 import strings from 'ProjectExtensionsStrings'
 import { BaseTaskError } from '../@BaseTask'
 import { ProvisioningError } from 'sp-js-provisioning'
+import { format } from 'pp365-shared-library'
 
 export class HooksTaskError extends BaseTaskError {
   /**

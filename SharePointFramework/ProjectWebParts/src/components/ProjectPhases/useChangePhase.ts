@@ -27,7 +27,7 @@ export function useChangePhase(delayBeforeReload: number = 1000) {
         context.state.confirmPhase,
         context.state.data.phaseField
       )
-      if (context.props.usePhaseHooks) runHook()
+      if (context.props.usePhaseHooks) void runHook()
       if (context.props.useDynamicHomepage) {
         await changeWelcomePage()
       }
@@ -42,7 +42,7 @@ export function useChangePhase(delayBeforeReload: number = 1000) {
         }, delayBeforeReload)
       }
     } catch (error) {
-      ListLogger.log({
+      void ListLogger.log({
         message: error.message,
         level: 'Error',
         functionName: 'changePhase',

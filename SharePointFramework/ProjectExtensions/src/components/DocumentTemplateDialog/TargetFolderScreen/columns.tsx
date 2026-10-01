@@ -1,12 +1,12 @@
-import { Icon, Link, IColumn } from '@fluentui/react'
+import { Link } from '@fluentui/react-components'
+import { Icon } from '@fluentui/react'
 import {
   FileIconType,
   getFileTypeIconProps,
   initializeFileTypeIcons
-} from '@uifabric/file-type-icons'
-import { getId } from '@uifabric/utilities'
+} from '@fluentui/react-file-type-icons'
 import * as ProjectExtensionsStrings from 'ProjectExtensionsStrings'
-import { SPFolder } from 'pp365-shared-library'
+import { IListColumn, SPFolder, getId } from 'pp365-shared-library'
 import React from 'react'
 
 initializeFileTypeIcons()
@@ -40,4 +40,4 @@ export default ({ onFolderClick }: { onFolderClick: (folder: SPFolder) => void }
         )
       }
     }
-  ] as IColumn[]
+  ] as IListColumn[]

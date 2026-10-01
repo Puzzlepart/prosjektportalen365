@@ -4,9 +4,8 @@ import strings from 'PortfolioWebPartsStrings'
 import { TOGGLE_COLUMN_FORM_PANEL } from '../../reducer'
 import { PortfolioOverviewContext } from '../../context'
 import { IColumnFormPanelFooterProps } from './types'
-import { useConfirmationDialog } from 'pzl-react-reusable-components/lib/ConfirmDialog'
 import { Button, FluentProvider, IdPrefixProvider, useId } from '@fluentui/react-components'
-import { customLightTheme } from 'pp365-shared-library'
+import { customLightTheme, useConfirmationDialog } from 'pp365-shared-library'
 
 export const ColumnFormPanelFooter: FC<IColumnFormPanelFooterProps> = ({
   onSave,
@@ -41,7 +40,7 @@ export const ColumnFormPanelFooter: FC<IColumnFormPanelFooterProps> = ({
                   [strings.ConfirmDeleteResponseAbort, false, false]
                 ]
               })
-              if (response) onDeleteColumn()
+              if (response) void onDeleteColumn()
             }}
           >
             {strings.DeleteButtonLabel}

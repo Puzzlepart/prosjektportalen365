@@ -237,13 +237,13 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
         </div>
         {state.panel && (
           <CustomEditPanel
-            isOpen={true}
+            open={true}
             fields={editPanelFields}
             fieldValues={state.panel.fieldValues}
             dataAdapter={dataAdapterForEditPanel}
             targetWeb={targetWeb}
             targetListId={state.data.listId}
-            onDismiss={() => {
+            onClose={() => {
               setState({
                 selectedItems: [],
                 panel: null

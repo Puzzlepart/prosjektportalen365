@@ -113,7 +113,7 @@ The unit tests exercise our logic against stand-ins; they do not execute SharePo
 ## Finishing steps (done 2026-09-21)
 
 1. `sp-js-provisioning` 1.4.0 published from its own repository.
-2. `node docs/plans/pnpjs-4-migration-bump.js --provisioning-version=1.4.0` and `rush update` applied; the bump script can be deleted once this branch is merged.
+2. The one-shot bump script (`pnpjs-4-migration-bump.js`) was applied for 1.4.0 and deleted after the merge (2026-09-22).
 3. `rush rebuild`: 9 of 9 projects green, no boundary errors left.
 4. Still open: the tenant smoke run per the table above. CI now runs on `ubuntu-latest` with an 8 GB Node heap (see `spfx-1.23-heft-toolchain/HANDOFF.md`, "CI runner").
 

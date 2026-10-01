@@ -1,6 +1,5 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { format } from '@fluentui/react'
 import { BaseDialog, IDialogConfiguration } from '@microsoft/sp-dialog'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import strings from 'PortfolioExtensionsStrings'
@@ -17,7 +16,7 @@ import {
 import { IIdeaDialogProps } from './types'
 import { FC, useContext } from 'react'
 import { IDeaDialogContext } from './context'
-import { customLightTheme } from 'pp365-shared-library'
+import { customLightTheme, format } from 'pp365-shared-library'
 import styles from './IdeaDialog.module.scss'
 
 export const IdeaDialog: FC<IIdeaDialogProps> = (props) => {

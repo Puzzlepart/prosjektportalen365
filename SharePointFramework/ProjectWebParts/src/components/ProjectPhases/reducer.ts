@@ -1,4 +1,3 @@
-import { MessageBarType } from '@fluentui/react'
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import { CustomError, ProjectPhaseModel } from 'pp365-shared-library/lib/models'
 import { IProjectPhasePopoverProps } from './ProjectPhase/ProjectPhasePopover'
@@ -26,7 +25,7 @@ export default createReducer(initialState, {
       state.phase = payload.data?.currentPhase
       state.isDataLoaded = true
     }
-    state.error = payload.error && CustomError.createError(payload.error, MessageBarType.error)
+    state.error = payload.error && CustomError.createError(payload.error, 'error')
   },
 
   [OPEN_POPOVER.type]: (state, { payload }) => {
@@ -57,6 +56,6 @@ export default createReducer(initialState, {
 
   [CHANGE_PHASE_ERROR.type]: (state, { payload }: ReturnType<typeof CHANGE_PHASE_ERROR>) => {
     state.isChangingPhase = false
-    state.error = payload.error && CustomError.createError(payload.error, MessageBarType.error)
+    state.error = payload.error && CustomError.createError(payload.error, 'error')
   }
 })

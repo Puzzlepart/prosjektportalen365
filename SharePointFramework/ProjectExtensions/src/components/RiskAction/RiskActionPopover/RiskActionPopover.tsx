@@ -1,9 +1,8 @@
-import { format } from '@fluentui/react'
 import { Button, Popover, PopoverSurface, mergeClasses } from '@fluentui/react-components'
 import { Alert } from '@fluentui/react-components/unstable'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'ProjectExtensionsStrings'
-import { getFluentIcon } from 'pp365-shared-library'
+import { getFluentIcon, format } from 'pp365-shared-library'
 import React, { FC, HTMLProps } from 'react'
 import { MigrateRiskActionsDialog } from './MigrateRiskActionsDialog'
 import { NewRiskActionPanel } from './NewRiskActionPanel'
@@ -89,7 +88,7 @@ export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
           </div>
         </PopoverSurface>
       </Popover>
-      <NewRiskActionPanel isOpen={isPanelOpen} onDismiss={onClosePanel} />
+      <NewRiskActionPanel open={isPanelOpen} onClose={onClosePanel} />
     </>
   )
 }

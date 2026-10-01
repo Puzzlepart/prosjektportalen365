@@ -60,6 +60,6 @@ export function useProjectNewsDataFetch(
       }
     }
 
-    fetchData()
+    void fetchData()
   }, [refetch, props.siteUrl, props.newsFolderName, props.context.pageContext.site.id])
 }

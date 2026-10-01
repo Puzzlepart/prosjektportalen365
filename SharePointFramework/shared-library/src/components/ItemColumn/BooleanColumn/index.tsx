@@ -1,8 +1,7 @@
-import { TextField } from '@fluentui/react'
 import strings from 'SharedLibraryStrings'
 import React from 'react'
 import { isTrueBooleanValue } from '../../../util/isTrueBooleanValue'
-import { ColumnDataTypePropertyField, IColumnDataTypePropertyField } from '../ColumnDataTypeField'
+import { IColumnDataTypePropertyField, textField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'
 import { IBooleanColumnProps } from './types'
 import { Text } from '@fluentui/react-components'
@@ -33,18 +32,18 @@ BooleanColumn.id = 'Boolean'
 BooleanColumn.displayName = strings.ColumnRenderOptionBoolean
 BooleanColumn.iconName = 'CheckboxComposite'
 BooleanColumn.getDataTypeProperties = (onChange, dataTypeProperties: Record<string, any>) => {
-  const properties: IColumnDataTypePropertyField<any>[] = [
-    ColumnDataTypePropertyField(TextField, {
+  const properties: IColumnDataTypePropertyField[] = [
+    textField({
       label: strings.ColumnRenderOptionBooleanTrue,
       placeholder: BooleanColumn.defaultProps.valueIfTrue,
       value: dataTypeProperties.valueIfTrue,
-      onChange: (_, value) => onChange('valueIfTrue', value)
+      onChange: (value) => onChange('valueIfTrue', value)
     }),
-    ColumnDataTypePropertyField(TextField, {
+    textField({
       label: strings.ColumnRenderOptionBooleanFalse,
       placeholder: BooleanColumn.defaultProps.valueIfFalse,
-      defaultValue: dataTypeProperties.valueIfFalse,
-      onChange: (_, value) => onChange('valueIfFalse', value)
+      value: dataTypeProperties.valueIfFalse,
+      onChange: (value) => onChange('valueIfFalse', value)
     })
   ]
   return properties

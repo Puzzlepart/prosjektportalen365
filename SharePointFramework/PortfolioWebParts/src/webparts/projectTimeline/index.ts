@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react'
 import {
   IPropertyPaneConfiguration,
   PropertyPaneDropdown,
@@ -7,6 +6,7 @@ import {
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectTimeline, IProjectTimelineProps } from 'pp365-shared-library/lib/components'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
+import { format } from 'pp365-shared-library'
 
 export default class PortfolioTimelineWebPart extends BasePortfolioWebPart<IProjectTimelineProps> {
   public async onInit(): Promise<void> {

@@ -1,7 +1,6 @@
-import { TableColumnDefinition } from '@fluentui/react-components'
-import { ProjectListModel } from 'pp365-shared-library'
+import { IDataGridColumn, ProjectListModel } from 'pp365-shared-library'
 
-export interface IListColumn extends TableColumnDefinition<ProjectListModel> {
-  minWidth?: number
-  defaultWidth?: number
-}
+/**
+ * A column of the project list's list view. The shared `IDataGridColumn`, for the project model.
+ */
+export type IListColumn = IDataGridColumn<ProjectListModel>

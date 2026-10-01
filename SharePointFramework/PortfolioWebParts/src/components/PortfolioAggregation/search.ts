@@ -1,5 +1,5 @@
-import { IColumn } from '@fluentui/react/lib/DetailsList'
 import { getObjectValue as get } from 'pp365-shared-library/lib/util/getObjectValue'
+import { IListColumn } from 'pp365-shared-library'
 
 /**
  * Search item by search term. Search term is matched against all columns,
@@ -11,7 +11,7 @@ import { getObjectValue as get } from 'pp365-shared-library/lib/util/getObjectVa
  * @param searchTerm Search term
  * @param columns Columns
  */
-export const searchItem = (item: any, searchTerm: string, columns: IColumn[]) => {
+export const searchItem = (item: any, searchTerm: string, columns: IListColumn[]) => {
   try {
     const searchObj = columns.reduce(
       (obj, col, index) => {

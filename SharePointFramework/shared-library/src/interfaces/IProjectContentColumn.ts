@@ -1,6 +1,6 @@
-import { IColumn } from '@fluentui/react'
+import { IListColumn } from '../types'
 
-export interface IProjectContentColumn extends IColumn {
+export interface IProjectContentColumn extends IListColumn {
   id?: number
   internalName?: string
   sortOrder?: number

@@ -71,7 +71,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
             find(this._config.processing, { key: Choice.Approve }).recommendation ||
           row.getValueByName('GtIdeaDecision') === strings.ApprovedSyncText
         dialog.isBlocked = !!row.getValueByName('GtIdeaProjectData')
-        dialog.show()
+        void dialog.show()
         dialog.submit = this._onSubmit.bind(this, row)
         break
       default:

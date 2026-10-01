@@ -1,4 +1,3 @@
-import { IIconProps } from '@fluentui/react'
 import { ProvisioningSchema } from './ProvisioningSchema'
 import { isArray } from 'underscore'
 import { ContentConfig } from './ContentConfig'
@@ -46,7 +45,7 @@ export interface IProjectTemplateSPItem {
  * @model ProjectTemplate
  */
 export class ProjectTemplate extends UserSelectableObject {
-  public iconProps: Pick<IIconProps, 'iconName' | 'styles'>
+  public iconProps: { iconName: string }
   public projectTemplateId: number = -1
   public projectTemplateUrl: string
   public contentConfig: number[] = []

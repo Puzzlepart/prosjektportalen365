@@ -1,8 +1,7 @@
-import { format } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
-import { ProjectColumn, SPProjectColumnItem } from 'pp365-shared-library'
+import { ProjectColumn, SPProjectColumnItem, format } from 'pp365-shared-library'
 import { useContext, useState } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import { COLUMN_DELETED, COLUMN_FORM_PANEL_ON_SAVED, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
@@ -17,11 +16,16 @@ export function useColumnFormPanel() {
   const context = useContext(PortfolioOverviewContext)
   const { column, setColumn, setColumnData, isEditing } = useEditableColumn()
   const [columnMessages, setColumnMessages] = useState<Map<string, string>>(new Map())
+  // A save or delete writes to the portal site in the hub, where SharePoint enforces the
+  // permission. A user whose menu was enabled but who lacks that permission gets a rejection here,
+  // and must be told rather than left looking at a panel that did nothing.
+  const [saveError, setSaveError] = useState<Error>(null)
 
   /**
    * Dismisses the form panel by dispatching the `TOGGLE_COLUMN_FORM_PANEL` action.
    */
   const onDismiss = () => {
+    setSaveError(null)
     context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
   }
 
@@ -36,6 +40,7 @@ export function useColumnFormPanel() {
    * the shared `dataAdapter`.
    */
   const onSave = async () => {
+    setSaveError(null)
     const colummData = column.get('data') ?? {}
     const columnItem: SPProjectColumnItem = {
       Id: column.get('id'),
@@ -55,17 +60,24 @@ export function useColumnFormPanel() {
     if (colummData.dataTypeProperties) {
       columnItem.GtFieldDataTypeProperties = JSON.stringify(colummData.dataTypeProperties, null, 2)
     }
-    if (isEditing) {
-      await context.props.dataAdapter.portalDataService.updateItemInList(
-        'PROJECT_COLUMNS',
-        context.state.columnForm.column.id,
-        _.omit(columnItem, ['Id', 'GtInternalName', 'GtManagedProperty'])
-      )
-    } else {
-      await context.props.dataAdapter.portalDataService.addColumnToPortfolioView(
-        columnItem,
-        context.state.currentView
-      )
+    try {
+      if (isEditing) {
+        await context.props.dataAdapter.portalDataService.updateItemInList(
+          'PROJECT_COLUMNS',
+          context.state.columnForm.column.id,
+          _.omit(columnItem, ['Id', 'GtInternalName', 'GtManagedProperty'])
+        )
+      } else {
+        // The id comes back from the list, so the column in the state can be edited and deleted
+        // without a reload.
+        columnItem.Id = await context.props.dataAdapter.portalDataService.addColumnToPortfolioView(
+          columnItem,
+          context.state.currentView
+        )
+      }
+    } catch (error) {
+      setSaveError(error)
+      return
     }
     context.dispatch(
       COLUMN_FORM_PANEL_ON_SAVED({
@@ -81,10 +93,17 @@ export function useColumnFormPanel() {
    * successfully, it will dispatch the `COLUMN_DELETED` action to the reducer.
    */
   const onDeleteColumn = async () => {
-    const isDeleted = await context.props.dataAdapter.portalDataService.deleteItemFromList(
-      'PROJECT_COLUMNS',
-      context.state.columnForm.column.id
-    )
+    setSaveError(null)
+    let isDeleted: boolean
+    try {
+      isDeleted = await context.props.dataAdapter.portalDataService.deleteItemFromList(
+        'PROJECT_COLUMNS',
+        context.state.columnForm.column.id
+      )
+    } catch (error) {
+      setSaveError(error)
+      return
+    }
     if (isDeleted) {
       context.dispatch(
         COLUMN_DELETED({
@@ -159,6 +178,7 @@ export function useColumnFormPanel() {
     onDeleteColumn,
     findMatchingSearchProperty,
     columnMessages,
+    saveError,
     fluentProviderId
   } as const
 }

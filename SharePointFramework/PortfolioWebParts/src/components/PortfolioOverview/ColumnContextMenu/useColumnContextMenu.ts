@@ -1,4 +1,3 @@
-import { ContextualMenuItemType, format, IContextualMenuItem } from '@fluentui/react'
 import _ from 'lodash'
 import strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared-library/lib/util/getObjectValue'
@@ -12,6 +11,7 @@ import {
 } from '../reducer'
 import { useAddColumn } from '../../List'
 import { MenuProps, useId } from '@fluentui/react-components'
+import { IMenuItem, format } from 'pp365-shared-library'
 
 /**
  * Hook for the column header context menu. Handles the logic for the context menu. Creates a context menu
@@ -26,10 +26,12 @@ export function useColumnContextMenu() {
     context?.props.pageContext?.user?.email ?? context?.props.pageContext?.user?.loginName
   const isViewAuthor = context?.state.currentView?.author === userEmail
 
-  const { isAddColumn, createContextualMenuItems } = useAddColumn(
-    true,
-    (context?.props.isSiteAdmin || isViewAuthor) ?? false
-  )
+  // Site administrators may manage the columns of any view; the author of a view may manage its
+  // own. This only decides what the menu offers: `PROJECT_COLUMNS` lives in the hub's portal site
+  // and SharePoint enforces write permission on it server side.
+  const userCanManageColumns = (context?.props.isSiteAdmin || isViewAuthor) ?? false
+
+  const { isAddColumn, createContextualMenuItems } = useAddColumn(true, userCanManageColumns)
   const onOpenChange: MenuProps['onOpenChange'] = (_, data) => setOpen(data.open)
   const onCheckedValueChange: MenuProps['onCheckedValueChange'] = (_event, data) => {
     setCheckedValues({ ...checkedValues, [data.name]: [_.last(data.checkedItems)].filter(Boolean) })
@@ -63,19 +65,17 @@ export function useColumnContextMenu() {
       context.state.currentView?.isProgramView
     )
   } else {
-    const columnCustomSorts = column.data?.customSorts.map<IContextualMenuItem>(
-      (customSort, idx) => ({
-        key: `CUSTOM_SORT_${idx}`,
-        text: customSort.name,
-        data: {
-          name: 'sort',
-          value: customSort.name
-        },
-        canCheck: true,
-        checked: column.isSorted && context.state.sortBy?.customSort?.name === customSort.name,
-        onClick: () => context.dispatch(SET_SORT({ column, customSort }))
-      })
-    )
+    const columnCustomSorts = column.data?.customSorts.map<IMenuItem>((customSort, idx) => ({
+      key: `CUSTOM_SORT_${idx}`,
+      text: customSort.name,
+      data: {
+        name: 'sort',
+        value: customSort.name
+      },
+      canCheck: true,
+      checked: column.isSorted && context.state.sortBy?.customSort?.name === customSort.name,
+      onClick: () => context.dispatch(SET_SORT({ column, customSort }))
+    }))
     columnContextMenu.items = [
       {
         key: 'SORT_DESC',
@@ -109,10 +109,10 @@ export function useColumnContextMenu() {
           subMenuProps: {
             items: columnCustomSorts
           }
-        } as IContextualMenuItem),
+        } as IMenuItem),
       {
         key: 'DIVIDER_01',
-        itemType: ContextualMenuItemType.Divider
+        itemType: 'divider'
       },
       {
         key: 'GROUP_BY',
@@ -125,7 +125,7 @@ export function useColumnContextMenu() {
       },
       {
         key: 'DIVIDER_02',
-        itemType: ContextualMenuItemType.Divider
+        itemType: 'divider'
       },
       {
         key: 'COLUMN_SETTINGS',
@@ -137,18 +137,18 @@ export function useColumnContextMenu() {
               key: 'EDIT_COLUMN',
               text: strings.EditColumnLabel,
               onClick: () => context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column })),
-              disabled: true,
+              disabled: !userCanManageColumns,
               iconProps: { iconName: 'TableCellEdit' }
             },
             {
               key: 'DIVIDER_03',
-              itemType: ContextualMenuItemType.Divider
+              itemType: 'divider'
             },
             {
               key: 'ADD_COLUMN',
               text: strings.AddColumnLabel,
               onClick: () => context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true })),
-              disabled: true,
+              disabled: !userCanManageColumns,
               iconProps: { iconName: 'Add' }
             }
           ]

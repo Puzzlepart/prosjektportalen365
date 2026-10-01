@@ -9,7 +9,6 @@ import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHe
 import { PropertyFieldToggleWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldToggleWithCallout'
 import React from 'react'
 import { IProjectPhasesProps, ProjectPhases } from 'components/ProjectPhases'
-import '@fluentui/react/dist/css/fabric.min.css'
 import * as strings from 'ProjectWebPartsStrings'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
 

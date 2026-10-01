@@ -1,5 +1,4 @@
-import { IColumn } from '@fluentui/react'
-import { arrayMove } from 'pp365-shared-library'
+import { IListColumn, arrayMove } from 'pp365-shared-library'
 import { useEffect, useMemo, useState } from 'react'
 import { EditViewColumnsPanelSortMode, IEditViewColumnsPanelProps } from './types'
 
@@ -48,7 +47,7 @@ export function useSelectableColumns(props: IEditViewColumnsPanelProps) {
     () => initialColumns.filter((c) => c.data.isSelected),
     [initialColumns]
   )
-  const [selectableColumns, setSelectableColumns] = useState<IColumn[]>([])
+  const [selectableColumns, setSelectableColumns] = useState<IListColumn[]>([])
 
   useEffect(() => {
     setSelectableColumns([...initialColumns])
@@ -65,7 +64,7 @@ export function useSelectableColumns(props: IEditViewColumnsPanelProps) {
    * @param col The column to update.
    * @param isSelected The new value for the `isSelected` property.
    */
-  function selectColumn(col: IColumn, isSelected: boolean) {
+  function selectColumn(col: IListColumn, isSelected: boolean) {
     setSelectableColumns((_selectableColumns) =>
       _selectableColumns.map((c) => {
         if (c.fieldName !== col.fieldName) return c
@@ -75,7 +74,7 @@ export function useSelectableColumns(props: IEditViewColumnsPanelProps) {
             ...c.data,
             isSelected
           }
-        } as IColumn
+        } as IListColumn
       })
     )
   }

@@ -6,9 +6,18 @@
   "strictPeerDependencies": false,
   "globalOverrides": {
     "caniuse-lite": "^1.0.30001700",
-    "@fluentui/react-tabster": "9.26.13",
-    "keyborg": "2.6.0",
-    "tabster": "8.7.0",
+
+    // Fluent v9's focus-management stack, pinned so every Fluent package shares one copy of it
+    // (two tabster instances on a page fight over focus). The pins must stay at or above what the
+    // Fluent version in the solutions requires, so re-check them on every Fluent v9 bump:
+    // `npm view @fluentui/react-tabster@<version> dependencies`. Raised 2026-09-22 for Fluent
+    // 9.74.8, which needs react-tabster ^9.26.18, keyborg ^2.14.1 and tabster ^8.8.0; the previous
+    // pins (9.26.13 / 2.6.0 / 8.7.0) would have forced versions below those minimums.
+    // keyborg 3.x is deliberately not used: react-tabster 9.26.18 still asks for the 2.x line.
+    "@fluentui/react-tabster": "9.26.18",
+    "keyborg": "2.14.1",
+    "tabster": "8.8.1",
+
     "@rushstack/heft": "1.2.17",
     "@types/react": "17.0.45",
     "@types/react-dom": "17.0.17"

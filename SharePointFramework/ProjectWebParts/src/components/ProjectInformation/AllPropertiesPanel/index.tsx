@@ -12,10 +12,11 @@ export const AllPropertiesPanel: FC<IBasePanelProps> = (props) => {
     <BasePanel
       {...props}
       headerText={context.props.title}
-      isOpen={context.state.activePanel === 'AllPropertiesPanel'}
-      onDismiss={() => context.dispatch(CLOSE_PANEL())}
-      onRenderBody={() => <ProjectProperties displayAllProperties />}
-    />
+      open={context.state.activePanel === 'AllPropertiesPanel'}
+      onClose={() => context.dispatch(CLOSE_PANEL())}
+    >
+      <ProjectProperties displayAllProperties />
+    </BasePanel>
   )
 }
 

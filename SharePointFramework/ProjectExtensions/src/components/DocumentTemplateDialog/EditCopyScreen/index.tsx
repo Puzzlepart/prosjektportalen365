@@ -1,4 +1,3 @@
-import { DefaultButton, DialogFooter, PrimaryButton } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { FC, useContext, useState } from 'react'
@@ -9,6 +8,7 @@ import { DocumentTemplateItem } from './DocumentTemplateItem'
 import styles from './EditCopyScreen.module.scss'
 import { IEditCopyScreenProps } from './types'
 import { UserMessage } from 'pp365-shared-library'
+import { Button, DialogActions } from '@fluentui/react-components'
 
 export const EditCopyScreen: FC<IEditCopyScreenProps> = ({ onStartCopy }) => {
   const { state, dispatch } = useContext(DocumentTemplateDialogContext)
@@ -88,19 +88,22 @@ export const EditCopyScreen: FC<IEditCopyScreenProps> = ({ onStartCopy }) => {
       {state.selected.map((item, idx) => (
         <DocumentTemplateItem key={idx} item={item} onInputChanged={onInputChanged} />
       ))}
-      <DialogFooter>
-        <PrimaryButton
-          text={strings.OnStartCopyText}
+      <DialogActions>
+        <Button
+          appearance='primary'
           disabled={!isFileNamesValid()}
           onClick={() => onStartCopy(templates)}
-        />
-        <DefaultButton
-          text={strings.OnGoBackText}
+        >
+          {strings.OnStartCopyText}
+        </Button>
+        <Button
           onClick={() =>
             dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.TargetFolder }))
           }
-        />
-      </DialogFooter>
+        >
+          {strings.OnGoBackText}
+        </Button>
+      </DialogActions>
     </div>
   )
 }

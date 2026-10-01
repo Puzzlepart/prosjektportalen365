@@ -1,5 +1,5 @@
-import { IProgressIndicatorProps } from '@fluentui/react'
 import { IBaseDialogProps } from '../@BaseDialog/types'
+import { IProgressProps } from 'pp365-shared-library'
 
 export type TaskStatus = 'pending' | 'running' | 'completed' | 'error' | 'warning'
 export type LogLevel = 'info' | 'warning' | 'error'
@@ -25,7 +25,7 @@ export interface IProgressDialogProps extends IBaseDialogProps {
   /**
    * Progress indicator props
    */
-  progressIndicator: IProgressIndicatorProps
+  progressIndicator: IProgressProps
 
   /**
    * Detailed task progress for the advanced log

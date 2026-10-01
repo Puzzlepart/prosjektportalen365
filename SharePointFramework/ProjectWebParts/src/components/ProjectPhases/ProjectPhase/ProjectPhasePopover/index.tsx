@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import ReactMarkdown from 'react-markdown'
@@ -22,7 +21,7 @@ import {
   TaskListLtrFilled,
   TaskListLtrRegular
 } from '@fluentui/react-icons'
-import { customLightTheme, getFluentIcon } from 'pp365-shared-library'
+import { customLightTheme, getFluentIcon, format } from 'pp365-shared-library'
 import resource from 'SharedResources'
 
 const Icons = {

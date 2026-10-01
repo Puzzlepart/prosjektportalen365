@@ -1,4 +1,3 @@
-import { format, IPersonaSharedProps, ITag } from '@fluentui/react'
 import { SPUser } from '@microsoft/sp-page-context'
 import { IPnPClientStore, PnPClientStorage } from '@pnp/core'
 import { SPFI } from '@pnp/sp'
@@ -10,6 +9,7 @@ import { SpEntityPortalService } from '../../services/EntityPortalService'
 import { PortalDataService } from '../../services/PortalDataService/PortalDataService'
 import { getTermLabel, getTermStore } from '../../taxonomy'
 import { SPFxContext } from '../../types'
+import { IPersonaItem, ITagItem } from '../../types'
 import { DefaultCaching } from '../cache'
 import { createSpfiInstance } from '../createSpfiInstance'
 import {
@@ -19,6 +19,7 @@ import {
   ProjectPropertiesMapType
 } from './types'
 import resource from 'SharedResources'
+import { format } from '../../util'
 
 export class SPDataAdapterBase<
   T extends ISPDataAdapterBaseConfiguration = ISPDataAdapterBaseConfiguration
@@ -79,7 +80,7 @@ export class SPDataAdapterBase<
       obj[key] = format(this._storageKeys[key], this.settings.siteId.replace(/-/g, ''))
       return obj
     }, {})
-    this._storage.deleteExpired()
+    void this._storage.deleteExpired()
   }
 
   /**
@@ -162,16 +163,22 @@ export class SPDataAdapterBase<
         return await this.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
       }
 
-      if (!properties) {
-        const propertiesList = this.sp.web.lists.getByTitle(resource.Lists_ProjectProperties_Title)
-        const [propertiesItem] = await propertiesList.items.top(1)()
-        if (!propertiesItem) return false
-        properties = new ItemFieldValues(propertiesItem)
-      }
+      // The properties given, or the project's own; the parameter is never reassigned across
+      // the awaits below.
+      const projectProperties =
+        properties ??
+        (await (async () => {
+          const propertiesList = this.sp.web.lists.getByTitle(
+            resource.Lists_ProjectProperties_Title
+          )
+          const [propertiesItem] = await propertiesList.items.top(1)()
+          return propertiesItem ? new ItemFieldValues(propertiesItem) : undefined
+        })())
+      if (!projectProperties) return false
 
       const permissions = await (async () => {
         const userPermissions = []
-        const rolesToCheck = properties.get('GtProjectAdminRoles').value
+        const rolesToCheck = projectProperties.get('GtProjectAdminRoles').value
         if (!_.isArray(rolesToCheck) || _.isEmpty(rolesToCheck)) {
           const currentUserHasManageWebPermisson = await this.sp.web.currentUserHasPermissions(
             PermissionKind.ManageWeb
@@ -202,7 +209,7 @@ export class SPDataAdapterBase<
             case ProjectAdminRoleType.ProjectProperty:
               {
                 if (!currentUser) break
-                const projectFieldValue = properties.get(role.projectFieldName).value
+                const projectFieldValue = projectProperties.get(role.projectFieldName).value
                 if (
                   _.isArray(projectFieldValue) &&
                   projectFieldValue.indexOf(currentUser.Id) !== -1
@@ -263,7 +270,7 @@ export class SPDataAdapterBase<
     queryString: string,
     selectedItems: any[],
     maximumEntitySuggestions = 50
-  ): Promise<IPersonaSharedProps[]> {
+  ): Promise<IPersonaItem[]> {
     const profiles = await this.sp.profiles.clientPeoplePickerSearchUser({
       QueryString: queryString,
       MaximumEntitySuggestions: maximumEntitySuggestions,
@@ -283,7 +290,7 @@ export class SPDataAdapterBase<
   }
 
   /**
-   * Get terms from term set as `ITag[]`. The result is filtered by `filter` and `selectedItems`.
+   * Get terms from term set as `ITagItem[]`. The result is filtered by `filter` and `selectedItems`.
    * Specify `languageTag` to get terms in a specific language (default `nb-NO`). Labels are
    * resolved with `getTermLabel`, so a term without a label in that language falls back to
    * `nb-NO`, then `en-US`, then its first label.
@@ -301,11 +308,11 @@ export class SPDataAdapterBase<
     filter: string,
     selectedItems: any[],
     languageTag = 'nb-NO'
-  ): Promise<ITag[]> {
+  ): Promise<ITagItem[]> {
     const terms = await getTermStore(this.sp.web).sets.getById(termSetId).terms.all()
     const tags = terms
       .filter((term) => !term.isDeprecated)
-      .map<ITag>((term) => ({
+      .map<ITagItem>((term) => ({
         key: term.id,
         name: getTermLabel(term, languageTag)
       }))

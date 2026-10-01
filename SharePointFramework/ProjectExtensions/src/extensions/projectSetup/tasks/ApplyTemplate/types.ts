@@ -1,7 +1,7 @@
-import { format } from '@uifabric/utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import { ProvisioningError, Schema } from 'sp-js-provisioning'
 import { BaseTaskError } from '../@BaseTask'
+import { format } from 'pp365-shared-library'
 
 interface IApplyTemplateStatus {
   text: string

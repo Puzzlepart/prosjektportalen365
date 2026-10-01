@@ -1,4 +1,3 @@
-import { ContextualMenuItemType, IContextualMenuItem, format } from '@fluentui/react'
 import _ from 'lodash'
 import * as strings from 'PortfolioWebPartsStrings'
 import { indexOf } from 'underscore'
@@ -12,6 +11,7 @@ import {
 } from '../reducer'
 import { useEffect, useState } from 'react'
 import { MenuProps, useId } from '@fluentui/react-components'
+import { IMenuItem, format } from 'pp365-shared-library'
 
 /**
  * Component logic hook for `ColumnContextMenu`. Handles state and dispatches actions to the reducer.
@@ -19,10 +19,11 @@ import { MenuProps, useId } from '@fluentui/react-components'
 export function useColumnContextMenu() {
   const context = usePortfolioAggregationContext()
   const [open, setOpen] = useState(false)
-  const { isAddColumn, createContextualMenuItems } = useAddColumn(
-    true,
-    context.props.pageContext.legacyPageContext.isSiteAdmin
-  )
+  // Only decides what the menu offers: `PROJECT_CONTENT_COLUMNS` lives in the hub's portal site
+  // and SharePoint enforces write permission on it server side.
+  const userCanManageColumns = context.props.pageContext.legacyPageContext.isSiteAdmin
+
+  const { isAddColumn, createContextualMenuItems } = useAddColumn(true, userCanManageColumns)
   const onOpenChange: MenuProps['onOpenChange'] = (_, data) => setOpen(data.open)
   const [checkedValues, setCheckedValues] = useState<MenuProps['checkedValues']>({})
   const onCheckedValueChange: MenuProps['onCheckedValueChange'] = (_event, data) => {
@@ -92,7 +93,7 @@ export function useColumnContextMenu() {
       },
       {
         key: 'DIVIDER_01',
-        itemType: ContextualMenuItemType.Divider
+        itemType: 'divider'
       },
       {
         key: 'GROUP_BY',
@@ -105,7 +106,7 @@ export function useColumnContextMenu() {
       },
       {
         key: 'DIVIDER_02',
-        itemType: ContextualMenuItemType.Divider
+        itemType: 'divider'
       },
       {
         key: 'COLUMN_SETTINGS',
@@ -119,12 +120,12 @@ export function useColumnContextMenu() {
               key: 'EDIT_COLUMN',
               text: strings.EditColumnLabel,
               onClick: () => context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column })),
-              disabled: true,
+              disabled: !userCanManageColumns,
               iconProps: { iconName: 'TableCellEdit' }
             },
             {
               key: 'DIVIDER_03',
-              itemType: ContextualMenuItemType.Divider
+              itemType: 'divider'
             },
             {
               key: 'SHOW_HIDE_COLUMNS',
@@ -137,12 +138,12 @@ export function useColumnContextMenu() {
               text: strings.AddColumnLabel,
               onClick: () => context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true })),
               iconProps: { iconName: 'Add' },
-              disabled: true
+              disabled: !userCanManageColumns
             }
           ]
         }
       }
-    ].filter(Boolean) as IContextualMenuItem[]
+    ].filter(Boolean) as IMenuItem[]
   }
 
   return columnContextMenu

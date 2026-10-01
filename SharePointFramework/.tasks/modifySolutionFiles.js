@@ -82,7 +82,32 @@ function generatePackageSolutionFile(id, name, zippedPackage) {
     packageSolution.solution.id = id
     packageSolution.solution.name = name
     packageSolution.paths.zippedPackage = zippedPackage
+    stampVersion(packageSolution)
     fs.writeFileSync(packageSolutionFile, JSON.stringify(packageSolution, null, 2), { encoding: 'utf8', overwrite: true })
+}
+
+/**
+ * Stamps the build number into the fourth segment of the solution's version (and of every
+ * feature's, which SharePoint upgrades with it) when `PP365_BUILD_NUMBER` is set - the CI run
+ * number in the channel workflows. Channel builds otherwise all carry the version from
+ * `package-solution.json`, and SharePoint clients keep the manifests they cached for a version they
+ * have seen, so a deployment that did not bump it could leave a site serving the previous bundle.
+ * Only channel builds come through here; the release build has its own stamping.
+ *
+ * @param {*} packageSolution Package solution config, modified in place
+ */
+function stampVersion(packageSolution) {
+    const buildNumber = process.env.PP365_BUILD_NUMBER
+    if (!buildNumber || !/^\d+$/.test(buildNumber)) return
+    const stamp = (version) => {
+        const [major = '1', minor = '0', patch = '0'] = String(version || '').split('.')
+        return `${major}.${minor}.${patch}.${buildNumber}`
+    }
+    packageSolution.solution.version = stamp(packageSolution.solution.version)
+    for (const feature of packageSolution.solution.features || []) {
+        feature.version = stamp(feature.version)
+    }
+    log(`Stamped solution version ${packageSolution.solution.version}`, 'modifySolutionFiles')
 }
 
 /**

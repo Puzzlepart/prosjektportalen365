@@ -1,8 +1,8 @@
-import { Selection, format } from '@fluentui/react'
+import { Selection } from '@fluentui/react'
 import { SearchBoxProps } from '@fluentui/react-components'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'PortfolioWebPartsStrings'
-import { IFilterPanelProps, ProjectContentColumn } from 'pp365-shared-library'
+import { IFilterPanelProps, ProjectContentColumn, format } from 'pp365-shared-library'
 import { useEffect, useMemo } from 'react'
 import { OnColumnContextMenu } from '../List'
 import {
@@ -36,11 +36,10 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
     }
   }, [props.dataSourceCategory, props.defaultViewId])
 
-  const onSelectionChanged = () => {
-    context.dispatch(SELECTION_CHANGED(selection))
-  }
-
-  const selection = new Selection({ onSelectionChanged })
+  // The callback dispatches the selection it belongs to, so it is declared with it.
+  const selection = new Selection({
+    onSelectionChanged: () => context.dispatch(SELECTION_CHANGED(selection))
+  })
 
   usePortfolioAggregationDataFetch(context, [context.state.currentView])
 
@@ -65,9 +64,9 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
 
   const filterPanelProps = useMemo<IFilterPanelProps>(
     () => ({
-      isOpen: context.state.isFilterPanelOpen,
+      open: context.state.isFilterPanelOpen,
       layerHostId: context.layerHostId,
-      onDismiss: () => context.dispatch(TOGGLE_FILTER_PANEL()),
+      onClose: () => context.dispatch(TOGGLE_FILTER_PANEL()),
       filters: context.state.filters,
       onFilterChange: (column: ProjectContentColumn, selectedItems) => {
         context.dispatch(ON_FILTER_CHANGE({ column, selectedItems }))

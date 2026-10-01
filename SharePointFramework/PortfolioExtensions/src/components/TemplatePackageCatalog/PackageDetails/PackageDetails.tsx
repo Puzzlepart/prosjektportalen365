@@ -1,5 +1,4 @@
-import { format } from '@fluentui/react/lib/Utilities'
-import { formatDate, getFluentIconWithFallback } from 'pp365-shared-library'
+import { formatDate, getFluentIconWithFallback, format } from 'pp365-shared-library'
 import {
   Button,
   Caption1,

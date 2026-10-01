@@ -1,4 +1,3 @@
-import { MessageBarType } from '@fluentui/react'
 import { LogLevel } from '@pnp/logging'
 import { PermissionKind } from '@pnp/sp/presets/all'
 import strings from 'ProjectWebPartsStrings'
@@ -158,7 +157,7 @@ const fetchData: DataFetchFunction<
     }
     return data
   } catch (error) {
-    ListLogger.log({
+    void ListLogger.log({
       message: error.message,
       level: 'Error',
       functionName: 'fetchData',
@@ -177,7 +176,7 @@ const fetchData: DataFetchFunction<
  */
 export const useProjectInformationDataFetch = (context: IProjectInformationContext) => {
   useEffect(() => {
-    SPDataAdapter.configure(context.props.spfxContext, {
+    void SPDataAdapter.configure(context.props.spfxContext, {
       siteId: context.props.siteId,
       webUrl: context.props.webAbsoluteUrl,
       logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
@@ -185,7 +184,7 @@ export const useProjectInformationDataFetch = (context: IProjectInformationConte
       fetchData(context)
         .then((state) => context.dispatch(INIT_DATA({ state })))
         .catch((e) => {
-          const error = CustomError.createError(e, MessageBarType.severeWarning)
+          const error = CustomError.createError(e, 'error')
           context.dispatch(FETCH_DATA_ERROR({ error }))
         })
     })

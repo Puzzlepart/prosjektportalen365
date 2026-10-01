@@ -1,10 +1,10 @@
-import { format } from '@fluentui/react'
 import { Avatar } from '@fluentui/react-components'
 import strings from 'SharedLibraryStrings'
 import React, { FC } from 'react'
 import styles from './ProjectLogo.module.scss'
 import { IProjectLogoProps } from './types'
 import { useProjectLogo } from './useProjectLogo'
+import { format } from '../../util'
 
 /**
  * A component that renders an avatar or a logo for a project. The avatar is rendered if the project does not have a custom logo.

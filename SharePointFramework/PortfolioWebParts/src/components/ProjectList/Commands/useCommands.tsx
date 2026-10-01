@@ -1,7 +1,6 @@
-import { format } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
-import { ListMenuItem, getFluentIcon } from 'pp365-shared-library'
+import { ListMenuItem, getFluentIcon, format } from 'pp365-shared-library'
 import { useContext, useMemo } from 'react'
 import { ProjectListContext } from '../context'
 import { ProjectListRenderMode } from '../types'

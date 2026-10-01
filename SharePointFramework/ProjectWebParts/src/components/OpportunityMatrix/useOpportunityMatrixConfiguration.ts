@@ -20,7 +20,7 @@ export function useOpportunityMatrixConfiguration(props: IOpportunityMatrixProps
   // Fetch manual configuration if `pageContext` is set.
   useEffect(() => {
     if (props.pageContext) {
-      fetchJsonConfiguration()
+      void fetchJsonConfiguration()
     }
   }, [props.pageContext])
 

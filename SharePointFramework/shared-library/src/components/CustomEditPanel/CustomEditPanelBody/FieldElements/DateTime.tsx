@@ -4,7 +4,12 @@ import React, { useState } from 'react'
 import { FieldContainer } from '../../../FieldContainer'
 import { useCustomEditPanelContext } from '../../context'
 import { FieldElementComponent } from './types'
-import { DayOfWeek } from '@fluentui/react'
+
+/**
+ * Monday, as the date picker's numeric `DayOfWeek` counts it. The compat package declares the enum
+ * but does not export it.
+ */
+const FIRST_DAY_OF_WEEK = 1
 
 export const DateTime: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
@@ -23,7 +28,7 @@ export const DateTime: FieldElementComponent = ({ field }) => {
           onSelectDate={(date) => context.model.set(field, date)}
           formatDate={(date) => date.toLocaleDateString()}
           placeholder={strings.Placeholder.DatePicker}
-          firstDayOfWeek={DayOfWeek.Monday}
+          firstDayOfWeek={FIRST_DAY_OF_WEEK}
           showWeekNumbers
           allowTextInput
           showMonthPickerAsOverlay={false}

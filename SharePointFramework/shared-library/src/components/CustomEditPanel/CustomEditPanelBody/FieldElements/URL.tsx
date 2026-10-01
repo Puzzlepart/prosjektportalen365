@@ -54,7 +54,7 @@ export const URL: FieldElementComponent = ({ field }) => {
         defaultValue={value.url}
         onChange={(_, data) => {
           validateUrl(data.value)
-          context.model.set(field, { url: data.value, description: value.description })
+          void context.model.set(field, { url: data.value, description: value.description })
         }}
         placeholder={strings.Placeholder.UrlField}
       />

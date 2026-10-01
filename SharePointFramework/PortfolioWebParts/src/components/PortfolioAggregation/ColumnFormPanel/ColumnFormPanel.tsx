@@ -1,6 +1,11 @@
-import { Panel } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
-import { ColumnSearchPropertyField, FieldContainer, customLightTheme } from 'pp365-shared-library'
+import {
+  BasePanel,
+  ColumnSearchPropertyField,
+  FieldContainer,
+  UserMessage,
+  customLightTheme
+} from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { usePortfolioAggregationContext } from '../context'
 import styles from './ColumnFormPanel.module.scss'
@@ -23,14 +28,15 @@ export const ColumnFormPanel: FC = () => {
     persistRenderGlobally,
     setPersistRenderGlobally,
     isEditing,
+    saveError,
     fluentProviderId
   } = useColumnFormPanel()
 
   return (
-    <Panel
-      isOpen={context.state.columnForm.isOpen}
+    <BasePanel
+      open={context.state.columnForm.isOpen}
       headerText={isEditing ? strings.EditColumnHeaderText : strings.NewColumnHeaderText}
-      onRenderFooterContent={() => (
+      footer={
         <ColumnFormPanelFooter
           onSave={onSave}
           onDeleteColumn={onDeleteColumn}
@@ -38,13 +44,16 @@ export const ColumnFormPanel: FC = () => {
           isSaveDisabled={isSaveDisabled}
           isDeleteDisabled={isDeleteDisabled}
         />
-      )}
-      onDismiss={onDismiss}
+      }
+      onClose={onDismiss}
       isLightDismiss={true}
       className={styles.root}
     >
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme} className={styles.content}>
+          {saveError && (
+            <UserMessage intent='error' title={strings.ErrorTitle} text={saveError.message} />
+          )}
           <FieldContainer
             iconName='NumberSymbolSquare'
             label={strings.SortOrderLabel}
@@ -167,7 +176,7 @@ export const ColumnFormPanel: FC = () => {
           </FieldContainer>
         </FluentProvider>
       </IdPrefixProvider>
-    </Panel>
+    </BasePanel>
   )
 }
 

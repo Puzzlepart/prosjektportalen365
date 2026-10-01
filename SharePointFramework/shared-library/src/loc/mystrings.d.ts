@@ -22,13 +22,13 @@ declare interface ISharedLibraryStrings {
     NumberField: string
     ChoiceField: string
     MultiChoiceField: string
-  },
+  }
   Validation: {
     NumberFieldMin: string
     NumberFieldMax: string
     NumberFieldMinMax: string
     UrlFieldInvalidFormat: string
-  },
+  }
   AllocationPercetageLabel: string
   AllocationStatusLabel: string
   BudgetTotalLabel: string
@@ -43,6 +43,7 @@ declare interface ISharedLibraryStrings {
   FiltersString: string
   FilterText: string
   FilterPanelEmptyTitle: string
+  PeoplePickerNoResults: string
   FilterPanelEmptyMessage: string
   FilterPanelGroupProjectInformation: string
   GroupByLabel: string
@@ -113,6 +114,8 @@ declare interface ISharedLibraryStrings {
   ShowInstrumentLinkText: string
   ProjectInformationPanelButton: string
   MeasurementSheetName: string
+  DataGridSelectAllLabel: string
+  DataGridSelectRowLabel: string
 }
 
 declare module 'SharedLibraryStrings' {

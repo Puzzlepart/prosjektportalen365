@@ -1,4 +1,4 @@
-import { getId } from '@fluentui/react'
+import { getId } from '../../util'
 import {
   IPropertyPaneCustomFieldProps,
   IPropertyPaneField,

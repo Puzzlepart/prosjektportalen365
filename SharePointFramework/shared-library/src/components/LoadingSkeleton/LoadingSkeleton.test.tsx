@@ -18,4 +18,15 @@ describe('LoadingSkeleton', () => {
     const { container } = render(<LoadingSkeleton aria-label='Laster' />)
     expect(container.firstElementChild).toHaveAttribute('aria-label', 'Laster')
   })
+
+  it('renders the rows it is given instead of the default three', () => {
+    const { container } = render(<LoadingSkeleton rows={['medium']} />)
+    expect(container.querySelectorAll('.xlarge, .large, .medium')).toHaveLength(1)
+    expect(container.querySelector('.medium')).toBeTruthy()
+  })
+
+  it('renders nothing but the container for an empty row list', () => {
+    const { container } = render(<LoadingSkeleton rows={[]} />)
+    expect(container.firstElementChild.children).toHaveLength(0)
+  })
 })

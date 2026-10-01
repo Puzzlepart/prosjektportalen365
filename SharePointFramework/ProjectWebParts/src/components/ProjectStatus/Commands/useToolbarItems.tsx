@@ -49,7 +49,7 @@ export function useToolbarItems() {
           )
           .setIcon('QuizNew')
           .setOnClick(() => {
-            createNewStatusReport()
+            void createNewStatusReport()
           }),
         state.selectedReport &&
           new ListMenuItem(
@@ -81,7 +81,7 @@ export function useToolbarItems() {
             )
             .setIcon('CloudArrowUp')
             .setOnClick(() => {
-              publishReport()
+              void publishReport()
             })
       ].filter(Boolean),
     [state]
@@ -103,7 +103,8 @@ export function useToolbarItems() {
             .setIcon('Image')
             .setWidth('fit-content')
             .setOnClick(() => {
-              window.open(state.selectedReport?.snapshotUrl, '_self')
+              // In a new tab: the report the user is reading stays where it is.
+              window.open(state.selectedReport?.snapshotUrl, '_blank', 'noopener')
             }),
         new ListMenuItem(
           state.selectedReport
@@ -127,7 +128,7 @@ export function useToolbarItems() {
                   value: formatDate(report.publishedDate ?? report.modified, true)
                 })
                 .setOnClick(() => {
-                  SPDataAdapter.portalDataService
+                  void SPDataAdapter.portalDataService
                     .getStatusReportAttachments(report)
                     .then((reportWithAttachments) => {
                       dispatch(SELECT_REPORT({ report: reportWithAttachments }))
@@ -157,7 +158,7 @@ export function useToolbarItems() {
             )
             .setIcon('Delete')
             .setOnClick(() => {
-              deleteReport()
+              void deleteReport()
             })
       ].filter(Boolean),
     [state, scopeSelector]

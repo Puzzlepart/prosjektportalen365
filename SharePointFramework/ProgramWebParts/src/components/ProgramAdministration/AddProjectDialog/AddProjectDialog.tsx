@@ -40,8 +40,9 @@ export const AddProjectDialog: FC = () => {
             <DialogContent className={styles.content}>
               <ProjectList
                 items={availableProjects}
-                onSelectionChange={(_, data) => {
-                  context.dispatch(SET_SELECTED_TO_ADD(Array.from(data.selectedItems)))
+                selectedItems={context.state.addProjectDialog?.selectedProjects ?? []}
+                onSelectionChange={(selectedItems) => {
+                  context.dispatch(SET_SELECTED_TO_ADD(selectedItems as string[]))
                 }}
                 search={{
                   placeholder: strings.AddProjectDialogSearchBoxPlaceholder

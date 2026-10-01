@@ -1,4 +1,3 @@
-import { format, Selection } from '@fluentui/react'
 import { Button } from '@fluentui/react-components'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { useReducer } from 'react'
@@ -22,13 +21,10 @@ import { SelectScreen } from './SelectScreen'
 import { TargetFolderScreen } from './TargetFolderScreen'
 import { DocumentTemplateDialogScreen, IDocumentTemplateDialogProps } from './types'
 import { IFileInfo } from '@pnp/sp/files'
-import { UserMessage } from 'pp365-shared-library'
+import { UserMessage, format } from 'pp365-shared-library'
 
 export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
   const [state, dispatch] = useReducer(reducer, initState())
-  const selection = new Selection({
-    onSelectionChanged: () => dispatch(SELECTION_CHANGED({ selection }))
-  })
 
   /**
    * On copy documents to the selected target URL
@@ -56,7 +52,7 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
         }
       } catch (error) {}
     }
-    selection.setItems([], true)
+    dispatch(SELECTION_CHANGED({ selected: [] }))
     dispatch(COPY_DONE({ files: filesAdded }))
   }
 
@@ -73,9 +69,7 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
   function onRenderContent() {
     return (
       {
-        [DocumentTemplateDialogScreen.Select]: (
-          <SelectScreen selection={selection} selectedItems={state.selected} />
-        ),
+        [DocumentTemplateDialogScreen.Select]: <SelectScreen />,
         [DocumentTemplateDialogScreen.TargetFolder]: <TargetFolderScreen />,
         [DocumentTemplateDialogScreen.EditCopy]: <EditCopyScreen onStartCopy={onStartCopy} />,
         [DocumentTemplateDialogScreen.CopyProgress]: <CopyProgressScreen {...state.progress} />,

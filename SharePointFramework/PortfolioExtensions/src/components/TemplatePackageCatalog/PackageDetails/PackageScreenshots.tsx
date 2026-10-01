@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react/lib/Utilities'
 import {
   Button,
   Dialog,
@@ -19,6 +18,7 @@ import {
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC } from 'react'
 import { usePackageScreenshots } from './usePackageScreenshots'
+import { format } from 'pp365-shared-library'
 
 const useStyles = makeStyles({
   root: {

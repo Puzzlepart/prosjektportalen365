@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react/lib/Utilities'
 import {
   makeStyles,
   mergeClasses,
@@ -22,6 +21,7 @@ import React, { FC } from 'react'
 import { ICatalogPackage, PpPkgType } from 'models'
 import { useCatalogContext } from '../context'
 import { languageLabel } from '../language'
+import { format } from 'pp365-shared-library'
 
 const useStyles = makeStyles({
   badge: {

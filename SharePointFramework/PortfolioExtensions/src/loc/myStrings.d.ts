@@ -270,6 +270,6 @@ declare interface IPortfolioExtensionsStrings {
 }
 
 declare module 'PortfolioExtensionsStrings' {
-  const strings: IPortfolioExtensionsStrings;
-  export = strings;
+  const strings: IPortfolioExtensionsStrings
+  export = strings
 }

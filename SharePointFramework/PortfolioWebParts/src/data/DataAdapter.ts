@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 
-import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, getHashCode, PnPClientStorage } from '@pnp/core'
 import { LogLevel } from '@pnp/logging'
@@ -43,7 +42,8 @@ import {
   SPProjectItem,
   SPTimelineConfigurationItem,
   TimelineConfigurationModel,
-  TimelineContentModel
+  TimelineContentModel,
+  format
 } from 'pp365-shared-library'
 import resource from 'SharedResources'
 import _ from 'underscore'
@@ -1083,7 +1083,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         MeasurementAchievement: JSON.stringify({
           Achievement: firstMeasurement?.Achievement,
           AchievementDisplay: firstMeasurement?.AchievementDisplay,
-          TrendIconProps: firstMeasurement?.TrendIconProps
+          TrendIcon: firstMeasurement?.TrendIcon
         }),
         Measurements: JSON.stringify(
           measurements?.map((m) => {
@@ -1095,7 +1095,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
               Achievement: m.Achievement,
               AchievementDisplay: m.AchievementDisplay,
               DateDisplay: m.DateDisplay,
-              TrendIconProps: m.TrendIconProps
+              TrendIcon: m.TrendIcon
             }
           })
         )

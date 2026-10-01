@@ -1,6 +1,16 @@
-.root {
+// `.body` carries the layout the v8 panel applied to its body content: a
+// vertical stack with a gap. Padding is deliberately absent — the v9
+// `DrawerHeader`, `DrawerBody` and `DrawerFooter` each bring their own, and
+// adding more here is what made the converted panels look over-padded.
+.body {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 20px 24px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.footer {
+  display: flex;
+  gap: 8px;
 }

@@ -1,12 +1,17 @@
 import {
-  DefaultButton,
+  Button,
   Dialog,
-  DialogFooter,
-  DialogType,
-  PrimaryButton,
+  DialogActions,
+  DialogBody,
+  DialogContent,
+  DialogSurface,
+  DialogTitle,
+  FluentProvider,
+  IdPrefixProvider,
   Spinner,
-  SpinnerSize
-} from '@fluentui/react'
+  useId
+} from '@fluentui/react-components'
+import { customLightTheme } from 'pp365-shared-library'
 import { IMenuNode } from '@pnp/sp/navigation'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC, useState } from 'react'
@@ -49,32 +54,45 @@ export const CreateParentDialog: FC = () => {
     }
   }
 
+  const fluentProviderId = useId('fp-create-parent-dialog')
+
   return (
-    <Dialog
-      hidden={context.state.activeDialog !== 'CreateParentDialog'}
-      onDismiss={() => context.dispatch(CLOSE_DIALOG())}
-      dialogContentProps={{
-        type: DialogType.largeHeader,
-        title: strings.CreateParentModalTitle,
-        subText: strings.CreateParentModalSubText
-      }}
-    >
-      {!isLoading && (
-        <DialogFooter>
-          <DefaultButton
-            text={strings.CancelText}
-            onClick={() => context.dispatch(CLOSE_DIALOG())}
-          />
-          <PrimaryButton
-            text={strings.RedoText}
-            onClick={() => {
-              saveNavigationNodes()
-              applyCustomAction()
-            }}
-          />
-        </DialogFooter>
-      )}
-      {isLoading && <Spinner size={SpinnerSize.medium} />}
-    </Dialog>
+    <IdPrefixProvider value={fluentProviderId}>
+      <FluentProvider theme={customLightTheme}>
+        <Dialog
+          open={context.state.activeDialog === 'CreateParentDialog'}
+          onOpenChange={(_event, data) => {
+            if (!data.open) context.dispatch(CLOSE_DIALOG())
+          }}
+        >
+          <DialogSurface>
+            <DialogBody>
+              <DialogTitle>{strings.CreateParentModalTitle}</DialogTitle>
+              <DialogContent>{strings.CreateParentModalSubText}</DialogContent>
+              {isLoading ? (
+                <DialogActions>
+                  <Spinner size='medium' />
+                </DialogActions>
+              ) : (
+                <DialogActions>
+                  <Button onClick={() => context.dispatch(CLOSE_DIALOG())}>
+                    {strings.CancelText}
+                  </Button>
+                  <Button
+                    appearance='primary'
+                    onClick={() => {
+                      void saveNavigationNodes()
+                      void applyCustomAction()
+                    }}
+                  >
+                    {strings.RedoText}
+                  </Button>
+                </DialogActions>
+              )}
+            </DialogBody>
+          </DialogSurface>
+        </Dialog>
+      </FluentProvider>
+    </IdPrefixProvider>
   )
 }

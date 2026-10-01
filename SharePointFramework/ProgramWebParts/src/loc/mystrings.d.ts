@@ -6,7 +6,7 @@ declare interface IProgramWebPartsStrings {
     MoveUpDisabled: string
     MoveDown: string
     MoveDownDisabled: string
-  },
+  }
   Placeholder: {
     TextField: string
     Icon: string

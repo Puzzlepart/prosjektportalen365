@@ -1,7 +1,6 @@
 import { FluentProvider, IdPrefixProvider } from '@fluentui/react-components'
 import strings from 'ProjectWebPartsStrings'
 import { Fluent, UserMessage, WebPartTitle, customLightTheme } from 'pp365-shared-library'
-import { ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
 import React, { FC } from 'react'
 import { Actions } from './Actions'
 import { AllPropertiesPanel } from './AllPropertiesPanel'
@@ -75,7 +74,6 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
           <RunProjectSetupDialog />
         </div>
       </Fluent>
-      {context.state.confirmActionProps && <ConfirmDialog {...context.state.confirmActionProps} />}
     </ProjectInformationContextProvider>
   )
 }

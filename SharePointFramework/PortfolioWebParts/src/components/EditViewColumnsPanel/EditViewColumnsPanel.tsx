@@ -1,4 +1,3 @@
-import { Panel, PanelType } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { FC } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
@@ -6,7 +5,7 @@ import styles from './EditViewColumnsPanel.module.scss'
 import { IEditViewColumnsPanelProps } from './types'
 import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
 import { Button, Checkbox, FluentProvider, IdPrefixProvider } from '@fluentui/react-components'
-import { WebPartTitle, getFluentIcon, customLightTheme } from 'pp365-shared-library'
+import { BasePanel, WebPartTitle, customLightTheme, getFluentIcon } from 'pp365-shared-library'
 import { getItemStyle } from './getItemStyle'
 
 export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
@@ -22,10 +21,10 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
   } = useEditViewColumnsPanel(props)
 
   return (
-    <Panel
-      isOpen={props.isOpen}
-      type={PanelType.medium}
-      onRenderHeader={() => (
+    <BasePanel
+      open={props.open}
+      size={'medium'}
+      header={
         <IdPrefixProvider value={fluentProviderHeaderId}>
           <FluentProvider theme={customLightTheme}>
             <div className={styles.panelActions}>
@@ -55,8 +54,8 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
             </div>
           </FluentProvider>
         </IdPrefixProvider>
-      )}
-      onDismiss={props.onDismiss}
+      }
+      onClose={props.onClose}
       isLightDismiss={true}
       className={styles.root}
     >
@@ -131,7 +130,7 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
           </DragDropContext>
         </FluentProvider>
       </IdPrefixProvider>
-    </Panel>
+    </BasePanel>
   )
 }
 

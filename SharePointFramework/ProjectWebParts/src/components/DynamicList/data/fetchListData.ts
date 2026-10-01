@@ -1,8 +1,8 @@
-import { IColumn } from '@fluentui/react'
 import { IDynamicListProps, IDynamicListData } from '../types'
 import SPDataAdapter from '../../../data'
 import {
   EditableSPField,
+  IListColumn,
   ProjectContentColumn,
   getAllItems,
   getTermStore
@@ -64,10 +64,10 @@ async function fetchProjectContentColumns(): Promise<ProjectContentColumn[]> {
  * @returns Array of enriched columns with merged configuration
  */
 function enrichColumnsWithConfiguration(
-  spColumns: IColumn[],
+  spColumns: IListColumn[],
   projectContentColumns: ProjectContentColumn[],
   useProjectContentColumnNames: boolean = true
-): IColumn[] {
+): IListColumn[] {
   return spColumns.map((spColumn) => {
     const configColumn = projectContentColumns.find(
       (c) => c.internalName === spColumn.fieldName || c.fieldName === spColumn.fieldName
@@ -306,7 +306,7 @@ async function fetchAllItemsChunked(
  */
 export function transformListItem(
   item: any,
-  columns: IColumn[],
+  columns: IListColumn[],
   taxonomyTermsMap: Map<string, TaxonomyTermModel[]>
 ): Record<string, any> {
   const transformedItem: Record<string, any> = { ...item }
@@ -365,7 +365,7 @@ export function transformListItem(
  * @returns Promise resolving to Map of termSetId to array of TaxonomyTermModel
  */
 async function fetchTaxonomyTermsForColumns(
-  columns: IColumn[]
+  columns: IListColumn[]
 ): Promise<Map<string, TaxonomyTermModel[]>> {
   const termSetIds = columns
     .filter((col) => col.data?.termSetId)
@@ -518,7 +518,7 @@ export async function fetchListData(
             .filter((fieldName) => !sourceVisibleFieldSet.has(fieldName))
         : []
 
-    let columns: IColumn[] = fields
+    let columns: IListColumn[] = fields
       .filter((field) => isVisibleListField(field, projectContentColumns))
       .map((field) => {
         const dataType = mapSharePointTypeToDataType(field.TypeAsString, field.FieldTypeKind)
@@ -632,7 +632,7 @@ export async function fetchSingleItem(
   props: IDynamicListProps,
   web: IWeb,
   itemId: number,
-  existingColumns?: IColumn[]
+  existingColumns?: IListColumn[]
 ): Promise<any> {
   try {
     if (!props.listName) {

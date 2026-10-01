@@ -15,8 +15,16 @@ const candidates = (override: string | undefined, ...names: string[]) =>
 
 const PAGES = {
   home: candidates(process.env.E2E_PAGE_HOME, 'Home.aspx', 'Hjem.aspx'),
-  overview: candidates(process.env.E2E_PAGE_OVERVIEW, 'Porteføljeoversikt.aspx', 'PortfolioOverview.aspx'),
-  projectStatus: candidates(process.env.E2E_PAGE_PROJECT_STATUS, 'Prosjektstatus.aspx', 'ProjectStatus.aspx'),
+  overview: candidates(
+    process.env.E2E_PAGE_OVERVIEW,
+    'Porteføljeoversikt.aspx',
+    'PortfolioOverview.aspx'
+  ),
+  projectStatus: candidates(
+    process.env.E2E_PAGE_PROJECT_STATUS,
+    'Prosjektstatus.aspx',
+    'ProjectStatus.aspx'
+  ),
   timeline: candidates(
     process.env.E2E_PAGE_TIMELINE,
     'Prosjekttidslinje.aspx',
@@ -37,22 +45,38 @@ test.describe('portfolio hub', () => {
     await openPage(await resolvePage(hub, PAGES.home))
     await expect(page).toHaveTitle(/.+/)
     // Home is a canvas page with several PP365 web parts (latest projects, project list, news).
-    await expect.poll(async () => page.locator(WEB_PART).count(), { timeout: 60_000 }).toBeGreaterThanOrEqual(2)
+    await expect
+      .poll(async () => page.locator(WEB_PART).count(), { timeout: 60_000 })
+      .toBeGreaterThanOrEqual(2)
   })
 
   test('portfolio overview renders its list', async ({ page, openPage, resolvePage }) => {
     await openPage(await resolvePage(hub, PAGES.overview))
     await expect(webPart(page, /porteføljeoversikt|portfolio overview/i).first()).toBeVisible()
     // The overview renders a Fluent list; grid/table are its stable roles.
-    await expect(page.getByRole('grid').or(page.getByRole('table')).first()).toBeVisible({ timeout: 60_000 })
+    await expect(page.getByRole('grid').or(page.getByRole('table')).first()).toBeVisible({
+      timeout: 60_000
+    })
     // Searching narrows the list: the results counter reports 0 of N for a nonsense term. This
     // exercises the toolbar (a covered or dead search box fails the fill) and the list binding.
     // Scoped to the web part: the page also has SharePoint's suite bar search box.
     const overview = page.locator(WEB_PART).first()
-    const search = overview.getByRole('searchbox').or(overview.getByPlaceholder(/søk|search/i)).first()
+    const search = overview
+      .getByRole('searchbox')
+      .or(overview.getByPlaceholder(/søk|search/i))
+      .first()
     await search.fill('zzz-e2e-ingen-treff')
-    await expect(overview.getByText(/^viser 0 av \d+|^showing 0 of \d+/i)).toBeVisible({ timeout: 20_000 })
+    await expect(overview.getByText(/^viser 0 av \d+|^showing 0 of \d+/i)).toBeVisible({
+      timeout: 20_000
+    })
     await search.clear()
+    // The filter panel is wired through a props object that the toolbar spreads, which type
+    // checking does not see into, so only opening it here proves the wiring survives a rename.
+    await overview.getByRole('button', { name: /^filtrer$|^filter$/i }).click()
+    await expect(
+      page.getByRole('dialog').getByRole('heading', { name: /^filtr|^filter/i })
+    ).toBeVisible()
+    await page.keyboard.press('Escape')
   })
 
   test('project status aggregation page loads', async ({ page, openPage, resolvePage }) => {
@@ -60,7 +84,11 @@ test.describe('portfolio hub', () => {
     await expect(webPart(page, /status/i).first()).toBeVisible()
   })
 
-  test('project timeline page loads and its controls can be reached', async ({ page, openPage, resolvePage }) => {
+  test('project timeline page loads and its controls can be reached', async ({
+    page,
+    openPage,
+    resolvePage
+  }) => {
     await openPage(await resolvePage(hub, PAGES.timeline))
     await expect(webPart(page, /tidslinje|timeline/i).first()).toBeVisible()
     // The timeline is react-calendar-timeline; its group list holds one link per project. A trial
@@ -71,24 +99,42 @@ test.describe('portfolio hub', () => {
     await expect(firstProjectLink).toBeVisible({ timeout: 60_000 })
     await firstProjectLink.click({ trial: true })
     // The filter toolbar button must open its panel and close again.
-    await page.locator(WEB_PART).first().getByRole('button', { name: /^filtrer$|^filter$/i }).click()
-    // The filter panel is a Fluent v8 Panel: its role=dialog root has no box of its own, so the
-    // visible proof is the panel heading.
-    await expect(page.getByRole('heading', { name: /^filtr|^filter/i, level: 1 })).toBeVisible()
+    await page
+      .locator(WEB_PART)
+      .first()
+      .getByRole('button', { name: /^filtrer$|^filter$/i })
+      .click()
+    // The filter panel's own root has no box, so the visible proof is its heading.
+    // The level is deliberately not asserted: it is the panel implementation's
+    // choice (v8 rendered an h1, the v9 drawer renders an h2) and not a contract.
+    await expect(
+      page.getByRole('dialog').getByRole('heading', { name: /^filtr|^filter/i })
+    ).toBeVisible()
     await page.keyboard.press('Escape')
   })
 
   test('benefit overview page loads', async ({ page, openPage, resolvePage }) => {
     await openPage(await resolvePage(hub, PAGES.benefits))
     await expect(webPart(page, /nytte|benefit/i).first()).toBeVisible()
-    await page.locator(WEB_PART).first().getByRole('button', { name: /^filtrer$|^filter$/i }).click()
-    // The filter panel is a Fluent v8 Panel: its role=dialog root has no box of its own, so the
-    // visible proof is the panel heading.
-    await expect(page.getByRole('heading', { name: /^filtr|^filter/i, level: 1 })).toBeVisible()
+    await page
+      .locator(WEB_PART)
+      .first()
+      .getByRole('button', { name: /^filtrer$|^filter$/i })
+      .click()
+    // The filter panel's own root has no box, so the visible proof is its heading.
+    // The level is deliberately not asserted: it is the panel implementation's
+    // choice (v8 rendered an h1, the v9 drawer renders an h2) and not a contract.
+    await expect(
+      page.getByRole('dialog').getByRole('heading', { name: /^filtr|^filter/i })
+    ).toBeVisible()
     await page.keyboard.press('Escape')
   })
 
-  test('footer application customizer renders the version', async ({ page, openPage, resolvePage }) => {
+  test('footer application customizer renders the version', async ({
+    page,
+    openPage,
+    resolvePage
+  }) => {
     await openPage(await resolvePage(hub, PAGES.home))
     // PortfolioExtensions' footer shows the installed version on every hub page, so it doubles as
     // the extension bundle check.

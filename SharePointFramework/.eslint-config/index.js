@@ -105,12 +105,8 @@ module.exports = function createProsjektportalenEslintConfig(solutionDir) {
     {
       files: TS_FILES,
       rules: {
-        // --- migration relaxations -----------------------------------
+        // --- rules the v9 migration relaxed, back to error (2026-09-30) ---
 
-        // Decision C: downgraded for the migration. The SPFx profile sets
-        // this to a bare 'error' (flat-profiles/default.js:32), so a bare
-        // 'warn' is the exact severity-only downgrade. Under Heft, ESLint
-        // warnings never fail the build; errors always do.
         // `dot-notation` is inherited from the rushstack profile and is AUTOFIXABLE, which makes it
         // actively dangerous here: `eslint --fix` rewrites `result['GtSiteIdOWSTEXT']` into
         // `result.GtSiteIdOWSTEXT`, and PnP result types (ISearchResult, ISiteGroupInfo, ...) do not
@@ -119,27 +115,25 @@ module.exports = function createProsjektportalenEslintConfig(solutionDir) {
         // .eslintrc.yaml never enabled this rule.
         'dot-notation': 'off',
 
-        '@typescript-eslint/no-floating-promises': 'warn',
+        // A promise left floating must say so: `void` marks a deliberate fire-and-forget (the
+        // `no-void` override below allows it as a statement), anything else is awaited or caught.
+        '@typescript-eslint/no-floating-promises': 'error',
+        'no-void': ['warn', { allowAsStatement: true }],
 
-        // Two more severity-only relaxations for the migration. Both are 'error' in the
-        // rushstack profile, neither was enforced before, and neither can be measured
-        // without running ESLint over the tree:
-        //  - no-use-before-define trips the common SPFx/React idiom of declaring IProps
-        //    or a styled constant below the component that references it (typedefs:true,
-        //    variables:true).
-        //  - require-atomic-updates is the profile's best-known false-positive generator
-        //    on await-heavy code.
-        // Tighten both to 'error' once the tree is clean.
-        '@typescript-eslint/no-use-before-define': 'warn',
-        'require-atomic-updates': 'warn',
+        // Function declarations are hoisted and a class used inside a method runs after the class
+        // exists, so only variables are checked - the `const` below the callback that uses it,
+        // which is what the rule is for.
+        '@typescript-eslint/no-use-before-define': [
+          'error',
+          { functions: false, classes: false, variables: true, typedefs: true, ignoreTypeReferences: true }
+        ],
 
-        // The old .eslintrc.yaml never enabled prettier/prettier at all -
-        // formatting was enforced only by the separate `npm run prettier`.
-        // eslint-plugin-prettier/recommended turns it on at 'error', which
-        // would newly break `heft build --production` (where --fix is
-        // force-disabled). Keep it visible but non-blocking; flip to
-        // 'error' once the tree is clean.
-        'prettier/prettier': 'warn',
+        // The property checks are the rule's false-positive generator on the project setup tasks,
+        // which write each step's result into a shared params object between awaits by design.
+        'require-atomic-updates': ['error', { allowProperties: true }],
+
+        // Formatting is part of the build, as `npm run prettier` always was of the workflow.
+        'prettier/prettier': 'error',
 
         // --- verbatim from .eslintrc.yaml ----------------------------
 

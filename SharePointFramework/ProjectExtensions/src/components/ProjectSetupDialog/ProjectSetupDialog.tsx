@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react'
 import { Tab, TabList, Badge, Button, Tooltip } from '@fluentui/react-components'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { FC, useEffect, useState } from 'react'
@@ -10,7 +9,7 @@ import styles from './ProjectSetupDialog.module.scss'
 import { TemplateSelector } from './TemplateSelector'
 import { IProjectSetupDialogProps } from './types'
 import { useProjectSetupDialog } from './useProjectSetupDialog'
-import { getFluentIcon, UserMessage } from 'pp365-shared-library'
+import { getFluentIcon, UserMessage, format } from 'pp365-shared-library'
 
 type ConfigTab = 'extensions' | 'contentConfig'
 

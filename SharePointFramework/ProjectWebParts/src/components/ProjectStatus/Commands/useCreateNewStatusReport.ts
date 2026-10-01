@@ -1,6 +1,5 @@
-import { format } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
-import { ItemFieldValue, buildScopedSiteId } from 'pp365-shared-library'
+import { ItemFieldValue, buildScopedSiteId, format } from 'pp365-shared-library'
 import { useProjectStatusContext } from '../context'
 import { getScopeLabel, parseSubProjects } from '../parseSubProjects'
 import { OPEN_PANEL } from '../reducer'

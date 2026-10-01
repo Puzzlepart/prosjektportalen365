@@ -1,8 +1,7 @@
-import { IPersonaProps, ITag, Link } from '@fluentui/react'
 import React from 'react'
 import { IIdeaFieldProps } from './types'
-import { Persona, Tag } from '@fluentui/react-components'
-import { getFluentIcon, OverflowTagMenu } from 'pp365-shared-library'
+import { Link, Persona, Tag } from '@fluentui/react-components'
+import { getFluentIcon, IPersonaItem, ITagItem, OverflowTagMenu } from 'pp365-shared-library'
 import {
   ChevronCircleRightFilled,
   EarthFilled,
@@ -54,7 +53,7 @@ export function useIdeaField(props: IIdeaFieldProps) {
     const renderMap = new Map<string, (value: any) => JSX.Element>([
       [
         'User',
-        ([user]: IPersonaProps[]) => {
+        ([user]: IPersonaItem[]) => {
           if (user) {
             return (
               <Persona
@@ -77,7 +76,7 @@ export function useIdeaField(props: IIdeaFieldProps) {
       ],
       [
         'UserMulti',
-        (users: IPersonaProps[]) => {
+        (users: IPersonaItem[]) => {
           return (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {users.map((user, key) => (
@@ -101,7 +100,7 @@ export function useIdeaField(props: IIdeaFieldProps) {
       ],
       [
         'TaxonomyFieldTypeMulti',
-        (tags: ITag[]) => (
+        (tags: ITagItem[]) => (
           <div style={{ marginTop: 6 }}>
             <OverflowTagMenu
               text={props.model.displayName}
@@ -113,7 +112,7 @@ export function useIdeaField(props: IIdeaFieldProps) {
       ],
       [
         'TaxonomyFieldType',
-        ([tag]: ITag[]) => (
+        ([tag]: ITagItem[]) => (
           <div style={{ marginTop: 6 }}>
             <OverflowTagMenu text={props.model.displayName} tags={[tag.name]} icon={icon} />
           </div>

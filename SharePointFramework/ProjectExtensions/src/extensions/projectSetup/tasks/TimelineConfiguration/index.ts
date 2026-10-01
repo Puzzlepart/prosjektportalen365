@@ -1,10 +1,9 @@
-import { format } from '@fluentui/react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'extensions/projectSetup'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../types'
 import { SPDataAdapter } from 'data'
-import { ContentConfig, getAllItems } from 'pp365-shared-library'
+import { ContentConfig, getAllItems, format } from 'pp365-shared-library'
 import resource from 'SharedResources'
 
 /**

@@ -20,7 +20,7 @@ export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
   // Fetch manual configuration if `pageContext` is set.
   useEffect(() => {
     if (props.pageContext) {
-      fetchJsonConfiguration()
+      void fetchJsonConfiguration()
     }
   }, [props.pageContext])
 

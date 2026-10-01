@@ -3,8 +3,7 @@ import { FluentProvider, IdPrefixProvider, InfoLabel, useId } from '@fluentui/re
 import { IWebPartTitleProps } from './types'
 import styles from './WebPartTitle.module.scss'
 import strings from 'SharedLibraryStrings'
-import { format } from '@fluentui/react'
-import { customLightTheme } from '../../util'
+import { customLightTheme, format } from '../../util'
 
 /**
  * Renders a web part title with an optional tooltip.

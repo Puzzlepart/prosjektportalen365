@@ -2,7 +2,6 @@ import { IProjectTimelineProps, ITimelineData, ITimelineGroup } from './types'
 import { useProjectTimelineDataFetch } from './data/useProjectTimelineDataFetch'
 import sortArray from 'array-sort'
 import { get } from '@microsoft/sp-lodash-subset'
-import { IColumn } from '@fluentui/react/lib/DetailsList'
 import { TimelineConfigurationModel } from 'pp365-shared-library/lib/models'
 import {
   IFilterItemProps,
@@ -14,6 +13,7 @@ import moment from 'moment'
 import { ITimelineItem } from 'pp365-shared-library/lib/interfaces'
 import { useProjectTimelineState } from './useProjectTimelineState'
 import resource from 'SharedResources'
+import { IListColumn } from 'pp365-shared-library'
 
 /**
  * Component logic hook for `ProjectTimeline`
@@ -89,7 +89,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
    * @param column Column
    * @param selectedItems Selected items
    */
-  const onFilterChange = (column: IColumn, selectedItems: IFilterItemProps[]) => {
+  const onFilterChange = (column: IListColumn, selectedItems: IFilterItemProps[]) => {
     const { activeFilters } = state
 
     if (selectedItems.length > 0) {

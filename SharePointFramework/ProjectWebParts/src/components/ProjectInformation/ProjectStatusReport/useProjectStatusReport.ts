@@ -1,5 +1,4 @@
-import { format } from '@fluentui/react'
-import { getScopeSeriesKey } from 'pp365-shared-library'
+import { getScopeSeriesKey, format } from 'pp365-shared-library'
 import { formatDate } from 'pp365-shared-library/lib/util'
 import strings from 'ProjectWebPartsStrings'
 import _ from 'underscore'

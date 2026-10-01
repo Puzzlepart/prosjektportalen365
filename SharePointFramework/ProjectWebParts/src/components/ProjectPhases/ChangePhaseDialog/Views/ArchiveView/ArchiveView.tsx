@@ -19,8 +19,7 @@ import {
 import styles from './ArchiveView.module.scss'
 import { useArchiveView } from './useArchiveView'
 import { IArchiveItem } from './types'
-import { format } from '@fluentui/react'
-import { getFluentIcon, UserMessage } from 'pp365-shared-library'
+import { getFluentIcon, UserMessage, format } from 'pp365-shared-library'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 

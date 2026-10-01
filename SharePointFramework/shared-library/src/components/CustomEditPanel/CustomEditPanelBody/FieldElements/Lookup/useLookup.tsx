@@ -10,7 +10,7 @@ export function useLookup(field: EditableSPField) {
   const context = useCustomEditPanelContext()
   const [options, setOptions] = useState<OptionProps[]>([])
   useEffect(() => {
-    getAllItems(
+    void getAllItems(
       context.props.targetWeb.lists.getById(field.LookupList).items.select('Id', field.LookupField)
     ).then((items) => {
       setOptions(

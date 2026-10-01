@@ -57,32 +57,6 @@ const BUNDLE_LINKED_PACKAGES = [
 /** Default output folder when no `outDir` can be resolved from the tsconfig chain. */
 const DEFAULT_OUT_DIR = 'lib'
 
-/**
- * Legacy package names that must be redirected to their modern equivalents.
- *
- * `office-ui-fabric-react` was renamed to `@fluentui/react` at v8. Some older transitive
- * dependencies (notably `pzl-spfx-components`, which declares no runtime dependencies at all)
- * still import the old name and used to resolve it through npm's flat node_modules. pnpm's
- * strict layout no longer provides it, so map it onto the Fluent v8 copy this solution already
- * bundles. Mapping to an absolute path is deliberate: a bare package name would be resolved
- * relative to the importing module, which cannot see this solution's dependencies.
- */
-const COMPAT_ALIASES = { 'office-ui-fabric-react': '@fluentui/react' }
-
-/**
- * Subpaths that exist on disk but are not listed in their package's `exports` map.
- *
- * `@fluentui/react` 8.106.4 exports `./dist/sass/*` but not `./dist/css/*`, while five web parts
- * import `@fluentui/react/dist/css/fabric.min.css` for the Fabric core classes. The gulp toolchain's
- * webpack did not enforce `exports`; the Heft toolchain's does. Aliasing the folder to its absolute
- * location bypasses the export map without changing which file is loaded.
- *
- * Each entry maps an alias prefix to [package name, subpath within that package].
- */
-const UNEXPORTED_SUBPATH_ALIASES = {
-  '@fluentui/react/dist/css': ['@fluentui/react', 'dist/css']
-}
-
 /** Parse a tsconfig-style JSON file (tolerates comments and trailing commas). */
 function readJsonc(filePath) {
   const raw = fs.readFileSync(filePath, 'utf8').replace(/^\uFEFF/, '')
@@ -176,22 +150,6 @@ function applyTsconfigAliases(webpackConfig, log) {
     if (!target) continue
     alias[stripWildcard(key)] = path.join(outDirPath, stripWildcard(target))
   }
-  for (const [legacyName, modernName] of Object.entries(COMPAT_ALIASES)) {
-    if (alias[legacyName]) continue
-    const modernRoot = resolvePackageRoot(modernName)
-    if (modernRoot) {
-      alias[legacyName] = modernRoot
-      log(`compat alias: ${legacyName} -> ${modernName}`)
-    }
-  }
-  for (const [request, [packageName, subPath]] of Object.entries(UNEXPORTED_SUBPATH_ALIASES)) {
-    if (alias[request]) continue
-    const packageRoot = resolvePackageRoot(packageName)
-    if (packageRoot) {
-      alias[request] = path.join(packageRoot, subPath)
-      log(`unexported subpath alias: ${request}`)
-    }
-  }
   webpackConfig.resolve.alias = alias
   log(`resolve.alias: ${Object.keys(alias).join(', ') || '(none)'} -> ${outDirPath}`)
 
@@ -268,7 +226,7 @@ function keepLinkedPackagesBundled(webpackConfig, log) {
  * The rig routes every `.css` file that is not named `*.global.css` through the CSS-modules loader
  * (`CSS_MODULE_RULE_TEST` in spfx-heft-plugins' WebpackConfigurationGenerator), which hashes the
  * class names. That is right for our own `.module.scss`, but wrong for third-party stylesheets
- * such as `react-calendar-timeline/lib/Timeline.css` and `@fluentui/react/dist/css/fabric.min.css`:
+ * such as `react-calendar-timeline/lib/Timeline.css`:
  * the library's DOM uses the plain class names, so the hashed rules never match and the timeline
  * collapsed into an unclickable overlay after the Heft migration. The gulp toolchain treated
  * node_modules CSS as global; this restores that by excluding node_modules from the module rule

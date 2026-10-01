@@ -3,7 +3,11 @@ import { stringIsNullOrEmpty } from '@pnp/core'
 import { fileFromServerRelativePath, IFileInfo } from '@pnp/sp/files'
 import { folderFromServerRelativePath, IFolder } from '@pnp/sp/folders'
 import { IWeb } from '@pnp/sp/webs'
-import { FileIconType, getFileTypeIconProps, IFileTypeIconOptions } from '@uifabric/file-type-icons'
+import {
+  FileIconType,
+  getFileTypeIconProps,
+  IFileTypeIconOptions
+} from '@fluentui/react-file-type-icons'
 import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
 
 export interface ITemplateSPItem {

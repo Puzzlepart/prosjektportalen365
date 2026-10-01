@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react'
 import {
   Button,
   Caption1,
@@ -14,7 +13,8 @@ import {
   UserMessage,
   WebPartTitle,
   formatDate,
-  customLightTheme
+  customLightTheme,
+  format
 } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import styles from './LatestProjects.module.scss'

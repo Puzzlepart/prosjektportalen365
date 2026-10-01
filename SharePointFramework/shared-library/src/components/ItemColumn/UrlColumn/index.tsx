@@ -1,9 +1,8 @@
 /* eslint-disable prefer-const */
-import { TextField, Toggle } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'SharedLibraryStrings'
 import React from 'react'
-import { ColumnDataTypePropertyField } from '../ColumnDataTypeField'
+import { switchField, textField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'
 import { IUrlColumnProps } from './types'
 import { Link } from '@fluentui/react-components'
@@ -34,16 +33,15 @@ UrlColumn.id = 'URL'
 UrlColumn.displayName = strings.ColumnRenderOptionUrl
 UrlColumn.iconName = 'Link'
 UrlColumn.getDataTypeProperties = (onChange, dataTypeProperties: Record<string, any>) => [
-  ColumnDataTypePropertyField(Toggle, {
+  switchField({
     label: strings.ColumnRenderOptionUrlOpenInNewTabLabel,
-    defaultChecked: UrlColumn.defaultProps.openInNewTab,
-    checked: dataTypeProperties.openInNewTab,
-    onChange: (_, checked) => onChange('openInNewTab', checked)
+    checked: dataTypeProperties.openInNewTab ?? UrlColumn.defaultProps.openInNewTab,
+    onChange: (checked) => onChange('openInNewTab', checked)
   }),
-  ColumnDataTypePropertyField(TextField, {
+  textField({
     label: strings.ColumnRenderOptionUrlDescriptionLabel,
     description: strings.ColumnRenderOptionUrlDescriptionDescription,
     value: dataTypeProperties.description,
-    onChange: (_, value) => onChange('description', value)
+    onChange: (value) => onChange('description', value)
   })
 ]

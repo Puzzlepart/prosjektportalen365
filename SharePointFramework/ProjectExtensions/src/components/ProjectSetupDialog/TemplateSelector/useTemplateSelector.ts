@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react'
 import { Logger, LogLevel } from '@pnp/logging'
 import strings from 'ProjectExtensionsStrings'
 import { useEffect, useMemo, useState } from 'react'
@@ -14,6 +13,7 @@ import {
 import { createNoTemplateOption } from '../../../extensions/projectSetup/noTemplate'
 import { resolveCloudTemplate } from '../resolveCloudTemplate'
 import { TemplateSelectorMode } from './types'
+import { format } from 'pp365-shared-library'
 
 /**
  * Manages template selection and resolves selected cloud packages for project setup.
@@ -35,7 +35,10 @@ export function useTemplateSelector() {
     return def || context.props.data.templates[0]
   })()
 
-  const templates = context.props.data.templates.filter((t) => !t.hidden)
+  // Title order, whatever order the hub's list returns them in.
+  const templates = context.props.data.templates
+    .filter((t) => !t.hidden)
+    .sort((a, b) => a.text.localeCompare(b.text, 'nb'))
   const selectedTemplate = context.state.selectedTemplate
   const isSingleTemplate = templates.length === 1
 

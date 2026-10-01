@@ -25,11 +25,15 @@ setup('sign in as the test user', async ({ page }) => {
   // "Stay signed in?" Choosing "Yes" gives a persistent cookie, which keeps the saved state valid
   // for the whole run. An MFA prompt would show up here instead.
   const staySignedIn = page.getByRole('button', { name: /^(ja|yes)$/i })
-  const mfaPrompt = page.getByText(/godkjenn|verify your identity|approve sign in request|bekreft identiteten/i)
+  const mfaPrompt = page.getByText(
+    /godkjenn|verify your identity|approve sign in request|bekreft identiteten/i
+  )
   await Promise.race([
     staySignedIn.waitFor({ state: 'visible', timeout: 30_000 }).catch(() => undefined),
     mfaPrompt.waitFor({ state: 'visible', timeout: 30_000 }).catch(() => undefined),
-    page.waitForURL((url) => url.href.startsWith(baseURL!), { timeout: 30_000 }).catch(() => undefined)
+    page
+      .waitForURL((url) => url.href.startsWith(baseURL!), { timeout: 30_000 })
+      .catch(() => undefined)
   ])
   if (await mfaPrompt.isVisible().catch(() => false)) {
     throw new Error(

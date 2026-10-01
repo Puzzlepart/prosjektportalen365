@@ -64,6 +64,17 @@ export function useArchiveView() {
     context.state?.data?.currentPhase
   ])
 
+  // What the user has ticked, in the shape the dialog stores; read by the effect below.
+  const getArchiveConfiguration = (): IArchiveConfiguration => {
+    const documentsSection = sections.find((s) => s.key === 'documents')
+    const listsSection = sections.find((s) => s.key === 'lists')
+
+    return {
+      documents: documentsSection?.items.filter((item) => item.selected) || [],
+      lists: listsSection?.items.filter((item) => item.selected) || []
+    }
+  }
+
   useEffect(() => {
     const archiveConfiguration = getArchiveConfiguration()
     dialogContext.dispatch(SET_ARCHIVE_CONFIGURATION({ archiveConfiguration }))
@@ -114,16 +125,6 @@ export function useArchiveView() {
     return sections.reduce((total, section) => {
       return total + section.items.filter((item) => item.selected).length
     }, 0)
-  }
-
-  const getArchiveConfiguration = (): IArchiveConfiguration => {
-    const documentsSection = sections.find((s) => s.key === 'documents')
-    const listsSection = sections.find((s) => s.key === 'lists')
-
-    return {
-      documents: documentsSection?.items.filter((item) => item.selected) || [],
-      lists: listsSection?.items.filter((item) => item.selected) || []
-    }
   }
 
   return {

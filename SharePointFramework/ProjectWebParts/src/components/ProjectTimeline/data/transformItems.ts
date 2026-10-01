@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react'
 import moment from 'moment'
 import { ITimelineItem } from 'pp365-shared-library/lib/interfaces/ITimelineItem'
 import { TimelineContentModel } from 'pp365-shared-library/lib/models'
@@ -6,6 +5,7 @@ import strings from 'ProjectWebPartsStrings'
 import { CSSProperties } from 'react'
 import { IProjectTimelineProps, ITimelineGroup } from '../types'
 import resource from 'SharedResources'
+import { format } from 'pp365-shared-library'
 
 /**
  * Transform items for timeline

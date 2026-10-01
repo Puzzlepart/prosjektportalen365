@@ -1,12 +1,11 @@
 import strings from 'PortfolioWebPartsStrings'
-import { useConfirmationDialog } from 'pzl-react-reusable-components/lib/ConfirmDialog'
 import React, { FC } from 'react'
 import { usePortfolioAggregationContext } from '../../context'
 import { TOGGLE_COLUMN_FORM_PANEL } from '../../reducer'
 import styles from './ColumnFormPanelFooter.module.scss'
 import { ColumnFormPanelFooterProps } from './types'
 import { Button, FluentProvider, IdPrefixProvider, useId } from '@fluentui/react-components'
-import { customLightTheme } from 'pp365-shared-library'
+import { customLightTheme, useConfirmationDialog } from 'pp365-shared-library'
 
 export const ColumnFormPanelFooter: FC<ColumnFormPanelFooterProps> = (props) => {
   const fluentProviderId = useId('fp-column-form-panel-footer')
@@ -36,7 +35,7 @@ export const ColumnFormPanelFooter: FC<ColumnFormPanelFooterProps> = (props) => 
                   [strings.ConfirmDeleteResponseAbort, false, false]
                 ]
               })
-              if (response) props.onDeleteColumn()
+              if (response) void props.onDeleteColumn()
             }}
             disabled={props.isDeleteDisabled}
           >

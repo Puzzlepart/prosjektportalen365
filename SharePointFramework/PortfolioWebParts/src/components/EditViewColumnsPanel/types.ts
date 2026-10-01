@@ -1,27 +1,34 @@
-import { IButtonProps, IColumn, IPanelProps } from '@fluentui/react'
+import { ButtonProps } from '@fluentui/react-components'
+import { IBasePanelProps, IListColumn } from 'pp365-shared-library'
 
-interface IRevertOrderButtonProps extends Omit<IButtonProps, 'onClick'> {
+interface IRevertOrderButtonProps extends Omit<ButtonProps, 'onClick'> {
   /**
    * Callback to call when the user clicks the revert order button.
    *
    * @param columns The selected columns
    */
-  onClick(columns: IColumn[]): void
+  onClick(columns: IListColumn[]): void
 }
 
-export interface IEditViewColumnsPanelProps extends IPanelProps {
+export interface IEditViewColumnsPanelProps extends IBasePanelProps {
+  /**
+   * Title shown above the column list. Previously inherited from the Fluent UI
+   * v8 `IPanelProps`.
+   */
+  title?: string
+
   /**
    * Callback to call when the user clicks the save button.
    *
    * @param columns The selected columns
    * @param columnIds The selected column IDs
    */
-  onSave(columns: IColumn[], columnIds?: number[]): void
+  onSave(columns: IListColumn[], columnIds?: number[]): void
 
   /**
    * Columns with selected state in the `data.isSelected` property.
    */
-  columns?: IColumn[]
+  columns?: IListColumn[]
 
   /**
    * Help text to display at the top of the panel in

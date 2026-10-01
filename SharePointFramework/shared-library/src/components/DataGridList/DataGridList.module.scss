@@ -1,0 +1,28 @@
+// The v8 list set its header at 12px semibold and its values at 12px in a lighter grey, and the
+// lists that moved to this grid are compared against the ones still on it. Fluent's own rules are
+// single classes injected after ours, so these are scoped under the grid root to outrank them; the
+// header's weight has to reach the button Fluent renders inside the header cell, which is where it
+// sets regular.
+.root {
+  .headerCell {
+    font-size: var(--fontSizeBase200);
+
+    :global(.fui-TableHeaderCell__button) {
+      font-weight: var(--fontWeightSemibold);
+    }
+  }
+
+  .cell {
+    font-size: var(--fontSizeBase200);
+    color: var(--colorNeutralForeground3);
+  }
+}
+
+// Fluent's column sizing sets `min-width: fit-content` on the grid, so where the columns do not
+// fit, the grid — and every row line in it — grows past its parent rather than shrinking. The v8
+// list scrolled horizontally inside its own box (`constrainMode` horizontal, its default); the
+// container gives this grid the same, so a list never draws outside the section or dialog that
+// holds it.
+.container {
+  overflow-x: auto;
+}

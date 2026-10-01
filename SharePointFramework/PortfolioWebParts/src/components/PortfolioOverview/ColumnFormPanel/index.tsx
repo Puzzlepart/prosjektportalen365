@@ -1,11 +1,16 @@
-import { Panel } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import styles from './ColumnFormPanel.module.scss'
 import { useColumnFormPanel } from './useColumnFormPanel'
 import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
-import { ColumnSearchPropertyField, FieldContainer, customLightTheme } from 'pp365-shared-library'
+import {
+  BasePanel,
+  ColumnSearchPropertyField,
+  FieldContainer,
+  UserMessage,
+  customLightTheme
+} from 'pp365-shared-library'
 import { ColumnDataTypeField } from 'pp365-shared-library/lib/components/ItemColumn/ColumnDataTypeField'
 import {
   Combobox,
@@ -30,31 +35,33 @@ export const ColumnFormPanel: FC = () => {
     isSaveDisabled,
     onDeleteColumn,
     findMatchingSearchProperty,
+    saveError,
     fluentProviderId
   } = useColumnFormPanel()
 
   if (!context) return null
 
   return (
-    <Panel
-      isOpen={context.state.columnForm.isOpen}
+    <BasePanel
+      open={context.state.columnForm.isOpen}
       headerText={isEditing ? strings.EditColumnHeaderText : strings.NewColumnHeaderText}
-      onRenderFooterContent={() => (
+      footer={
         <ColumnFormPanelFooter
           onSave={onSave}
           onDeleteColumn={onDeleteColumn}
           isEditing={isEditing}
           isSaveDisabled={isSaveDisabled}
         />
-      )}
-      isFooterAtBottom={true}
-      onDismiss={onDismiss}
+      }
+      onClose={onDismiss}
       isLightDismiss={true}
       className={styles.root}
-      styles={{ commands: { paddingBottom: 12 } }}
     >
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme} className={styles.content}>
+          {saveError && (
+            <UserMessage intent='error' title={strings.ErrorTitle} text={saveError.message} />
+          )}
           <FieldContainer
             iconName='NumberSymbolSquare'
             label={strings.SortOrderLabel}
@@ -207,7 +214,7 @@ export const ColumnFormPanel: FC = () => {
           </FieldContainer>
         </FluentProvider>
       </IdPrefixProvider>
-    </Panel>
+    </BasePanel>
   )
 }
 

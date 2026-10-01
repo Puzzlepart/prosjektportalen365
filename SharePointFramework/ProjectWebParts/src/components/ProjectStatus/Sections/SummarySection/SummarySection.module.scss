@@ -1,4 +1,9 @@
-@import "pkg:@fluentui/react/dist/sass/References.scss";
+// The Fabric grid this used (`ms-Grid`, `ms-Grid-row`, `ms-Grid-col`, `ms-sm6`, `ms-sm12`, `ms-xl8`,
+// `ms-xl12` from `@fluentui/react/dist/sass/References.scss`) was a float grid with 8px gutters and
+// a clearfix. This is the same layout in flex: the same widths, the same gutters, the same 1366px
+// breakpoint the Fabric `xl` size used.
+$gutter: 8px;
+$xl: 1366px;
 
 .summarySection {
   display: flex;
@@ -11,32 +16,43 @@
   }
 
   .statusElements {
-    @include ms-Grid-col;
-    @include ms-sm12;
-    @include ms-xl8;
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
     min-width: 0;
+    padding: 0 $gutter;
 
+    @media (min-width: $xl) {
+      width: 66.6667%;
+    }
 
     .container {
-      @include ms-Grid;
+      box-sizing: border-box;
+      margin: 0 auto;
+      padding: 0 $gutter;
 
       .row {
-        @include ms-Grid-row;
+        display: flex;
+        flex-wrap: wrap;
+        box-sizing: inherit;
+        margin: 0 (-$gutter);
 
         &.iconsOnly {
-          display: flex;
           justify-content: space-around;
         }
 
         .statusElement {
-          @include ms-Grid-col;
+          position: relative;
+          box-sizing: border-box;
+          min-height: 1px;
           margin: 20px 0 0 0;
           padding: 0 16px;
           min-width: 0;
           overflow: hidden;
 
           &.halfWidth {
-            @include ms-sm6;
+            flex: 0 0 50%;
+            max-width: 50%;
           }
 
           &.iconsOnly {
@@ -49,9 +65,12 @@
   }
 
   .fullWidth {
-    @include ms-sm12;
-    @include ms-xl12;
+    width: 100%;
     padding: 0;
     margin: 0;
+
+    @media (min-width: $xl) {
+      width: 100%;
+    }
   }
 }

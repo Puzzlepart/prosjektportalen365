@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react'
 import { find } from '@microsoft/sp-lodash-subset'
 import { AssignFrom, dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
@@ -39,7 +38,8 @@ import {
   getClassProperties,
   isUnauthorizedError,
   makeUrlAbsolute,
-  transformFieldXml
+  transformFieldXml,
+  format
 } from '../../util'
 import { DataService } from '../DataService'
 import {
@@ -580,22 +580,25 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    *
    * @param properties Properties for the new column (`Id` will be omitted)
    * @param view The view to add the column to
+   * @returns The id of the new column. A failure is thrown, for the form to show.
    */
   public async addColumnToPortfolioView(
     properties: SPProjectColumnItem,
     view: PortfolioOverviewView
-  ): Promise<boolean> {
-    try {
-      const projectColumnsList = this._getList('PROJECT_COLUMNS')
-      const portfolioViewsList = this._getList('PORTFOLIO_VIEWS')
-      const column = await projectColumnsList.items.add(_.omit(properties, ['Id']))
-      portfolioViewsList.items.getById(view.id as any).update({
-        GtPortfolioColumnsId: [...view.columns.map((c) => c.id), column.Id]
-      })
-      return true
-    } catch (error) {
-      return false
+  ): Promise<number> {
+    const projectColumnsList = this._getList('PROJECT_COLUMNS')
+    const portfolioViewsList = this._getList('PORTFOLIO_VIEWS')
+    const column = await projectColumnsList.items.add(_.omit(properties, ['Id']))
+    const update: Record<string, any> = {
+      GtPortfolioColumnsId: [...view.columns.map((c) => c.id), column.Id]
     }
+    // A view with its own column order sorts by it alone, so the new column must join it, at the
+    // end, or it would sort first on the next load.
+    if (!_.isEmpty(view.columnOrder)) {
+      update.GtPortfolioColumnOrder = JSON.stringify([...view.columnOrder, column.Id])
+    }
+    await portfolioViewsList.items.getById(view.id as any).update(update)
+    return column.Id
   }
 
   /**
@@ -733,7 +736,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       await executeQuery(jsomContext)
     } catch {}
     if (ensureList.created && params.properties) {
-      ensureList.list.items.add(params.properties)
+      await ensureList.list.items.add(params.properties)
     }
     return { ...ensureList, fieldsAdded }
   }
@@ -943,22 +946,19 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    *
    * @param properties Properties for the new column (`Id` will be omitted)
    * @param dataSource The data source to add the column to
+   * @returns The id of the new column. A failure is thrown, for the form to show.
    */
   public async addColumnToDataSource(
     properties: SPProjectContentColumnItem,
     dataSource: DataSource
-  ): Promise<boolean> {
-    try {
-      const projectContentColumnsList = this._getList('PROJECT_CONTENT_COLUMNS')
-      const dataSourceList = this._getList('DATA_SOURCES')
-      const column = await projectContentColumnsList.items.add(_.omit(properties, ['Id']))
-      dataSourceList.items.getById(dataSource.id as any).update({
-        GtProjectContentColumnsId: [...dataSource.columns.map((c) => c.id), column.Id]
-      })
-      return true
-    } catch (error) {
-      return false
-    }
+  ): Promise<number> {
+    const projectContentColumnsList = this._getList('PROJECT_CONTENT_COLUMNS')
+    const dataSourceList = this._getList('DATA_SOURCES')
+    const column = await projectContentColumnsList.items.add(_.omit(properties, ['Id']))
+    await dataSourceList.items.getById(dataSource.id as any).update({
+      GtProjectContentColumnsId: [...dataSource.columns.map((c) => c.id), column.Id]
+    })
+    return column.Id
   }
 
   /**

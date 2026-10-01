@@ -1,5 +1,4 @@
-import { IColumn } from '@fluentui/react'
-import { IFilterProps } from 'pp365-shared-library'
+import { IFilterProps, IListColumn } from 'pp365-shared-library'
 import { IDynamicListData } from '../types'
 import { get } from '@microsoft/sp-lodash-subset'
 import _ from 'lodash'
@@ -119,7 +118,7 @@ export function generateFilters(
           name: column.name,
           minWidth: column.minWidth,
           dataType: (column as any).dataType
-        } as IColumn,
+        } as IListColumn,
         items: filterItems
       })
     }

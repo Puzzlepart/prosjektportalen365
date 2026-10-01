@@ -1,8 +1,8 @@
-import { IColumn } from '@fluentui/react/lib/DetailsList'
 import { IFilterItemProps } from '../FilterItem/types'
+import { IListColumn } from '../../../types'
 
 export interface IFilterProps {
-  column: IColumn
+  column: IListColumn
   items: IFilterItemProps[]
   defaultCollapsed?: boolean
   /**
@@ -11,7 +11,7 @@ export interface IFilterProps {
    * `group` are rendered above any grouped sections.
    */
   group?: string
-  onFilterChange?: (column: IColumn, selectedItems: IFilterItemProps[]) => void
+  onFilterChange?: (column: IListColumn, selectedItems: IFilterItemProps[]) => void
 }
 
 export interface IFilterState {

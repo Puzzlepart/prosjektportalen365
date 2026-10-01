@@ -29,6 +29,7 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
             <ProjectList
               items={childProjects}
               defaultGroupsExpanded={true}
+              selectedItems={context.state.selectedProjects}
               onSelectionChange={onSelectionChange}
               renderLinks
               search={{

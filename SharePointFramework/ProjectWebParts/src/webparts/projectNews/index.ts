@@ -1,4 +1,3 @@
-import '@fluentui/react/dist/css/fabric.min.css'
 import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane'
 
 import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
