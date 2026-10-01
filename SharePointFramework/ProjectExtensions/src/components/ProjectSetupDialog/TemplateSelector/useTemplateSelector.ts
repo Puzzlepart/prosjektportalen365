@@ -35,7 +35,10 @@ export function useTemplateSelector() {
     return def || context.props.data.templates[0]
   })()
 
-  const templates = context.props.data.templates.filter((t) => !t.hidden)
+  // Title order, whatever order the hub's list returns them in.
+  const templates = context.props.data.templates
+    .filter((t) => !t.hidden)
+    .sort((a, b) => a.text.localeCompare(b.text, 'nb'))
   const selectedTemplate = context.state.selectedTemplate
   const isSingleTemplate = templates.length === 1
 

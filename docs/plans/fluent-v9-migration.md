@@ -1025,6 +1025,11 @@ the two the user asked to see verified, an end-to-end flow that was run against 
   opens while a search is active (the add dialog groups its hundreds of projects per hub, all
   collapsed, so a search hit was hidden). Reducer and list tests.
 
+- **Project setup dialog: order.** The user's one finding on the folded sections. Templates list
+  in title order (they came in list order); extensions and list content keep their groups — the
+  template's mandatory items, then the selected ones, then the rest — with each group in title
+  order, which the groups lacked. Hook tests for all three.
+
 **Two write flows, `e2e/tests/flows/`.** The user asked for both to be verified end to end:
 `portfolio-overview-column.spec.ts` adds a column as a site admin, reloads and expects it last,
 and removes it through the REST API (leftovers first); `program-administration.spec.ts` selects
