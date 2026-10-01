@@ -18,6 +18,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - `Rediger kolonne` og `Legg til kolonne` i `Porteføljeoversikt` og `Aggregert oversikt` er nå tilgjengelige for områdeadministratorer (var deaktivert)
 - Oppsettveiviseren for nye prosjektområder lister maler alfabetisk, og `Utvidelser` og `Listeinnhold` viser malens obligatoriske elementer først, deretter de valgte, deretter resten — hver gruppe alfabetisk
 - Nytteoversiktens trendikoner er fylte piler (`CaretUp`/`CaretDown`) sentrert mot teksten
+- Assistent-iframen i footeren har nå `allow="clipboard-write"`, slik at PP Assistenten kan legge rapporter på utklippstavlen som formatert tekst (limes pent inn i Word, Outlook og Teams). Uten dette faller assistenten tilbake til ren tekst (markdown)
 - Henting av brukerfeltverdier på statusrapporter gjøres nå som en egen, feiltolerant spørring — statusrapportene vises selv om brukerfelt-berikelsen skulle feile
 - Seksjonsikoner i `Prosjektstatus`, visningsikoner i `Porteføljeoversikt`/aggregerte oversikter og kolonneikoner i porteføljen rendres nå med Fluent UI-ikoner (strek som fylles ved hover), med automatisk oversetting av gamle UI Fabric-ikonnavn og fallback til UI Fabric for ukjente navn. Eksisterende ikonnavn fungerer uendret og krever ingen migrering; nye installasjoner får Fluent-navn som standard. Ukjente ikonnavn på vertikaler i `Prosjektliste` vises nå som UI Fabric-ikon i stedet for standardikonet [#1287](https://github.com/Puzzlepart/prosjektportalen365/issues/1287)
 
