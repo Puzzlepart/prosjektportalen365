@@ -63,7 +63,10 @@ test.describe('program administration', () => {
     const groupHeaders = admin.locator('[class*="groupHeader"]')
     test.skip((await groupHeaders.count()) < 2, 'the program spans one hub, so there are no groups')
     const first = groupHeaders.first()
-    const grid = admin.getByRole('grid').first()
+    // The group is the header's parent; its grid unmounts on collapse, and "the first grid in the
+    // web part" would then be the next group's.
+    const firstGroup = first.locator('..')
+    const grid = firstGroup.getByRole('grid')
     test.skip(
       (await grid.getByRole('checkbox').count()) === 0,
       'the test user may not manage the program, so there is no selection'
@@ -74,7 +77,7 @@ test.describe('program administration', () => {
     await expect(grid).toBeHidden()
     await first.click()
     await expect(
-      admin.getByRole('grid').first().getByRole('checkbox').nth(1),
+      firstGroup.getByRole('grid').getByRole('checkbox').nth(1),
       'the selection should survive the collapse'
     ).toBeChecked()
     await expect(removeButton(admin)).toBeEnabled()
