@@ -306,6 +306,10 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
             $SOLUTION_CONFIG_JSON = ($SOLUTION_CONFIG | ConvertTo-Json)
             $SOLUTION_CONFIG_JSON | Out-File -FilePath "./config/.generated-solution-config.json" -Encoding UTF8 -Force
             node ../.tasks/modifySolutionFiles.js --force >$null 2>&1
+            # The version the package carries, stamped with the run number in CI, so the log shows
+            # what the tenant will get and a stale deployment can be told from a cached one.
+            $STAMPED_VERSION = (Get-Content "./config/package-solution.json" -Raw | ConvertFrom-Json).solution.version
+            Write-Host "[$Solution] solution version $STAMPED_VERSION" -ForegroundColor Cyan
         }
     }
     Set-Location $SHAREPOINT_FRAMEWORK_BASEPATH

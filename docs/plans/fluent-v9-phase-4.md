@@ -89,6 +89,74 @@ a slice touches), **G** (file type icons stay v8 until a v9 route exists).
 
 Slices 2 to 5 are per solution and may run in a different order if a slice 1 finding says so.
 
+## Slice log
+
+### Slice 0 — branch and baselines (2026-10-01)
+
+Branch `feat/fluent-v9-phase-4` off `releases/1.15` at `1592f8c2`. Baselines, measured from the
+last full `rush rebuild` on that commit and the tree:
+
+| Solution | Tests | Test files | Floors (stmts/branches/funcs/lines) | v8 files |
+|---|---|---|---|---|
+| shared-library | 208 | 21 | 28/58/27/28 | 6 |
+| PortfolioWebParts | 14 | 3 | 12/16/12/12 | 15 |
+| ProjectWebParts | 21 | 6 | 12/19/7/12 | 0 |
+| ProjectExtensions | 29 | 9 | 19/48/18/19 | 6 |
+| ProgramWebParts | 13 | 3 | 29/32/7/29 | 0 |
+| PortfolioExtensions | 1 | 1 | 0/2/2/0 | 0 |
+| **All** | **286** | **43** | | **27** |
+
+(The setup dialog's three hook tests, 6 cases, landed after that build: 292 at the tip.) Lint
+warnings: 246, all house rules. Browser suite: 23 tests in 8 files (smoke and flows; the four
+local-bundle specs are opt-in). Production packages from the same build, main channel:
+PortfolioWebParts 9.87 MB, ProjectWebParts 7.03 MB, ProgramWebParts 4.62 MB, shared-library
+1.98 MB, PortfolioExtensions 1.42 MB, ProjectExtensions 1.12 MB (16.0 MB in all); slice 8 compares.
+
+**Stamping, confirmed indirectly.** The tenant app catalog is closed to the test user (403), and
+the release script silenced `modifySolutionFiles.js`, so no log named the version. The evidence is
+behavioural: the three deployments since the stamping each served the fix the browser suite then
+saw (the column's place, the program selection, the setup dialog's order), where the deployment
+before it had served a stale bundle for days. `Build-Release.ps1` now prints each package's
+stamped version after the channel ids are applied, so the next run's log says it outright.
+
+**Slice 1, adjusted.** Two write flows already run in CI from the phase 3 close-out (the overview
+column, the program's child project), so slice 1 is the navigation flows plus the two write flows
+the plan named — a status report draft created and deleted, a document template copied and the
+copy deleted — which exercise the status commands and the template dialog end to end.
+
+### Slice 1 — browser flows (2026-10-01)
+
+Three new files under `e2e/tests/flows/`, with the REST writes they need in `fixtures/rest.ts`:
+
+- **`navigation.spec.ts`**, read only: from the hub's overview into a project through its title
+  link and back; the status page's section tabs, which scroll to their section and stay pinned (on
+  `E2E_STATUS_PROJECT_URL`, a project with a published report, since the sections only show for
+  one); every link in the project's quick launch opened in turn — pages and list views alike, since
+  most of a project's navigation is list views, not site pages — with a web part or a list shown
+  and no error boundary; and the project home's link back to the hub.
+- **`document-template-copy.spec.ts`**, a write flow: a template is copied into the project's
+  library through "Hent dokumentmal", renamed on the way to an `E2E-kopi-` name, confirmed through
+  REST and deleted again; leftovers go first. Two traps on the way: a folder's name in the
+  template list is a v8 `Link` without an href, which is a button, so a file row is one without a
+  button; and the rename applies 400 ms after the last keystroke, once the library has said the
+  name is free, so the copy must wait for it or it copies under the template's own name.
+- **`status-report.spec.ts`**, a write flow: "Opprett" opens the edit panel with the draft's
+  properties, saving the panel creates the report, "Slett" removes it; the hub's status list is
+  cleaned of the test user's drafts for the project before and after. **Skipped on both test
+  projects today:** the save stays disabled on a project with no earlier report to copy values
+  from (required fields), and on the project with reports the test user is not a project admin, so
+  "Opprett" is not offered. It runs once `E2E_STATUS_PROJECT_URL` names a project with a published
+  report where the test user is a project admin.
+
+**A crash the flows found.** The console guard failed the status flow on the project with reports:
+`Could not load footer-application-customizer in require: Cannot read properties of undefined
+(reading 'themePrimary')`. The shared theme helper read `window.__themeState__.theme` at module
+load, and an application customizer can load before SharePoint has published the theme, which took
+the footer's whole bundle down on that site. The read now falls back to SharePoint's default
+primary colour, with a test that loads the module with no theme state, an empty one and a themed
+one. The fallback only applies when the theme is not there yet, so a themed site keeps its colour
+wherever the components load after the page.
+
 ## Rules for the executing agent
 
 - Read `AGENTS.md`, the `pp365-toolchain` and `pp365-testing` skills, this plan and the phase 3

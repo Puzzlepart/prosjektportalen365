@@ -1,8 +1,17 @@
 import { BrandVariants, createDarkTheme, createLightTheme } from '@fluentui/react-components'
 import pSBC from 'shade-blend-color'
 
-const themeColors: any = (window as any).__themeState__.theme
-const primaryColor = themeColors.themePrimary
+/**
+ * SharePoint's default primary colour, used when the page has not published its theme by the time
+ * this module loads. The site's own theme is on `window.__themeState__` on every modern page, but
+ * an application customizer can load before it is there: a bare read crashed the footer's whole
+ * bundle ("Could not load footer-application-customizer in require: Cannot read properties of
+ * undefined (reading 'themePrimary')") on a project site in the test tenant.
+ */
+const DEFAULT_PRIMARY_COLOR = '#0078d4'
+
+const themeColors: Record<string, string> = (window as any).__themeState__?.theme ?? {}
+const primaryColor: string = themeColors.themePrimary ?? DEFAULT_PRIMARY_COLOR
 
 const brandVariants: BrandVariants = {
   10: pSBC(-0.5, primaryColor),
