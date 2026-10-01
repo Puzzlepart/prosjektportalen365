@@ -3,6 +3,7 @@ import { configuredUrl, expect, test } from '../fixtures/pp365'
 import {
   deleteOwnDraftReports,
   deleteReportButton,
+  describeBlockingDrafts,
   newReportButton,
   statusWebPart
 } from '../fixtures/status-report'
@@ -15,10 +16,9 @@ import {
  * Needs the test user to have the project's admin permission, since "Opprett" and "Slett" are
  * offered to admins only; skips with a message otherwise.
  */
-// A project with reports when one is named: a new draft copies the last report's values, which is
-// what satisfies the form's required fields; on a project without reports the save stays disabled.
-const projectUrl =
-  configuredUrl(process.env.E2E_STATUS_PROJECT_URL) ?? configuredUrl(process.env.E2E_PROJECT_URL)
+// A new draft copies the last report's values, which is what satisfies the form's required fields,
+// so the test project must have a published report; without one the save stays disabled.
+const projectUrl = configuredUrl(process.env.E2E_PROJECT_URL)
 const hubUrl = baseURL.replace(/\/+$/, '').toLowerCase()
 const pointsAtHub = !!projectUrl && projectUrl.toLowerCase() === hubUrl
 
@@ -50,10 +50,15 @@ test.describe('status report draft', () => {
     let webPart = await statusWebPart(page)
     const create = newReportButton(webPart)
     await expect(create).toBeVisible({ timeout: 60_000 })
-    test.skip(
-      !(await create.isEnabled()),
-      'the test user may not create reports here (no admin permission, or a draft by someone else exists)'
-    )
+    if (!(await create.isEnabled())) {
+      const blocking = await describeBlockingDrafts(page, projectUrl!)
+      test.skip(
+        true,
+        blocking
+          ? `a draft keeps "Opprett" disabled: ${blocking} in the hub's status list; publish or delete it, or point E2E_PROJECT_URL at another project with reports`
+          : 'the test user may not create reports here (no admin permission on the project)'
+      )
+    }
 
     try {
       await create.click()
@@ -69,7 +74,7 @@ test.describe('status report draft', () => {
         await page.keyboard.press('Escape')
         test.skip(
           true,
-          'the new draft has required fields with no value to copy from an earlier report, so it cannot be saved here; point E2E_STATUS_PROJECT_URL at a project with reports'
+          'the new draft has required fields with no value to copy from an earlier report, so it cannot be saved here; point E2E_PROJECT_URL at a project with reports'
         )
       }
       await save.click()

@@ -8,6 +8,7 @@ import {
 } from '../fixtures/portfolio-overview-column'
 import { baseURL } from '../../playwright.config'
 import { expect, test, webPart } from '../fixtures/pp365'
+import { restGet } from '../fixtures/rest'
 
 /**
  * A write flow on the hub: a site admin adds a column to the portfolio overview's current view,
@@ -100,9 +101,9 @@ test.describe('portfolio overview, adding a column', () => {
       ).toBe(true)
       // What the view knows after the save: its column ids and its own column order. Attached, so
       // a column that does not come back after the reload can be told from one the view never got.
-      const views = await page.request.get(
-        `${hub}/_api/web/lists/getbytitle('Porteføljevisninger')/items?$select=Id,Title,GtIsDefaultView,GtPortfolioColumnOrder,GtPortfolioColumns/Id&$expand=GtPortfolioColumns&$top=20`,
-        { headers: { Accept: 'application/json;odata=nometadata' } }
+      const views = await restGet(
+        page,
+        `${hub}/_api/web/lists/getbytitle('Porteføljevisninger')/items?$select=Id,Title,GtPortfolioIsDefaultView,GtPortfolioColumnOrder,GtPortfolioColumns/Id&$expand=GtPortfolioColumns&$top=20`
       )
       const viewsBody = views.ok()
         ? await views.json()

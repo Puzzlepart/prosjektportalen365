@@ -20,10 +20,16 @@ const PAGES = {
     'Porteføljeoversikt.aspx',
     'PortfolioOverview.aspx'
   ),
-  projectStatus: candidates(
-    process.env.E2E_PAGE_PROJECT_STATUS,
-    'Prosjektstatus.aspx',
-    'ProjectStatus.aspx'
+  // The hub has no status page of its own; the aggregation web part sits on the delivery, the
+  // uncertainty and the experience-log pages, which the hub template provisions.
+  aggregation: candidates(
+    process.env.E2E_PAGE_AGGREGATION,
+    'Leveranseoversikt.aspx',
+    'DeliveryOverview.aspx',
+    'Usikkerhetsoversikt.aspx',
+    'UncertaintyOverview.aspx',
+    'Erfaringslogg.aspx',
+    'ExperienceLog.aspx'
   ),
   timeline: candidates(
     process.env.E2E_PAGE_TIMELINE,
@@ -79,9 +85,22 @@ test.describe('portfolio hub', () => {
     await page.keyboard.press('Escape')
   })
 
-  test('project status aggregation page loads', async ({ page, openPage, resolvePage }) => {
-    await openPage(await resolvePage(hub, PAGES.projectStatus))
-    await expect(webPart(page, /status/i).first()).toBeVisible()
+  test('portfolio aggregation page mounts its web part', async ({
+    page,
+    openPage,
+    resolvePage
+  }) => {
+    await openPage(await resolvePage(hub, PAGES.aggregation))
+    // A single web part page, so no feature tag to find the web part by: it is the one mounted
+    // web part, past its loading state when its list (a grid) or, with nothing to aggregate, the
+    // message shows.
+    const aggregation = page.locator(WEB_PART).first()
+    await expect(
+      aggregation
+        .getByRole('grid')
+        .or(aggregation.getByText(/ingen|no items|fant ingen/i))
+        .first()
+    ).toBeVisible({ timeout: 60_000 })
   })
 
   test('project timeline page loads and its controls can be reached', async ({

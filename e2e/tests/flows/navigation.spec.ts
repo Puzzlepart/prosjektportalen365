@@ -1,5 +1,6 @@
 import { baseURL } from '../../playwright.config'
 import { WEB_PART, configuredUrl, expect, test, webPartByAlias } from '../fixtures/pp365'
+import { restGet } from '../fixtures/rest'
 
 /**
  * The ways a user moves through the portal: from the hub's overview into a project and back, between
@@ -49,14 +50,9 @@ test.describe('navigation', () => {
       openPage,
       resolvePage
     }) => {
-      // A project with a published report, when one is named; the sections only show for one.
-      const statusProject = configuredUrl(process.env.E2E_STATUS_PROJECT_URL) ?? projectUrl!
+      // The sections, and so the tabs, only show for a project with a published report.
       await openPage(
-        await resolvePage(statusProject, [
-          'Prosjektstatus.aspx',
-          'ProjectStatus.aspx',
-          'Status.aspx'
-        ])
+        await resolvePage(projectUrl!, ['Prosjektstatus.aspx', 'ProjectStatus.aspx', 'Status.aspx'])
       )
       const tabs = page.getByRole('tab')
       // The report loads after the web part mounts; the tabs come with it.
@@ -83,9 +79,9 @@ test.describe('navigation', () => {
     test('every page in the project navigation opens', async ({ page }) => {
       test.setTimeout(300_000)
       // The quick launch, as SharePoint has it: pages and list views alike.
-      const response = await page.request.get(
-        `${projectUrl}/_api/web/Navigation/QuickLaunch?$select=Title,Url,Children/Title,Children/Url&$expand=Children`,
-        { headers: { Accept: 'application/json;odata=nometadata' } }
+      const response = await restGet(
+        page,
+        `${projectUrl}/_api/web/Navigation/QuickLaunch?$select=Title,Url,Children/Title,Children/Url&$expand=Children`
       )
       expect(response.ok(), `quick launch: HTTP ${response.status()}`).toBe(true)
       type Node = { Title: string; Url: string; Children?: Node[] }

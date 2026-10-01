@@ -12,7 +12,8 @@ Goal: every web part root and interactive component has a test that meets Decisi
 suite covers a program site, the navigation flows and two write flows, the v8 list hub in
 PortfolioWebParts is on v9, and the three hold-outs (people picker, file type icons, `Autocomplete`)
 are converted or re-decided — so that `@fluentui/react` leaves the repository, or stays only where
-a decision in this document says so. Non-goals: new features, and the lint allow-list beyond what a slice touches. Redux Toolkit 2,
+a decision in this document says so. Non-goals: new features, the lint allow-list beyond what a slice touches, and browser tests for
+users with other permission levels (P4-4; a slice of their own later). Redux Toolkit 2,
 xlsx 0.18 and React 18 are phase 5, which follows this phase on the way to 1.15.
 
 ## Inventory (2026-09-30)
@@ -72,6 +73,10 @@ a slice touches), **G** (file type icons stay v8 until a v9 route exists).
 - **P4-3. Write flows must clean up after themselves**, on the test tenant only, with a dedicated
   test user: nothing a flow creates survives the run, and a flow that fails half-way leaves an
   item that the next run recognises and removes.
+- **P4-4. One account for the suite, the tenant admin, for now** (decided 2026-10-01; replaces the
+  dedicated test user of P4-3). Every test signs in as the admin, so nothing a test asserts may
+  depend on being less than admin. Tests for users with other permission levels (member, visitor,
+  the project roles) come later, as a slice of their own with their own accounts.
 
 ## Slices and order
 
@@ -129,9 +134,8 @@ copy deleted — which exercise the status commands and the template dialog end 
 Three new files under `e2e/tests/flows/`, with the REST writes they need in `fixtures/rest.ts`:
 
 - **`navigation.spec.ts`**, read only: from the hub's overview into a project through its title
-  link and back; the status page's section tabs, which scroll to their section and stay pinned (on
-  `E2E_STATUS_PROJECT_URL`, a project with a published report, since the sections only show for
-  one); every link in the project's quick launch opened in turn — pages and list views alike, since
+  link and back; the status page's section tabs, which scroll to their section and stay pinned
+  (the test project has a published report, since the sections only show for one); every link in the project's quick launch opened in turn — pages and list views alike, since
   most of a project's navigation is list views, not site pages — with a web part or a list shown
   and no error boundary; and the project home's link back to the hub.
 - **`document-template-copy.spec.ts`**, a write flow: a template is copied into the project's
@@ -143,10 +147,11 @@ Three new files under `e2e/tests/flows/`, with the REST writes they need in `fix
 - **`status-report.spec.ts`**, a write flow: "Opprett" opens the edit panel with the draft's
   properties, saving the panel creates the report, "Slett" removes it; the hub's status list is
   cleaned of the test user's drafts for the project before and after. **Skipped on both test
-  projects today:** the save stays disabled on a project with no earlier report to copy values
-  from (required fields), and on the project with reports the test user is not a project admin, so
-  "Opprett" is not offered. It runs once `E2E_STATUS_PROJECT_URL` names a project with a published
-  report where the test user is a project admin.
+  projects at first:** the save stays disabled on a project with no earlier report to copy values
+  from (required fields), and on the project with reports the test user was not a project admin,
+  so "Opprett" was not offered. Resolved the same day by decision: the suite signs in as the
+  tenant admin for now, and the one test project (`E2E_PROJECT_URL`) is one with published
+  reports; see the paragraph below.
 
 **A crash the flows found.** The console guard failed the status flow on the project with reports:
 `Could not load footer-application-customizer in require: Cannot read properties of undefined
@@ -156,6 +161,33 @@ the footer's whole bundle down on that site. The read now falls back to SharePoi
 primary colour, with a test that loads the module with no theme state, an empty one and a themed
 one. The fallback only applies when the theme is not there yet, so a themed site keeps its colour
 wherever the components load after the page.
+
+**After the first CI run of the slice (run 36849685631, green).** Three tests passed on their
+retry, all on the connection to SharePoint in the same six minutes: the program site's SitePages
+listing never answered twice (one and four minutes), and the project home navigation ended in
+`net::ERR_TIMED_OUT`. The test runner gives `page.request` no timeout of its own, so a stalled
+request ran until the test timed out. The shared fixture now bounds the listing to 30 s, sends a
+request or navigation that failed at the network level once more, and keeps one SitePages listing
+per site per worker instead of one per test. A local run of the whole suite the same day had the
+same stall on the column flow's first REST call, so every REST call of the fixtures and specs now
+goes through `restGet`/`restPost` in `fixtures/rest.ts`: bounded, reads and the digest sent again
+after a network failure, writes sent once (a stalled delete may still have been applied). Two tests were skipped: the status flow, on a
+project where the draft could not be saved (see below), and the hub's "project status aggregation" smoke,
+which looked for a page the hub template never provisions; it now opens the delivery overview (or
+the uncertainty overview or the experience log) and expects the aggregation web part past its
+loading state. The views diagnostic in the column flow asked for `GtIsDefaultView`, which is
+`GtPortfolioIsDefaultView`, so its attachment was a 400; fixed.
+
+**One account, one project (decided 2026-10-01).** The suite signs in as the tenant admin for now;
+tests for users with other permission levels come later, as their own slice. With that, the
+separate status project (`E2E_STATUS_PROJECT_URL`, never set in the repository) is gone: there is
+one test project, `E2E_PROJECT_URL`, pointed at the Frisbee project the same day, which has
+published reports, so the status flow and the status page's tab test run there. An unpublished
+report from 2025 (item 28 in the hub's status list) kept "Opprett" disabled on that project until
+it was published; the flow's skip message now names any draft that blocks it, and says that the
+permission is missing when there is none. The project switch also skipped the dialog smoke's
+"unchoose" test, since the Frisbee library has no subfolder: the test now adds a folder of its own
+(`E2E-mappe`) to a library without one, and removes it again.
 
 ## Rules for the executing agent
 
