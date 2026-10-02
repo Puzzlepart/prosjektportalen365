@@ -8,7 +8,109 @@
  * and every call returns another stub, so module-level wiring such as `spfi().using(...)` does
  * not explode, while an awaited result surfaces as an explicit error instead of a silent
  * `undefined`. If a test hits that error, mock the adapter or service the component uses.
+ *
+ * `@pnp/core` also exports pure helpers (`stringIsNullOrEmpty`, `dateAdd`, ...) that components
+ * call on their own data, with no SharePoint behind them. Those come back as the real thing from
+ * KNOWN below, so a branch such as "render the display field when there is one" behaves as in the
+ * browser instead of always taking the proxy's truthy answer.
  */
+const { randomUUID } = require('crypto')
+
+const hasOwn = (object, prop) => Object.prototype.hasOwnProperty.call(object, prop)
+
+const stringIsNullOrEmpty = (value) => typeof value === 'undefined' || value === null || value.length < 1
+
+/** In-memory stand-in for PnPClientStore (get/put/delete/getOrPut), no expiry. */
+class PnPClientStore {
+  constructor() {
+    this._store = new Map()
+    this.enabled = true
+  }
+  get(key) {
+    return this._store.has(key) ? this._store.get(key) : null
+  }
+  put(key, value) {
+    this._store.set(key, value)
+  }
+  delete(key) {
+    this._store.delete(key)
+  }
+  async getOrPut(key, getter) {
+    if (!this._store.has(key)) this._store.set(key, await getter())
+    return this._store.get(key)
+  }
+  deleteExpired() {}
+}
+
+const KNOWN = {
+  stringIsNullOrEmpty,
+  isArray: (value) => Array.isArray(value),
+  isFunc: (value) => typeof value === 'function',
+  objectDefinedNotNull: (value) => typeof value !== 'undefined' && value !== null,
+  hOP: (object, prop) => hasOwn(object, prop),
+  isUrlAbsolute: (url) => /^https?:\/\/|^\/\//i.test(String(url)),
+  combine: (...paths) =>
+    paths
+      .filter((path) => !stringIsNullOrEmpty(path))
+      .map((path) => String(path).replace(/^[\\|/]/, '').replace(/[\\|/]$/, ''))
+      .join('/')
+      .replace(/\\/g, '/'),
+  dateAdd: (date, interval, units) => {
+    const result = new Date(date)
+    const checkRollover = () => {
+      if (result.getDate() !== date.getDate()) result.setDate(0)
+    }
+    switch (String(interval).toLowerCase()) {
+      case 'year':
+        result.setFullYear(result.getFullYear() + units)
+        checkRollover()
+        break
+      case 'quarter':
+        result.setMonth(result.getMonth() + 3 * units)
+        checkRollover()
+        break
+      case 'month':
+        result.setMonth(result.getMonth() + units)
+        checkRollover()
+        break
+      case 'week':
+        result.setDate(result.getDate() + 7 * units)
+        break
+      case 'day':
+        result.setDate(result.getDate() + units)
+        break
+      case 'hour':
+        result.setTime(result.getTime() + units * 3600000)
+        break
+      case 'minute':
+        result.setTime(result.getTime() + units * 60000)
+        break
+      case 'second':
+        result.setTime(result.getTime() + units * 1000)
+        break
+      default:
+        return undefined
+    }
+    return result
+  },
+  getGUID: () => randomUUID(),
+  getHashCode: (value) => {
+    let hash = 0
+    const text = String(value)
+    for (let i = 0; i < text.length; i++) {
+      hash = (hash << 5) - hash + text.charCodeAt(i)
+      hash |= 0
+    }
+    return hash
+  },
+  PnPClientStorage: class PnPClientStorage {
+    constructor() {
+      this.local = new PnPClientStore()
+      this.session = new PnPClientStore()
+    }
+  }
+}
+
 function createStub(path) {
   const target = function () {}
   return new Proxy(target, {
@@ -23,6 +125,7 @@ function createStub(path) {
         }
       }
       if (prop === '__esModule') return true
+      if (path === '@pnp' && hasOwn(KNOWN, prop)) return KNOWN[prop]
       if (prop === 'default') return createStub(path)
       return createStub(`${path}.${String(prop)}`)
     },

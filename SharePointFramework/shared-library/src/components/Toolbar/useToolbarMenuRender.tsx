@@ -163,7 +163,12 @@ function MenuComponent({
           hasIcons={hasIcons}
           checkedValues={item.checkedValues}
         >
-          {item.items.map((menuItem) => renderMenuItem(menuItem, () => setOpen(false)))}
+          {item.items.map((menuItem, index) => (
+            // A ListMenuItem has no key of its own; the menu's order is stable, so the index is one.
+            <React.Fragment key={index}>
+              {renderMenuItem(menuItem, () => setOpen(false))}
+            </React.Fragment>
+          ))}
         </MenuList>
       </MenuPopover>
     </Menu>

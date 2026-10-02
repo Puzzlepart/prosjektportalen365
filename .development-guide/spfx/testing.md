@@ -32,7 +32,7 @@ Alle løsningene peker på det samme Jest-oppsettet gjennom `config/jest.config.
 | `lib/resolver.js` | Løser SPFx-strengmoduler (`SharedLibraryStrings`, `SharedResources`, `<Løsning>Strings`) slik SPFx gjør det: via `localizedResources` i `config/config.json`, til `nb-no`-bunten. Sett `PP365_TEST_LOCALE=en-us` for å teste engelsk. |
 | `lib/amdTransform.js` | Gjør AMD-strengbuntene (`define([], function () { ... })`) om til CommonJS. En syntaksfeil i en `.js`-strengfil (for eksempel `,,`) feiler dermed testkjøringen i stedet for å krasje i nettleseren. |
 | `lib/spfxStub.js`, `lib/reactMarkdownStub.js`, `lib/noopPluginStub.js` | Erstatter `@microsoft/sp-*` (krever Microsoft-interne moduler i Node), `react-markdown` og `rehype-*`/`remark-*` (ESM-only). `@microsoft/sp-lodash-subset` peker på ekte `lodash`. `window.__themeState__` får standardpaletten SharePoint ellers leverer. |
-| `lib/pnpStub.js` | Erstatter alle `@pnp/*`-moduler. Import og kjeding (`spfi().using(...)`) går fint; et `await` på et PnP-kall feiler med en tydelig melding om at adapteren må mockes. |
+| `lib/pnpStub.js` | Erstatter alle `@pnp/*`-moduler. Import og kjeding (`spfi().using(...)`) går fint; et `await` på et PnP-kall feiler med en tydelig melding om at adapteren må mockes. De rene hjelpefunksjonene i `@pnp/core` (`stringIsNullOrEmpty`, `dateAdd`, `getHashCode`, `getGUID`, `combine`, `isArray`, `isUrlAbsolute`, `PnPClientStorage` i minnet) er ekte, så kode som bruker dem på egne data oppfører seg som i nettleseren. |
 | `moduleNameMapper` | Peker `pp365-shared-library`, `pp365-projectwebparts` og `pp365-portfoliowebparts` til `lib-commonjs/` (ESM i `lib/` kan ikke lastes av Jest). |
 
 Konsekvens: en løsnings tester krever at det delte biblioteket er bygget først (`rush rebuild -o pp365-shared-library`), akkurat som selve bygget.
@@ -69,7 +69,8 @@ Regler og fakta som gjelder:
 - `*.module.scss` løses til klassenavnene sine (`styles.foo === 'foo'`), så du kan spørre på klassenavn.
 - Strengmoduler gir de norske tekstene, så `screen.getByText(strings.Nøkkel)` fungerer.
 - Fluent UI v8 og v9 rendrer under jsdom. Første innlasting av `@fluentui/react-components` i en testfil tar 15-45 sekunder; samle testene for én funksjon i én fil i stedet for én fil per lite delkomponent.
-- Interaksjon: bruk `@testing-library/user-event` (`userEvent.setup()`), ikke `fireEvent`, for klikk og tasting.
+- Interaksjon: bruk `@testing-library/user-event` (`userEvent.setup()`), ikke `fireEvent`, for klikk og tasting. Unntak for Fluent v9-menyer: `user-event` sin pekersekvens på et menyelement stopper aldri under jsdom og lar Jest-arbeideren henge i minutter, så klikk menyelementer med `fireEvent.click`. En nestet v9-meny (undermeny) kan ikke åpnes under jsdom i det hele tatt; sjekk utløseren (`aria-haspopup="menu"`) og les valgene fra hooken som bygger dem. Hver åpen v9-meny koster dessuten titalls sekunder å rive ned under jsdom, og kostnaden vokser for hver meny en testfil har rendret: rendre menyen én gang per fil, og test valgene gjennom hooken.
+- Fluent v8 `DetailsList` rendrer ingen rader under jsdom uten `onShouldVirtualize={() => false}`, og markeringskolonnen gir en navnløs `columnheader` som må filtreres bort. `WebPartTitle` rendrer en `<h2>` rundt en `span[role=heading]`, så spør på `getByText(tittel, { selector: 'span' })`.
 - Trenger komponenten SPFx-kontekst (`WebPartContext`, `pageContext`), lag et minimalt objekt med akkurat feltene komponenten leser og send det inn via props eller context-provider. Ikke bygg en generell SPFx-mock.
 - Matcherne fra jest-dom (`toBeInTheDocument`, `toHaveClass`, ...) er gjort kjent for kompilatoren gjennom `src/jest-dom.d.ts` i hver løsning.
 

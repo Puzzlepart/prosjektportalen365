@@ -189,6 +189,57 @@ permission is missing when there is none. The project switch also skipped the di
 "unchoose" test, since the Frisbee library has no subfolder: the test now adds a folder of its own
 (`E2E-mappe`) to a library without one, and removes it again.
 
+### Slice 2 — PortfolioWebParts tests (2026-10-01)
+
+Fourteen test files added (three existed; 17 files, 81 tests, up from 14), one per component
+folder: the solution's nine real folders all have a test now (the inventory's eleven counted two empty, untracked directories on the
+developer's disk, `PortfolioInsights` and `ProjectProvision`, which are not in the repository).
+
+- **The hub list, before its conversion** (`List/List.test.tsx`, `useAddColumn.test.ts`,
+  `ColumnContextMenu/renderMenuItem.test.tsx`): the header with title, search box and toolbar in
+  the same block as the column headers (the block that stays pinned); one row per item, the title
+  as a link to the project or as text with the no-data explanation; a cell rendered through its
+  own renderer, its display field, its fallback or its configuration, and through the registry
+  (the hub column); hidden columns and the add column, which is there unless disabled — the
+  overview relies on that; the header click and right click that open the column menu; groups
+  with their names and a collapsed group's hidden rows; selection through the v8 `Selection`,
+  reported on change. The column menu's item kinds and the click that runs an item and closes
+  the menu.
+- **The overview's rules** (`PortfolioOverview/hooks/useFilteredData.test.ts`,
+  `reducer/reducer.test.ts`, `ColumnContextMenu/ColumnContextMenu.test.tsx`): search on every
+  column, the active filters, grouping with "not set" and the Yes/No grouping of boolean columns,
+  the sort within groups (the direction applies to the group value too); the reducer's sorting per
+  data type and by a custom order, the sorted column's marks, group-by toggling, filters, the
+  selection, the fetched data, the error named after the view, a saved column's place at the end
+  of the view order, deleted and chosen columns; the column menu's choices, who may use them and
+  what each dispatches, read from the hook. One fact pinned on the way: in this web part
+  `isSortedDescending: true` is the "A til Å" choice, that is ascending.
+- **Render tests for the root components** the web parts mount (`LatestProjects`,
+  `ProjectCard`, `ProjectList`, `ResourceAllocation`, `IdeaModule`, `PortfolioOverview`,
+  `PortfolioAggregation`) with the data fetch replaced, plus `EditViewColumnsPanel`'s choosing,
+  moving, saving and reverting.
+
+**Harness.** The PnP stub now returns the real pure helpers of `@pnp/core` (`stringIsNullOrEmpty`
+and friends, an in-memory `PnPClientStorage`), so a branch such as "render the display field when
+there is one" behaves as in the browser. Three facts about Fluent under jsdom went into the testing
+guide and the skill: v8 `DetailsList` needs `onShouldVirtualize` to render rows; a v9 menu item must
+be clicked with a plain click event (user-event's pointer sequence never settles and stalls the
+worker for minutes), a nested v9 menu cannot be opened at all, and every open menu costs tens of
+seconds to tear down, so a file renders a menu once and reads the choices from the hook.
+
+**Found by the tests and fixed.** The group-by item of both column menus was a checkable item with
+no name and value, so the menu kept its checked state under an undefined key and never showed the
+check mark; it has them now. The column menu's divider and submenu, and the shared toolbar's items,
+rendered without keys (a warning on every render). Found and left: `ProjectList`'s data fetch has no
+error handling, so its error state is unreachable from a failed fetch; the empty state is shown
+before the error when no project came back. Both are noted for the owner, not changed.
+
+**Floors.** Measured on the 81 tests: 50 % statements, 59 % branches, 45 % functions, 50 % lines
+(from 12/16/12/12); the floors are 48/56/42/48. ESLint, TypeScript and Jest were run on the changed
+files separately; the full Heft build of the solution and the shared library's rebuild (its toolbar
+now keys its items) are left to the push, since the machine's endpoint protection made every build
+take an hour that day.
+
 ## Rules for the executing agent
 
 - Read `AGENTS.md`, the `pp365-toolchain` and `pp365-testing` skills, this plan and the phase 3

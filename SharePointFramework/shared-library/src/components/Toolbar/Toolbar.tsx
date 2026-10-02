@@ -19,11 +19,16 @@ export const Toolbar: FC<IToolbarProps> = (props) => {
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme} className={styles.root}>
         <FluentToolbar className={styles.toolbar}>
-          {props.items.map(renderToolbarItem)}
+          {props.items.map((item, index) => (
+            // A ListMenuItem has no key of its own; the toolbar's order is stable, so the index is one.
+            <React.Fragment key={index}>{renderToolbarItem(item)}</React.Fragment>
+          ))}
         </FluentToolbar>
         {props.farItems && (
           <FluentToolbar className={styles.toolbar}>
-            {props.farItems.map(renderToolbarItem)}
+            {props.farItems.map((item, index) => (
+              <React.Fragment key={index}>{renderToolbarItem(item)}</React.Fragment>
+            ))}
           </FluentToolbar>
         )}
         {props.filterPanel && (
