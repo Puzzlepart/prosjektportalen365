@@ -293,7 +293,12 @@ with an undefined value, which Fluent reports in the development console.
 large Fluent tree (text and title queries instead there), and a component doing async work after
 its test ended takes the Jest worker down ("the `document` global ... is not defined anymore"), so
 the phase selector's tests unmount and let that work finish in `afterEach`. Opening a phase's
-popover blocked for 13 s on the loaded machine; those three tests have a 60 s timeout.
+popover blocked for 13 s on the loaded machine, and the first push's CI build (37001404506) failed
+on it: the three tests that open one ran past a 60 s timeout each (136 of 139 passed). Fluent
+positions an open popover against its trigger, and that is what costs under jsdom. The phase
+selector's test now stands in for `Popover`, `PopoverTrigger` and `PopoverSurface` with a plain
+popover that keeps Fluent's contract (the trigger toggles through `onOpenChange`, the surface shows
+while open), and the three tests run in the default time.
 
 **Floors.** Measured on the 139 tests: 45 % statements, 69 % branches, 51 % functions, 45 % lines
 (from 12/19/7/12); the floors are 42/66/48/42. ESLint and Prettier ran on every new and changed

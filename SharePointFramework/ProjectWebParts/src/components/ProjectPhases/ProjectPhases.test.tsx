@@ -18,6 +18,30 @@ jest.mock('data/SPDataAdapter', () => ({
     project: { updateChecklistItem: jest.fn() }
   }
 }))
+// Fluent positions an open popover against its trigger, and under jsdom that blocked a test for
+// 13 s on a loaded machine and for more than a minute in CI. The phases' popovers are stood in for
+// by a plain one: its trigger toggles it through `onOpenChange`, and its surface shows while open,
+// which is the part of Fluent's contract the phase selector relies on.
+jest.mock('@fluentui/react-components', () => {
+  const actual = jest.requireActual('@fluentui/react-components')
+  const React = jest.requireActual('react')
+  const PopoverContext = React.createContext({ open: false, toggle: (_event: any) => undefined })
+  const Popover = ({ open, onOpenChange, children }: any) =>
+    React.createElement(
+      PopoverContext.Provider,
+      { value: { open, toggle: (event: any) => onOpenChange?.(event, { open: !open }) } },
+      children
+    )
+  const PopoverTrigger = ({ children }: any) => {
+    const { toggle } = React.useContext(PopoverContext)
+    return React.cloneElement(children, { onClick: toggle })
+  }
+  const PopoverSurface = ({ children }: any) => {
+    const { open } = React.useContext(PopoverContext)
+    return open ? React.createElement('div', { role: 'dialog' }, children) : null
+  }
+  return { __esModule: true, ...actual, Popover, PopoverTrigger, PopoverSurface }
+})
 jest.mock('./useChangePhase', () => ({ useChangePhase: () => jest.fn() }))
 jest.mock('./usePhaseHooks', () => ({ usePhaseHooks: () => [jest.fn(), jest.fn()] }))
 
@@ -80,21 +104,16 @@ function renderPhases(
   )
 }
 
-// Each phase is a list item that doubles as the popover's trigger, so it carries the button role.
+// Each phase is a list item and the trigger of its popover; they are read from the list's markup.
 const phaseItems = () =>
   Array.from(screen.getByRole('list').querySelectorAll('li')).map(
     (li) => li.querySelector('span')?.textContent
   )
 
-// Opening a phase's popover blocked the test for over ten seconds under jsdom on a loaded machine
-// (measured: the click returned at once, the next timer fired 13 s later); the popover tests get
-// the time for it.
-const POPOVER_TIMEOUT = 60_000
-
 describe('ProjectPhases', () => {
-  // The popover and the dialog position themselves asynchronously; a test that leaves one open
-  // must unmount it and let that work finish, or it fires after the environment is torn down and
-  // takes the Jest worker down with it.
+  // The change-phase dialog keeps working asynchronously after it opens; a test that leaves it open
+  // must unmount it and let that work finish, or the work fires after the environment is torn down
+  // and takes the Jest worker down with it.
   afterEach(async () => {
     cleanup()
     await act(() => new Promise<void>((resolve) => setTimeout(resolve, 50)))
@@ -116,49 +135,37 @@ describe('ProjectPhases', () => {
     expect(phaseItems()).toEqual(['Konsept', 'Planlegge', 'Gjennomføre', 'Avslutte'])
   })
 
-  it(
-    'opens a phase in a popover with its checklist status and the change-phase action',
-    async () => {
-      renderPhases(phases[0])
-      fireEvent.click(await screen.findByTitle('Planlegge'))
-      expect(await screen.findByText('Planlegge', { selector: 'h2' })).toBeInTheDocument()
-      // One open and one closed checkpoint, told through the markdown stand-in.
-      expect(
-        screen.getByText(format(strings.CheckPointsStatus, 1, strings.StatusOpen.toLowerCase()))
-      ).toBeInTheDocument()
-      expect(screen.getByText(strings.PhaseChecklistLinkText).closest('a')).not.toBeNull()
-      const change = screen.getByTitle(strings.ChangePhaseText)
-      expect(change).toBeEnabled()
-      fireEvent.click(change)
-      expect(
-        await screen.findByText(format(strings.ChangePhaseDialogTitle, 'Planlegge'))
-      ).toBeInTheDocument()
-      expect(
-        screen.getByText(format(strings.ChangePhaseDialogSubtitle, 'Konsept', 'Planlegge'))
-      ).toBeInTheDocument()
-    },
-    POPOVER_TIMEOUT
-  )
+  it('opens a phase in a popover with its checklist status and the change-phase action', async () => {
+    renderPhases(phases[0])
+    fireEvent.click(await screen.findByTitle('Planlegge'))
+    expect(await screen.findByText('Planlegge', { selector: 'h2' })).toBeInTheDocument()
+    // One open and one closed checkpoint, told through the markdown stand-in.
+    expect(
+      screen.getByText(format(strings.CheckPointsStatus, 1, strings.StatusOpen.toLowerCase()))
+    ).toBeInTheDocument()
+    expect(screen.getByText(strings.PhaseChecklistLinkText).closest('a')).not.toBeNull()
+    const change = screen.getByTitle(strings.ChangePhaseText)
+    expect(change).toBeEnabled()
+    fireEvent.click(change)
+    expect(
+      await screen.findByText(format(strings.ChangePhaseDialogTitle, 'Planlegge'))
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(format(strings.ChangePhaseDialogSubtitle, 'Konsept', 'Planlegge'))
+    ).toBeInTheDocument()
+  })
 
-  it(
-    'does not offer to change to the phase the project is in',
-    async () => {
-      renderPhases(phases[0])
-      fireEvent.click(await screen.findByTitle('Konsept'))
-      expect(await screen.findByText('Konsept', { selector: 'h2' })).toBeInTheDocument()
-      expect(screen.getByTitle(strings.Aria.CurrentPhaseText)).toBeDisabled()
-    },
-    POPOVER_TIMEOUT
-  )
+  it('does not offer to change to the phase the project is in', async () => {
+    renderPhases(phases[0])
+    fireEvent.click(await screen.findByTitle('Konsept'))
+    expect(await screen.findByText('Konsept', { selector: 'h2' })).toBeInTheDocument()
+    expect(screen.getByTitle(strings.Aria.CurrentPhaseText)).toBeDisabled()
+  })
 
-  it(
-    'offers no change-phase action without the permission',
-    async () => {
-      renderPhases(phases[0], { userHasChangePhasePermission: false })
-      fireEvent.click(await screen.findByTitle('Planlegge'))
-      expect(await screen.findByText('Planlegge', { selector: 'h2' })).toBeInTheDocument()
-      expect(screen.queryByTitle(strings.ChangePhaseText)).toBeNull()
-    },
-    POPOVER_TIMEOUT
-  )
+  it('offers no change-phase action without the permission', async () => {
+    renderPhases(phases[0], { userHasChangePhasePermission: false })
+    fireEvent.click(await screen.findByTitle('Planlegge'))
+    expect(await screen.findByText('Planlegge', { selector: 'h2' })).toBeInTheDocument()
+    expect(screen.queryByTitle(strings.ChangePhaseText)).toBeNull()
+  })
 })
