@@ -11,7 +11,12 @@ import { isEmpty } from 'underscore'
  */
 export function useChildProjectsList() {
   const context = useProjectInformationContext()
-  const childProjects = context.state?.data?.childProjects || []
+  // One array per data load: a fresh `[]` on every render would re-run the effect below each time
+  // the data has no child projects (after a failed fetch, for one) and never let the page settle.
+  const childProjects = useMemo(
+    () => context.state?.data?.childProjects || [],
+    [context.state?.data?.childProjects]
+  )
 
   const [state, setState] = useState<IChildProjectsListState>({
     viewAll: false,

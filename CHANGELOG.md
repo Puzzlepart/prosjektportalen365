@@ -31,6 +31,9 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - `Åpne øyeblikksbilde` i `Prosjektstatus` åpner nå øyeblikksbildet i en ny fane
 - Rettet en feil i `Administrasjon av underområder` hvor et fjernet underområde ble hengende igjen i utvalget slik at `Fjern underområder` var aktiv uten noe valgt, og hvor en sammenslått og gjenåpnet hub-gruppe mistet det synlige utvalget; grupper med færre enn ti prosjekter åpnes nå automatisk, og alle grupper åpnes under søk
 - Rettet en feil hvor lister med utvalg (`Prosjekttidslinje`, `Hent dokumentmal`) alltid fikk et vannrett rullefelt tilsvarende avkrysningskolonnens bredde
+- Rettet en feil i `Prosjektstatus` hvor feilmeldingen aldri ble vist når data ikke kunne hentes; siden viste verktøylinjen i stedet
+- Rettet en feil i `Prosjektinformasjon` hvor webdelen tegnet seg selv på nytt i det uendelige etter at henting av data hadde feilet
+- Rettet en feil i `Dynamisk liste` hvor filteret for et oppslagsfelt tilbød verdier som `#Alfa` og `1` i stedet for navnet på oppslagsverdien
 
 ---
 

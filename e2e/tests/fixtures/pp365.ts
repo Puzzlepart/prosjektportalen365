@@ -43,15 +43,26 @@ export function configuredUrl(value: string | undefined): string | undefined {
  */
 export const REQUEST_TIMEOUT = 30_000
 
-/** Errors from the connection to SharePoint, as opposed to an answer from SharePoint. */
-const NETWORK_ERROR = /net::ERR_|Request timeout of \d+ms exceeded|socket hang up|ECONNRESET/i
+/**
+ * Errors from the connection to SharePoint, as opposed to an answer from SharePoint: Chromium's
+ * net errors, its error page (a navigation "interrupted by another navigation to chrome-error://"),
+ * a request that hit REQUEST_TIMEOUT ("Timeout 30000ms exceeded", Playwright's own wording) and a
+ * dropped socket.
+ */
+const NETWORK_ERROR = /net::ERR_|chrome-error:\/\//i
+const NETWORK_ERROR_TEXT = /Timeout \d+ms exceeded|socket hang up|ECONNRESET/i
+
+/** A pause between the attempts, so a momentary drop in the connection has passed. */
+const RETRY_DELAY = 3_000
 
 /** Runs a request or navigation, sending it a second time when the first attempt failed at the network level. */
 export async function withNetworkRetry<T>(send: () => Promise<T>): Promise<T> {
   try {
     return await send()
   } catch (error) {
-    if (!NETWORK_ERROR.test(String((error as Error)?.message ?? error))) throw error
+    const message = String((error as Error)?.message ?? error)
+    if (!NETWORK_ERROR.test(message) && !NETWORK_ERROR_TEXT.test(message)) throw error
+    await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY))
     return await send()
   }
 }

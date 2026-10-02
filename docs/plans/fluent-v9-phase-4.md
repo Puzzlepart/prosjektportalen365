@@ -238,7 +238,67 @@ before the error when no project came back. Both are noted for the owner, not ch
 (from 12/16/12/12); the floors are 48/56/42/48. ESLint, TypeScript and Jest were run on the changed
 files separately; the full Heft build of the solution and the shared library's rebuild (its toolbar
 now keys its items) are left to the push, since the machine's endpoint protection made every build
-take an hour that day.
+take an hour that day. The push's CI run (36974502735) built all five solutions green, with
+every solution's Jest passing on the changed PnP stub; its end-to-end job failed on four network
+errors inside a two-minute window from the runner to SharePoint (25 passed, 3 flaky, 1 failed), the
+environment again. Two of them exposed a gap in the fixture's retry: Playwright words a bounded
+request's timeout as "Timeout 30000ms exceeded", and Chromium's error page shows as a navigation
+"interrupted by another navigation to chrome-error://", and the retry recognised neither. It does
+now, and pauses three seconds before the second attempt. The slowness of that day's local builds is
+the machine's endpoint protection, measured on 2026-10-02 (a compile with 9 s of CPU takes 29 s, a
+first load of Fluent's modules 26 s against 1 s the second time); an exclusion was requested from IT.
+
+### Slice 3 — ProjectWebParts tests (2026-10-02)
+
+Twenty-seven test files added (six existed; 33 files, 139 tests, up from 21), covering every
+component folder in the repository (`ArchiveDialog` is, like the two in slice 2, an empty untracked
+directory on the developer's disk). The two base web parts are SPFx classes with nothing to render
+in Jest; the end-to-end smoke covers them.
+
+- **The status page** (`ProjectStatus.test.tsx`, `reducer.test.ts`, `Commands/useToolbarItems`,
+  `Sections/useSections`, `Sections/scopeTokens`, `StatusElement`, `parseSubProjects`): the page
+  with a published report and with a draft, the report commands each user may run, the history,
+  the snapshot and source links, the report series selector and its options (including a series
+  whose key is no longer configured), which sections show for a report and a series, the status
+  element with its truncated comment and icon-only variant, and every reducer rule.
+- **Project information** (`ProjectInformation`, `ProjectProperties`, `Actions`,
+  `ProjectStatusReport/useProjectStatusReport`, `ProjectInformationPanel`): properties rendered by
+  type, the actions by permission and project kind, parent and child projects with the fold, the
+  latest report per series, and the panel's two ways of opening.
+- **The phase selector** (`ProjectPhases`, `ChangePhaseDialog`, its reducer): the visible phases and
+  the end phase near the end, the popover with checklist status and the change action by
+  permission, the dialog's walk through the open checkpoints with the comment rule, the mandatory
+  checklist, the summary and the confirmation.
+- **The rest**: the dynamic list (rows, single-item view, empty and error states, filters, search,
+  field visibility), the matrix grid and both uncertainty matrices with the after-action switch,
+  the news web part and its file-name rules, the timeline with its groups and item transformation.
+
+**Found by the tests and fixed.**
+
+- The shared `Fluent` wrapper (`shared-library/src/components/Fluent`) memoized its whole tree with
+  no dependencies, since v1.9.0 (February 2024), so whatever the first render chose stuck. On the
+  status page that is the branch picked before the data arrives: a failed fetch set the error, and
+  the page kept showing its toolbar and never the message. The project information web part renders
+  through the same wrapper. It renders its children on every render now, with a test.
+- The child projects list of the project information web part built a new empty list on every
+  render when the data had none, and its effect re-ran on every render with it: after a failed
+  fetch the web part never settled (the test hung for 28 minutes). The list is memoized on the data.
+- The dynamic list split a lookup value (`1;#Alfa`) on `;` before reading its name, so its filter
+  offered `#Alfa` and `1`; lookup pairs are kept whole and named now.
+
+Found and left: while the status page loads, its section tabs render the six placeholder sections
+with an undefined value, which Fluent reports in the development console.
+
+**Harness.** Two more facts in the testing guide and the skill: role queries cost seconds each in a
+large Fluent tree (text and title queries instead there), and a component doing async work after
+its test ended takes the Jest worker down ("the `document` global ... is not defined anymore"), so
+the phase selector's tests unmount and let that work finish in `afterEach`. Opening a phase's
+popover blocked for 13 s on the loaded machine; those three tests have a 60 s timeout.
+
+**Floors.** Measured on the 139 tests: 45 % statements, 69 % branches, 51 % functions, 45 % lines
+(from 12/19/7/12); the floors are 42/66/48/42. ESLint and Prettier ran on every new and changed
+file, TypeScript on both solutions, and Jest on the whole of ProjectWebParts and the shared library;
+the full Heft builds are left to the push.
 
 ## Rules for the executing agent
 
