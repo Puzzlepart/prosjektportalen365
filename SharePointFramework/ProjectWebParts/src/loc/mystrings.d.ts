@@ -292,6 +292,8 @@ declare interface IProjectWebPartsStrings {
   TemplateLabel: string
   NoRecentNews: string
   ShowMoreNews: string
+  ShowMoreChildProjectsText: string
+  ShowLessChildProjectsText: string
   ShowLessNews: string
   ModifiedTooltipText: string
   MaxVisibleNewsDescription: string

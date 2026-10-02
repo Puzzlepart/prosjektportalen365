@@ -58,7 +58,10 @@ const OverflowMenu: FC<{
 
 export const SectionTabs: FC = () => {
   smoothscroll.polyfill()
-  const sections = useSections()
+  // While the report loads, the sections are placeholders without an id; they get no tab.
+  const sections = useSections().filter(
+    (section) => section.id !== undefined && section.id !== null
+  )
 
   const scrollIntoView = (sectionId) => {
     const section = document.getElementById(`${strings.ListSectionElementIdPrefix}${sectionId}`)

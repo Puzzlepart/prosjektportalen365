@@ -43,6 +43,8 @@ class PnPClientStore {
 }
 
 const KNOWN = {
+  // @pnp/logging
+  LogLevel: { Verbose: 0, Info: 1, Warning: 2, Error: 3, Off: 99 },
   stringIsNullOrEmpty,
   isArray: (value) => Array.isArray(value),
   isFunc: (value) => typeof value === 'function',
@@ -125,6 +127,9 @@ function createStub(path) {
         }
       }
       if (prop === '__esModule') return true
+      // Jest takes any value whose `asymmetricMatch` is a function for a matcher of its own, so
+      // a stub value would fail `expect.anything()` and every equality it is part of.
+      if (prop === 'asymmetricMatch') return undefined
       if (path === '@pnp' && hasOwn(KNOWN, prop)) return KNOWN[prop]
       if (prop === 'default') return createStub(path)
       return createStub(`${path}.${String(prop)}`)

@@ -34,6 +34,8 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
       return
     }
     if (!this._configuration) {
+      // The base web part unmounts the element in onDispose.
+      // eslint-disable-next-line @rushstack/pair-react-dom-render-unmount
       render(
         createElement(UserMessage, {
           title: this._configurationError?.name ?? strings.ErrorTitle,
@@ -63,9 +65,7 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
     this.properties[key] = value
     switch (this.displayMode) {
       case DisplayMode.Edit:
-        {
-          this.context.propertyPane.refresh()
-        }
+        this.context.propertyPane.refresh()
         break
       case DisplayMode.Read: {
         const options: ISPHttpClientOptions = {
@@ -139,8 +139,8 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
                   label: strings.DefaultDataSourceViewLabel,
                   options: this._getViewOptions(),
                   selectedKey:
-                    _.find(this._configuration.views, (v) => v.isDefault)?.id ||
-                    _.first(this._configuration.views)?.id
+                    _.find(this._configuration?.views, (v) => v.isDefault)?.id ||
+                    _.first(this._configuration?.views)?.id
                 })
               ]
             },

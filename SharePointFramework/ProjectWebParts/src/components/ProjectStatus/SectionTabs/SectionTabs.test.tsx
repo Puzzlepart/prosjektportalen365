@@ -1,12 +1,12 @@
 // The sections come from the report's data, so the hook is mocked before the component is
 // imported. Fluent's overflow needs a ResizeObserver, which jsdom lacks; a no-op keeps it quiet.
-jest.mock('../Sections/useSections', () => ({
-  useSections: () => [
-    { id: 1, name: 'Sammendrag' },
-    { id: 2, name: 'Leveranser' },
-    { id: 3, name: 'Usikkerhet' }
-  ]
-}))
+const mockSections: { value: any[] } = { value: [] }
+const SECTIONS = [
+  { id: 1, name: 'Sammendrag' },
+  { id: 2, name: 'Leveranser' },
+  { id: 3, name: 'Usikkerhet' }
+]
+jest.mock('../Sections/useSections', () => ({ useSections: () => mockSections.value }))
 window.ResizeObserver =
   window.ResizeObserver ??
   (class {
@@ -30,6 +30,10 @@ Element.prototype.scrollIntoView = jest.fn()
  * whichever element keeps the tabs pinned while the report scrolls.
  */
 describe('SectionTabs', () => {
+  beforeEach(() => {
+    mockSections.value = SECTIONS
+  })
+
   it('shows a tab for every section', () => {
     render(<SectionTabs />)
     expect(screen.getByRole('tab', { name: 'Sammendrag' })).toBeInTheDocument()
@@ -48,5 +52,15 @@ describe('SectionTabs', () => {
     await user.click(screen.getByRole('tab', { name: 'Leveranser' }))
     const section = screen.getByText('Leveranser-seksjonen')
     expect(section.scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'start' })
+  })
+
+  it('gives the placeholder sections of a loading report no tab', () => {
+    // While the report loads, the sections are placeholders without an id or a name.
+    mockSections.value = [
+      { id: undefined, name: undefined },
+      { id: undefined, name: undefined }
+    ]
+    render(<SectionTabs />)
+    expect(screen.queryAllByRole('tab')).toHaveLength(0)
   })
 })

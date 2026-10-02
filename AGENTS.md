@@ -61,7 +61,7 @@ Inside a solution (`SharePointFramework/<Solution>/`):
 | Validate localization balance | `npm run validate-loc` |
 | Type-check only | `npx tsc --noEmit` |
 | Run the solution's unit and component tests (`heft test`, builds first) | `npm test` |
-| Run one test file | `npx heft test --test-path-pattern <name>` |
+| Run one test file | `npx heft test --test-path-ignore-patterns '^(?!.*<name>\.test\.)'` (`--test-path-pattern` is ignored: Heft's Jest plugin passes the Jest 29 option name, and Jest 30 runs every file) |
 
 After changing the loc files, run `validate-loc`. After changing `shared-library`, rebuild it (`rush rebuild -o pp365-shared-library`) so dependent solutions pick up the change.
 

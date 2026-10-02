@@ -72,21 +72,6 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
   const context = useProjectList(props)
   const renderProjects = useProjectListRenderer(context)
 
-  if (context.state.isDataLoaded && context.state.projects.length === 0) {
-    return (
-      <IdPrefixProvider value={context.fluentProviderId}>
-        <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
-          <section className={styles.projectList}>
-            <UserMessage
-              title={strings.NoProjectsFoundTitle}
-              text={strings.NoProjectsFoundMessage}
-            />
-          </section>
-        </FluentProvider>
-      </IdPrefixProvider>
-    )
-  }
-
   if (context.state.error) {
     return (
       <IdPrefixProvider value={context.fluentProviderId}>
@@ -96,6 +81,21 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
               title={strings.ErrorFetchingProjectsTitle}
               text={context.state.error}
               intent='error'
+            />
+          </section>
+        </FluentProvider>
+      </IdPrefixProvider>
+    )
+  }
+
+  if (context.state.isDataLoaded && context.state.projects.length === 0) {
+    return (
+      <IdPrefixProvider value={context.fluentProviderId}>
+        <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
+          <section className={styles.projectList}>
+            <UserMessage
+              title={strings.NoProjectsFoundTitle}
+              text={strings.NoProjectsFoundMessage}
             />
           </section>
         </FluentProvider>

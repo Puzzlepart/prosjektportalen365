@@ -111,9 +111,10 @@ describe('ProjectList', () => {
   })
 
   it('shows the error when the fetch failed', async () => {
-    // With no projects the empty state is shown instead; the error shows once some are there.
-    renderList({ projects: projects(), error: 'Kilden svarte ikke' })
+    // A failed fetch leaves no projects; the error is what the user needs to see, not the empty list.
+    renderList({ projects: [], error: 'Kilden svarte ikke' })
     expect(await screen.findByText(strings.ErrorFetchingProjectsTitle)).toBeInTheDocument()
     expect(screen.getByText('Kilden svarte ikke')).toBeInTheDocument()
+    expect(screen.queryByText(strings.NoProjectsFoundTitle)).toBeNull()
   })
 })

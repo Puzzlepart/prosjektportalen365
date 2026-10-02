@@ -142,7 +142,7 @@ describe('ProjectInformation', () => {
     ).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Foxtrot' })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Golf' })).toBeNull()
-    await user.click(screen.getByRole('button', { name: 'Vis flere' }))
+    await user.click(screen.getByRole('button', { name: strings.ShowMoreChildProjectsText }))
     expect(screen.getByRole('button', { name: 'Golf' })).toBeInTheDocument()
   })
 

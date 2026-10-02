@@ -51,10 +51,12 @@ export const ChildProjectsList: FC = () => {
               appearance='subtle'
               size='small'
               icon={viewAll ? <ChevronUpFilled /> : <ChevronDownFilled />}
-              title={viewAll ? 'Vis mindre' : 'Vis flere'}
+              title={
+                viewAll ? strings.ShowLessChildProjectsText : strings.ShowMoreChildProjectsText
+              }
               onClick={toggleViewAll}
             >
-              {viewAll ? 'Vis mindre' : 'Vis flere'}
+              {viewAll ? strings.ShowLessChildProjectsText : strings.ShowMoreChildProjectsText}
             </Button>
           </div>
         </FluentProvider>

@@ -32,8 +32,15 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Rettet en feil i `Administrasjon av underområder` hvor et fjernet underområde ble hengende igjen i utvalget slik at `Fjern underområder` var aktiv uten noe valgt, og hvor en sammenslått og gjenåpnet hub-gruppe mistet det synlige utvalget; grupper med færre enn ti prosjekter åpnes nå automatisk, og alle grupper åpnes under søk
 - Rettet en feil hvor lister med utvalg (`Prosjekttidslinje`, `Hent dokumentmal`) alltid fikk et vannrett rullefelt tilsvarende avkrysningskolonnens bredde
 - Rettet en feil i `Prosjektstatus` hvor feilmeldingen aldri ble vist når data ikke kunne hentes; siden viste verktøylinjen i stedet
-- Rettet en feil i `Prosjektinformasjon` hvor webdelen tegnet seg selv på nytt i det uendelige etter at henting av data hadde feilet
+- Rettet en latent feil i `Prosjektinformasjon` hvor webdelen ville tegnet seg selv på nytt i det uendelige dersom henting av data feilet
 - Rettet en feil i `Dynamisk liste` hvor filteret for et oppslagsfelt tilbød verdier som `#Alfa` og `1` i stedet for navnet på oppslagsverdien
+- Rettet en feil i `Prosjektstatus` hvor enhver feil ved henting av statusrapportene ble meldt som manglende tilgang; meldingen sier nå at rapportene ikke kunne hentes, mens manglende tilgang til porteføljeområdet har sin egen melding som før
+- Fanene på statussiden viser ikke lenger tomme faner mens rapporten lastes
+- Knappen `Vis flere`/`Vis mindre` for underområdene i `Prosjektinformasjon` var alltid på norsk; den følger nå språket på området
+- Rettet en feil i `Prosjektliste` hvor listen viste lasteplassholdere i det uendelige når prosjektene ikke kunne hentes; feilmeldingen vises nå, også når ingen prosjekter kom tilbake
+- Rettet en feil hvor egenskapsruten til `Aggregert oversikt` (i porteføljen og i program) og `Idémodul` krasjet når datakilden ikke kunne leses, slik at datakilden ikke kunne rettes der
+- Rettet en feil i hjelpen i bunnteksten hvor en ekstern hjelpeside mistet alt innhold fram til sin siste vannrette linje (`---`), ikke bare Jekyll-hodet, og hvor to bilder på samme linje ga ødelagte bildelenker
+- Rettet en feil hvor `Opprett prosjektdata` krasjet for en godkjent idé når idékonfigurasjonen ikke hadde en tekst for prosjektdata
 
 ---
 

@@ -60,7 +60,10 @@ export const HelpContentDialog: FC<Omit<DialogProps, 'children'>> = (props) => {
                       ))}
                     </TabList>
                     {context.helpContent.map(
-                      (content) => activeValue === content.title && <Content content={content} />
+                      (content) =>
+                        activeValue === content.title && (
+                          <Content key={content.title} content={content} />
+                        )
                     )}
                   </>
                 )}

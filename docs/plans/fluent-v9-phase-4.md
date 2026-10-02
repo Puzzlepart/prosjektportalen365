@@ -232,7 +232,7 @@ no name and value, so the menu kept its checked state under an undefined key and
 check mark; it has them now. The column menu's divider and submenu, and the shared toolbar's items,
 rendered without keys (a warning on every render). Found and left: `ProjectList`'s data fetch has no
 error handling, so its error state is unreachable from a failed fetch; the empty state is shown
-before the error when no project came back. Both are noted for the owner, not changed.
+before the error when no project came back. Both were fixed in slice 4.
 
 **Floors.** Measured on the 81 tests: 50 % statements, 59 % branches, 45 % functions, 50 % lines
 (from 12/16/12/12); the floors are 48/56/42/48. ESLint, TypeScript and Jest were run on the changed
@@ -282,12 +282,14 @@ in Jest; the end-to-end smoke covers them.
   through the same wrapper. It renders its children on every render now, with a test.
 - The child projects list of the project information web part built a new empty list on every
   render when the data had none, and its effect re-ran on every render with it: after a failed
-  fetch the web part never settled (the test hung for 28 minutes). The list is memoized on the data.
+  fetch the web part never settled (the test hung for 28 minutes). Latent in practice, since every
+  hub call of that fetch has a fallback of its own and the fetch itself hardly ever fails. The list
+  is memoized on the data.
 - The dynamic list split a lookup value (`1;#Alfa`) on `;` before reading its name, so its filter
   offered `#Alfa` and `1`; lookup pairs are kept whole and named now.
 
 Found and left: while the status page loads, its section tabs render the six placeholder sections
-with an undefined value, which Fluent reports in the development console.
+with an undefined value, which Fluent reports in the development console. Fixed in slice 4.
 
 **Harness.** Two more facts in the testing guide and the skill: role queries cost seconds each in a
 large Fluent tree (text and title queries instead there), and a component doing async work after
@@ -304,6 +306,92 @@ while open), and the three tests run in the default time.
 (from 12/19/7/12); the floors are 42/66/48/42. ESLint and Prettier ran on every new and changed
 file, TypeScript on both solutions, and Jest on the whole of ProjectWebParts and the shared library;
 the full Heft builds are left to the push.
+
+### Slice 4 — extensions and program tests (2026-10-02)
+
+Twenty-eight test files added (24 in the three solutions of the slice, four in ProjectWebParts and
+PortfolioWebParts for fixes), every extension, web part root and component folder of
+PortfolioExtensions, ProjectExtensions and ProgramWebParts now under test. The slice began with the findings slices 2
+and 3 had left for the owner.
+
+- **PortfolioExtensions** (1 to 10 files, 1 to 100 tests): the footer with its site settings,
+  configuration page, favourite projects, links (the administrator links for site admins only),
+  installed version against the latest release, help and assistant; the five extensions as
+  classes: the footer customizer's settings, its assistant access by group, by role and by both,
+  and its loaders (installation log, links, GitHub releases, followed projects, help per level and
+  page); the three idea commands (who sees them, the dialog's text and choices, the decision or
+  recommendation written for each choice, the already-approved alert, an approved idea's fields
+  copied into processing, the project data item and its edit form); the template package catalog
+  command (template options list only, hub admins only, `showHidden` kept for the session, the
+  drawer opened and dismissed); the two idea dialogs with their SPFx dialog classes; the idea
+  configuration model.
+- **ProjectExtensions** (9 to 20 files, 35 to 109 tests): the setup customizer from start to end,
+  with every validation outcome (Teams channel, no group, not a member, not a site admin, another
+  language than the hub, no hub, the hub itself, already set up and the two ways round that), the
+  tasks in order with their progress and a failing one, the auto-configured and the locked
+  template, the multilingual site, and a forced template's parent project with its old menu; the
+  setup dialog with its template choice, cloud templates included, and its reducer; the base,
+  error and progress dialogs; the risk action cell with its popover, new action panel, Planner
+  preview and migration to Planner; the template selector command, the risk action field
+  customizer, the upgrade customizer and the customizer's removal.
+- **ProgramWebParts** (3 to 7 files, 13 to 30 tests): the five web parts as classes, the base one
+  through each: the data adapter configured for the site, each component rendered with its
+  props, the configuration errors, the aggregation's property updates (the pane refreshed while
+  edited, the page saved while read) and the property panes.
+
+**Found by the tests and fixed.**
+
+- Left by slices 2 and 3: the status page reported any failure to fetch its reports as missing
+  access; it says now that they could not be loaded, and keeps the access message for 401/403 and
+  a hub out of reach. Its section tabs drew a tab for each placeholder section while the report
+  loaded; those get none. The sub-site list's "Vis flere"/"Vis mindre" was hard-coded Norwegian;
+  it is in the language files now. The project list's fetch had no error handling, so a failed
+  fetch left the loading placeholders up for good, and the empty state came before the error;
+  the error is shown now, before the empty state.
+- The property panes of the portfolio aggregation, the idea module and the program aggregation
+  read the default view from a configuration that is missing when the data source cannot be
+  read, so the pane crashed exactly when it was needed to correct the data source.
+- The footer's external help pages lost everything up to their last horizontal rule, since the
+  pattern for the front matter was greedy; two images on one line broke the second image's link
+  and turned the text between them into `%20`.
+- "Opprett prosjektdata" crashed for an approved idea when the idea configuration had no
+  `projectData` text (a configuration made before that text existed, or one an admin wrote); the
+  model fills in empty texts, and the dialog takes a missing one.
+- The help dialog rendered its content without a key.
+
+Found and left: the template package catalog (its drawer, hooks and services, some 5 000
+statements of PortfolioExtensions) has only its skeleton test; it is a feature with a plan of
+its own (`template-catalog.md`) and the reason that solution's statement floor is low. Redux
+Toolkit warns that the object notation of `createReducer` goes away in RTK 2 (the setup dialog's
+reducer among others), for phase 5. The progress dialog's v8 `Icon` warns about icons that are
+not registered under Jest (Decision G).
+
+**Harness.** `pp365-jest-config` gained real, minimal SPFx base classes (`BaseApplicationCustomizer`,
+`BaseListViewCommandSet`, `BaseFieldCustomizer`, `BaseClientSideWebPart`, `BaseDialog`). They are
+ES5 constructor functions like SPFx's own, because the solutions compile to ES5 and an ES5
+subclass cannot call a native class constructor. The stub also has SPFx's `Version`,
+`Dialog.alert`/`prompt` and the property pane field factories, `LogLevel` has its real numbers,
+and both stubs answer `asymmetricMatch` with `undefined`, since Jest took any stub value for a
+matcher of its own. Into the testing guide and the skill went these facts: a `jest.mock` of one
+stubbed package mocks all of them (wrap the stub in a `Proxy` instead), the combobox stand-in,
+jsdom's navigation and the `DEBUG` constant. One correction: `npx heft test --test-path-pattern`,
+which `AGENTS.md`, the guide and the skill gave for running one file, does nothing with Jest 30
+(Heft's plugin passes the option under its Jest 29 name); `--test-path-ignore-patterns` with a
+negative lookahead works.
+
+**Floors.** Measured, then rounded down:
+
+| Solution | Tests | Measured (stmts/branches/funcs/lines) | Floors, from |
+|---|---|---|---|
+| PortfolioExtensions | 100 | 39.9/78.9/70.7/39.9 | 37/75/67/37, from 0/2/2/0 |
+| ProjectExtensions | 109 | 52.6/81.5/67.8/52.6 | 49/78/64/49, from 19/48/18/19 |
+| ProgramWebParts | 30 | 41.4/75.5/63.0/41.4 | 38/72/60/38, from 29/32/7/29 |
+| PortfolioWebParts | 87 | 58.0/61.0/43.2/58.0 | 55/58/42/55, from 48/56/42/48 |
+| ProjectWebParts | 142 | 45.7/69.2/51.3/45.7 | unchanged, 42/66/48/42 |
+
+ESLint and Prettier ran on every new and changed file and TypeScript on the five changed
+solutions; Jest ran on all six solutions on the changed harness (the shared library's 213 tests
+too). The full Heft builds are left to the push.
 
 ## Rules for the executing agent
 
