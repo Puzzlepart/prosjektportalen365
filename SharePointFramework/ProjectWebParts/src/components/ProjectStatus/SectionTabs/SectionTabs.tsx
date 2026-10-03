@@ -15,9 +15,9 @@ import {
 } from '@fluentui/react-components'
 import { MoreHorizontalRegular } from '@fluentui/react-icons'
 import smoothscroll from 'smoothscroll-polyfill'
-import strings from 'ProjectWebPartsStrings'
 import styles from '../ProjectStatus.module.scss'
 import { useSections } from '../Sections/useSections'
+import { useScrollToSection } from './useScrollToSection'
 
 const OverflowMenuItem: FC<{
   section: { id: number; name: string }
@@ -63,11 +63,7 @@ export const SectionTabs: FC = () => {
     (section) => section.id !== undefined && section.id !== null
   )
 
-  const scrollIntoView = (sectionId) => {
-    const section = document.getElementById(`${strings.ListSectionElementIdPrefix}${sectionId}`)
-    // The section's `scroll-margin-top` keeps it clear of the pinned tabs.
-    section?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
+  const scrollToSection = useScrollToSection()
 
   return (
     <div className={styles.stickyTabs}>
@@ -77,7 +73,7 @@ export const SectionTabs: FC = () => {
           defaultSelectedValue={1}
           onTabSelect={(_, data: SelectTabData) => {
             if (data.value === 'overflow-menu') return
-            scrollIntoView(data.value)
+            scrollToSection(data.value as number)
           }}
         >
           {sections.map((section) => {
@@ -89,7 +85,7 @@ export const SectionTabs: FC = () => {
               </OverflowItem>
             )
           })}
-          <OverflowMenu sections={sections} onSelect={scrollIntoView} />
+          <OverflowMenu sections={sections} onSelect={scrollToSection} />
         </TabList>
       </Overflow>
     </div>

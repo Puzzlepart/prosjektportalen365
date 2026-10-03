@@ -36,6 +36,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Rettet en feil i `Dynamisk liste` hvor filteret for et oppslagsfelt tilbød verdier som `#Alfa` og `1` i stedet for navnet på oppslagsverdien
 - Rettet en feil i `Prosjektstatus` hvor enhver feil ved henting av statusrapportene ble meldt som manglende tilgang; meldingen sier nå at rapportene ikke kunne hentes, mens manglende tilgang til porteføljeområdet har sin egen melding som før
 - Fanene på statussiden viser ikke lenger tomme faner mens rapporten lastes
+- Rettet en feil i `Prosjektstatus` hvor et klikk på en seksjonsfane kunne stoppe rullingen midt mellom to seksjoner når SharePoint krympet eller utvidet toppteksten mens siden rullet; siden ruller nå videre til seksjonen
 - Knappen `Vis flere`/`Vis mindre` for underområdene i `Prosjektinformasjon` var alltid på norsk; den følger nå språket på området
 - Rettet en feil i `Prosjektliste` hvor listen viste lasteplassholdere i det uendelige når prosjektene ikke kunne hentes; feilmeldingen vises nå, også når ingen prosjekter kom tilbake
 - Rettet en feil hvor egenskapsruten til `Aggregert oversikt` (i porteføljen og i program) og `Idémodul` krasjet når datakilden ikke kunne leses, slik at datakilden ikke kunne rettes der

@@ -15,7 +15,7 @@ window.ResizeObserver =
     disconnect() {}
   } as any)
 
-import { render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import * as React from 'react'
 import strings from 'ProjectWebPartsStrings'
@@ -23,6 +23,23 @@ import { SectionTabs } from './SectionTabs'
 
 // jsdom has no layout and no `scrollIntoView`; the test only needs to see it asked for.
 Element.prototype.scrollIntoView = jest.fn()
+const scrollIntoView = Element.prototype.scrollIntoView as jest.Mock
+
+/** The sections asked to scroll into view, in order, by their text. */
+const scrolled = () => scrollIntoView.mock.contexts.map((element: Element) => element.textContent)
+
+/** The report with the given sections below the tabs. */
+const renderReport = (...ids: number[]) =>
+  render(
+    <>
+      <SectionTabs />
+      {ids.map((id) => (
+        <div key={id} id={`${strings.ListSectionElementIdPrefix}${id}`}>
+          Seksjon {id}
+        </div>
+      ))}
+    </>
+  )
 
 /**
  * The status report's section tabs: one tab per section, named after it, and choosing one scrolls
@@ -32,7 +49,10 @@ Element.prototype.scrollIntoView = jest.fn()
 describe('SectionTabs', () => {
   beforeEach(() => {
     mockSections.value = SECTIONS
+    scrollIntoView.mockClear()
   })
+
+  afterEach(() => jest.useRealTimers())
 
   it('shows a tab for every section', () => {
     render(<SectionTabs />)
@@ -52,6 +72,39 @@ describe('SectionTabs', () => {
     await user.click(screen.getByRole('tab', { name: 'Leveranser' }))
     const section = screen.getByText('Leveranser-seksjonen')
     expect(section.scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'start' })
+  })
+
+  it('scrolls on to the section once the scrolling has ended, wherever it ended', () => {
+    // SharePoint's header collapsing mid-scroll stops a smooth scroll short of the section.
+    renderReport(1, 2, 3)
+    fireEvent.click(screen.getByRole('tab', { name: 'Usikkerhet' }))
+    expect(scrolled()).toEqual(['Seksjon 3'])
+    fireEvent(document, new Event('scrollend'))
+    expect(scrolled()).toEqual(['Seksjon 3', 'Seksjon 3'])
+    // Once is enough: its own scrolling ending asks for nothing more.
+    fireEvent(document, new Event('scrollend'))
+    expect(scrolled()).toHaveLength(2)
+  })
+
+  it('scrolls on after a second in a browser that does not say when the scrolling ended', () => {
+    jest.useFakeTimers()
+    renderReport(1, 2, 3)
+    fireEvent.click(screen.getByRole('tab', { name: 'Leveranser' }))
+    act(() => {
+      jest.advanceTimersByTime(1_000)
+    })
+    expect(scrolled()).toEqual(['Seksjon 2', 'Seksjon 2'])
+  })
+
+  it('does not take the page back to a section when another one is chosen', () => {
+    jest.useFakeTimers()
+    renderReport(1, 2, 3)
+    fireEvent.click(screen.getByRole('tab', { name: 'Leveranser' }))
+    fireEvent.click(screen.getByRole('tab', { name: 'Usikkerhet' }))
+    act(() => {
+      jest.advanceTimersByTime(1_000)
+    })
+    expect(scrolled()).toEqual(['Seksjon 2', 'Seksjon 3', 'Seksjon 3'])
   })
 
   it('gives the placeholder sections of a loading report no tab', () => {

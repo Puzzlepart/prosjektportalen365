@@ -495,6 +495,16 @@ code:
   the project home load every bundle from the app catalog, and stops the run with the bundle's
   address if one is still missing after that.
 
+The next run (37111173832) passed 29, the new setup step and the hub link test among them; the
+tab test failed on both attempts, now with the sections settled. Its frames show why: the tabs
+scroll smoothly, SharePoint collapses its header (76 px) when the page scrolls down past it and
+expands it on the way up, and that change of layout stopped the scroll partway, between two
+sections. On the developer's machine the header changes just after the scroll has ended (a
+script recorded the scroll position every 50 ms), on the CI runner mid-scroll, so a user on a
+fast machine meets it too. The tabs now scroll on to the section once the scrolling has ended
+(`scrollend`, or after a second in a browser without it), and choosing another tab before that
+cancels it (`SectionTabs/useScrollToSection.ts`, three tests).
+
 The manual check of the tenant found the label fix working for the fields with Fluent v9
 controls (text, number, choice, yes/no, note): the label carries `for` and `id`, and clicking it
 puts the cursor in the field. The date picker takes an id of its own, so its label's `for` points
