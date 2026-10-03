@@ -65,7 +65,8 @@ describe('useFilteredData', () => {
       ['Fase: Konsept', 0, 1],
       ['Fase: Planlegge', 1, 2]
     ])
-    expect(result.groups.every((g) => g.isCollapsed === false)).toBe(true)
+    // The groups start open.
+    expect(result.groups.every((g) => !g.isCollapsed)).toBe(true)
   })
 
   it('sorts the items within their groups by the sort column', () => {

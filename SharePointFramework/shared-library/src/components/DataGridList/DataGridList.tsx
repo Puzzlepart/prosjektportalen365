@@ -42,8 +42,9 @@ function createColumnSizingOptions(columns: IDataGridColumn[]): TableColumnSizin
  * This is the one shared list on v9. The project list and the timeline list ran the same grid
  * with the same code around it, and the lists converted in slice 6 repeated it again; this is that
  * code once. It takes columns as `IDataGridColumn` — a column definition plus widths — which
- * `createDataGridColumns` produces from the solutions' `IListColumn`. Lists that need grouping or a
- * sticky header stay on the v8 hub in PortfolioWebParts (Decision A).
+ * `createDataGridColumns` produces from the solutions' `IListColumn`. The hub in PortfolioWebParts
+ * (`List/ListGrid`) needs groups, a pinned header and shift-click ranges, which `DataGrid` leaves
+ * no room for, and renders on Fluent's `Table` with the same column sizing instead.
  */
 export function DataGridList<TItem = any>(props: IDataGridListProps<TItem>) {
   const {

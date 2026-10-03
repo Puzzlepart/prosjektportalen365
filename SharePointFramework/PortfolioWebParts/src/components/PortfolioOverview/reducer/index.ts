@@ -188,7 +188,7 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         })
       })
       .addCase(SELECTION_CHANGED, (state, { payload }) => {
-        state.selectedItems = payload.getSelection()
+        state.selectedItems = payload
       })
       .addCase(TOGGLE_COLUMN_FORM_PANEL, (state, { payload }) => {
         state.columnForm = payload

@@ -1,6 +1,6 @@
-import { IGroup } from '@fluentui/react'
 import { AnyAction } from '@reduxjs/toolkit'
 import { createContext, useContext } from 'react'
+import { IListGroup } from '../List'
 import { IPortfolioOverviewProps, IPortfolioOverviewState } from './types'
 
 export interface IPortfolioOverviewContext {
@@ -9,7 +9,7 @@ export interface IPortfolioOverviewContext {
   dispatch: React.Dispatch<AnyAction>
   layerHostId: string
   items?: Record<string, any>[]
-  groups?: IGroup[]
+  groups?: IListGroup[]
 }
 
 export const PortfolioOverviewContext = createContext<IPortfolioOverviewContext>(null)

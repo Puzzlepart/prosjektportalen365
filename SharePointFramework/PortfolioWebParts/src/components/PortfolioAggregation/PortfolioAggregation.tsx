@@ -7,7 +7,6 @@ import { ColumnFormPanel } from './ColumnFormPanel'
 import styles from './PortfolioAggregation.module.scss'
 import { ViewFormPanel } from './ViewFormPanel'
 import { PortfolioAggregationContext } from './context'
-import { SET_ALL_COLLAPSED, SET_COLLAPSED } from './reducer'
 import { IPortfolioAggregationProps } from './types'
 import { usePortfolioAggregation } from './usePortfolioAggregation'
 
@@ -19,7 +18,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
     onColumnContextMenu,
     menuItems,
     filterPanelProps,
-    selection
+    onSelectionChange
   } = usePortfolioAggregation(props)
 
   return (
@@ -33,22 +32,14 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             items={context.items}
             columns={context.state.columns}
             hiddenColumns={props.hiddenColumns}
-            groups={context.state.groups}
-            selection={selection}
+            groups={context.groups}
+            onSelectionChange={onSelectionChange}
             searchBox={searchBox}
             onColumnContextMenu={onColumnContextMenu}
             isAddColumnEnabled={!props.lockedColumns}
             compact={context.state.isCompact}
             isListLayoutModeJustified={props.isListLayoutModeJustified}
-            groupProps={{
-              onToggleCollapseAll: (isAllCollapsed) =>
-                context.dispatch(SET_ALL_COLLAPSED({ isAllCollapsed })),
-              headerProps: {
-                onToggleCollapse: (group) => context.dispatch(SET_COLLAPSED({ group }))
-              }
-            }}
             webPartContext={props.spfxContext as WebPartContext}
-            layerHostId={context.layerHostId}
             menuItems={menuItems}
             filterPanelProps={filterPanelProps}
             error={context.state.error}

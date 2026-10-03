@@ -14,7 +14,7 @@ import resource from 'SharedResources'
 export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
   const {
     context,
-    selection,
+    onSelectionChange,
     onColumnContextMenu,
     editViewColumnsPanelProps,
     searchBox,
@@ -33,13 +33,11 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
             columns={context.state.columns}
             groups={context.groups}
             searchBox={searchBox}
-            selection={selection}
-            setKey='multiple'
+            onSelectionChange={onSelectionChange}
             onColumnContextMenu={onColumnContextMenu}
             compact={context.state.isCompact}
             isListLayoutModeJustified={props.isListLayoutModeJustified}
             webPartContext={props.spfxContext as WebPartContext}
-            layerHostId={context.layerHostId}
             menuItems={menuItems}
             filterPanelProps={filterPanelProps}
             error={context.state.error}

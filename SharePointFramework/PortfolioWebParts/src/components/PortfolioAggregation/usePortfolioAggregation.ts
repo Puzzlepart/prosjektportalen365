@@ -1,9 +1,8 @@
-import { Selection } from '@fluentui/react'
 import { SearchBoxProps } from '@fluentui/react-components'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'PortfolioWebPartsStrings'
 import { IFilterPanelProps, ProjectContentColumn, format } from 'pp365-shared-library'
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { OnColumnContextMenu } from '../List'
 import {
   EXECUTE_SEARCH,
@@ -19,6 +18,7 @@ import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
 import { usePortfolioAggregationDataFetch } from './usePortfolioAggregationDataFetch'
 import { usePortfolioAggregationFilteredItems } from './usePortfolioAggregationFilteredItems'
 import { useToolbarItems } from './ToolbarItems/useToolbarItems'
+import { createGroups } from './createGroups'
 
 /**
  * Component logic hook for the Portfolio Aggregation component. This
@@ -36,14 +36,18 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
     }
   }, [props.dataSourceCategory, props.defaultViewId])
 
-  // The callback dispatches the selection it belongs to, so it is declared with it.
-  const selection = new Selection({
-    onSelectionChanged: () => context.dispatch(SELECTION_CHANGED(selection))
-  })
+  const onSelectionChange = useCallback(
+    (selectedItems: Record<string, any>[]) => context.dispatch(SELECTION_CHANGED(selectedItems)),
+    [context.dispatch]
+  )
 
   usePortfolioAggregationDataFetch(context, [context.state.currentView])
 
   context.items = usePortfolioAggregationFilteredItems(context)
+  context.groups = useMemo(
+    () => createGroups(context.items, context.state.groupBy),
+    [context.items, context.state.groupBy]
+  )
 
   const searchBox = useMemo<SearchBoxProps>(
     () => ({
@@ -84,6 +88,6 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
     searchBox,
     menuItems,
     filterPanelProps,
-    selection
+    onSelectionChange
   }
 }

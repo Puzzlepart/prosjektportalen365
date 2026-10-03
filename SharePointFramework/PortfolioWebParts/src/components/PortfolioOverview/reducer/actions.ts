@@ -1,4 +1,3 @@
-import { IObjectWithKey, Selection } from '@fluentui/react'
 import { createAction } from '@reduxjs/toolkit'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import {
@@ -98,9 +97,10 @@ export const SET_SORT = createAction<{
 }>('SET_SORT')
 
 /**
- * `SELECTION_CHANGED`: Action dispatched when user changes the selection in the list
+ * `SELECTION_CHANGED`: Action dispatched when user changes the selection in the list, with the
+ * selected items
  */
-export const SELECTION_CHANGED = createAction<Selection<IObjectWithKey>>('SELECTION_CHANGED')
+export const SELECTION_CHANGED = createAction<Record<string, any>[]>('SELECTION_CHANGED')
 
 /**
  * `TOGGLE_MERGED_VIEW`: Action dispatched when user toggles merged view mode

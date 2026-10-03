@@ -183,10 +183,7 @@ describe('PortfolioOverview reducer', () => {
 
   it('keeps the selected items and the open column menu', () => {
     const { reducer, state } = setup()
-    const selected = reducer(
-      state,
-      SELECTION_CHANGED({ getSelection: () => [{ Title: 'Alfa' }] } as any)
-    )
+    const selected = reducer(state, SELECTION_CHANGED([{ Title: 'Alfa' }]))
     expect(selected.selectedItems).toEqual([{ Title: 'Alfa' }])
     const target = document.createElement('div')
     expect(

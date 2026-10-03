@@ -1,22 +1,17 @@
+// The list fills SharePoint's main content area, as v8's ScrollablePane did: the area is made the
+// containing block, and the list's scroll container covers it.
 [class^="mainContent"] {
   position: relative !important;
 }
 
-.root {
-  // v8 row animations/transitions keep every virtualized row composited,
-  // exhausting Chromium's raster budget on high-DPI displays (white tiles)
-  :global(.ms-DetailsRow),
-  :global(.ms-DetailsRow) * {
-    animation: none !important;
-    transition: none !important;
-  }
-}
-
-[class*="stickyAbove"] .headerColumns {
-  padding-left: 32px;
+.scrollContainer {
+  position: absolute;
+  inset: 0;
+  overflow: auto;
 }
 
 .addColumnIcon {
+  display: inline-flex;
   margin: 0 4px 0 0;
-  vertical-align: bottom;
+  vertical-align: middle;
 }

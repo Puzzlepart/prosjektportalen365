@@ -1,4 +1,3 @@
-import { IGroup } from '@fluentui/react'
 import { ProjectColumn, ProjectContentColumn } from 'pp365-shared-library'
 import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
@@ -210,11 +209,6 @@ export interface IPortfolioAggregationState extends Pick<
    * in property `columns`.
    */
   allColumnsForCategory?: ProjectContentColumn[]
-
-  /**
-   * Groups to be rendered in the list
-   */
-  groups?: IGroup[]
 
   /**
    * Column to group by in the list

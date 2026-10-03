@@ -1,47 +1,49 @@
-import { useMemo } from 'react'
+import { IListColumn } from 'pp365-shared-library'
+import { RefObject, useEffect, useMemo, useRef, useState } from 'react'
 import { useOnRenderItemColumn } from './ItemColumn'
-import { useOnRenderDetailsHeader } from './ListHeader/useOnRenderDetailsHeader'
 import { IListProps } from './types'
 import { useAddColumn } from './useAddColumn'
-import { DetailsListLayoutMode, IColumn } from '@fluentui/react'
 
 /**
- * Custom hook that returns the properties needed for rendering a list.
+ * Height of an element, kept up to date as it changes.
+ */
+function useElementHeight(ref: RefObject<HTMLElement>): number {
+  const [height, setHeight] = useState(0)
+  useEffect(() => {
+    const element = ref.current
+    if (!element || typeof ResizeObserver === 'undefined') return undefined
+    const measure = () => setHeight(element.getBoundingClientRect().height)
+    measure()
+    const observer = new ResizeObserver(measure)
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [ref])
+  return height
+}
+
+/**
+ * Component logic hook for `List`: the columns to show (the add column last, hidden ones left
+ * out), the cell renderer, the column header click, and the height of the pinned command bar,
+ * under which the column headers are pinned.
  *
  * @param props - The props for the list.
- *
- * @returns An object containing the properties needed for rendering a list, returns
- * the provided props as well as the `onRenderItemColumn`, `onRenderDetailsHeader`,
- *  `columns` and `layoutMode` properties that is calculated based on the provided props.
  */
 export function useList(props: IListProps<any>) {
   const { addColumn } = useAddColumn(props.isAddColumnEnabled)
   const onRenderItemColumn = useOnRenderItemColumn()
-  const onRenderDetailsHeader = useOnRenderDetailsHeader(props)
   const columns = useMemo(
     () =>
       [...props.columns, addColumn].filter(
-        (col) => !col?.data?.isHidden && !props.hiddenColumns?.includes(col?.internalName)
+        (column: IListColumn & { internalName?: string }) =>
+          !column?.data?.isHidden && !props.hiddenColumns?.includes(column?.internalName)
       ),
-    [props.columns, props.hiddenColumns]
+    [props.columns, props.hiddenColumns, props.isAddColumnEnabled]
   )
-  const layoutMode = props.isListLayoutModeJustified
-    ? DetailsListLayoutMode.justified
-    : DetailsListLayoutMode.fixedColumns
-  const onColumnHeaderClick = (ev: React.MouseEvent<HTMLElement>, column: IColumn) => {
-    props.onColumnContextMenu({ column, target: ev.target as HTMLElement })
+  const onColumnHeaderClick = (column: IListColumn, target: HTMLElement) => {
+    props.onColumnContextMenu?.({ column, target })
   }
-  const onColumnHeaderContextMenu = (column: IColumn, ev: React.MouseEvent<HTMLElement>) => {
-    props.onColumnContextMenu({ column, target: ev.target as HTMLElement })
-  }
+  const commandBarRef = useRef<HTMLDivElement>(null)
+  const stickyTop = useElementHeight(commandBarRef)
 
-  return {
-    ...props,
-    onRenderItemColumn,
-    onRenderDetailsHeader,
-    onColumnHeaderClick,
-    onColumnHeaderContextMenu,
-    columns,
-    layoutMode
-  } as IListProps<any>
+  return { columns, onRenderItemColumn, onColumnHeaderClick, commandBarRef, stickyTop } as const
 }

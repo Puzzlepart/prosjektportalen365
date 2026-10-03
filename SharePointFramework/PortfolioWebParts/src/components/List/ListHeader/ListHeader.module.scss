@@ -1,18 +1,20 @@
-.sticky {
-  margin: 0;
-  padding-top: 32px;
-
-  .header {
-    display: none;
-  }
+// The list scrolls sideways in its own container when its columns do not fit; `left: 0` keeps the
+// header where it is while the rows move.
+.header {
+  position: sticky;
+  left: 0;
+  padding: 32px 32px 20px 32px;
 }
 
-.root {
-  .header {
-    padding: 32px 32px 20px 32px;
-  }
+.commandBar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  padding: 8px 0;
+  background-color: var(--colorNeutralBackground1);
 
-  .commandBar {
+  .commands {
     display: flex;
     flex-direction: row;
     max-width: 100%;
@@ -32,15 +34,7 @@
     }
   }
 
-  .filter {
-    box-shadow: var(--shadow2);
-  }
-
-  .headerColumns {
-    position: inherit;
-  }
-
   .errorContainer {
-    padding: 23px 32px 23px 32px;
+    padding: 15px 32px;
   }
 }

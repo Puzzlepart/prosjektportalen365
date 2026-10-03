@@ -1,7 +1,6 @@
-import { IColumn } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import styles from './List.module.scss'
-import { IMenuItem } from 'pp365-shared-library'
+import { IListColumn, IMenuItem } from 'pp365-shared-library'
 
 /**
  * Hook for an add column used in a list for adding a new column and
@@ -19,7 +18,7 @@ export function useAddColumn(
   /**
    * Add column object
    */
-  const addColumn: IColumn = {
+  const addColumn: IListColumn = {
     key,
     fieldName: '',
     name: strings.ToggleColumnFormPanelLabel,
@@ -69,7 +68,7 @@ export function useAddColumn(
    *
    * @param column Column to check
    */
-  const isAddColumn = (column: IColumn) => column.key === addColumn.key
+  const isAddColumn = (column: IListColumn) => column.key === addColumn.key
 
   return {
     addColumn,

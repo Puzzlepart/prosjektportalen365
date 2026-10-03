@@ -77,6 +77,10 @@ a slice touches), **G** (file type icons stay v8 until a v9 route exists).
   dedicated test user of P4-3). Every test signs in as the admin, so nothing a test asserts may
   depend on being less than admin. Tests for users with other permission levels (member, visitor,
   the project roles) come later, as a slice of their own with their own accounts.
+- **P4-5. The hub drops marquee selection** (decided 2026-10-03 by the owner, before slice 6). Its
+  one use is choosing the rows for "Eksporter til Excel" in both views; checkboxes, shift-click
+  ranges and select-all cover that, and keeping v8's `MarqueeSelection` would keep
+  `@fluentui/react` in PortfolioWebParts for one gesture.
 
 ## Slices and order
 
@@ -503,7 +507,66 @@ sections. On the developer's machine the header changes just after the scroll ha
 script recorded the scroll position every 50 ms), on the CI runner mid-scroll, so a user on a
 fast machine meets it too. The tabs now scroll on to the section once the scrolling has ended
 (`scrollend`, or after a second in a browser without it), and choosing another tab before that
-cancels it (`SectionTabs/useScrollToSection.ts`, three tests).
+cancels it (`SectionTabs/useScrollToSection.ts`, three tests). Its run (37114496550) built and
+upgraded green and passed the browser suite, 30 of 30; slice 5 is closed.
+
+### Slice 6 — the hub (2026-10-03)
+
+The hub's `List` (PortfolioWebParts, under `Porteføljeoversikt`, `Aggregert oversikt` and the
+program's views of both) is on Fluent UI v9, and PortfolioWebParts has dropped `@fluentui/react`
+(Decision C; `rush update` refreshed the lockfile). Marquee selection is gone (P4-5).
+
+**On `Table`, not `DataGridList`.** The slice table said `DataGridList`; reading Fluent's
+`DataGrid` showed why not. It builds its rows from its items and keeps the selection itself, so a
+group header row would have to be an item, select-all would select only the rows on the screen
+(v8 selected the collapsed groups' items too), and there is no shift-click range to extend. The hub
+renders on Fluent's `Table` primitives instead (`List/ListGrid`), with the same column sizing as
+`DataGrid` (`useTableColumnSizing_unstable`, `fitColumnWidths` for the justified layout) and
+`DataGrid`'s keyboard model (one tab stop, arrow keys across the grid through Tabster). The other
+lists stay on `DataGridList`.
+
+- **Rows and columns**: one row per item, cells through the hub's renderers as before, resizable
+  columns, the compact height, the justified layout, the add column, the sort marked on its header
+  (`aria-sort`), the header click and right click opening the column menu at the header, placeholder
+  rows while loading (v8's shimmer), and the browser skipping the layout of rows out of view
+  (`content-visibility`), since v9 has no virtualized table.
+- **Groups**: a header row per group with its name and count, opening and closing on a click, and a
+  button over the rows that closes or opens them all. The collapse state is the list's own, kept
+  per group while the list is searched or filtered; the aggregation's two collapse actions are gone.
+- **Selection**: a row's check or a click on the row toggles it (links and buttons in the row keep
+  their own click), shift-click selects the rows between, as they stand on the screen, a group's
+  check its items, the header's check every item, the collapsed groups' too. It is kept by item, so
+  sorting and grouping keep it, and the items a search or filter leaves out leave it, so the Excel
+  export never takes rows the user no longer sees. Both views get the selected items through
+  `onSelectionChange`; v8's `Selection` and `IGroup` are gone from them.
+- **Pinned header**: v8's `ScrollablePane` and `Sticky` are replaced by CSS. The list still fills
+  SharePoint's main content area and scrolls there; the title scrolls away (as v8's stuck header
+  hid it), the command bar sticks to the top, and the column headers stick under it
+  (`--pp-list-sticky-top`, the bar's measured height).
+
+**Found and fixed.** The aggregated overview made its groups in the reducer from all its items, but
+the list showed the items left after search and filters: as soon as either left items out, rows
+appeared under the wrong group headers. The groups are made from the items shown now
+(`PortfolioAggregation/createGroups.ts`, four tests).
+
+**Tests.** `List.test.tsx` went from 9 to 19 tests: the groups opening and closing one by one and
+all at once, the selection by check, by row click, by shift-click (a collapsed group's rows left out
+of a range), by group and by select-all, the selection pruned when items leave, the placeholder rows
+and the sort marker. Two tests changed with the API: the overview reducer's selection action takes
+the selected items, and the overview's groups no longer carry v8's extra fields. The lint debt in
+the two touched files with warnings is paid.
+
+**Floors.** PortfolioWebParts measured 59.6/64.2/45.9/59.6 on 101 tests (from 87); the floors are
+56/61/42/56 (from 55/58/42/55). TypeScript ran on PortfolioWebParts and, against its regenerated
+declarations, on ProgramWebParts, which renders both views; ESLint and Prettier on every changed
+file; Jest on all of PortfolioWebParts (101) and ProgramWebParts (30, coverage unchanged). The full
+Heft builds are left to the push.
+
+Left to check on the tenant: the pinned header in both views on a long list, the column resize and
+the justified layout, and the time a large aggregation (a thousand rows or more) takes to render
+without virtualization.
+
+## Rules for the executing agent
 
 The manual check of the tenant found the label fix working for the fields with Fluent v9
 controls (text, number, choice, yes/no, note): the label carries `for` and `id`, and clicking it
@@ -530,8 +593,7 @@ sits beside the label, not in it, so clicking the icon does nothing. Left for th
 ## Risks
 
 - Marquee selection has no v9 equivalent; shift-click ranges and select-all must be enough for the
-  overview's users, or the hub keeps a v8 selection layer. Decide with the users of the aggregation
-  views before slice 6.
+  overview's users, or the hub keeps a v8 selection layer. Decided: dropped (P4-5).
 - The write flows touch a real tenant; a failed clean-up leaves test data. Mitigation: a fixed prefix
   on everything a flow creates and a clean-up step that runs first.
 - The combobox family loops the Jest worker on React 17; the people picker's tests may have to stay
