@@ -70,6 +70,17 @@ test.describe('navigation', () => {
       const section = async (tab: typeof tabs) =>
         page.getByText((await tab.innerText()).trim(), { exact: true }).last()
       const last = tabs.last()
+      // The sections fill in after the tabs appear, each pushing the ones below it down, so a tab
+      // clicked before then scrolls to where its section was and the section moves on out of view
+      // (CI run 37107937758). A user reads the page first; the test waits until the section the
+      // last tab names has stopped moving.
+      const target = await section(last)
+      await expect(async () => {
+        const before = await target.boundingBox()
+        await page.waitForTimeout(1_000)
+        expect(before).not.toBeNull()
+        expect(await target.boundingBox()).toEqual(before)
+      }).toPass({ timeout: 30_000 })
       await last.click()
       // The section the tab names scrolls into view, and the tab list stays where it is.
       await expect(await section(last)).toBeInViewport({ timeout: 10_000 })

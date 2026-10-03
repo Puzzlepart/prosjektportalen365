@@ -49,10 +49,19 @@ export default defineConfig({
   projects: [
     // Signs in once with the dedicated test user and stores the session for the other projects.
     { name: 'setup', testMatch: /auth\.setup\.ts/ },
+    // Waits until the tenant serves the apps just upgraded (see tests/deployment.setup.ts).
+    {
+      name: 'deployment',
+      testMatch: /deployment\.setup\.ts/,
+      use: { ...devices['Desktop Chrome'], storageState: STORAGE_STATE },
+      dependencies: ['setup'],
+      // It retries for ten minutes itself; a second attempt would only double the wait.
+      retries: 0
+    },
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'], storageState: STORAGE_STATE },
-      dependencies: ['setup']
+      dependencies: ['deployment']
     }
   ]
 })

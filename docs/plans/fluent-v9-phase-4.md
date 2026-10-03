@@ -478,6 +478,30 @@ ran on the whole shared library and, against the changed library, on all five co
 tests, their coverage unchanged; the `ProjectDataService` fix came after that run, and no consumer
 test calls the two methods whose behaviour it changes). The full Heft builds are left to the push.
 
+The push's CI run (37107937758) built all five solutions green with the new floors and upgraded
+the test channel (packages only); the browser suite passed 27 of 29. Neither failure was slice 5's
+code:
+
+- The status page's tab test clicked the last tab 0.2 s after the tabs appeared, while the sections
+  were still fetching their data; each section that filled in pushed the last one down, out of
+  view again. A user reads the page first: the test now waits until the section has stopped
+  moving. It passes against the tenant, where the slower machine never hit the race.
+- Three minutes after the upgrade, SharePoint still handed the project home the previous
+  manifest of the template selector's command set (the page asked for
+  `template-selector-command-set_82fa87a9…`, the new package holds `…_af316efc…`), and that bundle
+  was gone. The rest of the page was already on the new version, and the version stamping does not
+  help here: it stamps the solution, while the component keeps `1.14.0`. A setup step,
+  `e2e/tests/deployment.setup.ts`, now waits up to ten minutes, before any test, until the hub and
+  the project home load every bundle from the app catalog, and stops the run with the bundle's
+  address if one is still missing after that.
+
+The manual check of the tenant found the label fix working for the fields with Fluent v9
+controls (text, number, choice, yes/no, note): the label carries `for` and `id`, and clicking it
+puts the cursor in the field. The date picker takes an id of its own, so its label's `for` points
+at nothing, though `Input` then names it through `aria-labelledby`; the people picker and the term
+picker are v8 controls that know nothing of Fluent's `Field`, and stay without a name. The icon
+sits beside the label, not in it, so clicking the icon does nothing. Left for the owner to decide.
+
 ## Rules for the executing agent
 
 - Read `AGENTS.md`, the `pp365-toolchain` and `pp365-testing` skills, this plan and the phase 3
