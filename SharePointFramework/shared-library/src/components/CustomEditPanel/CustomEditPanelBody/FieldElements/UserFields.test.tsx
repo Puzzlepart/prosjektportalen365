@@ -1,3 +1,10 @@
+// jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
+// Babel, so mocks are not hoisted. The picker is Fluent's TagPicker, which loops the Jest worker on
+// React 17 when typed into (it works in the browser); the harness's stand-in keeps its contract.
+jest.mock('@fluentui/react-components', () =>
+  jest.requireActual('pp365-jest-config/lib/tagPickerStandIn').withTagPickerStandIn()
+)
+
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import * as React from 'react'
@@ -8,10 +15,10 @@ import { UserMulti } from './UserMulti'
 
 /**
  * The contract of the two person fields in `CustomEditPanel`, asserted through labels, text and the
- * combobox/option roles rather than anything Fluent-specific. Both fields now render the shared
- * `PeoplePicker`, which is still the v8 `NormalPeoplePicker` inside (see Decision B); these tests
- * were written against the previous inline pickers and passed unchanged afterwards, so they are
- * what will show whether a future v9 picker keeps the same behaviour.
+ * combobox/option roles rather than anything Fluent-specific. Both fields render the shared
+ * `PeoplePicker`. These tests were written against the previous inline v8 pickers, passed unchanged
+ * on the shared v8 `NormalPeoplePicker` (phase 3), and pass unchanged on the v9 `TagPicker` (phase
+ * 4, slice 7), here through the harness's stand-in for its parts.
  *
  * The people themselves are the plain objects `clientPeoplePickerSearchUser` returns — `text` is the
  * display name and `secondaryText` the email, which is the identity the save path resolves through

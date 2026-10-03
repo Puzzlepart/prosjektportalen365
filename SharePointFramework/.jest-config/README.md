@@ -9,3 +9,9 @@ jest-dom matchers, jsdom polyfills for Fluent UI, resolution of SPFx localized s
 and an AMD to CommonJS transform for those string bundles.
 
 See `.development-guide/spfx/testing.md` for the testing regime and how to write tests.
+
+`lib/tagPickerStandIn.js` is for tests that type into Fluent UI v9's `TagPicker`, which loops the
+Jest worker on React 17 the moment it opens (it works in the browser). Above a test's imports,
+`jest.mock('@fluentui/react-components', () => jest.requireActual('pp365-jest-config/lib/tagPickerStandIn').withTagPickerStandIn())`
+replaces the picker's parts with plain elements that keep its contract; see the file for what it
+keeps.

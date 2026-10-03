@@ -25,7 +25,6 @@
     "test": "heft test"
   },
   "dependencies": {
-    "@fluentui/react": "8.106.4",
     "@microsoft/decorators": "1.23.2",
     "@microsoft/sp-application-base": "1.23.2",
     "@microsoft/sp-listview-extensibility": "1.23.2",

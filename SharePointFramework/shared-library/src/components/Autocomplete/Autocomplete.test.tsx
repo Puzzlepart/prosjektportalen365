@@ -1,19 +1,68 @@
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
+// jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
+// Babel, so mocks are not hoisted. Fluent's combobox family loops the Jest worker on React 17 the
+// moment it opens (see the testing guide); the stand-in keeps the contract the autocomplete uses:
+// the input shows `value` and reports typing through `onChange`, the clear button and each option
+// report a pick through `onOptionSelect`, a clear with no option value.
+jest.mock('@fluentui/react-components', () => {
+  const actual = jest.requireActual('@fluentui/react-components')
+  const React = jest.requireActual('react')
+  const Pick = React.createContext(null)
+  const Combobox = (props: any) =>
+    React.createElement(
+      Pick.Provider,
+      { value: props.onOptionSelect },
+      React.createElement('input', {
+        role: 'combobox',
+        value: props.value,
+        placeholder: props.placeholder,
+        disabled: props.disabled,
+        onChange: props.onChange
+      }),
+      props.clearable &&
+        React.createElement(
+          'button',
+          {
+            onClick: (event: any) =>
+              props.onOptionSelect(event, { optionValue: undefined, selectedOptions: [] })
+          },
+          'Tøm'
+        ),
+      React.createElement('ul', { role: 'listbox' }, props.children)
+    )
+  const Option = (props: any) => {
+    const onOptionSelect = React.useContext(Pick)
+    return React.createElement(
+      'li',
+      {
+        role: 'option',
+        'aria-disabled': !!props.disabled,
+        onClick: (event: any) =>
+          !props.disabled &&
+          onOptionSelect(event, {
+            optionValue: props.value,
+            optionText: props.text,
+            selectedOptions: [props.value]
+          })
+      },
+      props.children
+    )
+  }
+  return { __esModule: true, ...actual, Combobox, Option }
+})
+
+import { fireEvent, render, screen } from '@testing-library/react'
 import * as React from 'react'
 import { Autocomplete } from '.'
-import { DISMISS_CALLOUT, INIT, ON_KEY_DOWN, ON_SEARCH, RESET, SET_SELECTED_INDEX } from './actions'
-import { createAutocompleteReducer } from './reducer'
 
 /**
- * The contract the autocomplete keeps for its callers, written before its conversion from the v8
- * search box and callout (slice 7 of phase 4): typing offers the items that match, a click or
- * Enter on one picks it, and clearing starts over.
+ * The contract the autocomplete keeps for its callers, from its v8 search box and callout to the
+ * v9 combobox (slice 7 of phase 4): typing narrows the items to those that match, a pick reports
+ * the item, the default key starts it picked, and clearing starts over.
  */
 const PROPERTIES = ['GtProjectPhaseOWSCHCS', 'GtProjectManagerOWSUSER', 'RefinableString01']
 
-const searchBox = () => screen.getByRole('searchbox')
-// The v8 search box reads the key from `which`, not from `key`.
-const ESCAPE = { key: 'Escape', keyCode: 27, which: 27 }
+const input = () => screen.getByRole('combobox')
+const offered = () => screen.queryAllByRole('option').map((option) => option.textContent)
 
 function renderAutocomplete(props: Record<string, any> = {}) {
   const onSelected = jest.fn()
@@ -28,114 +77,82 @@ function renderAutocomplete(props: Record<string, any> = {}) {
   return { ...result, onSelected }
 }
 
-afterEach(async () => {
-  cleanup()
-  await act(() => new Promise((resolve) => setTimeout(resolve, 50)))
-})
-
 describe('Autocomplete', () => {
-  it('offers the items that match what is typed, and picks the one clicked', async () => {
+  it('offers every item until something is typed, then the ones that match, ignoring case', () => {
+    renderAutocomplete()
+    expect(offered()).toEqual(PROPERTIES)
+    fireEvent.change(input(), { target: { value: 'gtproject' } })
+    expect(offered()).toEqual(['GtProjectPhaseOWSCHCS', 'GtProjectManagerOWSUSER'])
+  })
+
+  it('reports the item picked and shows its text', () => {
     const { onSelected } = renderAutocomplete()
-    fireEvent.change(searchBox(), { target: { value: 'gtproject' } })
-    expect(await screen.findByText('GtProjectPhaseOWSCHCS')).toBeInTheDocument()
-    expect(screen.getByText('GtProjectManagerOWSUSER')).toBeInTheDocument()
-    expect(screen.queryByText('RefinableString01')).toBeNull()
-    fireEvent.click(screen.getByText('GtProjectManagerOWSUSER'))
+    fireEvent.change(input(), { target: { value: 'manager' } })
+    fireEvent.click(screen.getByRole('option', { name: 'GtProjectManagerOWSUSER' }))
     expect(onSelected).toHaveBeenCalledWith(
-      expect.objectContaining({ key: 'GtProjectManagerOWSUSER' })
+      expect.objectContaining({ key: 'GtProjectManagerOWSUSER', text: 'GtProjectManagerOWSUSER' })
     )
+    expect(input()).toHaveValue('GtProjectManagerOWSUSER')
   })
 
-  it('picks the highlighted item on Enter, and nothing when none is', async () => {
-    const { container, onSelected } = renderAutocomplete()
-    fireEvent.change(searchBox(), { target: { value: 'Refinable' } })
-    await screen.findByText('RefinableString01')
-    fireEvent.keyDown(container.firstElementChild, { key: 'Enter' })
-    expect(onSelected).not.toHaveBeenCalled()
-    fireEvent.keyDown(container.firstElementChild, { key: 'ArrowDown' })
-    fireEvent.keyDown(container.firstElementChild, { key: 'Enter' })
-    expect(onSelected).toHaveBeenCalledWith(expect.objectContaining({ key: 'RefinableString01' }))
-  })
-
-  it('starts with the item of its default key', () => {
-    renderAutocomplete({ defaultSelectedKey: 'RefinableString01' })
-    expect(searchBox()).toHaveValue('RefinableString01')
+  it('starts with the item of its default key, and its items may carry more than a name', () => {
+    renderAutocomplete({
+      items: [
+        { key: 'phase', text: 'Fase', searchValue: 'Fase GtProjectPhase' },
+        { key: 'owner', text: 'Eier', searchValue: 'Eier GtProjectOwner', disabled: true }
+      ],
+      defaultSelectedKey: 'phase'
+    })
+    expect(input()).toHaveValue('Fase')
+    fireEvent.change(input(), { target: { value: 'gtproject' } })
+    // The search value is matched, the text shown, and a disabled item cannot be picked.
+    expect(offered()).toEqual(['Fase', 'Eier'])
+    expect(screen.getByRole('option', { name: 'Eier' })).toHaveAttribute('aria-disabled', 'true')
   })
 
   it('starts over when it is cleared, whether or not the caller listens', () => {
     const onClear = jest.fn()
-    const { rerender } = renderAutocomplete({ onClear })
-    fireEvent.change(searchBox(), { target: { value: 'Gt' } })
-    fireEvent.keyDown(searchBox(), ESCAPE)
-    expect(onClear).toHaveBeenCalled()
-    rerender(<Autocomplete items={PROPERTIES} onSelected={jest.fn()} />)
-    fireEvent.change(searchBox(), { target: { value: 'Gt' } })
-    expect(() => fireEvent.keyDown(searchBox(), ESCAPE)).not.toThrow()
-  })
-})
-
-describe('Autocomplete reducer', () => {
-  const ITEMS = [
-    { key: 'a', text: 'Alfa', searchValue: 'Alfa' },
-    { key: 'b', text: 'Bravo', searchValue: 'Bravo' }
-  ]
-  const reduce = (state: any, ...actions: any[]) =>
-    actions.reduce((current, action) => createAutocompleteReducer(state)(current, action), state)
-
-  it('takes plain strings as items, and the default key as the value', () => {
-    const state = reduce(
-      {},
-      INIT({ props: { items: ['Alfa', 'Bravo'], defaultSelectedKey: 'Bravo', onSelected: null } })
-    )
-    expect(state.items).toEqual([
-      { key: 'Alfa', text: 'Alfa', searchValue: 'Alfa' },
-      { key: 'Bravo', text: 'Bravo', searchValue: 'Bravo' }
-    ])
-    expect(state.value).toBe('Bravo')
+    renderAutocomplete({ defaultSelectedKey: 'RefinableString01', onClear })
+    fireEvent.click(screen.getByRole('button', { name: 'Tøm' }))
+    expect(input()).toHaveValue('')
+    expect(onClear).toHaveBeenCalledTimes(1)
+    const { onSelected } = renderAutocomplete({ defaultSelectedKey: 'RefinableString01' })
+    fireEvent.click(screen.getAllByRole('button', { name: 'Tøm' })[1])
+    expect(onSelected).not.toHaveBeenCalled()
   })
 
-  it('moves the highlight with the arrows and picks it on Enter', () => {
-    const onEnter = jest.fn()
-    let state = reduce(
-      { selectedIndex: -1 },
-      INIT({ props: { items: ITEMS, onSelected: null } }),
-      ON_SEARCH({ searchTerm: 'a' })
+  it('starts over when the caller sets the selected key to null', () => {
+    const { rerender, onSelected } = renderAutocomplete({ defaultSelectedKey: 'RefinableString01' })
+    expect(input()).toHaveValue('RefinableString01')
+    rerender(
+      <Autocomplete
+        items={PROPERTIES}
+        onSelected={onSelected}
+        defaultSelectedKey='RefinableString01'
+        selectedKey={null}
+      />
     )
-    expect(state.suggestions.map(({ key }) => key)).toEqual(['a', 'b'])
-    state = reduce(
-      state,
-      ON_KEY_DOWN({ key: 'ArrowDown', onEnter }),
-      ON_KEY_DOWN({ key: 'ArrowDown', onEnter }),
-      ON_KEY_DOWN({ key: 'ArrowUp', onEnter })
-    )
-    expect(state.selectedIndex).toBe(0)
-    state = reduce(state, ON_KEY_DOWN({ key: 'Enter', onEnter }))
-    expect(onEnter).toHaveBeenCalledWith(ITEMS[0])
-    expect(state).toMatchObject({ suggestions: [], value: 'Alfa' })
+    expect(input()).toHaveValue('')
   })
 
-  it('keeps what was typed on Enter with nothing highlighted', () => {
-    const onEnter = jest.fn()
-    const state = reduce(
-      { selectedIndex: -1 },
-      INIT({ props: { items: ITEMS, onSelected: null } }),
-      ON_SEARCH({ searchTerm: 'Br' }),
-      ON_KEY_DOWN({ key: 'Enter', onEnter })
+  it('says so when nothing matches, if it is given the words', () => {
+    renderAutocomplete({ noSuggestionsText: 'Ingen treff' })
+    fireEvent.change(input(), { target: { value: 'finnes ikke' } })
+    expect(offered()).toEqual(['Ingen treff'])
+    expect(screen.getByRole('option', { name: 'Ingen treff' })).toHaveAttribute(
+      'aria-disabled',
+      'true'
     )
-    expect(onEnter).not.toHaveBeenCalled()
-    expect(state.value).toBe('Br')
   })
 
-  it('offers nothing for an empty search, and starts over on reset', () => {
-    let state = reduce(
-      {},
-      INIT({ props: { items: ITEMS, onSelected: null } }),
-      ON_SEARCH({ searchTerm: '' })
-    )
-    expect(state.suggestions).toEqual([])
-    state = reduce(state, SET_SELECTED_INDEX({ index: 1 }), DISMISS_CALLOUT({ item: ITEMS[1] }))
-    expect(state).toMatchObject({ selectedIndex: 1, value: 'Bravo', selectedItem: ITEMS[1] })
-    state = reduce(state, RESET())
-    expect(state).toMatchObject({ value: '', selectedItem: null, suggestions: [] })
+  it('sits in a field with its label, hint and error when it has them', () => {
+    renderAutocomplete({
+      label: 'Søkeegenskap',
+      description: 'Egenskapen i søkeindeksen',
+      errorMessage: 'Velg en egenskap'
+    })
+    expect(screen.getByText('Søkeegenskap')).toBeInTheDocument()
+    expect(screen.getByText('Egenskapen i søkeindeksen')).toBeInTheDocument()
+    expect(screen.getByText('Velg en egenskap')).toBeInTheDocument()
   })
 })

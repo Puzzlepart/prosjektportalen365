@@ -81,6 +81,22 @@ a slice touches), **G** (file type icons stay v8 until a v9 route exists).
   one use is choosing the rows for "Eksporter til Excel" in both views; checkboxes, shift-click
   ranges and select-all cover that, and keeping v8's `MarqueeSelection` would keep
   `@fluentui/react` in PortfolioWebParts for one gesture.
+- **P4-6. The people picker is v9's `TagPicker`** (decided 2026-10-03, slice 7; re-decides phase
+  3's Decision B on new evidence). B kept v8's `NormalPeoplePicker` inside the shared wrapper
+  because `TagPicker` looped the Jest worker when typed into, in Fluent's own example. That loop is
+  jsdom's: the same example, and then our wrapper, bundled with webpack on React 17 and driven in
+  Chromium, typed, picked and removed in a handful of renders, with the label tied to the input and
+  no errors. Tests type into it through a stand-in in the harness; a browser test types into it in
+  SharePoint.
+- **P4-7. File type icons leave v8; the icon fallback stays** (decided 2026-10-03, slice 7; amends
+  phase 3's Decision G). The coloured Office glyphs come from the file type icon package's own CDN
+  address as images (`FileTypeIcon`), the same glyphs v8's `Icon` showed, so ProjectExtensions
+  drops `@fluentui/react`. The fallback behind `getFluentIconWithFallback`, which draws an icon name
+  without a Fluent equivalent in the Fabric font through v8's `Icon`, stays: 1.15.0 added it on
+  purpose for the icon names customers type into their configuration. It is the one v8 import left
+  (`shared-library/src/icons/index.tsx`), and the shared library keeps `@fluentui/react` for it. If
+  it is to go, `getIconClassName` from `@fluentui/style-utilities` draws the same glyph without
+  `@fluentui/react`.
 
 ## Slices and order
 
@@ -565,6 +581,41 @@ Heft builds are left to the push.
 Left to check on the tenant: the pinned header in both views on a long list, the column resize and
 the justified layout, and the time a large aggregation (a thousand rows or more) takes to render
 without virtualization.
+
+### Slice 7 — the hold-outs (2026-10-03)
+
+`grep -rl "from '@fluentui/react'"` lists one file, `shared-library/src/icons/index.tsx`, which
+P4-7 names. ProjectExtensions drops `@fluentui/react` (`rush update` refreshed the lockfile); the
+shared library keeps it for that one import. Every other solution had dropped it already.
+
+- **The people picker** (`shared-library/src/components/PeoplePicker`) is on `TagPicker` (P4-6),
+  behind the same API: the people picked as tags with their picture, the search a moment after the
+  typing pauses (an answer to an older search dropped), told who is picked, the results with picture
+  and email, a field for one person taking no more input while it holds one, Backspace or a tag's
+  button removing a person, and the field's label tied to the input. Before it was adopted it was
+  driven in Chromium on React 17, bundled with webpack from the shared library's own packages, with
+  no errors and no render loop. In Jest it runs on the harness's new stand-in for the picker's parts
+  (`pp365-jest-config/lib/tagPickerStandIn.js`): the picker's 8 tests, and the edit panel's 13
+  person field tests, which were kept from phase 3 to show whether a v9 picker keeps the behaviour,
+  pass unchanged. A browser test (`e2e/tests/flows/people-picker.spec.ts`) searches for the signed-in
+  account in the project information panel, picks it and closes without saving; it runs once the
+  slice is deployed, since the tenant still serves v8's picker, whose results are not options.
+- **File type icons**: `FileTypeIcon` in the shared library draws the glyph from the file type icon
+  package's CDN address (P4-7), for the file name column and the document template dialog's
+  screens; `TemplateItem` hands out icon options instead of v8's `IIconProps`, and the progress
+  dialog's icon goes through `getFluentIconWithFallback`.
+- **The autocomplete** is v9's `Combobox` in freeform mode, inside a `Field` when it has a label;
+  the v8 search box, callout, reducer and key handling are gone. Its one caller, the column search
+  field, never gets suggestions from the column forms (they are commented out there), so it is not
+  seen in the product today.
+- **Labels**, from slice 5: the icon is inside the label, so a click on it reaches the field, and
+  the date picker takes the field's id (`useFieldControlProps_unstable`), so its label is tied to
+  its input. The term picker is PnP's control, which takes no props for its input; its label stays
+  apart.
+
+Lint debt in the touched files is paid (three try/catch blocks that only rethrew, four unused catch
+bindings, an empty catch). The shared library measured 74.9/81.3/55.2/74.9 on 374 tests; its floors
+stay 72/78/52/72.
 
 ## Rules for the executing agent
 

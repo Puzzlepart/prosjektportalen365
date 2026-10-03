@@ -1,9 +1,8 @@
-import { Icon } from '@fluentui/react'
 import { Button, Divider, Field, ProgressBar, Text } from '@fluentui/react-components'
 import { ChevronDownRegular, ChevronUpRegular } from '@fluentui/react-icons'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { FC, useEffect, useState } from 'react'
-import { UserMessage, format } from 'pp365-shared-library'
+import { UserMessage, format, getFluentIconWithFallback } from 'pp365-shared-library'
 import { BaseDialog } from '../@BaseDialog'
 import styles from './ProgressDialog.module.scss'
 import { IProgressDialogProps } from './types'
@@ -47,12 +46,7 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
     >
       <p className={styles.subText}>{subText}</p>
       <div className={styles.progressSection}>
-        <div className={styles.icon}>
-          <Icon
-            iconName={props.iconName}
-            style={{ fontSize: 42, display: 'block', textAlign: 'center' }}
-          />
-        </div>
+        <div className={styles.icon}>{getFluentIconWithFallback(props.iconName, { size: 42 })}</div>
         <div className={styles.indicator}>
           <Field label={props.progressIndicator?.label} hint={props.progressIndicator?.description}>
             <ProgressBar

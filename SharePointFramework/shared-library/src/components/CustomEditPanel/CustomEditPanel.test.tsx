@@ -326,8 +326,9 @@ describe('CustomEditPanel', () => {
         { GtStartDate: '01.03.2026' }
       )
     })
-    expect(await screen.findByPlaceholderText(strings.Placeholder.DatePicker)).toHaveValue(
-      new Date('2026-03-01T00:00:00Z').toLocaleDateString()
-    )
+    const date = await screen.findByPlaceholderText(strings.Placeholder.DatePicker)
+    expect(date).toHaveValue(new Date('2026-03-01T00:00:00Z').toLocaleDateString())
+    // The label is tied to the date's input, not to an id nothing has.
+    expect(screen.getByLabelText(/Startdato/)).toBe(date)
   })
 })

@@ -1,15 +1,8 @@
 import { Link } from '@fluentui/react-components'
-import { Icon } from '@fluentui/react'
-import {
-  FileIconType,
-  getFileTypeIconProps,
-  initializeFileTypeIcons
-} from '@fluentui/react-file-type-icons'
+import { FileIconType } from '@fluentui/react-file-type-icons'
 import * as ProjectExtensionsStrings from 'ProjectExtensionsStrings'
-import { IListColumn, SPFolder, getId } from 'pp365-shared-library'
+import { FileTypeIcon, IListColumn, SPFolder, getId } from 'pp365-shared-library'
 import React from 'react'
-
-initializeFileTypeIcons()
 
 export default ({ onFolderClick }: { onFolderClick: (folder: SPFolder) => void }) =>
   [
@@ -20,11 +13,7 @@ export default ({ onFolderClick }: { onFolderClick: (folder: SPFolder) => void }
       minWidth: 20,
       maxWidth: 20,
       onRender: (folder: SPFolder) => (
-        <Icon
-          {...getFileTypeIconProps({
-            type: folder.isLibrary ? FileIconType.list : FileIconType.folder
-          })}
-        />
+        <FileTypeIcon type={folder.isLibrary ? FileIconType.list : FileIconType.folder} />
       )
     },
     {

@@ -1,49 +1,99 @@
-import { IPersonaProps, NormalPeoplePicker } from '@fluentui/react'
+import {
+  Avatar,
+  Tag,
+  TagPicker,
+  TagPickerControl,
+  TagPickerGroup,
+  TagPickerInput,
+  TagPickerList,
+  TagPickerOption
+} from '@fluentui/react-components'
 import React, { FC } from 'react'
 import strings from 'SharedLibraryStrings'
 import { IPersonaItem } from '../../types'
 import { IPeoplePickerProps } from './types'
+import { NO_PEOPLE_FOUND, personKey, usePeoplePicker } from './usePeoplePicker'
 
 /**
- * Picks people.
+ * The person's picture, or their initials where there is none.
+ */
+const PersonAvatar: FC<{ person: IPersonaItem; shape?: 'circular' | 'square' }> = ({
+  person,
+  shape
+}) => (
+  <Avatar
+    name={person.text}
+    image={person.imageUrl ? { src: person.imageUrl } : undefined}
+    shape={shape}
+    color='colorful'
+  />
+)
+
+/**
+ * Picks people, on Fluent UI v9's `TagPicker`: the people picked as tags, an input that searches as
+ * the user types, and the people found as options with their picture and email.
  *
- * Fluent UI v9 has no people picker, so this is the v8 `NormalPeoplePicker` behind a v9-shaped API
- * (`selected`, `onChange`, `multi`, a resolver). Every person field in the solutions goes through
- * here, so replacing the inside is a one-file change.
- *
- * The v9 `TagPicker` was tried first and does not survive on this stack: typing into it sends it
- * into an endless render loop that kills the Jest worker, in Fluent's own documented form with none
- * of our code involved. SPFx 1.23 pins React 17 and `TagPicker` is built against React 18. Worth
- * retrying when the SPFx React version moves.
+ * Phase 3 (Decision B) kept v8's `NormalPeoplePicker` inside because `TagPicker` looped the Jest
+ * worker when typed into. That loop is the combobox family under jsdom on React 17, not the
+ * browser: Fluent's own example on React 17 typed, picked and removed in a handful of renders in
+ * Chromium (phase 4, slice 7). Tests type into it through the harness's stand-in
+ * (`pp365-jest-config/lib/tagPickerStandIn`).
  *
  * Callers supply the search through `onResolveSuggestions` rather than the picker knowing about
- * SharePoint, so the component stays free of data access.
+ * SharePoint, so the component stays free of data access. In a Fluent `Field` the input takes the
+ * field's label.
  */
 export const PeoplePicker: FC<IPeoplePickerProps> = (props) => {
-  const selected = props.selected ?? []
+  const { selected, query, suggestions, searching, atLimit, onQueryChange, onOptionSelect } =
+    usePeoplePicker(props)
+
   return (
-    <NormalPeoplePicker
+    <TagPicker
+      onOptionSelect={onOptionSelect}
+      selectedOptions={selected.map(personKey)}
       disabled={props.disabled}
-      // One person unless the field holds several. At the limit the picker stops offering its
-      // input, so a single person is replaced by removing them first.
-      itemLimit={props.multi ? 20 : 1}
-      styles={{ text: props.className }}
-      inputProps={{
-        placeholder: props.placeholder ?? strings.Placeholder.PeoplePicker,
-        'aria-label': props['aria-label']
-      }}
-      pickerSuggestionsProps={{ noResultsFoundText: strings.PeoplePickerNoResults }}
-      // Our own persona shape carries everything v8 reads off a persona; the cast only tells the
-      // compiler that, since `IPersonaItem` is deliberately not a Fluent type.
-      defaultSelectedItems={selected as IPersonaProps[]}
-      onResolveSuggestions={async (filter, selectedItems) =>
-        (await props.onResolveSuggestions(
-          filter,
-          (selectedItems ?? []) as IPersonaItem[]
-        )) as IPersonaProps[]
-      }
-      onChange={(items) => props.onChange((items ?? []) as IPersonaItem[])}
-    />
+    >
+      <TagPickerControl className={props.className}>
+        <TagPickerGroup aria-label={strings.PeoplePickerSelectedLabel}>
+          {selected.map((person) => (
+            <Tag
+              key={personKey(person)}
+              value={personKey(person)}
+              shape='rounded'
+              media={<PersonAvatar person={person} />}
+            >
+              {person.text}
+            </Tag>
+          ))}
+        </TagPickerGroup>
+        {!atLimit && (
+          <TagPickerInput
+            aria-label={props['aria-label']}
+            placeholder={props.placeholder ?? strings.Placeholder.PeoplePicker}
+            value={query}
+            onChange={onQueryChange}
+          />
+        )}
+      </TagPickerControl>
+      <TagPickerList>
+        {suggestions.map((person) => (
+          <TagPickerOption
+            key={personKey(person)}
+            value={personKey(person)}
+            text={person.text}
+            secondaryContent={person.secondaryText}
+            media={<PersonAvatar person={person} shape='square' />}
+          >
+            {person.text}
+          </TagPickerOption>
+        ))}
+        {query.trim() && !searching && suggestions.length === 0 && (
+          <TagPickerOption value={NO_PEOPLE_FOUND} text={strings.PeoplePickerNoResults}>
+            {strings.PeoplePickerNoResults}
+          </TagPickerOption>
+        )}
+      </TagPickerList>
+    </TagPicker>
   )
 }
 

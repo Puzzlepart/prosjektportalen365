@@ -1,84 +1,54 @@
-import { Callout, FocusZone, FocusZoneDirection, List, SearchBox } from '@fluentui/react'
-import { Label } from '@fluentui/react-components'
+import { Combobox, Field, Option } from '@fluentui/react-components'
 import React, { FC } from 'react'
-import _ from 'underscore'
-import { IAutocompleteProps } from '.'
-import { SuggestionItem } from './SuggestionItem'
+import { getFluentIconWithFallback } from '../../icons'
+import { IAutocompleteProps } from './types'
 import { useAutocomplete } from './useAutocomplete'
-import styles from './Autocomplete.module.scss'
 
 /**
- * Autocomplete component using `<SearchBox />`, `<Callout />`,
- * `<FocusZone />` and `<List />` from `@fluentui/react`.
+ * An input that offers the items matching what is typed, on Fluent UI v9's `Combobox` in freeform
+ * mode: the arrow keys move through the matches, Enter or a click picks one, and what is typed may
+ * also stay as it is. With a label, a description or an error message it sits in a Fluent `Field`.
  */
 export const Autocomplete: FC<IAutocompleteProps> = (props) => {
-  const {
-    state,
-    ref,
-    searchBoxRef,
-    className,
-    suggestions,
-    onDismissCallout,
-    onSetSelected,
-    onSearch,
-    onClear,
-    onKeyDown
-  } = useAutocomplete(props)
-  return (
-    <div className={className} onKeyDown={onKeyDown}>
-      {props.label && (
-        <Label disabled={props.disabled} required={props.required}>
-          {props?.label}
-        </Label>
+  const { value, selectedKey, suggestions, onChange, onOptionSelect } = useAutocomplete(props)
+
+  const combobox = (
+    <Combobox
+      freeform
+      clearable
+      className={props.className}
+      placeholder={props.placeholder}
+      disabled={props.disabled}
+      value={value}
+      selectedOptions={selectedKey ? [selectedKey] : []}
+      onChange={onChange}
+      onOptionSelect={onOptionSelect}
+      listbox={props.maxHeight ? { style: { maxHeight: props.maxHeight } } : undefined}
+    >
+      {suggestions.map((item) => (
+        <Option key={item.key} value={String(item.key)} text={item.text} disabled={item.disabled}>
+          {props.itemIcons && item.iconName && getFluentIconWithFallback(item.iconName)}
+          {item.text}
+        </Option>
+      ))}
+      {suggestions.length === 0 && props.noSuggestionsText && (
+        <Option key='no-suggestions' value='no-suggestions' text={props.noSuggestionsText} disabled>
+          {props.noSuggestionsText}
+        </Option>
       )}
-      <div ref={ref}>
-        <SearchBox
-          styles={{ root: styles.searchBox }}
-          componentRef={searchBoxRef}
-          key={state.selectedItem?.key}
-          defaultValue={state.value}
-          iconProps={{
-            iconName: state.selectedItem?.iconName || 'Search',
-            ...props.iconProps
-          }}
-          placeholder={props.placeholder}
-          disabled={props.disabled}
-          autoComplete='off'
-          autoCorrect='off'
-          onClear={onClear}
-          onChange={onSearch}
-        />
-      </div>
-      <Callout
-        gapSpace={2}
-        alignTargetEdge={true}
-        hidden={_.isEmpty(state.suggestions)}
-        onDismiss={() => onDismissCallout(null)}
-        calloutMaxHeight={props.maxHeight || 450}
-        style={{ width: ref.current?.clientWidth }}
-        target={ref?.current}
-        directionalHint={5}
-        isBeakVisible={false}
-      >
-        <div>
-          <FocusZone direction={FocusZoneDirection.vertical}>
-            <List
-              tabIndex={0}
-              items={suggestions}
-              onRenderCell={(item, index) => (
-                <SuggestionItem
-                  key={item.key}
-                  item={item}
-                  itemIcons={props.itemIcons}
-                  onClick={() => onDismissCallout(item)}
-                  onMouseOver={() => onSetSelected(index)}
-                />
-              )}
-            />
-          </FocusZone>
-        </div>
-      </Callout>
-    </div>
+    </Combobox>
+  )
+
+  if (!props.label && !props.description && !props.errorMessage) return combobox
+  return (
+    <Field
+      label={props.label}
+      hint={props.description}
+      validationMessage={props.errorMessage}
+      required={props.required}
+    >
+      {combobox}
+    </Field>
   )
 }
 

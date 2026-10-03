@@ -1,12 +1,8 @@
 import { Link } from '@fluentui/react-components'
-import { Icon } from '@fluentui/react'
-import { initializeFileTypeIcons } from '@fluentui/react-file-type-icons'
-import { IListColumn, getId } from 'pp365-shared-library'
+import { FileTypeIcon, IListColumn, getId } from 'pp365-shared-library'
 import { TemplateItem } from 'models'
 import * as ProjectExtensionsStrings from 'ProjectExtensionsStrings'
 import React from 'react'
-
-initializeFileTypeIcons()
 
 export default ({ setFolder }: { setFolder: (folder: TemplateItem) => void }) =>
   [
@@ -16,7 +12,7 @@ export default ({ setFolder }: { setFolder: (folder: TemplateItem) => void }) =>
       name: null,
       minWidth: 20,
       maxWidth: 20,
-      onRender: (item: TemplateItem) => <Icon {...item.getIconProps()} />
+      onRender: (item: TemplateItem) => <FileTypeIcon {...item.getFileTypeIconOptions()} />
     },
     {
       key: getId('name'),

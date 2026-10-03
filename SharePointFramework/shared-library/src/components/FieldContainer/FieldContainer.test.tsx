@@ -18,6 +18,8 @@ describe('FieldContainer', () => {
     expect(screen.getByText('Tittel')).toBeInTheDocument()
     expect(screen.getByText('Prosjektets navn')).toBeInTheDocument()
     expect(screen.getByLabelText('felt')).toBeInTheDocument()
+    // The icon is part of the label, so a click on it goes to the field as well.
+    expect(screen.getByText('Tittel').closest('label').querySelector('svg')).not.toBeNull()
   })
 
   it("ties the label to the field's control, with or without an icon", () => {

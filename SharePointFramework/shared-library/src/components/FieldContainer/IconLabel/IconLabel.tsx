@@ -14,17 +14,17 @@ export interface IIconLabelProps extends IFieldContainerProps {
 
 export const IconLabel: FC<IIconLabelProps> = ({ labelProps, ...props }) => {
   return (
-    <div className={styles.iconLabel}>
+    // The icon is inside the label, so a click on it, as on the text, goes to the field.
+    <Label
+      id={labelProps?.id}
+      htmlFor={labelProps?.htmlFor}
+      size='small'
+      weight='semibold'
+      required={props.required}
+      className={styles.iconLabel}
+    >
       {getFluentIcon(props.iconName)}
-      <Label
-        id={labelProps?.id}
-        htmlFor={labelProps?.htmlFor}
-        size='small'
-        weight='semibold'
-        required={props.required}
-      >
-        {props.label as React.ReactNode}
-      </Label>
-    </div>
+      {props.label as React.ReactNode}
+    </Label>
   )
 }

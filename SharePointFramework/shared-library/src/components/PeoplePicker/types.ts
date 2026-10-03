@@ -1,3 +1,5 @@
+import { TagPickerProps } from '@fluentui/react-components'
+import { ChangeEvent } from 'react'
 import { IPersonaItem } from '../../types'
 
 export interface IPeoplePickerProps {
@@ -44,4 +46,44 @@ export interface IPeoplePickerProps {
    * Class applied to the picker's text area.
    */
   className?: string
+}
+
+/**
+ * What `usePeoplePicker` gives `PeoplePicker` to render.
+ */
+export interface IPeoplePickerState {
+  /**
+   * The people picked.
+   */
+  selected: IPersonaItem[]
+
+  /**
+   * The text typed.
+   */
+  query: string
+
+  /**
+   * The people found for it.
+   */
+  suggestions: IPersonaItem[]
+
+  /**
+   * Whether a search is under way.
+   */
+  searching: boolean
+
+  /**
+   * Whether the field holds all the people it may: one, unless `multi`.
+   */
+  atLimit: boolean
+
+  /**
+   * Takes the text typed.
+   */
+  onQueryChange: (event: ChangeEvent<HTMLInputElement>) => void
+
+  /**
+   * Takes a pick or a removal from the picker.
+   */
+  onOptionSelect: TagPickerProps['onOptionSelect']
 }
