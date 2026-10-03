@@ -467,6 +467,10 @@ import { customLightTheme } from 'pp365-shared-library'
 </IdPrefixProvider>
 ```
 
+### Render-funksjoner for slots
+
+En slot kan få en render-funksjon i stedet for innhold: `label={{ children: (Component, props) => ... }}`. Fluent kaller den med slotens elementtype og props, og i props ligger det Fluent har koblet sammen, som `id` og `for` som knytter en `Field`-etikett til kontrollen. En funksjon som overser argumentene, tegner bare sitt eget innhold, og koblingen forsvinner. `FieldContainer` gjorde det til fase 4: feltene med ikon hadde ingen etikett for skjermlesere. Send videre det slot-en trenger, slik `FieldContainer` nå gjør med etikettens `id` og `htmlFor`.
+
 ---
 
 ## Oppsummering

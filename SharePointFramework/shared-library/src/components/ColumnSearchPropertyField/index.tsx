@@ -24,7 +24,8 @@ export const ColumnSearchPropertyField: FC<IColumnSearchPropertyFieldProps> = (p
             iconName: 'SearchData'
           }}
           items={props.managedProperties}
-          onSelected={(item) => props.onChange(item.key.toString())}
+          // Dismissing the suggestions without a pick hands over no item.
+          onSelected={(item) => item && props.onChange(item.key.toString())}
         />
       )}
       {props.children}

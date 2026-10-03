@@ -64,16 +64,18 @@ test.describe('navigation', () => {
         (await tabs.count()) < 2,
         'the project has no published report with sections, so there are no tabs'
       )
+      // A section's title is text, not a heading, and the summary at the top repeats every title,
+      // so the section a tab names is the last text on the page with that name (the tab itself
+      // comes first).
+      const section = async (tab: typeof tabs) =>
+        page.getByText((await tab.innerText()).trim(), { exact: true }).last()
       const last = tabs.last()
-      const name = (await last.innerText()).trim()
       await last.click()
       // The section the tab names scrolls into view, and the tab list stays where it is.
-      await expect(page.getByRole('heading', { name }).first()).toBeInViewport({ timeout: 10_000 })
+      await expect(await section(last)).toBeInViewport({ timeout: 10_000 })
       await expect(tabs.first()).toBeInViewport()
       await tabs.first().click()
-      await expect(
-        page.getByRole('heading', { name: (await tabs.first().innerText()).trim() }).first()
-      ).toBeInViewport({ timeout: 10_000 })
+      await expect(await section(tabs.first())).toBeInViewport({ timeout: 10_000 })
     })
 
     test('every page in the project navigation opens', async ({ page }) => {

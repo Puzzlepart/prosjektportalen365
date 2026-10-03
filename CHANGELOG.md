@@ -41,6 +41,10 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Rettet en feil hvor egenskapsruten til `Aggregert oversikt` (i porteføljen og i program) og `Idémodul` krasjet når datakilden ikke kunne leses, slik at datakilden ikke kunne rettes der
 - Rettet en feil i hjelpen i bunnteksten hvor en ekstern hjelpeside mistet alt innhold fram til sin siste vannrette linje (`---`), ikke bare Jekyll-hodet, og hvor to bilder på samme linje ga ødelagte bildelenker
 - Rettet en feil hvor `Opprett prosjektdata` krasjet for en godkjent idé når idékonfigurasjonen ikke hadde en tekst for prosjektdata
+- Rettet en feil hvor feltene med ikon i skjemaene (blant annet `Rediger prosjektinformasjon`, statusrapportens redigeringspanel og oppsettveiviseren) ikke hadde etiketten koblet til feltet, slik at skjermlesere ikke leste opp hva feltet het
+- Rettet en feil i tilgangskontrollen for prosjektadministrasjon hvor én rolle som viste til et felt prosjektet ikke har, tok fra brukeren tilgangene de andre rollene gav (for eksempel å redigere statusrapporter eller endre fase)
+- Rettet en feil i tidslinjene for portefølje og program hvor området man står på ikke alltid ble vist øverst, når et annet prosjekt hadde samme navn eller området var det første i listen
+- Rettet en feil hvor `Endre til denne fasen` feilet på prosjekter uten et element i listen `Prosjektegenskaper`, slik at fasen heller ikke ble lagret på prosjektet i porteføljen; fasen lagres nå i porteføljen, og lagring av prosjektinformasjon på et slikt prosjekt sier at prosjektegenskapene mangler i stedet for å vise en teknisk feilmelding
 
 ---
 

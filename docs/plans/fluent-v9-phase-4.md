@@ -393,6 +393,91 @@ ESLint and Prettier ran on every new and changed file and TypeScript on the five
 solutions; Jest ran on all six solutions on the changed harness (the shared library's 213 tests
 too). The full Heft builds are left to the push.
 
+The push's CI run (37038630066) built all six solutions green with the new floors and upgraded the
+test channel; the browser suite passed 28 of 29. The failure was a test of slice 1 that had never
+tested anything: the status page's tab test clicked the last tab while the report was still
+loading, which then was one of the placeholder tabs without a name, and an empty name matches any
+heading. With the placeholders gone (above), it clicked a real tab, and a section's title is text,
+not a heading. The test now looks for the section's title as text (the last on the page with that
+name, since the summary repeats every title) and passes against the test tenant.
+
+### Slice 5 — shared-library tests (2026-10-02)
+
+Twenty-seven test files added (23 existed; 50 files, 367 tests, up from 213): every component and
+data folder of the shared library is under test now, and every service but `DataSourceService`. The
+adapters are tested against structural stand-ins for their PnPjs calls, as `taxonomy/*.test.ts`
+does.
+
+- **The edit panel** (`CustomEditPanel`, `useModel`, `useInitialTaxonomyValues`, `FieldContainer`):
+  the fields that can be edited and not the hidden ones, save held back while a required field is
+  empty, the save with its progress and a failed one, the rules of the URL, number and percentage
+  fields, switches, choices, lookups (without what the configuration leaves out), terms and dates;
+  what the model sends for each type (a link, people as SharePoint's ids, terms through the hidden
+  text field, a lookup's id) and keeps when a person cannot be resolved; a stored term's labels in
+  the page's language; the field container's label, hint, validation message and icon.
+- **Filters and toolbar** (`FilterPanel`, `Filter/taxonomyHierarchy`, `Toolbar`): the empty state,
+  the filters with more than one value under their groups, picking and folding, yes/no columns,
+  term paths as a tree where a parent filters its branch; the toolbar's item builder, dividers,
+  headers and widths, its buttons, a disabled item, the search box, an item's menu and the filter
+  panel.
+- **The timelines** (`ProjectTimeline`, `Timeline`): a group and a bar per project with its
+  elements, the page's own project first, the filters (category, type, tag, project, project
+  information, several values in one field), the errors; the timeline's groups and links, bars and
+  milestones, time frame, grouping, and the details of each kind of element.
+- **The small components**: `Autocomplete`, `PeoplePicker`, `OverflowTagMenu`, `ProjectLogo` (with
+  its fallbacks to the template image and the initials), `UserMessage`, `WebPartTitle`,
+  `PropertyPaneDescription`, `ConditionalWrapper`, `ColumnSearchPropertyField`, the confirmation
+  dialog's hook and `BaseWebPartComponent`.
+- **Data and services**: who may administer a project (`SPDataAdapterBase`: site admins, person
+  fields and groups on the project and the hub) and its people search; the projects cache (memory
+  and session, one fetch for callers asking at once, expiry, entries too large for the session);
+  the aggregated search with its paging; the cloud template package (a real zip); the Excel export;
+  the hub's settings and status reports (`PortalDataService`); the project's properties, phase,
+  checklist and welcome page (`ProjectDataService`).
+
+**Found by the tests and fixed.**
+
+- The icon labels of `FieldContainer` (the forms of `Rediger prosjektinformasjon`, the status
+  report's edit panel, the setup wizard, the column forms) were not tied to their field. Fluent
+  hands a slot's render function the label's props, `id` and `for` among them, and the icon label
+  dropped them, so the control had no accessible name. The rule is in `kodemonster.md` now
+  ("Render-funksjoner for slots").
+- The project admin check stopped at a role that names a field the project does not have, and at a
+  project without the roles field, so one such role took away what the other roles gave.
+- The portfolio and program timelines looked the page's own project up by its item's id instead of
+  its group, and skipped group 0: the project was not put first when another one had the same
+  title, or when it came first in the data.
+- `ProjectDataService` turned a missing properties item into a TypeError instead of `null`.
+  Changing the phase on a project without an item in `Prosjektegenskaper` failed and never reached
+  the hub, though the method is written to fall back to it; saving the project information there
+  showed "Cannot read properties of null". The context is `null` now, and the save says that the
+  properties are missing, in the site's language.
+- Latent: the autocomplete crashed on Enter with nothing highlighted and on a clear without an
+  `onClear`, and the column search field on a dismissed suggestion list (both column forms render
+  the plain input, their managed properties being commented out); the timeline's grouping menu
+  memoized its label and check mark on the props alone (choosing a grouping re-renders the
+  timeline from its parent today). `SPDataAdapterBase`'s lint findings (redundant case blocks,
+  console calls) are cleared.
+
+Found and left: `DataSourceService` has no test, and `PortalDataService` has tests for its settings
+and status reports only. The phases and document types of `ProjectDataService` go through
+`getTermStore`, which the runtime contract test covers. Its `getPropertiesLastUpdated` has no
+caller and passes a field value object where the item id belongs. `UserMessage`'s `fixedCenter`
+and `isCompact` do nothing.
+
+**Harness.** No change to `pp365-jest-config`. Into the testing guide and the skill went: in an
+open Fluent drawer `toBeVisible()` fails for everything, since the entry motion never ends under
+jsdom (check the hiding attribute with `closest('[hidden]')`, and give role queries
+`{ hidden: true }`); Fluent v8 components read the key from `keyCode`/`which`; and `new Image()`
+never loads under jsdom (a `window.Image` stand-in, as in `ProjectLogo`'s test).
+
+**Floors.** Measured on the 367 tests: 75 % statements, 81 % branches, 55 % functions,
+75 % lines (the floors were 28/58/27/28, from the phase 3 close-out); the floors are 72/78/52/72.
+ESLint and Prettier ran on every new and changed file and TypeScript on the shared library; Jest
+ran on the whole shared library and, against the changed library, on all five consumers (468
+tests, their coverage unchanged; the `ProjectDataService` fix came after that run, and no consumer
+test calls the two methods whose behaviour it changes). The full Heft builds are left to the push.
+
 ## Rules for the executing agent
 
 - Read `AGENTS.md`, the `pp365-toolchain` and `pp365-testing` skills, this plan and the phase 3

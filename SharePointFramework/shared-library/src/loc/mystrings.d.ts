@@ -116,6 +116,7 @@ declare interface ISharedLibraryStrings {
   MeasurementSheetName: string
   DataGridSelectAllLabel: string
   DataGridSelectRowLabel: string
+  ProjectPropertiesNotFoundErrorText: string
 }
 
 declare module 'SharedLibraryStrings' {

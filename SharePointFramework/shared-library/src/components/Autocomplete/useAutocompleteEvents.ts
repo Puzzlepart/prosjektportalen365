@@ -16,7 +16,7 @@ export function useAutocompleteEvents({ dispatch, props }) {
     onSearch: (_event: any, searchTerm: string) => dispatch(ON_SEARCH({ searchTerm })),
     onClear: () => {
       dispatch(RESET())
-      props.onClear()
+      props.onClear?.()
     },
     onKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) =>
       dispatch(

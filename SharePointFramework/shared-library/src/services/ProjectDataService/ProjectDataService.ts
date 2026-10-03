@@ -20,6 +20,7 @@ import {
   IProjectInformationData
 } from './types'
 import { DataService } from '../DataService'
+import strings from 'SharedLibraryStrings'
 import '@pnp/sp/presets/all'
 
 export class ProjectDataService extends DataService<IProjectDataServiceParams> {
@@ -115,7 +116,8 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
   }
 
   /**
-   * Get local project information item context and cache it for 15 minutes.
+   * Get local project information item context and cache it for 15 minutes. Returns `null` when
+   * the site has no properties list, the list has no item or the list cannot be read.
    */
   private async _getLocalProjectInformationItemContext(): Promise<ILocalProjectInformationItemContext> {
     const context: Partial<ILocalProjectInformationItemContext> = await this._storage.getOrPut(
@@ -164,6 +166,7 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
       },
       dateAdd(new Date(), 'minute', 15)
     )
+    if (!context) return null
     const list = this.web.lists.getById(context.listId)
     const item = list.items.getById(context.itemId)
     return {
@@ -330,7 +333,11 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
   ): Promise<IProjectInformationData | null> {
     try {
       const propertyItemContext = await this._getLocalProjectInformationItemContext()
-      if (!propertyItemContext) throw new Error('Local property item not found.')
+      if (!propertyItemContext) {
+        throw new Error(
+          format(strings.ProjectPropertiesNotFoundErrorText, this._params.propertiesListName)
+        )
+      }
       await propertyItemContext.item.update(properties)
       if (returnData) {
         return await this.getProjectInformationData()

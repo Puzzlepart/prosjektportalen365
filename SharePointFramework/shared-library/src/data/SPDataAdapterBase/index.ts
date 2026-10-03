@@ -136,6 +136,7 @@ export class SPDataAdapterBase<
       const currentUser = await this.sp.web.ensureUser(user.loginName ?? user.email)
       return currentUser
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.warn(
         `(SPDataAdapterBase) (getCurrentUser) ensureUser failed for ${
           user?.loginName ?? user?.email ?? '<unknown>'
@@ -178,7 +179,9 @@ export class SPDataAdapterBase<
 
       const permissions = await (async () => {
         const userPermissions = []
-        const rolesToCheck = projectProperties.get('GtProjectAdminRoles').value
+        // A field the item does not have reads as no value, not as an error that would deny
+        // the permissions the other roles give.
+        const rolesToCheck: string[] = projectProperties.get('GtProjectAdminRoles')?.value ?? []
         if (!_.isArray(rolesToCheck) || _.isEmpty(rolesToCheck)) {
           const currentUserHasManageWebPermisson = await this.sp.web.currentUserHasPermissions(
             PermissionKind.ManageWeb
@@ -193,23 +196,22 @@ export class SPDataAdapterBase<
           const role = projectAdminRoles[i]
           switch (role.type) {
             case ProjectAdminRoleType.SiteAdmin:
-              {
-                try {
-                  const currentUserHasManageWebPermisson =
-                    await this.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
-                  if (currentUserHasManageWebPermisson) userPermissions.push(...role.permissions)
-                } catch (error) {
-                  console.warn(
-                    '(SPDataAdapterBase) (checkProjectAdminPermissions) SiteAdmin permission check failed:',
-                    error
-                  )
-                }
+              try {
+                const currentUserHasManageWebPermisson =
+                  await this.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
+                if (currentUserHasManageWebPermisson) userPermissions.push(...role.permissions)
+              } catch (error) {
+                // eslint-disable-next-line no-console
+                console.warn(
+                  '(SPDataAdapterBase) (checkProjectAdminPermissions) SiteAdmin permission check failed:',
+                  error
+                )
               }
               break
             case ProjectAdminRoleType.ProjectProperty:
               {
                 if (!currentUser) break
-                const projectFieldValue = projectProperties.get(role.projectFieldName).value
+                const projectFieldValue = projectProperties.get(role.projectFieldName)?.value
                 if (
                   _.isArray(projectFieldValue) &&
                   projectFieldValue.indexOf(currentUser.Id) !== -1
@@ -241,6 +243,7 @@ export class SPDataAdapterBase<
                   )
                     userPermissions.push(...role.permissions)
                 } catch (error) {
+                  // eslint-disable-next-line no-console
                   console.warn(
                     `(SPDataAdapterBase) (checkProjectAdminPermissions) SharePointGroup membership check failed for group '${role.groupName}':`,
                     error
@@ -389,16 +392,12 @@ export class SPDataAdapterBase<
     let destinationWeb: IWeb = this.portalDataService.web
     switch (options.mapType) {
       case ProjectPropertiesMapType.FromPortfolioToProject:
-        {
-          sourceWeb = this.portalDataService.web
-          destinationWeb = this.sp.web
-        }
+        sourceWeb = this.portalDataService.web
+        destinationWeb = this.sp.web
         break
       case ProjectPropertiesMapType.FromPortfolioToPortfolio:
-        {
-          sourceWeb = this.portalDataService.web
-          destinationWeb = this.portalDataService.web
-        }
+        sourceWeb = this.portalDataService.web
+        destinationWeb = this.portalDataService.web
         break
     }
 
@@ -437,20 +436,18 @@ export class SPDataAdapterBase<
         switch (field.TypeAsString) {
           case 'TaxonomyFieldType':
           case 'TaxonomyFieldTypeMulti':
-            {
-              if (options.useSharePointTaxonomyHiddenFields) {
-                const textField = targetListFields.find((f) => f.Id === field.TextField)
-                if (!textField) return properties
-                properties[textField.InternalName] = fieldValues.get<string>(field.InternalName, {
-                  format: 'term_text'
-                })
-              } else {
-                const [textField] = fields.filter(
-                  (f) => f.InternalName === `${field.InternalName}Text`
-                )
-                if (!textField) return properties
-                properties[textField.InternalName] = fieldValue.valueAsText
-              }
+            if (options.useSharePointTaxonomyHiddenFields) {
+              const textField = targetListFields.find((f) => f.Id === field.TextField)
+              if (!textField) return properties
+              properties[textField.InternalName] = fieldValues.get<string>(field.InternalName, {
+                format: 'term_text'
+              })
+            } else {
+              const [textField] = fields.filter(
+                (f) => f.InternalName === `${field.InternalName}Text`
+              )
+              if (!textField) return properties
+              properties[textField.InternalName] = fieldValue.valueAsText
             }
             break
           case 'User':
@@ -517,12 +514,10 @@ export class SPDataAdapterBase<
             properties[field.InternalName] = fieldValue.value ?? null
             break
           case 'MultiChoice':
-            {
-              if (fieldValue.value) {
-                properties[field.InternalName] = options.wrapMultiValuesInResultsArray
-                  ? { results: fieldValue.value }
-                  : fieldValue.value
-              }
+            if (fieldValue.value) {
+              properties[field.InternalName] = options.wrapMultiValuesInResultsArray
+                ? { results: fieldValue.value }
+                : fieldValue.value
             }
             break
           default:
@@ -532,6 +527,7 @@ export class SPDataAdapterBase<
         return properties
       }, Promise.resolve({}))
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(
         '(SPDataAdapterBase) (getMappedProjectProperties) Failed to map project properties:',
         error

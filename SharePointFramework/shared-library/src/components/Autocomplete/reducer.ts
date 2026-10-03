@@ -57,12 +57,12 @@ export const createAutocompleteReducer = (initialState: IAutocompleteState) =>
             break
           }
           case 'Enter': {
-            {
-              const item = state.suggestions[state.selectedIndex]
-              if (item) payload.onEnter(JSON.parse(JSON.stringify(item)))
-              state.suggestions = []
-              state.value = item.text
-            }
+            // Enter with no suggestion highlighted picks nothing and keeps what was typed.
+            const item = state.suggestions[state.selectedIndex]
+            if (!item) break
+            payload.onEnter(JSON.parse(JSON.stringify(item)))
+            state.suggestions = []
+            state.value = item.text
             break
           }
         }

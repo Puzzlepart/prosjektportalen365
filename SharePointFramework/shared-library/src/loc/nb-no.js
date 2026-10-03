@@ -116,6 +116,7 @@ define([], function () {
     ProjectInformationPanelButton: 'Åpne prosjektinformasjonspanel',
     MeasurementSheetName: 'Målinger',
     DataGridSelectAllLabel: 'Velg alle',
-    DataGridSelectRowLabel: 'Velg rad'
+    DataGridSelectRowLabel: 'Velg rad',
+    ProjectPropertiesNotFoundErrorText: 'Fant ikke prosjektegenskapene i listen "{0}".'
   }
 })
