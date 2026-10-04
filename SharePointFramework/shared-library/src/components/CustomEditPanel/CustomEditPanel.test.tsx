@@ -32,8 +32,8 @@ jest.mock('@fluentui/react-components', () => {
     React.createElement('option', { value: value ?? children }, children)
   return { __esModule: true, ...actual, Combobox, Option }
 })
-jest.mock('@pnp/spfx-controls-react', () => {
-  const stub = jest.requireActual('@pnp/spfx-controls-react')
+jest.mock('@pnp/spfx-controls-react/lib/ModernTaxonomyPicker', () => {
+  const stub = jest.requireActual('@pnp/spfx-controls-react/lib/ModernTaxonomyPicker')
   const React = jest.requireActual('react')
   const IDRETT = {
     id: 'term-9',

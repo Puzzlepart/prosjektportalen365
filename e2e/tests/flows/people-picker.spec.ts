@@ -9,6 +9,8 @@ import { restGet } from '../fixtures/rest'
  * panel is closed without saving.
  */
 const projectUrl = configuredUrl(process.env.E2E_PROJECT_URL)
+
+const escapeRegExp = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 const PEOPLE_PLACEHOLDER = /angi et navn eller en e-postadresse|enter a name or email address/i
 
 test.describe('the project information panel', () => {
@@ -38,14 +40,29 @@ test.describe('the project information panel', () => {
       .first()
       .click()
     const panel = page.getByRole('dialog').last()
-    // A person field with room for one more person: a field for one that holds one takes no input.
+    // The header's X and the footer's button are both named "Lukk"; the footer's is the last.
+    const close = panel.getByRole('button', { name: /^lukk$|^close$/i }).last()
+    await expect(close).toBeVisible({ timeout: 30_000 })
+    // The account may be picked already, saved by someone. The search leaves out who is picked, and
+    // a field for one person that holds one takes no input, so it is taken out of every person field
+    // first; the panel is closed without saving. In the panel, the options are the picked people's
+    // tags (the search results open outside it), and a click on a tag takes it out.
+    const pickedAccount = panel.getByRole('option', { name: new RegExp(escapeRegExp(name)) })
+    // One at a time: a tag on its way out is still counted, and clicking it waits for nothing.
+    for (let left = await pickedAccount.count(); left > 0; left--) {
+      await pickedAccount.first().click()
+      await expect(pickedAccount).toHaveCount(left - 1)
+    }
+
+    // The first person field with room for one more person.
     const input = panel.getByPlaceholder(PEOPLE_PLACEHOLDER).first()
     await expect(input).toBeVisible({ timeout: 30_000 })
-
-    // The name may be on the panel already, in another field; the pick adds one more.
+    // The name may be on the panel still, as text elsewhere; the pick adds one more.
     const named = panel.getByText(name, { exact: true })
     const before = await named.count()
-    await input.fill(email.split('@')[0])
+    // A click opens the list, and the search runs as the user types.
+    await input.click()
+    await input.pressSequentially(email.split('@')[0], { delay: 50 })
     // The people picked are options too (Fluent's tags); a search result is the one with the email.
     const option = page.getByRole('option').filter({ hasText: email }).first()
     await expect(option).toBeVisible({ timeout: 30_000 })
@@ -54,7 +71,7 @@ test.describe('the project information panel', () => {
     await expect(named).toHaveCount(before + 1)
     await expect(page.getByRole('option').filter({ hasText: email })).toHaveCount(0)
 
-    await panel.getByRole('button', { name: /^lukk$|^close$/i }).click()
+    await close.click()
     await expect(panel).toBeHidden({ timeout: 10_000 })
   })
 })

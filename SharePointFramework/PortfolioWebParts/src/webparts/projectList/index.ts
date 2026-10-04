@@ -1,9 +1,7 @@
 import { IPropertyPaneConfiguration, PropertyPaneToggle } from '@microsoft/sp-property-pane'
-import {
-  PropertyFieldDropdownWithCallout,
-  PropertyFieldMultiSelect,
-  PropertyFieldToggleWithCallout
-} from '@pnp/spfx-property-controls'
+import { PropertyFieldDropdownWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldDropdownWithCallout'
+import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls/lib/PropertyFieldMultiSelect'
+import { PropertyFieldToggleWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldToggleWithCallout'
 import {
   CustomCollectionFieldType,
   PropertyFieldCollectionData

@@ -105,7 +105,8 @@ module.exports = function createProsjektportalenEslintConfig(solutionDir) {
     {
       files: TS_FILES,
       rules: {
-        // --- rules the v9 migration relaxed, back to error (2026-09-30) ---
+        // --- rules the v9 migration relaxed, back to error (2026-09-30); `no-void`, `eqeqeq` and
+        // `react/jsx-key` promoted to error at the phase 4 close-out (2026-10-04), once clean ---
 
         // `dot-notation` is inherited from the rushstack profile and is AUTOFIXABLE, which makes it
         // actively dangerous here: `eslint --fix` rewrites `result['GtSiteIdOWSTEXT']` into
@@ -118,14 +119,20 @@ module.exports = function createProsjektportalenEslintConfig(solutionDir) {
         // A promise left floating must say so: `void` marks a deliberate fire-and-forget (the
         // `no-void` override below allows it as a statement), anything else is awaited or caught.
         '@typescript-eslint/no-floating-promises': 'error',
-        'no-void': ['warn', { allowAsStatement: true }],
+        'no-void': ['error', { allowAsStatement: true }],
 
         // Function declarations are hoisted and a class used inside a method runs after the class
         // exists, so only variables are checked - the `const` below the callback that uses it,
         // which is what the rule is for.
         '@typescript-eslint/no-use-before-define': [
           'error',
-          { functions: false, classes: false, variables: true, typedefs: true, ignoreTypeReferences: true }
+          {
+            functions: false,
+            classes: false,
+            variables: true,
+            typedefs: true,
+            ignoreTypeReferences: true
+          }
         ],
 
         // The property checks are the rule's false-positive generator on the project setup tasks,
@@ -146,11 +153,15 @@ module.exports = function createProsjektportalenEslintConfig(solutionDir) {
         'no-compare-neg-zero': 'warn',
         'no-console': 'warn',
         'default-case': 'off',
-        eqeqeq: 'warn',
+        // `== null` is the idiom for "null or undefined" and stays allowed; any other loose
+        // comparison is an error.
+        eqeqeq: ['error', 'always', { null: 'ignore' }],
         'max-classes-per-file': 'off',
         yoda: 'error',
         'require-await': 'warn',
         'unused-imports/no-unused-imports': 'error',
+        // A list without keys re-renders wrongly; the codebase has none left.
+        'react/jsx-key': 'error',
 
         // Dropped on purpose (see the repo migration notes):
         //   @typescript-eslint/interface-name-prefix  - removed in typescript-eslint v5+
@@ -180,6 +191,19 @@ module.exports = function createProsjektportalenEslintConfig(solutionDir) {
           'error',
           {
             paths: [
+              // Neither PnP package declares itself free of side effects, so webpack cannot drop the
+              // controls a bundle does not use: an import from the package's root brings every
+              // control, and their Fluent v8 list, picker and callout code, into the bundle.
+              {
+                name: '@pnp/spfx-controls-react',
+                message:
+                  "Import the control from its own entry point, e.g. '@pnp/spfx-controls-react/lib/ModernTaxonomyPicker': the package root bundles every control."
+              },
+              {
+                name: '@pnp/spfx-property-controls',
+                message:
+                  "Import the property field from its own entry point, e.g. '@pnp/spfx-property-controls/lib/PropertyFieldMultiSelect': the package root bundles every field."
+              },
               {
                 name: 'pp365-shared-library/lib/icons/iconCatalog',
                 message:

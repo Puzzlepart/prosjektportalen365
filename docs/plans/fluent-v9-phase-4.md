@@ -617,6 +617,56 @@ Lint debt in the touched files is paid (three try/catch blocks that only rethrew
 bindings, an empty catch). The shared library measured 74.9/81.3/55.2/74.9 on 374 tests; its floors
 stay 72/78/52/72.
 
+The push's CI run (37123110186) built and upgraded green; the browser suite passed 30 of 31, and
+the owner's manual check found the slice working. The failure was the new people picker test,
+which assumed the signed-in account was not picked: the manual check had saved it into both
+person fields, and the search rightly leaves out who is picked. The test now takes the account out
+of every person field first (the panel closes without saving, so nothing is changed), clicks the
+input before typing, as a user opens the list, and waits for each tag to leave before the next;
+it passed twice against the tenant. The file name column had no list on the test tenant to check by
+hand, so it got a test instead (`FileNameColumn.test.tsx`, four tests: the glyph of a file, a
+folder and a document set, an Office file opened through `Doc.aspx` on its own site, a PDF as a
+download, a redirect, and no glyph when it is turned off).
+
+### Slice 8 — close-out (2026-10-04)
+
+**Lint.** The three rules Decision E relaxed have been `error` since the phase 3 close-out. The
+allow-list of house-rule warnings is 210, from 248 at the phase 3 close-out (246 at slice 0):
+no-console 58, no-unused-vars 50, require-await 21, no-useless-catch 21, no-lone-blocks 13,
+no-new-null 12, no-empty 12, no-unused-expressions 10, pair-react-dom-render-unmount 7,
+import-requires-chunk-name 4, no-unsafe-regexp 2. Three rules that were down to a handful became
+`error` so they stay at none: `eqeqeq` (its three warnings were `== null`, the idiom for null or
+undefined, which `{ null: 'ignore' }` allows), `no-void` (its one expression became a statement) and
+`react/jsx-key` (none left). `allowWarningsInSuccessfulBuild` stays on while the allow-list has
+warnings in it.
+
+**Bundle sizes**, the production packages against slice 0's: PortfolioWebParts 9.87 to 9.90 MB,
+ProjectWebParts 7.03 to 7.07, ProgramWebParts 4.62 to 4.64, the shared library 1.98 to 1.98,
+PortfolioExtensions 1.42 to 1.42, ProjectExtensions 1.12 to 1.11 (slice 7's build, 26.04 to 26.12
+MB in all, +0.3 %). Dropping our own v8 imports did not shrink the bundles because v8 still came in
+through PnP's packages: the term field imported `ModernTaxonomyPicker` from the root of
+`@pnp/spfx-controls-react`, and the project list's and project card's property panes imported from
+the root of `@pnp/spfx-property-controls`. Neither package declares `sideEffects`, so a root
+import bundles every control in it with their v8 list, picker and callout code (the hub's bundles
+still held `MarqueeSelection` and `DetailsListBase`). Those three imports take each control from
+its own entry point now, and `no-restricted-imports` stops a root import of either package; the
+coding guide says why (`kodemonster.md`, "PnP-kontroller"). The close-out push's packages show
+the effect.
+
+**Definition of done, swept.** Every web part root, extension and interactive component has a
+test file, and every solution's floors sit at its totals (slices 2 to 7). The browser suite runs a
+program site, the navigation flows and the write flows in CI (slice 1, 31 tests with the people
+picker's). The hub is on v9 and PortfolioWebParts has no `@fluentui/react` (slice 6). The
+hold-outs are converted, and the one v8 import left is named by P4-7 (slice 7). The lint allow-list
+is shorter than phase 3 left it (above). The release note's technical section
+(`releasenotes/1.15.0.md`) describes phases 3 and 4 as a technical change with no intended
+functional difference and lists the visible differences made on purpose, now with the hub's
+selection, the people picker's look and the labels.
+
+**`Install/` and the upgrade path** are checked by the close-out push itself: it carries no
+`[apps-only]`, so its CI run builds the full release and runs the full upgrade on the test tenant,
+templates included, before the browser suite. Phase 5 starts when that run is green.
+
 ## Rules for the executing agent
 
 The manual check of the tenant found the label fix working for the fields with Fluent v9

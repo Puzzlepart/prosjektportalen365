@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import { FieldContainer } from '../../../FieldContainer'
 import { useCustomEditPanelContext } from '../../context'
 import { FieldElementComponent } from './types'
-import { ModernTaxonomyPicker } from '@pnp/spfx-controls-react'
+import { ModernTaxonomyPicker } from '@pnp/spfx-controls-react/lib/ModernTaxonomyPicker'
 import { Term, useInitialTaxonomyValues } from './useInitialTaxonomyValues'
 
 export const TaxonomyFieldType: FieldElementComponent = ({ field }) => {

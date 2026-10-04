@@ -10,11 +10,11 @@ import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 import { IProjectCardProps, ProjectCard } from 'components/ProjectCard'
 import {
   CustomCollectionFieldType,
-  PropertyFieldCollectionData,
-  PropertyFieldDropdownWithCallout,
-  PropertyFieldMultiSelect,
-  PropertyFieldToggleWithCallout
-} from '@pnp/spfx-property-controls'
+  PropertyFieldCollectionData
+} from '@pnp/spfx-property-controls/lib/PropertyFieldCollectionData'
+import { PropertyFieldDropdownWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldDropdownWithCallout'
+import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls/lib/PropertyFieldMultiSelect'
+import { PropertyFieldToggleWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldToggleWithCallout'
 import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHeader'
 import { createElement } from 'react'
 import { PortalDataService, ProjectColumn } from 'pp365-shared-library'
@@ -129,7 +129,8 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
               } else {
                 this._projectSiteId = gtSiteId
               }
-            } catch (hubError) {
+            } catch {
+              // The hub cannot be read; the site keeps its own id.
               this._projectSiteId = gtSiteId
             }
           } else {
