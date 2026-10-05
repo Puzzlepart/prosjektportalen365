@@ -18,7 +18,7 @@ is not ours to decide (see P5-1); a new Node major, which comes after 1.15 (P5-5
 | Dependency | Now | Target | Where |
 |---|---|---|---|
 | `@reduxjs/toolkit` | `~1.9.5` in five solutions | 2.x (2.13.0 on 2026-10-05) | 23 files. Nine reducers on `createReducer`, seven of them in the object notation 2.x removed (only the portfolio overview's and project information's use the builder callback); `AnyAction`, deprecated in 2.x for `UnknownAction`, in 11 files; `createAction` in 9; no `createSlice`. Five reducers have a test of their own (project status, the phase change dialog, the setup dialog, the portfolio overview, the program administration); the aggregation's, project information's, the phases' and the document template dialog's have none |
-| `xlsx` | `^0.16.9` in shared-library | 0.18.5, or SheetJS's own 0.20.3 (P5-7) | 1 file (`ExcelExportService`), six calls: `utils.aoa_to_sheet`, `book_append_sheet`, `book_new`, `json_to_sheet`, `sheet_to_json`, `write`; four tests since phase 4 run the real library. npm's last release is 0.18.5 (2022): it fixes the three denial-of-service advisories against 0.16 (CVE-2021-32012 to 32014), not the two high ones, prototype pollution when a file is read (CVE-2023-30533, fixed in 0.19.3) and a ReDoS (CVE-2024-22363, fixed in 0.20.2), whose fixes SheetJS publishes only on `cdn.sheetjs.com` |
+| `xlsx` | `^0.16.9` in shared-library | SheetJS's own 0.20.3 (P5-7) | 1 file (`ExcelExportService`), six calls: `utils.aoa_to_sheet`, `book_append_sheet`, `book_new`, `json_to_sheet`, `sheet_to_json`, `write`; four tests since phase 4 run the real library. npm's last release is 0.18.5 (2022): it fixes the three denial-of-service advisories against 0.16 (CVE-2021-32012 to 32014), not the two high ones, prototype pollution when a file is read (CVE-2023-30533, fixed in 0.19.3) and a ReDoS (CVE-2024-22363, fixed in 0.20.2), whose fixes SheetJS publishes only on `cdn.sheetjs.com` |
 | `react` / `react-dom` | `17.0.1` in all six, pinned by SPFx | 18 | Every component; 15 files render with react-dom's `render`, 7 of them without the unmount `pair-react-dom-render-unmount` asks for. SPFx 1.23.2 declares `react >=16.13.1 <18.0.0` in `sp-core-library`'s peer range, 1.24.0-rc.0 `<19.0.0`. React is not in our bundles: every manifest asks SharePoint for `react` and `react-dom` as framework components by version (`"type": "component"`, `17.0.1`, no copy in the package), so the React a web part gets is the platform's to serve |
 | `@types/react` / `@types/react-dom` | `17.0.45` / `17.0.17` in all six | 18 | The 18 types drop the implicit `children` from `FC`'s props; 20 files read `children` |
 | SPFx (`@microsoft/sp-*`, the rig, the Heft plugins) | `1.23.2` in all six | 1.24 GA | 1.24.0-rc.0 is on npm (`next`), GA announced for October 2026. The rig against 1.23.2: Heft 1.2.17 to 1.3.2, the Jest plugin 2.0.6 to 2.0.19, the lint plugin 1.2.7 to 1.3.1, the Sass plugin 1.4.1 to 1.5.0; ESLint 9.37.0 and the rig's TypeScript 5.3.3 unchanged. Node: `>=22.14.0 <23.0.0 \|\| >=24.0.0 <25.0.0 \|\| >=26.0.0 <27.0.0` (1.23.2: 22 only) |
@@ -56,11 +56,11 @@ is not ours to decide (see P5-1); a new Node major, which comes after 1.15 (P5-5
   PnP's code runs on the React the manifest asks for. What is unproven is that code on React 18;
   slice 4's manual round covers the term field and the property panes, and a PnP release for SPFx
   1.24 is taken if it comes in time.
-- **P5-7. xlsx: npm's 0.18.5 or SheetJS's 0.20.3** (open, for the user before slice 1's bump).
-  0.18.5 is the plan's target and npm's last; it leaves the two high advisories (inventory), which
+- **P5-7. xlsx: SheetJS's 0.20.3, not npm's 0.18.5** (decided by the user 2026-10-05). 0.18.5
+  was the plan's target and is npm's last; it leaves the two high advisories (inventory), which
   only reading a file reaches, and the export only writes. SheetJS's CE 0.20.3 from
   `cdn.sheetjs.com` closes them too, as a tarball URL in `package.json` that pnpm resolves like any
-  other version, at the price of a dependency from outside the registry. Recommended: 0.20.3.
+  other version, at the price of a dependency from outside the registry.
 
 ## Slices and order
 
@@ -68,6 +68,7 @@ is not ours to decide (see P5-1); a new Node major, which comes after 1.15 (P5-5
 |---|---|---|---|
 | 0 | Branch and baselines | New branch off `releases/1.15`, run by the test-channel workflow; record the inventory above, the test counts and the six package sizes | Baselines in this document |
 | 1 | xlsx | The export's four tests run the real library but read only what reaches `aoa_to_sheet`: first a round trip of the written workbook (read back with `XLSX.read`) on 0.16; then the bump to the version P5-7 settles and whatever the changed `utils` surface needs; the download checked by hand on the test tenant | Export tests green on the new version |
+| 1b | Agent skills and onboarding (added by the user 2026-10-05, between 1 and 2) | One source for the skills: Copilot reads `.claude/skills` as Claude Code does, so the hand-made copy in `.github/skills` (whose `pp365-testing` had fallen behind) goes, and a check in CI stops a second copy from coming back; three new skills, thin and pointing at the guide: `pp365-ui` (components, Fluent v9, our wrappers), `pp365-templates` (content model, provisioning, upgrades) and `pp365-release` (branches, commit tags, CI, channels, changelog and release notes); the two existing skills and `AGENTS.md` corrected against the code; four notes that lived only in an agent's personal memory moved into them; each new skill tried on a typical task by a fresh agent; `ONBOARDING.md`, a first-week path for new developers in Norwegian | One copy of each skill, the check in CI, `ONBOARDING.md` confirmed by the user |
 | 2 | Redux Toolkit 2 | Reducer tests for the four without one (the program administration's is the model); then the bump: the seven object-notation reducers moved to the builder callback, which 2.x requires, `AnyAction` replaced by `UnknownAction` or the reducer's own action union, `rush update`; every web part with a reducer checked by hand | All reducers tested, green on 2.x |
 | 3 | React 18 readiness | `react-beautiful-dnd` replaced by a maintained fork with the same API or by the panel's own ordering, `react-calendar-timeline` on a line that declares React 18, the 15 files that render with react-dom's `render` made ready for `createRoot` (the 7 without an unmount get one); nothing bumps yet | The two peers settled, tests green on React 17 |
 | 4 | SPFx 1.24 and React 18 | The SPFx bump first, on React 17 (its own mini-phase on the toolchain plan's pattern; the RC until GA, P5-4); then React 18: `react`, `react-dom` and their types, `createRoot`, Testing Library 16 with `@testing-library/dom` 10 in all six, `children` declared where the 18 types want it, StrictMode findings fixed, the Fluent and Tabster versions revisited, the TagPicker stand-in rechecked (its loop was seen on React 17); full manual round on the test tenant, PnP's term field and property panes included (P5-6) | 1.15's definition of done |
@@ -143,3 +144,71 @@ P5-4 to P5-6 record how slice 4 and the time after 1.15 go. The recount found wh
 do beyond the plan's first draft: seven of the nine reducers use the object notation Redux Toolkit
 2 removed. And the xlsx the plan named leaves two high advisories open, which P5-7 puts to the
 user.
+
+### Slice 1 — xlsx, the guard and the tests (2026-10-05)
+
+**Investigation.** Six agents compared 0.16.9 with SheetJS CE 0.20.3 before anything changed: the
+export's pipeline ported verbatim and run under both versions in 550 cases (cells read back with
+both readers), the written files unzipped and diffed part by part in 61 cases, the dependency
+mechanics tried in a throwaway Rush repo, the types, webpack resolution and bundle size, the test
+design, and a critic over all five, which checked contradictions in a headless Chromium. For
+realistic data every value, type and sheet name is the same. The package differs only in its
+container (an extra `xl/metadata.xml`, another ZIP layout), byte-identical to npm's 0.18.5, which
+has some 16 million downloads a week. In the browser the export is as fast as before, and webpack
+takes `xlsx.mjs`: the library's share of a bundle drops from about 911 KB to 320 KB minified, with
+the codepage tables and JSZip gone. TypeScript compiles our code unchanged against either version.
+
+**What 0.20.3 refuses.** Four inputs 0.16.9 wrote and Excel does not accept: text over 32,767
+characters in a cell (a note column holds up to 63,999), and as a sheet name, which is the web
+part's title, a name with `:`, one that starts or ends with an apostrophe, or `History`. All three
+callers swallow the export's errors, so the user would get neither a file nor a message. Names
+over 31 characters already fail on both versions: three provisioned titles per language on the
+child-project pages (32, 37 and 36 characters in Norwegian, 38, 39 and 32 in English).
+
+**The guard**, in `ExcelExportService` before the bump: `toSheetName` replaces `: \ / ? * [ ]`
+with a space, trims apostrophes and whitespace at both ends, cuts to 31 characters, falls back to
+`Sheet1` when nothing is left, and numbers `History` and a name already used (the measurements
+sheet's included); `truncate` cuts text to 32,767 characters without splitting a surrogate pair,
+since a lone surrogate corrupts the sheet in the browser on both versions. Realistic output is
+byte-identical with and without it. It is an intended visible difference, in the changelog and the
+release note: the long titles export now, cut to 31 characters. The dead `sheetName`,
+`fileSaverVersion` and `xlsxVersion` settings are gone from the configuration.
+
+**Tests.** `ExcelExportService.test.ts` has 18 tests, 14 of them new and all on the saved file
+rather than on calls into xlsx: the file read back from the Blob `saveAs` receives (through
+`FileReader`, since jsdom's Blob has no `arrayBuffer()`), each cell's value and type in both
+sheets, a package check (the main content type, every XML part well-formed and UTF-8, since
+SheetJS reads back files Excel refuses), the names, the measurements sheet's number, and the cut
+with an emoji across the limit. They pin today's behaviour, defects included (a `false`, `0` or
+`''` exports as an empty cell). 18 of 18 pass on 0.16.9 here; the critic's run passed them on both
+versions, and a mutation run showed they catch a number written as text, a renamed or missing
+sheet and a naive cut, where the four spy tests did not. The browser suite gets one read-only test
+(`smoke/portfolio.spec.ts`): the hub's overview exports, and the download is an xlsx package. It is
+the only test of the path users run, SheetJS's ES module build in a browser.
+
+**Install.** `Build-Release.ps1` kept no output of `rush install` and ignored its exit code, so a
+failed install surfaced as a rebuild that could not link. It now logs the install to
+`SharePointFramework/rush-<install|update>.build.log` and stops with its last 50 lines. With the
+tarball, an install from an empty store needs `cdn.sheetjs.com` to answer.
+
+**Order.** The guard and the tests land on 0.16.9 first, with a push and a green run; the bump
+follows as its own commit, `package.json` and the lockfile only, with no test changed (P5-3).
+
+**Accepted with the bump.** GitHub's dependency graph and Dependabot cannot follow a URL
+dependency: future xlsx advisories raise no alert, so the release checklist gets a look at
+SheetJS's advisories. Scanners that read the npm advisory ranges, which have no fixed version on
+npm, may still list the two advisories against 0.20.3. Both need a file to be read (SheetJS's own
+advisory says so for CVE-2023-30533; the 0.20.2 fix touched only parsing), and the export only
+writes, so the bump is hygiene, not a fix for an exploitable path.
+
+**Found and left**, for issues rather than this slice: failed exports show nothing to the user;
+`getObjectValue` turns `false`, `0` and `''` into empty cells; `parseDisplayValue` rewrites any
+text with ` | ` or `;#` (`Prosjekt A | Bydel Nord` exports as `Bydel Nord`); measurement dates
+come from `toLocaleDateString()` and are parsed back with `new Date()`; the callers round numbers
+down (`-0.5` exports as `-1`); no export applies an active search; file names turn `æøå` into `-`;
+`DynamicList`'s tooltip for exporting a selection uses the English plural in Norwegian;
+`getDateForExcelExport`'s JSDoc promises a `Date` but it returns strings.
+
+**Manual gate before merge:** on the test tenant, a one-sheet export (`Porteføljeoversikt`) and a
+two-sheet one (`Nytteoversikt`) from the 0.20.3 build open in Excel desktop and in Excel for the
+web without a repair prompt, and a `Dynamisk liste` titled with a `:` exports with the cleaned name.

@@ -40,6 +40,50 @@ function parseDisplayValue(value: any): any {
   return value
 }
 
+/** Excel's limits, in UTF-16 code units: what `String.length` counts and SheetJS checks. */
+const MAX_CELL_TEXT_LENGTH = 32767
+const MAX_SHEET_NAME_LENGTH = 31
+
+/**
+ * Cuts `value` to at most `maxLength` UTF-16 code units without splitting a surrogate pair.
+ *
+ * A lone surrogate is not valid UTF-8: in the browser SheetJS's own encoder then swallows the
+ * next character of the XML, and the sheet can no longer be opened.
+ */
+function truncate(value: string, maxLength: number): string {
+  if (value.length <= maxLength) return value
+  const last = value.charCodeAt(maxLength - 1)
+  return value.slice(0, last >= 0xd800 && last <= 0xdbff ? maxLength - 1 : maxLength)
+}
+
+/** A cell value Excel can hold: text longer than Excel's limit for a cell is cut. */
+function toCellValue(value: any): any {
+  return typeof value === 'string' ? truncate(value, MAX_CELL_TEXT_LENGTH) : value
+}
+
+/**
+ * A sheet name Excel accepts, made from `name`: the characters `: \ / ? * [ ]` become a space,
+ * apostrophes and whitespace at either end go, and the name is cut to 31 characters. An empty
+ * name gets `fallback`; `History` (reserved by Excel) and a name already in `usedNames`
+ * (compared without case, as Excel does) get a number.
+ */
+function toSheetName(name: string | undefined, fallback: string, usedNames: string[]): string {
+  const clean = (value: string) => value.replace(/^[\s']+|[\s']+$/g, '')
+  const base =
+    clean(
+      truncate(clean((name ?? '').replace(/\s*[:\\/?*[\]]+\s*/g, ' ')), MAX_SHEET_NAME_LENGTH)
+    ) || fallback
+  const isTaken = (candidate: string) =>
+    candidate.toLowerCase() === 'history' ||
+    usedNames.some((used) => used.toLowerCase() === candidate.toLowerCase())
+  let sheetName = base
+  for (let n = 2; isTaken(sheetName); n++) {
+    const suffix = ` (${n})`
+    sheetName = clean(truncate(base, MAX_SHEET_NAME_LENGTH - suffix.length)) + suffix
+  }
+  return sheetName
+}
+
 class ExcelExportService {
   public configuration: IExcelExportServiceConfiguration
   public isConfigured = false
@@ -110,7 +154,9 @@ class ExcelExportService {
    * Export the items with the given columns to an Excel file.
    * - The columns are used to create the header row.
    * - The items are used to create the data rows.
-   * - The sheet name is taken from the configuration with a fallback to `Sheet1`.
+   * - The sheet name is taken from the configuration, made one Excel accepts (see `toSheetName`),
+   *   with a fallback to `{sheetNamePrefix}1`.
+   * - Text longer than an Excel cell holds (32,767 characters) is cut.
    * - The file name is taken from the configuration.
    * - The file extension is hardcoded to `.xlsx`.
    *
@@ -166,9 +212,12 @@ class ExcelExportService {
         }
       }
       const workBook = XLSX.utils.book_new()
+      const sheetNames: string[] = []
       sheets.forEach((s, index) => {
-        const sheet = XLSX.utils.aoa_to_sheet(s.data)
-        XLSX.utils.book_append_sheet(workBook, sheet, s.name ?? `${sheetNamePrefix}${index + 1}`)
+        const sheet = XLSX.utils.aoa_to_sheet(s.data.map((row: any[]) => row.map(toCellValue)))
+        const sheetName = toSheetName(s.name, `${sheetNamePrefix}${index + 1}`, sheetNames)
+        sheetNames.push(sheetName)
+        XLSX.utils.book_append_sheet(workBook, sheet, sheetName)
       })
       const wbout = XLSX.write(workBook, this.configuration.options)
       const fileName = fileNamePart

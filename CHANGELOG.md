@@ -48,6 +48,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Rettet en feil i tidslinjene for portefølje og program hvor området man står på ikke alltid ble vist øverst, når et annet prosjekt hadde samme navn eller området var det første i listen
 - Rettet en feil i `Aggregert oversikt` hvor radene havnet under feil gruppe når listen var gruppert og et søk eller et filter var aktivt
 - Rettet en feil hvor `Endre til denne fasen` feilet på prosjekter uten et element i listen `Prosjektegenskaper`, slik at fasen heller ikke ble lagret på prosjektet i porteføljen; fasen lagres nå i porteføljen, og lagring av prosjektinformasjon på et slikt prosjekt sier at prosjektegenskapene mangler i stedet for å vise en teknisk feilmelding
+- Rettet en feil hvor `Eksporter til Excel` verken ga fil eller melding når webdelens tittel var lengre enn 31 tegn, slik som på sidene for underområder om nyttevirkninger, kommunikasjonsplaner og ressursallokeringer; arknavnet, som er webdelens tittel, kortes nå ned. Tegn Excel ikke tillater i et arknavn (`: \ / ? * [ ]`, en apostrof først eller sist, og navnet `History`) byttes ut, og tekst lengre enn de 32 767 tegnene en celle kan holde, kuttes, slik at filen alltid kan åpnes i Excel
 
 ---
 

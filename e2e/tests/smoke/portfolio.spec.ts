@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { baseURL } from '../../playwright.config'
 import { WEB_PART, expect, test, webPart } from '../fixtures/pp365'
 
@@ -83,6 +84,33 @@ test.describe('portfolio hub', () => {
       page.getByRole('dialog').getByRole('heading', { name: /^filtr|^filter/i })
     ).toBeVisible()
     await page.keyboard.press('Escape')
+  })
+
+  test('portfolio overview exports its list to an Excel file', async ({
+    page,
+    openPage,
+    resolvePage
+  }) => {
+    await openPage(await resolvePage(hub, PAGES.overview))
+    const overview = page.locator(WEB_PART).first()
+    await expect(overview.getByRole('grid').or(overview.getByRole('table')).first()).toBeVisible({
+      timeout: 60_000
+    })
+    // Only here does the export run as users run it: the browser takes SheetJS's ES module build
+    // through webpack, while Jest takes its CommonJS build in Node.
+    const download = page.waitForEvent('download')
+    await overview
+      .getByTitle(/^eksporter til excel$|^export to excel$/i)
+      .first()
+      .click()
+    const file = await download
+    expect(file.suggestedFilename()).toMatch(/\.xlsx$/)
+    // An xlsx file is a ZIP package. The entry names are stored uncompressed, whichever way the
+    // parts themselves are compressed, so the workbook and its first sheet can be found as text.
+    const bytes = readFileSync(await file.path())
+    expect(bytes.subarray(0, 4).toString('latin1')).toBe('PK\u0003\u0004')
+    expect(bytes.includes('xl/workbook.xml')).toBe(true)
+    expect(bytes.includes('xl/worksheets/sheet1.xml')).toBe(true)
   })
 
   test('portfolio aggregation page mounts its web part', async ({

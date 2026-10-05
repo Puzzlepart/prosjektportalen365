@@ -170,16 +170,23 @@ if ($CI.IsPresent) {
     # Rush is launched through the repo-pinned bootstrap script, so the version always
     # follows rush.json (no global install to keep in sync). `install` requires the
     # committed lockfile to match; use `update` locally when dependencies change.
-    node "$ROOT_PATH/common/scripts/install-run-rush.js" install >$null 2>&1
-    npm run generate-channel-replace-map >$null 2>&1
-    EndAction
+    $RUSH_INSTALL_COMMAND = "install"
 }
 else {
     StartAction("Updating npm packages using rush")
-    node "$ROOT_PATH/common/scripts/install-run-rush.js" update >$null 2>&1
-    npm run generate-channel-replace-map >$null 2>&1
-    EndAction
+    $RUSH_INSTALL_COMMAND = "update"
 }
+# The output is kept and the exit code checked: a failed install (a lockfile out of date, a registry
+# or the SheetJS CDN not answering) otherwise surfaces only later, as a rebuild that cannot link.
+$RUSH_INSTALL_LOG = "$SHAREPOINT_FRAMEWORK_BASEPATH/rush-$RUSH_INSTALL_COMMAND.build.log"
+node "$ROOT_PATH/common/scripts/install-run-rush.js" $RUSH_INSTALL_COMMAND 2>&1 | Out-File -FilePath $RUSH_INSTALL_LOG -Encoding utf8
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "[ERROR] rush $RUSH_INSTALL_COMMAND failed with exit code $LASTEXITCODE. Last 50 lines of $($RUSH_INSTALL_LOG):" -ForegroundColor Red
+    Get-Content $RUSH_INSTALL_LOG -Tail 50 | Write-Host
+    exit 1
+}
+npm run generate-channel-replace-map >$null 2>&1
+EndAction
 
 if ($CI.IsPresent) {
     StartAction("Installing module PnP.PowerShell")
