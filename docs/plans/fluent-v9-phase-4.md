@@ -650,8 +650,13 @@ the root of `@pnp/spfx-property-controls`. Neither package declares `sideEffects
 import bundles every control in it with their v8 list, picker and callout code (the hub's bundles
 still held `MarqueeSelection` and `DetailsListBase`). Those three imports take each control from
 its own entry point now, and `no-restricted-imports` stops a root import of either package; the
-coding guide says why (`kodemonster.md`, "PnP-kontroller"). The close-out push's packages show
-the effect.
+coding guide says why (`kodemonster.md`, "PnP-kontroller"). The close-out push's packages
+(37218291734) against slice 0's: PortfolioWebParts 9.87 to 6.76 MB, ProjectWebParts 7.03 to 4.63,
+ProgramWebParts 4.62 to 3.44, the shared library 1.98 to 1.38, PortfolioExtensions 1.42 to 1.42,
+ProjectExtensions 1.12 to 1.11, 26.04 to 18.74 MB in all (−28 %). What a page loads shrank more:
+the overview's bundle 6.30 to 4.04 MB (−36 %), the aggregation's 6.18 to 3.80 (−38 %), project
+information's 4.73 to 2.37 (−50 %), the status page's 4.73 to 2.32 (−51 %), uncompressed, against
+slice 7's; no hub bundle holds v8's list any more.
 
 **Definition of done, swept.** Every web part root, extension and interactive component has a
 test file, and every solution's floors sit at its totals (slices 2 to 7). The browser suite runs a
@@ -664,8 +669,11 @@ functional difference and lists the visible differences made on purpose, now wit
 selection, the people picker's look and the labels.
 
 **`Install/` and the upgrade path** are checked by the close-out push itself: it carries no
-`[apps-only]`, so its CI run builds the full release and runs the full upgrade on the test tenant,
-templates included, before the browser suite. Phase 5 starts when that run is green.
+`[apps-only]`, so its CI run (37218291734) built the full release, ran the full upgrade on the test
+tenant, templates included (23 minutes), and passed the browser suite, 31 of 31. Phase 4 is done;
+phase 5 (`dependency-upgrades-phase-5.md`) starts on its own branch once this one is merged into
+`releases/1.15`. SPFx 1.24.0-rc.0 declares React up to 18 in its peer ranges (1.23.2: below 18),
+which is the platform step its decision P5-1 waits for.
 
 ## Rules for the executing agent
 
