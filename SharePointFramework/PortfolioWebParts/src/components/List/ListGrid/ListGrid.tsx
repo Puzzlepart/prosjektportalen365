@@ -24,11 +24,14 @@ import { useListGrid } from './useListGrid'
 const PLACEHOLDER_ROWS = 8
 
 /**
- * Whether a click landed on something in the row that does its own thing: the title's link, a
- * button, the check.
+ * Whether a click leaves the row's selection alone: it landed on something in the row that does
+ * its own thing (the title's link, a button, the check), or outside the row altogether. A dialog,
+ * popover or menu that a cell opens is portalled elsewhere in the page, yet React passes its clicks
+ * up through the row.
  */
-function isInteractive(event: MouseEvent<HTMLElement>) {
+function isOwnClick(event: MouseEvent<HTMLElement>) {
   const target = event.target as HTMLElement
+  if (!event.currentTarget.contains(target)) return true
   const control = target.closest?.(
     'a, button, input, select, textarea, [role="button"], [role="link"], [role="checkbox"]'
   )
@@ -180,7 +183,7 @@ export const ListGrid: FC<IListGridProps> = (props) => {
                     aria-selected={selection.isSelected(entry.item)}
                     appearance={selection.isSelected(entry.item) ? 'brand' : 'none'}
                     onClick={(event: MouseEvent<HTMLElement>) => {
-                      if (!isInteractive(event)) selection.toggleRow(entry.item, event.shiftKey)
+                      if (!isOwnClick(event)) selection.toggleRow(entry.item, event.shiftKey)
                     }}
                   >
                     <TableSelectionCell
