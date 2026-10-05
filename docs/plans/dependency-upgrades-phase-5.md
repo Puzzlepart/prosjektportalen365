@@ -277,3 +277,19 @@ The CI guide (`kontinuerlig-integrasjon.md`) has the tag and the workflow. Step 
 rebuild, follows the numbers: each solution needs a Heft phase of its own for the compile, since
 all six use the rig as it is, and the debug workflow swaps that configuration in, so the live
 builds keep theirs until the phased build's packages are shown to equal them.
+
+### Between slices: watching and debugging a solution (2026-10-05)
+
+`npm run watch` in PortfolioWebParts failed with `Can't resolve '../Autocomplete'`: a watch builds
+only its own solution and bundles the shared library and ProjectWebParts from their `lib/`, which
+on the developer's machine dated from before phase 4's slice 7 (with only declarations for the two
+rewritten components). The code was fine; building the two (`heft build --clean`) made the watch
+compile in 11 s and recompile in about 15 s after an edit. The debug setup needed three fixes: the
+launch samples mapped only the solution's own sources, not `webpack:///../../<solution>/src/...`
+where webpack 5 puts the shared library's and ProjectWebParts' (3,121 of the overview bundle's
+sources resolve now, against 81); the root sample, the one VS Code reads with the repo open, still
+had a placeholder solution and the workbench; and `LAUNCH_CONFIGURATIONS`, which `createLaunchFile`
+reads, was in neither the template nor the guide. The guide (`utviklingsmiljo.md`) now says to
+build the dependencies first, that `SERVE_CHANNEL` must match the page's channel (`test` on the test
+tenant, or the page keeps the deployed bundles), and how to debug from VS Code. Slice 1b's
+`ONBOARDING.md` builds on it.

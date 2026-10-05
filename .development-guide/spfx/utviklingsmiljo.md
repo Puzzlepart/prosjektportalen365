@@ -14,10 +14,15 @@ En delt `.env.template`-fil finnes i `.tasks/`-mappen og definerer standardverdi
 
 | Variabel | Beskrivelse | Standard |
 |---|---|---|
-| `SERVE_CHANNEL` | Hvilken kanal som brukes for `environments.json`-oppslag. Tilgjengelige kanaler: `main`, `test`, `i18n`. | `main` |
+| `SERVE_CHANNEL` | Hvilken kanal som brukes for `environments.json`-oppslag, og hvilke komponent-ID-er `watch` serverer. Siden du feilsøker på, må bruke samme kanal, ellers ber den aldri om bundlene dine og kjører de utrullede videre. Testmiljøets hub og programområder er på `test`. Tilgjengelige kanaler: `main`, `test`, `i18n`. | `main` |
 | `SERVE_BUNDLE_REGEX` | Regulært uttrykk for å filtrere hvilke bundler som bygges under `watch`. Sett til et bundlenavn for raskere bygging. | _(tom – alle bundler bygges)_ |
 | `SERVE_ENVIRONMENT` | Navn på miljøet fra `environments.json` som blir `default` i `config/serve.json`. Kan overstyres per kjøring med `npm run watch -- --serve-config <navn>`. | _(ikke satt)_ |
 | `SPFX_SERVE_TENANT_DOMAIN` | Fyller ut `{tenantDomain}` i `config/serve.json` (f.eks. `contoso.sharepoint.com`). | _(ikke satt)_ |
+| `LAUNCH_CONFIGURATIONS` | Sider å feilsøke på fra VS Code når pakkemappen er åpnet som arbeidsområde, som `<navn>,<side-URL>;<navn>,<side-URL>`. `prewatch` lager `.vscode/launch.json` av dem når den ikke finnes. Med repoet åpnet, se «Feilsøking i VS Code». | _(ikke satt)_ |
+
+`createEnvironmentFile` lager `.env` bare når den mangler, så en eldre `.env` får ikke variabler som er lagt til malen senere. Sammenlign med `.tasks/.env.template` hvis en variabel mangler.
+
+> **Bygg avhengighetene før `watch`.** `watch` bygger bare sin egen pakke og bundler `shared-library` og `ProjectWebParts` fra deres `lib/` slik den ligger. Har du hentet endringer i dem, bygg dem først, for eksempel fra repo-roten med `rush build -T pp365-portfoliowebparts` (alt PortfolioWebParts avhenger av, uten pakken selv), eller raskere uten tester med `npx heft build --clean` i hver av dem. En gammel `lib/` gir feil som `Module not found: Can't resolve '../Autocomplete'` eller, verre, gammel kode uten feilmelding.
 
 Eksempel `.env`:
 
@@ -54,6 +59,18 @@ Overvåkingsskriptene knytter alt sammen:
 > **Merk:** Den SharePoint-hostede workbenchen (`_layouts/workbench.aspx`) pensjoneres 1. desember 2026. Derfor peker miljøene mot ekte sider.
 
 - **postwatch**: Rydder opp i midlertidige filer og konfigurasjoner
+
+### Feilsøking i VS Code
+
+Med repoet åpnet i VS Code (ikke en enkelt pakkemappe):
+
+1. Kopier `.vscode/launch.sample.json` til `.vscode/launch.json` (gitignorert).
+2. Stol på utviklingssertifikatet én gang: `npx heft trust-dev-cert` i en av pakkene.
+3. Kjør `npm run watch` i pakken du jobber med, og vent til webpack er ferdig.
+4. Start «Debug a page against npm run watch» (F5), velg pakken og lim inn siden du vil feilsøke på, uten spørrestreng. Konfigurasjonen legger selv på `debugManifestsFile`, `debug` og `noredir`.
+5. Chrome åpnes med en egen profil i `.vscode/chrome-debug-user-data`, så du logger inn bare første gang. Godta at siden laster feilsøkingsskript («Load debug scripts»), og tillat tilgang til lokalt nettverk hvis Chrome spør (siden laster skript fra `localhost`).
+
+Stoppunkter i pakkens egen `src/` og i `shared-library` og `ProjectWebParts` sin `src/` treffer, fordi kildekartene peker dit: webpack 5 navngir pakkens egne kilder `webpack:///.././src/...` og søsterpakkenes `webpack:///../../<pakke>/src/...`, og `sourceMapPathOverrides` i konfigurasjonen oversetter begge. Feilsøking i nettleserens DevTools virker uansett, siden kildekartene har kildeteksten med.
 
 ### Hvordan det fungerer i praksis
 
