@@ -17,6 +17,26 @@
         font-weight: var(--fontWeightSemibold);
       }
 
+      .headerButton {
+        // Fluent's header button keeps the width of its content (overflow visible, no min-width),
+        // so a long name wrapped onto more lines; it now stays within the column, the name on
+        // one line ending in an ellipsis, and the icon and the sort arrow keep their size.
+        min-width: 0;
+        overflow: hidden;
+
+        > * {
+          flex-shrink: 0;
+        }
+
+        .headerName {
+          flex-shrink: 1;
+          min-width: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+
       .headerIcon {
         display: inline-flex;
         margin-right: 4px;

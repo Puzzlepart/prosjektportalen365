@@ -218,3 +218,11 @@ down (`-0.5` exports as `-1`); no export applies an active search; file names tu
 **Manual gate before merge:** on the test tenant, a one-sheet export (`Porteføljeoversikt`) and a
 two-sheet one (`Nytteoversikt`) from the 0.20.3 build open in Excel desktop and in Excel for the
 web without a repair prompt, and a `Dynamisk liste` titled with a `:` exports with the cleaned name.
+
+### Found on the tenant between slices: the hub's column headers (2026-10-05)
+
+Phase 4's list wrapped a long column name onto more lines. Fluent v9's header button keeps the
+width of its content (overflow visible, no `min-width`), so it did not shrink with the column.
+The button now stays within the column, and the name sits on one line, ending in an ellipsis as in
+v8's list, with the whole name as its tooltip (`ListGrid`, one test). It reaches the program's
+overviews too, which bundle PortfolioWebParts' list.

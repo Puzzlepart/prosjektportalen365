@@ -116,7 +116,8 @@ export const ListGrid: FC<IListGridProps> = (props) => {
                 className={styles.headerCell}
                 button={{
                   onClick: onHeaderEvent(column),
-                  onContextMenu: onHeaderEvent(column)
+                  onContextMenu: onHeaderEvent(column),
+                  className: styles.headerButton
                 }}
               >
                 {column.iconName && (
@@ -124,7 +125,9 @@ export const ListGrid: FC<IListGridProps> = (props) => {
                     {getFluentIconWithFallback(column.iconName, { size: 16 })}
                   </span>
                 )}
-                {column.name}
+                <span className={styles.headerName} title={column.name}>
+                  {column.name}
+                </span>
               </TableHeaderCell>
             ))}
           </TableRow>

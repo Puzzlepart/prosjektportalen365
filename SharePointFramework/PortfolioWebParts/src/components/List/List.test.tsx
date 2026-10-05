@@ -101,6 +101,15 @@ describe('List', () => {
     expect(columnHeaders()).toEqual(['Tittel', 'Fase', strings.ToggleColumnFormPanelLabel])
   })
 
+  it('gives a column name an element of its own, with the whole name as its tooltip', () => {
+    const name = 'Ressursallokeringer for underområder'
+    renderList({ columns: [column('Title', 'Tittel'), column('GtResourceAllocation', name)] })
+    // The name is cut with an ellipsis inside the column (CSS, which jsdom does not apply), so the
+    // tooltip is where a long name can be read in full.
+    const header = screen.getByRole('columnheader', { name: /^Ressursallokeringer/ })
+    expect(within(header).getByTitle(name)).toHaveTextContent(name)
+  })
+
   it('shows the error in place of the search box and the toolbar', () => {
     renderList({
       error: { message: 'Kilden svarte ikke' } as Error,
