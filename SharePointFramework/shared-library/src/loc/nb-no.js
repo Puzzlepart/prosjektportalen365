@@ -43,6 +43,7 @@ define([], function () {
     FilterText: 'Filtrer',
     FilterPanelEmptyTitle: 'Ingen filtre tilgjengelig',
     PeoplePickerNoResults: 'Fant ingen personer',
+    PeoplePickerSelectedLabel: 'Valgte personer',
     FilterPanelEmptyMessage: 'Det er ingen filtre å vise. Filtre vises kun for kolonner som har mer enn én unik verdi i gjeldende datasett. Det betyr at det enten ikke er lastet inn data, eller at alle kolonner har samme verdi for hvert element.',
     FilterPanelGroupProjectInformation: 'Prosjektinformasjon',
     GroupByLabel: 'Grupper etter',
@@ -116,6 +117,7 @@ define([], function () {
     ProjectInformationPanelButton: 'Åpne prosjektinformasjonspanel',
     MeasurementSheetName: 'Målinger',
     DataGridSelectAllLabel: 'Velg alle',
-    DataGridSelectRowLabel: 'Velg rad'
+    DataGridSelectRowLabel: 'Velg rad',
+    ProjectPropertiesNotFoundErrorText: 'Fant ikke prosjektegenskapene i listen "{0}".'
   }
 })

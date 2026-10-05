@@ -7,7 +7,6 @@ import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPane
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
 import {
   isTaxonomyManagedProperty,
-  parseTaxonomyValue,
   parseUrlHash,
   setUrlHash,
   sortAlphabetically,
@@ -29,8 +28,6 @@ import {
   GET_FILTERS,
   ON_FILTER_CHANGE,
   SELECTION_CHANGED,
-  SET_ALL_COLLAPSED,
-  SET_COLLAPSED,
   SET_CURRENT_VIEW,
   SET_DATA_SOURCE,
   SET_GROUP_BY,
@@ -47,37 +44,7 @@ import { persistSelectedColumnsInWebPartProperties } from './persistSelectedColu
 import resource from 'SharedResources'
 import { ProjectContentColumn } from 'pp365-shared-library/lib/models/ProjectContentColumn'
 import { format } from 'pp365-shared-library'
-
-/**
- * Parses a raw SharePoint field value into a display-friendly string.
- * Handles user fields (pipe-separated), lookup fields (`;#`-separated),
- * calculated/number fields (e.g. `#10.0000000000000` or `2.00000000000000`),
- * and returns the value as-is for other types.
- *
- * @param value Raw field value
- */
-function parseDisplayValue(value: string): string {
-  if (!value) return value
-  if (value.includes(' | ')) {
-    const match = value.match(/\|([^|]+)\|/)
-    if (match) return match[1].trim()
-    return value.split(' | ')[1]?.trim() || value
-  }
-  if (value.includes('L0|#')) {
-    return parseTaxonomyValue(value)
-  }
-  if (value.includes(';#')) {
-    const tail = value.split(';#')[1] || value
-    return tail.includes('|') ? tail.split('|')[0] : tail
-  }
-  const numericMatch = value.match(/^#?(-?\d+(?:\.\d+)?)$/)
-  if (numericMatch) {
-    const num = parseFloat(numericMatch[1])
-    if (!isNaN(num))
-      return Number.isInteger(num) ? num.toString() : parseFloat(num.toFixed(2)).toString()
-  }
-  return value
-}
+import { parseDisplayValue } from '../createGroups'
 
 /**
  * Create reducer for `<PortfolioAggregation />` using `createReducer` from `@reduxjs/toolkit`.
@@ -243,44 +210,14 @@ export const createPortfolioAggregationReducer = (
           }
         : null
     },
-    [SET_ALL_COLLAPSED.type]: (state, { payload }: ReturnType<typeof SET_ALL_COLLAPSED>) => {
-      state.groups = state.groups.map((g) => {
-        return { ...g, isCollapsed: payload.isAllCollapsed }
-      })
-    },
-    [SET_COLLAPSED.type]: (state, { payload }: ReturnType<typeof SET_COLLAPSED>) => {
-      const { key, isCollapsed } = payload.group
-      state.groups = state.groups.map((g) => {
-        if (g.key === key) return { ...g, isCollapsed: !isCollapsed }
-        return g
-      })
-    },
     [SET_GROUP_BY.type]: (state, { payload }: ReturnType<typeof SET_GROUP_BY>) => {
       const { column } = payload
       if (column && column.fieldName !== state.groupBy?.fieldName) {
+        // Sorted by the group column, each group is one run of items; `createGroups` makes the
+        // groups from the items the list shows.
         state.items = sortArray([...state.items], [column.fieldName])
         state.groupBy = column
-        const groupNames: string[] = state.items.map((g) =>
-          get<string>(g, state.groupBy.fieldName, strings.NotSet)
-        )
-        const uniqueGroupNames: string[] = _.uniq(groupNames)
-        state.groups = uniqueGroupNames
-          .sort((a, b) => (a > b ? 1 : -1))
-          .map((name, idx) => {
-            const count = groupNames.filter((n) => n === name).length
-            const group = {
-              key: `Group_${idx}`,
-              name: `${state.groupBy.name}: ${parseDisplayValue(name)}`,
-              startIndex: groupNames.indexOf(name, 0),
-              count,
-              isShowingAll: count === state.items.length,
-              isDropEnabled: false,
-              isCollapsed: false
-            }
-            return group
-          })
       } else {
-        state.groups = null
         state.groupBy = null
         state.items = sortArray(
           [...state.items],
@@ -298,7 +235,6 @@ export const createPortfolioAggregationReducer = (
       state.sortBy = payload.column
       if (state.groupBy) {
         state.groupBy = null
-        state.groups = null
       }
       switch (payload.column.dataType) {
         case 'currency':
@@ -403,7 +339,8 @@ export const createPortfolioAggregationReducer = (
             state.items.map((i: any) => {
               const value = i.__projectRefinerValues?.[column.internalName]
               if (value === undefined || value === null) return []
-              if (Array.isArray(value)) return value.map((v) => (v == null ? '' : String(v)))
+              if (Array.isArray(value))
+                return value.map((v) => (v === null || v === undefined ? '' : String(v)))
               return String(value).split(';')
             })
           ).filter((v: string) => !stringIsNullOrEmpty(v))
@@ -492,16 +429,14 @@ export const createPortfolioAggregationReducer = (
           }
           break
         case 'edit':
-          {
-            state.currentView = payload.view
-            state.views = state.views.map((v) => {
-              if (v.id === payload.view.id) {
-                return payload.view
-              }
-              return v
-            })
-            state.viewForm = { isOpen: false }
-          }
+          state.currentView = payload.view
+          state.views = state.views.map((v) => {
+            if (v.id === payload.view.id) {
+              return payload.view
+            }
+            return v
+          })
+          state.viewForm = { isOpen: false }
           break
         default: {
           state.viewForm = _.omit(payload, 'submitAction')
@@ -509,6 +444,6 @@ export const createPortfolioAggregationReducer = (
       }
     },
     [SELECTION_CHANGED.type]: (state, { payload }: ReturnType<typeof SELECTION_CHANGED>) => {
-      state.selectedItems = payload.getSelection()
+      state.selectedItems = payload
     }
   })

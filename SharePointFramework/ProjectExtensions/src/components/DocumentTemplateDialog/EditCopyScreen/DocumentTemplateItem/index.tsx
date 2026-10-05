@@ -1,6 +1,5 @@
-import { Icon } from '@fluentui/react'
 import { Field, Input, useId } from '@fluentui/react-components'
-import { getFluentIconWithFallback } from 'pp365-shared-library'
+import { FileTypeIcon, getFluentIconWithFallback } from 'pp365-shared-library'
 import { DocumentTemplateDialogContext } from 'components/DocumentTemplateDialog/context'
 import { SPDataAdapter } from 'data'
 import * as strings from 'ProjectExtensionsStrings'
@@ -78,7 +77,7 @@ export const DocumentTemplateItem: FC<IDocumentTemplateItemProps> = (props) => {
     <div className={styles.root}>
       <div className={styles.header} onClick={() => setIsExpanded(!isExpanded)}>
         <div className={styles.fileTypeIcon}>
-          <Icon {...props.item.getIconProps()} />
+          <FileTypeIcon {...props.item.getFileTypeIconOptions()} />
         </div>
         <div className={styles.title}>{props.item.name}</div>
         <div className={styles.chevronIcon}>

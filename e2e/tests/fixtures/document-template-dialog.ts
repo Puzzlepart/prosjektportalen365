@@ -1,14 +1,15 @@
 import { expect } from '@playwright/test'
+import { restGet } from './rest'
 
 /**
  * The "Hent dokumentmal" dialog: opening it from a library, measuring its grids, and what both the
  * deployed and the local-bundle tests assert about them.
  */
 /** The site's document library ("Dokumenter" when there is one), by REST, so its URL need not be guessed. */
-export async function findDocumentLibrary(page: import('@playwright/test').Page, siteUrl: string) {
-  const response = await page.request.get(
-    `${siteUrl}/_api/web/lists?$filter=BaseTemplate eq 101 and Hidden eq false&$select=Title,RootFolder/ServerRelativeUrl&$expand=RootFolder&$top=10`,
-    { headers: { Accept: 'application/json;odata=nometadata' } }
+export async function documentLibrary(page: import('@playwright/test').Page, siteUrl: string) {
+  const response = await restGet(
+    page,
+    `${siteUrl}/_api/web/lists?$filter=BaseTemplate eq 101 and Hidden eq false&$select=Title,RootFolder/ServerRelativeUrl&$expand=RootFolder&$top=10`
   )
   if (!response.ok())
     throw new Error(`Could not list the libraries of ${siteUrl}: HTTP ${response.status()}`)
@@ -19,7 +20,16 @@ export async function findDocumentLibrary(page: import('@playwright/test').Page,
   ).value
   const library = libraries.find((l) => /dokument/i.test(l.Title)) ?? libraries[0]
   if (!library) throw new Error(`${siteUrl} has no document library`)
-  return `${new URL(siteUrl).origin}${library.RootFolder.ServerRelativeUrl}/Forms/AllItems.aspx`
+  return {
+    title: library.Title,
+    serverRelativeUrl: library.RootFolder.ServerRelativeUrl,
+    url: `${new URL(siteUrl).origin}${library.RootFolder.ServerRelativeUrl}/Forms/AllItems.aspx`
+  }
+}
+
+/** The URL of the site's document library view. */
+export async function findDocumentLibrary(page: import('@playwright/test').Page, siteUrl: string) {
+  return (await documentLibrary(page, siteUrl)).url
 }
 
 /** Runs the command from the library's command bar, or from its "Mer" overflow when the bar is narrow. */

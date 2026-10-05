@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - releases/1.15
-      - feat/fluent-v9-migration
+      - feat/fluent-v9*
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'

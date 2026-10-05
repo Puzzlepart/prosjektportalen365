@@ -23,7 +23,7 @@ import { IMenuItem } from 'pp365-shared-library'
 export function renderMenuItem(item: IMenuItem, onOpenChange: MenuProps['onOpenChange']) {
   switch (item.itemType) {
     case 'divider':
-      return <MenuDivider />
+      return <MenuDivider key={item.key} />
     default: {
       const baseProps: MenuItemProps = {
         title: item.title,
@@ -53,7 +53,7 @@ export function renderMenuItem(item: IMenuItem, onOpenChange: MenuProps['onOpenC
       if (item.subMenuProps?.items) {
         const { onClick: _closeMenu, ...triggerProps } = baseProps
         return (
-          <Menu>
+          <Menu key={item.key}>
             <MenuTrigger disableButtonEnhancement>
               <MenuItem {...triggerProps} hasSubmenu>
                 {item.text}

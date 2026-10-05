@@ -314,6 +314,11 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderOptionText: string
   NoProjectData: string
   MeasurementSheetTitleKey: string
+  ListSelectAllLabel: string
+  ListSelectRowLabel: string
+  ListSelectGroupLabel: string
+  ListCollapseAllGroupsLabel: string
+  ListExpandAllGroupsLabel: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

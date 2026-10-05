@@ -117,6 +117,12 @@ export function useColumnContextMenu() {
       {
         key: 'GROUP_BY',
         text: format(strings.GroupByColumnLabel, column.name),
+        // The checkable item needs a name and a value, like the sort items: without them the
+        // menu keeps its checked state under an undefined key and never shows the check mark.
+        data: {
+          name: 'groupBy',
+          value: column.fieldName
+        },
         canCheck: true,
         checked: get<string>(context.state, 'groupBy.fieldName', '') === column.fieldName,
         disabled: !column?.data?.isGroupable,

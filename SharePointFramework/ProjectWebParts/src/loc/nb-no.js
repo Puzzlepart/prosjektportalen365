@@ -233,7 +233,8 @@ define([], function () {
     ProjectPhasesFetchDataError:
       'Du har ikke tilgang til å se denne webdelen.<br/><br/>Du må enten ha tilgang til porteføljeområdet, eller så må prosjektet være fristilt fra porteføljeområdet.',
     ProjectPropertiesHeader: 'Prosjektinformasjon',
-    ProjectStatusDataErrorText: 'Ingen tilgang. Du har ikke tillatelse til å se statusrapporter.',
+    ProjectStatusDataErrorText:
+      'Statusrapportene kunne ikke hentes. Last inn siden på nytt, eller kontakt en administrator hvis feilen vedvarer.',
     ProjectStatusGroupName: 'Prosjektstatus',
     ProjectStatusProjectPropertiesGroupName: 'Prosjektegenskaper (Statusseksjoner)',
     ProjectTimelineErrorFetchText:
@@ -355,6 +356,8 @@ define([], function () {
     TemplateLabel: 'Mal',
     NoRecentNews: 'Her kan du opprette nyhetsartikler for prosjektet. Det er for øyeblikket ingen nyhetsartikler.',
     ShowMoreNews: 'Vis flere',
+    ShowMoreChildProjectsText: 'Vis flere',
+    ShowLessChildProjectsText: 'Vis mindre',
     ShowLessNews: 'Vis færre',
     ModifiedTooltipText: 'Redigert {0}',
     MaxVisibleNewsDescription:

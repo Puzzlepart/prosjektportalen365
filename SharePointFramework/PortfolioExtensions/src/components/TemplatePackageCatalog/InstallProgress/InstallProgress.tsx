@@ -301,7 +301,12 @@ export const InstallProgress: FC = () => {
       {isTerminal && (
         <div className={styles.terminalActions}>
           {progress.status === 'error' && selectedPackage && (
-            <Button appearance='primary' onClick={() => void importPackage(selectedPackage)}>
+            <Button
+              appearance='primary'
+              onClick={() => {
+                void importPackage(selectedPackage)
+              }}
+            >
               {strings.CatalogRetryText}
             </Button>
           )}

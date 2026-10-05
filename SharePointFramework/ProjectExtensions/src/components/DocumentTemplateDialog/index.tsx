@@ -42,7 +42,7 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
         COPY_PROGRESS({
           description: template.newName,
           percentComplete: i / templates.length,
-          iconProps: template.getIconProps({ size: 48 })
+          iconOptions: template.getFileTypeIconOptions({ size: 48 })
         })
       )
       try {
@@ -50,7 +50,9 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
         if (result) {
           filesAdded.push(result)
         }
-      } catch (error) {}
+      } catch {
+        // A template that cannot be copied is left out; the others are still copied.
+      }
     }
     dispatch(SELECTION_CHANGED({ selected: [] }))
     dispatch(COPY_DONE({ files: filesAdded }))

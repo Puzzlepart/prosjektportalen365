@@ -30,7 +30,7 @@ function template(name: string, overrides: Record<string, any> = {}) {
     parentFolderUrl: '/sites/x/Maler',
     level: 1,
     isFolder: false,
-    getIconProps: () => ({ iconName: 'WordDocument' }),
+    getFileTypeIconOptions: () => ({ extension: 'docx' }),
     ...overrides
   }
 }

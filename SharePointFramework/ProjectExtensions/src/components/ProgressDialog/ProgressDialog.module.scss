@@ -31,15 +31,11 @@
   align-items: center;
 
   .icon {
+    display: flex;
     flex-shrink: 0;
+    justify-content: center;
     width: 60px;
-
-    > i {
-      font-size: 42px;
-      display: block;
-      text-align: center;
-      margin-top: 12px;
-    }
+    margin-top: 12px;
   }
 
   .indicator {

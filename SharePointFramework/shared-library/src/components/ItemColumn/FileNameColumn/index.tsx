@@ -1,10 +1,10 @@
-import { Icon } from '@fluentui/react'
-import { FileIconType, getFileTypeIconProps } from '@fluentui/react-file-type-icons'
+import { FileIconType } from '@fluentui/react-file-type-icons'
 import strings from 'SharedLibraryStrings'
 import React from 'react'
 import { ColumnRenderComponent } from '../types'
 import { IFileNameColumnProps } from './types'
 import { Button } from '@fluentui/react-components'
+import { FileTypeIcon } from '../../FileTypeIcon'
 
 export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (props) => {
   const contentTypeId = props.item.ContentTypeId || ''
@@ -41,14 +41,10 @@ export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (prop
   return (
     <span>
       {props.showFileExtensionIcon && (
-        <Icon
-          {...getFileTypeIconProps({
-            extension: props.item.File_x0020_Type || props.item.FileExtension,
-            type: iconType,
-            size: 20,
-            imageFileType: 'svg'
-          })}
-          styles={{ root: { verticalAlign: 'bottom' } }}
+        <FileTypeIcon
+          extension={props.item.File_x0020_Type || props.item.FileExtension}
+          type={iconType}
+          size={20}
         />
       )}
       {isFolder ? (

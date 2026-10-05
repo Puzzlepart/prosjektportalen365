@@ -1,4 +1,3 @@
-import { Selection, IGroup, IObjectWithKey } from '@fluentui/react'
 import { createAction } from '@reduxjs/toolkit'
 import { ProjectContentColumn } from 'pp365-shared-library'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
@@ -66,16 +65,6 @@ export const TOGGLE_COLUMN_CONTEXT_MENU = createAction<OnColumnContextMenu>(
 export const SET_GROUP_BY = createAction<{ column: ProjectContentColumn }>('SET_GROUP_BY')
 
 /**
- * `SET_COLLAPSED`: Set collapsed.
- */
-export const SET_COLLAPSED = createAction<{ group: IGroup }>('SET_COLLAPSED')
-
-/**
- * `SET_ALL_COLLAPSED`: Set all collapsed.
- */
-export const SET_ALL_COLLAPSED = createAction<{ isAllCollapsed: boolean }>('SET_ALL_COLLAPSED')
-
-/**
  * `SET_SORT`: Set sort.
  */
 export const SET_SORT = createAction<{ column: ProjectContentColumn; isSortedDescending: boolean }>(
@@ -133,6 +122,7 @@ export const SET_VIEW_FORM_PANEL = createAction<{
 }>('SET_VIEW_FORM_PANEL')
 
 /**
- * `SELECTION_CHANGED`: Action dispatched when user changes the selection in the list
+ * `SELECTION_CHANGED`: Action dispatched when user changes the selection in the list, with the
+ * selected items
  */
-export const SELECTION_CHANGED = createAction<Selection<IObjectWithKey>>('SELECTION_CHANGED')
+export const SELECTION_CHANGED = createAction<Record<string, any>[]>('SELECTION_CHANGED')

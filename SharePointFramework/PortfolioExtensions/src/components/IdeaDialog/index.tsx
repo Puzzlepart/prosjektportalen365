@@ -40,7 +40,7 @@ export const IdeaDialog: FC<IIdeaDialogProps> = (props) => {
                   props.isBlocked
                     ? strings.IdeaProjectDataDialogBlockedMessage
                     : props.isApproved
-                      ? props.dialogMessage
+                      ? (props.dialogMessage ?? '')
                       : strings.IdeaProjectDataDialogNotApprovedMessage,
                   encodeURIComponent(window.location.href)
                 )}

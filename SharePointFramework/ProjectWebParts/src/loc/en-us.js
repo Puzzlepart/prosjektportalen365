@@ -219,7 +219,8 @@ define([], function () {
       'Project status cannot be loaded without access to the hub site. If you believe you should have this access, ask an administrator to grant you access to the hub site.',
     ProjectPhasesChangePhaseError: 'An error occured while changing the phase. Please try again or contact an administrator',
     ProjectPhasesFetchDataError: 'You do not have access to view this web part.<br/><br/>You must either have access to the portfolio site, or the project must be exempt from the portfolio site.',
-    ProjectStatusDataErrorText: 'No access. You are not allowed to view status reports. ',
+    ProjectStatusDataErrorText:
+      'The status reports could not be loaded. Reload the page, or contact an administrator if the error persists.',
     ProjectStatusGroupName: 'Project Status',
     ProjectStatusProjectPropertiesGroupName: 'Project properties (Status Sections)',
     ProjectTimelineErrorFetchText:
@@ -334,6 +335,8 @@ define([], function () {
     TemplateLabel: 'Template',
     NoRecentNews: 'Here you can create news articles for the project. There are currently no news articles.',
     ShowMoreNews: 'Show more',
+    ShowMoreChildProjectsText: 'Show more',
+    ShowLessChildProjectsText: 'Show less',
     ShowLessNews: 'Show less',
     ModifiedTooltipText: 'Modified {0}',
     MaxVisibleNewsLabel: "Number of visible news articles (before 'Show more')",

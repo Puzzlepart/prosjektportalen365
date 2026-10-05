@@ -1,9 +1,8 @@
-import { Selection } from '@fluentui/react'
 import { SearchBoxProps, useId } from '@fluentui/react-components'
 import strings from 'PortfolioWebPartsStrings'
 import { IFilterItemProps, IFilterPanelProps, ProjectColumn, format } from 'pp365-shared-library'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
-import { createElement, useEffect, useMemo, useReducer } from 'react'
+import { createElement, useCallback, useEffect, useMemo, useReducer } from 'react'
 import { OnColumnContextMenu } from '../../List'
 import { IPortfolioOverviewContext } from '../context'
 import createReducer, {
@@ -27,10 +26,7 @@ import { usePortfolioOverviewFilters } from './usePortfolioOverviewFilters'
  * Component logic hook for `PortfolioOverview` component.
  *
  * - Handles state using `useReducer` and our custom `reducer` function
- * - Handles selection changes using a stable `Selection` instance — v8
- *   `DetailsList` captures the `selection` prop in its constructor and never
- *   reconciles it, so recreating it per render desyncs `DetailsList` from
- *   `MarqueeSelection`
+ * - Keeps the selected items, which the Excel export takes instead of all rows
  * - Fetches initial data using `useFetchInitialData`
  * - Configures the `ExcelExportService` from `pp365-shared`
  * - Handles column header click using `useColumnHeaderClick`
@@ -54,12 +50,10 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
     [props, state, dispatch, layerHostId]
   )
 
-  const selection = useMemo(() => {
-    const instance: Selection = new Selection({
-      onSelectionChanged: () => dispatch(SELECTION_CHANGED(instance))
-    })
-    return instance
-  }, [dispatch])
+  const onSelectionChange = useCallback(
+    (selectedItems: Record<string, any>[]) => dispatch(SELECTION_CHANGED(selectedItems)),
+    [dispatch]
+  )
 
   const onColumnContextMenu = (contextMenu: OnColumnContextMenu) => {
     context.dispatch(TOGGLE_COLUMN_CONTEXT_MENU(contextMenu))
@@ -114,7 +108,7 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
 
   return {
     context: contextValue,
-    selection,
+    onSelectionChange,
     onColumnContextMenu,
     editViewColumnsPanelProps,
     searchBox,

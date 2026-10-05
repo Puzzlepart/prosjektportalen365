@@ -1,9 +1,9 @@
-import { IColumn } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import {
   ProjectColumnConfigDictionaryItem,
   getObjectValue as get,
   ColumnRenderComponentRegistry,
+  IListColumn,
   IRenderItemColumnProps,
   useColumnRenderComponentRegistry
 } from 'pp365-shared-library'
@@ -23,7 +23,7 @@ import { HubColumn } from './HubColumn'
  * @param item Item to render the value for
  * @param column Column to render the value for
  */
-function renderItemColumn(item: Record<string, any>, column: IColumn): ReactNode {
+function renderItemColumn(item: Record<string, any>, column: IListColumn): ReactNode {
   if (!column.fieldName) return null
   if (column.onRender) return column.onRender(item, undefined, column)
   if (!stringIsNullOrEmpty(column['fieldNameDisplay'])) {
@@ -81,7 +81,7 @@ export const useOnRenderItemColumn = () => {
   }, [])
 
   return useMemo(
-    () => (item?: any, _index?: number, column?: IColumn) => renderItemColumn(item, column),
+    () => (item?: any, _index?: number, column?: IListColumn) => renderItemColumn(item, column),
     []
   )
 }

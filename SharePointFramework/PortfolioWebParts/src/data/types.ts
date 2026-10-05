@@ -28,8 +28,7 @@ export interface IFetchDataForViewItemResult extends ISearchResult {
   /**
    * Synthetic unique row key on the format `${SiteId}_${scopeKey}`. A project
    * with multiple report series ("delprosjekter") yields one row per series,
-   * so `SiteId` alone is not unique. Matches the `key` property Fluent UI
-   * `DetailsList`/`Selection` use for row identity.
+   * so `SiteId` alone is not unique.
    */
   key?: string
 

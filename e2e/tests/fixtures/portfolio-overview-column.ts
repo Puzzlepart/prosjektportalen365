@@ -1,6 +1,7 @@
 import { expect, Page } from '@playwright/test'
 import { baseURL } from '../../playwright.config'
 import { webPart } from './pp365'
+import { requestDigest, restGet, restPost } from './rest'
 
 /**
  * Adding a column to the portfolio overview: the columns list, the test columns' clean-up, the
@@ -11,11 +12,8 @@ const hub = baseURL.replace(/\/+$/, '')
 export const COLUMN_PREFIX = 'E2E kolonne'
 /** The hub's project columns list, whatever the installation language named it. */
 export async function findColumnsList(page: Page) {
-  const response = await page.request.get(
-    // The configuration lists are hidden, so no filter on Hidden here.
-    `${hub}/_api/web/lists?$select=Title,Id&$top=500`,
-    { headers: { Accept: 'application/json;odata=nometadata' } }
-  )
+  // The configuration lists are hidden, so no filter on Hidden here.
+  const response = await restGet(page, `${hub}/_api/web/lists?$select=Title,Id&$top=500`)
   const lists = ((await response.json()) as { value: { Title: string; Id: string }[] }).value
   const list = lists.find((l) => /^(prosjektkolonner|project columns)$/i.test(l.Title))
   if (!list)
@@ -26,9 +24,9 @@ export async function findColumnsList(page: Page) {
 /** The columns whose title starts with the prefix, as SharePoint has them. */
 export async function findTestColumns(page: Page) {
   const list = await findColumnsList(page)
-  const items = await page.request.get(
-    `${hub}/_api/web/lists(guid'${list.Id}')/items?$select=Id,Title,GtShowFieldPortfolio&$filter=startswith(Title,'${COLUMN_PREFIX}')`,
-    { headers: { Accept: 'application/json;odata=nometadata' } }
+  const items = await restGet(
+    page,
+    `${hub}/_api/web/lists(guid'${list.Id}')/items?$select=Id,Title,GtShowFieldPortfolio&$filter=startswith(Title,'${COLUMN_PREFIX}')`
   )
   return (
     (await items.json()) as {
@@ -40,26 +38,21 @@ export async function findTestColumns(page: Page) {
 /** Deletes every column whose title starts with the prefix, through the REST API. */
 export async function deleteTestColumns(page: Page) {
   const list = await findColumnsList(page)
-  const items = await page.request.get(
-    `${hub}/_api/web/lists(guid'${list.Id}')/items?$select=Id,Title&$filter=startswith(Title,'${COLUMN_PREFIX}')`,
-    { headers: { Accept: 'application/json;odata=nometadata' } }
+  const items = await restGet(
+    page,
+    `${hub}/_api/web/lists(guid'${list.Id}')/items?$select=Id,Title&$filter=startswith(Title,'${COLUMN_PREFIX}')`
   )
   const rows = ((await items.json()) as { value: { Id: number; Title: string }[] }).value
   if (rows.length === 0) return 0
-  const digest = await page.request.post(`${hub}/_api/contextinfo`, {
-    headers: { Accept: 'application/json;odata=nometadata' }
-  })
-  const formDigest = ((await digest.json()) as { FormDigestValue: string }).FormDigestValue
+  const formDigest = await requestDigest(page, hub)
   for (const row of rows) {
-    const deleted = await page.request.post(
+    const deleted = await restPost(
+      page,
       `${hub}/_api/web/lists(guid'${list.Id}')/items(${row.Id})`,
       {
-        headers: {
-          Accept: 'application/json;odata=nometadata',
-          'X-RequestDigest': formDigest,
-          'X-HTTP-Method': 'DELETE',
-          'IF-MATCH': '*'
-        }
+        'X-RequestDigest': formDigest,
+        'X-HTTP-Method': 'DELETE',
+        'IF-MATCH': '*'
       }
     )
     if (!deleted.ok())

@@ -44,6 +44,7 @@ declare interface ISharedLibraryStrings {
   FilterText: string
   FilterPanelEmptyTitle: string
   PeoplePickerNoResults: string
+  PeoplePickerSelectedLabel: string
   FilterPanelEmptyMessage: string
   FilterPanelGroupProjectInformation: string
   GroupByLabel: string
@@ -116,6 +117,7 @@ declare interface ISharedLibraryStrings {
   MeasurementSheetName: string
   DataGridSelectAllLabel: string
   DataGridSelectRowLabel: string
+  ProjectPropertiesNotFoundErrorText: string
 }
 
 declare module 'SharedLibraryStrings' {

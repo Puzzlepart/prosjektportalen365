@@ -453,6 +453,10 @@ Katalogen i `shared-library/src/icons/iconCatalog.ts` er bevisst kuratert: `pp36
 4. Kostnad: ≈ 1,2 KB uminifisert per ikonpar per bundle-kopi — hold katalogen til ikoner som faktisk brukes.
 5. Bygg shared-library på nytt før du bruker ikonet fra en løsning: `rush rebuild -o pp365-shared-library`.
 
+### PnP-kontroller
+
+Importer PnP-kontrollene fra hver sin inngang, aldri fra pakkens rot: `import { ModernTaxonomyPicker } from '@pnp/spfx-controls-react/lib/ModernTaxonomyPicker'` og `import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls/lib/PropertyFieldMultiSelect'`. Ingen av pakkene erklærer at de er fri for sideeffekter (`sideEffects`), så webpack kan ikke ta bort kontrollene en bundle ikke bruker: en import fra roten tar med alle kontrollene og Fluent v8-koden deres (liste, personvelger, callout) i bundelen. ESLint stopper rot-importene (`no-restricted-imports` i `SharePointFramework/.eslint-config/index.js`).
+
 ### FluentProvider og IdPrefixProvider
 
 Alle dialoger wrappes i `FluentProvider` med prosjektets egne tema og `IdPrefixProvider` for å unngå ID-kollisjoner med SharePoint:
@@ -466,6 +470,10 @@ import { customLightTheme } from 'pp365-shared-library'
   </FluentProvider>
 </IdPrefixProvider>
 ```
+
+### Render-funksjoner for slots
+
+En slot kan få en render-funksjon i stedet for innhold: `label={{ children: (Component, props) => ... }}`. Fluent kaller den med slotens elementtype og props, og i props ligger det Fluent har koblet sammen, som `id` og `for` som knytter en `Field`-etikett til kontrollen. En funksjon som overser argumentene, tegner bare sitt eget innhold, og koblingen forsvinner. `FieldContainer` gjorde det til fase 4: feltene med ikon hadde ingen etikett for skjermlesere. Send videre det slot-en trenger, slik `FieldContainer` nå gjør med etikettens `id` og `htmlFor`.
 
 ---
 

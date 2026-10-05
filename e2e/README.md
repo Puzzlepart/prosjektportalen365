@@ -5,6 +5,12 @@ Playwright smoke tests that run against the test tenant after the test channel h
 only: they open the hub and one project, wait for the SPFx canvas, check that the expected web parts
 mount, and fail on browser errors that mean a bundle is broken.
 
+Before the tests, two setup steps run: `tests/auth.setup.ts` signs in, and
+`tests/deployment.setup.ts` waits, for at most ten minutes, until the hub and the project home load
+every bundle from the app catalog. Right after an upgrade SharePoint can still hand a page a
+component's previous manifest, whose bundle the upgrade has removed; without the wait, the first
+tests after a deployment fail on "Could not load ... in require".
+
 Local run:
 
 ```bash

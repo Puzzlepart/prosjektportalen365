@@ -1,4 +1,3 @@
-import { IGroup } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import sortArray from 'array-sort'
 import {
@@ -8,6 +7,7 @@ import {
   tryParseInt
 } from 'pp365-shared-library'
 import _ from 'underscore'
+import { IListGroup } from '../../List'
 import { IPortfolioOverviewContext } from '../context'
 import { IPortfolioOverviewState } from '../types'
 import { applyActiveFilters } from './applyActiveFilters'
@@ -35,9 +35,7 @@ function getGroupDisplayName(column: ProjectColumn, value: string) {
       displayValue = tryParseInt(value, strings.NotSet) as string
       break
     case 'currency':
-      {
-        displayValue = tryParseCurrency(value, strings.NotSet, 'kr', 0, 2)
-      }
+      displayValue = tryParseCurrency(value, strings.NotSet, 'kr', 0, 2)
       break
   }
   return `${column.name}: ${displayValue}`
@@ -85,14 +83,11 @@ function createGroups(items: any[], state: IPortfolioOverviewState) {
     .sort((a, b) => (a > b ? 1 : -1))
     .map((name, idx) => {
       const count = groupNames.filter((n) => n === name).length
-      const group: IGroup = {
+      const group: IListGroup = {
         key: `Group_${idx}`,
         name: getGroupDisplayName(state.groupBy, name),
         startIndex: groupNames.indexOf(name, 0),
-        count,
-        isShowingAll: count === items.length,
-        isDropEnabled: false,
-        isCollapsed: false
+        count
       }
       return group
     })

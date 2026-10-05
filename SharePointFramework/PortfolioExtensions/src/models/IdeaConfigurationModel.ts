@@ -27,10 +27,13 @@ export class IdeaConfigurationModel {
    */
   constructor(item: SPIdeaConfigurationItem) {
     this.title = item.Title
-    this.description = JSON.parse(item.GtDescription) || {
+    // A configuration may leave a text out (one made before `projectData` existed, say); the
+    // dialogs then show none rather than failing on it.
+    this.description = {
       registration: '',
       processing: '',
-      projectData: ''
+      projectData: '',
+      ...JSON.parse(item.GtDescription)
     }
     this.processingList = item.GtIdeaProcessingList
     this.registrationList = item.GtIdeaRegistrationList

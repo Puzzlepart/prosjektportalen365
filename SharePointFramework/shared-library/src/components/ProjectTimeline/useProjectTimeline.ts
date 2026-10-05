@@ -42,13 +42,15 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     const activeFiltersKeys = Object.keys(activeFilters)
     data.items = sortArray(data.items, 'data.sortOrder')
 
-    const projectId = data.items.find(
+    // The group of the page's own project goes first. Its id is the item's group, not the
+    // item's own id; the two only agree while every project title is unique.
+    const projectGroupId = data.items.find(
       (i) => i.data?.projectUrl === props.pageContext.site.absoluteUrl
-    )?.id
+    )?.group
 
-    if (projectId) {
-      const topGroup = data.groups.find((i) => i.id === projectId)
-      data.groups = [topGroup, ...data.groups.filter((grp) => grp?.id !== projectId)].filter(
+    if (projectGroupId !== undefined) {
+      const topGroup = data.groups.find((i) => i.id === projectGroupId)
+      data.groups = [topGroup, ...data.groups.filter((grp) => grp?.id !== projectGroupId)].filter(
         (grp) => grp
       )
     }

@@ -315,6 +315,11 @@ define([], function () {
     ProjectLevel: 'Prosjektnivå',
     ColumnRenderOptionText: 'Tekst',
     NoProjectData: 'Kan ikke hente alle data fra prosjektområdet. Det kan være at du ikke har tilgang til selve området. Det kan også være at området nylig er opprettet eller at prosjektegenskaper ikke er utfylt.',
-    MeasurementSheetTitleKey: 'Måling'
+    MeasurementSheetTitleKey: 'Måling',
+    ListSelectAllLabel: 'Velg alle rader',
+    ListSelectRowLabel: 'Velg rad',
+    ListSelectGroupLabel: 'Velg alle i {0}',
+    ListCollapseAllGroupsLabel: 'Skjul alle grupper',
+    ListExpandAllGroupsLabel: 'Vis alle grupper'
   }
 })

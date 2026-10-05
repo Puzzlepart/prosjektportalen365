@@ -319,6 +319,11 @@ define([], function () {
     ProjectLevel: 'Project level',
     ColumnRenderOptionText: 'Text',
     NoProjectData: 'Unable to retrieve all data from the project. It may be that you do not have access to the project itself. It may also be that the project has recently been created or that project properties have not been filled in.',
-    MeasurementSheetTitleKey: 'Measurement'
+    MeasurementSheetTitleKey: 'Measurement',
+    ListSelectAllLabel: 'Select all rows',
+    ListSelectRowLabel: 'Select row',
+    ListSelectGroupLabel: 'Select all in {0}',
+    ListCollapseAllGroupsLabel: 'Collapse all groups',
+    ListExpandAllGroupsLabel: 'Expand all groups'
   }
 })

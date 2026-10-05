@@ -25,7 +25,7 @@ function createItem(overrides: Record<string, any> = {}) {
     title: 'Prosjektplan',
     isFolder: false,
     errorMessage: undefined as string,
-    getIconProps: () => ({ iconName: 'WordDocument' }),
+    getFileTypeIconOptions: () => ({ extension: 'docx' }),
     ...overrides
   }
 }

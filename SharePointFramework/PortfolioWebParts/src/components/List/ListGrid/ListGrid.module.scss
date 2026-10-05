@@ -1,0 +1,70 @@
+.container {
+  padding: 0 32px 32px 32px;
+
+  .table {
+    // Grouped or not, the rows are at least as wide as their cells; the list's scroll container
+    // scrolls them sideways when they do not fit.
+    min-width: fit-content;
+
+    .header {
+      // Pinned under the list's command bar while the rows scroll; `List` measures the bar.
+      position: sticky;
+      top: var(--pp-list-sticky-top, 0px);
+      z-index: 2;
+      background-color: var(--colorNeutralBackground1);
+
+      .headerCell {
+        font-weight: var(--fontWeightSemibold);
+      }
+
+      .headerIcon {
+        display: inline-flex;
+        margin-right: 4px;
+        vertical-align: middle;
+      }
+    }
+
+    .row {
+      // The hub can hold thousands of rows and v9 has no virtualized table; the browser skips the
+      // layout and painting of the rows outside the view.
+      content-visibility: auto;
+      contain-intrinsic-size: auto 44px;
+    }
+
+    .expanderCell {
+      flex: 0 0 32px;
+      min-width: 32px;
+      max-width: 32px;
+      padding: 0;
+    }
+
+    .selectionPlaceholder {
+      flex: 0 0 44px;
+      min-width: 44px;
+    }
+
+    .placeholder {
+      width: 80%;
+    }
+
+    .groupRow {
+      background-color: var(--colorNeutralBackground2);
+
+      .groupCell {
+        flex: 1 1 auto;
+        padding: 0;
+      }
+
+      .groupButton {
+        justify-content: flex-start;
+        font-weight: var(--fontWeightSemibold);
+      }
+
+      .groupCount {
+        margin-left: 4px;
+        font-weight: var(--fontWeightRegular);
+        color: var(--colorNeutralForeground3);
+      }
+    }
+  }
+}
