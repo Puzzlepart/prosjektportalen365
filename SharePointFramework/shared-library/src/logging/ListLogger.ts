@@ -37,15 +37,27 @@ class ListLogger {
   /**
    * Log entry to SharePoint list specified when running `init()`.
    *
-   * Will fail silently.
+   * Will fail silently: a rejected write is reported to the console and the
+   * promise resolves to `undefined`, so callers can safely `await` it.
    *
    * @param entry Entry
    */
-  public log(entry: IListLoggerEntry): Promise<IItemAddResult> {
+  public async log(entry: IListLoggerEntry): Promise<IItemAddResult | undefined> {
     try {
       const spItem = this._getSpItem({ ...this._getEntryDefaults(), ...entry })
-      return (this.list as IList).items.add(spItem)
-    } catch (error) {}
+      // `await` is required here: returning the promise un-awaited would let a
+      // rejection (e.g. a 403 from the portfolio site) escape this try/catch and
+      // abort callers such as the project setup.
+      return await (this.list as IList).items.add(spItem)
+    } catch (error) {
+      console.warn(
+        `(ListLogger) (log) Could not write entry to log list. Status: ${
+          error?.status ?? 'n/a'
+        }, SPRequestGuid: ${error?.response?.headers?.get?.('sprequestguid') ?? 'n/a'}.`,
+        error?.message ?? error
+      )
+      return undefined
+    }
   }
 
   /**
@@ -61,7 +73,7 @@ class ListLogger {
     message: string,
     functionName?: string,
     level: ListLoggerEntryLevel = 'Info'
-  ): Promise<IItemAddResult> {
+  ): Promise<IItemAddResult | undefined> {
     return this.log({
       message,
       level,
