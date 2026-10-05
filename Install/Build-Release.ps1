@@ -23,8 +23,12 @@ Param(
     [ValidateSet("test", "kurs", "i18n")]
     [string]$Channel,
     [Parameter(Mandatory = $false, HelpMessage = "Skip import of PnP.PowerShell module")]
-    [switch]$SkipImportModule
-)  
+    [switch]$SkipImportModule,
+    [Parameter(Mandatory = $false, HelpMessage = "Do not install, import or check PnP.PowerShell; only the PnP templates need it, so this requires -SkipBuildPnPTemplates")]
+    [switch]$SkipPnPPowerShell,
+    [Parameter(Mandatory = $false, HelpMessage = "Run the rebuild with Rush's --timeline and print the per-project times")]
+    [switch]$RushTimeline
+)
 
 #region Normalize selected solutions
 # Canonical SPFx solution folder names. The -Solutions parameter (and the
@@ -188,20 +192,30 @@ if ($LASTEXITCODE -ne 0) {
 npm run generate-channel-replace-map >$null 2>&1
 EndAction
 
-if ($CI.IsPresent) {
-    StartAction("Installing module PnP.PowerShell")
-    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser
-    EndAction
-}
-else {
-    if (-not $SkipImportModule.IsPresent) {
-        Import-Module $PNP_BUNDLE_PATH/$PNP_VERSION/PnP.PowerShell.psd1 -DisableNameChecking -ErrorAction SilentlyContinue
+if ($SkipPnPPowerShell.IsPresent) {
+    # Only the PnP templates (Convert-PnPFolderToSiteTemplate below) use the module.
+    if (-not $SkipBuildPnPTemplates.IsPresent) {
+        Write-Host "[ERROR] -SkipPnPPowerShell needs -SkipBuildPnPTemplates: the PnP templates are built with PnP.PowerShell." -ForegroundColor Red
+        exit 1
     }
 }
+else {
+    if ($CI.IsPresent) {
+        StartAction("Installing module PnP.PowerShell")
+        Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser
+        EndAction
+    }
+    else {
+        if (-not $SkipImportModule.IsPresent) {
+            Import-Module $PNP_BUNDLE_PATH/$PNP_VERSION/PnP.PowerShell.psd1 -DisableNameChecking -ErrorAction SilentlyContinue
+        }
+    }
 
-if ($null -eq (Get-Command Connect-PnPOnline) -or (Get-Command Connect-PnPOnline).Version -lt [version]$PNP_VERSION) {
-    Write-Host "[ERROR] Correct PnP.PowerShell module not found. Please install it from PowerShell Gallery or do not use -SkipLoadingBundle." -ForegroundColor Red
-    exit 0
+    # A missing module stops the build as a failure: with exit 0 a CI job went green without packages.
+    if ($null -eq (Get-Command Connect-PnPOnline -ErrorAction SilentlyContinue) -or (Get-Command Connect-PnPOnline).Version -lt [version]$PNP_VERSION) {
+        Write-Host "[ERROR] Correct PnP.PowerShell module not found. Please install it from PowerShell Gallery or do not use -SkipLoadingBundle." -ForegroundColor Red
+        exit 1
+    }
 }
 
 if ($CI.IsPresent) {
@@ -331,7 +345,9 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
     # errors are never silently swallowed.
     $RUSH_REBUILD_LOG = "$SHAREPOINT_FRAMEWORK_BASEPATH/rush-rebuild.build.log"
     $RUSH_REBUILD_STARTED = (Get-Date).ToUniversalTime()
-    node "$ROOT_PATH/common/scripts/install-run-rush.js" rebuild 2>&1 | Out-File -FilePath $RUSH_REBUILD_LOG -Encoding utf8
+    $RUSH_REBUILD_ARGS = @("rebuild")
+    if ($RushTimeline.IsPresent) { $RUSH_REBUILD_ARGS += "--timeline" }
+    node "$ROOT_PATH/common/scripts/install-run-rush.js" @RUSH_REBUILD_ARGS 2>&1 | Out-File -FilePath $RUSH_REBUILD_LOG -Encoding utf8
     if ($LASTEXITCODE -ne 0) {
         Write-Host "[ERROR] rush rebuild failed with exit code $LASTEXITCODE. Last 200 lines of $($RUSH_REBUILD_LOG):" -ForegroundColor Red
         Get-Content $RUSH_REBUILD_LOG -Tail 200 | Write-Host
@@ -351,6 +367,32 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
                 }
             }
         exit 1
+    }
+    if ($RushTimeline.IsPresent) {
+        # Rush logs '"<project>" completed successfully in 12.34 seconds.' per project, then the
+        # --timeline chart, which ends with a LEGEND block (total work, wall clock, parallelism).
+        $REBUILD_LINES = @(Get-Content $RUSH_REBUILD_LOG)
+        $REPORT = @("Time per project, longest first:")
+        $REPORT += $REBUILD_LINES |
+            Select-String -Pattern '^"(.+)" completed (successfully|with warnings) in ([\d.]+) seconds' |
+            Sort-Object { [double]$_.Matches[0].Groups[3].Value } -Descending |
+            ForEach-Object {
+                [string]::Format([cultureinfo]::InvariantCulture, "  {0,8:F1} s  {1}", [double]$_.Matches[0].Groups[3].Value, $_.Matches[0].Groups[1].Value)
+            }
+        $LEGEND = [array]::FindIndex($REBUILD_LINES, [Predicate[string]] { param($Line) $Line -match '^LEGEND:' })
+        if ($LEGEND -gt 1) {
+            $CHART_START = $LEGEND - 2
+            while ($CHART_START -gt 0 -and $REBUILD_LINES[$CHART_START] -notmatch '^=+$') { $CHART_START-- }
+            $CHART_END = $LEGEND
+            while ($CHART_END + 1 -lt $REBUILD_LINES.Count -and $REBUILD_LINES[$CHART_END + 1].Trim() -ne '') { $CHART_END++ }
+            $REPORT += ""
+            $REPORT += $REBUILD_LINES[$CHART_START..$CHART_END]
+        }
+        Write-Host "[Rush rebuild timeline]" -ForegroundColor Cyan
+        $REPORT | Write-Host
+        if ($env:GITHUB_STEP_SUMMARY) {
+            @("### Rush rebuild timeline", "", '```') + $REPORT + @('```') | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+        }
     }
     # Jest reports a missed coverage floor (`coverageThreshold` in a solution's jest.config.json)
     # but Heft's test phase still succeeds, so the floors are only enforced by this check.

@@ -247,3 +247,33 @@ does not expose `package.json`, so `require('xlsx/package.json')` fails; nothing
 that. `rush update` also lists React-15/16-era peers beyond the inventory's two, which slice 3
 takes in: `react-autocomplete` (ProjectExtensions), `react-image-fade-in` and `react-scroll`
 (ProjectWebParts), and `create-react-context` under `react-calendar-timeline`.
+
+### Slice 1c — CI build time, step 1: measure (2026-10-05)
+
+The live packages-only job took 782 s (run 37316101049), 724 s of it the one `rush rebuild` of all
+eleven projects that `Build-Release.ps1` runs before it packages; the install took 42 s and
+PnP.PowerShell 14 s. Nothing builds twice: in the SPFx rig `package-solution` is a phase of its own
+with no dependencies, so it packages what `heft test` built. Two things make the rebuild long. The
+web parts form a chain (shared-library, ProjectWebParts, PortfolioWebParts, ProgramWebParts), and
+each waits for the previous one's whole build (lint, Jest with coverage, the production bundle, the
+package) though it needs only its compiled `lib/`; and `[apps-only:X]` narrows the packaging and the
+deployment, not the build, since a rebuild with `--to` once left a `.sppkg` out.
+
+Step 1 adds what measures, without changing the live workflows:
+
+- `.github/workflows/ci-build-debug.yml`: builds the test channel's package as the live
+  packages-only job does, on a push whose subject carries `[build-debug]` (with `[skip-ci]` the live
+  workflow stays idle), with no secrets and no deployment, and uploads the package and the Rush logs.
+  A push trigger, because `workflow_dispatch` works only once the file is on the default branch.
+- `Build-Release.ps1 -RushTimeline`: the rebuild runs with Rush's `--timeline`; the time per
+  project, longest first, and Rush's chart (total work, wall clock, parallelism) go to the log and
+  to the job summary. Tried against a two-project rebuild locally.
+- `Build-Release.ps1 -SkipPnPPowerShell` (with `-SkipBuildPnPTemplates` only): no install, import
+  or version check of PnP.PowerShell. That check used to end the script with `exit 0` when the
+  module was missing, so a CI job went green without packages; it exits 1 now, the one change the
+  live jobs see.
+
+The CI guide (`kontinuerlig-integrasjon.md`) has the tag and the workflow. Step 2, the phased
+rebuild, follows the numbers: each solution needs a Heft phase of its own for the compile, since
+all six use the rig as it is, and the debug workflow swaps that configuration in, so the live
+builds keep theirs until the phased build's packages are shown to equal them.
