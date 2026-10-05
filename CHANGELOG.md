@@ -2,6 +2,12 @@
 
 Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
+## 1.14.1 - TBA
+
+### Feilrettinger
+
+- Rettet en feil i oppsettveiviseren hvor prosjektoppsettet kunne stoppe med feilmeldingen «Access is denied. (Exception from HRESULT: 0x80070005 (E_ACCESSDENIED))» når en skriving til `Logg`-listen på porteføljeområdet ble avvist. Feilen kunne oppstå tilfeldig, både helt i starten av oppsettet og etter siste steg, også for brukere med skrivetilgang til listen. Logging til `Logg`-listen stopper nå aldri oppsettet. Avviste skrivinger logges til nettleserkonsollen med `SPRequestGuid`, slik at årsaken kan spores hos Microsoft
+
 ## 1.14.0 - TBA
 
 ### Ny funksjonalitet
