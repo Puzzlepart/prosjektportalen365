@@ -69,6 +69,7 @@ is not ours to decide (see P5-1); a new Node major, which comes after 1.15 (P5-5
 | 0 | Branch and baselines | New branch off `releases/1.15`, run by the test-channel workflow; record the inventory above, the test counts and the six package sizes | Baselines in this document |
 | 1 | xlsx | The export's four tests run the real library but read only what reaches `aoa_to_sheet`: first a round trip of the written workbook (read back with `XLSX.read`) on 0.16; then the bump to the version P5-7 settles and whatever the changed `utils` surface needs; the download checked by hand on the test tenant | Export tests green on the new version |
 | 1b | Agent skills and onboarding (added by the user 2026-10-05, between 1 and 2) | One source for the skills: Copilot reads `.claude/skills` as Claude Code does, so the hand-made copy in `.github/skills` (whose `pp365-testing` had fallen behind) goes, and a check in CI stops a second copy from coming back; three new skills, thin and pointing at the guide: `pp365-ui` (components, Fluent v9, our wrappers), `pp365-templates` (content model, provisioning, upgrades) and `pp365-release` (branches, commit tags, CI, channels, changelog and release notes); the two existing skills and `AGENTS.md` corrected against the code; four notes that lived only in an agent's personal memory moved into them; each new skill tried on a typical task by a fresh agent; `ONBOARDING.md`, a first-week path for new developers in Norwegian | One copy of each skill, the check in CI, `ONBOARDING.md` confirmed by the user |
+| 1c | CI build time (added by the user 2026-10-05; runs after 1, before 1b) | A debug workflow that builds the release package without touching the tenant, so the live workflows stay as they are until each change is proven; `Build-Release.ps1` switches, off by default: the rebuild's per-project timeline printed and its logs uploaded, PnP.PowerShell (and its version check, which ends the script with `exit 0` when the module is missing) skipped when the PnP templates are, and a phased Rush rebuild in which a solution starts once the solutions it depends on have compiled, instead of after their tests, bundles and packages | Measured per-project times; the phased build's packages equal the live build's; the switches adopted in the live workflows |
 | 2 | Redux Toolkit 2 | Reducer tests for the four without one (the program administration's is the model); then the bump: the seven object-notation reducers moved to the builder callback, which 2.x requires, `AnyAction` replaced by `UnknownAction` or the reducer's own action union, `rush update`; every web part with a reducer checked by hand | All reducers tested, green on 2.x |
 | 3 | React 18 readiness | `react-beautiful-dnd` replaced by a maintained fork with the same API or by the panel's own ordering, `react-calendar-timeline` on a line that declares React 18, the 15 files that render with react-dom's `render` made ready for `createRoot` (the 7 without an unmount get one); nothing bumps yet | The two peers settled, tests green on React 17 |
 | 4 | SPFx 1.24 and React 18 | The SPFx bump first, on React 17 (its own mini-phase on the toolchain plan's pattern; the RC until GA, P5-4); then React 18: `react`, `react-dom` and their types, `createRoot`, Testing Library 16 with `@testing-library/dom` 10 in all six, `children` declared where the 18 types want it, StrictMode findings fixed, the Fluent and Tabster versions revisited, the TagPicker stand-in rechecked (its loop was seen on React 17); full manual round on the test tenant, PnP's term field and property panes included (P5-6) | 1.15's definition of done |
@@ -226,3 +227,23 @@ width of its content (overflow visible, no `min-width`), so it did not shrink wi
 The button now stays within the column, and the name sits on one line, ending in an ellipsis as in
 v8's list, with the whole name as its tooltip (`ListGrid`, one test). It reaches the program's
 overviews too, which bundle PortfolioWebParts' list.
+
+The manual check found it working, and found the browser's own resize grip in the header's corner:
+Fluent's reset styles give the header button `resize: horizontal`, which a browser ignores while
+overflow is visible and honours once it is hidden. The button has `resize: none` now (checked in a
+headless Chromium), and the overview's smoke test reads the header's computed styles in the
+browser (no `resize`, overflow hidden, the name on one line ending in an ellipsis), since no unit
+test applies CSS.
+
+### Slice 1 — the bump (2026-10-05)
+
+With the guard and the tests green on 0.16.9 in CI (37311342282, 37316101049: the export test ran
+and passed in the browser, 32 of 32), `shared-library/package.json` takes
+`https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz`, and `rush update` writes the tarball and
+its integrity (`sha512-oLDq3jw7…`, the CDN's) into the lockfile; xlsx's ten dependencies leave it
+(other packages keep their own `commander` and `fflate`). No test changes: TypeScript compiles the
+shared library against 0.20.3's types, and the export's 18 tests pass on it. 0.20.3's `exports` map
+does not expose `package.json`, so `require('xlsx/package.json')` fails; nothing in the repo does
+that. `rush update` also lists React-15/16-era peers beyond the inventory's two, which slice 3
+takes in: `react-autocomplete` (ProjectExtensions), `react-image-fade-in` and `react-scroll`
+(ProjectWebParts), and `create-react-context` under `react-calendar-timeline`.

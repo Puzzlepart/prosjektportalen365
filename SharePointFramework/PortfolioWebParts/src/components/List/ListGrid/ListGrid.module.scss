@@ -23,6 +23,10 @@
         // one line ending in an ellipsis, and the icon and the sort arrow keep their size.
         min-width: 0;
         overflow: hidden;
+        // Fluent's reset styles give the button `resize: horizontal`, which a browser ignores
+        // while overflow is visible; with overflow hidden it draws its own grip in the corner.
+        // Columns are resized with the handle at the header's edge.
+        resize: none;
 
         > * {
           flex-shrink: 0;

@@ -64,10 +64,28 @@ test.describe('portfolio hub', () => {
     await expect(page.getByRole('grid').or(page.getByRole('table')).first()).toBeVisible({
       timeout: 60_000
     })
+    const overview = page.locator(WEB_PART).first()
+    // A column name stays on one line inside its column and ends in an ellipsis, and the header
+    // shows no resize grip of the browser's own (columns resize from the handle at the edge).
+    // This is CSS, which no unit test applies, so it is read from the browser.
+    const headerStyle = await overview
+      .getByRole('columnheader', { name: /^tittel|^title/i })
+      .first()
+      .getByRole('button')
+      .first()
+      .evaluate((button) => {
+        const name = button.querySelector('[title]')
+        return {
+          resize: getComputedStyle(button).resize,
+          overflow: getComputedStyle(button).overflow,
+          name:
+            name && `${getComputedStyle(name).whiteSpace} ${getComputedStyle(name).textOverflow}`
+        }
+      })
+    expect(headerStyle).toEqual({ resize: 'none', overflow: 'hidden', name: 'nowrap ellipsis' })
     // Searching narrows the list: the results counter reports 0 of N for a nonsense term. This
     // exercises the toolbar (a covered or dead search box fails the fill) and the list binding.
     // Scoped to the web part: the page also has SharePoint's suite bar search box.
-    const overview = page.locator(WEB_PART).first()
     const search = overview
       .getByRole('searchbox')
       .or(overview.getByPlaceholder(/søk|search/i))
