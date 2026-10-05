@@ -293,3 +293,38 @@ reads, was in neither the template nor the guide. The guide (`utviklingsmiljo.md
 build the dependencies first, that `SERVE_CHANNEL` must match the page's channel (`test` on the test
 tenant, or the page keeps the deployed bundles), and how to debug from VS Code. Slice 1b's
 `ONBOARDING.md` builds on it.
+
+### Between slices: the measurements dialog in the benefit overview (2026-10-05)
+
+A click inside `Vis alle målinger`'s dialog, or on its backdrop to close it, selected the row the
+dialog came from. Fluent's `Dialog` is portalled to the end of the page, outside the row, but React
+passes its clicks up through the row, and the row's check for a click of its own looked only at the
+DOM. The row now leaves its selection alone for any click that did not land inside it, which covers
+every dialog, popover and menu a cell opens (`ListGrid`, one test, which fails without the change).
+The dialog had no close button since phase 3 put it on v9: it has the title's dismiss button and a
+`Lukk` under the list now (`DialogColumn`, one test).
+
+### Slice 1c, step 1: the numbers (2026-10-05)
+
+The first debug run (37321980652) built in 753 s, 714 s of them the rebuild: 1,008 s of work done
+in 711 s of wall clock, at an average parallelism of 1.4 of the 2 allowed. The critical path is the
+chain and nothing else: shared-library 144.7 s, ProjectWebParts 300.0 s, PortfolioWebParts 175.0 s
+and ProgramWebParts 91.3 s add up to the 711 s; the two extensions (127.1 and 166.3 s) run beside
+ProjectWebParts and cost no time. Heft's own phases, from the per-project logs:
+
+| Solution | Build (Sass, TypeScript, lint, webpack) | Jest | Package |
+|---|---|---|---|
+| shared-library | 61.9 s | 80.9 s (392 tests) | 0.7 s |
+| ProjectWebParts | 172.2 s | 125.0 s (145 tests) | 1.9 s |
+| PortfolioWebParts | 127.2 s | 44.5 s (102 tests) | 2.4 s |
+| ProgramWebParts | 75.6 s | 13.6 s (30 tests) | 1.3 s |
+
+264 s of the critical path is Jest, which no dependent needs. So step 2 is simpler than planned:
+no Heft phase of our own (and so no question of resolving the rig's plugins from a solution's
+`heft.json`), but two Rush phases per solution, `_phase:build` (`heft build --clean --production`)
+and `_phase:test` (Jest on the built output, then `package-solution`), a dependent's build waiting
+only for its dependencies' builds. The tests then run beside the next build; webpack stays on the
+path. Rush schedules by critical path, so the gain is bounded by parallelism 2 more than by the
+chain; the debug run measures both 2 and 3. Splitting TypeScript from webpack is a later step if
+the numbers ask for it. The timeline's per-project list also missed the times Rush writes as
+"2 minutes 24.7 seconds"; it reads them now.

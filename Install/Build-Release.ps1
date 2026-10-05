@@ -369,16 +369,22 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
         exit 1
     }
     if ($RushTimeline.IsPresent) {
-        # Rush logs '"<project>" completed successfully in 12.34 seconds.' per project, then the
-        # --timeline chart, which ends with a LEGEND block (total work, wall clock, parallelism).
+        # Rush logs '"<project>" completed successfully in 12.34 seconds.' per project ('2 minutes
+        # 24.7 seconds' past a minute), then the --timeline chart, which ends with a LEGEND block
+        # (total work, wall clock, parallelism).
         $REBUILD_LINES = @(Get-Content $RUSH_REBUILD_LOG)
         $REPORT = @("Time per project, longest first:")
         $REPORT += $REBUILD_LINES |
-            Select-String -Pattern '^"(.+)" completed (successfully|with warnings) in ([\d.]+) seconds' |
-            Sort-Object { [double]$_.Matches[0].Groups[3].Value } -Descending |
+            Select-String -Pattern '^"(.+)" completed (?:successfully|with warnings) in (?:(\d+) minutes? )?([\d.]+) seconds' |
             ForEach-Object {
-                [string]::Format([cultureinfo]::InvariantCulture, "  {0,8:F1} s  {1}", [double]$_.Matches[0].Groups[3].Value, $_.Matches[0].Groups[1].Value)
-            }
+                $Groups = $_.Matches[0].Groups
+                [pscustomobject]@{
+                    Project = $Groups[1].Value
+                    Seconds = [double]$Groups[3].Value + $(if ($Groups[2].Success) { 60 * [int]$Groups[2].Value } else { 0 })
+                }
+            } |
+            Sort-Object Seconds -Descending |
+            ForEach-Object { [string]::Format([cultureinfo]::InvariantCulture, "  {0,8:F1} s  {1}", $_.Seconds, $_.Project) }
         $LEGEND = [array]::FindIndex($REBUILD_LINES, [Predicate[string]] { param($Line) $Line -match '^LEGEND:' })
         if ($LEGEND -gt 1) {
             $CHART_START = $LEGEND - 2
