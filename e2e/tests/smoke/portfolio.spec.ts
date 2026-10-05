@@ -96,13 +96,22 @@ test.describe('portfolio hub', () => {
     await expect(overview.getByRole('grid').or(overview.getByRole('table')).first()).toBeVisible({
       timeout: 60_000
     })
+    // The button is a web part property ("Vis eksport til Excel-knapp"). The hub template turns it
+    // on, but an installation can have it off, so it is looked for once the toolbar has rendered.
+    await expect(overview.getByRole('toolbar').first().getByRole('button').first()).toBeVisible({
+      timeout: 30_000
+    })
+    const exportButton = overview.getByRole('button', {
+      name: /^eksporter til excel$|^export to excel$/i
+    })
+    test.skip(
+      (await exportButton.count()) === 0,
+      'The overview shows no export button: turn on "Vis eksport til Excel-knapp" in its properties'
+    )
     // Only here does the export run as users run it: the browser takes SheetJS's ES module build
     // through webpack, while Jest takes its CommonJS build in Node.
     const download = page.waitForEvent('download')
-    await overview
-      .getByTitle(/^eksporter til excel$|^export to excel$/i)
-      .first()
-      .click()
+    await exportButton.first().click()
     const file = await download
     expect(file.suggestedFilename()).toMatch(/\.xlsx$/)
     // An xlsx file is a ZIP package. The entry names are stored uncompressed, whichever way the

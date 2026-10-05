@@ -194,6 +194,12 @@ tarball, an install from an empty store needs `cdn.sheetjs.com` to answer.
 **Order.** The guard and the tests land on 0.16.9 first, with a push and a green run; the bump
 follows as its own commit, `package.json` and the lockfile only, with no test changed (P5-3).
 
+**The first run (37300026442)** built and upgraded green, and the new browser test waited 90 s for
+an export button the test hub's overview does not show: its toolbar held only the view selector
+and the filter. The hub template turns the button on, but the installed page has the property off.
+The test now waits for the toolbar and skips with that reason when the button is missing, as the
+suite does for a page that does not exist; the property is turned on in the test hub.
+
 **Accepted with the bump.** GitHub's dependency graph and Dependabot cannot follow a URL
 dependency: future xlsx advisories raise no alert, so the release checklist gets a look at
 SheetJS's advisories. Scanners that read the npm advisory ranges, which have no fixed version on
