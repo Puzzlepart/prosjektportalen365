@@ -5,6 +5,7 @@ on:
     branches:
       - releases/1.15
       - feat/fluent-v9*
+      - feat/dependency-upgrades*
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'
