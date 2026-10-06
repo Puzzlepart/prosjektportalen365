@@ -62,6 +62,13 @@ is not ours to decide (see P5-1); a new Node major, which comes after 1.15 (P5-5
   `cdn.sheetjs.com` closes them too, as a tarball URL in `package.json` that pnpm resolves like any
   other version, at the price of a dependency from outside the registry.
 
+- **P5-8. The Excel export exports what is shown** (the user, 2026-10-06): the active search as
+  well as the filters, in all three exports (portfolio overview, aggregated overviews, dynamic list).
+- **P5-9. Yes/No columns export as Excel's own true/false** (shown as SANN/USANN in Norwegian Excel),
+  unless keeping the text "Ja"/"Nei" proves simpler; slice 2b records which (the user, 2026-10-06).
+- **P5-10. Numbers export as their value rounded to two decimals**, never floored (the user,
+  2026-10-06).
+
 ## Slices and order
 
 | # | Slice | Scope | Exit |
@@ -70,7 +77,8 @@ is not ours to decide (see P5-1); a new Node major, which comes after 1.15 (P5-5
 | 1 | xlsx | The export's four tests run the real library but read only what reaches `aoa_to_sheet`: first a round trip of the written workbook (read back with `XLSX.read`) on 0.16; then the bump to the version P5-7 settles and whatever the changed `utils` surface needs; the download checked by hand on the test tenant | Export tests green on the new version |
 | 1b | Agent skills and onboarding (added by the user 2026-10-05, between 1 and 2) | One source for the skills: Copilot reads `.claude/skills` as Claude Code does, so the hand-made copy in `.github/skills` (whose `pp365-testing` had fallen behind) goes, and a check in CI stops a second copy from coming back; three new skills, thin and pointing at the guide: `pp365-ui` (components, Fluent v9, our wrappers), `pp365-templates` (content model, provisioning, upgrades) and `pp365-release` (branches, commit tags, CI, channels, changelog and release notes); the two existing skills and `AGENTS.md` corrected against the code; four notes that lived only in an agent's personal memory moved into them; each new skill tried on a typical task by a fresh agent; a first-week path for new developers in Norwegian (`.development-guide/kom-i-gang.md`) | Done 2026-10-06: one copy of each skill and the check in CI; three new skills and two corrected; `AGENTS.md`, the onboarding chapter `.development-guide/kom-i-gang.md`, and the guide where it contradicted the code |
 | 1c | CI build time (added by the user 2026-10-05; runs after 1, before 1b) | A debug workflow that builds the release package without touching the tenant, so the live workflows stay as they are until each change is proven; `Build-Release.ps1` switches, off by default: the rebuild's per-project timeline printed and its logs uploaded, PnP.PowerShell (and its version check, which ends the script with `exit 0` when the module is missing) skipped when the PnP templates are, and a phased Rush rebuild in which a solution starts once the solutions it depends on have compiled, instead of after their tests, bundles and packages | Done 2026-10-06: per-project times measured; the timeline and the PnP.PowerShell skip in the live packages-only job; the phased rebuild tried and not adopted (slower on the 4-core runner); narrowing `[apps-only:<solution>]` builds left for after phase 5 |
-| 2 | Redux Toolkit 2 | Reducer tests for the four without one (the program administration's is the model); then the bump: the seven object-notation reducers moved to the builder callback, which 2.x requires, `AnyAction` replaced by `UnknownAction` or the reducer's own action union, `rush update`; every web part with a reducer checked by hand | All reducers tested, green on 2.x |
+| 2a | Redux Toolkit 2 | Tests first, so that every handler of the nine reducers is exercised (41 actions had no test on 2026-10-06, 17 of them in the aggregation's; the program administration's test is the model); then the bump: the seven object-notation reducers moved to the builder callback, which 2.x requires, `AnyAction` replaced by `UnknownAction` or the reducer's own action union, the shared library's unused `@reduxjs/toolkit` dropped, `rush update`; `kodemonster.md`'s reducer example on the builder; the coverage floors raised to what the tests reached; every web part with a reducer checked by hand | Step 1 done 2026-10-06 (every handler tested on 1.9.5); green on 2.x |
+| 2b | Fixes found in slices 1 to 1b (added by the user 2026-10-06, in place of filing issues) | Each a commit of its own with a test and a changelog line, apart from 2a's no-change upgrade. Excel export: a failed export shows a message; it exports what is shown (P5-8); `false` and `0` export as values, not empty cells (P5-9); numbers rounded to two decimals, not floored (P5-10); `æøå` kept in file names; ` \| ` and `;#` parsed only in person and lookup columns; measurement dates read without a locale round trip; the dynamic list's Norwegian plural. Upgrade and templates: `UpgradeAllSitesToLatest` on English installations; `Prosjektkolonner`'s id comments and the `GtStatusOpportunities` lookup; `channels/kurs.json`. Packaging and CI: the loc test no longer shipped as a locale; `generate-sbom.yml` on tags; `sync-version` across all projects. Accessibility and docs: `@BaseDialog`'s close button label, `IBasePanelProps.hidden`'s description, the templates and release chapters of the guide. Reducers (found by 2a's tests; each test that pins the fault changes with its fix): the status page survives a failed report delete; the program administration's delete button comes back after a failed delete; in the aggregated overview, "Liste" and "Kompakt" set the mode instead of flipping it, ungrouping keeps the chosen sort direction, a refetch keeps the grouping, a `viewId` first in the query string is found, a deleted column leaves the show/hide panel, and a failed fetch ends the loading; the portfolio overview writes the new grouping to the address; project information's properties built from `current(state)` after an update | Each fix tested where code; the CHANGELOG lists the user-visible ones |
 | 3 | React 18 readiness | `react-beautiful-dnd` replaced by a maintained fork with the same API or by the panel's own ordering, `react-calendar-timeline` on a line that declares React 18, the 15 files that render with react-dom's `render` made ready for `createRoot` (the 7 without an unmount get one); nothing bumps yet | The two peers settled, tests green on React 17 |
 | 4 | SPFx 1.24 and React 18 | The SPFx bump first, on React 17 (its own mini-phase on the toolchain plan's pattern; the RC until GA, P5-4); then React 18: `react`, `react-dom` and their types, `createRoot`, Testing Library 16 with `@testing-library/dom` 10 in all six, `children` declared where the 18 types want it, StrictMode findings fixed, the Fluent and Tabster versions revisited, the TagPicker stand-in rechecked (its loop was seen on React 17); full manual round on the test tenant, PnP's term field and property panes included (P5-6) | 1.15's definition of done |
 | 5 | Close-out and release | The release note for 1.15 finished (phases 3 to 5 as one technical change, the intended visible differences listed), the changelog complete, `Install/` and the upgrade path checked, the user's go | 1.15.0 cut |
@@ -431,3 +439,61 @@ locale bundle (`SharedLibraryStrings_strings.test.js`); `generate-sbom.yml` fail
 `aria-label`; `IBasePanelProps.hidden` hides only the header; the templates guide
 (`maler/*.md`) and the release guide (`opprette-ny-versjon.md`, `npm.md`) predate the current layout
 and process; `kodemonster.md`'s reducer example uses the object notation slice 2 removes.
+
+### Slice 2a, step 1 — every reducer handler tested on 1.9.5 (2026-10-06)
+
+Three agents, one per solution group, each told to pin what a handler does today, faults included,
+and to change no product code. Every handler of the nine reducers now runs in a test: 134 tests in
+nine files, up from 36 in five.
+
+| Reducer | Tests before | After |
+|---|---|---|
+| PortfolioAggregation | 0 (new file) | 49 |
+| PortfolioOverview | 12 | 21 |
+| ProjectInformation | 0 (new file) | 10 |
+| ProjectPhases | 0 (new file) | 9 |
+| ChangePhaseDialog | 6 | 7 |
+| ProjectStatus | 8 | 13 |
+| ProjectSetupDialog | 7 | 7 |
+| DocumentTemplateDialog | 0 (new file) | 9 |
+| ProgramAdministration | 3 | 9 |
+
+Run together through the fast loop (tsc to `lib-commonjs`, `heft run --only test`): all pass;
+ESLint, Prettier and tsc clean. Two reducers are created inside their hooks (ProjectInformation,
+ChangePhaseDialog), so their tests run the hook through `ProjectPhases/ChangePhaseDialog/testHooks.ts`.
+The aggregation's column handlers are checked through a `jest.fn` passed as `onUpdateProperty`, so
+nothing is mocked.
+
+**Faults the tests pin**, the user-visible ones moved to 2b:
+
+- ProjectStatus: `useDeleteReport` dispatches `REPORT_DELETE_ERROR()` without a payload (allowed
+  while `strictNullChecks` is off) and the handler reads `payload.error`, so a failed delete throws
+  inside `useReducer` and the web part falls to its error boundary.
+- ProgramAdministration: `Commands.tsx` sets `isDeleting` and has no `.catch`, so after a failed
+  delete the button stays disabled until the page reloads.
+- PortfolioAggregation: `TOGGLE_COMPACT` ignores its payload and always flips; "A til Å" sends
+  `isSortedDescending: true`, which `SET_SORT` sorts ascending while ungrouping and `DATA_FETCHED`
+  read it as reversed; `SET_GROUP_BY` toggles and the fetch dispatches it after every fetch, so a
+  refetch may ungroup (read from the code, not reproduced); `SET_CURRENT_VIEW` parses
+  `document.location.href` with `URLSearchParams`, so a `viewId` first in the query string is missed
+  and a later one takes in the hash; `COLUMN_DELETED` leaves the column in `allColumnsForCategory`;
+  `DATA_FETCH_ERROR` leaves `loading` true; `DATA_FETCHED` without columns returns early with
+  `loading` true, and with columns but no data source throws (the fetch always sends one).
+- PortfolioOverview: `DATA_FETCHED` writes `state.groupBy` to the hash before taking the new one;
+  `EXCEL_EXPORT_ERROR` keeps no error (already in 2b: a failed export shows a message).
+- ProjectInformation: `UPDATE_DATA` builds the properties from the draft, not `current(state)` as
+  `INIT_DATA` does, so without `fields` in the payload they hold revoked proxies (the save always
+  sends fields today).
+- ProjectPhases: `CHANGE_PHASE` reads `state.popover.phase` unguarded; unreachable from the UI, left.
+
+**Pinned as intended, or left:** the address hash wins over a changed default view (the address is
+what a shared link carries); `SET_PHASE` leaves `confirmPhase` set and `data.currentPhase` old (the
+page reloads when properties are synced); `CustomError` and `PortfolioAggregationErrorMessage` are
+plain `Error`s under the ES5 target, and nothing checks their class; `SET_VIEW_FORM_PANEL`'s type
+string is `TOGGLE_VIEW_FORM_PANEL` (the builder matches on the creator); several aggregation handlers
+mutate class instances (`setData` on columns) that immer does not draft.
+
+**For the rewrite:** `usePortfolioAggregation.ts` dispatches the creator `SET_CURRENT_VIEW`, not
+`SET_CURRENT_VIEW()`, which works because the reducer reads `.type` (pinned; the call gets its
+parentheses in step 2); ProjectStatus keys `REPORT_PUBLISH_ERROR` by a string literal, not
+`[REPORT_PUBLISH_ERROR.type]`; the CLEAR_USER_MESSAGE JSDoc is headed `PERSIST_SECTION_DATA_ERROR`.
