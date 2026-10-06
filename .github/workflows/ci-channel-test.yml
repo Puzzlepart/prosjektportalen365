@@ -137,15 +137,18 @@ jobs:
         shell: pwsh
 
       - name: Run Install/Build-Release.ps1 in CI mode for channel test
+        # The rebuild's timeline goes to the log and the job summary. PnP.PowerShell is not
+        # installed: only the PnP templates use it, and this job skips them (proven in
+        # ci-build-debug.yml).
         env:
           SOLUTIONS: ${{ steps.appsonly.outputs.solutions }}
           PP365_BUILD_NUMBER: ${{ github.run_number }}
         run: |
           if ([string]::IsNullOrWhiteSpace($env:SOLUTIONS)) {
-            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test
+            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test -RushTimeline -SkipPnPPowerShell
           }
           else {
-            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test -Solutions ($env:SOLUTIONS -split ',')
+            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test -RushTimeline -SkipPnPPowerShell -Solutions ($env:SOLUTIONS -split ',')
           }
         shell: pwsh
 

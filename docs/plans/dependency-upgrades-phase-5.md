@@ -69,7 +69,7 @@ is not ours to decide (see P5-1); a new Node major, which comes after 1.15 (P5-5
 | 0 | Branch and baselines | New branch off `releases/1.15`, run by the test-channel workflow; record the inventory above, the test counts and the six package sizes | Baselines in this document |
 | 1 | xlsx | The export's four tests run the real library but read only what reaches `aoa_to_sheet`: first a round trip of the written workbook (read back with `XLSX.read`) on 0.16; then the bump to the version P5-7 settles and whatever the changed `utils` surface needs; the download checked by hand on the test tenant | Export tests green on the new version |
 | 1b | Agent skills and onboarding (added by the user 2026-10-05, between 1 and 2) | One source for the skills: Copilot reads `.claude/skills` as Claude Code does, so the hand-made copy in `.github/skills` (whose `pp365-testing` had fallen behind) goes, and a check in CI stops a second copy from coming back; three new skills, thin and pointing at the guide: `pp365-ui` (components, Fluent v9, our wrappers), `pp365-templates` (content model, provisioning, upgrades) and `pp365-release` (branches, commit tags, CI, channels, changelog and release notes); the two existing skills and `AGENTS.md` corrected against the code; four notes that lived only in an agent's personal memory moved into them; each new skill tried on a typical task by a fresh agent; `ONBOARDING.md`, a first-week path for new developers in Norwegian | One copy of each skill, the check in CI, `ONBOARDING.md` confirmed by the user |
-| 1c | CI build time (added by the user 2026-10-05; runs after 1, before 1b) | A debug workflow that builds the release package without touching the tenant, so the live workflows stay as they are until each change is proven; `Build-Release.ps1` switches, off by default: the rebuild's per-project timeline printed and its logs uploaded, PnP.PowerShell (and its version check, which ends the script with `exit 0` when the module is missing) skipped when the PnP templates are, and a phased Rush rebuild in which a solution starts once the solutions it depends on have compiled, instead of after their tests, bundles and packages | Measured per-project times; the phased build's packages equal the live build's; the switches adopted in the live workflows |
+| 1c | CI build time (added by the user 2026-10-05; runs after 1, before 1b) | A debug workflow that builds the release package without touching the tenant, so the live workflows stay as they are until each change is proven; `Build-Release.ps1` switches, off by default: the rebuild's per-project timeline printed and its logs uploaded, PnP.PowerShell (and its version check, which ends the script with `exit 0` when the module is missing) skipped when the PnP templates are, and a phased Rush rebuild in which a solution starts once the solutions it depends on have compiled, instead of after their tests, bundles and packages | Done 2026-10-06: per-project times measured; the timeline and the PnP.PowerShell skip in the live packages-only job; the phased rebuild tried and not adopted (slower on the 4-core runner); narrowing `[apps-only:<solution>]` builds left for after phase 5 |
 | 2 | Redux Toolkit 2 | Reducer tests for the four without one (the program administration's is the model); then the bump: the seven object-notation reducers moved to the builder callback, which 2.x requires, `AnyAction` replaced by `UnknownAction` or the reducer's own action union, `rush update`; every web part with a reducer checked by hand | All reducers tested, green on 2.x |
 | 3 | React 18 readiness | `react-beautiful-dnd` replaced by a maintained fork with the same API or by the panel's own ordering, `react-calendar-timeline` on a line that declares React 18, the 15 files that render with react-dom's `render` made ready for `createRoot` (the 7 without an unmount get one); nothing bumps yet | The two peers settled, tests green on React 17 |
 | 4 | SPFx 1.24 and React 18 | The SPFx bump first, on React 17 (its own mini-phase on the toolchain plan's pattern; the RC until GA, P5-4); then React 18: `react`, `react-dom` and their types, `createRoot`, Testing Library 16 with `@testing-library/dom` 10 in all six, `children` declared where the 18 types want it, StrictMode findings fixed, the Fluent and Tabster versions revisited, the TagPicker stand-in rechecked (its loop was seen on React 17); full manual round on the test tenant, PnP's term field and property panes included (P5-6) | 1.15's definition of done |
@@ -348,3 +348,41 @@ with `classic`'s, file by file, and tables the wall clocks. Tried locally: Rush 
 configuration and names the operations `<package> (build)` and `(test)`; ProgramWebParts' phased
 rebuild built in 27 s, tested in 53 s (30 tests) and packaged; the comparison passes identical
 packages and names the file in an altered one.
+
+### Slice 1c, step 2: the result (2026-10-06)
+
+The debug run (37432085827) built the three variants on three runners:
+
+| Variant | Wall clock | Total work | Average parallelism |
+|---|---|---|---|
+| classic | 506.1 s | 718.0 s | 1.4 |
+| phased-p2 | 709.8 s | 1,224.5 s | 1.7 |
+| phased-p3 | 673.8 s | 1,482.7 s | 2.2 |
+
+The phased rebuild is slower. The build is CPU-bound on the 4-core runner, and each process already
+spreads over the cores (Jest's three workers, webpack's parallel minifier), so a test phase beside
+the next build makes both slower: ProjectWebParts' build alone took 209 s phased, as long as its
+build and tests together in classic (213 s), and the shared library's tests 158 s, against 102 s
+for the whole project in classic. The chain of builds stays the critical path. The runners vary
+too: classic took 711 s the day before and 506 s here, so only times from one run compare, and a
+70 % rise in total work is well beyond that spread.
+
+The packages are equivalent: the same 464 files in every variant, every bundle identical, and the
+XML that differs differs only in what `package-solution` generates per run, the client side assets
+feature's GUID and the relationship counter (`Id="r5"`); masked, nothing differs. The comparison
+job flagged those, so it needs the same masking to be of use.
+
+Not adopted: the phased rebuild would pay only on a runner with more cores. What does save time is
+less work (narrowing an `[apps-only:<solution>]` build to the solution and its dependencies, which
+`Build-Release.ps1` gave up on once) and the 14 s of PnP.PowerShell.
+
+### Slice 1c — closed (2026-10-06)
+
+Kept: the debug workflow (`ci-build-debug.yml`, one build, the live packages-only job's arguments),
+where the next change to the build is tried before the live workflows take it, and the two
+switches, now on in the live packages-only job: `-RushTimeline` (the time per project in the job
+summary of every `[apps-only]` run) and `-SkipPnPPowerShell` (14 s). Removed: the phased rebuild
+(`rebuild-phased`, its two phases in `command-line.json`, the phase scripts in nine `package.json`
+files, `-PhasedBuild`), so no configuration is left that nothing runs; this log and the CI guide keep
+what it showed. Narrowing an `[apps-only:<solution>]` build to the solution and its dependencies,
+the one change measured to save minutes, is left out of phase 5 (the user, 2026-10-06).

@@ -4,7 +4,6 @@
   "main": "generateTemplate.js",
   "scripts": {
     "build": "npm run generate-project-templates && npm run generate-resx-json",
-    "_phase:build": "npm run build",
     "lint": "echo \"No linting configured\"",
     "generate-resx-json": "node ./.tasks/generate-resx-json.js",
     "generate-resx-ts": "node ./.tasks/generate-resx-ts.js",

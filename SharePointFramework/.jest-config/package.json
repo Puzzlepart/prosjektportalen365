@@ -6,7 +6,6 @@
   "main": "lib/setup.js",
   "scripts": {
     "build": "node -e \"require('./lib/resolver.js'); require('./lib/amdTransform.js'); console.log('pp365-jest-config: modules load')\"",
-    "_phase:build": "npm run build",
     "lint": "echo \"No linting configured\"",
     "validate-loc": "echo \"No localization in pp365-jest-config\""
   },
