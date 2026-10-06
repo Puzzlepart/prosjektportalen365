@@ -46,6 +46,9 @@ export function useSnapshotDialog() {
     canFullscreen: document.fullscreenEnabled === true,
     isFullscreen,
     toggleFullscreen,
+    // window.open rather than a link: SharePoint intercepts clicks on links to its own pages and
+    // files and navigates in the same tab, `target="_blank"` notwithstanding.
+    openInNewTab: () => window.open(snapshotUrl, '_blank', 'noopener'),
     onDismiss: () => {
       exitFullscreen()
       dispatch(CLOSE_SNAPSHOT())

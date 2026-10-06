@@ -30,16 +30,16 @@ describe('ProjectStatus SnapshotDialog', () => {
       canFullscreen: true,
       isFullscreen: false,
       toggleFullscreen: jest.fn(),
+      openInNewTab: jest.fn(),
       onDismiss: jest.fn()
     })
   })
 
-  it('shows the snapshot image with a link that opens it in a new tab', () => {
+  it('shows the snapshot image with a button that opens it in a new tab', () => {
     render(<SnapshotDialog />)
     expect(screen.getByAltText(title)).toHaveAttribute('src', snapshotUrl)
-    const link = screen.getByRole('link', { name: 'Åpne i ny fane' })
-    expect(link).toHaveAttribute('href', snapshotUrl)
-    expect(link).toHaveAttribute('target', '_blank')
+    fireEvent.click(screen.getByText(strings.SnapshotOpenInNewTabLabel))
+    expect(mockDialog.openInNewTab).toHaveBeenCalledTimes(1)
   })
 
   it('calls onDismiss when the close button is clicked', () => {
@@ -119,6 +119,14 @@ describe('useSnapshotDialog', () => {
     expect(dialog.title).toMatch(/^Øyeblikksbilde – .*2026/)
     renderDialog({ isSnapshotOpen: true, selectedReport: report({}) })
     expect(dialog.isOpen).toBe(false)
+  })
+
+  it('opens the image in a new tab with window.open, out of reach of SharePoint link handling', () => {
+    const open = jest.spyOn(window, 'open').mockReturnValue(null)
+    renderDialog({ isSnapshotOpen: true, selectedReport: report({}, { snapshotUrl }) })
+    dialog.openInNewTab()
+    expect(open).toHaveBeenCalledWith(snapshotUrl, '_blank', 'noopener')
+    open.mockRestore()
   })
 
   it('takes the surface to full screen and back, following the document', () => {
