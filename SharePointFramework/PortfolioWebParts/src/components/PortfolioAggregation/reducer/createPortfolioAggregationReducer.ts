@@ -33,6 +33,7 @@ import {
   SET_GROUP_BY,
   SET_SORT,
   SET_VIEW_FORM_PANEL,
+  SET_VIEW_GROUP_BY,
   START_FETCH,
   TOGGLE_COLUMN_CONTEXT_MENU,
   TOGGLE_COLUMN_FORM_PANEL,
@@ -45,6 +46,26 @@ import resource from 'SharedResources'
 import { ProjectContentColumn } from 'pp365-shared-library/lib/models/ProjectContentColumn'
 import { format } from 'pp365-shared-library'
 import { parseDisplayValue } from '../createGroups'
+
+/**
+ * Groups the rows by `column`, sorted so that each group is one run of rows (`createGroups` makes
+ * the groups from the rows the list shows), or without a column ends the grouping and sorts the
+ * rows by the sort column (the project name when there is none).
+ *
+ * @param state Draft state of the reducer
+ * @param column Column to group by, or none
+ */
+function applyGroupBy(state: IPortfolioAggregationState, column?: ProjectContentColumn) {
+  if (column) {
+    state.items = sortArray([...state.items], [column.fieldName])
+    state.groupBy = column
+  } else {
+    state.groupBy = null
+    state.items = sortArray([...state.items], [state.sortBy?.fieldName || 'SiteTitle'], {
+      reverse: !!state.sortBy?.isSortedDescending
+    })
+  }
+}
 
 /**
  * Create reducer for `<PortfolioAggregation />` using `createReducer` from `@reduxjs/toolkit`.
@@ -167,8 +188,8 @@ export const createPortfolioAggregationReducer = (
       .addCase(TOGGLE_FILTER_PANEL, (state) => {
         state.isFilterPanelOpen = !state.isFilterPanelOpen
       })
-      .addCase(TOGGLE_COMPACT, (state) => {
-        state.isCompact = !state.isCompact
+      .addCase(TOGGLE_COMPACT, (state, { payload }) => {
+        state.isCompact = typeof payload === 'boolean' ? payload : !state.isCompact
       })
       .addCase(COLUMN_FORM_PANEL_ON_SAVED, (state, { payload }) => {
         const column = payload.column.setData({ isSelected: true })
@@ -190,6 +211,9 @@ export const createPortfolioAggregationReducer = (
       })
       .addCase(COLUMN_DELETED, (state, { payload }) => {
         state.columns = state.columns.filter((col) => col.id !== payload.columnId)
+        state.allColumnsForCategory = state.allColumnsForCategory.filter(
+          (col) => col.id !== payload.columnId
+        )
         state.columnForm = { isOpen: false }
         state.columnDeleted = new Date().getTime()
         persistSelectedColumnsInWebPartProperties(props, current(state).columns)
@@ -204,26 +228,17 @@ export const createPortfolioAggregationReducer = (
       })
       .addCase(SET_GROUP_BY, (state, { payload }) => {
         const { column } = payload
-        if (column && column.fieldName !== state.groupBy?.fieldName) {
-          // Sorted by the group column, each group is one run of items; `createGroups` makes the
-          // groups from the items the list shows.
-          state.items = sortArray([...state.items], [column.fieldName])
-          state.groupBy = column
-        } else {
-          state.groupBy = null
-          state.items = sortArray(
-            [...state.items],
-            [state.sortBy?.fieldName ? state.sortBy.fieldName : 'SiteTitle'],
-            {
-              reverse: state.sortBy?.isSortedDescending ? state.sortBy.isSortedDescending : false
-            }
-          )
-        }
+        applyGroupBy(state, column?.fieldName !== state.groupBy?.fieldName ? column : null)
+      })
+      .addCase(SET_VIEW_GROUP_BY, (state, { payload }) => {
+        applyGroupBy(state, payload.column)
       })
       .addCase(SET_SORT, (state, { payload }) => {
         const isSortedDescending = Object.keys(payload).includes('isSortedDescending')
           ? payload.isSortedDescending
           : !payload.column.isSortedDescending
+        // The sort helpers take whether to sort ascending.
+        const ascending = !isSortedDescending
         state.sortBy = payload.column
         if (state.groupBy) {
           state.groupBy = null
@@ -231,22 +246,22 @@ export const createPortfolioAggregationReducer = (
         switch (payload.column.dataType) {
           case 'currency':
             state.items = state.items.sort((a, b) =>
-              sortNumerically(a, b, isSortedDescending, payload.column.fieldName, 'kr ')
+              sortNumerically(a, b, ascending, payload.column.fieldName, 'kr ')
             )
             break
           case 'number':
             state.items = state.items.sort((a, b) =>
-              sortNumerically(a, b, isSortedDescending, payload.column.fieldName)
+              sortNumerically(a, b, ascending, payload.column.fieldName)
             )
             break
           case 'percentage':
             state.items = state.items.sort((a, b) =>
-              sortNumerically(a, b, isSortedDescending, payload.column.fieldName, '%')
+              sortNumerically(a, b, ascending, payload.column.fieldName, '%')
             )
             break
           default:
             state.items.sort((a, b) =>
-              sortAlphabetically(a, b, isSortedDescending, payload.column.fieldName)
+              sortAlphabetically(a, b, ascending, payload.column.fieldName)
             )
             break
         }
@@ -258,7 +273,7 @@ export const createPortfolioAggregationReducer = (
       })
       .addCase(SET_CURRENT_VIEW, (state) => {
         const hashState = parseUrlHash()
-        const viewIdUrlParam = new URLSearchParams(document.location.href).get('viewId')
+        const viewIdUrlParam = new URLSearchParams(document.location.search).get('viewId')
         let currentView: DataSource = null
         let errorMessage = strings.ViewNotFoundMessage || ''
 
@@ -406,6 +421,8 @@ export const createPortfolioAggregationReducer = (
       })
       .addCase(DATA_FETCH_ERROR, (state, { payload }) => {
         state.error = payload.error
+        state.loading = false
+        state.isChangingView = false
       })
       .addCase(SET_VIEW_FORM_PANEL, (state, { payload }) => {
         switch (payload.submitAction) {

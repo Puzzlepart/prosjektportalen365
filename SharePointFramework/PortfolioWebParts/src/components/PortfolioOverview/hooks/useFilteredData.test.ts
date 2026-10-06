@@ -75,12 +75,11 @@ describe('useFilteredData', () => {
       { Title: 'Alfa', GtProjectPhase: 'Konsept' },
       { Title: 'Bravo', GtProjectPhase: 'Planlegge' }
     ]
-    // In this web part `isSortedDescending: true` is the "A til Å" choice, that is ascending.
     const ascending = useFilteredData(
       context({
         items,
         groupBy: columns[1],
-        sortBy: { column: { ...columns[0], isSortedDescending: true } }
+        sortBy: { column: { ...columns[0], isSortedDescending: false } }
       })
     )
     expect(titles(ascending.items)).toEqual(['Alfa', 'Bravo', 'Charlie'])
@@ -88,7 +87,7 @@ describe('useFilteredData', () => {
       context({
         items,
         groupBy: columns[1],
-        sortBy: { column: { ...columns[0], isSortedDescending: false } }
+        sortBy: { column: { ...columns[0], isSortedDescending: true } }
       })
     )
     // The direction applies to the group value as well, so the groups swap places too.

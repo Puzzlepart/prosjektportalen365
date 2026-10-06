@@ -46,17 +46,29 @@ export const Commands: FC = () => {
         const projects = context.state.childProjects.filter(({ SiteId }) =>
           context.state.selectedProjects.includes(SiteId)
         )
-        void context.props.dataAdapter.removeChildProjects(projects).then(() => {
-          const siteIdsToRemove = projects.map((p) => p.SiteId)
-          context.dispatch(REMOVE_CHILD_PROJECTS({ siteIdsToRemove }))
-          dispatchToast(
-            <Toast>
-              <ToastTitle>{strings.ChildrenRemoveToastTitle}</ToastTitle>
-              <ToastBody>{strings.ChildrenRemoveToastMessage}</ToastBody>
-            </Toast>,
-            { intent: 'success' }
-          )
-        })
+        void context.props.dataAdapter
+          .removeChildProjects(projects)
+          .then(() => {
+            const siteIdsToRemove = projects.map((p) => p.SiteId)
+            context.dispatch(REMOVE_CHILD_PROJECTS({ siteIdsToRemove }))
+            dispatchToast(
+              <Toast>
+                <ToastTitle>{strings.ChildrenRemoveToastTitle}</ToastTitle>
+                <ToastBody>{strings.ChildrenRemoveToastMessage}</ToastBody>
+              </Toast>,
+              { intent: 'success' }
+            )
+          })
+          .catch((error) => {
+            context.dispatch(SET_IS_DELETING(false))
+            dispatchToast(
+              <Toast>
+                <ToastTitle>{strings.ChildrenRemoveErrorToastTitle}</ToastTitle>
+                {error?.message && <ToastBody>{error.message}</ToastBody>}
+              </Toast>,
+              { intent: 'error' }
+            )
+          })
       })
   ]
 

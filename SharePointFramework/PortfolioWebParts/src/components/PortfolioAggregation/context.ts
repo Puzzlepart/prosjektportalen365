@@ -16,6 +16,11 @@ export interface IPortfolioAggregationContext extends Pick<
   layerHostId: string
 
   /**
+   * Id of the toaster that tells the user an Excel export failed.
+   */
+  toasterId: string
+
+  /**
    * Groups of `items` when the list is grouped, made from the items it shows.
    */
   groups?: IListGroup[]

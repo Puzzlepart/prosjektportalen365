@@ -1,43 +1,126 @@
+import { get } from '@microsoft/sp-lodash-subset'
 import * as FileSaver from 'file-saver'
 import strings from 'SharedLibraryStrings'
 import _ from 'underscore'
 import * as XLSX from 'xlsx'
-import {
-  getObjectValue as get,
-  getDateForExcelExport,
-  stringToArrayBuffer,
-  format
-} from '../../util'
+import { getDateForExcelExport, isTrueBooleanValue, stringToArrayBuffer, format } from '../../util'
 import { ExcelExportServiceDefaultConfiguration } from './ExcelExportServiceDefaultConfiguration'
 import { IExcelExportServiceConfiguration } from './IExcelExportServiceConfiguration'
 import { IListColumn } from '../../types'
 
+/** Numbers always show two decimals, and percentages as per cent with two decimals. */
+const NUMBER_FORMAT = '#,##0.00'
+const PERCENTAGE_FORMAT = '0.00%'
+
+/** A lookup value: `id;#name`, a pair per value in a multi-lookup, `-1;#Term|guid` for a term. */
+const LOOKUP_VALUE = /^-?\d+;#/
+const TERM_ID = /\|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+/** `value` rounded to `decimals` decimals, never cut: `-0.5` stays `-0.5`. */
+function round(value: number, decimals = 2): number {
+  return parseFloat(value.toFixed(decimals))
+}
+
+/** The number in a number or in numeric text (search returns numbers as text), or `NaN`. */
+function toNumber(value: any): number {
+  if (typeof value === 'number') return value
+  const match = typeof value === 'string' && value.trim().match(/^#?(-?\d+(?:\.\d+)?)$/)
+  return match ? parseFloat(match[1]) : NaN
+}
+
+/** The names in a lookup value, without their ids: `1;#A;#2;#B` is `A; B`. */
+function parseLookupValue(value: string): string {
+  return value
+    .split(';#')
+    .filter((_part, index) => index % 2 === 1)
+    .map((name) => name.replace(TERM_ID, ''))
+    .join('; ')
+}
+
+/** The names in a person value, as `UserColumn` shows them: `email | Name` is `Name`. */
+function parsePersonValue(value: any): any {
+  if (typeof value !== 'string' || !value.includes(' | ')) return value
+  return value
+    .split(';')
+    .map((person) => person.split(' | ')[1]?.trim() || person.trim())
+    .join('; ')
+}
+
 /**
- * Parses a raw SharePoint field value into a display-friendly string.
- * Handles user fields (pipe-separated), lookup fields (`;#`-separated),
- * and returns the value as-is for other types.
- *
- * @param value Raw field value
+ * A value in a column without a type of its own: a lookup as its names, numeric text as a number
+ * rounded to two decimals, anything else as it is.
  */
 function parseDisplayValue(value: any): any {
-  if (typeof value === 'number') {
-    return Number.isInteger(value) ? value : parseFloat(value.toFixed(2))
-  }
+  if (typeof value === 'number') return round(value)
   if (typeof value !== 'string') return value
-  if (value.includes(' | ')) {
-    const match = value.match(/\|([^|]+)\|/)
-    if (match) return match[1].trim()
-    return value.split(' | ')[1]?.trim() || value
+  if (LOOKUP_VALUE.test(value)) return parseLookupValue(value)
+  const number = toNumber(value)
+  return isNaN(number) ? value : round(number)
+}
+
+/** The data type a column is rendered with, found the way `renderItemColumn` finds it. */
+function getDataType(column: IListColumn): string {
+  return (column as any).dataType || column.data?.type || column.data?.renderAs
+}
+
+/**
+ * The value of `column` in `item` as the list shows it: a date on the day the browser shows, a
+ * Yes/No as `true`/`false` (a missing one as `false`, as the list shows it), numbers rounded to two
+ * decimals (percentages to two decimals of a per cent), a person as the name. `false`, `0` and
+ * `''` are values; only a missing value leaves the cell empty.
+ */
+function toCellValueOf(item: Record<string, any>, column: IListColumn): any {
+  const value = get(item, column.fieldName) ?? null
+  const dataType = getDataType(column)
+  switch (dataType) {
+    case 'date':
+      return getDateForExcelExport(value, column.data?.dataTypeProperties?.includeTime)
+    case 'boolean':
+      return isTrueBooleanValue(value)
+    case 'number':
+    case 'currency':
+    case 'percentage': {
+      const number = toNumber(value)
+      if (isNaN(number)) return parseDisplayValue(value)
+      return round(number, dataType === 'percentage' ? 4 : 2)
+    }
+    case 'user':
+      return parsePersonValue(value)
+    default:
+      return parseDisplayValue(value)
   }
-  if (value.includes(';#')) {
-    return value.split(';#')[1] || value
+}
+
+/** The number format of a column's cells, or `undefined` for a column without one. */
+function getNumberFormat(column: IListColumn): string | undefined {
+  switch (getDataType(column)) {
+    case 'number':
+    case 'currency':
+      return NUMBER_FORMAT
+    case 'percentage':
+      return PERCENTAGE_FORMAT
   }
-  const numericMatch = value.match(/^#?(-?\d+(?:\.\d+)?)$/)
-  if (numericMatch) {
-    const num = parseFloat(numericMatch[1])
-    if (!isNaN(num)) return Number.isInteger(num) ? num : parseFloat(num.toFixed(2))
+}
+
+/**
+ * Gives each number cell below the header row a number format: the one for its column when
+ * `formats` is a list, or `formats` itself.
+ */
+function setNumberFormats(sheet: XLSX.WorkSheet, formats: string | string[]) {
+  if (!sheet['!ref']) return
+  const range = XLSX.utils.decode_range(sheet['!ref'])
+  for (let r = range.s.r + 1; r <= range.e.r; r++) {
+    for (let c = range.s.c; c <= range.e.c; c++) {
+      const cell: XLSX.CellObject = sheet[XLSX.utils.encode_cell({ r, c })]
+      const numberFormat = typeof formats === 'string' ? formats : formats[c]
+      if (numberFormat && cell?.t === 'n') cell.z = numberFormat
+    }
   }
-  return value
+}
+
+/** `value` with each character a file name cannot hold, on Windows or macOS, made a dash. */
+function toFileNamePart(value: string): string {
+  return value.replace(/[\\/:*?"<>|\t\n\r]/g, '-')
 }
 
 /** Excel's limits, in UTF-16 code units: what `String.length` counts and SheetJS checks. */
@@ -115,7 +198,8 @@ class ExcelExportService {
   ): Record<string, any>[] {
     const value = item[column]
     if (typeof value !== 'string' || !value.trim()) return []
-    const skipKeys = ['ValueDisplay', 'AchievementDisplay']
+    // `DateDisplay` is the browser's local text; `Date` is the date itself.
+    const skipKeys = ['ValueDisplay', 'AchievementDisplay', 'DateDisplay']
     const renameKeys = this.configuration?.measurementsSheetConfiguration?.renameKeys || {}
     const titleKey = this.configuration?.measurementsSheetConfiguration?.titleKey || 'Title'
     try {
@@ -138,8 +222,8 @@ class ExcelExportService {
                 columnRenameConfiguration?.dataType === 'date'
               ) {
                 processedValue = getDateForExcelExport(val as string | Date, false)
-              } else if (key === 'Achievement' && typeof val === 'number') {
-                processedValue = Math.floor(val * 100) / 100
+              } else if (typeof val === 'number') {
+                processedValue = round(val)
               }
               return [finalColumnName, processedValue]
             })
@@ -156,8 +240,11 @@ class ExcelExportService {
    * - The items are used to create the data rows.
    * - The sheet name is taken from the configuration, made one Excel accepts (see `toSheetName`),
    *   with a fallback to `{sheetNamePrefix}1`.
+   * - Each value is written as the list shows it (see `toCellValueOf`): numbers rounded to two
+   *   decimals and shown with two, dates on the browser's day, Yes/No as `true`/`false`.
    * - Text longer than an Excel cell holds (32,767 characters) is cut.
-   * - The file name is taken from the configuration.
+   * - The file name is taken from the configuration, with the characters a file name cannot hold
+   *   made dashes.
    * - The file extension is hardcoded to `.xlsx`.
    *
    * @param items Items
@@ -182,22 +269,9 @@ class ExcelExportService {
         name: this.configuration.name,
         data: [
           _columns.map(({ name }) => name),
-          ...items.map((item) =>
-            _columns.map((column) => {
-              switch ((column as any).dataType) {
-                case 'date': {
-                  return getDateForExcelExport(
-                    item[column.fieldName],
-                    column.data?.dataTypeProperties?.includeTime
-                  )
-                }
-                default: {
-                  return parseDisplayValue(get(item, column.fieldName, null))
-                }
-              }
-            })
-          )
-        ]
+          ...items.map((item) => _columns.map((column) => toCellValueOf(item, column)))
+        ],
+        numberFormats: _columns.map(getNumberFormat)
       })
       const hasMeasurementsColumn = items.some((item) => item[measurementsColumn])
       if (hasMeasurementsColumn) {
@@ -208,21 +282,27 @@ class ExcelExportService {
           const jsonDataSheet = XLSX.utils.sheet_to_json(XLSX.utils.json_to_sheet(combinedJson), {
             header: 1
           })
-          sheets.push({ name: strings.MeasurementSheetName, data: jsonDataSheet })
+          sheets.push({
+            name: strings.MeasurementSheetName,
+            data: jsonDataSheet,
+            numberFormats: NUMBER_FORMAT
+          })
         }
       }
       const workBook = XLSX.utils.book_new()
       const sheetNames: string[] = []
       sheets.forEach((s, index) => {
         const sheet = XLSX.utils.aoa_to_sheet(s.data.map((row: any[]) => row.map(toCellValue)))
+        setNumberFormats(sheet, s.numberFormats)
         const sheetName = toSheetName(s.name, `${sheetNamePrefix}${index + 1}`, sheetNames)
         sheetNames.push(sheetName)
         XLSX.utils.book_append_sheet(workBook, sheet, sheetName)
       })
       const wbout = XLSX.write(workBook, this.configuration.options)
+      const name = toFileNamePart(this.configuration.name ?? '')
       const fileName = fileNamePart
-        ? format(fileNameFormat, this.configuration.name, fileNamePart, new Date().toISOString())
-        : format(fileNameFormat, this.configuration.name, new Date().toISOString())
+        ? format(fileNameFormat, name, toFileNamePart(fileNamePart), new Date().toISOString())
+        : format(fileNameFormat, name, new Date().toISOString())
       FileSaver.saveAs(
         new Blob([stringToArrayBuffer(wbout)], { type: 'application/octet-stream' }),
         fileName

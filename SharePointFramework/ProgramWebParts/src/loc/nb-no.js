@@ -25,6 +25,7 @@ define([], function () {
     BooleanYes: 'Ja',
     Cancel: 'Avbryt',
     CancelButtonLabel: 'Avbryt',
+    ChildrenRemoveErrorToastTitle: 'Underområdene kunne ikke fjernes',
     ChildrenRemoveToastMessage: 'Fjerning av underområder er fullført.',
     ChildrenRemoveToastTitle: 'Underområder fjernet',
     CmdSelectionCountText: '{0} er merket',

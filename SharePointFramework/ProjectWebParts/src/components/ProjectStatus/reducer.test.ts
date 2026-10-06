@@ -131,17 +131,27 @@ describe('ProjectStatus reducer', () => {
     expect(state.mostRecentReportId).toBe(2)
   })
 
-  it('a failed delete keeps the error and the report', () => {
+  it('a failed delete shows why in a message above the report, and keeps the report', () => {
     const state = reducer(init(draft), REPORT_DELETE_ERROR({ error: { message: 'Ingen tilgang' } }))
-    expect(state.error).toEqual({ message: 'Ingen tilgang' })
+    expect(state.userMessage).toEqual({
+      title: strings.DeleteReportErrorTitle,
+      text: 'Ingen tilgang',
+      intent: 'error'
+    })
+    // `error` replaces the whole page; a failed delete leaves the page as it was.
+    expect(state.error).toBeUndefined()
     expect(state.selectedReport).toBe(draft)
     expect(state.data.reports.map((r) => r.id)).toEqual([3, 2])
   })
 
-  it('a failed delete as useDeleteReport sends it, without a payload, throws', () => {
-    // Today's behaviour, pinned: useDeleteReport dispatches REPORT_DELETE_ERROR() with no payload
-    // (the type allows it while strictNullChecks is off), and the handler reads `payload.error`.
-    expect(() => reducer(init(draft), REPORT_DELETE_ERROR())).toThrow(/reading 'error'/)
+  it('a failed delete without a payload or a reason still shows the message', () => {
+    const state = reducer(init(draft), REPORT_DELETE_ERROR())
+    expect(state.userMessage).toEqual({
+      title: strings.DeleteReportErrorTitle,
+      text: undefined,
+      intent: 'error'
+    })
+    expect(state.error).toBeUndefined()
   })
 
   it('opens and closes the panel, refetching on close', () => {

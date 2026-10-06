@@ -1,4 +1,6 @@
+import { Toaster } from '@fluentui/react-components'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { Fluent } from 'pp365-shared-library'
 import { EditViewColumnsPanel } from '../EditViewColumnsPanel'
 import React, { FC } from 'react'
 import { List } from '../List'
@@ -48,6 +50,9 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
         <ColumnFormPanel />
         <EditViewColumnsPanel {...editViewColumnsPanelProps} />
         <ViewFormPanel />
+        <Fluent>
+          <Toaster toasterId={context.toasterId} />
+        </Fluent>
       </PortfolioOverviewContext.Provider>
     </div>
   )

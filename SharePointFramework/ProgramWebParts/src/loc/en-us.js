@@ -64,6 +64,7 @@ define([], function () {
     BooleanOn: 'On',
     BooleanYes: 'Yes',
     CancelButtonLabel: 'Cancel',
+    ChildrenRemoveErrorToastTitle: 'The subareas could not be removed',
     ChildrenRemoveToastMessage: 'Subareas removal completed.',
     ChildrenRemoveToastTitle: 'Subareas removed',
     ColumnCategoryDescription: 'Specify a category for the column. The column will appear in all views using this category. To change the category for all web parts and views, modify the category in the Project Columns list.',

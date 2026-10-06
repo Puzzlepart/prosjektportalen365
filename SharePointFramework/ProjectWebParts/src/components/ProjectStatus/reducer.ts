@@ -38,7 +38,8 @@ export const REPORT_PUBLISH_ERROR = createAction<{
 export const REPORT_DELETED = createAction('REPORT_DELETED')
 
 /**
- * `REPORT_DELETE_ERROR`: Dispatched by `useDeleteReport` when a report fails to delete.
+ * `REPORT_DELETE_ERROR`: Dispatched by `useDeleteReport` when a report fails to delete. Shows the
+ * error's message as a user message above the report.
  */
 export const REPORT_DELETE_ERROR = createAction<{ error: any }>('REPORT_DELETE_ERROR')
 
@@ -164,7 +165,12 @@ const createProjectStatusReducer = createReducer(initialState, (builder) =>
       )
     })
     .addCase(REPORT_DELETE_ERROR, (state, { payload }) => {
-      state.error = payload.error
+      // A message above the report: `state.error` would replace the whole page.
+      state.userMessage = {
+        title: strings.DeleteReportErrorTitle,
+        text: payload?.error?.message,
+        intent: 'error'
+      }
     })
     .addCase(SELECT_REPORT, (state, { payload }) => {
       state.data.reports = state.data.reports.map((r) =>

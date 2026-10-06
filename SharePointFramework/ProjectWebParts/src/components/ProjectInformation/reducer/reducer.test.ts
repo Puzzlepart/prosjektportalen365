@@ -133,11 +133,9 @@ describe('ProjectInformation reducer', () => {
     expect(state.isDataLoaded).toBe(true)
   })
 
-  it('after a save without fields, keeps the loaded fields, but their properties cannot read the field afterwards', () => {
-    // Today's behaviour, pinned: the handler builds the properties from the draft, not from
-    // `current(state)` as INIT_DATA does, so a property built from a field kept in the state holds
-    // a draft that is revoked once the update is done. The save in EditPropertiesPanel always sends
-    // the fields, so the web part does not reach this.
+  it('after a save without fields, keeps the loaded fields, and their properties can read them', () => {
+    // The properties are built from `current(state)`, not the draft, so a property built from a
+    // field kept in the state holds no draft that is revoked once the update is done.
     const hook = loaded()
     const state = hook.dispatch(
       UPDATE_DATA({
@@ -148,7 +146,8 @@ describe('ProjectInformation reducer', () => {
       ['GtProjectOwner', 'Prosjekteier', undefined],
       ['GtProjectGoals', 'Prosjektmål', 'Bygge tunnel']
     ])
-    expect(() => state.properties[0].getProperty('Title')).toThrow(/revoked/)
+    expect(state.properties[0].getProperty('Title')).toBe('Eier')
+    expect(state.properties[1].getProperty('Title')).toBe('Mål')
   })
 
   it('keeps the error of a failed fetch and ends loading, with no properties', () => {

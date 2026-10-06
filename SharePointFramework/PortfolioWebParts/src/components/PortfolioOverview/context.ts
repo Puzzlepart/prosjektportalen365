@@ -8,6 +8,11 @@ export interface IPortfolioOverviewContext {
   state: IPortfolioOverviewState
   dispatch: React.Dispatch<UnknownAction>
   layerHostId: string
+
+  /**
+   * Id of the toaster that tells the user an Excel export failed.
+   */
+  toasterId: string
   items?: Record<string, any>[]
   groups?: IListGroup[]
 }

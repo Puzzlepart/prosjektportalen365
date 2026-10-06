@@ -78,7 +78,7 @@ is not ours to decide (see P5-1); a new Node major, which comes after 1.15 (P5-5
 | 1b | Agent skills and onboarding (added by the user 2026-10-05, between 1 and 2) | One source for the skills: Copilot reads `.claude/skills` as Claude Code does, so the hand-made copy in `.github/skills` (whose `pp365-testing` had fallen behind) goes, and a check in CI stops a second copy from coming back; three new skills, thin and pointing at the guide: `pp365-ui` (components, Fluent v9, our wrappers), `pp365-templates` (content model, provisioning, upgrades) and `pp365-release` (branches, commit tags, CI, channels, changelog and release notes); the two existing skills and `AGENTS.md` corrected against the code; four notes that lived only in an agent's personal memory moved into them; each new skill tried on a typical task by a fresh agent; a first-week path for new developers in Norwegian (`.development-guide/kom-i-gang.md`) | Done 2026-10-06: one copy of each skill and the check in CI; three new skills and two corrected; `AGENTS.md`, the onboarding chapter `.development-guide/kom-i-gang.md`, and the guide where it contradicted the code |
 | 1c | CI build time (added by the user 2026-10-05; runs after 1, before 1b) | A debug workflow that builds the release package without touching the tenant, so the live workflows stay as they are until each change is proven; `Build-Release.ps1` switches, off by default: the rebuild's per-project timeline printed and its logs uploaded, PnP.PowerShell (and its version check, which ends the script with `exit 0` when the module is missing) skipped when the PnP templates are, and a phased Rush rebuild in which a solution starts once the solutions it depends on have compiled, instead of after their tests, bundles and packages | Done 2026-10-06: per-project times measured; the timeline and the PnP.PowerShell skip in the live packages-only job; the phased rebuild tried and not adopted (slower on the 4-core runner); narrowing `[apps-only:<solution>]` builds left for after phase 5 |
 | 2a | Redux Toolkit 2 | Tests first, so that every handler of the nine reducers is exercised (41 actions had no test on 2026-10-06, 17 of them in the aggregation's; the program administration's test is the model); then the bump: the seven object-notation reducers moved to the builder callback, which 2.x requires, `AnyAction` replaced by `UnknownAction` or the reducer's own action union, the shared library's unused `@reduxjs/toolkit` dropped, `rush update`; `kodemonster.md`'s reducer example on the builder; the coverage floors raised to what the tests reached; every web part with a reducer checked by hand | Step 1 done 2026-10-06 (every handler tested on 1.9.5); step 2 done 2026-10-06 (2.13.0, all tests green unchanged); the hand check on the test tenant |
-| 2b | Fixes found in slices 1 to 1b (added by the user 2026-10-06, in place of filing issues) | Each a commit of its own with a test and a changelog line, apart from 2a's no-change upgrade. Excel export: a failed export shows a message; it exports what is shown (P5-8); `false` and `0` export as values, not empty cells (P5-9); numbers rounded to two decimals, not floored (P5-10); `æøå` kept in file names; ` \| ` and `;#` parsed only in person and lookup columns; measurement dates read without a locale round trip; the dynamic list's Norwegian plural. Upgrade and templates: `UpgradeAllSitesToLatest` on English installations; `Prosjektkolonner`'s id comments and the `GtStatusOpportunities` lookup; `channels/kurs.json`. Packaging and CI: the loc test no longer shipped as a locale; `generate-sbom.yml` on tags; `sync-version` across all projects. Accessibility and docs: `@BaseDialog`'s close button label, `IBasePanelProps.hidden`'s description, the templates and release chapters of the guide. Reducers (found by 2a's tests; each test that pins the fault changes with its fix): the status page survives a failed report delete; the program administration's delete button comes back after a failed delete; in the aggregated overview, "Liste" and "Kompakt" set the mode instead of flipping it, ungrouping keeps the chosen sort direction, a refetch keeps the grouping, a `viewId` first in the query string is found, a deleted column leaves the show/hide panel, and a failed fetch ends the loading; the portfolio overview writes the new grouping to the address; project information's properties built from `current(state)` after an update | Each fix tested where code; the CHANGELOG lists the user-visible ones |
+| 2b | Fixes found in slices 1 to 1b (added by the user 2026-10-06, in place of filing issues) | Each a commit of its own with a test and a changelog line, apart from 2a's no-change upgrade. Excel export: a failed export shows a message; it exports what is shown (P5-8); `false` and `0` export as values, not empty cells (P5-9); numbers rounded to two decimals, not floored (P5-10); `æøå` kept in file names; ` \| ` and `;#` parsed only in person and lookup columns; measurement dates read without a locale round trip; the dynamic list's Norwegian plural. Upgrade and templates: `UpgradeAllSitesToLatest` on English installations; `Prosjektkolonner`'s id comments and the `GtStatusOpportunities` lookup; `channels/kurs.json`. Packaging and CI: the loc test no longer shipped as a locale; `generate-sbom.yml` on tags; `sync-version` across all projects. Accessibility and docs: `@BaseDialog`'s close button label, `IBasePanelProps.hidden`'s description, the templates and release chapters of the guide. Reducers (found by 2a's tests; each test that pins the fault changes with its fix): the status page survives a failed report delete; the program administration's delete button comes back after a failed delete; in the aggregated overview, "Liste" and "Kompakt" set the mode instead of flipping it, ungrouping keeps the chosen sort direction, a refetch keeps the grouping, a `viewId` first in the query string is found, a deleted column leaves the show/hide panel, and a failed fetch ends the loading; the portfolio overview writes the new grouping to the address; project information's properties built from `current(state)` after an update | Done 2026-10-06 (each code fix tested, seen failing first; the changelog lists the user-visible ones); the hand check on the test tenant |
 | 3 | React 18 readiness | `react-beautiful-dnd` replaced by a maintained fork with the same API or by the panel's own ordering, `react-calendar-timeline` on a line that declares React 18, the 15 files that render with react-dom's `render` made ready for `createRoot` (the 7 without an unmount get one); nothing bumps yet | The two peers settled, tests green on React 17 |
 | 4 | SPFx 1.24 and React 18 | The SPFx bump first, on React 17 (its own mini-phase on the toolchain plan's pattern; the RC until GA, P5-4); then React 18: `react`, `react-dom` and their types, `createRoot`, Testing Library 16 with `@testing-library/dom` 10 in all six, `children` declared where the 18 types want it, StrictMode findings fixed, the Fluent and Tabster versions revisited, the TagPicker stand-in rechecked (its loop was seen on React 17); full manual round on the test tenant, PnP's term field and property panes included (P5-6) | 1.15's definition of done |
 | 5 | Close-out and release | The release note for 1.15 finished (phases 3 to 5 as one technical change, the intended visible differences listed), the changelog complete, `Install/` and the upgrade path checked, the user's go | 1.15.0 cut |
@@ -534,3 +534,99 @@ point lower, so a small difference between the local and CI measurement does not
 | ProjectWebParts | 42/66/48/42 | 45.92/70.15/50.92/45.92 | 45/70/50/45 |
 | ProjectExtensions | 49/78/64/49 | 52.64/81.69/68.58/52.64 | 52/81/68/52 |
 | ProgramWebParts | 38/72/60/38 | 41.71/77.27/63.63/41.71 | 41/76/63/41 |
+
+### Slice 2b — the fixes (2026-10-06)
+
+Five areas, each its own commit: the Excel export (main session), the reducers, templates and
+upgrade, packaging and CI with two accessibility fixes, and the guide's templates and release
+chapters (one agent each, none of them running git).
+
+**Excel export.** The shared service now does what the three callers each did their own way, and
+does it by the column's data type, read as `renderItemColumn` reads it (`dataType`, `data.type`,
+`data.renderAs`):
+- **P5-8:** each export takes the rows the list shows, from the same function as the list:
+  `filterItems` in the portfolio overview, `getFilteredItems` in the aggregated overview (which also
+  makes the export filter on project refiners through `__projectRefinerValues`, as the list does) and
+  `filterListItems` in the dynamic list. Selected rows win, as before.
+- **P5-9: Excel's own true/false.** `isTrueBooleanValue` covers both shapes (`'1'`/`'0'` from search,
+  booleans over REST); a missing value is `false`, as the list renders it. A column's own labels
+  (`valueIfTrue`/`valueIfFalse`) are not used in the export.
+- **P5-10:** numbers, currency and numeric text are rounded to two decimals, never floored, and get the
+  number format `#,##0.00`; percentages are numbers with two decimals of a per cent and `0.00%`,
+  instead of the text `45%`. The measurements sheet rounds its numbers the same way.
+- `false`, `0` and `''` are values; `getObjectValue`, which falls back on every falsy value, is no
+  longer used by the export (it is unchanged elsewhere).
+- ` | ` is parsed only in `user` columns, as `UserColumn` does; `;#` only in a value that starts with
+  a lookup id (`3;#Name`, `-1;#Term|guid`, every name of a multi-lookup), since no lookup data type
+  exists.
+- File names keep `æøå`: only `\ / : * ? " < > |` and line breaks in the name and the view's name
+  become dashes (the timestamp is unchanged).
+- The measurements JSON gets the measurement's `Date` (both data adapters), and the sheet uses it
+  instead of parsing `DateDisplay` (`toLocaleDateString()`) back with `new Date()`.
+- **Found while fixing, also fixed:** dates were written as the UTC day (`toISOString().slice(0, 10)`),
+  so a date-only value (local midnight, sent as UTC) exported a day early east of UTC, and times
+  were in UTC; they are now the browser's day and time, as the list shows them. And the service is
+  one instance per page that each web part configured as it rendered, so with two of them on a page
+  an export could take the other's name and measurements configuration; each export now configures
+  it as it runs.
+- A failed export shows a toast (`Toaster` in the shared `Fluent` wrapper, its id in the web part's
+  context next to `layerHostId`), and the dynamic list's selection text has a singular and a plural
+  string instead of `valgt{1} element{2}`.
+- Tests, each seen failing on the old code first: the service's file 18 → 23 (dates are built from
+  local time, since Jest gives each test a copy of `process.env` and the time zone cannot be set per
+  file), and new files for the three export hooks (6, 5 and 7 tests) that render a real `Toaster`.
+
+**Reducers** (the faults 2a's tests pinned; each pinning test now asserts the fix and was seen
+failing first):
+- ProjectStatus: a failed delete sends its error and shows it as the non-blocking `userMessage`
+  (with a title, cleared after 8 s as a failed publish is), not `state.error`, which replaced the page.
+- ProgramAdministration: a failed removal resets `isDeleting` and shows an error toast.
+- PortfolioAggregation: `TOGGLE_COMPACT` sets the mode from its payload; `isSortedDescending` means
+  what it says everywhere (the helpers take *ascending*; the crossed `SortDescLabel`/`SortAscLabel`
+  names are commented, not renamed); the fetch sets the view's grouping with a new
+  `SET_VIEW_GROUP_BY` instead of toggling it (proved real by a test that runs the fetch on the real
+  reducer: two views grouped on the same column, the second came out ungrouped); `viewId` read from
+  `location.search`; `COLUMN_DELETED` also leaves `allColumnsForCategory`; `DATA_FETCH_ERROR` ends
+  `loading` (no visible change: `List` drops the grid on an error).
+- PortfolioOverview: `DATA_FETCHED` writes the new grouping to the address; and the same sort flag
+  inversion as the aggregation, found by the reducer agent and fixed by the main session: the menu,
+  `SET_SORT` and the grouping sort now agree with `ListGrid`'s arrow. Without a direction (the
+  custom sort's menu item), an unsorted column sorts ascending and a sorted one flips, which is
+  what users saw before.
+- ProjectInformation: `UPDATE_DATA` builds the properties from `current(state)`.
+
+**Templates and upgrade.**
+- `UpgradeAllSitesToLatest.ps1` finds the project properties list by its title in the
+  installation's language (`Lists_ProjectProperties_Title`).
+- `Prosjektkolonnekonfigurasjon`'s three `GtStatusOpportunities` rows looked up id 54 since 1.8.0
+  (the column is row 36); fixed in the template, and `PostInstall.ps1` adds the three rows on
+  existing hubs by looking the column up by `GtInternalName` (the old rows stay).
+- `channels/kurs.json` lists `DynamicListWebPart` under `ProjectWebParts` with an id of its own.
+- No harness tests PowerShell or templates, so these three have no automated test.
+
+**Packaging, CI and accessibility.**
+- `shared-library`'s loc test moved out of `src/loc`: every file there is packaged as a locale, so
+  each `.sppkg` carried `SharedLibraryStrings_strings.test.js`.
+- `generate-sbom.yml` uploads the artifact on a tag and commits only on a branch, when more than the
+  timestamp changed, with a plain `git push` instead of an unpinned third-party action.
+- `sync-version` reads the projects from `rush.json`, covering all 11, with `--dry-run`.
+- `@BaseDialog`'s close button is named «Lukk»; `IBasePanelProps.hidden` describes what it does.
+
+**The guide.** `maler/*.md`, `utgivelse/opprette-ny-versjon.md` and `utgivelse/npm.md` rewritten
+against the repository; `npm.md` is proposed folded into `versjonering.md`.
+
+**Result.** tsc clean and every suite green in the five projects 2b touched: shared-library 399,
+PortfolioWebParts 179, ProjectWebParts 189, ProjectExtensions 118, ProgramWebParts 37 (922 tests).
+Every coverage floor holds; ProjectWebParts' functions fell to exactly its floor (50.00) because
+the export test loads `listOperationUtils`, so that file got tests of its own (9) and stands at
+51.26.
+
+**Found and left:** the Norwegian names in older upgrade steps (version-gated before English
+existed, except on a hub whose log has one install entry); the three old `GtStatusOpportunities`
+rows on existing hubs; `$schema.json` lacking two extensions; `generate-sbom.js` covering 8 of 11
+projects; a guard against tests in `src/loc`; removing sub-areas is not all-or-nothing (the
+program drops them before the hubs are updated); `en-us.js` in ProjectWebParts has a
+`DeleteReportButtonText` the typings do not declare; text columns' numeric coercion (`00123` exports as
+`123`, as before); and the stale chapters the guide agent listed (`versjonering.md`,
+`bygge-utgivelse.md`, `npm-skript.md`, `kontinuerlig-integrasjon.md`, `sbom.md`,
+`branching-og-arbeidsflyt.md`, `kom-i-gang.md`'s `[apps-only:…]` example).

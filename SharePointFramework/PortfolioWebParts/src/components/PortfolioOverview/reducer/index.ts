@@ -70,12 +70,12 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
       .addCase(DATA_FETCHED, (state, { payload }) => {
         state.items = payload.items
         state.currentView = payload.currentView
+        state.groupBy = payload.groupBy
         const obj: IPortfolioOverviewHashState = {}
         if (state.currentView) obj.viewId = payload.currentView.id.toString()
         if (state.groupBy) obj.groupBy = state.groupBy.fieldName
         setUrlHash(obj)
         state.columns = payload.currentView.columns
-        state.groupBy = payload.groupBy
         state.managedProperties = payload.managedProperties ?? []
         state.isUserInPortfolioManagerGroup = payload.isUserInPortfolioManagerGroup
         state.showChildProjectInfoInProgram = payload.showChildProjectInfoInProgram
@@ -142,40 +142,44 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
       })
       .addCase(SET_SORT, (state, { payload }) => {
         const isCustomSort = payload.customSort
+        // Without a direction (a custom sort), an unsorted column sorts ascending and a sorted
+        // one flips.
         const isSortedDescending = Object.keys(payload).includes('isSortedDescending')
           ? payload.isSortedDescending
-          : !payload.column.isSortedDescending
+          : !!payload.column.isSorted && !payload.column.isSortedDescending
+        // The sort helpers take whether to sort ascending.
+        const ascending = !isSortedDescending
         if (isCustomSort) {
           state.items = state.items.sort((a, b) => {
             const $a = payload.customSort.order.indexOf(a[payload.column.fieldName])
             const $b = payload.customSort.order.indexOf(b[payload.column.fieldName])
-            return isSortedDescending ? $a - $b : $b - $a
+            return ascending ? $a - $b : $b - $a
           })
         } else {
           switch (payload.column.dataType) {
             case 'date':
               state.items = state.items.sort((a, b) =>
-                sortNumerically(a, b, isSortedDescending, payload.column.fieldName)
+                sortNumerically(a, b, ascending, payload.column.fieldName)
               )
               break
             case 'number':
               state.items = state.items.sort((a, b) =>
-                sortNumerically(a, b, isSortedDescending, payload.column.fieldName)
+                sortNumerically(a, b, ascending, payload.column.fieldName)
               )
               break
             case 'currency':
               state.items = state.items.sort((a, b) =>
-                sortNumerically(a, b, isSortedDescending, payload.column.fieldName, 'kr ')
+                sortNumerically(a, b, ascending, payload.column.fieldName, 'kr ')
               )
               break
             case 'percentage':
               state.items = state.items.sort((a, b) =>
-                sortNumerically(a, b, isSortedDescending, payload.column.fieldName, '%')
+                sortNumerically(a, b, ascending, payload.column.fieldName, '%')
               )
               break
             default:
               state.items = state.items.sort((a, b) =>
-                sortAlphabetically(a, b, isSortedDescending, payload.column.fieldName)
+                sortAlphabetically(a, b, ascending, payload.column.fieldName)
               )
               break
           }

@@ -78,7 +78,7 @@ describe('PortfolioOverview reducer', () => {
     expect(next.columns).toEqual([title])
     expect(next.groupBy).toEqual(phase)
     expect(next.isUserInPortfolioManagerGroup).toBe(true)
-    expect(document.location.hash).toBe('#viewId=1')
+    expect(document.location.hash).toBe('#viewId=1&groupBy=GtProjectPhase')
   })
 
   it('keeps the error, named after the view, when the fetch fails', () => {
@@ -136,22 +136,32 @@ describe('PortfolioOverview reducer', () => {
     const { reducer, state } = setup({
       items: [{ Title: 'Bravo' }, { Title: 'alfa' }, { Title: 'Charlie' }]
     })
-    // `isSortedDescending: true` is the "A til Å" choice of the column menu: ascending.
-    const ascending = reducer(state, SET_SORT({ column: title, isSortedDescending: true }))
+    // The flag means what it says, as the header's sort arrow reads it: "A til Å" sends false.
+    const ascending = reducer(state, SET_SORT({ column: title, isSortedDescending: false }))
     expect(titles(ascending)).toEqual(['alfa', 'Bravo', 'Charlie'])
     expect(ascending.columns.map((c: any) => [c.isSorted, c.isSortedDescending])).toEqual([
-      [true, true],
+      [true, false],
       [false, false]
     ])
     expect(ascending.sortBy.column.key).toBe('Title')
-    const descending = reducer(ascending, SET_SORT({ column: title, isSortedDescending: false }))
+    const descending = reducer(ascending, SET_SORT({ column: title, isSortedDescending: true }))
     expect(titles(descending)).toEqual(['Charlie', 'Bravo', 'alfa'])
-    // Without an explicit direction the column's current direction is flipped.
-    const flipped = reducer(
-      descending,
-      SET_SORT({ column: { ...title, isSortedDescending: false } })
-    )
-    expect(titles(flipped)).toEqual(['alfa', 'Bravo', 'Charlie'])
+    expect(descending.columns[0].isSortedDescending).toBe(true)
+    // Without a direction (a custom sort), an unsorted column sorts ascending and a sorted one
+    // flips.
+    expect(titles(reducer(descending, SET_SORT({ column: { ...title } })))).toEqual([
+      'alfa',
+      'Bravo',
+      'Charlie'
+    ])
+    expect(
+      titles(
+        reducer(
+          descending,
+          SET_SORT({ column: { ...title, isSorted: true, isSortedDescending: false } })
+        )
+      )
+    ).toEqual(['Charlie', 'Bravo', 'alfa'])
   })
 
   it('sorts number columns numerically', () => {
@@ -162,14 +172,14 @@ describe('PortfolioOverview reducer', () => {
         { Title: 'Hundre', GtBudgetTotal: 100 }
       ]
     })
-    expect(titles(reducer(state, SET_SORT({ column: budget, isSortedDescending: true })))).toEqual([
-      'To',
-      'Ti',
-      'Hundre'
-    ])
     expect(titles(reducer(state, SET_SORT({ column: budget, isSortedDescending: false })))).toEqual(
-      ['Hundre', 'Ti', 'To']
+      ['To', 'Ti', 'Hundre']
     )
+    expect(titles(reducer(state, SET_SORT({ column: budget, isSortedDescending: true })))).toEqual([
+      'Hundre',
+      'Ti',
+      'To'
+    ])
   })
 
   it('sorts by a custom order of the column', () => {
@@ -181,12 +191,21 @@ describe('PortfolioOverview reducer', () => {
       ]
     })
     const customSort = { name: 'Fasene i rekkefølge', order: ['Konsept', 'Planlegge', 'Realisere'] }
-    const sorted = reducer(state, SET_SORT({ column: phase, customSort, isSortedDescending: true }))
+    const sorted = reducer(
+      state,
+      SET_SORT({ column: phase, customSort, isSortedDescending: false })
+    )
     expect(titles(sorted)).toEqual(['Bravo', 'Charlie', 'Alfa'])
     expect(sorted.sortBy.customSort).toEqual(customSort)
     expect(
-      titles(reducer(state, SET_SORT({ column: phase, customSort, isSortedDescending: false })))
+      titles(reducer(state, SET_SORT({ column: phase, customSort, isSortedDescending: true })))
     ).toEqual(['Alfa', 'Charlie', 'Bravo'])
+    // The menu sends a custom sort without a direction: the order as listed, first time round.
+    expect(titles(reducer(state, SET_SORT({ column: phase, customSort })))).toEqual([
+      'Bravo',
+      'Charlie',
+      'Alfa'
+    ])
   })
 
   it('keeps the selected items and the open column menu', () => {
@@ -353,15 +372,15 @@ describe('PortfolioOverview reducer', () => {
     })
     const sorted = (c: any, isSortedDescending: boolean) =>
       titles(reducer(state, SET_SORT({ column: c, isSortedDescending })))
-    expect(sorted(start, true)).toEqual(['Bravo', 'Charlie', 'Alfa'])
-    expect(sorted(start, false)).toEqual(['Alfa', 'Charlie', 'Bravo'])
-    expect(sorted(costs, true)).toEqual(['Alfa', 'Charlie', 'Bravo'])
-    expect(sorted(costs, false)).toEqual(['Bravo', 'Charlie', 'Alfa'])
-    expect(sorted(progress, true)).toEqual(['Bravo', 'Alfa', 'Charlie'])
-    expect(sorted(progress, false)).toEqual(['Charlie', 'Alfa', 'Bravo'])
+    expect(sorted(start, false)).toEqual(['Bravo', 'Charlie', 'Alfa'])
+    expect(sorted(start, true)).toEqual(['Alfa', 'Charlie', 'Bravo'])
+    expect(sorted(costs, false)).toEqual(['Alfa', 'Charlie', 'Bravo'])
+    expect(sorted(costs, true)).toEqual(['Bravo', 'Charlie', 'Alfa'])
+    expect(sorted(progress, false)).toEqual(['Bravo', 'Alfa', 'Charlie'])
+    expect(sorted(progress, true)).toEqual(['Charlie', 'Alfa', 'Bravo'])
   })
 
-  it('writes the grouping active before the fetch to the address, and takes no managed properties as none', () => {
+  it('writes the fetched grouping to the address, not the one before it, and takes no managed properties as none', () => {
     window.history.replaceState(null, '', '/')
     const { reducer, state } = setup({ groupBy: title })
     const next = reducer(
@@ -375,8 +394,11 @@ describe('PortfolioOverview reducer', () => {
         showChildProjectInfoInProgram: true
       })
     )
-    expect(document.location.hash).toBe('#viewId=1&groupBy=Title')
+    expect(document.location.hash).toBe('#viewId=1&groupBy=GtProjectPhase')
     expect(next.groupBy).toEqual(phase)
+    // A view fetched without a grouping leaves it out of the address.
+    reducer(next, DATA_FETCHED({ items: [], currentView: view(), groupBy: undefined } as any))
+    expect(document.location.hash).toBe('#viewId=1')
     expect(next.managedProperties).toEqual([])
     expect(next.showChildProjectInfoInProgram).toBe(true)
   })

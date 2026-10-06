@@ -16,6 +16,7 @@ import {
   SET_GROUP_BY,
   SET_SORT,
   SET_VIEW_FORM_PANEL,
+  SET_VIEW_GROUP_BY,
   START_FETCH,
   TOGGLE_COLUMN_CONTEXT_MENU,
   TOGGLE_COLUMN_FORM_PANEL,
@@ -337,12 +338,13 @@ describe('PortfolioAggregation reducer', () => {
     })
   })
 
-  it('keeps the fetch error, without ending the loading', () => {
-    const { reducer, state } = setup()
+  it('keeps the fetch error and ends the loading and the change of view', () => {
+    const { reducer, state } = setup({}, { isChangingView: true })
     const error = new Error('Kilden svarte ikke')
     const next = reducer(state, DATA_FETCH_ERROR({ error }))
     expect(next.error).toBe(error)
-    expect(next.loading).toBe(true)
+    expect(next.loading).toBe(false)
+    expect(next.isChangingView).toBe(false)
   })
 
   it('starts loading and keeps the search term as typed', () => {
@@ -351,15 +353,19 @@ describe('PortfolioAggregation reducer', () => {
     expect(reducer(state, EXECUTE_SEARCH('Konsept')).searchTerm).toBe('Konsept')
   })
 
-  it('toggles the filter panel, and toggles compact mode whatever the payload says', () => {
+  it('toggles the filter panel, and sets compact mode to what the payload says', () => {
     const { reducer, state } = setup()
     const open = reducer(state, TOGGLE_FILTER_PANEL())
     expect(open.isFilterPanelOpen).toBe(true)
     expect(reducer(open, TOGGLE_FILTER_PANEL()).isFilterPanelOpen).toBe(false)
-    const compact = reducer(state, TOGGLE_COMPACT())
+    const compact = reducer(state, TOGGLE_COMPACT(true))
     expect(compact.isCompact).toBe(true)
+    // Choosing the mode already on keeps it.
+    expect(reducer(compact, TOGGLE_COMPACT(true)).isCompact).toBe(true)
+    expect(reducer(compact, TOGGLE_COMPACT(false)).isCompact).toBe(false)
+    expect(reducer(state, TOGGLE_COMPACT(false)).isCompact).toBe(false)
+    // Without a payload it flips.
     expect(reducer(compact, TOGGLE_COMPACT()).isCompact).toBe(false)
-    expect(reducer(state, TOGGLE_COMPACT(false)).isCompact).toBe(true)
   })
 
   it('keeps the selected rows', () => {
@@ -455,7 +461,7 @@ describe('PortfolioAggregation reducer', () => {
       ])
     })
 
-    it('removes a deleted column from the list and the web part, but not from the category', () => {
+    it('removes a deleted column from the list, the category and the web part', () => {
       const { title, phase, budget } = categoryColumns()
       title.setData({ isSelected: true })
       phase.setData({ isSelected: true })
@@ -470,7 +476,8 @@ describe('PortfolioAggregation reducer', () => {
       const before = Date.now()
       const next = reducer(state, COLUMN_DELETED({ columnId: 3 }))
       expect(keys(next.columns)).toEqual(['Title'])
-      expect(keys(next.allColumnsForCategory)).toEqual(['Title', 'GtProjectPhase', 'GtBudgetTotal'])
+      // The show/hide panel offers the category's columns: the deleted one is gone there too.
+      expect(keys(next.allColumnsForCategory)).toEqual(['Title', 'GtBudgetTotal'])
       expect(next.columnForm).toEqual({ isOpen: false })
       expect(next.columnDeleted).toBeGreaterThanOrEqual(before)
       expect(next.columnDeleted).toBeLessThanOrEqual(Date.now())
@@ -593,15 +600,37 @@ describe('PortfolioAggregation reducer', () => {
       expect(field(next, 'SiteTitle')).toEqual(['Alfa', 'Bravo', 'Charlie'])
     })
 
-    it('after "A til Å" ungrouping re-sorts the rows from Å to A', () => {
+    it("after a fetch groups by the view's group column, also when already grouped by it, and ungroups without one", () => {
+      const { phase } = categoryColumns()
+      const { reducer, state } = setup(
+        {},
+        { items: rows(), sortBy: { fieldName: 'Title', isSortedDescending: true } }
+      )
+      const grouped = reducer(state, SET_VIEW_GROUP_BY({ column: phase }))
+      expect(grouped.groupBy).toBe(phase)
+      expect(field(grouped, 'SiteTitle')).toEqual(['Alfa', 'Charlie', 'Bravo'])
+      // The fetch of a view grouped by the column the rows are grouped by keeps the grouping.
+      expect(reducer(grouped, SET_VIEW_GROUP_BY({ column: phase })).groupBy).toBe(phase)
+      const ungrouped = reducer(grouped, SET_VIEW_GROUP_BY({ column: undefined }))
+      expect(ungrouped.groupBy).toBeNull()
+      expect(field(ungrouped, 'Title')).toEqual(['C', 'B', 'A'])
+    })
+
+    it('keeps the chosen sort direction through ungrouping and a refetch', () => {
       const { title, phase } = categoryColumns()
       const { reducer, state } = setup({}, { items: rows(), columns: [title, phase] })
-      // "A til Å" in the column menu dispatches `isSortedDescending: true`, which sorts ascending.
-      const sorted = reducer(state, SET_SORT({ column: title, isSortedDescending: true }))
-      expect(field(sorted, 'Title')).toEqual(['A', 'B', 'C'])
-      const grouped = reducer(sorted, SET_GROUP_BY({ column: phase }))
-      const ungrouped = reducer(grouped, SET_GROUP_BY({ column: phase }))
-      expect(field(ungrouped, 'Title')).toEqual(['C', 'B', 'A'])
+      const keepsOrder = (isSortedDescending: boolean, order: string[]) => {
+        const sorted = reducer(state, SET_SORT({ column: title, isSortedDescending }))
+        expect(field(sorted, 'Title')).toEqual(order)
+        const grouped = reducer(sorted, SET_GROUP_BY({ column: phase }))
+        const ungrouped = reducer(grouped, SET_GROUP_BY({ column: phase }))
+        expect(field(ungrouped, 'Title')).toEqual(order)
+        const refetched = reducer(sorted, DATA_FETCHED({ items: rows() }))
+        expect(field(refetched, 'Title')).toEqual(order)
+      }
+      // "A til Å" in the column menu sends `isSortedDescending: false`, "Å til A" sends `true`.
+      keepsOrder(false, ['A', 'B', 'C'])
+      keepsOrder(true, ['C', 'B', 'A'])
     })
 
     it('sorts text rows both ways, ignoring case, marks the sorted column and ends the grouping', () => {
@@ -614,18 +643,19 @@ describe('PortfolioAggregation reducer', () => {
           groupBy: phase
         }
       )
-      const ascending = reducer(state, SET_SORT({ column: title, isSortedDescending: true }))
+      const ascending = reducer(state, SET_SORT({ column: title, isSortedDescending: false }))
       expect(field(ascending, 'Title')).toEqual(['alfa', 'Bravo', 'Charlie'])
       expect(ascending.sortBy).toBe(title)
       expect(ascending.groupBy).toBeNull()
+      // The list header shows the direction from `isSortedDescending`.
       expect(ascending.columns.map((c) => [c.isSorted, c.isSortedDescending])).toEqual([
-        [true, true],
+        [true, false],
         [false, false]
       ])
-      const descending = reducer(state, SET_SORT({ column: title, isSortedDescending: false }))
+      const descending = reducer(state, SET_SORT({ column: title, isSortedDescending: true }))
       expect(field(descending, 'Title')).toEqual(['Charlie', 'Bravo', 'alfa'])
       expect(descending.columns.map((c) => [c.isSorted, c.isSortedDescending])).toEqual([
-        [true, false],
+        [true, true],
         [false, false]
       ])
     })
@@ -647,12 +677,12 @@ describe('PortfolioAggregation reducer', () => {
       )
       const sortBy = (c: ProjectContentColumn, isSortedDescending: boolean) =>
         field(reducer(state, SET_SORT({ column: c, isSortedDescending })), 'Title')
-      expect(sortBy(budget, true)).toEqual(['To', 'Ti', 'Hundre'])
-      expect(sortBy(budget, false)).toEqual(['Hundre', 'Ti', 'To'])
-      expect(sortBy(costs, true)).toEqual(['To', 'Hundre', 'Ti'])
-      expect(sortBy(costs, false)).toEqual(['Ti', 'Hundre', 'To'])
-      expect(sortBy(progress, true)).toEqual(['Ti', 'Hundre', 'To'])
-      expect(sortBy(progress, false)).toEqual(['To', 'Hundre', 'Ti'])
+      expect(sortBy(budget, false)).toEqual(['To', 'Ti', 'Hundre'])
+      expect(sortBy(budget, true)).toEqual(['Hundre', 'Ti', 'To'])
+      expect(sortBy(costs, false)).toEqual(['To', 'Hundre', 'Ti'])
+      expect(sortBy(costs, true)).toEqual(['Ti', 'Hundre', 'To'])
+      expect(sortBy(progress, false)).toEqual(['Ti', 'Hundre', 'To'])
+      expect(sortBy(progress, true)).toEqual(['To', 'Hundre', 'Ti'])
     })
 
     it("without a direction it flips the column's current one", () => {
@@ -662,10 +692,10 @@ describe('PortfolioAggregation reducer', () => {
         { items: [{ Title: 'Bravo' }, { Title: 'Alfa' }, { Title: 'Charlie' }], columns: [title] }
       )
       const first = reducer(state, SET_SORT({ column: title } as any))
-      expect(field(first, 'Title')).toEqual(['Alfa', 'Bravo', 'Charlie'])
+      expect(field(first, 'Title')).toEqual(['Charlie', 'Bravo', 'Alfa'])
       expect(first.columns[0].isSortedDescending).toBe(true)
       const second = reducer(first, SET_SORT({ column: first.columns[0] } as any))
-      expect(field(second, 'Title')).toEqual(['Charlie', 'Bravo', 'Alfa'])
+      expect(field(second, 'Title')).toEqual(['Alfa', 'Bravo', 'Charlie'])
       expect(second.columns[0].isSortedDescending).toBe(false)
     })
   })
@@ -701,11 +731,14 @@ describe('PortfolioAggregation reducer', () => {
       expect(document.location.hash).toBe('#viewId=3')
     })
 
-    it('a viewId query parameter wins over the hash, but is missed as the first parameter', () => {
+    it('a viewId query parameter wins over the hash, wherever it stands in the query', () => {
       window.history.replaceState(null, '', '/?viewId=1#viewId=3')
-      expect(currentViewTitle({})).toBe('Leveranser')
+      expect(currentViewTitle({})).toBe('Alle prosjekter')
       window.history.replaceState(null, '', '/?visning=liste&viewId=1')
       expect(currentViewTitle({ defaultViewId: '3' })).toBe('Alle prosjekter')
+      // The hash after the query is not part of the parameter's value.
+      window.history.replaceState(null, '', '/?visning=liste&viewId=3#groupBy=GtProjectPhase')
+      expect(currentViewTitle({ defaultViewId: '1' })).toBe('Leveranser')
     })
 
     it('falls back to the first view when the named one cannot be found', () => {

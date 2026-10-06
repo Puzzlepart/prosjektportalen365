@@ -60,7 +60,7 @@ function createGroups(items: any[], state: IPortfolioOverviewState) {
   }
   if (state.sortBy) {
     itemsSort.props.push(state.sortBy.column.fieldName)
-    itemsSort.opts.reverse = !state.sortBy.column.isSortedDescending
+    itemsSort.opts.reverse = !!state.sortBy.column.isSortedDescending
   }
   items = _.isEmpty(itemsSort.props)
     ? [...items]
@@ -95,13 +95,13 @@ function createGroups(items: any[], state: IPortfolioOverviewState) {
 }
 
 /**
- * Filter data based on `searchTerm` and `activeFilters`. Also, create groups based on `groupBy` field
- * using `createGroups` function.
+ * The items the overview shows: those matching the search term in any column, narrowed by the
+ * active filters. Shared by the list and the Excel export, so that the export holds what is shown.
  *
  * @param context Context of `<PortfolioOverview />`
  */
-export function useFilteredData(context: IPortfolioOverviewContext) {
-  let items = [...context.state.items].filter((item) => {
+export function filterItems(context: IPortfolioOverviewContext) {
+  const items = context.state.items.filter((item) => {
     return (
       context.state.columns.filter(
         (col) =>
@@ -109,8 +109,15 @@ export function useFilteredData(context: IPortfolioOverviewContext) {
       ).length > 0
     )
   })
+  return applyActiveFilters(items, context)
+}
 
-  items = applyActiveFilters(items, context)
-
-  return createGroups(items, context.state)
+/**
+ * Filter data based on `searchTerm` and `activeFilters` (see `filterItems`). Also, create groups
+ * based on `groupBy` field using `createGroups` function.
+ *
+ * @param context Context of `<PortfolioOverview />`
+ */
+export function useFilteredData(context: IPortfolioOverviewContext) {
+  return createGroups(filterItems(context), context.state)
 }

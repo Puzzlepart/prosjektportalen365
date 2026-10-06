@@ -58,7 +58,8 @@ function provider(
           ...state
         } as any,
         dispatch,
-        layerHostId: 'layer'
+        layerHostId: 'layer',
+        toasterId: 'toaster'
       }}
     >
       {children}
@@ -110,11 +111,12 @@ describe('ColumnContextMenu', () => {
     )
     // Menu items are clicked with a plain click event: user-event's pointer sequence on a v9 menu
     // item never settles under jsdom.
+    // `SortDescLabel` reads "A til Å", an ascending sort.
     fireEvent.click(screen.getByRole('menuitemcheckbox', { name: strings.SortDescLabel }))
     dispatched(
       dispatch,
       'SET_SORT',
-      expect.objectContaining({ column: phase, isSortedDescending: true })
+      expect.objectContaining({ column: phase, isSortedDescending: false })
     )
   })
 
@@ -122,17 +124,18 @@ describe('ColumnContextMenu', () => {
     it('sort both ways', () => {
       const phase = column('GtProjectPhase', 'Fase')
       const { items, dispatch } = renderHook(phase)
-      byKey(items, 'SORT_DESC').onClick(null, byKey(items, 'SORT_DESC'))
-      dispatched(
-        dispatch,
-        'SET_SORT',
-        expect.objectContaining({ column: phase, isSortedDescending: true })
-      )
+      expect(byKey(items, 'SORT_ASC').text).toBe(strings.SortDescLabel)
       byKey(items, 'SORT_ASC').onClick(null, byKey(items, 'SORT_ASC'))
       dispatched(
         dispatch,
         'SET_SORT',
         expect.objectContaining({ column: phase, isSortedDescending: false })
+      )
+      byKey(items, 'SORT_DESC').onClick(null, byKey(items, 'SORT_DESC'))
+      dispatched(
+        dispatch,
+        'SET_SORT',
+        expect.objectContaining({ column: phase, isSortedDescending: true })
       )
       expect(byKey(items, 'CUSTOM_SORTS_HEADER')).toBeUndefined()
     })

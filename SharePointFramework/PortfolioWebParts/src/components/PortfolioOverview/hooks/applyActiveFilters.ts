@@ -6,9 +6,8 @@ import { isBooleanColumn, normalizeBooleanValue } from './booleanColumn'
 /**
  * Filters `items` by the currently active filters.
  *
- * Shared by the list itself and the Excel export, so that the two always agree
- * on which rows a filter matches. Note that the search term is applied by the
- * list only, so an active search is still not reflected in the export.
+ * Shared by the list itself and the Excel export (through `filterItems`), so
+ * that the two always agree on which rows a filter matches.
  *
  * Boolean columns are compared on the normalized value, so that items where
  * search returned no value match the false option - the same way they're

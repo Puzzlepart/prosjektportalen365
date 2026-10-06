@@ -36,8 +36,8 @@ async function savedBytes(): Promise<Uint8Array> {
 }
 
 /** The workbook in the file the export handed to `saveAs`, read back from the Blob's bytes. */
-async function savedWorkbook(): Promise<XLSX.WorkBook> {
-  return XLSX.read(await savedBytes(), { type: 'array' })
+async function savedWorkbook(options: XLSX.ParsingOptions = {}): Promise<XLSX.WorkBook> {
+  return XLSX.read(await savedBytes(), { type: 'array', ...options })
 }
 
 /**
@@ -96,6 +96,15 @@ function bool(v: boolean) {
   return { t: 'b', v }
 }
 
+/**
+ * A date as SharePoint sends it: the moment, in UTC, of a time in the browser's time zone. A
+ * date-only field holds local midnight, which east of UTC is on the day before in UTC. Built from
+ * local time, so the tests hold in any time zone (Jest cannot change it for one file).
+ */
+function sharePointDate(year: number, month: number, day: number, hours = 0, minutes = 0) {
+  return new Date(year, month - 1, day, hours, minutes).toISOString()
+}
+
 const COLUMNS = [
   { key: 'Title', fieldName: 'Title', name: 'Tittel' },
   { key: 'GtBudget', fieldName: 'GtBudget', name: 'Budsjett' },
@@ -136,8 +145,8 @@ describe('ExcelExportService', () => {
           GtStatus: 'Grønn | Ihht. plan | 2',
           GtPhase: '3;#Gjennomføring',
           GtCode: '#7.5',
-          GtStart: '2026-03-01T00:00:00Z',
-          GtUpdated: '2026-09-30T10:15:00Z'
+          GtStart: sharePointDate(2026, 3, 1),
+          GtUpdated: sharePointDate(2026, 9, 30, 10, 15)
         },
         { Title: 'Svømmehall', GtBudget: 500, GtStatus: 'Gul | Avvik', GtCode: 'Ikke et tall' }
       ],
@@ -148,13 +157,115 @@ describe('ExcelExportService', () => {
       [
         'Frisbeegolfbane',
         1234.57,
-        'Ihht. plan',
+        'Grønn | Ihht. plan | 2',
         'Gjennomføring',
         7.5,
         '2026-03-01',
-        '2026-09-30T10:15:00.000Z'
+        '2026-09-30 10:15'
       ],
-      ['Svømmehall', 500, 'Avvik', null, 'Ikke et tall', '', '']
+      ['Svømmehall', 500, 'Gul | Avvik', null, 'Ikke et tall', '', '']
+    ])
+  })
+
+  it('writes a date on the day the list shows, in the browser time zone and not in UTC', () => {
+    const result = exported()
+    ExcelExportService.export(
+      [
+        { GtStart: sharePointDate(2026, 10, 6), GtUpdated: sharePointDate(2026, 10, 6, 0, 30) },
+        { GtStart: sharePointDate(2026, 12, 31, 23, 59), GtUpdated: 'ikke en dato' }
+      ],
+      COLUMNS.filter((column) => column.dataType === 'date')
+    )
+    expect(result.sheets()['Porteføljeoversikt']).toEqual([
+      ['Start', 'Oppdatert'],
+      ['2026-10-06', '2026-10-06 00:30'],
+      ['2026-12-31', '']
+    ])
+  })
+
+  it('exports false, 0 and an empty text as values, and a missing Yes/No as false', () => {
+    const result = exported()
+    ExcelExportService.export(
+      [
+        { Title: '', GtBudget: 0, GtIsParent: false },
+        { Title: 'Svømmehall', GtIsParent: '1' },
+        { Title: 'Bibliotek' }
+      ],
+      [
+        COLUMNS[0],
+        COLUMNS[1],
+        { key: 'GtIsParent', fieldName: 'GtIsParent', name: 'Overordnet', dataType: 'boolean' }
+      ] as any[]
+    )
+    expect(result.sheets()['Porteføljeoversikt']).toEqual([
+      ['Tittel', 'Budsjett', 'Overordnet'],
+      ['', 0, false],
+      ['Svømmehall', null, true],
+      ['Bibliotek', null, false]
+    ])
+  })
+
+  it('rounds numbers to two decimals, never down, and shows them with two decimals', async () => {
+    ExcelExportService.export(
+      [
+        { GtCount: -0.5, GtCost: '1234.567', GtShare: 0.45678, GtCode: 2.006 },
+        { GtCount: 2, GtCost: 1000, GtShare: '0.5', GtCode: '#12.346' },
+        { GtCount: 'ikke et tall' }
+      ],
+      [
+        { key: 'GtCount', fieldName: 'GtCount', name: 'Antall', dataType: 'number' },
+        { key: 'GtCost', fieldName: 'GtCost', name: 'Kostnad', data: { renderAs: 'currency' } },
+        { key: 'GtShare', fieldName: 'GtShare', name: 'Andel', dataType: 'percentage' },
+        { key: 'GtCode', fieldName: 'GtCode', name: 'Kode' }
+      ] as any[]
+    )
+    const sheet = (await savedWorkbook({ cellNF: true })).Sheets[
+      'Porteføljeoversikt'
+    ] as XLSX.WorkSheet
+    expect(cells(sheet)).toEqual([
+      [text('Antall'), text('Kostnad'), text('Andel'), text('Kode')],
+      [num(-0.5), num(1234.57), num(0.4568), num(2.01)],
+      [num(2), num(1000), num(0.5), num(12.35)],
+      [text('ikke et tall'), null, null, null]
+    ])
+    // Number, currency and percentage columns always show two decimals; a plain column has no
+    // format of its own.
+    expect([sheet.A2.z, sheet.B2.z, sheet.C2.z, sheet.A3.z]).toEqual([
+      '#,##0.00',
+      '#,##0.00',
+      '0.00%',
+      '#,##0.00'
+    ])
+    expect(sheet.D2.z).not.toBe('#,##0.00')
+  })
+
+  it('reads a person only in a person column, and a lookup only when it starts with its id', () => {
+    const result = exported()
+    ExcelExportService.export(
+      [
+        {
+          GtArea: 'Prosjekt A | Bydel Nord',
+          GtOwner: 'ola@kommune.no | Ola Nordmann',
+          GtLookup: '3;#Gjennomføring'
+        },
+        {
+          GtArea: 'Plan;#Bydel Nord',
+          GtOwner: 'ola@kommune.no | Ola Nordmann;kari@kommune.no | Kari Nordmann',
+          GtLookup: '1;#Bydel Nord;#2;#Bydel Sør'
+        },
+        { GtOwner: 'Ola Nordmann', GtLookup: '-1;#Konsept|3f2504e0-4f89-11d3-9a0c-0305e82c3301' }
+      ],
+      [
+        { key: 'GtArea', fieldName: 'GtArea', name: 'Område' },
+        { key: 'GtOwner', fieldName: 'GtOwner', name: 'Eier', dataType: 'user' },
+        { key: 'GtLookup', fieldName: 'GtLookup', name: 'Oppslag' }
+      ] as any[]
+    )
+    expect(result.sheets()['Porteføljeoversikt']).toEqual([
+      ['Område', 'Eier', 'Oppslag'],
+      ['Prosjekt A | Bydel Nord', 'Ola Nordmann', 'Gjennomføring'],
+      ['Plan;#Bydel Nord', 'Ola Nordmann; Kari Nordmann', 'Bydel Nord; Bydel Sør'],
+      [null, 'Ola Nordmann', 'Konsept']
     ])
   })
 
@@ -166,6 +277,14 @@ describe('ExcelExportService', () => {
     ExcelExportService.export([{ Title: 'A' }], COLUMNS, 'Alle prosjekter')
     expect((FileSaver.saveAs as jest.Mock).mock.calls[1][1]).toBe(
       'Porteføljeoversikt-Alle prosjekter-2026-10-02T12:00:00.000Z.xlsx'
+    )
+  })
+
+  it('keeps æøå in the file name, and replaces only what a file name cannot hold', () => {
+    ExcelExportService.configure({ name: 'Gevinster/nytte' } as any)
+    ExcelExportService.export([{ Title: 'A' }], COLUMNS, 'Mål: år 2026 "Østlandet"')
+    expect((FileSaver.saveAs as jest.Mock).mock.calls[0][1]).toBe(
+      'Gevinster-nytte-Mål- år 2026 -Østlandet--2026-10-02T12:00:00.000Z.xlsx'
     )
   })
 
@@ -186,7 +305,7 @@ describe('ExcelExportService', () => {
             {
               Value: 5,
               ValueDisplay: '5 stk',
-              Date: '2026-01-31T00:00:00Z',
+              Date: sharePointDate(2026, 1, 31),
               Achievement: 0.4567,
               Details: {}
             }
@@ -199,7 +318,7 @@ describe('ExcelExportService', () => {
     expect(Object.keys(sheets)).toEqual(['Gevinstoversikt', strings.MeasurementSheetName])
     expect(sheets[strings.MeasurementSheetName]).toEqual([
       ['Prosjekt', 'Verdi', 'Dato', 'Achievement'],
-      ['Frisbeegolfbane', 5, '2026-01-31', 0.45]
+      ['Frisbeegolfbane', 5, '2026-01-31', 0.46]
     ])
   })
 
@@ -218,8 +337,8 @@ describe('ExcelExportService', () => {
           GtStatus: 'Grønn | Ihht. plan | 2',
           GtPhase: '3;#Gjennomføring',
           GtCode: '#7.5',
-          GtStart: '2026-03-01T00:00:00Z',
-          GtUpdated: '2026-09-30T10:15:00Z',
+          GtStart: sharePointDate(2026, 3, 1),
+          GtUpdated: sharePointDate(2026, 9, 30, 10, 15),
           GtIsParent: true,
           GtNote: 'Mål & tiltak: <fase 1>\n"Ferdig" før jul'
         },
@@ -243,8 +362,8 @@ describe('ExcelExportService', () => {
     expect(blob.type).toBe('application/octet-stream')
     const workbook = await savedWorkbook()
     expect(workbook.SheetNames).toEqual(['Porteføljeoversikt'])
-    // A missing value, false, 0 and '' leave no cell: the value is read with getObjectValue, which
-    // falls back on every falsy value. A missing date is written as an empty text.
+    // A missing value leaves no cell; false, 0 and '' are written. A missing date is written as an
+    // empty text, and a missing Yes/No as false, as the list shows it.
     expect(cells(workbook.Sheets['Porteføljeoversikt'])).toEqual([
       [
         text('Tittel'),
@@ -260,26 +379,26 @@ describe('ExcelExportService', () => {
       [
         text('Frisbeegolfbane på Ekeberg'),
         num(1234.57),
-        text('Ihht. plan'),
+        text('Grønn | Ihht. plan | 2'),
         text('Gjennomføring'),
         num(7.5),
         text('2026-03-01'),
-        text('2026-09-30T10:15:00.000Z'),
+        text('2026-09-30 10:15'),
         bool(true),
         text('Mål & tiltak: <fase 1>\n"Ferdig" før jul')
       ],
       [
         text('Svømmehall'),
         num(-500),
-        text('Avvik'),
+        text('Gul | Avvik'),
         null,
         text('Ikke et tall'),
         text(''),
         text(''),
-        null,
-        null
+        bool(false),
+        text('')
       ],
-      [text('Bibliotek'), null, null, null, num(-3), text(''), text(''), null, null]
+      [text('Bibliotek'), num(0), null, null, num(-3), text(''), text(''), bool(false), null]
     ])
   })
 
@@ -293,7 +412,7 @@ describe('ExcelExportService', () => {
           Value: { name: 'Verdi' },
           Comment: { name: 'Kommentar' },
           Achievement: { name: 'Måloppnåelse' },
-          DateDisplay: { name: 'Dato', dataType: 'date' }
+          Date: { name: 'Dato', dataType: 'date' }
         }
       }
     } as any)
@@ -309,14 +428,16 @@ describe('ExcelExportService', () => {
               Comment: 'Over forventet',
               Achievement: 45.6789,
               AchievementDisplay: '45,68%',
-              DateDisplay: '2026-01-31T00:00:00Z',
+              DateDisplay: '31.1.2026',
+              Date: sharePointDate(2026, 1, 31),
               TrendIcon: { iconName: 'CaretUp', color: '#27ae60' }
             },
             {
               Title: 'Antall brukere',
               Value: 0,
               Achievement: -12.5,
-              DateDisplay: '2025-12-31T00:00:00Z'
+              DateDisplay: '31.12.2025',
+              Date: sharePointDate(2025, 12, 31)
             }
           ])
         },
@@ -328,7 +449,8 @@ describe('ExcelExportService', () => {
               Value: null,
               Comment: '',
               Achievement: 100,
-              DateDisplay: 'ikke en dato'
+              DateDisplay: '',
+              Date: 'ikke en dato'
             }
           ])
         },
@@ -353,7 +475,7 @@ describe('ExcelExportService', () => {
         text('Antall brukere'),
         num(120),
         text('Over forventet'),
-        num(45.67),
+        num(45.68),
         text('2026-01-31')
       ],
       [

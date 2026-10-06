@@ -49,6 +49,28 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Rettet en feil i `Aggregert oversikt` hvor radene havnet under feil gruppe når listen var gruppert og et søk eller et filter var aktivt
 - Rettet en feil hvor `Endre til denne fasen` feilet på prosjekter uten et element i listen `Prosjektegenskaper`, slik at fasen heller ikke ble lagret på prosjektet i porteføljen; fasen lagres nå i porteføljen, og lagring av prosjektinformasjon på et slikt prosjekt sier at prosjektegenskapene mangler i stedet for å vise en teknisk feilmelding
 - Rettet en feil hvor `Eksporter til Excel` verken ga fil eller melding når webdelens tittel var lengre enn 31 tegn, slik som på sidene for underområder om nyttevirkninger, kommunikasjonsplaner og ressursallokeringer; arknavnet, som er webdelens tittel, kortes nå ned. Tegn Excel ikke tillater i et arknavn (`: \ / ? * [ ]`, en apostrof først eller sist, og navnet `History`) byttes ut, og tekst lengre enn de 32 767 tegnene en celle kan holde, kuttes, slik at filen alltid kan åpnes i Excel
+- `Eksporter til Excel` i `Porteføljeoversikt`, `Aggregert oversikt` og `Dynamisk liste` tar nå med det listen viser: et aktivt søk gjelder også for eksporten, og i `Aggregert oversikt` filtrerer eksporten på prosjektfiltrene slik listen gjør. Valgte rader eksporteres som før
+- Rettet en feil i `Eksporter til Excel` hvor `0`, `false` og tom tekst ble tomme celler; ja/nei-kolonner eksporteres nå som Excels SANN/USANN, og en ja/nei-kolonne uten verdi som USANN, slik listen viser den
+- Rettet en feil i `Eksporter til Excel` hvor tall ble rundet ned (`-0,5` ble `-1`); tall, beløp og prosenter avrundes nå til to desimaler og vises alltid med to, og prosenter eksporteres som tall i prosentformat i stedet for som tekst
+- Rettet en feil i `Eksporter til Excel` hvor datoer uten klokkeslett kunne komme én dag for tidlig, og klokkeslett ble skrevet i UTC; datoene eksporteres nå slik listen viser dem
+- Rettet en feil i `Eksporter til Excel` hvor tekst med ` | ` eller `;#` ble kuttet (`Prosjekt A | Bydel Nord` ble `Bydel Nord`); bare personkolonner og oppslagsverdier tolkes nå, og et flervalgsoppslag eksporteres med alle verdiene
+- Rettet en feil i `Eksporter til Excel` hvor æ, ø og å i visningsnavnet ble bindestrek i filnavnet; nå byttes bare tegn et filnavn ikke kan inneholde
+- `Eksporter til Excel` gir nå en melding når eksporten mislykkes, i stedet for å stoppe i det stille
+- Rettet en feil i `Eksporter til Excel` hvor datoene i målingsarket i gevinstoversikten ble tolket på nytt fra en lokal tekst, slik at de kunne bli feil eller tomme
+- Rettet en feil hvor `Eksporter til Excel` kunne få navnet og innstillingene til en annen webdel når flere oversikter lå på samme side
+- Hjelpeteksten på eksportknappen i `Dynamisk liste` viser nå riktig norsk («Eksporter 3 valgte elementer til Excel»)
+- Rettet en feil i oppsettveiviseren, `Hent dokumentmal` og feilmeldingene ved prosjektoppsett hvor lukkeknappen (krysset) manglet et navn for skjermlesere; den leses nå opp som «Lukk»
+- Rettet en feil i `Prosjektstatus` hvor webdelen krasjet når en statusrapport ikke kunne slettes; nå vises en melding over rapporten om at den ikke kunne slettes, med årsaken
+- Rettet en feil i `Administrasjon av underområder` hvor `Fjern underområder` ble stående deaktivert når fjerningen feilet; knappen blir nå aktiv igjen, og en melding forteller at underområdene ikke kunne fjernes
+- Rettet en feil i `Aggregert oversikt` hvor valget `Liste` eller `Kompakt liste` byttet til den andre visningen når den valgte allerede var aktiv
+- Rettet en feil i `Aggregert oversikt` hvor radene sortert `A til Å` ble snudd til Å til A når grupperingen ble fjernet eller en annen visning ble valgt
+- Rettet en feil i `Aggregert oversikt` og `Porteføljeoversikt` hvor pilen i kolonneoverskriften viste motsatt sorteringsretning av radene
+- Rettet en feil i `Aggregert oversikt` hvor en visning gruppert på samme kolonne som visningen før ble vist uten gruppering
+- Rettet en feil i `Aggregert oversikt` hvor `viewId` i adressen ble oversett når den sto først i spørrestrengen, og åpnet første visning når adressen også hadde en `#`-del
+- Rettet en feil i `Aggregert oversikt` hvor en slettet kolonne fortsatt ble tilbudt i `Vis eller skjul kolonner`
+- Rettet en feil i `Porteføljeoversikt` hvor adressen etter henting av data viste grupperingen fra før hentingen, ikke den listen viser
+- Rettet en feil hvor `UpgradeAllSitesToLatest.ps1` hoppet over alle prosjektområder på engelske installasjoner fordi listen `Prosjektegenskaper` ble slått opp med norsk tittel; listen slås nå opp med tittelen på installasjonens språk
+- Rettet en feil hvor fargene for `Status muligheter` aldri ble brukt fordi konfigurasjonen i `Prosjektkolonnekonfigurasjon` pekte på feil prosjektkolonne: ikonet var grått i `Prosjektstatus` og `Prosjektinformasjon`, og kolonnen i `Porteføljeoversikt` viste ren tekst. Eksisterende installasjoner får riktige rader ved oppgradering; de gamle radene blir stående
 
 ---
 
