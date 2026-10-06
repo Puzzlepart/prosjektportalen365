@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogSurface,
   DialogTitle,
+  Field,
   Input,
   makeStyles,
   tokens
@@ -18,7 +19,7 @@ import { ICopyLinkDialogProps } from './types'
 
 const useStyles = makeStyles({
   surface: {
-    maxWidth: '560px'
+    maxWidth: '640px'
   },
   content: {
     display: 'flex',
@@ -27,6 +28,7 @@ const useStyles = makeStyles({
   },
   linkRow: {
     display: 'flex',
+    alignItems: 'flex-end',
     columnGap: tokens.spacingHorizontalS
   },
   link: {
@@ -36,11 +38,15 @@ const useStyles = makeStyles({
 })
 
 /**
- * Confirms that the link to the snapshot was copied, shows it for copying by hand when the
- * clipboard is not available, and says who can open it.
+ * Confirms that a link to the snapshot was copied, shows the link to the status page with the
+ * snapshot and the direct link to the image file for copying, and says who can open them.
  */
 export const CopyLinkDialog: FC<ICopyLinkDialogProps> = (props) => {
   const styles = useStyles()
+  const links = [
+    { label: strings.SnapshotPageLinkLabel, value: props.pageLink, onCopy: props.onCopyPageLink },
+    { label: strings.SnapshotImageLinkLabel, value: props.imageLink, onCopy: props.onCopyImageLink }
+  ]
 
   return (
     <Dialog open={props.open} onOpenChange={(_, data) => !data.open && props.onDismiss()}>
@@ -58,18 +64,16 @@ export const CopyLinkDialog: FC<ICopyLinkDialogProps> = (props) => {
                 }
               />
             )}
-            <div className={styles.linkRow}>
-              <Input
-                className={styles.link}
-                readOnly
-                value={props.link}
-                aria-label={strings.SnapshotLinkInputLabel}
-                onFocus={(event) => event.target.select()}
-              />
-              <Button icon={<Copy24Regular />} onClick={props.onCopy}>
-                {strings.SnapshotCopyButtonLabel}
-              </Button>
-            </div>
+            {links.map((link) => (
+              <div key={link.label} className={styles.linkRow}>
+                <Field className={styles.link} label={link.label}>
+                  <Input readOnly value={link.value} onFocus={(event) => event.target.select()} />
+                </Field>
+                <Button icon={<Copy24Regular />} onClick={link.onCopy}>
+                  {strings.SnapshotCopyButtonLabel}
+                </Button>
+              </div>
+            ))}
             <UserMessage intent='info' text={strings.SnapshotLinkAccessText} />
           </DialogContent>
           <DialogActions>

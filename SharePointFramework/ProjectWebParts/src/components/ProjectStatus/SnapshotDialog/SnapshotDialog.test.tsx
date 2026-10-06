@@ -21,13 +21,16 @@ const { useSnapshotDialog } =
  * handling against stand-ins for the browser's Fullscreen and Clipboard APIs, which jsdom lacks.
  */
 describe('ProjectStatus SnapshotDialog', () => {
-  const snapshotLink = `https://contoso.sharepoint.com${snapshotUrl}`
+  const pageLink =
+    'https://contoso.sharepoint.com/sites/frisbee/SitePages/Prosjektstatus.aspx?selectedReport=12&snapshot=1'
+  const imageLink = `https://contoso.sharepoint.com${snapshotUrl}`
 
   beforeEach(() => {
     Object.assign(mockDialog, {
       isOpen: true,
       snapshotUrl,
-      snapshotLink,
+      pageLink,
+      imageLink,
       title,
       surfaceRef: { current: null },
       canFullscreen: true,
@@ -36,25 +39,31 @@ describe('ProjectStatus SnapshotDialog', () => {
       openInNewTab: jest.fn(),
       isCopyLinkOpen: false,
       copyLinkStatus: undefined,
-      copyLink: jest.fn(),
+      copyPageLink: jest.fn(),
+      copyImageLink: jest.fn(),
       dismissCopyLink: jest.fn(),
       onDismiss: jest.fn()
     })
   })
 
-  it('copies the link, and confirms it in a dialog that says who can open the image', () => {
+  it('copies the link to the status page, and offers it and the image link in a dialog', () => {
     const { rerender } = render(<SnapshotDialog />)
     expect(screen.queryByText(strings.SnapshotCopyLinkDialogTitle)).toBeNull()
     fireEvent.click(screen.getByText(strings.SnapshotCopyLinkLabel))
-    expect(mockDialog.copyLink).toHaveBeenCalledTimes(1)
+    expect(mockDialog.copyPageLink).toHaveBeenCalledTimes(1)
     Object.assign(mockDialog, { isCopyLinkOpen: true, copyLinkStatus: 'copied' })
     rerender(<SnapshotDialog />)
     expect(screen.getByText(strings.SnapshotCopyLinkDialogTitle)).toBeInTheDocument()
     expect(screen.getByText(strings.SnapshotLinkCopiedText)).toBeInTheDocument()
-    expect(screen.getByDisplayValue(snapshotLink)).toHaveAttribute('readonly')
+    expect(screen.getByLabelText(strings.SnapshotPageLinkLabel)).toHaveValue(pageLink)
+    expect(screen.getByLabelText(strings.SnapshotImageLinkLabel)).toHaveValue(imageLink)
+    expect(screen.getByDisplayValue(pageLink)).toHaveAttribute('readonly')
     expect(screen.getByText(strings.SnapshotLinkAccessText)).toBeInTheDocument()
-    fireEvent.click(screen.getByText(strings.SnapshotCopyButtonLabel))
-    expect(mockDialog.copyLink).toHaveBeenCalledTimes(2)
+    const [copyPage, copyImage] = screen.getAllByText(strings.SnapshotCopyButtonLabel)
+    fireEvent.click(copyPage)
+    expect(mockDialog.copyPageLink).toHaveBeenCalledTimes(2)
+    fireEvent.click(copyImage)
+    expect(mockDialog.copyImageLink).toHaveBeenCalledTimes(1)
     fireEvent.click(screen.getByText(strings.CloseText))
     expect(mockDialog.dismissCopyLink).toHaveBeenCalledTimes(1)
   })
@@ -64,7 +73,8 @@ describe('ProjectStatus SnapshotDialog', () => {
     render(<SnapshotDialog />)
     expect(screen.getByText(strings.SnapshotLinkCopyFailedText)).toBeInTheDocument()
     expect(screen.queryByText(strings.SnapshotLinkCopiedText)).toBeNull()
-    expect(screen.getByDisplayValue(snapshotLink)).toBeInTheDocument()
+    expect(screen.getByDisplayValue(pageLink)).toBeInTheDocument()
+    expect(screen.getByDisplayValue(imageLink)).toBeInTheDocument()
   })
 
   it('shows the snapshot image with a button that opens it in a new tab', () => {
@@ -143,6 +153,8 @@ describe('useSnapshotDialog', () => {
     jest.clearAllMocks()
   })
 
+  afterEach(() => window.history.replaceState({}, '', '/'))
+
   it('opens for a report with a snapshot only, titled with its date', () => {
     const withSnapshot = report({}, { snapshotUrl })
     renderDialog({ isSnapshotOpen: true, selectedReport: withSnapshot })
@@ -161,26 +173,62 @@ describe('useSnapshotDialog', () => {
     open.mockRestore()
   })
 
-  it('copies an absolute link to the clipboard, and owns up when it cannot', async () => {
+  it('links to this page with the report and its snapshot, and to the image file', () => {
+    window.history.replaceState({}, '', '/sites/frisbee/SitePages/Prosjektstatus.aspx?Source=x')
+    renderDialog({ selectedReport: report({}, { id: 2, scopeKey: 'Del 1', snapshotUrl }) })
+    const { origin } = window.location
+    expect(dialog.pageLink).toBe(
+      `${origin}/sites/frisbee/SitePages/Prosjektstatus.aspx?selectedReport=2&scope=Del%201&snapshot=1`
+    )
+    expect(dialog.imageLink).toBe(`${origin}${snapshotUrl}`)
+    renderDialog({ selectedReport: report({}, { id: 2 }) })
+    expect(dialog.pageLink).toBe('')
+  })
+
+  it('copies the links to the clipboard, and owns up when it cannot', async () => {
     const writeText = jest.fn().mockResolvedValue(undefined)
     Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } })
-    renderDialog({ isSnapshotOpen: true, selectedReport: report({}, { snapshotUrl }) })
-    const link = `${window.location.origin}${snapshotUrl}`
-    expect(dialog.snapshotLink).toBe(link)
+    renderDialog({ isSnapshotOpen: true, selectedReport: report({}, { id: 2, snapshotUrl }) })
     await act(async () => {
-      await dialog.copyLink()
+      await dialog.copyPageLink()
     })
-    expect(writeText).toHaveBeenCalledWith(link)
+    expect(writeText).toHaveBeenLastCalledWith(dialog.pageLink)
     expect(dialog.isCopyLinkOpen).toBe(true)
     expect(dialog.copyLinkStatus).toBe('copied')
     writeText.mockRejectedValueOnce(new Error('NotAllowedError'))
     await act(async () => {
-      await dialog.copyLink()
+      await dialog.copyImageLink()
     })
+    expect(writeText).toHaveBeenLastCalledWith(dialog.imageLink)
     expect(dialog.copyLinkStatus).toBe('failed')
     act(() => dialog.dismissCopyLink())
     expect(dialog.isCopyLinkOpen).toBe(false)
     delete (navigator as any).clipboard
+  })
+
+  it('opens the snapshot named by a link once the report is loaded, and only then', () => {
+    window.history.replaceState(
+      {},
+      '',
+      '/sites/frisbee/SitePages/Prosjektstatus.aspx?selectedReport=2&snapshot=1'
+    )
+    const linked = report({}, { id: 2, snapshotUrl })
+    const page = (state: Record<string, any>) => (
+      <ProjectStatusContext.Provider value={{ state, props: {}, dispatch } as any}>
+        <Probe />
+      </ProjectStatusContext.Provider>
+    )
+    const { rerender } = render(page({ isDataLoaded: false }))
+    expect(dispatch).not.toHaveBeenCalled()
+    rerender(page({ isDataLoaded: true, selectedReport: linked }))
+    expect(dispatch).toHaveBeenCalledWith(expect.objectContaining({ type: 'OPEN_SNAPSHOT' }))
+    // A refetch after closing it does not bring it back.
+    rerender(page({ isDataLoaded: false, selectedReport: linked }))
+    rerender(page({ isDataLoaded: true, selectedReport: linked }))
+    expect(dispatch).toHaveBeenCalledTimes(1)
+    // Another report than the one the link names (one since deleted, say) is not opened.
+    renderDialog({ isDataLoaded: true, selectedReport: report({}, { id: 3, snapshotUrl }) })
+    expect(dispatch).toHaveBeenCalledTimes(1)
   })
 
   it('takes the surface to full screen and back, following the document', () => {

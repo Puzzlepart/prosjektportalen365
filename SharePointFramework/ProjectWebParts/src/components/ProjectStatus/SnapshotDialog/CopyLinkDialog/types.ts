@@ -1,5 +1,5 @@
 /**
- * Outcome of copying the snapshot link to the clipboard.
+ * Outcome of copying a snapshot link to the clipboard.
  */
 export type CopyLinkStatus = 'copied' | 'failed'
 
@@ -13,9 +13,14 @@ export interface ICopyLinkDialogProps {
   open: boolean
 
   /**
-   * Absolute link to the snapshot image
+   * Absolute link to the status page that opens with the snapshot shown
    */
-  link: string
+  pageLink: string
+
+  /**
+   * Absolute link to the snapshot image file
+   */
+  imageLink: string
 
   /**
    * Outcome of the last copy, if any
@@ -29,9 +34,14 @@ export interface ICopyLinkDialogProps {
   mountNode?: HTMLElement
 
   /**
-   * Copies the link again
+   * Copies the link to the status page
    */
-  onCopy: () => void
+  onCopyPageLink: () => void
+
+  /**
+   * Copies the link to the image file
+   */
+  onCopyImageLink: () => void
 
   /**
    * Closes the dialog
