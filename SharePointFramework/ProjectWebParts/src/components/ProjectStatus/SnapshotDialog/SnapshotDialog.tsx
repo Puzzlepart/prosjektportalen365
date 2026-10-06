@@ -80,6 +80,7 @@ export const SnapshotDialog: FC = () => {
     canFullscreen,
     isFullscreen,
     toggleFullscreen,
+    openInNewTab,
     onDismiss
   } = useSnapshotDialog()
 
@@ -105,14 +106,7 @@ export const SnapshotDialog: FC = () => {
                     : strings.SnapshotEnterFullscreenLabel}
                 </Button>
               )}
-              <Button
-                as='a'
-                href={snapshotUrl}
-                target='_blank'
-                rel='noopener noreferrer'
-                appearance='subtle'
-                icon={<Open24Regular />}
-              >
+              <Button appearance='subtle' icon={<Open24Regular />} onClick={openInNewTab}>
                 {strings.SnapshotOpenInNewTabLabel}
               </Button>
               <Tooltip content={strings.CloseText} relationship='label'>
