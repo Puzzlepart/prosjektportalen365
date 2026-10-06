@@ -69,9 +69,11 @@ if (Test-Path -Path "$ScriptDir/../.current-channel-config.json") {
 
 function UpgradeSite($Url) {
     Connect-SharePoint -Url $Url -ConnectionInfo $ConnectionInfo
-    $ProjectPropertiesList = Get-PnPList -Identity "Prosjektegenskaper" -ErrorAction SilentlyContinue
+    # The setup wizard creates the list with the localized title (Prosjektegenskaper, en-US ProjectProperties), and its URL follows that title, so neither is the same in both languages
+    $ProjectPropertiesListTitle = Get-Resource -Name "Lists_ProjectProperties_Title"
+    $ProjectPropertiesList = Get-PnPList -Identity $ProjectPropertiesListTitle -ErrorAction SilentlyContinue
     if ($null -eq $ProjectPropertiesList) {
-        Write-Host "`t`tNo Prosjektegenskaper list found - this site is not a qualified Prosjektportalen site. Skipping upgrade of site $Url" -ForegroundColor Yellow
+        Write-Host "`t`tNo $ProjectPropertiesListTitle list found - this site is not a qualified Prosjektportalen site. Skipping upgrade of site $Url" -ForegroundColor Yellow
         return
     }
     Get-ChildItem $ScriptDir/UpgradeAllSitesToLatest -Filter *.ps1 | ForEach-Object {

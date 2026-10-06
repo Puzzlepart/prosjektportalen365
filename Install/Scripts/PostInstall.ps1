@@ -94,17 +94,23 @@ function Disable-ListContentTypes {
     (Get-Resource -Name "Lists_PlannerTasksV6_Url")
 ) | ForEach-Object { Disable-ListContentTypes -Identity $_ }
 
-Write-Host "[INFO] Post-install action: Ensuring project column configuration for v6 status fields"
+Write-Host "[INFO] Post-install action: Ensuring project column configuration for status fields"
 # Fargekonfigurasjonen for de nye statusfeltene (område G) seedes også statisk i
 # Prosjektkolonnekonfigurasjon.xml, men med hardkodede lookup-ID-er (43/45) som kun
 # stemmer for nyinstallasjoner. GtPortfolioColumn er en lookup mot Prosjektkolonner
 # på item-ID, og ID-ene varierer mellom installasjoner. Dette steget sikrer derfor
 # radene med oppslag på GtInternalName ved kjøring, slik at oppgraderte miljøer får
 # riktige rader. Idempotent — eksisterende rader røres ikke.
+# GtStatusOpportunities er med fordi malen i 1.8.0-1.14.0 slo opp ID 54 (raden er 36 ved
+# nyinstallasjon): på eksisterende miljøer peker de tre radene på kolonnen som har ID 54,
+# eller på ingen. Miljøet får tre riktige rader i tillegg; de gamle blir stående.
 $ProjectColumnsItems = Get-PnPListItem -List (Get-Resource -Name "Lists_ProjectColumns_Title")
 $ColumnConfigList = Get-Resource -Name "Lists_ProjectColumnConfiguration_Title"
 $ColumnConfigItems = Get-PnPListItem -List $ColumnConfigList
-$V6StatusColumnConfig = @(
+$StatusColumnConfig = @(
+    @{ Field = "GtStatusOpportunities"; Choice = "Choice_GtStatusOpportunities_Low"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusOpportunities_Low_Title"; Color = "#2da748" },
+    @{ Field = "GtStatusOpportunities"; Choice = "Choice_GtStatusOpportunities_Medium"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusOpportunities_Medium_Title"; Color = "#e9b359" },
+    @{ Field = "GtStatusOpportunities"; Choice = "Choice_GtStatusOpportunities_High"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusOpportunities_High_Title"; Color = "#ea5c73" },
     @{ Field = "GtStatusScope"; Choice = "Choice_GtStatusScope_AsPlanned"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusScope_AsPlanned_Title"; Color = "#2da748" },
     @{ Field = "GtStatusScope"; Choice = "Choice_GtStatusScope_MinorChanges"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusScope_MinorChanges_Title"; Color = "#e9b359" },
     @{ Field = "GtStatusScope"; Choice = "Choice_GtStatusScope_MajorChanges"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusScope_MajorChanges_Title"; Color = "#ea5c73" },
@@ -113,7 +119,7 @@ $V6StatusColumnConfig = @(
     @{ Field = "GtStatusSustainability"; Choice = "Choice_GtStatusSustainability_MajorDeviation"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusSustainability_MajorDeviation_Title"; Color = "#ea5c73" },
     @{ Field = "GtStatusSustainability"; Choice = "Choice_GtStatusSustainability_NotDetermined"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusSustainability_NotDetermined_Title"; Color = "#e9b359" }
 )
-foreach ($Config in $V6StatusColumnConfig) {
+foreach ($Config in $StatusColumnConfig) {
     $Column = $ProjectColumnsItems | Where-Object { $_["GtInternalName"] -eq $Config.Field } | Select-Object -First 1
     if ($null -eq $Column) {
         Write-Host "[WARNING] Project column with internal name [$($Config.Field)] not found - skipping column configuration" -ForegroundColor Yellow
