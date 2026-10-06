@@ -256,13 +256,9 @@ if (-not $SkipBuildPnPTemplates.IsPresent) {
     StartAction("Building PnP content templates")
     Set-Location $PNP_TEMPLATES_BASEPATH
 
-    if ($CI.IsPresent) {  
-        npm ci --silent --no-audit --no-fund >$null 2>&1
-    }
-    else {
-        npm install --no-progress --silent --no-audit --no-fund  >$null 2>&1
-    }
-
+    # Templates is a Rush project, so the rush install/update above has installed its packages.
+    # Running npm here broke that: `npm install` rewrote the pnpm links in Templates/node_modules
+    # to targets that do not exist, and `npm ci` failed silently on the missing package-lock.json.
     npm run generate-project-templates >$null 2>&1
 
     Get-ChildItem "./Content" -Directory | ForEach-Object {
