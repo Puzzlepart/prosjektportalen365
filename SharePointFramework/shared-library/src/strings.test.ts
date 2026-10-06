@@ -5,6 +5,9 @@ import shared from 'SharedResources'
  * Proves that SPFx string modules resolve in tests the way they do at runtime: through
  * config/config.json "localizedResources" to the nb-no bundle (see pp365-jest-config/lib/resolver.js).
  * It also parses both bundles, so a syntax slip in a loc file fails the build here.
+ *
+ * Kept out of src/loc on purpose: "localizedResources" collects every lib/loc/*.js as a locale, so a
+ * test compiled there shipped in every package as the locale bundle `SharedLibraryStrings_strings.test`.
  */
 describe('localized string modules', () => {
   it('resolves SharedLibraryStrings to the Norwegian bundle', () => {

@@ -32,7 +32,7 @@ Wrappers are under `SharePointFramework/shared-library/src`, call sites under `S
 
 | Wrapper | What it is for | Real call site |
 |---|---|---|
-| `components/BasePanel` | Every side panel: v9 `OverlayDrawer`, own providers. `open`, `onClose` (close button, Escape, outside click), `headerText` or `header`, `footer`, `size` (`small`/`medium`/`large`/`full`, default `medium`), opens at `end`; `isLightDismiss={false}` makes it `alert`; `hidden` hides only the header, whatever its doc says | `shared-library/src/components/CustomEditPanel/CustomEditPanel.tsx` |
+| `components/BasePanel` | Every side panel: v9 `OverlayDrawer`, own providers. `open`, `onClose` (close button, Escape, outside click), `headerText` or `header`, `footer`, `size` (`small`/`medium`/`large`/`full`, default `medium`), opens at `end`; `isLightDismiss={false}` makes it `alert`; `hidden` hides only the header (title and close button) | `shared-library/src/components/CustomEditPanel/CustomEditPanel.tsx` |
 | `components/CustomEditPanel` | Edit form for a SharePoint item's fields on `BasePanel`; one element per field type in `CustomEditPanelBody/FieldElements` | `ProjectWebParts/src/components/ProjectInformation/EditPropertiesPanel/EditPropertiesPanel.tsx` |
 | `components/FilterPanel` | Filter drawer on `BasePanel`, handed to `Toolbar` as `filterPanel` | `ProjectWebParts/src/components/DynamicList/DynamicList.tsx` (props built in `useToolbarItems.tsx`) |
 | `components/Toolbar` + `ListMenuItem` | Command bar: `items`, `farItems`, built with `new ListMenuItem(text, description)` and `setIcon`, `setOnClick`, `setDisabled`, `setHidden`, `setItems`, `makeCheckable`, `setSearchBox`; `makeConditional` last, since it returns `null`. Own providers | `PortfolioWebParts/src/components/ProjectList/Commands/useCommands.tsx` (rendered in `Commands.tsx`) |
@@ -56,7 +56,7 @@ Wrappers are under `SharePointFramework/shared-library/src`, call sites under `S
 | `util/theme.tsx` (`customLightTheme`) | Fluent theme from the site's primary colour, read once when the module loads; SharePoint blue (`#0078d4`) for the page's whole life if the theme was not published by then | every provider above |
 | `util/format.ts`, `util/formatDate.ts` | `format(strings.Key, a, b)` fills `{0}` tokens with v8's semantics; `formatDate(date, includeTime)` for display, `nb-NO` by default | `PortfolioWebParts/src/components/ProjectList/Commands/useCommands.tsx`; `ProjectWebParts/src/components/ProjectInformation/ArchiveStatus/index.tsx` |
 
-ProjectExtensions' dialogs (`ErrorDialog`, `ProgressDialog`, `ProjectSetupDialog`, `DocumentTemplateDialog`) build on its own `src/components/@BaseDialog` (v9 `Dialog`, `title`, `subText`, `footer`, `isBlocking`, `version`; own providers). `isBlocking` only drops the close button and backdrop dismissal: Escape still closes. Its icon-only close button has no `aria-label` (a known gap). Width: kodemonster.md, "Konsistens".
+ProjectExtensions' dialogs (`ErrorDialog`, `ProgressDialog`, `ProjectSetupDialog`, `DocumentTemplateDialog`) build on its own `src/components/@BaseDialog` (v9 `Dialog`, `title`, `subText`, `footer`, `isBlocking`, `version`; own providers). `isBlocking` only drops the close button and backdrop dismissal: Escape still closes. Its icon-only close button is named `strings.CloseModalText` ("Lukk"), as is the footer button of `ErrorDialog`: tests find that one by text. Width: kodemonster.md, "Konsistens".
 
 ## Icons (`shared-library/src/icons`)
 
