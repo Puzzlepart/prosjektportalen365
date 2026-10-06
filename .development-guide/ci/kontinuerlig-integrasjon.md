@@ -37,7 +37,9 @@ Med gjeldende tilnærming, uten hurtigbuffer (da den kjører `npm ci`), tar en f
 
 ### CI (build debug)
 
-[ci-build-debug](../../.github/workflows/ci-build-debug.yml) bygger testkanalens utgivelsespakke slik pakkejobben i `ci-channel-test` gjør, men ruller den ikke ut og trenger ingen hemmeligheter. Den er til å prøve og måle endringer i selve bygget (nye brytere i `Build-Release.ps1`, oppsettet av Rush og Heft) før de levende arbeidsflytene tar dem i bruk. Den kjører ved _push_ når emnelinjen inneholder `[build-debug]`, med `-RushTimeline` (tiden per prosjekt skrives i loggen og i jobbens sammendrag) og `-SkipPnPPowerShell` (bare PnP-malene, som denne jobben hopper over, trenger modulen). Pakken og Rush-loggene lastes opp som artefaktene `release-package-debug` og `rush-logs-debug`.
+[ci-build-debug](../../.github/workflows/ci-build-debug.yml) bygger testkanalens utgivelsespakke slik pakkejobben i `ci-channel-test` gjør, men ruller den ikke ut og trenger ingen hemmeligheter. Den er til å prøve og måle endringer i selve bygget (nye brytere i `Build-Release.ps1`, oppsettet av Rush og Heft) før de levende arbeidsflytene tar dem i bruk. Den kjører ved _push_ når emnelinjen inneholder `[build-debug]`, med `-RushTimeline` (tiden per prosjekt skrives i loggen og i jobbens sammendrag) og `-SkipPnPPowerShell` (bare PnP-malene, som denne jobben hopper over, trenger modulen).
+
+Den bygger tre varianter side om side: `classic` (dagens `rush rebuild`), `phased-p2` og `phased-p3` (`-PhasedBuild`, som kjører `rush rebuild-phased` med parallellitet 2 og 3). I den faseinndelte varianten har hvert prosjekt to faser, `_phase:build` (`heft build`) og `_phase:test` (Jest på det bygde, så `package-solution`), og et prosjekt venter bare på at prosjektene det avhenger av er *bygd*, ikke testet. Jobben «Compare the variants» pakker ut hver `.sppkg` og sammenligner innholdet fil for fil med `classic`, og skriver byggetidene i en tabell i sammendraget. Pakkene og Rush-loggene lastes opp som `release-package-debug-<variant>` og `rush-logs-debug-<variant>`.
 
 ### Bygg utgivelse (main)
 

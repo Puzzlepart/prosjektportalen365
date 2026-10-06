@@ -37,9 +37,27 @@ jobs:
 
   build:
     needs: [commit_subject]
-    name: Build release package (debug)
+    name: Build release package (${{ matrix.variant }})
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'workflow_dispatch' || contains(needs.commit_subject.outputs.subject, '[build-debug]') }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Today's rebuild, the baseline the others are compared with.
+          - variant: classic
+            phased: false
+            parallelism: 2
+          # The phased rebuild (rush rebuild-phased): a solution builds once its dependencies have
+          # built, and their tests run beside it. At the live parallelism, and at one more.
+          - variant: phased-p2
+            phased: true
+            parallelism: 2
+          - variant: phased-p3
+            phased: true
+            parallelism: 3
+    env:
+      RUSH_PARALLELISM: ${{ matrix.parallelism }}
     steps:
       - uses: actions/checkout@v4
 
@@ -52,22 +70,84 @@ jobs:
         # the job summary), and without PnP.PowerShell, which only the skipped PnP templates use.
         env:
           PP365_BUILD_NUMBER: ${{ github.run_number }}
-        run: Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test -RushTimeline -SkipPnPPowerShell
+        run: |
+          $switches = @{ RushTimeline = $true; SkipPnPPowerShell = $true; PhasedBuild = ('${{ matrix.phased }}' -eq 'true') }
+          Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test @switches
         shell: pwsh
 
       - uses: actions/upload-artifact@v4
         with:
-          name: release-package-debug
+          name: release-package-debug-${{ matrix.variant }}
           path: release
 
       - name: Upload the Rush logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: rush-logs-debug
+          name: rush-logs-debug-${{ matrix.variant }}
           path: |
             SharePointFramework/rush-*.build.log
             SharePointFramework/*/rush-logs/
             Templates/rush-logs/
             e2e/rush-logs/
           if-no-files-found: warn
+
+  # The variants build the same commit with the same run number, so their packages must hold the
+  # same files with the same bytes; the zip containers themselves differ in their timestamps.
+  compare:
+    needs: [build]
+    name: Compare the variants
+    runs-on: ubuntu-latest
+    if: ${{ always() && needs.build.result != 'skipped' }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: release-package-debug-*
+          path: packages
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: rush-logs-debug-*
+          path: logs
+
+      - name: Compare the packages with the classic build's, and the times
+        run: |
+          set -uo pipefail
+          summary() { echo "$1" | tee -a "$GITHUB_STEP_SUMMARY"; }
+          summary "### Rebuild times"
+          summary ""
+          summary "| Variant | Wall clock | Total work | Average parallelism |"
+          summary "|---|---|---|---|"
+          for log in logs/*/SharePointFramework/rush-rebuild.build.log; do
+            variant=$(basename "$(dirname "$(dirname "$log")")" | sed 's/^rush-logs-debug-//')
+            wall=$(grep -o -E 'Wall Clock: [0-9.]+s' "$log" | grep -o -E '[0-9.]+s' || echo '?')
+            work=$(grep -o -E 'Total Work: [0-9.]+s' "$log" | grep -o -E '[0-9.]+s' || echo '?')
+            avg=$(grep -o -E 'Avg Parallelism Used: [0-9.]+' "$log" | grep -o -E '[0-9.]+$' || echo '?')
+            summary "| $variant | $wall | $work | $avg |"
+          done
+          summary ""
+          summary "### Packages against the classic build"
+          summary ""
+          for dir in packages/*/; do
+            variant=$(basename "$dir" | sed 's/^release-package-debug-//')
+            for sppkg in "$dir"Apps/*.sppkg; do
+              target="unpacked/$variant/$(basename "$sppkg" .sppkg)"
+              mkdir -p "$target" && unzip -q -o "$sppkg" -d "$target"
+            done
+          done
+          status=0
+          if [ ! -d unpacked/classic ]; then summary "No classic package to compare with."; exit 1; fi
+          for variant_dir in unpacked/*/; do
+            variant=$(basename "$variant_dir")
+            [ "$variant" = classic ] && continue
+            if diff -r -q unpacked/classic "$variant_dir" > "diff-$variant.txt"; then
+              summary "- **$variant**: the same files with the same bytes as classic ($(find "$variant_dir" -type f | wc -l | tr -d ' ') files in $(ls "$variant_dir" | wc -l | tr -d ' ') packages)."
+            else
+              summary "- **$variant**: differs from classic:"
+              summary '```'
+              summary "$(head -50 "diff-$variant.txt")"
+              summary '```'
+              status=1
+            fi
+          done
+          exit $status

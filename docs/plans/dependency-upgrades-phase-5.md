@@ -328,3 +328,23 @@ path. Rush schedules by critical path, so the gain is bounded by parallelism 2 m
 chain; the debug run measures both 2 and 3. Splitting TypeScript from webpack is a later step if
 the numbers ask for it. The timeline's per-project list also missed the times Rush writes as
 "2 minutes 24.7 seconds"; it reads them now.
+
+### Slice 1c, step 2: the phased rebuild in the debug workflow (2026-10-05)
+
+`common/config/rush/command-line.json` gets two phases and a phased command, `rebuild-phased`:
+`_phase:build` waits for the dependencies' `_phase:build`, and `_phase:test` for the project's own
+build only. The six solutions run `heft build --clean --production` in the first and
+`heft run --only test -- --production`, then `package-solution` (the shared library's runtime tests
+between them), in the second; Templates, the Jest harness and e2e run their `build` script in the
+first. Projects without a phase script are skipped (`missingScriptBehavior: silent`). `rush rebuild`
+and every `build` script are as they were, so the live builds do not change.
+
+`Build-Release.ps1 -PhasedBuild` runs `rebuild-phased`. Rush logs each phase on its own
+(`<package>._phase_build.log`, `<package>._phase_test.log`), so the scans for Jest's failures and the
+missed coverage floors read those in that mode; with `*.build.log` they would have found nothing and
+let a missed floor through. The debug workflow builds three variants of one commit side by side,
+`classic` (today's rebuild), `phased-p2` and `phased-p3`, and a job compares every `.sppkg`'s contents
+with `classic`'s, file by file, and tables the wall clocks. Tried locally: Rush accepts the
+configuration and names the operations `<package> (build)` and `(test)`; ProgramWebParts' phased
+rebuild built in 27 s, tested in 53 s (30 tests) and packaged; the comparison passes identical
+packages and names the file in an altered one.

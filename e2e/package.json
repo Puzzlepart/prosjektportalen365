@@ -5,6 +5,7 @@
   "description": "End-to-end smoke tests for Prosjektportalen 365, run with Playwright against the test tenant after the test channel is deployed.",
   "scripts": {
     "build": "tsc --noEmit -p tsconfig.json",
+    "_phase:build": "npm run build",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed",

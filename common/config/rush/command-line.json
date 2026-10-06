@@ -29,6 +29,33 @@
         "summary": "Runs validate-loc on all projects.",
         "description": "Runs validate-loc on all projects in the repo. Uses the validateloc configuration from the project's package.json.",
         "enableParallelism": true
+      },
+      {
+        // The rebuild in two phases per project (phase 5, slice 1c): a solution builds once the
+        // solutions it depends on have built, and their tests run beside it instead of in front of
+        // it. Only the debug build workflow uses it so far (Build-Release.ps1 -PhasedBuild).
+        "commandKind": "phased",
+        "name": "rebuild-phased",
+        "summary": "Rebuild all projects in two phases: build, then test and package.",
+        "phases": ["_phase:build", "_phase:test"],
+        "enableParallelism": true,
+        "incremental": false
+      }
+    ],
+    "phases": [
+      {
+        // `heft build`: what a dependent needs (lib, lib-commonjs, the loc bundles), and the bundles.
+        "name": "_phase:build",
+        "dependencies": { "upstream": ["_phase:build"] },
+        "missingScriptBehavior": "silent",
+        "allowWarningsOnSuccess": true
+      },
+      {
+        // Jest on the built output, then `package-solution`, after the project's own build.
+        "name": "_phase:test",
+        "dependencies": { "self": ["_phase:build"] },
+        "missingScriptBehavior": "silent",
+        "allowWarningsOnSuccess": true
       }
     ]
   }

@@ -1,0 +1,6 @@
+Invoking (initial): npm run build 
+
+> pp365-jest-config@1.14.0 build
+> node -e "require('./lib/resolver.js'); require('./lib/amdTransform.js'); console.log('pp365-jest-config: modules load')"
+
+pp365-jest-config: modules load

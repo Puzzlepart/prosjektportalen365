@@ -27,7 +27,9 @@ Param(
     [Parameter(Mandatory = $false, HelpMessage = "Do not install, import or check PnP.PowerShell; only the PnP templates need it, so this requires -SkipBuildPnPTemplates")]
     [switch]$SkipPnPPowerShell,
     [Parameter(Mandatory = $false, HelpMessage = "Run the rebuild with Rush's --timeline and print the per-project times")]
-    [switch]$RushTimeline
+    [switch]$RushTimeline,
+    [Parameter(Mandatory = $false, HelpMessage = "Rebuild in two phases per project (rush rebuild-phased): a solution builds once its dependencies have built, and their tests run beside it")]
+    [switch]$PhasedBuild
 )
 
 #region Normalize selected solutions
@@ -345,7 +347,11 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
     # errors are never silently swallowed.
     $RUSH_REBUILD_LOG = "$SHAREPOINT_FRAMEWORK_BASEPATH/rush-rebuild.build.log"
     $RUSH_REBUILD_STARTED = (Get-Date).ToUniversalTime()
-    $RUSH_REBUILD_ARGS = @("rebuild")
+    $RUSH_REBUILD_ARGS = @($(if ($PhasedBuild.IsPresent) { "rebuild-phased" } else { "rebuild" }))
+    # Each project's own log: <package>.build.log for the rebuild, one per phase for the phased one
+    # (<package>._phase_build.log, <package>._phase_test.log). The scans for Jest's failures and the
+    # coverage floors below read these, so they must follow the mode.
+    $RUSH_PROJECT_LOGS = $(if ($PhasedBuild.IsPresent) { "*._phase_*.log" } else { "*.build.log" })
     if ($RushTimeline.IsPresent) { $RUSH_REBUILD_ARGS += "--timeline" }
     node "$ROOT_PATH/common/scripts/install-run-rush.js" @RUSH_REBUILD_ARGS 2>&1 | Out-File -FilePath $RUSH_REBUILD_LOG -Encoding utf8
     if ($LASTEXITCODE -ne 0) {
@@ -357,7 +363,7 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
         # those. The bullet Jest marks a failure with is built from its code point, so this file
         # needs no non-ASCII characters.
         $JEST_FAILURE_MARK = [string][char]0x25CF
-        Get-ChildItem -Path $SHAREPOINT_FRAMEWORK_BASEPATH -Recurse -Depth 2 -Filter "*.build.log" |
+        Get-ChildItem -Path $SHAREPOINT_FRAMEWORK_BASEPATH -Recurse -Depth 2 -Filter $RUSH_PROJECT_LOGS |
             Where-Object { $_.DirectoryName -like "*rush-logs*" } |
             ForEach-Object {
                 $jestFailures = Select-String -Path $_.FullName -Pattern "$JEST_FAILURE_MARK|\[test:jest\] FAIL" -Context 0, 30
@@ -402,7 +408,7 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
     }
     # Jest reports a missed coverage floor (`coverageThreshold` in a solution's jest.config.json)
     # but Heft's test phase still succeeds, so the floors are only enforced by this check.
-    $missedFloors = Get-ChildItem -Path $SHAREPOINT_FRAMEWORK_BASEPATH -Recurse -Depth 2 -Filter "*.build.log" |
+    $missedFloors = Get-ChildItem -Path $SHAREPOINT_FRAMEWORK_BASEPATH -Recurse -Depth 2 -Filter $RUSH_PROJECT_LOGS |
         Where-Object { $_.DirectoryName -like "*rush-logs*" } |
         Select-String -Pattern "coverage threshold for .* not met"
     if ($missedFloors) {
