@@ -12,10 +12,12 @@ import {
   Dismiss24Regular,
   FullScreenMaximize24Regular,
   FullScreenMinimize24Regular,
+  Link24Regular,
   Open24Regular
 } from '@fluentui/react-icons'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
+import { CopyLinkDialog } from './CopyLinkDialog'
 import { useSnapshotDialog } from './useSnapshotDialog'
 
 // makeStyles rather than a CSS module: the surface has to override DialogSurface's own
@@ -81,6 +83,11 @@ export const SnapshotDialog: FC = () => {
     isFullscreen,
     toggleFullscreen,
     openInNewTab,
+    snapshotLink,
+    isCopyLinkOpen,
+    copyLinkStatus,
+    copyLink,
+    dismissCopyLink,
     onDismiss
   } = useSnapshotDialog()
 
@@ -106,6 +113,9 @@ export const SnapshotDialog: FC = () => {
                     : strings.SnapshotEnterFullscreenLabel}
                 </Button>
               )}
+              <Button appearance='subtle' icon={<Link24Regular />} onClick={copyLink}>
+                {strings.SnapshotCopyLinkLabel}
+              </Button>
               <Button appearance='subtle' icon={<Open24Regular />} onClick={openInNewTab}>
                 {strings.SnapshotOpenInNewTabLabel}
               </Button>
@@ -117,6 +127,14 @@ export const SnapshotDialog: FC = () => {
           <div className={styles.frame}>
             <img className={styles.image} src={snapshotUrl} alt={title} />
           </div>
+          <CopyLinkDialog
+            open={isCopyLinkOpen}
+            link={snapshotLink}
+            status={copyLinkStatus}
+            mountNode={surfaceRef.current}
+            onCopy={copyLink}
+            onDismiss={dismissCopyLink}
+          />
         </DialogBody>
       </DialogSurface>
     </Dialog>
