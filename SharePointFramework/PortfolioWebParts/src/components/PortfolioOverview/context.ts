@@ -1,4 +1,4 @@
-import { AnyAction } from '@reduxjs/toolkit'
+import { UnknownAction } from '@reduxjs/toolkit'
 import { createContext, useContext } from 'react'
 import { IListGroup } from '../List'
 import { IPortfolioOverviewProps, IPortfolioOverviewState } from './types'
@@ -6,7 +6,7 @@ import { IPortfolioOverviewProps, IPortfolioOverviewState } from './types'
 export interface IPortfolioOverviewContext {
   props: IPortfolioOverviewProps
   state: IPortfolioOverviewState
-  dispatch: React.Dispatch<AnyAction>
+  dispatch: React.Dispatch<UnknownAction>
   layerHostId: string
   items?: Record<string, any>[]
   groups?: IListGroup[]

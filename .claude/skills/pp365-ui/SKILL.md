@@ -12,14 +12,14 @@ Authoritative (Norwegian): `.development-guide/spfx/kodemonster.md`. This skill 
 
 - `kodemonster.md`, all of it: folder and barrel, hook, context, reducer, loc, SCSS modules, Fluent v9, icons, PnP controls, slot render functions. Beside it in `.development-guide/spfx/`: `komponentoversikt.md` maps web parts and extensions to solutions, `utviklingsmiljo.md` covers watching and debugging, `testing.md` the tests.
 - The closest existing component in the same solution, and the wrapper table below, before writing anything new.
-- Where kodemonster.md or AGENTS.md disagree with the code, follow the code and fix the guide. Known today: kodemonster.md's reducer example uses `createReducer`'s object notation (see Component shape).
-- Stack: React 17.0.1 (no `React.useId`, no `createRoot`), `@fluentui/react-components` ~9.74.8, `@fluentui/react-icons` ~2.0.341, `@reduxjs/toolkit` ~1.9.5. Fluent v8 (`@fluentui/react`) remains only as the Fabric font fallback in `shared-library/src/icons/index.tsx`.
+- Where kodemonster.md or AGENTS.md disagree with the code, follow the code and fix the guide.
+- Stack: React 17.0.1 (no `React.useId`, no `createRoot`), `@fluentui/react-components` ~9.74.8, `@fluentui/react-icons` ~2.0.341, `@reduxjs/toolkit` ~2.13.0. Fluent v8 (`@fluentui/react`) remains only as the Fabric font fallback in `shared-library/src/icons/index.tsx`.
 
 ## Component shape
 
 - Follow kodemonster.md's folder: `index.ts` re-exports only, `X.tsx` JSX only (`export const X: FC<IXProps>`), `export function useX` holding state, effects and handlers, `types.ts`, `X.module.scss`, `context.ts`/`reducer.ts` when needed. JSDoc on exported symbols.
 - About 65 component folders still keep the component in `index.tsx` (`UserMessage`, `WebPartTitle`, `OverflowTagMenu`, `ProjectLogo` in the library), and some hooks are arrow constants. Some call sites below are such files: copy the call, not the shape, and restructure one only when that is the task.
-- Reducers: 7 of 9 use `createReducer`'s object notation, deprecated in RTK 1.9 and removed in RTK 2, which phase 5 moves to (`docs/plans/dependency-upgrades-phase-5.md`). Write a new one with the builder callback, as `ProjectWebParts/src/components/ProjectInformation/reducer/index.ts`; kodemonster.md's example is the old notation.
+- Reducers: `createReducer` with the builder callback (`builder.addCase(ACTION, (state, { payload }) => …)`), as all nine are; Redux Toolkit 2 removed the object notation. Type a context's `dispatch` as `React.Dispatch<UnknownAction>`. Every handler has a test in the `reducer.test.ts` beside it (`ProgramWebParts/src/components/ProgramAdministration/reducer.test.ts`).
 - Ids: `useId` from `@fluentui/react-components` in components and hooks; `getId(prefix)` from `pp365-shared-library` only outside React (module scope, class fields).
 - A web part's class is `src/webparts/<name>/index.ts(x)` on the solution's base web part (`this.renderComponent(Component, props)`); its UI is `src/components/<Name>`.
 - Consumers import their own folders bare (`components/X`, `models`, `data`; `baseUrl: src`). A new bare-imported folder goes into the solution's `tsconfig.json` `paths`: webpack's aliases come only from there (`config/spfx-customize-webpack.js`), while TypeScript and Jest resolve any folder, so it compiles and passes its tests, then fails to bundle.

@@ -42,7 +42,6 @@
     "moment": "~2.29.4",
     "array-sort": "~1.0.0",
     "lodash": "~4.17.21",
-    "@reduxjs/toolkit": "~1.9.5",
     "@pnp/core": "4.21.0",
     "@pnp/queryable": "4.21.0",
     "@fluentui/react-components": "~9.74.8",

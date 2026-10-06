@@ -1,11 +1,11 @@
-import { AnyAction } from '@reduxjs/toolkit'
+import { UnknownAction } from '@reduxjs/toolkit'
 import { createContext, useContext } from 'react'
 import { IProjectSetupDialogProps, IProjectSetupDialogState } from './types'
 
 export interface IProjectSetupDialogContext {
   props: IProjectSetupDialogProps
   state: IProjectSetupDialogState
-  dispatch: React.Dispatch<AnyAction>
+  dispatch: React.Dispatch<UnknownAction>
 }
 
 export const ProjectSetupDialogContext = createContext<IProjectSetupDialogContext>(null)

@@ -19,10 +19,9 @@ export const SET_ARCHIVE_CONFIGURATION = createAction<{
 }>('SET_ARCHIVE_CONFIGURATION')
 
 const createChangePhaseDialogReducer = () =>
-  createReducer<IChangePhaseDialogState>(
-    {},
-    {
-      [INIT.type]: (state, { payload }: ReturnType<typeof INIT>) => {
+  createReducer<IChangePhaseDialogState>({}, (builder) =>
+    builder
+      .addCase(INIT, (state, { payload }) => {
         const phase =
           payload.context.state.phase ||
           payload.context.state.data.phases.find((phase) => phase.properties.IsInitial)
@@ -44,14 +43,11 @@ const createChangePhaseDialogReducer = () =>
         } else {
           state.view = payload.context.props.useArchive ? View.Archive : View.Confirm
         }
-      },
-      [SET_VIEW.type]: (state, { payload }: ReturnType<typeof SET_VIEW>) => {
+      })
+      .addCase(SET_VIEW, (state, { payload }) => {
         state.view = payload.view
-      },
-      [CHECKLIST_ITEM_UPDATED.type]: (
-        state,
-        { payload }: ReturnType<typeof CHECKLIST_ITEM_UPDATED>
-      ) => {
+      })
+      .addCase(CHECKLIST_ITEM_UPDATED, (state, { payload }) => {
         const checklistItems = current(state).checklistItems as ChecklistItemModel[]
         const item = checklistItems[state.currentIdx]
         state.checklistItems[state.currentIdx] = item.update(payload.properties)
@@ -61,14 +57,10 @@ const createChangePhaseDialogReducer = () =>
         } else {
           state.view = View.Summary
         }
-      },
-      [SET_ARCHIVE_CONFIGURATION.type]: (
-        state,
-        { payload }: ReturnType<typeof SET_ARCHIVE_CONFIGURATION>
-      ) => {
+      })
+      .addCase(SET_ARCHIVE_CONFIGURATION, (state, { payload }) => {
         state.archiveConfiguration = payload.archiveConfiguration
-      }
-    }
+      })
   )
 
 /**

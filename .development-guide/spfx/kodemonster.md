@@ -187,12 +187,13 @@ Når en komponent har underkomponenter som trenger tilgang til felles state, bru
 
 ```ts
 // context.ts
+import { UnknownAction } from '@reduxjs/toolkit'
 import { createContext, useContext } from 'react'
 
 export interface IKomponentContext {
   props: IKomponentProps
   state: IKomponentState
-  dispatch: React.Dispatch<AnyAction>
+  dispatch: React.Dispatch<UnknownAction>
 }
 
 export const KomponentContext = createContext<IKomponentContext>(null)
@@ -252,21 +253,26 @@ export const initialState: IKomponentState = {
 }
 
 export default (data: IData) =>
-  createReducer(initialState, {
-    [SOME_ACTION.type]: (state, action) => {
-      state.someField = action.payload
-    },
-    [ANOTHER_ACTION.type]: (state) => {
-      // ... oppdater state
-    }
-  })
+  createReducer(initialState, (builder) =>
+    builder
+      .addCase(SOME_ACTION, (state, { payload }) => {
+        state.someField = payload
+      })
+      .addCase(ANOTHER_ACTION, (state) => {
+        // ... oppdater state
+      })
+  )
 ```
+
+Bruk byggeren (`builder.addCase`), som gir handlingen riktig type ut fra `createAction`. Objektnotasjonen (`{ [SOME_ACTION.type]: … }`) finnes ikke lenger i Redux Toolkit 2.
 
 Brukes i hooken:
 ```ts
 const [state, dispatch] = useReducer(createReducer(props.data), initialState)
 dispatch(SOME_ACTION(payload))
 ```
+
+Hver handler i reduceren har en test i `reducer.test.ts` ved siden av den, som `ProgramWebParts/src/components/ProgramAdministration/reducer.test.ts`.
 
 ---
 

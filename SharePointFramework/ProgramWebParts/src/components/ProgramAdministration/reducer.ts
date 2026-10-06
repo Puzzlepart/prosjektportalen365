@@ -49,77 +49,60 @@ function appendKey(items: any[], keyProperty: string) {
   }))
 }
 
-export default createReducer(initialState, {
-  [DATA_LOADED.type]: (
-    state: IProgramAdministrationState,
-    { payload }: ReturnType<typeof DATA_LOADED>
-  ) => {
-    state.childProjects = payload.data.childProjects
-      ? appendKey(payload.data.childProjects, 'SiteId')
-      : state.childProjects
-    state.availableProjects = payload.data.availableProjects
-      ? appendKey(payload.data.availableProjects, 'SiteId')
-      : state.availableProjects
-    state.userHasManagePermission =
-      payload.data.userHasManagePermission ?? state.userHasManagePermission
-    if (payload.scope === 'AddProjectDialog') {
+export default createReducer(initialState, (builder) =>
+  builder
+    .addCase(DATA_LOADED, (state, { payload }) => {
+      state.childProjects = payload.data.childProjects
+        ? appendKey(payload.data.childProjects, 'SiteId')
+        : state.childProjects
+      state.availableProjects = payload.data.availableProjects
+        ? appendKey(payload.data.availableProjects, 'SiteId')
+        : state.availableProjects
+      state.userHasManagePermission =
+        payload.data.userHasManagePermission ?? state.userHasManagePermission
+      if (payload.scope === 'AddProjectDialog') {
+        state.addProjectDialog = {
+          ...state.addProjectDialog,
+          loading: false
+        }
+      } else {
+        state.loading = false
+      }
+    })
+    .addCase(TOGGLE_ADD_PROJECT_DIALOG, (state) => {
+      state.addProjectDialog = {
+        open: !state.addProjectDialog.open,
+        loading: false,
+        selectedProjects: []
+      }
+      state.selectedProjects = []
+    })
+    .addCase(ADD_CHILD_PROJECTS, (state, { payload }) => {
+      state.childProjects = [...state.childProjects, ...payload]
+      state.selectedProjects = []
+      state.addProjectDialog = {
+        open: false,
+        loading: false,
+        selectedProjects: []
+      }
+    })
+    .addCase(REMOVE_CHILD_PROJECTS, (state, { payload }) => {
+      state.childProjects = state.childProjects.filter(
+        (p) => !payload.siteIdsToRemove.includes(p.SiteId)
+      )
+      state.selectedProjects = []
+      state.isDeleting = false
+    })
+    .addCase(SET_SELECTED_TO_ADD, (state, { payload }) => {
       state.addProjectDialog = {
         ...state.addProjectDialog,
-        loading: false
+        selectedProjects: payload
       }
-    } else {
-      state.loading = false
-    }
-  },
-  [TOGGLE_ADD_PROJECT_DIALOG.type]: (state: IProgramAdministrationState) => {
-    state.addProjectDialog = {
-      open: !state.addProjectDialog.open,
-      loading: false,
-      selectedProjects: []
-    }
-    state.selectedProjects = []
-  },
-  [ADD_CHILD_PROJECTS.type]: (
-    state: IProgramAdministrationState,
-    { payload }: ReturnType<typeof ADD_CHILD_PROJECTS>
-  ) => {
-    state.childProjects = [...state.childProjects, ...payload]
-    state.selectedProjects = []
-    state.addProjectDialog = {
-      open: false,
-      loading: false,
-      selectedProjects: []
-    }
-  },
-  [REMOVE_CHILD_PROJECTS.type]: (
-    state: IProgramAdministrationState,
-    { payload }: ReturnType<typeof REMOVE_CHILD_PROJECTS>
-  ) => {
-    state.childProjects = state.childProjects.filter(
-      (p) => !payload.siteIdsToRemove.includes(p.SiteId)
-    )
-    state.selectedProjects = []
-    state.isDeleting = false
-  },
-  [SET_SELECTED_TO_ADD.type]: (
-    state: IProgramAdministrationState,
-    { payload }: ReturnType<typeof SET_SELECTED_TO_ADD>
-  ) => {
-    state.addProjectDialog = {
-      ...state.addProjectDialog,
-      selectedProjects: payload
-    }
-  },
-  [SET_SELECTED_TO_DELETE.type]: (
-    state: IProgramAdministrationState,
-    { payload }: ReturnType<typeof SET_SELECTED_TO_DELETE>
-  ) => {
-    state.selectedProjects = payload
-  },
-  [SET_IS_DELETING.type]: (
-    state: IProgramAdministrationState,
-    { payload }: ReturnType<typeof SET_IS_DELETING>
-  ) => {
-    state.isDeleting = payload
-  }
-})
+    })
+    .addCase(SET_SELECTED_TO_DELETE, (state, { payload }) => {
+      state.selectedProjects = payload
+    })
+    .addCase(SET_IS_DELETING, (state, { payload }) => {
+      state.isDeleting = payload
+    })
+)

@@ -37,7 +37,7 @@
     "@pnp/sp": "4.21.0",
     "@pnp/spfx-controls-react": "3.25.0",
     "@pnp/spfx-property-controls": "3.24.0",
-    "@reduxjs/toolkit": "~1.9.5",
+    "@reduxjs/toolkit": "~2.13.0",
     "@types/array-sort": "1.0.0",
     "array-sort": "1.0.0",
     "clean-deep": "3.0.2",

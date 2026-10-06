@@ -18,44 +18,38 @@ export const initialState: IProjectPhasesState = {
   }
 }
 
-export default createReducer(initialState, {
-  [INIT_DATA.type]: (state, { payload }: ReturnType<typeof INIT_DATA>) => {
-    if (payload.data) {
-      state.data = payload.data
-      state.phase = payload.data?.currentPhase
-      state.isDataLoaded = true
-    }
-    state.error = payload.error && CustomError.createError(payload.error, 'error')
-  },
-
-  [OPEN_POPOVER.type]: (state, { payload }) => {
-    state.popover = payload
-  },
-
-  [DISMISS_POPOVER.type]: (state) => {
-    state.popover = null
-  },
-
-  [DISMISS_CHANGE_PHASE_DIALOG.type]: (state) => {
-    state.confirmPhase = null
-  },
-
-  [INIT_CHANGE_PHASE.type]: (state) => {
-    state.isChangingPhase = true
-  },
-
-  [CHANGE_PHASE.type]: (state) => {
-    state.confirmPhase = state.popover.phase
-    state.popover = null
-  },
-
-  [SET_PHASE.type]: (state, { payload }: ReturnType<typeof SET_PHASE>) => {
-    state.phase = payload.phase
-    state.isChangingPhase = false
-  },
-
-  [CHANGE_PHASE_ERROR.type]: (state, { payload }: ReturnType<typeof CHANGE_PHASE_ERROR>) => {
-    state.isChangingPhase = false
-    state.error = payload.error && CustomError.createError(payload.error, 'error')
-  }
-})
+export default createReducer(initialState, (builder) =>
+  builder
+    .addCase(INIT_DATA, (state, { payload }) => {
+      if (payload.data) {
+        state.data = payload.data
+        state.phase = payload.data?.currentPhase
+        state.isDataLoaded = true
+      }
+      state.error = payload.error && CustomError.createError(payload.error, 'error')
+    })
+    .addCase(OPEN_POPOVER, (state, { payload }) => {
+      state.popover = payload
+    })
+    .addCase(DISMISS_POPOVER, (state) => {
+      state.popover = null
+    })
+    .addCase(DISMISS_CHANGE_PHASE_DIALOG, (state) => {
+      state.confirmPhase = null
+    })
+    .addCase(INIT_CHANGE_PHASE, (state) => {
+      state.isChangingPhase = true
+    })
+    .addCase(CHANGE_PHASE, (state) => {
+      state.confirmPhase = state.popover.phase
+      state.popover = null
+    })
+    .addCase(SET_PHASE, (state, { payload }) => {
+      state.phase = payload.phase
+      state.isChangingPhase = false
+    })
+    .addCase(CHANGE_PHASE_ERROR, (state, { payload }) => {
+      state.isChangingPhase = false
+      state.error = payload.error && CustomError.createError(payload.error, 'error')
+    })
+)

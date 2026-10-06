@@ -1,5 +1,5 @@
 import { LogLevel } from '@pnp/logging'
-import { AnyAction } from '@reduxjs/toolkit'
+import { UnknownAction } from '@reduxjs/toolkit'
 import strings from 'ProjectWebPartsStrings'
 import _ from 'lodash'
 import {
@@ -266,7 +266,7 @@ export const useProjectStatusDataFetch = (
   props: IProjectStatusProps,
   refetch: number,
   selectedScope: string,
-  dispatch: React.Dispatch<AnyAction>
+  dispatch: React.Dispatch<UnknownAction>
 ) => {
   useEffect(() => {
     fetchData(props, selectedScope)

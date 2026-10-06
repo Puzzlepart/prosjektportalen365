@@ -1,14 +1,15 @@
 {
   // Shared Jest setup for all pp365 solutions; see SharePointFramework/.jest-config/README.md
   "extends": "pp365-jest-config/jest-shared.config.json",
-  // Coverage may only rise: these are the floors measured after phase 4 slice 3 (2026-10-02,
-  // 45/69/51/45 on 139 tests), rounded down. Raise them when coverage grows; never lower them.
+  // Coverage may only rise: these are the floors measured after phase 5 slice 2a (2026-10-06,
+  // 45.92/70.15/50.92/45.92 on 170 tests), rounded down. Raise them when coverage grows; never
+  // lower them.
   "coverageThreshold": {
     "global": {
-      "statements": 42,
-      "branches": 66,
-      "functions": 48,
-      "lines": 42
+      "statements": 45,
+      "branches": 70,
+      "functions": 50,
+      "lines": 45
     }
   }
 }
