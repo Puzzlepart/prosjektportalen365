@@ -25,6 +25,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 
 ### Feilrettinger
 
+- **Installasjonsmeldingen til Prosjektportalen-teamet sender ikke lenger brukernavn eller parameterverdier.** `Install.ps1` sendte innloggingsnavnet til den som installerte og hele kommandolinjen, også verdier som `-CertificateBase64Encoded`. Meldingen inneholder nå bare adressen til porteføljeområdet, versjon, kanal, tidspunkt og navnene på parameterne som ble brukt. Den nye parameteren `-SkipPingback` slår meldingen av. Installasjonsloggen i porteføljeområdet er uendret
 - Rettet en feil hvor person-/brukerfelter på statusrapporter ble lagret med bruker-ID fra prosjektområdet i stedet for hubområdet, slik at feil person kunne vises i porteføljen
 - Rettet en latent feil hvor egenskapsruten til risiko- og mulighetsmatrisewebdelene krasjet dersom initialiseringen av webdelen hadde feilet
 - Matrise-elementer med ID over 99 vises nå korrekt (tidligere «99+»)
