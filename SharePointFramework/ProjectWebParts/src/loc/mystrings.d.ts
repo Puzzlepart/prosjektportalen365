@@ -98,7 +98,8 @@ declare interface IProjectWebPartsStrings {
   SnapshotCopyLinkLabel: string
   SnapshotCopyLinkDialogTitle: string
   SnapshotCopyButtonLabel: string
-  SnapshotLinkInputLabel: string
+  SnapshotPageLinkLabel: string
+  SnapshotImageLinkLabel: string
   SnapshotLinkCopiedText: string
   SnapshotLinkCopyFailedText: string
   SnapshotLinkAccessText: string

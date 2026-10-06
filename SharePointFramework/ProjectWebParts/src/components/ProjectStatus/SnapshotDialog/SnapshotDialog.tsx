@@ -83,10 +83,12 @@ export const SnapshotDialog: FC = () => {
     isFullscreen,
     toggleFullscreen,
     openInNewTab,
-    snapshotLink,
+    pageLink,
+    imageLink,
     isCopyLinkOpen,
     copyLinkStatus,
-    copyLink,
+    copyPageLink,
+    copyImageLink,
     dismissCopyLink,
     onDismiss
   } = useSnapshotDialog()
@@ -113,7 +115,7 @@ export const SnapshotDialog: FC = () => {
                     : strings.SnapshotEnterFullscreenLabel}
                 </Button>
               )}
-              <Button appearance='subtle' icon={<Link24Regular />} onClick={copyLink}>
+              <Button appearance='subtle' icon={<Link24Regular />} onClick={copyPageLink}>
                 {strings.SnapshotCopyLinkLabel}
               </Button>
               <Button appearance='subtle' icon={<Open24Regular />} onClick={openInNewTab}>
@@ -129,10 +131,12 @@ export const SnapshotDialog: FC = () => {
           </div>
           <CopyLinkDialog
             open={isCopyLinkOpen}
-            link={snapshotLink}
+            pageLink={pageLink}
+            imageLink={imageLink}
             status={copyLinkStatus}
             mountNode={surfaceRef.current}
-            onCopy={copyLink}
+            onCopyPageLink={copyPageLink}
+            onCopyImageLink={copyImageLink}
             onDismiss={dismissCopyLink}
           />
         </DialogBody>
