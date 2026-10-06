@@ -8,6 +8,7 @@ import { Header } from './Header/Header'
 import styles from './ProjectStatus.module.scss'
 import { PublishedStatus } from './PublishedStatus'
 import { SectionTabs } from './SectionTabs'
+import { SnapshotDialog } from './SnapshotDialog'
 import { Sections } from './Sections/Sections'
 import { UserMessages } from './UserMessages/UserMessages'
 import { ProjectStatusContext } from './context'
@@ -48,6 +49,7 @@ export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
           )}
         </div>
         <EditStatusPanel />
+        <SnapshotDialog />
       </Fluent>
     </ProjectStatusContext.Provider>
   )
