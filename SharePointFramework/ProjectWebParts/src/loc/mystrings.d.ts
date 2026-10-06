@@ -95,6 +95,13 @@ declare interface IProjectWebPartsStrings {
   SnapshotOpenInNewTabLabel: string
   SnapshotEnterFullscreenLabel: string
   SnapshotExitFullscreenLabel: string
+  SnapshotCopyLinkLabel: string
+  SnapshotCopyLinkDialogTitle: string
+  SnapshotCopyButtonLabel: string
+  SnapshotLinkInputLabel: string
+  SnapshotLinkCopiedText: string
+  SnapshotLinkCopyFailedText: string
+  SnapshotLinkAccessText: string
   HideActionsLabel: string
   HideAllActionsLabel: string
   HideParentProjectsLabel: string

@@ -16,23 +16,55 @@ const { useSnapshotDialog } =
   jest.requireActual<typeof import('./useSnapshotDialog')>('./useSnapshotDialog')
 
 /**
- * The snapshot of a published report: the dialog that shows it, its link to the image and its
- * full screen button (against a stand-in for its hook), and the hook's full screen handling
- * against a stand-in for the browser's Fullscreen API, which jsdom lacks.
+ * The snapshot of a published report: the dialog that shows it, its buttons and the dialog that
+ * copies its link (against a stand-in for its hook), and the hook's full screen and clipboard
+ * handling against stand-ins for the browser's Fullscreen and Clipboard APIs, which jsdom lacks.
  */
 describe('ProjectStatus SnapshotDialog', () => {
+  const snapshotLink = `https://contoso.sharepoint.com${snapshotUrl}`
+
   beforeEach(() => {
     Object.assign(mockDialog, {
       isOpen: true,
       snapshotUrl,
+      snapshotLink,
       title,
       surfaceRef: { current: null },
       canFullscreen: true,
       isFullscreen: false,
       toggleFullscreen: jest.fn(),
       openInNewTab: jest.fn(),
+      isCopyLinkOpen: false,
+      copyLinkStatus: undefined,
+      copyLink: jest.fn(),
+      dismissCopyLink: jest.fn(),
       onDismiss: jest.fn()
     })
+  })
+
+  it('copies the link, and confirms it in a dialog that says who can open the image', () => {
+    const { rerender } = render(<SnapshotDialog />)
+    expect(screen.queryByText(strings.SnapshotCopyLinkDialogTitle)).toBeNull()
+    fireEvent.click(screen.getByText(strings.SnapshotCopyLinkLabel))
+    expect(mockDialog.copyLink).toHaveBeenCalledTimes(1)
+    Object.assign(mockDialog, { isCopyLinkOpen: true, copyLinkStatus: 'copied' })
+    rerender(<SnapshotDialog />)
+    expect(screen.getByText(strings.SnapshotCopyLinkDialogTitle)).toBeInTheDocument()
+    expect(screen.getByText(strings.SnapshotLinkCopiedText)).toBeInTheDocument()
+    expect(screen.getByDisplayValue(snapshotLink)).toHaveAttribute('readonly')
+    expect(screen.getByText(strings.SnapshotLinkAccessText)).toBeInTheDocument()
+    fireEvent.click(screen.getByText(strings.SnapshotCopyButtonLabel))
+    expect(mockDialog.copyLink).toHaveBeenCalledTimes(2)
+    fireEvent.click(screen.getByText(strings.CloseText))
+    expect(mockDialog.dismissCopyLink).toHaveBeenCalledTimes(1)
+  })
+
+  it('asks for the link to be copied by hand when the clipboard fails', () => {
+    Object.assign(mockDialog, { isCopyLinkOpen: true, copyLinkStatus: 'failed' })
+    render(<SnapshotDialog />)
+    expect(screen.getByText(strings.SnapshotLinkCopyFailedText)).toBeInTheDocument()
+    expect(screen.queryByText(strings.SnapshotLinkCopiedText)).toBeNull()
+    expect(screen.getByDisplayValue(snapshotLink)).toBeInTheDocument()
   })
 
   it('shows the snapshot image with a button that opens it in a new tab', () => {
@@ -127,6 +159,28 @@ describe('useSnapshotDialog', () => {
     dialog.openInNewTab()
     expect(open).toHaveBeenCalledWith(snapshotUrl, '_blank', 'noopener')
     open.mockRestore()
+  })
+
+  it('copies an absolute link to the clipboard, and owns up when it cannot', async () => {
+    const writeText = jest.fn().mockResolvedValue(undefined)
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } })
+    renderDialog({ isSnapshotOpen: true, selectedReport: report({}, { snapshotUrl }) })
+    const link = `${window.location.origin}${snapshotUrl}`
+    expect(dialog.snapshotLink).toBe(link)
+    await act(async () => {
+      await dialog.copyLink()
+    })
+    expect(writeText).toHaveBeenCalledWith(link)
+    expect(dialog.isCopyLinkOpen).toBe(true)
+    expect(dialog.copyLinkStatus).toBe('copied')
+    writeText.mockRejectedValueOnce(new Error('NotAllowedError'))
+    await act(async () => {
+      await dialog.copyLink()
+    })
+    expect(dialog.copyLinkStatus).toBe('failed')
+    act(() => dialog.dismissCopyLink())
+    expect(dialog.isCopyLinkOpen).toBe(false)
+    delete (navigator as any).clipboard
   })
 
   it('takes the surface to full screen and back, following the document', () => {
