@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - claude/confident-goodall-vhqaqa
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'
