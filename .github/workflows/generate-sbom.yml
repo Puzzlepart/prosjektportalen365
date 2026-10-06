@@ -4,14 +4,14 @@ on:
   push:
     tags:
       - 'v*'
-  workflow_dispatch:  # Allow manual trigger
+  workflow_dispatch:  # Allow manual trigger; run from a branch, it also commits a changed SBOM.md there
 
 jobs:
   generate-sbom:
     name: Generate SBOM
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Required to push changes and upload artifacts
+      contents: write  # Required to push SBOM.md to the branch of a manual run
     steps:
       - uses: actions/checkout@v4
         with:
@@ -26,34 +26,29 @@ jobs:
         run: npm install
 
       - name: Generate SBOM
-        run: npm run generate-sbom
-
-      - name: Check if SBOM changed
-        id: sbom_check
         run: |
-          if git diff --quiet SBOM.md; then
-            echo "changed=false" >> $GITHUB_OUTPUT
-          else
-            echo "changed=true" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Commit SBOM if changed
-        if: steps.sbom_check.outputs.changed == 'true'
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add SBOM.md
-          git commit -m "docs: Update SBOM for version ${{ github.ref_name }} [skip-ci]"
-
-      - name: Push changes
-        if: steps.sbom_check.outputs.changed == 'true'
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+          cp SBOM.md "$RUNNER_TEMP/SBOM.committed.md"
+          npm run generate-sbom
 
       - name: Upload SBOM as artifact
         uses: actions/upload-artifact@v4
         with:
           name: sbom
           path: SBOM.md
+
+      # Only on a branch. A tag cannot take a new commit: pushing HEAD to refs/tags/<tag> is rejected
+      # because the tag exists, which failed every tag run from v1.12.1 to v1.14.0. postversion has
+      # already committed SBOM.md with the release, so a tag run keeps the artifact only.
+      - name: Commit and push SBOM if changed
+        if: github.ref_type == 'branch'
+        run: |
+          # The Generated line differs on every run; commit only a change in the dependencies
+          if cmp -s <(grep -v '^\*\*Generated:\*\*' "$RUNNER_TEMP/SBOM.committed.md") <(grep -v '^\*\*Generated:\*\*' SBOM.md); then
+            echo "SBOM.md is unchanged apart from its timestamp; nothing to commit"
+            exit 0
+          fi
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add SBOM.md
+          git commit -m "docs: Update SBOM for ${GITHUB_REF_NAME} [skip-ci]"
+          git push origin "HEAD:refs/heads/${GITHUB_REF_NAME}"

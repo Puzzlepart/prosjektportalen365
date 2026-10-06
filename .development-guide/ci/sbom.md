@@ -14,8 +14,8 @@ SBOM (Software Bill of Materials) er en omfattende liste over alle programvareko
 SBOM-en genereres automatisk når:
 
 1. **Versjonsoppdateringer**: Når du kjører `npm version patch` eller `npm version minor`, regenererer `postversion`-hooken automatisk SBOM-en
-2. **GitHub-utgivelser**: Når en versjons-tag (f.eks. `v1.12.0`) pushes til GitHub, genererer og committar arbeidsflyten automatisk den oppdaterte SBOM-en
-3. **Manuell utløsning**: GitHub-arbeidsflyten kan utløses manuelt fra fanen «Actions»
+2. **GitHub-utgivelser**: Når en versjons-tag (f.eks. `v1.12.0`) pushes til GitHub, genererer arbeidsflyten SBOM-en og laster den opp som byggartefakt. Den committer ingenting: en tag kan ikke få en ny commit, og `SBOM.md` fulgte allerede med `postversion`
+3. **Manuell utløsning**: GitHub-arbeidsflyten kan utløses manuelt fra fanen «Actions». Kjørt fra en gren committer den også en endret SBOM til grenen
 
 ### Manuell generering
 
@@ -56,8 +56,8 @@ Arbeidsflyten for SBOM-generering (`.github/workflows/generate-sbom.yml`) kjøre
 Arbeidsflyten:
 1. Installerer avhengigheter
 2. Genererer SBOM-en
-3. Committer den oppdaterte SBOM-en hvis den har endret seg
-4. Laster opp SBOM-en som et byggartefakt
+3. Laster opp SBOM-en som byggartefaktet `sbom`
+4. Bare ved manuell kjøring fra en gren: committer og pusher SBOM-en til grenen hvis avhengighetene er endret (tidsstempelet «Generated» alene teller ikke)
 
 ### Skriptdetaljer
 
