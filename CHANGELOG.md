@@ -69,6 +69,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Rettet en feil i `Aggregert oversikt` hvor `viewId` i adressen ble oversett når den sto først i spørrestrengen, og åpnet første visning når adressen også hadde en `#`-del
 - Rettet en feil i `Aggregert oversikt` hvor en slettet kolonne fortsatt ble tilbudt i `Vis eller skjul kolonner`
 - Rettet en feil i `Porteføljeoversikt` hvor adressen etter henting av data viste grupperingen fra før hentingen, ikke den listen viser
+- Rettet en feil i `Fasevelger` hvor dialogen for `Endre til denne fasen` husket forrige gang den var åpen: etter `Hopp over alle` og `Avbryt` åpnet den rett på bekreftelsen, også for en annen fase, og etter en faseendring uten at siden ble lastet på nytt viste den sjekklisten til fasen prosjektet var i da siden ble åpnet. Dialogen starter nå på nytt hver gang, med sjekkpunktene som allerede er besvart
 - Rettet en feil hvor `UpgradeAllSitesToLatest.ps1` hoppet over alle prosjektområder på engelske installasjoner fordi listen `Prosjektegenskaper` ble slått opp med norsk tittel; listen slås nå opp med tittelen på installasjonens språk
 - Rettet en feil hvor fargene for `Status muligheter` aldri ble brukt fordi konfigurasjonen i `Prosjektkolonnekonfigurasjon` pekte på feil prosjektkolonne: ikonet var grått i `Prosjektstatus` og `Prosjektinformasjon`, og kolonnen i `Porteføljeoversikt` viste ren tekst. Eksisterende installasjoner får riktige rader ved oppgradering; de gamle radene blir stående
 

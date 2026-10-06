@@ -1,6 +1,8 @@
+import strings from 'ProjectWebPartsStrings'
 import reducer, {
   CHANGE_PHASE,
   CHANGE_PHASE_ERROR,
+  CHECKLIST_ITEM_SAVED,
   DISMISS_CHANGE_PHASE_DIALOG,
   DISMISS_POPOVER,
   INIT_CHANGE_PHASE,
@@ -10,7 +12,7 @@ import reducer, {
   initialState
 } from './reducer'
 import { IProjectPhasesState } from './types'
-import { phase } from './testFixtures'
+import { checklistItem, phase } from './testFixtures'
 
 /**
  * The phase selector's state: the phases and the current one, the popover a phase opens, the
@@ -103,5 +105,31 @@ describe('ProjectPhases reducer', () => {
     expect(state.error.type).toBe('error')
     expect(state.phase).toBe(concept)
     expect(reducer(running, CHANGE_PHASE_ERROR({ error: null })).error).toBeNull()
+  })
+
+  it('a saved checkpoint replaces its old version in its phase, counted again, current phase included', () => {
+    const open = checklistItem(1, 'Mandat godkjent')
+    const done = checklistItem(2, 'Plan laget', strings.StatusClosed)
+    const withChecklist = phase('p1', 'Konsept', {}, [open, done])
+    const state = reducer(
+      initialState,
+      INIT_DATA({ data: { phases: [withChecklist, planning], currentPhase: withChecklist } })
+    )
+    // `update` takes the list's field names, though it is typed with the model's.
+    const answered = open.update({
+      GtChecklistStatus: strings.StatusClosed,
+      GtComment: 'Ok'
+    } as any)
+    const saved = reducer(state, CHECKLIST_ITEM_SAVED({ item: answered }))
+    const savedPhase = saved.data.phases[0]
+    expect(savedPhase.checklistData.items).toEqual([answered, done])
+    expect(savedPhase.checklistData.stats).toEqual({ [strings.StatusClosed]: 2 })
+    expect(savedPhase.name).toBe('Konsept')
+    // The current phase is the same phase, so the dialog opened next reads the saved checkpoint.
+    expect(saved.phase).toBe(savedPhase)
+    expect(saved.data.currentPhase).toBe(savedPhase)
+    // A copy: the loaded phase is left as it was, and a phase without the checkpoint is kept.
+    expect(withChecklist.checklistData.items).toEqual([open, done])
+    expect(saved.data.phases[1]).toBe(planning)
   })
 })

@@ -40,7 +40,8 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
                       return <ProjectPhase key={idx} phase={phase} />
                     })}
                 </ul>
-                <ChangePhaseDialog />
+                {/* Mounted while a phase waits for confirmation, so each opening starts afresh. */}
+                {context.state.confirmPhase && <ChangePhaseDialog />}
               </>
             ) : (
               <LoadingSkeleton />

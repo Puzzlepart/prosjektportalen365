@@ -162,6 +162,41 @@ describe('ProjectPhases', () => {
     expect(screen.getByTitle(strings.Aria.CurrentPhaseText)).toBeDisabled()
   })
 
+  /** Opens the change-phase dialog for the phase named `name`, through its popover. */
+  async function openChangePhaseDialog(name: string) {
+    fireEvent.click(await screen.findByTitle(name))
+    fireEvent.click(await screen.findByTitle(strings.ChangePhaseText))
+    return screen.findByText(format(strings.ChangePhaseDialogTitle, name))
+  }
+
+  it('opens the dialog afresh each time: a skipped checklist does not carry over to the next', async () => {
+    renderPhases(phases[1])
+    await openChangePhaseDialog('Gjennomføre')
+    // The checklist of the phase the project leaves, at its open checkpoint.
+    expect(screen.getByText('Mandat godkjent')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: strings.Skip }))
+    expect(
+      await screen.findByText(format(strings.ConfirmChangePhase, 'Gjennomføre'))
+    ).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: strings.CancelText }))
+    expect(screen.queryByText(format(strings.ChangePhaseDialogTitle, 'Gjennomføre'))).toBeNull()
+    await openChangePhaseDialog('Konsept')
+    expect(screen.getByText('Mandat godkjent')).toBeInTheDocument()
+    expect(screen.queryByText(format(strings.ConfirmChangePhase, 'Konsept'))).toBeNull()
+  })
+
+  it('keeps a checkpoint answered when the dialog is cancelled and opened again', async () => {
+    renderPhases(phases[1])
+    await openChangePhaseDialog('Gjennomføre')
+    fireEvent.click(screen.getByRole('button', { name: strings.StatusClosed }))
+    // The last open checkpoint is answered (and saved), so the summary follows.
+    expect(await screen.findByRole('button', { name: strings.MoveOn })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: strings.CancelText }))
+    await openChangePhaseDialog('Gjennomføre')
+    expect(screen.getByRole('button', { name: strings.MoveOn })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: strings.StatusClosed })).toBeNull()
+  })
+
   it('offers no change-phase action without the permission', async () => {
     renderPhases(phases[0], { userHasChangePhasePermission: false })
     fireEvent.click(await screen.findByTitle('Planlegge'))

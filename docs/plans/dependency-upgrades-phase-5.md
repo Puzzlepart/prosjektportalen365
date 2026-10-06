@@ -630,3 +630,24 @@ program drops them before the hubs are updated); `en-us.js` in ProjectWebParts h
 `123`, as before); and the stale chapters the guide agent listed (`versjonering.md`,
 `bygge-utgivelse.md`, `npm-skript.md`, `kontinuerlig-integrasjon.md`, `sbom.md`,
 `branching-og-arbeidsflyt.md`, `kom-i-gang.md`'s `[apps-only:…]` example).
+
+### Found in 2a's hand check: the change-phase dialog (2026-10-06)
+
+The user's hand check of 2a on the test tenant found two faults in `Fasevelger`, both already in
+1.14 (`main` has the same wiring, read through the GitHub API), so neither is from Redux Toolkit 2:
+"Hopp over alle" and `Avbryt` left the dialog on the confirmation the next time it opened, for any
+phase; and changing phase by skipping one or going back showed another phase's checkpoints. The
+cause of both: `ChangePhaseDialog` stayed mounted from the moment the data loaded and got `INIT`
+once, in a mount effect, so every opening reused the state of the first, including the checklist
+of the phase the project was in when the page loaded.
+
+The fix: the dialog mounts only while a phase waits for confirmation, and its state starts from
+`INIT` through `useReducer`'s initialiser (no effect, no frame of old state), as a new object.
+Since the checklist is now read afresh from the loaded phases each time, a checkpoint saved in the
+dialog is also written back to them (`CHECKLIST_ITEM_SAVED` in the phases reducer, which copies
+the changed phase, as immer does not draft the class, and counts the statuses again for the
+popover); otherwise a checkpoint answered before a cancel would show as open again. The dialog's
+state holds a copy of the checklist, as immer freezes what a state holds. Tests: the web part's
+test opens, skips, cancels and reopens for another phase (failed before), and answers, cancels and
+reopens (guards the write-back); the phases reducer's test covers the write-back.
+
