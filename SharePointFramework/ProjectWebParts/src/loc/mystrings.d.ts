@@ -91,6 +91,10 @@ declare interface IProjectWebPartsStrings {
   GeneralGroupName: string
   GetSnapshotButtonLabel: string
   GetSnapshotButtonDescription: string
+  SnapshotDialogTitle: string
+  SnapshotOpenInNewTabLabel: string
+  SnapshotEnterFullscreenLabel: string
+  SnapshotExitFullscreenLabel: string
   HideActionsLabel: string
   HideAllActionsLabel: string
   HideParentProjectsLabel: string

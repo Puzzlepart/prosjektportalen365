@@ -78,6 +78,18 @@ export const OPEN_PANEL = createAction<IProjectStatusState['activePanel']>('OPEN
 export const CLOSE_PANEL = createAction('CLOSE_PANEL')
 
 /**
+ * `OPEN_SNAPSHOT`: Dispatched by `useToolbarItems` to show the selected report's snapshot
+ * in `SnapshotDialog`.
+ */
+export const OPEN_SNAPSHOT = createAction('OPEN_SNAPSHOT')
+
+/**
+ * `CLOSE_SNAPSHOT`: Dispatched by `SnapshotDialog` when it is dismissed. Unlike `CLOSE_PANEL`
+ * it doesn't refetch, as viewing the snapshot changes nothing.
+ */
+export const CLOSE_SNAPSHOT = createAction('CLOSE_SNAPSHOT')
+
+/**
  * `REFETCH_DATA`: Dispatched by ...
  */
 export const REFETCH_DATA = createAction('REFETCH_DATA')
@@ -228,6 +240,12 @@ const createProjectStatusReducer = createReducer(initialState, {
   [CLOSE_PANEL.type]: (state: IProjectStatusState) => {
     state.activePanel = null
     state.refetch = new Date().getTime()
+  },
+  [OPEN_SNAPSHOT.type]: (state: IProjectStatusState) => {
+    state.isSnapshotOpen = true
+  },
+  [CLOSE_SNAPSHOT.type]: (state: IProjectStatusState) => {
+    state.isSnapshotOpen = false
   },
   [REFETCH_DATA.type]: (state: IProjectStatusState) => {
     state.refetch = new Date().getTime()

@@ -99,6 +99,15 @@ describe('useToolbarItems', () => {
     )
   })
 
+  it('opens the snapshot of the selected report in the snapshot dialog', () => {
+    const { farMenuItems, dispatch } = toolbar({
+      selectedReport: published,
+      data: { reports: [published], scopeKeysWithReports: [] }
+    })
+    byText(farMenuItems, strings.GetSnapshotButtonLabel).onClick(null)
+    expect(dispatch).toHaveBeenCalledWith(expect.objectContaining({ type: 'OPEN_SNAPSHOT' }))
+  })
+
   it('disables every report command without the admin permission', () => {
     const { menuItems, farMenuItems } = toolbar({
       selectedReport: draft,

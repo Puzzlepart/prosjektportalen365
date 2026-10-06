@@ -11,7 +11,7 @@ import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
 import { useMemo } from 'react'
 import SPDataAdapter from '../../../data'
 import { useProjectStatusContext } from '../context'
-import { OPEN_PANEL, SELECT_REPORT } from '../reducer'
+import { OPEN_PANEL, OPEN_SNAPSHOT, SELECT_REPORT } from '../reducer'
 import { useCreateNewStatusReport } from './useCreateNewStatusReport'
 import { useDeleteReport } from './useDeleteReport'
 import { usePublishReport } from './usePublishReport'
@@ -103,8 +103,7 @@ export function useToolbarItems() {
             .setIcon('Image')
             .setWidth('fit-content')
             .setOnClick(() => {
-              // In a new tab: the report the user is reading stays where it is.
-              window.open(state.selectedReport?.snapshotUrl, '_blank', 'noopener')
+              dispatch(OPEN_SNAPSHOT())
             }),
         new ListMenuItem(
           state.selectedReport
