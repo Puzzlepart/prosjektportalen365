@@ -10,6 +10,7 @@
     "generate-pnp-templates": "node ./.tasks/generate-pnp-templates.js",
     "generate-site-scripts": "node ./.tasks/generate-site-scripts.js --silent",
     "generate-sbom": "node ./.tasks/generate-sbom.js",
+    "check-skills": "node ./.tasks/check-skills.js",
     "postversion": "npm run generate-readme && npm run sync-version && npm run generate-sbom",
     "rush:init": "npm run rush:update && npm run rush:build",
     "rush:update": "node common/scripts/install-run-rush.js update",

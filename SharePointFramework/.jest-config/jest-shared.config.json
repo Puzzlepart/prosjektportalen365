@@ -50,8 +50,8 @@
     "[\\/]loc[\\/](shared[\\/])?[a-z]{2}-[a-z]{2}\\.js$": "<configDir>/lib/amdTransform.js"
   },
 
-  // Coverage is collected by the rig; the thresholds are deliberately not enforced yet.
-  // Component and unit tests are being introduced incrementally, see
-  // .development-guide/spfx/testing.md.
+  // Coverage is collected by the rig. The floors are set per solution (coverageThreshold in its
+  // config/jest.config.json); Heft's test phase succeeds on a missed floor, so Install/Build-Release.ps1
+  // enforces them (see .development-guide/spfx/testing.md).
   "collectCoverage": true
 }

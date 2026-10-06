@@ -68,7 +68,7 @@ is not ours to decide (see P5-1); a new Node major, which comes after 1.15 (P5-5
 |---|---|---|---|
 | 0 | Branch and baselines | New branch off `releases/1.15`, run by the test-channel workflow; record the inventory above, the test counts and the six package sizes | Baselines in this document |
 | 1 | xlsx | The export's four tests run the real library but read only what reaches `aoa_to_sheet`: first a round trip of the written workbook (read back with `XLSX.read`) on 0.16; then the bump to the version P5-7 settles and whatever the changed `utils` surface needs; the download checked by hand on the test tenant | Export tests green on the new version |
-| 1b | Agent skills and onboarding (added by the user 2026-10-05, between 1 and 2) | One source for the skills: Copilot reads `.claude/skills` as Claude Code does, so the hand-made copy in `.github/skills` (whose `pp365-testing` had fallen behind) goes, and a check in CI stops a second copy from coming back; three new skills, thin and pointing at the guide: `pp365-ui` (components, Fluent v9, our wrappers), `pp365-templates` (content model, provisioning, upgrades) and `pp365-release` (branches, commit tags, CI, channels, changelog and release notes); the two existing skills and `AGENTS.md` corrected against the code; four notes that lived only in an agent's personal memory moved into them; each new skill tried on a typical task by a fresh agent; `ONBOARDING.md`, a first-week path for new developers in Norwegian | One copy of each skill, the check in CI, `ONBOARDING.md` confirmed by the user |
+| 1b | Agent skills and onboarding (added by the user 2026-10-05, between 1 and 2) | One source for the skills: Copilot reads `.claude/skills` as Claude Code does, so the hand-made copy in `.github/skills` (whose `pp365-testing` had fallen behind) goes, and a check in CI stops a second copy from coming back; three new skills, thin and pointing at the guide: `pp365-ui` (components, Fluent v9, our wrappers), `pp365-templates` (content model, provisioning, upgrades) and `pp365-release` (branches, commit tags, CI, channels, changelog and release notes); the two existing skills and `AGENTS.md` corrected against the code; four notes that lived only in an agent's personal memory moved into them; each new skill tried on a typical task by a fresh agent; a first-week path for new developers in Norwegian (`.development-guide/kom-i-gang.md`) | Done 2026-10-06: one copy of each skill and the check in CI; three new skills and two corrected; `AGENTS.md`, the onboarding chapter `.development-guide/kom-i-gang.md`, and the guide where it contradicted the code |
 | 1c | CI build time (added by the user 2026-10-05; runs after 1, before 1b) | A debug workflow that builds the release package without touching the tenant, so the live workflows stay as they are until each change is proven; `Build-Release.ps1` switches, off by default: the rebuild's per-project timeline printed and its logs uploaded, PnP.PowerShell (and its version check, which ends the script with `exit 0` when the module is missing) skipped when the PnP templates are, and a phased Rush rebuild in which a solution starts once the solutions it depends on have compiled, instead of after their tests, bundles and packages | Done 2026-10-06: per-project times measured; the timeline and the PnP.PowerShell skip in the live packages-only job; the phased rebuild tried and not adopted (slower on the 4-core runner); narrowing `[apps-only:<solution>]` builds left for after phase 5 |
 | 2 | Redux Toolkit 2 | Reducer tests for the four without one (the program administration's is the model); then the bump: the seven object-notation reducers moved to the builder callback, which 2.x requires, `AnyAction` replaced by `UnknownAction` or the reducer's own action union, `rush update`; every web part with a reducer checked by hand | All reducers tested, green on 2.x |
 | 3 | React 18 readiness | `react-beautiful-dnd` replaced by a maintained fork with the same API or by the panel's own ordering, `react-calendar-timeline` on a line that declares React 18, the 15 files that render with react-dom's `render` made ready for `createRoot` (the 7 without an unmount get one); nothing bumps yet | The two peers settled, tests green on React 17 |
@@ -292,7 +292,7 @@ had a placeholder solution and the workbench; and `LAUNCH_CONFIGURATIONS`, which
 reads, was in neither the template nor the guide. The guide (`utviklingsmiljo.md`) now says to
 build the dependencies first, that `SERVE_CHANNEL` must match the page's channel (`test` on the test
 tenant, or the page keeps the deployed bundles), and how to debug from VS Code. Slice 1b's
-`ONBOARDING.md` builds on it.
+`.development-guide/kom-i-gang.md` builds on it.
 
 ### Between slices: the measurements dialog in the benefit overview (2026-10-05)
 
@@ -386,3 +386,48 @@ summary of every `[apps-only]` run) and `-SkipPnPPowerShell` (14 s). Removed: th
 files, `-PhasedBuild`), so no configuration is left that nothing runs; this log and the CI guide keep
 what it showed. Narrowing an `[apps-only:<solution>]` build to the solution and its dependencies,
 the one change measured to save minutes, is left out of phase 5 (the user, 2026-10-06).
+
+### Slice 1b — skills and onboarding (2026-10-06)
+
+**One copy.** Every Copilot surface that loads skills (VS Code, Visual Studio, JetBrains, the
+Copilot CLI and cloud agent) reads `.claude/skills`, as Claude Code does, so the hand-made copy in
+`.github/skills` went: seventeen of its files were identical, the eighteenth was a stale
+`pp365-testing`. `.tasks/check-skills.js` (`npm run check-skills`, and `skills.yml` on pushes and
+pull requests touching skills, `[skip-ci]` or not) fails when a second copy appears or a `SKILL.md`
+breaks the frontmatter rules Copilot applies (`name` equal to the folder, a description of at most
+1,024 characters); tried both ways.
+
+**Three new skills**, each drafted by an agent from the guide, the code, the phase plans and the
+notes that lived in one developer's agent memory, then fact-checked by a second agent and tried on a
+typical task by a third (adding a panel to project information; a new project property from field to
+upgrade; a fix through commit, CI, changelog and pull request), and revised from both: `pp365-ui`
+(131 lines; 52 claims held, 7 wrong), `pp365-templates` (135; 56 and 5) and `pp365-release` (143; 41
+and 9); every trial scored 4 of 5 on the draft. The four memory notes (Fluent v9 flicker, the pnpm
+store and validate-loc, stale bundles after a deploy, the local sp-js-provisioning runner) were
+checked, corrected where wrong (`localization-report.md` is gitignored, not tracked) and moved in.
+`pp365-toolchain` (108 lines, from 124) and `pp365-testing` (75) are corrected on 25 outdated points,
+`AGENTS.md` on 13 (where Jest runs, what `validate-loc` does not gate, the coverage floors, the lint
+rules, the Rush projects, the typings names) and lists the skills. `.development-guide/kom-i-gang.md`
+(first written as a root `ONBOARDING.md`, moved into the guide at the user's request) is a first-week
+path in Norwegian, with access and where to ask filled in by the user.
+
+**The guide, where the review found it contradicting the code:** `testing.md` (the floors were "not
+switched on"; branches; the e2e folders), `npm-skript.md` (`Build-Release.ps1`'s case; the build
+scripts), `commit-praksis.md` (tags and workflows, now a pointer to the CI chapter),
+`kontinuerlig-integrasjon.md` (the workflow table listed three in `unused/`; `[apps-only]` and any
+`Templates/` change), `kodemonster.md` (`format` from v8, typings beside the source, `myStrings.d.ts`
+everywhere, a hard-coded colour; a comments section; now in the generated README). Also:
+`jest-shared.config.json`'s comment and `Build-Release.ps1`'s message no longer suggest lowering a
+floor, and the two extension solutions' `validate-loc` passes `--dts myStrings.d.ts`, their file's
+real name, which on Linux would otherwise fail.
+
+**Found and left, for issues:** `UpgradeAllSitesToLatest.ps1` looks for the list title
+`Prosjektegenskaper`, so English installations run no per-site upgrade step; the `<!-- ID -->`
+comments in `Prosjektkolonner.xml` are wrong from row 34, and the three `GtStatusOpportunities` rows
+look up 54 where that column is row 36; `channels/kurs.json` lists `DynamicListWebPart` under the
+wrong solution with a stale id; `shared-library/src/loc/strings.test.ts` ships in the package as a
+locale bundle (`SharedLibraryStrings_strings.test.js`); `generate-sbom.yml` fails on every tag push;
+`sync-version` skips the dot folders, `Templates` and `e2e`; `@BaseDialog`'s close button has no
+`aria-label`; `IBasePanelProps.hidden` hides only the header; the templates guide
+(`maler/*.md`) and the release guide (`opprette-ny-versjon.md`, `npm.md`) predate the current layout
+and process; `kodemonster.md`'s reducer example uses the object notation slice 2 removes.

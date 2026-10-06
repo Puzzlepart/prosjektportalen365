@@ -8,12 +8,12 @@ Vi har satt opp kontinuerlig integrasjon (CI) ved hjelp av GitHub Actions.
 
 Nøkkelord kan brukes i commit-meldingen for å unngå (eller tvinge) at CI kjører noen av jobbene.
 
-- `[skip-ci]` for å unngå at alle CI-prosesser starter.
+- `[skip-ci]` for å unngå at alle CI-prosesser starter. Unntak: `skills.yml`, som bare sjekker agentferdighetene og tar sekunder.
 - `[skip-upgrade]` for å unngå at jobben «Oppgrader» starter. Dette vil også hoppe over jobben «Installer» da den er avhengig av «Oppgrader».
 - `[skip-install]` for å unngå at jobben «Installer» starter.
 - `[skip-main-ci]` for å hoppe over hovedbygging (build-release.yml).
 - `[skip-test-ci]` for å hoppe over test-kanal bygging.
-- `[apps-only]` for å bygge kun pakker (appkatalog), hopper over utrulling av maler. Brukes dersom du ikke har gjort noen endringer på .xml-filene i Templates.
+- `[apps-only]` for å bygge kun pakker (appkatalog), hopper over utrulling av maler. Brukes bare når ingenting i `Templates/` er endret: også `.resx`-tekster, JSON-maler og innhold går bare ut med en full kjøring.
 - `[apps-only:<løsninger>]` som `[apps-only]`, men bygger og ruller ut **kun de oppgitte SPFx-løsningene** (komma-separert) i stedet for alle. Navnene matches uten hensyn til store/små bokstaver og bindestrek, f.eks. `ApplyUpgradeTemplate` eller `[apps-only:PortfolioExtensions,shared-library]`. Gyldige navn: `shared-library`, `PortfolioExtensions`, `PortfolioWebParts`, `ProgramWebParts`, `ProjectExtensions`, `ProjectWebParts`.
 - `[upgrade-all-sites-to-latest]` for å kjøre skriptet `UpgradeAllSitesToLatest.ps1` i CI-modus.
 - `[skip-e2e]` for å hoppe over Playwright-røyktestene som kjører etter oppgraderingen av testkanalen, også etter en `[apps-only]`-oppgradering (se «Testregime»). `[skip-upgrade]` hopper over dem indirekte.
@@ -47,13 +47,15 @@ To ting å vite når du måler: løperne varierer mye (samme bygg har tatt 506 o
 
 ### Aktive arbeidsflyter
 
-| Arbeidsflytfil            | Beskrivelse                                      | Utløser                                           |
-| ------------------------- | ------------------------------------------------ | ------------------------------------------------- |
-| `ci-releases.yml`         | Bygg, oppgrader og installer til utviklingsmiljø | Push til `main` (stier: SPFx, Install, Templates) |
-| `build-release.yml`       | Bygg utgivelsespakke + test/kurs-kanalpakker     | Push til `main`                                   |
-| `ci-channel-test.yml`     | Bygg og distribuer testkanal                     | Push til releases-branch                          |
-| `ci-build-debug.yml`      | Bygg testkanalens pakke uten utrulling (måling)  | Push med `[build-debug]` i emnelinjen             |
-| `ci-channel-i18n.yml`     | Bygg og distribuer i18n (engelsk) kanal          | Push til `main` (krever `i18n:` i commit)         |
-| `pr-package-spfx-dev.yml` | Rush install, lint og rebuild ved pull requests  | PR mot release-branches                           |
-| `automatic_chores.yml`    | Automatisk linting og commit av rettelser        | Push til releases-branch                          |
-| `generate-sbom.yml`       | Generer og commit SBOM.md                        | Tag-push `v*` eller manuell utløsning             |
+GitHub kjører bare arbeidsflytfilene som ligger rett i `.github/workflows/`. De i `.github/workflows/unused/` (`automatic_chores.yml`, `ci-channel-i18n.yml`, `pr-package-spfx-dev.yml`) er tatt ut av bruk.
+
+| Arbeidsflytfil        | Beskrivelse                                                                  | Utløser                                                                                  |
+| --------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `ci-releases.yml`     | Bygg, oppgrader og installer til utviklingsmiljø                             | Push til `releases/1.15` (stier: SPFx, Install, Templates)                               |
+| `ci-channel-test.yml` | Bygg og distribuer testkanalen, og kjør Playwright-testene mot den           | Push til `releases/1.15`, `feat/fluent-v9*` og `feat/dependency-upgrades*` (stier: SPFx, Install, Templates, e2e) |
+| `ci-build-debug.yml`  | Bygg testkanalens pakke uten utrulling, for å prøve endringer i bygget       | Push med `[build-debug]` i emnelinjen                                                    |
+| `build-release.yml`   | Bygg utgivelsespakke og test/kurs-kanalpakker                                | Push til `main` (stier: SPFx, Install, Templates)                                        |
+| `generate-sbom.yml`   | Generer og commit SBOM.md                                                    | Tag-push `v*` eller manuell utløsning                                                    |
+| `skills.yml`          | Sjekk at agentferdighetene bare ligger i `.claude/skills` (`npm run check-skills`) | Push og pull request som endrer `.claude/skills`, `.github/skills` eller `.agents/skills` |
+
+Hvilke brancher en arbeidsflyt kjører på, leses fra arbeidsflytfilen i commiten som pushes. En branch kan derfor få CI ved å legge seg selv til i sin egen kopi av filen, slik fase 5 gjorde i `ci-channel-test.yml`.

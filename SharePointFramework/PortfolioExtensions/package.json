@@ -18,7 +18,7 @@
     "postversion": "heft build --production && npm publish",
     "lint": "npm run prettier && eslint ./src --fix",
     "prettier": "prettier \"**/*.ts*\" --write --log-level warn --config ../.prettierrc.yaml",
-    "validate-loc": "node ../.tasks/validateLoc.js --path ./src/loc --interface IPortfolioExtensionsStrings --dts mystrings.d.ts --output ./localization-report.md --summary",
+    "validate-loc": "node ../.tasks/validateLoc.js --path ./src/loc --interface IPortfolioExtensionsStrings --dts myStrings.d.ts --output ./localization-report.md --summary",
     "clean": "heft clean",
     "start": "heft start",
     "eject-webpack": "heft eject-webpack",

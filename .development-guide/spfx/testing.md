@@ -20,7 +20,7 @@ Kjøretidskontraktene finnes fordi Jest ikke kan laste `@pnp/*` (ESM-only under 
 
 `npm run build` i en løsning kjører `heft test --clean --production && heft package-solution --production`. Heft kompilerer `src/**/*.ts(x)` til `lib-commonjs/`, kjører alle `*.test.ts`/`*.test.tsx` der, og stopper bygget hvis en test feiler. Det samme skjer i `rush build`/`rush rebuild` og dermed i alle CI-arbeidsflytene. Resultatet ligger i `jest-output/JUnit.xml` og dekningsrapporten i `jest-output/coverage/` (begge er ignorert av git).
 
-Dekningsgrenser er med hensikt ikke slått på ennå. Tester innføres inkrementelt, med prioritet på kode som endres (Fluent UI v9-konverteringen) og kode som feiler stille (dataadaptere og provisjonering).
+Hver løsning har dekningsgrenser i `config/jest.config.json` (`coverageThreshold.global`: setninger, grener, funksjoner, linjer), målt i fase 4. De heves når dekningen øker og senkes aldri. Jest melder en grense som ikke nås, men Heft-testfasen lykkes likevel, så lokalt går bygget gjennom; det er `Install/Build-Release.ps1` som stopper på det, og dermed CI. Sletter du tester eller legger til kode uten tester, kan altså bygget gå lokalt og feile i CI.
 
 ### Delt oppsett: `pp365-jest-config`
 
@@ -91,9 +91,9 @@ Kjør testene i en løsning med `npm test` (`heft test`), eller bare bygg-og-tes
 
 ### Ende-til-ende med Playwright (`e2e/`)
 
-`e2e/` er Rush-prosjektet `pp365-e2e`. Testene er lesende røyk-tester mot testtenanten: de logger inn som en dedikert testbruker, åpner hub-sidene og et prosjektområde, venter på at SPFx-lerretet rendrer, sjekker at forventede webdeler monteres, og feiler på nettleserfeil som betyr at en bundle er ødelagt («Cannot find module», «Failed to load component», «ChunkLoadError»). Det siste er nettopp symptomet på et delt bibliotek som ikke er pakket inn, og er det pakkebeviset i `Build-Release.ps1` sikrer på byggetidspunktet.
+`e2e/` er Rush-prosjektet `pp365-e2e`, med tre mapper: `tests/smoke` (røyktester av sider og webdeler), `tests/flows` (brukerreiser; fire av dem skriver til testtenanten og rydder etter seg) og `tests/local` (en løsnings lokale bundle via en utviklingsserver, bare med `E2E_LOCAL_BUNDLE=1`, aldri i CI). Røyktestene logger inn som en dedikert testbruker, åpner hub-sidene og et prosjektområde, venter på at SPFx-lerretet rendrer, sjekker at forventede webdeler monteres, og feiler på nettleserfeil som betyr at en bundle er ødelagt («Cannot find module», «Failed to load component», «ChunkLoadError»). Det siste er nettopp symptomet på et delt bibliotek som ikke er pakket inn, og er det pakkebeviset i `Build-Release.ps1` sikrer på byggetidspunktet.
 
-Kjøring i CI: jobben «End-to-end smoke (test channel)» i `ci-channel-test.yml` kjører etter en vellykket «Upgrade (test channel)», altså mot den pakken som nettopp ble rullet ut til `SP_URL_TEST`. Arbeidsflyten utløses av push til grenene i `on.push.branches` (i dag `releases/1.15` og `feat/toolchain-upgrade`) når filer under `SharePointFramework/`, `Install/`, `Templates/` eller `e2e/` er endret, og kan startes manuelt fra Actions-fanen (`workflow_dispatch`). Merk at en push til en av disse grenene oppgraderer testtenanten. E2E-jobben følger begge oppgraderingsløpene: den vanlige oppgraderingen og pakke-oppgraderingen som `[apps-only]`/`[apps-only:<løsninger>]` bruker. `[skip-e2e]` i commit-emnet hopper over E2E-jobben; `[skip-upgrade]` hopper over oppgraderingen og dermed også E2E.
+Kjøring i CI: jobben «End-to-end smoke (test channel)» i `ci-channel-test.yml` kjører etter en vellykket «Upgrade (test channel)», altså mot den pakken som nettopp ble rullet ut til `SP_URL_TEST`. Arbeidsflyten utløses av push til grenene i `on.push.branches` (i dag `releases/1.15`, `feat/fluent-v9*` og `feat/dependency-upgrades*`) når filer under `SharePointFramework/`, `Install/`, `Templates/` eller `e2e/` er endret, og kan startes manuelt fra Actions-fanen (`workflow_dispatch`). Merk at en push til en av disse grenene oppgraderer testtenanten. E2E-jobben følger begge oppgraderingsløpene: den vanlige oppgraderingen og pakke-oppgraderingen som `[apps-only]`/`[apps-only:<løsninger>]` bruker. `[skip-e2e]` i commit-emnet hopper over E2E-jobben; `[skip-upgrade]` hopper over oppgraderingen og dermed også E2E.
 
 #### Finne og lese E2E-rapporten fra CI
 
@@ -151,7 +151,7 @@ Lokalt: `cp e2e/.env.example e2e/.env`, fyll inn, `npx playwright install chromi
 
 ### Veikart
 
-1. Komponenttester for komponentene som konverteres fra Fluent UI v8 til v9 (fase 3), skrevet før konverteringen.
-2. Skriveflyter i E2E: prosjektoppsett, publisering av statusrapport, opprettelse av idé. Krever oppryddingslogikk i testtenanten.
+1. ~~Komponenttester for komponentene som konverteres fra Fluent UI v8 til v9.~~ Gjort i fase 3 og 4: hver webdel-rot, utvidelse og interaktiv komponent har tester.
+2. Skriveflyter i E2E: kopi av dokumentmal, utkast til statusrapport, ny kolonne i porteføljeoversikten og underområde i et program er på plass og rydder etter seg. Gjenstår: prosjektoppsett, publisering av statusrapport og opprettelse av idé.
 3. Flere kjøretidskontrakter (`test/runtime`) for dataadapterne, mot innspilte svar.
-4. Dekningsgrenser per løsning når grunnlinjen er kjent.
+4. ~~Dekningsgrenser per løsning.~~ Gjort i fase 4 (se over).

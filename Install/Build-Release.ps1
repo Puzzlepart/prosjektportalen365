@@ -406,7 +406,7 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
         Where-Object { $_.DirectoryName -like "*rush-logs*" } |
         Select-String -Pattern "coverage threshold for .* not met"
     if ($missedFloors) {
-        Write-Host "[ERROR] A coverage floor was missed. Raise the coverage, or lower the floor in that solution's config/jest.config.json:" -ForegroundColor Red
+        Write-Host "[ERROR] A coverage floor was missed. Add tests to raise the coverage; the floors in that solution's config/jest.config.json are raised as coverage grows, never lowered:" -ForegroundColor Red
         $missedFloors | ForEach-Object { "$($_.Filename): $($_.Line)" } | Write-Host
         exit 1
     }

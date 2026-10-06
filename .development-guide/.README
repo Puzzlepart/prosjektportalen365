@@ -6,11 +6,15 @@
 [[ template:toc ]]
 </details>
 
+[[load:.development-guide/kom-i-gang.md]]
+
 [[load:.development-guide/git/branching-og-arbeidsflyt.md]]
 
 [[load:.development-guide/git/commit-praksis.md]]
 
 [[load:.development-guide/spfx/komponentoversikt.md]]
+
+[[load:.development-guide/spfx/kodemonster.md]]
 
 [[load:.development-guide/spfx/losninger.md]]
 
