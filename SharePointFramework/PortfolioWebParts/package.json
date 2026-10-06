@@ -52,7 +52,7 @@
     "underscore": "~1.13.6",
     "lodash": "~4.17.21",
     "array-unique": "0.3.2",
-    "react-beautiful-dnd": "~13.1.1",
+    "@hello-pangea/dnd": "~16.6.0",
     "@pnp/core": "4.21.0",
     "@pnp/queryable": "4.21.0",
     "@fluentui/react-components": "~9.74.8",
@@ -61,8 +61,7 @@
     "react-error-boundary": "~4.0.11",
     "react-window": "~1.8.10",
     "react-virtualized-auto-sizer": "~1.0.24",
-    "react-gauge-component": "~1.2.61",
-    "react-fade-in": "~2.0.1"
+    "react-gauge-component": "~1.2.61"
   },
   "devDependencies": {
     "@microsoft/sp-module-interfaces": "1.23.2",
@@ -78,7 +77,6 @@
     "@types/lodash": "~4.14.195",
     "@types/object-assign": "4.0.30",
     "@types/react": "17.0.45",
-    "@types/react-beautiful-dnd": "~13.1.4",
     "@types/react-dom": "17.0.17",
     "@types/react-window": "~1.8.8",
     "@types/underscore": "~1.11.5",

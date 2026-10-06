@@ -11,6 +11,7 @@ Denne guiden forklarer de viktigste kodemønstrene vi bruker i SharePoint Framew
 - [Lokalisering (loc)](#lokalisering-loc)
 - [SCSS-moduler](#scss-moduler)
 - [Fluent UI v9](#fluent-ui-v9)
+- [Montering av React](#montering-av-react)
 - [Kommentarer](#kommentarer)
 
 ---
@@ -481,6 +482,20 @@ import { customLightTheme } from 'pp365-shared-library'
 En slot kan få en render-funksjon i stedet for innhold: `label={{ children: (Component, props) => ... }}`. Fluent kaller den med slotens elementtype og props, og i props ligger det Fluent har koblet sammen, som `id` og `for` som knytter en `Field`-etikett til kontrollen. En funksjon som overser argumentene, tegner bare sitt eget innhold, og koblingen forsvinner. `FieldContainer` gjorde det til fase 4: feltene med ikon hadde ingen etikett for skjermlesere. Send videre det slot-en trenger, slik `FieldContainer` nå gjør med etikettens `id` og `htmlFor`.
 
 ---
+
+## Montering av React
+
+Webdeler, utvidelser, dialoger og felt i egenskapsruten monterer React med `renderReact` og `unmountReact` fra `pp365-shared-library`, aldri med `render` fra `react-dom` direkte. Da kan overgangen til React 18 (`createRoot`) gjøres i én fil, `shared-library/src/util/reactRoot.ts`.
+
+```ts
+import { renderReact, unmountReact } from 'pp365-shared-library'
+
+renderReact(createElement(Footer, footerProps), this._footerElement)
+// …og når verten fjernes:
+unmountReact(this._footerElement)
+```
+
+Det som tegner i sin egen beholder, fjerner komponenten når verten fjernes (basewebdelene gjør det i `onDispose`), og tegner på nytt i den samme beholderen i stedet for i en ny hver gang. Før 1.15 tegnet bunnteksten i en ny beholder ved hver navigering og la igjen en montert bunntekst for hver side.
 
 ## Kommentarer
 

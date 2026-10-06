@@ -10,8 +10,7 @@ import { ISPHttpClientOptions, SPHttpClient } from '@microsoft/sp-http'
 import * as strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import { createElement } from 'react'
-import { render } from 'react-dom'
-import { ErrorWithIntent, IUserMessageProps, UserMessage } from 'pp365-shared-library'
+import { ErrorWithIntent, IUserMessageProps, UserMessage, renderReact } from 'pp365-shared-library'
 import {
   IPortfolioAggregationConfiguration,
   IPortfolioAggregationProps,
@@ -36,7 +35,7 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
     if (!this._configuration) {
       // The base web part unmounts the element in onDispose.
       // eslint-disable-next-line @rushstack/pair-react-dom-render-unmount
-      render(
+      renderReact(
         createElement(UserMessage, {
           title: this._configurationError?.name ?? strings.ErrorTitle,
           text: this._configurationError?.message ?? strings.GetPortfolioConfigErrorText,

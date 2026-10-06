@@ -17,10 +17,11 @@ import {
   ProjectTemplateFile,
   createSpfiInstance,
   format,
-  getId
+  getId,
+  renderReact,
+  unmountReact
 } from 'pp365-shared-library'
 import { createElement } from 'react'
-import { render, unmountComponentAtNode } from 'react-dom'
 import _ from 'underscore'
 import {
   ErrorDialog,
@@ -342,7 +343,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           },
           validation: this._validation
         })
-        render(element, placeholder)
+        renderReact(element, placeholder)
       }
     })
   }
@@ -359,7 +360,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       ...props,
       version: this.version
     })
-    render(element, placeholder)
+    renderReact(element, placeholder)
   }
 
   /**
@@ -394,7 +395,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         this._unmount(placeholder)
       }
     })
-    render(element, placeholder)
+    renderReact(element, placeholder)
   }
 
   /**
@@ -678,8 +679,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    *
    * @param container - HTML container elememnt
    */
-  private _unmount(container: HTMLElement): boolean {
-    return unmountComponentAtNode(container)
+  private _unmount(container: HTMLElement): void {
+    unmountReact(container)
   }
 
   /**

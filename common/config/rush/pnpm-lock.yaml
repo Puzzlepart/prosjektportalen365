@@ -245,6 +245,9 @@ importers:
       '@fluentui/react-icons':
         specifier: ~2.0.341
         version: 2.0.341(react@17.0.1)
+      '@hello-pangea/dnd':
+        specifier: ~16.6.0
+        version: 16.6.0(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)
       '@microsoft/decorators':
         specifier: 1.23.2
         version: 1.23.2
@@ -289,7 +292,7 @@ importers:
         version: 3.24.0(@types/node@22.20.3)(@types/react-dom@17.0.17)(@types/react@17.0.45)(encoding@0.1.13)(scheduler@0.20.2)
       '@reduxjs/toolkit':
         specifier: ~2.13.0
-        version: 2.13.0(react-redux@7.2.9(react-dom@17.0.1(react@17.0.1))(react@17.0.1))(react@17.0.1)
+        version: 2.13.0(react-redux@8.1.3(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(redux@5.0.1))(react@17.0.1)
       '@types/array-sort':
         specifier: 1.0.0
         version: 1.0.0
@@ -323,18 +326,12 @@ importers:
       react:
         specifier: 17.0.1
         version: 17.0.1
-      react-beautiful-dnd:
-        specifier: ~13.1.1
-        version: 13.1.1(react-dom@17.0.1(react@17.0.1))(react@17.0.1)
       react-dom:
         specifier: 17.0.1
         version: 17.0.1(react@17.0.1)
       react-error-boundary:
         specifier: ~4.0.11
         version: 4.0.13(react@17.0.1)
-      react-fade-in:
-        specifier: ~2.0.1
-        version: 2.0.1(react@17.0.1)
       react-gauge-component:
         specifier: ~1.2.61
         version: 1.2.64(react-dom@17.0.1(react@17.0.1))(react@17.0.1)
@@ -393,9 +390,6 @@ importers:
       '@types/react':
         specifier: 17.0.45
         version: 17.0.45
-      '@types/react-beautiful-dnd':
-        specifier: ~13.1.4
-        version: 13.1.8
       '@types/react-dom':
         specifier: 17.0.17
         version: 17.0.17
@@ -485,7 +479,7 @@ importers:
         version: 3.24.0(@types/node@22.20.3)(@types/react-dom@17.0.17)(@types/react@17.0.45)(encoding@0.1.13)(scheduler@0.20.2)
       '@reduxjs/toolkit':
         specifier: ~2.13.0
-        version: 2.13.0(react-redux@7.2.9(react-dom@17.0.1(react@17.0.1))(react@17.0.1))(react@17.0.1)
+        version: 2.13.0(react-redux@8.1.3(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(redux@5.0.1))(react@17.0.1)
       '@types/array-sort':
         specifier: 1.0.0
         version: 1.0.0
@@ -657,7 +651,7 @@ importers:
         version: 4.21.0
       '@reduxjs/toolkit':
         specifier: ~2.13.0
-        version: 2.13.0(react-redux@7.2.9(react-dom@17.0.1(react@17.0.1))(react@17.0.1))(react@17.0.1)
+        version: 2.13.0(react-redux@8.1.3(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(redux@5.0.1))(react@17.0.1)
       jszip:
         specifier: 3.10.1
         version: 3.10.1
@@ -673,9 +667,6 @@ importers:
       react:
         specifier: 17.0.1
         version: 17.0.1
-      react-autocomplete:
-        specifier: 1.8.1
-        version: 1.8.1(react-dom@17.0.1(react@17.0.1))(react@17.0.1)
       react-dom:
         specifier: 17.0.1
         version: 17.0.1(react@17.0.1)
@@ -743,9 +734,6 @@ importers:
       '@types/react':
         specifier: 17.0.45
         version: 17.0.45
-      '@types/react-autocomplete':
-        specifier: ^1.8.6
-        version: 1.8.11
       '@types/react-dom':
         specifier: 17.0.17
         version: 17.0.17
@@ -847,7 +835,7 @@ importers:
         version: 3.24.0(@types/node@22.20.3)(@types/react-dom@17.0.17)(@types/react@17.0.45)(encoding@0.1.13)(scheduler@0.20.2)
       '@reduxjs/toolkit':
         specifier: ~2.13.0
-        version: 2.13.0(react-redux@7.2.9(react-dom@17.0.1(react@17.0.1))(react@17.0.1))(react@17.0.1)
+        version: 2.13.0(react-redux@8.1.3(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(redux@5.0.1))(react@17.0.1)
       array-sort:
         specifier: 1.0.0
         version: 1.0.0
@@ -887,15 +875,9 @@ importers:
       react-gauge-component:
         specifier: ~1.2.61
         version: 1.2.64(react-dom@17.0.1(react@17.0.1))(react@17.0.1)
-      react-image-fade-in:
-        specifier: 1.0.2
-        version: 1.0.2(prop-types@15.8.1)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)
       react-markdown:
         specifier: ^8.0.3
         version: 8.0.7(@types/react@17.0.45)(react@17.0.1)
-      react-scroll:
-        specifier: 1.7.11
-        version: 1.7.11(react-dom@17.0.1(react@17.0.1))(react@17.0.1)
       rehype-raw:
         specifier: ^6.1.1
         version: 6.1.1
@@ -2450,6 +2432,12 @@ packages:
   '@griffel/style-types@1.4.2':
     resolution: {integrity: sha512-MsSghfpyxR2MpTrYdcCozISsSLkmFjNw94wNPi4bDBRLW8W43718W/ZjmUdVkoM0KXMtJPYuEkx8Mzibqb03qA==}
 
+  '@hello-pangea/dnd@16.6.0':
+    resolution: {integrity: sha512-vfZ4GydqbtUPXSLfAvKvXQ6xwRzIjUSjVU0Sx+70VOhc2xx6CdmJXJ8YhH70RpbTUGjxctslQTHul9sIOxCfFQ==}
+    peerDependencies:
+      react: ^16.8.5 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.5 || ^17.0.0 || ^18.0.0
+
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
     engines: {node: '>=18.18.0'}
@@ -3951,20 +3939,11 @@ packages:
   '@types/range-parser@1.2.7':
     resolution: {integrity: sha512-hKormJbkJqzQGhziax5PItDUTMAM9uE2XXQmM37dyd4hVM+5aVl7oVxMVUiVQn2oCQFN/LKCZdvSM0pFRqbSmQ==}
 
-  '@types/react-autocomplete@1.8.11':
-    resolution: {integrity: sha512-JYaD/OGfVFMK5NaGOCAd25QRs4MEevapn38xvYWjwo5brxrUMo2PucYmShTfuTX99r80UtncCMDrFZ9MGIVyvQ==}
-
-  '@types/react-beautiful-dnd@13.1.8':
-    resolution: {integrity: sha512-E3TyFsro9pQuK4r8S/OL6G99eq7p8v29sX0PM7oT8Z+PJfZvSQTx4zTQbUJ+QZXioAF0e7TGBEcA1XhYhCweyQ==}
-
   '@types/react-calendar-timeline@0.28.0':
     resolution: {integrity: sha512-2l2S3JeHuer4ZGdHDWnUfA+R4y7O37ExF3foHswjLgSz85yyECczFGuLTISulPwpXzeds9wHnvP9mUoPzWNcBQ==}
 
   '@types/react-dom@17.0.17':
     resolution: {integrity: sha512-VjnqEmqGnasQKV0CWLevqMTXBYG9GbwuE6x3VetERLh0cq2LTptFE73MrQi2S7GkKXCf2GgwItB/melLnxfnsg==}
-
-  '@types/react-redux@7.1.34':
-    resolution: {integrity: sha512-GdFaVjEbYv4Fthm2ZLvj1VSCedV7TqE5y1kNwnjSdBOTXuRSgowux6J8TAct15T3CKBr63UMk+2CO7ilRhyrAQ==}
 
   '@types/react-window@1.8.8':
     resolution: {integrity: sha512-8Ls660bHR1AUA2kuRvVG9D/4XpRC6wjAaPT9dil7Ckc76eP9TKWZwwmgfq8Q1LANX3QNDnoU4Zp48A3w+zK69Q==}
@@ -4022,6 +4001,9 @@ packages:
 
   '@types/unist@2.0.11':
     resolution: {integrity: sha512-CmBKiL6NNo/OqgmMn95Fk9Whlp2mtvIv+KNpQKN2F4SjvrEesubTRWGYSg+BnWZOnlCaSTU1sMpsBOzgbYhnsA==}
+
+  '@types/use-sync-external-store@0.0.3':
+    resolution: {integrity: sha512-EwmlvuaxPNej9+T4v5AuBPJa2x2UOJVdjCtDHgcDqitUeOtjnJKJ+apYjVcAoBEMjKW1VVFGZLUb5+qqa09XFA==}
 
   '@types/webpack-env@1.15.3':
     resolution: {integrity: sha512-5oiXqR7kwDGZ6+gmzIO2lTC+QsriNuQXZDWNYRV3l2XRN/zmPgnC21DLSx2D05zvD8vnXW6qUg7JnXZ4I6qLVQ==}
@@ -5321,9 +5303,6 @@ packages:
 
   dom-helpers@5.2.1:
     resolution: {integrity: sha512-nRCa7CK3VTrM2NmGkIy4cbK7IZlgBE/PYMn55rrXefr5xXDP0LdtfPnblFDoVdcAfslJ7or6iqAUnx0CCGIWQA==}
-
-  dom-scroll-into-view@1.0.1:
-    resolution: {integrity: sha512-1Dmy6uH1vRcm2+Lvggyrlc04cMh+mr+VA+qcgs085hAEZp+v+6NT/xhRjfc6vRc7965sCSDdQcw063VkG+eNmQ==}
 
   dom-serializer@1.4.1:
     resolution: {integrity: sha512-VHwB3KfrcOOkelEG2ZOfxqLZdfkil8PtJi4P8N2MMXucZq2yLp75ClViUlOVwyoHEDjYU433Aq+5zWP61+RGag==}
@@ -6791,9 +6770,6 @@ packages:
     resolution: {integrity: sha512-XeqSp49hNGmlkj2EJlfrQFIzQ6lXdNro9sddtQzcJY8QaoC2GO0DT7xaIokHeyM+mIT0mPMlPvkYzg2xCuHdZg==}
     deprecated: This package is deprecated. Use destructuring assignment syntax instead.
 
-  lodash.throttle@4.1.1:
-    resolution: {integrity: sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==}
-
   lodash.transform@4.6.0:
     resolution: {integrity: sha512-LO37ZnhmBVx0GvOU/caQuipEh4GN82TcWv3yHlebGDgOxbxiwwzW5Pcx2AcvpIv2WmvmSMoC492yQFNhy/l/UQ==}
 
@@ -6886,6 +6862,9 @@ packages:
 
   memoize-one@5.2.1:
     resolution: {integrity: sha512-zYiwtZUcYyXKo/np96AGZAckk+FWWsUdJ3cHGGmld7+AhvcWmQyGCYUh1hc4Q/pkOhb65dQR/pqCyK0cOaHz4Q==}
+
+  memoize-one@6.0.0:
+    resolution: {integrity: sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw==}
 
   merge-descriptors@1.0.3:
     resolution: {integrity: sha512-gaNvAS7TZ897/rVaZ0nMtAyxNyi/pdbjbAwUpFQpN70GqnVfOiXpeUUMKRBmzXaSQ8DdTX4/0ms62r2K+hE6mQ==}
@@ -7699,19 +7678,6 @@ packages:
       react: ^0.13.0 || ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0
       react-dom: ^0.13.0 || ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0
 
-  react-autocomplete@1.8.1:
-    resolution: {integrity: sha512-YQGVN5POdcI3G89wUVWnJhk9rLF6JeB6Ik6xnNpfvSMG4tJkksBzqOE4mkFNGqEz+2AaQw13xNmVXresg9E3zg==}
-    peerDependencies:
-      react: ^0.14.7 || ^15.0.0-0 || ^16.0.0-0
-      react-dom: ^0.14.7 || ^15.0.0-0 || ^16.0.0-0
-
-  react-beautiful-dnd@13.1.1:
-    resolution: {integrity: sha512-0Lvs4tq2VcrEjEgDXHjT98r+63drkKEgqyxdA7qD3mvKwga6a5SscbdLPO2IExotU1jW8L0Ksdl0Cj2AF67nPQ==}
-    deprecated: 'react-beautiful-dnd is now deprecated. Context and options: https://github.com/atlassian/react-beautiful-dnd/issues/2672'
-    peerDependencies:
-      react: ^16.8.5 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.8.5 || ^17.0.0 || ^18.0.0
-
   react-calendar-timeline@0.28.0:
     resolution: {integrity: sha512-uy/erjon2oZO6dRtpQri1Sc20w4AOlIOqwjOpD2QNiWZvWt19VzO8pqOFF6BcnkuE63TM1xGfLdMbzSnKBPfeA==}
     peerDependencies:
@@ -7737,24 +7703,11 @@ packages:
     peerDependencies:
       react: '>=16.13.1'
 
-  react-fade-in@2.0.1:
-    resolution: {integrity: sha512-oqS/WT4znaXEHmL+yo0IDUDY7uC9K4RP35j1SdRUEBspR09B2iIC0i8oJ28tPOr6Ez/L2aktF9p89j+DbsTVNw==}
-    peerDependencies:
-      react: ^16.8 || 17
-
   react-gauge-component@1.2.64:
     resolution: {integrity: sha512-kYpOZtfu8z1Xjo+GrCQlMnh3Ai39j/ol1wzXEfvm9pWMyFmhFsX+d3cnZqnRBRQXsKif1up9378RrFjy47Q9DQ==}
     peerDependencies:
       react: ^16.8.2 || ^17.0 || ^18.x || ^19.x
       react-dom: ^16.8.2 || ^17.0 || ^18.x || ^19.x
-
-  react-image-fade-in@1.0.2:
-    resolution: {integrity: sha512-WKi4kBcBUZKveksO6AtKCSNahO2sCAzPb7/Suila0+h/srvO6lUQn5zYj09HfyX8gyd77u466cKeSchDp6gbRw==}
-    engines: {node: '>=8', npm: '>=5'}
-    peerDependencies:
-      prop-types: ^15.5.4
-      react: ^15.0.0 || ^16.0.0
-      react-dom: ^15.0.0 || ^16.0.0
 
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
@@ -7800,23 +7753,26 @@ packages:
       react: ^16 || ^17 || ^18
       react-dom: ^16 || ^17 || ^18
 
-  react-redux@7.2.9:
-    resolution: {integrity: sha512-Gx4L3uM182jEEayZfRbI/G11ZpYdNAnBs70lFVMNdHJI76XYtR+7m0MN+eAs7UHBPhWXcnFPaS+9owSCJQHNpQ==}
+  react-redux@8.1.3:
+    resolution: {integrity: sha512-n0ZrutD7DaX/j9VscF+uTALI3oUPa/pO4Z3soOBIjuRn/FzVu6aehhysxZCLi6y7duMf52WNZGMl7CtuK5EnRw==}
     peerDependencies:
-      react: ^16.8.3 || ^17 || ^18
-      react-dom: '*'
-      react-native: '*'
+      '@types/react': 17.0.45
+      '@types/react-dom': 17.0.17
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+      react-native: '>=0.59'
+      redux: ^4 || ^5.0.0-beta.0
     peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
       react-dom:
         optional: true
       react-native:
         optional: true
-
-  react-scroll@1.7.11:
-    resolution: {integrity: sha512-MCWtt8KWTBzBlo9oFE7xgAhGcgbslsfQAuGZAfYlBTt3Pxi2CX+kh8OoTUVAuOwNlt9XkoWcvDTWQwtHzm2uOg==}
-    peerDependencies:
-      react: ^15.5.4 || ^16.0.0
-      react-dom: ^15.5.4 || ^16.0.0
+      redux:
+        optional: true
 
   react-transition-group@4.4.5:
     resolution: {integrity: sha512-pZcd1MCJoiKiBR2NRxeCRg13uCXbydPnmB4EOeRrY7480qNWO8IIgQG6zlDkm6uRMsURXPuKq0GWtiM59a5Q6g==}
@@ -11274,6 +11230,22 @@ snapshots:
     dependencies:
       csstype: 3.2.3
 
+  '@hello-pangea/dnd@16.6.0(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)':
+    dependencies:
+      '@babel/runtime': 7.29.7
+      css-box-model: 1.2.1
+      memoize-one: 6.0.0
+      raf-schd: 4.0.3
+      react: 17.0.1
+      react-dom: 17.0.1(react@17.0.1)
+      react-redux: 8.1.3(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(redux@4.2.1)
+      redux: 4.2.1
+      use-memo-one: 1.1.3(react@17.0.1)
+    transitivePeerDependencies:
+      - '@types/react'
+      - '@types/react-dom'
+      - react-native
+
   '@humanfs/core@0.19.2':
     dependencies:
       '@humanfs/types': 0.15.0
@@ -13541,7 +13513,7 @@ snapshots:
 
   '@ptkdev/json-token-replace@1.2.2': {}
 
-  '@reduxjs/toolkit@2.13.0(react-redux@7.2.9(react-dom@17.0.1(react@17.0.1))(react@17.0.1))(react@17.0.1)':
+  '@reduxjs/toolkit@2.13.0(react-redux@8.1.3(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(redux@5.0.1))(react@17.0.1)':
     dependencies:
       '@standard-schema/spec': 1.1.0
       '@standard-schema/utils': 0.3.0
@@ -13551,7 +13523,7 @@ snapshots:
       reselect: 5.3.0
     optionalDependencies:
       react: 17.0.1
-      react-redux: 7.2.9(react-dom@17.0.1(react@17.0.1))(react@17.0.1)
+      react-redux: 8.1.3(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(redux@5.0.1)
 
   '@rushstack/debug-certificate-manager@1.7.10(@types/node@22.20.3)':
     dependencies:
@@ -14303,14 +14275,6 @@ snapshots:
 
   '@types/range-parser@1.2.7': {}
 
-  '@types/react-autocomplete@1.8.11':
-    dependencies:
-      '@types/react': 17.0.45
-
-  '@types/react-beautiful-dnd@13.1.8':
-    dependencies:
-      '@types/react': 17.0.45
-
   '@types/react-calendar-timeline@0.28.0':
     dependencies:
       '@types/react': 17.0.45
@@ -14319,13 +14283,6 @@ snapshots:
   '@types/react-dom@17.0.17':
     dependencies:
       '@types/react': 17.0.45
-
-  '@types/react-redux@7.1.34':
-    dependencies:
-      '@types/hoist-non-react-statics': 3.3.7(@types/react@17.0.45)
-      '@types/react': 17.0.45
-      hoist-non-react-statics: 3.3.2
-      redux: 4.2.1
 
   '@types/react-window@1.8.8':
     dependencies:
@@ -14385,6 +14342,8 @@ snapshots:
   '@types/underscore@1.11.15': {}
 
   '@types/unist@2.0.11': {}
+
+  '@types/use-sync-external-store@0.0.3': {}
 
   '@types/webpack-env@1.15.3': {}
 
@@ -15837,8 +15796,6 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.29.7
       csstype: 3.2.3
-
-  dom-scroll-into-view@1.0.1: {}
 
   dom-serializer@1.4.1:
     dependencies:
@@ -17699,8 +17656,6 @@ snapshots:
 
   lodash.omit@4.5.0: {}
 
-  lodash.throttle@4.1.1: {}
-
   lodash.transform@4.6.0: {}
 
   lodash.uniq@4.5.0: {}
@@ -17847,6 +17802,8 @@ snapshots:
       tslib: 2.8.1
 
   memoize-one@5.2.1: {}
+
+  memoize-one@6.0.0: {}
 
   merge-descriptors@1.0.3: {}
 
@@ -18710,27 +18667,6 @@ snapshots:
       react: 17.0.1
       react-dom: 17.0.1(react@17.0.1)
 
-  react-autocomplete@1.8.1(react-dom@17.0.1(react@17.0.1))(react@17.0.1):
-    dependencies:
-      dom-scroll-into-view: 1.0.1
-      prop-types: 15.8.1
-      react: 17.0.1
-      react-dom: 17.0.1(react@17.0.1)
-
-  react-beautiful-dnd@13.1.1(react-dom@17.0.1(react@17.0.1))(react@17.0.1):
-    dependencies:
-      '@babel/runtime': 7.29.7
-      css-box-model: 1.2.1
-      memoize-one: 5.2.1
-      raf-schd: 4.0.3
-      react: 17.0.1
-      react-dom: 17.0.1(react@17.0.1)
-      react-redux: 7.2.9(react-dom@17.0.1(react@17.0.1))(react@17.0.1)
-      redux: 4.2.1
-      use-memo-one: 1.1.3(react@17.0.1)
-    transitivePeerDependencies:
-      - react-native
-
   react-calendar-timeline@0.28.0(interactjs@1.6.2)(moment@2.29.4)(prop-types@15.8.1)(react-dom@17.0.1(react@17.0.1))(react@17.0.1):
     dependencies:
       classnames: 2.5.1
@@ -18763,10 +18699,6 @@ snapshots:
       '@babel/runtime': 7.29.7
       react: 17.0.1
 
-  react-fade-in@2.0.1(react@17.0.1):
-    dependencies:
-      react: 17.0.1
-
   react-gauge-component@1.2.64(react-dom@17.0.1(react@17.0.1))(react@17.0.1):
     dependencies:
       '@types/d3': 7.4.3
@@ -18775,12 +18707,6 @@ snapshots:
       react: 17.0.1
       react-dom: 17.0.1(react@17.0.1)
       serve: 14.2.6
-
-  react-image-fade-in@1.0.2(prop-types@15.8.1)(react-dom@17.0.1(react@17.0.1))(react@17.0.1):
-    dependencies:
-      prop-types: 15.8.1
-      react: 17.0.1
-      react-dom: 17.0.1(react@17.0.1)
 
   react-is@16.13.1: {}
 
@@ -18838,24 +18764,36 @@ snapshots:
       react: 17.0.1
       react-dom: 17.0.1(react@17.0.1)
 
-  react-redux@7.2.9(react-dom@17.0.1(react@17.0.1))(react@17.0.1):
+  react-redux@8.1.3(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(redux@4.2.1):
     dependencies:
       '@babel/runtime': 7.29.7
-      '@types/react-redux': 7.1.34
+      '@types/hoist-non-react-statics': 3.3.7(@types/react@17.0.45)
+      '@types/use-sync-external-store': 0.0.3
       hoist-non-react-statics: 3.3.2
-      loose-envify: 1.4.0
-      prop-types: 15.8.1
       react: 17.0.1
-      react-is: 17.0.2
+      react-is: 18.3.1
+      use-sync-external-store: 1.7.0(react@17.0.1)
     optionalDependencies:
+      '@types/react': 17.0.45
+      '@types/react-dom': 17.0.17
       react-dom: 17.0.1(react@17.0.1)
+      redux: 4.2.1
 
-  react-scroll@1.7.11(react-dom@17.0.1(react@17.0.1))(react@17.0.1):
+  react-redux@8.1.3(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(redux@5.0.1):
     dependencies:
-      lodash.throttle: 4.1.1
-      prop-types: 15.8.1
+      '@babel/runtime': 7.29.7
+      '@types/hoist-non-react-statics': 3.3.7(@types/react@17.0.45)
+      '@types/use-sync-external-store': 0.0.3
+      hoist-non-react-statics: 3.3.2
       react: 17.0.1
+      react-is: 18.3.1
+      use-sync-external-store: 1.7.0(react@17.0.1)
+    optionalDependencies:
+      '@types/react': 17.0.45
+      '@types/react-dom': 17.0.17
       react-dom: 17.0.1(react@17.0.1)
+      redux: 5.0.1
+    optional: true
 
   react-transition-group@4.4.5(react-dom@17.0.1(react@17.0.1))(react@17.0.1):
     dependencies:

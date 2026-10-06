@@ -1,4 +1,4 @@
-import { OnDragEndResponder } from 'react-beautiful-dnd'
+import { OnDragEndResponder } from '@hello-pangea/dnd'
 import { IEditViewColumnsPanelProps } from './types'
 import { useSelectableColumns } from './useSelectableColumns'
 import _ from 'lodash'

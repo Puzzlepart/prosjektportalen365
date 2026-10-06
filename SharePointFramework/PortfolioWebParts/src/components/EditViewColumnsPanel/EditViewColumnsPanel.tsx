@@ -1,6 +1,6 @@
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { FC } from 'react'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd'
 import styles from './EditViewColumnsPanel.module.scss'
 import { IEditViewColumnsPanelProps } from './types'
 import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'

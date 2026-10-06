@@ -68,6 +68,14 @@ is not ours to decide (see P5-1); a new Node major, which comes after 1.15 (P5-5
   unless keeping the text "Ja"/"Nei" proves simpler; slice 2b records which (the user, 2026-10-06).
 - **P5-10. Numbers export as their value rounded to two decimals**, never floored (the user,
   2026-10-06).
+- **P5-11. `react-calendar-timeline` stays on 0.28; `react-beautiful-dnd` becomes
+  `@hello-pangea/dnd` ~16.6** (the user, 2026-10-06, on the recommendation from npm on that day).
+  0.28 declares `react >=16.3`, React 18 included; its unmet peer is `create-react-context`, which
+  exports React's own `createContext` when React has one. The current line is a beta (0.30.0-beta),
+  requires React 18 and moves from `moment` to `dayjs`, so it waits for a release after 1.15; slice 4
+  tries the timelines on React 18. `@hello-pangea/dnd` is the maintained fork with the same API;
+  16.6 declares React 16.8, 17 and 18, while 17 and 18 require React 18, so 16.6 goes in now and
+  works on both sides of slice 4.
 
 ## Slices and order
 
@@ -79,7 +87,7 @@ is not ours to decide (see P5-1); a new Node major, which comes after 1.15 (P5-5
 | 1c | CI build time (added by the user 2026-10-05; runs after 1, before 1b) | A debug workflow that builds the release package without touching the tenant, so the live workflows stay as they are until each change is proven; `Build-Release.ps1` switches, off by default: the rebuild's per-project timeline printed and its logs uploaded, PnP.PowerShell (and its version check, which ends the script with `exit 0` when the module is missing) skipped when the PnP templates are, and a phased Rush rebuild in which a solution starts once the solutions it depends on have compiled, instead of after their tests, bundles and packages | Done 2026-10-06: per-project times measured; the timeline and the PnP.PowerShell skip in the live packages-only job; the phased rebuild tried and not adopted (slower on the 4-core runner); narrowing `[apps-only:<solution>]` builds left for after phase 5 |
 | 2a | Redux Toolkit 2 | Tests first, so that every handler of the nine reducers is exercised (41 actions had no test on 2026-10-06, 17 of them in the aggregation's; the program administration's test is the model); then the bump: the seven object-notation reducers moved to the builder callback, which 2.x requires, `AnyAction` replaced by `UnknownAction` or the reducer's own action union, the shared library's unused `@reduxjs/toolkit` dropped, `rush update`; `kodemonster.md`'s reducer example on the builder; the coverage floors raised to what the tests reached; every web part with a reducer checked by hand | Step 1 done 2026-10-06 (every handler tested on 1.9.5); step 2 done 2026-10-06 (2.13.0, all tests green unchanged); checked by hand on the test tenant 2026-10-06 |
 | 2b | Fixes found in slices 1 to 1b (added by the user 2026-10-06, in place of filing issues) | Each a commit of its own with a test and a changelog line, apart from 2a's no-change upgrade. Excel export: a failed export shows a message; it exports what is shown (P5-8); `false` and `0` export as values, not empty cells (P5-9); numbers rounded to two decimals, not floored (P5-10); `æøå` kept in file names; ` \| ` and `;#` parsed only in person and lookup columns; measurement dates read without a locale round trip; the dynamic list's Norwegian plural. Upgrade and templates: `UpgradeAllSitesToLatest` on English installations; `Prosjektkolonner`'s id comments and the `GtStatusOpportunities` lookup; `channels/kurs.json`. Packaging and CI: the loc test no longer shipped as a locale; `generate-sbom.yml` on tags; `sync-version` across all projects. Accessibility and docs: `@BaseDialog`'s close button label, `IBasePanelProps.hidden`'s description, the templates and release chapters of the guide. Reducers (found by 2a's tests; each test that pins the fault changes with its fix): the status page survives a failed report delete; the program administration's delete button comes back after a failed delete; in the aggregated overview, "Liste" and "Kompakt" set the mode instead of flipping it, ungrouping keeps the chosen sort direction, a refetch keeps the grouping, a `viewId` first in the query string is found, a deleted column leaves the show/hide panel, and a failed fetch ends the loading; the portfolio overview writes the new grouping to the address; project information's properties built from `current(state)` after an update | Done 2026-10-06 (each code fix tested, seen failing first; the changelog lists the user-visible ones); checked by hand on the test tenant 2026-10-06, the change-phase dialog's fix included |
-| 3 | React 18 readiness | `react-beautiful-dnd` replaced by a maintained fork with the same API or by the panel's own ordering, `react-calendar-timeline` on a line that declares React 18, the 15 files that render with react-dom's `render` made ready for `createRoot` (the 7 without an unmount get one); nothing bumps yet | The two peers settled, tests green on React 17 |
+| 3 | React 18 readiness | `react-beautiful-dnd` replaced by `@hello-pangea/dnd` ~16.6 and `react-calendar-timeline` kept on 0.28 (P5-11); the unused `react-autocomplete`, `react-image-fade-in` and `react-scroll` removed; the 15 files that render with react-dom's `render` through one shared-library helper, so that slice 4 moves to `createRoot` in one place (of the 7 without an unmount of their own, 6 have their base class's or an equivalent; the footer has none, and leaks a mounted footer on every navigation); nothing else bumps | Done 2026-10-06 (peers settled, every suite green on React 17); the hand check on the test tenant |
 | 4 | SPFx 1.24 and React 18 | The SPFx bump first, on React 17 (its own mini-phase on the toolchain plan's pattern; the RC until GA, P5-4); then React 18: `react`, `react-dom` and their types, `createRoot`, Testing Library 16 with `@testing-library/dom` 10 in all six, `children` declared where the 18 types want it, StrictMode findings fixed, the Fluent and Tabster versions revisited, the TagPicker stand-in rechecked (its loop was seen on React 17); full manual round on the test tenant, PnP's term field and property panes included (P5-6) | 1.15's definition of done |
 | 5 | Close-out and release | The release note for 1.15 finished (phases 3 to 5 as one technical change, the intended visible differences listed), the changelog complete, `Install/` and the upgrade path checked, the user's go | 1.15.0 cut |
 
@@ -669,3 +677,41 @@ groups were not used, since GitHub cancels an older waiting job when a newer one
 across two runs would cancel one run's e2e or the other's upgrade. The limit that stays: GitHub
 keeps one waiting run per group, so a waiting full run is cancelled by a newer push, and its
 templates are not applied; the release skill and the CI chapter say to push that commit last.
+
+### Slice 3 — React 18 readiness (2026-10-06)
+
+npm on the day decided most of the slice (P5-11): SPFx 1.24 is still `1.24.0-rc.0`;
+`@hello-pangea/dnd` 18 and 17 require React 18, 16.6 declares 16.8, 17 and 18;
+`react-calendar-timeline`'s current line is a beta that requires React 18.
+
+- **Dependencies.** `react-beautiful-dnd` ~13.1.1 (and its types) became `@hello-pangea/dnd`
+  ~16.6.0, an import rename in the three files of the show/hide columns panel; it brings
+  react-redux 8 with redux 4, both fine on React 18. `react-autocomplete` (and its types),
+  `react-image-fade-in`, `react-scroll` and `react-fade-in` were declared and imported nowhere, and
+  are removed. `rush update` now lists two React peers: `create-react-context` under the timeline
+  (P5-11) and `use-image-color` (0.0.9, `react ^16.8`, unchanged since 2022), a plain hook kept and
+  tried on React 18 in slice 4.
+- **One place mounts React.** `renderReact` and `unmountReact` (`shared-library/src/util/reactRoot.ts`)
+  wrap react-dom's `render` and `unmountComponentAtNode`; all 15 render sites use them (a script
+  changed the calls and imports; a whitespace-blind diff showed only those, apart from the three base
+  web parts' `abstract render()`, which it also renamed and which went back by hand). react-dom's
+  `render` is now imported in that one file. Slice 4 keeps a root per container there. Of the
+  seven sites without an unmount of their own, four use their base web part's `onDispose` and two
+  dialogs call it through `ReactDOM.*`; the footer had none.
+- **Found and fixed:** the footer rendered into a new `div` on every navigation and dropped the old
+  one without unmounting it, so each page visited left a mounted footer running; and its placeholder's
+  `onDispose` was passed unbound and called `dispose()` on the placeholder being disposed. It now
+  renders into one element, unmounts it when SharePoint disposes the placeholder, and makes a new
+  one on the next navigation. And the project list's card header called `useImageColor` only with
+  dynamic colours on, a project loaded and no logo of its own, so turning dynamic colours on in the
+  property pane threw "Rendered more hooks than during the previous render"; the hook now runs on
+  every render, with an empty source when the colours are not wanted.
+- **Tests,** first on the old code: the footer's mounted count after three navigations (3, now 1,
+  and 0 after the placeholder's dispose); the card header (failed with the hooks error); the panel's
+  drop handler (a drag cannot run under jsdom, every element measuring zero), green on both
+  libraries; the helper's own tests.
+- **Result:** tsc clean and every suite green in all six projects: shared-library 401,
+  PortfolioExtensions 101, PortfolioWebParts 183, ProjectWebParts 192, ProjectExtensions 118,
+  ProgramWebParts 37 (1032 tests); every floor holds. The `pp365-ui` skill and `kodemonster.md`
+  (a new section, «Montering av React») say to mount through the helper.
+
