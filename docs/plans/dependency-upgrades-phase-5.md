@@ -821,3 +821,16 @@ webpack/hot/dev-server does not reload on that path, so only F5 showed it. `spfx
 six solutions. Checked with a Playwright probe against a project home page: the client logs "App
 updated. Reloading..." and the page reloads about six seconds after the save.
 
+### Between slices: shared-library under watch (2026-10-07)
+
+A library change used to take `rush rebuild -o pp365-shared-library` and F5. With a solution's
+watch running, `npx heft build-watch` in `shared-library` carries a saved `.tsx` to `lib/` in about
+1 s, the solution's webpack sees it (it follows the pnpm link to the real path, outside
+`node_modules`) and the page reloads after about 17 s; a `.module.scss` change after about 20 s
+(Playwright probe on a project home page). Strings do not follow: spfx-heft-plugins'
+`LegacyExternals` reads each `localizedResources` file once per watch and caches it, so a
+`loc/*.js` change, the library's or the solution's own, shows only after the solution's watch is
+restarted. `shared-library` got `watch` (`heft build-watch --clean`); AGENTS.md, the guide
+(`utviklingsmiljo.md`, `kom-i-gang.md`, `npm-skript.md`) and the `pp365-toolchain` and `pp365-ui`
+skills describe the flow.
+

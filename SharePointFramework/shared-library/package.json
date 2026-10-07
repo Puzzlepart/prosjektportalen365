@@ -6,6 +6,7 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "heft test --clean --production && npm run test:runtime && heft package-solution --production",
+    "watch": "heft build-watch --clean",
     "build:test": "node ../.tasks/build.js --channel test",
     "build:i18n": "node ../.tasks/build.js --channel i18n",
     "build:kurs": "node ../.tasks/build.js --channel kurs",

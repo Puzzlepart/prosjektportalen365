@@ -61,7 +61,7 @@ Koden kjøres på en ekte SharePoint-side; den SharePoint-hostede workbenchen pe
    Første gang må du stole på dev-sertifikatet: `npx heft trust-dev-cert` i en av løsningene.
 5. **Feilsøk fra VS Code** med hele repoet åpnet: kopier `.vscode/launch.sample.json` til `.vscode/launch.json`, kjør `npm run watch`, start «Debug a page against npm run watch» (F5), velg løsningen og lim inn sidens URL uten spørrestreng. Stoppunkter i `shared-library` og `ProjectWebParts` treffer også.
 
-Endrer du `shared-library` underveis: `rush rebuild -o pp365-shared-library`, så tar `watch` det med. Navngitte miljøer (`environments.json`, `SERVE_ENVIRONMENT`, `npm run watch -- --serve-config <navn>`) står i samme kapittel.
+Endrer du `shared-library` underveis, start `npm run watch` i `shared-library` før løsningens `watch`. Da laster siden seg selv når du lagrer i biblioteket. Tekster (`loc/*.js`) krever at du starter løsningens `watch` på nytt. Navngitte miljøer (`environments.json`, `SERVE_ENVIRONMENT`, `npm run watch -- --serve-config <navn>`) står i samme kapittel.
 
 ### 4. Kodekonvensjoner i korte trekk
 

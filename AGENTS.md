@@ -65,6 +65,7 @@ Inside a solution (`SharePointFramework/<Solution>/`):
 | Task | Command |
 |---|---|
 | Dev server + live-reload (`heft start --nobrowser`; consumers only) | `npm run watch` |
+| Rebuild `shared-library` on every save while a solution's watch runs (`heft build-watch --clean`; no dev server, no tests) | `npm run watch` in `shared-library` |
 | Dev server against a named environment | `npm run watch -- --serve-config <name>` |
 | Build, test and package a shippable `.sppkg` (`heft test --clean --production` + `heft package-solution --production`) | `npm run build` |
 | Lint + Prettier | `npm run lint` |
@@ -73,7 +74,7 @@ Inside a solution (`SharePointFramework/<Solution>/`):
 | Run the solution's unit and component tests (`heft test`, builds first) | `npm test` |
 | Run one test file | `npx heft test --test-path-pattern <name>` (a regex over the compiled test file's path, e.g. `ProjectStatus/reducer`; heft-jest-plugin 2.0.19, with SPFx 1.24, passes it on as Jest 30's `testPathPatterns`) |
 
-After changing the loc files, run `validate-loc` and read its report. After changing `shared-library`, rebuild it (`rush rebuild -o pp365-shared-library`, or without tests `npx heft build --clean` inside it): a dev server bundles `shared-library` and sibling solutions from their `lib/` as it finds them. To try local bundles on a test-tenant page, the solution's `.env` needs `SERVE_CHANNEL=test`: the page asks only for its own channel's component ids. Watching and debugging from VS Code: `.development-guide/spfx/utviklingsmiljo.md`.
+After changing the loc files, run `validate-loc` and read its report. A dev server bundles `shared-library` and sibling solutions from their `lib/` as it finds them. To change `shared-library` under a solution's watch, start `npm run watch` in `shared-library` first: a saved `.ts(x)` or `.scss` reaches `lib/`, the solution rebuilds and the page reloads. Strings are the exception: a watch reads every `loc/*.js` (its own and the library's) once when it starts, so restart the solution's watch after editing them. Without the library's watch, rebuild it after a change (`rush rebuild -o pp365-shared-library`, or without tests `npx heft build --clean` inside it). To try local bundles on a test-tenant page, the solution's `.env` needs `SERVE_CHANNEL=test`: the page asks only for its own channel's component ids. Watching and debugging from VS Code: `.development-guide/spfx/utviklingsmiljo.md`.
 
 ## Testing
 
@@ -99,5 +100,5 @@ Full regime and failure handling: `.development-guide/spfx/testing.md` and the `
 
 ## Notes
 
-- The five consumer solutions share one script set (only the `validate-loc` interface and typings file names differ) and the conventions, so this single root file covers them. `shared-library` has no `watch`, `start`, `prewatch`, `postwatch` or `eject-webpack`, and runs `test:runtime` in `build` and `test`. Add a nested `AGENTS.md` inside a solution only if it accrues genuinely distinct rules.
+- The five consumer solutions share one script set (only the `validate-loc` interface and typings file names differ) and the conventions, so this single root file covers them. `shared-library`'s `watch` is `heft build-watch --clean` (it keeps `lib/` current and serves nothing); it has no `start`, `prewatch`, `postwatch` or `eject-webpack`, and runs `test:runtime` in `build` and `test`. Add a nested `AGENTS.md` inside a solution only if it accrues genuinely distinct rules.
 - Per-developer workflow preferences (who runs git, who runs builds, editor setup) are intentionally **not** encoded here — they belong in personal agent memory, not in a shared repo file.

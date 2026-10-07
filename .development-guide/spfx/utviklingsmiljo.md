@@ -24,6 +24,8 @@ En delt `.env.template`-fil finnes i `.tasks/`-mappen og definerer standardverdi
 
 > **Bygg avhengighetene før `watch`.** `watch` bygger bare sin egen pakke og bundler `shared-library` og `ProjectWebParts` fra deres `lib/` slik den ligger. Har du hentet endringer i dem, bygg dem først, for eksempel fra repo-roten med `rush build -T pp365-portfoliowebparts` (alt PortfolioWebParts avhenger av, uten pakken selv), eller raskere uten tester med `npx heft build --clean` i hver av dem. En gammel `lib/` gir feil som `Module not found: Can't resolve '../Autocomplete'` eller, verre, gammel kode uten feilmelding.
 
+> **Endre `shared-library` mens `watch` kjører.** Start `npm run watch` i `shared-library` først (`heft build-watch --clean`: ingen dev-server og ingen tester; første bygg tar et par minutter), deretter `npm run watch` i løsningen. Starter du biblioteket sist, tømmer `--clean` biblioteket sin `lib/`, og løsningen feiler til biblioteket er ferdig bygget. En lagret `.ts`/`.tsx` eller `.scss` i biblioteket er i `lib/` etter et sekund, løsningen bygger på nytt, og siden laster seg selv, rundt 20 sekunder etter at du lagret. Det virker fordi pnpm lenker `pp365-shared-library` til `SharePointFramework/shared-library`, og webpack overvåker den ekte stien. Unntaket er tekster: `watch` leser alle `loc/*.js` én gang når den starter, både løsningens egne og bibliotekets, så start løsningens `watch` på nytt når du har endret dem. Er `ProjectWebParts` en avhengighet (av `PortfolioWebParts` eller `ProgramWebParts`), kjør `npx heft build-watch` der, ikke `npm run watch`, som ville startet en dev-server til på samme port.
+
 Eksempel `.env`:
 
 ```text
