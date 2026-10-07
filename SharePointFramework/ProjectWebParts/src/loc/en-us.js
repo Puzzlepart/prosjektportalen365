@@ -140,7 +140,7 @@ define([], function () {
     GeneralGroupName: 'General',
     GetSnapshotButtonLabel: 'Open as snapshot',
     SnapshotDialogTitle: 'Snapshot – {0}',
-    SnapshotOpenInNewTabLabel: 'Open in new tab',
+    SnapshotOpenInNewTabLabel: 'Open image file in new tab',
     SnapshotEnterFullscreenLabel: 'Full screen',
     SnapshotExitFullscreenLabel: 'Exit full screen',
     SnapshotCopyLinkLabel: 'Copy link',
