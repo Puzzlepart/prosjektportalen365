@@ -46,8 +46,10 @@
   // written AMD), so they must be allowed through to the AMD transform.
   "transformIgnorePatterns": ["[\\/]lib-commonjs[\\/](?!loc[\\/]).*\\.js$"],
 
+  // Jest matches these keys against the native path and, unlike transformIgnorePatterns, does
+  // not convert `/` to `\` on Windows, so each separator class has to name both.
   "transform": {
-    "[\\/]loc[\\/](shared[\\/])?[a-z]{2}-[a-z]{2}\\.js$": "<configDir>/lib/amdTransform.js"
+    "[\\\\/]loc[\\\\/](shared[\\\\/])?[a-z]{2}-[a-z]{2}\\.js$": "<configDir>/lib/amdTransform.js"
   },
 
   // Coverage is collected by the rig. The floors are set per solution (coverageThreshold in its

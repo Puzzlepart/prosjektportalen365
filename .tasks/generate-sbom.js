@@ -165,7 +165,7 @@ This SBOM documents all software dependencies used in the Prosjektportalen 365 p
     
     // Sort dependencies alphabetically
     const sortedDeps = Array.from(allDeps.values()).sort((a, b) => 
-        a.name.localeCompare(b.name)
+        a.name.localeCompare(b.name, 'en')
     );
     
     // Group by type
@@ -220,7 +220,7 @@ This SBOM documents all software dependencies used in the Prosjektportalen 365 p
             sbom += `|---------|----------|\n`;
             
             Object.entries(proj.dependencies)
-                .sort(([a], [b]) => a.localeCompare(b))
+                .sort(([a], [b]) => a.localeCompare(b, 'en'))
                 .forEach(([name, version]) => {
                     sbom += `| ${name} | ${version} |\n`;
                 });
@@ -235,7 +235,7 @@ This SBOM documents all software dependencies used in the Prosjektportalen 365 p
             sbom += `|---------|----------|\n`;
             
             Object.entries(proj.devDependencies)
-                .sort(([a], [b]) => a.localeCompare(b))
+                .sort(([a], [b]) => a.localeCompare(b, 'en'))
                 .forEach(([name, version]) => {
                     sbom += `| ${name} | ${version} |\n`;
                 });

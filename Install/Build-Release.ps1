@@ -30,6 +30,11 @@ Param(
     [switch]$RushTimeline
 )
 
+# Native output (rush, npm, node) is decoded with the console's encoding, which on Windows is the
+# OEM code page: without this the build logs garble ✓, ● and æøå there. macOS and Linux use UTF-8.
+[Console]::OutputEncoding = [Text.UTF8Encoding]::new($false)
+$OutputEncoding = [Console]::OutputEncoding
+
 #region Normalize selected solutions
 # Canonical SPFx solution folder names. The -Solutions parameter (and the
 # [apps-only:<names>] CI commit tag) is matched case- and dash-insensitively
@@ -179,6 +184,13 @@ if ($CI.IsPresent) {
 else {
     StartAction("Updating npm packages using rush")
     $RUSH_INSTALL_COMMAND = "update"
+    # The root's own scripts (the channel maps and site scripts below) need the root's packages,
+    # which CI installs with npm ci above; a fresh clone has none.
+    if (-not (Test-Path "$ROOT_PATH/node_modules")) {
+        Push-Location $ROOT_PATH
+        npm ci --no-audit --no-fund >$null 2>&1
+        Pop-Location
+    }
 }
 # The output is kept and the exit code checked: a failed install (a lockfile out of date, a registry
 # or the SheetJS CDN not answering) otherwise surfaces only later, as a rebuild that cannot link.
@@ -190,6 +202,10 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 npm run generate-channel-replace-map >$null 2>&1
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "[ERROR] npm run generate-channel-replace-map failed with exit code $LASTEXITCODE. Run npm ci in the repository root and try again." -ForegroundColor Red
+    exit 1
+}
 EndAction
 
 if ($SkipPnPPowerShell.IsPresent) {
@@ -239,6 +255,10 @@ EndAction
 StartAction("Copying Install.ps1, PostInstall.ps1 and site script source files")
 if ($USE_CHANNEL_CONFIG) {
     npm run generate-site-scripts
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "[ERROR] npm run generate-site-scripts failed with exit code $LASTEXITCODE" -ForegroundColor Red
+        exit 1
+    }
     $SITE_SCRIPTS_BASEPATH = "$ROOT_PATH/.dist/SiteScripts"
     Copy-Item -Path "$SITE_SCRIPTS_BASEPATH/*.txt" -Filter *.txt -Destination $RELEASE_PATH_SITESCRIPTS -Force 
 }
@@ -277,13 +297,9 @@ if (-not $SkipBuildPnPTemplates.IsPresent) {
     StartAction("Building PnP content templates")
     Set-Location $PNP_TEMPLATES_BASEPATH
 
-    if ($CI.IsPresent) {  
-        npm ci --silent --no-audit --no-fund >$null 2>&1
-    }
-    else {
-        npm install --no-progress --silent --no-audit --no-fund  >$null 2>&1
-    }
-
+    # Templates is a Rush project, so the rush install/update above has installed its packages.
+    # Running npm here broke that: `npm install` rewrote the pnpm links in Templates/node_modules
+    # to targets that do not exist, and `npm ci` failed silently on the missing package-lock.json.
     npm run generate-project-templates >$null 2>&1
 
     Get-ChildItem "./Content" -Directory | ForEach-Object {
@@ -311,7 +327,8 @@ if (-not $SkipBuildPnPTemplates.IsPresent) {
 if ($Force.IsPresent) {
     $Solutions | ForEach-Object {
         StartAction("Clearing node_modules for SPFx solution [$_]")
-        rimraf "$SHAREPOINT_FRAMEWORK_BASEPATH/$_/node_modules/"
+        # Remove-Item instead of rimraf, which is not a dependency of this repo.
+        Remove-Item -Path "$SHAREPOINT_FRAMEWORK_BASEPATH/$_/node_modules" -Recurse -Force -ErrorAction SilentlyContinue
         EndAction
     }
 }

@@ -71,7 +71,7 @@ Inside a solution (`SharePointFramework/<Solution>/`):
 | Report loc keys missing from a bundle (exits 0 even then) | `npm run validate-loc` |
 | Type-check only (needs the Sass typings in `temp/sass-ts` from an earlier Heft build) | `npx tsc --noEmit` |
 | Run the solution's unit and component tests (`heft test`, builds first) | `npm test` |
-| Run one test file | `npx heft test --test-path-ignore-patterns '^(?!.*<name>\.test\.)'` (`--test-path-pattern` is ignored: Heft's Jest plugin passes the Jest 29 option name, and Jest 30 runs every file) |
+| Run one test file | `npx heft test --test-path-ignore-patterns '^(?!.*<name>\.test\.)'` (`--test-path-pattern` is ignored: Heft's Jest plugin passes the Jest 29 option name, and Jest 30 runs every file). In cmd.exe use double quotes: it keeps single quotes as part of the pattern, which then matches nothing and runs every file; zsh and bash need the single quotes because of the `!` |
 
 After changing the loc files, run `validate-loc` and read its report. After changing `shared-library`, rebuild it (`rush rebuild -o pp365-shared-library`, or without tests `npx heft build --clean` inside it): a dev server bundles `shared-library` and sibling solutions from their `lib/` as it finds them. To try local bundles on a test-tenant page, the solution's `.env` needs `SERVE_CHANNEL=test`: the page asks only for its own channel's component ids. Watching and debugging from VS Code: `.development-guide/spfx/utviklingsmiljo.md`.
 

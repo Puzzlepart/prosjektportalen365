@@ -715,3 +715,37 @@ npm on the day decided most of the slice (P5-11): SPFx 1.24 is still `1.24.0-rc.
   ProgramWebParts 37 (1032 tests); every floor holds. The `pp365-ui` skill and `kodemonster.md`
   (a new section, «Montering av React») say to mount through the helper.
 
+### Between slices: Windows and macOS (2026-10-07)
+
+Tarjei's `d440e8c` (branch `fix/windows-local-build`, off the same `bba23bc05`) fixed four faults
+that only a Windows build met: lint failing every line on CRLF checkouts (`endOfLine: auto`),
+`npm install` in `Templates` breaking Rush's links in `Build-Release.ps1`, the Jest transform key
+for the AMD loc bundles matching `/` only (Jest converts the `*IgnorePatterns` to the platform
+separator, not `transform`'s keys), and the timeline test comparing a currency in the machine's
+locale. The four changes are taken in word for word, so a later merge of the two branches meets
+the same lines (the changelog line apart).
+
+A read-only audit of the rest (Node scripts, npm and Rush scripts, Jest and Heft config, Prettier,
+tests, PowerShell, watch and debug, Rush and pnpm) found nothing else that stops a build, lint or
+test on Windows, and these, fixed here:
+- `generate-channel-config <channel> /update`: Git Bash rewrites `/update` into a Windows path, so
+  the flag was missed and an installed channel would get new ids. The flag is now matched as the
+  last path segment, or `--update`.
+- `SharePointFramework/.tasks/build.js` ran `node <absolute path>` through a shell with the
+  arguments unquoted, so a repo path with a space broke the channel builds (proved with a path in a
+  folder named `a b`); arguments with whitespace are quoted.
+- `Build-Release.ps1`: native output is read as UTF-8 (Windows' console code page garbled the logs);
+  a local build installs the root's own packages when they are missing (only CI ran `npm ci` there,
+  so `generate-channel-replace-map` and `generate-site-scripts` failed silently on a fresh clone,
+  and both now stop the build when they fail); `-Force` used `rimraf`, which is not installed.
+- `generate-sbom.js` sorts with English collation (nb-NO sorts `aa` as `å`, after `z`).
+- The tracked `Templates/Content/**/*-validation.md` held the machine's local time and its absolute
+  path (`/Users/…` from the last run); they now hold neither, so they only change with the template.
+- The solutions' `.vscode/settings.json` gave `typescript.tsdk` as a Windows-only `.\\…` path.
+- `.gitattributes`: `* text=auto eol=lf`, `-text` for the vendored, signed PnP.PowerShell module,
+  binaries marked. 17 files are stored with CRLF today and are renormalised once.
+- Docs: the one-test-file command in cmd.exe (double quotes), `NODE_OPTIONS` in PowerShell and cmd,
+  the e2e README's `VAR=value` prefixes replaced by the `.env` files, `Build-Release.ps1`'s case in
+  `npm-skript.md`, and a «Windows og macOS» section in `utviklingsmiljo.md` (terminal, nvm-windows,
+  line endings, long paths, variables).
+

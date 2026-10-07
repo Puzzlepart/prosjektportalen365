@@ -27,8 +27,8 @@ Alle fem løsningene avhenger av `shared-library`. `PortfolioWebParts` bruker i 
 
 Du trenger:
 
-- **Node 22**, versjonen i `.nvmrc` (22.22.2). `rush.json` godtar bare `>=22.14.0 <23.0.0`, så en annen hovedversjon stopper bygget. Med nvm: `nvm install && nvm use` i repo-roten.
-- **PowerShell 7** (`pwsh`) når du skal bygge en utgivelse (`npm run build-release`).
+- **Node 22**, versjonen i `.nvmrc` (22.22.2). `rush.json` godtar bare `>=22.14.0 <23.0.0`, så en annen hovedversjon stopper bygget. Med nvm: `nvm install && nvm use` i repo-roten. Med nvm-windows: `nvm install 22.22.2` og `nvm use 22.22.2`, siden den ikke nødvendigvis leser `.nvmrc`.
+- **PowerShell 7** (`pwsh`) når du skal bygge en utgivelse (`npm run build-release`), og på Windows også som terminal. Mer om Windows i [Windows og macOS](spfx/utviklingsmiljo.md#windows-og-macos).
 - **VS Code**, og **Chrome** for feilsøkingsoppsettet.
 - Gjerne Rush globalt (`npm i -g @microsoft/rush`), så kommandoer som `rush rebuild -o pp365-shared-library` virker direkte. Uten: `node common/scripts/install-run-rush.js <kommando>`.
 
@@ -39,7 +39,7 @@ npm run rush:init   # rush update og rebuild av alle prosjektene; tar en stund
 ```
 
 - **Kjør aldri `npm install`, `npm i`, `pnpm install` eller `pnpm add` inne i en løsning.** Det ødelegger `node_modules` som Rush styrer, og ser bort fra den felles låsefila. Endre `package.json` og kjør `npm run rush:update` fra roten; se [Rush og bygging](spfx/rush.md).
-- Dør bygget med «Reached heap limit», kjør `export NODE_OPTIONS=--max-old-space-size=8192` først, slik CI gjør.
+- Dør bygget med «Reached heap limit», sett `NODE_OPTIONS=--max-old-space-size=8192` først, slik CI gjør: `export NODE_OPTIONS=…` i bash og zsh, `$env:NODE_OPTIONS='…'` i PowerShell, `set NODE_OPTIONS=…` i cmd.
 - Rare feil etter et branchbytte: se «Full tilbakestilling av Rush-tilstand» i [rush.md](spfx/rush.md).
 
 Be om tilgang til repoet på GitHub (for å pushe brancher) og til testtenanten: porteføljehuben på testkanalen og minst ett prosjektområde der. Det er der du kjører koden din, og der CI ruller ut og kjører Playwright-testene.
@@ -83,7 +83,7 @@ Detaljer og ekte eksempler står i [kodemonster.md](spfx/kodemonster.md), og et 
 Les [testing.md](spfx/testing.md) før du skriver din første test.
 
 - **Jest i bygget.** `src/**/*.test.ts(x)` kjører i `heft test`, altså i `npm test`, `npm run build`, `rush build`/`rebuild` og CI, og en test som feiler, stopper bygget. `npm run watch` og kanalbyggene (`npm run build:<kanal>`) kjører ingen tester. Testen ligger ved siden av koden.
-- **Kjør** `npm test` i en løsning (bygger først). Én fil: `npx heft test --test-path-ignore-patterns '^(?!.*Header\.test\.)'`; `--test-path-pattern` blir oversett. `shared-library` må være bygget først.
+- **Kjør** `npm test` i en løsning (bygger først). Én fil: `npx heft test --test-path-ignore-patterns '^(?!.*Header\.test\.)'` (i cmd.exe med doble anførselstegn); `--test-path-pattern` blir oversett. `shared-library` må være bygget først.
 - **Komponenttester** bruker React Testing Library og `jest.mock` av hooken eller dataadapteren, og `jest.mock(...)` må stå over importene. Importer aldri `@pnp/*` i en test; harnessen `pp365-jest-config` stubber den.
 - **Dekningsgulv:** hver løsnings `config/jest.config.json` har `coverageThreshold`. Lokalt melder Jest bare et gulv som ikke nås, mens utgivelsesbygget i CI stopper på det: se på dekningen før du pusher. Gulvene skal bare opp: løft dem når du legger til tester, senk dem aldri.
 - **Playwright (`e2e/`):** røyktester (`tests/smoke`) og brukerreiser (`tests/flows`; fire av dem skriver til testtenanten og rydder etter seg) mot testtenanten. De kjører i CI etter hver utrulling til testkanalen (`ci-channel-test.yml`), og rapporten lastes opp som artefaktet `playwright-report-test-channel`. Lokalt i `e2e/`: `cp .env.example .env`, fyll inn, `npx playwright install chromium` og `npm test`.

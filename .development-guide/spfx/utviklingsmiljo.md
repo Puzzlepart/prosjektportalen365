@@ -115,3 +115,15 @@ Eksempel:
     "bundle": "portfolio-overview-web-part"
 }
 ```
+
+### Windows og macOS
+
+Alt i repoet skal virke likt på Windows og macOS, og i CI på Linux. Dette er verdt å vite på Windows:
+
+- **Terminal:** bruk PowerShell 7 (`pwsh`) eller Git Bash. Windows PowerShell 5.1 kan ikke `&&`, som flere kommandoer i guiden bruker, og stopper `npm.ps1` med standard kjørepolicy (`Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` løser det). I `cmd.exe` er enkle anførselstegn ikke anførselstegn: bruk doble, for eksempel rundt mønsteret til `--test-path-ignore-patterns`.
+- **Node:** nvm-windows leser ikke nødvendigvis `.nvmrc`. Installer og velg versjonen med navn: `nvm install 22.22.2` og `nvm use 22.22.2`.
+- **Linjeskift:** `.gitattributes` sjekker ut all tekst med LF på alle maskiner, uansett `core.autocrlf`, så lint, tester og utgivelsespakken bygger fra de samme bytene som på macOS og i CI. Prettiers `endOfLine: auto` er et sikkerhetsnett for en fil en editor lagrer med CRLF. En klone fra før `.gitattributes` kom inn, sjekkes ut på nytt én gang, etter at endringene er committet eller lagt til side: `git rm -r --cached -q . && git reset --hard`.
+- **Lange stier:** pnpm-lageret gir stier på over 250 tegn. Slå på lange stier i Windows (`LongPathsEnabled`) og i git (`git config --global core.longpaths true`), og klon til en kort sti, for eksempel `C:\src\pp365`.
+- **Miljøvariabler:** `VAR=verdi kommando` virker bare i bash og zsh. I PowerShell: `$env:NODE_OPTIONS='--max-old-space-size=8192'`; i cmd: `set NODE_OPTIONS=--max-old-space-size=8192`. Der det finnes en `.env`-fil, er den veien som virker overalt (`SERVE_CHANNEL` i løsningens `.env`, `E2E_LOCAL_BUNDLE` i `e2e/.env`).
+- **Kopiering:** `cp` virker i PowerShell, der den er et alias for `Copy-Item`, og i Git Bash, men ikke i `cmd.exe`.
+
