@@ -1,13 +1,13 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
 // Babel, so mocks are not hoisted. The data fetch dispatches what `fetched.data` holds; the data
 // adapter and the hooks that change the phase (all reach SharePoint) are stand-ins.
-const fetched: { data: any } = { data: null }
+const fetched: { data: any; error?: Error } = { data: null }
 jest.mock('./useProjectPhasesDataFetch', () => ({
   useProjectPhasesDataFetch: (_props: any, dispatch: any) => {
     const { useEffect } = jest.requireActual('react')
     const { INIT_DATA } = jest.requireActual('./reducer')
     useEffect(() => {
-      if (fetched.data) dispatch(INIT_DATA({ data: fetched.data }))
+      if (fetched.data) dispatch(INIT_DATA({ data: fetched.data, error: fetched.error }))
     }, [])
   }
 }))
@@ -71,8 +71,10 @@ const phases = [
 function renderPhases(
   currentPhase: any,
   data: Record<string, any> = {},
-  props: Record<string, any> = {}
+  props: Record<string, any> = {},
+  error?: Error
 ) {
+  fetched.error = error
   fetched.data = {
     phases,
     currentPhase,
@@ -162,7 +164,12 @@ describe('ProjectPhases', () => {
     expect(screen.getByTitle(strings.Aria.CurrentPhaseText)).toBeDisabled()
   })
 
-  /** Opens the change-phase dialog for the phase named `name`, through its popover. */
+  /**
+   * Opens the change-phase dialog for the phase named `name`, through its popover. Its buttons are
+   * found with `hidden: true`: Tabster marks the dialog `aria-hidden` on a timer while focus is
+   * outside it (as after a checkpoint's button is disabled during the save), which under load can
+   * land between two queries.
+   */
   async function openChangePhaseDialog(name: string) {
     fireEvent.click(await screen.findByTitle(name))
     fireEvent.click(await screen.findByTitle(strings.ChangePhaseText))
@@ -174,11 +181,11 @@ describe('ProjectPhases', () => {
     await openChangePhaseDialog('Gjennomføre')
     // The checklist of the phase the project leaves, at its open checkpoint.
     expect(screen.getByText('Mandat godkjent')).toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: strings.Skip }))
+    fireEvent.click(screen.getByRole('button', { name: strings.Skip, hidden: true }))
     expect(
       await screen.findByText(format(strings.ConfirmChangePhase, 'Gjennomføre'))
     ).toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: strings.CancelText }))
+    fireEvent.click(screen.getByRole('button', { name: strings.CancelText, hidden: true }))
     expect(screen.queryByText(format(strings.ChangePhaseDialogTitle, 'Gjennomføre'))).toBeNull()
     await openChangePhaseDialog('Konsept')
     expect(screen.getByText('Mandat godkjent')).toBeInTheDocument()
@@ -188,13 +195,20 @@ describe('ProjectPhases', () => {
   it('keeps a checkpoint answered when the dialog is cancelled and opened again', async () => {
     renderPhases(phases[1])
     await openChangePhaseDialog('Gjennomføre')
-    fireEvent.click(screen.getByRole('button', { name: strings.StatusClosed }))
+    fireEvent.click(screen.getByRole('button', { name: strings.StatusClosed, hidden: true }))
     // The last open checkpoint is answered (and saved), so the summary follows.
-    expect(await screen.findByRole('button', { name: strings.MoveOn })).toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: strings.CancelText }))
+    expect(
+      await screen.findByRole('button', { name: strings.MoveOn, hidden: true })
+    ).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: strings.CancelText, hidden: true }))
     await openChangePhaseDialog('Gjennomføre')
-    expect(screen.getByRole('button', { name: strings.MoveOn })).toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: strings.StatusClosed })).toBeNull()
+    expect(screen.getByRole('button', { name: strings.MoveOn, hidden: true })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: strings.StatusClosed, hidden: true })).toBeNull()
+  })
+
+  it('tells the user when loading the phases fails', async () => {
+    renderPhases(phases[0], {}, {}, new Error('Termlageret svarte ikke'))
+    expect(await screen.findByText('Termlageret svarte ikke')).toBeInTheDocument()
   })
 
   it('offers no change-phase action without the permission', async () => {

@@ -72,6 +72,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Rettet en feil i `Aggregert oversikt` hvor en slettet kolonne fortsatt ble tilbudt i `Vis eller skjul kolonner`
 - Rettet en feil i `Porteføljeoversikt` hvor adressen etter henting av data viste grupperingen fra før hentingen, ikke den listen viser
 - Rettet en feil i `Fasevelger` hvor dialogen for `Endre til denne fasen` husket forrige gang den var åpen: etter `Hopp over alle` og `Avbryt` åpnet den rett på bekreftelsen, også for en annen fase, og etter en faseendring uten at siden ble lastet på nytt viste den sjekklisten til fasen prosjektet var i da siden ble åpnet. Dialogen starter nå på nytt hver gang, med sjekkpunktene som allerede er besvart
+- Rettet en feil i `Fasevelger` hvor en feil ved henting av fasene eller ved faseendring aldri ble vist; nå vises den som en melding
 - Rettet en feil i bunnteksten hvor hver navigering mellom sider la igjen en skjult bunntekst som fortsatt kjørte; nå er det alltid én
 - Rettet en feil i `Prosjektliste` hvor kortvisningen krasjet når `Bruk dynamiske farger` ble slått på eller av i egenskapsruten
 - Rettet en feil hvor `UpgradeAllSitesToLatest.ps1` hoppet over alle prosjektområder på engelske installasjoner fordi listen `Prosjektegenskaper` ble slått opp med norsk tittel; listen slås nå opp med tittelen på installasjonens språk

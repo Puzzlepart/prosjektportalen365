@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { useProjectInformationContext } from '../../context'
 import { IProjectPropertyProps } from './types'
 import { Link, Persona, Text } from '@fluentui/react-components'
@@ -204,7 +204,7 @@ export function useProjectProperty(props: IProjectPropertyProps) {
       if (renderMap.has(props.model.type)) {
         return renderMap.get(props.model.type)(value)
       } else {
-        return <div title={value.toString()}>{value}</div>
+        return <div title={value.toString()}>{value as ReactNode}</div>
       }
     } catch (error) {
       console.warn(

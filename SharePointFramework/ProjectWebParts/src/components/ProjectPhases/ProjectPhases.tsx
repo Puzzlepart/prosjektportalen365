@@ -5,19 +5,12 @@ import { ProjectPhase } from './ProjectPhase'
 import styles from './ProjectPhases.module.scss'
 import { IProjectPhasesProps } from './types'
 import { useProjectPhases } from './useProjectPhases'
-import {
-  FluentProvider,
-  IdPrefixProvider,
-  Toast,
-  ToastTitle,
-  useToastController
-} from '@fluentui/react-components'
+import { FluentProvider, IdPrefixProvider, Toaster } from '@fluentui/react-components'
 import { LoadingSkeleton, customLightTheme } from 'pp365-shared-library'
 import resource from 'SharedResources'
 
 export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
   const { rootRef, context, fluentProviderId, toasterId } = useProjectPhases(props)
-  const { dispatchToast } = useToastController(toasterId)
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme} className={styles.root} ref={rootRef}>
@@ -47,13 +40,7 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
               <LoadingSkeleton />
             )}
           </ProjectPhasesContext.Provider>
-          {context.state.error &&
-            dispatchToast(
-              <Toast>
-                <ToastTitle>{context.state.error.message}</ToastTitle>
-              </Toast>,
-              { intent: 'error' }
-            )}
+          <Toaster toasterId={toasterId} />
         </div>
       </FluentProvider>
     </IdPrefixProvider>

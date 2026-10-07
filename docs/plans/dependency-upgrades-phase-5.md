@@ -749,3 +749,32 @@ test on Windows, and these, fixed here:
   `npm-skript.md`, and a «Windows og macOS» section in `utviklingsmiljo.md` (terminal, nvm-windows,
   line endings, long paths, variables).
 
+### Before slice 4: a React 18 spike, and what it asked for on React 17 (2026-10-07)
+
+An agent ran React 18 in a copy of the repository, nothing committed: `react`/`react-dom` 18.3.1,
+`@types/react` 18.3.31, `@types/react-dom` 18.3.7, Testing Library 16.3.3 with `@testing-library/dom`
+10.4.2, SPFx left at 1.23.2, and `renderReact` on `createRoot` (a root per container). The result:
+- **Types:** 22 errors. 18 from five props types that read `children` without declaring it
+  (`FC` no longer adds it): `IFluentProps`, `IColumnDataTypeFieldProps`,
+  `IPlannerTaskItemPropertyProps`, `MigrateRiskActionsDialog` and `HelpContentDialog`. 4 from the
+  narrower `ReactNode`: two `{value}` of type `unknown` (a cast keeps today's output), the dynamic
+  list's error (a string at run time, typed `CustomError`), and `ProjectPhases`' toast.
+- **Tests:** 17 of 1032 failed, in two files, for one reason: `createRoot` renders after the call
+  returns, so the footer test and the helper's own test assert before the render. `act` fixes both.
+  No act warnings turned errors, no batching changes, no Testing Library 16 API breaks, no Fluent or
+  Tabster failures. React 18.3 warns about `defaultProps` on function components (47 files): clean-up
+  before React 19, not 18.
+- **Toolchain, for slice 4:** the PnP controls take React 17.0.1 as a dependency, so on React 18
+  pnpm gives them their own copies of Fluent v8 and v9, which would be bundled twice; overrides
+  (`@pnp/spfx-controls-react>react`, `>react-dom`, the same for `@pnp/spfx-property-controls`, to
+  18.3.1) make them share ours. `react-dom/client` is not an SPFx external (only `react` and
+  `react-dom` by exact name), so webpack bundles its few lines, whose `require('react-dom')` stays
+  external: it works only if SharePoint serves react-dom 18, which the tenant shows.
+
+Done here, on React 17: the five `children` declarations, the casts, the dynamic list's error typed
+`string`, and `act` in the two tests. And `ProjectPhases`: it dispatched the error toast during
+render, on every render while the error was set, to a `Toaster` id no `Toaster` was mounted with,
+so a failed phase fetch or change was never shown. The toast now comes from an effect, once per
+error, into a mounted `Toaster` (a test that failed before). The 13 files, copied into the spike's
+copy, leave no TypeScript error on React 18's types.
+

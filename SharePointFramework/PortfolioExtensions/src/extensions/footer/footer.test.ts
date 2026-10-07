@@ -24,6 +24,7 @@ jest.mock('components/Footer', () => ({
 }))
 
 import { PlaceholderName } from '@microsoft/sp-application-base'
+import { act } from '@testing-library/react'
 import { ProjectAdminPermission } from 'pp365-shared-library'
 import resource from 'SharedResources'
 import FooterApplicationCustomizer from '.'
@@ -99,8 +100,11 @@ async function footerCustomizer(portal = portalDataService(), { onHub = true } =
   ;(customizer as any).context = context
   ;(customizer as any).properties = { publicMediaBasePath: 'https://media.example/media' }
   await customizer.onInit()
+  // Through `act`: React 18's `createRoot` renders the footer after the handler returns.
   const navigate = async () => {
-    for (const handler of navigated) await handler()
+    await act(async () => {
+      for (const handler of navigated) await handler()
+    })
   }
   return { context, placeholder, navigate }
 }
@@ -162,7 +166,9 @@ describe('FooterApplicationCustomizer', () => {
     expect(rendered.mounted).toBe(1)
     // SharePoint calls `onDispose` when it removes the placeholder, and the next page makes a new one.
     const [, options] = (context.placeholderProvider.tryCreateContent as jest.Mock).mock.calls[0]
-    options.onDispose(placeholder)
+    act(() => {
+      options.onDispose(placeholder)
+    })
     expect(rendered.mounted).toBe(0)
     await navigate()
     expect(context.placeholderProvider.tryCreateContent).toHaveBeenCalledTimes(2)

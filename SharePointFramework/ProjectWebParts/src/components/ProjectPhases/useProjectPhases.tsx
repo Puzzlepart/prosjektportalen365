@@ -1,12 +1,12 @@
 import SPDataAdapter from 'data/SPDataAdapter'
 import { ListLogger } from 'pp365-shared-library/lib/logging'
-import { useReducer, useRef } from 'react'
+import React, { useEffect, useReducer, useRef } from 'react'
 import { ProjectPhases } from '.'
 import { IProjectPhasesContext } from './context'
 import reducer, { initialState } from './reducer'
 import { IProjectPhasesProps } from './types'
 import { useProjectPhasesDataFetch } from './useProjectPhasesDataFetch'
-import { useId } from '@fluentui/react-components'
+import { Toast, ToastTitle, useId, useToastController } from '@fluentui/react-components'
 import resource from 'SharedResources'
 
 /**
@@ -32,6 +32,18 @@ export function useProjectPhases(props: IProjectPhasesProps) {
 
   const fluentProviderId = useId('fp-project-phases')
   const toasterId = useId('toaster')
+  const { dispatchToast } = useToastController(toasterId)
+
+  // Once per error, not on every render while it is set.
+  useEffect(() => {
+    if (!state.error) return
+    dispatchToast(
+      <Toast>
+        <ToastTitle>{state.error.message}</ToastTitle>
+      </Toast>,
+      { intent: 'error' }
+    )
+  }, [state.error])
 
   return { rootRef, context, fluentProviderId, toasterId } as const
 }
