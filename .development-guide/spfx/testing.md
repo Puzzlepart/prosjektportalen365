@@ -87,7 +87,7 @@ Regler og fakta som gjelder:
 - Trenger komponenten SPFx-kontekst (`WebPartContext`, `pageContext`), lag et minimalt objekt med akkurat feltene komponenten leser og send det inn via props eller context-provider. Ikke bygg en generell SPFx-mock.
 - Matcherne fra jest-dom (`toBeInTheDocument`, `toHaveClass`, ...) er gjort kjent for kompilatoren gjennom `src/jest-dom.d.ts` i hver løsning.
 
-Kjør testene i en løsning med `npm test` (`heft test`), eller bare bygg-og-test uten pakking. Én fil: `npx heft test --test-path-ignore-patterns '^(?!.*Header\.test\.)'`. I cmd.exe brukes doble anførselstegn: cmd tar de enkle med i mønsteret, som da ikke treffer noe, og alle filene kjører. Ikke bruk `--test-path-pattern`: Heft-tillegget for Jest (`@rushstack/heft-jest-plugin` 2.0.6) sender valget videre under Jest 29-navnet (`testPathPattern`), Jest 30 har gitt det nytt navn (`testPathPatterns`) og overser det gamle uten å si fra, så alle filene kjøres.
+Kjør testene i en løsning med `npm test` (`heft test`), eller bare bygg-og-test uten pakking. Én fil: `npx heft test --test-path-pattern Header`, et regulært uttrykk over stien til den kompilerte testfilen (for eksempel `ProjectStatus/reducer`). Med SPFx 1.23 (`@rushstack/heft-jest-plugin` 2.0.6) virket ikke dette: valget gikk videre under Jest 29-navnet, som Jest 30 overså, så alle filene kjørte. Fra SPFx 1.24 (2.0.19) sendes det som Jest 30s `testPathPatterns`.
 
 ### Ende-til-ende med Playwright (`e2e/`)
 

@@ -10,8 +10,8 @@
     "validate-loc": "echo \"No localization in pp365-eslint-config\""
   },
   "dependencies": {
-    "@microsoft/eslint-config-spfx": "1.23.2",
-    "@rushstack/eslint-config": "4.6.4",
+    "@microsoft/eslint-config-spfx": "1.24.0-rc.0",
+    "@rushstack/eslint-config": "4.8.0",
     "@typescript-eslint/eslint-plugin": "8.56.1",
     "eslint": "9.37.0",
     "eslint-config-prettier": "10.1.8",

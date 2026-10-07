@@ -2,7 +2,7 @@
 
 Operational guide for AI coding agents working in **Prosjektportalen 365** — an open-source (Puzzlepart) SharePoint Framework (SPFx) monorepo managed with **Rush + pnpm**.
 
-The build toolchain is **Heft** (SPFx 1.23.2, React 17, Rush Stack). The gulp toolchain was retired in the 1.17.4 to 1.23.2 migration; see `docs/plans/spfx-1.23-heft-toolchain.md` and the `pp365-toolchain` skill.
+The build toolchain is **Heft** (SPFx 1.24, on its release candidate 1.24.0-rc.0 until GA; React 17; Rush Stack). The gulp toolchain was retired in the 1.17.4 to 1.23.2 migration; see `docs/plans/spfx-1.23-heft-toolchain.md` and the `pp365-toolchain` skill.
 
 This is a thin operational index. The authoritative, detailed conventions live in **`.development-guide/`** (Norwegian) — read it for depth on anything below, and load the skill that covers your task (see [Skills](#skills)). Human contributors: see also `CONTRIBUTING.md`, and new developers `.development-guide/kom-i-gang.md` (a first-week path through the guide).
 
@@ -71,7 +71,7 @@ Inside a solution (`SharePointFramework/<Solution>/`):
 | Report loc keys missing from a bundle (exits 0 even then) | `npm run validate-loc` |
 | Type-check only (needs the Sass typings in `temp/sass-ts` from an earlier Heft build) | `npx tsc --noEmit` |
 | Run the solution's unit and component tests (`heft test`, builds first) | `npm test` |
-| Run one test file | `npx heft test --test-path-ignore-patterns '^(?!.*<name>\.test\.)'` (`--test-path-pattern` is ignored: Heft's Jest plugin passes the Jest 29 option name, and Jest 30 runs every file). In cmd.exe use double quotes: it keeps single quotes as part of the pattern, which then matches nothing and runs every file; zsh and bash need the single quotes because of the `!` |
+| Run one test file | `npx heft test --test-path-pattern <name>` (a regex over the compiled test file's path, e.g. `ProjectStatus/reducer`; heft-jest-plugin 2.0.19, with SPFx 1.24, passes it on as Jest 30's `testPathPatterns`) |
 
 After changing the loc files, run `validate-loc` and read its report. After changing `shared-library`, rebuild it (`rush rebuild -o pp365-shared-library`, or without tests `npx heft build --clean` inside it): a dev server bundles `shared-library` and sibling solutions from their `lib/` as it finds them. To try local bundles on a test-tenant page, the solution's `.env` needs `SERVE_CHANNEL=test`: the page asks only for its own channel's component ids. Watching and debugging from VS Code: `.development-guide/spfx/utviklingsmiljo.md`.
 

@@ -18,7 +18,7 @@ Authoritative description (Norwegian): `.development-guide/spfx/testing.md`. Thi
 
 ## Running
 
-- One solution: `cd SharePointFramework/<Solution> && npm test` (= `heft test`, builds first; shared-library adds `test:runtime`). One file: `npx heft test --test-path-ignore-patterns '^(?!.*<name>\.test\.)'` (in cmd.exe use double quotes: cmd keeps single quotes as part of the pattern, which then matches nothing, so every file runs). Not `--test-path-pattern`: `@rushstack/heft-jest-plugin` 2.0.6 passes it under its Jest 29 name (`testPathPattern`), which Jest 30 silently ignores, so every file runs.
+- One solution: `cd SharePointFramework/<Solution> && npm test` (= `heft test`, builds first; shared-library adds `test:runtime`). One file: `npx heft test --test-path-pattern <name>` (a regex over the compiled test file's path, e.g. `ProjectStatus/reducer`). It works from SPFx 1.24 (`@rushstack/heft-jest-plugin` 2.0.19 passes it as Jest 30's `testPathPatterns`); under 1.23 (2.0.6) it went out under the Jest 29 name, which Jest 30 ignores, and every file ran.
 - Consumers need the shared library built first: `rush rebuild -o pp365-shared-library` from the root.
 - E2E locally: `cd e2e && cp .env.example .env` (fill in) `&& npx playwright install chromium && npm test`. `npm run test:ui` opens Playwright's UI mode; the Inspector is `--debug` or `PWDEBUG=1`.
 

@@ -6,7 +6,7 @@ Denne siden er en vei gjennom den første uka for nye utviklere. Den gjentar ikk
 
 Prosjektportalen 365 er et prosjektstyringsverktøy for Microsoft 365, bygget av Puzzlepart (nå Crayon Consulting) og distribuert som åpen kildekode (MIT). Installasjonen setter opp et porteføljeområde (hub) med oversikt over prosjektene, og hvert prosjekt får et eget område (en Microsoft 365-gruppe) med lister, sider og logikk etter Prosjektveiviseren, Digitaliseringsdirektoratets prosjektmodell. Det finnes også et programnivå over prosjektene. Brukerne har en egen [brukermanual](https://puzzlepart.github.io/prosjektportalen-manual/).
 
-Repoet er et Rush-monorepo (pnpm, Heft, SPFx 1.23.2):
+Repoet er et Rush-monorepo (pnpm, Heft, SPFx 1.24):
 
 | Mappe | Innhold |
 |---|---|
@@ -83,7 +83,7 @@ Detaljer og ekte eksempler står i [kodemonster.md](spfx/kodemonster.md), og et 
 Les [testing.md](spfx/testing.md) før du skriver din første test.
 
 - **Jest i bygget.** `src/**/*.test.ts(x)` kjører i `heft test`, altså i `npm test`, `npm run build`, `rush build`/`rebuild` og CI, og en test som feiler, stopper bygget. `npm run watch` og kanalbyggene (`npm run build:<kanal>`) kjører ingen tester. Testen ligger ved siden av koden.
-- **Kjør** `npm test` i en løsning (bygger først). Én fil: `npx heft test --test-path-ignore-patterns '^(?!.*Header\.test\.)'` (i cmd.exe med doble anførselstegn); `--test-path-pattern` blir oversett. `shared-library` må være bygget først.
+- **Kjør** `npm test` i en løsning (bygger først). Én fil: `npx heft test --test-path-pattern Header` (et regulært uttrykk over stien til testfilen). `shared-library` må være bygget først.
 - **Komponenttester** bruker React Testing Library og `jest.mock` av hooken eller dataadapteren, og `jest.mock(...)` må stå over importene. Importer aldri `@pnp/*` i en test; harnessen `pp365-jest-config` stubber den.
 - **Dekningsgulv:** hver løsnings `config/jest.config.json` har `coverageThreshold`. Lokalt melder Jest bare et gulv som ikke nås, mens utgivelsesbygget i CI stopper på det: se på dekningen før du pusher. Gulvene skal bare opp: løft dem når du legger til tester, senk dem aldri.
 - **Playwright (`e2e/`):** røyktester (`tests/smoke`) og brukerreiser (`tests/flows`; fire av dem skriver til testtenanten og rydder etter seg) mot testtenanten. De kjører i CI etter hver utrulling til testkanalen (`ci-channel-test.yml`), og rapporten lastes opp som artefaktet `playwright-report-test-channel`. Lokalt i `e2e/`: `cp .env.example .env`, fyll inn, `npx playwright install chromium` og `npm test`.

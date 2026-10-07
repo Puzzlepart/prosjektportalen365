@@ -778,3 +778,33 @@ so a failed phase fetch or change was never shown. The toast now comes from an e
 error, into a mounted `Toaster` (a test that failed before). The 13 files, copied into the spike's
 copy, leave no TypeScript error on React 18's types.
 
+### Slice 4, step 1 — SPFx 1.24.0-rc.0, still on React 17 (2026-10-07)
+
+1.24 GA is not out (npm `latest` 1.23.2, `next` 1.24.0-rc.0), so the step runs on the RC (P5-4).
+CLI for Microsoft 365 has no rules for the RC (`latest` and `next` both refuse `--toVersion
+1.24.0-rc.0`), so the change set was read from Microsoft's own generator instead: the
+`@microsoft/generator-sharepoint` packages for 1.23.2 and 1.24.0-rc.0, diffed. For a project like
+ours it holds: every `@microsoft/*` package 1.23.2 to 1.24.0-rc.0 (the rig and the Heft plugins
+included), `@rushstack/heft` 1.2.17 to 1.3.2, two security floors as npm `overrides` (`qs >=6.15.2`,
+`uuid >=11.1.1`), `engines` widened to Node 22, 24 and 26 (we stay on 22, P5-5), and, for new
+projects, React 18.3.1 with `@types/react` 18.2.79 and `@types/react-dom` 18.2.25 and a web part
+template on `createRoot` (step 2). The rest is Copilot components, which we have none of.
+
+Applied: 68 `@microsoft/*` pins in the six solutions, `.eslint-config` and `.jest-config`; Heft in
+seven `package.json` files and the `globalOverrides`; `@rushstack/eslint-config` 4.6.4 to 4.8.0 (what
+`@microsoft/eslint-config-spfx` 1.24.0-rc.0 uses); `qs ^6.15.2` and `uuid ^11.1.1` in
+`globalOverrides`, held to their major because uuid 12 and later ship ESM only, and the tools that
+require() it (the SPFx Heft plugins, jest-junit, sockjs) would then lean on Node's require(esm). The
+rig moves its plugins (heft-jest-plugin 2.0.19, lint 1.3.1, Sass 1.5.0, webpack5 1.3.30) and keeps
+ESLint 9.37.0 and its own TypeScript 5.3.3; ESLint 10 is still outside the SPFx and Rush Stack peer
+ranges. The PnP controls keep `@microsoft/sp-core-library` 1.23.x as a dependency of their own, a
+page external, so it is not bundled.
+
+Result: `rush rebuild` green, all 11 operations (the six solutions with the usual lint warnings),
+a fresh `.sppkg` for each; no `pp365-*` AMD external; the timeline's stylesheet global and the
+shared-library CSS modules hashed; no Jest failure and no floor missed; the manifests still ask for
+React 17.0.1. heft-jest-plugin 2.0.19 passes `--test-path-pattern` on as Jest 30's
+`testPathPatterns`, so the one-file command works again; the docs and skills dropped the
+`--test-path-ignore-patterns` workaround. Next: the release build in the debug workflow, then the
+test channel, then step 2 (React 18). The changelog's technical bullet moves to 1.24 with GA.
+
