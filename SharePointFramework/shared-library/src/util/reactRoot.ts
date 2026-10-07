@@ -1,18 +1,28 @@
 import { ReactElement } from 'react'
-import { render, unmountComponentAtNode } from 'react-dom'
+import { createRoot, Root } from 'react-dom/client'
+
+/** The root of each container rendered into, from its first render until its unmount. */
+const roots = new WeakMap<Element, Root>()
 
 /**
  * Renders `element` into `container`, updating what an earlier call rendered there.
  *
  * Every web part, extension, dialog and property pane field mounts React through this function
- * and `unmountReact`, so that the move to React 18's `createRoot` changes only this file: there a
- * root is created for a container on its first render and kept for the next render and the unmount.
+ * and `unmountReact`. A container gets a React 18 root on its first render, which is kept for the
+ * next render and dropped on the unmount: React renders into an unmounted root no more, and warns
+ * when `createRoot` is called twice on one container. The render is scheduled, not done when the
+ * call returns.
  *
  * @param element Element to render
  * @param container DOM element to render it into
  */
 export function renderReact(element: ReactElement, container: Element): void {
-  render(element, container)
+  let root = roots.get(container)
+  if (!root) {
+    root = createRoot(container)
+    roots.set(container, root)
+  }
+  root.render(element)
 }
 
 /**
@@ -22,5 +32,8 @@ export function renderReact(element: ReactElement, container: Element): void {
  * @param container DOM element rendered into
  */
 export function unmountReact(container: Element): void {
-  unmountComponentAtNode(container)
+  const root = roots.get(container)
+  if (!root) return
+  roots.delete(container)
+  root.unmount()
 }

@@ -485,7 +485,7 @@ En slot kan få en render-funksjon i stedet for innhold: `label={{ children: (Co
 
 ## Montering av React
 
-Webdeler, utvidelser, dialoger og felt i egenskapsruten monterer React med `renderReact` og `unmountReact` fra `pp365-shared-library`, aldri med `render` fra `react-dom` direkte. Da kan overgangen til React 18 (`createRoot`) gjøres i én fil, `shared-library/src/util/reactRoot.ts`.
+Webdeler, utvidelser, dialoger og felt i egenskapsruten monterer React med `renderReact` og `unmountReact` fra `pp365-shared-library`, aldri med `render` fra `react-dom` direkte. Den ene filen, `shared-library/src/util/reactRoot.ts`, gir hver beholder en React 18-root (`createRoot`) ved første tegning og beholder den til avmonteringen. Tegningen skjer etter at kallet har returnert, så en test som monterer med `renderReact`, pakker kallet i `act`.
 
 ```ts
 import { renderReact, unmountReact } from 'pp365-shared-library'

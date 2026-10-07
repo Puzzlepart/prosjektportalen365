@@ -2,7 +2,7 @@
 
 Operational guide for AI coding agents working in **Prosjektportalen 365** — an open-source (Puzzlepart) SharePoint Framework (SPFx) monorepo managed with **Rush + pnpm**.
 
-The build toolchain is **Heft** (SPFx 1.24, on its release candidate 1.24.0-rc.0 until GA; React 17; Rush Stack). The gulp toolchain was retired in the 1.17.4 to 1.23.2 migration; see `docs/plans/spfx-1.23-heft-toolchain.md` and the `pp365-toolchain` skill.
+The build toolchain is **Heft** (SPFx 1.24, on its release candidate 1.24.0-rc.0 until GA; React 18; Rush Stack). The gulp toolchain was retired in the 1.17.4 to 1.23.2 migration; see `docs/plans/spfx-1.23-heft-toolchain.md` and the `pp365-toolchain` skill.
 
 This is a thin operational index. The authoritative, detailed conventions live in **`.development-guide/`** (Norwegian) — read it for depth on anything below, and load the skill that covers your task (see [Skills](#skills)). Human contributors: see also `CONTRIBUTING.md`, and new developers `.development-guide/kom-i-gang.md` (a first-week path through the guide).
 

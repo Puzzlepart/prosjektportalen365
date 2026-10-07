@@ -834,3 +834,34 @@ restarted. `shared-library` got `watch` (`heft build-watch --clean`); AGENTS.md,
 (`utviklingsmiljo.md`, `kom-i-gang.md`, `npm-skript.md`) and the `pp365-toolchain` and `pp365-ui`
 skills describe the flow.
 
+
+### Slice 4, step 2 — React 18 (2026-10-07)
+
+Applied on 1.24.0-rc.0, in all six: `react` and `react-dom` 18.3.1, `@types/react` 18.2.79 and
+`@types/react-dom` 18.2.25 (the 1.24 template's, in `globalOverrides` too), `@testing-library/react`
+16.3.3 with `@testing-library/dom` 10.4.2. `renderReact` keeps a `createRoot` per container in a
+`WeakMap` and drops it on the unmount; two tests came first and passed on React 17 (a render after
+an unmount, two containers apart). Overrides hold the PnP controls' `react` and `react-dom` to
+18.3.1, so their Fluent v8 (8.106.4) and v9 (9.74.8) resolve to the same React 18 variants as ours.
+SPFx's own `sp-*` 1.24.0-rc.0 still depend on React 17.0.1 and pull React 17 variants of Fluent,
+but they are page externals and never bundled. SPFx 1.24 maps `react-dom/client` to a component of
+its own (`3cadd7f5-5449-49c4-a153-1beb8facd90a`, only for React 18 and later), so no React DOM is
+bundled; the manifests ask the page for `react`, `react-dom` and `react-dom/client` 18.3.1.
+
+Result, fast loop: no TypeScript error in the six on React 18's types; 1035 tests in 158 files
+green. React 18 flagged four updates outside `act`, all in tests: the SPFx dialog stub closes, and
+so unmounts, a microtask after the click, and the setup's error dialog renders a few microtasks
+after the dismissal; the three tests now wait for those inside `act`. Left as they were: the
+`defaultProps` warnings on function components (clean-up before React 19, not 18) and the warnings
+React 17 gave as well (a null `textarea` value, unknown DOM props, an uncontrolled input turned
+controlled). The code has no `StrictMode`, so there was nothing to find there. The combobox family no
+longer loops under jsdom (a real `Combobox` and `TagPicker` opened and picked), but one opening
+took 44 and 57 s on a loaded machine, so the stand-ins stay; the testing guide, the skills and the
+stand-in say so. Peer warnings left by design: the PnP controls' inner packages (northstar, the old
+theme provider, their `sp-*` 1.23), `use-image-color` (`react ^16.8`) and `create-react-context`
+under the timeline (P5-6, P5-11).
+
+Next: a full build, then CI on the test channel (`[apps-only]`), which shows whether SharePoint
+serves React 18 to an RC build (P5-4), then the hand round: PnP's term field and property panes,
+the timelines, drag and drop in `Vis eller skjul kolonner`, the project cards, the dialogs and the
+footer.
