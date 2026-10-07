@@ -54,7 +54,7 @@ Overvåkingsskriptene knytter alt sammen:
   - Filtrerer bundler i `config/config.json` basert på `SERVE_BUNDLE_REGEX`
   - Håndterer kanalbytte for ikke-main-kanaler via `modifySolutionFiles`
 
-- **watch**: Kjører utviklingsserveren (webpack-dev-server via Heft) med miljøkonfigurasjonen. Heft legger selv på feilsøkingsparametrene `debug`, `noredir` og `debugManifestsFile=https://localhost:4321/temp/build/manifests.js`, samt `loadSPFX`/`customActions` for utvidelser. Live-reload er innebygd, så `concurrently` og `livereload` er ikke lenger i bruk.
+- **watch**: Kjører utviklingsserveren (webpack-dev-server via Heft) med miljøkonfigurasjonen. Heft legger selv på feilsøkingsparametrene `debug`, `noredir` og `debugManifestsFile=https://localhost:4321/temp/build/manifests.js`, samt `loadSPFX`/`customActions` for utvidelser. Live-reload er innebygd, så `concurrently` og `livereload` er ikke lenger i bruk: siden laster seg selv på nytt når en endring er bygget. Hot module replacement er slått av i `config/spfx-customize-webpack.js`, fordi hver webdel og utvidelse på en SharePoint-side har sin egen webpack-runtime, og oppdateringen feilet («[HMR] Update failed») uten at siden ble lastet på nytt; endringen kom først etter F5.
 
 > **Merk:** Den SharePoint-hostede workbenchen (`_layouts/workbench.aspx`) pensjoneres 1. desember 2026. Derfor peker miljøene mot ekte sider.
 

@@ -808,3 +808,16 @@ React 17.0.1. heft-jest-plugin 2.0.19 passes `--test-path-pattern` on as Jest 30
 `--test-path-ignore-patterns` workaround. Next: the release build in the debug workflow, then the
 test channel, then step 2 (React 18). The changelog's technical bullet moves to 1.24 with GA.
 
+On the test channel (run 37626808256, `[apps-only]`): the release build on Linux green, the
+1.24.0-rc.0 packages deployed to the test hub, and the browser suite 32 of 32. SharePoint runs the
+RC's packages on React 17 as it ran 1.23.2's.
+
+A saved change never reached the page under `npm run watch` (found by hand after the run, the same
+under 1.23.2: `updateServeConfigAsync` is unchanged). SPFx serves with `devServer.hot: true`, but
+each bundle on a SharePoint page has its own webpack runtime, the hot update fails ("Cannot set
+properties of undefined", "[HMR] Update failed: Loading hot update chunk ... failed") and
+webpack/hot/dev-server does not reload on that path, so only F5 showed it. `spfx-customize-webpack.js`
+(stage `MAX_SAFE_INTEGER`, after the serve plugin) now sets `hot: false`, `liveReload: true` in all
+six solutions. Checked with a Playwright probe against a project home page: the client logs "App
+updated. Reloading..." and the page reloads about six seconds after the save.
+
