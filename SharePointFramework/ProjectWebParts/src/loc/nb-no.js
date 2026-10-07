@@ -126,7 +126,7 @@ define([], function () {
     GetSnapshotButtonLabel: 'Åpne øyeblikksbilde',
     GetSnapshotButtonDescription: 'Åpner den valgte statusrapporten som et øyeblikksbilde.',
     SnapshotDialogTitle: 'Øyeblikksbilde – {0}',
-    SnapshotOpenInNewTabLabel: 'Åpne i ny fane',
+    SnapshotOpenInNewTabLabel: 'Åpne bildefilen i ny fane',
     SnapshotEnterFullscreenLabel: 'Fullskjerm',
     SnapshotExitFullscreenLabel: 'Avslutt fullskjerm',
     SnapshotCopyLinkLabel: 'Kopier lenke',
