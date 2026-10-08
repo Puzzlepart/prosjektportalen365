@@ -35,6 +35,7 @@ Sjekk ut [release notes](./releasenotes/1.12.0.md) for høydepunkter og mer deta
 - Rettet en feil i `Porteføljeoversikt` hvor Ja/Nei-kolonner viste råverdiene `0` og `1` i gruppeoverskriftene ved gruppering.
 - Ja/Nei-kolonner vises nå alltid med begge valgene i filterpanelet i `Porteføljeoversikt`, og valgene får riktig etikett uavhengig av hvilken kolonne det gjelder. `Eksporter til Excel` bruker nå samme filtrering som listen, slik at eksporten alltid inneholder de samme radene som vises
 - Rettet en feil hvor `Porteføljeoversikt` viste hvite, flimrende felter, kun på macOS i Chrome/Edge.
+- Rettet en feil i `Prosjektutlisting` hvor primært og sekundært felt (f.eks. `Tjenesteområde` og `Prosjekttype`) samt primær og sekundær bruker ikke ble vist på forsider satt opp med 1.10 eller eldre. Nøklene i innstillingen `Prosjektmetadata` ble endret i 1.11 uten migrering, slik at kun `Fase` ble vist; fra 1.14 gjaldt dette også listevisningen. Gamle nøkler oversettes nå automatisk, og forsidemalen fra 1.11, som manglet `Primært felt`, rettes også
 
 ### Merk
 
