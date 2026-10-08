@@ -1,12 +1,52 @@
 import { Locator, Page } from '@playwright/test'
 
+type Box = { x: number; y: number; width: number; height: number }
+
 /** Where a dragged column is drawn, and whether it is what the pointer is on. */
 export interface ColumnDrag {
   /** The dragged item's box in the viewport. */
-  box: { x: number; y: number; width: number; height: number }
+  box: Box
   viewport: { width: number; height: number }
   /** The element under the pointer is the dragged item or inside it, so it is drawn on top. */
   underPointer: boolean
+}
+
+/** The panel header's own box, its close button's, and those of the actions beside it. */
+export interface PanelHeaderLayout {
+  header: Box
+  close: Box
+  actions: Array<Box & { text: string }>
+}
+
+/**
+ * Measures the open panel's header after scrolling its body down, which is when the drawer draws
+ * the divider under the header.
+ */
+export async function scrolledHeaderLayout(page: Page): Promise<PanelHeaderLayout> {
+  await page.locator('.fui-OverlayDrawer .fui-DrawerBody').evaluate((body) => {
+    body.scrollTop = body.scrollHeight
+  })
+  await page.waitForTimeout(300)
+  return page.evaluate(() => {
+    const box = (element: Element) => {
+      const rect = element.getBoundingClientRect()
+      return { x: rect.x, y: rect.y, width: rect.width, height: rect.height }
+    }
+    const header = document.querySelector('.fui-OverlayDrawer .fui-DrawerHeader')
+    if (!header) throw new Error('the panel has no header')
+    const buttons = Array.from(header.querySelectorAll('button'))
+    const close = buttons.find((button) =>
+      /^(lukk|close)$/i.test(button.getAttribute('aria-label') ?? '')
+    )
+    if (!close) throw new Error('the panel header has no close button')
+    return {
+      header: box(header),
+      close: box(close),
+      actions: buttons
+        .filter((button) => button !== close)
+        .map((button) => ({ text: button.textContent?.trim() ?? '', ...box(button) }))
+    }
+  })
 }
 
 /**

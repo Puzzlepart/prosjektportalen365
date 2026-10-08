@@ -130,7 +130,6 @@ define([], function () {
     DefaultTimeframeStartLabel: 'Default start date',
     DefaultTimeframeStartValue: '{0} months back in the past',
     DeleteItemLabel: 'Delete',
-    DeleteReportButtonText: 'Delete',
     EditItemLabel: 'Edit',
     EditProjectInformationText: 'Edit project information',
     EditReportButtonLabel: 'Edit status',

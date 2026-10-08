@@ -152,6 +152,32 @@ if ($NODE_MAJOR -ne 22) {
 }
 #endregion
 
+#region Channel ids in the source
+# A watch or channel build that did not finish leaves another channel's ids in
+# config/package-solution.json and the manifests, and a commit can carry them. The source must carry
+# the main channel's ids, whichever channel this builds: a channel build swaps its own in from them,
+# a main build packages them as they are. Stop here rather than package another channel's solution.
+node "$ROOT_PATH/.tasks/check-channel-ids.js" @Solutions
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "[ERROR] The source carries another channel's ids (listed above). Aborting build of release." -ForegroundColor Red
+    exit 1
+}
+#endregion
+
+#region No tests among the strings
+# SPFx makes every lib/loc/<name>.js a locale of the strings module (localizedResources'
+# "lib/loc/{locale}.js"), so a test file in src/loc ships as one: shared-library's strings test went
+# out as SharedLibraryStrings_strings.test.js until it moved. Keep tests out of src/loc.
+$LOC_TESTS = @($Solutions | ForEach-Object {
+        Get-ChildItem -Path "$ROOT_PATH/SharePointFramework/$_/src/loc" -Recurse -File -Filter "*.test.*" -ErrorAction SilentlyContinue
+    })
+if ($LOC_TESTS.Count -gt 0) {
+    Write-Host "[ERROR] Test files in src/loc would ship as locale bundles; move them next to what they test:" -ForegroundColor Red
+    $LOC_TESTS | ForEach-Object { Write-Host "        $($_.FullName)" -ForegroundColor Red }
+    exit 1
+}
+#endregion
+
 #region Node heap
 # Heft runs TypeScript and webpack in one Node process per solution, and the largest solution
 # (PortfolioWebParts) needs more than V8's default heap on machines with 8 GB or less (it fails at

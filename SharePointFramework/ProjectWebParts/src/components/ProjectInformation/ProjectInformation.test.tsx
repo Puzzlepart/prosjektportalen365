@@ -110,6 +110,17 @@ describe('ProjectInformation', () => {
     expect(screen.queryByRole('button', { name: strings.RunProjectSetupLabel })).toBeNull()
   })
 
+  it('leaves its title to a host that shows it, and still names its actions after it', async () => {
+    renderInformation(() => initData(), { hideTitle: true })
+    expect(await screen.findByText(strings.NoPropertiesTitle)).toBeInTheDocument()
+    expect(screen.queryByText('Prosjektinformasjon', { selector: 'span' })).toBeNull()
+    expect(
+      screen.getByRole('button', {
+        name: format(strings.ShowAllProjectInformationText, 'prosjektinformasjon')
+      })
+    ).toBeInTheDocument()
+  })
+
   it('hides the editing actions from a user without the edit permission', async () => {
     renderInformation(() => initData({}, { userHasEditPermission: false }))
     await screen.findByText('Prosjektinformasjon', { selector: 'span' })

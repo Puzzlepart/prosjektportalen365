@@ -111,6 +111,16 @@ try {
     $global:__PreviousVersion = $VersionInfo.Previous
     $global:__InstalledChannel = $VersionInfo.Channel
 
+    # With one installation in the log, Get-PPInstallationInfo gives 0.0.0 as the previous version,
+    # which is lower than every step's target, so every step ran, the old ones with their Norwegian
+    # list and page names on English installations too. One installation means the sites were
+    # created by the version installed, so there is nothing to catch up on.
+    $UnknownPrevious = $null -eq $global:__PreviousVersion -or $global:__PreviousVersion -eq [version]"0.0.0"
+    if ($UnknownPrevious -and $null -ne $global:__InstalledVersion) {
+        Write-Host "Only one installation in the log: the sites were created by version $global:__InstalledVersion, so no upgrade step runs." -ForegroundColor Yellow
+        $global:__PreviousVersion = $global:__InstalledVersion
+    }
+
     Write-Host "Getting ready to upgrade feature discrepancy between version $global:__PreviousVersion and $global:__InstalledVersion"
 
     if ($global:__InstalledVersion -eq $global:__PreviousVersion) {

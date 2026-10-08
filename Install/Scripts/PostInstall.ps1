@@ -103,7 +103,8 @@ Write-Host "[INFO] Post-install action: Ensuring project column configuration fo
 # riktige rader. Idempotent — eksisterende rader røres ikke.
 # GtStatusOpportunities er med fordi malen i 1.8.0-1.14.0 slo opp ID 54 (raden er 36 ved
 # nyinstallasjon): på eksisterende miljøer peker de tre radene på kolonnen som har ID 54,
-# eller på ingen. Miljøet får tre riktige rader i tillegg; de gamle blir stående.
+# eller på ingen. Miljøet får tre riktige rader i tillegg, og PostInstallUpgrade.ps1 (1.15.0)
+# fjerner de gamle når den riktige raden for samme verdi finnes.
 $ProjectColumnsItems = Get-PnPListItem -List (Get-Resource -Name "Lists_ProjectColumns_Title")
 $ColumnConfigList = Get-Resource -Name "Lists_ProjectColumnConfiguration_Title"
 $ColumnConfigItems = Get-PnPListItem -List $ColumnConfigList

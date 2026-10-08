@@ -28,6 +28,7 @@ Lokalt havner pakken i `release/pp365-<versjon>.<hash>/` og som zip-fil ved side
 
 Skriptet stopper på feil som `npm run build` slipper gjennom:
 
+- løsnings- eller komponent-ID-er fra en annen kanal i kildekoden, for eksempel fra en `npm run watch` som ikke ble avsluttet før en commit (`npm run check-channel-ids` sjekker det samme alene)
 - en dekningsgrense i en løsnings `config/jest.config.json` som ikke er nådd (Jest melder det, men Heft feiler ikke)
 - en løsning som ikke fikk en ny `.sppkg`
 - en `pp365-*`-pakke som er ekstern i en bundle i stedet for bundlet inn

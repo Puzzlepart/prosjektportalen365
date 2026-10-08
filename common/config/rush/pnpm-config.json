@@ -37,7 +37,17 @@
     // `>=11.1.1`). Held to their major here: uuid 12 and later ship ESM only, while 11 keeps a
     // CommonJS build for the tools that require() it (the SPFx Heft plugins, jest-junit, sockjs).
     "qs": "^6.15.2",
-    "uuid": "^11.1.1"
+    "uuid": "^11.1.1",
+
+    // Advisories in packages that come in through others (2026-10-08, phase 5). lodash 4.18 fixes
+    // `_.template` code injection and two prototype pollutions; the override takes the copies the PnP
+    // controls and react-gauge-component bring, which are bundled, onto it too. compression comes
+    // with the `serve` CLI that react-gauge-component 1.x lists as a dependency (never bundled; 2.x
+    // dropped it) and with webpack-dev-server. node-fetch 1 comes with isomorphic-fetch under
+    // msgraph-helper's Graph client and runs only in Node: the browser build takes whatwg-fetch.
+    "lodash": "^4.18.1",
+    "compression": "^1.8.2",
+    "isomorphic-fetch>node-fetch": "^2.7.0"
   },
   "globalOnlyBuiltDependencies": []
 }

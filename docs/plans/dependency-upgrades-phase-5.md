@@ -925,3 +925,72 @@ RequireJS holds `react` and `react-dom` 18.3.1 and SPFx 1.24's `react-dom/client
 tenant's Microsoft Clarity customizer injects a plain script, but it calls no AMD `define`. The
 stack is SharePoint's loader alone. Left with the user: whether it shows on a site without
 Prosjektportalen, and a HAR from a failing load if it comes back.
+
+### Between slices: the drawers' headers (2026-10-08)
+
+The user saw "Bruk" and "Tilbakestill rekkefølge" in `Vis eller skjul kolonner` off the close
+button's line, with a line under them once the list scrolled. Measured: the actions sat in an
+absolutely placed block inside the drawer's empty heading, which the header centres, so they began
+at its middle: 16 px below the close button's line and 8 px past the 64 px header, where the divider
+the drawer draws on scroll cut through them. A browser test came first
+(`e2e/tests/flows/edit-view-columns-header.spec.ts`: scroll the panel, ask each header action to be
+on the close button's line and inside the header); it failed on the test channel at 16 px. Fix: the
+actions are a flex row in the header's flow, and the panel's own `IdPrefixProvider` and
+`FluentProvider` pairs inside `BasePanel` are gone (the provider rule; the hook's two ids with them).
+
+Then every drawer that opens without saving was toured with the same measurements and a screenshot
+at the top and at the bottom: Ny kolonne, Filtre (portfolio overview and Leveranseoversikt),
+Opprett visning, Rediger visning, the project information panel, Vis all and Rediger
+prosjektinformasjon, and the footer's assistant. One more of the kind: the project information
+panel the lists open had an empty header and the project's title as a web part title in its body,
+padded 25 px below the empty header. It now passes the title as `headerText` and `hideTitle` to
+`ProjectInformation` (a new prop; the actions are still named after the title), and its stylesheet
+went. Tested first in Jest (the drawer named after the project, the title once), and both panels
+checked with the local bundle. Noted, not changed: the panels' dates use `toLocaleDateString()`, so
+they follow the browser's language (`9/12/2026` in an English browser), where other places use
+`formatDate`.
+
+### Before 1.15: advisories, the channel-id guard, the release note, the leftovers (2026-10-08)
+
+The user asked for the four things left before 1.15 at once.
+
+**1. Advisories.** `install-run-rush-pnpm.js audit --prod` went from 36 to 13. Our own: `xmldom` 0.6.0
+(critical, in the bundles, one caller) gone: `transformFieldXml` parses and serializes with the
+browser's `DOMParser` and `XMLSerializer`, after five tests pinned what xmldom did (a `>` in an
+attribute may now be `&gt;`, which the tests allow; the round trip is the same). lodash 4.18.1 and
+moment 2.31.0 in every solution, glob 10.5.0 in `.tasks`, and three overrides with the reason beside
+them: `lodash` (the PnP controls' bundled copy too), `compression` (react-gauge-component 1.x lists
+the `serve` CLI; never bundled) and `isomorphic-fetch>node-fetch` (Node only). The 13 left are SPFx's
+build tools and PnP controls we do not import: in a dev bundle none of maplibre, swiper, quill,
+markdown-to-jsx, adaptive-expressions, react-mentions or fast-xml-parser appears, and the bundled
+`@babel/runtime` is 7.29.7. All six suites green after it (1042 tests, no act warning).
+
+**2. The channel-id guard.** `.tasks/check-channel-ids.js` compares each solution's id, name and
+package and every manifest's id with `channels/main.json`; `Build-Release.ps1` runs it first,
+whatever channel it builds. Five `node:test` cases first (`npm run test:tasks`); `npm run
+check-channel-ids` for the same check alone. The case it would have stopped: `f116d0c`.
+
+**3. Slice 5's groundwork.** The release note's technical part brought to phase 5 (SPFx 1.24, React
+18, Redux Toolkit, SheetJS, the dnd fork, the advisories; over 1 000 unit and about 35 browser
+tests), and the export, phase selector, aggregated overview and English-upgrade fixes added to its
+other improvements; the changelog's technical line names the advisories. Upgrade path from 1.14.0
+checked through the commits since the tag: multi-reporting needs no step, the matrices' data sources
+were in 1.14.0, the v6 content step is gated on state; the one gap was the old opportunity rows (4b).
+
+**4. 2b's leftovers.** (a) A hub with one install entry gets 0.0.0 as the previous version, so
+`UpgradeAllSitesToLatest.ps1` ran every per-site step, the Norwegian-named ones on English hubs
+too; it now takes the installed version as the previous one. `EnsureStakeholderGroupsTaxField.ps1`
+(1.14.0) takes its list, content type, field and group names from the resources, so English sites
+get the field. (b) `PostInstallUpgrade.ps1` (gate 1.15.0) recycles the three old `Status muligheter`
+rows on another project column once the right row for the same value exists. (c) `$schema.json`
+has `TemplatePackageCatalog` and `RiskActionPlanner`. (d) `Build-Release.ps1` stops on a test file
+under `src/loc`. (e) Removing sub-areas updates the hubs and parent links first and the program's
+list last (two tests first, both failed before). (f) The untyped `DeleteReportButtonText` went from
+ProjectWebParts' `en-us.js`. (g) The export keeps text with a zero before another digit (`00123`)
+as text (a test first); other numeric text is a number as P5-10 says. PowerShell has no harness:
+(a), (b) and (d) were parse-checked and (d) proven on a probe file; (a) and (b) run for real on the
+next full test-channel run with `[upgrade-all-sites-to-latest]`.
+
+Noted, not changed: `validate-loc` reports ProjectWebParts' `ColorPickerStrings` missing from both
+bundles; it is there, as an object typed by a separate interface the validator does not read, and
+nothing in the code uses it.

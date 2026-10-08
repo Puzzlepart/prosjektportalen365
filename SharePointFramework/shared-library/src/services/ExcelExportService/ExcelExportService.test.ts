@@ -239,6 +239,21 @@ describe('ExcelExportService', () => {
     expect(sheet.D2.z).not.toBe('#,##0.00')
   })
 
+  it('keeps a value with leading zeros as text: it is an identifier, not a number', async () => {
+    ExcelExportService.export(
+      [{ GtNumber: '00123' }, { GtNumber: '0123' }, { GtNumber: '0.5' }, { GtNumber: '0' }],
+      [{ key: 'GtNumber', fieldName: 'GtNumber', name: 'Prosjektnummer' }] as any[]
+    )
+    const sheet = (await savedWorkbook()).Sheets['Porteføljeoversikt'] as XLSX.WorkSheet
+    expect(cells(sheet)).toEqual([
+      [text('Prosjektnummer')],
+      [text('00123')],
+      [text('0123')],
+      [num(0.5)],
+      [num(0)]
+    ])
+  })
+
   it('reads a person only in a person column, and a lookup only when it starts with its id', () => {
     const result = exported()
     ExcelExportService.export(

@@ -1268,6 +1268,11 @@ export class SPDataAdapter
   /**
    * Remove child projects.
    *
+   * The hubs and the child projects' parent links are updated first and the program's own list
+   * last, so a hub that cannot be updated leaves the program listing them, as the administration
+   * still shows them after the error, and a second try finishes the job. Every step sets the same
+   * end state again, so a step that went through before is safe to repeat.
+   *
    * @param projectToRemove Projects to delete
    */
   public async removeChildProjects(
@@ -1293,7 +1298,6 @@ export class SPDataAdapter
       (p) => !projectToRemove.some((el) => el.SiteId === p.SiteId)
     )
     const updateProperties = { GtChildProjects: JSON.stringify(updatedProjects) }
-    await this._propertyItem.update(updateProperties)
 
     const uniqueHubIds = new Set(projectToRemove.map((p) => p.HubSiteId).filter(Boolean))
     await Promise.all([
@@ -1310,6 +1314,7 @@ export class SPDataAdapter
           : Promise.resolve()
       )
     ])
+    await this._propertyItem.update(updateProperties)
 
     return updatedProjects
   }

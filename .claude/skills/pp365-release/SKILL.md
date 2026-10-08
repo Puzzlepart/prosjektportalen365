@@ -137,7 +137,7 @@ A deploy workflow starts when the branch is in `on.push.branches` and the push c
 
 - Do not run `npm version` or `npm publish` inside a solution: its `postversion` is `heft build --production && npm publish`, and publishing has stopped (npm's latest is 1.8.4, `pp365-shared-library` is not on npm), whatever `utgivelse/npm.md` says.
 - Do not lower a `coverageThreshold`, delete an assertion or add `[skip-e2e]` to get CI green.
-- Do not commit channel ids in manifests, `*.bak`, `.generated-solution-config.json` or `.current-channel-config.json`.
+- Do not commit channel ids in manifests, `*.bak`, `.generated-solution-config.json` or `.current-channel-config.json`. A running `npm run watch` with `SERVE_CHANNEL=test` holds them in the working tree; `npm run check-channel-ids` tells before you commit, and `Build-Release.ps1` stops on them.
 - Do not push to a deploying branch while its previous run is still upgrading the tenant.
 - Do not edit `.development-guide/README.md` or the root `README.md`; `npm run generate-readme` builds them from the chapter files and `readme/`.
 - Do not copy a step from `.github/workflows/unused/`, and do not put skills in `.github/skills` or `.agents/skills`.

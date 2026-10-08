@@ -21,10 +21,14 @@ function round(value: number, decimals = 2): number {
   return parseFloat(value.toFixed(decimals))
 }
 
-/** The number in a number or in numeric text (search returns numbers as text), or `NaN`. */
+/**
+ * The number in a number or in numeric text (search returns numbers as text), or `NaN`. Text with
+ * a zero before another digit (`00123`) is an identifier, such as a project number, not a number:
+ * as a number it would lose its zeros.
+ */
 function toNumber(value: any): number {
   if (typeof value === 'number') return value
-  const match = typeof value === 'string' && value.trim().match(/^#?(-?\d+(?:\.\d+)?)$/)
+  const match = typeof value === 'string' && value.trim().match(/^#?(-?(?!0\d)\d+(?:\.\d+)?)$/)
   return match ? parseFloat(match[1]) : NaN
 }
 
