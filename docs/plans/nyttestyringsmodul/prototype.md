@@ -1,5 +1,9 @@
 # Plan: «Vibe-prototype» av Nyttestyring (HTML)
 
+> **Status 8.10.2026:** Bygget. Fila er [`prototype/nyttestyring.html`](prototype/nyttestyring.html).
+> Åpne den rett i nettleseren, den virker uten nett. Alle skjermene i kapittel 4 er med, også
+> «kan med»-skjermene (kopier som CSV og lesemodus).
+>
 > Hører til [løsningsforslaget](../nyttestyringsmodul.md). Formålet er å vise flatene på hub-,
 > program- og prosjektnivå for Asker og andre interessenter med fiktive data, før det skrives
 > SPFx-kode. Prototypen er en illustrasjon. Den skal aldri bli produksjonskode.
@@ -23,7 +27,7 @@ at det fungerer på en bærbar.
 | **Ingen avhengigheter.** Ren JS og CSS, grafer i inline SVG. | Virker uten nett og fra fil, og ingen CDN-versjon kan endre seg underveis |
 | **Utseende som Fluent v9**: Segoe UI, tokens for farger, avstand og radius, kort, faner og skuff | Skal ligne PP365 etter migreringen til Fluent v9. Ikke en piksel-kopi. |
 | **Tilstand i minnet, speilet til `localStorage`** (med try/catch) | Registreringer overlever en sideoppdatering under demo. Knappen «Tilbakestill demodata» sletter dem. |
-| **Ruting via `#hash`** (`#/hub/oversikt`, `#/prosjekt/p3/indikator/i7`) | Lenker kan deles, og det speiler `setUrlHash` i ekte kode |
+| **Ruting via `#hash`** (`#hub-oversikt`, `#p2-indikator-I4`) | Lenker kan deles, og det speiler `setUrlHash` i ekte kode |
 | **Lys og mørk modus** via `prefers-color-scheme` | Billig å få med |
 
 Anslått størrelse er 1 500–2 500 linjer. Bygges i én økt med Claude, så finpusses det i et par
@@ -112,8 +116,9 @@ Virksomheten er **Fjordvik kommune**. Den er oppdiktet. Navn på personer er fik
   - 2 antagelser er ikke vurdert på over 6 måneder.
 - **Katalog:** 3 nyttevirkninger med indikatorer som er gjenbrukt i flere prosjekter, for eksempel
   «Redusert manuell saksbehandling (timer/år)».
-- **Tildeling:** én programnyttevirkning som allerede er brutt ned i bidrag fra de tre prosjektene
-  i Digital innbyggerservice.
+- **Tildeling:** én programnyttevirkning («Færre telefonhenvendelser til servicetorget») som er
+  fordelt på to av de tre prosjektene i Digital innbyggerservice (40 % og 30 %). Digital byggesak
+  står igjen, så tildelingen kan vises live i demoen.
 
 Dataene ligger i ett `const SEED = {...}`-objekt øverst i filen, med samme feltnavn som i
 løsningsforslaget (`GtStartValue`, `GtBmDirection` og så videre). Prototypen dokumenterer da
@@ -141,7 +146,7 @@ Lag dem som rene funksjoner. De kan portes nesten direkte til `shared-library`.
    Kurven og statusen flytter seg med en gang. Pek på teksten «lagres på huben».
 4. **Statusseksjon:** «Dette er det styringsgruppa ser i statusrapporten».
 5. **Bytt til Program** (Digital innbyggerservice): Bryteren «Programmet / Alle prosjekter».
-   **Tildel**: Bryt ned «Færre telefonhenvendelser» på tre prosjekter.
+   **Tildel**: Tildel de siste 30 % av «Færre telefonhenvendelser» til Digital byggesak.
 6. **Hub, Katalog:** «Ta i bruk» i Chatbot-prosjektet.
 7. **Nyttekart og Strategiske mål:** Antagelsen som ikke holder lyser rødt i kjeden fram til S1.1.
    Avslutt med spørsmålene til workshopen.

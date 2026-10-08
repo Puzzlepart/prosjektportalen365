@@ -1,0 +1,1311 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nyttestyring prototype</title>
+<style>
+/* Layout: SharePoint site header, app navigation drawer to the left, working surface to the right.
+   Tokens follow Fluent UI v9 (PP365 customLightTheme), brand = the tenant's SharePoint theme (Teal). */
+:root {
+  --bg: #f5f5f5;
+  --surface: #ffffff;
+  --surface-2: #fafafa;
+  --surface-3: #f0f0f0;
+  --fg: #242424;
+  --fg-2: #424242;
+  --fg-3: #616161;
+  --fg-4: #8a8a8a;
+  --stroke: #d1d1d1;
+  --stroke-2: #e0e0e0;
+  --brand: #03787c;
+  --brand-hover: #02686b;
+  --brand-fg: #ffffff;
+  --brand-subtle: #e6f2f2;
+  --brand-text: #036a6e;
+  --demo-bg: #1b1a19;
+  --demo-fg: #f3f2f1;
+  --demo-muted: #b3b0ad;
+  --ok: #107c10; --ok-bg: #f1faf1; --ok-line: #9fd89f;
+  --warn: #bc4b09; --warn-bg: #fff9f5; --warn-line: #fdcfb4;
+  --crit: #c50f1f; --crit-bg: #fdf3f4; --crit-line: #eeacb2;
+  --none: #616161; --none-bg: #f5f5f5; --none-line: #d1d1d1;
+  --overlay: rgba(0,0,0,.32);
+  --shadow-4: 0 2px 4px rgba(0,0,0,.14), 0 0 2px rgba(0,0,0,.12);
+  --shadow-16: 0 8px 16px rgba(0,0,0,.14), 0 0 2px rgba(0,0,0,.12);
+  --shadow-64: 0 32px 64px rgba(0,0,0,.24), 0 0 8px rgba(0,0,0,.2);
+  --font: "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", sans-serif;
+  --font-display: "Segoe UI Variable Display", "Segoe UI", -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  --r-s: 2px; --r-m: 4px; --r-l: 8px; --r-xl: 12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141414; --surface: #292929; --surface-2: #1f1f1f; --surface-3: #333333;
+    --fg: #ffffff; --fg-2: #d6d6d6; --fg-3: #adadad; --fg-4: #8f8f8f;
+    --stroke: #5c5c5c; --stroke-2: #3d3d3d;
+    --brand: #3fb2b5; --brand-hover: #5cc2c4; --brand-fg: #0a2a2b; --brand-subtle: #0f3b3c; --brand-text: #74cfd1;
+    --demo-bg: #000000; --demo-fg: #f3f2f1; --demo-muted: #a19f9d;
+    --ok: #54b054; --ok-bg: #052505; --ok-line: #107c10;
+    --warn: #faa06b; --warn-bg: #4a1e04; --warn-line: #8a3707;
+    --crit: #dc626d; --crit-bg: #3b0509; --crit-line: #6e0811;
+    --none: #adadad; --none-bg: #333333; --none-line: #5c5c5c;
+    --overlay: rgba(0,0,0,.55);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141414; --surface: #292929; --surface-2: #1f1f1f; --surface-3: #333333;
+  --fg: #ffffff; --fg-2: #d6d6d6; --fg-3: #adadad; --fg-4: #8f8f8f;
+  --stroke: #5c5c5c; --stroke-2: #3d3d3d;
+  --brand: #3fb2b5; --brand-hover: #5cc2c4; --brand-fg: #0a2a2b; --brand-subtle: #0f3b3c; --brand-text: #74cfd1;
+  --demo-bg: #000000; --demo-fg: #f3f2f1; --demo-muted: #a19f9d;
+  --ok: #54b054; --ok-bg: #052505; --ok-line: #107c10;
+  --warn: #faa06b; --warn-bg: #4a1e04; --warn-line: #8a3707;
+  --crit: #dc626d; --crit-bg: #3b0509; --crit-line: #6e0811;
+  --none: #adadad; --none-bg: #333333; --none-line: #5c5c5c;
+  --overlay: rgba(0,0,0,.55);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--fg); font: 14px/20px var(--font); -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4 { margin: 0; font-family: var(--font-display); text-wrap: balance; }
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: var(--brand-text); }
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.num { font-variant-numeric: tabular-nums; }
+.muted { color: var(--fg-3); }
+.small { font-size: 12px; line-height: 16px; }
+
+/* Demo bar: not part of the app */
+.demo { background: var(--demo-bg); color: var(--demo-fg); padding: 8px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; font-size: 13px; }
+.demo-tag { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--demo-muted); }
+.demo-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.seg { display: inline-flex; border: 1px solid #605e5c; border-radius: var(--r-m); overflow: hidden; }
+.seg button { background: transparent; border: 0; color: var(--demo-fg); padding: 4px 12px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--demo-fg); color: var(--demo-bg); font-weight: 600; }
+.demo select { background: #323130; color: var(--demo-fg); border: 1px solid #605e5c; border-radius: var(--r-m); padding: 4px 8px; max-width: 100%; }
+.demo label.chk { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+.demo .demo-btn { background: transparent; color: var(--demo-fg); border: 1px solid #605e5c; border-radius: var(--r-m); padding: 4px 10px; cursor: pointer; }
+.demo .demo-btn:hover { background: #323130; }
+.demo .spacer { flex: 1; }
+
+/* SharePoint site header */
+.site { background: var(--surface); border-bottom: 1px solid var(--stroke-2); padding: 14px 16px; display: flex; align-items: center; gap: 14px; }
+.site-logo { width: 48px; height: 48px; border-radius: var(--r-l); background: var(--brand); color: var(--brand-fg); display: grid; place-items: center; font: 600 18px var(--font-display); flex: none; }
+.site-text { min-width: 0; }
+.site-title { font: 600 20px/26px var(--font-display); }
+.site-sub { color: var(--fg-3); font-size: 12px; }
+.site-kind { margin-left: auto; font-size: 12px; color: var(--fg-3); text-align: right; }
+
+/* App frame */
+.app { display: grid; grid-template-columns: 232px minmax(0, 1fr); min-height: calc(100vh - 140px); }
+.nav { background: var(--surface-2); border-right: 1px solid var(--stroke-2); padding: 12px 8px; display: flex; flex-direction: column; gap: 2px; }
+.nav-title { font-size: 12px; color: var(--fg-3); padding: 4px 12px 8px; letter-spacing: .04em; text-transform: uppercase; }
+.nav button { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 8px 12px; border: 0; border-radius: var(--r-m); background: transparent; cursor: pointer; position: relative; color: var(--fg-2); }
+.nav button:hover { background: var(--surface-3); color: var(--fg); }
+.nav button[aria-current="page"] { background: var(--surface-3); color: var(--fg); font-weight: 600; }
+.nav button[aria-current="page"]::before { content: ""; position: absolute; left: 0; top: 8px; bottom: 8px; width: 4px; border-radius: 2px; background: var(--brand); }
+.nav svg { width: 20px; height: 20px; flex: none; }
+.nav .nav-sep { height: 1px; background: var(--stroke-2); margin: 8px 12px; }
+.nav-foot { margin-top: auto; padding: 12px; font-size: 12px; color: var(--fg-3); }
+main { padding: 20px 24px 48px; min-width: 0; }
+
+.page-head { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px 16px; margin-bottom: 16px; }
+.page-head h1 { font-size: 24px; line-height: 32px; font-weight: 600; }
+.page-head .lead { color: var(--fg-3); max-width: 70ch; }
+.page-head .actions { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+.crumb { font-size: 12px; color: var(--fg-3); margin-bottom: 4px; display: flex; gap: 6px; flex-wrap: wrap; }
+.crumb button { border: 0; background: none; color: var(--brand-text); cursor: pointer; padding: 0; }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--stroke); background: var(--surface); color: var(--fg); padding: 5px 12px; border-radius: var(--r-m); cursor: pointer; font-weight: 600; min-height: 32px; white-space: nowrap; }
+.btn:hover { background: var(--surface-3); }
+.btn.primary { background: var(--brand); border-color: var(--brand); color: var(--brand-fg); }
+.btn.primary:hover { background: var(--brand-hover); border-color: var(--brand-hover); }
+.btn.subtle { border-color: transparent; background: transparent; color: var(--brand-text); }
+.btn.subtle:hover { background: var(--surface-3); }
+.btn.sm { min-height: 24px; padding: 2px 8px; font-size: 12px; }
+.btn svg { width: 16px; height: 16px; }
+.ro .write { display: none !important; }
+
+/* Cards and grids */
+.card { background: var(--surface); border-radius: var(--r-l); box-shadow: var(--shadow-4); padding: 16px; min-width: 0; }
+.card h2 { font-size: 16px; line-height: 22px; font-weight: 600; }
+.card-head { display: flex; align-items: baseline; gap: 8px 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.card-head .muted { font-size: 12px; }
+.card-head .right { margin-left: auto; max-width: 100%; }
+.legend { min-width: 0; }
+.grid { display: grid; gap: 16px; }
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 16px; margin-bottom: 16px; }
+.kpi { background: var(--surface); border-radius: var(--r-l); box-shadow: var(--shadow-4); padding: 14px 16px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.kpi .k-label { font-size: 12px; color: var(--fg-3); }
+.kpi .k-value { font: 600 28px/36px var(--font-display); font-variant-numeric: tabular-nums; }
+.kpi .k-value small { font-size: 14px; font-weight: 400; color: var(--fg-3); }
+.kpi .k-note { font-size: 12px; color: var(--fg-3); display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.two { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 16px; }
+
+/* Status pills */
+.pill { display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; height: 20px; border-radius: 10px; font-size: 12px; font-weight: 600; border: 1px solid; white-space: nowrap; }
+.pill svg { width: 12px; height: 12px; }
+.pill.ok { color: var(--ok); background: var(--ok-bg); border-color: var(--ok-line); }
+.pill.warn { color: var(--warn); background: var(--warn-bg); border-color: var(--warn-line); }
+.pill.crit { color: var(--crit); background: var(--crit-bg); border-color: var(--crit-line); }
+.pill.none { color: var(--none); background: var(--none-bg); border-color: var(--none-line); }
+.chip { display: inline-flex; align-items: center; padding: 0 8px; height: 20px; border-radius: 10px; font-size: 12px; background: var(--surface-3); color: var(--fg-2); white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.chip.brand { background: var(--brand-subtle); color: var(--brand-text); }
+button.chip { border: 0; cursor: pointer; }
+button.chip:hover { text-decoration: underline; }
+.chips { display: flex; gap: 4px; flex-wrap: wrap; }
+
+/* Tables */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { text-align: left; font-weight: 600; color: var(--fg-2); padding: 8px; border-bottom: 1px solid var(--stroke); white-space: nowrap; }
+td { padding: 8px; border-bottom: 1px solid var(--stroke-2); vertical-align: middle; }
+tr.click { cursor: pointer; }
+tr.click:hover td { background: var(--surface-2); }
+td.r, th.r { text-align: right; }
+.cell-title { font-weight: 600; color: var(--fg); }
+.cell-sub { font-size: 12px; color: var(--fg-3); }
+
+/* Bars */
+.bars { display: flex; flex-direction: column; gap: 10px; }
+.bar-row { display: grid; grid-template-columns: minmax(120px, 210px) minmax(0, 1fr) 48px 88px; gap: 10px; align-items: center; cursor: pointer; border-radius: var(--r-m); padding: 2px 4px; }
+.bar-row:hover { background: var(--surface-2); }
+.bar-label { min-width: 0; }
+.bar-label .t { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-label .s { font-size: 12px; color: var(--fg-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-track { height: 12px; background: var(--surface-3); border-radius: 0 4px 4px 0; position: relative; }
+.bar-fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--brand); border-radius: 0 4px 4px 0; }
+.bar-plan { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--fg-2); }
+.bar-val { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.legend { display: flex; gap: 6px 16px; flex-wrap: wrap; font-size: 12px; color: var(--fg-3); align-items: center; }
+.legend i { display: inline-block; vertical-align: middle; margin-right: 6px; }
+.lg-fill { width: 12px; height: 10px; background: var(--brand); border-radius: 2px; }
+.lg-plan { width: 2px; height: 14px; background: var(--fg-2); }
+.lg-line { width: 18px; height: 0; border-top: 2px solid var(--brand); }
+.lg-dash { width: 18px; height: 0; border-top: 2px dashed var(--fg-3); }
+.lg-dot { width: 18px; height: 0; border-top: 1px dotted var(--fg-2); }
+
+/* Charts */
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; width: 100%; }
+.chart text { fill: var(--fg-3); font: 11px var(--font); }
+.tip { position: fixed; z-index: 50; pointer-events: none; background: var(--surface); color: var(--fg); border-radius: var(--r-m); box-shadow: var(--shadow-16); padding: 8px 10px; font-size: 12px; line-height: 18px; max-width: 280px; }
+.tip b { font-weight: 600; }
+.tip .row { display: flex; justify-content: space-between; gap: 16px; }
+.spark { display: block; }
+
+/* Message bar */
+.msg { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: var(--r-m); border: 1px solid var(--stroke); background: var(--surface-2); margin-bottom: 16px; }
+.msg.info { background: var(--brand-subtle); border-color: transparent; }
+.msg.warn { background: var(--warn-bg); border-color: var(--warn-line); }
+.msg svg { width: 18px; height: 18px; flex: none; margin-top: 1px; color: var(--brand-text); }
+
+/* Tabs */
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--stroke-2); margin-bottom: 16px; overflow-x: auto; }
+.tabs button { border: 0; background: none; padding: 10px 12px; cursor: pointer; color: var(--fg-2); position: relative; white-space: nowrap; }
+.tabs button:hover { color: var(--fg); }
+.tabs button[aria-selected="true"] { color: var(--fg); font-weight: 600; }
+.tabs button[aria-selected="true"]::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: -1px; height: 3px; border-radius: 2px; background: var(--brand); }
+.tabs .count { color: var(--fg-3); font-weight: 400; margin-left: 4px; }
+
+/* Worklist */
+.group-title { font-weight: 600; margin: 16px 0 8px; display: flex; gap: 8px; align-items: center; }
+.group-title:first-child { margin-top: 0; }
+.work { display: grid; grid-template-columns: minmax(0, 1fr) 110px 110px 100px auto; gap: 12px; align-items: center; padding: 10px 12px; border-radius: var(--r-m); background: var(--surface); border: 1px solid var(--stroke-2); margin-bottom: 6px; }
+.work.overdue { border-left: 3px solid var(--crit); }
+.work .w-k { font-size: 11px; color: var(--fg-3); }
+
+/* Drawer */
+.overlay { position: fixed; inset: 0; background: var(--overlay); z-index: 30; }
+.drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(480px, 100%); background: var(--surface); box-shadow: var(--shadow-64); z-index: 31; display: flex; flex-direction: column; }
+.drawer-head { padding: 16px 20px 8px; display: flex; gap: 12px; align-items: flex-start; }
+.drawer-head h2 { font-size: 20px; line-height: 28px; font-weight: 600; }
+.drawer-head .x { margin-left: auto; }
+.drawer-body { padding: 8px 20px 20px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 14px; }
+.drawer-foot { padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--stroke-2); display: flex; gap: 8px; }
+.field { display: flex; flex-direction: column; gap: 4px; }
+.field > label, .field > .lbl { font-weight: 600; font-size: 13px; }
+.field .hint { font-size: 12px; color: var(--fg-3); }
+.input { border: 1px solid var(--stroke); border-bottom-color: var(--fg-3); border-radius: var(--r-m); background: var(--surface); padding: 5px 10px; min-height: 32px; width: 100%; }
+.input:focus { outline: none; border-bottom: 2px solid var(--brand); }
+textarea.input { min-height: 72px; resize: vertical; }
+.input[disabled], .locked { background: var(--surface-3); color: var(--fg-2); }
+.locked { border-radius: var(--r-m); padding: 6px 10px; display: flex; gap: 8px; align-items: center; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.checks { display: flex; flex-direction: column; gap: 4px; max-height: 180px; overflow-y: auto; border: 1px solid var(--stroke-2); border-radius: var(--r-m); padding: 6px 10px; }
+.checks label { display: flex; gap: 8px; align-items: flex-start; font-weight: 400; cursor: pointer; }
+.preview { border-radius: var(--r-m); background: var(--surface-2); padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+
+/* Toast */
+.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--fg); color: var(--surface); padding: 10px 16px; border-radius: var(--r-m); box-shadow: var(--shadow-16); z-index: 60; max-width: calc(100% - 32px); }
+
+/* Benefit map */
+.map-wrap { overflow-x: auto; }
+.map-cols { display: grid; grid-template-columns: repeat(3, 1fr); font-size: 12px; font-weight: 600; color: var(--fg-3); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; min-width: 760px; }
+.map-cols div:nth-child(2) { text-align: center; } .map-cols div:nth-child(3) { text-align: right; }
+.map-svg .node { cursor: pointer; }
+.map-svg .node rect.box { fill: var(--surface); stroke: var(--stroke); }
+.map-svg .node.goal rect.box { fill: var(--brand-subtle); stroke: transparent; }
+.map-svg .node text.t { fill: var(--fg); font: 600 12px var(--font); }
+.map-svg .node text.s { fill: var(--fg-3); font: 11px var(--font); }
+.map-svg path.link { fill: none; stroke: var(--stroke); stroke-width: 1.5; }
+.map-svg .dim { opacity: .18; }
+.map-svg path.link.hl { stroke: var(--brand); stroke-width: 2.5; }
+.map-svg .node.hl rect.box { stroke: var(--brand); stroke-width: 2; }
+.map-svg .asm { cursor: pointer; }
+.map-svg .asm text { fill: var(--surface); font: 700 11px var(--font); }
+
+/* Goals */
+.goal { display: grid; grid-template-columns: minmax(0, 1fr) 220px; gap: 16px; align-items: start; }
+.goal + .goal { margin-top: 12px; }
+.goal.child { margin-left: 28px; }
+.goal h3 { font-size: 16px; line-height: 22px; font-weight: 600; }
+.goal-meta { display: flex; gap: 6px 14px; flex-wrap: wrap; font-size: 12px; color: var(--fg-3); margin: 4px 0 8px; }
+.goal-stat { display: flex; flex-direction: column; gap: 6px; }
+.meter { height: 8px; background: var(--surface-3); border-radius: 4px; overflow: hidden; }
+.meter i { display: block; height: 100%; background: var(--brand); border-radius: 0 4px 4px 0; }
+
+/* Catalog */
+.cat-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.cat h3 { font-size: 16px; line-height: 22px; font-weight: 600; }
+.cat ul { margin: 8px 0; padding-left: 18px; color: var(--fg-2); }
+.cat .foot { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; border-top: 1px solid var(--stroke-2); padding-top: 10px; margin-top: 10px; }
+
+/* Indicator detail */
+.det-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start; }
+.facts { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 12px; font-size: 13px; }
+.facts dt { color: var(--fg-3); }
+.facts dd { margin: 0; min-width: 0; }
+.facts .chip { height: auto; white-space: normal; padding: 2px 8px; text-align: left; }
+.big { font: 600 32px/40px var(--font-display); font-variant-numeric: tabular-nums; }
+.asm-item { display: flex; gap: 8px; align-items: flex-start; padding: 8px 0; border-top: 1px solid var(--stroke-2); }
+.asm-item:first-child { border-top: 0; }
+
+/* Status report mock */
+.sr-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; margin-bottom: 12px; }
+.sr-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+.sr-tabs span { padding: 4px 10px; border-radius: var(--r-m); background: var(--surface-3); color: var(--fg-3); font-size: 12px; }
+.sr-tabs span.on { background: var(--brand); color: var(--brand-fg); font-weight: 600; }
+.sr-assess { display: flex; gap: 12px; align-items: flex-start; padding: 12px; border-radius: var(--r-m); background: var(--surface-2); margin-bottom: 12px; }
+.sr-dot { width: 28px; height: 28px; border-radius: 50%; flex: none; display: grid; place-items: center; color: var(--surface); }
+.sr-dot.ok { background: var(--ok); } .sr-dot.warn { background: var(--warn); } .sr-dot.crit { background: var(--crit); }
+.sr-dot svg { width: 16px; height: 16px; }
+
+.assign { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 16px; align-items: start; }
+.assign-proj { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 12px; align-items: center; padding: 12px 0; border-top: 1px solid var(--stroke-2); }
+.assign-proj:first-of-type { border-top: 0; }
+.pick { display: block; width: 100%; text-align: left; border: 1px solid var(--stroke-2); background: var(--surface); padding: 10px 12px; border-radius: var(--r-m); cursor: pointer; margin-bottom: 8px; }
+.pick[aria-pressed="true"] { border-color: var(--brand); box-shadow: inset 0 0 0 1px var(--brand); }
+.share-input { width: 72px; }
+
+.empty { padding: 24px; text-align: center; color: var(--fg-3); }
+
+@media (max-width: 1100px) {
+  .kpis { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .two, .det-grid, .assign { grid-template-columns: minmax(0, 1fr); }
+  .cat-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 760px) {
+  .app { grid-template-columns: minmax(0, 1fr); }
+  .nav { flex-direction: row; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--stroke-2); padding: 6px 8px; }
+  .nav button { width: auto; white-space: nowrap; }
+  .nav button[aria-current="page"]::before { left: 12px; right: 12px; top: auto; bottom: 0; width: auto; height: 3px; }
+  .nav-title, .nav-sep, .nav-foot { display: none; }
+  main { padding: 16px 16px 40px; }
+  .site-kind { display: none; }
+  .bar-row { grid-template-columns: minmax(0, 1fr) 48px; }
+  .bar-row .bar-track { grid-column: 1 / -1; grid-row: 2; }
+  .bar-row .pillcell { display: none; }
+  .work { grid-template-columns: minmax(0, 1fr) auto; }
+  .work .hide-sm { display: none; }
+  .goal { grid-template-columns: minmax(0, 1fr); }
+  .goal.child { margin-left: 12px; }
+  .row2 { grid-template-columns: minmax(0, 1fr); }
+  .kpi .k-value { font-size: 24px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .bar-fill, .meter i { transition: width .4s ease; }
+  .drawer { animation: slide .18s ease-out; }
+  @keyframes slide { from { transform: translateX(24px); opacity: .6; } to { transform: none; opacity: 1; } }
+}
+</style>
+</head>
+<body>
+<div class="demo" role="region" aria-label="Demokontroller">
+  <span class="demo-tag">Prototype · fiktive data</span>
+  <div class="demo-group">
+    <span>Vis som</span>
+    <div class="seg" role="group" aria-label="Nivå">
+      <button type="button" data-level="hub">Hub</button>
+      <button type="button" data-level="program">Program</button>
+      <button type="button" data-level="project">Prosjekt</button>
+    </div>
+    <select id="site-select" aria-label="Velg område"></select>
+  </div>
+  <label class="chk"><input type="checkbox" id="ro-toggle"> Simuler bruker uten skrivetilgang</label>
+  <span class="spacer"></span>
+  <button type="button" class="demo-btn" id="reset-btn">Tilbakestill demodata</button>
+</div>
+<header class="site" id="site-header"></header>
+<div class="app" id="app">
+  <nav class="nav" id="nav" aria-label="Nyttestyring"></nav>
+  <main id="main"></main>
+</div>
+<div id="drawer-root"></div>
+<div class="tip" id="tip" hidden></div>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script>
+'use strict';
+/* ------------------------------------------------------------------
+   Constants and helpers
+------------------------------------------------------------------ */
+const TODAY = '2026-10-08';
+const SNAPSHOT = '2026-09-30';
+const TOLERANCE = 0.10;
+const STORE_KEY = 'pp365-nyttestyring-prototype-v1';
+
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const toDate = (s) => { const [y, m, d] = s.split('-').map(Number); return Date.UTC(y, m - 1, d); };
+const fromTs = (t) => new Date(t).toISOString().slice(0, 10);
+const fmtDate = (s) => s ? s.slice(8, 10) + '.' + s.slice(5, 7) + '.' + s.slice(0, 4) : '–';
+const MONTHS = ['januar', 'februar', 'mars', 'april', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'desember'];
+const MONTHS_S = ['jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'des'];
+const fmtMonth = (s) => s ? MONTHS[Number(s.slice(5, 7)) - 1] + ' ' + s.slice(0, 4) : '–';
+const endOfMonth = (y, m) => fromTs(Date.UTC(y, m + 1, 0)); // m is 0-based
+function addMonthsEnd(s, n) { const y = Number(s.slice(0, 4)); const m = Number(s.slice(5, 7)) - 1 + n; return endOfMonth(y + Math.floor(m / 12), ((m % 12) + 12) % 12); }
+const fmtNum = (v, dec = 0) => v == null || isNaN(v) ? '–' : Number(v).toLocaleString('nb-NO', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+const pct = (v) => v == null ? '–' : Math.round(v) + ' %';
+const uid = (p) => p + Math.random().toString(36).slice(2, 7).toUpperCase();
+function mulberry(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const hash = (s) => [...s].reduce((a, c) => (a * 31 + c.charCodeAt(0)) | 0, 7);
+const FREQ_MONTHS = { 'Månedlig': 1, 'Kvartalsvis': 3, 'Halvårlig': 6, 'Årlig': 12 };
+
+/* ------------------------------------------------------------------
+   Fictitious seed data (Fjordvik kommune). Field names mirror the
+   data model in the solution proposal (GtStartValue, GtBmDirection …).
+------------------------------------------------------------------ */
+const SITES = {
+  hub: { id: 'hub', kind: 'hub', title: 'Fjordvik kommune', short: 'Virksomheten', initials: 'FK' },
+  pg1: { id: 'pg1', kind: 'program', title: 'Digital innbyggerservice', short: 'Digital innbyggerservice', initials: 'DI', children: ['p1', 'p2', 'p3'], manager: 'Hanne Brekke' },
+  pg2: { id: 'pg2', kind: 'program', title: 'Helse og omsorg 2030', short: 'Helse og omsorg 2030', initials: 'HO', children: ['p4', 'p5'], manager: 'Ola Tveit' },
+  p1: { id: 'p1', kind: 'project', title: 'Ny innbyggerportal', short: 'Ny innbyggerportal', initials: 'NI', program: 'pg1', manager: 'Siri Haugland', phase: 'Gjennomføre' },
+  p2: { id: 'p2', kind: 'project', title: 'Digital byggesak', short: 'Digital byggesak', initials: 'DB', program: 'pg1', manager: 'Anders Lie', phase: 'Gjennomføre' },
+  p3: { id: 'p3', kind: 'project', title: 'Chatbot for innbyggerdialog', short: 'Chatbot', initials: 'CI', program: 'pg1', manager: 'Mona Vik', phase: 'Gjennomføre' },
+  p4: { id: 'p4', kind: 'project', title: 'Velferdsteknologi i hjemmetjenesten', short: 'Velferdsteknologi', initials: 'VH', program: 'pg2', manager: 'Per Olsen', phase: 'Realisere' },
+  p5: { id: 'p5', kind: 'project', title: 'Digitalt tilsyn natt', short: 'Digitalt tilsyn natt', initials: 'DT', program: 'pg2', manager: 'Lene Moe', phase: 'Gjennomføre' },
+  p6: { id: 'p6', kind: 'project', title: 'Elektrifisering av kommunal bilpark', short: 'Elektrifisering bilpark', initials: 'EB', program: null, manager: 'Jon Bakke', phase: 'Gjennomføre' }
+};
+const siteName = (id) => SITES[id] ? SITES[id].title : '–';
+
+function buildSeed() {
+  const goals = [
+    { id: 'S1', title: 'Enkel og tilgjengelig innbyggerservice', level: 'Samfunnsmål', parent: null, owner: 'Kommunedirektør', period: '2024–2030', desc: 'Innbyggerne får hjelp raskt, uansett kanal, og opplever at kommunen henger sammen.' },
+    { id: 'S1-1', title: '80 % av henvendelsene løses digitalt innen 2028', level: 'Effektmål', parent: 'S1', owner: 'Kommunalsjef organisasjon', period: '2024–2028', desc: 'Andelen henvendelser som løses i selvbetjening eller digital dialog uten manuell oppfølging.' },
+    { id: 'S2', title: 'Klimanøytral kommunal drift innen 2030', level: 'Samfunnsmål', parent: null, owner: 'Kommunedirektør', period: '2020–2030', desc: 'Direkte klimagassutslipp fra kommunens egen drift skal ned med minst 70 % fra 2019-nivå.' },
+    { id: 'S3', title: 'Effektiv ressursbruk og bærekraftig økonomi', level: 'Virksomhetsmål', parent: null, owner: 'Økonomisjef', period: '2024–2027', desc: 'Frigjøre årsverk og driftsmidler til prioriterte tjenester.' },
+    { id: 'S4', title: 'Trygge og selvstendige innbyggere i eget hjem', level: 'Samfunnsmål', parent: null, owner: 'Kommunalsjef helse og omsorg', period: '2024–2030', desc: 'Flere eldre kan bo trygt hjemme lenger.' }
+  ];
+  const changes = [
+    { id: 'E1', site: 'p1', title: 'Selvbetjening erstatter papirskjema', type: 'Prosess', process: 'Søknad og innsyn', challenge: 'Mange skjema finnes bare som PDF og krever manuell registrering.', responsible: 'Siri Haugland', status: 'Pågår' },
+    { id: 'E2', site: 'p1', title: 'Servicetorget blir digital veiledning', type: 'Organisasjon', process: 'Innbyggerdialog', challenge: 'Servicetorget bruker mest tid på telefon med enkle spørsmål.', responsible: 'Trine Aas', status: 'Planlagt' },
+    { id: 'E3', site: 'p2', title: 'Automatisk kontroll av byggesøknader', type: 'Teknologi', process: 'Byggesaksbehandling', challenge: 'Kompletthetskontroll gjøres manuelt.', responsible: 'Anders Lie', status: 'Pågår' },
+    { id: 'E4', site: 'p2', title: 'Saksbehandlerne tar i bruk ny arbeidsflyt', type: 'Kompetanse', process: 'Byggesaksbehandling', challenge: 'Ny flyt krever opplæring og endrede rutiner.', responsible: 'Guro Næss', status: 'Pågår' },
+    { id: 'E5', site: 'p3', title: 'Chatbot svarer på standardspørsmål', type: 'Teknologi', process: 'Innbyggerdialog', challenge: 'Svarene må holdes oppdatert av fagområdene.', responsible: 'Mona Vik', status: 'Gjennomført' },
+    { id: 'E6', site: 'p4', title: 'Digitalt medisinskap og trygghetsalarm', type: 'Teknologi', process: 'Hjemmetjeneste', challenge: 'Krever stabil dekning og oppfølging av alarmer.', responsible: 'Per Olsen', status: 'Gjennomført' },
+    { id: 'E7', site: 'p5', title: 'Sensortilsyn erstatter faste nattbesøk', type: 'Prosess', process: 'Hjemmetjeneste natt', challenge: 'Ansatte og pårørende må ha tillit til sensorene.', responsible: 'Lene Moe', status: 'Pågår' },
+    { id: 'E8', site: 'p6', title: 'Fossile biler byttes ut med elbiler', type: 'Teknologi', process: 'Innkjøp og drift', challenge: 'Ladepunkter mangler på flere tjenestesteder.', responsible: 'Jon Bakke', status: 'Pågår' },
+    { id: 'E9', site: 'pg1', title: 'Felles kanalstrategi for innbyggerdialog', type: 'Organisasjon', process: 'Innbyggerdialog', challenge: 'Kanalene utvikles hver for seg.', responsible: 'Hanne Brekke', status: 'Pågår' }
+  ];
+  const benefits = [
+    { id: 'K1', site: 'hub', catalog: true, title: 'Redusert antall telefonhenvendelser', type: 'Direkte', status: 'Godkjent', owner: 'Kommunalsjef organisasjon', responsible: '', realization: '', changes: [], goals: ['S1-1', 'S3'], desc: 'Henvendelser flyttes fra telefon til selvbetjening og digital dialog.' },
+    { id: 'K2', site: 'hub', catalog: true, title: 'Redusert manuell saksbehandling', type: 'Direkte', status: 'Godkjent', owner: 'Økonomisjef', responsible: '', realization: '', changes: [], goals: ['S3'], desc: 'Frigjort tid når manuelle steg automatiseres. Måles i timer per år.' },
+    { id: 'K3', site: 'hub', catalog: true, title: 'Spart reisetid', type: 'Direkte', status: 'Godkjent', owner: 'Kommunalsjef helse og omsorg', responsible: '', realization: '', changes: [], goals: ['S3', 'S2'], desc: 'Færre fysiske besøk og kjøreturer.' },
+    { id: 'K4', site: 'hub', catalog: true, title: 'Økt innbyggertilfredshet', type: 'Kvalitativ', status: 'Godkjent', owner: 'Kommunedirektør', responsible: '', realization: '', changes: [], goals: ['S1'], desc: 'Måles med kommunens faste innbyggerundersøkelse (skala 1–6).' },
+
+    { id: 'N1', site: 'pg1', title: 'Færre telefonhenvendelser til servicetorget', type: 'Direkte', status: 'Under realisering', owner: 'Kari Fjeldstad', responsible: 'Hanne Brekke', realization: '2027-12', changes: ['E9'], goals: ['S1-1', 'S3'], basedOn: 'K1', desc: 'Programmets samlede mål for kanalvridning fra telefon til digitale kanaler.', prereq: 'Innbyggerportal og chatbot er i drift, og servicetorget er omorganisert.' },
+    { id: 'N2', site: 'p1', title: 'Flere henvendelser via innbyggerportalen', type: 'Direkte', status: 'Under realisering', owner: 'Kari Fjeldstad', responsible: 'Siri Haugland', realization: '2027-06', changes: ['E1', 'E2'], goals: ['S1-1'], contributesTo: 'N1', share: 40, basedOn: 'K1', desc: 'Prosjektets bidrag til programmets kanalvridning.' },
+    { id: 'N3', site: 'p1', title: 'Høyere andel saker løst digitalt', type: 'Direkte', status: 'Under realisering', owner: 'Kari Fjeldstad', responsible: 'Siri Haugland', realization: '2028-06', changes: ['E1'], goals: ['S1-1', 'S1'], desc: 'Flere saker løses fullt ut i selvbetjening.' },
+    { id: 'N4', site: 'p2', title: 'Kortere saksbehandlingstid i byggesak', type: 'Direkte', status: 'Under realisering', owner: 'Rolf Sande', responsible: 'Anders Lie', realization: '2027-06', changes: ['E3', 'E4'], goals: ['S1', 'S3'], desc: 'Søkerne får svar raskere, og færre saker går over fristen.', prereq: 'Ny arbeidsflyt er tatt i bruk av alle saksbehandlere.' },
+    { id: 'N5', site: 'p2', title: 'Flere digitale byggesøknader', type: 'Indirekte', status: 'Under realisering', owner: 'Rolf Sande', responsible: 'Guro Næss', realization: '2027-06', changes: ['E3'], goals: ['S1-1'], desc: 'Andelen søknader som kommer inn digitalt via Fellestjenester BYGG.' },
+    { id: 'N6', site: 'p2', title: 'Mindre manuell kontroll av byggesøknader', type: 'Direkte', status: 'Under realisering', owner: 'Rolf Sande', responsible: 'Anders Lie', realization: '2027-12', changes: ['E3'], goals: ['S3'], basedOn: 'K2', desc: 'Kompletthetskontroll automatiseres.' },
+    { id: 'N7', site: 'p3', title: 'Henvendelser besvart av chatbot', type: 'Direkte', status: 'Under realisering', owner: 'Kari Fjeldstad', responsible: 'Mona Vik', realization: '2027-06', changes: ['E5'], goals: ['S1-1'], contributesTo: 'N1', share: 30, basedOn: 'K1', desc: 'Prosjektets bidrag til programmets kanalvridning.' },
+    { id: 'N8', site: 'p4', title: 'Spart reisetid i hjemmetjenesten', type: 'Direkte', status: 'Under realisering', owner: 'Ingrid Dahl', responsible: 'Per Olsen', realization: '2027-12', changes: ['E6'], goals: ['S3', 'S2'], basedOn: 'K3', desc: 'Færre besøk kun for medisinutlevering.' },
+    { id: 'N9', site: 'p4', title: 'Økt trygghet for brukerne', type: 'Kvalitativ', status: 'Under realisering', owner: 'Ingrid Dahl', responsible: 'Per Olsen', realization: '2027-12', changes: ['E6'], goals: ['S4'], desc: 'Brukerne opplever økt trygghet i eget hjem.' },
+    { id: 'N10', site: 'p5', title: 'Færre unødvendige nattbesøk', type: 'Direkte', status: 'Under realisering', owner: 'Ingrid Dahl', responsible: 'Lene Moe', realization: '2027-06', changes: ['E7'], goals: ['S4', 'S3'], desc: 'Besøk gjøres når sensorene viser behov, ikke etter fast runde.' },
+    { id: 'N11', site: 'p6', title: 'Lavere CO₂-utslipp fra bilparken', type: 'Direkte', status: 'Under realisering', owner: 'Eva Strand', responsible: 'Jon Bakke', realization: '2030-12', changes: ['E8'], goals: ['S2'], desc: 'Utslipp fra kommunens kjøretøy, beregnet fra drivstofforbruk.' },
+    { id: 'N12', site: 'p6', title: 'Lavere driftskostnader for bilparken', type: 'Direkte', status: 'Under realisering', owner: 'Eva Strand', responsible: 'Jon Bakke', realization: '2028-12', changes: ['E8'], goals: ['S3'], desc: 'Drivstoff, vedlikehold og leasing samlet.' }
+  ];
+  // gapFinal = how far behind the planned path the last measurement is (share of total span)
+  const ind = [
+    ['I1', 'N1', 'pg1', 'Telefonhenvendelser til servicetorget per måned', 'antall', 6200, 3500, '2025-01-01', '2027-12-31', 'Månedlig', 0.15, '2026-09-30', 0, 'Telefonistatistikk fra sentralbordet'],
+    ['I2', 'N2', 'p1', 'Henvendelser via innbyggerportalen per måned', 'antall', 0, 2000, '2025-03-01', '2027-06-30', 'Månedlig', 0.02, '2026-09-30', 0, 'Statistikk fra portalen'],
+    ['I3', 'N3', 'p1', 'Andel saker løst digitalt', '%', 42, 80, '2025-01-01', '2028-06-30', 'Månedlig', 0.14, '2026-07-31', 0, 'Uttrekk fra sak/arkiv'],
+    ['I16', 'N3', 'p1', 'Innbyggertilfredshet med digitale tjenester', 'skala 1–6', 4.1, 4.6, '2025-01-01', '2027-12-31', 'Halvårlig', 0.0, '2026-06-30', 1, 'Innbyggerundersøkelsen'],
+    ['I4', 'N4', 'p2', 'Gjennomsnittlig saksbehandlingstid byggesak', 'dager', 54, 21, '2025-01-01', '2027-06-30', 'Månedlig', 0.32, '2026-09-30', 0, 'Rapport fra fagsystemet'],
+    ['I5', 'N5', 'p2', 'Andel byggesøknader levert digitalt', '%', 35, 90, '2025-01-01', '2027-06-30', 'Månedlig', 0.15, '2026-08-31', 0, 'Fellestjenester BYGG'],
+    ['I6', 'N6', 'p2', 'Timer manuell kontroll av byggesøknader', 'timer/år', 9800, 4000, '2025-01-01', '2027-12-31', 'Kvartalsvis', 0.01, '2026-09-30', 0, 'Timeføring, årstakt'],
+    ['I7', 'N7', 'p3', 'Henvendelser besvart av chatbot per måned', 'antall', 0, 1500, '2025-09-01', '2027-06-30', 'Månedlig', -0.02, '2026-09-30', 0, 'Chatbot-statistikk'],
+    ['I8', 'N7', 'p3', 'Andel samtaler løst uten overføring', '%', 0, 70, '2026-06-01', '2027-06-30', 'Månedlig', null, null, 0, 'Chatbot-statistikk'],
+    ['I9', 'N8', 'p4', 'Spart reisetid i hjemmetjenesten', 'timer/år', 0, 4000, '2025-01-01', '2027-12-31', 'Kvartalsvis', 0.03, '2026-06-30', 0, 'Kjørebok og turplanlegging'],
+    ['I10', 'N9', 'p4', 'Andel brukere som oppgir økt trygghet', '%', 61, 85, '2025-01-01', '2027-12-31', 'Halvårlig', 0.0, '2026-06-30', 0, 'Brukerundersøkelse'],
+    ['I11', 'N10', 'p5', 'Fysiske nattbesøk per uke', 'antall', 420, 150, '2025-06-01', '2027-06-30', 'Månedlig', 0.16, '2026-09-30', 0, 'Turliste natt'],
+    ['I12', 'N10', 'p5', 'Hendelser oppdaget av sensor per måned', 'antall', 0, 60, '2026-10-01', '2027-06-30', 'Månedlig', null, null, 0, 'Sensorplattformen'],
+    ['I13', 'N11', 'p6', 'CO₂-utslipp fra kommunal bilpark', 'tonn/år', 410, 120, '2024-01-01', '2030-12-31', 'Kvartalsvis', 0.02, '2026-09-30', 0, 'Drivstoffrapport omregnet til CO₂'],
+    ['I14', 'N11', 'p6', 'Andel elbiler i bilparken', '%', 18, 95, '2024-01-01', '2029-12-31', 'Kvartalsvis', 0.0, '2026-09-30', 0, 'Kjøretøyregister'],
+    ['I15', 'N12', 'p6', 'Drift og vedlikehold av bilparken', 'mill. kr/år', 7.4, 5.1, '2025-01-01', '2028-12-31', 'Halvårlig', 0.35, '2026-06-30', 1, 'Regnskap']
+  ];
+  const indicators = ind.map(([id, benefit, site, title, unit, start, target, startDate, targetDate, frequency, gap, lastDate, dec, method]) => ({
+    id, benefit, site, title, unit, start, target, startDate, targetDate, frequency, method, dec,
+    direction: target >= start ? 'Økende' : 'Minkende', milestones: [], _gap: gap, _last: lastDate
+  }));
+  indicators.find((i) => i.id === 'I13').milestones = [{ date: '2026-12-31', value: 300 }, { date: '2028-12-31', value: 200 }];
+  indicators.push(
+    { id: 'KI1', benefit: 'K1', site: 'hub', catalog: true, title: 'Telefonhenvendelser per måned', unit: 'antall', start: null, target: null, frequency: 'Månedlig', direction: 'Minkende', method: 'Telefonistatistikk', dec: 0, milestones: [] },
+    { id: 'KI2', benefit: 'K2', site: 'hub', catalog: true, title: 'Timer manuell saksbehandling per år', unit: 'timer/år', start: null, target: null, frequency: 'Kvartalsvis', direction: 'Minkende', method: 'Timeføring', dec: 0, milestones: [] },
+    { id: 'KI3', benefit: 'K3', site: 'hub', catalog: true, title: 'Spart reisetid', unit: 'timer/år', start: null, target: null, frequency: 'Kvartalsvis', direction: 'Økende', method: 'Kjørebok', dec: 0, milestones: [] },
+    { id: 'KI4', benefit: 'K4', site: 'hub', catalog: true, title: 'Innbyggertilfredshet', unit: 'skala 1–6', start: null, target: null, frequency: 'Halvårlig', direction: 'Økende', method: 'Innbyggerundersøkelsen', dec: 1, milestones: [] }
+  );
+
+  const lastComments = {
+    I1: 'Nedgangen har flatet ut etter sommeren. Chatboten tar mindre enn ventet av byggesaksspørsmål.',
+    I3: 'Seniorgruppen bruker portalen mindre enn antatt. Se antagelse.',
+    I4: 'Etterslep fra våren. Opplæring i ny flyt er utsatt til november.',
+    I5: 'Næringsaktørene sender digitalt, privatpersoner fortsatt på papir.',
+    I11: 'Tre soner har fortsatt faste runder i påvente av nye sensorer.',
+    I15: 'Leasingkostnadene for elbiler er høyere enn budsjettert.',
+    I13: 'Følger målbanen. Ny ladepark i Sentrum tatt i bruk i august.',
+    I7: 'Godt over plan etter ny kunnskapsbase i juni.'
+  };
+  const by = { pg1: 'Hanne Brekke', p1: 'Siri Haugland', p2: 'Anders Lie', p3: 'Mona Vik', p4: 'Per Olsen', p5: 'Lene Moe', p6: 'Jon Bakke' };
+  const measurements = [];
+  for (const i of indicators) {
+    if (i.catalog || i._gap == null) continue;
+    const step = FREQ_MONTHS[i.frequency];
+    const dates = [];
+    let d = addMonthsEnd(i.startDate, step - 1);
+    while (d <= i._last) { dates.push(d); d = addMonthsEnd(d, step); }
+    const rnd = mulberry(hash(i.id));
+    dates.forEach((date, k) => {
+      const t = dates.length > 1 ? k / (dates.length - 1) : 1;
+      const isLast = k === dates.length - 1;
+      const noise = isLast ? 0 : (rnd() - 0.5) * 0.03;
+      const prog = Math.max(-0.03, plannedProgress(i, date) - i._gap * t + noise);
+      const value = round(i.start + prog * (i.target - i.start), i.dec);
+      measurements.push({ id: i.id + '-' + date, indicator: i.id, date, value, comment: isLast ? (lastComments[i.id] || '') : '', by: by[i.site] || 'Ukjent' });
+    });
+    delete i._gap; delete i._last;
+  }
+  indicators.forEach((i) => { delete i._gap; delete i._last; });
+
+  const assumptions = [
+    { id: 'A1', site: 'p1', title: 'Innbyggere over 75 tar i bruk innbyggerportalen', from: 'N3', to: 'S1-1', status: 'Holder ikke', lastReviewed: '2026-09-10', note: 'Bruken i aldersgruppen er under 15 %. Vurder veiledning på biblioteket.' },
+    { id: 'A2', site: 'p2', title: 'Saksbehandlerne får opplæring før go-live', from: 'E4', to: 'N4', status: 'Usikker', lastReviewed: '2026-03-02', note: 'Opplæringen er flyttet to ganger.' },
+    { id: 'A3', site: 'p2', title: 'Ansvarlige søkere foretrekker digital innsending', from: 'E3', to: 'N5', status: 'Holder', lastReviewed: '2026-08-15', note: '' },
+    { id: 'A4', site: 'p3', title: 'Kunnskapsbasen holdes oppdatert av fagområdene', from: 'E5', to: 'N7', status: 'Holder', lastReviewed: '2026-09-01', note: '' },
+    { id: 'A5', site: 'p4', title: 'Brukerne har stabil mobildekning hjemme', from: 'E6', to: 'N8', status: 'Usikker', lastReviewed: '2026-02-20', note: 'Tre bygder har svak dekning.' },
+    { id: 'A6', site: 'p4', title: 'Økt trygghet gir lengre botid hjemme', from: 'N9', to: 'S4', status: 'Holder', lastReviewed: '2026-06-11', note: '' },
+    { id: 'A7', site: 'p6', title: 'Ladeinfrastruktur er på plass ved tjenestestedene', from: 'E8', to: 'N11', status: 'Holder', lastReviewed: '2026-07-01', note: '' },
+    { id: 'A8', site: 'pg1', title: 'Frigjort tid på servicetorget brukes på krevende saker', from: 'N1', to: 'S1-1', status: 'Holder', lastReviewed: '2026-05-20', note: '' }
+  ];
+  const assessments = {
+    p1: { level: 'warn', text: 'Nytteoppnåelsen er noe svakere enn planlagt. Eldre innbyggere tar i bruk portalen saktere enn antatt.' },
+    p2: { level: 'crit', text: 'Saksbehandlingstiden går ikke ned som planlagt. Opplæring i ny arbeidsflyt er utsatt, og prosjektet foreslår tiltak for styringsgruppen.' },
+    p3: { level: 'ok', text: 'Chatboten besvarer flere henvendelser enn planlagt.' },
+    p4: { level: 'ok', text: 'Nyttevirkningene følger planen.' },
+    p5: { level: 'warn', text: 'Tre soner har fortsatt faste nattrunder i påvente av sensorer.' },
+    p6: { level: 'warn', text: 'Utslippene følger målbanen, men driftskostnadene ligger over plan.' }
+  };
+  return { goals, changes, benefits, indicators, measurements, assumptions, assessments };
+}
+function round(v, dec) { const f = Math.pow(10, dec); return Math.round(v * f) / f; }
+
+/* ------------------------------------------------------------------
+   Calculations (to be ported to shared-library as pure functions)
+------------------------------------------------------------------ */
+function pathPoints(i) {
+  return [{ date: i.startDate, value: i.start }, ...(i.milestones || []), { date: i.targetDate, value: i.target }]
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
+function plannedValueAt(i, date) {
+  const pts = pathPoints(i); const t = toDate(date);
+  if (t <= toDate(pts[0].date)) return pts[0].value;
+  for (let k = 1; k < pts.length; k++) {
+    const a = toDate(pts[k - 1].date), b = toDate(pts[k].date);
+    if (t <= b) return pts[k - 1].value + (pts[k].value - pts[k - 1].value) * (t - a) / (b - a);
+  }
+  return pts[pts.length - 1].value;
+}
+function plannedProgress(i, date) { return (plannedValueAt(i, date) - i.start) / (i.target - i.start); }
+function progressOf(i, value) { return (value - i.start) / (i.target - i.start); }
+function achievement(i, value) { return Math.max(0, Math.min(1, progressOf(i, value))) * 100; }
+function statusAt(i, m) {
+  if (!m) return 'none';
+  const gap = plannedProgress(i, m.date) - progressOf(i, m.value);
+  if (gap <= TOLERANCE) return 'ok';
+  if (gap <= TOLERANCE * 2) return 'warn';
+  return 'crit';
+}
+function measurementsOf(id, until) { return db.measurements.filter((m) => m.indicator === id && (!until || m.date <= until)).sort((a, b) => a.date.localeCompare(b.date)); }
+function lastMeasurement(id, until) { const ms = measurementsOf(id, until); return ms[ms.length - 1] || null; }
+function indicatorState(i, until) {
+  const m = lastMeasurement(i.id, until);
+  return { m, status: statusAt(i, m), ach: m ? achievement(i, m.value) : null, planned: m ? Math.max(0, Math.min(1, plannedProgress(i, m.date))) * 100 : null };
+}
+function nextDue(i) {
+  const step = FREQ_MONTHS[i.frequency] || 1;
+  const m = lastMeasurement(i.id);
+  return m ? addMonthsEnd(m.date, step) : addMonthsEnd(i.startDate, step - 1);
+}
+const SEV = { crit: 3, warn: 2, ok: 1, none: 0 };
+function worst(list) { return list.reduce((w, s) => (SEV[s] > SEV[w] ? s : w), 'none'); }
+function rollup(indicators) {
+  const st = indicators.map((i) => indicatorState(i));
+  const measured = st.filter((s) => s.m);
+  const avg = (arr) => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : null;
+  return {
+    ach: avg(measured.map((s) => s.ach)), planned: avg(measured.map((s) => s.planned)),
+    status: worst(st.map((s) => s.status)), n: indicators.length, measured: measured.length,
+    counts: st.reduce((c, s) => (c[s.status]++, c), { ok: 0, warn: 0, crit: 0, none: 0 })
+  };
+}
+const ASM_STATUS = { 'Holder': 'ok', 'Usikker': 'warn', 'Holder ikke': 'crit' };
+function monthsBetween(a, b) { return (toDate(b) - toDate(a)) / (1000 * 3600 * 24 * 30.44); }
+
+/* ------------------------------------------------------------------
+   State and persistence
+------------------------------------------------------------------ */
+let db;
+function loadDb() {
+  try { const raw = localStorage.getItem(STORE_KEY); if (raw) return JSON.parse(raw); } catch (e) { /* storage unavailable */ }
+  return buildSeed();
+}
+function saveDb() { try { localStorage.setItem(STORE_KEY, JSON.stringify(db)); } catch (e) { /* storage unavailable */ } }
+db = loadDb();
+
+const state = { level: 'hub', site: 'hub', progMode: 'all', view: 'oversikt', param: null, regTab: 'benefits', readOnly: false, assignPick: null };
+
+/* Scope: which owning sites does the current context see? */
+function scopeSites() {
+  if (state.level === 'hub') return null; // everything
+  if (state.level === 'program') return state.progMode === 'all' ? [state.site, ...SITES[state.site].children] : [state.site];
+  return [state.site];
+}
+function inScope(item) { const s = scopeSites(); return s === null ? true : s.includes(item.site); }
+const scoped = {
+  benefits: () => db.benefits.filter((b) => !b.catalog && inScope(b)),
+  indicators: () => db.indicators.filter((i) => !i.catalog && inScope(i)),
+  changes: () => db.changes.filter(inScope),
+  assumptions: () => db.assumptions.filter(inScope)
+};
+const byId = (list, id) => db[list].find((x) => x.id === id);
+const nodeTitle = (id) => (byId('changes', id) || byId('benefits', id) || byId('goals', id) || {}).title || id;
+function canWrite() { return !state.readOnly; }
+
+/* ------------------------------------------------------------------
+   Icons (Fluent-like, 20px grid)
+------------------------------------------------------------------ */
+const ICON = {
+  home: '<path d="M10 3 3 9v8h5v-5h4v5h5V9z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>',
+  map: '<circle cx="4.5" cy="5" r="2" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="4.5" cy="15" r="2" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="10" cy="10" r="2" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="14" y="8" width="4.5" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M6.4 5.8 8.3 9M6.4 14.2 8.3 11M12 10h2" stroke="currentColor" stroke-width="1.4"/>',
+  edit: '<path d="M4 16h3l9-9-3-3-9 9z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="m11.5 5.5 3 3" stroke="currentColor" stroke-width="1.4"/>',
+  check: '<rect x="3" y="3" width="14" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="m6 10 2.5 2.5L14 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>',
+  library: '<path d="M4 3v14M8 3v14" stroke="currentColor" stroke-width="1.4"/><path d="m11 4 3-.8 3.2 13-3 .8z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>',
+  target: '<circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="10" cy="10" r="3.5" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="10" cy="10" r="1" fill="currentColor"/>',
+  share: '<circle cx="5" cy="10" r="2" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="15" cy="4.5" r="2" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="15" cy="10" r="2" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="15" cy="15.5" r="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M7 9.2 13 5.3M7 10h6M7 10.8l6 3.9" stroke="currentColor" stroke-width="1.4"/>',
+  report: '<path d="M5 2.5h7l3.5 3.5v11.5H5z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 14v-2.5M10.5 14V9M13 14v-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+  info: '<circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M10 9v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="10" cy="6.3" r="1" fill="currentColor"/>',
+  plus: '<path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+  close: '<path d="m5 5 10 10M15 5 5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+  ok: '<path d="m4.5 10.5 3.5 3.5 7.5-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+  warn: '<path d="M10 4.5v7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="10" cy="15" r="1.4" fill="currentColor"/>',
+  crit: '<path d="m5.5 5.5 9 9M14.5 5.5l-9 9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>',
+  none: '<path d="M5 10h10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>',
+  copy: '<rect x="6.5" y="6.5" width="10" height="10" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M4 13V5a1.5 1.5 0 0 1 1.5-1.5H13" fill="none" stroke="currentColor" stroke-width="1.4"/>',
+  hub: '<path d="M3 17V8l7-5 7 5v9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M7 17v-5h6v5" fill="none" stroke="currentColor" stroke-width="1.4"/>'
+};
+const icon = (name, cls = '') => `<svg viewBox="0 0 20 20" aria-hidden="true" class="${cls}">${ICON[name]}</svg>`;
+const STATUS = { ok: 'I rute', warn: 'Avvik', crit: 'Kritisk', none: 'Ikke målt' };
+const pill = (s, label) => `<span class="pill ${s}">${icon(s)}${esc(label || STATUS[s])}</span>`;
+const asmPill = (st) => pill(ASM_STATUS[st], st);
+const ASSESS = { ok: 'Grønn', warn: 'Gul', crit: 'Rød' };
+
+/* ------------------------------------------------------------------
+   Navigation and frame
+------------------------------------------------------------------ */
+function navItems() {
+  const items = [
+    ['oversikt', 'Oversikt', 'home'],
+    ['nyttekart', 'Nyttekart', 'map'],
+    ['registrering', 'Registrering', 'edit'],
+    ['oppfolging', 'Oppfølging', 'check'],
+    ['sep'],
+    ['katalog', 'Katalog', 'library'],
+    ['mal', 'Strategiske mål', 'target']
+  ];
+  if (state.level === 'program') items.push(['sep'], ['tildel', 'Tildel til prosjekter', 'share']);
+  if (state.level === 'project') items.push(['sep'], ['status', 'I statusrapporten', 'report']);
+  return items;
+}
+function renderFrame() {
+  const s = SITES[state.site];
+  const kindLabel = { hub: 'Hubområde · Prosjektportalen', program: 'Programområde', project: 'Prosjektområde' }[s.kind];
+  const sub = s.kind === 'hub' ? 'Prosjektportalen 365' : s.kind === 'program' ? `Program · tilknyttet Fjordvik kommune` : `Prosjekt${s.program ? ' i ' + esc(SITES[s.program].title) : ''} · fase ${esc(s.phase)}`;
+  document.getElementById('site-header').innerHTML = `
+    <div class="site-logo" aria-hidden="true">${esc(s.initials)}</div>
+    <div class="site-text"><div class="site-title">${esc(s.title)}</div><div class="site-sub">${sub}</div></div>
+    <div class="site-kind">${kindLabel}<br>Webdel: <b>Nyttestyring</b></div>`;
+  document.getElementById('nav').innerHTML = `<div class="nav-title">Nyttestyring</div>` + navItems().map((it) => it[0] === 'sep' ? '<div class="nav-sep"></div>' :
+    `<button type="button" data-nav="${it[0]}" ${state.view === it[0] ? 'aria-current="page"' : ''}>${icon(it[2])}<span>${it[1]}</span></button>`).join('') +
+    `<div class="nav-foot">Alle data lagres i listene på huben.</div>`;
+  document.querySelectorAll('.demo .seg button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.level === state.level)));
+  const sel = document.getElementById('site-select');
+  const opts = state.level === 'hub' ? [['hub', 'Fjordvik kommune (hub)']] :
+    Object.values(SITES).filter((x) => x.kind === state.level).map((x) => [x.id, x.title]);
+  sel.innerHTML = opts.map(([v, t]) => `<option value="${v}" ${v === state.site ? 'selected' : ''}>${esc(t)}</option>`).join('');
+  sel.disabled = state.level === 'hub';
+  document.getElementById('app').classList.toggle('ro', state.readOnly);
+}
+function setHash() {
+  const tok = [state.site, state.view, state.param].filter(Boolean).join('-');
+  try { history.replaceState(null, '', '#' + tok); } catch (e) { /* ignore */ }
+}
+function readHash() {
+  const h = (location.hash || '').slice(1); if (!h) return;
+  const [site, view, ...rest] = h.split('-');
+  if (!SITES[site]) return;
+  state.site = site; state.level = SITES[site].kind;
+  if (view) state.view = view;
+  if (rest.length) state.param = rest.join('-');
+}
+function go(view, param = null) { state.view = view; state.param = param; render(); window.scrollTo({ top: 0 }); }
+
+function render() {
+  if (!navItems().some((n) => n[0] === state.view) && state.view !== 'indikator') state.view = 'oversikt';
+  renderFrame();
+  const main = document.getElementById('main');
+  const views = { oversikt: viewOverview, nyttekart: viewMap, registrering: viewRegister, oppfolging: viewFollowUp, katalog: viewCatalog, mal: viewGoals, tildel: viewAssign, status: viewStatus, indikator: viewIndicator };
+  main.innerHTML = (state.readOnly ? `<div class="msg warn">${icon('info')}<div><b>Du har lesetilgang.</b> Nyttedata lagres i Prosjektportalen (hub). For å registrere trenger du skrivetilgang der. Kontakt porteføljekontoret.</div></div>` : '') + views[state.view]();
+  hydrate(main);
+  setHash();
+}
+
+/* ------------------------------------------------------------------
+   Shared view pieces
+------------------------------------------------------------------ */
+function scopeLabel() {
+  if (state.level === 'hub') return 'Alle prosjekter og programmer i Fjordvik kommune';
+  if (state.level === 'program') return state.progMode === 'all' ? 'Programmet og alle prosjektene i programmet' : 'Nyttevirkninger programmet eier selv';
+  return 'Nyttevirkninger koblet til dette prosjektet';
+}
+function progToggle() {
+  if (state.level !== 'program') return '';
+  return `<div class="seg" role="group" aria-label="Datagrunnlag" style="border-color:var(--stroke)">
+    ${[['program', 'Programmet'], ['all', 'Alle prosjekter']].map(([v, t]) => `<button type="button" data-progmode="${v}" aria-pressed="${state.progMode === v}" style="color:var(--fg);${state.progMode === v ? 'background:var(--brand);color:var(--brand-fg)' : ''}">${t}</button>`).join('')}
+  </div>`;
+}
+function pageHead(title, lead, actions = '') {
+  return `<div class="page-head"><div><h1>${esc(title)}</h1><div class="lead">${lead}</div></div><div class="actions">${progToggle()}${actions}</div></div>`;
+}
+function sparkline(i, w = 96, h = 28, until) {
+  const ms = measurementsOf(i.id, until);
+  if (!ms.length) return `<svg class="spark" width="${w}" height="${h}" aria-hidden="true"><line x1="0" y1="${h / 2}" x2="${w}" y2="${h / 2}" stroke="var(--stroke)" stroke-dasharray="3 3"/></svg>`;
+  const x0 = toDate(i.startDate), x1 = toDate(until || TODAY);
+  const vals = ms.map((m) => m.value).concat([i.start, plannedValueAt(i, until || TODAY)]);
+  let lo = Math.min(...vals), hi = Math.max(...vals); if (hi === lo) hi = lo + 1;
+  const X = (d) => 2 + (toDate(d) - x0) / (x1 - x0) * (w - 6);
+  const Y = (v) => h - 3 - (v - lo) / (hi - lo) * (h - 6);
+  const plan = `M${X(i.startDate)},${Y(i.start)} L${X(until || TODAY)},${Y(plannedValueAt(i, until || TODAY))}`;
+  const line = ms.map((m, k) => (k ? 'L' : 'M') + X(m.date).toFixed(1) + ',' + Y(m.value).toFixed(1)).join(' ');
+  const last = ms[ms.length - 1];
+  return `<svg class="spark" width="${w}" height="${h}" aria-hidden="true"><path d="${plan}" stroke="var(--fg-4)" stroke-dasharray="3 2" fill="none"/><path d="${line}" stroke="var(--brand)" stroke-width="1.5" fill="none" stroke-linejoin="round"/><circle cx="${X(last.date)}" cy="${Y(last.value)}" r="2.5" fill="var(--brand)"/></svg>`;
+}
+function indicatorRowsTable(list, opts = {}) {
+  if (!list.length) return `<div class="empty">Ingen indikatorer i dette utvalget.</div>`;
+  return `<div class="table-wrap"><table><thead><tr><th>Indikator</th>${opts.site ? '<th>Eier</th>' : ''}<th class="r">Siste måling</th><th class="r">Oppnåelse</th><th>Utvikling</th><th>Status</th></tr></thead><tbody>
+  ${list.map((i) => { const s = indicatorState(i, opts.until); const b = byId('benefits', i.benefit); return `<tr class="click" data-open-ind="${i.id}">
+    <td><div class="cell-title">${esc(i.title)}</div><div class="cell-sub">${esc(b ? b.title : '')}</div></td>
+    ${opts.site ? `<td>${esc(SITES[i.site].short)}</td>` : ''}
+    <td class="r num">${s.m ? fmtNum(s.m.value, i.dec) + ' ' + esc(i.unit) + `<div class="cell-sub">${fmtDate(s.m.date)}</div>` : '–'}</td>
+    <td class="r num">${pct(s.ach)}</td>
+    <td>${sparkline(i, 96, 28, opts.until)}</td>
+    <td>${pill(s.status)}</td></tr>`; }).join('')}
+  </tbody></table></div>`;
+}
+
+/* ------------------------------------------------------------------
+   View: Oversikt
+------------------------------------------------------------------ */
+function viewOverview() {
+  const benefits = scoped.benefits(); const inds = scoped.indicators(); const asms = scoped.assumptions();
+  const r = rollup(inds);
+  const due = inds.filter((i) => nextDue(i) <= endOfMonth(2026, 9));
+  const overdue = due.filter((i) => nextDue(i) < TODAY);
+  const stale = asms.filter((a) => monthsBetween(a.lastReviewed, TODAY) > 6);
+  const broken = asms.filter((a) => a.status === 'Holder ikke');
+  const kpis = `<div class="kpis">
+    <div class="kpi"><span class="k-label">Nyttevirkninger</span><span class="k-value">${benefits.length}</span><span class="k-note">${inds.length} måleindikatorer</span></div>
+    <div class="kpi"><span class="k-label">Indikatorer i rute</span><span class="k-value">${r.counts.ok}<small> av ${r.measured} målte</small></span><span class="k-note">${r.counts.warn ? pill('warn', r.counts.warn + ' avvik') : ''} ${r.counts.crit ? pill('crit', r.counts.crit + ' kritisk') : ''} ${r.counts.none ? pill('none', r.counts.none + ' ikke målt') : ''}</span></div>
+    <div class="kpi"><span class="k-label">Målinger som forfaller</span><span class="k-value">${due.length}</span><span class="k-note">${overdue.length ? pill('crit', overdue.length + ' forfalt') : 'Ingen forfalt'} · innen ${fmtMonth(TODAY)}</span></div>
+    <div class="kpi"><span class="k-label">Antagelser</span><span class="k-value">${asms.length}</span><span class="k-note">${broken.length ? pill('crit', broken.length + ' holder ikke') : ''} ${stale.length ? `<span>${stale.length} ikke vurdert på 6 mnd.</span>` : ''}</span></div>
+  </div>`;
+
+  // Bars: per owning site (hub/program-all) or per benefit (project/program-own)
+  let rows;
+  const perSite = state.level === 'hub' || (state.level === 'program' && state.progMode === 'all');
+  if (perSite) {
+    const sites = [...new Set(inds.map((i) => i.site))];
+    rows = sites.map((sid) => { const rr = rollup(inds.filter((i) => i.site === sid)); return { key: sid, label: SITES[sid].title, sub: SITES[sid].kind === 'program' ? 'Program' : (SITES[sid].program ? SITES[SITES[sid].program].short : 'Uten program'), ...rr, open: `data-goto-site="${sid}"` }; });
+  } else {
+    rows = benefits.map((b) => { const bi = inds.filter((i) => i.benefit === b.id); const rr = rollup(bi); return { key: b.id, label: b.title, sub: bi.length + ' indikator' + (bi.length === 1 ? '' : 'er'), ...rr, open: bi[0] ? `data-open-ind="${bi[0].id}"` : '' }; });
+  }
+  rows.sort((a, b) => SEV[b.status] - SEV[a.status] || (a.ach ?? -1) - (b.ach ?? -1));
+  const bars = `<div class="bars">${rows.map((x) => `
+    <div class="bar-row" ${x.open} data-tip="${esc(`<b>${esc(x.label)}</b><div class='row'><span>Oppnåelse</span><b>${pct(x.ach)}</b></div><div class='row'><span>Planlagt nå</span><b>${pct(x.planned)}</b></div><div class='row'><span>Indikatorer</span><b>${x.counts.ok} i rute, ${x.counts.warn} avvik, ${x.counts.crit} kritisk</b></div>`)}">
+      <div class="bar-label"><div class="t">${esc(x.label)}</div><div class="s">${esc(x.sub)}</div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${x.ach ?? 0}%"></div>${x.planned != null ? `<div class="bar-plan" style="left:calc(${x.planned}% - 1px)"></div>` : ''}</div>
+      <div class="bar-val">${pct(x.ach)}</div>
+      <div class="pillcell">${pill(x.status)}</div>
+    </div>`).join('') || '<div class="empty">Ingen data i dette utvalget.</div>'}</div>`;
+
+  const attention = inds.filter((i) => ['warn', 'crit'].includes(indicatorState(i).status)).sort((a, b) => SEV[indicatorState(b).status] - SEV[indicatorState(a).status]);
+  const brokenList = asms.filter((a) => a.status !== 'Holder').map((a) => `<div class="asm-item">${asmPill(a.status)}<div><div class="cell-title">${esc(a.title)}</div><div class="cell-sub">${esc(nodeTitle(a.from))} → ${esc(nodeTitle(a.to))} · vurdert ${fmtDate(a.lastReviewed)}${monthsBetween(a.lastReviewed, TODAY) > 6 ? ' · <b>bør vurderes på nytt</b>' : ''}</div></div></div>`).join('');
+
+  return pageHead('Nytteoversikt', esc(scopeLabel()) + ` · per ${fmtDate(TODAY)}`) + kpis + `
+    <div class="two">
+      <section class="card"><div class="card-head"><h2>Nytteoppnåelse ${perSite ? 'per prosjekt' : 'per nyttevirkning'}</h2><span class="muted">Snitt av indikatorene, siste måling</span>
+        <div class="legend right"><span><i class="lg-fill"></i>Oppnådd</span><span><i class="lg-plan"></i>Planlagt nå</span></div></div>${bars}</section>
+      <section class="card"><div class="card-head"><h2>Antagelser som må følges opp</h2></div>${brokenList || '<div class="empty">Alle antagelser holder.</div>'}</section>
+    </div>
+    <section class="card" style="margin-top:16px"><div class="card-head"><h2>Krever oppmerksomhet</h2><span class="muted">Indikatorer med avvik fra målbanen</span></div>${indicatorRowsTable(attention, { site: state.level !== 'project' })}</section>`;
+}
+
+/* ------------------------------------------------------------------
+   View: Indikatordetalj
+------------------------------------------------------------------ */
+function viewIndicator() {
+  const i = byId('indicators', state.param);
+  if (!i) return pageHead('Fant ikke indikatoren', '');
+  const b = byId('benefits', i.benefit); const st = indicatorState(i); const ms = measurementsOf(i.id);
+  const asms = db.assumptions.filter((a) => a.to === b.id || a.from === b.id || (b.changes || []).includes(a.from) && a.to === b.id);
+  const contrib = db.benefits.filter((x) => x.contributesTo === b.id);
+  const siblings = db.indicators.filter((x) => x.benefit === b.id && x.id !== i.id);
+  const canMeasure = canWrite() && (state.level === 'hub' || inScope(i));
+  return `<div class="crumb"><button type="button" data-nav="oversikt">Oversikt</button><span>›</span><span>${esc(b.title)}</span></div>` +
+    pageHead(i.title, `${esc(b.title)} · ${esc(SITES[i.site].title)}`, `${canMeasure ? `<button type="button" class="btn primary write" data-measure="${i.id}">${icon('plus')}Registrer måling</button>` : ''}<button type="button" class="btn write" data-edit="indicators:${i.id}">Rediger indikator</button>`) + `
+    <div class="det-grid">
+      <section class="card"><div class="card-head"><h2>Utvikling mot målet</h2>${pill(st.status)}
+        <div class="legend right"><span><i class="lg-line"></i>Faktisk</span><span><i class="lg-dash"></i>Målbane</span><span><i class="lg-dot"></i>Målverdi</span></div></div>
+        <div class="chart" data-chart="line" data-ind="${i.id}" style="height:300px"></div>
+      </section>
+      <aside class="card">
+        <div class="muted small">Siste måling ${st.m ? fmtDate(st.m.date) : ''}</div>
+        <div class="big">${st.m ? fmtNum(st.m.value, i.dec) : '–'} <span class="muted" style="font-size:14px;font-weight:400">${esc(i.unit)}</span></div>
+        <div class="muted small" style="margin-bottom:12px">Planlagt på samme dato: ${st.m ? fmtNum(plannedValueAt(i, st.m.date), i.dec) : '–'} · oppnåelse ${pct(st.ach)}</div>
+        <dl class="facts">
+          <dt>Startverdi</dt><dd class="num">${fmtNum(i.start, i.dec)} (${fmtDate(i.startDate)})</dd>
+          <dt>Målverdi</dt><dd class="num">${fmtNum(i.target, i.dec)} (${fmtDate(i.targetDate)})</dd>
+          <dt>Retning</dt><dd>${esc(i.direction)}</dd>
+          <dt>Frekvens</dt><dd>${esc(i.frequency)} · neste ${fmtDate(nextDue(i))}</dd>
+          <dt>Metode</dt><dd>${esc(i.method || '–')}</dd>
+          <dt>Nytteeier</dt><dd>${esc(b.owner)}</dd>
+          <dt>Nytteansvarlig</dt><dd>${esc(b.responsible || '–')}</dd>
+          <dt>Mål</dt><dd class="chips">${(b.goals || []).map((g) => `<button type="button" class="chip brand" data-nav="mal">${esc(nodeTitle(g))}</button>`).join('')}</dd>
+          ${b.basedOn ? `<dt>Basert på</dt><dd><span class="chip">Katalog: ${esc(nodeTitle(b.basedOn))}</span></dd>` : ''}
+          ${b.contributesTo ? `<dt>Bidrar til</dt><dd>${esc(nodeTitle(b.contributesTo))} (${b.share || '?'} %)</dd>` : ''}
+        </dl>
+      </aside>
+    </div>
+    <div class="two" style="margin-top:16px">
+      <section class="card"><div class="card-head"><h2>Målinger</h2><span class="muted">${ms.length} registrert</span></div>
+        <div class="table-wrap"><table><thead><tr><th>Dato</th><th class="r">Verdi</th><th class="r">Målbane</th><th>Vurdering</th><th>Kommentar</th></tr></thead><tbody>
+        ${ms.slice().reverse().map((m) => `<tr><td class="num">${fmtDate(m.date)}</td><td class="r num">${fmtNum(m.value, i.dec)}</td><td class="r num muted">${fmtNum(plannedValueAt(i, m.date), i.dec)}</td><td>${pill(statusAt(i, m))}</td><td>${esc(m.comment)}${m.comment ? `<div class="cell-sub">${esc(m.by)}</div>` : ''}</td></tr>`).join('') || '<tr><td colspan="5" class="empty">Ingen målinger ennå.</td></tr>'}
+        </tbody></table></div></section>
+      <section class="card"><div class="card-head"><h2>Antagelser</h2></div>
+        ${asms.map((a) => `<div class="asm-item">${asmPill(a.status)}<div><div class="cell-title">${esc(a.title)}</div><div class="cell-sub">${esc(nodeTitle(a.from))} → ${esc(nodeTitle(a.to))} · vurdert ${fmtDate(a.lastReviewed)}</div>${a.note ? `<div class="small">${esc(a.note)}</div>` : ''}</div></div>`).join('') || '<div class="empty">Ingen antagelser er koblet til denne nyttevirkningen.</div>'}
+        ${siblings.length ? `<div class="card-head" style="margin-top:16px"><h2>Andre indikatorer</h2></div>${siblings.map((x) => `<button type="button" class="pick" data-open-ind="${x.id}"><b>${esc(x.title)}</b> ${pill(indicatorState(x).status)}</button>`).join('')}` : ''}
+        ${contrib.length ? `<div class="card-head" style="margin-top:16px"><h2>Bidrag fra prosjekter</h2></div>${contrib.map((x) => { const xi = db.indicators.find((k) => k.benefit === x.id); return `<button type="button" class="pick" ${xi ? `data-open-ind="${xi.id}"` : ''}><b>${esc(SITES[x.site].title)}</b> · ${x.share || '?'} % · ${xi ? pill(indicatorState(xi).status) : pill('none')}</button>`; }).join('')}` : ''}
+      </section>
+    </div>`;
+}
+
+function drawLineChart(el) {
+  const i = byId('indicators', el.dataset.ind); const ms = measurementsOf(i.id);
+  const W = Math.max(320, el.clientWidth), H = el.clientHeight || 300;
+  const m = { l: 52, r: 16, t: 14, b: 28 };
+  const endDate = i.targetDate > TODAY ? i.targetDate : TODAY;
+  const x0 = toDate(i.startDate), x1 = toDate(endDate);
+  const vals = [i.start, i.target, ...ms.map((x) => x.value), ...(i.milestones || []).map((x) => x.value)];
+  let lo = Math.min(...vals), hi = Math.max(...vals); const pad = (hi - lo) * 0.08 || 1; lo -= pad; hi += pad;
+  // nice ticks
+  const span = hi - lo; const step0 = Math.pow(10, Math.floor(Math.log10(span / 4))); const step = [1, 2, 2.5, 5, 10].map((k) => k * step0).find((s) => span / s <= 5);
+  const tlo = Math.ceil(lo / step) * step; const ticks = []; for (let v = tlo; v <= hi + 1e-9; v += step) ticks.push(round(v, 6));
+  const X = (d) => m.l + (toDate(d) - x0) / (x1 - x0) * (W - m.l - m.r);
+  const Y = (v) => m.t + (1 - (v - lo) / (hi - lo)) * (H - m.t - m.b);
+  const years = []; for (let y = Number(i.startDate.slice(0, 4)) + 1; y <= Number(endDate.slice(0, 4)); y++) years.push(y + '-01-01');
+  const dec = i.dec;
+  let svg = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Linjediagram for ${esc(i.title)}">`;
+  ticks.forEach((v) => { svg += `<line x1="${m.l}" x2="${W - m.r}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--stroke-2)"/><text x="${m.l - 8}" y="${Y(v) + 4}" text-anchor="end">${fmtNum(v, step < 1 ? 1 : 0)}</text>`; });
+  years.forEach((d) => { svg += `<line x1="${X(d)}" x2="${X(d)}" y1="${H - m.b}" y2="${H - m.b + 4}" stroke="var(--stroke)"/><text x="${X(d)}" y="${H - 8}" text-anchor="middle">${d.slice(0, 4)}</text>`; });
+  svg += `<line x1="${m.l}" x2="${W - m.r}" y1="${H - m.b}" y2="${H - m.b}" stroke="var(--stroke)"/>`;
+  // target value line
+  svg += `<line x1="${m.l}" x2="${W - m.r}" y1="${Y(i.target)}" y2="${Y(i.target)}" stroke="var(--fg-2)" stroke-dasharray="1 3"/><text x="${W - m.r}" y="${Y(i.target) + (i.target > i.start ? -6 : 14)}" text-anchor="end" style="fill:var(--fg-2)">Mål ${fmtNum(i.target, dec)} ${esc(i.unit)}</text>`;
+  // planned path
+  const pts = pathPoints(i);
+  svg += `<path d="${pts.map((p, k) => (k ? 'L' : 'M') + X(p.date) + ',' + Y(p.value)).join(' ')}" fill="none" stroke="var(--fg-3)" stroke-width="1.5" stroke-dasharray="5 4"/>`;
+  (i.milestones || []).forEach((p) => { svg += `<circle cx="${X(p.date)}" cy="${Y(p.value)}" r="4" fill="var(--surface)" stroke="var(--fg-3)" stroke-width="1.5"/><text x="${X(p.date)}" y="${Y(p.value) - 9}" text-anchor="middle">Delmål</text>`; });
+  // today
+  svg += `<line x1="${X(TODAY)}" x2="${X(TODAY)}" y1="${m.t}" y2="${H - m.b}" stroke="var(--fg-4)" stroke-width="1"/><text x="${X(TODAY) + 4}" y="${m.t + 10}">I dag</text>`;
+  // actual
+  if (ms.length) {
+    const area = `M${X(ms[0].date)},${Y(i.start)} ` + ms.map((p) => 'L' + X(p.date) + ',' + Y(p.value)).join(' ') + ` L${X(ms[ms.length - 1].date)},${Y(i.start)} Z`;
+    svg += `<path d="${area}" fill="var(--brand)" fill-opacity=".08" stroke="none"/>`;
+    svg += `<path d="${ms.map((p, k) => (k ? 'L' : 'M') + X(p.date) + ',' + Y(p.value)).join(' ')}" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linejoin="round"/>`;
+    ms.forEach((p, k) => { const lastP = k === ms.length - 1; svg += `<circle cx="${X(p.date)}" cy="${Y(p.value)}" r="${lastP ? 5 : 3}" fill="var(--brand)" stroke="var(--surface)" stroke-width="${lastP ? 2 : 1}"/>`; });
+    const lp = ms[ms.length - 1];
+    svg += `<text x="${X(lp.date) - 8}" y="${Y(lp.value) - 10}" text-anchor="end" style="fill:var(--fg);font-weight:600">${fmtNum(lp.value, dec)}</text>`;
+  } else {
+    svg += `<text x="${(m.l + W - m.r) / 2}" y="${H / 2}" text-anchor="middle">Ingen målinger ennå. Første måling forfaller ${fmtDate(nextDue(i))}.</text>`;
+  }
+  svg += `<line class="xh" x1="0" x2="0" y1="${m.t}" y2="${H - m.b}" stroke="var(--fg-3)" visibility="hidden"/><rect x="${m.l}" y="${m.t}" width="${W - m.l - m.r}" height="${H - m.t - m.b}" fill="transparent" class="hit"/></svg>`;
+  el.innerHTML = svg;
+  const hit = el.querySelector('.hit'); const xh = el.querySelector('.xh');
+  if (!ms.length) return;
+  hit.addEventListener('mousemove', (ev) => {
+    const r = el.getBoundingClientRect(); const px = ev.clientX - r.left;
+    let best = ms[0]; ms.forEach((p) => { if (Math.abs(X(p.date) - px) < Math.abs(X(best.date) - px)) best = p; });
+    xh.setAttribute('x1', X(best.date)); xh.setAttribute('x2', X(best.date)); xh.setAttribute('visibility', 'visible');
+    showTip(`<b>${fmtDate(best.date)}</b><div class="row"><span>Faktisk</span><b>${fmtNum(best.value, dec)} ${esc(i.unit)}</b></div><div class="row"><span>Målbane</span><b>${fmtNum(plannedValueAt(i, best.date), dec)}</b></div><div class="row"><span>Vurdering</span><b>${STATUS[statusAt(i, best)]}</b></div>${best.comment ? `<div>${esc(best.comment)}</div>` : ''}`, ev);
+  });
+  hit.addEventListener('mouseleave', () => { xh.setAttribute('visibility', 'hidden'); hideTip(); });
+}
+
+/* ------------------------------------------------------------------
+   View: Oppfølging
+------------------------------------------------------------------ */
+function viewFollowUp() {
+  const inds = scoped.indicators().map((i) => ({ i, due: nextDue(i), s: indicatorState(i) })).sort((a, b) => a.due.localeCompare(b.due));
+  const monthEnd = endOfMonth(2026, 9);
+  const groups = [['Forfalt', inds.filter((x) => x.due < TODAY)], [`Forfaller i ${fmtMonth(TODAY)}`, inds.filter((x) => x.due >= TODAY && x.due <= monthEnd)], ['Senere', inds.filter((x) => x.due > monthEnd)]];
+  const row = (x, overdue) => `<div class="work ${overdue ? 'overdue' : ''}">
+    <div style="min-width:0"><button type="button" class="btn subtle" style="padding:0;min-height:0;white-space:normal;text-align:left" data-open-ind="${x.i.id}">${esc(x.i.title)}</button><div class="cell-sub">${esc(SITES[x.i.site].short)} · ${esc(x.i.frequency.toLowerCase())}</div></div>
+    <div class="hide-sm"><div class="w-k">Siste måling</div><div class="num">${x.s.m ? fmtNum(x.s.m.value, x.i.dec) + ' ' + esc(x.i.unit) : '–'}</div></div>
+    <div class="hide-sm"><div class="w-k">Forfaller</div><div class="num">${fmtDate(x.due)}</div></div>
+    <div class="hide-sm">${sparkline(x.i, 96, 28)}</div>
+    <div style="display:flex;gap:8px;align-items:center">${pill(x.s.status)}<button type="button" class="btn sm primary write" data-measure="${x.i.id}">Registrer</button></div>
+  </div>`;
+  return pageHead('Oppfølging', 'Indikatorer som skal måles, sortert etter forfall. ' + esc(scopeLabel()) + '.') +
+    `<section class="card">${groups.map(([t, list], gi) => `<div class="group-title">${esc(t)} <span class="chip">${list.length}</span></div>${list.map((x) => row(x, gi === 0)).join('') || '<div class="muted small">Ingen.</div>'}`).join('')}</section>`;
+}
+
+/* ------------------------------------------------------------------
+   View: Registrering
+------------------------------------------------------------------ */
+const ENT = {
+  goals: { label: 'Strategiske mål', one: 'strategisk mål', list: () => db.goals },
+  changes: { label: 'Endringer', one: 'endring', list: () => scoped.changes() },
+  benefits: { label: 'Nyttevirkninger', one: 'nyttevirkning', list: () => scoped.benefits() },
+  indicators: { label: 'Måleindikatorer', one: 'måleindikator', list: () => scoped.indicators() },
+  assumptions: { label: 'Antagelser', one: 'antagelse', list: () => scoped.assumptions() }
+};
+function regColumns(tab) {
+  const own = state.level !== 'project';
+  const C = {
+    goals: [['Mål', (g) => `<div class="cell-title">${esc(g.title)}</div>`], ['Nivå', (g) => `<span class="chip">${esc(g.level)}</span>`], ['Overordnet', (g) => esc(g.parent ? nodeTitle(g.parent) : '–')], ['Eier', (g) => esc(g.owner)], ['Periode', (g) => esc(g.period)]],
+    changes: [['Endring', (c) => `<div class="cell-title">${esc(c.title)}</div><div class="cell-sub">${esc(c.process)}</div>`], ['Type', (c) => `<span class="chip">${esc(c.type)}</span>`], ...(own ? [['Eier', (c) => esc(SITES[c.site].short)]] : []), ['Ansvarlig', (c) => esc(c.responsible)], ['Status', (c) => esc(c.status)]],
+    benefits: [['Nyttevirkning', (b) => `<div class="cell-title">${esc(b.title)}</div>${b.basedOn ? `<div class="cell-sub">Basert på katalog: ${esc(nodeTitle(b.basedOn))}</div>` : ''}${b.contributesTo ? `<div class="cell-sub">Bidrar til: ${esc(nodeTitle(b.contributesTo))}</div>` : ''}`], ['Type', (b) => `<span class="chip">${esc(b.type)}</span>`], ...(own ? [['Eier', (b) => esc(SITES[b.site].short)]] : []), ['Nytteeier', (b) => esc(b.owner)], ['Realiseres', (b) => esc(b.realization ? fmtMonth(b.realization + '-01') : '–')], ['Mål', (b) => `<div class="chips">${(b.goals || []).map((g) => `<span class="chip brand">${esc(g.replace('-', '.'))}</span>`).join('')}</div>`], ['Status', (b) => esc(b.status)]],
+    indicators: [['Indikator', (i) => `<div class="cell-title">${esc(i.title)}</div><div class="cell-sub">${esc(nodeTitle(i.benefit))}</div>`], ...(own ? [['Eier', (i) => esc(SITES[i.site].short)]] : []), ['Start → mål', (i) => `<span class="num">${fmtNum(i.start, i.dec)} → ${fmtNum(i.target, i.dec)}</span> <span class="muted">${esc(i.unit)}</span>`], ['Frekvens', (i) => esc(i.frequency)], ['Status', (i) => pill(indicatorState(i).status)], ['', (i) => `<button type="button" class="btn sm" data-open-ind="${i.id}">Åpne</button>`]],
+    assumptions: [['Antagelse', (a) => `<div class="cell-title">${esc(a.title)}</div><div class="cell-sub">${esc(nodeTitle(a.from))} → ${esc(nodeTitle(a.to))}</div>`], ...(own ? [['Eier', (a) => esc(SITES[a.site].short)]] : []), ['Status', (a) => asmPill(a.status)], ['Sist vurdert', (a) => `<span class="num">${fmtDate(a.lastReviewed)}</span>${monthsBetween(a.lastReviewed, TODAY) > 6 ? '<div class="cell-sub">Over 6 mnd.</div>' : ''}`]]
+  };
+  return C[tab];
+}
+function viewRegister() {
+  const tab = state.regTab; const cols = regColumns(tab); const list = ENT[tab].list();
+  const canAdd = canWrite() && (tab !== 'goals' || state.level === 'hub');
+  const tabs = `<div class="tabs" role="tablist">${Object.entries(ENT).map(([k, e]) => `<button type="button" role="tab" data-regtab="${k}" aria-selected="${k === tab}">${e.label}<span class="count">${e.list().length}</span></button>`).join('')}</div>`;
+  const note = tab === 'goals' && state.level !== 'hub' ? `<div class="msg info">${icon('info')}<div>Strategiske mål eies av virksomheten og redigeres på huben. Her kan du se dem og koble nyttevirkninger til dem.</div></div>` : '';
+  return pageHead('Registrering', 'Registrer og vedlikehold nyttedata i alle dimensjoner. ' + esc(scopeLabel()) + '.',
+    `<button type="button" class="btn" data-copy-csv="${tab}">${icon('copy')}Kopier som CSV</button>${canAdd ? `<button type="button" class="btn primary write" data-new="${tab}">${icon('plus')}Ny ${ENT[tab].one}</button>` : ''}`) +
+    tabs + note + `<section class="card"><div class="table-wrap"><table><thead><tr>${cols.map((c) => `<th>${c[0]}</th>`).join('')}</tr></thead><tbody>
+    ${list.map((x) => `<tr class="click" data-edit="${tab}:${x.id}">${cols.map((c) => `<td>${c[1](x)}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${cols.length}" class="empty">Ingen ${ENT[tab].label.toLowerCase()} i dette utvalget.</td></tr>`}
+    </tbody></table></div></section>`;
+}
+
+/* ------------------------------------------------------------------
+   View: Katalog
+------------------------------------------------------------------ */
+function viewCatalog() {
+  const cat = db.benefits.filter((b) => b.catalog);
+  return pageHead('Katalog', 'Nyttevirkninger og måleindikatorer virksomheten har definert for gjenbruk. «Ta i bruk» lager en kopi i prosjektet med referanse tilbake hit.',
+    state.level === 'hub' && canWrite() ? `<button type="button" class="btn primary write" data-new="catalog">${icon('plus')}Nytt katalogelement</button>` : '') +
+    `<div class="cat-grid">${cat.map((k) => {
+      const uses = db.benefits.filter((b) => b.basedOn === k.id && !b.catalog);
+      const kis = db.indicators.filter((i) => i.benefit === k.id);
+      return `<article class="card cat"><div class="card-head"><h3>${esc(k.title)}</h3><span class="chip">${esc(k.type)}</span></div>
+        <div class="muted">${esc(k.desc)}</div>
+        <ul>${kis.map((i) => `<li>${esc(i.title)} <span class="muted">(${esc(i.unit)}, ${esc(i.direction.toLowerCase())}, ${esc(i.frequency.toLowerCase())})</span></li>`).join('')}</ul>
+        <div class="chips">${(k.goals || []).map((g) => `<span class="chip brand">${esc(nodeTitle(g))}</span>`).join('')}</div>
+        <div class="foot"><span class="muted small">Brukt i ${uses.length} ${uses.length === 1 ? 'prosjekt' : 'prosjekter'}${uses.length ? ': ' + uses.map((u) => esc(SITES[u.site].short)).join(', ') : ''}</span>
+          ${canWrite() ? `<button type="button" class="btn sm primary write" style="margin-left:auto" data-adopt="${k.id}">Ta i bruk${state.level === 'project' ? ' i prosjektet' : ' i prosjekt …'}</button>` : ''}</div>
+      </article>`;
+    }).join('')}</div>`;
+}
+
+/* ------------------------------------------------------------------
+   View: Strategiske mål
+------------------------------------------------------------------ */
+function goalStats(g) {
+  const ids = [g.id, ...db.goals.filter((x) => x.parent === g.id).map((x) => x.id)];
+  const bens = db.benefits.filter((b) => !b.catalog && (b.goals || []).some((x) => ids.includes(x)));
+  const inds = db.indicators.filter((i) => !i.catalog && bens.some((b) => b.id === i.benefit));
+  return { bens, r: rollup(inds), projects: [...new Set(bens.map((b) => b.site))] };
+}
+function viewGoals() {
+  const top = db.goals.filter((g) => !g.parent);
+  const card = (g, child) => { const s = goalStats(g); return `<article class="card goal ${child ? 'child' : ''}">
+    <div style="min-width:0"><div class="chips" style="margin-bottom:4px"><span class="chip brand">${esc(g.level)}</span></div><h3>${esc(g.title)}</h3>
+      <div class="goal-meta"><span>Eier: ${esc(g.owner)}</span><span>Periode: ${esc(g.period)}</span></div>
+      <div class="muted">${esc(g.desc)}</div>
+      <div class="chips" style="margin-top:10px">${s.bens.map((b) => { const bi = db.indicators.find((i) => i.benefit === b.id); return `<button type="button" class="chip" ${bi ? `data-open-ind="${bi.id}"` : ''} data-tip="${esc(esc(SITES[b.site].title))}">${esc(b.title)}</button>`; }).join('')}</div></div>
+    <div class="goal-stat"><div class="muted small">Samlet oppnåelse</div><div class="big">${pct(s.r.ach)}</div><div class="meter"><i style="width:${s.r.ach || 0}%"></i></div>
+      <div class="small muted">${s.bens.length} nyttevirkninger · ${s.projects.length} prosjekter/programmer</div><div>${pill(s.r.status)}</div></div>
+  </article>`; };
+  return pageHead('Strategiske mål', 'Virksomhetens mål, med nytteoppnåelse fra nyttevirkningene som er koblet til hvert mål. Målene lagres i listen Strategiske mål på huben.',
+    state.level === 'hub' && canWrite() ? `<button type="button" class="btn primary write" data-new="goals">${icon('plus')}Nytt mål</button>` : '') +
+    top.map((g) => card(g) + db.goals.filter((c) => c.parent === g.id).map((c) => card(c, true)).join('')).join('');
+}
+
+/* ------------------------------------------------------------------
+   View: Nyttekart
+------------------------------------------------------------------ */
+function mapModel() {
+  const bens = scoped.benefits();
+  const goals = db.goals.filter((g) => bens.some((b) => (b.goals || []).includes(g.id)));
+  // Barycenter ordering keeps link crossings low: benefits by mean goal row, changes by mean benefit row
+  const mean = (arr) => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 99;
+  bens.sort((a, b) => mean((a.goals || []).map((g) => goals.findIndex((x) => x.id === g))) - mean((b.goals || []).map((g) => goals.findIndex((x) => x.id === g))));
+  const chIds = []; bens.forEach((b) => (b.changes || []).forEach((c) => { if (!chIds.includes(c)) chIds.push(c); }));
+  const changes = chIds.map((id) => byId('changes', id)).filter(Boolean)
+    .map((c) => ({ c, k: mean(bens.map((b, n) => (b.changes || []).includes(c.id) ? n : -1).filter((n) => n >= 0)) }))
+    .sort((a, b) => a.k - b.k).map((x) => x.c);
+  const links = [];
+  bens.forEach((b) => { (b.changes || []).forEach((c) => links.push({ from: c, to: b.id })); (b.goals || []).forEach((g) => links.push({ from: b.id, to: g })); });
+  const asms = db.assumptions.filter((a) => links.some((l) => l.from === a.from && l.to === a.to));
+  return { changes, bens, goals, links, asms };
+}
+function viewMap() {
+  return pageHead('Nyttekart', 'Hvordan endringer gir nyttevirkninger som bidrar til virksomhetens mål. Antagelsene ligger på lenkene. Hold over et element for å se kjeden.') +
+    `<section class="card"><div class="legend" style="margin-bottom:12px">${['Holder', 'Usikker', 'Holder ikke'].map((s) => `<span>${asmPill(s)}</span>`).join('')}<span>Antagelser på lenkene</span><span>· Fargestripe på nyttevirkning = verste indikatorstatus</span></div>
+    <div class="map-wrap"><div class="map-cols"><div>Endringer</div><div>Nyttevirkninger</div><div>Strategiske mål</div></div><div class="chart map-svg" data-chart="map" style="min-width:760px"></div></div></section>`;
+}
+function drawMap(el) {
+  const M = mapModel();
+  const W = Math.max(760, el.clientWidth); const nodeH = 46, gapY = 10, colW = Math.min(240, (W - 200) / 3);
+  const cols = [M.changes, M.bens, M.goals];
+  const colX = [0, (W - colW) / 2, W - colW];
+  const heights = cols.map((c) => c.length * (nodeH + gapY) - gapY);
+  const H = Math.max(...heights, 120) + 8;
+  const pos = {};
+  cols.forEach((c, ci) => { const off = (H - heights[ci]) / 2; c.forEach((n, k) => { pos[n.id] = { x: colX[ci], y: off + k * (nodeH + gapY), col: ci }; }); });
+  const maxChars = Math.floor(colW / 6.6);
+  const trunc = (s) => s.length > maxChars ? s.slice(0, maxChars - 1) + '…' : s;
+  let svg = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Nyttekart">`;
+  M.links.forEach((l, k) => { const a = pos[l.from], b = pos[l.to]; if (!a || !b) return; const x1 = a.x + colW, y1 = a.y + nodeH / 2, x2 = b.x, y2 = b.y + nodeH / 2, mx = (x1 + x2) / 2;
+    svg += `<path class="link" data-from="${l.from}" data-to="${l.to}" d="M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}"/>`; });
+  const node = (n, kind) => { const p = pos[n.id]; let stripe = '', sub = '';
+    if (kind === 'benefit') { const r = rollup(db.indicators.filter((i) => i.benefit === n.id)); stripe = `<rect x="0" y="0" width="4" height="${nodeH}" rx="2" fill="var(--${r.status})"/>`; sub = SITES[n.site].short + ' · ' + pct(r.ach); }
+    if (kind === 'change') sub = SITES[n.site].short + ' · ' + n.type;
+    if (kind === 'goal') sub = n.level;
+    return `<g class="node ${kind}" data-node="${n.id}" transform="translate(${p.x},${p.y})" data-tip="${esc('<b>' + esc(n.title) + '</b><div>' + esc(sub) + '</div>')}"><rect class="box" width="${colW}" height="${nodeH}" rx="6"/>${stripe}<text class="t" x="12" y="19">${esc(trunc(n.title))}</text><text class="s" x="12" y="35">${esc(trunc(sub))}</text></g>`; };
+  M.changes.forEach((n) => svg += node(n, 'change')); M.bens.forEach((n) => svg += node(n, 'benefit')); M.goals.forEach((n) => svg += node(n, 'goal'));
+  M.asms.forEach((a) => { const p1 = pos[a.from], p2 = pos[a.to]; if (!p1 || !p2) return; const x = (p1.x + colW + p2.x) / 2, y = (p1.y + p2.y) / 2 + nodeH / 2; const s = ASM_STATUS[a.status];
+    svg += `<g class="asm" data-asm="${a.id}" data-from="${a.from}" data-to="${a.to}" data-tip="${esc('<b>Antagelse</b><div>' + esc(a.title) + '</div><div>Status: <b>' + esc(a.status) + '</b> · vurdert ' + fmtDate(a.lastReviewed) + '</div>')}"><circle cx="${x}" cy="${y}" r="10" fill="var(--${s})" stroke="var(--surface)" stroke-width="2"/><text x="${x}" y="${y + 4}" text-anchor="middle">${s === 'ok' ? '✓' : s === 'warn' ? '?' : '!'}</text></g>`; });
+  svg += '</svg>';
+  el.style.height = H + 'px'; el.innerHTML = svg;
+  // highlight chain on hover
+  const related = (id) => { const set = new Set([id]); const up = (x) => M.links.filter((l) => l.to === x).forEach((l) => { set.add(l.from); up(l.from); }); const down = (x) => M.links.filter((l) => l.from === x).forEach((l) => { set.add(l.to); down(l.to); }); up(id); down(id); return set; };
+  el.querySelectorAll('.node').forEach((g) => {
+    g.addEventListener('mouseenter', () => { const set = related(g.dataset.node);
+      el.querySelectorAll('.node').forEach((n) => { n.classList.toggle('dim', !set.has(n.dataset.node)); n.classList.toggle('hl', n === g); });
+      el.querySelectorAll('path.link, .asm').forEach((p) => { const on = set.has(p.dataset.from) && set.has(p.dataset.to); p.classList.toggle('dim', !on); p.classList.toggle('hl', on); }); });
+    g.addEventListener('mouseleave', () => el.querySelectorAll('.dim, .hl').forEach((n) => n.classList.remove('dim', 'hl')));
+    g.addEventListener('click', () => { const id = g.dataset.node;
+      if (g.classList.contains('benefit')) { const bi = db.indicators.find((i) => i.benefit === id); if (bi) go('indikator', bi.id); else openForm('benefits', id); }
+      else if (g.classList.contains('goal')) go('mal'); else openForm('changes', id); });
+  });
+  el.querySelectorAll('.asm').forEach((a) => a.addEventListener('click', () => openForm('assumptions', a.dataset.asm)));
+}
+
+/* ------------------------------------------------------------------
+   View: Tildel (program)
+------------------------------------------------------------------ */
+function viewAssign() {
+  const prog = SITES[state.site];
+  const own = db.benefits.filter((b) => b.site === prog.id && !b.catalog);
+  if (!state.assignPick || !own.some((b) => b.id === state.assignPick)) state.assignPick = own[0] ? own[0].id : null;
+  const b = byId('benefits', state.assignPick);
+  const contrib = b ? db.benefits.filter((x) => x.contributesTo === b.id) : [];
+  const sum = contrib.reduce((a, x) => a + (x.share || 0), 0);
+  const bi = b ? db.indicators.find((i) => i.benefit === b.id) : null;
+  return pageHead('Tildel til prosjekter', `Bryt ned programmets nyttevirkninger i bidrag fra prosjektene i ${esc(prog.title)}. Hvert bidrag blir en egen nyttevirkning i prosjektet, koblet til programmets med «bidrar til».`) +
+    `<div class="assign"><section class="card"><div class="card-head"><h2>Programmets nyttevirkninger</h2></div>
+      ${own.map((x) => `<button type="button" class="pick" data-assign-pick="${x.id}" aria-pressed="${x.id === state.assignPick}"><b>${esc(x.title)}</b><div class="cell-sub">${db.benefits.filter((c) => c.contributesTo === x.id).length} bidrag · nytteeier ${esc(x.owner)}</div></button>`).join('') || '<div class="empty">Programmet eier ingen nyttevirkninger ennå. Opprett en under Registrering.</div>'}
+    </section>
+    ${b ? `<section class="card"><div class="card-head"><h2>${esc(b.title)}</h2><span class="muted">${bi ? `${fmtNum(bi.start)} → ${fmtNum(bi.target)} ${esc(bi.unit)}` : ''}</span></div>
+      <div class="muted small" style="margin-bottom:6px">Fordelt: <b>${sum} %</b> av målet · ${100 - sum > 0 ? `${100 - sum} % er ikke fordelt` : 'alt er fordelt'}</div>
+      <div class="meter" style="margin-bottom:12px"><i style="width:${Math.min(100, sum)}%"></i></div>
+      ${prog.children.map((pid) => { const c = contrib.find((x) => x.site === pid); return `<div class="assign-proj"><div style="min-width:0"><div class="cell-title">${esc(SITES[pid].title)}</div>
+        <div class="cell-sub">${c ? `Bidrag: ${esc(c.title)}` : 'Ikke tildelt'}</div></div>
+        <div style="display:flex;gap:8px;align-items:center">${c ? `<span class="chip brand">${c.share} %</span>${pill(rollup(db.indicators.filter((i) => i.benefit === c.id)).status)}` :
+          (canWrite() ? `<label class="small muted" for="share-${pid}">Andel</label><input id="share-${pid}" class="input share-input write" type="number" min="1" max="100" value="${Math.max(0, 100 - sum)}"><button type="button" class="btn sm primary write" data-assign="${pid}">Tildel</button>` : '')}</div></div>`; }).join('')}
+    </section>` : ''}</div>`;
+}
+
+/* ------------------------------------------------------------------
+   View: Statusrapport (project)
+------------------------------------------------------------------ */
+function viewStatus() {
+  const p = SITES[state.site]; const a = db.assessments[p.id] || { level: 'ok', text: '' };
+  const inds = db.indicators.filter((i) => i.site === p.id);
+  const newer = db.measurements.filter((m) => m.date > SNAPSHOT && inds.some((i) => i.id === m.indicator)).length;
+  return pageHead('I statusrapporten', 'Slik vises nyttestyringen som seksjon i prosjektstatus. Seksjonen erstatter dagens «Nytteoppnåelse», som bare viste vurderingen.') +
+    `<section class="card"><div class="sr-head"><h2 style="font-size:18px">Statusrapport ${fmtMonth(SNAPSHOT)}</h2><span class="chip">Publisert ${fmtDate(SNAPSHOT)}</span><span class="muted small">${esc(p.title)} · prosjektleder ${esc(p.manager)}</span></div>
+    <div class="sr-tabs">${['Overordnet', 'Tid', 'Kostnad', 'Nyttevirkninger', 'Kvalitet', 'Omfang', 'Bærekraft', 'Risiko'].map((t) => `<span class="${t === 'Nyttevirkninger' ? 'on' : ''}">${t}</span>`).join('')}</div>
+    <div class="sr-assess"><div class="sr-dot ${a.level}">${icon(a.level)}</div><div><div class="cell-title">Nytteoppnåelse: ${ASSESS[a.level]}</div><div>${esc(a.text)}</div></div></div>
+    ${indicatorRowsTable(inds, { until: SNAPSHOT })}
+    <div class="msg info" style="margin:12px 0 0">${icon('info')}<div>Øyeblikksbilde per ${fmtDate(SNAPSHOT)}. Målinger registrert etter publisering endrer ikke denne rapporten${newer ? ` (${newer} nyere ${newer === 1 ? 'måling finnes' : 'målinger finnes'})` : ''}.</div></div>
+    </section>`;
+}
+
+/* ------------------------------------------------------------------
+   Drawer and forms
+------------------------------------------------------------------ */
+function openDrawer(title, sub, body, foot) {
+  document.getElementById('drawer-root').innerHTML = `<div class="overlay" data-close></div>
+    <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="dr-title"><div class="drawer-head"><div><h2 id="dr-title">${esc(title)}</h2>${sub ? `<div class="muted small">${sub}</div>` : ''}</div><button type="button" class="btn subtle x" data-close aria-label="Lukk">${icon('close')}</button></div>
+    <form id="dr-form" novalidate style="display:contents"><div class="drawer-body">${body}</div><div class="drawer-foot">${foot}</div></form></aside>`;
+  const first = document.querySelector('#dr-form input:not([disabled]), #dr-form select, #dr-form textarea'); if (first) first.focus();
+}
+function closeDrawer() { document.getElementById('drawer-root').innerHTML = ''; }
+const saveNote = `<div class="small muted">Lagres i Prosjektportalen (hub).</div>`;
+
+function ownerOptions() {
+  if (state.level === 'hub') return Object.values(SITES).map((s) => [s.id, s.kind === 'hub' ? 'Virksomheten (huben)' : s.title]);
+  if (state.level === 'program') return [state.site, ...SITES[state.site].children].map((id) => [id, SITES[id].title]);
+  return [[state.site, SITES[state.site].title]];
+}
+function fieldHtml(f, v) {
+  const id = 'f-' + f.key; const dis = state.readOnly ? 'disabled' : '';
+  if (f.type === 'owner') {
+    const opts = ownerOptions();
+    if (opts.length === 1) return `<div class="field"><span class="lbl">${f.label}</span><div class="locked">${icon('hub')}${esc(opts[0][1])}</div><input type="hidden" name="${f.key}" value="${opts[0][0]}"><span class="hint">Koblet til prosjektet i Prosjekter-listen på huben.</span></div>`;
+    f = { ...f, type: 'select', options: opts };
+  }
+  const label = `<label for="${id}">${f.label}${f.req ? ' <span style="color:var(--crit)">*</span>' : ''}</label>`;
+  if (f.type === 'select') return `<div class="field">${label}<select class="input" id="${id}" name="${f.key}" ${dis}>${f.options.map((o) => { const [val, txt] = Array.isArray(o) ? o : [o, o]; return `<option value="${esc(val)}" ${String(v ?? '') === String(val) ? 'selected' : ''}>${esc(txt)}</option>`; }).join('')}</select>${f.hint ? `<span class="hint">${f.hint}</span>` : ''}</div>`;
+  if (f.type === 'multi') return `<div class="field"><span class="lbl">${f.label}</span><div class="checks">${f.options.map(([val, txt]) => `<label><input type="checkbox" name="${f.key}" value="${esc(val)}" ${(v || []).includes(val) ? 'checked' : ''} ${dis}> <span>${esc(txt)}</span></label>`).join('') || '<span class="muted small">Ingen å velge mellom i dette utvalget.</span>'}</div></div>`;
+  if (f.type === 'textarea') return `<div class="field">${label}<textarea class="input" id="${id}" name="${f.key}" ${dis}>${esc(v)}</textarea></div>`;
+  return `<div class="field">${label}<input class="input" id="${id}" name="${f.key}" type="${f.type || 'text'}" ${f.type === 'number' ? 'step="any"' : ''} value="${esc(v)}" ${dis}>${f.hint ? `<span class="hint">${f.hint}</span>` : ''}</div>`;
+}
+function formFields(ent, item) {
+  const goalsOpt = db.goals.map((g) => [g.id, g.title]);
+  switch (ent) {
+    case 'goals': return [{ key: 'title', label: 'Mål', req: true }, { key: 'level', label: 'Nivå', type: 'select', options: ['Samfunnsmål', 'Virksomhetsmål', 'Effektmål'] }, { key: 'parent', label: 'Overordnet mål', type: 'select', options: [['', '(ingen)'], ...goalsOpt.filter(([id]) => !item || id !== item.id)] }, { key: 'owner', label: 'Eier' }, { key: 'period', label: 'Periode', hint: 'For eksempel 2024–2028' }, { key: 'desc', label: 'Beskrivelse', type: 'textarea' }];
+    case 'changes': return [{ key: 'title', label: 'Endring', req: true }, { key: 'site', label: 'Eier', type: 'owner' }, { key: 'type', label: 'Type endring', type: 'select', options: ['Prosess', 'Organisasjon', 'Kompetanse', 'Teknologi', 'Kultur'] }, { key: 'process', label: 'Prosess / område' }, { key: 'challenge', label: 'Utfordring i dag', type: 'textarea' }, { key: 'responsible', label: 'Ansvarlig' }, { key: 'status', label: 'Status', type: 'select', options: ['Planlagt', 'Pågår', 'Gjennomført'] }];
+    case 'benefits': return [{ key: 'title', label: 'Nyttevirkning', req: true }, ...(item && item.catalog ? [] : [{ key: 'site', label: 'Eier', type: 'owner' }]), { key: 'type', label: 'Type', type: 'select', options: ['Direkte', 'Indirekte', 'Kvalitativ'] }, { key: 'status', label: 'Status', type: 'select', options: ['Foreslått', 'Godkjent', 'Under realisering', 'Realisert', 'Avbrutt'] }, { key: 'owner', label: 'Nytteeier', hint: 'Overordnet ansvar for at nytten realiseres' }, { key: 'responsible', label: 'Nytteansvarlig', hint: 'Delegert ansvar for denne nyttevirkningen' }, { key: 'realization', label: 'Realiseres', type: 'month' }, { key: 'goals', label: 'Bidrar til strategiske mål', type: 'multi', options: goalsOpt }, { key: 'changes', label: 'Forutsetter endringer', type: 'multi', options: (state.level === 'hub' ? db.changes : scoped.changes()).map((c) => [c.id, c.title + ' (' + SITES[c.site].short + ')']) }, { key: 'prereq', label: 'Forutsetninger for realisering', type: 'textarea' }, { key: 'desc', label: 'Beskrivelse', type: 'textarea' }];
+    case 'indicators': return [{ key: 'title', label: 'Indikator', req: true }, { key: 'benefit', label: 'Måler nyttevirkning', type: 'select', options: scoped.benefits().map((b) => [b.id, b.title]) }, { key: 'unit', label: 'Enhet', hint: 'For eksempel %, dager, timer/år' }, { key: '_r1', type: 'row', fields: [{ key: 'start', label: 'Startverdi', type: 'number', req: true }, { key: 'target', label: 'Målverdi', type: 'number', req: true }] }, { key: '_r2', type: 'row', fields: [{ key: 'startDate', label: 'Startdato', type: 'date' }, { key: 'targetDate', label: 'Måldato', type: 'date' }] }, { key: 'frequency', label: 'Målefrekvens', type: 'select', options: Object.keys(FREQ_MONTHS) }, { key: 'method', label: 'Datakilde og målemetode' }];
+    case 'assumptions': {
+      const links = []; scoped.benefits().forEach((b) => { (b.changes || []).forEach((c) => links.push([c + '>' + b.id, nodeTitle(c) + ' → ' + b.title])); (b.goals || []).forEach((g) => links.push([b.id + '>' + g, b.title + ' → ' + nodeTitle(g)])); });
+      return [{ key: 'title', label: 'Antagelse', req: true, hint: 'Hva må være sant for at lenken skal holde?' }, { key: 'link', label: 'Gjelder lenken', type: 'select', options: links }, { key: 'site', label: 'Eier', type: 'owner' }, { key: 'status', label: 'Status', type: 'select', options: ['Holder', 'Usikker', 'Holder ikke'] }, { key: 'lastReviewed', label: 'Sist vurdert', type: 'date' }, { key: 'note', label: 'Vurdering', type: 'textarea' }];
+    }
+  }
+}
+function renderFields(fields, item) {
+  return fields.map((f) => f.type === 'row' ? `<div class="row2">${f.fields.map((x) => fieldHtml(x, item[x.key])).join('')}</div>` : fieldHtml(f, f.key === 'link' ? (item.from ? item.from + '>' + item.to : '') : item[f.key])).join('');
+}
+function openForm(ent, id, extra = {}) {
+  const item = id ? byId(ent, id) : { site: ownerOptions()[0][0], status: ent === 'assumptions' ? 'Holder' : undefined, lastReviewed: TODAY, startDate: TODAY, frequency: 'Kvartalsvis', ...extra };
+  if (!item) return;
+  const fields = formFields(ent, item);
+  const isCatalog = extra.catalog || item.catalog;
+  const editable = canWrite() && (ent !== 'goals' || state.level === 'hub') && (!item.catalog || state.level === 'hub') && (state.level === 'hub' || !id || inScope(item) || ent === 'goals');
+  const title = (id ? '' : 'Ny ') + (isCatalog ? 'katalogelement' : ENT[ent].one);
+  openDrawer(id ? item.title : title.charAt(0).toUpperCase() + title.slice(1), id ? ENT[ent].one.charAt(0).toUpperCase() + ENT[ent].one.slice(1) : (isCatalog ? 'Gjenbrukbar nyttevirkning i katalogen' : esc(scopeLabel())),
+    `<input type="hidden" name="_ent" value="${ent}"><input type="hidden" name="_id" value="${id || ''}"><input type="hidden" name="_catalog" value="${isCatalog ? '1' : ''}">` + renderFields(fields, item) +
+    (ent === 'indicators' && id ? `<button type="button" class="btn" data-open-ind="${id}">Åpne indikatoren</button>` : ''),
+    editable ? `<button type="submit" class="btn primary">Lagre</button><button type="button" class="btn" data-close>Avbryt</button>${saveNote}` : `<button type="button" class="btn" data-close>Lukk</button><span class="small muted">${state.readOnly ? 'Lesetilgang' : 'Kan ikke redigeres fra dette nivået'}</span>`);
+  if (!editable) document.querySelectorAll('#dr-form .input, #dr-form input[type=checkbox]').forEach((x) => { x.disabled = true; });
+}
+function submitForm(form) {
+  const fd = new FormData(form); const ent = fd.get('_ent'); const id = fd.get('_id');
+  const fields = formFields(ent, {}).flatMap((f) => f.type === 'row' ? f.fields : [f]);
+  const data = {};
+  for (const f of fields) {
+    if (f.type === 'multi') data[f.key] = fd.getAll(f.key);
+    else if (f.key === 'link') { const [from, to] = String(fd.get('link') || '').split('>'); data.from = from; data.to = to; }
+    else if (f.type === 'number') data[f.key] = fd.get(f.key) === '' ? null : Number(fd.get(f.key));
+    else if (fd.has(f.key)) data[f.key] = String(fd.get(f.key));
+    if (f.req && (data[f.key] == null || data[f.key] === '')) { toast(`Fyll ut «${f.label}».`); return; }
+  }
+  if (ent === 'goals' && data.parent === '') data.parent = null;
+  if (ent === 'indicators') { data.direction = data.target >= data.start ? 'Økende' : 'Minkende'; data.site = (byId('benefits', data.benefit) || {}).site; if (!id) data.dec = data.unit && data.unit.includes('skala') ? 1 : 0; if (!data.targetDate) data.targetDate = '2027-12-31'; }
+  if (id) Object.assign(byId(ent, id), data);
+  else {
+    const prefix = { goals: 'S', changes: 'E', benefits: 'N', indicators: 'I', assumptions: 'A' }[ent];
+    const item = { id: uid(prefix), ...data };
+    if (fd.get('_catalog')) { item.catalog = true; item.site = 'hub'; item.changes = []; }
+    if (ent === 'indicators') item.milestones = [];
+    db[ent].push(item);
+  }
+  saveDb(); closeDrawer(); render();
+  toast(`${ENT[ent].one.charAt(0).toUpperCase() + ENT[ent].one.slice(1)} lagret i listen ${ENT[ent].label} på huben.`);
+}
+
+function openMeasure(indId) {
+  const i = byId('indicators', indId); const last = lastMeasurement(i.id);
+  const date = TODAY;
+  openDrawer('Registrer måling', esc(i.title) + ' · ' + esc(SITES[i.site].title),
+    `<input type="hidden" name="_measure" value="${i.id}">
+     <div class="row2">${fieldHtml({ key: 'value', label: `Verdi (${esc(i.unit)})`, type: 'number', req: true }, '')}${fieldHtml({ key: 'date', label: 'Dato', type: 'date' }, date)}</div>
+     ${fieldHtml({ key: 'comment', label: 'Kommentar', type: 'textarea' }, '')}
+     <div class="preview" id="m-preview"></div>
+     <div class="small muted">Forrige måling: ${last ? fmtNum(last.value, i.dec) + ' ' + esc(i.unit) + ' (' + fmtDate(last.date) + ')' : 'ingen'} · mål ${fmtNum(i.target, i.dec)} innen ${fmtDate(i.targetDate)}</div>`,
+    `<button type="submit" class="btn primary">Lagre måling</button><button type="button" class="btn" data-close>Avbryt</button>${saveNote}`);
+  const upd = () => {
+    const v = document.getElementById('f-value').value; const d = document.getElementById('f-date').value || TODAY;
+    const planned = plannedValueAt(i, d);
+    const s = v === '' ? null : statusAt(i, { date: d, value: Number(v) });
+    document.getElementById('m-preview').innerHTML = `<div class="row" style="display:flex;justify-content:space-between"><span>Målbane på ${fmtDate(d)}</span><b class="num">${fmtNum(planned, i.dec)} ${esc(i.unit)}</b></div>
+      <div style="display:flex;justify-content:space-between;align-items:center"><span>Vurdering</span>${s ? pill(s) : '<span class="muted">Skriv inn en verdi</span>'}</div>
+      ${s ? `<div style="display:flex;justify-content:space-between"><span>Oppnåelse</span><b class="num">${pct(achievement(i, Number(v)))}</b></div>` : ''}`;
+  };
+  document.getElementById('f-value').addEventListener('input', upd); document.getElementById('f-date').addEventListener('input', upd); upd();
+}
+function submitMeasure(form) {
+  const fd = new FormData(form); const id = fd.get('_measure'); const v = fd.get('value');
+  if (v === '' || isNaN(Number(v))) { toast('Skriv inn en verdi.'); return; }
+  const date = String(fd.get('date') || TODAY);
+  const by = { hub: 'Porteføljekontoret', program: SITES[state.site].manager, project: SITES[state.site].manager }[state.level];
+  db.measurements.push({ id: id + '-' + date + '-' + uid(''), indicator: id, date, value: Number(v), comment: String(fd.get('comment') || ''), by });
+  saveDb(); closeDrawer(); render();
+  toast('Målingen er lagret i Nytteoppfølging på huben. Kurven er oppdatert.');
+}
+
+function openAdopt(kid) {
+  const k = byId('benefits', kid); const kis = db.indicators.filter((i) => i.benefit === k.id);
+  const projects = state.level === 'hub' ? Object.values(SITES).filter((s) => s.kind !== 'hub').map((s) => [s.id, s.title]) : state.level === 'program' ? SITES[state.site].children.map((id) => [id, SITES[id].title]) : [[state.site, SITES[state.site].title]];
+  openDrawer('Ta i bruk: ' + k.title, 'Lager en kopi i prosjektet med referanse til katalogelementet',
+    `<input type="hidden" name="_adopt" value="${k.id}">` +
+    (projects.length === 1 ? `<div class="field"><span class="lbl">Prosjekt</span><div class="locked">${icon('hub')}${esc(projects[0][1])}</div><input type="hidden" name="site" value="${projects[0][0]}"></div>` : fieldHtml({ key: 'site', label: 'Prosjekt', type: 'select', options: projects }, projects[0][0])) +
+    fieldHtml({ key: 'owner', label: 'Nytteeier' }, k.owner) + fieldHtml({ key: 'realization', label: 'Realiseres', type: 'month' }, '2027-12') +
+    kis.map((i, n) => `<div class="preview"><b>${esc(i.title)}</b><span class="small muted">${esc(i.unit)} · ${esc(i.direction.toLowerCase())} · ${esc(i.frequency.toLowerCase())}</span><div class="row2">${fieldHtml({ key: 'start' + n, label: 'Startverdi', type: 'number' }, '')}${fieldHtml({ key: 'target' + n, label: 'Målverdi', type: 'number' }, '')}</div></div>`).join(''),
+    `<button type="submit" class="btn primary">Ta i bruk</button><button type="button" class="btn" data-close>Avbryt</button>${saveNote}`);
+}
+function submitAdopt(form) {
+  const fd = new FormData(form); const k = byId('benefits', fd.get('_adopt')); const site = String(fd.get('site'));
+  const nb = { ...k, id: uid('N'), catalog: false, site, basedOn: k.id, status: 'Godkjent', owner: String(fd.get('owner') || k.owner), realization: String(fd.get('realization') || ''), changes: [], goals: [...(k.goals || [])] };
+  db.benefits.push(nb);
+  let first = null;
+  db.indicators.filter((i) => i.benefit === k.id).forEach((i, n) => {
+    const s = fd.get('start' + n), t = fd.get('target' + n);
+    const ni = { ...i, id: uid('I'), catalog: false, benefit: nb.id, site, start: s === '' ? 0 : Number(s), target: t === '' ? 100 : Number(t), startDate: TODAY, targetDate: '2027-12-31', milestones: [] };
+    ni.direction = ni.target >= ni.start ? 'Økende' : 'Minkende';
+    db.indicators.push(ni); first = first || ni;
+  });
+  saveDb(); closeDrawer();
+  toast(`«${k.title}» er tatt i bruk i ${SITES[site].title}.`);
+  if (state.level === 'project' && first) go('indikator', first.id); else render();
+}
+function assignTo(pid) {
+  const parent = byId('benefits', state.assignPick); const share = Number(document.getElementById('share-' + pid).value) || 0;
+  if (share <= 0) { toast('Skriv inn en andel over 0 %.'); return; }
+  const pi = db.indicators.find((i) => i.benefit === parent.id);
+  const nb = { id: uid('N'), site: pid, title: parent.title + ' – bidrag', type: parent.type, status: 'Foreslått', owner: parent.owner, responsible: SITES[pid].manager, realization: parent.realization, changes: [], goals: [...(parent.goals || [])], contributesTo: parent.id, share, basedOn: parent.basedOn, desc: `Prosjektets bidrag (${share} %) til programmets nyttevirkning.` };
+  db.benefits.push(nb);
+  if (pi) {
+    const amount = Math.round(Math.abs(pi.target - pi.start) * share / 100);
+    db.indicators.push({ id: uid('I'), benefit: nb.id, site: pid, title: 'Bidrag: ' + pi.title.charAt(0).toLowerCase() + pi.title.slice(1), unit: pi.unit, start: 0, target: amount, startDate: TODAY, targetDate: pi.targetDate, frequency: pi.frequency, direction: 'Økende', method: pi.method, dec: pi.dec, milestones: [] });
+  }
+  saveDb(); render();
+  toast(`Tildelt ${SITES[pid].title}. Prosjektet ser bidraget i sin nyttestyring.`);
+}
+
+/* ------------------------------------------------------------------
+   CSV, tooltip, toast
+------------------------------------------------------------------ */
+function copyCsv(tab) {
+  const list = ENT[tab].list();
+  const keys = [...new Set(list.flatMap((x) => Object.keys(x)))].filter((k) => !['milestones'].includes(k));
+  const cell = (v) => { const s = Array.isArray(v) ? v.join(';') : (v ?? ''); return /[",\n;]/.test(String(s)) ? '"' + String(s).replace(/"/g, '""') + '"' : String(s); };
+  const csv = [keys.join(','), ...list.map((x) => keys.map((k) => cell(x[k])).join(','))].join('\n');
+  const done = () => toast(`${list.length} rader kopiert. Lim inn i Excel.`);
+  try { navigator.clipboard.writeText(csv).then(done, () => fallbackCopy(csv, done)); } catch (e) { fallbackCopy(csv, done); }
+}
+function fallbackCopy(text, done) {
+  openDrawer('Kopier som CSV', 'Teksten er markert. Kopier med Ctrl+C eller ⌘C.', `<textarea class="input" id="csv-out" style="min-height:320px;font-family:ui-monospace,Consolas,monospace;font-size:12px">${esc(text)}</textarea>`, `<button type="button" class="btn" data-close>Lukk</button>`);
+  const t = document.getElementById('csv-out'); t.focus(); t.select();
+}
+const tip = document.getElementById('tip');
+function showTip(html, ev) { tip.innerHTML = html; tip.hidden = false; const w = tip.offsetWidth, h = tip.offsetHeight; let x = ev.clientX + 14, y = ev.clientY + 14; if (x + w > innerWidth - 8) x = ev.clientX - w - 14; if (y + h > innerHeight - 8) y = ev.clientY - h - 14; tip.style.left = Math.max(8, x) + 'px'; tip.style.top = Math.max(8, y) + 'px'; }
+function hideTip() { tip.hidden = true; }
+let toastTimer;
+function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 3800); }
+
+function hydrate(root) {
+  root.querySelectorAll('[data-chart="line"]').forEach(drawLineChart);
+  root.querySelectorAll('[data-chart="map"]').forEach(drawMap);
+}
+
+/* ------------------------------------------------------------------
+   Events
+------------------------------------------------------------------ */
+document.addEventListener('click', (e) => {
+  const t = e.target.closest('[data-nav],[data-level],[data-progmode],[data-regtab],[data-new],[data-edit],[data-measure],[data-open-ind],[data-goto-site],[data-adopt],[data-assign],[data-assign-pick],[data-copy-csv],[data-close]');
+  if (!t) return;
+  const d = t.dataset;
+  if (d.close !== undefined) return closeDrawer();
+  if (d.nav) { closeDrawer(); return go(d.nav); }
+  if (d.level) { state.level = d.level; state.site = d.level === 'hub' ? 'hub' : d.level === 'program' ? 'pg1' : 'p2'; state.param = null; if (state.view === 'indikator') state.view = 'oversikt'; return render(); }
+  if (d.progmode) { state.progMode = d.progmode; return render(); }
+  if (d.regtab) { state.regTab = d.regtab; return render(); }
+  if (d.new) { if (d.new === 'catalog') return openForm('benefits', null, { catalog: true, site: 'hub' }); return openForm(d.new, null); }
+  if (d.edit) { const [ent, id] = d.edit.split(':'); if (e.target.closest('[data-open-ind]') && e.target.closest('[data-open-ind]') !== t) return; return openForm(ent, id); }
+  if (d.measure) { e.stopPropagation(); return openMeasure(d.measure); }
+  if (d.openInd) { e.stopPropagation(); closeDrawer(); return go('indikator', d.openInd); }
+  if (d.gotoSite) { const s = SITES[d.gotoSite]; state.level = s.kind; state.site = s.id; state.progMode = 'all'; return go('oversikt'); }
+  if (d.adopt) return openAdopt(d.adopt);
+  if (d.assignPick) { state.assignPick = d.assignPick; return render(); }
+  if (d.assign) return assignTo(d.assign);
+  if (d.copyCsv) return copyCsv(d.copyCsv);
+}, true);
+document.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const f = e.target;
+  if (f.querySelector('[name=_measure]')) return submitMeasure(f);
+  if (f.querySelector('[name=_adopt]')) return submitAdopt(f);
+  if (f.querySelector('[name=_ent]')) return submitForm(f);
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
+document.addEventListener('mouseover', (e) => { const t = e.target.closest('[data-tip]'); if (t && !t.closest('.chart [data-chart=line]')) showTip(t.dataset.tip, e); });
+document.addEventListener('mousemove', (e) => { const t = e.target.closest('[data-tip]'); if (t) showTip(t.dataset.tip, e); });
+document.addEventListener('mouseout', (e) => { const t = e.target.closest('[data-tip]'); if (t && !t.contains(e.relatedTarget)) hideTip(); });
+document.getElementById('site-select').addEventListener('change', (e) => { state.site = e.target.value; state.param = null; if (state.view === 'indikator') state.view = 'oversikt'; render(); });
+document.getElementById('ro-toggle').addEventListener('change', (e) => { state.readOnly = e.target.checked; render(); });
+let resetArmed = false;
+document.getElementById('reset-btn').addEventListener('click', (e) => {
+  if (!resetArmed) { resetArmed = true; e.target.textContent = 'Klikk igjen for å tilbakestille'; setTimeout(() => { resetArmed = false; e.target.textContent = 'Tilbakestill demodata'; }, 3000); return; }
+  resetArmed = false; e.target.textContent = 'Tilbakestill demodata';
+  try { localStorage.removeItem(STORE_KEY); } catch (err) { /* ignore */ }
+  db = buildSeed(); render(); toast('Demodata er tilbakestilt.');
+});
+let rz; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => hydrate(document.getElementById('main')), 150); });
+
+readHash();
+render();
+</script>
+</body>
+</html>
