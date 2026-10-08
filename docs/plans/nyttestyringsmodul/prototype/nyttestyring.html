@@ -34,6 +34,12 @@
   --shadow-4: 0 2px 4px rgba(0,0,0,.14), 0 0 2px rgba(0,0,0,.12);
   --shadow-16: 0 8px 16px rgba(0,0,0,.14), 0 0 2px rgba(0,0,0,.12);
   --shadow-64: 0 32px 64px rgba(0,0,0,.24), 0 0 8px rgba(0,0,0,.2);
+  --c-goal: #6b47b8; --c-goal-bg: #f3effb;
+  --c-ben: #0f6cbd; --c-ben-bg: #ebf3fc;
+  --c-ind: #b3307a; --c-ind-bg: #fbeff6;
+  --c-meas: #b3307a; --c-meas-bg: #fbeff6;
+  --c-chg: #4a5a6a; --c-chg-bg: #eef1f4;
+  --c-asm: #5c5c5c; --c-asm-bg: #f0f0f0;
   --font: "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", sans-serif;
   --font-display: "Segoe UI Variable Display", "Segoe UI", -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
   --r-s: 2px; --r-m: 4px; --r-l: 8px; --r-xl: 12px;
@@ -50,6 +56,12 @@
     --crit: #dc626d; --crit-bg: #3b0509; --crit-line: #6e0811;
     --none: #adadad; --none-bg: #333333; --none-line: #5c5c5c;
     --overlay: rgba(0,0,0,.55);
+    --c-goal: #b9a2f0; --c-goal-bg: #2b2142;
+    --c-ben: #62abf5; --c-ben-bg: #0e2a47;
+    --c-ind: #ee8fc4; --c-ind-bg: #3d1430;
+    --c-meas: #ee8fc4; --c-meas-bg: #3d1430;
+    --c-chg: #a9b8c6; --c-chg-bg: #26303a;
+    --c-asm: #c8c8c8; --c-asm-bg: #3a3a3a;
     color-scheme: dark;
   }
 }
@@ -64,6 +76,12 @@
   --crit: #dc626d; --crit-bg: #3b0509; --crit-line: #6e0811;
   --none: #adadad; --none-bg: #333333; --none-line: #5c5c5c;
   --overlay: rgba(0,0,0,.55);
+  --c-goal: #b9a2f0; --c-goal-bg: #2b2142;
+  --c-ben: #62abf5; --c-ben-bg: #0e2a47;
+  --c-ind: #ee8fc4; --c-ind-bg: #3d1430;
+  --c-meas: #ee8fc4; --c-meas-bg: #3d1430;
+  --c-chg: #a9b8c6; --c-chg-bg: #26303a;
+  --c-asm: #c8c8c8; --c-asm-bg: #3a3a3a;
   color-scheme: dark;
 }
 
@@ -245,11 +263,15 @@ textarea.input { min-height: 72px; resize: vertical; }
 
 /* Benefit map */
 .map-wrap { overflow-x: auto; }
-.map-cols { display: grid; grid-template-columns: repeat(3, 1fr); font-size: 12px; font-weight: 600; color: var(--fg-3); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; min-width: 760px; }
-.map-cols div:nth-child(2) { text-align: center; } .map-cols div:nth-child(3) { text-align: right; }
+.map-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 10px; min-width: 760px; font-size: 12px; color: var(--fg-3); }
+.map-cols > div { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.map-cols > div:nth-child(2) { align-items: center; text-align: center; } .map-cols > div:nth-child(3) { align-items: flex-end; text-align: right; }
 .map-svg .node { cursor: pointer; }
 .map-svg .node rect.box { fill: var(--surface); stroke: var(--stroke); }
-.map-svg .node.goal rect.box { fill: var(--brand-subtle); stroke: transparent; }
+.map-svg .node.goal rect.box { fill: var(--c-goal-bg); stroke: transparent; }
+.map-svg .node.change rect.box { fill: var(--c-chg-bg); stroke: transparent; }
+.map-svg .node.benefit rect.box { fill: var(--c-ben-bg); stroke: transparent; }
+.map-svg .node .ico { color: var(--c); }
 .map-svg .node text.t { fill: var(--fg); font: 600 12px var(--font); }
 .map-svg .node text.s { fill: var(--fg-3); font: 11px var(--font); }
 .map-svg path.link { fill: none; stroke: var(--stroke); stroke-width: 1.5; }
@@ -302,6 +324,56 @@ textarea.input { min-height: 72px; resize: vertical; }
 .pick[aria-pressed="true"] { border-color: var(--brand); box-shadow: inset 0 0 0 1px var(--brand); }
 .share-input { width: 72px; }
 
+/* Concept language: every object type has one hue, one icon and one name */
+.goal-c { --c: var(--c-goal); --cb: var(--c-goal-bg); }
+.ben-c { --c: var(--c-ben); --cb: var(--c-ben-bg); }
+.ind-c { --c: var(--c-ind); --cb: var(--c-ind-bg); }
+.meas-c { --c: var(--c-meas); --cb: var(--c-meas-bg); }
+.chg-c { --c: var(--c-chg); --cb: var(--c-chg-bg); }
+.asm-c { --c: var(--c-asm); --cb: var(--c-asm-bg); }
+.tt { display: inline-flex; align-items: center; gap: 4px; height: 20px; padding: 0 7px 0 5px; border-radius: var(--r-m); font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; white-space: nowrap; color: var(--c); background: var(--cb); vertical-align: middle; }
+.tt svg { width: 14px; height: 14px; }
+.ti { width: 16px; height: 16px; color: var(--c); flex: none; vertical-align: -3px; margin-right: 4px; }
+.chip.cc { background: var(--cb); color: var(--c); gap: 4px; }
+.chip.cc svg { width: 13px; height: 13px; }
+.cell-title .ti { margin-right: 6px; }
+.explain { margin-bottom: 16px; padding: 0; }
+.explain > summary { list-style: none; cursor: pointer; padding: 14px 16px; display: flex; gap: 8px 12px; align-items: baseline; flex-wrap: wrap; }
+.explain > summary::-webkit-details-marker { display: none; }
+.explain > summary h2 { font-size: 16px; line-height: 22px; font-weight: 600; }
+.explain > summary .tog { margin-left: auto; font-size: 12px; color: var(--brand-text); }
+.explain[open] > summary .tog::after { content: "Skjul"; } .explain:not([open]) > summary .tog::after { content: "Vis"; }
+.chain { display: grid; grid-template-columns: minmax(0, 1fr) 64px minmax(0, 1.5fr) 64px minmax(0, 1fr); align-items: stretch; padding: 0 16px 12px; }
+.cbox { border-radius: var(--r-l); background: var(--cb); padding: 12px; display: flex; flex-direction: column; gap: 6px; min-width: 0; border: 1px solid transparent; }
+.cbox .def { font-size: 13px; color: var(--fg-2); }
+.cbox .ex { font-size: 13px; color: var(--fg); background: var(--surface); border-radius: var(--r-m); padding: 6px 8px; }
+.cbox .ex b { font-weight: 600; }
+.cbox .ex .muted { font-size: 12px; }
+.cbox.nest { background: var(--surface); border-color: var(--c); }
+.cbox .inner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; margin-top: 4px; }
+.cbox .inner .cbox { padding: 8px 10px; }
+.arrow { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: var(--fg-3); font-size: 12px; text-align: center; }
+.arrow svg { width: 28px; height: 14px; }
+.explain .asm-line { padding: 0 16px 14px; font-size: 13px; color: var(--fg-2); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.defline { display: flex; gap: 8px 10px; align-items: flex-start; flex-wrap: wrap; padding: 10px 12px; border-radius: var(--r-m); background: var(--cb); margin-bottom: 12px; font-size: 13px; color: var(--fg-2); }
+.defline .rel { color: var(--fg-3); }
+.lineage { display: flex; flex-wrap: wrap; align-items: stretch; gap: 6px; margin-bottom: 12px; }
+.lineage .ln { display: flex; flex-direction: column; gap: 2px; padding: 6px 10px; border-radius: var(--r-m); background: var(--cb); min-width: 0; max-width: 100%; }
+.lineage .ln .lk { font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--c); display: flex; align-items: center; gap: 4px; }
+.lineage .ln .lk svg { width: 13px; height: 13px; }
+.lineage .ln .lv { font-size: 13px; color: var(--fg); }
+.lineage .ln button { border: 0; background: none; padding: 0; color: var(--fg); cursor: pointer; text-align: left; font: inherit; }
+.lineage .ln button:hover { text-decoration: underline; }
+.lineage .ln.cur { box-shadow: inset 0 0 0 1.5px var(--c); }
+.lineage .sep { align-self: center; color: var(--fg-3); font-size: 12px; }
+.gb-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.gb { border-left: 3px solid var(--c-ben); padding: 4px 0 4px 10px; }
+.gb .gb-t { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.gb .gb-t button { border: 0; background: none; padding: 0; font: inherit; font-weight: 600; color: var(--fg); cursor: pointer; text-align: left; }
+.gb .gb-t button:hover { text-decoration: underline; }
+.gb .gb-i { display: flex; gap: 8px; align-items: center; margin: 4px 0 0 18px; font-size: 13px; color: var(--fg-2); flex-wrap: wrap; }
+.gb .gb-i button { border: 0; background: none; padding: 0; font: inherit; color: var(--fg-2); cursor: pointer; text-align: left; }
+.gb .gb-i button:hover { color: var(--fg); text-decoration: underline; }
 .empty { padding: 24px; text-align: center; color: var(--fg-3); }
 
 @media (max-width: 1100px) {
@@ -309,7 +381,13 @@ textarea.input { min-height: 72px; resize: vertical; }
   .two, .det-grid, .assign { grid-template-columns: minmax(0, 1fr); }
   .cat-grid { grid-template-columns: minmax(0, 1fr); }
 }
+@media (max-width: 900px) {
+  .chain { grid-template-columns: minmax(0, 1fr); }
+  .arrow { flex-direction: row; padding: 6px 0; }
+  .arrow svg { transform: rotate(90deg); }
+}
 @media (max-width: 760px) {
+  .cbox .inner { grid-template-columns: minmax(0, 1fr); }
   .app { grid-template-columns: minmax(0, 1fr); }
   .nav { flex-direction: row; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--stroke-2); padding: 6px 8px; }
   .nav button { width: auto; white-space: nowrap; }
@@ -626,9 +704,33 @@ const ICON = {
   crit: '<path d="m5.5 5.5 9 9M14.5 5.5l-9 9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>',
   none: '<path d="M5 10h10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>',
   copy: '<rect x="6.5" y="6.5" width="10" height="10" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M4 13V5a1.5 1.5 0 0 1 1.5-1.5H13" fill="none" stroke="currentColor" stroke-width="1.4"/>',
+  ben: '<path d="M3 14.5 8 9.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.5 6H17v4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>',
+  gauge: '<path d="M3 14.5a7 7 0 1 1 14 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="m10 14.5 3.2-4.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="10" cy="14.5" r="1.3" fill="currentColor"/>',
+  meas: '<path d="M3 16.5h14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M10 16.5V11" stroke="currentColor" stroke-width="1.2" stroke-dasharray="1.5 1.5"/><circle cx="10" cy="8.5" r="2.5" fill="currentColor"/>',
+  chg: '<path d="M3.5 7.5h11l-3-3M16.5 12.5h-11l3 3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>',
+  bulb: '<path d="M7.2 13.2A5.2 5.2 0 1 1 12.8 13.2V15H7.2z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 17.5h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>',
+  arrow: '<path d="M2 7h22m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>',
   hub: '<path d="M3 17V8l7-5 7 5v9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M7 17v-5h6v5" fill="none" stroke="currentColor" stroke-width="1.4"/>'
 };
 const icon = (name, cls = '') => `<svg viewBox="0 0 20 20" aria-hidden="true" class="${cls}">${ICON[name]}</svg>`;
+const CONCEPT = {
+  goal: { label: 'Strategisk mål', plural: 'Strategiske mål', icon: 'target', def: 'Det virksomheten vil oppnå på lang sikt. Eies av virksomheten, ikke av prosjektet.' },
+  ben: { label: 'Nyttevirkning', plural: 'Nyttevirkninger', icon: 'ben', def: 'Den positive effekten et prosjekt skal gi, og som bidrar til et mål. Beskrives som en forbedring: kortere, færre, høyere.' },
+  ind: { label: 'Måleindikator', plural: 'Måleindikatorer', icon: 'gauge', def: 'Hvordan vi ser at nyttevirkningen inntreffer: hva som måles, fra hvilken startverdi, til hvilken målverdi og når.' },
+  meas: { label: 'Måling', plural: 'Målinger', icon: 'meas', def: 'Én registrert verdi for en måleindikator på en bestemt dato.' },
+  chg: { label: 'Endring', plural: 'Endringer', icon: 'chg', def: 'Det som må endres i måten vi jobber på, for at nytten skal oppstå.' },
+  asm: { label: 'Antagelse', plural: 'Antagelser', icon: 'bulb', def: 'Det som må være sant for at en pil i kjeden skal holde.' }
+};
+const ENT_CONCEPT = { goals: 'goal', changes: 'chg', benefits: 'ben', indicators: 'ind', assumptions: 'asm' };
+const conceptTip = (k) => esc(`<b>${CONCEPT[k].label}</b><div>${CONCEPT[k].def}</div>`);
+/** Type tag: coloured label naming the kind of object. */
+const tt = (k, label) => `<span class="tt ${k}-c" data-tip="${conceptTip(k)}">${icon(CONCEPT[k].icon)}${esc(label || CONCEPT[k].label)}</span>`;
+/** Inline concept icon, coloured. */
+const ci = (k) => icon(CONCEPT[k].icon, `ti ${k}-c`);
+/** Concept-coloured chip. */
+const cchip = (k, text, attrs = '') => `<${attrs ? 'button type="button"' : 'span'} class="chip cc ${k}-c" ${attrs}>${icon(CONCEPT[k].icon)}${esc(text)}</${attrs ? 'button' : 'span'}>`;
+function kindOf(id) { if (byId('goals', id)) return 'goal'; if (byId('changes', id)) return 'chg'; if (byId('benefits', id)) return 'ben'; return 'ind'; }
+const nodeRef = (id) => `${ci(kindOf(id))}${esc(nodeTitle(id))}`;
 const STATUS = { ok: 'I rute', warn: 'Avvik', crit: 'Kritisk', none: 'Ikke målt' };
 const pill = (s, label) => `<span class="pill ${s}">${icon(s)}${esc(label || STATUS[s])}</span>`;
 const asmPill = (st) => pill(ASM_STATUS[st], st);
@@ -708,8 +810,8 @@ function progToggle() {
     ${[['program', 'Programmet'], ['all', 'Alle prosjekter']].map(([v, t]) => `<button type="button" data-progmode="${v}" aria-pressed="${state.progMode === v}" style="color:var(--fg);${state.progMode === v ? 'background:var(--brand);color:var(--brand-fg)' : ''}">${t}</button>`).join('')}
   </div>`;
 }
-function pageHead(title, lead, actions = '') {
-  return `<div class="page-head"><div><h1>${esc(title)}</h1><div class="lead">${lead}</div></div><div class="actions">${progToggle()}${actions}</div></div>`;
+function pageHead(title, lead, actions = '', tag = '') {
+  return `<div class="page-head"><div>${tag ? `<div style="margin-bottom:6px">${tag}</div>` : ''}<h1>${esc(title)}</h1><div class="lead">${lead}</div></div><div class="actions">${progToggle()}${actions}</div></div>`;
 }
 function sparkline(i, w = 96, h = 28, until) {
   const ms = measurementsOf(i.id, until);
@@ -726,9 +828,9 @@ function sparkline(i, w = 96, h = 28, until) {
 }
 function indicatorRowsTable(list, opts = {}) {
   if (!list.length) return `<div class="empty">Ingen indikatorer i dette utvalget.</div>`;
-  return `<div class="table-wrap"><table><thead><tr><th>Indikator</th>${opts.site ? '<th>Eier</th>' : ''}<th class="r">Siste måling</th><th class="r">Oppnåelse</th><th>Utvikling</th><th>Status</th></tr></thead><tbody>
+  return `<div class="table-wrap"><table><thead><tr><th>Måleindikator <span class="muted" style="font-weight:400">· måler nyttevirkning</span></th>${opts.site ? '<th>Eier</th>' : ''}<th class="r">Siste måling</th><th class="r">Oppnåelse</th><th>Utvikling</th><th>Status</th></tr></thead><tbody>
   ${list.map((i) => { const s = indicatorState(i, opts.until); const b = byId('benefits', i.benefit); return `<tr class="click" data-open-ind="${i.id}">
-    <td><div class="cell-title">${esc(i.title)}</div><div class="cell-sub">${esc(b ? b.title : '')}</div></td>
+    <td><div class="cell-title">${ci('ind')}${esc(i.title)}</div><div class="cell-sub">${b ? `${ci('ben')}${esc(b.title)}` : ''}</div></td>
     ${opts.site ? `<td>${esc(SITES[i.site].short)}</td>` : ''}
     <td class="r num">${s.m ? fmtNum(s.m.value, i.dec) + ' ' + esc(i.unit) + `<div class="cell-sub">${fmtDate(s.m.date)}</div>` : '–'}</td>
     <td class="r num">${pct(s.ach)}</td>
@@ -736,6 +838,44 @@ function indicatorRowsTable(list, opts = {}) {
     <td>${pill(s.status)}</td></tr>`; }).join('')}
   </tbody></table></div>`;
 }
+
+/* ------------------------------------------------------------------
+   Concept explainer: the chain with a worked example from the scope
+------------------------------------------------------------------ */
+function pickExample() {
+  const bens = scoped.benefits();
+  const ok = (b) => (b.changes || []).length && (b.goals || []).length && db.indicators.some((i) => i.benefit === b.id && measurementsOf(i.id).length);
+  return bens.find((b) => b.id === 'N4' && ok(b)) || bens.find(ok) || db.benefits.find((b) => b.id === 'N4');
+}
+function explainer() {
+  const b = pickExample(); const ch = byId('changes', b.changes[0]); const g = byId('goals', b.goals[0]);
+  const i = db.indicators.find((x) => x.benefit === b.id && measurementsOf(x.id).length); const m = lastMeasurement(i.id);
+  const a = db.assumptions.find((x) => x.to === b.id || x.from === b.id) || db.assumptions[0];
+  let open = true; try { open = localStorage.getItem(STORE_KEY + '-explain') !== 'closed'; } catch (e) { /* ignore */ }
+  const arrow = (t) => `<div class="arrow">${icon('arrow')}<span>${t}</span></div>`;
+  return `<details class="card explain" id="explain" ${open ? 'open' : ''}><summary><h2>Slik henger det sammen</h2><span class="muted">Fem begreper, med et eksempel fra ${esc(SITES[b.site].title)}</span><span class="tog"></span></summary>
+    <div class="chain">
+      <div class="cbox chg-c">${tt('chg')}<div class="def">${CONCEPT.chg.def}</div><div class="ex">«${esc(ch.title)}»</div></div>
+      ${arrow('gir')}
+      <div class="cbox ben-c">${tt('ben')}<div class="def">${CONCEPT.ben.def}</div><div class="ex"><b>«${esc(b.title)}»</b></div>
+        <div class="inner">
+          <div class="cbox nest ind-c">${tt('ind')}<div class="def">Viser om nytten inntreffer.</div><div class="ex">${esc(i.title)}<div class="muted">${fmtNum(i.start, i.dec)} → ${fmtNum(i.target, i.dec)} ${esc(i.unit)} innen ${fmtDate(i.targetDate)}</div></div></div>
+          <div class="cbox nest meas-c">${tt('meas')}<div class="def">Verdien vi registrerer jevnlig.</div><div class="ex"><b>${fmtNum(m.value, i.dec)} ${esc(i.unit)}</b><div class="muted">${fmtDate(m.date)} · ${STATUS[statusAt(i, m)].toLowerCase()}</div></div></div>
+        </div>
+      </div>
+      ${arrow('bidrar til')}
+      <div class="cbox goal-c">${tt('goal')}<div class="def">${CONCEPT.goal.def}</div><div class="ex">«${esc(g.title)}»</div></div>
+    </div>
+    <div class="asm-line">${tt('asm')}<span>${CONCEPT.asm.def} Eksempel: «${esc(a.title)}»</span></div>
+  </details>`;
+}
+const DEF_EXAMPLE = {
+  goals: 'Eksempel: «Effektiv ressursbruk og bærekraftig økonomi».',
+  changes: 'Eksempel: «Saksbehandlerne tar i bruk ny arbeidsflyt».',
+  benefits: 'Eksempel: «Kortere saksbehandlingstid i byggesak». Kobles til endringene den forutsetter og målene den bidrar til.',
+  indicators: 'Eksempel: «Gjennomsnittlig saksbehandlingstid», fra 54 til 21 dager. Hører alltid til én nyttevirkning.',
+  assumptions: 'Eksempel: «Saksbehandlerne får opplæring før go-live». Ligger på en pil fra endring til nytte, eller fra nytte til mål.'
+};
 
 /* ------------------------------------------------------------------
    View: Oversikt
@@ -748,10 +888,10 @@ function viewOverview() {
   const stale = asms.filter((a) => monthsBetween(a.lastReviewed, TODAY) > 6);
   const broken = asms.filter((a) => a.status === 'Holder ikke');
   const kpis = `<div class="kpis">
-    <div class="kpi"><span class="k-label">Nyttevirkninger</span><span class="k-value">${benefits.length}</span><span class="k-note">${inds.length} måleindikatorer</span></div>
-    <div class="kpi"><span class="k-label">Indikatorer i rute</span><span class="k-value">${r.counts.ok}<small> av ${r.measured} målte</small></span><span class="k-note">${r.counts.warn ? pill('warn', r.counts.warn + ' avvik') : ''} ${r.counts.crit ? pill('crit', r.counts.crit + ' kritisk') : ''} ${r.counts.none ? pill('none', r.counts.none + ' ikke målt') : ''}</span></div>
-    <div class="kpi"><span class="k-label">Målinger som forfaller</span><span class="k-value">${due.length}</span><span class="k-note">${overdue.length ? pill('crit', overdue.length + ' forfalt') : 'Ingen forfalt'} · innen ${fmtMonth(TODAY)}</span></div>
-    <div class="kpi"><span class="k-label">Antagelser</span><span class="k-value">${asms.length}</span><span class="k-note">${broken.length ? pill('crit', broken.length + ' holder ikke') : ''} ${stale.length ? `<span>${stale.length} ikke vurdert på 6 mnd.</span>` : ''}</span></div>
+    <div class="kpi"><span class="k-label">${ci('ben')}Nyttevirkninger</span><span class="k-value">${benefits.length}</span><span class="k-note">${ci('ind')}${inds.length} måleindikatorer måler dem</span></div>
+    <div class="kpi"><span class="k-label">${ci('ind')}Måleindikatorer i rute</span><span class="k-value">${r.counts.ok}<small> av ${r.measured} målte</small></span><span class="k-note">${r.counts.warn ? pill('warn', r.counts.warn + ' avvik') : ''} ${r.counts.crit ? pill('crit', r.counts.crit + ' kritisk') : ''} ${r.counts.none ? pill('none', r.counts.none + ' ikke målt') : ''}</span></div>
+    <div class="kpi"><span class="k-label">${ci('meas')}Målinger som forfaller</span><span class="k-value">${due.length}</span><span class="k-note">${overdue.length ? pill('crit', overdue.length + ' forfalt') : 'Ingen forfalt'} · innen ${fmtMonth(TODAY)}</span></div>
+    <div class="kpi"><span class="k-label">${ci('asm')}Antagelser</span><span class="k-value">${asms.length}</span><span class="k-note">${broken.length ? pill('crit', broken.length + ' holder ikke') : ''} ${stale.length ? `<span>${stale.length} ikke vurdert på 6 mnd.</span>` : ''}</span></div>
   </div>`;
 
   // Bars: per owning site (hub/program-all) or per benefit (project/program-own)
@@ -761,27 +901,27 @@ function viewOverview() {
     const sites = [...new Set(inds.map((i) => i.site))];
     rows = sites.map((sid) => { const rr = rollup(inds.filter((i) => i.site === sid)); return { key: sid, label: SITES[sid].title, sub: SITES[sid].kind === 'program' ? 'Program' : (SITES[sid].program ? SITES[SITES[sid].program].short : 'Uten program'), ...rr, open: `data-goto-site="${sid}"` }; });
   } else {
-    rows = benefits.map((b) => { const bi = inds.filter((i) => i.benefit === b.id); const rr = rollup(bi); return { key: b.id, label: b.title, sub: bi.length + ' indikator' + (bi.length === 1 ? '' : 'er'), ...rr, open: bi[0] ? `data-open-ind="${bi[0].id}"` : '' }; });
+    rows = benefits.map((b) => { const bi = inds.filter((i) => i.benefit === b.id); const rr = rollup(bi); return { key: b.id, label: b.title, sub: 'Måles med ' + bi.length + ' indikator' + (bi.length === 1 ? '' : 'er'), ...rr, open: bi[0] ? `data-open-ind="${bi[0].id}"` : '' }; });
   }
   rows.sort((a, b) => SEV[b.status] - SEV[a.status] || (a.ach ?? -1) - (b.ach ?? -1));
   const bars = `<div class="bars">${rows.map((x) => `
     <div class="bar-row" ${x.open} data-tip="${esc(`<b>${esc(x.label)}</b><div class='row'><span>Oppnåelse</span><b>${pct(x.ach)}</b></div><div class='row'><span>Planlagt nå</span><b>${pct(x.planned)}</b></div><div class='row'><span>Indikatorer</span><b>${x.counts.ok} i rute, ${x.counts.warn} avvik, ${x.counts.crit} kritisk</b></div>`)}">
-      <div class="bar-label"><div class="t">${esc(x.label)}</div><div class="s">${esc(x.sub)}</div></div>
+      <div class="bar-label"><div class="t">${perSite ? '' : ci('ben')}${esc(x.label)}</div><div class="s">${esc(x.sub)}</div></div>
       <div class="bar-track"><div class="bar-fill" style="width:${x.ach ?? 0}%"></div>${x.planned != null ? `<div class="bar-plan" style="left:calc(${x.planned}% - 1px)"></div>` : ''}</div>
       <div class="bar-val">${pct(x.ach)}</div>
       <div class="pillcell">${pill(x.status)}</div>
     </div>`).join('') || '<div class="empty">Ingen data i dette utvalget.</div>'}</div>`;
 
   const attention = inds.filter((i) => ['warn', 'crit'].includes(indicatorState(i).status)).sort((a, b) => SEV[indicatorState(b).status] - SEV[indicatorState(a).status]);
-  const brokenList = asms.filter((a) => a.status !== 'Holder').map((a) => `<div class="asm-item">${asmPill(a.status)}<div><div class="cell-title">${esc(a.title)}</div><div class="cell-sub">${esc(nodeTitle(a.from))} → ${esc(nodeTitle(a.to))} · vurdert ${fmtDate(a.lastReviewed)}${monthsBetween(a.lastReviewed, TODAY) > 6 ? ' · <b>bør vurderes på nytt</b>' : ''}</div></div></div>`).join('');
+  const brokenList = asms.filter((a) => a.status !== 'Holder').map((a) => `<div class="asm-item">${asmPill(a.status)}<div><div class="cell-title">${esc(a.title)}</div><div class="cell-sub">Gjelder pilen ${nodeRef(a.from)} → ${nodeRef(a.to)}</div><div class="cell-sub">Vurdert ${fmtDate(a.lastReviewed)}${monthsBetween(a.lastReviewed, TODAY) > 6 ? ' · <b>bør vurderes på nytt</b>' : ''}</div></div></div>`).join('');
 
-  return pageHead('Nytteoversikt', esc(scopeLabel()) + ` · per ${fmtDate(TODAY)}`) + kpis + `
+  return pageHead('Nytteoversikt', esc(scopeLabel()) + ` · per ${fmtDate(TODAY)}`) + explainer() + kpis + `
     <div class="two">
       <section class="card"><div class="card-head"><h2>Nytteoppnåelse ${perSite ? 'per prosjekt' : 'per nyttevirkning'}</h2><span class="muted">Snitt av indikatorene, siste måling</span>
         <div class="legend right"><span><i class="lg-fill"></i>Oppnådd</span><span><i class="lg-plan"></i>Planlagt nå</span></div></div>${bars}</section>
-      <section class="card"><div class="card-head"><h2>Antagelser som må følges opp</h2></div>${brokenList || '<div class="empty">Alle antagelser holder.</div>'}</section>
+      <section class="card"><div class="card-head"><h2>${ci('asm')}Antagelser som må følges opp</h2></div>${brokenList || '<div class="empty">Alle antagelser holder.</div>'}</section>
     </div>
-    <section class="card" style="margin-top:16px"><div class="card-head"><h2>Krever oppmerksomhet</h2><span class="muted">Indikatorer med avvik fra målbanen</span></div>${indicatorRowsTable(attention, { site: state.level !== 'project' })}</section>`;
+    <section class="card" style="margin-top:16px"><div class="card-head"><h2>Krever oppmerksomhet</h2><span class="muted">Måleindikatorer der siste måling avviker fra målbanen</span></div>${indicatorRowsTable(attention, { site: state.level !== 'project' })}</section>`;
 }
 
 /* ------------------------------------------------------------------
@@ -795,15 +935,22 @@ function viewIndicator() {
   const contrib = db.benefits.filter((x) => x.contributesTo === b.id);
   const siblings = db.indicators.filter((x) => x.benefit === b.id && x.id !== i.id);
   const canMeasure = canWrite() && (state.level === 'hub' || inScope(i));
-  return `<div class="crumb"><button type="button" data-nav="oversikt">Oversikt</button><span>›</span><span>${esc(b.title)}</span></div>` +
-    pageHead(i.title, `${esc(b.title)} · ${esc(SITES[i.site].title)}`, `${canMeasure ? `<button type="button" class="btn primary write" data-measure="${i.id}">${icon('plus')}Registrer måling</button>` : ''}<button type="button" class="btn write" data-edit="indicators:${i.id}">Rediger indikator</button>`) + `
+  const goalsHtml = (b.goals || []).map((g) => `<button type="button" data-nav="mal">${esc(nodeTitle(g))}</button>`).join('<span class="muted"> · </span>');
+  const lineage = `<nav class="lineage" aria-label="Hva indikatoren hører til">
+    <div class="ln goal-c"><span class="lk">${icon('target')}Strategisk mål</span><span class="lv">${goalsHtml || '–'}</span></div><span class="sep">nås gjennom →</span>
+    <div class="ln ben-c"><span class="lk">${icon('ben')}Nyttevirkning</span><span class="lv">${esc(b.title)}</span></div><span class="sep">måles med →</span>
+    <div class="ln ind-c cur"><span class="lk">${icon('gauge')}Måleindikator</span><span class="lv"><b>${esc(i.title)}</b></span></div><span class="sep">følges opp med →</span>
+    <div class="ln meas-c"><span class="lk">${icon('meas')}Målinger</span><span class="lv">${ms.length} registrert</span></div>
+  </nav>`;
+  return `<div class="crumb"><button type="button" data-nav="oversikt">Oversikt</button><span>›</span><span>${esc(SITES[i.site].title)}</span></div>` + lineage +
+    pageHead(i.title, `Viser om nyttevirkningen «${esc(b.title)}» inntreffer. Eies av ${esc(SITES[i.site].title)}.`, `${canMeasure ? `<button type="button" class="btn primary write" data-measure="${i.id}">${icon('plus')}Registrer måling</button>` : ''}<button type="button" class="btn write" data-edit="indicators:${i.id}">Rediger indikator</button>`) + `
     <div class="det-grid">
       <section class="card"><div class="card-head"><h2>Utvikling mot målet</h2>${pill(st.status)}
         <div class="legend right"><span><i class="lg-line"></i>Faktisk</span><span><i class="lg-dash"></i>Målbane</span><span><i class="lg-dot"></i>Målverdi</span></div></div>
         <div class="chart" data-chart="line" data-ind="${i.id}" style="height:300px"></div>
       </section>
       <aside class="card">
-        <div class="muted small">Siste måling ${st.m ? fmtDate(st.m.date) : ''}</div>
+        <div class="muted small">${ci('meas')}Siste måling ${st.m ? fmtDate(st.m.date) : ''}</div>
         <div class="big">${st.m ? fmtNum(st.m.value, i.dec) : '–'} <span class="muted" style="font-size:14px;font-weight:400">${esc(i.unit)}</span></div>
         <div class="muted small" style="margin-bottom:12px">Planlagt på samme dato: ${st.m ? fmtNum(plannedValueAt(i, st.m.date), i.dec) : '–'} · oppnåelse ${pct(st.ach)}</div>
         <dl class="facts">
@@ -814,20 +961,19 @@ function viewIndicator() {
           <dt>Metode</dt><dd>${esc(i.method || '–')}</dd>
           <dt>Nytteeier</dt><dd>${esc(b.owner)}</dd>
           <dt>Nytteansvarlig</dt><dd>${esc(b.responsible || '–')}</dd>
-          <dt>Mål</dt><dd class="chips">${(b.goals || []).map((g) => `<button type="button" class="chip brand" data-nav="mal">${esc(nodeTitle(g))}</button>`).join('')}</dd>
           ${b.basedOn ? `<dt>Basert på</dt><dd><span class="chip">Katalog: ${esc(nodeTitle(b.basedOn))}</span></dd>` : ''}
           ${b.contributesTo ? `<dt>Bidrar til</dt><dd>${esc(nodeTitle(b.contributesTo))} (${b.share || '?'} %)</dd>` : ''}
         </dl>
       </aside>
     </div>
     <div class="two" style="margin-top:16px">
-      <section class="card"><div class="card-head"><h2>Målinger</h2><span class="muted">${ms.length} registrert</span></div>
+      <section class="card"><div class="card-head"><h2>${ci('meas')}Målinger</h2><span class="muted">${ms.length} registrert</span></div>
         <div class="table-wrap"><table><thead><tr><th>Dato</th><th class="r">Verdi</th><th class="r">Målbane</th><th>Vurdering</th><th>Kommentar</th></tr></thead><tbody>
         ${ms.slice().reverse().map((m) => `<tr><td class="num">${fmtDate(m.date)}</td><td class="r num">${fmtNum(m.value, i.dec)}</td><td class="r num muted">${fmtNum(plannedValueAt(i, m.date), i.dec)}</td><td>${pill(statusAt(i, m))}</td><td>${esc(m.comment)}${m.comment ? `<div class="cell-sub">${esc(m.by)}</div>` : ''}</td></tr>`).join('') || '<tr><td colspan="5" class="empty">Ingen målinger ennå.</td></tr>'}
         </tbody></table></div></section>
-      <section class="card"><div class="card-head"><h2>Antagelser</h2></div>
+      <section class="card"><div class="card-head"><h2>${ci('asm')}Antagelser</h2></div>
         ${asms.map((a) => `<div class="asm-item">${asmPill(a.status)}<div><div class="cell-title">${esc(a.title)}</div><div class="cell-sub">${esc(nodeTitle(a.from))} → ${esc(nodeTitle(a.to))} · vurdert ${fmtDate(a.lastReviewed)}</div>${a.note ? `<div class="small">${esc(a.note)}</div>` : ''}</div></div>`).join('') || '<div class="empty">Ingen antagelser er koblet til denne nyttevirkningen.</div>'}
-        ${siblings.length ? `<div class="card-head" style="margin-top:16px"><h2>Andre indikatorer</h2></div>${siblings.map((x) => `<button type="button" class="pick" data-open-ind="${x.id}"><b>${esc(x.title)}</b> ${pill(indicatorState(x).status)}</button>`).join('')}` : ''}
+        ${siblings.length ? `<div class="card-head" style="margin-top:16px"><h2>${ci('ind')}Andre indikatorer for samme nyttevirkning</h2></div>${siblings.map((x) => `<button type="button" class="pick" data-open-ind="${x.id}"><b>${esc(x.title)}</b> ${pill(indicatorState(x).status)}</button>`).join('')}` : ''}
         ${contrib.length ? `<div class="card-head" style="margin-top:16px"><h2>Bidrag fra prosjekter</h2></div>${contrib.map((x) => { const xi = db.indicators.find((k) => k.benefit === x.id); return `<button type="button" class="pick" ${xi ? `data-open-ind="${xi.id}"` : ''}><b>${esc(SITES[x.site].title)}</b> · ${x.share || '?'} % · ${xi ? pill(indicatorState(xi).status) : pill('none')}</button>`; }).join('')}` : ''}
       </section>
     </div>`;
@@ -892,13 +1038,13 @@ function viewFollowUp() {
   const monthEnd = endOfMonth(2026, 9);
   const groups = [['Forfalt', inds.filter((x) => x.due < TODAY)], [`Forfaller i ${fmtMonth(TODAY)}`, inds.filter((x) => x.due >= TODAY && x.due <= monthEnd)], ['Senere', inds.filter((x) => x.due > monthEnd)]];
   const row = (x, overdue) => `<div class="work ${overdue ? 'overdue' : ''}">
-    <div style="min-width:0"><button type="button" class="btn subtle" style="padding:0;min-height:0;white-space:normal;text-align:left" data-open-ind="${x.i.id}">${esc(x.i.title)}</button><div class="cell-sub">${esc(SITES[x.i.site].short)} · ${esc(x.i.frequency.toLowerCase())}</div></div>
+    <div style="min-width:0"><button type="button" class="btn subtle" style="padding:0;min-height:0;white-space:normal;text-align:left" data-open-ind="${x.i.id}">${ci('ind')}${esc(x.i.title)}</button><div class="cell-sub">Måler ${ci('ben')}${esc(nodeTitle(x.i.benefit))} · ${esc(SITES[x.i.site].short)} · ${esc(x.i.frequency.toLowerCase())}</div></div>
     <div class="hide-sm"><div class="w-k">Siste måling</div><div class="num">${x.s.m ? fmtNum(x.s.m.value, x.i.dec) + ' ' + esc(x.i.unit) : '–'}</div></div>
     <div class="hide-sm"><div class="w-k">Forfaller</div><div class="num">${fmtDate(x.due)}</div></div>
     <div class="hide-sm">${sparkline(x.i, 96, 28)}</div>
     <div style="display:flex;gap:8px;align-items:center">${pill(x.s.status)}<button type="button" class="btn sm primary write" data-measure="${x.i.id}">Registrer</button></div>
   </div>`;
-  return pageHead('Oppfølging', 'Indikatorer som skal måles, sortert etter forfall. ' + esc(scopeLabel()) + '.') +
+  return pageHead('Oppfølging', 'Måleindikatorer som skal ha en ny måling, sortert etter forfall. ' + esc(scopeLabel()) + '.', '', tt('meas', 'Registrere målinger')) +
     `<section class="card">${groups.map(([t, list], gi) => `<div class="group-title">${esc(t)} <span class="chip">${list.length}</span></div>${list.map((x) => row(x, gi === 0)).join('') || '<div class="muted small">Ingen.</div>'}`).join('')}</section>`;
 }
 
@@ -915,22 +1061,24 @@ const ENT = {
 function regColumns(tab) {
   const own = state.level !== 'project';
   const C = {
-    goals: [['Mål', (g) => `<div class="cell-title">${esc(g.title)}</div>`], ['Nivå', (g) => `<span class="chip">${esc(g.level)}</span>`], ['Overordnet', (g) => esc(g.parent ? nodeTitle(g.parent) : '–')], ['Eier', (g) => esc(g.owner)], ['Periode', (g) => esc(g.period)]],
-    changes: [['Endring', (c) => `<div class="cell-title">${esc(c.title)}</div><div class="cell-sub">${esc(c.process)}</div>`], ['Type', (c) => `<span class="chip">${esc(c.type)}</span>`], ...(own ? [['Eier', (c) => esc(SITES[c.site].short)]] : []), ['Ansvarlig', (c) => esc(c.responsible)], ['Status', (c) => esc(c.status)]],
-    benefits: [['Nyttevirkning', (b) => `<div class="cell-title">${esc(b.title)}</div>${b.basedOn ? `<div class="cell-sub">Basert på katalog: ${esc(nodeTitle(b.basedOn))}</div>` : ''}${b.contributesTo ? `<div class="cell-sub">Bidrar til: ${esc(nodeTitle(b.contributesTo))}</div>` : ''}`], ['Type', (b) => `<span class="chip">${esc(b.type)}</span>`], ...(own ? [['Eier', (b) => esc(SITES[b.site].short)]] : []), ['Nytteeier', (b) => esc(b.owner)], ['Realiseres', (b) => esc(b.realization ? fmtMonth(b.realization + '-01') : '–')], ['Mål', (b) => `<div class="chips">${(b.goals || []).map((g) => `<span class="chip brand">${esc(g.replace('-', '.'))}</span>`).join('')}</div>`], ['Status', (b) => esc(b.status)]],
-    indicators: [['Indikator', (i) => `<div class="cell-title">${esc(i.title)}</div><div class="cell-sub">${esc(nodeTitle(i.benefit))}</div>`], ...(own ? [['Eier', (i) => esc(SITES[i.site].short)]] : []), ['Start → mål', (i) => `<span class="num">${fmtNum(i.start, i.dec)} → ${fmtNum(i.target, i.dec)}</span> <span class="muted">${esc(i.unit)}</span>`], ['Frekvens', (i) => esc(i.frequency)], ['Status', (i) => pill(indicatorState(i).status)], ['', (i) => `<button type="button" class="btn sm" data-open-ind="${i.id}">Åpne</button>`]],
-    assumptions: [['Antagelse', (a) => `<div class="cell-title">${esc(a.title)}</div><div class="cell-sub">${esc(nodeTitle(a.from))} → ${esc(nodeTitle(a.to))}</div>`], ...(own ? [['Eier', (a) => esc(SITES[a.site].short)]] : []), ['Status', (a) => asmPill(a.status)], ['Sist vurdert', (a) => `<span class="num">${fmtDate(a.lastReviewed)}</span>${monthsBetween(a.lastReviewed, TODAY) > 6 ? '<div class="cell-sub">Over 6 mnd.</div>' : ''}`]]
+    goals: [['Strategisk mål', (g) => `<div class="cell-title">${ci('goal')}${esc(g.title)}</div>`], ['Nivå', (g) => `<span class="chip">${esc(g.level)}</span>`], ['Overordnet', (g) => esc(g.parent ? nodeTitle(g.parent) : '–')], ['Eier', (g) => esc(g.owner)], ['Periode', (g) => esc(g.period)]],
+    changes: [['Endring', (c) => `<div class="cell-title">${ci('chg')}${esc(c.title)}</div><div class="cell-sub">${esc(c.process)}</div>`], ['Type', (c) => `<span class="chip">${esc(c.type)}</span>`], ...(own ? [['Eier', (c) => esc(SITES[c.site].short)]] : []), ['Ansvarlig', (c) => esc(c.responsible)], ['Status', (c) => esc(c.status)]],
+    benefits: [['Nyttevirkning', (b) => `<div class="cell-title">${ci('ben')}${esc(b.title)}</div>${b.basedOn ? `<div class="cell-sub">Basert på katalog: ${esc(nodeTitle(b.basedOn))}</div>` : ''}${b.contributesTo ? `<div class="cell-sub">Bidrar til: ${esc(nodeTitle(b.contributesTo))}</div>` : ''}`], ['Type', (b) => `<span class="chip">${esc(b.type)}</span>`], ...(own ? [['Eier', (b) => esc(SITES[b.site].short)]] : []), ['Nytteeier', (b) => esc(b.owner)], ['Realiseres', (b) => esc(b.realization ? fmtMonth(b.realization + '-01') : '–')], ['Bidrar til mål', (b) => `<div class="chips">${(b.goals || []).map((g) => `<span class="chip cc goal-c" data-tip="${esc(esc(nodeTitle(g)))}">${icon('target')}${esc(g.replace('-', '.'))}</span>`).join('')}</div>`], ['Indikatorer', (b) => { const n = db.indicators.filter((i) => i.benefit === b.id).length; return `<span class="chip cc ind-c">${icon('gauge')}${n}</span>`; }], ['Status', (b) => esc(b.status)]],
+    indicators: [['Måleindikator · måler', (i) => `<div class="cell-title">${ci('ind')}${esc(i.title)}</div><div class="cell-sub">${ci('ben')}${esc(nodeTitle(i.benefit))}</div>`], ...(own ? [['Eier', (i) => esc(SITES[i.site].short)]] : []), ['Start → mål', (i) => `<span class="num">${fmtNum(i.start, i.dec)} → ${fmtNum(i.target, i.dec)}</span> <span class="muted">${esc(i.unit)}</span>`], ['Frekvens', (i) => esc(i.frequency)], ['Status', (i) => pill(indicatorState(i).status)], ['', (i) => `<button type="button" class="btn sm" data-open-ind="${i.id}">Åpne</button>`]],
+    assumptions: [['Antagelse · gjelder pilen', (a) => `<div class="cell-title">${ci('asm')}${esc(a.title)}</div><div class="cell-sub">${nodeRef(a.from)} → ${nodeRef(a.to)}</div>`], ...(own ? [['Eier', (a) => esc(SITES[a.site].short)]] : []), ['Status', (a) => asmPill(a.status)], ['Sist vurdert', (a) => `<span class="num">${fmtDate(a.lastReviewed)}</span>${monthsBetween(a.lastReviewed, TODAY) > 6 ? '<div class="cell-sub">Over 6 mnd.</div>' : ''}`]]
   };
   return C[tab];
 }
 function viewRegister() {
   const tab = state.regTab; const cols = regColumns(tab); const list = ENT[tab].list();
   const canAdd = canWrite() && (tab !== 'goals' || state.level === 'hub');
-  const tabs = `<div class="tabs" role="tablist">${Object.entries(ENT).map(([k, e]) => `<button type="button" role="tab" data-regtab="${k}" aria-selected="${k === tab}">${e.label}<span class="count">${e.list().length}</span></button>`).join('')}</div>`;
+  const tabs = `<div class="tabs" role="tablist">${Object.entries(ENT).map(([k, e]) => `<button type="button" role="tab" data-regtab="${k}" aria-selected="${k === tab}">${ci(ENT_CONCEPT[k])}${e.label}<span class="count">${e.list().length}</span></button>`).join('')}</div>`;
+  const k = ENT_CONCEPT[tab];
+  const defline = `<div class="defline ${k}-c">${tt(k)}<span>${CONCEPT[k].def} <span class="rel">${DEF_EXAMPLE[tab]}</span></span></div>`;
   const note = tab === 'goals' && state.level !== 'hub' ? `<div class="msg info">${icon('info')}<div>Strategiske mål eies av virksomheten og redigeres på huben. Her kan du se dem og koble nyttevirkninger til dem.</div></div>` : '';
   return pageHead('Registrering', 'Registrer og vedlikehold nyttedata i alle dimensjoner. ' + esc(scopeLabel()) + '.',
     `<button type="button" class="btn" data-copy-csv="${tab}">${icon('copy')}Kopier som CSV</button>${canAdd ? `<button type="button" class="btn primary write" data-new="${tab}">${icon('plus')}Ny ${ENT[tab].one}</button>` : ''}`) +
-    tabs + note + `<section class="card"><div class="table-wrap"><table><thead><tr>${cols.map((c) => `<th>${c[0]}</th>`).join('')}</tr></thead><tbody>
+    tabs + defline + note + `<section class="card"><div class="table-wrap"><table><thead><tr>${cols.map((c) => `<th>${c[0]}</th>`).join('')}</tr></thead><tbody>
     ${list.map((x) => `<tr class="click" data-edit="${tab}:${x.id}">${cols.map((c) => `<td>${c[1](x)}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${cols.length}" class="empty">Ingen ${ENT[tab].label.toLowerCase()} i dette utvalget.</td></tr>`}
     </tbody></table></div></section>`;
 }
@@ -945,10 +1093,12 @@ function viewCatalog() {
     `<div class="cat-grid">${cat.map((k) => {
       const uses = db.benefits.filter((b) => b.basedOn === k.id && !b.catalog);
       const kis = db.indicators.filter((i) => i.benefit === k.id);
-      return `<article class="card cat"><div class="card-head"><h3>${esc(k.title)}</h3><span class="chip">${esc(k.type)}</span></div>
+      return `<article class="card cat"><div style="margin-bottom:6px">${tt('ben')}</div><div class="card-head"><h3>${esc(k.title)}</h3><span class="chip">${esc(k.type)}</span></div>
         <div class="muted">${esc(k.desc)}</div>
-        <ul>${kis.map((i) => `<li>${esc(i.title)} <span class="muted">(${esc(i.unit)}, ${esc(i.direction.toLowerCase())}, ${esc(i.frequency.toLowerCase())})</span></li>`).join('')}</ul>
-        <div class="chips">${(k.goals || []).map((g) => `<span class="chip brand">${esc(nodeTitle(g))}</span>`).join('')}</div>
+        <div class="small" style="margin-top:10px;font-weight:600">${ci('ind')}Måles med</div>
+        <ul style="list-style:none;padding-left:20px;margin-top:4px">${kis.map((i) => `<li>${esc(i.title)} <span class="muted">(${esc(i.unit)}, ${esc(i.direction.toLowerCase())}, ${esc(i.frequency.toLowerCase())})</span></li>`).join('')}</ul>
+        <div class="small" style="font-weight:600;margin-bottom:4px">${ci('goal')}Bidrar til</div>
+        <div class="chips">${(k.goals || []).map((g) => cchip('goal', nodeTitle(g))).join('')}</div>
         <div class="foot"><span class="muted small">Brukt i ${uses.length} ${uses.length === 1 ? 'prosjekt' : 'prosjekter'}${uses.length ? ': ' + uses.map((u) => esc(SITES[u.site].short)).join(', ') : ''}</span>
           ${canWrite() ? `<button type="button" class="btn sm primary write" style="margin-left:auto" data-adopt="${k.id}">Ta i bruk${state.level === 'project' ? ' i prosjektet' : ' i prosjekt …'}</button>` : ''}</div>
       </article>`;
@@ -967,14 +1117,18 @@ function goalStats(g) {
 function viewGoals() {
   const top = db.goals.filter((g) => !g.parent);
   const card = (g, child) => { const s = goalStats(g); return `<article class="card goal ${child ? 'child' : ''}">
-    <div style="min-width:0"><div class="chips" style="margin-bottom:4px"><span class="chip brand">${esc(g.level)}</span></div><h3>${esc(g.title)}</h3>
+    <div style="min-width:0"><div class="chips" style="margin-bottom:6px">${tt('goal')}<span class="chip">${esc(g.level)}</span></div><h3>${esc(g.title)}</h3>
       <div class="goal-meta"><span>Eier: ${esc(g.owner)}</span><span>Periode: ${esc(g.period)}</span></div>
       <div class="muted">${esc(g.desc)}</div>
-      <div class="chips" style="margin-top:10px">${s.bens.map((b) => { const bi = db.indicators.find((i) => i.benefit === b.id); return `<button type="button" class="chip" ${bi ? `data-open-ind="${bi.id}"` : ''} data-tip="${esc(esc(SITES[b.site].title))}">${esc(b.title)}</button>`; }).join('')}</div></div>
+      <div class="small" style="margin-top:12px;font-weight:600">Nyttevirkninger som bidrar, og hvordan de måles</div>
+      <div class="gb-list">${s.bens.map((b) => { const bis = db.indicators.filter((i) => i.benefit === b.id); return `<div class="gb">
+        <div class="gb-t">${ci('ben')}<button type="button" ${bis[0] ? `data-open-ind="${bis[0].id}"` : `data-edit="benefits:${b.id}"`}>${esc(b.title)}</button><span class="muted small">${esc(SITES[b.site].short)}</span></div>
+        ${bis.map((i) => { const st = indicatorState(i); return `<div class="gb-i">${ci('ind')}<button type="button" data-open-ind="${i.id}">${esc(i.title)}</button>${pill(st.status)}<span class="muted small num">${pct(st.ach)}</span></div>`; }).join('')}
+      </div>`; }).join('') || '<div class="muted small">Ingen nyttevirkninger er koblet til dette målet ennå.</div>'}</div></div>
     <div class="goal-stat"><div class="muted small">Samlet oppnåelse</div><div class="big">${pct(s.r.ach)}</div><div class="meter"><i style="width:${s.r.ach || 0}%"></i></div>
       <div class="small muted">${s.bens.length} nyttevirkninger · ${s.projects.length} prosjekter/programmer</div><div>${pill(s.r.status)}</div></div>
   </article>`; };
-  return pageHead('Strategiske mål', 'Virksomhetens mål, med nytteoppnåelse fra nyttevirkningene som er koblet til hvert mål. Målene lagres i listen Strategiske mål på huben.',
+  return pageHead('Strategiske mål', 'Virksomhetens mål. Under hvert mål ser du nyttevirkningene som bidrar, og måleindikatorene som viser om nytten inntreffer. Målene lagres i listen Strategiske mål på huben.',
     state.level === 'hub' && canWrite() ? `<button type="button" class="btn primary write" data-new="goals">${icon('plus')}Nytt mål</button>` : '') +
     top.map((g) => card(g) + db.goals.filter((c) => c.parent === g.id).map((c) => card(c, true)).join('')).join('');
 }
@@ -1000,7 +1154,7 @@ function mapModel() {
 function viewMap() {
   return pageHead('Nyttekart', 'Hvordan endringer gir nyttevirkninger som bidrar til virksomhetens mål. Antagelsene ligger på lenkene. Hold over et element for å se kjeden.') +
     `<section class="card"><div class="legend" style="margin-bottom:12px">${['Holder', 'Usikker', 'Holder ikke'].map((s) => `<span>${asmPill(s)}</span>`).join('')}<span>Antagelser på lenkene</span><span>· Fargestripe på nyttevirkning = verste indikatorstatus</span></div>
-    <div class="map-wrap"><div class="map-cols"><div>Endringer</div><div>Nyttevirkninger</div><div>Strategiske mål</div></div><div class="chart map-svg" data-chart="map" style="min-width:760px"></div></div></section>`;
+    <div class="map-wrap"><div class="map-cols"><div>${tt('chg', 'Endringer')}<span>Det vi endrer</span></div><div>${tt('ben', 'Nyttevirkninger')}<span>Effekten vi får · tall = oppnåelse målt med indikatorene</span></div><div>${tt('goal', 'Strategiske mål')}<span>Det virksomheten vil oppnå</span></div></div><div class="chart map-svg" data-chart="map" style="min-width:760px"></div></div></section>`;
 }
 function drawMap(el) {
   const M = mapModel();
@@ -1011,7 +1165,7 @@ function drawMap(el) {
   const H = Math.max(...heights, 120) + 8;
   const pos = {};
   cols.forEach((c, ci) => { const off = (H - heights[ci]) / 2; c.forEach((n, k) => { pos[n.id] = { x: colX[ci], y: off + k * (nodeH + gapY), col: ci }; }); });
-  const maxChars = Math.floor(colW / 6.6);
+  const maxChars = Math.floor((colW - 30) / 6.8);
   const trunc = (s) => s.length > maxChars ? s.slice(0, maxChars - 1) + '…' : s;
   let svg = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Nyttekart">`;
   M.links.forEach((l, k) => { const a = pos[l.from], b = pos[l.to]; if (!a || !b) return; const x1 = a.x + colW, y1 = a.y + nodeH / 2, x2 = b.x, y2 = b.y + nodeH / 2, mx = (x1 + x2) / 2;
@@ -1020,7 +1174,7 @@ function drawMap(el) {
     if (kind === 'benefit') { const r = rollup(db.indicators.filter((i) => i.benefit === n.id)); stripe = `<rect x="0" y="0" width="4" height="${nodeH}" rx="2" fill="var(--${r.status})"/>`; sub = SITES[n.site].short + ' · ' + pct(r.ach); }
     if (kind === 'change') sub = SITES[n.site].short + ' · ' + n.type;
     if (kind === 'goal') sub = n.level;
-    return `<g class="node ${kind}" data-node="${n.id}" transform="translate(${p.x},${p.y})" data-tip="${esc('<b>' + esc(n.title) + '</b><div>' + esc(sub) + '</div>')}"><rect class="box" width="${colW}" height="${nodeH}" rx="6"/>${stripe}<text class="t" x="12" y="19">${esc(trunc(n.title))}</text><text class="s" x="12" y="35">${esc(trunc(sub))}</text></g>`; };
+    return `<g class="node ${kind}" data-node="${n.id}" transform="translate(${p.x},${p.y})" data-tip="${esc('<b>' + esc(n.title) + '</b><div>' + esc(sub) + '</div>')}"><rect class="box" width="${colW}" height="${nodeH}" rx="6"/>${stripe}<g class="ico ${{ change: 'chg', benefit: 'ben', goal: 'goal' }[kind]}-c" transform="translate(${colW - 22},6) scale(.8)">${ICON[{ change: 'chg', benefit: 'ben', goal: 'target' }[kind]]}</g><text class="t" x="12" y="19">${esc(trunc(n.title))}</text><text class="s" x="12" y="35">${esc(trunc(sub))}</text></g>`; };
   M.changes.forEach((n) => svg += node(n, 'change')); M.bens.forEach((n) => svg += node(n, 'benefit')); M.goals.forEach((n) => svg += node(n, 'goal'));
   M.asms.forEach((a) => { const p1 = pos[a.from], p2 = pos[a.to]; if (!p1 || !p2) return; const x = (p1.x + colW + p2.x) / 2, y = (p1.y + p2.y) / 2 + nodeH / 2; const s = ASM_STATUS[a.status];
     svg += `<g class="asm" data-asm="${a.id}" data-from="${a.from}" data-to="${a.to}" data-tip="${esc('<b>Antagelse</b><div>' + esc(a.title) + '</div><div>Status: <b>' + esc(a.status) + '</b> · vurdert ' + fmtDate(a.lastReviewed) + '</div>')}"><circle cx="${x}" cy="${y}" r="10" fill="var(--${s})" stroke="var(--surface)" stroke-width="2"/><text x="${x}" y="${y + 4}" text-anchor="middle">${s === 'ok' ? '✓' : s === 'warn' ? '?' : '!'}</text></g>`; });
@@ -1086,7 +1240,7 @@ function viewStatus() {
 ------------------------------------------------------------------ */
 function openDrawer(title, sub, body, foot) {
   document.getElementById('drawer-root').innerHTML = `<div class="overlay" data-close></div>
-    <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="dr-title"><div class="drawer-head"><div><h2 id="dr-title">${esc(title)}</h2>${sub ? `<div class="muted small">${sub}</div>` : ''}</div><button type="button" class="btn subtle x" data-close aria-label="Lukk">${icon('close')}</button></div>
+    <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="dr-title"><div class="drawer-head"><div><h2 id="dr-title">${esc(title)}</h2>${sub ? `<div class="muted small" style="margin-top:4px">${sub}</div>` : ''}</div><button type="button" class="btn subtle x" data-close aria-label="Lukk">${icon('close')}</button></div>
     <form id="dr-form" novalidate style="display:contents"><div class="drawer-body">${body}</div><div class="drawer-foot">${foot}</div></form></aside>`;
   const first = document.querySelector('#dr-form input:not([disabled]), #dr-form select, #dr-form textarea'); if (first) first.focus();
 }
@@ -1114,10 +1268,10 @@ function fieldHtml(f, v) {
 function formFields(ent, item) {
   const goalsOpt = db.goals.map((g) => [g.id, g.title]);
   switch (ent) {
-    case 'goals': return [{ key: 'title', label: 'Mål', req: true }, { key: 'level', label: 'Nivå', type: 'select', options: ['Samfunnsmål', 'Virksomhetsmål', 'Effektmål'] }, { key: 'parent', label: 'Overordnet mål', type: 'select', options: [['', '(ingen)'], ...goalsOpt.filter(([id]) => !item || id !== item.id)] }, { key: 'owner', label: 'Eier' }, { key: 'period', label: 'Periode', hint: 'For eksempel 2024–2028' }, { key: 'desc', label: 'Beskrivelse', type: 'textarea' }];
-    case 'changes': return [{ key: 'title', label: 'Endring', req: true }, { key: 'site', label: 'Eier', type: 'owner' }, { key: 'type', label: 'Type endring', type: 'select', options: ['Prosess', 'Organisasjon', 'Kompetanse', 'Teknologi', 'Kultur'] }, { key: 'process', label: 'Prosess / område' }, { key: 'challenge', label: 'Utfordring i dag', type: 'textarea' }, { key: 'responsible', label: 'Ansvarlig' }, { key: 'status', label: 'Status', type: 'select', options: ['Planlagt', 'Pågår', 'Gjennomført'] }];
-    case 'benefits': return [{ key: 'title', label: 'Nyttevirkning', req: true }, ...(item && item.catalog ? [] : [{ key: 'site', label: 'Eier', type: 'owner' }]), { key: 'type', label: 'Type', type: 'select', options: ['Direkte', 'Indirekte', 'Kvalitativ'] }, { key: 'status', label: 'Status', type: 'select', options: ['Foreslått', 'Godkjent', 'Under realisering', 'Realisert', 'Avbrutt'] }, { key: 'owner', label: 'Nytteeier', hint: 'Overordnet ansvar for at nytten realiseres' }, { key: 'responsible', label: 'Nytteansvarlig', hint: 'Delegert ansvar for denne nyttevirkningen' }, { key: 'realization', label: 'Realiseres', type: 'month' }, { key: 'goals', label: 'Bidrar til strategiske mål', type: 'multi', options: goalsOpt }, { key: 'changes', label: 'Forutsetter endringer', type: 'multi', options: (state.level === 'hub' ? db.changes : scoped.changes()).map((c) => [c.id, c.title + ' (' + SITES[c.site].short + ')']) }, { key: 'prereq', label: 'Forutsetninger for realisering', type: 'textarea' }, { key: 'desc', label: 'Beskrivelse', type: 'textarea' }];
-    case 'indicators': return [{ key: 'title', label: 'Indikator', req: true }, { key: 'benefit', label: 'Måler nyttevirkning', type: 'select', options: scoped.benefits().map((b) => [b.id, b.title]) }, { key: 'unit', label: 'Enhet', hint: 'For eksempel %, dager, timer/år' }, { key: '_r1', type: 'row', fields: [{ key: 'start', label: 'Startverdi', type: 'number', req: true }, { key: 'target', label: 'Målverdi', type: 'number', req: true }] }, { key: '_r2', type: 'row', fields: [{ key: 'startDate', label: 'Startdato', type: 'date' }, { key: 'targetDate', label: 'Måldato', type: 'date' }] }, { key: 'frequency', label: 'Målefrekvens', type: 'select', options: Object.keys(FREQ_MONTHS) }, { key: 'method', label: 'Datakilde og målemetode' }];
+    case 'goals': return [{ key: 'title', label: 'Strategisk mål', req: true, hint: 'Det virksomheten vil oppnå, for eksempel «Effektiv ressursbruk»' }, { key: 'level', label: 'Nivå', type: 'select', options: ['Samfunnsmål', 'Virksomhetsmål', 'Effektmål'] }, { key: 'parent', label: 'Overordnet mål', type: 'select', options: [['', '(ingen)'], ...goalsOpt.filter(([id]) => !item || id !== item.id)] }, { key: 'owner', label: 'Eier' }, { key: 'period', label: 'Periode', hint: 'For eksempel 2024–2028' }, { key: 'desc', label: 'Beskrivelse', type: 'textarea' }];
+    case 'changes': return [{ key: 'title', label: 'Endring', req: true, hint: 'Det som må endres: «Saksbehandlerne tar i bruk ny arbeidsflyt»' }, { key: 'site', label: 'Eier', type: 'owner' }, { key: 'type', label: 'Type endring', type: 'select', options: ['Prosess', 'Organisasjon', 'Kompetanse', 'Teknologi', 'Kultur'] }, { key: 'process', label: 'Prosess / område' }, { key: 'challenge', label: 'Utfordring i dag', type: 'textarea' }, { key: 'responsible', label: 'Ansvarlig' }, { key: 'status', label: 'Status', type: 'select', options: ['Planlagt', 'Pågår', 'Gjennomført'] }];
+    case 'benefits': return [{ key: 'title', label: 'Nyttevirkning', req: true, hint: 'Effekten, formulert som en forbedring: «Kortere saksbehandlingstid»' }, ...(item && item.catalog ? [] : [{ key: 'site', label: 'Eier', type: 'owner' }]), { key: 'type', label: 'Type', type: 'select', options: ['Direkte', 'Indirekte', 'Kvalitativ'] }, { key: 'status', label: 'Status', type: 'select', options: ['Foreslått', 'Godkjent', 'Under realisering', 'Realisert', 'Avbrutt'] }, { key: 'owner', label: 'Nytteeier', hint: 'Overordnet ansvar for at nytten realiseres' }, { key: 'responsible', label: 'Nytteansvarlig', hint: 'Delegert ansvar for denne nyttevirkningen' }, { key: 'realization', label: 'Realiseres', type: 'month' }, { key: 'goals', label: 'Bidrar til strategiske mål', type: 'multi', options: goalsOpt }, { key: 'changes', label: 'Forutsetter endringer', type: 'multi', options: (state.level === 'hub' ? db.changes : scoped.changes()).map((c) => [c.id, c.title + ' (' + SITES[c.site].short + ')']) }, { key: 'prereq', label: 'Forutsetninger for realisering', type: 'textarea' }, { key: 'desc', label: 'Beskrivelse', type: 'textarea' }];
+    case 'indicators': return [{ key: 'title', label: 'Måleindikator', req: true, hint: 'Det som måles: «Gjennomsnittlig saksbehandlingstid»' }, { key: 'benefit', label: 'Måler nyttevirkning', type: 'select', options: scoped.benefits().map((b) => [b.id, b.title]) }, { key: 'unit', label: 'Enhet', hint: 'For eksempel %, dager, timer/år' }, { key: '_r1', type: 'row', fields: [{ key: 'start', label: 'Startverdi', type: 'number', req: true }, { key: 'target', label: 'Målverdi', type: 'number', req: true }] }, { key: '_r2', type: 'row', fields: [{ key: 'startDate', label: 'Startdato', type: 'date' }, { key: 'targetDate', label: 'Måldato', type: 'date' }] }, { key: 'frequency', label: 'Målefrekvens', type: 'select', options: Object.keys(FREQ_MONTHS) }, { key: 'method', label: 'Datakilde og målemetode' }];
     case 'assumptions': {
       const links = []; scoped.benefits().forEach((b) => { (b.changes || []).forEach((c) => links.push([c + '>' + b.id, nodeTitle(c) + ' → ' + b.title])); (b.goals || []).forEach((g) => links.push([b.id + '>' + g, b.title + ' → ' + nodeTitle(g)])); });
       return [{ key: 'title', label: 'Antagelse', req: true, hint: 'Hva må være sant for at lenken skal holde?' }, { key: 'link', label: 'Gjelder lenken', type: 'select', options: links }, { key: 'site', label: 'Eier', type: 'owner' }, { key: 'status', label: 'Status', type: 'select', options: ['Holder', 'Usikker', 'Holder ikke'] }, { key: 'lastReviewed', label: 'Sist vurdert', type: 'date' }, { key: 'note', label: 'Vurdering', type: 'textarea' }];
@@ -1134,7 +1288,7 @@ function openForm(ent, id, extra = {}) {
   const isCatalog = extra.catalog || item.catalog;
   const editable = canWrite() && (ent !== 'goals' || state.level === 'hub') && (!item.catalog || state.level === 'hub') && (state.level === 'hub' || !id || inScope(item) || ent === 'goals');
   const title = (id ? '' : 'Ny ') + (isCatalog ? 'katalogelement' : ENT[ent].one);
-  openDrawer(id ? item.title : title.charAt(0).toUpperCase() + title.slice(1), id ? ENT[ent].one.charAt(0).toUpperCase() + ENT[ent].one.slice(1) : (isCatalog ? 'Gjenbrukbar nyttevirkning i katalogen' : esc(scopeLabel())),
+  openDrawer(id ? item.title : title.charAt(0).toUpperCase() + title.slice(1), tt(ENT_CONCEPT[ent]) + ' ' + (isCatalog ? 'Gjenbrukbar nyttevirkning i katalogen' : CONCEPT[ENT_CONCEPT[ent]].def),
     `<input type="hidden" name="_ent" value="${ent}"><input type="hidden" name="_id" value="${id || ''}"><input type="hidden" name="_catalog" value="${isCatalog ? '1' : ''}">` + renderFields(fields, item) +
     (ent === 'indicators' && id ? `<button type="button" class="btn" data-open-ind="${id}">Åpne indikatoren</button>` : ''),
     editable ? `<button type="submit" class="btn primary">Lagre</button><button type="button" class="btn" data-close>Avbryt</button>${saveNote}` : `<button type="button" class="btn" data-close>Lukk</button><span class="small muted">${state.readOnly ? 'Lesetilgang' : 'Kan ikke redigeres fra dette nivået'}</span>`);
@@ -1168,7 +1322,7 @@ function submitForm(form) {
 function openMeasure(indId) {
   const i = byId('indicators', indId); const last = lastMeasurement(i.id);
   const date = TODAY;
-  openDrawer('Registrer måling', esc(i.title) + ' · ' + esc(SITES[i.site].title),
+  openDrawer('Registrer måling', `${tt('meas')} for måleindikatoren «${esc(i.title)}», som måler nyttevirkningen «${esc(nodeTitle(i.benefit))}»`,
     `<input type="hidden" name="_measure" value="${i.id}">
      <div class="row2">${fieldHtml({ key: 'value', label: `Verdi (${esc(i.unit)})`, type: 'number', req: true }, '')}${fieldHtml({ key: 'date', label: 'Dato', type: 'date' }, date)}</div>
      ${fieldHtml({ key: 'comment', label: 'Kommentar', type: 'textarea' }, '')}
@@ -1295,6 +1449,7 @@ document.addEventListener('mousemove', (e) => { const t = e.target.closest('[dat
 document.addEventListener('mouseout', (e) => { const t = e.target.closest('[data-tip]'); if (t && !t.contains(e.relatedTarget)) hideTip(); });
 document.getElementById('site-select').addEventListener('change', (e) => { state.site = e.target.value; state.param = null; if (state.view === 'indikator') state.view = 'oversikt'; render(); });
 document.getElementById('ro-toggle').addEventListener('change', (e) => { state.readOnly = e.target.checked; render(); });
+document.addEventListener('toggle', (e) => { if (e.target.id === 'explain') { try { localStorage.setItem(STORE_KEY + '-explain', e.target.open ? 'open' : 'closed'); } catch (err) { /* ignore */ } } }, true);
 let resetArmed = false;
 document.getElementById('reset-btn').addEventListener('click', (e) => {
   if (!resetArmed) { resetArmed = true; e.target.textContent = 'Klikk igjen for å tilbakestille'; setTimeout(() => { resetArmed = false; e.target.textContent = 'Tilbakestill demodata'; }, 3000); return; }
