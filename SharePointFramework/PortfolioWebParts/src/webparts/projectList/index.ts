@@ -16,6 +16,35 @@ import React from 'react'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 import { PortalDataService, ProjectColumn } from 'pp365-shared-library'
 import { iconCatalog } from 'pp365-shared-library/lib/icons/iconCatalog'
+import _ from 'underscore'
+
+/**
+ * `projectMetadata` keys used up to 1.10, mapped to the keys that replaced them in 1.11.
+ */
+const LEGACY_PROJECT_METADATA_KEYS: Record<string, string> = {
+  ProjectServiceArea: 'PrimaryField',
+  ProjectType: 'SecondaryField',
+  ProjectOwner: 'PrimaryUserField',
+  ProjectManager: 'SecondaryUserField'
+}
+
+/**
+ * Maps `projectMetadata` saved by older versions to the current keys. Without this,
+ * pages provisioned before 1.11 only match `ProjectPhase`, hiding the primary/secondary
+ * fields and users in both tile and list view.
+ *
+ * @param projectMetadata Saved `projectMetadata` web part property
+ */
+function migrateProjectMetadata(projectMetadata?: string[]): string[] | undefined {
+  if (!Array.isArray(projectMetadata)) return projectMetadata
+  const keys = projectMetadata.map((key) => LEGACY_PROJECT_METADATA_KEYS[key] ?? key)
+  // The 1.11 front page template listed `PrimaryUserField` twice instead of `PrimaryField`.
+  // The property pane never saves duplicates, so a duplicate can only be that template default.
+  const isBuggyTemplateDefault =
+    keys.filter((key) => key === 'PrimaryUserField').length > 1 && !_.contains(keys, 'PrimaryField')
+  if (isBuggyTemplateDefault) keys[keys.indexOf('PrimaryUserField')] = 'PrimaryField'
+  return _.uniq(keys)
+}
 
 function renderJsonTextarea(
   field: any,
@@ -54,6 +83,8 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
 
   public async onInit(): Promise<void> {
     await super.onInit()
+
+    this.properties.projectMetadata = migrateProjectMetadata(this.properties.projectMetadata)
 
     this._portalDataService = await new PortalDataService().configure({
       spfxContext: this.context
