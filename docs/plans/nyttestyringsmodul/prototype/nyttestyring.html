@@ -34,6 +34,8 @@
   --shadow-4: 0 2px 4px rgba(0,0,0,.14), 0 0 2px rgba(0,0,0,.12);
   --shadow-16: 0 8px 16px rgba(0,0,0,.14), 0 0 2px rgba(0,0,0,.12);
   --shadow-64: 0 32px 64px rgba(0,0,0,.24), 0 0 8px rgba(0,0,0,.2);
+  --suite: #03787c; --suite-fg: #ffffff; --suite-search: #ffffff; --suite-search-fg: #424242;
+  --chrome: #f3f2f1; --page: #ffffff; --link: #0f6cbd;
   --c-goal: #6b47b8; --c-goal-bg: #f3effb;
   --c-ben: #0f6cbd; --c-ben-bg: #ebf3fc;
   --c-ind: #b3307a; --c-ind-bg: #fbeff6;
@@ -56,7 +58,11 @@
     --crit: #dc626d; --crit-bg: #3b0509; --crit-line: #6e0811;
     --none: #adadad; --none-bg: #333333; --none-line: #5c5c5c;
     --overlay: rgba(0,0,0,.55);
-    --c-goal: #b9a2f0; --c-goal-bg: #2b2142;
+    --suite: #0b4f51; --suite-fg: #f3f2f1; --suite-search: #2b2b2b; --suite-search-fg: #d6d6d6;
+    --chrome: #1b1a19; --page: #201f1e; --link: #62abf5;
+    --suite: #0b4f51; --suite-fg: #f3f2f1; --suite-search: #2b2b2b; --suite-search-fg: #d6d6d6;
+  --chrome: #1b1a19; --page: #201f1e; --link: #62abf5;
+  --c-goal: #b9a2f0; --c-goal-bg: #2b2142;
     --c-ben: #62abf5; --c-ben-bg: #0e2a47;
     --c-ind: #ee8fc4; --c-ind-bg: #3d1430;
     --c-meas: #ee8fc4; --c-meas-bg: #3d1430;
@@ -109,17 +115,51 @@ a { color: var(--brand-text); }
 .demo .demo-btn:hover { background: #323130; }
 .demo .spacer { flex: 1; }
 
-/* SharePoint site header */
-.site { background: var(--surface); border-bottom: 1px solid var(--stroke-2); padding: 14px 16px; display: flex; align-items: center; gap: 14px; }
-.site-logo { width: 48px; height: 48px; border-radius: var(--r-l); background: var(--brand); color: var(--brand-fg); display: grid; place-items: center; font: 600 18px var(--font-display); flex: none; }
-.site-text { min-width: 0; }
-.site-title { font: 600 20px/26px var(--font-display); }
-.site-sub { color: var(--fg-3); font-size: 12px; }
-.site-kind { margin-left: auto; font-size: 12px; color: var(--fg-3); text-align: right; }
+/* Static SharePoint chrome (illustration only): suite bar, app bar, hub nav, site header, command bar, PP footer */
+.sp { background: var(--chrome); min-height: calc(100vh - 44px); display: flex; flex-direction: column; }
+.suite svg, .appbar svg, .site-meta svg, .cmdbar svg, .ppfooter svg { width: 20px; height: 20px; flex: none; }
+.suite { height: 48px; background: var(--suite); color: var(--suite-fg); display: flex; align-items: center; gap: 12px; padding: 0 12px; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; }
+.suite .waffle { width: 32px; height: 32px; display: grid; place-items: center; }
+.suite .org { display: flex; align-items: center; gap: 8px; font-size: 13px; line-height: 14px; font-weight: 600; }
+.suite .org .mark { width: 30px; height: 30px; border: 1.5px solid currentColor; border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; display: grid; place-items: center; font: 700 12px var(--font-display); }
+.suite .app-name { font: 600 16px var(--font-display); margin-left: 20px; }
+.suite .search { flex: 0 1 400px; margin: 0 auto; height: 32px; border-radius: var(--r-m); background: var(--suite-search); color: var(--suite-search-fg); display: flex; align-items: center; gap: 8px; padding: 0 12px; font-size: 14px; }
+.suite .search svg { width: 16px; height: 16px; }
+.suite .tools { display: flex; align-items: center; gap: 4px; }
+.suite .tools span { width: 40px; height: 40px; display: grid; place-items: center; }
+.suite .avatar { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid currentColor; display: grid; place-items: center; font-size: 12px; font-weight: 600; margin-left: 4px; }
+.sp-body { display: grid; grid-template-columns: 76px minmax(0, 1fr); flex: 1; min-height: 0; }
+.appbar { display: flex; flex-direction: column; align-items: center; gap: 14px; padding-top: 14px; color: var(--fg-2); font-size: 10px; }
+.appbar span { display: flex; flex-direction: column; align-items: center; gap: 2px; width: 68px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.appbar svg { width: 22px; height: 22px; }
+.appbar .org-ico { width: 24px; height: 24px; border-radius: 50%; background: var(--suite); color: var(--suite-fg); display: grid; place-items: center; font: 700 13px var(--font-display); }
+.sp-page { background: var(--page); border-radius: 12px 12px 0 0; margin: 12px 12px 0 0; border: 1px solid var(--stroke-2); border-bottom: 0; display: flex; flex-direction: column; min-width: 0; }
+.hubnav { display: flex; align-items: center; gap: 4px 28px; padding: 0 36px; height: 44px; border-bottom: 1px solid var(--stroke-2); font-size: 14px; color: var(--fg-2); overflow-x: auto; white-space: nowrap; }
+.hubnav b { color: var(--fg); font-weight: 600; }
+.hubnav .on { color: var(--fg); position: relative; align-self: stretch; display: flex; align-items: center; }
+.hubnav .on::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--suite); }
+.hubnav .edit { color: var(--link); }
+.site { padding: 20px 36px 8px; display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+.site-logo { width: 48px; height: 48px; display: grid; place-items: center; color: #fff; font: 400 16px var(--font-display); flex: none; }
+.site-title { font: 600 24px/32px var(--font-display); }
+.site-meta { margin-left: auto; display: flex; align-items: center; gap: 22px; font-size: 14px; color: var(--fg-2); flex-wrap: wrap; }
+.site-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.site-meta svg { width: 16px; height: 16px; }
+.cmdbar { display: flex; align-items: center; gap: 4px 22px; padding: 10px 36px; font-size: 14px; color: var(--fg); flex-wrap: wrap; }
+.cmdbar span { display: inline-flex; align-items: center; gap: 6px; }
+.cmdbar svg { width: 18px; height: 18px; }
+.cmdbar .right { margin-left: auto; display: flex; align-items: center; gap: 22px; }
+.cmdbar .pub { font-size: 12px; padding: 2px 6px; border: 1px solid var(--stroke); border-radius: var(--r-m); background: var(--surface-2); color: var(--fg-2); }
+.canvas { padding: 16px 36px 24px; flex: 1; }
+.ppfooter { position: sticky; bottom: 0; z-index: 15; background: var(--page); border-top: 1px solid var(--stroke-2); display: flex; align-items: center; gap: 8px 26px; padding: 8px 36px calc(8px + env(safe-area-inset-bottom, 0px)); font-size: 13px; color: var(--fg-2); flex-wrap: wrap; }
+.ppfooter span { display: inline-flex; align-items: center; gap: 6px; }
+.ppfooter svg { width: 18px; height: 18px; }
+.ppfooter .right { margin-left: auto; display: flex; align-items: center; gap: 22px; }
+.ppfooter .assist { background: var(--suite); color: var(--suite-fg); border-radius: var(--r-m); padding: 5px 14px; font-weight: 600; }
 
 /* App frame */
-.app { display: grid; grid-template-columns: 232px minmax(0, 1fr); min-height: calc(100vh - 140px); }
-.nav { background: var(--surface-2); border-right: 1px solid var(--stroke-2); padding: 12px 8px; display: flex; flex-direction: column; gap: 2px; }
+.app { display: grid; grid-template-columns: 232px minmax(0, 1fr); min-height: 640px; border: 1px solid var(--stroke-2); border-radius: var(--r-l); overflow: hidden; background: var(--bg); }
+.nav { background: var(--surface); border-right: 1px solid var(--stroke-2); padding: 12px 8px; display: flex; flex-direction: column; gap: 2px; }
 .nav-title { font-size: 12px; color: var(--fg-3); padding: 4px 12px 8px; letter-spacing: .04em; text-transform: uppercase; }
 .nav button { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 8px 12px; border: 0; border-radius: var(--r-m); background: transparent; cursor: pointer; position: relative; color: var(--fg-2); }
 .nav button:hover { background: var(--surface-3); color: var(--fg); }
@@ -376,6 +416,10 @@ textarea.input { min-height: 72px; resize: vertical; }
 .gb .gb-i button:hover { color: var(--fg); text-decoration: underline; }
 .empty { padding: 24px; text-align: center; color: var(--fg-3); }
 
+@media (max-width: 1200px) {
+  .suite .app-name, .suite .tools .opt { display: none; }
+  .hubnav, .site, .cmdbar, .canvas, .ppfooter { padding-left: 20px; padding-right: 20px; }
+}
 @media (max-width: 1100px) {
   .kpis { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .two, .det-grid, .assign { grid-template-columns: minmax(0, 1fr); }
@@ -394,7 +438,15 @@ textarea.input { min-height: 72px; resize: vertical; }
   .nav button[aria-current="page"]::before { left: 12px; right: 12px; top: auto; bottom: 0; width: auto; height: 3px; }
   .nav-title, .nav-sep, .nav-foot { display: none; }
   main { padding: 16px 16px 40px; }
-  .site-kind { display: none; }
+  .sp-body { grid-template-columns: minmax(0, 1fr); }
+  .appbar, .suite .search, .suite .tools, .cmdbar .hide-sm, .site-meta .hide-sm, .ppfooter .hide-sm { display: none; }
+  .sp-page { margin: 0; border-radius: 0; border-left: 0; border-right: 0; }
+  .ppfooter { position: static; }
+  .hubnav, .site, .cmdbar, .canvas, .ppfooter { padding-left: 16px; padding-right: 16px; }
+  .site { gap: 14px; }
+  .site-meta { margin-left: 0; }
+  .canvas { padding-top: 8px; }
+  .app { border-radius: 0; border-left: 0; border-right: 0; margin: 0 -16px; }
   .bar-row { grid-template-columns: minmax(0, 1fr) 48px; }
   .bar-row .bar-track { grid-column: 1 / -1; grid-row: 2; }
   .bar-row .pillcell { display: none; }
@@ -428,10 +480,54 @@ textarea.input { min-height: 72px; resize: vertical; }
   <span class="spacer"></span>
   <button type="button" class="demo-btn" id="reset-btn">Tilbakestill demodata</button>
 </div>
-<header class="site" id="site-header"></header>
-<div class="app" id="app">
-  <nav class="nav" id="nav" aria-label="Nyttestyring"></nav>
-  <main id="main"></main>
+<div class="sp">
+  <header class="suite" aria-label="Microsoft 365 (statisk illustrasjon)">
+    <span class="waffle" aria-hidden="true"><svg viewBox="0 0 20 20"><g fill="currentColor"><circle cx="4" cy="4" r="1.6"/><circle cx="10" cy="4" r="1.6"/><circle cx="16" cy="4" r="1.6"/><circle cx="4" cy="10" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="16" cy="10" r="1.6"/><circle cx="4" cy="16" r="1.6"/><circle cx="10" cy="16" r="1.6"/><circle cx="16" cy="16" r="1.6"/></g></svg></span>
+    <span class="org"><span class="mark" aria-hidden="true">FK</span><span>Fjordvik<br>kommune</span></span>
+    <span class="app-name">SharePoint</span>
+    <span class="search"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m12.5 12.5 4.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Søk på tvers av områder</span>
+    <span class="tools" aria-hidden="true">
+      <span class="opt"><svg viewBox="0 0 20 20"><path d="M10 2.5 12 8l5.5 2-5.5 2-2 5.5L8 12l-5.5-2L8 8z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></span>
+      <span class="opt"><svg viewBox="0 0 20 20"><path d="M3 8v4h3l7 4V4L6 8z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M15.5 8a3 3 0 0 1 0 4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
+      <span><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M10 2.5v2.2M10 15.3v2.2M2.5 10h2.2M15.3 10h2.2M4.7 4.7l1.6 1.6M13.7 13.7l1.6 1.6M4.7 15.3l1.6-1.6M13.7 6.3l1.6-1.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
+      <span><svg viewBox="0 0 20 20"><path d="M7.5 7.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .8-1 1.5v.7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="10" cy="15" r="1" fill="currentColor"/></svg></span>
+      <span class="avatar">HB</span>
+    </span>
+  </header>
+  <div class="sp-body">
+    <nav class="appbar" aria-hidden="true">
+      <span><i class="org-ico">i</i>Fjordvik ko...</span>
+      <span><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="m7.5 12.5 1.8-4.2 3.2-.8-1.8 4.2z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>Oppdag</span>
+      <span><svg viewBox="0 0 20 20"><path d="M4 16h3l9-9-3-3-9 9z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>Publiser</span>
+      <span><svg viewBox="0 0 20 20"><rect x="3" y="4" width="14" height="5" rx="1" fill="none" stroke="currentColor" stroke-width="1.3"/><rect x="3" y="11" width="6" height="5" rx="1" fill="none" stroke="currentColor" stroke-width="1.3"/><rect x="11" y="11" width="6" height="5" rx="1" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>Bygg</span>
+      <span><svg viewBox="0 0 20 20"><path d="M6 15.5a3.5 3.5 0 0 1-.3-7A4.5 4.5 0 0 1 14.3 8a3.8 3.8 0 0 1 0 7.5z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>OneDrive</span>
+    </nav>
+    <div class="sp-page">
+      <nav class="hubnav" aria-label="Hubnavigasjon (statisk)">
+        <b>Prosjektportalen</b><span>Porteføljeoversikt</span><span>Stengte prosjekt</span><span>Porteføljeinnsikt</span><span class="on">Nytteoversikt</span><span>Erfaringslogg</span><span>Risikooversikt</span><span>Kvalitetssystemet</span><span class="edit">Rediger-navigasjon</span>
+      </nav>
+      <header class="site" id="site-header"></header>
+      <div class="cmdbar" aria-hidden="true">
+        <span><svg viewBox="0 0 20 20"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Nye <svg viewBox="0 0 20 20" style="width:12px;height:12px"><path d="m5 8 5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></span>
+        <span class="hide-sm"><svg viewBox="0 0 20 20"><path d="M5 2.5h7l3.5 3.5v11.5H5z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><circle cx="10" cy="11" r="2.2" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>Sidedetaljer</span>
+        <span class="hide-sm"><svg viewBox="0 0 20 20"><rect x="2.5" y="4" width="15" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M2.5 7.5h15" stroke="currentColor" stroke-width="1.3"/></svg>Forhåndsversjon</span>
+        <span class="hide-sm"><svg viewBox="0 0 20 20"><path d="M5 16V9M10 16V4M15 16v-5M3 16.5h14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Analyse</span>
+        <span class="right"><span class="pub hide-sm">Publisert 24.9.2026</span><span><svg viewBox="0 0 20 20"><path d="M11 4h5v5M16 4l-7 7M14 12v4H4V6h4" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>Del</span><span><svg viewBox="0 0 20 20"><path d="M4 16h3l9-9-3-3-9 9z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>Rediger</span></span>
+      </div>
+      <div class="canvas">
+        <div class="app" id="app">
+          <nav class="nav" id="nav" aria-label="Nyttestyring"></nav>
+          <main id="main"></main>
+        </div>
+      </div>
+      <footer class="ppfooter" aria-label="Prosjektportalen-footer (statisk)">
+        <span class="hide-sm"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M10 3v2M10 15v2M3 10h2M15 10h2M5 5l1.4 1.4M13.6 13.6 15 15M5 15l1.4-1.4M13.6 6.4 15 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Områdeinnstillinger</span>
+        <span class="hide-sm"><svg viewBox="0 0 20 20"><rect x="3" y="3.5" width="14" height="13" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M6 8h8M6 11h8M6 14h5" stroke="currentColor" stroke-width="1.3"/></svg>Konfigurasjon av Prosjektportalen</span>
+        <span><svg viewBox="0 0 20 20"><path d="M8.5 11.5a3 3 0 0 0 4.2 0l2.6-2.6a3 3 0 0 0-4.2-4.2l-.9.9M11.5 8.5a3 3 0 0 0-4.2 0l-2.6 2.6a3 3 0 0 0 4.2 4.2l.9-.9" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Nyttige lenker</span>
+        <span class="right"><span class="assist">Assistent</span><span class="hide-sm">v1.15.0 (prototype)</span><span class="hide-sm"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 8a2 2 0 1 1 2.8 1.8c-.5.2-.8.6-.8 1.2v.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="10" cy="14" r=".9" fill="currentColor"/></svg>Hjelp tilgjengelig</span></span>
+      </footer>
+    </div>
+  </div>
 </div>
 <div id="drawer-root"></div>
 <div class="tip" id="tip" hidden></div>
@@ -755,12 +851,17 @@ function navItems() {
 }
 function renderFrame() {
   const s = SITES[state.site];
-  const kindLabel = { hub: 'Hubområde · Prosjektportalen', program: 'Programområde', project: 'Prosjektområde' }[s.kind];
-  const sub = s.kind === 'hub' ? 'Prosjektportalen 365' : s.kind === 'program' ? `Program · tilknyttet Fjordvik kommune` : `Prosjekt${s.program ? ' i ' + esc(SITES[s.program].title) : ''} · fase ${esc(s.phase)}`;
+  const LOGO = { hub: '#e3008c', pg1: '#0f6cbd', pg2: '#8764b8', p1: '#038387', p2: '#ca5010', p3: '#4f6bed', p4: '#498205', p5: '#c239b3', p6: '#986f0b' };
+  const title = s.kind === 'hub' ? 'Prosjektportalen' : s.title;
+  const members = { hub: 11, pg1: 9, pg2: 7, p1: 8, p2: 6, p3: 5, p4: 7, p5: 4, p6: 5 }[s.id];
+  const ic = (d) => `<svg viewBox="0 0 20 20" aria-hidden="true">${d}</svg>`;
+  const star = ic('<path d="m10 3 2.1 4.4 4.9.6-3.6 3.3.9 4.8L10 13.8 5.7 16.1l.9-4.8L3 8l4.9-.6z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>');
+  const person = ic('<circle cx="10" cy="7" r="3" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M4 17a6 6 0 0 1 12 0" fill="none" stroke="currentColor" stroke-width="1.3"/>');
+  const plus = ic('<path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>');
   document.getElementById('site-header').innerHTML = `
-    <div class="site-logo" aria-hidden="true">${esc(s.initials)}</div>
-    <div class="site-text"><div class="site-title">${esc(s.title)}</div><div class="site-sub">${sub}</div></div>
-    <div class="site-kind">${kindLabel}<br>Webdel: <b>Nyttestyring</b></div>`;
+    <div class="site-logo" style="background:${LOGO[s.id]}" aria-hidden="true">${s.kind === 'hub' ? 'P' : esc(s.initials)}</div>
+    <div class="site-title">${esc(title)}</div>
+    <div class="site-meta"><span class="hide-sm">${s.kind === 'hub' ? 'Offentlig gruppe' : 'Privat gruppe'}</span>${s.kind === 'hub' ? `<span class="hide-sm">${plus}Opprett område</span>` : ''}<span class="hide-sm">${star}${s.kind === 'hub' ? 'Legg til i favoritter' : 'Følger'}</span><span>${person}${members} medlemmer</span></div>`;
   document.getElementById('nav').innerHTML = `<div class="nav-title">Nyttestyring</div>` + navItems().map((it) => it[0] === 'sep' ? '<div class="nav-sep"></div>' :
     `<button type="button" data-nav="${it[0]}" ${state.view === it[0] ? 'aria-current="page"' : ''}>${icon(it[2])}<span>${it[1]}</span></button>`).join('') +
     `<div class="nav-foot">Alle data lagres i listene på huben.</div>`;
