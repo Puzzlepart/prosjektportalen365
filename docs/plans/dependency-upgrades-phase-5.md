@@ -911,7 +911,9 @@ painted under the pointer, and cancels with Escape; it failed on the test channe
 `Droppable` renders the dragged copy through `renderClone` into a Fluent `Portal` (theme and the
 drawer's layer), wrapped in the module's `.root` so the row's nested styles apply. With the local
 bundle the test passes, the copy is drawn styled under the pointer, a drop reorders and the panel
-stays open. Recorded in the `pp365-ui` skill and the testing guide.
+stays open. Recorded in the `pp365-ui` skill and the testing guide. On the test channel (run 37763952796,
+`[apps-only:PortfolioWebParts,ProgramWebParts]`) the browser suite is 33 of 33, the new test
+included, and the user saw the drag right by hand.
 
 **"Beklager, noe gikk galt", no web parts on the page (OOTB ones too), with RequireJS' "Mismatched
 anonymous define() module: function(){return m}"** on the hub's home page, now and then. Not
