@@ -894,3 +894,32 @@ rig and Heft plugins. Still left from 2b's list: the Norwegian names in older up
 `GtStatusOpportunities` rows on existing hubs, `$schema.json` lacking two extensions, a guard against
 tests in `src/loc`, sub-area removal not being all-or-nothing, `DeleteReportButtonText` in
 ProjectWebParts' `en-us.js` without a typing, and text columns' numeric coercion in the export.
+
+### Slice 4, step 2 — the hand round (2026-10-08)
+
+The user's round on the test tenant passed but for two things.
+
+**The dragged column in `Vis eller skjul kolonner` vanished while dragged** and showed again where
+it was dropped. A browser probe found the cause: the v9 `OverlayDrawer` keeps an identity
+`transform` after sliding in, which makes it the containing block of the dragged item's
+`position: fixed`; the item was placed relative to the drawer (centre at x 1673 in a 1280 px
+window) and clipped by its `overflow`. Not React 18's doing and never released: 1.14 had the v8
+`Panel` and `react-beautiful-dnd`, and the drawer came with the Fluent v9 move in this release. A
+browser test came first, since jsdom has no layout (`e2e/tests/flows/edit-view-columns-drag.spec.ts`,
+with a local-bundle twin and a fixture): it starts a drag, asks that the item is in the window and
+painted under the pointer, and cancels with Escape; it failed on the test channel. Fix: the
+`Droppable` renders the dragged copy through `renderClone` into a Fluent `Portal` (theme and the
+drawer's layer), wrapped in the module's `.root` so the row's nested styles apply. With the local
+bundle the test passes, the copy is drawn styled under the pointer, a drop reorders and the panel
+stays open. Recorded in the `pp365-ui` skill and the testing guide.
+
+**"Beklager, noe gikk galt", no web parts on the page (OOTB ones too), with RequireJS' "Mismatched
+anonymous define() module: function(){return m}"** on the hub's home page, now and then. Not
+reproduced in 22 loads of the page with `define` hooked before SharePoint's loader. Every anonymous
+`define` came from a strings bundle loaded through its own script, attributed correctly, and none of
+the 348 scripts of a load holds an AMD define with that factory. React 18 is served as asked:
+RequireJS holds `react` and `react-dom` 18.3.1 and SPFx 1.24's `react-dom/client` component
+(`createRoot` a function), beside the 17.0.1 copies other solutions on the tenant ask for. The
+tenant's Microsoft Clarity customizer injects a plain script, but it calls no AMD `define`. The
+stack is SharePoint's loader alone. Left with the user: whether it shows on a site without
+Prosjektportalen, and a HAR from a failing load if it comes back.
