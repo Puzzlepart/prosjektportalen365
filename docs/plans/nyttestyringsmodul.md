@@ -167,7 +167,7 @@ Felt: `GtMeasurementDate`, `GtMeasurementValue` og `GtMeasurementComment` (alle 
 `GtMeasureIndicatorLookup` peker til hubens Måleindikatorer, og `GtSiteIdLookup` legges inn som
 dublett. Nye felt:
 
-- `GtBmAssessment` – vurdering: I rute, Avvik eller Kritisk.
+- `GtBmAssessment` – vurdering: I rute, Følg med eller Avvik.
 - `GtBmMigratedFrom`.
 
 ### 5.6 Antagelser (ny)
@@ -268,9 +268,9 @@ anbefales ikke.
 
    | Status | Regel |
    |---|---|
-   | I rute | Avvik ≤ toleranse |
-   | Avvik | Avvik ≤ 2 × toleranse |
-   | Kritisk | Større avvik |
+   | I rute | Inntil toleransen bak målbanen |
+   | Følg med | Inntil 2 × toleransen bak målbanen |
+   | Avvik | Mer enn 2 × toleransen bak målbanen |
 
    Toleransen settes i Globale innstillinger. Standard er 10 %.
 

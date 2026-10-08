@@ -827,7 +827,7 @@ const ci = (k) => icon(CONCEPT[k].icon, `ti ${k}-c`);
 const cchip = (k, text, attrs = '') => `<${attrs ? 'button type="button"' : 'span'} class="chip cc ${k}-c" ${attrs}>${icon(CONCEPT[k].icon)}${esc(text)}</${attrs ? 'button' : 'span'}>`;
 function kindOf(id) { if (byId('goals', id)) return 'goal'; if (byId('changes', id)) return 'chg'; if (byId('benefits', id)) return 'ben'; return 'ind'; }
 const nodeRef = (id) => `${ci(kindOf(id))}${esc(nodeTitle(id))}`;
-const STATUS = { ok: 'I rute', warn: 'Avvik', crit: 'Kritisk', none: 'Ikke målt' };
+const STATUS = { ok: 'I rute', warn: 'Følg med', crit: 'Avvik', none: 'Ikke målt' };
 const pill = (s, label) => `<span class="pill ${s}">${icon(s)}${esc(label || STATUS[s])}</span>`;
 const asmPill = (st) => pill(ASM_STATUS[st], st);
 const ASSESS = { ok: 'Grønn', warn: 'Gul', crit: 'Rød' };
@@ -990,7 +990,7 @@ function viewOverview() {
   const broken = asms.filter((a) => a.status === 'Holder ikke');
   const kpis = `<div class="kpis">
     <div class="kpi"><span class="k-label">${ci('ben')}Nyttevirkninger</span><span class="k-value">${benefits.length}</span><span class="k-note">${ci('ind')}${inds.length} måleindikatorer måler dem</span></div>
-    <div class="kpi"><span class="k-label">${ci('ind')}Måleindikatorer i rute</span><span class="k-value">${r.counts.ok}<small> av ${r.measured} målte</small></span><span class="k-note">${r.counts.warn ? pill('warn', r.counts.warn + ' avvik') : ''} ${r.counts.crit ? pill('crit', r.counts.crit + ' kritisk') : ''} ${r.counts.none ? pill('none', r.counts.none + ' ikke målt') : ''}</span></div>
+    <div class="kpi"><span class="k-label">${ci('ind')}Måleindikatorer i rute</span><span class="k-value">${r.counts.ok}<small> av ${r.measured} målte</small></span><span class="k-note">${r.counts.warn ? pill('warn', r.counts.warn + ' følg med') : ''} ${r.counts.crit ? pill('crit', r.counts.crit + ' avvik') : ''} ${r.counts.none ? pill('none', r.counts.none + ' ikke målt') : ''}</span></div>
     <div class="kpi"><span class="k-label">${ci('meas')}Målinger som forfaller</span><span class="k-value">${due.length}</span><span class="k-note">${overdue.length ? pill('crit', overdue.length + ' forfalt') : 'Ingen forfalt'} · innen ${fmtMonth(TODAY)}</span></div>
     <div class="kpi"><span class="k-label">${ci('asm')}Antagelser</span><span class="k-value">${asms.length}</span><span class="k-note">${broken.length ? pill('crit', broken.length + ' holder ikke') : ''} ${stale.length ? `<span>${stale.length} ikke vurdert på 6 mnd.</span>` : ''}</span></div>
   </div>`;
@@ -1006,7 +1006,7 @@ function viewOverview() {
   }
   rows.sort((a, b) => SEV[b.status] - SEV[a.status] || (a.ach ?? -1) - (b.ach ?? -1));
   const bars = `<div class="bars">${rows.map((x) => `
-    <div class="bar-row" ${x.open} data-tip="${esc(`<b>${esc(x.label)}</b><div class='row'><span>Oppnåelse</span><b>${pct(x.ach)}</b></div><div class='row'><span>Planlagt nå</span><b>${pct(x.planned)}</b></div><div class='row'><span>Indikatorer</span><b>${x.counts.ok} i rute, ${x.counts.warn} avvik, ${x.counts.crit} kritisk</b></div>`)}">
+    <div class="bar-row" ${x.open} data-tip="${esc(`<b>${esc(x.label)}</b><div class='row'><span>Oppnåelse</span><b>${pct(x.ach)}</b></div><div class='row'><span>Planlagt nå</span><b>${pct(x.planned)}</b></div><div class='row'><span>Indikatorer</span><b>${x.counts.ok} i rute, ${x.counts.warn} følg med, ${x.counts.crit} avvik</b></div>`)}">
       <div class="bar-label"><div class="t">${perSite ? '' : ci('ben')}${esc(x.label)}</div><div class="s">${esc(x.sub)}</div></div>
       <div class="bar-track"><div class="bar-fill" style="width:${x.ach ?? 0}%"></div>${x.planned != null ? `<div class="bar-plan" style="left:calc(${x.planned}% - 1px)"></div>` : ''}</div>
       <div class="bar-val">${pct(x.ach)}</div>

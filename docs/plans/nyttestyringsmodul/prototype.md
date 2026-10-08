@@ -55,7 +55,7 @@ Prioritet: **M** må med, **B** bør med, **K** kan med.
 
 | # | Skjerm | Pri | Innhold og interaksjon |
 |---|---|---|---|
-| 1 | **Oversikt** (alle nivå) | M | 4 nøkkeltallkort (nyttevirkninger, andel i rute, målinger som forfaller, antagelser som ikke er vurdert). Stolpediagram over oppnåelse per prosjekt (hub og program) eller per nyttevirkning (prosjekt). Tabell med avvik og kritiske indikatorer. På program: bryteren «Programmet / Alle prosjekter». |
+| 1 | **Oversikt** (alle nivå) | M | 4 nøkkeltallkort (nyttevirkninger, andel i rute, målinger som forfaller, antagelser som ikke er vurdert). Stolpediagram over oppnåelse per prosjekt (hub og program) eller per nyttevirkning (prosjekt). Tabell med indikatorer som har status «Følg med» eller «Avvik». På program: bryteren «Programmet / Alle prosjekter». |
 | 2 | **Indikatordetalj** | M | Linjediagram med målbanen fra start til mål (stiplet), delmål (punkter), faktiske målinger (heltrukket), målverdi (horisontal linje) og «i dag»-markør. Statusmerke. Tabell over målinger. Antagelsene som gjelder. Knappen «Registrer måling». |
 | 3 | **Oppfølging** | M | Arbeidsliste sortert på forfall («Forfalt», «Denne måneden», «Senere»). Rask registrering i en skuff. Kurven og statusen oppdateres med en gang. |
 | 4 | **Registrering** | M | Faner for Mål, Endringer, Nyttevirkninger, Indikatorer og Antagelser. Hver fane har en tabell og et skjema i skuff. Eierprosjekt er en nedtrekksliste på huben og et låst felt på prosjektet, med teksten «Lagres i Prosjektportalen (hub)». |
@@ -95,8 +95,8 @@ Virksomheten er **Fjordvik kommune**. Den er oppdiktet. Navn på personer er fik
   | Status | Antall indikatorer |
   |---|---|
   | I rute | 8 |
-  | Avvik | 4 |
-  | Kritisk | 2 |
+  | Følg med | 4 |
+  | Avvik | 2 |
   | Ingen målinger ennå | 2 |
 
 - Eksempler på indikatorer:
