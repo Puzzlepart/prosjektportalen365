@@ -13,11 +13,11 @@ A push runs the workflow files **of the pushed commit**, so read the target bran
 ## Read first
 
 - `git/commit-praksis.md`, `git/branching-og-arbeidsflyt.md` (one `releases/x.y` per minor; patches stay on it), `ci/kontinuerlig-integrasjon.md` (tags, «CI (build debug)»), `spfx/testing.md` «Finne og lese E2E-rapporten fra CI» and «Når en test feiler», `maler/kanaler.md`, `utgivelse/` (`versjonering.md`, `opprette-ny-versjon.md`, `smoketest.md`).
-- Where the guide lags, trust the files: the workflow tables in the CI chapter and `commit-praksis.md` (`ci-releases.yml` runs on `releases/1.15`, not `main`; `ci-channel-i18n.yml`, `pr-package-spfx-dev.yml` and `automatic_chores.yml` sit in `unused/`), «Bygg og installer (dev)» (25-35 min, `CI_DEV_TARGET_URL`), `[skip-test-ci]` and `[skip-ci]` on `main` (below), the branch list, «14 dager» and the `e2e` label in `testing.md`, `releases/1.12` in the branching page, `git push --tags` in `opprette-ny-versjon.md`, and `utgivelse/npm.md`.
+- Where the guide and the files disagree, trust the files (`.github/workflows/*.yml`, `Install/Build-Release.ps1`) and fix the guide. The CI, branching, versioning, release-build, SBOM and npm-scripts chapters were checked against them on 2026-10-08.
 
 ## 1. Before committing
 
-- [ ] The branch starts from the release branch: `git log --oneline origin/releases/1.15..HEAD` lists only your commits. Long-lived `feat/*` branches exist (`feat/dependency-upgrades-phase-5`), and a fix cut from one drags their commits into the PR. Names in use: `feat/<topic>`, `fix/<topic>`, `chore/<topic>` (the guide says `issues/<n>`).
+- [ ] The branch starts from the release branch: `git log --oneline origin/releases/1.15..HEAD` lists only your commits. Long-lived `feat/*` branches exist (`feat/dependency-upgrades-phase-5`), and a fix cut from one drags their commits into the PR. Names in use: `feat/<topic>`, `fix/<topic>`, `chore/<topic>`, `docs/<topic>`, and `issues/<n>` for a single issue.
 - [ ] Node 22 (`nvm use`); `Build-Release.ps1` exits on any other major.
 - [ ] `npm test` in each touched solution (after a `shared-library` change, `rush rebuild -o pp365-shared-library` first), `npm run lint`, and after loc edits `npm run validate-loc`. It writes `localization-report.md` in the solution, which is not in the repo and not ignored: leave it out of the commit.
 - [ ] Coverage: each solution's `config/jest.config.json` sets a `coverageThreshold`. Jest prints `coverage threshold for ... not met` but Heft passes, so only `Build-Release.ps1` (CI, or a local `npm run build-release`) fails on it. Read the test output.

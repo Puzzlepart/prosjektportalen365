@@ -2,7 +2,7 @@
 
 ### Hva er SBOM?
 
-SBOM (Software Bill of Materials) er en omfattende liste over alle programvarekomponenter, biblioteker og avhengigheter som brukes i Prosjektportalen 365. Den gir innsyn i hvilke åpen kildekode- og tredjepartskomponenter som er inkludert i prosjektet, noe som er viktig for:
+SBOM (Software Bill of Materials) er en liste over programvarekomponentene, bibliotekene og avhengighetene som brukes i Prosjektportalen 365. Vår SBOM lister de direkte avhengighetene slik `package.json` i hvert prosjekt oppgir dem (spesifikatoren, f.eks. `~9.74.8`), ikke de løste versjonene i lockfila eller de transitive avhengighetene. Den gir innsyn i hvilke åpen kildekode- og tredjepartskomponenter som er inkludert i prosjektet, noe som er viktig for:
 
 - **Sikkerhet**: Identifisering av sårbare avhengigheter
 - **Etterlevelse**: Oppfyllelse av regulatoriske krav
@@ -26,7 +26,7 @@ npm run generate-sbom
 ```
 
 Dette vil:
-- Skanne alle `package.json`-filer i monorepoet
+- Lese `package.json` i roten og i hvert prosjekt i `rush.json`
 - Samle alle avhengigheter (både produksjons- og utviklingsavhengigheter)
 - Generere en omfattende SBOM.md-fil i roten av repoet
 - Inkludere metadata som versjoner og hvilke prosjekter som bruker hver avhengighet
@@ -64,7 +64,7 @@ Arbeidsflyten:
 Skriptet for SBOM-generering ligger i `.tasks/generate-sbom.js` og følger disse beste praksisene:
 
 - **CycloneDX-inspirert format**: Basert på industristandarder
-- **Fullstendig dekning**: Inkluderer alle prosjekter i Rush-monorepoet
+- **Fullstendig dekning**: Leser prosjektene fra `rush.json`, så et nytt prosjekt kommer med uten endring i skriptet
 - **Lesbart format**: Generert som Markdown for enkel visning
 - **Rik på metadata**: Inkluderer versjonsnumre og avhengighetsrelasjoner
 - **Automatisert**: Integreres med eksisterende bygge- og versjoneringsprosesser
@@ -74,7 +74,7 @@ Skriptet for SBOM-generering ligger i `.tasks/generate-sbom.js` og følger disse
 Når du oppdaterer avhengigheter:
 
 1. Oppdater de relevante `package.json`-filene
-2. Kjør `npm install` eller `rush update`
+2. Kjør `npm run rush:update` i roten (aldri `npm install` i en løsning)
 3. Kjør `npm run generate-sbom` for å oppdatere SBOM-en
 4. Commit både endringene i package.json og den oppdaterte SBOM.md
 
@@ -89,7 +89,9 @@ SBOM-en kan brukes med sikkerhetsanalyseverktøy for å:
 - Overvåke sikkerhetsadvarsler
 
 Anbefalte verktøy:
-- `npm audit` - Innebygd npm-sikkerhetsskanner
-- GitHub Dependabot - Automatiske sikkerhetsoppdateringer
+- `node common/scripts/install-run-rush-pnpm.js audit` - pnpms sikkerhetsskanner over hele Rush-lockfila (`--prod` for bare produksjonsavhengighetene). `npm audit` i roten ser bare rotens egne avhengigheter
+- GitHub Dependabot - varsler om sårbare avhengigheter (de automatiske sikkerhetsoppdateringene er slått av i repoet)
 - Snyk - Kontinuerlig sikkerhetsovervåking
 - OWASP Dependency-Check - Sårbarhetsdeteksjon
+
+`xlsx` (Excel-eksporten i `shared-library`) hentes fra SheetJS' egen CDN (`https://cdn.sheetjs.com/xlsx-<versjon>/xlsx-<versjon>.tgz`), ikke fra npm, så GitHubs avhengighetsgraf og Dependabot ser den ikke, og npm-registerets sikkerhetsmeldinger dekker bare versjonene som ligger der. Sjekk [SheetJS' sikkerhetsmeldinger](https://cdn.sheetjs.com/advisories/) ved hver utgivelse.

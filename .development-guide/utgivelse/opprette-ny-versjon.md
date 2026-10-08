@@ -24,10 +24,8 @@ Bruk `patch` i stedet for `minor` for en patch. `npm install` gir skriptene i `p
 `npm version` setter versjonen i rotens `package.json` og `package-lock.json` og kjører så `postversion`:
 
 - `generate-readme` bygger `README.md` og `.development-guide/README.md` på nytt (den henter `@appnest/readme` med `npx`); se [README-generering](../ci/readme-generering.md).
-- `sync-version` (`.tasks/automatic-versioning.js`) setter versjonen i `SharePointFramework/*/package.json`, i hver løsnings `config/package-solution.json` (som `x.y.z.0`) og i hver `src/**/manifest.json`.
+- `sync-version` (`.tasks/automatic-versioning.js`) setter versjonen i `package.json` i hvert prosjekt i `rush.json` (de seks løsningene, `Templates`, `SharePointFramework/.tasks`, `.eslint-config`, `.jest-config` og `e2e`), i hver løsnings `config/package-solution.json` (som `x.y.z.0`) og i hver `src/**/manifest.json`; se [Versjonering](versjonering.md).
 - `generate-sbom` skriver `SBOM.md`; se [SBOM-generering](../ci/sbom.md).
-
-`sync-version` hopper over mappene som begynner med punktum, og mappene utenfor `SharePointFramework/`. Sett versjonen for hånd i `SharePointFramework/.tasks/package.json`, `SharePointFramework/.eslint-config/package.json`, `SharePointFramework/.jest-config/package.json`, `Templates/package.json` og `e2e/package.json`. Se også [Versjonering](versjonering.md).
 
 Commit alt som én commit på release-branchen, og push. For 1.14.0 var det commiten `v1.14.0` på `releases/1.14`.
 
@@ -48,7 +46,7 @@ Kjør aldri `npm version` inne i en løsning; se [NPM](npm.md).
 - Opprett utgivelsen `v<versjon>` med `main` som mål; GitHub lager taggen der.
 - Teksten lenker til release notes og gjentar endringsloggens seksjon for versjonen under overskriftene i `.github/RELEASE_TEMPLATE.md`.
 - Legg ved installasjonspakkene som zip-filer. For 1.14.0 het de `pp365-1.14.0.zip` og `pp365-1.14.0-test.zip`. Ingen bygg gir disse navnene: pakk innholdet i artefaktene `release-package` og `release-package-test`, eller gi nytt navn til zip-filene et lokalt bygg på `main` lager: `release/pp365-<versjon>.<hash>.zip`, og `release/pp365-<versjon>.<hash>-test.zip` med `-Channel test` (se [Bygge en ny utgivelse](bygge-utgivelse.md)).
-- Taggen starter `generate-sbom.yml`, som i dag feiler på steget «Push changes». `SBOM.md` er allerede oppdatert av `postversion`.
+- Taggen starter `generate-sbom.yml`, som bare laster opp SBOM-en som artefaktet `sbom`; den committer ingenting. `SBOM.md` er allerede oppdatert av `postversion`.
 
 ### 5. Neste versjon
 

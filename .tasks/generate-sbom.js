@@ -13,8 +13,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const util = require('util');
-const glob = util.promisify(require('glob'));
 
 /**
  * Get file content as JSON
@@ -27,25 +25,18 @@ function getFileContent(filePath) {
 }
 
 /**
- * Get all package.json files in the monorepo
+ * Get the package.json of the root and of every project in rush.json, the dot folders under
+ * `SharePointFramework/` and `e2e` included (a glob over `SharePointFramework/*` missed them), so a
+ * new project is covered without a change here
  * @returns {Promise<string[]>} Array of package.json file paths
  */
 async function getAllPackageFiles() {
-    const rootPkg = path.resolve(__dirname, '..', 'package.json');
-    const spfxPkgs = await glob('SharePointFramework/*/package.json', { cwd: path.resolve(__dirname, '..') });
-    const templatePkg = path.resolve(__dirname, '..', 'Templates/package.json');
-    
-    const allPkgs = [
-        rootPkg,
-        ...spfxPkgs.map(p => path.resolve(__dirname, '..', p))
+    const root = path.resolve(__dirname, '..');
+    const rush = getFileContent(path.resolve(root, 'rush.json'));
+    return [
+        path.resolve(root, 'package.json'),
+        ...rush.projects.map((project) => path.resolve(root, project.projectFolder, 'package.json'))
     ];
-    
-    // Add Templates package if it exists
-    if (fs.existsSync(templatePkg)) {
-        allPkgs.push(templatePkg);
-    }
-    
-    return allPkgs;
 }
 
 /**

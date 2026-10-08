@@ -93,12 +93,12 @@ Les [testing.md](spfx/testing.md) før du skriver din første test.
 
 Se [branching og arbeidsflyt](git/branching-og-arbeidsflyt.md), [commit-praksis](git/commit-praksis.md) og [kontinuerlig integrasjon](ci/kontinuerlig-integrasjon.md).
 
-1. **Branch.** `main` er siste utgivelse. Utviklingen skjer på release-branchen for neste minor, `releases/x.y` (nå `releases/1.15`). Lag din branch derfra: `issues/<nr>` for et issue, `feat/<navn>` for større arbeid.
+1. **Branch.** `main` er siste utgivelse. Utviklingen skjer på release-branchen for neste minor, `releases/x.y` (nå `releases/1.15`). Lag din branch derfra, med navn etter typen arbeid: `feat/<emne>`, `fix/<emne>`, `chore/<emne>` eller `docs/<emne>`, eller `issues/<nr>` for et enkelt issue.
 2. **Commit** på engelsk, semantisk: `<type>(<scope>): <subject>`, f.eks. `fix(projectwebparts): resolve timeline rendering issue`. Typene er `feat`, `fix`, `docs`, `style`, `refactor`, `chore`, `ci` og `install`.
 3. **CI-tagger i emnelinjen.** Bare første linje leses, også i en squash-merge:
    - `[skip-ci]`: ingen bygg eller utrulling, f.eks. for dokumentasjon.
    - `[apps-only]`: bare SPFx-pakkene, ikke malene; bruk det når `Templates/` er urørt.
-   - `[apps-only:X]`: bare de oppgitte løsningene, f.eks. `[apps-only:ProjectWebParts,shared-library]`.
+   - `[apps-only:X]`: bare de oppgitte løsningene, f.eks. `[apps-only:ProjectWebParts,PortfolioWebParts]`. `shared-library` er bundlet inn i løsningene som bruker den, så en endring der når sidene bare gjennom løsningene du lister.
    - `[skip-e2e]`: hopper over Playwright-testene etter utrullingen.
    - `[build-debug]`: bygger testkanalens pakke uten utrulling, for å prøve endringer i selve bygget.
 4. **Hva CI gjør.** En push til `releases/1.15` bygger og oppgraderer utviklingsmiljøet (`ci-releases.yml`) og bygger testkanalen, ruller den ut til testtenanten og kjører Playwright mot den (`ci-channel-test.yml`). En push dit oppgraderer altså testtenanten. Det kjører ingen bygg på pull requests i dag, så bygg og test lokalt før du ber om review.

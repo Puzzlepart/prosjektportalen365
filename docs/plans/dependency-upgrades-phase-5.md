@@ -865,3 +865,32 @@ Next: a full build, then CI on the test channel (`[apps-only]`), which shows whe
 serves React 18 to an RC build (P5-4), then the hand round: PnP's term field and property panes,
 the timelines, drag and drop in `Vis eller skjul kolonner`, the project cards, the dialogs and the
 footer.
+
+### Between slices: the leftover list, part 1 (2026-10-08)
+
+From 2b's "found and left": the stale guide chapters, checked against the workflows,
+`Build-Release.ps1`, every `package.json` and GitHub. `versjonering.md`, `bygge-utgivelse.md` and
+`branching-og-arbeidsflyt.md` rewritten (sync-version covers every Rush project; the release build's
+switches, output and the checks only it makes; `releases/1.15`, the branch names in use, squash
+merge with the tag in the merge subject). `kontinuerlig-integrasjon.md`: `[build-kurs]` added,
+`[skip-main-ci]` and `[skip-test-ci]` described as they behave, `build-release.yml` reading the
+whole message, the dev job's certificate sign-in and times, `[apps-only:…]` explained against the
+bundling (listing `shared-library` ships nothing a page loads), and the dev branch's screenshot
+removed. `sbom.md`: direct dependencies only, `npm run rush:update`, and an audit that sees the
+solutions. `npm-skript.md`: the missing scripts and the three missing projects. Also
+`kom-i-gang.md`'s `[apps-only:…]` example and branch names, `opprette-ny-versjon.md`'s
+sync-version and SBOM lines, `testing.md`'s artifact retention and label, `commit-praksis.md`'s
+`main` exception, and the `pp365-release` and `pp365-testing` skills. `generate-sbom.js` reads its
+projects from `rush.json` (12 `package.json` files, was 8), and `SBOM.md` and the guide's README are
+regenerated (the generator writes CR around its separators; stripped).
+
+**Found:** `[skip-test-ci]` does nothing (the job's `if:` starts with `always() ||`);
+`ci-channel-test.yml` asks for 14 days of artifact retention where the repository allows 7.
+`node common/scripts/install-run-rush-pnpm.js audit --prod` reports 36 advisories (4 critical, 21
+high, 13 moderate). Direct dependencies among them: `xmldom` 0.6.0 in shared-library (critical, so
+in the bundles), `lodash`, `moment`, `glob`, `react-gauge-component` (through `compression`) and
+`msgraph-helper` (through `node-fetch`); the rest come through the PnP controls and SPFx's own build
+rig and Heft plugins. Still left from 2b's list: the Norwegian names in older upgrade steps, the old
+`GtStatusOpportunities` rows on existing hubs, `$schema.json` lacking two extensions, a guard against
+tests in `src/loc`, sub-area removal not being all-or-nothing, `DeleteReportButtonText` in
+ProjectWebParts' `en-us.js` without a typing, and text columns' numeric coercion in the export.
