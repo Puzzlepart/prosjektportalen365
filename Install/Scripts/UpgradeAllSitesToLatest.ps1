@@ -55,6 +55,7 @@ $CI_MODE = $CI.IsPresent
 
 [version]$global:__InstalledVersion = $null
 [version]$global:__PreviousVersion = $null
+$global:__UpgradeFailed = $false
 $global:__PnPConnection = $null
 $global:__CurrentChannelConfig = $null
 $InstallStartTime = (Get-Date -Format o)
@@ -148,7 +149,16 @@ try {
     Write-Host "The following sites were found to be part of the Project Portal hub:"
     $ProjectsInHub | ForEach-Object { Write-Host "`t$_" }
 
-    if (-not $CI_MODE) {
+    # Signed in as an app with a certificate (as CI is), the app reaches every site through its
+    # application permissions, and SharePoint refuses to make it a site owner ("Kan ikke fullføre
+    # handlingen"), which stopped the run at the first site. Only a signed-in user is given, and
+    # afterwards relieved of, owner access.
+    $AppOnly = -not [string]::IsNullOrEmpty($CertificateBase64Encoded)
+    if ($AppOnly) {
+        Write-Host "Signed in as an app with a certificate: it reaches every site already, so no owner access is granted or removed."
+    }
+
+    if (-not $CI_MODE -and -not $AppOnly) {
         Write-Host "We can grant $UserName admin access to existing projects. This will ensure that all project will be upgraded. If you select no, the script will only upgrade the sites you are already an owner of."
         do {
             $GrantAccessConfirm = Read-Host "Do you want to grant $UserName access to all sites in the hub (listed above)? (y/n)"
@@ -156,7 +166,7 @@ try {
         while ("y", "n" -notcontains $GrantAccessConfirm)
     }
 
-    if ($GrantAccessConfirm -eq "y" -or $CI_MODE) {    
+    if (-not $AppOnly -and ($GrantAccessConfirm -eq "y" -or $CI_MODE)) {
         $ProjectsInHub | ForEach-Object -Begin { $ProgressCount = 0 } {
             [Int16]$PercentComplete = (++$ProgressCount) * 100 / $ProjectsInHub.Count
             Write-Progress -Activity "Granting access to all sites in the hub" -Status "$PercentComplete% Complete" -PercentComplete $PercentComplete -CurrentOperation "Processing site $_"
@@ -176,7 +186,7 @@ try {
         Write-Host "`t`tDone processing $_" -ForegroundColor Green
     }
 
-    if (-not $CI_MODE) {
+    if (-not $CI_MODE -and -not $AppOnly) {
         Write-Host "We can remove $UserName's admin access from existing projects."
         do {
             $RemoveAccessConfirm = Read-Host "Do you want to remove $UserName's admin access from all sites in the hub? (y/n)"
@@ -184,7 +194,7 @@ try {
         while ("y", "n" -notcontains $RemoveAccessConfirm)
     }
 
-    if ($RemoveAccessConfirm -eq "y" -or $CI_MODE) {
+    if (-not $AppOnly -and ($RemoveAccessConfirm -eq "y" -or $CI_MODE)) {
         $ProjectsInHub | ForEach-Object -Begin { $ProgressCount = 0 } {    
             [Int16]$PercentComplete = (++$ProgressCount) * 100 / $ProjectsInHub.Count
             Write-Progress -Activity "Removing admin access" -Status "$PercentComplete% Complete" -PercentComplete $PercentComplete -CurrentOperation "Processing site $_"
@@ -207,9 +217,15 @@ catch {
     Write-Host "[ERROR] An error occurred during the upgrade process. Check the log file for more information." -ForegroundColor Red
     Write-Host $_.Exception.Message -ForegroundColor Red
     Write-Host $_.Exception.StackTrace -ForegroundColor Red
+    # A failed upgrade must fail the CI job; it ended green before.
+    if ($CI_MODE) { $global:__UpgradeFailed = $true }
 }
 finally {
     Stop-Transcript
+}
+
+if ($global:__UpgradeFailed) {
+    exit 1
 }
 
 Connect-SharePoint -Url $Url -ConnectionInfo $ConnectionInfo

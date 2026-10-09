@@ -52,7 +52,7 @@ Choosing a tag. Decision A bundles `pp365-shared-library`, `pp365-projectwebpart
 | `[skip-e2e]` | Skips "End-to-end smoke (test channel)". |
 | `[skip-upgrade]` | Skips the upgrade (in `ci-channel-test.yml` both paths), and with it Install and e2e. `ci-releases.yml`'s packages-only upgrade ignores it. |
 | `[skip-install]` | `ci-releases.yml`: skips Install, the fresh site per commit (~46 min). |
-| `[upgrade-all-sites-to-latest]` | Runs `Install/Scripts/UpgradeAllSitesToLatest.ps1` after a full upgrade. |
+| `[upgrade-all-sites-to-latest]` | Runs `Install/Scripts/UpgradeAllSitesToLatest.ps1` after a full upgrade (never after `[apps-only]`: the job needs the full build and upgrade). It signs in with the certificate, so it grants itself no owner access, and a failure fails the job (until 2026-10-09 it stopped at the first site and still ended green). |
 | `[skip-main-ci]` | `main`, whole message: skips "Build release (CI)" and kurs. "Build test channel release (CI)" still runs: its `if:` starts with `always()`. |
 | `[build-kurs]` | `main`, whole message: also builds the kurs package. |
 | `[skip-test-ci]` | No effect, for the same `always()`. |

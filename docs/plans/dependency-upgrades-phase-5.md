@@ -1004,3 +1004,16 @@ All six suites then, from `jest-output/coverage/coverage-summary.json`: every fl
 42.3/78.72/64.17/42.3 against 41/76/63/41). The floors stay where they are until CI's own numbers
 show the gain, since the fast loop compiles with `tsc`, not Heft. The testing skill and guide say
 how a large loaded module drops coverage, and that the fast loop prints no threshold.
+
+The full run with the coverage fix (37915131776) went green. The channel-id guard ran first ("6
+solution(s) carry the main channel ids"); the upgrade's new 1.15.0 step recycled the test hub's three
+old rows ("Lav", "Medium", "Høy" on project column 54), the right rows being there already; the
+browser suite was 33 passed and 1 flaky (a 90 s timeout loading a document library, green on the
+retry), the new header test included. The sites job was the first `[upgrade-all-sites-to-latest]`
+run on the test channel, and it stopped at the first site: signed in with the certificate, the
+script tried to make the app (`app@sharepoint`) a site owner, which SharePoint refuses ("Kan ikke
+fullføre handlingen"), and its catch ended the job green. Both versions read 1.14.0, so no per-site
+step would have run. The script now grants and removes no owner access when it signs in with a
+certificate (the app reaches every site through its permissions; a signed-in user is still asked),
+and exits 1 on a failure in CI. To be proven by the next full run with the tag (it needs the full
+build and upgrade, so not with `[apps-only]`).
