@@ -56,6 +56,7 @@ import { IList } from '@pnp/sp/lists'
 import { IItem } from '@pnp/sp/items'
 import { PermissionKind, Web } from '@pnp/sp/presets/all'
 import resource from 'SharedResources'
+import { removeChildProjectsFromProgram } from './childProjectRemoval'
 
 enum ParentProjectOperation {
   Add = 'add',
@@ -1266,12 +1267,8 @@ export class SPDataAdapter
   }
 
   /**
-   * Remove child projects.
-   *
-   * The hubs and the child projects' parent links are updated first and the program's own list
-   * last, so a hub that cannot be updated leaves the program listing them, as the administration
-   * still shows them after the error, and a second try finishes the job. Every step sets the same
-   * end state again, so a step that went through before is safe to repeat.
+   * Remove child projects: the hubs and the parent links first, the program's own list last
+   * (`removeChildProjectsFromProgram`).
    *
    * @param projectToRemove Projects to delete
    */
@@ -1283,39 +1280,26 @@ export class SPDataAdapter
         '(SPDataAdapter) (removeChildProjects) Property item not initialized. Call fetchChildProjects() first.'
       )
     }
-    const { GtChildProjects } = await this._propertyItem.select('GtChildProjects')()
-    let projects: Array<Record<string, string>> = []
-    try {
-      projects = GtChildProjects ? JSON.parse(GtChildProjects) : []
-    } catch (error) {
-      console.warn(
-        '(SPDataAdapter) (removeChildProjects) Failed to parse GtChildProjects. Resetting to empty array.',
-        error
-      )
-      projects = []
-    }
-    const updatedProjects = projects.filter(
-      (p) => !projectToRemove.some((el) => el.SiteId === p.SiteId)
-    )
-    const updateProperties = { GtChildProjects: JSON.stringify(updatedProjects) }
-
-    const uniqueHubIds = new Set(projectToRemove.map((p) => p.HubSiteId).filter(Boolean))
-    await Promise.all([
-      ...Array.from(uniqueHubIds).map((hubSiteId) =>
-        this.updateProjectInHub(updateProperties, hubSiteId as string)
-      ),
-      ...projectToRemove.map((project) =>
-        project.HubSiteId
-          ? this._updateChildProjectParents(
-              project.SiteId,
-              project.HubSiteId,
-              ParentProjectOperation.Remove
+    return await removeChildProjectsFromProgram(
+      {
+        readChildProjects: async () => {
+          const { GtChildProjects } = await this._propertyItem.select('GtChildProjects')()
+          try {
+            return GtChildProjects ? JSON.parse(GtChildProjects) : []
+          } catch (error) {
+            console.warn(
+              '(SPDataAdapter) (removeChildProjects) Failed to parse GtChildProjects. Resetting to empty array.',
+              error
             )
-          : Promise.resolve()
-      )
-    ])
-    await this._propertyItem.update(updateProperties)
-
-    return updatedProjects
+            return []
+          }
+        },
+        writeChildProjects: (properties) => this._propertyItem.update(properties),
+        updateHub: (properties, hubSiteId) => this.updateProjectInHub(properties, hubSiteId),
+        removeParent: (siteId, hubSiteId) =>
+          this._updateChildProjectParents(siteId, hubSiteId, ParentProjectOperation.Remove)
+      },
+      projectToRemove
+    )
   }
 }

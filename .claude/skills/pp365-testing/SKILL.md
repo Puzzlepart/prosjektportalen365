@@ -24,7 +24,7 @@ Authoritative description (Norwegian): `.development-guide/spfx/testing.md`. Thi
 
 ## Coverage floors
 
-Each solution's `config/jest.config.json` sets `coverageThreshold.global` (statements, branches, functions, lines), floors measured in phase 4. Raise them when coverage grows; never lower them. Jest reports a miss but Heft's test phase passes, so deleting tests or adding untested code stays green locally and fails `Build-Release.ps1` (CI). Read Jest's coverage summary before pushing.
+Each solution's `config/jest.config.json` sets `coverageThreshold.global` (statements, branches, functions, lines), floors measured in phase 4. Raise them when coverage grows; never lower them. Jest reports a miss but Heft's test phase passes, so deleting tests or adding untested code stays green locally and fails `Build-Release.ps1` (CI). Read Jest's coverage summary before pushing. Coverage counts only the files the tests load: a new test that imports a large untested module (ProgramWebParts' `SPDataAdapter.ts`, 34 methods) pulls all of it in and can drop a floor (functions fell from 63 % to 44 % on 2026-10-08). Test the logic in a module of its own with its dependencies passed in (`ProgramWebParts/src/data/childProjectRemoval.ts`), or cover the module fully. The fast loop (`heft run --only test`) prints no threshold: read `jest-output/coverage/coverage-summary.json` (`total`) after a full run of the solution's suite.
 
 ## The harness: `pp365-jest-config` (SharePointFramework/.jest-config)
 

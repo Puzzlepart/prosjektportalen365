@@ -994,3 +994,13 @@ next full test-channel run with `[upgrade-all-sites-to-latest]`.
 Noted, not changed: `validate-loc` reports ProjectWebParts' `ColorPickerStrings` missing from both
 bundles; it is there, as an object typed by a separate interface the validator does not read, and
 nothing in the code uses it.
+
+The full test-channel run of that commit (37776356403) stopped in the release build: ProgramWebParts'
+function coverage was 44.44 % against its floor of 63. Coverage counts only the files the tests load,
+and the removal test loaded `SPDataAdapter.ts` (34 methods, one of them tested). The order now lives
+in `src/data/childProjectRemoval.ts` with its operations passed in, tested there (three cases), and
+the adapter delegates (`return await`, so a missing property item still rejects rather than throws).
+All six suites then, from `jest-output/coverage/coverage-summary.json`: every floor met (ProgramWebParts
+42.3/78.72/64.17/42.3 against 41/76/63/41). The floors stay where they are until CI's own numbers
+show the gain, since the fast loop compiles with `tsc`, not Heft. The testing skill and guide say
+how a large loaded module drops coverage, and that the fast loop prints no threshold.
