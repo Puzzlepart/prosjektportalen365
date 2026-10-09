@@ -1019,3 +1019,46 @@ and exits 1 on a failure in CI. Proven by the next full run with the tag (379269
 script signed in as the app, granted nothing, and processed all 49 sites of the test hub (8 skipped
 as not project sites, having no `Prosjektegenskaper`); the 1.15.0 step found no old opportunity row
 left, as it should on a second run; the browser suite was 34 of 34.
+
+### Between slices: six findings from the user's round (2026-10-09)
+
+While the user tested before the merge, six findings were fixed, two of them by agents in their own
+solutions (the matrices in ProjectWebParts; the program administration in ProgramWebParts, after a
+proposal that needed the hub's grid first).
+
+1. **The title column's panel button** was pushed out of a narrow cell: the title link kept its
+   full width inside Fluent's truncating cell layout. The title (and the `Prosjektinformasjon`
+   render option's value) now shrinks with an ellipsis and the button keeps its size
+   (`TitleColumn.module.scss`). 1.14 had the same cell. A read-only browser test narrows the cells
+   and hit-tests the buttons (`flows/portfolio-overview-title-button.spec.ts`); the test hub's
+   overview shows the test user no button, so it skips there.
+2. **Sorting a grouped list.** The aggregated overview ended the grouping on a sort (1.14 too);
+   it now sorts within the groups as the portfolio overview does. Both now sort through one helper,
+   `List/sortItems.ts` (by data type, or a custom order), then stably by the group value: the
+   portfolio overview's grouped sort compared numbers and custom orders as text, and
+   `sortNumerically` compared numbers in text (search returns them so) as text, `"30"` before
+   `"4"`, in both web parts and in 1.14. Tests first: the aggregation's reducer, the overview's
+   `useFilteredData`, `sortItems` and `sortNumerically`.
+3. **The program administration** (both the page's list and the add dialog) moved onto the hub's
+   `ListGrid`: one grid with a group per hub, Phase and Created columns from search, sortable. The
+   grid gained `selectionMode: 'none'`, a caller-kept `selectedItems` and `className`, tested in
+   `ListGrid.test.tsx`; `GtChildProjects` stores the same fields as before. "Lagt til" (date added)
+   is not stored anywhere and was left for the user to decide. The program administration's
+   browser tests find rows by their "Velg rad" check and groups by `aria-expanded` instead of the
+   old per-hub grids.
+4. **List typography.** Every list now has v8's (1.14's) look, measured from Fluent v8's source:
+   column names 14px semibold, values 12px in `colorNeutralForeground3`, links at the values'
+   size. The hub's grid inherited 14px, `DataGridList`'s headers were 12px and the dynamic list's
+   values dark.
+5. **The matrices' query.** `Listenavn` and the CAML query (`viewXml`) had been ignored since
+   1.12.0, and no property pane change took effect before a reload; fixed with a debounced refetch
+   in the base web part (12 new tests). The release note's matrix section was corrected (option
+   names, the badge, the filter applying to the program's own elements, which is left with the
+   user as a design question).
+6. **The people picker's placeholder** sat against the left border: a v8-era class with a typo'd
+   token (`--pacingHorizontalMNudge`) zeroed Fluent's padding. The class is gone; `TagPicker`
+   draws its own box.
+
+Coverage floors were left where they were: two agents raised them to within a fraction of a
+percent of a local run, which is what failed CI on 2026-10-08; they go up from CI's numbers.
+

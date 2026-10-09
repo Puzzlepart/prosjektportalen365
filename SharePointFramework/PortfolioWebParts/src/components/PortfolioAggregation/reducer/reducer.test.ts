@@ -633,20 +633,18 @@ describe('PortfolioAggregation reducer', () => {
       keepsOrder(true, ['C', 'B', 'A'])
     })
 
-    it('sorts text rows both ways, ignoring case, marks the sorted column and ends the grouping', () => {
+    it('sorts text rows both ways, ignoring case, and marks the sorted column', () => {
       const { title, phase } = categoryColumns()
       const { reducer, state } = setup(
         {},
         {
           items: [{ Title: 'Bravo' }, { Title: 'alfa' }, { Title: 'Charlie' }],
-          columns: [title, phase],
-          groupBy: phase
+          columns: [title, phase]
         }
       )
       const ascending = reducer(state, SET_SORT({ column: title, isSortedDescending: false }))
       expect(field(ascending, 'Title')).toEqual(['alfa', 'Bravo', 'Charlie'])
       expect(ascending.sortBy).toBe(title)
-      expect(ascending.groupBy).toBeNull()
       // The list header shows the direction from `isSortedDescending`.
       expect(ascending.columns.map((c) => [c.isSorted, c.isSortedDescending])).toEqual([
         [true, false],
@@ -658,6 +656,47 @@ describe('PortfolioAggregation reducer', () => {
         [true, true],
         [false, false]
       ])
+    })
+
+    it('sorts within the groups when grouped, keeping the grouping and the groups in order, as the portfolio overview does', () => {
+      const { title, phase, budget } = categoryColumns()
+      const { reducer, state } = setup(
+        {},
+        {
+          // Search returns numbers as text.
+          items: [
+            { Title: 'B', GtProjectPhase: 'Realisere', GtBudgetTotal: '50' },
+            { Title: 'C', GtProjectPhase: 'Konsept', GtBudgetTotal: '4' },
+            { Title: 'A', GtProjectPhase: 'Konsept', GtBudgetTotal: '30' },
+            { Title: 'D', GtProjectPhase: 'Realisere', GtBudgetTotal: '7' }
+          ],
+          columns: [title, phase, budget]
+        }
+      )
+      const rowsOf = (s: any) => s.items.map((i: any) => `${i.GtProjectPhase}:${i.Title}`)
+      const grouped = reducer(state, SET_GROUP_BY({ column: phase }))
+      const descending = reducer(grouped, SET_SORT({ column: title, isSortedDescending: true }))
+      expect(descending.groupBy).toBe(phase)
+      expect(rowsOf(descending)).toEqual(['Konsept:C', 'Konsept:A', 'Realisere:D', 'Realisere:B'])
+      expect(descending.columns.map((c) => [c.isSorted, c.isSortedDescending])).toEqual([
+        [true, true],
+        [false, false],
+        [false, false]
+      ])
+      // Ungrouping afterwards keeps the sort. Asserted before the next sort, which marks the
+      // same column objects (the reducer sets `isSorted` on them in place, as the list reads it).
+      const ungrouped = reducer(descending, SET_GROUP_BY({ column: phase }))
+      expect(ungrouped.groupBy).toBeNull()
+      expect(field(ungrouped, 'Title')).toEqual(['D', 'C', 'B', 'A'])
+      const ascending = reducer(descending, SET_SORT({ column: title, isSortedDescending: false }))
+      expect(ascending.groupBy).toBe(phase)
+      expect(rowsOf(ascending)).toEqual(['Konsept:A', 'Konsept:C', 'Realisere:B', 'Realisere:D'])
+      // A number column sorts by its numbers within each group, not as text.
+      const byBudget = reducer(grouped, SET_SORT({ column: budget, isSortedDescending: false }))
+      expect(rowsOf(byBudget)).toEqual(['Konsept:C', 'Konsept:A', 'Realisere:D', 'Realisere:B'])
+      // And so does ungrouping, which sorts all rows by it again.
+      const ungroupedByBudget = reducer(byBudget, SET_GROUP_BY({ column: phase }))
+      expect(field(ungroupedByBudget, 'Title')).toEqual(['C', 'D', 'A', 'B'])
     })
 
     it('sorts number, currency and percentage rows by their numbers', () => {

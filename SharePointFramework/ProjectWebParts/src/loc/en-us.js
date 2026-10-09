@@ -312,7 +312,7 @@ define([], function () {
     HookArchiveAuthFieldDescription: 'Authentication token or API key for the archive webhook endpoint',
     ViewsGroupName: 'Views',
     ViewVersionHistoryText: 'View version history',
-    ViewXmlFieldLabel: 'View XML query',
+    ViewXmlFieldLabel: 'CAML query (view XML)',
     WebPartNoAccessMessage:
       'You do not have access to view this web part. <br/> <br/> You must either have access to the portfolio site or the project must be free from the portfolio site.',
     WidthFieldLabel: 'Width (pixels)',

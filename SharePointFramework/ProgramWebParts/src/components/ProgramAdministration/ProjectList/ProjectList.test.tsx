@@ -1,46 +1,53 @@
-// The list's hook derives groups and filtering from the props; it is mocked before the import so
-// the test controls the rows and the grouping. The commands and the project logo reach SharePoint
-// and are stubbed.
-const mockUseProjectList = jest.fn()
-jest.mock('./useProjectList', () => ({ useProjectList: (props: any) => mockUseProjectList(props) }))
+// The commands and the project logo reach SharePoint and are stubbed; they are mocked before the
+// imports, as Heft runs Jest on TypeScript's CommonJS output without hoisting.
 jest.mock('../Commands', () => ({ Commands: () => null }))
 jest.mock('pp365-shared-library', () => ({
   ...jest.requireActual('pp365-shared-library'),
   ProjectLogo: () => null
 }))
 
-import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { fireEvent, render, screen } from '@testing-library/react'
+import { formatDate } from 'pp365-shared-library'
 import * as React from 'react'
 import { IProgramAdministrationContext, ProgramAdministrationContext } from '../context'
 import { ProjectList } from './ProjectList'
+import { IProjectListProps } from './types'
 
 /**
- * The program administration's project list: rows by title, a selection reported as site ids when
- * the user may manage the program, and one collapsible group per hub when the projects span
- * several. Asserted through roles and text, so it holds whichever grid draws the rows.
+ * The program administration's project list, on the portfolio overview's grid: rows by title with
+ * the phase and the creation date, a selection reported as site ids when the user may manage the
+ * program, and, when the projects come from more than one hub, one grid with a header row per hub,
+ * as the portfolio overview groups. Asserted through roles and text; the row checks are named
+ * "Velg rad", the group checks "Velg alle i <hub>" (PortfolioWebPartsStrings).
  */
-const items = [
-  { SiteId: 'a', Title: 'Alfa', HubSiteId: 'hub-1' },
-  { SiteId: 'b', Title: 'Bravo', HubSiteId: 'hub-2' }
+const HUBS = [
+  { url: 'https://t.sharepoint.com/sites/hub1', hubSiteId: 'hub-1', title: 'Hub 1' },
+  { url: 'https://t.sharepoint.com/sites/hub2', hubSiteId: 'hub-2', title: 'Hub 2' }
 ]
 
+const ALFA = {
+  SiteId: 'a',
+  Title: 'Alfa',
+  HubSiteId: 'hub-1',
+  SPWebURL: 'https://t.sharepoint.com/sites/alfa',
+  Phase: 'Konsept',
+  Created: '2024-03-01T09:00:00Z'
+}
+const BRAVO = { SiteId: 'b', Title: 'Bravo', HubSiteId: 'hub-1' }
+
+/** Ten projects in hub 1: a group that starts closed. */
+const MANY = Array.from({ length: 10 }, (_, i) => ({
+  SiteId: `p${i}`,
+  Title: `Prosjekt ${i + 1}`,
+  HubSiteId: 'hub-1'
+}))
+
 function renderList({
-  hook = {} as Record<string, any>,
-  state = {} as Record<string, any>,
-  props = {} as Record<string, any>
+  props = {} as Partial<IProjectListProps>,
+  state = {} as Record<string, any>
 } = {}) {
   const onSelectionChange = jest.fn()
-  mockUseProjectList.mockReturnValue({
-    items,
-    columns: jest.requireActual('./useColumns').useColumns(false),
-    defaultSortState: { sortColumn: 'title', sortDirection: 'ascending' },
-    onSearch: jest.fn(),
-    searchTerm: '',
-    groupedData: null,
-    shouldEnableGrouping: false,
-    ...hook
-  })
+  const items = props.items ?? [ALFA, BRAVO]
   const value = {
     props: {},
     state: { childProjects: items, loading: false, userHasManagePermission: true, ...state },
@@ -52,6 +59,7 @@ function renderList({
         items={items}
         onSelectionChange={onSelectionChange}
         search={{ placeholder: 'Søk' }}
+        programHubs={HUBS}
         {...props}
       />
     </ProgramAdministrationContext.Provider>
@@ -59,20 +67,44 @@ function renderList({
   return { onSelectionChange }
 }
 
-const setupUser = () => userEvent.setup({ pointerEventsCheck: 0 })
+const rowChecks = () => screen.queryAllByRole('checkbox', { name: 'Velg rad' })
+const checked = () => rowChecks().map((check) => (check as HTMLInputElement).checked)
+const search = (value: string) =>
+  fireEvent.change(screen.getByPlaceholderText('Søk'), { target: { value } })
+const shownTitles = () =>
+  screen.getAllByText(/^(Alfa|Bravo|Charlie)$/).map((element) => element.textContent)
 
 describe('ProjectList', () => {
   it('lists the projects by title', () => {
     renderList()
-    expect(screen.getByText('Alfa')).toBeInTheDocument()
-    expect(screen.getByText('Bravo')).toBeInTheDocument()
+    expect(shownTitles()).toEqual(['Alfa', 'Bravo'])
   })
 
-  it('reports a selection as site ids when the user may manage the program', async () => {
-    const user = setupUser()
+  it('shows the phase and the date the project was created', () => {
+    renderList()
+    expect(screen.getByText('Fase')).toBeInTheDocument()
+    expect(screen.getByText('Opprettet')).toBeInTheDocument()
+    expect(screen.getByText('Konsept')).toBeInTheDocument()
+    expect(screen.getByText(formatDate(ALFA.Created))).toBeInTheDocument()
+  })
+
+  it('links the titles on the page, and not in the dialog', () => {
+    renderList({ props: { renderLinks: true } })
+    expect(screen.getByRole('link', { name: 'Alfa' })).toHaveAttribute('href', ALFA.SPWebURL)
+    renderList({ props: { renderLinks: false, items: [{ ...ALFA, Title: 'Charlie' }] } })
+    expect(screen.queryByRole('link', { name: 'Charlie' })).toBeNull()
+  })
+
+  it('sorts by a column when its header is clicked', () => {
+    renderList({ props: { items: [BRAVO, { ...ALFA, Title: 'Charlie' }, ALFA] } })
+    expect(shownTitles()).toEqual(['Alfa', 'Bravo', 'Charlie'])
+    fireEvent.click(screen.getByText('Tittel'))
+    expect(shownTitles()).toEqual(['Charlie', 'Bravo', 'Alfa'])
+  })
+
+  it('reports a selection as site ids when the user may manage the program', () => {
     const { onSelectionChange } = renderList()
-    // The first checkbox selects all; the rest are one per row, in row order.
-    await user.click(screen.getAllByRole('checkbox')[2])
+    fireEvent.click(rowChecks()[1])
     expect(onSelectionChange).toHaveBeenLastCalledWith(['b'])
   })
 
@@ -83,55 +115,56 @@ describe('ProjectList', () => {
 
   it('shows the rows given as selected', () => {
     renderList({ props: { selectedItems: ['b'] } })
-    const checkboxes = screen.getAllByRole('checkbox')
-    expect(checkboxes[2]).toBeChecked()
-    expect(checkboxes[1]).not.toBeChecked()
+    expect(checked()).toEqual([false, true])
   })
 
-  it('groups the projects per hub, opens small groups at once and large ones on click', async () => {
-    const user = setupUser()
-    const many = Array.from({ length: 10 }, (_, i) => ({
-      SiteId: `p${i}`,
-      Title: `Prosjekt ${i + 1}`,
-      HubSiteId: 'hub-1'
-    }))
+  it('keeps a selection a search hides, so projects chosen in several searches are all added', () => {
+    const { onSelectionChange } = renderList({ props: { selectedItems: ['a'] } })
+    search('bra')
+    expect(shownTitles()).toEqual(['Bravo'])
+    fireEvent.click(rowChecks()[0])
+    expect(onSelectionChange).toHaveBeenLastCalledWith(['a', 'b'])
+  })
+
+  it('shows the empty message when the program has no child projects', () => {
+    renderList({ props: { items: [] } })
+    expect(screen.getByText('Ingen områder er koblet til programmet.')).toBeInTheDocument()
+  })
+
+  it('groups the projects per hub in one grid, opens small groups at once and large ones on click', () => {
     renderList({
-      hook: { shouldEnableGrouping: true, groupedData: { 'Hub 1': many, 'Hub 2': [items[1]] } },
-      props: { defaultGroupsExpanded: false }
+      props: { items: [...MANY, { ...BRAVO, HubSiteId: 'hub-2' }], defaultGroupsExpanded: false }
     })
+    expect(screen.getAllByRole('grid')).toHaveLength(1)
     expect(screen.getByText('Hub 1')).toBeInTheDocument()
+    expect(screen.getByText('(10)')).toBeInTheDocument()
     expect(screen.queryByText('Prosjekt 1')).toBeNull()
     expect(screen.getByText('Bravo')).toBeInTheDocument()
-    await user.click(screen.getByText('Hub 1'))
+    fireEvent.click(screen.getByText('Hub 1'))
     expect(screen.getByText('Prosjekt 1')).toBeInTheDocument()
   })
 
   it('opens every group while a search is active', () => {
-    const many = Array.from({ length: 10 }, (_, i) => ({
-      SiteId: `p${i}`,
-      Title: `Prosjekt ${i + 1}`,
-      HubSiteId: 'hub-1'
-    }))
     renderList({
-      hook: { shouldEnableGrouping: true, groupedData: { 'Hub 1': many }, searchTerm: 'pro' },
-      props: { defaultGroupsExpanded: false }
+      props: { items: [...MANY, { ...BRAVO, HubSiteId: 'hub-2' }], defaultGroupsExpanded: false }
     })
+    search('pro')
     expect(screen.getByText('Prosjekt 1')).toBeInTheDocument()
   })
 
-  it("keeps the other groups' selections when one group changes", async () => {
-    const user = setupUser()
+  it("keeps the other groups' selections when one group changes, and selects a hub's projects by its check", () => {
     const { onSelectionChange } = renderList({
-      hook: {
-        shouldEnableGrouping: true,
-        groupedData: { 'Hub 1': [items[0]], 'Hub 2': [items[1]] }
-      },
-      props: { defaultGroupsExpanded: true, selectedItems: ['a'] }
+      props: {
+        items: [ALFA, { ...BRAVO, HubSiteId: 'hub-2' }],
+        defaultGroupsExpanded: true,
+        selectedItems: ['a']
+      }
     })
-    // Two grids, each with a select-all checkbox and one row: [all, a, all, b].
-    const checkboxes = screen.getAllByRole('checkbox')
-    expect(checkboxes[1]).toBeChecked()
-    await user.click(checkboxes[3])
+    expect(checked()).toEqual([true, false])
+    fireEvent.click(rowChecks()[1])
     expect(onSelectionChange).toHaveBeenLastCalledWith(['a', 'b'])
+    onSelectionChange.mockClear()
+    fireEvent.click(screen.getByRole('checkbox', { name: 'Velg alle i Hub 2' }))
+    expect(onSelectionChange).toHaveBeenCalledWith(['a', 'b'])
   })
 })

@@ -1,13 +1,8 @@
 import { createReducer } from '@reduxjs/toolkit'
 import strings from 'PortfolioWebPartsStrings'
-import {
-  ProjectColumn,
-  setUrlHash,
-  sortAlphabetically,
-  sortNumerically,
-  format
-} from 'pp365-shared-library'
+import { ProjectColumn, setUrlHash, format } from 'pp365-shared-library'
 import _ from 'underscore'
+import { sortItems } from '../../List/sortItems'
 import { IPortfolioOverviewHashState, IPortfolioOverviewState } from '../types'
 import {
   CHANGE_VIEW,
@@ -149,41 +144,12 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
           : !!payload.column.isSorted && !payload.column.isSortedDescending
         // The sort helpers take whether to sort ascending.
         const ascending = !isSortedDescending
-        if (isCustomSort) {
-          state.items = state.items.sort((a, b) => {
-            const $a = payload.customSort.order.indexOf(a[payload.column.fieldName])
-            const $b = payload.customSort.order.indexOf(b[payload.column.fieldName])
-            return ascending ? $a - $b : $b - $a
-          })
-        } else {
-          switch (payload.column.dataType) {
-            case 'date':
-              state.items = state.items.sort((a, b) =>
-                sortNumerically(a, b, ascending, payload.column.fieldName)
-              )
-              break
-            case 'number':
-              state.items = state.items.sort((a, b) =>
-                sortNumerically(a, b, ascending, payload.column.fieldName)
-              )
-              break
-            case 'currency':
-              state.items = state.items.sort((a, b) =>
-                sortNumerically(a, b, ascending, payload.column.fieldName, 'kr ')
-              )
-              break
-            case 'percentage':
-              state.items = state.items.sort((a, b) =>
-                sortNumerically(a, b, ascending, payload.column.fieldName, '%')
-              )
-              break
-            default:
-              state.items = state.items.sort((a, b) =>
-                sortAlphabetically(a, b, ascending, payload.column.fieldName)
-              )
-              break
-          }
-        }
+        state.items = sortItems(
+          state.items,
+          payload.column,
+          ascending,
+          isCustomSort ? payload.customSort.order : undefined
+        )
         state.sortBy = _.pick(payload, ['column', 'customSort'])
         state.columns = state.columns.map((col) => {
           col.isSorted = col.key === payload.column.key

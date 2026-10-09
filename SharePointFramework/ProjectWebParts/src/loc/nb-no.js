@@ -333,7 +333,7 @@ define([], function () {
     HookArchiveAuthFieldDescription: 'Autentiseringstoken eller API-nøkkel for arkiv webhook endpoint',
     ViewsGroupName: 'Visninger',
     ViewVersionHistoryText: 'Vis versjonshistorikk',
-    ViewXmlFieldLabel: 'Vis XML spørring',
+    ViewXmlFieldLabel: 'CAML-spørring (View XML)',
     WebPartNoAccessMessage:
       'Du har ikke tilgang til å se denne webdelen.<br/><br/>Du må enten ha tilgang til porteføljeområdet, eller så må prosjektet være fristilt fra porteføljeområdet.',
     WidthFieldLabel: 'Bredde (piksler)',

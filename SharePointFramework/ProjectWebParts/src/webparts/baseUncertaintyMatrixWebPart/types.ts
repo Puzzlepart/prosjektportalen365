@@ -45,32 +45,38 @@ export interface IBaseUncertaintyMatrixWebPartProps
   filterByShowInPortfolio?: boolean
 
   /**
-   * The name of the SharePoint list to retrieve data from.
+   * The name of the local SharePoint list to retrieve items from in list mode. When empty, the
+   * uncertainty list (`Usikkerhet`) is used.
    */
   listName?: string
 
   /**
-   * The CAML query to filter items in the SharePoint list.
+   * The CAML query (view XML) to retrieve items from the list with in list mode. When empty, the
+   * items of the web part's content type (`Risiko` or `Mulighet`) are retrieved.
    */
   viewXml?: string
 
   /**
-   * The internal name of the field in the SharePoint list that stores the probability values.
+   * The internal name of the field that stores the probability values. When empty, or not found
+   * on an item, `GtRiskProbability` is used.
    */
   probabilityFieldName?: string
 
   /**
-   * The internal name of the field in the SharePoint list that stores the consequence values
+   * The internal name of the field that stores the consequence values. When empty, or not found
+   * on an item, `GtRiskConsequence` is used.
    */
   consequenceFieldName?: string
 
   /**
-   * The internal name of the field in the SharePoint list that stores the post-action probability values.
+   * The internal name of the field that stores the post-action probability values. When empty,
+   * or not found on an item, `GtRiskProbabilityPostAction` is used.
    */
   probabilityPostActionFieldName?: string
 
   /**
-   * The internal name of the field in the SharePoint list that stores the post-action consequence values.
+   * The internal name of the field that stores the post-action consequence values. When empty,
+   * or not found on an item, `GtRiskConsequencePostAction` is used.
    */
   consequencePostActionFieldName?: string
 }

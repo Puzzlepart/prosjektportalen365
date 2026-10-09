@@ -1,0 +1,20 @@
+// The title gives way to the button beside it: in a narrow column it shrinks and ends in an
+// ellipsis, so the button that opens the project information is always in view. Left to itself
+// the title keeps its full width, pushing the button past the cell, which clips it.
+.root {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+
+  .title {
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .action {
+    flex: 0 0 auto;
+  }
+}

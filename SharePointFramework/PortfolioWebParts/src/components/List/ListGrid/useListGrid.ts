@@ -67,10 +67,12 @@ function createColumnSizingOptions(
 export function useListGrid(props: IListGridProps): IListGridState {
   const { items, columns, groups, justified } = props
   const isGrouped = !!groups && groups.length > 0
+  const selectable = props.selectionMode !== 'none'
 
   const containerRef = useRef<HTMLDivElement>(null)
   const containerWidth = useContainerWidth(containerRef, justified)
-  const fixedCellsWidth = SELECTION_CELL_WIDTH + (isGrouped ? EXPANDER_CELL_WIDTH : 0)
+  const fixedCellsWidth =
+    (selectable ? SELECTION_CELL_WIDTH : 0) + (isGrouped ? EXPANDER_CELL_WIDTH : 0)
   const columnSizingOptions = useMemo(
     () =>
       createColumnSizingOptions(columns, justified ? containerWidth - fixedCellsWidth : undefined),
@@ -134,7 +136,12 @@ export function useListGrid(props: IListGridProps): IListGridState {
     () => entries.flatMap((entry) => (entry.type === 'item' ? [entry.item] : [])),
     [entries]
   )
-  const selection = useListSelection(items, visibleItems, props.onSelectionChange)
+  const selection = useListSelection(
+    items,
+    visibleItems,
+    props.onSelectionChange,
+    props.selectedItems
+  )
 
   // One tab stop for the grid, the arrow keys between its checks, links and header buttons, as in
   // v8's list and Fluent's DataGrid.
@@ -149,6 +156,7 @@ export function useListGrid(props: IListGridProps): IListGridState {
     allCollapsed,
     toggleCollapsed,
     toggleAllCollapsed,
+    selectable,
     selection,
     arrowNavigation
   }

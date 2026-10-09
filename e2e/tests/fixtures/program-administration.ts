@@ -31,13 +31,34 @@ export const removeButton = (admin: Locator) =>
 export const addButton = (admin: Locator) =>
   admin.getByRole('button', { name: /legg til underområder|add child/i }).first()
 
-/** The row of a project, by its title, in whichever grid holds it. */
+/**
+ * A project row's check, as opposed to a hub group's ("Velg alle i ...") and the select-all
+ * ("Velg alle rader"): the lists are the portfolio overview's grid (`ListGrid`).
+ */
+export const ROW_CHECK = /^(velg rad|select row)$/i
+
+/** The checks of the project rows in `container`, in display order. */
+export const rowChecks = (container: Locator) =>
+  container.getByRole('checkbox', { name: ROW_CHECK })
+
+/** The buttons that open and close the hub groups of a grid (only when the projects span hubs). */
+export const groupButtons = (grid: Locator) => grid.locator('button[aria-expanded]')
+
+/** The row of a project, by its title. */
 export const rowOf = (admin: Locator, title: string) =>
   admin.getByRole('row').filter({ hasText: title }).first()
 
+/** The check of a project's row, by its title. */
+export const rowCheckOf = (admin: Locator, title: string) =>
+  rowOf(admin, title).getByRole('checkbox', { name: ROW_CHECK })
+
 /** The title of the first project row: its link text, or the first line of the row. */
 export async function firstRowTitle(grid: Locator) {
-  const firstRow = grid.getByRole('row').nth(1)
+  // Group rows and the header row hold no project row check.
+  const firstRow = grid
+    .getByRole('row')
+    .filter({ has: grid.page().getByRole('checkbox', { name: ROW_CHECK }) })
+    .first()
   const link = await firstRow
     .getByRole('link')
     .first()
@@ -58,16 +79,16 @@ export async function addProject(page: Page, admin: Locator, title: string) {
   await expect(search).toBeVisible({ timeout: 60_000 })
   await search.fill(title)
   const row = dialog.getByRole('row').filter({ hasText: title }).first()
-  // The projects are grouped per hub. Groups open while a search is active; on a build without
-  // that, a collapsed group that hides the row is opened here.
+  // The projects are grouped per hub. Groups open while a search is active, but one the user
+  // closed stays closed, so a closed group that hides the row is opened here.
   if (!(await row.isVisible({ timeout: 5000 }).catch(() => false))) {
-    for (const header of await dialog.locator('[class*="groupHeader"]').all()) {
+    for (const group of await dialog.locator('button[aria-expanded="false"]').all()) {
       if (await row.isVisible().catch(() => false)) break
-      await header.click()
+      await group.click()
     }
   }
   await expect(row).toBeVisible({ timeout: 30_000 })
-  await row.getByRole('checkbox').click()
+  await row.getByRole('checkbox', { name: ROW_CHECK }).click()
   const add = dialog.getByRole('button', { name: /^legg til$|^add$/i })
   await expect(add).toBeEnabled()
   await add.click()

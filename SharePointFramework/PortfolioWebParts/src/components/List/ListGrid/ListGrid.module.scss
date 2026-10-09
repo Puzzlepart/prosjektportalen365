@@ -53,6 +53,18 @@
       // layout and painting of the rows outside the view.
       content-visibility: auto;
       contain-intrinsic-size: auto 44px;
+
+      // The values at 12px in the lighter grey, and links at the size of the text around them, as
+      // 1.14's v8 list showed them and as the other lists do (`DataGridList`, the dynamic list):
+      // the table would take the provider's 14px, and Fluent's `Link` sets 14px of its own.
+      :global(.fui-TableCell) {
+        font-size: var(--fontSizeBase200);
+        color: var(--colorNeutralForeground3);
+      }
+
+      :global(.fui-Link) {
+        font-size: inherit;
+      }
     }
 
     .expanderCell {

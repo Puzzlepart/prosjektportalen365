@@ -5,13 +5,7 @@ import sortArray from 'array-sort'
 import _ from 'lodash'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
-import {
-  isTaxonomyManagedProperty,
-  parseUrlHash,
-  setUrlHash,
-  sortAlphabetically,
-  sortNumerically
-} from 'pp365-shared-library/lib/util'
+import { isTaxonomyManagedProperty, parseUrlHash, setUrlHash } from 'pp365-shared-library/lib/util'
 import { getObjectValue as get } from 'pp365-shared-library/lib/util/getObjectValue'
 import {
   IPortfolioAggregationHashState,
@@ -46,6 +40,22 @@ import resource from 'SharedResources'
 import { ProjectContentColumn } from 'pp365-shared-library/lib/models/ProjectContentColumn'
 import { format } from 'pp365-shared-library'
 import { parseDisplayValue } from '../createGroups'
+import { sortItems } from '../../List/sortItems'
+
+/**
+ * Sorts the rows by the sort column as the list sorts (`sortItems`), or by project name when there
+ * is none.
+ *
+ * @param state State of the reducer, for its sort column
+ * @param items Rows, sorted in place
+ */
+function sortBySortColumn(state: IPortfolioAggregationState, items: Record<string, any>[]) {
+  return sortItems(
+    items,
+    state.sortBy ?? { fieldName: 'SiteTitle' },
+    !state.sortBy?.isSortedDescending
+  )
+}
 
 /**
  * Groups the rows by `column`, sorted so that each group is one run of rows (`createGroups` makes
@@ -61,9 +71,7 @@ function applyGroupBy(state: IPortfolioAggregationState, column?: ProjectContent
     state.groupBy = column
   } else {
     state.groupBy = null
-    state.items = sortArray([...state.items], [state.sortBy?.fieldName || 'SiteTitle'], {
-      reverse: !!state.sortBy?.isSortedDescending
-    })
+    state.items = sortBySortColumn(state, [...state.items])
   }
 }
 
@@ -82,9 +90,7 @@ export const createPortfolioAggregationReducer = (
       .addCase(DATA_FETCHED, (state, { payload }) => {
         if (payload.items) {
           let items = props.postTransform ? props.postTransform(payload.items) : payload.items
-          items = sortArray([...items], [state.sortBy?.fieldName ?? 'SiteTitle'], {
-            reverse: state.sortBy?.isSortedDescending ? state.sortBy.isSortedDescending : false
-          })
+          items = sortBySortColumn(state, [...items])
 
           if (payload.projects) {
             items = items.filter((item) =>
@@ -240,30 +246,12 @@ export const createPortfolioAggregationReducer = (
         // The sort helpers take whether to sort ascending.
         const ascending = !isSortedDescending
         state.sortBy = payload.column
+        state.items = sortItems(state.items, payload.column, ascending)
+        // Grouped, the rows are sorted within their groups, as in the portfolio overview: the sort
+        // by the group column is stable, so it gathers each group in one run (`createGroups`) and
+        // keeps the order just made inside it.
         if (state.groupBy) {
-          state.groupBy = null
-        }
-        switch (payload.column.dataType) {
-          case 'currency':
-            state.items = state.items.sort((a, b) =>
-              sortNumerically(a, b, ascending, payload.column.fieldName, 'kr ')
-            )
-            break
-          case 'number':
-            state.items = state.items.sort((a, b) =>
-              sortNumerically(a, b, ascending, payload.column.fieldName)
-            )
-            break
-          case 'percentage':
-            state.items = state.items.sort((a, b) =>
-              sortNumerically(a, b, ascending, payload.column.fieldName, '%')
-            )
-            break
-          default:
-            state.items.sort((a, b) =>
-              sortAlphabetically(a, b, ascending, payload.column.fieldName)
-            )
-            break
+          state.items = sortArray([...state.items], [state.groupBy.fieldName])
         }
         state.columns = [...state.columns].map((col) => {
           col.isSorted = col.key === payload.column.key
