@@ -45,9 +45,21 @@ export interface IListGridProps {
   justified?: boolean
 
   /**
-   * Called on a click and a right click on a column header, with the element to place a menu by.
+   * Called on a click on a column header, with the element to place a menu by.
    */
   onColumnHeaderClick?: (column: IListColumn, target: HTMLElement) => void
+
+  /**
+   * Called on a right click on a column header, with the element to place a menu by; the hub opens
+   * the column menu with both. Without it a right click is the browser's.
+   */
+  onColumnHeaderContextMenu?: (column: IListColumn, target: HTMLElement) => void
+
+  /**
+   * When it changes, the groups the user opened or closed go back to their `isCollapsed`: the
+   * program administration passes its search, so that a search opens every group.
+   */
+  collapseStateKey?: string | number
 
   /**
    * Called with the selected items whenever the selection changes.

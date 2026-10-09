@@ -38,6 +38,17 @@ const DATA_PROPERTIES: string[] = [
 ]
 
 /**
+ * A site id as search and the page context give it, without braces and in lower case.
+ *
+ * @param siteId Site id
+ */
+function normalizeSiteId(siteId: unknown): string {
+  return String(siteId ?? '')
+    .replace(/[{}]/g, '')
+    .toLowerCase()
+}
+
+/**
  * How long, in milliseconds, the property pane must be still after a change to a data property
  * before the items are fetched again: a text field reports every keystroke.
  */
@@ -271,13 +282,19 @@ export abstract class BaseUncertaintyMatrixWebPart<
         'GtRiskStrategyOWSCHCS',
         'GtRiskProximityOWSCHCS',
         'GtRiskStatusOWSCHCS',
-        'GtShowInPortfolioOWSBOOL'
+        'GtShowInPortfolioOWSBOOL',
+        'SiteId'
       ],
       true
     )
     if (this.properties.filterByShowInPortfolio ?? true) {
-      items = items.filter((item) =>
-        ['1', 'true'].includes(String(item.GtShowInPortfolioOWSBOOL).toLowerCase())
+      // The filter picks which of the child projects' items to show; the site's own always show,
+      // as they do in its own list.
+      const ownSiteId = normalizeSiteId(this.context.pageContext.site.id.toString())
+      items = items.filter(
+        (item) =>
+          normalizeSiteId(item.SiteId) === ownSiteId ||
+          ['1', 'true'].includes(String(item.GtShowInPortfolioOWSBOOL).toLowerCase())
       )
     }
     const fieldNameMap = new Map(

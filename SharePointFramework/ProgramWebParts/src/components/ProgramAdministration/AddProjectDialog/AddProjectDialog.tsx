@@ -49,6 +49,7 @@ export const AddProjectDialog: FC = () => {
                   placeholder: strings.AddProjectDialogSearchBoxPlaceholder
                 }}
                 hideCommands
+                scrollRows
                 renderLinks={false}
                 programHubs={context.programHubs}
               />

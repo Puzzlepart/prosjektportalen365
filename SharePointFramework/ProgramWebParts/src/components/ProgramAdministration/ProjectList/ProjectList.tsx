@@ -1,4 +1,4 @@
-import { SearchBox } from '@fluentui/react-components'
+import { mergeClasses, SearchBox } from '@fluentui/react-components'
 import { ListGrid } from 'pp365-portfoliowebparts/lib/components/List/ListGrid'
 import { UserMessage } from 'pp365-shared-library'
 import strings from 'ProgramWebPartsStrings'
@@ -24,7 +24,8 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
     showList,
     onSelectionChange,
     onColumnHeaderClick,
-    onSearch
+    onSearch,
+    searchTerm
   } = useProjectList(props)
 
   return (
@@ -46,12 +47,13 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
       </div>
       {showList ? (
         <ListGrid
-          className={styles.grid}
+          className={mergeClasses(styles.grid, props.scrollRows && styles.scrollingGrid)}
           title={props.title}
           items={rows}
           groups={groups}
           columns={columns}
           justified
+          collapseStateKey={searchTerm}
           selectionMode={selectionMode}
           selectedItems={selectedRows}
           onSelectionChange={onSelectionChange}

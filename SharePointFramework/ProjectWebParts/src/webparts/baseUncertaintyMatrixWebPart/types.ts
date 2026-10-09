@@ -39,8 +39,8 @@ export interface IBaseUncertaintyMatrixWebPartProps
   dataSource?: string
 
   /**
-   * Whether to only show items flagged with "Show in portfolio" (`GtShowInPortfolio`)
-   * in data source mode (default `true`).
+   * Whether to only show the child projects' items flagged with "Show in portfolio"
+   * (`GtShowInPortfolio`) in data source mode (default `true`). The site's own items always show.
    */
   filterByShowInPortfolio?: boolean
 

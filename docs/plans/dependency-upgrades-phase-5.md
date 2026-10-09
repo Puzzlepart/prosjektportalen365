@@ -1062,3 +1062,20 @@ proposal that needed the hub's grid first).
 Coverage floors were left where they were: two agents raised them to within a fraction of a
 percent of a local run, which is what failed CI on 2026-10-08; they go up from CI's numbers.
 
+The user's decisions on what was left open (2026-10-09): "Lagt til" waits until after 1.15. The
+matrices' `Vis i porteføljen` filter applies to the child projects' items only; the site's own
+always show, as in 1.14 (told apart by `SiteId`, now selected from search; the toggle's label says
+so). In the program administration a search opens every group again, a group closed by hand
+included (`ListGrid`'s `collapseStateKey`, the search); a right click on a column header no longer
+sorts (`ListGrid`'s `onColumnHeaderContextMenu`, which the hub passes for its column menu); and the
+column headers stick to the page: the list scrolled its own rows on the page too, which made it the
+sticky header's scroll container, so only the add dialog scrolls its rows now (`scrollRows`). A
+probe of the program page found nothing else between the web part and SharePoint's
+`contentScrollRegion` with an `overflow`.
+
+The user's pre-merge round on the test channel passed (2026-10-09): a new project through the
+setup wizard (the site fields provisioned through `transformFieldXml` on the browser's
+`DOMParser`, the first run of it outside jsdom), editing and saving its project information (the
+list sync, the same parser), the project information panel's title in the drawer's header, the
+`Status muligheter` colours after the upgrade step, and `00123` exported as text.
+

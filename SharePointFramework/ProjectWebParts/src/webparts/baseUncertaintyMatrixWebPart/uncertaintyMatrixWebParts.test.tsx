@@ -312,6 +312,28 @@ describe('the matrix web parts on a parent project or program', () => {
     ).toEqual([['BY12', 3, 4]])
   })
 
+  it("show the site's own items whether flagged or not: the filter picks among the child projects'", async () => {
+    searchResults.current = [
+      ...searchResults.current.map((item) => ({ ...item, SiteId: 'child-1' })),
+      {
+        ListItemID: '14',
+        Title: 'Forsinkelse',
+        SiteTitle: 'Program',
+        // Search gives the site's id as the query does; braces and case are not trusted.
+        SiteId: '{SITE-1}',
+        GtRiskProbabilityOWSNMBR: '1',
+        GtRiskConsequenceOWSNMBR: '5',
+        GtShowInPortfolioOWSBOOL: '0'
+      }
+    ]
+    const webPart = await initWebPart(RiskMatrixWebPart)
+    expect((adapter.fetchItemsFromDataSource.mock.calls[0] as any[])[1]).toContain('SiteId')
+    act(() => {
+      webPart.render()
+    })
+    expect(rendered.props.items.map((item) => item.id)).toEqual(['BY12', 'PR14'])
+  })
+
   it('show every item when the portfolio filter is turned off', async () => {
     const webPart = await initWebPart(RiskMatrixWebPart, { filterByShowInPortfolio: false })
     act(() => {

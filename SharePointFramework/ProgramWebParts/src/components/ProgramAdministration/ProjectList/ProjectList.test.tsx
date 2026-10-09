@@ -102,6 +102,14 @@ describe('ProjectList', () => {
     expect(shownTitles()).toEqual(['Charlie', 'Bravo', 'Alfa'])
   })
 
+  it('sorts on a click on a column header, not on a right click', () => {
+    renderList({ props: { items: [BRAVO, ALFA] } })
+    fireEvent.contextMenu(screen.getByText('Tittel'))
+    expect(shownTitles()).toEqual(['Alfa', 'Bravo'])
+    fireEvent.click(screen.getByText('Tittel'))
+    expect(shownTitles()).toEqual(['Bravo', 'Alfa'])
+  })
+
   it('reports a selection as site ids when the user may manage the program', () => {
     const { onSelectionChange } = renderList()
     fireEvent.click(rowChecks()[1])
@@ -150,6 +158,16 @@ describe('ProjectList', () => {
     })
     search('pro')
     expect(screen.getByText('Prosjekt 1')).toBeInTheDocument()
+  })
+
+  it('opens a group closed by hand again when a search starts, as every group opens under search', () => {
+    renderList({
+      props: { items: [ALFA, { ...BRAVO, HubSiteId: 'hub-2' }], defaultGroupsExpanded: true }
+    })
+    fireEvent.click(screen.getByText('Hub 1'))
+    expect(screen.queryByText('Alfa')).toBeNull()
+    search('a')
+    expect(screen.getByText('Alfa')).toBeInTheDocument()
   })
 
   it("keeps the other groups' selections when one group changes, and selects a hub's projects by its check", () => {

@@ -38,4 +38,10 @@ export interface IProjectListProps {
    * Start every hub's group expanded; otherwise only those with fewer than ten projects.
    */
   defaultGroupsExpanded?: boolean
+
+  /**
+   * Scroll the rows inside the list, under its pinned column headers, where its height is bounded
+   * (the add dialog). Without it the column headers stick to the top of the page as it scrolls.
+   */
+  scrollRows?: boolean
 }

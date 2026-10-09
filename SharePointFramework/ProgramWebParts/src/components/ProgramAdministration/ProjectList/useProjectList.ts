@@ -72,6 +72,7 @@ export function useProjectList(props: IProjectListProps) {
     showList,
     onSelectionChange,
     onColumnHeaderClick,
-    onSearch
+    onSearch,
+    searchTerm
   }
 }

@@ -26,12 +26,17 @@
     }
   }
 
-  // The portfolio overview's grid, without the hub's margins. The grid scrolls its own rows where
-  // its height is bounded (the add dialog), so the column headers stay pinned above them.
+  // The portfolio overview's grid, without the hub's margins. Its column headers are sticky: on
+  // the page they stick to SharePoint's scrolling content area, so nothing between may scroll.
   .grid {
     flex: 1 1 auto;
     min-height: 0;
-    overflow: auto;
     padding: 0;
+
+    // Where its height is bounded (the add dialog) the grid scrolls its own rows, so the column
+    // headers stay pinned above them and the search box in view.
+    &.scrollingGrid {
+      overflow: auto;
+    }
   }
 }

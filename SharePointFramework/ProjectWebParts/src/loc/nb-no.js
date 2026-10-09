@@ -103,7 +103,7 @@ define([], function () {
       'Det skjedde en feil under uthenting av data fra datakilde med navn {0}. Oppdater siden og prøv igjen.',
     DataSourceLabel: 'Datakilde',
     DataSourceNotFound: 'Finner ingen datakilde med navn {0}.',
-    FilterByShowInPortfolioLabel: "Vis kun elementer flagget med 'Vis i porteføljen'",
+    FilterByShowInPortfolioLabel: "Vis kun underområdenes elementer flagget med 'Vis i porteføljen'",
     DefaultGroupByLabel: 'Standard gruppering',
     DefaultTimeframeEndLabel: 'Standard sluttdato',
     DefaultTimeframeEndValue: '{0} måneder frem i tid',

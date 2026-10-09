@@ -123,7 +123,7 @@ define([], function () {
       'An error occurred while retrieving data from the data source named {0}.',
     DataSourceLabel: 'Data source',
     DataSourceNotFound: 'Cannot find any data source with name {0}.',
-    FilterByShowInPortfolioLabel: "Only show items flagged with 'Show in portfolio'",
+    FilterByShowInPortfolioLabel: "Only show child projects' items flagged with 'Show in portfolio'",
     DefaultGroupByLabel: 'Default grouping',
     DefaultTimeframeEndLabel: 'Default end date',
     DefaultTimeframeEndValue: '{0} months into the future',

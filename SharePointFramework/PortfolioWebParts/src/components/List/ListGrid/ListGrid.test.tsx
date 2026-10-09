@@ -70,6 +70,34 @@ describe('ListGrid', () => {
     expect(onSelectionChange).toHaveBeenLastCalledWith([ITEMS[0], ITEMS[1]])
   })
 
+  it('forgets the groups closed by hand when its collapse state key changes', () => {
+    const { rerender } = render(grid({ groups: GROUPS }))
+    fireEvent.click(screen.getByText('Hub 1'))
+    expect(screen.queryByText('Alfa')).not.toBeInTheDocument()
+    // The same key keeps the user's choice.
+    rerender(grid({ groups: GROUPS }))
+    expect(screen.queryByText('Alfa')).not.toBeInTheDocument()
+    // A new key (the program administration passes its search) opens it again.
+    rerender(grid({ groups: GROUPS, collapseStateKey: 'alfa' }))
+    expect(screen.getByText('Alfa')).toBeInTheDocument()
+  })
+
+  it('sends a right click on a column header to its own handler, and leaves it to the browser without one', () => {
+    const onColumnHeaderClick = jest.fn()
+    const { rerender } = render(grid({ onColumnHeaderClick }))
+    // Not prevented: the browser's own menu opens, and nothing sorts.
+    expect(fireEvent.contextMenu(screen.getByText('Tittel'))).toBe(true)
+    expect(onColumnHeaderClick).not.toHaveBeenCalled()
+    fireEvent.click(screen.getByText('Tittel'))
+    expect(onColumnHeaderClick).toHaveBeenCalledTimes(1)
+
+    const onColumnHeaderContextMenu = jest.fn()
+    rerender(grid({ onColumnHeaderClick, onColumnHeaderContextMenu }))
+    expect(fireEvent.contextMenu(screen.getByText('Tittel'))).toBe(false)
+    expect(onColumnHeaderContextMenu).toHaveBeenCalledWith(COLUMNS[0], expect.any(HTMLElement))
+    expect(onColumnHeaderClick).toHaveBeenCalledTimes(1)
+  })
+
   it('adds its class name to the container', () => {
     const { container } = render(grid({ className: 'programGrid' }))
     expect(container.firstElementChild).toHaveClass('programGrid')

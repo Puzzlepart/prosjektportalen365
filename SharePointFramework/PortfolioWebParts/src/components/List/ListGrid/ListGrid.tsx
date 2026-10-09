@@ -66,9 +66,14 @@ export const ListGrid: FC<IListGridProps> = (props) => {
     arrowNavigation
   } = useListGrid(props)
 
-  const onHeaderEvent = (column: IListColumn) => (event: MouseEvent<HTMLElement>) => {
-    if (event.type === 'contextmenu') event.preventDefault()
+  const onHeaderClick = (column: IListColumn) => (event: MouseEvent<HTMLElement>) => {
     props.onColumnHeaderClick?.(column, event.currentTarget)
+  }
+
+  const onHeaderContextMenu = (column: IListColumn) => (event: MouseEvent<HTMLElement>) => {
+    if (!props.onColumnHeaderContextMenu) return
+    event.preventDefault()
+    props.onColumnHeaderContextMenu(column, event.currentTarget)
   }
 
   return (
@@ -123,8 +128,8 @@ export const ListGrid: FC<IListGridProps> = (props) => {
                 sortDirection={sortDirection(column)}
                 className={styles.headerCell}
                 button={{
-                  onClick: onHeaderEvent(column),
-                  onContextMenu: onHeaderEvent(column),
+                  onClick: onHeaderClick(column),
+                  onContextMenu: onHeaderContextMenu(column),
                   className: styles.headerButton
                 }}
               >
