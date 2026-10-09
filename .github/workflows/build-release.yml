@@ -54,7 +54,9 @@ jobs:
     concurrency:
       group: ${{ github.ref }}_build_test_channel_release_ci
       cancel-in-progress: true
-    if: ${{ always() || !contains(github.event.head_commit.message, '[skip-test-ci]') }}
+    # Runs when the main build is skipped ([skip-main-ci]) or fails, unless the run is cancelled or
+    # the message holds [skip-test-ci]. `always() || …` was always true, so the tag did nothing.
+    if: ${{ !cancelled() && !contains(github.event.head_commit.message, '[skip-test-ci]') }}
     steps:
       - uses: actions/checkout@v4
         with:

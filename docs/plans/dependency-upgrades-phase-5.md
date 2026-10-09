@@ -946,7 +946,7 @@ panel the lists open had an empty header and the project's title as a web part t
 padded 25 px below the empty header. It now passes the title as `headerText` and `hideTitle` to
 `ProjectInformation` (a new prop; the actions are still named after the title), and its stylesheet
 went. Tested first in Jest (the drawer named after the project, the title once), and both panels
-checked with the local bundle. Noted, not changed: the panels' dates use `toLocaleDateString()`, so
+checked with the local bundle. Noted, not changed (fixed 2026-10-09, below): the panels' dates use `toLocaleDateString()`, so
 they follow the browser's language (`9/12/2026` in an English browser), where other places use
 `formatDate`.
 
@@ -1097,4 +1097,39 @@ portfolio overview's column menu on a right click, a person field's placeholder 
 project card's panel naming the project in its header. All pass against the test channel; three
 older specs (the project timeline at 1920px and two navigation cases) failed once under load and
 passed on a rerun.
+
+### Before merge: the small debts (2026-10-09)
+
+The user asked for the list of small things before the merge, as the PR waits anyway.
+
+- **Dates and amounts in the UI language.** `formatDate` was fixed to `nb-NO`, so an English
+  installation showed Norwegian dates, while a dozen places used `toLocaleDateString()` and
+  friends, which follow the browser: an English browser on a Norwegian site showed "11/18/2022"
+  in the project information panel. `getUILocale` reads SharePoint's UI culture
+  (`_spPageContextInfo`, then `<html lang>`, then `nb-NO`), the culture SPFx loads the strings
+  for; `formatDate` defaults to it, `formatShortDate` gives the numeric form for field values, and
+  every user-visible date went over (project properties, the status report's properties section,
+  news, the project timeline's list, the status snapshot's stamp, the idea module, the benefit
+  measurements, Planner tasks in risk actions, the setup log's times), amounts too
+  (`tryParseCurrency`). The edit panel's date field accepted typed text through `Date.parse`, which
+  rejected "18.11.2022" and read "03.04.2026" as 4 March; `parseShortDate` reads the short form
+  back in the UI language's order. `getDateValue`, exported but called nowhere, went. Tests pin
+  each place in jsdom's en-US, where the browser-locale code failed.
+- **`[skip-test-ci]`** now skips the test channel's package on `main` (`!cancelled() && …`; it was
+  `always() || …`, always true). The e2e report's retention is 7 days, the repository's maximum.
+- **`validate-loc`** reported ProjectWebParts' `ColorPickerStrings` missing: a key typed by a
+  named interface while the bundles hold an object. The strings were Fluent v8's colour picker's,
+  used nowhere, and went; the validator now counts such a key as present when the bundle has an
+  object under it. All six solutions report no missing keys.
+- **Coverage floors.** `Build-Release.ps1` prints each solution's coverage against its floors,
+  in the log and the job summary, so the floors can follow CI. Raised from full local runs,
+  rounded down and a point under (ProjectExtensions' were already closer than that and stay).
+- **Flaky e2e.** The project timeline at 1920px and two navigation cases ran out of time under
+  load (sequential waits of a minute each against a 90-second test): longer waits and test
+  timeouts for them, and for the program administration's tests.
+- **RequireJS' "Mismatched anonymous define()".** Another 60 loads of the hub's home page, 30 cold
+  (a new browser context each) and 30 warm, watching for the error and SharePoint's "Beklager, noe
+  gikk galt": none showed it, 82 loads in all with the 22 of 2026-10-08. Nothing to fix without a
+  failing load; a HAR from one, or the error on a site without Prosjektportalen, is still what
+  would tell.
 

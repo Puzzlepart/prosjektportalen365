@@ -246,7 +246,11 @@ try {
     for (const file of resourceFiles) {
         const [jsKeys, jsMap] = getJsKeyValues(path.join(locPath, file))
         const lng = file.replace('.js', '')
-        missingKeys[lng] = interfaceKeys.filter((key) => !jsKeys.includes(key))
+        // A key typed by a named interface (not an inline type) is one key in the typing, while the
+        // bundle holds an object under it, which reads as its nested keys: it counts as there.
+        missingKeys[lng] = interfaceKeys.filter(
+            (key) => !jsKeys.includes(key) && !jsKeys.some((jsKey) => jsKey.startsWith(`${key}.`))
+        )
         jsMaps[lng] = jsMap
     }
 

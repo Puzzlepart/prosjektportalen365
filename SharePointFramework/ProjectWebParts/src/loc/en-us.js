@@ -89,12 +89,6 @@ define([], function () {
       "You cannot set the checkpoint as 'Still open' without posting a comment.",
     ChildProjectAdminLabel: 'Manage childprojects',
     CloseText: 'Close',
-    ColorPickerStrings: {
-      blue: 'Blue',
-      green: 'Green',
-      hex: '',
-      red: 'Red'
-    },
     CommentLabel: 'Comment',
     ConfigItemTitleFieldLabel: 'Element title (configuration)',
     ConfirmChangePhase: 'Do you want to change phase to {0}?',

@@ -69,12 +69,6 @@ define([], function () {
       "Du kan ikke sette sjekkpunktet som 'Fortsatt åpen' uten å legge inn en kommentar.",
     ChildProjectAdminLabel: 'Administrer underområder',
     CloseText: 'Lukk',
-    ColorPickerStrings: {
-      blue: 'Blå',
-      green: 'Grønn',
-      hex: '',
-      red: 'Rød'
-    },
     CommentLabel: 'Kommentar',
     ConfigItemTitleFieldLabel: 'Elementtittel (konfigurasjon)',
     ConfirmChangePhase: 'Vil du endre fase til {0}?',

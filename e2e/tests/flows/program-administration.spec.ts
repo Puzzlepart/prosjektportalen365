@@ -28,6 +28,8 @@ const hubUrl = baseURL.replace(/\/+$/, '').toLowerCase()
 const pointsAtHub = !!programUrl && programUrl.toLowerCase() === hubUrl
 
 test.describe('program administration', () => {
+  // The administration and its list each wait up to a minute on a cold program site.
+  test.describe.configure({ timeout: 180_000 })
   test.skip(
     !programUrl,
     'E2E_PROGRAM_URL is not set (or is the .env.example placeholder); skipping'

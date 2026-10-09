@@ -42,7 +42,6 @@ declare interface IProjectWebPartsStrings {
   CheckpointStillOpenTooltipCommentEmpty: string
   ChildProjectAdminLabel: string
   CloseText: string
-  ColorPickerStrings: IColorPickerStrings
   CommentLabel: string
   ConfigItemTitleFieldLabel: string
   ConfirmChangePhase: string

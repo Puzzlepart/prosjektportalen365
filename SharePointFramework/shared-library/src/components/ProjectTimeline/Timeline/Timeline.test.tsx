@@ -89,9 +89,9 @@ import { formatDate, tryParseCurrency } from '../../../util'
 const FRISBEE = 'https://contoso.sharepoint.com/sites/frisbee'
 
 /**
- * The amount as `getByText` finds it. `tryParseCurrency` formats in the machine's locale, and in
- * nb-NO the thousands separator is a no-break space: Testing Library normalizes the page's text to
- * plain spaces but compares the expected string as given.
+ * The amount as `getByText` finds it. `tryParseCurrency` formats in SharePoint's UI language,
+ * Norwegian when the page names none, where the thousands separator is a no-break space: Testing
+ * Library normalizes the page's text to plain spaces but compares the expected string as given.
  */
 const currency = (value: string) => tryParseCurrency(value).replace(/\s+/g, ' ')
 

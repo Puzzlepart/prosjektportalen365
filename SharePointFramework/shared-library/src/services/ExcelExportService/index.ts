@@ -202,7 +202,7 @@ class ExcelExportService {
   ): Record<string, any>[] {
     const value = item[column]
     if (typeof value !== 'string' || !value.trim()) return []
-    // `DateDisplay` is the browser's local text; `Date` is the date itself.
+    // `DateDisplay` is the date as text in the UI language; `Date` is the date itself.
     const skipKeys = ['ValueDisplay', 'AchievementDisplay', 'DateDisplay']
     const renameKeys = this.configuration?.measurementsSheetConfiguration?.renameKeys || {}
     const titleKey = this.configuration?.measurementsSheetConfiguration?.titleKey || 'Title'

@@ -5,7 +5,8 @@ import * as React from 'react'
 import { ProgressDialog } from '.'
 import { ITaskProgress } from './types'
 
-const AT = new Date('2026-10-02T10:00:00Z')
+/** 2 October 2026, 14:05:09 in the machine's time zone. */
+const AT = new Date(2026, 9, 2, 14, 5, 9)
 
 function tasks(): ITaskProgress[] {
   return [
@@ -89,6 +90,9 @@ describe('ProgressDialog', () => {
       />
     )
     expect(screen.getByText('Mangler tilgang')).toBeInTheDocument()
+    // The entry's time in SharePoint's UI language (Norwegian when the page names none), not in
+    // jsdom's en-US, where it would read 02:05:09 PM.
+    expect(screen.getByText('14:05:09')).toBeInTheDocument()
     expect(screen.getByText('Oppsettet feilet')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: strings.CloseModalText }))
     expect(onDismiss).toHaveBeenCalled()

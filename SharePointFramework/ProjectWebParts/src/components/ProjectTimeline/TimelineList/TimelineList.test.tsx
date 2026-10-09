@@ -101,6 +101,16 @@ describe('TimelineList', () => {
     expect(screen.getByText('Kari Nordmann')).toBeInTheDocument()
   })
 
+  it("formats dates in SharePoint's UI language, not a fixed Norwegian one", () => {
+    document.documentElement.lang = 'en-US'
+    try {
+      renderList()
+      expect(screen.getByText('03/15/2026')).toBeInTheDocument()
+    } finally {
+      document.documentElement.lang = ''
+    }
+  })
+
   it('sorts by another column when its header is clicked', async () => {
     const user = setupUser()
     renderList()

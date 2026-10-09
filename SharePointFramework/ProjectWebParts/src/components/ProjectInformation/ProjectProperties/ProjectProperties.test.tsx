@@ -67,10 +67,20 @@ describe('ProjectProperties', () => {
       'href',
       'https://contoso.no'
     )
-    expect(
-      screen.getByText(new Date('2026-03-15T00:00:00').toLocaleDateString())
-    ).toBeInTheDocument()
     expect(screen.getByText(/Linje 1/).innerHTML).toContain('<br>')
+  })
+
+  it("writes a date in SharePoint's UI language, not the browser's", () => {
+    // jsdom's browser language is en-US, where the date would read 3/15/2026.
+    ;(window as any)._spPageContextInfo = { currentUICultureName: 'nb-NO' }
+    try {
+      renderProperties([
+        property('GtStartDate', 'Startdato', new Date('2026-03-15T00:00:00'), 'DateTime')
+      ])
+      expect(screen.getByText('15.03.2026')).toHaveAttribute('title', '15.03.2026')
+    } finally {
+      delete (window as any)._spPageContextInfo
+    }
   })
 
   it('leaves out hidden, empty and system properties', () => {

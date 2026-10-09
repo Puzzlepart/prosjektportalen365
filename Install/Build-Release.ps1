@@ -443,6 +443,27 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
             @("### Rush rebuild timeline", "", '```') + $REPORT + @('```') | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
         }
     }
+    # Each solution's coverage against its floors, from Jest's summary, in the log and the job
+    # summary: the floors are raised from what CI measures, since the fast local loop compiles
+    # with tsc rather than Heft and can count a little differently. Printed before the floor check
+    # below, so a missed floor shows its numbers too.
+    $COVERAGE_KINDS = @("statements", "branches", "functions", "lines")
+    $COVERAGE_REPORT = @("| Solution | Statements | Branches | Functions | Lines |", "| --- | --- | --- | --- | --- |")
+    foreach ($Solution in $ALL_SOLUTIONS) {
+        $COVERAGE_SUMMARY = "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution/jest-output/coverage/coverage-summary.json"
+        if (-not (Test-Path $COVERAGE_SUMMARY)) { continue }
+        $COVERAGE_TOTAL = (Get-Content $COVERAGE_SUMMARY -Raw | ConvertFrom-Json).total
+        $COVERAGE_FLOORS = (Get-Content "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution/config/jest.config.json" -Raw | ConvertFrom-Json).coverageThreshold.global
+        $COVERAGE_CELLS = $COVERAGE_KINDS | ForEach-Object {
+            [string]::Format([cultureinfo]::InvariantCulture, "{0:F2} (floor {1})", [double]$COVERAGE_TOTAL.$_.pct, $COVERAGE_FLOORS.$_)
+        }
+        $COVERAGE_REPORT += "| $Solution | $($COVERAGE_CELLS -join ' | ') |"
+    }
+    Write-Host "[Coverage per solution]" -ForegroundColor Cyan
+    $COVERAGE_REPORT | Write-Host
+    if ($env:GITHUB_STEP_SUMMARY) {
+        @("### Coverage per solution", "") + $COVERAGE_REPORT | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+    }
     # Jest reports a missed coverage floor (`coverageThreshold` in a solution's jest.config.json)
     # but Heft's test phase still succeeds, so the floors are only enforced by this check.
     $missedFloors = Get-ChildItem -Path $SHAREPOINT_FRAMEWORK_BASEPATH -Recurse -Depth 2 -Filter "*.build.log" |
