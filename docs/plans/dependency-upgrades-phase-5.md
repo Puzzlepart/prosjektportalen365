@@ -1015,5 +1015,7 @@ script tried to make the app (`app@sharepoint`) a site owner, which SharePoint r
 fullføre handlingen"), and its catch ended the job green. Both versions read 1.14.0, so no per-site
 step would have run. The script now grants and removes no owner access when it signs in with a
 certificate (the app reaches every site through its permissions; a signed-in user is still asked),
-and exits 1 on a failure in CI. To be proven by the next full run with the tag (it needs the full
-build and upgrade, so not with `[apps-only]`).
+and exits 1 on a failure in CI. Proven by the next full run with the tag (37926986508, green): the
+script signed in as the app, granted nothing, and processed all 49 sites of the test hub (8 skipped
+as not project sites, having no `Prosjektegenskaper`); the 1.15.0 step found no old opportunity row
+left, as it should on a second run; the browser suite was 34 of 34.
