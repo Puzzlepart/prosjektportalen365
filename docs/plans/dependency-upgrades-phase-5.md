@@ -1079,3 +1079,22 @@ setup wizard (the site fields provisioned through `transformFieldXml` on the bro
 list sync, the same parser), the project information panel's title in the drawer's header, the
 `Status muligheter` colours after the upgrade step, and `00123` exported as text.
 
+**Pages on the test sites ran the main channel (2026-10-09).** The user's hand round found the
+aggregated overview's typography unchanged while the portfolio overview's was right. A browser
+probe found its rows with another class hash and no rule, and the pages' component ids gave the
+cause: `Leveranseoversikt`, `Erfaringslogg` and `Gevinstoversikt` on the hub held the main
+channel's aggregated overview, `DynList.aspx` its dynamic list, and the test project's
+`Prosjekttidslinje.aspx` and the news web part on its home page the main channel's too, so they
+ran the last `releases/1.15` build and nothing of phase 5. With the user's go, a one-off script
+pointed the six web parts at the test channel's ids (checked out, saved and published through the
+SitePages API; the pages' content backed up first); every list then measured alike. The e2e suite
+now fails a page that runs another channel's PP365 web part (`openPage`, `E2E_CHANNEL`), and gained
+read-only specs for what the hand rounds checked by eye: the lists' typography (portfolio overview,
+aggregated overview, dynamic list, the project timeline's list), the program administration's
+column headers sticking to the page and to the add dialog's list, its phase and created columns,
+hub groups, a search reopening a closed group and a right click that leaves the order alone, the
+portfolio overview's column menu on a right click, a person field's placeholder padding, and the
+project card's panel naming the project in its header. All pass against the test channel; three
+older specs (the project timeline at 1920px and two navigation cases) failed once under load and
+passed on a rerun.
+

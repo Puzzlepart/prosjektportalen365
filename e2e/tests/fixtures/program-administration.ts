@@ -52,6 +52,25 @@ export const rowOf = (admin: Locator, title: string) =>
 export const rowCheckOf = (admin: Locator, title: string) =>
   rowOf(admin, title).getByRole('checkbox', { name: ROW_CHECK })
 
+/** The search box above a list of the administration (the page's or the dialog's). */
+export const searchBox = (container: Locator) =>
+  container
+    .getByRole('searchbox')
+    .or(container.getByPlaceholder(/søk|search/i))
+    .first()
+
+/**
+ * The title of each project row of a grid, in order: the rows other than its header and groups.
+ * Read from the title's link, since a logo turns into the project's initials while the list shows.
+ */
+export async function projectRowTexts(grid: Locator): Promise<string[]> {
+  return grid.evaluate((root) =>
+    Array.from(root.querySelectorAll('.fui-TableBody .fui-TableRow'))
+      .filter((row) => !row.querySelector('button[aria-expanded]'))
+      .map((row) => (row.querySelector('a')?.textContent || row.textContent || '').trim())
+  )
+}
+
 /** The title of the first project row: its link text, or the first line of the row. */
 export async function firstRowTitle(grid: Locator) {
   // Group rows and the header row hold no project row check.

@@ -5,10 +5,12 @@ import {
   firstRowTitle,
   groupButtons,
   openAdministration,
+  projectRowTexts,
   removeButton,
   rowCheckOf,
   rowChecks,
-  rowOf
+  rowOf,
+  searchBox
 } from '../fixtures/program-administration'
 
 /**
@@ -81,6 +83,53 @@ test.describe('program administration', () => {
       'the selection should survive the collapse'
     ).toBeChecked()
     await expect(removeButton(admin)).toBeEnabled()
+  })
+
+  test('shows the phase and creation date, and a group per hub with its name and count', async ({
+    page,
+    openPage,
+    resolvePage
+  }) => {
+    const admin = await openAdministration(page, programUrl!, openPage, resolvePage)
+    const grid = admin.getByRole('grid').first()
+    for (const name of [/^(tittel|title)$/i, /^(fase|phase)$/i, /^(opprettet|created)$/i]) {
+      await expect(grid.getByRole('columnheader', { name })).toBeVisible()
+    }
+    const groups = groupButtons(grid)
+    test.skip((await groups.count()) < 2, 'the program spans one hub, so there are no groups')
+    for (const group of await groups.all()) {
+      await expect(group, 'a hub group names the hub and counts its projects').toHaveText(
+        /\S.*\(\d+\)$/
+      )
+    }
+  })
+
+  test('a search opens a group closed by hand', async ({ page, openPage, resolvePage }) => {
+    const admin = await openAdministration(page, programUrl!, openPage, resolvePage)
+    const grid = admin.getByRole('grid').first()
+    const groups = groupButtons(grid)
+    test.skip((await groups.count()) < 2, 'the program spans one hub, so there are no groups')
+    // The page opens every group, so the first project row is the first group's.
+    const title = await firstRowTitle(grid)
+    await groups.first().click()
+    await expect(rowOf(admin, title)).toBeHidden()
+    await searchBox(admin).fill(title)
+    await expect(rowOf(admin, title), 'the search opens the closed group').toBeVisible()
+    await searchBox(admin).fill('')
+  })
+
+  test('a right click on a column header neither sorts nor opens a menu', async ({
+    page,
+    openPage,
+    resolvePage
+  }) => {
+    const admin = await openAdministration(page, programUrl!, openPage, resolvePage)
+    const grid = admin.getByRole('grid').first()
+    const before = await projectRowTexts(grid)
+    await grid.getByRole('columnheader', { name: /^(tittel|title)$/i }).click({ button: 'right' })
+    await page.waitForTimeout(500)
+    await expect(page.getByRole('menu')).toHaveCount(0)
+    expect(await projectRowTexts(grid), 'the rows keep their order').toEqual(before)
   })
 
   test('a removed project can be added back, and does not linger in the selection', async ({
