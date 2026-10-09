@@ -44,7 +44,9 @@ Param(
     [Parameter(Mandatory = $false, HelpMessage = "Base64 encoded certificate")]
     [string]$CertificateBase64Encoded,
     [Parameter(Mandatory = $false, HelpMessage = "Which handlers to exclude when performing an upgrade")]
-    [string[]]$UpgradeExcludeHandlers = @("Navigation", "SupportedUILanguages", "Files")
+    [string[]]$UpgradeExcludeHandlers = @("Navigation", "SupportedUILanguages", "Files"),
+    [Parameter(Mandatory = $false, HelpMessage = "Do not send the installation pingback (URL, version, channel, time and parameter names) to the Prosjektportalen team")]
+    [switch]$SkipPingback
 )
 
 . "$PSScriptRoot/Scripts/SharedFunctions.ps1"
@@ -700,10 +702,28 @@ catch {
 
 Disconnect-PnPOnline
 
-$InstallEntry.InstallUrl = $Uri.AbsoluteUri
-
-try { 
-    Invoke-WebRequest "https://pp365-install-pingback.azurewebsites.net/api/AddEntry" -Body ($InstallEntry | ConvertTo-Json) -Method 'POST' -ErrorAction SilentlyContinue >$null 2>&1 
+if (-not $SkipPingback.IsPresent) {
+    # The pingback leaves the customer's tenant, so it carries only what the team needs to see
+    # which versions are installed: no user name and no parameter values. The invocation line
+    # can hold values such as -CertificateBase64Encoded, so only the parameter names are sent.
+    $PingbackCommand = if ($CI.IsPresent) {
+        "GitHub CI"
+    }
+    else {
+        (@("Install.ps1") + @($PSBoundParameters.Keys | Sort-Object | ForEach-Object { "-$_" })) -join " "
+    }
+    $PingbackEntry = @{
+        Title            = $InstallEntry.Title
+        InstallStartTime = $InstallStartTime
+        InstallEndTime   = $InstallEndTime
+        InstallVersion   = $InstallEntry.InstallVersion
+        InstallCommand   = $PingbackCommand
+        InstallChannel   = $Channel
+        InstallUrl       = $Uri.AbsoluteUri
+    }
+    try {
+        Invoke-WebRequest "https://pp365-install-pingback.azurewebsites.net/api/AddEntry" -Body ($PingbackEntry | ConvertTo-Json) -Method 'POST' -ErrorAction SilentlyContinue >$null 2>&1
+    }
+    catch {}
 }
-catch {}
 #endregion
