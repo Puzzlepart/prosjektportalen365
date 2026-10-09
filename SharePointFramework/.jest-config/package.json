@@ -10,10 +10,10 @@
     "validate-loc": "echo \"No localization in pp365-jest-config\""
   },
   "dependencies": {
-    "@microsoft/spfx-heft-plugins": "1.23.2",
-    "@microsoft/spfx-web-build-rig": "1.23.2",
-    "@rushstack/heft": "1.2.17",
+    "@microsoft/spfx-heft-plugins": "1.24.0-rc.0",
+    "@microsoft/spfx-web-build-rig": "1.24.0-rc.0",
+    "@rushstack/heft": "1.3.2",
     "@testing-library/jest-dom": "6.6.3",
-    "lodash": "4.17.21"
+    "lodash": "4.18.1"
   }
 }

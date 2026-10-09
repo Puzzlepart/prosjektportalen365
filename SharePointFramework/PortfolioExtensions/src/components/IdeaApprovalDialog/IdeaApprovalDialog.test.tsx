@@ -1,8 +1,8 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
-// Babel, so mocks are not hoisted. Fluent's combobox family cannot be opened under jsdom on
-// React 17 (it loops the Jest worker; see the testing guide), so the dialog's combobox is a native
-// select that keeps Fluent's contract: choosing an option calls `onOptionSelect` with the
-// option's value and text.
+// Babel, so mocks are not hoisted. Fluent's combobox family looped the Jest worker on React 17 and
+// takes tens of seconds to open under jsdom on React 18 (see the testing guide), so the dialog's
+// combobox is a native select that keeps Fluent's contract: choosing an option calls
+// `onOptionSelect` with the option's value and text.
 jest.mock('@fluentui/react-components', () => {
   const actual = jest.requireActual('@fluentui/react-components')
   const React = jest.requireActual('react')
@@ -113,7 +113,8 @@ describe('RecommendationDialog', () => {
     choose('Avvis')
     comment('For dyrt')
     fireEvent.click(screen.getByRole('button', { name: strings.SubmitLabel }))
-    await closed
+    // The dialog closes and unmounts a microtask after the click; React 18 wants that inside act.
+    await act(() => closed)
     expect(dialog.selectedChoice).toBe('Avvis')
     expect(dialog.comment).toBe('For dyrt')
     expect(screen.queryByText(strings.SetRecommendationTitle)).toBeNull()
@@ -124,7 +125,7 @@ describe('RecommendationDialog', () => {
     dialog.choices = CHOICES
     const closed = dialog.show()
     fireEvent.click(await screen.findByRole('button', { name: strings.CancelLabel }))
-    await closed
+    await act(() => closed)
     expect(dialog.comment).toBeUndefined()
     await waitFor(() => expect(screen.queryByText(strings.SetRecommendationTitle)).toBeNull())
   })

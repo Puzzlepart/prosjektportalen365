@@ -15,12 +15,15 @@ Skriptene i roten styrer monorepoet som helhet: Rush-operasjoner, generering av 
 | `generate-pnp-templates`       | `node ./.tasks/generate-pnp-templates.js`                                                                 | Bygger PnP-provisjoneringsmaler (porteføljemaler og taksonomi) fra kildefilene i `Templates/`-mappen. Se [Maler](../maler/maler.md).                                                             |
 | `generate-site-scripts`        | `node ./.tasks/generate-site-scripts.js --silent`                                                         | Genererer site scripts fra kildefilene i `SiteScripts/src`-mappen til klar-til-bruk JSON. Se [Site Design / Site Scripts](../maler/site-design-og-site-scripts.md).                              |
 | `generate-sbom`                | `node ./.tasks/generate-sbom.js`                                                                          | Genererer `SBOM.md` med komplett oversikt over avhengigheter i alle pakker. Se [SBOM-generering](../ci/sbom.md).                                                                                |
+| `check-skills`                 | `node ./.tasks/check-skills.js`                                                                           | Sjekker at agentferdighetene (skills) bare ligger i `.claude/skills`: Claude Code leser bare den mappen, og GitHub Copilot leser den også. Feiler hvis `.github/skills` eller `.agents/skills` finnes, eller hvis en `SKILL.md` mangler `name` lik mappenavnet eller en `description` på 1–1024 tegn. Kjøres i CI av `skills.yml`. |
+| `check-channel-ids` | `node ./.tasks/check-channel-ids.js` | Sjekker at løsningene har main-kanalens løsnings- og komponent-ID-er i `config/package-solution.json` og manifestene, slik `channels/main.json` har dem. Feiler og lister avvikene ellers. `Install/Build-Release.ps1` kjører den før bygget. |
+| `test:tasks` | `node --test ".tasks/*.test.js"` | Kjører testene for skriptene i `.tasks/` (i dag `check-channel-ids`). |
 | `postversion`                  | `npm run generate-readme && npm run sync-version && npm run generate-sbom`                                | Kjøres automatisk av npm etter `npm version patch/minor`. Regenererer README, synkroniserer versjoner og oppdaterer SBOM i ett steg.                                                             |
 | `rush:init`                    | `npm run rush:update && npm run rush:build`                                                               | Førstegangsoppsett av repoet. Kjører `rush:update` etterfulgt av `rush:build` slik at avhengigheter installeres og alle løsningene bygges i riktig rekkefølge. Se [Rush og bygging](./rush.md).  |
 | `rush:update`                  | `node common/scripts/install-run-rush.js update`                                                          | Kjører `rush update` uten at Rush er installert globalt. Installerer avhengigheter og sikrer konsistente versjoner på tvers av løsningene.                                                       |
-| `rush:build`                   | `node common/scripts/install-run-rush.js rebuild --verbose`                                               | Kjører `rush rebuild` med detaljerte logger. Bygger alle løsningene i monorepoet i riktig avhengighetsrekkefølge.                                                                                |
-| `rush:lint`                    | `node common/scripts/install-run-rush.js lint`                                                            | Kjører `lint`-skriptet i alle SPFx-løsningene via Rush. Brukes også i `automatic_chores.yml` for å rette formateringsfeil automatisk.                                                            |
-| `build-release`                | `pwsh -File ./Install/build-release.ps1`                                                                  | Bygger en komplett utgivelsespakke ved å kjøre PowerShell-skriptet `Install/build-release.ps1`. Se [Bygge en ny utgivelse](../utgivelse/bygge-utgivelse.md).                                     |
+| `rush:build`                   | `node common/scripts/install-run-rush.js rebuild --verbose`                                               | Kjører `rush rebuild` med detaljerte logger. Bygger alle løsningene i monorepoet i riktig avhengighetsrekkefølge og kjører testene.                                                               |
+| `rush:lint`                    | `node common/scripts/install-run-rush.js lint`                                                            | Kjører `lint`-skriptet i alle prosjektene via Rush. I SPFx-løsningene skriver det om filene (`prettier --write`, `eslint --fix`).                                                            |
+| `build-release`                | `pwsh -File ./Install/Build-Release.ps1`                                                                  | Bygger en komplett utgivelsespakke ved å kjøre PowerShell-skriptet `Install/Build-Release.ps1`. Se [Bygge en ny utgivelse](../utgivelse/bygge-utgivelse.md).                                     |
 
 ### Skript i SPFx-løsningene
 
@@ -30,30 +33,36 @@ Hver SPFx-løsning under `SharePointFramework/` (`PortfolioExtensions`, `Portfol
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `watch`         | `heft start --nobrowser`                                                                                                         | Starter utviklingsserveren (webpack-dev-server) uten å åpne nettleseren. Hovedkommandoen for lokal utvikling; siden oppdateres automatisk ved endringer. Velg miljø med `npm run watch -- --serve-config <navn>`.   |
 | `prewatch`      | `node ../.tasks/pre-watch.js`                                                                                                    | Kjøres automatisk før `watch`. Oppretter `.env`, `config/serve.json` (fra `environments.json` og `config/serve.sample.json`) og `.vscode/launch.json` fra maler, filtrerer bundler basert på `SERVE_BUNDLE_REGEX` og håndterer kanalbytte. Se [Utviklingsmiljø](./utviklingsmiljo.md). |
-| `postwatch`     | `node ../.tasks/post-watch.js`                                                                                                   | Kjøres automatisk etter `watch` avsluttes. Rydder opp i midlertidige filer og tilbakestiller `config.json` til opprinnelig tilstand.                                                                              |
+| `postwatch`     | `node ../.tasks/post-watch.js`                                                                                                   | Kjøres automatisk når `watch` avslutter uten feil. Tilbakestiller kanal-ID-ene i `config/package-solution.json` og manifestene, og bundle-filteret i `config/config.json`. Viser `git status` endrede `manifest.json` etter en `watch`, tilbakestill med `node ../.tasks/modifySolutionFiles.js --revert --force` og `node ../.tasks/setBundleConfig.js --revert`. Commit aldri kanal-ID-er. |
 | `start`         | `heft start`                                                                                                                     | Som `watch`, men åpner nettleseren på `serveConfigurations.default` fra `config/serve.json`. Heft legger selv på `debug`, `noredir` og `debugManifestsFile`. Bruk `--locales nb-no` for å bygge kun ett språk.      |
-| `build`         | `heft build --clean --production && heft package-solution --production`                                                          | Bygger og pakker løsningen som en `.sppkg`-fil klar for distribusjon. `--production` gir optimalisert produksjonsbygg (tilsvarer det gamle `--ship`).                                                              |
+| `build`         | `heft test --clean --production && heft package-solution --production`                                                          | Bygger løsningen, kjører Jest-testene og pakker den som en `.sppkg`-fil klar for distribusjon. `--production` gir optimalisert produksjonsbygg (tilsvarer det gamle `--ship`).                                                              |
 | `clean`         | `heft clean`                                                                                                                     | Sletter byggeutdata (`lib`, `lib-commonjs`, `dist`, `temp`, `release`).                                                                                                                                            |
-| `build:test`    | `node ../.tasks/build.js --channel test`                                                                                         | Bygger en kanalspesifikk `.sppkg` for `test`-kanalen i ett steg. Bytter inn IDer fra `channels/test.json`, kjører `heft build && heft package-solution`, og tilbakestiller manifestene etterpå.                       |
+| `test`          | `heft test`                                                                                                                      | Bygger løsningen og kjører Jest-testene (`src/**/*.test.ts(x)`). Én fil: `npx heft test --test-path-pattern <navn>`. Se [Testing](testing.md). |
+| `eject-webpack` | `heft eject-webpack`                                                                                                             | Skriver SPFx' webpack-oppsett ut i løsningen, og kan ikke angres. Ikke i bruk: tilpasninger går i `config/spfx-customize-webpack.js`. |
+| `build:test`    | `node ../.tasks/build.js --channel test`                                                                                         | Bygger en kanalspesifikk `.sppkg` for `test`-kanalen i ett steg. Bytter inn ID-er fra `channels/test.json`, kjører `heft build --clean --production` og `heft package-solution --production` (uten Jest-testene), og tilbakestiller etterpå.                       |
 | `build:i18n`    | `node ../.tasks/build.js --channel i18n`                                                                                         | Som `build:test`, men for `i18n`-kanalen.                                                                                                                                                                          |
 | `build:kurs`    | `node ../.tasks/build.js --channel kurs`                                                                                         | Som `build:test`, men for `kurs`-kanalen.                                                                                                                                                                          |
-| `postversion`   | `heft build --production && npm publish`                                                                                         | Kjøres automatisk etter `npm version`. Kompilerer TypeScript og publiserer pakken til npm (brukes for pakker som publiseres uavhengig).                                                                            |
+| `postversion`   | `heft build --production && npm publish`                                                                                         | Rest fra da løsningene ble publisert til npm; publiseringen har stoppet. Kjør aldri `npm version` eller `npm publish` i en løsning; se [NPM](../utgivelse/npm.md). |
 | `lint`          | `npm run prettier && eslint ./src --fix` | Formaterer med Prettier og kjører deretter ESLint 9 (flat config) med automatisk feilretting. Konfigurasjonen ligger i løsningens `eslint.config.js`, som videresender til Rush-prosjektet `SharePointFramework/.eslint-config` (pakken `pp365-eslint-config`). Merk at Heft også kjører ESLint som en del av `heft build` — der feiler bygget på errors, men ikke på warnings. |
 | `prettier`      | `prettier "**/*.ts*" --write --log-level warn --config ../.prettierrc.yaml` | Formaterer alle `.ts`/`.tsx`-filer etter felles Prettier-konfigurasjon. Doble anførselstegn gjør at mønsteret også virker i Windows cmd/PowerShell. Kalles av `lint`. |
 | `validate-loc`  | `node ../.tasks/validateLoc.js --path ./src/loc --interface I{Pakkenavn}Strings --dts mystrings.d.ts --output ./localization-report.md --summary` | Validerer lokaliseringsfiler (`.js`-ressurser) i `src/loc` mot typeinterfacet og genererer en rapport. Sikrer at alle språk har samme nøkler.                                                                     |
 
 ### Skript i `SharePointFramework/shared-library`
 
-`shared-library` er biblioteket som de andre SPFx-løsningene deler kode med. Det bygges og publiseres uavhengig, og har derfor ikke `watch`/`start`-skript.
+`shared-library` er biblioteket som de andre SPFx-løsningene deler kode med. Det bygges og publiseres uavhengig og har ingen dev-server, så det har ikke `start`-skript. `watch` holder bare `lib/` oppdatert mens en løsnings `watch` kjører.
 
 | Skript         | Kommando                                                                                                                                  | Hva det gjør / hvorfor                                                                                                                    |
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `build`        | `heft build --clean --production && heft package-solution --production`                                                                   | Bygger biblioteket. Kalles typisk via `rush rebuild -o pp365-shared-library` for å oppdatere biblioteket som andre løsninger avhenger av. |
+| `build`        | `heft test --clean --production && npm run test:runtime && heft package-solution --production`                                                                   | Bygger biblioteket, kjører Jest-testene og kjøretidstestene (`test:runtime`) og pakker det. Kalles typisk via `rush rebuild -o pp365-shared-library` for å oppdatere biblioteket som andre løsninger avhenger av. |
+| `watch`        | `heft build-watch --clean` | Bygger biblioteket på nytt hver gang du lagrer, uten tester og uten dev-server. En løsning som kjører `npm run watch` tar med endringen og laster siden på nytt. Start det før løsningens `watch`, og start løsningens `watch` på nytt etter endrede tekster. Se [Utviklingsmiljø](utviklingsmiljo.md). |
 | `build:test`   | `node ../.tasks/build.js --channel test`                                                                                                  | Bygger en kanalspesifikk `.sppkg` for `test`-kanalen. Tilsvarende finnes for `build:i18n` og `build:kurs`.                                |
-| `postversion`  | `heft build --production && npm publish`                                                                                                  | Kompilerer TypeScript og publiserer biblioteket til npm som [`pp365-shared-library`](https://www.npmjs.com/package/pp365-shared-library). |
+| `postversion`  | `heft build --production && npm publish`                                                                                                  | Rest fra da løsningene ble publisert til npm; publiseringen har stoppet. Kjør aldri `npm version` eller `npm publish` i en løsning; se [NPM](../utgivelse/npm.md). `pp365-shared-library` har aldri ligget på npm. |
 | `lint`         | `npm run prettier && eslint ./src --fix` | Formaterer med Prettier og kjører deretter ESLint 9 (flat config) med automatisk feilretting. Konfigurasjonen ligger i løsningens `eslint.config.js`, som videresender til Rush-prosjektet `SharePointFramework/.eslint-config` (pakken `pp365-eslint-config`). Merk at Heft også kjører ESLint som en del av `heft build` — der feiler bygget på errors, men ikke på warnings. |
 | `prettier`     | `prettier "**/*.ts*" --write --log-level warn --config ../.prettierrc.yaml` | Formaterer alle `.ts`/`.tsx`-filer etter felles Prettier-konfigurasjon. Doble anførselstegn gjør at mønsteret også virker i Windows cmd/PowerShell. Kalles av `lint`. |
 | `validate-loc` | `node ../.tasks/validateLoc.js --path ./src/loc --interface ISharedLibraryStrings --dts mystrings.d.ts --output ./localization-report.md --summary` | Validerer lokaliseringsfiler i biblioteket mot `ISharedLibraryStrings`-interfacet.                                                         |
+| `test`         | `heft test && npm run test:runtime` | Bygger biblioteket og kjører Jest-testene, deretter kjøretidstestene. |
+| `test:runtime` | `node --test "test/runtime/*.test.mjs"` | Kjøretidstester mot ekte PnPjs 4 (ESM) med en falsk transport, for kode som setter sammen PnPjs-spørringer. Se [Testing](testing.md). |
+| `clean`        | `heft clean` | Sletter byggeutdata. |
 
 ### Skript i `SharePointFramework/.tasks`
 
@@ -61,11 +70,33 @@ Hver SPFx-løsning under `SharePointFramework/` (`PortfolioExtensions`, `Portfol
 
 | Skript         | Kommando                                                                                                                | Hva det gjør / hvorfor                                                                                                                                     |
 | -------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `build`        | `node ./build.js`                                                                                                       | Kjører bygget for `.tasks`-pakken (valideringer, klargjøring av hjelpeskript).                                                                             |
+| `build`        | `echo "No build for pp365-spfx-tasks; …"`                                                                              | Ingen bygg: skriptene i mappen kjøres direkte, f.eks. `node ../.tasks/build.js --channel <navn>` fra en løsning. Skriptet finnes fordi `rush build` krever det. |
 | `lint`         | `echo "No linting configured"` | Ingen linting er satt opp for denne pakken; skriptet finnes bare fordi `rush lint` krever at alle prosjekter har det. |
 | `validate-loc` | `echo "No localization in pp365-spfx-tasks"` | `.tasks` har ingen egen `src/loc`; skriptet er en plassholder slik at `rush validate-loc` kan kjøre over alle prosjekter. |
 
 Se [Oppgaver](../../SharePointFramework/.tasks/README.md) for en full oversikt over oppgaveskriptene som ligger i denne mappen.
+
+### Skript i `SharePointFramework/.eslint-config` og `SharePointFramework/.jest-config`
+
+`.eslint-config` (`pp365-eslint-config`) er den felles ESLint-konfigurasjonen, og `.jest-config` (`pp365-jest-config`) er den felles Jest-harnessen; se [Testing](testing.md). Ingen av dem har noe å bygge.
+
+| Skript         | Kommando | Hva det gjør / hvorfor |
+| -------------- | -------- | ---------------------- |
+| `build`        | `echo "No build for pp365-eslint-config"` / `node -e "require('./lib/resolver.js'); require('./lib/amdTransform.js'); …"` | I `.jest-config` sjekker det at harnessens resolver og AMD-transform lar seg laste. |
+| `lint`, `validate-loc` | `echo …` | Plassholdere, fordi `rush lint` og `rush validate-loc` krever skriptene i alle prosjekter. |
+
+### Skript i `e2e`
+
+`e2e` (`pp365-e2e`) har Playwright-testene mot testtenanten. De trenger `e2e/.env` (kopiert fra `.env.example`) og `npx playwright install chromium` én gang; se [Testing](testing.md).
+
+| Skript         | Kommando | Hva det gjør / hvorfor |
+| -------------- | -------- | ---------------------- |
+| `build`        | `tsc --noEmit -p tsconfig.json` | Typesjekker testene. Kjøres av `rush build`. |
+| `test`         | `playwright test` | Kjører testene mot testtenanten. |
+| `test:ui`      | `playwright test --ui` | Åpner Playwrights grensesnitt for å kjøre og feilsøke testene. |
+| `test:headed`  | `playwright test --headed` | Kjører testene med synlig nettleser. |
+| `report`       | `playwright show-report` | Åpner HTML-rapporten fra siste kjøring. |
+| `lint`, `validate-loc` | `echo …` | Plassholdere for `rush lint` og `rush validate-loc`. |
 
 ### Skript i `Templates`
 
@@ -89,10 +120,13 @@ Oversikt over hvilke skript som brukes i typiske arbeidsflyter:
 | ------------------------------------------- | ------------------------------------------------------------------------------- |
 | Første gangs oppsett av repoet              | `npm run rush:init` i rot                                                       |
 | Oppdater `shared-library` og bygg på nytt   | `rush rebuild -o pp365-shared-library`                                          |
+| Endre `shared-library` mens `watch` kjører  | `npm run watch` i `shared-library`, deretter i løsningen                        |
 | Daglig utvikling på en webdel/utvidelse     | `npm run watch` i den aktuelle SPFx-pakken                                      |
 | Rett opp formatering og linting             | `npm run rush:lint` i rot, eller `npm run lint` i én pakke                      |
+| Kjør testene i én løsning                   | `npm test` i løsningen                                                          |
+| Kjør Playwright-testene                     | `npm test` i `e2e`                                                              |
 | Generer ny kanal                            | `npm run generate-channel-config <kanalnavn>` i rot                             |
 | Regenerer README-er                         | `npm run generate-readme` i rot                                                 |
-| Ny patch-/minor-versjon                     | `npm version patch` / `npm version minor` i rot (utløser `postversion`-hooken) |
+| Ny patch-/minor-versjon                     | `npm version minor --no-git-tag-version` (eller `patch`) i rot; se [Opprettelse av en ny versjon](../utgivelse/opprette-ny-versjon.md) |
 | Bygg utgivelsespakke lokalt                 | `npm run build-release` i rot                                                   |
 | Oppdater SBOM manuelt                       | `npm run generate-sbom` i rot                                                   |

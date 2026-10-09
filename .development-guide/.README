@@ -6,11 +6,15 @@
 [[ template:toc ]]
 </details>
 
+[[load:.development-guide/kom-i-gang.md]]
+
 [[load:.development-guide/git/branching-og-arbeidsflyt.md]]
 
 [[load:.development-guide/git/commit-praksis.md]]
 
 [[load:.development-guide/spfx/komponentoversikt.md]]
+
+[[load:.development-guide/spfx/kodemonster.md]]
 
 [[load:.development-guide/spfx/losninger.md]]
 
@@ -22,11 +26,11 @@
 
 [[load:.development-guide/spfx/testing.md]]
 
-[[load:.development-guide/maler/site-design-og-site-scripts.md]]
+[[load:.development-guide/maler/maler.md]]
 
 [[load:.development-guide/maler/js-provisjoneringsmal.md]]
 
-[[load:.development-guide/maler/maler.md]]
+[[load:.development-guide/maler/site-design-og-site-scripts.md]]
 
 [[load:.development-guide/maler/kanaler.md]]
 

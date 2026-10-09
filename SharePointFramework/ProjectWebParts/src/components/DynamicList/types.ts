@@ -317,7 +317,15 @@ export interface IDynamicListProps extends IBaseWebPartComponentProps {
   customActions?: ICustomAction[]
 }
 
-export interface IDynamicListState extends IBaseWebPartComponentState<IDynamicListData> {
+export interface IDynamicListState extends Omit<
+  IBaseWebPartComponentState<IDynamicListData>,
+  'error'
+> {
+  /**
+   * Message of a failed fetch, shown in place of the list
+   */
+  error?: string
+
   /**
    * Loading state
    */

@@ -38,6 +38,7 @@ export const List: FC<IListProps<any>> = (props) => {
                 compact={props.compact}
                 justified={props.isListLayoutModeJustified}
                 onColumnHeaderClick={onColumnHeaderClick}
+                onColumnHeaderContextMenu={onColumnHeaderClick}
                 onSelectionChange={props.onSelectionChange}
                 renderCell={onRenderItemColumn}
               />

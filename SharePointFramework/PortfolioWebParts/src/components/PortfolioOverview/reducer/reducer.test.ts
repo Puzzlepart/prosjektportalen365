@@ -6,23 +6,31 @@ import createReducer, {
   COLUMN_FORM_PANEL_ON_SAVED,
   DATA_FETCHED,
   DATA_FETCH_ERROR,
+  EXCEL_EXPORT_ERROR,
+  EXCEL_EXPORT_SUCCESS,
   EXECUTE_SEARCH,
   ON_FILTER_CHANGED,
   SELECTION_CHANGED,
   SET_GROUP_BY,
   SET_SORT,
+  SET_VIEW_FORM_PANEL,
+  START_EXCEL_EXPORT,
+  STARTING_DATA_FETCH,
   TOGGLE_COLUMN_CONTEXT_MENU,
+  TOGGLE_COLUMN_FORM_PANEL,
   TOGGLE_COMPACT,
   TOGGLE_EDIT_VIEW_COLUMNS_PANEL,
   TOGGLE_FILTER_PANEL,
+  TOGGLE_MERGED_VIEW,
   getInitialState
 } from './index'
 
 /**
- * The overview's state rules: search, filters, grouping, sorting per data type (including a
- * column's custom order), the selection, the column context menu, the data fetched for a view and
- * the column form's results. The list renders what this produces, so these must hold through the
- * list's conversion.
+ * The overview's state rules: loading, search, filters, grouping, sorting per data type (including
+ * a column's custom order), the selection, the column context menu, the data fetched for a view,
+ * the merged view of all projects, the Excel export's progress and the column and view forms'
+ * results. The list renders what this produces, so these must hold through the list's conversion
+ * and the reducer's rewrites.
  */
 const column = (fieldName: string, name: string, extra: Record<string, any> = {}) =>
   ({ key: fieldName, fieldName, name, minWidth: 100, dataType: 'text', ...extra }) as any
@@ -70,7 +78,7 @@ describe('PortfolioOverview reducer', () => {
     expect(next.columns).toEqual([title])
     expect(next.groupBy).toEqual(phase)
     expect(next.isUserInPortfolioManagerGroup).toBe(true)
-    expect(document.location.hash).toBe('#viewId=1')
+    expect(document.location.hash).toBe('#viewId=1&groupBy=GtProjectPhase')
   })
 
   it('keeps the error, named after the view, when the fetch fails', () => {
@@ -128,22 +136,32 @@ describe('PortfolioOverview reducer', () => {
     const { reducer, state } = setup({
       items: [{ Title: 'Bravo' }, { Title: 'alfa' }, { Title: 'Charlie' }]
     })
-    // `isSortedDescending: true` is the "A til Å" choice of the column menu: ascending.
-    const ascending = reducer(state, SET_SORT({ column: title, isSortedDescending: true }))
+    // The flag means what it says, as the header's sort arrow reads it: "A til Å" sends false.
+    const ascending = reducer(state, SET_SORT({ column: title, isSortedDescending: false }))
     expect(titles(ascending)).toEqual(['alfa', 'Bravo', 'Charlie'])
     expect(ascending.columns.map((c: any) => [c.isSorted, c.isSortedDescending])).toEqual([
-      [true, true],
+      [true, false],
       [false, false]
     ])
     expect(ascending.sortBy.column.key).toBe('Title')
-    const descending = reducer(ascending, SET_SORT({ column: title, isSortedDescending: false }))
+    const descending = reducer(ascending, SET_SORT({ column: title, isSortedDescending: true }))
     expect(titles(descending)).toEqual(['Charlie', 'Bravo', 'alfa'])
-    // Without an explicit direction the column's current direction is flipped.
-    const flipped = reducer(
-      descending,
-      SET_SORT({ column: { ...title, isSortedDescending: false } })
-    )
-    expect(titles(flipped)).toEqual(['alfa', 'Bravo', 'Charlie'])
+    expect(descending.columns[0].isSortedDescending).toBe(true)
+    // Without a direction (a custom sort), an unsorted column sorts ascending and a sorted one
+    // flips.
+    expect(titles(reducer(descending, SET_SORT({ column: { ...title } })))).toEqual([
+      'alfa',
+      'Bravo',
+      'Charlie'
+    ])
+    expect(
+      titles(
+        reducer(
+          descending,
+          SET_SORT({ column: { ...title, isSorted: true, isSortedDescending: false } })
+        )
+      )
+    ).toEqual(['Charlie', 'Bravo', 'alfa'])
   })
 
   it('sorts number columns numerically', () => {
@@ -154,14 +172,14 @@ describe('PortfolioOverview reducer', () => {
         { Title: 'Hundre', GtBudgetTotal: 100 }
       ]
     })
-    expect(titles(reducer(state, SET_SORT({ column: budget, isSortedDescending: true })))).toEqual([
-      'To',
-      'Ti',
-      'Hundre'
-    ])
     expect(titles(reducer(state, SET_SORT({ column: budget, isSortedDescending: false })))).toEqual(
-      ['Hundre', 'Ti', 'To']
+      ['To', 'Ti', 'Hundre']
     )
+    expect(titles(reducer(state, SET_SORT({ column: budget, isSortedDescending: true })))).toEqual([
+      'Hundre',
+      'Ti',
+      'To'
+    ])
   })
 
   it('sorts by a custom order of the column', () => {
@@ -173,12 +191,21 @@ describe('PortfolioOverview reducer', () => {
       ]
     })
     const customSort = { name: 'Fasene i rekkefølge', order: ['Konsept', 'Planlegge', 'Realisere'] }
-    const sorted = reducer(state, SET_SORT({ column: phase, customSort, isSortedDescending: true }))
+    const sorted = reducer(
+      state,
+      SET_SORT({ column: phase, customSort, isSortedDescending: false })
+    )
     expect(titles(sorted)).toEqual(['Bravo', 'Charlie', 'Alfa'])
     expect(sorted.sortBy.customSort).toEqual(customSort)
     expect(
-      titles(reducer(state, SET_SORT({ column: phase, customSort, isSortedDescending: false })))
+      titles(reducer(state, SET_SORT({ column: phase, customSort, isSortedDescending: true })))
     ).toEqual(['Alfa', 'Charlie', 'Bravo'])
+    // The menu sends a custom sort without a direction: the order as listed, first time round.
+    expect(titles(reducer(state, SET_SORT({ column: phase, customSort })))).toEqual([
+      'Bravo',
+      'Charlie',
+      'Alfa'
+    ])
   })
 
   it('keeps the selected items and the open column menu', () => {
@@ -263,5 +290,128 @@ describe('PortfolioOverview reducer', () => {
       })
     )
     expect(reverted.currentView.columnOrder).toEqual([])
+  })
+
+  it('shows loading again when a new fetch starts', () => {
+    const { reducer, state } = setup({ loading: false, items: [{ Title: 'Alfa' }] })
+    const next = reducer(state, STARTING_DATA_FETCH())
+    expect(next.loading).toBe(true)
+    expect(titles(next)).toEqual(['Alfa'])
+  })
+
+  it('marks the Excel export as running until it succeeds or fails, and keeps no error from it', () => {
+    const { reducer, state } = setup()
+    const exporting = reducer(state, START_EXCEL_EXPORT())
+    expect(exporting.isExporting).toBe(true)
+    expect(reducer(exporting, EXCEL_EXPORT_SUCCESS()).isExporting).toBe(false)
+    const failed = reducer(exporting, EXCEL_EXPORT_ERROR(new Error('Eksporten feilet')))
+    expect(failed.isExporting).toBe(false)
+    expect(failed.error).toBeUndefined()
+  })
+
+  it('opens the view form for a new view or the chosen one, and closes it', () => {
+    const { reducer, state } = setup()
+    expect(reducer(state, SET_VIEW_FORM_PANEL({ isOpen: true })).viewForm).toEqual({
+      isOpen: true
+    })
+    const chosen = view({ id: 2, title: 'Mine prosjekter' })
+    const editing = reducer(state, SET_VIEW_FORM_PANEL({ isOpen: true, view: chosen }))
+    expect(editing.viewForm).toEqual({ isOpen: true, view: chosen })
+    expect(reducer(editing, SET_VIEW_FORM_PANEL({ isOpen: false })).viewForm).toEqual({
+      isOpen: false
+    })
+  })
+
+  it('switches to the merged view of all projects and back, as a change of view each way', () => {
+    const { reducer, state } = setup()
+    const merged = reducer(state, TOGGLE_MERGED_VIEW(true))
+    expect(merged.isMergedView).toBe(true)
+    expect(merged.isChangingView).toBe(true)
+    const separate = reducer({ ...merged, isChangingView: false }, TOGGLE_MERGED_VIEW(false))
+    expect(separate.isMergedView).toBe(false)
+    expect(separate.isChangingView).toBe(true)
+  })
+
+  it('opens the column form for a new column or the chosen one, and closes it', () => {
+    const { reducer, state } = setup()
+    expect(reducer(state, TOGGLE_COLUMN_FORM_PANEL({ isOpen: true })).columnForm).toEqual({
+      isOpen: true
+    })
+    const editing = reducer(state, TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column: phase }))
+    expect(editing.columnForm).toEqual({ isOpen: true, column: phase })
+    expect(reducer(editing, TOGGLE_COLUMN_FORM_PANEL({ isOpen: false })).columnForm).toEqual({
+      isOpen: false
+    })
+  })
+
+  it('sorts date, currency and percentage columns by their values', () => {
+    const start = column('GtStartDate', 'Startdato', { dataType: 'date' })
+    const costs = column('GtCostsTotal', 'Kostnader', { dataType: 'currency' })
+    const progress = column('GtProgress', 'Fremdrift', { dataType: 'percentage' })
+    const { reducer, state } = setup({
+      items: [
+        {
+          Title: 'Alfa',
+          GtStartDate: '2026-05-01T00:00:00Z',
+          GtCostsTotal: 'kr 30',
+          GtProgress: '50%'
+        },
+        {
+          Title: 'Bravo',
+          GtStartDate: '2025-11-15T00:00:00Z',
+          GtCostsTotal: 'kr 1000',
+          GtProgress: '5%'
+        },
+        {
+          Title: 'Charlie',
+          GtStartDate: '2026-01-10T00:00:00Z',
+          GtCostsTotal: 'kr 200',
+          GtProgress: '100%'
+        }
+      ]
+    })
+    const sorted = (c: any, isSortedDescending: boolean) =>
+      titles(reducer(state, SET_SORT({ column: c, isSortedDescending })))
+    expect(sorted(start, false)).toEqual(['Bravo', 'Charlie', 'Alfa'])
+    expect(sorted(start, true)).toEqual(['Alfa', 'Charlie', 'Bravo'])
+    expect(sorted(costs, false)).toEqual(['Alfa', 'Charlie', 'Bravo'])
+    expect(sorted(costs, true)).toEqual(['Bravo', 'Charlie', 'Alfa'])
+    expect(sorted(progress, false)).toEqual(['Bravo', 'Alfa', 'Charlie'])
+    expect(sorted(progress, true)).toEqual(['Charlie', 'Alfa', 'Bravo'])
+  })
+
+  it('writes the fetched grouping to the address, not the one before it, and takes no managed properties as none', () => {
+    window.history.replaceState(null, '', '/')
+    const { reducer, state } = setup({ groupBy: title })
+    const next = reducer(
+      state,
+      DATA_FETCHED({
+        items: [],
+        currentView: view(),
+        groupBy: phase,
+        managedProperties: undefined,
+        isUserInPortfolioManagerGroup: false,
+        showChildProjectInfoInProgram: true
+      })
+    )
+    expect(document.location.hash).toBe('#viewId=1&groupBy=GtProjectPhase')
+    expect(next.groupBy).toEqual(phase)
+    // A view fetched without a grouping leaves it out of the address.
+    reducer(next, DATA_FETCHED({ items: [], currentView: view(), groupBy: undefined } as any))
+    expect(document.location.hash).toBe('#viewId=1')
+    expect(next.managedProperties).toEqual([])
+    expect(next.showChildProjectInfoInProgram).toBe(true)
+  })
+
+  it('keeps the grouping in the address when the view changes, and names no view when none was open', () => {
+    window.history.replaceState(null, '', '/')
+    const grouped = setup({ currentView: view(), groupBy: phase })
+    grouped.reducer(grouped.state, CHANGE_VIEW(view({ id: 2, title: 'Mine prosjekter' })))
+    expect(document.location.hash).toBe('#viewId=2&groupBy=GtProjectPhase')
+    window.history.replaceState(null, '', '/')
+    const first = setup()
+    const next = first.reducer(first.state, CHANGE_VIEW(view({ id: 2, title: 'Mine prosjekter' })))
+    expect(next.currentView.title).toBe('Mine prosjekter')
+    expect(document.location.hash).toBe('')
   })
 })

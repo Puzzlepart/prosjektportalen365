@@ -1,6 +1,7 @@
 import { PopoverProps } from '@fluentui/react-components'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'ProjectExtensionsStrings'
+import { formatShortDate } from 'pp365-shared-library'
 import { useBoolean } from 'usehooks-ts'
 import { useRiskActionFieldCustomizerContext } from '../../../extensions/riskAction/context'
 import { useRiskActionContext } from '../context'
@@ -41,9 +42,7 @@ export function useRiskActionPopover() {
     infoText = strings.RiskActionPopoverInfoTextNoPlanner
   }
 
-  const lastUpdated =
-    itemContext.hiddenFieldValues?.updated &&
-    new Date(itemContext.hiddenFieldValues.updated).toLocaleString()
+  const lastUpdated = formatShortDate(itemContext.hiddenFieldValues?.updated, true)
 
   return {
     infoText,

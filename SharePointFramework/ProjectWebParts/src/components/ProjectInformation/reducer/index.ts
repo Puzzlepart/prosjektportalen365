@@ -56,7 +56,7 @@ const createProjectInformationReducer = (spfxContext: SPFxContext) =>
           ...(state.data ?? {}),
           ...action.payload.data
         }
-        state.properties = createProperties(state as IProjectInformationState, spfxContext)
+        state.properties = createProperties(current(state) as IProjectInformationState, spfxContext)
       })
       .addCase(FETCH_DATA_ERROR, (state, action) => {
         state.error = action.payload.error

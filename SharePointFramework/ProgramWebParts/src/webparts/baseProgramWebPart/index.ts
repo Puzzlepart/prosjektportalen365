@@ -3,10 +3,9 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { LogLevel } from '@pnp/logging'
 import { SPFI } from '@pnp/sp'
 import { SPDataAdapter } from 'data/SPDataAdapter'
-import { createSpfiInstance } from 'pp365-shared-library'
+import { createSpfiInstance, renderReact, unmountReact } from 'pp365-shared-library'
 import { IHubSite } from 'pp365-shared-library/lib/interfaces'
 import { ComponentClass, FC, ReactElement, createElement } from 'react'
-import { render, unmountComponentAtNode } from 'react-dom'
 import { IBaseProgramWebPartProps } from './types'
 
 export abstract class BaseProgramWebPart<
@@ -67,7 +66,7 @@ export abstract class BaseProgramWebPart<
       title: this.properties.title
     }
     const element: ReactElement<T> = createElement(component, combinedProps)
-    render(element, this.domElement)
+    renderReact(element, this.domElement)
   }
 
   public async onInit(): Promise<void> {
@@ -96,7 +95,7 @@ export abstract class BaseProgramWebPart<
    */
   protected onDispose(): void {
     if (this.domElement) {
-      unmountComponentAtNode(this.domElement)
+      unmountReact(this.domElement)
     }
   }
 }

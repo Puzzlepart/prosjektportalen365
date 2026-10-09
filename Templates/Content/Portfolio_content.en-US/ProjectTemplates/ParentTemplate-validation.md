@@ -1,5 +1,3 @@
-_The template was validated 9/16/2026, 7:16:36 PM_
-
 The template contains the following tokens that has not been found in the .resx files:
 
 _No tokens with missing translations or replacement values found._
@@ -288,6 +286,6 @@ _No tokens with missing translations or replacement values found._
 ## Template Path
 
 ```txt
-/Users/remi.blom-ohlsen/code/Prosjektportalen/prosjektportalen365/Templates/Content/Portfolio_content.en-US/ProjectTemplates/ParentTemplate.txt
+Content/Portfolio_content.en-US/ProjectTemplates/ParentTemplate.txt
 ```
 

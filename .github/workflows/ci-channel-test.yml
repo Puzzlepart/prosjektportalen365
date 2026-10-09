@@ -5,6 +5,7 @@ on:
     branches:
       - releases/1.15
       - feat/fluent-v9*
+      - feat/dependency-upgrades*
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'
@@ -13,6 +14,16 @@ on:
       - .github/workflows/ci-channel-test.yml
   # Manual runs, for example to re-run the end-to-end smoke after fixing a secret or a spec.
   workflow_dispatch:
+
+# One run at a time, whatever the branch: every run deploys to the same test hub and app catalog,
+# so two at once can overwrite each other mid-run (on 2026-10-06 an [apps-only] run's packages
+# landed in the middle of a full run's template step). A newer run waits for the running one.
+# GitHub keeps only the newest waiting run in a group and cancels an older waiting one: on one
+# branch the newer commit holds the older one's changes, but a cancelled full run's templates are
+# not applied, so push the commit that needs the full run last.
+concurrency:
+  group: ci-channel-test
+  cancel-in-progress: false
 
 env:
   # Heft's TypeScript and webpack steps need more than V8's default heap (about 2 GB on a small
@@ -136,15 +147,18 @@ jobs:
         shell: pwsh
 
       - name: Run Install/Build-Release.ps1 in CI mode for channel test
+        # The rebuild's timeline goes to the log and the job summary. PnP.PowerShell is not
+        # installed: only the PnP templates use it, and this job skips them (proven in
+        # ci-build-debug.yml).
         env:
           SOLUTIONS: ${{ steps.appsonly.outputs.solutions }}
           PP365_BUILD_NUMBER: ${{ github.run_number }}
         run: |
           if ([string]::IsNullOrWhiteSpace($env:SOLUTIONS)) {
-            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test
+            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test -RushTimeline -SkipPnPPowerShell
           }
           else {
-            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test -Solutions ($env:SOLUTIONS -split ',')
+            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test -RushTimeline -SkipPnPPowerShell -Solutions ($env:SOLUTIONS -split ',')
           }
         shell: pwsh
 
@@ -208,4 +222,5 @@ jobs:
           path: |
             e2e/playwright-report
             e2e/test-results
-          retention-days: 14
+          # The longest this repository allows; more is cut to it.
+          retention-days: 7

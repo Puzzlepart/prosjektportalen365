@@ -156,6 +156,8 @@ define([], function () {
     EmptyMessageDescription: 'No new projects found.',
     EndDateLabel: 'End date',
     ExcelExportButtonLabel: 'Export to excel',
+    ExcelExportErrorTitle: 'The export to Excel failed',
+    ExcelExportErrorMessage: 'No file was made. Try again, and contact your administrator if it still fails.',
     ErrorFetchingProjectsTitle: 'An error occurred while retrieving projects.',
     FiltersString: 'Filters',
     FilterText: 'Filter',

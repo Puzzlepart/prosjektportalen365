@@ -65,7 +65,7 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
                 value: 'list'
               })
               .setOnClick(() => {
-                context.dispatch(TOGGLE_COMPACT())
+                context.dispatch(TOGGLE_COMPACT(false))
               }),
             new ListMenuItem(strings.CompactViewText)
               .setIcon(TextBulletListLtrRegular)
@@ -74,7 +74,7 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
                 value: 'compactList'
               })
               .setOnClick(() => {
-                context.dispatch(TOGGLE_COMPACT())
+                context.dispatch(TOGGLE_COMPACT(true))
               }),
             ListMenuItemDivider,
             ...views,

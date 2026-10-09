@@ -1,21 +1,30 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
 // Babel, so mocks are not hoisted. The data adapter hands out the test's portal data service, and
-// the footer component (tested on its own) records the props the customizer renders it with.
+// the footer component (tested on its own) records the props the customizer renders it with and
+// how many footers are mounted (in a layout effect, which runs as react-dom's `render` returns).
 const adapter = {
   configure: jest.fn(() => Promise.resolve()),
   portalDataService: undefined as any,
   checkProjectAdminPermissions: jest.fn(() => Promise.resolve(true))
 }
 jest.mock('../../data/SPDataAdapter', () => ({ __esModule: true, default: adapter }))
-const rendered: { props?: any } = {}
+const rendered: { props?: any; mounted: number } = { mounted: 0 }
 jest.mock('components/Footer', () => ({
   Footer: (props: any) => {
+    const { useLayoutEffect } = jest.requireActual('react')
     rendered.props = props
+    useLayoutEffect(() => {
+      rendered.mounted++
+      return () => {
+        rendered.mounted--
+      }
+    }, [])
     return null
   }
 }))
 
 import { PlaceholderName } from '@microsoft/sp-application-base'
+import { act } from '@testing-library/react'
 import { ProjectAdminPermission } from 'pp365-shared-library'
 import resource from 'SharedResources'
 import FooterApplicationCustomizer from '.'
@@ -91,8 +100,11 @@ async function footerCustomizer(portal = portalDataService(), { onHub = true } =
   ;(customizer as any).context = context
   ;(customizer as any).properties = { publicMediaBasePath: 'https://media.example/media' }
   await customizer.onInit()
+  // Through `act`: React 18's `createRoot` renders the footer after the handler returns.
   const navigate = async () => {
-    for (const handler of navigated) await handler()
+    await act(async () => {
+      for (const handler of navigated) await handler()
+    })
   }
   return { context, placeholder, navigate }
 }
@@ -112,6 +124,7 @@ const originalFetch = global.fetch
 
 beforeEach(() => {
   rendered.props = undefined
+  rendered.mounted = 0
   adapter.checkProjectAdminPermissions.mockImplementation(() => Promise.resolve(true))
 })
 
@@ -143,6 +156,24 @@ describe('FooterApplicationCustomizer', () => {
     await navigate()
     expect(placeholder.domElement.childNodes).toHaveLength(1)
     expect(context.placeholderProvider.tryCreateContent).toHaveBeenCalledTimes(1)
+  })
+
+  it('keeps one footer mounted across navigations, and unmounts it with its placeholder', async () => {
+    const { context, placeholder, navigate } = await footerCustomizer()
+    await navigate()
+    await navigate()
+    await navigate()
+    expect(rendered.mounted).toBe(1)
+    // SharePoint calls `onDispose` when it removes the placeholder, and the next page makes a new one.
+    const [, options] = (context.placeholderProvider.tryCreateContent as jest.Mock).mock.calls[0]
+    act(() => {
+      options.onDispose(placeholder)
+    })
+    expect(rendered.mounted).toBe(0)
+    await navigate()
+    expect(context.placeholderProvider.tryCreateContent).toHaveBeenCalledTimes(2)
+    expect(rendered.mounted).toBe(1)
+    expect(placeholder.domElement.childNodes).toHaveLength(1)
   })
 
   it.each([

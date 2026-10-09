@@ -30,6 +30,10 @@ function context(state: Record<string, any>): IPortfolioOverviewContext {
 
 const titles = (items: Record<string, any>[]) => items.map((i) => i.Title)
 
+/** The rows as the list shows them: group by group, each group's rows from its start index. */
+const shown = (result: ReturnType<typeof useFilteredData>) =>
+  result.groups.flatMap((g) => titles(result.items.slice(g.startIndex, g.startIndex + g.count)))
+
 describe('useFilteredData', () => {
   it('keeps every item and makes no groups without a search, filters or group-by', () => {
     const items = [{ Title: 'Bravo' }, { Title: 'Alfa' }]
@@ -75,12 +79,11 @@ describe('useFilteredData', () => {
       { Title: 'Alfa', GtProjectPhase: 'Konsept' },
       { Title: 'Bravo', GtProjectPhase: 'Planlegge' }
     ]
-    // In this web part `isSortedDescending: true` is the "A til Å" choice, that is ascending.
     const ascending = useFilteredData(
       context({
         items,
         groupBy: columns[1],
-        sortBy: { column: { ...columns[0], isSortedDescending: true } }
+        sortBy: { column: { ...columns[0], isSortedDescending: false } }
       })
     )
     expect(titles(ascending.items)).toEqual(['Alfa', 'Bravo', 'Charlie'])
@@ -88,11 +91,54 @@ describe('useFilteredData', () => {
       context({
         items,
         groupBy: columns[1],
-        sortBy: { column: { ...columns[0], isSortedDescending: false } }
+        sortBy: { column: { ...columns[0], isSortedDescending: true } }
       })
     )
-    // The direction applies to the group value as well, so the groups swap places too.
-    expect(titles(descending.items)).toEqual(['Charlie', 'Bravo', 'Alfa'])
+    // The groups keep their order; the rows within them turn.
+    expect(shown(descending)).toEqual(['Alfa', 'Charlie', 'Bravo'])
+  })
+
+  it('sorts numbers within their groups by their value, as the list does without groups', () => {
+    const budget = column('GtBudgetTotal', 'Budsjett', { dataType: 'number' })
+    // Search returns numbers as text.
+    const items = [
+      { Title: 'Tretti', GtProjectPhase: 'Planlegge', GtBudgetTotal: '30' },
+      { Title: 'Fire', GtProjectPhase: 'Planlegge', GtBudgetTotal: '4' },
+      { Title: 'Hundre', GtProjectPhase: 'Planlegge', GtBudgetTotal: '100' }
+    ]
+    const result = useFilteredData(
+      context({
+        items,
+        groupBy: columns[1],
+        sortBy: { column: { ...budget, isSortedDescending: false } }
+      })
+    )
+    expect(shown(result)).toEqual(['Fire', 'Tretti', 'Hundre'])
+  })
+
+  it('keeps the order configured for a column (a custom sort) within the groups', () => {
+    const phase = columns[1]
+    const program = column('GtIsProgram', 'Program', { dataType: 'boolean' })
+    const items = [
+      { Title: 'Alfa', GtProjectPhase: 'Avslutte', GtIsProgram: '1' },
+      { Title: 'Bravo', GtProjectPhase: 'Konsept', GtIsProgram: '1' },
+      { Title: 'Charlie', GtProjectPhase: 'Gjennomføre', GtIsProgram: '1' }
+    ]
+    const result = useFilteredData(
+      context({
+        items,
+        columns: [...columns, program],
+        groupBy: program,
+        sortBy: {
+          column: { ...phase, isSortedDescending: false },
+          customSort: {
+            name: 'Faserekkefølge',
+            order: ['Konsept', 'Planlegge', 'Gjennomføre', 'Avslutte']
+          }
+        }
+      })
+    )
+    expect(shown(result)).toEqual(['Bravo', 'Charlie', 'Alfa'])
   })
 
   it('groups a boolean column on Yes/No, with items without a value under No', () => {

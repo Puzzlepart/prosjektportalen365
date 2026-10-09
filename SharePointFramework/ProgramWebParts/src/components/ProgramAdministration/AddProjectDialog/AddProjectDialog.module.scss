@@ -1,20 +1,25 @@
 .addProjectDialog {
-  & > div[role="dialog"] {
+  & > div[role='dialog'] {
     display: flex;
     flex-direction: column;
-    max-width: 700px;
+    max-width: 960px;
     width: calc(100vw - 180px);
     height: calc(100vh - 180px);
   }
 
-    .content {
-      overflow-y: auto;
-      overflow-x: hidden;
-    }
+  // The list fills the dialog: the search box stays on top, and the list scrolls its rows under
+  // its pinned column headers.
+  .content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+  }
 
-    .actions {
-      display: flex;
-      justify-content: flex-end;
-      padding: 20px 0 0 0;
-    }
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px 0 0 0;
+  }
 }

@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { baseURL } from '../../playwright.config'
 import { WEB_PART, expect, test, webPart } from '../fixtures/pp365'
 
@@ -63,10 +64,28 @@ test.describe('portfolio hub', () => {
     await expect(page.getByRole('grid').or(page.getByRole('table')).first()).toBeVisible({
       timeout: 60_000
     })
+    const overview = page.locator(WEB_PART).first()
+    // A column name stays on one line inside its column and ends in an ellipsis, and the header
+    // shows no resize grip of the browser's own (columns resize from the handle at the edge).
+    // This is CSS, which no unit test applies, so it is read from the browser.
+    const headerStyle = await overview
+      .getByRole('columnheader', { name: /^tittel|^title/i })
+      .first()
+      .getByRole('button')
+      .first()
+      .evaluate((button) => {
+        const name = button.querySelector('[title]')
+        return {
+          resize: getComputedStyle(button).resize,
+          overflow: getComputedStyle(button).overflow,
+          name:
+            name && `${getComputedStyle(name).whiteSpace} ${getComputedStyle(name).textOverflow}`
+        }
+      })
+    expect(headerStyle).toEqual({ resize: 'none', overflow: 'hidden', name: 'nowrap ellipsis' })
     // Searching narrows the list: the results counter reports 0 of N for a nonsense term. This
     // exercises the toolbar (a covered or dead search box fails the fill) and the list binding.
     // Scoped to the web part: the page also has SharePoint's suite bar search box.
-    const overview = page.locator(WEB_PART).first()
     const search = overview
       .getByRole('searchbox')
       .or(overview.getByPlaceholder(/søk|search/i))
@@ -83,6 +102,42 @@ test.describe('portfolio hub', () => {
       page.getByRole('dialog').getByRole('heading', { name: /^filtr|^filter/i })
     ).toBeVisible()
     await page.keyboard.press('Escape')
+  })
+
+  test('portfolio overview exports its list to an Excel file', async ({
+    page,
+    openPage,
+    resolvePage
+  }) => {
+    await openPage(await resolvePage(hub, PAGES.overview))
+    const overview = page.locator(WEB_PART).first()
+    await expect(overview.getByRole('grid').or(overview.getByRole('table')).first()).toBeVisible({
+      timeout: 60_000
+    })
+    // The button is a web part property ("Vis eksport til Excel-knapp"). The hub template turns it
+    // on, but an installation can have it off, so it is looked for once the toolbar has rendered.
+    await expect(overview.getByRole('toolbar').first().getByRole('button').first()).toBeVisible({
+      timeout: 30_000
+    })
+    const exportButton = overview.getByRole('button', {
+      name: /^eksporter til excel$|^export to excel$/i
+    })
+    test.skip(
+      (await exportButton.count()) === 0,
+      'The overview shows no export button: turn on "Vis eksport til Excel-knapp" in its properties'
+    )
+    // Only here does the export run as users run it: the browser takes SheetJS's ES module build
+    // through webpack, while Jest takes its CommonJS build in Node.
+    const download = page.waitForEvent('download')
+    await exportButton.first().click()
+    const file = await download
+    expect(file.suggestedFilename()).toMatch(/\.xlsx$/)
+    // An xlsx file is a ZIP package. The entry names are stored uncompressed, whichever way the
+    // parts themselves are compressed, so the workbook and its first sheet can be found as text.
+    const bytes = readFileSync(await file.path())
+    expect(bytes.subarray(0, 4).toString('latin1')).toBe('PK\u0003\u0004')
+    expect(bytes.includes('xl/workbook.xml')).toBe(true)
+    expect(bytes.includes('xl/worksheets/sheet1.xml')).toBe(true)
   })
 
   test('portfolio aggregation page mounts its web part', async ({

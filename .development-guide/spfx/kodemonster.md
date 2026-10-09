@@ -11,6 +11,8 @@ Denne guiden forklarer de viktigste kodemønstrene vi bruker i SharePoint Framew
 - [Lokalisering (loc)](#lokalisering-loc)
 - [SCSS-moduler](#scss-moduler)
 - [Fluent UI v9](#fluent-ui-v9)
+- [Montering av React](#montering-av-react)
+- [Kommentarer](#kommentarer)
 
 ---
 
@@ -24,8 +26,7 @@ Alle komponenter følger et konsekvent mappestruktur-mønster. En komponentmappe
 KomponentNavn/
 ├── index.ts                        # Barrel-eksport (kun re-eksport)
 ├── KomponentNavn.tsx                # Selve React-komponenten
-├── KomponentNavn.module.scss        # CSS-moduler (styles)
-├── KomponentNavn.module.scss.ts     # Auto-generert type-fil for styles
+├── KomponentNavn.module.scss        # CSS-moduler (styles); typene genereres til temp/sass-ts/ av Heft
 ├── useKomponentNavn.ts              # Hook med logikk (state, handlers)
 ├── types.ts                         # Props, state og andre typer
 ├── context.ts                       # React Context (valgfritt)
@@ -91,7 +92,6 @@ ProjectSetupDialog/
 ├── index.ts                              # Barrel
 ├── ProjectSetupDialog.tsx                # Hovedkomponent
 ├── ProjectSetupDialog.module.scss        # Styles
-├── ProjectSetupDialog.module.scss.ts     # Auto-generert type-fil
 ├── useProjectSetupDialog.ts              # Hook med reducer, submit, validering
 ├── types.ts                              # IProjectSetupDialogProps, IProjectSetupDialogState
 ├── context.ts                            # ProjectSetupDialogContext
@@ -188,12 +188,13 @@ Når en komponent har underkomponenter som trenger tilgang til felles state, bru
 
 ```ts
 // context.ts
+import { UnknownAction } from '@reduxjs/toolkit'
 import { createContext, useContext } from 'react'
 
 export interface IKomponentContext {
   props: IKomponentProps
   state: IKomponentState
-  dispatch: React.Dispatch<AnyAction>
+  dispatch: React.Dispatch<UnknownAction>
 }
 
 export const KomponentContext = createContext<IKomponentContext>(null)
@@ -253,21 +254,26 @@ export const initialState: IKomponentState = {
 }
 
 export default (data: IData) =>
-  createReducer(initialState, {
-    [SOME_ACTION.type]: (state, action) => {
-      state.someField = action.payload
-    },
-    [ANOTHER_ACTION.type]: (state) => {
-      // ... oppdater state
-    }
-  })
+  createReducer(initialState, (builder) =>
+    builder
+      .addCase(SOME_ACTION, (state, { payload }) => {
+        state.someField = payload
+      })
+      .addCase(ANOTHER_ACTION, (state) => {
+        // ... oppdater state
+      })
+  )
 ```
+
+Bruk byggeren (`builder.addCase`), som gir handlingen riktig type ut fra `createAction`. Objektnotasjonen (`{ [SOME_ACTION.type]: … }`) finnes ikke lenger i Redux Toolkit 2.
 
 Brukes i hooken:
 ```ts
 const [state, dispatch] = useReducer(createReducer(props.data), initialState)
 dispatch(SOME_ACTION(payload))
 ```
+
+Hver handler i reduceren har en test i `reducer.test.ts` ved siden av den, som `ProgramWebParts/src/components/ProgramAdministration/reducer.test.ts`.
 
 ---
 
@@ -277,14 +283,14 @@ Alle brukersynlige tekster skal lokaliseres. SPFx bruker en `loc/`-mappe med fø
 
 ```
 loc/
-├── myStrings.d.ts    # TypeScript-deklarasjon (interface med alle nøkler)
+├── mystrings.d.ts    # TypeScript-deklarasjon (interface med alle nøkler); myStrings.d.ts i utvidelsene
 ├── nb-no.js          # Norsk bokmål (standard)
 └── en-us.js          # Engelsk
 ```
 
 ### Legge til en ny tekststreng
 
-**Steg 1:** Legg til i TypeScript-deklarasjonen (`myStrings.d.ts`):
+**Steg 1:** Legg til i TypeScript-deklarasjonen (`mystrings.d.ts`, eller `myStrings.d.ts` i PortfolioExtensions og ProjectExtensions; Linux skiller på store og små bokstaver):
 ```ts
 declare interface IProjectExtensionsStrings {
   // ... eksisterende strenger
@@ -323,9 +329,9 @@ import * as strings from 'ProjectExtensionsStrings'
 
 ### Formateringsstrenger
 
-For tekster med dynamiske verdier, bruk `format` fra `@fluentui/react`:
+For tekster med dynamiske verdier, bruk `format` fra `pp365-shared-library` (inne i biblioteket selv: fra `util`):
 ```tsx
-import { format } from '@fluentui/react'
+import { format } from 'pp365-shared-library'
 
 // I loc-fil: ProgressStepCountText: 'Steg {0} av {1}'
 format(strings.ProgressStepCountText, currentStep, totalSteps)
@@ -353,9 +359,9 @@ Vi bruker CSS-moduler (`.module.scss`) for scoped styling. Klassene blir automat
 
 .subText {
   margin-bottom: 12px;
-  color: #605e5c;
-  font-size: 14px;
-  font-weight: 400;
+  color: var(--colorNeutralForeground3);
+  font-size: var(--fontSizeBase300);
+  font-weight: var(--fontWeightRegular);
 }
 ```
 
@@ -380,19 +386,19 @@ Dialoger (`ProjectSetupDialog`, `ProgressDialog`, `ErrorDialog`) bruker samme br
 
 .subText {
   margin-bottom: 12px;
-  color: #605e5c;
-  font-size: 14px;
-  font-weight: 400;
+  color: var(--colorNeutralForeground3);
+  font-size: var(--fontSizeBase300);
+  font-weight: var(--fontWeightRegular);
 }
 ```
 
-SubText rendres som en `<p className={styles.subText}>` inne i komponentens children (ikke som en prop til `BaseDialog`), slik at stylingen er konsistent på tvers av alle dialoger.
+Dialogene i ProjectExtensions bygger på `@BaseDialog`, som tar `subText` som prop og viser den under tittelen. Farger, størrelser og vekter tas fra Fluents tokens (`var(--colorNeutralForeground3)` osv.), som finnes under en `FluentProvider`; ikke hardkod farger som `#605e5c`.
 
 ---
 
 ## Fluent UI v9
 
-Vi bruker **Fluent UI v9** (`@fluentui/react-components`) for UI-komponenter. Noen eldre Fluent UI v8-importerer finnes fortsatt for spesifikke verktøy (f.eks. `format` fra `@fluentui/react`).
+Vi bruker **Fluent UI v9** (`@fluentui/react-components`) for UI-komponenter. Fluent UI v8 (`@fluentui/react`) er bare igjen i ikonfallbacken i `shared-library/src/icons/index.tsx` og inne i PnP-kontrollene; ikke ta det inn i ny kode.
 
 ### Vanlige v9-importer
 
@@ -477,6 +483,39 @@ En slot kan få en render-funksjon i stedet for innhold: `label={{ children: (Co
 
 ---
 
+## Montering av React
+
+Webdeler, utvidelser, dialoger og felt i egenskapsruten monterer React med `renderReact` og `unmountReact` fra `pp365-shared-library`, aldri med `render` fra `react-dom` direkte. Den ene filen, `shared-library/src/util/reactRoot.ts`, gir hver beholder en React 18-root (`createRoot`) ved første tegning og beholder den til avmonteringen. Tegningen skjer etter at kallet har returnert, så en test som monterer med `renderReact`, pakker kallet i `act`.
+
+```ts
+import { renderReact, unmountReact } from 'pp365-shared-library'
+
+renderReact(createElement(Footer, footerProps), this._footerElement)
+// …og når verten fjernes:
+unmountReact(this._footerElement)
+```
+
+Det som tegner i sin egen beholder, fjerner komponenten når verten fjernes (basewebdelene gjør det i `onDispose`), og tegner på nytt i den samme beholderen i stedet for i en ny hver gang. Før 1.15 tegnet bunnteksten i en ny beholder ved hver navigering og la igjen en montert bunntekst for hver side.
+
+## Kommentarer
+
+- **JSDoc (`/** */`)** på det som eksporteres og på hooks og komponenter: én kort linje om hva det er til, og `@param`/`@returns` bare når det ikke er åpenbart.
+- **`//`-kommentarer** bare for det som ikke kan leses av koden: hvorfor noe er gjort slik (en begrensning, en felle, en omvei rundt et rammeverk), ikke hva neste linje gjør.
+- Hold dem korte. En kommentar som gjentar koden, blir feil første gang koden endres.
+
+```tsx
+/**
+ * Whether a click leaves the row's selection alone.
+ */
+function isOwnClick(event: MouseEvent<HTMLElement>) {
+  // A dialog a cell opens is portalled outside the row, yet React passes its clicks up through it.
+  if (!event.currentTarget.contains(event.target as Node)) return true
+  ...
+}
+```
+
+---
+
 ## Oppsummering
 
 | Mønster | Fil | Formål |
@@ -488,4 +527,4 @@ En slot kan få en render-funksjon i stedet for innhold: `label={{ children: (Co
 | Context | `context.ts` | Delt state mellom under-komponenter |
 | Reducer | `reducer.ts` | Kompleks state-håndtering |
 | SCSS-modul | `KomponentNavn.module.scss` | Scoped styles |
-| Lokalisering | `loc/nb-no.js`, `en-us.js`, `myStrings.d.ts` | Flerspråklige tekster |
+| Lokalisering | `loc/nb-no.js`, `en-us.js`, `mystrings.d.ts` (`myStrings.d.ts` i utvidelsene) | Flerspråklige tekster |

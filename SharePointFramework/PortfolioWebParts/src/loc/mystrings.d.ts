@@ -164,6 +164,8 @@ declare interface IPortfolioWebPartsStrings {
   ErrorFetchingProjectsTitle: string
   ErrorTitle: string
   ExcelExportButtonLabel: string
+  ExcelExportErrorTitle: string
+  ExcelExportErrorMessage: string
   FiltersString: string
   FilterText: string
   GeneralGroupName: string

@@ -166,6 +166,8 @@ define([], function () {
     ErrorFetchingProjectsTitle: 'Det skjedde en feil under uthenting av prosjekter.',
     ErrorTitle: 'Det har oppstått en feil',
     ExcelExportButtonLabel: 'Eksporter til Excel',
+    ExcelExportErrorTitle: 'Eksporten til Excel mislyktes',
+    ExcelExportErrorMessage: 'Filen ble ikke laget. Prøv igjen, og kontakt administrator hvis det ikke lykkes.',
     FiltersString: 'Filtre',
     FilterText: 'Filtrer',
     GeneralGroupName: 'Generelt',

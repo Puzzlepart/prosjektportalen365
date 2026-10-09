@@ -16,6 +16,7 @@ import {
   InfoRegular
 } from '@fluentui/react-icons'
 import strings from 'ProjectExtensionsStrings'
+import { getUILocale } from 'pp365-shared-library'
 import { ITaskProgress, TaskStatus, LogLevel } from './types'
 import styles from './ProgressDialog.module.scss'
 
@@ -77,7 +78,7 @@ const TaskLogEntries: FC<{ task: ITaskProgress }> = ({ task }) => {
         <div key={idx} className={styles.logEntry}>
           <span className={styles.logEntryIcon}>{getLogLevelIcon(entry.level)}</span>
           <span className={styles.logEntryTime}>
-            {entry.timestamp.toLocaleTimeString(undefined, {
+            {entry.timestamp.toLocaleTimeString(getUILocale(), {
               hour: '2-digit',
               minute: '2-digit',
               second: '2-digit'

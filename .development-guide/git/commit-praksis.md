@@ -55,28 +55,21 @@ install: update installation scripts
 
 Prosjektportalen bruker GitHub Actions for kontinuerlig integrasjon og utrulling. Forskjellige commit-meldinger kan påvirke hvilke actions som kjøres:
 
-**Actions som hopper over CI:**
+Nøkkelordene leses bare fra emnelinjen (første linje) i commit-meldingen, unntatt på `main`, der `build-release.yml` leser hele meldingen. Den fullstendige listen og hva hver arbeidsflyt gjør, står i [Kontinuerlig integrasjon](../ci/kontinuerlig-integrasjon.md). De mest brukte:
 
-- `[skip-ci]` - Hopper over alle CI-prosesser
-- `[skip-main-ci]` - Hopper over hovedbygging (build-release.yml)
-- `[skip-test-ci]` - Hopper over test-kanal bygging
-- `[apps-only]` - Bygger kun pakker (appkatalog), hopper over utrulling av maler. Brukes dersom du ikke har gjort noen endringer på .xml-filene i Templates.
+- `[skip-ci]` – ingen bygging eller utrulling (unntatt `skills.yml`, som bare sjekker agentferdighetene)
+- `[apps-only]` – bygger og ruller ut bare pakkene (appkatalogen), ikke malene. Brukes når ingenting i `Templates/` er endret.
+- `[apps-only:<løsninger>]` – som `[apps-only]`, men pakker og ruller ut bare de oppgitte løsningene (alle seks bygges fortsatt)
+- `[skip-e2e]` – hopper over Playwright-testene etter utrullingen til testkanalen
+- `[build-debug]` – bygger pakken i feilsøkingsarbeidsflyten, uten utrulling
 
 **Eksempler på bruk:**
 
 ```text
-docs: update README [skip-ci]
-chore: update package.json [skip-main-ci]
-fix(portfoliowebparts): minor styling fix [skip-test-ci]
-feat(shared): add new utility function [apps-only]
+docs: update the development guide [skip-ci]
+fix(PortfolioWebParts): long column names end in an ellipsis [apps-only:PortfolioWebParts,ProgramWebParts]
+feat(shared-library): a new utility function [apps-only]
+ci: try a change to the build [skip-ci] [build-debug]
 ```
 
-**Aktive arbeidsflyter:**
-
-- **ci-releases.yml** - Kjører på `main`-branch for utgivelsesbygging
-- **build-release.yml** - Kjører på siste releases-branch og `main` for full bygging
-- **pr-package-spfx-dev.yml** - Kjører på pull requests mot release-branches
-- **automatic_chores.yml** - Kjører automatiske vedlikeholdsoppgaver (linting m.m.)
-- **ci-channel-test.yml** - Kanalspesifikt bygg for testing
-
-**Tips:** Bruk skip-flaggene når du gjør endringer som ikke påvirker funksjonaliteten (som dokumentasjonsoppdateringer) for å spare CI-ressurser. Eller dersom det ikke er nødvendig å få med endringene dine når du skal gjøre flere relaterte endringer i samme branch.
+**Tips:** Bruk `[skip-ci]` når endringen ikke påvirker det som bygges (for eksempel bare dokumentasjon), og `[apps-only]` når malene ikke er endret: en full kjøring oppgraderer testtenanten med maler og tar rundt 40 minutter.

@@ -1,12 +1,15 @@
 import strings from 'SharedLibraryStrings'
 import React from 'react'
+import { getFluentIcon } from '../../../icons'
 import { checkboxField, textField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'
 import styles from './DialogColumn.module.scss'
 import { IDialogColumnProps } from './types'
 import { useDialogColumn } from './useDialogColumn'
 import {
+  Button,
   Dialog,
+  DialogActions,
   DialogBody,
   DialogContent,
   DialogSurface,
@@ -42,7 +45,20 @@ export const DialogColumn: ColumnRenderComponent<IDialogColumnProps> = (props) =
       </DialogTrigger>
       <DialogSurface>
         <DialogBody className={styles.root}>
-          <DialogTitle className={styles.title} hidden={stringIsNullOrEmpty(title)}>
+          <DialogTitle
+            className={styles.title}
+            hidden={stringIsNullOrEmpty(title)}
+            action={
+              <DialogTrigger action='close'>
+                <Button
+                  appearance='subtle'
+                  icon={getFluentIcon('Dismiss')}
+                  aria-label={strings.CloseText}
+                  title={strings.CloseText}
+                />
+              </DialogTrigger>
+            }
+          >
             {title}
             <Text size={400}>{subTitle}</Text>
           </DialogTitle>
@@ -61,6 +77,11 @@ export const DialogColumn: ColumnRenderComponent<IDialogColumnProps> = (props) =
               />
             )}
           </DialogContent>
+          <DialogActions>
+            <DialogTrigger action='close'>
+              <Button appearance='secondary'>{strings.CloseText}</Button>
+            </DialogTrigger>
+          </DialogActions>
         </DialogBody>
       </DialogSurface>
     </Dialog>

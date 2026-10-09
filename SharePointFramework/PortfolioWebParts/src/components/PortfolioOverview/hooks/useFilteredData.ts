@@ -8,6 +8,7 @@ import {
 } from 'pp365-shared-library'
 import _ from 'underscore'
 import { IListGroup } from '../../List'
+import { sortItems } from '../../List/sortItems'
 import { IPortfolioOverviewContext } from '../context'
 import { IPortfolioOverviewState } from '../types'
 import { applyActiveFilters } from './applyActiveFilters'
@@ -50,30 +51,27 @@ function getGroupDisplayName(column: ProjectColumn, value: string) {
 function createGroups(items: any[], state: IPortfolioOverviewState) {
   if (!state.groupBy) return { items, columns: state.columns, groups: null }
   const isBooleanGroupBy = isBooleanColumn(state.groupBy)
-  // For boolean columns the raw values can't be used to group by, as items
-  // without a value are rendered as the false label in the grid and have to end
-  // up in the same group as the explicit false values. Those items are sorted
-  // by the sort column only, and then grouped by the normalized value below.
-  const itemsSort: { props: string[]; opts: { reverse: boolean } } = {
-    props: isBooleanGroupBy ? [] : [state.groupBy.fieldName],
-    opts: { reverse: false }
-  }
+  // Within the groups the rows are sorted as the list sorts them without groups (`sortItems`:
+  // numbers by value, a custom sort in its order). Both sorts by the group value below are
+  // stable, so they make each group contiguous, which the `startIndex`/`count` based grouping
+  // depends on, and keep that order within it.
+  items = [...items]
   if (state.sortBy) {
-    itemsSort.props.push(state.sortBy.column.fieldName)
-    itemsSort.opts.reverse = !state.sortBy.column.isSortedDescending
-  }
-  items = _.isEmpty(itemsSort.props)
-    ? [...items]
-    : sortArray([...items], itemsSort.props, itemsSort.opts)
-  if (isBooleanGroupBy) {
-    // `_.sortBy` is stable, so sorting on the normalized value after the sort
-    // column keeps the items sorted within each group, while making each group
-    // contiguous - which the `startIndex`/`count` based grouping below depends
-    // on.
-    items = _.sortBy(items, (item) =>
-      normalizeBooleanValue(get<string>(item, state.groupBy.fieldName, ''))
+    items = sortItems(
+      items,
+      state.sortBy.column,
+      !state.sortBy.column.isSortedDescending,
+      state.sortBy.customSort?.order
     )
   }
+  // For boolean columns the raw values can't be used to group by, as items without a value are
+  // rendered as the false label in the grid and have to end up in the same group as the explicit
+  // false values, so they are grouped by the normalized value.
+  items = isBooleanGroupBy
+    ? _.sortBy(items, (item) =>
+        normalizeBooleanValue(get<string>(item, state.groupBy.fieldName, ''))
+      )
+    : sortArray(items, [state.groupBy.fieldName])
   const groupNames: string[] = items.map((g) => {
     const value = get<string>(g, state.groupBy.fieldName, strings.NotSet)
     return isBooleanGroupBy ? normalizeBooleanValue(value) : value
@@ -95,13 +93,13 @@ function createGroups(items: any[], state: IPortfolioOverviewState) {
 }
 
 /**
- * Filter data based on `searchTerm` and `activeFilters`. Also, create groups based on `groupBy` field
- * using `createGroups` function.
+ * The items the overview shows: those matching the search term in any column, narrowed by the
+ * active filters. Shared by the list and the Excel export, so that the export holds what is shown.
  *
  * @param context Context of `<PortfolioOverview />`
  */
-export function useFilteredData(context: IPortfolioOverviewContext) {
-  let items = [...context.state.items].filter((item) => {
+export function filterItems(context: IPortfolioOverviewContext) {
+  const items = context.state.items.filter((item) => {
     return (
       context.state.columns.filter(
         (col) =>
@@ -109,8 +107,15 @@ export function useFilteredData(context: IPortfolioOverviewContext) {
       ).length > 0
     )
   })
+  return applyActiveFilters(items, context)
+}
 
-  items = applyActiveFilters(items, context)
-
-  return createGroups(items, context.state)
+/**
+ * Filter data based on `searchTerm` and `activeFilters` (see `filterItems`). Also, create groups
+ * based on `groupBy` field using `createGroups` function.
+ *
+ * @param context Context of `<PortfolioOverview />`
+ */
+export function useFilteredData(context: IPortfolioOverviewContext) {
+  return createGroups(filterItems(context), context.state)
 }

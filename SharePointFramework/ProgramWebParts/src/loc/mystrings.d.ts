@@ -23,6 +23,7 @@ declare interface IProgramWebPartsStrings {
   BooleanYes: string
   Cancel: string
   CancelButtonLabel: string
+  ChildrenRemoveErrorToastTitle: string
   ChildrenRemoveToastMessage: string
   ChildrenRemoveToastTitle: string
   CmdSelectionCountText: string

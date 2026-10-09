@@ -1,6 +1,5 @@
 import React from 'react'
 import { IPersonaItem } from '../../../../types'
-import styles from '../CustomEditPanelBody.module.scss'
 import { FieldContainer } from '../../../FieldContainer'
 import { PeoplePicker } from '../../../PeoplePicker'
 import { useCustomEditPanelContext } from '../../context'
@@ -18,7 +17,6 @@ export const UserMulti: FieldElementComponent = ({ field }) => {
       <PeoplePicker
         multi
         aria-label={field.displayName}
-        className={styles.field}
         selected={context.model.get<IPersonaItem[]>(field)}
         onResolveSuggestions={(filter, selected) =>
           context.props.dataAdapter.clientPeoplePickerSearchUser(filter, selected)

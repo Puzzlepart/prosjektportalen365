@@ -1,8 +1,9 @@
 .projectList {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
   gap: 16px;
-  overflow: hidden;
+  min-height: 0;
 
   .header {
     padding: 2px;
@@ -25,52 +26,17 @@
     }
   }
 
-  .groupedList {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+  // The portfolio overview's grid, without the hub's margins. Its column headers are sticky: on
+  // the page they stick to SharePoint's scrolling content area, so nothing between may scroll.
+  .grid {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 0;
 
-    .group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-
-      .groupHeader {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 12px;
-        background-color: var(--colorNeutralBackground3);
-        border-radius: 4px;
-        cursor: pointer;
-        user-select: none;
-        transition: background-color 0.15s ease;
-
-        &:hover {
-          background-color: var(--colorNeutralBackground3Hover);
-        }
-
-        &:active {
-          background-color: var(--colorNeutralBackground3Pressed);
-        }
-
-        &:focus-visible {
-          outline: 2px solid var(--colorStrokeFocus2);
-          outline-offset: 2px;
-        }
-
-        h3 {
-          margin: 0;
-          font-size: 14px;
-          font-weight: 600;
-          color: var(--colorNeutralForeground1);
-        }
-
-        .groupCount {
-          font-size: 12px;
-          color: var(--colorNeutralForeground2);
-        }
-      }
+    // Where its height is bounded (the add dialog) the grid scrolls its own rows, so the column
+    // headers stay pinned above them and the search box in view.
+    &.scrollingGrid {
+      overflow: auto;
     }
   }
 }

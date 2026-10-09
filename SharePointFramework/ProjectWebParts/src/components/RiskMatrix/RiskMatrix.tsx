@@ -2,7 +2,7 @@ import { Field, FluentProvider, IdPrefixProvider, Switch } from '@fluentui/react
 import strings from 'ProjectWebPartsStrings'
 import resource from 'SharedResources'
 import React, { FC } from 'react'
-import { DynamicMatrix } from '../DynamicMatrix'
+import { DEFAULT_MATRIX_WIDTH, DynamicMatrix } from '../DynamicMatrix'
 import { IRiskMatrixProps } from './types'
 import { useRiskMatrix } from './useRiskMatrix'
 import { UserMessage, WebPartTitle, customLightTheme } from 'pp365-shared-library'
@@ -26,7 +26,7 @@ export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
           <>
             <DynamicMatrix
               {...props}
-              width={props.fullWidth ? '100%' : props.width}
+              width={props.fullWidth ? '100%' : (props.width ?? DEFAULT_MATRIX_WIDTH)}
               configuration={configuration}
               getElementsForCell={getElementsForCell}
             />

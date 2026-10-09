@@ -17,30 +17,31 @@ export const initState = (): IDocumentTemplateDialogState => ({
   uploaded: []
 })
 
-export default createReducer(initState(), {
-  [SELECTION_CHANGED.type]: (state, { payload }: ReturnType<typeof SELECTION_CHANGED>) => {
-    state.selected = payload.selected
-  },
-  [START_COPY.type]: (state) => {
-    state.screen = DocumentTemplateDialogScreen.CopyProgress
-    state.locked = true
-  },
-  [COPY_PROGRESS.type]: (state, { payload }: ReturnType<typeof COPY_PROGRESS>) => {
-    state.progress = payload
-  },
-  [COPY_DONE.type]: (state, { payload }: ReturnType<typeof COPY_DONE>) => {
-    state.uploaded = payload.files
-    state.screen = DocumentTemplateDialogScreen.Summary
-    state.locked = false
-    state.selected = []
-  },
-  [SET_SCREEN.type]: (state, { payload }: ReturnType<typeof SET_SCREEN>) => {
-    state.screen = payload.screen
-    if (state.screen === DocumentTemplateDialogScreen.Select) {
+export default createReducer(initState(), (builder) =>
+  builder
+    .addCase(SELECTION_CHANGED, (state, { payload }) => {
+      state.selected = payload.selected
+    })
+    .addCase(START_COPY, (state) => {
+      state.screen = DocumentTemplateDialogScreen.CopyProgress
+      state.locked = true
+    })
+    .addCase(COPY_PROGRESS, (state, { payload }) => {
+      state.progress = payload
+    })
+    .addCase(COPY_DONE, (state, { payload }) => {
+      state.uploaded = payload.files
+      state.screen = DocumentTemplateDialogScreen.Summary
+      state.locked = false
       state.selected = []
-    }
-  },
-  [SET_TARGET.type]: (state, { payload }: ReturnType<typeof SET_TARGET>) => {
-    state.targetFolder = payload.folder
-  }
-})
+    })
+    .addCase(SET_SCREEN, (state, { payload }) => {
+      state.screen = payload.screen
+      if (state.screen === DocumentTemplateDialogScreen.Select) {
+        state.selected = []
+      }
+    })
+    .addCase(SET_TARGET, (state, { payload }) => {
+      state.targetFolder = payload.folder
+    })
+)

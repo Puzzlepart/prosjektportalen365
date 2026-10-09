@@ -135,7 +135,7 @@ last full `rush rebuild` on that commit and the tree:
 warnings: 246, all house rules. Browser suite: 23 tests in 8 files (smoke and flows; the four
 local-bundle specs are opt-in). Production packages from the same build, main channel:
 PortfolioWebParts 9.87 MB, ProjectWebParts 7.03 MB, ProgramWebParts 4.62 MB, shared-library
-1.98 MB, PortfolioExtensions 1.42 MB, ProjectExtensions 1.12 MB (16.0 MB in all); slice 8 compares.
+1.98 MB, PortfolioExtensions 1.42 MB, ProjectExtensions 1.12 MB (26.0 MB in all); slice 8 compares.
 
 **Stamping, confirmed indirectly.** The tenant app catalog is closed to the test user (403), and
 the release script silenced `modifySolutionFiles.js`, so no log named the version. The evidence is
@@ -526,6 +526,14 @@ fast machine meets it too. The tabs now scroll on to the section once the scroll
 cancels it (`SectionTabs/useScrollToSection.ts`, three tests). Its run (37114496550) built and
 upgraded green and passed the browser suite, 30 of 30; slice 5 is closed.
 
+The manual check of the tenant found the label fix working for the fields with Fluent v9
+controls (text, number, choice, yes/no, note): the label carries `for` and `id`, and clicking it
+puts the cursor in the field. The date picker takes an id of its own, so its label's `for` points
+at nothing, though `Input` then names it through `aria-labelledby`; the people picker and the term
+picker are v8 controls that know nothing of Fluent's `Field`, and stay without a name. The icon
+sits beside the label, not in it, so clicking the icon does nothing. Slice 7 took it up
+("Labels").
+
 ### Slice 6 — the hub (2026-10-03)
 
 The hub's `List` (PortfolioWebParts, under `Porteføljeoversikt`, `Aggregert oversikt` and the
@@ -674,15 +682,6 @@ tenant, templates included (23 minutes), and passed the browser suite, 31 of 31.
 phase 5 (`dependency-upgrades-phase-5.md`) starts on its own branch once this one is merged into
 `releases/1.15`. SPFx 1.24.0-rc.0 declares React up to 18 in its peer ranges (1.23.2: below 18),
 which is the platform step its decision P5-1 waits for.
-
-## Rules for the executing agent
-
-The manual check of the tenant found the label fix working for the fields with Fluent v9
-controls (text, number, choice, yes/no, note): the label carries `for` and `id`, and clicking it
-puts the cursor in the field. The date picker takes an id of its own, so its label's `for` points
-at nothing, though `Input` then names it through `aria-labelledby`; the people picker and the term
-picker are v8 controls that know nothing of Fluent's `Field`, and stay without a name. The icon
-sits beside the label, not in it, so clicking the icon does nothing. Left for the owner to decide.
 
 ## Rules for the executing agent
 

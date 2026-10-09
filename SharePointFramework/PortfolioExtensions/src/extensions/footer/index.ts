@@ -11,10 +11,9 @@ import '@pnp/sp/webs'
 import resource from 'SharedResources'
 import { Footer, IFooterProps } from 'components/Footer'
 import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
-import { isHubSite, ProjectAdminPermission } from 'pp365-shared-library'
+import { isHubSite, ProjectAdminPermission, renderReact, unmountReact } from 'pp365-shared-library'
 import SPDataAdapter from '../../data/SPDataAdapter'
 import { createElement } from 'react'
-import { render } from 'react-dom'
 import {
   HelpContentModel,
   IFooterApplicationCustomizerProperties,
@@ -25,6 +24,7 @@ import strings from 'PortfolioExtensionsStrings'
 
 export default class FooterApplicationCustomizer extends BaseApplicationCustomizer<IFooterApplicationCustomizerProperties> {
   private _bottomPlaceholder: PlaceholderContent
+  private _footerElement: HTMLDivElement
   private _installEntries: InstallationEntry[]
   private _useAssistant: boolean
   private _hasAssistantAccess: boolean
@@ -309,9 +309,9 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   }
 
   /**
-   * Render the footer in the specified placeholder. Creates a
-   * placeholder if it doesn't exist and adds a new div element
-   * to the placeholder where the footer will be rendered.
+   * Render the footer in the specified placeholder. Creates the placeholder, and the div element
+   * in it where the footer is rendered, if they don't exist; every navigation after that renders
+   * the same footer again with its new props, so one footer is mounted.
    *
    * @param name Placeholder name
    * @param footerProps Props for the `Footer` component
@@ -319,23 +319,23 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   private _renderFooter(name: PlaceholderName, footerProps: IFooterProps): void {
     if (!this._bottomPlaceholder) {
       this._bottomPlaceholder = this.context.placeholderProvider.tryCreateContent(name, {
-        onDispose: this._onDispose
+        onDispose: () => this._onDispose()
       })
     }
-    const footerElement: HTMLDivElement = document.createElement('div')
-    render(createElement(Footer, footerProps), footerElement)
-
-    if (this._bottomPlaceholder.domElement.hasChildNodes()) {
-      this._bottomPlaceholder.domElement.removeChild(this._bottomPlaceholder.domElement.firstChild)
+    if (!this._footerElement) {
+      this._footerElement = document.createElement('div')
+      this._bottomPlaceholder.domElement.replaceChildren(this._footerElement)
     }
-
-    this._bottomPlaceholder.domElement.append(footerElement)
+    renderReact(createElement(Footer, footerProps), this._footerElement)
   }
 
   /**
-   * Dispose the bottom placeholder when the footer is disposed.
+   * Unmounts the footer when SharePoint disposes its placeholder; the next navigation creates a
+   * new placeholder and renders the footer in it.
    */
   protected _onDispose(): void {
-    this._bottomPlaceholder.dispose()
+    if (this._footerElement) unmountReact(this._footerElement)
+    this._footerElement = undefined
+    this._bottomPlaceholder = undefined
   }
 }

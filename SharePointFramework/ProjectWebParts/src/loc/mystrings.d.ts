@@ -42,7 +42,6 @@ declare interface IProjectWebPartsStrings {
   CheckpointStillOpenTooltipCommentEmpty: string
   ChildProjectAdminLabel: string
   CloseText: string
-  ColorPickerStrings: IColorPickerStrings
   CommentLabel: string
   ConfigItemTitleFieldLabel: string
   ConfirmChangePhase: string
@@ -78,6 +77,7 @@ declare interface IProjectWebPartsStrings {
   DeleteReportButtonLabel: string
   DeleteReportButtonDescription: string
   DeleteReportButtonDescriptionNoPermission: string
+  DeleteReportErrorTitle: string
   EditItemLabel: string
   EditProjectInformationText: string
   EditReportButtonLabel: string
@@ -367,6 +367,9 @@ declare interface IProjectWebPartsStrings {
     SearchIn: string
     Search: string
     ExportSelected: string
+    ExportSelectedMultiple: string
+    ExportErrorTitle: string
+    ExportErrorMessage: string
     ExportToExcel: string
     FolderView: string
     FlatView: string

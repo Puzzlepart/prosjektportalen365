@@ -8,7 +8,8 @@ import {
   TableHeader,
   TableHeaderCell,
   TableRow,
-  TableSelectionCell
+  TableSelectionCell,
+  mergeClasses
 } from '@fluentui/react-components'
 import { ChevronDownRegular, ChevronRightRegular } from '@fluentui/react-icons'
 import strings from 'PortfolioWebPartsStrings'
@@ -24,11 +25,14 @@ import { useListGrid } from './useListGrid'
 const PLACEHOLDER_ROWS = 8
 
 /**
- * Whether a click landed on something in the row that does its own thing: the title's link, a
- * button, the check.
+ * Whether a click leaves the row's selection alone: it landed on something in the row that does
+ * its own thing (the title's link, a button, the check), or outside the row altogether. A dialog,
+ * popover or menu that a cell opens is portalled elsewhere in the page, yet React passes its clicks
+ * up through the row.
  */
-function isInteractive(event: MouseEvent<HTMLElement>) {
+function isOwnClick(event: MouseEvent<HTMLElement>) {
   const target = event.target as HTMLElement
+  if (!event.currentTarget.contains(target)) return true
   const control = target.closest?.(
     'a, button, input, select, textarea, [role="button"], [role="link"], [role="checkbox"]'
   )
@@ -43,8 +47,9 @@ function sortDirection(column: IListColumn) {
 /**
  * The hub's rows on Fluent UI v9's `Table`: resizable columns, groups that open and close, and a
  * selection by check or by a click on the row (as v8's list and v9's DataGrid select), with
- * shift-click ranges and a select-all. The column headers stay pinned under
- * the list's command bar while the rows scroll (`--pp-list-sticky-top`, set by `List`).
+ * shift-click ranges and a select-all, or none (`selectionMode`); the selection is the grid's own,
+ * or kept by the caller (`selectedItems`). The column headers stay pinned under the list's command
+ * bar while the rows scroll (`--pp-list-sticky-top`, set by `List`).
  */
 export const ListGrid: FC<IListGridProps> = (props) => {
   const {
@@ -56,24 +61,30 @@ export const ListGrid: FC<IListGridProps> = (props) => {
     allCollapsed,
     toggleCollapsed,
     toggleAllCollapsed,
+    selectable,
     selection,
     arrowNavigation
   } = useListGrid(props)
 
-  const onHeaderEvent = (column: IListColumn) => (event: MouseEvent<HTMLElement>) => {
-    if (event.type === 'contextmenu') event.preventDefault()
+  const onHeaderClick = (column: IListColumn) => (event: MouseEvent<HTMLElement>) => {
     props.onColumnHeaderClick?.(column, event.currentTarget)
   }
 
+  const onHeaderContextMenu = (column: IListColumn) => (event: MouseEvent<HTMLElement>) => {
+    if (!props.onColumnHeaderContextMenu) return
+    event.preventDefault()
+    props.onColumnHeaderContextMenu(column, event.currentTarget)
+  }
+
   return (
-    <div ref={containerRef} className={styles.container}>
+    <div ref={containerRef} className={mergeClasses(styles.container, props.className)}>
       <Table
         ref={tableRef}
         {...columnSizing.getTableProps()}
         {...arrowNavigation}
         role='grid'
         aria-label={props.title}
-        aria-multiselectable
+        aria-multiselectable={selectable || undefined}
         aria-busy={!!props.loading}
         noNativeElements
         sortable
@@ -82,12 +93,14 @@ export const ListGrid: FC<IListGridProps> = (props) => {
       >
         <TableHeader className={styles.header}>
           <TableRow>
-            <TableSelectionCell
-              role='columnheader'
-              checked={selection.allState}
-              onClick={selection.toggleAll}
-              checkboxIndicator={{ 'aria-label': strings.ListSelectAllLabel }}
-            />
+            {selectable && (
+              <TableSelectionCell
+                role='columnheader'
+                checked={selection.allState}
+                onClick={selection.toggleAll}
+                checkboxIndicator={{ 'aria-label': strings.ListSelectAllLabel }}
+              />
+            )}
             {isGrouped && (
               <TableCell role='columnheader' className={styles.expanderCell}>
                 <Button
@@ -115,8 +128,9 @@ export const ListGrid: FC<IListGridProps> = (props) => {
                 sortDirection={sortDirection(column)}
                 className={styles.headerCell}
                 button={{
-                  onClick: onHeaderEvent(column),
-                  onContextMenu: onHeaderEvent(column)
+                  onClick: onHeaderClick(column),
+                  onContextMenu: onHeaderContextMenu(column),
+                  className: styles.headerButton
                 }}
               >
                 {column.iconName && (
@@ -124,7 +138,9 @@ export const ListGrid: FC<IListGridProps> = (props) => {
                     {getFluentIconWithFallback(column.iconName, { size: 16 })}
                   </span>
                 )}
-                {column.name}
+                <span className={styles.headerName} title={column.name}>
+                  {column.name}
+                </span>
               </TableHeaderCell>
             ))}
           </TableRow>
@@ -133,7 +149,9 @@ export const ListGrid: FC<IListGridProps> = (props) => {
           {props.loading
             ? Array.from({ length: PLACEHOLDER_ROWS }, (_value, n) => (
                 <TableRow key={`placeholder-${n}`} className={styles.row}>
-                  <TableCell role='gridcell' className={styles.selectionPlaceholder} />
+                  {selectable && (
+                    <TableCell role='gridcell' className={styles.selectionPlaceholder} />
+                  )}
                   {isGrouped && <TableCell role='gridcell' className={styles.expanderCell} />}
                   {props.columns.map((column) => (
                     <TableCell
@@ -149,14 +167,16 @@ export const ListGrid: FC<IListGridProps> = (props) => {
             : entries.map((entry) =>
                 entry.type === 'group' ? (
                   <TableRow key={`group-${entry.group.key}`} className={styles.groupRow}>
-                    <TableSelectionCell
-                      role='gridcell'
-                      checked={selection.groupState(entry.group)}
-                      onClick={() => selection.toggleGroup(entry.group)}
-                      checkboxIndicator={{
-                        'aria-label': format(strings.ListSelectGroupLabel, entry.group.name)
-                      }}
-                    />
+                    {selectable && (
+                      <TableSelectionCell
+                        role='gridcell'
+                        checked={selection.groupState(entry.group)}
+                        onClick={() => selection.toggleGroup(entry.group)}
+                        checkboxIndicator={{
+                          'aria-label': format(strings.ListSelectGroupLabel, entry.group.name)
+                        }}
+                      />
+                    )}
                     <TableCell role='gridcell' className={styles.groupCell}>
                       <Button
                         appearance='transparent'
@@ -174,22 +194,28 @@ export const ListGrid: FC<IListGridProps> = (props) => {
                   <TableRow
                     key={entry.index}
                     className={styles.row}
-                    aria-selected={selection.isSelected(entry.item)}
-                    appearance={selection.isSelected(entry.item) ? 'brand' : 'none'}
-                    onClick={(event: MouseEvent<HTMLElement>) => {
-                      if (!isInteractive(event)) selection.toggleRow(entry.item, event.shiftKey)
-                    }}
+                    aria-selected={selectable ? selection.isSelected(entry.item) : undefined}
+                    appearance={selectable && selection.isSelected(entry.item) ? 'brand' : 'none'}
+                    onClick={
+                      selectable
+                        ? (event: MouseEvent<HTMLElement>) => {
+                            if (!isOwnClick(event)) selection.toggleRow(entry.item, event.shiftKey)
+                          }
+                        : undefined
+                    }
                   >
-                    <TableSelectionCell
-                      role='gridcell'
-                      checked={selection.isSelected(entry.item)}
-                      onClick={(event: MouseEvent) => {
-                        // The row would toggle it a second time.
-                        event.stopPropagation()
-                        selection.toggleRow(entry.item, event.shiftKey)
-                      }}
-                      checkboxIndicator={{ 'aria-label': strings.ListSelectRowLabel }}
-                    />
+                    {selectable && (
+                      <TableSelectionCell
+                        role='gridcell'
+                        checked={selection.isSelected(entry.item)}
+                        onClick={(event: MouseEvent) => {
+                          // The row would toggle it a second time.
+                          event.stopPropagation()
+                          selection.toggleRow(entry.item, event.shiftKey)
+                        }}
+                        checkboxIndicator={{ 'aria-label': strings.ListSelectRowLabel }}
+                      />
+                    )}
                     {isGrouped && <TableCell role='gridcell' className={styles.expanderCell} />}
                     {props.columns.map((column) => (
                       <TableCell

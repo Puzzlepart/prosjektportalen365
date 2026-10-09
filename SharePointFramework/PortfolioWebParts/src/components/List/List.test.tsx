@@ -13,6 +13,7 @@ import userEvent from '@testing-library/user-event'
 import strings from 'PortfolioWebPartsStrings'
 import { ColumnRenderComponentRegistry, format, ListMenuItem } from 'pp365-shared-library'
 import * as React from 'react'
+import { createPortal } from 'react-dom'
 import { HubColumn } from './ItemColumn/HubColumn'
 import { List } from './List'
 import { IListProps } from './types'
@@ -99,6 +100,15 @@ describe('List', () => {
     expect(follows(search, toolbar)).toBe(true)
     expect(follows(toolbar, firstHeader)).toBe(true)
     expect(columnHeaders()).toEqual(['Tittel', 'Fase', strings.ToggleColumnFormPanelLabel])
+  })
+
+  it('gives a column name an element of its own, with the whole name as its tooltip', () => {
+    const name = 'Ressursallokeringer for underområder'
+    renderList({ columns: [column('Title', 'Tittel'), column('GtResourceAllocation', name)] })
+    // The name is cut with an ellipsis inside the column (CSS, which jsdom does not apply), so the
+    // tooltip is where a long name can be read in full.
+    const header = screen.getByRole('columnheader', { name: /^Ressursallokeringer/ })
+    expect(within(header).getByTitle(name)).toHaveTextContent(name)
   })
 
   it('shows the error in place of the search box and the toolbar', () => {
@@ -276,6 +286,23 @@ describe('List', () => {
       onSelectionChange
     })
     fireEvent.click(screen.getByRole('button', { name: 'Alfa' }))
+    expect(onSelectionChange).not.toHaveBeenCalled()
+  })
+
+  it('leaves the selection alone on a click in a dialog that a cell opened', () => {
+    // A cell's dialog (the benefit overview's measurements), popover or menu is portalled to the
+    // end of the page, outside the row, but React passes its clicks up through the row.
+    const onSelectionChange = jest.fn()
+    renderList({
+      items: ITEMS.slice(0, 1),
+      columns: [
+        column('Title', 'Tittel', {
+          onRender: (item: any) => createPortal(<p>Målinger for {item.Title}</p>, document.body)
+        })
+      ],
+      onSelectionChange
+    })
+    fireEvent.click(screen.getByText('Målinger for Alfa'))
     expect(onSelectionChange).not.toHaveBeenCalled()
   })
 

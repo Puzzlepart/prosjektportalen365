@@ -315,10 +315,12 @@ describe('ProjectSetup', () => {
 
   it('stops when the user closes the setup dialog', async () => {
     await projectSetup()
+    // The dismissal rejects, and the error dialog renders from the setup's catch a few microtasks
+    // later: one act around both, or React 18 sees the render outside it.
     await act(() => {
       dialogs.setup.onDismiss()
+      return new Promise((resolve) => setTimeout(resolve, 0))
     })
-    await settle()
     expect(dialogs.error.error.message).toBe(strings.SetupAbortedText)
     expect(run.tasks[0].execute).not.toHaveBeenCalled()
   })

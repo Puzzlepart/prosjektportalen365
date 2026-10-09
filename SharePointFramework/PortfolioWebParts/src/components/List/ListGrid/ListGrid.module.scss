@@ -17,6 +17,30 @@
         font-weight: var(--fontWeightSemibold);
       }
 
+      .headerButton {
+        // Fluent's header button keeps the width of its content (overflow visible, no min-width),
+        // so a long name wrapped onto more lines; it now stays within the column, the name on
+        // one line ending in an ellipsis, and the icon and the sort arrow keep their size.
+        min-width: 0;
+        overflow: hidden;
+        // Fluent's reset styles give the button `resize: horizontal`, which a browser ignores
+        // while overflow is visible; with overflow hidden it draws its own grip in the corner.
+        // Columns are resized with the handle at the header's edge.
+        resize: none;
+
+        > * {
+          flex-shrink: 0;
+        }
+
+        .headerName {
+          flex-shrink: 1;
+          min-width: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+
       .headerIcon {
         display: inline-flex;
         margin-right: 4px;
@@ -29,6 +53,18 @@
       // layout and painting of the rows outside the view.
       content-visibility: auto;
       contain-intrinsic-size: auto 44px;
+
+      // The values at 12px in the lighter grey, and links at the size of the text around them, as
+      // 1.14's v8 list showed them and as the other lists do (`DataGridList`, the dynamic list):
+      // the table would take the provider's 14px, and Fluent's `Link` sets 14px of its own.
+      :global(.fui-TableCell) {
+        font-size: var(--fontSizeBase200);
+        color: var(--colorNeutralForeground3);
+      }
+
+      :global(.fui-Link) {
+        font-size: inherit;
+      }
     }
 
     .expanderCell {

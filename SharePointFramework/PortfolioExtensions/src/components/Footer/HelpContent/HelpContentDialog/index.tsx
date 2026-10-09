@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useContext } from 'react'
+import React, { FC, ReactElement, ReactNode, useContext } from 'react'
 import styles from './HelpContentDialog.module.scss'
 import { FooterContext } from 'components/Footer/context'
 import {
@@ -22,7 +22,9 @@ import { Content } from './Content'
 import { customLightTheme } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
 
-export const HelpContentDialog: FC<Omit<DialogProps, 'children'>> = (props) => {
+export const HelpContentDialog: FC<Omit<DialogProps, 'children'> & { children?: ReactNode }> = (
+  props
+) => {
   const fluentProviderId = useId('fp-help-dialog')
   const context = useContext(FooterContext)
   const [selectedValue, setSelectedValue] = React.useState<TabValue>()

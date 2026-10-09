@@ -4,8 +4,10 @@
  * The combobox family (`Combobox`, `Dropdown` and `TagPicker`, all built on
  * `@fluentui/react-combobox`) sends the Jest worker into an endless render loop on React 17 the
  * moment it opens. In the browser it works: Fluent's own TagPicker example on React 17 typed,
- * picked and removed in a handful of renders (phase 4, slice 7). The stand-in keeps the contract a
- * TagPicker's caller relies on, so the caller's own logic is what the test runs:
+ * picked and removed in a handful of renders (phase 4, slice 7). On React 18 the loop is gone (a
+ * real TagPicker typed and picked under jsdom, 2026-10-07), but opening it took close to a minute
+ * on a loaded machine, so the stand-in stays. It keeps the contract a TagPicker's caller relies
+ * on, so the caller's own logic is what the test runs:
  *
  * - the picker hands its `selectedOptions`, `onOptionSelect` and `disabled` to its parts;
  * - the input is a combobox that shows `value` and reports typing through `onChange`;

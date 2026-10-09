@@ -2,14 +2,18 @@ import strings from 'ProjectWebPartsStrings'
 import { format } from 'pp365-shared-library'
 import { formatDate } from 'pp365-shared-library/lib/util'
 import reducer, {
+  CLEAR_USER_MESSAGE,
   CLOSE_PANEL,
   FETCH_DATA_ERROR,
   INIT_DATA,
   OPEN_PANEL,
   PERSIST_SECTION_DATA,
+  REFETCH_DATA,
   REPORT_DELETED,
+  REPORT_DELETE_ERROR,
   REPORT_PUBLISHED,
   REPORT_PUBLISHING,
+  REPORT_PUBLISH_ERROR,
   SELECT_REPORT,
   SELECT_SCOPE,
   initialState
@@ -18,8 +22,8 @@ import { report, section } from './testFixtures'
 
 /**
  * The status page's state rules: the fetched data and the report it opens with, selecting a
- * report, switching report series, publishing and deleting, the section data a report remembers,
- * the panel, and a failed fetch.
+ * report, switching report series, publishing and deleting (and their failures), the message shown
+ * after publishing, the section data a report remembers, the panel, refetching, and a failed fetch.
  */
 const published = report({ GtStatusTime: 'Grønn' }, { id: 2 })
 const draft = report({ GtStatusTime: 'Gul' }, { id: 3, published: false })
@@ -97,11 +101,57 @@ describe('ProjectStatus reducer', () => {
     expect(state.userMessage).toEqual({ text: 'Publisert', intent: 'success' })
   })
 
+  it('a failed publish ends the busy state and shows why, keeping the report as it was', () => {
+    const busy = reducer(init(draft), REPORT_PUBLISHING())
+    const state = reducer(
+      busy,
+      REPORT_PUBLISH_ERROR({ message: { text: 'Kunne ikke publisere', intent: 'error' } })
+    )
+    expect(state.isPublishing).toBe(false)
+    expect(state.userMessage).toEqual({ text: 'Kunne ikke publisere', intent: 'error' })
+    expect(state.selectedReport).toBe(draft)
+    expect(state.refetch).toBe(busy.refetch)
+  })
+
+  it('clears the message shown after publishing, and nothing else', () => {
+    const shown = reducer(
+      init(published),
+      REPORT_PUBLISH_ERROR({ message: { text: 'Kunne ikke publisere', intent: 'error' } })
+    )
+    const state = reducer(shown, CLEAR_USER_MESSAGE())
+    expect(state.userMessage).toBeNull()
+    expect(state.selectedReport).toBe(published)
+    expect(state.refetch).toBe(shown.refetch)
+  })
+
   it('deleting the selected report opens the next one', () => {
     const state = reducer(init(draft), REPORT_DELETED())
     expect(state.data.reports.map((r) => r.id)).toEqual([2])
     expect(state.selectedReport).toBe(published)
     expect(state.mostRecentReportId).toBe(2)
+  })
+
+  it('a failed delete shows why in a message above the report, and keeps the report', () => {
+    const state = reducer(init(draft), REPORT_DELETE_ERROR({ error: { message: 'Ingen tilgang' } }))
+    expect(state.userMessage).toEqual({
+      title: strings.DeleteReportErrorTitle,
+      text: 'Ingen tilgang',
+      intent: 'error'
+    })
+    // `error` replaces the whole page; a failed delete leaves the page as it was.
+    expect(state.error).toBeUndefined()
+    expect(state.selectedReport).toBe(draft)
+    expect(state.data.reports.map((r) => r.id)).toEqual([3, 2])
+  })
+
+  it('a failed delete without a payload or a reason still shows the message', () => {
+    const state = reducer(init(draft), REPORT_DELETE_ERROR())
+    expect(state.userMessage).toEqual({
+      title: strings.DeleteReportErrorTitle,
+      text: undefined,
+      intent: 'error'
+    })
+    expect(state.error).toBeUndefined()
   })
 
   it('opens and closes the panel, refetching on close', () => {
@@ -110,6 +160,14 @@ describe('ProjectStatus reducer', () => {
     const closed = reducer(open, CLOSE_PANEL())
     expect(closed.activePanel).toBeNull()
     expect(closed.refetch).toBeGreaterThanOrEqual(open.refetch)
+  })
+
+  it('asks for the data again, and changes nothing else', () => {
+    const before = Date.now()
+    const loaded = { ...init(published), refetch: 0 }
+    const state = reducer(loaded, REFETCH_DATA())
+    expect(state.refetch).toBeGreaterThanOrEqual(before)
+    expect({ ...state, refetch: 0 }).toEqual(loaded)
   })
 
   it('keeps the error of a failed fetch and ends loading', () => {

@@ -57,7 +57,11 @@ export interface IBasePanelProps<T extends string = string> {
   closeButtonAriaLabel?: string
 
   /**
-   * Hides the panel without unmounting it.
+   * Hides the panel's header, with the title or `header` content and the
+   * close button, through the `hidden` attribute. The body and footer still
+   * render, and only `open` decides whether the panel shows: without the close
+   * button it closes on Escape, a click outside (`isLightDismiss`) or the
+   * caller's own buttons.
    */
   hidden?: boolean
 

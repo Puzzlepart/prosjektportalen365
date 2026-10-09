@@ -1,4 +1,6 @@
 import { expect, test as base, Page } from '@playwright/test'
+import * as fs from 'fs'
+import * as path from 'path'
 
 /**
  * Browser-side failures that mean the deployed bundles are broken, not the page content.
@@ -135,6 +137,7 @@ export const test = base.extend<Pp365Fixtures>({
         throw new Error(`Page not found: ${response.url()}`)
       }
       await expectCanvasRendered(page)
+      await expectReleaseChannel(page)
       // Every PP365 web part renders the same error boundary when its bundle or data fails; one
       // of these headings on a smoke page is a failure regardless of what else mounted.
       await expect(
@@ -165,6 +168,52 @@ export { expect }
 
 /** Selector for a mounted SPFx web part. Present on canvas pages and on single web part app pages alike. */
 export const WEB_PART = '[data-sp-web-part-id]'
+
+/** The release channel under test: the test channel, which CI deploys before the suite runs. */
+const CHANNEL = process.env.E2E_CHANNEL || 'test'
+
+/**
+ * Every PP365 component id of every release channel (`channels/<name>.json`), with its channel and
+ * its name: what tells a page's web part of the channel under test from another channel's.
+ */
+const CHANNEL_COMPONENTS: Map<string, { channel: string; name: string }> = (() => {
+  const components = new Map<string, { channel: string; name: string }>()
+  const dir = path.resolve(__dirname, '..', '..', '..', 'channels')
+  for (const file of fs.readdirSync(dir).filter((name) => /^[a-z0-9]+\.json$/.test(name))) {
+    const channel = file.replace(/\.json$/, '')
+    const walk = (node: unknown, key: string) => {
+      if (typeof node === 'string' && /^[0-9a-f-]{36}$/i.test(node)) {
+        components.set(node.toLowerCase(), { channel, name: key })
+      } else if (node && typeof node === 'object') {
+        for (const [childKey, child] of Object.entries(node)) walk(child, childKey)
+      }
+    }
+    walk(JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8')), '')
+  }
+  return components
+})()
+
+/**
+ * Fails when a web part on the page is a PP365 component of another release channel than the one
+ * under test. Such a page runs that channel's code (the main channel's is the last release), so a
+ * pass or a failure there says nothing about this build: on 2026-10-09 three of the hub's
+ * aggregated overviews, the dynamic list and the project's timeline turned out to run the main
+ * channel's. Out-of-the-box web parts are left alone.
+ */
+export async function expectReleaseChannel(page: Page): Promise<void> {
+  const ids = await page
+    .locator(WEB_PART)
+    .evaluateAll((elements) => elements.map((e) => e.getAttribute('data-sp-web-part-id') ?? ''))
+  const foreign = ids
+    .map((id) => CHANNEL_COMPONENTS.get(id.toLowerCase()))
+    .filter((component) => component && component.channel !== CHANNEL)
+    .map((component) => `${component!.name} (${component!.channel} channel)`)
+  expect(
+    foreign,
+    `${page.url()} runs web parts of another release channel than "${CHANNEL}"; point them at the ` +
+      `${CHANNEL} channel's components (channels/${CHANNEL}.json)`
+  ).toEqual([])
+}
 
 /**
  * Waits until at least one SPFx web part has mounted. PP365 uses both page kinds: Home.aspx is a

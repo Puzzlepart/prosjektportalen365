@@ -40,9 +40,12 @@
     }
   }
 
+  // In the header's flow, so the drawer centres them on the close button's line and the header
+  // grows to hold them; absolutely placed from the empty heading they sat 16px lower and reached
+  // past the header, where the divider drawn on scroll cut through them.
   .panelActions {
-    display: block;
-    position: absolute;
-    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: var(--spacingHorizontalXS);
   }
 }
