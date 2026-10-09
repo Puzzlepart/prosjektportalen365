@@ -3,9 +3,11 @@ import { format } from 'pp365-shared-library'
 import { formatDate } from 'pp365-shared-library/lib/util'
 import reducer, {
   CLOSE_PANEL,
+  CLOSE_SNAPSHOT,
   FETCH_DATA_ERROR,
   INIT_DATA,
   OPEN_PANEL,
+  OPEN_SNAPSHOT,
   PERSIST_SECTION_DATA,
   REPORT_DELETED,
   REPORT_PUBLISHED,
@@ -19,7 +21,7 @@ import { report, section } from './testFixtures'
 /**
  * The status page's state rules: the fetched data and the report it opens with, selecting a
  * report, switching report series, publishing and deleting, the section data a report remembers,
- * the panel, and a failed fetch.
+ * the panel, the snapshot dialog, and a failed fetch.
  */
 const published = report({ GtStatusTime: 'Grønn' }, { id: 2 })
 const draft = report({ GtStatusTime: 'Gul' }, { id: 3, published: false })
@@ -110,6 +112,14 @@ describe('ProjectStatus reducer', () => {
     const closed = reducer(open, CLOSE_PANEL())
     expect(closed.activePanel).toBeNull()
     expect(closed.refetch).toBeGreaterThanOrEqual(open.refetch)
+  })
+
+  it('opens and closes the snapshot without refetching', () => {
+    const open = reducer(init(published), OPEN_SNAPSHOT())
+    expect(open.isSnapshotOpen).toBe(true)
+    const closed = reducer(open, CLOSE_SNAPSHOT())
+    expect(closed.isSnapshotOpen).toBe(false)
+    expect(closed.refetch).toBe(open.refetch)
   })
 
   it('keeps the error of a failed fetch and ends loading', () => {

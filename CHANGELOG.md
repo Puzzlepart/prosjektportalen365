@@ -22,6 +22,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Assistent-iframen i footeren har nå `allow="clipboard-write"`, slik at PP Assistenten kan legge rapporter på utklippstavlen som formatert tekst (limes pent inn i Word, Outlook og Teams). Uten dette faller assistenten tilbake til ren tekst (markdown)
 - Henting av brukerfeltverdier på statusrapporter gjøres nå som en egen, feiltolerant spørring — statusrapportene vises selv om brukerfelt-berikelsen skulle feile
 - Seksjonsikoner i `Prosjektstatus`, visningsikoner i `Porteføljeoversikt`/aggregerte oversikter og kolonneikoner i porteføljen rendres nå med Fluent UI-ikoner (strek som fylles ved hover), med automatisk oversetting av gamle UI Fabric-ikonnavn og fallback til UI Fabric for ukjente navn. Eksisterende ikonnavn fungerer uendret og krever ingen migrering; nye installasjoner får Fluent-navn som standard. Ukjente ikonnavn på vertikaler i `Prosjektliste` vises nå som UI Fabric-ikon i stedet for standardikonet [#1287](https://github.com/Puzzlepart/prosjektportalen365/issues/1287)
+- `Åpne øyeblikksbilde` i `Prosjektstatus` viser øyeblikksbildet i et vindu som fyller nettleseren, i full bredde med rulling i stedet for zoom, med knapper for fullskjerm, for å åpne bildet i ny fane og for å kopiere en lenke som åpner statussiden med øyeblikksbildet i full bredde (eller en direkte lenke til bildefilen), med informasjon om hvem som kan åpne dem. Nye øyeblikksbilder har prosjektets tittel (med delprosjekt ved multirapportering) over prosjektinformasjonen og lagres i dobbel oppløsning, så de er skarpe også på skjermer med høy oppløsning
 
 ### Feilrettinger
 
@@ -29,7 +30,6 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Rettet en latent feil hvor egenskapsruten til risiko- og mulighetsmatrisewebdelene krasjet dersom initialiseringen av webdelen hadde feilet
 - Matrise-elementer med ID over 99 vises nå korrekt (tidligere «99+»)
 - Rettet en feil i `Porteføljeoversikt` hvor en ny kolonne havnet først i visningen etter oppfriskning, fordi visningens egen kolonnerekkefølge ikke kjente den; nye kolonner legges nå sist i rekkefølgen, og en lagring som feiler vises i panelet i stedet for å lukke det
-- `Åpne øyeblikksbilde` i `Prosjektstatus` åpner nå øyeblikksbildet i en ny fane
 - Rettet en feil i `Administrasjon av underområder` hvor et fjernet underområde ble hengende igjen i utvalget slik at `Fjern underområder` var aktiv uten noe valgt, og hvor en sammenslått og gjenåpnet hub-gruppe mistet det synlige utvalget; grupper med færre enn ti prosjekter åpnes nå automatisk, og alle grupper åpnes under søk
 - Rettet en feil hvor lister med utvalg (`Prosjekttidslinje`, `Hent dokumentmal`) alltid fikk et vannrett rullefelt tilsvarende avkrysningskolonnens bredde
 - Rettet en feil i `Prosjektstatus` hvor feilmeldingen aldri ble vist når data ikke kunne hentes; siden viste verktøylinjen i stedet
