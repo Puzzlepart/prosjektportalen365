@@ -341,7 +341,8 @@ describe('CustomEditPanel', () => {
     await run(() => {
       fireEvent.blur(date)
     })
-    await waitFor(() => expect(properties().GtStartDate).toBe(new Date(2026, 2, 15).toISOString()))
+    // Sent as the day typed, which SharePoint reads in the site's time zone (`toCalendarDate`).
+    await waitFor(() => expect(properties().GtStartDate).toBe('2026-03-15'))
     expect(date).toHaveValue('15.03.2026')
   })
 })

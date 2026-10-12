@@ -30,7 +30,7 @@ tests, and on a developer's machine in seconds. Plan and decisions:
 
 | Mode | When | As |
 |---|---|---|
-| `certificate` | `CI_TENANT`, `CI_CLIENT_ID` and `CI_CERT_BASE64` are set (CI) | The CI app, app-only, with the certificate the upgrade jobs use, read in memory |
+| `certificate` | `CI_TENANT`, `CI_CLIENT_ID` and `CI_CERT_BASE64` are set (CI) | The CI app «Prosjektportalen CI» (Entra ID), app-only, with the certificate the upgrade jobs use, read in memory |
 | `cookies` | Otherwise, when `e2e/.auth/user.json` exists (locally) | The e2e user, with the session the browser suite's sign-in left |
 
 `INTEGRATION_AUTH=certificate|cookies` forces one. The session lasts about two days: renew it with

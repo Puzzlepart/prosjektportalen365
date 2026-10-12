@@ -1,4 +1,4 @@
-import { formatDate, formatShortDate, parseShortDate } from './formatDate'
+import { formatDate, formatShortDate, parseShortDate, toCalendarDate } from './formatDate'
 
 /**
  * Dates as the user reads them: in SharePoint's UI language (the language of the strings beside
@@ -93,5 +93,21 @@ describe('parseShortDate', () => {
   it("follows SharePoint's UI language by default", () => {
     ;(window as any)._spPageContextInfo = { currentUICultureName: 'en-US' }
     expect(parseShortDate('11/18/2022')).toEqual(day(2022, 11, 18))
+  })
+})
+
+describe('toCalendarDate', () => {
+  it("writes the day a date picker picked, which SharePoint reads in the site's time zone", () => {
+    // The picker gives the day at local midnight; sent as an instant, that midnight fell on the day
+    // before for a machine east of the site (Helsinki and Tokyo on an Oslo site, on the tenant).
+    expect(toCalendarDate(new Date(2026, 3, 3))).toBe('2026-04-03')
+    expect(toCalendarDate(new Date(2026, 3, 3, 23, 30))).toBe('2026-04-03')
+    expect(toCalendarDate(new Date(2026, 0, 5))).toBe('2026-01-05')
+  })
+
+  it('sends no date, and what is not a date, as null', () => {
+    expect(toCalendarDate(null)).toBeNull()
+    expect(toCalendarDate(undefined)).toBeNull()
+    expect(toCalendarDate(new Date('ikke en dato'))).toBeNull()
   })
 })

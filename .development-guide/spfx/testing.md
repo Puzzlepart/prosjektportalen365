@@ -196,5 +196,5 @@ I CI kjører jobben «Integration tests (test channel)» i `ci-channel-test.yml`
 
 1. ~~Komponenttester for komponentene som konverteres fra Fluent UI v8 til v9.~~ Gjort i fase 3 og 4: hver webdel-rot, utvidelse og interaktiv komponent har tester.
 2. Skriveflyter i E2E: kopi av dokumentmal, utkast til statusrapport, ny kolonne i porteføljeoversikten og underområde i et program er på plass og rydder etter seg. Gjenstår: prosjektoppsett, publisering av statusrapport og opprettelse av idé.
-3. Integrasjonstester for datalaget (`integration/`, `docs/plans/integration-tests.md`): harness, CI-jobb, søk og termer er på plass (skive 0 og 1; søketestene fant at sidene i et søk overlappet, rettet i 1.15). Gjenstår: prosjektegenskaper tur-retur, hub-siden og malens tilstand etter en oppgradering (skive 2–4).
+3. Integrasjonstester for datalaget (`integration/`, `docs/plans/integration-tests.md`): harness, CI-jobb, søk, termer og prosjektegenskaper tur-retur er på plass (skive 0–2). Søketestene fant at sidene i et søk overlappet, og datotestene at en dato valgt øst for områdets tidssone ble lagret som dagen før; begge er rettet i 1.15. Gjenstår: hub-siden og malens tilstand etter en oppgradering (skive 3–4).
 4. ~~Dekningsgrenser per løsning.~~ Gjort i fase 4 (se over).

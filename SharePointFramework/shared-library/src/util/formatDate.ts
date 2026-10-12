@@ -97,3 +97,21 @@ export function parseShortDate(text: string, locale: string = getUILocale()): Da
     result.getDate() === parts.day
   return isSameDay ? result : undefined
 }
+
+/**
+ * The day a date picker picked, as `YYYY-MM-DD`, which SharePoint reads as midnight in the site's
+ * time zone, as its own forms store a date. Sent as an instant instead (the picker's local
+ * midnight, in UTC), the day became the day before for a machine east of the site's time zone:
+ * "03.04.2026" typed in Helsinki or Tokyo was stored as 2 April on an Oslo site.
+ *
+ * @param date The picked date
+ *
+ * @returns the day, or `null` for no date
+ */
+// SharePoint clears a field with null, so null is what no date is sent as.
+// eslint-disable-next-line @rushstack/no-new-null
+export function toCalendarDate(date: Date | null | undefined): string | null {
+  if (!(date instanceof Date) || isNaN(date.getTime())) return null
+  const pad = (value: number) => String(value).padStart(2, '0')
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
+}

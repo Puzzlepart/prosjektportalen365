@@ -25,9 +25,25 @@ Bare emnelinjen (første linje) i commit-meldingen leses, slik at punktene i en 
 
 ### Bygg og installer (dev)
 
-[ci-releases](../../.github/workflows/ci-releases.yml) kjører ved _push_ til `releases/1.15` som endrer noe under `SharePointFramework/`, `Install/` eller `Templates/`. Den bygger utgivelsespakken med [Build-Release.ps1](../../Install/Build-Release.ps1) `-CI`, oppgraderer utviklingshuben `https://puzzlepart.sharepoint.com/sites/pp365` med [Install.ps1](../../Install/Install.ps1) `-Upgrade`, og installerer så et nytt område, `<huben>_<commit>`, for å prøve en ny installasjon. Innloggingen skjer med et sertifikat for en app-registrering, fra hemmelighetene `CI_TENANT`, `CI_CLIENT_ID` og `CI_CERT_BASE64`.
+[ci-releases](../../.github/workflows/ci-releases.yml) kjører ved _push_ til `releases/1.15` som endrer noe under `SharePointFramework/`, `Install/` eller `Templates/`. Den bygger utgivelsespakken med [Build-Release.ps1](../../Install/Build-Release.ps1) `-CI`, oppgraderer utviklingshuben `https://puzzlepart.sharepoint.com/sites/pp365` med [Install.ps1](../../Install/Install.ps1) `-Upgrade`, og installerer så et nytt område, `<huben>_<commit>`, for å prøve en ny installasjon. Innloggingen skjer som CI-appen «Prosjektportalen CI» (se under), fra hemmelighetene `CI_TENANT`, `CI_CLIENT_ID` og `CI_CERT_BASE64`.
 
 En full kjøring tar rundt 85–90 minutter (bygg ~13, oppgradering ~28, ny installasjon ~46). Med `[apps-only]` bygges bare pakkene, og huben oppgraderes uten maler, på rundt 14 minutter.
+
+### CI-appen «Prosjektportalen CI»
+
+Jobbene som rører en tenant, logger inn som appregistreringen **Prosjektportalen CI** i Entra ID, app-only med et sertifikat. Den brukes av oppgraderingen og den nye installasjonen i `ci-releases.yml`, av oppgraderingene og `UpgradeAllSitesToLatest.ps1` i `ci-channel-test.yml` (`Install.ps1 -CI -Tenant … -CertificateBase64Encoded … -ClientId …`) og av integrasjonstestene i `integration/` (MSAL i Node). Playwright-testene bruker den ikke: de logger inn som e2e-brukeren (se «Testregime»).
+
+| Hemmelighet | Innhold |
+|---|---|
+| `CI_CLIENT_ID` | Appens «Application (client) ID» |
+| `CI_TENANT` | Tenanten appen logger inn i |
+| `CI_CERT_BASE64` | Sertifikatet med privat nøkkel: en PFX uten passord, base64-kodet |
+
+- Det er ikke flerleietaker-appen «Prosjektportalen» (`da6c31a6-b557-4ac3-9994-7315da06ea3a`), som `Install.ps1` bruker til interaktiv innlogging når `-ClientId` ikke er oppgitt. Gi aldri den appen rettigheter for CI: rettighetene på en flerleietaker-app blir bedt om fra alle kunder som godkjenner den.
+- Rettighetene er applikasjonsrettigheter på SharePoint og må godkjennes av en administrator («Grant admin consent»); en rettighet som er lagt til uten godkjenning, virker ikke. `TermStore.Read.All` ble lagt til 2026-10-12 for integrasjonstestene, som leser termlageret: uten den svarer termlageret 403, og de testene hoppes over med den begrunnelsen. Resten står under «API permissions» på appen.
+- App-only trimmes ingenting etter en brukers tilgang. Det en bruker bare får se med tilgang, prøves derfor av e2e-brukeren.
+- Appen finnes i Entra admin center under App registrations. Hvilken app en kjøring brukte, viser Sign-in logs, fanen «Service principal sign-ins», ved kjøringens tidspunkt (ressursen «Office 365 SharePoint Online»).
+- Sertifikatet har en utløpsdato, som står under «Certificates & secrets» på appen. Ved fornyelse lastes den offentlige delen opp der, og `CI_CERT_BASE64` byttes ut med den nye PFX-en i base64 i repoets hemmeligheter. Integrasjonstestene leser en PFX med tomt passord eller helt uten passord.
 
 ### CI (channels/test)
 
@@ -52,7 +68,7 @@ GitHub kjører bare arbeidsflytfilene som ligger rett i `.github/workflows/`. De
 | Arbeidsflytfil        | Beskrivelse                                                                  | Utløser                                                                                  |
 | --------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | `ci-releases.yml`     | Bygg, oppgrader og installer til utviklingsmiljø                             | Push til `releases/1.15` (stier: SPFx, Install, Templates)                               |
-| `ci-channel-test.yml` | Bygg og distribuer testkanalen, og kjør Playwright-testene mot den           | Push til `releases/1.15`, `feat/fluent-v9*` og `feat/dependency-upgrades*` (stier: SPFx, Install, Templates, e2e) |
+| `ci-channel-test.yml` | Bygg og distribuer testkanalen, og kjør Playwright- og integrasjonstestene mot den | Push til `releases/1.15`, `feat/fluent-v9*` og `feat/dependency-upgrades*` (stier: SPFx, Install, Templates, e2e, integration) |
 | `ci-build-debug.yml`  | Bygg testkanalens pakke uten utrulling, for å prøve endringer i bygget       | Push til `releases/1.15` eller en `feat/**`-branch med `[build-debug]` i emnelinjen      |
 | `build-release.yml`   | Bygg utgivelsespakke og test/kurs-kanalpakker                                | Push til `main` (stier: SPFx, Install, Templates)                                        |
 | `generate-sbom.yml`   | Generer SBOM.md som artefakt; committer den bare ved manuell kjøring fra en branch | Tag-push `v*` eller manuell utløsning                                              |

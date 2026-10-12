@@ -131,6 +131,16 @@ describe('useModel', () => {
     expect(current().properties).toEqual({ GtProjectManagerId: null })
   })
 
+  it("sends a date as the day picked, which SharePoint reads in the site's time zone", async () => {
+    const { current } = renderModel()
+    const start = field('GtStartDate', 'DateTime')
+    await set(current, start, new Date(2026, 3, 3))
+    expect(current().properties).toEqual({ GtStartDate: '2026-04-03' })
+    expect(current().get(start)).toEqual(new Date(2026, 3, 3))
+    await set(current, start, null)
+    expect(current().properties).toEqual({ GtStartDate: null })
+  })
+
   it('sends several people as their ids', async () => {
     const { current } = renderModel()
     await set(current, field('GtMembers', 'UserMulti'), [

@@ -245,6 +245,11 @@ which only an administrator can grant. Until it has it, the tests that read the 
 in certificate mode with that reason (`appOnlyDenied` in `sites.ts`, tested offline), and run once
 it is granted; signed in as a user they never skip.
 
+Exit met (run 38253960834, the integration job rerun after the user granted `TermStore.Read.All`
+on SharePoint to the app "Prosjektportalen CI" with admin consent): 24 of 24 green app-only, the
+term store included; a grant without the admin consent still gave 403. The skip stays for a
+tenant whose CI app lacks the permission.
+
 ### Slice 1: search and terms (2026-10-12)
 
 Done, read-only: `tests/search.test.ts` runs `searchAggregatedItems` over the test program's 30
@@ -271,3 +276,37 @@ was seen failing in both layers before the fix. A changelog line under «Feilret
 
 Not covered here: `getTermLabel`'s last fallback, the first label, when a term has neither nb-NO
 nor en-US (the set has no such term; Jest covers it).
+
+Exit met: green locally in cookie mode and in CI app-only (run 38253960834, the search tests in
+its first attempt, the term store tests in the second).
+
+### Slice 2: project properties round trip (2026-10-12)
+
+Done: `tests/project-properties.test.ts` writes the reserved project's properties item as the edit
+panel sends it (`useModel`'s transforms) through `ProjectDataService.updateProjectProperties`, reads
+it back through `getProjectInformationData`, raw and as SharePoint shows it, and restores every
+value in `finally` from what it read first, failing when the restore does not hold. A date typed as
+the picker shows it, "03.04.2026", parsed in the page's language and sent as the panel sends it,
+with the machine in Europe/Oslo, UTC, America/New_York, Europe/Helsinki and Asia/Tokyo
+(`process.env.TZ`, switched within the run); text, a choice and a person (`ensureUser` on the
+project's web, the run's user); a service area term through its hidden text field
+(`-1;#<label>|<id>`), skipping app-only without `TermStore.Read.All`.
+
+Found: before the fix the date scenario failed, run with the payload the panel then sent. The panel
+sent the picked day's local midnight as an instant (the `Date` serialized in UTC), so a machine
+east of the site's time zone stored the day before: typed in Helsinki or Tokyo, 3 April became 2
+April on the Oslo site; Oslo, UTC and New York were right. SharePoint reads a date sent without a
+zone (`2026-04-03`) as midnight in the site's time zone, which is what its own forms store, so the
+panel now sends the day picked: `toCalendarDate` (`util/formatDate.ts`) in `useModel`'s `DateTime`
+transform, with Jest tests seen failing first and the panel's date test updated to the new payload.
+A changelog line. Not the 4 March report: that is a day and month swapped while parsing, which
+`parseShortDate` prevents and the date field's Jest test covers; the user is to type it again with
+the latest packages.
+
+Open, not fixed: the mirror image when reading. The panel shows a stored date as `new Date(value)`
+(`createFieldValueMap`), the stored instant in the machine's time zone, so a machine west of the
+site's (the UK in winter, the Americas) shows and starts from the day before; the project
+information web part shows SharePoint's own text and is right. Reading the day from SharePoint's
+text (`valueAsText`, in the site's regional settings) would fix it; it needs the regional locale
+the text is written in, so it is a decision of its own.
+
