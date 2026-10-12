@@ -11,6 +11,7 @@ on:
       - 'Install/**'
       - 'Templates/**'
       - 'e2e/**'
+      - 'integration/**'
       - .github/workflows/ci-channel-test.yml
   # Manual runs, for example to re-run the end-to-end smoke after fixing a secret or a spec.
   workflow_dispatch:
@@ -223,4 +224,51 @@ jobs:
             e2e/playwright-report
             e2e/test-results
           # The longest this repository allows; more is cut to it.
+          retention-days: 7
+
+  integration_test_channel:
+    # The shared library's data layer against the test tenant from Node, beside the smoke tests
+    # and after the same two upgrade paths (integration/README.md). It signs in as the CI app with
+    # the workflow's certificate; INTEGRATION_USER is who the library acts for where it asks for a
+    # user (ensureUser).
+    needs: [commit_subject, upgrade_channel_test, upgrade_channel_test_packages_only]
+    name: Integration tests (test channel)
+    runs-on: ubuntu-latest
+    if: ${{ always() && (needs.upgrade_channel_test.result == 'success' || needs.upgrade_channel_test_packages_only.result == 'success') && !contains(needs.commit_subject.outputs.subject, '[skip-integration]') }}
+    env:
+      INTEGRATION_HUB_URL: ${{ vars.SP_URL_TEST }}
+      INTEGRATION_PROGRAM_URL: ${{ vars.E2E_PROGRAM_URL }}
+      INTEGRATION_PROJECT_URL: ${{ vars.INTEGRATION_PROJECT_URL }}
+      INTEGRATION_USER: ${{ secrets.E2E_USERNAME }}
+      # A missing variable or secret fails the job: skipped whole, the suite would pass untested.
+      INTEGRATION_STRICT: 'true'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Install pp365-integration
+        run: node common/scripts/install-run-rush.js install --to pp365-integration --to pp365-templates
+
+      # The library's shared strings (src/loc/shared) are generated from the templates' .resx files.
+      - name: Generate the shared strings
+        run: npm run generate-resx-ts
+        working-directory: Templates
+
+      # The tests load the library's CommonJS build; no Jest here (the release build ran it).
+      - name: Build the shared library
+        run: npx heft build --production
+        working-directory: SharePointFramework/shared-library
+
+      - name: Run the integration tests against the test channel
+        run: npm run test:ci
+        working-directory: integration
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: integration-report-test-channel
+          path: integration/test-results
           retention-days: 7

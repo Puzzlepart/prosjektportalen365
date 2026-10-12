@@ -59,6 +59,11 @@
             "packageName": "pp365-e2e",
             "projectFolder": "e2e",
             "shouldPublish": false
+        },
+        {
+            "packageName": "pp365-integration",
+            "projectFolder": "integration",
+            "shouldPublish": false
         }
     ]
 }

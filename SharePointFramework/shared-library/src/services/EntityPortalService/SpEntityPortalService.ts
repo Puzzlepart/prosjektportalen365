@@ -1,5 +1,7 @@
+import { AssignFrom } from '@pnp/core'
 import '@pnp/sp/presets/all'
-import { IContentType, IList, IWeb, SPFI, SPFx, spfi } from '@pnp/sp/presets/all'
+import { IContentType, IList, IWeb, SPFI, spfi } from '@pnp/sp/presets/all'
+import { createSpfiInstance } from '../../data/createSpfiInstance'
 import { SPFxContext } from '../../types'
 import {
   addEntityItem,
@@ -38,7 +40,9 @@ export class SpEntityPortalService {
     private _spfxContext: SPFxContext,
     private _params: ISpEntityPortalServiceParams
   ) {
-    this.sp = spfi(_params.portalUrl).using(SPFx(_spfxContext))
+    // Connected the way the library's other clients are (`createSpfiInstance`), so a factory the
+    // integration tests register reaches this client too.
+    this.sp = spfi(_params.portalUrl).using(AssignFrom(createSpfiInstance(_spfxContext).web))
     this.web = this.sp.web
     this._entityList = this.web.lists.getByTitle(_params.listName)
     this._entityContentType = _params.contentTypeId
@@ -71,7 +75,8 @@ export class SpEntityPortalService {
       identity,
       sourceUrl,
       onFieldsError,
-      origin: `${window.location.protocol}//${window.location.hostname}`,
+      // The page's origin, from the context rather than `window`, which Node does not have.
+      origin: new URL(this._spfxContext.pageContext.web.absoluteUrl).origin,
       portalUrl: this._params.portalUrl,
       listName: this._params.listName,
       identityFieldName: this._params.identityFieldName,

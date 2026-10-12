@@ -90,6 +90,7 @@
 		* [Skript i `SharePointFramework/.tasks`](#skript-i-sharepointframeworktasks)
 		* [Skript i `SharePointFramework/.eslint-config` og `SharePointFramework/.jest-config`](#skript-i-sharepointframeworkeslint-config-og-sharepointframeworkjest-config)
 		* [Skript i `e2e`](#skript-i-e2e)
+		* [Skript i `integration`](#skript-i-integration)
 		* [Skript i `Templates`](#skript-i-templates)
 		* [Vanlige arbeidsflyter](#vanlige-arbeidsflyter)
 	* [➤ Konfigurasjon av utviklingsmiljø](#-konfigurasjon-av-utviklingsmilj)
@@ -109,6 +110,7 @@
 		* [Skrive komponenttester](#skrive-komponenttester)
 		* [Ende-til-ende med Playwright (`e2e/`)](#ende-til-ende-med-playwright-e2e)
 			* [Finne og lese E2E-rapporten fra CI](#finne-og-lese-e2e-rapporten-fra-ci)
+		* [Integrasjonstester (`integration/`)](#integrasjonstester-integration)
 		* [Når en test feiler](#nr-en-test-feiler)
 		* [Veikart](#veikart)
 	* [➤ Maler](#-maler)
@@ -190,6 +192,7 @@ Repoet er et Rush-monorepo (pnpm, Heft, SPFx 1.24):
 | `Install/` | `Build-Release.ps1` (utgivelsesbygget), `Install.ps1` og oppgraderingsskriptene |
 | `channels/` | Installasjonskanalene `main`, `test`, `i18n` og `kurs`; se [kanaler](maler/kanaler.md) |
 | `e2e/` | Playwright-røyktester mot testtenanten (Rush-prosjektet `pp365-e2e`) |
+| `integration/` | Integrasjonstester av bibliotekets datalag mot testtenanten, i Node (Rush-prosjektet `pp365-integration`) |
 | `.development-guide/` | Utviklingsguiden, delt i `spfx/`, `maler/`, `git/`, `ci/` og `utgivelse/` |
 | `docs/plans/` | Planer for større løft, f.eks. [Heft-overgangen](../docs/plans/spfx-1.23-heft-toolchain.md) og [fase 5](../docs/plans/dependency-upgrades-phase-5.md) |
 
@@ -1309,6 +1312,17 @@ Se [Oppgaver](../../SharePointFramework/.tasks/README.md) for en full oversikt o
 | `report`       | `playwright show-report` | Åpner HTML-rapporten fra siste kjøring. |
 | `lint`, `validate-loc` | `echo …` | Plassholdere for `rush lint` og `rush validate-loc`. |
 
+### Skript i `integration`
+
+`integration` (`pp365-integration`) har integrasjonstestene av bibliotekets datalag mot testtenanten. De trenger `integration/.env` (kopiert fra `.env.example`), e2e-brukerens økt eller CI-sertifikatet, og et bygget `shared-library`; se [Testing](testing.md).
+
+| Skript         | Kommando | Hva det gjør / hvorfor |
+| -------------- | -------- | ---------------------- |
+| `build`        | `tsc --noEmit -p tsconfig.json` | Typesjekker harnessen og testene. Kjøres av `rush build`; testene kjører aldri der, siden de trenger en tenant. |
+| `test`         | `node --test --test-concurrency=1 "tests/**/*.test.ts"` | Kjører testene mot testtenanten, én fil om gangen, med Nodes typestripping. |
+| `test:ci`      | `node --test … --test-reporter=spec … --test-reporter=junit …` | Som `test`, med spec-rapport i loggen og JUnit i `test-results/junit.xml`. Brukes av CI-jobben. |
+| `lint`, `validate-loc` | `echo …` | Plassholdere for `rush lint` og `rush validate-loc`. |
+
 ### Skript i `Templates`
 
 `Templates`-pakken genererer JSON-provisjoneringsmaler og `.resx`-basert lokalisering for malene.
@@ -1492,11 +1506,12 @@ Dette kapittelet beskriver hvordan Prosjektportalen testes automatisk, hva som k
 |---|---|---|---|---|
 | Enhetstester | Ren logikk: modeller, hjelpefunksjoner, datamappere, reducere, tjenesteoperasjoner | Jest via Heft (`heft test`) | I hvert bygg av løsningen, lokalt og i CI | Nei |
 | Komponenttester | React-komponenter rendret i jsdom: hva vises, hva skjer ved klikk | Jest + React Testing Library | I hvert bygg av løsningen | Nei |
+| Kjøretidskontrakt | Kode som komponerer PnPjs-spørringer, kjørt mot det ekte PnPjs 4-biblioteket med falsk transport | `node --test` (`shared-library/test/runtime/*.test.mjs`, `npm run test:runtime`) | I byggeskriptet til shared-library, etter `heft test` | Nei |
 | Pakkebevis | At hvert bygg faktisk produserer sin `.sppkg` og at det delte biblioteket er pakket inn (ikke en kjøretidsavhengighet) | `Install/Build-Release.ps1` | I hvert utgivelsesbygg | Nei |
+| Integrasjon | Bibliotekets datalag (tjenestene, søk, termlageret) mot testtenanten: hva SharePoint returnerer og lagrer | `node --test` (`integration/`) | Etter utrulling til testkanalen i `ci-channel-test.yml`, ved siden av E2E; lokalt på sekunder | Ja |
 | Ende-til-ende (E2E) | Hub og prosjektområde i testtenanten: sidene laster, webdelene monteres, ingen ødelagte bundler | Playwright (`e2e/`) | Etter utrulling til testkanalen i `ci-channel-test.yml` | Ja |
 | Manuell smoke-test | Skriveflyter som ennå ikke er automatisert (prosjektoppsett, publisering av statusrapport, idéflyt) | Issue-maler, se «Smoke test-prosessen» | Før utgivelse, til E2E dekker flytene | Ja |
 
-| Kjøretidskontrakt | Kode som komponerer PnPjs-spørringer, kjørt mot det ekte PnPjs 4-biblioteket med falsk transport | `node --test` (`shared-library/test/runtime/*.test.mjs`, `npm run test:runtime`) | I byggeskriptet til shared-library, etter `heft test` | Nei |
 
 Kjøretidskontraktene finnes fordi Jest ikke kan laste `@pnp/*` (ESM-only under CommonJS-kjøreren) og stand-ins ikke fanger feil i selve PnPjs-koblingen: `getTermStore` kastet i SPFx fordi `spfi().using(SPFx(context))` holder URL-er relative til forespørselen sendes, noe stand-ins aldri viste. Node kan importere ESM-PnPjs, så disse testene kjører pipelinen med både relative (SPFx-stil) og absolutte (`spfi(url)`) URL-er. Legg flere slike tester her når kode kobler seg direkte på PnPjs-kjøringen.
 
@@ -1578,7 +1593,7 @@ Kjør testene i en løsning med `npm test` (`heft test`), eller bare bygg-og-tes
 
 `e2e/` er Rush-prosjektet `pp365-e2e`, med tre mapper: `tests/smoke` (røyktester av sider og webdeler), `tests/flows` (brukerreiser; fire av dem skriver til testtenanten og rydder etter seg) og `tests/local` (en løsnings lokale bundle via en utviklingsserver, bare med `E2E_LOCAL_BUNDLE=1`, aldri i CI). Røyktestene logger inn som en dedikert testbruker, åpner hub-sidene og et prosjektområde, venter på at SPFx-lerretet rendrer, sjekker at forventede webdeler monteres, og feiler på nettleserfeil som betyr at en bundle er ødelagt («Cannot find module», «Failed to load component», «ChunkLoadError»). Det siste er nettopp symptomet på et delt bibliotek som ikke er pakket inn, og er det pakkebeviset i `Build-Release.ps1` sikrer på byggetidspunktet.
 
-Kjøring i CI: jobben «End-to-end smoke (test channel)» i `ci-channel-test.yml` kjører etter en vellykket «Upgrade (test channel)», altså mot den pakken som nettopp ble rullet ut til `SP_URL_TEST`. Arbeidsflyten utløses av push til grenene i `on.push.branches` (i dag `releases/1.15`, `feat/fluent-v9*` og `feat/dependency-upgrades*`) når filer under `SharePointFramework/`, `Install/`, `Templates/` eller `e2e/` er endret, og kan startes manuelt fra Actions-fanen (`workflow_dispatch`). Merk at en push til en av disse grenene oppgraderer testtenanten. E2E-jobben følger begge oppgraderingsløpene: den vanlige oppgraderingen og pakke-oppgraderingen som `[apps-only]`/`[apps-only:<løsninger>]` bruker. `[skip-e2e]` i commit-emnet hopper over E2E-jobben; `[skip-upgrade]` hopper over oppgraderingen og dermed også E2E.
+Kjøring i CI: jobben «End-to-end smoke (test channel)» i `ci-channel-test.yml` kjører etter en vellykket «Upgrade (test channel)», altså mot den pakken som nettopp ble rullet ut til `SP_URL_TEST`. Arbeidsflyten utløses av push til grenene i `on.push.branches` (i dag `releases/1.15`, `feat/fluent-v9*` og `feat/dependency-upgrades*`) når filer under `SharePointFramework/`, `Install/`, `Templates/`, `e2e/` eller `integration/` er endret, og kan startes manuelt fra Actions-fanen (`workflow_dispatch`). Merk at en push til en av disse grenene oppgraderer testtenanten. E2E-jobben følger begge oppgraderingsløpene: den vanlige oppgraderingen og pakke-oppgraderingen som `[apps-only]`/`[apps-only:<løsninger>]` bruker. `[skip-e2e]` i commit-emnet hopper over E2E-jobben; `[skip-upgrade]` hopper over oppgraderingen og dermed også E2E.
 
 #### Finne og lese E2E-rapporten fra CI
 
@@ -1613,6 +1628,41 @@ Sidenavn varierer mellom norsk og engelsk provisjonering og mellom tenanter. Hve
 
 Lokalt: `cp e2e/.env.example e2e/.env`, fyll inn, `npx playwright install chromium`, så `npm test` eller `npm run test:ui` i `e2e/`. Nye tester planlegges, genereres og repareres med Playwright-CLI-ferdigheten i `.claude/skills/playwright-cli` (`references/test-generation.md`).
 
+### Integrasjonstester (`integration/`)
+
+`integration/` er Rush-prosjektet `pp365-integration`. Det kjører det delte bibliotekets datalag (`PortalDataService`, `ProjectDataService`, søk, termlageret) i Node mot testtenanten og sjekker hva SharePoint faktisk returnerer og lagrer. Laget fyller hullet mellom Jest, der SharePoint alltid er mocket, og Playwright, som bare ser SharePoint gjennom brukergrensesnittet. Fire feil i fase 5 lå nettopp der: `getTermStore` kastet under SPFx, søk returnerer tall som tekst, matrisene oversåg listenavnet og CAML-spørringen, og `CanvasContent1` er HTML i listefeltet men JSON i SitePages-API-et. Laget erstatter ikke E2E: sider, bunter, kanaler, layout og brukerreiser hører hjemme der. Plan og beslutninger: `docs/plans/integration-tests.md`; kortversjonen står i `integration/README.md`.
+
+- `node --test` kjører `tests/**/*.test.ts` direkte med Nodes typestripping. Det finnes ikke noe byggesteg: bare TypeScript som kan viskes bort (ingen `enum`, navnerom eller parameteregenskaper; `import type` for typer), og importene navngir `.ts`-filen. `npm run build` typesjekker bare.
+- Testene laster bibliotekets CommonJS-bygg (`shared-library/lib-commonjs`), det samme Jest kjører, så biblioteket må være bygget. `src/loader.ts` løser det bare SPFx gir på en side: strengmodulene til buntene i `INTEGRATION_LOCALE` (gjennom AMD-omformingen i `pp365-jest-config`), `@microsoft/sp-*` til stand-ins fra `pp365-jest-config` og stilark til klassenavn. `src/globals.ts` gir `DOMParser` og `XMLSerializer` fra jsdom, ikke mer.
+- `src/sites.ts` kobler til et område og bygger SPFx-konteksten en webdel der ville fått (`src/context.ts`), ut fra det området selv svarer. Bibliotekets klienter kobler seg til gjennom `setSpfiFactory` i `shared-library/src/data/createSpfiInstance.ts`, med testenes innlogging. Uten en registrert fabrikk kobler de seg til gjennom SPFx, som før.
+
+Innlogging (`src/auth.ts`):
+
+| Modus | Når | Som |
+|---|---|---|
+| `certificate` | `CI_TENANT`, `CI_CLIENT_ID` og `CI_CERT_BASE64` er satt (CI) | CI-appen, app-only, med sertifikatet oppgraderingsjobbene bruker. PFX-en leses i minnet |
+| `cookies` | Ellers, når `e2e/.auth/user.json` finnes (lokalt) | E2E-brukeren, med økten fra nettlesertestenes innlogging |
+
+`INTEGRATION_AUTH=certificate|cookies` tvinger fram én av dem. Økten varer rundt to døgn; forny den med `npx playwright test --project=setup` i `e2e/`. App-only blir ingenting rettighetstrimmet, og bibliotekets bruker er `INTEGRATION_USER`. En test som trenger en ekte bruker (personlige visninger, `Author`), kjører derfor bare med informasjonskapsler og sier det når den hoppes over. Termlagerets v2.1-API avviser informasjonskapsler fra noe annet enn en nettleser («OAuth only flow is enabled …»), så kallene sender en `User-Agent` som begynner med `Mozilla/5.0`.
+
+Lokalt: `cp .env.example .env` i `integration/`, forny økten ved behov, bygg biblioteket etter en endring i det (`npx heft build --clean` i `shared-library`), og kjør `npm test` i `integration/`. En test som mangler området eller innloggingen den trenger, hoppes over med en begrunnelse. Med `INTEGRATION_STRICT=true` (CI) feiler den i stedet, fordi en suite som hoppes over i sin helhet ellers går grønt uten å ha testet noe. `INTEGRATION_LOCALE` (standard `nb-no`) må være områdenes språk: biblioteket finner hubens lister på tittelen i strengenes språk, og harnessen stopper med den forklaringen når de to ikke stemmer.
+
+Regler for testene:
+
+- Skriv bare til `INTEGRATION_PROJECT_URL` og til hub-rader testen selv har laget. `INTEGRATION_PROJECT_URL` er et prosjekt i testhuben som er reservert for disse testene. Gjenopprett i `finally` fra det testen leste først. Pek aldri en variabel på prosjektet i `E2E_PROJECT_URL`, som nettlesertestene og håndtestingen bruker.
+- Sjekk det SharePoint returnerte eller lagret, lest tilbake, ikke det koden sendte. Hold påstandene uavhengige av tidssone og av andre prosjekters data.
+- Ingen hemmelighet havner i en logg, en rapport eller en fil: ingen token, informasjonskapsel eller sertifikat skrives ut.
+
+I CI kjører jobben «Integration tests (test channel)» i `ci-channel-test.yml` etter den samme oppgraderingen som E2E (begge løpene), ved siden av E2E-jobben. Den installerer `--to pp365-integration --to pp365-templates`, genererer bibliotekets delte strenger fra `.resx`-filene (`npm run generate-resx-ts` i `Templates`; de ligger ikke i git), bygger biblioteket (`heft build --production`, uten Jest) og kjører `npm run test:ci`. Spec-rapporten havner i loggen, og JUnit-rapporten i `integration/test-results/junit.xml`, lastet opp som `integration-report-test-channel` (7 dager). `[skip-integration]` i commit-emnet hopper over jobben.
+
+| Navn i GitHub | Type | Brukes som |
+|---|---|---|
+| `SP_URL_TEST` | variabel | `INTEGRATION_HUB_URL` |
+| `E2E_PROGRAM_URL` | variabel | `INTEGRATION_PROGRAM_URL` |
+| `INTEGRATION_PROJECT_URL` | variabel | Prosjektet testene skriver til, reservert for dem |
+| `E2E_USERNAME` | hemmelighet | `INTEGRATION_USER`, brukeren biblioteket handler for app-only |
+| `CI_CERT_BASE64`, `CI_CLIENT_ID`, `CI_TENANT` | hemmeligheter | Sertifikatinnloggingen, fra arbeidsflytens `env` |
+
 ### Når en test feiler
 
 **Enhets- eller komponenttest feiler i bygget**
@@ -1632,13 +1682,19 @@ Lokalt: `cp e2e/.env.example e2e/.env`, fyll inn, `npx playwright install chromi
    - *Testfeil*: siden endret seg med hensikt (ny tittel, ny side). Rett testen med Playwright-CLI-ferdigheten («heal»), i egen commit.
 3. Én ny prøve i CI er slått på. En test som bare passerer på andre forsøk rapporteres som «flaky» i rapporten; tre flaky kjøringer på rad kvalifiserer til `test.fixme` med et issue, ikke til å øke antall forsøk.
 
+**Integrasjonstest feiler etter utrulling**
+
+1. Jobbloggen viser hver test og påstanden som feilet. Rapporten hentes med `gh run download <run-id> -n integration-report-test-channel`.
+2. Klassifiser som for E2E: *miljø* (innloggingen, rettighetene til CI-appen, en variabel som mangler; med `INTEGRATION_STRICT` feiler det i stedet for å hoppes over), *regresjon* i datalaget (rett koden; testen peker på én funksjon), eller *endret svar fra SharePoint* (rett koden som leser svaret, og la testen dokumentere den nye formen).
+3. `node:test` prøver ikke på nytt. En ustabil test rettes eller merkes `todo` med et issue; omprøving legges eventuelt bare rundt innloggingen og første kall (se planen).
+
 **Eierskap**: den som åpner en PR fikser tester som feiler på grunn av PR-en. Den som lager en utgivelse sjekker at siste E2E-kjøring på testkanalen er grønn før smoke-test-issuene opprettes.
 
 ### Veikart
 
 1. ~~Komponenttester for komponentene som konverteres fra Fluent UI v8 til v9.~~ Gjort i fase 3 og 4: hver webdel-rot, utvidelse og interaktiv komponent har tester.
 2. Skriveflyter i E2E: kopi av dokumentmal, utkast til statusrapport, ny kolonne i porteføljeoversikten og underområde i et program er på plass og rydder etter seg. Gjenstår: prosjektoppsett, publisering av statusrapport og opprettelse av idé.
-3. Flere kjøretidskontrakter (`test/runtime`) for dataadapterne, mot innspilte svar.
+3. Integrasjonstester for datalaget (`integration/`, `docs/plans/integration-tests.md`): harness, første test og CI-jobb er på plass (skive 0). Gjenstår: søk og termer, prosjektegenskaper tur-retur, hub-siden og malens tilstand etter en oppgradering (skive 1–4).
 4. ~~Dekningsgrenser per løsning.~~ Gjort i fase 4 (se over).
 
 
@@ -2113,6 +2169,7 @@ Nøkkelord kan brukes i commit-meldingen for å unngå (eller tvinge) at CI kjø
 - `[apps-only:<løsninger>]` som `[apps-only]`, men pakker og ruller ut **kun de oppgitte SPFx-løsningene** (kommaseparert) i stedet for alle, f.eks. `[apps-only:ProjectWebParts,PortfolioWebParts]`. Navnene matches uten hensyn til store/små bokstaver og bindestrek (`portfoliowebparts` er `PortfolioWebParts`). Gyldige navn: `shared-library`, `PortfolioExtensions`, `PortfolioWebParts`, `ProgramWebParts`, `ProjectExtensions`, `ProjectWebParts`. Bygget er likevel en full `rush rebuild`. `shared-library` er bundlet inn i hver løsning som bruker den, og `ProjectWebParts` og `PortfolioWebParts` i løsningene som henter komponenter fra dem, så en endring der når sidene bare gjennom løsningene du lister. Å liste `shared-library` alene ruller ikke ut noe som sidene bruker.
 - `[upgrade-all-sites-to-latest]` for å kjøre skriptet `UpgradeAllSitesToLatest.ps1` i CI-modus etter en full oppgradering (ikke etter `[apps-only]`, siden jobben trenger det fulle bygget). Skriptet logger inn med sertifikatet og gir seg derfor ikke eiertilgang til områdene, og en feil gjør jobben rød.
 - `[skip-e2e]` for å hoppe over Playwright-røyktestene som kjører etter oppgraderingen av testkanalen, også etter en `[apps-only]`-oppgradering (se «Testregime»). `[skip-upgrade]` hopper over dem indirekte.
+- `[skip-integration]` for å hoppe over integrasjonstestene i `integration/`, som kjører ved siden av røyktestene (se «Testregime»). `[skip-upgrade]` hopper over dem indirekte.
 - `[build-debug]` for å bygge utgivelsespakken i feilsøkingsarbeidsflyten, uten utrulling (se «CI (build debug)»). Sammen med `[skip-ci]` i samme emnelinje bygger bare den.
 
 Bare emnelinjen (første linje) i commit-meldingen leses, slik at punktene i en squash-merge ikke styrer jobbene. Unntaket er `build-release.yml` på `main`: den leser hele meldingen, også punktlisten i en squash-merge, etter `[skip-main-ci]`, `[skip-test-ci]` og `[build-kurs]`.
@@ -2125,7 +2182,7 @@ En full kjøring tar rundt 85–90 minutter (bygg ~13, oppgradering ~28, ny inst
 
 ### CI (channels/test)
 
-[ci-channel-test](../../.github/workflows/ci-channel-test.yml) bygger en pakke for kanalen [test](../../channels/test.json), distribuerer den til URL-en som er spesifisert i `SP_URL_TEST`, og kjører deretter Playwright-røyktestene i `e2e/` mot den (jobben «End-to-end smoke (test channel)»). Pakkejobben (`[apps-only]`) skriver tiden per prosjekt i jobbens sammendrag og installerer ikke PnP.PowerShell, som bare malene trenger. Rapporten lastes opp som artefaktet `playwright-report-test-channel`; hvordan den leses står under «Testregime». Arbeidsflyten kan også startes manuelt fra Actions-fanen.
+[ci-channel-test](../../.github/workflows/ci-channel-test.yml) bygger en pakke for kanalen [test](../../channels/test.json), distribuerer den til URL-en som er spesifisert i `SP_URL_TEST`, og kjører deretter Playwright-røyktestene i `e2e/` mot den (jobben «End-to-end smoke (test channel)») og, ved siden av dem, integrasjonstestene i `integration/` (jobben «Integration tests (test channel)», rapport i artefaktet `integration-report-test-channel`). Pakkejobben (`[apps-only]`) skriver tiden per prosjekt i jobbens sammendrag og installerer ikke PnP.PowerShell, som bare malene trenger. Rapporten lastes opp som artefaktet `playwright-report-test-channel`; hvordan den leses står under «Testregime». Arbeidsflyten kan også startes manuelt fra Actions-fanen.
 
 Alle kjøringene oppgraderer den samme testhuben og appkatalogen, uansett branch, så de deler én `concurrency`-gruppe (`ci-channel-test`): en kjøring venter mens en annen kjører, i stedet for at to deployer samtidig og overskriver hverandres pakker. GitHub holder bare den nyeste ventende kjøringen i gruppen og avbryter en eldre som venter. På samme branch inneholder den nyeste commiten endringene fra den eldre, men malene fra en avbrutt full kjøring blir ikke lagt på. Push derfor commiten som trenger full kjøring sist, eller vent til den er ferdig.
 

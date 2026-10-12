@@ -98,6 +98,17 @@ Se [Oppgaver](../../SharePointFramework/.tasks/README.md) for en full oversikt o
 | `report`       | `playwright show-report` | Åpner HTML-rapporten fra siste kjøring. |
 | `lint`, `validate-loc` | `echo …` | Plassholdere for `rush lint` og `rush validate-loc`. |
 
+### Skript i `integration`
+
+`integration` (`pp365-integration`) har integrasjonstestene av bibliotekets datalag mot testtenanten. De trenger `integration/.env` (kopiert fra `.env.example`), e2e-brukerens økt eller CI-sertifikatet, og et bygget `shared-library`; se [Testing](testing.md).
+
+| Skript         | Kommando | Hva det gjør / hvorfor |
+| -------------- | -------- | ---------------------- |
+| `build`        | `tsc --noEmit -p tsconfig.json` | Typesjekker harnessen og testene. Kjøres av `rush build`; testene kjører aldri der, siden de trenger en tenant. |
+| `test`         | `node --test --test-concurrency=1 "tests/**/*.test.ts"` | Kjører testene mot testtenanten, én fil om gangen, med Nodes typestripping. |
+| `test:ci`      | `node --test … --test-reporter=spec … --test-reporter=junit …` | Som `test`, med spec-rapport i loggen og JUnit i `test-results/junit.xml`. Brukes av CI-jobben. |
+| `lint`, `validate-loc` | `echo …` | Plassholdere for `rush lint` og `rush validate-loc`. |
+
 ### Skript i `Templates`
 
 `Templates`-pakken genererer JSON-provisjoneringsmaler og `.resx`-basert lokalisering for malene.

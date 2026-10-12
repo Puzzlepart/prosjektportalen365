@@ -18,6 +18,7 @@ Every Rush project is listed in `rush.json`.
   - `.jest-config` (`pp365-jest-config`) — the shared Jest harness
 - `Templates/` (`pp365-templates`) — the hub's PnP template, the JSON project templates and their `.resx` texts
 - `e2e/` (`pp365-e2e`) — Playwright end-to-end tests against the test tenant
+- `integration/` (`pp365-integration`) — integration tests: the shared library's data layer run in Node against the test tenant
 - `channels/` — the solution and component ids of each release channel (`main`, `test`, `i18n`, `kurs`)
 - `.claude/skills/` — the agent skills; `docs/plans/` — migration and feature plans
 - `.tasks/` (repo scripts such as channel config, PnP templates, site scripts, SBOM and `check-skills`), `SiteScripts/`, `Install/` (install and upgrade scripts, `Build-Release.ps1`), `common/` (Rush), `.development-guide/` (the guide)
@@ -81,6 +82,8 @@ After changing the loc files, run `validate-loc` and read its report. A dev serv
 `heft test` runs the solution's `src/**/*.test.ts(x)` with Jest after the build phase, so `npm test`, `npm run build`, `rush build`/`rebuild` and CI run them, and a failing test fails them. `heft build` (used by the channel builds `npm run build:<channel>` and by `postversion`) and `heft start` (`npm run watch`) do not. `shared-library` also runs `test:runtime` (`node --test`) in `npm test` and `npm run build`. The shared harness is `pp365-jest-config` (`SharePointFramework/.jest-config`): jsdom, jest-dom, SPFx string modules resolved like at runtime, `@pnp/*` and `@microsoft/sp-*` stubbed. Components are tested with React Testing Library and `jest.mock` of their hook or data adapter; never import `@pnp/*` in a test.
 
 **Coverage floors:** each solution's `config/jest.config.json` sets a `coverageThreshold`. Raise a floor when coverage grows; never lower one. Jest only reports a missed floor and Heft still passes, so only `Install/Build-Release.ps1` fails on it (CI, or a local `npm run build-release`), never `npm test` or `npm run build`: read the coverage summary before you push.
+
+**Integration:** `integration/` (Rush project `pp365-integration`) runs the shared library's data services in Node (`node --test`, type stripping) against the test tenant and asserts on what SharePoint returns and stores. CI runs it beside the e2e job after the test-channel upgrade (`[skip-integration]` skips it); `rush build` only type-checks it. Locally: `cd integration && npm test` with an `integration/.env` from `.env.example`, the e2e user's session (`npx playwright test --project=setup` in `e2e/`) and the library built. Writes go only to `INTEGRATION_PROJECT_URL`, restored in `finally`. See `integration/README.md`.
 
 **End-to-end:** `e2e/` (Rush project `pp365-e2e`, Playwright) holds `tests/smoke` (pages and web parts render and fit), `tests/flows` (user journeys) and `tests/local` (a solution's local bundle through a dev server; only with `E2E_LOCAL_BUNDLE=1`, never in CI). Tests that write to the tenant clean up after themselves. CI runs smoke and flows after the test-channel upgrade. Locally: `npx playwright install chromium` once, then `cd e2e && npm test` with an `e2e/.env` from `.env.example` (the project and program tests skip without `E2E_PROJECT_URL` / `E2E_PROGRAM_URL`).
 

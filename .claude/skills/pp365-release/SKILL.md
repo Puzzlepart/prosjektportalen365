@@ -1,6 +1,6 @@
 ---
 name: pp365-release
-description: 'From a finished change to a Prosjektportalen 365 release: branches, commit messages and their CI tags, what CI does with a push, channels and version stamping, the changelog, release notes and pull requests, reading a failed run, and cutting a release. Use when asked to "commit this", "write the commit message", "which tag", "[skip-ci]", "[apps-only]", "[build-debug]", "skip e2e", "push", "which workflow runs", "why did CI not run", "how long does CI take", "deploy to the test channel", "try a build change in CI", "version stamp", "update the changelog", "write the release notes", "open a PR", "squash merge", "release PR", "cut a release", "npm version", "CI failed", "read the failed run", "playwright report", "stale bundle", "Could not load ... in require". Encodes the subject-line tag rules, the branch and path triggers, run times, the build errors, the deployment gate, the merge and the release steps. Pair with pp365-testing to fix a failing test and pp365-toolchain for build problems.'
+description: 'From a finished change to a Prosjektportalen 365 release: branches, commit messages and their CI tags, what CI does with a push, channels and version stamping, the changelog, release notes and pull requests, reading a failed run, and cutting a release. Use when asked to "commit this", "write the commit message", "which tag", "[skip-ci]", "[apps-only]", "[build-debug]", "skip e2e", "skip integration", "push", "which workflow runs", "why did CI not run", "how long does CI take", "deploy to the test channel", "try a build change in CI", "version stamp", "update the changelog", "write the release notes", "open a PR", "squash merge", "release PR", "cut a release", "npm version", "CI failed", "read the failed run", "playwright report", "stale bundle", "Could not load ... in require". Encodes the subject-line tag rules, the branch and path triggers, run times, the build errors, the deployment gate, the merge and the release steps. Pair with pp365-testing to fix a failing test and pp365-toolchain for build problems.'
 argument-hint: 'Where the change stands (branch, commit, run id or failing job) and what is needed: commit message, push plan, failure diagnosis, pull request or a release step'
 ---
 
@@ -50,7 +50,8 @@ Choosing a tag. Decision A bundles `pp365-shared-library`, `pp365-projectwebpart
 | `[apps-only:<names>]` | As `[apps-only]` for the named solutions: comma separated, case and hyphens ignored, from the six folder names under `SharePointFramework/`. `rush rebuild` still builds and tests all six; only packaging and deployment narrow. |
 | `[build-debug]` | `ci-build-debug.yml` builds the test-channel package as the packages-only job does, deploys nothing, needs no secrets; artifacts `release-package-debug` and `rush-logs-debug`. |
 | `[skip-e2e]` | Skips "End-to-end smoke (test channel)". |
-| `[skip-upgrade]` | Skips the upgrade (in `ci-channel-test.yml` both paths), and with it Install and e2e. `ci-releases.yml`'s packages-only upgrade ignores it. |
+| `[skip-integration]` | Skips "Integration tests (test channel)" (`integration/`, beside e2e). |
+| `[skip-upgrade]` | Skips the upgrade (in `ci-channel-test.yml` both paths), and with it Install, e2e and the integration tests. `ci-releases.yml`'s packages-only upgrade ignores it. |
 | `[skip-install]` | `ci-releases.yml`: skips Install, the fresh site per commit (~46 min). |
 | `[upgrade-all-sites-to-latest]` | Runs `Install/Scripts/UpgradeAllSitesToLatest.ps1` after a full upgrade (never after `[apps-only]`: the job needs the full build and upgrade). It signs in with the certificate, so it grants itself no owner access, and a failure fails the job (until 2026-10-09 it stopped at the first site and still ended green). |
 | `[skip-main-ci]` | `main`, whole message: skips "Build release (CI)" and kurs. "Build test channel release (CI)" still runs: its `if:` is `!cancelled() && …`, so a skipped or failed main build does not stop it. |
@@ -61,12 +62,12 @@ GitHub's own `[skip ci]` (with a space) suppresses every push workflow, `main`'s
 
 ## 3. The push: what CI runs, and how long
 
-A deploy workflow starts when the branch is in `on.push.branches` and the push changes something under `paths` (`SharePointFramework/**`, `Install/**`, `Templates/**`, the workflow file; `ci-channel-test.yml` adds `e2e/**`). `SiteScripts/` and `channels/` are in no filter, although site scripts ship in the package. Times are from runs in October 2026.
+A deploy workflow starts when the branch is in `on.push.branches` and the push changes something under `paths` (`SharePointFramework/**`, `Install/**`, `Templates/**`, the workflow file; `ci-channel-test.yml` adds `e2e/**` and `integration/**`). `SiteScripts/` and `channels/` are in no filter, although site scripts ship in the package. Times are from runs in October 2026.
 
 | Push to | Workflow: jobs | Time |
 |---|---|---|
 | `releases/1.15` | `ci-releases.yml`: build (~13 min), upgrade the dev hub `https://puzzlepart.sharepoint.com/sites/pp365` (~28), install a new site `<that URL>_<sha>` (~46) | full ~87 min, `[apps-only]` ~14 |
-| `releases/1.15`, `feat/fluent-v9*`, `feat/dependency-upgrades*` | `ci-channel-test.yml`: build the test channel (~14, packages only ~9), upgrade `vars.SP_URL_TEST` (~25, packages only ~3.5), e2e (~5-6) | full ~40-45 min, `[apps-only]` ~18-20 |
+| `releases/1.15`, `feat/fluent-v9*`, `feat/dependency-upgrades*` | `ci-channel-test.yml`: build the test channel (~14, packages only ~9), upgrade `vars.SP_URL_TEST` (~25, packages only ~3.5), e2e (~5-6) and beside it the integration tests (added 2026-10-12, not yet timed) | full ~40-45 min, `[apps-only]` ~18-20 |
 | `releases/1.15`, `feat/**`, every push (no path filter) | `ci-build-debug.yml`: the subject job; the build only with `[build-debug]` | seconds; with the tag ~10-13 min |
 | `main` | `build-release.yml`: release package, then test-channel package (kurs on `[build-kurs]`); deploys nothing | ~25 min |
 | any branch or PR touching `.claude/skills/**`, `.github/skills/**`, `.agents/skills/**` or `.tasks/check-skills.js` | `skills.yml`: `npm run check-skills`, regardless of `[skip-ci]` | seconds |
@@ -92,6 +93,7 @@ A deploy workflow starts when the branch is in `on.push.branches` and the push c
   - `Correct PnP.PowerShell module not found` (the PowerShell Gallery install) or `-SkipPnPPowerShell needs -SkipBuildPnPTemplates` (a workflow's arguments). Like a failed `rush install`, these used to exit 0 and leave a green job without packages.
   - `[Rush rebuild timeline]` is no error: time per project, longest first, in the log and the job summary of the packages-only test-channel job and the debug build (`-RushTimeline`). Compare times only within one run; the same build has taken 506 and 711 s.
 - Upgrade job: `Install.ps1` output (`Failed to run pre-install upgrade steps`, `Failed to install app packages`, `Failed to apply PnP Portfolio template after 3 attempts`). After tenant trouble, `gh run rerun <run-id> --failed`.
+- Integration job: `node --test`'s spec report lists each test, and each failure with its assertion; JUnit is in the artifact `integration-report-test-channel`. A missing variable or secret fails it (`INTEGRATION_STRICT`) rather than skipping. Classify per `testing.md` «Når en test feiler».
 - E2E job: each failure is logged as `[chromium] › tests/<spec>:<line>:<col> › <title>` with its assertion, then `N failed` and `N passed (<time>)`, also as annotations on the run page; each test attaches `browser-errors.txt`. The report artifact and how to open it: `testing.md` «Finne og lese E2E-rapporten fra CI». Classify per «Når en test feiler»:
 
 | In the log | Means | Do |
@@ -117,10 +119,10 @@ A deploy workflow starts when the branch is in `on.push.branches` and the push c
 
 ## 6. Cutting a release
 
-1. Gate: the last e2e run on the test channel is green, and the smoke-test issues (templates in the private `Puzzlepart/prosjektportalen365-testing` repo, `utgivelse/smoketest.md`) link to it.
+1. Gate: the last e2e and integration runs on the test channel are green, and the smoke-test issues (templates in the private `Puzzlepart/prosjektportalen365-testing` repo, `utgivelse/smoketest.md`) link to it.
 2. `CHANGELOG.md`: `## <versjon> - TBA` becomes `## <versjon> - DD.MM.YYYY`. For a minor, the intro line links `./releasenotes/<versjon>.md`; only minors have a notes file (model: `releasenotes/1.14.0.md`).
 3. `releasenotes/<versjon>.md`: the title's `(TBA)` becomes month and year (`# Prosjektportalen 365 - 1.14.0 (September 2026)`); add the images for every `<!-- TODO skjermbilde -->` under `releasenotes/assets/<x.y>/` (`assets/1.15/` does not exist yet).
-4. Version, on `releases/x.y` with a clean tree, in the root after `npm install` there (`sync-version` needs `glob`; `generate-readme` fetches `@appnest/readme` with `npx`): `npm version minor` (or `patch`). `postversion` runs `generate-readme`, `sync-version` (`.tasks/automatic-versioning.js`: the `package.json` of every project in `rush.json`, the dot folders, `Templates` and `e2e` included; `package-solution.json` as `x.y.z.0`; every `src/**/manifest.json`) and `generate-sbom`. `npm run sync-version -- --dry-run` lists what it would change.
+4. Version, on `releases/x.y` with a clean tree, in the root after `npm install` there (`sync-version` needs `glob`; `generate-readme` fetches `@appnest/readme` with `npx`): `npm version minor` (or `patch`). `postversion` runs `generate-readme`, `sync-version` (`.tasks/automatic-versioning.js`: the `package.json` of every project in `rush.json`, the dot folders, `Templates`, `e2e` and `integration` included; `package-solution.json` as `x.y.z.0`; every `src/**/manifest.json`) and `generate-sbom`. `npm run sync-version -- --dry-run` lists what it would change.
 5. npm commits and tags before `postversion` runs, so its commit misses those files. 1.14.0 ended as one commit `v1.14.0` on `releases/1.14` holding them all, with the `v1.14.0` tag later on `main`: use `npm version minor --no-git-tag-version` and one commit, or amend npm's commit and delete its local tag. Do not `git push --tags` as `opprette-ny-versjon.md` says: the tag would land on the release branch. Never version a solution on its own (`versjonering.md`).
 6. Release PR from `releases/x.y` into `main`, titled `v<versjon>`, label `release-pr`, milestone `<versjon>` (#1769, squash-merged). `build-release.yml` reads the whole squash message, so check its body (every commit of the release) for `[skip-main-ci]` and `[build-kurs]`.
 7. `build-release.yml` uploads `release-package` and `release-package-test` (the `release/` folder, gone after 7 days). Its test package carries `x.y.z.0`, lower than the `x.y.z.<run>` the test hub got from `ci-channel-test.yml`. A local `npm run build-release` on `main` writes `release/pp365-<version>.<hash>.zip` (`-test` appended with `-Channel test`). Both include the bundled PnP.PowerShell, which the deploy workflows leave out (`-SkipBundle`).
@@ -136,7 +138,7 @@ A deploy workflow starts when the branch is in `on.push.branches` and the push c
 ## Do not
 
 - Do not run `npm version` or `npm publish` inside a solution: its `postversion` is `heft build --production && npm publish`, and publishing has stopped (npm's latest is 1.8.4, `pp365-shared-library` is not on npm), whatever `utgivelse/npm.md` says.
-- Do not lower a `coverageThreshold`, delete an assertion or add `[skip-e2e]` to get CI green.
+- Do not lower a `coverageThreshold`, delete an assertion or add `[skip-e2e]` or `[skip-integration]` to get CI green.
 - Do not commit channel ids in manifests, `*.bak`, `.generated-solution-config.json` or `.current-channel-config.json`. A running `npm run watch` with `SERVE_CHANNEL=test` holds them in the working tree; `npm run check-channel-ids` tells before you commit, and `Build-Release.ps1` stops on them.
 - Do not push to a deploying branch while its previous run is still upgrading the tenant.
 - Do not edit `.development-guide/README.md` or the root `README.md`; `npm run generate-readme` builds them from the chapter files and `readme/`.
