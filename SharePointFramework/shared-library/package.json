@@ -53,6 +53,7 @@
     "react-gauge-component": "~1.2.61",
     "@microsoft/sp-property-pane": "1.24.0-rc.0",
     "react-calendar-timeline": "0.28.0",
+    "interactjs": "1.6.2",
     "@types/react-calendar-timeline": "0.28.0"
   },
   "devDependencies": {
@@ -70,6 +71,7 @@
     "@types/react": "18.2.79",
     "@types/react-dom": "18.2.25",
     "@types/shade-blend-color": "~1.0.3",
+    "@types/sharepoint": "2016.1.10",
     "@types/underscore": "~1.11.5",
     "@types/webpack-env": "~1.15.2",
     "css-loader": "7.1.2",

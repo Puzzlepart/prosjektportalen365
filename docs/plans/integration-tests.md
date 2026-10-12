@@ -228,5 +228,15 @@ Deviations, each for a reason found on the way:
 - **The CI job generates the shared strings.** `src/loc/shared` comes from the templates' `.resx`
   (`generate-resx-ts`), not git, so the job also installs `pp365-templates`.
 
-Open: the exit's CI half. The first run after this push proves app-only sign-in, search and the
-term store for the CI app, or reports the permission it lacks; the job's time is unmeasured.
+First CI run (38246009009, packages only): the job failed before any test, building the library.
+The partial install (`--to pp365-integration --to pp365-templates`) lacks what a full install
+hoists from projects outside the subset, and the library used two packages it never declared:
+`@types/sharepoint` (`spfx-jsom` references it, the library uses `SP`: "Cannot find name 'SP'")
+and `interactjs` (a peer of `react-calendar-timeline`, declared only by the three web part
+solutions: webpack's "Can't resolve 'interactjs'"). shared-library now declares both, at the
+solutions' versions. Each was reproduced first, and the job's steps then ran green in a fresh copy
+of the repository installed as CI installs it (the trap and the method: `pp365-toolchain`).
+
+Open: the exit's CI half. The next run proves app-only sign-in, search and the term store for the
+CI app, or reports the permission it lacks; the job's time is unmeasured (locally, from a fresh
+copy: install 1.5 min, library build 1.25 min, tests 25 s).
