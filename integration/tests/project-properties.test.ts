@@ -3,7 +3,7 @@ import { createRequire } from 'node:module'
 import { before, describe, it } from 'node:test'
 import type { ProjectDataService } from 'pp365-shared-library/lib/services/ProjectDataService/index.js'
 import { env, skipReason } from '../src/env.ts'
-import { library, projectDataService, termStore } from '../src/library.ts'
+import { library, models, projectDataService, termStore } from '../src/library.ts'
 import type { ISite } from '../src/sites.ts'
 import { appOnlyDenied, connect, TERM_STORE_PERMISSION } from '../src/sites.ts'
 
@@ -80,6 +80,38 @@ describe(
         }
         // One instant from every zone: midnight in the site's time zone, as SharePoint's forms store it.
         assert.equal(stored.size, 1, `stored as ${[...stored].join(', ')}`)
+      } finally {
+        process.env.TZ = zone
+        await save({ GtStartDate: original })
+      }
+      assert.equal(
+        (await fieldValues()).get('GtStartDate')?.value ?? null,
+        original,
+        'start date not restored'
+      )
+    })
+
+    it("shows a stored date as the day SharePoint shows, whatever the machine's time zone", async () => {
+      const { toCalendarDate } = dates()
+      const { EditableSPField } = models()
+      const original = (await fieldValues()).get('GtStartDate')?.value ?? null
+      const zone = process.env.TZ
+      try {
+        await save({ GtStartDate: '2026-04-03' })
+        const { fields, fieldValues: values } = await service.getProjectInformationData()
+        assert.ok(fields && values, 'the reserved project has no properties item')
+        const startDate = fields.find((field) => field.InternalName === 'GtStartDate')
+        assert.ok(startDate, 'the properties list has no GtStartDate field')
+        for (const timeZone of ['Europe/Oslo', 'Europe/London', 'America/New_York', 'Asia/Tokyo']) {
+          process.env.TZ = timeZone
+          // The day the panel's date field starts from: the stored value, read as the panel reads it.
+          const shown: Date = new EditableSPField(startDate).setValue(values).getParsedValue<Date>()
+          assert.equal(
+            toCalendarDate(shown),
+            '2026-04-03',
+            `the machine in ${timeZone} shows ${shown}`
+          )
+        }
       } finally {
         process.env.TZ = zone
         await save({ GtStartDate: original })

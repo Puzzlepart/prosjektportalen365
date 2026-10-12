@@ -95,9 +95,8 @@ describe('useModel', () => {
       description: 'Hjemmeside'
     })
     expect(current().get(field('GtAreas', 'MultiChoice'))).toEqual(['Helse', 'Idrett'])
-    expect(current().get(field('GtStartDate', 'DateTime'))).toEqual(
-      new Date('2026-03-01T00:00:00Z')
-    )
+    // The day SharePoint shows ('01.03.2026'), at local midnight, whatever the machine's time zone.
+    expect(current().get(field('GtStartDate', 'DateTime'))).toEqual(new Date(2026, 2, 1))
     expect(current().get(field('GtProjectManager', 'User'))).toEqual([
       expect.objectContaining({ key: 7, text: 'Kari Nordmann', secondaryText: 'kari@contoso.no' })
     ])

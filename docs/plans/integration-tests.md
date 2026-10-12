@@ -303,10 +303,20 @@ A changelog line. Not the 4 March report: that is a day and month swapped while 
 `parseShortDate` prevents and the date field's Jest test covers; the user is to type it again with
 the latest packages.
 
-Open, not fixed: the mirror image when reading. The panel shows a stored date as `new Date(value)`
-(`createFieldValueMap`), the stored instant in the machine's time zone, so a machine west of the
-site's (the UK in winter, the Americas) shows and starts from the day before; the project
-information web part shows SharePoint's own text and is right. Reading the day from SharePoint's
-text (`valueAsText`, in the site's regional settings) would fix it; it needs the regional locale
-the text is written in, so it is a decision of its own.
+Fixed as well, once the user chose it: the mirror image when reading. The panel showed a stored
+date as `new Date(value)` (`createFieldValueMap`), the stored instant in the machine's time zone, so
+a machine west of the site's (London all year, New York) started from the day before; the project
+information web part shows SharePoint's own text and was right. The panel now reads the day from
+that text (`readStoredDay`): written in the site's time zone and regional format, read in the
+format the page context names (`getRegionalLocale`, `currentCultureName`, which can differ from the
+UI language), and trusted only within 36 hours of the stored instant, since a format guessed wrong
+swaps day and month and moves the date by weeks; otherwise the instant is kept. The test reads a
+stored 3 April as the panel does with the machine in Oslo, London, New York and Tokyo; it failed
+(London showed 2 April) before the fix, as did the new Jest tests. `getUILocale` reads the page
+context from `globalThis` and needs no `document`, so the library reads it in Node too, where the
+harness sets it (`globals.ts`).
+
+Still open, not decided: lists that format a stored date from search or REST themselves (a date
+column in the portfolio overview, the aggregations) also read the instant in the machine's time
+zone and have no text beside it; a machine west of the site shows the day before there too.
 

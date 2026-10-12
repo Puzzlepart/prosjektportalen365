@@ -1,4 +1,10 @@
-import { formatDate, formatShortDate, parseShortDate, toCalendarDate } from './formatDate'
+import {
+  formatDate,
+  formatShortDate,
+  parseShortDate,
+  readStoredDay,
+  toCalendarDate
+} from './formatDate'
 
 /**
  * Dates as the user reads them: in SharePoint's UI language (the language of the strings beside
@@ -109,5 +115,38 @@ describe('toCalendarDate', () => {
     expect(toCalendarDate(null)).toBeNull()
     expect(toCalendarDate(undefined)).toBeNull()
     expect(toCalendarDate(new Date('ikke en dato'))).toBeNull()
+  })
+})
+
+describe('readStoredDay', () => {
+  it("reads the day from SharePoint's text, written in the site's time zone and regional format", () => {
+    // 3 April stored as midnight on an Oslo site: read as an instant, London and New York got 2 April.
+    expect(readStoredDay('2026-04-02T22:00:00Z', '03.04.2026', 'nb-NO')).toEqual(
+      new Date(2026, 3, 3)
+    )
+    expect(readStoredDay('2026-04-03T04:00:00Z', '4/3/2026', 'en-US')).toEqual(new Date(2026, 3, 3))
+  })
+
+  it('keeps the stored instant when the text is no date near it, as a format guessed wrong gives', () => {
+    // "03.04.2026" read in American order is 4 March, a month from the stored 3 April.
+    const stored = new Date('2026-04-02T22:00:00Z')
+    expect(readStoredDay('2026-04-02T22:00:00Z', '03.04.2026', 'en-US')).toEqual(stored)
+    expect(readStoredDay('2026-04-02T22:00:00Z', '', 'nb-NO')).toEqual(stored)
+  })
+
+  it('has no day for no value', () => {
+    expect(readStoredDay(undefined, '', 'nb-NO')).toBeUndefined()
+  })
+
+  it("reads the text in the site's regional format, not in the UI language", () => {
+    ;(window as any)._spPageContextInfo = {
+      currentCultureName: 'en-US',
+      currentUICultureName: 'nb-NO'
+    }
+    try {
+      expect(readStoredDay('2026-04-03T04:00:00Z', '4/3/2026')).toEqual(new Date(2026, 3, 3))
+    } finally {
+      delete (window as any)._spPageContextInfo
+    }
   })
 })

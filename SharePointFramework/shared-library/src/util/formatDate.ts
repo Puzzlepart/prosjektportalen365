@@ -1,4 +1,4 @@
-import { getUILocale } from './getUILocale'
+import { getRegionalLocale, getUILocale } from './getUILocale'
 
 /** Hours and minutes, added to either form when the time is asked for. */
 const TIME: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' }
@@ -114,4 +114,32 @@ export function toCalendarDate(date: Date | null | undefined): string | null {
   if (!(date instanceof Date) || isNaN(date.getTime())) return null
   const pad = (value: number) => String(value).padStart(2, '0')
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
+}
+
+/** How far the text's day may lie from the stored instant: time zones differ by up to 26 hours. */
+const NEAR_INSTANT = 36 * 60 * 60 * 1000
+
+/**
+ * The day a stored date is in SharePoint, as a date at local midnight for a date picker. A date
+ * is stored as an instant, midnight in the site's time zone; read as that instant in the machine's
+ * time zone, a machine west of the site (London, New York) got the day before. SharePoint's text
+ * of the value (`FieldValuesAsText`) is written in the site's time zone and regional format, so
+ * the day is read from it. The text is trusted only near the instant: a format guessed wrong swaps
+ * day and month, which moves the date by weeks, and then the instant is kept.
+ *
+ * @param stored The stored value, an ISO date
+ * @param text SharePoint's text of the value
+ * @param locale The regional format the text is in, by default the site's (`getRegionalLocale`)
+ *
+ * @returns the day, the instant when the text is not a date near it, or `undefined` for no value
+ */
+export function readStoredDay(
+  stored: string | undefined,
+  text: string | undefined,
+  locale: string = getRegionalLocale()
+): Date | undefined {
+  const instant = stored ? new Date(stored) : undefined
+  const day = text ? parseShortDate(text, locale) : undefined
+  if (!instant || isNaN(instant.getTime())) return day
+  return day && Math.abs(day.getTime() - instant.getTime()) < NEAR_INSTANT ? day : instant
 }
