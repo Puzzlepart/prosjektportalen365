@@ -1,3 +1,4 @@
+import { PortfolioOverviewView, ProjectColumn } from '../../models'
 import { PortalDataService } from './PortalDataService'
 import { PortalDataServiceDefaultConfiguration } from './types'
 
@@ -86,6 +87,74 @@ describe('PortalDataService', () => {
       const { service } = portal({ [LISTS.GLOBAL_SETTINGS]: () => new Error('500 Server Error') })
       expect((await service.getGlobalSettings()).size).toBe(0)
       expect(service.isAvailable).toBe(true)
+    })
+  })
+
+  describe('addColumnToPortfolioView', () => {
+    /**
+     * The columns list and the views list: `add` creates column 99, a view item answers with its
+     * stored fields, and every write is recorded.
+     */
+    function viewsService(stored: Record<string, any>) {
+      const written: { list: string; id?: number; properties: any }[] = []
+      const web = {
+        lists: {
+          getByTitle: (list: string) => ({
+            items: {
+              add: (properties: any) => {
+                written.push({ list, properties })
+                return Promise.resolve({ ...properties, Id: 99 })
+              },
+              getById: (id: number) => {
+                const item: any = () => Promise.resolve(stored)
+                item.select = () => item
+                item.update = (properties: any) => {
+                  written.push({ list, id, properties })
+                  return Promise.resolve()
+                }
+                return item
+              }
+            }
+          })
+        }
+      }
+      const service = new PortalDataService()
+      service.web = web as any
+      ;(service as any)._configuration = PortalDataServiceDefaultConfiguration
+      return { service, written }
+    }
+
+    const columns = [1, 2, 3].map(
+      (Id) =>
+        new ProjectColumn({
+          Id,
+          GtInternalName: `Kolonne${Id}`,
+          GtShowFieldPortfolio: Id !== 2
+        } as any)
+    )
+
+    it('appends the new column to every column the view holds, those hidden in the portfolio too', async () => {
+      const stored = { GtPortfolioColumnsId: [1, 2, 3], GtPortfolioColumnOrder: '[3,1,2]' }
+      const { service, written } = viewsService(stored)
+      // The view as the overview holds it: column 2 is hidden in the portfolio, so it is not shown.
+      const view = new PortfolioOverviewView({ Id: 5, ...stored } as any).configure(columns)
+      expect(view.columns.map((column) => column.id)).toEqual([3, 1])
+      expect(await service.addColumnToPortfolioView({ Title: 'Ny' } as any, view)).toBe(99)
+      expect(written.find(({ list }) => list === LISTS.PORTFOLIO_VIEWS)).toEqual({
+        list: LISTS.PORTFOLIO_VIEWS,
+        id: 5,
+        properties: { GtPortfolioColumnsId: [1, 2, 3, 99], GtPortfolioColumnOrder: '[3,1,2,99]' }
+      })
+    })
+
+    it('gives a view without an order of its own none', async () => {
+      const stored = { GtPortfolioColumnsId: [1], GtPortfolioColumnOrder: null }
+      const { service, written } = viewsService(stored)
+      const view = new PortfolioOverviewView({ Id: 5, ...stored } as any).configure(columns)
+      await service.addColumnToPortfolioView({ Title: 'Ny' } as any, view)
+      expect(written.find(({ list }) => list === LISTS.PORTFOLIO_VIEWS)?.properties).toEqual({
+        GtPortfolioColumnsId: [1, 99]
+      })
     })
   })
 

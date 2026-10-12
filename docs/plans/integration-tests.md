@@ -320,3 +320,30 @@ Still open, not decided: lists that format a stored date from search or REST the
 column in the portfolio overview, the aggregations) also read the instant in the machine's time
 zone and have no text beside it; a machine west of the site shows the day before there too.
 
+### Slice 3: the hub side (2026-10-12)
+
+Done: `tests/hub.test.ts`. The project's data adapter (`SPDataAdapterBase.configure` with the
+project's context) reads the project's row in the hub through the entity service, its links built
+from the page's origin (I3); the save's sync maps the properties (`getMappedProjectProperties`, as
+ProjectWebParts' `syncPropertyItemToHub` calls it) and writes the two it checks to the row
+(`updateEntityItem`), a date as the same instant as the project's; a column is added to a shared
+view with an order of its own (`addColumnToPortfolioView`) and the view and columns are restored;
+the column configuration's lookups read as the columns they name, and the global settings; the
+program's projects (`getChildProjects`) name it among their parents (`getParentProjects`, whose
+model must carry `url` and `childProjects`). Writes: the reserved project's own row in the hub,
+columns the test creates (prefixed `Integrasjonstest`, removed at the start when an interrupted run
+left any), and the view, put back from what was read first.
+
+Found, by reading the code, then proven: `addColumnToPortfolioView` wrote back the view's columns
+as the overview shows them, which leaves out the columns hidden in the portfolio, so adding a column
+took the hidden ones out of the view for good. No view on the test hub held one, so the test makes
+its own: a column added, then hidden in the portfolio, then a second one added; the view must hold
+both. It now reads the view's stored columns and order before it appends. A Jest test was seen
+failing first, and the integration test failed against the old logic (put back into the build for
+the run only). A changelog line.
+
+Left for the exit: the browser column flow (`e2e/tests/flows/portfolio-overview-column.spec.ts`)
+keeps its UI assertions and drops its data assertions (the column's list item, its visibility), once
+this test is green in CI (I9). Not here: `syncPropertyItemToHub` itself and its JSOM `syncList`
+(ProjectWebParts' adapter, slice 5 and I10).
+

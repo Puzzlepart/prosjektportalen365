@@ -65,6 +65,7 @@ with that reason when the two differ.
 - Assert what SharePoint returned or stored, read back, not what the code sent; keep assertions
   independent of the time zone and of other projects' data.
 - No secret reaches a log, a report or a file: no token, cookie or certificate is printed.
+- What a test creates in the hub carries a prefix of its own (columns: `Integrasjonstest …`), and the test first removes what an interrupted run left with that prefix.
 - Format with Prettier and the solutions' rules: `prettier --config ../SharePointFramework/.prettierrc.yaml`.
 
 ## In CI
