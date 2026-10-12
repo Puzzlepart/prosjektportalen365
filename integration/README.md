@@ -38,6 +38,9 @@ tests, and on a developer's machine in seconds. Plan and decisions:
 permission-trimmed and the library's user is `INTEGRATION_USER`; a test that needs a real user
 (personal views, `Author`) runs with cookies only, and says so when it skips. The term store's v2.1
 API refuses cookies from anything but a browser, so cookie calls send a browser `User-Agent`.
+App-only, the term store refuses the CI app (403) until it has the application permission
+`TermStore.Read.All` on SharePoint: a test that needs a permission the app may lack probes with
+`appOnlyDenied` (`src/sites.ts`) and skips, naming the permission, when SharePoint refuses it.
 
 ## Local run
 

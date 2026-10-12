@@ -9,6 +9,7 @@ import { spfxContext } from '../src/context.ts'
 import { env } from '../src/env.ts'
 import { portalDataService, projectDataService, termStore } from '../src/library.ts'
 import { stringsToCommonJs } from '../src/loader.ts'
+import { appOnlyDenied } from '../src/sites.ts'
 
 /**
  * A self-signed certificate and its key in a PFX, base64, as `CI_CERT_BASE64` holds the CI app's.
@@ -136,5 +137,37 @@ describe('the harness', () => {
       (error: Error) =>
         /CI_CERT_BASE64/.test(error.message) && !/not a certificate/.test(error.message)
     )
+  })
+
+  describe('a request the CI app may not make', () => {
+    const refused = (status: number) => () =>
+      Promise.reject(Object.assign(new Error('refused'), { status }))
+
+    it('skips, naming the permission, when SharePoint refuses the app with 403', async () => {
+      const reason = await appOnlyDenied(
+        { mode: 'certificate' },
+        refused(403),
+        'TermStore.Read.All'
+      )
+      assert.match(reason ?? '', /403.*TermStore\.Read\.All/)
+    })
+
+    it('runs when the app may make it, and fails on any other error', async () => {
+      assert.equal(
+        await appOnlyDenied({ mode: 'certificate' }, () => Promise.resolve(), 'X'),
+        undefined
+      )
+      await assert.rejects(appOnlyDenied({ mode: 'certificate' }, refused(500), 'X'), /refused/)
+    })
+
+    it('never skips signed in as a user, who gets what a web part gets', async () => {
+      let probed = false
+      const probe = () => {
+        probed = true
+        return Promise.reject(Object.assign(new Error('refused'), { status: 403 }))
+      }
+      assert.equal(await appOnlyDenied({ mode: 'cookies' }, probe, 'X'), undefined)
+      assert.equal(probed, false)
+    })
   })
 })

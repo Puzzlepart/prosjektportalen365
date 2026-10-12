@@ -32,3 +32,21 @@ export const createSpfiInstance = () =>
 
 export const termStore = () =>
   library<typeof import('pp365-shared-library/lib/taxonomy/index.js')>('taxonomy/index.js')
+
+export const dataSourceService = () =>
+  library<typeof import('pp365-shared-library/lib/services/DataSourceService/index.js')>(
+    'services/DataSourceService/index.js'
+  )
+
+/** The aggregated search the program's and the project's web parts fetch with. */
+export const aggregatedSearch = () => ({
+  ...library<typeof import('pp365-shared-library/lib/data/searchAggregatedItems.js')>(
+    'data/searchAggregatedItems.js'
+  ),
+  ...library<typeof import('pp365-shared-library/lib/util/buildAggregatedSiteIdQueries.js')>(
+    'util/buildAggregatedSiteIdQueries.js'
+  )
+})
+
+export const models = () =>
+  library<typeof import('pp365-shared-library/lib/models/index.js')>('models/index.js')

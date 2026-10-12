@@ -84,6 +84,7 @@ A `pp365-*` name in that AMD list means externalized. The manifest is authoritat
 - Term store: `getTermStore(sp.web).sets.getById(id).terms.select('*', 'localProperties').all()`. Never `@pnp/graph/taxonomy`: no `localProperties`, and it needs tenant-admin consent.
 - From a returned payload, re-resolve handles (`web.getFileByServerRelativePath(info.ServerRelativeUrl)`, `web.siteGroups.getById(info.Id)`). `IItemAddResult`, `IItemUpdateResult`, `IFileAddResult`, `IFolderAddResult` are gone; `IListEnsureResult` is in `@pnp/sp/lists/types`.
 - `sp-js-provisioning` is pinned to 1.4.0 (PnPjs 4 peers) in PortfolioExtensions and ProjectExtensions; bump by editing both and `npm run rush:update`. A v3 release fails every `new WebProvisioner(web)` with "IWeb is not assignable".
+- Search pages (`sp.search` with `StartRow`) overlap unless the query sorts on a unique property: search ranks each request anew, and pages of seven over 54 results returned three to six twice and lost as many. Sort on the document id as `SortList: [{ Property: 'docid', Direction: 0 }]`, in lower case: SharePoint Online refuses `DocId`, `[DocId]` and `IndexDocId` with 400. Page through `searchAggregatedItems` (shared-library), which does; `integration/tests/search.test.ts` pins it against the tenant.
 
 ## CI, release build and memory
 

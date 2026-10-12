@@ -3,7 +3,7 @@ import { before, describe, it } from 'node:test'
 import { env, skipReason } from '../src/env.ts'
 import { termStore } from '../src/library.ts'
 import type { ISite } from '../src/sites.ts'
-import { connect } from '../src/sites.ts'
+import { appOnlyDenied, connect, TERM_STORE_PERMISSION } from '../src/sites.ts'
 
 /**
  * What the data layer reaches in the sign-in mode of this run: the hub's REST API, search and the
@@ -40,16 +40,20 @@ describe('reachable from Node', { skip: skipReason('hubUrl') }, () => {
     assert.equal(typeof results.PrimarySearchResults[0].SiteId, 'string')
   })
 
-  it("reads the phases from the term store, through the library's client", async () => {
+  it("reads the phases from the term store, through the library's client", async (t) => {
     // The term set the hub's phase field is bound to, as the phase web part reads it.
     const { TermSetId } = await hub.sp.web.fields
       .getByInternalNameOrTitle('GtProjectPhase')
       .select('TermSetId')<{ TermSetId: string }>()
-    const terms = await termStore()
-      .getTermStore(hub.sp.web)
-      .sets.getById(TermSetId)
-      .terms.select('*', 'localProperties')
-      .all()
+    const phases = () =>
+      termStore()
+        .getTermStore(hub.sp.web)
+        .sets.getById(TermSetId)
+        .terms.select('*', 'localProperties')
+        .all()
+    const denied = await appOnlyDenied(hub, phases, TERM_STORE_PERMISSION)
+    if (denied) return t.skip(denied)
+    const terms = await phases()
     assert.ok(terms.length > 0, `the phase term set ${TermSetId} has no terms`)
     assert.ok(terms.every((term) => term.labels?.length > 0))
   })

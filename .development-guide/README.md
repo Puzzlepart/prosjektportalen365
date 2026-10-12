@@ -1643,7 +1643,7 @@ Innlogging (`src/auth.ts`):
 | `certificate` | `CI_TENANT`, `CI_CLIENT_ID` og `CI_CERT_BASE64` er satt (CI) | CI-appen, app-only, med sertifikatet oppgraderingsjobbene bruker. PFX-en leses i minnet |
 | `cookies` | Ellers, når `e2e/.auth/user.json` finnes (lokalt) | E2E-brukeren, med økten fra nettlesertestenes innlogging |
 
-`INTEGRATION_AUTH=certificate|cookies` tvinger fram én av dem. Økten varer rundt to døgn; forny den med `npx playwright test --project=setup` i `e2e/`. App-only blir ingenting rettighetstrimmet, og bibliotekets bruker er `INTEGRATION_USER`. En test som trenger en ekte bruker (personlige visninger, `Author`), kjører derfor bare med informasjonskapsler og sier det når den hoppes over. Termlagerets v2.1-API avviser informasjonskapsler fra noe annet enn en nettleser («OAuth only flow is enabled …»), så kallene sender en `User-Agent` som begynner med `Mozilla/5.0`.
+`INTEGRATION_AUTH=certificate|cookies` tvinger fram én av dem. Økten varer rundt to døgn; forny den med `npx playwright test --project=setup` i `e2e/`. App-only blir ingenting rettighetstrimmet, og bibliotekets bruker er `INTEGRATION_USER`. En test som trenger en ekte bruker (personlige visninger, `Author`), kjører derfor bare med informasjonskapsler og sier det når den hoppes over. Termlagerets v2.1-API avviser informasjonskapsler fra noe annet enn en nettleser («OAuth only flow is enabled …»), så kallene sender en `User-Agent` som begynner med `Mozilla/5.0`. App-only nekter termlageret CI-appen (403) til den har applikasjonsrettigheten `TermStore.Read.All` på SharePoint; testene som leser termlageret, hoppes da over med den begrunnelsen (`appOnlyDenied` i `src/sites.ts`) og kjører når rettigheten er gitt.
 
 Lokalt: `cp .env.example .env` i `integration/`, forny økten ved behov, bygg biblioteket etter en endring i det (`npx heft build --clean` i `shared-library`), og kjør `npm test` i `integration/`. En test som mangler området eller innloggingen den trenger, hoppes over med en begrunnelse. Med `INTEGRATION_STRICT=true` (CI) feiler den i stedet, fordi en suite som hoppes over i sin helhet ellers går grønt uten å ha testet noe. `INTEGRATION_LOCALE` (standard `nb-no`) må være områdenes språk: biblioteket finner hubens lister på tittelen i strengenes språk, og harnessen stopper med den forklaringen når de to ikke stemmer.
 
@@ -1694,7 +1694,7 @@ I CI kjører jobben «Integration tests (test channel)» i `ci-channel-test.yml`
 
 1. ~~Komponenttester for komponentene som konverteres fra Fluent UI v8 til v9.~~ Gjort i fase 3 og 4: hver webdel-rot, utvidelse og interaktiv komponent har tester.
 2. Skriveflyter i E2E: kopi av dokumentmal, utkast til statusrapport, ny kolonne i porteføljeoversikten og underområde i et program er på plass og rydder etter seg. Gjenstår: prosjektoppsett, publisering av statusrapport og opprettelse av idé.
-3. Integrasjonstester for datalaget (`integration/`, `docs/plans/integration-tests.md`): harness, første test og CI-jobb er på plass (skive 0). Gjenstår: søk og termer, prosjektegenskaper tur-retur, hub-siden og malens tilstand etter en oppgradering (skive 1–4).
+3. Integrasjonstester for datalaget (`integration/`, `docs/plans/integration-tests.md`): harness, CI-jobb, søk og termer er på plass (skive 0 og 1; søketestene fant at sidene i et søk overlappet, rettet i 1.15). Gjenstår: prosjektegenskaper tur-retur, hub-siden og malens tilstand etter en oppgradering (skive 2–4).
 4. ~~Dekningsgrenser per løsning.~~ Gjort i fase 4 (se over).
 
 

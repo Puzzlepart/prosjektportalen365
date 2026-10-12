@@ -63,3 +63,31 @@ export async function connect(url: string): Promise<ISite> {
         }
   return { url: siteUrl, sp, context: spfxContext(site, web, user, env.locale), mode }
 }
+
+/** The app permission the term store's API needs app-only (Office 365 SharePoint Online). */
+export const TERM_STORE_PERMISSION = 'TermStore.Read.All'
+
+/**
+ * Why a test cannot run in this sign-in mode, or `undefined` when it can. Signed in as the CI app,
+ * SharePoint refuses a request the app has no permission for with 403: the test then skips, naming
+ * the permission, and runs once the app has it. Any other failure is thrown, and signed in as a
+ * user nothing is skipped: the user gets what a web part on the page gets.
+ *
+ * @param site The site, for its sign-in mode
+ * @param probe A request the test needs
+ * @param permission The app permission the request needs
+ */
+export async function appOnlyDenied(
+  site: Pick<ISite, 'mode'>,
+  probe: () => Promise<unknown>,
+  permission: string
+): Promise<string | undefined> {
+  if (site.mode !== 'certificate') return undefined
+  try {
+    await probe()
+    return undefined
+  } catch (error) {
+    if ((error as { status?: number }).status !== 403) throw error
+    return `SharePoint refuses the CI app (403): it needs the application permission ${permission}`
+  }
+}

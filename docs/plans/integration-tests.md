@@ -237,6 +237,37 @@ solutions: webpack's "Can't resolve 'interactjs'"). shared-library now declares 
 solutions' versions. Each was reproduced first, and the job's steps then ran green in a fresh copy
 of the repository installed as CI installs it (the trap and the method: `pp365-toolchain`).
 
-Open: the exit's CI half. The next run proves app-only sign-in, search and the term store for the
-CI app, or reports the permission it lacks; the job's time is unmeasured (locally, from a fresh
-copy: install 1.5 min, library build 1.25 min, tests 25 s).
+Second CI run (38250569858, packages only; the job took 2 min 11 s): the certificate sign-in works,
+and with it the PFX reading; the hub's REST API and search answer the CI app. The term store does
+not: `_api/v2.1/termStore` refuses it with 403 ("insufficient permissions"). That is the gap the
+exit asks to report: the app needs the application permission `TermStore.Read.All` on SharePoint,
+which only an administrator can grant. Until it has it, the tests that read the term store skip
+in certificate mode with that reason (`appOnlyDenied` in `sites.ts`, tested offline), and run once
+it is granted; signed in as a user they never skip.
+
+### Slice 1: search and terms (2026-10-12)
+
+Done, read-only: `tests/search.test.ts` runs `searchAggregatedItems` over the test program's 30
+projects with the risk matrix's default data source (`b0ef3852-…`, 54 results). Every property the
+matrix selects is present; numbers come as text (`"3.00000000000000"`); the show-in-portfolio flag
+as `'0'`, `'1'` or `null`; `SiteId` as a bare lower-case GUID, compared as the matrix compares it.
+Pages of seven return what one page returns; 40 site ids that match nothing split the query over
+two requests without losing a result; `includeSelf` adds a site's own results.
+`tests/term-store.test.ts` checks `getTermLabel` against the phase set's labels (nb-NO, `en-us`
+in lower case, a language with none), the phases' texts from the phase set in both languages
+(`PhaseSubText`, `PhaseSubText_en-us`), and `ProjectDataService.getPhases` on the reserved project
+against the set's terms labelled in the project's language.
+
+Found: the paging test failed. Search ranks every request anew, so `StartRow` pages overlap: in
+pages of seven, three to six of the 54 results came twice and as many never, in every run. Every
+aggregation whose search matched more than 500 results (one page) was hit: the program's aggregated
+overview and timeline, and the risk and opportunity matrices. `searchAggregatedItems` now sorts
+every request on the document id. SharePoint Online takes that sort only as `docid`, in lower case:
+`DocId`, `[DocId]`, `IndexDocId`, `ListItemID`, `Path`, `WorkId` and `UniqueId` are refused with
+400, and `Created`, `LastModifiedTime` and `Size` sort but are not unique. With `docid`, six runs
+of six (pages of seven and of three) returned each result once, in document id order both ways.
+The Jest stand-in now ranks every request anew unless it is sorted, as SharePoint does; the test
+was seen failing in both layers before the fix. A changelog line under «Feilrettinger».
+
+Not covered here: `getTermLabel`'s last fallback, the first label, when a term has neither nb-NO
+nor en-US (the set has no such term; Jest covers it).
