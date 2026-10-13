@@ -1,4 +1,4 @@
-import { expect, Locator, Page } from '@playwright/test'
+import { expect, Locator, Page, test } from '@playwright/test'
 import { baseURL } from '../../playwright.config'
 import { deleteItem, currentUserId, restGet, siteId } from './rest'
 
@@ -12,6 +12,8 @@ export const newReportButton = (webPart: Locator) =>
   webPart.getByRole('button', { name: /^opprett$|^create$/i }).first()
 export const deleteReportButton = (webPart: Locator) =>
   webPart.getByRole('button', { name: /^slett$|^delete$/i }).first()
+export const snapshotButton = (webPart: Locator) =>
+  webPart.getByRole('button', { name: /^åpne øyeblikksbilde$|^open as snapshot$/i }).first()
 
 /** The hub's status list, whatever the installation language named it. */
 async function statusListTitle(page: Page) {
@@ -44,6 +46,50 @@ export async function draftReports(page: Page, projectUrl: string): Promise<Draf
     )
   const items = ((await response.json()) as { value: DraftReport[] }).value
   return items.filter((i) => !/publisert|published/i.test(i.GtModerationStatus ?? ''))
+}
+
+interface PublishedSnapshot {
+  /** The report's id in the hub's status list */
+  reportId: number
+  /** Server-relative path of the report's snapshot image */
+  snapshotPath: string
+}
+
+/**
+ * The project's published reports that have a snapshot (the attachment `Snapshot.png` publishing
+ * makes), newest first. Publishing cannot be undone from the page, so no flow publishes: the
+ * snapshot flows read one that is there, and skip when none is.
+ */
+export async function publishedSnapshots(
+  page: Page,
+  projectUrl: string
+): Promise<PublishedSnapshot[]> {
+  const [list, site] = await Promise.all([statusListTitle(page), siteId(page, projectUrl)])
+  const response = await restGet(
+    page,
+    `${hub}/_api/web/lists/getbytitle('${list}')/items?$select=Id,GtModerationStatus,AttachmentFiles&$expand=AttachmentFiles&$filter=GtSiteId eq '${site}'&$orderby=Created desc&$top=500`
+  )
+  if (!response.ok())
+    throw new Error(
+      `Could not list the reports of ${projectUrl}: HTTP ${response.status()} ${await response.text()}`
+    )
+  const items = (
+    (await response.json()) as {
+      value: {
+        Id: number
+        GtModerationStatus: string
+        AttachmentFiles: { FileName: string; ServerRelativeUrl: string }[]
+      }[]
+    }
+  ).value
+  return items
+    .filter((i) => /publisert|published/i.test(i.GtModerationStatus ?? ''))
+    .map((i) => ({
+      reportId: i.Id,
+      snapshotPath: i.AttachmentFiles?.find((a) => /^snapshot\.png$/i.test(a.FileName))
+        ?.ServerRelativeUrl
+    }))
+    .filter((s): s is PublishedSnapshot => !!s.snapshotPath)
 }
 
 /**
@@ -88,4 +134,112 @@ export async function statusWebPart(page: Page) {
   await expect(webPart).toBeVisible({ timeout: 60_000 })
   await expect(webPart.getByRole('button').first()).toBeVisible({ timeout: 60_000 })
   return webPart
+}
+
+const SNAPSHOT_DIALOG = /^(øyeblikksbilde|snapshot) –/i
+const CLOSE = /^(lukk|close)$/i
+
+/**
+ * The snapshot of a published report, read-only: `Åpne øyeblikksbilde` opens it in a dialog that
+ * fills the window and shows the image; the dialog goes to full screen where the browser allows
+ * it; `Kopier lenke` copies a link to the status page with the snapshot shown and offers it and
+ * the image file's link; the image file opens in a new tab; and the copied link opens the status
+ * page with the dialog already open. Shared by the flow against the deployed build and its
+ * local-bundle twin, which differ only in how a page is opened.
+ *
+ * @param page The page
+ * @param snapshot A published report with a snapshot
+ * @param pagePath The status page's path
+ * @param open Opens a page path, query string included, the way the spec loads pages
+ */
+export async function snapshotJourney(
+  page: Page,
+  snapshot: PublishedSnapshot,
+  pagePath: string,
+  open: (path: string) => Promise<void>
+) {
+  const { reportId, snapshotPath } = snapshot
+  const imagePath = new URL(snapshotPath, baseURL).pathname.toLowerCase()
+  await open(`${pagePath}?selectedReport=${reportId}`)
+  const button = snapshotButton(await statusWebPart(page))
+  await expect(button).toBeEnabled({ timeout: 60_000 })
+  await button.click()
+
+  const dialog = page.getByRole('dialog', { name: SNAPSHOT_DIALOG })
+  await expect(dialog).toBeVisible({ timeout: 30_000 })
+  const image = dialog.getByRole('img')
+  expect(new URL((await image.getAttribute('src'))!, baseURL).pathname.toLowerCase()).toBe(
+    imagePath
+  )
+  await expect
+    .poll(() => image.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0), {
+      message: 'the snapshot image loads',
+      timeout: 30_000
+    })
+    .toBe(true)
+
+  // Full screen is the browser's to grant: a host that refuses it hides the button, and a headless
+  // browser may ignore the request, in which case the dialog stays as it is.
+  const enterFullscreen = dialog.getByRole('button', { name: /^(fullskjerm|full screen)$/i })
+  if (await enterFullscreen.isVisible()) {
+    await enterFullscreen.click()
+    const exitFullscreen = dialog.getByRole('button', {
+      name: /^(avslutt fullskjerm|exit full screen)$/i
+    })
+    if (await exitFullscreen.isVisible({ timeout: 5_000 }).catch(() => false)) {
+      await exitFullscreen.click()
+      await expect(enterFullscreen).toBeVisible()
+    } else {
+      test.info().annotations.push({
+        type: 'note',
+        description: 'the browser did not enter full screen; the button was offered and clicked'
+      })
+    }
+  }
+
+  // The copied link, and the two links on offer.
+  await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
+  await dialog.getByRole('button', { name: /^(kopier lenke|copy link)$/i }).click()
+  const copyDialog = page.getByRole('dialog', {
+    name: /kopier lenke til øyeblikksbilde|copy link to snapshot/i
+  })
+  await expect(copyDialog).toBeVisible()
+  await expect(
+    copyDialog.getByText(/lenken er kopiert|the link has been copied/i),
+    'the link reached the clipboard'
+  ).toBeVisible()
+  const pageLink = await copyDialog
+    .getByLabel(/lenke til øyeblikksbildet på statussiden|link to the snapshot on the status page/i)
+    .inputValue()
+  expect(pageLink).toContain(`selectedReport=${reportId}`)
+  expect(pageLink).toContain('snapshot=1')
+  expect(
+    await copyDialog
+      .getByLabel(/direkte lenke til bildefilen|direct link to the image file/i)
+      .inputValue()
+  ).toBe(new URL(snapshotPath, baseURL).href)
+  await copyDialog.getByRole('button', { name: CLOSE }).click()
+  await expect(copyDialog).toBeHidden()
+
+  // The image file in a new tab, out of reach of SharePoint's own link handling. The tab is opened
+  // with `noopener`, so it is awaited on the context, not as the page's popup.
+  const newTab = page.context().waitForEvent('page')
+  await dialog
+    .getByRole('button', { name: /åpne bildefilen i ny fane|open image file in new tab/i })
+    .click()
+  const tab = await newTab
+  await tab.waitForURL(/snapshot\.png/i, { timeout: 30_000 })
+  expect(new URL(tab.url()).pathname.toLowerCase()).toBe(imagePath)
+  await tab.close()
+
+  await dialog.getByRole('button', { name: CLOSE }).click()
+  await expect(dialog).toBeHidden()
+
+  // The copied link opens the page with the snapshot shown, and Escape closes it.
+  await open(pageLink)
+  await expect(page.getByRole('dialog', { name: SNAPSHOT_DIALOG })).toBeVisible({
+    timeout: 60_000
+  })
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('dialog', { name: SNAPSHOT_DIALOG })).toBeHidden()
 }
