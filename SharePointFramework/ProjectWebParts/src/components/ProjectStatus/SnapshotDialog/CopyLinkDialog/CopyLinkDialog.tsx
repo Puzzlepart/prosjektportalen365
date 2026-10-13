@@ -11,9 +11,8 @@ import {
   makeStyles,
   tokens
 } from '@fluentui/react-components'
-import { Copy24Regular } from '@fluentui/react-icons'
 import strings from 'ProjectWebPartsStrings'
-import { UserMessage } from 'pp365-shared-library'
+import { getFluentIcon, UserMessage } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { ICopyLinkDialogProps } from './types'
 
@@ -69,7 +68,7 @@ export const CopyLinkDialog: FC<ICopyLinkDialogProps> = (props) => {
                 <Field className={styles.link} label={link.label}>
                   <Input readOnly value={link.value} onFocus={(event) => event.target.select()} />
                 </Field>
-                <Button icon={<Copy24Regular />} onClick={link.onCopy}>
+                <Button icon={getFluentIcon('Copy')} onClick={link.onCopy}>
                   {strings.SnapshotCopyButtonLabel}
                 </Button>
               </div>

@@ -8,14 +8,8 @@ import {
   tokens,
   Tooltip
 } from '@fluentui/react-components'
-import {
-  Dismiss24Regular,
-  FullScreenMaximize24Regular,
-  FullScreenMinimize24Regular,
-  Link24Regular,
-  Open24Regular
-} from '@fluentui/react-icons'
 import strings from 'ProjectWebPartsStrings'
+import { getFluentIcon } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { CopyLinkDialog } from './CopyLinkDialog'
 import { useSnapshotDialog } from './useSnapshotDialog'
@@ -104,9 +98,7 @@ export const SnapshotDialog: FC = () => {
               {canFullscreen && (
                 <Button
                   appearance='subtle'
-                  icon={
-                    isFullscreen ? <FullScreenMinimize24Regular /> : <FullScreenMaximize24Regular />
-                  }
+                  icon={getFluentIcon(isFullscreen ? 'FullScreenMinimize' : 'FullScreenMaximize')}
                   onClick={toggleFullscreen}
                 >
                   {isFullscreen
@@ -114,14 +106,14 @@ export const SnapshotDialog: FC = () => {
                     : strings.SnapshotEnterFullscreenLabel}
                 </Button>
               )}
-              <Button appearance='subtle' icon={<Link24Regular />} onClick={copyPageLink}>
+              <Button appearance='subtle' icon={getFluentIcon('Link')} onClick={copyPageLink}>
                 {strings.SnapshotCopyLinkLabel}
               </Button>
-              <Button appearance='subtle' icon={<Open24Regular />} onClick={openInNewTab}>
+              <Button appearance='subtle' icon={getFluentIcon('Open')} onClick={openInNewTab}>
                 {strings.SnapshotOpenInNewTabLabel}
               </Button>
               <Tooltip content={strings.CloseText} relationship='label'>
-                <Button appearance='subtle' icon={<Dismiss24Regular />} onClick={onDismiss} />
+                <Button appearance='subtle' icon={getFluentIcon('Dismiss')} onClick={onDismiss} />
               </Tooltip>
             </div>
           </div>

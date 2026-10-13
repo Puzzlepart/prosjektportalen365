@@ -91,6 +91,17 @@ describe('ProjectStatus SnapshotDialog', () => {
     expect(screen.getByRole('dialog', { name: strings.SnapshotCopyLinkDialogTitle })).toBe(copyLink)
   })
 
+  // A bundled icon holds the filled icon beside the regular one, and Fluent's button shows it on
+  // hover, as every other icon button in Prosjektportalen does.
+  it('fills the icons of its buttons on hover, as the rest of Prosjektportalen does', () => {
+    Object.assign(mockDialog, { isCopyLinkOpen: true, copyLinkStatus: 'copied' })
+    render(<SnapshotDialog />)
+    // Full screen, copy link, new tab and close in the bar; the two copy buttons in the dialog.
+    const icons = Array.from(document.querySelectorAll('.fui-Button__icon'))
+    expect(icons).toHaveLength(6)
+    icons.forEach((icon) => expect(icon.querySelector('.fui-Icon-filled')).not.toBeNull())
+  })
+
   it('shows the snapshot image with a button that opens it in a new tab', () => {
     render(<SnapshotDialog />)
     expect(screen.getByAltText(title)).toHaveAttribute('src', snapshotUrl)
