@@ -14,17 +14,23 @@ tests, and on a developer's machine in seconds. Plan and decisions:
   build: only TypeScript that erases to JavaScript (no `enum`, namespaces or parameter
   properties; `import type` for types), and imports name the `.ts` file. `npm run build` only
   type-checks.
-- The tests load the library's CommonJS build (`SharePointFramework/shared-library/lib-commonjs`),
-  the one its Jest suites run, so the library must be built first.
-- `src/loader.ts` resolves what only SPFx provides on a page: the string modules
-  (`SharedLibraryStrings`, `SharedResources`) to the bundles in `INTEGRATION_LOCALE`, through the
-  Jest harness's AMD transform; `@microsoft/sp-*` to the Jest harness's stand-ins; stylesheets to
-  their class names. `src/globals.ts` adds jsdom's `DOMParser` and `XMLSerializer`, nothing else.
+- The tests load the CommonJS builds (`lib-commonjs`) of the library and of ProjectWebParts, whose
+  data adapter they run, the builds their Jest suites run: build both first.
+- `src/loader.ts` resolves what only SPFx and webpack provide, as the Jest harness does: the
+  workspace packages and their `lib/...` paths to `lib-commonjs` (one instance of the library, so
+  the tests' sign-in reaches the solution's clients); a solution's bare imports of its own folders
+  (`types`, `data`) in its `lib-commonjs`; the string modules each package names in
+  `config/config.json` to the bundles in `INTEGRATION_LOCALE`, through the Jest harness's AMD
+  transform; `@microsoft/sp-*` and PnP's UI controls (ESM written for webpack, never rendered here)
+  to the Jest harness's stand-ins; stylesheets to their class names. `src/globals.ts` adds jsdom's
+  `DOMParser` and `XMLSerializer` and the page context SharePoint sets on a page
+  (`_spPageContextInfo`, with the locale's cultures), nothing else.
 - `src/sites.ts` connects to a site and builds the SPFx context a web part on it would have
   (`src/context.ts`) from what the site says about itself. The library's clients connect through
   `setSpfiFactory` (`shared-library/src/data/createSpfiInstance.ts`) with the tests' sign-in;
   without a factory they connect through SPFx, as on a page.
-- `src/library.ts` loads the library's modules, typed by their declarations in `lib`.
+- `src/library.ts` loads the library's modules and ProjectWebParts' adapter, typed by their
+  declarations in `lib`.
 
 ## Sign-in
 
@@ -48,6 +54,7 @@ App-only, the term store refuses the CI app (403) until it has the application p
 cp .env.example .env                                    # the test hub, a program, the reserved project
 (cd ../e2e && npx playwright test --project=setup)      # the e2e user's session, every other day
 (cd ../SharePointFramework/shared-library && npx heft build --clean)   # after a library change
+(cd ../SharePointFramework/ProjectWebParts && npx heft build --clean)  # after a change there
 npm test
 ```
 
@@ -69,14 +76,18 @@ with that reason when the two differ.
 - Assert what SharePoint returned or stored, read back, not what the code sent; keep assertions
   independent of the time zone and of other projects' data.
 - No secret reaches a log, a report or a file: no token, cookie or certificate is printed.
-- What a test creates in the hub carries a prefix of its own (columns: `Integrasjonstest …`), and the test first removes what an interrupted run left with that prefix.
+- What a test creates in the hub carries a prefix of its own (columns: `Integrasjonstest …`;
+  status reports: the reserved project's report series `ITEST`, apart from its own reports), and
+  the test first removes what an interrupted run left there.
 - Format with Prettier and the solutions' rules: `prettier --config ../SharePointFramework/.prettierrc.yaml`.
 
 ## In CI
 
 The job installs `--to pp365-integration --to pp365-templates`, generates the library's shared
 strings from the templates' `.resx` files (`npm run generate-resx-ts` in `Templates`; they are not
-in git), builds the library (`heft build --production`, without Jest) and runs `npm run test:ci`:
+in git), builds the library (`heft build --production`, without Jest), compiles ProjectWebParts'
+`lib-commonjs` with TypeScript alone (`--noCheck`, the strings copied beside it; its bundle and
+type check are the release build's) and runs `npm run test:ci`:
 the spec report in the log, JUnit in `test-results/junit.xml`, uploaded as
 `integration-report-test-channel` for 7 days. `[skip-integration]` in the commit subject skips it.
 

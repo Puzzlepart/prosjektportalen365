@@ -266,6 +266,16 @@ jobs:
         run: npx heft build --production
         working-directory: SharePointFramework/shared-library
 
+      # The tests load ProjectWebParts' data adapter from its CommonJS build. TypeScript alone emits
+      # it, unchecked: the solution's bundle and type check are the release build's.
+      - name: Compile ProjectWebParts for the tests
+        run: |
+          npx tsc -p tsconfig.json --outDir lib-commonjs --module commonjs --noEmit false --noCheck --declaration false --declarationMap false --sourceMap true --incremental false
+          mkdir -p lib-commonjs/loc/shared
+          cp src/loc/*.js lib-commonjs/loc/
+          cp src/loc/shared/*.js lib-commonjs/loc/shared/
+        working-directory: SharePointFramework/ProjectWebParts
+
       - name: Run the integration tests against the test channel
         run: npm run test:ci
         working-directory: integration

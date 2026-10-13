@@ -23,6 +23,7 @@
     "jsdom": "26.1.0",
     "node-forge": "1.4.0",
     "pp365-jest-config": "workspace:*",
+    "pp365-projectwebparts": "workspace:*",
     "pp365-shared-library": "workspace:*",
     "typescript": "~5.8.3"
   }

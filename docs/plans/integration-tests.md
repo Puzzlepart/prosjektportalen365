@@ -363,5 +363,45 @@ matrices' default data sources resolve by id; the overview's default view (the f
 as `useFetchData` picks it) names only existing columns. All green against the test hub, and the
 log test fails with the newest installation named when the commit differs.
 
-Open: slice 5 (the consumers' adapters) is to be decided with the user.
+Slice 5 was decided with the user on 2026-10-13: done, below.
+
+### Status reports, an addition the user asked for (2026-10-13)
+
+`tests/status-reports.test.ts`: the status page's write path through `PortalDataService`, in a
+report series of the test's own (`<site id>-ITEST`, a "delprosjekt" series of the reserved project),
+apart from the project's two published reports. The new report command's draft (`addStatusReport`
+with the template's `ProjectStatusContentTypeId`), the edit panel's save (`updateStatusReport`: a
+status, its comment, a person by `ensureUser` on the hub), read back (`getStatusReports` with the
+person expanded from its own query, `userFields`), the series kept apart (not among the project's
+own reports, among all its series through `getAllScopesFilter`), then `deleteStatusReport`; the
+project's own reports compared before and after; leftovers of an interrupted run deleted first.
+Publishing stays out: a published report reaches the portfolio's search, and a scoped series shows
+as a row of its own there until the index forgets it.
+
+### Slice 5: the consumers' adapters (2026-10-13)
+
+Decided with the user: done for ProjectWebParts, not for ProjectExtensions' setup.
+
+Done: `tests/project-web-parts.test.ts` runs ProjectWebParts' `SPDataAdapter` from the solution's
+`lib-commonjs`. Saving project information's sync (`syncPropertyItemToHub`, the whole mapped item
+and the web's title) writes the project's row in the hub and reports its progress in the solution's
+own strings; the restore is the project's own value synced back, which is what saving it writes,
+and the row's value is compared with the one read first. On the program, the adapter reads it as a
+program (`isParentProject`, the risk matrix's automatic mode), resolves the matrix's default data
+source and fetches its children's risks (`fetchItemsFromDataSource`).
+
+The loader, as Jest's harness: `pp365-*` and their `lib/...` paths to `lib-commonjs`, so that one
+instance of the library exists and the tests' sign-in reaches the solution's clients; a solution's
+bare imports of its own folders (`types`) in its `lib-commonjs`; every package's string modules
+from its `config/config.json`, `node_modules` bundles included; PnP's UI controls to the Jest
+harness's stand-in, since they are ESM written for webpack (Node refuses their directory imports)
+and are never rendered here; `_spPageContextInfo` on `globalThis`. The solution's barrel loads the
+whole library with Fluent, about 6 seconds once per file. In CI, ProjectWebParts' `lib-commonjs` is
+emitted by TypeScript alone (`--noCheck`, the `src/loc` bundles copied beside it): its bundle and
+type check are the release build's, and a Heft build would bundle every web part for nothing.
+
+Not done, and why: ProjectExtensions' `SetupProjectInformation`. Its core, the properties list,
+goes through `syncList` (JSOM, I10), and its hub row (`createNewEntity`) needs a site that has none,
+so a new site per run, minutes and a deleted site each time. The manual smoke test's "Opprett nytt
+prosjekt" round covers it.
 

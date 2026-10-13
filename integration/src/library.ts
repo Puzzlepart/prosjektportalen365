@@ -50,3 +50,12 @@ export const aggregatedSearch = () => ({
 
 export const models = () =>
   library<typeof import('pp365-shared-library/lib/models/index.js')>('models/index.js')
+
+/**
+ * ProjectWebParts' data adapter, from the solution's CommonJS build: the one instance its web parts
+ * share on a page, configured by each with the page's context.
+ */
+export const projectWebPartsAdapter = () =>
+  (
+    require('pp365-projectwebparts/lib-commonjs/data/SPDataAdapter/index.js') as typeof import('pp365-projectwebparts/lib/data/SPDataAdapter/index.js')
+  ).default

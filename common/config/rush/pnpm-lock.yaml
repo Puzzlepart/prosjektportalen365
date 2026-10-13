@@ -1241,6 +1241,9 @@ importers:
       pp365-jest-config:
         specifier: workspace:*
         version: link:../SharePointFramework/.jest-config
+      pp365-projectwebparts:
+        specifier: workspace:*
+        version: link:../SharePointFramework/ProjectWebParts
       pp365-shared-library:
         specifier: workspace:*
         version: link:../SharePointFramework/shared-library

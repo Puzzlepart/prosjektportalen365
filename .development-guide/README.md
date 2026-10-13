@@ -113,6 +113,15 @@
 		* [Integrasjonstester (`integration/`)](#integrasjonstester-integration)
 		* [Når en test feiler](#nr-en-test-feiler)
 		* [Veikart](#veikart)
+	* [➤ Testoversikt](#-testoversikt)
+		* [Lagene](#lagene-1)
+		* [Porteføljen (PortfolioWebParts)](#portefljen-portfoliowebparts)
+		* [Program (ProgramWebParts)](#program-programwebparts)
+		* [Prosjekt (ProjectWebParts)](#prosjekt-projectwebparts)
+		* [Utvidelser (PortfolioExtensions og ProjectExtensions)](#utvidelser-portfolioextensions-og-projectextensions)
+		* [Det delte biblioteket (shared-library)](#det-delte-biblioteket-shared-library)
+		* [Integrasjonstestene](#integrasjonstestene)
+		* [Hull verdt å kjenne til](#hull-verdt--kjenne-til)
 	* [➤ Maler](#-maler)
 		* [Mappene](#mappene)
 		* [Bygge og validere](#bygge-og-validere)
@@ -438,6 +447,7 @@ ci: try a change to the build [skip-ci] [build-debug]
 | IdeaProcessing                | PortfolioExtensions | Listeutvidelse for Idébehandling                       | b28cba0d-922c-44e0-a035-e4ea57d80e6d |
 | IdeaProjectData               | PortfolioExtensions | Listeutvidelse for Idé - Prosjektdata                  | 69a7f6eb-e7ce-40eb-81e1-6f172a802619 |
 | IdeaRegistration              | PortfolioExtensions | Listeutvidelse for Idéregistrering                     | 5d26712e-bdad-4ebf-b33f-9c759042bef6 |
+| TemplatePackageCatalog        | PortfolioExtensions | Listeutvidelse for Malpakkekatalog                     | 75f97492-8b9f-4af6-8c0e-6cc6ce354bdd |
 | LatestProjectsWebPart         | PortfolioWebParts   | Siste prosjekter                                       | 941fd73c-b957-41c3-8d4f-082268407f10 |
 | PortfolioAggregationWebPart   | PortfolioWebParts   | Portefølje aggregeringsoversikt (eks: Nytteoversikt) | 6c0e484d-f6da-40d4-81fc-ec1389ef29a8 |
 | PortfolioOverviewWebPart      | PortfolioWebParts   | Porteføljeoversikt                                     | e58e3d32-057a-4418-97ce-172b92482ba2 |
@@ -463,6 +473,8 @@ ci: try a change to the build [skip-ci] [build-debug]
 | ProjectNewsWebPart            | ProjectWebParts     | Prosjektnyheter                                        | a9097537-6860-4e05-99f3-4ee21782687f |
 | DynamicListWebPart            | ProjectWebParts     | Dynamisk liste                                         | 2f66a372-7d6f-4d36-90b4-22b26465aa3c |
 | SharedLibrary                 | SharedLibrary       | Pakke med delte komponenter                            | 0f65a874-dc9d-491d-b979-6ce1d943dd00 |
+
+Hvilke tester som dekker hver komponent, står i [testoversikten](testoversikt.md).
 
 
 
@@ -1634,7 +1646,7 @@ Lokalt: `cp e2e/.env.example e2e/.env`, fyll inn, `npx playwright install chromi
 `integration/` er Rush-prosjektet `pp365-integration`. Det kjører det delte bibliotekets datalag (`PortalDataService`, `ProjectDataService`, søk, termlageret) i Node mot testtenanten og sjekker hva SharePoint faktisk returnerer og lagrer. Laget fyller hullet mellom Jest, der SharePoint alltid er mocket, og Playwright, som bare ser SharePoint gjennom brukergrensesnittet. Fire feil i fase 5 lå nettopp der: `getTermStore` kastet under SPFx, søk returnerer tall som tekst, matrisene oversåg listenavnet og CAML-spørringen, og `CanvasContent1` er HTML i listefeltet men JSON i SitePages-API-et. Laget erstatter ikke E2E: sider, bunter, kanaler, layout og brukerreiser hører hjemme der. Plan og beslutninger: `docs/plans/integration-tests.md`; kortversjonen står i `integration/README.md`.
 
 - `node --test` kjører `tests/**/*.test.ts` direkte med Nodes typestripping. Det finnes ikke noe byggesteg: bare TypeScript som kan viskes bort (ingen `enum`, navnerom eller parameteregenskaper; `import type` for typer), og importene navngir `.ts`-filen. `npm run build` typesjekker bare.
-- Testene laster bibliotekets CommonJS-bygg (`shared-library/lib-commonjs`), det samme Jest kjører, så biblioteket må være bygget. `src/loader.ts` løser det bare SPFx gir på en side: strengmodulene til buntene i `INTEGRATION_LOCALE` (gjennom AMD-omformingen i `pp365-jest-config`), `@microsoft/sp-*` til stand-ins fra `pp365-jest-config` og stilark til klassenavn. `src/globals.ts` gir `DOMParser` og `XMLSerializer` fra jsdom, ikke mer.
+- Testene laster CommonJS-byggene (`lib-commonjs`) til biblioteket og til ProjectWebParts, hvis dataadapter de kjører, de samme byggene Jest kjører, så begge må være bygget. `src/loader.ts` løser det bare SPFx og webpack gir, slik Jest-oppsettet gjør: arbeidsområdepakkene og deres `lib/...`-stier til `lib-commonjs` (én kopi av biblioteket, så testenes innlogging når løsningens klienter), en løsnings korte importer av egne mapper (`types`, `data`) i dens `lib-commonjs`, strengmodulene hver pakke nevner i `config/config.json` til buntene i `INTEGRATION_LOCALE` (gjennom AMD-omformingen i `pp365-jest-config`), `@microsoft/sp-*` og PnP-kontrollene (ESM skrevet for webpack, som aldri tegnes her) til stand-ins fra `pp365-jest-config`, og stilark til klassenavn. `src/globals.ts` gir `DOMParser` og `XMLSerializer` fra jsdom og sidekonteksten SharePoint setter på en side (`_spPageContextInfo`), ikke mer.
 - `src/sites.ts` kobler til et område og bygger SPFx-konteksten en webdel der ville fått (`src/context.ts`), ut fra det området selv svarer. Bibliotekets klienter kobler seg til gjennom `setSpfiFactory` i `shared-library/src/data/createSpfiInstance.ts`, med testenes innlogging. Uten en registrert fabrikk kobler de seg til gjennom SPFx, som før.
 
 Innlogging (`src/auth.ts`):
@@ -1654,7 +1666,7 @@ Regler for testene:
 - Sjekk det SharePoint returnerte eller lagret, lest tilbake, ikke det koden sendte. Hold påstandene uavhengige av tidssone og av andre prosjekters data.
 - Ingen hemmelighet havner i en logg, en rapport eller en fil: ingen token, informasjonskapsel eller sertifikat skrives ut.
 
-I CI kjører jobben «Integration tests (test channel)» i `ci-channel-test.yml` etter den samme oppgraderingen som E2E (begge løpene), ved siden av E2E-jobben. Den installerer `--to pp365-integration --to pp365-templates`, genererer bibliotekets delte strenger fra `.resx`-filene (`npm run generate-resx-ts` i `Templates`; de ligger ikke i git), bygger biblioteket (`heft build --production`, uten Jest) og kjører `npm run test:ci`. Spec-rapporten havner i loggen, og JUnit-rapporten i `integration/test-results/junit.xml`, lastet opp som `integration-report-test-channel` (7 dager). `[skip-integration]` i commit-emnet hopper over jobben.
+I CI kjører jobben «Integration tests (test channel)» i `ci-channel-test.yml` etter den samme oppgraderingen som E2E (begge løpene), ved siden av E2E-jobben. Den installerer `--to pp365-integration --to pp365-templates`, genererer bibliotekets delte strenger fra `.resx`-filene (`npm run generate-resx-ts` i `Templates`; de ligger ikke i git), bygger biblioteket (`heft build --production`, uten Jest), kompilerer ProjectWebParts' `lib-commonjs` med TypeScript alene (`--noCheck`, med strengfilene kopiert ved siden av; bunting og typesjekk av løsningen gjør utgivelsesbygget) og kjører `npm run test:ci`. Spec-rapporten havner i loggen, og JUnit-rapporten i `integration/test-results/junit.xml`, lastet opp som `integration-report-test-channel` (7 dager). `[skip-integration]` i commit-emnet hopper over jobben.
 
 | Navn i GitHub | Type | Brukes som |
 |---|---|---|
@@ -1695,8 +1707,119 @@ I CI kjører jobben «Integration tests (test channel)» i `ci-channel-test.yml`
 
 1. ~~Komponenttester for komponentene som konverteres fra Fluent UI v8 til v9.~~ Gjort i fase 3 og 4: hver webdel-rot, utvidelse og interaktiv komponent har tester.
 2. Skriveflyter i E2E: kopi av dokumentmal, utkast til statusrapport, ny kolonne i porteføljeoversikten og underområde i et program er på plass og rydder etter seg. Gjenstår: prosjektoppsett, publisering av statusrapport og opprettelse av idé.
-3. Integrasjonstester for datalaget (`integration/`, `docs/plans/integration-tests.md`): harness, CI-jobb, søk, termer, prosjektegenskaper tur-retur og hub-siden er på plass (skive 0–3). Malens tilstand etter en oppgradering er også på plass (skive 4). Testene fant at sidene i et søk overlappet, at datoer ble forskjøvet én dag i en annen tidssone enn områdets, og at `Legg til kolonne` fjernet skjulte kolonner fra visningen; alt er rettet i 1.15. E2E-flyten for ny kolonne sjekker nå bare det brukeren ser; hva lagringen skriver, sjekker integrasjonstesten (I9). Gjenstår: beslutningen om skive 5 (forbrukerløsningenes dataadaptere).
+3. Integrasjonstester for datalaget (`integration/`, `docs/plans/integration-tests.md`): harness, CI-jobb, søk, termer, prosjektegenskaper tur-retur og hub-siden er på plass (skive 0–3). Malens tilstand etter en oppgradering er også på plass (skive 4). Statusrapportenes datavei (kladd, utfylling, sletting, i en egen rapportserie) og ProjectWebParts' dataadapter (synkronisering til huben, matrisens datakilde på et program; skive 5) er også på plass. Testene fant at sidene i et søk overlappet, at datoer ble forskjøvet én dag i en annen tidssone enn områdets, og at `Legg til kolonne` fjernet skjulte kolonner fra visningen; alt er rettet i 1.15. E2E-flyten for ny kolonne sjekker nå bare det brukeren ser; hva lagringen skriver, sjekker integrasjonstesten (I9). Prosjektoppsettets `SetupProjectInformation` er bevisst utelatt: kjernen går gjennom JSOM (`syncList`), og hubraden krever et nytt område per kjøring; den dekkes av den manuelle smoke-testen. Se også [testoversikten](testoversikt.md).
 4. ~~Dekningsgrenser per løsning.~~ Gjort i fase 4 (se over).
+
+
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#testoversikt)
+
+## ➤ Testoversikt
+
+Hvilke automatiske tester som dekker hver komponent, lag for lag, med noen ord om hva de sjekker. Hvordan testene skrives og kjøres, og hva vi gjør når en feiler, står i [Testregime](testing.md). Tallene er telt 2026-10-13. Legger du til eller fjerner en testfil, oppdaterer du raden for komponenten.
+
+### Lagene
+
+| Lag | Hvor | Kjører | Fanger |
+|---|---|---|---|
+| Jest (enhet og komponent) | `SharePointFramework/<løsning>/src/**/*.test.ts(x)` | I hvert bygg (`heft test`) | Logikk, reducere og komponenter i jsdom, med SharePoint byttet ut |
+| Kjøretidskontrakt | `shared-library/test/runtime/*.test.mjs` | I bibliotekets bygg | Koblingen til ekte PnPjs, med falsk transport |
+| Integrasjon | `integration/tests/*.test.ts` | I CI etter hver utrulling til testkanalen, ved siden av E2E; lokalt | Datalaget mot testtenanten: hva SharePoint lagrer og returnerer |
+| E2E (Playwright) | `e2e/tests/smoke`, `e2e/tests/flows` (`e2e/tests/local` bare lokalt) | I CI etter hver utrulling til testkanalen | Sider og webdeler i nettleseren, brukerreiser |
+| Manuell smoke-test | Issue-maler, se [Smoke test-prosessen](../utgivelse/smoketest.md) | Før utgivelse | Det som ikke er automatisert |
+
+| Lag | Filer | Tester |
+|---|---|---|
+| Jest | 175 | 1 144: PortfolioExtensions 101, PortfolioWebParts 199, ProgramWebParts 59, ProjectExtensions 118, ProjectWebParts 215, shared-library 452 |
+| Kjøretidskontrakt | 1 | 4 |
+| Integrasjon | 10 | 41: 12 uten tenant, 29 mot testtenanten |
+| E2E | 22 spesifikasjoner | 52: smoke 19, flows 26 (de to i CI), local 7 |
+
+I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder etter seg. «Indirekte» betyr at komponenten står på en side en E2E-test åpner. Testen sjekker da ikke komponenten selv, men `openPage` feiler fortsatt på feilgrensen «Noe gikk galt», på en webdel fra en annen kanal og på bunter som ikke lastes.
+
+### Porteføljen (PortfolioWebParts)
+
+| Komponent | Jest | E2E | Integrasjon | Ikke dekket / manuelt |
+|---|---|---|---|---|
+| Porteføljeoversikt | 7 filer, 54: reducer, filtrering, Excel-eksport, kolonnemeny, kolonneskjema | Smoke: listen, søk, filter, Excel-eksport. Flows: kolonnemeny på høyreklikk, dra kolonner, panelets topp, tittelknappen, typografi, navigasjon, ny kolonne (skriver) | Prosjektkolonner; ny kolonne i en visning, også med skjulte kolonner (skriver); kolonnekonfigurasjon; standardvisningen og fargene for `Status muligheter` etter oppgradering | — |
+| Delt liste (`List`, `ListGrid`, `Vis eller skjul kolonner`) | 6 filer, 41 | Gjennom flytene for porteføljeoversikten | — | — |
+| Portefølje aggregeringsoversikt | 9 filer, 75: reducer (51), datahenting, Excel-eksport, verktøylinje, gruppering | Smoke: aggregeringssidene og Nytteoversikt med filter. Flows: typografi | — | Hubens dataadapter |
+| Prosjektutlisting | 4 filer, 16 | Flows: kortets panel viser prosjektnavnet | — | — |
+| Prosjekttidslinje (porteføljenivå) | Via bibliotekets `ProjectTimeline` (22) | Smoke: prøveklikk på en prosjektlenke, filter | — | Ingen test av webdelen selv |
+| Siste prosjekter | 5: nyeste områder, vis flere/færre, tom, feil | Indirekte (hubens forside) | — | — |
+| Ressursallokering | 2 | — | — | Bare Jest |
+| Idémodul | 2 filer, 4 | — | — | Bare Jest; idéflyten er manuell |
+| Prosjektkort | 2 | — | — | Bare Jest |
+
+### Program (ProgramWebParts)
+
+| Komponent | Jest | E2E | Integrasjon | Ikke dekket / manuelt |
+|---|---|---|---|---|
+| Programadministrasjon | 7 filer, 45: liste, reducer, kommandoer, fjerning av underområder | Flows: utvalg, grupper, kolonner, søk, høyreklikk, fjerne og legge til et underområde igjen (skriver), faste kolonneoverskrifter | Programmet og prosjektene knyttet begge veier | Programmets egen adapter (legge til og fjerne) |
+| Program aggregeringsoversikt | 7, i tillegg til testene for aggregeringsoversikten | — | Søket over programmets prosjekter (`searchAggregatedItems`) | Ingen E2E |
+| Programoversikt | 5, i tillegg til testene for porteføljeoversikten | Smoke: underområdene listes med teller | Programmets prosjekter | — |
+| Prosjekttidslinje (programnivå) | 2, i tillegg til bibliotekets tidslinje | Smoke: siden lastes | — | Innholdet sjekkes ikke i E2E |
+
+### Prosjekt (ProjectWebParts)
+
+| Komponent | Jest | E2E | Integrasjon | Ikke dekket / manuelt |
+|---|---|---|---|---|
+| Prosjektinformasjon | 5 filer, 31, og bibliotekets `CustomEditPanel` (39) | Smoke: monteres, «Vis all prosjektinformasjon». Flows: personvelgeren og panelene (lukker uten å lagre), lenken tilbake til huben | Egenskaper tur-retur: datoer i fem tidssoner, tekst, valg, person, termer (skriver); hubraden og synkroniseringen til den, også gjennom ProjectWebParts' adapter (skriver) | Lagring gjøres ikke i E2E |
+| Fasevelger | 4 filer, 30: reducer, fasedialogen | Smoke: fasene vises, prøveklikk på hver | Fasene fra termlageret, etikettene og tekstene; `getPhases`; kjøretidskontrakten for termlageret | Å endre fase er ikke automatisert |
+| Prosjektstatus | 15 filer, 73: reducer, seksjoner, verktøylinje, faner, delprosjekter | Smoke: siden monteres. Flows: kladd opprettet og slettet (skriver), fanene og seksjonene | Kladd i en egen rapportserie, fylt ut, lest med personen og slettet (skriver) | Publisering er manuell |
+| Risikomatrise og Mulighetsmatrise | 4 og 2, og 15 delte: begge webdelene, prosjekt- og programmodus | — (står på ingen malside) | Søket med matrisens datakilde, også gjennom ProjectWebParts' adapter på programmet; datakildene finnes etter oppgradering | Ingen E2E |
+| Prosjekttidslinje (prosjektnivå) | 4 filer, 17 | Smoke: listen får plass i 1280 og 1920 px. Flows: typografi | — | Tidslinjens stolper |
+| Prosjektnyheter | 2 filer, 7 | Indirekte (prosjektets forside) | — | Å opprette en nyhetsside |
+| Dynamisk liste | 6 filer, 33 | Flows: typografi (hoppes over når siden mangler) | — | Skriving og egne handlinger |
+
+### Utvidelser (PortfolioExtensions og ProjectExtensions)
+
+| Komponent | Jest | E2E | Integrasjon | Ikke dekket / manuelt |
+|---|---|---|---|---|
+| Footer | 2 filer, 40: montering, assistenttilgang, hjelp, versjoner | Smoke: versjonen vises | — | Lenker, hjelp og assistent bare i Jest |
+| Idébehandling, Idéregistrering, Idé – Prosjektdata | 13, 13 og 11, og delte dialoger (12) | — | — | Idéflyten er manuell |
+| Malpakkekatalog | 2 filer, 10 | — | — | Bare Jest |
+| Oppsett av prosjekt | 11 filer, 65: utvidelsen, dialogen, reducer, progresjon og feil | — | Bevisst utelatt: kjernen går gjennom JSOM (`syncList`), og hubraden krever et nytt område per kjøring | «Opprett nytt prosjekt» i den manuelle smoke-testen |
+| Oppgradering av prosjekt | 1 | — | Installasjonsloggen etter oppgraderingen (installasjonsskriptet, ikke utvidelsen) | — |
+| Dokumentmalvelger | 5 filer, 35 | Smoke: listene får plass, målmappe velges bort igjen (oppretter en mappe ved behov). Flows: kopi av en mal (skriver) | — | — |
+| Planner-tiltak | 3 filer, 14 | — | — | Bare Jest |
+
+### Det delte biblioteket (shared-library)
+
+| Del | Jest | Integrasjon |
+|---|---|---|
+| `CustomEditPanel` | 5 filer, 39 | Datoer i fem tidssoner, person og termer |
+| `PortalDataService` | 9 | Kolonner, visninger, konfigurasjon, innstillinger, statusrapporter, programrelasjoner |
+| `ProjectDataService` | 11 | Egenskaper tur-retur, faser |
+| `SPDataAdapterBase` og `EntityPortalService` | 43 | Hubraden og synkroniseringen |
+| `searchAggregatedItems` | 4 | Egenskaper og formater, bla mellom sider, oppdeling, eget område |
+| Termlageret (`taxonomy`) | 73, og kjøretidskontrakten (4) | Fasene og etikettene |
+| `DataSourceService` | Ingen | Matrisenes datakilder slått opp på ID |
+| `DataGridList`, `PeoplePicker`, `FilterPanel`, `Toolbar`, `ProjectTimeline`, `ExcelExportService` | 20, 8, 11, 10, 22, 24 | — (E2E dekker dem gjennom webdelene) |
+
+### Integrasjonstestene
+
+| Fil | Tester | Sjekker |
+|---|---|---|
+| `harness` | 12, uten tenant | Strengene, AMD-feil, at tjenestene lastes, SPFx-konteksten, språksjekken, sertifikatet, `appOnlyDenied` |
+| `reachability` | 3 | Hubens web, søk og termlageret i innloggingsmodusen |
+| `portal-data-service` | 2 | Prosjektkolonnene, og at prosjektet finner huben |
+| `search` | 4 | Matrisens egenskaper og formater, sider, oppdeling, eget område |
+| `term-store` | 3 | Etikettene og reservespråkene, fasetekstene, `getPhases` |
+| `project-properties` | 4 (skriver) | Datoer lagret og vist i fem tidssoner, tekst/valg/person, termer |
+| `hub` | 5 (2 skriver) | Hubraden, synkroniseringen, ny kolonne i en visning, kolonnekonfigurasjon og innstillinger, program og prosjekter |
+| `status-reports` | 1 (skriver) | Kladd i en egen rapportserie, utfylt, lest med personen og slettet |
+| `template` | 5 (4 etter full oppgradering) | Installasjonsloggen, fargene for `Status muligheter`, interessentfeltet, matrisenes datakilder, standardvisningen |
+| `project-web-parts` | 2 (1 skriver) | ProjectWebParts' synkronisering til huben, og matrisens datakilde på programmet |
+
+### Hull verdt å kjenne til
+
+- **Bare Jest**, uten E2E og integrasjon: Ressursallokering, Idémodul, Prosjektkort, idéutvidelsene, Malpakkekatalog, Oppsett av prosjekt, Oppgradering av prosjekt og Planner-tiltak.
+- **Integrasjon, men ingen E2E:** Risikomatrise, Mulighetsmatrise og Program aggregeringsoversikt.
+- **Bare indirekte i E2E:** Siste prosjekter og Prosjektnyheter.
+- **Manuelt:** prosjektoppsett, publisering av statusrapport, idéflyten og å endre fase.
+- **Ingen test:** ikonhjelperne (`getFluentIcon`, `resolveFluentIcon`), `DataService.ts` og `ListLogger.ts`. Programmets tidslinjeside (`Tidslinje.aspx`) åpnes ikke av noen E2E-test.
+- **Utenfor komponentene:** `.tasks/check-channel-ids.test.js` (5 tester, `npm run test:tasks`).
 
 
 

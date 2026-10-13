@@ -1133,3 +1133,24 @@ The user asked for the list of small things before the merge, as the PR waits an
   failing load; a HAR from one, or the error on a site without Prosjektportalen, is still what
   would tell.
 
+### Before merge: the date picker, and the integration tests' findings (2026-10-10 to 2026-10-13)
+
+- **The date picker in the page's language.** The edit panel's date field showed English month and
+  day names on a Norwegian site: `getDatePickerLocalization` gives Fluent's picker the UI language's
+  names, its texts (new `DatePicker` strings in the shared library), dates for screen readers,
+  Monday first and ISO week numbers.
+- **"03.04.2026" saved as 4 March**, reported by the user, did not reproduce on the deployed
+  packages (`parseShortDate` reads the short form in the UI language's order since the small debts
+  above); the user's retest on 2026-10-13 passed.
+- **An integration test layer** (`integration/`, its own plan: `docs/plans/integration-tests.md`):
+  the shared library's data layer, and ProjectWebParts' adapter, run in Node against the test
+  tenant after every test-channel upgrade, beside the browser suite (about 40 tests). It found four
+  defects, fixed in 1.15 with a changelog line each: the aggregated search's pages overlapped past
+  500 results (it now sorts on `docid`); a date picked on a machine east of the site's time zone was
+  stored as the day before, and one west of it showed the day before (the panel sends the day and
+  reads SharePoint's own text of it); `Legg til kolonne` took the columns hidden in the portfolio
+  out of the view. Its partial CI install found two packages the library used without declaring
+  them (`@types/sharepoint`, `interactjs`); the CI app «Prosjektportalen CI» got `TermStore.Read.All`
+  on SharePoint; the browser column flow now checks only what the admin sees.
+- **The release note** names the integration tests and the three fixes users can notice.
+
