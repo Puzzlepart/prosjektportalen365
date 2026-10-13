@@ -48,6 +48,18 @@ describe('BasePanel', () => {
     expect(screen.getByRole('button', { name: 'Lagre' })).toBeInTheDocument()
   })
 
+  it('hides only its header when hidden', () => {
+    render(
+      <BasePanel open hidden headerText='Tittel' footer={<button>Lagre</button>}>
+        <div>Innhold</div>
+      </BasePanel>
+    )
+    // The drawer's entry motion never ends under jsdom, so the attribute is checked, not visibility.
+    expect(screen.getByText('Tittel').closest('[hidden]')).not.toBeNull()
+    expect(screen.getByText('Innhold').closest('[hidden]')).toBeNull()
+    expect(screen.getByText('Lagre').closest('[hidden]')).toBeNull()
+  })
+
   it('dismisses when the close button is used', async () => {
     const onClose = jest.fn()
     const user = userEvent.setup()

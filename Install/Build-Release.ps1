@@ -23,8 +23,17 @@ Param(
     [ValidateSet("test", "kurs", "i18n")]
     [string]$Channel,
     [Parameter(Mandatory = $false, HelpMessage = "Skip import of PnP.PowerShell module")]
-    [switch]$SkipImportModule
-)  
+    [switch]$SkipImportModule,
+    [Parameter(Mandatory = $false, HelpMessage = "Do not install, import or check PnP.PowerShell; only the PnP templates need it, so this requires -SkipBuildPnPTemplates")]
+    [switch]$SkipPnPPowerShell,
+    [Parameter(Mandatory = $false, HelpMessage = "Run the rebuild with Rush's --timeline and print the per-project times")]
+    [switch]$RushTimeline
+)
+
+# Native output (rush, npm, node) is decoded with the console's encoding, which on Windows is the
+# OEM code page: without this the build logs garble ✓, ● and æøå there. macOS and Linux use UTF-8.
+[Console]::OutputEncoding = [Text.UTF8Encoding]::new($false)
+$OutputEncoding = [Console]::OutputEncoding
 
 #region Normalize selected solutions
 # Canonical SPFx solution folder names. The -Solutions parameter (and the
@@ -143,6 +152,32 @@ if ($NODE_MAJOR -ne 22) {
 }
 #endregion
 
+#region Channel ids in the source
+# A watch or channel build that did not finish leaves another channel's ids in
+# config/package-solution.json and the manifests, and a commit can carry them. The source must carry
+# the main channel's ids, whichever channel this builds: a channel build swaps its own in from them,
+# a main build packages them as they are. Stop here rather than package another channel's solution.
+node "$ROOT_PATH/.tasks/check-channel-ids.js" @Solutions
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "[ERROR] The source carries another channel's ids (listed above). Aborting build of release." -ForegroundColor Red
+    exit 1
+}
+#endregion
+
+#region No tests among the strings
+# SPFx makes every lib/loc/<name>.js a locale of the strings module (localizedResources'
+# "lib/loc/{locale}.js"), so a test file in src/loc ships as one: shared-library's strings test went
+# out as SharedLibraryStrings_strings.test.js until it moved. Keep tests out of src/loc.
+$LOC_TESTS = @($Solutions | ForEach-Object {
+        Get-ChildItem -Path "$ROOT_PATH/SharePointFramework/$_/src/loc" -Recurse -File -Filter "*.test.*" -ErrorAction SilentlyContinue
+    })
+if ($LOC_TESTS.Count -gt 0) {
+    Write-Host "[ERROR] Test files in src/loc would ship as locale bundles; move them next to what they test:" -ForegroundColor Red
+    $LOC_TESTS | ForEach-Object { Write-Host "        $($_.FullName)" -ForegroundColor Red }
+    exit 1
+}
+#endregion
+
 #region Node heap
 # Heft runs TypeScript and webpack in one Node process per solution, and the largest solution
 # (PortfolioWebParts) needs more than V8's default heap on machines with 8 GB or less (it fails at
@@ -170,31 +205,59 @@ if ($CI.IsPresent) {
     # Rush is launched through the repo-pinned bootstrap script, so the version always
     # follows rush.json (no global install to keep in sync). `install` requires the
     # committed lockfile to match; use `update` locally when dependencies change.
-    node "$ROOT_PATH/common/scripts/install-run-rush.js" install >$null 2>&1
-    npm run generate-channel-replace-map >$null 2>&1
-    EndAction
+    $RUSH_INSTALL_COMMAND = "install"
 }
 else {
     StartAction("Updating npm packages using rush")
-    node "$ROOT_PATH/common/scripts/install-run-rush.js" update >$null 2>&1
-    npm run generate-channel-replace-map >$null 2>&1
-    EndAction
-}
-
-if ($CI.IsPresent) {
-    StartAction("Installing module PnP.PowerShell")
-    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser
-    EndAction
-}
-else {
-    if (-not $SkipImportModule.IsPresent) {
-        Import-Module $PNP_BUNDLE_PATH/$PNP_VERSION/PnP.PowerShell.psd1 -DisableNameChecking -ErrorAction SilentlyContinue
+    $RUSH_INSTALL_COMMAND = "update"
+    # The root's own scripts (the channel maps and site scripts below) need the root's packages,
+    # which CI installs with npm ci above; a fresh clone has none.
+    if (-not (Test-Path "$ROOT_PATH/node_modules")) {
+        Push-Location $ROOT_PATH
+        npm ci --no-audit --no-fund >$null 2>&1
+        Pop-Location
     }
 }
+# The output is kept and the exit code checked: a failed install (a lockfile out of date, a registry
+# or the SheetJS CDN not answering) otherwise surfaces only later, as a rebuild that cannot link.
+$RUSH_INSTALL_LOG = "$SHAREPOINT_FRAMEWORK_BASEPATH/rush-$RUSH_INSTALL_COMMAND.build.log"
+node "$ROOT_PATH/common/scripts/install-run-rush.js" $RUSH_INSTALL_COMMAND 2>&1 | Out-File -FilePath $RUSH_INSTALL_LOG -Encoding utf8
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "[ERROR] rush $RUSH_INSTALL_COMMAND failed with exit code $LASTEXITCODE. Last 50 lines of $($RUSH_INSTALL_LOG):" -ForegroundColor Red
+    Get-Content $RUSH_INSTALL_LOG -Tail 50 | Write-Host
+    exit 1
+}
+npm run generate-channel-replace-map >$null 2>&1
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "[ERROR] npm run generate-channel-replace-map failed with exit code $LASTEXITCODE. Run npm ci in the repository root and try again." -ForegroundColor Red
+    exit 1
+}
+EndAction
 
-if ($null -eq (Get-Command Connect-PnPOnline) -or (Get-Command Connect-PnPOnline).Version -lt [version]$PNP_VERSION) {
-    Write-Host "[ERROR] Correct PnP.PowerShell module not found. Please install it from PowerShell Gallery or do not use -SkipLoadingBundle." -ForegroundColor Red
-    exit 0
+if ($SkipPnPPowerShell.IsPresent) {
+    # Only the PnP templates (Convert-PnPFolderToSiteTemplate below) use the module.
+    if (-not $SkipBuildPnPTemplates.IsPresent) {
+        Write-Host "[ERROR] -SkipPnPPowerShell needs -SkipBuildPnPTemplates: the PnP templates are built with PnP.PowerShell." -ForegroundColor Red
+        exit 1
+    }
+}
+else {
+    if ($CI.IsPresent) {
+        StartAction("Installing module PnP.PowerShell")
+        Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser
+        EndAction
+    }
+    else {
+        if (-not $SkipImportModule.IsPresent) {
+            Import-Module $PNP_BUNDLE_PATH/$PNP_VERSION/PnP.PowerShell.psd1 -DisableNameChecking -ErrorAction SilentlyContinue
+        }
+    }
+
+    # A missing module stops the build as a failure: with exit 0 a CI job went green without packages.
+    if ($null -eq (Get-Command Connect-PnPOnline -ErrorAction SilentlyContinue) -or (Get-Command Connect-PnPOnline).Version -lt [version]$PNP_VERSION) {
+        Write-Host "[ERROR] Correct PnP.PowerShell module not found. Please install it from PowerShell Gallery or do not use -SkipLoadingBundle." -ForegroundColor Red
+        exit 1
+    }
 }
 
 if ($CI.IsPresent) {
@@ -218,6 +281,10 @@ EndAction
 StartAction("Copying Install.ps1, PostInstall.ps1 and site script source files")
 if ($USE_CHANNEL_CONFIG) {
     npm run generate-site-scripts
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "[ERROR] npm run generate-site-scripts failed with exit code $LASTEXITCODE" -ForegroundColor Red
+        exit 1
+    }
     $SITE_SCRIPTS_BASEPATH = "$ROOT_PATH/.dist/SiteScripts"
     Copy-Item -Path "$SITE_SCRIPTS_BASEPATH/*.txt" -Filter *.txt -Destination $RELEASE_PATH_SITESCRIPTS -Force 
 }
@@ -256,13 +323,9 @@ if (-not $SkipBuildPnPTemplates.IsPresent) {
     StartAction("Building PnP content templates")
     Set-Location $PNP_TEMPLATES_BASEPATH
 
-    if ($CI.IsPresent) {  
-        npm ci --silent --no-audit --no-fund >$null 2>&1
-    }
-    else {
-        npm install --no-progress --silent --no-audit --no-fund  >$null 2>&1
-    }
-
+    # Templates is a Rush project, so the rush install/update above has installed its packages.
+    # Running npm here broke that: `npm install` rewrote the pnpm links in Templates/node_modules
+    # to targets that do not exist, and `npm ci` failed silently on the missing package-lock.json.
     npm run generate-project-templates >$null 2>&1
 
     Get-ChildItem "./Content" -Directory | ForEach-Object {
@@ -290,7 +353,8 @@ if (-not $SkipBuildPnPTemplates.IsPresent) {
 if ($Force.IsPresent) {
     $Solutions | ForEach-Object {
         StartAction("Clearing node_modules for SPFx solution [$_]")
-        rimraf "$SHAREPOINT_FRAMEWORK_BASEPATH/$_/node_modules/"
+        # Remove-Item instead of rimraf, which is not a dependency of this repo.
+        Remove-Item -Path "$SHAREPOINT_FRAMEWORK_BASEPATH/$_/node_modules" -Recurse -Force -ErrorAction SilentlyContinue
         EndAction
     }
 }
@@ -324,7 +388,9 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
     # errors are never silently swallowed.
     $RUSH_REBUILD_LOG = "$SHAREPOINT_FRAMEWORK_BASEPATH/rush-rebuild.build.log"
     $RUSH_REBUILD_STARTED = (Get-Date).ToUniversalTime()
-    node "$ROOT_PATH/common/scripts/install-run-rush.js" rebuild 2>&1 | Out-File -FilePath $RUSH_REBUILD_LOG -Encoding utf8
+    $RUSH_REBUILD_ARGS = @("rebuild")
+    if ($RushTimeline.IsPresent) { $RUSH_REBUILD_ARGS += "--timeline" }
+    node "$ROOT_PATH/common/scripts/install-run-rush.js" @RUSH_REBUILD_ARGS 2>&1 | Out-File -FilePath $RUSH_REBUILD_LOG -Encoding utf8
     if ($LASTEXITCODE -ne 0) {
         Write-Host "[ERROR] rush rebuild failed with exit code $LASTEXITCODE. Last 200 lines of $($RUSH_REBUILD_LOG):" -ForegroundColor Red
         Get-Content $RUSH_REBUILD_LOG -Tail 200 | Write-Host
@@ -345,13 +411,66 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
             }
         exit 1
     }
+    if ($RushTimeline.IsPresent) {
+        # Rush logs '"<project>" completed successfully in 12.34 seconds.' per project ('2 minutes
+        # 24.7 seconds' past a minute), then the --timeline chart, which ends with a LEGEND block
+        # (total work, wall clock, parallelism).
+        $REBUILD_LINES = @(Get-Content $RUSH_REBUILD_LOG)
+        $REPORT = @("Time per project, longest first:")
+        $REPORT += $REBUILD_LINES |
+            Select-String -Pattern '^"(.+)" completed (?:successfully|with warnings) in (?:(\d+) minutes? )?([\d.]+) seconds' |
+            ForEach-Object {
+                $Groups = $_.Matches[0].Groups
+                [pscustomobject]@{
+                    Project = $Groups[1].Value
+                    Seconds = [double]$Groups[3].Value + $(if ($Groups[2].Success) { 60 * [int]$Groups[2].Value } else { 0 })
+                }
+            } |
+            Sort-Object Seconds -Descending |
+            ForEach-Object { [string]::Format([cultureinfo]::InvariantCulture, "  {0,8:F1} s  {1}", $_.Seconds, $_.Project) }
+        $LEGEND = [array]::FindIndex($REBUILD_LINES, [Predicate[string]] { param($Line) $Line -match '^LEGEND:' })
+        if ($LEGEND -gt 1) {
+            $CHART_START = $LEGEND - 2
+            while ($CHART_START -gt 0 -and $REBUILD_LINES[$CHART_START] -notmatch '^=+$') { $CHART_START-- }
+            $CHART_END = $LEGEND
+            while ($CHART_END + 1 -lt $REBUILD_LINES.Count -and $REBUILD_LINES[$CHART_END + 1].Trim() -ne '') { $CHART_END++ }
+            $REPORT += ""
+            $REPORT += $REBUILD_LINES[$CHART_START..$CHART_END]
+        }
+        Write-Host "[Rush rebuild timeline]" -ForegroundColor Cyan
+        $REPORT | Write-Host
+        if ($env:GITHUB_STEP_SUMMARY) {
+            @("### Rush rebuild timeline", "", '```') + $REPORT + @('```') | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+        }
+    }
+    # Each solution's coverage against its floors, from Jest's summary, in the log and the job
+    # summary: the floors are raised from what CI measures, since the fast local loop compiles
+    # with tsc rather than Heft and can count a little differently. Printed before the floor check
+    # below, so a missed floor shows its numbers too.
+    $COVERAGE_KINDS = @("statements", "branches", "functions", "lines")
+    $COVERAGE_REPORT = @("| Solution | Statements | Branches | Functions | Lines |", "| --- | --- | --- | --- | --- |")
+    foreach ($Solution in $ALL_SOLUTIONS) {
+        $COVERAGE_SUMMARY = "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution/jest-output/coverage/coverage-summary.json"
+        if (-not (Test-Path $COVERAGE_SUMMARY)) { continue }
+        $COVERAGE_TOTAL = (Get-Content $COVERAGE_SUMMARY -Raw | ConvertFrom-Json).total
+        $COVERAGE_FLOORS = (Get-Content "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution/config/jest.config.json" -Raw | ConvertFrom-Json).coverageThreshold.global
+        $COVERAGE_CELLS = $COVERAGE_KINDS | ForEach-Object {
+            [string]::Format([cultureinfo]::InvariantCulture, "{0:F2} (floor {1})", [double]$COVERAGE_TOTAL.$_.pct, $COVERAGE_FLOORS.$_)
+        }
+        $COVERAGE_REPORT += "| $Solution | $($COVERAGE_CELLS -join ' | ') |"
+    }
+    Write-Host "[Coverage per solution]" -ForegroundColor Cyan
+    $COVERAGE_REPORT | Write-Host
+    if ($env:GITHUB_STEP_SUMMARY) {
+        @("### Coverage per solution", "") + $COVERAGE_REPORT | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+    }
     # Jest reports a missed coverage floor (`coverageThreshold` in a solution's jest.config.json)
     # but Heft's test phase still succeeds, so the floors are only enforced by this check.
     $missedFloors = Get-ChildItem -Path $SHAREPOINT_FRAMEWORK_BASEPATH -Recurse -Depth 2 -Filter "*.build.log" |
         Where-Object { $_.DirectoryName -like "*rush-logs*" } |
         Select-String -Pattern "coverage threshold for .* not met"
     if ($missedFloors) {
-        Write-Host "[ERROR] A coverage floor was missed. Raise the coverage, or lower the floor in that solution's config/jest.config.json:" -ForegroundColor Red
+        Write-Host "[ERROR] A coverage floor was missed. Add tests to raise the coverage; the floors in that solution's config/jest.config.json are raised as coverage grows, never lowered:" -ForegroundColor Red
         $missedFloors | ForEach-Object { "$($_.Filename): $($_.Line)" } | Write-Host
         exit 1
     }

@@ -293,6 +293,24 @@ function provideNodeGlobals(webpackConfig, webpack, log) {
   log('Buffer provided from the buffer package')
 }
 
+/**
+ * The dev server (`npm run watch`) reloads the page after a rebuild instead of hot-swapping modules.
+ *
+ * SPFx turns hot module replacement on (`devServer.hot: true` in spfx-heft-plugins'
+ * `updateServeConfigAsync`, set in serve mode only, at the default `onConfigure` stage, so before
+ * this hook). On a SharePoint page every web part and extension bundle carries its own webpack
+ * runtime and dev-server client, and the update fails ("Loading hot update chunk ... failed",
+ * "Cannot set properties of undefined"); webpack/hot/dev-server then only logs "[HMR] Update
+ * failed" and never reloads, so a saved change showed only after F5. With HMR off, the dev-server
+ * client falls back to live reload and reloads the page once the rebuild is done.
+ */
+function reloadPageOnRebuild(webpackConfig, log) {
+  if (!webpackConfig.devServer) return
+  webpackConfig.devServer.hot = false
+  webpackConfig.devServer.liveReload = true
+  log('dev server: hot module replacement off, the page reloads after each rebuild')
+}
+
 module.exports = function customizeWebpackConfiguration(webpackConfig, taskSession, heftConfiguration, webpack) {
   const log = (message) => {
     try {
@@ -308,5 +326,6 @@ module.exports = function customizeWebpackConfiguration(webpackConfig, taskSessi
     keepLinkedPackagesBundled(configuration, log)
     treatNodeModulesCssAsGlobal(configuration, log)
     provideNodeGlobals(configuration, webpack, log)
+    reloadPageOnRebuild(configuration, log)
   }
 }

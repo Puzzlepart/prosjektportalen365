@@ -28,7 +28,8 @@ describe('ErrorDialog', () => {
     )
     expect(screen.getByText(strings.NoHubSiteErrorMessage)).toBeInTheDocument()
     expect(screen.getByText(strings.NoHubSiteErrorStack, { selector: 'p' })).toBeVisible()
-    fireEvent.click(screen.getByRole('button', { name: strings.CloseModalText }))
+    // By text: the title's close button carries the same name, as an aria-label.
+    fireEvent.click(screen.getByText(strings.CloseModalText))
     expect(onDismiss).toHaveBeenCalled()
   })
 
@@ -61,6 +62,6 @@ describe('ErrorDialog', () => {
     expect(onSetupClick).toHaveBeenCalled()
     fireEvent.click(screen.getByRole('button', { name: strings.ContinueToProjectText }))
     expect(onDismiss).toHaveBeenCalled()
-    expect(screen.queryByRole('button', { name: strings.CloseModalText })).toBeNull()
+    expect(screen.queryByText(strings.CloseModalText)).toBeNull()
   })
 })

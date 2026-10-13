@@ -1,8 +1,9 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
-// Babel, so mocks are not hoisted. Fluent's combobox family loops the Jest worker on React 17 the
-// moment it opens (see the testing guide); the stand-in keeps the contract the autocomplete uses:
-// the input shows `value` and reports typing through `onChange`, the clear button and each option
-// report a pick through `onOptionSelect`, a clear with no option value.
+// Babel, so mocks are not hoisted. Fluent's combobox family looped the Jest worker on React 17 the
+// moment it opened, and takes tens of seconds to open under jsdom on React 18 (see the testing
+// guide); the stand-in keeps the contract the autocomplete uses: the input shows `value` and
+// reports typing through `onChange`, the clear button and each option report a pick through
+// `onOptionSelect`, a clear with no option value.
 jest.mock('@fluentui/react-components', () => {
   const actual = jest.requireActual('@fluentui/react-components')
   const React = jest.requireActual('react')

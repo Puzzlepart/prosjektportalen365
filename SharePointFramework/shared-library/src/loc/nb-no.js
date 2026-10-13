@@ -1,7 +1,8 @@
 define([], function () {
   return {
     NoAccessToPortfolioErrorTitle: 'Ingen tilgang til portefølje',
-    NoAccessToPortfolioErrorText: 'Du har ikke tilgangen til porteføljen for området {0}. Ta kontakt med en administrator.',
+    NoAccessToPortfolioErrorText:
+      'Du har ikke tilgangen til porteføljen for området {0}. Ta kontakt med en administrator.',
     SaveText: 'Lagre',
     CloseText: 'Lukk',
     Aria: {
@@ -9,7 +10,22 @@ define([], function () {
       MenuOverflowCount: '{0} flere elementer',
       ProjectTitle: 'Logo for prosjekt: {0}',
       SaveTitle: 'Lagre',
-      SaveDisabledTitle: 'Det er påkrevde felter som ikke er utfylt, fyll ut disse for å lagre',
+      SaveDisabledTitle: 'Det er påkrevde felter som ikke er utfylt, fyll ut disse for å lagre'
+    },
+    DatePicker: {
+      GoToToday: 'Gå til i dag',
+      PrevMonth: 'Forrige måned',
+      NextMonth: 'Neste måned',
+      PrevYear: 'Forrige år',
+      NextYear: 'Neste år',
+      PrevYearRange: 'Forrige årsintervall',
+      NextYearRange: 'Neste årsintervall',
+      WeekNumber: 'Uke {0}',
+      SelectedDate: 'Valgt dato {0}',
+      TodayDate: 'Dagens dato {0}',
+      MonthPickerHeader: '{0}, bytt år',
+      YearPickerHeader: '{0}, bytt måned',
+      DayMarked: 'merket'
     },
     Placeholder: {
       DatePicker: 'Angi en dato',
@@ -20,13 +36,13 @@ define([], function () {
       PeoplePicker: 'Angi et navn eller en e-postadresse',
       NumberField: 'Skriv inn et tall',
       ChoiceField: 'Velg et alternativ',
-      MultiChoiceField: 'Velg ett eller flere alternativer',
+      MultiChoiceField: 'Velg ett eller flere alternativer'
     },
     Validation: {
       NumberFieldMin: 'Verdien må være minst {0}',
       NumberFieldMax: 'Verdien må være maksimalt {0}',
       NumberFieldMinMax: 'Verdien må være mellom {0} og {1}',
-      UrlFieldInvalidFormat: 'Nettadressen må starte med http:// eller https://',
+      UrlFieldInvalidFormat: 'Nettadressen må starte med http:// eller https://'
     },
     AllocationPercetageLabel: 'Allokeringsprosent',
     AllocationStatusLabel: 'Allokeringsstatus',
@@ -44,15 +60,18 @@ define([], function () {
     FilterPanelEmptyTitle: 'Ingen filtre tilgjengelig',
     PeoplePickerNoResults: 'Fant ingen personer',
     PeoplePickerSelectedLabel: 'Valgte personer',
-    FilterPanelEmptyMessage: 'Det er ingen filtre å vise. Filtre vises kun for kolonner som har mer enn én unik verdi i gjeldende datasett. Det betyr at det enten ikke er lastet inn data, eller at alle kolonner har samme verdi for hvert element.',
+    FilterPanelEmptyMessage:
+      'Det er ingen filtre å vise. Filtre vises kun for kolonner som har mer enn én unik verdi i gjeldende datasett. Det betyr at det enten ikke er lastet inn data, eller at alle kolonner har samme verdi for hvert element.',
     FilterPanelGroupProjectInformation: 'Prosjektinformasjon',
     GroupByLabel: 'Grupper etter',
     LastPublishedStatusreport: 'Gå til siste statusrapport',
     LoadingText: 'Laster...',
     MilestoneDateLabel: 'Dato for milepæl',
     NameLabel: 'Navn',
-    ProjectTimelineErrorTransformItemText: 'Feil ved knytning av elementer til tidslinje.<br><br>Dette kan være grunnet problem med et element i "Prosjekter" listen (duplikat, slettet prosjekt), eller at et tidslinjeelement ikke har gyldig tilknytning. <br><br>- SiteId: {0} <br> - Tittel: {1} <br> - Type: {2} <br><br>Feilmelding: {3}',
-    ProjectTimelineInfoText: 'Her listes alle prosjektene med start- og sluttdato. Prosjekttidslinjen støtter også faser, delfaser og milepæler. For å zoome inn/ut i tidslinje: ALT+Musehjul.',
+    ProjectTimelineErrorTransformItemText:
+      'Feil ved knytning av elementer til tidslinje.<br><br>Dette kan være grunnet problem med et element i "Prosjekter" listen (duplikat, slettet prosjekt), eller at et tidslinjeelement ikke har gyldig tilknytning. <br><br>- SiteId: {0} <br> - Tittel: {1} <br> - Type: {2} <br><br>Feilmelding: {3}',
+    ProjectTimelineInfoText:
+      'Her listes alle prosjektene med start- og sluttdato. Prosjekttidslinjen støtter også faser, delfaser og milepæler. For å zoome inn/ut i tidslinje: ALT+Musehjul.',
     ProjectTimelineTitle: 'Prosjekttidslinje',
     ProjectTimelineItemInfo: '{0} - prosjektets tidsforløp',
     ProgramTimelineTitle: 'Programtidslinje',
@@ -69,12 +88,13 @@ define([], function () {
     BooleanYes: 'Ja',
     BooleanNo: 'Nei',
     ColumnPersistRenderGloballyFieldLabel: 'Oppdater visningsmodus globalt',
-    ColumnPersistRenderGloballyFieldDescription: 'Om du ønsker å endre visningsmodus for kolonnen globaly, for alle webdeler og visninger, huk av sjekkboksen over. (Dette gjelder kun visningsmodus)',
+    ColumnPersistRenderGloballyFieldDescription:
+      'Om du ønsker å endre visningsmodus for kolonnen globaly, for alle webdeler og visninger, huk av sjekkboksen over. (Dette gjelder kun visningsmodus)',
     ColumnRenderOptionText: 'Tekst',
     ColumnRenderOptionNote: 'Notat',
     ColumnRenderOptionBoolean: 'Ja/nei',
-    ColumnRenderOptionBooleanTrue: 'Verdi for \'Ja\'',
-    ColumnRenderOptionBooleanFalse: 'Verdi for \'Nei\'',
+    ColumnRenderOptionBooleanTrue: "Verdi for 'Ja'",
+    ColumnRenderOptionBooleanFalse: "Verdi for 'Nei'",
     ColumnRenderOptionCurrency: 'Valuta',
     ColumnRenderOptionCurrencyFallbackValueLabel: 'Standardverdi',
     ColumnRenderOptionCurrencyMaximumFractionDigitsLabel: 'Maksimalt antall desimaler',
@@ -85,7 +105,8 @@ define([], function () {
     ColumnRenderOptionDialogLinkTextLabel: 'Tekst for lenke',
     ColumnRenderOptionDialogShowInfoTextLabel: 'Vis infotekst',
     ColumnRenderOptionDialogInfoTextTemplateLabel: 'Mal for infotekst',
-    ColumnRenderOptionDialogInfoTextTemplateDescription: 'Mal for infotekst. Bruk {{GtMeasurementOWSCHCS}} for å vise måleindikatoren, {{GtStartValueOWSNMBR}} for å vise startverdien og {{GtDesiredValueOWSNMBR}} for å vise målet. Du kan også bruke andre kolonnenavn fra nyttevirkningsarbeidet.',
+    ColumnRenderOptionDialogInfoTextTemplateDescription:
+      'Mal for infotekst. Bruk {{GtMeasurementOWSCHCS}} for å vise måleindikatoren, {{GtStartValueOWSNMBR}} for å vise startverdien og {{GtDesiredValueOWSNMBR}} for å vise målet. Du kan også bruke andre kolonnenavn fra nyttevirkningsarbeidet.',
     ColumnRenderOptionFilename: 'Filnavn',
     ColumnRenderOptionInstrument: 'Instrument',
     ColumnRenderOptionNumber: 'Tall',
@@ -94,13 +115,15 @@ define([], function () {
     ColumnRenderOptionStatusReport: 'Statusrapport',
     ColumnRenderOptionTags: 'Etiketter',
     ColumnRenderOptionTagsValueSeparatorLabel: 'Separator for verdier',
-    ColumnRenderOptionTagsValueSeparatorDescription: 'Angi et tegn som skal brukes for å skille verdier i etikettfeltet. Standard er semikolon.',
+    ColumnRenderOptionTagsValueSeparatorDescription:
+      'Angi et tegn som skal brukes for å skille verdier i etikettfeltet. Standard er semikolon.',
     ColumnRenderOptionTrend: 'Trend',
     ColumnRenderOptionTrendShowTrendIconLabel: 'Vis ikon',
     ColumnRenderOptionUrl: 'URL',
     ColumnRenderOptionUrlOpenInNewTabLabel: 'Åpne i ny fane',
     ColumnRenderOptionUrlDescriptionLabel: 'Beskrivelse',
-    ColumnRenderOptionUrlDescriptionDescription: 'Beskrivelse av lenken. Om du ikke angir en verdi, brukes eventuelt beskrivelse fra lenken.',
+    ColumnRenderOptionUrlDescriptionDescription:
+      'Beskrivelse av lenken. Om du ikke angir en verdi, brukes eventuelt beskrivelse fra lenken.',
     ColumnRenderOptionUser: 'Person',
     ColumnRenderOptionCalculated: 'Beregnet kolonne',
     HideDataTypePropertiesLabel: 'Skjul egenskaper for visningsmodus',

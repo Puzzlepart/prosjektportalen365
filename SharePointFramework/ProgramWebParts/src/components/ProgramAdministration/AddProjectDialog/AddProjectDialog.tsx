@@ -39,6 +39,7 @@ export const AddProjectDialog: FC = () => {
             </DialogTitle>
             <DialogContent className={styles.content}>
               <ProjectList
+                title={strings.ProgramAdministrationAddChildsButtonLabel}
                 items={availableProjects}
                 selectedItems={context.state.addProjectDialog?.selectedProjects ?? []}
                 onSelectionChange={(selectedItems) => {
@@ -48,6 +49,7 @@ export const AddProjectDialog: FC = () => {
                   placeholder: strings.AddProjectDialogSearchBoxPlaceholder
                 }}
                 hideCommands
+                scrollRows
                 renderLinks={false}
                 programHubs={context.programHubs}
               />

@@ -1,11 +1,11 @@
-// The v8 list set its header at 12px semibold and its values at 12px in a lighter grey, and the
-// lists that moved to this grid are compared against the ones still on it. Fluent's own rules are
-// single classes injected after ours, so these are scoped under the grid root to outrank them; the
-// header's weight has to reach the button Fluent renders inside the header cell, which is where it
-// sets regular.
+// The v8 list set its column names at 14px semibold, its values at 12px in a lighter grey and its
+// links at the size of the text around them; every list keeps that (the hub's `ListGrid`, the
+// dynamic list). Fluent's own rules are single classes injected after ours, so these are scoped
+// under the grid root to outrank them; the header's weight has to reach the button Fluent renders
+// inside the header cell, which is where it sets regular, and Fluent's `Link` sets 14px of its own.
 .root {
   .headerCell {
-    font-size: var(--fontSizeBase200);
+    font-size: var(--fontSizeBase300);
 
     :global(.fui-TableHeaderCell__button) {
       font-weight: var(--fontWeightSemibold);
@@ -15,6 +15,10 @@
   .cell {
     font-size: var(--fontSizeBase200);
     color: var(--colorNeutralForeground3);
+
+    :global(.fui-Link) {
+      font-size: inherit;
+    }
   }
 }
 

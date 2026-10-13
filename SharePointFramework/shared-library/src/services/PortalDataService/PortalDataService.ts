@@ -39,7 +39,8 @@ import {
   isUnauthorizedError,
   makeUrlAbsolute,
   transformFieldXml,
-  format
+  format,
+  tryParseJson
 } from '../../util'
 import { DataService } from '../DataService'
 import {
@@ -587,17 +588,26 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     view: PortfolioOverviewView
   ): Promise<number> {
     const projectColumnsList = this._getList('PROJECT_COLUMNS')
-    const portfolioViewsList = this._getList('PORTFOLIO_VIEWS')
+    const viewItem = this._getList('PORTFOLIO_VIEWS').items.getById(view.id as any)
+    // The view's columns and order as stored, not as `view` shows them: it leaves out the columns
+    // hidden in the portfolio, and writing those back took the hidden ones out of the view.
+    const stored = await viewItem.select('GtPortfolioColumnsId', 'GtPortfolioColumnOrder')<
+      Pick<SPPortfolioOverviewViewItem, 'GtPortfolioColumnsId' | 'GtPortfolioColumnOrder'>
+    >()
+    const columnIds = Array.isArray(stored?.GtPortfolioColumnsId)
+      ? stored.GtPortfolioColumnsId
+      : (stored?.GtPortfolioColumnsId?.results ?? [])
+    const columnOrder = tryParseJson<number[]>(stored?.GtPortfolioColumnOrder, [])
     const column = await projectColumnsList.items.add(_.omit(properties, ['Id']))
     const update: Record<string, any> = {
-      GtPortfolioColumnsId: [...view.columns.map((c) => c.id), column.Id]
+      GtPortfolioColumnsId: [...columnIds, column.Id]
     }
     // A view with its own column order sorts by it alone, so the new column must join it, at the
     // end, or it would sort first on the next load.
-    if (!_.isEmpty(view.columnOrder)) {
-      update.GtPortfolioColumnOrder = JSON.stringify([...view.columnOrder, column.Id])
+    if (!_.isEmpty(columnOrder)) {
+      update.GtPortfolioColumnOrder = JSON.stringify([...columnOrder, column.Id])
     }
-    await portfolioViewsList.items.getById(view.id as any).update(update)
+    await viewItem.update(update)
     return column.Id
   }
 

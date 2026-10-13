@@ -4,12 +4,11 @@ import { SPFI } from '@pnp/sp'
 import { IBaseWebPartComponentProps } from 'pp365-shared-library/lib/components/BaseWebPartComponent'
 import { createSpfiInstance } from 'pp365-shared-library/lib/data'
 import { createElement, FC } from 'react'
-import { render, unmountComponentAtNode } from 'react-dom'
 import SPDataAdapter from '../../data'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorBoundaryFallback } from './ErrorBoundary'
 import React from 'react'
-import { SiteContext } from 'pp365-shared-library'
+import { SiteContext, renderReact, unmountReact } from 'pp365-shared-library'
 
 Logger.subscribe(ConsoleListener())
 Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
@@ -46,7 +45,7 @@ export abstract class BaseProjectWebPart<
   public renderComponent<P>(component: FC<P>, props: Partial<P> = {}): void {
     const combinedProps = this.createPropsForComponent(props)
     const element = createElement(component, combinedProps)
-    render(
+    renderReact(
       <ErrorBoundary
         fallbackRender={({ error }) => (
           <ErrorBoundaryFallback title={combinedProps['title']} error={error} />
@@ -85,7 +84,7 @@ export abstract class BaseProjectWebPart<
    */
   protected onDispose(): void {
     if (this.domElement) {
-      unmountComponentAtNode(this.domElement)
+      unmountReact(this.domElement)
     }
   }
 }

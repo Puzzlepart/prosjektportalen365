@@ -1,4 +1,5 @@
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
+import strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
 import { BaseDialog } from '.'
 
@@ -26,10 +27,10 @@ describe('BaseDialog', () => {
     expect(screen.getByText('v1.15.0')).toBeInTheDocument()
   })
 
-  it('closes through its close button', () => {
+  it('closes through its close button, named for screen readers', () => {
     const onDismiss = jest.fn()
     render(<BaseDialog title='Oppsettveiviser' onDismiss={onDismiss} />)
-    fireEvent.click(screen.getByRole('button'))
+    fireEvent.click(screen.getByRole('button', { name: strings.CloseModalText }))
     expect(onDismiss).toHaveBeenCalled()
   })
 

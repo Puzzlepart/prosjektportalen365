@@ -5,6 +5,8 @@ import {
   administrationWebPart,
   firstRowTitle,
   removeButton,
+  rowCheckOf,
+  rowChecks,
   rowOf
 } from '../fixtures/program-administration'
 
@@ -34,15 +36,12 @@ test('local: a removed project can be added back, and does not linger in the sel
     'the local bundle should be the one loaded'
   ).toBeGreaterThan(0)
   const grid = admin.getByRole('grid').first()
-  test.skip(
-    (await grid.getByRole('checkbox').count()) === 0,
-    'the test user may not manage the program'
-  )
+  test.skip((await rowChecks(grid).count()) === 0, 'the test user may not manage the program')
   const title = await firstRowTitle(grid)
   expect(title).toBeTruthy()
   let removed = false
   try {
-    await grid.getByRole('row').nth(1).getByRole('checkbox').click()
+    await rowCheckOf(admin, title).click()
     await expect(removeButton(admin)).toBeEnabled()
     await removeButton(admin).click()
     removed = true
@@ -51,10 +50,10 @@ test('local: a removed project can be added back, and does not linger in the sel
     ).toBeVisible({ timeout: 60_000 })
     await expect(rowOf(admin, title)).toBeHidden({ timeout: 60_000 })
     await expect(removeButton(admin), 'nothing is selected after a removal').toBeDisabled()
-    const remaining = admin.getByRole('grid').first().getByRole('checkbox')
-    await remaining.nth(1).click()
+    const remaining = rowChecks(admin.getByRole('grid').first())
+    await remaining.first().click()
     await expect(removeButton(admin)).toBeEnabled()
-    await remaining.nth(1).click()
+    await remaining.first().click()
     await expect(
       removeButton(admin),
       'selecting and unselecting another row leaves nothing selected'

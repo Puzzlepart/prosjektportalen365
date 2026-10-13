@@ -74,6 +74,8 @@ const PLANNER_TASKS = [
   { id: 'task-1', title: 'Ring leverandøren', isCompleted: '0' },
   { id: 'task-2', title: 'Avtal en reserve', isCompleted: '1' }
 ]
+/** When the tasks were last synchronised: 1 October 2026, 10:00 in the machine's time zone. */
+const UPDATED = new Date(2026, 9, 1, 10, 0).toISOString()
 
 const adapter = {
   globalSettings: new Map<string, string>(),
@@ -108,7 +110,7 @@ function renderRiskAction(
     title: RISK,
     fieldValue,
     hiddenFieldValues: plannerTasks
-      ? { data: 'tasks', tasks: plannerTasks, updated: '2026-10-01T10:00:00Z' }
+      ? { data: 'tasks', tasks: plannerTasks, updated: UPDATED }
       : undefined
   }
   render(
@@ -161,13 +163,9 @@ describe('RiskAction', () => {
     expect(screen.getByText('Ring leverandøren')).toBeInTheDocument()
     expect(screen.getByText('Avtal en reserve')).toBeInTheDocument()
     fireEvent.click(screen.getByText(strings.RiskActionFieldValueAdminButtonText))
+    // In SharePoint's UI language (Norwegian when the page names none), not jsdom's en-US.
     expect(
-      screen.getByText(
-        format(
-          strings.RiskActionPopoverLastUpdated,
-          new Date('2026-10-01T10:00:00Z').toLocaleString()
-        )
-      )
+      screen.getByText(format(strings.RiskActionPopoverLastUpdated, '01.10.2026, 10:00'))
     ).toBeVisible()
     expect(screen.getByText(strings.NewRiskActionPanelMigrateRiskActions)).not.toBeVisible()
     adapter.syncTasks.mockImplementation(() =>
@@ -190,8 +188,8 @@ describe('RiskAction', () => {
     adapter.getTask.mockImplementation(() =>
       Promise.resolve({
         description: 'Ring før fredag',
-        startDateTime: null,
-        dueDateTime: null,
+        startDateTime: new Date(2026, 8, 21),
+        dueDateTime: new Date(2026, 9, 2),
         progress: 'Pågår',
         assignees: [{ displayName: 'Kari Nordmann', mail: 'kari@contoso.no' }],
         planId: 'plan-1'
@@ -202,6 +200,8 @@ describe('RiskAction', () => {
     expect(await screen.findByText('Ring før fredag')).toBeInTheDocument()
     expect(adapter.getTask).toHaveBeenCalledWith('task-1')
     expect(screen.getByText('Kari Nordmann')).toBeInTheDocument()
+    expect(screen.getByText('21.09.2026')).toBeInTheDocument()
+    expect(screen.getByText('02.10.2026')).toBeInTheDocument()
     fireEvent.click(screen.getByText(strings.RiskActionPlannerTaskPreviewPlannerLinkText))
     expect(open).toHaveBeenCalledWith(
       'https://planner.cloud.microsoft/webui/plan/plan-1/task/task-1',

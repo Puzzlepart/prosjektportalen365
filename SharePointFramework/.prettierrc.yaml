@@ -6,3 +6,7 @@ printWidth: 100
 trailingComma: none
 bracketSpacing: true
 jsxSingleQuote: true
+# Git checks files out with CRLF on Windows (core.autocrlf) and commits them as LF, so the
+# line ending on disk is the platform's: with prettier/prettier an ESLint error, `lf` would fail
+# every line of a Windows build.
+endOfLine: auto

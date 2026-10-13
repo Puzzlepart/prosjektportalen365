@@ -54,8 +54,8 @@ for (const contentTemplate of contentTemplates) {
     }
 }
 
-for (const path of templates) {
-    const templateContent = fs.readFileSync(path, 'utf-8')
+for (const templatePath of templates) {
+    const templateContent = fs.readFileSync(templatePath, 'utf-8').replace(/\r\n/g, '\n')
     let tokens = new Set()
     let match
     while ((match = TOKEN_REGEX.exec(templateContent)) !== null) {
@@ -65,8 +65,9 @@ for (const path of templates) {
     // Sort tokens alphabetically and remove duplicates
     tokens = new Set(Array.from(tokens).sort())
 
-    let markdownContent = `_The template was validated ${new Date().toLocaleString()}_\n\n`
-    markdownContent += `The template contains the following tokens that has not been found in the .resx files:\n\n`
+    // No date and no absolute path: the report is tracked, so it must come out the same on every
+    // machine (macOS or Windows, any locale) as long as the template does not change.
+    let markdownContent = `The template contains the following tokens that has not been found in the .resx files:\n\n`
     if (tokens.size === 0) {
         markdownContent += '_No tokens with missing translations or replacement values found._'
     }
@@ -81,10 +82,10 @@ for (const path of templates) {
     markdownContent += '\n```\n\n'
     markdownContent += '## Template Path\n\n'
     markdownContent += '```txt\n'
-    markdownContent += path
+    markdownContent += path.relative(path.resolve(__dirname, '..'), templatePath).split(path.sep).join('/')
     markdownContent += '\n```\n\n'
 
-    const filePath = path.replace(/\.txt$/, '-validation.md')
+    const filePath = templatePath.replace(/\.txt$/, '-validation.md')
 
     fs.writeFileSync(filePath, markdownContent, { flag: 'w' })
 }

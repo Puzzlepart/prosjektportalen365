@@ -1,8 +1,7 @@
 import { SearchBoxProps, useId } from '@fluentui/react-components'
 import strings from 'PortfolioWebPartsStrings'
 import { IFilterItemProps, IFilterPanelProps, ProjectColumn, format } from 'pp365-shared-library'
-import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
-import { createElement, useCallback, useEffect, useMemo, useReducer } from 'react'
+import { createElement, useCallback, useMemo, useReducer } from 'react'
 import { OnColumnContextMenu } from '../../List'
 import { IPortfolioOverviewContext } from '../context'
 import createReducer, {
@@ -28,7 +27,7 @@ import { usePortfolioOverviewFilters } from './usePortfolioOverviewFilters'
  * - Handles state using `useReducer` and our custom `reducer` function
  * - Keeps the selected items, which the Excel export takes instead of all rows
  * - Fetches initial data using `useFetchInitialData`
- * - Configures the `ExcelExportService` from `pp365-shared`
+ * - Gives the context the id of the toaster that reports a failed Excel export
  * - Handles column header click using `useColumnHeaderClick`
  * - Handles column header context menu using `useColumnHeaderContextMenu`
  * - Handles column persistence using `usePersistedColumns`
@@ -39,15 +38,17 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
   const [state, dispatch] = useReducer(reducer, getInitialState({ props, placeholderColumns }))
 
   const layerHostId = useId('layerHost')
+  const toasterId = useId('toaster')
 
   const context: IPortfolioOverviewContext = useMemo(
     () => ({
       props,
       state,
       dispatch,
-      layerHostId
+      layerHostId,
+      toasterId
     }),
-    [props, state, dispatch, layerHostId]
+    [props, state, dispatch, layerHostId, toasterId]
   )
 
   const onSelectionChange = useCallback(
@@ -60,10 +61,6 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
   }
 
   useFetchData(context)
-
-  useEffect(() => {
-    ExcelExportService.configure({ name: props.title })
-  }, [props.title])
 
   const { items, groups } = useFilteredData(context)
 

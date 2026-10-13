@@ -1,6 +1,6 @@
 import { LogLevel } from '@pnp/logging'
 import { SPFI } from '@pnp/sp'
-import { AnyAction } from '@reduxjs/toolkit'
+import { UnknownAction } from '@reduxjs/toolkit'
 import * as strings from 'ProjectWebPartsStrings'
 import {
   ListLogger,
@@ -139,7 +139,7 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
  */
 export const useProjectPhasesDataFetch = (
   props: IProjectPhasesProps,
-  dispatch: React.Dispatch<AnyAction>
+  dispatch: React.Dispatch<UnknownAction>
 ) => {
   useEffect(() => {
     fetchData(props)

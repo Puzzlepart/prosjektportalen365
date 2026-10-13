@@ -1,7 +1,8 @@
 define([], function () {
   return {
     NoAccessToPortfolioErrorTitle: 'No access to portfolio',
-    NoAccessToPortfolioErrorText: 'Du har ikke tilgangen til porteføljen for området {0}. Ta kontakt med en administrator.',
+    NoAccessToPortfolioErrorText:
+      'Du har ikke tilgangen til porteføljen for området {0}. Ta kontakt med en administrator.',
     SaveText: 'Save',
     CloseText: 'Close',
     Aria: {
@@ -10,6 +11,21 @@ define([], function () {
       ProjectTitle: 'Logo for project: {0}',
       SaveTitle: 'Save',
       SaveDisabledTitle: 'There are required fields that are not filled out, fill these out to save'
+    },
+    DatePicker: {
+      GoToToday: 'Go to today',
+      PrevMonth: 'Previous month',
+      NextMonth: 'Next month',
+      PrevYear: 'Previous year',
+      NextYear: 'Next year',
+      PrevYearRange: 'Previous year range',
+      NextYearRange: 'Next year range',
+      WeekNumber: 'Week number {0}',
+      SelectedDate: 'Selected date {0}',
+      TodayDate: "Today's date {0}",
+      MonthPickerHeader: '{0}, change year',
+      YearPickerHeader: '{0}, change month',
+      DayMarked: 'marked'
     },
     Placeholder: {
       DatePicker: 'Enter a date',
@@ -20,13 +36,13 @@ define([], function () {
       PeoplePicker: 'Enter a name or an email address',
       NumberField: 'Enter a number',
       ChoiceField: 'Select an option',
-      MultiChoiceField: 'Select one or more options',
+      MultiChoiceField: 'Select one or more options'
     },
     Validation: {
       NumberFieldMin: 'The value must be at least {0}',
       NumberFieldMax: 'The value must be at most {0}',
       NumberFieldMinMax: 'The value must be between {0} and {1}',
-      UrlFieldInvalidFormat: 'The URL must start with http:// or https://',
+      UrlFieldInvalidFormat: 'The URL must start with http:// or https://'
     },
     AllocationPercetageLabel: 'Allocation percentage',
     AllocationStatusLabel: 'Allocation status',
@@ -44,15 +60,18 @@ define([], function () {
     FilterPanelEmptyTitle: 'No filters available',
     PeoplePickerNoResults: 'No people found',
     PeoplePickerSelectedLabel: 'Selected people',
-    FilterPanelEmptyMessage: 'There are no filters to display. Filters are only shown for columns that have more than one unique value across the current data set. This means there is either no data loaded, or all columns contain the same value for every item.',
+    FilterPanelEmptyMessage:
+      'There are no filters to display. Filters are only shown for columns that have more than one unique value across the current data set. This means there is either no data loaded, or all columns contain the same value for every item.',
     FilterPanelGroupProjectInformation: 'Project information',
     GroupByLabel: 'Group by',
     LastPublishedStatusreport: 'Go to last published status report',
     LoadingText: 'Loading...',
     MilestoneDateLabel: 'Date of milestone',
     NameLabel: 'Name',
-    ProjectTimelineErrorTransformItemText: 'Error when linking items to timeline.<br><br>This may be due to a problem with an item in the "Projects" list (duplicate, deleted project), or that a timeline item does not have a valid link. <br><br>- SiteId: {0} <br> - Title: {1} <br> - Type: {2} <br><br>Error message: {3}',
-    ProjectTimelineInfoText: 'Here is a list of all projects with start and end date. The project timeline also supports phases, subphases and milestones. To zoom in/out in the timeline: ALT+Mouse wheel.',
+    ProjectTimelineErrorTransformItemText:
+      'Error when linking items to timeline.<br><br>This may be due to a problem with an item in the "Projects" list (duplicate, deleted project), or that a timeline item does not have a valid link. <br><br>- SiteId: {0} <br> - Title: {1} <br> - Type: {2} <br><br>Error message: {3}',
+    ProjectTimelineInfoText:
+      'Here is a list of all projects with start and end date. The project timeline also supports phases, subphases and milestones. To zoom in/out in the timeline: ALT+Mouse wheel.',
     ProjectTimelineTitle: 'Project timeline',
     ProjectTimelineItemInfo: '{0} - project timeline',
     ProgramTimelineTitle: 'Program timeline',
@@ -69,12 +88,13 @@ define([], function () {
     BooleanYes: 'Yes',
     BooleanNo: 'No',
     ColumnPersistRenderGloballyFieldLabel: 'Update globally',
-    ColumnPersistRenderGloballyFieldDescription: 'If you want to change the display mode for the columns as for all web parts and views, tick the check box above.',
+    ColumnPersistRenderGloballyFieldDescription:
+      'If you want to change the display mode for the columns as for all web parts and views, tick the check box above.',
     ColumnRenderOptionText: 'Text',
     ColumnRenderOptionNote: 'Note',
     ColumnRenderOptionBoolean: 'Yes/no',
-    ColumnRenderOptionBooleanTrue: 'Value for \'Yes\'',
-    ColumnRenderOptionBooleanFalse: 'Value for \'No\'',
+    ColumnRenderOptionBooleanTrue: "Value for 'Yes'",
+    ColumnRenderOptionBooleanFalse: "Value for 'No'",
     ColumnRenderOptionCurrency: 'Currency',
     ColumnRenderOptionCurrencyFallbackValueLabel: 'Default value',
     ColumnRenderOptionCurrencyMaximumFractionDigitsLabel: 'Maximum number of decimals',
@@ -85,7 +105,8 @@ define([], function () {
     ColumnRenderOptionDialogLinkTextLabel: 'Linktext',
     ColumnRenderOptionDialogShowInfoTextLabel: 'Show infotext',
     ColumnRenderOptionDialogInfoTextTemplateLabel: 'Template for infotext',
-    ColumnRenderOptionDialogInfoTextTemplateDescription: 'Template for info text. Use {{GtMeasurementOWSCHCS}} to display the measurement indicator, {{GtStartValueOWSNMBR}} to display the starting value, and {{GtDesiredValueOWSNMBR}} to display the target. You can also use other column names from the benefit overview.',
+    ColumnRenderOptionDialogInfoTextTemplateDescription:
+      'Template for info text. Use {{GtMeasurementOWSCHCS}} to display the measurement indicator, {{GtStartValueOWSNMBR}} to display the starting value, and {{GtDesiredValueOWSNMBR}} to display the target. You can also use other column names from the benefit overview.',
     ColumnRenderOptionFilename: 'File name',
     ColumnRenderOptionInstrument: 'Instrument',
     ColumnRenderOptionNumber: 'Number',
@@ -94,13 +115,15 @@ define([], function () {
     ColumnRenderOptionStatusReport: 'Status report',
     ColumnRenderOptionTags: 'Labels',
     ColumnRenderOptionTagsValueSeparatorLabel: 'Separator for values',
-    ColumnRenderOptionTagsValueSeparatorDescription: 'Enter a character to be used to separate values in the label field. Default is semicolon.',
+    ColumnRenderOptionTagsValueSeparatorDescription:
+      'Enter a character to be used to separate values in the label field. Default is semicolon.',
     ColumnRenderOptionTrend: 'Trend',
     ColumnRenderOptionTrendShowTrendIconLabel: 'Show icon',
     ColumnRenderOptionUrl: 'URL',
     ColumnRenderOptionUrlOpenInNewTabLabel: 'Open in new tab',
     ColumnRenderOptionUrlDescriptionLabel: 'Description',
-    ColumnRenderOptionUrlDescriptionDescription: 'Link description. If you do not enter a value, any description from the link is used.',
+    ColumnRenderOptionUrlDescriptionDescription:
+      'Link description. If you do not enter a value, any description from the link is used.',
     ColumnRenderOptionUser: 'Person',
     ColumnRenderOptionCalculated: 'Calculated column',
     HideDataTypePropertiesLabel: 'Hide properties for display mode',

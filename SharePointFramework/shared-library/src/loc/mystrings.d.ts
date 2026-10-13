@@ -12,6 +12,21 @@ declare interface ISharedLibraryStrings {
     SaveTitle: string
     SaveDisabledTitle: string
   }
+  DatePicker: {
+    GoToToday: string
+    PrevMonth: string
+    NextMonth: string
+    PrevYear: string
+    NextYear: string
+    PrevYearRange: string
+    NextYearRange: string
+    WeekNumber: string
+    SelectedDate: string
+    TodayDate: string
+    MonthPickerHeader: string
+    YearPickerHeader: string
+    DayMarked: string
+  }
   Placeholder: {
     DatePicker: string
     TextField: string

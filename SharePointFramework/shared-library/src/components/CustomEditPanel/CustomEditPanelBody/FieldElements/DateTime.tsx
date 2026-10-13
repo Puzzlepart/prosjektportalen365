@@ -1,16 +1,11 @@
 import { useFieldControlProps_unstable } from '@fluentui/react-components'
 import { DatePicker, DatePickerProps } from '@fluentui/react-datepicker-compat'
 import strings from 'SharedLibraryStrings'
-import React, { FC, useState } from 'react'
+import React, { FC, useMemo, useState } from 'react'
+import { formatShortDate, getDatePickerLocalization, parseShortDate } from '../../../../util'
 import { FieldContainer } from '../../../FieldContainer'
 import { useCustomEditPanelContext } from '../../context'
 import { FieldElementComponent } from './types'
-
-/**
- * Monday, as the date picker's numeric `DayOfWeek` counts it. The compat package declares the enum
- * but does not export it.
- */
-const FIRST_DAY_OF_WEEK = 1
 
 /**
  * The date picker with the id of the field it is in. It takes an id of its own otherwise, so the
@@ -23,6 +18,8 @@ const FieldDatePicker: FC<DatePickerProps> = (props) => (
 export const DateTime: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
   const [popupRef, setPopupRef] = useState<HTMLDivElement | null>(null)
+  // The picker in SharePoint's UI language: names, texts, dates, the week and its numbers.
+  const localization = useMemo(() => getDatePickerLocalization(), [])
 
   return (
     <FieldContainer
@@ -35,9 +32,12 @@ export const DateTime: FieldElementComponent = ({ field }) => {
         <FieldDatePicker
           value={context.model.get(field)}
           onSelectDate={(date) => context.model.set(field, date)}
-          formatDate={(date) => date.toLocaleDateString()}
+          // Written and read in SharePoint's UI language: the default parser (`Date.parse`)
+          // cannot read a typed "15.03.2026".
+          formatDate={formatShortDate}
+          parseDateFromString={parseShortDate}
           placeholder={strings.Placeholder.DatePicker}
-          firstDayOfWeek={FIRST_DAY_OF_WEEK}
+          {...localization}
           showWeekNumbers
           allowTextInput
           showMonthPickerAsOverlay={false}

@@ -45,14 +45,43 @@ export interface IListGridProps {
   justified?: boolean
 
   /**
-   * Called on a click and a right click on a column header, with the element to place a menu by.
+   * Called on a click on a column header, with the element to place a menu by.
    */
   onColumnHeaderClick?: (column: IListColumn, target: HTMLElement) => void
+
+  /**
+   * Called on a right click on a column header, with the element to place a menu by; the hub opens
+   * the column menu with both. Without it a right click is the browser's.
+   */
+  onColumnHeaderContextMenu?: (column: IListColumn, target: HTMLElement) => void
+
+  /**
+   * When it changes, the groups the user opened or closed go back to their `isCollapsed`: the
+   * program administration passes its search, so that a search opens every group.
+   */
+  collapseStateKey?: string | number
 
   /**
    * Called with the selected items whenever the selection changes.
    */
   onSelectionChange?: (selectedItems: Record<string, any>[]) => void
+
+  /**
+   * `'none'` leaves out the checks and the selection by a click on a row, for a user who may only
+   * look. Defaults to `'multiselect'`.
+   */
+  selectionMode?: 'multiselect' | 'none'
+
+  /**
+   * The selected items, kept by the caller: the grid shows these and reports a change through
+   * `onSelectionChange` without keeping a selection of its own. Without it the grid keeps its own.
+   */
+  selectedItems?: Record<string, any>[]
+
+  /**
+   * Class name for the grid's container.
+   */
+  className?: string
 
   /**
    * Renders a cell.
@@ -110,6 +139,11 @@ export interface IListGridState {
    * Collapses every group, or opens them all when all are collapsed.
    */
   toggleAllCollapsed: () => void
+
+  /**
+   * Whether the rows can be selected (`selectionMode`).
+   */
+  selectable: boolean
 
   /**
    * The selection.

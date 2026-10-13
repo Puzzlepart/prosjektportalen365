@@ -1,14 +1,13 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
-// Babel, so mocks are not hoisted. The data fetch dispatches what `fetched.action()` returns; the
-// data adapter, the edit panel and the project information block (both reach SharePoint) are
-// stand-ins.
+// Babel, so mocks are not hoisted. The data fetch dispatches what `fetched.action()` returns (one
+// action or several, in order); the data adapter, the edit panel and the project information block
+// (both reach SharePoint) are stand-ins.
 const fetched: { action: () => any } = { action: () => null }
 jest.mock('./useProjectStatusDataFetch', () => ({
   useProjectStatusDataFetch: (_props: any, _refetch: number, _scope: string, dispatch: any) => {
     const { useEffect } = jest.requireActual('react')
     useEffect(() => {
-      const action = fetched.action()
-      if (action) dispatch(action)
+      for (const action of [].concat(fetched.action() ?? [])) dispatch(action)
     }, [])
   }
 }))
@@ -30,7 +29,7 @@ import { format } from 'pp365-shared-library'
 import { formatDate } from 'pp365-shared-library/lib/util'
 import * as React from 'react'
 import { ProjectStatus } from './ProjectStatus'
-import { FETCH_DATA_ERROR, INIT_DATA } from './reducer'
+import { FETCH_DATA_ERROR, INIT_DATA, REPORT_DELETE_ERROR } from './reducer'
 import { PROPERTIES_SECTION_CT, report, section } from './testFixtures'
 
 /**
@@ -162,6 +161,19 @@ describe('ProjectStatus', () => {
       })
     ).toBeInTheDocument()
     expect(screen.getByRole('button', { name: strings.NewStatusReportLabel })).toBeEnabled()
+  })
+
+  it('keeps the report on screen and says why when a delete fails', async () => {
+    const draft = report(values, { published: false })
+    renderStatus(() => [
+      initData(draft),
+      REPORT_DELETE_ERROR({ error: { message: 'Ingen tilgang' } })
+    ])
+    expect(await screen.findByText(strings.DeleteReportErrorTitle)).toBeInTheDocument()
+    expect(screen.getByText('Ingen tilgang')).toBeInTheDocument()
+    expect(screen.queryByText(strings.ErrorTitle)).toBeNull()
+    expect(screen.getByRole('button', { name: strings.DeleteReportButtonLabel })).toBeEnabled()
+    expect(screen.getByRole('tab', { name: 'Fremdrift' })).toBeInTheDocument()
   })
 
   it('shows the error when the data cannot be fetched', async () => {

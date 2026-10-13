@@ -13,7 +13,7 @@ import {
 } from '@fluentui/react-components'
 import { Alert } from '@fluentui/react-components/unstable'
 import strings from 'ProjectExtensionsStrings'
-import React, { FC, ReactElement } from 'react'
+import React, { FC, ReactElement, ReactNode } from 'react'
 import styles from './MigrateRiskActionsDialog.module.scss'
 import { useMigrateRiskActionsDialog } from './useMigrateRiskActionsDialog'
 import { getFluentIcon, format } from 'pp365-shared-library'
@@ -21,7 +21,7 @@ import { getFluentIcon, format } from 'pp365-shared-library'
 /**
  * Migrate risk actions dialog. This dialog is used to migrate risk actions to planner tasks.
  */
-export const MigrateRiskActionsDialog: FC = (props) => {
+export const MigrateRiskActionsDialog: FC<{ children?: ReactNode }> = (props) => {
   const { tasks, itemContext, onMigrate, open, setOpen, isMigrating, separator, setSeparator } =
     useMigrateRiskActionsDialog()
   return (

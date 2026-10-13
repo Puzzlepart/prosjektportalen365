@@ -5,14 +5,26 @@ on:
     branches:
       - releases/1.15
       - feat/fluent-v9*
+      - feat/dependency-upgrades*
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'
       - 'Templates/**'
       - 'e2e/**'
+      - 'integration/**'
       - .github/workflows/ci-channel-test.yml
   # Manual runs, for example to re-run the end-to-end smoke after fixing a secret or a spec.
   workflow_dispatch:
+
+# One run at a time, whatever the branch: every run deploys to the same test hub and app catalog,
+# so two at once can overwrite each other mid-run (on 2026-10-06 an [apps-only] run's packages
+# landed in the middle of a full run's template step). A newer run waits for the running one.
+# GitHub keeps only the newest waiting run in a group and cancels an older waiting one: on one
+# branch the newer commit holds the older one's changes, but a cancelled full run's templates are
+# not applied, so push the commit that needs the full run last.
+concurrency:
+  group: ci-channel-test
+  cancel-in-progress: false
 
 env:
   # Heft's TypeScript and webpack steps need more than V8's default heap (about 2 GB on a small
@@ -136,15 +148,18 @@ jobs:
         shell: pwsh
 
       - name: Run Install/Build-Release.ps1 in CI mode for channel test
+        # The rebuild's timeline goes to the log and the job summary. PnP.PowerShell is not
+        # installed: only the PnP templates use it, and this job skips them (proven in
+        # ci-build-debug.yml).
         env:
           SOLUTIONS: ${{ steps.appsonly.outputs.solutions }}
           PP365_BUILD_NUMBER: ${{ github.run_number }}
         run: |
           if ([string]::IsNullOrWhiteSpace($env:SOLUTIONS)) {
-            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test
+            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test -RushTimeline -SkipPnPPowerShell
           }
           else {
-            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test -Solutions ($env:SOLUTIONS -split ',')
+            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test -RushTimeline -SkipPnPPowerShell -Solutions ($env:SOLUTIONS -split ',')
           }
         shell: pwsh
 
@@ -208,4 +223,66 @@ jobs:
           path: |
             e2e/playwright-report
             e2e/test-results
-          retention-days: 14
+          # The longest this repository allows; more is cut to it.
+          retention-days: 7
+
+  integration_test_channel:
+    # The shared library's data layer against the test tenant from Node, beside the smoke tests
+    # and after the same two upgrade paths (integration/README.md). It signs in as the CI app with
+    # the workflow's certificate; INTEGRATION_USER is who the library acts for where it asks for a
+    # user (ensureUser).
+    needs: [commit_subject, upgrade_channel_test, upgrade_channel_test_packages_only]
+    name: Integration tests (test channel)
+    runs-on: ubuntu-latest
+    if: ${{ always() && (needs.upgrade_channel_test.result == 'success' || needs.upgrade_channel_test_packages_only.result == 'success') && !contains(needs.commit_subject.outputs.subject, '[skip-integration]') }}
+    env:
+      INTEGRATION_HUB_URL: ${{ vars.SP_URL_TEST }}
+      INTEGRATION_PROGRAM_URL: ${{ vars.E2E_PROGRAM_URL }}
+      INTEGRATION_PROJECT_URL: ${{ vars.INTEGRATION_PROJECT_URL }}
+      INTEGRATION_USER: ${{ secrets.E2E_USERNAME }}
+      # A missing variable or secret fails the job: skipped whole, the suite would pass untested.
+      INTEGRATION_STRICT: 'true'
+      # The full upgrade applies the templates, the packages-only one ([apps-only]) does not: the
+      # tests of the templates' state run only after the former. GITHUB_SHA names the commit whose
+      # upgrade the installation log must show.
+      INTEGRATION_TEMPLATES_APPLIED: ${{ needs.upgrade_channel_test.result == 'success' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Install pp365-integration
+        run: node common/scripts/install-run-rush.js install --to pp365-integration --to pp365-templates
+
+      # The library's shared strings (src/loc/shared) are generated from the templates' .resx files.
+      - name: Generate the shared strings
+        run: npm run generate-resx-ts
+        working-directory: Templates
+
+      # The tests load the library's CommonJS build; no Jest here (the release build ran it).
+      - name: Build the shared library
+        run: npx heft build --production
+        working-directory: SharePointFramework/shared-library
+
+      # The tests load ProjectWebParts' data adapter from its CommonJS build. TypeScript alone emits
+      # it, unchecked: the solution's bundle and type check are the release build's.
+      - name: Compile ProjectWebParts for the tests
+        run: |
+          npx tsc -p tsconfig.json --outDir lib-commonjs --module commonjs --noEmit false --noCheck --declaration false --declarationMap false --sourceMap true --incremental false
+          mkdir -p lib-commonjs/loc/shared
+          cp src/loc/*.js lib-commonjs/loc/
+          cp src/loc/shared/*.js lib-commonjs/loc/shared/
+        working-directory: SharePointFramework/ProjectWebParts
+
+      - name: Run the integration tests against the test channel
+        run: npm run test:ci
+        working-directory: integration
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: integration-report-test-channel
+          path: integration/test-results
+          retention-days: 7

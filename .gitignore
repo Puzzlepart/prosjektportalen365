@@ -30,6 +30,7 @@ SharePointFramework/**/.heft
 **/*.build.error.log
 **/package-lock.json
 .vscode/launch.json*
+.vscode/chrome-debug-user-data
 SharePointFramework/**/.vscode/chrome-debug-user-data
 SharePointFramework/**/.gitmoji.json
 SharePointFramework/**/environments.json

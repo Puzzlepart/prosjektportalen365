@@ -6,6 +6,12 @@ export type DynamicMatrixConfiguration = IMatrixCell[][]
 export type DynamicMatrixColorScaleConfigItem = { p: number; r: number; g: number; b: number }
 export type DynamicMatrixColorScaleConfig = DynamicMatrixColorScaleConfigItem[]
 
+/**
+ * Width in pixels of a matrix that is not full width and has no width set: the value the
+ * property pane's width slider shows until it is moved.
+ */
+export const DEFAULT_MATRIX_WIDTH = 400
+
 export interface IDynamicMatrixProps {
   /**
    * Matrix items/elements.

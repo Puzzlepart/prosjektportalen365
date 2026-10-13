@@ -1,7 +1,8 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
-// Babel, so mocks are not hoisted. The autocomplete is a Fluent combobox, which loops the Jest
-// worker on React 17 when it opens; it has tests of its own, and this one stands in for it with a
-// button per item that reports the pick, to test what the field hands it and takes from it.
+// Babel, so mocks are not hoisted. The autocomplete is a Fluent combobox, which looped the Jest
+// worker on React 17 and takes tens of seconds to open under jsdom on React 18; it has tests of its
+// own, and this one stands in for it with a button per item that reports the pick, to test what the
+// field hands it and takes from it.
 jest.mock('../Autocomplete', () => {
   const React = jest.requireActual('react')
   return {

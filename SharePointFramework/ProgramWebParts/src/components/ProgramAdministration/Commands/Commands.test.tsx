@@ -4,7 +4,12 @@ import userEvent from '@testing-library/user-event'
 import * as strings from 'ProgramWebPartsStrings'
 import { Commands } from './Commands'
 import { ProgramAdministrationContext, IProgramAdministrationContext } from '../context'
-import { REMOVE_CHILD_PROJECTS, SET_IS_DELETING, TOGGLE_ADD_PROJECT_DIALOG } from '../reducer'
+import reducer, {
+  REMOVE_CHILD_PROJECTS,
+  SET_IS_DELETING,
+  TOGGLE_ADD_PROJECT_DIALOG,
+  initialState
+} from '../reducer'
 
 /**
  * Builds a minimal context: only the fields Commands reads. The data adapter is a plain object
@@ -32,6 +37,30 @@ function renderCommands(overrides: Partial<IProgramAdministrationContext['state'
   return { dispatch, removeChildProjects }
 }
 
+/**
+ * Renders the commands on the web part's own reducer, so the remove command's state follows what
+ * the component dispatches.
+ */
+function renderOnReducer(removeChildProjects: jest.Mock) {
+  const Host: React.FC = () => {
+    const [state, dispatch] = React.useReducer(reducer, {
+      ...initialState,
+      loading: false,
+      userHasManagePermission: true,
+      selectedProjects: ['site-a'],
+      childProjects: [{ SiteId: 'site-a' }, { SiteId: 'site-b' }] as any
+    })
+    return (
+      <ProgramAdministrationContext.Provider
+        value={{ props: { dataAdapter: { removeChildProjects } }, state, dispatch } as any}
+      >
+        <Commands />
+      </ProgramAdministrationContext.Provider>
+    )
+  }
+  render(<Host />)
+}
+
 describe('ProgramAdministration Commands', () => {
   it('opens the add dialog', async () => {
     const { dispatch } = renderCommands()
@@ -49,6 +78,16 @@ describe('ProgramAdministration Commands', () => {
     await waitFor(() =>
       expect(dispatch).toHaveBeenCalledWith(REMOVE_CHILD_PROJECTS({ siteIdsToRemove: ['site-a'] }))
     )
+  })
+
+  it('after a failed removal says why and offers the command again', async () => {
+    const removeChildProjects = jest.fn().mockRejectedValue(new Error('Ingen tilgang'))
+    renderOnReducer(removeChildProjects)
+    await userEvent.setup().click(screen.getByText(strings.ProgramRemoveChildsButtonLabel))
+    expect(removeChildProjects).toHaveBeenCalledWith([{ SiteId: 'site-a' }])
+    expect(await screen.findByText(strings.ChildrenRemoveErrorToastTitle)).toBeInTheDocument()
+    expect(screen.getByText('Ingen tilgang')).toBeInTheDocument()
+    expect(screen.getByText(strings.ProgramRemoveChildsButtonLabel).closest('button')).toBeEnabled()
   })
 
   it('disables both commands without manage permission', () => {

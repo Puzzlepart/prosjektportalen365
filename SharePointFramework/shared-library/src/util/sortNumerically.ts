@@ -1,7 +1,19 @@
 import { getObjectValue } from '.'
 
 /**
- * Sort numerically
+ * The number a value holds: a number, or text that is a number (search returns numbers as text);
+ * `undefined` for anything else, such as a date or an empty value.
+ */
+function asNumber(value: unknown): number | undefined {
+  if (typeof value === 'number') return isNaN(value) ? undefined : value
+  if (typeof value !== 'string' || value.trim() === '') return undefined
+  const number = Number(value.trim())
+  return Number.isFinite(number) ? number : undefined
+}
+
+/**
+ * Sort numerically: numbers, and numbers in text, by their value; amounts and percentages once
+ * `symbol` is removed; any other value as it is.
  *
  * @param a Object a
  * @param b Object b
@@ -43,6 +55,15 @@ export function sortNumerically<T>(
         }
       }
     }
+  }
+
+  // Compared as text, "30" would come before "4".
+  const aNumber = asNumber(aValue)
+  const bNumber = asNumber(bValue)
+  if (aNumber !== undefined && bNumber !== undefined) {
+    if (aNumber < bNumber) return ascending ? -1 : 1
+    if (aNumber > bNumber) return ascending ? 1 : -1
+    return 0
   }
 
   if (aValue < bValue) {

@@ -1,13 +1,8 @@
 import { createReducer } from '@reduxjs/toolkit'
 import strings from 'PortfolioWebPartsStrings'
-import {
-  ProjectColumn,
-  setUrlHash,
-  sortAlphabetically,
-  sortNumerically,
-  format
-} from 'pp365-shared-library'
+import { ProjectColumn, setUrlHash, format } from 'pp365-shared-library'
 import _ from 'underscore'
+import { sortItems } from '../../List/sortItems'
 import { IPortfolioOverviewHashState, IPortfolioOverviewState } from '../types'
 import {
   CHANGE_VIEW,
@@ -70,12 +65,12 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
       .addCase(DATA_FETCHED, (state, { payload }) => {
         state.items = payload.items
         state.currentView = payload.currentView
+        state.groupBy = payload.groupBy
         const obj: IPortfolioOverviewHashState = {}
         if (state.currentView) obj.viewId = payload.currentView.id.toString()
         if (state.groupBy) obj.groupBy = state.groupBy.fieldName
         setUrlHash(obj)
         state.columns = payload.currentView.columns
-        state.groupBy = payload.groupBy
         state.managedProperties = payload.managedProperties ?? []
         state.isUserInPortfolioManagerGroup = payload.isUserInPortfolioManagerGroup
         state.showChildProjectInfoInProgram = payload.showChildProjectInfoInProgram
@@ -142,44 +137,19 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
       })
       .addCase(SET_SORT, (state, { payload }) => {
         const isCustomSort = payload.customSort
+        // Without a direction (a custom sort), an unsorted column sorts ascending and a sorted
+        // one flips.
         const isSortedDescending = Object.keys(payload).includes('isSortedDescending')
           ? payload.isSortedDescending
-          : !payload.column.isSortedDescending
-        if (isCustomSort) {
-          state.items = state.items.sort((a, b) => {
-            const $a = payload.customSort.order.indexOf(a[payload.column.fieldName])
-            const $b = payload.customSort.order.indexOf(b[payload.column.fieldName])
-            return isSortedDescending ? $a - $b : $b - $a
-          })
-        } else {
-          switch (payload.column.dataType) {
-            case 'date':
-              state.items = state.items.sort((a, b) =>
-                sortNumerically(a, b, isSortedDescending, payload.column.fieldName)
-              )
-              break
-            case 'number':
-              state.items = state.items.sort((a, b) =>
-                sortNumerically(a, b, isSortedDescending, payload.column.fieldName)
-              )
-              break
-            case 'currency':
-              state.items = state.items.sort((a, b) =>
-                sortNumerically(a, b, isSortedDescending, payload.column.fieldName, 'kr ')
-              )
-              break
-            case 'percentage':
-              state.items = state.items.sort((a, b) =>
-                sortNumerically(a, b, isSortedDescending, payload.column.fieldName, '%')
-              )
-              break
-            default:
-              state.items = state.items.sort((a, b) =>
-                sortAlphabetically(a, b, isSortedDescending, payload.column.fieldName)
-              )
-              break
-          }
-        }
+          : !!payload.column.isSorted && !payload.column.isSortedDescending
+        // The sort helpers take whether to sort ascending.
+        const ascending = !isSortedDescending
+        state.items = sortItems(
+          state.items,
+          payload.column,
+          ascending,
+          isCustomSort ? payload.customSort.order : undefined
+        )
         state.sortBy = _.pick(payload, ['column', 'customSort'])
         state.columns = state.columns.map((col) => {
           col.isSorted = col.key === payload.column.key

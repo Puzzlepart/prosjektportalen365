@@ -1,9 +1,10 @@
-import { render, screen } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import strings from 'PortfolioWebPartsStrings'
 import * as React from 'react'
 import { EditViewColumnsPanel } from './EditViewColumnsPanel'
 import { EditViewColumnsPanelSortMode } from './types'
+import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
 
 /**
  * The show/hide columns panel: the selected columns first, in the view's order, then the rest;
@@ -94,6 +95,32 @@ describe('EditViewColumnsPanel', () => {
     await user.click(screen.getByTitle(strings.Aria.MoveDown))
     await user.click(screen.getByRole('button', { name: strings.UseChangesButtonText }))
     expect(onSave.mock.calls[0][1]).toEqual([2, 1])
+  })
+
+  it('drops a dragged column where it lands, and ignores a drop outside the list', () => {
+    // A drag cannot be performed under jsdom (every element measures zero), so the drop the
+    // drag-and-drop library reports is handed to the panel's handler directly.
+    let panel: ReturnType<typeof useEditViewColumnsPanel>
+    // The props are made once: new columns on every render would make the panel select them again.
+    const props = {
+      ...EditViewColumnsPanel.defaultProps,
+      open: true,
+      onClose: jest.fn(),
+      onSave: jest.fn(),
+      sortMode: EditViewColumnsPanelSortMode.CustomSelectedOnTop,
+      columns: columns()
+    } as any
+    const Probe: React.FC = () => {
+      panel = useEditViewColumnsPanel(props)
+      return null
+    }
+    render(<Probe />)
+    const selectedNames = () => panel.selectedColumns.map((c) => c.name)
+    expect(selectedNames()).toEqual(['Tittel', 'Fase'])
+    act(() => panel.onDragEnd({ source: { index: 0 }, destination: { index: 1 } } as any, null))
+    expect(selectedNames()).toEqual(['Fase', 'Tittel'])
+    act(() => panel.onDragEnd({ source: { index: 0 }, destination: null } as any, null))
+    expect(selectedNames()).toEqual(['Fase', 'Tittel'])
   })
 
   it('offers the revert button when the view has a custom order', async () => {

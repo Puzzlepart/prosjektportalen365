@@ -71,15 +71,16 @@ test.describe('document template copy', () => {
       const start = dialog.getByRole('button', { name: /start kopiering|start copy/i })
       await expect(start).toBeEnabled({ timeout: 15_000 })
       await start.click()
-      await expect(dialog.getByRole('button', { name: /^lukk$|^close$/i })).toBeVisible({
-        timeout: 120_000
-      })
+      // The summary's "Lukk" ends the copy. The title's X is named "Lukk" too and is always there,
+      // so the footer's button is found by its text, which the X (an icon) has not.
+      const close = dialog.getByRole('button').filter({ hasText: /^\s*(lukk|close)\s*$/i })
+      await expect(close).toBeVisible({ timeout: 120_000 })
       const copies = await filesWithPrefix(page, projectUrl!, decodeURIComponent(folder), name)
       expect(
         copies.map((f) => f.Name),
         'the copy should be in the library under its new name'
       ).toHaveLength(1)
-      await dialog.getByRole('button', { name: /^lukk$|^close$/i }).click()
+      await close.click()
     } finally {
       await deleteTestCopies(page, decodeURIComponent(folder))
     }

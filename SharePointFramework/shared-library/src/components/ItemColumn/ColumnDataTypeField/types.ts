@@ -1,4 +1,5 @@
 import { SwitchProps } from '@fluentui/react-components'
+import { ReactNode } from 'react'
 
 interface IColumnDataTypePropertyFieldBase {
   /**
@@ -136,6 +137,11 @@ export interface IColumnDataTypeFieldOption {
 export interface IColumnDataTypeFieldProps {
   label: string
   description: string
+
+  /**
+   * Content rendered below the data type dropdown, before the data type's own fields.
+   */
+  children?: ReactNode
 
   /**
    * Key of the data type selected when the field first renders.

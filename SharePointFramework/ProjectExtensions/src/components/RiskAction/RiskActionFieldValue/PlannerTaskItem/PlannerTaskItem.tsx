@@ -7,7 +7,7 @@ import {
   Persona
 } from '@fluentui/react-components'
 import strings from 'ProjectExtensionsStrings'
-import { getFluentIcon } from 'pp365-shared-library'
+import { formatShortDate, getFluentIcon } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import styles from './PlannerTaskItem.module.scss'
 import { IPlannerTaskItemProps } from './types'
@@ -35,11 +35,11 @@ export const PlannerTaskItem: FC<IPlannerTaskItemProps> = (props) => {
             <PlannerTaskItemProperty value={task?.description} />
             <PlannerTaskItemProperty
               label={strings.StartDateLabel}
-              value={task?.startDateTime?.toLocaleDateString()}
+              value={formatShortDate(task?.startDateTime)}
             />
             <PlannerTaskItemProperty
               label={strings.DueDateLabel}
-              value={task?.dueDateTime?.toLocaleDateString()}
+              value={formatShortDate(task?.dueDateTime)}
             />
             <PlannerTaskItemProperty label={strings.ProgressLabel} value={task?.progress} />
             <PlannerTaskItemProperty label={strings.AssignedToLabel}>

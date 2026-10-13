@@ -3,7 +3,6 @@ import {
   columnHeaders,
   deleteTestColumns,
   fieldInput,
-  findTestColumns,
   clearPersistedColumns
 } from '../fixtures/portfolio-overview-column'
 import { baseURL } from '../../playwright.config'
@@ -15,6 +14,9 @@ import { restGet } from '../fixtures/rest'
  * and the column keeps its place after a reload. Pins the defect where a new column sorted first
  * after a reload because the view's own column order did not know it. The column is removed again
  * through the REST API at the end, and any leftover from an earlier run at the start.
+ *
+ * It asserts what the admin sees. What the save stores, the column's item and its place in the
+ * view's columns and order, is pinned against the tenant by `integration/tests/hub.test.ts`.
  *
  * Needs the test user to be a site admin of the hub, since "Legg til kolonne" is only offered to
  * admins; skips with a message otherwise.
@@ -89,16 +91,6 @@ test.describe('portfolio overview, adding a column', () => {
       await expect(save).toBeEnabled({ timeout: 10_000 })
       await save.click()
       await expect(panel).toBeHidden({ timeout: 30_000 })
-      // The build under test may close the panel on a failed save; the list item tells the truth.
-      const saved = await findTestColumns(page)
-      expect(
-        saved.map((c) => c.Title),
-        'the column should exist in the columns list'
-      ).toContain(columnName)
-      expect(
-        saved.find((c) => c.Title === columnName)?.GtShowFieldPortfolio,
-        'the column should be visible in the portfolio'
-      ).toBe(true)
       // What the view knows after the save: its column ids and its own column order. Attached, so
       // a column that does not come back after the reload can be told from one the view never got.
       const views = await restGet(
@@ -109,7 +101,7 @@ test.describe('portfolio overview, adding a column', () => {
         ? await views.json()
         : { status: views.status(), text: await views.text() }
       await testInfo.attach('views-after-save.json', {
-        body: JSON.stringify({ saved, views: viewsBody }, null, 2),
+        body: JSON.stringify({ views: viewsBody }, null, 2),
         contentType: 'application/json'
       })
       console.log('views after save:', JSON.stringify(viewsBody).slice(0, 1200))
@@ -123,7 +115,6 @@ test.describe('portfolio overview, adding a column', () => {
         columnName
       ])
 
-      await clearPersistedColumns(page)
       await clearPersistedColumns(page)
       await page.reload()
       await expect(overview.getByRole('columnheader').first()).toBeVisible({ timeout: 60_000 })

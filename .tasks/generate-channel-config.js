@@ -15,8 +15,12 @@ const default_channel_name = 'main'
 // Get the channel name from the command line
 const name = argv._[0] ?? default_channel_name
 
-// Check if the update flag is set
-const update = argv._[1] === '/update' ?? false
+// Check if the update flag is set: `/update` as documented, or `--update`. Git Bash on Windows
+// rewrites an argument that starts with `/` into a Windows path (`C:/Program Files/Git/update`)
+// before node sees it, so the flag is matched as the last path segment; missing it would give
+// an installed channel new ids.
+const update =
+    argv.update === true || /(^|[\\/])update$/i.test(String(argv._[1] ?? ''))
 
 /**
  * Get file content for the given file path in JSON format

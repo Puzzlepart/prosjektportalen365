@@ -1,8 +1,7 @@
-import { OnDragEndResponder } from 'react-beautiful-dnd'
+import { OnDragEndResponder } from '@hello-pangea/dnd'
 import { IEditViewColumnsPanelProps } from './types'
 import { useSelectableColumns } from './useSelectableColumns'
 import _ from 'lodash'
-import { useId } from '@fluentui/react-components'
 import { IListColumn } from 'pp365-shared-library'
 
 /**
@@ -49,9 +48,6 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
     moveColumn(result.source.index, result.destination.index)
   }
 
-  const fluentProviderHeaderId = useId('fp-edit-view-columns-panel-header')
-  const fluentProviderBodyId = useId('fp-edit-view-columns-panel-body')
-
   return {
     onDragEnd,
     selectableColumns,
@@ -63,8 +59,6 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
         moveColumn(columnIndex, columnIndex + moveIndex)
       }
     },
-    fluentProviderHeaderId,
-    fluentProviderBodyId,
     selectedColumns
   }
 }

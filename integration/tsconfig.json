@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    // Not nodenext: PnPjs 4's typings add `web`, `site` and `search` to SPFI through
+    // `declare module "../fi"`, which nodenext cannot resolve without the extension. Node resolves
+    // the imports at runtime, so they keep their extensions all the same.
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "types": ["node"],
+    "noEmit": true,
+    // Node runs these files as they are, stripping the types: imports name the .ts file, and only
+    // syntax that erases to JavaScript is allowed (no enums, namespaces or parameter properties).
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true
+  },
+  "include": ["src/**/*.ts", "tests/**/*.ts"]
+}

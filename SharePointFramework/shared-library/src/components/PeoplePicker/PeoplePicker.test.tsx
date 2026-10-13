@@ -1,6 +1,7 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
-// Babel, so mocks are not hoisted. Fluent's TagPicker loops the Jest worker on React 17 when typed
-// into (it works in the browser); the harness's stand-in keeps its contract.
+// Babel, so mocks are not hoisted. Fluent's TagPicker looped the Jest worker on React 17 when typed
+// into and takes tens of seconds to open under jsdom on React 18 (it works in the browser); the
+// harness's stand-in keeps its contract.
 jest.mock('@fluentui/react-components', () =>
   jest.requireActual('pp365-jest-config/lib/tagPickerStandIn').withTagPickerStandIn()
 )

@@ -4,6 +4,7 @@ import { SiteContext } from 'pp365-shared-library'
 import React, { FC, ReactNode, useContext } from 'react'
 import { ListContext } from '../../context'
 import { usePortfolioOverviewContext } from '../../../PortfolioOverview/context'
+import styles from './TitleColumn.module.scss'
 import { ITitleColumnProps } from './types'
 import { Text, Button, Link } from '@fluentui/react-components'
 import {
@@ -38,13 +39,13 @@ export const TitleColumn: FC<ITitleColumnProps> = (props) => {
   /**
    * Renders the title wrapped in a `ProjectInformationPanel` with a toggle button.
    *
-   * @param children Title element shown in the cell and used as the panel trigger label
+   * @param children Title element shown in the cell, beside the toggle button
    * @param webAbsoluteUrl Project web URL. Omitted for projects the user has no access to,
    * in which case the panel falls back to the current (hub) web context — so for those
    * projects it surfaces hub-side data only, not the project's own web data.
    */
   const renderPanel = (children: ReactNode, webAbsoluteUrl?: string) => (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
+    <div className={styles.root}>
       <ProjectInformationPanel
         {...SiteContext.create(context.props.webPartContext, props.item.SiteId, webAbsoluteUrl)}
         title={props.item.Title}
@@ -52,6 +53,7 @@ export const TitleColumn: FC<ITitleColumnProps> = (props) => {
         hideAllActions={true}
         onRenderToggleElement={(onToggle) => (
           <Button
+            className={styles.action}
             appearance='transparent'
             size='small'
             icon={<Icons.PanelRight />}
@@ -68,12 +70,19 @@ export const TitleColumn: FC<ITitleColumnProps> = (props) => {
 
   if (!url) {
     if (renderProjectInformationPanel && showPanelButtonWithoutUrl) {
-      return renderPanel(<Text size={200}>{props.item.Title}</Text>)
+      return renderPanel(
+        <Text size={200} className={styles.title} title={props.item.Title}>
+          {props.item.Title}
+        </Text>
+      )
     }
     return (
-      <span>
-        <Text size={200}>{props.item.Title}</Text>
+      <div className={styles.root}>
+        <Text size={200} className={styles.title} title={props.item.Title}>
+          {props.item.Title}
+        </Text>
         <Button
+          className={styles.action}
           style={{ cursor: 'default' }}
           appearance='transparent'
           size='small'
@@ -81,7 +90,7 @@ export const TitleColumn: FC<ITitleColumnProps> = (props) => {
           title={strings.NoProjectData}
           aria-label={strings.NoProjectData}
         />
-      </span>
+      </div>
     )
   }
   if (!renderProjectInformationPanel) {
@@ -92,7 +101,13 @@ export const TitleColumn: FC<ITitleColumnProps> = (props) => {
     )
   }
   return renderPanel(
-    <Link href={url} rel='noopener noreferrer' target='_blank'>
+    <Link
+      className={styles.title}
+      title={props.item.Title}
+      href={url}
+      rel='noopener noreferrer'
+      target='_blank'
+    >
       {props.item.Title}
     </Link>,
     url

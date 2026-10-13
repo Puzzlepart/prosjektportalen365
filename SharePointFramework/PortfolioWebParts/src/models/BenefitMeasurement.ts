@@ -1,6 +1,6 @@
 import { BenefitBase, BenefitMeasurementIndicator } from './'
 import { IBenefitsSearchResult } from 'interfaces'
-import { ITrendIcon } from 'pp365-shared-library'
+import { formatShortDate, ITrendIcon } from 'pp365-shared-library'
 
 export class BenefitMeasurement extends BenefitBase {
   public Date: Date
@@ -23,7 +23,8 @@ export class BenefitMeasurement extends BenefitBase {
   constructor(result: IBenefitsSearchResult, fractionDigits: number = 2) {
     super(result)
     this.Date = new Date(result.GtMeasurementDateOWSDATE)
-    this.DateDisplay = this.Date.toLocaleDateString()
+    // For display only: the Excel export writes `Date` itself.
+    this.DateDisplay = formatShortDate(this.Date)
     this.Value = !isNaN(parseFloat(result.GtMeasurementValueOWSNMBR))
       ? parseFloat(result.GtMeasurementValueOWSNMBR)
       : null

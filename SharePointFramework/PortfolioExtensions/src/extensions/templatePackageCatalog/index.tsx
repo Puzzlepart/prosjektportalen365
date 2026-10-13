@@ -6,10 +6,9 @@ import {
 } from '@microsoft/sp-listview-extensibility'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { PermissionKind } from '@pnp/sp/security'
-import { getId, themeColor } from 'pp365-shared-library'
+import { getId, themeColor, renderReact, unmountReact } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
 import React from 'react'
-import { render, unmountComponentAtNode } from 'react-dom'
 import resource from 'SharedResources'
 import { TemplatePackageCatalog } from 'components/TemplatePackageCatalog'
 import { featureFlags } from 'services'
@@ -97,7 +96,7 @@ export default class TemplatePackageCatalogCommandSet extends BaseListViewComman
   public onExecute(event: IListViewCommandSetExecuteEventParameters): void {
     if (event.itemId !== OPEN_COMMAND) return
     const placeholder = this._getPlaceholder()
-    render(
+    renderReact(
       React.createElement(TemplatePackageCatalog, {
         context: this.context,
         catalogUrl: this.properties.catalogUrl,
@@ -121,7 +120,7 @@ export default class TemplatePackageCatalogCommandSet extends BaseListViewComman
   }
 
   private _unmount(placeholder: HTMLElement): void {
-    unmountComponentAtNode(placeholder)
+    unmountReact(placeholder)
   }
 
   private _getIcon(): string {

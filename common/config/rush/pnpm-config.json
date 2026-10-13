@@ -18,9 +18,36 @@
     "keyborg": "2.14.1",
     "tabster": "8.8.1",
 
-    "@rushstack/heft": "1.2.17",
-    "@types/react": "17.0.45",
-    "@types/react-dom": "17.0.17"
+    "@rushstack/heft": "1.3.2",
+    "@types/react": "18.2.79",
+    "@types/react-dom": "18.2.25",
+
+    // The PnP controls declare react and react-dom 17.0.1 as dependencies, not peers, and they are
+    // bundled into our web parts. On React 18 pnpm would give them a React 17 of their own, and
+    // with it their own copies of Fluent v8 and v9 (peer variants), bundled next to ours. Held to
+    // the solutions' React so the copies are shared. Drop these when a controls release declares
+    // React 18. SPFx's own packages also depend on React 17.0.1, but they are page externals and
+    // never bundled, so they are left alone.
+    "@pnp/spfx-controls-react>react": "18.3.1",
+    "@pnp/spfx-controls-react>react-dom": "18.3.1",
+    "@pnp/spfx-property-controls>react": "18.3.1",
+    "@pnp/spfx-property-controls>react-dom": "18.3.1",
+
+    // The security floors SPFx 1.24's project template sets (as npm `overrides`: `>=6.15.2`,
+    // `>=11.1.1`). Held to their major here: uuid 12 and later ship ESM only, while 11 keeps a
+    // CommonJS build for the tools that require() it (the SPFx Heft plugins, jest-junit, sockjs).
+    "qs": "^6.15.2",
+    "uuid": "^11.1.1",
+
+    // Advisories in packages that come in through others (2026-10-08, phase 5). lodash 4.18 fixes
+    // `_.template` code injection and two prototype pollutions; the override takes the copies the PnP
+    // controls and react-gauge-component bring, which are bundled, onto it too. compression comes
+    // with the `serve` CLI that react-gauge-component 1.x lists as a dependency (never bundled; 2.x
+    // dropped it) and with webpack-dev-server. node-fetch 1 comes with isomorphic-fetch under
+    // msgraph-helper's Graph client and runs only in Node: the browser build takes whatwg-fetch.
+    "lodash": "^4.18.1",
+    "compression": "^1.8.2",
+    "isomorphic-fetch>node-fetch": "^2.7.0"
   },
   "globalOnlyBuiltDependencies": []
 }

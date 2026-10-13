@@ -25,6 +25,12 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   page: ProjectInformationPage
 
   /**
+   * Leaves out the web part's title, for a host that shows it itself (the project information
+   * panel names itself after the project in its header). The actions are still named after it.
+   */
+  hideTitle?: boolean
+
+  /**
    * Hide all actions for the web part
    */
   hideAllActions?: boolean

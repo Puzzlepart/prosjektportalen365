@@ -1,4 +1,4 @@
-import { DraggingStyle, NotDraggingStyle } from 'react-beautiful-dnd'
+import { DraggingStyle, NotDraggingStyle } from '@hello-pangea/dnd'
 
 export const getItemStyle = (
   _isDragging: boolean,

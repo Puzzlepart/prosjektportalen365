@@ -77,29 +77,30 @@ export function useColumnContextMenu() {
       onClick: () => context.dispatch(SET_SORT({ column, customSort }))
     }))
     columnContextMenu.items = [
-      {
-        key: 'SORT_DESC',
-        data: {
-          name: `${column.key}_sort`,
-          value: 'desc'
-        },
-        text: strings.SortDescLabel,
-        iconProps: { iconName: 'TextSortAscending' },
-        canCheck: true,
-        checked: column.isSorted && !context.state.sortBy?.customSort && column.isSortedDescending,
-        onClick: () => context.dispatch(SET_SORT({ column, isSortedDescending: true }))
-      },
+      // `SortDescLabel` reads "A til Å", an ascending sort; `SortAscLabel` "Å til A".
       {
         key: 'SORT_ASC',
         data: {
           name: `${column.key}_sort`,
           value: 'asc'
         },
-        text: strings.SortAscLabel,
-        iconProps: { iconName: 'TextSortDescending' },
+        text: strings.SortDescLabel,
+        iconProps: { iconName: 'TextSortAscending' },
         canCheck: true,
         checked: column.isSorted && !context.state.sortBy?.customSort && !column.isSortedDescending,
         onClick: () => context.dispatch(SET_SORT({ column, isSortedDescending: false }))
+      },
+      {
+        key: 'SORT_DESC',
+        data: {
+          name: `${column.key}_sort`,
+          value: 'desc'
+        },
+        text: strings.SortAscLabel,
+        iconProps: { iconName: 'TextSortDescending' },
+        canCheck: true,
+        checked: column.isSorted && !context.state.sortBy?.customSort && column.isSortedDescending,
+        onClick: () => context.dispatch(SET_SORT({ column, isSortedDescending: true }))
       },
       !_.isEmpty(columnCustomSorts) &&
         ({

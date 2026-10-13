@@ -457,6 +457,8 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
    * Clear cache
    */
   public clearCache(): void {
+    // Outside a page (the integration tests in Node) PnPjs keeps its cache in memory instead.
+    if (typeof sessionStorage === 'undefined') return
     Object.keys(this._storageKeys).forEach((name) => {
       const key = this.getStorageKey(name)
       Logger.write(`(ProjectDataService) Clearing key ${key} from sessionStorage.`)

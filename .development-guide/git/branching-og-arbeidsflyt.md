@@ -2,30 +2,29 @@
 
 ### Branching-strategi
 
-Prosjektportalen bruker en utgivelsesbasert branching-strategi hvor vi har dedikerte branches for hver utgivelse:
+`main` er siste utgivelse. Hver minor-versjon utvikles på sin egen release-branch, `releases/x.y`:
 
-Eksempel:
+- `releases/1.15`: gjeldende utviklings-branch
+- `releases/1.14`, `releases/1.13`, …: tidligere utgivelser
 
-- `releases/1.12` - Gjeldende utviklings-branch
-- `releases/1.11` - Forrige utgivelse
-- `releases/1.10` - Tidligere utgivelse
-- osv...
+Nye funksjoner og feilrettinger går mot gjeldende release-branch. Versjonene følger [Semantic Versioning](https://semver.org/spec/v2.0.0.html). En minor får sin egen branch. Hvilken branch en patch lages fra, avtales i teamet; se [Opprettelse av en ny versjon](../utgivelse/opprette-ny-versjon.md).
 
-Alle nye funksjoner og feilrettinger skal utvikles mot den aktuelle release-branchen. Formatet på versjonene følger [Semantic Versioning](http://semver.org/spec/v2.0.0.html). `Minor`-utgivelse får egen branch. `Patch`-utgivelse inngår i den relevante branchen.
+En push til `releases/1.15` bygger og ruller ut til utviklingsmiljøet og testtenanten; se [Kontinuerlig integrasjon](../ci/kontinuerlig-integrasjon.md).
 
-### Arbeidsflyt for GitHub Issues
+### Din branch
 
-Når du jobber med et spesifikt GitHub issue, opprett en branch fra gjeldende release-branch med følgende navnekonvensjon:
-
-```text
-issues/<issue-nummer>
-```
-
-**Eksempler:**
+Lag branchen fra gjeldende release-branch, og gi den navn etter typen arbeid, som commit-typene: `feat/<emne>`, `fix/<emne>`, `chore/<emne>` eller `docs/<emne>`. For et enkelt issue går også `issues/<issue-nummer>`.
 
 ```bash
-git checkout releases/1.12
-git checkout -b issues/1628
+git checkout releases/1.15
+git pull
+git checkout -b fix/tidslinje-zoom
 ```
 
-Når arbeidet er ferdig, opprett en pull request tilbake til release-branchen. Husk å referere til issue-nummeret i PR-beskrivelsen.
+Lag ikke en branch fra en annen langvarig branch (som `feat/dependency-upgrades-phase-5`): da følger alle dens commits med i pull requesten. `git log --oneline origin/releases/1.15..HEAD` skal bare vise dine egne.
+
+### Pull request og merge
+
+- Opprett pull requesten mot release-branchen, med milepælen for versjonen (`1.15.0`), og fyll ut `.github/PULL_REQUEST_TEMPLATE.md`. Referer til issuet i beskrivelsen.
+- Slå sammen med **Squash and merge**. CI leser emnelinjen i squash-commiten, så legg en CI-tag som `[apps-only]` på slutten av emnelinjen i merge-dialogen, ikke i PR-tittelen. En vanlig merge-commit har ingen tag og starter alltid hele løpet. Se [Commit-praksis](commit-praksis.md) og taggene i [Kontinuerlig integrasjon](../ci/kontinuerlig-integrasjon.md).
+- Pull requester kjører ingen bygg, bare `skills.yml` når agentferdighetene er endret. Bygg og test lokalt før du ber om review.

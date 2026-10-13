@@ -10,6 +10,7 @@
       "sourceMaps": true,
       "sourceMapPathOverrides": {
         "webpack:///.././src/*": "${webRoot}/src/*",
+        "webpack:///../../*": "${webRoot}/../*",
         "webpack:///../../../src/*": "${webRoot}/src/*",
         "webpack:///../../../../src/*": "${webRoot}/src/*",
         "webpack:///../../../../../src/*": "${webRoot}/src/*"

@@ -24,8 +24,7 @@ import '@pnp/sp/files'
 import '@pnp/sp/files/folder'
 import type { IFileInfo } from '@pnp/sp/files'
 import _ from 'lodash'
-import { useExcelExport, useCustomActionDialog } from './hooks'
-import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
+import { getExportButtonText, useExcelExport, useCustomActionDialog } from './hooks'
 import { fetchSingleItem } from './data/fetchListData'
 import {
   getSelectedItems,
@@ -52,15 +51,11 @@ const Icons = {
 
 export function useToolbarItems(isSingleView: boolean = false, showNewButton: boolean = true) {
   const context = useContext(DynamicListContext)
-  const exportToExcel = useExcelExport()
   const toasterId = useId('toaster')
+  const exportToExcel = useExcelExport(toasterId)
   const fluentProviderId = useId('fp-dynamic-list-actions')
   const { dispatchToast } = useToastController(toasterId)
   const { openDialog, dialogComponent, toasterId: dialogToasterId } = useCustomActionDialog()
-
-  ExcelExportService.configure({
-    name: context.props.title?.trim() || context.state.data?.listTitle || 'Export'
-  })
 
   const checkedValues = useMemo(() => {
     const viewMode =
@@ -700,13 +695,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       context.props.showExportButton !== false
     ) {
       const selectedCount = context.state.selectedItems?.length || 0
-      const tooltipText =
-        selectedCount > 0
-          ? strings.DynamicList.ExportSelected.replace('{0}', selectedCount.toString()).replace(
-              '{1}',
-              selectedCount === 1 ? '' : 's'
-            )
-          : strings.DynamicList.ExportToExcel
+      const tooltipText = getExportButtonText(selectedCount)
 
       items.push(
         new ListMenuItem(selectedCount > 0 ? selectedCount.toString() : undefined, tooltipText)

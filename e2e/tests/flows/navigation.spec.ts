@@ -125,7 +125,8 @@ test.describe('navigation', () => {
                 .first(),
               `${link.title} should show a web part or a list`
             )
-            .toBeVisible({ timeout: 60_000 })
+            // A list view on a cold site can take more than a minute to render its rows.
+            .toBeVisible({ timeout: 90_000 })
           await expect
             .soft(
               page.getByRole('heading', { name: /noe gikk galt|something went wrong/i }),
@@ -137,9 +138,11 @@ test.describe('navigation', () => {
     })
 
     test('the project home links back to the hub', async ({ page, openPage, resolvePage }) => {
+      // Two cold pages, the project's and the hub's, each up to a minute and a half under load.
+      test.setTimeout(240_000)
       await openPage(await resolvePage(projectUrl!, ['ProjectHome.aspx', 'Hjem.aspx', 'Home.aspx']))
       await expect(webPartByAlias(page, 'ProjectInformation').first()).toBeVisible({
-        timeout: 60_000
+        timeout: 90_000
       })
       // The hub's name in SharePoint's hub navigation leads back to the hub.
       const hubLink = page
@@ -147,12 +150,12 @@ test.describe('navigation', () => {
         .filter({ has: page.locator(':scope') })
         .filter({ hasText: /prosjektportalen/i })
         .first()
-      await expect(hubLink).toBeVisible({ timeout: 30_000 })
+      await expect(hubLink).toBeVisible({ timeout: 60_000 })
       await hubLink.click()
       await page.waitForURL((url) => url.href.toLowerCase().startsWith(hub.toLowerCase()), {
-        timeout: 60_000
+        timeout: 90_000
       })
-      await expect(page.locator(WEB_PART).first()).toBeVisible({ timeout: 60_000 })
+      await expect(page.locator(WEB_PART).first()).toBeVisible({ timeout: 90_000 })
     })
   })
 })

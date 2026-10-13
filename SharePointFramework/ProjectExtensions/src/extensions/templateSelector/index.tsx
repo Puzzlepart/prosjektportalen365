@@ -9,11 +9,10 @@ import { DocumentTemplateDialog } from 'components'
 import { SPDataAdapter } from 'data'
 import * as strings from 'ProjectExtensionsStrings'
 import React from 'react'
-import { render, unmountComponentAtNode } from 'react-dom'
 import { find, first } from 'underscore'
 import { ITemplateSelectorContext, TemplateSelectorContext } from './context'
 import { ITemplateSelectorCommandProperties } from './types'
-import { getId, themeColor } from 'pp365-shared-library'
+import { getId, themeColor, renderReact, unmountReact } from 'pp365-shared-library'
 import resource from 'SharedResources'
 
 export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITemplateSelectorCommandProperties> {
@@ -142,11 +141,11 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
         />
       </TemplateSelectorContext.Provider>
     )
-    render(element, placeholder)
+    renderReact(element, placeholder)
   }
 
   private _unmount(container: HTMLElement) {
-    unmountComponentAtNode(container)
+    unmountReact(container)
   }
 
   private _getPlaceholder(key = 'DocumentTemplateDialog') {

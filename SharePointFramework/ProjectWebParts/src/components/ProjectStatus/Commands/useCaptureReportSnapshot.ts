@@ -1,5 +1,5 @@
 import domToImage from 'dom-to-image'
-import moment from 'moment'
+import { formatShortDate } from 'pp365-shared-library'
 
 /**
  * Hook for capturing a report snapshot using `dom-to-image`. Returns a callback function
@@ -11,7 +11,8 @@ export function useCaptureReportSnapshot() {
   return async (): Promise<Blob> => {
     try {
       const statusReportHtml = document.getElementById('pp-statussection')
-      const date = moment().format('DD.MM.YYYY HH:mm')
+      // When the snapshot was taken, in the language of the page it was taken on.
+      const date = formatShortDate(new Date(), true)
       const dateStamp = document.createElement('p')
       dateStamp.textContent = `${date}`
       dateStamp.style.textAlign = 'right'
@@ -20,7 +21,7 @@ export function useCaptureReportSnapshot() {
       statusReportHtml.style.backgroundColor = '#FFFFFF'
       const content = await domToImage.toBlob(statusReportHtml)
       return content
-    } catch (error) {
+    } catch {
       return null
     }
   }

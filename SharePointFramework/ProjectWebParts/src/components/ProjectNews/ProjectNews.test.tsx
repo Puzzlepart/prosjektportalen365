@@ -59,6 +59,10 @@ describe('ProjectNews', () => {
     expect(screen.getByText('Prosjektnyheter', { selector: 'span' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: strings.CreateNewsLinkLabel })).toBeInTheDocument()
     expect(screen.getAllByText('Kari Nordmann')).toHaveLength(2)
+    // In SharePoint's UI language (Norwegian when the page names none), not jsdom's en-US.
+    const dates = screen.getAllByTitle(format(strings.ModifiedTooltipText, '01.09.2026'))
+    expect(dates).toHaveLength(2)
+    expect(dates[0]).toHaveTextContent('| 01.09.2026')
     expect(screen.queryByRole('link', { name: 'Dugnad' })).toBeNull()
     await user.click(screen.getByRole('button', { name: strings.ShowMoreNews }))
     expect(screen.getByRole('link', { name: 'Dugnad' })).toBeInTheDocument()

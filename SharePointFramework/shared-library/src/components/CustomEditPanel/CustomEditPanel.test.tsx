@@ -327,8 +327,22 @@ describe('CustomEditPanel', () => {
       )
     })
     const date = await screen.findByPlaceholderText(strings.Placeholder.DatePicker)
-    expect(date).toHaveValue(new Date('2026-03-01T00:00:00Z').toLocaleDateString())
+    // In SharePoint's UI language (Norwegian when the page names none), not the browser's.
+    expect(date).toHaveValue('01.03.2026')
     // The label is tied to the date's input, not to an id nothing has.
     expect(screen.getByLabelText(/Startdato/)).toBe(date)
+  })
+
+  it('takes a date typed the way the date picker writes it', async () => {
+    const start = field('GtStartDate', 'DateTime', { Title: 'Startdato' })
+    renderPanel({ fields: [start] })
+    const date = await screen.findByPlaceholderText(strings.Placeholder.DatePicker)
+    await type(date, '15.03.2026')
+    await run(() => {
+      fireEvent.blur(date)
+    })
+    // Sent as the day typed, which SharePoint reads in the site's time zone (`toCalendarDate`).
+    await waitFor(() => expect(properties().GtStartDate).toBe('2026-03-15'))
+    expect(date).toHaveValue('15.03.2026')
   })
 })

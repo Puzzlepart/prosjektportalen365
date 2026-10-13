@@ -7,14 +7,21 @@
   bottom: 0;
   padding: 0 32px;
 
+  // Column names at 14px semibold, values at 12px in the lighter grey and links at the size of
+  // the text around them, as 1.14's v8 list and every other list (`DataGridList`, the hub's
+  // `ListGrid`); Fluent's `Link` sets 14px of its own.
   :global(.fui-TableCell) {
     overflow: hidden;
     text-overflow: ellipsis;
     padding-top: 11px;
     padding-bottom: 11px;
-    font-size: 12px;
-    font-weight: 400;
-    color: #323130;
+    font-size: var(--fontSizeBase200);
+    font-weight: var(--fontWeightRegular);
+    color: var(--colorNeutralForeground3);
+
+    :global(.fui-Link) {
+      font-size: inherit;
+    }
   }
 
   :global(.fui-TableHeaderCell) {
@@ -22,8 +29,8 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    font-weight: 600;
-    font-size: 14px;
-    color: #323130;
+    font-weight: var(--fontWeightSemibold);
+    font-size: var(--fontSizeBase300);
+    color: var(--colorNeutralForeground1);
   }
 }

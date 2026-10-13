@@ -1,0 +1,43 @@
+name: Check skills
+
+# .claude/skills is the one copy of the agent skills: Claude Code reads only that folder, and
+# GitHub Copilot reads it too (besides .github/skills and .agents/skills). The check fails when a
+# second copy or a Copilot-only skill appears, or when a SKILL.md breaks the Agent Skills rules
+# Copilot applies (see .tasks/check-skills.js). It takes seconds and deploys nothing, so
+# [skip-ci] is not honored here.
+on:
+  push:
+    # Branches only: path filters are not evaluated for tag pushes, so a release tag would run it.
+    branches:
+      - '**'
+    paths:
+      - '.claude/skills/**'
+      - '.github/skills/**'
+      - '.agents/skills/**'
+      - .tasks/check-skills.js
+      - .github/workflows/skills.yml
+  pull_request:
+    paths:
+      - '.claude/skills/**'
+      - '.github/skills/**'
+      - '.agents/skills/**'
+      - .tasks/check-skills.js
+      - .github/workflows/skills.yml
+
+permissions:
+  contents: read
+
+jobs:
+  check_skills:
+    name: Skills only in .claude/skills
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      # Dependency-free script: no npm install or Rush install needed.
+      - name: Run npm run check-skills
+        run: npm run check-skills

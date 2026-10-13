@@ -1,0 +1,74 @@
+name: CI (build debug)
+
+# Builds the test channel's release package as the live packages-only job does, without deploying
+# it, so changes to the build itself (Install/Build-Release.ps1 switches, the Rush and Heft setup)
+# can be tried and measured before the live workflows take them (phase 5, slice 1c). It needs no
+# secrets and touches no tenant.
+#
+# Runs on a push whose commit subject carries [build-debug]. Put [skip-ci] in the same subject to
+# keep the live test-channel workflow from building and deploying that commit. workflow_dispatch
+# works once this file is on the default branch.
+on:
+  push:
+    branches:
+      - releases/1.15
+      - 'feat/**'
+  workflow_dispatch:
+
+env:
+  # The live workflow's heap and parallelism, so the times compare.
+  NODE_OPTIONS: --max-old-space-size=8192
+  RUSH_PARALLELISM: 2
+
+jobs:
+  # Only the subject (first line) counts, as in the live workflow: squash-merge bodies carry the
+  # branch's commit subjects.
+  commit_subject:
+    name: Determine commit subject
+    runs-on: ubuntu-latest
+    outputs:
+      subject: ${{ steps.subject.outputs.subject }}
+    steps:
+      - name: Extract first line of commit message
+        id: subject
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        run: echo "subject=${COMMIT_MESSAGE%%$'\n'*}" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: [commit_subject]
+    name: Build release package (debug)
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || contains(needs.commit_subject.outputs.subject, '[build-debug]') }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Run Install/Build-Release.ps1 in CI mode for channel test
+        # The live packages-only job's arguments (the rebuild's timeline, printed here and in the job
+        # summary, and no PnP.PowerShell, which only the skipped PnP templates use). A change to the
+        # build goes here first, as a new switch, and moves to the live workflow once proven.
+        env:
+          PP365_BUILD_NUMBER: ${{ github.run_number }}
+        run: Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test -RushTimeline -SkipPnPPowerShell
+        shell: pwsh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-package-debug
+          path: release
+
+      - name: Upload the Rush logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rush-logs-debug
+          path: |
+            SharePointFramework/rush-*.build.log
+            SharePointFramework/*/rush-logs/
+            Templates/rush-logs/
+            e2e/rush-logs/
+          if-no-files-found: warn

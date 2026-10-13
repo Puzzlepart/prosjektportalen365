@@ -10,7 +10,7 @@ import {
 } from '@fluentui/react-components'
 import * as strings from 'ProjectWebPartsStrings'
 import styles from './RecentNews.module.scss'
-import { getFluentIcon, format } from 'pp365-shared-library'
+import { getFluentIcon, format, formatShortDate } from 'pp365-shared-library'
 import { IRecentNewsProps } from './types'
 
 export const RecentNews: FC<IRecentNewsProps> = ({ news, maxVisible = 4 }) => {
@@ -42,11 +42,11 @@ export const RecentNews: FC<IRecentNewsProps> = ({ news, maxVisible = 4 }) => {
                           <Caption1
                             title={format(
                               strings.ModifiedTooltipText,
-                              new Date(item.modifiedDate).toLocaleDateString()
+                              formatShortDate(item.modifiedDate)
                             )}
                           >
                             {' | '}
-                            {new Date(item.modifiedDate).toLocaleDateString()}
+                            {formatShortDate(item.modifiedDate)}
                           </Caption1>
                         </>
                       )}

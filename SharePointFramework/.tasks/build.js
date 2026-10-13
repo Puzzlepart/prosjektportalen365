@@ -31,7 +31,10 @@ const solutionConfigFile = joinPath(process.cwd(), 'config', '.generated-solutio
 
 function run(cmd, args = []) {
   log(`${colors.cyan(cmd)} ${args.join(' ')}`, 'build')
-  const result = spawnSync(cmd, args, { stdio: 'inherit', shell: true, env: process.env })
+  // With `shell: true` Node joins the arguments with spaces and no quoting, so an absolute path
+  // with a space in it (a Windows profile folder, for one) would split in two.
+  const quoted = args.map((arg) => (/\s/.test(arg) && !/^".*"$/.test(arg) ? `"${arg}"` : arg))
+  const result = spawnSync(cmd, quoted, { stdio: 'inherit', shell: true, env: process.env })
   if (result.status !== 0) {
     throw new Error(`${cmd} ${args.join(' ')} exited with code ${result.status}`)
   }

@@ -47,13 +47,17 @@
                                         },
                                         "IdeaRegistration": {
                                             "$ref": "#/definitions/guid"
+                                        },
+                                        "TemplatePackageCatalog": {
+                                            "$ref": "#/definitions/guid"
                                         }
                                     },
                                     "required": [
                                         "Footer",
                                         "IdeaProcessing",
                                         "IdeaProjectData",
-                                        "IdeaRegistration"
+                                        "IdeaRegistration",
+                                        "TemplatePackageCatalog"
                                     ]
                                 }
                             },
@@ -189,12 +193,16 @@
                                         },
                                         "TemplateSelectorCommand": {
                                             "$ref": "#/definitions/guid"
+                                        },
+                                        "RiskActionPlanner": {
+                                            "$ref": "#/definitions/guid"
                                         }
                                     },
                                     "required": [
                                         "ProjectSetup",
                                         "ProjectUpgrade",
-                                        "TemplateSelectorCommand"
+                                        "TemplateSelectorCommand",
+                                        "RiskActionPlanner"
                                     ]
                                 }
                             },

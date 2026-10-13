@@ -1095,6 +1095,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
               Achievement: m.Achievement,
               AchievementDisplay: m.AchievementDisplay,
               DateDisplay: m.DateDisplay,
+              Date: m.Date,
               TrendIcon: m.TrendIcon
             }
           })
