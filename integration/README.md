@@ -51,7 +51,11 @@ cp .env.example .env                                    # the test hub, a progra
 npm test
 ```
 
-A test skips, with the reason, when a site or the sign-in it needs is not configured;
+The tests of the templates' state (`tests/template.test.ts`) run only with
+`INTEGRATION_TEMPLATES_APPLIED=true`, which CI sets after its full upgrade (the packages-only one
+applies no templates); in CI the installation log's newest entry must also name the commit under
+test (`GITHUB_SHA`). A test skips, with the reason, when a site or the sign-in it needs is not
+configured;
 `INTEGRATION_STRICT=true` (CI) fails it instead, since a suite skipped whole would pass having
 tested nothing. `INTEGRATION_LOCALE` (`nb-no` by default, or `en-us`) must be the sites' language:
 the library finds the hub's lists by their titles in the strings' language, and the harness stops

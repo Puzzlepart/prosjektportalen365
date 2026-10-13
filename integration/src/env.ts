@@ -54,6 +54,13 @@ export const env = {
     const pfxBase64 = configured('CI_CERT_BASE64')
     return tenant && clientId && pfxBase64 ? { tenant, clientId, pfxBase64 } : undefined
   })(),
+  /**
+   * Whether the run's upgrade applied the templates: CI's full upgrade does, the packages-only one
+   * (`[apps-only]`) does not. The tests of the templates' state run only then.
+   */
+  templatesApplied: configured('INTEGRATION_TEMPLATES_APPLIED') === 'true',
+  /** The commit under test, in CI (`GITHUB_SHA`), whose upgrade the installation log names. */
+  commit: configured('GITHUB_SHA'),
   cookiesFile: resolve(
     ROOT,
     configured('INTEGRATION_COOKIES_FILE') ?? resolve(ROOT, '..', 'e2e', '.auth', 'user.json')

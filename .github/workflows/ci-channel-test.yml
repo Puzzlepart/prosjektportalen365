@@ -242,6 +242,10 @@ jobs:
       INTEGRATION_USER: ${{ secrets.E2E_USERNAME }}
       # A missing variable or secret fails the job: skipped whole, the suite would pass untested.
       INTEGRATION_STRICT: 'true'
+      # The full upgrade applies the templates, the packages-only one ([apps-only]) does not: the
+      # tests of the templates' state run only after the former. GITHUB_SHA names the commit whose
+      # upgrade the installation log must show.
+      INTEGRATION_TEMPLATES_APPLIED: ${{ needs.upgrade_channel_test.result == 'success' }}
     steps:
       - uses: actions/checkout@v4
 

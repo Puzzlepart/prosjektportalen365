@@ -342,8 +342,26 @@ both. It now reads the view's stored columns and order before it appends. A Jest
 failing first, and the integration test failed against the old logic (put back into the build for
 the run only). A changelog line.
 
-Left for the exit: the browser column flow (`e2e/tests/flows/portfolio-overview-column.spec.ts`)
-keeps its UI assertions and drops its data assertions (the column's list item, its visibility), once
-this test is green in CI (I9). Not here: `syncPropertyItemToHub` itself and its JSOM `syncList`
+Exit met: green app-only in CI (run 38274719499, 33 of 33). The browser column flow
+(`e2e/tests/flows/portfolio-overview-column.spec.ts`) then kept its UI assertions (the header shows,
+last, after the save and after a reload) and dropped its data assertions (the column's list item
+and its visibility flag, and with them the fixture's `findTestColumns`), as I9 has it; it still
+attaches the views' state for diagnosis. Not here: `syncPropertyItemToHub` itself and its JSOM `syncList`
 (ProjectWebParts' adapter, slice 5 and I10).
+
+### Slice 4: the templates' state after an upgrade (2026-10-12)
+
+Done, read-only: `tests/template.test.ts`. The installation log's newest entry carries the root
+package's version and, in CI, the short hash of the commit under test (`GITHUB_SHA`, as
+`Build-Release.ps1` stamps `InstallVersion`) and the test channel: the upgrade job has an assertion,
+not only an exit code, and the test runs after both upgrade paths, since both log. After a full
+upgrade only (`INTEGRATION_TEMPLATES_APPLIED`, set by the job from the full upgrade's result;
+locally opt-in): `Status muligheter` has one configuration row per level, all on
+`GtStatusOpportunities` and none left on another column; the reserved project's stakeholder register
+has `GtStakeholderGroups`, a multi-value taxonomy field named and grouped from the resources; both
+matrices' default data sources resolve by id; the overview's default view (the first in sort order,
+as `useFetchData` picks it) names only existing columns. All green against the test hub, and the
+log test fails with the newest installation named when the commit differs.
+
+Open: slice 5 (the consumers' adapters) is to be decided with the user.
 
