@@ -28,6 +28,7 @@ SharePointFramework/**/.heft
 **/.rush/temp/
 **/*.build.log
 **/*.build.error.log
+rush-logs/
 **/package-lock.json
 .vscode/launch.json*
 .vscode/chrome-debug-user-data

@@ -1,4 +1,16 @@
-import { getObjectValue } from '.'
+import { get } from '@microsoft/sp-lodash-subset'
+
+/** What an empty value sorts as. */
+const EMPTY = '-'
+
+/**
+ * The value `object` sorts by: its `property`, or `EMPTY` when that holds nothing. Zero is a
+ * number like any other, not an empty value (as it is to `getObjectValue`).
+ */
+function sortValue<T>(object: T, property?: string): T | string {
+  const value: T = property ? get(object, property) : object
+  return value === undefined || value === null || value === '' ? EMPTY : value
+}
 
 /**
  * The number a value holds: a number, or text that is a number (search returns numbers as text);
@@ -13,7 +25,7 @@ function asNumber(value: unknown): number | undefined {
 
 /**
  * Sort numerically: numbers, and numbers in text, by their value; amounts and percentages once
- * `symbol` is removed; any other value as it is.
+ * `symbol` is removed; empty values first ascending and last descending; any other value as it is.
  *
  * @param a Object a
  * @param b Object b
@@ -28,8 +40,8 @@ export function sortNumerically<T>(
   property?: string,
   symbol?: string
 ): number {
-  const aValue = getObjectValue(a, property, '-') || a
-  const bValue = getObjectValue(b, property, '-') || b
+  const aValue = sortValue(a, property)
+  const bValue = sortValue(b, property)
 
   if (typeof aValue === 'number' && isNaN(aValue)) {
     return 1
@@ -37,6 +49,12 @@ export function sortNumerically<T>(
   if (typeof bValue === 'number' && isNaN(bValue)) {
     return -1
   }
+
+  // Empty values come first ascending, as they already do among text ("-" before "0"). Compared
+  // with a number, "-" is neither smaller nor larger, which would leave the whole column unsorted.
+  if (aValue === EMPTY && bValue === EMPTY) return 0
+  if (aValue === EMPTY) return ascending ? -1 : 1
+  if (bValue === EMPTY) return ascending ? 1 : -1
 
   if (symbol) {
     const aString = typeof aValue === 'string' ? aValue : String(aValue ?? '')

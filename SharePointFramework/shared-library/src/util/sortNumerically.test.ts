@@ -30,4 +30,17 @@ describe('sortNumerically', () => {
   it('compares values that are no number as they are', () => {
     expect(sorted(['2026-10-09', '2025-01-31'], true)).toEqual(['2025-01-31', '2026-10-09'])
   })
+
+  // `Nytteoversikt` holds numbers, not text: a start value of 0 is common.
+  it('compares zero as a number', () => {
+    expect(sorted([4, 0, 2], true)).toEqual([0, 2, 4])
+    expect(sorted([4, 0, 2], false)).toEqual([4, 2, 0])
+    expect(sorted([30, 0, 4], true, 'kr ')).toEqual([0, 4, 30])
+  })
+
+  it('puts empty values first ascending and last descending, among numbers as among text', () => {
+    expect(sorted([30, null, 4, undefined], true)).toEqual([null, undefined, 4, 30])
+    expect(sorted([30, null, 4, undefined], false)).toEqual([30, 4, null, undefined])
+    expect(sorted(['30', '', '4'], true)).toEqual(['', '4', '30'])
+  })
 })

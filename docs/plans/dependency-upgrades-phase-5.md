@@ -1154,3 +1154,23 @@ The user asked for the list of small things before the merge, as the PR waits an
   on SharePoint; the browser column flow now checks only what the admin sees.
 - **The release note** names the integration tests and the three fixes users can notice.
 
+### Before merge: Copilot's review of #1784 (2026-10-13)
+
+Both findings held, were seen failing in a test first and are fixed, each with a changelog line:
+
+- **Zero and empty values in a numeric sort.** `sortNumerically` read the value through
+  `getObjectValue`, whose fallback is falsy, so a 0 became the `-` of an empty value; and `-`
+  compared with a number is neither smaller nor larger, so one such row left the whole column
+  unsorted (`[4, 0, 2]` stayed as it was). Search gives numbers as text, so only real numbers were
+  hit: `Nytteoversikt`'s start, desired and last measured values (`parseFloat` in
+  `fetchBenefitItemsWithSource`). The value is now read without the falsy fallback, and an empty
+  value sorts first ascending, as it already did among text. Already wrong in 1.14.
+- **The aggregation's search after a column change.** `usePortfolioAggregationFilteredItems`
+  searches the shown columns but did not list `state.columns` among its memo's dependencies: with a
+  search active, showing, hiding, adding or deleting a column left the rows found with the old
+  columns, while `Eksporter til Excel` (which calls `getFilteredItems` itself) used the new ones.
+
+Its summary also showed two Rush logs from slice 1c's phased-build trial in the diff
+(`*._phase_build.log`). The root `.gitignore` covered only `*.build.log`, so eight lint and
+validate-loc logs were already tracked; all ten are deleted and `rush-logs/` is ignored.
+

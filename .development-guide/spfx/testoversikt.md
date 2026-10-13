@@ -14,7 +14,7 @@ Hvilke automatiske tester som dekker hver komponent, lag for lag, med noen ord o
 
 | Lag | Filer | Tester |
 |---|---|---|
-| Jest | 175 | 1 144: PortfolioExtensions 101, PortfolioWebParts 199, ProgramWebParts 59, ProjectExtensions 118, ProjectWebParts 215, shared-library 452 |
+| Jest | 176 | 1 147: PortfolioExtensions 101, PortfolioWebParts 200, ProgramWebParts 59, ProjectExtensions 118, ProjectWebParts 215, shared-library 454 |
 | Kjøretidskontrakt | 1 | 4 |
 | Integrasjon | 10 | 41: 12 uten tenant, 29 mot testtenanten |
 | E2E | 22 spesifikasjoner | 52: smoke 19, flows 26 (de to i CI), local 7 |
@@ -27,7 +27,7 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 |---|---|---|---|---|
 | Porteføljeoversikt | 7 filer, 54: reducer, filtrering, Excel-eksport, kolonnemeny, kolonneskjema | Smoke: listen, søk, filter, Excel-eksport. Flows: kolonnemeny på høyreklikk, dra kolonner, panelets topp, tittelknappen, typografi, navigasjon, ny kolonne (skriver) | Prosjektkolonner; ny kolonne i en visning, også med skjulte kolonner (skriver); kolonnekonfigurasjon; standardvisningen og fargene for `Status muligheter` etter oppgradering | — |
 | Delt liste (`List`, `ListGrid`, `Vis eller skjul kolonner`) | 6 filer, 41 | Gjennom flytene for porteføljeoversikten | — | — |
-| Portefølje aggregeringsoversikt | 9 filer, 75: reducer (51), datahenting, Excel-eksport, verktøylinje, gruppering | Smoke: aggregeringssidene og Nytteoversikt med filter. Flows: typografi | — | Hubens dataadapter |
+| Portefølje aggregeringsoversikt | 10 filer, 76: reducer (51), datahenting, Excel-eksport, verktøylinje, gruppering, søk i kolonnene som vises | Smoke: aggregeringssidene og Nytteoversikt med filter. Flows: typografi | — | Hubens dataadapter |
 | Prosjektutlisting | 4 filer, 16 | Flows: kortets panel viser prosjektnavnet | — | — |
 | Prosjekttidslinje (porteføljenivå) | Via bibliotekets `ProjectTimeline` (22) | Smoke: prøveklikk på en prosjektlenke, filter | — | Ingen test av webdelen selv |
 | Siste prosjekter | 5: nyeste områder, vis flere/færre, tom, feil | Indirekte (hubens forside) | — | — |

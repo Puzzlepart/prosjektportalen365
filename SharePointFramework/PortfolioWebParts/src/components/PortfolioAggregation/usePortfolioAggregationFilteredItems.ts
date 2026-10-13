@@ -64,6 +64,6 @@ export function getFilteredItems(state: IPortfolioAggregationContext['state']) {
 export function usePortfolioAggregationFilteredItems({ state }: IPortfolioAggregationContext) {
   return useMemo(
     () => getFilteredItems(state),
-    [state.searchTerm, state.items, state.activeFilters, state.filters]
+    [state.searchTerm, state.items, state.activeFilters, state.filters, state.columns]
   )
 }
