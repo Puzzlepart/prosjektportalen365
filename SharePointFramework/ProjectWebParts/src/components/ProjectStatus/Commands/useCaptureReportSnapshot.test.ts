@@ -3,15 +3,21 @@
 const mockToBlob = jest.fn()
 jest.mock('dom-to-image', () => ({ __esModule: true, default: { toBlob: mockToBlob } }))
 
+import { formatShortDate } from 'pp365-shared-library'
 import { getSnapshotScale, useCaptureReportSnapshot } from './useCaptureReportSnapshot'
 
 /**
- * Capturing the published report: the project title above it and the capture date below it,
- * on the page only while the snapshot is taken; twice the page's resolution, less for reports
- * too long for a browser's canvas, and the page's resolution when the larger canvas fails.
+ * Capturing the published report: the project title above it and the capture date below it (in
+ * the page's language), on the page only while the snapshot is taken; twice the page's
+ * resolution, less for reports too long for a browser's canvas, and the page's resolution when
+ * the larger canvas fails.
  */
 describe('useCaptureReportSnapshot', () => {
   const png = new Blob(['png'], { type: 'image/png' })
+  const now = new Date(2026, 9, 13, 10, 5)
+
+  beforeAll(() => jest.useFakeTimers({ now }))
+  afterAll(() => jest.useRealTimers())
 
   function statusSection(innerHTML = '', width = 1200, height = 3000) {
     document.body.innerHTML = `<div id="pp-statussection">${innerHTML}</div>`
@@ -75,9 +81,7 @@ describe('useCaptureReportSnapshot', () => {
     const anchor = snapshot.querySelector('[data-snapshot-title-anchor]')
     expect(anchor.firstElementChild.tagName).toBe('H2')
     expect(anchor.firstElementChild.textContent).toBe('Frisbeegolfbane – Delprosjekt A')
-    expect(snapshot.firstElementChild.lastElementChild.textContent).toMatch(
-      /^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$/
-    )
+    expect(snapshot.firstElementChild.lastElementChild.textContent).toBe(formatShortDate(now, true))
     // Only the snapshot has them: the page is as it was.
     expect(node.querySelector('h2')).toBeNull()
     expect(node.lastElementChild).toBe(node.querySelector('[data-snapshot-title-anchor]'))

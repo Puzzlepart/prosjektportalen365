@@ -1730,7 +1730,7 @@ Hvilke automatiske tester som dekker hver komponent, lag for lag, med noen ord o
 
 | Lag | Filer | Tester |
 |---|---|---|
-| Jest | 176 | 1 147: PortfolioExtensions 101, PortfolioWebParts 200, ProgramWebParts 59, ProjectExtensions 118, ProjectWebParts 215, shared-library 454 |
+| Jest | 178 | 1 167: PortfolioExtensions 101, PortfolioWebParts 200, ProgramWebParts 59, ProjectExtensions 118, ProjectWebParts 235, shared-library 454 |
 | Kjøretidskontrakt | 1 | 4 |
 | Integrasjon | 10 | 41: 12 uten tenant, 29 mot testtenanten |
 | E2E | 22 spesifikasjoner | 52: smoke 19, flows 26 (de to i CI), local 7 |
@@ -1766,7 +1766,7 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 |---|---|---|---|---|
 | Prosjektinformasjon | 5 filer, 31, og bibliotekets `CustomEditPanel` (39) | Smoke: monteres, «Vis all prosjektinformasjon». Flows: personvelgeren og panelene (lukker uten å lagre), lenken tilbake til huben | Egenskaper tur-retur: datoer i fem tidssoner, tekst, valg, person, termer (skriver); hubraden og synkroniseringen til den, også gjennom ProjectWebParts' adapter (skriver) | Lagring gjøres ikke i E2E |
 | Fasevelger | 4 filer, 30: reducer, fasedialogen | Smoke: fasene vises, prøveklikk på hver | Fasene fra termlageret, etikettene og tekstene; `getPhases`; kjøretidskontrakten for termlageret | Å endre fase er ikke automatisert |
-| Prosjektstatus | 15 filer, 73: reducer, seksjoner, verktøylinje, faner, delprosjekter | Smoke: siden monteres. Flows: kladd opprettet og slettet (skriver), fanene og seksjonene | Kladd i en egen rapportserie, fylt ut, lest med personen og slettet (skriver) | Publisering er manuell |
+| Prosjektstatus | 17 filer, 93: reducer, seksjoner, verktøylinje, faner, delprosjekter, øyeblikksbildedialogen (fullskjerm, lenker, åpning fra en lenke) og øyeblikksbildet (tittel, dato, oppløsning) | Smoke: siden monteres. Flows: kladd opprettet og slettet (skriver), fanene og seksjonene | Kladd i en egen rapportserie, fylt ut, lest med personen og slettet (skriver) | Publisering er manuell |
 | Risikomatrise og Mulighetsmatrise | 4 og 2, og 15 delte: begge webdelene, prosjekt- og programmodus | — (står på ingen malside) | Søket med matrisens datakilde, også gjennom ProjectWebParts' adapter på programmet; datakildene finnes etter oppgradering | Ingen E2E |
 | Prosjekttidslinje (prosjektnivå) | 4 filer, 17 | Smoke: listen får plass i 1280 og 1920 px. Flows: typografi | — | Tidslinjens stolper |
 | Prosjektnyheter | 2 filer, 7 | Indirekte (prosjektets forside) | — | Å opprette en nyhetsside |
