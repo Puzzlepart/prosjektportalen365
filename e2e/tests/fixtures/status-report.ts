@@ -15,16 +15,24 @@ export const deleteReportButton = (webPart: Locator) =>
 export const snapshotButton = (webPart: Locator) =>
   webPart.getByRole('button', { name: /^åpne øyeblikksbilde$|^open as snapshot$/i }).first()
 
-/** The hub's status list, whatever the installation language named it. */
-async function statusListTitle(page: Page) {
+/** The title of one of the hub's lists, whatever the installation language named it. */
+async function hubListTitle(page: Page, pattern: RegExp, what: string) {
   const response = await restGet(page, `${hub}/_api/web/lists?$select=Title&$top=500`)
   const titles = ((await response.json()) as { value: { Title: string }[] }).value.map(
     (l) => l.Title
   )
-  const title = titles.find((t) => /^(prosjektstatus|project status)$/i.test(t))
-  if (!title) throw new Error(`No status list among: ${titles.join(', ')}`)
+  const title = titles.find((t) => pattern.test(t))
+  if (!title) throw new Error(`No ${what} among: ${titles.join(', ')}`)
   return title
 }
+
+/** The hub's status list. */
+const statusListTitle = (page: Page) =>
+  hubListTitle(page, /^(prosjektstatus|project status)$/i, 'status list')
+
+/** The hub's library of status report attachments, with a folder per report named by its id. */
+const attachmentsLibraryTitle = (page: Page) =>
+  hubListTitle(page, /^(prosjektstatusvedlegg|projectstatusattachments)$/i, 'attachments library')
 
 interface DraftReport {
   Id: number
@@ -56,39 +64,50 @@ interface PublishedSnapshot {
 }
 
 /**
- * The project's published reports that have a snapshot (the attachment `Snapshot.png` publishing
- * makes), newest first. Publishing cannot be undone from the page, so no flow publishes: the
- * snapshot flows read one that is there, and skip when none is.
+ * The project's published reports that have a snapshot, newest first. Publishing uploads
+ * `Snapshot.png` to the report's folder in the hub's attachments library, not as a list item
+ * attachment. Publishing cannot be undone from the page, so no flow publishes: the snapshot flows
+ * read one that is there, and skip when none is.
  */
 export async function publishedSnapshots(
   page: Page,
   projectUrl: string
 ): Promise<PublishedSnapshot[]> {
-  const [list, site] = await Promise.all([statusListTitle(page), siteId(page, projectUrl)])
-  const response = await restGet(
-    page,
-    `${hub}/_api/web/lists/getbytitle('${list}')/items?$select=Id,GtModerationStatus,AttachmentFiles&$expand=AttachmentFiles&$filter=GtSiteId eq '${site}'&$orderby=Created desc&$top=500`
-  )
-  if (!response.ok())
-    throw new Error(
-      `Could not list the reports of ${projectUrl}: HTTP ${response.status()} ${await response.text()}`
+  const [list, library, site] = await Promise.all([
+    statusListTitle(page),
+    attachmentsLibraryTitle(page),
+    siteId(page, projectUrl)
+  ])
+  const [reports, files] = await Promise.all([
+    restGet(
+      page,
+      `${hub}/_api/web/lists/getbytitle('${list}')/items?$select=Id,GtModerationStatus&$filter=GtSiteId eq '${site}'&$orderby=Created desc&$top=500`
+    ),
+    restGet(
+      page,
+      `${hub}/_api/web/lists/getbytitle('${library}')/items?$select=FileLeafRef,FileDirRef,FileRef&$filter=FSObjType eq 0&$top=5000`
     )
-  const items = (
-    (await response.json()) as {
-      value: {
-        Id: number
-        GtModerationStatus: string
-        AttachmentFiles: { FileName: string; ServerRelativeUrl: string }[]
-      }[]
+  ])
+  for (const [response, what] of [
+    [reports, `the reports of ${projectUrl}`],
+    [files, 'the status report attachments']
+  ] as const) {
+    if (!response.ok())
+      throw new Error(`Could not list ${what}: HTTP ${response.status()} ${await response.text()}`)
+  }
+  const snapshotByReport = new Map<string, string>()
+  for (const file of (
+    (await files.json()) as {
+      value: { FileLeafRef: string; FileDirRef: string; FileRef: string }[]
     }
-  ).value
-  return items
+  ).value) {
+    if (/^snapshot\.png$/i.test(file.FileLeafRef)) {
+      snapshotByReport.set(file.FileDirRef.split('/').pop()!, file.FileRef)
+    }
+  }
+  return ((await reports.json()) as { value: { Id: number; GtModerationStatus: string }[] }).value
     .filter((i) => /publisert|published/i.test(i.GtModerationStatus ?? ''))
-    .map((i) => ({
-      reportId: i.Id,
-      snapshotPath: i.AttachmentFiles?.find((a) => /^snapshot\.png$/i.test(a.FileName))
-        ?.ServerRelativeUrl
-    }))
+    .map((i) => ({ reportId: i.Id, snapshotPath: snapshotByReport.get(String(i.Id)) }))
     .filter((s): s is PublishedSnapshot => !!s.snapshotPath)
 }
 
