@@ -3,8 +3,14 @@ import React, { FC } from 'react'
 import { IColumnSearchPropertyFieldProps } from './types'
 import { Autocomplete } from '../Autocomplete'
 import { Input } from '@fluentui/react-components'
+import { withDefaults } from '../../util'
 
-export const ColumnSearchPropertyField: FC<IColumnSearchPropertyFieldProps> = (props) => {
+const COLUMN_SEARCH_PROPERTY_FIELD_DEFAULT_PROPS: Partial<IColumnSearchPropertyFieldProps> = {
+  managedProperties: []
+}
+
+export const ColumnSearchPropertyField: FC<IColumnSearchPropertyFieldProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, COLUMN_SEARCH_PROPERTY_FIELD_DEFAULT_PROPS)
   return (
     <>
       {_.isEmpty(props.managedProperties) ? (
@@ -28,8 +34,4 @@ export const ColumnSearchPropertyField: FC<IColumnSearchPropertyFieldProps> = (p
       {props.children}
     </>
   )
-}
-
-ColumnSearchPropertyField.defaultProps = {
-  managedProperties: []
 }

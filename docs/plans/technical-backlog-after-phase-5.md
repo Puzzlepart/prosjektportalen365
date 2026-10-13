@@ -177,4 +177,32 @@ Node matter only: V8 14.6 is Chromium 146, so Chrome and Edge of 2026 already la
 date picker's week numbers were wrong there since phase 5 added them. The rule now comes from
 `minimalDays` where Intl still gives it and from CLDR's week data by region otherwise (a test that
 stubs the week info failed on the old code; the suite is green on 22 and 26). The debug build on 26
-is the next proof, then the test-channel run.
+was green (run 38429925360), with the same six packages and the same coverage as the Node 22 build.
+
+The user asked whether any test looked at the week numbers themselves: none did, only at the rule
+given to Fluent. Two now do. A Jest test renders Fluent's real picker with our localization and
+reads the week column for January 2027 (53, then 1 from Monday 4 January by ISO 8601; 1, 2, 3 by
+the American rule): with the old helper on Node 26 it read 1, with the new one 53. A read-only
+browser flow (`e2e/tests/flows/date-picker-weeks.spec.ts`) opens `Rediger prosjektinformasjon`,
+types 15.01.2027 into the first date field, opens the calendar and reads the same column; against
+the deployed build in Playwright's Chromium 153 it read 1, 2, 3, 4, 5, the bug in a real browser,
+and it passes once this branch is deployed. January 2027 is the month to look at: 1 January is a
+Friday, so the rules disagree there and agree for all of 2026.
+
+### Slice 2 — `defaultProps` (2026-10-13)
+
+The 47 `X.defaultProps` became a `const X_DEFAULT_PROPS: Partial<IXProps>` above each component,
+merged at the top with `withDefaults(incomingProps, X_DEFAULT_PROPS)`, a small helper in the
+library's `util` (four tests) that applies a default for `undefined` only, as React did. The
+inventory's "eight files pass the props object on" undercounted: nearly all 47 do, to a hook, a
+context or a spread, so the one shape serves all of them and the diff per file is two lines plus
+the moved block. A script did 45 of them; `CurrencyColumn` (an expression body) and
+`StatusReportColumn` (a multi-line signature) were done by hand. Ten defaults are read elsewhere,
+by a web part's property pane (`min`/`max` of a row limit, `{...X.defaultProps, ...this.properties}`),
+by two tests and by `StatusReportColumn`'s `fetchData`: those constants are exported, with the
+component's name in the constant so the barrels never collide. One latent fault went with it:
+`fetchData` merged the column's settings into `StatusReportColumn.defaultProps` with `_.merge`,
+which writes into its first argument, so every fetch changed the shared defaults; it merges into a
+fresh object now. `no-restricted-syntax` in `pp365-eslint-config` stops `defaultProps` from coming
+back, and `kodemonster.md` and the `pp365-ui` skill describe the pattern. Every solution's suite was
+run on Node 26 after the change.

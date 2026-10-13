@@ -43,6 +43,7 @@
 	* [➤ Hook-mønsteret (`useKomponent`)](#-hook-mnsteret-usekomponent)
 		* [Hvorfor?](#hvorfor)
 		* [Mønster](#mnster)
+		* [Standardverdier for props](#standardverdier-for-props)
 		* [Ekte eksempel: `useProjectSetupDialog`](#ekte-eksempel-useprojectsetupdialog)
 	* [➤ Context-mønsteret](#-context-mnsteret)
 		* [Mønster](#mnster-1)
@@ -644,6 +645,25 @@ export const KomponentNavn: FC<IKomponentNavnProps> = (props) => {
   return <div>{/* Bruk verdiene fra hooken */}</div>
 }
 ```
+
+### Standardverdier for props
+
+Ikke `KomponentNavn.defaultProps`: React 18.3 advarer om den på funksjonskomponenter, og React 19 ignorerer den, så hver standardverdi ville forsvunnet stille ved neste React-hopp. Standardverdiene ligger i en konstant over komponenten og flettes inn øverst med `withDefaults` fra `pp365-shared-library` (i biblioteket fra `util`). Den gjør det React gjorde: en prop som er `undefined` får standardverdien, mens `null`, `false`, `0` og `''` beholdes. Flettingen skjer på selve objektet, slik at hooken, konteksten og `{...props}` ser de samme verdiene:
+
+```tsx
+const KOMPONENT_NAVN_DEFAULT_PROPS: Partial<IKomponentNavnProps> = {
+  rowLimit: 6,
+  showTitle: true
+}
+
+export const KomponentNavn: FC<IKomponentNavnProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, KOMPONENT_NAVN_DEFAULT_PROPS)
+  const { value } = useKomponentNavn(props)
+  …
+}
+```
+
+Leses verdiene andre steder (webdelens egenskapsrute, en test), eksporteres konstanten; navnet har komponentens navn i seg, så barrelene ikke kolliderer. En komponent som bare leser sine egne props, kan sette standardverdiene i destruktureringen (`({ rowLimit = 6 }) =>`), men ikke når `props` sendes videre. ESLint stopper `defaultProps` fra å komme tilbake.
 
 ### Ekte eksempel: `useProjectSetupDialog`
 
@@ -1730,10 +1750,10 @@ Hvilke automatiske tester som dekker hver komponent, lag for lag, med noen ord o
 
 | Lag | Filer | Tester |
 |---|---|---|
-| Jest | 179 | 1 174: PortfolioExtensions 101, PortfolioWebParts 200, ProgramWebParts 59, ProjectExtensions 118, ProjectWebParts 239, shared-library 457 |
+| Jest | 181 | 1 183: PortfolioExtensions 101, PortfolioWebParts 200, ProgramWebParts 59, ProjectExtensions 118, ProjectWebParts 239, shared-library 466 |
 | Kjøretidskontrakt | 1 | 4 |
 | Integrasjon | 10 | 41: 12 uten tenant, 29 mot testtenanten |
-| E2E | 24 spesifikasjoner | 54: smoke 19, flows 27 (de to i CI), local 8 |
+| E2E | 25 spesifikasjoner | 55: smoke 19, flows 28 (de to i CI), local 8 |
 
 I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder etter seg. «Indirekte» betyr at komponenten står på en side en E2E-test åpner. Testen sjekker da ikke komponenten selv, men `openPage` feiler fortsatt på feilgrensen «Noe gikk galt», på en webdel fra en annen kanal og på bunter som ikke lastes.
 
@@ -1764,7 +1784,7 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 
 | Komponent | Jest | E2E | Integrasjon | Ikke dekket / manuelt |
 |---|---|---|---|---|
-| Prosjektinformasjon | 5 filer, 31, og bibliotekets `CustomEditPanel` (39) | Smoke: monteres, «Vis all prosjektinformasjon». Flows: personvelgeren og panelene (lukker uten å lagre), lenken tilbake til huben | Egenskaper tur-retur: datoer i fem tidssoner, tekst, valg, person, termer (skriver); hubraden og synkroniseringen til den, også gjennom ProjectWebParts' adapter (skriver) | Lagring gjøres ikke i E2E |
+| Prosjektinformasjon | 5 filer, 31, og bibliotekets `CustomEditPanel` (41) | Smoke: monteres, «Vis all prosjektinformasjon». Flows: personvelgeren og panelene (lukker uten å lagre), lenken tilbake til huben, datovelgerens ukenummer for januar 2027 (uke 53, så 1) | Egenskaper tur-retur: datoer i fem tidssoner, tekst, valg, person, termer (skriver); hubraden og synkroniseringen til den, også gjennom ProjectWebParts' adapter (skriver) | Lagring gjøres ikke i E2E |
 | Fasevelger | 4 filer, 30: reducer, fasedialogen | Smoke: fasene vises, prøveklikk på hver | Fasene fra termlageret, etikettene og tekstene; `getPhases`; kjøretidskontrakten for termlageret | Å endre fase er ikke automatisert |
 | Prosjektstatus | 17 filer, 97: reducer, seksjoner, verktøylinje, faner, delprosjekter, øyeblikksbildedialogen (fullskjerm, lenker, åpning fra en lenke, eller ny fane når egenskapen er slått av) og øyeblikksbildet (tittel, dato, oppløsning) | Smoke: siden monteres. Flows: kladd opprettet og slettet (skriver), fanene og seksjonene, øyeblikksbildet av en publisert rapport (dialogen med bildet, fullskjerm der nettleseren tillater det, kopiert lenke som åpner det igjen, bildefilen i ny fane) | Kladd i en egen rapportserie, fylt ut, lest med personen og slettet (skriver) | Publisering er manuell, så øyeblikksbildeflyten leser en rapport som alt er publisert |
 | Risikomatrise og Mulighetsmatrise | 4 og 2, og 15 delte: begge webdelene, prosjekt- og programmodus | — (står på ingen malside) | Søket med matrisens datakilde, også gjennom ProjectWebParts' adapter på programmet; datakildene finnes etter oppgradering | Ingen E2E |
@@ -1788,7 +1808,7 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 
 | Del | Jest | Integrasjon |
 |---|---|---|
-| `CustomEditPanel` | 5 filer, 39 | Datoer i fem tidssoner, person og termer |
+| `CustomEditPanel` | 6 filer, 41, også ukenummerene Fluents kalender tegner for januar 2027 | Datoer i fem tidssoner, person og termer |
 | `PortalDataService` | 9 | Kolonner, visninger, konfigurasjon, innstillinger, statusrapporter, programrelasjoner |
 | `ProjectDataService` | 11 | Egenskaper tur-retur, faser |
 | `SPDataAdapterBase` og `EntityPortalService` | 43 | Hubraden og synkroniseringen |
@@ -1796,6 +1816,7 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 | Termlageret (`taxonomy`) | 73, og kjøretidskontrakten (4) | Fasene og etikettene |
 | `DataSourceService` | Ingen | Matrisenes datakilder slått opp på ID |
 | `ListLogger` | 3: feltene, en avvist skriving stopper ikke kalleren | — |
+| `withDefaults` og `getDatePickerLocalization` | 4 og 7: standardverdier som React ga dem; ukeregelen fra `minimalDays` eller CLDR-regionen | — |
 | `DataGridList`, `PeoplePicker`, `FilterPanel`, `Toolbar`, `ProjectTimeline`, `ExcelExportService` | 20, 8, 11, 10, 22, 24 | — (E2E dekker dem gjennom webdelene) |
 
 ### Integrasjonstestene

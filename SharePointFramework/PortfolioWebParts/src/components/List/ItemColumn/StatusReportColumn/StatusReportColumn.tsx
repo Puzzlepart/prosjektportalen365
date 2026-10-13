@@ -5,13 +5,32 @@ import { IStatusColumnProps } from './types'
 import { useStatusReportColumn } from './useStatusReportColumn'
 import { fetchData } from './data'
 import resource from 'SharedResources'
-import { ColumnRenderComponent, getFluentIconWithFallback } from 'pp365-shared-library'
+import {
+  ColumnRenderComponent,
+  getFluentIconWithFallback,
+  withDefaults
+} from 'pp365-shared-library'
 import { Popover, PopoverSurface, PopoverTrigger } from '@fluentui/react-components'
 import { TooltipContent } from './TooltipContent'
 
+/** Read by `fetchData` too, which merges the column's own settings over them. */
+export const STATUS_REPORT_COLUMN_DEFAULT_PROPS: Partial<IStatusColumnProps> = {
+  statusReportListName: resource.Lists_ProjectStatus_Title,
+  columnConfigListName: resource.Lists_ProjectColumnConfiguration_Title,
+  statusSectionsListName: resource.Lists_StatusSections_Title,
+  openDelay: 500,
+  tooltip: {
+    animation: {
+      delay: 50,
+      transitionDuration: 200
+    }
+  }
+}
+
 export const StatusReportColumn: ColumnRenderComponent<IStatusColumnProps> = (
-  props
+  incomingProps
 ): JSX.Element => {
+  const props = withDefaults(incomingProps, STATUS_REPORT_COLUMN_DEFAULT_PROPS)
   const { status, open, onOpenChange, cancelPendingOpen } = useStatusReportColumn(props)
 
   return (
@@ -37,18 +56,6 @@ export const StatusReportColumn: ColumnRenderComponent<IStatusColumnProps> = (
       </PopoverSurface>
     </Popover>
   )
-}
-StatusReportColumn.defaultProps = {
-  statusReportListName: resource.Lists_ProjectStatus_Title,
-  columnConfigListName: resource.Lists_ProjectColumnConfiguration_Title,
-  statusSectionsListName: resource.Lists_StatusSections_Title,
-  openDelay: 500,
-  tooltip: {
-    animation: {
-      delay: 50,
-      transitionDuration: 200
-    }
-  }
 }
 StatusReportColumn.key = 'statusreport'
 StatusReportColumn.id = 'StatusReport'

@@ -7,6 +7,14 @@ import { PlannerTaskItem } from './PlannerTaskItem'
 import styles from './RiskActionFieldValue.module.scss'
 import { IRiskActionFieldValueProps } from './types'
 import { useRiskActionFieldValue } from './useRiskActionFieldValue'
+import { withDefaults } from 'pp365-shared-library'
+
+const RISK_ACTION_FIELD_VALUE_DEFAULT_PROPS: Partial<IRiskActionFieldValueProps> = {
+  adminButton: {
+    appearance: 'transparent',
+    size: 'small'
+  }
+}
 
 /**
  * Renders the field value for a risk action.
@@ -15,7 +23,8 @@ import { useRiskActionFieldValue } from './useRiskActionFieldValue'
  *
  * @returns The rendered component.
  */
-export const RiskActionFieldValue: FC<IRiskActionFieldValueProps> = (props) => {
+export const RiskActionFieldValue: FC<IRiskActionFieldValueProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, RISK_ACTION_FIELD_VALUE_DEFAULT_PROPS)
   const context = useRiskActionFieldCustomizerContext()
   const { isFieldValueSet, isHiddenFieldValueSet, tasks, horizontalLayout, gap } =
     useRiskActionFieldValue()
@@ -59,9 +68,3 @@ export const RiskActionFieldValue: FC<IRiskActionFieldValueProps> = (props) => {
 }
 
 RiskActionFieldValue.displayName = 'RiskActionFieldValue'
-RiskActionFieldValue.defaultProps = {
-  adminButton: {
-    appearance: 'transparent',
-    size: 'small'
-  }
-}

@@ -4,15 +4,25 @@ import { ILatestGitHubReleaseProps } from './types'
 import styles from './LatestGitHubRelease.module.scss'
 import { useLatestGitHubRelease } from './useLatestGitHubRelease'
 import { Button, Label, Link, Tooltip, Divider } from '@fluentui/react-components'
-import { FluentIconName, getFluentIcon } from 'pp365-shared-library'
+import { FluentIconName, getFluentIcon, withDefaults } from 'pp365-shared-library'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
+
+export const LATEST_GIT_HUB_RELEASE_DEFAULT_PROPS: Partial<ILatestGitHubReleaseProps> = {
+  latestGitHubReleaseIsNewerIconName: 'ArrowCircleUpSparkle',
+  latestGitHubReleaseIsNewerIconColor: 'green',
+  latestGitHubReleaseIsOlderIconName: 'ArrowCircleDown',
+  latestGitHubReleaseIsOlderIconColor: 'orange',
+  latestGitHubReleaseIsSameIconName: 'CheckmarkCircle',
+  latestGitHubReleaseIsSameIconColor: 'black'
+}
 
 /**
  * Component for displaying the latest GitHub release and a
  * comparison between the latest GitHub release and the installed version.
  */
-export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
+export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, LATEST_GIT_HUB_RELEASE_DEFAULT_PROPS)
   const {
     latestGitHubRelease,
     latestGitHubVersion,
@@ -90,13 +100,4 @@ export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
       </div>
     </div>
   )
-}
-
-LatestGitHubRelease.defaultProps = {
-  latestGitHubReleaseIsNewerIconName: 'ArrowCircleUpSparkle',
-  latestGitHubReleaseIsNewerIconColor: 'green',
-  latestGitHubReleaseIsOlderIconName: 'ArrowCircleDown',
-  latestGitHubReleaseIsOlderIconColor: 'orange',
-  latestGitHubReleaseIsSameIconName: 'CheckmarkCircle',
-  latestGitHubReleaseIsSameIconColor: 'black'
 }

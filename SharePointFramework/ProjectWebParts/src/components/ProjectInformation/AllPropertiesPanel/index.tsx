@@ -1,11 +1,17 @@
 import strings from 'ProjectWebPartsStrings'
-import { BasePanel, IBasePanelProps } from 'pp365-shared-library'
+import { BasePanel, IBasePanelProps, withDefaults } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { ProjectProperties } from '../ProjectProperties'
 import { CLOSE_PANEL } from '../reducer'
 import { useProjectInformationContext } from '../context'
 
-export const AllPropertiesPanel: FC<IBasePanelProps> = (props) => {
+const ALL_PROPERTIES_PANEL_DEFAULT_PROPS: Partial<IBasePanelProps> = {
+  $type: 'AllPropertiesPanel',
+  headerText: strings.ProjectPropertiesHeader
+}
+
+export const AllPropertiesPanel: FC<IBasePanelProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, ALL_PROPERTIES_PANEL_DEFAULT_PROPS)
   const context = useProjectInformationContext()
 
   return (
@@ -18,9 +24,4 @@ export const AllPropertiesPanel: FC<IBasePanelProps> = (props) => {
       <ProjectProperties displayAllProperties />
     </BasePanel>
   )
-}
-
-AllPropertiesPanel.defaultProps = {
-  $type: 'AllPropertiesPanel',
-  headerText: strings.ProjectPropertiesHeader
 }

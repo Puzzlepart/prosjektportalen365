@@ -6,8 +6,15 @@ import { switchField, textField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'
 import { IUrlColumnProps } from './types'
 import { Link } from '@fluentui/react-components'
+import { withDefaults } from '../../../util'
 
-export const UrlColumn: ColumnRenderComponent<IUrlColumnProps> = (props) => {
+const URL_COLUMN_DEFAULT_PROPS: Partial<IUrlColumnProps> = {
+  openInNewTab: false,
+  description: null
+}
+
+export const UrlColumn: ColumnRenderComponent<IUrlColumnProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, URL_COLUMN_DEFAULT_PROPS)
   if (!props.columnValue) {
     return null
   }
@@ -23,11 +30,6 @@ export const UrlColumn: ColumnRenderComponent<IUrlColumnProps> = (props) => {
     </Link>
   )
 }
-
-UrlColumn.defaultProps = {
-  openInNewTab: false,
-  description: null
-}
 UrlColumn.key = 'url'
 UrlColumn.id = 'URL'
 UrlColumn.displayName = strings.ColumnRenderOptionUrl
@@ -35,7 +37,7 @@ UrlColumn.iconName = 'Link'
 UrlColumn.getDataTypeProperties = (onChange, dataTypeProperties: Record<string, any>) => [
   switchField({
     label: strings.ColumnRenderOptionUrlOpenInNewTabLabel,
-    checked: dataTypeProperties.openInNewTab ?? UrlColumn.defaultProps.openInNewTab,
+    checked: dataTypeProperties.openInNewTab ?? URL_COLUMN_DEFAULT_PROPS.openInNewTab,
     onChange: (checked) => onChange('openInNewTab', checked)
   }),
   textField({

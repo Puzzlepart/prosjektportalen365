@@ -5,10 +5,24 @@ import styles from './EditViewColumnsPanel.module.scss'
 import { IEditViewColumnsPanelProps } from './types'
 import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
 import { Button, Checkbox, Portal } from '@fluentui/react-components'
-import { BasePanel, IListColumn, WebPartTitle, getFluentIcon } from 'pp365-shared-library'
+import {
+  BasePanel,
+  IListColumn,
+  WebPartTitle,
+  getFluentIcon,
+  withDefaults
+} from 'pp365-shared-library'
 import { getItemStyle } from './getItemStyle'
 
-export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
+export const EDIT_VIEW_COLUMNS_PANEL_DEFAULT_PROPS: Partial<IEditViewColumnsPanelProps> = {
+  title: strings.EditViewColumnsPanelHeaderText,
+  helpText: strings.EditViewColumnsPanelHelpText,
+  columns: [],
+  customColumnOrder: []
+}
+
+export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, EDIT_VIEW_COLUMNS_PANEL_DEFAULT_PROPS)
   const { onDragEnd, selectableColumns, onChange, onSave, moveColumn, selectedColumns } =
     useEditViewColumnsPanel(props)
 
@@ -146,9 +160,3 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
 }
 
 EditViewColumnsPanel.displayName = 'EditViewColumnsPanel'
-EditViewColumnsPanel.defaultProps = {
-  title: strings.EditViewColumnsPanelHeaderText,
-  helpText: strings.EditViewColumnsPanelHelpText,
-  columns: [],
-  customColumnOrder: []
-}

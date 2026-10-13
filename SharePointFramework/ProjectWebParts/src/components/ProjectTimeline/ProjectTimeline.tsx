@@ -1,5 +1,5 @@
 import { Spinner } from '@fluentui/react-components'
-import { ItemFieldValues, WebPartTitle, format } from 'pp365-shared-library'
+import { ItemFieldValues, WebPartTitle, format, withDefaults } from 'pp365-shared-library'
 import { CustomEditPanel, Timeline, UserMessage } from 'pp365-shared-library/lib/components'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
@@ -11,7 +11,23 @@ import { IProjectTimelineProps } from './types'
 import { useProjectTimeline } from './useProjectTimeline'
 import resource from 'SharedResources'
 
-export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
+export const PROJECT_TIMELINE_DEFAULT_PROPS: Partial<IProjectTimelineProps> = {
+  listName: resource.Lists_TimelineContent_Title,
+  showTimeline: true,
+  showTimelineList: true,
+  showTimelineListCommands: true,
+  projectTimeLapse: true,
+  defaultTimeframeStart: '4,months',
+  defaultTimeframeEnd: '4,months',
+  defaultGroupBy: strings.TypeLabel,
+  showProjectDeliveries: false,
+  projectDeliveriesListName: resource.Lists_ProjectDeliveries_Title,
+  configItemTitle: resource.TimelineConfiguration_ProjectDelivery_Title,
+  defaultCategory: resource.TimelineConfiguration_Management_Category
+}
+
+export const ProjectTimeline: FC<IProjectTimelineProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, PROJECT_TIMELINE_DEFAULT_PROPS)
   const { state, setState, onFilterChange, onGroupByChange, defaultTimeframe, timeLapseCenter } =
     useProjectTimeline(props)
 
@@ -73,17 +89,3 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
 }
 
 ProjectTimeline.displayName = 'ProjectTimeline'
-ProjectTimeline.defaultProps = {
-  listName: resource.Lists_TimelineContent_Title,
-  showTimeline: true,
-  showTimelineList: true,
-  showTimelineListCommands: true,
-  projectTimeLapse: true,
-  defaultTimeframeStart: '4,months',
-  defaultTimeframeEnd: '4,months',
-  defaultGroupBy: strings.TypeLabel,
-  showProjectDeliveries: false,
-  projectDeliveriesListName: resource.Lists_ProjectDeliveries_Title,
-  configItemTitle: resource.TimelineConfiguration_ProjectDelivery_Title,
-  defaultCategory: resource.TimelineConfiguration_Management_Category
-}

@@ -2,10 +2,15 @@ import { stringIsNullOrEmpty } from '@pnp/core'
 import React, { FC } from 'react'
 import { IConfigColumnProps } from './types'
 import { Tooltip } from '@fluentui/react-components'
-import { getFluentIconWithFallback } from 'pp365-shared-library'
+import { getFluentIconWithFallback, withDefaults } from 'pp365-shared-library'
 import styles from './ConfigColumn.module.scss'
 
-export const ConfigColumn: FC<IConfigColumnProps> = (props) => {
+const CONFIG_COLUMN_DEFAULT_PROPS: Partial<IConfigColumnProps> = {
+  tooltipColumnPropertyName: null
+}
+
+export const ConfigColumn: FC<IConfigColumnProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, CONFIG_COLUMN_DEFAULT_PROPS)
   const element = (
     <span>
       <span className={styles.icon}>
@@ -26,8 +31,4 @@ export const ConfigColumn: FC<IConfigColumnProps> = (props) => {
   } else {
     return element
   }
-}
-
-ConfigColumn.defaultProps = {
-  tooltipColumnPropertyName: null
 }

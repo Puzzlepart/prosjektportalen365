@@ -154,6 +154,25 @@ export const KomponentNavn: FC<IKomponentNavnProps> = (props) => {
 }
 ```
 
+### Standardverdier for props
+
+Ikke `KomponentNavn.defaultProps`: React 18.3 advarer om den på funksjonskomponenter, og React 19 ignorerer den, så hver standardverdi ville forsvunnet stille ved neste React-hopp. Standardverdiene ligger i en konstant over komponenten og flettes inn øverst med `withDefaults` fra `pp365-shared-library` (i biblioteket fra `util`). Den gjør det React gjorde: en prop som er `undefined` får standardverdien, mens `null`, `false`, `0` og `''` beholdes. Flettingen skjer på selve objektet, slik at hooken, konteksten og `{...props}` ser de samme verdiene:
+
+```tsx
+const KOMPONENT_NAVN_DEFAULT_PROPS: Partial<IKomponentNavnProps> = {
+  rowLimit: 6,
+  showTitle: true
+}
+
+export const KomponentNavn: FC<IKomponentNavnProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, KOMPONENT_NAVN_DEFAULT_PROPS)
+  const { value } = useKomponentNavn(props)
+  …
+}
+```
+
+Leses verdiene andre steder (webdelens egenskapsrute, en test), eksporteres konstanten; navnet har komponentens navn i seg, så barrelene ikke kolliderer. En komponent som bare leser sine egne props, kan sette standardverdiene i destruktureringen (`({ rowLimit = 6 }) =>`), men ikke når `props` sendes videre. ESLint stopper `defaultProps` fra å komme tilbake.
+
 ### Ekte eksempel: `useProjectSetupDialog`
 
 ```ts

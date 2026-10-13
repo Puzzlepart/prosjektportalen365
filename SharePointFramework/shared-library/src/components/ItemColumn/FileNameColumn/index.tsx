@@ -5,8 +5,14 @@ import { ColumnRenderComponent } from '../types'
 import { IFileNameColumnProps } from './types'
 import { Button } from '@fluentui/react-components'
 import { FileTypeIcon } from '../../FileTypeIcon'
+import { withDefaults } from '../../../util'
 
-export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (props) => {
+const FILE_NAME_COLUMN_DEFAULT_PROPS: Partial<IFileNameColumnProps> = {
+  showFileExtensionIcon: true
+}
+
+export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, FILE_NAME_COLUMN_DEFAULT_PROPS)
   const contentTypeId = props.item.ContentTypeId || ''
   const isFolder = props.item.FSObjType === 1
   const isDocSet = contentTypeId.indexOf('0x0120D520') === 0
@@ -62,10 +68,6 @@ export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (prop
       )}
     </span>
   )
-}
-
-FileNameColumn.defaultProps = {
-  showFileExtensionIcon: true
 }
 FileNameColumn.key = 'filename'
 FileNameColumn.id = 'Filename'

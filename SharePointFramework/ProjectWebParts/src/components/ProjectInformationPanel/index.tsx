@@ -2,9 +2,14 @@ import React, { FC, useEffect } from 'react'
 import { useBoolean } from 'usehooks-ts'
 import { ProjectInformation } from '../ProjectInformation'
 import { IProjectInformationPanelProps } from './types'
-import { BasePanel } from 'pp365-shared-library'
+import { BasePanel, withDefaults } from 'pp365-shared-library'
 
-export const ProjectInformationPanel: FC<IProjectInformationPanelProps> = (props) => {
+const PROJECT_INFORMATION_PANEL_DEFAULT_PROPS: Partial<IProjectInformationPanelProps> = {
+  hidden: true
+}
+
+export const ProjectInformationPanel: FC<IProjectInformationPanelProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, PROJECT_INFORMATION_PANEL_DEFAULT_PROPS)
   const panelState = useBoolean(!props.hidden)
 
   useEffect(() => {
@@ -28,10 +33,6 @@ export const ProjectInformationPanel: FC<IProjectInformationPanelProps> = (props
       </BasePanel>
     </>
   )
-}
-
-ProjectInformationPanel.defaultProps = {
-  hidden: true
 }
 
 export * from './types'

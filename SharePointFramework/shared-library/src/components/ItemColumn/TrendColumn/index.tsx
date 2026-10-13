@@ -1,5 +1,5 @@
 import strings from 'SharedLibraryStrings'
-import { tryParseJson } from '../../../util'
+import { tryParseJson, withDefaults } from '../../../util'
 import { getFluentIcon } from '../../../icons'
 import { ITrendIcon } from '../../../types'
 import React from 'react'
@@ -22,7 +22,12 @@ import { ITrendColumnProps } from './types'
  */
 export const TREND_ICON_SIZE = 20
 
-export const TrendColumn: ColumnRenderComponent<ITrendColumnProps> = (props) => {
+const TREND_COLUMN_DEFAULT_PROPS: Partial<ITrendColumnProps> = {
+  showTrendIcon: true
+}
+
+export const TrendColumn: ColumnRenderComponent<ITrendColumnProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, TREND_COLUMN_DEFAULT_PROPS)
   const trend = tryParseJson(props.columnValue)
   const icon: ITrendIcon | undefined = trend?.TrendIcon
   return trend ? (
@@ -36,10 +41,6 @@ export const TrendColumn: ColumnRenderComponent<ITrendColumnProps> = (props) => 
     </span>
   ) : null
 }
-
-TrendColumn.defaultProps = {
-  showTrendIcon: true
-}
 TrendColumn.key = 'trend'
 TrendColumn.id = 'Trend'
 TrendColumn.displayName = strings.ColumnRenderOptionTrend
@@ -48,7 +49,7 @@ TrendColumn.isDisabled = true
 TrendColumn.getDataTypeProperties = (onChange, dataTypeProperties: Record<string, any>) => [
   checkboxField({
     label: strings.ColumnRenderOptionTrendShowTrendIconLabel,
-    checked: dataTypeProperties.showTrendIcon ?? TrendColumn.defaultProps.showTrendIcon,
+    checked: dataTypeProperties.showTrendIcon ?? TREND_COLUMN_DEFAULT_PROPS.showTrendIcon,
     onChange: (checked) => onChange('showTrendIcon', checked)
   })
 ]

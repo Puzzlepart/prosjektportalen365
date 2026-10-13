@@ -5,9 +5,20 @@ import React, { FC } from 'react'
 import { DEFAULT_MATRIX_WIDTH, DynamicMatrix } from '../DynamicMatrix'
 import { IRiskMatrixProps } from './types'
 import { useRiskMatrix } from './useRiskMatrix'
-import { UserMessage, WebPartTitle, customLightTheme } from 'pp365-shared-library'
+import { UserMessage, WebPartTitle, customLightTheme, withDefaults } from 'pp365-shared-library'
 
-export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
+const RISK_MATRIX_DEFAULT_PROPS: Partial<IRiskMatrixProps> = {
+  items: [],
+  fullWidth: true,
+  calloutTemplate: `
+  <h3>{Title}</h3>\n
+  <p><strong>${resource.SiteFields_GtRiskStrategy_DisplayName}: </strong>{GtRiskStrategy}</p>\n
+  <p><strong>${resource.SiteFields_GtRiskProximity_DisplayName}: </strong>{GtRiskProximity}</p>\n
+  <p><strong>${resource.SiteFields_GtRiskStatus_DisplayName}: </strong>{GtRiskStatus}</p>`
+}
+
+export const RiskMatrix: FC<IRiskMatrixProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, RISK_MATRIX_DEFAULT_PROPS)
   const {
     configuration,
     error,
@@ -49,12 +60,3 @@ export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
 }
 
 RiskMatrix.displayName = 'RiskMatrix'
-RiskMatrix.defaultProps = {
-  items: [],
-  fullWidth: true,
-  calloutTemplate: `
-  <h3>{Title}</h3>\n
-  <p><strong>${resource.SiteFields_GtRiskStrategy_DisplayName}: </strong>{GtRiskStrategy}</p>\n
-  <p><strong>${resource.SiteFields_GtRiskProximity_DisplayName}: </strong>{GtRiskProximity}</p>\n
-  <p><strong>${resource.SiteFields_GtRiskStatus_DisplayName}: </strong>{GtRiskStatus}</p>`
-}
