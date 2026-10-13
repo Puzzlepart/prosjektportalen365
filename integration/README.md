@@ -10,7 +10,7 @@ tests, and on a developer's machine in seconds. Plan and decisions:
 
 ## How it works
 
-- `node --test` runs `tests/**/*.test.ts` directly through Node 22's type stripping. There is no
+- `node --test` runs `tests/**/*.test.ts` directly through Node's type stripping (stable since 22.18; the repo runs 26). There is no
   build: only TypeScript that erases to JavaScript (no `enum`, namespaces or parameter
   properties; `import type` for types), and imports name the `.ts` file. `npm run build` only
   type-checks.

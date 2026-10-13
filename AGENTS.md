@@ -30,7 +30,7 @@ Every Rush project is listed in `rush.json`.
 3. **Do not hand-edit generated files** — they are gitignored and regenerated on build:
    - Sass typings — generated into `temp/sass-ts/` by the Heft build (they used to sit next to the source as `**/*.module.scss.ts`). Edit the `.scss`; keep the set of class names stable. Never edit or commit anything under `temp/`.
    - `**/src/loc/shared/*` — regenerated from `Templates/Portfolio/Resources.*.resx` (via the `Templates` `generate-resx-ts` task).
-4. **Node 22** (`.nvmrc` = `22.22.2`, `rush.json` enforces `>=22.14.0 <23.0.0`). The SPFx 1.23 Heft toolchain requires it; another major fails the build, and `build-release` refuses to run.
+4. **Node 26** (`.nvmrc` = `26.11.1`, `rush.json` enforces `>=26.11.0 <27.0.0`). SPFx 1.24 allows 22, 24 and 26, and the repo pins one so every build is the same build: another major fails `rush`, and `build-release` refuses to run.
 5. **CI runs on Linux, so every path is case sensitive.** macOS hid mismatches such as `SiteScripts/Src` vs the real `SiteScripts/src` and `build-release.ps1` vs `Build-Release.ps1`; on `ubuntu-latest` they fail the release build. Spell paths in scripts, workflows and imports exactly as the filesystem does, and check with `ls` when in doubt.
 6. **Production builds need more than Node's default heap on small machines.** The PortfolioWebParts build fails at a 2 GB heap and passes at 3 GB. CI (`ubuntu-latest`) and `Install/Build-Release.ps1` set `NODE_OPTIONS=--max-old-space-size=8192`; if a local `heft build --production` or `rush rebuild` dies with "Reached heap limit", export the same variable first.
 7. **Lint errors fail the build** (Heft lints in its build phase; warnings do not fail). The house rules are in `SharePointFramework/.eslint-config/index.js`: no `import * as` from `@fluentui/react-icons`; no root import of `@pnp/spfx-controls-react` or `@pnp/spfx-property-controls` (import each control from its `/lib/<Control>` entry point); no deep import of `pp365-shared-library/lib/icons/iconCatalog`. `@typescript-eslint/no-floating-promises`, `no-void` (allowed only as a statement, `void promise;` for a deliberate fire-and-forget), `eqeqeq` (`== null` allowed), `react/jsx-key`, `unused-imports/no-unused-imports` and `prettier/prettier` are errors.
@@ -58,7 +58,7 @@ From the **repo root** unless noted:
 | Rebuild everything in dependency order (`rush rebuild`: full, not incremental; runs the Jest tests) | `npm run rush:build` |
 | Rebuild only `shared-library` | `rush rebuild -o pp365-shared-library` |
 | Lint + format all solutions (rewrites files: `prettier --write`, `eslint --fix`) | `npm run rush:lint` |
-| Build a release package (`Install/Build-Release.ps1`; needs Node 22 and PowerShell 7, `pwsh`) | `npm run build-release` |
+| Build a release package (`Install/Build-Release.ps1`; needs Node 26 and PowerShell 7, `pwsh`) | `npm run build-release` |
 | Check the agent skills (one copy, valid `SKILL.md` frontmatter) | `npm run check-skills` |
 
 Inside a solution (`SharePointFramework/<Solution>/`):

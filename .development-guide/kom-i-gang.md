@@ -28,7 +28,7 @@ Alle fem løsningene avhenger av `shared-library`. `PortfolioWebParts` bruker i 
 
 Du trenger:
 
-- **Node 22**, versjonen i `.nvmrc` (22.22.2). `rush.json` godtar bare `>=22.14.0 <23.0.0`, så en annen hovedversjon stopper bygget. Med nvm: `nvm install && nvm use` i repo-roten. Med nvm-windows: `nvm install 22.22.2` og `nvm use 22.22.2`, siden den ikke nødvendigvis leser `.nvmrc`.
+- **Node 26**, versjonen i `.nvmrc` (26.11.1). `rush.json` godtar bare `>=26.11.0 <27.0.0`, så en annen hovedversjon stopper bygget. Med nvm: `nvm install && nvm use` i repo-roten. Med nvm-windows: `nvm install 26.11.1` og `nvm use 26.11.1`, siden den ikke nødvendigvis leser `.nvmrc`.
 - **PowerShell 7** (`pwsh`) når du skal bygge en utgivelse (`npm run build-release`), og på Windows også som terminal. Mer om Windows i [Windows og macOS](spfx/utviklingsmiljo.md#windows-og-macos).
 - **VS Code**, og **Chrome** for feilsøkingsoppsettet.
 - Gjerne Rush globalt (`npm i -g @microsoft/rush`), så kommandoer som `rush rebuild -o pp365-shared-library` virker direkte. Uten: `node common/scripts/install-run-rush.js <kommando>`.

@@ -136,18 +136,19 @@ $RELEASE_PATH = "$ROOT_PATH/release/$($RELEASE_NAME)"
 #endregion
 
 #region Node version guard
-# The SPFx 1.23 Heft toolchain requires Node 22 (see rush.json nodeSupportedVersionRange and the
-# .nvmrc files). Building on another major silently produces a stale or broken .sppkg, so fail here
-# rather than shipping one.
+# The repo builds on one Node major, 26 (see rush.json nodeSupportedVersionRange and the .nvmrc
+# files); SPFx 1.24 allows 22, 24 and 26, and one is pinned so every build is the same build.
+# Building on another major silently produces a stale or broken .sppkg, so fail here rather than
+# shipping one.
 $NODE_VERSION_RAW = (node -v) 2>$null
 if ($LASTEXITCODE -ne 0 -or -not $NODE_VERSION_RAW) {
-    Write-Host "[ERROR] Node.js was not found on PATH. Node.js 22 is required." -ForegroundColor Red
+    Write-Host "[ERROR] Node.js was not found on PATH. Node.js 26 is required." -ForegroundColor Red
     exit 1
 }
 $NODE_MAJOR = [int]($NODE_VERSION_RAW.TrimStart('v').Split('.')[0])
-if ($NODE_MAJOR -ne 22) {
-    Write-Host "[ERROR] Node.js 22 is required for the SPFx Heft toolchain, found $NODE_VERSION_RAW." -ForegroundColor Red
-    Write-Host "        Run 'nvm use' in the repository root (see .nvmrc) and try again." -ForegroundColor Yellow
+if ($NODE_MAJOR -ne 26) {
+    Write-Host "[ERROR] Node.js 26 is required for the SPFx Heft toolchain, found $NODE_VERSION_RAW." -ForegroundColor Red
+    Write-Host "        Run 'nvm install' and 'nvm use' in the repository root (see .nvmrc) and try again." -ForegroundColor Yellow
     exit 1
 }
 #endregion

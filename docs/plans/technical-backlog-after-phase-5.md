@@ -34,8 +34,18 @@ release).
   warning, not an error. No `engine-strict` is set. The shared library built and ran its Jest and
   runtime-contract tests under Node 24.15.0 locally on 2026-10-13 (Heft, TypeScript, webpack, Sass,
   Jest 30, `node --test`), with no new warning.
-- **What allows 26.** Only SPFx, so far. Heft, Jest, Playwright and Rush have not declared it, and
-  26 is not LTS until 2026-10-28: not this cycle.
+- **What allows 26.** SPFx's check lists it, and no other package in the tree sets an upper bound
+  below it: the only `engines` that exclude 26 are the SPFx 1.23.x copies the PnP controls and
+  `eslint-config-spfx` carry, and those exclude 24 just the same (`<23.0.0`); without
+  `engine-strict` they stop nothing, as the Node 24 build showed. Heft, Jest, Playwright and pnpm
+  have no upper bound; Rush prints "has not been tested yet with Rush" for a major newer than it
+  knows, a warning, not an error. On 2026-10-13 Node 26.11.1 (downloaded from nodejs.org, checksum
+  verified) built the shared library in 13 s and ran its Jest and runtime-contract tests, built
+  ProjectWebParts, ran the integration harness's offline tests (`module.registerHooks`, which 26
+  keeps; it runtime-deprecates the older `module.register()`) and type-checked e2e, all green and
+  without a deprecation warning. 26's removals (`_stream_*`, `http.Server.writeHeader`, DEP0182)
+  touch nothing in the build. 26 is LTS from 2026-10-28, active until 2027-10-20, maintained to
+  2029-04-30.
 - **`defaultProps` on function components.** 47 files: shared-library 20, PortfolioWebParts 12,
   ProjectWebParts 11, ProjectExtensions 3, PortfolioExtensions 1. React 18.3 warns in development
   builds only (SharePoint serves production React, so no user sees it); React 19 ignores them. Eight
@@ -72,11 +82,17 @@ release).
 
 ## Decisions (proposed)
 
-- **D1. Node 24 now, one version, 22 dropped.** Node changes what builds, not what ships, so it
-  needs no release of its own and no template. One pinned version in every place (as for 22):
-  a developer on 22 gets `rush`'s and `Build-Release.ps1`'s clear error and runs `nvm use`. Done on
-  `releases/1.15` before the GA swap, so the swap is proven on the Node CI will keep. 26 waits for
-  Heft, Jest and Playwright to declare it; check again mid-2027, before 24 leaves maintenance.
+- **D1. Node 26 directly, 24 only as the fallback, one version, 22 dropped.** Node changes what
+  builds, not what ships, so it needs no release of its own and no template. Nothing in a Node
+  move depends on having been on 24 first: each move is the same twenty files and the same two CI
+  proofs, so going through 24 buys a second move within a year (24 is in maintenance from
+  2026-10-20, 26 is the active line until 2027-10-20) and no safety the debug build does not give.
+  The order is: the debug build on 26.11.1; green, it is merged; red for a cause that is Node's,
+  the same branch goes to 24.21.0 and 26 waits for the fix. One pinned version in every place (as
+  for 22): a developer on 22 or 24 gets `rush`'s and `Build-Release.ps1`'s clear error and runs
+  `nvm install` / `nvm use`. Done on `releases/1.15` before the GA swap, so the swap is proven on
+  the Node CI will keep. The `.nvmrc` moves to 26's first LTS patch after 2026-10-28 when a
+  dependency bump is next pushed anyway.
 - **D2. `defaultProps` go, in two shapes.** Where the component only reads its props: defaults in
   the parameter destructuring. Where the props object is passed on (the eight files): a module
   constant merged at the top, `const props = { ...DEFAULTS, ...incoming }`, so `context.props` and
@@ -91,7 +107,7 @@ release).
 | # | Slice | Blocked by | Scope | Effort | Exit |
 |---|---|---|---|---|---|
 | 0 | Coverage floors | — | ProjectWebParts 50 / 72 / 56 / 50 (done 2026-10-13) | done | CI prints the new floors met |
-| 1 | Node 24 | — | `.nvmrc` ×7 = 24.21.0; `engines` ×6 and `rush.json` = `>=24.11.0 <25.0.0`; the guard in `Build-Release.ps1` = 24; `AGENTS.md`, `kom-i-gang.md`, `utviklingsmiljo.md`, `bygge-utgivelse.md`, the toolchain and release skills. First `rush install` + `rush rebuild` locally on 24; then a push with `[skip-ci] [build-debug]` (the full release build on 24, deploys nothing); then the merge with `[apps-only]` (packages, e2e, integration) | 1 day | Debug build and test-channel run green on 24; no `Node 22` left outside changelogs and plans |
+| 1 | Node 26 (24 the fallback) | — | `.nvmrc` ×7 = 26.11.1; `engines` ×6 and `rush.json` = `>=26.11.0 <27.0.0`; the guard in `Build-Release.ps1` = 26; `AGENTS.md`, `kom-i-gang.md`, `utviklingsmiljo.md`, `bygge-utgivelse.md`, the toolchain and release skills. First `rush install` + `rush rebuild` locally on 26; then a push with `[skip-ci] [build-debug]` (the full release build on 26, deploys nothing); then the merge with `[apps-only]` (packages, e2e, integration). Red for a cause that is Node's: the same files to 24.21.0 and `>=24.11.0 <25.0.0`, and the cause logged here | 1 day | Debug build and test-channel run green; no `Node 22` left outside changelogs and plans |
 | 2 | `defaultProps` | — | Per solution, smallest first (PortfolioExtensions 1, ProjectExtensions 3, ProjectWebParts 11, PortfolioWebParts 12, shared-library 20), each a commit; D2's two shapes; the existing component tests guard each file, and a file without one gets a render test first; the lint rule last | 2–3 days | Zero `defaultProps` in `src`; the rule in `pp365-eslint-config` |
 | 3 | Dates in the site's time zone | — | `getSiteTimeZone()` in the library from the page context (offset and daylight rules); `formatDate`/`formatShortDate` take the zone for date-only values; `DateColumn`, the Excel export's dates and the timeline's list follow; an integration case in `project-properties`' five-zone matrix reads a list value through search; changelog line | 1–2 days | The overview shows the day the site shows in all five zones |
 | 4 | Test gaps | the matrices need a page | The icon helpers (`getFluentIcon`, `resolveFluentIcon`, `getIconComponentWithFallback`) and `DataService.ts` in Jest; `Tidslinje.aspx` in the program smoke; a matrix page on the e2e project (the user adds it once), then a read-only smoke for both matrices | 1 day | `testoversikt.md` lists no "Ingen test" but by choice |
@@ -122,9 +138,12 @@ hard they block: GA blocks the release, PnP blocks nothing today, the timeline b
 
 ## Risks
 
-- Node 24 differs from 22 in little that the build touches (npm 11, stricter deprecations); the
-  debug build is where a difference shows, before anything deploys. A developer's forgotten
-  `nvm use` is the likelier failure, and both gates say so.
+- Node 26 differs from 22 in little that the build touches (V8 14.6, npm 11, the removals listed
+  in the inventory); the local proof covered the library, a consumer, the integration harness and
+  e2e, and the debug build covers the rest (the five other consumers, the PnP templates, the
+  packaging proofs) before anything deploys. Rush's "not tested yet" warning stays until a Rush
+  release lists 26; it is noise, not a gate. A developer's forgotten `nvm install 26` is the
+  likelier failure, and both gates say so.
 - `defaultProps` to destructuring in a file that spreads `props` on silently drops a default; the
   eight files are listed above, and the per-file render tests are the net.
 - A site's time zone rules from the page context are SharePoint's own (bias and transition dates),
@@ -141,5 +160,21 @@ check date in this plan; the test overview and the guide say what the repo does.
 
 ### Fact-finding (2026-10-13)
 
-The inventory above. The shared library was built and tested on Node 24.15.0 locally as the first
-proof for slice 1; the coverage floors of ProjectWebParts were raised (slice 0).
+The inventory above. The shared library was built and tested on Node 24.15.0 locally, then the
+library, ProjectWebParts, the integration harness and e2e on Node 26.11.1, as the proofs behind D1;
+the coverage floors of ProjectWebParts were raised (slice 0).
+
+### Slice 1 — Node 26 (2026-10-13)
+
+The twenty places moved to 26.11.1 / `>=26.11.0 <27.0.0`, the guard in `Build-Release.ps1` to 26,
+and the docs, skills, changelog and release note with them. `rush install` under 26 installs Rush
+again (`install-run` keeps one copy per Node version) and prints Rush's "not a Long-Term Support
+release" warning, which goes away on 2026-10-28; the install itself is unchanged. Then
+`rush build -o pp365-shared-library` found the one thing in the repo that 26 changes: V8 14.6
+dropped `minimalDays` from `Intl.Locale`'s week info (the proposal removed it), so
+`getDatePickerLocalization` fell back to the American week rule on Norwegian sites. That is not a
+Node matter only: V8 14.6 is Chromium 146, so Chrome and Edge of 2026 already lacked it, and the
+date picker's week numbers were wrong there since phase 5 added them. The rule now comes from
+`minimalDays` where Intl still gives it and from CLDR's week data by region otherwise (a test that
+stubs the week info failed on the old code; the suite is green on 22 and 26). The debug build on 26
+is the next proof, then the test-channel run.

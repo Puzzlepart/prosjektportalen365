@@ -18,7 +18,7 @@ A push runs the workflow files **of the pushed commit**, so read the target bran
 ## 1. Before committing
 
 - [ ] The branch starts from the release branch: `git log --oneline origin/releases/1.15..HEAD` lists only your commits. Long-lived `feat/*` branches exist (`feat/dependency-upgrades-phase-5`), and a fix cut from one drags their commits into the PR. Names in use: `feat/<topic>`, `fix/<topic>`, `chore/<topic>`, `docs/<topic>`, and `issues/<n>` for a single issue.
-- [ ] Node 22 (`nvm use`); `Build-Release.ps1` exits on any other major.
+- [ ] Node 26 (`nvm use`); `Build-Release.ps1` exits on any other major.
 - [ ] `npm test` in each touched solution (after a `shared-library` change, `rush rebuild -o pp365-shared-library` first), `npm run lint`, and after loc edits `npm run validate-loc`. It writes `localization-report.md` in the solution, which is not in the repo and not ignored: leave it out of the commit.
 - [ ] Coverage: each solution's `config/jest.config.json` sets a `coverageThreshold`. Jest prints `coverage threshold for ... not met` but Heft passes, so only `Build-Release.ps1` (CI, or a local `npm run build-release`) fails on it. Read the test output.
 - [ ] A skill change: `npm run check-skills` (`.tasks/check-skills.js`). Skills live only in `.claude/skills`; any file in `.github/skills` or `.agents/skills` fails it, `name` must equal the folder and `description` may have at most 1024 characters.
