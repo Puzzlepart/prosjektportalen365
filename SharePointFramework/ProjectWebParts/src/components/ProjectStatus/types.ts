@@ -128,6 +128,11 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   }
 
   /**
+   * Is the snapshot of the selected report shown in `SnapshotDialog`?
+   */
+  isSnapshotOpen?: boolean
+
+  /**
    * The status for the report (currently selected)
    */
   reportStatus?: string

@@ -23,9 +23,12 @@ export const localBundleUse = {
   }
 }
 
-/** Opens a page with the debug manifests and accepts SharePoint's prompt about them. */
+/** Opens a page (its own query string kept) with the debug manifests and accepts SharePoint's prompt about them. */
 export async function openWithLocalBundle(page: Page, pagePath: string) {
-  await page.goto(`${pagePath}?loadSPFX=true&debugManifestsFile=${encodeURIComponent(manifests)}`)
+  const separator = pagePath.includes('?') ? '&' : '?'
+  await page.goto(
+    `${pagePath}${separator}loadSPFX=true&debugManifestsFile=${encodeURIComponent(manifests)}`
+  )
   const allow = page.getByRole('button', {
     name: /^load debug scripts$|^last inn feilsøkingsskript$/i
   })

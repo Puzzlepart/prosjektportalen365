@@ -1,6 +1,7 @@
 import moment from 'moment'
 import { PortalDataService } from 'pp365-shared-library/lib/services'
 import { useProjectStatusContext } from '../context'
+import { getScopeLabel, parseSubProjects } from '../parseSubProjects'
 import {
   CLEAR_USER_MESSAGE,
   REPORT_PUBLISHED,
@@ -30,7 +31,13 @@ export function usePublishReport() {
     if (!context.state.isPublishing) {
       try {
         context.dispatch(REPORT_PUBLISHING())
-        const snapshot = await captureReportSnapshot()
+        const scopeLabel = getScopeLabel(
+          parseSubProjects(context.props.subProjects),
+          context.state.selectedScope
+        )
+        const snapshot = await captureReportSnapshot(
+          scopeLabel ? `${context.props.webTitle} – ${scopeLabel}` : context.props.webTitle
+        )
         const attachments = [
           {
             url: context.props.snapshotAttachmentFileName,
