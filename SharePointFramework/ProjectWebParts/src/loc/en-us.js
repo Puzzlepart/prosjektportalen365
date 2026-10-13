@@ -146,6 +146,10 @@ define([], function () {
     SnapshotLinkCopyFailedText: 'The link could not be copied automatically. Select the link and copy it.',
     SnapshotLinkAccessText:
       'The link to the status page opens the snapshot at full width, for everyone with access to the project site and Prosjektportalen (the portfolio site). The image file can be opened by everyone with access to the portfolio site.',
+    SnapshotGroupName: 'Snapshot',
+    SnapshotInDialogFieldLabel: 'Open snapshot in full window',
+    SnapshotInDialogOnText: 'In a window that fills the browser, with full screen and a link',
+    SnapshotInDialogOffText: 'The image file in a new tab',
     HideActionsLabel: 'Hide buttons',
     HideAllActionsLabel: 'Hide all buttons',
     HideParentProjectsLabel: 'Hide parent projects',

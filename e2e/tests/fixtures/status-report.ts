@@ -198,17 +198,21 @@ export async function snapshotJourney(
     .toBe(true)
 
   // Full screen is the browser's to grant: a host that refuses it hides the button, and a headless
-  // browser may ignore the request, in which case the dialog stays as it is.
+  // browser may ignore the request. When it is granted, the link is copied in full screen, where
+  // the copy dialog must be shown and reachable too, and full screen is left after.
   const enterFullscreen = dialog.getByRole('button', { name: /^(fullskjerm|full screen)$/i })
+  const exitFullscreen = dialog.getByRole('button', {
+    name: /^(avslutt fullskjerm|exit full screen)$/i
+  })
+  let inFullscreen = false
   if (await enterFullscreen.isVisible()) {
     await enterFullscreen.click()
-    const exitFullscreen = dialog.getByRole('button', {
-      name: /^(avslutt fullskjerm|exit full screen)$/i
-    })
-    if (await exitFullscreen.isVisible({ timeout: 5_000 }).catch(() => false)) {
-      await exitFullscreen.click()
-      await expect(enterFullscreen).toBeVisible()
-    } else {
+    // `isVisible` returns at once whatever its timeout says; `waitFor` waits.
+    inFullscreen = await exitFullscreen.waitFor({ state: 'visible', timeout: 5_000 }).then(
+      () => true,
+      () => false
+    )
+    if (!inFullscreen) {
       test.info().annotations.push({
         type: 'note',
         description: 'the browser did not enter full screen; the button was offered and clicked'
@@ -239,6 +243,10 @@ export async function snapshotJourney(
   ).toBe(new URL(snapshotPath, baseURL).href)
   await copyDialog.getByRole('button', { name: CLOSE }).click()
   await expect(copyDialog).toBeHidden()
+  if (inFullscreen) {
+    await exitFullscreen.click()
+    await expect(enterFullscreen).toBeVisible()
+  }
 
   // The image file in a new tab, out of reach of SharePoint's own link handling. The tab is opened
   // with `noopener`, so it is awaited on the context, not as the page's popup.

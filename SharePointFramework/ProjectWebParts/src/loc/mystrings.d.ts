@@ -103,6 +103,10 @@ declare interface IProjectWebPartsStrings {
   SnapshotLinkCopiedText: string
   SnapshotLinkCopyFailedText: string
   SnapshotLinkAccessText: string
+  SnapshotGroupName: string
+  SnapshotInDialogFieldLabel: string
+  SnapshotInDialogOnText: string
+  SnapshotInDialogOffText: string
   HideActionsLabel: string
   HideAllActionsLabel: string
   HideParentProjectsLabel: string

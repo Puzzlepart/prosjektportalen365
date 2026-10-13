@@ -138,6 +138,10 @@ define([], function () {
     SnapshotLinkCopyFailedText: 'Lenken kunne ikke kopieres automatisk. Marker lenken og kopier den.',
     SnapshotLinkAccessText:
       'Lenken til statussiden åpner øyeblikksbildet i full bredde, for alle med tilgang til prosjektområdet og Prosjektportalen (porteføljeområdet). Bildefilen kan åpnes av alle med tilgang til porteføljeområdet.',
+    SnapshotGroupName: 'Øyeblikksbilde',
+    SnapshotInDialogFieldLabel: 'Åpne øyeblikksbilde i fullvindu',
+    SnapshotInDialogOnText: 'I et vindu som fyller nettleseren, med fullskjerm og lenke',
+    SnapshotInDialogOffText: 'Bildefilen i en ny fane',
     HideActionsLabel: 'Skjul knapper',
     HideAllActionsLabel: 'Skjul alle knapper',
     HideParentProjectsLabel: 'Skjul overordnede prosjekter',

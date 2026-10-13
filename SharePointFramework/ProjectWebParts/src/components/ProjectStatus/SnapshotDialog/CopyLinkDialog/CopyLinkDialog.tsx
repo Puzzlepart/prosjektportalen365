@@ -50,7 +50,7 @@ export const CopyLinkDialog: FC<ICopyLinkDialogProps> = (props) => {
 
   return (
     <Dialog open={props.open} onOpenChange={(_, data) => !data.open && props.onDismiss()}>
-      <DialogSurface className={styles.surface} mountNode={props.mountNode}>
+      <DialogSurface className={styles.surface}>
         <DialogBody>
           <DialogTitle>{strings.SnapshotCopyLinkDialogTitle}</DialogTitle>
           <DialogContent className={styles.content}>

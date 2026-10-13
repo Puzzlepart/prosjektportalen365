@@ -155,6 +155,18 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
               ]
             },
             {
+              groupName: strings.SnapshotGroupName,
+              groupFields: [
+                // Unset on pages saved before the property existed, which keep the dialog.
+                PropertyPaneToggle('snapshotInDialog', {
+                  label: strings.SnapshotInDialogFieldLabel,
+                  onText: strings.SnapshotInDialogOnText,
+                  offText: strings.SnapshotInDialogOffText,
+                  checked: this.properties.snapshotInDialog !== false
+                })
+              ]
+            },
+            {
               groupName: strings.MultiReportingGroupName,
               groupFields: [
                 PropertyPaneToggle('multiReporting', {

@@ -61,5 +61,6 @@ ProjectStatus.defaultProps = {
   fieldWidth: 250,
   persistSectionDataAttachmentFileName: 'PersistedSectionDataJson.json',
   snapshotAttachmentFileName: 'Snapshot.png',
+  snapshotInDialog: true,
   description: ''
 }

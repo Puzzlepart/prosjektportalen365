@@ -27,12 +27,16 @@ function getSnapshotPageLink(report: StatusReport): string {
 /**
  * Component logic hook for `SnapshotDialog`. Provides the snapshot URL and title of the
  * selected report, whether the dialog is open, the dismiss handler, the browser's full
- * screen mode for the dialog surface, and copying links to the snapshot. Opens the dialog
- * on load for a link made by `getSnapshotPageLink`.
+ * screen mode, and copying links to the snapshot. Opens the dialog on load for a link made
+ * by `getSnapshotPageLink`.
+ *
+ * Full screen is the whole page's, not the dialog surface's: the dialog already fills the
+ * window, and Fluent portals the copy-link dialog into the page's body, which a full screen
+ * surface would leave out. Mounted inside the surface instead, the copy-link dialog was hidden
+ * with it (`aria-hidden`), out of reach of screen readers.
  */
 export function useSnapshotDialog() {
-  const { state, dispatch } = useProjectStatusContext()
-  const surfaceRef = useRef<HTMLDivElement>(null)
+  const { state, props, dispatch } = useProjectStatusContext()
   const urlParamHandledRef = useRef(false)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [isCopyLinkOpen, setIsCopyLinkOpen] = useState(false)
@@ -48,6 +52,8 @@ export function useSnapshotDialog() {
     // a snapshot the user has closed.
     if (urlParamHandledRef.current || !state.isDataLoaded) return
     urlParamHandledRef.current = true
+    // With the dialog turned off on the web part, a link with the snapshot opens just the report.
+    if (props.snapshotInDialog === false) return
     const reportId = parseInt(getUrlParam('selectedReport'), 10)
     if (getUrlParam(SNAPSHOT_URL_PARAM) === '1' && snapshotUrl && report?.id === reportId) {
       dispatch(OPEN_SNAPSHOT())
@@ -57,7 +63,7 @@ export function useSnapshotDialog() {
   useEffect(() => {
     // Esc and the browser's own controls leave full screen too, so follow the document.
     const onFullscreenChange = () =>
-      setIsFullscreen(!!surfaceRef.current && document.fullscreenElement === surfaceRef.current)
+      setIsFullscreen(document.fullscreenElement === document.documentElement)
     document.addEventListener('fullscreenchange', onFullscreenChange)
     return () => document.removeEventListener('fullscreenchange', onFullscreenChange)
   }, [])
@@ -68,7 +74,7 @@ export function useSnapshotDialog() {
 
   function toggleFullscreen() {
     if (document.fullscreenElement) exitFullscreen()
-    else void surfaceRef.current?.requestFullscreen().catch(() => undefined)
+    else void document.documentElement.requestFullscreen().catch(() => undefined)
   }
 
   async function copy(link: string) {
@@ -93,7 +99,6 @@ export function useSnapshotDialog() {
       strings.SnapshotDialogTitle,
       formatDate(report?.publishedDate ?? report?.modified, true)
     ),
-    surfaceRef,
     // False in an iframe without `allow="fullscreen"`, such as some Teams hosts.
     canFullscreen: document.fullscreenEnabled === true,
     isFullscreen,

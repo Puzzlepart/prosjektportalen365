@@ -28,12 +28,6 @@ export interface ICopyLinkDialogProps {
   status?: CopyLinkStatus
 
   /**
-   * Element to render the dialog in. The snapshot dialog's surface, so the dialog shows
-   * while that surface is in full screen, where nothing outside it is drawn.
-   */
-  mountNode?: HTMLElement
-
-  /**
    * Copies the link to the status page
    */
   onCopyPageLink: () => void

@@ -32,7 +32,6 @@ describe('ProjectStatus SnapshotDialog', () => {
       pageLink,
       imageLink,
       title,
-      surfaceRef: { current: null },
       canFullscreen: true,
       isFullscreen: false,
       toggleFullscreen: jest.fn(),
@@ -77,6 +76,21 @@ describe('ProjectStatus SnapshotDialog', () => {
     expect(screen.getByDisplayValue(imageLink)).toBeInTheDocument()
   })
 
+  // Inside the snapshot's surface, the copy dialog was hidden with it: opening a nested modal
+  // dialog sets aria-hidden on the one below, so screen readers lost the copy dialog (and the
+  // e2e flow, which finds it by its role, failed in CI).
+  it('renders the copy dialog beside the snapshot, where it is not hidden with it', () => {
+    const { rerender } = render(<SnapshotDialog />)
+    Object.assign(mockDialog, { isCopyLinkOpen: true, copyLinkStatus: 'copied' })
+    rerender(<SnapshotDialog />)
+    const snapshot = screen.getByAltText(title).closest('[role="dialog"]')
+    const copyLink = screen
+      .getByText(strings.SnapshotCopyLinkDialogTitle)
+      .closest('[role="dialog"]') as HTMLElement
+    expect(snapshot.contains(copyLink)).toBe(false)
+    expect(screen.getByRole('dialog', { name: strings.SnapshotCopyLinkDialogTitle })).toBe(copyLink)
+  })
+
   it('shows the snapshot image with a button that opens it in a new tab', () => {
     render(<SnapshotDialog />)
     expect(screen.getByAltText(title)).toHaveAttribute('src', snapshotUrl)
@@ -114,7 +128,7 @@ describe('useSnapshotDialog', () => {
 
   const Probe: React.FC = () => {
     dialog = useSnapshotDialog()
-    return <div ref={dialog.surfaceRef} />
+    return null
   }
 
   function renderDialog(state: Record<string, any>) {
@@ -123,7 +137,6 @@ describe('useSnapshotDialog', () => {
         <Probe />
       </ProjectStatusContext.Provider>
     )
-    dialog.surfaceRef.current.requestFullscreen = jest.fn(() => Promise.resolve())
   }
 
   function fullscreenChange(element: Element) {
@@ -140,12 +153,14 @@ describe('useSnapshotDialog', () => {
       get: () => fullscreenElement
     })
     document.exitFullscreen = jest.fn(() => Promise.resolve())
+    document.documentElement.requestFullscreen = jest.fn(() => Promise.resolve())
   })
 
   afterAll(() => {
     delete (document as any).fullscreenEnabled
     delete (document as any).fullscreenElement
     delete (document as any).exitFullscreen
+    delete (document.documentElement as any).requestFullscreen
   })
 
   beforeEach(() => {
@@ -231,13 +246,30 @@ describe('useSnapshotDialog', () => {
     expect(dispatch).toHaveBeenCalledTimes(1)
   })
 
-  it('takes the surface to full screen and back, following the document', () => {
+  it('leaves a link to the snapshot unopened when the web part has the dialog turned off', () => {
+    window.history.replaceState(
+      {},
+      '',
+      '/sites/frisbee/SitePages/Prosjektstatus.aspx?selectedReport=2&snapshot=1'
+    )
+    const state = { isDataLoaded: true, selectedReport: report({}, { id: 2, snapshotUrl }) }
+    render(
+      <ProjectStatusContext.Provider
+        value={{ state, props: { snapshotInDialog: false }, dispatch } as any}
+      >
+        <Probe />
+      </ProjectStatusContext.Provider>
+    )
+    expect(dispatch).not.toHaveBeenCalled()
+  })
+
+  it('takes the page to full screen and back, following the document', () => {
     renderDialog({ isSnapshotOpen: true, selectedReport: report({}, { snapshotUrl }) })
     expect(dialog.canFullscreen).toBe(true)
-    const surface = dialog.surfaceRef.current
+    const page = document.documentElement
     dialog.toggleFullscreen()
-    expect(surface.requestFullscreen).toHaveBeenCalledTimes(1)
-    fullscreenChange(surface)
+    expect(page.requestFullscreen).toHaveBeenCalledTimes(1)
+    fullscreenChange(page)
     expect(dialog.isFullscreen).toBe(true)
     dialog.toggleFullscreen()
     expect(document.exitFullscreen).toHaveBeenCalledTimes(1)
@@ -248,7 +280,7 @@ describe('useSnapshotDialog', () => {
 
   it('leaves full screen when it is dismissed', () => {
     renderDialog({ isSnapshotOpen: true, selectedReport: report({}, { snapshotUrl }) })
-    fullscreenChange(dialog.surfaceRef.current)
+    fullscreenChange(document.documentElement)
     dialog.onDismiss()
     expect(document.exitFullscreen).toHaveBeenCalledTimes(1)
     expect(dispatch).toHaveBeenCalledWith(expect.objectContaining({ type: 'CLOSE_SNAPSHOT' }))

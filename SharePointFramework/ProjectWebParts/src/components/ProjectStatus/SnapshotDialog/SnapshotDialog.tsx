@@ -78,7 +78,6 @@ export const SnapshotDialog: FC = () => {
     isOpen,
     snapshotUrl,
     title,
-    surfaceRef,
     canFullscreen,
     isFullscreen,
     toggleFullscreen,
@@ -95,7 +94,7 @@ export const SnapshotDialog: FC = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={(_, data) => !data.open && onDismiss()}>
-      <DialogSurface ref={surfaceRef} className={styles.surface} aria-label={title}>
+      <DialogSurface className={styles.surface} aria-label={title}>
         <DialogBody className={styles.body}>
           <div className={styles.bar}>
             <Text size={400} weight='semibold'>
@@ -134,7 +133,6 @@ export const SnapshotDialog: FC = () => {
             pageLink={pageLink}
             imageLink={imageLink}
             status={copyLinkStatus}
-            mountNode={surfaceRef.current}
             onCopyPageLink={copyPageLink}
             onCopyImageLink={copyImageLink}
             onDismiss={dismissCopyLink}
