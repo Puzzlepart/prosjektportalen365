@@ -40,7 +40,7 @@ Choosing a tag. Decision A bundles `pp365-shared-library`, `pp365-projectwebpart
 - `PortfolioWebParts` code: `[apps-only:PortfolioWebParts,ProgramWebParts]`. `ProjectWebParts` code: name `ProjectWebParts`, `PortfolioWebParts` and `ProgramWebParts`, or use `[apps-only]`.
 - `shared-library` code: `[apps-only]`. `[apps-only:shared-library]` deploys a package that nothing loads.
 - PnP templates under `Templates/` changed (the guide says its `.xml` files): no `apps-only`; take the full path.
-- Only docs, `CHANGELOG.md` or `releasenotes/`: no tag needed (path filters). `[skip-ci]` for anything else that should not deploy.
+- Only docs, `CHANGELOG.md` or `releasenotes/`: no tag needed (path filters). `[skip-ci]` for anything else that should not deploy, except code: a change under `SharePointFramework/**` never goes with a bare `[skip-ci]`, since nothing builds it and a compile error reaches the branch unbuilt (#1779's `IItemAddResult` on 2026-10-13 broke the next full run). Use `[apps-only]`, or `[skip-ci] [build-debug]` when it must not deploy.
 - A change to the build itself (`Build-Release.ps1`, Rush, Heft), tried first: `[skip-ci] [build-debug]` on `releases/1.15` or a `feat/**` branch.
 
 | Tag (subject) | Effect |

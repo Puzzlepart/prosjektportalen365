@@ -40,9 +40,9 @@ class ListLogger {
    *
    * @param entry Entry
    * @returns The created list item as returned by SharePoint (PnPjs 4 resolves `items.add`
-   * to the item payload itself), or `undefined` when building the entry failed
+   * to the item payload itself; `IItemAddResult` is gone), or `undefined` when the write failed
    */
-  public async log(entry: IListLoggerEntry): Promise<IItemAddResult | undefined> {
+  public async log(entry: IListLoggerEntry): Promise<Record<string, any> | undefined> {
     try {
       const spItem = this._getSpItem({ ...this._getEntryDefaults(), ...entry })
       // `await` is required here: returning the promise un-awaited would let a
@@ -73,7 +73,7 @@ class ListLogger {
     message: string,
     functionName?: string,
     level: ListLoggerEntryLevel = 'Info'
-  ): Promise<IItemAddResult | undefined> {
+  ): Promise<Record<string, any> | undefined> {
     return this.log({
       message,
       level,

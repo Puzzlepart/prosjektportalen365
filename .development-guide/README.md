@@ -433,7 +433,7 @@ feat(shared-library): a new utility function [apps-only]
 ci: try a change to the build [skip-ci] [build-debug]
 ```
 
-**Tips:** Bruk `[skip-ci]` når endringen ikke påvirker det som bygges (for eksempel bare dokumentasjon), og `[apps-only]` når malene ikke er endret: en full kjøring oppgraderer testtenanten med maler og tar rundt 40 minutter.
+**Tips:** Bruk `[skip-ci]` når endringen ikke påvirker det som bygges (for eksempel bare dokumentasjon), og `[apps-only]` når malene ikke er endret: en full kjøring oppgraderer testtenanten med maler og tar rundt 40 minutter. Kode under `SharePointFramework/` skal aldri merges med bare `[skip-ci]`: da bygger ingenting den, og en kompileringsfeil ligger på branchen til neste kjøring (slik `IItemAddResult` fra #1779 felte den fulle kjøringen 13. oktober 2026). Bruk `[apps-only]`, eller `[skip-ci] [build-debug]` når den ikke skal rulles ut.
 
 
 
@@ -1730,7 +1730,7 @@ Hvilke automatiske tester som dekker hver komponent, lag for lag, med noen ord o
 
 | Lag | Filer | Tester |
 |---|---|---|
-| Jest | 178 | 1 167: PortfolioExtensions 101, PortfolioWebParts 200, ProgramWebParts 59, ProjectExtensions 118, ProjectWebParts 235, shared-library 454 |
+| Jest | 179 | 1 170: PortfolioExtensions 101, PortfolioWebParts 200, ProgramWebParts 59, ProjectExtensions 118, ProjectWebParts 235, shared-library 457 |
 | Kjøretidskontrakt | 1 | 4 |
 | Integrasjon | 10 | 41: 12 uten tenant, 29 mot testtenanten |
 | E2E | 24 spesifikasjoner | 54: smoke 19, flows 27 (de to i CI), local 8 |
@@ -1795,6 +1795,7 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 | `searchAggregatedItems` | 4 | Egenskaper og formater, bla mellom sider, oppdeling, eget område |
 | Termlageret (`taxonomy`) | 73, og kjøretidskontrakten (4) | Fasene og etikettene |
 | `DataSourceService` | Ingen | Matrisenes datakilder slått opp på ID |
+| `ListLogger` | 3: feltene, en avvist skriving stopper ikke kalleren | — |
 | `DataGridList`, `PeoplePicker`, `FilterPanel`, `Toolbar`, `ProjectTimeline`, `ExcelExportService` | 20, 8, 11, 10, 22, 24 | — (E2E dekker dem gjennom webdelene) |
 
 ### Integrasjonstestene
@@ -1818,7 +1819,7 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 - **Integrasjon, men ingen E2E:** Risikomatrise, Mulighetsmatrise og Program aggregeringsoversikt.
 - **Bare indirekte i E2E:** Siste prosjekter og Prosjektnyheter.
 - **Manuelt:** prosjektoppsett, publisering av statusrapport, idéflyten og å endre fase.
-- **Ingen test:** ikonhjelperne (`getFluentIcon`, `resolveFluentIcon`), `DataService.ts` og `ListLogger.ts`. Programmets tidslinjeside (`Tidslinje.aspx`) åpnes ikke av noen E2E-test.
+- **Ingen test:** ikonhjelperne (`getFluentIcon`, `resolveFluentIcon`) og `DataService.ts`. Programmets tidslinjeside (`Tidslinje.aspx`) åpnes ikke av noen E2E-test.
 - **Utenfor komponentene:** `.tasks/check-channel-ids.test.js` (5 tester, `npm run test:tasks`).
 
 

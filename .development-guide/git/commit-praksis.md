@@ -72,4 +72,4 @@ feat(shared-library): a new utility function [apps-only]
 ci: try a change to the build [skip-ci] [build-debug]
 ```
 
-**Tips:** Bruk `[skip-ci]` når endringen ikke påvirker det som bygges (for eksempel bare dokumentasjon), og `[apps-only]` når malene ikke er endret: en full kjøring oppgraderer testtenanten med maler og tar rundt 40 minutter.
+**Tips:** Bruk `[skip-ci]` når endringen ikke påvirker det som bygges (for eksempel bare dokumentasjon), og `[apps-only]` når malene ikke er endret: en full kjøring oppgraderer testtenanten med maler og tar rundt 40 minutter. Kode under `SharePointFramework/` skal aldri merges med bare `[skip-ci]`: da bygger ingenting den, og en kompileringsfeil ligger på branchen til neste kjøring (slik `IItemAddResult` fra #1779 felte den fulle kjøringen 13. oktober 2026). Bruk `[apps-only]`, eller `[skip-ci] [build-debug]` når den ikke skal rulles ut.
