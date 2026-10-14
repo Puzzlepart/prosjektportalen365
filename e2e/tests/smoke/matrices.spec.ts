@@ -65,9 +65,14 @@ test.describe('the uncertainty matrices', () => {
   })
 })
 
-/** A drawn matrix: at least a 3 by 3 grid of cells that fit in their rows, and no overflow. */
+/**
+ * A drawn matrix: at least a 3 by 3 grid of cells with a size. The root comes before the cells,
+ * which the web part draws once its configuration and items have arrived, so the first cell is
+ * waited for before they are counted (a busy worker showed the root with no cells yet).
+ */
 async function expectMatrix(matrix: import('@playwright/test').Locator) {
   const cells = matrix.locator(CELL)
+  await expect(cells.first()).toBeVisible({ timeout: 30_000 })
   expect(await cells.count(), 'the matrix has cells').toBeGreaterThanOrEqual(9)
   const box = await matrix.boundingBox()
   expect(box, 'the matrix has a box').not.toBeNull()

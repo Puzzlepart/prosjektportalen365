@@ -110,7 +110,7 @@ release).
 | 1 | Node 26 (24 the fallback) | — | `.nvmrc` ×7 = 26.11.1; `engines` ×6 and `rush.json` = `>=26.11.0 <27.0.0`; the guard in `Build-Release.ps1` = 26; `AGENTS.md`, `kom-i-gang.md`, `utviklingsmiljo.md`, `bygge-utgivelse.md`, the toolchain and release skills. First `rush install` + `rush rebuild` locally on 26; then a push with `[skip-ci] [build-debug]` (the full release build on 26, deploys nothing); then the merge with `[apps-only]` (packages, e2e, integration). Red for a cause that is Node's: the same files to 24.21.0 and `>=24.11.0 <25.0.0`, and the cause logged here | 1 day | Debug build and test-channel run green; no `Node 22` left outside changelogs and plans |
 | 2 | `defaultProps` | — | Per solution, smallest first (PortfolioExtensions 1, ProjectExtensions 3, ProjectWebParts 11, PortfolioWebParts 12, shared-library 20), each a commit; D2's two shapes; the existing component tests guard each file, and a file without one gets a render test first; the lint rule last | 2–3 days | Zero `defaultProps` in `src`; the rule in `pp365-eslint-config` |
 | 3 | Dates in the site's time zone | — | `getSiteTimeZone()` in the library from the page context (offset and daylight rules); `formatDate`/`formatShortDate` take the zone for date-only values; `DateColumn`, the Excel export's dates and the timeline's list follow; an integration case in `project-properties`' five-zone matrix reads a list value through search; changelog line (done 2026-10-13, see the log) | done | The overview shows the day the site shows in all five zones |
-| 4 | Test gaps | the matrices need a page | The icon helpers (`getFluentIcon`, `resolveFluentIcon`, `getIconComponentWithFallback`) and `DataService.ts` in Jest; `Tidslinje.aspx` in the program smoke; a matrix page on the e2e project (the user adds it once), then a read-only smoke for both matrices (done 2026-10-14, see the log; the matrix page is still to be added) | done | `testoversikt.md` lists no "Ingen test" but by choice |
+| 4 | Test gaps | the matrices need a page | The icon helpers (`getFluentIcon`, `resolveFluentIcon`, `getIconComponentWithFallback`) and `DataService.ts` in Jest; `Tidslinje.aspx` in the program smoke; a matrix page on the e2e project (the user adds it once), then a read-only smoke for both matrices (done 2026-10-14, see the log; the matrix page added with `add-matrix-page`) | done | `testoversikt.md` lists no "Ingen test" but by choice |
 | 5 | SPFx 1.24 GA | Microsoft | P5-4: a version bump through CI and a hand round | ½ day | 1.15.0 cut on GA |
 | 6 | PnP controls on React 18 | PnP | A release whose peers allow React 18; then the bump, the term field and property panes by hand (P5-6) | ½ day | — |
 | 7 | react-calendar-timeline 0.30 | the project | A stable release; `moment` → `dayjs` in the timeline's data and items, `interactjs` to its peer; the timeline's Jest (22) and smoke tests | 2 days | — |
@@ -268,9 +268,21 @@ ProjectWebParts' timeline with the program's items), and the smoke opened only t
 opens the second and waits for the drawn timeline. No template page holds the matrix web parts, so
 `tests/smoke/matrices.spec.ts` checks two places: the status page's uncertainty section, which
 draws the selected report's matrix when it has risks or opportunities, and a page with both web
-parts that the e2e project gets by hand (`E2E_PAGE_MATRIX`, else `Usikkerhet.aspx` and a few more
-names), skipping with the reason until it exists. A drawn matrix is at least nine cells with a
-size. The page is a single web part app page, where SharePoint sets no feature tag, so the web
+parts (`E2E_PAGE_MATRIX`, else `Usikkerhet.aspx` and a few more names), skipping with the reason
+until it exists. `integration/scripts/add-matrix-page.ts` (`npm run add-matrix-page -- <url>`)
+adds that page through PnPjs 4's client-side page API, signed in as the harness is: an article
+page, one section per web part, each from the site's component definition with the toolbox's
+defaults (the manifest's first preconfigured entry), published; it did so on the e2e project on
+2026-10-14. Two things it taught. `GetClientSideWebParts` writes component ids in braces and upper
+case (`{B1500CBA-…}`), so an id compared as the channel files write it never matched, and the
+script's first version fell back on the manifest alias and picked a risk matrix from a 1.8.1
+package the tenant's app catalog still holds (seven risk matrices from 1.8.1 on are offered); the
+page rendered that package's code, and the opportunity matrix of the same package did not render
+at all. The script normalizes the ids, accepts only the channel's own and lists the other packages
+when the channel's is missing, and `--replace` recycles a page to remake it. The suite's channel
+guard (`expectReleaseChannel`) had let that page through, since no channel file knew the id: it
+now also fails on a PP365 web part (by the alias in its feature tag) whose id no channel file
+knows. A drawn matrix is at least nine cells with a size. The page is a single web part app page, where SharePoint sets no feature tag, so the web
 part is found by the title it renders (the first local run looked for the tag).
 
 The flaky tabs flow in `navigation.spec.ts` (runs 37107937758, 38429925362 and 38516321658,
@@ -293,4 +305,4 @@ instant to the site's zone (a Helsinki midnight is the evening before in Oslo). 
 what made CI show it.
 
 The test overview's "Ingen test" bullet is gone; what remains uncovered is there by choice (the
-program aggregation has integration tests and no browser test; the matrix page is the user's).
+program aggregation has integration tests and no browser test).

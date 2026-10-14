@@ -83,6 +83,9 @@ with that reason when the two differ.
   status reports: the reserved project's report series `ITEST`, apart from its own reports), and
   the test first removes what an interrupted run left there.
 - Format with Prettier and the solutions' rules: `prettier --config ../SharePointFramework/.prettierrc.yaml`.
+- The browser suite's matrix smoke needs a project page with both matrix web parts, which no
+  template holds: `npm run add-matrix-page -- <project url> [Usikkerhet.aspx] [channel]` adds and
+  publishes it with the toolbox defaults, signed in as the harness is (`scripts/add-matrix-page.ts`).
 
 ## In CI
 
