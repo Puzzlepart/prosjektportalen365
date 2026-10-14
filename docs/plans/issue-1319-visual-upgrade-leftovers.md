@@ -227,7 +227,24 @@ channel as deployed, so the old panel: the spec reads only labels and button nam
 «Bare Jest» bullet; writing to Planner stays manual, since nothing can delete a Planner task
 afterwards. No changelog line (tests only).
 
-Tags: the slices' commits sit on `fix/1319-visual-upgrade-leftovers`, where no deploy workflow
-runs; the pull request runs «Build release package (pull request)», and the squash subject decides
-what runs on `releases/1.15`. Slice 2 changed the library, so the squash subject carries
-`[apps-only]`: every package deploys to both hubs, and the new smoke runs with the rest.
+Tags: the user's commit «ci: workflow updates» put the branch in `ci-channel-test.yml`'s push
+branches (and `fix/**` in `ci-build-debug.yml`'s), as the release skill describes for a topic
+branch, so the slices' tags did run: slice 2's `[apps-only]` deployed every package to the test
+hub, slice 3's `[apps-only:ProjectExtensions]` the extensions, and the hand rounds are done there.
+The pull request runs «Build release package (pull request)», the first run of that required
+check; the squash subject decides what runs on `releases/1.15`, and since slice 2 changed the
+library it carries `[apps-only]`.
+
+### Before the pull request (2026-10-14)
+
+Two things the hand rounds and the merge would otherwise trip over. The smoke picked the first
+risk with text, and a hand test that adds a Planner task to it turns its cell into the task list,
+whose click opens the task's preview, not the risk's popover: the smoke now selects
+`RiskActionData` too (when the list has the field, which the customizer adds the first time it
+runs) and takes the first risk with text and no Planner tasks, skipping with a message when none
+is left; not seen failing first, since that would mean writing Planner tasks to the e2e project,
+and green against the tenant after the change. And the two trigger lines are set back to
+`releases/1.15`'s (the test channel's `feat/technical-backlog*`, no `fix/**` for the debug
+build), in a commit of their own pushed after the branch's last test-channel run, so the merge
+leaves the triggers and the three documents listing them as they were; the release skill now says
+so.
