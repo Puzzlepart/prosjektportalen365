@@ -33,4 +33,4 @@
 | DynamicListWebPart            | ProjectWebParts     | Dynamisk liste                                         | 2f66a372-7d6f-4d36-90b4-22b26465aa3c |
 | SharedLibrary                 | SharedLibrary       | Pakke med delte komponenter                            | 0f65a874-dc9d-491d-b979-6ce1d943dd00 |
 
-Hvilke tester som dekker hver komponent, står i [testoversikten](testoversikt.md).
+Hvilke tester som dekker hver komponent, står i [testoversikten](testoversikt.md). Status for universell utforming per komponent står i [Tilgjengelighet](tilgjengelighet.md).

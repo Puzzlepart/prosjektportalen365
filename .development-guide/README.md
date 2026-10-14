@@ -124,6 +124,15 @@
 		* [Det delte biblioteket (shared-library)](#det-delte-biblioteket-shared-library)
 		* [Integrasjonstestene](#integrasjonstestene)
 		* [Hull verdt å kjenne til](#hull-verdt--kjenne-til)
+	* [➤ Tilgjengelighet](#-tilgjengelighet)
+		* [Slik leses tabellene](#slik-leses-tabellene)
+		* [Grunnlagsmålingen](#grunnlagsmlingen)
+		* [shared-library](#shared-library-1)
+		* [ProjectWebParts](#projectwebparts-1)
+		* [ProjectExtensions](#projectextensions-1)
+		* [PortfolioWebParts](#portfoliowebparts-1)
+		* [PortfolioExtensions](#portfolioextensions-1)
+		* [ProgramWebParts](#programwebparts-1)
 	* [➤ Maler](#-maler)
 		* [Mappene](#mappene)
 		* [Bygge og validere](#bygge-og-validere)
@@ -165,6 +174,7 @@
 		* [Bygg og installer (dev)](#bygg-og-installer-dev)
 		* [CI-appen «Prosjektportalen CI»](#ci-appen-prosjektportalen-ci)
 		* [CI (channels/test)](#ci-channelstest)
+		* [Testrapportsiden](#testrapportsiden)
 		* [CI (build debug)](#ci-build-debug)
 		* [Bygg utgivelse (main)](#bygg-utgivelse-main)
 		* [Felles for arbeidsflytene](#felles-for-arbeidsflytene)
@@ -274,7 +284,7 @@ Les [testing.md](spfx/testing.md) før du skriver din første test. Avsnittet «
 - **Kjør** `npm test` i en løsning (bygger først). Én fil: `npx heft test --test-path-pattern Header` (et regulært uttrykk over stien til testfilen). `shared-library` må være bygget først.
 - **Komponenttester** bruker React Testing Library og `jest.mock` av hooken eller dataadapteren, og `jest.mock(...)` må stå over importene. Importer aldri `@pnp/*` i en test; harnessen `pp365-jest-config` stubber den.
 - **Dekningsgulv:** hver løsnings `config/jest.config.json` har `coverageThreshold`. Lokalt melder Jest bare et gulv som ikke nås, mens utgivelsesbygget i CI stopper på det: se på dekningen før du pusher. Gulvene skal bare opp: løft dem når du legger til tester, senk dem aldri.
-- **Playwright (`e2e/`):** røyktester (`tests/smoke`) og brukerreiser (`tests/flows`; fire av dem skriver til testtenanten og rydder etter seg) mot testtenanten. De kjører i CI etter hver utrulling til testkanalen (`ci-channel-test.yml`), og rapporten lastes opp som artefaktet `playwright-report-test-channel`. Lokalt i `e2e/`: `cp .env.example .env`, fyll inn, `npx playwright install chromium` og `npm test`.
+- **Playwright (`e2e/`):** røyktester (`tests/smoke`) og brukerreiser (`tests/flows`; fire av dem skriver til testtenanten og rydder etter seg) mot testtenanten. De kjører i CI etter hver utrulling til testkanalen (`ci-channel-test.yml`), og rapporten, som integrasjonsrapporten, åpnes på den private testrapportsiden fra lenken i jobbens sammendrag (artefaktet `playwright-report-test-channel` er reserven, uten sporinger). Lokalt i `e2e/`: `cp .env.example .env`, fyll inn, `npx playwright install chromium` og `npm test`.
 - Den som åpner en PR, retter tester som feiler på grunn av den. Slett aldri en påstand bare for å få grønt.
 
 ### 6. Fra endring til merge
@@ -477,7 +487,7 @@ ci: try a change to the build [skip-ci] [build-debug]
 | DynamicListWebPart            | ProjectWebParts     | Dynamisk liste                                         | 2f66a372-7d6f-4d36-90b4-22b26465aa3c |
 | SharedLibrary                 | SharedLibrary       | Pakke med delte komponenter                            | 0f65a874-dc9d-491d-b979-6ce1d943dd00 |
 
-Hvilke tester som dekker hver komponent, står i [testoversikten](testoversikt.md).
+Hvilke tester som dekker hver komponent, står i [testoversikten](testoversikt.md). Status for universell utforming per komponent står i [Tilgjengelighet](tilgjengelighet.md).
 
 
 
@@ -1266,7 +1276,7 @@ Skriptene i roten styrer monorepoet som helhet: Rush-operasjoner, generering av 
 | `generate-sbom`                | `node ./.tasks/generate-sbom.js`                                                                          | Genererer `SBOM.md` med komplett oversikt over avhengigheter i alle pakker. Se [SBOM-generering](../ci/sbom.md).                                                                                |
 | `check-skills`                 | `node ./.tasks/check-skills.js`                                                                           | Sjekker at agentferdighetene (skills) bare ligger i `.claude/skills`: Claude Code leser bare den mappen, og GitHub Copilot leser den også. Feiler hvis `.github/skills` eller `.agents/skills` finnes, eller hvis en `SKILL.md` mangler `name` lik mappenavnet eller en `description` på 1–1024 tegn. Kjøres i CI av `skills.yml`. |
 | `check-channel-ids` | `node ./.tasks/check-channel-ids.js` | Sjekker at løsningene har main-kanalens løsnings- og komponent-ID-er i `config/package-solution.json` og manifestene, slik `channels/main.json` har dem. Feiler og lister avvikene ellers. `Install/Build-Release.ps1` kjører den før bygget. |
-| `test:tasks` | `node --test ".tasks/*.test.js"` | Kjører testene for skriptene i `.tasks/` (i dag `check-channel-ids`). |
+| `test:tasks` | `node --test ".tasks/*.test.js"` | Kjører alle `.tasks/*.test.js`, testene for skriptene i `.tasks/` (i dag `check-channel-ids`, `modify-solution-files` og `publish-test-report`). CI kjører dem ikke. |
 | `postversion`                  | `npm run generate-readme && npm run sync-version && npm run generate-sbom`                                | Kjøres automatisk av npm etter `npm version patch/minor`. Regenererer README, synkroniserer versjoner og oppdaterer SBOM i ett steg.                                                             |
 | `rush:init`                    | `npm run rush:update && npm run rush:build`                                                               | Førstegangsoppsett av repoet. Kjører `rush:update` etterfulgt av `rush:build` slik at avhengigheter installeres og alle løsningene bygges i riktig rekkefølge. Se [Rush og bygging](./rush.md).  |
 | `rush:update`                  | `node common/scripts/install-run-rush.js update`                                                          | Kjører `rush update` uten at Rush er installert globalt. Installerer avhengigheter og sikrer konsistente versjoner på tvers av løsningene.                                                       |
@@ -1344,7 +1354,7 @@ Se [Oppgaver](../../SharePointFramework/.tasks/README.md) for en full oversikt o
 | `test`         | `playwright test` | Kjører testene mot testtenanten. |
 | `test:ui`      | `playwright test --ui` | Åpner Playwrights grensesnitt for å kjøre og feilsøke testene. |
 | `test:headed`  | `playwright test --headed` | Kjører testene med synlig nettleser. |
-| `report`       | `playwright show-report` | Åpner HTML-rapporten fra siste kjøring. |
+| `report`       | `playwright show-report` | Åpner HTML-rapporten fra siste lokale kjøring. Rapporten fra CI ligger på testrapportsiden. |
 | `lint`, `validate-loc` | `echo …` | Plassholdere for `rush lint` og `rush validate-loc`. |
 
 ### Skript i `integration`
@@ -1355,7 +1365,7 @@ Se [Oppgaver](../../SharePointFramework/.tasks/README.md) for en full oversikt o
 | -------------- | -------- | ---------------------- |
 | `build`        | `tsc --noEmit -p tsconfig.json` | Typesjekker harnessen og testene. Kjøres av `rush build`; testene kjører aldri der, siden de trenger en tenant. |
 | `test`         | `node --test --test-concurrency=1 "tests/**/*.test.ts"` | Kjører testene mot testtenanten, én fil om gangen, med Nodes typestripping. |
-| `test:ci`      | `node --test … --test-reporter=spec … --test-reporter=junit …` | Som `test`, med spec-rapport i loggen og JUnit i `test-results/junit.xml`. Brukes av CI-jobben. |
+| `test:ci`      | `node --test … --test-reporter=spec … --test-reporter=junit … --test-reporter=./src/reporters/html.ts …` | Som `test`, med spec-rapport i loggen, JUnit i `test-results/junit.xml` og HTML-rapporten i `test-results/index.html` (den testrapportsiden viser). Brukes av CI-jobben. |
 | `lint`, `validate-loc` | `echo …` | Plassholdere for `rush lint` og `rush validate-loc`. |
 
 ### Skript i `Templates`
@@ -1648,22 +1658,22 @@ Kjør testene i en løsning med `npm test` (`heft test`), eller bare bygg-og-tes
 
 `e2e/` er Rush-prosjektet `pp365-e2e`, med tre mapper: `tests/smoke` (røyktester av sider og webdeler), `tests/flows` (brukerreiser; fire av dem skriver til testtenanten og rydder etter seg) og `tests/local` (en løsnings lokale bundle via en utviklingsserver, bare med `E2E_LOCAL_BUNDLE=1`, aldri i CI). Røyktestene logger inn som en dedikert testbruker, åpner hub-sidene og et prosjektområde, venter på at SPFx-lerretet rendrer, sjekker at forventede webdeler monteres, og feiler på nettleserfeil som betyr at en bundle er ødelagt («Cannot find module», «Failed to load component», «ChunkLoadError»). Det siste er nettopp symptomet på et delt bibliotek som ikke er pakket inn, og er det pakkebeviset i `Build-Release.ps1` sikrer på byggetidspunktet.
 
-Kjøring i CI: jobben «End-to-end smoke (test channel)» i `ci-channel-test.yml` kjører etter en vellykket «Upgrade (test channel)», altså mot den pakken som nettopp ble rullet ut til `SP_URL_TEST`. Arbeidsflyten utløses av push til grenene i `on.push.branches` (i dag `releases/1.15` og `feat/technical-backlog*`) når filer under `SharePointFramework/`, `Install/`, `Templates/`, `e2e/` eller `integration/` er endret, og kan startes manuelt fra Actions-fanen (`workflow_dispatch`). Merk at en push til en av disse grenene oppgraderer testtenanten. E2E-jobben følger begge oppgraderingsløpene: den vanlige oppgraderingen og pakke-oppgraderingen som `[apps-only]`/`[apps-only:<løsninger>]` bruker. `[skip-e2e]` i commit-emnet hopper over E2E-jobben; `[skip-upgrade]` hopper over oppgraderingen og dermed også E2E.
+Kjøring i CI: jobben «End-to-end smoke (test channel)» i `ci-channel-test.yml` kjører etter en vellykket «Upgrade (test channel)», altså mot den pakken som nettopp ble rullet ut til `SP_URL_TEST`. Arbeidsflyten utløses av push til grenene i `on.push.branches` (i dag bare `releases/1.15`) når filer under `SharePointFramework/`, `Install/`, `Templates/`, `e2e/` eller `integration/`, publiseringsskriptet `.tasks/publish-test-report.js` eller arbeidsflytfilen selv er endret, og kan startes manuelt fra Actions-fanen (`workflow_dispatch`). Merk at en push til en av disse grenene oppgraderer testtenanten. E2E-jobben følger begge oppgraderingsløpene: den vanlige oppgraderingen og pakke-oppgraderingen som `[apps-only]`/`[apps-only:<løsninger>]` bruker. `[skip-e2e]` i commit-emnet hopper over E2E-jobben; `[skip-upgrade]` hopper over oppgraderingen og dermed også E2E.
 
 #### Finne og lese E2E-rapporten fra CI
 
 - **Rask oversikt**: jobbloggen lister hver test som bestått, feilet eller hoppet over, og skriver ut påstanden og lokatoren for hver feil (`github`-reporteren). Feil vises også som annotasjoner på kjøringens oppsummeringsside.
-- **Full rapport**: nederst på oppsummeringssiden, under «Artifacts», ligger `playwright-report-test-channel` (7 dager, det lengste repoet tillater). Zip-filen inneholder `playwright-report/` (HTML-rapporten) og `test-results/` (per feilet test: `error-context.md` med sidens tilgjengelighetssnapshot, skjermbilde, video og ved nytt forsøk `trace.zip`), samt `test-results/junit.xml`.
-- **Åpne rapporten lokalt**: fra `e2e/`:
+- **Full rapport, på testrapportsiden**: jobbens sammendrag på kjøringens side har lenken «Open the report» til kjøringens Playwright-rapport og «all runs» til forsiden. Forsiden lister testkanalens kjøringer de siste 7 dagene, nyeste først: kjøringen, commiten med branch og emnelinje, og en kolonne for E2E og en for integrasjon med utfall, antall og lenke til rapporten. Et nytt forsøk av en kjøring står på en egen rad. Rapporten åpnes rett i nettleseren, med skjermbilder, video og sporinger (traces), og sporingsvisningen virker der, fordi området serveres over HTTPS. Tittelen er `PP365 e2e · <branch> · run <nummer>` (`PLAYWRIGHT_HTML_TITLE` i teststeget). Området er privat: GitHub ber om innlogging, og alle med lesetilgang til rapportrepoet slipper inn. Rapporten kommer et minutt eller to etter at jobben er ferdig. Hvordan den er satt opp, står under «Testrapportsiden» i [Kontinuerlig integrasjon](../ci/kontinuerlig-integrasjon.md).
+- **Artefaktet, når testrapportsiden ikke har rapporten** (området er ikke satt opp, eller publiseringen feilet; steget viser da en advarsel): nederst på oppsummeringssiden, under «Artifacts», ligger `playwright-report-test-channel` (7 dager, det lengste repoet tillater). Zip-filen inneholder `playwright-report/` (HTML-rapporten) og `test-results/` (per feilet test: `error-context.md` med sidens tilgjengelighetssnapshot, skjermbilde og video), samt `test-results/junit.xml` og `test-results/results.json`. Sporingene er tatt ut (`playwright-report/data/*.zip`, `playwright-report/trace` og `test-results/**/trace.zip`), og det samme er innloggingens egne resultater (`test-results/auth.setup*`), fordi sidesnapshotet deres viser innloggingsskjemaet. Alt finnes på testrapportsiden. Fra `e2e/`:
 
   ```bash
   gh run download <run-id> -n playwright-report-test-channel -D ci-report
   npx playwright show-report ci-report/playwright-report   # åpner http://localhost:9323
-  npx playwright show-trace ci-report/test-results/<test>/trace.zip
   ```
 
-  `index.html` kan også åpnes rett fra filsystemet, men sporinger krever `show-report` eller trace.playwright.dev.
-- Rapporten inneholder snapshot av sider i testtenanten. Den publiseres ikke utenfor GitHub, og artefakt-tilgangen på repoet skal ikke utvides.
+  `index.html` kan også åpnes rett fra filsystemet.
+- **Rapportene går bare til den private testrapportsiden.** De inneholder snapshot av sider i testtenanten, og sporingene inneholder e2e-brukerens øktinformasjonskapsler, `storageState` og forespørselshodene: Playwright 1.63 maskerer ingenting (sjekket 2026-10-14). Repoet er offentlig, så artefaktene kan lastes ned av alle som er logget inn på GitHub, og derfor er sporingene tatt ut av artefaktet. Testrapportsiden skal forbli privat, rapportene publiseres ikke noe annet sted, og tilgangen til artefaktene og rapportrepoet skal ikke utvides.
+- **Aldri en hemmelighet i et steg.** `fill(verdi)` gir steget tittelen `Fill "<verdi>"`, og HTML-rapporten beholder hvert steg i hver test, også i dem som består. Til 14. oktober 2026 brukte `auth.setup.ts` `fill(password)`, så hver CI-rapport siden suiten kom, hadde e2e-brukerens passord i klartekst, i et artefakt alle innloggede GitHub-brukere kunne laste ned i 7 dager. Nå skriver `enterSecret()` i `auth.setup.ts` inn brukernavnet og passordet: `fill('')` tømmer feltet etter de samme kontrollene som før, og Chromiums `Input.insertText`, som `fill()` selv ender i, skriver verdien som ekte inndata. Et protokollkall blir ikke noe steg i rapporten (`type()`, `pressSequentially()` og `insertText()` har verdien i tittelen, de også). Bruk den for hver hemmelighet en test skriver inn. To ting til holder passordet ute: når en test feiler, skriver Playwright `error-context.md` med et tilgjengelighetssnapshot av siden, og der står verdien i hvert felt, også passordfelt. Derfor tømmer en `afterEach` i `auth.setup.ts` passordfeltene før snapshotet tas. I tillegg har oppsettsprosjektet `setup` `trace: 'off'` i CI, fordi en sporing beholder argumentene til hver handling og verdiene i feltene. Lokalt overstyrer `--trace on` og `npm run test:ui` dette, men `test-results/` er ikke i git. Har en hemmelighet havnet i en rapport, roteres den, testbrukerens økter tilbakekalles, og artefaktene med den slettes.
 
 Variabler og hemmeligheter i GitHub:
 
@@ -1674,6 +1684,8 @@ Variabler og hemmeligheter i GitHub:
 | `E2E_PROGRAM_URL` | variabel | Et eksisterende programområde i huben med minst ett underprosjekt (programtestene hoppes over med melding hvis variabelen mangler eller peker på huben) |
 | `E2E_USERNAME` | hemmelighet | Testbrukerens UPN |
 | `E2E_PASSWORD` | hemmelighet | Testbrukerens passord |
+
+Publiseringen til testrapportsiden bruker `TEST_REPORTS_DEPLOY_KEY`, `TEST_REPORTS_REPOSITORY` og `TEST_REPORTS_URL`; de står under «Testrapportsiden» i [Kontinuerlig integrasjon](../ci/kontinuerlig-integrasjon.md).
 
 Krav til testbrukeren: en egen konto (for eksempel `pp365-e2e@<tenant>.onmicrosoft.com`) som er medlem av porteføljen og prosjektet, med minst mulig rettigheter ellers, ekskludert fra MFA gjennom en Conditional Access-policy som gjelder bare denne kontoen, og med passord som roteres og bare finnes som GitHub-hemmelighet. Ikke bruk en personlig konto, og ikke gjenbruk sertifikat-appen som utrullingen bruker: E2E trenger en brukersesjon i nettleseren.
 
@@ -1708,7 +1720,9 @@ Regler for testene:
 - Sjekk det SharePoint returnerte eller lagret, lest tilbake, ikke det koden sendte. Hold påstandene uavhengige av tidssone og av andre prosjekters data.
 - Ingen hemmelighet havner i en logg, en rapport eller en fil: ingen token, informasjonskapsel eller sertifikat skrives ut.
 
-I CI kjører jobben «Integration tests (test channel)» i `ci-channel-test.yml` etter den samme oppgraderingen som E2E (begge løpene), ved siden av E2E-jobben. Den installerer `--to pp365-integration --to pp365-templates`, genererer bibliotekets delte strenger fra `.resx`-filene (`npm run generate-resx-ts` i `Templates`; de ligger ikke i git), bygger biblioteket (`heft build --production`, uten Jest), kompilerer ProjectWebParts' `lib-commonjs` med TypeScript alene (`--noCheck`, med strengfilene kopiert ved siden av; bunting og typesjekk av løsningen gjør utgivelsesbygget) og kjører `npm run test:ci`. Spec-rapporten havner i loggen, og JUnit-rapporten i `integration/test-results/junit.xml`, lastet opp som `integration-report-test-channel` (7 dager). `[skip-integration]` i commit-emnet hopper over jobben.
+I CI kjører jobben «Integration tests (test channel)» i `ci-channel-test.yml` etter den samme oppgraderingen som E2E (begge løpene), ved siden av E2E-jobben. Den installerer `--to pp365-integration --to pp365-templates`, genererer bibliotekets delte strenger fra `.resx`-filene (`npm run generate-resx-ts` i `Templates`; de ligger ikke i git), bygger biblioteket (`heft build --production`, uten Jest), kompilerer ProjectWebParts' `lib-commonjs` med TypeScript alene (`--noCheck`, med strengfilene kopiert ved siden av; bunting og typesjekk av løsningen gjør utgivelsesbygget) og kjører `npm run test:ci`. Spec-rapporten havner i loggen, JUnit-rapporten i `integration/test-results/junit.xml` og HTML-rapporten i `integration/test-results/index.html`. Mappen lastes opp som `integration-report-test-channel` (7 dager) og publiseres på testrapportsiden, som E2E-rapporten. `[skip-integration]` i commit-emnet hopper over jobben.
+
+HTML-rapporten lages av `src/reporters/html.ts`, en egen rapportør for `node:test` (en asynkron generator, typestrippet TypeScript som testene) som `test:ci` kjører som tredje rapportør ved siden av spec og JUnit. Den viser et tre per fil med suiter og tester og status (bestått, feilet, avbrutt, hoppet over, `todo`), begrunnelsen for en test som ble hoppet over, linjene fra `t.diagnostic`, feilene (en krok som feilet, er navngitt, `cause`-kjeden er med, og stakken er uten repoets rot og Nodes interne rammer), det hver fil skrev til stdout og stderr, filer som feilet før testene kjørte, og totalene fra Nodes siste `test:summary`. Totalene bygges inn i HTML-filen som `<script type="application/json" id="report-summary">`, og testrapportsiden leser antallene derfra. Med tre rapportører skriver Node en `MaxListenersExceededWarning`; den er ufarlig. Rapportøren testes uten tenant i `tests/html-reporter.test.ts`, som kjører i `npm test` og i CI-jobben.
 
 | Navn i GitHub | Type | Brukes som |
 |---|---|---|
@@ -1729,7 +1743,7 @@ I CI kjører jobben «Integration tests (test channel)» i `ci-channel-test.yml`
 
 **E2E feiler etter utrulling til testkanalen**
 
-1. Åpne artefaktet `playwright-report-test-channel` fra kjøringen. Sporingen viser hvert steg, nettverkskall og konsoll.
+1. Åpne rapporten på testrapportsiden fra lenken i jobbens sammendrag, eller artefaktet `playwright-report-test-channel` når testrapportsiden ikke har den (uten sporinger). Sporingen, som tas ved nytt forsøk, viser hvert steg, nettverkskall og konsoll.
 2. Klassifiser:
    - *Miljø*: innlogging feilet (utløpt passord, MFA-krav, endret policy), siden finnes ikke, tenanten svarer ikke. Rett hemmelighet, policy eller variabel; kjør jobben på nytt.
    - *Utrulling*: rett etter en oppgradering kan SharePoint i noen minutter gi en side forrige versjons manifest for en komponent, og bunten det peker på har oppgraderingen fjernet («Could not load … in require»). Oppsettet `tests/deployment.setup.ts` venter derfor inntil ti minutter på at hubben og prosjektets forside laster alle bunter fra appkatalogen før testene starter. Feiler oppsettet, er en bunt fortsatt borte etter ti minutter, og utrullingen er ødelagt.
@@ -1739,7 +1753,7 @@ I CI kjører jobben «Integration tests (test channel)» i `ci-channel-test.yml`
 
 **Integrasjonstest feiler etter utrulling**
 
-1. Jobbloggen viser hver test og påstanden som feilet. Rapporten hentes med `gh run download <run-id> -n integration-report-test-channel`.
+1. Jobbloggen viser hver test og påstanden som feilet. HTML-rapporten på testrapportsiden (lenken i jobbens sammendrag) viser feilen med stakk og det filen skrev til stdout og stderr. Mangler den der, hentes den med `gh run download <run-id> -n integration-report-test-channel`, og `index.html` åpnes rett fra filsystemet.
 2. Klassifiser som for E2E: *miljø* (innloggingen, rettighetene til CI-appen, en variabel som mangler; med `INTEGRATION_STRICT` feiler det i stedet for å hoppes over), *regresjon* i datalaget (rett koden; testen peker på én funksjon), eller *endret svar fra SharePoint* (rett koden som leser svaret, og la testen dokumentere den nye formen).
 3. `node:test` prøver ikke på nytt. En ustabil test rettes eller merkes `todo` med et issue; omprøving legges eventuelt bare rundt innloggingen og første kall (se planen).
 
@@ -1774,7 +1788,7 @@ Hvilke automatiske tester som dekker hver komponent, lag for lag, med noen ord o
 |---|---|---|
 | Jest | 192 | 1 268: PortfolioExtensions 101, PortfolioWebParts 240, ProgramWebParts 59, ProjectExtensions 118, ProjectWebParts 239, shared-library 511 |
 | Kjøretidskontrakt | 2 | 6 |
-| Integrasjon | 10 | 42: 12 uten tenant, 30 mot testtenanten |
+| Integrasjon | 11 | 50: 20 uten tenant, 30 mot testtenanten |
 | E2E | 27 spesifikasjoner | 59: smoke 22, flows 29 (de to i CI), local 8 |
 
 I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder etter seg. «Indirekte» betyr at komponenten står på en side en E2E-test åpner. Testen sjekker da ikke komponenten selv, men `openPage` feiler fortsatt på feilgrensen «Noe gikk galt», på en webdel fra en annen kanal og på bunter som ikke lastes.
@@ -1849,6 +1863,7 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 | Fil | Tester | Sjekker |
 |---|---|---|
 | `harness` | 12, uten tenant | Strengene, AMD-feil, at tjenestene lastes, SPFx-konteksten, språksjekken, sertifikatet, `appOnlyDenied` |
+| `html-reporter` | 8, uten tenant | HTML-rapporten fra `src/reporters/html.ts`: treet og statusene, stakken uten roten og Nodes rammer, krok som feilet og `cause`-kjeden, fil som feilet ved lasting, en prosess som døde etter testene og en test som aldri ble ferdig, totalene fra sammendraget, escaping, og at en ødelagt strøm likevel gir en side |
 | `reachability` | 3 | Hubens web, søk og termlageret i innloggingsmodusen |
 | `portal-data-service` | 2 | Prosjektkolonnene, og at prosjektet finner huben |
 | `search` | 4 | Matrisens egenskaper og formater, sider, oppdeling, eget område |
@@ -1865,7 +1880,105 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 - **Integrasjon, men ingen E2E:** Program aggregeringsoversikt. Matrisene har E2E på statussiden bare der rapporten har usikkerheter, og som webdeler på en side testharnesset legger til (`add-matrix-page`), siden ingen malside har dem.
 - **Bare indirekte i E2E:** Siste prosjekter og Prosjektnyheter.
 - **Manuelt:** prosjektoppsett, publisering av statusrapport, idéflyten og å endre fase.
-- **Utenfor komponentene:** `.tasks/check-channel-ids.test.js` (5 tester) og `.tasks/modify-solution-files.test.js` (3 tester: kanal-ID-ene, versjonsstempelet og at bare en kanal med egne ID-er skjuler webdelene), med `npm run test:tasks`.
+- **Tilgjengelighet (#1788):** `tests/smoke/a11y-baseline.spec.ts` skanner alle PP365-webdeler på sidene røyktestene åpner med axe, og røyktestene for tiltaksfeltet og «Hent dokumentmal» skanner flatene de åpner. Skanningene rapporterer og feiler bare for gjennomgåtte komponenter. Resultatet per komponent står i [Tilgjengelighet](tilgjengelighet.md). I Jest gir `pp365-jest-config/lib/axe` det samme for en komponent, foreløpig brukt i `FieldContainer`.
+- **Utenfor komponentene:** `.tasks/check-channel-ids.test.js` (5 tester), `.tasks/modify-solution-files.test.js` (3 tester: kanal-ID-ene, versjonsstempelet og at bare en kanal med egne ID-er skjuler webdelene) og `.tasks/publish-test-report.test.js` (11 tester av testrapportsiden, mot et lokalt bart repo: rapport og metadata, én rad per kjøring og forsøk, 7 dager, størrelsesbudsjettet, escaping, antallene, commit uten foreldre, ny runde når den andre jobben pushet først, ingen publisering til et område som svarer uten innlogging, og deploy-nøkkelen på disk), med `npm run test:tasks`, som CI ikke kjører.
+
+
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#tilgjengelighet)
+
+## ➤ Tilgjengelighet
+
+Status for universell utforming per komponent, arbeidet i [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788). Målet er WCAG 2.1 nivå A og AA, og i tillegg fire kriterier fra WCAG 2.2: 2.4.11, 2.5.7, 2.5.8 og 3.3.7. Planen og rekkefølgen står i `docs/plans/universal-design-wcag.md`. Reglene for koden og fremgangsmåten står i skillen `pp365-a11y`.
+
+### Slik leses tabellene
+
+- **axe** er det axe fant i grunnlagsmålingen 14.10.2026: regelen og hvor mange elementer som brøt den. «Ingen» betyr at axe ikke fant noe. Det betyr ikke at komponenten er tilgjengelig, siden axe bare finner en del av det WCAG krever.
+- **Gjennomgått** er datoen komponenten har vært gjennom alle sju stegene: axe, jest-axe, tastatur, skjermleser, visuelt, skjema og registrering.
+- **Tastatur**, **Skjermleser**, **Visuelt** og **Skjema** fylles ut ved gjennomgangen: ✓ for bestått, ✗ for funn (se merknaden) og – når det ikke er relevant.
+
+### Grunnlagsmålingen
+
+axe-core 4.13 gjennom `@axe-core/playwright` skannet hver PP365-webdel fra testkanalen på sidene røyktestene åpner, og flatene testene for tiltaksfeltet og «Hent dokumentmal» åpner. Reglene var WCAG 2.1 A og AA og WCAG 2.2 AA. Fluents fokusvakter (`i[data-tabster-dummy]`) er holdt utenfor. De flagges av `aria-hidden-focus`, men flytter fokus videre med en gang og er Fluents egne.
+
+Målingen er et øyeblikksbilde. Antallet varierer noe med hvor mye data som har lastet når skanningen går. Webdeler under folden, som Prosjektnyheter på prosjektets forside, monteres først når siden rulles og er ikke med. De skannes i sin egen gjennomgang.
+
+Testene går i `e2e/tests/smoke/a11y-baseline.spec.ts`, `risk-action.spec.ts` og `document-template-dialog.spec.ts`. Hver skanning legger ved `axe-<komponent>.json` og en `a11y`-merknad i rapporten. En skanning feiler bare for komponenter som er gjennomgått og står i `A11Y_BLOCKING`.
+
+### shared-library
+
+| Komponent | axe | Gjennomgått | Tastatur | Skjermleser | Visuelt | Skjema | Merknad |
+|---|---|---|---|---|---|---|---|
+| BasePanel | Se tiltakspanelet |  |  |  |  |  |  |
+| Toolbar | Ikke målt alene |  |  |  |  |  |  |
+| DataGridList | Se «Hent dokumentmal» |  |  |  |  |  |  |
+| FieldContainer og skjemafeltene | Ikke målt alene |  |  |  |  |  |  |
+| CustomEditPanel | Ikke målt |  |  |  |  |  |  |
+| FilterPanel | Ikke målt |  |  |  |  |  | Seksjonstoppen er et klikkbart `div` |
+| UserMessage | Ikke målt |  |  |  |  |  | Leses ikke opp uten `AriaLiveAnnouncer` |
+| WebPartTitle | Ikke målt alene |  |  |  |  |  |  |
+| ConfirmDialog | Ikke målt |  |  |  |  |  |  |
+| OverflowTagMenu | Ikke målt |  |  |  |  |  | Utvidelsen er et klikkbart `div` |
+| ItemColumn | Se porteføljeoversikten |  |  |  |  |  |  |
+| LoadingSkeleton | aria-progressbar-name 1, i ressursallokeringen |  |  |  |  |  | Skjelettet har ikke navn |
+| ProjectLogo og FileTypeIcon | Ikke målt alene |  |  |  |  |  |  |
+| Autocomplete og ColumnSearchPropertyField | Ikke målt |  |  |  |  |  |  |
+| ProjectTimeline | Se tidslinjene |  |  |  |  |  | Tidslinjebiblioteket har ikke tastaturstøtte |
+
+### ProjectWebParts
+
+| Komponent | axe | Gjennomgått | Tastatur | Skjermleser | Visuelt | Skjema | Merknad |
+|---|---|---|---|---|---|---|---|
+| Prosjektinformasjon | Ingen |  |  |  |  |  |  |
+| Fasevelger | color-contrast 8–10, list 1 |  |  |  |  |  | Fasenavn med lav kontrast, `ul` med andre barn enn `li` |
+| Prosjektstatus | Ingen |  |  |  |  |  |  |
+| Prosjekttidslinje | color-contrast 2, scrollable-region-focusable 1 |  |  |  |  |  | Har en liste ved siden av |
+| Risikomatrise | Ingen |  |  |  |  |  |  |
+| Mulighetsmatrise | Ingen |  |  |  |  |  |  |
+| Prosjektnyheter | Ikke målt |  |  |  |  |  | Under folden |
+| Dynamisk liste | Ikke målt |  |  |  |  |  | Ingen side på testområdet |
+| Prosjektinformasjonspanel | Ikke målt |  |  |  |  |  |  |
+
+### ProjectExtensions
+
+| Komponent | axe | Gjennomgått | Tastatur | Skjermleser | Visuelt | Skjema | Merknad |
+|---|---|---|---|---|---|---|---|
+| Oppsett av prosjekt | Ikke målt |  |  |  |  |  |  |
+| Oppgradering av prosjekt | Ikke målt |  |  |  |  |  |  |
+| Hent dokumentmal | Velg maler: target-size 2. Målmappe: target-size 3, color-contrast 1 |  |  |  |  |  | Overskriften på hver kopi er et klikkbart `div` |
+| Planner-tiltak | Cellen og menyen: ingen. Nytt tiltak: color-contrast 1. Migrer tiltak: color-contrast 5 |  |  |  |  |  |  |
+
+### PortfolioWebParts
+
+| Komponent | axe | Gjennomgått | Tastatur | Skjermleser | Visuelt | Skjema | Merknad |
+|---|---|---|---|---|---|---|---|
+| Prosjektutlisting | aria-roles 36 (kritisk), link-name 5–7 |  |  |  |  |  | Ugyldige roller på avatarene, lenker uten tekst på prosjektkortene |
+| Siste prosjekter | Ingen |  |  |  |  |  |  |
+| Porteføljeoversikt | Ingen |  |  |  |  |  |  |
+| Aggregert oversikt | Ingen |  |  |  |  |  |  |
+| Prosjekttidslinje (portefølje) | color-contrast 8, scrollable-region-focusable 1 |  |  |  |  |  | Ingen liste ved siden av |
+| Ressursallokering | aria-progressbar-name 1 |  |  |  |  |  | Ingen liste ved siden av |
+| Idémodul | Ingen |  |  |  |  |  |  |
+| Prosjektkort | Ikke målt |  |  |  |  |  |  |
+
+### PortfolioExtensions
+
+| Komponent | axe | Gjennomgått | Tastatur | Skjermleser | Visuelt | Skjema | Merknad |
+|---|---|---|---|---|---|---|---|
+| Bunntekst | Ikke målt |  |  |  |  |  |  |
+| Idéregistrering | Ikke målt |  |  |  |  |  |  |
+| Idébehandling | Ikke målt |  |  |  |  |  |  |
+| Idé – prosjektdata | Ikke målt |  |  |  |  |  |  |
+| Malpakkekatalog | Ikke målt |  |  |  |  |  | Fokusrammen er fjernet i pakkedetaljene |
+
+### ProgramWebParts
+
+| Komponent | axe | Gjennomgått | Tastatur | Skjermleser | Visuelt | Skjema | Merknad |
+|---|---|---|---|---|---|---|---|
+| Administrasjon av underområder | Ingen |  |  |  |  |  |  |
+| Innholdsaggregering for program | Ingen |  |  |  |  |  |  |
+| Oversikt over underområder | aria-command-name 24 |  |  |  |  |  | Kommandoer uten navn |
+| Tidslinje for underområder | color-contrast 4, scrollable-region-focusable 1 |  |  |  |  |  | Ingen liste ved siden av |
 
 
 
@@ -2369,9 +2482,98 @@ Jobbene som rører en tenant, logger inn som appregistreringen **Prosjektportale
 
 ### CI (channels/test)
 
-[ci-channel-test](../../.github/workflows/ci-channel-test.yml) bygger en pakke for kanalen [test](../../channels/test.json), distribuerer den til URL-en som er spesifisert i `SP_URL_TEST`, og kjører deretter Playwright-røyktestene i `e2e/` mot den (jobben «End-to-end smoke (test channel)») og, ved siden av dem, integrasjonstestene i `integration/` (jobben «Integration tests (test channel)», rapport i artefaktet `integration-report-test-channel`). Pakkejobben (`[apps-only]`) skriver tiden per prosjekt i jobbens sammendrag og installerer ikke PnP.PowerShell, som bare malene trenger. Rapporten lastes opp som artefaktet `playwright-report-test-channel`; hvordan den leses står under «Testregime». Arbeidsflyten kan også startes manuelt fra Actions-fanen.
+[ci-channel-test](../../.github/workflows/ci-channel-test.yml) bygger en pakke for kanalen [test](../../channels/test.json), distribuerer den til URL-en som er spesifisert i `SP_URL_TEST`, og kjører deretter Playwright-røyktestene i `e2e/` mot den (jobben «End-to-end smoke (test channel)») og, ved siden av dem, integrasjonstestene i `integration/` (jobben «Integration tests (test channel)», rapport i artefaktet `integration-report-test-channel`). Pakkejobben (`[apps-only]`) skriver tiden per prosjekt i jobbens sammendrag og installerer ikke PnP.PowerShell, som bare malene trenger. Rapporten lastes opp som artefaktet `playwright-report-test-channel`, uten sporingene og uten innloggingens egne resultater; hvordan den leses står under «Testregime». Siste steg i begge testjobbene, «Publish the report to the test report site», legger rapporten på testrapportsiden (se under) og lenken i jobbens sammendrag. Arbeidsflyten kan også startes manuelt fra Actions-fanen.
 
 Alle kjøringene oppgraderer den samme testhuben og appkatalogen, uansett branch, så de deler én `concurrency`-gruppe (`ci-channel-test`): en kjøring venter mens en annen kjører, i stedet for at to deployer samtidig og overskriver hverandres pakker. GitHub holder bare den nyeste ventende kjøringen i gruppen og avbryter en eldre som venter. På samme branch inneholder den nyeste commiten endringene fra den eldre, men malene fra en avbrutt full kjøring blir ikke lagt på. Push derfor commiten som trenger full kjøring sist, eller vent til den er ferdig.
+
+### Testrapportsiden
+
+Testrapportsiden viser Playwright-rapporten og integrasjonsrapporten fra hver kjøring av `ci-channel-test.yml` i nettleseren, så ingen trenger å laste ned et artefakt eller kjøre `show-report`. Det er et privat GitHub Pages-område på branchen `gh-pages` i et eget, privat repo (variabelen `TEST_REPORTS_REPOSITORY`, for eksempel `Puzzlepart/prosjektportalen365-test-reports`). Adressen er tilfeldig, `https://<ord>.pages.github.io/`, og endres ikke så lenge Pages er slått på. Lenken står i jobbens sammendrag. Forsiden lister kjøringene de siste 7 dagene, nyeste først; hvordan rapportene leses, står i «Testregime».
+
+**Hvorfor privat, og hvorfor i et annet repo.** `Puzzlepart/prosjektportalen365` er offentlig: artefaktene kan lastes ned av alle som er logget inn på GitHub, og et Pages-område fra repoet ville vært offentlig. Rapportene inneholder snapshot av sider i testtenanten, og Playwrights sporinger inneholder e2e-brukerens øktinformasjonskapsler, `storageState` og forespørselshodene; Playwright 1.63 maskerer ingenting (sjekket 2026-10-14). Pages med tilgangskontroll finnes bare for private og interne repoer på GitHub Enterprise Cloud. Puzzlepart-organisasjonen er på Enterprise Cloud (ikke EMU), med `members_can_create_private_pages=true`. Uten EMU er et Pages-område offentlig som standard, også fra et privat repo, så synligheten må settes til privat med en gang Pages er slått på, før CI publiserer noe. Området kan åpnes av alle med lesetilgang til rapportrepoet. Organisasjonens basisrettighet er skriv, så det er alle organisasjonens 40 medlemmer (14. oktober 2026): de samme som allerede har skrivetilgang til det offentlige repoet og gjennom en arbeidsflyt kunne lest hemmelighetene der.
+
+**Slik virker det.** Siste steg i E2E-jobben og i integrasjonsjobben, «Publish the report to the test report site» (`if: !cancelled()`, `continue-on-error: true`, `timeout-minutes: 10`), kjører `.tasks/publish-test-report.js` (CommonJS, uten avhengigheter):
+
+1. Sjekker at området er privat, og publiserer ingenting ellers: rapportrepoet er ikke offentlig (jobbens `GITHUB_TOKEN` ser ingen andre private repoer, så API-et svarer 404), repoets offentlige Pages-adresse (`https://puzzlepart.github.io/<repo>/`) viser ingenting, og `TEST_REPORTS_URL` svarer ikke på en anonym forespørsel med innhold (et privat område sender videre til innloggingen på GitHub). Sjekken kjøres ved hver publisering, fordi alle administratorer av rapportrepoet kan sette synligheten tilbake til offentlig. 14. oktober 2026 var alle private Puzzlepart-repoer med Pages offentlige.
+2. Henter `gh-pages` i rapportrepoet over SSH med deploy-nøkkelen. GitHubs vertsnøkler leses fra `https://api.github.com/meta`, så den første tilkoblingen sjekkes i stedet for å stoles på.
+3. Kopierer rapporten til `runs/<kjørings-id>-<forsøk>/<suite>/`: `e2e/playwright-report` for `e2e` og `integration/test-results` for `integration`. Ved siden av skrives `runs/<kjørings-id>-<forsøk>/<suite>.json` med utfallet av teststeget, antallene (fra Playwrights `test-results/results.json` og fra sammendraget integrasjonsrapporten bygger inn), kjøringen, commiten, branchen, emnelinjen og `publishedAt`. Et nytt forsøk av en kjøring får dermed en egen rad.
+4. Sletter kjøringer eldre enn 7 dager, like lenge som artefaktene (organisasjonen holder artefakter og logger i høyst 7 dager), og deretter de eldste kjøringene så lenge kjøringene til sammen er over 800 MB, siden Pages publiserer høyst 1 GB. Kjøringen som publiseres, slettes aldri. En fil over 95 MiB utelates med en advarsel, siden git avviser filer over 100 MiB.
+5. Skriver `.nojekyll`, så Pages publiserer filene som de er, uten Jekyll, og `index.html`, forsiden (på engelsk): kjøring, commit og en kolonne for E2E og en for integrasjon med utfall, antall og lenke.
+6. Pusher én commit uten foreldre med `--force-with-lease`, så branchen aldri samler historikk med gamle rapporter. E2E- og integrasjonsjobben kjører samtidig og pusher begge. Pushen lykkes bare om branchen står der den sto da den ble hentet; en push som taper fordi den andre jobben kom først, begynner på nytt fra steg 2, opptil fem forsøk. Et git-kall som henger, avbrytes etter 5 minutter, og SSH-tilkoblingen har egne tidsgrenser.
+
+Til slutt skriver skriptet lenken til rapporten og til forsiden i jobbens sammendrag (`$GITHUB_STEP_SUMMARY`). Pages publiserer endringen et minutt eller to etter steget, med arbeidsflyten `pages-build-deployment` i rapportrepoet. En feil i publiseringen, også et offentlig område eller et steg som når tidsgrensen, gjør ikke jobben rød, men vises som en advarsel: jobbens resultat er testenes. Skriptets tester ligger i `.tasks/publish-test-report.test.js` og kjører mot et lokalt bart repo (`TEST_REPORTS_REMOTE`) med `npm run test:tasks`, som CI ikke kjører: kjør dem selv etter en endring i skriptet.
+
+| Navn | Type | Innhold |
+|---|---|---|
+| `TEST_REPORTS_DEPLOY_KEY` | hemmelighet | Den private delen av en SSH-deploy-nøkkel med skrivetilgang til rapportrepoet |
+| `TEST_REPORTS_REPOSITORY` | variabel | Rapportrepoet, `eier/navn` |
+| `TEST_REPORTS_URL` | variabel | Områdets adresse, for lenkene i jobbens sammendrag og sjekken av at området er privat |
+
+Uten `TEST_REPORTS_REPOSITORY`, `TEST_REPORTS_URL` eller `TEST_REPORTS_DEPLOY_KEY` skriver steget bare en `::notice` om at testrapportsiden ikke er satt opp, og avslutter med 0, så CI virker før området finnes. Rapportene ligger da bare i artefaktene.
+
+**Engangsoppsett.** En med administratortilgang i organisasjonen gjør det én gang, i denne rekkefølgen. CI oppretter ingenting selv.
+
+> **Viktig:** Pages er offentlig som standard, også fra et privat repo. Gjør området privat (steg 3) før hemmeligheten og variablene settes (steg 4 og 5): fra da publiserer hver kjøring rapportene, med sporingene.
+
+1. Opprett et privat repo bare for rapportene, uten hemmeligheter og uten issues:
+
+   ```bash
+   gh repo create Puzzlepart/prosjektportalen365-test-reports --private --add-readme --description "CI test reports for prosjektportalen365 (private GitHub Pages)"
+   ```
+
+2. Lag branchen `gh-pages` fra `main`:
+
+   ```bash
+   gh api repos/Puzzlepart/prosjektportalen365-test-reports/git/refs -f ref=refs/heads/gh-pages -f sha=$(gh api repos/Puzzlepart/prosjektportalen365-test-reports/git/ref/heads/main --jq .object.sha)
+   ```
+
+3. Slå på Pages fra den branchen, og gjør området privat med en gang:
+
+   ```bash
+   gh api -X POST repos/Puzzlepart/prosjektportalen365-test-reports/pages -f 'source[branch]=gh-pages' -f 'source[path]=/'
+   ```
+
+   ```bash
+   gh api -X PUT repos/Puzzlepart/prosjektportalen365-test-reports/pages -F public=false
+   ```
+
+   Det samme i nettleseren: Settings > Pages, Source «Deploy from a branch», `gh-pages`, `/ (root)`, og «GitHub Pages visibility» Private. Sjekk i et privat nettleservindu at adressen ber om innlogging på GitHub. Adressen er tilfeldig:
+
+   ```bash
+   gh api repos/Puzzlepart/prosjektportalen365-test-reports/pages --jq .html_url
+   ```
+
+   Actions må være slått på i rapportrepoet, fordi Pages bygger området med arbeidsflyten `pages-build-deployment` der.
+
+4. Lag deploy-nøkkelen, legg den offentlige delen i rapportrepoet med skrivetilgang og den private som hemmelighet i dette repoet, og slett begge filene etterpå:
+
+   ```bash
+   ssh-keygen -t ed25519 -N "" -C "prosjektportalen365 CI test reports" -f pp365-test-reports
+   ```
+
+   ```bash
+   gh repo deploy-key add pp365-test-reports.pub --repo Puzzlepart/prosjektportalen365-test-reports --allow-write --title "prosjektportalen365 CI"
+   ```
+
+   ```bash
+   gh secret set TEST_REPORTS_DEPLOY_KEY --repo Puzzlepart/prosjektportalen365 < pp365-test-reports
+   ```
+
+   ```bash
+   rm pp365-test-reports pp365-test-reports.pub
+   ```
+
+5. Sett variablene, med adressen fra steg 3:
+
+   ```bash
+   gh variable set TEST_REPORTS_REPOSITORY --repo Puzzlepart/prosjektportalen365 --body Puzzlepart/prosjektportalen365-test-reports
+   ```
+
+   ```bash
+   gh variable set TEST_REPORTS_URL --repo Puzzlepart/prosjektportalen365 --body https://<ord>.pages.github.io/
+   ```
+
+Neste kjøring av `ci-channel-test.yml` publiserer. Valgfri herding: et regelsett (ruleset) i rapportrepoet som beskytter `main` mot deploy-nøkkelen, som ellers kan pushe til alle brancher der. Sett aldri Pages-synligheten tilbake til offentlig.
 
 ### CI (build debug)
 
@@ -2387,8 +2589,8 @@ To ting å vite når du måler: løperne varierer mye (samme bygg har tatt 506 o
 
 ### Felles for arbeidsflytene
 
-- **Tidsgrenser.** Hver jobb har `timeout-minutes`: bygg 45, full oppgradering 60, pakkeoppgradering 20, E2E 30, integrasjonstester 20 og `UpgradeAllSitesToLatest.ps1` 120. GitHubs standard er seks timer, og når kjøringene venter på hverandre (`concurrency`), holder en jobb som henger, alle senere like lenge.
-- **Rettigheter.** `permissions: contents: read` for `GITHUB_TOKEN`; bare SBOM-jobben skriver, siden den committer `SBOM.md` ved manuell kjøring.
+- **Tidsgrenser.** Hver jobb har `timeout-minutes`: bygg 45, full oppgradering 60, pakkeoppgradering 20, E2E 30, integrasjonstester 20 og `UpgradeAllSitesToLatest.ps1` 120. Publiseringsstegene til testrapportsiden har sin egen grense på 10 minutter, så et steg som henger, ikke tar testjobben med seg. GitHubs standard er seks timer, og når kjøringene venter på hverandre (`concurrency`), holder en jobb som henger, alle senere like lenge.
+- **Rettigheter.** `permissions: contents: read` for `GITHUB_TOKEN`; bare SBOM-jobben skriver, siden den committer `SBOM.md` ved manuell kjøring. Publiseringsstegene i `ci-channel-test.yml` pusher til et annet repo, rapportrepoet bak testrapportsiden, med deploy-nøkkelen `TEST_REPORTS_DEPLOY_KEY` over SSH, ikke med `GITHUB_TOKEN`.
 - **Rush-loggene** lastes opp som artefakt (`rush-logs-…`, 7 dager) når et bygg feiler. `Build-Release.ps1` skriver bare de siste 200 linjene i jobbloggen.
 - **Hemmelighetene** sendes til skriptene som `$env:CI_CERT_BASE64`, `$env:CI_TENANT` og `$env:CI_CLIENT_ID`, som PowerShell leser når steget kjører. De skrives dermed aldri inn i stegets skript på runneren.
 - **PnP.PowerShell** installeres i CI med `Install-ModuleWithRetry` fra `Install/Scripts/SharedFunctions.ps1`: tre forsøk med 30 sekunder imellom, siden runneren av og til ikke når PowerShell Gallery (kjøring 38522211703).
@@ -2402,7 +2604,7 @@ GitHub kjører bare arbeidsflytfilene som ligger rett i `.github/workflows/`. Ma
 | Arbeidsflytfil        | Beskrivelse                                                                  | Utløser                                                                                  |
 | --------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | `ci-releases.yml`     | Bygg og oppgrader utviklingsmiljøet; ny installasjon med `[fresh-install]`   | Push til `releases/1.15` (stier: SPFx, Install, Templates)                               |
-| `ci-channel-test.yml` | Bygg og distribuer testkanalen, og kjør Playwright- og integrasjonstestene mot den | Push til `releases/1.15` og `feat/technical-backlog*` (stier: SPFx, Install, Templates, e2e, integration) |
+| `ci-channel-test.yml` | Bygg og distribuer testkanalen, og kjør Playwright- og integrasjonstestene mot den | Push til `releases/1.15` (stier: SPFx, Install, Templates, e2e, integration, `.tasks/publish-test-report.js` og arbeidsflytfilen) |
 | `ci-build-debug.yml`  | Bygg testkanalens pakke uten utrulling: for å prøve endringer i bygget, og som påkrevd bygg på pull requests | Push til `releases/1.15` eller en `feat/**`-branch med `[build-debug]` i emnelinjen, og hver pull request mot `releases/**` |
 | `build-release.yml`   | Bygg utgivelsespakke og test/kurs-kanalpakker                                | Push til `main` (stier: SPFx, Install, Templates)                                        |
 | `generate-sbom.yml`   | Generer SBOM.md som artefakt; committer den bare ved manuell kjøring fra en branch | Tag-push `v*` eller manuell utløsning                                              |

@@ -194,6 +194,29 @@ const CHANNEL_COMPONENTS: Map<string, { channel: string; name: string }> = (() =
 })()
 
 /**
+ * The web parts on the page that are PP365 components of the channel under test, each with the
+ * alias `channels/<channel>.json` gives it ("ProjectInformationWebPart") and a CSS selector for
+ * its containers, in page order. A web part used twice on a page is listed once; its selector
+ * matches both.
+ */
+export async function channelWebPartsOnPage(
+  page: Page
+): Promise<Array<{ alias: string; selector: string }>> {
+  const ids = await page
+    .locator(WEB_PART)
+    .evaluateAll((elements) =>
+      elements.map((e) => (e.getAttribute('data-sp-web-part-id') ?? '').toLowerCase())
+    )
+  const parts = new Map<string, { alias: string; selector: string }>()
+  for (const id of ids) {
+    const component = CHANNEL_COMPONENTS.get(id)
+    if (!component || component.channel !== CHANNEL || parts.has(id)) continue
+    parts.set(id, { alias: component.name, selector: `[data-sp-web-part-id="${id}" i]` })
+  }
+  return [...parts.values()]
+}
+
+/**
  * Fails when a web part on the page is a PP365 component of another release channel than the one
  * under test. Such a page runs that channel's code (the main channel's is the last release), so a
  * pass or a failure there says nothing about this build: on 2026-10-09 three of the hub's

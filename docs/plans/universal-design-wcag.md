@@ -193,3 +193,52 @@ Every component in the inventory audited and recorded, its axe scope blocking in
 the conformance overview published with a release, the new issue closed.
 
 ## Slice log
+
+### Slice 0 — Foundation (2026-10-14)
+
+Issue #1788 replaces #1527 (closed by the user). Branch `feat/universal-design-wcag`, put in
+`ci-channel-test.yml`'s push branches in this first commit, as the release skill says, to be
+taken out in the pull request's last commit; `ci-build-debug.yml` covers `feat/**` already.
+
+- **Skill** `pp365-a11y`: the target, what Fluent gives and what stays ours, fourteen rules for
+  our code (Microsoft's `detecting-accessibility-issues`, MIT, adapted with attribution), the
+  audit, the tests, recording, the traps. pp365-ui's "Accessibility of form fields" moved into it
+  (rules 1 and 3); pp365-testing and AGENTS.md point at it. `check-skills` passes with eight.
+- **Jest**: `jest-axe` 11.0.0 in `pp365-jest-config`, `lib/axe.js` with typings in `lib/axe.d.ts`
+  so the solutions need no dependency of their own; requiring it registers the matcher, so only
+  the tests that use it load axe-core. First use in `FieldContainer.test.tsx`: no violation with
+  or without an icon, and a test that axe does find an input without a label (the matcher is not
+  vacuous). 6 tests pass.
+- **Browser**: `@axe-core/playwright` 4.13.0 in `e2e`; `fixtures/a11y.ts` (`scanAccessibility`,
+  `WCAG_TAGS`, `A11Y_BLOCKING` empty, `SURFACES`, `FLUENT_INTERNALS`, `waitForContent`,
+  `settleWebParts`), `channelWebPartsOnPage` in `fixtures/pp365.ts`, the page scans in
+  `tests/smoke/a11y-baseline.spec.ts` (16 pages), the surfaces in the risk action and template
+  dialog smokes. Report mode: annotations and `axe-<component>.json` attachments, nothing fails.
+- **Baseline** (`.development-guide/spfx/tilgjengelighet.md`, new guide chapter): no violation in
+  Prosjektinformasjon, Prosjektstatus, both matrices, Siste prosjekter, Porteføljeoversikt,
+  Aggregert oversikt, Idémodul, the program's administration, aggregation; violations in
+  Prosjektutlisting (aria-roles 36, critical, on the cards' avatars; link-name 5–7), Fasevelger
+  (contrast of the phase names, a `ul` with other children), the three timelines (contrast of the
+  items, the scroll region not focusable), Ressursallokering (a nameless skeleton),
+  Oversikt over underområder (aria-command-name 24), «Hent dokumentmal» (target size, one
+  contrast), the risk action panel's hint and the migrate dialog's field (contrast).
+
+Found on the way:
+
+- **Fluent's focus sentinels.** Tabster puts focusable `<i data-tabster-dummy>` hidden from
+  assistive technology at the edges of focus groups; `aria-hidden-focus` flagged every toolbar,
+  tag group and tab list. They pass focus straight on and are Fluent's; `FLUENT_INTERNALS` leaves
+  them out of every scan.
+- **Web parts mount late and lazily.** `openPage` waits for the first web part; the opportunity
+  matrix came after. `settleWebParts` waits until the count has stood still for two seconds. Web
+  parts below the fold mount only on scroll (the project home's news) and are scanned in their
+  component's slice: scrolling made the program home fail, next item.
+- **The program home's document list breaks the template command set.** Scrolled into view, its
+  list loaded `TemplateSelectorCommand` (test channel id, registered at web scope as on the
+  project), whose strings failed: "Could not load template-selector-command-set in require.
+  Script error for 32f5eb06-…_1.14.0/ProjectExtensionsStrings", twice, the second time after the
+  upgrade had finished. The project's library view loads the same command set fine. Not this
+  plan's; reported to the user for an issue of its own.
+- **The tenant under load.** A scan run while CI's upgrade ran hit the guard on a half-replaced
+  bundle, and one while CI's e2e ran waited past 60 s for the project home's first web part; both
+  passed when rerun.

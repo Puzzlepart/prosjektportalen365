@@ -97,7 +97,8 @@ Full regime and failure handling: `.development-guide/spfx/testing.md` and the `
 
 - `pp365-toolchain` — Rush, pnpm and Heft: adding or bumping a dependency, builds and channel builds, watch/serve/debug, SPFx upgrades, a `shared-library` change not picked up.
 - `pp365-testing` — writing, running and fixing tests: Jest unit and component tests on `pp365-jest-config`, and the Playwright suite.
-- `pp365-ui` — building or changing UI: components and the shared-library wrappers, Fluent v9, icons, styling, strings, accessibility.
+- `pp365-ui` — building or changing UI: components and the shared-library wrappers, Fluent v9, icons, styling, strings.
+- `pp365-a11y` — universal design (WCAG 2.1 AA, issue #1788): the rules for our code, the audit of a component, the axe scans in Jest and the browser suite, and the conformance overview.
 - `pp365-templates` — content that reaches sites: the hub PnP template, JSON project templates and their `.resx` texts, site scripts, channel ids, install and upgrade scripts.
 - `pp365-release` — from a finished change to a release: commits and their CI tags, what CI runs, channels and version stamps, changelog, release notes, PRs, reading a failed run.
 - `spfx` (upstream, generic) — creating and upgrading SPFx projects, React design, PnPjs; use with `pp365-toolchain`, whose Rush rules replace its npm commands.

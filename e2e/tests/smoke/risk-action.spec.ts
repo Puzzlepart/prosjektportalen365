@@ -2,6 +2,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { Page } from '@playwright/test'
 import { baseURL } from '../../playwright.config'
+import { scanAccessibility, SURFACES } from '../fixtures/a11y'
 import { configuredUrl, expect, test, withNetworkRetry } from '../fixtures/pp365'
 import { restGet } from '../fixtures/rest'
 
@@ -187,6 +188,12 @@ test.describe('risk actions', () => {
     await expect(
       page.getByRole('button', { name: /synkroniser endringer|synchronize changes/i })
     ).toBeHidden()
+    // #1788: the cell (our provider inside SharePoint's row) and the popover, reported.
+    await scanAccessibility(page, {
+      component: 'RiskActionPlanner',
+      include: ['[data-automationid="DetailsRow"] .fui-FluentProvider']
+    })
+    await scanAccessibility(page, { component: 'RiskActionPopover', include: [SURFACES.popover] })
 
     // The panel for a new task: its fields, save disabled without a title, closed unsaved.
     await addButton.click()
@@ -204,6 +211,7 @@ test.describe('risk actions', () => {
       await expect(panel.getByText(label).first(), `the panel has the field ${label}`).toBeVisible()
     }
     await expect(panel.getByRole('button', { name: /^(lagre|save)$/i })).toBeDisabled()
+    await scanAccessibility(page, { component: 'NewRiskActionPanel', include: [SURFACES.drawer] })
     await panel.getByRole('button', { name: /^(lukk|close)$/i }).click()
     await expect(panel).toBeHidden()
 
@@ -219,6 +227,10 @@ test.describe('risk actions', () => {
     await expect(
       dialog.getByRole('button', { name: /opprett \d+ tiltak i planner|create planner tasks/i })
     ).toBeVisible()
+    await scanAccessibility(page, {
+      component: 'MigrateRiskActionsDialog',
+      include: [SURFACES.dialog]
+    })
     // The text button, not the title's close cross: both are named «Lukk» in Norwegian.
     await dialog.getByText(/^(lukk|cancel)$/i).click()
     await expect(dialog).toBeHidden()

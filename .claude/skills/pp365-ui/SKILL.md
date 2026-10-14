@@ -105,13 +105,9 @@ ProjectExtensions' dialogs (`ErrorDialog`, `ProgressDialog`, `ProjectSetupDialog
 - **Renaming a prop**: props objects (`useMemo<IXProps>`, `: IXProps =`, `as IXProps`) that are spread skip excess-property checks; that is how five panels kept `isOpen` and never opened (`docs/plans/fluent-v9-migration.md`). `IBasePanelProps` declares `isOpen`/`onDismiss` as `never` for that reason; grep for the objects.
 - **A fix that does nothing**: first prove the browser runs your bundle (a visible tell, or the bundle URL in the Network tab): the right solution watched, its dependencies built, and after a deployment SharePoint can serve a component's previous manifest for minutes. A `<style>` tag added from the console tests CSS without a build.
 
-## Accessibility of form fields
+## Accessibility
 
-- In a `FieldContainer` a v9 control takes the field's id, so the label names it and a click on the label reaches it; check `for` against `id` in the browser.
-- A slot render function must pass on what Fluent wired (kodemonster.md, "Render-funksjoner for slots"): `FieldContainer/IconLabel/IconLabel.tsx` puts `labelProps.id` and `htmlFor` on its `Label`.
-- A control that ignores the field gets its props through `useFieldControlProps_unstable(props, { supportsLabelFor: true })`, as `FieldDatePicker` in `FieldElements/DateTime.tsx` does for the compat `DatePicker`.
-- `PeoplePicker` takes the field's label inside a `Field`; outside one pass `aria-label`. PnP's `ModernTaxonomyPicker` takes no input props, so its label stays apart.
-- Icon-only buttons get an `aria-label` from the strings (`BasePanel`'s close button: `strings.CloseText`). `DataGridList` labels its selection checks (`DataGridSelectAllLabel`, `DataGridSelectRowLabel`), the hub its own (`ListSelectRowLabel`, `ListSelectGroupLabel`).
+Names, labels (the `FieldContainer` wiring, `useFieldControlProps_unstable`, `PeoplePicker`, PnP's taxonomy picker), focus, announcements, colours and the audit of a component: pp365-a11y.
 
 ## Localized strings
 
