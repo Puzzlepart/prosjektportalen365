@@ -1,5 +1,12 @@
 import { baseURL } from '../../playwright.config'
-import { WEB_PART, configuredUrl, expect, test, webPartByAlias } from '../fixtures/pp365'
+import {
+  WEB_PART,
+  configuredUrl,
+  expect,
+  test,
+  webPartByAlias,
+  withNetworkRetry
+} from '../fixtures/pp365'
 import { restGet } from '../fixtures/rest'
 
 /**
@@ -125,7 +132,7 @@ test.describe('navigation', () => {
       expect(links.length, 'the navigation should have links into the site').toBeGreaterThan(0)
       for (const link of links) {
         await test.step(link.title, async () => {
-          const result = await page.goto(link.url, { timeout: 90_000 })
+          const result = await withNetworkRetry(() => page.goto(link.url, { timeout: 90_000 }))
           expect
             .soft(result?.status(), `${link.title} answered HTTP ${result?.status()}`)
             .toBeLessThan(400)

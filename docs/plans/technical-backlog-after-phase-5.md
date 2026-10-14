@@ -306,3 +306,42 @@ what made CI show it.
 
 The test overview's "Ingen test" bullet is gone; what remains uncovered is there by choice (the
 program aggregation has integration tests and no browser test).
+
+### Before the merge (2026-10-14)
+
+Four loose ends from slice 4, done before the PR. The `custom-cells.txt` 404 seen on the first
+matrix page was not ours: no code in the repo names the file, the request used
+`getFileByServerRelativeUrl`, which PnPjs 4 does not have, and it came from the 1.8.1 package's
+web parts that page first held. Today's matrix web parts load with no 4xx and no console error,
+and the 44 browser-error attachments of CI run 38522211703 hold no 4xx either; the hardened
+channel guard now catches such a page.
+
+The two tests that skipped on every run had the data they needed; they looked too early. The
+portfolio overview's title button test counted the buttons at the first cell, which is a
+placeholder row ("Viser 0 av 0"); even after the rows arrive the title cells are plain links for a
+few seconds, until the view's own columns replace the ones persisted in local storage. It now
+waits for the results counter and the first button, and passes against the hub's 42 projects.
+The program administration's add dialog lists the hub's 197 other projects in two groups of ten
+or more, which the dialog opens only on request, so the list was two rows high and never
+scrolled; the test opens them with `Vis alle grupper`, as a user would, and passes. Every
+navigation outside `openPage` (the library views of both document template specs, the quick
+launch's pages, the sign-in, the local bundle) goes through `withNetworkRetry`, which retries a
+network-level failure such as `net::ERR_TIMED_OUT` once; `deployment.setup.ts` keeps its own
+loop. The full suite ran locally with 53 passed and none skipped. The one flaky test of the
+last CI run (38526548748, green otherwise) had the same cause: the list typography test measured
+the overview's placeholder rows after a fixed two-second pause, found no text and so no font size;
+`measureListTypography` now waits for text in a cell first, and passed twelve times with CI's two
+workers. With the default workers and `--repeat-each=3` the same pages failed in the web parts
+themselves ("Ingen konfigurasjon tilgjengelig", "Det har oppstått en feil"): twelve heavy pages at
+once are more than the tenant answers, not a fault of the change.
+
+PortfolioWebParts had 0.5 points over its branch floor. Forty characterization tests (they pin
+what the code does, so they passed at once) cover the project list's tab filters
+(`ProjectListFilterRegistry`, with its `$ne`/`$in`/`$nin` operators and state and access gates),
+the list view's columns (`useColumns`), the portfolio and view selectors, `applyActiveFilters` and
+the group names of persons, terms and lookups. Branch coverage went from 72.50 to 77.58 (1 371 of
+1 767: the files the new tests load add their own branches to the total); statements 63.65,
+functions 52.31. By the house rule the floors follow, a point under the rounded-down figure:
+PortfolioWebParts 62 / 76 / 51 / 62 (was 62 / 72 / 49 / 62), and shared-library, grown by slices
+3 and 4, 76 / 82 / 60 / 76 from CI's 77.75 / 83.02 / 61.03 / 77.75 (was 75 / 81 / 57 / 75). The
+other four solutions are within the formula of their floors.

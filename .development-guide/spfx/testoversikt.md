@@ -14,7 +14,7 @@ Hvilke automatiske tester som dekker hver komponent, lag for lag, med noen ord o
 
 | Lag | Filer | Tester |
 |---|---|---|
-| Jest | 187 | 1 228: PortfolioExtensions 101, PortfolioWebParts 200, ProgramWebParts 59, ProjectExtensions 118, ProjectWebParts 239, shared-library 511 |
+| Jest | 192 | 1 268: PortfolioExtensions 101, PortfolioWebParts 240, ProgramWebParts 59, ProjectExtensions 118, ProjectWebParts 239, shared-library 511 |
 | Kjøretidskontrakt | 2 | 6 |
 | Integrasjon | 10 | 42: 12 uten tenant, 30 mot testtenanten |
 | E2E | 27 spesifikasjoner | 59: smoke 22, flows 29 (de to i CI), local 8 |
@@ -25,10 +25,10 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 
 | Komponent | Jest | E2E | Integrasjon | Ikke dekket / manuelt |
 |---|---|---|---|---|
-| Porteføljeoversikt | 7 filer, 54: reducer, filtrering, Excel-eksport, kolonnemeny, kolonneskjema | Smoke: listen, søk, filter, Excel-eksport. Flows: kolonnemeny på høyreklikk, dra kolonner, panelets topp, tittelknappen, typografi, navigasjon, ny kolonne (skriver) | Prosjektkolonner; ny kolonne i en visning, også med skjulte kolonner (skriver); kolonnekonfigurasjon; standardvisningen og fargene for `Status muligheter` etter oppgradering | — |
+| Porteføljeoversikt | 10 filer, 73: reducer, filtrering, Excel-eksport, kolonnemeny, kolonneskjema, porteføljevelgeren og visningsvelgeren (sammenslått visning, egne visninger, programmer, hvem som kan lage og endre visninger) | Smoke: listen, søk, filter, Excel-eksport. Flows: kolonnemeny på høyreklikk, dra kolonner, panelets topp, tittelknappen, typografi, navigasjon, ny kolonne (skriver) | Prosjektkolonner; ny kolonne i en visning, også med skjulte kolonner (skriver); kolonnekonfigurasjon; standardvisningen og fargene for `Status muligheter` etter oppgradering | — |
 | Delt liste (`List`, `ListGrid`, `Vis eller skjul kolonner`) | 6 filer, 41 | Gjennom flytene for porteføljeoversikten | — | — |
-| Portefølje aggregeringsoversikt | 10 filer, 76: reducer (51), datahenting, Excel-eksport, verktøylinje, gruppering, søk i kolonnene som vises | Smoke: aggregeringssidene og Nytteoversikt med filter. Flows: typografi | — | Hubens dataadapter |
-| Prosjektutlisting | 4 filer, 16 | Flows: kortets panel viser prosjektnavnet | — | — |
+| Portefølje aggregeringsoversikt | 10 filer, 78: reducer (51), datahenting, Excel-eksport, verktøylinje, gruppering (også gruppenavn for personer, termer og oppslag), søk i kolonnene som vises | Smoke: aggregeringssidene og Nytteoversikt med filter. Flows: typografi | — | Hubens dataadapter |
+| Prosjektutlisting | 6 filer, 35: også fanenes filtre (feltbetingelser med `$ne`/`$in`/`$nin`, tilstand, tilgang) og listevisningens kolonner | Flows: kortets panel viser prosjektnavnet | — | — |
 | Prosjekttidslinje (porteføljenivå) | Via bibliotekets `ProjectTimeline` (22) | Smoke: prøveklikk på en prosjektlenke, filter | — | Ingen test av webdelen selv |
 | Siste prosjekter | 5: nyeste områder, vis flere/færre, tom, feil | Indirekte (hubens forside) | — | — |
 | Ressursallokering | 2 | — | — | Bare Jest |
