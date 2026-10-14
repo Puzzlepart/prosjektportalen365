@@ -14,6 +14,14 @@ const resources = require('SharedResources') as Record<string, string>
 const dates = () =>
   library<typeof import('pp365-shared-library/lib/util/formatDate.js')>('util/formatDate.js')
 
+/** The Excel export's date text, and the site's time zone the library formats by. */
+const excelDates = () =>
+  library<typeof import('pp365-shared-library/lib/util/getDateForExcelExport.js')>(
+    'util/getDateForExcelExport.js'
+  )
+const siteTimeZone = () =>
+  library<typeof import('pp365-shared-library/lib/util/siteTimeZone.js')>('util/siteTimeZone.js')
+
 /** The machine's time zones a date is typed in: the site's, CI's, one west of the site, two east. */
 const TIME_ZONES = ['Europe/Oslo', 'UTC', 'America/New_York', 'Europe/Helsinki', 'Asia/Tokyo']
 
@@ -121,6 +129,46 @@ describe(
         original,
         'start date not restored'
       )
+    })
+
+    it("formats a stored date for the page as the day SharePoint shows, whatever the machine's time zone", async (t) => {
+      const { formatShortDate, parseShortDate, toCalendarDate } = dates()
+      const { getDateForExcelExport } = excelDates()
+      const { getSiteTimeZone } = siteTimeZone()
+      const original = (await fieldValues()).get('GtStartDate')?.value ?? null
+      // The service was configured with the site's context, which carries the site's time zone as
+      // SPFx's does on a page; the harness knows the daylight rules of the European zones only.
+      if (!getSiteTimeZone()) {
+        const { Description, Id } = project.timeZone
+        t.skip(
+          `the harness has no daylight rules for the site's time zone, ${Description} (id ${Id})`
+        )
+        return
+      }
+      const zone = process.env.TZ
+      try {
+        await save({ GtStartDate: '2026-04-03' })
+        const { value, valueAsText } = (await fieldValues()).get('GtStartDate')
+        for (const timeZone of TIME_ZONES) {
+          process.env.TZ = timeZone
+          // The overview's date column, the status report and the Excel export format the stored
+          // instant, not SharePoint's text of it: west of the site it was the day before.
+          const shown = formatShortDate(value, false, '', locale)
+          assert.equal(
+            toCalendarDate(parseShortDate(shown, locale)),
+            '2026-04-03',
+            `the machine in ${timeZone} shows ${shown}, SharePoint ${valueAsText}`
+          )
+          assert.equal(
+            getDateForExcelExport(value),
+            '2026-04-03',
+            `the machine in ${timeZone} exports ${getDateForExcelExport(value)}`
+          )
+        }
+      } finally {
+        process.env.TZ = zone
+        await save({ GtStartDate: original })
+      }
     })
 
     it('stores text, a choice and a person as the panel sends them', async (t) => {

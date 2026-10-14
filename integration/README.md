@@ -74,7 +74,10 @@ with that reason when the two differ.
   to hub rows the test created. Restore in `finally`, from what the test read first. Never point a
   variable at the project in `E2E_PROJECT_URL`, which the browser suite and hand tests use.
 - Assert what SharePoint returned or stored, read back, not what the code sent; keep assertions
-  independent of the time zone and of other projects' data.
+  independent of the time zone and of other projects' data. A test of a date's text runs the
+  machine through the zones with `process.env.TZ`, which Node applies at once (Jest's copy of the
+  environment does not); the harness hands the services the site's time zone as a page does
+  (`siteTimeZoneData` in `src/context.ts`, which knows the European zones' daylight rules).
 - No secret reaches a log, a report or a file: no token, cookie or certificate is printed.
 - What a test creates in the hub carries a prefix of its own (columns: `Integrasjonstest …`;
   status reports: the reserved project's report series `ITEST`, apart from its own reports), and

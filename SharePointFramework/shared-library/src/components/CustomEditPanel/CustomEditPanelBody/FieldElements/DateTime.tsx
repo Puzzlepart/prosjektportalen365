@@ -2,7 +2,7 @@ import { useFieldControlProps_unstable } from '@fluentui/react-components'
 import { DatePicker, DatePickerProps } from '@fluentui/react-datepicker-compat'
 import strings from 'SharedLibraryStrings'
 import React, { FC, useMemo, useState } from 'react'
-import { formatShortDate, getDatePickerLocalization, parseShortDate } from '../../../../util'
+import { formatDay, getDatePickerLocalization, parseShortDate } from '../../../../util'
 import { FieldContainer } from '../../../FieldContainer'
 import { useCustomEditPanelContext } from '../../context'
 import { FieldElementComponent } from './types'
@@ -32,9 +32,9 @@ export const DateTime: FieldElementComponent = ({ field }) => {
         <FieldDatePicker
           value={context.model.get(field)}
           onSelectDate={(date) => context.model.set(field, date)}
-          // Written and read in SharePoint's UI language: the default parser (`Date.parse`)
+          // A day, written and read in SharePoint's UI language: the default parser (`Date.parse`)
           // cannot read a typed "15.03.2026".
-          formatDate={formatShortDate}
+          formatDate={formatDay}
           parseDateFromString={parseShortDate}
           placeholder={strings.Placeholder.DatePicker}
           {...localization}

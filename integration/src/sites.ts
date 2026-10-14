@@ -3,20 +3,21 @@ import { spfi } from '@pnp/sp'
 import '@pnp/sp/presets/all.js'
 import type { SPFxContext } from 'pp365-shared-library/lib/types/index.js'
 import { signedIn } from './auth.ts'
-import type { IUserInfo } from './context.ts'
+import type { ITimeZoneInfo, IUserInfo } from './context.ts'
 import { spfxContext } from './context.ts'
 import type { AuthMode } from './env.ts'
 import { authMode, env } from './env.ts'
 import { createSpfiInstance } from './library.ts'
 
 /**
- * A site the tests talk to: a client signed in to it, and the SPFx context a web part on it would
- * have, which the library's services take.
+ * A site the tests talk to: a client signed in to it, the SPFx context a web part on it would
+ * have, which the library's services take, and its time zone as the REST API gives it.
  */
 export interface ISite {
   url: string
   sp: SPFI
   context: SPFxContext
+  timeZone: ITimeZoneInfo
   mode: AuthMode
 }
 
@@ -49,9 +50,10 @@ export async function connect(url: string): Promise<ISite> {
   registerFactory(mode)
   const siteUrl = url.replace(/\/+$/, '')
   const sp = spfi(siteUrl).using(signedIn(mode, siteUrl))
-  const [site, web] = await Promise.all([
+  const [site, web, timeZone] = await Promise.all([
     sp.site.select('Id', 'Url', 'ServerRelativeUrl', 'HubSiteId')(),
-    sp.web.select('Id', 'Title', 'Url', 'ServerRelativeUrl', 'Language')()
+    sp.web.select('Id', 'Title', 'Url', 'ServerRelativeUrl', 'Language')(),
+    sp.web.regionalSettings.timeZone()
   ])
   const user: IUserInfo =
     mode === 'cookies'
@@ -61,7 +63,13 @@ export async function connect(url: string): Promise<ISite> {
           Email: env.user ?? '',
           LoginName: env.user ? `i:0#.f|membership|${env.user}` : ''
         }
-  return { url: siteUrl, sp, context: spfxContext(site, web, user, env.locale), mode }
+  return {
+    url: siteUrl,
+    sp,
+    context: spfxContext(site, web, user, env.locale, timeZone),
+    timeZone,
+    mode
+  }
 }
 
 /** The app permission the term store's API needs app-only (Office 365 SharePoint Online). */

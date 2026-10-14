@@ -1,4 +1,22 @@
-import { act, cleanup, render } from '@testing-library/react'
+// jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
+// Babel, so mocks are not hoisted. The picker's calendar sits in a Fluent popover, whose
+// positioning never settles under jsdom and whose teardown took over 30 s on the CI runner; a
+// plain popover keeping Fluent's contract (open shows the surface) renders the calendar at once.
+jest.mock('@fluentui/react-components', () => {
+  const actual = jest.requireActual('@fluentui/react-components')
+  const React = jest.requireActual('react')
+  const PopoverContext = React.createContext({ open: false })
+  const Popover = ({ open, children }: any) =>
+    React.createElement(PopoverContext.Provider, { value: { open } }, children)
+  const PopoverTrigger = ({ children }: any) => children
+  const PopoverSurface = ({ children }: any) => {
+    const { open } = React.useContext(PopoverContext)
+    return open ? React.createElement('div', { role: 'dialog' }, children) : null
+  }
+  return { __esModule: true, ...actual, Popover, PopoverTrigger, PopoverSurface }
+})
+
+import { cleanup, render } from '@testing-library/react'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
 import * as React from 'react'
 import { getDatePickerLocalization } from '../../../../util/getDatePickerLocalization'
@@ -8,15 +26,9 @@ import { getDatePickerLocalization } from '../../../../util/getDatePickerLocaliz
  * (the sibling test stands the picker in and checks the props). January 2027 tells the two rules
  * apart: 1 January is a Friday, so by ISO 8601 the week of 28 December is week 53 of 2026 and week
  * 1 starts on Monday 4 January, while the American rule calls the week holding 1 January week 1.
- * The picker is opened with the real DatePicker, which costs seconds under jsdom, once per locale.
  */
 describe('the date picker week numbers', () => {
-  // Fluent keeps positioning the popover after a test ends; let it settle before the next one.
-  // Tearing an open popover down takes seconds under jsdom, more than a hook's default 5.
-  afterEach(async () => {
-    cleanup()
-    await act(() => new Promise((resolve) => setTimeout(resolve, 50)))
-  }, 30_000)
+  afterEach(() => cleanup())
 
   function weekNumbersOfJanuary2027(locale: string) {
     render(

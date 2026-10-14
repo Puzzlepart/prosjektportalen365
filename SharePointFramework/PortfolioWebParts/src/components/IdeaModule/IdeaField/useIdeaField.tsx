@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import { IIdeaFieldProps } from './types'
 import { Link, Persona, Tag } from '@fluentui/react-components'
 import {
-  formatShortDate,
+  formatDay,
   getFluentIcon,
   IPersonaItem,
   ITagItem,
@@ -153,7 +153,7 @@ export function useIdeaField(props: IIdeaFieldProps) {
       [
         'DateTime',
         (date: Date) => {
-          const text = formatShortDate(date)
+          const text = formatDay(date)
           return <div title={text}>{text}</div>
         }
       ],

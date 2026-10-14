@@ -1,4 +1,5 @@
 import { getRegionalLocale, getUILocale } from './getUILocale'
+import { toSiteWallTime } from './siteTimeZone'
 
 /** Hours and minutes, added to either form when the time is asked for. */
 const TIME: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' }
@@ -8,9 +9,12 @@ const SHORT_DATE: Intl.DateTimeFormatOptions = { day: '2-digit', month: '2-digit
 
 /**
  * Formats a date in the long form with the weekday ("fredag 18. nov. 2022"), in SharePoint's UI
- * language unless `locale` is given.
+ * language unless `locale` is given, and in the site's time zone where the page gave one
+ * (`toSiteWallTime`): the day and the time SharePoint's own lists show. A date-only value is
+ * stored as midnight in the site's time zone, which read in the machine's zone was the day before
+ * on a machine west of the site (London, New York).
  *
- * @param date Date string or object
+ * @param date Date string or object, an instant
  * @param includeTime Include hours and minutes
  * @param fallback Returned when `date` is empty
  * @param locale Locale, by default SharePoint's UI language (`getUILocale`)
@@ -34,14 +38,17 @@ export function formatDate(
     }
   }
   if (!date) return fallback
-  return (typeof date === 'string' ? new Date(date) : date).toLocaleString(locale, options)
+  const value = toSiteWallTime(typeof date === 'string' ? new Date(date) : date)
+  return value.toLocaleString(locale, options)
 }
 
 /**
  * Formats a date as numbers ("18.11.2022", "11/18/2022" in American English), in SharePoint's UI
- * language unless `locale` is given. For field values, where `formatDate`'s weekday is noise.
+ * language unless `locale` is given, in the site's time zone where the page gave one, as
+ * `formatDate`. For field values, where `formatDate`'s weekday is noise. A date picker's value is
+ * a day, not an instant: `formatDay` writes it.
  *
- * @param date Date string or object
+ * @param date Date string or object, an instant
  * @param includeTime Include hours and minutes ("18.11.2022, 09:05")
  * @param fallback Returned when `date` is empty or not a date
  * @param locale Locale, by default SharePoint's UI language (`getUILocale`)
@@ -55,7 +62,27 @@ export function formatShortDate(
   if (!date) return fallback
   const value = typeof date === 'string' ? new Date(date) : date
   if (isNaN(value.getTime())) return fallback
-  return value.toLocaleString(locale, includeTime ? { ...SHORT_DATE, ...TIME } : SHORT_DATE)
+  return toSiteWallTime(value).toLocaleString(
+    locale,
+    includeTime ? { ...SHORT_DATE, ...TIME } : SHORT_DATE
+  )
+}
+
+/**
+ * Formats the day a local `Date` holds as numbers ("18.11.2022"): a date picker's value, the day
+ * `readStoredDay` and `parseShortDate` give, at local midnight. A day is not an instant, so it is
+ * never moved to the site's time zone as `formatShortDate` moves one: moved, a day picked on a
+ * machine east of the site (Helsinki, Tokyo) would read as the day before. The date picker's
+ * `formatDate`, with `parseShortDate` as its parser.
+ *
+ * @param date The day, at local midnight
+ * @param locale Locale, by default SharePoint's UI language (`getUILocale`)
+ *
+ * @returns the day as numbers, or an empty string for no day or what is not a date
+ */
+export function formatDay(date: Date | undefined, locale: string = getUILocale()): string {
+  if (!(date instanceof Date) || isNaN(date.getTime())) return ''
+  return date.toLocaleString(locale, SHORT_DATE)
 }
 
 /**

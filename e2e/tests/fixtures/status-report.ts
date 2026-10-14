@@ -27,7 +27,7 @@ async function hubListTitle(page: Page, pattern: RegExp, what: string) {
 }
 
 /** The hub's status list. */
-const statusListTitle = (page: Page) =>
+export const statusListTitle = (page: Page) =>
   hubListTitle(page, /^(prosjektstatus|project status)$/i, 'status list')
 
 /** The hub's library of status report attachments, with a folder per report named by its id. */

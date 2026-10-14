@@ -109,7 +109,7 @@ release).
 | 0 | Coverage floors | — | ProjectWebParts 50 / 72 / 56 / 50 (done 2026-10-13) | done | CI prints the new floors met |
 | 1 | Node 26 (24 the fallback) | — | `.nvmrc` ×7 = 26.11.1; `engines` ×6 and `rush.json` = `>=26.11.0 <27.0.0`; the guard in `Build-Release.ps1` = 26; `AGENTS.md`, `kom-i-gang.md`, `utviklingsmiljo.md`, `bygge-utgivelse.md`, the toolchain and release skills. First `rush install` + `rush rebuild` locally on 26; then a push with `[skip-ci] [build-debug]` (the full release build on 26, deploys nothing); then the merge with `[apps-only]` (packages, e2e, integration). Red for a cause that is Node's: the same files to 24.21.0 and `>=24.11.0 <25.0.0`, and the cause logged here | 1 day | Debug build and test-channel run green; no `Node 22` left outside changelogs and plans |
 | 2 | `defaultProps` | — | Per solution, smallest first (PortfolioExtensions 1, ProjectExtensions 3, ProjectWebParts 11, PortfolioWebParts 12, shared-library 20), each a commit; D2's two shapes; the existing component tests guard each file, and a file without one gets a render test first; the lint rule last | 2–3 days | Zero `defaultProps` in `src`; the rule in `pp365-eslint-config` |
-| 3 | Dates in the site's time zone | — | `getSiteTimeZone()` in the library from the page context (offset and daylight rules); `formatDate`/`formatShortDate` take the zone for date-only values; `DateColumn`, the Excel export's dates and the timeline's list follow; an integration case in `project-properties`' five-zone matrix reads a list value through search; changelog line | 1–2 days | The overview shows the day the site shows in all five zones |
+| 3 | Dates in the site's time zone | — | `getSiteTimeZone()` in the library from the page context (offset and daylight rules); `formatDate`/`formatShortDate` take the zone for date-only values; `DateColumn`, the Excel export's dates and the timeline's list follow; an integration case in `project-properties`' five-zone matrix reads a list value through search; changelog line (done 2026-10-13, see the log) | done | The overview shows the day the site shows in all five zones |
 | 4 | Test gaps | the matrices need a page | The icon helpers (`getFluentIcon`, `resolveFluentIcon`, `getIconComponentWithFallback`) and `DataService.ts` in Jest; `Tidslinje.aspx` in the program smoke; a matrix page on the e2e project (the user adds it once), then a read-only smoke for both matrices | 1 day | `testoversikt.md` lists no "Ingen test" but by choice |
 | 5 | SPFx 1.24 GA | Microsoft | P5-4: a version bump through CI and a hand round | ½ day | 1.15.0 cut on GA |
 | 6 | PnP controls on React 18 | PnP | A release whose peers allow React 18; then the bump, the term field and property panes by hand (P5-6) | ½ day | — |
@@ -206,3 +206,42 @@ which writes into its first argument, so every fetch changed the shared defaults
 fresh object now. `no-restricted-syntax` in `pp365-eslint-config` stops `defaultProps` from coming
 back, and `kodemonster.md` and the `pp365-ui` skill describe the pattern. Every solution's suite was
 run on Node 26 after the change.
+
+### Slice 3 — Dates in the site's time zone (2026-10-13)
+
+The library now formats an instant in the site's time zone, as SharePoint's own lists do.
+`util/pageContext.ts` keeps what SPFx hands over (`rememberPageContext`, called from
+`createSpfiInstance`, which every web part and extension goes through before it renders): the
+cultures and `legacyPageContext.webTimeZoneData`, SharePoint's own time zone record with its
+Windows transition rules (`Bias`, `DaylightBias`, `DaylightDate`/`StandardDate` as `SYSTEMTIME`
+rules, `Day` 5 for the last occurrence). Modern pages have no `_spPageContextInfo` on `window`
+(checked on the test hub), so the global stays as the fallback for classic pages and the
+integration harness only. `util/siteTimeZone.ts` applies the rules (`siteOffsetMinutes`, checked
+for Oslo, New York, Tokyo, Sydney's year-spanning daylight time and a March with four Sundays) and
+`toSiteWallTime` gives a `Date` whose local fields hold the site's wall time, so `toLocaleString`
+without a zone shows what SharePoint shows; without a site zone the instant is left alone, and the
+machine's zone decides as before. `formatDate`, `formatShortDate` and `getDateForExcelExport` go
+through it, so `DateColumn`, the status report's project information, the timeline list, the news
+and report dates and the Excel export follow. A date picker's value is a day at local midnight, not
+an instant: moved to the site's zone it would read as the day before east of the site, so the new
+`formatDay` writes it (the picker's `formatDate`, and the two displays of a parsed day in
+`ProjectInformation` and the idea module), with `parseShortDate` as its pair.
+
+Three findings along the way. The hub's page context carries the zone with its rules while the REST
+API (`web/RegionalSettings/TimeZone`) gives only the offsets, so the integration harness builds the
+rules itself for the European zones (`siteTimeZoneData` in `integration/src/context.ts`) and the
+site-day test skips elsewhere. Jest cannot move the machine's time zone: `process.env.TZ` inside a
+test writes to Jest's copy of the environment, and the first version of the tests passed on an
+Oslo machine for the wrong reason; real Node applies it at once, so the five-zone matrix runs in
+`test/runtime/dates.runtime.test.mjs` (`node --test`, in the library's build) and in
+`project-properties`, while the Jest tests vary the site's zone instead (Honolulu lies west of any
+machine the suite runs on). And the hub's portfolio views show no date column, so the browser proof
+is on the status page: `e2e/tests/flows/dates-site-time-zone.spec.ts` runs the browser in Los
+Angeles and compares the report selector, the report menu and the date-only fields of the project
+information sections with SharePoint's own texts; against the deployed build it reads a report
+published at 14:08 as 05:08, which is the bug, and passes once this branch is deployed.
+
+Suites after the change, on Node 26: shared-library 486 (76.93 / 82.91 / 59.34 / 76.93), runtime
+6, ProjectWebParts 239, PortfolioWebParts 200, all above their floors; the three type checks and
+the integration harness compile. Changelog and release note carry the fix; `pp365-ui` and
+`pp365-testing` the rules.

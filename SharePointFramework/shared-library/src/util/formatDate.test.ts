@@ -1,24 +1,89 @@
 import {
   formatDate,
+  formatDay,
   formatShortDate,
   parseShortDate,
   readStoredDay,
   toCalendarDate
 } from './formatDate'
+import { setPageContextInfo } from './pageContext'
+import { HONOLULU_TIME_ZONE, OSLO_TIME_ZONE, TOKYO_TIME_ZONE } from './testFixtures'
 
 /**
  * Dates as the user reads them: in SharePoint's UI language (the language of the strings beside
- * them), never the browser's. ICU separates the time and the day period with no-break spaces, so
- * the texts are compared with plain spaces.
+ * them), never the browser's, and in the site's time zone, as SharePoint's own lists show them.
+ * ICU separates the time and the day period with no-break spaces, so the texts are compared with
+ * plain spaces. Jest cannot move the machine's time zone (its `process.env` is a copy), so the
+ * site's zone is what varies here: Honolulu lies west of any machine the tests run on, Tokyo east
+ * of CI's UTC and the developers' Oslo. The machine-zone matrix runs in
+ * `test/runtime/dates.runtime.test.mjs`, in a real Node process.
  */
 const plain = (text: string) => text.replace(/\s/g, ' ')
 
 /** Friday 18 November 2022, 09:05 in the machine's time zone. */
 const DATE = new Date(2022, 10, 18, 9, 5)
 
+/** 3 April 2026 on an Oslo site, a date-only field stored as the site's midnight: 22:00Z the day before. */
+const STORED = '2026-04-02T22:00:00Z'
+
+/** The machine's own zone, named in an expectation: the text of an instant in it, by ICU itself. */
+const MACHINE_ZONE = Intl.DateTimeFormat().resolvedOptions().timeZone
+const inMachineZone = (iso: string, options: Intl.DateTimeFormatOptions) =>
+  plain(new Date(iso).toLocaleString('nb-NO', { ...options, timeZone: MACHINE_ZONE }))
+
 afterEach(() => {
+  setPageContextInfo(undefined)
   delete (window as any)._spPageContextInfo
   document.documentElement.removeAttribute('lang')
+})
+
+describe("dates in the site's time zone", () => {
+  it("shows the day and the time the site's lists show once the page gave the site's zone", () => {
+    setPageContextInfo({ currentUICultureName: 'nb-NO', webTimeZoneData: OSLO_TIME_ZONE })
+    expect(formatShortDate(STORED)).toBe('03.04.2026')
+    expect(plain(formatShortDate(STORED, true))).toBe('03.04.2026, 00:00')
+    expect(formatDate(STORED)).toBe('fredag 3. apr. 2026')
+    expect(plain(formatDate(new Date(STORED), true))).toBe('fredag 3. apr. 2026, 00:00')
+    // The same instant on a site in Hawaii is noon the day before, in Tokyo the morning after.
+    setPageContextInfo({ currentUICultureName: 'nb-NO', webTimeZoneData: HONOLULU_TIME_ZONE })
+    expect(plain(formatShortDate(STORED, true))).toBe('02.04.2026, 12:00')
+    expect(formatDate(STORED)).toBe('torsdag 2. apr. 2026')
+    setPageContextInfo({ currentUICultureName: 'nb-NO', webTimeZoneData: TOKYO_TIME_ZONE })
+    expect(plain(formatShortDate(STORED, true))).toBe('03.04.2026, 07:00')
+  })
+
+  it("follows the machine's time zone without a site time zone, as before", () => {
+    // On CI's UTC runner this is "02.04.2026", the day before the site's.
+    expect(formatShortDate(STORED, false, '', 'nb-NO')).toBe(
+      inMachineZone(STORED, { day: '2-digit', month: '2-digit', year: 'numeric' })
+    )
+    expect(plain(formatDate(STORED, true, '', 'nb-NO'))).toBe(
+      inMachineZone(STORED, {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+    )
+  })
+})
+
+describe('formatDay', () => {
+  it("writes a picker's day as numbers, never moved to the site's time zone", () => {
+    // A site west of any machine these tests run on: the machine's midnight of 3 April is still
+    // 2 April there, so an instant moves, a day does not.
+    setPageContextInfo({ currentUICultureName: 'nb-NO', webTimeZoneData: HONOLULU_TIME_ZONE })
+    expect(formatDay(new Date(2026, 3, 3))).toBe('03.04.2026')
+    expect(formatShortDate(new Date(2026, 3, 3))).toBe('02.04.2026')
+    expect(formatDay(new Date(2026, 3, 3), 'en-US')).toBe('04/03/2026')
+  })
+
+  it('writes nothing for no day, and for what is not a date', () => {
+    expect(formatDay(undefined)).toBe('')
+    expect(formatDay(new Date('ikke en dato'))).toBe('')
+  })
 })
 
 describe('formatShortDate', () => {
