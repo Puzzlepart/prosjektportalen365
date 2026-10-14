@@ -155,6 +155,8 @@ define([], function () {
     HideParentProjectsLabel: 'Hide parent projects',
     HideChildProjectsLabel: 'Hide child projects',
     HideStatusReportLabel: 'Hide latest status report',
+    ShowSustainabilityGoalsLabel: 'Show UN Sustainable Development Goals',
+    SustainabilityGoalIconSizeLabel: 'Icon size',
     HookAuthFieldDescription: 'Authentication for execution of calls when changing phase',
     HookAuthFieldLabel: 'Hook authentication',
     HookUrlFieldDescription: 'Url to be called when changing a phase',

@@ -21,6 +21,18 @@ jest.mock('./CreateParentDialog', () => ({ CreateParentDialog: () => null }))
 jest.mock('./RunProjectSetupDialog', () => ({ RunProjectSetupDialog: () => null }))
 jest.mock('./ProgressDialog', () => ({ ProgressDialog: () => null }))
 jest.mock('./ProjectStatusReport', () => ({ ProjectStatusReport: () => null }))
+jest.mock('./SustainabilityGoals', () => ({
+  SustainabilityGoals: () => {
+    const React = jest.requireActual('react')
+    const { useProjectInformationContext } = jest.requireActual('./context')
+    const context = useProjectInformationContext()
+    return React.createElement(
+      'span',
+      { 'data-testid': 'sustainability-props' },
+      `${context.props.showSustainabilityGoals}:${context.props.sustainabilityGoalIconSize}`
+    )
+  }
+}))
 
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -68,9 +80,8 @@ function initData(overrides: Record<string, any> = {}, state: Record<string, any
   })
 }
 
-function renderInformation(action: () => any, props: Record<string, any> = {}) {
-  fetched.action = action
-  render(
+function information(props: Record<string, any> = {}) {
+  return (
     <ProjectInformation
       title='Prosjektinformasjon'
       page='Frontpage'
@@ -81,6 +92,11 @@ function renderInformation(action: () => any, props: Record<string, any> = {}) {
       {...props}
     />
   )
+}
+
+function renderInformation(action: () => any, props: Record<string, any> = {}) {
+  fetched.action = action
+  return render(information(props))
 }
 
 const project = (title: string) => ({ title, url: `/sites/${title.toLowerCase()}` })
@@ -119,6 +135,17 @@ describe('ProjectInformation', () => {
         name: format(strings.ShowAllProjectInformationText, 'prosjektinformasjon')
       })
     ).toBeInTheDocument()
+  })
+
+  it('updates sustainability properties in its context when web part properties change', async () => {
+    const view = renderInformation(() => initData(), {
+      showSustainabilityGoals: true,
+      sustainabilityGoalIconSize: 32
+    })
+    expect(await screen.findByTestId('sustainability-props')).toHaveTextContent('true:32')
+
+    view.rerender(information({ showSustainabilityGoals: false, sustainabilityGoalIconSize: 64 }))
+    expect(screen.getByTestId('sustainability-props')).toHaveTextContent('false:64')
   })
 
   it('hides the editing actions from a user without the edit permission', async () => {

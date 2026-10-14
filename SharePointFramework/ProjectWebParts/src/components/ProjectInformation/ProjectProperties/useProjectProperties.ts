@@ -15,6 +15,7 @@ export function useProjectProperties(props: IProjectPropertiesProps) {
     () =>
       context.state.properties
         .filter((p) => !p.isSystemField)
+        .filter((p) => props.displayAllProperties || p.internalName !== 'GtUNSustDevGoals')
         .filter((p) => {
           if (props.displayAllProperties) return true
           return p.isVisible(

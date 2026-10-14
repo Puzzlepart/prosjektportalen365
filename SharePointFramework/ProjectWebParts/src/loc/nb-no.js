@@ -147,6 +147,8 @@ define([], function () {
     HideParentProjectsLabel: 'Skjul overordnede prosjekter',
     HideChildProjectsLabel: 'Skjul underordnede prosjekter',
     HideStatusReportLabel: 'Skjul siste statusrapport',
+    ShowSustainabilityGoalsLabel: 'Vis FNs bærekraftsmål',
+    SustainabilityGoalIconSizeLabel: 'Ikonstørrelse',
     HookAuthFieldDescription: 'Autentisering for å utføre kall ved endring av fase',
     HookAuthFieldLabel: 'Hook autentisering',
     HookUrlFieldDescription: 'URL som skal kalles ved endring av fase',
