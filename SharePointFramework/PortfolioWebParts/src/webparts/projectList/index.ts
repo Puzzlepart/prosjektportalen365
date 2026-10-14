@@ -8,7 +8,7 @@ import {
 } from '@pnp/spfx-property-controls/lib/PropertyFieldCollectionData'
 import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHeader'
 import * as strings from 'PortfolioWebPartsStrings'
-import { IProjectListProps, ProjectList } from 'components/ProjectList'
+import { IProjectListProps, PROJECT_LIST_DEFAULT_PROPS, ProjectList } from 'components/ProjectList'
 import React from 'react'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 import { PortalDataService, ProjectColumn, getFluentIcons } from 'pp365-shared-library'
@@ -78,9 +78,9 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    const propertiesWithDefaults = { ...ProjectList.defaultProps, ...this.properties }
+    const propertiesWithDefaults = { ...PROJECT_LIST_DEFAULT_PROPS, ...this.properties }
     const quickLaunchMenu = {
-      ...ProjectList.defaultProps.quickLaunchMenu,
+      ...PROJECT_LIST_DEFAULT_PROPS.quickLaunchMenu,
       ...this.properties.quickLaunchMenu
     }
 

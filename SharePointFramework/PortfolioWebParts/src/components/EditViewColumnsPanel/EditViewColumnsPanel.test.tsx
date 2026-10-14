@@ -2,7 +2,7 @@ import { act, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import strings from 'PortfolioWebPartsStrings'
 import * as React from 'react'
-import { EditViewColumnsPanel } from './EditViewColumnsPanel'
+import { EDIT_VIEW_COLUMNS_PANEL_DEFAULT_PROPS, EditViewColumnsPanel } from './EditViewColumnsPanel'
 import { EditViewColumnsPanelSortMode } from './types'
 import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
 
@@ -103,7 +103,7 @@ describe('EditViewColumnsPanel', () => {
     let panel: ReturnType<typeof useEditViewColumnsPanel>
     // The props are made once: new columns on every render would make the panel select them again.
     const props = {
-      ...EditViewColumnsPanel.defaultProps,
+      ...EDIT_VIEW_COLUMNS_PANEL_DEFAULT_PROPS,
       open: true,
       onClose: jest.fn(),
       onSave: jest.fn(),

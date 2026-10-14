@@ -49,7 +49,7 @@ import resource from 'SharedResources'
 import { useAssistant } from './Assistant/useAssistant'
 import { FooterContext } from './context'
 import { Footer } from './Footer'
-import { LatestGitHubRelease } from './InstallVersion/InstallVersionTooltipContent/LatestGitHubRelease'
+import { LATEST_GIT_HUB_RELEASE_DEFAULT_PROPS } from './InstallVersion/InstallVersionTooltipContent/LatestGitHubRelease'
 import { useLatestGitHubRelease } from './InstallVersion/InstallVersionTooltipContent/LatestGitHubRelease/useLatestGitHubRelease'
 import { IFooterProps } from './types'
 
@@ -339,7 +339,7 @@ describe('useLatestGitHubRelease', () => {
   const compare = (tag: string) =>
     withFooterContext(
       { gitHubReleases: [release(tag)], props: { installEntries: [installation()] } },
-      () => useLatestGitHubRelease(LatestGitHubRelease.defaultProps)
+      () => useLatestGitHubRelease(LATEST_GIT_HUB_RELEASE_DEFAULT_PROPS)
     ).versionComparisonIconProps
 
   it('compares the latest release with the installed version', () => {

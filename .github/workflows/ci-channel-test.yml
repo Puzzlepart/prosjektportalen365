@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - releases/1.15
-      - feat/fluent-v9*
-      - feat/dependency-upgrades*
+      - feat/technical-backlog*
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'

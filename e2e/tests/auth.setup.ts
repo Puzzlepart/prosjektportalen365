@@ -1,5 +1,6 @@
 import { expect, test as setup } from '@playwright/test'
 import { STORAGE_STATE, baseURL } from '../playwright.config'
+import { withNetworkRetry } from './fixtures/pp365'
 
 /**
  * Signs in to Microsoft 365 as the dedicated end-to-end test user and saves the browser storage
@@ -15,7 +16,8 @@ setup('sign in as the test user', async ({ page }) => {
     throw new Error('E2E_USERNAME and E2E_PASSWORD must be set (see e2e/.env.example).')
   }
 
-  await page.goto(baseURL!)
+  // Every test depends on this sign-in: a dropped connection is tried once more.
+  await withNetworkRetry(() => page.goto(baseURL!))
   // Unauthenticated requests are redirected to login.microsoftonline.com.
   await page.getByRole('textbox', { name: /e-post|email|telefon|phone|skype/i }).fill(username)
   await page.getByRole('button', { name: /neste|next/i }).click()

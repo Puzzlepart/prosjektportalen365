@@ -184,6 +184,13 @@ module.exports = function createProsjektportalenEslintConfig(solutionDir) {
               "ImportDeclaration[source.value='@fluentui/react-icons'] > ImportNamespaceSpecifier",
             message:
               "Never `import * as ... from '@fluentui/react-icons'` (bloats every bundle). Use named imports via the shared-library icon catalog (SharePointFramework/shared-library/src/icons/iconCatalog.ts)."
+          },
+          {
+            // React 18.3 warns about it on function components and React 19 ignores it, so every
+            // default would vanish at the next React major. Gone from the repo on 2026-10-13.
+            selector: "AssignmentExpression > MemberExpression.left[property.name='defaultProps']",
+            message:
+              'No `X.defaultProps`: put the defaults in a `const X_DEFAULT_PROPS: Partial<IXProps>` above the component and merge them with `withDefaults(incomingProps, X_DEFAULT_PROPS)` from pp365-shared-library (see kodemonster.md, "Standardverdier for props").'
           }
         ],
 

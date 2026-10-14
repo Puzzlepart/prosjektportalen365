@@ -10,7 +10,7 @@ tests, and on a developer's machine in seconds. Plan and decisions:
 
 ## How it works
 
-- `node --test` runs `tests/**/*.test.ts` directly through Node 22's type stripping. There is no
+- `node --test` runs `tests/**/*.test.ts` directly through Node's type stripping (stable since 22.18; the repo runs 26). There is no
   build: only TypeScript that erases to JavaScript (no `enum`, namespaces or parameter
   properties; `import type` for types), and imports name the `.ts` file. `npm run build` only
   type-checks.
@@ -74,12 +74,18 @@ with that reason when the two differ.
   to hub rows the test created. Restore in `finally`, from what the test read first. Never point a
   variable at the project in `E2E_PROJECT_URL`, which the browser suite and hand tests use.
 - Assert what SharePoint returned or stored, read back, not what the code sent; keep assertions
-  independent of the time zone and of other projects' data.
+  independent of the time zone and of other projects' data. A test of a date's text runs the
+  machine through the zones with `process.env.TZ`, which Node applies at once (Jest's copy of the
+  environment does not); the harness hands the services the site's time zone as a page does
+  (`siteTimeZoneData` in `src/context.ts`, which knows the European zones' daylight rules).
 - No secret reaches a log, a report or a file: no token, cookie or certificate is printed.
 - What a test creates in the hub carries a prefix of its own (columns: `Integrasjonstest …`;
   status reports: the reserved project's report series `ITEST`, apart from its own reports), and
   the test first removes what an interrupted run left there.
 - Format with Prettier and the solutions' rules: `prettier --config ../SharePointFramework/.prettierrc.yaml`.
+- The browser suite's matrix smoke needs a project page with both matrix web parts, which no
+  template holds: `npm run add-matrix-page -- <project url> [Usikkerhet.aspx] [channel]` adds and
+  publishes it with the toolbox defaults, signed in as the harness is (`scripts/add-matrix-page.ts`).
 
 ## In CI
 

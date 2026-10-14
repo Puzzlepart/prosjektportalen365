@@ -121,9 +121,21 @@ test.describe('program administration column headers', () => {
       .getByRole('searchbox')
       .or(dialog.getByPlaceholder(/søk|search/i))
       .first()
+    // The dialog groups the projects by hub and opens only the groups of fewer than ten: on the
+    // test hub, 197 projects in two closed groups made a list two rows high, which never scrolled,
+    // so the test skipped on every run. Opened as a user opens them, the list scrolls.
+    const expandAll = dialog.getByRole('button', {
+      name: /^(vis alle grupper|expand all groups)$/i
+    })
+    if (await expandAll.isVisible()) {
+      await expandAll.click()
+      await expect(
+        dialog.getByRole('button', { name: /^(skjul alle grupper|collapse all groups)$/i })
+      ).toBeVisible({ timeout: 10_000 })
+    }
     const searchBefore = (await search.boundingBox())!
     const container = await scrollContainerOf(page, header)
-    test.skip(!container, "the dialog's list fits without scrolling")
+    test.skip(!container, 'the dialog lists too few projects to scroll, even with its groups open')
     const scrolled = await scrollUnderHeader(header, container!, 400)
     expect(
       Math.abs(scrolled.header.y - scrolled.container.y),

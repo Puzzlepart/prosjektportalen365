@@ -1,6 +1,6 @@
 import { Toaster } from '@fluentui/react-components'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { Fluent } from 'pp365-shared-library'
+import { Fluent, withDefaults } from 'pp365-shared-library'
 import { EditViewColumnsPanel } from '../EditViewColumnsPanel'
 import React, { FC } from 'react'
 import { List } from '../List'
@@ -13,7 +13,20 @@ import { IPortfolioOverviewProps } from './types'
 import { usePortfolioOverview } from './hooks/usePortfolioOverview'
 import resource from 'SharedResources'
 
-export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
+const PORTFOLIO_OVERVIEW_DEFAULT_PROPS: Partial<IPortfolioOverviewProps> = {
+  title: resource.WebParts_PortfolioOverview_Title,
+  portfolios: [],
+  statusReportsCount: 0,
+  showCommandBar: true,
+  showExcelExportButton: true,
+  showViewSelector: true,
+  showSearchBox: true,
+  showFilters: true,
+  showMergedViewInViewSelector: false
+}
+
+export const PortfolioOverview: FC<IPortfolioOverviewProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, PORTFOLIO_OVERVIEW_DEFAULT_PROPS)
   const {
     context,
     onSelectionChange,
@@ -59,14 +72,3 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
 }
 
 PortfolioOverview.displayName = 'PortfolioOverview'
-PortfolioOverview.defaultProps = {
-  title: resource.WebParts_PortfolioOverview_Title,
-  portfolios: [],
-  statusReportsCount: 0,
-  showCommandBar: true,
-  showExcelExportButton: true,
-  showViewSelector: true,
-  showSearchBox: true,
-  showFilters: true,
-  showMergedViewInViewSelector: false
-}

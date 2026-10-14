@@ -7,7 +7,7 @@ import {
 } from '@microsoft/sp-property-pane'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
-import { IProjectCardProps, ProjectCard } from 'components/ProjectCard'
+import { IProjectCardProps, PROJECT_CARD_DEFAULT_PROPS, ProjectCard } from 'components/ProjectCard'
 import {
   CustomCollectionFieldType,
   PropertyFieldCollectionData
@@ -149,7 +149,7 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     const quickLaunchMenu = {
-      ...ProjectCard.defaultProps.quickLaunchMenu,
+      ...PROJECT_CARD_DEFAULT_PROPS.quickLaunchMenu,
       ...this.properties.quickLaunchMenu
     }
 

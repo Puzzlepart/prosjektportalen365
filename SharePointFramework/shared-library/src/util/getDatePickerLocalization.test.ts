@@ -38,6 +38,49 @@ describe('getDatePickerLocalization', () => {
     expect(dateTimeFormatter.formatYear(december16)).toBe('2026')
   })
 
+  // V8 14.6 (Chromium 146, Node 26) dropped `minimalDays` from the week info when the proposal
+  // did, and Firefox never had week info: the week rule then comes from the region.
+  describe('without minimalDays from Intl', () => {
+    const weekInfo = (tag: string, withMinimalDays: boolean) => ({
+      firstDay: tag.startsWith('nb') ? 1 : 7,
+      weekend: [6, 7],
+      ...(withMinimalDays ? { minimalDays: tag.startsWith('nb') ? 4 : 1 } : {})
+    })
+    const stubLocale = (shape: (tag: string) => Record<string, any>) =>
+      jest.spyOn(Intl, 'Locale').mockImplementation(function (tag: string) {
+        return {
+          region: tag.split('-')[1],
+          maximize: () => ({ region: tag.split('-')[1] }),
+          ...shape(tag)
+        }
+      } as any)
+
+    afterEach(() => jest.restoreAllMocks())
+
+    it('numbers the Norwegian weeks by ISO 8601 and the American by 1 January, as in CLDR', () => {
+      stubLocale((tag) => ({ getWeekInfo: () => weekInfo(tag, false) }))
+      expect(getDatePickerLocalization('nb-NO').firstWeekOfYear).toBe(2)
+      expect(getDatePickerLocalization('nb-NO').firstDayOfWeek).toBe(1)
+      expect(getDatePickerLocalization('en-US').firstWeekOfYear).toBe(0)
+      expect(getDatePickerLocalization('en-US').firstDayOfWeek).toBe(0)
+    })
+
+    it('does the same with no week info at all, from the tag alone', () => {
+      stubLocale(() => ({}))
+      expect(getDatePickerLocalization('nb-NO').firstWeekOfYear).toBe(2)
+      expect(getDatePickerLocalization('nb-NO').firstDayOfWeek).toBe(1)
+      expect(getDatePickerLocalization('en-GB').firstWeekOfYear).toBe(2)
+      expect(getDatePickerLocalization('en-US').firstWeekOfYear).toBe(0)
+      expect(getDatePickerLocalization('en-US').firstDayOfWeek).toBe(0)
+    })
+
+    it('still prefers minimalDays when Intl gives it', () => {
+      stubLocale((tag) => ({ getWeekInfo: () => weekInfo(tag, true) }))
+      expect(getDatePickerLocalization('nb-NO').firstWeekOfYear).toBe(2)
+      expect(getDatePickerLocalization('en-US').firstWeekOfYear).toBe(0)
+    })
+  })
+
   it('starts the Norwegian week on Monday and numbers weeks by ISO 8601, the American on Sunday', () => {
     const norwegian = getDatePickerLocalization('nb-NO')
     // DayOfWeek.Monday and FirstWeekOfYear.FirstFourDayWeek.

@@ -5,7 +5,11 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls/lib/PropertyFieldMultiSelect'
-import { IProjectInformationProps, ProjectInformation } from 'components/ProjectInformation'
+import {
+  IProjectInformationProps,
+  PROJECT_INFORMATION_DEFAULT_PROPS,
+  ProjectInformation
+} from 'components/ProjectInformation'
 import * as strings from 'ProjectWebPartsStrings'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
 import resource from 'SharedResources'
@@ -33,7 +37,7 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    const propertiesWithDefaults = { ...ProjectInformation.defaultProps, ...this.properties }
+    const propertiesWithDefaults = { ...PROJECT_INFORMATION_DEFAULT_PROPS, ...this.properties }
     return {
       pages: [
         {
@@ -115,8 +119,8 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
                 }),
                 PropertyPaneSlider('rowLimit', {
                   label: strings.RowLimitLabel,
-                  min: ProjectInformation.defaultProps.minRowLimit,
-                  max: ProjectInformation.defaultProps.maxRowLimit,
+                  min: PROJECT_INFORMATION_DEFAULT_PROPS.minRowLimit,
+                  max: PROJECT_INFORMATION_DEFAULT_PROPS.maxRowLimit,
                   step: 1
                 })
               ]

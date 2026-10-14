@@ -1,11 +1,13 @@
 import { getRegionalLocale, getUILocale } from './getUILocale'
+import { setPageContextInfo } from './pageContext'
 
 /**
- * SharePoint's UI language, the one SPFx loads the strings for: the page context first, then
- * `<html lang>`, then Norwegian. Never the browser's language.
+ * SharePoint's UI language, the one SPFx loads the strings for: the page context first (what SPFx
+ * gave, else the page's global), then `<html lang>`, then Norwegian. Never the browser's language.
  */
 describe('getUILocale', () => {
   afterEach(() => {
+    setPageContextInfo(undefined)
     delete (window as any)._spPageContextInfo
     document.documentElement.removeAttribute('lang')
   })
@@ -14,6 +16,13 @@ describe('getUILocale', () => {
     ;(window as any)._spPageContextInfo = { currentUICultureName: 'en-US' }
     document.documentElement.lang = 'nb-NO'
     expect(getUILocale()).toBe('en-US')
+  })
+
+  it("reads the culture SPFx gave before the page's global", () => {
+    ;(window as any)._spPageContextInfo = { currentUICultureName: 'en-US' }
+    setPageContextInfo({ currentUICultureName: 'en-GB', currentCultureName: 'sv-SE' })
+    expect(getUILocale()).toBe('en-GB')
+    expect(getRegionalLocale()).toBe('sv-SE')
   })
 
   it('falls back to the language SharePoint sets on the page', () => {

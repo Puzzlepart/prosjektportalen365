@@ -1,5 +1,5 @@
 import strings from 'ProjectWebPartsStrings'
-import { Fluent, UserMessage } from 'pp365-shared-library'
+import { Fluent, UserMessage, withDefaults } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import SPDataAdapter from '../../data'
 import { Commands } from './Commands/Commands'
@@ -16,7 +16,17 @@ import { IProjectStatusProps } from './types'
 import { useProjectStatus } from './useProjectStatus'
 import resource from 'SharedResources'
 
-export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
+const PROJECT_STATUS_DEFAULT_PROPS: Partial<IProjectStatusProps> = {
+  title: resource.WebParts_ProjectStatus_Title,
+  fieldWidth: 250,
+  persistSectionDataAttachmentFileName: 'PersistedSectionDataJson.json',
+  snapshotAttachmentFileName: 'Snapshot.png',
+  snapshotInDialog: true,
+  description: ''
+}
+
+export const ProjectStatus: FC<IProjectStatusProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, PROJECT_STATUS_DEFAULT_PROPS)
   const { context } = useProjectStatus(props)
   const showNoHubAccessMessage =
     !context.state.selectedReport && SPDataAdapter.portalDataService?.isAvailable === false
@@ -56,11 +66,3 @@ export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
 }
 
 ProjectStatus.displayName = 'ProjectStatus'
-ProjectStatus.defaultProps = {
-  title: resource.WebParts_ProjectStatus_Title,
-  fieldWidth: 250,
-  persistSectionDataAttachmentFileName: 'PersistedSectionDataJson.json',
-  snapshotAttachmentFileName: 'Snapshot.png',
-  snapshotInDialog: true,
-  description: ''
-}

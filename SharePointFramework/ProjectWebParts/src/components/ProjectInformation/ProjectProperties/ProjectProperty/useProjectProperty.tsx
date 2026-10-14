@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import { useProjectInformationContext } from '../../context'
 import { IProjectPropertyProps } from './types'
 import { Link, Persona, Text } from '@fluentui/react-components'
-import { formatShortDate, IPersonaItem, OverflowTagMenu } from 'pp365-shared-library'
+import { formatDay, IPersonaItem, OverflowTagMenu } from 'pp365-shared-library'
 import * as strings from 'ProjectWebPartsStrings'
 import {
   ChevronCircleRightFilled,
@@ -185,7 +185,7 @@ export function useProjectProperty(props: IProjectPropertyProps) {
       [
         'DateTime',
         (date: Date) => {
-          const text = formatShortDate(date)
+          const text = formatDay(date)
           return <div title={text}>{text}</div>
         }
       ]

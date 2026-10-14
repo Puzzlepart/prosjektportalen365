@@ -18,7 +18,7 @@ import {
 import { MoreHorizontalRegular } from '@fluentui/react-icons'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
-import { SiteContext, UserMessage, customLightTheme } from 'pp365-shared-library'
+import { SiteContext, UserMessage, customLightTheme, withDefaults } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { find, isEmpty } from 'underscore'
 import styles from './ProjectList.module.scss'
@@ -68,7 +68,104 @@ const OverflowMenu: FC<{
   )
 }
 
-export const ProjectList: FC<IProjectListProps> = (props) => {
+export const PROJECT_LIST_DEFAULT_PROPS: Partial<IProjectListProps> = {
+  sortBy: 'Title',
+  showSearchBox: true,
+  showRenderModeSelector: true,
+  showSortBy: true,
+  showClosedProjects: false,
+  defaultRenderMode: 'tiles',
+  verticalConfigs: [
+    {
+      title: strings.ProjectsAccessHeaderText,
+      iconName: 'LockOpen',
+      clientFilter: '{"hasUserAccess":true}',
+      fieldFilter: '',
+      visibilityRule: '',
+      requiresAccess: false,
+      isDefault: false,
+      searchBoxPlaceholder: strings.ProjectsAccessSearchBoxPlaceholderText
+    },
+    {
+      title: strings.MyProjectsHeaderText,
+      iconName: 'PersonCircle',
+      clientFilter: '{"isUserMember":true}',
+      fieldFilter: '',
+      visibilityRule: '',
+      requiresAccess: false,
+      isDefault: true,
+      searchBoxPlaceholder: strings.MyProjectsSearchBoxPlaceholderText
+    },
+    {
+      title: strings.AllProjectsHeaderText,
+      iconName: 'Cube',
+      clientFilter: '',
+      fieldFilter: '',
+      visibilityRule: '{"isUserInPortfolioManagerGroup":true}',
+      requiresAccess: false,
+      isDefault: false,
+      searchBoxPlaceholder: strings.AllProjectsSearchBoxPlaceholderText
+    },
+    {
+      title: strings.ParentProjectsHeaderText,
+      iconName: 'BoxMultiple',
+      clientFilter: '',
+      fieldFilter: '{"GtIsParentProject":true}',
+      visibilityRule: '',
+      requiresAccess: true,
+      isDefault: false,
+      searchBoxPlaceholder: strings.ParentProjectsSearchBoxPlaceholderText
+    },
+    {
+      title: strings.ProgramsHeaderText,
+      iconName: 'BoxMultiple',
+      clientFilter: '',
+      fieldFilter: '{"GtIsProgram":true}',
+      visibilityRule: '',
+      requiresAccess: true,
+      isDefault: false,
+      searchBoxPlaceholder: strings.ProgramSearchBoxPlaceholderText
+    }
+  ],
+  useDynamicColors: true,
+  showProjectLogo: true,
+  primaryField: 'GtProjectServiceAreaText',
+  secondaryField: 'GtProjectTypeText',
+  primaryUserField: 'GtProjectOwner',
+  secondaryUserField: 'GtProjectManager',
+  projectMetadata: [
+    'PrimaryField',
+    'SecondaryField',
+    'PrimaryUserField',
+    'SecondaryUserField',
+    'ProjectPhase'
+  ],
+  quickLaunchMenu: [
+    {
+      order: 10,
+      text: resource.Navigation_ProjectStatus_Title,
+      relativeUrl: `/${resource.Navigation_ProjectStatus_Url}`
+    },
+    {
+      order: 20,
+      text: resource.Navigation_Documents_Title,
+      relativeUrl: `/${resource.Navigation_Documents_Url}`
+    },
+    {
+      order: 30,
+      text: resource.Navigation_PhaseChecklist_Title,
+      relativeUrl: `/${resource.Navigation_PhaseChecklist_Url}`
+    },
+    {
+      order: 40,
+      text: resource.Navigation_Tasks_Title,
+      relativeUrl: `/${resource.Navigation_Tasks_Url}`
+    }
+  ]
+}
+
+export const ProjectList: FC<IProjectListProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, PROJECT_LIST_DEFAULT_PROPS)
   const context = useProjectList(props)
   const renderProjects = useProjectListRenderer(context)
 
@@ -188,100 +285,4 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
       </IdPrefixProvider>
     </ProjectListContext.Provider>
   )
-}
-
-ProjectList.defaultProps = {
-  sortBy: 'Title',
-  showSearchBox: true,
-  showRenderModeSelector: true,
-  showSortBy: true,
-  showClosedProjects: false,
-  defaultRenderMode: 'tiles',
-  verticalConfigs: [
-    {
-      title: strings.ProjectsAccessHeaderText,
-      iconName: 'LockOpen',
-      clientFilter: '{"hasUserAccess":true}',
-      fieldFilter: '',
-      visibilityRule: '',
-      requiresAccess: false,
-      isDefault: false,
-      searchBoxPlaceholder: strings.ProjectsAccessSearchBoxPlaceholderText
-    },
-    {
-      title: strings.MyProjectsHeaderText,
-      iconName: 'PersonCircle',
-      clientFilter: '{"isUserMember":true}',
-      fieldFilter: '',
-      visibilityRule: '',
-      requiresAccess: false,
-      isDefault: true,
-      searchBoxPlaceholder: strings.MyProjectsSearchBoxPlaceholderText
-    },
-    {
-      title: strings.AllProjectsHeaderText,
-      iconName: 'Cube',
-      clientFilter: '',
-      fieldFilter: '',
-      visibilityRule: '{"isUserInPortfolioManagerGroup":true}',
-      requiresAccess: false,
-      isDefault: false,
-      searchBoxPlaceholder: strings.AllProjectsSearchBoxPlaceholderText
-    },
-    {
-      title: strings.ParentProjectsHeaderText,
-      iconName: 'BoxMultiple',
-      clientFilter: '',
-      fieldFilter: '{"GtIsParentProject":true}',
-      visibilityRule: '',
-      requiresAccess: true,
-      isDefault: false,
-      searchBoxPlaceholder: strings.ParentProjectsSearchBoxPlaceholderText
-    },
-    {
-      title: strings.ProgramsHeaderText,
-      iconName: 'BoxMultiple',
-      clientFilter: '',
-      fieldFilter: '{"GtIsProgram":true}',
-      visibilityRule: '',
-      requiresAccess: true,
-      isDefault: false,
-      searchBoxPlaceholder: strings.ProgramSearchBoxPlaceholderText
-    }
-  ],
-  useDynamicColors: true,
-  showProjectLogo: true,
-  primaryField: 'GtProjectServiceAreaText',
-  secondaryField: 'GtProjectTypeText',
-  primaryUserField: 'GtProjectOwner',
-  secondaryUserField: 'GtProjectManager',
-  projectMetadata: [
-    'PrimaryField',
-    'SecondaryField',
-    'PrimaryUserField',
-    'SecondaryUserField',
-    'ProjectPhase'
-  ],
-  quickLaunchMenu: [
-    {
-      order: 10,
-      text: resource.Navigation_ProjectStatus_Title,
-      relativeUrl: `/${resource.Navigation_ProjectStatus_Url}`
-    },
-    {
-      order: 20,
-      text: resource.Navigation_Documents_Title,
-      relativeUrl: `/${resource.Navigation_Documents_Url}`
-    },
-    {
-      order: 30,
-      text: resource.Navigation_PhaseChecklist_Title,
-      relativeUrl: `/${resource.Navigation_PhaseChecklist_Url}`
-    },
-    {
-      order: 40,
-      text: resource.Navigation_Tasks_Title,
-      relativeUrl: `/${resource.Navigation_Tasks_Url}`
-    }
-  ]
 }

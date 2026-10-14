@@ -1,4 +1,5 @@
 import { Page } from '@playwright/test'
+import { withNetworkRetry } from './pp365'
 
 /**
  * Loading a solution's local bundle onto a tenant page through SPFx's debug manifests, for the
@@ -26,8 +27,10 @@ export const localBundleUse = {
 /** Opens a page (its own query string kept) with the debug manifests and accepts SharePoint's prompt about them. */
 export async function openWithLocalBundle(page: Page, pagePath: string) {
   const separator = pagePath.includes('?') ? '&' : '?'
-  await page.goto(
-    `${pagePath}${separator}loadSPFX=true&debugManifestsFile=${encodeURIComponent(manifests)}`
+  await withNetworkRetry(() =>
+    page.goto(
+      `${pagePath}${separator}loadSPFX=true&debugManifestsFile=${encodeURIComponent(manifests)}`
+    )
   )
   const allow = page.getByRole('button', {
     name: /^load debug scripts$|^last inn feilsøkingsskript$/i

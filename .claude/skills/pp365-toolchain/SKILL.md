@@ -76,7 +76,7 @@ A `pp365-*` name in that AMD list means externalized. The manifest is authoritat
 4. `npm run rush:lint` and `rush validate-loc` pass (see `AGENTS.md`).
 5. A watch (dependencies built) serves a real page via `?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/build/manifests.js`, and picks up a `shared-library/src` change after the library is rebuilt.
 6. `npm run build:test` succeeds and leaves the tree clean (it runs no tests).
-7. `Install/Build-Release.ps1 -CI -SkipBundle` (or CI) produces the release on Node 22. Only this enforces the coverage floors in `config/jest.config.json` (Heft passes on a miss; the script greps `rush-logs`) and the packaging proofs: a fresh `.sppkg` each, no `pp365-*` external, no hashed third-party class names. Try changes to the build in `.github/workflows/ci-build-debug.yml` first: a push with `[build-debug]` in the subject (plus `[skip-ci]` to keep the live workflow idle) builds the test channel's package, deploys nothing, uploads package and Rush logs.
+7. `Install/Build-Release.ps1 -CI -SkipBundle` (or CI) produces the release on Node 26. Only this enforces the coverage floors in `config/jest.config.json` (Heft passes on a miss; the script greps `rush-logs`) and the packaging proofs: a fresh `.sppkg` each, no `pp365-*` external, no hashed third-party class names. Try changes to the build in `.github/workflows/ci-build-debug.yml` first: a push with `[build-debug]` in the subject (plus `[skip-ci]` to keep the live workflow idle) builds the test channel's package, deploys nothing, uploads package and Rush logs.
 
 ## PnPjs 4 (beyond `AGENTS.md`; see `docs/plans/pnpjs-4-migration.md`)
 
@@ -105,7 +105,7 @@ webpack 5 does not polyfill Node globals. `xml-js` (sp-js-provisioning) evaluate
 
 ## Do not
 
-- Do not pin Node below 22 or run the Heft toolchain on Node 16/18.
+- Do not pin Node below 26 or run the Heft toolchain on 22 or 24: SPFx 1.24 allows 22, 24 and 26, and the repo pins one (26 since 2026-10-13, `docs/plans/technical-backlog-after-phase-5.md`, slice 1). `rush` and `Build-Release.ps1` stop on any other major.
 - Do not add `"overrides"` or `"resolutions"` to a solution's `package.json`.
 - Do not delete `config/config.json`; Heft still reads it.
 - Do not break the lint house rules (errors, `SharePointFramework/.eslint-config/index.js`): no `import * as` from `@fluentui/react-icons` (named imports via `shared-library/src/icons/iconCatalog.ts`); no root import of `@pnp/spfx-controls-react` or `@pnp/spfx-property-controls` (use `<package>/lib/<Control>`: neither declares `sideEffects`, so the root bundles every control and its Fluent v8); no deep import of `pp365-shared-library/lib/icons/iconCatalog`; `no-floating-promises`, `no-void` (statements allowed), `eqeqeq` (null ignored), `react/jsx-key`, `prettier/prettier`. Warnings do not fail the build (`allowWarningsInSuccessfulBuild`).

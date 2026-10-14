@@ -4,14 +4,19 @@ import React, { FC } from 'react'
 import styles from './ProjectLogo.module.scss'
 import { IProjectLogoProps } from './types'
 import { useProjectLogo } from './useProjectLogo'
-import { format } from '../../util'
+import { format, withDefaults } from '../../util'
+
+const PROJECT_LOGO_DEFAULT_PROPS: Partial<IProjectLogoProps> = {
+  size: '100%'
+}
 
 /**
  * A component that renders an avatar or a logo for a project. The avatar is rendered if the project does not have a custom logo.
  *
  * @category ProjectLogo
  */
-export const ProjectLogo: FC<IProjectLogoProps> = (props: IProjectLogoProps) => {
+export const ProjectLogo: FC<IProjectLogoProps> = (incomingProps: IProjectLogoProps) => {
+  const props = withDefaults(incomingProps, PROJECT_LOGO_DEFAULT_PROPS)
   const {
     showCustomImage,
     imageSource,
@@ -68,10 +73,6 @@ export const ProjectLogo: FC<IProjectLogoProps> = (props: IProjectLogoProps) => 
       />
     </div>
   )
-}
-
-ProjectLogo.defaultProps = {
-  size: '100%'
 }
 
 export * from './types'

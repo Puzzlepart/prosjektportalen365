@@ -1,6 +1,7 @@
 import type { TimelinePipe } from '@pnp/core'
 import { SPFx, spfi } from '@pnp/sp'
 import { SPFxContext } from '../types'
+import { rememberPageContext } from '../util/pageContext'
 import '@pnp/sp/presets/all'
 
 /**
@@ -29,8 +30,13 @@ export function setSpfiFactory(factory?: SpfiFactory): void {
  * PnPjs 4 has no `getAll()` on item collections; use `getAllItems` from this
  * folder to page through a whole list.
  *
+ * Every web part and extension creates its clients from the page's context before it renders, so
+ * this is where the library learns the page's cultures and the site's time zone, which it formats
+ * dates by (`rememberPageContext`): modern pages expose no page context on `window`.
+ *
  * @param spfxContext SPFx context
  */
 export function createSpfiInstance(spfxContext: SPFxContext) {
+  rememberPageContext(spfxContext)
   return spfi().using(spfiFactory ? spfiFactory(spfxContext) : SPFx(spfxContext))
 }

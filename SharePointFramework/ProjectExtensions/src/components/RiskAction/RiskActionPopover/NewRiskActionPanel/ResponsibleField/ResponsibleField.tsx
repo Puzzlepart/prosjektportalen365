@@ -1,12 +1,19 @@
 import { Combobox, Option, Persona } from '@fluentui/react-components'
 import strings from 'ProjectExtensionsStrings'
-import { FieldContainer, format } from 'pp365-shared-library'
+import { FieldContainer, format, withDefaults } from 'pp365-shared-library'
 import React, { FC, useEffect, useState } from 'react'
 import { useRiskActionFieldCustomizerContext } from '../../../../../extensions/riskAction/context'
 import { IResponsibleFieldProps } from './types'
 import { stringIsNullOrEmpty } from '@pnp/core'
 
-export const ResponsibleField: FC<IResponsibleFieldProps> = (props) => {
+const RESPONSIBLE_FIELD_DEFAULT_PROPS: Partial<IResponsibleFieldProps> = {
+  onChange: () => {
+    // Empty function as default
+  }
+}
+
+export const ResponsibleField: FC<IResponsibleFieldProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, RESPONSIBLE_FIELD_DEFAULT_PROPS)
   const context = useRiskActionFieldCustomizerContext()
   const [value, setValue] = useState('')
   const [matchingUsers, setMatchingUsers] = useState([])
@@ -53,8 +60,3 @@ export const ResponsibleField: FC<IResponsibleFieldProps> = (props) => {
 }
 
 ResponsibleField.displayName = 'ResponsibleField'
-ResponsibleField.defaultProps = {
-  onChange: () => {
-    // Empty function as default
-  }
-}

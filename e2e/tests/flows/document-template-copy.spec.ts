@@ -1,5 +1,5 @@
 import { baseURL } from '../../playwright.config'
-import { configuredUrl, expect, test } from '../fixtures/pp365'
+import { configuredUrl, expect, test, withNetworkRetry } from '../fixtures/pp365'
 import {
   findDocumentLibrary,
   openDocumentTemplateDialog
@@ -41,7 +41,9 @@ test.describe('document template copy', () => {
     const name = `${COPY_PREFIX}${Date.now().toString().slice(-6)}`
     const libraryPage = await findDocumentLibrary(page, projectUrl!)
     const folder = new URL(libraryPage).pathname.replace(/\/Forms\/AllItems\.aspx$/i, '')
-    await page.goto(libraryPage, { timeout: 90_000 })
+    // A library view is no web part page, so not `openPage`; a connection SharePoint never
+    // answered (net::ERR_TIMED_OUT, run 38522211703) is tried once more, as `openPage` does.
+    await withNetworkRetry(() => page.goto(libraryPage, { timeout: 90_000 }))
     await deleteTestCopies(page, decodeURIComponent(folder))
 
     try {

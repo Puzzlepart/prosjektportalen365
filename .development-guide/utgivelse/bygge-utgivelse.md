@@ -1,6 +1,6 @@
 ## Bygge en ny utgivelse
 
-`Install/Build-Release.ps1` bygger installasjonspakken. Det kjører en full `rush rebuild` med testene, pakker hver løsning som `.sppkg`, bygger PnP-malene og site scripts og legger alt sammen med installasjonsskriptene og PnP.PowerShell i `release/`. Skriptet trenger Node 22 og PowerShell 7 (`pwsh`), og stopper på en annen hovedversjon av Node.
+`Install/Build-Release.ps1` bygger installasjonspakken. Det kjører en full `rush rebuild` med testene, pakker hver løsning som `.sppkg`, bygger PnP-malene og site scripts og legger alt sammen med installasjonsskriptene og PnP.PowerShell i `release/`. Skriptet trenger Node 26 og PowerShell 7 (`pwsh`), og stopper på en annen hovedversjon av Node.
 
 Fra roten:
 

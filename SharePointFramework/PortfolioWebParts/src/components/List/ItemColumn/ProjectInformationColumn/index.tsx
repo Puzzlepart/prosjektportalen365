@@ -1,6 +1,6 @@
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformation'
-import { ColumnRenderComponent, SiteContext } from 'pp365-shared-library'
+import { ColumnRenderComponent, SiteContext, withDefaults } from 'pp365-shared-library'
 import React, { useContext } from 'react'
 import { ListContext } from '../../context'
 import styles from '../TitleColumn/TitleColumn.module.scss'
@@ -19,9 +19,14 @@ const Icons = {
   PanelRight: bundleIcon(PanelRightContractFilled, PanelRightContractRegular)
 }
 
+const PROJECT_INFORMATION_COLUMN_DEFAULT_PROPS: Partial<IProjectInformationColumnProps> = {
+  page: 'Portfolio'
+}
+
 export const ProjectInformationColumn: ColumnRenderComponent<IProjectInformationColumnProps> = (
-  props
+  incomingProps
 ) => {
+  const props = withDefaults(incomingProps, PROJECT_INFORMATION_COLUMN_DEFAULT_PROPS)
   const context = useContext(ListContext)
   const url = props.item?.Path || props.item?.SPWebUrl
 
@@ -59,10 +64,6 @@ export const ProjectInformationColumn: ColumnRenderComponent<IProjectInformation
       </ProjectInformationPanel>
     </div>
   )
-}
-
-ProjectInformationColumn.defaultProps = {
-  page: 'Portfolio'
 }
 ProjectInformationColumn.key = 'projectinfo'
 ProjectInformationColumn.id = 'projectinfo'

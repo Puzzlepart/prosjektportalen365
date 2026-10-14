@@ -8,16 +8,37 @@ jest.mock('@pnp/sp', () => ({
   spfi: jest.fn(() => ({ using: (behaviour: unknown) => ({ behaviour }) }))
 }))
 
+import { getUILocale } from '../util/getUILocale'
+import { setPageContextInfo } from '../util/pageContext'
+import { getSiteTimeZone } from '../util/siteTimeZone'
+import { OSLO_TIME_ZONE } from '../util/testFixtures'
 import { createSpfiInstance, setSpfiFactory } from './createSpfiInstance'
 
 /**
  * How the library's clients connect to SharePoint: through SPFx on a page, or through a factory
- * the integration tests register, which signs in from Node where there is no page.
+ * the integration tests register, which signs in from Node where there is no page. Every client
+ * is created from the page's context, so this is where the library learns the page's cultures and
+ * the site's time zone.
  */
 describe('createSpfiInstance', () => {
   const context = { name: 'project' } as any
 
-  afterEach(() => setSpfiFactory(undefined))
+  afterEach(() => {
+    setSpfiFactory(undefined)
+    setPageContextInfo(undefined)
+  })
+
+  it("remembers the page's cultures and the site's time zone from the context", () => {
+    createSpfiInstance({
+      name: 'project',
+      pageContext: {
+        cultureInfo: { currentUICultureName: 'en-US', currentCultureName: 'nb-NO' },
+        legacyPageContext: { webTimeZoneData: OSLO_TIME_ZONE }
+      }
+    } as any)
+    expect(getUILocale()).toBe('en-US')
+    expect(getSiteTimeZone()).toBe(OSLO_TIME_ZONE)
+  })
 
   it('connects through SPFx by default', () => {
     expect((createSpfiInstance(context) as any).behaviour).toBe('SPFx(project)')

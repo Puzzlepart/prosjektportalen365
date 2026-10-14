@@ -58,7 +58,7 @@ export function normalizeBooleanValue(value: any): '1' | '0' {
 export function getBooleanDisplayValue(column: ProjectColumn, value: any): string {
   const { valueIfTrue, valueIfFalse } = column?.data?.dataTypeProperties ?? {}
   // `??` and not `||`, so that an empty label stays empty, like the
-  // `defaultProps` of `BooleanColumn` which only apply when it's `undefined`.
+  // the defaults of `BooleanColumn` which only apply when it's `undefined`.
   return normalizeBooleanValue(value) === '1'
     ? (valueIfTrue ?? strings.BooleanYes)
     : (valueIfFalse ?? strings.BooleanNo)

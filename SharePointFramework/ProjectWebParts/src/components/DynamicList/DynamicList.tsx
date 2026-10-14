@@ -17,7 +17,8 @@ import {
   CustomEditPanel,
   Toolbar,
   UserMessage,
-  LoadingSkeleton
+  LoadingSkeleton,
+  withDefaults
 } from 'pp365-shared-library'
 import { Spinner, Skeleton, SkeletonItem } from '@fluentui/react-components'
 import SPDataAdapter from '../../data'
@@ -130,6 +131,28 @@ const DynamicListContent: FC<{
   )
 }
 
+const DYNAMIC_LIST_DEFAULT_PROPS: Partial<IDynamicListProps> = {
+  mode: DynamicListMode.Multi,
+  documentLibraryViewMode: DocumentLibraryViewMode.Folders,
+  useProjectContentColumnNames: true,
+  showItemTitle: true,
+  showCommandBar: true,
+  showSearchBox: true,
+  showViewSelector: false,
+  showFilters: true,
+  showNewButton: true,
+  showEditButton: true,
+  showDeleteButton: false,
+  showRefreshButton: true,
+  showExportButton: true,
+  showUploadButton: true,
+  showNewWordButton: false,
+  showNewExcelButton: false,
+  showNewPowerPointButton: false,
+  showViewModeToggle: true,
+  showCustomActions: true
+}
+
 /**
  * DynamicList web part component for displaying SharePoint list data.
  *
@@ -142,7 +165,8 @@ const DynamicListContent: FC<{
  *
  * @param props Configuration properties for the DynamicList
  */
-export const DynamicList: FC<IDynamicListProps> = (props) => {
+export const DynamicList: FC<IDynamicListProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, DYNAMIC_LIST_DEFAULT_PROPS)
   /**
    * Determines the target SharePoint web instance based on webContextMode prop.
    * This web is used for ALL operations (read and write) and points to where the list exists.
@@ -255,26 +279,4 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
       </DynamicListContext.Provider>
     </div>
   )
-}
-
-DynamicList.defaultProps = {
-  mode: DynamicListMode.Multi,
-  documentLibraryViewMode: DocumentLibraryViewMode.Folders,
-  useProjectContentColumnNames: true,
-  showItemTitle: true,
-  showCommandBar: true,
-  showSearchBox: true,
-  showViewSelector: false,
-  showFilters: true,
-  showNewButton: true,
-  showEditButton: true,
-  showDeleteButton: false,
-  showRefreshButton: true,
-  showExportButton: true,
-  showUploadButton: true,
-  showNewWordButton: false,
-  showNewExcelButton: false,
-  showNewPowerPointButton: false,
-  showViewModeToggle: true,
-  showCustomActions: true
 }

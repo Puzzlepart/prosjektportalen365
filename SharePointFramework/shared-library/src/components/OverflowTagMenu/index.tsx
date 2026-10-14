@@ -19,7 +19,7 @@ import _ from 'underscore'
 import styles from './OverflowTagMenu.module.scss'
 import { IOverflowTagMenuProps, OverflowMenuItemProps } from './types'
 import { useOverflowTagMenu } from './useOverflowTagMenu'
-import { format } from '../../util'
+import { format, withDefaults } from '../../util'
 
 const OverflowMenuItem: FC<OverflowMenuItemProps> = (props) => {
   const { tag } = props
@@ -78,7 +78,12 @@ const OverflowMenu: FC<{
   )
 }
 
-export const OverflowTagMenu: FC<IOverflowTagMenuProps> = (props) => {
+const OVERFLOW_TAG_MENU_DEFAULT_PROPS: Partial<IOverflowTagMenuProps> = {
+  minimumVisibleTags: 1
+}
+
+export const OverflowTagMenu: FC<IOverflowTagMenuProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, OVERFLOW_TAG_MENU_DEFAULT_PROPS)
   const { tags, icon } = useOverflowTagMenu(props)
   const Icon = icon
   const shouldApplyPreviewStyles = props.isTagPreview && tags.length > 1
@@ -115,8 +120,4 @@ export const OverflowTagMenu: FC<IOverflowTagMenuProps> = (props) => {
       )}
     </div>
   )
-}
-
-OverflowTagMenu.defaultProps = {
-  minimumVisibleTags: 1
 }

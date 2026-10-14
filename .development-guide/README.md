@@ -43,6 +43,7 @@
 	* [➤ Hook-mønsteret (`useKomponent`)](#-hook-mnsteret-usekomponent)
 		* [Hvorfor?](#hvorfor)
 		* [Mønster](#mnster)
+		* [Standardverdier for props](#standardverdier-for-props)
 		* [Ekte eksempel: `useProjectSetupDialog`](#ekte-eksempel-useprojectsetupdialog)
 	* [➤ Context-mønsteret](#-context-mnsteret)
 		* [Mønster](#mnster-1)
@@ -104,6 +105,7 @@
 		* [Windows og macOS](#windows-og-macos)
 	* [➤ Testregime](#-testregime)
 		* [Lagene](#lagene)
+		* [Hvilken test skal jeg skrive?](#hvilken-test-skal-jeg-skrive)
 		* [Hva skjer i et bygg](#hva-skjer-i-et-bygg)
 		* [Delt oppsett: `pp365-jest-config`](#delt-oppsett-pp365-jest-config)
 		* [Skrive enhetstester](#skrive-enhetstester)
@@ -201,7 +203,7 @@ Repoet er et Rush-monorepo (pnpm, Heft, SPFx 1.24):
 | `SiteScripts/` | Site scripts; se [site design og site scripts](maler/site-design-og-site-scripts.md) |
 | `Install/` | `Build-Release.ps1` (utgivelsesbygget), `Install.ps1` og oppgraderingsskriptene |
 | `channels/` | Installasjonskanalene `main`, `test`, `i18n` og `kurs`; se [kanaler](maler/kanaler.md) |
-| `e2e/` | Playwright-røyktester mot testtenanten (Rush-prosjektet `pp365-e2e`) |
+| `e2e/` | Playwright-tester i en ekte nettleser mot testtenanten: røyktester og brukerflyter (Rush-prosjektet `pp365-e2e`) |
 | `integration/` | Integrasjonstester av bibliotekets datalag mot testtenanten, i Node (Rush-prosjektet `pp365-integration`) |
 | `.development-guide/` | Utviklingsguiden, delt i `spfx/`, `maler/`, `git/`, `ci/` og `utgivelse/` |
 | `docs/plans/` | Planer for større løft, f.eks. [Heft-overgangen](../docs/plans/spfx-1.23-heft-toolchain.md) og [fase 5](../docs/plans/dependency-upgrades-phase-5.md) |
@@ -212,7 +214,7 @@ Alle fem løsningene avhenger av `shared-library`. `PortfolioWebParts` bruker i 
 
 Du trenger:
 
-- **Node 22**, versjonen i `.nvmrc` (22.22.2). `rush.json` godtar bare `>=22.14.0 <23.0.0`, så en annen hovedversjon stopper bygget. Med nvm: `nvm install && nvm use` i repo-roten. Med nvm-windows: `nvm install 22.22.2` og `nvm use 22.22.2`, siden den ikke nødvendigvis leser `.nvmrc`.
+- **Node 26**, versjonen i `.nvmrc` (26.11.1). `rush.json` godtar bare `>=26.11.0 <27.0.0`, så en annen hovedversjon stopper bygget. Med nvm: `nvm install && nvm use` i repo-roten. Med nvm-windows: `nvm install 26.11.1` og `nvm use 26.11.1`, siden den ikke nødvendigvis leser `.nvmrc`.
 - **PowerShell 7** (`pwsh`) når du skal bygge en utgivelse (`npm run build-release`), og på Windows også som terminal. Mer om Windows i [Windows og macOS](spfx/utviklingsmiljo.md#windows-og-macos).
 - **VS Code**, og **Chrome** for feilsøkingsoppsettet.
 - Gjerne Rush globalt (`npm i -g @microsoft/rush`), så kommandoer som `rush rebuild -o pp365-shared-library` virker direkte. Uten: `node common/scripts/install-run-rush.js <kommando>`.
@@ -265,7 +267,7 @@ Detaljer og ekte eksempler står i [kodemonster.md](spfx/kodemonster.md), og et 
 
 ### 5. Tester
 
-Les [testing.md](spfx/testing.md) før du skriver din første test.
+Les [testing.md](spfx/testing.md) før du skriver din første test. Avsnittet «Hvilken test skal jeg skrive?» der forklarer forskjellen på Jest, integrasjon og E2E.
 
 - **Jest i bygget.** `src/**/*.test.ts(x)` kjører i `heft test`, altså i `npm test`, `npm run build`, `rush build`/`rebuild` og CI, og en test som feiler, stopper bygget. `npm run watch` og kanalbyggene (`npm run build:<kanal>`) kjører ingen tester. Testen ligger ved siden av koden.
 - **Kjør** `npm test` i en løsning (bygger først). Én fil: `npx heft test --test-path-pattern Header` (et regulært uttrykk over stien til testfilen). `shared-library` må være bygget først.
@@ -644,6 +646,25 @@ export const KomponentNavn: FC<IKomponentNavnProps> = (props) => {
   return <div>{/* Bruk verdiene fra hooken */}</div>
 }
 ```
+
+### Standardverdier for props
+
+Ikke `KomponentNavn.defaultProps`: React 18.3 advarer om den på funksjonskomponenter, og React 19 ignorerer den, så hver standardverdi ville forsvunnet stille ved neste React-hopp. Standardverdiene ligger i en konstant over komponenten og flettes inn øverst med `withDefaults` fra `pp365-shared-library` (i biblioteket fra `util`). Den gjør det React gjorde: en prop som er `undefined` får standardverdien, mens `null`, `false`, `0` og `''` beholdes. Flettingen skjer på selve objektet, slik at hooken, konteksten og `{...props}` ser de samme verdiene:
+
+```tsx
+const KOMPONENT_NAVN_DEFAULT_PROPS: Partial<IKomponentNavnProps> = {
+  rowLimit: 6,
+  showTitle: true
+}
+
+export const KomponentNavn: FC<IKomponentNavnProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, KOMPONENT_NAVN_DEFAULT_PROPS)
+  const { value } = useKomponentNavn(props)
+  …
+}
+```
+
+Leses verdiene andre steder (webdelens egenskapsrute, en test), eksporteres konstanten; navnet har komponentens navn i seg, så barrelene ikke kolliderer. En komponent som bare leser sine egne props, kan sette standardverdiene i destruktureringen (`({ rowLimit = 6 }) =>`), men ikke når `props` sendes videre. ESLint stopper `defaultProps` fra å komme tilbake.
 
 ### Ekte eksempel: `useProjectSetupDialog`
 
@@ -1498,7 +1519,7 @@ Eksempel:
 Alt i repoet skal virke likt på Windows og macOS, og i CI på Linux. Dette er verdt å vite på Windows:
 
 - **Terminal:** bruk PowerShell 7 (`pwsh`) eller Git Bash. Windows PowerShell 5.1 kan ikke `&&`, som flere kommandoer i guiden bruker, og stopper `npm.ps1` med standard kjørepolicy (`Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` løser det). I `cmd.exe` er enkle anførselstegn ikke anførselstegn: bruk doble rundt et argument med mellomrom eller spesialtegn.
-- **Node:** nvm-windows leser ikke nødvendigvis `.nvmrc`. Installer og velg versjonen med navn: `nvm install 22.22.2` og `nvm use 22.22.2`.
+- **Node:** nvm-windows leser ikke nødvendigvis `.nvmrc`. Installer og velg versjonen med navn: `nvm install 26.11.1` og `nvm use 26.11.1`.
 - **Linjeskift:** `.gitattributes` sjekker ut all tekst med LF på alle maskiner, uansett `core.autocrlf`, så lint, tester og utgivelsespakken bygger fra de samme bytene som på macOS og i CI. Prettiers `endOfLine: auto` er et sikkerhetsnett for en fil en editor lagrer med CRLF. En klone fra før `.gitattributes` kom inn, sjekkes ut på nytt én gang, etter at endringene er committet eller lagt til side: `git rm -r --cached -q . && git reset --hard`.
 - **Lange stier:** pnpm-lageret gir stier på over 250 tegn. Slå på lange stier i Windows (`LongPathsEnabled`) og i git (`git config --global core.longpaths true`), og klon til en kort sti, for eksempel `C:\src\pp365`.
 - **Miljøvariabler:** `VAR=verdi kommando` virker bare i bash og zsh. I PowerShell: `$env:NODE_OPTIONS='--max-old-space-size=8192'`; i cmd: `set NODE_OPTIONS=--max-old-space-size=8192`. Der det finnes en `.env`-fil, er den veien som virker overalt (`SERVE_CHANNEL` i løsningens `.env`, `E2E_LOCAL_BUNDLE` i `e2e/.env`).
@@ -1522,11 +1543,31 @@ Dette kapittelet beskriver hvordan Prosjektportalen testes automatisk, hva som k
 | Kjøretidskontrakt | Kode som komponerer PnPjs-spørringer, kjørt mot det ekte PnPjs 4-biblioteket med falsk transport | `node --test` (`shared-library/test/runtime/*.test.mjs`, `npm run test:runtime`) | I byggeskriptet til shared-library, etter `heft test` | Nei |
 | Pakkebevis | At hvert bygg faktisk produserer sin `.sppkg` og at det delte biblioteket er pakket inn (ikke en kjøretidsavhengighet) | `Install/Build-Release.ps1` | I hvert utgivelsesbygg | Nei |
 | Integrasjon | Bibliotekets datalag (tjenestene, søk, termlageret) mot testtenanten: hva SharePoint returnerer og lagrer | `node --test` (`integration/`) | Etter utrulling til testkanalen i `ci-channel-test.yml`, ved siden av E2E; lokalt på sekunder | Ja |
-| Ende-til-ende (E2E) | Hub og prosjektområde i testtenanten: sidene laster, webdelene monteres, ingen ødelagte bundler | Playwright (`e2e/`) | Etter utrulling til testkanalen i `ci-channel-test.yml` | Ja |
+| Ende-til-ende (E2E) | Hub, prosjekt- og programområde i en ekte nettleser: sidene laster, webdelene monteres og bundlene lastes (røyktester), og brukerreiser, også de som skriver til testtenanten og rydder etter seg (flyter) | Playwright (`e2e/`) | Etter utrulling til testkanalen i `ci-channel-test.yml` | Ja |
 | Manuell smoke-test | Skriveflyter som ennå ikke er automatisert (prosjektoppsett, publisering av statusrapport, idéflyt) | Issue-maler, se «Smoke test-prosessen» | Før utgivelse, til E2E dekker flytene | Ja |
 
 
 Kjøretidskontraktene finnes fordi Jest ikke kan laste `@pnp/*` (ESM-only under CommonJS-kjøreren) og stand-ins ikke fanger feil i selve PnPjs-koblingen: `getTermStore` kastet i SPFx fordi `spfi().using(SPFx(context))` holder URL-er relative til forespørselen sendes, noe stand-ins aldri viste. Node kan importere ESM-PnPjs, så disse testene kjører pipelinen med både relative (SPFx-stil) og absolutte (`spfi(url)`) URL-er. Legg flere slike tester her når kode kobler seg direkte på PnPjs-kjøringen.
+
+### Hvilken test skal jeg skrive?
+
+Lagene tester det samme produktet fra ulik avstand. Forskjellen er hva testen kjører mot:
+
+- **Jest** kjører koden alene i Node, med SharePoint, PnPjs og SPFx byttet ut med stand-ins. Testene er raske og kjører i hvert bygg, men de ser bare hva koden gjør med svarene testen gir den, ikke hvordan SharePoint faktisk svarer.
+- **Integrasjonstestene** kjører bibliotekets ekte datalag mot ekte SharePoint i testtenanten, uten nettleser. De viser hva SharePoint faktisk lagrer og returnerer: feltformater, datoer i andre tidssoner, søk, termer og synkroniseringen til huben.
+- **E2E-testene** styrer en ekte nettleser på ekte sider etter utrulling til testkanalen. Røyktestene sjekker at sidene laster og webdelene monteres. Flytene går gjennom det en bruker gjør, også det som skriver til tenanten.
+
+Jo lenger ned i listen, jo tregere og mer avhengig av testdata er testen, men jo nærmere det brukeren opplever. Velg derfor det laveste laget som kan vise det du vil sjekke:
+
+| Du endrer eller retter | Skriv |
+|---|---|
+| Logikk: en hjelpefunksjon, en reducer, en modell, en mapping av data | Jest-enhetstest |
+| Hva en komponent viser, og hva som skjer når brukeren klikker eller skriver | Jest-komponenttest med React Testing Library |
+| Kode som setter sammen PnPjs-spørringer (URL-er, kjeder, behaviors) | Kjøretidskontrakt i `shared-library/test/runtime` |
+| Hva SharePoint lagrer eller returnerer for en tjeneste i datalaget | Integrasjonstest |
+| Det bare en nettleser viser: oppsett og CSS, at bundlene lastes, en reise over flere sider | E2E |
+
+Skriv testen før rettingen og se den feile, så vet du at den fanger feilen. Mange endringer trenger mer enn ett lag. Datoene i områdets tidssone (1.15) har Jest-tester for overgangsreglene, en kjøretidstest og en integrasjonstest som kjører maskinen gjennom fem tidssoner, og en E2E-flyt fra en nettleser i Los Angeles.
 
 ### Hva skjer i et bygg
 
@@ -1606,7 +1647,7 @@ Kjør testene i en løsning med `npm test` (`heft test`), eller bare bygg-og-tes
 
 `e2e/` er Rush-prosjektet `pp365-e2e`, med tre mapper: `tests/smoke` (røyktester av sider og webdeler), `tests/flows` (brukerreiser; fire av dem skriver til testtenanten og rydder etter seg) og `tests/local` (en løsnings lokale bundle via en utviklingsserver, bare med `E2E_LOCAL_BUNDLE=1`, aldri i CI). Røyktestene logger inn som en dedikert testbruker, åpner hub-sidene og et prosjektområde, venter på at SPFx-lerretet rendrer, sjekker at forventede webdeler monteres, og feiler på nettleserfeil som betyr at en bundle er ødelagt («Cannot find module», «Failed to load component», «ChunkLoadError»). Det siste er nettopp symptomet på et delt bibliotek som ikke er pakket inn, og er det pakkebeviset i `Build-Release.ps1` sikrer på byggetidspunktet.
 
-Kjøring i CI: jobben «End-to-end smoke (test channel)» i `ci-channel-test.yml` kjører etter en vellykket «Upgrade (test channel)», altså mot den pakken som nettopp ble rullet ut til `SP_URL_TEST`. Arbeidsflyten utløses av push til grenene i `on.push.branches` (i dag `releases/1.15`, `feat/fluent-v9*` og `feat/dependency-upgrades*`) når filer under `SharePointFramework/`, `Install/`, `Templates/`, `e2e/` eller `integration/` er endret, og kan startes manuelt fra Actions-fanen (`workflow_dispatch`). Merk at en push til en av disse grenene oppgraderer testtenanten. E2E-jobben følger begge oppgraderingsløpene: den vanlige oppgraderingen og pakke-oppgraderingen som `[apps-only]`/`[apps-only:<løsninger>]` bruker. `[skip-e2e]` i commit-emnet hopper over E2E-jobben; `[skip-upgrade]` hopper over oppgraderingen og dermed også E2E.
+Kjøring i CI: jobben «End-to-end smoke (test channel)» i `ci-channel-test.yml` kjører etter en vellykket «Upgrade (test channel)», altså mot den pakken som nettopp ble rullet ut til `SP_URL_TEST`. Arbeidsflyten utløses av push til grenene i `on.push.branches` (i dag `releases/1.15` og `feat/technical-backlog*`) når filer under `SharePointFramework/`, `Install/`, `Templates/`, `e2e/` eller `integration/` er endret, og kan startes manuelt fra Actions-fanen (`workflow_dispatch`). Merk at en push til en av disse grenene oppgraderer testtenanten. E2E-jobben følger begge oppgraderingsløpene: den vanlige oppgraderingen og pakke-oppgraderingen som `[apps-only]`/`[apps-only:<løsninger>]` bruker. `[skip-e2e]` i commit-emnet hopper over E2E-jobben; `[skip-upgrade]` hopper over oppgraderingen og dermed også E2E.
 
 #### Finne og lese E2E-rapporten fra CI
 
@@ -1730,10 +1771,10 @@ Hvilke automatiske tester som dekker hver komponent, lag for lag, med noen ord o
 
 | Lag | Filer | Tester |
 |---|---|---|
-| Jest | 179 | 1 174: PortfolioExtensions 101, PortfolioWebParts 200, ProgramWebParts 59, ProjectExtensions 118, ProjectWebParts 239, shared-library 457 |
-| Kjøretidskontrakt | 1 | 4 |
-| Integrasjon | 10 | 41: 12 uten tenant, 29 mot testtenanten |
-| E2E | 24 spesifikasjoner | 54: smoke 19, flows 27 (de to i CI), local 8 |
+| Jest | 192 | 1 268: PortfolioExtensions 101, PortfolioWebParts 240, ProgramWebParts 59, ProjectExtensions 118, ProjectWebParts 239, shared-library 511 |
+| Kjøretidskontrakt | 2 | 6 |
+| Integrasjon | 10 | 42: 12 uten tenant, 30 mot testtenanten |
+| E2E | 27 spesifikasjoner | 59: smoke 22, flows 29 (de to i CI), local 8 |
 
 I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder etter seg. «Indirekte» betyr at komponenten står på en side en E2E-test åpner. Testen sjekker da ikke komponenten selv, men `openPage` feiler fortsatt på feilgrensen «Noe gikk galt», på en webdel fra en annen kanal og på bunter som ikke lastes.
 
@@ -1741,10 +1782,10 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 
 | Komponent | Jest | E2E | Integrasjon | Ikke dekket / manuelt |
 |---|---|---|---|---|
-| Porteføljeoversikt | 7 filer, 54: reducer, filtrering, Excel-eksport, kolonnemeny, kolonneskjema | Smoke: listen, søk, filter, Excel-eksport. Flows: kolonnemeny på høyreklikk, dra kolonner, panelets topp, tittelknappen, typografi, navigasjon, ny kolonne (skriver) | Prosjektkolonner; ny kolonne i en visning, også med skjulte kolonner (skriver); kolonnekonfigurasjon; standardvisningen og fargene for `Status muligheter` etter oppgradering | — |
+| Porteføljeoversikt | 10 filer, 73: reducer, filtrering, Excel-eksport, kolonnemeny, kolonneskjema, porteføljevelgeren og visningsvelgeren (sammenslått visning, egne visninger, programmer, hvem som kan lage og endre visninger) | Smoke: listen, søk, filter, Excel-eksport. Flows: kolonnemeny på høyreklikk, dra kolonner, panelets topp, tittelknappen, typografi, navigasjon, ny kolonne (skriver) | Prosjektkolonner; ny kolonne i en visning, også med skjulte kolonner (skriver); kolonnekonfigurasjon; standardvisningen og fargene for `Status muligheter` etter oppgradering | — |
 | Delt liste (`List`, `ListGrid`, `Vis eller skjul kolonner`) | 6 filer, 41 | Gjennom flytene for porteføljeoversikten | — | — |
-| Portefølje aggregeringsoversikt | 10 filer, 76: reducer (51), datahenting, Excel-eksport, verktøylinje, gruppering, søk i kolonnene som vises | Smoke: aggregeringssidene og Nytteoversikt med filter. Flows: typografi | — | Hubens dataadapter |
-| Prosjektutlisting | 4 filer, 16 | Flows: kortets panel viser prosjektnavnet | — | — |
+| Portefølje aggregeringsoversikt | 10 filer, 78: reducer (51), datahenting, Excel-eksport, verktøylinje, gruppering (også gruppenavn for personer, termer og oppslag), søk i kolonnene som vises | Smoke: aggregeringssidene og Nytteoversikt med filter. Flows: typografi | — | Hubens dataadapter |
+| Prosjektutlisting | 6 filer, 35: også fanenes filtre (feltbetingelser med `$ne`/`$in`/`$nin`, tilstand, tilgang) og listevisningens kolonner | Flows: kortets panel viser prosjektnavnet | — | — |
 | Prosjekttidslinje (porteføljenivå) | Via bibliotekets `ProjectTimeline` (22) | Smoke: prøveklikk på en prosjektlenke, filter | — | Ingen test av webdelen selv |
 | Siste prosjekter | 5: nyeste områder, vis flere/færre, tom, feil | Indirekte (hubens forside) | — | — |
 | Ressursallokering | 2 | — | — | Bare Jest |
@@ -1758,16 +1799,16 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 | Programadministrasjon | 7 filer, 45: liste, reducer, kommandoer, fjerning av underområder | Flows: utvalg, grupper, kolonner, søk, høyreklikk, fjerne og legge til et underområde igjen (skriver), faste kolonneoverskrifter | Programmet og prosjektene knyttet begge veier | Programmets egen adapter (legge til og fjerne) |
 | Program aggregeringsoversikt | 7, i tillegg til testene for aggregeringsoversikten | — | Søket over programmets prosjekter (`searchAggregatedItems`) | Ingen E2E |
 | Programoversikt | 5, i tillegg til testene for porteføljeoversikten | Smoke: underområdene listes med teller | Programmets prosjekter | — |
-| Prosjekttidslinje (programnivå) | 2, i tillegg til bibliotekets tidslinje | Smoke: siden lastes | — | Innholdet sjekkes ikke i E2E |
+| Prosjekttidslinje (programnivå) | 2, i tillegg til bibliotekets tidslinje | Smoke: siden lastes; programmets egen tidslinjeside (`Tidslinje.aspx`, ProjectWebParts' tidslinje med programmets elementer) tegner tidslinjen | — | Innholdet sjekkes ikke i E2E |
 
 ### Prosjekt (ProjectWebParts)
 
 | Komponent | Jest | E2E | Integrasjon | Ikke dekket / manuelt |
 |---|---|---|---|---|
-| Prosjektinformasjon | 5 filer, 31, og bibliotekets `CustomEditPanel` (39) | Smoke: monteres, «Vis all prosjektinformasjon». Flows: personvelgeren og panelene (lukker uten å lagre), lenken tilbake til huben | Egenskaper tur-retur: datoer i fem tidssoner, tekst, valg, person, termer (skriver); hubraden og synkroniseringen til den, også gjennom ProjectWebParts' adapter (skriver) | Lagring gjøres ikke i E2E |
+| Prosjektinformasjon | 5 filer, 31, og bibliotekets `CustomEditPanel` (41) | Smoke: monteres, «Vis all prosjektinformasjon». Flows: personvelgeren og panelene (lukker uten å lagre), lenken tilbake til huben, datovelgerens ukenummer for januar 2027 (uke 53, så 1) | Egenskaper tur-retur: datoer i fem tidssoner, tekst, valg, person, termer (skriver); hubraden og synkroniseringen til den, også gjennom ProjectWebParts' adapter (skriver) | Lagring gjøres ikke i E2E |
 | Fasevelger | 4 filer, 30: reducer, fasedialogen | Smoke: fasene vises, prøveklikk på hver | Fasene fra termlageret, etikettene og tekstene; `getPhases`; kjøretidskontrakten for termlageret | Å endre fase er ikke automatisert |
-| Prosjektstatus | 17 filer, 97: reducer, seksjoner, verktøylinje, faner, delprosjekter, øyeblikksbildedialogen (fullskjerm, lenker, åpning fra en lenke, eller ny fane når egenskapen er slått av) og øyeblikksbildet (tittel, dato, oppløsning) | Smoke: siden monteres. Flows: kladd opprettet og slettet (skriver), fanene og seksjonene, øyeblikksbildet av en publisert rapport (dialogen med bildet, fullskjerm der nettleseren tillater det, kopiert lenke som åpner det igjen, bildefilen i ny fane) | Kladd i en egen rapportserie, fylt ut, lest med personen og slettet (skriver) | Publisering er manuell, så øyeblikksbildeflyten leser en rapport som alt er publisert |
-| Risikomatrise og Mulighetsmatrise | 4 og 2, og 15 delte: begge webdelene, prosjekt- og programmodus | — (står på ingen malside) | Søket med matrisens datakilde, også gjennom ProjectWebParts' adapter på programmet; datakildene finnes etter oppgradering | Ingen E2E |
+| Prosjektstatus | 17 filer, 97: reducer, seksjoner, verktøylinje, faner, delprosjekter, øyeblikksbildedialogen (fullskjerm, lenker, åpning fra en lenke, eller ny fane når egenskapen er slått av) og øyeblikksbildet (tittel, dato, oppløsning) | Smoke: siden monteres. Flows: kladd opprettet og slettet (skriver), fanene og seksjonene, øyeblikksbildet av en publisert rapport (dialogen med bildet, fullskjerm der nettleseren tillater det, kopiert lenke som åpner det igjen, bildefilen i ny fane), datoene fra en nettleser i Los Angeles (rapportvelgeren, rapportmenyen med klokkeslett og datofeltene i prosjektinformasjonen mot SharePoints egne tekster) | Kladd i en egen rapportserie, fylt ut, lest med personen og slettet (skriver) | Publisering er manuell, så øyeblikksbildeflyten leser en rapport som alt er publisert |
+| Risikomatrise og Mulighetsmatrise | 4 og 2, og 15 delte: begge webdelene, prosjekt- og programmodus | Smoke: matrisen i statusrapportens usikkerhetsseksjon (når rapporten har usikkerheter), og `Usikkerhet.aspx` med begge webdelene (`E2E_PAGE_MATRIX` overstyrer navnet); ingen malside har dem, så siden legges på E2E-prosjektet med `npm run add-matrix-page -- <url>` i `integration/`, og testen hopper over til den finnes | Søket med matrisens datakilde, også gjennom ProjectWebParts' adapter på programmet; datakildene finnes etter oppgradering | — |
 | Prosjekttidslinje (prosjektnivå) | 4 filer, 17 | Smoke: listen får plass i 1280 og 1920 px. Flows: typografi | — | Tidslinjens stolper |
 | Prosjektnyheter | 2 filer, 7 | Indirekte (prosjektets forside) | — | Å opprette en nyhetsside |
 | Dynamisk liste | 6 filer, 33 | Flows: typografi (hoppes over når siden mangler) | — | Skriving og egne handlinger |
@@ -1788,14 +1829,18 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 
 | Del | Jest | Integrasjon |
 |---|---|---|
-| `CustomEditPanel` | 5 filer, 39 | Datoer i fem tidssoner, person og termer |
+| `CustomEditPanel` | 6 filer, 41, også ukenummerene Fluents kalender tegner for januar 2027 | Datoer i fem tidssoner, person og termer |
 | `PortalDataService` | 9 | Kolonner, visninger, konfigurasjon, innstillinger, statusrapporter, programrelasjoner |
 | `ProjectDataService` | 11 | Egenskaper tur-retur, faser |
 | `SPDataAdapterBase` og `EntityPortalService` | 43 | Hubraden og synkroniseringen |
 | `searchAggregatedItems` | 4 | Egenskaper og formater, bla mellom sider, oppdeling, eget område |
 | Termlageret (`taxonomy`) | 73, og kjøretidskontrakten (4) | Fasene og etikettene |
-| `DataSourceService` | Ingen | Matrisenes datakilder slått opp på ID |
+| `DataSourceService` | 5: listene fra strengene, oppslag på ID og tittel med kolonner, refinere og gruppering, tomt og feilet oppslag (bare logget), kategori og nivå | Matrisenes datakilder slått opp på ID |
+| `DataService` (basen for `PortalDataService` og `ProjectDataService`) | 3: konfigurering, feltenes skjemasynlighet (`ShowInEditForm` med flere) | — |
+| Ikonhjelperne (`resolveFluentIcon`, `getFluentIcon`, `getFluentIconWithFallback`, `getIconComponentWithFallback`, `isIconAvailable`) | 17: katalognavn og UI Fabric-aliaser (alle peker på katalogen, `CircleFill` fylt), nøkler fra `Object.prototype`, farge/størrelse/klasse, reserven i UI Fabric-fonten, stabile komponentidentiteter | — |
 | `ListLogger` | 3: feltene, en avvist skriving stopper ikke kalleren | — |
+| `withDefaults` og `getDatePickerLocalization` | 4 og 7: standardverdier som React ga dem; ukeregelen fra `minimalDays` eller CLDR-regionen | — |
+| Datoer i områdets tidssone (`siteTimeZone`, `pageContext`, `formatDate`, `getDateForExcelExport`, `createSpfiInstance`) | 8, 3, 24, 3 og 4: SharePoints egne overgangsregler (Oslo, New York, Tokyo, Sydney, «siste søndag»), sidekonteksten SPFx gir foran `_spPageContextInfo`, dagen og klokkeslettet områdets lister viser for et område i Oslo, Honolulu og Tokyo, `formatDay` for datovelgerens dag; kjøretidskontrakten (2) kjører maskinen gjennom fem tidssoner, siden Jest ikke kan flytte den | `project-properties`: en lagret dato formatert for siden og for Excel i fem tidssoner |
 | `DataGridList`, `PeoplePicker`, `FilterPanel`, `Toolbar`, `ProjectTimeline`, `ExcelExportService` | 20, 8, 11, 10, 22, 24 | — (E2E dekker dem gjennom webdelene) |
 
 ### Integrasjonstestene
@@ -1807,7 +1852,7 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 | `portal-data-service` | 2 | Prosjektkolonnene, og at prosjektet finner huben |
 | `search` | 4 | Matrisens egenskaper og formater, sider, oppdeling, eget område |
 | `term-store` | 3 | Etikettene og reservespråkene, fasetekstene, `getPhases` |
-| `project-properties` | 4 (skriver) | Datoer lagret og vist i fem tidssoner, tekst/valg/person, termer |
+| `project-properties` | 5 (skriver) | Datoer lagret, vist og formatert for siden og Excel i fem tidssoner (områdets sone fra harnessets kontekst), tekst/valg/person, termer |
 | `hub` | 5 (2 skriver) | Hubraden, synkroniseringen, ny kolonne i en visning, kolonnekonfigurasjon og innstillinger, program og prosjekter |
 | `status-reports` | 1 (skriver) | Kladd i en egen rapportserie, utfylt, lest med personen og slettet |
 | `template` | 5 (4 etter full oppgradering) | Installasjonsloggen, fargene for `Status muligheter`, interessentfeltet, matrisenes datakilder, standardvisningen |
@@ -1816,10 +1861,9 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 ### Hull verdt å kjenne til
 
 - **Bare Jest**, uten E2E og integrasjon: Ressursallokering, Idémodul, Prosjektkort, idéutvidelsene, Malpakkekatalog, Oppsett av prosjekt, Oppgradering av prosjekt og Planner-tiltak.
-- **Integrasjon, men ingen E2E:** Risikomatrise, Mulighetsmatrise og Program aggregeringsoversikt.
+- **Integrasjon, men ingen E2E:** Program aggregeringsoversikt. Matrisene har E2E på statussiden bare der rapporten har usikkerheter, og som webdeler på en side testharnesset legger til (`add-matrix-page`), siden ingen malside har dem.
 - **Bare indirekte i E2E:** Siste prosjekter og Prosjektnyheter.
 - **Manuelt:** prosjektoppsett, publisering av statusrapport, idéflyten og å endre fase.
-- **Ingen test:** ikonhjelperne (`getFluentIcon`, `resolveFluentIcon`) og `DataService.ts`. Programmets tidslinjeside (`Tidslinje.aspx`) åpnes ikke av noen E2E-test.
 - **Utenfor komponentene:** `.tasks/check-channel-ids.test.js` (5 tester, `npm run test:tasks`).
 
 
@@ -2222,7 +2266,7 @@ Patcher har ikke fulgt ett fast løp: 1.12.1 ble slått sammen til `main` fra `r
 
 ## ➤ Bygge en ny utgivelse
 
-`Install/Build-Release.ps1` bygger installasjonspakken. Det kjører en full `rush rebuild` med testene, pakker hver løsning som `.sppkg`, bygger PnP-malene og site scripts og legger alt sammen med installasjonsskriptene og PnP.PowerShell i `release/`. Skriptet trenger Node 22 og PowerShell 7 (`pwsh`), og stopper på en annen hovedversjon av Node.
+`Install/Build-Release.ps1` bygger installasjonspakken. Det kjører en full `rush rebuild` med testene, pakker hver løsning som `.sppkg`, bygger PnP-malene og site scripts og legger alt sammen med installasjonsskriptene og PnP.PowerShell i `release/`. Skriptet trenger Node 26 og PowerShell 7 (`pwsh`), og stopper på en annen hovedversjon av Node.
 
 Fra roten:
 
@@ -2344,7 +2388,7 @@ GitHub kjører bare arbeidsflytfilene som ligger rett i `.github/workflows/`. De
 | Arbeidsflytfil        | Beskrivelse                                                                  | Utløser                                                                                  |
 | --------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | `ci-releases.yml`     | Bygg, oppgrader og installer til utviklingsmiljø                             | Push til `releases/1.15` (stier: SPFx, Install, Templates)                               |
-| `ci-channel-test.yml` | Bygg og distribuer testkanalen, og kjør Playwright- og integrasjonstestene mot den | Push til `releases/1.15`, `feat/fluent-v9*` og `feat/dependency-upgrades*` (stier: SPFx, Install, Templates, e2e, integration) |
+| `ci-channel-test.yml` | Bygg og distribuer testkanalen, og kjør Playwright- og integrasjonstestene mot den | Push til `releases/1.15` og `feat/technical-backlog*` (stier: SPFx, Install, Templates, e2e, integration) |
 | `ci-build-debug.yml`  | Bygg testkanalens pakke uten utrulling, for å prøve endringer i bygget       | Push til `releases/1.15` eller en `feat/**`-branch med `[build-debug]` i emnelinjen      |
 | `build-release.yml`   | Bygg utgivelsespakke og test/kurs-kanalpakker                                | Push til `main` (stier: SPFx, Install, Templates)                                        |
 | `generate-sbom.yml`   | Generer SBOM.md som artefakt; committer den bare ved manuell kjøring fra en branch | Tag-push `v*` eller manuell utløsning                                              |

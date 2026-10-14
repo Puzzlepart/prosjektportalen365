@@ -5,9 +5,20 @@ import React, { FC } from 'react'
 import { DEFAULT_MATRIX_WIDTH, DynamicMatrix } from '../DynamicMatrix'
 import { IOpportunityMatrixProps } from './types'
 import { useOpportunityMatrix } from './useOpportunityMatrix'
-import { UserMessage, WebPartTitle, customLightTheme } from 'pp365-shared-library'
+import { UserMessage, WebPartTitle, customLightTheme, withDefaults } from 'pp365-shared-library'
 
-export const OpportunityMatrix: FC<IOpportunityMatrixProps> = (props) => {
+const OPPORTUNITY_MATRIX_DEFAULT_PROPS: Partial<IOpportunityMatrixProps> = {
+  items: [],
+  fullWidth: true,
+  calloutTemplate: `
+  <h3>{Title}</h3>\n
+  <p><strong>${resource.SiteFields_GtRiskStrategy_DisplayName}: </strong>{GtRiskStrategy}</p>\n
+  <p><strong>${resource.SiteFields_GtRiskProximity_DisplayName}: </strong>{GtRiskProximity}</p>\n
+  <p><strong>${resource.SiteFields_GtRiskStatus_DisplayName}: </strong>{GtRiskStatus}</p>`
+}
+
+export const OpportunityMatrix: FC<IOpportunityMatrixProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, OPPORTUNITY_MATRIX_DEFAULT_PROPS)
   const {
     configuration,
     error,
@@ -49,12 +60,3 @@ export const OpportunityMatrix: FC<IOpportunityMatrixProps> = (props) => {
 }
 
 OpportunityMatrix.displayName = 'OpportunityMatrix'
-OpportunityMatrix.defaultProps = {
-  items: [],
-  fullWidth: true,
-  calloutTemplate: `
-  <h3>{Title}</h3>\n
-  <p><strong>${resource.SiteFields_GtRiskStrategy_DisplayName}: </strong>{GtRiskStrategy}</p>\n
-  <p><strong>${resource.SiteFields_GtRiskProximity_DisplayName}: </strong>{GtRiskProximity}</p>\n
-  <p><strong>${resource.SiteFields_GtRiskStatus_DisplayName}: </strong>{GtRiskStatus}</p>`
-}
