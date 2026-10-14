@@ -208,3 +208,26 @@ inside the dialog, so they need no change; CI runs them. Lint clean. Changelog l
 Forbedringer; `testoversikt.md` counts updated. Hand round pending (the user): the whole way
 through «Hent dokumentmal», the buttons in the footer on every screen, the folder screen's place
 kept on the way back, a duplicate name flagged on both copies.
+
+### Slice 4 — Browser smoke for the risk actions (2026-10-14)
+
+`e2e/tests/smoke/risk-action.spec.ts`, read-only on `E2E_PROJECT_URL`. It first asserts the hub's
+`RiskActionPlannerEnabled` is 1 (the customizer renders nothing otherwise), then finds the list
+with `GtRiskAction` (preferring «Usikkerhet»), checks the field is bound to the channel under
+test's `RiskActionPlanner` id (`channels/<E2E_CHANNEL>.json`, as `expectReleaseChannel` does for
+web parts), opens the list's default view, and on the first risk with actions written: the cell
+shows the text, the popover shows the risk's title with «Legg til nytt tiltak» and «Migrer
+tiltakene til Planner» and no «Synkroniser endringer» (no Planner data yet), the panel opens with
+its six labels and «Lagre» disabled and is closed with its «Lukk», and the migration dialog lists
+the lines and offers «Opprett N tiltak i Planner», closed with its «Lukk» text button. Nothing is
+saved. The first run failed on the settings lookup: the template hides «Globale innstillinger»,
+so the helper searches hidden lists for it. Green locally against the test tenant (the test
+channel as deployed, so the old panel: the spec reads only labels and button names, which slices
+1 to 3 kept). `testoversikt.md`: «Planner-tiltak» has the smoke in the E2E column and left the
+«Bare Jest» bullet; writing to Planner stays manual, since nothing can delete a Planner task
+afterwards. No changelog line (tests only).
+
+Tags: the slices' commits sit on `fix/1319-visual-upgrade-leftovers`, where no deploy workflow
+runs; the pull request runs «Build release package (pull request)», and the squash subject decides
+what runs on `releases/1.15`. Slice 2 changed the library, so the squash subject carries
+`[apps-only]`: every package deploys to both hubs, and the new smoke runs with the rest.
