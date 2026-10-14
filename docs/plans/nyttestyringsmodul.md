@@ -321,21 +321,29 @@ Lenker og forutsetninger blir noen tusen rader.
 
 ### 6.2 Flater
 
-| Flate | Hub | Program | Prosjekt | Innhold |
+Menyen har få punkter, og alle er steder navngitt som substantiver. «Felles grunnlag» skiller det
+virksomheten eier fra det prosjektet jobber med.
+
+| Menypunkt | Hub | Program | Prosjekt | Innhold |
 |---|:-:|:-:|:-:|---|
-| **Oversikt** | ✔ | ✔ | ✔ | Forklaring av kjeden med et eksempel fra dataene, nøkkeltall, nytteoppnåelse, forutsetninger og risikoer som må følges opp, og indikatorer med avvik |
-| **Nyttekart** | ✔ | ✔ | ✔ | Grafen med én kolonne per aktivt nivå. Strekene viser evidensstyrke, og merkene på pilene viser forutsetninger og risikoer. Hold over for å se kjeden. Klikk på en pil for å vurdere den. |
-| **Matrise** | ✔ | ✔ | ✔ | Én rad per nyttevirkning: mål, nyttevirkning, effekter, evner, leveranser, forutsetninger og risikoer, indikatorer, svakeste pil og bidragsvurdering. Kan kopieres til Excel. |
-| **Nyttevirkning** | ✔ | ✔ | ✔ | Kjeden fram til nyttevirkningen, forventet bidrag, historikk for bidragsvurderinger, indikatorer etter rolle, forutsetninger og risikoer, og pilene med evidens |
-| **Indikator** | ✔ | ✔ | ✔ | Kurve mot målbane eller terskel, eller bare utvikling. Hva indikatoren måler, og hvilke nyttevirkninger og mål den henger sammen med. |
-| **Registrering** | ✔ | ✔ | ✔ | Én fane per aktivt nivå, pluss Nyttevirkninger, Indikatorer, Forutsetninger og risikoer, og Mål |
-| **Oppfølging** | ✔ | ✔ | ✔ | Målinger som forfaller, bidragsvurderinger som mangler og forutsetninger som ikke er vurdert på seks måneder |
-| **Styringsrapport** | ✔ | ✔ | – | Følger kjeden ovenfra: mål → nyttevirkninger og bidrag → antakelser → risikoer og bivirkninger → hva må justeres |
-| **Katalog** | ✔ (rediger) | les | les | Gjenbrukbare nyttevirkninger og indikatorer. «Ta i bruk» lager en kopi. |
-| **Strategiske mål** | ✔ (rediger) | les | les | Måltre med kontekstindikatorer, nyttevirkningene som bidrar og hvordan de måles |
-| **Tildel** | – | ✔ | – | Prosjektenes leveranser i programmets kjede, og fordeling av tallfestede gevinster i prosent |
-| **Statusseksjon** | – | – | ✔ | Vurderingen og prosjektets indikatorer slik de var på rapportdatoen |
+| **Oversikt** | ✔ | ✔ | ✔ | Forklaring av kjeden med et eksempel fra dataene, nøkkeltall, nytteoppnåelse, forutsetninger og risikoer som må følges opp, og indikatorer med avvik. På prosjektet finnes en lenke til hvordan dette vises i statusrapporten. |
+| **Til oppfølging** (med tall) | ✔ | ✔ | ✔ | Målinger som forfaller, bidragsvurderinger som mangler og forutsetninger som ikke er vurdert på seks måneder |
+| **Nyttekart** | ✔ | ✔ | ✔ | Tre faner med samme kjede. **Kart** er grafen med én kolonne per aktivt nivå, evidens på pilene og forutsetninger og risikoer som merker. **Matrise** har én rad per nyttevirkning og kan kopieres til Excel. **Liste** har én underfane per type, og der registrerer man. |
+| **Styringsrapport** | ✔ | ✔ | – | Mål → nyttevirkninger og bidrag → antakelser → risikoer og bivirkninger → hva må justeres |
+| **Prosjektenes bidrag** | – | ✔ | – | Prosjektenes leveranser i programmets kjede, og fordeling i prosent for tallfestede gevinster |
+| *Felles grunnlag:* **Strategiske mål** | rediger | les | les | Måltre med kontekstindikatorer, nyttevirkningene som bidrar og hvordan de måles |
+| *Felles grunnlag:* **Katalog** | rediger | les | les | Gjenbrukbare nyttevirkninger og indikatorer. «Ta i bruk» lager en kopi. |
 | **Innstillinger** | ✔ | – | – | Kjedemodell, navn på nivåene og toleranse |
+
+Detaljsider som åpnes fra listene:
+
+- **Nyttevirkning:** kjeden fram til nyttevirkningen, forventet bidrag, historikk for bidragsvurderinger,
+  indikatorer etter rolle, forutsetninger og risikoer, og pilene med evidens.
+- **Indikator:** kurve mot målbane eller terskel, eller bare utvikling, og hva indikatoren henger
+  sammen med.
+
+**Statusseksjonen** er ikke en del av appens meny. Den ligger på Prosjektstatus-siden og viser vurderingen
+og prosjektets indikatorer slik de var på rapportdatoen.
 
 ### 6.3 Viktige designvalg
 

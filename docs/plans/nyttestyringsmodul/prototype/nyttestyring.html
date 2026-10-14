@@ -173,6 +173,13 @@ a { color: var(--brand-text); }
 .nav button[aria-current="page"]::before { content: ""; position: absolute; left: 0; top: 8px; bottom: 8px; width: 4px; border-radius: 2px; background: var(--brand); }
 .nav svg { width: 20px; height: 20px; flex: none; }
 .nav .nav-sep { height: 1px; background: var(--stroke-2); margin: 8px 12px; }
+.nav-hdr { font-size: 12px; font-weight: 600; color: var(--fg-3); padding: 14px 12px 4px; border-top: 1px solid var(--stroke-2); margin: 8px 0 2px; }
+.nav .badge { margin-left: auto; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: var(--crit); color: var(--surface); font-size: 11px; font-weight: 600; display: grid; place-items: center; font-variant-numeric: tabular-nums; }
+.tabs .ti { margin-right: 6px; }
+.tabs.sub { border-bottom: 0; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.tabs.sub button { border: 1px solid var(--stroke-2); border-radius: 16px; padding: 4px 12px; font-size: 13px; background: var(--surface); }
+.tabs.sub button[aria-selected="true"] { background: var(--surface-3); border-color: var(--fg-3); }
+.tabs.sub button[aria-selected="true"]::after { display: none; }
 .nav-foot { margin-top: auto; padding: 12px; font-size: 12px; color: var(--fg-3); }
 main { padding: 20px 24px 48px; min-width: 0; }
 
@@ -405,6 +412,7 @@ textarea.input { min-height: 72px; resize: vertical; }
 .kinds svg { width: 16px; height: 16px; color: var(--fg-2); }
 .cbox { border-radius: var(--r-l); background: var(--cb); padding: 12px; display: flex; flex-direction: column; gap: 6px; min-width: 0; border: 1px solid transparent; }
 .cbox .def { font-size: 13px; color: var(--fg-2); }
+.cbox .tt { white-space: normal; height: auto; min-height: 20px; padding: 2px 7px 2px 5px; align-self: flex-start; }
 .cbox .ex { font-size: 13px; color: var(--fg); background: var(--surface); border-radius: var(--r-m); padding: 6px 8px; }
 .cbox .ex b { font-weight: 600; }
 .cbox .ex .muted { font-size: 12px; }
@@ -510,7 +518,7 @@ textarea.input { min-height: 72px; resize: vertical; }
   .nav { flex-direction: row; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--stroke-2); padding: 6px 8px; }
   .nav button { width: auto; white-space: nowrap; }
   .nav button[aria-current="page"]::before { left: 12px; right: 12px; top: auto; bottom: 0; width: auto; height: 3px; }
-  .nav-title, .nav-sep, .nav-foot { display: none; }
+  .nav-title, .nav-sep, .nav-foot, .nav-hdr { display: none; }
   main { padding: 16px 16px 40px; }
   .sp-body { grid-template-columns: minmax(0, 1fr); }
   .appbar, .suite .search, .suite .tools, .cmdbar .hide-sm, .site-meta .hide-sm, .ppfooter .hide-sm { display: none; }
@@ -1071,21 +1079,21 @@ const dot = (s) => `<i class="dot ${s}"></i>`;
 /* ------------------------------------------------------------------
    Navigation and frame
 ------------------------------------------------------------------ */
+const VIEW_ALIAS = { matrise: ['nyttekart', 'matrise'], registrering: ['nyttekart', 'liste'], kart: ['nyttekart', 'kart'] };
+const CHAIN_TABS = [['kart', 'Kart', 'map'], ['matrise', 'Matrise', 'grid'], ['liste', 'Liste', 'edit']];
+/** Number of things waiting for the user: overdue measurements and assessments older than six months. */
+function followUpCount() {
+  const overdue = scoped.indicators().filter((i) => nextDue(i) < TODAY).length;
+  const staleF = scoped.factors().filter((f) => monthsBetween(f.lastReviewed, TODAY) > 6).length;
+  const staleB = scoped.benefits().filter((b) => b.status === 'Under realisering' && (!latestContribution(b.id) || monthsBetween(latestContribution(b.id).date, TODAY) > 6)).length;
+  return overdue + staleF + staleB;
+}
 function navItems() {
-  const items = [
-    ['oversikt', 'Oversikt', 'home'],
-    ['nyttekart', 'Nyttekart', 'map'],
-    ['matrise', 'Matrise', 'grid'],
-    ['registrering', 'Registrering', 'edit'],
-    ['oppfolging', 'Oppfølging', 'check'],
-    ['sep'],
-    ['katalog', 'Katalog', 'library'],
-    ['mal', 'Strategiske mål', 'target']
-  ];
-  if (state.level !== 'project') items.push(['sep'], ['rapport', 'Styringsrapport', 'flag']);
-  if (state.level === 'program') items.push(['tildel', 'Tildel til prosjekter', 'share']);
-  if (state.level === 'project') items.push(['sep'], ['status', 'I statusrapporten', 'report']);
-  if (state.level === 'hub') items.push(['innstillinger', 'Innstillinger', 'gear']);
+  const items = [['oversikt', 'Oversikt', 'home'], ['oppfolging', 'Til oppfølging', 'check'], ['nyttekart', 'Nyttekart', 'map']];
+  if (state.level !== 'project') items.push(['rapport', 'Styringsrapport', 'flag']);
+  if (state.level === 'program') items.push(['tildel', 'Prosjektenes bidrag', 'share']);
+  items.push(['hdr', 'Felles grunnlag'], ['mal', 'Strategiske mål', 'target'], ['katalog', 'Katalog', 'library']);
+  if (state.level === 'hub') items.push(['sep'], ['innstillinger', 'Innstillinger', 'gear']);
   return items;
 }
 function renderFrame() {
@@ -1101,9 +1109,10 @@ function renderFrame() {
     <div class="site-logo" style="background:${LOGO[s.id]}" aria-hidden="true">${s.kind === 'hub' ? 'P' : esc(s.initials)}</div>
     <div class="site-title">${esc(title)}</div>
     <div class="site-meta"><span class="hide-sm">${s.kind === 'hub' ? 'Offentlig gruppe' : 'Privat gruppe'}</span>${s.kind === 'hub' ? `<span class="hide-sm">${plus}Opprett område</span>` : ''}<span class="hide-sm">${star}${s.kind === 'hub' ? 'Legg til i favoritter' : 'Følger'}</span><span>${person}${members} medlemmer</span></div>`;
-  const cur = { indikator: 'oversikt', nytte: 'matrise' }[state.view] ? null : state.view;
-  document.getElementById('nav').innerHTML = `<div class="nav-title">Nyttestyring</div>` + navItems().map((it) => it[0] === 'sep' ? '<div class="nav-sep"></div>' :
-    `<button type="button" data-nav="${it[0]}" ${cur === it[0] ? 'aria-current="page"' : ''}>${icon(it[2])}<span>${it[1]}</span></button>`).join('') +
+  const cur = { nytte: 'nyttekart', status: 'oversikt', indikator: null }[state.view] !== undefined ? { nytte: 'nyttekart', status: 'oversikt', indikator: null }[state.view] : state.view;
+  const due = followUpCount();
+  document.getElementById('nav').innerHTML = `<div class="nav-title">Nyttestyring</div>` + navItems().map((it) => it[0] === 'sep' ? '<div class="nav-sep"></div>' : it[0] === 'hdr' ? `<div class="nav-hdr">${esc(it[1])}</div>` :
+    `<button type="button" data-nav="${it[0]}" ${cur === it[0] ? 'aria-current="page"' : ''}>${icon(it[2])}<span>${it[1]}</span>${it[0] === 'oppfolging' && due ? `<span class="badge" aria-label="${due} venter">${due}</span>` : ''}</button>`).join('') +
     `<div class="nav-foot">Alle data lagres i listene på huben. Kjedemodell: <b>${esc(PRESETS[db.settings.preset] ? PRESETS[db.settings.preset].label.split(' (')[0] : 'Tilpasset')}</b>.</div>`;
   document.querySelectorAll('.demo .seg button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.level === state.level)));
   const sel = document.getElementById('site-select');
@@ -1121,13 +1130,14 @@ function readHash() {
   if (view) state.view = view;
   if (rest.length) state.param = rest.join('-');
 }
-function go(view, param = null) { state.view = view; state.param = param; render(); window.scrollTo({ top: 0 }); }
+function go(view, param = null) { if (VIEW_ALIAS[view]) [view, param] = VIEW_ALIAS[view]; state.view = view; state.param = param; render(); window.scrollTo({ top: 0 }); }
 function render() {
-  if (!navItems().some((n) => n[0] === state.view) && !['indikator', 'nytte'].includes(state.view)) state.view = 'oversikt';
-  if (!ENT[state.regTab] || (LEVEL_ORDER.includes(state.regTab) && !lv(state.regTab).active)) state.regTab = 'benefits';
+  if (VIEW_ALIAS[state.view]) [state.view, state.param] = VIEW_ALIAS[state.view];
+  if (!navItems().some((n) => n[0] === state.view) && !['indikator', 'nytte'].includes(state.view) && !(state.view === 'status' && state.level === 'project')) state.view = 'oversikt';
+  if (!regTabs().includes(state.regTab)) state.regTab = 'benefits';
   renderFrame();
   const main = document.getElementById('main');
-  const views = { oversikt: viewOverview, nyttekart: viewMap, matrise: viewMatrix, registrering: viewRegister, oppfolging: viewFollowUp, katalog: viewCatalog, mal: viewGoals, tildel: viewAssign, status: viewStatus, indikator: viewIndicator, nytte: viewBenefit, rapport: viewReport, innstillinger: viewSettings };
+  const views = { oversikt: viewOverview, nyttekart: viewChain, oppfolging: viewFollowUp, katalog: viewCatalog, mal: viewGoals, tildel: viewAssign, status: viewStatus, indikator: viewIndicator, nytte: viewBenefit, rapport: viewReport, innstillinger: viewSettings };
   main.innerHTML = (state.readOnly ? `<div class="msg warn">${icon('info')}<div><b>Du har lesetilgang.</b> Nyttedata lagres i Prosjektportalen (hub). For å registrere trenger du skrivetilgang der. Kontakt porteføljekontoret.</div></div>` : '') + views[state.view]();
   hydrate(main);
   setHash();
@@ -1265,11 +1275,11 @@ function viewOverview() {
   const attention = inds.filter((i) => ['warn', 'crit'].includes(indicatorState(i).status)).sort((a, b) => SEV[indicatorState(b).status] - SEV[indicatorState(a).status]);
   const facAll = facs.filter((f) => ['warn', 'crit'].includes(factorStatus(f))).sort((a, b) => SEV[factorStatus(b)] - SEV[factorStatus(a)]);
   const facList = facAll.slice(0, 6).map((f) => `<div class="asm-item">${factorPill(f)}<div><div class="cell-title">${icon(FACTOR_KINDS[f.kind].icon, 'ti asm-c')}${esc(f.kind)}: ${esc(f.title)}</div><div class="cell-sub">Pilen ${nodeRef(f.from)} → ${nodeRef(f.to)}</div><div class="cell-sub">Vurdert ${fmtDate(f.lastReviewed)}${monthsBetween(f.lastReviewed, TODAY) > 6 ? ' · <b>bør vurderes på nytt</b>' : ''}</div></div></div>`).join('');
-  return pageHead('Nytteoversikt', esc(scopeLabel()) + ` · per ${fmtDate(TODAY)}`) + explainer() + kpis + `
+  return pageHead('Oversikt', esc(scopeLabel()) + ` · per ${fmtDate(TODAY)}`, state.level === 'project' ? `<button type="button" class="btn" data-nav="status">${icon('report')}Slik vises dette i statusrapporten</button>` : '') + explainer() + kpis + `
     <div class="two">
       <section class="card"><div class="card-head"><h2>Nytteoppnåelse ${perSite ? 'per prosjekt' : 'per nyttevirkning'}</h2><span class="muted">Snitt av gevinstindikatorene, siste måling</span>
         <div class="legend right"><span><i class="lg-fill"></i>Oppnådd</span><span><i class="lg-plan"></i>Planlagt nå</span></div></div>${bars}</section>
-      <section class="card"><div class="card-head"><h2>${ci('asm')}Forutsetninger og risikoer som må følges opp</h2></div>${facList || '<div class="empty">Ingen forutsetninger eller risikoer krever oppfølging.</div>'}${facAll.length > 6 ? `<button type="button" class="btn subtle" data-nav="${state.level === 'project' ? 'registrering' : 'rapport'}">Se alle ${facAll.length} ${state.level === 'project' ? 'under Registrering' : 'i styringsrapporten'}</button>` : ''}</section>
+      <section class="card"><div class="card-head"><h2>${ci('asm')}Forutsetninger og risikoer som må følges opp</h2></div>${facList || '<div class="empty">Ingen forutsetninger eller risikoer krever oppfølging.</div>'}${facAll.length > 6 ? `<button type="button" class="btn subtle" data-nav="${state.level === 'project' ? 'registrering' : 'rapport'}">Se alle ${facAll.length} ${state.level === 'project' ? 'i Nyttekart › Liste' : 'i styringsrapporten'}</button>` : ''}</section>
     </div>
     <section class="card" style="margin-top:16px"><div class="card-head"><h2>Krever oppmerksomhet</h2><span class="muted">Måleindikatorer med status «Følg med» eller «Avvik», uansett hvor i kjeden de måler</span></div>${indicatorRowsTable(attention, { site: state.level !== 'project', role: true })}</section>`;
 }
@@ -1284,7 +1294,7 @@ function viewBenefit() {
   const lc = cons[0]; const editable = canWrite() && (state.level === 'hub' || inScope(b));
   const contribs = db.benefits.filter((x) => x.contributesTo === b.id);
   const groups = Object.keys(FACTOR_KINDS).map((k) => [k, ch.factors.filter((f) => f.kind === k)]).filter(([, l]) => l.length);
-  return `<div class="crumb"><button type="button" data-nav="matrise">Matrise</button><span>›</span><span>${esc(SITES[b.site].title)}</span></div>` +
+  return `<div class="crumb"><button type="button" data-nav="matrise">Nyttekart</button><span>›</span><span>${esc(SITES[b.site].title)}</span></div>` +
     pageHead(b.title, `Eies av ${esc(SITES[b.site].title)} · nytteeier ${esc(b.owner || '–')}${b.unit ? ' · ' + esc(b.unit) : ''} · ${esc(b.status)}${b.realization ? ' · realiseres ' + fmtMonth(b.realization + '-01') : ''}`,
       `${editable ? `<button type="button" class="btn primary write" data-contrib="${b.id}">${icon('plus')}Ny bidragsvurdering</button>` : ''}<button type="button" class="btn write" data-edit="benefits:${b.id}">Rediger</button>`, tt('ben')) + `
     <section class="card"><div class="card-head"><h2>Kjeden</h2><span class="muted">Alt som fører til denne nyttevirkningen, og målene den bidrar til</span>
@@ -1428,7 +1438,7 @@ function viewFollowUp() {
   const staleF = scoped.factors().filter((f) => monthsBetween(f.lastReviewed, TODAY) > 6);
   const staleB = scoped.benefits().filter((b) => b.status === 'Under realisering' && (!latestContribution(b.id) || monthsBetween(latestContribution(b.id).date, TODAY) > 6));
   const vRow = (title, sub, btn) => `<div class="work" style="grid-template-columns:minmax(0,1fr) auto"><div style="min-width:0"><div class="cell-title">${title}</div><div class="cell-sub">${sub}</div></div><div>${btn}</div></div>`;
-  return pageHead('Oppfølging', 'Målinger og vurderinger som skal gjøres. ' + esc(scopeLabel()) + '.', '', tt('meas', 'Registrere målinger og vurderinger')) +
+  return pageHead('Til oppfølging', 'Målinger og vurderinger som venter. ' + esc(scopeLabel()) + '.', '', tt('meas', 'Registrere målinger og vurderinger')) +
     `<section class="card"><div class="card-head"><h2>${ci('meas')}Målinger</h2></div>${groups.map(([t, list], gi) => `<div class="group-title">${esc(t)} <span class="chip">${list.length}</span></div>${list.map((x) => row(x, gi === 0)).join('') || '<div class="muted small">Ingen.</div>'}`).join('')}</section>
     <section class="card" style="margin-top:16px"><div class="card-head"><h2>Vurderinger</h2><span class="muted">Hver sjette måned</span></div>
       <div class="group-title">${ci('ben')}Bidragsvurdering mangler eller er eldre enn 6 mnd. <span class="chip">${staleB.length}</span></div>
@@ -1451,7 +1461,7 @@ const ENT = {
   factors: { label: 'Forutsetninger og risikoer', one: 'forutsetning eller risiko', db: 'factors', list: () => scoped.factors() }
 };
 const ENT_CONCEPT = { goals: 'goal', lev: 'lev', chg: 'chg', eff: 'eff', benefits: 'ben', indicators: 'ind', factors: 'asm' };
-const regTabs = () => ['goals', ...activeLevels(), 'benefits', 'indicators', 'factors'];
+const regTabs = () => [...activeLevels(), 'benefits', 'indicators', 'factors'];
 const DEF_EXAMPLE = {
   goals: 'Eksempel: «Trygge og selvstendige innbyggere i eget hjem».',
   lev: 'Eksempel: «Digital hjemmeoppfølging i drift». Kobles til det den fører til.',
@@ -1474,18 +1484,18 @@ function regColumns(tab) {
   };
   return C[tab];
 }
-function viewRegister() {
+function listTab() {
   const tab = state.regTab; const cols = regColumns(tab); const list = ENT[tab].list();
   const canAdd = canWrite() && (tab !== 'goals' || state.level === 'hub');
-  const tabs = `<div class="tabs" role="tablist">${regTabs().map((k) => `<button type="button" role="tab" data-regtab="${k}" aria-selected="${k === tab}">${ci(ENT_CONCEPT[k])}${esc(ENT[k].label)}<span class="count">${ENT[k].list().length}</span></button>`).join('')}</div>`;
+  const tabs = `<div class="tabs sub" role="tablist" aria-label="Type">${regTabs().map((k) => `<button type="button" role="tab" data-regtab="${k}" aria-selected="${k === tab}">${ci(ENT_CONCEPT[k])}${esc(ENT[k].label)}<span class="count">${ENT[k].list().length}</span></button>`).join('')}</div>`;
   const k = ENT_CONCEPT[tab];
   const defline = `<div class="defline ${k}-c">${tt(k)}<span>${esc(CONCEPT[k].def)} <span class="rel">${esc(DEF_EXAMPLE[tab])}</span></span></div>`;
   const note = tab === 'goals' && state.level !== 'hub' ? `<div class="msg info">${icon('info')}<div>Strategiske mål eies av virksomheten og redigeres på huben. Her kan du se dem og koble nyttevirkninger til dem.</div></div>` : '';
-  return pageHead('Registrering', 'Registrer og vedlikehold alle ledd i kjeden. ' + esc(scopeLabel()) + '.',
-    `<button type="button" class="btn" data-copy-csv="${tab}">${icon('copy')}Kopier som CSV</button>${canAdd ? `<button type="button" class="btn primary write" data-new="${tab}">${icon('plus')}Ny ${esc(ENT[tab].one)}</button>` : ''}`) +
-    tabs + defline + note + `<section class="card"><div class="table-wrap"><table><thead><tr>${cols.map((c) => `<th>${esc(c[0])}</th>`).join('')}</tr></thead><tbody>
+  return { lead: 'Alle ledd i kjeden som lister, én type om gangen. Klikk på en rad for å redigere.',
+    actions: `<button type="button" class="btn" data-copy-csv="${tab}">${icon('copy')}Kopier som CSV</button>${canAdd ? `<button type="button" class="btn primary write" data-new="${tab}">${icon('plus')}Ny ${esc(ENT[tab].one)}</button>` : ''}`,
+    html: tabs + defline + note + `<section class="card"><div class="table-wrap"><table><thead><tr>${cols.map((c) => `<th>${esc(c[0])}</th>`).join('')}</tr></thead><tbody>
     ${list.map((x) => `<tr class="click" data-edit="${tab}:${x.id}">${cols.map((c) => `<td>${c[1](x)}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${cols.length}" class="empty">Ingen ${esc(ENT[tab].label.toLowerCase())} i dette utvalget.</td></tr>`}
-    </tbody></table></div></section>`;
+    </tbody></table></div></section>` };
 }
 
 /* ------------------------------------------------------------------
@@ -1496,7 +1506,7 @@ function matrixRows() {
   return scoped.benefits().map((b) => ({ b, ch: chainOf(b.id) }))
     .sort((x, y) => Math.min(...goalsOf(x.b.id).map((g) => order.indexOf(g)), 99) - Math.min(...goalsOf(y.b.id).map((g) => order.indexOf(g)), 99));
 }
-function viewMatrix() {
+function matrixTab() {
   const levels = [...activeLevels()].reverse();
   const rows = matrixRows();
   const head = ['Strategisk mål', 'Nyttevirkning', ...levels.map((k) => lv(k).plural), 'Forutsetninger og risikoer', 'Måleindikatorer', 'Svakeste pil', 'Bidragsvurdering'];
@@ -1513,10 +1523,10 @@ function viewMatrix() {
       <td>${lc ? `${evid(lc.grade)}<div class="cell-sub">${fmtDate(lc.date)}</div>` : evid('Ikke vurdert')}</td>
     </tr>`;
   }).join('');
-  return pageHead('Matrise', 'Én rad per nyttevirkning. Les fra venstre: målet, nyttevirkningen som bidrar, og leddene som fører dit. Til høyre står det som skal holde kjeden sammen, og hvordan den måles og vurderes.',
-    `<button type="button" class="btn" data-copy-csv="matrix">${icon('copy')}Kopier som CSV</button>`) +
-    `<section class="card"><div class="legend" style="margin-bottom:10px"><span>Forutsetninger: A antakelse · R risiko · U utilsiktet virkning · P påvirkningsfaktor</span><span>Indikatorer: forbokstav = rolle (G gevinst, E effekt, L leveranse, A antakelse, B balanserende …)</span><span>Farge = status</span></div>
-    <div class="table-wrap"><table class="matrix"><thead><tr>${head.map((h) => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${body || `<tr><td colspan="${head.length}" class="empty">Ingen nyttevirkninger i dette utvalget.</td></tr>`}</tbody></table></div></section>`;
+  return { lead: 'Én rad per nyttevirkning. Les fra venstre: målet, nyttevirkningen som bidrar, og leddene som fører dit. Til høyre står det som skal holde kjeden sammen, og hvordan den måles og vurderes.',
+    actions: `<button type="button" class="btn" data-copy-csv="matrix">${icon('copy')}Kopier som CSV</button>`,
+    html: `<section class="card"><div class="legend" style="margin-bottom:10px"><span>Forutsetninger: A antakelse · R risiko · U utilsiktet virkning · P påvirkningsfaktor</span><span>Indikatorer: forbokstav = rolle (G gevinst, E effekt, L leveranse, A antakelse, B balanserende …)</span><span>Farge = status</span></div>
+    <div class="table-wrap"><table class="matrix"><thead><tr>${head.map((h) => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${body || `<tr><td colspan="${head.length}" class="empty">Ingen nyttevirkninger i dette utvalget.</td></tr>`}</tbody></table></div></section>` };
 }
 
 /* ------------------------------------------------------------------
@@ -1597,10 +1607,17 @@ function effectiveEdges(ids) {
   });
   return [...edges.values()].map((e) => ({ ...e, evidence: weakestEvidence(e.links), factors: db.factors.filter((f) => e.links.some((l) => l.from === f.from && l.to === f.to)) }));
 }
-function viewMap() {
-  return pageHead('Nyttekart', `Kjeden fra ${activeLevels().map((k) => lv(k).plural.toLowerCase()).join(', ')} via nyttevirkninger til virksomhetens mål. Pilene viser evidensstyrke. Bokstavene på pilene er forutsetninger og risikoer. Hold over et element for å se kjeden, og klikk på en pil for å vurdere den.`) +
-    `<section class="card"><div class="legend" style="margin-bottom:12px">${[3, 2, 1, 0].map((n) => `<span><i class="lg-ev e${n}"></i>${EVIDENCE.find((e) => EV_N[e] === n)}</span>`).join('')}<span>·</span>${Object.entries(FACTOR_KINDS).map(([k, d]) => `<span><b>${d.short}</b> ${esc(k.toLowerCase())}</span>`).join('')}<span>· farge = status</span></div>
-    <div class="map-wrap"><div class="map-cols" data-map-head></div><div class="chart map-svg" data-chart="map" style="min-width:760px"></div></div></section>`;
+function mapTab() {
+  return { lead: `Kjeden fra ${activeLevels().map((k) => lv(k).plural.toLowerCase()).join(', ')} via nyttevirkninger til virksomhetens mål. Pilene viser evidensstyrke, og bokstavene på pilene er forutsetninger og risikoer. Hold over et element for å se kjeden, og klikk på en pil for å vurdere den.`, actions: '',
+    html: `<section class="card"><div class="legend" style="margin-bottom:12px">${[3, 2, 1, 0].map((n) => `<span><i class="lg-ev e${n}"></i>${EVIDENCE.find((e) => EV_N[e] === n)}</span>`).join('')}<span>·</span>${Object.entries(FACTOR_KINDS).map(([k, d]) => `<span><b>${d.short}</b> ${esc(k.toLowerCase())}</span>`).join('')}<span>· farge = status</span></div>
+    <div class="map-wrap"><div class="map-cols" data-map-head></div><div class="chart map-svg" data-chart="map" style="min-width:760px"></div></div></section>` };
+}
+/** Nyttekart: one page, three views of the same chain. */
+function viewChain() {
+  const tab = CHAIN_TABS.some((t) => t[0] === state.param) ? state.param : 'kart';
+  const t = tab === 'kart' ? mapTab() : tab === 'matrise' ? matrixTab() : listTab();
+  const tabs = `<div class="tabs" role="tablist" aria-label="Visning">${CHAIN_TABS.map(([k, label, ic]) => `<button type="button" role="tab" data-chaintab="${k}" aria-selected="${k === tab}">${icon(ic, 'ti')}${label}</button>`).join('')}</div>`;
+  return pageHead('Nyttekart', esc(scopeLabel()) + '. ' + t.lead, t.actions) + tabs + t.html;
 }
 function drawMap(el) {
   const focus = el.dataset.focus || null;
@@ -1706,7 +1723,7 @@ function viewAssign() {
   const sum = contrib.reduce((a, x) => a + (x.share || 0), 0);
   const bi = b ? db.indicators.find((i) => i.benefit === b.id && i.mtype === 'path') : null;
   const childLev = b ? db.elements.filter((e) => prog.children.includes(e.site) && closure(e.id, 'down').includes(b.id)) : [];
-  return pageHead('Tildel til prosjekter', `Prosjektene bidrar til programmets nyttevirkninger på to måter: med leveranser som inngår i programmets kjede, eller med en andel av en tallfestet gevinst.`) +
+  return pageHead('Prosjektenes bidrag', `Prosjektene bidrar til programmets nyttevirkninger på to måter: med leveranser som inngår i programmets kjede, eller med en andel av en tallfestet gevinst.`) +
     `<div class="assign"><section class="card"><div class="card-head"><h2>Programmets nyttevirkninger</h2></div>
       ${own.map((x) => `<button type="button" class="pick" data-assign-pick="${x.id}" aria-pressed="${x.id === state.assignPick}"><b>${esc(x.title)}</b><div class="cell-sub">${db.benefits.filter((c) => c.contributesTo === x.id).length} tallfestede bidrag · nytteeier ${esc(x.owner)}</div></button>`).join('') || '<div class="empty">Programmet eier ingen nyttevirkninger ennå.</div>'}
     </section>
@@ -1726,7 +1743,7 @@ function viewStatus() {
   const p = SITES[state.site]; const a = db.assessments[p.id] || { level: 'ok', text: '' };
   const inds = db.indicators.filter((i) => i.site === p.id);
   const newer = db.measurements.filter((m) => m.date > SNAPSHOT && inds.some((i) => i.id === m.indicator)).length;
-  return pageHead('I statusrapporten', 'Slik vises nyttestyringen som seksjon i prosjektstatus. Seksjonen erstatter dagens «Nytteoppnåelse», som bare viste vurderingen.') +
+  return `<div class="crumb"><button type="button" data-nav="oversikt">Oversikt</button><span>›</span><span>Statusrapporten</span></div>` + pageHead('Slik vises dette i statusrapporten', 'Nyttestyringen som seksjon på Prosjektstatus-siden. Seksjonen erstatter dagens «Nytteoppnåelse», som bare viste vurderingen.') +
     `<section class="card"><div class="sr-head"><h2 style="font-size:18px">Statusrapport ${fmtMonth(SNAPSHOT)}</h2><span class="chip">Publisert ${fmtDate(SNAPSHOT)}</span><span class="muted small">${esc(p.title)} · prosjektleder ${esc(p.manager)}</span></div>
     <div class="sr-tabs">${['Overordnet', 'Tid', 'Kostnad', 'Nyttevirkninger', 'Kvalitet', 'Omfang', 'Bærekraft', 'Risiko'].map((t) => `<span class="${t === 'Nyttevirkninger' ? 'on' : ''}">${t}</span>`).join('')}</div>
     <div class="sr-assess"><div class="sr-dot ${a.level}">${icon(a.level)}</div><div><div class="cell-title">Nytteoppnåelse: ${ASSESS[a.level]}</div><div>${esc(a.text)}</div></div></div>
@@ -2032,14 +2049,15 @@ function hydrate(root) {
    Events
 ------------------------------------------------------------------ */
 document.addEventListener('click', (e) => {
-  const t = e.target.closest('[data-nav],[data-level],[data-progmode],[data-regtab],[data-new],[data-edit],[data-measure],[data-open-ind],[data-open-ben],[data-goto-site],[data-adopt],[data-assign],[data-assign-pick],[data-copy-csv],[data-close],[data-link],[data-contrib],[data-preset]');
+  const t = e.target.closest('[data-nav],[data-level],[data-progmode],[data-regtab],[data-new],[data-edit],[data-measure],[data-open-ind],[data-open-ben],[data-goto-site],[data-adopt],[data-assign],[data-assign-pick],[data-copy-csv],[data-close],[data-link],[data-contrib],[data-preset],[data-chaintab]');
   if (!t) return;
   const d = t.dataset;
   if (d.close !== undefined) return closeDrawer();
   if (d.nav) { closeDrawer(); return go(d.nav); }
   if (d.level) { state.level = d.level; state.site = d.level === 'hub' ? 'hub' : d.level === 'program' ? 'pg2' : 'p2'; state.param = null; if (['indikator', 'nytte'].includes(state.view)) state.view = 'oversikt'; return render(); }
   if (d.progmode) { state.progMode = d.progmode; return render(); }
-  if (d.regtab) { state.regTab = d.regtab; return render(); }
+  if (d.regtab) { state.regTab = d.regtab; state.view = 'nyttekart'; state.param = 'liste'; return render(); }
+  if (d.chaintab) { state.view = 'nyttekart'; state.param = d.chaintab; return render(); }
   if (d.new) { if (d.new === 'catalog') return openForm('benefits', null, { catalog: true, site: 'hub' }); return openForm(d.new, null); }
   if (d.measure) { e.stopPropagation(); return openMeasure(d.measure); }
   if (d.openInd) { e.stopPropagation(); closeDrawer(); return go('indikator', d.openInd); }

@@ -42,14 +42,23 @@ runder etter tilbakemelding.
   med en nedtrekksliste for hvilket program eller prosjekt. Den simulerer hvor webdelen står.
 - **Statisk SharePoint- og PP-ramme:** suitebar, appmeny, hubnavigasjon, områdeoverskrift,
   kommandolinje og PP-footeren. Fiktiv virksomhet, ingen ekte logoer.
-- **Appens navigasjonsskuff** (som IdeaModule):
-  - Oversikt, Nyttekart, Matrise, Registrering og Oppfølging (alle nivå)
-  - Katalog og Strategiske mål (alle nivå)
-  - Styringsrapport (hub og program)
-  - Tildel til prosjekter (program)
-  - I statusrapporten (prosjekt)
-  - Innstillinger (hub)
-- Nyttevirkning og Indikator er detaljsider som åpnes fra listene.
+- **Appens navigasjonsskuff** (som IdeaModule). Alle punktene er steder, navngitt som substantiver:
+
+  | Hub | Program | Prosjekt |
+  |---|---|---|
+  | Oversikt | Oversikt | Oversikt |
+  | Til oppfølging (tall) | Til oppfølging (tall) | Til oppfølging (tall) |
+  | Nyttekart | Nyttekart | Nyttekart |
+  | Styringsrapport | Styringsrapport | |
+  | | Prosjektenes bidrag | |
+  | *Felles grunnlag:* Strategiske mål, Katalog | *Felles grunnlag:* Strategiske mål, Katalog | *Felles grunnlag:* Strategiske mål, Katalog |
+  | Innstillinger | | |
+
+- **Nyttekart** samler tre visninger av samme kjede i faner: **Kart · Matrise · Liste**. Liste har én
+  underfane per type, og det er her man registrerer.
+- **Til oppfølging** viser et tall for det som er forfalt.
+- Nyttevirkning og Indikator er detaljsider. Statusseksjonen ligger på Prosjektstatus-siden i produktet.
+  I prototypen åpnes den fra prosjektets oversikt («Slik vises dette i statusrapporten»).
 
 ## 4. Skjermbilder
 
@@ -58,15 +67,15 @@ Prioritet: **M** må med, **B** bør med, **K** kan med.
 | # | Skjerm | Innhold og interaksjon |
 |---|---|---|
 | 1 | **Oversikt** | Forklaringen «Slik henger det sammen» med de aktive leddene og et eksempel fra dataene. Nøkkeltall. Nytteoppnåelse per prosjekt eller nyttevirkning. Forutsetninger og risikoer som må følges opp. Indikatorer med «Følg med» eller «Avvik», med rolle. |
-| 2 | **Nyttekart** | Én kolonne per aktivt nivå. Strekene viser evidensstyrke: tykk for sterk, tynn for moderat, stiplet for svak og prikket for ikke vurdert. Bokstavmerker (A, R, U, P) for forutsetninger og risikoer, farget etter status. Hold over for å se kjeden. Klikk på en pil for å vurdere den. |
-| 3 | **Matrise** | Én rad per nyttevirkning: mål, nyttevirkning med eier, effekter, evner, leveranser, forutsetninger og risikoer, indikatorer, svakeste pil og siste bidragsvurdering. Kopier som CSV. |
+| 2 | **Nyttekart › Kart** | Én kolonne per aktivt nivå. Strekene viser evidensstyrke: tykk for sterk, tynn for moderat, stiplet for svak og prikket for ikke vurdert. Bokstavmerker (A, R, U, P) for forutsetninger og risikoer, farget etter status. Hold over for å se kjeden. Klikk på en pil for å vurdere den. |
+| 3 | **Nyttekart › Matrise** | Én rad per nyttevirkning: mål, nyttevirkning med eier, effekter, evner, leveranser, forutsetninger og risikoer, indikatorer, svakeste pil og siste bidragsvurdering. Kopier som CSV. |
 | 4 | **Nyttevirkning** | Fokuskart for kjeden, forventet bidrag, historikk for bidragsvurderinger med beslutninger, «Ny bidragsvurdering», indikatorer etter rolle, forutsetninger og risikoer gruppert etter type, og pilene med evidens. |
 | 5 | **Indikator** | Kurve for målbane (med delmål), terskel (med skravert område utenfor grensen) eller følg med. Viser hva indikatoren måler, og hvilke nyttevirkninger og mål den henger sammen med. |
-| 6 | **Registrering** | Én fane per aktivt nivå, pluss Nyttevirkninger, Indikatorer, Forutsetninger og risikoer, og Mål. «Fører til» lager pilene. Prosjektet kan peke inn i programmets kjede. Indikatorskjemaet har rolle og måletype. Skjemaet for forutsetninger tilpasser status etter type. |
-| 7 | **Oppfølging** | Målinger som forfaller, og vurderinger som skal gjøres: bidragsvurderinger og forutsetninger eldre enn seks måneder. |
+| 6 | **Nyttekart › Liste** | Én fane per aktivt nivå, pluss Nyttevirkninger, Indikatorer, Forutsetninger og risikoer, og Mål. «Fører til» lager pilene. Prosjektet kan peke inn i programmets kjede. Indikatorskjemaet har rolle og måletype. Skjemaet for forutsetninger tilpasser status etter type. |
+| 7 | **Til oppfølging** | Målinger som forfaller, og vurderinger som skal gjøres: bidragsvurderinger og forutsetninger eldre enn seks måneder. |
 | 8 | **Styringsrapport** | Mål → nyttevirkninger og bidrag → antakelser → risikoer og bivirkninger → hva må justeres. |
 | 9 | **Strategiske mål** | Måltre med kontekstindikatorer, nyttevirkningene som bidrar og indikatorene deres. |
-| 10 | **Tildel** | Prosjektenes leveranser i programmets kjede, og fordeling i prosent for tallfestede gevinster. |
+| 10 | **Prosjektenes bidrag** | Prosjektenes leveranser i programmets kjede, og fordeling i prosent for tallfestede gevinster. |
 | 11 | **Katalog** og **Statusseksjon** | Som før. Statusseksjonen viser rolle per indikator. |
 | 12 | **Innstillinger** | Velg Enkel eller Utvidet, gi nivåene nye navn eller skru dem av, og sett toleranse. Alle flater oppdateres med en gang. |
 
@@ -161,10 +170,11 @@ Lag dem som rene funksjoner. De kan portes nesten direkte til `shared-library`.
    - ensomhet (balanserende).
 
    Registrer en ny bidragsvurdering.
-5. **Matrise:** Samme data som tabell, «slik dere kjenner det fra gevinstmatrisen». Kopier til Excel.
+5. **Nyttekart › Matrise:** Samme data som tabell, «slik dere kjenner det fra gevinstmatrisen». Kopier til Excel.
 6. **Program Helse og omsorg 2030, Styringsrapport:** Fra mål til «hva må justeres».
-7. **Prosjekt Digital byggesak:** Oppfølging, så registrer en måling, og så statusseksjonen.
-8. **Program Digital innbyggerservice, Tildel:** Tildel de siste 30 % til Digital byggesak.
+7. **Prosjekt Digital byggesak:** Til oppfølging, så registrer en måling, og så «Slik vises dette i
+   statusrapporten».
+8. **Program Digital innbyggerservice, Prosjektenes bidrag:** Tildel de siste 30 % til Digital byggesak.
 
 ## 8. Arbeidsplan
 
