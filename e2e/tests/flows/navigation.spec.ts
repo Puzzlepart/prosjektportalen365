@@ -64,29 +64,43 @@ test.describe('navigation', () => {
         (await tabs.count()) < 2,
         'the project has no published report with sections, so there are no tabs'
       )
-      // A section's title is text, not a heading, and the summary at the top repeats every title,
-      // so the section a tab names is the last text on the page with that name (the tab itself
-      // comes first).
-      const section = async (tab: typeof tabs) =>
-        page.getByText((await tab.innerText()).trim(), { exact: true }).last()
-      const last = tabs.last()
+      // A tab scrolls to the section element whose id is the section's id behind the language's
+      // prefix (`seksjon12`, `section12`); the tab is a button whose `value` is that id. Finding
+      // the section by its title instead picked a status field's label of the same name lower on
+      // the page, out of view once the page had scrolled (run 38516321658); the tab's own text is
+      // no key either, since Fluent renders it twice ("FremdriftFremdrift").
+      const section = async (tab: typeof tabs) => {
+        const id = await tab.getAttribute('value')
+        expect(id, 'the tab carries its section id').toBeTruthy()
+        return page.locator(`[id="seksjon${id}"], [id="section${id}"]`).first()
+      }
+      // The tabs that fit; the ones that do not sit behind the overflow menu's own tab.
+      const shown = tabs
+        .and(page.locator('[role="tab"][value]:not([value="overflow-menu"])'))
+        .filter({ visible: true })
+      const last = shown.last()
       // The sections fill in after the tabs appear, each pushing the ones below it down, so a tab
       // clicked before then scrolls to where its section was and the section moves on out of view
       // (CI run 37107937758). A user reads the page first; the test waits until the section the
-      // last tab names has stopped moving.
+      // last tab names has stopped moving and the page has stopped growing: a list section that
+      // finished loading between two looks at the last section still moved it (run 38429925362).
       const target = await section(last)
+      const layout = async () => ({
+        section: await target.boundingBox(),
+        height: await page.evaluate(() => document.documentElement.scrollHeight)
+      })
       await expect(async () => {
-        const before = await target.boundingBox()
-        await page.waitForTimeout(1_000)
-        expect(before).not.toBeNull()
-        expect(await target.boundingBox()).toEqual(before)
-      }).toPass({ timeout: 30_000 })
+        const before = await layout()
+        await page.waitForTimeout(1_500)
+        expect(before.section).not.toBeNull()
+        expect(await layout()).toEqual(before)
+      }).toPass({ timeout: 45_000 })
       await last.click()
       // The section the tab names scrolls into view, and the tab list stays where it is.
-      await expect(await section(last)).toBeInViewport({ timeout: 10_000 })
-      await expect(tabs.first()).toBeInViewport()
-      await tabs.first().click()
-      await expect(await section(tabs.first())).toBeInViewport({ timeout: 10_000 })
+      await expect(target).toBeInViewport({ timeout: 10_000 })
+      await expect(shown.first()).toBeInViewport()
+      await shown.first().click()
+      await expect(await section(shown.first())).toBeInViewport({ timeout: 10_000 })
     })
 
     test('every page in the project navigation opens', async ({ page }) => {

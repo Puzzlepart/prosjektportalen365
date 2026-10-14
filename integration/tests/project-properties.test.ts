@@ -68,15 +68,16 @@ describe(
       project.sp.web.lists.getByTitle(resources.Lists_ProjectProperties_Title)
 
     it("stores a date typed in the page's language as that day, whatever the machine's time zone", async () => {
-      const { formatShortDate, parseShortDate, toCalendarDate } = dates()
+      const { formatDay, parseShortDate, toCalendarDate } = dates()
       const original = (await fieldValues()).get('GtStartDate')?.value ?? null
       const zone = process.env.TZ
       const stored = new Set<string>()
       try {
         for (const timeZone of TIME_ZONES) {
           process.env.TZ = timeZone
-          // 3 April, typed as the picker shows it: a day and month mixed up would make it 4 March.
-          const typed = formatShortDate(new Date(2026, 3, 3), false, '', locale)
+          // 3 April, typed as the picker shows it (a day at local midnight, written by formatDay,
+          // never moved to the site's zone): a day and month mixed up would make it 4 March.
+          const typed = formatDay(new Date(2026, 3, 3), locale)
           await save({ GtStartDate: toCalendarDate(parseShortDate(typed, locale)) })
           const { value, valueAsText } = (await fieldValues()).get('GtStartDate')
           assert.equal(

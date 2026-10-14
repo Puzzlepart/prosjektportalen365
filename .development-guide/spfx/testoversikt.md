@@ -14,10 +14,10 @@ Hvilke automatiske tester som dekker hver komponent, lag for lag, med noen ord o
 
 | Lag | Filer | Tester |
 |---|---|---|
-| Jest | 184 | 1 203: PortfolioExtensions 101, PortfolioWebParts 200, ProgramWebParts 59, ProjectExtensions 118, ProjectWebParts 239, shared-library 486 |
+| Jest | 187 | 1 228: PortfolioExtensions 101, PortfolioWebParts 200, ProgramWebParts 59, ProjectExtensions 118, ProjectWebParts 239, shared-library 511 |
 | Kjøretidskontrakt | 2 | 6 |
 | Integrasjon | 10 | 42: 12 uten tenant, 30 mot testtenanten |
-| E2E | 26 spesifikasjoner | 56: smoke 19, flows 29 (de to i CI), local 8 |
+| E2E | 27 spesifikasjoner | 59: smoke 22, flows 29 (de to i CI), local 8 |
 
 I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder etter seg. «Indirekte» betyr at komponenten står på en side en E2E-test åpner. Testen sjekker da ikke komponenten selv, men `openPage` feiler fortsatt på feilgrensen «Noe gikk galt», på en webdel fra en annen kanal og på bunter som ikke lastes.
 
@@ -42,7 +42,7 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 | Programadministrasjon | 7 filer, 45: liste, reducer, kommandoer, fjerning av underområder | Flows: utvalg, grupper, kolonner, søk, høyreklikk, fjerne og legge til et underområde igjen (skriver), faste kolonneoverskrifter | Programmet og prosjektene knyttet begge veier | Programmets egen adapter (legge til og fjerne) |
 | Program aggregeringsoversikt | 7, i tillegg til testene for aggregeringsoversikten | — | Søket over programmets prosjekter (`searchAggregatedItems`) | Ingen E2E |
 | Programoversikt | 5, i tillegg til testene for porteføljeoversikten | Smoke: underområdene listes med teller | Programmets prosjekter | — |
-| Prosjekttidslinje (programnivå) | 2, i tillegg til bibliotekets tidslinje | Smoke: siden lastes | — | Innholdet sjekkes ikke i E2E |
+| Prosjekttidslinje (programnivå) | 2, i tillegg til bibliotekets tidslinje | Smoke: siden lastes; programmets egen tidslinjeside (`Tidslinje.aspx`, ProjectWebParts' tidslinje med programmets elementer) tegner tidslinjen | — | Innholdet sjekkes ikke i E2E |
 
 ### Prosjekt (ProjectWebParts)
 
@@ -51,7 +51,7 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 | Prosjektinformasjon | 5 filer, 31, og bibliotekets `CustomEditPanel` (41) | Smoke: monteres, «Vis all prosjektinformasjon». Flows: personvelgeren og panelene (lukker uten å lagre), lenken tilbake til huben, datovelgerens ukenummer for januar 2027 (uke 53, så 1) | Egenskaper tur-retur: datoer i fem tidssoner, tekst, valg, person, termer (skriver); hubraden og synkroniseringen til den, også gjennom ProjectWebParts' adapter (skriver) | Lagring gjøres ikke i E2E |
 | Fasevelger | 4 filer, 30: reducer, fasedialogen | Smoke: fasene vises, prøveklikk på hver | Fasene fra termlageret, etikettene og tekstene; `getPhases`; kjøretidskontrakten for termlageret | Å endre fase er ikke automatisert |
 | Prosjektstatus | 17 filer, 97: reducer, seksjoner, verktøylinje, faner, delprosjekter, øyeblikksbildedialogen (fullskjerm, lenker, åpning fra en lenke, eller ny fane når egenskapen er slått av) og øyeblikksbildet (tittel, dato, oppløsning) | Smoke: siden monteres. Flows: kladd opprettet og slettet (skriver), fanene og seksjonene, øyeblikksbildet av en publisert rapport (dialogen med bildet, fullskjerm der nettleseren tillater det, kopiert lenke som åpner det igjen, bildefilen i ny fane), datoene fra en nettleser i Los Angeles (rapportvelgeren, rapportmenyen med klokkeslett og datofeltene i prosjektinformasjonen mot SharePoints egne tekster) | Kladd i en egen rapportserie, fylt ut, lest med personen og slettet (skriver) | Publisering er manuell, så øyeblikksbildeflyten leser en rapport som alt er publisert |
-| Risikomatrise og Mulighetsmatrise | 4 og 2, og 15 delte: begge webdelene, prosjekt- og programmodus | — (står på ingen malside) | Søket med matrisens datakilde, også gjennom ProjectWebParts' adapter på programmet; datakildene finnes etter oppgradering | Ingen E2E |
+| Risikomatrise og Mulighetsmatrise | 4 og 2, og 15 delte: begge webdelene, prosjekt- og programmodus | Smoke: matrisen i statusrapportens usikkerhetsseksjon (når rapporten har usikkerheter), og en side med begge webdelene når prosjektet har en (`E2E_PAGE_MATRIX`, ellers `Usikkerhet.aspx` og noen navn til; ingen malside har dem, så testen hopper over til siden er lagt til) | Søket med matrisens datakilde, også gjennom ProjectWebParts' adapter på programmet; datakildene finnes etter oppgradering | Siden med webdelene legges til for hånd på E2E-prosjektet |
 | Prosjekttidslinje (prosjektnivå) | 4 filer, 17 | Smoke: listen får plass i 1280 og 1920 px. Flows: typografi | — | Tidslinjens stolper |
 | Prosjektnyheter | 2 filer, 7 | Indirekte (prosjektets forside) | — | Å opprette en nyhetsside |
 | Dynamisk liste | 6 filer, 33 | Flows: typografi (hoppes over når siden mangler) | — | Skriving og egne handlinger |
@@ -78,7 +78,9 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 | `SPDataAdapterBase` og `EntityPortalService` | 43 | Hubraden og synkroniseringen |
 | `searchAggregatedItems` | 4 | Egenskaper og formater, bla mellom sider, oppdeling, eget område |
 | Termlageret (`taxonomy`) | 73, og kjøretidskontrakten (4) | Fasene og etikettene |
-| `DataSourceService` | Ingen | Matrisenes datakilder slått opp på ID |
+| `DataSourceService` | 5: listene fra strengene, oppslag på ID og tittel med kolonner, refinere og gruppering, tomt og feilet oppslag (bare logget), kategori og nivå | Matrisenes datakilder slått opp på ID |
+| `DataService` (basen for `PortalDataService` og `ProjectDataService`) | 3: konfigurering, feltenes skjemasynlighet (`ShowInEditForm` med flere) | — |
+| Ikonhjelperne (`resolveFluentIcon`, `getFluentIcon`, `getFluentIconWithFallback`, `getIconComponentWithFallback`, `isIconAvailable`) | 17: katalognavn og UI Fabric-aliaser (alle peker på katalogen, `CircleFill` fylt), nøkler fra `Object.prototype`, farge/størrelse/klasse, reserven i UI Fabric-fonten, stabile komponentidentiteter | — |
 | `ListLogger` | 3: feltene, en avvist skriving stopper ikke kalleren | — |
 | `withDefaults` og `getDatePickerLocalization` | 4 og 7: standardverdier som React ga dem; ukeregelen fra `minimalDays` eller CLDR-regionen | — |
 | Datoer i områdets tidssone (`siteTimeZone`, `pageContext`, `formatDate`, `getDateForExcelExport`, `createSpfiInstance`) | 8, 3, 24, 3 og 4: SharePoints egne overgangsregler (Oslo, New York, Tokyo, Sydney, «siste søndag»), sidekonteksten SPFx gir foran `_spPageContextInfo`, dagen og klokkeslettet områdets lister viser for et område i Oslo, Honolulu og Tokyo, `formatDay` for datovelgerens dag; kjøretidskontrakten (2) kjører maskinen gjennom fem tidssoner, siden Jest ikke kan flytte den | `project-properties`: en lagret dato formatert for siden og for Excel i fem tidssoner |
@@ -102,8 +104,7 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 ### Hull verdt å kjenne til
 
 - **Bare Jest**, uten E2E og integrasjon: Ressursallokering, Idémodul, Prosjektkort, idéutvidelsene, Malpakkekatalog, Oppsett av prosjekt, Oppgradering av prosjekt og Planner-tiltak.
-- **Integrasjon, men ingen E2E:** Risikomatrise, Mulighetsmatrise og Program aggregeringsoversikt.
+- **Integrasjon, men ingen E2E:** Program aggregeringsoversikt. Matrisene har E2E bare der statusrapporten har usikkerheter, og som webdeler først når E2E-prosjektet får en side med dem (`E2E_PAGE_MATRIX`).
 - **Bare indirekte i E2E:** Siste prosjekter og Prosjektnyheter.
 - **Manuelt:** prosjektoppsett, publisering av statusrapport, idéflyten og å endre fase.
-- **Ingen test:** ikonhjelperne (`getFluentIcon`, `resolveFluentIcon`) og `DataService.ts`. Programmets tidslinjeside (`Tidslinje.aspx`) åpnes ikke av noen E2E-test.
 - **Utenfor komponentene:** `.tasks/check-channel-ids.test.js` (5 tester, `npm run test:tasks`).

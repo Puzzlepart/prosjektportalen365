@@ -110,7 +110,7 @@ release).
 | 1 | Node 26 (24 the fallback) | — | `.nvmrc` ×7 = 26.11.1; `engines` ×6 and `rush.json` = `>=26.11.0 <27.0.0`; the guard in `Build-Release.ps1` = 26; `AGENTS.md`, `kom-i-gang.md`, `utviklingsmiljo.md`, `bygge-utgivelse.md`, the toolchain and release skills. First `rush install` + `rush rebuild` locally on 26; then a push with `[skip-ci] [build-debug]` (the full release build on 26, deploys nothing); then the merge with `[apps-only]` (packages, e2e, integration). Red for a cause that is Node's: the same files to 24.21.0 and `>=24.11.0 <25.0.0`, and the cause logged here | 1 day | Debug build and test-channel run green; no `Node 22` left outside changelogs and plans |
 | 2 | `defaultProps` | — | Per solution, smallest first (PortfolioExtensions 1, ProjectExtensions 3, ProjectWebParts 11, PortfolioWebParts 12, shared-library 20), each a commit; D2's two shapes; the existing component tests guard each file, and a file without one gets a render test first; the lint rule last | 2–3 days | Zero `defaultProps` in `src`; the rule in `pp365-eslint-config` |
 | 3 | Dates in the site's time zone | — | `getSiteTimeZone()` in the library from the page context (offset and daylight rules); `formatDate`/`formatShortDate` take the zone for date-only values; `DateColumn`, the Excel export's dates and the timeline's list follow; an integration case in `project-properties`' five-zone matrix reads a list value through search; changelog line (done 2026-10-13, see the log) | done | The overview shows the day the site shows in all five zones |
-| 4 | Test gaps | the matrices need a page | The icon helpers (`getFluentIcon`, `resolveFluentIcon`, `getIconComponentWithFallback`) and `DataService.ts` in Jest; `Tidslinje.aspx` in the program smoke; a matrix page on the e2e project (the user adds it once), then a read-only smoke for both matrices | 1 day | `testoversikt.md` lists no "Ingen test" but by choice |
+| 4 | Test gaps | the matrices need a page | The icon helpers (`getFluentIcon`, `resolveFluentIcon`, `getIconComponentWithFallback`) and `DataService.ts` in Jest; `Tidslinje.aspx` in the program smoke; a matrix page on the e2e project (the user adds it once), then a read-only smoke for both matrices (done 2026-10-14, see the log; the matrix page is still to be added) | done | `testoversikt.md` lists no "Ingen test" but by choice |
 | 5 | SPFx 1.24 GA | Microsoft | P5-4: a version bump through CI and a hand round | ½ day | 1.15.0 cut on GA |
 | 6 | PnP controls on React 18 | PnP | A release whose peers allow React 18; then the bump, the term field and property panes by hand (P5-6) | ½ day | — |
 | 7 | react-calendar-timeline 0.30 | the project | A stable release; `moment` → `dayjs` in the timeline's data and items, `interactjs` to its peer; the timeline's Jest (22) and smoke tests | 2 days | — |
@@ -245,3 +245,52 @@ Suites after the change, on Node 26: shared-library 486 (76.93 / 82.91 / 59.34 /
 6, ProjectWebParts 239, PortfolioWebParts 200, all above their floors; the three type checks and
 the integration harness compile. Changelog and release note carry the fix; `pp365-ui` and
 `pp365-testing` the rules.
+
+### Slice 4 — Test gaps (2026-10-14)
+
+The three untested library modules have Jest tests now. `icons/index.test.tsx` (17) covers the
+one lookup every icon goes through: a catalog name, a UI Fabric alias (each of the 17 aliases
+resolves to a catalog entry, `CircleFill` to the filled variant), a key from `Object.prototype`
+(list data can hold any text), colour, size and class on the element, the cached bundled component
+and the cached UI Fabric wrapper (the same identity each time, so React never remounts an icon),
+the UI Fabric fallback with the size as the font size, and the older boolean form. jsdom reports a
+computed colour as `rgb()`, which the first run showed. `services/DataService.test.ts` (3) opens the
+base's protected hooks through a subclass and checks the form-visibility flags read from a field's
+schema XML. `services/DataSourceService/index.test.ts` (5) runs the service against a structural
+web whose two lists answer from canned rows and record the titles, selects and filters asked for:
+the lists are found by the strings' titles, a data source by id or title comes with its columns,
+refiners and grouping picked among the content columns, no match and a failed fetch both give
+`null` (the failure only logged), and a category query adds the level to the filter.
+
+The program's second timeline page was the real gap: the template names them
+`ProgramTidslinje.aspx` (the program's own timeline) and `Tidslinje.aspx` (titled "Programtidslinje",
+ProjectWebParts' timeline with the program's items), and the smoke opened only the first. A test
+opens the second and waits for the drawn timeline. No template page holds the matrix web parts, so
+`tests/smoke/matrices.spec.ts` checks two places: the status page's uncertainty section, which
+draws the selected report's matrix when it has risks or opportunities, and a page with both web
+parts that the e2e project gets by hand (`E2E_PAGE_MATRIX`, else `Usikkerhet.aspx` and a few more
+names), skipping with the reason until it exists. A drawn matrix is at least nine cells with a
+size. The page is a single web part app page, where SharePoint sets no feature tag, so the web
+part is found by the title it renders (the first local run looked for the tag).
+
+The flaky tabs flow in `navigation.spec.ts` (runs 37107937758, 38429925362 and 38516321658,
+passing on retry each time) found a tab's section by its title, as the last text on the page with
+that name; the report of run 38516321658 showed it picking a status field's label of the same name
+("Overordnet status") lower on the page, out of view once the page had scrolled. A tab scrolls to
+the element whose id is the section's id behind the language's prefix (`seksjon12`), and the tab
+is a button whose `value` attribute is that id (Fluent's `data-overflow-item` is an empty marker,
+and the tab's text is rendered twice, "FremdriftFremdrift"), so the flow reads the id and finds
+the section element; it takes only the tabs that fit (the overflow menu's own tab has the value
+`overflow-menu`) and waits for the page's height to stand still as well as the last section,
+1.5 s at a time, within 45 s, since a list section that finished loading between two looks still
+moved it.
+
+The slice 3 push (run 38516321658) deployed to the test channel: the Los Angeles flow passed in
+CI against the deployed build, and the integration suite had one failure, the older
+`project-properties` case that typed a picker's day with `formatShortDate`, which now moves an
+instant to the site's zone (a Helsinki midnight is the evening before in Oslo). It types with
+`formatDay`, as the picker does, and passes against the tenant; the harness' site-zone context was
+what made CI show it.
+
+The test overview's "Ingen test" bullet is gone; what remains uncovered is there by choice (the
+program aggregation has integration tests and no browser test; the matrix page is the user's).
