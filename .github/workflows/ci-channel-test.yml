@@ -15,6 +15,10 @@ on:
   # Manual runs, for example to re-run the end-to-end smoke after fixing a secret or a spec.
   workflow_dispatch:
 
+# The jobs only read the repository; the deployments sign in to the tenant with the certificate.
+permissions:
+  contents: read
+
 # One run at a time, whatever the branch: every run deploys to the same test hub and app catalog,
 # so two at once can overwrite each other mid-run (on 2026-10-06 an [apps-only] run's packages
 # landed in the middle of a full run's template step). A newer run waits for the running one.
@@ -36,6 +40,12 @@ env:
   CI_TENANT: ${{ secrets.CI_TENANT }}
   CI_CLIENT_ID: ${{ secrets.CI_CLIENT_ID }}
 
+# Every job has a timeout. GitHub's default is six hours, and with one run at a time a hung job
+# holds every later run as long. Measured on 2026-10-14: build 13-15 min, full upgrade 27,
+# packages-only upgrade 3, e2e 6-7, integration tests 3.
+#
+# The upgrades pass the certificate and the ids as $env: references, which PowerShell reads at run
+# time, so the secrets are never written into the step's script on the runner.
 jobs:
   # Tags like [skip-ci] and [apps-only] must only be honored when present in the
   # commit *subject* (first line). Squash-merge commit bodies inherit the PR's
@@ -44,6 +54,7 @@ jobs:
   commit_subject:
     name: Determine commit subject
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     outputs:
       subject: ${{ steps.subject.outputs.subject }}
     steps:
@@ -57,17 +68,12 @@ jobs:
     needs: [commit_subject]
     name: Build release package (test channel)
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     if: ${{ !contains(needs.commit_subject.outputs.subject, '[skip-ci]') && !contains(needs.commit_subject.outputs.subject, '[apps-only') }}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
+      - uses: actions/checkout@v7
 
-      - name: Set sha_short
-        id: vars
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
 
@@ -79,58 +85,68 @@ jobs:
         run: Install/Build-Release.ps1 -CI -SkipBundle -Channel test
         shell: pwsh
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-package-test
           path: release
-    outputs:
-      sha_short: ${{ steps.vars.outputs.sha_short }}
+
+      # Build-Release.ps1 prints the last 200 lines of a failed rebuild; the whole logs are here.
+      - name: Upload the Rush logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: rush-logs-test-channel
+          path: |
+            SharePointFramework/rush-*.build.log
+            SharePointFramework/*/rush-logs/
+            Templates/rush-logs/
+            e2e/rush-logs/
+            integration/rush-logs/
+          if-no-files-found: warn
+          retention-days: 7
 
   upgrade_channel_test:
     needs: [commit_subject, build_release_package_test]
     name: Upgrade (test channel)
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     if: ${{ !contains(needs.commit_subject.outputs.subject, '[skip-upgrade]') }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: release-package-test
           path: release
 
       - name: Upgrade
-        run: release/Install.ps1 -Url "${{ vars.SP_URL_TEST }}" -Upgrade -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }}
+        run: release/Install.ps1 -Url "${{ vars.SP_URL_TEST }}" -Upgrade -CI -Tenant $env:CI_TENANT -CertificateBase64Encoded $env:CI_CERT_BASE64 -ClientId $env:CI_CLIENT_ID
         shell: pwsh
 
   upgrade_all_sites_to_latest:
     needs: [commit_subject, build_release_package_test, upgrade_channel_test]
     name: Upgrade all sites to latest (test channel)
     runs-on: ubuntu-latest
+    timeout-minutes: 120
     if: ${{ contains(needs.commit_subject.outputs.subject, '[upgrade-all-sites-to-latest]') }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: release-package-test
           path: release
 
       - name: Run script UpgradeAllSitesToLatest.ps1 in CI mode
-        run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url ${{ vars.SP_URL_TEST }} -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }}
+        run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url "${{ vars.SP_URL_TEST }}" -CI -Tenant $env:CI_TENANT -CertificateBase64Encoded $env:CI_CERT_BASE64 -ClientId $env:CI_CLIENT_ID
         shell: pwsh
 
   build_release_package_test_packages_only:
     needs: [commit_subject]
     name: Build release package - packages only (test channel)
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     if: ${{ contains(needs.commit_subject.outputs.subject, '[apps-only')}}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
+      - uses: actions/checkout@v7
 
-      - name: Set sha_short
-        id: vars
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
 
@@ -162,26 +178,39 @@ jobs:
           }
         shell: pwsh
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-package-test
           path: release
-    outputs:
-      sha_short: ${{ steps.vars.outputs.sha_short }}
+
+      - name: Upload the Rush logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: rush-logs-test-channel
+          path: |
+            SharePointFramework/rush-*.build.log
+            SharePointFramework/*/rush-logs/
+            Templates/rush-logs/
+            e2e/rush-logs/
+            integration/rush-logs/
+          if-no-files-found: warn
+          retention-days: 7
 
   upgrade_channel_test_packages_only:
     needs: [commit_subject, build_release_package_test_packages_only]
     name: Upgrade packages only (test channel)
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     if: ${{ !contains(needs.commit_subject.outputs.subject, '[skip-upgrade]') }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: release-package-test
           path: release
 
       - name: Upgrade
-        run: release/Install.ps1 -Url "${{ vars.SP_URL_TEST }}" -Upgrade -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }} -SkipTemplate
+        run: release/Install.ps1 -Url "${{ vars.SP_URL_TEST }}" -Upgrade -CI -Tenant $env:CI_TENANT -CertificateBase64Encoded $env:CI_CERT_BASE64 -ClientId $env:CI_CLIENT_ID -SkipTemplate
         shell: pwsh
 
   e2e_smoke_test_channel:
@@ -190,6 +219,7 @@ jobs:
     needs: [commit_subject, upgrade_channel_test, upgrade_channel_test_packages_only]
     name: End-to-end smoke (test channel)
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: ${{ always() && (needs.upgrade_channel_test.result == 'success' || needs.upgrade_channel_test_packages_only.result == 'success') && !contains(needs.commit_subject.outputs.subject, '[skip-e2e]') }}
     env:
       E2E_BASE_URL: ${{ vars.SP_URL_TEST }}
@@ -198,9 +228,9 @@ jobs:
       E2E_USERNAME: ${{ secrets.E2E_USERNAME }}
       E2E_PASSWORD: ${{ secrets.E2E_PASSWORD }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
 
@@ -215,7 +245,7 @@ jobs:
         run: npx playwright test
         working-directory: e2e
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: playwright-report-test-channel
@@ -233,6 +263,7 @@ jobs:
     needs: [commit_subject, upgrade_channel_test, upgrade_channel_test_packages_only]
     name: Integration tests (test channel)
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     if: ${{ always() && (needs.upgrade_channel_test.result == 'success' || needs.upgrade_channel_test_packages_only.result == 'success') && !contains(needs.commit_subject.outputs.subject, '[skip-integration]') }}
     env:
       INTEGRATION_HUB_URL: ${{ vars.SP_URL_TEST }}
@@ -246,9 +277,9 @@ jobs:
       # upgrade the installation log must show.
       INTEGRATION_TEMPLATES_APPLIED: ${{ needs.upgrade_channel_test.result == 'success' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
 
@@ -279,7 +310,7 @@ jobs:
         run: npm run test:ci
         working-directory: integration
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: integration-report-test-channel

@@ -117,7 +117,7 @@ Write-Host "########################################################" -Foregroun
 
 if ($CI.IsPresent -and $null -eq (Get-Module -Name PnP.PowerShell)) {
     Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
-    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop -RequiredVersion $RequiredPnPVersion
+    Install-ModuleWithRetry -Name PnP.PowerShell -RequiredVersion $RequiredPnPVersion
     $PnPVersion = (Get-Command Connect-PnPOnline -ErrorAction SilentlyContinue).Version
     Write-Host "[INFO] Installed module PnP.PowerShell v$($PnPVersion) from PowerShell Gallery"
 }

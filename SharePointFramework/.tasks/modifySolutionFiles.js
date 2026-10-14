@@ -135,16 +135,18 @@ function generateComponentManifestFiles(solutionConfig, componentManifestFiles) 
     for (let i = 0; i < componentManifestFiles.length; i++) {
         const componentManifestFile = componentManifestFiles[i]
         const componentManifest = getFileContent(componentManifestFile)
+        const ownId = componentManifest.id
         componentManifest.id = solutionConfig.components[componentManifest.alias]
         switch (componentManifest.componentType) {
             /**
-             * For web parts, hide them from the toolbox by default. This is to avoid
-             * confusion with duplicate web parts in the toolbox when several channels
-             * are deployed to the same tenant.
+             * A channel with ids of its own hides its web parts from the toolbox, so a tenant
+             * with several channels does not list each web part twice. The main channel's ids are
+             * the manifests' own (ci-releases.yml builds with -Channel main for the version
+             * stamp), and its web parts are the ones the toolbox should show.
              */
             case 'WebPart':
                 {
-                    componentManifest.hiddenFromToolbox = true
+                    if (componentManifest.id !== ownId) componentManifest.hiddenFromToolbox = true
                 }
                 break
         }

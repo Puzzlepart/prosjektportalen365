@@ -4,10 +4,10 @@ En installasjonskanal gir løsningene og komponentene egne ID-er, slik at flere 
 
 | Fil | Kanal |
 |---|---|
-| `main.json` | Utgivelsen. ID-ene er de som står i kildekoden |
+| `main.json` | Utgivelsen. ID-ene er de som står i kildekoden. `ci-releases.yml` bygger med den (`-Channel main`) for å få kjørenummeret i versjonen |
 | `test.json` | Testkanalen, som `ci-channel-test.yml` bygger og ruller ut til testtenanten |
 | `kurs.json` | Bygges på `main` når commit-meldingen har `[build-kurs]` |
-| `i18n.json` | Ingen aktiv arbeidsflyt bygger den (`ci-channel-i18n.yml` ligger i `.github/workflows/unused/`) |
+| `i18n.json` | Ingen arbeidsflyt bygger den; `Build-Release.ps1 -Channel i18n` eller `npm run build:i18n` i en løsning bygger den lokalt |
 
 Hver fil gir hver SPFx-løsning egen `id`, `name` og `zippedPackage` (f.eks. `solution/pp-portfolio-web-parts-test.sppkg`) og hver komponent egen ID, oppslått på komponentens alias. Formatet står i `channels/$schema.json`.
 
@@ -15,7 +15,7 @@ Hver fil gir hver SPFx-løsning egen `id`, `name` og `zippedPackage` (f.eks. `so
 
 SPFx-manifestene, porteføljemalen og site scriptene har `main`-ID-ene, og JSON-prosjektmalene bruker `{{ControlId_<alias>}}`. `Install/Build-Release.ps1 -Channel <kanal>` skriver kanalfila til `.current-channel-config.json` i roten og bytter ID-ene på fire steder:
 
-- **SPFx-løsningene:** `config/package-solution.json` og hver `manifest.json` (`SharePointFramework/.tasks/modifySolutionFiles.js`). Webdelene får `hiddenFromToolbox`, så verktøykassen ikke viser dem to ganger. Filene tilbakestilles etter pakkingen.
+- **SPFx-løsningene:** `config/package-solution.json` og hver `manifest.json` (`SharePointFramework/.tasks/modifySolutionFiles.js`). Webdelene får `hiddenFromToolbox` når kanalen har egne ID-er, så verktøykassen ikke viser dem to ganger; med `main` beholder de plassen sin i verktøykassen. Filene tilbakestilles etter pakkingen.
 - **Porteføljemalen:** `npm run generate-pnp-templates` kopierer `Templates/Portfolio` til `.dist/Templates/Portfolio` og bytter `main`-ID-ene der.
 - **Site scriptene:** `npm run generate-site-scripts` kopierer `SiteScripts/src` til `.dist/SiteScripts` og bytter ID-ene der.
 - **JSON-prosjektmalene:** `{{ControlId_<alias>}}` fylles fra `.current-channel-config.json`, eller fra `channels/main.json` når den fila ikke finnes.
@@ -26,9 +26,9 @@ Komponent-ID-er som står i TypeScript, byttes ikke. De to `ProjectSetupCustomAc
 
 ### Bygge for en kanal
 
-- Hele utgivelsespakken: `./Install/Build-Release.ps1 -Channel test` i PowerShell 7. `-Channel` godtar `test`, `kurs` og `i18n`. Pakken havner i `release/` med kanalnavnet bakerst; se [Bygge en ny utgivelse](../utgivelse/bygge-utgivelse.md).
+- Hele utgivelsespakken: `./Install/Build-Release.ps1 -Channel test` i PowerShell 7. `-Channel` tar navnet på en fil i `channels/`: `main`, `test`, `kurs` eller `i18n`. Pakken havner i `release/` med kanalnavnet bakerst; se [Bygge en ny utgivelse](../utgivelse/bygge-utgivelse.md).
 - Én løsning: `npm run build:test` (eller `build:kurs`, `build:i18n`) i løsningen. Det lager bare den løsningens `.sppkg` og kjører ingen tester.
-- I CI setter `ci-channel-test.yml` og `ci-build-debug.yml` `PP365_BUILD_NUMBER` til kjørenummeret, og løsningen og funksjonene får versjonen `x.y.z.<kjørenummer>`. Andre bygg har `x.y.z.0`.
+- I CI setter `ci-releases.yml`, `ci-channel-test.yml` og `ci-build-debug.yml` `PP365_BUILD_NUMBER` til kjørenummeret, og løsningen og funksjonene får versjonen `x.y.z.<kjørenummer>`. Andre bygg har `x.y.z.0`.
 
 Avbrytes et kanalbygg, blir filene liggende. En gjenglemt `.current-channel-config.json` får lokale genereringer til å bruke kanalens ID-er: slett den. Tilbakestill løsningene med `node ../.tasks/modifySolutionFiles.js --revert --force` og `node ../.tasks/setBundleConfig.js --revert` i hver av dem. Commit aldri kanal-ID-er i manifestene.
 

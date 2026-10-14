@@ -12,9 +12,9 @@ Oppretter en `config/serve.json`-fil fra malen `config/serve.sample.json` for gj
 
 ## modifySolutionFiles.js
 
-Modifiserer `config/package-solution.json` og alle `manifest.json`-filer for en løsning slik at de samsvarer med ID-er fra den valgte kanalen.
+Modifiserer `config/package-solution.json` og alle `manifest.json`-filer for en løsning slik at de samsvarer med ID-er fra den valgte kanalen. En kanal med egne ID-er skjuler webdelene i verktøykassen (`hiddenFromToolbox`), så en tenant med flere kanaler ikke viser hver webdel to ganger; med `main`, der ID-ene er manifestenes egne, beholder webdelene plassen sin. Testene ligger i `.tasks/modify-solution-files.test.js` i roten (`npm run test:tasks`).
 
-Når miljøvariabelen `PP365_BUILD_NUMBER` er satt (kanal-arbeidsflytene setter den til kjørenummeret i GitHub Actions), stemples den også inn som fjerde segment i løsningens og funksjonenes versjon (`1.14.0.<kjørenummer>`). Hver utrulling blir dermed en ny versjon for SharePoint, slik at klientene henter manifestene på nytt i stedet for å bruke dem de har mellomlagret for en versjon de har sett før. Utgivelsesbygget (`main`) berøres ikke.
+Når miljøvariabelen `PP365_BUILD_NUMBER` er satt (`ci-releases.yml`, `ci-channel-test.yml` og `ci-build-debug.yml` setter den til kjørenummeret i GitHub Actions; `ci-releases.yml` bygger med `-Channel main` for det), stemples den også inn som fjerde segment i løsningens og funksjonenes versjon (`1.14.0.<kjørenummer>`). Hver utrulling blir dermed en ny versjon for SharePoint, slik at klientene henter manifestene på nytt i stedet for å bruke dem de har mellomlagret for en versjon de har sett før. Utgivelsesbygget på `main` berøres ikke.
 
 ## post-watch.js
 

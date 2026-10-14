@@ -10,6 +10,10 @@ on:
       - 'Templates/**'
       - .github/workflows/build-release.yml
 
+# The jobs only read the repository; nothing here deploys.
+permissions:
+  contents: read
+
 env:
   # Heft's TypeScript and webpack steps need more than V8's default heap (about 2 GB on a small
   # runner): the PortfolioWebParts production build dies at 2 GB and passes at 3 GB. 8 GB matches
@@ -18,55 +22,77 @@ env:
   NODE_OPTIONS: --max-old-space-size=8192
   RUSH_PARALLELISM: 2
 
+# Every job has a timeout; GitHub's default is six hours.
 jobs:
+  # Tags count only in the commit *subject* (first line), as in the other workflows. A release's
+  # squash commit lists every commit message of the release in its body, so matching the whole
+  # message let one [skip-test-ci] or [build-kurs] anywhere in the release decide the build. Put a
+  # tag at the end of the squash subject in the merge dialog.
+  commit_subject:
+    name: Determine commit subject
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      subject: ${{ steps.subject.outputs.subject }}
+    steps:
+      - name: Extract first line of commit message
+        id: subject
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        run: echo "subject=${COMMIT_MESSAGE%%$'\n'*}" >> "$GITHUB_OUTPUT"
+
   build-release:
+    needs: [commit_subject]
     name: Build release (CI)
     runs-on: ubuntu-latest
-    if: ${{ !contains(github.event.head_commit.message, '[skip-main-ci]') }}
+    timeout-minutes: 45
+    if: ${{ !contains(needs.commit_subject.outputs.subject, '[skip-main-ci]') }}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
+      - uses: actions/checkout@v7
 
-      - name: Set sha_short
-        id: vars
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
 
       - name: Run Install/Build-Release.ps1 in CI mode
         run: Install/Build-Release.ps1 -CI
         shell: pwsh
-      
-      - uses: actions/upload-artifact@v4
+
+      - uses: actions/upload-artifact@v7
         with:
           name: release-package
           path: release
-    outputs:
-      sha_short: ${{ steps.vars.outputs.sha_short }}
+
+      # Build-Release.ps1 prints the last 200 lines of a failed rebuild; the whole logs are here.
+      - name: Upload the Rush logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: rush-logs-main
+          path: |
+            SharePointFramework/rush-*.build.log
+            SharePointFramework/*/rush-logs/
+            Templates/rush-logs/
+            e2e/rush-logs/
+            integration/rush-logs/
+          if-no-files-found: warn
+          retention-days: 7
 
   build_release_package_test:
-    needs: [build-release]
+    needs: [commit_subject, build-release]
     name: Build test channel release (CI)
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     concurrency:
       group: ${{ github.ref }}_build_test_channel_release_ci
       cancel-in-progress: true
     # Runs when the main build is skipped ([skip-main-ci]) or fails, unless the run is cancelled or
-    # the message holds [skip-test-ci]. `always() || …` was always true, so the tag did nothing.
-    if: ${{ !cancelled() && !contains(github.event.head_commit.message, '[skip-test-ci]') }}
+    # the subject holds [skip-test-ci]. `always() || …` was always true, so the tag did nothing.
+    if: ${{ !cancelled() && !contains(needs.commit_subject.outputs.subject, '[skip-test-ci]') }}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
+      - uses: actions/checkout@v7
 
-      - name: Set sha_short
-        id: vars
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
 
@@ -74,31 +100,38 @@ jobs:
         run: Install/Build-Release.ps1 -CI -Channel test
         shell: pwsh
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-package-test
           path: release
-    outputs:
-      sha_short: ${{ steps.vars.outputs.sha_short }}
+
+      - name: Upload the Rush logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: rush-logs-main-test
+          path: |
+            SharePointFramework/rush-*.build.log
+            SharePointFramework/*/rush-logs/
+            Templates/rush-logs/
+            e2e/rush-logs/
+            integration/rush-logs/
+          if-no-files-found: warn
+          retention-days: 7
 
   build_release_package_kurs:
-    needs: [build-release]
+    needs: [commit_subject, build-release]
     name: Build kurs channel release (CI)
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     concurrency:
       group: ${{ github.ref }}_build_kurs_channel_release_ci
       cancel-in-progress: true
-    if: ${{ contains(github.event.head_commit.message, '[build-kurs]') }}
+    if: ${{ contains(needs.commit_subject.outputs.subject, '[build-kurs]') }}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
+      - uses: actions/checkout@v7
 
-      - name: Set sha_short
-        id: vars
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
 
@@ -106,9 +139,21 @@ jobs:
         run: Install/Build-Release.ps1 -CI -Channel kurs
         shell: pwsh
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-package-kurs
           path: release
-    outputs:
-      sha_short: ${{ steps.vars.outputs.sha_short }}
+
+      - name: Upload the Rush logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: rush-logs-main-kurs
+          path: |
+            SharePointFramework/rush-*.build.log
+            SharePointFramework/*/rush-logs/
+            Templates/rush-logs/
+            e2e/rush-logs/
+            integration/rush-logs/
+          if-no-files-found: warn
+          retention-days: 7

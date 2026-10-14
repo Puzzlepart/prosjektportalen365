@@ -345,3 +345,30 @@ functions 52.31. By the house rule the floors follow, a point under the rounded-
 PortfolioWebParts 62 / 76 / 51 / 62 (was 62 / 72 / 49 / 62), and shared-library, grown by slices
 3 and 4, 76 / 82 / 60 / 76 from CI's 77.75 / 83.02 / 61.03 / 77.75 (was 75 / 81 / 57 / 75). The
 other four solutions are within the formula of their floors.
+
+### CI workflows (2026-10-14)
+
+A review of every workflow against what the test channel's had learned, committed straight to
+`releases/1.15` at the user's request. All workflows now read tags from the subject only (`main`
+read the whole message, so one tag anywhere in a release's squash body counted), every job has a
+timeout (GitHub's default is six hours, and the test channel's runs wait for each other), the
+GITHUB_TOKEN is read-only except for the SBOM commit, a failed build uploads the whole Rush logs,
+and the deployments read the certificate as `$env:` instead of having it written into the step's
+script. `ci-releases.yml` got the test channel's lessons: a `concurrency` group for the dev hub,
+`[skip-upgrade]` on its packages-only upgrade, `-RushTimeline -SkipPnPPowerShell` there, and the
+run number in the package versions through `-Channel main`. That last one hid a trap: a channel
+build set `hiddenFromToolbox` on every web part, so `-Channel main` would have hidden the main
+channel's web parts across the tenant's app catalog; `modifySolutionFiles.js` now hides them only
+when the channel's ids differ from the manifests' own (`.tasks/modify-solution-files.test.js`,
+seen failing first). The fresh installation (`sites/pp365_<sha>`, 354 of them on the tenant, none
+ever deleted) runs only with `[fresh-install]`. `ci-build-debug.yml` builds every pull request to a
+release branch as «Build release package (pull request)», the check the branch protection is to
+require instead of «Rush Install and Rebuild», which came from a workflow in `unused/` that never
+ran; the job has its own name on a pull request because a push without `[build-debug]` reports a
+skipped «Build release package (debug)» on the same commit, and a skipped job passes a required
+check. `unused/` is deleted, the actions
+moved from v4 to their Node 24 majors (checkout, setup-node and upload-artifact v7,
+download-artifact v8; none of the breaking changes touches how they are used here), and
+PnP.PowerShell installs through `Install-ModuleWithRetry` after a PowerShell Gallery outage failed
+run 38522211703. The user removes the stale secrets, `NODE_VERSION` and `SP_URL_ENG`, and changes
+the branch protection.

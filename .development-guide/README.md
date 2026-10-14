@@ -167,6 +167,7 @@
 		* [CI (channels/test)](#ci-channelstest)
 		* [CI (build debug)](#ci-build-debug)
 		* [Bygg utgivelse (main)](#bygg-utgivelse-main)
+		* [Felles for arbeidsflytene](#felles-for-arbeidsflytene)
 		* [Aktive arbeidsflyter](#aktive-arbeidsflyter)
 	* [➤ README-generering](#-readme-generering)
 	* [➤ SBOM-generering](#-sbom-generering)
@@ -288,7 +289,7 @@ Se [branching og arbeidsflyt](git/branching-og-arbeidsflyt.md), [commit-praksis]
    - `[apps-only:X]`: bare de oppgitte løsningene, f.eks. `[apps-only:ProjectWebParts,PortfolioWebParts]`. `shared-library` er bundlet inn i løsningene som bruker den, så en endring der når sidene bare gjennom løsningene du lister.
    - `[skip-e2e]`: hopper over Playwright-testene etter utrullingen.
    - `[build-debug]`: bygger testkanalens pakke uten utrulling, for å prøve endringer i selve bygget.
-4. **Hva CI gjør.** En push til `releases/1.15` bygger og oppgraderer utviklingsmiljøet (`ci-releases.yml`) og bygger testkanalen, ruller den ut til testtenanten og kjører Playwright mot den (`ci-channel-test.yml`). En push dit oppgraderer altså testtenanten. Det kjører ingen bygg på pull requests i dag, så bygg og test lokalt før du ber om review.
+4. **Hva CI gjør.** En push til `releases/1.15` bygger og oppgraderer utviklingsmiljøet (`ci-releases.yml`) og bygger testkanalen, ruller den ut til testtenanten og kjører Playwright mot den (`ci-channel-test.yml`). En push dit oppgraderer altså testtenanten. En pull request mot release-branchen får et fullt bygg med alle testene (`ci-build-debug.yml`), som branch-beskyttelsen krever før merge. Den ruller ikke ut noe.
 5. **Changelog.** Legg til en linje på norsk i [CHANGELOG.md](../CHANGELOG.md) under neste versjon (`Ny funksjonalitet`, `Forbedringer` eller `Feilrettinger`), skrevet for brukeren og med issue-nummer når det finnes.
 6. **PR** mot release-branchen med [PR-malen](../.github/PULL_REQUEST_TEMPLATE.md): beskrivelse, før/etter-skjermbilder ved visuelle endringer, teststeg som en bruker uten kodekunnskap kan følge, milepæl, labels og deg selv som ansvarlig.
 7. **Review.** [CODEOWNERS](../.github/CODEOWNERS) gjør @tarjeieo og @remi749 til standard-reviewere. De sjekker testpunktene, om endringen hører hjemme i release notes og om [brukermanualen](https://puzzlepart.github.io/prosjektportalen-manual/) må oppdateres.
@@ -418,7 +419,7 @@ install: update installation scripts
 
 Prosjektportalen bruker GitHub Actions for kontinuerlig integrasjon og utrulling. Forskjellige commit-meldinger kan påvirke hvilke actions som kjøres:
 
-Nøkkelordene leses bare fra emnelinjen (første linje) i commit-meldingen, unntatt på `main`, der `build-release.yml` leser hele meldingen. Den fullstendige listen og hva hver arbeidsflyt gjør, står i [Kontinuerlig integrasjon](../ci/kontinuerlig-integrasjon.md). De mest brukte:
+Nøkkelordene leses bare fra emnelinjen (første linje) i commit-meldingen, også på `main`. Den fullstendige listen og hva hver arbeidsflyt gjør, står i [Kontinuerlig integrasjon](../ci/kontinuerlig-integrasjon.md). De mest brukte:
 
 - `[skip-ci]` – ingen bygging eller utrulling (unntatt `skills.yml`, som bare sjekker agentferdighetene)
 - `[apps-only]` – bygger og ruller ut bare pakkene (appkatalogen), ikke malene. Brukes når ingenting i `Templates/` er endret.
@@ -1864,7 +1865,7 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 - **Integrasjon, men ingen E2E:** Program aggregeringsoversikt. Matrisene har E2E på statussiden bare der rapporten har usikkerheter, og som webdeler på en side testharnesset legger til (`add-matrix-page`), siden ingen malside har dem.
 - **Bare indirekte i E2E:** Siste prosjekter og Prosjektnyheter.
 - **Manuelt:** prosjektoppsett, publisering av statusrapport, idéflyten og å endre fase.
-- **Utenfor komponentene:** `.tasks/check-channel-ids.test.js` (5 tester, `npm run test:tasks`).
+- **Utenfor komponentene:** `.tasks/check-channel-ids.test.js` (5 tester) og `.tasks/modify-solution-files.test.js` (3 tester: kanal-ID-ene, versjonsstempelet og at bare en kanal med egne ID-er skjuler webdelene), med `npm run test:tasks`.
 
 
 
@@ -2078,10 +2079,10 @@ En installasjonskanal gir løsningene og komponentene egne ID-er, slik at flere 
 
 | Fil | Kanal |
 |---|---|
-| `main.json` | Utgivelsen. ID-ene er de som står i kildekoden |
+| `main.json` | Utgivelsen. ID-ene er de som står i kildekoden. `ci-releases.yml` bygger med den (`-Channel main`) for å få kjørenummeret i versjonen |
 | `test.json` | Testkanalen, som `ci-channel-test.yml` bygger og ruller ut til testtenanten |
 | `kurs.json` | Bygges på `main` når commit-meldingen har `[build-kurs]` |
-| `i18n.json` | Ingen aktiv arbeidsflyt bygger den (`ci-channel-i18n.yml` ligger i `.github/workflows/unused/`) |
+| `i18n.json` | Ingen arbeidsflyt bygger den; `Build-Release.ps1 -Channel i18n` eller `npm run build:i18n` i en løsning bygger den lokalt |
 
 Hver fil gir hver SPFx-løsning egen `id`, `name` og `zippedPackage` (f.eks. `solution/pp-portfolio-web-parts-test.sppkg`) og hver komponent egen ID, oppslått på komponentens alias. Formatet står i `channels/$schema.json`.
 
@@ -2089,7 +2090,7 @@ Hver fil gir hver SPFx-løsning egen `id`, `name` og `zippedPackage` (f.eks. `so
 
 SPFx-manifestene, porteføljemalen og site scriptene har `main`-ID-ene, og JSON-prosjektmalene bruker `{{ControlId_<alias>}}`. `Install/Build-Release.ps1 -Channel <kanal>` skriver kanalfila til `.current-channel-config.json` i roten og bytter ID-ene på fire steder:
 
-- **SPFx-løsningene:** `config/package-solution.json` og hver `manifest.json` (`SharePointFramework/.tasks/modifySolutionFiles.js`). Webdelene får `hiddenFromToolbox`, så verktøykassen ikke viser dem to ganger. Filene tilbakestilles etter pakkingen.
+- **SPFx-løsningene:** `config/package-solution.json` og hver `manifest.json` (`SharePointFramework/.tasks/modifySolutionFiles.js`). Webdelene får `hiddenFromToolbox` når kanalen har egne ID-er, så verktøykassen ikke viser dem to ganger; med `main` beholder de plassen sin i verktøykassen. Filene tilbakestilles etter pakkingen.
 - **Porteføljemalen:** `npm run generate-pnp-templates` kopierer `Templates/Portfolio` til `.dist/Templates/Portfolio` og bytter `main`-ID-ene der.
 - **Site scriptene:** `npm run generate-site-scripts` kopierer `SiteScripts/src` til `.dist/SiteScripts` og bytter ID-ene der.
 - **JSON-prosjektmalene:** `{{ControlId_<alias>}}` fylles fra `.current-channel-config.json`, eller fra `channels/main.json` når den fila ikke finnes.
@@ -2100,9 +2101,9 @@ Komponent-ID-er som står i TypeScript, byttes ikke. De to `ProjectSetupCustomAc
 
 ### Bygge for en kanal
 
-- Hele utgivelsespakken: `./Install/Build-Release.ps1 -Channel test` i PowerShell 7. `-Channel` godtar `test`, `kurs` og `i18n`. Pakken havner i `release/` med kanalnavnet bakerst; se [Bygge en ny utgivelse](../utgivelse/bygge-utgivelse.md).
+- Hele utgivelsespakken: `./Install/Build-Release.ps1 -Channel test` i PowerShell 7. `-Channel` tar navnet på en fil i `channels/`: `main`, `test`, `kurs` eller `i18n`. Pakken havner i `release/` med kanalnavnet bakerst; se [Bygge en ny utgivelse](../utgivelse/bygge-utgivelse.md).
 - Én løsning: `npm run build:test` (eller `build:kurs`, `build:i18n`) i løsningen. Det lager bare den løsningens `.sppkg` og kjører ingen tester.
-- I CI setter `ci-channel-test.yml` og `ci-build-debug.yml` `PP365_BUILD_NUMBER` til kjørenummeret, og løsningen og funksjonene får versjonen `x.y.z.<kjørenummer>`. Andre bygg har `x.y.z.0`.
+- I CI setter `ci-releases.yml`, `ci-channel-test.yml` og `ci-build-debug.yml` `PP365_BUILD_NUMBER` til kjørenummeret, og løsningen og funksjonene får versjonen `x.y.z.<kjørenummer>`. Andre bygg har `x.y.z.0`.
 
 Avbrytes et kanalbygg, blir filene liggende. En gjenglemt `.current-channel-config.json` får lokale genereringer til å bruke kanalens ID-er: slett den. Tilbakestill løsningene med `node ../.tasks/modifySolutionFiles.js --revert --force` og `node ../.tasks/setBundleConfig.js --revert` i hver av dem. Commit aldri kanal-ID-er i manifestene.
 
@@ -2140,7 +2141,7 @@ npm run sync-version -- --dry-run
 
 Det trenger rotens egne avhengigheter (`glob`), som Rush ikke installerer, så kjør `npm install` i roten først. Løsningene henter hverandre med `workspace:*`, så ingen avhengighet må oppdateres for hånd. Hele løpet for en ny versjon står i [Opprettelse av en ny versjon](opprette-ny-versjon.md).
 
-Pakkene som `ci-channel-test.yml` og `ci-build-debug.yml` bygger, får kjørenummeret som fjerde ledd (`x.y.z.<kjørenummer>`), slik at SharePoint henter manifestene på nytt. Pakker fra `main`, `ci-releases.yml` og lokale bygg har `x.y.z.0`. Se [Installasjonskanaler](../maler/kanaler.md).
+Pakkene som `ci-releases.yml`, `ci-channel-test.yml` og `ci-build-debug.yml` bygger, får kjørenummeret som fjerde ledd (`x.y.z.<kjørenummer>`), slik at SharePoint henter manifestene på nytt. Pakker fra `main` og lokale bygg har `x.y.z.0`. Se [Installasjonskanaler](../maler/kanaler.md).
 
 
 
@@ -2239,8 +2240,8 @@ Kjør aldri `npm version` inne i en løsning; se [NPM](npm.md).
 ### 3. Release-PR og pakkene
 
 - Opprett en PR fra `releases/x.y` til `main` med tittelen `v<versjon>`, labelen `release-pr` og milepælen for versjonen. For 1.14.0 var det #1769, slått sammen med «Squash and merge».
-- Push til `main` starter `build-release.yml` («Build release (main)») når den endrer noe under `SharePointFramework/`, `Install/` eller `Templates/`, som versjonscommiten gjør. Den laster opp artefaktene `release-package` (hovedkanalen) og `release-package-test` (testkanalen), og `release-package-kurs` når commit-meldingen har `[build-kurs]`. Den ruller ikke ut noe.
-- Arbeidsflyten leser hele commit-meldingen, også punktlisten en squash-merge lager av alle commitene i versjonen. Sjekk at den ikke har `[skip-main-ci]` eller en `[build-kurs]` du ikke vil ha.
+- Push til `main` starter `build-release.yml` («Build release (main)») når den endrer noe under `SharePointFramework/`, `Install/` eller `Templates/`, som versjonscommiten gjør. Den laster opp artefaktene `release-package` (hovedkanalen) og `release-package-test` (testkanalen), og `release-package-kurs` når emnelinjen har `[build-kurs]`. Den ruller ikke ut noe.
+- Arbeidsflyten leser bare emnelinjen, som de andre arbeidsflytene. Skal kurs-pakken bygges, legg `[build-kurs]` bakerst i emnelinjen i merge-dialogen. Til 14. oktober 2026 leste den hele meldingen, også punktlisten en squash-merge lager av alle commitene i versjonen.
 - Artefaktene slettes etter 7 dager, som er det lengste repoet tillater.
 - Testpakken fra `main` har versjonen `x.y.z.0`. Testtenanten har allerede fått `x.y.z.<kjørenummer>` fra `ci-channel-test.yml`.
 
@@ -2329,8 +2330,8 @@ Vi har satt opp kontinuerlig integrasjon (CI) ved hjelp av GitHub Actions.
 Nøkkelord kan brukes i commit-meldingen for å unngå (eller tvinge) at CI kjører noen av jobbene.
 
 - `[skip-ci]` for å unngå at alle CI-prosesser starter. Unntak: `skills.yml`, som bare sjekker agentferdighetene og tar sekunder, og `build-release.yml` på `main`, som ikke leser taggen.
-- `[skip-upgrade]` for å unngå at jobben «Oppgrader» starter. Dette vil også hoppe over jobben «Installer» da den er avhengig av «Oppgrader».
-- `[skip-install]` for å unngå at jobben «Installer» starter.
+- `[skip-upgrade]` for å unngå at oppgraderingen starter, også pakkeoppgraderingen etter `[apps-only]`. Jobbene som følger den, hoppes da også over: «Installer», røyktestene og integrasjonstestene.
+- `[fresh-install]` (bare `ci-releases.yml`) installerer et nytt hubområde, `<huben>_<commit>`, etter oppgraderingen, for å prøve en installasjon fra bunnen. Jobben kjørte før på hver push uten `[skip-install]`, og ingenting sletter områdene: 14. oktober 2026 lå det 354 slike på tenanten.
 - `[skip-main-ci]` (bare `main`) hopper over utgivelsespakken og kurs-pakken i `build-release.yml`. Testkanalens pakke bygges likevel.
 - `[skip-test-ci]` (bare `main`) hopper over testkanalens pakke i `build-release.yml`. Uten taggen bygges den også når hovedpakken hoppes over (`[skip-main-ci]`) eller feiler; jobbens `if:` er `!cancelled() && …` (til 2026-10-09 `always() || …`, som alltid var sant, så taggen virket ikke).
 - `[build-kurs]` (bare `main`) bygger også kurs-kanalens pakke i `build-release.yml`.
@@ -2341,13 +2342,13 @@ Nøkkelord kan brukes i commit-meldingen for å unngå (eller tvinge) at CI kjø
 - `[skip-integration]` for å hoppe over integrasjonstestene i `integration/`, som kjører ved siden av røyktestene (se «Testregime»). `[skip-upgrade]` hopper over dem indirekte.
 - `[build-debug]` for å bygge utgivelsespakken i feilsøkingsarbeidsflyten, uten utrulling (se «CI (build debug)»). Sammen med `[skip-ci]` i samme emnelinje bygger bare den.
 
-Bare emnelinjen (første linje) i commit-meldingen leses, slik at punktene i en squash-merge ikke styrer jobbene. Unntaket er `build-release.yml` på `main`: den leser hele meldingen, også punktlisten i en squash-merge, etter `[skip-main-ci]`, `[skip-test-ci]` og `[build-kurs]`.
+Bare emnelinjen (første linje) i commit-meldingen leses, også på `main`, slik at punktene i en squash-merge ikke styrer jobbene. Til 14. oktober 2026 leste `build-release.yml` hele meldingen, så én `[skip-test-ci]` eller `[build-kurs]` i en hvilken som helst commit i en versjon slo inn. Legg taggen bakerst i emnelinjen i merge-dialogen.
 
 ### Bygg og installer (dev)
 
-[ci-releases](../../.github/workflows/ci-releases.yml) kjører ved _push_ til `releases/1.15` som endrer noe under `SharePointFramework/`, `Install/` eller `Templates/`. Den bygger utgivelsespakken med [Build-Release.ps1](../../Install/Build-Release.ps1) `-CI`, oppgraderer utviklingshuben `https://puzzlepart.sharepoint.com/sites/pp365` med [Install.ps1](../../Install/Install.ps1) `-Upgrade`, og installerer så et nytt område, `<huben>_<commit>`, for å prøve en ny installasjon. Innloggingen skjer som CI-appen «Prosjektportalen CI» (se under), fra hemmelighetene `CI_TENANT`, `CI_CLIENT_ID` og `CI_CERT_BASE64`.
+[ci-releases](../../.github/workflows/ci-releases.yml) kjører ved _push_ til `releases/1.15` som endrer noe under `SharePointFramework/`, `Install/` eller `Templates/`. Den bygger utgivelsespakken med [Build-Release.ps1](../../Install/Build-Release.ps1) `-CI -Channel main`, med kjørenummeret som fjerde ledd i versjonen slik testkanalen får det, og oppgraderer utviklingshuben `https://puzzlepart.sharepoint.com/sites/pp365` (variabelen `SP_URL`) med [Install.ps1](../../Install/Install.ps1) `-Upgrade`. Med `[fresh-install]` installerer den også et nytt område, `<huben>_<commit>`, for å prøve en ny installasjon. Kjøringene deler én `concurrency`-gruppe (`ci-releases`), så to push rett etter hverandre ikke oppgraderer huben samtidig. Innloggingen skjer som CI-appen «Prosjektportalen CI» (se under), fra hemmelighetene `CI_TENANT`, `CI_CLIENT_ID` og `CI_CERT_BASE64`.
 
-En full kjøring tar rundt 85–90 minutter (bygg ~13, oppgradering ~28, ny installasjon ~46). Med `[apps-only]` bygges bare pakkene, og huben oppgraderes uten maler, på rundt 14 minutter.
+En full kjøring tar rundt 40 minutter (bygg ~13, oppgradering ~28), og rundt 46 minutter til med `[fresh-install]`. Med `[apps-only]` bygges bare pakkene, og huben oppgraderes uten maler, på rundt 14 minutter.
 
 ### CI-appen «Prosjektportalen CI»
 
@@ -2375,21 +2376,33 @@ Alle kjøringene oppgraderer den samme testhuben og appkatalogen, uansett branch
 
 [ci-build-debug](../../.github/workflows/ci-build-debug.yml) bygger testkanalens utgivelsespakke slik pakkejobben i `ci-channel-test` gjør, men ruller den ikke ut og trenger ingen hemmeligheter. Den er til å prøve og måle endringer i selve bygget (nye brytere i `Build-Release.ps1`, oppsettet av Rush og Heft) før de levende arbeidsflytene tar dem i bruk. Den kjører ved _push_ når emnelinjen inneholder `[build-debug]`, med samme argumenter som pakkejobben i `ci-channel-test`: `-RushTimeline` (tiden per prosjekt skrives i loggen og i jobbens sammendrag) og `-SkipPnPPowerShell` (bare PnP-malene, som jobben hopper over, trenger modulen). En endring i bygget legges inn her først, som en ny bryter i `Build-Release.ps1`, og flyttes til de levende arbeidsflytene når den er bevist. Pakken og Rush-loggene lastes opp som `release-package-debug` og `rush-logs-debug`.
 
+Den kjører også på hver pull request mot en release-branch (`releases/**`), uten tag og uten stifilter. Der er den bygget branch-beskyttelsen krever før merge, jobben «Build release package (pull request)»: full `rush rebuild` med Jest, dekningsgulvene og pakkebevisene, uten utrulling og uten hemmeligheter. En ny push til samme pull request avbryter bygget som kjører.
+
 To ting å vite når du måler: løperne varierer mye (samme bygg har tatt 506 og 711 sekunder), så bare tider fra samme kjøring kan sammenlignes. Og `package-solution` lager ny GUID for «Client Side Assets»-funksjonen og nye relasjons-ID-er (`Id="r5"`) ved hver kjøring, så to `.sppkg` fra samme kode er bare like når disse er maskert. Et faseinndelt bygg (build og test som egne Rush-faser) er prøvd og var tregere på GitHubs firekjerners løpere; resultatet står i `docs/plans/dependency-upgrades-phase-5.md`, slice 1c.
 
 ### Bygg utgivelse (main)
 
 [build-release](../../.github/workflows/build-release.yml) kjører ved _push_ til `main` som endrer noe under `SharePointFramework/`, `Install/` eller `Templates/`. Den bygger utgivelsespakken og testkanalens pakke, og kurs-pakken med `[build-kurs]`, og laster dem opp som artefaktene `release-package`, `release-package-test` og `release-package-kurs`. Den ruller ikke ut noe, og tar rundt 25 minutter. Hvordan pakkene brukes i en utgivelse, står i [Opprettelse av en ny versjon](../utgivelse/opprette-ny-versjon.md).
 
+### Felles for arbeidsflytene
+
+- **Tidsgrenser.** Hver jobb har `timeout-minutes`: bygg 45, full oppgradering 60, pakkeoppgradering 20, E2E 30, integrasjonstester 20 og `UpgradeAllSitesToLatest.ps1` 120. GitHubs standard er seks timer, og når kjøringene venter på hverandre (`concurrency`), holder en jobb som henger, alle senere like lenge.
+- **Rettigheter.** `permissions: contents: read` for `GITHUB_TOKEN`; bare SBOM-jobben skriver, siden den committer `SBOM.md` ved manuell kjøring.
+- **Rush-loggene** lastes opp som artefakt (`rush-logs-…`, 7 dager) når et bygg feiler. `Build-Release.ps1` skriver bare de siste 200 linjene i jobbloggen.
+- **Hemmelighetene** sendes til skriptene som `$env:CI_CERT_BASE64`, `$env:CI_TENANT` og `$env:CI_CLIENT_ID`, som PowerShell leser når steget kjører. De skrives dermed aldri inn i stegets skript på runneren.
+- **PnP.PowerShell** installeres i CI med `Install-ModuleWithRetry` fra `Install/Scripts/SharedFunctions.ps1`: tre forsøk med 30 sekunder imellom, siden runneren av og til ikke når PowerShell Gallery (kjøring 38522211703).
+- **Versjoner av actions:** `actions/checkout@v7`, `actions/setup-node@v7`, `actions/upload-artifact@v7` og `actions/download-artifact@v8`, som alle kjører på Node 24.
+- **Versjonsstempling:** `ci-releases.yml`, `ci-channel-test.yml` og `ci-build-debug.yml` setter `PP365_BUILD_NUMBER` (se [Installasjonskanaler](../maler/kanaler.md)).
+
 ### Aktive arbeidsflyter
 
-GitHub kjører bare arbeidsflytfilene som ligger rett i `.github/workflows/`. De i `.github/workflows/unused/` (`automatic_chores.yml`, `ci-channel-i18n.yml`, `pr-package-spfx-dev.yml`) er tatt ut av bruk.
+GitHub kjører bare arbeidsflytfilene som ligger rett i `.github/workflows/`. Mappen `unused/` med `automatic_chores.yml`, `ci-channel-i18n.yml` og `pr-package-spfx-dev.yml` ble slettet 14. oktober 2026. Den påkrevde sjekken «Rush Install and Rebuild» i branch-beskyttelsen kom fra den siste og kunne aldri kjøre; branch-beskyttelsen skal kreve «Build release package (pull request)» i stedet. PR-jobben har et eget navn fordi en push til samme commit uten `[build-debug]` gir en hoppet-over «Build release package (debug)», og GitHub regner en hoppet-over jobb som bestått for en påkrevd sjekk.
 
 | Arbeidsflytfil        | Beskrivelse                                                                  | Utløser                                                                                  |
 | --------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `ci-releases.yml`     | Bygg, oppgrader og installer til utviklingsmiljø                             | Push til `releases/1.15` (stier: SPFx, Install, Templates)                               |
+| `ci-releases.yml`     | Bygg og oppgrader utviklingsmiljøet; ny installasjon med `[fresh-install]`   | Push til `releases/1.15` (stier: SPFx, Install, Templates)                               |
 | `ci-channel-test.yml` | Bygg og distribuer testkanalen, og kjør Playwright- og integrasjonstestene mot den | Push til `releases/1.15` og `feat/technical-backlog*` (stier: SPFx, Install, Templates, e2e, integration) |
-| `ci-build-debug.yml`  | Bygg testkanalens pakke uten utrulling, for å prøve endringer i bygget       | Push til `releases/1.15` eller en `feat/**`-branch med `[build-debug]` i emnelinjen      |
+| `ci-build-debug.yml`  | Bygg testkanalens pakke uten utrulling: for å prøve endringer i bygget, og som påkrevd bygg på pull requests | Push til `releases/1.15` eller en `feat/**`-branch med `[build-debug]` i emnelinjen, og hver pull request mot `releases/**` |
 | `build-release.yml`   | Bygg utgivelsespakke og test/kurs-kanalpakker                                | Push til `main` (stier: SPFx, Install, Templates)                                        |
 | `generate-sbom.yml`   | Generer SBOM.md som artefakt; committer den bare ved manuell kjøring fra en branch | Tag-push `v*` eller manuell utløsning                                              |
 | `skills.yml`          | Sjekk at agentferdighetene bare ligger i `.claude/skills` (`npm run check-skills`) | Push og pull request som endrer `.claude/skills`, `.github/skills` eller `.agents/skills` |

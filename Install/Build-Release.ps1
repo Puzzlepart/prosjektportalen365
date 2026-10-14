@@ -245,7 +245,11 @@ if ($SkipPnPPowerShell.IsPresent) {
 else {
     if ($CI.IsPresent) {
         StartAction("Installing module PnP.PowerShell")
-        Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser
+        # With SharedFunctions.ps1's retries, in their own scope like Get-PnPVersion above.
+        & {
+            . "$PSScriptRoot/Scripts/SharedFunctions.ps1"
+            Install-ModuleWithRetry -Name PnP.PowerShell
+        }
         EndAction
     }
     else {

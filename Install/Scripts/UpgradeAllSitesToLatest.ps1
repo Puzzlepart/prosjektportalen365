@@ -26,7 +26,7 @@ $ErrorActionPreference = "Stop"
 
 if ($CI.IsPresent -and $null -eq (Get-Module -Name PnP.PowerShell)) {
     Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
-    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop
+    Install-ModuleWithRetry -Name PnP.PowerShell
 }
 else {
     if (-not $SkipLoadingBundle.IsPresent) {
