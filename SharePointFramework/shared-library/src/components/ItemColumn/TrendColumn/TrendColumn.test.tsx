@@ -1,4 +1,6 @@
 import { render, screen } from '@testing-library/react'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
+import strings from 'SharedLibraryStrings'
 import * as React from 'react'
 import { TrendColumn } from './index'
 
@@ -49,5 +51,19 @@ describe('TrendColumn', () => {
     )
     expect(hasIcon(container)).toBe(false)
     expect(screen.getByText('75 %')).toBeInTheDocument()
+  })
+
+  it('names the trend its icon shows, which is otherwise only seen (WCAG 1.1.1)', async () => {
+    const { container, rerender } = render(
+      <TrendColumn columnValue={trend({ iconName: 'Trophy', color: 'gold' })} />
+    )
+    expect(screen.getByRole('img', { name: strings.Aria.TrendTargetReached })).toBeInTheDocument()
+    expect(await axeComponent(container)).toHaveNoViolations()
+    rerender(<TrendColumn columnValue={trend({ iconName: 'CaretUp', color: '#27ae60' })} />)
+    expect(screen.getByRole('img', { name: strings.Aria.TrendBetter })).toBeInTheDocument()
+    rerender(<TrendColumn columnValue={trend({ iconName: 'CaretDown', color: '#e74c3c' })} />)
+    expect(screen.getByRole('img', { name: strings.Aria.TrendWorse })).toBeInTheDocument()
+    rerender(<TrendColumn columnValue={trend(undefined)} />)
+    expect(screen.queryByRole('img')).toBeNull()
   })
 })

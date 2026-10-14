@@ -1,4 +1,5 @@
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import * as React from 'react'
 import { UserMessage } from '.'
 
@@ -31,5 +32,14 @@ describe('UserMessage', () => {
     expect(onClick).toHaveBeenCalled()
     rerender(<UserMessage text='Lagret' hidden />)
     expect(container.firstElementChild).not.toBeVisible()
+  })
+
+  it('breaks no rule axe can check, with a title, a text and a link', async () => {
+    const { container } = render(
+      <UserMessage title='Ingen tilgang' text='Kontakt **administrator**.' intent='warning'>
+        <a href='/hjelp'>Les mer</a>
+      </UserMessage>
+    )
+    expect(await axeComponent(container)).toHaveNoViolations()
   })
 })

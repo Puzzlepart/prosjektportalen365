@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { createTableColumn } from '@fluentui/react-components'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import * as React from 'react'
 import { IListColumn } from '../../types'
 import { createDataGridColumns } from '../../util/createDataGridColumns'
@@ -178,5 +179,19 @@ describe('DataGridList', () => {
     render(<DataGridList items={items} columns={fromList} getRowId={(item) => item.id} />)
     expect(screen.getByText('Navn')).toBeInTheDocument()
     expect(rowNames()).toEqual(['Bravo', 'Alfa', 'Charlie'])
+  })
+
+  it('breaks no rule axe can check, sortable and with every row selectable', async () => {
+    const { container } = render(
+      <DataGridList
+        items={items}
+        columns={columns}
+        getRowId={(item) => item.id}
+        sortable
+        selectionMode='multiselect'
+        selectedItems={['a']}
+      />
+    )
+    expect(await axeComponent(container)).toHaveNoViolations()
   })
 })

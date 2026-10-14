@@ -37,6 +37,8 @@ export const UserColumn: ColumnRenderComponent = ({ columnValue, column }) => {
         <Avatar
           title={text}
           name={text}
+          // The name is beside it: read once, not twice (WCAG 1.1.1).
+          aria-hidden
           image={{
             src: getUserPhoto(email)
           }}
@@ -55,6 +57,7 @@ export const UserColumn: ColumnRenderComponent = ({ columnValue, column }) => {
       <Avatar
         title={columnValue}
         name={columnValue}
+        aria-hidden
         size={28}
         color='colorful'
         style={{ marginRight: 4 }}

@@ -13,7 +13,9 @@
  * - the input is a combobox that shows `value` and reports typing through `onChange`;
  * - an option reports a pick with its value and the selected options plus it;
  * - a tag reports its removal with the selected options less it, as Backspace in the empty input
- *   does for the last tag.
+ *   does for the last tag;
+ * - a tag and an option show their `media` (a picture) before their text, so a test sees what a
+ *   screen reader would read in them.
  *
  * Usage, above the test's imports:
  *
@@ -34,7 +36,7 @@ function withTagPickerStandIn() {
   const TagPickerControl = ({ className, children }) => h('div', { className }, children)
   const TagPickerGroup = (props) =>
     h('div', { role: 'group', 'aria-label': props['aria-label'] }, props.children)
-  const Tag = ({ value, children }) => {
+  const Tag = ({ value, media, children }) => {
     const context = React.useContext(Picker)
     return h(
       'button',
@@ -43,6 +45,7 @@ function withTagPickerStandIn() {
         onClick: (event) =>
           select(context, event, value, context.selectedOptions.filter((option) => option !== value))
       },
+      media,
       children
     )
   }
@@ -64,7 +67,7 @@ function withTagPickerStandIn() {
     })
   }
   const TagPickerList = ({ children }) => h('div', { role: 'listbox' }, children)
-  const TagPickerOption = ({ value, children, secondaryContent }) => {
+  const TagPickerOption = ({ value, media, children, secondaryContent }) => {
     const context = React.useContext(Picker)
     return h(
       'div',
@@ -73,6 +76,7 @@ function withTagPickerStandIn() {
         'aria-selected': false,
         onClick: (event) => select(context, event, value, [...context.selectedOptions, value])
       },
+      media,
       children,
       secondaryContent ? h('span', null, ' ', secondaryContent) : null
     )

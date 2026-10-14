@@ -6,7 +6,7 @@ jest.mock('@fluentui/react-components', () =>
   jest.requireActual('pp365-jest-config/lib/tagPickerStandIn').withTagPickerStandIn()
 )
 
-import { act, fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import strings from 'SharedLibraryStrings'
 import * as React from 'react'
 import { PeoplePicker } from '.'
@@ -75,13 +75,27 @@ describe('PeoplePicker', () => {
         onResolveSuggestions={jest.fn()}
       />
     )
-    expect(
-      screen.getByRole('group', { name: strings.PeoplePickerSelectedLabel })
-    ).toHaveTextContent('Kari NordmannOla Nordmann')
+    const picked = screen.getByRole('group', { name: strings.PeoplePickerSelectedLabel })
+    expect(within(picked).getByRole('button', { name: 'Kari Nordmann' })).toBeInTheDocument()
+    expect(within(picked).getByRole('button', { name: 'Ola Nordmann' })).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Kari Nordmann' }))
     expect(onChange).toHaveBeenLastCalledWith([OLA])
     fireEvent.keyDown(input(), { key: 'Backspace' })
     expect(onChange).toHaveBeenLastCalledWith([KARI])
+  })
+
+  it('reads a person by their name once, their picture beside it hidden (WCAG 1.1.1)', async () => {
+    render(
+      <PeoplePicker
+        selected={[KARI]}
+        multi
+        onChange={jest.fn()}
+        onResolveSuggestions={() => Promise.resolve([OLA])}
+      />
+    )
+    expect(screen.getByRole('button', { name: 'Kari Nordmann' })).toBeInTheDocument()
+    await search('Ola')
+    expect(screen.getByRole('option', { name: 'Ola Nordmann ola@contoso.no' })).toBeInTheDocument()
   })
 
   it('searches a moment after the typing pauses, telling the search who is picked', async () => {

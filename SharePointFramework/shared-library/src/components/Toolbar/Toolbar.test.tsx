@@ -22,6 +22,7 @@ jest.mock('@fluentui/react-components', () => {
 
 import { AddRegular } from '@fluentui/react-icons'
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import strings from 'SharedLibraryStrings'
 import * as React from 'react'
 import { ListMenuItem, ListMenuItemDivider, ListMenuItemHeader, Toolbar } from '.'
@@ -179,5 +180,26 @@ describe('Toolbar', () => {
     )
     expect(screen.getByText(strings.FiltersString)).toBeInTheDocument()
     expect(screen.getByText(strings.FilterPanelEmptyTitle)).toBeInTheDocument()
+  })
+
+  it('names every item, by its text, its description or its search box label, and breaks no rule axe can check', async () => {
+    const { container } = render(
+      <Toolbar
+        items={[
+          new ListMenuItem('Ny', 'Lag et nytt element').setIcon(AddRegular).setOnClick(jest.fn()),
+          new ListMenuItem(null, 'Eksporter til Excel').setIcon('ExcelLogo').setOnClick(jest.fn()),
+          new ListMenuItem('Visning', 'Velg visning').setItems([new ListMenuItem('Alle')]),
+          new ListMenuItem().setSearchBox({ placeholder: 'Søk i listen', 'aria-label': 'Søk' })
+        ]}
+        farItems={[
+          new ListMenuItem(null, 'Vis som kort').setIcon('GridView').setOnClick(jest.fn())
+        ]}
+      />
+    )
+    for (const name of ['Ny', 'Eksporter til Excel', 'Visning', 'Vis som kort']) {
+      expect(screen.getByRole('button', { name })).toBeInTheDocument()
+    }
+    expect(screen.getByRole('searchbox', { name: 'Søk' })).toBeInTheDocument()
+    expect(await axeComponent(container)).toHaveNoViolations()
   })
 })

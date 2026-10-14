@@ -15,13 +15,15 @@ import { IPeoplePickerProps } from './types'
 import { NO_PEOPLE_FOUND, personKey, usePeoplePicker } from './usePeoplePicker'
 
 /**
- * The person's picture, or their initials where there is none.
+ * The person's picture, or their initials where there is none. Hidden from screen readers: the
+ * person's name is beside it, and would otherwise be read twice (WCAG 1.1.1).
  */
 const PersonAvatar: FC<{ person: IPersonaItem; shape?: 'circular' | 'square' }> = ({
   person,
   shape
 }) => (
   <Avatar
+    aria-hidden
     name={person.text}
     image={person.imageUrl ? { src: person.imageUrl } : undefined}
     shape={shape}

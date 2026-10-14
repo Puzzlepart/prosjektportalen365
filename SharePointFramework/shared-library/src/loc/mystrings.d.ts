@@ -11,6 +11,9 @@ declare interface ISharedLibraryStrings {
     ProjectTitle: string
     SaveTitle: string
     SaveDisabledTitle: string
+    TrendBetter: string
+    TrendTargetReached: string
+    TrendWorse: string
   }
   DatePicker: {
     GoToToday: string

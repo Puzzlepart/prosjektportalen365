@@ -1,4 +1,5 @@
 import { act, cleanup, render, screen, waitFor } from '@testing-library/react'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import strings from 'SharedLibraryStrings'
 import * as React from 'react'
 import { ProjectLogo } from '.'
@@ -83,5 +84,19 @@ describe('ProjectLogo', () => {
     unmount()
     render(<ProjectLogo title='Frisbeegolfbane' url={URL} />)
     expect(await screen.findByText('FR')).toBeInTheDocument()
+  })
+
+  it('names the logo and the initials alike, and breaks no rule axe can check', async () => {
+    const name = format(strings.Aria.ProjectTitle, 'Frisbeegolfbane')
+    const logoShown = render(<ProjectLogo title='Frisbeegolfbane' url={URL} />)
+    await waitFor(() => expect(image()).toBeVisible())
+    expect(screen.getByRole('img', { name })).toBe(image())
+    expect(await axeComponent(logoShown.container)).toHaveNoViolations()
+    logoShown.unmount()
+    logo.height = 96
+    const initials = render(<ProjectLogo title='Frisbeegolfbane' url={URL} />)
+    expect(await screen.findByText('FR')).toBeInTheDocument()
+    expect(screen.getByRole('img', { name })).not.toBe(image())
+    expect(await axeComponent(initials.container)).toHaveNoViolations()
   })
 })

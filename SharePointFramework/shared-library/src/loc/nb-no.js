@@ -10,7 +10,10 @@ define([], function () {
       MenuOverflowCount: '{0} flere elementer',
       ProjectTitle: 'Logo for prosjekt: {0}',
       SaveTitle: 'Lagre',
-      SaveDisabledTitle: 'Det er påkrevde felter som ikke er utfylt, fyll ut disse for å lagre'
+      SaveDisabledTitle: 'Det er påkrevde felter som ikke er utfylt, fyll ut disse for å lagre',
+      TrendBetter: 'Bedre enn forrige måling',
+      TrendTargetReached: 'Målet er nådd',
+      TrendWorse: 'Dårligere enn forrige måling'
     },
     DatePicker: {
       GoToToday: 'Gå til i dag',

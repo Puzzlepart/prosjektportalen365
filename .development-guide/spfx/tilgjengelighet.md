@@ -7,6 +7,7 @@ Status for universell utforming per komponent, arbeidet i [#1788](https://github
 - **axe** er det axe fant i grunnlagsmålingen 14.10.2026: regelen og hvor mange elementer som brøt den. «Ingen» betyr at axe ikke fant noe. Det betyr ikke at komponenten er tilgjengelig, siden axe bare finner en del av det WCAG krever.
 - **Gjennomgått** er datoen komponenten har vært gjennom alle sju stegene: axe, jest-axe, tastatur, skjermleser, visuelt, skjema og registrering.
 - **Tastatur**, **Skjermleser**, **Visuelt** og **Skjema** fylles ut ved gjennomgangen: ✓ for bestått, ✗ for funn (se merknaden) og – når det ikke er relevant.
+- **Merknad** sier hva som er rettet og hva som gjenstår, og hva jest-axe fant der komponenten har komponenttester.
 
 ### Grunnlagsmålingen
 
@@ -20,20 +21,21 @@ Testene går i `e2e/tests/smoke/a11y-baseline.spec.ts`, `risk-action.spec.ts` og
 
 | Komponent | axe | Gjennomgått | Tastatur | Skjermleser | Visuelt | Skjema | Merknad |
 |---|---|---|---|---|---|---|---|
-| BasePanel | Ingen, i tiltakspanelet |  |  |  |  |  |  |
-| Toolbar | Ikke målt alene |  |  |  |  |  |  |
-| DataGridList | Se «Hent dokumentmal» |  |  |  |  |  |  |
-| FieldContainer og skjemafeltene | Ikke målt alene |  |  |  |  |  |  |
-| CustomEditPanel | Ikke målt |  |  |  |  |  |  |
+| BasePanel | Ingen, i tiltakspanelet |  |  |  |  |  | jest-axe: ingen funn. Panelet heter det overskriften sier, også når toppen er skjult |
+| Toolbar | Ikke målt alene |  |  |  |  |  | jest-axe: ingen funn. En knapp uten tekst heter det beskrivelsen sier |
+| DataGridList | Se «Hent dokumentmal» |  |  |  |  |  | jest-axe: ingen funn, med sortering og avkrysning |
+| FieldContainer og skjemafeltene | Ikke målt alene |  |  |  |  |  | jest-axe: ingen funn, også med datovelgeren |
+| CustomEditPanel | Ikke målt |  |  |  |  |  | jest-axe: ingen funn |
+| PeoplePicker | Ikke målt alene |  |  |  |  |  | Rettet: bildet ved navnet er skjult for skjermlesere, så navnet leses én gang, ikke to |
 | FilterPanel | Ikke målt |  |  |  |  |  | Rettet: seksjonstoppen er en knapp som sier om filteret er åpent |
-| UserMessage | Ikke målt |  |  |  |  |  | Rettet: leses opp, siden hver React-rot nå har en `AriaLiveAnnouncer` |
+| UserMessage | Ikke målt |  |  |  |  |  | Rettet: leses opp, siden hver React-rot nå har en `AriaLiveAnnouncer`. jest-axe: ingen funn |
 | WebPartTitle | Ikke målt alene |  |  |  |  |  | Rettet: én overskrift, der det var to, og info-knappen heter «Informasjon om …» på norsk, der Fluent kalte den «information» |
-| ConfirmDialog | Ikke målt |  |  |  |  |  |  |
-| OverflowTagMenu | Ikke målt |  |  |  |  |  | Taggene er knapper som ikke gjør noe. Vurderes med prosjektkortene |
-| ItemColumn | Se porteføljeoversikten |  |  |  |  |  |  |
+| ConfirmDialog | Ikke målt |  |  |  |  |  | Rettet: dialogen beskrives av teksten sin, så spørsmålet leses opp når den åpnes, ikke bare tittelen |
+| OverflowTagMenu | Ikke målt |  |  |  |  |  | Rettet: taggene er en liste med tekst, der de var knapper som ikke gjorde noe, og `+n`-knappen sier hvor mange tagger den skjuler |
+| ItemColumn | Se porteføljeoversikten |  |  |  |  |  | Rettet: trendikonet har tekst, en lenke uten beskrivelse viser adressen (den var tom), filnavn er lenker, ikke knapper, og bildet ved et personnavn leses ikke opp i tillegg til navnet. Gjenstår: kontrasten i trendikonene (gull 1,4:1 og grønn 2,9:1, kravet er 3:1) rettes med gevinstoversikten. Flere personer i én celle har navnene bare i et verktøytips, uten tastaturvei, og måleren i instrumentkolonnen har ikke tekstalternativ |
 | LoadingSkeleton | aria-progressbar-name 1, i ressursallokeringen |  |  |  |  |  | Rettet: skjelettet heter «Laster...» |
-| ProjectLogo og FileTypeIcon | Ikke målt alene |  |  |  |  |  |  |
-| Autocomplete og ColumnSearchPropertyField | Ikke målt |  |  |  |  |  |  |
+| ProjectLogo og FileTypeIcon | Ikke målt alene |  |  |  |  |  | jest-axe: ingen funn. Logoen og initialene har samme navn, og filtypeikonet er pynt (`alt=""`) ved filnavnet |
+| Autocomplete og ColumnSearchPropertyField | Ikke målt |  |  |  |  |  | Komponenttestene bruker en erstatning for Fluents kombinasjonsboks, så de skannes i nettleseren, med kolonneskjemaene |
 | ProjectTimeline | Se tidslinjene |  |  |  |  |  | Tidslinjebiblioteket har ikke tastaturstøtte |
 
 ### ProjectWebParts

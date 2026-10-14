@@ -32,6 +32,7 @@ import { ConfirmDialogResponseValue, IConfirmDialogProps, UseConfirmationDialog 
  */
 export function useConfirmationDialog(): UseConfirmationDialog {
   const fluentProviderId = useId('fp-confirm-dialog')
+  const contentId = useId('confirm-dialog-content')
   const [state, setState] = useState<{
     props: IConfirmDialogProps
     resolve: (value: ConfirmDialogResponseValue) => void
@@ -66,10 +67,12 @@ export function useConfirmationDialog(): UseConfirmationDialog {
             if (!data.open) respond(undefined)
           }}
         >
-          <DialogSurface>
+          {/* Described by its text, so a screen reader reads the question as the dialog opens,
+              not only its title and the button that takes focus. */}
+          <DialogSurface aria-describedby={contentId}>
             <DialogBody>
               {state?.props.title && <DialogTitle>{state.props.title}</DialogTitle>}
-              <DialogContent>
+              <DialogContent id={contentId}>
                 {state?.props.subText}
                 {state?.props.children}
               </DialogContent>

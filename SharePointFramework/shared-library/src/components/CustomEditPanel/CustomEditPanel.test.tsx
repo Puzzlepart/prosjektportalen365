@@ -54,6 +54,7 @@ jest.mock('@pnp/spfx-controls-react/lib/ModernTaxonomyPicker', () => {
 })
 
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import strings from 'SharedLibraryStrings'
 import * as React from 'react'
 import resource from 'SharedResources'
@@ -176,6 +177,11 @@ describe('CustomEditPanel', () => {
     expect(screen.queryByText('Hemmelig')).toBeNull()
     expect(screen.queryByText('Beregnet')).toBeNull()
     expect(input('Tittel')).toHaveValue('Frisbeegolfbane')
+  })
+
+  it('breaks no rule axe can check, every field labelled', async () => {
+    renderPanel()
+    expect(await axeComponent(document.body)).toHaveNoViolations()
   })
 
   it('keeps save off while a required field is empty', async () => {
@@ -331,6 +337,7 @@ describe('CustomEditPanel', () => {
     expect(date).toHaveValue('01.03.2026')
     // The label is tied to the date's input, not to an id nothing has.
     expect(screen.getByLabelText(/Startdato/)).toBe(date)
+    expect(await axeComponent(document.body)).toHaveNoViolations()
   })
 
   it('takes a date typed the way the date picker writes it', async () => {

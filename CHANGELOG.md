@@ -29,9 +29,11 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Panelet for nytt tiltak på en usikkerhet (Planner) bruker nå samme datovelger og personvelger som de andre skjemaene, med ukenumre og datoer i områdets språk, og tømmes etter lagring når flere tiltak legges til etter hverandre (#1319)
 - Knappene i `Hent dokumentmal` står nå i dialogens knapperad på alle skjermene, der de før lå nederst i innholdet på mappe- og navngivingsskjermen, og mappeskjermen viser samme sted når du går tilbake til den fra navngivingen (#1319)
 - Universell utforming (#1788): skjermlesere leser nå opp meldingsfeltene i webdelene og dialogene, seksjonene i filterpanelet kan åpnes og lukkes med tastatur og sier om de er åpne, webdeltitlene er én overskrift i stedet for to, info-knappen ved tittelen har norsk navn, og innlastingen har et navn skjermleseren kan lese
+- Universell utforming (#1788): merkelappene i blant annet `Prosjektinformasjon`, `Prosjektliste` og `Idémodul` leses som en liste med tekst, ikke som knapper som ikke gjør noe, og `+n`-knappen sier hvor mange merkelapper den skjuler; trendikonet i gevinstoversikten har tekst for skjermlesere («Målet er nådd», «Bedre enn forrige måling», «Dårligere enn forrige måling»); bekreftelsesdialogene leser opp spørsmålet når de åpnes; et navn ved et profilbilde, i personvelgeren og i personkolonner, leses én gang i stedet for to; og filnavn i de aggregerte oversiktene er lenker, som kan kopieres eller åpnes i ny fane, i stedet for knapper
 
 ### Feilrettinger
 
+- Rettet en feil hvor kolonner vist som URL i `Porteføljeoversikt` og `Aggregert oversikt` viste en tom lenke når kolonnen ikke hadde en egen beskrivelse; lenken viser nå lenkens beskrivelse, eller adressen når den ikke har noen (#1788)
 - Rettet en feil hvor person-/brukerfelter på statusrapporter ble lagret med bruker-ID fra prosjektområdet i stedet for hubområdet, slik at feil person kunne vises i porteføljen
 - Rettet en latent feil hvor egenskapsruten til risiko- og mulighetsmatrisewebdelene krasjet dersom initialiseringen av webdelen hadde feilet
 - Matrise-elementer med ID over 99 vises nå korrekt (tidligere «99+»)

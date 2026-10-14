@@ -276,3 +276,45 @@ Tests first: the five new tests (two in `reactRoot`, one each in `LoadingSkeleto
 skeleton's and the title's tests. Changelog line under Forbedringer. Screen reader rounds for the
 four are the user's (pp365-a11y, step 4): a filter section's state, the title read once, the info
 button's name, «Laster...», and a message bar read aloud when it appears.
+
+### Slice 1, part 2 — The other wrappers and the cell renderers (2026-10-14)
+
+- **jest-axe in every wrapper with tests**: `BasePanel`, `Toolbar`, `DataGridList`,
+  `useConfirmationDialog`, `CustomEditPanel` (also with the real date picker), `UserMessage`,
+  `ProjectLogo`, `OverflowTagMenu` and the trend, link, person and file name cells. No violation in
+  the first six; the panel is named by its header also while the header is hidden. `PeoplePicker`,
+  `Autocomplete` and `ColumnSearchPropertyField` are tested on stand-ins for Fluent's combobox
+  family, whose markup is not Fluent's: their names are asserted, and axe sees them in the browser.
+- **OverflowTagMenu** (project information, the project list and cards, the idea module, the tags
+  column): the tags were `InteractionTag`s, buttons that did nothing, in a `TagGroup`, which is a
+  toolbar by default. They are `Tag`s now, each a `listitem` of a `TagGroup role="list"`, named
+  by `text` when the caller gives one. The `+n` button is named «n flere elementer», and with the
+  `MenuTrigger` around `InteractionTagPrimary` rather than around the tag's `div`, the menu's
+  `aria-haspopup` and `aria-expanded` sit on the button that has focus.
+- **An avatar beside a name** (`PeoplePicker`'s tags and options, `UserColumn` with one person)
+  is `aria-hidden`: Fluent's `Avatar` is an `img` named by `name`, so the name was read twice.
+  Several people in one cell keep their named pictures. The tag picker stand-in in
+  `pp365-jest-config` renders `media` now, so a test sees the picture.
+- **ConfirmDialog** is described by its content (`aria-describedby` on `DialogSurface`): Fluent
+  names a dialog by its title and puts focus on the first button, so the question itself was not
+  read as the dialog opened.
+- **TrendColumn**: the icon is an `img` named «Målet er nådd», «Bedre enn forrige måling» or
+  «Dårligere enn forrige måling» (three new strings), where shape and colour alone carried the
+  trend. Its colours come from the benefit model in PortfolioWebParts: gold is 1.4:1 and the green
+  2.9:1 against white, under the 3:1 of 1.4.11, left for the benefit overview in slice 4.
+- **UrlColumn** rendered the column's description as the link's text, so a column without one
+  showed an empty link (axe's `link-name`, and nothing to see or click). The text is the column's
+  description, then the link's own, then the address, as the setting's help text says.
+- **FileNameColumn**: a file name is a `Link` with `href`, `target="_blank"` and
+  `rel="noopener noreferrer"`, where it was a transparent button calling `window.open`, so it is
+  read and listed as a link and can be copied or opened where the user wants it.
+- Noted, not changed: several people in one `UserColumn` cell show their names only in a tooltip
+  on hover, with no way to it from the keyboard; `InstrumentColumn`'s gauge has no text
+  alternative and colours its arc from red to green. Both with the views that use them (slice 4).
+
+Tests first: ten tests in eight files failed on the old code (two each in `PeoplePicker`,
+`FileNameColumn` and `UrlColumn`, one each in `TrendColumn`, `UserColumn`, `OverflowTagMenu` and
+`useConfirmationDialog`) and pass. The library's 74 test files and its runtime tests pass, as do
+the consumers' tests that render the changed parts: `RiskAction` in ProjectExtensions, and the
+project list, the project cards and the idea module in PortfolioWebParts. Left in slice 1: the
+timeline.

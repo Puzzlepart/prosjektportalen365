@@ -50,12 +50,17 @@ Rules 1, 2, 5, 6, 8 and the tooltip handling are adapted from Microsoft's
    `PeoplePicker` takes the field's label inside a `Field`, else `aria-label`. PnP's
    `ModernTaxonomyPicker` takes no input props, so its label stays apart. A placeholder is no label.
 4. **What can be clicked is a button**: Fluent's `Button` or a `<button>`, never a `div` or `span`
-   with `onClick` (found: `OverflowTagMenu`, `FilterPanel/Filter`, `DocumentTemplateItem`'s header).
-   An expand toggle has `aria-expanded`, and `aria-controls` when the content is elsewhere.
+   with `onClick` (found: `FilterPanel/Filter`, `DocumentTemplateItem`'s header). An expand toggle
+   has `aria-expanded`, and `aria-controls` when the content is elsewhere. What goes somewhere is
+   a link with `href` (Fluent's `Link`), not a button calling `window.open` (`FileNameColumn`); a
+   `Link` without `href` renders a button, right for an action (`DialogColumn`). What does nothing
+   is no control: tags that only label are `Tag`s, not `InteractionTag`s (`OverflowTagMenu`).
 5. **Decoration is hidden, meaning is named.** Fluent's icons are hidden from assistive technology
-   already; a decorative `<img>` has `alt=''`, a meaningful one an `alt` from the strings
-   (`ProjectLogo`, `SustainabilityGoals`); a `ProgressBar` beside a text that says the same is
-   `aria-hidden`.
+   already, so an icon that says something alone is named: `role="img"` and an `aria-label` from
+   the strings on its container (`TrendColumn`). A decorative `<img>` has `alt=''`
+   (`FileTypeIcon`), a meaningful one an `alt` from the strings (`ProjectLogo`,
+   `SustainabilityGoals`); a `ProgressBar` beside a text that says the same is `aria-hidden`, and
+   so is an `Avatar` beside the name it shows (`PeoplePicker`, `UserColumn`).
 6. **Status messages are announced** (4.1.3): searches and counts, loading done, saved, failed.
    `const { announce } = useAnnounce()` from `@fluentui/react-components`, then
    `announce(format(strings.X, n), { polite: true })`; a completed action may be a toast instead
@@ -139,6 +144,18 @@ checked by hand and with which reader and browser: axe finds only part of what W
 - axe measuring a dialog, drawer or popover while Fluent animates it in reports contrast that is
   not there (the text blends with the backdrop): `scanAccessibility` waits for finite animations
   first (`waitForAnimations`).
+- Fluent's `TagGroup` is a `toolbar` and its `InteractionTag` a button, whatever the tags do:
+  labels are `Tag`s with `role='listitem'` in a `TagGroup role='list'` (`OverflowTagMenu`).
+- `MenuTrigger` puts `aria-haspopup` and `aria-expanded` on its child. Around an `InteractionTag`
+  that is the tag's `div`, not the button inside it: wrap the `InteractionTagPrimary`.
+- Fluent's `Avatar` is an `img` named by its `name`, so beside the same name in text a screen
+  reader reads the name twice: `aria-hidden` there; alone, it keeps its name.
+- A Fluent `Dialog` is named by its `DialogTitle`, described by nothing, and opens with focus on
+  its first button: a dialog whose text is the point (a confirmation) points `aria-describedby`
+  on `DialogSurface` at its `DialogContent` (`useConfirmationDialog`).
+- jest-axe over a stand-in judges the stand-in. The combobox family (`Autocomplete`,
+  `PeoplePicker`, `ColumnSearchPropertyField`) runs on stand-ins in Jest: assert names there and
+  let the browser scans judge the markup.
 - `react-calendar-timeline` 0.28 has no keyboard handling and no roles.
 - axe scoped to our markup still judges rules that need the page (landmarks, the page's headings);
   such findings belong to SharePoint's page and are noted, not fixed in our code.

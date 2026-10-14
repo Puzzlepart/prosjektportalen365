@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import * as React from 'react'
 import { BasePanel } from './BasePanel'
 
@@ -76,5 +77,21 @@ describe('BasePanel', () => {
     expect(close).toBeTruthy()
     await user.click(close)
     await waitFor(() => expect(onClose).toHaveBeenCalled())
+  })
+
+  it('is a dialog named by its header, also while the header is hidden, and breaks no rule axe can check', async () => {
+    const { rerender } = render(
+      <BasePanel open headerText='Alle egenskaper' footer={<button>Lagre</button>}>
+        <div>Innhold</div>
+      </BasePanel>
+    )
+    expect(screen.getByRole('dialog')).toHaveAccessibleName('Alle egenskaper')
+    expect(await axeComponent(document.body)).toHaveNoViolations()
+    rerender(
+      <BasePanel open hidden headerText='Alle egenskaper'>
+        <div>Innhold</div>
+      </BasePanel>
+    )
+    expect(screen.getByRole('dialog')).toHaveAccessibleName('Alle egenskaper')
   })
 })

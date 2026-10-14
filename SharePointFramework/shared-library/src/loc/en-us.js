@@ -10,7 +10,11 @@ define([], function () {
       MenuOverflowCount: '{0} more items',
       ProjectTitle: 'Logo for project: {0}',
       SaveTitle: 'Save',
-      SaveDisabledTitle: 'There are required fields that are not filled out, fill these out to save'
+      SaveDisabledTitle:
+        'There are required fields that are not filled out, fill these out to save',
+      TrendBetter: 'Better than the previous measurement',
+      TrendTargetReached: 'Target reached',
+      TrendWorse: 'Worse than the previous measurement'
     },
     DatePicker: {
       GoToToday: 'Go to today',
