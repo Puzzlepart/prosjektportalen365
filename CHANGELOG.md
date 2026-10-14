@@ -28,6 +28,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Meldingene i tiltaksfeltet for usikkerheter (Planner), i tiltaksmenyen og i dialogen for å gjøre tiltak om til Planner-oppgaver bruker nå samme meldingsfelt som resten av løsningen, og knappene i dialogen står i dialogens knapperad (#1319)
 - Panelet for nytt tiltak på en usikkerhet (Planner) bruker nå samme datovelger og personvelger som de andre skjemaene, med ukenumre og datoer i områdets språk, og tømmes etter lagring når flere tiltak legges til etter hverandre (#1319)
 - Knappene i `Hent dokumentmal` står nå i dialogens knapperad på alle skjermene, der de før lå nederst i innholdet på mappe- og navngivingsskjermen, og mappeskjermen viser samme sted når du går tilbake til den fra navngivingen (#1319)
+- Universell utforming (#1788): skjermlesere leser nå opp meldingsfeltene i webdelene og dialogene, seksjonene i filterpanelet kan åpnes og lukkes med tastatur og sier om de er åpne, webdeltitlene er én overskrift i stedet for to, info-knappen ved tittelen har norsk navn, og innlastingen har et navn skjermleseren kan lese
 
 ### Feilrettinger
 

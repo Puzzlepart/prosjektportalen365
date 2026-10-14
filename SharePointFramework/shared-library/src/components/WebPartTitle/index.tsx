@@ -16,22 +16,20 @@ import { customLightTheme, format } from '../../util'
  */
 export const WebPartTitle: FC<IWebPartTitleProps> = (props) => {
   const fluentProviderId = useId('fp-webpart-title')
+  // The info button's name: Fluent names it "information" when its label is empty, as it is here.
+  const infoName = format(strings.Aria.InfoLabelTitle, props?.title)
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider id={fluentProviderId} className={styles.root} theme={customLightTheme}>
         <h2 className={styles.heading} title={props?.title} hidden={!props?.title}>
-          <span role='heading' aria-level={2} className={styles.title}>
-            {props?.title}
-          </span>
+          <span className={styles.title}>{props?.title}</span>
         </h2>
         {props?.description && (
-          <div
-            className={styles.infoLabel}
-            title={format(strings.Aria.InfoLabelTitle, props?.description)}
-          >
+          <div className={styles.infoLabel} title={infoName}>
             <InfoLabel
               size='large'
+              infoButton={{ 'aria-label': infoName }}
               info={
                 <div
                   className={styles.infoLabelContent}

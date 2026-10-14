@@ -242,3 +242,37 @@ Found on the way:
 - **The tenant under load.** A scan run while CI's upgrade ran hit the guard on a half-replaced
   bundle, and one while CI's e2e ran waited past 60 s for the project home's first web part; both
   passed when rerun.
+
+### Slice 1, part 1 — The announcer and four wrappers (2026-10-14)
+
+- **Every root speaks.** `renderReact` (`shared-library/src/util/reactRoot.ts`), which mounts
+  every web part, extension, dialog and property pane field, wraps what it renders in Fluent's
+  `AriaLiveAnnouncer`. Without one, `useAnnounce` falls back to a function that does nothing
+  (`@fluentui/react-shared-contexts`), so every `MessageBar` (`UserMessage`) was silent. Two tests
+  in `reactRoot.test.tsx`, seen failing without the announcer and passing with it: a status
+  message announced after an action reaches a live region, which goes with the root, and a
+  `UserMessage` shown after the mount announces itself. A message announced while the root first
+  mounts waits in the announcer's queue (its live region is made in its own effect, after its
+  children's), recorded as a trap in pp365-a11y.
+- **LoadingSkeleton** names its progress bar «Laster...» (`strings.LoadingText`), the
+  `aria-progressbar-name` the baseline found in resource allocation; a caller's name wins.
+- **WebPartTitle** is one `h2`: the span inside it carried `role="heading"` as well, two headings
+  to a screen reader. Fluent's `InfoLabel` named its info button "information" in English when its
+  label is empty, as it is here: the button is now «Informasjon om <tittel>», and the tooltip names
+  the web part instead of the description's HTML.
+- **FilterPanel**: a filter's section header is a button with `aria-expanded` and
+  `aria-controls`, where it was a clickable `div` the keyboard could not reach; a focus ring of
+  Fluent's tokens, since our button draws its own.
+- **The scanner waits for animations.** The contrast the baseline found in the risk action panel,
+  the migrate dialog and the template dialog's footer was measured while Fluent faded them in;
+  `waitForAnimations` before each scan, and those surfaces have no violation. The template
+  dialog's target sizes stand.
+- The static scan's three clickable `div`s were two: `OverflowTagMenu`'s wraps the menu to stop a
+  click reaching the card, and is no control. Its tags are buttons that do nothing, a finding for
+  the project cards.
+
+Tests first: the five new tests (two in `reactRoot`, one each in `LoadingSkeleton`,
+`WebPartTitle` and `FilterPanel`) failed on the old code and pass; jest-axe joined the
+skeleton's and the title's tests. Changelog line under Forbedringer. Screen reader rounds for the
+four are the user's (pp365-a11y, step 4): a filter section's state, the title read once, the info
+button's name, «Laster...», and a message bar read aloud when it appears.

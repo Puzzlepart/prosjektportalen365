@@ -108,6 +108,7 @@ export async function scanAccessibility(page: Page, scope: IA11yScope): Promise<
   }
   let violations: IA11yViolation[]
   try {
+    await waitForAnimations(page)
     const results = await builder.analyze()
     violations = results.violations.map((violation) => ({
       id: violation.id,
@@ -149,6 +150,30 @@ export async function scanAccessibility(page: Page, scope: IA11yScope): Promise<
     ).toEqual([])
   }
   return violations
+}
+
+/**
+ * Waits, at most `timeout`, for the page's finite animations to end. Fluent fades and slides its
+ * dialogs, drawers and popovers in; measured mid-way, their text blends with the backdrop and axe
+ * reports contrast that is not there. Endless animations (spinners, skeletons) are not waited for.
+ *
+ * @param page The page
+ * @param timeout How long to wait, in milliseconds
+ */
+export async function waitForAnimations(page: Page, timeout = 2_000): Promise<void> {
+  await page.evaluate(
+    (ms) =>
+      Promise.race([
+        Promise.all(
+          document
+            .getAnimations()
+            .filter((animation) => animation.effect?.getTiming().iterations !== Infinity)
+            .map((animation) => animation.finished.catch(() => undefined))
+        ),
+        new Promise((resolve) => setTimeout(resolve, ms))
+      ]),
+    timeout
+  )
 }
 
 /**

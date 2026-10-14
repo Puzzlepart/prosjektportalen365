@@ -131,6 +131,14 @@ checked by hand and with which reader and browser: axe finds only part of what W
   (`@fluentui/react-shared-contexts`), and `FluentProvider` renders none: every `MessageBar` was
   silent until our root providers rendered one. A provider of ours inside a wrapper is still wrong
   (pp365-ui); the announcer goes where the root provider is.
+- Messages announced while a root mounts (a child's first effect) wait in the announcer's queue:
+  its live region is made in its own effect, which runs after its children's on the first render.
+  Announce what follows an action or a load, as status messages do.
+- Fluent's `InfoLabel` names its info button "information", in English, when the label is empty
+  (`WebPartTitle`'s was): pass `infoButton={{ 'aria-label': … }}` from the strings.
+- axe measuring a dialog, drawer or popover while Fluent animates it in reports contrast that is
+  not there (the text blends with the backdrop): `scanAccessibility` waits for finite animations
+  first (`waitForAnimations`).
 - `react-calendar-timeline` 0.28 has no keyboard handling and no roles.
 - axe scoped to our markup still judges rules that need the page (landmarks, the page's headings);
   such findings belong to SharePoint's page and are noted, not fixed in our code.
