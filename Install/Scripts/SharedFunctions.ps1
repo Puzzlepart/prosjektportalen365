@@ -61,7 +61,10 @@ Action name to start
 #>
 function StartAction($Action) {
     $global:sw_action = [Diagnostics.Stopwatch]::StartNew()
+    $global:PP365StepIndex++
+    $global:PP365CurrentAction = $Action
     Write-Host "[INFO] $Action...  " -NoNewline
+    Write-StepRecord -Status "Started" -ElapsedSeconds 0
 }
 
 <#
@@ -75,6 +78,263 @@ function EndAction() {
     $global:sw_action.Stop()
     $ElapsedSeconds = [math]::Round(($global:sw_action.ElapsedMilliseconds) / 1000, 2)
     Write-Host "Completed in $($ElapsedSeconds)s" -ForegroundColor Green
+    Write-StepRecord -Status "Completed" -ElapsedSeconds $ElapsedSeconds
+}
+
+<#
+.SYNOPSIS
+Emit a structured progress record for the current action
+
+.DESCRIPTION
+Writes a record tagged 'PP365.Step' to the information stream. It is silent by default,
+so console output is unchanged, but a wrapper (GUI, CI) can capture it with 6> or -InformationVariable.
+#>
+function Write-StepRecord {
+    Param(
+        [Parameter(Mandatory = $true)]
+        [string]$Status,
+        [double]$ElapsedSeconds
+    )
+    $Record = [PSCustomObject]@{
+        Step           = $global:PP365StepIndex
+        Name           = $global:PP365CurrentAction
+        Status         = $Status
+        ElapsedSeconds = $ElapsedSeconds
+    }
+    Write-Information -MessageData $Record -Tags "PP365.Step"
+}
+
+<#
+.SYNOPSIS
+Write a non-fatal warning and remember it for the end-of-run summary
+
+.PARAMETER Message
+The warning message (without the [WARNING] prefix)
+
+.PARAMETER ErrorRecord
+Optional ErrorRecord whose details are written below the warning
+#>
+function Write-InstallWarning {
+    Param(
+        [Parameter(Mandatory = $true)]
+        [string]$Message,
+        $ErrorRecord
+    )
+    Write-Host "[WARNING] $Message" -ForegroundColor Yellow
+    if ($null -ne $ErrorRecord) {
+        Write-ErrorDetails $ErrorRecord
+    }
+    Add-InstallIssue $Message
+}
+
+<#
+.SYNOPSIS
+Remember an issue for the end-of-run summary without writing it
+#>
+function Add-InstallIssue {
+    Param(
+        [Parameter(Mandatory = $true)]
+        [string]$Message
+    )
+    if ($null -eq $global:PP365Issues) {
+        $global:PP365Issues = [System.Collections.Generic.List[string]]::new()
+    }
+    $global:PP365Issues.Add($Message)
+}
+
+<#
+.SYNOPSIS
+Write the list of warnings collected during the run, if any
+#>
+function Write-InstallSummary {
+    if ($null -eq $global:PP365Issues -or $global:PP365Issues.Count -eq 0) {
+        return
+    }
+    Write-Host "[WARNING] Completed with $($global:PP365Issues.Count) warning(s). Review these before using the portfolio site:" -ForegroundColor Yellow
+    $global:PP365Issues | ForEach-Object { Write-Host "          - $_" -ForegroundColor Yellow }
+}
+
+<#
+.SYNOPSIS
+Write a fatal error, stop the transcript and exit the script with exit code 1
+
+.PARAMETER Message
+The error message (without the [ERROR] prefix)
+
+.PARAMETER Hint
+Optional lines with guidance, written indented below the error
+
+.PARAMETER ErrorRecord
+Optional ErrorRecord whose details are written below the error
+#>
+function Exit-InstallWithError {
+    Param(
+        [Parameter(Mandatory = $true)]
+        [string]$Message,
+        [string[]]$Hint,
+        $ErrorRecord
+    )
+    Write-Host "[ERROR] $Message" -ForegroundColor Red
+    $Hint | Where-Object { $_ } | ForEach-Object { Write-Host "        $_" -ForegroundColor Red }
+    if ($null -ne $ErrorRecord) {
+        Write-ErrorDetails $ErrorRecord
+    }
+    Stop-InstallTranscript
+    exit 1
+}
+
+<#
+.SYNOPSIS
+Start a transcript of the console output next to the install script
+
+.OUTPUTS
+The path to the transcript file, or $null if it could not be started.
+#>
+function Start-InstallTranscript {
+    Param(
+        [Parameter(Mandatory = $true)]
+        [string]$Path
+    )
+    try {
+        $null = Start-Transcript -Path $Path -ErrorAction Stop
+        $global:PP365TranscriptPath = $Path
+        return $Path
+    }
+    catch {
+        Write-Host "[INFO] Could not start transcript at $($Path): $($_.Exception.Message)"
+        return $null
+    }
+}
+
+<#
+.SYNOPSIS
+Stop the transcript started by Start-InstallTranscript, if it is running
+#>
+function Stop-InstallTranscript {
+    if ($null -eq $global:PP365TranscriptPath) {
+        return
+    }
+    $global:PP365TranscriptPath = $null
+    try { $null = Stop-Transcript -ErrorAction Stop } catch {}
+}
+
+<#
+.SYNOPSIS
+Validate a Prosjektportalen portfolio site URL
+
+.DESCRIPTION
+Checks the URL format without connecting to SharePoint, so invalid input is reported before sign-in.
+
+.OUTPUTS
+$null if the URL is valid, otherwise a message describing the problem.
+#>
+function Get-PortfolioUrlError {
+    Param(
+        [Parameter(Mandatory = $true)]
+        [AllowEmptyString()]
+        [string]$Url
+    )
+    $Expected = "Expected format: https://<tenant>.sharepoint.com/sites/<alias>"
+    [System.Uri]$Uri = $null
+    if (-not [System.Uri]::TryCreate($Url.Trim().TrimEnd('/'), [System.UriKind]::Absolute, [ref]$Uri) -or $Uri.Scheme -ne "https") {
+        return "Invalid URL '$Url'. $Expected"
+    }
+    if ($Uri.Segments.Count -lt 3) {
+        return "Invalid URL '$Url'. $Expected"
+    }
+    $ManagedPath = $Uri.Segments[1]
+    $Alias = $Uri.Segments[2]
+    if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath) -or $Uri.Authority.Contains("-admin")) {
+        return "It looks like you're trying to install to a root site or an invalid site ('$Url'). This is not supported. $Expected"
+    }
+    return $null
+}
+
+<#
+.SYNOPSIS
+Format a script invocation as a copy-pasteable PowerShell command line
+
+.DESCRIPTION
+Secrets (certificate) are masked. Switches are written without value when set, and omitted when not set.
+#>
+function Format-ScriptCommand {
+    Param(
+        [Parameter(Mandatory = $true)]
+        [string]$ScriptName,
+        [Parameter(Mandatory = $true)]
+        [System.Collections.IDictionary]$Parameters
+    )
+    $Parts = @($ScriptName)
+    foreach ($Key in $Parameters.Keys) {
+        $Value = $Parameters[$Key]
+        if ($Value -is [switch] -or $Value -is [bool]) {
+            if ($Value) { $Parts += "-$Key" }
+            continue
+        }
+        if ($Key -eq "CertificateBase64Encoded") {
+            $Value = "***"
+        }
+        $Values = @($Value) | ForEach-Object { "'" + ([string]$_).Replace("'", "''") + "'" }
+        $Parts += "-$Key $($Values -join ',')"
+    }
+    return $Parts -join " "
+}
+
+<#
+.SYNOPSIS
+Run a script block, retrying on failure
+
+.PARAMETER Description
+What the script block does, used in messages ("Failed to <Description>")
+#>
+function Invoke-WithRetry {
+    Param(
+        [Parameter(Mandatory = $true)]
+        [scriptblock]$ScriptBlock,
+        [Parameter(Mandatory = $true)]
+        [string]$Description,
+        [int]$MaxRetries = 3
+    )
+    for ($Attempt = 1; $Attempt -le $MaxRetries; $Attempt++) {
+        try {
+            & $ScriptBlock
+            return
+        }
+        catch {
+            if ($Attempt -eq $MaxRetries) {
+                Write-Host "[ERROR] Failed to $Description after $MaxRetries attempts" -ForegroundColor Red
+                Write-ErrorDetails $_
+                throw
+            }
+            Write-Host "`t[WARNING] Failed to $Description. $($MaxRetries - $Attempt) attempt(s) remaining..." -ForegroundColor Yellow
+            Write-ErrorDetails $_
+        }
+    }
+}
+
+<#
+.SYNOPSIS
+Add the signed-in user as site collection administrator of a site
+
+.OUTPUTS
+$true if the owner was set, $false if no current user is available (e.g. app-only sign-in).
+#>
+function Set-CurrentUserAsSiteAdmin {
+    Param(
+        [Parameter(Mandatory = $true)]
+        [string]$Url,
+        $CurrentUser,
+        [Parameter(Mandatory = $true)]
+        [string]$AdminSiteUrl,
+        [Parameter(Mandatory = $true)]
+        $ConnectionInfo
+    )
+    if ($null -eq $CurrentUser -or -not $CurrentUser.LoginName) {
+        return $false
+    }
+    Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
+    Set-PnPTenantSite -Url $Url -Owners $CurrentUser.LoginName -ErrorAction SilentlyContinue
+    return $true
 }
 
 <#
@@ -110,6 +370,58 @@ function Get-PnPVersion {
 
 <#
 .SYNOPSIS
+Make PnP.PowerShell available in the session
+
+.DESCRIPTION
+In CI mode the required version is installed from the PowerShell Gallery. Otherwise the bundled
+version is loaded, or with -SkipLoadingBundle the version already in the session is used.
+Exits the script with a clear message if PnP.PowerShell is missing or too old.
+
+.OUTPUTS
+The loaded PnP.PowerShell version.
+#>
+function Initialize-PnPModule {
+    Param(
+        [switch]$CI,
+        [switch]$SkipLoadingBundle
+    )
+    $RequiredVersion = Get-PnPVersion
+    $InstallHint = "Install-Module -Name PnP.PowerShell -Scope CurrentUser -RequiredVersion $RequiredVersion"
+
+    if ($CI.IsPresent -and $null -eq (Get-Module -Name PnP.PowerShell)) {
+        Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
+        Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop -RequiredVersion $RequiredVersion
+        $Version = (Get-Command Connect-PnPOnline -ErrorAction SilentlyContinue).Version
+        Write-Host "[INFO] Installed module PnP.PowerShell v$($Version) from PowerShell Gallery"
+        return $Version
+    }
+
+    if (-not $SkipLoadingBundle.IsPresent) {
+        $Version = LoadBundle -Version $RequiredVersion
+        if ($null -eq $Version) {
+            Exit-InstallWithError `
+                -Message "Failed to load bundled PnP.PowerShell v$RequiredVersion from '$([System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot "../PnP.PowerShell/$RequiredVersion")))'." `
+                -Hint @("Make sure the release archive was extracted with the PnP.PowerShell folder intact, or install PnP.PowerShell manually and rerun with -SkipLoadingBundle:", "    $InstallHint")
+        }
+        Write-Host "[INFO] Loaded module PnP.PowerShell v$($Version) from bundle"
+    }
+    else {
+        $Version = (Get-Command Connect-PnPOnline -ErrorAction SilentlyContinue).Version
+        if ($null -eq $Version) {
+            Exit-InstallWithError `
+                -Message "-SkipLoadingBundle was specified but PnP.PowerShell is not available in this session. Install it with:" `
+                -Hint @("    $InstallHint")
+        }
+        Write-Host "[INFO] Loaded PnP.PowerShell v$($Version) from your environment"
+    }
+    if ($Version -lt $RequiredVersion) {
+        Exit-InstallWithError -Message "PnP.PowerShell v$Version is too old. v$RequiredVersion or newer is required."
+    }
+    return $Version
+}
+
+<#
+.SYNOPSIS
 Parse version string
 
 .DESCRIPTION
@@ -130,13 +442,27 @@ function ParseVersionString($VersionString) {
         Write-Host "[ERROR] Failed to parse version string: $VersionString" -ForegroundColor Red
         Write-Host "[ERROR] Unable to compare with previous versions. Some upgrade actions might be skipped."
         Write-Host "[ERROR] Make sure that the field 'Versjonsnummer' has a valid version number value."
-        
-        $Input = Read-Host "Do you still want to continue? [Y/N]"
-        if ($Input -ne "Y" -and $Input -ne "y") {
+
+        if (Test-NonInteractive) {
+            Exit-InstallWithError -Message "Cannot ask whether to continue because the script is running non-interactively. Aborting."
+        }
+        $Answer = Read-Host "Do you still want to continue? [Y/N]"
+        if ($Answer -ne "Y" -and $Answer -ne "y") {
             exit 0
         }
         return [Version]"999.99.99"
     }
+}
+
+<#
+.SYNOPSIS
+Whether the script must not wait for or read keyboard input
+
+.DESCRIPTION
+True when -NonInteractive/-CI was passed, or when stdin is redirected ([Console]::KeyAvailable throws then).
+#>
+function Test-NonInteractive {
+    return ($global:PP365NonInteractive -eq $true) -or [Console]::IsInputRedirected
 }
 
 <#
@@ -158,6 +484,9 @@ function Show-Countdown {
         [int]$Seconds = 10
     )
 
+    if (Test-NonInteractive) {
+        return
+    }
     $keyPressed = $false
     for ($sec = $Seconds; $sec -gt 0; $sec--) {
         if ([Console]::KeyAvailable) {
@@ -259,6 +588,7 @@ function Invoke-SiteTemplateSafely {
             Write-Host "          The installation will continue. To fully restore the bundled content, restore the missing terms in the term store and re-run the install with -Upgrade." -ForegroundColor Yellow
             Write-Host "          Server message: $msg" -ForegroundColor DarkYellow
             Write-ErrorDetails $_
+            Add-InstallIssue "Content template '$([System.IO.Path]::GetFileName($TemplatePath))' was not applied because taxonomy terms are missing"
             return $false
         }
         # Not term-related: re-throw so the caller's outer Catch can decide whether to fail the install.
