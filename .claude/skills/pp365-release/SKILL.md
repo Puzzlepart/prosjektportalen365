@@ -8,7 +8,7 @@ argument-hint: 'Where the change stands (branch, commit, run id or failing job) 
 
 Authoritative description (Norwegian): `.development-guide/` (`git/`, `ci/`, `utgivelse/`). What CI does is decided by `.github/workflows/*.yml` (top level only; `unused/` never runs) and `Install/Build-Release.ps1`.
 
-A push runs the workflow files **of the pushed commit**, so read the target branch's copy: `gh api 'repos/Puzzlepart/prosjektportalen365/contents/.github/workflows/<file>?ref=<branch>' --jq .content | base64 -d`. This skill matches `feat/dependency-upgrades-phase-5` on 2026-10-06. Until phase 5 merges, `releases/1.15` has no `ci-build-debug.yml` (and no `skills.yml`), its `ci-channel-test.yml` lacks `feat/dependency-upgrades*`, and its packages-only job lacks `-RushTimeline -SkipPnPPowerShell`.
+A push runs the workflow files **of the pushed commit**, so read the target branch's copy: `gh api 'repos/Puzzlepart/prosjektportalen365/contents/.github/workflows/<file>?ref=<branch>' --jq .content | base64 -d`. This skill matches `releases/1.15` and `feat/technical-backlog-phase-6` on 2026-10-14: both have `ci-build-debug.yml`, `skills.yml` and the packages-only job's `-RushTimeline -SkipPnPPowerShell`; the branch's `ci-channel-test.yml` triggers on `feat/technical-backlog*` instead of the merged phases' `feat/fluent-v9*` and `feat/dependency-upgrades*`.
 
 ## Read first
 
@@ -67,7 +67,7 @@ A deploy workflow starts when the branch is in `on.push.branches` and the push c
 | Push to | Workflow: jobs | Time |
 |---|---|---|
 | `releases/1.15` | `ci-releases.yml`: build (~13 min), upgrade the dev hub `https://puzzlepart.sharepoint.com/sites/pp365` (~28), install a new site `<that URL>_<sha>` (~46) | full ~87 min, `[apps-only]` ~14 |
-| `releases/1.15`, `feat/fluent-v9*`, `feat/dependency-upgrades*` | `ci-channel-test.yml`: build the test channel (~14, packages only ~9), upgrade `vars.SP_URL_TEST` (~25, packages only ~3.5), e2e (~5-6) and beside it the integration tests (added 2026-10-12, not yet timed) | full ~40-45 min, `[apps-only]` ~18-20 |
+| `releases/1.15`, `feat/technical-backlog*` | `ci-channel-test.yml`: build the test channel (~14, packages only ~9), upgrade `vars.SP_URL_TEST` (~25, packages only ~3.5), e2e (~5-6) and beside it the integration tests (added 2026-10-12, not yet timed) | full ~40-45 min, `[apps-only]` ~18-20 |
 | `releases/1.15`, `feat/**`, every push (no path filter) | `ci-build-debug.yml`: the subject job; the build only with `[build-debug]` | seconds; with the tag ~10-13 min |
 | `main` | `build-release.yml`: release package, then test-channel package (kurs on `[build-kurs]`); deploys nothing | ~25 min |
 | any branch or PR touching `.claude/skills/**`, `.github/skills/**`, `.agents/skills/**` or `.tasks/check-skills.js` | `skills.yml`: `npm run check-skills`, regardless of `[skip-ci]` | seconds |
