@@ -15,6 +15,10 @@ import { restGet } from '../fixtures/rest'
  * The customizer renders only while the hub's `RiskActionPlannerEnabled` setting is on (the test
  * hub has it on); off, the cell shows SharePoint's plain text and the popover never opens, so the
  * setting is asserted first, and a changed setting fails the test rather than hides it.
+ *
+ * The risk used has actions written as text and no Planner tasks (`RiskActionData` empty): a risk
+ * with tasks, which a hand test leaves behind, shows the tasks instead and offers synchronising
+ * rather than migrating. With no such risk left, the test skips and says so.
  */
 const projectUrl = configuredUrl(process.env.E2E_PROJECT_URL)
 const hubUrl = baseURL.replace(/\/+$/, '')
@@ -50,11 +54,7 @@ async function listWithField(
   const lists = ((await response.json()) as { value: Record<string, string>[] }).value
   lists.sort((a, b) => Number(preferred.test(b.Title)) - Number(preferred.test(a.Title)))
   for (const list of lists) {
-    const fields = await restGet(
-      page,
-      `${siteUrl}/_api/web/lists(guid'${list.Id}')/fields?$filter=InternalName eq '${internalName}'&$select=InternalName`
-    )
-    if (fields.ok() && ((await fields.json()) as { value: unknown[] }).value.length > 0) {
+    if (await hasField(page, siteUrl, list.Id, internalName)) {
       return {
         id: list.Id,
         title: list.Title,
@@ -63,6 +63,20 @@ async function listWithField(
     }
   }
   return undefined
+}
+
+/** Whether a list has a field, by internal name. */
+async function hasField(
+  page: Page,
+  siteUrl: string,
+  listId: string,
+  internalName: string
+): Promise<boolean> {
+  const response = await restGet(
+    page,
+    `${siteUrl}/_api/web/lists(guid'${listId}')/fields?$filter=InternalName eq '${internalName}'&$select=InternalName`
+  )
+  return response.ok() && ((await response.json()) as { value: unknown[] }).value.length > 0
 }
 
 /** The value of a setting in the hub's global settings list, or `undefined` when there is none. */
@@ -125,14 +139,26 @@ test.describe('risk actions', () => {
       ).toBe(expectedId)
     }
 
+    // The customizer adds the hidden `RiskActionData` field the first time it runs on the list;
+    // selecting a field the list lacks would fail the request.
+    const select = (await hasField(page, projectUrl!, list!.id, 'RiskActionData'))
+      ? 'Id,Title,GtRiskAction,RiskActionData'
+      : 'Id,Title,GtRiskAction'
     const items = await restGet(
       page,
-      `${projectUrl}/_api/web/lists(guid'${list!.id}')/items?$select=Id,Title,GtRiskAction&$orderby=Id&$top=10`
+      `${projectUrl}/_api/web/lists(guid'${list!.id}')/items?$select=${select}&$orderby=Id&$top=100`
     )
-    const risks = ((await items.json()) as { value: { Title: string; GtRiskAction?: string }[] })
-      .value
-    const risk = risks.find((r) => r.GtRiskAction?.trim())
-    test.skip(!risk, `"${list!.title}" has no risk with actions written in GtRiskAction`)
+    const risks = (
+      (await items.json()) as {
+        value: { Title: string; GtRiskAction?: string; RiskActionData?: string }[]
+      }
+    ).value
+    const risk = risks.find((r) => r.GtRiskAction?.trim() && !r.RiskActionData?.trim())
+    test.skip(
+      !risk,
+      `"${list!.title}" has no risk with actions written as text and no Planner tasks; ` +
+        'leave one without Planner tasks for this test'
+    )
     // The first line of the actions, as the cell shows the text: enough of it to be found.
     const actions = risk!.GtRiskAction!.split(/\r?\n/)[0].trim().slice(0, 40)
 
