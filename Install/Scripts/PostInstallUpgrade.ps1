@@ -1,4 +1,4 @@
-﻿$InstallationEntriesList = Get-PnPList -Identity (Get-Resource -Name "Lists_InstallationLog_Title") -ErrorAction Stop
+$InstallationEntriesList = Get-PnPList -Identity (Get-Resource -Name "Lists_InstallationLog_Title") -ErrorAction Stop
 $LastInstall = Get-PnPListItem -List $InstallationEntriesList.Id -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>" | Select-Object -First 1 -Wait
 if ($null -ne $LastInstall) {
     $PreviousVersion = ParseVersionString -VersionString $LastInstall.FieldValues["InstallVersion"]
@@ -360,6 +360,53 @@ if ($null -ne $LastInstall) {
             }
             elseif ($LegacyList.Title -eq $_.V6Title) {
                 Write-Host "[WARNING] Legacy list at [$($_.LegacyUrl)] is still titled [$($LegacyList.Title)] - the rename in PreInstallUpgrade did not run. Project provisioning will resolve the WRONG source list until it is renamed to [$($_.LegacyTitle)]." -ForegroundColor Red
+            }
+        }
+    }
+
+    if ($PreviousVersion -lt [version]"1.14.1") {
+        # Prosjektutlisting: nøklene i 'projectMetadata' ble endret i v1.11 uten migrering. Forsider
+        # satt opp med v1.10 eller eldre har fortsatt de gamle nøklene, og forsidemalen i v1.11 hadde
+        # 'PrimaryUserField' to ganger i stedet for 'PrimaryField'. Begge deler skjuler primært/sekundært
+        # felt og brukere i Prosjektutlisting (fra v1.14 også i listevisningen).
+        Write-Host "[INFO] Repairing 'projectMetadata' on 'Prosjektutlisting' web parts"
+        $ProjectListWebPartId = "54fbeb7d-e463-4dcc-8873-50a3ab2f0f68"
+        $LegacyProjectMetadataKeys = @{
+            "ProjectServiceArea" = "PrimaryField"
+            "ProjectType"        = "SecondaryField"
+            "ProjectOwner"       = "PrimaryUserField"
+            "ProjectManager"     = "SecondaryUserField"
+        }
+        $Pages = Get-PnPFolder -Url SitePages -Includes Files | Select-Object -ExpandProperty Files | Where-Object { $_.Name -like "*.aspx" }
+        foreach ($Page in $Pages) {
+            try {
+                $Components = Get-PnPPageComponent -Page $Page.Name -ErrorAction SilentlyContinue | Where-Object { $_.WebPartId -eq $ProjectListWebPartId }
+                foreach ($Component in $Components) {
+                    # Only the projectMetadata array is rewritten - round-tripping the whole properties
+                    # JSON through ConvertFrom-Json/ConvertTo-Json could alter other values (e.g. dates).
+                    $PropertiesJson = $Component.PropertiesJson
+                    $Match = [regex]::Match($PropertiesJson, '"projectMetadata"\s*:\s*(\[[^\]]*\])')
+                    if (-not $Match.Success) { continue }
+                    $CurrentKeys = @($Match.Groups[1].Value | ConvertFrom-Json)
+                    $Keys = @($CurrentKeys | ForEach-Object { if ($LegacyProjectMetadataKeys.ContainsKey($_)) { $LegacyProjectMetadataKeys[$_] } else { $_ } })
+                    # The property pane never saves duplicates, so a duplicate 'PrimaryUserField' can only be the v1.11 template default
+                    if (@($Keys | Where-Object { $_ -eq "PrimaryUserField" }).Count -gt 1 -and $Keys -notcontains "PrimaryField") {
+                        $Keys[[array]::IndexOf($Keys, "PrimaryUserField")] = "PrimaryField"
+                    }
+                    $Keys = @($Keys | Select-Object -Unique)
+                    if (($Keys -join ",") -eq ($CurrentKeys -join ",")) {
+                        Write-Host "[INFO] 'projectMetadata' on [$($Page.Name)] is already up to date, skipping"
+                        continue
+                    }
+                    $Group = $Match.Groups[1]
+                    $UpdatedJson = $PropertiesJson.Remove($Group.Index, $Group.Length).Insert($Group.Index, (ConvertTo-Json -InputObject $Keys -Compress))
+                    Set-PnPPageWebPart -Page $Page.Name -Identity $Component.InstanceId -PropertiesJson $UpdatedJson -ErrorAction Stop
+                    Set-PnPPage -Identity $Page.Name -Publish -ErrorAction Stop | Out-Null
+                    Write-Host "[INFO] Updated 'projectMetadata' on [$($Page.Name)] from [$($CurrentKeys -join ', ')] to [$($Keys -join ', ')]" -ForegroundColor Green
+                }
+            }
+            catch {
+                Write-Host "[WARNING] Failed to repair 'projectMetadata' on [$($Page.Name)]: $($_.Exception.Message)" -ForegroundColor Yellow
             }
         }
     }
