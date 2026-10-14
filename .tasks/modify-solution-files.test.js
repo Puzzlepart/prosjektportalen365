@@ -94,3 +94,27 @@ test('keeps the version without a run number, and the revert restores the files'
     assert.equal(webPart(dir).hiddenFromToolbox, undefined)
     assert.equal(packageSolution(dir).solution.id, MAIN_IDS.solution)
 })
+
+test("a forced run swaps and reverts whatever SERVE_CHANNEL a developer's .env holds", () => {
+    // The .env template sets SERVE_CHANNEL=main, and Build-Release.ps1 runs the script in the
+    // solution folder, where dotenv reads that file: the release build must not depend on it.
+    const dir = solution()
+    fs.writeFileSync(path.join(dir, '.env'), 'SERVE_CHANNEL=main\n')
+    channel(dir, TEST_IDS, 'solution/pp-test-web-parts-test.sppkg')
+    run(dir, ['--force'], '7')
+    assert.equal(packageSolution(dir).solution.id, TEST_IDS.solution)
+    assert.equal(webPart(dir).id, TEST_IDS.webPart)
+    assert.equal(packageSolution(dir).solution.version, '1.15.0.7')
+    run(dir, ['--revert', '--force'])
+    assert.equal(packageSolution(dir).solution.id, MAIN_IDS.solution)
+    assert.equal(webPart(dir).id, MAIN_IDS.webPart)
+})
+
+test('without --force, SERVE_CHANNEL=main leaves the files alone, as a watch on the main channel needs', () => {
+    const dir = solution()
+    fs.writeFileSync(path.join(dir, '.env'), 'SERVE_CHANNEL=main\n')
+    channel(dir, TEST_IDS, 'solution/pp-test-web-parts-test.sppkg')
+    run(dir, [])
+    assert.equal(packageSolution(dir).solution.id, MAIN_IDS.solution)
+    assert.equal(fs.existsSync(path.join(dir, 'config/package-solution.json.bak')), false)
+})

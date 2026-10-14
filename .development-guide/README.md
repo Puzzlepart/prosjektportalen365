@@ -2284,7 +2284,7 @@ Lokalt havner pakken i `release/pp365-<versjon>.<hash>/` og som zip-fil ved side
 
 | Parameter | Hva den gjør |
 | --- | --- |
-| `-Channel test\|kurs\|i18n` | Bytter inn kanalens løsnings- og komponent-ID-er fra `channels/<kanal>.json` før bygget (se [Installasjonskanaler](../maler/kanaler.md)). |
+| `-Channel main\|test\|kurs\|i18n` | Bytter inn kanalens løsnings- og komponent-ID-er fra `channels/<kanal>.json` før bygget (se [Installasjonskanaler](../maler/kanaler.md)). `main` har ID-ene fra kildekoden, så løsningene blir de samme som uten `-Channel`. Med en kanal og `PP365_BUILD_NUMBER` satt får versjonen kjørenummeret som fjerde ledd, slik `ci-releases.yml` bygger. |
 | `-Solutions <navn,...>` | Pakker bare de oppgitte løsningene. Bygget er likevel en full `rush rebuild`, så `shared-library` kommer med i løsningene som bundler den. Navnene matches uten hensyn til store bokstaver og bindestrek. |
 | `-SkipBuildPnPTemplates` | Hopper over PnP-malene. |
 | `-SkipPnPPowerShell` | Installerer, importerer og sjekker ikke PnP.PowerShell, som bare malene trenger. Krever `-SkipBuildPnPTemplates`. |
@@ -2296,6 +2296,7 @@ Lokalt havner pakken i `release/pp365-<versjon>.<hash>/` og som zip-fil ved side
 Skriptet stopper på feil som `npm run build` slipper gjennom:
 
 - løsnings- eller komponent-ID-er fra en annen kanal i kildekoden, for eksempel fra en `npm run watch` som ikke ble avsluttet før en commit (`npm run check-channel-ids` sjekker det samme alene)
+- en løsning som etter kanalbyttet ikke har kanalens løsnings-ID, eller som i CI mangler kjørenummeret i versjonen (`modifySolutionFiles.js` skriver ingenting i loggen)
 - en dekningsgrense i en løsnings `config/jest.config.json` som ikke er nådd (Jest melder det, men Heft feiler ikke)
 - en løsning som ikke fikk en ny `.sppkg`
 - en `pp365-*`-pakke som er ekstern i en bundle i stedet for bundlet inn
@@ -2396,7 +2397,7 @@ To ting å vite når du måler: løperne varierer mye (samme bygg har tatt 506 o
 
 ### Aktive arbeidsflyter
 
-GitHub kjører bare arbeidsflytfilene som ligger rett i `.github/workflows/`. Mappen `unused/` med `automatic_chores.yml`, `ci-channel-i18n.yml` og `pr-package-spfx-dev.yml` ble slettet 14. oktober 2026. Den påkrevde sjekken «Rush Install and Rebuild» i branch-beskyttelsen kom fra den siste og kunne aldri kjøre; branch-beskyttelsen skal kreve «Build release package (pull request)» i stedet. PR-jobben har et eget navn fordi en push til samme commit uten `[build-debug]` gir en hoppet-over «Build release package (debug)», og GitHub regner en hoppet-over jobb som bestått for en påkrevd sjekk.
+GitHub kjører bare arbeidsflytfilene som ligger rett i `.github/workflows/`. Mappen `unused/` med `automatic_chores.yml`, `ci-channel-i18n.yml` og `pr-package-spfx-dev.yml` ble slettet 14. oktober 2026. Den påkrevde sjekken «Rush Install and Rebuild» i branch-beskyttelsen kom fra den siste og kunne aldri kjøre; branch-beskyttelsen skal kreve «Build release package (pull request)» i stedet. PR-jobben har et eget navn fordi en push til samme commit uten `[build-debug]` gir en hoppet-over jobb, og GitHub regner en hoppet-over jobb som bestått for en påkrevd sjekk. En hoppet-over jobb får det uevaluerte uttrykket i `name:` som navn (`github.event_name == 'pull_request' && …`), og listen over sjekker i branch-beskyttelsen viser den teksten også. Velg «Build release package (pull request)», som listen viser når en pull request har kjørt bygget den siste uka. Legg kravet i en regel for det eksakte navnet `releases/1.15`: den går foran jokertegnregelen `releases/1.1*`, og branchene til og med `releases/1.14` har ingen arbeidsflyt som kjører på pull requests.
 
 | Arbeidsflytfil        | Beskrivelse                                                                  | Utløser                                                                                  |
 | --------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |

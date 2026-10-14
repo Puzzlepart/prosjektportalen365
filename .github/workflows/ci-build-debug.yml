@@ -50,8 +50,10 @@ jobs:
   build:
     needs: [commit_subject]
     # The pull request's build has a name of its own, which the branch protection requires: a push
-    # to the same commit without [build-debug] reports a skipped "Build release package (debug)",
-    # and GitHub counts a skipped job as passed for a required check.
+    # to the same commit without [build-debug] reports a skipped job, and GitHub counts a skipped
+    # job as passed for a required check. GitHub names a skipped job by this expression's
+    # unevaluated text, and the branch protection's list offers that text too: require
+    # "Build release package (pull request)", the name a pull request's run reports.
     name: ${{ github.event_name == 'pull_request' && 'Build release package (pull request)' || 'Build release package (debug)' }}
     runs-on: ubuntu-latest
     timeout-minutes: 45

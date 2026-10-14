@@ -365,10 +365,24 @@ ever deleted) runs only with `[fresh-install]`. `ci-build-debug.yml` builds ever
 release branch as «Build release package (pull request)», the check the branch protection is to
 require instead of «Rush Install and Rebuild», which came from a workflow in `unused/` that never
 ran; the job has its own name on a pull request because a push without `[build-debug]` reports a
-skipped «Build release package (debug)» on the same commit, and a skipped job passes a required
-check. `unused/` is deleted, the actions
+skipped job on the same commit, and a skipped job passes a required check. `unused/` is deleted, the actions
 moved from v4 to their Node 24 majors (checkout, setup-node and upload-artifact v7,
 download-artifact v8; none of the breaking changes touches how they are used here), and
 PnP.PowerShell installs through `Install-ModuleWithRetry` after a PowerShell Gallery outage failed
-run 38522211703. The user removes the stale secrets, `NODE_VERSION` and `SP_URL_ENG`, and changes
-the branch protection.
+run 38522211703. The user removes the stale secrets and `SP_URL_ENG`, and changes the branch
+protection.
+
+The same day, after commit ef261f553: `ci-releases.yml`'s build failed (run 38545996195) because
+`Build-Release.ps1`'s `-Channel` did not accept `main`; it does now. Checking that path found an
+older trap: the `.env` template sets `SERVE_CHANNEL=main`, and `modifySolutionFiles.js` did nothing
+on `main` even with `--force`, so a local `Build-Release.ps1 -Channel test` packaged every solution
+whose `.env` said `main` with the main channel's ids, silently (the script's output is discarded).
+CI has no `.env` and was not hit. `--force` now swaps whatever `SERVE_CHANNEL` says
+(`.tasks/modify-solution-files.test.js`, seen failing first), and the release script stops when a
+solution lacks the channel's solution id after the swap, or, with `PP365_BUILD_NUMBER`, the run
+number. Two corrections to the review: `NODE_VERSION` is not stale, since `main`'s and
+`releases/1.14`'s workflows read it (`16.18.0`), so it stays until 1.15.0 is on `main`; and GitHub
+names a skipped job by its unevaluated `name:` expression, which the branch protection's list
+offered and which was picked, a check no pull request reports. The rule for `releases/1.15` is to
+require «Build release package (pull request)», in a rule for that exact name, since the branches
+up to 1.14 that `releases/1.1*` also covers run no workflow on a pull request.

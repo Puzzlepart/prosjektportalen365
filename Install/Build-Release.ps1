@@ -20,7 +20,9 @@ Param(
     [Parameter(Mandatory = $false)]
     [switch]$SkipBundle,
     [Parameter(Mandatory = $false)]
-    [ValidateSet("test", "kurs", "i18n")]
+    # main builds the release with the main channel's ids, which are the source's own, so that
+    # PP365_BUILD_NUMBER can stamp the run number into the versions (ci-releases.yml).
+    [ValidateSet("main", "test", "kurs", "i18n")]
     [string]$Channel,
     [Parameter(Mandatory = $false, HelpMessage = "Skip import of PnP.PowerShell module")]
     [switch]$SkipImportModule,
@@ -375,10 +377,24 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
             $SOLUTION_CONFIG_JSON = ($SOLUTION_CONFIG | ConvertTo-Json)
             $SOLUTION_CONFIG_JSON | Out-File -FilePath "./config/.generated-solution-config.json" -Encoding UTF8 -Force
             node ../.tasks/modifySolutionFiles.js --force >$null 2>&1
+            # The swap's output is silenced, so check what it wrote: a channel package with the
+            # source's solution id would install over the main channel's app, and a CI package
+            # without the run number in its version can leave clients on manifests they cached.
+            $PACKAGE_SOLUTION = (Get-Content "./config/package-solution.json" -Raw | ConvertFrom-Json).solution
+            $SWAP_ERROR = $null
+            if ($PACKAGE_SOLUTION.id -ne $SOLUTION_CONFIG.id) {
+                $SWAP_ERROR = "has the solution id $($PACKAGE_SOLUTION.id), not channel $($CHANNEL_CONFIG_NAME)'s $($SOLUTION_CONFIG.id)"
+            }
+            elseif ($env:PP365_BUILD_NUMBER -match '^\d+$' -and -not "$($PACKAGE_SOLUTION.version)".EndsWith(".$($env:PP365_BUILD_NUMBER)")) {
+                $SWAP_ERROR = "has the version $($PACKAGE_SOLUTION.version), without the run number $($env:PP365_BUILD_NUMBER)"
+            }
+            if ($SWAP_ERROR) {
+                Write-Host "[ERROR] [$Solution] config/package-solution.json $SWAP_ERROR after the channel swap. In each solution run 'node ../.tasks/modifySolutionFiles.js --revert --force', delete .current-channel-config.json and build again." -ForegroundColor Red
+                exit 1
+            }
             # The version the package carries, stamped with the run number in CI, so the log shows
             # what the tenant will get and a stale deployment can be told from a cached one.
-            $STAMPED_VERSION = (Get-Content "./config/package-solution.json" -Raw | ConvertFrom-Json).solution.version
-            Write-Host "[$Solution] solution version $STAMPED_VERSION" -ForegroundColor Cyan
+            Write-Host "[$Solution] solution version $($PACKAGE_SOLUTION.version)" -ForegroundColor Cyan
         }
     }
     Set-Location $SHAREPOINT_FRAMEWORK_BASEPATH
