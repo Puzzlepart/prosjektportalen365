@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc --noEmit -p tsconfig.json",
     "test": "node --test --test-concurrency=1 \"tests/**/*.test.ts\"",
-    "test:ci": "node -e \"require('node:fs').mkdirSync('test-results', { recursive: true })\" && node --test --test-concurrency=1 --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=test-results/junit.xml \"tests/**/*.test.ts\"",
+    "test:ci": "node -e \"require('node:fs').mkdirSync('test-results', { recursive: true })\" && node --test --test-concurrency=1 --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=test-results/junit.xml --test-reporter=./src/reporters/html.ts --test-reporter-destination=test-results/index.html \"tests/**/*.test.ts\"",
     "lint": "echo \"No linting configured\"",
     "validate-loc": "echo \"No localization in pp365-integration\"",
     "add-matrix-page": "node scripts/add-matrix-page.ts"

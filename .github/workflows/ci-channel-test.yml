@@ -10,6 +10,7 @@ on:
       - 'Templates/**'
       - 'e2e/**'
       - 'integration/**'
+      - .tasks/publish-test-report.js
       - .github/workflows/ci-channel-test.yml
   # Manual runs, for example to re-run the end-to-end smoke after fixing a secret or a spec.
   workflow_dispatch:
@@ -241,9 +242,17 @@ jobs:
         working-directory: e2e
 
       - name: Run smoke tests against the test channel
+        id: tests
         run: npx playwright test
         working-directory: e2e
+        env:
+          PLAYWRIGHT_HTML_TITLE: PP365 e2e · ${{ github.ref_name }} · run ${{ github.run_number }}
 
+      # The repository is public, so any signed-in GitHub user can download this artifact: it
+      # leaves out the traces (data/*.zip, trace.zip), which hold the test user's session cookies
+      # and request headers, and the sign-in's own results, whose page snapshot shows the sign-in
+      # form (auth.setup.ts blanks the password before it is taken). The test report site below
+      # has everything.
       - uses: actions/upload-artifact@v7
         if: always()
         with:
@@ -251,8 +260,29 @@ jobs:
           path: |
             e2e/playwright-report
             e2e/test-results
+            !e2e/playwright-report/data/*.zip
+            !e2e/playwright-report/trace
+            !e2e/test-results/**/trace.zip
+            !e2e/test-results/auth.setup*/**
           # The longest this repository allows; more is cut to it.
           retention-days: 7
+
+      # The report in the browser, traces included: a private GitHub Pages site in another
+      # repository (.tasks/publish-test-report.js says why). Without its secret and variables it
+      # only says so, and it refuses a site that answers without a GitHub sign-in. A publishing
+      # failure or hang (the step's own timeout) leaves the job's result to the tests.
+      - name: Publish the report to the test report site
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        timeout-minutes: 10
+        run: node .tasks/publish-test-report.js --suite e2e --report e2e/playwright-report --results e2e/test-results/results.json --outcome "$OUTCOME"
+        env:
+          OUTCOME: ${{ steps.tests.outcome }}
+          COMMIT_SUBJECT: ${{ needs.commit_subject.outputs.subject }}
+          TEST_REPORTS_REPOSITORY: ${{ vars.TEST_REPORTS_REPOSITORY }}
+          TEST_REPORTS_URL: ${{ vars.TEST_REPORTS_URL }}
+          TEST_REPORTS_DEPLOY_KEY: ${{ secrets.TEST_REPORTS_DEPLOY_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
 
   integration_test_channel:
     # The shared library's data layer against the test tenant from Node, beside the smoke tests
@@ -306,6 +336,7 @@ jobs:
         working-directory: SharePointFramework/ProjectWebParts
 
       - name: Run the integration tests against the test channel
+        id: tests
         run: npm run test:ci
         working-directory: integration
 
@@ -315,3 +346,17 @@ jobs:
           name: integration-report-test-channel
           path: integration/test-results
           retention-days: 7
+
+      # The HTML report (test-results/index.html) on the test report site, as the e2e job does.
+      - name: Publish the report to the test report site
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        timeout-minutes: 10
+        run: node .tasks/publish-test-report.js --suite integration --report integration/test-results --outcome "$OUTCOME"
+        env:
+          OUTCOME: ${{ steps.tests.outcome }}
+          COMMIT_SUBJECT: ${{ needs.commit_subject.outputs.subject }}
+          TEST_REPORTS_REPOSITORY: ${{ vars.TEST_REPORTS_REPOSITORY }}
+          TEST_REPORTS_URL: ${{ vars.TEST_REPORTS_URL }}
+          TEST_REPORTS_DEPLOY_KEY: ${{ secrets.TEST_REPORTS_DEPLOY_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}

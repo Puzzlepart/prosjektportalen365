@@ -78,7 +78,9 @@ with that reason when the two differ.
   machine through the zones with `process.env.TZ`, which Node applies at once (Jest's copy of the
   environment does not); the harness hands the services the site's time zone as a page does
   (`siteTimeZoneData` in `src/context.ts`, which knows the European zones' daylight rules).
-- No secret reaches a log, a report or a file: no token, cookie or certificate is printed.
+- No secret reaches a log, a report or a file: no token, cookie or certificate is printed. A
+  `t.diagnostic` line, `console` output and a failed assertion's values land in the HTML report and
+  on the test report site as well as in the log.
 - What a test creates in the hub carries a prefix of its own (columns: `Integrasjonstest …`;
   status reports: the reserved project's report series `ITEST`, apart from its own reports), and
   the test first removes what an interrupted run left there.
@@ -94,8 +96,15 @@ strings from the templates' `.resx` files (`npm run generate-resx-ts` in `Templa
 in git), builds the library (`heft build --production`, without Jest), compiles ProjectWebParts'
 `lib-commonjs` with TypeScript alone (`--noCheck`, the strings copied beside it; its bundle and
 type check are the release build's) and runs `npm run test:ci`:
-the spec report in the log, JUnit in `test-results/junit.xml`, uploaded as
-`integration-report-test-channel` for 7 days. `[skip-integration]` in the commit subject skips it.
+the spec report in the log, JUnit in `test-results/junit.xml` and an HTML report in
+`test-results/index.html` (`src/reporters/html.ts`, a `node:test` reporter: each file's suites and
+tests with their status, skip reasons, `t.diagnostic` lines, errors with their cause chain and
+stack, and the file's stdout and stderr). With three reporters Node prints a
+`MaxListenersExceededWarning`, which is harmless. The job uploads `test-results` as
+`integration-report-test-channel` for 7 days and publishes the HTML report to the test report site,
+a private GitHub Pages site (`.tasks/publish-test-report.js`; setup in
+`.development-guide/ci/kontinuerlig-integrasjon.md` «Testrapportsiden»). `[skip-integration]` in the
+commit subject skips it. `tests/html-reporter.test.ts` tests the reporter offline, in `npm test` too.
 
 | GitHub | Kind | Here |
 |---|---|---|
@@ -105,4 +114,7 @@ the spec report in the log, JUnit in `test-results/junit.xml`, uploaded as
 | `E2E_USERNAME` | secret | `INTEGRATION_USER` |
 | `CI_CERT_BASE64`, `CI_CLIENT_ID`, `CI_TENANT` | secrets | The certificate sign-in, from the workflow's `env` |
 
-A failed run's report: `gh run download <run-id> -n integration-report-test-channel`.
+A failed run's report: the link under «Integration report» in the job summary on the run's page
+opens it on the test report site, which keeps 7 days of runs. Without the site (not set up yet, or
+the publishing step warned): `gh run download <run-id> -n integration-report-test-channel`, then
+open `index.html`.

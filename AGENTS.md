@@ -87,6 +87,8 @@ After changing the loc files, run `validate-loc` and read its report. A dev serv
 
 **End-to-end:** `e2e/` (Rush project `pp365-e2e`, Playwright) holds `tests/smoke` (pages and web parts render and fit), `tests/flows` (user journeys) and `tests/local` (a solution's local bundle through a dev server; only with `E2E_LOCAL_BUNDLE=1`, never in CI). Tests that write to the tenant clean up after themselves. CI runs smoke and flows after the test-channel upgrade. Locally: `npx playwright install chromium` once, then `cd e2e && npm test` with an `e2e/.env` from `.env.example` (the project and program tests skip without `E2E_PROJECT_URL` / `E2E_PROGRAM_URL`).
 
+**Reports:** CI publishes the e2e and integration HTML reports to a private test report site (a GitHub Pages site in another repository), linked in each test job's summary; setup in `.development-guide/ci/kontinuerlig-integrasjon.md` «Testrapportsiden».
+
 Full regime and failure handling: `.development-guide/spfx/testing.md` and the `pp365-testing` skill.
 
 ## Skills

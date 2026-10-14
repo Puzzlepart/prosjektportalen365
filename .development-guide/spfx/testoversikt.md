@@ -16,7 +16,7 @@ Hvilke automatiske tester som dekker hver komponent, lag for lag, med noen ord o
 |---|---|---|
 | Jest | 192 | 1 268: PortfolioExtensions 101, PortfolioWebParts 240, ProgramWebParts 59, ProjectExtensions 118, ProjectWebParts 239, shared-library 511 |
 | Kjøretidskontrakt | 2 | 6 |
-| Integrasjon | 10 | 42: 12 uten tenant, 30 mot testtenanten |
+| Integrasjon | 11 | 50: 20 uten tenant, 30 mot testtenanten |
 | E2E | 27 spesifikasjoner | 59: smoke 22, flows 29 (de to i CI), local 8 |
 
 I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder etter seg. «Indirekte» betyr at komponenten står på en side en E2E-test åpner. Testen sjekker da ikke komponenten selv, men `openPage` feiler fortsatt på feilgrensen «Noe gikk galt», på en webdel fra en annen kanal og på bunter som ikke lastes.
@@ -91,6 +91,7 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 | Fil | Tester | Sjekker |
 |---|---|---|
 | `harness` | 12, uten tenant | Strengene, AMD-feil, at tjenestene lastes, SPFx-konteksten, språksjekken, sertifikatet, `appOnlyDenied` |
+| `html-reporter` | 8, uten tenant | HTML-rapporten fra `src/reporters/html.ts`: treet og statusene, stakken uten roten og Nodes rammer, krok som feilet og `cause`-kjeden, fil som feilet ved lasting, en prosess som døde etter testene og en test som aldri ble ferdig, totalene fra sammendraget, escaping, og at en ødelagt strøm likevel gir en side |
 | `reachability` | 3 | Hubens web, søk og termlageret i innloggingsmodusen |
 | `portal-data-service` | 2 | Prosjektkolonnene, og at prosjektet finner huben |
 | `search` | 4 | Matrisens egenskaper og formater, sider, oppdeling, eget område |
@@ -107,4 +108,4 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 - **Integrasjon, men ingen E2E:** Program aggregeringsoversikt. Matrisene har E2E på statussiden bare der rapporten har usikkerheter, og som webdeler på en side testharnesset legger til (`add-matrix-page`), siden ingen malside har dem.
 - **Bare indirekte i E2E:** Siste prosjekter og Prosjektnyheter.
 - **Manuelt:** prosjektoppsett, publisering av statusrapport, idéflyten og å endre fase.
-- **Utenfor komponentene:** `.tasks/check-channel-ids.test.js` (5 tester) og `.tasks/modify-solution-files.test.js` (3 tester: kanal-ID-ene, versjonsstempelet og at bare en kanal med egne ID-er skjuler webdelene), med `npm run test:tasks`.
+- **Utenfor komponentene:** `.tasks/check-channel-ids.test.js` (5 tester), `.tasks/modify-solution-files.test.js` (3 tester: kanal-ID-ene, versjonsstempelet og at bare en kanal med egne ID-er skjuler webdelene) og `.tasks/publish-test-report.test.js` (11 tester av testrapportsiden, mot et lokalt bart repo: rapport og metadata, én rad per kjøring og forsøk, 7 dager, størrelsesbudsjettet, escaping, antallene, commit uten foreldre, ny runde når den andre jobben pushet først, ingen publisering til et område som svarer uten innlogging, og deploy-nøkkelen på disk), med `npm run test:tasks`, som CI ikke kjører.

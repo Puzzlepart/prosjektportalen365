@@ -47,9 +47,98 @@ Jobbene som rører en tenant, logger inn som appregistreringen **Prosjektportale
 
 ### CI (channels/test)
 
-[ci-channel-test](../../.github/workflows/ci-channel-test.yml) bygger en pakke for kanalen [test](../../channels/test.json), distribuerer den til URL-en som er spesifisert i `SP_URL_TEST`, og kjører deretter Playwright-røyktestene i `e2e/` mot den (jobben «End-to-end smoke (test channel)») og, ved siden av dem, integrasjonstestene i `integration/` (jobben «Integration tests (test channel)», rapport i artefaktet `integration-report-test-channel`). Pakkejobben (`[apps-only]`) skriver tiden per prosjekt i jobbens sammendrag og installerer ikke PnP.PowerShell, som bare malene trenger. Rapporten lastes opp som artefaktet `playwright-report-test-channel`; hvordan den leses står under «Testregime». Arbeidsflyten kan også startes manuelt fra Actions-fanen.
+[ci-channel-test](../../.github/workflows/ci-channel-test.yml) bygger en pakke for kanalen [test](../../channels/test.json), distribuerer den til URL-en som er spesifisert i `SP_URL_TEST`, og kjører deretter Playwright-røyktestene i `e2e/` mot den (jobben «End-to-end smoke (test channel)») og, ved siden av dem, integrasjonstestene i `integration/` (jobben «Integration tests (test channel)», rapport i artefaktet `integration-report-test-channel`). Pakkejobben (`[apps-only]`) skriver tiden per prosjekt i jobbens sammendrag og installerer ikke PnP.PowerShell, som bare malene trenger. Rapporten lastes opp som artefaktet `playwright-report-test-channel`, uten sporingene og uten innloggingens egne resultater; hvordan den leses står under «Testregime». Siste steg i begge testjobbene, «Publish the report to the test report site», legger rapporten på testrapportsiden (se under) og lenken i jobbens sammendrag. Arbeidsflyten kan også startes manuelt fra Actions-fanen.
 
 Alle kjøringene oppgraderer den samme testhuben og appkatalogen, uansett branch, så de deler én `concurrency`-gruppe (`ci-channel-test`): en kjøring venter mens en annen kjører, i stedet for at to deployer samtidig og overskriver hverandres pakker. GitHub holder bare den nyeste ventende kjøringen i gruppen og avbryter en eldre som venter. På samme branch inneholder den nyeste commiten endringene fra den eldre, men malene fra en avbrutt full kjøring blir ikke lagt på. Push derfor commiten som trenger full kjøring sist, eller vent til den er ferdig.
+
+### Testrapportsiden
+
+Testrapportsiden viser Playwright-rapporten og integrasjonsrapporten fra hver kjøring av `ci-channel-test.yml` i nettleseren, så ingen trenger å laste ned et artefakt eller kjøre `show-report`. Det er et privat GitHub Pages-område på branchen `gh-pages` i et eget, privat repo (variabelen `TEST_REPORTS_REPOSITORY`, for eksempel `Puzzlepart/prosjektportalen365-test-reports`). Adressen er tilfeldig, `https://<ord>.pages.github.io/`, og endres ikke så lenge Pages er slått på. Lenken står i jobbens sammendrag. Forsiden lister kjøringene de siste 7 dagene, nyeste først; hvordan rapportene leses, står i «Testregime».
+
+**Hvorfor privat, og hvorfor i et annet repo.** `Puzzlepart/prosjektportalen365` er offentlig: artefaktene kan lastes ned av alle som er logget inn på GitHub, og et Pages-område fra repoet ville vært offentlig. Rapportene inneholder snapshot av sider i testtenanten, og Playwrights sporinger inneholder e2e-brukerens øktinformasjonskapsler, `storageState` og forespørselshodene; Playwright 1.63 maskerer ingenting (sjekket 2026-10-14). Pages med tilgangskontroll finnes bare for private og interne repoer på GitHub Enterprise Cloud. Puzzlepart-organisasjonen er på Enterprise Cloud (ikke EMU), med `members_can_create_private_pages=true`. Uten EMU er et Pages-område offentlig som standard, også fra et privat repo, så synligheten må settes til privat med en gang Pages er slått på, før CI publiserer noe. Området kan åpnes av alle med lesetilgang til rapportrepoet. Organisasjonens basisrettighet er skriv, så det er alle organisasjonens 40 medlemmer (14. oktober 2026): de samme som allerede har skrivetilgang til det offentlige repoet og gjennom en arbeidsflyt kunne lest hemmelighetene der.
+
+**Slik virker det.** Siste steg i E2E-jobben og i integrasjonsjobben, «Publish the report to the test report site» (`if: !cancelled()`, `continue-on-error: true`, `timeout-minutes: 10`), kjører `.tasks/publish-test-report.js` (CommonJS, uten avhengigheter):
+
+1. Sjekker at området er privat, og publiserer ingenting ellers: rapportrepoet er ikke offentlig (jobbens `GITHUB_TOKEN` ser ingen andre private repoer, så API-et svarer 404), repoets offentlige Pages-adresse (`https://puzzlepart.github.io/<repo>/`) viser ingenting, og `TEST_REPORTS_URL` svarer ikke på en anonym forespørsel med innhold (et privat område sender videre til innloggingen på GitHub). Sjekken kjøres ved hver publisering, fordi alle administratorer av rapportrepoet kan sette synligheten tilbake til offentlig. 14. oktober 2026 var alle private Puzzlepart-repoer med Pages offentlige.
+2. Henter `gh-pages` i rapportrepoet over SSH med deploy-nøkkelen. GitHubs vertsnøkler leses fra `https://api.github.com/meta`, så den første tilkoblingen sjekkes i stedet for å stoles på.
+3. Kopierer rapporten til `runs/<kjørings-id>-<forsøk>/<suite>/`: `e2e/playwright-report` for `e2e` og `integration/test-results` for `integration`. Ved siden av skrives `runs/<kjørings-id>-<forsøk>/<suite>.json` med utfallet av teststeget, antallene (fra Playwrights `test-results/results.json` og fra sammendraget integrasjonsrapporten bygger inn), kjøringen, commiten, branchen, emnelinjen og `publishedAt`. Et nytt forsøk av en kjøring får dermed en egen rad.
+4. Sletter kjøringer eldre enn 7 dager, like lenge som artefaktene (organisasjonen holder artefakter og logger i høyst 7 dager), og deretter de eldste kjøringene så lenge kjøringene til sammen er over 800 MB, siden Pages publiserer høyst 1 GB. Kjøringen som publiseres, slettes aldri. En fil over 95 MiB utelates med en advarsel, siden git avviser filer over 100 MiB.
+5. Skriver `.nojekyll`, så Pages publiserer filene som de er, uten Jekyll, og `index.html`, forsiden (på engelsk): kjøring, commit og en kolonne for E2E og en for integrasjon med utfall, antall og lenke.
+6. Pusher én commit uten foreldre med `--force-with-lease`, så branchen aldri samler historikk med gamle rapporter. E2E- og integrasjonsjobben kjører samtidig og pusher begge. Pushen lykkes bare om branchen står der den sto da den ble hentet; en push som taper fordi den andre jobben kom først, begynner på nytt fra steg 2, opptil fem forsøk. Et git-kall som henger, avbrytes etter 5 minutter, og SSH-tilkoblingen har egne tidsgrenser.
+
+Til slutt skriver skriptet lenken til rapporten og til forsiden i jobbens sammendrag (`$GITHUB_STEP_SUMMARY`). Pages publiserer endringen et minutt eller to etter steget, med arbeidsflyten `pages-build-deployment` i rapportrepoet. En feil i publiseringen, også et offentlig område eller et steg som når tidsgrensen, gjør ikke jobben rød, men vises som en advarsel: jobbens resultat er testenes. Skriptets tester ligger i `.tasks/publish-test-report.test.js` og kjører mot et lokalt bart repo (`TEST_REPORTS_REMOTE`) med `npm run test:tasks`, som CI ikke kjører: kjør dem selv etter en endring i skriptet.
+
+| Navn | Type | Innhold |
+|---|---|---|
+| `TEST_REPORTS_DEPLOY_KEY` | hemmelighet | Den private delen av en SSH-deploy-nøkkel med skrivetilgang til rapportrepoet |
+| `TEST_REPORTS_REPOSITORY` | variabel | Rapportrepoet, `eier/navn` |
+| `TEST_REPORTS_URL` | variabel | Områdets adresse, for lenkene i jobbens sammendrag og sjekken av at området er privat |
+
+Uten `TEST_REPORTS_REPOSITORY`, `TEST_REPORTS_URL` eller `TEST_REPORTS_DEPLOY_KEY` skriver steget bare en `::notice` om at testrapportsiden ikke er satt opp, og avslutter med 0, så CI virker før området finnes. Rapportene ligger da bare i artefaktene.
+
+**Engangsoppsett.** En med administratortilgang i organisasjonen gjør det én gang, i denne rekkefølgen. CI oppretter ingenting selv.
+
+> **Viktig:** Pages er offentlig som standard, også fra et privat repo. Gjør området privat (steg 3) før hemmeligheten og variablene settes (steg 4 og 5): fra da publiserer hver kjøring rapportene, med sporingene.
+
+1. Opprett et privat repo bare for rapportene, uten hemmeligheter og uten issues:
+
+   ```bash
+   gh repo create Puzzlepart/prosjektportalen365-test-reports --private --add-readme --description "CI test reports for prosjektportalen365 (private GitHub Pages)"
+   ```
+
+2. Lag branchen `gh-pages` fra `main`:
+
+   ```bash
+   gh api repos/Puzzlepart/prosjektportalen365-test-reports/git/refs -f ref=refs/heads/gh-pages -f sha=$(gh api repos/Puzzlepart/prosjektportalen365-test-reports/git/ref/heads/main --jq .object.sha)
+   ```
+
+3. Slå på Pages fra den branchen, og gjør området privat med en gang:
+
+   ```bash
+   gh api -X POST repos/Puzzlepart/prosjektportalen365-test-reports/pages -f 'source[branch]=gh-pages' -f 'source[path]=/'
+   ```
+
+   ```bash
+   gh api -X PUT repos/Puzzlepart/prosjektportalen365-test-reports/pages -F public=false
+   ```
+
+   Det samme i nettleseren: Settings > Pages, Source «Deploy from a branch», `gh-pages`, `/ (root)`, og «GitHub Pages visibility» Private. Sjekk i et privat nettleservindu at adressen ber om innlogging på GitHub. Adressen er tilfeldig:
+
+   ```bash
+   gh api repos/Puzzlepart/prosjektportalen365-test-reports/pages --jq .html_url
+   ```
+
+   Actions må være slått på i rapportrepoet, fordi Pages bygger området med arbeidsflyten `pages-build-deployment` der.
+
+4. Lag deploy-nøkkelen, legg den offentlige delen i rapportrepoet med skrivetilgang og den private som hemmelighet i dette repoet, og slett begge filene etterpå:
+
+   ```bash
+   ssh-keygen -t ed25519 -N "" -C "prosjektportalen365 CI test reports" -f pp365-test-reports
+   ```
+
+   ```bash
+   gh repo deploy-key add pp365-test-reports.pub --repo Puzzlepart/prosjektportalen365-test-reports --allow-write --title "prosjektportalen365 CI"
+   ```
+
+   ```bash
+   gh secret set TEST_REPORTS_DEPLOY_KEY --repo Puzzlepart/prosjektportalen365 < pp365-test-reports
+   ```
+
+   ```bash
+   rm pp365-test-reports pp365-test-reports.pub
+   ```
+
+5. Sett variablene, med adressen fra steg 3:
+
+   ```bash
+   gh variable set TEST_REPORTS_REPOSITORY --repo Puzzlepart/prosjektportalen365 --body Puzzlepart/prosjektportalen365-test-reports
+   ```
+
+   ```bash
+   gh variable set TEST_REPORTS_URL --repo Puzzlepart/prosjektportalen365 --body https://<ord>.pages.github.io/
+   ```
+
+Neste kjøring av `ci-channel-test.yml` publiserer. Valgfri herding: et regelsett (ruleset) i rapportrepoet som beskytter `main` mot deploy-nøkkelen, som ellers kan pushe til alle brancher der. Sett aldri Pages-synligheten tilbake til offentlig.
 
 ### CI (build debug)
 
@@ -65,8 +154,8 @@ To ting å vite når du måler: løperne varierer mye (samme bygg har tatt 506 o
 
 ### Felles for arbeidsflytene
 
-- **Tidsgrenser.** Hver jobb har `timeout-minutes`: bygg 45, full oppgradering 60, pakkeoppgradering 20, E2E 30, integrasjonstester 20 og `UpgradeAllSitesToLatest.ps1` 120. GitHubs standard er seks timer, og når kjøringene venter på hverandre (`concurrency`), holder en jobb som henger, alle senere like lenge.
-- **Rettigheter.** `permissions: contents: read` for `GITHUB_TOKEN`; bare SBOM-jobben skriver, siden den committer `SBOM.md` ved manuell kjøring.
+- **Tidsgrenser.** Hver jobb har `timeout-minutes`: bygg 45, full oppgradering 60, pakkeoppgradering 20, E2E 30, integrasjonstester 20 og `UpgradeAllSitesToLatest.ps1` 120. Publiseringsstegene til testrapportsiden har sin egen grense på 10 minutter, så et steg som henger, ikke tar testjobben med seg. GitHubs standard er seks timer, og når kjøringene venter på hverandre (`concurrency`), holder en jobb som henger, alle senere like lenge.
+- **Rettigheter.** `permissions: contents: read` for `GITHUB_TOKEN`; bare SBOM-jobben skriver, siden den committer `SBOM.md` ved manuell kjøring. Publiseringsstegene i `ci-channel-test.yml` pusher til et annet repo, rapportrepoet bak testrapportsiden, med deploy-nøkkelen `TEST_REPORTS_DEPLOY_KEY` over SSH, ikke med `GITHUB_TOKEN`.
 - **Rush-loggene** lastes opp som artefakt (`rush-logs-…`, 7 dager) når et bygg feiler. `Build-Release.ps1` skriver bare de siste 200 linjene i jobbloggen.
 - **Hemmelighetene** sendes til skriptene som `$env:CI_CERT_BASE64`, `$env:CI_TENANT` og `$env:CI_CLIENT_ID`, som PowerShell leser når steget kjører. De skrives dermed aldri inn i stegets skript på runneren.
 - **PnP.PowerShell** installeres i CI med `Install-ModuleWithRetry` fra `Install/Scripts/SharedFunctions.ps1`: tre forsøk med 30 sekunder imellom, siden runneren av og til ikke når PowerShell Gallery (kjøring 38522211703).
@@ -80,7 +169,7 @@ GitHub kjører bare arbeidsflytfilene som ligger rett i `.github/workflows/`. Ma
 | Arbeidsflytfil        | Beskrivelse                                                                  | Utløser                                                                                  |
 | --------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | `ci-releases.yml`     | Bygg og oppgrader utviklingsmiljøet; ny installasjon med `[fresh-install]`   | Push til `releases/1.15` (stier: SPFx, Install, Templates)                               |
-| `ci-channel-test.yml` | Bygg og distribuer testkanalen, og kjør Playwright- og integrasjonstestene mot den | Push til `releases/1.15` og `feat/technical-backlog*` (stier: SPFx, Install, Templates, e2e, integration) |
+| `ci-channel-test.yml` | Bygg og distribuer testkanalen, og kjør Playwright- og integrasjonstestene mot den | Push til `releases/1.15` (stier: SPFx, Install, Templates, e2e, integration, `.tasks/publish-test-report.js` og arbeidsflytfilen) |
 | `ci-build-debug.yml`  | Bygg testkanalens pakke uten utrulling: for å prøve endringer i bygget, og som påkrevd bygg på pull requests | Push til `releases/1.15` eller en `feat/**`-branch med `[build-debug]` i emnelinjen, og hver pull request mot `releases/**` |
 | `build-release.yml`   | Bygg utgivelsespakke og test/kurs-kanalpakker                                | Push til `main` (stier: SPFx, Install, Templates)                                        |
 | `generate-sbom.yml`   | Generer SBOM.md som artefakt; committer den bare ved manuell kjøring fra en branch | Tag-push `v*` eller manuell utløsning                                              |
