@@ -10,6 +10,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - **Risiko- og mulighetsmatrise for program og overordnede prosjekter.** Matrisewebdelene kan nå aggregere usikkerhetselementer fra underprosjekter via søk — automatisk på program-/overordnede områder, uten endringer for vanlige prosjekter. Se releasenotes for 1.15.0 for detaljer
 - Ny egenskap `Vis tittel` med valgfri egendefinert tittel på risiko- og mulighetsmatrisewebdelene
 - Ny egenskap `Ekskluderte seksjoner` i `Prosjektstatus`-webdelen — én seksjonstittel per linje for å skjule seksjoner fra statussiden
+- `Prosjektinformasjon` kan vise valgte FN-bærekraftsmål som sorterte SVG-ikoner i stedet for vanlige merkelapper. Ikonvisningen er av som standard og kan slås på med valgfri ikonstørrelse i webdelens egenskaper [#1230](https://github.com/Puzzlepart/prosjektportalen365/issues/1230)
 
 ### Forbedringer
 

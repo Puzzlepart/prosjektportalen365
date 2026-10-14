@@ -21,6 +21,7 @@ import { ProgressDialog } from './ProgressDialog'
 import styles from './ProjectInformation.module.scss'
 import { ProjectProperties } from './ProjectProperties'
 import { ProjectStatusReport } from './ProjectStatusReport'
+import { SustainabilityGoals } from './SustainabilityGoals'
 import { ProjectInformationContextProvider } from './context'
 import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
@@ -35,6 +36,8 @@ export const PROJECT_INFORMATION_DEFAULT_PROPS: Partial<IProjectInformationProps
   fallbackVisibleFields: [],
   hideStatusReport: false,
   hideArchiveStatus: true,
+  showSustainabilityGoalsAsIcons: false,
+  sustainabilityGoalIconSize: 48,
   statusReportShowOnlyIcons: true,
   rowLimit: 6,
   minRowLimit: 4,
@@ -79,6 +82,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (incomingProps) 
             />
           )}
           <ProjectProperties />
+          <SustainabilityGoals />
           <Actions />
           <ParentProjectsList />
           <ChildProjectsList />

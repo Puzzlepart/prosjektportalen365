@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - releases/1.15
-      - feat/technical-backlog*
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'

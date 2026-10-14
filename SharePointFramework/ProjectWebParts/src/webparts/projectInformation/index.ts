@@ -1,5 +1,6 @@
 import {
   IPropertyPaneConfiguration,
+  PropertyPaneDropdown,
   PropertyPaneSlider,
   PropertyPaneTextField,
   PropertyPaneToggle
@@ -133,6 +134,25 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
                   checked: propertiesWithDefaults.hideArchiveStatus
                 })
               ]
+            },
+            {
+              groupName: resource.SiteFields_GtUNSustDevGoals_DisplayName,
+              groupFields: [
+                PropertyPaneToggle('showSustainabilityGoalsAsIcons', {
+                  label: strings.ShowSustainabilityGoalsAsIconsLabel,
+                  checked: propertiesWithDefaults.showSustainabilityGoalsAsIcons
+                }),
+                propertiesWithDefaults.showSustainabilityGoalsAsIcons &&
+                  PropertyPaneDropdown('sustainabilityGoalIconSize', {
+                    label: strings.SustainabilityGoalIconSizeLabel,
+                    options: [
+                      { key: 32, text: '32 px' },
+                      { key: 48, text: '48 px' },
+                      { key: 64, text: '64 px' }
+                    ],
+                    selectedKey: propertiesWithDefaults.sustainabilityGoalIconSize
+                  })
+              ].filter(Boolean)
             },
             {
               groupName: strings.ProjectStatusGroupName,

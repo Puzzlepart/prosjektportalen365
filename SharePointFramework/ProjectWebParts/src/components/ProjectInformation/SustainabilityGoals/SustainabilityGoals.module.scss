@@ -1,0 +1,29 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  width: 100%;
+
+  .title {
+    margin: 0;
+  }
+
+  .goals {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .goal {
+    display: block;
+    flex: 0 0 auto;
+    line-height: 0;
+  }
+
+  .goalIcon {
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
+}
