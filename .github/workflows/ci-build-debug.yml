@@ -16,6 +16,7 @@ on:
     branches:
       - releases/1.15
       - 'feat/**'
+      - 'fix/**'
   # No path filter: a required check that never starts would hold a pull request for good.
   pull_request:
     branches:
