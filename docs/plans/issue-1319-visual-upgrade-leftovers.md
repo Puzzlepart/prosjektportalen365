@@ -168,3 +168,43 @@ clean. The changelog has a Forbedringer line; pp365-ui got a `DateField` row and
 bullet now points to it. Hand round pending (the user): add a task with days and a responsible from
 the risk list, see it in Planner with the dates and assignee; a date typed as «15.03.2026»; the
 calendar opening inside the drawer without being clipped.
+
+### Slice 3 — Document template dialog (2026-10-14)
+
+Done as planned, with the state lifted to the reducer. The dialog owns the footer: `BaseDialog`'s
+`footer` is a map by screen in `DocumentTemplateDialog.tsx` («Velg»; «Kopier hit» and «Gå
+tilbake»; «Start kopiering» and «Gå tilbake»; «Hent flere» and «Lukk»; none while copying), and
+what the buttons need moved into the dialog's state: the target folder screen's browsing
+(`browse`: the library, the folder open, whether the libraries are listed, the folder picked by
+its row; `OPEN_LIBRARY`, `BROWSE_FOLDER`, `SHOW_LIBRARIES`, `SELECT_FOLDER`; `initState(context)`
+seeds it from where the command ran) and the names of the copies (`TEMPLATE_CHANGED`, with the
+duplicate-name check that lived in `EditCopyScreen`; the copies are model instances, which
+immer's drafts leave alone, so the case replaces the array to tell React). A side effect worth
+knowing: the folder screen now shows the same place when the user comes back to it from the
+names, where it reopened at the target before. The folder list itself (`SPDataAdapter.getFolders`)
+stays in the screen's hook.
+
+The folder has kodemonster.md's shape: `index.ts` barrels (re-export only),
+`DocumentTemplateDialog.tsx` and `useDocumentTemplateDialog.ts` (the reducer, `onStartCopy`,
+`copyHere`, `goTo`, `onClose`, `canSelect`/`canCopyHere`/`canStartCopy`), `types.ts`, and each
+screen as `X.tsx` + `useX.ts` + `index.ts` (`SelectScreen`, `TargetFolderScreen`,
+`EditCopyScreen`, `DocumentTemplateItem`, `FolderNavigation`; `CopyProgressScreen` is JSX only).
+`DocumentTemplateItem`'s debounce timer is a ref now, where a `let` per render never cleared the
+previous one. `FolderNavigation` takes `currentFolder` as optional (left out while the libraries
+are listed) instead of `null`. `components/index.ts` still exports the dialog through the barrel,
+which `extensions/templateSelector` imports. Two TypeScript findings on the way: RTK could not
+infer an all-optional payload (`SELECT_FOLDER` takes `{ folder: string }`, cleared with
+`undefined`), and a helper taking `TemplateItem[]` refused the reducer's drafts (it takes a `Pick`
+of the fields it reads).
+
+Tests: `reducer.test.ts` 18 (the browse actions and the naming, written with the code: an action
+that does not exist cannot be seen failing), `DocumentTemplateDialog.test.tsx` 8 (new: the
+footer's buttons, when they are offered and what they do, from the pick to the summary and
+`onDismiss({ reload: true })`), `TargetFolderScreen.test.tsx` 6 (on the real reducer through a
+`useReducer` harness; the button tests moved to the dialog's; one new test's folder URLs had to sit
+below the library, since the trail reads a folder's place from its URL), `SelectScreen` 4 and
+`DocumentTemplateItem` 7 unchanged and green. The two browser specs find the buttons by name
+inside the dialog, so they need no change; CI runs them. Lint clean. Changelog line under
+Forbedringer; `testoversikt.md` counts updated. Hand round pending (the user): the whole way
+through «Hent dokumentmal», the buttons in the footer on every screen, the folder screen's place
+kept on the way back, a duplicate name flagged on both copies.

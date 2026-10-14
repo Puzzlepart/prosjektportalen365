@@ -36,9 +36,10 @@ export interface IFolderNavigationProps {
   root: string
 
   /**
-   * Current folder URL
+   * The folder open: its server relative URL, or an empty string for the root. Left out while
+   * the list of libraries is shown, which has no folder open and so no root in the trail.
    */
-  currentFolder: string
+  currentFolder?: string
 
   /**
    * Set folder

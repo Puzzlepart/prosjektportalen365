@@ -65,8 +65,8 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 | Malpakkekatalog | 2 filer, 10 | — | — | Bare Jest |
 | Oppsett av prosjekt | 11 filer, 65: utvidelsen, dialogen, reducer, progresjon og feil | — | Bevisst utelatt: kjernen går gjennom JSOM (`syncList`), og hubraden krever et nytt område per kjøring | «Opprett nytt prosjekt» i den manuelle smoke-testen |
 | Oppgradering av prosjekt | 1 | — | Installasjonsloggen etter oppgraderingen (installasjonsskriptet, ikke utvidelsen) | — |
-| Dokumentmalvelger | 5 filer, 35 | Smoke: listene får plass, målmappe velges bort igjen (oppretter en mappe ved behov). Flows: kopi av en mal (skriver) | — | — |
-| Planner-tiltak | 3 filer, 14 | — | — | Bare Jest |
+| Dokumentmalvelger | 5 filer, 43 | Smoke: listene får plass, målmappe velges bort igjen (oppretter en mappe ved behov). Flows: kopi av en mal (skriver) | — | — |
+| Planner-tiltak | 3 filer, 17 | — | — | Bare Jest |
 
 ### Det delte biblioteket (shared-library)
 

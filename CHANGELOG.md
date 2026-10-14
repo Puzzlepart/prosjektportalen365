@@ -26,6 +26,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - `Åpne øyeblikksbilde` i `Prosjektstatus` viser øyeblikksbildet i et vindu som fyller nettleseren, i full bredde med rulling i stedet for zoom, med knapper for fullskjerm, for å åpne bildet i ny fane og for å kopiere en lenke som åpner statussiden med øyeblikksbildet i full bredde (eller en direkte lenke til bildefilen), med informasjon om hvem som kan åpne dem. Nye øyeblikksbilder har prosjektets tittel (med delprosjekt ved multirapportering) over prosjektinformasjonen og lagres i dobbel oppløsning, så de er skarpe også på skjermer med høy oppløsning. Den nye egenskapen `Åpne øyeblikksbilde i fullvindu` (på som standard) kan slås av, slik at bildefilen åpnes i en ny fane som før
 - Meldingene i tiltaksfeltet for usikkerheter (Planner), i tiltaksmenyen og i dialogen for å gjøre tiltak om til Planner-oppgaver bruker nå samme meldingsfelt som resten av løsningen, og knappene i dialogen står i dialogens knapperad (#1319)
 - Panelet for nytt tiltak på en usikkerhet (Planner) bruker nå samme datovelger og personvelger som de andre skjemaene, med ukenumre og datoer i områdets språk, og tømmes etter lagring når flere tiltak legges til etter hverandre (#1319)
+- Knappene i `Hent dokumentmal` står nå i dialogens knapperad på alle skjermene, der de før lå nederst i innholdet på mappe- og navngivingsskjermen, og mappeskjermen viser samme sted når du går tilbake til den fra navngivingen (#1319)
 
 ### Feilrettinger
 
