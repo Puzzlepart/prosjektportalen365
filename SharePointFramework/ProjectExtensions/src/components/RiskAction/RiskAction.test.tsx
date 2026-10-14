@@ -303,4 +303,21 @@ describe('RiskAction', () => {
       expect(screen.queryByText(format(strings.MigrateRiskActionsDialogTitle, RISK))).toBeNull()
     )
   })
+
+  it("names the migrate dialog's close button for screen readers, as the other dialogs do", async () => {
+    renderRiskAction('Ring leverandøren')
+    fireEvent.click(screen.getByText('Ring leverandøren'))
+    fireEvent.click(screen.getByText(strings.NewRiskActionPanelMigrateRiskActions))
+    await screen.findByText(format(strings.MigrateRiskActionsDialogTitle, RISK))
+    expect(screen.getByLabelText(strings.CloseModalText).closest('button')).toBeEnabled()
+  })
+
+  it("renders the new-action panel under the drawer's provider alone", async () => {
+    renderRiskAction('')
+    fireEvent.click(screen.getByText('Ingen tiltak ennå'))
+    fireEvent.click(screen.getByText(strings.NewRiskActionPanelAddNewRiskAction))
+    const panel = await screen.findByRole('dialog')
+    // BasePanel supplies the theme; a provider inside it injects the whole theme once more.
+    expect(panel.querySelectorAll('.fui-FluentProvider')).toHaveLength(0)
+  })
 })

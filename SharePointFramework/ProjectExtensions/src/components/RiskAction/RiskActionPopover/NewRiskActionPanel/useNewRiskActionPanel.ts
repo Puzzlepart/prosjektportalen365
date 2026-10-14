@@ -1,4 +1,3 @@
-import { useId } from '@fluentui/react-components'
 import { useCallback, useState } from 'react'
 import { useRiskActionFieldCustomizerContext } from '../../../../extensions/riskAction/context'
 import { useRiskActionContext } from '../../context'
@@ -9,7 +8,7 @@ import { IBasePanelProps } from 'pp365-shared-library'
  *
  * @param props - The props for the NewRiskActionPanel component.
  *
- * @returns An object containing the model, setModel function, onSave function, isSaving boolean, and fluentProviderId string.
+ * @returns The model, `setModel`, `onSave` and whether a save is under way.
  */
 export function useNewRiskActionPanel(props: IBasePanelProps) {
   const context = useRiskActionFieldCustomizerContext()
@@ -62,13 +61,10 @@ export function useNewRiskActionPanel(props: IBasePanelProps) {
     }
   }, [itemContext, model])
 
-  const fluentProviderId = useId('fp-risk-action-panel')
-
   return {
     model,
     setModel,
     onSave,
-    isSaving,
-    fluentProviderId
+    isSaving
   }
 }

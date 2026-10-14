@@ -1,5 +1,11 @@
-import { Button, Popover, PopoverSurface, mergeClasses } from '@fluentui/react-components'
-import { Alert } from '@fluentui/react-components/unstable'
+import {
+  Button,
+  MessageBar,
+  MessageBarBody,
+  Popover,
+  PopoverSurface,
+  mergeClasses
+} from '@fluentui/react-components'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'ProjectExtensionsStrings'
 import { getFluentIcon, format } from 'pp365-shared-library'
@@ -41,16 +47,18 @@ export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
           <div className={styles.title}>
             {format(strings.RiskActionPopoverTitle, itemContext.title)}
           </div>
-          <Alert intent='info' className={mergeClasses(styles.alert, styles.infoText)}>
-            {infoText}
-          </Alert>
+          <MessageBar intent='info' className={mergeClasses(styles.alert, styles.infoText)}>
+            <MessageBarBody>{infoText}</MessageBarBody>
+          </MessageBar>
           <div hidden={!lastUpdated || !showLastSyncTime}>
-            <Alert
+            <MessageBar
               className={mergeClasses(styles.alert, styles.lastUpdated)}
               icon={getFluentIcon('ArrowSync', { color: 'green' })}
             >
-              {format(strings.RiskActionPopoverLastUpdated, lastUpdated)}
-            </Alert>
+              <MessageBarBody>
+                {format(strings.RiskActionPopoverLastUpdated, lastUpdated)}
+              </MessageBarBody>
+            </MessageBar>
           </div>
           <div className={styles.actions}>
             <div>
