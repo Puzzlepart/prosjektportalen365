@@ -11,10 +11,3 @@ export interface IDocumentTemplateItemProps {
    */
   onInputChanged: (id: string, properties: Record<string, string>, errorMessage?: string) => void
 }
-
-export interface IDocumentTemplateItemState {
-  /**
-   * Is expanded
-   */
-  isExpanded: boolean
-}

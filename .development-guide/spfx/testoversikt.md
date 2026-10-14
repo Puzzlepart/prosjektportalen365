@@ -65,8 +65,8 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 | Malpakkekatalog | 2 filer, 10 | — | — | Bare Jest |
 | Oppsett av prosjekt | 11 filer, 65: utvidelsen, dialogen, reducer, progresjon og feil | — | Bevisst utelatt: kjernen går gjennom JSOM (`syncList`), og hubraden krever et nytt område per kjøring | «Opprett nytt prosjekt» i den manuelle smoke-testen |
 | Oppgradering av prosjekt | 1 | — | Installasjonsloggen etter oppgraderingen (installasjonsskriptet, ikke utvidelsen) | — |
-| Dokumentmalvelger | 5 filer, 35 | Smoke: listene får plass, målmappe velges bort igjen (oppretter en mappe ved behov). Flows: kopi av en mal (skriver) | — | — |
-| Planner-tiltak | 3 filer, 14 | — | — | Bare Jest |
+| Dokumentmalvelger | 5 filer, 43 | Smoke: listene får plass, målmappe velges bort igjen (oppretter en mappe ved behov). Flows: kopi av en mal (skriver) | — | — |
+| Planner-tiltak | 3 filer, 17 | Smoke: tiltaksfeltet på usikkerhetslisten (popoveren, panelet for nytt tiltak, migreringsdialogen), lesende | — | Skriving til Planner (opprette og synkronisere oppgaver) er manuell: testrammeverket kan ikke slette en Planner-oppgave |
 
 ### Det delte biblioteket (shared-library)
 
@@ -103,7 +103,7 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 
 ### Hull verdt å kjenne til
 
-- **Bare Jest**, uten E2E og integrasjon: Ressursallokering, Idémodul, Prosjektkort, idéutvidelsene, Malpakkekatalog, Oppsett av prosjekt, Oppgradering av prosjekt og Planner-tiltak.
+- **Bare Jest**, uten E2E og integrasjon: Ressursallokering, Idémodul, Prosjektkort, idéutvidelsene, Malpakkekatalog, Oppsett av prosjekt og Oppgradering av prosjekt.
 - **Integrasjon, men ingen E2E:** Program aggregeringsoversikt. Matrisene har E2E på statussiden bare der rapporten har usikkerheter, og som webdeler på en side testharnesset legger til (`add-matrix-page`), siden ingen malside har dem.
 - **Bare indirekte i E2E:** Siste prosjekter og Prosjektnyheter.
 - **Manuelt:** prosjektoppsett, publisering av statusrapport, idéflyten og å endre fase.

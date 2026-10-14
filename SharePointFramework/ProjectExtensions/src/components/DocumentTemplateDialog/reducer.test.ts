@@ -1,10 +1,16 @@
+import strings from 'ProjectExtensionsStrings'
 import reducer, {
+  BROWSE_FOLDER,
   COPY_DONE,
   COPY_PROGRESS,
+  OPEN_LIBRARY,
   SELECTION_CHANGED,
+  SELECT_FOLDER,
   SET_SCREEN,
   SET_TARGET,
+  SHOW_LIBRARIES,
   START_COPY,
+  TEMPLATE_CHANGED,
   initState
 } from './reducer'
 import { DocumentTemplateDialogScreen, IDocumentTemplateDialogState } from './types'
@@ -17,8 +23,26 @@ import { DocumentTemplateDialogScreen, IDocumentTemplateDialogState } from './ty
  */
 type Template = IDocumentTemplateDialogState['selected'][number]
 type UploadedFile = IDocumentTemplateDialogState['uploaded'][number]
+type Library = IDocumentTemplateDialogState['browse']['library']
 
-const template = (id: string) => ({ id, name: `${id}.docx`, newName: `${id}.docx` }) as Template
+/**
+ * A template as the reducer reads it, with the model's `update`, which takes the values given and
+ * leaves a field alone for an empty one.
+ */
+const template = (id: string, overrides: Partial<Template> = {}) =>
+  ({
+    id,
+    name: `${id}.docx`,
+    newName: `${id}.docx`,
+    isFolder: false,
+    update(properties: Record<string, string>) {
+      Object.keys(properties).forEach((key) => {
+        if (properties[key]) this[key] = properties[key]
+      })
+    },
+    ...overrides
+  }) as unknown as Template
+const library = (name: string) => ({ name, url: `/sites/p/${name}`, folders: [] }) as Library
 const file = (Name: string) =>
   ({ Name, ServerRelativeUrl: `/sites/p/Delte dokumenter/${Name}` }) as UploadedFile
 
@@ -28,8 +52,17 @@ describe('DocumentTemplateDialog reducer', () => {
       targetFolder: '',
       screen: DocumentTemplateDialogScreen.Select,
       selected: [],
-      uploaded: []
+      uploaded: [],
+      browse: { library: undefined, folder: '', libraries: false }
     })
+  })
+
+  it('starts browsing in the library the command was run in, at the folder it was run in', () => {
+    const documents = library('Delte dokumenter')
+    expect(
+      initState({ currentLibrary: documents, currentFolderUrl: '/sites/p/Delte dokumenter/Mal' })
+        .browse
+    ).toEqual({ library: documents, folder: '/sites/p/Delte dokumenter/Mal', libraries: false })
   })
 
   it('leaves the state as it is for an action it does not handle', () => {
@@ -144,5 +177,114 @@ describe('DocumentTemplateDialog reducer', () => {
     expect(state.uploaded.map((f) => f.Name)).toEqual(['a.docx', 'b.docx'])
     expect(state.targetFolder).toBe('/sites/p/Delte dokumenter')
     expect(state.progress).toEqual(progress)
+  })
+})
+
+describe('browsing for the target folder', () => {
+  const documents = library('Delte dokumenter')
+  const start = () =>
+    reducer(initState({ currentLibrary: documents, currentFolderUrl: '' }), { type: '@@INIT' })
+
+  it('opens a folder, which clears a folder picked by its row before', () => {
+    let state = reducer(start(), SELECT_FOLDER({ folder: '/sites/p/Delte dokumenter/Mal' }))
+    expect(state.browse.selectedFolder).toBe('/sites/p/Delte dokumenter/Mal')
+    state = reducer(state, BROWSE_FOLDER({ folder: '/sites/p/Delte dokumenter/Rapporter' }))
+    expect(state.browse).toEqual({
+      library: documents,
+      folder: '/sites/p/Delte dokumenter/Rapporter',
+      libraries: false,
+      selectedFolder: undefined
+    })
+    state = reducer(state, BROWSE_FOLDER({ folder: '' }))
+    expect(state.browse.folder).toBe('')
+  })
+
+  it('lists the libraries, and opens one at its root', () => {
+    const pictures = library('Bilder')
+    let state = reducer(start(), SHOW_LIBRARIES())
+    expect(state.browse.libraries).toBe(true)
+    expect(state.browse.library).toEqual(documents)
+    state = reducer(state, OPEN_LIBRARY({ library: pictures }))
+    expect(state.browse).toEqual({
+      library: pictures,
+      folder: '/sites/p/Bilder',
+      libraries: false,
+      selectedFolder: undefined
+    })
+  })
+
+  it('picks a folder by its row, and clears the pick', () => {
+    let state = reducer(start(), SELECT_FOLDER({ folder: '/sites/p/Delte dokumenter/Mal' }))
+    expect(state.browse.selectedFolder).toBe('/sites/p/Delte dokumenter/Mal')
+    expect(state.browse.folder).toBe('')
+    state = reducer(state, SELECT_FOLDER({ folder: undefined }))
+    expect(state.browse.selectedFolder).toBeUndefined()
+  })
+})
+
+describe('naming the copies', () => {
+  const start = (...selected: Template[]) => ({ ...initState(), selected })
+
+  it('renames a copy, passes on what SharePoint said about the name, and gives React a new list', () => {
+    const before = start(template('a'), template('b'))
+    const state = reducer(
+      before,
+      TEMPLATE_CHANGED({ id: 'a', properties: { newName: 'Plan.docx' }, errorMessage: 'Ugyldig' })
+    )
+    expect(state.selected.map((t) => t.newName)).toEqual(['Plan.docx', 'b.docx'])
+    expect(state.selected[0].errorMessage).toBe('Ugyldig')
+    expect(state.selected).not.toBe(before.selected)
+  })
+
+  it('takes a title, or the validation of an untouched name, without touching the rest', () => {
+    let state = reducer(
+      start(template('a', { errorMessage: 'Ugyldig' } as Partial<Template>)),
+      TEMPLATE_CHANGED({ id: 'a', properties: { newTitle: 'Plan' } })
+    )
+    expect(state.selected[0].newTitle).toBe('Plan')
+    expect(state.selected[0].errorMessage).toBe('Ugyldig')
+    state = reducer(state, TEMPLATE_CHANGED({ id: 'a', properties: {}, errorMessage: undefined }))
+    expect(state.selected[0].errorMessage).toBe('Ugyldig')
+    state = reducer(state, TEMPLATE_CHANGED({ id: 'a', properties: {}, errorMessage: 'Opptatt' }))
+    expect(state.selected[0].errorMessage).toBe('Opptatt')
+  })
+
+  it('flags both copies given the same name, worded for a file or a folder', () => {
+    const state = reducer(
+      start(template('a'), template('b')),
+      TEMPLATE_CHANGED({ id: 'b', properties: { newName: 'A.DOCX' } })
+    )
+    expect(state.selected.map((t) => t.errorMessage)).toEqual([
+      strings.FilenameAlreadySelectedErrorText,
+      strings.FilenameAlreadySelectedErrorText
+    ])
+    const folders = reducer(
+      start(
+        template('x', { name: 'x', newName: 'x', isFolder: true } as Partial<Template>),
+        template('y', { name: 'y', newName: 'y', isFolder: true } as Partial<Template>)
+      ),
+      TEMPLATE_CHANGED({ id: 'y', properties: { newName: 'x' } })
+    )
+    expect(folders.selected[1].errorMessage).toBe(strings.FolderNameAlreadySelectedErrorText)
+  })
+
+  it('clears the duplicate flags once the names differ again, but not an error SharePoint gave', () => {
+    let state = reducer(
+      start(
+        template('a'),
+        template('b'),
+        template('c', { errorMessage: 'Opptatt' } as Partial<Template>)
+      ),
+      TEMPLATE_CHANGED({ id: 'b', properties: { newName: 'a.docx' } })
+    )
+    state = reducer(state, TEMPLATE_CHANGED({ id: 'b', properties: { newName: 'bb.docx' } }))
+    expect(state.selected.map((t) => t.errorMessage)).toEqual([undefined, undefined, 'Opptatt'])
+  })
+
+  it('leaves the state as it is for a copy it does not hold', () => {
+    const before = start(template('a'))
+    expect(reducer(before, TEMPLATE_CHANGED({ id: 'zzz', properties: { newName: 'x' } }))).toBe(
+      before
+    )
   })
 })

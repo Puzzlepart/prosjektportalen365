@@ -1,5 +1,4 @@
-import { Button, PopoverTrigger } from '@fluentui/react-components'
-import { Alert } from '@fluentui/react-components/unstable'
+import { Button, MessageBar, MessageBarBody, PopoverTrigger } from '@fluentui/react-components'
 import strings from 'ProjectExtensionsStrings'
 import React, { FC, ReactElement } from 'react'
 import { useRiskActionFieldCustomizerContext } from '../../../extensions/riskAction/context'
@@ -57,9 +56,11 @@ export const RiskActionFieldValue: FC<IRiskActionFieldValueProps> = (incomingPro
     } else {
       element = (
         <PopoverTrigger disableButtonEnhancement>
-          <Alert intent='info' className={styles.alert}>
-            {context.dataAdapter.globalSettings.get('RiskActionPlannerNoActionsText')}
-          </Alert>
+          <MessageBar intent='info' className={styles.alert}>
+            <MessageBarBody>
+              {context.dataAdapter.globalSettings.get('RiskActionPlannerNoActionsText')}
+            </MessageBarBody>
+          </MessageBar>
         </PopoverTrigger>
       )
     }

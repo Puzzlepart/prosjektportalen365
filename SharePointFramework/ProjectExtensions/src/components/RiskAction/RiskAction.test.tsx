@@ -1,11 +1,13 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
 // Babel, so mocks are not hoisted. Stand-ins keep Fluent's contracts where jsdom cannot run the
 // real controls (see the testing guide): the popovers toggle through `onOpenChange` and show their
-// surface while open; the responsible picker (`Combobox`) is a text box for the search and a native
-// select for the pick; the separator (`Dropdown`) is a native select. A choice calls
-// `onOptionSelect` with the option's value and text.
+// surface while open; the responsible is the harness's TagPicker stand-in (a combobox for the
+// search, an option per person found); the separator (`Dropdown`) is a native select, whose choice
+// calls `onOptionSelect` with the option's value and text; the date pickers are inputs that write a
+// day through `formatDate` and read a typed one through `parseDateFromString`, as `allowTextInput`
+// does.
 jest.mock('@fluentui/react-components', () => {
-  const actual = jest.requireActual('@fluentui/react-components')
+  const base = jest.requireActual('pp365-jest-config/lib/tagPickerStandIn').withTagPickerStandIn()
   const React = jest.requireActual('react')
   const PopoverContext = React.createContext({ open: false, toggle: (_event: any) => undefined })
   const Popover = ({ open: controlled, onOpenChange, children }: any) => {
@@ -25,18 +27,6 @@ jest.mock('@fluentui/react-components', () => {
     const option = event.target.options[event.target.selectedIndex]
     onOptionSelect?.(event, { optionValue: option.value, optionText: option.textContent })
   }
-  const Combobox = ({ value, onChange, onOptionSelect, children }: any) =>
-    React.createElement(
-      React.Fragment,
-      null,
-      React.createElement('input', { 'aria-label': 'Søk etter ansvarlig', value, onChange }),
-      React.createElement(
-        'select',
-        { 'aria-label': 'Velg ansvarlig', value: '', onChange: pick(onOptionSelect) },
-        React.createElement('option', { value: '' }),
-        children
-      )
-    )
   const Dropdown = ({ disabled, defaultSelectedOptions, onOptionSelect, children }: any) =>
     React.createElement(
       'select',
@@ -50,19 +40,31 @@ jest.mock('@fluentui/react-components', () => {
     )
   const Option = ({ value, text, children }: any) =>
     React.createElement('option', { value: value ?? '' }, text || children)
-  return {
-    __esModule: true,
-    ...actual,
-    Popover,
-    PopoverTrigger,
-    PopoverSurface,
-    Combobox,
-    Dropdown,
-    Option
-  }
+  return { ...base, Popover, PopoverTrigger, PopoverSurface, Dropdown, Option }
+})
+jest.mock('@fluentui/react-datepicker-compat', () => {
+  const React = jest.requireActual('react')
+  const DatePicker = ({
+    id,
+    value,
+    placeholder,
+    disabled,
+    formatDate,
+    parseDateFromString,
+    onSelectDate
+  }: any) =>
+    React.createElement('input', {
+      id,
+      placeholder,
+      disabled,
+      value: value ? formatDate(value) : '',
+      onChange: (event: any) => onSelectDate(parseDateFromString(event.target.value))
+    })
+  return { __esModule: true, DatePicker }
 })
 
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import strings from 'ProjectExtensionsStrings'
 import { format } from 'pp365-shared-library'
 import * as React from 'react'
@@ -124,6 +126,37 @@ function renderRiskAction(
 }
 
 const button = (text: string) => screen.getByText(text).closest('button')
+
+/**
+ * `pointerEventsCheck` is off because Fluent's popup surfaces compute to `pointer-events: none`
+ * under jsdom, which has no layout: the guard would reject a click the browser performs happily.
+ */
+const setupUser = () => userEvent.setup({ pointerEventsCheck: 0 })
+
+/**
+ * The shared people picker's text for a search that finds no one (`SharedLibraryStrings`
+ * `PeoplePickerNoResults`, in Norwegian here): the solution has no typings for that module.
+ */
+const NO_PEOPLE_FOUND = 'Fant ingen personer'
+
+/**
+ * Opens the panel that adds an action to the risk, and gives it.
+ */
+function openNewActionPanel(): Promise<HTMLElement> {
+  fireEvent.click(screen.getByText(strings.NewRiskActionPanelAddNewRiskAction))
+  return screen.findByRole('dialog')
+}
+
+/**
+ * Types a name into the panel's responsible picker.
+ */
+async function searchResponsible(panel: HTMLElement, name: string) {
+  const user = setupUser()
+  const input = within(panel).getByRole('combobox', { name: strings.ResponsibleFieldLabel })
+  await user.click(input)
+  await user.type(input, name)
+  return user
+}
 
 let open: jest.SpyInstance
 
@@ -222,14 +255,13 @@ describe('RiskAction', () => {
     expect(open).toHaveBeenCalledWith('https://tasks.office.com/home/task/task-2', '_blank')
   })
 
-  it('adds a new action to Planner with its title and responsible, and closes', async () => {
+  it('adds a new action to Planner with its title, days and responsible, and closes', async () => {
     adapter.clientPeoplePickerSearchUser.mockImplementation((query: string) =>
       Promise.resolve(query ? [{ text: 'Kari Nordmann', secondaryText: 'kari@contoso.no' }] : [])
     )
     const itemContext = renderRiskAction('')
     fireEvent.click(screen.getByText('Ingen tiltak ennå'))
-    fireEvent.click(screen.getByText(strings.NewRiskActionPanelAddNewRiskAction))
-    const panel = await screen.findByRole('dialog')
+    const panel = await openNewActionPanel()
     expect(
       within(panel).getByText(format(strings.NewRiskActionPanelTitle, RISK))
     ).toBeInTheDocument()
@@ -237,15 +269,21 @@ describe('RiskAction', () => {
     fireEvent.change(within(panel).getAllByRole('textbox')[0], {
       target: { value: 'Avtal en reserveleverandør' }
     })
-    fireEvent.change(screen.getByLabelText('Søk etter ansvarlig'), { target: { value: 'Kari' } })
-    await screen.findByRole('option', { name: 'Kari Nordmann' })
-    fireEvent.change(screen.getByLabelText('Velg ansvarlig'), {
-      target: { value: 'kari@contoso.no' }
+    // The days as the picker writes them in the UI language, Norwegian.
+    fireEvent.change(within(panel).getByLabelText(strings.StartDateLabel), {
+      target: { value: '15.03.2026' }
     })
+    fireEvent.change(within(panel).getByLabelText(strings.DueDateLabel), {
+      target: { value: '20.03.2026' }
+    })
+    const user = await searchResponsible(panel, 'Kari')
+    await user.click(await screen.findByRole('option', { name: /Kari Nordmann/ }))
     fireEvent.click(button(strings.SaveButtonLabel))
     await waitFor(() => expect(adapter.updateItem).toHaveBeenCalled())
     const [model, context] = adapter.addTask.mock.calls[0] as any[]
     expect(model.get('title')).toBe('Avtal en reserveleverandør')
+    expect(model.get('startDate')).toEqual(new Date(2026, 2, 15))
+    expect(model.get('dueDate')).toEqual(new Date(2026, 2, 20))
     expect(model.get('responsible')).toBe('kari@contoso.no')
     expect(context).toEqual(itemContext)
     expect(await screen.findByText('Ny oppgave')).toBeInTheDocument()
@@ -254,27 +292,26 @@ describe('RiskAction', () => {
     )
   })
 
-  it('says when no user matches the search for a responsible', async () => {
+  it('says, as the shared people picker does, when no one matches the responsible typed', async () => {
     renderRiskAction('')
     fireEvent.click(screen.getByText('Ingen tiltak ennå'))
-    fireEvent.click(screen.getByText(strings.NewRiskActionPanelAddNewRiskAction))
-    await screen.findByRole('dialog')
-    fireEvent.change(screen.getByLabelText('Søk etter ansvarlig'), { target: { value: 'Ukjent' } })
-    expect(
-      await screen.findByText(format(strings.ResponsibleFieldNoResults, 'Ukjent'))
-    ).toBeInTheDocument()
+    const panel = await openNewActionPanel()
+    await searchResponsible(panel, 'Ukjent')
+    expect(await screen.findByText(NO_PEOPLE_FOUND)).toBeInTheDocument()
   })
 
-  it('keeps the panel open to add one action after another', async () => {
+  it('keeps the panel open to add one action after another, cleared for the next', async () => {
     renderRiskAction('')
     fireEvent.click(screen.getByText('Ingen tiltak ennå'))
-    fireEvent.click(screen.getByText(strings.NewRiskActionPanelAddNewRiskAction))
-    const panel = await screen.findByRole('dialog')
-    fireEvent.change(within(panel).getAllByRole('textbox')[0], { target: { value: 'Første' } })
+    const panel = await openNewActionPanel()
+    const title = within(panel).getAllByRole('textbox')[0]
+    fireEvent.change(title, { target: { value: 'Første' } })
     fireEvent.click(within(panel).getByRole('switch'))
     fireEvent.click(button(strings.SaveButtonLabel))
     await waitFor(() => expect(adapter.updateItem).toHaveBeenCalled())
     expect(screen.getByText(format(strings.NewRiskActionPanelTitle, RISK))).toBeInTheDocument()
+    await waitFor(() => expect(title).toHaveValue(''))
+    expect(within(panel).getByRole('switch')).toBeChecked()
   })
 
   it('turns the actions in the field into Planner tasks, split as the user says', async () => {
@@ -302,5 +339,21 @@ describe('RiskAction', () => {
     await waitFor(() =>
       expect(screen.queryByText(format(strings.MigrateRiskActionsDialogTitle, RISK))).toBeNull()
     )
+  })
+
+  it("names the migrate dialog's close button for screen readers, as the other dialogs do", async () => {
+    renderRiskAction('Ring leverandøren')
+    fireEvent.click(screen.getByText('Ring leverandøren'))
+    fireEvent.click(screen.getByText(strings.NewRiskActionPanelMigrateRiskActions))
+    await screen.findByText(format(strings.MigrateRiskActionsDialogTitle, RISK))
+    expect(screen.getByLabelText(strings.CloseModalText).closest('button')).toBeEnabled()
+  })
+
+  it("renders the new-action panel under the drawer's provider alone", async () => {
+    renderRiskAction('')
+    fireEvent.click(screen.getByText('Ingen tiltak ennå'))
+    const panel = await openNewActionPanel()
+    // BasePanel supplies the theme; a provider inside it injects the whole theme once more.
+    expect(panel.querySelectorAll('.fui-FluentProvider')).toHaveLength(0)
   })
 })
