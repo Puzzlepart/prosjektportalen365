@@ -36,7 +36,7 @@ export const PROJECT_INFORMATION_DEFAULT_PROPS: Partial<IProjectInformationProps
   fallbackVisibleFields: [],
   hideStatusReport: false,
   hideArchiveStatus: true,
-  showSustainabilityGoals: true,
+  showSustainabilityGoalsAsIcons: false,
   sustainabilityGoalIconSize: 48,
   statusReportShowOnlyIcons: true,
   rowLimit: 6,

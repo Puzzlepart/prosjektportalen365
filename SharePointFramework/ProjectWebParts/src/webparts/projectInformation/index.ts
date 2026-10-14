@@ -138,11 +138,11 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
             {
               groupName: resource.SiteFields_GtUNSustDevGoals_DisplayName,
               groupFields: [
-                PropertyPaneToggle('showSustainabilityGoals', {
-                  label: strings.ShowSustainabilityGoalsLabel,
-                  checked: propertiesWithDefaults.showSustainabilityGoals
+                PropertyPaneToggle('showSustainabilityGoalsAsIcons', {
+                  label: strings.ShowSustainabilityGoalsAsIconsLabel,
+                  checked: propertiesWithDefaults.showSustainabilityGoalsAsIcons
                 }),
-                propertiesWithDefaults.showSustainabilityGoals &&
+                propertiesWithDefaults.showSustainabilityGoalsAsIcons &&
                   PropertyPaneDropdown('sustainabilityGoalIconSize', {
                     label: strings.SustainabilityGoalIconSizeLabel,
                     options: [

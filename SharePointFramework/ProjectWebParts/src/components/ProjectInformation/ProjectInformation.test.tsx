@@ -29,7 +29,7 @@ jest.mock('./SustainabilityGoals', () => ({
     return React.createElement(
       'span',
       { 'data-testid': 'sustainability-props' },
-      `${context.props.showSustainabilityGoals}:${context.props.sustainabilityGoalIconSize}`
+      `${context.props.showSustainabilityGoalsAsIcons}:${context.props.sustainabilityGoalIconSize}`
     )
   }
 }))
@@ -139,12 +139,14 @@ describe('ProjectInformation', () => {
 
   it('updates sustainability properties in its context when web part properties change', async () => {
     const view = renderInformation(() => initData(), {
-      showSustainabilityGoals: true,
+      showSustainabilityGoalsAsIcons: true,
       sustainabilityGoalIconSize: 32
     })
     expect(await screen.findByTestId('sustainability-props')).toHaveTextContent('true:32')
 
-    view.rerender(information({ showSustainabilityGoals: false, sustainabilityGoalIconSize: 64 }))
+    view.rerender(
+      information({ showSustainabilityGoalsAsIcons: false, sustainabilityGoalIconSize: 64 })
+    )
     expect(screen.getByTestId('sustainability-props')).toHaveTextContent('false:64')
   })
 

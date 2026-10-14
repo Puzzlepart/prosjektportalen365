@@ -25,7 +25,7 @@ function renderGoals(
             page: 'Frontpage',
             showFieldExternal: {},
             fallbackVisibleFields: [],
-            showSustainabilityGoals: true,
+            showSustainabilityGoalsAsIcons: true,
             sustainabilityGoalIconSize: 48,
             ...props
           },
@@ -66,9 +66,9 @@ describe('SustainabilityGoals', () => {
     expect(model.isVisible).toHaveBeenCalled()
   })
 
-  it('renders nothing when the section is disabled or the field is not visible', () => {
+  it('renders no icon section when icon mode is disabled or the field is not visible', () => {
     renderGoals([{ key: 'energy', name: '07. Ren energi til alle' }], {
-      showSustainabilityGoals: false
+      showSustainabilityGoalsAsIcons: false
     })
     expect(screen.queryByText('FNs bærekraftsmål')).toBeNull()
 

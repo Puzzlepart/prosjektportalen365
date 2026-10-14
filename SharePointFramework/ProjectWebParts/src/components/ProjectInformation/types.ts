@@ -93,9 +93,9 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   hideArchiveStatus?: boolean
 
   /**
-   * Show the selected UN Sustainable Development Goals as icons
+   * Render the selected UN Sustainable Development Goals as icons instead of tags
    */
-  showSustainabilityGoals?: boolean
+  showSustainabilityGoalsAsIcons?: boolean
 
   /**
    * Size of the UN Sustainable Development Goal icons

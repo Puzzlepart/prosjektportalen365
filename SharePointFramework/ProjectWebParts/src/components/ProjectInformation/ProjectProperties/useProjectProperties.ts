@@ -15,7 +15,12 @@ export function useProjectProperties(props: IProjectPropertiesProps) {
     () =>
       context.state.properties
         .filter((p) => !p.isSystemField)
-        .filter((p) => props.displayAllProperties || p.internalName !== 'GtUNSustDevGoals')
+        .filter(
+          (p) =>
+            props.displayAllProperties ||
+            !context.props.showSustainabilityGoalsAsIcons ||
+            p.internalName !== 'GtUNSustDevGoals'
+        )
         .filter((p) => {
           if (props.displayAllProperties) return true
           return p.isVisible(
@@ -31,6 +36,7 @@ export function useProjectProperties(props: IProjectPropertiesProps) {
       context.props.fallbackVisibleFields,
       context.props.page,
       context.props.showFieldExternal,
+      context.props.showSustainabilityGoalsAsIcons,
       props.displayAllProperties
     ]
   )

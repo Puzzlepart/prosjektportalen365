@@ -16,7 +16,7 @@ export function useSustainabilityGoals() {
     context.props.fallbackVisibleFields
   )
 
-  if (!context.props.showSustainabilityGoals || !model || model.isEmpty || !isVisible) {
+  if (!context.props.showSustainabilityGoalsAsIcons || !model || model.isEmpty || !isVisible) {
     return { goals: [], iconSize, title: model?.displayName }
   }
 

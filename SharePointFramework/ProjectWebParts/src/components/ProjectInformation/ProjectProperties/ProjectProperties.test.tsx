@@ -103,7 +103,7 @@ describe('ProjectProperties', () => {
     expect(screen.getByText('Skjult')).toBeInTheDocument()
   })
 
-  it('leaves sustainability goals to the dedicated section unless all properties are asked for', () => {
+  it('renders sustainability goals as tags by default and leaves them to icon mode when enabled', () => {
     const sustainabilityGoals = property(
       'GtUNSustDevGoals',
       'FNs bærekraftsmål',
@@ -111,13 +111,42 @@ describe('ProjectProperties', () => {
       'TaxonomyFieldTypeMulti'
     )
     const view = renderProperties([sustainabilityGoals])
+    expect(screen.getByText('FNs bærekraftsmål')).toBeInTheDocument()
+    expect(screen.getByText('07. Ren energi til alle')).toBeInTheDocument()
+
+    view.rerender(
+      <ProjectInformationContextProvider
+        value={
+          {
+            props: {
+              page: 'Frontpage',
+              showFieldExternal: {},
+              fallbackVisibleFields: [],
+              showSustainabilityGoalsAsIcons: true
+            },
+            state: {
+              properties: [sustainabilityGoals],
+              data: { fieldValues: { get: () => '' } }
+            },
+            dispatch: jest.fn()
+          } as any
+        }
+      >
+        <ProjectProperties />
+      </ProjectInformationContextProvider>
+    )
     expect(screen.queryByText('FNs bærekraftsmål')).toBeNull()
 
     view.rerender(
       <ProjectInformationContextProvider
         value={
           {
-            props: { page: 'Frontpage', showFieldExternal: {}, fallbackVisibleFields: [] },
+            props: {
+              page: 'Frontpage',
+              showFieldExternal: {},
+              fallbackVisibleFields: [],
+              showSustainabilityGoalsAsIcons: true
+            },
             state: {
               properties: [sustainabilityGoals],
               data: { fieldValues: { get: () => '' } }

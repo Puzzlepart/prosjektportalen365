@@ -4,7 +4,7 @@ jest.mock('components/ProjectInformation', () => ({
   PROJECT_INFORMATION_DEFAULT_PROPS: {
     minRowLimit: 4,
     maxRowLimit: 100,
-    showSustainabilityGoals: true,
+    showSustainabilityGoalsAsIcons: false,
     sustainabilityGoalIconSize: 48
   }
 }))
@@ -30,13 +30,20 @@ function sustainabilityFields(webPart: any): Record<string, any> {
 }
 
 describe('ProjectInformation web part sustainability properties', () => {
-  it('offers a visible section and a valid default icon size', () => {
+  it('renders tags by default and hides the icon size choice', () => {
     const fields = sustainabilityFields(createWebPart())
 
-    expect(fields.showSustainabilityGoals).toMatchObject({
-      label: strings.ShowSustainabilityGoalsLabel,
-      checked: true
+    expect(fields.showSustainabilityGoalsAsIcons).toMatchObject({
+      label: strings.ShowSustainabilityGoalsAsIconsLabel,
+      checked: false
     })
+    expect(fields.sustainabilityGoalIconSize).toBeUndefined()
+  })
+
+  it('offers a valid icon size when icon rendering is enabled', () => {
+    const fields = sustainabilityFields(createWebPart({ showSustainabilityGoalsAsIcons: true }))
+
+    expect(fields.showSustainabilityGoalsAsIcons.checked).toBe(true)
     expect(fields.sustainabilityGoalIconSize).toMatchObject({
       label: strings.SustainabilityGoalIconSizeLabel,
       selectedKey: 48
@@ -46,12 +53,5 @@ describe('ProjectInformation web part sustainability properties', () => {
       { key: 48, text: '48 px' },
       { key: 64, text: '64 px' }
     ])
-  })
-
-  it('hides the size choice when the section is disabled', () => {
-    const fields = sustainabilityFields(createWebPart({ showSustainabilityGoals: false }))
-
-    expect(fields.showSustainabilityGoals.checked).toBe(false)
-    expect(fields.sustainabilityGoalIconSize).toBeUndefined()
   })
 })
