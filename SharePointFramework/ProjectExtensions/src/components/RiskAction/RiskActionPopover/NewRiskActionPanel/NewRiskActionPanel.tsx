@@ -1,55 +1,72 @@
-import { Input, Switch, Textarea } from '@fluentui/react-components'
-import { BasePanel, FieldContainer, IBasePanelProps, format } from 'pp365-shared-library'
+import { Button, Input, Switch, Textarea } from '@fluentui/react-components'
+import { BasePanel, DateField, FieldContainer, PeoplePicker } from 'pp365-shared-library'
 import strings from 'ProjectExtensionsStrings'
 import React, { FC } from 'react'
-import { Footer } from './Footer'
 import styles from './NewRiskActionPanel.module.scss'
-import { ResponsibleField } from './ResponsibleField'
+import { INewRiskActionPanelProps } from './types'
 import { useNewRiskActionPanel } from './useNewRiskActionPanel'
-import { useRiskActionFieldCustomizerContext } from '../../../../extensions/riskAction/context'
 
 /**
- * The panel that adds a Planner task to the risk. It renders under `BasePanel`'s provider, so
- * nothing inside it is to add another.
+ * The panel that adds a Planner task to the risk: a drawer on `BasePanel`, under whose provider it
+ * renders, with the fields the other forms use and save and cancel in the footer.
  */
-export const NewRiskActionPanel: FC<IBasePanelProps> = (props) => {
-  const context = useRiskActionFieldCustomizerContext()
-  const { model, setModel, onSave, isSaving } = useNewRiskActionPanel(props)
+export const NewRiskActionPanel: FC<INewRiskActionPanelProps> = (props) => {
+  const { headerText, form, setField, resolvePeople, onSave, canSave } =
+    useNewRiskActionPanel(props)
   return (
     <BasePanel
       {...props}
-      isLightDismiss={true}
-      headerText={format(strings.NewRiskActionPanelTitle, context.itemContext.title)}
+      isLightDismiss
+      headerText={headerText}
       footer={
-        <Footer
-          onSave={onSave}
-          closePanel={props.onClose}
-          isSaveDisabled={!model.get('title') || isSaving}
-        />
+        <>
+          <Button appearance='primary' onClick={onSave} disabled={!canSave}>
+            {strings.SaveButtonLabel}
+          </Button>
+          <Button appearance='secondary' onClick={props.onClose}>
+            {strings.CancelButtonLabel}
+          </Button>
+        </>
       }
     >
       <div className={styles.newRiskActionPanel}>
-        <FieldContainer label={strings.TitleLabel} required={true} iconName='TextNumberFormat'>
-          <Input type='text' onChange={(_ev, { value }) => setModel('title', value)} />
+        <FieldContainer label={strings.TitleLabel} required iconName='TextNumberFormat'>
+          <Input value={form.title} onChange={(_event, { value }) => setField('title', value)} />
         </FieldContainer>
         <FieldContainer label={strings.DescriptionLabel} iconName='TextAlignLeft'>
-          <Textarea onChange={(_ev, { value }) => setModel('description', value)} rows={6} />
+          <Textarea
+            value={form.description}
+            onChange={(_event, { value }) => setField('description', value)}
+            rows={6}
+            resize='vertical'
+          />
         </FieldContainer>
-        <FieldContainer label={strings.StartDateLabel} iconName='Calendar'>
-          <Input type='date' onChange={(_ev, { value }) => setModel('startDate', value)} />
+        <DateField
+          label={strings.StartDateLabel}
+          value={form.startDate}
+          onSelectDate={(date) => setField('startDate', date)}
+        />
+        <DateField
+          label={strings.DueDateLabel}
+          value={form.dueDate}
+          onSelectDate={(date) => setField('dueDate', date)}
+        />
+        <FieldContainer label={strings.ResponsibleFieldLabel} iconName='Person'>
+          <PeoplePicker
+            aria-label={strings.ResponsibleFieldLabel}
+            selected={form.responsible}
+            onResolveSuggestions={resolvePeople}
+            onChange={(people) => setField('responsible', people)}
+          />
         </FieldContainer>
-        <FieldContainer label={strings.DueDateLabel} iconName='Calendar'>
-          <Input type='date' onChange={(_ev, { value }) => setModel('dueDate', value)} />
-        </FieldContainer>
-        <ResponsibleField onChange={(value) => setModel('responsible', value)} />
         <FieldContainer
           label={strings.CreateMultipleLabel}
           description={strings.CreateMultipleDescription}
           iconName='ToggleLeft'
         >
           <Switch
-            checked={model.get('createMultiple')}
-            onChange={(_ev, { checked }) => setModel('createMultiple', checked)}
+            checked={form.createMultiple}
+            onChange={(_event, { checked }) => setField('createMultiple', checked)}
           />
         </FieldContainer>
       </div>

@@ -27,7 +27,6 @@ define([], function () {
     DueDateLabel: 'Due date',
     NewRiskActionPanelTitle: 'New risk action',
     NewRiskActionPanelAddNewRiskAction: 'Add new risk action',
-    ResponsibleFieldNoResults: 'No results found matching the search term \'{0}\'.',
     ResponsibleFieldLabel: 'Responsible',
     ConfiguredSpecifiedTaskTitle: 'Configured to run only the following steps: {0}',
     DocumentTemplateDialogScreenEditCopyInfoTitle: 'Edit and copy document templates',

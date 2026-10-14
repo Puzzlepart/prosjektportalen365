@@ -132,3 +132,39 @@ Forbedringer line for the message bars and the dialog's button row, and the migr
 the 1.15 line about the close buttons. pp365-ui no longer lists the panel among the nested
 providers. Hand round pending (the user): a risk list with Planner on, the popover, the panel, the
 migrate dialog and the synchronisation.
+
+### Slice 2 — The shared date field and the new-action panel (2026-10-14)
+
+Done as planned. **shared-library:** `components/DateField` (`DateField.tsx`, `useDateField.ts`,
+`types.ts`, barrel) is the picker that lived in `CustomEditPanel`'s `DateTime.tsx`: a
+`FieldContainer` (icon `Calendar` by default) around Fluent's `DatePicker` with
+`getDatePickerLocalization`, `formatDay`/`parseShortDate`, week numbers, typed input, the field's id
+through `useFieldControlProps_unstable` so the label reaches the picker, and the calendar mounted in
+the field's own absolutely placed element so a drawer's transform and overflow leave it alone. Its
+props carry no `null` (`@rushstack/no-new-null`): `value?: Date`, `onSelectDate(date: Date |
+undefined)`, the picker's `null` for a cleared day mapped to `undefined`, the popup element's ref
+a `RefCallback`. `DateTime.tsx` renders it with the field's label, description, required flag and
+model value; its two tests passed unchanged, and `DateField.test.tsx` (3) pins the label tie, the
+day, the placeholder, the mount node, the short form and the pick. Exported from the components
+barrel.
+
+**ProjectExtensions:** `NewRiskActionPanel` is `BasePanel` with `headerText` and a `footer` of
+save and cancel; its content is `FieldContainer` + `Input` (title, required, controlled),
+`Textarea`, two `DateField`s, `FieldContainer` + the shared `PeoplePicker` (single; the person's
+email goes to the adapter as before), `Switch`. `ResponsibleField/` and `Footer/` are deleted, and
+`ResponsibleFieldNoResults` left the loc triad (`validate-loc`: 0 missing). The hook holds a typed
+form (`INewRiskActionForm`), builds the adapter's `Map` on save (`toTaskModel`), and after a save
+with «create several» on clears the form but keeps the switch, where the old uncontrolled inputs
+kept the last task's text. The days reach Planner as `Date`s, which the request serialises as ISO
+instants at local midnight; the old `Input type='date'` sent a bare day that Graph read as UTC.
+
+Tests: `RiskAction.test.tsx` drives the responsible through the harness's TagPicker stand-in
+(composed with the file's own popover and dropdown stand-ins) and the days through an input
+stand-in for the picker that keeps `formatDate`/`parseDateFromString`/`onSelectDate`; the add test
+asserts title, both days and the email in the adapter's model, the no-results test the shared
+picker's text (a literal, since the solution has no typings for `SharedLibraryStrings`), and the
+«one after another» test that the form clears. 11 pass, the folder's 14, the library's 6; lint
+clean. The changelog has a Forbedringer line; pp365-ui got a `DateField` row and the form-field
+bullet now points to it. Hand round pending (the user): add a task with days and a responsible from
+the risk list, see it in Planner with the dates and assignee; a date typed as «15.03.2026»; the
+calendar opening inside the drawer without being clipped.
