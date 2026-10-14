@@ -1,8 +1,8 @@
 # Plan: «Vibe-prototype» av Nyttestyring (HTML)
 
-> **Status 8.10.2026:** Bygget. Fila er [`prototype/nyttestyring.html`](prototype/nyttestyring.html).
-> Åpne den rett i nettleseren, den virker uten nett. Alle skjermene i kapittel 4 er med, også
-> «kan med»-skjermene (kopier som CSV og lesemodus).
+> **Status 14.10.2026:** Bygget og utvidet med den konfigurerbare resultatkjeden (se løsningsforslaget).
+> Fila er [`prototype/nyttestyring.html`](prototype/nyttestyring.html). Åpne den rett i nettleseren, den
+> virker uten nett. Prototypen ligger i en statisk ramme med SharePoint og Prosjektportalen rundt.
 >
 > Hører til [løsningsforslaget](../nyttestyringsmodul.md). Formålet er å vise flatene på hub-,
 > program- og prosjektnivå for Asker og andre interessenter med fiktive data, før det skrives
@@ -11,7 +11,10 @@
 ## 1. Mål for prototypen
 
 - Gjøre det tydelig at det er **samme app på tre nivåer**, med ulike flater og dataomfang.
-- Vise hele kjeden: mål, nyttevirkning, indikator, måling og kurve mot målbanen.
+- Vise hele kjeden: leveranse, evne, effekt, nyttevirkning og mål, med indikatorer og målinger.
+- Vise at **kjedemodellen kan konfigureres** (Enkel eller Utvidet) uten at dataene endres.
+- Vise **pilene** som egne objekter: evidensstyrke, og forutsetninger og risikoer på pilene.
+- Vise **bidragsvurdering** og en **styringsrapport** som ender i «hva må justeres».
 - Gi en **følelse av registrering**: skjemaene fungerer, og nye målinger flytter kurven med en gang.
 - Være et utgangspunkt for workshopen: alle ⚠-spørsmålene i løsningsforslaget skal kunne
   diskuteres med prototypen på skjermen.
@@ -37,35 +40,35 @@ runder etter tilbakemelding.
 
 - **Nivåvelger øverst** (demolinje som ikke er en del av appen): «Vis som: Hub / Program / Prosjekt»,
   med en nedtrekksliste for hvilket program eller prosjekt. Den simulerer hvor webdelen står.
-- **SharePoint-lignende ramme:** områdetittel («Fjordvik kommune – Prosjektportalen», «Program
-  Digital innbyggerservice», «Ny innbyggerportal») og en enkel venstremeny.
+- **Statisk SharePoint- og PP-ramme:** suitebar, appmeny, hubnavigasjon, områdeoverskrift,
+  kommandolinje og PP-footeren. Fiktiv virksomhet, ingen ekte logoer.
 - **Appens navigasjonsskuff** (som IdeaModule):
-  - Oversikt
-  - Nyttekart
-  - Registrering
-  - Oppfølging
-  - Katalog
-  - Strategiske mål
-  - Tildel (bare på program)
-  - Statusrapport-forhåndsvisning (bare på prosjekt)
+  - Oversikt, Nyttekart, Matrise, Registrering og Oppfølging (alle nivå)
+  - Katalog og Strategiske mål (alle nivå)
+  - Styringsrapport (hub og program)
+  - Tildel til prosjekter (program)
+  - I statusrapporten (prosjekt)
+  - Innstillinger (hub)
+- Nyttevirkning og Indikator er detaljsider som åpnes fra listene.
 
 ## 4. Skjermbilder
 
 Prioritet: **M** må med, **B** bør med, **K** kan med.
 
-| # | Skjerm | Pri | Innhold og interaksjon |
-|---|---|---|---|
-| 1 | **Oversikt** (alle nivå) | M | 4 nøkkeltallkort (nyttevirkninger, andel i rute, målinger som forfaller, antagelser som ikke er vurdert). Stolpediagram over oppnåelse per prosjekt (hub og program) eller per nyttevirkning (prosjekt). Tabell med indikatorer som har status «Følg med» eller «Avvik». På program: bryteren «Programmet / Alle prosjekter». |
-| 2 | **Indikatordetalj** | M | Linjediagram med målbanen fra start til mål (stiplet), delmål (punkter), faktiske målinger (heltrukket), målverdi (horisontal linje) og «i dag»-markør. Statusmerke. Tabell over målinger. Antagelsene som gjelder. Knappen «Registrer måling». |
-| 3 | **Oppfølging** | M | Arbeidsliste sortert på forfall («Forfalt», «Denne måneden», «Senere»). Rask registrering i en skuff. Kurven og statusen oppdateres med en gang. |
-| 4 | **Registrering** | M | Faner for Mål, Endringer, Nyttevirkninger, Indikatorer og Antagelser. Hver fane har en tabell og et skjema i skuff. Eierprosjekt er en nedtrekksliste på huben og et låst felt på prosjektet, med teksten «Lagres i Prosjektportalen (hub)». |
-| 5 | **Statusseksjon** (prosjekt) | M | Mockup av prosjektstatus der seksjonen «Nytteoppnåelse» erstattes: vurdering (grønn/gul/rød) med kommentar, og kompakte indikatorrader med minikurve. Merket «Øyeblikksbilde per 30.09.2026». |
-| 6 | **Katalog** | B | Kort for gjenbrukbare nyttevirkninger og indikatorer. Brukstall («brukt i 5 prosjekter»). «Ta i bruk i prosjekt…» lager en kopi og viser referansen. |
-| 7 | **Nyttekart** | B | Tre kolonner i SVG: Endringer → Nyttevirkninger → Strategiske mål, med kurvede lenker. Antagelser som små merker på lenkene (farge etter status). Hover framhever kjeden. Klikk åpner detaljer. |
-| 8 | **Strategiske mål** | B | Måltre med samlet oppnåelse per mål og antall bidragende prosjekter |
-| 9 | **Tildel** (program) | B | Programmets nyttevirkning til venstre, prosjektene til høyre. Velg prosjekter og sett bidrag (for eksempel 40/30/30 % av målverdien). Bidragene vises i Oversikt under «Alle prosjekter». |
-| 10 | Eksport til Excel (CSV) | K | Viser at dataene er lette å rapportere fra |
-| 11 | Lesemodus | K | Bryteren «Simuler bruker uten skrivetilgang» skjuler redigering og viser en forklaring |
+| # | Skjerm | Innhold og interaksjon |
+|---|---|---|
+| 1 | **Oversikt** | Forklaringen «Slik henger det sammen» med de aktive leddene og et eksempel fra dataene. Nøkkeltall. Nytteoppnåelse per prosjekt eller nyttevirkning. Forutsetninger og risikoer som må følges opp. Indikatorer med «Følg med» eller «Avvik», med rolle. |
+| 2 | **Nyttekart** | Én kolonne per aktivt nivå. Strekene viser evidensstyrke: tykk for sterk, tynn for moderat, stiplet for svak og prikket for ikke vurdert. Bokstavmerker (A, R, U, P) for forutsetninger og risikoer, farget etter status. Hold over for å se kjeden. Klikk på en pil for å vurdere den. |
+| 3 | **Matrise** | Én rad per nyttevirkning: mål, nyttevirkning med eier, effekter, evner, leveranser, forutsetninger og risikoer, indikatorer, svakeste pil og siste bidragsvurdering. Kopier som CSV. |
+| 4 | **Nyttevirkning** | Fokuskart for kjeden, forventet bidrag, historikk for bidragsvurderinger med beslutninger, «Ny bidragsvurdering», indikatorer etter rolle, forutsetninger og risikoer gruppert etter type, og pilene med evidens. |
+| 5 | **Indikator** | Kurve for målbane (med delmål), terskel (med skravert område utenfor grensen) eller følg med. Viser hva indikatoren måler, og hvilke nyttevirkninger og mål den henger sammen med. |
+| 6 | **Registrering** | Én fane per aktivt nivå, pluss Nyttevirkninger, Indikatorer, Forutsetninger og risikoer, og Mål. «Fører til» lager pilene. Prosjektet kan peke inn i programmets kjede. Indikatorskjemaet har rolle og måletype. Skjemaet for forutsetninger tilpasser status etter type. |
+| 7 | **Oppfølging** | Målinger som forfaller, og vurderinger som skal gjøres: bidragsvurderinger og forutsetninger eldre enn seks måneder. |
+| 8 | **Styringsrapport** | Mål → nyttevirkninger og bidrag → antakelser → risikoer og bivirkninger → hva må justeres. |
+| 9 | **Strategiske mål** | Måltre med kontekstindikatorer, nyttevirkningene som bidrar og indikatorene deres. |
+| 10 | **Tildel** | Prosjektenes leveranser i programmets kjede, og fordeling i prosent for tallfestede gevinster. |
+| 11 | **Katalog** og **Statusseksjon** | Som før. Statusseksjonen viser rolle per indikator. |
+| 12 | **Innstillinger** | Velg Enkel eller Utvidet, gi nivåene nye navn eller skru dem av, og sett toleranse. Alle flater oppdateres med en gang. |
 
 ## 5. Fiktive data
 
@@ -89,15 +92,21 @@ Virksomheten er **Fjordvik kommune**. Den er oppdiktet. Navn på personer er fik
 
 **Omfang og innhold:**
 
-- Omtrent 12 nyttevirkninger, 16 indikatorer og 6–14 målinger per indikator, fra 2025 til i dag.
-- Spredningen er valgt med vilje:
+- 13 nyttevirkninger og 21 indikatorer med 6–21 målinger hver, fra 2024 til i dag. Indikatorene
+  har ulike roller (gevinst, effekt, leveranse, antakelse, balanserende, kontekst) og alle tre
+  måletypene.
+- **En komplett utvidet kjede** i Helse og omsorg 2030, bygget på et generelt eksempel om digital
+  hjemmeoppfølging:
+  - Leveranser: digital hjemmeoppfølging, sensorbasert nattilsyn og innsatsteam.
+  - Evner: responssenteret oppdager forverring tidlig, og mestringsorientert oppfølging.
+  - Effekter: forverring håndteres tidligere, og flere opplever trygghet.
+  - Nyttevirkning: «Flere eldre bor hjemme uten omfattende tjenester».
+  - Mål: trygge innbyggere i eget hjem, og effektiv ressursbruk.
 
-  | Status | Antall indikatorer |
-  |---|---|
-  | I rute | 8 |
-  | Følg med | 4 |
-  | Avvik | 2 |
-  | Ingen målinger ennå | 2 |
+  Kjeden har svake piler, en risiko som er høy, en negativ bivirkning som fanges opp av en balanserende
+  indikator, en påvirkningsfaktor (endret innleggelsespraksis) og to bidragsvurderinger.
+- De andre prosjektene har enklere kjeder, slik de ville sett ut etter migrering, med noen leveranser og
+  effekter lagt til.
 
 - Eksempler på indikatorer:
 
@@ -110,19 +119,17 @@ Virksomheten er **Fjordvik kommune**. Den er oppdiktet. Navn på personer er fik
   | Spart reisetid hjemmetjenesten | 0 timer | 4 000 timer i året |
   | Andel brukere som oppgir økt trygghet | kvalitativ, prosent fra spørreundersøkelse | |
 
-- **Antagelser (8):**
-  - Status: 5 «Holder», 2 «Usikker» og 1 «Holder ikke». Den siste er «Innbyggerne over 75 tar i
-    bruk innbyggerportalen», med lenke fra Ny innbyggerportal til S1.1.
-  - 2 antagelser er ikke vurdert på over 6 måneder.
+- **Forutsetninger og risikoer (17):** 11 antakelser, 3 risikoer, 2 utilsiktede virkninger og 1
+  påvirkningsfaktor. Flere er ikke vurdert på over seks måneder.
 - **Katalog:** 3 nyttevirkninger med indikatorer som er gjenbrukt i flere prosjekter, for eksempel
   «Redusert manuell saksbehandling (timer/år)».
 - **Tildeling:** én programnyttevirkning («Færre telefonhenvendelser til servicetorget») som er
   fordelt på to av de tre prosjektene i Digital innbyggerservice (40 % og 30 %). Digital byggesak
   står igjen, så tildelingen kan vises live i demoen.
 
-Dataene ligger i ett `const SEED = {...}`-objekt øverst i filen, med samme feltnavn som i
-løsningsforslaget (`GtStartValue`, `GtBmDirection` og så videre). Prototypen dokumenterer da
-datamodellen samtidig.
+Dataene bygges i `buildSeed()` øverst i skriptet, med samme struktur som datamodellen i
+løsningsforslaget: `elements`, `benefits`, `links`, `factors`, `indicators`, `measurements`,
+`contributions` og `settings`.
 
 ## 6. Beregninger (samme som i produktet)
 
@@ -132,24 +139,32 @@ Lag dem som rene funksjoner. De kan portes nesten direkte til `shared-library`.
 |---|---|
 | `achievement(indicator, value)` | `(value − start) / (target − start)`, avgrenset til 0–100 % for visning (rå verdi i tooltip) |
 | `plannedValueAt(indicator, date)` | Lineær målbane mellom start og mål, eller stykkevis lineær via `GtBmMilestones` |
-| `status(indicator, measurement)` | Avviket mellom faktisk verdi og målbanen på samme dato, mot toleransen i innstillinger (standard 10 %) |
+| `statusAt(indicator, measurement)` | Målbane: avviket fra banen på samme dato. Terskel: avstanden til grensen. Følg med: vurderes ikke. Toleransen settes i innstillinger (standard 10 %). |
+| `closure`, `chainOf` | Alt oppstrøms og nedstrøms for et element i grafen |
+| `effectiveEdges` | Slår sammen piler gjennom skjulte nivåer og gir dem den svakeste evidensen på veien |
+| `weakestEvidence` | Svakeste pil i en kjede |
 | `nextDue(indicator)` | Siste måling pluss frekvensen |
 | `rollup(...)` | Oppnåelse per nyttevirkning, prosjekt og mål, som snitt av indikatorene, vektet likt i prototypen |
 
-## 7. Demomanus (5–7 minutter)
+## 7. Demomanus (8–10 minutter)
 
-1. **Hub, Oversikt:** «Slik ser porteføljen ut». To prosjekter er røde. Klikk på
-   «Digital byggesak».
-2. **Indikatordetalj** for saksbehandlingstid: Kurven ligger over målbanen. Vis antagelsen
-   «Saksbehandlerne får opplæring før go-live» med status «Usikker».
-3. **Bytt til Prosjekt** (Digital byggesak), **Oppfølging**: Registrer måling for september.
-   Kurven og statusen flytter seg med en gang. Pek på teksten «lagres på huben».
-4. **Statusseksjon:** «Dette er det styringsgruppa ser i statusrapporten».
-5. **Bytt til Program** (Digital innbyggerservice): Bryteren «Programmet / Alle prosjekter».
-   **Tildel**: Tildel de siste 30 % av «Færre telefonhenvendelser» til Digital byggesak.
-6. **Hub, Katalog:** «Ta i bruk» i Chatbot-prosjektet.
-7. **Nyttekart og Strategiske mål:** Antagelsen som ikke holder lyser rødt i kjeden fram til S1.1.
-   Avslutt med spørsmålene til workshopen.
+1. **Hub, Oversikt:** Gå gjennom «Slik henger det sammen»: fem ledd, og forutsetninger og risikoer på
+   pilene.
+2. **Innstillinger:** Bytt til **Enkel**. Kartet og registreringen får tre ledd, og ingen data
+   forsvinner. Bytt tilbake til **Utvidet**.
+3. **Nyttekart:** Hold over «Flere eldre bor hjemme …». Pek på den stiplede pilen fra effekt til
+   gevinst, og merkene P og U på den.
+4. **Nyttevirkning** («Flere eldre bor hjemme …»): Forventet bidrag. Bidragsvurderingen gikk fra svak til
+   moderat. Indikatorene etter rolle:
+   - innleggelser (Avvik),
+   - responstid på varsler (antakelse, terskel),
+   - ensomhet (balanserende).
+
+   Registrer en ny bidragsvurdering.
+5. **Matrise:** Samme data som tabell, «slik dere kjenner det fra gevinstmatrisen». Kopier til Excel.
+6. **Program Helse og omsorg 2030, Styringsrapport:** Fra mål til «hva må justeres».
+7. **Prosjekt Digital byggesak:** Oppfølging, så registrer en måling, og så statusseksjonen.
+8. **Program Digital innbyggerservice, Tildel:** Tildel de siste 30 % til Digital byggesak.
 
 ## 8. Arbeidsplan
 
@@ -173,4 +188,6 @@ Lag dem som rene funksjoner. De kan portes nesten direkte til `shared-library`.
 - Er indikatordetaljen og statusseksjonen nok for styringsgruppa?
 - Begreper og nivåer for mål og typer nyttevirkning, se ⚠ i løsningsforslaget.
 - Katalog og tildeling: er modellen med kopi og «bidrar til» intuitiv?
-- Antagelser: nyttig eller for mye i V1?
+- Kjedemodell: holder Enkel og Utvidet, og er standardnavnene riktige?
+- Bidragsvurdering: riktig skala og riktig takt (seks måneder)?
+- Indikatorroller og måletyper: dekker de det dere måler i dag?
