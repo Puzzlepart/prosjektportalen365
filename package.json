@@ -1,7 +1,7 @@
 {
   "name": "pp365",
   "version": "1.14.1",
-  "description": "Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.",
+  "description": "Prosjektportalen er et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.",
   "scripts": {
     "sync-version": "node ./.tasks/automatic-versioning.js",
     "generate-readme": "npx @appnest/readme generate && npx @appnest/readme generate --config .development-guide/blueprint.json",
@@ -30,14 +30,14 @@
   "contributors": [
     {
       "name": "Tarjei Ormestøyl",
-      "email": "tarjei.ormestoyl@crayon.no"
+      "url": "https://github.com/tarjeieo"
     },
     {
       "name": "Remi Blom-Ohlsen",
-      "email": "remi.blom-ohlsen@crayon.no"
+      "url": "https://github.com/Remi749"
     }
   ],
-  "author": "tarjei.ormestoyl@crayon.no",
+  "author": "Prosjektportalen-teamet <kontakt@prosjektportalen.no>",
   "license": "MIT",
   "devDependencies": {
     "fs-extra": "11.1.0",
