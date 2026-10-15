@@ -1,8 +1,8 @@
 <!-- ⚠️ This README has been generated from the file(s) ".README" ⚠️--><p align="center">
   <img src="assets/pp365_logo.png" alt="Logo" width="119" height="119" />
 </p> <p align="center">
-  <b>Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.</b></br>
-  <sub>Prosjektportalen for Microsoft 365 er bygget av Puzzlepart AS og distribuert som åpen kildekode. Løsningen inneholder Microsoft 365 og SharePoint-tilpasninger som til sammen utgjør et prosjektstyringsverktøy.<sub>
+  <b>Prosjektportalen er et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.</b></br>
+  <sub>Prosjektportalen for Microsoft 365 er åpen kildekode, og forvaltes og videreutvikles av Prosjektportalen-teamet. Løsningen inneholder Microsoft 365- og SharePoint-tilpasninger som til sammen utgjør et prosjektstyringsverktøy.<sub>
 </p>
 
 <br />
@@ -31,11 +31,13 @@
 
 ## ➤ Hva er Prosjektportalen for Microsoft 365?
 
-Prosjektportalen for Microsoft 365 er bygget av Puzzlepart - nå Crayon Consulting AS - og distribuert som åpen kildekode. Løsningen inneholder Microsoft 365 og SharePoint-tilpasninger som til sammen utgjør et prosjektstyringsverktøy. Det blir satt opp et porteføljeområde som gir en oversikt over prosjekter og der brukere kan opprette nye prosjektrom. Hvert prosjektområde opprettes som en Microsoft 365 gruppe og det settes opp en del lister, en del standardelementer og logikk for å gjennomføre et prosjekt etter Prosjektveiviserens modell. Prosjektveiviseren er Digitaliseringsdirektoratets anbefalte prosjektmodell for gjennomføring av digitaliseringsprosjekter i offentlige virksomheter.
+Prosjektportalen er et prosjektstyringsverktøy for Microsoft 365, bygget på [Prosjektveiviseren](https://prosjektveiviseren.digdir.no/), Digitaliseringsdirektoratets anbefalte prosjektmodell. Løsningen installeres i virksomhetens egen Microsoft 365-tenant. Det settes opp et porteføljeområde som gir oversikt over prosjektene, og der brukerne kan opprette nye prosjekter fra maler. Hvert prosjektområde opprettes som en Microsoft 365-gruppe, med lister, standardinnhold og logikk for å gjennomføre prosjektet etter Prosjektveiviserens modell.
 
-Første versjon av Prosjektportalen ble i sin tid utviklet for Asker kommune og KommIT av da Puzzlepart. I ettertid har videreutvikling og oppgradering av løsningen blitt gjort som et spleiselag mellom Puzzlepart - nå Crayon Consulting - og kunder, i perioder med støtte fra SkatteFunn. Det har hele tiden vært ambisjonen av løsningen skal være åpen kildekode og fritt tilgjengelig å ta i bruk uten bindinger. For at det skal være mulig må videreutvikling finansieres i stor grad av "kundesponsorer".
+Prosjektportalen er åpen kildekode under MIT-lisensen, og alle står fritt til å ta den i bruk uten lisenskostnader eller bindinger. Løsningen forvaltes og videreutvikles av Prosjektportalen-teamet, som primært består av ansatte hos SoftwareOne.
 
-Mer informasjon om løsningen, hvordan den er satt opp og hvordan overordnede komponenter fungerer kan du lese på om [wiki-sidene til Prosjektportalen](https://github.com/Puzzlepart/prosjektportalen365/wiki).
+Første versjon ble utviklet for Asker kommune og KommIT av Puzzlepart, som senere ble en del av Crayon og i dag er en del av SoftwareOne. Siden har videreutviklingen vært et spleiselag mellom Prosjektportalen-teamet og kundene. Ny funksjonalitet finansieres i stor grad av *kundesponsorer*: virksomheter som betaler for en forbedring de trenger, som deretter blir tilgjengelig for alle.
+
+Mer om løsningen, hvordan den er satt opp, og eierskap, drift og forvaltning står på [wiki-sidene til Prosjektportalen](https://github.com/Puzzlepart/prosjektportalen365/wiki).
 
 
 
@@ -44,9 +46,9 @@ Mer informasjon om løsningen, hvordan den er satt opp og hvordan overordnede ko
 
 ## ➤ Installering og oppgradering
 
-Prosjektportalen kan lastes under [releases](https://github.com/Puzzlepart/prosjektportalen365/releases/latest). Mer informasjon om løsningen, konfigurasjon, installasjon og feilsøking finner du på [wiki-sidene til Prosjektportalen](https://github.com/Puzzlepart/prosjektportalen365/wiki).
+Prosjektportalen kan lastes ned fra [releases](https://github.com/Puzzlepart/prosjektportalen365/releases/latest). Installasjon, oppgradering, konfigurasjon og feilsøking er beskrevet på [wiki-sidene til Prosjektportalen](https://github.com/Puzzlepart/prosjektportalen365/wiki).
 
-Vi gjør oppmerksom at vi logger basis-info om hver installasjon til en sentral oversikt. Dette gjøres for å ha kontroll på installasjonshyppighet og hvordan installasjoner gjøres. Informasjonen brukes kun for å forbedre løsningen og til intern statistikk.
+Installasjonsskriptet sender én melding til Prosjektportalen-teamet når installasjonen er ferdig, slik at teamet ser hvilke versjoner som er i bruk: adressen til porteføljeområdet, versjon, kanal, tidspunkt og navnene på parameterne som ble brukt. Fra versjon 1.15 inneholder meldingen ikke brukernavn eller parameterverdier, og den kan slås av med `-SkipPingback`. Se [Grunnlag for DPIA og ROS](https://github.com/Puzzlepart/prosjektportalen365/wiki/Grunnlag-for-DPIA-og-ROS) for hva som sendes ut av tenanten.
 
 
 
@@ -54,7 +56,13 @@ Vi gjør oppmerksom at vi logger basis-info om hver installasjon til en sentral 
 
 ## ➤ Kontakt
 
-Har du spørsmål vedrørende Prosjektportalen for Microsoft 365, behov for bistand til installasjon av løsningen eller ønsker om muligheter for videreutvikling og spesialtilpasninger, ta kontakt med [tarjei.ormestoyl@crayon.no](mailto:tarjei.ormestoyl@crayon.no). Vi gjør oppmerksom på at eventuell bistand vil være en fakturerbar tjeneste etter at vi har etablert kontakt og vurdert behov.
+| Hva | Hvor |
+| --- | --- |
+| Forvaltningsavtale, bistand, videreutvikling og kundesponsing | [kontakt@prosjektportalen.no](mailto:kontakt@prosjektportalen.no) |
+| Tekniske spørsmål om installasjon og oppsett | [setup@prosjektportalen.no](mailto:setup@prosjektportalen.no) |
+| Feil og forslag til forbedringer | [Issues på GitHub](https://github.com/Puzzlepart/prosjektportalen365/issues) |
+
+Prosjektportalen er ikke et produkt som selges, og har ingen garantier for feilretting, oppgradering eller support. Prosjektportalen-teamet tilbyr forvaltningsavtale for virksomheter som ønsker det. Bistand utover dokumentasjonen er en fakturerbar tjeneste.
 
 
 
@@ -62,7 +70,7 @@ Har du spørsmål vedrørende Prosjektportalen for Microsoft 365, behov for bist
 
 ## ➤ Nettleserstøtte
 
-Vi gjør vårt beste for å støtte alle nettlesere, men følger retningslinjer fra Microsoft og Microsoft 365. Noen eldre nettlesere har dårlig støtte og anbefales ikke. Se oppdatert oversikt hos Microsoft på [Hvilke nettlesere som fungerer med Microsoft 365 for nettet og Microsoft 365-tillegg](https://support.microsoft.com/nb-no/office/hvilke-nettlesere-som-fungerer-med-microsoft-365-for-nettet-og-microsoft-365-tillegg-ad1303e0-a318-47aa-b409-d3a5eb44e452) 
+Prosjektportalen følger Microsofts retningslinjer for hvilke nettlesere som støttes i Microsoft 365. Noen eldre nettlesere har dårlig støtte og anbefales ikke. Se oppdatert oversikt hos Microsoft på [Hvilke nettlesere som fungerer med Microsoft 365 for nettet og Microsoft 365-tillegg](https://support.microsoft.com/nb-no/office/hvilke-nettlesere-som-fungerer-med-microsoft-365-for-nettet-og-microsoft-365-tillegg-ad1303e0-a318-47aa-b409-d3a5eb44e452) 
 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#contributors)
@@ -70,14 +78,14 @@ Vi gjør vårt beste for å støtte alle nettlesere, men følger retningslinjer 
 ## ➤ Contributors
 	
 
-| [Tarjei Ormestøyl](undefined)                    | [Remi Blom-Ohlsen](undefined)                    |
-|:--------------------------------------------------:|:--------------------------------------------------:|
-| [tarjei.ormestoyl@crayon.no](mailto:tarjei.ormestoyl@crayon.no) | [remi.blom-ohlsen@crayon.no](mailto:remi.blom-ohlsen@crayon.no) |
+| [Tarjei Ormestøyl](https://github.com/tarjeieo) | [Remi Blom-Ohlsen](https://github.com/Remi749) |
+|:-------------------------------------------------:|:------------------------------------------------:|
 
 
-Det er flere aktive bidragsytere internt i Puzzlepart - nå Crayon Consulting - som fortjener en takk. Det tilhører sjeldenhetene at eksterne kommer med bidrag, og vi tar gjerne imot flere aktive bidragsytere fra andre virksomheter.
 
-I tillegg til de aktive bidragsyterne vil vi anerkjenne tidligere utviklere for hederlig innsats gjennom årene, de har bidratt til at løsningen har kommet dit den er i dag.
+Prosjektportalen-teamet har mange flere aktive bidragsytere enn de som står over, og alle fortjener en takk. Bidrag fra andre virksomheter er sjeldne, men svært velkomne, både som issues og pull requests.
+
+Takk også til tidligere utviklere for innsatsen gjennom årene. De har bidratt til at løsningen er der den er i dag.
 
 
 

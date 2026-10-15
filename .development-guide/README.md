@@ -1,7 +1,7 @@
 <!-- ⚠️ This README has been generated from the file(s) ".development-guide/.README" ⚠️--><p align="center">
   <img src="../assets/pp365_logo.png" alt="Logo" width="119" height="119" />
 </p> <p align="center">
-  <b>Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.</b></br>
+  <b>Prosjektportalen er et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.</b></br>
   <sub>Utviklerguide<sub>
 </p>
 
