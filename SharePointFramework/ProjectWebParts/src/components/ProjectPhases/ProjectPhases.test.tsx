@@ -21,31 +21,43 @@ jest.mock('data/SPDataAdapter', () => ({
 // Fluent positions an open popover against its trigger, and under jsdom that blocked a test for
 // 13 s on a loaded machine and for more than a minute in CI. The phases' popovers are stood in for
 // by a plain one: its trigger toggles it through `onOpenChange`, and its surface shows while open,
-// which is the part of Fluent's contract the phase selector relies on.
+// named as it is told, which is the part of Fluent's contract the phase selector relies on. Fluent
+// traps focus in a popover asked to (`trapFocus`); the stand-in records whether it was asked, and
+// the browser suite presses the keys.
+const popover: { trapFocus?: boolean } = {}
 jest.mock('@fluentui/react-components', () => {
   const actual = jest.requireActual('@fluentui/react-components')
   const React = jest.requireActual('react')
   const PopoverContext = React.createContext({ open: false, toggle: (_event: any) => undefined })
-  const Popover = ({ open, onOpenChange, children }: any) =>
-    React.createElement(
+  const Popover = ({ open, onOpenChange, trapFocus, children }: any) => {
+    popover.trapFocus = trapFocus
+    return React.createElement(
       PopoverContext.Provider,
       { value: { open, toggle: (event: any) => onOpenChange?.(event, { open: !open }) } },
       children
     )
+  }
   const PopoverTrigger = ({ children }: any) => {
     const { toggle } = React.useContext(PopoverContext)
     return React.cloneElement(children, { onClick: toggle })
   }
-  const PopoverSurface = ({ children }: any) => {
+  const PopoverSurface = ({ children, ...props }: any) => {
     const { open } = React.useContext(PopoverContext)
-    return open ? React.createElement('div', { role: 'dialog' }, children) : null
+    return open
+      ? React.createElement(
+          'div',
+          { role: 'dialog', 'aria-labelledby': props['aria-labelledby'] },
+          children
+        )
+      : null
   }
   return { __esModule: true, ...actual, Popover, PopoverTrigger, PopoverSurface }
 })
 jest.mock('./useChangePhase', () => ({ useChangePhase: () => jest.fn() }))
 jest.mock('./usePhaseHooks', () => ({ usePhaseHooks: () => [jest.fn(), jest.fn()] }))
 
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import strings from 'ProjectWebPartsStrings'
 import { format } from 'pp365-shared-library'
 import * as React from 'react'
@@ -157,11 +169,16 @@ describe('ProjectPhases', () => {
     ).toBeInTheDocument()
   })
 
-  it('does not offer to change to the phase the project is in', async () => {
+  it('does not offer to change to the phase the project is in, and lets the keyboard reach why', async () => {
     renderPhases(phases[0])
     fireEvent.click(await screen.findByTitle('Konsept'))
     expect(await screen.findByText('Konsept', { selector: 'h2' })).toBeInTheDocument()
-    expect(screen.getByTitle(strings.Aria.CurrentPhaseText)).toBeDisabled()
+    // Disabled but focusable, so the keyboard and a screen reader reach the reason in its title.
+    const change = screen.getByTitle(strings.Aria.CurrentPhaseText)
+    expect(change).toHaveAttribute('aria-disabled', 'true')
+    expect(change).not.toHaveAttribute('disabled')
+    fireEvent.click(change)
+    expect(screen.queryByText(format(strings.ChangePhaseDialogTitle, 'Konsept'))).toBeNull()
   })
 
   /**
@@ -216,5 +233,48 @@ describe('ProjectPhases', () => {
     fireEvent.click(await screen.findByTitle('Planlegge'))
     expect(await screen.findByText('Planlegge', { selector: 'h2' })).toBeInTheDocument()
     expect(screen.queryByTitle(strings.ChangePhaseText)).toBeNull()
+  })
+
+  it('is a named list of the phases, each a button, the current one marked (WCAG 1.3.1, 4.1.2)', async () => {
+    renderPhases(phases[0])
+    const list = await screen.findByRole('list', { name: strings.Aria.PhaseListLabel })
+    const items = within(list).getAllByRole('listitem')
+    expect(items).toHaveLength(3)
+    expect(within(items[0]).getByRole('button', { name: /^Konsept/ })).toHaveAttribute(
+      'aria-current',
+      'step'
+    )
+    expect(within(items[1]).getByRole('button', { name: /^Planlegge/ })).not.toHaveAttribute(
+      'aria-current'
+    )
+    expect(await axeComponent(list)).toHaveNoViolations()
+  })
+
+  it('opens a phase as a dialog named by the phase, holding the focus (WCAG 2.4.3)', async () => {
+    renderPhases(phases[0])
+    fireEvent.click(await screen.findByTitle('Planlegge'))
+    const dialog = await screen.findByRole('dialog')
+    expect(dialog).toHaveAccessibleName('Planlegge')
+    expect(popover.trapFocus).toBe(true)
+    expect(await axeComponent(dialog)).toHaveNoViolations()
+  })
+
+  it('writes a phase in a colour readable on it, at rest and under the pointer (WCAG 1.4.3)', async () => {
+    renderPhases(phases[0], {
+      phases: [
+        phase('p1', 'Konsept'),
+        phase('p2', 'Planlegge'),
+        phase('p3', 'Mørk', { PhaseColor: '#1f4e79' }),
+        phase('p4', 'Portefølje', { PhaseLevel: 'Portfolio' })
+      ]
+    })
+    const fontColor = (name: string) =>
+      screen.getByTitle(name).closest('li').style.getPropertyValue('--font-color')
+    // White on the default greens and blue reads 1.7 to 2.7:1; black reads 4.2:1 or more.
+    expect(await screen.findByTitle('Konsept')).toBeInTheDocument()
+    expect(fontColor('Konsept')).toBe('#000000')
+    expect(fontColor('Planlegge')).toBe('#000000')
+    expect(fontColor('Portefølje')).toBe('#000000')
+    expect(fontColor('Mørk')).toBe('#ffffff')
   })
 })

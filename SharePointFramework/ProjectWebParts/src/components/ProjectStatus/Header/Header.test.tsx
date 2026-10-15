@@ -14,13 +14,16 @@ import { Header } from './Header'
  * pattern for every component whose data comes from a hook or a data adapter: replace the hook.
  */
 describe('ProjectStatus Header', () => {
-  it('renders the title as the heading and exposes the description on the info label', () => {
+  it('renders the title as the heading, with an info button for the description', () => {
     render(<Header />)
-    // WebPartTitle renders an <h2> around a span[role=heading]; both carry the text, so target the span.
+    // WebPartTitle renders one <h2> (#1788: it was an <h2> around a second heading), and an info
+    // button named after the title, whose popover shows the description. The name is Norwegian,
+    // as the strings resolve in tests; the library's strings have no typings here.
     expect(
-      screen.getByText('Prosjektstatus – Delprosjekt A', { selector: 'span' })
+      screen.getByRole('heading', { level: 2, name: 'Prosjektstatus – Delprosjekt A' })
     ).toBeInTheDocument()
-    // WebPartTitle shows the description in a popover; its trigger carries the description in the title.
-    expect(screen.getByTitle(/Publisert/)).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: 'Informasjon om Prosjektstatus – Delprosjekt A' })
+    ).toBeInTheDocument()
   })
 })

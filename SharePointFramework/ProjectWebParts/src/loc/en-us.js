@@ -63,6 +63,8 @@ define([], function () {
     PhaseCheckListItem: "Checklist item {0}",
     Aria: {
       CurrentPhaseText: 'This is the current phase. It is therefore not possible to change to this phase.',
+      PhaseListLabel: "The project's phases",
+      ChecklistStepsLabel: 'Checkpoints',
     },
     SaveText: 'Save',
     UpdatingProjectPropertiesStatusText: 'Updating project properties ...',

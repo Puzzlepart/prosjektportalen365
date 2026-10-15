@@ -123,6 +123,10 @@ checked by hand and with which reader and browser: axe finds only part of what W
   under test's ids, so another channel's package is never scanned as ours); dialogs, drawers and
   popovers from `SURFACES`. The page scans are `e2e/tests/smoke/a11y-baseline.spec.ts`; a surface
   is scanned in the spec that opens it.
+- **A fix in a shared wrapper changes the markup the consumers' tests read.** Run every solution's
+  `npm test` before handing it over, not only the library's: the status header's test read
+  `WebPartTitle`'s old `title`, and the release build failed on three pushes before it was seen
+  (2026-10-15); a failing solution also stops those that depend on it from being tested.
 - **Report, then blocking** (the plan's D2): a scan attaches `axe-<component>.json` and an `a11y`
   annotation and fails nothing, until the component's audit is done; then its name goes into
   `A11Y_BLOCKING` in the same commit, and from there a serious or critical violation fails the run.
@@ -158,6 +162,17 @@ checked by hand and with which reader and browser: axe finds only part of what W
 - A Fluent `Dialog` is named by its `DialogTitle`, described by nothing, and opens with focus on
   its first button: a dialog whose text is the point (a confirmation) points `aria-describedby`
   on `DialogSurface` at its `DialogContent` (`useConfirmationDialog`).
+- Fluent's `PopoverTrigger` makes its child a button (`useARIAButtonProps`) even with
+  `disableButtonEnhancement`: on an `li` that takes the item's role, and the list has none (axe's
+  `list`). Put a `<button>` in the `li` (`ProjectPhases/ProjectPhase`).
+- A `Popover` with controls in it needs `trapFocus`. Without it the surface sits in a portal at the
+  end of the page, and Tab from its last control went to the top of the page, leaving the popover
+  open. With it, Fluent names the surface a dialog: name it (`aria-labelledby` its heading).
+- A button that cannot be used yet but explains why in its `title` is `disabledFocusable`, not
+  `disabled`: a disabled button is skipped by the keyboard and its reason never reached. It also
+  keeps the focus while an action it started runs (the change-phase dialog's statuses).
+- A status message in Jest: the announcer writes it as `innerText`, which jsdom keeps as a
+  property, not as text; read `span.innerText` in the live region (`reactRoot.test.tsx`).
 - jest-axe over a stand-in judges the stand-in. The combobox family (`Autocomplete`,
   `PeoplePicker`, `ColumnSearchPropertyField`) runs on stand-ins in Jest: assert names there and
   let the browser scans judge the markup.

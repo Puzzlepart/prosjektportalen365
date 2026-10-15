@@ -7,6 +7,8 @@ declare interface IProjectWebPartsStrings {
   EditStatusPanelText: string
   Aria: {
     CurrentPhaseText: string
+    PhaseListLabel: string
+    ChecklistStepsLabel: string
   }
   SaveText: string
   ErrorBoundaryFallbackDescription: string

@@ -87,7 +87,7 @@ describe('List', () => {
       searchBox: { placeholder: 'Søk i Alle prosjekter' },
       menuItems: [new ListMenuItem('Eksporter til Excel')]
     })
-    // WebPartTitle renders an <h2> around a span[role=heading]; both carry the text, so target the span.
+    // WebPartTitle renders one <h2> with the title in a span; the span holds the text alone.
     const heading = screen.getByText('Porteføljeoversikt', { selector: 'span' })
     const search = screen.getByPlaceholderText('Søk i Alle prosjekter')
     const toolbar = screen.getByRole('button', { name: 'Eksporter til Excel' })

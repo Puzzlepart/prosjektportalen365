@@ -12,6 +12,7 @@ import {
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { ProjectPhasesContext } from '../context'
+import { DISMISS_CHANGE_PHASE_DIALOG } from '../reducer'
 import { Actions } from './Actions/Actions'
 import styles from './ChangePhaseDialog.module.scss'
 import { Content } from './Content/Content'
@@ -31,7 +32,15 @@ export const ChangePhaseDialog: FC = () => {
     <ChangePhaseDialogContext.Provider value={{ state, dispatch, nextChecklistItem }}>
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
-          <Dialog open>
+          {/* Escape closes the dialog as Cancel does, except while the phase is being changed. */}
+          <Dialog
+            open
+            onOpenChange={(_, data) => {
+              if (!data.open && state.view !== View.ChangingPhase) {
+                context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())
+              }
+            }}
+          >
             <DialogSurface>
               <DialogBody className={styles.changePhaseDialog}>
                 <DialogTitle>

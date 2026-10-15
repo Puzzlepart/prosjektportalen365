@@ -7,7 +7,8 @@ import { Button, Text } from '@fluentui/react-components'
 import { useCheckListItem } from './useCheckListItem'
 
 export const CheckListItem: FC<IChecklistItemProps> = ({ item }) => {
-  const { commentHidden, setCommentHidden, hasComment, statusIcon } = useCheckListItem(item)
+  const { commentHidden, setCommentHidden, hasComment, statusIcon, commentId } =
+    useCheckListItem(item)
 
   return (
     <div
@@ -20,7 +21,9 @@ export const CheckListItem: FC<IChecklistItemProps> = ({ item }) => {
     >
       <div className={styles.item}>
         <div className={styles.title}>
-          <div className={styles.statusIcon}>{statusIcon}</div>
+          <div className={styles.statusIcon} role='img' aria-label={item.status}>
+            {statusIcon}
+          </div>
           <Text>
             {item.id}. {item.title}
           </Text>
@@ -31,10 +34,13 @@ export const CheckListItem: FC<IChecklistItemProps> = ({ item }) => {
             size='small'
             icon={commentHidden ? getFluentIcon('ChevronUp') : getFluentIcon('ChevronDown')}
             title={commentHidden ? strings.ShowCommentText : strings.HideCommentText}
+            aria-label={commentHidden ? strings.ShowCommentText : strings.HideCommentText}
+            aria-expanded={!commentHidden}
+            aria-controls={commentId}
           />
         </div>
       </div>
-      <div className={styles.comment} hidden={commentHidden}>
+      <div id={commentId} className={styles.comment} hidden={commentHidden}>
         <Text weight='semibold'>{strings.CommentLabel}: </Text>
         <Text>{item.comment}</Text>
       </div>

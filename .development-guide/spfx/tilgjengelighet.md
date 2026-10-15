@@ -43,7 +43,7 @@ Testene går i `e2e/tests/smoke/a11y-baseline.spec.ts`, `risk-action.spec.ts` og
 | Komponent | axe | Gjennomgått | Tastatur | Skjermleser | Visuelt | Skjema | Merknad |
 |---|---|---|---|---|---|---|---|
 | Prosjektinformasjon | Ingen |  |  |  |  |  |  |
-| Fasevelger | color-contrast 8–10, list 1 |  |  |  |  |  | Fasenavn med lav kontrast, `ul` med andre barn enn `li` |
+| Fasevelger | color-contrast 8–10, list 1 |  |  |  |  |  | Rettet: fasene er en navngitt liste der hver fase er en knapp, og gjeldende fase er merket som gjeldende trinn. Popoveren holder fokus til den lukkes (Tab sendte fokus til toppen av siden og lot den stå åpen) og heter det fasen heter. Teksten er svart eller hvit der den leser best, også under pekeren (hvitt på standardfargene ga 1,7–2,7:1). Knappen for å endre fase er fokuserbar også når den ikke kan brukes, så grunnen nås. I dialogen for faseskifte har kommentaren etikett, sjekkpunktene er trinn i stedet for faner uten funksjon, deaktiverte knapper kan nås med grunnen, Escape lukker, faseskiftet leses opp når det starter, og oppsummeringen har tekst for statusikonene og sier om en kommentar vises. jest-axe: ingen funn |
 | Prosjektstatus | Ingen |  |  |  |  |  |  |
 | Prosjekttidslinje | color-contrast 2, scrollable-region-focusable 1 |  |  |  |  |  | Har en liste ved siden av. Rettet i bibliotekets tidslinje: elementene kan åpnes med tastaturet, tidslinjen rulles med piltastene, og teksten og milepælene har nok kontrast |
 | Risikomatrise | Ingen |  |  |  |  |  |  |

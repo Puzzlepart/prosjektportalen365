@@ -18,7 +18,9 @@ define([], function () {
     ArchiveLogOperationEndClosed: 'Avsluttet/Stengt/Låst',
     Aria: {
       CurrentPhaseText:
-        'Dette er den gjeldende fasen. Det er derfor ikke mulig å endre til denne fasen.'
+        'Dette er den gjeldende fasen. Det er derfor ikke mulig å endre til denne fasen.',
+      PhaseListLabel: 'Prosjektets faser',
+      ChecklistStepsLabel: 'Sjekkpunkter'
     },
     Placeholder: {
       DatePicker: 'Angi en dato',

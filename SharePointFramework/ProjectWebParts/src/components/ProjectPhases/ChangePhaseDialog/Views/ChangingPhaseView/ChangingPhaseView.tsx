@@ -1,17 +1,12 @@
-import { ProjectPhasesContext } from '../../../../ProjectPhases/context'
 import * as strings from 'ProjectWebPartsStrings'
-import React, { FC, useContext } from 'react'
+import React, { FC } from 'react'
 import { Field, ProgressBar } from '@fluentui/react-components'
-import { format } from 'pp365-shared-library'
+import { useChangingPhaseView } from './useChangingPhaseView'
 
 export const ChangingPhaseView: FC = () => {
-  const context = useContext(ProjectPhasesContext)
+  const { description } = useChangingPhaseView()
   return (
-    <Field
-      label={strings.PleaseWaitText}
-      hint={format(strings.ChangingPhaseDescription, context.state.confirmPhase.name)}
-      validationState='none'
-    >
+    <Field label={strings.PleaseWaitText} hint={description} validationState='none'>
       <ProgressBar />
     </Field>
   )

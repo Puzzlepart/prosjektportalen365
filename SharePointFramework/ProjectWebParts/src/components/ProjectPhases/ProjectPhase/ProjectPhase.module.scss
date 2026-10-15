@@ -43,7 +43,7 @@ $project-phase-padding: 0.25em;
   &::before {
     position: absolute;
     z-index: -1;
-    content: "";
+    content: '';
     border: solid transparent;
     border-width: $chevron-height $chevron-width;
   }
@@ -75,7 +75,7 @@ $project-phase-padding: 0.25em;
       border-left-color: inherit;
     }
 
-    span {
+    .name {
       font-size: 20px;
     }
   }
@@ -83,7 +83,6 @@ $project-phase-padding: 0.25em;
   &.portfolio {
     background: $portfolio-color;
     border-color: $portfolio-color;
-
 
     &::after {
       border-top-color: inherit;
@@ -97,7 +96,6 @@ $project-phase-padding: 0.25em;
     &.isCurrentPhase {
       background: $portfolio-current-color;
       border-color: $portfolio-current-color;
-
 
       &::after {
         border-top-color: inherit;
@@ -126,7 +124,6 @@ $project-phase-padding: 0.25em;
     &.isCurrentPhase {
       background: $end-current-color;
       border-color: $end-current-color;
-
 
       &::after {
         border-top-color: inherit;
@@ -253,7 +250,28 @@ $project-phase-padding: 0.25em;
   text-align: center;
   color: $font-color;
 
-  span {
+  // The phase's button fills its arrow and looks like it; its focus ring takes the text's colour,
+  // which is chosen to read on the phase.
+  .trigger {
+    all: unset;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    text-align: center;
+
+    &:focus-visible {
+      outline: var(--strokeWidthThick) solid currentColor;
+      outline-offset: 2px;
+    }
+  }
+
+  .name {
     cursor: pointer;
     font-size: 16px;
     line-height: 1em;
@@ -262,6 +280,7 @@ $project-phase-padding: 0.25em;
   }
 
   .subText {
+    display: block;
     line-height: 1em;
     font-size: 12px;
     font-weight: inherit;

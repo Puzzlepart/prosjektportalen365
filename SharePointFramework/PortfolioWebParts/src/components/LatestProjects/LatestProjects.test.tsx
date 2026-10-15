@@ -41,7 +41,7 @@ describe('LatestProjects', () => {
     expect(dataAdapter.fetchProjectSites.mock.calls[0].slice(0, 2)).toEqual([10, 'Created'])
     expect(screen.getByRole('link', { name: 'Bravo' })).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: 'Charlie' })).toBeNull()
-    // WebPartTitle renders an <h2> around a span[role=heading]; both carry the text, so target the span.
+    // WebPartTitle renders one <h2> with the title in a span; the span holds the text alone.
     expect(screen.getByText('Siste prosjekter', { selector: 'span' })).toBeInTheDocument()
   })
 

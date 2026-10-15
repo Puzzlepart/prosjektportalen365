@@ -355,3 +355,48 @@ timeline tests of ProjectWebParts, ProgramWebParts and PortfolioWebParts' resour
 new smoke test opens a portfolio timeline item with Enter and checks the focus after Escape
 against the real calendar on the test tenant; it passes once the change is deployed there.
 Slice 1 is done but for the hand rounds (screen reader, zoom, contrast themes).
+
+### Slice 2, part 1 — The phase selector (2026-10-15)
+
+The baseline's `list` and `color-contrast` were the smaller part; a keyboard probe on the test
+project found the larger: Enter on a phase opened its popover, but Tab from the popover's last
+button went to the top of the SharePoint page and left the popover open, where Escape no longer
+closed it.
+
+- **The phases** are a list named «Prosjektets faser», each phase a `<button>` in its `li`.
+  Fluent's `PopoverTrigger` had made the `li` itself a button (it applies `useARIAButtonProps`
+  even with `disableButtonEnhancement`), which took the item's role (axe's `list`). The current
+  phase is `aria-current="step"`, where its size and colour alone told it.
+- **The popover** traps focus (`trapFocus`), so Tab stays in it and Escape gives focus back to
+  the phase, and it is a dialog named by the phase's heading. Its sub text is a paragraph, not an
+  `h4` under the `h2`. «Endre til denne fasen» is `disabledFocusable` on the current phase, so the
+  reason in its title can be reached.
+- **Contrast**: white on the default phase colours read 1.68 to 2.72:1; the old check for a light
+  colour (perceived brightness over 200) never fired on them. The text colour is now chosen with
+  `getContrastRatio` against every colour the phase takes, at rest and under the pointer: white
+  where it reads 4.5:1 on all of them, otherwise black or white, whichever reads better on the
+  worst. All the defaults get black; a dark custom colour keeps white. The focus ring takes the
+  text's colour.
+- **The change-phase dialog**: the comment field has a label («Kommentar»), where it had only a
+  placeholder; the checkpoints are a list of steps with the current one marked, where they were
+  tabs without panels that did nothing when chosen; the status buttons and «Hopp over» are
+  `disabledFocusable`, so the keyboard reaches why they cannot be used and the focus stays while a
+  status is saved; Escape closes the dialog except while the phase changes; the change is
+  announced as it starts; in the summary each status icon is named by its status and the comment
+  toggles say whether they are open; an archive section's header says whether it is open.
+
+Tests first: four tests in `ProjectPhases.test.tsx` and eight in `ChangePhaseDialog.test.tsx`
+failed on the old code and pass, with jest-axe over the list, the popover and the dialog's
+views. The announcement test's first red run proved nothing (its helper read `textContent`,
+which the announcer leaves empty under jsdom); with the helper fixed, it was seen failing with
+the announcement switched off and passing with it. A new smoke test opens a phase with Enter,
+tabs inside it and checks the focus after Escape, read only; it passes once deployed.
+
+Found on the way: the test channel's release build had failed on the three pushes of slice 1.
+`WebPartTitle`'s new markup (part 1) broke the status header's test in ProjectWebParts, which read
+the description from the title's `title` attribute, and Rush then skipped the solutions that build
+on ProjectWebParts, so nothing reached the test tenant after slice 0. The test reads the heading
+and the info button now; every solution's suite passes locally (the library's 75 test files,
+ProjectWebParts 46, PortfolioWebParts 37, ProjectExtensions 22, ProgramWebParts 10,
+PortfolioExtensions 10), with no coverage floor missed. Recorded in pp365-a11y: a change to a
+shared wrapper runs every solution's tests.
