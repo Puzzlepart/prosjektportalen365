@@ -44,6 +44,10 @@
   --c-lev: #56651a; --c-lev-bg: #f2f5e4;
   --c-eff: #0b6a78; --c-eff-bg: #e4f3f5;
   --c-asm: #5c5c5c; --c-asm-bg: #f0f0f0;
+  --c-em: #9c3d8f; --c-em-bg: #faeff8;
+  --c-cost: #8f4e00; --c-cost-bg: #fbf1e6;
+  --c-grp: #4f52b2; --c-grp-bg: #eef0fb;
+  --c-tiltak: #424242; --c-tiltak-bg: #f5f5f5;
   --font: "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", sans-serif;
   --font-display: "Segoe UI Variable Display", "Segoe UI", -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
   --r-s: 2px; --r-m: 4px; --r-l: 8px; --r-xl: 12px;
@@ -74,6 +78,10 @@
     --c-lev: #b8c76c; --c-lev-bg: #283014;
     --c-eff: #6ccad6; --c-eff-bg: #0c3036;
     --c-asm: #c8c8c8; --c-asm-bg: #3a3a3a;
+    --c-em: #e59bd8; --c-em-bg: #3a1734;
+    --c-cost: #f0b56e; --c-cost-bg: #3a230a;
+    --c-grp: #a7aaf0; --c-grp-bg: #23264a;
+    --c-tiltak: #d6d6d6; --c-tiltak-bg: #333333;
     color-scheme: dark;
   }
 }
@@ -94,6 +102,10 @@
   --c-meas: #ee8fc4; --c-meas-bg: #3d1430;
   --c-chg: #a9b8c6; --c-chg-bg: #26303a;
   --c-asm: #c8c8c8; --c-asm-bg: #3a3a3a;
+  --c-em: #e59bd8; --c-em-bg: #3a1734;
+  --c-cost: #f0b56e; --c-cost-bg: #3a230a;
+  --c-grp: #a7aaf0; --c-grp-bg: #23264a;
+  --c-tiltak: #d6d6d6; --c-tiltak-bg: #333333;
   color-scheme: dark;
 }
 
@@ -386,6 +398,10 @@ textarea.input { min-height: 72px; resize: vertical; }
 .lev-c { --c: var(--c-lev); --cb: var(--c-lev-bg); }
 .eff-c { --c: var(--c-eff); --cb: var(--c-eff-bg); }
 .asm-c { --c: var(--c-asm); --cb: var(--c-asm-bg); }
+.em-c { --c: var(--c-em); --cb: var(--c-em-bg); }
+.cost-c { --c: var(--c-cost); --cb: var(--c-cost-bg); }
+.grp-c { --c: var(--c-grp); --cb: var(--c-grp-bg); }
+.tiltak-c { --c: var(--c-tiltak); --cb: var(--c-tiltak-bg); }
 .tt { display: inline-flex; align-items: center; gap: 4px; height: 20px; padding: 0 7px 0 5px; border-radius: var(--r-m); font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; white-space: nowrap; color: var(--c); background: var(--cb); vertical-align: middle; }
 .tt svg { width: 14px; height: 14px; }
 .ti { width: 16px; height: 16px; color: var(--c); flex: none; vertical-align: -3px; margin-right: 4px; }
@@ -413,7 +429,8 @@ textarea.input { min-height: 72px; resize: vertical; }
 .cbox { border-radius: var(--r-l); background: var(--cb); padding: 12px; display: flex; flex-direction: column; gap: 6px; min-width: 0; border: 1px solid transparent; }
 .cbox .def { font-size: 13px; color: var(--fg-2); }
 .cbox .tt { white-space: normal; height: auto; min-height: 20px; padding: 2px 7px 2px 5px; align-self: flex-start; }
-.cbox .ex { font-size: 13px; color: var(--fg); background: var(--surface); border-radius: var(--r-m); padding: 6px 8px; }
+.cbox .ex { font-size: 13px; color: var(--fg); background: var(--surface); border-radius: var(--r-m); padding: 6px 8px; overflow-wrap: anywhere; }
+.map-cols > div .tt { max-width: 100%; white-space: normal; height: auto; min-height: 20px; padding-top: 2px; padding-bottom: 2px; line-height: 14px; }
 .cbox .ex b { font-weight: 600; }
 .cbox .ex .muted { font-size: 12px; }
 .cbox.nest { background: var(--surface); border-color: var(--c); }
@@ -471,6 +488,7 @@ textarea.input { min-height: 72px; resize: vertical; }
 .hist > div { border-top: 1px solid var(--stroke-2); padding-top: 10px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
 .hist .dec { color: var(--fg-2); }
 .preset { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 760px) { .phase-strip { grid-template-columns: minmax(0, 1fr); } .phases { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .preset button { text-align: left; border: 1px solid var(--stroke); background: var(--surface); border-radius: var(--r-l); padding: 14px; cursor: pointer; display: flex; flex-direction: column; gap: 8px; }
 .preset button[aria-pressed="true"] { border-color: var(--brand); box-shadow: inset 0 0 0 1px var(--brand); }
 .preset .chainmini { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; font-size: 12px; color: var(--fg-3); }
@@ -479,7 +497,7 @@ textarea.input { min-height: 72px; resize: vertical; }
 .rep-sec .q { color: var(--fg-3); font-weight: 400; font-size: 13px; }
 .goal-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
 .goal-tiles > div { border: 1px solid var(--stroke-2); border-radius: var(--r-m); padding: 12px; display: flex; flex-direction: column; gap: 6px; }
-.map-cols { position: relative; height: 52px; display: block; min-width: 760px; margin-bottom: 6px; }
+.map-cols { position: relative; height: 44px; display: block; min-width: 760px; margin-bottom: 6px; }
 .map-cols > div { position: absolute; top: 0; display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--fg-3); }
 .map-svg path.link.ev3 { stroke: var(--fg-3); stroke-width: 2.6; }
 .map-svg path.link.ev2 { stroke: var(--fg-3); stroke-width: 1.6; }
@@ -491,6 +509,44 @@ textarea.input { min-height: 72px; resize: vertical; }
 .map-svg .node.k-eff rect.box { fill: var(--c-eff-bg); stroke: transparent; }
 .map-svg .node.k-ben rect.box { fill: var(--c-ben-bg); stroke: transparent; }
 .map-svg .node.k-goal rect.box { fill: var(--c-goal-bg); stroke: transparent; }
+.map-svg .node.k-em rect.box { fill: var(--c-em-bg); stroke: transparent; }
+.map-svg .node.k-ben.cost rect.box { fill: var(--c-cost-bg); stroke: var(--c-cost); stroke-dasharray: 4 3; stroke-opacity: .6; }
+.map-svg .node.k-grp rect.box { fill: var(--c-grp-bg); stroke: transparent; }
+.map-svg .node.k-tiltak rect.box { fill: var(--surface); stroke: var(--stroke); }
+.map-svg path.link.syn { stroke: var(--stroke); stroke-width: 1.3; }
+.chain { overflow-x: auto; }
+.gb.cost { border-left-color: var(--c-cost); }
+/* DFØ phase, checklist, plan */
+.phase-strip { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 24px; margin-bottom: 16px; align-items: start; }
+.phases { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+.phases li { position: relative; padding: 8px 10px 8px 34px; background: var(--surface-2); border-radius: var(--r-m); font-size: 12px; line-height: 15px; min-height: 52px; display: flex; flex-direction: column; justify-content: center; color: var(--fg-3); }
+.phases li b { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; background: var(--surface-3); color: var(--fg-2); }
+.phases li span { color: var(--fg-2); font-weight: 600; }
+.phases li small { font-size: 11px; }
+.phases li.past b { background: var(--ok); color: #fff; }
+.phases li.now { background: var(--brand-subtle); box-shadow: inset 0 0 0 1px var(--brand); }
+.phases li.now b { background: var(--brand); color: var(--brand-fg); }
+.phases li.now span { color: var(--fg); }
+.ps-num { font-size: 14px; margin: 2px 0 6px; } .ps-num b { font-size: 22px; font-family: var(--font-display); }
+.ck { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-top: 1px solid var(--stroke-2); }
+.ck:first-of-type { border-top: 0; }
+.ck > div { flex: 1; }
+.ck-box { flex: 0 0 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-3); color: var(--fg-3); }
+.ck-box svg { width: 14px; height: 14px; }
+.ck.done .ck-box { background: var(--ok); color: #fff; }
+.ck.open .ck-box { background: var(--warn-bg); color: var(--warn); box-shadow: inset 0 0 0 1px var(--warn-line); }
+.rep-sec.later { opacity: .7; }
+.plan-facts { grid-template-columns: minmax(120px, 200px) minmax(0, 1fr); }
+.plan-facts dd .chip { margin: 0 4px 4px 0; }
+tr.grp-row td { background: var(--surface-2); font-weight: 600; }
+table.dfo th.dfo-grp { text-align: left; vertical-align: top; background: var(--surface-2); font-weight: 600; width: 170px; }
+table.dfo td { vertical-align: top; }
+@media print {
+  .demo, .suite, .appbar, .hubnav, .site, .cmdbar, .ppfooter, #nav, .page-head .actions, .tabs, .msg { display: none !important; }
+  body, .sp, .sp-page, .canvas { background: #fff !important; }
+  .app { display: block !important; } #main { padding: 0 !important; }
+  .card { box-shadow: none !important; border: 1px solid #ccc !important; break-inside: avoid; }
+}
 .lg-ev { display: inline-block; width: 22px; height: 0; border-top: 2px solid var(--fg-3); vertical-align: middle; margin-right: 6px; }
 .lg-ev.e3 { border-top-width: 3px; } .lg-ev.e1 { border-top-style: dashed; } .lg-ev.e0 { border-top-style: dotted; border-top-color: var(--fg-4); }
 .empty { padding: 24px; text-align: center; color: var(--fg-3); }
@@ -558,6 +614,13 @@ textarea.input { min-height: 72px; resize: vertical; }
     </div>
     <select id="site-select" aria-label="Velg område"></select>
   </div>
+  <div class="demo-group">
+    <span>Kjedemodell</span>
+    <div class="seg" role="group" aria-label="Kjedemodell">
+      <button type="button" data-demo-preset="dfo">DFØ</button>
+      <button type="button" data-demo-preset="utvidet">Utvidet</button>
+    </div>
+  </div>
   <label class="chk"><input type="checkbox" id="ro-toggle"> Simuler bruker uten skrivetilgang</label>
   <span class="spacer"></span>
   <button type="button" class="demo-btn" id="reset-btn">Tilbakestill demodata</button>
@@ -622,7 +685,7 @@ textarea.input { min-height: 72px; resize: vertical; }
 ------------------------------------------------------------------ */
 const TODAY = '2026-10-08';
 const SNAPSHOT = '2026-09-30';
-const STORE_KEY = 'pp365-nyttestyring-prototype-v2';
+const STORE_KEY = 'pp365-nyttestyring-prototype-v3';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const toDate = (s) => { const [y, m, d] = s.split('-').map(Number); return Date.UTC(y, m - 1, d); };
@@ -647,30 +710,42 @@ const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
    («Nyttestyring – kjedenivåer») the organisation maintains.
 ------------------------------------------------------------------ */
 const LEVEL_ORDER = ['lev', 'chg', 'eff'];
-const RANK = { lev: 0, chg: 1, eff: 2, ben: 3, goal: 4 };
+const RANK = { lev: 0, chg: 1, eff: 2, ben: 3, em: 4, goal: 5 };
 const PRESETS = {
-  enkel: {
-    label: 'Enkel (Prosjektveiviseren)',
-    desc: 'Endring → nyttevirkning → strategisk mål. Passer for de fleste prosjekter, og tilsvarer dagens nytteanalyse.',
-    levels: { lev: { name: 'Leveranse', plural: 'Leveranser', active: false }, chg: { name: 'Endring', plural: 'Endringer', active: true }, eff: { name: 'Effekt', plural: 'Effekter', active: false } }
+  dfo: {
+    label: 'DFØ (nyttestyring)',
+    desc: 'Tiltak → hvem blir berørt → nytte- og kostnadsvirkninger → effektmål → samfunnsmål. Samme nyttekart som DFØs veileder. Passer for de fleste prosjekter.',
+    levels: { lev: { name: 'Leveranse', plural: 'Leveranser', active: false }, chg: { name: 'Nødvendig aktivitet', plural: 'Nødvendige aktiviteter', active: false }, eff: { name: 'Effekt', plural: 'Effekter', active: false } }
   },
   utvidet: {
-    label: 'Utvidet (MSP og endringsteori)',
-    desc: 'Leveranse → evne → effekt → nyttevirkning → strategisk mål. For programmer som styrer etter en endringsteori og vil se hvor kjeden brister.',
+    label: 'Utvidet (endringsteori)',
+    desc: 'Leveranse → evne → effekt → virkning → effektmål → samfunnsmål. For programmer som styrer etter en endringsteori og vil se hvor kjeden brister.',
     levels: { lev: { name: 'Leveranse', plural: 'Leveranser', active: true }, chg: { name: 'Evne / endret praksis', plural: 'Evner og endret praksis', active: true }, eff: { name: 'Effekt', plural: 'Effekter', active: true } }
   }
 };
 const LEVEL_DEF = {
   lev: 'Det prosjektet faktisk leverer: en løsning, et tilbud eller en tjeneste.',
-  chg: 'Det organisasjonen må kunne eller gjøre annerledes, for at nytten skal oppstå.',
+  get chg() { return lv('chg').active ? 'Det organisasjonen må kunne eller gjøre annerledes, for at nytten skal oppstå.' : 'Det som må gjøres for at nytten skal oppstå, for eksempel opplæring, nye rutiner eller informasjon til målgruppen. DFØ: aktiviteter som gjør det mulig å realisere nytten.'; },
   eff: 'Den første endringen hos innbyggere eller tjenester, før gevinsten kan måles.'
 };
+/** DFØ's four phases of benefit management, and the Prosjektveiviseren phases they overlap with (DFØ 6.2). */
+const DFO_PHASES = [
+  { n: 1, name: 'Utrede', pv: ['Idé', 'Konsept'] },
+  { n: 2, name: 'Planlegge gjennomføring og oppfølging', pv: ['Planlegge'] },
+  { n: 3, name: 'Gjennomføre og evaluere underveis', pv: ['Gjennomføre', 'Avslutte'] },
+  { n: 4, name: 'Etterevaluere', pv: ['Realisere'] }
+];
+const dfoPhase = (pvPhase) => DFO_PHASES.find((p) => p.pv.includes(pvPhase)) || DFO_PHASES[0];
+const EFFECTS = ['Nytte', 'Kostnad'];
+const PRICED = ['Prissatt', 'Ikke prissatt'];
+const EVAL_KINDS = ['Løpende vurdering', 'Underveisevaluering', 'Etterevaluering'];
+const DECISIONS = ['Videreføre', 'Justere', 'Avslutte'];
 const EVIDENCE = ['Sterk', 'Moderat', 'Svak', 'Ikke vurdert'];
 const EV_N = { 'Sterk': 3, 'Moderat': 2, 'Svak': 1, 'Ikke vurdert': 0 };
 const GRADES = ['Sterk', 'Moderat', 'Svak', 'Motstridende', 'Ikke vurdert'];
-const ROLES = ['Gevinst', 'Effekt', 'Leveranse', 'Antakelse', 'Risiko', 'Balanserende', 'Kontekst'];
+const ROLES = ['Gevinst', 'Kostnad', 'Effekt', 'Leveranse', 'Antakelse', 'Risiko', 'Balanserende', 'Kontekst'];
 const ROLE_DEF = {
-  Gevinst: 'Tester om nyttevirkningen oppstår.', Effekt: 'Tester om den tidlige endringen skjer.', Leveranse: 'Tester om leveransen er på plass og når målgruppen.',
+  Gevinst: 'Tester om nyttevirkningen oppstår.', Kostnad: 'Følger en kostnadsvirkning, for eksempel driftskostnad mot budsjett.', Effekt: 'Tester om den tidlige endringen skjer.', Leveranse: 'Tester om leveransen er på plass og når målgruppen.',
   Antakelse: 'Tester om en antakelse i kjeden holder.', Risiko: 'Varsler om at kjeden er i ferd med å brytes.', Balanserende: 'Fanger opp bivirkninger, for eksempel at belastning flyttes til pårørende.', Kontekst: 'Viser utviklingen i samfunnet rundt. Kan ikke tilskrives tiltaket alene.'
 };
 const MTYPES = { path: 'Målbane', threshold: 'Terskel', watch: 'Følg med' };
@@ -686,8 +761,8 @@ const FACTOR_KINDS = {
 ------------------------------------------------------------------ */
 const SITES = {
   hub: { id: 'hub', kind: 'hub', title: 'Fjordvik kommune', short: 'Virksomheten', initials: 'FK' },
-  pg1: { id: 'pg1', kind: 'program', title: 'Digital innbyggerservice', short: 'Digital innbyggerservice', initials: 'DI', children: ['p1', 'p2', 'p3'], manager: 'Hanne Brekke' },
-  pg2: { id: 'pg2', kind: 'program', title: 'Helse og omsorg 2030', short: 'Helse og omsorg 2030', initials: 'HO', children: ['p4', 'p5'], manager: 'Ola Tveit' },
+  pg1: { id: 'pg1', kind: 'program', title: 'Digital innbyggerservice', short: 'Digital innbyggerservice', initials: 'DI', children: ['p1', 'p2', 'p3'], manager: 'Hanne Brekke', phase: 'Gjennomføre' },
+  pg2: { id: 'pg2', kind: 'program', title: 'Helse og omsorg 2030', short: 'Helse og omsorg 2030', initials: 'HO', children: ['p4', 'p5'], manager: 'Ola Tveit', phase: 'Gjennomføre' },
   p1: { id: 'p1', kind: 'project', title: 'Ny innbyggerportal', short: 'Ny innbyggerportal', initials: 'NI', program: 'pg1', manager: 'Siri Haugland', phase: 'Gjennomføre' },
   p2: { id: 'p2', kind: 'project', title: 'Digital byggesak', short: 'Digital byggesak', initials: 'DB', program: 'pg1', manager: 'Anders Lie', phase: 'Gjennomføre' },
   p3: { id: 'p3', kind: 'project', title: 'Chatbot for innbyggerdialog', short: 'Chatbot', initials: 'CI', program: 'pg1', manager: 'Mona Vik', phase: 'Gjennomføre' },
@@ -697,13 +772,20 @@ const SITES = {
 };
 
 function buildSeed() {
-  const settings = { preset: 'utvidet', levels: JSON.parse(JSON.stringify(PRESETS.utvidet.levels)), tolerance: 10 };
+  const settings = { preset: 'dfo', levels: JSON.parse(JSON.stringify(PRESETS.dfo.levels)), tolerance: 10, groups: ['Innbyggere', 'Brukere og pårørende', 'Ansatte', 'Egen virksomhet', 'Næringslivet', 'Samfunnet'] };
   const goals = [
-    { id: 'S1', title: 'Enkel og tilgjengelig innbyggerservice', level: 'Samfunnsmål', parent: null, owner: 'Kommunedirektør', period: '2024–2030', desc: 'Innbyggerne får hjelp raskt, uansett kanal, og opplever at kommunen henger sammen.' },
-    { id: 'S1-1', title: '80 % av henvendelsene løses digitalt innen 2028', level: 'Hovedmål', parent: 'S1', owner: 'Kommunalsjef organisasjon', period: '2024–2028', desc: 'Andelen henvendelser som løses i selvbetjening eller digital dialog uten manuell oppfølging.' },
-    { id: 'S2', title: 'Klimanøytral kommunal drift innen 2030', level: 'Samfunnsmål', parent: null, owner: 'Kommunedirektør', period: '2020–2030', desc: 'Direkte klimagassutslipp fra kommunens egen drift skal ned med minst 70 % fra 2019-nivå.' },
-    { id: 'S3', title: 'Effektiv ressursbruk og bærekraftig økonomi', level: 'Virksomhetsmål', parent: null, owner: 'Økonomisjef', period: '2024–2027', desc: 'Frigjøre årsverk og driftsmidler til prioriterte tjenester.' },
-    { id: 'S4', title: 'Trygge og selvstendige innbyggere i eget hjem', level: 'Samfunnsmål', parent: null, owner: 'Kommunalsjef helse og omsorg', period: '2024–2030', desc: 'Flere eldre kan bo trygt hjemme lenger.' }
+    { id: 'S1', site: 'hub', title: 'Enkel og tilgjengelig innbyggerservice', level: 'Samfunnsmål', parent: null, owner: 'Kommunedirektør', period: '2024–2030', desc: 'Innbyggerne får hjelp raskt, uansett kanal, og opplever at kommunen henger sammen.' },
+    { id: 'S1-1', site: 'hub', title: '80 % av henvendelsene løses digitalt innen 2028', level: 'Hovedmål', parent: 'S1', owner: 'Kommunalsjef organisasjon', period: '2024–2028', desc: 'Andelen henvendelser som løses i selvbetjening eller digital dialog uten manuell oppfølging.' },
+    { id: 'S2', site: 'hub', title: 'Klimanøytral kommunal drift innen 2030', level: 'Samfunnsmål', parent: null, owner: 'Kommunedirektør', period: '2020–2030', desc: 'Direkte klimagassutslipp fra kommunens egen drift skal ned med minst 70 % fra 2019-nivå.' },
+    { id: 'S3', site: 'hub', title: 'Effektiv ressursbruk og bærekraftig økonomi', level: 'Virksomhetsmål', parent: null, owner: 'Økonomisjef', period: '2024–2027', desc: 'Frigjøre årsverk og driftsmidler til prioriterte tjenester.' },
+    { id: 'S4', site: 'hub', title: 'Trygge og selvstendige innbyggere i eget hjem', level: 'Samfunnsmål', parent: null, owner: 'Kommunalsjef helse og omsorg', period: '2024–2030', desc: 'Flere eldre kan bo trygt hjemme lenger.' },
+    // Effektmål belong to a tiltak (program or project) and point up to the organisation's goals through links
+    { id: 'M1', site: 'pg1', title: 'Innbyggerne får løst enkle henvendelser digitalt', level: 'Effektmål', parent: null, owner: 'Hanne Brekke', period: '2025–2028', desc: 'Ønsket situasjon for innbyggerne når programmet er gjennomført.' },
+    { id: 'M2', site: 'pg1', title: 'Effektiv drift av servicetorget', level: 'Effektmål', parent: null, owner: 'Hanne Brekke', period: '2025–2028', desc: 'Servicetorget bruker tiden på henvendelser som krever en person.' },
+    { id: 'M3', site: 'p2', title: 'Rask og forutsigbar byggesaksbehandling', level: 'Effektmål', parent: null, owner: 'Anders Lie', period: '2025–2027', desc: 'Søkerne vet når de får svar, og fristene holdes.' },
+    { id: 'M4', site: 'pg2', title: 'Eldre mestrer hverdagen hjemme lenger', level: 'Effektmål', parent: null, owner: 'Ola Tveit', period: '2025–2030', desc: 'Færre trenger omfattende tjenester eller plass på institusjon.' },
+    { id: 'M5', site: 'pg2', title: 'Bærekraftig ressursbruk i hjemmetjenesten', level: 'Effektmål', parent: null, owner: 'Ola Tveit', period: '2025–2030', desc: 'Hjemmetjenesten klarer flere brukere uten flere årsverk.' },
+    { id: 'M6', site: 'p6', title: 'Utslippsfri og kostnadseffektiv bilpark', level: 'Effektmål', parent: null, owner: 'Jon Bakke', period: '2024–2030', desc: 'Bilparken er elektrisk, og driften koster mindre enn i dag.' }
   ];
   const elements = [
     { id: 'E1', kind: 'chg', site: 'p1', title: 'Selvbetjening erstatter papirskjema', type: 'Prosess', desc: 'Mange skjema finnes bare som PDF og krever manuell registrering.', responsible: 'Siri Haugland', status: 'Pågår' },
@@ -746,27 +828,47 @@ function buildSeed() {
     { id: 'N10', site: 'p5', title: 'Færre unødvendige nattbesøk', type: 'Direkte', status: 'Under realisering', owner: 'Ingrid Dahl', unit: 'Hjemmetjenesten natt', responsible: 'Lene Moe', realization: '2027-06', desc: 'Besøk gjøres når sensorene viser behov, ikke etter fast runde.' },
     { id: 'N11', site: 'p6', title: 'Lavere CO₂-utslipp fra bilparken', type: 'Direkte', status: 'Under realisering', owner: 'Eva Strand', unit: 'Eiendom og drift', responsible: 'Jon Bakke', realization: '2030-12', desc: 'Utslipp fra kommunens kjøretøy, beregnet fra drivstofforbruk.', evalLevel: 'Minimal' },
     { id: 'N12', site: 'p6', title: 'Lavere driftskostnader for bilparken', type: 'Direkte', status: 'Under realisering', owner: 'Eva Strand', unit: 'Eiendom og drift', responsible: 'Jon Bakke', realization: '2028-12', desc: 'Drivstoff, vedlikehold og leasing samlet.' },
-    { id: 'N13', site: 'pg2', title: 'Flere eldre bor hjemme uten omfattende tjenester', type: 'Direkte', status: 'Under realisering', owner: 'Ingrid Dahl', unit: 'Hjemmetjenesten + Tildelingskontoret', responsible: 'Ola Tveit', realization: '2028-12', desc: 'Programmets hovedgevinst: flere eldre klarer seg hjemme med lettere tjenester.', expected: 'Programmet skal styrke hjemmetjenestens evne til å oppdage og håndtere forverring tidlig, slik at akutte hendelser og behov for omfattende tjenester blir mindre sannsynlige, forutsatt at riktige brukere tar løsningen i bruk og at responssenteret har nok kapasitet.', evalLevel: 'Indirekte' }
+    { id: 'N13', site: 'pg2', title: 'Flere eldre bor hjemme uten omfattende tjenester', type: 'Direkte', status: 'Under realisering', owner: 'Ingrid Dahl', unit: 'Hjemmetjenesten + Tildelingskontoret', responsible: 'Ola Tveit', realization: '2028-12', desc: 'Programmets hovedgevinst: flere eldre klarer seg hjemme med lettere tjenester.', expected: 'Programmet skal styrke hjemmetjenestens evne til å oppdage og håndtere forverring tidlig, slik at akutte hendelser og behov for omfattende tjenester blir mindre sannsynlige, forutsatt at riktige brukere tar løsningen i bruk og at responssenteret har nok kapasitet.', evalLevel: 'Indirekte' },
+    // Kostnadsvirkninger (DFØ): registered alongside the benefits, in the same list
+    { id: 'N14', site: 'pg2', effect: 'Kostnad', title: 'Drift av responssenteret', type: 'Direkte', status: 'Under realisering', owner: 'Ingrid Dahl', unit: 'Hjemmetjenesten', responsible: 'Ola Tveit', realization: '2026-01', desc: 'Bemanning, lisenser og vakttelefon. Budsjett 6,5 mill. kr per år.' },
+    { id: 'N15', site: 'p6', effect: 'Kostnad', title: 'Investering i elbiler og ladepunkter', type: 'Direkte', status: 'Under realisering', owner: 'Eva Strand', unit: 'Eiendom og drift', responsible: 'Jon Bakke', realization: '2025-01', desc: 'Utskifting av 140 kjøretøy og 90 ladepunkter fram til 2029.' },
+    { id: 'N16', site: 'p1', effect: 'Kostnad', title: 'Lisens og forvaltning av innbyggerportalen', type: 'Direkte', status: 'Godkjent', owner: 'Kari Fjeldstad', unit: 'Digitalisering', responsible: 'Siri Haugland', realization: '2026-01', desc: 'Årlig lisens og intern forvaltning.' },
+    { id: 'N17', site: 'p2', effect: 'Kostnad', title: 'Opplæring og omstilling i byggesak', type: 'Indirekte', status: 'Under realisering', owner: 'Rolf Sande', unit: 'Byggesak', responsible: 'Guro Næss', realization: '2026-11', desc: 'Tid saksbehandlerne bruker på opplæring og på å jobbe i to løsninger i overgangen.' }
   ];
+  // DFØ fields: nytte or kostnad, prissatt or not, estimated value and who is affected
+  const DFO = {
+    N1: ['Prissatt', '3,2 mill. kr/år', ['Innbyggere', 'Egen virksomhet']], N2: ['Ikke prissatt', '', ['Innbyggere']], N3: ['Ikke prissatt', '', ['Innbyggere']],
+    N4: ['Ikke prissatt', '', ['Innbyggere', 'Næringslivet']], N5: ['Ikke prissatt', '', ['Næringslivet', 'Innbyggere']], N6: ['Prissatt', '4,9 mill. kr/år', ['Egen virksomhet']],
+    N7: ['Ikke prissatt', '', ['Innbyggere']], N8: ['Prissatt', '2,6 mill. kr/år', ['Ansatte', 'Egen virksomhet']], N9: ['Ikke prissatt', '', ['Brukere og pårørende']],
+    N10: ['Prissatt', '1,8 mill. kr/år', ['Brukere og pårørende', 'Ansatte']], N11: ['Ikke prissatt', '', ['Samfunnet']], N12: ['Prissatt', '2,3 mill. kr/år', ['Egen virksomhet']],
+    N13: ['Prissatt', '12 mill. kr/år', ['Brukere og pårørende', 'Samfunnet']], N14: ['Prissatt', '6,5 mill. kr/år', ['Egen virksomhet']], N15: ['Prissatt', '18 mill. kr', ['Egen virksomhet']],
+    N16: ['Prissatt', '2,1 mill. kr/år', ['Egen virksomhet']], N17: ['Ikke prissatt', '', ['Ansatte']]
+  };
+  benefits.forEach((b) => { if (b.catalog) return; const [priced, value, affected] = DFO[b.id]; Object.assign(b, { effect: b.effect || 'Nytte', priced, value, affected }); });
   const L = (from, to, evidence = 'Ikke vurdert', note = '') => ({ id: from + '>' + to, from, to, evidence, note });
   const links = [
     L('K1', 'S1-1'), L('K1', 'S3'), L('K2', 'S3'), L('K3', 'S3'), L('K3', 'S2'), L('K4', 'S1'),
-    L('E9', 'N1', 'Moderat'), L('N1', 'S1-1', 'Moderat'), L('N1', 'S3', 'Svak'),
-    L('E1', 'N2', 'Moderat'), L('E2', 'N2', 'Svak'), L('N2', 'S1-1', 'Moderat'),
-    L('E1', 'N3', 'Svak'), L('N3', 'S1-1', 'Svak'), L('N3', 'S1'),
-    L('E3', 'N4', 'Moderat'), L('E4', 'N4', 'Svak', 'Opplæringen er utsatt, så ny arbeidsflyt er bare delvis i bruk.'), L('N4', 'S1', 'Moderat'), L('N4', 'S3'),
-    L('E3', 'N5', 'Moderat'), L('N5', 'S1-1'),
-    L('E3', 'N6', 'Sterk'), L('N6', 'S3', 'Moderat'),
-    L('E5', 'N7', 'Sterk'), L('N7', 'S1-1', 'Moderat'),
-    L('E6', 'N8', 'Moderat'), L('N8', 'S3', 'Moderat'), L('N8', 'S2'),
-    L('E6', 'N9', 'Moderat'), L('N9', 'S4', 'Moderat'),
-    L('E7', 'N10', 'Moderat'), L('N10', 'S4'), L('N10', 'S3', 'Svak'),
-    L('E8', 'N11', 'Sterk'), L('N11', 'S2', 'Sterk'),
-    L('E8', 'N12', 'Svak'), L('N12', 'S3', 'Moderat'),
+    // Effektmål → the organisation's goals
+    L('M1', 'S1-1', 'Moderat'), L('M1', 'S1'), L('M2', 'S3', 'Moderat'), L('M3', 'S1', 'Moderat'), L('M3', 'S3'),
+    L('M4', 'S4', 'Moderat'), L('M5', 'S3', 'Moderat'), L('M6', 'S2', 'Sterk'), L('M6', 'S3', 'Moderat'),
+    // Virkninger → effektmål
+    L('E9', 'N1', 'Moderat'), L('N1', 'M1', 'Moderat'), L('N1', 'M2', 'Svak'),
+    L('E1', 'N2', 'Moderat'), L('E2', 'N2', 'Svak'), L('N2', 'M1', 'Moderat'),
+    L('E1', 'N3', 'Svak'), L('N3', 'M1', 'Svak'),
+    L('E3', 'N4', 'Moderat'), L('E4', 'N4', 'Svak', 'Opplæringen er utsatt, så ny arbeidsflyt er bare delvis i bruk.'), L('N4', 'M3', 'Moderat'),
+    L('E3', 'N5', 'Moderat'), L('N5', 'M3'),
+    L('E3', 'N6', 'Sterk'), L('N6', 'M3', 'Moderat'),
+    L('E5', 'N7', 'Sterk'), L('N7', 'M1', 'Moderat'),
+    L('E6', 'N8', 'Moderat'), L('N8', 'M5', 'Moderat'),
+    L('E6', 'N9', 'Moderat'), L('N9', 'M4', 'Moderat'),
+    L('E7', 'N10', 'Moderat'), L('N10', 'M4'), L('N10', 'M5', 'Svak'),
+    L('E8', 'N11', 'Sterk'), L('N11', 'M6', 'Sterk'),
+    L('E8', 'N12', 'Svak'), L('N12', 'M6', 'Moderat'),
+    L('N14', 'M5'), L('N15', 'M6'), L('N16', 'M2'), L('E4', 'N17'), L('N17', 'M3'),
     L('L4', 'E1', 'Sterk'), L('L4', 'E2', 'Moderat'), L('L5', 'E5', 'Sterk'), L('L6', 'E3', 'Moderat'), L('L6', 'E4', 'Svak'), L('L7', 'E8', 'Sterk'),
     L('L1', 'E6', 'Sterk'), L('L1', 'V1', 'Moderat'), L('L2', 'V1', 'Svak'), L('L2', 'E7', 'Moderat'), L('L3', 'V2'),
     L('V1', 'F1', 'Moderat', 'Responstiden er god på dagtid, men svakere i helgene.'), L('V2', 'F1', 'Svak'), L('V1', 'F2', 'Moderat'), L('E6', 'F2', 'Moderat'),
-    L('F1', 'N13', 'Svak', 'Innleggelsene går ned, men sykehuset endret praksis samtidig.'), L('F2', 'N13', 'Moderat'), L('N13', 'S4', 'Moderat'), L('N13', 'S3', 'Svak'),
+    L('F1', 'N13', 'Svak', 'Innleggelsene går ned, men sykehuset endret praksis samtidig.'), L('F2', 'N13', 'Moderat'), L('N13', 'M4', 'Moderat'), L('N13', 'M5', 'Svak'),
     L('E1', 'F3', 'Moderat'), L('E5', 'F3', 'Moderat'), L('F3', 'N1', 'Moderat'),
     L('E3', 'F4', 'Sterk'), L('F4', 'N5', 'Moderat'), L('F4', 'N4', 'Moderat')
   ];
@@ -791,7 +893,8 @@ function buildSeed() {
     ['I15', 'N12', 'p6', 'Drift og vedlikehold av bilparken', 'mill. kr/år', 7.4, 5.1, '2025-01-01', '2028-12-31', 'Halvårlig', 0.35, '2026-06-30', 1, 'Regnskap', 'Gevinst'],
     ['I17', 'N13', 'pg2', 'Andel 80+ som bor hjemme uten omfattende tjenester', '%', 78, 84, '2025-01-01', '2028-12-31', 'Kvartalsvis', 0.06, '2026-09-30', 1, 'Fagsystem og befolkningsstatistikk', 'Gevinst'],
     ['I22', 'F1', 'pg2', 'Akutte innleggelser per 1 000 brukere med digital oppfølging', 'per 1 000', 42, 30, '2025-06-01', '2027-12-31', 'Kvartalsvis', 0.24, '2026-09-30', 0, 'Data fra helseforetaket', 'Effekt'],
-    ['I18', 'L1', 'p4', 'Andel aktuelle brukere i gang med digital oppfølging', '%', 0, 60, '2025-06-01', '2027-06-30', 'Månedlig', 0.12, '2026-09-30', 0, 'Responssenterets register', 'Leveranse']
+    ['I18', 'L1', 'p4', 'Andel aktuelle brukere i gang med digital oppfølging', '%', 0, 60, '2025-06-01', '2027-06-30', 'Månedlig', 0.12, '2026-09-30', 0, 'Responssenterets register', 'Leveranse'],
+    ['I25', 'M3', 'p2', 'Andel byggesaker behandlet innen fristen', '%', 71, 95, '2025-01-01', '2027-06-30', 'Kvartalsvis', 0.22, '2026-09-30', 0, 'Rapport fra fagsystemet', 'Effekt']
   ];
   const isBen = (id) => benefits.some((b) => b.id === id);
   const indicators = P.map(([id, anchor, site, title, unit, start, target, startDate, targetDate, frequency, gap, lastDate, dec, method, role]) => ({
@@ -804,6 +907,8 @@ function buildSeed() {
     { id: 'I19', asm: 'A11', site: 'pg2', title: 'Andel varsler fulgt opp innen 30 minutter', unit: '%', mtype: 'threshold', limitDir: 'Over', target: 90, startDate: '2025-10-01', frequency: 'Månedlig', dec: 0, method: 'Logg fra responssenteret', role: 'Antakelse', _sim: [95, 87], _last: '2026-09-30' },
     { id: 'I20', benefit: 'N13', site: 'pg2', title: 'Andel brukere som opplever ensomhet', unit: '%', mtype: 'threshold', limitDir: 'Under', target: 25, startDate: '2025-01-01', frequency: 'Kvartalsvis', dec: 0, method: 'Brukerundersøkelse', role: 'Balanserende', _sim: [19, 27], _last: '2026-09-30' },
     { id: 'I21', node: 'S4', site: 'hub', title: 'Innbyggere 80 år og eldre', unit: 'antall', mtype: 'watch', startDate: '2024-01-01', frequency: 'Halvårlig', dec: 0, method: 'SSB', role: 'Kontekst', _sim: [3900, 4380], _last: '2026-06-30' },
+    { id: 'I23', benefit: 'N14', site: 'pg2', title: 'Driftskostnad for responssenteret', unit: 'mill. kr/år', mtype: 'threshold', limitDir: 'Under', target: 6.5, startDate: '2026-01-01', frequency: 'Kvartalsvis', dec: 1, method: 'Regnskap, årstakt', role: 'Kostnad', _sim: [5.9, 6.9], _last: '2026-09-30' },
+    { id: 'I24', benefit: 'N15', site: 'p6', title: 'Påløpt investering i forhold til budsjett hittil', unit: '%', mtype: 'threshold', limitDir: 'Under', target: 100, startDate: '2025-01-01', frequency: 'Halvårlig', dec: 0, method: 'Prosjektregnskap', role: 'Kostnad', _sim: [82, 96], _last: '2026-06-30' },
     { id: 'KI1', benefit: 'K1', site: 'hub', catalog: true, title: 'Telefonhenvendelser per måned', unit: 'antall', start: null, target: null, frequency: 'Månedlig', direction: 'Minkende', method: 'Telefonistatistikk', dec: 0, milestones: [], role: 'Gevinst', mtype: 'path' },
     { id: 'KI2', benefit: 'K2', site: 'hub', catalog: true, title: 'Timer manuell saksbehandling per år', unit: 'timer/år', start: null, target: null, frequency: 'Kvartalsvis', direction: 'Minkende', method: 'Timeføring', dec: 0, milestones: [], role: 'Gevinst', mtype: 'path' },
     { id: 'KI3', benefit: 'K3', site: 'hub', catalog: true, title: 'Spart reisetid', unit: 'timer/år', start: null, target: null, frequency: 'Kvartalsvis', direction: 'Økende', method: 'Kjørebok', dec: 0, milestones: [], role: 'Gevinst', mtype: 'path' },
@@ -822,7 +927,9 @@ function buildSeed() {
     I22: 'Nedgangen har stoppet opp. Sykehuset endret innleggelsespraksis i vår, så tallene må tolkes varsomt.',
     I19: 'Helgene trekker ned. Bemanningen i responssenteret vurderes.',
     I20: 'Økning etter at to faste besøk i uka ble erstattet med digital oppfølging.',
-    I18: 'Rekrutteringen går saktere enn planlagt utenfor sentrum.'
+    I18: 'Rekrutteringen går saktere enn planlagt utenfor sentrum.',
+    I23: 'Overtid i helgene trekker opp. Bemanningsplan for 2027 er under arbeid.',
+    I25: 'Etterslepet fra våren gjør at færre saker holder fristen.'
   };
   const by = { hub: 'Porteføljekontoret', pg1: 'Hanne Brekke', pg2: 'Ola Tveit', p1: 'Siri Haugland', p2: 'Anders Lie', p3: 'Mona Vik', p4: 'Per Olsen', p5: 'Lene Moe', p6: 'Jon Bakke' };
   const measurements = [];
@@ -852,14 +959,14 @@ function buildSeed() {
 
   const F = (id, kind, site, title, from, to, status, lastReviewed, note = '', polarity) => ({ id, kind, site, title, from, to, status, lastReviewed, note, ...(polarity ? { polarity } : {}) });
   const factors = [
-    F('A1', 'Antakelse', 'p1', 'Innbyggere over 75 tar i bruk innbyggerportalen', 'N3', 'S1-1', 'Holder ikke', '2026-09-10', 'Bruken i aldersgruppen er under 15 %. Vurder veiledning på biblioteket.'),
+    F('A1', 'Antakelse', 'p1', 'Innbyggere over 75 tar i bruk innbyggerportalen', 'N3', 'M1', 'Holder ikke', '2026-09-10', 'Bruken i aldersgruppen er under 15 %. Vurder veiledning på biblioteket.'),
     F('A2', 'Antakelse', 'p2', 'Saksbehandlerne får opplæring før go-live', 'E4', 'N4', 'Usikker', '2026-03-02', 'Opplæringen er flyttet to ganger.'),
     F('A3', 'Antakelse', 'p2', 'Ansvarlige søkere foretrekker digital innsending', 'E3', 'N5', 'Holder', '2026-08-15'),
     F('A4', 'Antakelse', 'p3', 'Kunnskapsbasen holdes oppdatert av fagområdene', 'E5', 'N7', 'Holder', '2026-09-01'),
     F('A5', 'Antakelse', 'p4', 'Brukerne har stabil mobildekning hjemme', 'E6', 'N8', 'Usikker', '2026-02-20', 'Tre bygder har svak dekning.'),
-    F('A6', 'Antakelse', 'p4', 'Økt trygghet gir lengre botid hjemme', 'N9', 'S4', 'Holder', '2026-06-11'),
+    F('A6', 'Antakelse', 'p4', 'Økt trygghet gir lengre botid hjemme', 'N9', 'M4', 'Holder', '2026-06-11'),
     F('A7', 'Antakelse', 'p6', 'Ladeinfrastruktur er på plass ved tjenestestedene', 'E8', 'N11', 'Holder', '2026-07-01'),
-    F('A8', 'Antakelse', 'pg1', 'Frigjort tid på servicetorget brukes på krevende saker', 'N1', 'S1-1', 'Holder', '2026-05-20'),
+    F('A8', 'Antakelse', 'pg1', 'Frigjort tid på servicetorget brukes på krevende saker', 'M2', 'S3', 'Holder', '2026-05-20'),
     F('A9', 'Antakelse', 'pg2', 'Tidligere innsats forebygger akutte hendelser', 'F1', 'N13', 'Usikker', '2026-09-25', 'Innleggelsene gikk ned i 2025, men har flatet ut.'),
     F('A10', 'Antakelse', 'pg2', 'Tidsavgrenset innsats gir varig mestring', 'L3', 'V2', 'Usikker', '2026-01-15', 'Ingen oppfølging etter seks måneder ennå.'),
     F('A11', 'Antakelse', 'pg2', 'Varsler følges opp raskt nok til å gjøre en forskjell', 'V1', 'F1', 'Usikker', '2026-09-25', 'Testes med indikatoren for responstid.'),
@@ -871,11 +978,11 @@ function buildSeed() {
     F('P1', 'Påvirkningsfaktor', 'pg2', 'Sykehusets innleggelsespraksis er endret samtidig', 'F1', 'N13', 'Må undersøkes', '2026-09-25', 'Kan forklare deler av nedgangen i innleggelser.')
   ];
   const contributions = [
-    { id: 'C1', benefit: 'N13', date: '2026-03-20', grade: 'Svak', text: 'Digital hjemmeoppfølging er i drift, men rekkevidden er lav. For tidlig å se effekt på botid.', decision: 'Øke rekrutteringen av brukere via tildelingskontoret.', by: 'Ola Tveit' },
-    { id: 'C2', benefit: 'N13', date: '2026-09-25', grade: 'Moderat', text: 'Varsler håndteres raskere, og flere opplever trygghet. Effekten på innleggelser er usikker fordi sykehuset endret praksis samtidig.', decision: 'Gå gjennom innleggelsesdata med helseforetaket før neste styringsmøte. Følg ensomhet tett.', by: 'Ola Tveit' },
-    { id: 'C3', benefit: 'N4', date: '2026-09-20', grade: 'Svak', text: 'Automatisk kontroll er i drift, men ny arbeidsflyt er ikke tatt i bruk. Saksbehandlingstiden går ikke ned.', decision: 'Gjennomføre opplæringen i november og vurdere midlertidig ekstra bemanning.', by: 'Anders Lie' },
-    { id: 'C4', benefit: 'N1', date: '2026-08-30', grade: 'Moderat', text: 'Telefonhenvendelsene går ned der portal og chatbot dekker temaet. Byggesaksspørsmål går fortsatt på telefon.', decision: 'Utvide kunnskapsbasen med byggesak.', by: 'Hanne Brekke' },
-    { id: 'C5', benefit: 'N11', date: '2026-09-10', grade: 'Sterk', text: 'Utslippene følger utskiftingen av biler tett, og ingen andre forhold forklarer nedgangen.', decision: '', by: 'Jon Bakke' }
+    { id: 'C1', benefit: 'N13', kind: 'Løpende vurdering', decisionType: 'Justere', date: '2026-03-20', grade: 'Svak', text: 'Digital hjemmeoppfølging er i drift, men rekkevidden er lav. For tidlig å se effekt på botid.', decision: 'Øke rekrutteringen av brukere via tildelingskontoret.', by: 'Ola Tveit' },
+    { id: 'C2', benefit: 'N13', kind: 'Underveisevaluering', decisionType: 'Justere', date: '2026-09-25', grade: 'Moderat', problem: 'Problemet er det samme, men flere eldre bor alene enn ventet.', deviation: 'Rekrutteringen av brukere går saktere enn planlagt, og sykehuset endret innleggelsespraksis samtidig.', text: 'Varsler håndteres raskere, og flere opplever trygghet. Effekten på innleggelser er usikker fordi sykehuset endret praksis samtidig.', decision: 'Gå gjennom innleggelsesdata med helseforetaket før neste styringsmøte. Følg ensomhet tett.', by: 'Fjordvik FoU (ekstern)' },
+    { id: 'C3', benefit: 'N4', kind: 'Løpende vurdering', decisionType: 'Justere', date: '2026-09-20', grade: 'Svak', deviation: 'Opplæringen i ny arbeidsflyt er utsatt to ganger.', text: 'Automatisk kontroll er i drift, men ny arbeidsflyt er ikke tatt i bruk. Saksbehandlingstiden går ikke ned.', decision: 'Gjennomføre opplæringen i november og vurdere midlertidig ekstra bemanning.', by: 'Anders Lie' },
+    { id: 'C4', benefit: 'N1', kind: 'Løpende vurdering', decisionType: 'Videreføre', date: '2026-08-30', grade: 'Moderat', text: 'Telefonhenvendelsene går ned der portal og chatbot dekker temaet. Byggesaksspørsmål går fortsatt på telefon.', decision: 'Utvide kunnskapsbasen med byggesak.', by: 'Hanne Brekke' },
+    { id: 'C5', benefit: 'N11', kind: 'Underveisevaluering', decisionType: 'Videreføre', date: '2026-09-10', grade: 'Sterk', text: 'Utslippene følger utskiftingen av biler tett, og ingen andre forhold forklarer nedgangen.', decision: 'Fortsette utskiftingen etter planen.', by: 'Miljørådgiver, Eiendom og drift' }
   ];
   const assessments = {
     p1: { level: 'warn', text: 'Nytteoppnåelsen er noe svakere enn planlagt. Eldre innbyggere tar i bruk portalen saktere enn antatt.' },
@@ -885,7 +992,19 @@ function buildSeed() {
     p5: { level: 'warn', text: 'Tre soner har fortsatt faste nattrunder i påvente av sensorer.' },
     p6: { level: 'warn', text: 'Utslippene følger målbanen, men driftskostnadene ligger over plan.' }
   };
-  return { settings, goals, elements, benefits, links, indicators, measurements, factors, contributions, assessments };
+  // Nytterealiseringsplan: what cannot be derived from the lists. Everything else in the plan is generated.
+  const E = (kind, when, by, status, method = '') => ({ id: uid('V'), kind, when, by, status, method });
+  const plans = {
+    pg1: { owner: 'Kommunalsjef organisasjon', problem: 'Innbyggerne må ringe eller møte opp for å få hjelp med enkle saker. Servicetorget bruker det meste av tiden på telefon.', measure: 'Programmet samler innbyggerportal, digital byggesak og chatbot i én kanalstrategi.', profitability: 'Lønnsomt basert på prissatte virkninger (frigjort tid på servicetorget og i byggesak). Usikkerheten er størst for hvor raskt eldre innbyggere tar i bruk løsningene.', resources: 'Programleder 100 %, nytteansvarlig i Servicetorget 20 %.', involvement: 'Brukertesting med innbyggerpanelet før hver lansering. Seniorrådet orienteres to ganger i året.', measureResp: 'Analytiker i Servicetorget', evalResp: 'Internrevisjonen', evaluations: [E('Underveisevaluering', '2027-03', 'Internrevisjonen', 'Planlagt', 'Dokumentstudie og intervjuer'), E('Etterevaluering', '2029-06', 'Ekstern', 'Planlagt')] },
+    pg2: { owner: 'Kommunalsjef helse og omsorg', problem: 'Flere eldre og færre ansatte. Uten endring må hjemmetjenesten og sykehjemmene vokse mer enn kommunen har råd til.', measure: 'Programmet innfører digital hjemmeoppfølging, sensorbasert nattilsyn og innsatsteam for hverdagsmestring.', profitability: 'Lønnsomt basert på prissatte virkninger dersom botiden hjemme øker som antatt. Usikkerheten er stor: effekten på innleggelser er ikke dokumentert ennå.', resources: 'Programleder 100 %, responssenter 6 årsverk, nytteansvarlig i hjemmetjenesten 30 %.', involvement: 'Brukere og pårørende intervjues hvert halvår. Tillitsvalgte deltar i styringsgruppen.', measureResp: 'Fagsystemansvarlig i helse og omsorg', evalResp: 'Fjordvik FoU (ekstern)', evaluations: [E('Underveisevaluering', '2026-09', 'Fjordvik FoU (ekstern)', 'Gjennomført', 'Bidragsanalyse med registerdata og intervjuer'), E('Underveisevaluering', '2027-09', 'Fjordvik FoU (ekstern)', 'Planlagt'), E('Etterevaluering', '2030-06', 'Ekstern', 'Planlagt')] },
+    p1: { owner: 'Kommunalsjef organisasjon', problem: 'Mange skjema finnes bare som PDF og må registreres manuelt.', measure: 'Ny innbyggerportal med selvbetjening, innsyn og meldinger.', profitability: 'Inngår i programmets vurdering.', resources: 'Prosjektleder 80 %.', involvement: 'Innbyggerpanelet tester nye tjenester.', measureResp: 'Analytiker i Servicetorget', evalResp: '', evaluations: [] },
+    p2: { owner: 'Kommunalsjef samfunnsutvikling', problem: 'Saksbehandlingstiden i byggesak er lang, og mange saker går over fristen fordi kompletthetskontrollen er manuell.', measure: 'Ny saksbehandlingsløsning med automatisk kompletthetskontroll og ny arbeidsflyt.', profitability: 'Lønnsomt basert på prissatte virkninger (frigjort tid i kontrollen). Usikkerheten er knyttet til opplæringen.', resources: 'Prosjektleder 100 %, superbrukere 2 × 20 %.', involvement: 'Næringsforeningen og faste ansvarlige søkere deltar i testing.', measureResp: 'Fagleder byggesak', evalResp: '', evaluations: [] },
+    p3: { owner: 'Kommunalsjef organisasjon', problem: 'Servicetorget svarer på de samme spørsmålene mange ganger hver dag.', measure: 'Chatbot med felles kunnskapsbase.', profitability: 'Inngår i programmets vurdering.', resources: 'Prosjektleder 50 %.', involvement: 'Fagområdene eier svarene i kunnskapsbasen.', measureResp: 'Chatbot-redaktør', evalResp: 'Internrevisjonen', evaluations: [E('Underveisevaluering', '2027-03', 'Internrevisjonen', 'Planlagt')] },
+    p4: { owner: 'Kommunalsjef helse og omsorg', problem: 'Mange besøk i hjemmetjenesten gjelder bare medisinutlevering.', measure: 'Digitalt medisinskap og trygghetsalarm.', profitability: 'Inngår i programmets vurdering.', resources: 'Prosjektleder 50 %.', involvement: 'Brukerundersøkelse hvert halvår.', measureResp: 'Responssenteret', evalResp: 'Fjordvik FoU (ekstern)', evaluations: [E('Etterevaluering', '2027-12', 'Fjordvik FoU (ekstern)', 'Planlagt', 'Registerdata og brukerundersøkelse')] },
+    p5: { owner: 'Kommunalsjef helse og omsorg', problem: 'Faste nattrunder vekker brukere som ikke trenger tilsyn.', measure: 'Sensorbasert nattilsyn der brukeren samtykker.', profitability: 'Inngår i programmets vurdering.', resources: 'Prosjektleder 60 %.', involvement: 'Pårørende informeres før oppstart i hver sone.', measureResp: 'Hjemmetjenesten natt', evalResp: '', evaluations: [] },
+    p6: { owner: 'Direktør for eiendom og drift', problem: 'Bilparken står for en stor del av kommunens direkte utslipp, og drivstoffkostnadene øker.', measure: 'Utskifting til elbiler og utbygging av ladepunkter fram til 2029.', profitability: 'Lønnsomt over bilenes levetid. Høyere leasingkostnad enn budsjettert gir usikkerhet.', resources: 'Prosjektleder 40 %.', involvement: 'Tjenestestedene planlegger utskiftingen sammen med prosjektet.', measureResp: 'Controller, Eiendom og drift', evalResp: 'Miljørådgiver, Eiendom og drift', evaluations: [E('Underveisevaluering', '2026-09', 'Miljørådgiver, Eiendom og drift', 'Gjennomført'), E('Etterevaluering', '2030-06', 'Ekstern', 'Planlagt')] }
+  };
+  return { settings, goals, elements, benefits, links, indicators, measurements, factors, contributions, assessments, plans };
 }
 
 /* ------------------------------------------------------------------
@@ -952,6 +1071,9 @@ function factorStatus(f) {
   return f.status === 'Må undersøkes' ? 'warn' : 'ok';
 }
 const latestContribution = (bid) => db.contributions.filter((c) => c.benefit === bid).sort((a, b) => b.date.localeCompare(a.date))[0] || null;
+const isCost = (b) => !!b && b.effect === 'Kostnad';
+const effLabel = (b) => isCost(b) ? 'Kostnadsvirkning' : 'Nyttevirkning';
+const planOf = (siteId) => { db.plans = db.plans || {}; return db.plans[siteId] || (db.plans[siteId] = { owner: '', problem: '', measure: '', profitability: '', resources: '', involvement: '', measureResp: '', evalResp: '', evaluations: [] }); };
 
 /* ------------------------------------------------------------------
    State, persistence and graph helpers
@@ -975,8 +1097,20 @@ function scopeSites() {
 }
 function inScope(item) { const s = scopeSites(); return s === null ? true : s.includes(item.site); }
 const byId = (list, id) => db[list].find((x) => x.id === id);
-const node = (id) => byId('benefits', id) || byId('elements', id) || byId('goals', id) || null;
-function kindOf(id) { if (byId('goals', id)) return 'goal'; const e = byId('elements', id); if (e) return e.kind; if (byId('benefits', id)) return 'ben'; if (byId('factors', id)) return 'asm'; return 'ind'; }
+/** Synthetic map nodes for the DFØ columns «Tiltak» (site:<id>) and «Hvem blir berørt?» (grp:<name>). */
+function synthNode(id) {
+  if (id.startsWith('site:')) { const s = SITES[id.slice(5)]; return s ? { id, title: s.title, site: s.id } : null; }
+  if (id.startsWith('grp:')) return { id, title: id.slice(4), site: 'hub' };
+  return null;
+}
+const node = (id) => byId('benefits', id) || byId('elements', id) || byId('goals', id) || synthNode(String(id)) || null;
+function kindOf(id) {
+  const g = byId('goals', id); if (g) return g.level === 'Effektmål' ? 'em' : 'goal';
+  const e = byId('elements', id); if (e) return e.kind; if (byId('benefits', id)) return 'ben'; if (byId('factors', id)) return 'asm';
+  if (String(id).startsWith('site:')) return 'tiltak'; if (String(id).startsWith('grp:')) return 'grp';
+  return 'ind';
+}
+const isGoalKind = (k) => k === 'goal' || k === 'em';
 const nodeTitle = (id) => ((node(id) || byId('factors', id) || {}).title) || id;
 const outLinks = (id) => db.links.filter((l) => l.from === id);
 const inLinks = (id) => db.links.filter((l) => l.to === id);
@@ -1005,12 +1139,15 @@ function benefitsOfIndicator(i) {
 function chainOf(bid) {
   const up = closure(bid, 'up');
   const nodes = new Set([...up, bid]);
-  const goals = goalsOf(bid);
-  const links = db.links.filter((l) => nodes.has(l.from) && (nodes.has(l.to) || (l.from === bid && goals.includes(l.to))));
+  const goals = closure(bid, 'down').filter((x) => byId('goals', x));
+  const G = new Set(goals);
+  const links = db.links.filter((l) => (nodes.has(l.from) && (nodes.has(l.to) || (l.from === bid && G.has(l.to)))) || (G.has(l.from) && G.has(l.to)));
   const factors = db.factors.filter((f) => links.some((l) => l.from === f.from && l.to === f.to));
-  const indicators = db.indicators.filter((i) => !i.catalog && (i.benefit === bid || (i.node && nodes.has(i.node)) || (i.asm && factors.some((f) => f.id === i.asm))));
+  const indicators = db.indicators.filter((i) => !i.catalog && (i.benefit === bid || (i.node && (nodes.has(i.node) || (G.has(i.node) && kindOf(i.node) === 'em'))) || (i.asm && factors.some((f) => f.id === i.asm))));
   return { up, goals, links, factors, indicators };
 }
+/** Effektmål and strategic goals a benefit contributes to, directly or through an effektmål. */
+const goalChain = (bid) => { const all = closure(bid, 'down').filter((x) => byId('goals', x)); return { em: all.filter((x) => kindOf(x) === 'em'), top: all.filter((x) => kindOf(x) === 'goal') }; };
 function weakestEvidence(links) { if (!links.length) return 'Ikke vurdert'; const n = Math.min(...links.map((l) => EV_N[l.evidence] ?? 0)); return EVIDENCE.find((e) => EV_N[e] === n); }
 function canWrite() { return !state.readOnly; }
 
@@ -1049,12 +1186,21 @@ const ICON = {
   spark: '<path d="M10 2.5 11.8 8l5.7 2-5.7 2L10 17.5 8.2 12l-5.7-2 5.7-2z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>',
   ext: '<path d="M11 4h5v5M16 4l-7 7M14 12v4H4V6h4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>',
   arrow: '<path d="M2 7h22m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>',
-  hub: '<path d="M3 17V8l7-5 7 5v9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M7 17v-5h6v5" fill="none" stroke="currentColor" stroke-width="1.4"/>'
+  hub: '<path d="M3 17V8l7-5 7 5v9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M7 17v-5h6v5" fill="none" stroke="currentColor" stroke-width="1.4"/>',
+  cost: '<circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M6.5 10h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+  people: '<circle cx="7" cy="7" r="2.4" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="14" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M2.5 16a4.5 4.5 0 0 1 9 0M11.5 13a3.6 3.6 0 0 1 6 3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>',
+  tiltak: '<rect x="3" y="4" width="14" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M3 8h14M7 11.5h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>',
+  plan: '<rect x="4" y="3" width="12" height="14.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M7 7h6M7 10h6M7 13h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>',
+  print: '<path d="M6 7V3h8v4M6 14H4V8h12v6h-2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><rect x="6" y="11.5" width="8" height="5.5" fill="none" stroke="currentColor" stroke-width="1.4"/>'
 };
 const icon = (name, cls = '') => `<svg viewBox="0 0 20 20" aria-hidden="true" class="${cls}">${ICON[name]}</svg>`;
 const CONCEPT = {
-  goal: { label: 'Strategisk mål', plural: 'Strategiske mål', icon: 'target', def: 'Det virksomheten vil oppnå på lang sikt, for eksempel et samfunnsmål eller hovedmål. Eies av virksomheten, ikke av prosjektet.' },
-  ben: { label: 'Nyttevirkning', plural: 'Nyttevirkninger', icon: 'ben', def: 'Gevinsten: den positive effekten som bidrar til et mål. Beskrives som en forbedring, og har en nytteeier i linjen.' },
+  goal: { label: 'Strategisk mål', plural: 'Strategiske mål', icon: 'target', def: 'Det virksomheten vil oppnå på lang sikt: et samfunnsmål, hovedmål eller virksomhetsmål. Eies av virksomheten, ikke av prosjektet.' },
+  em: { label: 'Effektmål', plural: 'Effektmål', icon: 'flag', def: 'Ønsket situasjon for målgruppen når tiltaket er gjennomført. Eies av prosjektet eller programmet, og bidrar til et samfunnsmål.' },
+  ben: { label: 'Nyttevirkning', plural: 'Nytte- og kostnadsvirkninger', icon: 'ben', def: 'Gevinsten: en positiv virkning som bidrar til et mål. Beskrives som en forbedring, og har en nytteeier i linjen.' },
+  cost: { label: 'Kostnadsvirkning', plural: 'Kostnadsvirkninger', icon: 'cost', def: 'En kostnad tiltaket påfører, for eksempel investering eller drift. Registreres sammen med nyttevirkningene, slik DFØ anbefaler.' },
+  tiltak: { label: 'Tiltak', plural: 'Tiltak', icon: 'tiltak', def: 'Prosjektet eller programmet som gjennomføres.' },
+  grp: { label: 'Hvem blir berørt?', plural: 'Hvem blir berørt?', icon: 'people', def: 'Målgruppen og andre som merker virkningen: innbyggere, brukere, ansatte, egen virksomhet, næringslivet eller samfunnet.' },
   ind: { label: 'Måleindikator', plural: 'Måleindikatorer', icon: 'gauge', def: 'Det vi måler for å se om noe i kjeden skjer. Kan måle en nyttevirkning, en effekt, en leveranse eller om en antakelse holder.' },
   meas: { label: 'Måling', plural: 'Målinger', icon: 'meas', def: 'Én registrert verdi for en måleindikator på en bestemt dato.' },
   asm: { label: 'Forutsetning eller risiko', plural: 'Forutsetninger og risikoer', icon: 'bulb', def: 'Det som sitter på pilene i kjeden: antakelser, risikoer, utilsiktede virkninger og andre påvirkningsfaktorer.' }
@@ -1066,8 +1212,10 @@ const conceptTip = (k) => esc(`<b>${esc(CONCEPT[k].label)}</b><div>${esc(CONCEPT
 const tt = (k, label) => `<span class="tt ${k}-c" data-tip="${conceptTip(k)}">${icon(CONCEPT[k].icon)}${esc(label || CONCEPT[k].label)}</span>`;
 const ci = (k) => icon(CONCEPT[k].icon, `ti ${k}-c`);
 const cchip = (k, text, attrs = '') => `<${attrs ? 'button type="button"' : 'span'} class="chip cc ${k}-c" ${attrs}>${icon(CONCEPT[k].icon)}${esc(text)}</${attrs ? 'button' : 'span'}>`;
-const nodeRef = (id) => `${ci(kindOf(id))}${esc(nodeTitle(id))}`;
-const nodeChip = (id) => { const k = kindOf(id); const attr = k === 'ben' ? `data-open-ben="${id}"` : k === 'goal' ? 'data-nav="mal"' : `data-edit="${k}:${id}"`; return cchip(k, nodeTitle(id), attr); };
+/** Concept used for display: a benefit that is a cost gets the cost look. */
+const ck = (id) => { const k = kindOf(id); return k === 'ben' && isCost(byId('benefits', id)) ? 'cost' : k; };
+const nodeRef = (id) => `${ci(ck(id))}${esc(nodeTitle(id))}`;
+const nodeChip = (id) => { const k = kindOf(id); const attr = k === 'ben' ? `data-open-ben="${id}"` : isGoalKind(k) ? 'data-nav="mal"' : `data-edit="${k}:${id}"`; return cchip(ck(id), nodeTitle(id), attr); };
 const STATUS = { ok: 'I rute', warn: 'Følg med', crit: 'Avvik', none: 'Ikke målt', watch: 'Følges' };
 const pill = (s, label) => `<span class="pill ${s}">${icon(s)}${esc(label || STATUS[s])}</span>`;
 const factorPill = (f) => pill(factorStatus(f), f.status + (f.polarity ? ` (${f.polarity.toLowerCase()})` : ''));
@@ -1079,7 +1227,8 @@ const dot = (s) => `<i class="dot ${s}"></i>`;
 /* ------------------------------------------------------------------
    Navigation and frame
 ------------------------------------------------------------------ */
-const VIEW_ALIAS = { matrise: ['nyttekart', 'matrise'], registrering: ['nyttekart', 'liste'], kart: ['nyttekart', 'kart'] };
+const VIEW_ALIAS = { matrise: ['nyttekart', 'matrise'], registrering: ['nyttekart', 'liste'], kart: ['nyttekart', 'kart'], nytteoversikt: ['plan', 'nytteoversikt'], sjekkliste: ['plan', 'sjekkliste'] };
+const PLAN_TABS = [['plan', 'Nytterealiseringsplan', 'plan'], ['nytteoversikt', 'Nytteoversikt (DFØ)', 'grid'], ['sjekkliste', 'Sjekkliste for fasen', 'check']];
 const CHAIN_TABS = [['kart', 'Kart', 'map'], ['matrise', 'Matrise', 'grid'], ['liste', 'Liste', 'edit']];
 /** Number of things waiting for the user: overdue measurements and assessments older than six months. */
 function followUpCount() {
@@ -1089,10 +1238,11 @@ function followUpCount() {
   return overdue + staleF + staleB;
 }
 function navItems() {
-  const items = [['oversikt', 'Oversikt', 'home'], ['oppfolging', 'Til oppfølging', 'check'], ['nyttekart', 'Nyttekart', 'map']];
-  if (state.level !== 'project') items.push(['rapport', 'Styringsrapport', 'flag']);
+  const items = [['oversikt', 'Oversikt', 'home'], ['oppfolging', 'Til oppfølging', 'check'], ['nyttekart', 'Nyttekart', 'map'], ['mal', 'Mål', 'target']];
+  if (state.level !== 'hub') items.push(['plan', 'Nytterealiseringsplan', 'plan']);
+  if (state.level !== 'project') items.push(['rapport', 'Styringsrapport', 'report']);
   if (state.level === 'program') items.push(['tildel', 'Prosjektenes bidrag', 'share']);
-  items.push(['hdr', 'Felles grunnlag'], ['mal', 'Strategiske mål', 'target'], ['katalog', 'Katalog', 'library']);
+  items.push(['hdr', 'Felles grunnlag'], ['katalog', 'Katalog', 'library']);
   if (state.level === 'hub') items.push(['sep'], ['innstillinger', 'Innstillinger', 'gear']);
   return items;
 }
@@ -1114,7 +1264,8 @@ function renderFrame() {
   document.getElementById('nav').innerHTML = `<div class="nav-title">Nyttestyring</div>` + navItems().map((it) => it[0] === 'sep' ? '<div class="nav-sep"></div>' : it[0] === 'hdr' ? `<div class="nav-hdr">${esc(it[1])}</div>` :
     `<button type="button" data-nav="${it[0]}" ${cur === it[0] ? 'aria-current="page"' : ''}>${icon(it[2])}<span>${it[1]}</span>${it[0] === 'oppfolging' && due ? `<span class="badge" aria-label="${due} venter">${due}</span>` : ''}</button>`).join('') +
     `<div class="nav-foot">Alle data lagres i listene på huben. Kjedemodell: <b>${esc(PRESETS[db.settings.preset] ? PRESETS[db.settings.preset].label.split(' (')[0] : 'Tilpasset')}</b>.</div>`;
-  document.querySelectorAll('.demo .seg button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.level === state.level)));
+  document.querySelectorAll('.demo .seg button[data-level]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.level === state.level)));
+  document.querySelectorAll('.demo .seg button[data-demo-preset]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.demoPreset === db.settings.preset)));
   const sel = document.getElementById('site-select');
   const opts = state.level === 'hub' ? [['hub', 'Fjordvik kommune (hub)']] : Object.values(SITES).filter((x) => x.kind === state.level).map((x) => [x.id, x.title]);
   sel.innerHTML = opts.map(([v, t]) => `<option value="${v}" ${v === state.site ? 'selected' : ''}>${esc(t)}</option>`).join('');
@@ -1137,7 +1288,7 @@ function render() {
   if (!regTabs().includes(state.regTab)) state.regTab = 'benefits';
   renderFrame();
   const main = document.getElementById('main');
-  const views = { oversikt: viewOverview, nyttekart: viewChain, oppfolging: viewFollowUp, katalog: viewCatalog, mal: viewGoals, tildel: viewAssign, status: viewStatus, indikator: viewIndicator, nytte: viewBenefit, rapport: viewReport, innstillinger: viewSettings };
+  const views = { oversikt: viewOverview, nyttekart: viewChain, oppfolging: viewFollowUp, katalog: viewCatalog, mal: viewGoals, tildel: viewAssign, status: viewStatus, indikator: viewIndicator, nytte: viewBenefit, rapport: viewReport, innstillinger: viewSettings, plan: viewPlan };
   main.innerHTML = (state.readOnly ? `<div class="msg warn">${icon('info')}<div><b>Du har lesetilgang.</b> Nyttedata lagres i Prosjektportalen (hub). For å registrere trenger du skrivetilgang der. Kontakt porteføljekontoret.</div></div>` : '') + views[state.view]();
   hydrate(main);
   setHash();
@@ -1215,7 +1366,8 @@ function pickExample() {
   return cands.slice().sort((a, c) => score(c) - score(a))[0];
 }
 function explainer() {
-  const b = pickExample(); const chain = exampleChain(b); const g = byId('goals', goalsOf(b.id)[0]);
+  const b = pickExample(); const chain = exampleChain(b); const gc = goalChain(b.id);
+  const em = byId('goals', gc.em[0]); const g = byId('goals', (em && goalsOf(em.id)[0]) || gc.top[0]);
   const i = db.indicators.find((x) => x.benefit === b.id && x.mtype === 'path' && measurementsOf(x.id).length) || db.indicators.find((x) => x.benefit === b.id);
   const m = i ? lastMeasurement(i.id) : null;
   let open = true; try { open = localStorage.getItem(STORE_KEY + '-explain') !== 'closed'; } catch (e) { /* ignore */ }
@@ -1223,6 +1375,11 @@ function explainer() {
   const lvlBox = (k) => `<div class="cbox ${k}-c">${tt(k)}<div class="def">${esc(CONCEPT[k].def)}</div><div class="ex">${chain[k] ? '«' + esc(nodeTitle(chain[k])) + '»' : '<span class="muted">Ikke registrert i eksempelet</span>'}</div></div>`;
   const levels = activeLevels();
   const parts = [];
+  const box = (k, ex) => `<div class="cbox ${k}-c">${tt(k)}<div class="def">${esc(CONCEPT[k].def)}</div><div class="ex">${ex}</div></div>`;
+  if (!levels.length) {
+    parts.push(box('tiltak', '«' + esc(SITES[b.site].title) + '»'), arrow('berører'));
+    parts.push(box('grp', (b.affected || []).map(esc).join(', ') || '<span class="muted">Ikke beskrevet</span>'), arrow('som merker'));
+  }
   levels.forEach((k, n) => { parts.push(lvlBox(k)); parts.push(arrow(n === levels.length - 1 ? 'gir' : 'fører til')); });
   parts.push(`<div class="cbox ben-c">${tt('ben')}<div class="def">${esc(CONCEPT.ben.def)}</div><div class="ex"><b>«${esc(b.title)}»</b></div>
     ${i ? `<div class="inner">
@@ -1230,10 +1387,12 @@ function explainer() {
       <div class="cbox nest meas-c">${tt('meas')}<div class="def">Verdien vi registrerer jevnlig.</div><div class="ex">${m ? `<b>${fmtNum(m.value, i.dec)} ${esc(i.unit)}</b><div class="muted">${fmtDate(m.date)} · ${STATUS[statusAt(i, m)].toLowerCase()}</div>` : '<span class="muted">Ingen målinger ennå</span>'}</div></div>
     </div>` : ''}</div>`);
   parts.push(arrow('bidrar til'));
+  if (em) parts.push(box('em', '«' + esc(em.title) + '»'), arrow('som bidrar til'));
   parts.push(`<div class="cbox goal-c">${tt('goal')}<div class="def">${esc(CONCEPT.goal.def)}</div><div class="ex">${g ? '«' + esc(g.title) + '»' : '–'}</div></div>`);
   const kinds = Object.entries(FACTOR_KINDS).map(([k, d]) => `<div><b>${icon(d.icon)}${esc(k)}</b><span>${esc(d.def)}</span></div>`).join('');
   return `<details class="card explain" id="explain" ${open ? 'open' : ''}><summary><h2>Slik henger det sammen</h2><span class="muted">Kjedemodell «${esc(PRESETS[db.settings.preset] ? PRESETS[db.settings.preset].label : 'Tilpasset')}», med et eksempel fra ${esc(SITES[b.site].title)}</span><span class="tog"></span></summary>
-    <div class="chain ${levels.length > 1 ? 'tight' : ''}">${parts.join('')}</div>
+    <div class="chain tight">${parts.join('')}</div>
+    <div class="asm-line">${tt('cost', 'Kostnadsvirkninger')}<span>Registreres i samme liste som nyttevirkningene, med egen farge. Nytte og kostnad vises sammen i kartet og i nytteoversikten, slik DFØ anbefaler.</span></div>
     <div class="asm-line">${tt('asm', 'Forutsetninger og risikoer')}<span>Sitter på pilene i kjeden. Det er dem som forklarer <i>hvorfor</i> vi tror kjeden holder, og hva som kan bryte den.</span></div>
     <div class="kinds">${kinds}</div>
   </details>`;
@@ -1250,7 +1409,7 @@ function viewOverview() {
   const stale = facs.filter((a) => monthsBetween(a.lastReviewed, TODAY) > 6);
   const alarming = facs.filter((f) => factorStatus(f) === 'crit');
   const kpis = `<div class="kpis">
-    <div class="kpi"><span class="k-label">${ci('ben')}Nyttevirkninger</span><span class="k-value">${benefits.length}</span><span class="k-note">${ci('ind')}${inds.length} måleindikatorer i kjedene</span></div>
+    <div class="kpi"><span class="k-label">${ci('ben')}Nytte- og kostnadsvirkninger</span><span class="k-value">${benefits.length}</span><span class="k-note">${benefits.filter((b) => !isCost(b)).length} nytte · ${benefits.filter(isCost).length} kostnad · ${inds.length} indikatorer</span></div>
     <div class="kpi"><span class="k-label">${ci('ind')}Måleindikatorer i rute</span><span class="k-value">${r.counts.ok}<small> av ${r.measured} målte</small></span><span class="k-note">${r.counts.warn ? pill('warn', r.counts.warn + ' følg med') : ''} ${r.counts.crit ? pill('crit', r.counts.crit + ' avvik') : ''} ${r.counts.none ? pill('none', r.counts.none + ' ikke målt') : ''}</span></div>
     <div class="kpi"><span class="k-label">${ci('meas')}Målinger som forfaller</span><span class="k-value">${due.length}</span><span class="k-note">${overdue.length ? pill('crit', overdue.length + ' forfalt') : 'Ingen forfalt'} · innen ${fmtMonth(TODAY)}</span></div>
     <div class="kpi"><span class="k-label">${ci('asm')}Forutsetninger og risikoer</span><span class="k-value">${facs.length}</span><span class="k-note">${alarming.length ? pill('crit', alarming.length + ' holder ikke / høy') : ''} ${stale.length ? `<span>${stale.length} ikke vurdert på 6 mnd.</span>` : ''}</span></div>
@@ -1262,12 +1421,12 @@ function viewOverview() {
     const sites = [...new Set(benefits.map((b) => b.site))];
     rows = sites.map((sid) => { const rr = rollup(benefits.filter((b) => b.site === sid).flatMap((b) => benInds(b.id))); return { label: SITES[sid].title, sub: SITES[sid].kind === 'program' ? 'Program' : (SITES[sid].program ? SITES[SITES[sid].program].short : 'Uten program'), ...rr, open: `data-goto-site="${sid}"` }; });
   } else {
-    rows = benefits.map((b) => { const rr = rollup(benInds(b.id)); const c = latestContribution(b.id); return { label: b.title, sub: 'Bidragsvurdering: ' + (c ? c.grade.toLowerCase() : 'ikke vurdert'), ...rr, open: `data-open-ben="${b.id}"` }; });
+    rows = benefits.map((b) => { const rr = rollup(benInds(b.id)); const c = latestContribution(b.id); return { label: b.title, cost: isCost(b), sub: isCost(b) ? 'Kostnadsvirkning' + (b.value ? ' · ' + b.value : '') : 'Bidragsvurdering: ' + (c ? c.grade.toLowerCase() : 'ikke vurdert'), ...rr, open: `data-open-ben="${b.id}"` }; });
   }
   rows.sort((a, b) => SEV[b.status] - SEV[a.status] || (a.ach ?? -1) - (b.ach ?? -1));
   const bars = `<div class="bars">${rows.map((x) => `
     <div class="bar-row" ${x.open} data-tip="${esc(`<b>${esc(x.label)}</b><div class='row'><span>Oppnåelse</span><b>${pct(x.ach)}</b></div><div class='row'><span>Planlagt nå</span><b>${pct(x.planned)}</b></div><div class='row'><span>Indikatorer</span><b>${x.counts.ok} i rute, ${x.counts.warn} følg med, ${x.counts.crit} avvik</b></div>`)}">
-      <div class="bar-label"><div class="t">${perSite ? '' : ci('ben')}${esc(x.label)}</div><div class="s">${esc(x.sub)}</div></div>
+      <div class="bar-label"><div class="t">${perSite ? '' : ci(x.cost ? 'cost' : 'ben')}${esc(x.label)}</div><div class="s">${esc(x.sub)}</div></div>
       <div class="bar-track"><div class="bar-fill" style="width:${x.ach ?? 0}%"></div>${x.planned != null ? `<div class="bar-plan" style="left:calc(${x.planned}% - 1px)"></div>` : ''}</div>
       <div class="bar-val">${pct(x.ach)}</div>
       <div class="pillcell">${pill(x.status)}</div>
@@ -1275,9 +1434,9 @@ function viewOverview() {
   const attention = inds.filter((i) => ['warn', 'crit'].includes(indicatorState(i).status)).sort((a, b) => SEV[indicatorState(b).status] - SEV[indicatorState(a).status]);
   const facAll = facs.filter((f) => ['warn', 'crit'].includes(factorStatus(f))).sort((a, b) => SEV[factorStatus(b)] - SEV[factorStatus(a)]);
   const facList = facAll.slice(0, 6).map((f) => `<div class="asm-item">${factorPill(f)}<div><div class="cell-title">${icon(FACTOR_KINDS[f.kind].icon, 'ti asm-c')}${esc(f.kind)}: ${esc(f.title)}</div><div class="cell-sub">Pilen ${nodeRef(f.from)} → ${nodeRef(f.to)}</div><div class="cell-sub">Vurdert ${fmtDate(f.lastReviewed)}${monthsBetween(f.lastReviewed, TODAY) > 6 ? ' · <b>bør vurderes på nytt</b>' : ''}</div></div></div>`).join('');
-  return pageHead('Oversikt', esc(scopeLabel()) + ` · per ${fmtDate(TODAY)}`, state.level === 'project' ? `<button type="button" class="btn" data-nav="status">${icon('report')}Slik vises dette i statusrapporten</button>` : '') + explainer() + kpis + `
+  return pageHead('Oversikt', esc(scopeLabel()) + ` · per ${fmtDate(TODAY)}`, state.level === 'project' ? `<button type="button" class="btn" data-nav="status">${icon('report')}Slik vises dette i statusrapporten</button>` : '') + phaseStrip() + explainer() + kpis + `
     <div class="two">
-      <section class="card"><div class="card-head"><h2>Nytteoppnåelse ${perSite ? 'per prosjekt' : 'per nyttevirkning'}</h2><span class="muted">Snitt av gevinstindikatorene, siste måling</span>
+      <section class="card"><div class="card-head"><h2>Nytteoppnåelse ${perSite ? 'per prosjekt' : 'per virkning'}</h2><span class="muted">Snitt av gevinstindikatorene, siste måling. Status tar med kostnadsindikatorene.</span>
         <div class="legend right"><span><i class="lg-fill"></i>Oppnådd</span><span><i class="lg-plan"></i>Planlagt nå</span></div></div>${bars}</section>
       <section class="card"><div class="card-head"><h2>${ci('asm')}Forutsetninger og risikoer som må følges opp</h2></div>${facList || '<div class="empty">Ingen forutsetninger eller risikoer krever oppfølging.</div>'}${facAll.length > 6 ? `<button type="button" class="btn subtle" data-nav="${state.level === 'project' ? 'registrering' : 'rapport'}">Se alle ${facAll.length} ${state.level === 'project' ? 'i Nyttekart › Liste' : 'i styringsrapporten'}</button>` : ''}</section>
     </div>
@@ -1294,9 +1453,10 @@ function viewBenefit() {
   const lc = cons[0]; const editable = canWrite() && (state.level === 'hub' || inScope(b));
   const contribs = db.benefits.filter((x) => x.contributesTo === b.id);
   const groups = Object.keys(FACTOR_KINDS).map((k) => [k, ch.factors.filter((f) => f.kind === k)]).filter(([, l]) => l.length);
+  const dfoFacts = `<div class="chips" style="margin-top:8px">${cchip(isCost(b) ? 'cost' : 'ben', effLabel(b))}<span class="chip">${esc(b.priced || 'Ikke prissatt')}${b.value ? ': ' + esc(b.value) : ''}</span>${(b.affected || []).map((g) => cchip('grp', g)).join('')}</div>`;
   return `<div class="crumb"><button type="button" data-nav="matrise">Nyttekart</button><span>›</span><span>${esc(SITES[b.site].title)}</span></div>` +
-    pageHead(b.title, `Eies av ${esc(SITES[b.site].title)} · nytteeier ${esc(b.owner || '–')}${b.unit ? ' · ' + esc(b.unit) : ''} · ${esc(b.status)}${b.realization ? ' · realiseres ' + fmtMonth(b.realization + '-01') : ''}`,
-      `${editable ? `<button type="button" class="btn primary write" data-contrib="${b.id}">${icon('plus')}Ny bidragsvurdering</button>` : ''}<button type="button" class="btn write" data-edit="benefits:${b.id}">Rediger</button>`, tt('ben')) + `
+    pageHead(b.title, `Eies av ${esc(SITES[b.site].title)} · nytteeier ${esc(b.owner || '–')}${b.unit ? ' · ' + esc(b.unit) : ''} · ${esc(b.status)}${b.realization ? ' · ' + (isCost(b) ? 'påløper fra ' : 'oppstår ') + fmtMonth(b.realization + '-01') : ''}` + dfoFacts,
+      `${editable ? `<button type="button" class="btn primary write" data-contrib="${b.id}">${icon('plus')}Ny vurdering</button>` : ''}<button type="button" class="btn write" data-edit="benefits:${b.id}">Rediger</button>`, tt(isCost(b) ? 'cost' : 'ben')) + `
     <section class="card"><div class="card-head"><h2>Kjeden</h2><span class="muted">Alt som fører til denne nyttevirkningen, og målene den bidrar til</span>
         <div class="legend right">${[3, 2, 1, 0].map((n) => `<span><i class="lg-ev e${n}"></i>${EVIDENCE.find((e) => EV_N[e] === n)}</span>`).join('')}</div></div>
         <div class="map-wrap"><div class="map-cols" data-map-head></div><div class="chart map-svg" data-chart="map" data-focus="${b.id}" style="min-width:760px"></div></div>
@@ -1304,9 +1464,9 @@ function viewBenefit() {
     <div class="two" style="margin-top:16px">
       <section class="card">
         ${b.expected ? `<div class="callout"><b>Forventet bidrag</b>${esc(b.expected)}</div>` : `<div class="msg info" style="margin:0">${icon('info')}<div>Ingen formulering av forventet bidrag ennå. Mal: «Vi skal styrke X, slik at Y blir mer sannsynlig, forutsatt Z.»</div></div>`}
-        <div class="card-head" style="margin-top:16px"><h2>Bidragsvurdering</h2>${b.evalLevel ? `<span class="chip" data-tip="${esc('Hvor grundig bidraget skal vurderes: minimal, direkte eller indirekte innflytelse.')}">Nivå: ${esc(b.evalLevel)}</span>` : ''}</div>
+        <div class="card-head" style="margin-top:16px"><h2>Vurderinger og evalueringer</h2>${b.evalLevel ? `<span class="chip" data-tip="${esc('Hvor grundig bidraget skal vurderes: minimal, direkte eller indirekte innflytelse.')}">Nivå: ${esc(b.evalLevel)}</span>` : ''}</div>
         <div class="grade-big">${evid(lc ? lc.grade : 'Ikke vurdert')}<span class="muted small">${lc ? fmtDate(lc.date) + ' · ' + esc(lc.by) : ''}</span></div>
-        <div class="hist">${cons.map((c) => `<div><div>${evid(c.grade)} <span class="muted small">${fmtDate(c.date)}</span></div><div>${esc(c.text)}</div>${c.decision ? `<div class="dec"><b>Beslutning:</b> ${esc(c.decision)}</div>` : ''}</div>`).join('') || '<div class="muted small">Ingen vurderinger ennå.</div>'}</div>
+        <div class="hist">${cons.map((c) => `<div><div>${evid(c.grade)} <span class="chip">${esc(c.kind || 'Løpende vurdering')}</span> <span class="muted small">${fmtDate(c.date)} · ${esc(c.by)}</span></div><div>${esc(c.text)}</div>${c.deviation ? `<div class="small"><b>Årsaker til avvik:</b> ${esc(c.deviation)}</div>` : ''}${c.decision || c.decisionType ? `<div class="dec"><b>Beslutning: ${esc(c.decisionType || '')}.</b> ${esc(c.decision || '')}</div>` : ''}</div>`).join('') || '<div class="muted small">Ingen vurderinger ennå.</div>'}</div>
       </section>
       <section class="card"><div class="card-head"><h2>Pilene i kjeden</h2><span class="muted">Evidensstyrke per pil · klikk for å vurdere</span></div>
         <div class="table-wrap"><table><thead><tr><th>Fra</th><th>Til</th><th>Evidens</th></tr></thead><tbody>
@@ -1329,13 +1489,16 @@ function viewIndicator() {
   const i = byId('indicators', state.param);
   if (!i) return pageHead('Fant ikke indikatoren', '');
   const st = indicatorState(i); const ms = measurementsOf(i.id);
-  const bens = benefitsOfIndicator(i); const goals = [...new Set(bens.flatMap(goalsOf))];
+  const bens = benefitsOfIndicator(i); const gcs = bens.map(goalChain);
+  const ems = [...new Set(gcs.flatMap((g) => g.em))];
+  const goals = i.node && isGoalKind(kindOf(i.node)) ? closure(i.node, 'down').filter((x) => kindOf(x) === 'goal') : [...new Set(gcs.flatMap((g) => g.top))];
   const canMeasure = canWrite() && (state.level === 'hub' || inScope(i));
   const anchorKind = i.benefit ? 'ben' : i.asm ? 'asm' : kindOf(i.node);
   const anchorTitle = i.asm ? (byId('factors', i.asm) || {}).title : nodeTitle(i.benefit || i.node);
   const lineage = `<nav class="lineage" aria-label="Hva indikatoren hører til">
     ${goals.length ? `<div class="ln goal-c"><span class="lk">${icon('target')}Strategisk mål</span><span class="lv">${goals.map((g) => `<button type="button" data-nav="mal">${esc(nodeTitle(g))}</button>`).join('<span class="muted"> · </span>')}</span></div><span class="sep">nås gjennom →</span>` : ''}
-    ${bens.length ? `<div class="ln ben-c"><span class="lk">${icon('ben')}Nyttevirkning</span><span class="lv">${bens.map((x) => `<button type="button" data-open-ben="${x}">${esc(nodeTitle(x))}</button>`).join('<span class="muted"> · </span>')}</span></div><span class="sep">${anchorKind === 'ben' ? 'måles med →' : 'avhenger av →'}</span>` : ''}
+    ${ems.length ? `<div class="ln em-c"><span class="lk">${icon('flag')}Effektmål</span><span class="lv">${ems.map((g) => `<button type="button" data-nav="mal">${esc(nodeTitle(g))}</button>`).join('<span class="muted"> · </span>')}</span></div><span class="sep">nås gjennom →</span>` : ''}
+    ${bens.length ? `<div class="ln ${ck(bens[0])}-c"><span class="lk">${icon(CONCEPT[ck(bens[0])].icon)}${esc(effLabel(byId('benefits', bens[0])))}</span><span class="lv">${bens.map((x) => `<button type="button" data-open-ben="${x}">${esc(nodeTitle(x))}</button>`).join('<span class="muted"> · </span>')}</span></div><span class="sep">${anchorKind === 'ben' ? 'måles med →' : 'avhenger av →'}</span>` : ''}
     ${anchorKind !== 'ben' ? `<div class="ln ${anchorKind}-c"><span class="lk">${icon(anchorKind === 'asm' ? FACTOR_KINDS[(byId('factors', i.asm) || {}).kind || 'Antakelse'].icon : CONCEPT[anchorKind].icon)}${esc(anchorKind === 'asm' ? (byId('factors', i.asm) || {}).kind : CONCEPT[anchorKind].label)}</span><span class="lv">${esc(anchorTitle)}</span></div><span class="sep">måles med →</span>` : ''}
     <div class="ln ind-c cur"><span class="lk">${icon('gauge')}Måleindikator · ${esc(i.role)}</span><span class="lv"><b>${esc(i.title)}</b></span></div><span class="sep">følges opp med →</span>
     <div class="ln meas-c"><span class="lk">${icon('meas')}Målinger</span><span class="lv">${ms.length} registrert</span></div>
@@ -1356,7 +1519,7 @@ function viewIndicator() {
         <dl class="facts">
           <dt>Rolle</dt><dd>${esc(i.role)}</dd>
           <dt>Måletype</dt><dd>${MTYPES[i.mtype]}</dd>
-          ${i.mtype === 'path' ? `<dt>Startverdi</dt><dd class="num">${fmtNum(i.start, i.dec)} (${fmtDate(i.startDate)})</dd><dt>Målverdi</dt><dd class="num">${fmtNum(i.target, i.dec)} (${fmtDate(i.targetDate)})</dd>` : ''}
+          ${i.mtype === 'path' ? `<dt>Nullpunkt</dt><dd class="num">${fmtNum(i.start, i.dec)} (${fmtDate(i.startDate)})</dd><dt>Målverdi</dt><dd class="num">${fmtNum(i.target, i.dec)} (${fmtDate(i.targetDate)})</dd>` : ''}
           ${i.mtype === 'threshold' ? `<dt>Terskel</dt><dd class="num">${targetText(i)}</dd>` : ''}
           <dt>Frekvens</dt><dd>${esc(i.frequency)} · neste ${fmtDate(nextDue(i))}</dd>
           <dt>Metode</dt><dd>${esc(i.method || '–')}</dd>
@@ -1452,22 +1615,24 @@ function viewFollowUp() {
    View: Registrering
 ------------------------------------------------------------------ */
 const ENT = {
-  goals: { get label() { return 'Strategiske mål'; }, one: 'strategisk mål', db: 'goals', list: () => db.goals },
+  goals: { get label() { return 'Mål'; }, one: 'mål', db: 'goals', list: () => db.goals },
   lev: { get label() { return lv('lev').plural; }, get one() { return lv('lev').name.toLowerCase(); }, db: 'elements', list: () => scoped.elements('lev') },
   chg: { get label() { return lv('chg').plural; }, get one() { return lv('chg').name.toLowerCase(); }, db: 'elements', list: () => scoped.elements('chg') },
   eff: { get label() { return lv('eff').plural; }, get one() { return lv('eff').name.toLowerCase(); }, db: 'elements', list: () => scoped.elements('eff') },
-  benefits: { label: 'Nyttevirkninger', one: 'nyttevirkning', db: 'benefits', list: () => scoped.benefits() },
+  benefits: { label: 'Nytte- og kostnadsvirkninger', one: 'virkning', db: 'benefits', list: () => scoped.benefits() },
   indicators: { label: 'Måleindikatorer', one: 'måleindikator', db: 'indicators', list: () => scoped.indicators() },
   factors: { label: 'Forutsetninger og risikoer', one: 'forutsetning eller risiko', db: 'factors', list: () => scoped.factors() }
 };
 const ENT_CONCEPT = { goals: 'goal', lev: 'lev', chg: 'chg', eff: 'eff', benefits: 'ben', indicators: 'ind', factors: 'asm' };
-const regTabs = () => [...activeLevels(), 'benefits', 'indicators', 'factors'];
+/** The chain levels, plus «Nødvendige aktiviteter» (the chg level) in the DFØ model, where it is not a column in the map. */
+const listLevels = () => lv('chg').active ? activeLevels() : ['chg', ...activeLevels()];
+const regTabs = () => [...listLevels(), 'benefits', 'indicators', 'factors'];
 const DEF_EXAMPLE = {
   goals: 'Eksempel: «Trygge og selvstendige innbyggere i eget hjem».',
   lev: 'Eksempel: «Digital hjemmeoppfølging i drift». Kobles til det den fører til.',
-  get chg() { return lv('lev').active ? 'Eksempel: «Responssenteret oppdager forverring tidlig og reagerer».' : 'Eksempel: «Saksbehandlerne tar i bruk ny arbeidsflyt».'; },
+  get chg() { return lv('chg').active ? 'Eksempel: «Responssenteret oppdager forverring tidlig og reagerer».' : 'Eksempel: «Saksbehandlerne tar i bruk ny arbeidsflyt». Kobles til virkningen aktiviteten gjør mulig. Vises i punkt 8 i nytterealiseringsplanen.'; },
   eff: 'Eksempel: «Forverring håndteres tidligere».',
-  benefits: 'Eksempel: «Flere eldre bor hjemme uten omfattende tjenester». Har nytteeier i linjen, forventet bidrag og bidragsvurderinger.',
+  benefits: 'Eksempel: nyttevirkningen «Flere eldre bor hjemme uten omfattende tjenester» eller kostnadsvirkningen «Drift av responssenteret». Har nytteeier i linjen, og sier hvem som blir berørt.',
   indicators: 'Eksempel: «Andel varsler fulgt opp innen 30 minutter» som tester en antakelse, med terskel minst 90 %.',
   factors: 'Eksempel: risikoen «Varsler blir ikke håndtert innen riktig tid». Ligger alltid på en pil i kjeden.'
 };
@@ -1478,7 +1643,7 @@ function regColumns(tab) {
   const C = {
     goals: [['Strategisk mål', (g) => `<div class="cell-title">${ci('goal')}${esc(g.title)}</div>`], ['Nivå', (g) => `<span class="chip">${esc(g.level)}</span>`], ['Overordnet', (g) => esc(g.parent ? nodeTitle(g.parent) : '–')], ['Eier', (g) => esc(g.owner)], ['Periode', (g) => esc(g.period)]],
     lev: elCols('lev'), chg: elCols('chg'), eff: elCols('eff'),
-    benefits: [['Nyttevirkning', (b) => `<div class="cell-title">${ci('ben')}${esc(b.title)}</div>${b.contributesTo ? `<div class="cell-sub">Bidrar til: ${esc(nodeTitle(b.contributesTo))}</div>` : ''}`], ...(own ? [['Eier', (b) => esc(SITES[b.site].short)]] : []), ['Nytteeier', (b) => `${esc(b.owner || '–')}${b.unit ? `<div class="cell-sub">${esc(b.unit)}</div>` : ''}`], ['Bidrar til mål', (b) => `<div class="chips">${goalsOf(b.id).map((g) => `<span class="chip cc goal-c" data-tip="${esc(esc(nodeTitle(g)))}">${icon('target')}${esc(g.replace('-', '.'))}</span>`).join('')}</div>`], ['Bidragsvurdering', (b) => evid((latestContribution(b.id) || {}).grade)], ['Status', (b) => esc(b.status)], ['', (b) => `<button type="button" class="btn sm" data-open-ben="${b.id}">Åpne</button>`]],
+    benefits: [['Virkning', (b) => `<div class="cell-title">${ci(isCost(b) ? 'cost' : 'ben')}${esc(b.title)}</div>${b.contributesTo ? `<div class="cell-sub">Bidrar til: ${esc(nodeTitle(b.contributesTo))}</div>` : ''}`], ['Type', (b) => `<span class="chip">${isCost(b) ? 'Kostnad' : 'Nytte'}</span><div class="cell-sub">${esc(b.priced || '')}${b.value ? ' · ' + esc(b.value) : ''}</div>`], ...(own ? [['Eier', (b) => esc(SITES[b.site].short)]] : []), ['Hvem blir berørt', (b) => esc((b.affected || []).join(', ') || '–')], ['Nytteeier', (b) => `${esc(b.owner || '–')}${b.unit ? `<div class="cell-sub">${esc(b.unit)}</div>` : ''}`], ['Bidrar til mål', (b) => `<div class="chips">${goalsOf(b.id).map((g) => `<span class="chip cc ${ck(g)}-c" data-tip="${esc(esc(nodeTitle(g)))}">${icon(CONCEPT[ck(g)].icon)}${esc(g.replace('-', '.'))}</span>`).join('')}</div>`], ['Vurdering', (b) => evid((latestContribution(b.id) || {}).grade)], ['Status', (b) => esc(b.status)], ['', (b) => `<button type="button" class="btn sm" data-open-ben="${b.id}">Åpne</button>`]],
     indicators: [['Måleindikator · måler', (i) => `<div class="cell-title">${ci('ind')}${esc(i.title)}</div><div class="cell-sub">${anchorRef(i)}</div>`], ['Rolle', (i) => `<span class="chip">${esc(i.role)}</span>`], ...(own ? [['Eier', (i) => esc(SITES[i.site].short)]] : []), ['Mål / terskel', (i) => `<span class="num">${targetText(i)}</span>`], ['Status', (i) => pill(indicatorState(i).status)], ['', (i) => `<button type="button" class="btn sm" data-open-ind="${i.id}">Åpne</button>`]],
     factors: [['Forutsetning · gjelder pilen', (f) => `<div class="cell-title">${icon(FACTOR_KINDS[f.kind].icon, 'ti asm-c')}${esc(f.title)}</div><div class="cell-sub">${nodeRef(f.from)} → ${nodeRef(f.to)}</div>`], ['Type', (f) => `<span class="chip">${esc(f.kind)}</span>`], ...(own ? [['Eier', (f) => esc(SITES[f.site].short)]] : []), ['Status', (f) => factorPill(f)], ['Sist vurdert', (f) => `<span class="num">${fmtDate(f.lastReviewed)}</span>${monthsBetween(f.lastReviewed, TODAY) > 6 ? '<div class="cell-sub">Over 6 mnd.</div>' : ''}`]]
   };
@@ -1506,16 +1671,19 @@ function matrixRows() {
   return scoped.benefits().map((b) => ({ b, ch: chainOf(b.id) }))
     .sort((x, y) => Math.min(...goalsOf(x.b.id).map((g) => order.indexOf(g)), 99) - Math.min(...goalsOf(y.b.id).map((g) => order.indexOf(g)), 99));
 }
+const matrixLevels = () => [...listLevels()].reverse();
 function matrixTab() {
-  const levels = [...activeLevels()].reverse();
+  const levels = matrixLevels();
   const rows = matrixRows();
-  const head = ['Strategisk mål', 'Nyttevirkning', ...levels.map((k) => lv(k).plural), 'Forutsetninger og risikoer', 'Måleindikatorer', 'Svakeste pil', 'Bidragsvurdering'];
+  const head = ['Strategisk mål', 'Effektmål', 'Virkning', 'Hvem blir berørt', ...levels.map((k) => lv(k).plural), 'Forutsetninger og risikoer', 'Måleindikatorer', 'Svakeste pil', 'Vurdering'];
   const body = rows.map(({ b, ch }) => {
     const byKind = (k) => ch.up.filter((x) => kindOf(x) === k);
-    const lc = latestContribution(b.id);
+    const lc = latestContribution(b.id); const gc = goalChain(b.id);
     return `<tr>
-      <td><div class="stack">${ch.goals.map((g) => nodeChip(g)).join('') || '–'}</div></td>
-      <td class="wide"><div class="stack"><button type="button" class="chip cc ben-c" data-open-ben="${b.id}" style="font-weight:600">${icon('ben')}${esc(b.title)}</button><span class="small muted">${esc(b.owner || '–')}${b.unit ? ' · ' + esc(b.unit) : ''}</span></div></td>
+      <td><div class="stack">${gc.top.map((g) => nodeChip(g)).join('') || '–'}</div></td>
+      <td><div class="stack">${gc.em.map((g) => nodeChip(g)).join('') || '<span class="muted small">–</span>'}</div></td>
+      <td class="wide"><div class="stack"><button type="button" class="chip cc ${isCost(b) ? 'cost' : 'ben'}-c" data-open-ben="${b.id}" style="font-weight:600">${icon(isCost(b) ? 'cost' : 'ben')}${esc(b.title)}</button><span class="small muted">${isCost(b) ? 'Kostnad' : 'Nytte'}${b.value ? ' · ' + esc(b.value) : ''} · ${esc(b.owner || '–')}</span></div></td>
+      <td><div class="stack">${(b.affected || []).map((g) => `<span class="small">${esc(g)}</span>`).join('') || '<span class="muted small">–</span>'}</div></td>
       ${levels.map((k) => `<td><div class="stack">${byKind(k).map((x) => nodeChip(x)).join('') || '<span class="muted small">–</span>'}</div></td>`).join('')}
       <td class="wide"><div class="stack">${ch.factors.map(kchip).join('') || '<span class="muted small">–</span>'}</div></td>
       <td class="wide"><div class="stack">${ch.indicators.map((i) => `<button type="button" class="kchip" data-open-ind="${i.id}"><span class="k ${indicatorState(i).status === 'watch' ? '' : indicatorState(i).status}" style="${indicatorState(i).status === 'none' || indicatorState(i).status === 'watch' ? 'background:var(--fg-4)' : ''}">${esc(i.role.charAt(0))}</span><span>${esc(i.title)}</span></button>`).join('') || '<span class="muted small">–</span>'}</div></td>
@@ -1523,10 +1691,10 @@ function matrixTab() {
       <td>${lc ? `${evid(lc.grade)}<div class="cell-sub">${fmtDate(lc.date)}</div>` : evid('Ikke vurdert')}</td>
     </tr>`;
   }).join('');
-  return { lead: 'Én rad per nyttevirkning. Les fra venstre: målet, nyttevirkningen som bidrar, og leddene som fører dit. Til høyre står det som skal holde kjeden sammen, og hvordan den måles og vurderes.',
+  return { lead: 'Én rad per virkning. Les fra venstre: målet, effektmålet, virkningen som bidrar, hvem den berører og leddene som fører dit. Til høyre står det som skal holde kjeden sammen, og hvordan den måles og vurderes.',
     actions: `<button type="button" class="btn" data-copy-csv="matrix">${icon('copy')}Kopier som CSV</button>`,
     html: `<section class="card"><div class="legend" style="margin-bottom:10px"><span>Forutsetninger: A antakelse · R risiko · U utilsiktet virkning · P påvirkningsfaktor</span><span>Indikatorer: forbokstav = rolle (G gevinst, E effekt, L leveranse, A antakelse, B balanserende …)</span><span>Farge = status</span></div>
-    <div class="table-wrap"><table class="matrix"><thead><tr>${head.map((h) => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${body || `<tr><td colspan="${head.length}" class="empty">Ingen nyttevirkninger i dette utvalget.</td></tr>`}</tbody></table></div></section>` };
+    <div class="table-wrap"><table class="matrix"><thead><tr>${head.map((h) => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${body || `<tr><td colspan="${head.length}" class="empty">Ingen virkninger i dette utvalget.</td></tr>`}</tbody></table></div></section>` };
 }
 
 /* ------------------------------------------------------------------
@@ -1556,43 +1724,74 @@ function viewCatalog() {
 ------------------------------------------------------------------ */
 function goalStats(g) {
   const ids = [g.id, ...db.goals.filter((x) => x.parent === g.id).map((x) => x.id)];
-  const bens = db.benefits.filter((b) => !b.catalog && goalsOf(b.id).some((x) => ids.includes(x)));
-  const inds = db.indicators.filter((i) => !i.catalog && bens.some((b) => b.id === i.benefit));
+  const bens = db.benefits.filter((b) => !b.catalog && closure(b.id, 'down').some((x) => ids.includes(x)));
+  const inds = db.indicators.filter((i) => !i.catalog && bens.some((b) => b.id === i.benefit && !isCost(b)));
   const ctx = db.indicators.filter((i) => i.node && ids.includes(i.node));
   return { bens, r: rollup(inds), ctx, projects: [...new Set(bens.map((b) => b.site))] };
 }
 function viewGoals() {
-  const top = db.goals.filter((g) => !g.parent);
-  const card = (g, child) => { const s = goalStats(g); return `<article class="card goal ${child ? 'child' : ''}">
-    <div style="min-width:0"><div class="chips" style="margin-bottom:6px">${tt('goal')}<span class="chip">${esc(g.level)}</span></div><h3>${esc(g.title)}</h3>
+  const top = db.goals.filter((g) => !g.parent && g.level !== 'Effektmål');
+  const ems = db.goals.filter((g) => g.level === 'Effektmål' && (state.level === 'hub' || inTargets(g)));
+  const card = (g, child) => { const s = goalStats(g); const isEm = g.level === 'Effektmål'; const editable = canWrite() && (state.level === 'hub' || (isEm && inScope(g)));
+    const ups = isEm ? goalsOf(g.id) : []; const downs = isEm ? [] : db.goals.filter((x) => x.level === 'Effektmål' && goalsOf(x.id).includes(g.id));
+    return `<article class="card goal ${child ? 'child' : ''}">
+    <div style="min-width:0"><div class="chips" style="margin-bottom:6px">${tt(isEm ? 'em' : 'goal')}<span class="chip">${esc(isEm ? 'Effektmål · ' + SITES[g.site].short : g.level)}</span>${editable ? `<button type="button" class="btn sm subtle write" data-edit="goals:${g.id}">Rediger</button>` : ''}</div><h3>${esc(g.title)}</h3>
       <div class="goal-meta"><span>Eier: ${esc(g.owner)}</span><span>Periode: ${esc(g.period)}</span></div>
+      ${ups.length ? `<div class="small" style="margin:6px 0">Bidrar til: ${ups.map((x) => cchip('goal', nodeTitle(x))).join(' ')}</div>` : ''}
+      ${downs.length ? `<div class="small" style="margin:6px 0">Effektmål som bidrar: ${downs.map((x) => cchip('em', x.title + ' (' + SITES[x.site].short + ')')).join(' ')}</div>` : ''}
       <div class="muted">${esc(g.desc)}</div>
       ${s.ctx.length ? `<div class="small" style="margin-top:12px;font-weight:600">Kontekstindikatorer</div>${s.ctx.map((i) => `<div class="gb-i" style="margin-left:0">${ci('ind')}<button type="button" data-open-ind="${i.id}">${esc(i.title)}</button>${pill(indicatorState(i).status)}</div>`).join('')}` : ''}
-      <div class="small" style="margin-top:12px;font-weight:600">Nyttevirkninger som bidrar, og hvordan de måles</div>
-      <div class="gb-list">${s.bens.map((b) => { const bis = db.indicators.filter((i) => i.benefit === b.id); return `<div class="gb">
-        <div class="gb-t">${ci('ben')}<button type="button" data-open-ben="${b.id}">${esc(b.title)}</button><span class="muted small">${esc(SITES[b.site].short)}</span></div>
+      <div class="small" style="margin-top:12px;font-weight:600">Virkninger som bidrar, og hvordan de måles</div>
+      <div class="gb-list">${s.bens.map((b) => { const bis = db.indicators.filter((i) => i.benefit === b.id); return `<div class="gb ${isCost(b) ? 'cost' : ''}">
+        <div class="gb-t">${ci(isCost(b) ? 'cost' : 'ben')}<button type="button" data-open-ben="${b.id}">${esc(b.title)}</button><span class="muted small">${esc(SITES[b.site].short)}</span></div>
         ${bis.map((i) => { const st = indicatorState(i); return `<div class="gb-i">${ci('ind')}<button type="button" data-open-ind="${i.id}">${esc(i.title)}</button>${pill(st.status)}<span class="muted small num">${st.ach != null ? pct(st.ach) : ''}</span></div>`; }).join('')}
       </div>`; }).join('') || '<div class="muted small">Ingen nyttevirkninger er koblet til dette målet ennå.</div>'}</div></div>
     <div class="goal-stat"><div class="muted small">Samlet oppnåelse</div><div class="big">${pct(s.r.ach)}</div><div class="meter"><i style="width:${s.r.ach || 0}%"></i></div>
-      <div class="small muted">${s.bens.length} nyttevirkninger · ${s.projects.length} prosjekter/programmer</div><div>${pill(s.r.status)}</div></div>
+      <div class="small muted">${s.bens.length} virkninger · ${s.projects.length} prosjekter/programmer</div><div>${pill(s.r.status)}</div></div>
   </article>`; };
-  return pageHead('Strategiske mål', 'Virksomhetens mål. Under hvert mål ser du nyttevirkningene som bidrar, og måleindikatorene som viser om nytten inntreffer. Målene lagres i listen Strategiske mål på huben.',
-    state.level === 'hub' && canWrite() ? `<button type="button" class="btn primary write" data-new="goals">${icon('plus')}Nytt mål</button>` : '') +
-    top.map((g) => card(g) + db.goals.filter((c) => c.parent === g.id).map((c) => card(c, true)).join('')).join('');
+  const own = state.level === 'hub' ? null : SITES[state.site];
+  const newEm = canWrite() && own ? `<button type="button" class="btn primary write" data-new-em="${own.id}">${icon('plus')}Nytt effektmål</button>` : '';
+  const emHead = `<div class="card-head" style="margin:8px 0 12px"><h2>${ci('em')}Effektmål</h2><span class="muted">${own ? 'Effektmålene ' + (own.kind === 'program' ? 'programmet' : 'prosjektet') + ' styrer etter' + (own.program ? ', og programmets effektmål prosjektet bidrar til' : '') : 'Prosjektenes og programmenes effektmål'}. Effektmål tallfestes med en indikator når tiltaket er besluttet.</span></div>`;
+  const goalHead = `<div class="card-head" style="margin:24px 0 12px"><h2>${ci('goal')}Samfunnsmål og strategiske mål</h2><span class="muted">Virksomhetens mål. Eies av virksomheten og redigeres på huben.</span></div>`;
+  return pageHead('Mål', 'DFØ skiller mellom effektmål, som er tiltakets egne mål, og samfunnsmål, som er virksomhetens. Under hvert mål ser du virkningene som bidrar, og indikatorene som viser om nytten inntreffer. Alle mål lagres i listen Mål på huben.',
+    (state.level === 'hub' && canWrite() ? `<button type="button" class="btn primary write" data-new="goals">${icon('plus')}Nytt mål</button>` : '') + newEm) +
+    emHead + (ems.map((g) => card(g, true)).join('') || '<div class="empty">Ingen effektmål ennå.</div>') +
+    goalHead + top.map((g) => card(g) + db.goals.filter((c) => c.parent === g.id).map((c) => card(c, true)).join('')).join('');
 }
 
 /* ------------------------------------------------------------------
    Nyttekart: graph with configurable levels. Inactive levels are
    contracted, so a hidden level never breaks a chain.
 ------------------------------------------------------------------ */
+/** DFØ model: no levels before the virkning, so the map starts with the tiltak and who is affected, like DFØ's nyttekart. */
+const dfoMode = () => !activeLevels().length;
 function mapNodeIds(focus) {
   let ids;
-  if (focus) ids = [...closure(focus, 'up'), focus, ...goalsOf(focus)];
+  if (focus) ids = [...closure(focus, 'up'), focus, ...closure(focus, 'down')];
   else {
     const base = [...scoped.elements().map((e) => e.id), ...scoped.benefits().map((b) => b.id)];
     ids = [...new Set([...base, ...base.flatMap((x) => closure(x, 'down'))])];
   }
-  return ids.filter((x) => isActiveNode(x) && !(byId('benefits', x) || {}).catalog && node(x));
+  ids = ids.filter((x) => isActiveNode(x) && !(byId('benefits', x) || {}).catalog && node(x));
+  if (dfoMode()) {
+    const extra = new Set();
+    ids.filter((x) => kindOf(x) === 'ben').forEach((x) => { const b = byId('benefits', x); extra.add('site:' + b.site); (b.affected || []).forEach((g) => extra.add('grp:' + g)); });
+    ids = [...extra, ...ids];
+  }
+  return ids;
+}
+/** Edges tiltak → hvem blir berørt → virkning. Factors on contracted arrows into a virkning sit on its first incoming edge. */
+function dfoEdges(ids) {
+  const S = new Set(ids); const out = new Map();
+  const add = (from, to, factors = []) => { const key = from + '>' + to; if (!out.has(key)) out.set(key, { from, to, links: [], evidence: null, syn: true, factors: [...factors] }); else out.get(key).factors.push(...factors); };
+  ids.filter((x) => kindOf(x) === 'ben').forEach((x) => {
+    const b = byId('benefits', x); const site = 'site:' + b.site;
+    const inF = db.factors.filter((f) => f.to === x && !isActiveNode(f.from));
+    const groups = (b.affected || []).map((g) => 'grp:' + g).filter((g) => S.has(g));
+    if (!groups.length) { add(site, x, inF); return; }
+    groups.forEach((g, n) => { add(site, g); add(g, x, n === 0 ? inF : []); });
+  });
+  return [...out.values()];
 }
 function effectiveEdges(ids) {
   const S = new Set(ids); const edges = new Map();
@@ -1608,8 +1807,11 @@ function effectiveEdges(ids) {
   return [...edges.values()].map((e) => ({ ...e, evidence: weakestEvidence(e.links), factors: db.factors.filter((f) => e.links.some((l) => l.from === f.from && l.to === f.to)) }));
 }
 function mapTab() {
-  return { lead: `Kjeden fra ${activeLevels().map((k) => lv(k).plural.toLowerCase()).join(', ')} via nyttevirkninger til virksomhetens mål. Pilene viser evidensstyrke, og bokstavene på pilene er forutsetninger og risikoer. Hold over et element for å se kjeden, og klikk på en pil for å vurdere den.`, actions: '',
-    html: `<section class="card"><div class="legend" style="margin-bottom:12px">${[3, 2, 1, 0].map((n) => `<span><i class="lg-ev e${n}"></i>${EVIDENCE.find((e) => EV_N[e] === n)}</span>`).join('')}<span>·</span>${Object.entries(FACTOR_KINDS).map(([k, d]) => `<span><b>${d.short}</b> ${esc(k.toLowerCase())}</span>`).join('')}<span>· farge = status</span></div>
+  const lead = dfoMode()
+    ? `Nyttekartet slik DFØ beskriver det: tiltaket, hvem som blir berørt, nytte- og kostnadsvirkningene, og effektmålene og samfunnsmålene de bidrar til. Pilene mot målene viser evidensstyrke, og bokstavene er forutsetninger og risikoer. ${esc(cap(lv('chg').plural.toLowerCase()))} finner du under Liste og i nytterealiseringsplanen.`
+    : `Kjeden fra ${activeLevels().map((k) => lv(k).plural.toLowerCase()).join(', ')} via virkninger og effektmål til virksomhetens mål. Pilene viser evidensstyrke, og bokstavene på pilene er forutsetninger og risikoer. Hold over et element for å se kjeden, og klikk på en pil for å vurdere den.`;
+  return { lead, actions: '',
+    html: `<section class="card"><div class="legend" style="margin-bottom:12px"><span>${ci('ben')}Nyttevirkning</span><span>${ci('cost')}Kostnadsvirkning</span><span>·</span>${[3, 2, 1, 0].map((n) => `<span><i class="lg-ev e${n}"></i>${EVIDENCE.find((e) => EV_N[e] === n)}</span>`).join('')}<span>·</span>${Object.entries(FACTOR_KINDS).map(([k, d]) => `<span><b>${d.short}</b> ${esc(k.toLowerCase())}</span>`).join('')}<span>· farge = status</span></div>
     <div class="map-wrap"><div class="map-cols" data-map-head></div><div class="chart map-svg" data-chart="map" style="min-width:760px"></div></div></section>` };
 }
 /** Nyttekart: one page, three views of the same chain. */
@@ -1623,8 +1825,8 @@ function drawMap(el) {
   const focus = el.dataset.focus || null;
   const ids = mapNodeIds(focus);
   if (!ids.length) { el.style.height = 'auto'; el.innerHTML = '<div class="empty">Ingenting å vise i dette utvalget ennå.</div>'; return; }
-  const edges = effectiveEdges(ids);
-  const colKinds = [...activeLevels(), 'ben', 'goal'].filter((k) => ids.some((x) => kindOf(x) === k));
+  const edges = [...effectiveEdges(ids), ...(dfoMode() ? dfoEdges(ids) : [])];
+  const colKinds = [...(dfoMode() ? ['tiltak', 'grp'] : activeLevels()), 'ben', 'em', 'goal'].filter((k) => ids.some((x) => kindOf(x) === k));
   const cols = colKinds.map((k) => ids.filter((x) => kindOf(x) === k));
   const W = Math.max(760, el.clientWidth); const nodeH = 56, gapY = 10; const n = cols.length;
   const colW = Math.min(240, (W - (n - 1) * 48) / n);
@@ -1646,16 +1848,21 @@ function drawMap(el) {
   const trunc = (s, mc = maxChars) => s.length > mc ? s.slice(0, mc - 1) + '…' : s;
   const wrap2 = (s) => { const words = s.split(' '); let a = ''; let k = 0; while (k < words.length && (a + ' ' + words[k]).trim().length <= maxChars) { a = (a + ' ' + words[k]).trim(); k++; } if (!a) return [trunc(s), '']; return [a, trunc(words.slice(k).join(' '))]; };
   const head = el.parentElement.querySelector('[data-map-head]');
-  if (head) { head.style.width = W + 'px'; head.innerHTML = colKinds.map((k, c) => `<div style="left:${colX[c]}px;width:${colW}px">${tt(k, k === 'goal' ? 'Strategiske mål' : k === 'ben' ? 'Nyttevirkninger' : lv(k).plural)}</div>`).join(''); }
+  const HEAD = { goal: 'Samfunnsmål', em: 'Effektmål', ben: 'Nytte- og kostnadsvirkninger', tiltak: 'Tiltak', grp: 'Hvem blir berørt?' };
+  if (head) { head.style.width = W + 'px'; head.innerHTML = colKinds.map((k, c) => `<div style="left:${colX[c]}px;width:${colW}px">${tt(k, HEAD[k] || lv(k).plural)}</div>`).join(''); }
   const bez = (a, b, t) => { const x1 = a.x + colW, y1 = a.y + nodeH / 2, x2 = b.x, y2 = b.y + nodeH / 2, mx = (x1 + x2) / 2; const u = 1 - t; return { x: u * u * u * x1 + 3 * u * u * t * mx + 3 * u * t * t * mx + t * t * t * x2, y: u * u * u * y1 + 3 * u * u * t * y1 + 3 * u * t * t * y2 + t * t * t * y2 }; };
   let svg = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Nyttekart">`;
   edges.forEach((e, k) => { const a = pos[e.from], b = pos[e.to]; if (!a || !b) return; const x1 = a.x + colW, y1 = a.y + nodeH / 2, x2 = b.x, y2 = b.y + nodeH / 2, mx = (x1 + x2) / 2; const d = `M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`;
+    if (e.syn) { svg += `<path class="link syn" data-from="${e.from}" data-to="${e.to}" d="${d}"/>`; return; }
     svg += `<path class="link ev${EV_N[e.evidence]}" data-from="${e.from}" data-to="${e.to}" d="${d}"/><path class="hit" data-from="${e.from}" data-to="${e.to}" data-link="${esc(e.links.map((l) => l.id).join('|'))}" d="${d}" data-tip="${esc(`<b>${esc(nodeTitle(e.from))} → ${esc(nodeTitle(e.to))}</b><div>Evidens: <b>${e.evidence}</b>${e.links.length > 1 ? ' (via skjult nivå)' : ''}</div>${e.factors.length ? `<div>${e.factors.length} forutsetninger/risikoer</div>` : ''}<div class='muted'>Klikk for å vurdere</div>`)}"/>`; });
-  const nodeSvg = (x) => { const p = pos[x]; const k = kindOf(x); const o = node(x); let stripe = '', sub = '';
-    if (k === 'ben') { const r = rollup(db.indicators.filter((i) => i.benefit === x)); stripe = `<rect x="0" y="0" width="4" height="${nodeH}" rx="2" fill="var(--${r.status === 'watch' ? 'none' : r.status})"/>`; sub = SITES[o.site].short + ' · ' + pct(r.ach); }
+  const benInIds = ids.filter((x) => kindOf(x) === 'ben').map((x) => byId('benefits', x));
+  const nodeSvg = (x) => { const p = pos[x]; const k = kindOf(x); const c = ck(x); const o = node(x); let stripe = '', sub = '';
+    if (k === 'ben') { const r = rollup(db.indicators.filter((i) => i.benefit === x)); stripe = `<rect x="0" y="0" width="4" height="${nodeH}" rx="2" fill="var(--${r.status === 'watch' ? 'none' : r.status})"/>`; sub = SITES[o.site].short + ' · ' + (isCost(o) ? (o.value || 'kostnad') : pct(r.ach)); }
     else if (k === 'goal') sub = o.level;
+    else if (k === 'tiltak') { const st = SITES[o.site]; sub = (st.kind === 'program' ? 'Program' : 'Prosjekt') + ' · ' + st.manager; }
+    else if (k === 'grp') { const n2 = benInIds.filter((b) => (b.affected || []).includes(o.title)).length; sub = n2 + (n2 === 1 ? ' virkning' : ' virkninger'); }
     else { const ind = db.indicators.filter((i) => i.node === x); const r = ind.length ? rollup(ind) : null; if (r && r.status !== 'none') stripe = `<rect x="0" y="0" width="4" height="${nodeH}" rx="2" fill="var(--${r.status})"/>`; sub = SITES[o.site].short + (o.type ? ' · ' + o.type : ''); }
-    return `<g class="node k-${k}" data-node="${x}" transform="translate(${p.x},${p.y})" data-tip="${esc('<b>' + esc(o.title) + '</b><div>' + esc(CONCEPT[k].label) + ' · ' + esc(sub) + '</div>')}"><rect class="box" width="${colW}" height="${nodeH}" rx="6"/>${stripe}<g class="ico ${k}-c" transform="translate(${colW - 22},6) scale(.8)">${ICON[CONCEPT[k].icon]}</g>${wrap2(o.title).map((ln, q) => `<text class="t" x="12" y="${17 + q * 14}">${esc(ln)}</text>`).join('')}<text class="s" x="12" y="47">${esc(trunc(sub, maxChars + 4))}</text></g>`; };
+    return `<g class="node k-${k} ${c === 'cost' ? 'cost' : ''}" data-node="${x}" transform="translate(${p.x},${p.y})" data-tip="${esc('<b>' + esc(o.title) + '</b><div>' + esc(CONCEPT[c].label) + ' · ' + esc(sub) + '</div>')}"><rect class="box" width="${colW}" height="${nodeH}" rx="6"/>${stripe}<g class="ico ${c}-c" transform="translate(${colW - 22},6) scale(.8)">${ICON[CONCEPT[c].icon]}</g>${wrap2(o.title).map((ln, q) => `<text class="t" x="12" y="${17 + q * 14}">${esc(ln)}</text>`).join('')}<text class="s" x="12" y="47">${esc(trunc(sub, maxChars + 4))}</text></g>`; };
   ids.forEach((x) => { if (pos[x]) svg += nodeSvg(x); });
   edges.forEach((e) => { const a = pos[e.from], b = pos[e.to]; if (!a || !b) return; const gapMid = a.x + colW + ((n > 1 ? colX[1] - colX[0] : 100) - colW) / 2; let t0 = 0.5; for (let s2 = 0.02; s2 < 1; s2 += 0.02) { if (bez(a, b, s2).x >= gapMid) { t0 = s2; break; } }
     e.factors.forEach((f, q) => { const t = Math.min(0.95, Math.max(0.05, t0 + (q - (e.factors.length - 1) / 2) * 0.07)); const pt = bez(a, b, t); const s = factorStatus(f);
@@ -1669,7 +1876,10 @@ function drawMap(el) {
       el.querySelectorAll('path.link, .asm').forEach((p) => { const on = set.has(p.dataset.from) && set.has(p.dataset.to); p.classList.toggle('dim', !on); p.classList.toggle('hl', on); }); });
     g.addEventListener('mouseleave', () => el.querySelectorAll('.dim, .hl').forEach((x) => x.classList.remove('dim', 'hl')));
     g.addEventListener('click', () => { const id = g.dataset.node; const k = kindOf(id);
-      if (k === 'ben') go('nytte', id); else if (k === 'goal') go('mal'); else openForm(k, id); });
+      if (k === 'ben') go('nytte', id); else if (isGoalKind(k)) go('mal');
+      else if (k === 'tiltak') { const st = SITES[id.slice(5)]; state.level = st.kind; state.site = st.id; state.progMode = 'all'; go('plan'); }
+      else if (k === 'grp') toast(`«${id.slice(4)}» er en av gruppene i listen «Hvem blir berørt?» på huben.`);
+      else openForm(k, id); });
   });
   el.querySelectorAll('.asm').forEach((a) => a.addEventListener('click', (ev) => { ev.stopPropagation(); openForm('factors', a.dataset.asm); }));
 }
@@ -1679,19 +1889,187 @@ function drawMap(el) {
 ------------------------------------------------------------------ */
 function viewReport() {
   const bens = scoped.benefits(); const facs = scoped.factors();
-  const goalIds = [...new Set(bens.flatMap((b) => goalsOf(b.id)))];
-  const goals = db.goals.filter((g) => goalIds.includes(g.id));
+  const gcs = bens.map((b) => goalChain(b.id));
+  const emIds = new Set(gcs.flatMap((g) => g.em)); const topIds = new Set(gcs.flatMap((g) => g.top));
+  const goals = [...db.goals.filter((g) => emIds.has(g.id)), ...db.goals.filter((g) => topIds.has(g.id))];
   const asm = facs.filter((f) => f.kind === 'Antakelse' && f.status !== 'Holder');
   const risks = facs.filter((f) => (f.kind === 'Risiko' && f.status !== 'Lav') || (f.kind === 'Utilsiktet virkning' && f.status === 'Observert' && f.polarity !== 'Positiv') || (f.kind === 'Påvirkningsfaktor' && f.status === 'Må undersøkes'));
   const decisions = bens.map((b) => ({ b, c: latestContribution(b.id) })).filter((x) => x.c && x.c.decision);
   const sec = (n, title, q, body) => `<section class="card rep-sec"><div class="card-head"><h2><span class="chip">${n}</span>${title}</h2><span class="q">${q}</span></div>${body}</section>`;
   const title = state.level === 'hub' ? 'Fjordvik kommune' : SITES[state.site].title;
   return pageHead('Styringsrapport', `${esc(title)} · per ${fmtDate(TODAY)} · ${esc(scopeLabel())}. Rapporten følger kjeden ovenfra og ned og ender i det som må justeres.`, `<button type="button" class="btn" data-copy-csv="matrix">${icon('copy')}Kopier matrisen som CSV</button>`, tt('goal', 'Fra mål til tiltak')) +
-    sec(1, 'Strategiske mål', 'Hvordan går det med målene vi bidrar til?', `<div class="goal-tiles">${goals.map((g) => { const s = goalStats(g); return `<div><div class="small muted">${esc(g.level)}</div><b>${esc(g.title)}</b><div class="meter"><i style="width:${s.r.ach || 0}%"></i></div><div style="display:flex;justify-content:space-between;align-items:center"><span class="num">${pct(s.r.ach)}</span>${pill(s.r.status)}</div></div>`; }).join('')}</div>`) +
-    sec(2, 'Nyttevirkninger', 'Oppstår gevinstene, og har vi bidratt?', `<div class="table-wrap"><table><thead><tr><th>Nyttevirkning</th><th>Nytteeier</th><th class="r">Oppnåelse</th><th>Status</th><th>Bidragsvurdering</th></tr></thead><tbody>${bens.map((b) => { const r = rollup(db.indicators.filter((i) => i.benefit === b.id)); const c = latestContribution(b.id); return `<tr class="click" data-open-ben="${b.id}"><td><div class="cell-title">${ci('ben')}${esc(b.title)}</div><div class="cell-sub">${esc(SITES[b.site].short)}</div></td><td>${esc(b.owner || '–')}${b.unit ? `<div class="cell-sub">${esc(b.unit)}</div>` : ''}</td><td class="r num">${pct(r.ach)}</td><td>${pill(r.status)}</td><td>${evid(c ? c.grade : 'Ikke vurdert')}${c ? `<div class="cell-sub">${fmtDate(c.date)}</div>` : ''}</td></tr>`; }).join('')}</tbody></table></div>`) +
+    sec(1, 'Mål', 'Hvordan går det med effektmålene og målene vi bidrar til?', `<div class="goal-tiles">${goals.map((g) => { const s = goalStats(g); return `<div class="${ck(g.id)}-c" style="border-top:3px solid var(--c)"><div class="small muted">${esc(g.level === 'Effektmål' ? 'Effektmål · ' + SITES[g.site].short : g.level)}</div><b>${esc(g.title)}</b><div class="meter"><i style="width:${s.r.ach || 0}%"></i></div><div style="display:flex;justify-content:space-between;align-items:center"><span class="num">${pct(s.r.ach)}</span>${pill(s.r.status)}</div></div>`; }).join('')}</div>`) +
+    sec(2, 'Nytte- og kostnadsvirkninger', 'Oppstår gevinstene, holder kostnadene seg, og har vi bidratt?', `<div class="table-wrap"><table><thead><tr><th>Virkning</th><th>Nytteeier</th><th class="r">Oppnåelse</th><th>Status</th><th>Vurdering</th></tr></thead><tbody>${bens.slice().sort((x, y) => isCost(x) - isCost(y)).map((b) => { const r = rollup(db.indicators.filter((i) => i.benefit === b.id)); const c = latestContribution(b.id); return `<tr class="click" data-open-ben="${b.id}"><td><div class="cell-title">${ci(isCost(b) ? 'cost' : 'ben')}${esc(b.title)}</div><div class="cell-sub">${isCost(b) ? 'Kostnad · ' : ''}${esc(SITES[b.site].short)}</div></td><td>${esc(b.owner || '–')}${b.unit ? `<div class="cell-sub">${esc(b.unit)}</div>` : ''}</td><td class="r num">${pct(r.ach)}</td><td>${pill(r.status)}</td><td>${evid(c ? c.grade : 'Ikke vurdert')}${c ? `<div class="cell-sub">${fmtDate(c.date)}</div>` : ''}</td></tr>`; }).join('')}</tbody></table></div>`) +
     sec(3, 'Antakelser', 'Holder teorien vår?', asm.map((f) => `<div class="asm-item">${factorPill(f)}<div><div class="cell-title">${esc(f.title)}</div><div class="cell-sub">Pilen ${nodeRef(f.from)} → ${nodeRef(f.to)} · vurdert ${fmtDate(f.lastReviewed)}</div>${f.note ? `<div class="small">${esc(f.note)}</div>` : ''}</div></div>`).join('') || '<div class="empty">Alle antakelser holder.</div>') +
     sec(4, 'Risikoer og bivirkninger', 'Hva bekymrer oss?', risks.map((f) => `<div class="asm-item">${factorPill(f)}<div><div class="cell-title">${icon(FACTOR_KINDS[f.kind].icon, 'ti asm-c')}${esc(f.kind)}: ${esc(f.title)}</div><div class="cell-sub">Pilen ${nodeRef(f.from)} → ${nodeRef(f.to)}</div>${f.note ? `<div class="small">${esc(f.note)}</div>` : ''}</div></div>`).join('') || '<div class="empty">Ingen.</div>') +
-    sec(5, 'Hva må justeres?', 'Beslutninger fra siste bidragsvurdering', decisions.map((x) => `<div class="asm-item">${evid(x.c.grade)}<div><div class="cell-title">${esc(x.b.title)}</div><div>${esc(x.c.decision)}</div><div class="cell-sub">${fmtDate(x.c.date)} · ${esc(x.c.by)}</div></div></div>`).join('') || '<div class="empty">Ingen beslutninger registrert.</div>');
+    sec(5, 'Videreføre, justere eller avslutte?', 'Beslutninger fra siste vurdering eller evaluering', decisions.map((x) => `<div class="asm-item">${x.c.decisionType ? `<span class="pill ${{ Videreføre: 'ok', Justere: 'warn', Avslutte: 'crit' }[x.c.decisionType]}">${esc(x.c.decisionType)}</span>` : evid(x.c.grade)}<div><div class="cell-title">${esc(x.b.title)}</div><div>${esc(x.c.decision)}</div><div class="cell-sub">${esc(x.c.kind || 'Løpende vurdering')} · ${fmtDate(x.c.date)} · ${esc(x.c.by)} · bidragsstøtte ${esc((x.c.grade || '').toLowerCase())}</div></div></div>`).join('') || '<div class="empty">Ingen beslutninger registrert.</div>');
+}
+
+/* ------------------------------------------------------------------
+   DFØ: nyttestyringsfase, sjekkliste, nytterealiseringsplan and
+   nytteoversikt. Everything is generated from the lists, so the plan
+   is never out of date (DFØ: «planen puttes i en skuff»).
+------------------------------------------------------------------ */
+/** The checklist for the current site and scope. Each item knows what is missing and where to fix it. */
+function checklist() {
+  const pl = planOf(state.site);
+  const bens = scoped.benefits(); const inds = scoped.indicators(); const facs = scoped.factors();
+  const nyt = bens.filter((b) => !isCost(b));
+  const ems = db.goals.filter((g) => g.level === 'Effektmål' && inTargets(g));
+  const acts = scoped.elements().filter((e) => e.kind === 'lev' || e.kind === 'chg');
+  const evs = pl.evaluations || [];
+  const cons = db.contributions.filter((c) => bens.some((b) => b.id === c.benefit));
+  const lacking = (list, ok) => list.filter((x) => !ok(x)).map((x) => x.title);
+  const it = (phase, text, missing, fix, note = '') => ({ phase, text, missing, done: !missing.length, fix, note });
+  const evDone = (kind) => cons.some((c) => c.kind === kind) || evs.some((e) => e.kind === kind && e.status === 'Gjennomført');
+  return [
+    it(1, 'Problemet og tiltaket er beskrevet', pl.problem && pl.measure ? [] : ['Bakgrunn'], 'plan-edit'),
+    it(1, 'Tiltakseier er avklart', pl.owner ? [] : ['Tiltakseier'], 'plan-edit'),
+    it(1, 'Både nytte- og kostnadsvirkninger er beskrevet', [...(nyt.length ? [] : ['Nyttevirkninger']), ...(bens.some(isCost) ? [] : ['Kostnadsvirkninger'])], 'list:benefits'),
+    it(1, 'Det er beskrevet hvem som blir berørt', lacking(bens, (b) => (b.affected || []).length), 'list:benefits'),
+    it(1, 'Virkningene er koblet til mål', lacking(bens, (b) => goalsOf(b.id).length), 'list:benefits'),
+    it(2, 'Effektmålene er formulert', ems.length ? [] : ['Effektmål'], 'mal'),
+    it(2, 'Alle virkninger har nytteeier og nytteansvarlig', lacking(bens, (b) => b.owner && b.responsible), 'list:benefits'),
+    it(2, 'Alle virkninger har minst én indikator', lacking(bens, (b) => db.indicators.some((i) => i.benefit === b.id)), 'list:indicators'),
+    it(2, 'Alle indikatorer har nullpunktsmåling', lacking(inds, (i) => i.mtype === 'path' ? i.start != null && i.startDate : measurementsOf(i.id).length), 'list:indicators'),
+    it(2, 'Usikkerhet og risiko er vurdert', facs.some((f) => f.kind === 'Risiko' || f.kind === 'Antakelse') ? [] : ['Risikoer og antakelser'], 'list:factors'),
+    it(2, 'Aktiviteter som gjør det mulig å realisere nytten, er beskrevet', acts.length ? [] : [cap(lv('chg').plural)], 'list:chg'),
+    it(2, 'Ansvar for målinger og evalueringer er avklart', [...(pl.measureResp ? [] : ['Ansvarlig for målinger']), ...(pl.evalResp ? [] : ['Ansvarlig for evalueringer'])], 'plan-edit'),
+    it(2, 'Evalueringene er planlagt', evs.length ? [] : ['Underveis- og etterevaluering'], 'eval-new'),
+    it(3, 'Målingene gjøres etter planen', inds.filter((i) => nextDue(i) < TODAY).map((i) => i.title), 'oppfolging'),
+    it(3, 'Antakelser og risikoer er vurdert siste 6 måneder', facs.filter((f) => monthsBetween(f.lastReviewed, TODAY) > 6).map((f) => f.title), 'oppfolging'),
+    it(3, 'Underveisevaluering er gjennomført', evDone('Underveisevaluering') ? [] : ['Underveisevaluering'], 'eval-new', 'Bør gjøres relativt tidlig etter at tiltaket er iverksatt.'),
+    it(3, 'Nytterealiseringsplanen er oppdatert', [], null, 'Planen lages fra dataene og er alltid oppdatert.'),
+    it(4, 'Ansvarlig for etterevalueringen er avklart', evs.some((e) => e.kind === 'Etterevaluering' && e.by) ? [] : ['Etterevaluering'], 'eval-new'),
+    it(4, 'Etterevalueringen er gjennomført', evDone('Etterevaluering') ? [] : ['Etterevaluering'], 'eval-new'),
+    it(4, 'Videre oppfølging er avklart, og nytten er overført til linjen', lacking(nyt, (b) => ['Realisert', 'Overført til linjen'].includes(b.status)), 'list:benefits')
+  ];
+}
+function checklistScore() {
+  const ph = dfoPhase(SITES[state.site].phase).n; const items = checklist(); const due = items.filter((x) => x.phase <= ph);
+  return { ph, items, due, done: due.filter((x) => x.done).length, next: due.find((x) => !x.done) };
+}
+const fixBtn = (x, label = 'Fiks') => x.fix ? `<button type="button" class="btn sm write" data-fix="${x.fix}">${label}</button>` : '';
+function phaseSteps(ph) {
+  return `<ol class="phases">${DFO_PHASES.map((p) => `<li class="${p.n < ph ? 'past' : p.n === ph ? 'now' : ''}"><b>${p.n}</b><span>${esc(p.name)}</span><small>${esc(p.pv.join(' og '))}</small></li>`).join('')}</ol>`;
+}
+/** Phase and checklist summary at the top of Oversikt for a project or program. */
+function phaseStrip() {
+  if (state.level === 'hub') return '';
+  const c = checklistScore(); const s = SITES[state.site];
+  return `<section class="card phase-strip"><div><div class="small muted">Nyttestyringsfase etter DFØ · prosjektfase «${esc(s.phase)}»</div>${phaseSteps(c.ph)}</div>
+    <div class="ps-check"><div class="small muted">Sjekkliste til og med fase ${c.ph}</div><div class="ps-num"><b>${c.done}</b> av ${c.due.length} på plass</div><div class="meter"><i style="width:${Math.round(c.done / c.due.length * 100)}%"></i></div>
+      ${c.next ? `<div class="small" style="margin-top:6px">Neste: <b>${esc(c.next.text)}</b></div>` : '<div class="small" style="margin-top:6px">Alt er på plass for denne fasen.</div>'}
+      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">${c.next ? fixBtn(c.next, 'Fiks nå') : ''}<button type="button" class="btn sm" data-nav="sjekkliste">Se sjekklisten</button></div></div></section>`;
+}
+function checklistTab() {
+  const c = checklistScore();
+  return { lead: `DFØs sjekklister for hver fase, sjekket mot dataene. Oppgaver fra tidligere faser som ikke er fullført, er etterslep og må håndteres nå.`, actions: '',
+    html: `<section class="card">${phaseSteps(c.ph)}<div class="ps-num" style="margin:12px 0 6px"><b>${c.done}</b> av ${c.due.length} på plass til og med fase ${c.ph}</div><div class="meter"><i style="width:${Math.round(c.done / c.due.length * 100)}%"></i></div></section>` +
+      DFO_PHASES.map((p) => `<section class="card rep-sec ${p.n > c.ph ? 'later' : ''}"><div class="card-head"><h2><span class="chip">${p.n}</span>${esc(p.name)}</h2>${p.n === c.ph ? '<span class="chip brand">Nå</span>' : p.n > c.ph ? '<span class="q">Senere</span>' : ''}</div>
+        ${c.items.filter((x) => x.phase === p.n).map((x) => `<div class="ck ${x.done ? 'done' : p.n <= c.ph ? 'open' : ''}"><span class="ck-box">${icon(x.done ? 'ok' : 'none')}</span><div style="min-width:0"><div>${esc(x.text)}${!x.done && p.n < c.ph ? ' <span class="chip">Etterslep</span>' : ''}</div>${x.note ? `<div class="cell-sub">${esc(x.note)}</div>` : ''}${!x.done && x.missing.length ? `<div class="cell-sub">Mangler: ${x.missing.slice(0, 3).map(esc).join(', ')}${x.missing.length > 3 ? ` og ${x.missing.length - 3} til` : ''}</div>` : ''}</div>${!x.done && p.n <= c.ph ? fixBtn(x) : ''}</div>`).join('')}</section>`).join('') };
+}
+const unique = (arr) => [...new Set(arr.filter(Boolean))];
+const notSet = '<span class="pill warn">Ikke avklart</span>';
+function planTab() {
+  const s = SITES[state.site]; const pl = planOf(s.id);
+  const bens = scoped.benefits(); const inds = scoped.indicators(); const facs = scoped.factors();
+  const ems = unique(bens.flatMap((b) => goalChain(b.id).em)).map((x) => byId('goals', x));
+  const ownEms = db.goals.filter((g) => g.level === 'Effektmål' && inScope(g));
+  const emList = unique([...ownEms, ...ems]);
+  const tops = unique(emList.flatMap((g) => goalsOf(g.id)));
+  const acts = scoped.elements().filter((e) => e.kind === 'lev' || e.kind === 'chg');
+  const sec = (n, title, body) => `<section class="card rep-sec plan-sec"><div class="card-head"><h2><span class="chip">${n}</span>${title}</h2></div>${body}</section>`;
+  const txt = (v) => v ? esc(v) : notSet;
+  const unintended = facs.filter((f) => f.kind === 'Utilsiktet virkning' && f.status === 'Observert');
+  const s1 = `<dl class="facts plan-facts"><dt>Problemet</dt><dd>${txt(pl.problem)}</dd><dt>Tiltaket</dt><dd>${txt(pl.measure)}</dd>
+    <dt>Effektmål</dt><dd>${emList.map((g) => cchip('em', g.title)).join(' ') || notSet}</dd><dt>Samfunnsmål</dt><dd>${tops.map((g) => cchip('goal', nodeTitle(g))).join(' ') || '–'}</dd>
+    <dt>Virkninger</dt><dd>${bens.filter((b) => !isCost(b)).length} nyttevirkninger og ${bens.filter(isCost).length} kostnadsvirkninger. <button type="button" class="btn sm subtle" data-plantab="nytteoversikt">Se nytteoversikten</button></dd>
+    ${unintended.length ? `<dt>Utilsiktede virkninger</dt><dd>${unintended.map((f) => `${esc(f.title)} (${esc((f.polarity || '').toLowerCase())})`).join('<br>')}</dd>` : ''}
+    <dt>Lønnsomhet og usikkerhet</dt><dd>${txt(pl.profitability)}</dd><dt>Ressurser til oppfølging</dt><dd>${txt(pl.resources)}</dd></dl>`;
+  const people = (list) => list.length ? list.map(esc).join(', ') : notSet;
+  const roles = [
+    ['Tiltakseier', s.kind === 'program' ? 'Programeier' : 'Prosjekteier', pl.owner ? esc(pl.owner) : notSet, 'Eier tiltaket og virkningene. Sikrer forankring i ledelsen.'],
+    ['Tiltakets leder', s.kind === 'program' ? 'Programleder' : 'Prosjektleder', esc(s.manager), 'Planer for gjennomføring og oppfølging. Følger med på nytten, ikke bare tid, kostnad og kvalitet.'],
+    ['Nytteansvarlig', 'DFØ', people(unique(bens.map((b) => b.responsible))), 'Operativt ansvar for nyttestyringen, per virkning.'],
+    ['Nytteeier', 'Prosjektveiviseren', people(unique(bens.map((b) => b.owner + (b.unit ? ' (' + b.unit + ')' : '')))), 'Leder i linjen som overtar virkningene når prosjektet avsluttes.'],
+    ['Ansvarlig for løpende målinger', '', pl.measureResp ? esc(pl.measureResp) : notSet, 'Henter inn data og registrerer målinger.'],
+    ['Ansvarlig for evalueringer', '', pl.evalResp ? esc(pl.evalResp) : notSet, 'Bør ikke være de som har gjennomført tiltaket.']
+  ];
+  const s2 = `<div class="table-wrap"><table><thead><tr><th>Rolle</th><th>Navn</th><th>Ansvar</th></tr></thead><tbody>${roles.map((r) => `<tr><td><b>${r[0]}</b>${r[1] ? `<div class="cell-sub">${r[1]}</div>` : ''}</td><td>${r[2]}</td><td class="small">${r[3]}</td></tr>`).join('')}</tbody></table></div>`;
+  const groups = unique(bens.flatMap((b) => b.affected || []));
+  const s3 = `<div class="table-wrap"><table><thead><tr><th>Hvem blir berørt?</th><th>Virkninger</th></tr></thead><tbody>${groups.map((g) => `<tr><td>${ci('grp')}${esc(g)}</td><td>${bens.filter((b) => (b.affected || []).includes(g)).map((b) => nodeRef(b.id)).join('<br>')}</td></tr>`).join('') || '<tr><td colspan="2" class="empty">Ikke beskrevet.</td></tr>'}</tbody></table></div>
+    <dl class="facts plan-facts" style="margin-top:12px"><dt>Slik involverer vi dem</dt><dd>${txt(pl.involvement)}</dd><dt>Interessentanalyse</dt><dd class="muted">Ligger i prosjektets interessentregister.</dd></dl>`;
+  const indRow = (i) => { const st = indicatorState(i); return `<tr class="click" data-open-ind="${i.id}"><td>${ci('ind')}${esc(i.title)}<div class="cell-sub">${esc(i.role)} · ${MTYPES[i.mtype]}</div></td><td class="num">${i.mtype === 'path' ? fmtNum(i.start, i.dec) + ' ' + esc(i.unit) : '–'}</td><td class="num">${targetText(i)}</td><td>${pill(st.status)}</td></tr>`; };
+  const s4rows = [...emList.map((g) => [g.id, db.indicators.filter((i) => i.node === g.id)]), ...bens.map((b) => [b.id, db.indicators.filter((i) => i.benefit === b.id)])];
+  const s4 = `<div class="table-wrap"><table><thead><tr><th>Indikator</th><th>Nullpunkt</th><th>Mål eller terskel</th><th>Status</th></tr></thead><tbody>${s4rows.map(([id, list]) => `<tr class="grp-row"><td colspan="4">${nodeRef(id)}</td></tr>` + (list.map(indRow).join('') || `<tr><td colspan="4"><span class="pill ${kindOf(id) === 'em' ? 'none' : 'warn'}">${kindOf(id) === 'em' ? 'Ingen egen indikator. Følges gjennom virkningene.' : 'Mangler indikator'}</span></td></tr>`)).join('')}</tbody></table></div>`;
+  const s5 = `<dl class="facts plan-facts" style="margin-bottom:12px"><dt>Ansvarlig</dt><dd>${txt(pl.measureResp)}</dd></dl><div class="table-wrap"><table><thead><tr><th>Indikator</th><th>Datakilde og metode</th><th>Frekvens</th><th>Nullpunktsmåling</th><th>Neste måling</th></tr></thead><tbody>${inds.map((i) => `<tr class="click" data-open-ind="${i.id}"><td>${ci('ind')}${esc(i.title)}</td><td>${esc(i.method || '–')}</td><td>${esc(i.frequency)}</td><td class="num">${i.mtype === 'path' ? fmtDate(i.startDate) : measurementsOf(i.id)[0] ? fmtDate(measurementsOf(i.id)[0].date) : '<span class="pill warn">Mangler</span>'}</td><td class="num">${nextDue(i) < TODAY ? `<span class="pill crit">Forfalt ${fmtDate(nextDue(i))}</span>` : fmtDate(nextDue(i))}</td></tr>`).join('') || '<tr><td colspan="5" class="empty">Ingen indikatorer.</td></tr>'}</tbody></table></div>`;
+  const evs = (pl.evaluations || []).slice().sort((a, b) => a.when.localeCompare(b.when));
+  const doneC = db.contributions.filter((c) => bens.some((b) => b.id === c.benefit) && c.kind && c.kind !== 'Løpende vurdering');
+  const s6 = `<dl class="facts plan-facts" style="margin-bottom:12px"><dt>Ansvarlig</dt><dd>${txt(pl.evalResp)}</dd></dl><div class="table-wrap"><table><thead><tr><th>Evaluering</th><th>Når</th><th>Hvem</th><th>Metode</th><th>Status</th></tr></thead><tbody>${evs.map((e) => `<tr><td>${esc(e.kind)}</td><td class="num">${fmtMonth(e.when + '-01')}</td><td>${esc(e.by || '–')}</td><td>${esc(e.method || '–')}</td><td>${pill(e.status === 'Gjennomført' ? 'ok' : 'none', e.status)}</td></tr>`).join('') || `<tr><td colspan="5"><span class="pill warn">Ingen evalueringer er planlagt</span></td></tr>`}</tbody></table></div>
+    <div style="margin-top:8px">${canWrite() ? `<button type="button" class="btn sm write" data-eval-new="1">${icon('plus')}Planlegg evaluering</button>` : ''}</div>
+    ${doneC.length ? `<div class="small" style="margin-top:12px;font-weight:600">Gjennomførte evalueringer av virkningene</div>${doneC.map((c) => `<div class="asm-item">${evid(c.grade)}<div><div class="cell-title">${esc(c.kind)}: ${esc(nodeTitle(c.benefit))}</div><div class="cell-sub">${fmtDate(c.date)} · ${esc(c.by)}${c.decisionType ? ' · ' + esc(c.decisionType) : ''}</div></div></div>`).join('')}` : ''}`;
+  const risky = facs.filter((f) => f.kind !== 'Utilsiktet virkning').sort((a, b) => SEV[factorStatus(b)] - SEV[factorStatus(a)]);
+  const s7 = risky.map((f) => `<div class="asm-item">${factorPill(f)}<div><div class="cell-title">${icon(FACTOR_KINDS[f.kind].icon, 'ti asm-c')}${esc(f.kind)}: ${esc(f.title)}</div><div class="cell-sub">Pilen ${nodeRef(f.from)} → ${nodeRef(f.to)} · vurdert ${fmtDate(f.lastReviewed)}</div>${f.note ? `<div class="small">${esc(f.note)}</div>` : ''}</div></div>`).join('') || `<span class="pill warn">Ingen risikoer eller antakelser er registrert</span>`;
+  const s8 = `<div class="table-wrap"><table><thead><tr><th>Aktivitet</th><th>Gjør mulig</th><th>Ansvarlig</th><th>Status</th></tr></thead><tbody>${acts.map((e) => `<tr class="click" data-edit="${e.kind}:${e.id}"><td>${ci(e.kind)}${esc(e.title)}<div class="cell-sub">${esc(lv(e.kind).name)}</div></td><td>${closure(e.id, 'down').filter((x) => kindOf(x) === 'ben').map(nodeRef).join('<br>') || '–'}</td><td>${esc(e.responsible || '–')}</td><td>${esc(e.status || '–')}</td></tr>`).join('') || '<tr><td colspan="4"><span class="pill warn">Ingen aktiviteter er beskrevet</span></td></tr>'}</tbody></table></div>`;
+  return { lead: `Lages fra dataene i Prosjektportalen per ${fmtDate(TODAY)}. Når en virkning, indikator eller risiko endres, er planen oppdatert. De åtte punktene følger DFØs mal.`,
+    actions: `${canWrite() ? `<button type="button" class="btn write" data-plan-edit="1">${icon('edit')}Rediger bakgrunn og roller</button>` : ''}<button type="button" class="btn" onclick="window.print()">${icon('print')}Skriv ut eller lagre som PDF</button>`,
+    html: sec(1, 'Bakgrunnsinformasjon og ressursbehov', s1) + sec(2, 'Roller, ansvar og myndighet', s2) + sec(3, 'Involvere målgruppen og interessentene', s3) + sec(4, 'Indikatorer for mål og virkninger', s4) +
+      sec(5, 'Løpende målinger', s5) + sec(6, 'Evaluere tiltaket', s6) + sec(7, 'Håndtere usikkerhet (risiko)', s7) + sec(8, 'Aktiviteter som gjør det mulig å realisere nytten', s8) };
+}
+const DFO_ROWS = [['Nytte', 'Prissatt', 'Prissatte nyttevirkninger'], ['Nytte', 'Ikke prissatt', 'Ikke-prissatte nyttevirkninger'], ['Kostnad', 'Prissatt', 'Prissatte kostnadsvirkninger'], ['Kostnad', 'Ikke prissatt', 'Ikke-prissatte kostnadsvirkninger']];
+const dfoGroup = (b, row) => (b.effect || 'Nytte') === row[0] && (b.priced || 'Ikke prissatt') === row[1];
+function overviewTab() {
+  const s = SITES[state.site]; const pl = planOf(s.id); const bens = scoped.benefits();
+  const ems = unique(bens.flatMap((b) => goalChain(b.id).em)); const tops = unique(ems.flatMap((g) => goalsOf(g)));
+  const body = DFO_ROWS.map((row) => { const list = bens.filter((b) => dfoGroup(b, row)); if (!list.length) return '';
+    return list.map((b, n) => `<tr>${n === 0 ? `<th scope="rowgroup" rowspan="${list.length}" class="dfo-grp">${esc(row[2])}</th>` : ''}<td><button type="button" class="btn subtle" style="padding:0;min-height:0;white-space:normal;text-align:left" data-open-ben="${b.id}">${ci(isCost(b) ? 'cost' : 'ben')}${esc(b.title)}</button>${b.value ? ` <span class="muted">(${esc(b.value)})</span>` : ''}<div class="cell-sub">${esc(SITES[b.site].short)}</div></td>
+      <td>${db.indicators.filter((i) => i.benefit === b.id).map((i) => `<div>${esc(i.title)}</div>`).join('') || '<span class="pill warn">Mangler</span>'}</td><td>${esc((b.affected || []).join(', ')) || '<span class="pill warn">Mangler</span>'}</td><td class="num">${b.realization ? fmtMonth(b.realization + '-01') : '–'}</td></tr>`).join(''); }).join('');
+  return { lead: 'Samlet oversikt over nytte- og kostnadsvirkningene, i samme form som DFØs mal. Brukes som grunnlag for nytterealiseringsplanen.',
+    actions: `<button type="button" class="btn" data-copy-csv="nytteoversikt">${icon('copy')}Kopier som CSV</button>`,
+    html: `<section class="card"><dl class="facts plan-facts"><dt>Problemet</dt><dd>${txt2(pl.problem)}</dd><dt>Målene</dt><dd>${ems.map((g) => cchip('em', nodeTitle(g))).join(' ')} ${tops.map((g) => cchip('goal', nodeTitle(g))).join(' ')}</dd><dt>Tiltaket</dt><dd>${txt2(pl.measure)}</dd><dt>Lønnsomhet og usikkerhet</dt><dd>${txt2(pl.profitability)}</dd></dl></section>
+      <section class="card" style="margin-top:16px"><div class="table-wrap"><table class="dfo"><thead><tr><th>Virkninger</th><th>Nytte- og kostnadsvirkninger</th><th>Indikatorer på virkninger</th><th>Hvem blir berørt?</th><th>Når oppstår virkningen?</th></tr></thead><tbody>${body || '<tr><td colspan="5" class="empty">Ingen virkninger i dette utvalget.</td></tr>'}</tbody></table></div></section>` };
+}
+const txt2 = (v) => v ? esc(v) : notSet;
+function viewPlan() {
+  const tab = PLAN_TABS.some((t) => t[0] === state.param) ? state.param : 'plan';
+  const t = tab === 'plan' ? planTab() : tab === 'nytteoversikt' ? overviewTab() : checklistTab();
+  const tabs = `<div class="tabs" role="tablist" aria-label="Visning">${PLAN_TABS.map(([k, label, ic]) => `<button type="button" role="tab" data-plantab="${k}" aria-selected="${k === tab}">${icon(ic, 'ti')}${label}</button>`).join('')}</div>`;
+  const s = SITES[state.site];
+  return pageHead(PLAN_TABS.find((x) => x[0] === tab)[1].replace(' (DFØ)', ''), `${esc(s.title)} · ${esc(scopeLabel())}. ${t.lead}`, t.actions, `<span class="chip">Fase ${dfoPhase(s.phase).n}: ${esc(dfoPhase(s.phase).name)}</span>`) + tabs + t.html;
+}
+function openPlanEdit() {
+  const s = SITES[state.site]; const pl = planOf(s.id);
+  const F = [['owner', 'Tiltakseier', 'text', s.kind === 'program' ? 'Programeier' : 'Prosjekteier'], ['problem', 'Problemet tiltaket skal løse', 'textarea'], ['measure', 'Tiltaket', 'textarea', 'Hva skal gjøres, og når iverksettes det?'], ['profitability', 'Samfunnsøkonomisk lønnsomhet og usikkerhet', 'textarea', 'Kort, med henvisning til utredningen. Appen regner ikke ut lønnsomhet.'], ['resources', 'Ressurser til oppfølging', 'textarea'], ['involvement', 'Slik involverer vi målgruppen og interessentene', 'textarea'], ['measureResp', 'Ansvarlig for løpende målinger', 'text'], ['evalResp', 'Ansvarlig for evalueringer', 'text', 'DFØ: bør ikke være de som har gjennomført tiltaket.']];
+  openDrawer('Bakgrunn og roller', `${esc(s.title)}. Det som ikke kan hentes fra listene. Resten av nytterealiseringsplanen lages automatisk.`,
+    `<input type="hidden" name="_plan" value="${s.id}">` + F.map(([key, label, type, hint]) => fieldHtml({ key, label, type, hint }, pl[key])).join(''),
+    `<button type="submit" class="btn primary">Lagre</button><button type="button" class="btn" data-close>Avbryt</button>${saveNote}`);
+}
+function submitPlan(form) {
+  const fd = new FormData(form); const pl = planOf(String(fd.get('_plan')));
+  ['owner', 'problem', 'measure', 'profitability', 'resources', 'involvement', 'measureResp', 'evalResp'].forEach((k) => { pl[k] = String(fd.get(k) || ''); });
+  saveDb(); closeDrawer(); render(); toast('Lagret. Nytterealiseringsplanen er oppdatert.');
+}
+function openEvalNew() {
+  const s = SITES[state.site]; const pl = planOf(s.id);
+  openDrawer('Planlegg evaluering', `${esc(s.title)}. Jo større og mer usikre virkningene er, desto hyppigere og grundigere bør tiltaket evalueres.`,
+    `<input type="hidden" name="_eval" value="${s.id}">` + fieldHtml({ key: 'kind', label: 'Type', type: 'select', options: EVAL_KINDS.slice(1) }, 'Underveisevaluering') +
+    `<div class="row2">${fieldHtml({ key: 'when', label: 'Når', type: 'month' }, '2027-06')}${fieldHtml({ key: 'status', label: 'Status', type: 'select', options: ['Planlagt', 'Gjennomført'] }, 'Planlagt')}</div>` +
+    fieldHtml({ key: 'by', label: 'Hvem evaluerer', hint: 'For eksempel internrevisjonen eller et eksternt FoU-miljø.' }, pl.evalResp) + fieldHtml({ key: 'method', label: 'Data og metode' }, ''),
+    `<button type="submit" class="btn primary">Lagre</button><button type="button" class="btn" data-close>Avbryt</button>${saveNote}`);
+}
+function submitEval(form) {
+  const fd = new FormData(form); const pl = planOf(String(fd.get('_eval'))); const g = (k) => String(fd.get(k) || '');
+  pl.evaluations = pl.evaluations || [];
+  pl.evaluations.push({ id: uid('V'), kind: g('kind'), when: g('when') || '2027-06', by: g('by'), status: g('status'), method: g('method') });
+  if (!pl.evalResp && g('by')) pl.evalResp = g('by');
+  saveDb(); closeDrawer(); render(); toast('Evalueringen er lagt inn i nytterealiseringsplanen.');
+}
+function runFix(fix) {
+  if (fix === 'plan-edit') return openPlanEdit();
+  if (fix === 'eval-new') return openEvalNew();
+  if (fix.startsWith('list:')) { state.regTab = fix.slice(5); return go('nyttekart', 'liste'); }
+  return go(fix);
 }
 
 /* ------------------------------------------------------------------
@@ -1699,14 +2077,15 @@ function viewReport() {
 ------------------------------------------------------------------ */
 function viewSettings() {
   const st = db.settings;
-  const chainMini = (p) => `<div class="chainmini">${LEVEL_ORDER.filter((k) => p.levels[k].active).map((k) => `<span class="chip cc ${k}-c">${icon(CONCEPT[k].icon)}${esc(p.levels[k].name)}</span><span>→</span>`).join('')}<span class="chip cc ben-c">${icon('ben')}Nyttevirkning</span><span>→</span><span class="chip cc goal-c">${icon('target')}Strategisk mål</span></div>`;
+  const chainMini = (p) => { const lvls = LEVEL_ORDER.filter((k) => p.levels[k].active); const c = (k, t) => `<span class="chip cc ${k}-c">${icon(CONCEPT[k].icon)}${esc(t)}</span><span>→</span>`;
+    return `<div class="chainmini">${lvls.length ? lvls.map((k) => c(k, p.levels[k].name)).join('') : c('tiltak', 'Tiltak') + c('grp', 'Hvem blir berørt?')}${c('ben', 'Nytte- og kostnadsvirkning')}${c('em', 'Effektmål')}<span class="chip cc goal-c">${icon('target')}Samfunnsmål</span></div>`; };
   return pageHead('Innstillinger', 'Virksomheten bestemmer hvor mange ledd kjeden skal ha og hva de heter. Endringen gjelder alle flater på hub, program og prosjekt. Data i nivåer som skrus av, slettes ikke, og kartet slår dem sammen.', '', `<span class="chip">Kun på huben</span>`) +
     `<section class="card"><div class="card-head"><h2>Kjedemodell</h2></div><div class="preset">${Object.entries(PRESETS).map(([key, p]) => `<button type="button" data-preset="${key}" aria-pressed="${st.preset === key}"><b>${esc(p.label)}</b><span class="muted small">${esc(p.desc)}</span>${chainMini(p)}</button>`).join('')}</div></section>
-    <section class="card" style="margin-top:16px"><div class="card-head"><h2>Nivåer under nyttevirkningen</h2><span class="muted">Navnene vises overalt i appen</span></div>
+    <section class="card" style="margin-top:16px"><div class="card-head"><h2>Nivåer før virkningen</h2><span class="muted">Navnene vises overalt i appen. Når ingen nivåer er i bruk, følger kartet DFØ og starter med tiltaket og hvem som blir berørt. Det midterste nivået brukes da til nødvendige aktiviteter i lister og i nytterealiseringsplanen.</span></div>
       <form id="settings-form"><div class="table-wrap"><table><thead><tr><th>I bruk</th><th>Navn</th><th>Flertall</th><th>Hva det er</th></tr></thead><tbody>
       ${LEVEL_ORDER.map((k) => `<tr><td><input type="checkbox" id="lv-a-${k}" name="a-${k}" ${lv(k).active ? 'checked' : ''} ${canWrite() ? '' : 'disabled'}></td><td><input class="input" id="lv-n-${k}" name="n-${k}" value="${esc(lv(k).name)}"></td><td><input class="input" id="lv-p-${k}" name="p-${k}" value="${esc(lv(k).plural)}"></td><td class="small muted">${esc(LEVEL_DEF[k])}</td></tr>`).join('')}
       </tbody></table></div>
-      <div class="row2" style="margin-top:12px;max-width:520px">${fieldHtml({ key: 'tolerance', label: 'Toleranse for «I rute» (%)', type: 'number', hint: 'Avvik fra målbanen eller terskelen som fortsatt regnes som i rute. «Følg med» går til det dobbelte.' }, st.tolerance)}</div>
+      <div class="row2" style="margin-top:12px;max-width:720px">${fieldHtml({ key: 'tolerance', label: 'Toleranse for «I rute» (%)', type: 'number', hint: 'Avvik fra målbanen eller terskelen som fortsatt regnes som i rute. «Følg med» går til det dobbelte.' }, st.tolerance)}${fieldHtml({ key: 'groups', label: 'Hvem blir berørt? (én per linje)', type: 'textarea', hint: 'Valgene på hver virkning, og radene i kolonnen «Hvem blir berørt?» i nyttekartet.' }, (st.groups || []).join('\n'))}</div>
       <div style="margin-top:12px;display:flex;gap:8px"><button type="submit" class="btn primary write">Lagre innstillinger</button><span class="small muted" style="align-self:center">Lagres i listen «Nyttestyring – kjedenivåer» på huben.</span></div></form>
     </section>`;
 }
@@ -1797,7 +2176,8 @@ function leadOptions(k, selfId) {
   return [...els, ...bens].sort((a, b) => RANK[kindOf(a.id)] - RANK[kindOf(b.id)]).map((x) => [x.id, `${ci(kindOf(x.id))}${esc(x.title)} <span class="muted">(${esc(SITES[x.site].short)})</span>`]);
 }
 function formFields(ent, item) {
-  const goalsOpt = db.goals.map((g) => [g.id, `${ci('goal')}${esc(g.title)}`]);
+  const goalsOpt = db.goals.filter((g) => g.level !== 'Effektmål' || state.level === 'hub' || inTargets(g)).sort((a, b) => (b.level === 'Effektmål') - (a.level === 'Effektmål'))
+    .map((g) => [g.id, `${ci(ck(g.id))}${esc(g.title)}${g.level === 'Effektmål' ? ` <span class="muted">(effektmål, ${esc(SITES[g.site].short)})</span>` : ''}`]);
   if (LEVEL_ORDER.includes(ent)) {
     return [{ key: 'title', label: cap(lv(ent).name), req: true, hint: esc(DEF_EXAMPLE[ent]) }, { key: 'site', label: 'Eier', type: 'owner' },
       ...(ent === 'chg' ? [{ key: 'type', label: 'Type', type: 'select', options: ['Prosess', 'Organisasjon', 'Kompetanse', 'Teknologi', 'Kultur'] }] : []),
@@ -1805,16 +2185,23 @@ function formFields(ent, item) {
       { key: '_leads', label: 'Fører til', type: 'multi', options: leadOptions(ent, item && item.id), hint: state.level === 'project' ? 'Du kan også peke inn i programmets kjede.' : '' }];
   }
   switch (ent) {
-    case 'goals': return [{ key: 'title', label: 'Strategisk mål', req: true, hint: 'Det virksomheten vil oppnå, for eksempel «Effektiv ressursbruk»' }, { key: 'level', label: 'Nivå', type: 'select', options: ['Samfunnsmål', 'Hovedmål', 'Virksomhetsmål'] }, { key: 'parent', label: 'Overordnet mål', type: 'select', options: [['', '(ingen)'], ...db.goals.filter((g) => !item || g.id !== item.id).map((g) => [g.id, g.title])] }, { key: 'owner', label: 'Eier' }, { key: 'period', label: 'Periode', hint: 'For eksempel 2024–2028' }, { key: 'desc', label: 'Beskrivelse', type: 'textarea' }];
-    case 'benefits': return [{ key: 'title', label: 'Nyttevirkning', req: true, hint: 'Gevinsten, formulert som en forbedring: «Kortere saksbehandlingstid»' }, ...(item && item.catalog ? [] : [{ key: 'site', label: 'Eier', type: 'owner' }]), { key: 'type', label: 'Type', type: 'select', options: ['Direkte', 'Indirekte', 'Kvalitativ'] }, { key: 'status', label: 'Status', type: 'select', options: ['Foreslått', 'Godkjent', 'Under realisering', 'Realisert', 'Overført til linjen', 'Avbrutt'] }, { key: 'owner', label: 'Nytteeier', hint: 'Overordnet ansvar for at nytten realiseres' }, { key: 'unit', label: 'Eierenhet i linjen', hint: 'En eller flere enheter, for eksempel «Hjemmetjenesten + Tildelingskontoret». Overtar når prosjektet avsluttes.' }, { key: 'responsible', label: 'Nytteansvarlig' }, { key: 'realization', label: 'Realiseres', type: 'month' }, { key: 'expected', label: 'Forventet bidrag', type: 'textarea', hint: 'Mal: «Vi skal styrke X, slik at Y blir mer sannsynlig, forutsatt Z.»' }, { key: 'evalLevel', label: 'Nivå for bidragsvurdering', type: 'select', options: [['', '(ikke satt)'], ['Minimal', 'Minimal: kjent og velprøvd tiltak'], ['Direkte', 'Direkte innflytelse: normalnivået'], ['Indirekte', 'Indirekte innflytelse: strategiske gevinster']] }, { key: '_goals', label: 'Bidrar til strategiske mål', type: 'multi', options: goalsOpt }, { key: 'desc', label: 'Beskrivelse', type: 'textarea' }];
+    case 'goals': {
+      if (item && item.level === 'Effektmål') return [{ key: 'title', label: 'Effektmål', req: true, hint: 'Ønsket situasjon for målgruppen, for eksempel «Rask og forutsigbar byggesaksbehandling». Tallfest med en indikator.' }, { key: 'level', label: 'Nivå', type: 'select', options: ['Effektmål'] }, { key: 'site', label: 'Tiltak', type: 'owner' }, { key: '_goals', label: 'Bidrar til samfunnsmål eller strategisk mål', type: 'multi', options: db.goals.filter((g) => g.level !== 'Effektmål').map((g) => [g.id, `${ci('goal')}${esc(g.title)}`]) }, { key: 'owner', label: 'Eier' }, { key: 'period', label: 'Periode', hint: 'For eksempel 2025–2028' }, { key: 'desc', label: 'Beskrivelse', type: 'textarea' }];
+      return [{ key: 'title', label: 'Mål', req: true, hint: 'Det virksomheten vil oppnå, for eksempel «Effektiv ressursbruk»' }, { key: 'level', label: 'Nivå', type: 'select', options: ['Samfunnsmål', 'Hovedmål', 'Virksomhetsmål'] }, { key: 'parent', label: 'Overordnet mål', type: 'select', options: [['', '(ingen)'], ...db.goals.filter((g) => (!item || g.id !== item.id) && g.level !== 'Effektmål').map((g) => [g.id, g.title])] }, { key: 'owner', label: 'Eier' }, { key: 'period', label: 'Periode', hint: 'For eksempel 2024–2028' }, { key: 'desc', label: 'Beskrivelse', type: 'textarea' }];
+    }
+    case 'benefits': return [{ key: 'effect', label: 'Nytte eller kostnad', type: 'select', options: [['Nytte', 'Nyttevirkning (gevinst)'], ['Kostnad', 'Kostnadsvirkning']], hint: 'DFØ: ta med både nytte- og kostnadsvirkninger, også de utilsiktede.' }, { key: 'title', label: 'Virkning', req: true, hint: 'Formulert som en forbedring eller en kostnad: «Kortere saksbehandlingstid», «Drift av responssenteret»' }, ...(item && item.catalog ? [] : [{ key: 'site', label: 'Eier', type: 'owner' }]),
+      { key: '_r3', type: 'row', fields: [{ key: 'priced', label: 'Prissatt?', type: 'select', options: PRICED }, { key: 'value', label: 'Anslått verdi', hint: 'For eksempel «3,2 mill. kr/år»' }] },
+      { key: 'affected', label: 'Hvem blir berørt?', type: 'multi', options: (db.settings.groups || []).map((g) => [g, esc(g)]), hint: 'Målgruppen og andre som merker virkningen. Listen vedlikeholdes på huben.' },
+      { key: 'type', label: 'Type', type: 'select', options: ['Direkte', 'Indirekte', 'Kvalitativ'] }, { key: 'status', label: 'Status', type: 'select', options: ['Foreslått', 'Godkjent', 'Under realisering', 'Realisert', 'Overført til linjen', 'Avbrutt'] }, { key: 'owner', label: 'Nytteeier', hint: 'Overordnet ansvar for at nytten realiseres' }, { key: 'unit', label: 'Eierenhet i linjen', hint: 'En eller flere enheter, for eksempel «Hjemmetjenesten + Tildelingskontoret». Overtar når prosjektet avsluttes.' }, { key: 'responsible', label: 'Nytteansvarlig', hint: 'Operativt ansvar for nyttestyringen (DFØ). Ofte en leder i linjen.' }, { key: 'realization', label: 'Når oppstår virkningen?', type: 'month' }, { key: 'expected', label: 'Forventet bidrag', type: 'textarea', hint: 'Mal: «Vi skal styrke X, slik at Y blir mer sannsynlig, forutsatt Z.»' }, { key: 'evalLevel', label: 'Nivå for bidragsvurdering', type: 'select', options: [['', '(ikke satt)'], ['Minimal', 'Minimal: kjent og velprøvd tiltak'], ['Direkte', 'Direkte innflytelse: normalnivået'], ['Indirekte', 'Indirekte innflytelse: strategiske gevinster']] }, { key: '_goals', label: 'Bidrar til mål', type: 'multi', options: goalsOpt, hint: 'Velg et effektmål. Virkninger kan også peke rett på et strategisk mål.' }, { key: 'desc', label: 'Beskrivelse', type: 'textarea' }];
     case 'indicators': {
       const anchors = [
         ...scoped.benefits().map((b) => ['benefit:' + b.id, CONCEPT.ben.label + ': ' + b.title]),
         ...db.elements.filter((e) => inTargets(e) && lv(e.kind).active).map((e) => ['node:' + e.id, lv(e.kind).name + ': ' + e.title]),
+        ...db.goals.filter((g) => g.level === 'Effektmål' && (state.level === 'hub' || inTargets(g))).map((g) => ['node:' + g.id, 'Effektmål: ' + g.title]),
         ...db.factors.filter(inTargets).map((f) => ['asm:' + f.id, f.kind + ': ' + f.title]),
-        ...(state.level === 'hub' ? db.goals.map((g) => ['node:' + g.id, 'Strategisk mål: ' + g.title]) : [])
+        ...(state.level === 'hub' ? db.goals.filter((g) => g.level !== 'Effektmål').map((g) => ['node:' + g.id, 'Strategisk mål: ' + g.title]) : [])
       ];
-      return [{ key: 'title', label: 'Måleindikator', req: true, hint: 'Det som måles: «Gjennomsnittlig saksbehandlingstid»' }, { key: '_anchor', label: 'Måler', type: 'select', options: anchors, hint: 'En nyttevirkning, et ledd i kjeden, en forutsetning eller et mål' }, { key: 'role', label: 'Rolle', type: 'select', options: ROLES, hint: 'Hva indikatoren tester' }, { key: 'mtype', label: 'Måletype', type: 'select', options: Object.entries(MTYPES) }, { key: 'unit', label: 'Enhet', hint: 'For eksempel %, dager, timer/år' }, { key: '_r1', type: 'row', fields: [{ key: 'start', label: 'Startverdi', type: 'number' }, { key: 'target', label: 'Målverdi eller terskel', type: 'number' }] }, { key: 'limitDir', label: 'Terskelen er', type: 'select', options: [['Under', 'en øvre grense (skal holde seg under)'], ['Over', 'en nedre grense (skal holde seg over)']] }, { key: '_r2', type: 'row', fields: [{ key: 'startDate', label: 'Startdato', type: 'date' }, { key: 'targetDate', label: 'Måldato', type: 'date' }] }, { key: 'frequency', label: 'Målefrekvens', type: 'select', options: Object.keys(FREQ_MONTHS) }, { key: 'method', label: 'Datakilde og målemetode' }];
+      return [{ key: 'title', label: 'Måleindikator', req: true, hint: 'Det som måles: «Gjennomsnittlig saksbehandlingstid»' }, { key: '_anchor', label: 'Måler', type: 'select', options: anchors, hint: 'En virkning, et effektmål, et ledd i kjeden eller en forutsetning' }, { key: 'role', label: 'Rolle', type: 'select', options: ROLES, hint: 'Hva indikatoren tester' }, { key: 'mtype', label: 'Måletype', type: 'select', options: Object.entries(MTYPES) }, { key: 'unit', label: 'Enhet', hint: 'For eksempel %, dager, timer/år' }, { key: '_r1', type: 'row', fields: [{ key: 'start', label: 'Nullpunkt (startverdi)', type: 'number' }, { key: 'target', label: 'Målverdi eller terskel', type: 'number' }] }, { key: 'limitDir', label: 'Terskelen er', type: 'select', options: [['Under', 'en øvre grense (skal holde seg under)'], ['Over', 'en nedre grense (skal holde seg over)']] }, { key: '_r2', type: 'row', fields: [{ key: 'startDate', label: 'Dato for nullpunktsmåling', type: 'date' }, { key: 'targetDate', label: 'Måldato', type: 'date' }] }, { key: 'frequency', label: 'Målefrekvens', type: 'select', options: Object.keys(FREQ_MONTHS) }, { key: 'method', label: 'Datakilde og målemetode', hint: 'Hvor kommer tallene fra, og er de «sikre nok»?' }];
     }
     case 'factors': {
       const links = db.links.filter((l) => { const a = node(l.from), b = node(l.to); return a && b && !a.catalog && isActiveNode(l.from) && isActiveNode(l.to) && (inTargets(a) || inTargets(b)); }).map((l) => [l.from + '>' + l.to, nodeTitle(l.from) + ' → ' + nodeTitle(l.to)]);
@@ -1835,11 +2222,11 @@ function renderFields(fields, item) {
 }
 function openForm(ent, id, extra = {}) {
   const list = ENT[ent].db;
-  const item = id ? byId(list, id) : { site: ownerOptions()[0][0], kind: LEVEL_ORDER.includes(ent) ? ent : 'Antakelse', status: ent === 'factors' ? 'Holder' : LEVEL_ORDER.includes(ent) ? 'Planlagt' : undefined, lastReviewed: TODAY, startDate: TODAY, frequency: 'Kvartalsvis', role: 'Gevinst', mtype: 'path', limitDir: 'Under', ...extra };
+  const item = id ? byId(list, id) : { site: ownerOptions()[0][0], kind: LEVEL_ORDER.includes(ent) ? ent : 'Antakelse', status: ent === 'factors' ? 'Holder' : LEVEL_ORDER.includes(ent) ? 'Planlagt' : undefined, lastReviewed: TODAY, startDate: TODAY, frequency: 'Kvartalsvis', role: 'Gevinst', mtype: 'path', limitDir: 'Under', ...(ent === 'benefits' ? { effect: 'Nytte', priced: 'Ikke prissatt', affected: [] } : {}), ...extra };
   if (!item) return;
   const fields = formFields(ent, item);
   const isCatalog = extra.catalog || item.catalog;
-  const editable = canWrite() && (ent !== 'goals' || state.level === 'hub') && (!item.catalog || state.level === 'hub') && (state.level === 'hub' || !id || inScope(item));
+  const editable = canWrite() && (ent !== 'goals' || state.level === 'hub' || item.level === 'Effektmål') && (!item.catalog || state.level === 'hub') && (state.level === 'hub' || !id || inScope(item));
   const c = ENT_CONCEPT[ent];
   const title = (id ? '' : 'Ny ') + (isCatalog ? 'katalogelement' : ENT[ent].one);
   openDrawer(id ? item.title : cap(title), tt(c) + ' ' + esc(isCatalog ? 'Gjenbrukbar nyttevirkning i katalogen' : CONCEPT[c].def),
@@ -1866,10 +2253,11 @@ function syncLinks(fromId, chosen, optionIds) {
 }
 function submitForm(form) {
   const fd = new FormData(form); const ent = fd.get('_ent'); const id = fd.get('_id'); const list = ENT[ent].db;
-  const fields = formFields(ent, id ? byId(list, id) : {}).flatMap((f) => f.type === 'row' ? f.fields : [f]);
+  const fields = formFields(ent, id ? byId(list, id) : { level: fd.get('level') }).flatMap((f) => f.type === 'row' ? f.fields : [f]);
   const data = {}; let multi = {};
   for (const f of fields) {
-    if (f.type === 'multi') multi[f.key] = { chosen: fd.getAll(f.key), options: f.options.map((o) => o[0]) };
+    if (f.type === 'multi' && !f.key.startsWith('_')) data[f.key] = fd.getAll(f.key);
+    else if (f.type === 'multi') multi[f.key] = { chosen: fd.getAll(f.key), options: f.options.map((o) => o[0]) };
     else if (f.key === 'link') { const [from, to] = String(fd.get('link') || '').split('>'); data.from = from; data.to = to; }
     else if (f.key === '_anchor') { const [k, v] = String(fd.get('_anchor') || '').split(':'); data.benefit = undefined; data.node = undefined; data.asm = undefined; if (k && v) data[k] = v; }
     else if (f.type === 'number') data[f.key] = fd.get(f.key) === '' || fd.get(f.key) == null ? null : Number(fd.get(f.key));
@@ -1914,19 +2302,23 @@ function submitLinks(form) {
 }
 function openContribution(bid) {
   const b = byId('benefits', bid); const ch = chainOf(bid);
-  openDrawer('Ny bidragsvurdering', `${tt('ben')} «${esc(b.title)}». Har tiltakene bidratt til endringen, og hvor sikre er vi? Svakeste pil i kjeden: ${evid(weakestEvidence(ch.links))}.`,
+  const me = { hub: 'Porteføljekontoret', program: SITES[state.site].manager, project: SITES[state.site].manager }[state.level];
+  openDrawer('Ny vurdering', `${tt(isCost(b) ? 'cost' : 'ben')} «${esc(b.title)}». Har tiltaket gitt de forventede virkningene, og hvor sikre er vi? Svakeste pil i kjeden: ${evid(weakestEvidence(ch.links))}.`,
     `<input type="hidden" name="_contrib" value="${b.id}">
      ${b.expected ? `<div class="callout"><b>Forventet bidrag</b>${esc(b.expected)}</div>` : ''}
-     <div class="row2">${fieldHtml({ key: 'grade', label: 'Bidragsstøtte', type: 'select', options: GRADES }, 'Moderat')}${fieldHtml({ key: 'date', label: 'Dato', type: 'date' }, TODAY)}</div>
-     <div class="small muted">Sterk: kjeden er dokumentert, antakelsene holdt og andre forklaringer er vurdert. Moderat: deler av kjeden er dokumentert. Svak: tiltaket er gjennomført, men endringen er ikke vist. Motstridende: evidensen støtter ikke teorien.</div>
+     <div class="row2">${fieldHtml({ key: 'kind', label: 'Type', type: 'select', options: EVAL_KINDS, hint: 'DFØ: løpende målinger, underveisevaluering og etterevaluering.' }, 'Løpende vurdering')}${fieldHtml({ key: 'date', label: 'Dato', type: 'date' }, TODAY)}</div>
+     ${fieldHtml({ key: 'problem', label: 'Har problemet tiltaket skulle løse, endret seg?', type: 'textarea' }, '')}
+     ${fieldHtml({ key: 'grade', label: 'Gir tiltaket forventede virkninger, og kan vi sannsynliggjøre at tiltaket er årsaken?', type: 'select', options: GRADES, hint: 'Sterk: kjeden er dokumentert, antakelsene holdt og andre forklaringer er vurdert. Moderat: deler av kjeden er dokumentert. Svak: tiltaket er gjennomført, men endringen er ikke vist. Motstridende: evidensen støtter ikke teorien.' }, 'Moderat')}
      ${fieldHtml({ key: 'text', label: 'Begrunnelse', type: 'textarea' }, '')}
-     ${fieldHtml({ key: 'decision', label: 'Beslutning eller læringspunkt', type: 'textarea', hint: 'Hva må justeres? Vises i styringsrapporten.' }, '')}`,
+     ${fieldHtml({ key: 'deviation', label: 'Årsaker til avvik mellom forventede og faktiske virkninger', type: 'textarea' }, '')}
+     <div class="row2">${fieldHtml({ key: 'decisionType', label: 'Anbefaling', type: 'select', options: DECISIONS }, 'Videreføre')}${fieldHtml({ key: 'by', label: 'Vurdert av', hint: 'DFØ: de som har gjennomført tiltaket, bør ikke evaluere det selv.' }, me)}</div>
+     ${fieldHtml({ key: 'decision', label: 'Beslutning eller læringspunkt', type: 'textarea', hint: 'Hva må gjøres? Vises i styringsrapporten.' }, '')}`,
     `<button type="submit" class="btn primary">Lagre vurdering</button><button type="button" class="btn" data-close>Avbryt</button>${saveNote}`);
 }
 function submitContribution(form) {
-  const fd = new FormData(form);
-  db.contributions.push({ id: uid('C'), benefit: String(fd.get('_contrib')), date: String(fd.get('date') || TODAY), grade: String(fd.get('grade')), text: String(fd.get('text') || ''), decision: String(fd.get('decision') || ''), by: { hub: 'Porteføljekontoret', program: SITES[state.site].manager, project: SITES[state.site].manager }[state.level] });
-  saveDb(); closeDrawer(); render(); toast('Bidragsvurderingen er lagret.');
+  const fd = new FormData(form); const g = (k) => String(fd.get(k) || '');
+  db.contributions.push({ id: uid('C'), benefit: g('_contrib'), kind: g('kind'), date: g('date') || TODAY, grade: g('grade'), problem: g('problem'), text: g('text'), deviation: g('deviation'), decisionType: g('decisionType'), decision: g('decision'), by: g('by') || 'Ukjent' });
+  saveDb(); closeDrawer(); render(); toast('Vurderingen er lagret.');
 }
 function openMeasure(indId) {
   const i = byId('indicators', indId); const last = lastMeasurement(i.id);
@@ -2001,8 +2393,8 @@ function applyPreset(key) {
 function submitSettings(form) {
   const fd = new FormData(form);
   LEVEL_ORDER.forEach((k) => { db.settings.levels[k] = { name: String(fd.get('n-' + k) || lv(k).name), plural: String(fd.get('p-' + k) || lv(k).plural), active: fd.get('a-' + k) === 'on' }; });
-  if (!LEVEL_ORDER.some((k) => db.settings.levels[k].active)) db.settings.levels.chg.active = true;
   const t = Number(fd.get('tolerance')); if (t > 0 && t < 100) db.settings.tolerance = t;
+  const groups = String(fd.get('groups') || '').split('\n').map((x) => x.trim()).filter(Boolean); if (groups.length) db.settings.groups = groups;
   const match = Object.entries(PRESETS).find(([, p]) => LEVEL_ORDER.every((k) => p.levels[k].active === db.settings.levels[k].active && p.levels[k].name === db.settings.levels[k].name));
   db.settings.preset = match ? match[0] : 'tilpasset';
   saveDb(); render(); toast('Innstillingene er lagret.');
@@ -2018,11 +2410,16 @@ function csvOf(rows) {
 function copyCsv(tab) {
   let csv, n;
   if (tab === 'matrix') {
-    const levels = [...activeLevels()].reverse();
+    const levels = matrixLevels();
     const rows = matrixRows();
-    csv = csvOf([['Strategisk mål', 'Nyttevirkning', 'Nytteeier', 'Eierenhet', ...levels.map((k) => lv(k).plural), 'Forutsetninger og risikoer', 'Måleindikatorer', 'Svakeste pil', 'Bidragsvurdering'],
-      ...rows.map(({ b, ch }) => [ch.goals.map(nodeTitle), b.title, b.owner || '', b.unit || '', ...levels.map((k) => ch.up.filter((x) => kindOf(x) === k).map(nodeTitle)), ch.factors.map((f) => `${f.kind}: ${f.title} (${f.status})`), ch.indicators.map((i) => `${i.title} [${i.role}, ${STATUS[indicatorState(i).status]}]`), weakestEvidence(ch.links), (latestContribution(b.id) || {}).grade || 'Ikke vurdert'])]);
+    csv = csvOf([['Strategisk mål', 'Effektmål', 'Virkning', 'Nytte/kostnad', 'Prissatt', 'Anslått verdi', 'Hvem blir berørt', 'Nytteeier', 'Eierenhet', ...levels.map((k) => lv(k).plural), 'Forutsetninger og risikoer', 'Måleindikatorer', 'Svakeste pil', 'Vurdering'],
+      ...rows.map(({ b, ch }) => [goalChain(b.id).top.map(nodeTitle), goalChain(b.id).em.map(nodeTitle), b.title, isCost(b) ? 'Kostnad' : 'Nytte', b.priced || '', b.value || '', b.affected || [], b.owner || '', b.unit || '', ...levels.map((k) => ch.up.filter((x) => kindOf(x) === k).map(nodeTitle)), ch.factors.map((f) => `${f.kind}: ${f.title} (${f.status})`), ch.indicators.map((i) => `${i.title} [${i.role}, ${STATUS[indicatorState(i).status]}]`), weakestEvidence(ch.links), (latestContribution(b.id) || {}).grade || 'Ikke vurdert'])]);
     n = rows.length;
+  } else if (tab === 'nytteoversikt') {
+    const bens = scoped.benefits();
+    csv = csvOf([['Virkninger', 'Nytte- og kostnadsvirkninger', 'Anslått verdi', 'Indikatorer på virkninger', 'Hvem blir berørt?', 'Når oppstår virkningen?'],
+      ...DFO_ROWS.flatMap((row) => bens.filter((b) => dfoGroup(b, row)).map((b) => [row[2], b.title, b.value || '', db.indicators.filter((i) => i.benefit === b.id).map((i) => i.title), b.affected || [], b.realization || '']))]);
+    n = bens.length;
   } else {
     const list = ENT[tab].list();
     const keys = [...new Set(list.flatMap((x) => Object.keys(x)))].filter((k) => !['milestones'].includes(k));
@@ -2049,7 +2446,7 @@ function hydrate(root) {
    Events
 ------------------------------------------------------------------ */
 document.addEventListener('click', (e) => {
-  const t = e.target.closest('[data-nav],[data-level],[data-progmode],[data-regtab],[data-new],[data-edit],[data-measure],[data-open-ind],[data-open-ben],[data-goto-site],[data-adopt],[data-assign],[data-assign-pick],[data-copy-csv],[data-close],[data-link],[data-contrib],[data-preset],[data-chaintab]');
+  const t = e.target.closest('[data-nav],[data-level],[data-progmode],[data-regtab],[data-new],[data-edit],[data-measure],[data-open-ind],[data-open-ben],[data-goto-site],[data-adopt],[data-assign],[data-assign-pick],[data-copy-csv],[data-close],[data-link],[data-contrib],[data-preset],[data-demo-preset],[data-chaintab],[data-new-em],[data-plantab],[data-plan-edit],[data-eval-new],[data-fix]');
   if (!t) return;
   const d = t.dataset;
   if (d.close !== undefined) return closeDrawer();
@@ -2058,7 +2455,12 @@ document.addEventListener('click', (e) => {
   if (d.progmode) { state.progMode = d.progmode; return render(); }
   if (d.regtab) { state.regTab = d.regtab; state.view = 'nyttekart'; state.param = 'liste'; return render(); }
   if (d.chaintab) { state.view = 'nyttekart'; state.param = d.chaintab; return render(); }
+  if (d.plantab) { state.view = 'plan'; state.param = d.plantab; render(); return window.scrollTo({ top: 0 }); }
+  if (d.planEdit) return openPlanEdit();
+  if (d.evalNew) return openEvalNew();
+  if (d.fix) return runFix(d.fix);
   if (d.new) { if (d.new === 'catalog') return openForm('benefits', null, { catalog: true, site: 'hub' }); return openForm(d.new, null); }
+  if (d.newEm) return openForm('goals', null, { level: 'Effektmål', site: d.newEm, owner: SITES[d.newEm].manager });
   if (d.measure) { e.stopPropagation(); return openMeasure(d.measure); }
   if (d.openInd) { e.stopPropagation(); closeDrawer(); return go('indikator', d.openInd); }
   if (d.openBen) { e.stopPropagation(); closeDrawer(); return go('nytte', d.openBen); }
@@ -2071,6 +2473,7 @@ document.addEventListener('click', (e) => {
   if (d.assign) return assignTo(d.assign);
   if (d.copyCsv) return copyCsv(d.copyCsv);
   if (d.preset && canWrite()) return applyPreset(d.preset);
+  if (d.demoPreset) return applyPreset(d.demoPreset);
 }, true);
 document.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -2080,6 +2483,8 @@ document.addEventListener('submit', (e) => {
   if (f.querySelector('[name=_adopt]')) return submitAdopt(f);
   if (f.querySelector('[name=_links]')) return submitLinks(f);
   if (f.querySelector('[name=_contrib]')) return submitContribution(f);
+  if (f.querySelector('[name=_plan]')) return submitPlan(f);
+  if (f.querySelector('[name=_eval]')) return submitEval(f);
   if (f.querySelector('[name=_ent]')) return submitForm(f);
 });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
@@ -2100,6 +2505,7 @@ let rz; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() 
 
 readHash();
 render();
+
 </script>
 </body>
 </html>

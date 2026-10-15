@@ -1,6 +1,8 @@
 # Plan: «Vibe-prototype» av Nyttestyring (HTML)
 
-> **Status 14.10.2026:** Bygget og utvidet med den konfigurerbare resultatkjeden (se løsningsforslaget).
+> **Status 15.10.2026:** Bygget, utvidet med den konfigurerbare resultatkjeden og lagt tett opp til DFØs
+> veileder om nyttestyring: DFØ-nyttekart som standard, kostnadsvirkninger, effektmål, hvem som blir
+> berørt, nytterealiseringsplan, nytteoversikt og sjekkliste per fase (se løsningsforslaget).
 > Fila er [`prototype/nyttestyring.html`](prototype/nyttestyring.html). Åpne den rett i nettleseren, den
 > virker uten nett. Prototypen ligger i en statisk ramme med SharePoint og Prosjektportalen rundt.
 >
@@ -11,13 +13,17 @@
 ## 1. Mål for prototypen
 
 - Gjøre det tydelig at det er **samme app på tre nivåer**, med ulike flater og dataomfang.
-- Vise hele kjeden: leveranse, evne, effekt, nyttevirkning og mål, med indikatorer og målinger.
-- Vise at **kjedemodellen kan konfigureres** (Enkel eller Utvidet) uten at dataene endres.
+- Vise hele kjeden: tiltak, hvem som blir berørt, nytte- og kostnadsvirkninger, effektmål og samfunnsmål,
+  med indikatorer og målinger. I den utvidede modellen også leveranse, evne og effekt.
+- Vise at **kjedemodellen kan konfigureres** (DFØ eller Utvidet) uten at dataene endres.
+- Vise at **nytterealiseringsplanen, nytteoversikten og sjekklisten** lages fra dataene og alltid er
+  oppdatert.
 - Vise **pilene** som egne objekter: evidensstyrke, og forutsetninger og risikoer på pilene.
-- Vise **bidragsvurdering** og en **styringsrapport** som ender i «hva må justeres».
+- Vise **vurderinger og evalueringer** og en **styringsrapport** som ender i «videreføre, justere eller
+  avslutte».
 - Gi en **følelse av registrering**: skjemaene fungerer, og nye målinger flytter kurven med en gang.
-- Være et utgangspunkt for workshopen: alle ⚠-spørsmålene i løsningsforslaget skal kunne
-  diskuteres med prototypen på skjermen.
+- Være et utgangspunkt for workshopen: beslutningene i løsningsforslaget skal kunne diskuteres med
+  prototypen på skjermen.
 
 **Ikke med:** pålogging, SharePoint, ekte tilgangsstyring, migrering og responsiv finpuss utover
 at det fungerer på en bærbar.
@@ -39,25 +45,30 @@ runder etter tilbakemelding.
 ## 3. Rammen rundt appen
 
 - **Nivåvelger øverst** (demolinje som ikke er en del av appen): «Vis som: Hub / Program / Prosjekt»,
-  med en nedtrekksliste for hvilket program eller prosjekt. Den simulerer hvor webdelen står.
+  med en nedtrekksliste for hvilket program eller prosjekt. Den simulerer hvor webdelen står. Ved siden av
+  står en bryter for kjedemodell (DFØ eller Utvidet), så modellene kan sammenlignes i demoen.
 - **Statisk SharePoint- og PP-ramme:** suitebar, appmeny, hubnavigasjon, områdeoverskrift,
   kommandolinje og PP-footeren. Fiktiv virksomhet, ingen ekte logoer.
 - **Appens navigasjonsskuff** (som IdeaModule). Alle punktene er steder, navngitt som substantiver:
 
   | Hub | Program | Prosjekt |
   |---|---|---|
-  | Oversikt | Oversikt | Oversikt |
+  | Oversikt | Oversikt (med fase og sjekkliste) | Oversikt (med fase og sjekkliste) |
   | Til oppfølging (tall) | Til oppfølging (tall) | Til oppfølging (tall) |
   | Nyttekart | Nyttekart | Nyttekart |
+  | Mål | Mål | Mål |
+  | | Nytterealiseringsplan | Nytterealiseringsplan |
   | Styringsrapport | Styringsrapport | |
   | | Prosjektenes bidrag | |
-  | *Felles grunnlag:* Strategiske mål, Katalog | *Felles grunnlag:* Strategiske mål, Katalog | *Felles grunnlag:* Strategiske mål, Katalog |
+  | *Felles grunnlag:* Katalog | *Felles grunnlag:* Katalog | *Felles grunnlag:* Katalog |
   | Innstillinger | | |
 
 - **Nyttekart** samler tre visninger av samme kjede i faner: **Kart · Matrise · Liste**. Liste har én
   underfane per type, og det er her man registrerer.
 - **Til oppfølging** viser et tall for det som er forfalt.
-- Nyttevirkning og Indikator er detaljsider. Statusseksjonen ligger på Prosjektstatus-siden i produktet.
+- **Nytterealiseringsplan** har tre faner: **Nytterealiseringsplan · Nytteoversikt (DFØ) · Sjekkliste for
+  fasen**.
+- Virkning og Indikator er detaljsider. Statusseksjonen ligger på Prosjektstatus-siden i produktet.
   I prototypen åpnes den fra prosjektets oversikt («Slik vises dette i statusrapporten»).
 
 ## 4. Skjermbilder
@@ -66,30 +77,37 @@ Prioritet: **M** må med, **B** bør med, **K** kan med.
 
 | # | Skjerm | Innhold og interaksjon |
 |---|---|---|
-| 1 | **Oversikt** | Forklaringen «Slik henger det sammen» med de aktive leddene og et eksempel fra dataene. Nøkkeltall. Nytteoppnåelse per prosjekt eller nyttevirkning. Forutsetninger og risikoer som må følges opp. Indikatorer med «Følg med» eller «Avvik», med rolle. |
-| 2 | **Nyttekart › Kart** | Én kolonne per aktivt nivå. Strekene viser evidensstyrke: tykk for sterk, tynn for moderat, stiplet for svak og prikket for ikke vurdert. Bokstavmerker (A, R, U, P) for forutsetninger og risikoer, farget etter status. Hold over for å se kjeden. Klikk på en pil for å vurdere den. |
-| 3 | **Nyttekart › Matrise** | Én rad per nyttevirkning: mål, nyttevirkning med eier, effekter, evner, leveranser, forutsetninger og risikoer, indikatorer, svakeste pil og siste bidragsvurdering. Kopier som CSV. |
-| 4 | **Nyttevirkning** | Fokuskart for kjeden, forventet bidrag, historikk for bidragsvurderinger med beslutninger, «Ny bidragsvurdering», indikatorer etter rolle, forutsetninger og risikoer gruppert etter type, og pilene med evidens. |
-| 5 | **Indikator** | Kurve for målbane (med delmål), terskel (med skravert område utenfor grensen) eller følg med. Viser hva indikatoren måler, og hvilke nyttevirkninger og mål den henger sammen med. |
-| 6 | **Nyttekart › Liste** | Én fane per aktivt nivå, pluss Nyttevirkninger, Indikatorer, Forutsetninger og risikoer, og Mål. «Fører til» lager pilene. Prosjektet kan peke inn i programmets kjede. Indikatorskjemaet har rolle og måletype. Skjemaet for forutsetninger tilpasser status etter type. |
-| 7 | **Til oppfølging** | Målinger som forfaller, og vurderinger som skal gjøres: bidragsvurderinger og forutsetninger eldre enn seks måneder. |
-| 8 | **Styringsrapport** | Mål → nyttevirkninger og bidrag → antakelser → risikoer og bivirkninger → hva må justeres. |
-| 9 | **Strategiske mål** | Måltre med kontekstindikatorer, nyttevirkningene som bidrar og indikatorene deres. |
-| 10 | **Prosjektenes bidrag** | Prosjektenes leveranser i programmets kjede, og fordeling i prosent for tallfestede gevinster. |
-| 11 | **Katalog** og **Statusseksjon** | Som før. Statusseksjonen viser rolle per indikator. |
-| 12 | **Innstillinger** | Velg Enkel eller Utvidet, gi nivåene nye navn eller skru dem av, og sett toleranse. Alle flater oppdateres med en gang. |
+| 1 | **Oversikt** | På program og prosjekt: nyttestyringsfasen etter DFØ og sjekklisten, med neste oppgave og «Fiks nå». Forklaringen «Slik henger det sammen» med de aktive leddene og et eksempel fra dataene. Nøkkeltall (nytte og kostnad hver for seg). Nytteoppnåelse per prosjekt eller virkning. Forutsetninger og risikoer som må følges opp. Indikatorer med «Følg med» eller «Avvik», med rolle. |
+| 2 | **Nyttekart › Kart** | DFØ-modellen: kolonnene Tiltak, Hvem blir berørt?, Nytte- og kostnadsvirkninger, Effektmål og Samfunnsmål. Utvidet modell: én kolonne per aktivt nivå, deretter virkninger, effektmål og samfunnsmål. Kostnadsvirkninger har egen farge og stiplet kant. Strekene viser evidensstyrke. Bokstavmerker (A, R, U, P) for forutsetninger og risikoer, farget etter status. Hold over for å se kjeden. Klikk på en pil for å vurdere den, og på et tiltak for å åpne planen. |
+| 3 | **Nyttekart › Matrise** | Én rad per virkning: strategisk mål, effektmål, virkning (nytte eller kostnad, verdi, eier), hvem som blir berørt, ledd før virkningen, forutsetninger og risikoer, indikatorer, svakeste pil og siste vurdering. Kopier som CSV. |
+| 4 | **Virkning** | Type, prissatt eller ikke, og hvem som blir berørt. Fokuskart for kjeden, forventet bidrag, historikk for vurderinger og evalueringer med anbefaling og beslutning, «Ny vurdering», indikatorer etter rolle, forutsetninger og risikoer gruppert etter type, og pilene med evidens. |
+| 5 | **Indikator** | Kurve for målbane (med delmål), terskel (med skravert område utenfor grensen) eller følg med. Viser nullpunktet, hva indikatoren måler, og hvilke virkninger, effektmål og mål den henger sammen med. |
+| 6 | **Nyttekart › Liste** | Én fane per type: nødvendige aktiviteter (DFØ) eller aktive nivåer (Utvidet), Nytte- og kostnadsvirkninger, Indikatorer, og Forutsetninger og risikoer. «Fører til» og «Bidrar til mål» lager pilene. Prosjektet kan peke inn i programmets kjede. Virkningsskjemaet har nytte eller kostnad, prissatt, anslått verdi og hvem som blir berørt. |
+| 7 | **Til oppfølging** | Målinger som forfaller, og vurderinger som skal gjøres: vurderinger og forutsetninger eldre enn seks måneder. |
+| 8 | **Mål** | Effektmål for prosjektet eller programmet (kan legges til og redigeres der), og samfunnsmål og strategiske mål med kontekstindikatorer, virkningene som bidrar og indikatorene deres. |
+| 9 | **Nytterealiseringsplan** | DFØs åtte punkter, satt sammen av dataene, med «Ikke avklart» og «Mangler» der noe mangler. «Rediger bakgrunn og roller», «Planlegg evaluering» og utskrift eller PDF. |
+| 10 | **Nytteoversikt (DFØ)** | DFØs tabell: prissatte og ikke-prissatte nytte- og kostnadsvirkninger, indikatorer, hvem som blir berørt og når virkningen oppstår. Kopier som CSV. |
+| 11 | **Sjekkliste for fasen** | DFØs sjekklister for fase 1–4, sjekket mot dataene. Etterslep fra tidligere faser er merket. «Fiks» åpner riktig skjema eller liste. |
+| 12 | **Styringsrapport** | Mål → nytte- og kostnadsvirkninger → antakelser → risikoer og bivirkninger → videreføre, justere eller avslutte. |
+| 13 | **Prosjektenes bidrag** | Prosjektenes leveranser i programmets kjede, og fordeling i prosent for tallfestede gevinster. |
+| 14 | **Katalog** og **Statusseksjon** | Som før. Statusseksjonen viser rolle per indikator. |
+| 15 | **Innstillinger** | Velg DFØ eller Utvidet, gi nivåene nye navn eller skru dem av, rediger listen over berørte grupper og sett toleranse. Alle flater oppdateres med en gang. |
 
 ## 5. Fiktive data
 
 Virksomheten er **Fjordvik kommune**. Den er oppdiktet. Navn på personer er fiktive.
 
-**Strategiske mål (4, i to nivåer)**
+**Samfunnsmål og strategiske mål (5, i to nivåer)**
 
 - S1 «Enkel og tilgjengelig innbyggerservice»
   - S1.1 «80 % av henvendelsene løses digitalt innen 2028»
 - S2 «Klimanøytral kommunal drift innen 2030»
 - S3 «Effektiv ressursbruk og bærekraftig økonomi»
 - S4 «Trygge og selvstendige innbyggere i eget hjem»
+
+**Effektmål (6)**, eid av programmer og prosjekter, for eksempel «Rask og forutsigbar
+byggesaksbehandling» (Digital byggesak) og «Eldre mestrer hverdagen hjemme lenger» (Helse og omsorg 2030).
+Hvert effektmål peker opp til ett eller to samfunnsmål.
 
 **Programmer og prosjekter (2 programmer, 6 prosjekter)**
 
@@ -101,9 +119,13 @@ Virksomheten er **Fjordvik kommune**. Den er oppdiktet. Navn på personer er fik
 
 **Omfang og innhold:**
 
-- 13 nyttevirkninger og 21 indikatorer med 6–21 målinger hver, fra 2024 til i dag. Indikatorene
-  har ulike roller (gevinst, effekt, leveranse, antakelse, balanserende, kontekst) og alle tre
-  måletypene.
+- 13 nyttevirkninger og 4 kostnadsvirkninger, og 25 indikatorer med 6–21 målinger hver, fra 2024 til i
+  dag. Indikatorene har ulike roller (gevinst, kostnad, effekt, leveranse, antakelse, balanserende,
+  kontekst) og alle tre måletypene. Hver virkning sier hvem som blir berørt, om den er prissatt og
+  eventuelt en anslått verdi.
+- **Nytterealiseringsplaner** for alle prosjekter og programmer, med problem, tiltak, lønnsomhet,
+  ressurser, involvering, ansvar for målinger og evalueringer, og planlagte evalueringer. Digital byggesak
+  mangler med vilje evalueringsplan og en indikator for kostnadsvirkningen, så sjekklisten har noe å vise.
 - **En komplett utvidet kjede** i Helse og omsorg 2030, bygget på et generelt eksempel om digital
   hjemmeoppfølging:
   - Leveranser: digital hjemmeoppfølging, sensorbasert nattilsyn og innsatsteam.
@@ -137,8 +159,8 @@ Virksomheten er **Fjordvik kommune**. Den er oppdiktet. Navn på personer er fik
   står igjen, så tildelingen kan vises live i demoen.
 
 Dataene bygges i `buildSeed()` øverst i skriptet, med samme struktur som datamodellen i
-løsningsforslaget: `elements`, `benefits`, `links`, `factors`, `indicators`, `measurements`,
-`contributions` og `settings`.
+løsningsforslaget: `goals`, `elements`, `benefits`, `links`, `factors`, `indicators`, `measurements`,
+`contributions`, `plans` og `settings`.
 
 ## 6. Beregninger (samme som i produktet)
 
@@ -154,27 +176,26 @@ Lag dem som rene funksjoner. De kan portes nesten direkte til `shared-library`.
 | `weakestEvidence` | Svakeste pil i en kjede |
 | `nextDue(indicator)` | Siste måling pluss frekvensen |
 | `rollup(...)` | Oppnåelse per nyttevirkning, prosjekt og mål, som snitt av indikatorene, vektet likt i prototypen |
+| `dfoPhase(fase)` | Fra prosjektfase (Prosjektveiviseren) til nyttestyringsfase (DFØ) |
+| `checklist()` | DFØs sjekkliste per fase, med hva som mangler og hvor det rettes |
 
-## 7. Demomanus (8–10 minutter)
+## 7. Demomanus (10–12 minutter)
 
-1. **Hub, Oversikt:** Gå gjennom «Slik henger det sammen»: fem ledd, og forutsetninger og risikoer på
-   pilene.
-2. **Innstillinger:** Bytt til **Enkel**. Kartet og registreringen får tre ledd, og ingen data
-   forsvinner. Bytt tilbake til **Utvidet**.
-3. **Nyttekart:** Hold over «Flere eldre bor hjemme …». Pek på den stiplede pilen fra effekt til
-   gevinst, og merkene P og U på den.
-4. **Nyttevirkning** («Flere eldre bor hjemme …»): Forventet bidrag. Bidragsvurderingen gikk fra svak til
-   moderat. Indikatorene etter rolle:
-   - innleggelser (Avvik),
-   - responstid på varsler (antakelse, terskel),
-   - ensomhet (balanserende).
-
-   Registrer en ny bidragsvurdering.
-5. **Nyttekart › Matrise:** Samme data som tabell, «slik dere kjenner det fra gevinstmatrisen». Kopier til Excel.
-6. **Program Helse og omsorg 2030, Styringsrapport:** Fra mål til «hva må justeres».
-7. **Prosjekt Digital byggesak:** Til oppfølging, så registrer en måling, og så «Slik vises dette i
-   statusrapporten».
-8. **Program Digital innbyggerservice, Prosjektenes bidrag:** Tildel de siste 30 % til Digital byggesak.
+1. **Hub, Nyttekart:** DFØs nyttekart med Fjordviks data: tiltak, hvem som blir berørt, nytte- og
+   kostnadsvirkninger, effektmål og samfunnsmål. Pek på kostnadsvirkningene og bokstavmerkene på pilene.
+2. **Bytt kjedemodell til Utvidet** i demolinjen. Kartet får leveranser, evner og effekter, og ingen data
+   forsvinner. Bytt tilbake til **DFØ**.
+3. **Prosjekt Digital byggesak, Oversikt:** Fase 3 av 4 og «11 av 17 på plass». Trykk «Fiks nå» og legg
+   inn det som mangler. Telleren går opp.
+4. **Nytterealiseringsplan:** De åtte punktene, laget fra dataene. Vis «Ikke avklart» under roller og
+   «Planlegg evaluering». Skriv ut som PDF. Bytt til **Nytteoversikt (DFØ)**: samme tabell som i DFØs mal.
+5. **Mål:** Prosjektets effektmål og samfunnsmålene de bidrar til. Legg til et effektmål.
+6. **Program Helse og omsorg 2030, virkningen «Flere eldre bor hjemme …»:** Underveisevalueringen med
+   anbefalingen «Justere». Indikatorene etter rolle: innleggelser (Avvik), responstid på varsler
+   (antakelse, terskel) og ensomhet (balanserende). Registrer en ny vurdering.
+7. **Styringsrapport** for programmet: fra mål til «videreføre, justere eller avslutte».
+8. **Nyttekart › Matrise:** Samme data som tabell, «slik dere kjenner det fra gevinstmatrisen». Kopier
+   til Excel.
 
 ## 8. Arbeidsplan
 
@@ -196,8 +217,11 @@ Lag dem som rene funksjoner. De kan portes nesten direkte til `shared-library`.
 
 - Treffer nivåene og flatene hvordan Asker faktisk jobber? Hvem registrerer, og hvor?
 - Er indikatordetaljen og statusseksjonen nok for styringsgruppa?
-- Begreper og nivåer for mål og typer nyttevirkning, se ⚠ i løsningsforslaget.
+- Er DFØ-modellen riktig standard for kommunene, og er nytterealiseringsplanen nyttig slik den lages?
+- Begreper og nivåer for mål og typer virkning: skal `GtGainsType` erstattes av DFØs inndeling?
+- Berørte grupper: én felles liste, eller egne målgrupper per program?
+- Sjekklisten: er oppgavene riktige, og gjør den registreringen enklere?
 - Katalog og tildeling: er modellen med kopi og «bidrar til» intuitiv?
-- Kjedemodell: holder Enkel og Utvidet, og er standardnavnene riktige?
-- Bidragsvurdering: riktig skala og riktig takt (seks måneder)?
+- Kjedemodell: holder DFØ og Utvidet, og er standardnavnene riktige?
+- Vurderinger: riktig skala, riktige spørsmål og riktig takt (seks måneder)?
 - Indikatorroller og måletyper: dekker de det dere måler i dag?
