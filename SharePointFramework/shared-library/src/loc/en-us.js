@@ -12,6 +12,7 @@ define([], function () {
       SaveTitle: 'Save',
       SaveDisabledTitle:
         'There are required fields that are not filled out, fill these out to save',
+      TimelineScrollLabel: 'The timeline. Scroll in time with the arrow keys',
       TrendBetter: 'Better than the previous measurement',
       TrendTargetReached: 'Target reached',
       TrendWorse: 'Worse than the previous measurement'

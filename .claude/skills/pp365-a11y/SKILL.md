@@ -74,16 +74,21 @@ Rules 1, 2, 5, 6, 8 and the tooltip handling are adapted from Microsoft's
    pair of move buttons).
 9. **Colour** comes from Fluent's tokens, not hex: 4.5:1 for text, 3:1 for large text and for
    non-text that carries meaning (borders of inputs, focus, status icons). Colour is never alone:
-   a matrix cell or a status shows its value or its text as well.
+   a matrix cell or a status shows its value or its text as well. Colours from configuration
+   (the timeline's) go through `getReadableTextColor` and `getContrastRatio` (`util/contrast.ts`):
+   the configured text colour stays where it reads 4.5:1, and black or white takes its place
+   where it does not.
 10. **Headings**: `WebPartTitle` is the web part's `h2`; a section inside is an `h3`. Panels and
     dialogs take their heading from `DrawerHeaderTitle` and `DialogTitle`.
 11. **Targets** are at least 24 by 24 CSS pixels (2.5.8); a transparent button with no padding is
     smaller than it looks.
 12. **Drag and drop** has a keyboard way and a single-pointer way (2.1.1, 2.5.7): the move buttons
     of `EditViewColumnsPanel` are the model.
-13. **A visualisation without a keyboard model** (`react-calendar-timeline` has none) needs an
-    equivalent with the same information in the same place: the project timeline's `TimelineList`
-    is the model.
+13. **A visualisation without a keyboard model** (`react-calendar-timeline` has none) gets one
+    where we render its parts: the timeline's items are buttons through our `itemRenderer`, its
+    scroll area a named, focusable group through `scrollRef`. Where that is not enough, an
+    equivalent with the same information in the same place: the project timeline's
+    `TimelineList` is the model.
 14. **Text comes from the loc triad**: names, announcements, alt texts, never literals.
 
 ## The audit of one component
@@ -156,7 +161,14 @@ checked by hand and with which reader and browser: axe finds only part of what W
 - jest-axe over a stand-in judges the stand-in. The combobox family (`Autocomplete`,
   `PeoplePicker`, `ColumnSearchPropertyField`) runs on stand-ins in Jest: assert names there and
   let the browser scans judge the markup.
-- `react-calendar-timeline` 0.28 has no keyboard handling and no roles.
+- `react-calendar-timeline` 0.28 has no keyboard handling and no roles, but it draws each item
+  with our `itemRenderer` and hands its scroll area (`.rct-scroll`) to `scrollRef`: that is where
+  roles, names and keys go (`ProjectTimeline/Timeline/useItemRenderer.tsx`, `useTimeline.ts`).
+  Its scroll area scrolls with the arrow keys once it can take focus.
+- A Fluent `Popover` positioned on an element, with no `PopoverTrigger`, gives focus back to
+  nothing when it closes: return it on Escape yourself (`useTimeline`'s `onDetailsDismiss`).
+- An inline `outline: none` (the timeline items' configured style) beats a stylesheet's
+  `:focus-visible` outline unless that outline is `!important`.
 - axe scoped to our markup still judges rules that need the page (landmarks, the page's headings);
   such findings belong to SharePoint's page and are noted, not fixed in our code.
 - Under jsdom contrast cannot be measured, and Fluent's menus and popovers are slow

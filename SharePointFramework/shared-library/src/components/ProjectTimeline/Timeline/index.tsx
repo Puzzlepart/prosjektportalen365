@@ -34,7 +34,8 @@ export const Timeline: FC<ITimelineProps> = (incomingProps) => {
     showDetails,
     menuItems,
     setShowFilterPanel,
-    setShowDetails,
+    onDetailsDismiss,
+    scrollRef,
     itemRenderer,
     groupRenderer
   } = useTimeline(props)
@@ -63,6 +64,7 @@ export const Timeline: FC<ITimelineProps> = (incomingProps) => {
             sidebarWidth={sidebarWidth}
             itemRenderer={itemRenderer}
             groupRenderer={groupRenderer}
+            scrollRef={scrollRef}
           >
             <TimelineMarkers>
               <CustomMarker date={props.timeLapseMarker}>
@@ -86,9 +88,7 @@ export const Timeline: FC<ITimelineProps> = (incomingProps) => {
           isLightDismiss
           onClose={() => setShowFilterPanel(false)}
         />
-        {showDetails && (
-          <DetailsPopover timelineItem={showDetails} onDismiss={() => setShowDetails(null)} />
-        )}
+        {showDetails && <DetailsPopover timelineItem={showDetails} onDismiss={onDetailsDismiss} />}
       </FluentProvider>
     </IdPrefixProvider>
   )

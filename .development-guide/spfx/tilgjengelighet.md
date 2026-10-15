@@ -36,7 +36,7 @@ Testene går i `e2e/tests/smoke/a11y-baseline.spec.ts`, `risk-action.spec.ts` og
 | LoadingSkeleton | aria-progressbar-name 1, i ressursallokeringen |  |  |  |  |  | Rettet: skjelettet heter «Laster...» |
 | ProjectLogo og FileTypeIcon | Ikke målt alene |  |  |  |  |  | jest-axe: ingen funn. Logoen og initialene har samme navn, og filtypeikonet er pynt (`alt=""`) ved filnavnet |
 | Autocomplete og ColumnSearchPropertyField | Ikke målt |  |  |  |  |  | Komponenttestene bruker en erstatning for Fluents kombinasjonsboks, så de skannes i nettleseren, med kolonneskjemaene |
-| ProjectTimeline | Se tidslinjene |  |  |  |  |  | Tidslinjebiblioteket har ikke tastaturstøtte |
+| ProjectTimeline | Se tidslinjene |  |  |  |  |  | Rettet: elementene er knapper som åpnes med Enter eller mellomrom, milepælene har navn, og fokus går tilbake til elementet når detaljene lukkes med Escape. Rulleområdet kan nås med tastaturet og rulles med piltastene. Teksten i et element er svart eller hvit der den konfigurerte fargen har for lav kontrast (standardfargene hadde 3,2–3,7:1), og en milepæl i en svak farge (standardgult har 1,6:1) får en kantlinje. Selve tidslinjebiblioteket har ingen tastaturstøtte, så dette er lagt på der vi tegner elementene. Gjenstår: en liste som alternativ der tidslinjen ikke har en (egen sak) |
 
 ### ProjectWebParts
 
@@ -45,7 +45,7 @@ Testene går i `e2e/tests/smoke/a11y-baseline.spec.ts`, `risk-action.spec.ts` og
 | Prosjektinformasjon | Ingen |  |  |  |  |  |  |
 | Fasevelger | color-contrast 8–10, list 1 |  |  |  |  |  | Fasenavn med lav kontrast, `ul` med andre barn enn `li` |
 | Prosjektstatus | Ingen |  |  |  |  |  |  |
-| Prosjekttidslinje | color-contrast 2, scrollable-region-focusable 1 |  |  |  |  |  | Har en liste ved siden av |
+| Prosjekttidslinje | color-contrast 2, scrollable-region-focusable 1 |  |  |  |  |  | Har en liste ved siden av. Rettet i bibliotekets tidslinje: elementene kan åpnes med tastaturet, tidslinjen rulles med piltastene, og teksten og milepælene har nok kontrast |
 | Risikomatrise | Ingen |  |  |  |  |  |  |
 | Mulighetsmatrise | Ingen |  |  |  |  |  |  |
 | Prosjektnyheter | Ikke målt |  |  |  |  |  | Under folden |
@@ -69,8 +69,8 @@ Testene går i `e2e/tests/smoke/a11y-baseline.spec.ts`, `risk-action.spec.ts` og
 | Siste prosjekter | Ingen |  |  |  |  |  |  |
 | Porteføljeoversikt | Ingen |  |  |  |  |  |  |
 | Aggregert oversikt | Ingen |  |  |  |  |  |  |
-| Prosjekttidslinje (portefølje) | color-contrast 8, scrollable-region-focusable 1 |  |  |  |  |  | Ingen liste ved siden av |
-| Ressursallokering | aria-progressbar-name 1 |  |  |  |  |  | Ingen liste ved siden av |
+| Prosjekttidslinje (portefølje) | color-contrast 8, scrollable-region-focusable 1 |  |  |  |  |  | Ingen liste ved siden av (egen sak). Rettet i bibliotekets tidslinje: elementene kan åpnes med tastaturet, tidslinjen rulles med piltastene, og teksten og milepælene har nok kontrast |
+| Ressursallokering | aria-progressbar-name 1 |  |  |  |  |  | Ingen liste ved siden av (egen sak). Rettet i bibliotekets tidslinje: elementene kan åpnes med tastaturet, tidslinjen rulles med piltastene, og teksten og milepælene har nok kontrast |
 | Idémodul | Ingen |  |  |  |  |  |  |
 | Prosjektkort | Ikke målt |  |  |  |  |  |  |
 
@@ -91,4 +91,4 @@ Testene går i `e2e/tests/smoke/a11y-baseline.spec.ts`, `risk-action.spec.ts` og
 | Administrasjon av underområder | Ingen |  |  |  |  |  |  |
 | Innholdsaggregering for program | Ingen |  |  |  |  |  |  |
 | Oversikt over underområder | aria-command-name 24 |  |  |  |  |  | Kommandoer uten navn |
-| Tidslinje for underområder | color-contrast 4, scrollable-region-focusable 1 |  |  |  |  |  | Ingen liste ved siden av |
+| Tidslinje for underområder | color-contrast 4, scrollable-region-focusable 1 |  |  |  |  |  | Ingen liste ved siden av (egen sak). Rettet i bibliotekets tidslinje: elementene kan åpnes med tastaturet, tidslinjen rulles med piltastene, og teksten og milepælene har nok kontrast |

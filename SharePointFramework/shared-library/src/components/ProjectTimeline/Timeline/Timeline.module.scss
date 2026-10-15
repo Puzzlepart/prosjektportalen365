@@ -28,6 +28,26 @@
         width: 100%;
         padding: 0 8px;
       }
+
+      // The items' configured style sets `outline: none`, which the focus ring must win over.
+      &:focus-visible {
+        outline: var(--strokeWidthThick) solid var(--colorStrokeFocus2) !important;
+        outline-offset: 1px;
+      }
+    }
+
+    // A milestone too faint against the timeline gets a one-pixel outline in the stroke Fluent
+    // makes for 3:1 against white; a shape cut out with `clip-path` cannot take a border.
+    .milestoneOutline {
+      filter: drop-shadow(1px 0 0 var(--colorNeutralStrokeAccessible))
+        drop-shadow(-1px 0 0 var(--colorNeutralStrokeAccessible))
+        drop-shadow(0 1px 0 var(--colorNeutralStrokeAccessible))
+        drop-shadow(0 -1px 0 var(--colorNeutralStrokeAccessible));
+    }
+
+    :global(.rct-scroll):focus-visible {
+      outline: var(--strokeWidthThick) solid var(--colorStrokeFocus2);
+      outline-offset: calc(var(--strokeWidthThick) * -1);
     }
 
     .timelineItem:hover {
@@ -41,33 +61,33 @@
   }
 }
 
-div[class="rct-header-root"] {
+div[class='rct-header-root'] {
   position: sticky;
   top: 0;
   background: #f4f4f4 !important;
   z-index: 8;
 }
 
-div[class="rct-sidebar"] {
+div[class='rct-sidebar'] {
   width: fit-content !important;
   max-width: 320px !important;
   min-width: 0px !important;
 }
 
-div[class="rct-scroll"] {
+div[class='rct-scroll'] {
   z-index: 1 !important;
 }
 
-div[class*="rct-dateHeader-primary"] {
+div[class*='rct-dateHeader-primary'] {
   color: #444 !important;
   border: none !important;
 }
 
-div[class="rct-calendar-header"] {
+div[class='rct-calendar-header'] {
   border: none !important;
 }
 
-div[class*="rct-dateHeader"] {
+div[class*='rct-dateHeader'] {
   font-size: 10px !important;
   border: none !important;
   background: #f4f4f4 !important;

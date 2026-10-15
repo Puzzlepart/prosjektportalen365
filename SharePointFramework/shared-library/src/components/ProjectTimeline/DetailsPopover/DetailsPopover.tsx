@@ -181,9 +181,9 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (incomingProps) => {
     <Popover
       withArrow
       open={props.open}
-      onOpenChange={(_, data) => {
+      onOpenChange={(event, data) => {
         if (!data.open) {
-          props.onDismiss()
+          props.onDismiss(event)
         }
       }}
       trapFocus
@@ -193,7 +193,7 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (incomingProps) => {
         overflowBoundary: document.getElementsByClassName('rct-scroll')[0] as HTMLElement
       }}
     >
-      <PopoverSurface className={styles.detailsPopover}>
+      <PopoverSurface className={styles.detailsPopover} aria-label={item.title}>
         <div className={styles.calloutHeader}>
           <div
             hidden={!data.tag}

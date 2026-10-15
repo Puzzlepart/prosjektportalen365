@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { baseURL } from '../../playwright.config'
+import { SURFACES } from '../fixtures/a11y'
 import { WEB_PART, expect, test, webPart } from '../fixtures/pp365'
 
 /**
@@ -185,6 +186,33 @@ test.describe('portfolio hub', () => {
       page.getByRole('dialog').getByRole('heading', { name: /^filtr|^filter/i })
     ).toBeVisible()
     await page.keyboard.press('Escape')
+  })
+
+  test("the project timeline's items open from the keyboard, and its scroll area takes focus (#1788)", async ({
+    page,
+    openPage,
+    resolvePage
+  }) => {
+    await openPage(await resolvePage(hub, PAGES.timeline))
+    const timeline = page.locator('.react-calendar-timeline').first()
+    // The calendar renders its scroll area itself; the timeline names it and puts it in the tab
+    // order through the calendar's `scrollRef`, so the arrow keys scroll it (WCAG 2.1.1).
+    const scrollArea = timeline.getByRole('group', {
+      name: /rull i tid med piltastene|scroll in time with the arrow keys/i
+    })
+    await expect(scrollArea).toBeVisible({ timeout: 60_000 })
+    await expect(scrollArea).toHaveAttribute('tabindex', '0')
+    // An item is a button: Enter opens its details, and Escape closes them and gives focus back
+    // to the item, which the popover, opened without a trigger of Fluent's, would not.
+    const item = timeline.locator('.rc-item[role="button"]').first()
+    await expect(item).toBeVisible({ timeout: 60_000 })
+    await item.focus()
+    await page.keyboard.press('Enter')
+    const details = page.locator(SURFACES.popover)
+    await expect(details).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(details).toBeHidden()
+    await expect(item).toBeFocused()
   })
 
   test('benefit overview page loads', async ({ page, openPage, resolvePage }) => {

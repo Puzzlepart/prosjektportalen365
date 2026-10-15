@@ -318,3 +318,40 @@ Tests first: ten tests in eight files failed on the old code (two each in `Peopl
 the consumers' tests that render the changed parts: `RiskAction` in ProjectExtensions, and the
 project list, the project cards and the idea module in PortfolioWebParts. Left in slice 1: the
 timeline.
+
+### Slice 1, part 3 — The timeline (2026-10-14)
+
+`react-calendar-timeline` has no keyboard model, but it draws each item with our `itemRenderer`
+and hands its scroll area to `scrollRef`, so most of what the risk above feared could be done in
+place, in the library's `Timeline`, which all four timelines use (project, portfolio, program and
+resource allocation).
+
+- **The items are buttons** (`role="button"`, `tabIndex=0`, `aria-haspopup="dialog"`): Enter or
+  Space opens the details, as a click does. A milestone, which shows no text, is named by its
+  title. The details popover is named by the item, and Escape gives focus back to the item: the
+  popover is positioned on the item, with no `PopoverTrigger` of Fluent's to return focus to.
+  A `:focus-visible` ring wins over the `outline: none` in the items' configured style.
+- **The scroll area** (`.rct-scroll`, axe's `scrollable-region-focusable` on every timeline) is a
+  focusable `group` named «Tidslinjen. Rull i tid med piltastene», so the keyboard scrolls the
+  time; checked against the real calendar under jsdom as well as the stand-in.
+- **Contrast from configuration.** The hub template's colours put white text on #f35d69 (3.19:1),
+  #2589d6 (3.73:1) and #249ea0 (3.24:1), all of axe's `color-contrast` findings on the timelines;
+  the template's rows are `UpdateBehavior="Skip"`, so a fix in the template would reach no
+  existing hub. `util/contrast.ts` measures contrast as WCAG does, and a bar's text keeps its
+  configured colour where it reads 4.5:1 against the bar and is black or white where it does not.
+  The resource allocation's bars, whose colours fade with the allocation, are measured the same
+  way, blended over white. A milestone whose colour is under 3:1 against the timeline (the
+  default yellow, 1.55:1, and the triangle's light blue) gets a one-pixel outline in
+  `colorNeutralStrokeAccessible` (1.4.11), drawn as a shadow on a wrapper, since a shape cut out
+  with `clip-path` takes no border.
+- **Split out**: a list beside the portfolio, program and resource allocation timelines, as the
+  project timeline has (`TimelineList`): a product decision (the plan's risks), drafted as an
+  issue. Noted: a long timeline is many tab stops; the today marker is a line in colour alone.
+
+Tests first: five tests in `Timeline.test.tsx` failed on the old code (the keyboard and the focus
+return, the milestones' names, the scroll area, the text colour, the outline) and pass, with
+`contrast.test.ts` beside them. The library's 75 test files and its runtime tests pass, and the
+timeline tests of ProjectWebParts, ProgramWebParts and PortfolioWebParts' resource allocation. A
+new smoke test opens a portfolio timeline item with Enter and checks the focus after Escape
+against the real calendar on the test tenant; it passes once the change is deployed there.
+Slice 1 is done but for the hand rounds (screen reader, zoom, contrast themes).

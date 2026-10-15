@@ -1,6 +1,7 @@
 import _ from 'underscore'
 import moment from 'moment'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
+import strings from 'SharedLibraryStrings'
 import { ITimelineItem, TimelineGroupType } from '../../../interfaces'
 import { ITimelineProps } from './types'
 import { useGroupRenderer } from './useGroupRenderer'
@@ -17,17 +18,38 @@ export function useTimeline(props: ITimelineProps) {
   const [selectedGroupBy, setSelectedGroupBy] = useState<string>(props.defaultGroupBy)
 
   /**
-   * On item click
+   * Opens an item's details, from a click or from the keyboard.
    *
    * @param event Event
    * @param item Item
    */
-  const onItemClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    item: ITimelineItem
-  ) => {
+  const onItemClick = (event: React.SyntheticEvent<HTMLDivElement>, item: ITimelineItem) => {
     setShowDetails({ element: event.currentTarget, item })
   }
+
+  /**
+   * Closes the details. Closed with Escape, focus goes back to the item they belong to: the
+   * popover has no trigger of Fluent's to return it to, so it would be lost to the page.
+   *
+   * @param event The event that closed them
+   */
+  const onDetailsDismiss = (event?: React.SyntheticEvent | Event) => {
+    const element = showDetails?.element
+    setShowDetails(null)
+    if (event?.type === 'keydown') element?.focus()
+  }
+
+  /**
+   * Makes the calendar's scroll area a named stop for the keyboard, so the timeline can be
+   * scrolled in time with the arrow keys (WCAG 2.1.1). The calendar renders it and takes no props
+   * for it, only this ref.
+   */
+  const scrollRef = useCallback((element: HTMLDivElement | null) => {
+    if (!element) return
+    element.tabIndex = 0
+    element.setAttribute('role', 'group')
+    element.setAttribute('aria-label', strings.Aria.TimelineScrollLabel)
+  }, [])
 
   const defaultTimeStart = moment().add(...props.defaultTimeframe[0])
   const defaultTimeEnd = moment().add(...props.defaultTimeframe[1])
@@ -56,6 +78,8 @@ export function useTimeline(props: ITimelineProps) {
     setShowFilterPanel,
     setShowDetails,
     onItemClick,
+    onDetailsDismiss,
+    scrollRef,
     itemRenderer,
     groupRenderer
   } as const

@@ -1,6 +1,7 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
 // Babel, so mocks are not hoisted. The calendar (`react-calendar-timeline`) needs a real layout,
-// so it is a stand-in that draws each group and item through the timeline's own renderers and
+// so it is a stand-in that draws each group and item through the timeline's own renderers, the
+// items inside its scroll element (`.rct-scroll`, handed to `scrollRef` as the calendar does), and
 // shows the time frame and sidebar it was given. Fluent's popover and menu are stand-ins that keep
 // their contract (see the testing guide): the details popover shows while open and reports
 // Escape through `onOpenChange`, and the menu trigger toggles through `onOpenChange`.
@@ -18,15 +19,19 @@ jest.mock('react-calendar-timeline', () => {
       props.groups.map((group: any) =>
         React.createElement('div', { key: `group-${group.id}` }, props.groupRenderer({ group }))
       ),
-      props.items.map((item: any) =>
-        React.createElement(
-          'div',
-          { key: `item-${item.id}` },
-          props.itemRenderer({
-            item,
-            itemContext: { dimensions: { height: 20 } },
-            getItemProps: (itemProps: any) => itemProps
-          })
+      React.createElement(
+        'div',
+        { className: 'rct-scroll', ref: props.scrollRef },
+        props.items.map((item: any) =>
+          React.createElement(
+            'div',
+            { key: `item-${item.id}` },
+            props.itemRenderer({
+              item,
+              itemContext: { dimensions: { height: 20 } },
+              getItemProps: (itemProps: any) => itemProps
+            })
+          )
         )
       )
     )
@@ -53,8 +58,8 @@ jest.mock('@fluentui/react-components', () => {
           children
         )
       : null
-  const PopoverSurface = ({ children }: any) =>
-    React.createElement('div', { role: 'dialog' }, children)
+  const PopoverSurface = ({ children, ...props }: any) =>
+    React.createElement('div', { role: 'dialog', 'aria-label': props['aria-label'] }, children)
   const MenuContext = React.createContext({ open: false, toggle: (_event: any) => undefined })
   const Menu = ({ open, onOpenChange, children }: any) =>
     React.createElement(
@@ -79,6 +84,7 @@ jest.mock('@fluentui/react-components', () => {
 
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import moment from 'moment'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import strings from 'SharedLibraryStrings'
 import * as React from 'react'
 import resource from 'SharedResources'
@@ -335,5 +341,86 @@ describe('Timeline', () => {
     fireEvent.click(within(calendar()).getByText('Kontrakt signert'))
     expect(within(details()).getAllByText('Kontrakt signert').length).toBeGreaterThan(0)
     expect(within(details()).getByText('0%')).toBeInTheDocument()
+  })
+
+  it('opens an item from the keyboard, and gives focus back to it on Escape (WCAG 2.1.1)', () => {
+    renderTimeline()
+    const bar = within(calendar()).getByRole('button', { name: 'Prosjekt: Frisbeegolfbane' })
+    expect(bar).toHaveAttribute('tabindex', '0')
+    expect(bar).toHaveAttribute('aria-haspopup', 'dialog')
+    bar.focus()
+    fireEvent.keyDown(bar, { key: 'Enter' })
+    expect(details()).toHaveAccessibleName('Prosjekt: Frisbeegolfbane')
+    // Fluent's popover takes focus into the details; Escape there closes them.
+    const link = within(details()).getByText('Frisbeegolfbane')
+    link.focus()
+    fireEvent.keyDown(link, { key: 'Escape' })
+    expect(screen.queryByRole('dialog')).toBeNull()
+    expect(bar).toHaveFocus()
+    fireEvent.keyDown(within(calendar()).getByRole('button', { name: 'Åpning' }), { key: ' ' })
+    expect(within(details()).getByText(`${strings.MilestoneDateLabel}:`)).toBeInTheDocument()
+  })
+
+  it('names a milestone, which shows no text, by its title (WCAG 4.1.2)', () => {
+    renderTimeline()
+    expect(within(calendar()).getByRole('button', { name: 'Åpning' })).toBeInTheDocument()
+    expect(within(calendar()).getByRole('button', { name: 'Forprosjekt' })).toBeInTheDocument()
+  })
+
+  it('lets the keyboard reach the timeline to scroll it, as a named group (WCAG 2.1.1)', async () => {
+    renderTimeline()
+    const scroll = screen.getByRole('group', { name: strings.Aria.TimelineScrollLabel })
+    expect(scroll).toHaveClass('rct-scroll')
+    expect(scroll).toHaveAttribute('tabindex', '0')
+    expect(await axeComponent(calendar())).toHaveNoViolations()
+  })
+
+  it('writes an item in a colour readable on its background (WCAG 1.4.3)', () => {
+    const coloured = (id: number, title: string, background: string, color: string) => ({
+      ...item(id, title, {
+        type: resource.TimelineConfiguration_Project_Title,
+        elementType: resource.TimelineConfiguration_Bar_ElementType
+      }),
+      itemProps: { style: { background, backgroundColor: background, color } }
+    })
+    renderTimeline({
+      items: [coloured(6, 'Lys', '#f35d69', '#ffffff'), coloured(7, 'Mørk', '#1f4e79', '#ffffff')]
+    })
+    // White on the template's red is 3.19:1; black on it is 6.6:1.
+    expect(within(calendar()).getByRole('button', { name: 'Lys' })).toHaveStyle({
+      color: '#000000'
+    })
+    expect(within(calendar()).getByRole('button', { name: 'Mørk' })).toHaveStyle({
+      color: '#ffffff'
+    })
+  })
+
+  it('outlines a milestone whose colour is faint against the timeline (WCAG 1.4.11)', () => {
+    const milestone = (
+      id: number,
+      title: string,
+      bgColorHex?: string,
+      elementType = resource.TimelineConfiguration_Diamond_ElementType
+    ) =>
+      item(id, title, {
+        type: resource.TimelineConfiguration_Milestone_Title,
+        elementType,
+        bgColorHex
+      })
+    renderTimeline({
+      items: [
+        milestone(8, 'Gul', '#ffc800'),
+        milestone(9, 'Mørkeblå', '#1f4e79'),
+        milestone(10, 'Uten farge'),
+        milestone(11, 'Trekant', undefined, resource.TimelineConfiguration_Triangle_ElementType)
+      ]
+    })
+    const outlined = (name: string) =>
+      within(calendar()).getByRole('button', { name }).querySelector('.milestoneOutline') !== null
+    expect(outlined('Gul')).toBe(true)
+    expect(outlined('Mørkeblå')).toBe(false)
+    // The default colours, yellow for a diamond and light blue for a triangle, are faint too.
+    expect(outlined('Uten farge')).toBe(true)
+    expect(outlined('Trekant')).toBe(true)
   })
 })
