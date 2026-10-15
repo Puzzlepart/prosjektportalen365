@@ -11,6 +11,7 @@ Mer informasjon om løsningen, hvordan den er satt opp og hvordan overordnede ko
 Prosjektportalen har en KI-assistent som åpnes fra footeren. Den kan blant annet oppsummere statusrapporter, svare på spørsmål om prosjektet og porteføljen, foreslå listeinnhold og lage utkast til sluttrapport. Assistenten er slått av som standard, og krever eget oppsett med KI-tjenester i virksomhetens eget Azure-abonnement.
 
 - [PP Assistenten](https://github.com/Puzzlepart/prosjektportalen365/wiki/PP-Assistenten) - hva assistenten er og hvilke operasjoner den har
-- [Oppsett av PP Assistenten](https://github.com/Puzzlepart/prosjektportalen365/wiki/Oppsett-av-PP-Assistenten) - Azure AI Foundry, Key Vault, oppsettsskriptet og registrering
+- [Oppsett av PP Assistenten](https://github.com/Puzzlepart/prosjektportalen365/wiki/Oppsett-av-PP-Assistenten) - Microsoft Foundry, Key Vault, oppsettsskriptet og registrering
 - [Konfigurasjon av PP Assistenten](https://github.com/Puzzlepart/prosjektportalen365/wiki/Konfigurasjon-av-PP-Assistenten) - globale innstillinger, tilgangsstyring og hva hvert felt gjør
+- [Sikkerhet i PP Assistenten](https://github.com/Puzzlepart/prosjektportalen365/wiki/Sikkerhet-i-PP-Assistenten) - dataflyt, tilganger, telemetri og anbefalinger for sikkerhetsansvarlige
 - [Endringslogg for PP Assistenten](https://github.com/Puzzlepart/prosjektportalen365/wiki/Endringslogg-PP-Assistenten) - hva som er nytt i hver versjon
