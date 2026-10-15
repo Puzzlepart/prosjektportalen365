@@ -26,20 +26,16 @@ import strings from 'PortfolioExtensionsStrings'
 export default class FooterApplicationCustomizer extends BaseApplicationCustomizer<IFooterApplicationCustomizerProperties> {
   private _bottomPlaceholder: PlaceholderContent
   private _installEntries: InstallationEntry[]
-  private _gitHubReleases: IGitHubRelease[]
-  private _links: { Url: string; Description: string; Level?: string }[]
-  private _favoriteProjects: { name: string; url: string }[]
   private _useAssistant: boolean
   private _hasAssistantAccess: boolean
   private _assistantEndpointUrl: string
-  private _helpContent: HelpContentModel[]
   private _portalDataService: PortalDataService
   private _showFooter: boolean
   private _minimizeFooter: boolean
   private _globalSettings: Map<string, string>
 
   /**
-   * On init, fetch the installation logs, GitHub releases and links.
+   * Initializes the settings and data required for the visible footer.
    */
   public async onInit(): Promise<void> {
     await super.onInit()
@@ -49,10 +45,6 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
 
     if (!this._portalDataService.isAvailable) {
       this._installEntries = []
-      this._gitHubReleases = []
-      this._helpContent = []
-      this._links = []
-      this._favoriteProjects = []
       this._useAssistant = false
       this._hasAssistantAccess = false
       this._assistantEndpointUrl = ''
@@ -61,30 +53,23 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       return Promise.resolve()
     }
 
-    const [installEntries, gitHubReleases, helpContent, links, favoriteProjects] =
-      await Promise.all([
-        this._fetchInstallationLogs(),
-        this._fetchGitHubReleases(),
-        this._fetchHelpContent(),
-        this._fetchLinks(),
-        this._fetchFavoriteProjects()
-      ])
-
-    this._installEntries = installEntries
-    this._gitHubReleases = gitHubReleases
-    this._helpContent = helpContent
-    this._links = links
-    this._favoriteProjects = favoriteProjects
     this._useAssistant = this._globalSettings.get('UseAssistant') === '1'
     this._showFooter = this._globalSettings.get('ShowFooter') === '1'
     this._minimizeFooter = this._globalSettings.get('MinimizeFooter') === '1'
+
+    if (!this._showFooter) return Promise.resolve()
 
     const useBetaChannel = this._globalSettings.get('UseBetaChannel') === '1'
     const betaEndpointUrl = this._globalSettings.get('BetaEndpointUrl')
     const endpointUrl = this._globalSettings.get('EndpointUrl')
     this._assistantEndpointUrl = useBetaChannel && betaEndpointUrl ? betaEndpointUrl : endpointUrl
 
-    this._hasAssistantAccess = await this._checkAssistantAccess()
+    const [installEntries, hasAssistantAccess] = await Promise.all([
+      this._fetchInstallationLogs(),
+      this._useAssistant ? this._checkAssistantAccess() : Promise.resolve(false)
+    ])
+    this._installEntries = installEntries
+    this._hasAssistantAccess = hasAssistantAccess
     this.context.application.navigatedEvent.add(this, this._handleNavigatedEvent)
     return Promise.resolve()
   }
@@ -92,19 +77,14 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   private async _handleNavigatedEvent(): Promise<void> {
     if (!this._portalDataService?.isAvailable) return
 
-    const [helpContent, hasAssistantAccess] = await Promise.all([
-      this._fetchHelpContent(),
-      this._checkAssistantAccess()
-    ])
-    this._helpContent = helpContent
-    this._hasAssistantAccess = hasAssistantAccess
+    this._hasAssistantAccess = this._useAssistant ? await this._checkAssistantAccess() : false
 
     this._renderFooter(PlaceholderName.Bottom, {
       installEntries: this._installEntries,
-      gitHubReleases: this._gitHubReleases,
-      helpContent: this._helpContent,
-      links: this._links,
-      favoriteProjects: this._favoriteProjects,
+      loadGitHubReleases: () => this._fetchGitHubReleases(),
+      loadHelpContent: () => this._fetchHelpContent(),
+      loadLinks: () => this._fetchLinks(),
+      loadFavoriteProjects: () => this._fetchFavoriteProjects(),
       pageContext: this.context.pageContext,
       portalUrl: this._portalDataService.url,
       useAssistant: this._useAssistant,
@@ -172,10 +152,9 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       const installationLogList = this._portalDataService.web.lists.getByTitle(
         resource.Lists_InstallationLog_Title
       )
-      const installationLogItems = await installationLogList.items.orderBy(
-        orderBy,
-        orderAscending
-      )()
+      const installationLogItems = await installationLogList.items
+        .orderBy(orderBy, orderAscending)
+        .top(1)()
       return installationLogItems.map((item) => new InstallationEntry(item))
     } catch (error) {
       return []
@@ -263,9 +242,21 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   private async _fetchGitHubReleases(
     repoName = 'puzzlepart/prosjektportalen365'
   ): Promise<IGitHubRelease[]> {
-    const response = await fetch(`https://api.github.com/repos/${repoName}/releases`)
-    const releases = await response.json()
-    return releases
+    try {
+      return await new PnPClientStorage().session.getOrPut(
+        `pp365_github_releases_${repoName}`,
+        async () => {
+          const response = await fetch(`https://api.github.com/repos/${repoName}/releases`)
+          if (!response.ok) return []
+
+          const releases = await response.json()
+          return Array.isArray(releases) ? releases : []
+        },
+        dateAdd(new Date(), 'hour', 4)
+      )
+    } catch (error) {
+      return []
+    }
   }
 
   /**

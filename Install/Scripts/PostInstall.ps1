@@ -63,15 +63,36 @@ else {
 }
 
 Write-Host "[INFO] Post-install action: Disabling content types for lists"
-Set-PnPList -Identity (Get-Resource -Name "Lists_ProjectColumnConfiguration_Title") -EnableContentTypes:$false >$null 2>&1  
-Set-PnPList -Identity (Get-Resource -Name "Lists_PhaseChecklistLegacy_Url") -EnableContentTypes:$false >$null 2>&1
-Set-PnPList -Identity (Get-Resource -Name "Lists_PhaseChecklistV6_Url") -EnableContentTypes:$false >$null 2>&1
-Set-PnPList -Identity (Get-Resource -Name "Lists_Configuration_Title") -EnableContentTypes:$false >$null 2>&1  
-Set-PnPList -Identity (Get-Resource -Name "Lists_PortfolioViews_Title") -EnableContentTypes:$false >$null 2>&1  
-Set-PnPList -Identity (Get-Resource -Name "Lists_ProjectColumns_Title") -EnableContentTypes:$false >$null 2>&1  
-Set-PnPList -Identity (Get-Resource -Name "Lists_ResourceAllocation_Title") -EnableContentTypes:$false >$null 2>&1  
-Set-PnPList -Identity (Get-Resource -Name "Lists_PlannerTasksLegacy_Url") -EnableContentTypes:$false >$null 2>&1
-Set-PnPList -Identity (Get-Resource -Name "Lists_PlannerTasksV6_Url") -EnableContentTypes:$false >$null 2>&1
+# Listene «Fasesjekkliste» (Lists/Fasesjekkliste) og «Planneroppgaver» (Lists/Planneroppgaver)
+# finnes KUN i oppgraderte miljøer - v6-splitten døper dem om til «... (tidligere)», men
+# nyinstallasjoner provisjonerer bare v6-listene. Install.ps1 setter $ErrorActionPreference =
+# "Stop", og PostInstall.ps1 dot-sources inn i den scopen: et manglende liste-oppslag ble derfor
+# en terminerende feil som avbrøt HELE PostInstall ved nyinstallasjon - inkludert IsDefaultTemplate
+# og koblingen av listeinnhold til Standardmal lenger ned. Stream-omdirigering ($null 2>&1) stopper
+# ikke den konverteringen, så hvert kall må vaktes eksplisitt.
+function Disable-ListContentTypes {
+    param([string]$Identity)
+    if ([string]::IsNullOrWhiteSpace($Identity)) { return }
+    try {
+        $List = Get-PnPList -Identity $Identity -ErrorAction SilentlyContinue
+        if ($null -eq $List) { return }
+        Set-PnPList -Identity $List.Id -EnableContentTypes:$false -ErrorAction Stop >$null
+    }
+    catch {
+        Write-Host "[WARNING] Failed to disable content types for [$Identity]: $($_.Exception.Message)" -ForegroundColor Yellow
+    }
+}
+@(
+    (Get-Resource -Name "Lists_ProjectColumnConfiguration_Title"),
+    (Get-Resource -Name "Lists_PhaseChecklistLegacy_Url"),
+    (Get-Resource -Name "Lists_PhaseChecklistV6_Url"),
+    (Get-Resource -Name "Lists_Configuration_Title"),
+    (Get-Resource -Name "Lists_PortfolioViews_Title"),
+    (Get-Resource -Name "Lists_ProjectColumns_Title"),
+    (Get-Resource -Name "Lists_ResourceAllocation_Title"),
+    (Get-Resource -Name "Lists_PlannerTasksLegacy_Url"),
+    (Get-Resource -Name "Lists_PlannerTasksV6_Url")
+) | ForEach-Object { Disable-ListContentTypes -Identity $_ }
 
 Write-Host "[INFO] Post-install action: Ensuring project column configuration for v6 status fields"
 # Fargekonfigurasjonen for de nye statusfeltene (område G) seedes også statisk i
@@ -89,7 +110,8 @@ $V6StatusColumnConfig = @(
     @{ Field = "GtStatusScope"; Choice = "Choice_GtStatusScope_MajorChanges"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusScope_MajorChanges_Title"; Color = "#ea5c73" },
     @{ Field = "GtStatusSustainability"; Choice = "Choice_GtStatusSustainability_AsPlanned"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusSustainability_AsPlanned_Title"; Color = "#2da748" },
     @{ Field = "GtStatusSustainability"; Choice = "Choice_GtStatusSustainability_MinorDeviation"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusSustainability_MinorDeviation_Title"; Color = "#e9b359" },
-    @{ Field = "GtStatusSustainability"; Choice = "Choice_GtStatusSustainability_MajorDeviation"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusSustainability_MajorDeviation_Title"; Color = "#ea5c73" }
+    @{ Field = "GtStatusSustainability"; Choice = "Choice_GtStatusSustainability_MajorDeviation"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusSustainability_MajorDeviation_Title"; Color = "#ea5c73" },
+    @{ Field = "GtStatusSustainability"; Choice = "Choice_GtStatusSustainability_NotDetermined"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusSustainability_NotDetermined_Title"; Color = "#e9b359" }
 )
 foreach ($Config in $V6StatusColumnConfig) {
     $Column = $ProjectColumnsItems | Where-Object { $_["GtInternalName"] -eq $Config.Field } | Select-Object -First 1

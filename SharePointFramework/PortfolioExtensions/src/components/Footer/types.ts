@@ -8,19 +8,19 @@ export interface IFooterProps {
   installEntries: InstallationEntry[]
 
   /**
-   * Releases from GitHub
+   * Loads releases from GitHub
    */
-  gitHubReleases: IGitHubRelease[]
+  loadGitHubReleases: () => Promise<IGitHubRelease[]>
 
   /**
-   * Help content to display in the footer
+   * Loads help content to display in the footer
    */
-  helpContent: HelpContentModel[]
+  loadHelpContent: () => Promise<HelpContentModel[]>
 
   /**
-   * Links to display in the footer
+   * Loads links to display in the footer
    */
-  links: { Url: string; Description: string; Level?: string }[]
+  loadLinks: () => Promise<{ Url: string; Description: string; Level?: string }[]>
 
   /**
    * Page context object
@@ -58,7 +58,7 @@ export interface IFooterProps {
   minimizeFooter: boolean
 
   /**
-   * Favorite projects (followed sites) for the current user
+   * Loads favorite projects (followed sites) for the current user
    */
-  favoriteProjects: { name: string; url: string }[]
+  loadFavoriteProjects: () => Promise<{ name: string; url: string }[]>
 }

@@ -372,12 +372,31 @@ export class CatalogService {
         labelKeys: []
       },
       {
+        key: 'client-side-pages',
+        summaryLabel: strings.CatalogContentClientSidePages,
+        hierarchyLabel: strings.CatalogContentClientSidePages,
+        icon: 'clientSidePages',
+        entries: [
+          ...CatalogService._asArray(hub?.ClientSidePages),
+          ...CatalogService._asArray(template?.ClientSidePages)
+        ],
+        labelKeys: ['Title', 'Name']
+      },
+      {
         key: 'extensions',
         summaryLabel: strings.CatalogContentExtensions,
         hierarchyLabel: strings.CatalogContentExtensions,
         icon: 'extensions',
         entries: CatalogService._asArray(manifest.provisioning?.extensions),
         labelKeys: ['name', 'Name']
+      },
+      {
+        key: 'list-content',
+        summaryLabel: strings.CatalogContentListContent,
+        hierarchyLabel: strings.CatalogContentListContent,
+        icon: 'content',
+        entries: CatalogService._asArray(manifest.provisioning?.listContent),
+        labelKeys: ['title', 'name', 'Title']
       },
       {
         key: 'files',

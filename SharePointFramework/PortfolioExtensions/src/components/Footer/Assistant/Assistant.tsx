@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import React, { FC, useContext, useState } from 'react'
+import React, { FC, useContext } from 'react'
 import * as strings from 'PortfolioExtensionsStrings'
 import { FooterContext } from '../context'
 import {
@@ -12,23 +12,21 @@ import {
   Button,
   DrawerHeader,
   DrawerBody,
-  DrawerHeaderNavigation,
   Toolbar,
   ToolbarButton,
-  ToolbarGroup,
   Spinner,
   DrawerHeaderTitle
 } from '@fluentui/react-components'
 import { customLightTheme, getFluentIcon } from 'pp365-shared-library'
 import styles from './Assistant.module.scss'
 import resource from 'SharedResources'
+import { useAssistant } from './useAssistant'
 
 export const Assistant: FC = () => {
   const context = useContext(FooterContext)
   const fluentProviderId = useId('fp-assistant')
   const isUnavailable = false
-  const [open, setOpen] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const { open, hasOpened, loading, close, toggle, setDrawerOpen, setLoading } = useAssistant()
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
@@ -36,42 +34,36 @@ export const Assistant: FC = () => {
         <OverlayDrawer
           role='panel'
           position='end'
-          size='medium'
-          // Litt bredere enn Fluents 'medium' (592px). Settes som inline variabel fordi
-          // Fluent-klassen setter samme variabel, og max-width: 100vw fanger små skjermer.
-          style={{ '--fui-Drawer--size': '720px' } as React.CSSProperties}
+          className={styles.drawer}
           open={open}
-          onOpenChange={(_, { open }) => setOpen(open)}
+          onOpenChange={(_, { open }) => setDrawerOpen(open)}
         >
-          <DrawerHeader>
-            <DrawerHeaderNavigation>
-              <Toolbar className={styles.toolbar}>
-                <DrawerHeaderTitle>{strings.AssistantDrawerTitle}</DrawerHeaderTitle>
-                <ToolbarGroup>
-                  <ToolbarButton
-                    appearance='subtle'
-                    title={strings.AssistantSettingsTooltip}
-                    disabled={!context.props.pageContext.legacyPageContext.isSiteAdmin}
-                    icon={getFluentIcon('Settings')}
-                    onClick={() =>
-                      window.open(
-                        `${context.props.portalUrl}/${resource.Lists_Global_Settings_Url}`,
-                        '_blank'
-                      )
-                    }
-                  />
-                  <ToolbarButton
-                    title={strings.CloseLabel}
-                    appearance='subtle'
-                    icon={getFluentIcon('Dismiss')}
-                    onClick={() => setOpen(false)}
-                  />
-                </ToolbarGroup>
-              </Toolbar>
-            </DrawerHeaderNavigation>
+          <DrawerHeader className={styles.header}>
+            <div className={styles.title}>
+              {getFluentIcon('BotSparkle', { filled: true, size: '24px' })}
+              <DrawerHeaderTitle>{strings.AssistantDrawerTitle}</DrawerHeaderTitle>
+            </div>
+            <Toolbar className={styles.actions}>
+              <ToolbarButton
+                appearance='subtle'
+                title={strings.AssistantSettingsTooltip}
+                disabled={!context.props.pageContext.legacyPageContext.isSiteAdmin}
+                icon={getFluentIcon('Settings')}
+                onClick={() =>
+                  window.open(
+                    `${context.props.portalUrl}/${resource.Lists_Global_Settings_Url}`,
+                    '_blank'
+                  )
+                }
+              />
+              <ToolbarButton
+                title={strings.CloseLabel}
+                appearance='subtle'
+                icon={getFluentIcon('Dismiss')}
+                onClick={close}
+              />
+            </Toolbar>
           </DrawerHeader>
-          {/* padding må settes inline: Fluent har en `.fui-DrawerBody:last-child`-regel med
-              padding-bottom som slår klassen vår, og gir en hvit stripe under footeren i iframen. */}
           <DrawerBody className={styles.body} style={{ padding: 0 }}>
             {loading && (
               <Spinner
@@ -80,14 +72,16 @@ export const Assistant: FC = () => {
                 style={{ padding: 10, minHeight: '20px' }}
               />
             )}
-            <iframe
-              src={`${context.props.assistantEndpointUrl}?source=${context.props.pageContext.web.absoluteUrl}`}
-              style={{ display: loading ? 'none' : 'block', border: 'none', width: '100%', height: '100%' }}
-              title={strings.AssistantIframeTitle}
-              width='100%'
-              height='100%'
-              onLoad={() => setLoading(false)}
-            />
+            {hasOpened && (
+              <iframe
+                src={`${context.props.assistantEndpointUrl}?source=${context.props.pageContext.web.absoluteUrl}`}
+                style={{ display: loading ? 'none' : 'block', border: 'none' }}
+                title={strings.AssistantIframeTitle}
+                width='100%'
+                height='100%'
+                onLoad={() => setLoading(false)}
+              />
+            )}
           </DrawerBody>
         </OverlayDrawer>
         <Tooltip
@@ -101,7 +95,7 @@ export const Assistant: FC = () => {
             appearance='primary'
             disabled={isUnavailable}
             icon={isUnavailable ? getFluentIcon('Bot') : getFluentIcon('BotSparkle')}
-            onClick={() => setOpen(!open)}
+            onClick={toggle}
           >
             {strings.AssistantButtonLabel}
           </Button>

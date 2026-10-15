@@ -110,6 +110,8 @@ declare interface IPortfolioExtensionsStrings {
   CatalogContentFieldFallback: string
   CatalogContentTaxonomy: string
   CatalogContentTermSets: string
+  CatalogContentClientSidePages: string
+  CatalogContentListContent: string
   CatalogContentExtensions: string
   CatalogContentFiles: string
   CatalogShowDetails: string

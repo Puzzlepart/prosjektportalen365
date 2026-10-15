@@ -137,7 +137,6 @@ const logLevelIcon = (level: IInstallLogEntry['level']) => {
 export const InstallProgress: FC = () => {
   const { state, setState, selectedPackage, importPackage } = useCatalogContext()
   const cls = useLogStyles()
-  // Advanced log is collapsed by default (like ProjectSetup); auto-expands on error.
   const [logExpanded, setLogExpanded] = useState(false)
   const logRef = useRef<HTMLDivElement>(null)
   const progress = state.installProgress

@@ -23,7 +23,11 @@
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
                                         <pnp:Property Key="ShowOnFrontpage" Value="false" />
-                                        <pnp:Property Key="PhaseSubText" Value="" />
+                                        <pnp:Property Key="PhaseSubText" Value="Utforske behov, problem og idéer" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Explore needs, problems and ideas" />
+                                        <pnp:Property Key="PhaseSubText_en-us" Value="Capture and describe the idea" />
+                                        <pnp:Property Key="PhaseDescription" Value="Idéfasen fanger opp et behov eller en mulighet før den er utredet. Her beskrives idéen kort — hva den handler om, hvem den angår og hvilken nytte den kan gi — slik at virksomheten kan avgjøre om den er verdt å utrede videre i konseptfasen." />
+                                        <pnp:Property Key="PhaseDescription_en-us" Value="The idea phase captures a need or an opportunity before it has been assessed. The idea is described briefly — what it is about, who it concerns and what benefits it may give — so the organization can decide whether it is worth investigating further in the concept phase." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Konsept" ID="99e85650-33de-4af4-b8db-edffbc8a310b" CustomSortOrder="3" SourceTermId="99e85650-33de-4af4-b8db-edffbc8a310b">

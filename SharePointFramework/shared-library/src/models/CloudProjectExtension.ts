@@ -31,12 +31,22 @@ export class CloudProjectExtension extends ProjectExtension {
       FieldValuesAsText: { GtDescription: ext.description ?? '' },
       GtExtensionDefault: !!ext.defaultSelected,
       GtExtensionHidden: false,
-      GtExtensionLocked: false
+      GtExtensionLocked: !!ext.locked
     }
     const instance = new CloudProjectExtension(spItem, undefined)
     instance._file = ext.file
     instance._package = pkg
     return instance
+  }
+
+  /**
+   * A bundled extension always belongs to its cloud template. The base
+   * implementation compares hub item ids, which the synthetic cloud ids never
+   * match, so it is overridden here (this also makes `locked` bundled extensions
+   * mandatory through `isMandatoryForTemplate`).
+   */
+  public isDefaultForTemplate(): boolean {
+    return true
   }
 
   /**

@@ -15,8 +15,25 @@ export interface IManifestExtension {
    * (e.g. `provisioning/extensions/EnkeltProsjekt.json`).
    */
   file: string
+  /**
+   * Informational only (not read by Prosjektportalen). Use `locked` to make the
+   * extension mandatory for its template.
+   */
   optional?: boolean
+  /**
+   * Pre-select the extension in the setup wizard (`GtExtensionDefault`). Note
+   * that the hub item flag is hub-wide: the extension is then pre-selected for
+   * every template, not only the one it is linked to.
+   */
   defaultSelected?: boolean
+  /**
+   * Lock the extension (`GtExtensionLocked`). For the template it is linked to
+   * (import: Maloppsett `GtProjectExtensions`; cloud: bundled in the `.pppkg`)
+   * it is always applied and cannot be deselected. Combined with
+   * `defaultSelected: false` it is also hidden in the wizard, which mirrors a
+   * hidden, template-bound Prosjekttillegg item.
+   */
+  locked?: boolean
 }
 
 /**
@@ -175,6 +192,13 @@ export interface IPackageManifest {
      * wizard provisions projects from this template with that content type.
      */
     projectContentTypeId?: string
+    /**
+     * Content type ID (defined by the hub template) to record as
+     * `GtProjectStatusContentType` on the imported Maloppsett item, so status
+     * reports for projects created from this template use that content type
+     * instead of the standard one.
+     */
+    projectStatusContentTypeId?: string
     /**
      * Term set ID (provisioned by the hub template) to record as
      * `GtProjectPhaseTermId` on the imported Maloppsett item, so projects created

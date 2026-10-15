@@ -6,6 +6,7 @@ import '@pnp/sp/lists'
 import '@pnp/sp/folders'
 import '@pnp/sp/files'
 import '@pnp/sp/items'
+import { TEMPLATE_PACKAGE_STORE_FOLDER } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
 import resource from 'SharedResources'
 import SPDataAdapter from 'data/SPDataAdapter'
@@ -26,8 +27,10 @@ import { isNewerVersion } from './version'
 /**
  * Folder (under the hub Template Library) where imported project-level
  * provisioning assets are stored for later use by the setup wizard (Phase 3).
+ * Shared constant — the document template selector (ProjectExtensions)
+ * excludes this folder from its listing.
  */
-const PACKAGE_STORE_FOLDER = 'pp-packages'
+const PACKAGE_STORE_FOLDER = TEMPLATE_PACKAGE_STORE_FOLDER
 
 /**
  * Routes every PnP `Logger` line (sp-js-provisioning's per-field / per-content-type /
@@ -380,6 +383,7 @@ export class PackageInstaller {
       setStatus(InstallStepKey.UpdateTemplateOptions, 'running')
       await TemplateOptionsService.upsertImported(pkg, existingItemId, {
         projectContentTypeId: manifest.provisioning?.projectContentTypeId,
+        projectStatusContentTypeId: manifest.provisioning?.projectStatusContentTypeId,
         projectPhaseTermSetId: manifest.provisioning?.projectPhaseTermSetId,
         extensionItemIds: extensionItems.map((e) => e.itemId),
         listContentItemIds: listContentItems.map((l) => l.itemId),
@@ -741,7 +745,11 @@ export class PackageInstaller {
    * Upload the package's extension provisioning file(s) into the hub
    * **Prosjekttillegg** (Project Extensions) document library, setting the
    * `Title` and description (`GtDescription`) on each, plus `GtExtensionDefault`
-   * from the manifest's `defaultSelected`. Re-import overwrites the file by name.
+   * from the manifest's `defaultSelected`, and `GtExtensionLocked` from `locked`
+   * when the manifest declares it (a locked extension linked to the template is
+   * always applied for that template and hidden in the wizard; leaving `locked`
+   * out keeps whatever lock the item already has). Re-import overwrites the file
+   * by name.
    * Returns the created/updated Prosjekttillegg items so a template's Maloppsett
    * entry can link them via `GtProjectExtensions` (Utvidelser).
    */
@@ -775,7 +783,10 @@ export class PackageInstaller {
       await item.update({
         Title: ext.name,
         GtDescription: ext.description ?? manifest.description ?? '',
-        GtExtensionDefault: !!ext.defaultSelected
+        GtExtensionDefault: !!ext.defaultSelected,
+        // Only sent when the manifest states it, so a lock set by an
+        // administrator on the Prosjekttillegg item survives a re-import.
+        ...(ext.locked === undefined ? {} : { GtExtensionLocked: !!ext.locked })
       })
       added.push({ extensionId: ext.id, itemId: item.Id, name: ext.name })
     }

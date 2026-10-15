@@ -14,7 +14,7 @@ import { getFluentIcon, customLightTheme } from 'pp365-shared-library'
 export const HelpContent: FC = () => {
   const context = useContext(FooterContext)
   const fluentProviderId = useId('fp-footer-help-content')
-  const isUnavailable = context.props.helpContent.length === 0
+  const isUnavailable = context.isHelpContentLoaded && context.helpContent.length === 0
 
   return (
     <IdPrefixProvider value={fluentProviderId}>

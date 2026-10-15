@@ -66,7 +66,6 @@ define([], function () {
     SyncListAddingField: 'Legger til felt {0} i prosjektegenskaper...',
     BooleanYes: 'Ja',
     BooleanNo: 'Nei',
-    // ItemColumn strings
     ColumnPersistRenderGloballyFieldLabel: 'Oppdater visningsmodus globalt',
     ColumnPersistRenderGloballyFieldDescription: 'Om du ønsker å endre visningsmodus for kolonnen globaly, for alle webdeler og visninger, huk av sjekkboksen over. (Dette gjelder kun visningsmodus)',
     ColumnRenderOptionText: 'Tekst',

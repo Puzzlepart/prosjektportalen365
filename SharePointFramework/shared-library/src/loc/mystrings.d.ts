@@ -65,7 +65,6 @@ declare interface ISharedLibraryStrings {
   TimelineGroupDescription: string
   TypeLabel: string
   SyncListAddingField: string
-  // ItemColumn strings
   ColumnPersistRenderGloballyFieldLabel: string
   ColumnPersistRenderGloballyFieldDescription: string
   ColumnRenderOptionText: string

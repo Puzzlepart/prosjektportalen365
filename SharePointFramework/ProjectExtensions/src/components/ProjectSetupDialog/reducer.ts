@@ -107,9 +107,14 @@ export default (data: IProjectSetupData) =>
       state.resolvedCloudTemplate = payload
       state.isResolvingCloudTemplate = false
       state.cloudTemplateError = undefined
-      state.selectedExtensions = payload.extensions.filter((extension) => !extension.hidden)
+      // Hidden items are not shown, but a hidden item that is mandatory for the
+      // template (e.g. a locked bundled extension) must still be applied.
+      state.selectedExtensions = payload.extensions.filter(
+        (extension) => !extension.hidden || extension.isMandatoryForTemplate(state.selectedTemplate)
+      )
       state.selectedContentConfig = payload.contentConfig.filter(
-        (contentConfig) => !contentConfig.hidden
+        (contentConfig) =>
+          !contentConfig.hidden || contentConfig.isMandatoryForTemplate(state.selectedTemplate)
       )
     },
 

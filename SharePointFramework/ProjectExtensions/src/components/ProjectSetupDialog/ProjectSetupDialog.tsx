@@ -17,8 +17,10 @@ type ConfigTab = 'extensions' | 'contentConfig'
 export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
   const { state, dispatch, onSubmit, isConfigDisabled } = useProjectSetupDialog(props)
 
-  const extensionsCount = state.selectedExtensions?.length ?? 0
-  const contentConfigCount = state.selectedContentConfig?.length ?? 0
+  // Hidden selections (e.g. a locked, template-bound extension) are applied but
+  // never shown, so they must not be counted in the visible badges.
+  const extensionsCount = state.selectedExtensions?.filter((e) => !e.hidden).length ?? 0
+  const contentConfigCount = state.selectedContentConfig?.filter((c) => !c.hidden).length ?? 0
   const hasExtensions = !isConfigDisabled('extensions')
   const hasContentConfig = !isConfigDisabled('contentConfig')
 

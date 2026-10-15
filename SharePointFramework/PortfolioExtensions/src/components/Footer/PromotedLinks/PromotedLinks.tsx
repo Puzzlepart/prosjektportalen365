@@ -12,7 +12,8 @@ import {
   Tooltip,
   FluentProvider,
   IdPrefixProvider,
-  useId
+  useId,
+  Spinner
 } from '@fluentui/react-components'
 import { getFluentIcon, customLightTheme } from 'pp365-shared-library'
 import resource from 'SharedResources'
@@ -23,7 +24,7 @@ export const PromotedLinks: FC = () => {
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>
-        <Menu>
+        <Menu onOpenChange={(_, { open }) => open && context.loadLinks()}>
           <MenuTrigger disableButtonEnhancement>
             <Tooltip
               relationship='description'
@@ -47,22 +48,26 @@ export const PromotedLinks: FC = () => {
             </Tooltip>
           </MenuTrigger>
           <MenuPopover style={{ minWidth: 'fit-content' }}>
-            <MenuList>
-              {context.props.links
-                .filter((link) => {
-                  if (context.props.pageContext.legacyPageContext.isSiteAdmin) return true
-                  else return link.Level !== strings.AdministratorLabel
-                })
-                .map((link, idx) => (
-                  <MenuItem
-                    style={{ maxWidth: 'fit-content', minWidth: '100%' }}
-                    key={idx}
-                    onClick={() => window.open(link.Url, '_blank')}
-                  >
-                    {link.Description}
-                  </MenuItem>
-                ))}
-            </MenuList>
+            {!context.areLinksLoaded || context.isLinksLoading ? (
+              <Spinner size='tiny' label={strings.LinksListLabel} style={{ padding: '8px' }} />
+            ) : (
+              <MenuList>
+                {context.links
+                  .filter((link) => {
+                    if (context.props.pageContext.legacyPageContext.isSiteAdmin) return true
+                    else return link.Level !== strings.AdministratorLabel
+                  })
+                  .map((link, idx) => (
+                    <MenuItem
+                      style={{ maxWidth: 'fit-content', minWidth: '100%' }}
+                      key={idx}
+                      onClick={() => window.open(link.Url, '_blank')}
+                    >
+                      {link.Description}
+                    </MenuItem>
+                  ))}
+              </MenuList>
+            )}
           </MenuPopover>
         </Menu>
       </FluentProvider>

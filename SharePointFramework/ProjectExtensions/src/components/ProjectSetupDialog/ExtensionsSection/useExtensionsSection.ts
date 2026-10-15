@@ -61,10 +61,15 @@ export function useExtensionsSection() {
     subText: { minWidth: 250, defaultWidth: 400 }
   }
 
+  // Hidden selections are applied but never listed, so they are not counted.
+  const visibleSelectedCount = context.state.selectedExtensions.filter(
+    (item) => !item.hidden
+  ).length
+
   const toolbarItems = [
     new ListMenuItem(
-      format(strings.SelectedCountLabel, context.state.selectedExtensions.length),
-      format(strings.SelectedCountLabel, context.state.selectedExtensions.length)
+      format(strings.SelectedCountLabel, visibleSelectedCount),
+      format(strings.SelectedCountLabel, visibleSelectedCount)
     )
       .setIcon('CheckmarkCircle')
       .setDisabled(true)

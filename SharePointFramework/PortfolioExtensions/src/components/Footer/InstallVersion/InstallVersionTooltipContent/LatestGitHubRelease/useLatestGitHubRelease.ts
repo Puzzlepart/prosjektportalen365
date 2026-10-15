@@ -13,7 +13,7 @@ import { ILatestGitHubReleaseProps } from './types'
  */
 export function useLatestGitHubRelease(props: ILatestGitHubReleaseProps) {
   const context = useContext(FooterContext)
-  const latestGitHubRelease = context.props.gitHubReleases[0]
+  const latestGitHubRelease = context.gitHubReleases[0]
   const latestGitHubVersion = Version.parse(latestGitHubRelease.tag_name.substring(1))
   const installedVersion = context.props.installEntries[0].installVersion
 
