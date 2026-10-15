@@ -14,25 +14,24 @@ export const Actions: FC = () => {
       <FluentProvider theme={customLightTheme}>
         <div className={styles.root}>
           {actions.map(([text, onClickOrHref, Icon, disabled, hidden], idx) => {
-            const onClick = () => {
-              if (typeof onClickOrHref === 'string') {
-                window.open(onClickOrHref, '_self')
-              } else {
-                onClickOrHref()
-              }
+            const label = <span className={styles.label}>{text}</span>
+            const buttonProps = {
+              className: styles.button,
+              appearance: 'subtle' as const,
+              icon: <Icon />,
+              iconPosition: 'before' as const,
+              disabled,
+              style: { display: hidden && 'none' }
             }
-            return (
-              <Button
-                key={idx}
-                className={styles.button}
-                appearance='subtle'
-                icon={<Icon />}
-                iconPosition='before'
-                onClick={onClick}
-                disabled={disabled}
-                style={{ display: hidden && 'none' }}
-              >
-                <span className={styles.label}>{text}</span>
+            // An action that goes to a page is a link (WCAG 4.1.2), one that does something here
+            // a button.
+            return typeof onClickOrHref === 'string' ? (
+              <Button key={idx} as='a' href={onClickOrHref} {...buttonProps}>
+                {label}
+              </Button>
+            ) : (
+              <Button key={idx} onClick={() => onClickOrHref()} {...buttonProps}>
+                {label}
               </Button>
             )
           })}

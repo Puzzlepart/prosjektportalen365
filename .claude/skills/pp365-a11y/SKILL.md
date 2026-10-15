@@ -78,8 +78,10 @@ Rules 1, 2, 5, 6, 8 and the tooltip handling are adapted from Microsoft's
    (the timeline's) go through `getReadableTextColor` and `getContrastRatio` (`util/contrast.ts`):
    the configured text colour stays where it reads 4.5:1, and black or white takes its place
    where it does not.
-10. **Headings**: `WebPartTitle` is the web part's `h2`; a section inside is an `h3`. Panels and
-    dialogs take their heading from `DrawerHeaderTitle` and `DialogTitle`.
+10. **Headings**: `WebPartTitle` is the web part's `h2`; a section inside is an `h3`
+    (`WebPartTitle headingLevel={3}`, as the project information's parent projects). Panels and
+    dialogs take their heading from `DrawerHeaderTitle` and `DialogTitle`. Name and value pairs
+    are a description list (`dl`, `dt`, `dd`), as the project properties are.
 11. **Targets** are at least 24 by 24 CSS pixels (2.5.8); a transparent button with no padding is
     smaller than it looks.
 12. **Drag and drop** has a keyboard way and a single-pointer way (2.1.1, 2.5.7): the move buttons
@@ -158,7 +160,9 @@ checked by hand and with which reader and browser: axe finds only part of what W
 - `MenuTrigger` puts `aria-haspopup` and `aria-expanded` on its child. Around an `InteractionTag`
   that is the tag's `div`, not the button inside it: wrap the `InteractionTagPrimary`.
 - Fluent's `Avatar` is an `img` named by its `name`, so beside the same name in text a screen
-  reader reads the name twice: `aria-hidden` there; alone, it keeps its name.
+  reader reads the name twice: `aria-hidden` there; alone, it keeps its name. Fluent's `Persona`
+  does not hide its own: pass `avatar={{ 'aria-hidden': true, … }}` (`ProjectProperty`,
+  `TimelineList`).
 - A Fluent `Dialog` is named by its `DialogTitle`, described by nothing, and opens with focus on
   its first button: a dialog whose text is the point (a confirmation) points `aria-describedby`
   on `DialogSurface` at its `DialogContent` (`useConfirmationDialog`).

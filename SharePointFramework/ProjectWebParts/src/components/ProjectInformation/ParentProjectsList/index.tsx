@@ -16,30 +16,30 @@ export const ParentProjectsList: FC = () => {
       <WebPartTitle
         title={strings.ParentProjectsHeaderText}
         description={strings.ParentProjectsHeaderDescription}
+        headingLevel={3}
       />
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
-          {projects.map((p, idx) => {
-            const Icon = p?.icon
-            const onClick = () => {
-              if (typeof p.url === 'string') {
-                window.open(p.url, '_self')
-              }
-            }
-
-            return (
-              <Button
-                key={idx}
-                className={styles.button}
-                appearance='subtle'
-                icon={Icon ? <Icon /> : undefined}
-                iconPosition='before'
-                onClick={onClick}
-              >
-                <span className={styles.label}>{p.title}</span>
-              </Button>
-            )
-          })}
+          {/* A list of links: each goes to a project's site (WCAG 1.3.1, 4.1.2). */}
+          <ul className={styles.list}>
+            {projects.map((p, idx) => {
+              const Icon = p?.icon
+              return (
+                <li key={idx}>
+                  <Button
+                    as='a'
+                    href={typeof p.url === 'string' ? p.url : undefined}
+                    className={styles.button}
+                    appearance='subtle'
+                    icon={Icon ? <Icon /> : undefined}
+                    iconPosition='before'
+                  >
+                    <span className={styles.label}>{p.title}</span>
+                  </Button>
+                </li>
+              )
+            })}
+          </ul>
         </FluentProvider>
       </IdPrefixProvider>
     </div>

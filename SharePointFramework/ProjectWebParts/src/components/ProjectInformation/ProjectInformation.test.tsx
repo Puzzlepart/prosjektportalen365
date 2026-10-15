@@ -34,8 +34,9 @@ jest.mock('./SustainabilityGoals', () => ({
   }
 }))
 
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import strings from 'ProjectWebPartsStrings'
 import { format } from 'pp365-shared-library'
 import * as React from 'react'
@@ -102,9 +103,12 @@ function renderInformation(action: () => any, props: Record<string, any> = {}) {
 const project = (title: string) => ({ title, url: `/sites/${title.toLowerCase()}` })
 
 describe('ProjectInformation', () => {
-  it('shows nothing but a skeleton until the data is there', () => {
+  it('shows nothing but a skeleton until the data is there, named for a screen reader', () => {
     renderInformation(() => null)
     expect(screen.queryByText('Prosjektinformasjon', { selector: 'span' })).toBeNull()
+    expect(
+      screen.getByRole('progressbar', { name: format(strings.LoadingText, 'Prosjektinformasjon') })
+    ).toBeInTheDocument()
   })
 
   it('shows the title, the properties message and the actions the permission allows', async () => {
@@ -158,7 +162,7 @@ describe('ProjectInformation', () => {
         name: format(strings.EditProjectInformationText, 'prosjektinformasjon')
       })
     ).toBeNull()
-    expect(screen.queryByRole('button', { name: strings.ViewVersionHistoryText })).toBeNull()
+    expect(screen.queryByRole('link', { name: strings.ViewVersionHistoryText })).toBeNull()
   })
 
   it('lists the parent projects and the child projects, the latter folded past the row limit', async () => {
@@ -176,14 +180,38 @@ describe('ProjectInformation', () => {
     expect(
       await screen.findByText(strings.ParentProjectsHeaderText, { selector: 'span' })
     ).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Program Nord' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Program Nord' })).toBeInTheDocument()
     expect(
       screen.getByText(strings.ChildProjectsHeaderText, { selector: 'span' })
     ).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Foxtrot' })).toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: 'Golf' })).toBeNull()
+    expect(screen.getByRole('link', { name: 'Foxtrot' })).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'Golf' })).toBeNull()
     await user.click(screen.getByRole('button', { name: strings.ShowMoreChildProjectsText }))
-    expect(screen.getByRole('button', { name: 'Golf' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Golf' })).toBeInTheDocument()
+  })
+
+  it('links the parent and child projects in lists under section headings (WCAG 1.3.1, 4.1.2)', async () => {
+    const { container } = renderInformation(() =>
+      initData({ parentProjects: [project('Program Nord')], childProjects: [project('Alfa')] })
+    )
+    const parents = await screen.findByRole('heading', {
+      level: 3,
+      name: strings.ParentProjectsHeaderText
+    })
+    expect(parents).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { level: 3, name: strings.ChildProjectsHeaderText })
+    ).toBeInTheDocument()
+    const [parentList, childList] = screen.getAllByRole('list')
+    expect(within(parentList).getByRole('link', { name: 'Program Nord' })).toHaveAttribute(
+      'href',
+      '/sites/program nord'
+    )
+    expect(within(childList).getByRole('link', { name: 'Alfa' })).toHaveAttribute(
+      'href',
+      '/sites/alfa'
+    )
+    expect(await axeComponent(container)).toHaveNoViolations()
   })
 
   it('shows the error when the data cannot be fetched', async () => {

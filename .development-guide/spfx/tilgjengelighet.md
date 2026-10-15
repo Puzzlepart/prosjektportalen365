@@ -29,7 +29,7 @@ Testene går i `e2e/tests/smoke/a11y-baseline.spec.ts`, `risk-action.spec.ts` og
 | PeoplePicker | Ikke målt alene |  |  |  |  |  | Rettet: bildet ved navnet er skjult for skjermlesere, så navnet leses én gang, ikke to |
 | FilterPanel | Ikke målt |  |  |  |  |  | Rettet: seksjonstoppen er en knapp som sier om filteret er åpent |
 | UserMessage | Ikke målt |  |  |  |  |  | Rettet: leses opp, siden hver React-rot nå har en `AriaLiveAnnouncer`. jest-axe: ingen funn |
-| WebPartTitle | Ikke målt alene |  |  |  |  |  | Rettet: én overskrift, der det var to, og info-knappen heter «Informasjon om …» på norsk, der Fluent kalte den «information» |
+| WebPartTitle | Ikke målt alene |  |  |  |  |  | Rettet: én overskrift, der det var to, og info-knappen heter «Informasjon om …» på norsk, der Fluent kalte den «information». En seksjon inne i en webdel får nivå 3 (`headingLevel={3}`) |
 | ConfirmDialog | Ikke målt |  |  |  |  |  | Rettet: dialogen beskrives av teksten sin, så spørsmålet leses opp når den åpnes, ikke bare tittelen |
 | OverflowTagMenu | Ikke målt |  |  |  |  |  | Rettet: taggene er en liste med tekst, der de var knapper som ikke gjorde noe, og `+n`-knappen sier hvor mange tagger den skjuler |
 | ItemColumn | Se porteføljeoversikten |  |  |  |  |  | Rettet: trendikonet har tekst, en lenke uten beskrivelse viser adressen (den var tom), filnavn er lenker, ikke knapper, og bildet ved et personnavn leses ikke opp i tillegg til navnet. Gjenstår: kontrasten i trendikonene (gull 1,4:1 og grønn 2,9:1, kravet er 3:1) rettes med gevinstoversikten. Flere personer i én celle har navnene bare i et verktøytips, uten tastaturvei, og måleren i instrumentkolonnen har ikke tekstalternativ |
@@ -42,10 +42,10 @@ Testene går i `e2e/tests/smoke/a11y-baseline.spec.ts`, `risk-action.spec.ts` og
 
 | Komponent | axe | Gjennomgått | Tastatur | Skjermleser | Visuelt | Skjema | Merknad |
 |---|---|---|---|---|---|---|---|
-| Prosjektinformasjon | Ingen |  |  |  |  |  |  |
+| Prosjektinformasjon | Ingen |  |  |  |  |  | Rettet: egenskapene er en beskrivelsesliste, så skjermleseren vet hvilken verdi som hører til hvilket navn, og en person leses én gang (bildet ved navnet leses ikke opp). Handlingene som går til en annen side (versjonshistorikk, administrer underområder) og de overordnede og underordnede prosjektene er lenker, ikke knapper, og prosjektene står i lister under overskrifter på nivå 3. Arkivstatusens popover holder fokus til den lukkes, og statusmerkene har ikke lenger oransje tekst (2:1). Lasteplassholderen og spinnerne i dialogene har navn. jest-axe: ingen funn |
 | Fasevelger | color-contrast 8–10, list 1 |  |  |  |  |  | Rettet: fasene er en navngitt liste der hver fase er en knapp, og gjeldende fase er merket som gjeldende trinn. Popoveren holder fokus til den lukkes (Tab sendte fokus til toppen av siden og lot den stå åpen) og heter det fasen heter. Teksten er svart eller hvit der den leser best, også under pekeren (hvitt på standardfargene ga 1,7–2,7:1). Knappen for å endre fase er fokuserbar også når den ikke kan brukes, så grunnen nås. I dialogen for faseskifte har kommentaren etikett, sjekkpunktene er trinn i stedet for faner uten funksjon, deaktiverte knapper kan nås med grunnen, Escape lukker, faseskiftet leses opp når det starter, og oppsummeringen har tekst for statusikonene og sier om en kommentar vises. jest-axe: ingen funn |
 | Prosjektstatus | Ingen |  |  |  |  |  |  |
-| Prosjekttidslinje | color-contrast 2, scrollable-region-focusable 1 |  |  |  |  |  | Har en liste ved siden av. Rettet i bibliotekets tidslinje: elementene kan åpnes med tastaturet, tidslinjen rulles med piltastene, og teksten og milepælene har nok kontrast |
+| Prosjekttidslinje | color-contrast 2, scrollable-region-focusable 1 |  |  |  |  |  | Har en liste ved siden av, der en person nå leses én gang. Rettet i bibliotekets tidslinje: elementene kan åpnes med tastaturet, tidslinjen rulles med piltastene, og teksten og milepælene har nok kontrast |
 | Risikomatrise | Ingen |  |  |  |  |  |  |
 | Mulighetsmatrise | Ingen |  |  |  |  |  |  |
 | Prosjektnyheter | Ikke målt |  |  |  |  |  | Under folden |

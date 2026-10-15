@@ -59,9 +59,7 @@ export const useActions = () => {
   ]
   const administerChildrenAction: ActionType = [
     strings.ChildProjectAdminLabel,
-    () => {
-      window.location.href = `${context.props.webServerRelativeUrl}/SitePages/${context.props.adminPageLink}`
-    },
+    `${context.props.webServerRelativeUrl}/SitePages/${context.props.adminPageLink}`,
     bundleIcon(Organization24Filled, Organization24Regular),
     false,
     !context.state.userHasEditPermission

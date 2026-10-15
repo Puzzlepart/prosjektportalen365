@@ -18,13 +18,15 @@ export const WebPartTitle: FC<IWebPartTitleProps> = (props) => {
   const fluentProviderId = useId('fp-webpart-title')
   // The info button's name: Fluent names it "information" when its label is empty, as it is here.
   const infoName = format(strings.Aria.InfoLabelTitle, props?.title)
+  // A section inside a web part takes the level below the web part's own title.
+  const Heading = props?.headingLevel === 3 ? 'h3' : 'h2'
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider id={fluentProviderId} className={styles.root} theme={customLightTheme}>
-        <h2 className={styles.heading} title={props?.title} hidden={!props?.title}>
+        <Heading className={styles.heading} title={props?.title} hidden={!props?.title}>
           <span className={styles.title}>{props?.title}</span>
-        </h2>
+        </Heading>
         {props?.description && (
           <div className={styles.infoLabel} title={infoName}>
             <InfoLabel

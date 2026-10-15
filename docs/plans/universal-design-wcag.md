@@ -400,3 +400,30 @@ and the info button now; every solution's suite passes locally (the library's 75
 ProjectWebParts 46, PortfolioWebParts 37, ProjectExtensions 22, ProgramWebParts 10,
 PortfolioExtensions 10), with no coverage floor missed. Recorded in pp365-a11y: a change to a
 shared wrapper runs every solution's tests.
+
+### Slice 2, part 2 — The project information (2026-10-15)
+
+axe found nothing in the baseline; the audit found what axe cannot judge.
+
+- **The properties** are a description list: each name a `dt`, its value the `dd`, where they
+  were two texts in a `div` whose pairing only the eye could see (1.3.1). A person's picture is
+  hidden beside the name: Fluent's `Persona` names its avatar, so the name was read twice; the
+  project timeline's list had the same, also fixed.
+- **Links where the action goes to a page**: «Vis versjonshistorikk» and «Administrer
+  underområder», and every parent and child project, were buttons calling `window.open` or
+  setting `location`; they are links (`Button as='a'`), and the projects are lists. The three
+  sections inside the web part (parent projects, child projects, archive status) are `h3`
+  under the web part's `h2`, through a new `headingLevel` on `WebPartTitle` (default 2).
+- **The archive status** popover traps focus and is named, as the phase popover now is; its scope
+  tags no longer colour their text by status (the warning's orange read 2:1): the status is the
+  group's heading, and the icon keeps the colour.
+- **Names**: the web part's own loading skeleton is «Laster Prosjektinformasjon...», and the
+  spinners in the parent-project and rerun-setup dialogs say «Vennligst vent».
+- Left for their own slices: `Persona` in the idea module's fields (slice 4) and in the Planner
+  task item of the risk action (slice 3); the status report summary the web part embeds belongs
+  to Prosjektstatus.
+
+Tests first: nine tests (the actions, the properties, the timeline list, the web part and a new
+`ArchiveStatus.test.tsx`) and one in `WebPartTitle` failed on the old code and pass. Every
+solution's suite passes (the library 75 test files, ProjectWebParts 47, PortfolioWebParts 37,
+ProjectExtensions 22, ProgramWebParts 10, PortfolioExtensions 10), no coverage floor missed.

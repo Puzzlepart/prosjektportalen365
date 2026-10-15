@@ -26,6 +26,14 @@ describe('WebPartTitle', () => {
     expect(await axeComponent(container)).toHaveNoViolations()
   })
 
+  it("renders a section's title one level down when asked (WCAG 1.3.1)", () => {
+    render(<WebPartTitle title='Overordnede prosjekter' headingLevel={3} />)
+    expect(screen.getByRole('heading', { name: 'Overordnede prosjekter' })).toHaveProperty(
+      'tagName',
+      'H3'
+    )
+  })
+
   it('hides the heading without a title, and the info label without a description', () => {
     const { container } = render(<WebPartTitle />)
     expect(container.querySelector('h2')).not.toBeVisible()

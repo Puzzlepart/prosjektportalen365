@@ -15,7 +15,9 @@ export const useColumns = (): IDataGridColumn[] => {
         title={item.Title}
         name={item.Title}
         size='small'
+        // The name is beside the picture: read once, not twice (WCAG 1.1.1).
         avatar={{
+          'aria-hidden': true,
           image: {
             src: getUserPhoto(item.EMail)
           }
