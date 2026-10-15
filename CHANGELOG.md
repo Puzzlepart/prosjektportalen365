@@ -2,6 +2,15 @@
 
 Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
+## 1.14.1 - 15.10.2026
+
+### Feilrettinger
+
+- Rettet en feil i `Prosjektutlisting` hvor primært og sekundært felt (f.eks. `Tjenesteområde` og `Prosjekttype`) samt primær og sekundær bruker ikke ble vist på forsider satt opp med 1.10 eller eldre. Nøklene i innstillingen `Prosjektmetadata` ble endret i 1.11 uten migrering, slik at kun `Fase` ble vist; fra 1.14 gjaldt dette også listevisningen. Forsidemalen fra 1.11 manglet i tillegg `Primært felt`. Oppgraderingen retter nå opp gamle og feilaktige verdier direkte på webdelen [#1783](https://github.com/Puzzlepart/prosjektportalen365/pull/1783)
+- Rettet en feil i oppsettveiviseren hvor prosjektoppsettet kunne stoppe med feilmeldingen «Access is denied. (Exception from HRESULT: 0x80070005 (E_ACCESSDENIED))» når en skriving til `Logg`-listen på porteføljeområdet ble avvist. Feilen kunne oppstå tilfeldig, både helt i starten av oppsettet og etter siste steg, også for brukere med skrivetilgang til listen. Logging til `Logg`-listen stopper nå aldri oppsettet. Avviste skrivinger logges til nettleserkonsollen med `SPRequestGuid`, slik at årsaken kan spores hos Microsoft [#1779](https://github.com/Puzzlepart/prosjektportalen365/pull/1779)
+
+---
+
 ## 1.14.0 - 10.09.2026
 
 ### Ny funksjonalitet

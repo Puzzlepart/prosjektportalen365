@@ -130,18 +130,18 @@ function generateSBOM(data, projectVersion) {
     
     let sbom = `# Software Bill of Materials (SBOM)
 
-**Project:** Prosjektportalen 365  
-**Version:** ${projectVersion}  
-**Generated:** ${timestamp}  
+**Project:** Prosjektportalen 365<br>
+**Version:** ${projectVersion}<br>
+**Generated:** ${timestamp}<br>
 **Format:** CycloneDX-inspired Markdown
 
 ## Overview
 
 This SBOM documents all software dependencies used in the Prosjektportalen 365 project, including all packages in the monorepo.
 
-**Total Dependencies:** ${allDeps.size}  
-**Production Dependencies:** ${Array.from(allDeps.values()).filter(d => d.type === 'production').length}  
-**Development Dependencies:** ${Array.from(allDeps.values()).filter(d => d.type === 'development').length}  
+**Total Dependencies:** ${allDeps.size}<br>
+**Production Dependencies:** ${Array.from(allDeps.values()).filter(d => d.type === 'production').length}<br>
+**Development Dependencies:** ${Array.from(allDeps.values()).filter(d => d.type === 'development').length}<br>
 **Projects in Monorepo:** ${projectDeps.length}
 
 ## Projects in Monorepo

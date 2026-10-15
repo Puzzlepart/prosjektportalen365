@@ -1,4 +1,4 @@
-﻿Write-Host "[INFO] Post-install action: Restoring Idea calculated field formulas"
+Write-Host "[INFO] Post-install action: Restoring Idea calculated field formulas"
 # The 5 *Number calc fields and GtIdeaScore ship with a placeholder formula =0 because SharePoint
 # rejects formulas that reference list-level columns at FieldRef time on a freshly created list.
 # Now that the list is fully provisioned, restore the real formulas. Source field titles are read
