@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
 import { SectionContext } from '../Sections/context'
@@ -18,7 +19,7 @@ const headerProps = {
 }
 
 function renderElement(props: Record<string, any> = {}, header = headerProps) {
-  render(
+  return render(
     <SectionContext.Provider value={{ headerProps: header, section: {} } as any}>
       <StatusElement {...props} />
     </SectionContext.Provider>
@@ -43,9 +44,10 @@ describe('StatusElement', () => {
     expect(screen.getByText('Alle milep...')).toBeInTheDocument()
   })
 
-  it('shows only the icon, labelled for screen readers, when asked', () => {
+  it('shows only the icon, named by its section and its status for screen readers, when asked', () => {
     renderElement({ iconsOnly: true, iconSize: 18 })
-    const host = screen.getByRole('img', { name: 'Fremdrift' })
+    // The status is the point of the icon, which shows it by its colour alone (WCAG 1.1.1).
+    const host = screen.getByRole('img', { name: 'Fremdrift: Grønn' })
     expect(host.querySelector('.element')).toBeNull()
     expect(host.querySelector('.icon')).not.toBeNull()
   })
@@ -56,5 +58,23 @@ describe('StatusElement', () => {
     })
     expect(screen.getByText('Sum budsjett')).toBeInTheDocument()
     expect(screen.getByText((content) => /1\D{0,2}200/.test(content))).toBeInTheDocument()
+  })
+
+  it('names an icon without a status by its section alone', () => {
+    renderElement({ iconsOnly: true }, { ...headerProps, value: '' })
+    expect(screen.getByRole('img', { name: 'Fremdrift' })).toBeInTheDocument()
+  })
+
+  it("is the section's heading when it heads a section, and breaks no rule axe can check (WCAG 1.3.1)", async () => {
+    const { container, rerender } = renderElement({ asHeading: true })
+    expect(screen.getByRole('heading', { level: 3, name: 'Fremdrift' })).toBeInTheDocument()
+    expect(await axeComponent(container)).toHaveNoViolations()
+    // In the summary, among the other sections' elements, it is no heading.
+    rerender(
+      <SectionContext.Provider value={{ headerProps, section: {} } as any}>
+        <StatusElement />
+      </SectionContext.Provider>
+    )
+    expect(screen.queryByRole('heading')).toBeNull()
   })
 })

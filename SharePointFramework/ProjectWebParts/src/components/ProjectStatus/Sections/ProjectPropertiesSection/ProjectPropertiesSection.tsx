@@ -49,8 +49,9 @@ export const ProjectPropertiesSection: FC = () => {
   return (
     <BaseSection>
       <div className={styles.projectPropertiesSection}>
-        <StatusElement />
-        <div className={styles.fields}>{renderFields()}</div>
+        <StatusElement asHeading />
+        {/* The fields' names and values, paired as a description list (WCAG 1.3.1). */}
+        <dl className={styles.fields}>{renderFields()}</dl>
       </div>
     </BaseSection>
   )

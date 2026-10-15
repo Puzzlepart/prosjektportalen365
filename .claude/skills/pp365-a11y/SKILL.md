@@ -69,7 +69,8 @@ Rules 1, 2, 5, 6, 8 and the tooltip handling are adapted from Microsoft's
 7. **Focus is kept and shown.** Fluent's `Dialog` and `OverlayDrawer` move focus in and back; an
    overlay of our own does both. Never `outline: none` or `outline: 0` without a `:focus-visible`
    style in its place (found: `EditViewColumnsPanel`, `PackageDetails`). A sticky header must not
-   cover the focused row (2.4.11).
+   cover the focused element (2.4.11): give what scrolls under it `scroll-margin-top`, the
+   focusable descendants too (`ProjectStatus`'s `BaseSection`: `* { scroll-margin-top: 80px }`).
 8. **Related controls form a group**: `role="group"` with `aria-labelledby` (a toolbar section, a
    pair of move buttons).
 9. **Colour** comes from Fluent's tokens, not hex: 4.5:1 for text, 3:1 for large text and for
@@ -81,7 +82,9 @@ Rules 1, 2, 5, 6, 8 and the tooltip handling are adapted from Microsoft's
 10. **Headings**: `WebPartTitle` is the web part's `h2`; a section inside is an `h3`
     (`WebPartTitle headingLevel={3}`, as the project information's parent projects). Panels and
     dialogs take their heading from `DrawerHeaderTitle` and `DialogTitle`. Name and value pairs
-    are a description list (`dl`, `dt`, `dd`), as the project properties are.
+    are a description list (`dl`, `dt`, `dd`), as the project properties are. The status
+    report's sections are headed by their status element (`StatusElement asHeading`), and a
+    status shown by an icon alone is named by its section and its value.
 11. **Targets** are at least 24 by 24 CSS pixels (2.5.8); a transparent button with no padding is
     smaller than it looks.
 12. **Drag and drop** has a keyboard way and a single-pointer way (2.1.1, 2.5.7): the move buttons
@@ -173,7 +176,7 @@ checked by hand and with which reader and browser: axe finds only part of what W
   end of the page, and Tab from its last control went to the top of the page, leaving the popover
   open. With it, Fluent names the surface a dialog: name it (`aria-labelledby` its heading).
 - A button that cannot be used yet but explains why in its `title` is `disabledFocusable`, not
-  `disabled`: a disabled button is skipped by the keyboard and its reason never reached. It also
+  `disabled` (`Toolbar` does so for every disabled item since #1788): a disabled button is skipped by the keyboard and its reason never reached. It also
   keeps the focus while an action it started runs (the change-phase dialog's statuses).
 - A status message in Jest: the announcer writes it as `innerText`, which jsdom keeps as a
   property, not as text; read `span.innerText` in the live region (`reactRoot.test.tsx`).

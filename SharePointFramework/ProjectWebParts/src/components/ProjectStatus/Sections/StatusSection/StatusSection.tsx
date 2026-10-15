@@ -8,7 +8,7 @@ export const StatusSection: FC = () => {
   if (!headerProps.value && !headerProps.comment) return null
   return (
     <BaseSection>
-      <StatusElement />
+      <StatusElement asHeading />
     </BaseSection>
   )
 }

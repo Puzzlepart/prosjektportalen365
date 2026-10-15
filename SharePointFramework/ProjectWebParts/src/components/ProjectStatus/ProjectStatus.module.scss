@@ -29,6 +29,15 @@
         margin-top: 7px;
         color: #2da748;
       }
+
+      // The look of the title beside it (WebPartTitle), as it had when it was one.
+      .reportStatus {
+        margin: 0;
+        font-size: 20px;
+        line-height: 24px;
+        font-weight: var(--fontWeightSemibold);
+        color: var(--colorNeutralForeground1);
+      }
     }
   }
 

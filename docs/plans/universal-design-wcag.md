@@ -427,3 +427,39 @@ Tests first: nine tests (the actions, the properties, the timeline list, the web
 `ArchiveStatus.test.tsx`) and one in `WebPartTitle` failed on the old code and pass. Every
 solution's suite passes (the library 75 test files, ProjectWebParts 47, PortfolioWebParts 37,
 ProjectExtensions 22, ProgramWebParts 10, PortfolioExtensions 10), no coverage floor missed.
+
+### Slice 2, part 3 — The project status (2026-10-15)
+
+axe found nothing in the baseline; what the audit found:
+
+- **Headings**: the sections (Fremdrift, Økonomi, the lists, the uncertainties, the project
+  properties) had no heading, so a screen reader's heading list had none of them; their status
+  element now heads them as an `h3` (`asHeading`), its look unchanged. The report's state
+  («Publisert …», `PublishedStatus`) was a second `WebPartTitle`, a second `h2` beside the
+  title; it is a paragraph with the title's look.
+- **A status shown by its icon alone** (`iconsOnly`, the project information's summary by
+  default) was named by its section only («Fremdrift»), where the status is the point; it is
+  named «Fremdrift: Grønn». Seen, it still tells the status by colour alone: the template's
+  status icons are all `CircleFill` in green, yellow and red, the yellow at 1.9:1 (1.4.1, 1.4.11).
+  A product decision, put to the user: per-value icons in the column configuration, the value as
+  text under each icon, or the full status elements by default.
+- **The project properties section**'s fields are a description list, as the project
+  information's are.
+- **The section tabs**: the overflow tab is named «n flere seksjoner», where «+2» told nothing;
+  and whatever takes focus inside a section is kept clear of the pinned tabs
+  (`scroll-margin-top` on the section's descendants, as on the section; 2.4.11).
+- **The toolbar** (`shared-library`, every toolbar): a disabled item is `disabledFocusable`, so the
+  arrow keys reach it and its description, which says why (no permission, a published report),
+  is read; the status report's commands were the case.
+- The tabs stay Fluent tabs that scroll to a section (an in-page navigation in a tab list), and
+  the snapshot dialog, built this release, needed nothing.
+
+Tests first: eleven tests failed on the old code (the status element's heading and icon name, the
+sections' headings, the field list, the overflow tab, the toolbar, the report's headings) and
+pass; three report tests and one program administration test changed with the intended toolbar
+and markup changes. Every solution's suite passes.
+
+The phase selector's push turned the test channel green again: the release build, the upgrade and
+the browser suite passed, 72 tests where slice 0 had 70, the two new keyboard tests (the timeline
+and the phases) among them. The integration job failed once on a program's risks fetched through
+search (a data source error after 31 s), which none of this touches; rerun it.

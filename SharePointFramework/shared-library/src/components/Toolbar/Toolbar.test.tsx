@@ -109,10 +109,25 @@ describe('Toolbar', () => {
     expect(screen.getByText('Skjult')).not.toBeVisible()
   })
 
-  it('keeps a disabled item from running', () => {
+  it('keeps a disabled item from running, and lets the keyboard reach why (WCAG 2.1.1)', () => {
     const onClick = jest.fn()
-    render(<Toolbar items={[new ListMenuItem('Slett').setDisabled(true).setOnClick(onClick)]} />)
-    expect(screen.getByRole('button', { name: 'Slett' })).toBeDisabled()
+    render(
+      <Toolbar
+        items={[
+          new ListMenuItem('Slett', 'En publisert rapport kan ikke slettes')
+            .setDisabled(true)
+            .setOnClick(onClick)
+        ]}
+      />
+    )
+    // Focusable while disabled, so the toolbar's arrow keys reach it and a screen reader reads its
+    // description, which says why it cannot be used.
+    const button = screen.getByRole('button', { name: 'Slett' })
+    expect(button).toHaveAttribute('aria-disabled', 'true')
+    expect(button).not.toHaveAttribute('disabled')
+    expect(button).toHaveAttribute('title', 'En publisert rapport kan ikke slettes')
+    fireEvent.click(button)
+    expect(onClick).not.toHaveBeenCalled()
   })
 
   it('renders a search item as a search box that reports what is typed', () => {

@@ -30,10 +30,17 @@ export function useStatusElement(props: IStatusElementProps) {
 
   const fluentProviderId = useId('fp-status-element')
 
+  // The name of the icon shown alone: the section and its status, which the icon shows by its
+  // colour only (WCAG 1.1.1).
+  const iconName = headerProps.value
+    ? `${headerProps.label}: ${headerProps.value}`
+    : headerProps.label
+
   return {
     commentProps,
     iconSize: props.iconSize ?? headerProps.iconSize,
     useWrapper,
-    fluentProviderId
+    fluentProviderId,
+    iconName
   } as const
 }

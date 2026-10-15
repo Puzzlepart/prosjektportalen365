@@ -5,8 +5,12 @@ jest.mock('../../StatusElement', () => {
   const React = jest.requireActual('react')
   const { SectionContext } = jest.requireActual('../context')
   return {
-    StatusElement: () =>
-      React.createElement('div', null, React.useContext(SectionContext).headerProps.label)
+    StatusElement: ({ asHeading }: any) =>
+      React.createElement(
+        asHeading ? 'h3' : 'div',
+        null,
+        React.useContext(SectionContext).headerProps.label
+      )
   }
 })
 
@@ -90,6 +94,21 @@ describe('ProjectPropertiesSection', () => {
     expect(screen.getByText('15.03.2026')).toBeInTheDocument()
     expect(screen.getByText('Bedre flyt')).toBeInTheDocument()
     expect(screen.queryByText('Tom')).toBeNull()
+  })
+
+  it('heads the section, and pairs each field with its value in a description list (WCAG 1.3.1)', () => {
+    renderSection()
+    expect(
+      screen.getByRole('heading', { level: 3, name: 'Prosjektegenskaper' })
+    ).toBeInTheDocument()
+    expect(screen.getAllByRole('term').map((term) => term.textContent)).toEqual([
+      'Startdato',
+      'Sluttdato',
+      'Prosjektmål'
+    ])
+    expect(screen.getAllByRole('definition').map((value) => value.textContent)).toContain(
+      'Bedre flyt'
+    )
   })
 
   it('shows the text of a date it cannot read', () => {

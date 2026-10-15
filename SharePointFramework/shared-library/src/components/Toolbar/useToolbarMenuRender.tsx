@@ -40,7 +40,9 @@ export function useToolbarMenuRender() {
           aria-label={item.text ? undefined : item.description}
           style={createStyle(item, buttonStyle)}
           onClick={item.onClick}
-          disabled={item.disabled}
+          // Focusable while disabled: the toolbar's arrow keys reach it, and a screen reader reads
+          // the description that says why it cannot be used (WCAG 2.1.1).
+          disabledFocusable={item.disabled}
         >
           {item.text && <span style={labelStyle}>{item.text}</span>}
         </ToolbarButton>

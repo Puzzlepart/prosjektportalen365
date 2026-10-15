@@ -65,6 +65,7 @@ define([], function () {
       CurrentPhaseText: 'This is the current phase. It is therefore not possible to change to this phase.',
       PhaseListLabel: "The project's phases",
       ChecklistStepsLabel: 'Checkpoints',
+      MoreSectionsLabel: '{0} more sections',
     },
     SaveText: 'Save',
     UpdatingProjectPropertiesStatusText: 'Updating project properties ...',
