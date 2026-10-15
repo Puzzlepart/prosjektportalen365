@@ -183,6 +183,16 @@ checked by hand and with which reader and browser: axe finds only part of what W
 - jest-axe over a stand-in judges the stand-in. The combobox family (`Autocomplete`,
   `PeoplePicker`, `ColumnSearchPropertyField`) runs on stand-ins in Jest: assert names there and
   let the browser scans judge the markup.
+- `opacity: 0` hides nothing from a screen reader or the keyboard: the matrices drew both the
+  before and after positions and faded one out, and both were read. Hide with `visibility`, and
+  transition it with the opacity so the fade still runs (`MatrixElement.module.scss`).
+- A grid whose rows and columns mean something is a table: `role="table"` named by its title,
+  `row`, `columnheader`, `rowheader` and `cell` on the divs (`DynamicMatrix`), so a screen reader
+  tells where an element sits. Its look stays the grid's.
+- Content only in a tooltip is out of the keyboard's reach: make the trigger focusable (the
+  tooltip then shows on focus) and give the content as its description, `aria-describedby` a
+  hidden copy, with the tooltip's `relationship='inaccessible'` so it is not read twice
+  (`MatrixElement`).
 - `react-calendar-timeline` 0.28 has no keyboard handling and no roles, but it draws each item
   with our `itemRenderer` and hands its scroll area (`.rct-scroll`) to `scrollRef`: that is where
   roles, names and keys go (`ProjectTimeline/Timeline/useItemRenderer.tsx`, `useTimeline.ts`).

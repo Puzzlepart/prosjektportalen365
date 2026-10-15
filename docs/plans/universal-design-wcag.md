@@ -463,3 +463,24 @@ The phase selector's push turned the test channel green again: the release build
 the browser suite passed, 72 tests where slice 0 had 70, the two new keyboard tests (the timeline
 and the phases) among them. The integration job failed once on a program's risks fetched through
 search (a data source error after 31 s), which none of this touches; rerun it.
+
+### Slice 2, part 4 — The risk and opportunity matrices (2026-10-15)
+
+axe found nothing; the matrices told what they hold to the eye alone.
+
+- **A table**: the matrix was a grid of `div`s, so a screen reader read the headers and the
+  elements' numbers in a row, with nothing to say which probability and consequence an element
+  has. It is `role="table"` named by the web part's title, with `row`, `columnheader` (the top
+  row, consequence), `rowheader` (the first cell of a row, probability) and `cell`; the look is
+  the grid's.
+- **The elements** were badges showing a number, their callout a tooltip under the mouse only.
+  An element is now reachable by the keyboard (the tooltip shows on focus), named «7: <title>»,
+  and described by the callout's text through a hidden copy (`aria-describedby`; the tooltip is
+  `relationship='inaccessible'` so it is not read twice).
+- **Before and after actions**: both positions were drawn, the one not shown at `opacity: 0`, so a
+  screen reader read every risk twice, and a focusable element would have been focused unseen.
+  The one not shown is `visibility: hidden` as well, transitioned with the opacity so the fade
+  stays.
+
+Tests first: a test of the table, the names and the description in `DynamicMatrix`, and the
+hidden set in `RiskMatrix`, failed on the old code and pass. Every solution's suite passes.
