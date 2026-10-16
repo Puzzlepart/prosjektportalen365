@@ -484,3 +484,23 @@ axe found nothing; the matrices told what they hold to the eye alone.
 
 Tests first: a test of the table, the names and the description in `DynamicMatrix`, and the
 hidden set in `RiskMatrix`, failed on the old code and pass. Every solution's suite passes.
+
+### Slice 2, part 5 — The phase selector's colours (2026-10-16)
+
+Part 1 let the code pick black text on the light default phases. A comparison of four variants,
+drawn with the component's CSS and measured in the browser, showed one gap left: black on the
+current phase under the pointer (#397e39) read 4.22:1. The user chose light phases with black text
+and a dark current phase with white text over dark phases throughout:
+
+| Level | Phase (black) | Under the pointer (black) | Current (white) | Current under the pointer (white) |
+|---|---|---|---|---|
+| Project | #89ce87, 11.2:1 | #54b054, 7.7:1 | #336f33, 6.1:1 | #2c5f2c, 7.6:1 |
+| Portfolio | #9dceee, 12.5:1 | #64addb, 8.5:1 | #226894, 6.0:1 | #1e597f, 7.5:1 |
+| End | #f0c993, 13.5:1 | #f09440, 9.0:1 | #994f0c, 6.0:1 | #83440a, 7.5:1 |
+
+A phase not current took the current colour under the pointer; it has a colour of its own now
+(`--phase-hover-color`), so the current phase can be dark while the others stay light. A phase in
+the customer's own colour (`PhaseColor`) takes its current colour under the pointer as before;
+whether such colours read is the customer's to judge, and the text picks black or white by the
+contrast either way. The colour test was changed first and seen failing. The timeline faces the
+same choice for its bars; not decided.

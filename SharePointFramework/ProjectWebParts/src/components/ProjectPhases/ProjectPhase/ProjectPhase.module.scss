@@ -1,14 +1,20 @@
+// Light phases with black text, the current phase dark with white text, each 4.5:1 or more in
+// every state (#1788); `DEFAULT_PHASE_COLORS` in useProjectPhase.ts holds the same colours to
+// choose the text by. A phase's own colour (PhaseColor) sets the variables instead.
 $project-color: var(--phase-color, #89ce87);
-$project-current-color: var(--phase-current-color, #54b054);
-$project-current-color-hover: var(--phase-current-hover-color, #397e39);
+$project-hover-color: var(--phase-hover-color, #54b054);
+$project-current-color: var(--phase-current-color, #336f33);
+$project-current-color-hover: var(--phase-current-hover-color, #2c5f2c);
 
 $portfolio-color: var(--phase-color, #9dceee);
-$portfolio-current-color: var(--phase-current-color, #64addb);
-$portfolio-current-color-hover: var(--phase-current-hover-color, #5688af);
+$portfolio-hover-color: var(--phase-hover-color, #64addb);
+$portfolio-current-color: var(--phase-current-color, #226894);
+$portfolio-current-color-hover: var(--phase-current-hover-color, #1e597f);
 
 $end-color: var(--phase-color, #f0c993);
-$end-current-color: var(--phase-current-color, #f09440);
-$end-current-color-hover: var(--phase-current-hover-color, #ba6f29);
+$end-hover-color: var(--phase-hover-color, #f09440);
+$end-current-color: var(--phase-current-color, #994f0c);
+$end-current-color-hover: var(--phase-current-hover-color, #83440a);
 
 $font-color: var(--font-color, white);
 
@@ -159,8 +165,8 @@ $project-phase-padding: 0.25em;
 }
 
 .projectPhase:hover {
-  background: $project-current-color;
-  border-color: $project-current-color;
+  background: $project-hover-color;
+  border-color: $project-hover-color;
   filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.2));
 
   &::after {
@@ -188,8 +194,8 @@ $project-phase-padding: 0.25em;
   }
 
   &.portfolio {
-    background: $portfolio-current-color;
-    border-color: $portfolio-current-color;
+    background: $portfolio-hover-color;
+    border-color: $portfolio-hover-color;
 
     &::after {
       border-top-color: inherit;
@@ -216,8 +222,8 @@ $project-phase-padding: 0.25em;
   }
 
   &.end {
-    background: $end-current-color;
-    border-color: $end-current-color;
+    background: $end-hover-color;
+    border-color: $end-hover-color;
 
     &::after {
       border-top-color: inherit;

@@ -268,13 +268,20 @@ describe('ProjectPhases', () => {
         phase('p4', 'Portefølje', { PhaseLevel: 'Portfolio' })
       ]
     })
-    const fontColor = (name: string) =>
-      screen.getByTitle(name).closest('li').style.getPropertyValue('--font-color')
-    // White on the default greens and blue reads 1.7 to 2.7:1; black reads 4.2:1 or more.
+    const style = (name: string) => screen.getByTitle(name).closest('li').style
+    const fontColor = (name: string) => style(name).getPropertyValue('--font-color')
     expect(await screen.findByTitle('Konsept')).toBeInTheDocument()
-    expect(fontColor('Konsept')).toBe('#000000')
+    // The default phases are light with black text, at rest and under the pointer (7.7:1 or
+    // more); the current phase is dark with white text (6:1 or more), where white on the old
+    // colours read 1.7 to 2.7:1 and black on the current phase under the pointer 4.2:1.
+    expect(fontColor('Konsept')).toBe('#ffffff')
     expect(fontColor('Planlegge')).toBe('#000000')
     expect(fontColor('Portefølje')).toBe('#000000')
+    // A colour of the customer's own picks its text by the same measure, and a phase in it under
+    // the pointer takes its current colour, as before.
     expect(fontColor('Mørk')).toBe('#ffffff')
+    expect(style('Mørk').getPropertyValue('--phase-hover-color')).toBe(
+      style('Mørk').getPropertyValue('--phase-current-color')
+    )
   })
 })

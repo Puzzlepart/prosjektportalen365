@@ -10,13 +10,15 @@ import pSBC from 'shade-blend-color'
 import { hslToHex, hexToHsl } from 'colors-convert'
 
 /**
- * The stylesheet's colours for a phase without a colour of its own, by phase level: the phase, the
- * current phase (and any phase under the pointer), and the current phase under the pointer.
+ * The stylesheet's colours for a phase without a colour of its own, by phase level: the phase, a
+ * phase under the pointer, the current phase, and the current phase under the pointer. The phases
+ * are light with black text and the current phase dark with white text, each 4.5:1 or more
+ * (#1788, chosen over dark phases throughout).
  */
-const DEFAULT_PHASE_COLORS: Record<string, [string, string, string]> = {
-  project: ['#89ce87', '#54b054', '#397e39'],
-  portfolio: ['#9dceee', '#64addb', '#5688af'],
-  end: ['#f0c993', '#f09440', '#ba6f29']
+const DEFAULT_PHASE_COLORS: Record<string, [string, string, string, string]> = {
+  project: ['#89ce87', '#54b054', '#336f33', '#2c5f2c'],
+  portfolio: ['#9dceee', '#64addb', '#226894', '#1e597f'],
+  end: ['#f0c993', '#f09440', '#994f0c', '#83440a']
 }
 
 /**
@@ -93,14 +95,18 @@ export function useProjectPhase(props: IProjectPhaseProps) {
   const defaultColors = DEFAULT_PHASE_COLORS[level] ?? DEFAULT_PHASE_COLORS.project
   const currentColor = adjustColor(phaseColor, 40, -0.25)
   const currentHoverColor = adjustColor(phaseColor, 42, -0.45)
-  // A phase under the pointer takes the current phase's colour, and the current phase a darker one.
+  // A phase of the customer's own colour takes its current colour under the pointer, as before; the
+  // default phases a darker shade of their own light colour. Whether a customer's colours read is
+  // the customer's to judge; the text takes black or white by the contrast either way.
+  const hoverColor = currentColor
   const backgrounds = isCurrentPhase
-    ? [currentColor ?? defaultColors[1], currentHoverColor ?? defaultColors[2]]
-    : [phaseColor ?? defaultColors[0], currentColor ?? defaultColors[1]]
+    ? [currentColor ?? defaultColors[2], currentHoverColor ?? defaultColors[3]]
+    : [phaseColor ?? defaultColors[0], hoverColor ?? defaultColors[1]]
 
   const customPhaseColor = {
     '--font-color': phaseTextColor(backgrounds),
     '--phase-color': phaseColor,
+    '--phase-hover-color': hoverColor,
     '--phase-current-color': currentColor,
     '--phase-current-hover-color': currentHoverColor
   }
