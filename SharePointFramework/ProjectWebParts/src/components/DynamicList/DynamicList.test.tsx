@@ -87,13 +87,15 @@ function renderList(state: Record<string, any> | undefined, props: Record<string
 }
 
 /**
- * What the announcer's live region holds now. It writes its message as `innerText`, which jsdom
- * keeps as a property rather than as text in the document.
+ * What the announcer's live region holds now. It writes each message as `innerText` on a span of
+ * its own, which jsdom keeps as a property rather than as text, and clears the region through
+ * `innerText` too, which jsdom ignores: the newest message is the last span.
  */
 const announced = () =>
   Array.from(document.body.querySelectorAll('[aria-live]'))
     .map((region) => {
-      const span = region.querySelector('span') as HTMLElement | null
+      const spans = region.querySelectorAll('span')
+      const span = spans[spans.length - 1] as HTMLElement | undefined
       return (span && (span.innerText || span.textContent)) || region.textContent || ''
     })
     .join(' ')

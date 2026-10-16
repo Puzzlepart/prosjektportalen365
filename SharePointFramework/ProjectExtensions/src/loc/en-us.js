@@ -195,6 +195,23 @@ define([], function () {
     ProgressTaskErrorText: 'Error',
     ProgressTaskWarningText: 'Warning',
     ProgressStepCountText: 'Step {0} of {1}',
-    ProgressAdvancedLogDescription: 'Click to view detailed log for each step in the setup.'
+    ProgressAdvancedLogDescription: 'Click to view detailed log for each step in the setup.',
+    ProjectTemplateSelectorModeLabel: 'Template on the site',
+    ConfigTabSelectedLabel: '{0}, {1} selected',
+    ExtensionsSectionSearchLabel: 'Search project extensions',
+    ContentConfigSectionSearchLabel: 'Search default content',
+    SearchResultsCount: 'Showing {0} of {1}',
+    CloudTemplateResolved: 'The cloud template is read, and the project can be set up',
+    ProgressStepAnnouncement: 'Step {0} of {1}: {2}',
+    ProgressTaskStatusPending: 'waiting',
+    ProgressTaskStatusRunning: 'running',
+    ProgressTaskStatusCompleted: 'completed',
+    ProgressTaskStatusError: 'failed',
+    ProgressTaskStatusWarning: 'completed with warnings',
+    ProgressTaskLabel: '{0}: {1}',
+    ProgressTaskLabelWithEntries: '{0}: {1} ({2} in the log)',
+    ProgressLogLevelInfo: 'Info',
+    ProgressLogLevelWarning: 'Warning',
+    ProgressLogLevelError: 'Error'
   }
 })

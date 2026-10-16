@@ -633,3 +633,41 @@ Tests first: the focus test in `ProjectInformationPanel.test.tsx` and the restor
 PortfolioWebParts' `ProjectCard.test.tsx` failed on the old code and pass. Slice 2 is done but
 for the hand rounds.
 
+### Slice 3, part 1 — The project setup (2026-10-16)
+
+The setup dialog shows on a new site only, so the baseline never scanned it; axe ran in Jest over
+the dialog, its two sections, the progress dialog and the error dialog, and found nothing in the
+base dialog or the error dialog. What the audit found:
+
+- **The template picker**: the choice between no template and a template (`RadioGroup`) had no
+  name; it is «Mal på området». A cloud template's reading and its end were silent, the setup
+  button turning usable without a word; both are announced, and a failure is a message as before.
+- **The sections' tabs**: the sections were not tied to their tabs; the content is the tab panel
+  (`role="tabpanel"`, `aria-labelledby` the tab). A tab's count badge was a bare number; a tab
+  with a count is named «Prosjekttillegg, 2 valgt». A disabled tab keeps its reason in a tooltip,
+  which the keyboard does not reach and a screen reader gets as its description: noted.
+- **The sections**: the search boxes had a placeholder and no name; a search tells how many items
+  it leaves (`useSearchAnnouncement`, half a second after the last keystroke). The count of picked
+  items was a disabled toolbar button, read as «3 valgte elementer, button, unavailable» since the
+  toolbar's items became `disabledFocusable`; it is a `status`, read when it changes. The lock on
+  an item that cannot be left out was a `span` named by its tooltip; it is an `img`. The Norwegian
+  lock text said «Prosjekttilegget»; spelt right.
+- **The progress dialog**: each step is announced as it starts («Steg 3 av 9: …»), where the bar
+  and the step count changed in silence. The advanced log's toggle says whether the log is shown
+  (`aria-expanded`, `aria-controls`). Each step in the log is named by its status and its entries
+  («SitePermissions: fullført (2 i loggen)»), which an icon and a colour showed alone (1.1.1,
+  1.4.1); the running step's spinner was an unnamed progress bar. Each entry's level is named,
+  and the entries are a `log` the keyboard reaches to scroll. The status icons take Fluent's
+  colours (the warning's #ffaa44 was 1.9:1), and «Venter» the grey that reads 4.5:1 (#8a8886
+  read 3.5:1).
+- **Hidden messages read out**: «Prosjektdata funnet» sat in a `hidden` container on every setup,
+  and the error dialog kept a hidden message bar with the stack beside the stack as subtext. A
+  `MessageBar` announces itself when it mounts, hidden or not, and an announcement made while the
+  root mounts waits for the next one: the setup's came out when a cloud template was read. Both
+  render only when they apply.
+
+Tests first: fourteen tests across the setup dialog, both sections and their hooks, the progress
+dialog and the error dialog failed on the old code and pass; the tests' announcer helper reads
+the newest message, the last span, since jsdom ignores the announcer's clearing. ProjectExtensions'
+22 test files pass.
+

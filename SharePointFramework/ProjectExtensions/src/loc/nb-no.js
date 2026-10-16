@@ -70,7 +70,7 @@ define([], function () {
     DocumentTemplateDialogScreenSelectInfoMessage: 'Velg dokumentmalene og/eller mappene du vil kopiere til prosjektområdet.<br /><br />Malene hentes fra <a href="{0}" target="_blank">{1}</a> og det hentes **siste versjon** av malene.<br /><br />**Obs:** Mapper kopieres med alt innhold rekursivt.<br /><br />Når du trykker **Velg** sendes du videre til et skjermbilde hvor du velger destinasjonen du ønsker å kopiere til.',
     DocumentTemplateDialogScreenTargetFolderInfoTitle: 'Velg mål for malene',
     DocumentTemplateDialogScreenTargetFolderInfoMessage: 'Velg mål for de valgte malene og/eller mappene. Dersom det er flere enn ett dokumentbibliotek kan du trykke **Bibliotek** for å velge et annet bibliotek.<br /><br />Når du trykker **Kopier hit** sendes du videre til et skjermbilde hvor du kan sette tittel og filnavn for malene som kopieres over.',
-    ExtensionLockedTooltipText: 'Prosjekttilegget er låst og kan ikke velges bort.',
+    ExtensionLockedTooltipText: 'Prosjekttillegget er låst og kan ikke velges bort.',
     ExtensionsSectionHeaderText: 'Prosjekttillegg',
     ExtensionsSectionTooltip: 'Prosjekttillegg gir ekstra funksjonalitet til prosjektområdet, som for eksempel tilleggslister, venstremeny og annen konfigurasjon.',
     ExtensionsSectionDisabledTooltip: 'Ingen prosjekttillegg er tilgjengelig.',
@@ -195,6 +195,23 @@ define([], function () {
     ProgressTaskErrorText: 'Feil',
     ProgressTaskWarningText: 'Advarsel',
     ProgressStepCountText: 'Steg {0} av {1}',
-    ProgressAdvancedLogDescription: 'Klikk for å vise detaljert logg for hvert steg i oppsettet.'
+    ProgressAdvancedLogDescription: 'Klikk for å vise detaljert logg for hvert steg i oppsettet.',
+    ProjectTemplateSelectorModeLabel: 'Mal på området',
+    ConfigTabSelectedLabel: '{0}, {1} valgt',
+    ExtensionsSectionSearchLabel: 'Søk i prosjekttillegg',
+    ContentConfigSectionSearchLabel: 'Søk i standardinnhold',
+    SearchResultsCount: 'Viser {0} av {1}',
+    CloudTemplateResolved: 'Skymalen er lest, og prosjektet kan settes opp',
+    ProgressStepAnnouncement: 'Steg {0} av {1}: {2}',
+    ProgressTaskStatusPending: 'venter',
+    ProgressTaskStatusRunning: 'pågår',
+    ProgressTaskStatusCompleted: 'fullført',
+    ProgressTaskStatusError: 'feilet',
+    ProgressTaskStatusWarning: 'fullført med advarsler',
+    ProgressTaskLabel: '{0}: {1}',
+    ProgressTaskLabelWithEntries: '{0}: {1} ({2} i loggen)',
+    ProgressLogLevelInfo: 'Info',
+    ProgressLogLevelWarning: 'Advarsel',
+    ProgressLogLevelError: 'Feil'
   }
 })

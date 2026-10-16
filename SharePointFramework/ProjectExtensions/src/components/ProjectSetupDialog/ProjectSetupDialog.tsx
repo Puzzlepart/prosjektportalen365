@@ -1,4 +1,4 @@
-import { Tab, TabList, Badge, Button, Tooltip } from '@fluentui/react-components'
+import { Tab, TabList, Badge, Button, Tooltip, useId } from '@fluentui/react-components'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { FC, useEffect, useState } from 'react'
 import { BaseDialog } from '../@BaseDialog'
@@ -25,6 +25,13 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
 
   const defaultTab: ConfigTab = hasExtensions ? 'extensions' : 'contentConfig'
   const [activeTab, setActiveTab] = useState<ConfigTab>(defaultTab)
+  const tabIds: Record<ConfigTab, string> = {
+    extensions: useId('extensions-tab'),
+    contentConfig: useId('content-config-tab')
+  }
+  // A tab with a count says what the count is: «Prosjekttillegg, 2 valgt» (WCAG 1.1.1).
+  const tabLabel = (header: string, count: number) =>
+    count > 0 ? format(strings.ConfigTabSelectedLabel, header, count) : undefined
 
   useEffect(() => {
     if (hasExtensions) {
@@ -93,7 +100,13 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
               relationship='description'
               positioning='above'
             >
-              <Tab value='extensions' disabled={!hasExtensions} icon={getFluentIcon('PuzzlePiece')}>
+              <Tab
+                value='extensions'
+                id={tabIds.extensions}
+                aria-label={tabLabel(strings.ExtensionsSectionHeaderText, extensionsCount)}
+                disabled={!hasExtensions}
+                icon={getFluentIcon('PuzzlePiece')}
+              >
                 <span className={styles.tabLabel}>
                   {strings.ExtensionsSectionHeaderText}
                   {hasExtensions && extensionsCount > 0 && (
@@ -120,6 +133,8 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
             >
               <Tab
                 value='contentConfig'
+                id={tabIds.contentConfig}
+                aria-label={tabLabel(strings.ContentConfigSectionHeaderText, contentConfigCount)}
                 disabled={!hasContentConfig}
                 icon={getFluentIcon('ListBar')}
               >
@@ -140,19 +155,23 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
             </Tooltip>
           </TabList>
 
-          <div className={styles.tabContent}>
+          <div className={styles.tabContent} role='tabpanel' aria-labelledby={tabIds[activeTab]}>
             {activeTab === 'extensions' && hasExtensions && <ExtensionsSection />}
             {activeTab === 'contentConfig' && hasContentConfig && <ContentConfigSection />}
           </div>
         </div>
 
-        <div className={styles.projectDataMessage} hidden={!props.data.projectData}>
-          <UserMessage
-            title={strings.ProjectDataFoundTitle}
-            text={strings.ProjectDataFoundMessage}
-            intent='success'
-          />
-        </div>
+        {/* Rendered only with project data: a message bar announces itself when it mounts, so a
+            hidden one was read out to a screen reader on every setup. */}
+        {props.data.projectData && (
+          <div className={styles.projectDataMessage}>
+            <UserMessage
+              title={strings.ProjectDataFoundTitle}
+              text={strings.ProjectDataFoundMessage}
+              intent='success'
+            />
+          </div>
+        )}
       </BaseDialog>
     </ProjectSetupDialogContext.Provider>
   )

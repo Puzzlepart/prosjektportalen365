@@ -39,6 +39,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Universell utforming (#1788): i `Prosjektnyheter` leses nyhetene som en liste, «Vis flere» sier om flere nyheter vises, og dialogen for ny nyhet sier fra til skjermlesere når nyheten opprettes og når den er opprettet
 - Universell utforming (#1788): i `Dynamisk liste` går fokus til elementet eller mappen som åpnes, og tilbake til lenken man kom fra når man går tilbake, i stedet for til toppen av siden; verktøylinjen blir stående mens listen oppdateres; skjermlesere får vite hvor mange elementer et søk eller filter viser og når listen er oppdatert; opplasting, nye dokumenter og sletting sier fra når de er gjort og når de feiler, som før var helt tause; en feil ved henting vises på norsk; eksportknappen heter etter hva den gjør; og enkeltvisningen har riktig overskriftsnivå, feltene som navn og verdi, og får plass på smale skjermer
 - Universell utforming (#1788): når prosjektinformasjonspanelet lukkes, går fokus tilbake til knappen som åpnet det, på prosjektkortene og i porteføljelistene, i stedet for til toppen av siden
+- Universell utforming (#1788): i oppsettet av et prosjekt har valget av mal og søkefeltene navn, fanene sier hvor mange som er valgt, et søk og antall valgte leses opp, og det leses opp når en skymal hentes og er klar. Fremdriften leser opp hvert steg, og loggen viser status og nivå i ord og ikke bare med ikon og farge. Meldingen «Prosjektdata funnet» ble lest opp ved hvert oppsett selv om den var skjult, og det gjør den ikke lenger
 
 ### Feilrettinger
 

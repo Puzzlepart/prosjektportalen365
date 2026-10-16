@@ -191,8 +191,14 @@ checked by hand and with which reader and browser: axe finds only part of what W
 - A button that cannot be used yet but explains why in its `title` is `disabledFocusable`, not
   `disabled` (`Toolbar` does so for every disabled item since #1788): a disabled button is skipped by the keyboard and its reason never reached. It also
   keeps the focus while an action it started runs (the change-phase dialog's statuses).
-- A status message in Jest: the announcer writes it as `innerText`, which jsdom keeps as a
-  property, not as text; read `span.innerText` in the live region (`reactRoot.test.tsx`).
+- A status message in Jest: the announcer writes each message as `innerText` on a new span, which
+  jsdom keeps as a property, not as text, and clears the region through `innerText` too, which
+  jsdom ignores: read the last span's `innerText` in the live region, or a second message reads
+  as the first (`ProjectSetupDialog.test.tsx`).
+- A `UserMessage` (Fluent's `MessageBar`) announces itself when it mounts, hidden or not: one in a
+  `hidden` container was read out on every project setup («Prosjektdata funnet»). Render it only
+  when it applies. A message announced while the root mounts waits in the queue and comes out
+  with the next announcement, so a test that triggers one sees it.
 - jest-axe over a stand-in judges the stand-in. The combobox family (`Autocomplete`,
   `PeoplePicker`, `ColumnSearchPropertyField`) runs on stand-ins in Jest: assert names there and
   let the browser scans judge the markup.
