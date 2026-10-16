@@ -633,6 +633,16 @@ Tests first: the focus test in `ProjectInformationPanel.test.tsx` and the restor
 PortfolioWebParts' `ProjectCard.test.tsx` failed on the old code and pass. Slice 2 is done but
 for the hand rounds.
 
+The browser test then failed on the test hub: the button carried the restore target and was in
+Tabster's history, but the focus stayed on the page's start. A probe on the hub showed the
+button gone from the page 387 ms after Escape and a new one in its place: the project list gave
+`FixedSizeList` an inline function as its row, a new component on every render of the list, so
+every row and card was made anew whenever its state changed, the panel opening and closing among
+them, and Tabster found only a detached button to return the focus to. The row is a component of
+its own (`ProjectRow` in `useProjectListRenderer.tsx`), given its projects through `itemData`,
+and the cards are keyed by their site; a test in `ProjectList.test.tsx`, the card view on a
+stand-in `AutoSizer`, failed on the old code (the button detached after the click) and passes.
+
 ### Slice 3, part 1 — The project setup (2026-10-16)
 
 The setup dialog shows on a new site only, so the baseline never scanned it; axe ran in Jest over
@@ -670,4 +680,36 @@ Tests first: fourteen tests across the setup dialog, both sections and their hoo
 dialog and the error dialog failed on the old code and pass; the tests' announcer helper reads
 the newest message, the last span, since jsdom ignores the announcer's clearing. ProjectExtensions'
 22 test files pass.
+
+### Slice 3, part 2 — The project upgrade (2026-10-16)
+
+`ProjectUpgrade` renders nothing: its `onInit` returns at once, and the upgrade runs from the
+installer (its test says so). There is nothing on the page to audit. The component overview still
+called it a dialog; it says what it does now.
+
+### Slice 3, part 3 — «Hent dokumentmal» (2026-10-16)
+
+The baseline's `target-size` findings, 2 in the template step and 3 in the target folder step,
+were the folders' names: a `Link` with 16px of text in the name column, beside the row's check
+box or radio. They are a `FolderLink` at least 24 by 24 px. What else the audit found:
+
+- **The folder trail** had no name; it is «Mappenavigasjon». Opening a folder from either list
+  dropped the focus to the page's start, as the link left with the list; going up from the trail
+  did the same. `useFolderFocus` gives an opened folder's trail step the focus, and on going up
+  the link of the folder left, looked for again for a while, since `DataGridList` draws its rows a
+  render after the screen and the target step reads its folders from SharePoint; it leaves the
+  focus alone if the user has moved it. Switching library in the target step moves no focus:
+  noted.
+- **Each copy's header** was a clickable `div`; it is a button that says whether the fields are
+  shown (`aria-expanded`, `aria-controls`), with the look it had. The name and title fields set
+  ids of their own, which the hook told them apart by, so Fluent's `Field` named them through
+  `aria-labelledby` and a click on «Filnavn» or «Tittel» reached nothing; each field has its own
+  handler now and keeps the field's id.
+- **The copy** tells each file as it starts («Kopierer Prosjektplan.docx»), where the bar and the
+  name changed in silence; the summary was a message already.
+
+Tests first: the trail and the focus in `SelectScreen.test.tsx` and `TargetFolderScreen.test.tsx`,
+the header button and the label clicks in `DocumentTemplateItem.test.tsx`, and a new
+`CopyProgressScreen.test.tsx` failed on the old code and pass. The target size is CSS; the browser
+suite's scans of both steps will tell. ProjectExtensions' 23 test files pass.
 

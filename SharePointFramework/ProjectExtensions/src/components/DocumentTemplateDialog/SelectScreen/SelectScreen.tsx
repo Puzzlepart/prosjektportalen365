@@ -10,6 +10,7 @@ import { useSelectScreen } from './useSelectScreen'
  */
 export const SelectScreen: FC = () => {
   const {
+    containerRef,
     templateLibrary,
     folder,
     setFolder,
@@ -20,7 +21,7 @@ export const SelectScreen: FC = () => {
     onRowDoubleClick
   } = useSelectScreen()
   return (
-    <>
+    <div ref={containerRef}>
       <UserMessage
         title={strings.DocumentTemplateDialogScreenSelectInfoTitle}
         text={format(
@@ -39,7 +40,7 @@ export const SelectScreen: FC = () => {
         onSelectionChange={onSelectionChange}
         onRowDoubleClick={onRowDoubleClick}
       />
-    </>
+    </div>
   )
 }
 

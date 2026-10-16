@@ -212,6 +212,8 @@ define([], function () {
     ProgressTaskLabelWithEntries: '{0}: {1} ({2} i loggen)',
     ProgressLogLevelInfo: 'Info',
     ProgressLogLevelWarning: 'Advarsel',
-    ProgressLogLevelError: 'Feil'
+    ProgressLogLevelError: 'Feil',
+    FolderNavigationLabel: 'Mappenavigasjon',
+    CopyProgressAnnouncement: 'Kopierer {0}'
   }
 })

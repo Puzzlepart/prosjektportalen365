@@ -209,6 +209,8 @@ declare interface IProjectExtensionsStrings {
   ProgressLogLevelInfo: string
   ProgressLogLevelWarning: string
   ProgressLogLevelError: string
+  FolderNavigationLabel: string
+  CopyProgressAnnouncement: string
 }
 
 declare module 'ProjectExtensionsStrings' {

@@ -4,6 +4,7 @@ import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { TemplateSelectorContext } from '../../../extensions/templateSelector/context'
 import { DocumentTemplateDialogContext } from '../context'
 import { SELECTION_CHANGED } from '../reducer'
+import { useFolderFocus } from '../useFolderFocus'
 import columns from './columns'
 
 /**
@@ -15,6 +16,7 @@ export function useSelectScreen() {
   const context = useContext(TemplateSelectorContext)
   const { state, dispatch } = useContext(DocumentTemplateDialogContext)
   const [folder, setFolder] = useState('')
+  const containerRef = useRef<HTMLDivElement>(null)
   const templates = useMemo(
     () =>
       (context.templates ?? [])
@@ -34,6 +36,8 @@ export function useSelectScreen() {
     []
   )
 
+  useFolderFocus(folder, containerRef)
+
   // Opening another folder starts the selection over, as the v8 list did when its key changed.
   const isFirstRender = useRef(true)
   useEffect(() => {
@@ -45,6 +49,7 @@ export function useSelectScreen() {
   }, [folder])
 
   return {
+    containerRef,
     templateLibrary: context.templateLibrary,
     folder,
     setFolder,

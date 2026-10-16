@@ -7,23 +7,38 @@ import { IDocumentTemplateItemProps } from './types'
 import { MAX_LENGTH, useDocumentTemplateItem } from './useDocumentTemplateItem'
 
 /**
- * One copy to name: its file type and name as a header that opens the name and title fields.
+ * One copy to name: its file type and name as a button that opens the name and title fields, and
+ * says whether they are shown (WCAG 2.1.1, 4.1.2); it was a clickable `div` the keyboard could not
+ * reach.
  */
 export const DocumentTemplateItem: FC<IDocumentTemplateItemProps> = (props) => {
-  const { nameId, titleId, isExpanded, toggleExpanded, nameLength, titleLength, onInputChange } =
-    useDocumentTemplateItem(props)
+  const {
+    fieldsId,
+    isExpanded,
+    toggleExpanded,
+    nameLength,
+    titleLength,
+    onNameChange,
+    onTitleChange
+  } = useDocumentTemplateItem(props)
   return (
     <div className={styles.root}>
-      <div className={styles.header} onClick={toggleExpanded}>
-        <div className={styles.fileTypeIcon}>
+      <button
+        type='button'
+        className={styles.header}
+        onClick={toggleExpanded}
+        aria-expanded={isExpanded}
+        aria-controls={fieldsId}
+      >
+        <span className={styles.fileTypeIcon}>
           <FileTypeIcon {...props.item.getFileTypeIconOptions()} />
-        </div>
-        <div className={styles.title}>{props.item.name}</div>
-        <div className={styles.chevronIcon}>
+        </span>
+        <span className={styles.title}>{props.item.name}</span>
+        <span className={styles.chevronIcon} aria-hidden>
           {getFluentIconWithFallback(isExpanded ? 'ChevronDown' : 'ChevronUp')}
-        </div>
-      </div>
-      <div hidden={!isExpanded}>
+        </span>
+      </button>
+      <div id={fieldsId} hidden={!isExpanded}>
         <div className={styles.inputField}>
           <Field
             label={props.item.isFolder ? strings.FolderNameLabel : strings.FileNameLabel}
@@ -31,7 +46,6 @@ export const DocumentTemplateItem: FC<IDocumentTemplateItemProps> = (props) => {
             validationState={props.item.errorMessage ? 'error' : 'none'}
           >
             <Input
-              id={nameId}
               placeholder={props.item.isFolder ? strings.FolderNameLabel : strings.FileNameLabel}
               defaultValue={props.item.isFolder ? props.item.name : props.item.nameWithoutExtension}
               maxLength={MAX_LENGTH}
@@ -40,19 +54,18 @@ export const DocumentTemplateItem: FC<IDocumentTemplateItemProps> = (props) => {
                   ? `${nameLength}/${MAX_LENGTH}`
                   : `${nameLength}/${MAX_LENGTH} .${props.item.fileExtension}`
               }
-              onChange={onInputChange}
+              onChange={onNameChange}
             />
           </Field>
         </div>
         <div className={styles.inputField}>
           <Field label={strings.TitleLabel}>
             <Input
-              id={titleId}
               placeholder={strings.TitleLabel}
               defaultValue={props.item.title}
               maxLength={MAX_LENGTH}
               contentAfter={`${titleLength}/${MAX_LENGTH}`}
-              onChange={onInputChange}
+              onChange={onTitleChange}
             />
           </Field>
         </div>

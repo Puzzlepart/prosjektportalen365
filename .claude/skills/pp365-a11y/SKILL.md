@@ -80,7 +80,10 @@ Rules 1, 2, 5, 6, 8 and the tooltip handling are adapted from Microsoft's
    A view that replaces the element with focus (an item or folder opened from a list, a toolbar
    swapped for a spinner) drops focus to the page's start (2.4.3): give it to the new view's
    heading or the breadcrumb's current crumb, and on going back to the link left
-   (`DynamicList/useNavigationFocus.ts`); keep a toolbar mounted while its action runs.
+   (`DynamicList/useNavigationFocus.ts`, `DocumentTemplateDialog/useFolderFocus.ts`); keep a
+   toolbar mounted while its action runs. A `DataGridList` draws its rows a render after the
+   screen, and a list fetched from SharePoint later still: look for the link again for a while,
+   and leave the focus alone if the user has moved it meanwhile (`useFolderFocus`).
 8. **Related controls form a group**: `role="group"` with `aria-labelledby` (a toolbar section, a
    pair of move buttons).
 9. **Colour** comes from Fluent's tokens, not hex: 4.5:1 for text, 3:1 for large text and for
@@ -222,7 +225,12 @@ checked by hand and with which reader and browser: axe finds only part of what W
   nothing either: Tabster's restorer returns it only to an element marked as a restore target,
   which `DialogTrigger` marks. Spread `useRestoreFocusTarget()` on the button that opens it
   (`ProjectCardFooter`, `NewsDialog`); `ProjectInformationPanel` marks the toggle element it
-  renders. It works under jsdom, so a test can press Escape and expect the focus back.
+  renders. It works under jsdom, so a test can press Escape and expect the focus back, but that
+  proves less than it seems: Tabster returns the focus only to the element it saw, and a list
+  that remakes its rows (react-window given an inline row function, as the project list was)
+  replaces that button while the drawer closes. A row component goes to `FixedSizeList` once,
+  at module scope, with its data in `itemData` (`ProjectList/useProjectListRenderer.tsx`).
+  Check the focus in the browser suite as well.
 - An inline `outline: none` (the timeline items' configured style) beats a stylesheet's
   `:focus-visible` outline unless that outline is `!important`.
 - A shape cut out with `clip-path` (the timeline's diamonds and triangles) takes no border: draw
