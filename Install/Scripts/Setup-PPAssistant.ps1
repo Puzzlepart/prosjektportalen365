@@ -810,7 +810,7 @@ function Test-PPFoundryPlan {
           $onsketType = $d.Type
           $d.Type = 'GlobalStandard'
           $d.Versjon = $global.Versjon
-          Add-PPCheck -Navn $sjekk -Status 'ADVARSEL' -Detalj "$($d.Modell) $($d.Versjon) settes opp som GlobalStandard, fordi den ikke kan settes opp som $($onsketType): $($valg.Arsak)" -Fiks "Bildeforespørslene (prompten til logoforslag) kan da behandles utenfor EU. Chatmodellen og prosjektdataene berøres ikke. Vil dere ikke det: -FoundryImagesDeploymentType $onsketType (stopper i stedet), en annen region med -FoundryImagesLocation, eller -NoFoundryImages."
+          Add-PPCheck -Navn $sjekk -Status 'ADVARSEL' -Detalj "$($d.Modell) $($d.Versjon) settes opp som GlobalStandard, fordi den ikke kan settes opp som $($onsketType): $($valg.Arsak)" -Fiks "Da kan teksten brukeren skriver i logofeltet (forhåndsutfylt med tittelen på prosjektområdet) behandles utenfor EU. Ingen andre prosjektdata sendes til bildemodellen, og chatmodellen berøres ikke. Vil dere ikke det: -FoundryImagesDeploymentType $onsketType (stopper i stedet), en annen region med -FoundryImagesLocation, eller -NoFoundryImages."
           continue
         }
         $valg.Arsak = "$($valg.Arsak); heller ikke som GlobalStandard ($($global.Arsak))"
