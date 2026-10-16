@@ -212,6 +212,11 @@ checked by hand and with which reader and browser: axe finds only part of what W
   Its scroll area scrolls with the arrow keys once it can take focus.
 - A Fluent `Popover` positioned on an element, with no `PopoverTrigger`, gives focus back to
   nothing when it closes: return it on Escape yourself (`useTimeline`'s `onDetailsDismiss`).
+- A Fluent `Dialog` or drawer opened from state, with no `DialogTrigger`, gives focus back to
+  nothing either: Tabster's restorer returns it only to an element marked as a restore target,
+  which `DialogTrigger` marks. Spread `useRestoreFocusTarget()` on the button that opens it
+  (`ProjectCardFooter`, `NewsDialog`); `ProjectInformationPanel` marks the toggle element it
+  renders. It works under jsdom, so a test can press Escape and expect the focus back.
 - An inline `outline: none` (the timeline items' configured style) beats a stylesheet's
   `:focus-visible` outline unless that outline is `!important`.
 - A shape cut out with `clip-path` (the timeline's diamonds and triangles) takes no border: draw

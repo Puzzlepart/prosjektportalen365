@@ -1,4 +1,10 @@
-import { Avatar, Button, CardFooter, Tooltip } from '@fluentui/react-components'
+import {
+  Avatar,
+  Button,
+  CardFooter,
+  Tooltip,
+  useRestoreFocusTarget
+} from '@fluentui/react-components'
 import {
   PanelRightContractFilled,
   PanelRightContractRegular,
@@ -15,6 +21,9 @@ const PanelRight = bundleIcon(PanelRightContractFilled, PanelRightContractRegula
 export const ProjectCardFooter: FC = () => {
   const context = useContext(ProjectCardContext)
   const { primaryUser, secondaryUser, ProjectTypeIcon, projectTypeText } = useProjectCardFooter()
+  // The project information panel opens from state, so its drawer has no trigger of Fluent's to
+  // give the focus back to: the button is marked as its restore target (WCAG 2.4.3).
+  const restoreFocusTarget = useRestoreFocusTarget()
 
   return (
     <CardFooter
@@ -26,7 +35,13 @@ export const ProjectCardFooter: FC = () => {
           relationship='description'
           withArrow
         >
-          <Button className={styles.action} appearance='subtle' icon={<PanelRight />} {...action} />
+          <Button
+            className={styles.action}
+            appearance='subtle'
+            icon={<PanelRight />}
+            {...restoreFocusTarget}
+            {...action}
+          />
         </Tooltip>
       ))}
     >

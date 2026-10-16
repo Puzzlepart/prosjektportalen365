@@ -5,6 +5,7 @@ jest.mock('pp365-projectwebparts/lib/components/ProjectInformationPanel', () => 
 }))
 
 import { render, screen } from '@testing-library/react'
+import strings from 'PortfolioWebPartsStrings'
 import * as React from 'react'
 import { ProjectCard } from './ProjectCard'
 
@@ -21,20 +22,20 @@ const spfxContext = {
   }
 } as any
 
+const PROJECT = {
+  title: 'Alfa',
+  url: '/sites/alfa',
+  hasUserAccess: true,
+  phase: 'Konsept',
+  data: {},
+  primaryUser: { name: 'Kari Nordmann' },
+  secondaryUser: { name: 'Ola Nordmann' },
+  template: 'Standard'
+}
+
 describe('ProjectCard', () => {
   it('fetches the project and shows its card', async () => {
-    const dataAdapter = {
-      fetchEnrichedProject: jest.fn().mockResolvedValue({
-        title: 'Alfa',
-        url: '/sites/alfa',
-        hasUserAccess: true,
-        phase: 'Konsept',
-        data: {},
-        primaryUser: { name: 'Kari Nordmann' },
-        secondaryUser: { name: 'Ola Nordmann' },
-        template: 'Standard'
-      })
-    }
+    const dataAdapter = { fetchEnrichedProject: jest.fn().mockResolvedValue(PROJECT) }
     render(
       <ProjectCard
         dataAdapter={dataAdapter as any}
@@ -47,6 +48,20 @@ describe('ProjectCard', () => {
     expect(await screen.findByTitle('Konsept')).toBeInTheDocument()
     expect(dataAdapter.fetchEnrichedProject).toHaveBeenCalledWith('site-1', undefined)
     expect(screen.getAllByRole('link')[0]).toHaveAttribute('href', '/sites/alfa')
+  })
+
+  it('marks the button that opens the project information as where the panel gives the focus back (WCAG 2.4.3)', async () => {
+    const dataAdapter = { fetchEnrichedProject: jest.fn().mockResolvedValue(PROJECT) }
+    render(
+      <ProjectCard
+        dataAdapter={dataAdapter as any}
+        projectSiteId='site-1'
+        spfxContext={spfxContext}
+      />
+    )
+    // Fluent's drawer gives the focus back only to an element marked as its restore target.
+    const open = await screen.findByTitle(strings.ProjectInformationPanelButton)
+    expect(open.getAttribute('data-tabster')).toContain('"restorer"')
   })
 
   it('shows nothing of the card until the project is there', () => {

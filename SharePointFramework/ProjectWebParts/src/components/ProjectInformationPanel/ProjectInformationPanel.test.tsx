@@ -13,8 +13,9 @@ jest.mock('../ProjectInformation', () => ({
   }
 }))
 
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import * as React from 'react'
 import { ProjectInformationPanel } from './index'
 
@@ -54,9 +55,27 @@ describe('ProjectInformationPanel', () => {
     expect(screen.getByText('Prosjektinformasjon (panel)')).toBeInTheDocument()
   })
 
-  it('names the panel after the project in its header, beside the close button, and only there', () => {
+  it('names the panel after the project in its header, beside the close button, and only there', async () => {
     render(<ProjectInformationPanel {...base} title='Ny svømmehall' hidden={false} />)
-    expect(screen.getByRole('dialog', { name: 'Ny svømmehall' })).toBeInTheDocument()
+    const panel = screen.getByRole('dialog', { name: 'Ny svømmehall' })
     expect(screen.getAllByText('Ny svømmehall')).toHaveLength(1)
+    expect(await axeComponent(panel)).toHaveNoViolations()
+  })
+
+  it('gives the focus back to the element that opened it when it closes (WCAG 2.4.3)', async () => {
+    const user = userEvent.setup()
+    render(
+      <ProjectInformationPanel
+        {...base}
+        title='Alfa'
+        onRenderToggleElement={(onToggle) => <button onClick={onToggle}>Åpne</button>}
+      />
+    )
+    const open = screen.getByRole('button', { name: 'Åpne' })
+    await user.click(open)
+    expect(screen.getByRole('dialog', { name: 'Alfa' })).toBeInTheDocument()
+    expect(open).not.toHaveFocus()
+    await user.keyboard('{Escape}')
+    await waitFor(() => expect(open).toHaveFocus())
   })
 })

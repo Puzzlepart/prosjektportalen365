@@ -615,3 +615,21 @@ name, the spinner's name) failed on the old code, as did the new test in shared-
 `Toolbar.test.tsx`; all pass. The folder's focus test failed there on `DEBUG`, which SPFx defines
 at build and the library's view reads, before it reached its assertion; the test defines it now,
 and was not run against the old code again.
+
+### Slice 2, part 10 — The project information panel (2026-10-16)
+
+The panel the project cards and the portfolio lists open is the library's `BasePanel` around
+`ProjectInformation`, both audited, and jest-axe finds nothing in it. One finding: closing it left
+the focus on the page's start (2.4.3). Fluent's drawer returns focus through Tabster's restorer,
+only to an element marked as a restore target, which `DialogTrigger` would mark; the panel opens
+from state. The toggle element `ProjectInformationPanel` renders (the portfolio lists' title and
+project information columns) is now cloned with `useRestoreFocusTarget()`, and the project card's
+button (`ProjectCardFooter`, PortfolioWebParts, for the project list and the project card web part,
+which open the panel through `hidden`) carries it. The flow test that opens the panel from a card
+scans it with axe and expects the focus back on the card's button after Escape. Noted for slice 4:
+that button has the same text in its `title` and its tooltip, read twice.
+
+Tests first: the focus test in `ProjectInformationPanel.test.tsx` and the restore target in
+PortfolioWebParts' `ProjectCard.test.tsx` failed on the old code and pass. Slice 2 is done but
+for the hand rounds.
+
