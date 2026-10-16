@@ -318,6 +318,7 @@ function Show-PPSummary($Tenant, $AzContext, $VaultFinnes, $Consent, $SharePoint
     }
     foreach ($d in $script:FoundryPlan) {
       $status = if ($d.Finnes) { "finnes ($($d.Type)), gjenbrukes" } else { "OPPRETTES ($($d.Type), kapasitet $($d.Kapasitet))" }
+      if ($d.Ukontrollert -and $d.Rolle -eq 'Images' -and $d.Type -ne 'GlobalStandard' -and -not $script:BildeTypeEksplisitt) { $status += ' - ev. GlobalStandard om det ikke går' }
       Write-PPPlan $(if ($d.Rolle -eq 'Chat') { 'Chatmodell' } else { 'Bildemodell' }) ('{0} på {1} - {2}' -f "$($d.Modell) $($d.Versjon)".Trim(), $d.Konto, $status)
     }
     if (-not $hasImages) { Write-PPPlan 'Bildemodell' '' $true }
@@ -670,17 +671,23 @@ function Grant-PPKeyVaultAccess($Vault, $AssistantSp) {
 
 # Finner modellversjonen som kan deployes med valgt deploymenttype i regionen. Foretrekker
 # regionens standardversjon. Returnerer også kvotenavnet (usageName) for kvotesjekken.
-function Resolve-PPFoundryModel([string] $Region, [string] $Model, [string] $Type) {
-  $modeller = (Invoke-PPArm GET "/subscriptions/$($script:SubId)/providers/Microsoft.CognitiveServices/locations/$Region/models?api-version=$CogApiVersion").value
+#
+# Uten -AccountId leses regionens katalog, som ligger på abonnementet. Med -AccountId leses
+# ressursens egen liste, som bare krever tilgang på ressursgruppen - det er veien når den som
+# kjører bare er Owner på ressursgruppen. De to listene har samme felter, men ressursens er flat.
+function Resolve-PPFoundryModel([string] $Region, [string] $Model, [string] $Type, [string] $AccountId) {
+  $sti = if ($AccountId) { "$AccountId/models?api-version=$CogApiVersion" }
+         else { "/subscriptions/$($script:SubId)/providers/Microsoft.CognitiveServices/locations/$Region/models?api-version=$CogApiVersion" }
+  $modeller = @((Invoke-PPArm GET $sti).value | ForEach-Object { if ($_.model) { $_.model } else { $_ } })
   $kandidater = @($modeller | Where-Object {
-      $_.model.format -eq 'OpenAI' -and $_.model.name -eq $Model -and
-      $_.model.lifecycleStatus -ne 'Deprecated' -and (@($_.model.skus.name) -contains $Type)
+      $_.format -eq 'OpenAI' -and $_.name -eq $Model -and
+      $_.lifecycleStatus -ne 'Deprecated' -and (@($_.skus.name) -contains $Type)
     })
   if ($kandidater.Count -eq 0) { return $null }
-  $valgt = $kandidater | Where-Object { $_.model.isDefaultVersion } | Select-Object -First 1
-  if (-not $valgt) { $valgt = $kandidater | Sort-Object { $_.model.version } -Descending | Select-Object -First 1 }
-  $sku = $valgt.model.skus | Where-Object { $_.name -eq $Type } | Select-Object -First 1
-  return [pscustomobject]@{ Version = $valgt.model.version; UsageName = $sku.usageName }
+  $valgt = $kandidater | Where-Object { $_.isDefaultVersion } | Select-Object -First 1
+  if (-not $valgt) { $valgt = $kandidater | Sort-Object { $_.version } -Descending | Select-Object -First 1 }
+  $sku = $valgt.skus | Where-Object { $_.name -eq $Type } | Select-Object -First 1
+  return [pscustomobject]@{ Version = $valgt.version; UsageName = $sku.usageName }
 }
 
 # Ledig kvote (limit - forbruk) for et kvotenavn i regionen, eller $null om den ikke finnes.
@@ -732,22 +739,31 @@ function Add-PPFoundryProblem($Deployment, [string] $Sjekk, [string] $Detalj, [s
 #>
 function Test-PPFoundryPlan {
   $sub = $script:SubId
-  $script:FoundryRpRegistrert = $false
+  # $true / $false / $null. $null betyr at vi ikke fikk lest det - typisk fordi den som kjører
+  # bare har tilgang på ressursgruppen. Da forsøker vi ikke å registrere, for det krever
+  # abonnementet; i de fleste abonnement er leverandøren registrert fra før.
+  $script:FoundryRpRegistrert = $null
   try {
     $rp = Invoke-PPArm GET "/subscriptions/$sub/providers/Microsoft.CognitiveServices?api-version=$RpApiVersion"
     $script:FoundryRpRegistrert = $rp.registrationState -eq 'Registered'
   } catch {}
-  if ($script:FoundryRpRegistrert) {
+  if ($script:FoundryRpRegistrert -eq $true) {
     Add-PPCheck -Navn 'Ressursleverandør' -Status 'OK' -Detalj 'Microsoft.CognitiveServices er registrert'
-  } else {
+  } elseif ($script:FoundryRpRegistrert -eq $false) {
     Add-PPCheck -Navn 'Ressursleverandør' -Status 'ADVARSEL' -Detalj 'Microsoft.CognitiveServices er ikke registrert på abonnementet' -Fiks 'Skriptet registrerer den etter bekreftelsen. Krever Contributor på abonnementet.'
+  } else {
+    Add-PPCheck -Navn 'Ressursleverandør' -Status 'UKJENT' -Detalj 'kunne ikke lese registreringen av Microsoft.CognitiveServices (trolig bare tilgang på ressursgruppen)' -Fiks 'Skriptet antar at den er registrert. Feiler opprettelsen med MissingSubscriptionRegistration, må noen med Contributor på abonnementet registrere den.'
   }
 
   $alle = @()
   try { $alle = @((Invoke-PPArm GET "/subscriptions/$sub/providers/Microsoft.CognitiveServices/accounts?api-version=$CogApiVersion").value) } catch {}
   foreach ($konto in $script:FoundryKontoer.Values) {
     $sjekk = "Foundry-ressurs $($konto.Navn)"
-    $eksisterende = $alle | Where-Object { $_.name -eq $konto.Navn } | Select-Object -First 1
+    # Ressursgruppen først: den krever bare tilgang der. Lista over abonnementet fanger en
+    # ressurs med samme navn i en annen ressursgruppe, når vi har lov til å lese den.
+    $eksisterende = $null
+    try { $eksisterende = Invoke-PPArm GET "/subscriptions/$sub/resourceGroups/$ResourceGroupName/providers/Microsoft.CognitiveServices/accounts/$($konto.Navn)?api-version=$CogApiVersion" -AllowNotFound } catch {}
+    if (-not $eksisterende) { $eksisterende = $alle | Where-Object { $_.name -eq $konto.Navn } | Select-Object -First 1 }
     if ($eksisterende) {
       $konto.Finnes = $true
       $konto.Id = $eksisterende.id
@@ -827,8 +843,12 @@ function Test-PPFoundryPlan {
         Add-PPCheck -Navn $sjekk -Status 'OK' -Detalj "$($d.Modell) $($d.Versjon), $($d.Type), kapasitet $($d.Kapasitet) (ledig $($valg.Ledig))"
       }
     } catch {
-      $fiks = if (-not $script:FoundryRpRegistrert) { 'Kontrolleres på nytt etter at ressursleverandøren er registrert.' } else { '' }
-      Add-PPCheck -Navn $sjekk -Status 'UKJENT' -Detalj $_.Exception.Message -Fiks $fiks
+      $d.Ukontrollert = $true
+      $fallback = if ($d.Rolle -eq 'Images' -and $d.Type -ne 'GlobalStandard' -and -not $script:BildeTypeEksplisitt) { ' Bildemodellen faller tilbake til GlobalStandard om den ikke kan opprettes som valgt.' } else { '' }
+      $fiks = if ($_.Exception.Message -match '403|AuthorizationFailed') {
+        "Modellkatalogen og kvoten ligger på abonnementet, og du har trolig bare tilgang på ressursgruppen. Kontrolleres når ressursen er opprettet; mangler kvote, stopper skriptet da.$fallback"
+      } elseif ($script:FoundryRpRegistrert -eq $false) { "Kontrolleres på nytt etter at ressursleverandøren er registrert.$fallback" } else { $fallback.Trim() }
+      Add-PPCheck -Navn $sjekk -Status 'UKJENT' -Detalj "kunne ikke kontrollere $($d.Modell) som $($d.Type) ($($_.Exception.Message))" -Fiks $fiks
     }
   }
 }
@@ -859,14 +879,46 @@ function Get-PPFoundryConnection($Konto) {
   return @{ Base = $base; Key = (ConvertTo-SecureString $nokler.key1 -AsPlainText -Force) }
 }
 
+# Oppretter én deployment som $Type og venter til den er klar. Kaster ved feil, slik at
+# kalleren kan prøve en annen type. Versjonen hentes fra ressursens egen modelliste når
+# forhåndssjekken ikke fant den (eller typen er byttet); finnes den ikke der heller, utelates
+# den, og Azure velger modellens standardversjon.
+function New-PPFoundryDeployment($Konto, $Deployment, [string] $Type) {
+  if (-not $Deployment.Versjon -or $Type -ne $Deployment.Type) {
+    $modell = $null
+    try { $modell = Resolve-PPFoundryModel $Konto.Location $Deployment.Modell $Type $Konto.Id } catch {}
+    if (-not $modell) {
+      try { $modell = Resolve-PPFoundryModel $Konto.Location $Deployment.Modell $Type } catch {}
+    }
+    $Deployment.Versjon = if ($modell) { $modell.Version } else { $null }
+  }
+  $sti = "$($Konto.Id)/deployments/$($Deployment.Modell)?api-version=$CogApiVersion"
+  $modellSpek = @{ format = 'OpenAI'; name = $Deployment.Modell }
+  if ($Deployment.Versjon) { $modellSpek.version = $Deployment.Versjon }
+  $body = @{
+    sku        = @{ name = $Type; capacity = $Deployment.Kapasitet }
+    properties = @{ model = $modellSpek; versionUpgradeOption = 'OnceNewDefaultVersionAvailable' }
+  }
+  Invoke-PPArm PUT $sti $body | Out-Null
+  $klar = Wait-PPArmProvisioning $sti "Deploymenten '$($Deployment.Modell)'"
+  $Deployment.Type = $Type
+  if (-not $Deployment.Versjon) { $Deployment.Versjon = $klar.properties.model.version }
+  $Deployment.Finnes = $true
+  Write-Ok "Deployment '$($Deployment.Modell)' $($Deployment.Versjon): opprettet ($Type, kapasitet $($Deployment.Kapasitet))"
+}
+
 # Oppretter det forhåndssjekken fant mangler: ressursleverandør, ressurs(er) og deployments.
 # Returnerer endepunkt og nøkkel per rolle (Chat, Images).
 function New-PPFoundry {
   Write-Step 'Microsoft Foundry (-ProvisionFoundry)'
   $sub = $script:SubId
 
-  if (-not $script:FoundryRpRegistrert -and $PSCmdlet.ShouldProcess($sub, 'Registrere ressursleverandøren Microsoft.CognitiveServices')) {
-    Invoke-PPArm POST "/subscriptions/$sub/providers/Microsoft.CognitiveServices/register?api-version=$RpApiVersion" | Out-Null
+  if ($script:FoundryRpRegistrert -eq $false -and $PSCmdlet.ShouldProcess($sub, 'Registrere ressursleverandøren Microsoft.CognitiveServices')) {
+    try {
+      Invoke-PPArm POST "/subscriptions/$sub/providers/Microsoft.CognitiveServices/register?api-version=$RpApiVersion" | Out-Null
+    } catch {
+      throw "Kunne ikke registrere ressursleverandøren Microsoft.CognitiveServices ($($_.Exception.Message)). Det krever Contributor på abonnementet - be en som har det om å registrere den (Abonnement -> Resource providers), og kjør skriptet igjen."
+    }
     $frist = (Get-Date).AddMinutes(5)
     while ((Invoke-PPArm GET "/subscriptions/$sub/providers/Microsoft.CognitiveServices?api-version=$RpApiVersion").registrationState -ne 'Registered') {
       if ((Get-Date) -gt $frist) { throw 'Microsoft.CognitiveServices ble ikke registrert innen 5 minutter. Kjør skriptet igjen om litt.' }
@@ -898,7 +950,10 @@ function New-PPFoundry {
       Invoke-PPArm PUT "$($konto.Id)?api-version=$CogApiVersion" $body | Out-Null
     } catch {
       if ($_.Exception.Message -match 'RequestDisallowedByPolicy') {
-        throw "En Azure Policy stopper opprettelsen av '$($konto.Navn)' ($($_.Exception.Message)). Typisk krav om disableLocalAuth eller privat nettverk - assistenten trenger API-nøkkel og et offentlig endepunkt. Opprett ressursen manuelt etter virksomhetens regler, og kjør skriptet med -ChatApiBase/-ChatApiKey/-ChatDeployment."
+        throw "En Azure Policy stopper opprettelsen av '$($konto.Navn)' ($($_.Exception.Message)). Typisk tillatte regioner (prøv en annen -FoundryLocation), eller krav om disableLocalAuth eller privat nettverk - assistenten trenger API-nøkkel og et offentlig endepunkt. Går ikke det, opprett ressursen manuelt etter virksomhetens regler og kjør skriptet med -ChatApiBase/-ChatApiKey/-ChatDeployment."
+      }
+      if ($_.Exception.Message -match 'MissingSubscriptionRegistration') {
+        throw "Ressursleverandøren Microsoft.CognitiveServices er ikke registrert på abonnementet. Det krever Contributor på abonnementet - be en som har det om å registrere den (Abonnement -> Resource providers), og kjør skriptet igjen."
       }
       throw
     }
@@ -911,36 +966,40 @@ function New-PPFoundry {
     $konto = $script:FoundryKontoer[$d.Konto]
     if ($d.Finnes) { Write-Ok "Deployment '$($d.Modell)': finnes"; continue }
     if (-not $PSCmdlet.ShouldProcess("$($konto.Navn)/$($d.Modell)", "Opprette deployment ($($d.Type), kapasitet $($d.Kapasitet))")) { continue }
-    if (-not $d.Versjon) {
-      $modell = Resolve-PPFoundryModel $konto.Location $d.Modell $d.Type
-      if (-not $modell) { throw "$($d.Modell) finnes ikke som $($d.Type) i $($konto.Location)." }
-      $d.Versjon = $modell.Version
-    }
-    $sti = "$($konto.Id)/deployments/$($d.Modell)?api-version=$CogApiVersion"
-    $body = @{
-      sku        = @{ name = $d.Type; capacity = $d.Kapasitet }
-      properties = @{
-        model                = @{ format = 'OpenAI'; name = $d.Modell; version = $d.Versjon }
-        versionUpgradeOption = 'OnceNewDefaultVersionAvailable'
+
+    # Samme fallback som i forhåndssjekken, her for tilfellene den ikke fikk kontrollert
+    # (bare tilgang på ressursgruppen): bildemodellen prøver GlobalStandard om valgt type ikke går.
+    $typer = @($d.Type)
+    if ($d.Rolle -eq 'Images' -and $d.Type -ne 'GlobalStandard' -and -not $script:BildeTypeEksplisitt) { $typer += 'GlobalStandard' }
+    $feil = $null
+    foreach ($type in $typer) {
+      try {
+        New-PPFoundryDeployment $konto $d $type
+        $feil = $null
+        break
+      } catch {
+        $feil = $_
+        if ($type -ne $typer[-1]) {
+          Write-Warning "Bildemodellen kunne ikke opprettes som $type ($($_.Exception.Message)). Prøver GlobalStandard - teksten brukeren skriver i logofeltet kan da behandles utenfor EU."
+        }
       }
     }
-    try {
-      Invoke-PPArm PUT $sti $body | Out-Null
-    } catch {
-      if ($_.Exception.Message -match 'InsufficientQuota|quota') {
-        throw "Ikke nok kvote for $($d.Modell) i $($konto.Location) ($($_.Exception.Message)). Senk kapasiteten, velg en annen region, eller be om kvoteøkning under Management -> Quota i Foundry-portalen."
-      }
-      throw
+    if (-not $feil) { continue }
+    if ($d.Rolle -eq 'Images' -and -not $script:BildeEksplisitt) {
+      Write-Warning "Bildemodellen hoppes over ($($feil.Exception.Message)). Alt annet settes opp; logoforslag blir utilgjengelig."
+      $d.Hoppes = $true
+      continue
     }
-    Wait-PPArmProvisioning $sti "Deploymenten '$($d.Modell)'" | Out-Null
-    $d.Finnes = $true
-    Write-Ok "Deployment '$($d.Modell)' $($d.Versjon): opprettet ($($d.Type), kapasitet $($d.Kapasitet))"
+    if ($feil.Exception.Message -match 'InsufficientQuota|quota') {
+      throw "Ikke nok kvote for $($d.Modell) i $($konto.Location) ($($feil.Exception.Message)). Senk kapasiteten, velg en annen region, eller be om kvoteøkning under Management -> Quota i Foundry-portalen."
+    }
+    throw $feil
   }
 
   $tilkoblinger = @{}
   foreach ($konto in $script:FoundryKontoer.Values) { $tilkoblinger[$konto.Navn] = Get-PPFoundryConnection $konto }
   $resultat = @{}
-  foreach ($d in $script:FoundryPlan) { $resultat[$d.Rolle] = $tilkoblinger[$d.Konto] }
+  foreach ($d in $script:FoundryPlan | Where-Object { -not $_.Hoppes }) { $resultat[$d.Rolle] = $tilkoblinger[$d.Konto] }
   Write-Info 'Tips: sett et budsjettvarsel på abonnementet, så dere ser forbruket før fakturaen gjør det.'
   return $resultat
 }
@@ -1171,14 +1230,14 @@ if ($ProvisionFoundry) {
   $script:FoundryKontoer = [ordered]@{}
   $script:FoundryKontoer[$navn] = [pscustomobject]@{ Navn = $navn; Location = $FoundryLocation; Finnes = $false; Id = $null }
   $bildeType = if ($FoundryImagesDeploymentType) { $FoundryImagesDeploymentType } else { $FoundryDeploymentType }
-  $script:FoundryPlan = @([pscustomobject]@{ Rolle = 'Chat'; Konto = $navn; Modell = $FoundryChatModel; Type = $FoundryDeploymentType; Kapasitet = $FoundryChatCapacity; Versjon = $null; Finnes = $false; Hoppes = $false })
+  $script:FoundryPlan = @([pscustomobject]@{ Rolle = 'Chat'; Konto = $navn; Modell = $FoundryChatModel; Type = $FoundryDeploymentType; Kapasitet = $FoundryChatCapacity; Versjon = $null; Finnes = $false; Hoppes = $false; Ukontrollert = $false })
   if ($hasImages) {
     # Bildemodellene finnes ikke i alle regioner (f.eks. ikke norwayeast). Egen region gir egen ressurs.
     $bildeNavn = if ($bildeRegion -ne $FoundryLocation) { "$navn-img" } else { $navn }
     if (-not $script:FoundryKontoer.Contains($bildeNavn)) {
       $script:FoundryKontoer[$bildeNavn] = [pscustomobject]@{ Navn = $bildeNavn; Location = $bildeRegion; Finnes = $false; Id = $null }
     }
-    $script:FoundryPlan += [pscustomobject]@{ Rolle = 'Images'; Konto = $bildeNavn; Modell = $FoundryImagesModel; Type = $bildeType; Kapasitet = $FoundryImagesCapacity; Versjon = $null; Finnes = $false; Hoppes = $false }
+    $script:FoundryPlan += [pscustomobject]@{ Rolle = 'Images'; Konto = $bildeNavn; Modell = $FoundryImagesModel; Type = $bildeType; Kapasitet = $FoundryImagesCapacity; Versjon = $null; Finnes = $false; Hoppes = $false; Ukontrollert = $false }
   }
 }
 
@@ -1251,6 +1310,7 @@ Confirm-PPSetup $tenant $azContext $vaultFinnes $consentTekst $scopeTekst
 # Foundry først: feiler opprettelsen (kvote, policy), har vi ikke åpnet consent-siden forgjeves.
 if ($ProvisionFoundry) {
   $foundry = New-PPFoundry
+  if ($hasImages -and -not $foundry.ContainsKey('Images')) { $hasImages = $false }
   $script:ChatBase = Assert-PPApiBase $foundry.Chat.Base 'Foundry-endepunkt'
   $ChatApiKey = $foundry.Chat.Key
   if ($hasImages) {
