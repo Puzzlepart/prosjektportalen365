@@ -32,10 +32,12 @@
 
   Med -ProvisionFoundry (opt-in) oppretter skriptet en Microsoft Foundry-ressurs (AIServices, S0) med
   deployments for de anbefalte modellene, i stedet for at du oppgir -ChatApiBase/-ChatApiKey/-ChatDeployment.
-  Standard er chatmodellen gpt-5.6-terra i swedencentral som Global Standard; bildemodellen er med bare når
-  du oppgir -FoundryImagesModel. Forhåndssjekken kontrollerer at modellen finnes i regionen og at det er
-  ledig kvote, før noe opprettes. Finnes ressursen eller deploymenten fra før, gjenbrukes den. Endepunkt
-  og nøkkel hentes fra ressursen og skrives til Key Vault som ellers - du ser dem aldri.
+  Standard er chatmodellen gpt-5.6-terra og bildemodellen gpt-image-1.5 i swedencentral, som Data Zone
+  Standard - forespørslene behandles da innenfor EU-datasonen. Forhåndssjekken kontrollerer at modellene
+  finnes i regionen og at det er ledig kvote, før noe opprettes. Finnes ikke bildemodellen som Data Zone,
+  hoppes den over med en advarsel; den behandles aldri utenfor EU uten at du ber om det med
+  -FoundryImagesDeploymentType GlobalStandard. Finnes ressursen eller deploymenten fra før, gjenbrukes den.
+  Endepunkt og nøkkel hentes fra ressursen og skrives til Key Vault som ellers - du ser dem aldri.
 
   Før noe skrives kjører en forhåndssjekk, og deretter vises en oppsummering med de
   OPPLØSTE verdiene: hvilken tenant hub-URL-en peker på, hvilken konto du er logget inn som,
@@ -79,14 +81,18 @@
 .PARAMETER FoundryLocation
   Region for Foundry-ressursen. Standard: swedencentral, som har både chat- og bildemodellene.
 .PARAMETER FoundryDeploymentType
-  GlobalStandard (standard, størst kvote), DataZoneStandard (behandling innenfor regionens datasone,
-  f.eks. EU) eller Standard (behandling i regionen).
+  DataZoneStandard (standard: behandling innenfor regionens datasone, EU for swedencentral),
+  GlobalStandard (størst kvote, men forespørslene kan behandles i alle Azure-regioner, også utenfor EU)
+  eller Standard (behandling i regionen).
 .PARAMETER FoundryChatModel
   Chatmodell. Standard: gpt-5.6-terra. Deploymenten får samme navn som modellen.
 .PARAMETER FoundryChatCapacity
   Kapasitet for chat-deploymenten, i tusen tokens per minutt. Standard: 100.
 .PARAMETER FoundryImagesModel
-  Valgfritt: bildemodell, f.eks. gpt-image-1.5. Utelates den, settes ingen bildemodell opp.
+  Bildemodell (brukes til logoforslag). Standard: gpt-image-1.5. Oppgis den eksplisitt, stopper
+  forhåndssjekken hvis den ikke kan settes opp; ellers hoppes den over med en advarsel.
+.PARAMETER NoFoundryImages
+  Ikke sett opp bildemodell. Logoforslag blir da utilgjengelig; alt annet virker.
 .PARAMETER FoundryImagesLocation
   Valgfritt: egen region for bildemodellen. Da opprettes en egen ressurs, <FoundryName>-img.
   Standard: samme som -FoundryLocation.
@@ -103,11 +109,11 @@
     -ImagesApiKey (Read-Host -AsSecureString "Bilde-nøkkel") -ImagesDeployment gpt-image-1.5 -CustomerName "Kontoso AS"
 
 .EXAMPLE
-  ./Setup-PPAssistant.ps1 -HubUrl https://kontoso.sharepoint.com/sites/pp365 -ProvisionFoundry `
-    -FoundryImagesModel gpt-image-1.5 -CustomerName "Kontoso AS"
-  # Oppretter Foundry-ressursen pp365-kontoso-ai i swedencentral med gpt-5.6-terra og gpt-image-1.5,
-  # og fortsetter med Key Vault, secrets og godkjenninger som vanlig. Legg til -Preflight for å se
-  # om modellene finnes i regionen og om det er kvote, uten å endre noe.
+  ./Setup-PPAssistant.ps1 -HubUrl https://kontoso.sharepoint.com/sites/pp365 -ProvisionFoundry -CustomerName "Kontoso AS"
+  # Oppretter Foundry-ressursen pp365-kontoso-ai i swedencentral med gpt-5.6-terra og gpt-image-1.5
+  # (Data Zone Standard, behandling i EU), og fortsetter med Key Vault, secrets og godkjenninger som
+  # vanlig. Legg til -Preflight for å se om modellene finnes i regionen og om det er kvote, uten å
+  # endre noe.
 
 .EXAMPLE
   ./Setup-PPAssistant.ps1 -HubUrl https://kontoso.sharepoint.com/sites/pp365
@@ -152,10 +158,13 @@ param(
   [switch] $ProvisionFoundry,
   [ValidatePattern('^[A-Za-z0-9][A-Za-z0-9-]{0,58}[A-Za-z0-9]$')] [string] $FoundryName,   # default: pp365-<tenant>-ai
   [ValidatePattern('^[a-z0-9]+$')] [string] $FoundryLocation = 'swedencentral',
-  [ValidateSet('GlobalStandard', 'DataZoneStandard', 'Standard')] [string] $FoundryDeploymentType = 'GlobalStandard',
+  # Data Zone som standard: Global Standard kan behandle forespørslene utenfor EU, og det skal
+  # være et bevisst valg - ikke noe kunden arver fra skriptet.
+  [ValidateSet('GlobalStandard', 'DataZoneStandard', 'Standard')] [string] $FoundryDeploymentType = 'DataZoneStandard',
   [string] $FoundryChatModel = 'gpt-5.6-terra',
   [ValidateRange(1, 10000)] [int] $FoundryChatCapacity = 100,
-  [string] $FoundryImagesModel,
+  [string] $FoundryImagesModel = 'gpt-image-1.5',
+  [switch] $NoFoundryImages,
   [ValidatePattern('^[a-z0-9]+$')] [string] $FoundryImagesLocation,
   [ValidateRange(1, 1000)] [int] $FoundryImagesCapacity = 1,
   [ValidateSet('GlobalStandard', 'DataZoneStandard', 'Standard')] [string] $FoundryImagesDeploymentType,   # default: -FoundryDeploymentType
@@ -293,9 +302,10 @@ function Confirm-PPSetup($Tenant, $AzContext, $VaultFinnes, $Consent, $SharePoin
       Write-PPPlan 'Foundry-ressurs' ('{0} ({1}) - {2}' -f $konto.Navn, $konto.Location, $(if ($konto.Finnes) { 'finnes, gjenbrukes' } else { "OPPRETTES i $ResourceGroupName" }))
     }
     foreach ($d in $script:FoundryPlan) {
-      $status = if ($d.Finnes) { 'finnes, gjenbrukes' } else { "OPPRETTES ($($d.Type), kapasitet $($d.Kapasitet))" }
+      $status = if ($d.Finnes) { "finnes ($($d.Type)), gjenbrukes" } else { "OPPRETTES ($($d.Type), kapasitet $($d.Kapasitet))" }
       Write-PPPlan $(if ($d.Rolle -eq 'Chat') { 'Chatmodell' } else { 'Bildemodell' }) ('{0} {1} på {2} - {3}' -f $d.Modell, $d.Versjon, $d.Konto, $status)
     }
+    if (-not $hasImages) { Write-PPPlan 'Bildemodell' '' $true }
     foreach ($type in @($script:FoundryPlan.Type | Select-Object -Unique)) {
       Write-PPPlan 'Databehandling' $(switch ($type) {
         'GlobalStandard'   { 'Global Standard: forespørsler kan behandles i alle Azure-regioner (DataZoneStandard holder dem i datasonen)' }
@@ -338,7 +348,7 @@ function Write-Info([string] $Text) { Write-Host "   $Text" }
 function Test-PPPrerequisites {
   Write-Step 'Forutsetninger'
   $hasImages = [bool]$ImagesApiBase -or [bool]$ImagesApiKey -or [bool]$ImagesDeployment
-  if ($ProvisionFoundry) { $hasImages = [bool]$FoundryImagesModel }
+  if ($ProvisionFoundry) { $hasImages = [bool]$FoundryImagesModel -and -not $NoFoundryImages }
   elseif ($hasImages -and -not ($ImagesApiBase -and $ImagesApiKey -and $ImagesDeployment)) {
     throw 'Bildemodell: -ImagesApiBase, -ImagesApiKey og -ImagesDeployment må gis sammen (eller ingen av dem).'
   }
@@ -615,7 +625,8 @@ function Set-PPKeyVaultSecrets($Vault, [bool] $HasImages) {
     else { Write-Info 'apiKeyImages : hoppes over (nøkkelen finnes først når Foundry-ressursen er opprettet)' }
     Set-PPSecret $Vault 'modelNameImages' $ImagesDeployment
   } else {
-    Write-Warning 'Ingen bildemodell oppgitt - logo-generering vil rapportere ai_configuration_incomplete. Kjør igjen med -Images* for å aktivere.'
+    $aktiver = if ($ProvisionFoundry) { 'Se forhåndssjekken over for hvordan den kan settes opp.' } else { 'Kjør igjen med -Images* for å aktivere.' }
+    Write-Warning "Ingen bildemodell satt opp - logo-generering vil rapportere ai_configuration_incomplete. $aktiver"
   }
   if (Get-AzKeyVaultSecret -VaultName $Vault.VaultName -Name 'apiVersion' -ErrorAction SilentlyContinue) {
     Write-Info 'apiVersion/apiVersionImages er ikke lenger i bruk (kan slettes).'
@@ -671,6 +682,17 @@ function Get-PPFoundryQuota([string] $Region, [string] $UsageName) {
     Where-Object { $_.name.value -eq $UsageName } | Select-Object -First 1
   if (-not $bruk) { return $null }
   return [int]($bruk.limit - $bruk.currentValue)
+}
+
+# En deployment som ikke kan opprettes, stopper kjøringen - unntatt bildemodellen når den bare er
+# med som standard. Den er et tillegg (logoforslag), og da hoppes den over med en advarsel.
+function Add-PPFoundryProblem($Deployment, [string] $Sjekk, [string] $Detalj, [string] $Fiks) {
+  if ($Deployment.Rolle -eq 'Images' -and -not $script:BildeEksplisitt) {
+    $Deployment.Hoppes = $true
+    Add-PPCheck -Navn $Sjekk -Status 'ADVARSEL' -Detalj "$Detalj - bildemodellen hoppes over" -Fiks $Fiks
+  } else {
+    Add-PPCheck -Navn $Sjekk -Status 'MANGLER' -Detalj $Detalj -Fiks $Fiks
+  }
 }
 
 <#
@@ -734,10 +756,16 @@ function Test-PPFoundryPlan {
       if ($eksisterende) {
         $d.Finnes = $true
         $d.Versjon = $eksisterende.properties.model.version
+        # Eksisterende deployments gjenbrukes med typen de har - den styrer hvor forespørslene
+        # behandles, så oppsummeringen skal vise den faktiske, ikke den ønskede.
+        $onsketType = $d.Type
+        if ($eksisterende.sku.name) { $d.Type = $eksisterende.sku.name }
         if ($eksisterende.properties.model.name -ne $d.Modell) {
           Add-PPCheck -Navn $sjekk -Status 'ADVARSEL' -Detalj "deploymenten '$($d.Modell)' finnes, men kjører $($eksisterende.properties.model.name)" -Fiks 'Gjenbrukes som den er. Slett eller gi nytt navn i Foundry-portalen om det ikke er meningen.'
+        } elseif ($d.Type -eq 'GlobalStandard' -and $onsketType -ne 'GlobalStandard') {
+          Add-PPCheck -Navn $sjekk -Status 'ADVARSEL' -Detalj "$($d.Modell) $($d.Versjon) finnes som GlobalStandard - forespørslene kan behandles utenfor EU" -Fiks "Gjenbrukes som den er. Vil dere ha $($onsketType): slett deploymenten i Foundry-portalen og kjør skriptet igjen."
         } else {
-          Add-PPCheck -Navn $sjekk -Status 'OK' -Detalj "$($d.Modell) $($d.Versjon) finnes, gjenbrukes"
+          Add-PPCheck -Navn $sjekk -Status 'OK' -Detalj "$($d.Modell) $($d.Versjon) ($($d.Type)) finnes, gjenbrukes"
         }
         continue
       }
@@ -745,7 +773,12 @@ function Test-PPFoundryPlan {
     try {
       $modell = Resolve-PPFoundryModel $konto.Location $d.Modell $d.Type
       if (-not $modell) {
-        Add-PPCheck -Navn $sjekk -Status 'MANGLER' -Detalj "$($d.Modell) finnes ikke som $($d.Type) i $($konto.Location)" -Fiks 'Velg en annen region (-FoundryLocation / -FoundryImagesLocation), en annen deploymenttype (-FoundryDeploymentType / -FoundryImagesDeploymentType) eller en annen modell. Se modellkatalogen i Foundry-portalen.'
+        $fiks = if ($d.Rolle -eq 'Images') {
+          "Bildemodellene finnes ikke med alle deploymenttyper i alle regioner. Prøv en annen region (-FoundryImagesLocation), eller -FoundryImagesDeploymentType GlobalStandard - da kan bildeforespørslene (prosjektnavn og -beskrivelse) behandles utenfor EU. Med -NoFoundryImages settes ingen bildemodell opp."
+        } else {
+          'Velg en annen region (-FoundryLocation), en annen -FoundryDeploymentType eller en annen modell. Se modellkatalogen i Foundry-portalen.'
+        }
+        Add-PPFoundryProblem $d $sjekk "$($d.Modell) finnes ikke som $($d.Type) i $($konto.Location)" $fiks
         continue
       }
       $d.Versjon = $modell.Version
@@ -754,7 +787,7 @@ function Test-PPFoundryPlan {
         Add-PPCheck -Navn $sjekk -Status 'UKJENT' -Detalj "$($d.Modell) $($d.Versjon): fant ikke kvoten ($($modell.UsageName))" -Fiks 'Kontroller Management -> Quota i Foundry-portalen.'
       } elseif ($ledig -lt $d.Kapasitet) {
         $fiks = if ($ledig -gt 0) { "Kjør med $kapasitetParam $ledig, " } else { 'Prøv en annen region eller deploymenttype, ' }
-        Add-PPCheck -Navn $sjekk -Status 'MANGLER' -Detalj "$($d.Modell) $($d.Versjon): ledig kvote $ledig, ønsket $($d.Kapasitet)" -Fiks ($fiks + 'eller be om kvoteøkning under Management -> Quota i Foundry-portalen.')
+        Add-PPFoundryProblem $d $sjekk "$($d.Modell) $($d.Versjon): ledig kvote $ledig, ønsket $($d.Kapasitet)" ($fiks + 'eller be om kvoteøkning under Management -> Quota i Foundry-portalen.')
       } else {
         Add-PPCheck -Navn $sjekk -Status 'OK' -Detalj "$($d.Modell) $($d.Versjon), $($d.Type), kapasitet $($d.Kapasitet) (ledig $ledig)"
       }
@@ -1034,9 +1067,12 @@ if ($ProvisionFoundry) {
   }
   $ChatDeployment = $FoundryChatModel
   $ImagesDeployment = $FoundryImagesModel
-} elseif ($FoundryImagesModel -or $FoundryImagesLocation -or $FoundryImagesDeploymentType -or $FoundryName) {
-  throw '-FoundryName og -FoundryImages* brukes bare sammen med -ProvisionFoundry.'
+} elseif (@('FoundryName', 'FoundryImagesModel', 'FoundryImagesLocation', 'FoundryImagesDeploymentType', 'NoFoundryImages') | Where-Object { $PSBoundParameters.ContainsKey($_) }) {
+  throw '-FoundryName, -FoundryImages* og -NoFoundryImages brukes bare sammen med -ProvisionFoundry.'
 }
+# Ba brukeren selv om bildemodellen, skal den stoppe kjøringen om den ikke kan settes opp.
+# Som standard er den et tillegg som hoppes over med en advarsel.
+$script:BildeEksplisitt = [bool](@('FoundryImagesModel', 'FoundryImagesLocation', 'FoundryImagesDeploymentType') | Where-Object { $PSBoundParameters.ContainsKey($_) })
 
 $fulltOppsett = $ProvisionFoundry -or [bool]$ChatApiBase -or [bool]$ChatApiKey -or [bool]$ChatDeployment
 if (-not $ProvisionFoundry -and $fulltOppsett -and -not ($ChatApiBase -and $ChatApiKey -and $ChatDeployment)) {
@@ -1098,14 +1134,14 @@ if ($ProvisionFoundry) {
   $script:FoundryKontoer = [ordered]@{}
   $script:FoundryKontoer[$navn] = [pscustomobject]@{ Navn = $navn; Location = $FoundryLocation; Finnes = $false; Id = $null }
   $bildeType = if ($FoundryImagesDeploymentType) { $FoundryImagesDeploymentType } else { $FoundryDeploymentType }
-  $script:FoundryPlan = @([pscustomobject]@{ Rolle = 'Chat'; Konto = $navn; Modell = $FoundryChatModel; Type = $FoundryDeploymentType; Kapasitet = $FoundryChatCapacity; Versjon = $null; Finnes = $false })
+  $script:FoundryPlan = @([pscustomobject]@{ Rolle = 'Chat'; Konto = $navn; Modell = $FoundryChatModel; Type = $FoundryDeploymentType; Kapasitet = $FoundryChatCapacity; Versjon = $null; Finnes = $false; Hoppes = $false })
   if ($hasImages) {
     # Bildemodellene finnes ikke i alle regioner (f.eks. ikke norwayeast). Egen region gir egen ressurs.
     $bildeNavn = if ($bildeRegion -ne $FoundryLocation) { "$navn-img" } else { $navn }
     if (-not $script:FoundryKontoer.Contains($bildeNavn)) {
       $script:FoundryKontoer[$bildeNavn] = [pscustomobject]@{ Navn = $bildeNavn; Location = $bildeRegion; Finnes = $false; Id = $null }
     }
-    $script:FoundryPlan += [pscustomobject]@{ Rolle = 'Images'; Konto = $bildeNavn; Modell = $FoundryImagesModel; Type = $bildeType; Kapasitet = $FoundryImagesCapacity; Versjon = $null; Finnes = $false }
+    $script:FoundryPlan += [pscustomobject]@{ Rolle = 'Images'; Konto = $bildeNavn; Modell = $FoundryImagesModel; Type = $bildeType; Kapasitet = $FoundryImagesCapacity; Versjon = $null; Finnes = $false; Hoppes = $false }
   }
 }
 
@@ -1115,7 +1151,16 @@ $azContext = Get-AzContext
 Add-PPCheck -Navn 'Azure-innlogging' -Status 'OK' -Detalj "$($azContext.Account.Id) i riktig tenant"
 $script:SubId = $azContext.Subscription.Id
 
-if ($ProvisionFoundry) { Test-PPFoundryPlan }
+if ($ProvisionFoundry) {
+  Test-PPFoundryPlan
+  if ($script:FoundryPlan | Where-Object { $_.Hoppes }) {
+    $script:FoundryPlan = @($script:FoundryPlan | Where-Object { -not $_.Hoppes })
+    $hasImages = $false
+    foreach ($n in @($script:FoundryKontoer.Keys)) {
+      if ($n -notin $script:FoundryPlan.Konto) { $script:FoundryKontoer.Remove($n) }
+    }
+  }
+}
 
 # Finnes vaulten fra før? Avgjør om oppsummeringen sier «gjenbrukes» eller «OPPRETTES».
 $vaultFinnes = $false
