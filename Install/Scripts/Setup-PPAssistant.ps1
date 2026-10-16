@@ -34,9 +34,10 @@
   deployments for de anbefalte modellene, i stedet for at du oppgir -ChatApiBase/-ChatApiKey/-ChatDeployment.
   Standard er chatmodellen gpt-5.6-terra og bildemodellen gpt-image-1.5 i swedencentral, som Data Zone
   Standard - forespørslene behandles da innenfor EU-datasonen. Forhåndssjekken kontrollerer at modellene
-  finnes i regionen og at det er ledig kvote, før noe opprettes. Finnes ikke bildemodellen som Data Zone,
-  hoppes den over med en advarsel; den behandles aldri utenfor EU uten at du ber om det med
-  -FoundryImagesDeploymentType GlobalStandard. Finnes ressursen eller deploymenten fra før, gjenbrukes den.
+  finnes i regionen og at det er ledig kvote, før noe opprettes. Kan ikke bildemodellen settes opp som
+  Data Zone (ikke tilgjengelig eller ikke kvote), settes den opp som Global Standard i stedet, og
+  forhåndssjekken og oppsummeringen sier det. Chatmodellen faller aldri tilbake til Global Standard.
+  Finnes ressursen eller deploymenten fra før, gjenbrukes den.
   Endepunkt og nøkkel hentes fra ressursen og skrives til Key Vault som ellers - du ser dem aldri.
 
   Før noe skrives kjører en forhåndssjekk, og deretter vises en oppsummering med de
@@ -66,8 +67,8 @@
 .PARAMETER RemoveSharePointFullControl
   Fjerner AllSites.FullControl igjen.
 .PARAMETER Preflight
-  Kjør kun forhåndssjekken og skriv ut sjekklista. Endrer ingenting. Avslutningskode 1 hvis
-  noe mangler.
+  Kjør kun forhåndssjekken og skriv ut sjekklista og oppsummeringen av hva som ville blitt gjort.
+  Endrer ingenting og spør ikke. Avslutningskode 1 hvis noe mangler.
 .PARAMETER SkipConfirmation
   Hopp over oppsummeringen og bekreftelsen. For uovervåkede kjøringer.
 .PARAMETER ImagesApiBase
@@ -89,8 +90,8 @@
 .PARAMETER FoundryChatCapacity
   Kapasitet for chat-deploymenten, i tusen tokens per minutt. Standard: 100.
 .PARAMETER FoundryImagesModel
-  Bildemodell (brukes til logoforslag). Standard: gpt-image-1.5. Oppgis den eksplisitt, stopper
-  forhåndssjekken hvis den ikke kan settes opp; ellers hoppes den over med en advarsel.
+  Bildemodell (brukes til logoforslag). Standard: gpt-image-1.5. Kan den ikke settes opp i det hele
+  tatt, hoppes den over med en advarsel - eller stopper forhåndssjekken, hvis den er oppgitt eksplisitt.
 .PARAMETER NoFoundryImages
   Ikke sett opp bildemodell. Logoforslag blir da utilgjengelig; alt annet virker.
 .PARAMETER FoundryImagesLocation
@@ -99,8 +100,9 @@
 .PARAMETER FoundryImagesCapacity
   Kapasitet for bilde-deploymenten. Standard: 1.
 .PARAMETER FoundryImagesDeploymentType
-  Deploymenttype for bildemodellen, om den skal avvike fra -FoundryDeploymentType (bildemodellene
-  finnes ikke med alle typer i alle regioner). Standard: samme som -FoundryDeploymentType.
+  Deploymenttype for bildemodellen. Standard: samme som -FoundryDeploymentType, med fallback til
+  GlobalStandard om den ikke kan settes opp slik. Oppgis den, brukes den uten fallback - f.eks.
+  -FoundryImagesDeploymentType DataZoneStandard for å kreve at også bildene behandles i EU.
 
 .EXAMPLE
   ./Setup-PPAssistant.ps1 -HubUrl https://kontoso.sharepoint.com/sites/pp365 -KeyVaultName kv-kontoso-pp365 `
@@ -123,7 +125,7 @@
 .EXAMPLE
   ./Setup-PPAssistant.ps1 -HubUrl https://kontoso.sharepoint.com/sites/pp365 -Preflight
   # Kun forhåndssjekk: kontrollerer tenant, innlogging, Key Vault og godkjenninger, skriver ut
-  # sjekklista og avslutter. Endrer ingenting.
+  # sjekklista og oppsummeringen av hva som ville blitt gjort, og avslutter. Endrer ingenting.
 
 .EXAMPLE
   ./Setup-PPAssistant.ps1 -HubUrl https://kontoso.sharepoint.com/sites/pp365 -GrantSharePointFullControl
@@ -271,6 +273,19 @@ function Confirm-PPSetup($Tenant, $AzContext, $VaultFinnes, $Consent, $SharePoin
     return
   }
 
+  Show-PPSummary $Tenant $AzContext $VaultFinnes $Consent $SharePointScope
+  Write-Host 'Kontroller spesielt tenant, konto og Key Vault-navn over.' -ForegroundColor Yellow
+  $svar = Read-Host 'Fortsett? ( j / n )'
+  if ($svar -notin @('j', 'J', 'y', 'Y')) {
+    Write-Host 'Avbrutt. Ingenting er endret.' -ForegroundColor Yellow
+    exit 0
+  }
+  Write-Host 'Bekreftet - starter.' -ForegroundColor Green
+}
+
+# Oppsummeringen alene. Brukes av Confirm-PPSetup og av -Preflight, som viser hva som ville
+# blitt gjort uten å spørre.
+function Show-PPSummary($Tenant, $AzContext, $VaultFinnes, $Consent, $SharePointScope) {
   Write-Host ''
   Write-Host '#################### OPPSUMMERING ####################' -ForegroundColor Magenta
   Write-Host ''
@@ -289,7 +304,7 @@ function Confirm-PPSetup($Tenant, $AzContext, $VaultFinnes, $Consent, $SharePoin
   Write-Host "    Admin-consent:      $Consent"
   Write-Host "    SharePoint-scope:   $SharePointScope"
   Write-Host ''
-  Write-Host '  Dette blir gjort:' -ForegroundColor Yellow
+  Write-Host $(if ($Preflight) { '  Dette ville blitt gjort:' } else { '  Dette blir gjort:' }) -ForegroundColor Yellow
 
   function Write-PPPlan([string] $Merkelapp, [string] $Verdi, [bool] $Hoppet = $false) {
     if ($Hoppet) { Write-Host ('    {0,-20}(hoppes over)' -f "$($Merkelapp):") -ForegroundColor DarkGray }
@@ -303,14 +318,14 @@ function Confirm-PPSetup($Tenant, $AzContext, $VaultFinnes, $Consent, $SharePoin
     }
     foreach ($d in $script:FoundryPlan) {
       $status = if ($d.Finnes) { "finnes ($($d.Type)), gjenbrukes" } else { "OPPRETTES ($($d.Type), kapasitet $($d.Kapasitet))" }
-      Write-PPPlan $(if ($d.Rolle -eq 'Chat') { 'Chatmodell' } else { 'Bildemodell' }) ('{0} {1} på {2} - {3}' -f $d.Modell, $d.Versjon, $d.Konto, $status)
+      Write-PPPlan $(if ($d.Rolle -eq 'Chat') { 'Chatmodell' } else { 'Bildemodell' }) ('{0} på {1} - {2}' -f "$($d.Modell) $($d.Versjon)".Trim(), $d.Konto, $status)
     }
     if (-not $hasImages) { Write-PPPlan 'Bildemodell' '' $true }
-    foreach ($type in @($script:FoundryPlan.Type | Select-Object -Unique)) {
-      Write-PPPlan 'Databehandling' $(switch ($type) {
-        'GlobalStandard'   { 'Global Standard: forespørsler kan behandles i alle Azure-regioner (DataZoneStandard holder dem i datasonen)' }
-        'DataZoneStandard' { 'Data Zone Standard: forespørsler behandles innenfor regionens datasone' }
-        'Standard'         { 'Standard: forespørsler behandles i regionen' }
+    foreach ($d in $script:FoundryPlan) {
+      Write-PPPlan $(if ($d.Rolle -eq 'Chat') { 'Behandling, chat' } else { 'Behandling, bilder' }) $(switch ($d.Type) {
+        'GlobalStandard'   { 'Global Standard - forespørslene kan behandles i alle Azure-regioner, også utenfor EU' }
+        'DataZoneStandard' { 'Data Zone Standard - forespørslene behandles innenfor regionens datasone (EU)' }
+        'Standard'         { 'Standard - forespørslene behandles i regionen' }
       })
     }
   }
@@ -332,13 +347,6 @@ function Confirm-PPSetup($Tenant, $AzContext, $VaultFinnes, $Consent, $SharePoin
 
   Write-Host ''
   Write-Host '######################################################' -ForegroundColor Magenta
-  Write-Host 'Kontroller spesielt tenant, konto og Key Vault-navn over.' -ForegroundColor Yellow
-  $svar = Read-Host 'Fortsett? ( j / n )'
-  if ($svar -notin @('j', 'J', 'y', 'Y')) {
-    Write-Host 'Avbrutt. Ingenting er endret.' -ForegroundColor Yellow
-    exit 0
-  }
-  Write-Host 'Bekreftet - starter.' -ForegroundColor Green
 }
 
 function Write-Step([string] $Text) { Write-Host "`n== $Text" -ForegroundColor Cyan }
@@ -684,6 +692,27 @@ function Get-PPFoundryQuota([string] $Region, [string] $UsageName) {
   return [int]($bruk.limit - $bruk.currentValue)
 }
 
+# Kan modellen deployes som $Type i ressursens region, med nok kvote? Bare lesing. Ukjent kvote
+# regnes som OK (Ledig = $null) - den rapporteres, men stopper ikke.
+function Test-PPFoundryOption($Konto, $Deployment, [string] $Type) {
+  $kapasitetParam = if ($Deployment.Rolle -eq 'Chat') { '-FoundryChatCapacity' } else { '-FoundryImagesCapacity' }
+  $modell = Resolve-PPFoundryModel $Konto.Location $Deployment.Modell $Type
+  if (-not $modell) {
+    $fiks = if ($Deployment.Rolle -eq 'Images') {
+      'Bildemodellene finnes ikke med alle deploymenttyper i alle regioner. Prøv en annen region (-FoundryImagesLocation), eller -NoFoundryImages for å sette opp uten bildemodell.'
+    } else {
+      'Velg en annen region (-FoundryLocation), en annen -FoundryDeploymentType eller en annen modell. Se modellkatalogen i Foundry-portalen.'
+    }
+    return [pscustomobject]@{ Ok = $false; Versjon = $null; Ledig = $null; Arsak = "$($Deployment.Modell) finnes ikke som $Type i $($Konto.Location)"; Fiks = $fiks }
+  }
+  $ledig = Get-PPFoundryQuota $Konto.Location $modell.UsageName
+  if ($null -ne $ledig -and $ledig -lt $Deployment.Kapasitet) {
+    $fiks = if ($ledig -gt 0) { "Kjør med $kapasitetParam $ledig, " } else { 'Prøv en annen region, ' }
+    return [pscustomobject]@{ Ok = $false; Versjon = $modell.Version; Ledig = $ledig; Arsak = "ledig $Type-kvote for $($Deployment.Modell) er $ledig, ønsket $($Deployment.Kapasitet)"; Fiks = ($fiks + 'eller be om kvoteøkning under Management -> Quota i Foundry-portalen.') }
+  }
+  return [pscustomobject]@{ Ok = $true; Versjon = $modell.Version; Ledig = $ledig; Arsak = ''; Fiks = '' }
+}
+
 # En deployment som ikke kan opprettes, stopper kjøringen - unntatt bildemodellen når den bare er
 # med som standard. Den er et tillegg (logoforslag), og da hoppes den over med en advarsel.
 function Add-PPFoundryProblem($Deployment, [string] $Sjekk, [string] $Detalj, [string] $Fiks) {
@@ -750,7 +779,6 @@ function Test-PPFoundryPlan {
   foreach ($d in $script:FoundryPlan) {
     $konto = $script:FoundryKontoer[$d.Konto]
     $sjekk = if ($d.Rolle -eq 'Chat') { 'Foundry: chatmodell' } else { 'Foundry: bildemodell' }
-    $kapasitetParam = if ($d.Rolle -eq 'Chat') { '-FoundryChatCapacity' } else { '-FoundryImagesCapacity' }
     if ($konto.Finnes) {
       $eksisterende = Invoke-PPArm GET "$($konto.Id)/deployments/$($d.Modell)?api-version=$CogApiVersion" -AllowNotFound
       if ($eksisterende) {
@@ -771,25 +799,32 @@ function Test-PPFoundryPlan {
       }
     }
     try {
-      $modell = Resolve-PPFoundryModel $konto.Location $d.Modell $d.Type
-      if (-not $modell) {
-        $fiks = if ($d.Rolle -eq 'Images') {
-          "Bildemodellene finnes ikke med alle deploymenttyper i alle regioner. Prøv en annen region (-FoundryImagesLocation), eller -FoundryImagesDeploymentType GlobalStandard - da kan bildeforespørslene (prosjektnavn og -beskrivelse) behandles utenfor EU. Med -NoFoundryImages settes ingen bildemodell opp."
-        } else {
-          'Velg en annen region (-FoundryLocation), en annen -FoundryDeploymentType eller en annen modell. Se modellkatalogen i Foundry-portalen.'
+      $valg = Test-PPFoundryOption $konto $d $d.Type
+
+      # Bildemodellen faller tilbake til Global Standard når den ikke kan settes opp i EU
+      # (ikke tilgjengelig som Data Zone, eller ikke kvote) - med mindre typen er valgt eksplisitt.
+      # Chatmodellen gjør det aldri: der går prosjektdataene.
+      if (-not $valg.Ok -and $d.Rolle -eq 'Images' -and $d.Type -ne 'GlobalStandard' -and -not $script:BildeTypeEksplisitt) {
+        $global = Test-PPFoundryOption $konto $d 'GlobalStandard'
+        if ($global.Ok) {
+          $onsketType = $d.Type
+          $d.Type = 'GlobalStandard'
+          $d.Versjon = $global.Versjon
+          Add-PPCheck -Navn $sjekk -Status 'ADVARSEL' -Detalj "$($d.Modell) $($d.Versjon) settes opp som GlobalStandard, fordi den ikke kan settes opp som $($onsketType): $($valg.Arsak)" -Fiks "Bildeforespørslene (prompten til logoforslag) kan da behandles utenfor EU. Chatmodellen og prosjektdataene berøres ikke. Vil dere ikke det: -FoundryImagesDeploymentType $onsketType (stopper i stedet), en annen region med -FoundryImagesLocation, eller -NoFoundryImages."
+          continue
         }
-        Add-PPFoundryProblem $d $sjekk "$($d.Modell) finnes ikke som $($d.Type) i $($konto.Location)" $fiks
+        $valg.Arsak = "$($valg.Arsak); heller ikke som GlobalStandard ($($global.Arsak))"
+      }
+
+      if (-not $valg.Ok) {
+        Add-PPFoundryProblem $d $sjekk $valg.Arsak $valg.Fiks
         continue
       }
-      $d.Versjon = $modell.Version
-      $ledig = Get-PPFoundryQuota $konto.Location $modell.UsageName
-      if ($null -eq $ledig) {
-        Add-PPCheck -Navn $sjekk -Status 'UKJENT' -Detalj "$($d.Modell) $($d.Versjon): fant ikke kvoten ($($modell.UsageName))" -Fiks 'Kontroller Management -> Quota i Foundry-portalen.'
-      } elseif ($ledig -lt $d.Kapasitet) {
-        $fiks = if ($ledig -gt 0) { "Kjør med $kapasitetParam $ledig, " } else { 'Prøv en annen region eller deploymenttype, ' }
-        Add-PPFoundryProblem $d $sjekk "$($d.Modell) $($d.Versjon): ledig kvote $ledig, ønsket $($d.Kapasitet)" ($fiks + 'eller be om kvoteøkning under Management -> Quota i Foundry-portalen.')
+      $d.Versjon = $valg.Versjon
+      if ($null -eq $valg.Ledig) {
+        Add-PPCheck -Navn $sjekk -Status 'UKJENT' -Detalj "$($d.Modell) $($d.Versjon): fant ikke kvoten" -Fiks 'Kontroller Management -> Quota i Foundry-portalen.'
       } else {
-        Add-PPCheck -Navn $sjekk -Status 'OK' -Detalj "$($d.Modell) $($d.Versjon), $($d.Type), kapasitet $($d.Kapasitet) (ledig $ledig)"
+        Add-PPCheck -Navn $sjekk -Status 'OK' -Detalj "$($d.Modell) $($d.Versjon), $($d.Type), kapasitet $($d.Kapasitet) (ledig $($valg.Ledig))"
       }
     } catch {
       $fiks = if (-not $script:FoundryRpRegistrert) { 'Kontrolleres på nytt etter at ressursleverandøren er registrert.' } else { '' }
@@ -1073,6 +1108,8 @@ if ($ProvisionFoundry) {
 # Ba brukeren selv om bildemodellen, skal den stoppe kjøringen om den ikke kan settes opp.
 # Som standard er den et tillegg som hoppes over med en advarsel.
 $script:BildeEksplisitt = [bool](@('FoundryImagesModel', 'FoundryImagesLocation', 'FoundryImagesDeploymentType') | Where-Object { $PSBoundParameters.ContainsKey($_) })
+# Valgt type for bildemodellen er et løfte: da faller den ikke tilbake til Global Standard.
+$script:BildeTypeEksplisitt = $PSBoundParameters.ContainsKey('FoundryImagesDeploymentType')
 
 $fulltOppsett = $ProvisionFoundry -or [bool]$ChatApiBase -or [bool]$ChatApiKey -or [bool]$ChatDeployment
 if (-not $ProvisionFoundry -and $fulltOppsett -and -not ($ChatApiBase -and $ChatApiKey -and $ChatDeployment)) {
@@ -1198,6 +1235,8 @@ if ($assistantSpCurrent) {
 
 $antallMangler = Show-PPChecklist
 if ($Preflight) {
+  Show-PPSummary $tenant $azContext $vaultFinnes $consentTekst $scopeTekst
+  if ($antallMangler -gt 0) { Write-Host "Forhåndssjekken fant $antallMangler ting som mangler - kjøringen ville stoppet før noe ble endret." -ForegroundColor Red }
   Write-Info 'Kun forhåndssjekk (-Preflight). Ingenting er endret.'
   exit $(if ($antallMangler -gt 0) { 1 } else { 0 })
 }
