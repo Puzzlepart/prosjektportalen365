@@ -211,6 +211,14 @@ declare interface IProjectExtensionsStrings {
   ProgressLogLevelError: string
   FolderNavigationLabel: string
   CopyProgressAnnouncement: string
+  RiskActionTasksLabel: string
+  RiskActionTaskCompletedLabel: string
+  RiskActionSyncDone: string
+  RiskActionSyncFailed: string
+  NewRiskActionSaved: string
+  NewRiskActionSaveFailed: string
+  MigrateRiskActionsDone: string
+  MigrateRiskActionsFailed: string
 }
 
 declare module 'ProjectExtensionsStrings' {

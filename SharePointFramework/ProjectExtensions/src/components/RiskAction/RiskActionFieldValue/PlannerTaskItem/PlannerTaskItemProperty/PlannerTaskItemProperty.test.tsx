@@ -9,6 +9,12 @@ describe('PlannerTaskItemProperty', () => {
     expect(screen.getByText('21.09.2026')).toBeVisible()
   })
 
+  it("is a name and its value, a term and its description in the preview's list (WCAG 1.3.1)", () => {
+    render(<PlannerTaskItemProperty label='Frist' value='21.09.2026' />)
+    expect(screen.getByText('Frist').closest('dt')).not.toBeNull()
+    expect(screen.getByText('21.09.2026').closest('dd')).not.toBeNull()
+  })
+
   it('is hidden when there is neither a value nor children', () => {
     const { container } = render(<PlannerTaskItemProperty label='Frist' />)
     expect(container.firstElementChild).toHaveAttribute('hidden')

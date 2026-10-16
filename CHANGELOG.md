@@ -41,6 +41,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Universell utforming (#1788): når prosjektinformasjonspanelet lukkes, går fokus tilbake til knappen som åpnet det, på prosjektkortene og i porteføljelistene, i stedet for til toppen av siden
 - Universell utforming (#1788): i oppsettet av et prosjekt har valget av mal og søkefeltene navn, fanene sier hvor mange som er valgt, et søk og antall valgte leses opp, og det leses opp når en skymal hentes og er klar. Fremdriften leser opp hvert steg, og loggen viser status og nivå i ord og ikke bare med ikon og farge. Meldingen «Prosjektdata funnet» ble lest opp ved hvert oppsett selv om den var skjult, og det gjør den ikke lenger
 - Universell utforming (#1788): i «Hent dokumentmal» er mappenavnene store nok å treffe, mappestien har navn, og fokus følger med når en mappe åpnes eller man går opp; overskriften på hver kopi kan åpnes med tastaturet og sier om feltene vises, et klikk på et felts navn gir feltet fokus, og kopieringen leser opp hver fil
+- Universell utforming (#1788): i Planner-tiltakene leses ikke lenger «ingen tiltak» opp i hver rad i risikolisten, en fullført oppgave sier det i navnet, popoverne holder fokus, personer leses én gang og «Åpne i Planner» er en lenke; synkronisering, nytt tiltak og migrering sier fra når de er gjort og viser feilen når de ikke blir det, og «Administrer» vises når den får fokus
 
 ### Feilrettinger
 

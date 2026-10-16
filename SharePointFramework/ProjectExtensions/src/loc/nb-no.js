@@ -214,6 +214,14 @@ define([], function () {
     ProgressLogLevelWarning: 'Advarsel',
     ProgressLogLevelError: 'Feil',
     FolderNavigationLabel: 'Mappenavigasjon',
-    CopyProgressAnnouncement: 'Kopierer {0}'
+    CopyProgressAnnouncement: 'Kopierer {0}',
+    RiskActionTasksLabel: 'Tiltak i Planner',
+    RiskActionTaskCompletedLabel: '{0}, fullført',
+    RiskActionSyncDone: 'Oppgavestatusen er oppdatert',
+    RiskActionSyncFailed: 'Oppgavestatusen ble ikke oppdatert',
+    NewRiskActionSaved: 'Tiltaket «{0}» er lagt til i Planner',
+    NewRiskActionSaveFailed: 'Tiltaket ble ikke lagt til',
+    MigrateRiskActionsDone: '{0} oppgaver er opprettet i Planner',
+    MigrateRiskActionsFailed: 'Oppgavene ble ikke opprettet'
   }
 })

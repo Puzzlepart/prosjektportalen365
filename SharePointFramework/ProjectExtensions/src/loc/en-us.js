@@ -214,6 +214,14 @@ define([], function () {
     ProgressLogLevelWarning: 'Warning',
     ProgressLogLevelError: 'Error',
     FolderNavigationLabel: 'Folder navigation',
-    CopyProgressAnnouncement: 'Copying {0}'
+    CopyProgressAnnouncement: 'Copying {0}',
+    RiskActionTasksLabel: 'Actions in Planner',
+    RiskActionTaskCompletedLabel: '{0}, completed',
+    RiskActionSyncDone: 'The task status is updated',
+    RiskActionSyncFailed: 'The task status was not updated',
+    NewRiskActionSaved: 'The action «{0}» was added to Planner',
+    NewRiskActionSaveFailed: 'The action was not added',
+    MigrateRiskActionsDone: '{0} tasks were created in Planner',
+    MigrateRiskActionsFailed: 'The tasks were not created'
   }
 })

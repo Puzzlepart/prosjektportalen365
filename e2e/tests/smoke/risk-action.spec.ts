@@ -197,7 +197,8 @@ test.describe('risk actions', () => {
 
     // The panel for a new task: its fields, save disabled without a title, closed unsaved.
     await addButton.click()
-    const panel = page.getByRole('dialog')
+    // By name: the popover is a dialog too, since it keeps the focus (`trapFocus`, #1788).
+    const panel = page.getByRole('dialog', { name: /legg til nytt tiltak for|new risk action/i })
     await expect(panel).toBeVisible()
     await expect(panel.getByText(/legg til nytt tiltak for|new risk action/i).first()).toBeVisible()
     for (const label of [
@@ -219,7 +220,10 @@ test.describe('risk actions', () => {
     await cellText.first().click()
     await expect(migrateButton).toBeVisible()
     await migrateButton.click()
-    const dialog = page.getByRole('dialog')
+    // The popover it opens from stays open behind it, a dialog as well.
+    const dialog = page.getByRole('dialog', {
+      name: /migrering av tiltak for|migration of risk actions for/i
+    })
     await expect(
       dialog.getByText(/migrering av tiltak for|migration of risk actions for/i)
     ).toBeVisible()

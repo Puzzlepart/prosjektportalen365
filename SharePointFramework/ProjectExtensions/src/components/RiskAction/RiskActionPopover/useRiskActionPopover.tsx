@@ -1,7 +1,8 @@
-import { PopoverProps } from '@fluentui/react-components'
+import { PopoverProps, useAnnounce, useId } from '@fluentui/react-components'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'ProjectExtensionsStrings'
 import { formatShortDate } from 'pp365-shared-library'
+import { useState } from 'react'
 import { useBoolean } from 'usehooks-ts'
 import { useRiskActionFieldCustomizerContext } from '../../../extensions/riskAction/context'
 import { useRiskActionContext } from '../context'
@@ -14,6 +15,9 @@ export function useRiskActionPopover() {
   const { itemContext, setItemContext } = useRiskActionContext()
   const panelState = useBoolean(false)
   const popoverState = useBoolean(false)
+  const titleId = useId('risk-action-title')
+  const [syncError, setSyncError] = useState<string>()
+  const { announce } = useAnnounce()
 
   const onPopoverOpenChange: PopoverProps['onOpenChange'] = (_ev, { open }) => {
     popoverState.setValue(open)
@@ -25,13 +29,20 @@ export function useRiskActionPopover() {
   }
 
   /**
-   * Syncs the tasks in the item context by syncing with the data adapter, sets the updated item context,
-   * and closes the popover.
+   * Syncs the tasks in the item context by syncing with the data adapter, sets the updated item
+   * context, closes the popover and says so (WCAG 4.1.3); a failure stays in the popover, said in
+   * a message.
    */
   const onSyncTasks = async () => {
-    const updatedItemContext = await context.dataAdapter.syncTasks(itemContext)
-    popoverState.setFalse()
-    setItemContext(updatedItemContext)
+    setSyncError(undefined)
+    try {
+      const updatedItemContext = await context.dataAdapter.syncTasks(itemContext)
+      popoverState.setFalse()
+      setItemContext(updatedItemContext)
+      announce(strings.RiskActionSyncDone, { polite: true })
+    } catch (error) {
+      setSyncError(error?.message ?? '')
+    }
   }
 
   let infoText = strings.RiskActionPopoverInfoText
@@ -45,6 +56,8 @@ export function useRiskActionPopover() {
   const lastUpdated = formatShortDate(itemContext.hiddenFieldValues?.updated, true)
 
   return {
+    titleId,
+    syncError,
     infoText,
     isPopoverOpen: popoverState.value,
     onPopoverOpenChange,

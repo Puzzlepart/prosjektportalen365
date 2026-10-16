@@ -1,4 +1,4 @@
-import { PopoverProps } from '@fluentui/react-components'
+import { PopoverProps, useId } from '@fluentui/react-components'
 import { useState } from 'react'
 import { useRiskActionFieldCustomizerContext } from '../../../../extensions/riskAction/context'
 import { RiskActionPlannerTask } from '../../../../extensions/riskAction/types'
@@ -14,6 +14,7 @@ import { IPlannerTaskItemProps } from './types'
 export function usePlannerTaskItem(props: IPlannerTaskItemProps) {
   const context = useRiskActionFieldCustomizerContext()
   const [task, setTask] = useState<RiskActionPlannerTask>(new RiskActionPlannerTask())
+  const titleId = useId('planner-task-title')
 
   const onOpenChange: PopoverProps['onOpenChange'] = async (_e, { open }) => {
     if (open) {
@@ -26,5 +27,5 @@ export function usePlannerTaskItem(props: IPlannerTaskItemProps) {
     ? `https://planner.cloud.microsoft/webui/plan/${task.planId}/task/${props.task.id}`
     : `https://tasks.office.com/home/task/${props.task.id}`
 
-  return { onOpenChange, task, taskLink }
+  return { onOpenChange, task, taskLink, titleId }
 }

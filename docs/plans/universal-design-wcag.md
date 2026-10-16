@@ -713,3 +713,33 @@ the header button and the label clicks in `DocumentTemplateItem.test.tsx`, and a
 `CopyProgressScreen.test.tsx` failed on the old code and pass. The target size is CSS; the browser
 suite's scans of both steps will tell. ProjectExtensions' 23 test files pass.
 
+### Slice 3, part 4 — The risk actions in Planner (2026-10-16)
+
+axe found nothing in the baseline, in the cell, the popover, the panel or the migration dialog.
+What it cannot judge:
+
+- **«No actions»** in a risk's cell was an info `MessageBar`, which announces itself as it mounts:
+  a field customizer renders one per row, so the risk list read out «no actions» for every risk
+  as it loaded. It is a button with the message's look, which opens the actions as before.
+- **The Planner tasks** are a list named «Tiltak i Planner»; a done task, struck through to the
+  eye, says so in its name («…, fullført»). Its preview keeps the focus (`trapFocus`), is named
+  by the task, reads the people once (the `Persona`'s avatar hidden, as in the project
+  information), gives its properties as a description list, and «Åpne i Planner» is a link with
+  `href`, where a button called `window.open`.
+- **The actions' popover** keeps the focus and is named by its title. Its hidden «last
+  synchronised» message bar was announced on every open; it renders only when shown. The
+  synchronisation, a new action and the migration said nothing when done, and their failures
+  were not caught: each says what it did, and a failure shows in a message where the action was
+  made (the popover, the panel, the dialog). The migration's buttons stay while it runs,
+  `disabledFocusable`, where they were removed with the focus on one, and its bar is named.
+- **«Administrer»** sat at opacity 0.2 (its text 1.3:1) until the pointer came, and stayed so
+  with the focus on it; it shows on hover and on focus, and always without a hovering pointer.
+- The browser test found the panel and the migration dialog as «the» dialog; with the popover a
+  dialog too, it finds them by name. A probe with the real Popover and Dialog showed a dialog
+  opened from a focus-trapping popover taking the focus and giving it back on Escape, as without.
+
+Tests first: seven new tests and two changed ones in `RiskAction.test.tsx` (the popover stand-in
+now carries `trapFocus` and the surface's name, as Fluent does) and one in
+`PlannerTaskItemProperty.test.tsx` failed on the old code and pass. ProjectExtensions' 23 test
+files pass. Slice 3 is done but for the hand rounds.
+

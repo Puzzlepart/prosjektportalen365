@@ -201,7 +201,13 @@ checked by hand and with which reader and browser: axe finds only part of what W
 - A `UserMessage` (Fluent's `MessageBar`) announces itself when it mounts, hidden or not: one in a
   `hidden` container was read out on every project setup («Prosjektdata funnet»). Render it only
   when it applies. A message announced while the root mounts waits in the queue and comes out
-  with the next announcement, so a test that triggers one sees it.
+  with the next announcement, so a test that triggers one sees it. Nor is a message bar an empty
+  state in a list's cells: in a field customizer each row's announces itself (the risk actions'
+  «no actions», now a button with its look).
+- A `Popover` with `trapFocus` is a `dialog` to `getByRole`: a browser test that found «the»
+  dialog by role alone finds two when a dialog opens from the popover; find dialogs by name. A
+  `Dialog` opened from inside such a popover still takes the focus and gives it back on Escape
+  (probed with the real components, `RiskActionPopover`).
 - jest-axe over a stand-in judges the stand-in. The combobox family (`Autocomplete`,
   `PeoplePicker`, `ColumnSearchPropertyField`) runs on stand-ins in Jest: assert names there and
   let the browser scans judge the markup.

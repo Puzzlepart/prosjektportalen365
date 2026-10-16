@@ -1,5 +1,11 @@
 import { Button, Input, Switch, Textarea } from '@fluentui/react-components'
-import { BasePanel, DateField, FieldContainer, PeoplePicker } from 'pp365-shared-library'
+import {
+  BasePanel,
+  DateField,
+  FieldContainer,
+  PeoplePicker,
+  UserMessage
+} from 'pp365-shared-library'
 import strings from 'ProjectExtensionsStrings'
 import React, { FC } from 'react'
 import styles from './NewRiskActionPanel.module.scss'
@@ -11,7 +17,7 @@ import { useNewRiskActionPanel } from './useNewRiskActionPanel'
  * renders, with the fields the other forms use and save and cancel in the footer.
  */
 export const NewRiskActionPanel: FC<INewRiskActionPanelProps> = (props) => {
-  const { headerText, form, setField, resolvePeople, onSave, canSave } =
+  const { headerText, form, setField, resolvePeople, onSave, canSave, saveError } =
     useNewRiskActionPanel(props)
   return (
     <BasePanel
@@ -30,6 +36,9 @@ export const NewRiskActionPanel: FC<INewRiskActionPanelProps> = (props) => {
       }
     >
       <div className={styles.newRiskActionPanel}>
+        {saveError !== undefined && (
+          <UserMessage title={strings.NewRiskActionSaveFailed} text={saveError} intent='error' />
+        )}
         <FieldContainer label={strings.TitleLabel} required iconName='TextNumberFormat'>
           <Input value={form.title} onChange={(_event, { value }) => setField('title', value)} />
         </FieldContainer>
