@@ -55,3 +55,29 @@ describe('ProjectInformation web part sustainability properties', () => {
     ])
   })
 })
+
+/** The fields of the property pane's status report group, by the property they set. */
+function statusReportFields(webPart: any): Record<string, any> {
+  const groups = webPart.getPropertyPaneConfiguration().pages[0].groups
+  const group = groups.find(({ groupName }) => groupName === strings.ProjectStatusGroupName)
+  return Object.fromEntries(
+    group.groupFields.map((field) => [field.targetProperty, field.properties])
+  )
+}
+
+describe('ProjectInformation web part status report properties', () => {
+  it('shows the full status report by default, with no warning', () => {
+    const fields = statusReportFields(createWebPart())
+    expect(fields.statusReportShowOnlyIcons.checked).toBeFalsy()
+    expect(fields.statusReportShowOnlyIconsWarning).toBeUndefined()
+    expect(fields.statusReportTruncateComments).toBeDefined()
+  })
+
+  it('warns that icons alone show the status by colour only (WCAG 1.4.1)', () => {
+    const fields = statusReportFields(createWebPart({ statusReportShowOnlyIcons: true }))
+    expect(fields.statusReportShowOnlyIcons.checked).toBe(true)
+    expect(fields.statusReportShowOnlyIconsWarning).toEqual({
+      text: strings.StatusReportShowOnlyIconsWarning
+    })
+  })
+})

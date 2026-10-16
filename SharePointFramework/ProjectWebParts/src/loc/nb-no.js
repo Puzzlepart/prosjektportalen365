@@ -298,6 +298,8 @@ define([], function () {
     StatusNotRelevant: 'Ikke relevant',
     StatusOpen: 'Åpen',
     StatusReportShowOnlyIconsLabel: 'Vis kun ikoner',
+    StatusReportShowOnlyIconsWarning:
+      'Med bare ikoner vises statusen bare med farge, og oppfyller ikke kravene til universell utforming (WCAG 1.4.1). Full visning viser statusen som tekst.',
     StatusReportTruncateCommentsLabel: 'Avkort kommentarer',
     StatusStillOpen: 'Fortsatt åpen',
     SubTextTruncateLengthFieldLabel: 'Max lengde fasetekst',

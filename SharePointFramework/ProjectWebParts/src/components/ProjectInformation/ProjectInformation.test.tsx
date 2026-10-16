@@ -20,7 +20,18 @@ jest.mock('./EditPropertiesPanel', () => ({ EditPropertiesPanel: () => null }))
 jest.mock('./CreateParentDialog', () => ({ CreateParentDialog: () => null }))
 jest.mock('./RunProjectSetupDialog', () => ({ RunProjectSetupDialog: () => null }))
 jest.mock('./ProgressDialog', () => ({ ProgressDialog: () => null }))
-jest.mock('./ProjectStatusReport', () => ({ ProjectStatusReport: () => null }))
+jest.mock('./ProjectStatusReport', () => ({
+  ProjectStatusReport: () => {
+    const React = jest.requireActual('react')
+    const { useProjectInformationContext } = jest.requireActual('./context')
+    const context = useProjectInformationContext()
+    return React.createElement(
+      'span',
+      { 'data-testid': 'status-report-props' },
+      `iconsOnly:${context.props.statusReportShowOnlyIcons}`
+    )
+  }
+}))
 jest.mock('./SustainabilityGoals', () => ({
   SustainabilityGoals: () => {
     const React = jest.requireActual('react')
@@ -218,6 +229,12 @@ describe('ProjectInformation', () => {
     renderInformation(() => FETCH_DATA_ERROR({ error: { message: 'Kilden svarte ikke' } as any }))
     expect(await screen.findByText(strings.ErrorTitle)).toBeInTheDocument()
     expect(screen.getByText('Kilden svarte ikke')).toBeInTheDocument()
+  })
+
+  it('shows the status report in full by default, its status in text (WCAG 1.4.1)', async () => {
+    renderInformation(() => initData())
+    // With icons only, the status was told by the icons' colour alone.
+    expect(await screen.findByTestId('status-report-props')).toHaveTextContent('iconsOnly:false')
   })
 
   it('tells when the hub is out of reach', async () => {

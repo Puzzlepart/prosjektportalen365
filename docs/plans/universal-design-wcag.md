@@ -504,3 +504,16 @@ the customer's own colour (`PhaseColor`) takes its current colour under the poin
 whether such colours read is the customer's to judge, and the text picks black or white by the
 contrast either way. The colour test was changed first and seen failing. The timeline faces the
 same choice for its bars; not decided.
+
+### Slice 2, part 6 — The status report's icons (2026-10-16)
+
+The user chose the full view as the default where the project information shows the status report
+(`statusReportShowOnlyIcons: false`), so the status is told in text and the default setup meets
+1.4.1; the default lives in code only, so it reaches every page where no one chose otherwise.
+Icons only can still be chosen; the property pane then says that it tells the status by colour
+alone and does not meet the requirements. The icons looked soft: the catalog's unsized icons are
+drawn on a 20 px grid and were shown at 18 px (the project information), 30 px (the report's
+summary) and 50 px (each section); drawn at each size on a 1x and a 2x screen, 20 and 40 px were
+crisp and the others blurred. They are 20 px in the project information and 40 px on the status
+page. The SPFx stub in `pp365-jest-config` builds labels and sliders too, so a test reads them
+from a property pane. Tests first (the default, the warning); every solution's suite passes.

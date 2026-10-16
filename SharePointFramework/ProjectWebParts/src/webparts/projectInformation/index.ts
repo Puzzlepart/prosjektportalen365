@@ -1,6 +1,7 @@
 import {
   IPropertyPaneConfiguration,
   PropertyPaneDropdown,
+  PropertyPaneLabel,
   PropertyPaneSlider,
   PropertyPaneTextField,
   PropertyPaneToggle
@@ -165,6 +166,11 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
                   PropertyPaneToggle('statusReportShowOnlyIcons', {
                     label: strings.StatusReportShowOnlyIconsLabel,
                     checked: propertiesWithDefaults.statusReportShowOnlyIcons
+                  }),
+                !propertiesWithDefaults.hideStatusReport &&
+                  propertiesWithDefaults.statusReportShowOnlyIcons &&
+                  PropertyPaneLabel('statusReportShowOnlyIconsWarning', {
+                    text: strings.StatusReportShowOnlyIconsWarning
                   }),
                 !propertiesWithDefaults.hideStatusReport &&
                   !propertiesWithDefaults.statusReportShowOnlyIcons &&

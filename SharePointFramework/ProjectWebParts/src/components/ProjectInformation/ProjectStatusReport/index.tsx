@@ -20,7 +20,8 @@ export const ProjectStatusReport: FC = () => {
             noPadding
             noMargin
             iconsOnly={context.props.statusReportShowOnlyIcons}
-            iconSize={18}
+            // The icons' own 20 px grid: crisp, where 18 px blurred their strokes.
+            iconSize={20}
             truncateComment={context.props.statusReportTruncateComments}
           />
         </ProjectStatusContext.Provider>

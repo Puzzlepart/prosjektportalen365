@@ -39,7 +39,8 @@ export const PROJECT_INFORMATION_DEFAULT_PROPS: Partial<IProjectInformationProps
   hideArchiveStatus: true,
   showSustainabilityGoalsAsIcons: false,
   sustainabilityGoalIconSize: 48,
-  statusReportShowOnlyIcons: true,
+  // The full view tells the status in text; icons alone tell it by colour only (WCAG 1.4.1).
+  statusReportShowOnlyIcons: false,
   rowLimit: 6,
   minRowLimit: 4,
   maxRowLimit: 100

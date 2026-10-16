@@ -11,7 +11,7 @@ import { useSections } from './useSections'
 
 export const Sections: FC = () => {
   const context = useProjectStatusContext()
-  const createContextValue = useCreateContextValue({ iconSize: 50 })
+  const createContextValue = useCreateContextValue({ iconSize: 40 })
   const sections = useSections()
 
   if (!context.state.isDataLoaded) return <LoadingSkeleton />

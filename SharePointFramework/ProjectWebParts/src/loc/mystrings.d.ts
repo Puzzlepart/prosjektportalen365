@@ -242,6 +242,7 @@ declare interface IProjectWebPartsStrings {
   StatusNotRelevant: string
   StatusOpen: string
   StatusReportShowOnlyIconsLabel: string
+  StatusReportShowOnlyIconsWarning: string
   StatusReportTruncateCommentsLabel: string
   StatusStillOpen: string
   SubTextTruncateLengthFieldLabel: string
