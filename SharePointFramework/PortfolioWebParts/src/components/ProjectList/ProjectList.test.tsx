@@ -13,8 +13,13 @@ jest.mock('./ProjectMenu', () => ({ ProjectMenu: () => null }))
 jest.mock('pp365-projectwebparts/lib/components/ProjectInformationPanel', () => ({
   ProjectInformationPanel: () => null
 }))
+// The card view sizes itself to its container, which jsdom gives no width; it gets a row's.
+jest.mock('react-virtualized-auto-sizer', () => ({
+  __esModule: true,
+  default: ({ children }: any) => children({ width: 968, height: 880 })
+}))
 
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import strings from 'PortfolioWebPartsStrings'
 import * as React from 'react'
@@ -48,9 +53,15 @@ const spfxContext = {
   }
 } as any
 
-function renderList(state: Record<string, any>) {
+function renderList(state: Record<string, any>, defaultRenderMode: 'list' | 'tiles' = 'list') {
   fetched.state = { isDataLoaded: true, isUserInPortfolioManagerGroup: false, ...state }
-  render(<ProjectList dataAdapter={{} as any} spfxContext={spfxContext} defaultRenderMode='list' />)
+  render(
+    <ProjectList
+      dataAdapter={{} as any}
+      spfxContext={spfxContext}
+      defaultRenderMode={defaultRenderMode}
+    />
+  )
 }
 
 const projects = () => [
@@ -103,6 +114,14 @@ describe('ProjectList', () => {
     await user.click(screen.getByRole('tab', { name: strings.ProjectsAccessHeaderText }))
     await user.type(screen.getByRole('searchbox'), 'brav')
     expect(linkNames()).toEqual(['Bravo'])
+  })
+
+  it('keeps its cards as the project information opens, so the button that opened it is there to take the focus back (WCAG 2.4.3)', async () => {
+    renderList({ projects: projects() }, 'tiles')
+    const [open] = await screen.findAllByTitle(strings.ProjectInformationPanelButton)
+    fireEvent.click(open)
+    // The rows were remade on every render of the list, so the button was a new one.
+    expect(open.isConnected).toBe(true)
   })
 
   it('tells when no projects came back', async () => {
