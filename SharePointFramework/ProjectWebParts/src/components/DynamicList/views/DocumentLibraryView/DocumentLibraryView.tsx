@@ -11,12 +11,7 @@ import { useFilteredData } from '../../useFilteredData'
 import { ListView, IListViewColumn } from '../ListView'
 import { IFileItem, DocumentLibraryViewMode } from '../../types'
 import { FileUploadZone } from '../../components/FileUpload'
-import { stampSiteIdFieldsOnFile } from '../../utils/listOperationUtils'
-import '@pnp/sp/lists'
-import '@pnp/sp/folders'
-import '@pnp/sp/files'
-import '@pnp/sp/files/folder'
-import type { IFileInfo } from '@pnp/sp/files'
+import { useFileUpload } from '../../hooks'
 import styles from './DocumentLibraryView.module.scss'
 import * as strings from 'ProjectWebPartsStrings'
 
@@ -38,20 +33,22 @@ export const DocumentLibraryView: FC = () => {
    * Filter items based on view mode and current folder.
    * Uses FileDirRef (parent folder URL) - same pattern as DocumentTemplateDialog.
    * Sorts folders alphabetically first, then files.
+   *
+   * @param source The items to filter: those the search and filters leave, or all
    */
-  const items = useMemo(() => {
-    let itemsToDisplay = filteredItems
+  const itemsInView = (source: Record<string, any>[]): Record<string, any>[] => {
+    let itemsToDisplay = source
 
     if (viewMode === DocumentLibraryViewMode.Folders) {
       const currentPath = context.state.currentFolderPath || ''
       const projectFolderName = context.props.useProjectFolder ? context.props.webTitle : null
 
       let libraryRootPath = ''
-      if (filteredItems.length > 0 && filteredItems[0].FileDirRef) {
-        libraryRootPath = filteredItems[0].FileDirRef
-        const firstItemPath = filteredItems[0].FileDirRef
+      if (source.length > 0 && source[0].FileDirRef) {
+        libraryRootPath = source[0].FileDirRef
+        const firstItemPath = source[0].FileDirRef
         const parts = firstItemPath.split('/')
-        if (filteredItems[0].FSObjType === 1 || filteredItems[0].FSObjType === 0) {
+        if (source[0].FSObjType === 1 || source[0].FSObjType === 0) {
           const pathSegments = firstItemPath.split('/').filter(Boolean)
           if (pathSegments.length >= 3) {
             libraryRootPath = '/' + pathSegments.slice(0, 3).join('/')
@@ -66,17 +63,17 @@ export const DocumentLibraryView: FC = () => {
             projectFolderName,
             libraryRootPath,
             useProjectFolder: context.props.useProjectFolder,
-            totalItems: filteredItems.length,
-            sampleItemPaths: filteredItems.slice(0, 3).map((i) => i.FileDirRef)
+            totalItems: source.length,
+            sampleItemPaths: source.slice(0, 3).map((i) => i.FileDirRef)
           }))
 
-      itemsToDisplay = filteredItems.filter((item: IFileItem) => {
+      itemsToDisplay = source.filter((item: IFileItem) => {
         if (!item.FileDirRef) return false
 
         if (!currentPath && projectFolderName) {
           const projectFolderPath = `${libraryRootPath}/${projectFolderName}`
           const match = item.FileDirRef === projectFolderPath
-          if (!match && filteredItems.indexOf(item) < 3) {
+          if (!match && source.indexOf(item) < 3) {
             sessionStorage.DEBUG ||
               (DEBUG &&
                 console.log('[DocumentLibraryView] Item at root with project folder (no match):', {
@@ -106,13 +103,20 @@ export const DocumentLibraryView: FC = () => {
     })
 
     return itemsToDisplay
-  }, [
-    filteredItems,
+  }
+
+  const viewDependencies = [
     viewMode,
     context.state.currentFolderPath,
     context.props.useProjectFolder,
     context.props.webTitle
-  ])
+  ]
+  const items = useMemo(() => itemsInView(filteredItems), [filteredItems, ...viewDependencies])
+  // The folder's items before the search and the filters, told beside the number shown.
+  const total = useMemo(
+    () => itemsInView(context.state.data?.listItems ?? []).length,
+    [context.state.data?.listItems, ...viewDependencies]
+  )
 
   const breadcrumbItems = useMemo(() => {
     const currentPath = context.state.currentFolderPath || ''
@@ -225,77 +229,11 @@ export const DocumentLibraryView: FC = () => {
     ]
   )
 
-  /**
-   * Handle file upload via drag-and-drop or file selection. If inside a folder, uploads
-   * to that folder; otherwise uploads to the root of the document library.
-   */
-  const handleFilesSelected = useCallback(
-    async (files: File[]) => {
-      try {
-        const list = context.web.lists.getByTitle(context.props.listName)
-        let folderPath = context.state.currentFolderPath || ''
-
-        if (context.props.useProjectFolder) {
-          const projectFolderName = context.props.webTitle
-          if (projectFolderName) {
-            try {
-              await list.rootFolder.folders.getByUrl(projectFolderName)()
-            } catch {
-              await list.rootFolder.folders.addUsingPath(projectFolderName)
-            }
-            if (!folderPath) {
-              folderPath = projectFolderName
-            } else if (
-              !folderPath.startsWith(projectFolderName + '/') &&
-              folderPath !== projectFolderName
-            ) {
-              folderPath = `${projectFolderName}/${folderPath}`
-            }
-          }
-        }
-
-        const listData = await list.select('RootFolder/ServerRelativeUrl').expand('RootFolder')()
-        const listRootPath = listData.RootFolder.ServerRelativeUrl
-
-        for (const file of files) {
-          let addedFile: IFileInfo
-          if (folderPath) {
-            const folderServerRelativeUrl = `${listRootPath}/${folderPath}`
-            sessionStorage.DEBUG ||
-              (DEBUG &&
-                console.log('[DocumentLibraryView] Uploading to folder:', {
-                  listName: context.props.listName,
-                  folderPath,
-                  folderServerRelativeUrl
-                }))
-            const targetFolder = context.web.getFolderByServerRelativePath(folderServerRelativeUrl)
-            addedFile = await targetFolder.files.addUsingPath(file.name, file, { Overwrite: true })
-          } else {
-            addedFile = await list.rootFolder.files.addUsingPath(file.name, file, {
-              Overwrite: true
-            })
-          }
-
-          if (context.props.useSiteIdFiltering && addedFile) {
-            await stampSiteIdFieldsOnFile(
-              context.web,
-              addedFile,
-              context.props.siteId,
-              context.props.webTitle
-            )
-          }
-        }
-
-        context.setState({ refetch: Date.now() })
-      } catch (error) {
-        console.error('Error uploading files:', error)
-      }
-    },
-    [context.props, context.state.currentFolderPath, context.setState]
-  )
+  /** A drop on the library uploads as the toolbar's upload does, and tells what it did. */
+  const uploadFiles = useFileUpload()
 
   return (
-    <FileUploadZone onFilesSelected={handleFilesSelected} fullScreen>
+    <FileUploadZone onFilesSelected={uploadFiles} fullScreen>
       {viewMode === DocumentLibraryViewMode.Folders && breadcrumbItems.length > 1 && (
         <div className={styles.breadcrumb}>
           <Breadcrumb aria-label={strings.DynamicList.FolderNavigation}>
@@ -317,6 +255,7 @@ export const DocumentLibraryView: FC = () => {
       <ListView
         columns={columns as any}
         items={items}
+        total={total}
         isDocumentLibrary
         onFirstColumnClick={handleFileClick}
         emptyMessage={

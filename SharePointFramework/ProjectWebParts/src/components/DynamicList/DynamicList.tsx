@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect, useMemo } from 'react'
+import { FC, useContext, useEffect, useMemo, useRef } from 'react'
 import * as React from 'react'
 import { DynamicListContext } from './context'
 import {
@@ -20,11 +20,13 @@ import {
   LoadingSkeleton,
   withDefaults
 } from 'pp365-shared-library'
-import { Spinner, Skeleton, SkeletonItem } from '@fluentui/react-components'
+import { Spinner, Skeleton, SkeletonItem, useId } from '@fluentui/react-components'
 import SPDataAdapter from '../../data'
 import { useToolbarItems } from './useToolbarItems'
 import styles from './DynamicList.module.scss'
 import * as strings from 'ProjectWebPartsStrings'
+import { useRefreshAnnouncement } from './useAnnouncements'
+import { useNavigationFocus } from './useNavigationFocus'
 
 /**
  * Internal component that renders the main content of the DynamicList.
@@ -44,6 +46,7 @@ const DynamicListContent: FC<{
   const context = useContext(DynamicListContext)
   const { menuItems, farMenuItems, filterPanelProps, customActionDialog, toaster } =
     useToolbarItems(isSingleView, showNewButton)
+  useRefreshAnnouncement(!!context.state.isRefetching)
 
   if (!context.props.listName) {
     return (
@@ -69,7 +72,8 @@ const DynamicListContent: FC<{
     <>
       <div className={styles.header}>
         {context.state.isLoading ? (
-          <Skeleton className={styles.headerSkeleton}>
+          // Hidden: the list's skeleton below names the loading, which would be read twice.
+          <Skeleton className={styles.headerSkeleton} aria-hidden>
             <SkeletonItem className={styles.titleSkeleton} />
           </Skeleton>
         ) : (
@@ -82,27 +86,35 @@ const DynamicListContent: FC<{
           />
         )}
       </div>
-      {context.state.isRefetching ? (
+      {context.state.isRefetching && (
         <Spinner
           size='extra-tiny'
           label={strings.DynamicList.RefetchingData}
           style={{ padding: 10, minHeight: '20px' }}
         />
-      ) : (
-        (context.props.showCommandBar ||
-          (!context.props.showCommandBar &&
-            (context.state.isDrilledDown ||
-              (context.state.isDocumentLibrary && context.state.currentFolderPath)))) && (
-          <div className={styles.commandBar}>
-            <Toolbar items={menuItems} farItems={farMenuItems} filterPanel={filterPanelProps} />
-          </div>
-        )
+      )}
+      {/* Kept while the list is fetched again, so the refresh button keeps the focus. */}
+      {(context.props.showCommandBar ||
+        (!context.props.showCommandBar &&
+          (context.state.isDrilledDown ||
+            (context.state.isDocumentLibrary && context.state.currentFolderPath)))) && (
+        <div className={styles.commandBar}>
+          <Toolbar items={menuItems} farItems={farMenuItems} filterPanel={filterPanelProps} />
+        </div>
       )}
       {context.state.isLoading ? (
         <LoadingSkeleton />
       ) : (
         <>
-          {context.state.error && <div>Error: {context.state.error}</div>}
+          {context.state.error && (
+            <div style={{ padding: '0 32px', marginBottom: '16px' }}>
+              <UserMessage
+                title={strings.DynamicList.Error}
+                text={context.state.error}
+                intent='error'
+              />
+            </div>
+          )}
           {context.state.data?.siteIdFieldMissing && (
             <div style={{ padding: '0 32px', marginBottom: '16px' }}>
               <UserMessage
@@ -179,15 +191,19 @@ export const DynamicList: FC<IDynamicListProps> = (incomingProps) => {
   }, [props.webContextMode, props.webUrl])
 
   const { state, setState } = useDynamicList(props, targetWeb)
+  const toasterId = useId('dynamic-list-toaster')
+  const containerRef = useRef<HTMLDivElement>(null)
+  useNavigationFocus(state, containerRef)
 
   const context = useMemo(
     () => ({
       props,
       state,
       setState,
-      web: targetWeb
+      web: targetWeb,
+      toasterId
     }),
-    [props, state, targetWeb]
+    [props, state, targetWeb, toasterId]
   )
 
   const hasOnlyOneItem = state.data?.listItems?.length === 1
@@ -252,7 +268,7 @@ export const DynamicList: FC<IDynamicListProps> = (incomingProps) => {
   return (
     <div className={styles.dynamicList} style={containerStyle}>
       <DynamicListContext.Provider value={context}>
-        <div className={styles.container} style={containerStyle}>
+        <div className={styles.container} style={containerStyle} ref={containerRef}>
           <DynamicListContent
             isSingleView={isSingleView}
             showNewButton={showNewButton}

@@ -468,7 +468,18 @@ define([], function () {
       ListTable: 'List table',
       GroupByColumn: 'Group by {0}',
       FolderNavigation: 'Folder navigation',
-      HiddenFromView: 'Hidden from view'
+      HiddenFromView: 'Hidden from view',
+      RefreshDone: 'The list is updated',
+      ItemsShown: 'Showing {0} of {1} items',
+      FileUploaded: '{0} uploaded',
+      FilesUploaded: '{0} files uploaded',
+      UploadFailed: 'The upload failed',
+      DocumentCreated: '{0} created',
+      DocumentCreateFailed: 'The document was not created',
+      ItemDeleted: 'The item was deleted',
+      ItemsDeleted: '{0} items deleted',
+      DeleteFailed: 'The deletion failed',
+      DefaultListName: 'list'
     }
   }
 })

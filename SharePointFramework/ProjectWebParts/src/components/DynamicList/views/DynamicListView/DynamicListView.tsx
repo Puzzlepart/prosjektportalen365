@@ -26,6 +26,7 @@ export const DynamicListView: FC = () => {
     <ListView
       columns={columns as any}
       items={filteredItems}
+      total={context.state.data?.listItems?.length}
       onFirstColumnClick={handleFirstColumnClick}
       emptyMessage={strings.DynamicList.NoItemsToShow}
       noColumnsMessage={strings.DynamicList.NoColumnsToShow}

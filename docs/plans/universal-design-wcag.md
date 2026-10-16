@@ -569,3 +569,49 @@ Tests first: the tone and the edge of a bar, the milestones' edges and the detai
 in `Timeline.test.tsx` on the old renderer, as did the three new tests of `getTint` and
 `getContrastingShade` in `contrast.test.ts` (against stubs); all pass, and the allocation's
 colours are pinned by a test that passed before and after.
+
+### Slice 2, part 9 — The dynamic list (2026-10-16)
+
+No page on the test hub holds the web part, so the baseline never scanned it and axe ran in Jest
+only. What the audit found:
+
+- **Focus dropped to the page's start** whenever the view changed (2.4.3): the link that opened
+  an item or a folder left the page with the view, and the refresh button was swapped for a
+  spinner while the list was fetched again. `useNavigationFocus` gives an opened item's heading
+  the focus (its fields where the title is hidden), an opened folder the breadcrumb's current
+  crumb, and on going back the link of the item or folder left; the toolbar stays while the list
+  is fetched again. The back button's state change is `utils/navigation.ts`'s `goBack`, so the
+  test runs the real one.
+- **Silent results** (4.1.3): an upload, a new document and a deletion said nothing when done
+  and nothing when they failed, the error going to the console only; a deletion's failure was
+  not even caught. Each says what it did, or why it did not, in a toast (`useNotify`), seen by
+  all and read through the toaster's live region. A drop on the library and the toolbar's upload
+  share one upload (`useFileUpload`), where each had its own. A search or a filter tells how many
+  items it shows, half a second after the last keystroke, against the folder's count in a
+  library; the refresh tells when the list is updated.
+- **A fetch error** showed as «Error: …» in a bare `div`, English and unannounced; it is a
+  `UserMessage` titled «Feil». The search box's placeholder fell back to a literal «liste».
+- **The export button** was named «3» when three items were selected: its text is the count,
+  and the toolbar names an item with text by its text. `ListMenuItem.setAriaLabel`
+  (shared-library) names it «Eksporter 3 valgte elementer til Excel», holding the count, in
+  every toolbar where an item's text alone does not say what it does.
+- **The single item view**: the title was an `h1` under the web part's `h2`; it is an `h3` with
+  the same look. The fields were name and value in `div`s; they are a description list. Its
+  columns were at least 450px wide in a container that hides what overflows, so at 320px the
+  values were cut off (1.4.10); one column now when the web part is narrower.
+- **Names**: the title's skeleton beside the list's while loading was a second, unnamed progress
+  bar (axe's `aria-progressbar-name`); it is hidden. The custom action dialog's spinner is named
+  «Vennligst vent...».
+- Noted, not changed: the column header's right-click sets a menu that nothing renders, so there
+  is nothing the keyboard misses; column widths change by mouse only, while every value shows in
+  full in the single item view; the rows carry `aria-selected` in a `table`, which axe accepts
+  and the row's check box says anyway; the upload zone's card variant is used nowhere.
+
+Tests first: seven tests in `DynamicList.test.tsx` (the heading and the field list, the loading,
+the focus after opening and going back for an item and a folder, the toolbar kept through a
+refresh and its announcement, the search count, the error) and five in a new
+`useToolbarItems.test.tsx` (a new document, a deletion and an upload told, the export button's
+name, the spinner's name) failed on the old code, as did the new test in shared-library's
+`Toolbar.test.tsx`; all pass. The folder's focus test failed there on `DEBUG`, which SPFx defines
+at build and the library's view reads, before it reached its assertion; the test defines it now,
+and was not run against the old code again.

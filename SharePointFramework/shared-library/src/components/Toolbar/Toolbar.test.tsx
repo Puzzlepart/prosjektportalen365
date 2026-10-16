@@ -217,4 +217,21 @@ describe('Toolbar', () => {
     expect(screen.getByRole('searchbox', { name: 'Søk' })).toBeInTheDocument()
     expect(await axeComponent(container)).toHaveNoViolations()
   })
+
+  it('names an item whose text is only a count by the name it is given, which holds the count (WCAG 2.4.6, 2.5.3)', () => {
+    const name = 'Eksporter 3 valgte elementer til Excel'
+    render(
+      <Toolbar
+        items={[]}
+        farItems={[
+          new ListMenuItem('3', name).setAriaLabel(name).setIcon('ExcelLogo').setOnClick(jest.fn()),
+          new ListMenuItem('2', 'Velg visning')
+            .setAriaLabel('2 visninger')
+            .setItems([new ListMenuItem('Alle')])
+        ]}
+      />
+    )
+    expect(screen.getByRole('button', { name })).toHaveTextContent('3')
+    expect(screen.getByRole('button', { name: '2 visninger' })).toHaveTextContent('2')
+  })
 })

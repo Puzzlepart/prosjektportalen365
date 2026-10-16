@@ -490,7 +490,18 @@ define([], function () {
       ListTable: 'Listetabell',
       GroupByColumn: 'Grupper etter {0}',
       FolderNavigation: 'Mappenavigasjon',
-      HiddenFromView: 'Skjult fra visning'
+      HiddenFromView: 'Skjult fra visning',
+      RefreshDone: 'Listen er oppdatert',
+      ItemsShown: 'Viser {0} av {1} elementer',
+      FileUploaded: '{0} er lastet opp',
+      FilesUploaded: '{0} filer er lastet opp',
+      UploadFailed: 'Opplastingen feilet',
+      DocumentCreated: '{0} er opprettet',
+      DocumentCreateFailed: 'Dokumentet ble ikke opprettet',
+      ItemDeleted: 'Elementet er slettet',
+      ItemsDeleted: '{0} elementer er slettet',
+      DeleteFailed: 'Slettingen feilet',
+      DefaultListName: 'liste'
     }
   }
 })

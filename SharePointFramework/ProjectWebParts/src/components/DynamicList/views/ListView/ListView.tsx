@@ -25,14 +25,19 @@ import { customLightTheme, UserMessage } from 'pp365-shared-library'
 import styles from './ListView.module.scss'
 import { IListViewProps } from './types'
 import * as strings from 'ProjectWebPartsStrings'
+import { useResultsAnnouncement } from '../../useAnnouncements'
+import { NAVIGATION_KEY_ATTRIBUTE } from '../../useNavigationFocus'
 
 /**
  * Base ListView component that provides common table rendering functionality
- * for both DynamicListView and DocumentLibraryView.
+ * for both DynamicListView and DocumentLibraryView. It tells how many items a search or a filter
+ * leaves (`useResultsAnnouncement`), and marks each item's link by its id, a file's or folder's by
+ * its name, so going back gives it the focus (`useNavigationFocus`).
  */
 export const ListView: FC<IListViewProps> = ({
   columns,
   items,
+  total,
   isDocumentLibrary,
   onFirstColumnClick,
   emptyMessage = strings.DynamicList.NoItemsToShow,
@@ -41,6 +46,7 @@ export const ListView: FC<IListViewProps> = ({
 }) => {
   const context = useContext(DynamicListContext)
   const fluentProviderId = useId('fp-list-view')
+  useResultsAnnouncement(items.length, total ?? items.length)
 
   const selectedRows = useMemo(() => {
     const selectedIndices = new Set<TableRowId>()
@@ -254,6 +260,11 @@ export const ListView: FC<IListViewProps> = ({
                     const isFolder = isDocumentLibrary && (item as any).FSObjType === 1
                     const isFile = isDocumentLibrary && !isFolder
                     const fileUrl = isFile ? (item as any).FileRef : null
+                    const navigationKey = {
+                      [NAVIGATION_KEY_ATTRIBUTE]: String(
+                        isDocumentLibrary ? (item as any).FileLeafRef : (item as any).Id
+                      )
+                    }
 
                     return (
                       <TableCell
@@ -263,7 +274,12 @@ export const ListView: FC<IListViewProps> = ({
                         {isFirstColumn && onFirstColumnClick ? (
                           <TableCellLayout>
                             {isFile && fileUrl ? (
-                              <Link href={fileUrl} target='_blank' rel='noopener noreferrer'>
+                              <Link
+                                href={fileUrl}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                                {...navigationKey}
+                              >
                                 {cellContent}
                               </Link>
                             ) : (
@@ -272,6 +288,7 @@ export const ListView: FC<IListViewProps> = ({
                                   e.stopPropagation()
                                   onFirstColumnClick(item)
                                 }}
+                                {...navigationKey}
                               >
                                 {cellContent}
                               </Link>

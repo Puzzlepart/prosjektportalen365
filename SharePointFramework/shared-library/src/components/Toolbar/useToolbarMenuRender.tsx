@@ -37,7 +37,7 @@ export function useToolbarMenuRender() {
         <ToolbarButton
           icon={createIcon(item)}
           title={item.description ?? item.text}
-          aria-label={item.text ? undefined : item.description}
+          aria-label={item.ariaLabel ?? (item.text ? undefined : item.description)}
           style={createStyle(item, buttonStyle)}
           onClick={item.onClick}
           // Focusable while disabled: the toolbar's arrow keys reach it, and a screen reader reads

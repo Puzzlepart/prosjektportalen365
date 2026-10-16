@@ -437,6 +437,17 @@ declare interface IProjectWebPartsStrings {
     GroupByColumn: string
     FolderNavigation: string
     HiddenFromView: string
+    RefreshDone: string
+    ItemsShown: string
+    FileUploaded: string
+    FilesUploaded: string
+    UploadFailed: string
+    DocumentCreated: string
+    DocumentCreateFailed: string
+    ItemDeleted: string
+    ItemsDeleted: string
+    DeleteFailed: string
+    DefaultListName: string
   }
 }
 

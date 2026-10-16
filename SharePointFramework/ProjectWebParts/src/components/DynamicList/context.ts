@@ -11,6 +11,10 @@ export interface IDynamicListContext {
    * Points to the site where the list exists (current project, hub, or custom site).
    */
   web: IWeb
+  /**
+   * The toaster the web part tells what an action did in: an upload, a new document, a deletion.
+   */
+  toasterId?: string
 }
 
 export const DynamicListContext = createContext<IDynamicListContext>(null)

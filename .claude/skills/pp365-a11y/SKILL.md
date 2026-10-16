@@ -40,7 +40,10 @@ Rules 1, 2, 5, 6, 8 and the tooltip handling are adapted from Microsoft's
    when the trigger has no text, `relationship="description"` when it has; never copy the tooltip
    into `aria-label` as well, or it is read twice.
 2. **Visible text is in the name** (2.5.3, voice control): an `aria-label` on a button with text
-   starts with that text. An `aria-label` equal to the visible text is noise: drop it.
+   starts with that text. An `aria-label` equal to the visible text is noise: drop it. A text
+   that does not say what the button does (a count) is no name (2.4.6): a toolbar item takes
+   one that holds the text through `ListMenuItem.setAriaLabel` (the dynamic list's export,
+   «Eksporter 3 valgte elementer til Excel»).
 3. **Every input has a label.** In a `FieldContainer` the control takes the field's id, so the label
    names it and a click on the label reaches it; check `for` against `id` in the browser. A slot
    render function passes on what Fluent wired (kodemonster.md, «Render-funksjoner for slots»:
@@ -66,11 +69,18 @@ Rules 1, 2, 5, 6, 8 and the tooltip handling are adapted from Microsoft's
    `announce(format(strings.X, n), { polite: true })`; a completed action may be a toast instead
    (the `Toaster` has its own live region). Fluent's `MessageBar` (`UserMessage`) announces itself
    the same way. Both speak only under an `AriaLiveAnnouncer`, which only our root providers render.
+   An action that changes content (an upload, a new document, a deletion) says that it did, and
+   why it did not, in a toast seen by all (the dynamic list's `useNotify`); a search tells its
+   count once typing stops, not per keystroke (`DynamicList/useAnnouncements.ts`).
 7. **Focus is kept and shown.** Fluent's `Dialog` and `OverlayDrawer` move focus in and back; an
    overlay of our own does both. Never `outline: none` or `outline: 0` without a `:focus-visible`
    style in its place (found: `EditViewColumnsPanel`, `PackageDetails`). A sticky header must not
    cover the focused element (2.4.11): give what scrolls under it `scroll-margin-top`, the
    focusable descendants too (`ProjectStatus`'s `BaseSection`: `* { scroll-margin-top: 80px }`).
+   A view that replaces the element with focus (an item or folder opened from a list, a toolbar
+   swapped for a spinner) drops focus to the page's start (2.4.3): give it to the new view's
+   heading or the breadcrumb's current crumb, and on going back to the link left
+   (`DynamicList/useNavigationFocus.ts`); keep a toolbar mounted while its action runs.
 8. **Related controls form a group**: `role="group"` with `aria-labelledby` (a toolbar section, a
    pair of move buttons).
 9. **Colour** comes from Fluent's tokens, not hex: 4.5:1 for text, 3:1 for large text and for
