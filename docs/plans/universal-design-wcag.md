@@ -517,3 +517,17 @@ summary) and 50 px (each section); drawn at each size on a 1x and a 2x screen, 2
 crisp and the others blurred. They are 20 px in the project information and 40 px on the status
 page. The SPFx stub in `pp365-jest-config` builds labels and sliders too, so a test reads them
 from a property pane. Tests first (the default, the warning); every solution's suite passes.
+
+### Slice 2, part 7 — The project news (2026-10-16)
+
+Below the fold, so the baseline never scanned it. The news are a list (`role="list"` on the
+cards' row, `listitem` on each card); «Vis flere» says whether more are shown (`aria-expanded`);
+the separator between the author and the date is hidden from screen readers. The dialog for a new
+article announces that it is being made and that it is made (`useAnnounce` in `useNewsDialog`),
+where its content gave way to a spinner and a result in silence; an error already shows in the
+title field's message, which Fluent reads. The title field and the template picker had fixed ids
+(`news-title-input`, `template-dropdown`), so Fluent named them through `aria-labelledby` while a
+click on the label no longer reached them, and two news web parts on a page would share ids; they
+take the field's id now. «Opprett nyhet» lost an `aria-label` equal to its text and a `role` and
+`tabIndex` the button has anyway. Tests first: the list test and the announcement test (a new
+`useNewsDialog.test.tsx`) failed on the old code and pass.

@@ -23,9 +23,9 @@ export const RecentNews: FC<IRecentNewsProps> = ({ news, maxVisible = 4 }) => {
         <div className={styles.noRecentNews}>{strings.NoRecentNews}</div>
       ) : (
         <>
-          <div className={styles.recentNews}>
+          <div className={styles.recentNews} role='list'>
             {visibleNews.map((item) => (
-              <Card key={item.name} className={styles.card}>
+              <Card key={item.name} className={styles.card} role='listitem'>
                 {item.imageUrl && <img src={item.imageUrl} alt='' className={styles.cardImage} />}
                 <CardHeader
                   header={
@@ -45,7 +45,7 @@ export const RecentNews: FC<IRecentNewsProps> = ({ news, maxVisible = 4 }) => {
                               formatShortDate(item.modifiedDate)
                             )}
                           >
-                            {' | '}
+                            <span aria-hidden> | </span>
                             {formatShortDate(item.modifiedDate)}
                           </Caption1>
                         </>
@@ -66,7 +66,7 @@ export const RecentNews: FC<IRecentNewsProps> = ({ news, maxVisible = 4 }) => {
               appearance='subtle'
               size='small'
               icon={showAll ? getFluentIcon('ChevronUp') : getFluentIcon('ChevronDown')}
-              title={showAll ? strings.ShowLessNews : strings.ShowMoreNews}
+              aria-expanded={showAll}
               onClick={() => setShowAll(!showAll)}
             >
               {showAll ? strings.ShowLessNews : strings.ShowMoreNews}

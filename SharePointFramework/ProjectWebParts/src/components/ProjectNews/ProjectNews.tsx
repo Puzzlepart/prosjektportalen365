@@ -39,9 +39,6 @@ export const ProjectNews: FC<IProjectNewsProps> = (incomingProps) => {
               icon={getFluentIcon('News')}
               iconPosition='before'
               onClick={() => context.setState({ isDialogOpen: true })}
-              aria-label={strings.CreateNewsLinkLabel}
-              role='button'
-              tabIndex={0}
               aria-haspopup='dialog'
             >
               {strings.CreateNewsLinkLabel}

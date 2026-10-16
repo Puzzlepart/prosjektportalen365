@@ -36,6 +36,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Universell utforming (#1788): i `Prosjektstatus` har hver seksjon en overskrift som skjermlesere kan navigere til, rapportens tilstand er ikke lenger en ekstra overskrift, og et statusikon som vises alene leses opp med seksjon og status. Det som får fokus i en seksjon, havner ikke lenger under de festede fanene. Deaktiverte knapper i verktøylinjene i alle webdeler kan nås med tastaturet, slik at forklaringen på hvorfor de ikke kan brukes leses opp
 - Universell utforming (#1788): statusrapporten i `Prosjektinformasjon` vises nå i full visning som standard, med statusen som tekst, i stedet for bare ikoner, som viste statusen bare med farge. «Vis kun ikoner» kan fortsatt velges, og egenskapsruten sier da at det ikke oppfyller kravene til universell utforming. Statusikonene er litt større og skarpere: 20 px i prosjektinformasjonen og 40 px på statussiden
 - Universell utforming (#1788): `Risikomatrise` og `Mulighetsmatrise` leses som en tabell, så skjermlesere sier hvilken sannsynlighet og konsekvens et element har. Elementene kan nås med tastaturet, leses opp med nummer, tittel og innholdet i verktøytipset, og bare elementene for valgt visning (før eller etter tiltak) leses opp
+- Universell utforming (#1788): i `Prosjektnyheter` leses nyhetene som en liste, «Vis flere» sier om flere nyheter vises, og dialogen for ny nyhet sier fra til skjermlesere når nyheten opprettes og når den er opprettet
 
 ### Feilrettinger
 
