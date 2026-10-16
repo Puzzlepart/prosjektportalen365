@@ -36,13 +36,36 @@
       }
     }
 
-    // A milestone too faint against the timeline gets a one-pixel outline in the stroke Fluent
-    // makes for 3:1 against white; a shape cut out with `clip-path` cannot take a border.
-    .milestoneOutline {
-      filter: drop-shadow(1px 0 0 var(--colorNeutralStrokeAccessible))
-        drop-shadow(-1px 0 0 var(--colorNeutralStrokeAccessible))
-        drop-shadow(0 1px 0 var(--colorNeutralStrokeAccessible))
-        drop-shadow(0 -1px 0 var(--colorNeutralStrokeAccessible));
+    // A milestone is its shape in the edge's colour with the fill laid on top, cut out by the same
+    // shape scaled about its centre: a shape cut out with `clip-path` cannot take a border. The
+    // inner polygons leave an edge about 1.5px wide on the 22 by 24 px diamond and the 22 by 19 px
+    // triangle.
+    .milestone {
+      position: relative;
+      background: var(--milestone-edge);
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: var(--milestone-fill);
+      }
+    }
+
+    .diamond {
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+
+      &::after {
+        clip-path: polygon(50% 9.25%, 90.75% 50%, 50% 90.75%, 9.25% 50%);
+      }
+    }
+
+    .triangle {
+      clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+
+      &::after {
+        clip-path: polygon(50% 15.76%, 88.17% 92.1%, 11.83% 92.1%);
+      }
     }
 
     :global(.rct-scroll):focus-visible {
@@ -50,13 +73,15 @@
       outline-offset: calc(var(--strokeWidthThick) * -1);
     }
 
+    // Darker under the pointer, not lighter: lighter would fade the edges against the rows and
+    // white text against its bar (WCAG 1.4.3, 1.4.11).
     .timelineItem:hover {
-      filter: brightness(1.2);
+      filter: brightness(0.95);
       box-shadow: var(--shadow2);
     }
 
     .timelineItemMilestone:hover {
-      filter: brightness(1.2);
+      filter: brightness(0.95);
     }
   }
 }

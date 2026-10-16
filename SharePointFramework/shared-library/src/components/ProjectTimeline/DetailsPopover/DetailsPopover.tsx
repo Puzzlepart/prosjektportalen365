@@ -1,7 +1,7 @@
 import { Link, Popover, PopoverSurface } from '@fluentui/react-components'
 import * as strings from 'SharedLibraryStrings'
 import React, { FC } from 'react'
-import { formatDate, tryParseCurrency, withDefaults } from '../../../util'
+import { formatDate, getReadableTextColor, tryParseCurrency, withDefaults } from '../../../util'
 import styles from './DetailsPopover.module.scss'
 import { IDetailsPopoverProps } from './types'
 import resource from 'SharedResources'
@@ -199,8 +199,10 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (incomingProps) => {
             hidden={!data.tag}
             title={strings.TagFieldLabel}
             className={styles.tag}
+            // White on the configured colour unless that is under 4.5:1 (WCAG 1.4.3).
             style={{
-              backgroundColor: data.bgColorHex
+              backgroundColor: data.bgColorHex,
+              color: getReadableTextColor(data.bgColorHex, '#ffffff')
             }}
           >
             {data.tag}

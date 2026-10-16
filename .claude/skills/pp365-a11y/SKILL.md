@@ -76,9 +76,12 @@ Rules 1, 2, 5, 6, 8 and the tooltip handling are adapted from Microsoft's
 9. **Colour** comes from Fluent's tokens, not hex: 4.5:1 for text, 3:1 for large text and for
    non-text that carries meaning (borders of inputs, focus, status icons). Colour is never alone:
    a matrix cell or a status shows its value or its text as well. Colours from configuration
-   (the timeline's) go through `getReadableTextColor` and `getContrastRatio` (`util/contrast.ts`):
-   the configured text colour stays where it reads 4.5:1, and black or white takes its place
-   where it does not.
+   (the timeline's) go through `util/contrast.ts`: `getReadableTextColor` keeps the configured
+   text colour where it reads 4.5:1 and puts black or white in its place where it does not;
+   `getContrastingShade` darkens a configured colour just until it reaches 3:1 against the
+   fainter background (the timeline's grey rows, `#f2f2f2`), for an edge; `getTint` makes the
+   light tone a bar is filled with. A configured colour is the customer's choice: draw it so it
+   holds whatever it is, rather than changing it.
 10. **Headings**: `WebPartTitle` is the web part's `h2`; a section inside is an `h3`
     (`WebPartTitle headingLevel={3}`, as the project information's parent projects). Panels and
     dialogs take their heading from `DrawerHeaderTitle` and `DialogTitle`. Name and value pairs
@@ -201,6 +204,13 @@ checked by hand and with which reader and browser: axe finds only part of what W
   nothing when it closes: return it on Escape yourself (`useTimeline`'s `onDetailsDismiss`).
 - An inline `outline: none` (the timeline items' configured style) beats a stylesheet's
   `:focus-visible` outline unless that outline is `!important`.
+- A shape cut out with `clip-path` (the timeline's diamonds and triangles) takes no border: draw
+  it in the edge's colour and lay the fill on top in a `::after` cut out by the same polygon
+  scaled about the shape's centre (`Timeline.module.scss`). A drop shadow as the edge is thinner
+  on the slopes than on the straight sides.
+- A `brightness()` above 1 under the pointer fades an edge against its background and white text
+  against its fill; darken instead (the timeline's `brightness(0.95)`). CSS `brightness()` scales
+  the sRGB channels, so the hover colour can be measured as the colour times the factor.
 - axe scoped to our markup still judges rules that need the page (landmarks, the page's headings);
   such findings belong to SharePoint's page and are noted, not fixed in our code.
 - Under jsdom contrast cannot be measured, and Fluent's menus and popovers are slow

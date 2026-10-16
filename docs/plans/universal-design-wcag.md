@@ -531,3 +531,41 @@ click on the label no longer reached them, and two news web parts on a page woul
 take the field's id now. «Opprett nyhet» lost an `aria-label` equal to its text and a `role` and
 `tabIndex` the button has anyway. Tests first: the list test and the announcement test (a new
 `useNewsDialog.test.tsx`) failed on the old code and pass.
+
+### Slice 2, part 8 — The timeline's colours (2026-10-16)
+
+Slice 1 left the timeline's text readable, but against the grey rows (`rgba(0, 0, 0, 0.05)` over
+white, `#f2f2f2`) three of the template's four bar colours were under 3:1 (#f35d69 2.85:1,
+#249ea0 2.90:1, #ff9933 1.90:1, and 2.13:1 against white too), and a bar's length is the period
+it shows. Five variants were drawn with the timeline's CSS and measured in the browser (template
+colours with white text, the branch's black text, darker colours with white text, a light tone
+with a coloured edge, and the template's colours edged only where too faint). The user chose the
+light tone with a coloured edge, and the milestones in the template's own yellow with a darker
+edge of the same yellow.
+
+- **Bars of the timeline configuration** (`elementType` Bar) are drawn in a light tone of their
+  colour (40 % of it over white, `getTint`), edged by 1px in the colour itself, darkened just
+  until it reaches 3:1 against the grey rows where it does not (`getContrastingShade`), with the
+  text black where the configured colour does not read on the tone. All four template colours
+  then give black text at 12.9–15.5:1 and an edge at 3.00–3.33:1 against the grey rows.
+- **Milestones** (diamonds and triangles) are filled with their colour and edged in a shade at
+  least a quarter darker that reaches 3:1 against the grey rows: the template's yellow `#ffc800`
+  in `#ac8700` (3.02:1), the decision point's `#6495ed` in `#4b70b2` (4.40:1). A shape cut out
+  with `clip-path` takes no border, so the edge is the shape in the edge's colour with the fill
+  in a `::after` cut out by the polygon scaled about its centre, about 1.5px wide; the grey
+  outline of slice 1 is gone. The triangle, drawn with CSS borders before, is a polygon now.
+- **Under the pointer** the items darken (`brightness(0.95)`), where they brightened by 1.2,
+  which faded the edges and would have dropped white text under 4.5:1.
+- **The details' label** (`DetailsPopover`'s tag, in the item's colour) wrote white on any
+  colour; it takes black where white is under 4.5:1.
+- **Not changed**: the resource allocation's bars, whose colour fades with the allocation and
+  has no `elementType`, keep their colour and only have their text chosen; their contrast
+  against the rows belongs to slice 4. No template row changes, so nothing needs an upgrade step:
+  the colours are drawn from whatever the hub has configured, the customer's own included.
+  Noted: the project timeline's time-lapse marker is a line in `#f35d69`, 2.85:1 against the grey
+  rows.
+
+Tests first: the tone and the edge of a bar, the milestones' edges and the details' label failed
+in `Timeline.test.tsx` on the old renderer, as did the three new tests of `getTint` and
+`getContrastingShade` in `contrast.test.ts` (against stubs); all pass, and the allocation's
+colours are pinned by a test that passed before and after.

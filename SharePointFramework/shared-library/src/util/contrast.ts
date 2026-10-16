@@ -92,3 +92,63 @@ export function getReadableTextColor(
   const luminance = relativeLuminance(parsed)
   return (luminance + 0.05) / 0.05 >= 1.05 / (luminance + 0.05) ? BLACK : WHITE
 }
+
+/**
+ * A colour as hex (`#rrggbb`), each channel rounded and held between 0 and 255.
+ *
+ * @param color The colour
+ */
+function toHex(color: RgbColor): string {
+  return (
+    '#' +
+    color
+      .map((channel) =>
+        Math.max(0, Math.min(255, Math.round(channel)))
+          .toString(16)
+          .padStart(2, '0')
+      )
+      .join('')
+  )
+}
+
+/**
+ * A light tone of a colour: the share of it laid over white, such as the timeline's bars in a
+ * tone of their configured colour. `undefined` when the colour cannot be read (see `parseColor`).
+ *
+ * @param color The colour
+ * @param share How much of the colour to keep, from 0 (white) to 1 (the colour itself)
+ */
+export function getTint(color: string, share = 0.4): string | undefined {
+  const parsed = parseColor(color)
+  if (!parsed) return undefined
+  return toHex(parsed.map((channel) => channel * share + 255 * (1 - share)) as RgbColor)
+}
+
+/**
+ * A shade of a colour that stands out against a light background, such as an edge round a
+ * timeline element (WCAG 1.4.11): the colour itself when it reaches `minimum` against the
+ * background, otherwise the colour darkened towards black just until it does. `start` darkens it
+ * that far first (1 keeps it, 0.75 takes a quarter off), so an edge differs from the fill it
+ * frames even where the fill would stand out by itself. `undefined` when either colour cannot be
+ * read (see `parseColor`).
+ *
+ * @param color The colour
+ * @param background The background it must stand out against
+ * @param minimum The least contrast ratio, 3 for graphics (WCAG 1.4.11)
+ * @param start How much of the colour to keep before measuring, from 0 to 1
+ */
+export function getContrastingShade(
+  color: string,
+  background: string,
+  minimum = 3,
+  start = 1
+): string | undefined {
+  const parsed = parseColor(color)
+  if (!parsed || !parseColor(background)) return undefined
+  // Steps of half a percent, counted in whole steps so they add up exactly.
+  for (let step = 0; step <= start * 200; step++) {
+    const shade = toHex(parsed.map((channel) => channel * (start - step / 200)) as RgbColor)
+    if ((getContrastRatio(shade, background) ?? 0) >= minimum) return shade
+  }
+  return BLACK
+}
