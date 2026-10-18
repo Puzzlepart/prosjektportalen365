@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { axeComponent } from 'pp365-jest-config/lib/axe'
 import strings from 'SharedLibraryStrings'
 import * as React from 'react'
+import { getContrastRatio } from '../../../util'
 import { TrendColumn } from './index'
 
 /**
@@ -18,6 +19,10 @@ const trend = (icon: Record<string, any> | undefined) =>
  * inline `<svg>`.
  */
 const hasIcon = (container: HTMLElement) => container.querySelector('i, svg') !== null
+
+/** The colours the cell's icons are drawn in, as the browser reads them. */
+const iconColors = (container: HTMLElement) =>
+  Array.from(container.querySelectorAll('svg')).map((svg) => svg.style.color)
 
 describe('TrendColumn', () => {
   it('renders nothing for a cell without a trend', () => {
@@ -65,5 +70,17 @@ describe('TrendColumn', () => {
     expect(screen.getByRole('img', { name: strings.Aria.TrendWorse })).toBeInTheDocument()
     rerender(<TrendColumn columnValue={trend(undefined)} />)
     expect(screen.queryByRole('img')).toBeNull()
+  })
+
+  it('frames an icon that stands out too little from the row in a darker shade, and keeps its colour (WCAG 1.4.11)', () => {
+    const { container, rerender } = render(
+      <TrendColumn columnValue={trend({ iconName: 'Trophy', color: '#ffd700' })} />
+    )
+    const colors = iconColors(container)
+    expect(colors).toContain('rgb(255, 215, 0)')
+    // A row is white, and about #f2f2f2 when hovered or selected: the edge stands out from both.
+    expect(colors.some((color) => getContrastRatio(color, '#f2f2f2') >= 3)).toBe(true)
+    rerender(<TrendColumn columnValue={trend({ iconName: 'CaretDown', color: '#d13438' })} />)
+    expect(new Set(iconColors(container))).toEqual(new Set(['rgb(209, 52, 56)']))
   })
 })

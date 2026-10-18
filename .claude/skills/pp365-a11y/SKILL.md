@@ -96,7 +96,10 @@ Rules 1, 2, 5, 6, 8 and the tooltip handling are adapted from Microsoft's
    `getContrastingShade` darkens a configured colour just until it reaches 3:1 against the
    fainter background (the timeline's grey rows, `#f2f2f2`), for an edge; `getTint` makes the
    light tone a bar is filled with. A configured colour is the customer's choice: draw it so it
-   holds whatever it is, rather than changing it.
+   holds whatever it is, rather than changing it. An icon is framed the same way: its regular
+   variant, the filled one's outline, drawn over it in the shade (`TrendColumn`, where gold and
+   green were under 3:1). `parseColor` reads hex and `rgb()`, not names: a colour from code is
+   hex (the benefit model's trophy was `'gold'`).
 10. **Headings**: `WebPartTitle` is the web part's `h2`; a section inside is an `h3`
     (`WebPartTitle headingLevel={3}`, as the project information's parent projects). Panels and
     dialogs take their heading from `DrawerHeaderTitle` and `DialogTitle`. Name and value pairs
@@ -204,7 +207,10 @@ checked by hand and with which reader and browser: axe finds only part of what W
   `list`). Put a `<button>` in the `li` (`ProjectPhases/ProjectPhase`).
 - A `Popover` with controls in it needs `trapFocus`. Without it the surface sits in a portal at the
   end of the page, and Tab from its last control went to the top of the page, leaving the popover
-  open. With it, Fluent names the surface a dialog: name it (`aria-labelledby` its heading).
+  open. With it, Fluent names the surface a dialog: name it (`aria-labelledby` its heading). A
+  popover with no control in it (a gauge, a text) leaves the focus on its trigger, and nothing is
+  heard to open: `tabIndex={-1}` on `PopoverSurface` makes Fluent focus the surface, named and
+  described by what it shows (`InstrumentColumn`).
 - A button that cannot be used yet but explains why in its `title` is `disabledFocusable`, not
   `disabled` (`Toolbar` does so for every disabled item since #1788): a disabled button is skipped by the keyboard and its reason never reached. It also
   keeps the focus while an action it started runs (the change-phase dialog's statuses).
@@ -235,7 +241,13 @@ checked by hand and with which reader and browser: axe finds only part of what W
 - Content only in a tooltip is out of the keyboard's reach: make the trigger focusable (the
   tooltip then shows on focus) and give the content as its description, `aria-describedby` a
   hidden copy, with the tooltip's `relationship='inaccessible'` so it is not read twice
-  (`MatrixElement`).
+  (`MatrixElement`). Where the tooltip holds the name only, the focus is enough: several people
+  in a `UserColumn` cell, the project cards' people, phase and type. In the hub's grid such
+  stops are reached by the arrow keys, not Tab. Give them a `:focus-visible` outline.
+- A description that points at an element named by `aria-label` (a drawing's `img`) comes out
+  without it under Testing Library: `dom-accessibility-api` uses a referenced `aria-label` for
+  names only. Put the text in a hidden element that both names the drawing (`aria-labelledby`)
+  and describes the surface (`InstrumentColumn`).
 - `react-calendar-timeline` 0.28 has no keyboard handling and no roles, but it draws each item
   with our `itemRenderer` and hands its scroll area (`.rct-scroll`) to `scrollRef`: that is where
   roles, names and keys go (`ProjectTimeline/Timeline/useItemRenderer.tsx`, `useTimeline.ts`).

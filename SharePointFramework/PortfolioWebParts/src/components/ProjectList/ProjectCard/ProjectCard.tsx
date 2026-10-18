@@ -43,10 +43,12 @@ export const ProjectCard: FC = (props) => {
               relationship='inaccessible'
               withArrow
             >
-              {/* The phase's first letter to the eye, its name to a screen reader. */}
+              {/* The phase's first letter to the eye, its name to a screen reader; it takes the
+                  focus, so the tooltip with the name shows to the keyboard too (WCAG 2.1.1). */}
               <div
                 className={styles.phaseBadge}
                 role='img'
+                tabIndex={0}
                 aria-label={format(strings.NameValueLabel, strings.PhaseLabel, phase)}
               >
                 {phase === strings.NotSet ? <DismissCircle20Regular /> : phase.slice(0, 1)}

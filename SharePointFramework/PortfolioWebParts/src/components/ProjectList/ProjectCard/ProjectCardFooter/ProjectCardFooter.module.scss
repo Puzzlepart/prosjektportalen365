@@ -8,6 +8,11 @@
     .avatar:hover {
       filter: brightness(0.9);
     }
+
+    .avatar:focus-visible {
+      outline: 2px solid var(--colorStrokeFocus2);
+      outline-offset: 1px;
+    }
   }
 
   .action {
@@ -41,5 +46,9 @@
 
   .templateTag:hover {
     background-color: var(--colorNeutralBackground3Hover);
+  }
+
+  .templateTag:focus-visible {
+    outline: 2px solid var(--colorStrokeFocus2);
   }
 }

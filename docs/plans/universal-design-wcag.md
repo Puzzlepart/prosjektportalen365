@@ -830,3 +830,39 @@ Tests first: the new names in `usePortfolioSelector.test.ts` and `useViewSelecto
 the hidden warning in the new `ViewFormPanel.test.tsx`, failed on the old code and pass; the
 other test in that file, the warning shown for a shared view, is a guard that passed before.
 `PortfolioOverview.test.tsx` finds the view selector by its new name.
+
+### Slice 4, part 5 — The aggregated overview, and the hub's cells (2026-10-18)
+
+The aggregated overview renders the hub's `List`, so part 3's fixes are its own. Its forms are
+like the overview's: labelled, required fields marked, a save error a message bar. What was left:
+
+- **The view selector** was named by the view alone; it adds what it selects, as the overview's.
+- **The cells** noted in slice 1, «with the views that use them»:
+  - `TrendColumn`: the icon's colour must reach 3:1 against the row's faintest background (white,
+    about `#f2f2f2` when hovered or selected). Gold reached 1.25:1, green 2.6:1. An icon under 3:1
+    is framed: the regular icon, which is the filled one's outline, is drawn over it in
+    `getContrastingShade` of its colour (`#a38a00`, `#24a058`), so the colour stays; red reaches
+    3.4:1 and is drawn as before. `BenefitMeasurement` gave the gold as `'gold'`, which
+    `parseColor` cannot read; it is `#ffd700`.
+  - `UserColumn` with several people showed their names only in tooltips on hover. Each picture
+    takes the focus (an arrow stop in the hub's grid, whose Tabster grid navigation keeps them off
+    the Tab sequence), so its tooltip shows to the keyboard; the `title` beside the tooltip, a
+    second, native one, is gone.
+  - `InstrumentColumn`: the gauge is a drawing with no text alternative; it is an `img` named by
+    «Siste måling 30, startverdi 10, målverdi 50» (`Aria.InstrumentGaugeLabel`). The popover held
+    no control, so the focus stayed on the link and a screen reader heard nothing open; with
+    `tabIndex={-1}` on the surface Fluent focuses the surface, and `trapFocus` keeps it there
+    until Escape gives it back. It is named by the indicator (or the column) and described by the
+    gauge's text and the unit, from one hidden text: `dom-accessibility-api`, which Testing
+    Library computes descriptions with, leaves out a referenced `aria-label`. Its arc still runs
+    from red to green; the values are in text.
+- **The project cards** had the same tooltip-only text: the people, the phase and the type. They
+  take the focus too, with a focus outline.
+- Noted: the forms show category and level as disabled fields, and «Slett» is disabled for the
+  title column with no reason given.
+
+Tests first: the view selector's name in `useToolbarItems.test.tsx`, the edge in
+`TrendColumn.test.tsx`, the measurable gold in `BenefitMeasurement.test.ts`, the people in
+`UserColumn.test.tsx`, the card's markers in `ProjectList.test.tsx` and both tests in the new
+`InstrumentColumn.test.tsx` failed on the old code and pass. The trophy's colour in the benefit
+test changed with the hex.

@@ -161,7 +161,7 @@ describe('ProjectList', () => {
     expect(open.isConnected).toBe(true)
   })
 
-  it("names a card's people by their role, its phase and its type, with no role of their own on the pictures (WCAG 1.1.1, 4.1.2)", async () => {
+  it("names a card's people by their role, its phase and its type, with no role of their own on the pictures, and lets the keyboard reach them (WCAG 1.1.1, 2.1.1, 4.1.2)", async () => {
     renderList(
       {
         projects: [
@@ -198,6 +198,15 @@ describe('ProjectList', () => {
     // The type was a button that did nothing.
     expect(screen.getByRole('img', { name: /\(Standardmal\)$/ })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Standardmal' })).toBeNull()
+    // Each shows its text only in a tooltip, which shows on focus as well as under the pointer.
+    for (const name of [
+      format(strings.NameValueLabel, 'Prosjekteier', 'Kari Nordmann'),
+      format(strings.NameValueLabel, 'Prosjektleder', 'Ola Nordmann'),
+      format(strings.NameValueLabel, strings.PhaseLabel, 'Gjennomføring'),
+      /\(Standardmal\)$/
+    ]) {
+      expect(screen.getByRole('img', { name })).toHaveAttribute('tabindex', '0')
+    }
   })
 
   it('names the panel button once, and the link to the project by the project (WCAG 2.4.4, 4.1.2)', async () => {

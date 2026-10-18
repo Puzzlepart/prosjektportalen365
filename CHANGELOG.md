@@ -46,6 +46,8 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Universell utforming (#1788): i `Siste prosjekter` leses prosjektene som en liste, hvert prosjekt én gang, og «Vis flere» sier om flere prosjekter vises
 - Universell utforming (#1788): i `Porteføljeoversikt` og `Aggregert oversikt` sier kolonnetoppene at de åpner en meny og får fokus tilbake når den lukkes, antall treff leses opp, og i «Vis eller skjul kolonner» kan kolonnene flyttes med tastatur, med knapper som heter etter kolonnen og instruksjoner og beskjeder på norsk
 - Universell utforming (#1788): i `Porteføljeoversikt` sier visnings- og porteføljevelgeren hva de velger, og visningsskjemaet leser ikke lenger opp advarselen om standardvisning når den ikke vises
+- Universell utforming (#1788): i `Aggregert oversikt` sier visningsvelgeren hva den velger. I `Porteføljeoversikt` og `Aggregert oversikt` når tastaturet hver av flere personer i én celle, så navnet vises; instrumentet har tekst og tar fokus når det åpnes; og trendikonene i gull og grønt har fått en kant i en mørkere tone, så de skiller seg nok fra raden
+- Universell utforming (#1788): i `Prosjektutlisting` kan personene, fasen og prosjekttypen på kortene nås med tastaturet, så verktøytipset vises
 
 ### Feilrettinger
 

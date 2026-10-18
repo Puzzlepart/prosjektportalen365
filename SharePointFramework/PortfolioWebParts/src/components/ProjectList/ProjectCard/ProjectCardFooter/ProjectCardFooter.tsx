@@ -49,7 +49,8 @@ export const ProjectCardFooter: FC = () => {
     >
       <div className={styles.persona}>
         <div hidden={!context.shouldDisplay('PrimaryUserField')}>
-          {/* The picture is named by the role and the name, which the tooltip shows the pointer. */}
+          {/* The picture is named by the role and the name, which the tooltip shows the pointer, and
+              the keyboard too: what shows only in a tooltip takes the focus (WCAG 2.1.1). */}
           <Tooltip
             content={
               <>
@@ -59,7 +60,7 @@ export const ProjectCardFooter: FC = () => {
             relationship='inaccessible'
             withArrow
           >
-            <Avatar className={styles.avatar} {...primaryUser.avatar} />
+            <Avatar className={styles.avatar} tabIndex={0} {...primaryUser.avatar} />
           </Tooltip>
         </div>
         <div hidden={!context.shouldDisplay('SecondaryUserField')}>
@@ -72,7 +73,7 @@ export const ProjectCardFooter: FC = () => {
             relationship='inaccessible'
             withArrow
           >
-            <Avatar className={styles.avatar} {...secondaryUser.avatar} />
+            <Avatar className={styles.avatar} tabIndex={0} {...secondaryUser.avatar} />
           </Tooltip>
         </div>
       </div>
@@ -90,6 +91,7 @@ export const ProjectCardFooter: FC = () => {
           <span
             className={styles.templateTag}
             role='img'
+            tabIndex={0}
             aria-label={format(
               strings.ProjectTypeIconLabel,
               projectTypeText,

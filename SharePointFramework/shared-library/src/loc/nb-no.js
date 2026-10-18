@@ -7,6 +7,7 @@ define([], function () {
     CloseText: 'Lukk',
     Aria: {
       InfoLabelTitle: 'Informasjon om {0}',
+      InstrumentGaugeLabel: 'Siste måling {0}, startverdi {1}, målverdi {2}',
       MenuOverflowCount: '{0} flere elementer',
       ProjectTitle: 'Logo for prosjekt: {0}',
       SaveTitle: 'Lagre',

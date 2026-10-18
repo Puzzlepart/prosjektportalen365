@@ -1,3 +1,4 @@
+import { parseColor } from 'pp365-shared-library'
 import { BenefitMeasurement } from './BenefitMeasurement'
 
 /**
@@ -56,7 +57,7 @@ describe('BenefitMeasurement', () => {
     const previous = measurement('150').calculcateAchievement(INDICATOR)
     expect(
       measurement('200').calculcateAchievement(INDICATOR).setTrendIcon(previous).TrendIcon
-    ).toEqual({ iconName: 'Trophy', color: 'gold' })
+    ).toEqual({ iconName: 'Trophy', color: '#ffd700' })
     expect(
       measurement('180').calculcateAchievement(INDICATOR).setTrendIcon(previous).TrendIcon.iconName
     ).toBe('CaretUp')
@@ -66,5 +67,15 @@ describe('BenefitMeasurement', () => {
     expect(
       measurement('150').calculcateAchievement(INDICATOR).setTrendIcon(previous).TrendIcon
     ).toBeUndefined()
+  })
+
+  it('gives each trend a colour the cell can measure, to frame one that stands out too little', () => {
+    const previous = measurement('150').calculcateAchievement(INDICATOR)
+    for (const value of ['200', '180', '120']) {
+      const icon = measurement(value)
+        .calculcateAchievement(INDICATOR)
+        .setTrendIcon(previous).TrendIcon
+      expect(parseColor(icon.color)).toBeDefined()
+    }
   })
 })

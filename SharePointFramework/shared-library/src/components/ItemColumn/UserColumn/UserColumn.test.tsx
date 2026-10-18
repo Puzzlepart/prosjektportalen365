@@ -34,4 +34,14 @@ describe('UserColumn', () => {
     expect(screen.getByRole('img', { name: 'Ola Nordmann' })).toBeInTheDocument()
     expect(await axeComponent(container)).toHaveNoViolations()
   })
+
+  it('lets the keyboard reach each of several people, whose names show only in a tooltip (WCAG 2.1.1)', () => {
+    render(<UserColumn columnValue='Kari Nordmann;Ola Nordmann' column={column('GtProjectTeam')} />)
+    for (const name of ['Kari Nordmann', 'Ola Nordmann']) {
+      const person = screen.getByRole('img', { name })
+      // The tooltip shows on focus; a title as well showed the browser's own beside it.
+      expect(person).toHaveAttribute('tabindex', '0')
+      expect(person).not.toHaveAttribute('title')
+    }
+  })
 })

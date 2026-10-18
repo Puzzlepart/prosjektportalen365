@@ -7,6 +7,7 @@ declare interface ISharedLibraryStrings {
   CloseText: string
   Aria: {
     InfoLabelTitle: string
+    InstrumentGaugeLabel: string
     MenuOverflowCount: string
     ProjectTitle: string
     SaveTitle: string
