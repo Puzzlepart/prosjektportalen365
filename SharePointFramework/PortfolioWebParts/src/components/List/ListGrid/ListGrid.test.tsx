@@ -102,4 +102,26 @@ describe('ListGrid', () => {
     const { container } = render(grid({ className: 'programGrid' }))
     expect(container.firstElementChild).toHaveClass('programGrid')
   })
+
+  it('says that a column header opens a menu, marks it for the focus to come back to, and that a group spans its row (WCAG 1.3.1, 2.4.3, 4.1.2)', () => {
+    render(grid({ onColumnHeaderClick: jest.fn(), headerOpensMenu: true, groups: GROUPS }))
+    const header = screen.getByText('Tittel').closest('[role="button"], button')
+    expect(header).toHaveAttribute('aria-haspopup', 'menu')
+    // The menu opens from state, with no trigger of Fluent's to give the focus back to.
+    expect(header.getAttribute('data-tabster')).toContain('"restorer"')
+    // Named by its tooltip, not by a title of the same text as well.
+    const all = screen.getByRole('button', { name: strings.ListCollapseAllGroupsLabel })
+    expect(all).not.toHaveAttribute('title')
+    expect(screen.getByText('Hub 1').closest('[role="gridcell"]')).toHaveAttribute(
+      'aria-colspan',
+      String(COLUMNS.length + 1)
+    )
+  })
+
+  it('leaves a header that sorts as a plain button', () => {
+    render(grid({ onColumnHeaderClick: jest.fn() }))
+    expect(screen.getByText('Tittel').closest('[role="button"], button')).not.toHaveAttribute(
+      'aria-haspopup'
+    )
+  })
 })

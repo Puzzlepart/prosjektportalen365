@@ -178,6 +178,18 @@ checked by hand and with which reader and browser: axe finds only part of what W
   labels are `Tag`s with `role='listitem'` in a `TagGroup role='list'` (`OverflowTagMenu`).
 - `MenuTrigger` puts `aria-haspopup` and `aria-expanded` on its child. Around an `InteractionTag`
   that is the tag's `div`, not the button inside it: wrap the `InteractionTagPrimary`.
+- Spreading a data object onto a Fluent component passes its every key as a prop: the project
+  list's people carried `role` (the field's internal name) from the data adapter, and every
+  `Avatar` got `role="GtProjectManager"`, axe's critical `aria-roles` 36 times. Pick the props.
+- `@hello-pangea/dnd` announces drags and explains its handles in English: give
+  `DragDropContext` `dragHandleUsageInstructions` from the strings and announce through the
+  responders' `provided.announce` (`EditViewColumnsPanel`). A control shown only on `:hover` is out
+  of the keyboard's reach, `display: none` taking it from the tab order: show it on
+  `:focus-within` too.
+- A link inside a `MenuItem` is out of the keyboard's reach: the item takes the focus and does
+  nothing on Enter. Use `MenuItemLink` with `href` (`ProjectMenu`).
+- A button with a `title` and a `Tooltip` of the same text as its description is read twice:
+  give the tooltip `relationship='label'` and drop the title (the project card's panel button).
 - Fluent's `Avatar` is an `img` named by its `name`, so beside the same name in text a screen
   reader reads the name twice: `aria-hidden` there; alone, it keeps its name. Fluent's `Persona`
   does not hide its own: pass `avatar={{ 'aria-hidden': true, … }}` (`ProjectProperty`,

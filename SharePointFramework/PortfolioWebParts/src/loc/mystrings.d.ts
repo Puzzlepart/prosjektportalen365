@@ -321,6 +321,18 @@ declare interface IPortfolioWebPartsStrings {
   ListSelectGroupLabel: string
   ListCollapseAllGroupsLabel: string
   ListExpandAllGroupsLabel: string
+  NameValueLabel: string
+  ProjectTypeIconLabel: string
+  MoreVerticalsLabel: string
+  ProjectsShownAnnouncement: string
+  RenderModeButtonLabel: string
+  MoveColumnUp: string
+  MoveColumnDown: string
+  ColumnMovedAnnouncement: string
+  ColumnLiftedAnnouncement: string
+  ColumnDragPositionAnnouncement: string
+  ColumnDropCancelledAnnouncement: string
+  DragHandleInstructions: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

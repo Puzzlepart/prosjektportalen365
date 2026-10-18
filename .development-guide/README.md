@@ -1954,14 +1954,14 @@ Testene går i `e2e/tests/smoke/a11y-baseline.spec.ts`, `risk-action.spec.ts` og
 
 | Komponent | axe | Gjennomgått | Tastatur | Skjermleser | Visuelt | Skjema | Merknad |
 |---|---|---|---|---|---|---|---|
-| Prosjektutlisting | aria-roles 36 (kritisk), link-name 5–7 |  |  |  |  |  | Ugyldige roller på avatarene, lenker uten tekst på prosjektkortene |
-| Siste prosjekter | Ingen |  |  |  |  |  |  |
-| Porteføljeoversikt | Ingen |  |  |  |  |  |  |
+| Prosjektutlisting | aria-roles 36 (kritisk), link-name 5–7 |  |  |  |  |  | Rettet: avatarene fikk feltets interne navn som ARIA-rolle (`role="GtProjectManager"`, de 36 kritiske); nå er de bilder med navn og rolle («Prosjektleder: Kari Nordmann») på kortene, og skjult ved navnet i listevisningen. Lenken til prosjektet på kortet har navn (logoen er tom mens den lastes, de 5–7 `link-name`), og ved siden av tittellenken er den bare for musen. Fasemerket og prosjekttypen er bilder med navn (typen var en knapp som ikke gjorde noe, fasen bare en bokstav); knappen for prosjektinformasjon leses én gang. Hurtigmenyen var lenker inni menyvalg, som tastaturet ikke nådde; nå er menyvalgene lenkene. Fanen for flere utvalg heter «3 flere utvalg» (ikke «+3»), prosjektene er utvalgsfanens panel, visningsknappen heter «Kort, visningsmodus», og et søk leser opp hvor mange som vises. Kortene ble laget på nytt ved hver endring i listen, så fokus mistet knappen den kom fra (rettet med prosjektinformasjonspanelet) |
+| Siste prosjekter | Ingen |  |  |  |  |  | Rettet: prosjektene er en liste navngitt etter webdelens tittel, logoen ved lenken leses ikke opp (prosjektet ble lest to ganger), og «Vis flere» sier om flere vises |
+| Porteføljeoversikt | Ingen |  |  |  |  |  | Del 1 rettet: en kolonnetopp sier at den åpner en meny, og fokus går tilbake til den når menyen eller et panel den åpnet lukkes; en gruppe sier at den spenner over raden, og knappen for alle grupper leses én gang. Antall treff («Viser 10 av 42») leses opp når søk, filter eller lasting endrer det. I «Vis eller skjul kolonner» viser raden fokus, flytteknappene vises når fokus er i raden (før bare under musen, så tastaturet nådde dem ikke), heter etter kolonnen («Flytt Tittel opp»), er fokuserbare med grunnen når flyttet ikke kan gjøres, og leser opp hvor kolonnen havnet; dra med tastaturet har instruksjoner og kunngjøringer på norsk (biblioteket sa dem på engelsk). Del 2: skjemaene for kolonne og visning og verktøylinjen |
 | Aggregert oversikt | Ingen |  |  |  |  |  |  |
 | Prosjekttidslinje (portefølje) | color-contrast 8, scrollable-region-focusable 1 |  |  |  |  |  | Ingen liste ved siden av (egen sak). Rettet i bibliotekets tidslinje: elementene kan åpnes med tastaturet, tidslinjen rulles med piltastene, og søylene, teksten og milepælene har nok kontrast |
 | Ressursallokering | aria-progressbar-name 1 |  |  |  |  |  | Ingen liste ved siden av (egen sak). Rettet i bibliotekets tidslinje: elementene kan åpnes med tastaturet, tidslinjen rulles med piltastene, og teksten har nok kontrast. Søylene, som blekner med allokeringen, tas i PortfolioWebParts-delen |
 | Idémodul | Ingen |  |  |  |  |  |  |
-| Prosjektkort | Ikke målt |  |  |  |  |  |  |
+| Prosjektkort | Ikke målt |  |  |  |  |  | Samme kort som i Prosjektutlisting, rettet der: personene, fasen, prosjekttypen, knappen for prosjektinformasjon og hurtigmenyen. Fokus går tilbake til knappen når panelet lukkes |
 
 ### PortfolioExtensions
 

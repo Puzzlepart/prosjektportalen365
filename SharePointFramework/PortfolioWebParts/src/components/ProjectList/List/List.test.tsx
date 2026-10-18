@@ -91,4 +91,21 @@ describe('ProjectList list view', () => {
     expect(screen.queryByText(strings.PhaseLabel)).toBeNull()
     expect(screen.getByText(strings.TitleLabel)).toBeInTheDocument()
   })
+
+  it('reads each person and the project once, with no role of their own on the pictures (WCAG 1.1.1, 4.1.2)', () => {
+    // The data adapter gives each person the field's internal name as `role`.
+    renderList([
+      project('Alfa', {
+        primaryUser: { name: 'Kari Nordmann', role: 'GtProjectOwner' },
+        secondaryUser: { name: 'Ola Nordmann', role: 'GtProjectManager' }
+      })
+    ])
+    expect(
+      document.querySelectorAll('[role="GtProjectOwner"], [role="GtProjectManager"]')
+    ).toHaveLength(0)
+    // The picture beside the name, and the logo beside the title, are not read again.
+    expect(screen.queryByRole('img', { name: 'Kari Nordmann' })).toBeNull()
+    expect(screen.queryByRole('img', { name: /Alfa/ })).toBeNull()
+    expect(screen.getByRole('link', { name: 'Alfa' })).toBeInTheDocument()
+  })
 })

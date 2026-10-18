@@ -6,6 +6,7 @@ jest.mock('pp365-projectwebparts/lib/components/ProjectInformationPanel', () => 
 
 import { render, screen } from '@testing-library/react'
 import strings from 'PortfolioWebPartsStrings'
+import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import { ProjectCard } from './ProjectCard'
 
@@ -45,7 +46,11 @@ describe('ProjectCard', () => {
     )
     // The title text only shows once a custom image has loaded; the phase badge and the people
     // are what prove the card is there.
-    expect(await screen.findByTitle('Konsept')).toBeInTheDocument()
+    expect(
+      await screen.findByRole('img', {
+        name: format(strings.NameValueLabel, strings.PhaseLabel, 'Konsept')
+      })
+    ).toBeInTheDocument()
     expect(dataAdapter.fetchEnrichedProject).toHaveBeenCalledWith('site-1', undefined)
     expect(screen.getAllByRole('link')[0]).toHaveAttribute('href', '/sites/alfa')
   })
@@ -60,7 +65,7 @@ describe('ProjectCard', () => {
       />
     )
     // Fluent's drawer gives the focus back only to an element marked as its restore target.
-    const open = await screen.findByTitle(strings.ProjectInformationPanelButton)
+    const open = await screen.findByRole('button', { name: strings.ProjectInformationPanelButton })
     expect(open.getAttribute('data-tabster')).toContain('"restorer"')
   })
 

@@ -1,5 +1,4 @@
 .root {
-
   .columnItem {
     display: flex;
     flex-direction: row;
@@ -13,6 +12,20 @@
     &:hover {
       background-color: var(--colorBrandBackground2);
 
+      .columnItemActions {
+        display: flex;
+      }
+    }
+
+    // The row is the drag handle the keyboard lifts with space: its focus shows (WCAG 2.4.7),
+    // and so do its move buttons while the focus is in it, the way to them without a pointer.
+    &:focus-visible {
+      outline: var(--strokeWidthThick) solid var(--colorStrokeFocus2);
+      outline-offset: 1px;
+      border-radius: var(--borderRadiusMedium);
+    }
+
+    &:focus-within {
       .columnItemActions {
         display: flex;
       }

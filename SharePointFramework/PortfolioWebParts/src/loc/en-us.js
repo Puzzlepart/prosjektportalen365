@@ -326,6 +326,18 @@ define([], function () {
     ListSelectRowLabel: 'Select row',
     ListSelectGroupLabel: 'Select all in {0}',
     ListCollapseAllGroupsLabel: 'Collapse all groups',
-    ListExpandAllGroupsLabel: 'Expand all groups'
+    ListExpandAllGroupsLabel: 'Expand all groups',
+    NameValueLabel: '{0}: {1}',
+    ProjectTypeIconLabel: '{0} ({1})',
+    MoreVerticalsLabel: '{0} more selections',
+    ProjectsShownAnnouncement: 'Showing {0} of {1} projects',
+    RenderModeButtonLabel: '{0}, display mode',
+    MoveColumnUp: 'Move {0} up',
+    MoveColumnDown: 'Move {0} down',
+    ColumnMovedAnnouncement: '{0} moved to position {1} of {2}',
+    ColumnLiftedAnnouncement: '{0} lifted from position {1}. Move it with the arrow keys',
+    ColumnDragPositionAnnouncement: 'Position {0} of {1}',
+    ColumnDropCancelledAnnouncement: '{0} returned to position {1}',
+    DragHandleInstructions: 'Press space to lift the column, the arrow keys to move it and space again to drop it. Escape cancels.'
   }
 })

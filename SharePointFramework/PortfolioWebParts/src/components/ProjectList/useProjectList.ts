@@ -1,7 +1,9 @@
-import { ButtonProps, useId } from '@fluentui/react-components'
+import { ButtonProps, useAnnounce, useId } from '@fluentui/react-components'
 import strings from 'PortfolioWebPartsStrings'
+import { format } from 'pp365-shared-library'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
 import { sortAlphabetically } from 'pp365-shared-library/lib/util/sortAlphabetically'
+import { useEffect, useRef } from 'react'
 import _ from 'underscore'
 import { IProjectCardContext } from './ProjectCard/context'
 import { IProjectListProps } from './types'
@@ -9,8 +11,14 @@ import { useProjectListDataFetch } from './useProjectListDataFetch'
 import { useProjectListState } from './useProjectListState'
 
 /**
+ * How long a search waits after the last keystroke before it tells how many projects it shows.
+ */
+const SEARCH_ANNOUNCE_DELAY = 500
+
+/**
  * Component logic hook for `ProjectList`. Handles data fetching,
- * sorting, filtering and card actions.
+ * sorting, filtering and card actions. A search tells how many of the selection's projects it
+ * shows, once the user stops typing (WCAG 4.1.3).
  *
  * Verticals are built synchronously from `props.verticalConfigs`
  * in `useProjectListState`.
@@ -26,8 +34,7 @@ export const useProjectList = (props: IProjectListProps) => {
     return [
       {
         id: 'showProjectInfo',
-        onClick: (event: React.MouseEvent<any>) => onExecuteCardAction(event, project),
-        title: strings.ProjectInformationPanelButton
+        onClick: (event: React.MouseEvent<any>) => onExecuteCardAction(event, project)
       }
     ]
   }
@@ -42,11 +49,15 @@ export const useProjectList = (props: IProjectListProps) => {
     }
   }
 
+  /** The projects of the selected vertical, before the search. */
+  function inVertical(projects: ProjectListModel[]) {
+    return projects.filter((project) =>
+      state.selectedVertical?.filter ? state.selectedVertical.filter(project, state) : true
+    )
+  }
+
   function filterProjects(projects: ProjectListModel[]) {
-    return projects
-      .filter((project) =>
-        state.selectedVertical?.filter ? state.selectedVertical.filter(project, state) : true
-      )
+    return inVertical(projects)
       .filter((project) =>
         _.any(Object.keys(project), (key) => {
           let value = null
@@ -76,6 +87,23 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   const projects = state.isDataLoaded ? filterProjects(state.projects) : state.projects
+
+  const { announce } = useAnnounce()
+  const isFirstSearch = useRef(true)
+  useEffect(() => {
+    if (isFirstSearch.current) {
+      isFirstSearch.current = false
+      return
+    }
+    if (!state.isDataLoaded) return
+    const shown = projects.length
+    const total = inVertical(state.projects).length
+    const timer = setTimeout(
+      () => announce(format(strings.ProjectsShownAnnouncement, shown, total), { polite: true }),
+      SEARCH_ANNOUNCE_DELAY
+    )
+    return () => clearTimeout(timer)
+  }, [state.searchTerm])
 
   const shouldDisplay = (key: string) => _.contains(props.projectMetadata, key)
 

@@ -1,4 +1,5 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import userEvent from '@testing-library/user-event'
 import strings from 'PortfolioWebPartsStrings'
 import * as React from 'react'
@@ -69,5 +70,24 @@ describe('LatestProjects', () => {
   it('tells the same when the fetch fails', async () => {
     renderLatest(new Error('Søket feilet'))
     expect(await screen.findByText(strings.NoProjectsFoundTitle)).toBeInTheDocument()
+  })
+
+  it('lists the projects, each read once, and says whether more are shown (WCAG 1.3.1, 4.1.2)', async () => {
+    const user = userEvent.setup()
+    renderLatest([site('Alfa'), site('Bravo'), site('Charlie')])
+    const list = await screen.findByRole('list', { name: 'Siste prosjekter' })
+    expect(within(list).getAllByRole('listitem')).toHaveLength(2)
+    // The logo beside the link would read the project again.
+    expect(within(list).queryByRole('img', { name: /Alfa/ })).toBeNull()
+    const more = screen.getByRole('button', { name: strings.ViewMoreText })
+    expect(more).toHaveAttribute('aria-expanded', 'false')
+    expect(more).not.toHaveAttribute('title')
+    await user.click(more)
+    expect(screen.getByRole('button', { name: strings.ViewLessText })).toHaveAttribute(
+      'aria-expanded',
+      'true'
+    )
+    expect(within(list).getAllByRole('listitem')).toHaveLength(3)
+    expect(await axeComponent(document.body)).toHaveNoViolations()
   })
 })

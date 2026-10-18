@@ -11,6 +11,7 @@ import {
   bundleIcon
 } from '@fluentui/react-icons'
 import strings from 'PortfolioWebPartsStrings'
+import { format } from 'pp365-shared-library'
 import React, { FC, useContext } from 'react'
 import { ProjectMenu } from '../../ProjectMenu'
 import { ProjectCardContext } from '../context'
@@ -29,10 +30,11 @@ export const ProjectCardFooter: FC = () => {
     <CardFooter
       className={styles.footer}
       action={context.actions.map((action) => (
+        // The tooltip names the button: with the same text as its title too, it was read twice.
         <Tooltip
           key={action.id}
           content={strings.ProjectInformationPanelButton}
-          relationship='description'
+          relationship='label'
           withArrow
         >
           <Button
@@ -47,29 +49,30 @@ export const ProjectCardFooter: FC = () => {
     >
       <div className={styles.persona}>
         <div hidden={!context.shouldDisplay('PrimaryUserField')}>
+          {/* The picture is named by the role and the name, which the tooltip shows the pointer. */}
           <Tooltip
             content={
               <>
-                <strong>{primaryUser.role}</strong>: {primaryUser.name || strings.NotSet}
+                <strong>{primaryUser.role}</strong>: {primaryUser.name}
               </>
             }
-            relationship='description'
+            relationship='inaccessible'
             withArrow
           >
-            <Avatar className={styles.avatar} {...primaryUser} />
+            <Avatar className={styles.avatar} {...primaryUser.avatar} />
           </Tooltip>
         </div>
         <div hidden={!context.shouldDisplay('SecondaryUserField')}>
           <Tooltip
             content={
               <>
-                <strong>{secondaryUser.role}</strong>: {secondaryUser.name || strings.NotSet}
+                <strong>{secondaryUser.role}</strong>: {secondaryUser.name}
               </>
             }
-            relationship='description'
+            relationship='inaccessible'
             withArrow
           >
-            <Avatar className={styles.avatar} {...secondaryUser} />
+            <Avatar className={styles.avatar} {...secondaryUser.avatar} />
           </Tooltip>
         </div>
       </div>
@@ -80,15 +83,21 @@ export const ProjectCardFooter: FC = () => {
               <strong>{projectTypeText}</strong> ({context.project?.template})
             </>
           }
-          relationship='description'
+          relationship='inaccessible'
           withArrow
         >
-          <Button
+          {/* An image named by the type, where a button did nothing (WCAG 4.1.2). */}
+          <span
             className={styles.templateTag}
-            appearance='subtle'
-            icon={<ProjectTypeIcon />}
-            title={context.project?.template}
-          />
+            role='img'
+            aria-label={format(
+              strings.ProjectTypeIconLabel,
+              projectTypeText,
+              context.project?.template
+            )}
+          >
+            <ProjectTypeIcon />
+          </span>
         </Tooltip>
         <ProjectMenu
           project={context.project}

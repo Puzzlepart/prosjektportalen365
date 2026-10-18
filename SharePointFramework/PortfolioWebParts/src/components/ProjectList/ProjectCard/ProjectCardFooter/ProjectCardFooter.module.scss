@@ -25,13 +25,18 @@
     right: 56px;
   }
 
+  // The project's type: an image with the look of the subtle icon button it was.
   .templateTag {
-    cursor: default !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
+    border-radius: var(--borderRadiusMedium);
+    color: var(--colorNeutralForeground2);
+    cursor: default;
     background-color: var(--colorNeutralBackground3);
-
-    button {
-      cursor: default !important;
-    }
   }
 
   .templateTag:hover {

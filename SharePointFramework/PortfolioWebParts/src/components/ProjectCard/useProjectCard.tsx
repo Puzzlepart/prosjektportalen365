@@ -6,7 +6,6 @@ import { useProjectCardDataFetch } from './useProjectCardDataFetch'
 import _ from 'underscore'
 import { IProjectCardContext } from './context'
 import { ProjectListModel } from 'pp365-shared-library'
-import strings from 'PortfolioWebPartsStrings'
 
 /**
  * Component logic hook for `ProjectCard` component.
@@ -28,8 +27,7 @@ export function useProjectCard(props: IProjectCardProps) {
       {
         id: 'showProjectInfo',
         onClick: (event: React.MouseEvent<any>) => onExecuteCardAction(event, project),
-        disabled: !project || !project.url || project.url === '#',
-        title: strings.ProjectInformationPanelButton
+        disabled: !project || !project.url || project.url === '#'
       }
     ]
   }

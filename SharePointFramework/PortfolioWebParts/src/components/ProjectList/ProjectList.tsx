@@ -18,7 +18,13 @@ import {
 import { MoreHorizontalRegular } from '@fluentui/react-icons'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
-import { SiteContext, UserMessage, customLightTheme, withDefaults } from 'pp365-shared-library'
+import {
+  SiteContext,
+  UserMessage,
+  customLightTheme,
+  format,
+  withDefaults
+} from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { find, isEmpty } from 'underscore'
 import styles from './ProjectList.module.scss'
@@ -53,7 +59,14 @@ const OverflowMenu: FC<{
   return (
     <Menu>
       <MenuTrigger disableButtonEnhancement>
-        <Tab ref={ref} role='tab' value='overflow-menu' icon={<MoreHorizontalRegular />}>
+        {/* «+3» said what it holds: «3 flere utvalg». */}
+        <Tab
+          ref={ref}
+          role='tab'
+          value='overflow-menu'
+          icon={<MoreHorizontalRegular />}
+          aria-label={format(strings.MoreVerticalsLabel, overflowCount)}
+        >
           +{overflowCount}
         </Tab>
       </MenuTrigger>
@@ -224,7 +237,12 @@ export const ProjectList: FC<IProjectListProps> = (incomingProps) => {
                         const Icon = vertical.icon
                         return (
                           <OverflowItem key={vertical.key} id={String(vertical.key)}>
-                            <Tab key={vertical.key} value={vertical.value} icon={<Icon />}>
+                            <Tab
+                              key={vertical.key}
+                              id={`${context.fluentProviderId}-tab-${vertical.key}`}
+                              value={vertical.value}
+                              icon={<Icon />}
+                            >
                               {vertical.text}
                             </Tab>
                           </OverflowItem>
@@ -263,7 +281,14 @@ export const ProjectList: FC<IProjectListProps> = (incomingProps) => {
                 />
               </div>
             )}
-            <div className={styles.projects}>{renderProjects(context.projects)}</div>
+            {/* The projects are what the selection's tab shows (WCAG 1.3.1). */}
+            <div
+              className={styles.projects}
+              role='tabpanel'
+              aria-labelledby={`${context.fluentProviderId}-tab-${context.state.selectedVertical?.key}`}
+            >
+              {renderProjects(context.projects)}
+            </div>
             <ProjectInformationPanel
               {...SiteContext.create(
                 props.spfxContext,

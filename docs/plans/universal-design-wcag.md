@@ -743,3 +743,71 @@ now carries `trapFocus` and the surface's name, as Fluent does) and one in
 `PlannerTaskItemProperty.test.tsx` failed on the old code and pass. ProjectExtensions' 23 test
 files pass. Slice 3 is done but for the hand rounds.
 
+### Slice 4, part 1 — The project list and its cards (2026-10-16)
+
+- **`aria-roles` 36 (critical)**: the data adapter gives each person the field's internal name as
+  `role` (`createUserPersona`), and the cards' footer and the list view spread the person onto
+  `Avatar`, so every picture had `role="GtProjectOwner"` or `role="GtProjectManager"`. The cards
+  name the picture by the role and the person («Prosjektleder: Kari Nordmann», which only a
+  tooltip on hover told before); the list view hides it beside the name it shows.
+- **`link-name` 5–7**: the card's logo link took its name from `ProjectLogo`, which is empty
+  while the logo loads, hence the count that changed between runs. It is named by the project,
+  and beside the title's link to the same page, shown over a custom logo, it is left to the
+  pointer (`aria-hidden`, `tabIndex -1`). The list view's logo is hidden beside the title's link.
+- **The card's other parts**: the project type was a subtle button that did nothing; it is an
+  image named by the type and the template. The phase badge showed its first letter; it is an
+  image named «Fase: Konsept». The panel button had the same text as its `title` and its tooltip's
+  description, read twice; the tooltip is its label.
+- **The quick launch menu** (the card's and the list's `ProjectMenu`) put each link inside a
+  `MenuItem`, which takes the focus and did nothing on Enter, so the keyboard could open none of
+  the project's pages; the items are `MenuItemLink`s.
+- **The commands and the selections**: the overflow tab «+3» is named «3 flere utvalg»; the
+  projects are the selected tab's panel; the view mode button, named «Kort» by the mode it shows,
+  is «Kort, visningsmodus» (`setAriaLabel`); a search tells how many of the selection's projects
+  it shows, half a second after the last keystroke.
+- Done with the project information panel (slice 2, part 10): the cards were remade on every
+  render of the list.
+
+Tests first: three new tests in `ProjectList.test.tsx`, one in `List.test.tsx` and a new
+`ProjectMenu.test.tsx` failed on the old code and pass; three tests changed with the intended
+markup (the phase badge, the panel button and the list's logo, found by role, name or wrapper).
+The test of the selections, the view mode button and the search took over five seconds by roles
+under a full run's load; it is two tests now, on selectors, after it had failed on the old code
+as one. PortfolioWebParts' 38 test files and ProgramWebParts' 10 pass.
+
+### Slice 4, part 2 — The latest projects (2026-10-18)
+
+axe found nothing. The projects were `div`s; they are a list named by the web part's title. Each
+project's logo, an image named «Prosjekt: …» beside the link with the project's name, read it
+twice; it is hidden. «Vis flere» says whether the rest are shown (`aria-expanded`) and lost a
+`title` equal to its text. Tests first: the new test in `LatestProjects.test.tsx` failed on the
+old code and passes.
+
+### Slice 4, part 3 — The portfolio overview, part 1: the list and its columns (2026-10-18)
+
+axe found nothing in the baseline. The hub's grid (`ListGrid`, which the aggregated overview and
+the program administration share) was rebuilt on Fluent's `Table` in the migration with a grid's
+roles, arrow keys and named checks. What the audit found:
+
+- **The column headers** open the column menu, but said nothing of it; with `headerOpensMenu`
+  (the hub's, not the program administration's, whose headers sort) they carry
+  `aria-haspopup="menu"` and are marked as Tabster's restore target: the menu opens from state, at
+  the header, with no trigger of Fluent's, so closing it, or a panel it opened (the column form),
+  left the focus nowhere. The expand-all button had the same text as name and title, read twice;
+  its tooltip names it. A group's cell spans the row (`aria-colspan`).
+- **The results count** («Viser 10 av 42») is a `status`, read as a search, a filter or the load
+  changes it.
+- **«Vis eller skjul kolonner»**: a row is the drag handle the keyboard lifts with space, with
+  `outline: 0` and no focus style; it shows its focus. The move buttons showed only on `:hover`,
+  `display: none` otherwise, so the keyboard could not reach the way to move a column without
+  dragging; they show while the focus is in the row. They were named by `title` alone, «Flytt opp»
+  in every row, and `disabled` with their reason in that title; they are «Flytt Tittel opp»,
+  `disabledFocusable` with the reason as title, and a move tells where the column went. The
+  drag-and-drop library's handle instructions and announcements were English; they are the
+  strings' (`dragHandleUsageInstructions`, the responders' `announce`).
+- Part 2: the column and view forms and the toolbar.
+
+Tests first: two tests in `ListGrid.test.tsx` (one a guard that a sorting header stays plain,
+which passed before), one in `ResultsCount.test.tsx` and two in `EditViewColumnsPanel.test.tsx`
+failed on the old code and pass; the move test changed with the buttons' names.
+
