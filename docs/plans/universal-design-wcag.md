@@ -805,9 +805,28 @@ roles, arrow keys and named checks. What the audit found:
   `disabledFocusable` with the reason as title, and a move tells where the column went. The
   drag-and-drop library's handle instructions and announcements were English; they are the
   strings' (`dragHandleUsageInstructions`, the responders' `announce`).
-- Part 2: the column and view forms and the toolbar.
+- Part 2 (below): the column and view forms and the toolbar.
 
 Tests first: two tests in `ListGrid.test.tsx` (one a guard that a sorting header stays plain,
 which passed before), one in `ResultsCount.test.tsx` and two in `EditViewColumnsPanel.test.tsx`
 failed on the old code and pass; the move test changed with the buttons' names.
 
+
+### Slice 4, part 4 — The portfolio overview, part 2: the forms and the toolbar (2026-10-18)
+
+- **The toolbar's selectors** were named by what they showed, «Alle prosjekter» or the
+  portfolio's name, and said nothing of what they choose. They keep that text first (2.5.3) and
+  add their purpose through `ListMenuItem.setAriaLabel`: «Alle prosjekter, Porteføljevisninger»
+  (`SelectorButtonLabel`, `'{0}, {1}'`). The export and filter buttons were named already.
+- **The view form**: the warning that a default view is set sat inside the default view's field,
+  which is `hidden` for a personal view, and a message bar announces itself when it mounts,
+  hidden or not; it was read on every opening. It is rendered only while the field shows.
+- **The column form**: every control is in a `FieldContainer` with label and hint, the required
+  fields are marked, and a save error is a message bar, which announces itself. Nothing to fix.
+  Both forms disable «Lagre» until the required fields are filled (two characters or more in the
+  column form), and those fields are marked; left as it is.
+
+Tests first: the new names in `usePortfolioSelector.test.ts` and `useViewSelector.test.ts`, and
+the hidden warning in the new `ViewFormPanel.test.tsx`, failed on the old code and pass; the
+other test in that file, the warning shown for a shared view, is a guard that passed before.
+`PortfolioOverview.test.tsx` finds the view selector by its new name.

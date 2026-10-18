@@ -43,7 +43,9 @@ Rules 1, 2, 5, 6, 8 and the tooltip handling are adapted from Microsoft's
    starts with that text. An `aria-label` equal to the visible text is noise: drop it. A text
    that does not say what the button does (a count) is no name (2.4.6): a toolbar item takes
    one that holds the text through `ListMenuItem.setAriaLabel` (the dynamic list's export,
-   «Eksporter 3 valgte elementer til Excel»).
+   «Eksporter 3 valgte elementer til Excel»). Nor does a selector's current value: it adds what
+   it selects, `format(strings.SelectorButtonLabel, value, purpose)` («Alle prosjekter,
+   Porteføljevisninger», the portfolio overview's view and portfolio selectors).
 3. **Every input has a label.** In a `FieldContainer` the control takes the field's id, so the label
    names it and a click on the label reaches it; check `for` against `id` in the browser. A slot
    render function passes on what Fluent wired (kodemonster.md, «Render-funksjoner for slots»:
@@ -211,8 +213,9 @@ checked by hand and with which reader and browser: axe finds only part of what W
   jsdom ignores: read the last span's `innerText` in the live region, or a second message reads
   as the first (`ProjectSetupDialog.test.tsx`).
 - A `UserMessage` (Fluent's `MessageBar`) announces itself when it mounts, hidden or not: one in a
-  `hidden` container was read out on every project setup («Prosjektdata funnet»). Render it only
-  when it applies. A message announced while the root mounts waits in the queue and comes out
+  `hidden` container was read out on every project setup («Prosjektdata funnet»), and one in a
+  `FieldContainer` with `hidden` on every opening of the portfolio overview's view form. Render it
+  only when it applies. A message announced while the root mounts waits in the queue and comes out
   with the next announcement, so a test that triggers one sees it. Nor is a message bar an empty
   state in a list's cells: in a field customizer each row's announces itself (the risk actions'
   «no actions», now a button with its look).

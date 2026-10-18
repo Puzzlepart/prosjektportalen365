@@ -91,7 +91,8 @@ export const ViewFormPanel: FC = () => {
               onChange={(_, data) => setView('isDefaultView', data.checked)}
               disabled={isDefaultViewSet}
             />
-            {isDefaultViewSet && (
+            {/* Only while the field shows: a message bar announces itself, hidden or not. */}
+            {isDefaultViewSet && !view.get('isPersonalView') && (
               <UserMessage
                 title={strings.DefaultViewLabel}
                 text={strings.DefaultViewSetWarningMessage}

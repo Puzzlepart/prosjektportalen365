@@ -333,6 +333,7 @@ declare interface IPortfolioWebPartsStrings {
   ColumnDragPositionAnnouncement: string
   ColumnDropCancelledAnnouncement: string
   DragHandleInstructions: string
+  SelectorButtonLabel: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

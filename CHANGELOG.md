@@ -45,6 +45,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Universell utforming (#1788): i `Prosjektutlisting` har personene på kortene ikke lenger en ugyldig rolle, men leses med rolle og navn, og lenken til prosjektet, fasen og prosjekttypen har navn; hurtigmenyen kan brukes med tastatur, fanen for flere utvalg sier hvor mange den har, visningsknappen sier hva den gjør, og et søk leser opp hvor mange prosjekter som vises; i listevisningen leses hver person og hvert prosjekt én gang
 - Universell utforming (#1788): i `Siste prosjekter` leses prosjektene som en liste, hvert prosjekt én gang, og «Vis flere» sier om flere prosjekter vises
 - Universell utforming (#1788): i `Porteføljeoversikt` og `Aggregert oversikt` sier kolonnetoppene at de åpner en meny og får fokus tilbake når den lukkes, antall treff leses opp, og i «Vis eller skjul kolonner» kan kolonnene flyttes med tastatur, med knapper som heter etter kolonnen og instruksjoner og beskjeder på norsk
+- Universell utforming (#1788): i `Porteføljeoversikt` sier visnings- og porteføljevelgeren hva de velger, og visningsskjemaet leser ikke lenger opp advarselen om standardvisning når den ikke vises
 
 ### Feilrettinger
 

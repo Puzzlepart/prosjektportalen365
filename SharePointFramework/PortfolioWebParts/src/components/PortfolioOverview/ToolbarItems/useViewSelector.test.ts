@@ -6,7 +6,7 @@ jest.mock('./useProgramMenuItems', () => ({ useProgramMenuItems: jest.fn(() => [
 
 import { renderHook } from '@testing-library/react'
 import strings from 'PortfolioWebPartsStrings'
-import { ListMenuItem } from 'pp365-shared-library'
+import { ListMenuItem, format } from 'pp365-shared-library'
 import resource from 'SharedResources'
 import { SET_VIEW_FORM_PANEL, TOGGLE_COMPACT, TOGGLE_MERGED_VIEW } from '../reducer'
 import { useProgramMenuItems } from './useProgramMenuItems'
@@ -77,6 +77,12 @@ describe('useViewSelector', () => {
     expect(
       selectorFor(contextWith({}, { isCompact: true, isMergedView: true })).checkedValues
     ).toEqual({ views: ['merged'], renderMode: ['compactList'] })
+  })
+
+  it('is named by what it chooses as well as the view it shows (WCAG 2.4.6)', () => {
+    expect(selectorFor(contextWith()).ariaLabel).toBe(
+      format(strings.SelectorButtonLabel, VIEW.title, resource.Lists_PortfolioViews_Title)
+    )
   })
 
   it('switches the list mode from either mode choice', () => {

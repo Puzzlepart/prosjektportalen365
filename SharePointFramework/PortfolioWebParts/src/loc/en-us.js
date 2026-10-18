@@ -338,6 +338,7 @@ define([], function () {
     ColumnLiftedAnnouncement: '{0} lifted from position {1}. Move it with the arrow keys',
     ColumnDragPositionAnnouncement: 'Position {0} of {1}',
     ColumnDropCancelledAnnouncement: '{0} returned to position {1}',
-    DragHandleInstructions: 'Press space to lift the column, the arrow keys to move it and space again to drop it. Escape cancels.'
+    DragHandleInstructions: 'Press space to lift the column, the arrow keys to move it and space again to drop it. Escape cancels.',
+    SelectorButtonLabel: '{0}, {1}'
   }
 })

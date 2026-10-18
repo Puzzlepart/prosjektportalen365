@@ -334,6 +334,7 @@ define([], function () {
     ColumnLiftedAnnouncement: '{0} er løftet fra plass {1}. Flytt den med piltastene',
     ColumnDragPositionAnnouncement: 'Plass {0} av {1}',
     ColumnDropCancelledAnnouncement: '{0} er lagt tilbake på plass {1}',
-    DragHandleInstructions: 'Trykk mellomrom for å løfte kolonnen, piltastene for å flytte den og mellomrom igjen for å slippe den. Escape avbryter.'
+    DragHandleInstructions: 'Trykk mellomrom for å løfte kolonnen, piltastene for å flytte den og mellomrom igjen for å slippe den. Escape avbryter.',
+    SelectorButtonLabel: '{0}, {1}'
   }
 })
