@@ -3,8 +3,9 @@
 // so it is a stand-in that draws each group and item through the timeline's own renderers, the
 // items inside its scroll element (`.rct-scroll`, handed to `scrollRef` as the calendar does), and
 // shows the time frame and sidebar it was given. Fluent's popover and menu are stand-ins that keep
-// their contract (see the testing guide): the details popover shows while open and reports
-// Escape through `onOpenChange`, and the menu trigger toggles through `onOpenChange`.
+// their contract (see the testing guide): the details popover shows while open, with the props its
+// surface is given, and reports Escape through `onOpenChange`, and the menu trigger toggles through
+// `onOpenChange`.
 jest.mock('react-calendar-timeline', () => {
   const React = jest.requireActual('react')
   const Calendar = (props: any) =>
@@ -59,7 +60,7 @@ jest.mock('@fluentui/react-components', () => {
         )
       : null
   const PopoverSurface = ({ children, ...props }: any) =>
-    React.createElement('div', { role: 'dialog', 'aria-label': props['aria-label'] }, children)
+    React.createElement('div', { role: 'dialog', ...props }, children)
   const MenuContext = React.createContext({ open: false, toggle: (_event: any) => undefined })
   const Menu = ({ open, onOpenChange, children }: any) =>
     React.createElement(
@@ -363,6 +364,19 @@ describe('Timeline', () => {
     expect(bar).toHaveFocus()
     fireEvent.keyDown(within(calendar()).getByRole('button', { name: 'Åpning' }), { key: ' ' })
     expect(within(details()).getByText(`${strings.MilestoneDateLabel}:`)).toBeInTheDocument()
+  })
+
+  it('takes the focus into details that hold no link, named by the item and described by what they show (WCAG 2.4.3, 4.1.2)', () => {
+    renderTimeline()
+    fireEvent.keyDown(within(calendar()).getByRole('button', { name: 'Åpning' }), { key: 'Enter' })
+    // Fluent focuses a surface with a tab index as it opens; without one, the focus stayed on the
+    // item behind the details of a milestone or a phase, and a screen reader heard nothing open.
+    expect(details()).toHaveAttribute('tabindex', '-1')
+    expect(details()).toHaveAccessibleName('Åpning')
+    const date = formatDate(MILESTONE.end_time.toString())
+    expect(details()).toHaveAccessibleDescription(
+      expect.stringContaining(`${strings.MilestoneDateLabel}: ${date}`)
+    )
   })
 
   it('names a milestone, which shows no text, by its title (WCAG 4.1.2)', () => {

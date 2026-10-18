@@ -20,6 +20,7 @@ jest.mock('@fluentui/react-components', () => {
   return { __esModule: true, ...actual, Menu, MenuTrigger, MenuPopover }
 })
 
+import { useRestoreFocusTarget } from '@fluentui/react-components'
 import { AddRegular } from '@fluentui/react-icons'
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { axeComponent } from 'pp365-jest-config/lib/axe'
@@ -107,6 +108,24 @@ describe('Toolbar', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Eksporter til Excel' }))
     expect(onExport).toHaveBeenCalled()
     expect(screen.getByText('Skjult')).not.toBeVisible()
+  })
+
+  it('marks its buttons as where the focus goes back to when what they opened from state closes (WCAG 2.4.3)', () => {
+    // Fluent gives the focus back only to an element marked so; a panel opened from state, such
+    // as the filter panel, has no trigger of Fluent's to mark it.
+    let target: ReturnType<typeof useRestoreFocusTarget>
+    const Probe: React.FC = () => {
+      target = useRestoreFocusTarget()
+      return null
+    }
+    render(
+      <>
+        <Probe />
+        <Toolbar items={[new ListMenuItem(null, 'Filtrer').setIcon('Filter')]} />
+      </>
+    )
+    const [attribute, value] = Object.entries(target)[0]
+    expect(screen.getByRole('button', { name: 'Filtrer' })).toHaveAttribute(attribute, value)
   })
 
   it('keeps a disabled item from running, and lets the keyboard reach why (WCAG 2.1.1)', () => {

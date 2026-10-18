@@ -173,19 +173,26 @@ test.describe('portfolio hub', () => {
     const firstProjectLink = page.locator('.react-calendar-timeline a[href]').first()
     await expect(firstProjectLink).toBeVisible({ timeout: 60_000 })
     await firstProjectLink.click({ trial: true })
-    // The filter toolbar button must open its panel and close again.
-    await page
+    // The filter toolbar button must open its panel and close again, and the focus go back to
+    // it: the panel opens from state, with no trigger of Fluent's to return it to (#1788).
+    const filter = page
       .locator(WEB_PART)
       .first()
       .getByRole('button', { name: /^filtrer$|^filter$/i })
-      .click()
+    await filter.click()
     // The filter panel's own root has no box, so the visible proof is its heading.
     // The level is deliberately not asserted: it is the panel implementation's
     // choice (v8 rendered an h1, the v9 drawer renders an h2) and not a contract.
-    await expect(
-      page.getByRole('dialog').getByRole('heading', { name: /^filtr|^filter/i })
-    ).toBeVisible()
+    const panelHeading = page
+      .getByRole('dialog')
+      .getByRole('heading', { name: /^filtr|^filter/i })
+    await expect(panelHeading).toBeVisible()
     await page.keyboard.press('Escape')
+    await expect(panelHeading).toBeHidden({ timeout: 10_000 })
+    await expect(
+      filter,
+      'closing the filter panel gives the focus back to its button'
+    ).toBeFocused()
   })
 
   test("the project timeline's items open from the keyboard, and its scroll area takes focus (#1788)", async ({
@@ -210,6 +217,8 @@ test.describe('portfolio hub', () => {
     await page.keyboard.press('Enter')
     const details = page.locator(SURFACES.popover)
     await expect(details).toBeVisible()
+    // The details take the focus, link or none, so a screen reader hears them open.
+    await expect(details, 'the details take the focus as they open').toBeFocused()
     await page.keyboard.press('Escape')
     await expect(details).toBeHidden()
     await expect(item).toBeFocused()
@@ -218,18 +227,24 @@ test.describe('portfolio hub', () => {
   test('benefit overview page loads', async ({ page, openPage, resolvePage }) => {
     await openPage(await resolvePage(hub, PAGES.benefits))
     await expect(webPart(page, /nytte|benefit/i).first()).toBeVisible()
-    await page
+    const filter = page
       .locator(WEB_PART)
       .first()
       .getByRole('button', { name: /^filtrer$|^filter$/i })
-      .click()
+    await filter.click()
     // The filter panel's own root has no box, so the visible proof is its heading.
     // The level is deliberately not asserted: it is the panel implementation's
     // choice (v8 rendered an h1, the v9 drawer renders an h2) and not a contract.
-    await expect(
-      page.getByRole('dialog').getByRole('heading', { name: /^filtr|^filter/i })
-    ).toBeVisible()
+    const panelHeading = page
+      .getByRole('dialog')
+      .getByRole('heading', { name: /^filtr|^filter/i })
+    await expect(panelHeading).toBeVisible()
     await page.keyboard.press('Escape')
+    await expect(panelHeading).toBeHidden({ timeout: 10_000 })
+    await expect(
+      filter,
+      'closing the filter panel gives the focus back to its button'
+    ).toBeFocused()
   })
 
   test('footer application customizer renders the version', async ({

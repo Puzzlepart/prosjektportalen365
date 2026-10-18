@@ -1,10 +1,14 @@
-import { ToolbarButton } from '@fluentui/react-components'
+import { ToolbarButton, useRestoreFocusTarget } from '@fluentui/react-components'
 import React, { CSSProperties } from 'react'
 import { createStyle } from './createStyle'
 import { createIcon } from './createIcon'
 import { ListMenuItem } from './types'
 
 export function useToolbarButtonRender() {
+  // Where the focus goes back to when a panel or dialog the button opened closes: Fluent marks
+  // only its own triggers so, and the filter panel, for one, opens from state (WCAG 2.4.3).
+  const restoreFocusTarget = useRestoreFocusTarget()
+
   /**
    * Renders a toolbar button based on the provided list menu item.
    *
@@ -24,6 +28,7 @@ export function useToolbarButtonRender() {
     return (
       <div hidden={item.hidden}>
         <ToolbarButton
+          {...restoreFocusTarget}
           icon={createIcon(item)}
           title={item.description ?? item.text}
           aria-label={item.ariaLabel ?? (item.text ? undefined : item.description)}

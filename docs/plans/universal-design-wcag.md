@@ -866,3 +866,29 @@ Tests first: the view selector's name in `useToolbarItems.test.tsx`, the edge in
 `UserColumn.test.tsx`, the card's markers in `ProjectList.test.tsx` and both tests in the new
 `InstrumentColumn.test.tsx` failed on the old code and pass. The trophy's colour in the benefit
 test changed with the hex.
+
+### Slice 4, part 6 — The portfolio timeline (2026-10-19)
+
+The web part renders the library's `ProjectTimeline` and nothing of its own; slice 1 made the
+items buttons, the scroll area a stop for the keyboard and the colours readable. Two things were
+left, both in the library, so all four timelines and every toolbar have them:
+
+- **The details** of a milestone or a phase hold no link, so Fluent's popover, which focuses the
+  first control in it, left the focus on the item behind, outside the trap, and a screen reader
+  heard nothing open. With `tabIndex={-1}` on the surface Fluent focuses the surface, link or
+  none, and it is described by its content (`aria-describedby`), so the dates are read as it
+  opens. The test's surface stand-in passes on its props now.
+- **The filter panel** opens from a toolbar button through state, with no `DialogTrigger`, so
+  Tabster had no restore target and closing it left the focus at the start of the page. `Toolbar`
+  marks every button it renders with `useRestoreFocusTarget()`: the portfolio overview's, the
+  aggregated overview's, the dynamic list's and the timelines' filter panels, and any panel or
+  dialog a toolbar button opens. Menu items are Fluent's triggers already.
+- The browser suite checks both: the details take the focus, and closing the filter panel of the
+  timeline and of the benefit overview gives it back to the button.
+- Still split out: a list beside the timeline (the plan's risks). Noted: the today marker is a
+  coloured line with no text; a project's name shows two tooltips under the pointer, its `title`
+  and Fluent's.
+
+Tests first: the restore target in `Toolbar.test.tsx` and the details' focus and description in
+`Timeline.test.tsx` failed on the old code and pass. The browser checks run in CI after the
+test-channel upgrade.

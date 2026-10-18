@@ -210,7 +210,8 @@ checked by hand and with which reader and browser: axe finds only part of what W
   open. With it, Fluent names the surface a dialog: name it (`aria-labelledby` its heading). A
   popover with no control in it (a gauge, a text) leaves the focus on its trigger, and nothing is
   heard to open: `tabIndex={-1}` on `PopoverSurface` makes Fluent focus the surface, named and
-  described by what it shows (`InstrumentColumn`).
+  described by what it shows (`InstrumentColumn`, the timeline's `DetailsPopover`, whose
+  milestones and phases have no link).
 - A button that cannot be used yet but explains why in its `title` is `disabledFocusable`, not
   `disabled` (`Toolbar` does so for every disabled item since #1788): a disabled button is skipped by the keyboard and its reason never reached. It also
   keeps the focus while an action it started runs (the change-phase dialog's statuses).
@@ -258,7 +259,7 @@ checked by hand and with which reader and browser: axe finds only part of what W
   nothing either: Tabster's restorer returns it only to an element marked as a restore target,
   which `DialogTrigger` marks. Spread `useRestoreFocusTarget()` on the button that opens it
   (`ProjectCardFooter`, `NewsDialog`); `ProjectInformationPanel` marks the toggle element it
-  renders. It works under jsdom, so a test can press Escape and expect the focus back, but that
+  renders, and `Toolbar` every button (the filter panels open from state). It works under jsdom, so a test can press Escape and expect the focus back, but that
   proves less than it seems: Tabster returns the focus only to the element it saw, and a list
   that remakes its rows (react-window given an inline row function, as the project list was)
   replaces that button while the drawer closes. A row component goes to `FixedSizeList` once,
