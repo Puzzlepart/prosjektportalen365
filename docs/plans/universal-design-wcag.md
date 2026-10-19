@@ -1065,3 +1065,33 @@ untested, and the branch coverage fell under its floor (78.5 %); three behaviour
 dialog followed (adding under the program's hub, cancel and Escape, a failed fetch and a hub with
 no id, a hub not among the program's), and one of a search box named by its caller. Coverage is
 47.32/79.37/70.58/47.32; the floors rise to 46/79/69/46.
+
+### Slice 6, part 2 — The program aggregation and overview, and a regression CI found (2026-10-19)
+
+**The program aggregation** renders the portfolio's `PortfolioAggregation` (slice 4, part 5); the
+program mode changes its data, not its markup. Nothing of its own.
+
+**The program overview** renders the portfolio overview. The baseline's 24 nameless commands
+(`aria-command-name`) are not in CI's latest scan of it (run 39223161814): no violation.
+
+**The regression.** The end-to-end run failed on three pushes in a row, on the status report's
+snapshot flow, from the push that made every `Toolbar` button a restore target (part 6 of
+slice 4). The copy-link dialog opens from state, from a plain button inside the snapshot dialog;
+Tabster gave the focus to the latest restore target as it closed, now the toolbar's snapshot
+button, behind the snapshot dialog held open in full screen, and the dialog's exit from full
+screen could no longer be clicked. Before, there was no target, and the focus stayed. A dialog
+opened from state inside a dialog or panel needs its own opener marked: the snapshot's
+«Kopier lenke», and «Slett» in both column forms, whose confirmation sent the focus to the
+column header behind the panel (the header a target since slice 4, part 3). Tests first: the
+three new tests failed on the old code and pass.
+
+**What the scan found.** The same run's scan of the portfolio overview reported
+`aria-command-name` 42 times, serious: `StatusReportColumn` puts `PopoverTrigger` round a
+`div` of status icons, which Fluent makes a button (and a restore target) with no name, and an
+empty one for a project with no report. It is named by each section's status, «Statusrapport:
+Kostnad: Grønn, Fremdrift: I rute», and a row with no report renders nothing. «Status rapportert»
+in its popover was a literal. Tests first: both tests in the new `StatusReportColumn.test.tsx`
+failed on the old code and pass. Noted: the icons show the status by colour alone in the cell,
+the text only on hover or focus (1.4.1): a product decision. Also seen in the browser errors of
+the list view extensions' tests (flaky, passing on retry): `Cannot read properties of null
+(reading 'useContext')` from SharePoint's list view host; to be looked into.

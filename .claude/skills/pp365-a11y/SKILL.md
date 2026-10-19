@@ -229,7 +229,14 @@ checked by hand and with which reader and browser: axe finds only part of what W
   on `DialogSurface` at its `DialogContent` (`useConfirmationDialog`).
 - Fluent's `PopoverTrigger` makes its child a button (`useARIAButtonProps`) even with
   `disableButtonEnhancement`: on an `li` that takes the item's role, and the list has none (axe's
-  `list`). Put a `<button>` in the `li` (`ProjectPhases/ProjectPhase`).
+  `list`). Put a `<button>` in the `li` (`ProjectPhases/ProjectPhase`). Round a `div` of icons it
+  makes a button with no name, one per row of a list (`StatusReportColumn`, axe's
+  `aria-command-name`): name it, and render nothing where there is nothing to show.
+- Every restore target changes where the focus goes for each dialog opened from state after it:
+  Tabster gives the focus to the latest target. A dialog opened from state inside a dialog or a
+  panel then sends it out, behind what is still open (the status snapshot's copy dialog, held in
+  full screen, which the browser suite then could not leave; the column forms' delete
+  confirmation, to the column header). Mark the inner opener too.
 - A `Popover` with controls in it needs `trapFocus`. Without it the surface sits in a portal at the
   end of the page, and Tab from its last control went to the top of the page, leaving the popover
   open. With it, Fluent names the surface a dialog: name it (`aria-labelledby` its heading). A

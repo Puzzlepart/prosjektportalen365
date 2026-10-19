@@ -1,3 +1,4 @@
+import { useRestoreFocusTarget } from '@fluentui/react-components'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import * as React from 'react'
@@ -39,6 +40,18 @@ describe('ColumnFormPanelFooter', () => {
   it('shows delete when editing', () => {
     renderFooter({ isEditing: true })
     expect(screen.getByRole('button', { name: 'Slett' })).toBeVisible()
+  })
+
+  it('gives the focus back to delete as its confirmation closes, not to the column header behind the panel (WCAG 2.4.3)', () => {
+    let target: ReturnType<typeof useRestoreFocusTarget>
+    const Probe: React.FC = () => {
+      target = useRestoreFocusTarget()
+      return null
+    }
+    render(<Probe />)
+    renderFooter({ isEditing: true })
+    const [attribute, value] = Object.entries(target)[0]
+    expect(screen.getByRole('button', { name: 'Slett' })).toHaveAttribute(attribute, value)
   })
 
   it('calls onSave when save is clicked', async () => {

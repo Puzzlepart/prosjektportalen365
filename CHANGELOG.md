@@ -54,6 +54,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Universell utforming (#1788): i bunnteksten på porteføljeområdet vises en minimert bunntekst når tastaturet er i den; sider som åpnes herfra (områdeinnstillinger, konfigurasjon, installasjonslogg, GitHub, nyttige lenker og hjelp) er lenker; assistenten er en dialog med navn som gir fokus tilbake når den lukkes; hjelpen har tittel og lukkeknapp; og favorittprosjektene og installasjonen holder fokus mens de er åpne
 - Universell utforming (#1788): i `Malpakkekatalog` er pakkekortene knapper som sier hvilken pakke som er valgt; søk og filtre er et søkeområde; pakkenavnet er en overskrift som får fokus; installasjonen tar og gir tilbake fokus, har navn og leser opp hvert trinn; meldinger leses opp; og fokus går tilbake til kommandolinjen når katalogen lukkes
 - Universell utforming (#1788): i `Administrasjon av underområder` har søkefeltene navn, hvert prosjekt leses én gang, og dialogen for å legge til har én overskrift
+- Universell utforming (#1788): i `Porteføljeoversikt` og `Oversikt over underområder` har statusrapportkolonnen et navn med hver seksjons status, og prosjekter uten rapport viser ingen tom knapp. Når kopi-dialogen i statusrapportens øyeblikksbilde eller bekreftelsen av «Slett» i kolonneskjemaet lukkes, går fokus tilbake til knappen som åpnet den
 
 ### Feilrettinger
 

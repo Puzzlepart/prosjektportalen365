@@ -331,6 +331,7 @@ define([], function () {
     ListCollapseAllGroupsLabel: 'Skjul alle grupper',
     ListExpandAllGroupsLabel: 'Vis alle grupper',
     NameValueLabel: '{0}: {1}',
+    StatusReportedText: 'Status rapportert {0}',
     ProjectTypeIconLabel: '{0} ({1})',
     MoreVerticalsLabel: '{0} flere utvalg',
     ProjectsShownAnnouncement: 'Viser {0} av {1} prosjekter',

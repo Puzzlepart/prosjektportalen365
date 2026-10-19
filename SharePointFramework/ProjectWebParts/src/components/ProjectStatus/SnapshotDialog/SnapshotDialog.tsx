@@ -6,7 +6,8 @@ import {
   makeStyles,
   Text,
   tokens,
-  Tooltip
+  Tooltip,
+  useRestoreFocusTarget
 } from '@fluentui/react-components'
 import strings from 'ProjectWebPartsStrings'
 import { getFluentIcon } from 'pp365-shared-library'
@@ -85,6 +86,10 @@ export const SnapshotDialog: FC = () => {
     dismissCopyLink,
     onDismiss
   } = useSnapshotDialog()
+  // The copy dialog opens from state: its button is where the focus goes back as it closes. Else
+  // Fluent gives it to the latest restore target, the status toolbar's snapshot button, behind
+  // this dialog (WCAG 2.4.3).
+  const restoreFocusTarget = useRestoreFocusTarget()
 
   return (
     <Dialog open={isOpen} onOpenChange={(_, data) => !data.open && onDismiss()}>
@@ -106,7 +111,12 @@ export const SnapshotDialog: FC = () => {
                     : strings.SnapshotEnterFullscreenLabel}
                 </Button>
               )}
-              <Button appearance='subtle' icon={getFluentIcon('Link')} onClick={copyPageLink}>
+              <Button
+                {...restoreFocusTarget}
+                appearance='subtle'
+                icon={getFluentIcon('Link')}
+                onClick={copyPageLink}
+              >
                 {strings.SnapshotCopyLinkLabel}
               </Button>
               <Button appearance='subtle' icon={getFluentIcon('Open')} onClick={openInNewTab}>

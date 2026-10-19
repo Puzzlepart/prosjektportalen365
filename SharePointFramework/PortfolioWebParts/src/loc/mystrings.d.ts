@@ -329,6 +329,7 @@ declare interface IPortfolioWebPartsStrings {
   ListCollapseAllGroupsLabel: string
   ListExpandAllGroupsLabel: string
   NameValueLabel: string
+  StatusReportedText: string
   ProjectTypeIconLabel: string
   MoreVerticalsLabel: string
   ProjectsShownAnnouncement: string

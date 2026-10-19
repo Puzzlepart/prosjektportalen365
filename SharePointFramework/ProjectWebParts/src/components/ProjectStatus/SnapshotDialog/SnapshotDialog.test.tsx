@@ -5,6 +5,7 @@ const title = 'Øyeblikksbilde – mandag 5. okt. 2026'
 const mockDialog: Record<string, any> = {}
 jest.mock('./useSnapshotDialog', () => ({ useSnapshotDialog: () => mockDialog }))
 
+import { useRestoreFocusTarget } from '@fluentui/react-components'
 import * as React from 'react'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import strings from 'ProjectWebPartsStrings'
@@ -65,6 +66,28 @@ describe('ProjectStatus SnapshotDialog', () => {
     expect(mockDialog.copyImageLink).toHaveBeenCalledTimes(1)
     fireEvent.click(screen.getByText(strings.CloseText))
     expect(mockDialog.dismissCopyLink).toHaveBeenCalledTimes(1)
+  })
+
+  it('gives the focus back to its copy button as the copy dialog closes, not to the toolbar behind it (WCAG 2.4.3)', () => {
+    // The copy dialog opens from state, so Fluent gives the focus back to the latest restore
+    // target: the status toolbar's snapshot button, behind the snapshot dialog, held open in full
+    // screen, unless the copy button is one.
+    let target: ReturnType<typeof useRestoreFocusTarget>
+    const Probe: React.FC = () => {
+      target = useRestoreFocusTarget()
+      return null
+    }
+    render(
+      <>
+        <Probe />
+        <SnapshotDialog />
+      </>
+    )
+    const [attribute, value] = Object.entries(target)[0]
+    expect(screen.getByText(strings.SnapshotCopyLinkLabel).closest('button')).toHaveAttribute(
+      attribute,
+      value
+    )
   })
 
   it('asks for the link to be copied by hand when the clipboard fails', () => {

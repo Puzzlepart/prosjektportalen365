@@ -335,6 +335,7 @@ define([], function () {
     ListCollapseAllGroupsLabel: 'Collapse all groups',
     ListExpandAllGroupsLabel: 'Expand all groups',
     NameValueLabel: '{0}: {1}',
+    StatusReportedText: 'Status reported {0}',
     ProjectTypeIconLabel: '{0} ({1})',
     MoreVerticalsLabel: '{0} more selections',
     ProjectsShownAnnouncement: 'Showing {0} of {1} projects',

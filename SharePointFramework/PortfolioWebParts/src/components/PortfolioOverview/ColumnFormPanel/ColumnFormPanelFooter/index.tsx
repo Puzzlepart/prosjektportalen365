@@ -4,7 +4,13 @@ import strings from 'PortfolioWebPartsStrings'
 import { TOGGLE_COLUMN_FORM_PANEL } from '../../reducer'
 import { PortfolioOverviewContext } from '../../context'
 import { IColumnFormPanelFooterProps } from './types'
-import { Button, FluentProvider, IdPrefixProvider, useId } from '@fluentui/react-components'
+import {
+  Button,
+  FluentProvider,
+  IdPrefixProvider,
+  useId,
+  useRestoreFocusTarget
+} from '@fluentui/react-components'
 import { customLightTheme, useConfirmationDialog } from 'pp365-shared-library'
 
 export const ColumnFormPanelFooter: FC<IColumnFormPanelFooterProps> = ({
@@ -16,6 +22,9 @@ export const ColumnFormPanelFooter: FC<IColumnFormPanelFooterProps> = ({
   const fluentProviderId = useId('fp-column-form-panel-footer')
   const context = useContext(PortfolioOverviewContext)
   const [confirmDeleteDialog, getConfirmDeleteResponse] = useConfirmationDialog()
+  // The confirmation opens from state: delete is where the focus goes back as it closes. Else
+  // Fluent gives it to the latest restore target, the column header behind the panel (WCAG 2.4.3).
+  const restoreFocusTarget = useRestoreFocusTarget()
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme} className={styles.root}>
@@ -31,6 +40,7 @@ export const ColumnFormPanelFooter: FC<IColumnFormPanelFooterProps> = ({
         </Button>
         {isEditing && (
           <Button
+            {...restoreFocusTarget}
             onClick={async () => {
               const response = await getConfirmDeleteResponse({
                 title: strings.ConfirmDeleteProjectColumnTitle,
