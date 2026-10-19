@@ -78,7 +78,7 @@ Testene går i `e2e/tests/smoke/a11y-baseline.spec.ts`, `risk-action.spec.ts` og
 
 | Komponent | axe | Gjennomgått | Tastatur | Skjermleser | Visuelt | Skjema | Merknad |
 |---|---|---|---|---|---|---|---|
-| Bunntekst | Ikke målt |  |  |  |  |  |  |
+| Bunntekst | Ikke målt |  |  |  |  |  | Rettet: minimert var bunnteksten usynlig og 12 px høy også når tastaturet var i den; den vises nå når fokus er i den. Assistentens skuff hadde rollen «panel», som ikke finnes; nå er den en dialog med navn, knappene i toppen har navn (bare `title` før), innstillingene er en lenke for administratorer (en deaktivert knapp for andre, uten grunn), og fokus går tilbake til assistentknappen når skuffen lukkes. Områdeinnstillinger, områdeinnhold, konfigurasjonen, installasjonsloggen, GitHub-lenkene, de nyttige lenkene og hjelpens lenke åpnet sider med `window.open` fra knapper; nå er de lenker. Menyknappen i områdeinnstillinger het det samme som innstillingene; nå «Flere valg for området». Lenken til lenkelisten lå i et verktøytips tastaturet ikke nådde; nå er den nederst i menyen. Favorittprosjektene og installasjonen holder fokus mens de er åpne, og har navn. Hjelpen har tittel og lukkeknapp (dialogen hadde ingen navn), hver fane er knyttet til innholdet sitt, og hjelpeknappen kan fokuseres når det ikke finnes hjelp, så grunnen leses. Versjonsikonet for en eldre GitHub-versjon var oransje 2:1, nå 5,1:1, og nyhetene i versjonen er et navngitt område |
 | Idéregistrering | Ikke målt |  |  |  |  |  |  |
 | Idébehandling | Ikke målt |  |  |  |  |  |  |
 | Idé – prosjektdata | Ikke målt |  |  |  |  |  |  |

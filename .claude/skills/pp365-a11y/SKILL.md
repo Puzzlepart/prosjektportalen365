@@ -58,7 +58,10 @@ Rules 1, 2, 5, 6, 8 and the tooltip handling are adapted from Microsoft's
    with `onClick` (found: `FilterPanel/Filter`, `DocumentTemplateItem`'s header). An expand toggle
    has `aria-expanded`, and `aria-controls` when the content is elsewhere. What goes somewhere is
    a link with `href` (Fluent's `Link`), not a button calling `window.open` (`FileNameColumn`); a
-   `Link` without `href` renders a button, right for an action (`DialogColumn`). What does nothing
+   `Link` without `href` renders a button, right for an action (`DialogColumn`). A link that looks
+   like a button is `Button as='a'` with `href` (Fluent keeps the link role while there is one),
+   in a `SplitButton` `primaryActionButton={{ as: 'a', href }}`, in a menu `MenuItemLink` (the
+   footer). What does nothing
    is no control: tags that only label are `Tag`s, not `InteractionTag`s (`OverflowTagMenu`).
 5. **Decoration is hidden, meaning is named.** Fluent's icons are hidden from assistive technology
    already, so an icon that says something alone is named: `role="img"` and an `aria-label` from
@@ -201,7 +204,15 @@ checked by hand and with which reader and browser: axe finds only part of what W
   of the keyboard's reach, `display: none` taking it from the tab order: show it on
   `:focus-within` too.
 - A link inside a `MenuItem` is out of the keyboard's reach: the item takes the focus and does
-  nothing on Enter. Use `MenuItemLink` with `href` (`ProjectMenu`).
+  nothing on Enter. Use `MenuItemLink` with `href` (`ProjectMenu`). So is a link inside a
+  `Tooltip`: the footer's useful links held the list's in theirs; it is a menu item now.
+- A `SplitButton`'s menu button with no name of its own is named by the primary button, so both
+  read the same: give it one. `MenuTrigger` goes round a render function that hands its props
+  to `menuButton`; round a `Tooltip` round the split button, the trigger's state lands on the
+  split button's frame. A tooltip that describes the primary button goes on it through the slot's
+  render function, `primaryActionButton={{ children: (Component, props) => <Tooltip …><Component
+  {...props} /></Tooltip> }}`, which gets the slot's text in `props` (the footer's
+  `SiteSettings`).
 - A button with a `title` and a `Tooltip` of the same text as its description is read twice:
   give the tooltip `relationship='label'` and drop the title (the project card's panel button).
 - Fluent's `Avatar` is an `img` named by its `name`, so beside the same name in text a screen
@@ -244,7 +255,9 @@ checked by hand and with which reader and browser: axe finds only part of what W
   let the browser scans judge the markup.
 - `opacity: 0` hides nothing from a screen reader or the keyboard: the matrices drew both the
   before and after positions and faded one out, and both were read. Hide with `visibility`, and
-  transition it with the opacity so the fade still runs (`MatrixElement.module.scss`).
+  transition it with the opacity so the fade still runs (`MatrixElement.module.scss`). Where it
+  is shown on `:hover`, show it on `:focus-within` too, or the keyboard works in the dark (the
+  minimized footer).
 - A grid whose rows and columns mean something is a table: `role="table"` named by its title,
   `row`, `columnheader`, `rowheader` and `cell` on the divs (`DynamicMatrix`), so a screen reader
   tells where an element sits. Its look stays the grid's.

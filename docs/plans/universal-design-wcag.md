@@ -954,3 +954,40 @@ Slice 4 is done but for the hand rounds: the project list and its cards, the lat
 the portfolio overview and the aggregated overview with the hub's grid, panels and cells, the
 portfolio timeline, resource allocation, the idea module and the project card.
 `PortfolioInsights` and `ProjectProvision` are dead code, not audited.
+
+### Slice 5, part 1 — The footer (2026-10-19)
+
+The footer (PortfolioExtensions' application customizer) was not in the baseline: it shows on
+every hub page but no scan scoped to it. Its test (`Footer.test.tsx`) renders it whole with
+stand-ins for Fluent's popovers and menus, now passing their surfaces' props on, marking a focus
+trap, and calling a trigger's render function as Fluent does.
+
+- **Minimized**, the footer was `opacity: 0` and 12px high but on `:hover`, so the keyboard worked
+  in it unseen (2.4.7); it shows on `:focus-within` too.
+- **The assistant's drawer** had `role='panel'`, no ARIA role at all; it is the drawer's dialog,
+  named by its title. Its header's icon buttons were named by `title` alone; they have
+  `aria-label`s. The settings, a list, are a link for site admins, where others had a disabled
+  button with no reason. The drawer opens from state, so the assistant's button is the restore
+  target.
+- **Links**: the site settings, the site contents, the configuration page, the installation log,
+  the GitHub release, its notes (a `Link` with no `href`, so a button), the download, the useful
+  links and the help's resource link were buttons calling `window.open`; they are links
+  (`Button as='a'`, the split button's `primaryActionButton={{ as: 'a' }}`, `MenuItemLink`).
+- **The site settings' split button**: `MenuTrigger` went round a tooltip round the whole split
+  button, so the menu's state landed on its frame, and its menu button, unnamed, took the
+  settings' name; the trigger hands its props to `menuButton`, named «Flere valg for området»,
+  and the description goes on the link through the slot's render function.
+- **The useful links' tooltip** held a link to the links list, out of the keyboard's reach; the
+  tooltip is text, and the list is the menu's last item.
+- **The favourite projects and the installation** popovers hold links: `trapFocus`, named.
+- **The help dialog** had no title, so no name, and no close button; it has both. Each tab is tied
+  to its panel (`tabpanel`, `aria-labelledby`). The help button, unavailable with no help, is
+  `disabledFocusable`, so its description says why.
+- **GitHub's version comparison**: the older-version icon was CSS orange, 2:1 against the
+  popover; the icons are Fluent's green, warning orange and foreground, hex (`parseColor` reads no
+  names). The release's highlights scroll and are a stop for the keyboard; they are a named
+  region.
+
+Tests first: eight tests in `Footer.test.tsx` and the new colour test failed on the old code
+and pass; the tests that clicked through `window.open` changed with the links, and the
+comparison test reads the colours from the defaults.

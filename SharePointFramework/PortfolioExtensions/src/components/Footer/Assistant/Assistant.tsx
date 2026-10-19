@@ -13,7 +13,8 @@ import {
   Toolbar,
   ToolbarButton,
   Spinner,
-  DrawerHeaderTitle
+  DrawerHeaderTitle,
+  useRestoreFocusTarget
 } from '@fluentui/react-components'
 import { customLightTheme, getFluentIcon } from 'pp365-shared-library'
 import styles from './Assistant.module.scss'
@@ -25,12 +26,16 @@ export const Assistant: FC = () => {
   const fluentProviderId = useId('fp-assistant')
   const isUnavailable = false
   const { open, hasOpened, loading, close, toggle, setDrawerOpen, setLoading } = useAssistant()
+  // The drawer opens from state, with no trigger of Fluent's: the button is where the focus goes
+  // back as it closes (WCAG 2.4.3).
+  const restoreFocusTarget = useRestoreFocusTarget()
+  const isSiteAdmin = context.props.pageContext.legacyPageContext.isSiteAdmin
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>
+        {/* A dialog, named by its title: its role was 'panel', which is no role (WCAG 4.1.2). */}
         <OverlayDrawer
-          role='panel'
           position='end'
           className={styles.drawer}
           open={open}
@@ -42,20 +47,23 @@ export const Assistant: FC = () => {
               <DrawerHeaderTitle>{strings.AssistantDrawerTitle}</DrawerHeaderTitle>
             </div>
             <Toolbar className={styles.actions}>
-              <ToolbarButton
-                appearance='subtle'
-                title={strings.AssistantSettingsTooltip}
-                disabled={!context.props.pageContext.legacyPageContext.isSiteAdmin}
-                icon={getFluentIcon('Settings')}
-                onClick={() =>
-                  window.open(
-                    `${context.props.portalUrl}/${resource.Lists_Global_Settings_Url}`,
-                    '_blank'
-                  )
-                }
-              />
+              {/* The settings are a list, so a link, for site admins only: a link cannot be
+                  disabled, and a disabled button said nothing of why. Both are named, where a
+                  title was all (WCAG 4.1.2). */}
+              {isSiteAdmin && (
+                <ToolbarButton
+                  as='a'
+                  appearance='subtle'
+                  title={strings.AssistantSettingsTooltip}
+                  aria-label={strings.AssistantSettingsTooltip}
+                  icon={getFluentIcon('Settings')}
+                  href={`${context.props.portalUrl}/${resource.Lists_Global_Settings_Url}`}
+                  target='_blank'
+                />
+              )}
               <ToolbarButton
                 title={strings.CloseLabel}
+                aria-label={strings.CloseLabel}
                 appearance='subtle'
                 icon={getFluentIcon('Dismiss')}
                 onClick={close}
@@ -91,6 +99,7 @@ export const Assistant: FC = () => {
           }
         >
           <Button
+            {...restoreFocusTarget}
             appearance='primary'
             disabled={isUnavailable}
             icon={isUnavailable ? getFluentIcon('Bot') : getFluentIcon('BotSparkle')}

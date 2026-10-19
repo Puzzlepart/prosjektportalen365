@@ -20,6 +20,7 @@ declare interface IPortfolioExtensionsStrings {
   CreateLabel: string
   HelpContentAvailableDescription: string
   HelpContentAvailableLabel: string
+  HelpContentDialogTitle: string
   HelpContentUnavailableDescription: string
   HelpContentUnavailableLabel: string
   IdeaAlreadyApproved: string
@@ -43,12 +44,14 @@ declare interface IPortfolioExtensionsStrings {
   LatestGitHubReleaseHighlightsLabel: string
   LinksListDescription: string
   LinksListLabel: string
+  LinksListOpenLabel: string
   SeeAllInstallationsLinkText: string
   SetRecommendationSubtitle: string
   SetRecommendationTitle: string
   SiteContentsLabel: string
   SiteSettingsDescription: string
   SiteSettingsLabel: string
+  SiteSettingsMoreLabel: string
   SubmitLabel: string
   IdeaRegistrationIncludeString: string
   IdeaProcessingCommandTitle: string

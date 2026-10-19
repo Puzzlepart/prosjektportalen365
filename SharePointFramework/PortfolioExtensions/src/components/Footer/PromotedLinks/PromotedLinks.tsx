@@ -2,10 +2,10 @@ import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useContext } from 'react'
 import { FooterContext } from '../context'
 import {
-  Link,
   Menu,
   MenuButton,
-  MenuItem,
+  MenuDivider,
+  MenuItemLink,
   MenuList,
   MenuPopover,
   MenuTrigger,
@@ -26,22 +26,8 @@ export const PromotedLinks: FC = () => {
       <FluentProvider theme={customLightTheme}>
         <Menu onOpenChange={(_, { open }) => open && context.loadLinks()}>
           <MenuTrigger disableButtonEnhancement>
-            <Tooltip
-              relationship='description'
-              withArrow
-              content={
-                <>
-                  {strings.LinksListDescription}
-                  <Link
-                    href={`${context.props.portalUrl}/${resource.Lists_Links_Url}/AllItems.aspx`}
-                    target='_blank'
-                    title={resource.Lists_Links_Title}
-                  >
-                    {resource.Lists_Links_Title}
-                  </Link>
-                </>
-              }
-            >
+            {/* Text only: a link in a tooltip is out of the keyboard's reach (WCAG 2.1.1). */}
+            <Tooltip relationship='description' withArrow content={strings.LinksListDescription}>
               <MenuButton size='small' appearance='subtle' icon={getFluentIcon('Link')}>
                 {strings.LinksListLabel}
               </MenuButton>
@@ -58,14 +44,25 @@ export const PromotedLinks: FC = () => {
                     else return link.Level !== strings.AdministratorLabel
                   })
                   .map((link, idx) => (
-                    <MenuItem
+                    // A page elsewhere, so a link (WCAG 4.1.2).
+                    <MenuItemLink
                       style={{ maxWidth: 'fit-content', minWidth: '100%' }}
                       key={idx}
-                      onClick={() => window.open(link.Url, '_blank')}
+                      href={link.Url}
+                      target='_blank'
                     >
                       {link.Description}
-                    </MenuItem>
+                    </MenuItemLink>
                   ))}
+                <MenuDivider />
+                {/* The list the links come from, where the tooltip had it. */}
+                <MenuItemLink
+                  icon={getFluentIcon('Edit')}
+                  href={`${context.props.portalUrl}/${resource.Lists_Links_Url}/AllItems.aspx`}
+                  target='_blank'
+                >
+                  {strings.LinksListOpenLabel}
+                </MenuItemLink>
               </MenuList>
             )}
           </MenuPopover>
