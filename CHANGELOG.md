@@ -49,6 +49,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Universell utforming (#1788): i `Aggregert oversikt` sier visningsvelgeren hva den velger. I `Porteføljeoversikt` og `Aggregert oversikt` når tastaturet hver av flere personer i én celle, så navnet vises; instrumentet har tekst og tar fokus når det åpnes; og trendikonene i gull og grønt har fått en kant i en mørkere tone, så de skiller seg nok fra raden
 - Universell utforming (#1788): i `Prosjektutlisting` kan personene, fasen og prosjekttypen på kortene nås med tastaturet, så verktøytipset vises
 - Universell utforming (#1788): i tidslinjene (`Prosjekttidslinje`, porteføljens og programmets tidslinje og `Ressursallokering`) tar detaljene fokus når de åpnes, også for milepæler og faser, og leses opp. Når et panel som filterpanelet lukkes, går fokus tilbake til knappen i verktøylinjen som åpnet det, i alle webdeler med verktøylinje
+- Universell utforming (#1788): i `Ressursallokering` har søylene en kant i den fulle fargen, så også en søyle med lav allokering skiller seg fra raden; fyllet viser fortsatt hvor mye som er allokert
 
 ### Feilrettinger
 

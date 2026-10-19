@@ -99,7 +99,9 @@ Rules 1, 2, 5, 6, 8 and the tooltip handling are adapted from Microsoft's
    holds whatever it is, rather than changing it. An icon is framed the same way: its regular
    variant, the filled one's outline, drawn over it in the shade (`TrendColumn`, where gold and
    green were under 3:1). `parseColor` reads hex and `rgb()`, not names: a colour from code is
-   hex (the benefit model's trophy was `'gold'`).
+   hex (the benefit model's trophy was `'gold'`). A timeline bar whose fill fades (the resource
+   allocation's) names its full colour as `data.edgeColor`, and the timeline edges it in that,
+   darkened the same way.
 10. **Headings**: `WebPartTitle` is the web part's `h2`; a section inside is an `h3`
     (`WebPartTitle headingLevel={3}`, as the project information's parent projects). Panels and
     dialogs take their heading from `DrawerHeaderTitle` and `DialogTitle`. Name and value pairs

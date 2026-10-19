@@ -892,3 +892,24 @@ left, both in the library, so all four timelines and every toolbar have them:
 Tests first: the restore target in `Toolbar.test.tsx` and the details' focus and description in
 `Timeline.test.tsx` failed on the old code and pass. The browser checks run in CI after the
 test-channel upgrade.
+
+### Slice 4, part 7 — Resource allocation (2026-10-19)
+
+axe's `aria-progressbar-name` was the loading skeleton, named in slice 1, and the timeline's
+keyboard, text colours, details and filter panel are the library's (slice 1 and part 6). Left was
+what the plan called its bars: the fill is the configured colour at the allocation's opacity,
+never under 0.3, so a bar of 30 % is 1.3:1 against the grey rows and its extent hard to see
+(1.4.11). The share stays in the fill, and in the bar's text.
+
+- A bar from elsewhere than the timeline configuration may name an edge colour,
+  `data.edgeColor` (`ITimelineItemData`); the timeline edges it in that colour, darkened by
+  `getContrastingShade` where it stands out too little from the rows, with the line height
+  less the edge, as a configured bar. Without one a bar is drawn as before.
+- The resource allocation names its full colour (`rgb(itemColor)` or `rgb(itemAbsenceColor)`):
+  the default green (3.27:1) and blue stand out by themselves, a paler configured colour is
+  darkened. The edge shows the bar's whole extent, the fill how much of it is allocated.
+- `transformItems` is exported for its test.
+
+Tests first: the edge in `Timeline.test.tsx` and the new `useResourceAllocationDataFetch.test.ts`
+failed on the old code and pass; the test that a bar from elsewhere without an edge colour is
+not edged passes as before.

@@ -20,8 +20,9 @@ const TIMELINE_ROW_BACKGROUND = '#f2f2f2'
  * light tone of its colour, edged in the colour, darkened where that is under 3:1 against the
  * grey rows (WCAG 1.4.11), and a milestone is edged in a darker shade of its own colour. A bar's
  * text keeps its configured colour where that reads on the bar, and is black or white where it
- * does not (WCAG 1.4.3). Bars from elsewhere (the resource allocation, whose colour fades with
- * the allocation) keep their colour, and only their text is chosen.
+ * does not (WCAG 1.4.3). Bars from elsewhere keep their fill, and only their text is chosen; one
+ * that names an edge colour (the resource allocation, whose fill fades with the allocation) is
+ * edged in it, darkened in the same way.
  *
  * @param onItemClick Opens an item's details, from a click or from the keyboard
  */
@@ -101,18 +102,20 @@ export function useItemRenderer(
         const isConfiguredBar =
           calProps.item.data.elementType === resource.TimelineConfiguration_Bar_ElementType
         const tint = isConfiguredBar ? getTint(configured) : undefined
-        const edge = tint && getContrastingShade(configured, TIMELINE_ROW_BACKGROUND)
+        const edgeColor = tint ? configured : calProps.item.data?.edgeColor
+        const edge = edgeColor && getContrastingShade(edgeColor, TIMELINE_ROW_BACKGROUND)
         const background = tint ?? configured
-        const barStyle: React.CSSProperties = tint
-          ? {
-              ...style,
-              background,
-              backgroundColor: background,
-              border: `1px solid ${edge}`,
-              // The calendar sets the line height to the item's height, which the edge takes 2px of.
-              lineHeight: `${calProps.itemContext.dimensions.height - 2}px`
-            }
-          : style
+        const barStyle: React.CSSProperties = {
+          ...style,
+          ...(tint ? { background, backgroundColor: background } : {}),
+          ...(edge
+            ? {
+                border: `1px solid ${edge}`,
+                // The calendar sets the line height to the item's height; the edge takes 2px of it.
+                lineHeight: `${calProps.itemContext.dimensions.height - 2}px`
+              }
+            : {})
+        }
         return (
           <div
             {...htmlProps}

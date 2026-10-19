@@ -437,6 +437,28 @@ describe('Timeline', () => {
     expect(button('Ola')).toHaveStyle({ backgroundColor: '#1f4e79', color: '#ffffff' })
   })
 
+  it('edges a bar from elsewhere in the colour it asks for, darkened where that stands out too little, and keeps its fill (WCAG 1.4.11)', () => {
+    const allocation = (id: number, title: string, edgeColor: string) => ({
+      ...item(id, title, { type: strings.ResourceLabel, allocation: 30, edgeColor }),
+      itemProps: { style: { backgroundColor: 'rgba(51, 153, 51, 0.3)', color: '#000000' } }
+    })
+    renderTimeline({
+      items: [
+        allocation(11, 'Kari', 'rgb(51, 153, 51)'),
+        allocation(12, 'Ola', 'rgb(173, 216, 230)')
+      ]
+    })
+    // The allocation's fill fades with its share, 1.3:1 against the grey rows at 30 %; its edge is
+    // its full colour, which stands out by itself (3.27:1), and the edge takes 2px of the height.
+    expect(button('Kari')).toHaveStyle({
+      backgroundColor: 'rgba(51, 153, 51, 0.3)',
+      border: '1px solid #339933',
+      lineHeight: '18px'
+    })
+    // A pale colour is darkened until its edge stands out.
+    expect(getContrastRatio(button('Ola').style.borderColor, GREY_ROW)).toBeGreaterThanOrEqual(3)
+  })
+
   it('edges a milestone in a darker shade of its colour, which stands out on the grey rows (WCAG 1.4.11)', () => {
     const milestone = (
       id: number,
