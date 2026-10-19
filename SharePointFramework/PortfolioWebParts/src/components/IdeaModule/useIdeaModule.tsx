@@ -12,7 +12,7 @@ import {
   setUrlHash
 } from 'pp365-shared-library'
 import _ from 'lodash'
-import { useEffect, useState } from 'react'
+import { RefObject, useEffect, useRef, useState } from 'react'
 import styles from './IdeaModule.module.scss'
 import { IdeaField } from './IdeaField'
 
@@ -98,7 +98,7 @@ export function useIdeaModule(props: IIdeaModuleProps) {
     if (!selectedIdea) {
       setState({
         error: {
-          title: 'Ingen idé funnet',
+          title: strings.Idea.NoIdeaFoundTitle,
           message: strings.Idea.NoIdeaFoundErrorMessage
         }
       })
@@ -177,6 +177,18 @@ export function useIdeaModule(props: IIdeaModuleProps) {
   const [openItems, setOpenItems] = useState(['registration'])
   const [isOpen, setIsOpen] = useState(true)
 
+  // The menu's button goes with the menu, and the one beside the content comes as it closes: a
+  // toggle gives the focus to the button that takes the other's place (WCAG 2.4.3).
+  const menuButtonRef = useRef<HTMLButtonElement>(null)
+  const contentButtonRef = useRef<HTMLButtonElement>(null)
+  const isToggled = useRef(false)
+  useEffect(() => {
+    if (!isToggled.current) return
+    isToggled.current = false
+    const button = isOpen ? menuButtonRef.current : contentButtonRef.current
+    button?.focus()
+  }, [isOpen])
+
   const handleToggle: AccordionToggleEventHandler<string> = (event, data) => {
     setOpenItems(data.openItems)
   }
@@ -188,10 +200,22 @@ export function useIdeaModule(props: IIdeaModuleProps) {
     'GtIdeaDecisionComment'
   ]
 
-  const renderHamburger = () => {
+  /**
+   * The button that shows or hides the navigation menu, named by its tooltip.
+   *
+   * @param ref The menu's button or the one beside the content
+   */
+  const renderHamburger = (ref: RefObject<HTMLButtonElement>) => {
     return (
-      <Tooltip content='Navigation' relationship='label'>
-        <Hamburger onClick={() => setIsOpen(!isOpen)} />
+      <Tooltip content={strings.Idea.NavigationMenuLabel} relationship='label'>
+        <Hamburger
+          ref={ref}
+          aria-expanded={isOpen}
+          onClick={() => {
+            isToggled.current = true
+            setIsOpen(!isOpen)
+          }}
+        />
       </Tooltip>
     )
   }
@@ -245,16 +269,14 @@ export function useIdeaModule(props: IIdeaModuleProps) {
         className={styles.statusSection}
         style={{ backgroundColor, border: `1px solid ${borderColor}` }}
       >
-        <h2>Status</h2>
-        <div className={styles.status}>
+        <h3 className={styles.statusTitle}>{strings.Idea.StatusTitle}</h3>
+        <dl className={styles.status}>
           {fieldValues
             .filter((model) => model.internalName.includes(filterKey))
             .map((model, idx) => (
-              <div className={styles.field} key={idx}>
-                <IdeaField key={idx} model={model} />
-              </div>
+              <IdeaField key={idx} className={styles.field} model={model} />
             ))}
-        </div>
+        </dl>
       </div>
     )
   }
@@ -277,6 +299,8 @@ export function useIdeaModule(props: IIdeaModuleProps) {
     getSelectedIdea,
     getSelectedView,
     renderHamburger,
+    menuButtonRef,
+    contentButtonRef,
     renderStatus,
     handleToggle,
     ignoreFields,

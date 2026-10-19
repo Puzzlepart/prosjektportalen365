@@ -50,6 +50,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Universell utforming (#1788): i `Prosjektutlisting` kan personene, fasen og prosjekttypen på kortene nås med tastaturet, så verktøytipset vises
 - Universell utforming (#1788): i tidslinjene (`Prosjekttidslinje`, porteføljens og programmets tidslinje og `Ressursallokering`) tar detaljene fokus når de åpnes, også for milepæler og faser, og leses opp. Når et panel som filterpanelet lukkes, går fokus tilbake til knappen i verktøylinjen som åpnet det, i alle webdeler med verktøylinje
 - Universell utforming (#1788): i `Ressursallokering` har søylene en kant i den fulle fargen, så også en søyle med lav allokering skiller seg fra raden; fyllet viser fortsatt hvor mye som er allokert
+- Universell utforming (#1788): i `Idémodul` har menyknappen et norsk navn, sier om menyen er åpen og beholder fokus når menyen åpnes eller lukkes; fasene er en liste med gjeldende fase markert og de andre fasene lesbare; idéens tittel og «Status» er overskrifter på riktig nivå, feltene leses som navn og verdi, og en person leses én gang
 
 ### Feilrettinger
 

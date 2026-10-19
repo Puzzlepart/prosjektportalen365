@@ -13,7 +13,6 @@ import {
   FluentProvider,
   IdPrefixProvider,
   Spinner,
-  Tooltip,
   NavCategory,
   NavCategoryItem,
   NavDrawer,
@@ -93,6 +92,8 @@ export const IdeaModule: FC<IIdeaModuleProps> = (incomingProps) => {
     getSelectedIdea,
     getSelectedView,
     renderHamburger,
+    menuButtonRef,
+    contentButtonRef,
     renderStatus,
     handleToggle,
     ignoreFields,
@@ -130,11 +131,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (incomingProps) => {
                 size='small'
                 className={styles.nav}
               >
-                <NavDrawerHeader>
-                  <Tooltip content='NavigationMenu' relationship='label'>
-                    {renderHamburger()}
-                  </Tooltip>
-                </NavDrawerHeader>
+                <NavDrawerHeader>{renderHamburger(menuButtonRef)}</NavDrawerHeader>
                 <NavDrawerBody className={styles.navBody}>
                   <AppItemStatic icon={getFluentIcon('Lightbulb')}>
                     {strings.Idea.ModuleTitle}
@@ -217,7 +214,9 @@ export const IdeaModule: FC<IIdeaModuleProps> = (incomingProps) => {
               )}
               {state.selectedView && (
                 <div className={styles.overview}>
-                  <div className={styles.hamburger}>{!isOpen && renderHamburger()}</div>
+                  <div className={styles.hamburger}>
+                    {!isOpen && renderHamburger(contentButtonRef)}
+                  </div>
                   <div className={styles.ideaList}>
                     <PortfolioAggregation
                       {...props}
@@ -233,19 +232,22 @@ export const IdeaModule: FC<IIdeaModuleProps> = (incomingProps) => {
                     {/* <Commands /> */}
                     <div className={styles.ideaHeader}>
                       <div className={styles.phasebar}>
-                        <div className={styles.hamburger}>{!isOpen && renderHamburger()}</div>
+                        <div className={styles.hamburger}>
+                          {!isOpen && renderHamburger(contentButtonRef)}
+                        </div>
                         <IdeaPhaseBar />
                       </div>
-                      <h1 className={styles.ideaTitle}>{state.selectedIdea.item.Title}</h1>
+                      {/* Below the page's title, as a web part's heading is (WCAG 1.3.1). */}
+                      <h2 className={styles.ideaTitle}>{state.selectedIdea.item.Title}</h2>
                     </div>
                     {!state.selectedIdea.item.processing && (
-                      <div className={styles.idea}>
+                      <dl className={styles.idea}>
                         {state.selectedIdea.registeredFieldValues
                           .filter((model) => !ignoreFields.includes(model.internalName))
                           .map((model, idx) => (
                             <IdeaField key={idx} model={model} />
                           ))}
-                      </div>
+                      </dl>
                     )}
                     {!state.selectedIdea.item.processing && renderStatus()}
                     {state.selectedIdea.item.processing && (
@@ -265,24 +267,24 @@ export const IdeaModule: FC<IIdeaModuleProps> = (incomingProps) => {
                               {strings.Idea.RegisteredIdeaTitle}
                             </AccordionHeader>
                             <AccordionPanel style={{ margin: 0 }}>
-                              <div className={styles.idea}>
+                              <dl className={styles.idea}>
                                 {state.selectedIdea.registeredFieldValues.map((model, idx) => (
                                   <IdeaField key={idx} model={model} />
                                 ))}
-                              </div>
+                              </dl>
                             </AccordionPanel>
                           </AccordionItem>
                         </Accordion>
                         <Divider />
                       </>
                     )}
-                    <div className={styles.idea}>
+                    <dl className={styles.idea}>
                       {state.selectedIdea.processingFieldValues
                         ?.filter((model) => !ignoreFields.includes(model.internalName))
                         .map((model, idx) => (
                           <IdeaField key={idx} model={model} />
                         ))}
-                    </div>
+                    </dl>
                     {state.selectedIdea.item.processing && renderStatus()}
                   </>
                 </div>

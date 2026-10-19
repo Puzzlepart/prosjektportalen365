@@ -187,7 +187,14 @@ checked by hand and with which reader and browser: axe finds only part of what W
   that is the tag's `div`, not the button inside it: wrap the `InteractionTagPrimary`.
 - Spreading a data object onto a Fluent component passes its every key as a prop: the project
   list's people carried `role` (the field's internal name) from the data adapter, and every
-  `Avatar` got `role="GtProjectManager"`, axe's critical `aria-roles` 36 times. Pick the props.
+  `Avatar` got `role="GtProjectManager"`, axe's critical `aria-roles` 36 times; the idea
+  module's `Persona` got the login name as its `id`. Pick the props.
+- Steps or phases shown in order, one of them current, are an ordered list with
+  `aria-current="step"`, not a `TabList` of tabs that do nothing (`IdeaPhaseBar`). A list styled
+  without markers keeps `role="list"` explicit: Safari drops the role otherwise.
+- Two buttons that toggle the same thing from different places, each gone when the other shows
+  (the idea module's menu button in the menu and beside the content), take the focus over from
+  each other: a ref each, focused after the toggle (`useIdeaModule`).
 - `@hello-pangea/dnd` announces drags and explains its handles in English: give
   `DragDropContext` `dragHandleUsageInstructions` from the strings and announce through the
   responders' `provided.announce` (`EditViewColumnsPanel`). A control shown only on `:hover` is out

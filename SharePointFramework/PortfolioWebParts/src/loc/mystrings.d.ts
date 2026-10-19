@@ -71,6 +71,13 @@ declare interface IPortfolioWebPartsStrings {
     NoViewFoundErrorMessage: string
     NoIdeaFoundErrorMessage: string
     ProvisionAreaTitle: string
+    NavigationMenuLabel: string
+    PhasesLabel: string
+    RegistrationPhaseTitle: string
+    ProcessingPhaseTitle: string
+    ApprovedPhaseTitle: string
+    StatusTitle: string
+    NoIdeaFoundTitle: string
     ConfigurationListFieldLabel: string
     ConfigurationListFieldDescription: string
     ConfigurationNameFieldLabel: string

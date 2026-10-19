@@ -18,7 +18,7 @@ jest.mock('components', () => {
   }
 })
 
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import strings from 'PortfolioWebPartsStrings'
 import * as React from 'react'
@@ -80,6 +80,49 @@ describe('IdeaModule', () => {
     await user.click(screen.getByText(strings.Idea.ProcessingIdeasTitle))
     expect(await screen.findByText('Solceller på taket')).toBeInTheDocument()
     expect(window.location.hash).toBe('#viewId=1')
+  })
+
+  it('names the menu button, says whether the menu is open, and keeps the focus on the button that takes its place (WCAG 4.1.2, 2.4.3)', async () => {
+    const user = userEvent.setup({ pointerEventsCheck: 0 })
+    renderModule()
+    await screen.findByText('Idéoversikt: Alle idéer')
+    const name = strings.Idea.NavigationMenuLabel
+    const inMenu = screen.getByRole('button', { name })
+    expect(inMenu).toHaveAttribute('aria-expanded', 'true')
+    await user.click(inMenu)
+    // The menu's button goes with the menu, and the one beside the content takes the focus.
+    const beside = document.querySelector<HTMLElement>('.hamburger button')
+    expect(beside).toHaveAccessibleName(name)
+    expect(beside).toHaveAttribute('aria-expanded', 'false')
+    expect(beside).toHaveFocus()
+    await user.click(beside)
+    expect(document.activeElement).toHaveAccessibleName(name)
+    expect(document.activeElement).toHaveAttribute('aria-expanded', 'true')
+  })
+
+  it('opens an idea under a heading below the page title, its phases a list marking the current, and its status under its own heading (WCAG 1.3.1)', async () => {
+    window.location.hash = '#ideaId=1'
+    renderModule()
+    expect(
+      await screen.findByRole('heading', { level: 2, name: 'Sykkelparkering' })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { level: 3, name: strings.Idea.StatusTitle })
+    ).toBeInTheDocument()
+    // The phases were tabs that did nothing, the others disabled and the arrows between them
+    // nameless tabs.
+    expect(screen.queryByRole('tab')).toBeNull()
+    const steps = within(screen.getByRole('list', { name: strings.Idea.PhasesLabel })).getAllByRole(
+      'listitem'
+    )
+    expect(steps.map((step) => step.textContent)).toEqual([
+      strings.Idea.RegistrationPhaseTitle,
+      strings.Idea.ProcessingPhaseTitle,
+      strings.Idea.ApprovedPhaseTitle,
+      strings.Idea.ProvisionAreaTitle
+    ])
+    expect(steps[0]).toHaveAttribute('aria-current', 'step')
+    expect(steps[1]).not.toHaveAttribute('aria-current')
   })
 
   it('tells when there is no view to open', async () => {

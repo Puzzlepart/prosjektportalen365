@@ -913,3 +913,31 @@ never under 0.3, so a bar of 30 % is 1.3:1 against the grey rows and its extent 
 Tests first: the edge in `Timeline.test.tsx` and the new `useResourceAllocationDataFetch.test.ts`
 failed on the old code and pass; the test that a bar from elsewhere without an edge colour is
 not edged passes as before.
+
+### Slice 4, part 8 — The idea module (2026-10-19)
+
+axe found nothing in the baseline, which scanned the overview, the aggregated overview's list.
+The idea view and the navigation had what it cannot see:
+
+- **The menu button** (Fluent's `Hamburger`, which has no name of its own) was named by a tooltip
+  «Navigation» inside another, «NavigationMenu», both literals in English. It is named
+  `Idea.NavigationMenuLabel`, says whether the menu is open (`aria-expanded`), and, since the
+  menu's button goes with the menu and the one beside the content comes as it closes, a toggle
+  gives the focus to the button that takes the other's place; it fell to the page's start.
+- **The phase bar** was a `TabList`: tabs that did nothing, the phases other than the current
+  disabled (`colorNeutralForegroundDisabled`, 1.9:1) and a nameless disabled tab between each,
+  three of the names Norwegian literals. It is an ordered list named `Idea.PhasesLabel`, the
+  current phase `aria-current="step"`, drawn as the tabs were (icon and name, the current one
+  underlined in the brand stroke and semibold), the others in `colorNeutralForeground3` (6.2:1),
+  the chevrons hidden. `role="list"` stays explicit: Safari drops the role of a list without
+  markers.
+- **Headings**: the idea's title was an `h1` under the page's own; it is an `h2`, as a web part's
+  heading is, and «Status» an `h3` from the strings, sized as the `h2` it was.
+- **Fields**: each is a name and value pair in a description list (`dt`, `dd`), the containers
+  `dl`s. A person (`User`, `UserMulti`) was spread onto `Persona` with its every key, so its
+  login name became the element's `id` (twice where one person shows twice); the props are
+  picked, and the picture beside the name is hidden.
+- The error title «Ingen idé funnet» was a literal; it is `Idea.NoIdeaFoundTitle`.
+
+Tests first: two new tests in `IdeaModule.test.tsx` (the menu button and the focus; the idea's
+headings and phases) and the new `IdeaField.test.tsx` failed on the old code and pass.
