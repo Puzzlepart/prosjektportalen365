@@ -221,6 +221,9 @@ checked by hand and with which reader and browser: axe finds only part of what W
   reader reads the name twice: `aria-hidden` there; alone, it keeps its name. Fluent's `Persona`
   does not hide its own: pass `avatar={{ 'aria-hidden': true, … }}` (`ProjectProperty`,
   `TimelineList`).
+- `DialogTitle` and `DrawerHeaderTitle` render a heading (`h2`): put the text in them, not a
+  heading of your own, or one heading sits inside another (the program's add dialog). A
+  `SearchBox` with only a `placeholder` has no name: give it an `aria-label`.
 - A Fluent `Dialog` is named by its `DialogTitle`, described by nothing, and opens with focus on
   its first button: a dialog whose text is the point (a confirmation) points `aria-describedby`
   on `DialogSurface` at its `DialogContent` (`useConfirmationDialog`).

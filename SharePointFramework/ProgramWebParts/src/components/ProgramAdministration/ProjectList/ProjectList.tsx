@@ -34,6 +34,8 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         <div className={styles.search}>
           <SearchBox
             {...props.search}
+            // Named by what its placeholder says: a placeholder is no name (WCAG 1.3.1, 4.1.2).
+            aria-label={props.search?.['aria-label'] ?? props.search?.placeholder}
             className={styles.searchBox}
             appearance='filled-lighter'
             size='large'

@@ -15,7 +15,8 @@ export const ProjectListCell: FC<IProjectListCellProps> = ({ item, column, rende
       const url = item.SPWebURL || item.Path
       return (
         <span className={styles.title}>
-          <span className={styles.logo}>
+          {/* The project is named by its title beside it: read once, not twice (WCAG 1.1.1). */}
+          <span className={styles.logo} aria-hidden>
             <ProjectLogo title={item.Title} url={url} renderMode='list' size='32px' />
           </span>
           {renderLinks ? (

@@ -1041,3 +1041,27 @@ followed: each kind of package's actions and confirmations, the badges, the empt
 toolbar's search, view, compatibility switch and clearing, and the installation's failed,
 running and waiting states. Coverage is 53.09/81.00/77.02/53.09 in a full run of 122 tests, and
 the floors are raised to 52/80/76/52.
+
+### Slice 6, part 1 — The program administration (2026-10-19)
+
+axe found nothing in the baseline. The list is the hub's `ListGrid` (slice 4), the commands the
+library's `Toolbar`, whose buttons are restore targets now (slice 4, part 6), so the add dialog,
+opened from state, gives the focus back to its button. What was left:
+
+- **The search boxes** (the page's and the dialog's) had a placeholder and no name; they are named
+  by what the placeholder says, unless the caller names them.
+- **The project's logo** beside its title was an image named «Logo for prosjekt: …», so each
+  project was read twice; it is hidden, as in the latest projects.
+- **The add dialog's title** held an `h2` inside `DialogTitle`, which is an `h2` itself: a heading
+  inside a heading. The title is the text.
+- Noted: adding projects catches no error, so a failure shows nothing (a fault for everyone).
+  Across the solutions, Fluent's `SearchBox` names its clear button «clear», in English, and keeps
+  it out of the tab order (Escape clears): a sweep at close-out names it from the strings
+  wherever a search box is.
+
+Tests first: the new test in `ProjectList.test.tsx` and the first test of the new
+`AddProjectDialog.test.tsx` failed on the old code and pass. The dialog's test loaded its hook,
+untested, and the branch coverage fell under its floor (78.5 %); three behaviour tests of the
+dialog followed (adding under the program's hub, cancel and Escape, a failed fetch and a hub with
+no id, a hub not among the program's), and one of a search box named by its caller. Coverage is
+47.32/79.37/70.58/47.32; the floors rise to 46/79/69/46.

@@ -1977,7 +1977,7 @@ Testene går i `e2e/tests/smoke/a11y-baseline.spec.ts`, `risk-action.spec.ts` og
 
 | Komponent | axe | Gjennomgått | Tastatur | Skjermleser | Visuelt | Skjema | Merknad |
 |---|---|---|---|---|---|---|---|
-| Administrasjon av underområder | Ingen |  |  |  |  |  |  |
+| Administrasjon av underområder | Ingen |  |  |  |  |  | Rettet: søkefeltene (på siden og i dialogen) hadde bare plassholdertekst; nå har de navn. Logoen ved prosjektnavnet het «Logo for prosjekt: …», så prosjektet ble lest to ganger; den er skjult. Dialogen for å legge til hadde en overskrift inni tittelen, som selv er en overskrift. Listen er porteføljeoversiktens (rettet der), og kommandoene den delte verktøylinjen, som gir fokus tilbake fra dialogen. Merket: en feil når prosjekter legges til, fanges ikke og vises ikke, og Fluents tømmeknapp i søkefelt heter «clear» på engelsk (gjelder alle søkefelt) |
 | Innholdsaggregering for program | Ingen |  |  |  |  |  |  |
 | Oversikt over underområder | aria-command-name 24 |  |  |  |  |  | Kommandoer uten navn |
 | Tidslinje for underområder | color-contrast 4, scrollable-region-focusable 1 |  |  |  |  |  | Ingen liste ved siden av (egen sak). Rettet i bibliotekets tidslinje: elementene kan åpnes med tastaturet, tidslinjen rulles med piltastene, og søylene, teksten og milepælene har nok kontrast |

@@ -34,9 +34,8 @@ export const AddProjectDialog: FC = () => {
           }}
         >
           <DialogSurface>
-            <DialogTitle>
-              <h2>{strings.ProgramAdministrationAddChildsButtonLabel}</h2>
-            </DialogTitle>
+            {/* The title is a heading itself: a heading inside it nested one in another. */}
+            <DialogTitle>{strings.ProgramAdministrationAddChildsButtonLabel}</DialogTitle>
             <DialogContent className={styles.content}>
               <ProjectList
                 title={strings.ProgramAdministrationAddChildsButtonLabel}
