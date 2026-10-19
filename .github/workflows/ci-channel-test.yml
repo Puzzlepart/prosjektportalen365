@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - releases/1.15
-      # #1788 on the test tenant while it is worked on; taken out in the pull request's last
-      # commit (the release skill, "To put a topic branch on the test tenant").
-      - feat/universal-design-wcag
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'

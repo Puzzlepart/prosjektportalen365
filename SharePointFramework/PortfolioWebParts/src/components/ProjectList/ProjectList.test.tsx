@@ -248,7 +248,7 @@ describe('ProjectList', () => {
       () => expect(announced()).toContain(format(strings.ProjectsShownAnnouncement, 1, 2)),
       { timeout: 2000 }
     )
-  }, 20000)
+  })
 
   it('tells when no projects came back', async () => {
     renderList({ projects: [] })
