@@ -12,6 +12,7 @@ define([], function () {
       ProjectTitle: 'Logo for prosjekt: {0}',
       SaveTitle: 'Lagre',
       SaveDisabledTitle: 'Det er påkrevde felter som ikke er utfylt, fyll ut disse for å lagre',
+      SearchBoxClearLabel: 'Tøm søket',
       TimelineScrollLabel: 'Tidslinjen. Rull i tid med piltastene',
       TrendBetter: 'Bedre enn forrige måling',
       TrendTargetReached: 'Målet er nådd',

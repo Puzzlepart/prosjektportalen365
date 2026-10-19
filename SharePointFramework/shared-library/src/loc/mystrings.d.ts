@@ -12,6 +12,7 @@ declare interface ISharedLibraryStrings {
     ProjectTitle: string
     SaveTitle: string
     SaveDisabledTitle: string
+    SearchBoxClearLabel: string
     TimelineScrollLabel: string
     TrendBetter: string
     TrendTargetReached: string

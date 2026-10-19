@@ -16,7 +16,7 @@ import { useCatalogContext } from '../context'
 import { languageLabel } from '../language'
 import { ALL_FILTER, SortKey } from '../types'
 import styles from './CatalogToolbar.module.scss'
-import { format } from 'pp365-shared-library'
+import { format, getSearchBoxDismissProps } from 'pp365-shared-library'
 
 export const CatalogToolbar: FC = () => {
   const {
@@ -96,6 +96,7 @@ export const CatalogToolbar: FC = () => {
       <div className={styles.filterRow}>
         <SearchBox
           ref={searchBoxRef}
+          dismiss={getSearchBoxDismissProps()}
           className={styles.search}
           placeholder={strings.CatalogSearchPlaceholder}
           aria-label={strings.CatalogSearchPlaceholder}

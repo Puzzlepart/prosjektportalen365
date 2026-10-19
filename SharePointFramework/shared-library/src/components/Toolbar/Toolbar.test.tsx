@@ -169,6 +169,14 @@ describe('Toolbar', () => {
     )
   })
 
+  it("names its search box's clear button in the page's language, where Fluent says «clear» (WCAG 3.1.2, 4.1.2)", () => {
+    render(<Toolbar items={[new ListMenuItem().setSearchBox({ 'aria-label': 'Søk' })]} />)
+    expect(
+      screen.getByRole('button', { name: strings.Aria.SearchBoxClearLabel })
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'clear' })).toBeNull()
+  })
+
   it('opens the menu of an item with items, runs the chosen one and closes', () => {
     const onAll = jest.fn()
     const onMine = jest.fn()

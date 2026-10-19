@@ -1,6 +1,6 @@
 import { SearchBox } from '@fluentui/react-components'
 import strings from 'ProjectExtensionsStrings'
-import { DataGridList, getFluentIcon } from 'pp365-shared-library'
+import { DataGridList, getFluentIcon, getSearchBoxDismissProps } from 'pp365-shared-library'
 import React from 'react'
 import { ProjectSetupDialogSectionComponent } from '../types'
 import styles from './ContentConfigSection.module.scss'
@@ -25,6 +25,7 @@ export const ContentConfigSection: ProjectSetupDialogSectionComponent = () => {
       <div className={styles.commands}>
         <div className={styles.search}>
           <SearchBox
+            dismiss={getSearchBoxDismissProps()}
             placeholder={strings.ContentConfigSectionSearchPlaceholder}
             aria-label={strings.ContentConfigSectionSearchLabel}
             value={searchTerm}

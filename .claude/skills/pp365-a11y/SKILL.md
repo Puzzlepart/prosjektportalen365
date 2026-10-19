@@ -223,7 +223,9 @@ checked by hand and with which reader and browser: axe finds only part of what W
   `TimelineList`).
 - `DialogTitle` and `DrawerHeaderTitle` render a heading (`h2`): put the text in them, not a
   heading of your own, or one heading sits inside another (the program's add dialog). A
-  `SearchBox` with only a `placeholder` has no name: give it an `aria-label`.
+  `SearchBox` with only a `placeholder` has no name: give it an `aria-label`. Its clear button
+  is named «clear», in English: give every search box `dismiss={getSearchBoxDismissProps()}`
+  from `pp365-shared-library`, which names it «Tøm søket».
 - A Fluent `Dialog` is named by its `DialogTitle`, described by nothing, and opens with focus on
   its first button: a dialog whose text is the point (a confirmation) points `aria-describedby`
   on `DialogSurface` at its `DialogContent` (`useConfirmationDialog`).

@@ -1095,3 +1095,19 @@ failed on the old code and pass. Noted: the icons show the status by colour alon
 the text only on hover or focus (1.4.1): a product decision. Also seen in the browser errors of
 the list view extensions' tests (flaky, passing on retry): `Cannot read properties of null
 (reading 'useContext')` from SharePoint's list view host; to be looked into.
+
+### Slice 6, part 3 — The program timeline; the search boxes' clear button (2026-10-19)
+
+**The program timeline** renders the library's `ProjectTimeline`, as the portfolio timeline
+does, with what slice 1 and slice 4, part 6 gave it: no violation in CI's scan. Slice 6 is done
+but for the hand rounds.
+
+**The search boxes' clear button.** Fluent's `SearchBox` names its clear button (its `dismiss`
+slot) «clear», in English, on a Norwegian page (3.1.2 for the part in another language, and a
+name the user cannot match to what they hear elsewhere). `getSearchBoxDismissProps()`
+(`shared-library/src/util`) names it from `Aria.SearchBoxClearLabel` («Tøm søket»), and every
+search box takes it: the library's toolbar search, the project list's commands, the project setup's content and extension sections, the template package catalog and
+the program administration's lists. It stays out of the tab order, as Fluent keeps it; Escape in
+the box clears too. The hub list's header has no clear button at all (`contentAfter={null}`
+removes the slot it sits in), so nothing there to name. Tests first: the toolbar's and the program
+list's new tests failed on the old code and pass.

@@ -2,6 +2,7 @@ import { SearchBox } from '@fluentui/react-components'
 import React from 'react'
 import { ListMenuItem } from './types'
 import styles from './Toolbar.module.scss'
+import { getSearchBoxDismissProps } from '../../util'
 
 export function useToolbarSearchRender() {
   /**
@@ -17,6 +18,7 @@ export function useToolbarSearchRender() {
     return (
       <div className={styles.search} hidden={item.hidden}>
         <SearchBox
+          dismiss={getSearchBoxDismissProps()}
           className={styles.searchBox}
           style={{ ...item.style }}
           disabled={item.disabled}
