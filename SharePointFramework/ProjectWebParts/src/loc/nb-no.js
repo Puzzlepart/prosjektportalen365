@@ -64,6 +64,7 @@ define([], function () {
     ChildProjectAdminLabel: 'Administrer underområder',
     CloseText: 'Lukk',
     CommentLabel: 'Kommentar',
+    CommentMinLengthFieldLabel: 'Minimum antall tegn i kommentar på sjekkpunkt (0 = ikke påkrevd)',
     ConfigItemTitleFieldLabel: 'Elementtittel (konfigurasjon)',
     ConfirmChangePhase: 'Vil du endre fase til {0}?',
     ConsequenceFieldNameFieldLabel: 'Feltnavn - Konsekvens',
