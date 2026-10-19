@@ -175,7 +175,9 @@ checked by hand and with which reader and browser: axe finds only part of what W
 - `useAnnounce()` returns a function that does nothing when no `AriaLiveAnnouncer` is above it
   (`@fluentui/react-shared-contexts`), and `FluentProvider` renders none: every `MessageBar` was
   silent until our root providers rendered one. A provider of ours inside a wrapper is still wrong
-  (pp365-ui); the announcer goes where the root provider is.
+  (pp365-ui); the announcer goes where the root provider is. A root of ours that renders
+  `FluentProvider` itself needs one too: the template package catalog's message bars and steps
+  were silent until it had.
 - Messages announced while a root mounts (a child's first effect) wait in the announcer's queue:
   its live region is made in its own effect, which runs after its children's on the first render.
   Announce what follows an action or a load, as status messages do.
@@ -238,7 +240,16 @@ checked by hand and with which reader and browser: axe finds only part of what W
 - A status message in Jest: the announcer writes each message as `innerText` on a new span, which
   jsdom keeps as a property, not as text, and clears the region through `innerText` too, which
   jsdom ignores: read the last span's `innerText` in the live region, or a second message reads
-  as the first (`ProjectSetupDialog.test.tsx`).
+  as the first (`ProjectSetupDialog.test.tsx`). The announcer sends a moment after `announce`:
+  `await waitFor(...)`.
+- A card or item that is chosen from a list: the list's cell is the `listitem`, the card a
+  `button` named by the item, the chosen one `aria-current` (the catalog's `PackageCard`).
+  `aria-selected` belongs to options, rows, tabs and grid cells, not to list items.
+- `role='toolbar'` promises one stop and the arrow keys; a search box, lists and a switch in a
+  row are a `search` (or a named `group`), each its own stop (the catalog's `CatalogToolbar`).
+- A pane that replaces the one holding the focused button (details for a progress, and back)
+  takes the focus: a named region or heading with `tabIndex={-1}`, focused as it mounts, and a
+  flag in state for the way back (`InstallProgress`, `usePackageDetails`'s `focusDetails`).
 - A `UserMessage` (Fluent's `MessageBar`) announces itself when it mounts, hidden or not: one in a
   `hidden` container was read out on every project setup («Prosjektdata funnet»), and one in a
   `FieldContainer` with `hidden` on every opening of the portfolio overview's view form. Render it

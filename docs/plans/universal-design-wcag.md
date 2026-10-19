@@ -991,3 +991,53 @@ trap, and calling a trigger's render function as Fluent does.
 Tests first: eight tests in `Footer.test.tsx` and the new colour test failed on the old code
 and pass; the tests that clicked through `window.open` changed with the links, and the
 comparison test reads the colours from the defaults.
+
+### Slice 5, part 2 — The idea extensions, skipped (2026-10-19)
+
+IdeaRegistration, IdeaProcessing and IdeaProjectData (`IdeaDialog`, `IdeaApprovalDialog`) are
+not audited: they are to be deprecated (decided 2026-10-19), so their rows say so and #1788's
+boxes for them are left out rather than ticked. The idea module web part (slice 4, part 8) is
+not affected.
+
+### Slice 5, part 3 — The template package catalog (2026-10-19)
+
+The catalog (the template options list's command set) was not in the baseline. A new test,
+`TemplatePackageCatalog.test.tsx`, renders its parts under a context stand-in, with the parts of
+the details that fetch stood in for.
+
+- **The cards** were `listitem`s with `aria-selected`, which a list item does not take (axe's
+  `aria-allowed-attr`), focusable and chosen by click or Enter: read as list items, never as
+  something to choose. The cell is the `listitem`; the card is a `button` named by the package,
+  described by its description, the chosen one `aria-current`.
+- **The toolbar** was `role='toolbar'`, which promises one stop and the arrow keys, around a
+  search box, lists and a switch, named as the drawer; it is a `search` named
+  «Søk, filtrer og sorter malpakkene». The view buttons' group was named «Rutenett», as one of
+  its buttons; it is «Visning», the buttons named by their tooltips alone.
+- **The details** took the focus on their frame, with no name and its outline removed; the
+  package's name is an `h3` that takes it. The actions were `disabled` while one ran and the main
+  one when the package is unsupported, so the keyboard lost the focus and never reached the
+  reason; they are `disabledFocusable`.
+- **The installation** replaces the details, whose button started it, and is replaced by them as
+  it closes: it is a region named «Installasjon av …» that takes the focus as it mounts (both of
+  its states render the same root, so the focus stays as the steps arrive), and closing it sets
+  `focusDetails`, which hands the focus to the package's heading. A retry keeps the focus in the
+  region. The progress bar is named, each step's status icon is an image named by the status (a
+  name on a plain span is not read), the log's toggle has `aria-expanded` and `aria-controls`,
+  and each step is announced as it starts.
+- **The catalog's root** rendered `FluentProvider` with no `AriaLiveAnnouncer`, so its message
+  bars and announcements were silent; it has one.
+- **Closing** it left the focus nowhere: it opens from SharePoint's command button in a place of
+  its own; the command set keeps what had the focus and gives it back on dismiss.
+- The close button had an `aria-label` («Lukk») and a tooltip label («Lukk katalogen»); the
+  tooltip names it, and `CatalogCloseAria` is gone from the strings.
+
+Tests first: the six tests in the new `TemplatePackageCatalog.test.tsx` and the new focus test
+in `templatePackageCatalog.test.tsx` failed on the old code and pass; the details test failed on
+jsdom's missing `Element.scrollTo` before the heading, so the test file stands one in.
+
+The new test loaded the catalog's parts, largely untested, and PortfolioExtensions' coverage fell
+under its floors (branches 69.9 %, functions 67.9 %). Twelve behaviour tests of those parts
+followed: each kind of package's actions and confirmations, the badges, the empty states, the
+toolbar's search, view, compatibility switch and clearing, and the installation's failed,
+running and waiting states. Coverage is 53.09/81.00/77.02/53.09 in a full run of 122 tests, and
+the floors are raised to 52/80/76/52.

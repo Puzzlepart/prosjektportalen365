@@ -91,7 +91,8 @@ export const CatalogToolbar: FC = () => {
   const sortValue = `${strings.CatalogSortLabel}: ${textFor(sortOptions, sort)}`
 
   return (
-    <div className={styles.toolbar} role='toolbar' aria-label={strings.CatalogDrawerTitle}>
+    // A search with its filters, not a toolbar, which takes one stop and the arrow keys.
+    <div className={styles.toolbar} role='search' aria-label={strings.CatalogToolbarLabel}>
       <div className={styles.filterRow}>
         <SearchBox
           ref={searchBoxRef}
@@ -201,13 +202,13 @@ export const CatalogToolbar: FC = () => {
           </Dropdown>
         </Tooltip>
 
-        <div className={styles.viewToggle} role='group' aria-label={strings.CatalogViewGrid}>
+        {/* Named for what the buttons choose; each is named by its tooltip alone. */}
+        <div className={styles.viewToggle} role='group' aria-label={strings.CatalogViewLabel}>
           <Tooltip content={strings.CatalogViewGrid} relationship='label'>
             <ToggleButton
               appearance='subtle'
               checked={renderMode === 'grid'}
               icon={<Grid20Regular />}
-              aria-label={strings.CatalogViewGrid}
               onClick={() => setRenderMode('grid')}
             />
           </Tooltip>
@@ -216,7 +217,6 @@ export const CatalogToolbar: FC = () => {
               appearance='subtle'
               checked={renderMode === 'list'}
               icon={<List20Regular />}
-              aria-label={strings.CatalogViewList}
               onClick={() => setRenderMode('list')}
             />
           </Tooltip>

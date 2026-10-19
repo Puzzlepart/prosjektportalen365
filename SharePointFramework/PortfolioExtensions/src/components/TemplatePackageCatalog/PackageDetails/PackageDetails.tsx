@@ -50,6 +50,7 @@ export const PackageDetails: FC = () => {
     confirmRemove,
     setConfirmRemove,
     rootRef,
+    titleRef,
     filterByTag
   } = usePackageDetails()
 
@@ -101,7 +102,7 @@ export const PackageDetails: FC = () => {
     .join('  •  ')
 
   return (
-    <div className={styles.root} ref={rootRef} tabIndex={-1}>
+    <div className={styles.root} ref={rootRef}>
       <Button
         className={styles.backButton}
         appearance='subtle'
@@ -120,7 +121,15 @@ export const PackageDetails: FC = () => {
           {pkg.icon && (
             <span className={styles.titleIcon}>{getFluentIconWithFallback(pkg.icon)}</span>
           )}
-          <Text size={500} weight='semibold' className={styles.titleText}>
+          {/* The package's heading, under the catalog's, where the focus goes as it is chosen. */}
+          <Text
+            as='h3'
+            ref={titleRef}
+            tabIndex={-1}
+            size={500}
+            weight='semibold'
+            className={styles.titleText}
+          >
             {pkg.name}
           </Text>
         </div>
@@ -195,7 +204,9 @@ export const PackageDetails: FC = () => {
           <Button
             className={styles.mainAction}
             appearance='primary'
-            disabled={!supported || !!state.busyAction}
+            // Focusable when it cannot run, so its reason is read, and while it runs, so the
+            // focus stays (WCAG 2.1.1, 2.4.3).
+            disabledFocusable={!supported || !!state.busyAction}
             icon={isExtension ? <PuzzlePiece24Regular /> : <ArrowDownload24Regular />}
             onClick={onPrimaryAction}
           >
@@ -228,7 +239,7 @@ export const PackageDetails: FC = () => {
             <Button
               className={styles.removeAction}
               appearance='subtle'
-              disabled={!!state.busyAction}
+              disabledFocusable={!!state.busyAction}
               icon={state.busyAction === 'remove' ? <Spinner size='tiny' /> : <Delete24Regular />}
               onClick={() => setConfirmRemove(true)}
             >
@@ -255,8 +266,7 @@ export const PackageDetails: FC = () => {
               <Button
                 className={styles.mainAction}
                 appearance='secondary'
-                disabled={!!state.busyAction}
-                disabledFocusable={notCloudCompatible || isCentral}
+                disabledFocusable={!!state.busyAction || notCloudCompatible || isCentral}
                 icon={state.busyAction === 'publish' ? <Spinner size='tiny' /> : <Cloud24Regular />}
                 onClick={() => publishCentral(pkg)}
               >
@@ -271,7 +281,7 @@ export const PackageDetails: FC = () => {
                 <Button
                   className={styles.removeAction}
                   appearance='subtle'
-                  disabled={!!state.busyAction}
+                  disabledFocusable={!!state.busyAction}
                   icon={
                     state.busyAction === 'remove' ? <Spinner size='tiny' /> : <Delete24Regular />
                   }

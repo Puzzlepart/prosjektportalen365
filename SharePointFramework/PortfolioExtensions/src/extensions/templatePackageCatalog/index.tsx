@@ -95,6 +95,9 @@ export default class TemplatePackageCatalogCommandSet extends BaseListViewComman
   @override
   public onExecute(event: IListViewCommandSetExecuteEventParameters): void {
     if (event.itemId !== OPEN_COMMAND) return
+    // The catalog opens in a place of its own, from SharePoint's command button, with no trigger
+    // of Fluent's to give the focus back to: it goes back to the button as it closes (WCAG 2.4.3).
+    const opener = document.activeElement as HTMLElement | null
     const placeholder = this._getPlaceholder()
     renderReact(
       React.createElement(TemplatePackageCatalog, {
@@ -103,7 +106,7 @@ export default class TemplatePackageCatalogCommandSet extends BaseListViewComman
         userGuideUrl: this.properties.userGuideUrl,
         featureFlagProvisioning: this.properties.featureFlagProvisioning,
         telemetryUrl: this.properties.telemetryUrl,
-        onDismiss: () => this._unmount(placeholder)
+        onDismiss: () => this._unmount(placeholder, opener)
       }),
       placeholder
     )
@@ -119,8 +122,9 @@ export default class TemplatePackageCatalogCommandSet extends BaseListViewComman
     return placeholder
   }
 
-  private _unmount(placeholder: HTMLElement): void {
+  private _unmount(placeholder: HTMLElement, opener?: HTMLElement | null): void {
     unmountReact(placeholder)
+    if (opener?.isConnected) opener.focus()
   }
 
   private _getIcon(): string {

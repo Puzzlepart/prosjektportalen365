@@ -97,6 +97,11 @@ export interface ITemplatePackageCatalogState {
    */
   busyAction?: 'publish' | 'remove'
   /**
+   * Set as an installation's progress is closed: the details it replaced take the focus back
+   * (WCAG 2.4.3), and clear it.
+   */
+  focusDetails?: boolean
+  /**
    * Whether the detail pane is shown in the <720px collapsed layout.
    */
   detailOpen: boolean

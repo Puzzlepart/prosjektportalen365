@@ -117,6 +117,23 @@ describe('TemplatePackageCatalogCommandSet', () => {
     expect(document.body.querySelectorAll(':scope > div')).toHaveLength(1)
   })
 
+  it('gives the focus back to what opened it when it is dismissed (WCAG 2.4.3)', async () => {
+    const { command } = await catalogCommand()
+    // SharePoint's command bar button: the catalog opens in a place of its own, with no trigger
+    // of Fluent's to give the focus back to.
+    const opener = document.createElement('button')
+    document.body.appendChild(opener)
+    opener.focus()
+    act(() => command.onExecute(execute(OPEN)))
+    const catalog = screen.getByText(/Katalog fra/)
+    catalog.focus()
+    act(() => {
+      fireEvent.click(catalog)
+    })
+    expect(opener).toHaveFocus()
+    opener.remove()
+  })
+
   it('ignores the commands of other command sets', async () => {
     const { command } = await catalogCommand()
     act(() => command.onExecute(execute('ANNEN')))

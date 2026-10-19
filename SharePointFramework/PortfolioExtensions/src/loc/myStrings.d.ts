@@ -63,9 +63,9 @@ declare interface IPortfolioExtensionsStrings {
   FavoriteProjectsNoItemsMessage: string
   TemplatePackageCatalogCommandTitle: string
   CatalogDrawerTitle: string
+  CatalogToolbarLabel: string
   CatalogSubtitle: string
   CatalogUserGuideLinkText: string
-  CatalogCloseAria: string
   CatalogLoadingText: string
   CatalogSearchPlaceholder: string
   CatalogFilterTypeLabel: string
@@ -80,6 +80,7 @@ declare interface IPortfolioExtensionsStrings {
   CatalogSortName: string
   CatalogViewGrid: string
   CatalogViewList: string
+  CatalogViewLabel: string
   CatalogTypeTemplate: string
   CatalogTypeExtension: string
   CatalogTypeContent: string
@@ -142,6 +143,7 @@ declare interface IPortfolioExtensionsStrings {
   CatalogStepListContent: string
   CatalogStepListContentDetail: string
   CatalogAdvancedLogLabel: string
+  CatalogInstallProgressLabel: string
   CatalogLogDownloaded: string
   CatalogLogManifestValidated: string
   CatalogLogHubProvisioned: string
