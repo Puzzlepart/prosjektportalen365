@@ -55,6 +55,11 @@ describe('ProjectInformationPanel', () => {
     expect(screen.getByText('Prosjektinformasjon (panel)')).toBeInTheDocument()
   })
 
+  it('lets the keyboard reach and scroll the project information, which has no control of its own (WCAG 2.1.1)', () => {
+    render(<ProjectInformationPanel {...base} title='Ny svømmehall' hidden={false} />)
+    expect(screen.getByRole('region', { name: 'Ny svømmehall' })).toHaveAttribute('tabindex', '0')
+  })
+
   it('names the panel after the project in its header, beside the close button, and only there', async () => {
     render(<ProjectInformationPanel {...base} title='Ny svømmehall' hidden={false} />)
     const panel = screen.getByRole('dialog', { name: 'Ny svømmehall' })

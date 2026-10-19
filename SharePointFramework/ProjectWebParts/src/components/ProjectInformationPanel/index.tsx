@@ -14,7 +14,8 @@ const PROJECT_INFORMATION_PANEL_DEFAULT_PROPS: Partial<IProjectInformationPanelP
  * renders to open it is marked as the panel's restore target, so closing the panel gives it the
  * focus back (WCAG 2.4.3): Fluent's drawer gives focus back only to such a target, and a toggle
  * that opens it from state has none. A caller that opens the panel through `hidden` marks its
- * own button with `useRestoreFocusTarget`.
+ * own button with `useRestoreFocusTarget`. Its body is read, not worked in, so it takes the focus
+ * itself, and the keyboard can scroll it (WCAG 2.1.1).
  */
 export const ProjectInformationPanel: FC<IProjectInformationPanelProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, PROJECT_INFORMATION_PANEL_DEFAULT_PROPS)
@@ -35,6 +36,7 @@ export const ProjectInformationPanel: FC<IProjectInformationPanelProps> = (incom
         open={panelState.value}
         size={'medium'}
         isLightDismiss={true}
+        isBodyFocusable
         onClose={panelState.setFalse}
         headerText={props.title}
         {...props.panelProps}

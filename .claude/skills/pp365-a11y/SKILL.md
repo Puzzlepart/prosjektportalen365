@@ -234,6 +234,10 @@ checked by hand and with which reader and browser: axe finds only part of what W
   `list`). Put a `<button>` in the `li` (`ProjectPhases/ProjectPhase`). Round a `div` of icons it
   makes a button with no name, one per row of a list (`StatusReportColumn`, axe's
   `aria-command-name`): name it, and render nothing where there is nothing to show.
+- A panel's body scrolls (`BasePanel`'s `DrawerBody`); with nothing focusable in it the keyboard
+  cannot scroll it (axe's `scrollable-region-focusable`). A panel read rather than worked in sets
+  `isBodyFocusable`, which makes the body a region named by the header that takes the focus (the
+  project information panel); a panel of fields leaves it off.
 - Every restore target changes where the focus goes for each dialog opened from state after it:
   Tabster gives the focus to the latest target. A dialog opened from state inside a dialog or a
   panel then sends it out, behind what is still open (the status snapshot's copy dialog, held in

@@ -56,6 +56,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Universell utforming (#1788): i `Administrasjon av underområder` har søkefeltene navn, hvert prosjekt leses én gang, og dialogen for å legge til har én overskrift
 - Universell utforming (#1788): i `Porteføljeoversikt` og `Oversikt over underområder` har statusrapportkolonnen et navn med hver seksjons status, og prosjekter uten rapport viser ingen tom knapp. Når kopi-dialogen i statusrapportens øyeblikksbilde eller bekreftelsen av «Slett» i kolonneskjemaet lukkes, går fokus tilbake til knappen som åpnet den
 - Universell utforming (#1788): tømmeknappen i alle søkefelt heter «Tøm søket», der Fluent kalte den «clear», på engelsk
+- Universell utforming (#1788): innholdet i prosjektinformasjonspanelet kan nås og rulles med tastaturet
 
 ### Feilrettinger
 

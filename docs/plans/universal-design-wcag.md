@@ -1111,3 +1111,20 @@ the program administration's lists. It stays out of the tab order, as Fluent kee
 the box clears too. The hub list's header has no clear button at all (`contentAfter={null}`
 removes the slot it sits in), so nothing there to name. Tests first: the toolbar's and the program
 list's new tests failed on the old code and pass.
+
+### Close-out, part 1 — CI's last findings, the floors and the release notes (2026-10-19)
+
+The full test-channel run (39248212569) was green; its scans left one finding, also in the run
+before: `scrollable-region-focusable` in the project information panel. The panel's body scrolls,
+and with the actions hidden there is nothing in it to focus, so the keyboard could not scroll it.
+`BasePanel` takes `isBodyFocusable`, which makes the body a stop for the keyboard and a region
+named by the header, for a panel read rather than worked in; the project information panel sets
+it, and a panel of fields does not (its fields are its stops). Tests first: the new tests in
+`BasePanel.test.tsx` and `ProjectInformationPanel.test.tsx` failed on the old code and pass.
+
+The coverage floors of shared-library, PortfolioWebParts, ProjectExtensions and ProjectWebParts
+rise to the same run's figures, rounded down and one point under, no floor lower than before.
+The release notes have a section on universal design, and their test counts are brought up to
+date. Noted from the run: `pageerror: undefined` in most tests, also before this work, without a
+message or a stack; and the date test checks 0 of 1 date-only fields, as on 2026-10-14, since the
+e2e project's report has no value in it.

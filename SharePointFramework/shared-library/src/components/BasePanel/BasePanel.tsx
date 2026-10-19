@@ -37,6 +37,7 @@ export const BasePanel: FC<IBasePanelProps> = ({
   header,
   hidden,
   footer,
+  isBodyFocusable,
   children,
   className
 }) => {
@@ -80,7 +81,15 @@ export const BasePanel: FC<IBasePanelProps> = ({
               {header ?? headerText}
             </DrawerHeaderTitle>
           </DrawerHeader>
-          <DrawerBody className={styles.body}>{children}</DrawerBody>
+          {/* A body read rather than worked in takes the focus, so the keyboard can scroll it. */}
+          <DrawerBody
+            className={styles.body}
+            {...(isBodyFocusable
+              ? { tabIndex: 0, role: headerText ? 'region' : undefined, 'aria-label': headerText }
+              : {})}
+          >
+            {children}
+          </DrawerBody>
           {footer && <DrawerFooter className={styles.footer}>{footer}</DrawerFooter>}
         </OverlayDrawer>
       </FluentProvider>
