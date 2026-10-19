@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { ProjectPhasesContext } from 'components/ProjectPhases/context'
 import { ChangePhaseDialogContext } from '../../context'
 import { useActions } from './useActions'
 
@@ -10,6 +11,7 @@ export function useInitialView() {
   const checklistItem = state.checklistItems[state.currentIdx]
   const checklistItems = state.checklistItems
   const { nextChecklistItem } = useContext(ChangePhaseDialogContext)
+  const isCommentRequired = useContext(ProjectPhasesContext).props.commentMinLength > 0
   const [comment, setComment] = useState(checklistItem.comment || '')
 
   /**
@@ -27,5 +29,12 @@ export function useInitialView() {
 
   const actions = useActions(comment, onNextChecklistItem)
 
-  return { checklistItem, checklistItems, setComment, comment, actions } as const
+  return {
+    checklistItem,
+    checklistItems,
+    setComment,
+    comment,
+    isCommentRequired,
+    actions
+  } as const
 }

@@ -48,6 +48,7 @@ declare interface IProjectWebPartsStrings {
   ChildProjectAdminLabel: string
   CloseText: string
   CommentLabel: string
+  CommentMinLengthFieldLabel: string
   ConfigItemTitleFieldLabel: string
   ConfirmChangePhase: string
   ConsequenceFieldNameFieldLabel: string

@@ -95,6 +95,7 @@ define([], function () {
     ChildProjectAdminLabel: 'Manage childprojects',
     CloseText: 'Close',
     CommentLabel: 'Comment',
+    CommentMinLengthFieldLabel: 'Minimum number of characters in checkpoint comment (0 = not required)',
     ConfigItemTitleFieldLabel: 'Element title (configuration)',
     ConfirmChangePhase: 'Do you want to change phase to {0}?',
     ConsequenceFieldNameFieldLabel: 'Field name - Consequence',
