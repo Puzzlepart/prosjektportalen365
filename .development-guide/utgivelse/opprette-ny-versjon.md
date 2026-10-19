@@ -36,8 +36,8 @@ Kjør aldri `npm version` inne i en løsning; se [NPM](npm.md).
 ### 3. Release-PR og pakkene
 
 - Opprett en PR fra `releases/x.y` til `main` med tittelen `v<versjon>`, labelen `release-pr` og milepælen for versjonen. For 1.14.0 var det #1769, slått sammen med «Squash and merge».
-- Push til `main` starter `build-release.yml` («Build release (main)») når den endrer noe under `SharePointFramework/`, `Install/` eller `Templates/`, som versjonscommiten gjør. Den laster opp artefaktene `release-package` (hovedkanalen) og `release-package-test` (testkanalen), og `release-package-kurs` når commit-meldingen har `[build-kurs]`. Den ruller ikke ut noe.
-- Arbeidsflyten leser hele commit-meldingen, også punktlisten en squash-merge lager av alle commitene i versjonen. Sjekk at den ikke har `[skip-main-ci]` eller en `[build-kurs]` du ikke vil ha.
+- Push til `main` starter `build-release.yml` («Build release (main)») når den endrer noe under `SharePointFramework/`, `Install/` eller `Templates/`, som versjonscommiten gjør. Den laster opp artefaktene `release-package` (hovedkanalen) og `release-package-test` (testkanalen), og `release-package-kurs` når emnelinjen har `[build-kurs]`. Den ruller ikke ut noe.
+- Arbeidsflyten leser bare emnelinjen, som de andre arbeidsflytene. Skal kurs-pakken bygges, legg `[build-kurs]` bakerst i emnelinjen i merge-dialogen. Til 14. oktober 2026 leste den hele meldingen, også punktlisten en squash-merge lager av alle commitene i versjonen.
 - Artefaktene slettes etter 7 dager, som er det lengste repoet tillater.
 - Testpakken fra `main` har versjonen `x.y.z.0`. Testtenanten har allerede fått `x.y.z.<kjørenummer>` fra `ci-channel-test.yml`.
 

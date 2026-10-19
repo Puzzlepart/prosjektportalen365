@@ -21,6 +21,12 @@ import {
 import { stringIsNullOrEmpty } from '@pnp/core'
 import { DataGridList } from '../../DataGridList'
 import { UserMessage } from '../../UserMessage'
+import { withDefaults } from '../../../util'
+
+const DIALOG_COLUMN_DEFAULT_PROPS: Partial<IDialogColumnProps> = {
+  linkText: strings.ShowAllMeasurementsLinkText,
+  infoTextTemplate: ''
+}
 
 /**
  * A column render component that displays a link in the cell. When the link is clicked, a dialog is displayed
@@ -35,7 +41,8 @@ import { UserMessage } from '../../UserMessage'
  * @param props.infoTextTemplate - The template for the information text to display below the list of items.
  * @param props.showInfoText - Whether to show the information text.
  */
-export const DialogColumn: ColumnRenderComponent<IDialogColumnProps> = (props) => {
+export const DialogColumn: ColumnRenderComponent<IDialogColumnProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, DIALOG_COLUMN_DEFAULT_PROPS)
   const { infoText, title, subTitle, items, columns, shouldRenderList } = useDialogColumn(props)
 
   return (
@@ -87,11 +94,6 @@ export const DialogColumn: ColumnRenderComponent<IDialogColumnProps> = (props) =
     </Dialog>
   )
 }
-
-DialogColumn.defaultProps = {
-  linkText: strings.ShowAllMeasurementsLinkText,
-  infoTextTemplate: ''
-}
 DialogColumn.key = 'modal'
 DialogColumn.id = 'Modal'
 DialogColumn.displayName = strings.ColumnRenderOptionDialog
@@ -100,19 +102,19 @@ DialogColumn.isDisabled = true
 DialogColumn.getDataTypeProperties = (onChange, dataTypeProperties) => [
   textField({
     label: strings.ColumnRenderOptionDialogLinkTextLabel,
-    placeholder: DialogColumn.defaultProps.linkText,
+    placeholder: DIALOG_COLUMN_DEFAULT_PROPS.linkText,
     value: dataTypeProperties.linkText,
     onChange: (value) => onChange('linkText', value)
   }),
   checkboxField({
     label: strings.ColumnRenderOptionDialogShowInfoTextLabel,
-    checked: dataTypeProperties.showInfoText ?? DialogColumn.defaultProps.showInfoText,
+    checked: dataTypeProperties.showInfoText ?? DIALOG_COLUMN_DEFAULT_PROPS.showInfoText,
     onChange: (checked) => onChange('showInfoText', checked)
   }),
   textField({
     label: strings.ColumnRenderOptionDialogInfoTextTemplateLabel,
     description: strings.ColumnRenderOptionDialogInfoTextTemplateDescription,
-    placeholder: DialogColumn.defaultProps.infoTextTemplate,
+    placeholder: DIALOG_COLUMN_DEFAULT_PROPS.infoTextTemplate,
     value: dataTypeProperties.infoTextTemplate,
     multiline: true,
     disabled: !dataTypeProperties.showInfoText,

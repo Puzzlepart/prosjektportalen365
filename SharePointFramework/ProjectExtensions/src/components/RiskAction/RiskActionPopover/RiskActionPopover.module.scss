@@ -11,6 +11,12 @@
 
     .alert {
         white-space: pre-wrap;
+
+        // The message bar's body sets its own size; the popover's texts are smaller.
+        :global(.fui-MessageBarBody) {
+            font-size: inherit;
+            line-height: normal;
+        }
     }
 
     .infoText, .lastUpdated {

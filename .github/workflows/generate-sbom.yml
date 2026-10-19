@@ -10,15 +10,16 @@ jobs:
   generate-sbom:
     name: Generate SBOM
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     permissions:
       contents: write  # Required to push SBOM.md to the branch of a manual run
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.ref }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
 
@@ -31,7 +32,7 @@ jobs:
           npm run generate-sbom
 
       - name: Upload SBOM as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sbom
           path: SBOM.md

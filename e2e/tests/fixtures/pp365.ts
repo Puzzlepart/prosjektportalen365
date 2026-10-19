@@ -201,13 +201,26 @@ const CHANNEL_COMPONENTS: Map<string, { channel: string; name: string }> = (() =
  * channel's. Out-of-the-box web parts are left alone.
  */
 export async function expectReleaseChannel(page: Page): Promise<void> {
-  const ids = await page
-    .locator(WEB_PART)
-    .evaluateAll((elements) => elements.map((e) => e.getAttribute('data-sp-web-part-id') ?? ''))
-  const foreign = ids
-    .map((id) => CHANNEL_COMPONENTS.get(id.toLowerCase()))
-    .filter((component) => component && component.channel !== CHANNEL)
-    .map((component) => `${component!.name} (${component!.channel} channel)`)
+  const webParts = await page.locator(WEB_PART).evaluateAll((elements) =>
+    elements.map((e) => ({
+      id: (e.getAttribute('data-sp-web-part-id') ?? '').toLowerCase(),
+      // "RiskMatrixWebPart web part (Risikomatrise)" on canvas pages; app pages have no tag.
+      alias: /^(\w+) web part/.exec(e.getAttribute('data-sp-feature-tag') ?? '')?.[1]
+    }))
+  )
+  const names = new Set(
+    [...CHANNEL_COMPONENTS.values()].filter((c) => c.channel === CHANNEL).map((c) => c.name)
+  )
+  const foreign = webParts
+    .map(({ id, alias }) => {
+      const component = CHANNEL_COMPONENTS.get(id)
+      if (component) return component.channel === CHANNEL ? undefined : component
+      // A PP365 web part whose id no channel file knows: a package outside the channels, as the
+      // old packages a tenant's app catalog keeps (a 1.8.1 risk matrix on the test tenant).
+      return alias && names.has(alias) ? { name: alias, channel: `package ${id}` } : undefined
+    })
+    .filter((component) => component)
+    .map((component) => `${component!.name} (${component!.channel})`)
   expect(
     foreign,
     `${page.url()} runs web parts of another release channel than "${CHANNEL}"; point them at the ` +

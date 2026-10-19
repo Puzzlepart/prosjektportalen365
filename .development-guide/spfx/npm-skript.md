@@ -17,7 +17,7 @@ Skriptene i roten styrer monorepoet som helhet: Rush-operasjoner, generering av 
 | `generate-sbom`                | `node ./.tasks/generate-sbom.js`                                                                          | Genererer `SBOM.md` med komplett oversikt over avhengigheter i alle pakker. Se [SBOM-generering](../ci/sbom.md).                                                                                |
 | `check-skills`                 | `node ./.tasks/check-skills.js`                                                                           | Sjekker at agentferdighetene (skills) bare ligger i `.claude/skills`: Claude Code leser bare den mappen, og GitHub Copilot leser den også. Feiler hvis `.github/skills` eller `.agents/skills` finnes, eller hvis en `SKILL.md` mangler `name` lik mappenavnet eller en `description` på 1–1024 tegn. Kjøres i CI av `skills.yml`. |
 | `check-channel-ids` | `node ./.tasks/check-channel-ids.js` | Sjekker at løsningene har main-kanalens løsnings- og komponent-ID-er i `config/package-solution.json` og manifestene, slik `channels/main.json` har dem. Feiler og lister avvikene ellers. `Install/Build-Release.ps1` kjører den før bygget. |
-| `test:tasks` | `node --test ".tasks/*.test.js"` | Kjører testene for skriptene i `.tasks/` (i dag `check-channel-ids`). |
+| `test:tasks` | `node --test ".tasks/*.test.js"` | Kjører alle `.tasks/*.test.js`, testene for skriptene i `.tasks/` (i dag `check-channel-ids`, `modify-solution-files` og `publish-test-report`). CI kjører dem ikke. |
 | `postversion`                  | `npm run generate-readme && npm run sync-version && npm run generate-sbom`                                | Kjøres automatisk av npm etter `npm version patch/minor`. Regenererer README, synkroniserer versjoner og oppdaterer SBOM i ett steg.                                                             |
 | `rush:init`                    | `npm run rush:update && npm run rush:build`                                                               | Førstegangsoppsett av repoet. Kjører `rush:update` etterfulgt av `rush:build` slik at avhengigheter installeres og alle løsningene bygges i riktig rekkefølge. Se [Rush og bygging](./rush.md).  |
 | `rush:update`                  | `node common/scripts/install-run-rush.js update`                                                          | Kjører `rush update` uten at Rush er installert globalt. Installerer avhengigheter og sikrer konsistente versjoner på tvers av løsningene.                                                       |
@@ -95,7 +95,7 @@ Se [Oppgaver](../../SharePointFramework/.tasks/README.md) for en full oversikt o
 | `test`         | `playwright test` | Kjører testene mot testtenanten. |
 | `test:ui`      | `playwright test --ui` | Åpner Playwrights grensesnitt for å kjøre og feilsøke testene. |
 | `test:headed`  | `playwright test --headed` | Kjører testene med synlig nettleser. |
-| `report`       | `playwright show-report` | Åpner HTML-rapporten fra siste kjøring. |
+| `report`       | `playwright show-report` | Åpner HTML-rapporten fra siste lokale kjøring. Rapporten fra CI ligger på testrapportsiden. |
 | `lint`, `validate-loc` | `echo …` | Plassholdere for `rush lint` og `rush validate-loc`. |
 
 ### Skript i `integration`
@@ -106,7 +106,7 @@ Se [Oppgaver](../../SharePointFramework/.tasks/README.md) for en full oversikt o
 | -------------- | -------- | ---------------------- |
 | `build`        | `tsc --noEmit -p tsconfig.json` | Typesjekker harnessen og testene. Kjøres av `rush build`; testene kjører aldri der, siden de trenger en tenant. |
 | `test`         | `node --test --test-concurrency=1 "tests/**/*.test.ts"` | Kjører testene mot testtenanten, én fil om gangen, med Nodes typestripping. |
-| `test:ci`      | `node --test … --test-reporter=spec … --test-reporter=junit …` | Som `test`, med spec-rapport i loggen og JUnit i `test-results/junit.xml`. Brukes av CI-jobben. |
+| `test:ci`      | `node --test … --test-reporter=spec … --test-reporter=junit … --test-reporter=./src/reporters/html.ts …` | Som `test`, med spec-rapport i loggen, JUnit i `test-results/junit.xml` og HTML-rapporten i `test-results/index.html` (den testrapportsiden viser). Brukes av CI-jobben. |
 | `lint`, `validate-loc` | `echo …` | Plassholdere for `rush lint` og `rush validate-loc`. |
 
 ### Skript i `Templates`

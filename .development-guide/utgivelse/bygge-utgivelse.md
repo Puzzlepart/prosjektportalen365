@@ -1,6 +1,6 @@
 ## Bygge en ny utgivelse
 
-`Install/Build-Release.ps1` bygger installasjonspakken. Det kjører en full `rush rebuild` med testene, pakker hver løsning som `.sppkg`, bygger PnP-malene og site scripts og legger alt sammen med installasjonsskriptene og PnP.PowerShell i `release/`. Skriptet trenger Node 22 og PowerShell 7 (`pwsh`), og stopper på en annen hovedversjon av Node.
+`Install/Build-Release.ps1` bygger installasjonspakken. Det kjører en full `rush rebuild` med testene, pakker hver løsning som `.sppkg`, bygger PnP-malene og site scripts og legger alt sammen med installasjonsskriptene og PnP.PowerShell i `release/`. Skriptet trenger Node 26 og PowerShell 7 (`pwsh`), og stopper på en annen hovedversjon av Node.
 
 Fra roten:
 
@@ -17,7 +17,7 @@ Lokalt havner pakken i `release/pp365-<versjon>.<hash>/` og som zip-fil ved side
 
 | Parameter | Hva den gjør |
 | --- | --- |
-| `-Channel test\|kurs\|i18n` | Bytter inn kanalens løsnings- og komponent-ID-er fra `channels/<kanal>.json` før bygget (se [Installasjonskanaler](../maler/kanaler.md)). |
+| `-Channel main\|test\|kurs\|i18n` | Bytter inn kanalens løsnings- og komponent-ID-er fra `channels/<kanal>.json` før bygget (se [Installasjonskanaler](../maler/kanaler.md)). `main` har ID-ene fra kildekoden, så løsningene blir de samme som uten `-Channel`. Med en kanal og `PP365_BUILD_NUMBER` satt får versjonen kjørenummeret som fjerde ledd, slik `ci-releases.yml` bygger. |
 | `-Solutions <navn,...>` | Pakker bare de oppgitte løsningene. Bygget er likevel en full `rush rebuild`, så `shared-library` kommer med i løsningene som bundler den. Navnene matches uten hensyn til store bokstaver og bindestrek. |
 | `-SkipBuildPnPTemplates` | Hopper over PnP-malene. |
 | `-SkipPnPPowerShell` | Installerer, importerer og sjekker ikke PnP.PowerShell, som bare malene trenger. Krever `-SkipBuildPnPTemplates`. |
@@ -29,6 +29,7 @@ Lokalt havner pakken i `release/pp365-<versjon>.<hash>/` og som zip-fil ved side
 Skriptet stopper på feil som `npm run build` slipper gjennom:
 
 - løsnings- eller komponent-ID-er fra en annen kanal i kildekoden, for eksempel fra en `npm run watch` som ikke ble avsluttet før en commit (`npm run check-channel-ids` sjekker det samme alene)
+- en løsning som etter kanalbyttet ikke har kanalens løsnings-ID, eller som i CI mangler kjørenummeret i versjonen (`modifySolutionFiles.js` skriver ingenting i loggen)
 - en dekningsgrense i en løsnings `config/jest.config.json` som ikke er nådd (Jest melder det, men Heft feiler ikke)
 - en løsning som ikke fikk en ny `.sppkg`
 - en `pp365-*`-pakke som er ekstern i en bundle i stedet for bundlet inn

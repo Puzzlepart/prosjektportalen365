@@ -10,7 +10,7 @@ tests, and on a developer's machine in seconds. Plan and decisions:
 
 ## How it works
 
-- `node --test` runs `tests/**/*.test.ts` directly through Node 22's type stripping. There is no
+- `node --test` runs `tests/**/*.test.ts` directly through Node's type stripping (stable since 22.18; the repo runs 26). There is no
   build: only TypeScript that erases to JavaScript (no `enum`, namespaces or parameter
   properties; `import type` for types), and imports name the `.ts` file. `npm run build` only
   type-checks.
@@ -74,12 +74,20 @@ with that reason when the two differ.
   to hub rows the test created. Restore in `finally`, from what the test read first. Never point a
   variable at the project in `E2E_PROJECT_URL`, which the browser suite and hand tests use.
 - Assert what SharePoint returned or stored, read back, not what the code sent; keep assertions
-  independent of the time zone and of other projects' data.
-- No secret reaches a log, a report or a file: no token, cookie or certificate is printed.
+  independent of the time zone and of other projects' data. A test of a date's text runs the
+  machine through the zones with `process.env.TZ`, which Node applies at once (Jest's copy of the
+  environment does not); the harness hands the services the site's time zone as a page does
+  (`siteTimeZoneData` in `src/context.ts`, which knows the European zones' daylight rules).
+- No secret reaches a log, a report or a file: no token, cookie or certificate is printed. A
+  `t.diagnostic` line, `console` output and a failed assertion's values land in the HTML report and
+  on the test report site as well as in the log.
 - What a test creates in the hub carries a prefix of its own (columns: `Integrasjonstest …`;
   status reports: the reserved project's report series `ITEST`, apart from its own reports), and
   the test first removes what an interrupted run left there.
 - Format with Prettier and the solutions' rules: `prettier --config ../SharePointFramework/.prettierrc.yaml`.
+- The browser suite's matrix smoke needs a project page with both matrix web parts, which no
+  template holds: `npm run add-matrix-page -- <project url> [Usikkerhet.aspx] [channel]` adds and
+  publishes it with the toolbox defaults, signed in as the harness is (`scripts/add-matrix-page.ts`).
 
 ## In CI
 
@@ -88,8 +96,15 @@ strings from the templates' `.resx` files (`npm run generate-resx-ts` in `Templa
 in git), builds the library (`heft build --production`, without Jest), compiles ProjectWebParts'
 `lib-commonjs` with TypeScript alone (`--noCheck`, the strings copied beside it; its bundle and
 type check are the release build's) and runs `npm run test:ci`:
-the spec report in the log, JUnit in `test-results/junit.xml`, uploaded as
-`integration-report-test-channel` for 7 days. `[skip-integration]` in the commit subject skips it.
+the spec report in the log, JUnit in `test-results/junit.xml` and an HTML report in
+`test-results/index.html` (`src/reporters/html.ts`, a `node:test` reporter: each file's suites and
+tests with their status, skip reasons, `t.diagnostic` lines, errors with their cause chain and
+stack, and the file's stdout and stderr). With three reporters Node prints a
+`MaxListenersExceededWarning`, which is harmless. The job uploads `test-results` as
+`integration-report-test-channel` for 7 days and publishes the HTML report to the test report site,
+a private GitHub Pages site (`.tasks/publish-test-report.js`; setup in
+`.development-guide/ci/kontinuerlig-integrasjon.md` «Testrapportsiden»). `[skip-integration]` in the
+commit subject skips it. `tests/html-reporter.test.ts` tests the reporter offline, in `npm test` too.
 
 | GitHub | Kind | Here |
 |---|---|---|
@@ -99,4 +114,7 @@ the spec report in the log, JUnit in `test-results/junit.xml`, uploaded as
 | `E2E_USERNAME` | secret | `INTEGRATION_USER` |
 | `CI_CERT_BASE64`, `CI_CLIENT_ID`, `CI_TENANT` | secrets | The certificate sign-in, from the workflow's `env` |
 
-A failed run's report: `gh run download <run-id> -n integration-report-test-channel`.
+A failed run's report: the link under «Integration report» in the job summary on the run's page
+opens it on the test report site, which keeps 7 days of runs. Without the site (not set up yet, or
+the publishing step warned): `gh run download <run-id> -n integration-report-test-channel`, then
+open `index.html`.

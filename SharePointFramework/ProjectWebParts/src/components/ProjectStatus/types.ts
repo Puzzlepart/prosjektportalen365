@@ -45,6 +45,13 @@ export interface IProjectStatusProps extends IBaseWebPartComponentProps {
   snapshotAttachmentFileName?: string
 
   /**
+   * `Åpne øyeblikksbilde` shows the snapshot in `SnapshotDialog`, which fills the window and
+   * offers full screen and a link to the snapshot. `false` opens the image file in a new tab
+   * instead. Unset is `true`: pages saved before the property existed get the dialog.
+   */
+  snapshotInDialog?: boolean
+
+  /**
    * When `true`, the project can maintain multiple report series
    * ("multirapportering") — one per sub-project ("delprosjekt") defined in
    * `subProjects` — selected through a scope selector in the toolbar. Each
@@ -126,6 +133,11 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
     reportProps?: Record<string, any>
     contentId?: any
   }
+
+  /**
+   * Is the snapshot of the selected report shown in `SnapshotDialog`?
+   */
+  isSnapshotOpen?: boolean
 
   /**
    * The status for the report (currently selected)

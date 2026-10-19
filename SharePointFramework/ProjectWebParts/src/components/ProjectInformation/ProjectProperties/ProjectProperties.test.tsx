@@ -31,7 +31,7 @@ function property(
 }
 
 function renderProperties(properties: Property[], props: Record<string, any> = {}) {
-  render(
+  return render(
     <ProjectInformationContextProvider
       value={
         {
@@ -101,6 +101,64 @@ describe('ProjectProperties', () => {
       displayAllProperties: true
     })
     expect(screen.getByText('Skjult')).toBeInTheDocument()
+  })
+
+  it('renders sustainability goals as tags by default and leaves them to icon mode when enabled', () => {
+    const sustainabilityGoals = property(
+      'GtUNSustDevGoals',
+      'FNs bærekraftsmål',
+      [{ key: 'energy', name: '07. Ren energi til alle' }],
+      'TaxonomyFieldTypeMulti'
+    )
+    const view = renderProperties([sustainabilityGoals])
+    expect(screen.getByText('FNs bærekraftsmål')).toBeInTheDocument()
+    expect(screen.getByText('07. Ren energi til alle')).toBeInTheDocument()
+
+    view.rerender(
+      <ProjectInformationContextProvider
+        value={
+          {
+            props: {
+              page: 'Frontpage',
+              showFieldExternal: {},
+              fallbackVisibleFields: [],
+              showSustainabilityGoalsAsIcons: true
+            },
+            state: {
+              properties: [sustainabilityGoals],
+              data: { fieldValues: { get: () => '' } }
+            },
+            dispatch: jest.fn()
+          } as any
+        }
+      >
+        <ProjectProperties />
+      </ProjectInformationContextProvider>
+    )
+    expect(screen.queryByText('FNs bærekraftsmål')).toBeNull()
+
+    view.rerender(
+      <ProjectInformationContextProvider
+        value={
+          {
+            props: {
+              page: 'Frontpage',
+              showFieldExternal: {},
+              fallbackVisibleFields: [],
+              showSustainabilityGoalsAsIcons: true
+            },
+            state: {
+              properties: [sustainabilityGoals],
+              data: { fieldValues: { get: () => '' } }
+            },
+            dispatch: jest.fn()
+          } as any
+        }
+      >
+        <ProjectProperties displayAllProperties />
+      </ProjectInformationContextProvider>
+    )
+    expect(screen.getByText('FNs bærekraftsmål')).toBeInTheDocument()
   })
 
   it('tells when no property is left to show', () => {

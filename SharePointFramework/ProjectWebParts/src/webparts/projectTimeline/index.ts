@@ -5,7 +5,10 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import { IProjectTimelineProps } from 'components/ProjectTimeline'
-import { ProjectTimeline } from 'components/ProjectTimeline/ProjectTimeline'
+import {
+  PROJECT_TIMELINE_DEFAULT_PROPS,
+  ProjectTimeline
+} from 'components/ProjectTimeline/ProjectTimeline'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
 import * as strings from 'ProjectWebPartsStrings'
 import resource from 'SharedResources'
@@ -17,7 +20,7 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    const propertiesWithDefaults = { ...ProjectTimeline.defaultProps, ...this.properties }
+    const propertiesWithDefaults = { ...PROJECT_TIMELINE_DEFAULT_PROPS, ...this.properties }
     return {
       pages: [
         {

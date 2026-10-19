@@ -46,7 +46,7 @@ Param(
     [Parameter(Mandatory = $false, HelpMessage = "Which handlers to exclude when performing an upgrade")]
     [string[]]$UpgradeExcludeHandlers = @("Navigation", "SupportedUILanguages", "Files"),
     [Parameter(Mandatory = $false, HelpMessage = "Do not send the installation pingback (URL, version, channel, time and parameter names) to the Prosjektportalen team")]
-    [switch]$SkipPingback
+    [switch]$SkipPingback,
     [Parameter(Mandatory = $false, HelpMessage = "Never wait for keyboard input (countdowns and prompts are skipped). Implied by -CI.")]
     [switch]$NonInteractive
 )

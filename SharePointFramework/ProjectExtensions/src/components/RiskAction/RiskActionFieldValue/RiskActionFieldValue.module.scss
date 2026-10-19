@@ -6,6 +6,12 @@
   .alert {
     white-space: pre-wrap;
     font-size: 10px;
+
+    // The message bar's body sets its own size; the cell's text is smaller.
+    :global(.fui-MessageBarBody) {
+      font-size: inherit;
+      line-height: normal;
+    }
   }
 
   .fieldValue {

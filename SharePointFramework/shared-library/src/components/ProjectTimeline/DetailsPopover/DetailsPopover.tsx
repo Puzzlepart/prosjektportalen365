@@ -1,12 +1,17 @@
 import { Link, Popover, PopoverSurface } from '@fluentui/react-components'
 import * as strings from 'SharedLibraryStrings'
 import React, { FC } from 'react'
-import { formatDate, tryParseCurrency } from '../../../util'
+import { formatDate, tryParseCurrency, withDefaults } from '../../../util'
 import styles from './DetailsPopover.module.scss'
 import { IDetailsPopoverProps } from './types'
 import resource from 'SharedResources'
 
-export const DetailsPopover: FC<IDetailsPopoverProps> = (props) => {
+const DETAILS_POPOVER_DEFAULT_PROPS: Partial<IDetailsPopoverProps> = {
+  open: true
+}
+
+export const DetailsPopover: FC<IDetailsPopoverProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, DETAILS_POPOVER_DEFAULT_PROPS)
   const { data } = props.timelineItem.item
   const { item } = props.timelineItem
 
@@ -220,6 +225,3 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (props) => {
 }
 
 DetailsPopover.displayName = 'DetailsPopover'
-DetailsPopover.defaultProps = {
-  open: true
-}

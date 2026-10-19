@@ -1,5 +1,5 @@
 import { FluentProvider, IdPrefixProvider, useId } from '@fluentui/react-components'
-import { customLightTheme } from 'pp365-shared-library'
+import { customLightTheme, withDefaults } from 'pp365-shared-library'
 import React, { CSSProperties, FC } from 'react'
 import { ListContext } from './context'
 import styles from './List.module.scss'
@@ -8,13 +8,21 @@ import { ListHeader } from './ListHeader'
 import { IListProps } from './types'
 import { useList } from './useList'
 
+const LIST_DEFAULT_PROPS: Partial<IListProps<any>> = {
+  items: [],
+  columns: [],
+  menuItems: [],
+  isListLayoutModeJustified: false
+}
+
 /**
  * The hub's list, for the portfolio overview and the aggregated overview: a header with the
  * title, the search box and the toolbar, and the rows on Fluent UI v9's `Table`, grouped or not.
  * The list fills SharePoint's main content area and scrolls there, with the command bar and the
  * column headers pinned at its top.
  */
-export const List: FC<IListProps<any>> = (props) => {
+export const List: FC<IListProps<any>> = (incomingProps) => {
+  const props = withDefaults(incomingProps, LIST_DEFAULT_PROPS)
   const fluentProviderId = useId('fp-list')
   const { columns, onRenderItemColumn, onColumnHeaderClick, commandBarRef, stickyTop } =
     useList(props)
@@ -48,11 +56,4 @@ export const List: FC<IListProps<any>> = (props) => {
       </FluentProvider>
     </IdPrefixProvider>
   )
-}
-
-List.defaultProps = {
-  items: [],
-  columns: [],
-  menuItems: [],
-  isListLayoutModeJustified: false
 }

@@ -26,7 +26,6 @@ declare interface IProjectExtensionsStrings {
   DueDateLabel: string
   NewRiskActionPanelTitle: string
   NewRiskActionPanelAddNewRiskAction: string
-  ResponsibleFieldNoResults: string
   ResponsibleFieldLabel: string
   ApplyExtensionHooks: string
   ApplyExtensionText: string

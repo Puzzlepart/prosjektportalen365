@@ -17,4 +17,4 @@ npm run sync-version -- --dry-run
 
 Det trenger rotens egne avhengigheter (`glob`), som Rush ikke installerer, så kjør `npm install` i roten først. Løsningene henter hverandre med `workspace:*`, så ingen avhengighet må oppdateres for hånd. Hele løpet for en ny versjon står i [Opprettelse av en ny versjon](opprette-ny-versjon.md).
 
-Pakkene som `ci-channel-test.yml` og `ci-build-debug.yml` bygger, får kjørenummeret som fjerde ledd (`x.y.z.<kjørenummer>`), slik at SharePoint henter manifestene på nytt. Pakker fra `main`, `ci-releases.yml` og lokale bygg har `x.y.z.0`. Se [Installasjonskanaler](../maler/kanaler.md).
+Pakkene som `ci-releases.yml`, `ci-channel-test.yml` og `ci-build-debug.yml` bygger, får kjørenummeret som fjerde ledd (`x.y.z.<kjørenummer>`), slik at SharePoint henter manifestene på nytt. Pakker fra `main` og lokale bygg har `x.y.z.0`. Se [Installasjonskanaler](../maler/kanaler.md).

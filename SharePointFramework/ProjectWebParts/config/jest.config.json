@@ -7,10 +7,10 @@
   // Raise them when coverage grows; never lower them.
   "coverageThreshold": {
     "global": {
-      "statements": 49,
-      "branches": 71,
-      "functions": 54,
-      "lines": 49
+      "statements": 50,
+      "branches": 72,
+      "functions": 56,
+      "lines": 50
     }
   }
 }

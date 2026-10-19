@@ -43,6 +43,7 @@
 	* [➤ Hook-mønsteret (`useKomponent`)](#-hook-mnsteret-usekomponent)
 		* [Hvorfor?](#hvorfor)
 		* [Mønster](#mnster)
+		* [Standardverdier for props](#standardverdier-for-props)
 		* [Ekte eksempel: `useProjectSetupDialog`](#ekte-eksempel-useprojectsetupdialog)
 	* [➤ Context-mønsteret](#-context-mnsteret)
 		* [Mønster](#mnster-1)
@@ -104,6 +105,7 @@
 		* [Windows og macOS](#windows-og-macos)
 	* [➤ Testregime](#-testregime)
 		* [Lagene](#lagene)
+		* [Hvilken test skal jeg skrive?](#hvilken-test-skal-jeg-skrive)
 		* [Hva skjer i et bygg](#hva-skjer-i-et-bygg)
 		* [Delt oppsett: `pp365-jest-config`](#delt-oppsett-pp365-jest-config)
 		* [Skrive enhetstester](#skrive-enhetstester)
@@ -165,6 +167,7 @@
 		* [CI (channels/test)](#ci-channelstest)
 		* [CI (build debug)](#ci-build-debug)
 		* [Bygg utgivelse (main)](#bygg-utgivelse-main)
+		* [Felles for arbeidsflytene](#felles-for-arbeidsflytene)
 		* [Aktive arbeidsflyter](#aktive-arbeidsflyter)
 	* [➤ README-generering](#-readme-generering)
 	* [➤ SBOM-generering](#-sbom-generering)
@@ -201,7 +204,7 @@ Repoet er et Rush-monorepo (pnpm, Heft, SPFx 1.24):
 | `SiteScripts/` | Site scripts; se [site design og site scripts](maler/site-design-og-site-scripts.md) |
 | `Install/` | `Build-Release.ps1` (utgivelsesbygget), `Install.ps1` og oppgraderingsskriptene |
 | `channels/` | Installasjonskanalene `main`, `test`, `i18n` og `kurs`; se [kanaler](maler/kanaler.md) |
-| `e2e/` | Playwright-røyktester mot testtenanten (Rush-prosjektet `pp365-e2e`) |
+| `e2e/` | Playwright-tester i en ekte nettleser mot testtenanten: røyktester og brukerflyter (Rush-prosjektet `pp365-e2e`) |
 | `integration/` | Integrasjonstester av bibliotekets datalag mot testtenanten, i Node (Rush-prosjektet `pp365-integration`) |
 | `.development-guide/` | Utviklingsguiden, delt i `spfx/`, `maler/`, `git/`, `ci/` og `utgivelse/` |
 | `docs/plans/` | Planer for større løft, f.eks. [Heft-overgangen](../docs/plans/spfx-1.23-heft-toolchain.md) og [fase 5](../docs/plans/dependency-upgrades-phase-5.md) |
@@ -212,7 +215,7 @@ Alle fem løsningene avhenger av `shared-library`. `PortfolioWebParts` bruker i 
 
 Du trenger:
 
-- **Node 22**, versjonen i `.nvmrc` (22.22.2). `rush.json` godtar bare `>=22.14.0 <23.0.0`, så en annen hovedversjon stopper bygget. Med nvm: `nvm install && nvm use` i repo-roten. Med nvm-windows: `nvm install 22.22.2` og `nvm use 22.22.2`, siden den ikke nødvendigvis leser `.nvmrc`.
+- **Node 26**, versjonen i `.nvmrc` (26.11.1). `rush.json` godtar bare `>=26.11.0 <27.0.0`, så en annen hovedversjon stopper bygget. Med nvm: `nvm install && nvm use` i repo-roten. Med nvm-windows: `nvm install 26.11.1` og `nvm use 26.11.1`, siden den ikke nødvendigvis leser `.nvmrc`.
 - **PowerShell 7** (`pwsh`) når du skal bygge en utgivelse (`npm run build-release`), og på Windows også som terminal. Mer om Windows i [Windows og macOS](spfx/utviklingsmiljo.md#windows-og-macos).
 - **VS Code**, og **Chrome** for feilsøkingsoppsettet.
 - Gjerne Rush globalt (`npm i -g @microsoft/rush`), så kommandoer som `rush rebuild -o pp365-shared-library` virker direkte. Uten: `node common/scripts/install-run-rush.js <kommando>`.
@@ -265,7 +268,7 @@ Detaljer og ekte eksempler står i [kodemonster.md](spfx/kodemonster.md), og et 
 
 ### 5. Tester
 
-Les [testing.md](spfx/testing.md) før du skriver din første test.
+Les [testing.md](spfx/testing.md) før du skriver din første test. Avsnittet «Hvilken test skal jeg skrive?» der forklarer forskjellen på Jest, integrasjon og E2E.
 
 - **Jest i bygget.** `src/**/*.test.ts(x)` kjører i `heft test`, altså i `npm test`, `npm run build`, `rush build`/`rebuild` og CI, og en test som feiler, stopper bygget. `npm run watch` og kanalbyggene (`npm run build:<kanal>`) kjører ingen tester. Testen ligger ved siden av koden.
 - **Kjør** `npm test` i en løsning (bygger først). Én fil: `npx heft test --test-path-pattern Header` (et regulært uttrykk over stien til testfilen). `shared-library` må være bygget først.
@@ -286,7 +289,7 @@ Se [branching og arbeidsflyt](git/branching-og-arbeidsflyt.md), [commit-praksis]
    - `[apps-only:X]`: bare de oppgitte løsningene, f.eks. `[apps-only:ProjectWebParts,PortfolioWebParts]`. `shared-library` er bundlet inn i løsningene som bruker den, så en endring der når sidene bare gjennom løsningene du lister.
    - `[skip-e2e]`: hopper over Playwright-testene etter utrullingen.
    - `[build-debug]`: bygger testkanalens pakke uten utrulling, for å prøve endringer i selve bygget.
-4. **Hva CI gjør.** En push til `releases/1.15` bygger og oppgraderer utviklingsmiljøet (`ci-releases.yml`) og bygger testkanalen, ruller den ut til testtenanten og kjører Playwright mot den (`ci-channel-test.yml`). En push dit oppgraderer altså testtenanten. Det kjører ingen bygg på pull requests i dag, så bygg og test lokalt før du ber om review.
+4. **Hva CI gjør.** En push til `releases/1.15` bygger og oppgraderer utviklingsmiljøet (`ci-releases.yml`) og bygger testkanalen, ruller den ut til testtenanten og kjører Playwright mot den (`ci-channel-test.yml`). En push dit oppgraderer altså testtenanten. En pull request mot release-branchen får et fullt bygg med alle testene (`ci-build-debug.yml`), som branch-beskyttelsen krever før merge. Den ruller ikke ut noe.
 5. **Changelog.** Legg til en linje på norsk i [CHANGELOG.md](../CHANGELOG.md) under neste versjon (`Ny funksjonalitet`, `Forbedringer` eller `Feilrettinger`), skrevet for brukeren og med issue-nummer når det finnes.
 6. **PR** mot release-branchen med [PR-malen](../.github/PULL_REQUEST_TEMPLATE.md): beskrivelse, før/etter-skjermbilder ved visuelle endringer, teststeg som en bruker uten kodekunnskap kan følge, milepæl, labels og deg selv som ansvarlig.
 7. **Review.** [CODEOWNERS](../.github/CODEOWNERS) gjør @tarjeieo og @remi749 til standard-reviewere. De sjekker testpunktene, om endringen hører hjemme i release notes og om [brukermanualen](https://puzzlepart.github.io/prosjektportalen-manual/) må oppdateres.
@@ -416,7 +419,7 @@ install: update installation scripts
 
 Prosjektportalen bruker GitHub Actions for kontinuerlig integrasjon og utrulling. Forskjellige commit-meldinger kan påvirke hvilke actions som kjøres:
 
-Nøkkelordene leses bare fra emnelinjen (første linje) i commit-meldingen, unntatt på `main`, der `build-release.yml` leser hele meldingen. Den fullstendige listen og hva hver arbeidsflyt gjør, står i [Kontinuerlig integrasjon](../ci/kontinuerlig-integrasjon.md). De mest brukte:
+Nøkkelordene leses bare fra emnelinjen (første linje) i commit-meldingen, også på `main`. Den fullstendige listen og hva hver arbeidsflyt gjør, står i [Kontinuerlig integrasjon](../ci/kontinuerlig-integrasjon.md). De mest brukte:
 
 - `[skip-ci]` – ingen bygging eller utrulling (unntatt `skills.yml`, som bare sjekker agentferdighetene)
 - `[apps-only]` – bygger og ruller ut bare pakkene (appkatalogen), ikke malene. Brukes når ingenting i `Templates/` er endret.
@@ -433,7 +436,7 @@ feat(shared-library): a new utility function [apps-only]
 ci: try a change to the build [skip-ci] [build-debug]
 ```
 
-**Tips:** Bruk `[skip-ci]` når endringen ikke påvirker det som bygges (for eksempel bare dokumentasjon), og `[apps-only]` når malene ikke er endret: en full kjøring oppgraderer testtenanten med maler og tar rundt 40 minutter.
+**Tips:** Bruk `[skip-ci]` når endringen ikke påvirker det som bygges (for eksempel bare dokumentasjon), og `[apps-only]` når malene ikke er endret: en full kjøring oppgraderer testtenanten med maler og tar rundt 40 minutter. Kode under `SharePointFramework/` skal aldri merges med bare `[skip-ci]`: da bygger ingenting den, og en kompileringsfeil ligger på branchen til neste kjøring (slik `IItemAddResult` fra #1779 felte den fulle kjøringen 13. oktober 2026). Bruk `[apps-only]`, eller `[skip-ci] [build-debug]` når den ikke skal rulles ut.
 
 
 
@@ -644,6 +647,25 @@ export const KomponentNavn: FC<IKomponentNavnProps> = (props) => {
   return <div>{/* Bruk verdiene fra hooken */}</div>
 }
 ```
+
+### Standardverdier for props
+
+Ikke `KomponentNavn.defaultProps`: React 18.3 advarer om den på funksjonskomponenter, og React 19 ignorerer den, så hver standardverdi ville forsvunnet stille ved neste React-hopp. Standardverdiene ligger i en konstant over komponenten og flettes inn øverst med `withDefaults` fra `pp365-shared-library` (i biblioteket fra `util`). Den gjør det React gjorde: en prop som er `undefined` får standardverdien, mens `null`, `false`, `0` og `''` beholdes. Flettingen skjer på selve objektet, slik at hooken, konteksten og `{...props}` ser de samme verdiene:
+
+```tsx
+const KOMPONENT_NAVN_DEFAULT_PROPS: Partial<IKomponentNavnProps> = {
+  rowLimit: 6,
+  showTitle: true
+}
+
+export const KomponentNavn: FC<IKomponentNavnProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, KOMPONENT_NAVN_DEFAULT_PROPS)
+  const { value } = useKomponentNavn(props)
+  …
+}
+```
+
+Leses verdiene andre steder (webdelens egenskapsrute, en test), eksporteres konstanten; navnet har komponentens navn i seg, så barrelene ikke kolliderer. En komponent som bare leser sine egne props, kan sette standardverdiene i destruktureringen (`({ rowLimit = 6 }) =>`), men ikke når `props` sendes videre. ESLint stopper `defaultProps` fra å komme tilbake.
 
 ### Ekte eksempel: `useProjectSetupDialog`
 
@@ -1498,7 +1520,7 @@ Eksempel:
 Alt i repoet skal virke likt på Windows og macOS, og i CI på Linux. Dette er verdt å vite på Windows:
 
 - **Terminal:** bruk PowerShell 7 (`pwsh`) eller Git Bash. Windows PowerShell 5.1 kan ikke `&&`, som flere kommandoer i guiden bruker, og stopper `npm.ps1` med standard kjørepolicy (`Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` løser det). I `cmd.exe` er enkle anførselstegn ikke anførselstegn: bruk doble rundt et argument med mellomrom eller spesialtegn.
-- **Node:** nvm-windows leser ikke nødvendigvis `.nvmrc`. Installer og velg versjonen med navn: `nvm install 22.22.2` og `nvm use 22.22.2`.
+- **Node:** nvm-windows leser ikke nødvendigvis `.nvmrc`. Installer og velg versjonen med navn: `nvm install 26.11.1` og `nvm use 26.11.1`.
 - **Linjeskift:** `.gitattributes` sjekker ut all tekst med LF på alle maskiner, uansett `core.autocrlf`, så lint, tester og utgivelsespakken bygger fra de samme bytene som på macOS og i CI. Prettiers `endOfLine: auto` er et sikkerhetsnett for en fil en editor lagrer med CRLF. En klone fra før `.gitattributes` kom inn, sjekkes ut på nytt én gang, etter at endringene er committet eller lagt til side: `git rm -r --cached -q . && git reset --hard`.
 - **Lange stier:** pnpm-lageret gir stier på over 250 tegn. Slå på lange stier i Windows (`LongPathsEnabled`) og i git (`git config --global core.longpaths true`), og klon til en kort sti, for eksempel `C:\src\pp365`.
 - **Miljøvariabler:** `VAR=verdi kommando` virker bare i bash og zsh. I PowerShell: `$env:NODE_OPTIONS='--max-old-space-size=8192'`; i cmd: `set NODE_OPTIONS=--max-old-space-size=8192`. Der det finnes en `.env`-fil, er den veien som virker overalt (`SERVE_CHANNEL` i løsningens `.env`, `E2E_LOCAL_BUNDLE` i `e2e/.env`).
@@ -1522,11 +1544,31 @@ Dette kapittelet beskriver hvordan Prosjektportalen testes automatisk, hva som k
 | Kjøretidskontrakt | Kode som komponerer PnPjs-spørringer, kjørt mot det ekte PnPjs 4-biblioteket med falsk transport | `node --test` (`shared-library/test/runtime/*.test.mjs`, `npm run test:runtime`) | I byggeskriptet til shared-library, etter `heft test` | Nei |
 | Pakkebevis | At hvert bygg faktisk produserer sin `.sppkg` og at det delte biblioteket er pakket inn (ikke en kjøretidsavhengighet) | `Install/Build-Release.ps1` | I hvert utgivelsesbygg | Nei |
 | Integrasjon | Bibliotekets datalag (tjenestene, søk, termlageret) mot testtenanten: hva SharePoint returnerer og lagrer | `node --test` (`integration/`) | Etter utrulling til testkanalen i `ci-channel-test.yml`, ved siden av E2E; lokalt på sekunder | Ja |
-| Ende-til-ende (E2E) | Hub og prosjektområde i testtenanten: sidene laster, webdelene monteres, ingen ødelagte bundler | Playwright (`e2e/`) | Etter utrulling til testkanalen i `ci-channel-test.yml` | Ja |
+| Ende-til-ende (E2E) | Hub, prosjekt- og programområde i en ekte nettleser: sidene laster, webdelene monteres og bundlene lastes (røyktester), og brukerreiser, også de som skriver til testtenanten og rydder etter seg (flyter) | Playwright (`e2e/`) | Etter utrulling til testkanalen i `ci-channel-test.yml` | Ja |
 | Manuell smoke-test | Skriveflyter som ennå ikke er automatisert (prosjektoppsett, publisering av statusrapport, idéflyt) | Issue-maler, se «Smoke test-prosessen» | Før utgivelse, til E2E dekker flytene | Ja |
 
 
 Kjøretidskontraktene finnes fordi Jest ikke kan laste `@pnp/*` (ESM-only under CommonJS-kjøreren) og stand-ins ikke fanger feil i selve PnPjs-koblingen: `getTermStore` kastet i SPFx fordi `spfi().using(SPFx(context))` holder URL-er relative til forespørselen sendes, noe stand-ins aldri viste. Node kan importere ESM-PnPjs, så disse testene kjører pipelinen med både relative (SPFx-stil) og absolutte (`spfi(url)`) URL-er. Legg flere slike tester her når kode kobler seg direkte på PnPjs-kjøringen.
+
+### Hvilken test skal jeg skrive?
+
+Lagene tester det samme produktet fra ulik avstand. Forskjellen er hva testen kjører mot:
+
+- **Jest** kjører koden alene i Node, med SharePoint, PnPjs og SPFx byttet ut med stand-ins. Testene er raske og kjører i hvert bygg, men de ser bare hva koden gjør med svarene testen gir den, ikke hvordan SharePoint faktisk svarer.
+- **Integrasjonstestene** kjører bibliotekets ekte datalag mot ekte SharePoint i testtenanten, uten nettleser. De viser hva SharePoint faktisk lagrer og returnerer: feltformater, datoer i andre tidssoner, søk, termer og synkroniseringen til huben.
+- **E2E-testene** styrer en ekte nettleser på ekte sider etter utrulling til testkanalen. Røyktestene sjekker at sidene laster og webdelene monteres. Flytene går gjennom det en bruker gjør, også det som skriver til tenanten.
+
+Jo lenger ned i listen, jo tregere og mer avhengig av testdata er testen, men jo nærmere det brukeren opplever. Velg derfor det laveste laget som kan vise det du vil sjekke:
+
+| Du endrer eller retter | Skriv |
+|---|---|
+| Logikk: en hjelpefunksjon, en reducer, en modell, en mapping av data | Jest-enhetstest |
+| Hva en komponent viser, og hva som skjer når brukeren klikker eller skriver | Jest-komponenttest med React Testing Library |
+| Kode som setter sammen PnPjs-spørringer (URL-er, kjeder, behaviors) | Kjøretidskontrakt i `shared-library/test/runtime` |
+| Hva SharePoint lagrer eller returnerer for en tjeneste i datalaget | Integrasjonstest |
+| Det bare en nettleser viser: oppsett og CSS, at bundlene lastes, en reise over flere sider | E2E |
+
+Skriv testen før rettingen og se den feile, så vet du at den fanger feilen. Mange endringer trenger mer enn ett lag. Datoene i områdets tidssone (1.15) har Jest-tester for overgangsreglene, en kjøretidstest og en integrasjonstest som kjører maskinen gjennom fem tidssoner, og en E2E-flyt fra en nettleser i Los Angeles.
 
 ### Hva skjer i et bygg
 
@@ -1606,7 +1648,7 @@ Kjør testene i en løsning med `npm test` (`heft test`), eller bare bygg-og-tes
 
 `e2e/` er Rush-prosjektet `pp365-e2e`, med tre mapper: `tests/smoke` (røyktester av sider og webdeler), `tests/flows` (brukerreiser; fire av dem skriver til testtenanten og rydder etter seg) og `tests/local` (en løsnings lokale bundle via en utviklingsserver, bare med `E2E_LOCAL_BUNDLE=1`, aldri i CI). Røyktestene logger inn som en dedikert testbruker, åpner hub-sidene og et prosjektområde, venter på at SPFx-lerretet rendrer, sjekker at forventede webdeler monteres, og feiler på nettleserfeil som betyr at en bundle er ødelagt («Cannot find module», «Failed to load component», «ChunkLoadError»). Det siste er nettopp symptomet på et delt bibliotek som ikke er pakket inn, og er det pakkebeviset i `Build-Release.ps1` sikrer på byggetidspunktet.
 
-Kjøring i CI: jobben «End-to-end smoke (test channel)» i `ci-channel-test.yml` kjører etter en vellykket «Upgrade (test channel)», altså mot den pakken som nettopp ble rullet ut til `SP_URL_TEST`. Arbeidsflyten utløses av push til grenene i `on.push.branches` (i dag `releases/1.15`, `feat/fluent-v9*` og `feat/dependency-upgrades*`) når filer under `SharePointFramework/`, `Install/`, `Templates/`, `e2e/` eller `integration/` er endret, og kan startes manuelt fra Actions-fanen (`workflow_dispatch`). Merk at en push til en av disse grenene oppgraderer testtenanten. E2E-jobben følger begge oppgraderingsløpene: den vanlige oppgraderingen og pakke-oppgraderingen som `[apps-only]`/`[apps-only:<løsninger>]` bruker. `[skip-e2e]` i commit-emnet hopper over E2E-jobben; `[skip-upgrade]` hopper over oppgraderingen og dermed også E2E.
+Kjøring i CI: jobben «End-to-end smoke (test channel)» i `ci-channel-test.yml` kjører etter en vellykket «Upgrade (test channel)», altså mot den pakken som nettopp ble rullet ut til `SP_URL_TEST`. Arbeidsflyten utløses av push til grenene i `on.push.branches` (i dag `releases/1.15` og `feat/technical-backlog*`) når filer under `SharePointFramework/`, `Install/`, `Templates/`, `e2e/` eller `integration/` er endret, og kan startes manuelt fra Actions-fanen (`workflow_dispatch`). Merk at en push til en av disse grenene oppgraderer testtenanten. E2E-jobben følger begge oppgraderingsløpene: den vanlige oppgraderingen og pakke-oppgraderingen som `[apps-only]`/`[apps-only:<løsninger>]` bruker. `[skip-e2e]` i commit-emnet hopper over E2E-jobben; `[skip-upgrade]` hopper over oppgraderingen og dermed også E2E.
 
 #### Finne og lese E2E-rapporten fra CI
 
@@ -1730,10 +1772,10 @@ Hvilke automatiske tester som dekker hver komponent, lag for lag, med noen ord o
 
 | Lag | Filer | Tester |
 |---|---|---|
-| Jest | 176 | 1 147: PortfolioExtensions 101, PortfolioWebParts 200, ProgramWebParts 59, ProjectExtensions 118, ProjectWebParts 215, shared-library 454 |
-| Kjøretidskontrakt | 1 | 4 |
-| Integrasjon | 10 | 41: 12 uten tenant, 29 mot testtenanten |
-| E2E | 22 spesifikasjoner | 52: smoke 19, flows 26 (de to i CI), local 7 |
+| Jest | 192 | 1 268: PortfolioExtensions 101, PortfolioWebParts 240, ProgramWebParts 59, ProjectExtensions 118, ProjectWebParts 239, shared-library 511 |
+| Kjøretidskontrakt | 2 | 6 |
+| Integrasjon | 10 | 42: 12 uten tenant, 30 mot testtenanten |
+| E2E | 27 spesifikasjoner | 59: smoke 22, flows 29 (de to i CI), local 8 |
 
 I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder etter seg. «Indirekte» betyr at komponenten står på en side en E2E-test åpner. Testen sjekker da ikke komponenten selv, men `openPage` feiler fortsatt på feilgrensen «Noe gikk galt», på en webdel fra en annen kanal og på bunter som ikke lastes.
 
@@ -1741,10 +1783,10 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 
 | Komponent | Jest | E2E | Integrasjon | Ikke dekket / manuelt |
 |---|---|---|---|---|
-| Porteføljeoversikt | 7 filer, 54: reducer, filtrering, Excel-eksport, kolonnemeny, kolonneskjema | Smoke: listen, søk, filter, Excel-eksport. Flows: kolonnemeny på høyreklikk, dra kolonner, panelets topp, tittelknappen, typografi, navigasjon, ny kolonne (skriver) | Prosjektkolonner; ny kolonne i en visning, også med skjulte kolonner (skriver); kolonnekonfigurasjon; standardvisningen og fargene for `Status muligheter` etter oppgradering | — |
+| Porteføljeoversikt | 10 filer, 73: reducer, filtrering, Excel-eksport, kolonnemeny, kolonneskjema, porteføljevelgeren og visningsvelgeren (sammenslått visning, egne visninger, programmer, hvem som kan lage og endre visninger) | Smoke: listen, søk, filter, Excel-eksport. Flows: kolonnemeny på høyreklikk, dra kolonner, panelets topp, tittelknappen, typografi, navigasjon, ny kolonne (skriver) | Prosjektkolonner; ny kolonne i en visning, også med skjulte kolonner (skriver); kolonnekonfigurasjon; standardvisningen og fargene for `Status muligheter` etter oppgradering | — |
 | Delt liste (`List`, `ListGrid`, `Vis eller skjul kolonner`) | 6 filer, 41 | Gjennom flytene for porteføljeoversikten | — | — |
-| Portefølje aggregeringsoversikt | 10 filer, 76: reducer (51), datahenting, Excel-eksport, verktøylinje, gruppering, søk i kolonnene som vises | Smoke: aggregeringssidene og Nytteoversikt med filter. Flows: typografi | — | Hubens dataadapter |
-| Prosjektutlisting | 4 filer, 16 | Flows: kortets panel viser prosjektnavnet | — | — |
+| Portefølje aggregeringsoversikt | 10 filer, 78: reducer (51), datahenting, Excel-eksport, verktøylinje, gruppering (også gruppenavn for personer, termer og oppslag), søk i kolonnene som vises | Smoke: aggregeringssidene og Nytteoversikt med filter. Flows: typografi | — | Hubens dataadapter |
+| Prosjektutlisting | 6 filer, 35: også fanenes filtre (feltbetingelser med `$ne`/`$in`/`$nin`, tilstand, tilgang) og listevisningens kolonner | Flows: kortets panel viser prosjektnavnet | — | — |
 | Prosjekttidslinje (porteføljenivå) | Via bibliotekets `ProjectTimeline` (22) | Smoke: prøveklikk på en prosjektlenke, filter | — | Ingen test av webdelen selv |
 | Siste prosjekter | 5: nyeste områder, vis flere/færre, tom, feil | Indirekte (hubens forside) | — | — |
 | Ressursallokering | 2 | — | — | Bare Jest |
@@ -1758,16 +1800,16 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 | Programadministrasjon | 7 filer, 45: liste, reducer, kommandoer, fjerning av underområder | Flows: utvalg, grupper, kolonner, søk, høyreklikk, fjerne og legge til et underområde igjen (skriver), faste kolonneoverskrifter | Programmet og prosjektene knyttet begge veier | Programmets egen adapter (legge til og fjerne) |
 | Program aggregeringsoversikt | 7, i tillegg til testene for aggregeringsoversikten | — | Søket over programmets prosjekter (`searchAggregatedItems`) | Ingen E2E |
 | Programoversikt | 5, i tillegg til testene for porteføljeoversikten | Smoke: underområdene listes med teller | Programmets prosjekter | — |
-| Prosjekttidslinje (programnivå) | 2, i tillegg til bibliotekets tidslinje | Smoke: siden lastes | — | Innholdet sjekkes ikke i E2E |
+| Prosjekttidslinje (programnivå) | 2, i tillegg til bibliotekets tidslinje | Smoke: siden lastes; programmets egen tidslinjeside (`Tidslinje.aspx`, ProjectWebParts' tidslinje med programmets elementer) tegner tidslinjen | — | Innholdet sjekkes ikke i E2E |
 
 ### Prosjekt (ProjectWebParts)
 
 | Komponent | Jest | E2E | Integrasjon | Ikke dekket / manuelt |
 |---|---|---|---|---|
-| Prosjektinformasjon | 5 filer, 31, og bibliotekets `CustomEditPanel` (39) | Smoke: monteres, «Vis all prosjektinformasjon». Flows: personvelgeren og panelene (lukker uten å lagre), lenken tilbake til huben | Egenskaper tur-retur: datoer i fem tidssoner, tekst, valg, person, termer (skriver); hubraden og synkroniseringen til den, også gjennom ProjectWebParts' adapter (skriver) | Lagring gjøres ikke i E2E |
+| Prosjektinformasjon | 5 filer, 31, og bibliotekets `CustomEditPanel` (41) | Smoke: monteres, «Vis all prosjektinformasjon». Flows: personvelgeren og panelene (lukker uten å lagre), lenken tilbake til huben, datovelgerens ukenummer for januar 2027 (uke 53, så 1) | Egenskaper tur-retur: datoer i fem tidssoner, tekst, valg, person, termer (skriver); hubraden og synkroniseringen til den, også gjennom ProjectWebParts' adapter (skriver) | Lagring gjøres ikke i E2E |
 | Fasevelger | 4 filer, 30: reducer, fasedialogen | Smoke: fasene vises, prøveklikk på hver | Fasene fra termlageret, etikettene og tekstene; `getPhases`; kjøretidskontrakten for termlageret | Å endre fase er ikke automatisert |
-| Prosjektstatus | 15 filer, 73: reducer, seksjoner, verktøylinje, faner, delprosjekter | Smoke: siden monteres. Flows: kladd opprettet og slettet (skriver), fanene og seksjonene | Kladd i en egen rapportserie, fylt ut, lest med personen og slettet (skriver) | Publisering er manuell |
-| Risikomatrise og Mulighetsmatrise | 4 og 2, og 15 delte: begge webdelene, prosjekt- og programmodus | — (står på ingen malside) | Søket med matrisens datakilde, også gjennom ProjectWebParts' adapter på programmet; datakildene finnes etter oppgradering | Ingen E2E |
+| Prosjektstatus | 17 filer, 97: reducer, seksjoner, verktøylinje, faner, delprosjekter, øyeblikksbildedialogen (fullskjerm, lenker, åpning fra en lenke, eller ny fane når egenskapen er slått av) og øyeblikksbildet (tittel, dato, oppløsning) | Smoke: siden monteres. Flows: kladd opprettet og slettet (skriver), fanene og seksjonene, øyeblikksbildet av en publisert rapport (dialogen med bildet, fullskjerm der nettleseren tillater det, kopiert lenke som åpner det igjen, bildefilen i ny fane), datoene fra en nettleser i Los Angeles (rapportvelgeren, rapportmenyen med klokkeslett og datofeltene i prosjektinformasjonen mot SharePoints egne tekster) | Kladd i en egen rapportserie, fylt ut, lest med personen og slettet (skriver) | Publisering er manuell, så øyeblikksbildeflyten leser en rapport som alt er publisert |
+| Risikomatrise og Mulighetsmatrise | 4 og 2, og 15 delte: begge webdelene, prosjekt- og programmodus | Smoke: matrisen i statusrapportens usikkerhetsseksjon (når rapporten har usikkerheter), og `Usikkerhet.aspx` med begge webdelene (`E2E_PAGE_MATRIX` overstyrer navnet); ingen malside har dem, så siden legges på E2E-prosjektet med `npm run add-matrix-page -- <url>` i `integration/`, og testen hopper over til den finnes | Søket med matrisens datakilde, også gjennom ProjectWebParts' adapter på programmet; datakildene finnes etter oppgradering | — |
 | Prosjekttidslinje (prosjektnivå) | 4 filer, 17 | Smoke: listen får plass i 1280 og 1920 px. Flows: typografi | — | Tidslinjens stolper |
 | Prosjektnyheter | 2 filer, 7 | Indirekte (prosjektets forside) | — | Å opprette en nyhetsside |
 | Dynamisk liste | 6 filer, 33 | Flows: typografi (hoppes over når siden mangler) | — | Skriving og egne handlinger |
@@ -1781,20 +1823,25 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 | Malpakkekatalog | 2 filer, 10 | — | — | Bare Jest |
 | Oppsett av prosjekt | 11 filer, 65: utvidelsen, dialogen, reducer, progresjon og feil | — | Bevisst utelatt: kjernen går gjennom JSOM (`syncList`), og hubraden krever et nytt område per kjøring | «Opprett nytt prosjekt» i den manuelle smoke-testen |
 | Oppgradering av prosjekt | 1 | — | Installasjonsloggen etter oppgraderingen (installasjonsskriptet, ikke utvidelsen) | — |
-| Dokumentmalvelger | 5 filer, 35 | Smoke: listene får plass, målmappe velges bort igjen (oppretter en mappe ved behov). Flows: kopi av en mal (skriver) | — | — |
-| Planner-tiltak | 3 filer, 14 | — | — | Bare Jest |
+| Dokumentmalvelger | 5 filer, 43 | Smoke: listene får plass, målmappe velges bort igjen (oppretter en mappe ved behov). Flows: kopi av en mal (skriver) | — | — |
+| Planner-tiltak | 3 filer, 17 | Smoke: tiltaksfeltet på usikkerhetslisten (popoveren, panelet for nytt tiltak, migreringsdialogen), lesende | — | Skriving til Planner (opprette og synkronisere oppgaver) er manuell: testrammeverket kan ikke slette en Planner-oppgave |
 
 ### Det delte biblioteket (shared-library)
 
 | Del | Jest | Integrasjon |
 |---|---|---|
-| `CustomEditPanel` | 5 filer, 39 | Datoer i fem tidssoner, person og termer |
+| `CustomEditPanel` | 6 filer, 41, også ukenummerene Fluents kalender tegner for januar 2027 | Datoer i fem tidssoner, person og termer |
 | `PortalDataService` | 9 | Kolonner, visninger, konfigurasjon, innstillinger, statusrapporter, programrelasjoner |
 | `ProjectDataService` | 11 | Egenskaper tur-retur, faser |
 | `SPDataAdapterBase` og `EntityPortalService` | 43 | Hubraden og synkroniseringen |
 | `searchAggregatedItems` | 4 | Egenskaper og formater, bla mellom sider, oppdeling, eget område |
 | Termlageret (`taxonomy`) | 73, og kjøretidskontrakten (4) | Fasene og etikettene |
-| `DataSourceService` | Ingen | Matrisenes datakilder slått opp på ID |
+| `DataSourceService` | 5: listene fra strengene, oppslag på ID og tittel med kolonner, refinere og gruppering, tomt og feilet oppslag (bare logget), kategori og nivå | Matrisenes datakilder slått opp på ID |
+| `DataService` (basen for `PortalDataService` og `ProjectDataService`) | 3: konfigurering, feltenes skjemasynlighet (`ShowInEditForm` med flere) | — |
+| Ikonhjelperne (`resolveFluentIcon`, `getFluentIcon`, `getFluentIconWithFallback`, `getIconComponentWithFallback`, `isIconAvailable`) | 17: katalognavn og UI Fabric-aliaser (alle peker på katalogen, `CircleFill` fylt), nøkler fra `Object.prototype`, farge/størrelse/klasse, reserven i UI Fabric-fonten, stabile komponentidentiteter | — |
+| `ListLogger` | 3: feltene, en avvist skriving stopper ikke kalleren | — |
+| `withDefaults` og `getDatePickerLocalization` | 4 og 7: standardverdier som React ga dem; ukeregelen fra `minimalDays` eller CLDR-regionen | — |
+| Datoer i områdets tidssone (`siteTimeZone`, `pageContext`, `formatDate`, `getDateForExcelExport`, `createSpfiInstance`) | 8, 3, 24, 3 og 4: SharePoints egne overgangsregler (Oslo, New York, Tokyo, Sydney, «siste søndag»), sidekonteksten SPFx gir foran `_spPageContextInfo`, dagen og klokkeslettet områdets lister viser for et område i Oslo, Honolulu og Tokyo, `formatDay` for datovelgerens dag; kjøretidskontrakten (2) kjører maskinen gjennom fem tidssoner, siden Jest ikke kan flytte den | `project-properties`: en lagret dato formatert for siden og for Excel i fem tidssoner |
 | `DataGridList`, `PeoplePicker`, `FilterPanel`, `Toolbar`, `ProjectTimeline`, `ExcelExportService` | 20, 8, 11, 10, 22, 24 | — (E2E dekker dem gjennom webdelene) |
 
 ### Integrasjonstestene
@@ -1806,7 +1853,7 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 | `portal-data-service` | 2 | Prosjektkolonnene, og at prosjektet finner huben |
 | `search` | 4 | Matrisens egenskaper og formater, sider, oppdeling, eget område |
 | `term-store` | 3 | Etikettene og reservespråkene, fasetekstene, `getPhases` |
-| `project-properties` | 4 (skriver) | Datoer lagret og vist i fem tidssoner, tekst/valg/person, termer |
+| `project-properties` | 5 (skriver) | Datoer lagret, vist og formatert for siden og Excel i fem tidssoner (områdets sone fra harnessets kontekst), tekst/valg/person, termer |
 | `hub` | 5 (2 skriver) | Hubraden, synkroniseringen, ny kolonne i en visning, kolonnekonfigurasjon og innstillinger, program og prosjekter |
 | `status-reports` | 1 (skriver) | Kladd i en egen rapportserie, utfylt, lest med personen og slettet |
 | `template` | 5 (4 etter full oppgradering) | Installasjonsloggen, fargene for `Status muligheter`, interessentfeltet, matrisenes datakilder, standardvisningen |
@@ -1814,12 +1861,11 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 
 ### Hull verdt å kjenne til
 
-- **Bare Jest**, uten E2E og integrasjon: Ressursallokering, Idémodul, Prosjektkort, idéutvidelsene, Malpakkekatalog, Oppsett av prosjekt, Oppgradering av prosjekt og Planner-tiltak.
-- **Integrasjon, men ingen E2E:** Risikomatrise, Mulighetsmatrise og Program aggregeringsoversikt.
+- **Bare Jest**, uten E2E og integrasjon: Ressursallokering, Idémodul, Prosjektkort, idéutvidelsene, Malpakkekatalog, Oppsett av prosjekt og Oppgradering av prosjekt.
+- **Integrasjon, men ingen E2E:** Program aggregeringsoversikt. Matrisene har E2E på statussiden bare der rapporten har usikkerheter, og som webdeler på en side testharnesset legger til (`add-matrix-page`), siden ingen malside har dem.
 - **Bare indirekte i E2E:** Siste prosjekter og Prosjektnyheter.
 - **Manuelt:** prosjektoppsett, publisering av statusrapport, idéflyten og å endre fase.
-- **Ingen test:** ikonhjelperne (`getFluentIcon`, `resolveFluentIcon`), `DataService.ts` og `ListLogger.ts`. Programmets tidslinjeside (`Tidslinje.aspx`) åpnes ikke av noen E2E-test.
-- **Utenfor komponentene:** `.tasks/check-channel-ids.test.js` (5 tester, `npm run test:tasks`).
+- **Utenfor komponentene:** `.tasks/check-channel-ids.test.js` (5 tester) og `.tasks/modify-solution-files.test.js` (3 tester: kanal-ID-ene, versjonsstempelet og at bare en kanal med egne ID-er skjuler webdelene), med `npm run test:tasks`.
 
 
 
@@ -2033,10 +2079,10 @@ En installasjonskanal gir løsningene og komponentene egne ID-er, slik at flere 
 
 | Fil | Kanal |
 |---|---|
-| `main.json` | Utgivelsen. ID-ene er de som står i kildekoden |
+| `main.json` | Utgivelsen. ID-ene er de som står i kildekoden. `ci-releases.yml` bygger med den (`-Channel main`) for å få kjørenummeret i versjonen |
 | `test.json` | Testkanalen, som `ci-channel-test.yml` bygger og ruller ut til testtenanten |
 | `kurs.json` | Bygges på `main` når commit-meldingen har `[build-kurs]` |
-| `i18n.json` | Ingen aktiv arbeidsflyt bygger den (`ci-channel-i18n.yml` ligger i `.github/workflows/unused/`) |
+| `i18n.json` | Ingen arbeidsflyt bygger den; `Build-Release.ps1 -Channel i18n` eller `npm run build:i18n` i en løsning bygger den lokalt |
 
 Hver fil gir hver SPFx-løsning egen `id`, `name` og `zippedPackage` (f.eks. `solution/pp-portfolio-web-parts-test.sppkg`) og hver komponent egen ID, oppslått på komponentens alias. Formatet står i `channels/$schema.json`.
 
@@ -2044,7 +2090,7 @@ Hver fil gir hver SPFx-løsning egen `id`, `name` og `zippedPackage` (f.eks. `so
 
 SPFx-manifestene, porteføljemalen og site scriptene har `main`-ID-ene, og JSON-prosjektmalene bruker `{{ControlId_<alias>}}`. `Install/Build-Release.ps1 -Channel <kanal>` skriver kanalfila til `.current-channel-config.json` i roten og bytter ID-ene på fire steder:
 
-- **SPFx-løsningene:** `config/package-solution.json` og hver `manifest.json` (`SharePointFramework/.tasks/modifySolutionFiles.js`). Webdelene får `hiddenFromToolbox`, så verktøykassen ikke viser dem to ganger. Filene tilbakestilles etter pakkingen.
+- **SPFx-løsningene:** `config/package-solution.json` og hver `manifest.json` (`SharePointFramework/.tasks/modifySolutionFiles.js`). Webdelene får `hiddenFromToolbox` når kanalen har egne ID-er, så verktøykassen ikke viser dem to ganger; med `main` beholder de plassen sin i verktøykassen. Filene tilbakestilles etter pakkingen.
 - **Porteføljemalen:** `npm run generate-pnp-templates` kopierer `Templates/Portfolio` til `.dist/Templates/Portfolio` og bytter `main`-ID-ene der.
 - **Site scriptene:** `npm run generate-site-scripts` kopierer `SiteScripts/src` til `.dist/SiteScripts` og bytter ID-ene der.
 - **JSON-prosjektmalene:** `{{ControlId_<alias>}}` fylles fra `.current-channel-config.json`, eller fra `channels/main.json` når den fila ikke finnes.
@@ -2055,9 +2101,9 @@ Komponent-ID-er som står i TypeScript, byttes ikke. De to `ProjectSetupCustomAc
 
 ### Bygge for en kanal
 
-- Hele utgivelsespakken: `./Install/Build-Release.ps1 -Channel test` i PowerShell 7. `-Channel` godtar `test`, `kurs` og `i18n`. Pakken havner i `release/` med kanalnavnet bakerst; se [Bygge en ny utgivelse](../utgivelse/bygge-utgivelse.md).
+- Hele utgivelsespakken: `./Install/Build-Release.ps1 -Channel test` i PowerShell 7. `-Channel` tar navnet på en fil i `channels/`: `main`, `test`, `kurs` eller `i18n`. Pakken havner i `release/` med kanalnavnet bakerst; se [Bygge en ny utgivelse](../utgivelse/bygge-utgivelse.md).
 - Én løsning: `npm run build:test` (eller `build:kurs`, `build:i18n`) i løsningen. Det lager bare den løsningens `.sppkg` og kjører ingen tester.
-- I CI setter `ci-channel-test.yml` og `ci-build-debug.yml` `PP365_BUILD_NUMBER` til kjørenummeret, og løsningen og funksjonene får versjonen `x.y.z.<kjørenummer>`. Andre bygg har `x.y.z.0`.
+- I CI setter `ci-releases.yml`, `ci-channel-test.yml` og `ci-build-debug.yml` `PP365_BUILD_NUMBER` til kjørenummeret, og løsningen og funksjonene får versjonen `x.y.z.<kjørenummer>`. Andre bygg har `x.y.z.0`.
 
 Avbrytes et kanalbygg, blir filene liggende. En gjenglemt `.current-channel-config.json` får lokale genereringer til å bruke kanalens ID-er: slett den. Tilbakestill løsningene med `node ../.tasks/modifySolutionFiles.js --revert --force` og `node ../.tasks/setBundleConfig.js --revert` i hver av dem. Commit aldri kanal-ID-er i manifestene.
 
@@ -2095,7 +2141,7 @@ npm run sync-version -- --dry-run
 
 Det trenger rotens egne avhengigheter (`glob`), som Rush ikke installerer, så kjør `npm install` i roten først. Løsningene henter hverandre med `workspace:*`, så ingen avhengighet må oppdateres for hånd. Hele løpet for en ny versjon står i [Opprettelse av en ny versjon](opprette-ny-versjon.md).
 
-Pakkene som `ci-channel-test.yml` og `ci-build-debug.yml` bygger, får kjørenummeret som fjerde ledd (`x.y.z.<kjørenummer>`), slik at SharePoint henter manifestene på nytt. Pakker fra `main`, `ci-releases.yml` og lokale bygg har `x.y.z.0`. Se [Installasjonskanaler](../maler/kanaler.md).
+Pakkene som `ci-releases.yml`, `ci-channel-test.yml` og `ci-build-debug.yml` bygger, får kjørenummeret som fjerde ledd (`x.y.z.<kjørenummer>`), slik at SharePoint henter manifestene på nytt. Pakker fra `main` og lokale bygg har `x.y.z.0`. Se [Installasjonskanaler](../maler/kanaler.md).
 
 
 
@@ -2194,8 +2240,8 @@ Kjør aldri `npm version` inne i en løsning; se [NPM](npm.md).
 ### 3. Release-PR og pakkene
 
 - Opprett en PR fra `releases/x.y` til `main` med tittelen `v<versjon>`, labelen `release-pr` og milepælen for versjonen. For 1.14.0 var det #1769, slått sammen med «Squash and merge».
-- Push til `main` starter `build-release.yml` («Build release (main)») når den endrer noe under `SharePointFramework/`, `Install/` eller `Templates/`, som versjonscommiten gjør. Den laster opp artefaktene `release-package` (hovedkanalen) og `release-package-test` (testkanalen), og `release-package-kurs` når commit-meldingen har `[build-kurs]`. Den ruller ikke ut noe.
-- Arbeidsflyten leser hele commit-meldingen, også punktlisten en squash-merge lager av alle commitene i versjonen. Sjekk at den ikke har `[skip-main-ci]` eller en `[build-kurs]` du ikke vil ha.
+- Push til `main` starter `build-release.yml` («Build release (main)») når den endrer noe under `SharePointFramework/`, `Install/` eller `Templates/`, som versjonscommiten gjør. Den laster opp artefaktene `release-package` (hovedkanalen) og `release-package-test` (testkanalen), og `release-package-kurs` når emnelinjen har `[build-kurs]`. Den ruller ikke ut noe.
+- Arbeidsflyten leser bare emnelinjen, som de andre arbeidsflytene. Skal kurs-pakken bygges, legg `[build-kurs]` bakerst i emnelinjen i merge-dialogen. Til 14. oktober 2026 leste den hele meldingen, også punktlisten en squash-merge lager av alle commitene i versjonen.
 - Artefaktene slettes etter 7 dager, som er det lengste repoet tillater.
 - Testpakken fra `main` har versjonen `x.y.z.0`. Testtenanten har allerede fått `x.y.z.<kjørenummer>` fra `ci-channel-test.yml`.
 
@@ -2221,7 +2267,7 @@ Patcher har ikke fulgt ett fast løp: 1.12.1 ble slått sammen til `main` fra `r
 
 ## ➤ Bygge en ny utgivelse
 
-`Install/Build-Release.ps1` bygger installasjonspakken. Det kjører en full `rush rebuild` med testene, pakker hver løsning som `.sppkg`, bygger PnP-malene og site scripts og legger alt sammen med installasjonsskriptene og PnP.PowerShell i `release/`. Skriptet trenger Node 22 og PowerShell 7 (`pwsh`), og stopper på en annen hovedversjon av Node.
+`Install/Build-Release.ps1` bygger installasjonspakken. Det kjører en full `rush rebuild` med testene, pakker hver løsning som `.sppkg`, bygger PnP-malene og site scripts og legger alt sammen med installasjonsskriptene og PnP.PowerShell i `release/`. Skriptet trenger Node 26 og PowerShell 7 (`pwsh`), og stopper på en annen hovedversjon av Node.
 
 Fra roten:
 
@@ -2238,7 +2284,7 @@ Lokalt havner pakken i `release/pp365-<versjon>.<hash>/` og som zip-fil ved side
 
 | Parameter | Hva den gjør |
 | --- | --- |
-| `-Channel test\|kurs\|i18n` | Bytter inn kanalens løsnings- og komponent-ID-er fra `channels/<kanal>.json` før bygget (se [Installasjonskanaler](../maler/kanaler.md)). |
+| `-Channel main\|test\|kurs\|i18n` | Bytter inn kanalens løsnings- og komponent-ID-er fra `channels/<kanal>.json` før bygget (se [Installasjonskanaler](../maler/kanaler.md)). `main` har ID-ene fra kildekoden, så løsningene blir de samme som uten `-Channel`. Med en kanal og `PP365_BUILD_NUMBER` satt får versjonen kjørenummeret som fjerde ledd, slik `ci-releases.yml` bygger. |
 | `-Solutions <navn,...>` | Pakker bare de oppgitte løsningene. Bygget er likevel en full `rush rebuild`, så `shared-library` kommer med i løsningene som bundler den. Navnene matches uten hensyn til store bokstaver og bindestrek. |
 | `-SkipBuildPnPTemplates` | Hopper over PnP-malene. |
 | `-SkipPnPPowerShell` | Installerer, importerer og sjekker ikke PnP.PowerShell, som bare malene trenger. Krever `-SkipBuildPnPTemplates`. |
@@ -2250,6 +2296,7 @@ Lokalt havner pakken i `release/pp365-<versjon>.<hash>/` og som zip-fil ved side
 Skriptet stopper på feil som `npm run build` slipper gjennom:
 
 - løsnings- eller komponent-ID-er fra en annen kanal i kildekoden, for eksempel fra en `npm run watch` som ikke ble avsluttet før en commit (`npm run check-channel-ids` sjekker det samme alene)
+- en løsning som etter kanalbyttet ikke har kanalens løsnings-ID, eller som i CI mangler kjørenummeret i versjonen (`modifySolutionFiles.js` skriver ingenting i loggen)
 - en dekningsgrense i en løsnings `config/jest.config.json` som ikke er nådd (Jest melder det, men Heft feiler ikke)
 - en løsning som ikke fikk en ny `.sppkg`
 - en `pp365-*`-pakke som er ekstern i en bundle i stedet for bundlet inn
@@ -2284,8 +2331,8 @@ Vi har satt opp kontinuerlig integrasjon (CI) ved hjelp av GitHub Actions.
 Nøkkelord kan brukes i commit-meldingen for å unngå (eller tvinge) at CI kjører noen av jobbene.
 
 - `[skip-ci]` for å unngå at alle CI-prosesser starter. Unntak: `skills.yml`, som bare sjekker agentferdighetene og tar sekunder, og `build-release.yml` på `main`, som ikke leser taggen.
-- `[skip-upgrade]` for å unngå at jobben «Oppgrader» starter. Dette vil også hoppe over jobben «Installer» da den er avhengig av «Oppgrader».
-- `[skip-install]` for å unngå at jobben «Installer» starter.
+- `[skip-upgrade]` for å unngå at oppgraderingen starter, også pakkeoppgraderingen etter `[apps-only]`. Jobbene som følger den, hoppes da også over: «Installer», røyktestene og integrasjonstestene.
+- `[fresh-install]` (bare `ci-releases.yml`) installerer et nytt hubområde, `<huben>_<commit>`, etter oppgraderingen, for å prøve en installasjon fra bunnen. Jobben kjørte før på hver push uten `[skip-install]`, og ingenting sletter områdene: 14. oktober 2026 lå det 354 slike på tenanten.
 - `[skip-main-ci]` (bare `main`) hopper over utgivelsespakken og kurs-pakken i `build-release.yml`. Testkanalens pakke bygges likevel.
 - `[skip-test-ci]` (bare `main`) hopper over testkanalens pakke i `build-release.yml`. Uten taggen bygges den også når hovedpakken hoppes over (`[skip-main-ci]`) eller feiler; jobbens `if:` er `!cancelled() && …` (til 2026-10-09 `always() || …`, som alltid var sant, så taggen virket ikke).
 - `[build-kurs]` (bare `main`) bygger også kurs-kanalens pakke i `build-release.yml`.
@@ -2296,13 +2343,13 @@ Nøkkelord kan brukes i commit-meldingen for å unngå (eller tvinge) at CI kjø
 - `[skip-integration]` for å hoppe over integrasjonstestene i `integration/`, som kjører ved siden av røyktestene (se «Testregime»). `[skip-upgrade]` hopper over dem indirekte.
 - `[build-debug]` for å bygge utgivelsespakken i feilsøkingsarbeidsflyten, uten utrulling (se «CI (build debug)»). Sammen med `[skip-ci]` i samme emnelinje bygger bare den.
 
-Bare emnelinjen (første linje) i commit-meldingen leses, slik at punktene i en squash-merge ikke styrer jobbene. Unntaket er `build-release.yml` på `main`: den leser hele meldingen, også punktlisten i en squash-merge, etter `[skip-main-ci]`, `[skip-test-ci]` og `[build-kurs]`.
+Bare emnelinjen (første linje) i commit-meldingen leses, også på `main`, slik at punktene i en squash-merge ikke styrer jobbene. Til 14. oktober 2026 leste `build-release.yml` hele meldingen, så én `[skip-test-ci]` eller `[build-kurs]` i en hvilken som helst commit i en versjon slo inn. Legg taggen bakerst i emnelinjen i merge-dialogen.
 
 ### Bygg og installer (dev)
 
-[ci-releases](../../.github/workflows/ci-releases.yml) kjører ved _push_ til `releases/1.15` som endrer noe under `SharePointFramework/`, `Install/` eller `Templates/`. Den bygger utgivelsespakken med [Build-Release.ps1](../../Install/Build-Release.ps1) `-CI`, oppgraderer utviklingshuben `https://puzzlepart.sharepoint.com/sites/pp365` med [Install.ps1](../../Install/Install.ps1) `-Upgrade`, og installerer så et nytt område, `<huben>_<commit>`, for å prøve en ny installasjon. Innloggingen skjer som CI-appen «Prosjektportalen CI» (se under), fra hemmelighetene `CI_TENANT`, `CI_CLIENT_ID` og `CI_CERT_BASE64`.
+[ci-releases](../../.github/workflows/ci-releases.yml) kjører ved _push_ til `releases/1.15` som endrer noe under `SharePointFramework/`, `Install/` eller `Templates/`. Den bygger utgivelsespakken med [Build-Release.ps1](../../Install/Build-Release.ps1) `-CI -Channel main`, med kjørenummeret som fjerde ledd i versjonen slik testkanalen får det, og oppgraderer utviklingshuben `https://puzzlepart.sharepoint.com/sites/pp365` (variabelen `SP_URL`) med [Install.ps1](../../Install/Install.ps1) `-Upgrade`. Med `[fresh-install]` installerer den også et nytt område, `<huben>_<commit>`, for å prøve en ny installasjon. Kjøringene deler én `concurrency`-gruppe (`ci-releases`), så to push rett etter hverandre ikke oppgraderer huben samtidig. Innloggingen skjer som CI-appen «Prosjektportalen CI» (se under), fra hemmelighetene `CI_TENANT`, `CI_CLIENT_ID` og `CI_CERT_BASE64`.
 
-En full kjøring tar rundt 85–90 minutter (bygg ~13, oppgradering ~28, ny installasjon ~46). Med `[apps-only]` bygges bare pakkene, og huben oppgraderes uten maler, på rundt 14 minutter.
+En full kjøring tar rundt 40 minutter (bygg ~13, oppgradering ~28), og rundt 46 minutter til med `[fresh-install]`. Med `[apps-only]` bygges bare pakkene, og huben oppgraderes uten maler, på rundt 14 minutter.
 
 ### CI-appen «Prosjektportalen CI»
 
@@ -2330,21 +2377,33 @@ Alle kjøringene oppgraderer den samme testhuben og appkatalogen, uansett branch
 
 [ci-build-debug](../../.github/workflows/ci-build-debug.yml) bygger testkanalens utgivelsespakke slik pakkejobben i `ci-channel-test` gjør, men ruller den ikke ut og trenger ingen hemmeligheter. Den er til å prøve og måle endringer i selve bygget (nye brytere i `Build-Release.ps1`, oppsettet av Rush og Heft) før de levende arbeidsflytene tar dem i bruk. Den kjører ved _push_ når emnelinjen inneholder `[build-debug]`, med samme argumenter som pakkejobben i `ci-channel-test`: `-RushTimeline` (tiden per prosjekt skrives i loggen og i jobbens sammendrag) og `-SkipPnPPowerShell` (bare PnP-malene, som jobben hopper over, trenger modulen). En endring i bygget legges inn her først, som en ny bryter i `Build-Release.ps1`, og flyttes til de levende arbeidsflytene når den er bevist. Pakken og Rush-loggene lastes opp som `release-package-debug` og `rush-logs-debug`.
 
+Den kjører også på hver pull request mot en release-branch (`releases/**`), uten tag og uten stifilter. Der er den bygget branch-beskyttelsen krever før merge, jobben «Build release package (pull request)»: full `rush rebuild` med Jest, dekningsgulvene og pakkebevisene, uten utrulling og uten hemmeligheter. En ny push til samme pull request avbryter bygget som kjører.
+
 To ting å vite når du måler: løperne varierer mye (samme bygg har tatt 506 og 711 sekunder), så bare tider fra samme kjøring kan sammenlignes. Og `package-solution` lager ny GUID for «Client Side Assets»-funksjonen og nye relasjons-ID-er (`Id="r5"`) ved hver kjøring, så to `.sppkg` fra samme kode er bare like når disse er maskert. Et faseinndelt bygg (build og test som egne Rush-faser) er prøvd og var tregere på GitHubs firekjerners løpere; resultatet står i `docs/plans/dependency-upgrades-phase-5.md`, slice 1c.
 
 ### Bygg utgivelse (main)
 
 [build-release](../../.github/workflows/build-release.yml) kjører ved _push_ til `main` som endrer noe under `SharePointFramework/`, `Install/` eller `Templates/`. Den bygger utgivelsespakken og testkanalens pakke, og kurs-pakken med `[build-kurs]`, og laster dem opp som artefaktene `release-package`, `release-package-test` og `release-package-kurs`. Den ruller ikke ut noe, og tar rundt 25 minutter. Hvordan pakkene brukes i en utgivelse, står i [Opprettelse av en ny versjon](../utgivelse/opprette-ny-versjon.md).
 
+### Felles for arbeidsflytene
+
+- **Tidsgrenser.** Hver jobb har `timeout-minutes`: bygg 45, full oppgradering 60, pakkeoppgradering 20, E2E 30, integrasjonstester 20 og `UpgradeAllSitesToLatest.ps1` 120. GitHubs standard er seks timer, og når kjøringene venter på hverandre (`concurrency`), holder en jobb som henger, alle senere like lenge.
+- **Rettigheter.** `permissions: contents: read` for `GITHUB_TOKEN`; bare SBOM-jobben skriver, siden den committer `SBOM.md` ved manuell kjøring.
+- **Rush-loggene** lastes opp som artefakt (`rush-logs-…`, 7 dager) når et bygg feiler. `Build-Release.ps1` skriver bare de siste 200 linjene i jobbloggen.
+- **Hemmelighetene** sendes til skriptene som `$env:CI_CERT_BASE64`, `$env:CI_TENANT` og `$env:CI_CLIENT_ID`, som PowerShell leser når steget kjører. De skrives dermed aldri inn i stegets skript på runneren.
+- **PnP.PowerShell** installeres i CI med `Install-ModuleWithRetry` fra `Install/Scripts/SharedFunctions.ps1`: tre forsøk med 30 sekunder imellom, siden runneren av og til ikke når PowerShell Gallery (kjøring 38522211703).
+- **Versjoner av actions:** `actions/checkout@v7`, `actions/setup-node@v7`, `actions/upload-artifact@v7` og `actions/download-artifact@v8`, som alle kjører på Node 24.
+- **Versjonsstempling:** `ci-releases.yml`, `ci-channel-test.yml` og `ci-build-debug.yml` setter `PP365_BUILD_NUMBER` (se [Installasjonskanaler](../maler/kanaler.md)).
+
 ### Aktive arbeidsflyter
 
-GitHub kjører bare arbeidsflytfilene som ligger rett i `.github/workflows/`. De i `.github/workflows/unused/` (`automatic_chores.yml`, `ci-channel-i18n.yml`, `pr-package-spfx-dev.yml`) er tatt ut av bruk.
+GitHub kjører bare arbeidsflytfilene som ligger rett i `.github/workflows/`. Mappen `unused/` med `automatic_chores.yml`, `ci-channel-i18n.yml` og `pr-package-spfx-dev.yml` ble slettet 14. oktober 2026. Den påkrevde sjekken «Rush Install and Rebuild» i branch-beskyttelsen kom fra den siste og kunne aldri kjøre; branch-beskyttelsen skal kreve «Build release package (pull request)» i stedet. PR-jobben har et eget navn fordi en push til samme commit uten `[build-debug]` gir en hoppet-over jobb, og GitHub regner en hoppet-over jobb som bestått for en påkrevd sjekk. En hoppet-over jobb får det uevaluerte uttrykket i `name:` som navn (`github.event_name == 'pull_request' && …`), og listen over sjekker i branch-beskyttelsen viser den teksten også. Velg «Build release package (pull request)», som listen viser når en pull request har kjørt bygget den siste uka. Legg kravet i en regel for det eksakte navnet `releases/1.15`: den går foran jokertegnregelen `releases/1.1*`, og branchene til og med `releases/1.14` har ingen arbeidsflyt som kjører på pull requests.
 
 | Arbeidsflytfil        | Beskrivelse                                                                  | Utløser                                                                                  |
 | --------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `ci-releases.yml`     | Bygg, oppgrader og installer til utviklingsmiljø                             | Push til `releases/1.15` (stier: SPFx, Install, Templates)                               |
-| `ci-channel-test.yml` | Bygg og distribuer testkanalen, og kjør Playwright- og integrasjonstestene mot den | Push til `releases/1.15`, `feat/fluent-v9*` og `feat/dependency-upgrades*` (stier: SPFx, Install, Templates, e2e, integration) |
-| `ci-build-debug.yml`  | Bygg testkanalens pakke uten utrulling, for å prøve endringer i bygget       | Push til `releases/1.15` eller en `feat/**`-branch med `[build-debug]` i emnelinjen      |
+| `ci-releases.yml`     | Bygg og oppgrader utviklingsmiljøet; ny installasjon med `[fresh-install]`   | Push til `releases/1.15` (stier: SPFx, Install, Templates)                               |
+| `ci-channel-test.yml` | Bygg og distribuer testkanalen, og kjør Playwright- og integrasjonstestene mot den | Push til `releases/1.15` og `feat/technical-backlog*` (stier: SPFx, Install, Templates, e2e, integration) |
+| `ci-build-debug.yml`  | Bygg testkanalens pakke uten utrulling: for å prøve endringer i bygget, og som påkrevd bygg på pull requests | Push til `releases/1.15` eller en `feat/**`-branch med `[build-debug]` i emnelinjen, og hver pull request mot `releases/**` |
 | `build-release.yml`   | Bygg utgivelsespakke og test/kurs-kanalpakker                                | Push til `main` (stier: SPFx, Install, Templates)                                        |
 | `generate-sbom.yml`   | Generer SBOM.md som artefakt; committer den bare ved manuell kjøring fra en branch | Tag-push `v*` eller manuell utløsning                                              |
 | `skills.yml`          | Sjekk at agentferdighetene bare ligger i `.claude/skills` (`npm run check-skills`) | Push og pull request som endrer `.claude/skills`, `.github/skills` eller `.agents/skills` |

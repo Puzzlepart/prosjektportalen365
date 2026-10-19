@@ -2,7 +2,7 @@
     "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/rush.schema.json",
     "rushVersion": "5.179.0",
     "pnpmVersion": "10.34.5",
-    "nodeSupportedVersionRange": ">=22.14.0 <23.0.0",
+    "nodeSupportedVersionRange": ">=26.11.0 <27.0.0",
     "repository": {
         "url": "https://github.com/Puzzlepart/prosjektportalen365"
     },

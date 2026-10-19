@@ -19,4 +19,3 @@ export const PlannerTaskItemProperty: FC<IPlannerTaskItemPropertyProps> = (props
 }
 
 PlannerTaskItemProperty.displayName = 'PlannerTaskItemProperty'
-PlannerTaskItemProperty.defaultProps = {}

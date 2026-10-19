@@ -30,7 +30,22 @@ test('portfolio overview: the project information button stays in view in a narr
   await expect(overview.getByRole('gridcell').first()).toBeVisible({
     timeout: 90_000
   })
+  // The first cells are placeholders, drawn from the columns persisted in local storage while the
+  // data loads ("Viser 0 av 0"), and the rows that follow show plain title links until the view's
+  // own columns have replaced the persisted ones, a few seconds later; only then does the title
+  // cell get its button. Counted at the first cell, there were none, and the test skipped on every
+  // run although the hub lists 42 projects with the button. So the counter is waited for, and the
+  // first button.
+  await expect(overview.locator('[class*="resultsCount"]').first()).toHaveText(
+    /viser [1-9]\d* av \d+|showing [1-9]\d* of \d+/i,
+    { timeout: 90_000 }
+  )
   const buttonSelector = BUTTON_LABELS.map((label) => `button[aria-label="${label}"]`).join(', ')
+  await overview
+    .locator(buttonSelector)
+    .first()
+    .waitFor({ state: 'visible', timeout: 30_000 })
+    .catch(() => undefined)
   test.skip(
     (await overview.locator(buttonSelector).count()) === 0,
     'the overview shows no project information button in its title column'

@@ -8,7 +8,7 @@ import {
 } from '../fixtures/document-template-dialog'
 import { deleteFolder, ensureFolder } from '../fixtures/rest'
 import { baseURL } from '../../playwright.config'
-import { configuredUrl, expect, test } from '../fixtures/pp365'
+import { configuredUrl, expect, test, withNetworkRetry } from '../fixtures/pp365'
 
 /**
  * The "Hent dokumentmal" dialog's lists must fit the dialog: no horizontal scrollbar on the
@@ -45,7 +45,8 @@ test.describe('document template dialog', () => {
       await page.setViewportSize(viewport)
       // A library view is not an SPFx web part page, so the canvas wait of `openPage` does not apply.
       // A library view is heavy; the CI runner has timed out on its default 30 s once.
-      await page.goto(await findDocumentLibrary(page, projectUrl!), { timeout: 90_000 })
+      const libraryPage = await findDocumentLibrary(page, projectUrl!)
+      await withNetworkRetry(() => page.goto(libraryPage, { timeout: 90_000 }))
       const dialog = await openDocumentTemplateDialog(page)
       expectDialogGridsToFit(await measureBothScreens(page, dialog, testInfo))
     })
@@ -62,7 +63,7 @@ test.describe('document template dialog', () => {
     // folder of the test's own for the duration of the test.
     const created = await ensureFolder(page, projectUrl!, library.serverRelativeUrl, FOLDER)
     try {
-      await page.goto(library.url, { timeout: 90_000 })
+      await withNetworkRetry(() => page.goto(library.url, { timeout: 90_000 }))
       const dialog = await openDocumentTemplateDialog(page)
       await openTargetFolderScreen(dialog)
       const rows = dialog.locator('.fui-DataGridBody [role="row"]')

@@ -1,6 +1,12 @@
 import { FluentProvider, IdPrefixProvider } from '@fluentui/react-components'
 import strings from 'ProjectWebPartsStrings'
-import { Fluent, UserMessage, WebPartTitle, customLightTheme } from 'pp365-shared-library'
+import {
+  Fluent,
+  UserMessage,
+  WebPartTitle,
+  customLightTheme,
+  withDefaults
+} from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { Actions } from './Actions'
 import { AllPropertiesPanel } from './AllPropertiesPanel'
@@ -15,10 +21,28 @@ import { ProgressDialog } from './ProgressDialog'
 import styles from './ProjectInformation.module.scss'
 import { ProjectProperties } from './ProjectProperties'
 import { ProjectStatusReport } from './ProjectStatusReport'
+import { SustainabilityGoals } from './SustainabilityGoals'
 import { ProjectInformationContextProvider } from './context'
 import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
 import resource from 'SharedResources'
+
+export const PROJECT_INFORMATION_DEFAULT_PROPS: Partial<IProjectInformationProps> = {
+  title: resource.WebParts_ProjectInformation_Title,
+  page: 'Frontpage',
+  customActions: [],
+  hideActions: [],
+  showFieldExternal: {},
+  fallbackVisibleFields: [],
+  hideStatusReport: false,
+  hideArchiveStatus: true,
+  showSustainabilityGoalsAsIcons: false,
+  sustainabilityGoalIconSize: 48,
+  statusReportShowOnlyIcons: true,
+  rowLimit: 6,
+  minRowLimit: 4,
+  maxRowLimit: 100
+}
 
 /**
  * Display project information. A number of actions are available to the user,
@@ -29,7 +53,8 @@ import resource from 'SharedResources'
  * - Promote to parent project (`CreateParentDialog`)
  * - Run project setup wizard on-demand (`RunProjectSetupDialog`)
  */
-export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
+export const ProjectInformation: FC<IProjectInformationProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, PROJECT_INFORMATION_DEFAULT_PROPS)
   const { fluentProviderId, context } = useProjectInformation(props)
   const showNoHubAccessMessage = context.state.hubIsAvailable === false && !context.state.error
   if (context.state.hidden) return null
@@ -57,6 +82,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
             />
           )}
           <ProjectProperties />
+          <SustainabilityGoals />
           <Actions />
           <ParentProjectsList />
           <ChildProjectsList />
@@ -79,17 +105,3 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
 }
 
 ProjectInformation.displayName = 'Project Information'
-ProjectInformation.defaultProps = {
-  title: resource.WebParts_ProjectInformation_Title,
-  page: 'Frontpage',
-  customActions: [],
-  hideActions: [],
-  showFieldExternal: {},
-  fallbackVisibleFields: [],
-  hideStatusReport: false,
-  hideArchiveStatus: true,
-  statusReportShowOnlyIcons: true,
-  rowLimit: 6,
-  minRowLimit: 4,
-  maxRowLimit: 100
-}

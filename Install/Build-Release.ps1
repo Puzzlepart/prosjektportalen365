@@ -20,7 +20,9 @@ Param(
     [Parameter(Mandatory = $false)]
     [switch]$SkipBundle,
     [Parameter(Mandatory = $false)]
-    [ValidateSet("test", "kurs", "i18n")]
+    # main builds the release with the main channel's ids, which are the source's own, so that
+    # PP365_BUILD_NUMBER can stamp the run number into the versions (ci-releases.yml).
+    [ValidateSet("main", "test", "kurs", "i18n")]
     [string]$Channel,
     [Parameter(Mandatory = $false, HelpMessage = "Skip import of PnP.PowerShell module")]
     [switch]$SkipImportModule,
@@ -136,18 +138,19 @@ $RELEASE_PATH = "$ROOT_PATH/release/$($RELEASE_NAME)"
 #endregion
 
 #region Node version guard
-# The SPFx 1.23 Heft toolchain requires Node 22 (see rush.json nodeSupportedVersionRange and the
-# .nvmrc files). Building on another major silently produces a stale or broken .sppkg, so fail here
-# rather than shipping one.
+# The repo builds on one Node major, 26 (see rush.json nodeSupportedVersionRange and the .nvmrc
+# files); SPFx 1.24 allows 22, 24 and 26, and one is pinned so every build is the same build.
+# Building on another major silently produces a stale or broken .sppkg, so fail here rather than
+# shipping one.
 $NODE_VERSION_RAW = (node -v) 2>$null
 if ($LASTEXITCODE -ne 0 -or -not $NODE_VERSION_RAW) {
-    Write-Host "[ERROR] Node.js was not found on PATH. Node.js 22 is required." -ForegroundColor Red
+    Write-Host "[ERROR] Node.js was not found on PATH. Node.js 26 is required." -ForegroundColor Red
     exit 1
 }
 $NODE_MAJOR = [int]($NODE_VERSION_RAW.TrimStart('v').Split('.')[0])
-if ($NODE_MAJOR -ne 22) {
-    Write-Host "[ERROR] Node.js 22 is required for the SPFx Heft toolchain, found $NODE_VERSION_RAW." -ForegroundColor Red
-    Write-Host "        Run 'nvm use' in the repository root (see .nvmrc) and try again." -ForegroundColor Yellow
+if ($NODE_MAJOR -ne 26) {
+    Write-Host "[ERROR] Node.js 26 is required for the SPFx Heft toolchain, found $NODE_VERSION_RAW." -ForegroundColor Red
+    Write-Host "        Run 'nvm install' and 'nvm use' in the repository root (see .nvmrc) and try again." -ForegroundColor Yellow
     exit 1
 }
 #endregion
@@ -244,7 +247,11 @@ if ($SkipPnPPowerShell.IsPresent) {
 else {
     if ($CI.IsPresent) {
         StartAction("Installing module PnP.PowerShell")
-        Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser
+        # With SharedFunctions.ps1's retries, in their own scope like Get-PnPVersion above.
+        & {
+            . "$PSScriptRoot/Scripts/SharedFunctions.ps1"
+            Install-ModuleWithRetry -Name PnP.PowerShell
+        }
         EndAction
     }
     else {
@@ -371,10 +378,24 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
             $SOLUTION_CONFIG_JSON = ($SOLUTION_CONFIG | ConvertTo-Json)
             $SOLUTION_CONFIG_JSON | Out-File -FilePath "./config/.generated-solution-config.json" -Encoding UTF8 -Force
             node ../.tasks/modifySolutionFiles.js --force >$null 2>&1
+            # The swap's output is silenced, so check what it wrote: a channel package with the
+            # source's solution id would install over the main channel's app, and a CI package
+            # without the run number in its version can leave clients on manifests they cached.
+            $PACKAGE_SOLUTION = (Get-Content "./config/package-solution.json" -Raw | ConvertFrom-Json).solution
+            $SWAP_ERROR = $null
+            if ($PACKAGE_SOLUTION.id -ne $SOLUTION_CONFIG.id) {
+                $SWAP_ERROR = "has the solution id $($PACKAGE_SOLUTION.id), not channel $($CHANNEL_CONFIG_NAME)'s $($SOLUTION_CONFIG.id)"
+            }
+            elseif ($env:PP365_BUILD_NUMBER -match '^\d+$' -and -not "$($PACKAGE_SOLUTION.version)".EndsWith(".$($env:PP365_BUILD_NUMBER)")) {
+                $SWAP_ERROR = "has the version $($PACKAGE_SOLUTION.version), without the run number $($env:PP365_BUILD_NUMBER)"
+            }
+            if ($SWAP_ERROR) {
+                Write-Host "[ERROR] [$Solution] config/package-solution.json $SWAP_ERROR after the channel swap. In each solution run 'node ../.tasks/modifySolutionFiles.js --revert --force', delete .current-channel-config.json and build again." -ForegroundColor Red
+                exit 1
+            }
             # The version the package carries, stamped with the run number in CI, so the log shows
             # what the tenant will get and a stale deployment can be told from a cached one.
-            $STAMPED_VERSION = (Get-Content "./config/package-solution.json" -Raw | ConvertFrom-Json).solution.version
-            Write-Host "[$Solution] solution version $STAMPED_VERSION" -ForegroundColor Cyan
+            Write-Host "[$Solution] solution version $($PACKAGE_SOLUTION.version)" -ForegroundColor Cyan
         }
     }
     Set-Location $SHAREPOINT_FRAMEWORK_BASEPATH

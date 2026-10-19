@@ -10,6 +10,17 @@ on:
       - 'Templates/**'
       - .github/workflows/ci-releases.yml
 
+# The jobs only read the repository; the deployments sign in to the tenant with the certificate.
+permissions:
+  contents: read
+
+# One run at a time: every run upgrades the same development hub (vars.SP_URL), so two at once can
+# overwrite each other mid-run, as two runs of the test channel's workflow did on 2026-10-06. A
+# newer run waits for the running one; GitHub keeps only the newest waiting run in the group.
+concurrency:
+  group: ci-releases
+  cancel-in-progress: false
+
 env:
   # Heft's TypeScript and webpack steps need more than V8's default heap (about 2 GB on a small
   # runner): the PortfolioWebParts production build dies at 2 GB and passes at 3 GB. 8 GB matches
@@ -17,11 +28,23 @@ env:
   # the heap ceilings cannot add up past the runner's memory.
   NODE_OPTIONS: --max-old-space-size=8192
   RUSH_PARALLELISM: 2
-  SP_URL: 'https://puzzlepart.sharepoint.com/sites/pp365'
+  SP_URL: ${{ vars.SP_URL }}
   CI_CERT_BASE64: ${{ secrets.CI_CERT_BASE64 }}
   CI_TENANT: ${{ secrets.CI_TENANT }}
   CI_CLIENT_ID: ${{ secrets.CI_CLIENT_ID }}
 
+# Every job has a timeout. GitHub's default is six hours, and with one run at a time a hung job
+# holds every later run as long.
+#
+# The packages are built as the main channel with the run number as the fourth segment of every
+# version (PP365_BUILD_NUMBER), as the test channel's are, so each deployment is a new version to
+# SharePoint and clients refetch the manifests. Without -Channel every deployment carried the
+# version in package-solution.json. The main channel's ids, names and paths are the ones in the
+# repository, and its site scripts and PnP templates came out identical to the sources (checked
+# on 2026-10-14), so the packages are otherwise the same.
+#
+# The deployments pass the certificate and the ids as $env: references, which PowerShell reads at
+# run time, so the secrets are never written into the step's script on the runner.
 jobs:
   # Tags like [skip-ci] and [apps-only] must only be honored when present in the
   # commit *subject* (first line). Squash-merge commit bodies inherit the PR's
@@ -30,6 +53,7 @@ jobs:
   commit_subject:
     name: Determine commit subject
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     outputs:
       subject: ${{ steps.subject.outputs.subject }}
     steps:
@@ -43,28 +67,45 @@ jobs:
     needs: [commit_subject]
     name: Build release package
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     if: ${{ !contains(needs.commit_subject.outputs.subject, '[skip-ci]') && !contains(needs.commit_subject.outputs.subject, '[apps-only') }}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
+      - uses: actions/checkout@v7
 
+      # Names the hub of a fresh installation ([fresh-install]).
       - name: Set sha_short
         id: vars
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
 
       - name: Run Install/Build-Release.ps1 in CI mode
-        run: Install/Build-Release.ps1 -CI -SkipBundle
+        env:
+          PP365_BUILD_NUMBER: ${{ github.run_number }}
+        run: Install/Build-Release.ps1 -CI -SkipBundle -Channel main
         shell: pwsh
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-package
           path: release
+
+      # Build-Release.ps1 prints the last 200 lines of a failed rebuild; the whole logs are here.
+      - name: Upload the Rush logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: rush-logs-releases
+          path: |
+            SharePointFramework/rush-*.build.log
+            SharePointFramework/*/rush-logs/
+            Templates/rush-logs/
+            e2e/rush-logs/
+            integration/rush-logs/
+          if-no-files-found: warn
+          retention-days: 7
     outputs:
       sha_short: ${{ steps.vars.outputs.sha_short }}
 
@@ -72,62 +113,64 @@ jobs:
     needs: [commit_subject, build_release_package]
     name: Upgrade
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     if: ${{ !contains(needs.commit_subject.outputs.subject, '[skip-upgrade]') }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: release-package
           path: release
 
       - name: Upgrade
-        run: release/Install.ps1 -Url ${{ env.SP_URL }} -Upgrade -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }}
+        run: release/Install.ps1 -Url $env:SP_URL -Upgrade -CI -Tenant $env:CI_TENANT -CertificateBase64Encoded $env:CI_CERT_BASE64 -ClientId $env:CI_CLIENT_ID
         shell: pwsh
 
   install:
     needs: [commit_subject, build_release_package, upgrade]
     name: Install
     runs-on: ubuntu-latest
-    if: ${{ !contains(needs.commit_subject.outputs.subject, '[skip-install]') }}
+    timeout-minutes: 60
+    # A fresh installation on a new hub, sites/pp365_<sha>, which nothing deletes: run on every
+    # push, it had left 354 such hubs on the tenant by 2026-10-14. It runs only when asked for.
+    if: ${{ contains(needs.commit_subject.outputs.subject, '[fresh-install]') }}
+    env:
+      SHA_SHORT: ${{ needs.build_release_package.outputs.sha_short }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: release-package
           path: release
 
       - name: Install
-        run: release/Install.ps1 -Url "${{ env.SP_URL }}_${{ needs.build_release_package.outputs.sha_short }}" -Title "Prosjektportalen 365 ${{ needs.build_release_package.outputs.sha_short }}" -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }} -SkipAppPackages -SkipSiteDesign -SkipTaxonomy -SkipSearchConfiguration
+        run: release/Install.ps1 -Url "$($env:SP_URL)_$($env:SHA_SHORT)" -Title "Prosjektportalen 365 $($env:SHA_SHORT)" -CI -Tenant $env:CI_TENANT -CertificateBase64Encoded $env:CI_CERT_BASE64 -ClientId $env:CI_CLIENT_ID -SkipAppPackages -SkipSiteDesign -SkipTaxonomy -SkipSearchConfiguration
         shell: pwsh
 
   upgrade_all_sites_to_latest:
     needs: [commit_subject, build_release_package, upgrade]
     name: Upgrade all sites to latest
     runs-on: ubuntu-latest
+    timeout-minutes: 120
     if: ${{ contains(needs.commit_subject.outputs.subject, '[upgrade-all-sites-to-latest]') }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: release-package
           path: release
 
       - name: Run script UpgradeAllSitesToLatest.ps1 in CI mode
-        run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url ${{ env.SP_URL }} -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }}
+        run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url $env:SP_URL -CI -Tenant $env:CI_TENANT -CertificateBase64Encoded $env:CI_CERT_BASE64 -ClientId $env:CI_CLIENT_ID
         shell: pwsh
 
   build_release_package_packages_only:
     needs: [commit_subject]
     name: Build release package - packages only
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     if: ${{ contains(needs.commit_subject.outputs.subject, '[apps-only') }}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
+      - uses: actions/checkout@v7
 
-      - name: Set sha_short
-        id: vars
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
 
@@ -144,34 +187,52 @@ jobs:
         shell: pwsh
 
       - name: Run Install/Build-Release.ps1 in CI mode
+        # As the test channel's packages-only job: the rebuild's timeline goes to the log and the
+        # job summary, and PnP.PowerShell is not installed, since only the skipped PnP templates
+        # use it.
         env:
           SOLUTIONS: ${{ steps.appsonly.outputs.solutions }}
+          PP365_BUILD_NUMBER: ${{ github.run_number }}
         run: |
           if ([string]::IsNullOrWhiteSpace($env:SOLUTIONS)) {
-            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates
+            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel main -RushTimeline -SkipPnPPowerShell
           }
           else {
-            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Solutions ($env:SOLUTIONS -split ',')
+            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel main -RushTimeline -SkipPnPPowerShell -Solutions ($env:SOLUTIONS -split ',')
           }
         shell: pwsh
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-package
           path: release
-    outputs:
-      sha_short: ${{ steps.vars.outputs.sha_short }}
+
+      - name: Upload the Rush logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: rush-logs-releases
+          path: |
+            SharePointFramework/rush-*.build.log
+            SharePointFramework/*/rush-logs/
+            Templates/rush-logs/
+            e2e/rush-logs/
+            integration/rush-logs/
+          if-no-files-found: warn
+          retention-days: 7
 
   upgrade_packages_only:
-    needs: [build_release_package_packages_only]
+    needs: [commit_subject, build_release_package_packages_only]
     name: Upgrade packages only
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: ${{ !contains(needs.commit_subject.outputs.subject, '[skip-upgrade]') }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: release-package
           path: release
 
       - name: Upgrade
-        run: release/Install.ps1 -Url ${{ env.SP_URL }} -Upgrade -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }} -SkipTemplate
+        run: release/Install.ps1 -Url $env:SP_URL -Upgrade -CI -Tenant $env:CI_TENANT -CertificateBase64Encoded $env:CI_CERT_BASE64 -ClientId $env:CI_CLIENT_ID -SkipTemplate
         shell: pwsh

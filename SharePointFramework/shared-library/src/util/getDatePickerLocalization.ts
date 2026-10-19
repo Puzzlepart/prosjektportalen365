@@ -22,21 +22,36 @@ function capitalize(text: string, locale: string) {
 }
 
 /**
+ * The regions whose first week of the year is the first with four or more of its days (ISO 8601):
+ * CLDR's week data, `minDays` 4. Every other region counts the week that holds 1 January.
+ */
+const FOUR_DAY_WEEK_REGIONS = new Set(
+  'AD AN AT AX BE BG CH CZ DE DK EE ES FI FJ FO FR GB GF GG GI GP GR HU IE IM IS IT JE LI LT LU MC MQ NL NO PL PT RE RU SE SJ SK SM VA'.split(
+    ' '
+  )
+)
+
+/**
  * The first day of the week (0 Sunday to 6 Saturday, as `DayOfWeek`) and the fewest days of the
- * year's first week, from the language's region. Browsers give them through `getWeekInfo()`,
- * Node through `weekInfo`; without either, the American week, or Europe's ISO 8601 week.
+ * year's first week, from the language's region. Browsers give the first day through
+ * `getWeekInfo()`, Node through `weekInfo`. The fewest days come from them only where they still
+ * have it: the Intl.Locale proposal dropped `minimalDays`, and V8 14.6 (Chromium 146, Node 26)
+ * followed, while Firefox never had week info at all. Otherwise both come from the region.
  */
 function weekOf(locale: string): { firstDay: number; minimalDays: number } {
+  let region = /-([A-Za-z]{2})(?:-|$)/.exec(locale)?.[1]
+  let info: { firstDay: number; minimalDays?: number } | undefined
   try {
     const intlLocale = new Intl.Locale(locale) as any
-    const info = intlLocale.getWeekInfo?.() ?? intlLocale.weekInfo
-    if (info) return { firstDay: info.firstDay % 7, minimalDays: info.minimalDays }
+    info = intlLocale.getWeekInfo?.() ?? intlLocale.weekInfo
+    region = intlLocale.maximize?.().region ?? intlLocale.region ?? region
   } catch {
-    // An unknown locale falls through to the region's guess.
+    // An unknown locale: the tag's own region, if it has one, decides below.
   }
-  return /-(US|CA)$/i.test(locale)
-    ? { firstDay: 0, minimalDays: 1 }
-    : { firstDay: 1, minimalDays: 4 }
+  region = region?.toUpperCase()
+  const minimalDays = info?.minimalDays ?? (FOUR_DAY_WEEK_REGIONS.has(region) ? 4 : 1)
+  const firstDay = info ? info.firstDay % 7 : region === 'US' || region === 'CA' ? 0 : 1
+  return { firstDay, minimalDays }
 }
 
 /**

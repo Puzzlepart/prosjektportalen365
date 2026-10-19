@@ -14,7 +14,8 @@ import {
   WebPartTitle,
   formatDate,
   customLightTheme,
-  format
+  format,
+  withDefaults
 } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import styles from './LatestProjects.module.scss'
@@ -22,13 +23,22 @@ import { ILatestProjectsProps } from './types'
 import { useLatestProjects } from './useLatestProjects'
 import resource from 'SharedResources'
 
+export const LATEST_PROJECTS_DEFAULT_PROPS: Partial<ILatestProjectsProps> = {
+  title: resource.WebParts_LatestProjects_Title,
+  showProjectLogo: true,
+  rowLimit: 5,
+  minRowLimit: 3,
+  maxRowLimit: 10
+}
+
 /**
  * Renders a list of the latest projects. The list is sorted by the Created date
  * by default.
  *
  * @param props - The component props.
  */
-export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
+export const LatestProjects: FC<ILatestProjectsProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, LATEST_PROJECTS_DEFAULT_PROPS)
   const { className, loading, projects, viewAll, toggleViewAll, fluentProviderId } =
     useLatestProjects(props)
 
@@ -91,12 +101,4 @@ export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
       </FluentProvider>
     </IdPrefixProvider>
   )
-}
-
-LatestProjects.defaultProps = {
-  title: resource.WebParts_LatestProjects_Title,
-  showProjectLogo: true,
-  rowLimit: 5,
-  minRowLimit: 3,
-  maxRowLimit: 10
 }

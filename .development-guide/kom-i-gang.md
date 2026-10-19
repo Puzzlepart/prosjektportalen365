@@ -17,7 +17,7 @@ Repoet er et Rush-monorepo (pnpm, Heft, SPFx 1.24):
 | `SiteScripts/` | Site scripts; se [site design og site scripts](maler/site-design-og-site-scripts.md) |
 | `Install/` | `Build-Release.ps1` (utgivelsesbygget), `Install.ps1` og oppgraderingsskriptene |
 | `channels/` | Installasjonskanalene `main`, `test`, `i18n` og `kurs`; se [kanaler](maler/kanaler.md) |
-| `e2e/` | Playwright-røyktester mot testtenanten (Rush-prosjektet `pp365-e2e`) |
+| `e2e/` | Playwright-tester i en ekte nettleser mot testtenanten: røyktester og brukerflyter (Rush-prosjektet `pp365-e2e`) |
 | `integration/` | Integrasjonstester av bibliotekets datalag mot testtenanten, i Node (Rush-prosjektet `pp365-integration`) |
 | `.development-guide/` | Utviklingsguiden, delt i `spfx/`, `maler/`, `git/`, `ci/` og `utgivelse/` |
 | `docs/plans/` | Planer for større løft, f.eks. [Heft-overgangen](../docs/plans/spfx-1.23-heft-toolchain.md) og [fase 5](../docs/plans/dependency-upgrades-phase-5.md) |
@@ -28,7 +28,7 @@ Alle fem løsningene avhenger av `shared-library`. `PortfolioWebParts` bruker i 
 
 Du trenger:
 
-- **Node 22**, versjonen i `.nvmrc` (22.22.2). `rush.json` godtar bare `>=22.14.0 <23.0.0`, så en annen hovedversjon stopper bygget. Med nvm: `nvm install && nvm use` i repo-roten. Med nvm-windows: `nvm install 22.22.2` og `nvm use 22.22.2`, siden den ikke nødvendigvis leser `.nvmrc`.
+- **Node 26**, versjonen i `.nvmrc` (26.11.1). `rush.json` godtar bare `>=26.11.0 <27.0.0`, så en annen hovedversjon stopper bygget. Med nvm: `nvm install && nvm use` i repo-roten. Med nvm-windows: `nvm install 26.11.1` og `nvm use 26.11.1`, siden den ikke nødvendigvis leser `.nvmrc`.
 - **PowerShell 7** (`pwsh`) når du skal bygge en utgivelse (`npm run build-release`), og på Windows også som terminal. Mer om Windows i [Windows og macOS](spfx/utviklingsmiljo.md#windows-og-macos).
 - **VS Code**, og **Chrome** for feilsøkingsoppsettet.
 - Gjerne Rush globalt (`npm i -g @microsoft/rush`), så kommandoer som `rush rebuild -o pp365-shared-library` virker direkte. Uten: `node common/scripts/install-run-rush.js <kommando>`.
@@ -81,13 +81,13 @@ Detaljer og ekte eksempler står i [kodemonster.md](spfx/kodemonster.md), og et 
 
 ### 5. Tester
 
-Les [testing.md](spfx/testing.md) før du skriver din første test.
+Les [testing.md](spfx/testing.md) før du skriver din første test. Avsnittet «Hvilken test skal jeg skrive?» der forklarer forskjellen på Jest, integrasjon og E2E.
 
 - **Jest i bygget.** `src/**/*.test.ts(x)` kjører i `heft test`, altså i `npm test`, `npm run build`, `rush build`/`rebuild` og CI, og en test som feiler, stopper bygget. `npm run watch` og kanalbyggene (`npm run build:<kanal>`) kjører ingen tester. Testen ligger ved siden av koden.
 - **Kjør** `npm test` i en løsning (bygger først). Én fil: `npx heft test --test-path-pattern Header` (et regulært uttrykk over stien til testfilen). `shared-library` må være bygget først.
 - **Komponenttester** bruker React Testing Library og `jest.mock` av hooken eller dataadapteren, og `jest.mock(...)` må stå over importene. Importer aldri `@pnp/*` i en test; harnessen `pp365-jest-config` stubber den.
 - **Dekningsgulv:** hver løsnings `config/jest.config.json` har `coverageThreshold`. Lokalt melder Jest bare et gulv som ikke nås, mens utgivelsesbygget i CI stopper på det: se på dekningen før du pusher. Gulvene skal bare opp: løft dem når du legger til tester, senk dem aldri.
-- **Playwright (`e2e/`):** røyktester (`tests/smoke`) og brukerreiser (`tests/flows`; fire av dem skriver til testtenanten og rydder etter seg) mot testtenanten. De kjører i CI etter hver utrulling til testkanalen (`ci-channel-test.yml`), og rapporten lastes opp som artefaktet `playwright-report-test-channel`. Lokalt i `e2e/`: `cp .env.example .env`, fyll inn, `npx playwright install chromium` og `npm test`.
+- **Playwright (`e2e/`):** røyktester (`tests/smoke`) og brukerreiser (`tests/flows`; fire av dem skriver til testtenanten og rydder etter seg) mot testtenanten. De kjører i CI etter hver utrulling til testkanalen (`ci-channel-test.yml`), og rapporten, som integrasjonsrapporten, åpnes på den private testrapportsiden fra lenken i jobbens sammendrag (artefaktet `playwright-report-test-channel` er reserven, uten sporinger). Lokalt i `e2e/`: `cp .env.example .env`, fyll inn, `npx playwright install chromium` og `npm test`.
 - Den som åpner en PR, retter tester som feiler på grunn av den. Slett aldri en påstand bare for å få grønt.
 
 ### 6. Fra endring til merge
@@ -102,7 +102,7 @@ Se [branching og arbeidsflyt](git/branching-og-arbeidsflyt.md), [commit-praksis]
    - `[apps-only:X]`: bare de oppgitte løsningene, f.eks. `[apps-only:ProjectWebParts,PortfolioWebParts]`. `shared-library` er bundlet inn i løsningene som bruker den, så en endring der når sidene bare gjennom løsningene du lister.
    - `[skip-e2e]`: hopper over Playwright-testene etter utrullingen.
    - `[build-debug]`: bygger testkanalens pakke uten utrulling, for å prøve endringer i selve bygget.
-4. **Hva CI gjør.** En push til `releases/1.15` bygger og oppgraderer utviklingsmiljøet (`ci-releases.yml`) og bygger testkanalen, ruller den ut til testtenanten og kjører Playwright mot den (`ci-channel-test.yml`). En push dit oppgraderer altså testtenanten. Det kjører ingen bygg på pull requests i dag, så bygg og test lokalt før du ber om review.
+4. **Hva CI gjør.** En push til `releases/1.15` bygger og oppgraderer utviklingsmiljøet (`ci-releases.yml`) og bygger testkanalen, ruller den ut til testtenanten og kjører Playwright mot den (`ci-channel-test.yml`). En push dit oppgraderer altså testtenanten. En pull request mot release-branchen får et fullt bygg med alle testene (`ci-build-debug.yml`), som branch-beskyttelsen krever før merge. Den ruller ikke ut noe.
 5. **Changelog.** Legg til en linje på norsk i [CHANGELOG.md](../CHANGELOG.md) under neste versjon (`Ny funksjonalitet`, `Forbedringer` eller `Feilrettinger`), skrevet for brukeren og med issue-nummer når det finnes.
 6. **PR** mot release-branchen med [PR-malen](../.github/PULL_REQUEST_TEMPLATE.md): beskrivelse, før/etter-skjermbilder ved visuelle endringer, teststeg som en bruker uten kodekunnskap kan følge, milepæl, labels og deg selv som ansvarlig.
 7. **Review.** [CODEOWNERS](../.github/CODEOWNERS) gjør @tarjeieo og @remi749 til standard-reviewere. De sjekker testpunktene, om endringen hører hjemme i release notes og om [brukermanualen](https://puzzlepart.github.io/prosjektportalen-manual/) må oppdateres.

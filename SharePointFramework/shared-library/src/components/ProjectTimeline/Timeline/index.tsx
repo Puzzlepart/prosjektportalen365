@@ -12,9 +12,19 @@ import { ITimelineProps } from './types'
 import { useTimeline } from './useTimeline'
 import { WebPartTitle } from '../../WebPartTitle'
 import { Toolbar } from '../../Toolbar'
-import { customLightTheme } from '../../../util'
+import { customLightTheme, withDefaults } from '../../../util'
 
-export const Timeline: FC<ITimelineProps> = (props) => {
+const TIMELINE_DEFAULT_PROPS: Partial<ITimelineProps> = {
+  defaultTimeframe: [
+    [-1, 'months'],
+    [1, 'years']
+  ],
+  title: strings.ProjectTimelineTitle,
+  infoText: strings.ProjectTimelineInfoText
+}
+
+export const Timeline: FC<ITimelineProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, TIMELINE_DEFAULT_PROPS)
   const fluentProviderId = useId('fp-timeline')
   const {
     defaultTimeStart,
@@ -82,15 +92,6 @@ export const Timeline: FC<ITimelineProps> = (props) => {
       </FluentProvider>
     </IdPrefixProvider>
   )
-}
-
-Timeline.defaultProps = {
-  defaultTimeframe: [
-    [-1, 'months'],
-    [1, 'years']
-  ],
-  title: strings.ProjectTimelineTitle,
-  infoText: strings.ProjectTimelineInfoText
 }
 
 export * from './types'

@@ -1,6 +1,7 @@
 import {
   Button,
   Dialog,
+  DialogActions,
   DialogBody,
   DialogContent,
   DialogSurface,
@@ -8,10 +9,11 @@ import {
   DialogTrigger,
   Dropdown,
   Field,
+  MessageBar,
+  MessageBarBody,
   Option,
   ProgressBar
 } from '@fluentui/react-components'
-import { Alert } from '@fluentui/react-components/unstable'
 import strings from 'ProjectExtensionsStrings'
 import React, { FC, ReactElement, ReactNode } from 'react'
 import styles from './MigrateRiskActionsDialog.module.scss'
@@ -35,7 +37,7 @@ export const MigrateRiskActionsDialog: FC<{ children?: ReactNode }> = (props) =>
               <DialogTrigger action='close' disableButtonEnhancement>
                 <Button
                   appearance='subtle'
-                  aria-label='close'
+                  aria-label={strings.CloseModalText}
                   icon={getFluentIcon('Dismiss')}
                   disabled={isMigrating}
                 />
@@ -45,9 +47,9 @@ export const MigrateRiskActionsDialog: FC<{ children?: ReactNode }> = (props) =>
             {format(strings.MigrateRiskActionsDialogTitle, itemContext.title)}
           </DialogTitle>
           <DialogContent className={styles.migrateRiskActionsDialogContent}>
-            <Alert intent='info' className={styles.infoText}>
-              {strings.MigrateRiskActionsDialogInfoText}
-            </Alert>
+            <MessageBar intent='info' className={styles.infoText}>
+              <MessageBarBody>{strings.MigrateRiskActionsDialogInfoText}</MessageBarBody>
+            </MessageBar>
             <Field label={strings.MigrateRiskActionsDialogSeparatorLabel}>
               <Dropdown
                 disabled={isMigrating}
@@ -71,7 +73,7 @@ export const MigrateRiskActionsDialog: FC<{ children?: ReactNode }> = (props) =>
                 <li key={index}>{t}</li>
               ))}
             </ol>
-            {isMigrating ? (
+            {isMigrating && (
               <div className={styles.progress}>
                 <Field
                   validationMessage={strings.MigrateRiskActionsDialogProgressText}
@@ -80,23 +82,18 @@ export const MigrateRiskActionsDialog: FC<{ children?: ReactNode }> = (props) =>
                   <ProgressBar />
                 </Field>
               </div>
-            ) : (
-              <div className={styles.actions}>
-                <Button
-                  appearance='primary'
-                  onClick={onMigrate}
-                  disabled={tasks.length === 0 || isMigrating}
-                >
-                  {format(strings.MigrateRiskActionsDialogCreatePlannerTasks, tasks.length)}
-                </Button>
-                <DialogTrigger action='close' disableButtonEnhancement>
-                  <Button appearance='secondary' disabled={isMigrating}>
-                    {strings.MigrateRiskActionsDialogCancel}
-                  </Button>
-                </DialogTrigger>
-              </div>
             )}
           </DialogContent>
+          {!isMigrating && (
+            <DialogActions>
+              <Button appearance='primary' onClick={onMigrate} disabled={tasks.length === 0}>
+                {format(strings.MigrateRiskActionsDialogCreatePlannerTasks, tasks.length)}
+              </Button>
+              <DialogTrigger action='close' disableButtonEnhancement>
+                <Button appearance='secondary'>{strings.MigrateRiskActionsDialogCancel}</Button>
+              </DialogTrigger>
+            </DialogActions>
+          )}
         </DialogBody>
       </DialogSurface>
     </Dialog>

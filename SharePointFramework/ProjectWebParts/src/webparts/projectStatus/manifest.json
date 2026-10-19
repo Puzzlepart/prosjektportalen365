@@ -24,7 +24,8 @@
       },
       "officeFabricIconFontName": "AwayStatus",
       "properties": {
-        "fieldWidth": 250
+        "fieldWidth": 250,
+        "snapshotInDialog": true
       }
     }
   ]

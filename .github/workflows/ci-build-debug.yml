@@ -6,14 +6,25 @@ name: CI (build debug)
 # secrets and touches no tenant.
 #
 # Runs on a push whose commit subject carries [build-debug]. Put [skip-ci] in the same subject to
-# keep the live test-channel workflow from building and deploying that commit. workflow_dispatch
+# keep the live test-channel workflow from building and deploying that commit. It also runs on
+# every pull request to a release branch, as the build the branch protection requires before a
+# merge (the job "Build release package (pull request)"): the rebuild with Jest, the coverage
+# floors and the packaging proofs. workflow_dispatch
 # works once this file is on the default branch.
 on:
   push:
     branches:
       - releases/1.15
       - 'feat/**'
+  # No path filter: a required check that never starts would hold a pull request for good.
+  pull_request:
+    branches:
+      - 'releases/**'
   workflow_dispatch:
+
+# The build only reads the repository and uses no secret, so a pull request from a fork is safe.
+permissions:
+  contents: read
 
 env:
   # The live workflow's heap and parallelism, so the times compare.
@@ -22,10 +33,11 @@ env:
 
 jobs:
   # Only the subject (first line) counts, as in the live workflow: squash-merge bodies carry the
-  # branch's commit subjects.
+  # branch's commit subjects. A pull request has no head commit message, so its subject is empty.
   commit_subject:
     name: Determine commit subject
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     outputs:
       subject: ${{ steps.subject.outputs.subject }}
     steps:
@@ -37,13 +49,24 @@ jobs:
 
   build:
     needs: [commit_subject]
-    name: Build release package (debug)
+    # The pull request's build has a name of its own, which the branch protection requires: a push
+    # to the same commit without [build-debug] reports a skipped job, and GitHub counts a skipped
+    # job as passed for a required check. GitHub names a skipped job by this expression's
+    # unevaluated text, and the branch protection's list offers that text too: require
+    # "Build release package (pull request)", the name a pull request's run reports.
+    name: ${{ github.event_name == 'pull_request' && 'Build release package (pull request)' || 'Build release package (debug)' }}
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'workflow_dispatch' || contains(needs.commit_subject.outputs.subject, '[build-debug]') }}
+    timeout-minutes: 45
+    # A newer push to the same pull request or branch replaces a build still running. Set on the
+    # job, not the workflow, so a push without [build-debug], which builds nothing, cancels nothing.
+    concurrency:
+      group: ci-build-debug-${{ github.event.pull_request.number || github.ref }}
+      cancel-in-progress: true
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request' || contains(needs.commit_subject.outputs.subject, '[build-debug]') }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
 
@@ -56,14 +79,14 @@ jobs:
         run: Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test -RushTimeline -SkipPnPPowerShell
         shell: pwsh
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-package-debug
           path: release
 
       - name: Upload the Rush logs
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: rush-logs-debug
           path: |
@@ -71,4 +94,5 @@ jobs:
             SharePointFramework/*/rush-logs/
             Templates/rush-logs/
             e2e/rush-logs/
+            integration/rush-logs/
           if-no-files-found: warn

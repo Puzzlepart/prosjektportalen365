@@ -6,10 +6,19 @@ import styles from './ProjectPhases.module.scss'
 import { IProjectPhasesProps } from './types'
 import { useProjectPhases } from './useProjectPhases'
 import { FluentProvider, IdPrefixProvider, Toaster } from '@fluentui/react-components'
-import { LoadingSkeleton, customLightTheme } from 'pp365-shared-library'
+import { LoadingSkeleton, customLightTheme, withDefaults } from 'pp365-shared-library'
 import resource from 'SharedResources'
 
-export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
+const PROJECT_PHASES_DEFAULT_PROPS: Partial<IProjectPhasesProps> = {
+  phaseField: resource.SiteFields_GtProjectPhase_DisplayName,
+  currentPhaseViewName: resource.View_CurrentPhase_DisplayName,
+  syncPropertiesAfterPhaseChange: true,
+  commentMinLength: 4,
+  subTextTruncateLength: 50
+}
+
+export const ProjectPhases: FC<IProjectPhasesProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, PROJECT_PHASES_DEFAULT_PROPS)
   const { rootRef, context, fluentProviderId, toasterId } = useProjectPhases(props)
   return (
     <IdPrefixProvider value={fluentProviderId}>
@@ -47,10 +56,3 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
   )
 }
 ProjectPhases.displayName = 'Project Phases'
-ProjectPhases.defaultProps = {
-  phaseField: resource.SiteFields_GtProjectPhase_DisplayName,
-  currentPhaseViewName: resource.View_CurrentPhase_DisplayName,
-  syncPropertiesAfterPhaseChange: true,
-  commentMinLength: 4,
-  subTextTruncateLength: 50
-}

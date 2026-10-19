@@ -1,5 +1,4 @@
-import { Button, PopoverTrigger } from '@fluentui/react-components'
-import { Alert } from '@fluentui/react-components/unstable'
+import { Button, MessageBar, MessageBarBody, PopoverTrigger } from '@fluentui/react-components'
 import strings from 'ProjectExtensionsStrings'
 import React, { FC, ReactElement } from 'react'
 import { useRiskActionFieldCustomizerContext } from '../../../extensions/riskAction/context'
@@ -7,6 +6,14 @@ import { PlannerTaskItem } from './PlannerTaskItem'
 import styles from './RiskActionFieldValue.module.scss'
 import { IRiskActionFieldValueProps } from './types'
 import { useRiskActionFieldValue } from './useRiskActionFieldValue'
+import { withDefaults } from 'pp365-shared-library'
+
+const RISK_ACTION_FIELD_VALUE_DEFAULT_PROPS: Partial<IRiskActionFieldValueProps> = {
+  adminButton: {
+    appearance: 'transparent',
+    size: 'small'
+  }
+}
 
 /**
  * Renders the field value for a risk action.
@@ -15,7 +22,8 @@ import { useRiskActionFieldValue } from './useRiskActionFieldValue'
  *
  * @returns The rendered component.
  */
-export const RiskActionFieldValue: FC<IRiskActionFieldValueProps> = (props) => {
+export const RiskActionFieldValue: FC<IRiskActionFieldValueProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, RISK_ACTION_FIELD_VALUE_DEFAULT_PROPS)
   const context = useRiskActionFieldCustomizerContext()
   const { isFieldValueSet, isHiddenFieldValueSet, tasks, horizontalLayout, gap } =
     useRiskActionFieldValue()
@@ -48,9 +56,11 @@ export const RiskActionFieldValue: FC<IRiskActionFieldValueProps> = (props) => {
     } else {
       element = (
         <PopoverTrigger disableButtonEnhancement>
-          <Alert intent='info' className={styles.alert}>
-            {context.dataAdapter.globalSettings.get('RiskActionPlannerNoActionsText')}
-          </Alert>
+          <MessageBar intent='info' className={styles.alert}>
+            <MessageBarBody>
+              {context.dataAdapter.globalSettings.get('RiskActionPlannerNoActionsText')}
+            </MessageBarBody>
+          </MessageBar>
         </PopoverTrigger>
       )
     }
@@ -59,9 +69,3 @@ export const RiskActionFieldValue: FC<IRiskActionFieldValueProps> = (props) => {
 }
 
 RiskActionFieldValue.displayName = 'RiskActionFieldValue'
-RiskActionFieldValue.defaultProps = {
-  adminButton: {
-    appearance: 'transparent',
-    size: 'small'
-  }
-}

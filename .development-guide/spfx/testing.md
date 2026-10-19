@@ -11,11 +11,31 @@ Dette kapittelet beskriver hvordan Prosjektportalen testes automatisk, hva som k
 | Kjøretidskontrakt | Kode som komponerer PnPjs-spørringer, kjørt mot det ekte PnPjs 4-biblioteket med falsk transport | `node --test` (`shared-library/test/runtime/*.test.mjs`, `npm run test:runtime`) | I byggeskriptet til shared-library, etter `heft test` | Nei |
 | Pakkebevis | At hvert bygg faktisk produserer sin `.sppkg` og at det delte biblioteket er pakket inn (ikke en kjøretidsavhengighet) | `Install/Build-Release.ps1` | I hvert utgivelsesbygg | Nei |
 | Integrasjon | Bibliotekets datalag (tjenestene, søk, termlageret) mot testtenanten: hva SharePoint returnerer og lagrer | `node --test` (`integration/`) | Etter utrulling til testkanalen i `ci-channel-test.yml`, ved siden av E2E; lokalt på sekunder | Ja |
-| Ende-til-ende (E2E) | Hub og prosjektområde i testtenanten: sidene laster, webdelene monteres, ingen ødelagte bundler | Playwright (`e2e/`) | Etter utrulling til testkanalen i `ci-channel-test.yml` | Ja |
+| Ende-til-ende (E2E) | Hub, prosjekt- og programområde i en ekte nettleser: sidene laster, webdelene monteres og bundlene lastes (røyktester), og brukerreiser, også de som skriver til testtenanten og rydder etter seg (flyter) | Playwright (`e2e/`) | Etter utrulling til testkanalen i `ci-channel-test.yml` | Ja |
 | Manuell smoke-test | Skriveflyter som ennå ikke er automatisert (prosjektoppsett, publisering av statusrapport, idéflyt) | Issue-maler, se «Smoke test-prosessen» | Før utgivelse, til E2E dekker flytene | Ja |
 
 
 Kjøretidskontraktene finnes fordi Jest ikke kan laste `@pnp/*` (ESM-only under CommonJS-kjøreren) og stand-ins ikke fanger feil i selve PnPjs-koblingen: `getTermStore` kastet i SPFx fordi `spfi().using(SPFx(context))` holder URL-er relative til forespørselen sendes, noe stand-ins aldri viste. Node kan importere ESM-PnPjs, så disse testene kjører pipelinen med både relative (SPFx-stil) og absolutte (`spfi(url)`) URL-er. Legg flere slike tester her når kode kobler seg direkte på PnPjs-kjøringen.
+
+### Hvilken test skal jeg skrive?
+
+Lagene tester det samme produktet fra ulik avstand. Forskjellen er hva testen kjører mot:
+
+- **Jest** kjører koden alene i Node, med SharePoint, PnPjs og SPFx byttet ut med stand-ins. Testene er raske og kjører i hvert bygg, men de ser bare hva koden gjør med svarene testen gir den, ikke hvordan SharePoint faktisk svarer.
+- **Integrasjonstestene** kjører bibliotekets ekte datalag mot ekte SharePoint i testtenanten, uten nettleser. De viser hva SharePoint faktisk lagrer og returnerer: feltformater, datoer i andre tidssoner, søk, termer og synkroniseringen til huben.
+- **E2E-testene** styrer en ekte nettleser på ekte sider etter utrulling til testkanalen. Røyktestene sjekker at sidene laster og webdelene monteres. Flytene går gjennom det en bruker gjør, også det som skriver til tenanten.
+
+Jo lenger ned i listen, jo tregere og mer avhengig av testdata er testen, men jo nærmere det brukeren opplever. Velg derfor det laveste laget som kan vise det du vil sjekke:
+
+| Du endrer eller retter | Skriv |
+|---|---|
+| Logikk: en hjelpefunksjon, en reducer, en modell, en mapping av data | Jest-enhetstest |
+| Hva en komponent viser, og hva som skjer når brukeren klikker eller skriver | Jest-komponenttest med React Testing Library |
+| Kode som setter sammen PnPjs-spørringer (URL-er, kjeder, behaviors) | Kjøretidskontrakt i `shared-library/test/runtime` |
+| Hva SharePoint lagrer eller returnerer for en tjeneste i datalaget | Integrasjonstest |
+| Det bare en nettleser viser: oppsett og CSS, at bundlene lastes, en reise over flere sider | E2E |
+
+Skriv testen før rettingen og se den feile, så vet du at den fanger feilen. Mange endringer trenger mer enn ett lag. Datoene i områdets tidssone (1.15) har Jest-tester for overgangsreglene, en kjøretidstest og en integrasjonstest som kjører maskinen gjennom fem tidssoner, og en E2E-flyt fra en nettleser i Los Angeles.
 
 ### Hva skjer i et bygg
 
@@ -95,22 +115,22 @@ Kjør testene i en løsning med `npm test` (`heft test`), eller bare bygg-og-tes
 
 `e2e/` er Rush-prosjektet `pp365-e2e`, med tre mapper: `tests/smoke` (røyktester av sider og webdeler), `tests/flows` (brukerreiser; fire av dem skriver til testtenanten og rydder etter seg) og `tests/local` (en løsnings lokale bundle via en utviklingsserver, bare med `E2E_LOCAL_BUNDLE=1`, aldri i CI). Røyktestene logger inn som en dedikert testbruker, åpner hub-sidene og et prosjektområde, venter på at SPFx-lerretet rendrer, sjekker at forventede webdeler monteres, og feiler på nettleserfeil som betyr at en bundle er ødelagt («Cannot find module», «Failed to load component», «ChunkLoadError»). Det siste er nettopp symptomet på et delt bibliotek som ikke er pakket inn, og er det pakkebeviset i `Build-Release.ps1` sikrer på byggetidspunktet.
 
-Kjøring i CI: jobben «End-to-end smoke (test channel)» i `ci-channel-test.yml` kjører etter en vellykket «Upgrade (test channel)», altså mot den pakken som nettopp ble rullet ut til `SP_URL_TEST`. Arbeidsflyten utløses av push til grenene i `on.push.branches` (i dag `releases/1.15`, `feat/fluent-v9*` og `feat/dependency-upgrades*`) når filer under `SharePointFramework/`, `Install/`, `Templates/`, `e2e/` eller `integration/` er endret, og kan startes manuelt fra Actions-fanen (`workflow_dispatch`). Merk at en push til en av disse grenene oppgraderer testtenanten. E2E-jobben følger begge oppgraderingsløpene: den vanlige oppgraderingen og pakke-oppgraderingen som `[apps-only]`/`[apps-only:<løsninger>]` bruker. `[skip-e2e]` i commit-emnet hopper over E2E-jobben; `[skip-upgrade]` hopper over oppgraderingen og dermed også E2E.
+Kjøring i CI: jobben «End-to-end smoke (test channel)» i `ci-channel-test.yml` kjører etter en vellykket «Upgrade (test channel)», altså mot den pakken som nettopp ble rullet ut til `SP_URL_TEST`. Arbeidsflyten utløses av push til grenene i `on.push.branches` (i dag bare `releases/1.15`) når filer under `SharePointFramework/`, `Install/`, `Templates/`, `e2e/` eller `integration/`, publiseringsskriptet `.tasks/publish-test-report.js` eller arbeidsflytfilen selv er endret, og kan startes manuelt fra Actions-fanen (`workflow_dispatch`). Merk at en push til en av disse grenene oppgraderer testtenanten. E2E-jobben følger begge oppgraderingsløpene: den vanlige oppgraderingen og pakke-oppgraderingen som `[apps-only]`/`[apps-only:<løsninger>]` bruker. `[skip-e2e]` i commit-emnet hopper over E2E-jobben; `[skip-upgrade]` hopper over oppgraderingen og dermed også E2E.
 
 #### Finne og lese E2E-rapporten fra CI
 
 - **Rask oversikt**: jobbloggen lister hver test som bestått, feilet eller hoppet over, og skriver ut påstanden og lokatoren for hver feil (`github`-reporteren). Feil vises også som annotasjoner på kjøringens oppsummeringsside.
-- **Full rapport**: nederst på oppsummeringssiden, under «Artifacts», ligger `playwright-report-test-channel` (7 dager, det lengste repoet tillater). Zip-filen inneholder `playwright-report/` (HTML-rapporten) og `test-results/` (per feilet test: `error-context.md` med sidens tilgjengelighetssnapshot, skjermbilde, video og ved nytt forsøk `trace.zip`), samt `test-results/junit.xml`.
-- **Åpne rapporten lokalt**: fra `e2e/`:
+- **Full rapport, på testrapportsiden**: jobbens sammendrag på kjøringens side har lenken «Open the report» til kjøringens Playwright-rapport og «all runs» til forsiden. Forsiden lister testkanalens kjøringer de siste 7 dagene, nyeste først: kjøringen, commiten med branch og emnelinje, og en kolonne for E2E og en for integrasjon med utfall, antall og lenke til rapporten. Et nytt forsøk av en kjøring står på en egen rad. Rapporten åpnes rett i nettleseren, med skjermbilder, video og sporinger (traces), og sporingsvisningen virker der, fordi området serveres over HTTPS. Tittelen er `PP365 e2e · <branch> · run <nummer>` (`PLAYWRIGHT_HTML_TITLE` i teststeget). Området er privat: GitHub ber om innlogging, og alle med lesetilgang til rapportrepoet slipper inn. Rapporten kommer et minutt eller to etter at jobben er ferdig. Hvordan den er satt opp, står under «Testrapportsiden» i [Kontinuerlig integrasjon](../ci/kontinuerlig-integrasjon.md).
+- **Artefaktet, når testrapportsiden ikke har rapporten** (området er ikke satt opp, eller publiseringen feilet; steget viser da en advarsel): nederst på oppsummeringssiden, under «Artifacts», ligger `playwright-report-test-channel` (7 dager, det lengste repoet tillater). Zip-filen inneholder `playwright-report/` (HTML-rapporten) og `test-results/` (per feilet test: `error-context.md` med sidens tilgjengelighetssnapshot, skjermbilde og video), samt `test-results/junit.xml` og `test-results/results.json`. Sporingene er tatt ut (`playwright-report/data/*.zip`, `playwright-report/trace` og `test-results/**/trace.zip`), og det samme er innloggingens egne resultater (`test-results/auth.setup*`), fordi sidesnapshotet deres viser innloggingsskjemaet. Alt finnes på testrapportsiden. Fra `e2e/`:
 
   ```bash
   gh run download <run-id> -n playwright-report-test-channel -D ci-report
   npx playwright show-report ci-report/playwright-report   # åpner http://localhost:9323
-  npx playwright show-trace ci-report/test-results/<test>/trace.zip
   ```
 
-  `index.html` kan også åpnes rett fra filsystemet, men sporinger krever `show-report` eller trace.playwright.dev.
-- Rapporten inneholder snapshot av sider i testtenanten. Den publiseres ikke utenfor GitHub, og artefakt-tilgangen på repoet skal ikke utvides.
+  `index.html` kan også åpnes rett fra filsystemet.
+- **Rapportene går bare til den private testrapportsiden.** De inneholder snapshot av sider i testtenanten, og sporingene inneholder e2e-brukerens øktinformasjonskapsler, `storageState` og forespørselshodene: Playwright 1.63 maskerer ingenting (sjekket 2026-10-14). Repoet er offentlig, så artefaktene kan lastes ned av alle som er logget inn på GitHub, og derfor er sporingene tatt ut av artefaktet. Testrapportsiden skal forbli privat, rapportene publiseres ikke noe annet sted, og tilgangen til artefaktene og rapportrepoet skal ikke utvides.
+- **Aldri en hemmelighet i et steg.** `fill(verdi)` gir steget tittelen `Fill "<verdi>"`, og HTML-rapporten beholder hvert steg i hver test, også i dem som består. Til 14. oktober 2026 brukte `auth.setup.ts` `fill(password)`, så hver CI-rapport siden suiten kom, hadde e2e-brukerens passord i klartekst, i et artefakt alle innloggede GitHub-brukere kunne laste ned i 7 dager. Nå skriver `enterSecret()` i `auth.setup.ts` inn brukernavnet og passordet: `fill('')` tømmer feltet etter de samme kontrollene som før, og Chromiums `Input.insertText`, som `fill()` selv ender i, skriver verdien som ekte inndata. Et protokollkall blir ikke noe steg i rapporten (`type()`, `pressSequentially()` og `insertText()` har verdien i tittelen, de også). Bruk den for hver hemmelighet en test skriver inn. To ting til holder passordet ute: når en test feiler, skriver Playwright `error-context.md` med et tilgjengelighetssnapshot av siden, og der står verdien i hvert felt, også passordfelt. Derfor tømmer en `afterEach` i `auth.setup.ts` passordfeltene før snapshotet tas. I tillegg har oppsettsprosjektet `setup` `trace: 'off'` i CI, fordi en sporing beholder argumentene til hver handling og verdiene i feltene. Lokalt overstyrer `--trace on` og `npm run test:ui` dette, men `test-results/` er ikke i git. Har en hemmelighet havnet i en rapport, roteres den, testbrukerens økter tilbakekalles, og artefaktene med den slettes.
 
 Variabler og hemmeligheter i GitHub:
 
@@ -121,6 +141,8 @@ Variabler og hemmeligheter i GitHub:
 | `E2E_PROGRAM_URL` | variabel | Et eksisterende programområde i huben med minst ett underprosjekt (programtestene hoppes over med melding hvis variabelen mangler eller peker på huben) |
 | `E2E_USERNAME` | hemmelighet | Testbrukerens UPN |
 | `E2E_PASSWORD` | hemmelighet | Testbrukerens passord |
+
+Publiseringen til testrapportsiden bruker `TEST_REPORTS_DEPLOY_KEY`, `TEST_REPORTS_REPOSITORY` og `TEST_REPORTS_URL`; de står under «Testrapportsiden» i [Kontinuerlig integrasjon](../ci/kontinuerlig-integrasjon.md).
 
 Krav til testbrukeren: en egen konto (for eksempel `pp365-e2e@<tenant>.onmicrosoft.com`) som er medlem av porteføljen og prosjektet, med minst mulig rettigheter ellers, ekskludert fra MFA gjennom en Conditional Access-policy som gjelder bare denne kontoen, og med passord som roteres og bare finnes som GitHub-hemmelighet. Ikke bruk en personlig konto, og ikke gjenbruk sertifikat-appen som utrullingen bruker: E2E trenger en brukersesjon i nettleseren.
 
@@ -155,7 +177,9 @@ Regler for testene:
 - Sjekk det SharePoint returnerte eller lagret, lest tilbake, ikke det koden sendte. Hold påstandene uavhengige av tidssone og av andre prosjekters data.
 - Ingen hemmelighet havner i en logg, en rapport eller en fil: ingen token, informasjonskapsel eller sertifikat skrives ut.
 
-I CI kjører jobben «Integration tests (test channel)» i `ci-channel-test.yml` etter den samme oppgraderingen som E2E (begge løpene), ved siden av E2E-jobben. Den installerer `--to pp365-integration --to pp365-templates`, genererer bibliotekets delte strenger fra `.resx`-filene (`npm run generate-resx-ts` i `Templates`; de ligger ikke i git), bygger biblioteket (`heft build --production`, uten Jest), kompilerer ProjectWebParts' `lib-commonjs` med TypeScript alene (`--noCheck`, med strengfilene kopiert ved siden av; bunting og typesjekk av løsningen gjør utgivelsesbygget) og kjører `npm run test:ci`. Spec-rapporten havner i loggen, og JUnit-rapporten i `integration/test-results/junit.xml`, lastet opp som `integration-report-test-channel` (7 dager). `[skip-integration]` i commit-emnet hopper over jobben.
+I CI kjører jobben «Integration tests (test channel)» i `ci-channel-test.yml` etter den samme oppgraderingen som E2E (begge løpene), ved siden av E2E-jobben. Den installerer `--to pp365-integration --to pp365-templates`, genererer bibliotekets delte strenger fra `.resx`-filene (`npm run generate-resx-ts` i `Templates`; de ligger ikke i git), bygger biblioteket (`heft build --production`, uten Jest), kompilerer ProjectWebParts' `lib-commonjs` med TypeScript alene (`--noCheck`, med strengfilene kopiert ved siden av; bunting og typesjekk av løsningen gjør utgivelsesbygget) og kjører `npm run test:ci`. Spec-rapporten havner i loggen, JUnit-rapporten i `integration/test-results/junit.xml` og HTML-rapporten i `integration/test-results/index.html`. Mappen lastes opp som `integration-report-test-channel` (7 dager) og publiseres på testrapportsiden, som E2E-rapporten. `[skip-integration]` i commit-emnet hopper over jobben.
+
+HTML-rapporten lages av `src/reporters/html.ts`, en egen rapportør for `node:test` (en asynkron generator, typestrippet TypeScript som testene) som `test:ci` kjører som tredje rapportør ved siden av spec og JUnit. Den viser et tre per fil med suiter og tester og status (bestått, feilet, avbrutt, hoppet over, `todo`), begrunnelsen for en test som ble hoppet over, linjene fra `t.diagnostic`, feilene (en krok som feilet, er navngitt, `cause`-kjeden er med, og stakken er uten repoets rot og Nodes interne rammer), det hver fil skrev til stdout og stderr, filer som feilet før testene kjørte, og totalene fra Nodes siste `test:summary`. Totalene bygges inn i HTML-filen som `<script type="application/json" id="report-summary">`, og testrapportsiden leser antallene derfra. Med tre rapportører skriver Node en `MaxListenersExceededWarning`; den er ufarlig. Rapportøren testes uten tenant i `tests/html-reporter.test.ts`, som kjører i `npm test` og i CI-jobben.
 
 | Navn i GitHub | Type | Brukes som |
 |---|---|---|
@@ -176,7 +200,7 @@ I CI kjører jobben «Integration tests (test channel)» i `ci-channel-test.yml`
 
 **E2E feiler etter utrulling til testkanalen**
 
-1. Åpne artefaktet `playwright-report-test-channel` fra kjøringen. Sporingen viser hvert steg, nettverkskall og konsoll.
+1. Åpne rapporten på testrapportsiden fra lenken i jobbens sammendrag, eller artefaktet `playwright-report-test-channel` når testrapportsiden ikke har den (uten sporinger). Sporingen, som tas ved nytt forsøk, viser hvert steg, nettverkskall og konsoll.
 2. Klassifiser:
    - *Miljø*: innlogging feilet (utløpt passord, MFA-krav, endret policy), siden finnes ikke, tenanten svarer ikke. Rett hemmelighet, policy eller variabel; kjør jobben på nytt.
    - *Utrulling*: rett etter en oppgradering kan SharePoint i noen minutter gi en side forrige versjons manifest for en komponent, og bunten det peker på har oppgraderingen fjernet («Could not load … in require»). Oppsettet `tests/deployment.setup.ts` venter derfor inntil ti minutter på at hubben og prosjektets forside laster alle bunter fra appkatalogen før testene starter. Feiler oppsettet, er en bunt fortsatt borte etter ti minutter, og utrullingen er ødelagt.
@@ -186,7 +210,7 @@ I CI kjører jobben «Integration tests (test channel)» i `ci-channel-test.yml`
 
 **Integrasjonstest feiler etter utrulling**
 
-1. Jobbloggen viser hver test og påstanden som feilet. Rapporten hentes med `gh run download <run-id> -n integration-report-test-channel`.
+1. Jobbloggen viser hver test og påstanden som feilet. HTML-rapporten på testrapportsiden (lenken i jobbens sammendrag) viser feilen med stakk og det filen skrev til stdout og stderr. Mangler den der, hentes den med `gh run download <run-id> -n integration-report-test-channel`, og `index.html` åpnes rett fra filsystemet.
 2. Klassifiser som for E2E: *miljø* (innloggingen, rettighetene til CI-appen, en variabel som mangler; med `INTEGRATION_STRICT` feiler det i stedet for å hoppes over), *regresjon* i datalaget (rett koden; testen peker på én funksjon), eller *endret svar fra SharePoint* (rett koden som leser svaret, og la testen dokumentere den nye formen).
 3. `node:test` prøver ikke på nytt. En ustabil test rettes eller merkes `todo` med et issue; omprøving legges eventuelt bare rundt innloggingen og første kall (se planen).
 

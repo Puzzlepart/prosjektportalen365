@@ -13,6 +13,7 @@ import { IProjectStatusData } from '../ProjectStatus'
 import { ActionType } from './Actions/types'
 import { IProgressDialogProps } from './ProgressDialog/types'
 import { IArchiveStatusInfo } from '../../data/SPDataAdapter/types'
+import type { SustainabilityGoalIconSize } from './SustainabilityGoals'
 
 export type ProjectInformationPanelType = 'EditPropertiesPanel' | 'AllPropertiesPanel'
 export type ProjectInformationDialogType = 'CreateParentDialog' | 'RunProjectSetupDialog'
@@ -90,6 +91,16 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
    * Hide archive status section
    */
   hideArchiveStatus?: boolean
+
+  /**
+   * Render the selected UN Sustainable Development Goals as icons instead of tags
+   */
+  showSustainabilityGoalsAsIcons?: boolean
+
+  /**
+   * Size of the UN Sustainable Development Goal icons
+   */
+  sustainabilityGoalIconSize?: SustainabilityGoalIconSize
 
   /**
    * Truncate status report comments to the specified length and add ellipsis (...)

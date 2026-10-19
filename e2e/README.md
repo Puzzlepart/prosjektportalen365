@@ -26,6 +26,27 @@ npm test               # or: npm run test:ui
 The Playwright CLI skill in `.claude/skills/playwright-cli` documents how to plan, generate and heal
 tests interactively. See `.development-guide/spfx/testing.md` for the testing regime.
 
+## Reports
+
+In CI the job publishes the HTML report, traces included, to the test report site: a private GitHub
+Pages site that only those with read access to its repository (every Puzzlepart member) can open
+(`.tasks/publish-test-report.js`; setup in `.development-guide/ci/kontinuerlig-integrasjon.md`
+«Testrapportsiden»). The link is under «End-to-end report» in the job summary on the run's page, and
+the site keeps 7 days of runs. The artifact `playwright-report-test-channel` holds the same report
+without the traces, since anyone signed in to GitHub can download this public repository's artifacts.
+
+A report keeps every step of every test, passed ones too, and a trace every action's arguments:
+
+- Never type a secret with `fill()`, `type()`, `pressSequentially()` or `insertText()`: the step's
+  title holds the value (`Fill "<value>"`), and until 2026-10-14 every CI report held the test
+  user's password. Use `enterSecret` in `tests/auth.setup.ts`: `fill('')`, then Chromium's
+  `Input.insertText`, a protocol call that is no step of the report.
+- A failed test's `error-context.md` holds an ARIA snapshot of the page with every input's value,
+  password fields too: an `afterEach` in `tests/auth.setup.ts` blanks them before it is taken, and
+  the public artifact leaves the sign-in's results (`test-results/auth.setup*`) out.
+- The `setup` project, the sign-in, is not traced in CI (`trace: 'off'` in `playwright.config.ts`;
+  locally `--trace on` and UI mode override it).
+
 ## Checking a fix on the tenant before it is deployed
 
 `tests/local/*` load a solution's *local* bundle onto the real page through SPFx's debug manifests

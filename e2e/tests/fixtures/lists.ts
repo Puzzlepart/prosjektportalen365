@@ -21,8 +21,15 @@ export interface ListTypography {
 
 /** Measures the column names and the text of the first rows of the first list in `scope`. */
 export async function measureListTypography(scope: Locator): Promise<ListTypography> {
-  const firstCell = scope.locator('.fui-TableBody .fui-TableCell').first()
-  await expect(firstCell).toBeVisible({ timeout: 90_000 })
+  // The first rows can be placeholders without text while the data loads (the portfolio overview
+  // draws them from the columns persisted in local storage), and a fixed pause after the first
+  // cell measured those on a slow runner: no text, so no font size (run 38526548748). The
+  // measuring waits for text in a cell first.
+  const filledCell = scope
+    .locator('.fui-TableBody .fui-TableCell')
+    .filter({ hasText: /\S/ })
+    .first()
+  await expect(filledCell).toBeVisible({ timeout: 90_000 })
   // Let the rows and their cell renderers settle.
   await scope.page().waitForTimeout(2000)
   return scope.evaluate((root) => {

@@ -26,7 +26,13 @@ import {
   AppItemStatic,
   NavItem
 } from '@fluentui/react-components'
-import { customLightTheme, getFluentIcon, setUrlHash, UserMessage } from 'pp365-shared-library'
+import {
+  customLightTheme,
+  getFluentIcon,
+  setUrlHash,
+  UserMessage,
+  withDefaults
+} from 'pp365-shared-library'
 import {
   Board20Filled,
   Board20Regular,
@@ -46,7 +52,41 @@ const Dashboard = bundleIcon(Board20Filled, Board20Regular)
 const Lightbulb = bundleIcon(Lightbulb20Filled, Lightbulb20Regular)
 const JobPostings = bundleIcon(NotePin20Filled, NotePin20Regular)
 
-export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
+const IDEA_MODULE_DEFAULT_PROPS: Partial<IIdeaModuleProps> = {
+  dataSource: strings.Idea.RegisteredIdeasTitle,
+  dataSourceCategory: strings.Idea.ModuleTitle,
+  showCommandBar: true,
+  showExcelExportButton: true,
+  showFilters: true,
+  showViewSelector: true,
+  lockedColumns: false,
+  ideaConfigurationList: resource.Lists_Idea_Configuration_Title,
+  ideaConfiguration: 'Standard',
+  hiddenRegFields: ['Title'],
+  hiddenProcFields: [
+    'Title',
+    'GtIdeaUrl',
+    'GtRegistratedIdea',
+    'GtIdeaProjectData',
+    'GtIdeaStrategicValue',
+    'GtIdeaStrategicNumber',
+    'GtIdeaQualityBenefit',
+    'GtIdeaQualityNumber',
+    'GtIdeaEconomicBenefit',
+    'GtIdeaEconomicNumber',
+    'GtIdeaOperationalNeed',
+    'GtIdeaOperationalNumber',
+    'GtIdeaRisk',
+    'GtIdeaRiskNumber',
+    'GtIdeaManualScore',
+    'GtIdeaManualComment',
+    'GtIdeaScore',
+    'GtIdeaPriority'
+  ]
+}
+
+export const IdeaModule: FC<IIdeaModuleProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, IDEA_MODULE_DEFAULT_PROPS)
   const {
     state,
     setState,
@@ -256,35 +296,3 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
 }
 
 IdeaModule.displayName = 'IdeaModule'
-IdeaModule.defaultProps = {
-  dataSource: strings.Idea.RegisteredIdeasTitle,
-  dataSourceCategory: strings.Idea.ModuleTitle,
-  showCommandBar: true,
-  showExcelExportButton: true,
-  showFilters: true,
-  showViewSelector: true,
-  lockedColumns: false,
-  ideaConfigurationList: resource.Lists_Idea_Configuration_Title,
-  ideaConfiguration: 'Standard',
-  hiddenRegFields: ['Title'],
-  hiddenProcFields: [
-    'Title',
-    'GtIdeaUrl',
-    'GtRegistratedIdea',
-    'GtIdeaProjectData',
-    'GtIdeaStrategicValue',
-    'GtIdeaStrategicNumber',
-    'GtIdeaQualityBenefit',
-    'GtIdeaQualityNumber',
-    'GtIdeaEconomicBenefit',
-    'GtIdeaEconomicNumber',
-    'GtIdeaOperationalNeed',
-    'GtIdeaOperationalNumber',
-    'GtIdeaRisk',
-    'GtIdeaRiskNumber',
-    'GtIdeaManualScore',
-    'GtIdeaManualComment',
-    'GtIdeaScore',
-    'GtIdeaPriority'
-  ]
-}
