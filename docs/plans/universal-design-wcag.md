@@ -941,3 +941,16 @@ The idea view and the navigation had what it cannot see:
 
 Tests first: two new tests in `IdeaModule.test.tsx` (the menu button and the focus; the idea's
 headings and phases) and the new `IdeaField.test.tsx` failed on the old code and pass.
+
+### Slice 4, part 9 — The project card, and slice 4 done (2026-10-19)
+
+The project card web part renders the project list's card for one project, with the project
+information panel: what part 1 and part 5 fixed on the card is its own, and its test already
+checks the focus back from the panel. Nothing of its own to fix. Noted: it shows nothing while
+it loads, and nothing when the fetch fails (`useProjectCardDataFetch` catches no error), the
+latter a fault for everyone rather than for universal design.
+
+Slice 4 is done but for the hand rounds: the project list and its cards, the latest projects,
+the portfolio overview and the aggregated overview with the hub's grid, panels and cells, the
+portfolio timeline, resource allocation, the idea module and the project card.
+`PortfolioInsights` and `ProjectProvision` are dead code, not audited.
