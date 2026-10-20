@@ -71,8 +71,10 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     this._installEntries = installEntries
     this._hasAssistantAccess = hasAssistantAccess
     this.context.application.navigatedEvent.add(this, this._handleNavigatedEvent)
-    // The first navigation may have come and gone while this initialised: on a list page it had,
-    // and the footer never showed. It renders now, and again on each navigation.
+    // On a list page SharePoint may define its placeholders after the footer has started, and
+    // the first navigation may have come and gone: the footer showed on few loads there. It
+    // renders now, when the placeholders change, and on each navigation.
+    this.context.placeholderProvider.changedEvent.add(this, this._render)
     this._render()
     return Promise.resolve()
   }
@@ -329,7 +331,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
         onDispose: () => this._onDispose()
       })
     }
-    // SharePoint has no placeholder for it yet: the next navigation renders it.
+    // SharePoint has no placeholder for it yet: its changed event renders it.
     if (!this._bottomPlaceholder) return
     if (!this._footerElement) {
       this._footerElement = document.createElement('div')

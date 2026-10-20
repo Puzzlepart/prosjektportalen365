@@ -65,7 +65,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 
 ### Feilrettinger
 
-- Bunnteksten på porteføljeområdet vises nå også på SharePoints listesider, der den som regel manglet fordi den abonnerte på navigasjonshendelsen for sent (#1788)
+- Bunnteksten på porteføljeområdet vises nå også på SharePoints listesider, der den som regel manglet fordi den bare ventet på navigasjonshendelsen og ikke på at SharePoint gjorde plassholderne klare (#1788)
 - `Prosjektkort` viser at prosjektet lastes, og sier fra når det ikke kan hentes, der webdelen før var tom (#1788)
 - En feil når prosjekter legges til i `Administrasjon av underområder`, vises i dialogen, der den før ikke ble fanget (#1788)
 - Rettet en feil hvor kolonner vist som URL i `Porteføljeoversikt` og `Aggregert oversikt` viste en tom lenke når kolonnen ikke hadde en egen beskrivelse; lenken viser nå lenkens beskrivelse, eller adressen når den ikke har noen (#1788)

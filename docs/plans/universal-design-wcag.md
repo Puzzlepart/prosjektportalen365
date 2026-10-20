@@ -1277,3 +1277,17 @@ from the release notes. It is preliminary until the hand rounds are done.
     the aria-hidden fix holds. The click on the chosen first card met its details sliding over it;
     the test now scans the catalog with that package's details instead.
   - **The risk actions were flaky with the same React fault.**
+
+**The footer on list pages, again (2026-10-20).** Rendering at the end of `onInit` was not enough.
+The run after part 3 deployed 38b1b70, and the footer still did not show on list pages.
+
+- **A measuring error.** The earlier counts looked for `#spBottomPlaceholder`, which list pages do
+  not have. Their placeholder is `[data-sp-placeholder="Bottom"]`.
+- **What a trace of four loads showed:**
+  - The footer filled its placeholder only on the load where SharePoint logged «Defined
+    clientSidePlaceholders» before it started.
+  - On two loads it found no placeholder, and nothing came after.
+  - On one it hit the React fault.
+- **The fix.** The footer now also renders on `placeholderProvider.changedEvent`, as SPFx
+  recommends. Its test failed on the code before. The count of the React fault on list pages,
+  for sp-dev-docs#11068, waits for this to be deployed.

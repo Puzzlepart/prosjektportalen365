@@ -94,7 +94,10 @@ async function footerCustomizer(portal = portalDataService(), { onHub = true } =
         add: (observer: any, handler: () => Promise<void>) => navigated.push(handler.bind(observer))
       }
     },
-    placeholderProvider: { tryCreateContent: jest.fn(() => placeholder) }
+    placeholderProvider: {
+      tryCreateContent: jest.fn(() => placeholder),
+      changedEvent: { add: jest.fn() }
+    }
   }
   const customizer = new FooterApplicationCustomizer()
   ;(customizer as any).context = context
@@ -169,8 +172,20 @@ describe('FooterApplicationCustomizer', () => {
     expect(rendered.props).toMatchObject({ portalUrl: HUB, showFooter: true })
   })
 
-  it('waits for the next navigation when SharePoint has no placeholder for it yet', async () => {
-    const placeholderProvider = { tryCreateContent: jest.fn(() => undefined) }
+  it('renders once SharePoint has its placeholders, which on a list page it can define after the footer has started', async () => {
+    // With no placeholder at the start it waited for a navigation, which on a list page never
+    // came: the footer showed on few loads there (2026-10-20).
+    const placeholder = { domElement: document.createElement('div'), dispose: jest.fn() }
+    let available = false
+    const placeholdersChanged: Array<() => void> = []
+    const placeholderProvider = {
+      tryCreateContent: jest.fn(() => (available ? placeholder : undefined)),
+      changedEvent: {
+        add: jest.fn((observer: any, handler: () => void) =>
+          placeholdersChanged.push(handler.bind(observer))
+        )
+      }
+    }
     adapter.portalDataService = portalDataService({ settings: { ShowFooter: '1' } })
     const customizer = new FooterApplicationCustomizer()
     ;(customizer as any).context = {
@@ -187,6 +202,12 @@ describe('FooterApplicationCustomizer', () => {
     })
     expect(placeholderProvider.tryCreateContent).toHaveBeenCalled()
     expect(rendered.props).toBeUndefined()
+    available = true
+    await act(async () => {
+      for (const changed of placeholdersChanged) changed()
+    })
+    expect(rendered.props).toMatchObject({ portalUrl: HUB, showFooter: true })
+    expect(placeholder.domElement.childNodes).toHaveLength(1)
   })
 
   it('keeps one footer mounted across navigations, and unmounts it with its placeholder', async () => {
