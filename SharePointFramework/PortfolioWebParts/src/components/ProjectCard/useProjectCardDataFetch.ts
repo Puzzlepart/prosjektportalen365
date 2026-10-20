@@ -15,13 +15,14 @@ export function useProjectCardDataFetch(
   setState: (newState: Partial<IProjectCardState>) => void
 ) {
   useEffect(() => {
-    void Promise.all([
-      props.dataAdapter.fetchEnrichedProject(props.projectSiteId, props.hubContext)
-    ]).then(([project]) => {
-      setState({
-        project,
-        isDataLoaded: true
+    props.dataAdapter
+      .fetchEnrichedProject(props.projectSiteId, props.hubContext)
+      .then((project) => setState({ project, isDataLoaded: true, loading: false }))
+      // A failure was not caught, and the web part stayed empty: it says so now.
+      .catch((error: Error) => {
+        // eslint-disable-next-line no-console
+        console.error('(ProjectCard) could not fetch the project', error)
+        setState({ error, loading: false })
       })
-    })
   }, [refetch])
 }

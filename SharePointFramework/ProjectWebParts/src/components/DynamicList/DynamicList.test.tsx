@@ -47,6 +47,61 @@ jest.mock('./useToolbarItems', () => ({
   }
 }))
 jest.mock('../../data', () => ({ __esModule: true, default: { portalDataService: {}, sp: {} } }))
+// An open Fluent menu is positioned against its trigger, which costs tens of seconds under jsdom
+// (see the testing guide): the column headers' menus are a stand-in that keeps Fluent's contract.
+// With `openOnContext` the trigger's child opens the menu on `contextmenu`, which a right click,
+// Shift+F10 and the menu key all fire, and an item runs its `onClick` and closes the menu.
+jest.mock('@fluentui/react-components', () => {
+  const actual = jest.requireActual('@fluentui/react-components')
+  const React = jest.requireActual('react')
+  const MenuContext = React.createContext({
+    open: false,
+    setOpen: (_open: boolean) => undefined,
+    openOnContext: false
+  })
+  const Menu = ({ openOnContext, children }: any) => {
+    const [open, setOpen] = React.useState(false)
+    return React.createElement(
+      MenuContext.Provider,
+      { value: { open, setOpen, openOnContext } },
+      children
+    )
+  }
+  const MenuTrigger = ({ children }: any) => {
+    const { setOpen, openOnContext } = React.useContext(MenuContext)
+    return React.cloneElement(
+      React.Children.only(children),
+      openOnContext
+        ? {
+            onContextMenu: (event: any) => {
+              event.preventDefault()
+              setOpen(true)
+            }
+          }
+        : { onClick: () => setOpen(true) }
+    )
+  }
+  const MenuPopover = ({ children }: any) =>
+    React.useContext(MenuContext).open
+      ? React.createElement('div', { role: 'menu' }, children)
+      : null
+  const MenuList = ({ children }: any) => React.createElement(React.Fragment, null, children)
+  const MenuItem = ({ children, onClick }: any) => {
+    const { setOpen } = React.useContext(MenuContext)
+    return React.createElement(
+      'button',
+      {
+        role: 'menuitem',
+        onClick: (event: any) => {
+          onClick?.(event)
+          setOpen(false)
+        }
+      },
+      children
+    )
+  }
+  return { __esModule: true, ...actual, Menu, MenuTrigger, MenuPopover, MenuList, MenuItem }
+})
 
 import { AriaLiveAnnouncer } from '@fluentui/react-components'
 import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
@@ -135,6 +190,28 @@ describe('DynamicList', () => {
         .filter(Boolean)
     ).toEqual(['Tittel', 'Status'])
     expect(screen.getByText('Ferdig')).toBeInTheDocument()
+  })
+
+  it('opens a menu on a column header from the keyboard, as on a right click, to sort or resize the column (WCAG 2.1.1)', async () => {
+    // A right click kept the browser's menu away and opened nothing, and a column's width could
+    // only be changed with a mouse. Shift+F10 and the menu key fire the same contextmenu event.
+    renderList({ data: { listItems, listColumns, listTitle: 'Leveranser' } })
+    await screen.findByText('Design av bane')
+    // By its text, not by role: a role query reads the whole document's tree, slow in a large one.
+    const status = () => screen.getByText('Status').closest('[role="columnheader"]')
+    fireEvent.contextMenu(status())
+    const menu = document.querySelector<HTMLElement>('[role="menu"]')
+    expect(
+      within(menu)
+        .getAllByRole('menuitem')
+        .map((item) => item.textContent)
+    ).toEqual([
+      strings.DynamicList.SortAscending,
+      strings.DynamicList.SortDescending,
+      strings.DynamicList.ResizeColumn
+    ])
+    fireEvent.click(within(menu).getByText(strings.DynamicList.SortAscending))
+    await waitFor(() => expect(status()).toHaveAttribute('aria-sort', 'ascending'))
   })
 
   it('tells when the list has no rows', async () => {

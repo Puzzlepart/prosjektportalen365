@@ -154,4 +154,70 @@ describe('AddProjectDialog', () => {
     fireEvent.click(screen.getByRole('button', { name: strings.Add }))
     await waitFor(() => expect(addChildProjects).toHaveBeenCalledWith([ALFA], undefined))
   })
+
+  it('says why the projects could not be added, and stays open (WCAG 3.3.1, 4.1.3)', async () => {
+    // The failure was not caught: nothing was added, and nothing said so.
+    const ALFA = { SiteId: 'a', Title: 'Alfa' }
+    const dispatch = jest.fn()
+    render(
+      <ProgramAdministrationContext.Provider
+        value={
+          {
+            props: {
+              context: {
+                pageContext: { site: { id: 'site' }, legacyPageContext: { hubSiteId: 'HUB-1' } }
+              },
+              dataAdapter: {
+                addChildProjects: jest.fn(() =>
+                  Promise.reject(new Error('Ingen tilgang til huben'))
+                ),
+                getHubSiteProjects: jest.fn(() => Promise.resolve([ALFA]))
+              }
+            },
+            state: {
+              addProjectDialog: { open: true, selectedProjects: ['a'] },
+              availableProjects: [ALFA],
+              childProjects: []
+            },
+            programHubs: [{ url: 'https://t.sharepoint.com/sites/hub1', hubSiteId: 'hub-1' }],
+            dispatch
+          } as any
+        }
+      >
+        <AddProjectDialog />
+      </ProgramAdministrationContext.Provider>
+    )
+    fireEvent.click(screen.getByRole('button', { name: strings.Add }))
+    expect(await screen.findByText(strings.AddProjectsErrorTitle)).toBeInTheDocument()
+    expect(screen.getByText('Ingen tilgang til huben')).toBeInTheDocument()
+    expect(dispatch).not.toHaveBeenCalledWith(ADD_CHILD_PROJECTS([ALFA]))
+    expect(dispatch).not.toHaveBeenCalledWith(TOGGLE_ADD_PROJECT_DIALOG())
+  })
+
+  it('lets the keyboard reach add before a project is chosen, and says what it needs (WCAG 2.1.1, 3.3.2)', () => {
+    render(
+      <ProgramAdministrationContext.Provider
+        value={
+          {
+            props: {
+              context: { pageContext: { site: { id: 'site' }, legacyPageContext: {} } },
+              dataAdapter: {}
+            },
+            state: {
+              addProjectDialog: { open: true, selectedProjects: [] },
+              availableProjects: [],
+              childProjects: []
+            },
+            programHubs: [],
+            dispatch: jest.fn()
+          } as any
+        }
+      >
+        <AddProjectDialog />
+      </ProgramAdministrationContext.Provider>
+    )
+    const add = screen.getByRole('button', { name: strings.Add })
+    expect(add).toHaveAttribute('aria-disabled', 'true')
+    expect(add).toHaveAccessibleDescription(strings.AddProjectsDisabledReason)
+  })
 })

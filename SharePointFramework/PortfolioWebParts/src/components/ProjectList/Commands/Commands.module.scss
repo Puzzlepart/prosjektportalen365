@@ -1,17 +1,19 @@
 .commands {
   display: flex;
   flex-direction: row;
+  // The toolbar goes under the search box where both do not fit, as at 320 px (WCAG 1.4.10).
+  flex-wrap: wrap;
   max-width: 1024px;
-  gap: 15px;
+  gap: 8px 15px;
 
   .search {
-    width: 100%;
-    max-width: 100%;
+    flex: 1 1 240px;
+    min-width: 0;
 
     .searchBox {
       box-shadow: var(--shadow2);
-      width: inherit;
-      max-width: inherit;
+      width: 100%;
+      max-width: 100%;
     }
   }
 

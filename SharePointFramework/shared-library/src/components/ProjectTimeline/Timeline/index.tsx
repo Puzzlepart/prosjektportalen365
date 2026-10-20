@@ -37,7 +37,8 @@ export const Timeline: FC<ITimelineProps> = (incomingProps) => {
     onDetailsDismiss,
     scrollRef,
     itemRenderer,
-    groupRenderer
+    groupRenderer,
+    timeLapseMarkerColor
   } = useTimeline(props)
 
   return (
@@ -68,15 +69,18 @@ export const Timeline: FC<ITimelineProps> = (incomingProps) => {
           >
             <TimelineMarkers>
               <CustomMarker date={props.timeLapseMarker}>
-                {({ styles }) => {
-                  const customStyles = {
-                    ...styles,
-                    backgroundColor: '#f35d69'
-                  }
-                  return <div style={customStyles} />
-                }}
+                {({ styles: markerStyles }) => (
+                  <div style={{ ...markerStyles, backgroundColor: timeLapseMarkerColor }} />
+                )}
               </CustomMarker>
-              <TodayMarker date={moment().toDate()} />
+              {/* Today is a line in colour; its label says what it is (WCAG 1.1.1, 1.4.1). */}
+              <TodayMarker date={moment().toDate()}>
+                {({ styles: markerStyles }) => (
+                  <div style={markerStyles}>
+                    <span className={styles.todayLabel}>{strings.TimelineTodayLabel}</span>
+                  </div>
+                )}
+              </TodayMarker>
             </TimelineMarkers>
           </ReactTimeline>
         </div>

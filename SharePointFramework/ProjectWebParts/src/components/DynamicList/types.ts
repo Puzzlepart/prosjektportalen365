@@ -98,14 +98,6 @@ export interface ICustomAction {
   order?: number
 }
 
-/**
- * Column context menu configuration.
- */
-export interface IColumnContextMenu {
-  column: any
-  target: HTMLElement
-}
-
 export interface IFileItem extends Record<string, any> {
   Id: number
   FileRef: string
@@ -410,11 +402,6 @@ export interface IDynamicListState extends Omit<
    * Document library view mode (flat or folders)
    */
   documentLibraryViewMode?: DocumentLibraryViewMode
-
-  /**
-   * Column context menu state
-   */
-  columnContextMenu?: IColumnContextMenu
 
   /**
    * Whether Excel export is in progress

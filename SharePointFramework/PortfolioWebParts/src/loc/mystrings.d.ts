@@ -98,6 +98,8 @@ declare interface IPortfolioWebPartsStrings {
   CancelButtonLabel: string
   ColumnCategoryDescription: string
   ColumnCategoryLabel: string
+  ColumnFieldLockedText: string
+  ColumnFormSaveDisabledReason: string
   ColumnRenderDataTypePropertiesHeaderText: string
   ColumnRenderDescription: string
   ColumnRenderLabel: string
@@ -127,6 +129,7 @@ declare interface IPortfolioWebPartsStrings {
   DataSourceLabel: string
   DataSourceLevelDescription: string
   DataSourceLevelLabel: string
+  ReadOnlyFromDataSourceText: string
   DataSourceNotFound: string
   DefaultDataSourceViewLabel: string
   DefaultRenderModeDescription: string
@@ -239,6 +242,7 @@ declare interface IPortfolioWebPartsStrings {
     WebPartDescription: string
     ProjectSiteIdFieldLabel: string
     ProjectSiteIdFieldDescription: string
+    LoadErrorText: string
   }
   ProjectsAccessHeaderText: string
   ProjectsAccessSearchBoxPlaceholderText: string
@@ -301,6 +305,8 @@ declare interface IPortfolioWebPartsStrings {
   StatusReportsCountLabel: string
   TileViewGroupName: string
   TitleLabel: string
+  TitleColumnDeleteDisabledReason: string
+  ViewFormSaveDisabledReason: string
   TitleDescription: string
   ToggleColumnFormPanelLabel: string
   UseChangesButtonText: string

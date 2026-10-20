@@ -3,6 +3,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    // The toolbar goes under the title where both do not fit, as at 320 px (WCAG 1.4.10).
+    flex-wrap: wrap;
+    gap: 8px 16px;
     padding: 32px 32px 20px 32px;
 
     .commandBar {
@@ -14,6 +17,20 @@
     margin: 0px auto;
     padding: 0 32px 0 32px;
     font-size: 12px !important;
+
+    // Today's label, at the top of its line, readable over the bars it may lie on.
+    .todayLabel {
+      position: absolute;
+      top: 2px;
+      left: 4px;
+      padding: 0 4px;
+      border-radius: var(--borderRadiusSmall);
+      background-color: var(--colorNeutralBackground1);
+      color: var(--colorPaletteRedForeground1);
+      font-size: var(--fontSizeBase100);
+      line-height: var(--lineHeightBase100);
+      white-space: nowrap;
+    }
 
     .timelineItem,
     .timelineItemMilestone {

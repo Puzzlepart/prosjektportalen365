@@ -55,6 +55,36 @@ describe('ProjectCard', () => {
     expect(screen.getAllByRole('link')[0]).toHaveAttribute('href', '/sites/alfa')
   })
 
+  it('says it is loading while the project is fetched (WCAG 4.1.2)', () => {
+    // It showed nothing until the project came.
+    const dataAdapter = { fetchEnrichedProject: jest.fn(() => new Promise(() => undefined)) }
+    render(
+      <ProjectCard
+        dataAdapter={dataAdapter as any}
+        projectSiteId='site-1'
+        spfxContext={spfxContext}
+      />
+    )
+    // The library's skeleton, named by its strings, which have no typings here.
+    expect(screen.getByRole('progressbar', { name: 'Laster...' })).toBeInTheDocument()
+  })
+
+  it('says so when the project cannot be fetched (WCAG 3.3.1, 4.1.3)', async () => {
+    // The failure was not caught, and the web part stayed empty.
+    const dataAdapter = {
+      fetchEnrichedProject: jest.fn().mockRejectedValue(new Error('Tilgang nektet'))
+    }
+    render(
+      <ProjectCard
+        dataAdapter={dataAdapter as any}
+        projectSiteId='site-1'
+        spfxContext={spfxContext}
+      />
+    )
+    expect(await screen.findByText(strings.ProjectCard.LoadErrorText)).toBeInTheDocument()
+    expect(screen.queryByRole('progressbar')).toBeNull()
+  })
+
   it('marks the button that opens the project information as where the panel gives the focus back (WCAG 2.4.3)', async () => {
     const dataAdapter = { fetchEnrichedProject: jest.fn().mockResolvedValue(PROJECT) }
     render(

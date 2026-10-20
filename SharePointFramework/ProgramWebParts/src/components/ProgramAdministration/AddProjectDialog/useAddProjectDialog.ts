@@ -1,10 +1,11 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { ProgramAdministrationContext } from '../context'
 import { ADD_CHILD_PROJECTS, DATA_LOADED } from '../reducer'
 import { useId } from '@fluentui/react-components'
 
 export const useAddProjectDialog = () => {
   const context = useContext(ProgramAdministrationContext)
+  const [error, setError] = useState<Error>(null)
 
   useEffect(() => {
     if (!context.programHubs || context.programHubs.length === 0) return
@@ -43,8 +44,15 @@ export const useAddProjectDialog = () => {
     )
     const parentHubSiteUrl = parentHub?.url
 
-    await context.props.dataAdapter.addChildProjects(projects, parentHubSiteUrl)
-    context.dispatch(ADD_CHILD_PROJECTS(projects))
+    // A failure was not caught: nothing was added, and nothing said so. The dialog stays open
+    // with the error (WCAG 3.3.1, 4.1.3).
+    try {
+      setError(null)
+      await context.props.dataAdapter.addChildProjects(projects, parentHubSiteUrl)
+      context.dispatch(ADD_CHILD_PROJECTS(projects))
+    } catch (e) {
+      setError(e)
+    }
   }
 
   const fluentProviderId = useId('fp-add-project-dialog')
@@ -52,6 +60,7 @@ export const useAddProjectDialog = () => {
   return {
     availableProjects,
     onAddChildProjects,
+    error,
     fluentProviderId
   }
 }

@@ -185,6 +185,18 @@ describe('ProjectSetupDialog', () => {
     expect(await axeComponent(screen.getByRole('alertdialog'))).toHaveNoViolations()
   })
 
+  it('lets the keyboard reach a section with nothing to choose, which says so (WCAG 2.1.1, 1.3.1)', () => {
+    // A disabled tab is skipped by the keyboard, and why it was disabled was only in its tooltip.
+    renderDialog({ data: setupData({ extensions: [] }) })
+    const tab = screen.getByRole('tab', { name: new RegExp(strings.ExtensionsSectionHeaderText) })
+    expect(tab).not.toBeDisabled()
+    fireEvent.click(tab)
+    expect(tab).toHaveAttribute('aria-selected', 'true')
+    expect(
+      within(screen.getByRole('tabpanel')).getByText(strings.ExtensionsSectionDisabledTooltip)
+    ).toBeInTheDocument()
+  })
+
   it('tells while a cloud template is read, and when it is ready (WCAG 4.1.3)', async () => {
     let finish: (value: any) => void
     cloud.resolve.mockImplementation(() => new Promise((resolve) => (finish = resolve)))

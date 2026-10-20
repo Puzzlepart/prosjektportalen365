@@ -2,7 +2,7 @@
 // Babel, so mocks are not hoisted. The calendar (`react-calendar-timeline`) needs a real layout,
 // so it is a stand-in that draws each group and item through the timeline's own renderers, the
 // items inside its scroll element (`.rct-scroll`, handed to `scrollRef` as the calendar does), and
-// shows the time frame and sidebar it was given. Fluent's popover and menu are stand-ins that keep
+// shows the time frame and sidebar it was given, and its markers. Fluent's popover and menu are stand-ins that keep
 // their contract (see the testing guide): the details popover shows while open, with the props its
 // surface is given, and reports Escape through `onOpenChange`, and the menu trigger toggles through
 // `onOpenChange`.
@@ -34,15 +34,23 @@ jest.mock('react-calendar-timeline', () => {
             })
           )
         )
-      )
+      ),
+      props.children
     )
-  const Empty = () => null
+  // A marker draws what its render function returns from the styles of its line, as the
+  // calendar's do, or a bare line without one.
+  const marker =
+    (left: number) =>
+    ({ children, date }: any) =>
+      children
+        ? children({ styles: { position: 'absolute', left, width: '2px' }, date })
+        : React.createElement('div', { 'data-testid': 'bare-marker' })
   return {
     __esModule: true,
     default: Calendar,
-    TimelineMarkers: Empty,
-    CustomMarker: Empty,
-    TodayMarker: Empty
+    TimelineMarkers: ({ children }: any) => React.createElement(React.Fragment, null, children),
+    CustomMarker: marker(10),
+    TodayMarker: marker(20)
   }
 })
 jest.mock('@fluentui/react-components', () => {
@@ -494,6 +502,19 @@ describe('Timeline', () => {
     expect(fill).toBe('#add8e6')
     expect(getContrastRatio(edge, GREY_ROW)).toBeGreaterThanOrEqual(3)
     expect(shape('Trekant')).toHaveClass('triangle')
+  })
+
+  it('marks today with a label in text, where a coloured line was all (WCAG 1.1.1, 1.4.1)', () => {
+    renderTimeline()
+    expect(screen.getByText(strings.TimelineTodayLabel)).toBeInTheDocument()
+  })
+
+  it('draws the time-lapse marker in a shade that stands out on the grey rows (WCAG 1.4.11)', () => {
+    // Its red, #f35d69, had 2.85:1 against them.
+    renderTimeline({ timeLapseMarker: new Date() })
+    // The stand-in places the custom marker, the time lapse's, 10 px in.
+    const marker = document.querySelector<HTMLElement>('[style*="left: 10px"]')
+    expect(getContrastRatio(marker.style.backgroundColor, GREY_ROW)).toBeGreaterThanOrEqual(3)
   })
 
   it('writes the tag in the details in a colour readable on the item colour (WCAG 1.4.3)', () => {

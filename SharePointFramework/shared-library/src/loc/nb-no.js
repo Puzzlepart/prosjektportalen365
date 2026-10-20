@@ -79,6 +79,7 @@ define([], function () {
     ProjectTimelineInfoText:
       'Her listes alle prosjektene med start- og sluttdato. Prosjekttidslinjen støtter også faser, delfaser og milepæler. For å zoome inn/ut i tidslinje: ALT+Musehjul.',
     ProjectTimelineTitle: 'Prosjekttidslinje',
+    TimelineTodayLabel: 'I dag',
     ProjectTimelineItemInfo: '{0} - prosjektets tidsforløp',
     ProgramTimelineTitle: 'Programtidslinje',
     ResourceLabel: 'Ressurs',

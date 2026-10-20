@@ -1,11 +1,15 @@
 .root {
   display: flex;
   justify-content: space-between;
-  gap: 15px;
+  // Wraps where it does not fit, as at 320 px (WCAG 1.4.10): the buttons shrank and the rest
+  // were cut off past the web part's edge.
+  flex-wrap: wrap;
+  gap: 8px 15px;
 
   .toolbar {
-    gap: 15px;
-    height: 40px;
+    flex-wrap: wrap;
+    gap: 8px 15px;
+    min-height: 40px;
     padding: 0 !important;
 
     .search {

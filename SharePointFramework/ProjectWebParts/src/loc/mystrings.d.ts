@@ -434,7 +434,9 @@ declare interface IProjectWebPartsStrings {
     Close: string
     NoItemsFound: string
     ListTable: string
-    GroupByColumn: string
+    SortAscending: string
+    SortDescending: string
+    ResizeColumn: string
     FolderNavigation: string
     HiddenFromView: string
     RefreshDone: string

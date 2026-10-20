@@ -44,6 +44,11 @@ describe('ViewFormPanel', () => {
     expect(screen.getByText(strings.DefaultViewSetWarningMessage)).toBeInTheDocument()
   })
 
+  it('marks the search query as required, as save asks for it (WCAG 3.3.2)', () => {
+    renderForm({ title: 'Mine prosjekter', searchQuery: '', isPersonalView: false }, false)
+    expect(screen.getByLabelText(new RegExp(strings.SearchQueryLabel))).toBeRequired()
+  })
+
   it('leaves the warning out for a personal view, whose default view field is hidden (WCAG 4.1.3)', () => {
     renderForm({ title: 'Mine prosjekter', isPersonalView: true }, true)
     expect(screen.queryByText(strings.DefaultViewSetWarningMessage)).toBeNull()

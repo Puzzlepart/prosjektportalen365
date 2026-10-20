@@ -19,7 +19,12 @@ import { restGet } from '../fixtures/rest'
  *
  * The risk used has actions written as text and no Planner tasks (`RiskActionData` empty): a risk
  * with tasks, which a hand test leaves behind, shows the tasks instead and offers synchronising
- * rather than migrating. With no such risk left, the test skips and says so.
+ * rather than migrating. With no such risk left, the test skips and says so. *
+ * Known flake on list pages (SPFx 1.24.0-rc.0): on about one load in twenty, SharePoint resolves
+ * the `react` our extensions import to its list view host's copy (`listview-host-assembly`) while
+ * its `react-dom-18-bundle` renders them, so their first hook throws "Cannot read properties of
+ * null (reading 'useContext')" and nothing opens; the CI retry passes. Reported as
+ * SharePoint/sp-dev-docs#11068 (2026-10-20); check again on SPFx 1.24 GA.
  */
 const projectUrl = configuredUrl(process.env.E2E_PROJECT_URL)
 const hubUrl = baseURL.replace(/\/+$/, '')

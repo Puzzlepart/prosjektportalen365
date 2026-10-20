@@ -161,4 +161,16 @@ describe('TargetFolderScreen', () => {
     await waitFor(() => expect(getFolders).toHaveBeenCalledWith('/sites/x/Bilder'))
     expect(await screen.findByText('Ferie')).toBeInTheDocument()
   })
+
+  it("gives the focus to the opened library's step in the trail, as for a folder (WCAG 2.4.3)", async () => {
+    // The library's link leaves the page with the list of libraries.
+    const user = setupUser()
+    const { getFolders } = renderScreen({ libraries: [folder('Bilder', { isLibrary: true })] })
+    getFolders.mockResolvedValue([folder('Ferie')])
+    await user.click(screen.getByRole('button', { name: strings.Library }))
+    await user.click(await screen.findByRole('button', { name: 'Bilder' }))
+    expect(await screen.findByText('Ferie')).toBeInTheDocument()
+    const trail = screen.getByRole('navigation', { name: strings.FolderNavigationLabel })
+    await waitFor(() => expect(within(trail).getByRole('button', { name: 'Bilder' })).toHaveFocus())
+  })
 })

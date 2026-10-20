@@ -76,6 +76,7 @@ declare interface ISharedLibraryStrings {
   ProjectTimelineErrorTransformItemText: string
   ProjectTimelineInfoText: string
   ProjectTimelineTitle: string
+  TimelineTodayLabel: string
   ProjectTimelineItemInfo: string
   ProgramTimelineTitle: string
   ResourceLabel: string

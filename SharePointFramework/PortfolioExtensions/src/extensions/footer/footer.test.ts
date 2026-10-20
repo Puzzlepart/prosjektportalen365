@@ -99,7 +99,11 @@ async function footerCustomizer(portal = portalDataService(), { onHub = true } =
   const customizer = new FooterApplicationCustomizer()
   ;(customizer as any).context = context
   ;(customizer as any).properties = { publicMediaBasePath: 'https://media.example/media' }
-  await customizer.onInit()
+  // Through `act` too: the customizer renders the footer as it starts, and outside `act` React
+  // 18 would render it after the test, into the next one.
+  await act(async () => {
+    await customizer.onInit()
+  })
   // Through `act`: React 18's `createRoot` renders the footer after the handler returns.
   const navigate = async () => {
     await act(async () => {
@@ -156,6 +160,33 @@ describe('FooterApplicationCustomizer', () => {
     await navigate()
     expect(placeholder.domElement.childNodes).toHaveLength(1)
     expect(context.placeholderProvider.tryCreateContent).toHaveBeenCalledTimes(1)
+  })
+
+  it('renders as soon as it has started, without waiting for a navigation', async () => {
+    // It rendered on SharePoint's navigated event only, which it subscribed to after its own
+    // fetches: on a list page that event had come and gone, and the footer never showed.
+    await footerCustomizer(portalDataService({ settings: { ShowFooter: '1' } }))
+    expect(rendered.props).toMatchObject({ portalUrl: HUB, showFooter: true })
+  })
+
+  it('waits for the next navigation when SharePoint has no placeholder for it yet', async () => {
+    const placeholderProvider = { tryCreateContent: jest.fn(() => undefined) }
+    adapter.portalDataService = portalDataService({ settings: { ShowFooter: '1' } })
+    const customizer = new FooterApplicationCustomizer()
+    ;(customizer as any).context = {
+      pageContext: {
+        web: { absoluteUrl: HUB },
+        legacyPageContext: { siteId: '{hub-1}', hubSiteId: 'hub-1', isSiteAdmin: true }
+      },
+      application: { navigatedEvent: { add: jest.fn() } },
+      placeholderProvider
+    }
+    ;(customizer as any).properties = {}
+    await act(async () => {
+      await expect(customizer.onInit()).resolves.toBeUndefined()
+    })
+    expect(placeholderProvider.tryCreateContent).toHaveBeenCalled()
+    expect(rendered.props).toBeUndefined()
   })
 
   it('keeps one footer mounted across navigations, and unmounts it with its placeholder', async () => {

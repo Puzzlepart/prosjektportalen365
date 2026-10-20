@@ -139,6 +139,11 @@ function renderPanel(props: Record<string, any> = {}) {
 /** What the save would send, as the debug view shows it. */
 const properties = () => JSON.parse(document.querySelector('pre').textContent)
 const save = () => screen.getByText(strings.SaveText).closest('button')
+/**
+ * Save cannot save: it stays focusable, so the keyboard reaches it and a screen reader reads why
+ * (WCAG 2.1.1, 3.3.2). A disabled button was skipped, and why was only in its `title`.
+ */
+const expectSaveOff = () => expect(save()).toHaveAttribute('aria-disabled', 'true')
 // A required field's label ends with an asterisk.
 const input = (label: string) => screen.getByLabelText((content) => content.startsWith(label))
 const settle = () => new Promise((resolve) => setTimeout(resolve, 0))
@@ -184,12 +189,15 @@ describe('CustomEditPanel', () => {
     expect(await axeComponent(document.body)).toHaveNoViolations()
   })
 
-  it('keeps save off while a required field is empty', async () => {
-    renderPanel()
-    expect(save()).toBeEnabled()
+  it('keeps save off while a required field is empty, and lets the keyboard reach why (WCAG 2.1.1, 3.3.2)', async () => {
+    const onSubmit = jest.fn()
+    renderPanel({ submit: { onSubmit } })
+    expect(save()).not.toHaveAttribute('aria-disabled')
     await type(input('Tittel'), '')
-    expect(save()).toBeDisabled()
-    expect(save()).toHaveAttribute('title', strings.Aria.SaveDisabledTitle)
+    expectSaveOff()
+    expect(save()).toHaveAccessibleDescription(strings.Aria.SaveDisabledTitle)
+    fireEvent.click(save())
+    expect(onSubmit).not.toHaveBeenCalled()
   })
 
   it('saves the changes, showing its progress until they are saved', async () => {
@@ -222,10 +230,10 @@ describe('CustomEditPanel', () => {
     const address = screen.getByPlaceholderText(strings.Placeholder.UrlField)
     await type(address, 'frisbee.no')
     expect(screen.getByText(strings.Validation.UrlFieldInvalidFormat)).toBeInTheDocument()
-    expect(save()).toBeDisabled()
+    expectSaveOff()
     await type(address, 'https://frisbee.no')
     expect(screen.queryByText(strings.Validation.UrlFieldInvalidFormat)).toBeNull()
-    expect(save()).toBeEnabled()
+    expect(save()).not.toHaveAttribute('aria-disabled')
     await type(screen.getByPlaceholderText(strings.Placeholder.UrlFieldAlternative), 'Banen')
     expect(properties().GtHomepage).toEqual({ Url: 'https://frisbee.no', Description: 'Banen' })
   })
@@ -239,9 +247,9 @@ describe('CustomEditPanel', () => {
         strings.Validation.NumberFieldMinMax.replace('{0}', '0').replace('{1}', '1000000')
       )
     ).toBeInTheDocument()
-    expect(save()).toBeDisabled()
+    expectSaveOff()
     await type(budget, '500000')
-    expect(save()).toBeEnabled()
+    expect(save()).not.toHaveAttribute('aria-disabled')
     expect(properties().GtBudget).toBe('500000')
   })
 

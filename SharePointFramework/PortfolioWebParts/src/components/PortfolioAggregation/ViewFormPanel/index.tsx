@@ -37,6 +37,7 @@ export const ViewFormPanel: FC = () => {
             iconName='TextAlignLeft'
             label={strings.SearchQueryLabel}
             description={strings.PortfolioAggregationViewSearchQueryDescription}
+            required={true}
           >
             <Textarea
               defaultValue={view.get('searchQuery')}
@@ -59,16 +60,17 @@ export const ViewFormPanel: FC = () => {
           <FieldContainer
             iconName='GroupList'
             label={strings.DataSourceCategoryLabel}
-            description={strings.DataSourceCategoryDescription}
+            description={`${strings.DataSourceCategoryDescription} ${strings.ReadOnlyFromDataSourceText}`}
           >
-            <Input value={context.props.dataSourceCategory} disabled={true} />
+            {/* Read-only, not disabled: the keyboard reaches it and its value can be read. */}
+            <Input value={context.props.dataSourceCategory} readOnly />
           </FieldContainer>
           <FieldContainer
             iconName='GroupList'
             label={strings.DataSourceLevelLabel}
-            description={strings.DataSourceLevelDescription}
+            description={`${strings.DataSourceLevelDescription} ${strings.ReadOnlyFromDataSourceText}`}
           >
-            <Input value={context.props.configuration?.level} disabled={true} />
+            <Input value={context.props.configuration?.level} readOnly />
           </FieldContainer>
         </FluentProvider>
       </IdPrefixProvider>

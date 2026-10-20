@@ -16,7 +16,12 @@ import {
   useTableColumnSizing_unstable,
   TableRowId,
   TableColumnSizingOptions,
-  Link
+  Link,
+  Menu,
+  MenuItem,
+  MenuList,
+  MenuPopover,
+  MenuTrigger
 } from '@fluentui/react-components'
 import * as React from 'react'
 import { FC, useContext, useMemo, useCallback } from 'react'
@@ -106,7 +111,7 @@ export const ListView: FC<IListViewProps> = ({
   const {
     getRows,
     selection: { allRowsSelected, someRowsSelected, toggleAllRows, toggleRow, isRowSelected },
-    sort: { getSortDirection, toggleColumnSort, sort },
+    sort: { getSortDirection, toggleColumnSort, setColumnSort, sort },
     columnSizing_unstable: columnSizingState,
     tableRef
   } = useTableFeatures(
@@ -214,27 +219,33 @@ export const ListView: FC<IListViewProps> = ({
                   checkboxIndicator={{ 'aria-label': strings.DynamicList.SelectAll }}
                 />
                 {columns.map((column) => (
-                  <TableHeaderCell
-                    key={column.columnId}
-                    {...columnSizingState.getTableHeaderCellProps(column.columnId)}
-                    sortDirection={getSortDirection(column.columnId)}
-                    onClick={(e) => toggleColumnSort(e, column.columnId)}
-                    onContextMenu={(e) => {
-                      e.preventDefault()
-                      context.setState({
-                        columnContextMenu: {
-                          column: {
-                            ...column,
-                            isSorted: !!getSortDirection(column.columnId),
-                            isSortedDescending: getSortDirection(column.columnId) === 'descending'
-                          },
-                          target: e.currentTarget as HTMLElement
-                        }
-                      })
-                    }}
-                  >
-                    {column.renderHeaderCell ? column.renderHeaderCell() : column.columnId}
-                  </TableHeaderCell>
+                  // The column's menu opens on a right click, and on Shift+F10 or the menu key
+                  // from the keyboard. Its width can be changed from there with the arrow keys,
+                  // where only a mouse could before (WCAG 2.1.1).
+                  <Menu key={column.columnId} openOnContext>
+                    <MenuTrigger disableButtonEnhancement>
+                      <TableHeaderCell
+                        {...columnSizingState.getTableHeaderCellProps(column.columnId)}
+                        sortDirection={getSortDirection(column.columnId)}
+                        onClick={(e) => toggleColumnSort(e, column.columnId)}
+                      >
+                        {column.renderHeaderCell ? column.renderHeaderCell() : column.columnId}
+                      </TableHeaderCell>
+                    </MenuTrigger>
+                    <MenuPopover>
+                      <MenuList>
+                        <MenuItem onClick={(e) => setColumnSort(e, column.columnId, 'ascending')}>
+                          {strings.DynamicList.SortAscending}
+                        </MenuItem>
+                        <MenuItem onClick={(e) => setColumnSort(e, column.columnId, 'descending')}>
+                          {strings.DynamicList.SortDescending}
+                        </MenuItem>
+                        <MenuItem onClick={columnSizingState.enableKeyboardMode(column.columnId)}>
+                          {strings.DynamicList.ResizeColumn}
+                        </MenuItem>
+                      </MenuList>
+                    </MenuPopover>
+                  </Menu>
                 ))}
               </TableRow>
             </TableHeader>

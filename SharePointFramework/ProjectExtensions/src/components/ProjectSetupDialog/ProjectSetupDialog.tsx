@@ -104,7 +104,6 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
                 value='extensions'
                 id={tabIds.extensions}
                 aria-label={tabLabel(strings.ExtensionsSectionHeaderText, extensionsCount)}
-                disabled={!hasExtensions}
                 icon={getFluentIcon('PuzzlePiece')}
               >
                 <span className={styles.tabLabel}>
@@ -135,7 +134,6 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
                 value='contentConfig'
                 id={tabIds.contentConfig}
                 aria-label={tabLabel(strings.ContentConfigSectionHeaderText, contentConfigCount)}
-                disabled={!hasContentConfig}
                 icon={getFluentIcon('ListBar')}
               >
                 <span className={styles.tabLabel}>
@@ -156,8 +154,20 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
           </TabList>
 
           <div className={styles.tabContent} role='tabpanel' aria-labelledby={tabIds[activeTab]}>
-            {activeTab === 'extensions' && hasExtensions && <ExtensionsSection />}
-            {activeTab === 'contentConfig' && hasContentConfig && <ContentConfigSection />}
+            {/* A section with nothing to choose says so in its panel: its tab was disabled,
+                skipped by the keyboard, with why only in its tooltip (WCAG 2.1.1, 1.3.1). */}
+            {activeTab === 'extensions' &&
+              (hasExtensions ? (
+                <ExtensionsSection />
+              ) : (
+                <UserMessage text={strings.ExtensionsSectionDisabledTooltip} />
+              ))}
+            {activeTab === 'contentConfig' &&
+              (hasContentConfig ? (
+                <ContentConfigSection />
+              ) : (
+                <UserMessage text={strings.ContentConfigSectionDisabledTooltip} />
+              ))}
           </div>
         </div>
 

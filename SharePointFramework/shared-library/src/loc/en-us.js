@@ -80,6 +80,7 @@ define([], function () {
     ProjectTimelineInfoText:
       'Here is a list of all projects with start and end date. The project timeline also supports phases, subphases and milestones. To zoom in/out in the timeline: ALT+Mouse wheel.',
     ProjectTimelineTitle: 'Project timeline',
+    TimelineTodayLabel: 'Today',
     ProjectTimelineItemInfo: '{0} - project timeline',
     ProgramTimelineTitle: 'Program timeline',
     ResourceLabel: 'Resource',

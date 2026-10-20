@@ -15,6 +15,8 @@ define([], function () {
     },
     ColumnCategoryDescription: 'The category of the column. This is used to group columns in the web part.',
     ColumnCategoryLabel: 'Column category',
+    ColumnFieldLockedText: 'Cannot be changed for an existing column.',
+    ColumnFormSaveDisabledReason: 'Fill in the internal field name, the search property and the display name, at least two characters each, to save',
     DefaultRenderModeDescription: 'The default display mode for the web part. This can be changed in the web part properties.',
     DefaultTimeframeEndLabel: 'Default end date',
     DefaultTimeframeEndValue: 'Default end date value',
@@ -32,7 +34,8 @@ define([], function () {
     ProjectCard: {
       WebPartDescription: 'Project card',
       ProjectSiteIdFieldLabel: 'Site ID',
-      ProjectSiteIdFieldDescription: 'ID for the SharePoint site (Project)'
+      ProjectSiteIdFieldDescription: 'ID for the SharePoint site (Project)',
+      LoadErrorText: 'The project could not be fetched. Try reloading the page.'
     },
     ProjectServiceArea: 'Project service area',
     ProjectType: 'Project type',
@@ -124,6 +127,7 @@ define([], function () {
     DataSourceLabel: 'Data source',
     DataSourceLevelDescription: 'Set the level for the data source. This is used to filter data sources in the web part based on where data is obtained from. This can be changed afterwards in the \'Data sources\' list if you want to make the query/view available elsewhere.',
     DataSourceLevelLabel: 'Data source level',
+    ReadOnlyFromDataSourceText: 'Comes from the web part\'s data source and cannot be changed here.',
     DataSourceNotFound: 'Cannot find any data source with name **{0}**.',
     DefaultDataSourceViewLabel: 'Default view (data source)',
     DefaultRenderModeLabel: 'Default display mode',
@@ -271,6 +275,8 @@ define([], function () {
     StatusReportsCountLabel: 'Number of statusreports to display',
     TileViewGroupName: 'Tile view',
     TitleLabel: 'Title',
+    TitleColumnDeleteDisabledReason: 'The title column cannot be deleted',
+    ViewFormSaveDisabledReason: 'Fill in the title, at least two characters, and the search query, at least 51 characters, to save',
     ToggleColumnFormPanelLabel: 'Add column',
     UseChangesButtonText: 'Use',
     ViewNotFoundMessage: 'Cannot find the specified view.',

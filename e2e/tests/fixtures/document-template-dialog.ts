@@ -32,7 +32,15 @@ export async function findDocumentLibrary(page: import('@playwright/test').Page,
   return (await documentLibrary(page, siteUrl)).url
 }
 
-/** Runs the command from the library's command bar, or from its "Mer" overflow when the bar is narrow. */
+/**
+ * Runs the command from the library's command bar, or from its "Mer" overflow when the bar is narrow.
+ *
+ * Known flake on list pages (SPFx 1.24.0-rc.0): on about one load in twenty, SharePoint resolves
+ * the `react` our extensions import to its list view host's copy (`listview-host-assembly`) while
+ * its `react-dom-18-bundle` renders them, so their first hook throws "Cannot read properties of
+ * null (reading 'useContext')" and nothing opens; the CI retry passes. Reported as
+ * SharePoint/sp-dev-docs#11068 (2026-10-20); check again on SPFx 1.24 GA.
+ */
 export async function openDocumentTemplateDialog(page: import('@playwright/test').Page) {
   await expect(
     page.locator('[data-automationid="CommandBar"], [role="menubar"]').first()

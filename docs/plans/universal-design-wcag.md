@@ -1199,3 +1199,81 @@ Decided with the developer on 2026-10-19:
 - The `useContext` flake is our footer on list pages: its hooks ran on the React copy of
   SharePoint's list view host (`listview-host-assembly`), while SPFx's `react-dom-18-bundle`
   rendered it. Not fixed yet.
+
+### Close-out, part 3 — the decisions carried out, and the overview per criterion (2026-10-20)
+
+Each fix came with tests that failed on the old code. The one exception is the library switch,
+noted below.
+
+**The fixes:**
+
+- **Reflow (1.4.10).** The visual test found the toolbars too wide at 320 px: their buttons
+  shrank, and the rest went past the web part's edge.
+  - The library's `Toolbar` and the timeline's header wrap.
+  - The project list's search box and toolbar wrap onto two lines.
+  - These are CSS, so they were tried on the tenant's pages with the styles injected before they
+    went in. The visual test measures them after deployment.
+- **The timeline's markers.**
+  - Today has the label «I dag» (`TimelineTodayLabel`).
+  - The time-lapse marker is darkened to 3:1 against the grey rows: `getContrastingShade`, from
+    #f35d69, which had 2.85:1.
+  - The tests' calendar stand-in now renders its markers, which it dropped.
+- **Disabled without a reason.** These are now `disabledFocusable`, with their reason as the
+  description:
+  - the edit panel's save;
+  - the column and view forms' saves, in the overview and the aggregation;
+  - the title column's delete;
+  - the program's add.
+
+  The other changes:
+  - Fields fixed for an existing column, and the aggregation's category and level, are read-only
+    and say why.
+  - The view forms' search query, which save requires at 51 characters, is marked required.
+  - Fluent's `Tab` cannot be `disabledFocusable`, so the project setup's empty sections keep their
+    tab, and the panel says why it is empty.
+- **The dynamic list's column menu.**
+  - It existed only as state and a component rendered nowhere, and a right click kept the
+    browser's menu away for nothing. Its one item, «Grupper etter», did nothing (a TODO).
+  - Each header is now a Fluent `Menu` with `openOnContext`, which opens on a right click,
+    Shift+F10 or the menu key. Its items are sort ascending, sort descending, and «Endre
+    kolonnebredde» (`enableKeyboardMode`), which lets the arrow keys resize the column.
+  - The dead component, its state and the group-by string are gone.
+- **Errors.** The project card shows a skeleton while it loads and a message when the fetch fails.
+  The program's add shows its failure and stays open.
+- **The footer on list pages.** It rendered on `navigatedEvent` only, which it subscribed to at
+  the end of an asynchronous `onInit`, so on list pages it usually never rendered. On 20 loads of
+  a list view, it never did. It renders when `onInit` ends now, and waits for a navigation when
+  SharePoint has no placeholder yet.
+
+**What the tests settled:**
+
+- **The library switch.** Changing the library in «Hent dokumentmal»'s target step already gives
+  the focus to the trail. The test passed on the old code, so the note of 2026-10-16 was wrong.
+  The test stays as a guard.
+
+**The React fault on list pages.** It is reported as SharePoint/sp-dev-docs#11068, with the reply
+drafted for its triage. In short:
+
+- **The bundle.** It holds no React of its own: `react`, `react-dom` and `react-dom/client` are
+  AMD dependencies, and only `react/jsx-runtime` is bundled, on the external `react`.
+- **The order.** SharePoint's bundles load in the same order on every reload of a list view.
+- **The flake.** The e2e flake of the template dialog has the same cause; its first try failed
+  with the hook error in the same load. The specs on list pages say so.
+
+**The overview per WCAG criterion** is `.development-guide/spfx/tilgjengelighet-wcag.md`, linked
+from the release notes. It is preliminary until the hand rounds are done.
+
+**The test-channel run for part 2 (39389973572, commit 140ed2bd2):**
+
+- **Green:** the build, the upgrade and the integration tests (50 of 50).
+- **The e2e: 2 failed and 1 flaky.**
+  - **The column menu test failed in the test, not the app.** It read the overview's headers
+    while the placeholder rows were up, and a header's icon glyph before its text made «Legg til
+    kolonne» look like a column. It now waits for the count, as `columnHeaders` does, and matches
+    the end of the text.
+  - **The catalog's first try never opened.** The React fault on list pages struck in the same
+    load.
+  - **The catalog's retry opened it from «Mer».** It was a dialog in the accessibility tree, so
+    the aria-hidden fix holds. The click on the chosen first card met its details sliding over it;
+    the test now scans the catalog with that package's details instead.
+  - **The risk actions were flaky with the same React fault.**

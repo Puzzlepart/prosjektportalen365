@@ -9,7 +9,7 @@ import { getContrastingShade, getReadableTextColor, getTint } from '../../../uti
  * The timeline's grey rows (react-calendar-timeline's `rgba(0, 0, 0, 0.05)` over white): the
  * fainter of the two backgrounds its items lie on, so the one their edges are measured against.
  */
-const TIMELINE_ROW_BACKGROUND = '#f2f2f2'
+export const TIMELINE_ROW_BACKGROUND = '#f2f2f2'
 
 /**
  * Timeline item renderer hook. Each item is a button that opens its details, by click or by Enter

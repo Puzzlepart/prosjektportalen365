@@ -99,6 +99,8 @@ define([], function () {
     CancelButtonLabel: 'Avbryt',
     ColumnCategoryDescription: 'Angi en kategori for kolonnen. Kolonnen vil dukke opp i alle visninger som bruker denne kategorien. Om du ønsker å endre kategorien for alle webdeler og visninger, kan du endre kategorien i listen Prosjektkolonner.',
     ColumnCategoryLabel: 'Kategori for kolonnen',
+    ColumnFieldLockedText: 'Kan ikke endres for en kolonne som finnes.',
+    ColumnFormSaveDisabledReason: 'Fyll ut internt feltnavn, søkeegenskap og visningsnavn, med minst to tegn i hvert, for å lagre',
     ColumnRenderDataTypePropertiesHeaderText: 'Egenskaper for visningsmodus',
     ColumnRenderDescription: 'Velg hvordan kolonnen skal vises. Om det er tekstfelt som skal vises over flere linjer, velg Notat.',
     ColumnRenderLabel: 'Visningsmodus',
@@ -129,6 +131,7 @@ define([], function () {
     DataSourceLabel: 'Datakilde',
     DataSourceLevelDescription: 'Angi nivået for datakilden. Dette brukes for å filtrere datakilder i webdelen basert på hvor man henter data fra. Dette kan endres i ettertid i \'Datakilder\'-listen om du ønsker å gjøre spørringen/visningen tilgjengelig andre steder.',
     DataSourceLevelLabel: 'Nivå for datakilde',
+    ReadOnlyFromDataSourceText: 'Hentes fra webdelens datakilde og kan ikke endres her.',
     DataSourceNotFound: 'Finner ingen datakilde med navn **{0}**.',
     DefaultDataSourceViewLabel: 'Standardvisning (datakilde)',
     DefaultRenderModeDescription: 'Her kan du velge hvilken visning som skal være standard.',
@@ -240,7 +243,8 @@ define([], function () {
     ProjectCard: {
       WebPartDescription: 'Prosjektkort',
       ProjectSiteIdFieldLabel: 'Område ID',
-      ProjectSiteIdFieldDescription: 'ID for SharePoint-området (Prosjektet)'
+      ProjectSiteIdFieldDescription: 'ID for SharePoint-området (Prosjektet)',
+      LoadErrorText: 'Prosjektet kunne ikke hentes. Prøv å laste inn siden på nytt.'
     },
     ProjectsAccessHeaderText: 'Tilgang til',
     ProjectsAccessSearchBoxPlaceholderText: 'Søk i {0} prosjekter du har tilgang til...',
@@ -303,6 +307,8 @@ define([], function () {
     StatusReportsCountLabel: 'Antall rapporter å vise',
     TileViewGroupName: 'Flisevisning',
     TitleLabel: 'Tittel',
+    TitleColumnDeleteDisabledReason: 'Tittelkolonnen kan ikke slettes',
+    ViewFormSaveDisabledReason: 'Fyll ut tittel, med minst to tegn, og søkespørring, med minst 51 tegn, for å lagre',
     TitleDescription: 'Tittel for visningen.',
     ToggleColumnFormPanelLabel: 'Legg til kolonne',
     UseChangesButtonText: 'Bruk',

@@ -28,7 +28,14 @@ export const ColumnFormPanelFooter: FC<IColumnFormPanelFooterProps> = ({
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme} className={styles.root}>
-        <Button onClick={onSave} disabled={isSaveDisabled} appearance='primary'>
+        <Button
+          onClick={onSave}
+          // Focusable while it cannot save, with what it needs: a disabled button is skipped by
+          // the keyboard (WCAG 2.1.1, 3.3.2).
+          disabledFocusable={isSaveDisabled}
+          title={isSaveDisabled ? strings.ColumnFormSaveDisabledReason : undefined}
+          appearance='primary'
+        >
           {strings.SaveButtonLabel}
         </Button>
         <Button

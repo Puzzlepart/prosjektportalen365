@@ -73,10 +73,21 @@ async function scanAndClose(page: Page, { component, surface, exclude, focusBack
  * @param list The list's web part
  */
 async function columnHeaderButton(list: Locator) {
+  // Once the list has its data: until then the portfolio overview draws placeholder rows from
+  // the columns it kept in local storage, and reads "Viser 0 av 0" (as `columnHeaders` waits).
+  const counter = list.locator('[class*="resultsCount"]').first()
+  if ((await counter.count()) > 0) {
+    await expect(counter).toHaveText(/viser [1-9]\d* av \d+|showing [1-9]\d* of \d+/i, MOUNT)
+  } else {
+    await expect(list.locator('.fui-TableBody .fui-TableCell').first()).toBeVisible(MOUNT)
+  }
+  await expect(list.getByRole('columnheader', { name: /^tittel$|^title$/i })).toBeVisible(MOUNT)
   const headers = list.getByRole('columnheader')
   const texts = await headers.allInnerTexts()
+  // By the end of its text: a header's icon is a glyph of the icon font before it, which trim()
+  // leaves, so "Legg til kolonne" was taken for a column.
   const index = texts.findIndex(
-    (text) => /\S/.test(text) && !/^\s*(tittel|title|legg til kolonne|add column)\s*$/i.test(text)
+    (text) => /\p{L}/u.test(text) && !/(tittel|title|legg til kolonne|add column)\s*$/i.test(text)
   )
   expect(index, `a column besides the title among: ${texts.join(' | ')}`).toBeGreaterThan(-1)
   return headers.nth(index).getByRole('button').first()
@@ -382,19 +393,15 @@ test.describe('the template package catalog', () => {
     })
     await expect(catalog).toBeVisible({ timeout: 30_000 })
     // Each package is a card, a button named by the package, in a cell of the catalog's list.
-    const firstPackage = catalog.getByRole('listitem').getByRole('button').first()
-    await expect(firstPackage).toBeVisible(MOUNT)
-    await waitForContent(page, [SURFACES.drawer])
-    await scanAccessibility(page, {
-      component: 'TemplatePackageCatalog',
-      include: [SURFACES.drawer]
-    })
-    await firstPackage.click()
+    await expect(catalog.getByRole('listitem').getByRole('button').first()).toBeVisible(MOUNT)
+    // The first package is chosen as the catalog opens, its details beside the list (its name a
+    // heading): one scan covers both. A click on that card met its details sliding over it.
     await expect(catalog.getByRole('heading', { level: 3 }).first()).toBeVisible({
       timeout: 30_000
     })
+    await waitForContent(page, [SURFACES.drawer])
     await scanAccessibility(page, {
-      component: 'TemplatePackageDetails',
+      component: 'TemplatePackageCatalog',
       include: [SURFACES.drawer]
     })
     await page.keyboard.press('Escape')

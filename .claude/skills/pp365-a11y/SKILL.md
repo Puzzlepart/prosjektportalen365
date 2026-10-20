@@ -208,6 +208,11 @@ checked by hand and with which reader and browser: axe finds only part of what W
   `aria-hidden="true"` from SharePoint and keeps it, so a dialog is invisible to screen readers
   (the template package catalog, 2026-10-19). Render a command set's surface after
   `await whenHostMenuHasClosed()` (shared-library), and take the opener for the focus after it.
+- On SharePoint's list pages, SPFx 1.24 RC sometimes resolves the `react` an extension imports to
+  the list view host's copy (`listview-host-assembly`) while `react-dom-18-bundle` renders it:
+  the first hook throws "Cannot read properties of null (reading 'useContext')" and nothing
+  shows (about one load in twenty; the template dialog's e2e flake). Not ours: the bundles hold
+  no React of their own. Reported as SharePoint/sp-dev-docs#11068; check again on SPFx 1.24 GA.
 - Spreading a data object onto a Fluent component passes its every key as a prop: the project
   list's people carried `role` (the field's internal name) from the data adapter, and every
   `Avatar` got `role="GtProjectManager"`, axe's critical `aria-roles` 36 times; the idea
@@ -271,6 +276,12 @@ checked by hand and with which reader and browser: axe finds only part of what W
 - A button that cannot be used yet but explains why in its `title` is `disabledFocusable`, not
   `disabled` (`Toolbar` does so for every disabled item since #1788): a disabled button is skipped by the keyboard and its reason never reached. It also
   keeps the focus while an action it started runs (the change-phase dialog's statuses).
+- A field that cannot change is `readOnly`, not `disabled`, and its hint says why: a read-only input
+  is reached by the keyboard and its value read and copied (the column forms, 2026-10-20). A
+  Fluent `Tab` cannot be `disabledFocusable`: keep the tab and let its panel say why it is empty
+  (`ProjectSetupDialog`). A save that waits for required fields names what it waits for in its
+  description, and the fields it waits for are marked required (the view forms' search query
+  was not).
 - A status message in Jest: the announcer writes each message as `innerText` on a new span, which
   jsdom keeps as a property, not as text, and clears the region through `innerText` too, which
   jsdom ignores: read the last span's `innerText` in the live region, or a second message reads
