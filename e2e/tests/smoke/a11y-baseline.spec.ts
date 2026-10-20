@@ -1,6 +1,6 @@
-import { baseURL } from '../../playwright.config'
 import { scanAccessibility, settleWebParts, waitForContent } from '../fixtures/a11y'
-import { channelWebPartsOnPage, configuredUrl, test } from '../fixtures/pp365'
+import { A11Y_PAGES } from '../fixtures/pages'
+import { channelWebPartsOnPage, test } from '../fixtures/pp365'
 
 /**
  * Accessibility scans of the pages (#1788, docs/plans/universal-design-wcag.md): axe over every
@@ -10,93 +10,8 @@ import { channelWebPartsOnPage, configuredUrl, test } from '../fixtures/pp365'
  * `fixtures/a11y.ts`). The dialogs, drawers and popovers are scanned by the specs that open them.
  * A page the site does not have is skipped with the pages it does have.
  */
-const hub = baseURL.replace(/\/+$/, '')
-const project = configuredUrl(process.env.E2E_PROJECT_URL)
-const program = configuredUrl(process.env.E2E_PROGRAM_URL)
-
-const PAGES: Array<{ name: string; site: () => string | undefined; pages: string[] }> = [
-  { name: 'hub home', site: () => hub, pages: ['Home.aspx', 'Hjem.aspx'] },
-  {
-    name: 'portfolio overview',
-    site: () => hub,
-    pages: ['Porteføljeoversikt.aspx', 'PortfolioOverview.aspx']
-  },
-  {
-    name: 'aggregated overview',
-    site: () => hub,
-    pages: ['Leveranseoversikt.aspx', 'DeliveryOverview.aspx', 'Usikkerhetsoversikt.aspx']
-  },
-  {
-    name: 'benefit overview',
-    site: () => hub,
-    pages: ['Nytteoversikt.aspx', 'Gevinstoversikt.aspx', 'BenefitOverview.aspx']
-  },
-  {
-    name: 'portfolio timeline',
-    site: () => hub,
-    pages: ['Prosjekttidslinje.aspx', 'ProjectTimeline.aspx', 'Tidslinje.aspx', 'Timeline.aspx']
-  },
-  {
-    name: 'resource allocation',
-    site: () => hub,
-    pages: ['Ressursallokering.aspx', 'ResourceAllocation.aspx']
-  },
-  {
-    name: 'idea module',
-    site: () => hub,
-    pages: ['Idémodul.aspx', 'Idemodul.aspx', 'Ideer.aspx', 'IdeaModule.aspx']
-  },
-  {
-    name: 'project home',
-    site: () => project,
-    pages: ['ProjectHome.aspx', 'Hjem.aspx', 'Home.aspx']
-  },
-  {
-    name: 'project status',
-    site: () => project,
-    pages: ['Prosjektstatus.aspx', 'ProjectStatus.aspx', 'Status.aspx']
-  },
-  {
-    name: 'project timeline',
-    site: () => project,
-    pages: ['Prosjekttidslinje.aspx', 'ProjectTimeline.aspx', 'Tidslinje.aspx']
-  },
-  // Not provisioned by the templates: `npm run add-matrix-page` in integration/ adds it.
-  { name: 'project matrices', site: () => project, pages: ['Usikkerhet.aspx'] },
-  {
-    name: 'program home',
-    site: () => program,
-    pages: ['ProgramHome.aspx', 'Hjem.aspx', 'Home.aspx']
-  },
-  {
-    name: 'program overview',
-    site: () => program,
-    pages: ['ProgramOversikt.aspx', 'ProgramOverview.aspx']
-  },
-  {
-    name: 'program aggregation',
-    site: () => program,
-    pages: ['ProgramLeveranser.aspx', 'ProgramUsikkerheter.aspx', 'ProgramDeliveries.aspx']
-  },
-  {
-    name: 'program timeline',
-    site: () => program,
-    pages: ['ProgramTidslinje.aspx', 'ProgramTimeline.aspx', 'Tidslinje.aspx']
-  },
-  {
-    name: 'program administration',
-    site: () => program,
-    pages: [
-      'Admin.aspx',
-      'ProgramAdministrasjon.aspx',
-      'Administrasjon.aspx',
-      'ProgramAdministration.aspx'
-    ]
-  }
-]
-
 test.describe('accessibility of the pages', () => {
-  for (const entry of PAGES) {
+  for (const entry of A11Y_PAGES) {
     test(`the ${entry.name}'s web parts`, async ({ page, openPage, resolvePage }) => {
       test.setTimeout(180_000)
       const site = entry.site()

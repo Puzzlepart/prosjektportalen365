@@ -12,6 +12,7 @@ jest.mock('./useProjectNewsDataFetch', () => ({
 }))
 jest.mock('./NewsDialog', () => ({ NewsDialog: () => null }))
 
+import { useRestoreFocusTarget } from '@fluentui/react-components'
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { axeComponent } from 'pp365-jest-config/lib/axe'
@@ -99,6 +100,22 @@ describe('ProjectNews', () => {
   it('shows the spinner while loading', () => {
     renderNews(undefined)
     expect(screen.getByText(format(strings.LoadingText, 'Prosjektnyheter'))).toBeInTheDocument()
+  })
+
+  it('marks the create button as where the focus goes back to when the dialog closes (WCAG 2.4.3)', async () => {
+    // The dialog opens from state, so Fluent has no trigger of its own to give the focus back to,
+    // and it was left on the page's start.
+    let target: ReturnType<typeof useRestoreFocusTarget>
+    const Probe: React.FC = () => {
+      target = useRestoreFocusTarget()
+      return null
+    }
+    render(<Probe />)
+    renderNews({ data: { news: [] } })
+    const [attribute, value] = Object.entries(target)[0]
+    expect(
+      await screen.findByRole('button', { name: strings.CreateNewsLinkLabel })
+    ).toHaveAttribute(attribute, value)
   })
 
   it('shows the error when the pages cannot be fetched', async () => {

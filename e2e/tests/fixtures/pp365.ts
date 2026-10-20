@@ -112,9 +112,10 @@ export const test = base.extend<Pp365Fixtures>({
       errors.push(`pageerror: ${error.message} ${error.stack ?? ''}`.trim())
     )
     await use({ errors })
-    // Every browser error is attached to the report as evidence (the deployed build throws an
-    // unhandled rejection with an undefined reason on app pages, for example); only the patterns
-    // that mean a broken bundle fail the test.
+    // Every browser error is attached to the report as evidence; only the patterns that mean a
+    // broken bundle fail the test. The "pageerror: undefined" on most pages is SharePoint's own:
+    // a promise its page assembly (sp-pages-assembly) rejects with no reason as the page loads,
+    // traced with the debugger on 2026-10-19, as are its list bundle's rejections on project pages.
     if (errors.length > 0) {
       await base
         .info()

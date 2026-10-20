@@ -1,8 +1,8 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
 // Babel, so mocks are not hoisted. A Fluent v9 menu costs seconds to open and to tear down under
 // jsdom (see the testing guide), so the toolbar's menus are a stand-in that keeps Fluent's
-// contract: the trigger toggles through `onOpenChange`, and the popover shows while open. The menu
-// list and its items are Fluent's own.
+// contract: the trigger puts the toggle and the menu button's state on its child, as Fluent's
+// does, and the popover shows while open. The menu list and its items are Fluent's own.
 jest.mock('@fluentui/react-components', () => {
   const actual = jest.requireActual('@fluentui/react-components')
   const React = jest.requireActual('react')
@@ -13,8 +13,14 @@ jest.mock('@fluentui/react-components', () => {
       { value: { open, toggle: (event: any) => onOpenChange?.(event, { open: !open }) } },
       children
     )
-  const MenuTrigger = ({ children }: any) =>
-    React.createElement('span', { onClick: React.useContext(MenuContext).toggle }, children)
+  const MenuTrigger = ({ children }: any) => {
+    const { open, toggle } = React.useContext(MenuContext)
+    return React.cloneElement(React.Children.only(children), {
+      onClick: toggle,
+      'aria-haspopup': 'menu',
+      'aria-expanded': open
+    })
+  }
   const MenuPopover = ({ children }: any) =>
     React.useContext(MenuContext).open ? React.createElement('div', null, children) : null
   return { __esModule: true, ...actual, Menu, MenuTrigger, MenuPopover }
@@ -126,6 +132,34 @@ describe('Toolbar', () => {
     )
     const [attribute, value] = Object.entries(target)[0]
     expect(screen.getByRole('button', { name: 'Filtrer' })).toHaveAttribute(attribute, value)
+  })
+
+  it("marks a menu's button as where the focus goes back to when what its menu opened closes (WCAG 2.4.3)", () => {
+    // A panel opened from a menu item, such as the overview's view form, opens from state after
+    // the menu has closed; without the mark the focus was left on the page's start.
+    let target: ReturnType<typeof useRestoreFocusTarget>
+    const Probe: React.FC = () => {
+      target = useRestoreFocusTarget()
+      return null
+    }
+    render(
+      <>
+        <Probe />
+        <Toolbar items={[new ListMenuItem('Visning').setItems([new ListMenuItem('Rediger')])]} />
+      </>
+    )
+    const [attribute, value] = Object.entries(target)[0]
+    expect(screen.getByRole('button', { name: 'Visning' })).toHaveAttribute(attribute, value)
+  })
+
+  it("says on a menu's button that it opens a menu, and whether it is open (WCAG 4.1.2)", () => {
+    // The trigger puts these on its child, which was the box around the button.
+    render(<Toolbar items={[new ListMenuItem('Visning').setItems([new ListMenuItem('Alle')])]} />)
+    const button = screen.getByRole('button', { name: 'Visning' })
+    expect(button).toHaveAttribute('aria-haspopup', 'menu')
+    expect(button).toHaveAttribute('aria-expanded', 'false')
+    fireEvent.click(button)
+    expect(button).toHaveAttribute('aria-expanded', 'true')
   })
 
   it('keeps a disabled item from running, and lets the keyboard reach why (WCAG 2.1.1)', () => {

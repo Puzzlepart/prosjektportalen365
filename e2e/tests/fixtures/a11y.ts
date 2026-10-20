@@ -8,9 +8,9 @@ import { expect, WEB_PART } from './pp365'
  * `openPage` waits for the first only: on the matrix page the first baseline (2026-10-14) found
  * the risk matrix and not yet the opportunity matrix. The page is not scrolled, so a web part
  * SharePoint mounts only when it comes into view (the project home's news) is scanned by its
- * component's own test instead: scrolling the program home brought its document list into view,
- * whose list command set then failed to load its strings (2026-10-14), a fault of its own that
- * the console guard would report on every run.
+ * component's own test instead (`a11y-surfaces.spec.ts` scrolls to the project's news). Scrolling
+ * the program home brought its document list into view, whose list command set then failed to
+ * load its strings (2026-10-14); it loads them, and opens, since (checked 2026-10-19).
  *
  * @param page The page
  * @param timeout How long to wait, in milliseconds
@@ -53,12 +53,40 @@ export const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'
  * `channels/<channel>.json`, or a surface's name such as "RiskActionPanel"). A component joins in
  * the commit that finishes its audit, with its row in the conformance overview.
  */
-export const A11Y_BLOCKING: ReadonlySet<string> = new Set<string>([])
+export const A11Y_BLOCKING: ReadonlySet<string> = new Set<string>([
+  // Clean in the test channel's run of 2026-10-19 (39248212569), blocking from then on so a fixed
+  // component cannot slip back while its hand round is still to come (decided 2026-10-19).
+  'DocumentTemplateDialog-select',
+  'DocumentTemplateDialog-target',
+  'IdeaModuleWebPart',
+  'LatestProjectsWebPart',
+  'MigrateRiskActionsDialog',
+  'NewRiskActionPanel',
+  'OpportunityMatrixWebPart',
+  'PortfolioAggregationWebPart',
+  'PortfolioOverviewWebPart',
+  'PortfolioTimelineWebPart',
+  'ProgramAdministrationWebpart',
+  'ProgramAggregationWebPart',
+  'ProgramProjectOverviewWebPart',
+  'ProgramTimelineWebPart',
+  'ProjectInformationWebPart',
+  'ProjectListWebPart',
+  'ProjectNewsWebPart',
+  'ProjectPhasesWebPart',
+  'ProjectStatusWebPart',
+  'ProjectTimelineWebPart',
+  'ResourceAllocationWebPart',
+  'RiskActionPlanner',
+  'RiskActionPopover',
+  'RiskMatrixWebPart'
+])
 
-/** Fluent UI v9's surfaces that render in a portal, outside the web part: where our dialogs, drawers and popovers are. */
+/** Fluent UI v9's surfaces that render in a portal, outside the web part: where our dialogs, drawers, menus and popovers are. */
 export const SURFACES = {
   dialog: '.fui-DialogSurface',
   drawer: '.fui-OverlayDrawer',
+  menu: '.fui-MenuPopover',
   popover: '.fui-PopoverSurface'
 } as const
 

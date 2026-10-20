@@ -8,7 +8,8 @@ import {
   MenuPopover,
   MenuProps,
   MenuTrigger,
-  ToolbarButton
+  ToolbarButton,
+  useRestoreFocusTarget
 } from '@fluentui/react-components'
 import React, { CSSProperties, useState } from 'react'
 import { createIcon } from './createIcon'
@@ -16,8 +17,14 @@ import { createStyle } from './createStyle'
 import { ListMenuItem } from './types'
 
 export function useToolbarMenuRender() {
+  // Where the focus goes back to when a panel or dialog a menu item opened closes: the panel opens
+  // from state after the menu has closed, so Fluent has no trigger to return it to (WCAG 2.4.3).
+  const restoreFocusTarget = useRestoreFocusTarget()
+
   /**
-   * Renders a toolbar button based on the provided list menu item.
+   * Renders a menu's toolbar button based on the provided list menu item. It is the menu
+   * trigger's child itself, so the trigger's `aria-haspopup` and `aria-expanded` are the
+   * button's (WCAG 4.1.2).
    *
    * @param item The list menu item to render the toolbar button for.
    * @param buttonStyle The style to apply to the toolbar button.
@@ -33,20 +40,19 @@ export function useToolbarMenuRender() {
     labelStyle: CSSProperties = {}
   ) {
     return (
-      <div hidden={item.hidden}>
-        <ToolbarButton
-          icon={createIcon(item)}
-          title={item.description ?? item.text}
-          aria-label={item.ariaLabel ?? (item.text ? undefined : item.description)}
-          style={createStyle(item, buttonStyle)}
-          onClick={item.onClick}
-          // Focusable while disabled: the toolbar's arrow keys reach it, and a screen reader reads
-          // the description that says why it cannot be used (WCAG 2.1.1).
-          disabledFocusable={item.disabled}
-        >
-          {item.text && <span style={labelStyle}>{item.text}</span>}
-        </ToolbarButton>
-      </div>
+      <ToolbarButton
+        {...restoreFocusTarget}
+        icon={createIcon(item)}
+        title={item.description ?? item.text}
+        aria-label={item.ariaLabel ?? (item.text ? undefined : item.description)}
+        style={createStyle(item, buttonStyle)}
+        onClick={item.onClick}
+        // Focusable while disabled: the toolbar's arrow keys reach it, and a screen reader reads
+        // the description that says why it cannot be used (WCAG 2.1.1).
+        disabledFocusable={item.disabled}
+      >
+        {item.text && <span style={labelStyle}>{item.text}</span>}
+      </ToolbarButton>
     )
   }
 
@@ -145,34 +151,37 @@ function MenuComponent({
     setOpen(data.open)
   }
 
+  // The box that hides the item is outside the trigger, whose child must be the button.
   return (
-    <Menu open={open} onOpenChange={onOpenChange} closeOnScroll positioning={{ autoSize: true }}>
-      <MenuTrigger disableButtonEnhancement>
-        {renderMenuButton(
-          item,
-          {
-            justifyContent: 'left',
-            fontWeight: 'var(--fontWeightRegular)',
-            padding: '0 6px',
-            minHeight: 32
-          },
-          { textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'inherit' }
-        )}
-      </MenuTrigger>
-      <MenuPopover>
-        <MenuList
-          hasCheckmarks={hasCheckmarks}
-          hasIcons={hasIcons}
-          checkedValues={item.checkedValues}
-        >
-          {item.items.map((menuItem, index) => (
-            // A ListMenuItem has no key of its own; the menu's order is stable, so the index is one.
-            <React.Fragment key={index}>
-              {renderMenuItem(menuItem, () => setOpen(false))}
-            </React.Fragment>
-          ))}
-        </MenuList>
-      </MenuPopover>
-    </Menu>
+    <div hidden={item.hidden}>
+      <Menu open={open} onOpenChange={onOpenChange} closeOnScroll positioning={{ autoSize: true }}>
+        <MenuTrigger disableButtonEnhancement>
+          {renderMenuButton(
+            item,
+            {
+              justifyContent: 'left',
+              fontWeight: 'var(--fontWeightRegular)',
+              padding: '0 6px',
+              minHeight: 32
+            },
+            { textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'inherit' }
+          )}
+        </MenuTrigger>
+        <MenuPopover>
+          <MenuList
+            hasCheckmarks={hasCheckmarks}
+            hasIcons={hasIcons}
+            checkedValues={item.checkedValues}
+          >
+            {item.items.map((menuItem, index) => (
+              // A ListMenuItem has no key of its own; the menu's order is stable, so the index is one.
+              <React.Fragment key={index}>
+                {renderMenuItem(menuItem, () => setOpen(false))}
+              </React.Fragment>
+            ))}
+          </MenuList>
+        </MenuPopover>
+      </Menu>
+    </div>
   )
 }

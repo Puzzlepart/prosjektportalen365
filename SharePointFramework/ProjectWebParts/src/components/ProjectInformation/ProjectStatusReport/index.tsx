@@ -14,7 +14,8 @@ export const ProjectStatusReport: FC = () => {
           key={projectStatusContext.state.selectedReport.id}
           value={projectStatusContext}
         >
-          <Header />
+          {/* A section under the project information's own heading (WCAG 1.3.1). */}
+          <Header headingLevel={3} />
           <SummarySection
             transparent
             noPadding

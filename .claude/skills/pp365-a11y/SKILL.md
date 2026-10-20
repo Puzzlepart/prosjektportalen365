@@ -152,15 +152,20 @@ checked by hand and with which reader and browser: axe finds only part of what W
 - **Browser**: `scanAccessibility(page, { component, include, exclude })` from
   `e2e/tests/fixtures/a11y.ts`. Web parts come from `channelWebPartsOnPage(page)` (the channel
   under test's ids, so another channel's package is never scanned as ours); dialogs, drawers and
-  popovers from `SURFACES`. The page scans are `e2e/tests/smoke/a11y-baseline.spec.ts`; a surface
-  is scanned in the spec that opens it.
+  popovers and menus from `SURFACES`. The pages are listed once, in `e2e/tests/fixtures/pages.ts`:
+  `a11y-baseline.spec.ts` scans them, and `a11y-visual.spec.ts` measures them for the visual step
+  (reflow at 320 px, text cut off by 1.4.12's spacing, pictures in forced colours; it reports and
+  fails nothing). A surface is scanned in the spec that opens it; `a11y-surfaces.spec.ts` opens
+  those no other spec does, closes each with Escape and expects the focus back on its opener. A
+  new panel, dialog or menu gets a step there.
 - **A fix in a shared wrapper changes the markup the consumers' tests read.** Run every solution's
   `npm test` before handing it over, not only the library's: the status header's test read
   `WebPartTitle`'s old `title`, and the release build failed on three pushes before it was seen
   (2026-10-15); a failing solution also stops those that depend on it from being tested.
 - **Report, then blocking** (the plan's D2): a scan attaches `axe-<component>.json` and an `a11y`
-  annotation and fails nothing, until the component's audit is done; then its name goes into
-  `A11Y_BLOCKING` in the same commit, and from there a serious or critical violation fails the run.
+  annotation and fails nothing until its name is in `A11Y_BLOCKING`; from there a serious or
+  critical violation fails the run. A component clean in a run goes in then, its hand round still
+  to come (decided 2026-10-19: the 24 clean in run 39248212569).
   The annotations are in the HTML report on the test report site (pp365-release, «After the run»).
 
 ## Recording
@@ -189,7 +194,20 @@ checked by hand and with which reader and browser: axe finds only part of what W
 - Fluent's `TagGroup` is a `toolbar` and its `InteractionTag` a button, whatever the tags do:
   labels are `Tag`s with `role='listitem'` in a `TagGroup role='list'` (`OverflowTagMenu`).
 - `MenuTrigger` puts `aria-haspopup` and `aria-expanded` on its child. Around an `InteractionTag`
-  that is the tag's `div`, not the button inside it: wrap the `InteractionTagPrimary`.
+  that is the tag's `div`, not the button inside it: wrap the `InteractionTagPrimary`. A box that
+  hides the item (`<div hidden>`) goes outside the trigger, or it takes them: the toolbar's menu
+  buttons did until 2026-10-19 (`useToolbarMenuRender`).
+- A panel or dialog a menu item opens, opens from state after the menu has closed, so the focus
+  goes back to the last restore target or to the page's start: mark the menu's button with
+  `useRestoreFocusTarget()` too (the toolbar's, the view form).
+- A menu that loads its items after it opens holds nothing to focus while it loads, and the focus
+  stays on its button, outside the menu: the arrow keys miss the items and Escape does not close
+  it. Move the focus to the first item once they are there (`usePromotedLinks`).
+- On SharePoint's list pages its own Tabster (in `splistwebpack.js`) runs beside ours, and a
+  command run from its «Mer» menu runs while that menu closes: what renders then gets
+  `aria-hidden="true"` from SharePoint and keeps it, so a dialog is invisible to screen readers
+  (the template package catalog, 2026-10-19). Render a command set's surface after
+  `await whenHostMenuHasClosed()` (shared-library), and take the opener for the focus after it.
 - Spreading a data object onto a Fluent component passes its every key as a prop: the project
   list's people carried `role` (the field's internal name) from the data adapter, and every
   `Avatar` got `role="GtProjectManager"`, axe's critical `aria-roles` 36 times; the idea

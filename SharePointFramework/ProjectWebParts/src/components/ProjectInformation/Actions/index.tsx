@@ -1,4 +1,10 @@
-import { Button, FluentProvider, IdPrefixProvider, useId } from '@fluentui/react-components'
+import {
+  Button,
+  FluentProvider,
+  IdPrefixProvider,
+  useId,
+  useRestoreFocusTarget
+} from '@fluentui/react-components'
 import React, { FC } from 'react'
 import { isEmpty } from 'underscore'
 import styles from './Actions.module.scss'
@@ -8,6 +14,9 @@ import { customLightTheme } from 'pp365-shared-library'
 export const Actions: FC = () => {
   const actions = useActions()
   const fluentProviderId = useId('fp-project-information-actions')
+  // Where the focus goes back to when a panel or dialog an action opened closes: they open from
+  // state, with no trigger of Fluent's to return it to (WCAG 2.4.3).
+  const restoreFocusTarget = useRestoreFocusTarget()
   if (isEmpty(actions)) return null
   return (
     <IdPrefixProvider value={fluentProviderId}>
@@ -30,7 +39,12 @@ export const Actions: FC = () => {
                 {label}
               </Button>
             ) : (
-              <Button key={idx} onClick={() => onClickOrHref()} {...buttonProps}>
+              <Button
+                key={idx}
+                {...restoreFocusTarget}
+                onClick={() => onClickOrHref()}
+                {...buttonProps}
+              >
                 {label}
               </Button>
             )

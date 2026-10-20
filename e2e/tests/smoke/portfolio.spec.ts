@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { baseURL } from '../../playwright.config'
-import { SURFACES } from '../fixtures/a11y'
+import { scanAccessibility, SURFACES } from '../fixtures/a11y'
 import { WEB_PART, expect, test, webPart } from '../fixtures/pp365'
 
 /**
@@ -219,6 +219,7 @@ test.describe('portfolio hub', () => {
     await expect(details).toBeVisible()
     // The details take the focus, link or none, so a screen reader hears them open.
     await expect(details, 'the details take the focus as they open').toBeFocused()
+    await scanAccessibility(page, { component: 'TimelineDetailsPopover', include: [SURFACES.popover] })
     await page.keyboard.press('Escape')
     await expect(details).toBeHidden()
     await expect(item).toBeFocused()

@@ -1,4 +1,5 @@
 import { baseURL } from '../../playwright.config'
+import { scanAccessibility, SURFACES } from '../fixtures/a11y'
 import { addButton, openAdministration } from '../fixtures/program-administration'
 import {
   expectListTypography,
@@ -117,6 +118,7 @@ test.describe('program administration column headers', () => {
     const dialog = page.getByRole('dialog').last()
     const header = dialog.locator('.fui-TableHeader').first()
     await expect(header).toBeVisible({ timeout: 90_000 })
+    await scanAccessibility(page, { component: 'AddProjectDialog', include: [SURFACES.dialog] })
     const search = dialog
       .getByRole('searchbox')
       .or(dialog.getByPlaceholder(/søk|search/i))

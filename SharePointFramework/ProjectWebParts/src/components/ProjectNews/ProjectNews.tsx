@@ -25,7 +25,7 @@ const PROJECT_NEWS_DEFAULT_PROPS: Partial<IProjectNewsProps> = {
 
 export const ProjectNews: FC<IProjectNewsProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, PROJECT_NEWS_DEFAULT_PROPS)
-  const { context, recentNews, fluentProviderId } = useProjectNews(props)
+  const { context, recentNews, fluentProviderId, restoreFocusTarget } = useProjectNews(props)
 
   return (
     <ProjectNewsContext.Provider value={context}>
@@ -34,6 +34,7 @@ export const ProjectNews: FC<IProjectNewsProps> = (incomingProps) => {
           <section className={styles.projectNews}>
             {props.title && <WebPartTitle title={props.title} description={props.description} />}
             <Button
+              {...restoreFocusTarget}
               className={styles.button}
               appearance='subtle'
               icon={getFluentIcon('News')}

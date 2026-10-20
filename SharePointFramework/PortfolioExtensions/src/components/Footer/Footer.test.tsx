@@ -265,6 +265,22 @@ describe('Footer', () => {
     expect(screen.queryByText('Kun for administratorer')).toBeNull()
   })
 
+  it('moves the focus into the useful links once they have loaded, so the arrow keys and Escape reach the menu (WCAG 2.1.1)', async () => {
+    // The menu opens on a spinner, with nothing in it to take the focus; the focus stayed on the
+    // button, outside the menu, and Escape left the menu open.
+    let resolveLinks: (links: any[]) => void
+    render(
+      <Footer
+        {...footerProps({
+          loadLinks: jest.fn(() => new Promise<any[]>((resolve) => (resolveLinks = resolve)))
+        })}
+      />
+    )
+    fireEvent.click(screen.getByText(strings.LinksListLabel))
+    await act(async () => resolveLinks([{ Url: 'https://alfa.example', Description: 'Alfa' }]))
+    await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Alfa' })).toHaveFocus())
+  })
+
   it('shows the installed version and, opened, the installation and the latest release', async () => {
     const loadGitHubReleases = jest.fn(() => Promise.resolve([release('v1.15.2')]))
     render(<Footer {...footerProps({ loadGitHubReleases })} />)

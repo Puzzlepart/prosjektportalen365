@@ -1128,3 +1128,74 @@ The release notes have a section on universal design, and their test counts are 
 date. Noted from the run: `pageerror: undefined` in most tests, also before this work, without a
 message or a stack; and the date test checks 0 of 1 date-only fields, as on 2026-10-14, since the
 e2e project's report has no value in it.
+
+### Close-out, part 2 — the surfaces and the visual step in the browser, and what they found (2026-10-19)
+
+Decided with the developer on 2026-10-19:
+
+- **Hand rounds.** VoiceOver with Safari in every round, and NVDA with Edge as a sample on the
+  timelines, the matrices, the hub's list and the phase selector. Contrast themes are checked
+  through Chrome's `forced-colors` emulation, with Windows as a sample.
+- **Blocking.** The 24 components clean in run 39248212569 go into `A11Y_BLOCKING` now, before
+  their hand rounds.
+- **The idea extensions** move to the issue's out of scope list.
+- **Status column.** Its colour-only icons (1.4.1) are recorded as a deviation and get an issue
+  of their own.
+- **Timeline markers.** «I dag» is to get a label, and the time-lapse marker a shade that reaches
+  3:1. Not done yet.
+- **Trophy, idea phase bar and status icons.** The trophy's edge, the idea phase bar and the
+  status icons' 40 px stay as they are.
+- **What gets fixed in this pull request.** The disabled controls without a reason, the focus
+  after a library switch, the dynamic list's column header menu, the project card's loading and
+  error, the program's add error and the `useContext` flake.
+
+**What the browser now checks.** The checks ask less of the hand rounds:
+
+- `e2e/tests/smoke/a11y-surfaces.spec.ts` opens the panels, dialogs, menus and popovers no other
+  spec opens. It scans each, closes it with Escape and expects the focus back on its opener.
+- The snapshot, the status draft's panel, the program's add dialog and the hub timeline's details
+  are scanned in the flows that open them.
+- `a11y-visual.spec.ts` reports, and fails nothing. On the same pages as axe it measures:
+  - what reaches past a web part at 320 px, with tables, grids and the timelines exempt;
+  - what text spacing cuts off;
+  - and it attaches pictures in forced colours.
+- The pages are shared in `fixtures/pages.ts`, which adds the dynamic list. `DynList.aspx` is on
+  the test hub, so the overview's "no page" was wrong.
+
+**What it found**, each with tests that failed on the old code:
+
+- **The focus back** went to the page's start after:
+  - the view form opened from the toolbar's view menu, in the overview and the aggregation;
+  - the four panels and dialogs of the project information's actions;
+  - the news dialog.
+
+  The toolbar's menu button, the actions and the news button are now restore targets.
+- **The toolbar's menu button.** Its trigger's child was a box around the button, so
+  `aria-haspopup` and `aria-expanded` sat on a `div`. The box is outside the trigger now.
+- **«Nyttige lenker».** The menu opened on a spinner, with nothing in it to take the focus, so
+  Escape and the arrow keys missed it. `usePromotedLinks` moves the focus to the first link once
+  the links are loaded.
+- **The template package catalog**, opened from SharePoint's «Mer» menu, had
+  `aria-hidden="true"`.
+  - Traced to SharePoint's own Tabster in `splistwebpack.js`, which hid it while its menu closed
+    and never showed it again. Opened directly from the command bar, it is not hidden.
+  - `whenHostMenuHasClosed()` (shared-library) waits until the focus has left the menu, and a
+    moment more, before the catalog renders. The focus then goes back to «Mer», not to the gone
+    menu item.
+  - This is confirmed only by the browser test after deployment.
+- **The status report heading.** In the project information it was a second `h2`; it is an `h3`
+  now (`Header headingLevel`).
+
+**What it settled:**
+
+- `pageerror: undefined` is SharePoint's. Paused in the debugger, the rejection comes from its
+  page assembly (`sp-pages-assembly`, a `setInterval` under `onBeforePageLoad`). On project pages
+  its list bundle adds rejections of its own.
+- The date test checked 0 of 1 because of its query, not the data. `FieldValuesAsText` expanded
+  on list items holds only the fields the query also selects, with Created and Modified. With
+  the fields selected it checks 1 of 1.
+- «Hent dokumentmal» on the program's front page loads its strings and opens. The fault of
+  2026-10-14 does not reproduce.
+- The `useContext` flake is our footer on list pages: its hooks ran on the React copy of
+  SharePoint's list view host (`listview-host-assembly`), while SPFx's `react-dom-18-bundle`
+  rendered it. Not fixed yet.

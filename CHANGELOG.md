@@ -57,6 +57,8 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Universell utforming (#1788): i `Porteføljeoversikt` og `Oversikt over underområder` har statusrapportkolonnen et navn med hver seksjons status, og prosjekter uten rapport viser ingen tom knapp. Når kopi-dialogen i statusrapportens øyeblikksbilde eller bekreftelsen av «Slett» i kolonneskjemaet lukkes, går fokus tilbake til knappen som åpnet den
 - Universell utforming (#1788): tømmeknappen i alle søkefelt heter «Tøm søket», der Fluent kalte den «clear», på engelsk
 - Universell utforming (#1788): innholdet i prosjektinformasjonspanelet kan nås og rulles med tastaturet
+- Universell utforming (#1788): fokus går tilbake til knappen som åpnet et panel eller en dialog når den lukkes, også for handlingene i `Prosjektinformasjon` (alle egenskaper, rediger, gjør om til overordnet prosjekt og kjør oppsettveiviser), «Opprett nyhetsartikkel» i `Prosjektnyheter` og visningsskjemaet som åpnes fra visningsvelgeren i `Porteføljeoversikt` og `Aggregert oversikt`; før havnet fokus på toppen av siden. En knapp i verktøylinjen som åpner en meny, sier nå til skjermlesere at den åpner en meny og om menyen er åpen
+- Universell utforming (#1788): `Malpakkekatalog` åpnet fra «Mer» i kommandolinjen var skjult for skjermlesere, fordi SharePoint skjulte den mens menyen lukket seg; den åpnes nå når menyen er lukket, og fokus går tilbake til «Mer» når katalogen lukkes. «Nyttige lenker» i bunnteksten flytter fokus til den første lenken når lenkene er lastet, så piltastene og Escape virker i menyen. Statusrapporten i `Prosjektinformasjon` er en seksjonsoverskrift på nivå 3 under webdelens tittel
 
 ### Feilrettinger
 

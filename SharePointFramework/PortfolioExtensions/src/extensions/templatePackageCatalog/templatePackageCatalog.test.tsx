@@ -99,7 +99,7 @@ describe('TemplatePackageCatalogCommandSet', () => {
 
   it('opens the catalog on top of the page and removes it when it is dismissed', async () => {
     const { command } = await catalogCommand()
-    act(() => command.onExecute(execute(OPEN)))
+    await act(() => command.onExecute(execute(OPEN)))
     const catalog = screen.getByText('Katalog fra https://katalog.example/catalog.json')
     expect(catalog.parentElement.parentElement).toBe(document.body)
     act(() => {
@@ -108,8 +108,8 @@ describe('TemplatePackageCatalogCommandSet', () => {
     expect(screen.queryByText(/Katalog fra/)).toBeNull()
 
     // Opened again, it reuses its place on the page.
-    act(() => command.onExecute(execute(OPEN)))
-    act(() => command.onExecute(execute(OPEN)))
+    await act(() => command.onExecute(execute(OPEN)))
+    await act(() => command.onExecute(execute(OPEN)))
     expect(screen.getAllByText(/Katalog fra/)).toHaveLength(1)
     act(() => {
       fireEvent.click(screen.getByText(/Katalog fra/))
@@ -124,7 +124,7 @@ describe('TemplatePackageCatalogCommandSet', () => {
     const opener = document.createElement('button')
     document.body.appendChild(opener)
     opener.focus()
-    act(() => command.onExecute(execute(OPEN)))
+    await act(() => command.onExecute(execute(OPEN)))
     const catalog = screen.getByText(/Katalog fra/)
     catalog.focus()
     act(() => {
@@ -134,9 +134,37 @@ describe('TemplatePackageCatalogCommandSet', () => {
     opener.remove()
   })
 
+  it('opens from SharePoint\'s "Mer" menu once the menu has closed, and gives the focus back to the menu\'s button (WCAG 4.1.2, 2.4.3)', async () => {
+    const { command } = await catalogCommand()
+    // The command runs while SharePoint's menu has the focus. Rendered then, the catalog was
+    // hidden from screen readers by SharePoint's own focus manager as the menu closed, and the
+    // focus went back to the menu item, which was gone.
+    const more = document.createElement('button')
+    const menu = document.createElement('div')
+    menu.setAttribute('role', 'menu')
+    const item = document.createElement('button')
+    item.setAttribute('role', 'menuitem')
+    menu.appendChild(item)
+    document.body.append(more, menu)
+    item.focus()
+    const opening = command.onExecute(execute(OPEN))
+    await act(() => new Promise((resolve) => setTimeout(resolve, 100)))
+    expect(screen.queryByText(/Katalog fra/)).toBeNull()
+    menu.remove()
+    more.focus()
+    await act(() => opening)
+    const catalog = screen.getByText(/Katalog fra/)
+    catalog.focus()
+    act(() => {
+      fireEvent.click(catalog)
+    })
+    expect(more).toHaveFocus()
+    more.remove()
+  })
+
   it('ignores the commands of other command sets', async () => {
     const { command } = await catalogCommand()
-    act(() => command.onExecute(execute('ANNEN')))
+    await act(() => command.onExecute(execute('ANNEN')))
     expect(screen.queryByText(/Katalog fra/)).toBeNull()
   })
 

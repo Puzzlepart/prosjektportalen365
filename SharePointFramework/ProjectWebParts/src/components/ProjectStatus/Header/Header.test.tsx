@@ -26,4 +26,13 @@ describe('ProjectStatus Header', () => {
       screen.getByRole('button', { name: 'Informasjon om Prosjektstatus – Delprosjekt A' })
     ).toBeInTheDocument()
   })
+
+  it('heads a section at the level it is given, as in the project information (WCAG 1.3.1)', () => {
+    // There it sits under the project information's own <h2>, beside the parent projects' <h3>,
+    // and was a second <h2> (#1788).
+    render(<Header headingLevel={3} />)
+    expect(
+      screen.getByRole('heading', { level: 3, name: 'Prosjektstatus – Delprosjekt A' })
+    ).toBeInTheDocument()
+  })
 })

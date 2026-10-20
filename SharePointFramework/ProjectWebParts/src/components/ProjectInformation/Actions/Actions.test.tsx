@@ -1,3 +1,4 @@
+import { useRestoreFocusTarget } from '@fluentui/react-components'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import strings from 'ProjectWebPartsStrings'
@@ -43,6 +44,21 @@ const showAll = format(strings.ShowAllProjectInformationText, 'prosjektinformasj
 const edit = format(strings.EditProjectInformationText, 'prosjektinformasjon')
 
 describe('Actions', () => {
+  it('marks the buttons that open a panel or a dialog as where the focus goes back to when it closes (WCAG 2.4.3)', () => {
+    // The panels and dialogs open from state, after the click, so Fluent has no trigger of its
+    // own to give the focus back to, and it was left on the page's start.
+    let target: ReturnType<typeof useRestoreFocusTarget>
+    const Probe: React.FC = () => {
+      target = useRestoreFocusTarget()
+      return null
+    }
+    render(<Probe />)
+    renderActions()
+    const [attribute, value] = Object.entries(target)[0]
+    expect(screen.getByRole('button', { name: showAll })).toHaveAttribute(attribute, value)
+    expect(screen.getByRole('button', { name: edit })).toHaveAttribute(attribute, value)
+  })
+
   it('offers to show all and to edit to a user with the edit permission', async () => {
     const user = userEvent.setup()
     const dispatch = renderActions()
