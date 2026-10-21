@@ -28,7 +28,8 @@ rem PnP.PowerShell 3.x requires PowerShell 7.4 or newer
 if errorlevel 1 goto :old_pwsh
 
 echo Removing the "downloaded from the internet" mark from the release files...
-"%PWSH%" -NoProfile -NoLogo -NonInteractive -Command "Get-ChildItem -LiteralPath $env:PP365_ROOT -Recurse -File | Unblock-File"
+rem Access and unblock failures are non-terminating errors, so they are collected to set the exit code
+"%PWSH%" -NoProfile -NoLogo -NonInteractive -Command "Get-ChildItem -LiteralPath $env:PP365_ROOT -Recurse -File -ErrorVariable +UnblockErrors | Unblock-File -ErrorVariable +UnblockErrors; exit [int]($UnblockErrors.Count -gt 0)"
 if errorlevel 1 echo [WARNING] Could not unblock all files. If the installation fails to load scripts, right-click the zip, choose Properties, tick Unblock and extract it again.
 
 rem An execution policy set by Group Policy overrides -ExecutionPolicy Bypass. We explain it rather than work around it.

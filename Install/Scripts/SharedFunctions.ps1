@@ -239,7 +239,9 @@ function Get-PortfolioUrlError {
     if (-not [System.Uri]::TryCreate($Url.Trim().TrimEnd('/'), [System.UriKind]::Absolute, [ref]$Uri) -or $Uri.Scheme -ne "https") {
         return "Invalid URL '$Url'. $Expected"
     }
-    if ($Uri.Segments.Count -lt 3) {
+    # The rest of the installation assumes <tenant>.sharepoint.com (the admin site URL is derived from it),
+    # and a subsite path or query would give a different alias than the URL the site is created at.
+    if ($Uri.Segments.Count -ne 3 -or $Uri.Query -or $Uri.Fragment -or -not $Uri.Host.EndsWith(".sharepoint.com", [System.StringComparison]::OrdinalIgnoreCase)) {
         return "Invalid URL '$Url'. $Expected"
     }
     $ManagedPath = $Uri.Segments[1]

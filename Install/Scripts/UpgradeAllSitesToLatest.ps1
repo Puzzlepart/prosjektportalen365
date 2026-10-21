@@ -206,8 +206,9 @@ catch {
     Write-Host "[ERROR] An error occurred during the upgrade process. Check the log file for more information." -ForegroundColor Red
     Write-Host $_.Exception.Message -ForegroundColor Red
     Write-Host $_.Exception.StackTrace -ForegroundColor Red
-    # A failed upgrade must fail the CI job; it ended green before.
-    if ($CI_MODE) { $global:__UpgradeFailed = $true }
+    # A failed upgrade must end with exit code 1, so the CI job and Start-Install.cmd see it, and
+    # must not be logged as an upgrade in the installation log.
+    $global:__UpgradeFailed = $true
 }
 finally {
     Stop-Transcript

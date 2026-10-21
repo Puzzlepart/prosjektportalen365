@@ -74,9 +74,10 @@ $global:PP365Issues = [System.Collections.Generic.List[string]]::new()
 $global:PP365StepIndex = 0
 $RunTimestamp = [datetime]::Now.ToString("yy-MM-ddTHH-mm-ss")
 
-# The transcript header contains the full command line, which in CI includes the certificate.
+# The transcript header contains the full command line, which can include the certificate,
+# also when it is passed without -CI, and the transcript is attached to the installation log.
 $TranscriptPath = $null
-if (-not $CI.IsPresent) {
+if (-not $CI.IsPresent -and [string]::IsNullOrEmpty($CertificateBase64Encoded)) {
     $TranscriptPath = Start-InstallTranscript -Path "$PSScriptRoot/Install_Transcript_$RunTimestamp.txt"
 }
 trap {
