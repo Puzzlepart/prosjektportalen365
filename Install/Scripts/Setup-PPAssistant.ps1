@@ -77,7 +77,9 @@
   Opt-in: opprett Microsoft Foundry-ressurs og deployments med anbefalte modeller. Kan ikke kombineres
   med -ChatApi*/-ChatDeployment/-Images*. Krever Contributor på ressursgruppen (eller abonnementet).
 .PARAMETER FoundryName
-  Navn på Foundry-ressursen (også subdomenet i endepunktet, globalt unikt). Standard: pp365-<tenantnavn>-ai.
+  Navn på Foundry-ressursen. Blir subdomenet i endepunktet og er globalt unikt i hele Azure, på tvers
+  av kunder - bruk derfor ikke et fast navn for alle. Standard: pp365-<tenantnavn>-ai, med hele
+  tenantnavnet (<tenantnavn>.onmicrosoft.com er selv globalt unikt).
   Finnes en ressurs med navnet i abonnementet fra før, gjenbrukes den.
 .PARAMETER FoundryLocation
   Region for Foundry-ressursen. Standard: swedencentral, som har både chat- og bildemodellene.
@@ -1043,6 +1045,9 @@ function New-PPFoundry {
       if ($_.Exception.Message -match 'RequestDisallowedByPolicy') {
         throw "En Azure Policy stopper opprettelsen av '$($konto.Navn)' ($($_.Exception.Message)). Typisk tillatte regioner (prøv en annen -FoundryLocation), eller krav om disableLocalAuth eller privat nettverk - assistenten trenger API-nøkkel og et offentlig endepunkt. Går ikke det, opprett ressursen manuelt etter virksomhetens regler og kjør skriptet med -ChatApiBase/-ChatApiKey/-ChatDeployment."
       }
+      if ($_.Exception.Message -match 'CustomDomainInUse|SubdomainNameInUse|subdomain.*(in use|taken|not available)|already (in use|taken|exists)') {
+        throw "Navnet '$($konto.Navn)' er allerede i bruk i Azure ($($_.Exception.Message)). Navnet blir subdomenet i endepunktet og er globalt unikt på tvers av alle kunder. Velg et annet med -FoundryName, eller utelat parameteret for standardnavnet pp365-<tenantnavn>-ai."
+      }
       if ($_.Exception.Message -match 'MissingSubscriptionRegistration') {
         throw "Ressursleverandøren Microsoft.CognitiveServices er ikke registrert på abonnementet. Det krever Contributor på abonnementet - be en som har det om å registrere den (Abonnement -> Resource providers), og kjør skriptet igjen."
       }
@@ -1316,7 +1321,10 @@ if ($fulltOppsett) {
 $tenant = Resolve-PPTenantId $HubUrl
 Add-PPCheck -Navn 'Tenant fra hub-URL' -Status 'OK' -Detalj "$($tenant.Name).onmicrosoft.com ($($tenant.Id))"
 
-# Tenantnavnet kuttet til 15 tegn, så standardnavnene holder seg innenfor Key Vaults 24 tegn.
+# Tenantnavnet kuttet til 15 tegn, så standardnavnet holder seg innenfor Key Vaults 24 tegn.
+# Kuttingen kan i sjeldne tilfeller gi to tenanter samme vault-navn - da stopper opprettelsen
+# med beskjed om -KeyVaultName. Regelen endres ikke: eksisterende oppsett kjøres på nytt uten
+# -KeyVaultName og må treffe samme vault.
 $tenantKort = ($tenant.Name -replace '[^A-Za-z0-9]', '')
 $tenantKort = $tenantKort.Substring(0, [Math]::Min($tenantKort.Length, 15))
 
@@ -1326,7 +1334,10 @@ if ($fulltOppsett) {
 }
 
 if ($ProvisionFoundry) {
-  $navn = if ($FoundryName) { $FoundryName } else { "pp365-$tenantKort-ai" }
+  # Foundry-navnet blir subdomenet i endepunktet og er globalt unikt. Hele tenantnavnet brukes
+  # (det er selv globalt unikt), ikke det kuttede vault-navnet - Foundry tillater 64 tegn.
+  $tenantFull = ($tenant.Name -replace '[^A-Za-z0-9]', '').ToLowerInvariant()
+  $navn = if ($FoundryName) { $FoundryName } else { "pp365-$($tenantFull.Substring(0, [Math]::Min($tenantFull.Length, 52)))-ai" }
   $bildeRegion = if ($FoundryImagesLocation) { $FoundryImagesLocation } else { $FoundryLocation }
   $script:FoundryKontoer = [ordered]@{}
   $script:FoundryKontoer[$navn] = [pscustomobject]@{ Navn = $navn; Location = $FoundryLocation; Finnes = $false; Id = $null; Prosjekt = "$navn-project"; ProsjektFinnes = $false; KanHaProsjekt = $true }
