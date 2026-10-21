@@ -603,11 +603,91 @@ function Register-PPResourceProviders {
   }
 }
 
+# Global Administrator er en rolle i Entra ID og gir ingen tilgang i Azure (RBAC). Fiksen er
+# den samme uansett hva som mangler, så den står ett sted.
+$script:AzureTilgangFiks = "Global Administrator gir ikke tilgang i Azure. Be om Owner på ressursgruppen '$ResourceGroupName' (eller på abonnementet). En Global Administrator kan gi seg selv tilgang under Entra ID -> Egenskaper -> «Tilgangsadministrasjon for Azure-ressurser», og så tildele seg Owner - slå det av igjen etterpå."
+
+# Treffer $Action noen av rettighetene den innloggede har? Samme regel som Azure: en rolle gir
+# handlingen når den står i actions og ikke i notActions (begge kan ha jokertegn).
+function Test-PPAction($Rettigheter, [string] $Action) {
+  foreach ($r in $Rettigheter) {
+    if (-not (@($r.actions) | Where-Object { $Action -like $_ })) { continue }
+    if (-not (@($r.notActions) | Where-Object { $Action -like $_ })) { return $true }
+  }
+  return $false
+}
+
+<#
+  Har den innloggede lov til å opprette det skriptet skal opprette? Leser de effektive
+  rettighetene på ressursgruppen (eller abonnementet, når gruppen skal opprettes) og sjekker
+  bare handlingene denne kjøringen trenger. Bare lesing. Kan rettighetene ikke leses, blir det
+  UKJENT - da får opprettelsen avgjøre.
+#>
+function Test-PPAzurePermissions([bool] $VaultFinnes) {
+  $sub = "/subscriptions/$($script:SubId)"
+  $rgId = "$sub/resourceGroups/$ResourceGroupName"
+  $foundryNytt = $ProvisionFoundry -and @($script:FoundryKontoer.Values | Where-Object { -not $_.Finnes }).Count -gt 0
+  $noeNytt = -not $VaultFinnes -or $foundryNytt
+  $rgFinnes = [bool](Get-AzResourceGroup -Name $ResourceGroupName -ErrorAction SilentlyContinue)
+
+  # Handling -> (hvor den sjekkes, hva den betyr for brukeren)
+  $trengs = [ordered]@{}
+  if ($noeNytt -and -not $rgFinnes) { $trengs['Microsoft.Resources/subscriptions/resourceGroups/write'] = @($sub, "opprette ressursgruppen $ResourceGroupName") }
+  if ($foundryNytt) { $trengs['Microsoft.CognitiveServices/accounts/write'] = @($rgId, 'opprette Foundry-ressurs') }
+  if ($ProvisionFoundry -and @($script:FoundryPlan | Where-Object { -not $_.Finnes }).Count -gt 0) {
+    $trengs['Microsoft.CognitiveServices/accounts/deployments/write'] = @($rgId, 'opprette modell-deployments')
+  }
+  if ($ProvisionFoundry) { $trengs['Microsoft.CognitiveServices/accounts/listKeys/action'] = @($rgId, 'lese nøkkelen til Foundry-ressursen') }
+  if (-not $VaultFinnes) {
+    $trengs['Microsoft.KeyVault/vaults/write'] = @($rgId, 'opprette Key Vault')
+    $trengs['Microsoft.Authorization/roleAssignments/write'] = @($rgId, 'tildele roller på vaulten (krever Owner eller User Access Administrator)')
+  }
+  if ($trengs.Count -eq 0) { return }
+
+  # Ressursgruppen finnes ikke ennå: da kan rettighetene bare leses på abonnementet, og det som
+  # gis der, arves av gruppen som opprettes.
+  $mangler = @()
+  $ukjent = $false
+  $lest = @{}
+  foreach ($action in $trengs.Keys) {
+    $scope = if ($rgFinnes) { $trengs[$action][0] } else { $sub }
+    if (-not $lest.ContainsKey($scope)) {
+      try { $lest[$scope] = @(Get-PPArmList "$scope/providers/Microsoft.Authorization/permissions?api-version=2022-04-01") }
+      catch { $lest[$scope] = $null }
+    }
+    if ($null -eq $lest[$scope]) { $ukjent = $true; continue }
+    if (-not (Test-PPAction $lest[$scope] $action)) { $mangler += $trengs[$action][1] }
+  }
+
+  $hvor = if ($rgFinnes) { "ressursgruppen $ResourceGroupName" } else { 'abonnementet' }
+  if ($mangler.Count -gt 0) {
+    Add-PPCheck -Navn 'Azure-tilgang' -Status 'MANGLER' -Detalj "du har ikke lov til å $($mangler -join ', ') på $hvor" -Fiks $script:AzureTilgangFiks
+  } elseif ($ukjent) {
+    Add-PPCheck -Navn 'Azure-tilgang' -Status 'UKJENT' -Detalj "kunne ikke lese rettighetene dine på $hvor - kontrolleres ved opprettelsen"
+  } else {
+    Add-PPCheck -Navn 'Azure-tilgang' -Status 'OK' -Detalj "kan opprette det som trengs på $hvor"
+  }
+}
+
+# Gjør en Azure-tilgangsfeil om til en forklaring. Andre feil slipper gjennom til kalleren.
+function Assert-PPAzureTilgang($Feil, [string] $Hva) {
+  if ("$($Feil.Exception.Message)" -match 'AuthorizationFailed|does not have authorization') {
+    # Skriptet gjenbruker en eksisterende Az-innlogging. Er tilgangen gitt etter at den ble laget,
+    # bærer den fortsatt med seg den gamle - da hjelper det å logge ut og inn igjen.
+    throw "Du har ikke lov til å $Hva ($($Feil.Exception.Message)). Har du nettopp fått tilgangen: kjør Disconnect-AzAccount, vent et par minutter og kjør skriptet på nytt med samme parametre - det som er opprettet, gjenbrukes. Ellers: $($script:AzureTilgangFiks)"
+  }
+}
+
 function Initialize-PPResourceGroup {
   if (Get-AzResourceGroup -Name $ResourceGroupName -ErrorAction SilentlyContinue) { return }
   if ($NoCreate) { throw "Ressursgruppen '$ResourceGroupName' finnes ikke, og -NoCreate er angitt." }
   if ($PSCmdlet.ShouldProcess($ResourceGroupName, "Opprette ressursgruppe i $Location")) {
-    New-AzResourceGroup -Name $ResourceGroupName -Location $Location | Out-Null
+    try {
+      New-AzResourceGroup -Name $ResourceGroupName -Location $Location | Out-Null
+    } catch {
+      Assert-PPAzureTilgang $_ "opprette ressursgruppen '$ResourceGroupName'"
+      throw
+    }
     Write-Ok "Ressursgruppe '$ResourceGroupName' opprettet"
   }
 }
@@ -628,6 +708,7 @@ function Set-PPKeyVault {
         if ((Get-Command New-AzKeyVault).Parameters.ContainsKey('EnableRbacAuthorization')) { $kvParams.EnableRbacAuthorization = $true }
         $vault = New-AzKeyVault @kvParams
       } catch {
+        Assert-PPAzureTilgang $_ "opprette Key Vault '$($script:VaultName)'"
         if ($_.Exception.Message -match 'not registered to use namespace') {
           throw "Ressursleverandøren Microsoft.KeyVault er ikke registrert på abonnementet. Be eieren av abonnementet registrere den (Abonnement -> Resource providers -> Microsoft.KeyVault -> Register), og kjør skriptet igjen med samme parametre - det som er opprettet, gjenbrukes."
         }
@@ -1042,6 +1123,7 @@ function New-PPFoundry {
     try {
       Invoke-PPArm PUT "$($konto.Id)?api-version=$CogApiVersion" $body | Out-Null
     } catch {
+      Assert-PPAzureTilgang $_ "opprette Foundry-ressursen '$($konto.Navn)'"
       if ($_.Exception.Message -match 'RequestDisallowedByPolicy') {
         throw "En Azure Policy stopper opprettelsen av '$($konto.Navn)' ($($_.Exception.Message)). Typisk tillatte regioner (prøv en annen -FoundryLocation), eller krav om disableLocalAuth eller privat nettverk - assistenten trenger API-nøkkel og et offentlig endepunkt. Går ikke det, opprett ressursen manuelt etter virksomhetens regler og kjør skriptet med -ChatApiBase/-ChatApiKey/-ChatDeployment."
       }
@@ -1309,16 +1391,18 @@ if ($fulltOppsett) {
   } else {
     Add-PPCheck -Navn 'Chat-deployment' -Status 'ADVARSEL' -Detalj "'$ChatDeployment' inneholder ikke «gpt-5»" -Fiks 'Filvedlegg (PDF) i assistenten blir utilgjengelig. Bruk en deployment i gpt-5-familien hvis dere vil ha det.'
   }
-  if ($SkipModelTest) {
-    Add-PPCheck -Navn 'Chatmodellen svarer' -Status 'HOPPET OVER' -Detalj '-SkipModelTest'
-  } elseif ($ProvisionFoundry) {
-    Add-PPCheck -Navn 'Chatmodellen svarer' -Status 'HOPPET OVER' -Detalj 'testes etter at Foundry-deploymenten er opprettet'
-  } else {
-    try {
-      Test-PPChatDeployment $script:ChatBase $ChatApiKey $ChatDeployment
-      Add-PPCheck -Navn 'Chatmodellen svarer' -Status 'OK' -Detalj "$($script:ChatBase) -> $ChatDeployment"
-    } catch {
-      Add-PPCheck -Navn 'Chatmodellen svarer' -Status 'MANGLER' -Detalj $_.Exception.Message -Fiks 'Kontroller endepunkt, nøkkel og deployment-navn i Azure AI Foundry (steg 1 i veiledningen).'
+  # Med -ProvisionFoundry finnes modellen ikke før den er opprettet. Den testes etter opprettelsen,
+  # så forhåndssjekken får ingen linje for den.
+  if (-not $ProvisionFoundry) {
+    if ($SkipModelTest) {
+      Add-PPCheck -Navn 'Chatmodellen svarer' -Status 'HOPPET OVER' -Detalj '-SkipModelTest'
+    } else {
+      try {
+        Test-PPChatDeployment $script:ChatBase $ChatApiKey $ChatDeployment
+        Add-PPCheck -Navn 'Chatmodellen svarer' -Status 'OK' -Detalj "$($script:ChatBase) -> $ChatDeployment"
+      } catch {
+        Add-PPCheck -Navn 'Chatmodellen svarer' -Status 'MANGLER' -Detalj $_.Exception.Message -Fiks 'Kontroller endepunkt, nøkkel og deployment-navn i Azure AI Foundry (steg 1 i veiledningen).'
+      }
     }
   }
 }
@@ -1363,13 +1447,18 @@ Connect-PPAzure $tenant.Id
 $azContext = Get-AzContext
 Add-PPCheck -Navn 'Azure-innlogging' -Status 'OK' -Detalj "$($azContext.Account.Id) i riktig tenant"
 $script:SubId = $azContext.Subscription.Id
+# Uten abonnement kan ingenting opprettes, og sjekkene under ville feile på tomme stier.
+$script:IngenAbonnement = $fulltOppsett -and -not $script:SubId
+if ($script:IngenAbonnement) {
+  Add-PPCheck -Navn 'Azure-abonnement' -Status 'MANGLER' -Detalj "$($azContext.Account.Id) har ikke tilgang til noe Azure-abonnement i tenanten" -Fiks $script:AzureTilgangFiks
+}
 
 # Organisasjonens navn i Entra ID - til oppsummeringen (kontroll av tenant) og blokken til
 # registreringen, så -CustomerName ikke trengs. Faller tilbake til tenantnavnet.
 $script:OrgNavn = $null
 try { $script:OrgNavn = (Invoke-PPGraph GET "$Graph/organization?`$select=displayName").value[0].displayName } catch {}
 
-if ($ProvisionFoundry) {
+if ($ProvisionFoundry -and -not $script:IngenAbonnement) {
   Test-PPFoundryPlan
   if ($script:FoundryPlan | Where-Object { $_.Hoppes }) {
     $script:FoundryPlan = @($script:FoundryPlan | Where-Object { -not $_.Hoppes })
@@ -1382,7 +1471,7 @@ if ($ProvisionFoundry) {
 
 # Finnes vaulten fra før? Avgjør om oppsummeringen sier «gjenbrukes» eller «OPPRETTES».
 $vaultFinnes = $false
-if ($fulltOppsett) {
+if ($fulltOppsett -and -not $script:IngenAbonnement) {
   $eksisterende = Get-AzKeyVault -VaultName $script:VaultName -ErrorAction SilentlyContinue
   if ($eksisterende) {
     $vaultFinnes = $true
@@ -1393,6 +1482,7 @@ if ($fulltOppsett) {
     Add-PPCheck -Navn 'Key Vault' -Status 'OK' -Detalj "$($script:VaultName) opprettes i $ResourceGroupName/$Location"
     Test-PPResourceProvider 'Microsoft.KeyVault'
   }
+  Test-PPAzurePermissions $vaultFinnes
 }
 
 # Nåværende godkjenninger og SharePoint-scope, til oppsummeringen. Rene oppslag.
@@ -1425,7 +1515,10 @@ if ($assistantSpCurrent) {
     # en ny kjøring etter godkjenningen gir appen lesetilgang til vaulten.
     Add-PPCheck -Navn 'Admin-consent' -Status 'ADVARSEL' -Detalj 'ikke gitt ennå - hoppes over (-SkipConsent)' -Fiks 'Resten settes opp nå. Be en administrator godkjenne etterpå (lenken skrives ut til slutt), og kjør skriptet på nytt med samme parametre uten -SkipConsent. Da får appen lesetilgang til vaulten.'
   } else {
-    Add-PPCheck -Navn 'Admin-consent' -Status 'MANGLER' -Detalj 'ikke gitt ennå' -Fiks 'Skriptet åpner godkjenningssiden, og du må være Global Administrator, Privileged Role Administrator eller Cloud Application Administrator. Er du ikke det: kjør med -SkipConsent og la en administrator godkjenne etterpå.'
+    # ADVARSEL, ikke MANGLER: hos en ny virksomhet finnes appen først når noen har godkjent den,
+    # og det er nettopp det skriptet gjør etter bekreftelsen. MANGLER ville stoppe kjøringen før
+    # godkjenningssiden åpnes - også for en Global Administrator.
+    Add-PPCheck -Navn 'Admin-consent' -Status 'ADVARSEL' -Detalj 'ikke gitt ennå - gis etter bekreftelsen' -Fiks 'Skriptet åpner godkjenningssiden. Det krever Global Administrator, Privileged Role Administrator eller Cloud Application Administrator. Er du ikke det: kjør med -SkipConsent og la en administrator godkjenne etterpå.'
   }
 }
 
