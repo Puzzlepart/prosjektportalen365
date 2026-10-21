@@ -517,6 +517,8 @@ summary) and 50 px (each section); drawn at each size on a 1x and a 2x screen, 2
 crisp and the others blurred. They are 20 px in the project information and 40 px on the status
 page. The SPFx stub in `pp365-jest-config` builds labels and sliders too, so a test reads them
 from a property pane. Tests first (the default, the warning); every solution's suite passes.
+Reverted 2026-10-21 in the review before the merge: the status mark (close-out, part 4) lets
+icons alone meet 1.4.1, so the default is `true` again, as in 1.14, and the pages look as before.
 
 ### Slice 2, part 7 — The project news (2026-10-16)
 

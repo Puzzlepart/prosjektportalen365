@@ -5,7 +5,8 @@ jest.mock('components/ProjectInformation', () => ({
     minRowLimit: 4,
     maxRowLimit: 100,
     showSustainabilityGoalsAsIcons: false,
-    sustainabilityGoalIconSize: 48
+    sustainabilityGoalIconSize: 48,
+    statusReportShowOnlyIcons: true
   }
 }))
 
@@ -66,17 +67,16 @@ function statusReportFields(webPart: any): Record<string, any> {
 }
 
 describe('ProjectInformation web part status report properties', () => {
-  it('shows the full status report by default', () => {
+  it('shows the status report as icons by default, with no warning, for their marks tell the status by shape (WCAG 1.4.1)', () => {
     const fields = statusReportFields(createWebPart())
-    expect(fields.statusReportShowOnlyIcons.checked).toBeFalsy()
-    expect(fields.statusReportShowOnlyIconsWarning).toBeUndefined()
-    expect(fields.statusReportTruncateComments).toBeDefined()
-  })
-
-  it('shows icons alone with no warning, for their marks tell the status by shape (WCAG 1.4.1)', () => {
-    const fields = statusReportFields(createWebPart({ statusReportShowOnlyIcons: true }))
     expect(fields.statusReportShowOnlyIcons.checked).toBe(true)
     expect(fields.statusReportShowOnlyIconsWarning).toBeUndefined()
     expect(Object.keys(fields)).toEqual(['hideStatusReport', 'statusReportShowOnlyIcons'])
+  })
+
+  it('offers the comment length for the full report', () => {
+    const fields = statusReportFields(createWebPart({ statusReportShowOnlyIcons: false }))
+    expect(fields.statusReportShowOnlyIcons.checked).toBe(false)
+    expect(fields.statusReportTruncateComments).toBeDefined()
   })
 })

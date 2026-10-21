@@ -231,10 +231,9 @@ describe('ProjectInformation', () => {
     expect(screen.getByText('Kilden svarte ikke')).toBeInTheDocument()
   })
 
-  it('shows the status report in full by default, its status in text (WCAG 1.4.1)', async () => {
+  it('shows the status report as icons by default, as before, their marks telling the status by shape (WCAG 1.4.1)', async () => {
     renderInformation(() => initData())
-    // With icons only, the status was told by the icons' colour alone.
-    expect(await screen.findByTestId('status-report-props')).toHaveTextContent('iconsOnly:false')
+    expect(await screen.findByTestId('status-report-props')).toHaveTextContent('iconsOnly:true')
   })
 
   it('tells when the hub is out of reach', async () => {
