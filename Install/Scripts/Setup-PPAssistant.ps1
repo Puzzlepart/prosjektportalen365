@@ -714,8 +714,11 @@ function Resolve-PPFoundryModel([string] $Region, [string] $Model, [string] $Typ
 # Ledig kvote (limit - forbruk) for et kvotenavn i regionen, eller $null om den ikke finnes.
 function Get-PPFoundryQuota([string] $Region, [string] $UsageName) {
   if (-not $UsageName) { return $null }
-  $bruk = Get-PPArmList "/subscriptions/$($script:SubId)/providers/Microsoft.CognitiveServices/locations/$Region/usages?api-version=$CogApiVersion" |
-    Where-Object { $_.name.value -eq $UsageName } | Select-Object -First 1
+  $alle = @(Get-PPArmList "/subscriptions/$($script:SubId)/providers/Microsoft.CognitiveServices/locations/$Region/usages?api-version=$CogApiVersion")
+  # Noen abonnement får en tom kvoteliste for regionen. Da kan kvoten ikke kontrolleres på
+  # forhånd, og det er noe annet enn at akkurat denne modellen mangler kvote.
+  $script:KvoteListeTom = $alle.Count -eq 0
+  $bruk = $alle | Where-Object { $_.name.value -eq $UsageName } | Select-Object -First 1
   if (-not $bruk) { return $null }
   return [int]($bruk.limit - $bruk.currentValue)
 }
@@ -859,7 +862,12 @@ function Test-PPFoundryPlan {
       }
       $d.Versjon = $valg.Versjon
       if ($null -eq $valg.Ledig) {
-        Add-PPCheck -Navn $sjekk -Status 'UKJENT' -Detalj "$($d.Modell) $($d.Versjon), $($d.Type): fant ikke kvoteoppføringen '$($valg.UsageName)'" -Fiks 'Kan bety at abonnementet ikke har kvote for modellen i regionen. Kontroller Management -> Quota i Foundry-portalen. Mangler kvoten, stopper skriptet når deploymenten opprettes.'
+        $fallback = if ($d.Rolle -eq 'Images' -and $d.Type -ne 'GlobalStandard' -and -not $script:BildeTypeEksplisitt) { ' Bildemodellen faller da tilbake til GlobalStandard.' } else { '' }
+        if ($script:KvoteListeTom) {
+          Add-PPCheck -Navn $sjekk -Status 'UKJENT' -Detalj "$($d.Modell) $($d.Versjon), $($d.Type): Azure returnerer ingen kvoteoppføringer for $($konto.Location) i dette abonnementet" -Fiks "Kvoten kontrolleres i stedet når deploymenten opprettes; mangler den, stopper skriptet da.$fallback Kvoten kan ses i Foundry-portalen under Management -> Quota."
+        } else {
+          Add-PPCheck -Navn $sjekk -Status 'UKJENT' -Detalj "$($d.Modell) $($d.Versjon), $($d.Type): fant ikke kvoteoppføringen '$($valg.UsageName)'" -Fiks "Kan bety at abonnementet ikke har kvote for modellen i regionen. Kontroller Management -> Quota i Foundry-portalen. Mangler kvoten, stopper skriptet når deploymenten opprettes.$fallback"
+        }
       } else {
         Add-PPCheck -Navn $sjekk -Status 'OK' -Detalj "$($d.Modell) $($d.Versjon), $($d.Type), kapasitet $($d.Kapasitet) (ledig $($valg.Ledig))"
       }
