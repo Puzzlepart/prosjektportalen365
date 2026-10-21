@@ -337,7 +337,8 @@ function Show-PPSummary($Tenant, $AzContext, $VaultFinnes, $Consent, $SharePoint
       Write-PPPlan 'Chatmodell' ("$($script:ChatBase) -> $ChatDeployment")
       if ($hasImages) { Write-PPPlan 'Bildemodell' ("$($script:ImagesBase) -> $ImagesDeployment") }
     }
-    Write-PPPlan 'Vault-tilgang' 'Key Vault Secrets User til «Prosjektportalen Assistent»'
+    if ($assistantSpCurrent -or -not $SkipConsent) { Write-PPPlan 'Vault-tilgang' 'Key Vault Secrets User til «Prosjektportalen Assistent»' }
+    else { Write-PPPlan 'Vault-tilgang' 'venter på admin-consent - gis når skriptet kjøres på nytt etter godkjenningen' }
   } else {
     Write-PPPlan 'Key Vault' '' $true
     Write-PPPlan 'Secrets' '' $true
@@ -488,6 +489,10 @@ function Get-PPGrants([string] $ClientSpId) {
   (Invoke-PPGraph GET "$Graph/oauth2PermissionGrants?`$filter=clientId eq '$ClientSpId' and consentType eq 'AllPrincipals'").value
 }
 
+function Get-PPConsentUrl([string] $Tenant) {
+  "https://login.microsoftonline.com/$Tenant/adminconsent?client_id=$AssistantAppId&redirect_uri=$ConsentRedirect"
+}
+
 function Request-PPAdminConsent([string] $Tenant) {
   Write-Step 'Admin-consent'
   $assistantSp = Get-AzADServicePrincipal -ApplicationId $AssistantAppId -ErrorAction SilentlyContinue
@@ -511,7 +516,7 @@ function Request-PPAdminConsent([string] $Tenant) {
 
   if ($ok -and -not $ForceConsent) { Write-Ok 'Consent finnes allerede for begge apper (inkl. Tasks.Read)'; return $assistantSp }
 
-  $url = "https://login.microsoftonline.com/$Tenant/adminconsent?client_id=$AssistantAppId&redirect_uri=$ConsentRedirect"
+  $url = Get-PPConsentUrl $Tenant
   Write-Info 'Godkjenn som administrator i nettleseren. Etter godkjenning vises en bekreftelsesside:'
   Write-Host "   $url" -ForegroundColor Yellow
   if (-not $PSCmdlet.ShouldProcess($Tenant, 'Åpne admin-consent i nettleser og vente på godkjenning')) { return $assistantSp }
@@ -644,7 +649,10 @@ function Set-PPKeyVaultSecrets($Vault, [bool] $HasImages) {
 
 function Grant-PPKeyVaultAccess($Vault, $AssistantSp) {
   Write-Step 'Tilgang for «Prosjektportalen Assistent» til vaulten'
-  if (-not $AssistantSp) { throw 'Assistent-appen finnes ikke i tenanten ennå (consent mangler). Kjør uten -SkipConsent.' }
+  if (-not $AssistantSp) {
+    Write-Warning 'Hopper over - «Prosjektportalen Assistent» finnes ikke i tenanten før admin-consent er gitt. Kjør skriptet på nytt med samme parametre etter godkjenningen.'
+    return
+  }
   if ($Vault.EnableRbacAuthorization) {
     $existing = Get-AzRoleAssignment -ObjectId $AssistantSp.Id -Scope $Vault.ResourceId -RoleDefinitionName 'Key Vault Secrets User' -ErrorAction SilentlyContinue
     if ($existing) { Write-Ok 'Key Vault Secrets User: finnes'; return }
@@ -717,7 +725,7 @@ function Test-PPFoundryOption($Konto, $Deployment, [string] $Type) {
     $fiks = if ($ledig -gt 0) { "Kjør med $kapasitetParam $ledig, " } else { 'Prøv en annen region, ' }
     return [pscustomobject]@{ Ok = $false; Versjon = $modell.Version; Ledig = $ledig; Arsak = "ledig $Type-kvote for $($Deployment.Modell) er $ledig, ønsket $($Deployment.Kapasitet)"; Fiks = ($fiks + 'eller be om kvoteøkning under Management -> Quota i Foundry-portalen.') }
   }
-  return [pscustomobject]@{ Ok = $true; Versjon = $modell.Version; Ledig = $ledig; Arsak = ''; Fiks = '' }
+  return [pscustomobject]@{ Ok = $true; Versjon = $modell.Version; Ledig = $ledig; UsageName = $modell.UsageName; Arsak = ''; Fiks = '' }
 }
 
 # En deployment som ikke kan opprettes, stopper kjøringen - unntatt bildemodellen når den bare er
@@ -838,7 +846,7 @@ function Test-PPFoundryPlan {
       }
       $d.Versjon = $valg.Versjon
       if ($null -eq $valg.Ledig) {
-        Add-PPCheck -Navn $sjekk -Status 'UKJENT' -Detalj "$($d.Modell) $($d.Versjon): fant ikke kvoten" -Fiks 'Kontroller Management -> Quota i Foundry-portalen.'
+        Add-PPCheck -Navn $sjekk -Status 'UKJENT' -Detalj "$($d.Modell) $($d.Versjon), $($d.Type): fant ikke kvoteoppføringen '$($valg.UsageName)'" -Fiks 'Kan bety at abonnementet ikke har kvote for modellen i regionen. Kontroller Management -> Quota i Foundry-portalen. Mangler kvoten, stopper skriptet når deploymenten opprettes.'
       } else {
         Add-PPCheck -Navn $sjekk -Status 'OK' -Detalj "$($d.Modell) $($d.Versjon), $($d.Type), kapasitet $($d.Kapasitet) (ledig $($valg.Ledig))"
       }
@@ -1141,6 +1149,14 @@ Modus:             $(if ($FulltOppsett) { 'fullt oppsett' } else { 'kun godkjenn
 Tidspunkt:         $(Get-Date -Format 'yyyy-MM-dd HH:mm')
 "@
   Write-Host $handoff -ForegroundColor Yellow
+
+  if (-not $AssistantSp) {
+    Write-Step 'Gjenstår: admin-consent'
+    Write-Info 'Send denne lenken til en Global Administrator, Privileged Role Administrator eller Cloud Application Administrator:'
+    Write-Host "   $(Get-PPConsentUrl $Tenant)" -ForegroundColor Yellow
+    Write-Info 'Når godkjenningen er gjort: kjør skriptet på nytt med de samme parametrene, uten -SkipConsent.'
+    if ($FulltOppsett) { Write-Info 'Det som finnes fra før, gjenbrukes. Det som gjenstår, er lesetilgangen for «Prosjektportalen Assistent» til vaulten.' }
+  }
   Write-Info 'Er virksomheten allerede registrert, trenger teamet ikke blokken – sammenlign bare hub-URL og vault-navn med det som er registrert.'
   Write-Info 'Ellers svarer assistenten «tenant_not_onboarded» til registreringen er gjort. Du får bekreftelse på e-post.'
   Write-Info 'Brukere må laste assistenten på nytt (F5) for at et nytt token skal hentes.'
@@ -1289,7 +1305,13 @@ if ($assistantSpCurrent) {
     Add-PPCheck -Navn 'Admin-consent' -Status 'UKJENT' -Detalj $_.Exception.Message
   }
 } else {
-  Add-PPCheck -Navn 'Admin-consent' -Status 'MANGLER' -Detalj 'ikke gitt ennå' -Fiks 'Skriptet åpner godkjenningssiden. Du må være Global Administrator eller Privileged Role Administrator.'
+  if ($SkipConsent) {
+    # Den som har Azure-rettighetene er ofte ikke Entra-admin. Da settes alt annet opp nå, og
+    # en ny kjøring etter godkjenningen gir appen lesetilgang til vaulten.
+    Add-PPCheck -Navn 'Admin-consent' -Status 'ADVARSEL' -Detalj 'ikke gitt ennå - hoppes over (-SkipConsent)' -Fiks 'Resten settes opp nå. Be en administrator godkjenne etterpå (lenken skrives ut til slutt), og kjør skriptet på nytt med samme parametre uten -SkipConsent. Da får appen lesetilgang til vaulten.'
+  } else {
+    Add-PPCheck -Navn 'Admin-consent' -Status 'MANGLER' -Detalj 'ikke gitt ennå' -Fiks 'Skriptet åpner godkjenningssiden, og du må være Global Administrator, Privileged Role Administrator eller Cloud Application Administrator. Er du ikke det: kjør med -SkipConsent og la en administrator godkjenne etterpå.'
+  }
 }
 
 $antallMangler = Show-PPChecklist
