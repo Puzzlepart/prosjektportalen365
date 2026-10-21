@@ -485,6 +485,19 @@ function Invoke-PPArm([string] $Method, [string] $Path, $Body, [switch] $AllowNo
   if ($r.Content) { return $r.Content | ConvertFrom-Json }
 }
 
+# Henter alle elementene i en ARM-liste, også når svaret er delt i sider (nextLink).
+# Kvotelista for en region er lang nok til å bli delt.
+function Get-PPArmList([string] $Path) {
+  $elementer = @()
+  $neste = $Path
+  while ($neste) {
+    $side = Invoke-PPArm GET $neste
+    $elementer += @($side.value)
+    $neste = if ($side.nextLink) { ([Uri]$side.nextLink).PathAndQuery } else { $null }
+  }
+  return $elementer
+}
+
 function Get-PPGrants([string] $ClientSpId) {
   (Invoke-PPGraph GET "$Graph/oauth2PermissionGrants?`$filter=clientId eq '$ClientSpId' and consentType eq 'AllPrincipals'").value
 }
@@ -686,7 +699,7 @@ function Grant-PPKeyVaultAccess($Vault, $AssistantSp) {
 function Resolve-PPFoundryModel([string] $Region, [string] $Model, [string] $Type, [string] $AccountId) {
   $sti = if ($AccountId) { "$AccountId/models?api-version=$CogApiVersion" }
          else { "/subscriptions/$($script:SubId)/providers/Microsoft.CognitiveServices/locations/$Region/models?api-version=$CogApiVersion" }
-  $modeller = @((Invoke-PPArm GET $sti).value | ForEach-Object { if ($_.model) { $_.model } else { $_ } })
+  $modeller = @(Get-PPArmList $sti | ForEach-Object { if ($_.model) { $_.model } else { $_ } })
   $kandidater = @($modeller | Where-Object {
       $_.format -eq 'OpenAI' -and $_.name -eq $Model -and
       $_.lifecycleStatus -ne 'Deprecated' -and (@($_.skus.name) -contains $Type)
@@ -701,7 +714,7 @@ function Resolve-PPFoundryModel([string] $Region, [string] $Model, [string] $Typ
 # Ledig kvote (limit - forbruk) for et kvotenavn i regionen, eller $null om den ikke finnes.
 function Get-PPFoundryQuota([string] $Region, [string] $UsageName) {
   if (-not $UsageName) { return $null }
-  $bruk = (Invoke-PPArm GET "/subscriptions/$($script:SubId)/providers/Microsoft.CognitiveServices/locations/$Region/usages?api-version=$CogApiVersion").value |
+  $bruk = Get-PPArmList "/subscriptions/$($script:SubId)/providers/Microsoft.CognitiveServices/locations/$Region/usages?api-version=$CogApiVersion" |
     Where-Object { $_.name.value -eq $UsageName } | Select-Object -First 1
   if (-not $bruk) { return $null }
   return [int]($bruk.limit - $bruk.currentValue)
@@ -764,7 +777,7 @@ function Test-PPFoundryPlan {
   }
 
   $alle = @()
-  try { $alle = @((Invoke-PPArm GET "/subscriptions/$sub/providers/Microsoft.CognitiveServices/accounts?api-version=$CogApiVersion").value) } catch {}
+  try { $alle = @(Get-PPArmList "/subscriptions/$sub/providers/Microsoft.CognitiveServices/accounts?api-version=$CogApiVersion") } catch {}
   foreach ($konto in $script:FoundryKontoer.Values) {
     $sjekk = "Foundry-ressurs $($konto.Navn)"
     # Ressursgruppen først: den krever bare tilgang der. Lista over abonnementet fanger en
