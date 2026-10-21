@@ -98,7 +98,7 @@ export const ColumnFormPanel: FC = () => {
               placeholder={strings.SearchPropertyPlaceholder}
               value={column.get('fieldName')}
               onChange={(value) => setColumn('fieldName', value)}
-              disabled={isEditing}
+              readOnly={isEditing}
             />
           </FieldContainer>
           <FieldContainer

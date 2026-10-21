@@ -7,6 +7,13 @@ export const useAddProjectDialog = () => {
   const context = useContext(ProgramAdministrationContext)
   const [error, setError] = useState<Error>(null)
 
+  // A failed add is told while the dialog is open. The dialog stays mounted while closed, so the
+  // error is let go of then, and the next opening starts clean.
+  const isOpen = !!context.state.addProjectDialog?.open
+  useEffect(() => {
+    if (!isOpen) setError(null)
+  }, [isOpen])
+
   useEffect(() => {
     if (!context.programHubs || context.programHubs.length === 0) return
     if (!context.programHubs.some((h) => h.hubSiteId)) return

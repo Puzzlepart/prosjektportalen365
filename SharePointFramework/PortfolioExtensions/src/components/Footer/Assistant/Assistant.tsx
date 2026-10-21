@@ -54,7 +54,6 @@ export const Assistant: FC = () => {
                 <ToolbarButton
                   as='a'
                   appearance='subtle'
-                  title={strings.AssistantSettingsTooltip}
                   aria-label={strings.AssistantSettingsTooltip}
                   icon={getFluentIcon('Settings')}
                   href={`${context.props.portalUrl}/${resource.Lists_Global_Settings_Url}`}
@@ -62,7 +61,6 @@ export const Assistant: FC = () => {
                 />
               )}
               <ToolbarButton
-                title={strings.CloseLabel}
                 aria-label={strings.CloseLabel}
                 appearance='subtle'
                 icon={getFluentIcon('Dismiss')}

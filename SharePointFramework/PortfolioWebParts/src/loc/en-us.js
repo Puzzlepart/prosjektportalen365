@@ -349,7 +349,7 @@ define([], function () {
     MoveColumnUp: 'Move {0} up',
     MoveColumnDown: 'Move {0} down',
     ColumnMovedAnnouncement: '{0} moved to position {1} of {2}',
-    ColumnLiftedAnnouncement: '{0} lifted from position {1}. Move it with the arrow keys',
+    ColumnLiftedAnnouncement: '{0} lifted from position {1}',
     ColumnDragPositionAnnouncement: 'Position {0} of {1}',
     ColumnDropCancelledAnnouncement: '{0} returned to position {1}',
     SelectorButtonLabel: '{0}, {1}'

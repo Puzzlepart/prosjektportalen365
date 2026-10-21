@@ -21,7 +21,7 @@ export const ParentProjectsList: FC = () => {
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
           {/* A list of links: each goes to a project's site (WCAG 1.3.1, 4.1.2). */}
-          <ul className={styles.list}>
+          <ul className={styles.list} role='list'>
             {projects.map((p, idx) => {
               const Icon = p?.icon
               return (

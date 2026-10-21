@@ -223,6 +223,18 @@ describe('ChangePhaseDialog', () => {
     )
   })
 
+  it('stays open on a click outside it, which never closed it before', () => {
+    const dispatch = renderDialog(phase('p1', 'Konsept'), planning)
+    // Fluent reports a click on the backdrop as a request to close, as it does Escape; with the
+    // handler that answers Escape, a stray click threw away the checklist.
+    const backdrop = document.querySelector('.fui-DialogSurface__backdrop')
+    expect(backdrop).not.toBeNull()
+    fireEvent.click(backdrop)
+    expect(dispatch).not.toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'DISMISS_CHANGE_PHASE_DIALOG' })
+    )
+  })
+
   it('tells a screen reader that the phase is changing, and cannot be closed meanwhile (WCAG 4.1.3)', async () => {
     const user = userEvent.setup()
     mockChangePhase.mockImplementation(() => new Promise(() => undefined))

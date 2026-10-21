@@ -33,7 +33,6 @@ export const CheckListItem: FC<IChecklistItemProps> = ({ item }) => {
             appearance='transparent'
             size='small'
             icon={commentHidden ? getFluentIcon('ChevronUp') : getFluentIcon('ChevronDown')}
-            title={commentHidden ? strings.ShowCommentText : strings.HideCommentText}
             aria-label={commentHidden ? strings.ShowCommentText : strings.HideCommentText}
             aria-expanded={!commentHidden}
             aria-controls={commentId}

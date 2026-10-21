@@ -49,7 +49,6 @@ const OverflowMenu: FC<{
           value='overflow-menu'
           icon={<MoreHorizontalRegular />}
           aria-label={format(strings.Aria.MoreSectionsLabel, overflowCount)}
-          title={format(strings.Aria.MoreSectionsLabel, overflowCount)}
         >
           +{overflowCount}
         </Tab>

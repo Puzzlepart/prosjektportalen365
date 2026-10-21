@@ -345,7 +345,7 @@ define([], function () {
     MoveColumnUp: 'Flytt {0} opp',
     MoveColumnDown: 'Flytt {0} ned',
     ColumnMovedAnnouncement: '{0} er flyttet til plass {1} av {2}',
-    ColumnLiftedAnnouncement: '{0} er løftet fra plass {1}. Flytt den med piltastene',
+    ColumnLiftedAnnouncement: '{0} er løftet fra plass {1}',
     ColumnDragPositionAnnouncement: 'Plass {0} av {1}',
     ColumnDropCancelledAnnouncement: '{0} er lagt tilbake på plass {1}',
     SelectorButtonLabel: '{0}, {1}'

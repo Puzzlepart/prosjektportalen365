@@ -32,8 +32,8 @@ jest.mock('pp365-shared-library', () => {
   const React = jest.requireActual('react')
   return {
     ...jest.requireActual('pp365-shared-library'),
-    ColumnSearchPropertyField: ({ disabled }: any) =>
-      React.createElement('input', { disabled, defaultValue: 'GtDeliveryStatusOWSCHCS' })
+    ColumnSearchPropertyField: ({ disabled, readOnly }: any) =>
+      React.createElement('input', { disabled, readOnly, defaultValue: 'GtDeliveryStatusOWSCHCS' })
   }
 })
 
@@ -65,5 +65,9 @@ describe('ColumnFormPanel (portfolio overview)', () => {
     expect(field).toHaveAccessibleDescription(
       expect.stringContaining(strings.ColumnFieldLockedText)
     )
+    // The search property as well: a stand-in shows it, so only its state is seen here.
+    const searchProperty = screen.getByDisplayValue('GtDeliveryStatusOWSCHCS')
+    expect(searchProperty).not.toBeDisabled()
+    expect(searchProperty).toHaveAttribute('readonly')
   })
 })

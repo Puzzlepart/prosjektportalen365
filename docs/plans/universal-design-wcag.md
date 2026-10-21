@@ -1025,7 +1025,9 @@ the details that fetch stood in for.
   name on a plain span is not read), the log's toggle has `aria-expanded` and `aria-controls`,
   and each step is announced as it starts.
 - **The catalog's root** rendered `FluentProvider` with no `AriaLiveAnnouncer`, so its message
-  bars and announcements were silent; it has one.
+  bars and announcements were silent; it has one. Corrected 2026-10-21: the catalog is mounted
+  through `renderReact`, which has wrapped every root in an announcer since slice 1, part 1, so
+  the second, nested one was removed in the review before the merge.
 - **Closing** it left the focus nowhere: it opens from SharePoint's command button in a place of
   its own; the command set keeps what had the focus and gives it back on dismiss.
 - The close button had an `aria-label` («Lukk») and a tooltip label («Lukk katalogen»); the

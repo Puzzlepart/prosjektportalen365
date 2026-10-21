@@ -183,8 +183,9 @@ checked by hand and with which reader and browser: axe finds only part of what W
   (`@fluentui/react-shared-contexts`), and `FluentProvider` renders none: every `MessageBar` was
   silent until our root providers rendered one. A provider of ours inside a wrapper is still wrong
   (pp365-ui); the announcer goes where the root provider is. A root of ours that renders
-  `FluentProvider` itself needs one too: the template package catalog's message bars and steps
-  were silent until it had.
+  `FluentProvider` itself needs none of its own as long as it is mounted through `renderReact`,
+  which wraps every root in one (`reactRoot.ts`): the template package catalog carried a second,
+  nested one until 2026-10-21.
 - Messages announced while a root mounts (a child's first effect) wait in the announcer's queue:
   its live region is made in its own effect, which runs after its children's on the first render.
   Announce what follows an action or a load, as status messages do.

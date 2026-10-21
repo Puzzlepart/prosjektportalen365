@@ -21,6 +21,8 @@ export function useRiskActionPopover() {
 
   const onPopoverOpenChange: PopoverProps['onOpenChange'] = (_ev, { open }) => {
     popoverState.setValue(open)
+    // A failed sync is told while the popover is open; opened again, it starts clean.
+    if (!open) setSyncError(undefined)
   }
 
   const onOpenPanel = () => {

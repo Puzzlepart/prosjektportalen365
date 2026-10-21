@@ -348,6 +348,11 @@ describe('RiskAction', () => {
     fireEvent.click(screen.getByText(strings.RiskActionFieldValueAdminButtonText))
     fireEvent.click(screen.getByText(strings.NewRiskActionPanelUpdateTaskStatus))
     expect(await screen.findByText(strings.RiskActionSyncFailed)).toBeInTheDocument()
+    // Closed and opened again, the popover starts clean: the failure belonged to that attempt.
+    fireEvent.click(screen.getByText(strings.RiskActionFieldValueAdminButtonText))
+    await waitFor(() => expect(screen.queryByText(strings.RiskActionSyncFailed)).toBeNull())
+    fireEvent.click(screen.getByText(strings.RiskActionFieldValueAdminButtonText))
+    expect(screen.queryByText(strings.RiskActionSyncFailed)).toBeNull()
     adapter.syncTasks.mockImplementationOnce(() => Promise.resolve({ ...itemContext }))
     fireEvent.click(screen.getByText(strings.NewRiskActionPanelUpdateTaskStatus))
     await waitFor(() => expect(announced()).toContain(strings.RiskActionSyncDone))
@@ -366,6 +371,25 @@ describe('RiskAction', () => {
     expect(within(panel).getByText('Ingen tilgang')).toBeInTheDocument()
     fireEvent.click(button(strings.SaveButtonLabel))
     await waitFor(() => expect(announced()).toContain(format(strings.NewRiskActionSaved, 'Første')))
+  })
+
+  it('starts clean when the panel is opened again after a failed save', async () => {
+    renderRiskAction('')
+    fireEvent.click(screen.getByText('Ingen tiltak ennå'))
+    let panel = await openNewActionPanel()
+    fireEvent.change(within(panel).getAllByRole('textbox')[0], { target: { value: 'Første' } })
+    adapter.addTask.mockImplementationOnce(() => Promise.reject(new Error('Ingen tilgang')))
+    fireEvent.click(button(strings.SaveButtonLabel))
+    expect(await within(panel).findByText(strings.NewRiskActionSaveFailed)).toBeInTheDocument()
+    // The panel stays mounted while closed: the error must not wait there for the next opening,
+    // where its message bar would announce itself again.
+    fireEvent.click(button(strings.CancelButtonLabel))
+    await waitFor(() =>
+      expect(screen.queryByText(format(strings.NewRiskActionPanelTitle, RISK))).toBeNull()
+    )
+    fireEvent.click(screen.getByText('Ingen tiltak ennå'))
+    panel = await openNewActionPanel()
+    expect(within(panel).queryByText(strings.NewRiskActionSaveFailed)).toBeNull()
   })
 
   it('keeps the focus and names the progress while the actions are migrated, and says when they are (WCAG 2.4.3, 4.1.2, 4.1.3)', async () => {

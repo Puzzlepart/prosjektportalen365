@@ -6,7 +6,6 @@
     align-items: center;
     height: 20px;
     margin: 4px 0;
-    outline: 0;
     padding: 6px;
 
     &:hover {
@@ -17,14 +16,8 @@
       }
     }
 
-    // The row is the drag handle the keyboard lifts with space: its focus shows (WCAG 2.4.7),
-    // and so do its move buttons while the focus is in it, the way to them without a pointer.
-    &:focus-visible {
-      outline: var(--strokeWidthThick) solid var(--colorStrokeFocus2);
-      outline-offset: 1px;
-      border-radius: var(--borderRadiusMedium);
-    }
-
+    // The row drags with the mouse only; the keyboard moves a column with the buttons, which show
+    // while the focus is in the row, the way to them without a pointer.
     &:focus-within {
       .columnItemActions {
         display: flex;

@@ -1,7 +1,7 @@
 import { useAnnounce } from '@fluentui/react-components'
 import { IPersonaItem, format } from 'pp365-shared-library'
 import strings from 'ProjectExtensionsStrings'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRiskActionFieldCustomizerContext } from '../../../../extensions/riskAction/context'
 import { useRiskActionContext } from '../../context'
 import { INewRiskActionForm, INewRiskActionPanelProps } from './types'
@@ -46,6 +46,12 @@ export function useNewRiskActionPanel(props: INewRiskActionPanelProps) {
   const [isSaving, setIsSaving] = useState(false)
   const [saveError, setSaveError] = useState<string>()
   const { announce } = useAnnounce()
+
+  // A failed save is told while the panel is open. The panel stays mounted while closed, so the
+  // error is let go of as it opens again, and the opening starts clean.
+  useEffect(() => {
+    if (props.open) setSaveError(undefined)
+  }, [props.open])
 
   const setField = useCallback(
     <K extends keyof INewRiskActionForm>(key: K, value: INewRiskActionForm[K]) => {

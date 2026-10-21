@@ -132,6 +132,47 @@ describe('TemplateSelectorCommand', () => {
     fireEvent.click(screen.getByText(strings.TemplateLibrarySelectModalTitle))
   })
 
+  it('gives the focus back to what opened it when it is dismissed (WCAG 2.4.3)', async () => {
+    const { command } = await selectorCommand()
+    // SharePoint's command bar button: the dialog opens in a place of its own, with no trigger of
+    // Fluent's to give the focus back to.
+    const opener = document.createElement('button')
+    document.body.appendChild(opener)
+    opener.focus()
+    await execute(command)
+    const dialog = screen.getByText(strings.TemplateLibrarySelectModalTitle)
+    dialog.focus()
+    fireEvent.click(dialog)
+    expect(opener).toHaveFocus()
+    opener.remove()
+  })
+
+  it('opens from SharePoint\'s "Mer" menu once the menu has closed, and gives the focus back to the menu\'s button (WCAG 4.1.2, 2.4.3)', async () => {
+    const { command } = await selectorCommand()
+    // The command runs while SharePoint's menu has the focus. Rendered then, the dialog is hidden
+    // from screen readers by SharePoint's own focus manager as the menu closes, and the focus
+    // would go back to the menu item, which is gone.
+    const more = document.createElement('button')
+    const menu = document.createElement('div')
+    menu.setAttribute('role', 'menu')
+    const item = document.createElement('button')
+    item.setAttribute('role', 'menuitem')
+    menu.appendChild(item)
+    document.body.append(more, menu)
+    item.focus()
+    const opening = command.onExecute({ itemId: OPEN } as any)
+    await act(() => new Promise((resolve) => setTimeout(resolve, 100)))
+    expect(screen.queryByText(strings.TemplateLibrarySelectModalTitle)).toBeNull()
+    menu.remove()
+    more.focus()
+    await act(() => opening)
+    const dialog = screen.getByText(strings.TemplateLibrarySelectModalTitle)
+    dialog.focus()
+    fireEvent.click(dialog)
+    expect(more).toHaveFocus()
+    more.remove()
+  })
+
   it('says it is not available, and opens nothing, when the hub is out of reach', async () => {
     adapter.portalDataService.isAvailable = false
     const { command, raiseOnChange, open } = await selectorCommand()

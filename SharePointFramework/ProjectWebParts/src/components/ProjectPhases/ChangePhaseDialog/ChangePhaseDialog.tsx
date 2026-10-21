@@ -32,13 +32,14 @@ export const ChangePhaseDialog: FC = () => {
     <ChangePhaseDialogContext.Provider value={{ state, dispatch, nextChecklistItem }}>
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
-          {/* Escape closes the dialog as Cancel does, except while the phase is being changed. */}
+          {/* Escape closes the dialog as Cancel does, except while the phase is being changed. A
+              click outside it does not: it never did, and a checklist half answered or a comment
+              typed would be lost with it. */}
           <Dialog
             open
             onOpenChange={(_, data) => {
-              if (!data.open && state.view !== View.ChangingPhase) {
-                context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())
-              }
+              if (data.open || data.type === 'backdropClick') return
+              if (state.view !== View.ChangingPhase) context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())
             }}
           >
             <DialogSurface>

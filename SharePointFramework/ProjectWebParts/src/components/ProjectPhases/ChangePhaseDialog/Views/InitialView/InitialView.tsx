@@ -14,7 +14,7 @@ export const InitialView: FC = () => {
     <div className={styles.root}>
       {/* The checkpoints as steps, not tabs: no panel belongs to a checkpoint, and choosing one
           did nothing. */}
-      <ol className={styles.steps} aria-label={strings.Aria.ChecklistStepsLabel}>
+      <ol className={styles.steps} role='list' aria-label={strings.Aria.ChecklistStepsLabel}>
         {checklistItems.map((item) => (
           <li
             key={item.id}
