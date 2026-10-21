@@ -1425,7 +1425,10 @@ if ($assistantSpCurrent) {
     # en ny kjøring etter godkjenningen gir appen lesetilgang til vaulten.
     Add-PPCheck -Navn 'Admin-consent' -Status 'ADVARSEL' -Detalj 'ikke gitt ennå - hoppes over (-SkipConsent)' -Fiks 'Resten settes opp nå. Be en administrator godkjenne etterpå (lenken skrives ut til slutt), og kjør skriptet på nytt med samme parametre uten -SkipConsent. Da får appen lesetilgang til vaulten.'
   } else {
-    Add-PPCheck -Navn 'Admin-consent' -Status 'MANGLER' -Detalj 'ikke gitt ennå' -Fiks 'Skriptet åpner godkjenningssiden, og du må være Global Administrator, Privileged Role Administrator eller Cloud Application Administrator. Er du ikke det: kjør med -SkipConsent og la en administrator godkjenne etterpå.'
+    # ADVARSEL, ikke MANGLER: hos en ny virksomhet finnes appen først når noen har godkjent den,
+    # og det er nettopp det skriptet gjør etter bekreftelsen. MANGLER ville stoppe kjøringen før
+    # godkjenningssiden åpnes - også for en Global Administrator.
+    Add-PPCheck -Navn 'Admin-consent' -Status 'ADVARSEL' -Detalj 'ikke gitt ennå - gis etter bekreftelsen' -Fiks 'Skriptet åpner godkjenningssiden. Det krever Global Administrator, Privileged Role Administrator eller Cloud Application Administrator. Er du ikke det: kjør med -SkipConsent og la en administrator godkjenne etterpå.'
   }
 }
 
