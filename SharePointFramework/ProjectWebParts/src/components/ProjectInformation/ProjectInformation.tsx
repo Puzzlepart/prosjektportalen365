@@ -88,6 +88,13 @@ export const ProjectInformation: FC<IProjectInformationProps> = (incomingProps) 
           <ChildProjectsList />
           <ArchiveStatus />
           <ProjectStatusReport />
+          {context.state.hubSyncWarning && (
+            <UserMessage
+              title={strings.HubSyncWarningTitle}
+              text={context.state.hubSyncWarning}
+              intent='warning'
+            />
+          )}
           {showNoHubAccessMessage && (
             <div className={styles.noHubAccessMessage}>
               {strings.ProjectInformationNoHubAccessMessage}

@@ -4,12 +4,14 @@ import {
   DataSource,
   ItemFieldValues,
   ProjectInformationChildProject,
+  ProjectPhaseModel,
   searchAggregatedItems,
   format
 } from 'pp365-shared-library'
 import { DefaultCaching, SPDataAdapterBase } from 'pp365-shared-library/lib/data'
 import {
   DataSourceService,
+  IPhaseField,
   IProjectDataServiceParams,
   ProjectDataService
 } from 'pp365-shared-library/lib/services'
@@ -27,6 +29,7 @@ import {
 import resource from 'SharedResources'
 import { IProgressProps } from 'pp365-shared-library'
 import { getNewEntityProperties } from './newEntityProperties'
+import { syncPhaseToHub } from './syncPhaseToHub'
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService
@@ -212,6 +215,44 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       data: { properties },
       level: LogLevel.Info
     })
+  }
+
+  /**
+   * Change the project's phase on its properties item, then on its entity in the hub. A project
+   * without an entity in the hub is registered with all its properties (`syncPropertyItemToHub`).
+   *
+   * A failed hub update does not undo the phase change: the error is returned for the caller to
+   * report, while an error on the project's own item is thrown.
+   *
+   * @param phase Phase to change to
+   * @param phaseField Phase field
+   *
+   * @returns The error from the hub, or `null` when the hub was updated or is out of reach
+   */
+  public async updateProjectPhase(
+    phase: ProjectPhaseModel,
+    phaseField: IPhaseField
+  ): Promise<Error | null> {
+    const phaseProperties = await this.project.updateProjectPhase(phase, phaseField, false)
+    if (!this.entityService) return null
+    try {
+      await syncPhaseToHub(this.entityService, this.settings.siteId, phaseProperties, async () => {
+        const data = await this.project.getProjectInformationData()
+        await this.syncPropertyItemToHub(
+          this.spfxContext.pageContext.web.title,
+          data.fieldValues,
+          data.templateParameters ?? {},
+          () => null
+        )
+      })
+      return null
+    } catch (error) {
+      Logger.log({
+        message: `(${this._name}) (updateProjectPhase) The phase was not changed in the hub: ${error?.message}`,
+        level: LogLevel.Warning
+      })
+      return error
+    }
   }
 
   /**

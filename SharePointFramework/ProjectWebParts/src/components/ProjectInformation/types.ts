@@ -194,6 +194,11 @@ export interface IProjectInformationState extends IBaseWebPartComponentState<IPr
    * Properties last updated date/time
    */
   propertiesLastUpdated?: Date
+
+  /**
+   * Warning shown when saved properties were not synced to the hub, with the reason
+   */
+  hubSyncWarning?: string
 }
 
 export interface IProjectInformationData
