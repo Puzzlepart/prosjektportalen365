@@ -552,6 +552,50 @@ function Request-PPAdminConsent([string] $Tenant) {
   throw 'Fikk ikke bekreftet consent innen 5 minutter. Kjør skriptet igjen når godkjenningen er gjort.'
 }
 
+# Ressursleverandørene skriptet trenger: $true (registrert), $false (ikke registrert) eller
+# $null (kunne ikke leses). Fylles av forhåndssjekken, brukes av Register-PPResourceProviders.
+$script:RpStatus = [ordered]@{}
+
+# Forhåndssjekk av én ressursleverandør. Bare lesing.
+function Test-PPResourceProvider([string] $Namespace) {
+  $status = $null
+  try {
+    $rp = Invoke-PPArm GET "/subscriptions/$($script:SubId)/providers/$($Namespace)?api-version=$RpApiVersion"
+    $status = $rp.registrationState -eq 'Registered'
+  } catch {}
+  $script:RpStatus[$Namespace] = $status
+  if ($status -eq $true) {
+    Add-PPCheck -Navn "Ressursleverandør $Namespace" -Status 'OK' -Detalj 'registrert'
+  } elseif ($status -eq $false) {
+    Add-PPCheck -Navn "Ressursleverandør $Namespace" -Status 'ADVARSEL' -Detalj 'ikke registrert på abonnementet' -Fiks "Skriptet registrerer den før noe opprettes, og det krever Contributor på abonnementet. Har du bare tilgang på ressursgruppen: be eieren av abonnementet registrere den først (Abonnement -> Resource providers -> $Namespace -> Register)."
+  } else {
+    Add-PPCheck -Navn "Ressursleverandør $Namespace" -Status 'UKJENT' -Detalj 'kunne ikke lese registreringen (trolig bare tilgang på ressursgruppen)' -Fiks "Skriptet antar at den er registrert. Feiler opprettelsen med «not registered to use namespace», må eieren av abonnementet registrere $Namespace."
+  }
+}
+
+# Registrerer leverandørene forhåndssjekken fant uregistrert. Kjøres FØR noe opprettes, så en
+# manglende rettighet på abonnementet stopper kjøringen før den har laget et halvt oppsett.
+function Register-PPResourceProviders {
+  $mangler = @($script:RpStatus.Keys | Where-Object { $script:RpStatus[$_] -eq $false })
+  if ($mangler.Count -eq 0) { return }
+  Write-Step 'Ressursleverandører'
+  foreach ($ns in $mangler) {
+    if (-not $PSCmdlet.ShouldProcess($script:SubId, "Registrere ressursleverandøren $ns")) { continue }
+    try {
+      Invoke-PPArm POST "/subscriptions/$($script:SubId)/providers/$ns/register?api-version=$RpApiVersion" | Out-Null
+    } catch {
+      throw "Kunne ikke registrere ressursleverandøren $ns ($($_.Exception.Message)). Det krever Contributor på abonnementet. Be eieren av abonnementet registrere den (Abonnement -> Resource providers -> $ns -> Register), og kjør skriptet igjen. Ingenting er opprettet i denne kjøringen."
+    }
+    $frist = (Get-Date).AddMinutes(5)
+    while ((Invoke-PPArm GET "/subscriptions/$($script:SubId)/providers/$($ns)?api-version=$RpApiVersion").registrationState -ne 'Registered') {
+      if ((Get-Date) -gt $frist) { throw "$ns ble ikke registrert innen 5 minutter. Kjør skriptet igjen om litt." }
+      Start-Sleep -Seconds 10
+    }
+    $script:RpStatus[$ns] = $true
+    Write-Ok "$($ns): registrert"
+  }
+}
+
 function Initialize-PPResourceGroup {
   if (Get-AzResourceGroup -Name $ResourceGroupName -ErrorAction SilentlyContinue) { return }
   if ($NoCreate) { throw "Ressursgruppen '$ResourceGroupName' finnes ikke, og -NoCreate er angitt." }
@@ -577,6 +621,9 @@ function Set-PPKeyVault {
         if ((Get-Command New-AzKeyVault).Parameters.ContainsKey('EnableRbacAuthorization')) { $kvParams.EnableRbacAuthorization = $true }
         $vault = New-AzKeyVault @kvParams
       } catch {
+        if ($_.Exception.Message -match 'not registered to use namespace') {
+          throw "Ressursleverandøren Microsoft.KeyVault er ikke registrert på abonnementet. Be eieren av abonnementet registrere den (Abonnement -> Resource providers -> Microsoft.KeyVault -> Register), og kjør skriptet igjen med samme parametre - det som er opprettet, gjenbrukes."
+        }
         if ($_.Exception.Message -match 'VaultAlreadyExists|already in use|is already taken') {
           throw "Key Vault-navnet '$script:VaultName' er opptatt (navn er globalt unike i Azure). Velg et annet med -KeyVaultName - og oppgi det til Prosjektportalen-teamet."
         }
@@ -764,21 +811,7 @@ function Add-PPFoundryProblem($Deployment, [string] $Sjekk, [string] $Detalj, [s
 #>
 function Test-PPFoundryPlan {
   $sub = $script:SubId
-  # $true / $false / $null. $null betyr at vi ikke fikk lest det - typisk fordi den som kjører
-  # bare har tilgang på ressursgruppen. Da forsøker vi ikke å registrere, for det krever
-  # abonnementet; i de fleste abonnement er leverandøren registrert fra før.
-  $script:FoundryRpRegistrert = $null
-  try {
-    $rp = Invoke-PPArm GET "/subscriptions/$sub/providers/Microsoft.CognitiveServices?api-version=$RpApiVersion"
-    $script:FoundryRpRegistrert = $rp.registrationState -eq 'Registered'
-  } catch {}
-  if ($script:FoundryRpRegistrert -eq $true) {
-    Add-PPCheck -Navn 'Ressursleverandør' -Status 'OK' -Detalj 'Microsoft.CognitiveServices er registrert'
-  } elseif ($script:FoundryRpRegistrert -eq $false) {
-    Add-PPCheck -Navn 'Ressursleverandør' -Status 'ADVARSEL' -Detalj 'Microsoft.CognitiveServices er ikke registrert på abonnementet' -Fiks 'Skriptet registrerer den etter bekreftelsen. Krever Contributor på abonnementet.'
-  } else {
-    Add-PPCheck -Navn 'Ressursleverandør' -Status 'UKJENT' -Detalj 'kunne ikke lese registreringen av Microsoft.CognitiveServices (trolig bare tilgang på ressursgruppen)' -Fiks 'Skriptet antar at den er registrert. Feiler opprettelsen med MissingSubscriptionRegistration, må noen med Contributor på abonnementet registrere den.'
-  }
+  Test-PPResourceProvider 'Microsoft.CognitiveServices'
 
   $alle = @()
   try { $alle = @(Get-PPArmList "/subscriptions/$sub/providers/Microsoft.CognitiveServices/accounts?api-version=$CogApiVersion") } catch {}
@@ -880,7 +913,7 @@ function Test-PPFoundryPlan {
       $fallback = if ($d.Rolle -eq 'Images' -and $d.Type -ne 'GlobalStandard' -and -not $script:BildeTypeEksplisitt) { ' Bildemodellen faller tilbake til GlobalStandard om den ikke kan opprettes som valgt.' } else { '' }
       $fiks = if ($_.Exception.Message -match '403|AuthorizationFailed') {
         "Modellkatalogen og kvoten ligger på abonnementet, og du har trolig bare tilgang på ressursgruppen. Kontrolleres når ressursen er opprettet; mangler kvote, stopper skriptet da.$fallback"
-      } elseif ($script:FoundryRpRegistrert -eq $false) { "Kontrolleres på nytt etter at ressursleverandøren er registrert.$fallback" } else { $fallback.Trim() }
+      } elseif ($script:RpStatus['Microsoft.CognitiveServices'] -eq $false) { "Kontrolleres på nytt etter at ressursleverandøren er registrert.$fallback" } else { $fallback.Trim() }
       Add-PPCheck -Navn $sjekk -Status 'UKJENT' -Detalj "kunne ikke kontrollere $($d.Modell) som $($d.Type) ($($_.Exception.Message))" -Fiks $fiks
     }
   }
@@ -945,21 +978,6 @@ function New-PPFoundryDeployment($Konto, $Deployment, [string] $Type) {
 function New-PPFoundry {
   Write-Step 'Microsoft Foundry (-ProvisionFoundry)'
   $sub = $script:SubId
-
-  if ($script:FoundryRpRegistrert -eq $false -and $PSCmdlet.ShouldProcess($sub, 'Registrere ressursleverandøren Microsoft.CognitiveServices')) {
-    try {
-      Invoke-PPArm POST "/subscriptions/$sub/providers/Microsoft.CognitiveServices/register?api-version=$RpApiVersion" | Out-Null
-    } catch {
-      throw "Kunne ikke registrere ressursleverandøren Microsoft.CognitiveServices ($($_.Exception.Message)). Det krever Contributor på abonnementet - be en som har det om å registrere den (Abonnement -> Resource providers), og kjør skriptet igjen."
-    }
-    $frist = (Get-Date).AddMinutes(5)
-    while ((Invoke-PPArm GET "/subscriptions/$sub/providers/Microsoft.CognitiveServices?api-version=$RpApiVersion").registrationState -ne 'Registered') {
-      if ((Get-Date) -gt $frist) { throw 'Microsoft.CognitiveServices ble ikke registrert innen 5 minutter. Kjør skriptet igjen om litt.' }
-      Start-Sleep -Seconds 10
-    }
-    $script:FoundryRpRegistrert = $true
-    Write-Ok 'Ressursleverandøren Microsoft.CognitiveServices: registrert'
-  }
 
   foreach ($konto in $script:FoundryKontoer.Values) {
     if ($konto.Finnes) { Write-Ok "Foundry-ressurs '$($konto.Navn)': finnes"; continue }
@@ -1310,6 +1328,7 @@ if ($fulltOppsett) {
     Add-PPCheck -Navn 'Key Vault' -Status 'MANGLER' -Detalj "$($script:VaultName) finnes ikke, og -NoCreate er angitt" -Fiks 'Opprett vaulten, eller kjør uten -NoCreate.'
   } else {
     Add-PPCheck -Navn 'Key Vault' -Status 'OK' -Detalj "$($script:VaultName) opprettes i $ResourceGroupName/$Location"
+    Test-PPResourceProvider 'Microsoft.KeyVault'
   }
 }
 
@@ -1353,6 +1372,8 @@ if ($antallMangler -gt 0) {
 Confirm-PPSetup $tenant $azContext $vaultFinnes $consentTekst $scopeTekst
 
 # --- Fra og med her skrives det ---
+
+Register-PPResourceProviders
 
 # Foundry først: feiler opprettelsen (kvote, policy), har vi ikke åpnet consent-siden forgjeves.
 if ($ProvisionFoundry) {
