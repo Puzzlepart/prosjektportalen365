@@ -4,6 +4,7 @@ import {
   BreadcrumbDivider,
   BreadcrumbItem
 } from '@fluentui/react-components'
+import strings from 'ProjectExtensionsStrings'
 import React, { FC, Fragment } from 'react'
 import styles from './FolderNavigation.module.scss'
 import { IFolderNavigationProps } from './types'
@@ -16,7 +17,7 @@ export const FolderNavigation: FC<IFolderNavigationProps> = (props) => {
   const items = useFolderNavigation(props)
   return (
     <div className={styles.root}>
-      <Breadcrumb>
+      <Breadcrumb aria-label={strings.FolderNavigationLabel}>
         {items.map((item, index) => (
           <Fragment key={item.key}>
             {index > 0 && <BreadcrumbDivider />}

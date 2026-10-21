@@ -1,4 +1,4 @@
-import { Avatar, Link, TableCellLayout } from '@fluentui/react-components'
+import { Avatar, AvatarProps, Link, TableCellLayout } from '@fluentui/react-components'
 import { GlobeLocationFilled, TagMultipleFilled } from '@fluentui/react-icons'
 import * as strings from 'PortfolioWebPartsStrings'
 import { OverflowTagMenu, ProjectLogo } from 'pp365-shared-library'
@@ -7,6 +7,18 @@ import _ from 'underscore'
 import { ProjectMenu } from '../ProjectMenu'
 import { ListContext } from './context'
 import { IListColumn } from './types'
+
+/**
+ * A person's picture beside the name the cell shows: hidden, or the name is read twice, and
+ * without the `role` the data adapter gives the person (the field's internal name), which was
+ * spread onto the picture as its ARIA role (axe's critical `aria-roles`).
+ *
+ * @param user The person, as the data adapter gives it
+ */
+function person(user: AvatarProps | undefined): AvatarProps {
+  const { role: _field, ...avatar } = user ?? {}
+  return { ...avatar, 'aria-hidden': true }
+}
 
 export const useColumns = (): IListColumn[] => {
   const context = useContext(ListContext)
@@ -52,14 +64,17 @@ export const useColumns = (): IListColumn[] => {
       compare: () => null,
       renderHeaderCell: () => null,
       renderCell: (item) => {
+        // The logo beside the title's link: hidden, or the project is read twice.
         return (
-          <ProjectLogo
-            title={item.title}
-            url={item.url}
-            renderMode='list'
-            size={context.size !== 'medium' ? '32px' : '48px'}
-            fallbackImageUrl={item.templateImageUrl}
-          />
+          <div aria-hidden>
+            <ProjectLogo
+              title={item.title}
+              url={item.url}
+              renderMode='list'
+              size={context.size !== 'medium' ? '32px' : '48px'}
+              fallbackImageUrl={item.templateImageUrl}
+            />
+          </div>
         )
       }
     },
@@ -166,7 +181,7 @@ export const useColumns = (): IListColumn[] => {
             truncate
             title={`${primaryUserRole}: ${item.primaryUser?.name ?? strings.NotSet}`}
           >
-            <Avatar size={context.size !== 'medium' ? 24 : 32} {...item.primaryUser} />{' '}
+            <Avatar size={context.size !== 'medium' ? 24 : 32} {...person(item.primaryUser)} />{' '}
             {item.primaryUser?.name}
           </TableCellLayout>
         )
@@ -187,7 +202,7 @@ export const useColumns = (): IListColumn[] => {
             truncate
             title={`${secondaryUserRole}: ${item.secondaryUser?.name ?? strings.NotSet}`}
           >
-            <Avatar size={context.size !== 'medium' ? 24 : 32} {...item.secondaryUser} />{' '}
+            <Avatar size={context.size !== 'medium' ? 24 : 32} {...person(item.secondaryUser)} />{' '}
             {item.secondaryUser?.name}
           </TableCellLayout>
         )

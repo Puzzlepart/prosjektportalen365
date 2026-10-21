@@ -198,6 +198,33 @@ declare interface IProjectExtensionsStrings {
   ProgressTaskWarningText: string
   ProgressStepCountText: string
   ProgressAdvancedLogDescription: string
+  ProjectTemplateSelectorModeLabel: string
+  ConfigTabSelectedLabel: string
+  ExtensionsSectionSearchLabel: string
+  ContentConfigSectionSearchLabel: string
+  SearchResultsCount: string
+  CloudTemplateResolved: string
+  ProgressStepAnnouncement: string
+  ProgressTaskStatusPending: string
+  ProgressTaskStatusRunning: string
+  ProgressTaskStatusCompleted: string
+  ProgressTaskStatusError: string
+  ProgressTaskStatusWarning: string
+  ProgressTaskLabel: string
+  ProgressTaskLabelWithEntries: string
+  ProgressLogLevelInfo: string
+  ProgressLogLevelWarning: string
+  ProgressLogLevelError: string
+  FolderNavigationLabel: string
+  CopyProgressAnnouncement: string
+  RiskActionTasksLabel: string
+  RiskActionTaskCompletedLabel: string
+  RiskActionSyncDone: string
+  RiskActionSyncFailed: string
+  NewRiskActionSaved: string
+  NewRiskActionSaveFailed: string
+  MigrateRiskActionsDone: string
+  MigrateRiskActionsFailed: string
 }
 
 declare module 'ProjectExtensionsStrings' {

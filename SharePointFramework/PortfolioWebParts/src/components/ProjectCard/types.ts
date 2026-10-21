@@ -87,6 +87,11 @@ export interface IProjectCardState {
   refetch?: number
 
   /**
+   * The error that kept the project from being fetched
+   */
+  error?: Error
+
+  /**
    * Project model
    */
   project?: ProjectListModel

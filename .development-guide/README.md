@@ -124,6 +124,25 @@
 		* [Det delte biblioteket (shared-library)](#det-delte-biblioteket-shared-library)
 		* [Integrasjonstestene](#integrasjonstestene)
 		* [Hull verdt å kjenne til](#hull-verdt--kjenne-til)
+	* [➤ Tilgjengelighet](#-tilgjengelighet)
+		* [Slik leses tabellene](#slik-leses-tabellene)
+		* [Grunnlagsmålingen](#grunnlagsmlingen)
+		* [Nettlesertestene fra 19.10.2026](#nettlesertestene-fra-19102026)
+		* [shared-library](#shared-library-1)
+		* [ProjectWebParts](#projectwebparts-1)
+		* [ProjectExtensions](#projectextensions-1)
+		* [PortfolioWebParts](#portfoliowebparts-1)
+		* [PortfolioExtensions](#portfolioextensions-1)
+		* [ProgramWebParts](#programwebparts-1)
+	* [➤ Tilgjengelighet per WCAG-kriterium](#-tilgjengelighet-per-wcag-kriterium)
+		* [Hva oversikten gjelder](#hva-oversikten-gjelder)
+		* [Grunnlag og status](#grunnlag-og-status)
+		* [Oppfattbar](#oppfattbar)
+		* [Mulig å betjene](#mulig--betjene)
+		* [Forståelig](#forstelig)
+		* [Robust](#robust)
+		* [Fra WCAG 2.2](#fra-wcag-22)
+		* [Kjente avvik](#kjente-avvik)
 	* [➤ Maler](#-maler)
 		* [Mappene](#mappene)
 		* [Bygge og validere](#bygge-og-validere)
@@ -165,6 +184,7 @@
 		* [Bygg og installer (dev)](#bygg-og-installer-dev)
 		* [CI-appen «Prosjektportalen CI»](#ci-appen-prosjektportalen-ci)
 		* [CI (channels/test)](#ci-channelstest)
+		* [Testrapportsiden](#testrapportsiden)
 		* [CI (build debug)](#ci-build-debug)
 		* [Bygg utgivelse (main)](#bygg-utgivelse-main)
 		* [Felles for arbeidsflytene](#felles-for-arbeidsflytene)
@@ -274,7 +294,7 @@ Les [testing.md](spfx/testing.md) før du skriver din første test. Avsnittet «
 - **Kjør** `npm test` i en løsning (bygger først). Én fil: `npx heft test --test-path-pattern Header` (et regulært uttrykk over stien til testfilen). `shared-library` må være bygget først.
 - **Komponenttester** bruker React Testing Library og `jest.mock` av hooken eller dataadapteren, og `jest.mock(...)` må stå over importene. Importer aldri `@pnp/*` i en test; harnessen `pp365-jest-config` stubber den.
 - **Dekningsgulv:** hver løsnings `config/jest.config.json` har `coverageThreshold`. Lokalt melder Jest bare et gulv som ikke nås, mens utgivelsesbygget i CI stopper på det: se på dekningen før du pusher. Gulvene skal bare opp: løft dem når du legger til tester, senk dem aldri.
-- **Playwright (`e2e/`):** røyktester (`tests/smoke`) og brukerreiser (`tests/flows`; fire av dem skriver til testtenanten og rydder etter seg) mot testtenanten. De kjører i CI etter hver utrulling til testkanalen (`ci-channel-test.yml`), og rapporten lastes opp som artefaktet `playwright-report-test-channel`. Lokalt i `e2e/`: `cp .env.example .env`, fyll inn, `npx playwright install chromium` og `npm test`.
+- **Playwright (`e2e/`):** røyktester (`tests/smoke`) og brukerreiser (`tests/flows`; fire av dem skriver til testtenanten og rydder etter seg) mot testtenanten. De kjører i CI etter hver utrulling til testkanalen (`ci-channel-test.yml`), og rapporten, som integrasjonsrapporten, åpnes på den private testrapportsiden fra lenken i jobbens sammendrag (artefaktet `playwright-report-test-channel` er reserven, uten sporinger). Lokalt i `e2e/`: `cp .env.example .env`, fyll inn, `npx playwright install chromium` og `npm test`.
 - Den som åpner en PR, retter tester som feiler på grunn av den. Slett aldri en påstand bare for å få grønt.
 
 ### 6. Fra endring til merge
@@ -464,7 +484,7 @@ ci: try a change to the build [skip-ci] [build-debug]
 | ProgramProjectOverviewWebPart | ProgramWebParts     | Programoversikt                                        | 01417142-67c8-498b-a6da-6e78003023dd |
 | ProgramTimelineWebPart        | ProgramWebParts     | Prosjekttidslinje (Programnivå)                        | f97a38ab-78c2-400e-899f-b0d4cda76166 |
 | ProjectSetup                  | ProjectExtensions   | Oppsett av prosjekt-dialog                             | ce34553d-ab47-4107-8dd1-e980d953996d |
-| ProjectUpgrade                | ProjectExtensions   | Oppgradering av prosjekt-dialog                        | 453a6c1e-e1d0-4b12-a3fc-690a36da1f0c |
+| ProjectUpgrade                | ProjectExtensions   | Gjør ingenting på siden; oppgraderingen kjøres fra installasjonsskriptet | 453a6c1e-e1d0-4b12-a3fc-690a36da1f0c |
 | TemplateSelectorCommand       | ProjectExtensions   | Dokumentmalvelger-dialog (Malbibliotek)                | c9080212-e63e-47cc-8278-00ad38c3f5a5 |
 | RiskActionPlanner             | ProjectExtensions   | Planner-tiltak                                         | 1dd9fdb3-df0f-4248-a869-ca6f512e3d0f |
 | OpportunityMatrixWebPart      | ProjectWebParts     | Mulighetsmatrise                                       | aff0baa2-9ab4-4c13-a062-d5fa5028121c |
@@ -477,7 +497,7 @@ ci: try a change to the build [skip-ci] [build-debug]
 | DynamicListWebPart            | ProjectWebParts     | Dynamisk liste                                         | 2f66a372-7d6f-4d36-90b4-22b26465aa3c |
 | SharedLibrary                 | SharedLibrary       | Pakke med delte komponenter                            | 0f65a874-dc9d-491d-b979-6ce1d943dd00 |
 
-Hvilke tester som dekker hver komponent, står i [testoversikten](testoversikt.md).
+Hvilke tester som dekker hver komponent, står i [testoversikten](testoversikt.md). Status for universell utforming per komponent står i [Tilgjengelighet](tilgjengelighet.md).
 
 
 
@@ -1266,7 +1286,7 @@ Skriptene i roten styrer monorepoet som helhet: Rush-operasjoner, generering av 
 | `generate-sbom`                | `node ./.tasks/generate-sbom.js`                                                                          | Genererer `SBOM.md` med komplett oversikt over avhengigheter i alle pakker. Se [SBOM-generering](../ci/sbom.md).                                                                                |
 | `check-skills`                 | `node ./.tasks/check-skills.js`                                                                           | Sjekker at agentferdighetene (skills) bare ligger i `.claude/skills`: Claude Code leser bare den mappen, og GitHub Copilot leser den også. Feiler hvis `.github/skills` eller `.agents/skills` finnes, eller hvis en `SKILL.md` mangler `name` lik mappenavnet eller en `description` på 1–1024 tegn. Kjøres i CI av `skills.yml`. |
 | `check-channel-ids` | `node ./.tasks/check-channel-ids.js` | Sjekker at løsningene har main-kanalens løsnings- og komponent-ID-er i `config/package-solution.json` og manifestene, slik `channels/main.json` har dem. Feiler og lister avvikene ellers. `Install/Build-Release.ps1` kjører den før bygget. |
-| `test:tasks` | `node --test ".tasks/*.test.js"` | Kjører testene for skriptene i `.tasks/` (i dag `check-channel-ids`). |
+| `test:tasks` | `node --test ".tasks/*.test.js"` | Kjører alle `.tasks/*.test.js`, testene for skriptene i `.tasks/` (i dag `check-channel-ids`, `modify-solution-files` og `publish-test-report`). CI kjører dem ikke. |
 | `postversion`                  | `npm run generate-readme && npm run sync-version && npm run generate-sbom`                                | Kjøres automatisk av npm etter `npm version patch/minor`. Regenererer README, synkroniserer versjoner og oppdaterer SBOM i ett steg.                                                             |
 | `rush:init`                    | `npm run rush:update && npm run rush:build`                                                               | Førstegangsoppsett av repoet. Kjører `rush:update` etterfulgt av `rush:build` slik at avhengigheter installeres og alle løsningene bygges i riktig rekkefølge. Se [Rush og bygging](./rush.md).  |
 | `rush:update`                  | `node common/scripts/install-run-rush.js update`                                                          | Kjører `rush update` uten at Rush er installert globalt. Installerer avhengigheter og sikrer konsistente versjoner på tvers av løsningene.                                                       |
@@ -1344,7 +1364,7 @@ Se [Oppgaver](../../SharePointFramework/.tasks/README.md) for en full oversikt o
 | `test`         | `playwright test` | Kjører testene mot testtenanten. |
 | `test:ui`      | `playwright test --ui` | Åpner Playwrights grensesnitt for å kjøre og feilsøke testene. |
 | `test:headed`  | `playwright test --headed` | Kjører testene med synlig nettleser. |
-| `report`       | `playwright show-report` | Åpner HTML-rapporten fra siste kjøring. |
+| `report`       | `playwright show-report` | Åpner HTML-rapporten fra siste lokale kjøring. Rapporten fra CI ligger på testrapportsiden. |
 | `lint`, `validate-loc` | `echo …` | Plassholdere for `rush lint` og `rush validate-loc`. |
 
 ### Skript i `integration`
@@ -1355,7 +1375,7 @@ Se [Oppgaver](../../SharePointFramework/.tasks/README.md) for en full oversikt o
 | -------------- | -------- | ---------------------- |
 | `build`        | `tsc --noEmit -p tsconfig.json` | Typesjekker harnessen og testene. Kjøres av `rush build`; testene kjører aldri der, siden de trenger en tenant. |
 | `test`         | `node --test --test-concurrency=1 "tests/**/*.test.ts"` | Kjører testene mot testtenanten, én fil om gangen, med Nodes typestripping. |
-| `test:ci`      | `node --test … --test-reporter=spec … --test-reporter=junit …` | Som `test`, med spec-rapport i loggen og JUnit i `test-results/junit.xml`. Brukes av CI-jobben. |
+| `test:ci`      | `node --test … --test-reporter=spec … --test-reporter=junit … --test-reporter=./src/reporters/html.ts …` | Som `test`, med spec-rapport i loggen, JUnit i `test-results/junit.xml` og HTML-rapporten i `test-results/index.html` (den testrapportsiden viser). Brukes av CI-jobben. |
 | `lint`, `validate-loc` | `echo …` | Plassholdere for `rush lint` og `rush validate-loc`. |
 
 ### Skript i `Templates`
@@ -1631,6 +1651,8 @@ Regler og fakta som gjelder:
 - `*.module.scss` løses til klassenavnene sine (`styles.foo === 'foo'`), så du kan spørre på klassenavn.
 - Strengmoduler gir de norske tekstene, så `screen.getByText(strings.Nøkkel)` fungerer.
 - Fluent UI v8 og v9 rendrer under jsdom. Første innlasting av `@fluentui/react-components` i en testfil tar 15-45 sekunder; samle testene for én funksjon i én fil i stedet for én fil per lite delkomponent.
+- En knapp inni et Fluent `Tooltip`: et klikk med user-event flytter pekeren over knappen, verktøytipset åpnes og plasseres, og det fikk en test til å henge over 30 sekunder i CI, selv om den besto lokalt (knappen som åpner alle grupper i `List.test.tsx`, 2026-10-19). Bruk `fireEvent.click` når det er selve klikket som testes.
+- En test har 30 sekunder på seg (`testTimeout` i `pp365-jest-config`), ikke Jests 5. CI bygger to løsninger samtidig, og tester som tok 1-2 sekunder lokalt, feilet der tilfeldig på 5 sekunder, en ny test hver gang (2026-10-19). Gi ikke en test en lavere grense selv; en test som henger, feiler fortsatt.
 - Interaksjon: bruk `@testing-library/user-event` (`userEvent.setup()`), ikke `fireEvent`, for klikk og tasting. Unntak for Fluent v9-menyer: `user-event` sin pekersekvens på et menyelement stopper aldri under jsdom og lar Jest-arbeideren henge i minutter, så klikk menyelementer med `fireEvent.click`. En nestet v9-meny (undermeny) kan ikke åpnes under jsdom i det hele tatt; sjekk utløseren (`aria-haspopup="menu"`) og les valgene fra hooken som bygger dem. Hver åpen v9-meny koster dessuten titalls sekunder å rive ned under jsdom, og kostnaden vokser for hver meny en testfil har rendret: rendre menyen én gang per fil, og test valgene gjennom hooken.
 - Rollespørringer (`getByRole`) regner ut tilgjengelighetstreet for hele dokumentet og tar sekunder per kall i et stort Fluent-tre, særlig på en maskin under last. Bruk `getByText`, `getByTitle` eller `getByLabelText` når treet er stort (en åpen popover eller dialog i tillegg til web-delen), og rollespørringer der treet er lite.
 - Kombinasjonsboks-familien i Fluent v9 (`Combobox`, `Dropdown`, `TagPicker`) gikk i en endeløs render-løkke under jsdom på React 17 i det den åpnet. På React 18 åpner den og velger (prøvd 2026-10-07), men én åpning tok 40–60 sekunder på en belastet maskin, så testene står fortsatt inn for den. En test som skal velge noe, erstatter `Combobox` og `Option` med en vanlig `<select>` som holder Fluents kontrakt (`onOptionSelect` kalles med valgets verdi og tekst); se `PortfolioExtensions/src/components/IdeaApprovalDialog/IdeaApprovalDialog.test.tsx`. En test som skriver i en `TagPicker`, bruker harnessens stand-in: `jest.mock('@fluentui/react-components', () => jest.requireActual('pp365-jest-config/lib/tagPickerStandIn').withTagPickerStandIn())` (se `PeoplePicker.test.tsx`). I nettleseren fungerte familien også på React 17. En v9-komponent kan prøves i en ekte nettleser uten SharePoint ved å bunte den med webpack fra løsningens `node_modules` og kjøre den i Playwrights Chromium (slik personvelgeren ble prøvd i fase 4, slice 7).
@@ -1638,7 +1660,7 @@ Regler og fakta som gjelder:
 - I en `TagPicker` har de valgte taggene også rollen `option`. En nettlesertest som skal velge et søkeresultat, finner det på noe bare resultatene viser, som e-postadressen (`e2e/tests/flows/people-picker.spec.ts`).
 - En åpen Fluent v9-popover posisjoneres mot utløseren sin, og under jsdom kostet det 13 sekunder per test på en maskin under last og over ett minutt i CI. En test som skal åpne en popover, erstatter `Popover`, `PopoverTrigger` og `PopoverSurface` med en enkel utgave som holder Fluents kontrakt (utløseren veksler via `onOpenChange`, flaten vises mens den er åpen); se `ProjectWebParts/src/components/ProjectPhases/ProjectPhases.test.tsx`. Innholdet i popoveren kan også testes direkte, uten popoveren rundt.
 - Feilen «The `document` global was defined when React was initialized, but is not defined anymore» betyr at en komponent fortsatt gjorde asynkront arbeid (posisjonering av popover, timere) etter at testen var ferdig, og den tar hele Jest-arbeideren ned. Rydd opp og la arbeidet bli ferdig i `afterEach`: `cleanup()` etterfulgt av `await act(() => new Promise((r) => setTimeout(r, 50)))`.
-- Hovedlisten i PortfolioWebParts (`List`) rendrer radene med Fluent v9 `Table` (`List/ListGrid`): markeringskolonnen gir en navnløs `columnheader` som må filtreres bort, og elementradene finnes på avkrysningsboksen sin (`strings.ListSelectRowLabel`), siden grupperader har sin egen; se `List.test.tsx`. `WebPartTitle` rendrer en `<h2>` rundt en `span[role=heading]`, så spør på `getByText(tittel, { selector: 'span' })`.
+- Hovedlisten i PortfolioWebParts (`List`) rendrer radene med Fluent v9 `Table` (`List/ListGrid`): markeringskolonnen gir en navnløs `columnheader` som må filtreres bort, og elementradene finnes på avkrysningsboksen sin (`strings.ListSelectRowLabel`), siden grupperader har sin egen; se `List.test.tsx`. `WebPartTitle` rendrer én `<h2>` med tittelen i en `span`, og en info-knapp som heter «Informasjon om <tittel>» (#1788): spør på `getByRole('heading', { level: 2, name })`, eller `getByText(tittel, { selector: 'span' })` i et stort tre.
 - Trenger komponenten SPFx-kontekst (`WebPartContext`, `pageContext`), lag et minimalt objekt med akkurat feltene komponenten leser og send det inn via props eller context-provider. Ikke bygg en generell SPFx-mock.
 - Matcherne fra jest-dom (`toBeInTheDocument`, `toHaveClass`, ...) er gjort kjent for kompilatoren gjennom `src/jest-dom.d.ts` i hver løsning.
 
@@ -1648,22 +1670,22 @@ Kjør testene i en løsning med `npm test` (`heft test`), eller bare bygg-og-tes
 
 `e2e/` er Rush-prosjektet `pp365-e2e`, med tre mapper: `tests/smoke` (røyktester av sider og webdeler), `tests/flows` (brukerreiser; fire av dem skriver til testtenanten og rydder etter seg) og `tests/local` (en løsnings lokale bundle via en utviklingsserver, bare med `E2E_LOCAL_BUNDLE=1`, aldri i CI). Røyktestene logger inn som en dedikert testbruker, åpner hub-sidene og et prosjektområde, venter på at SPFx-lerretet rendrer, sjekker at forventede webdeler monteres, og feiler på nettleserfeil som betyr at en bundle er ødelagt («Cannot find module», «Failed to load component», «ChunkLoadError»). Det siste er nettopp symptomet på et delt bibliotek som ikke er pakket inn, og er det pakkebeviset i `Build-Release.ps1` sikrer på byggetidspunktet.
 
-Kjøring i CI: jobben «End-to-end smoke (test channel)» i `ci-channel-test.yml` kjører etter en vellykket «Upgrade (test channel)», altså mot den pakken som nettopp ble rullet ut til `SP_URL_TEST`. Arbeidsflyten utløses av push til grenene i `on.push.branches` (i dag `releases/1.15` og `feat/technical-backlog*`) når filer under `SharePointFramework/`, `Install/`, `Templates/`, `e2e/` eller `integration/` er endret, og kan startes manuelt fra Actions-fanen (`workflow_dispatch`). Merk at en push til en av disse grenene oppgraderer testtenanten. E2E-jobben følger begge oppgraderingsløpene: den vanlige oppgraderingen og pakke-oppgraderingen som `[apps-only]`/`[apps-only:<løsninger>]` bruker. `[skip-e2e]` i commit-emnet hopper over E2E-jobben; `[skip-upgrade]` hopper over oppgraderingen og dermed også E2E.
+Kjøring i CI: jobben «End-to-end smoke (test channel)» i `ci-channel-test.yml` kjører etter en vellykket «Upgrade (test channel)», altså mot den pakken som nettopp ble rullet ut til `SP_URL_TEST`. Arbeidsflyten utløses av push til grenene i `on.push.branches` (i dag bare `releases/1.15`) når filer under `SharePointFramework/`, `Install/`, `Templates/`, `e2e/` eller `integration/`, publiseringsskriptet `.tasks/publish-test-report.js` eller arbeidsflytfilen selv er endret, og kan startes manuelt fra Actions-fanen (`workflow_dispatch`). Merk at en push til en av disse grenene oppgraderer testtenanten. E2E-jobben følger begge oppgraderingsløpene: den vanlige oppgraderingen og pakke-oppgraderingen som `[apps-only]`/`[apps-only:<løsninger>]` bruker. `[skip-e2e]` i commit-emnet hopper over E2E-jobben; `[skip-upgrade]` hopper over oppgraderingen og dermed også E2E.
 
 #### Finne og lese E2E-rapporten fra CI
 
 - **Rask oversikt**: jobbloggen lister hver test som bestått, feilet eller hoppet over, og skriver ut påstanden og lokatoren for hver feil (`github`-reporteren). Feil vises også som annotasjoner på kjøringens oppsummeringsside.
-- **Full rapport**: nederst på oppsummeringssiden, under «Artifacts», ligger `playwright-report-test-channel` (7 dager, det lengste repoet tillater). Zip-filen inneholder `playwright-report/` (HTML-rapporten) og `test-results/` (per feilet test: `error-context.md` med sidens tilgjengelighetssnapshot, skjermbilde, video og ved nytt forsøk `trace.zip`), samt `test-results/junit.xml`.
-- **Åpne rapporten lokalt**: fra `e2e/`:
+- **Full rapport, på testrapportsiden**: jobbens sammendrag på kjøringens side har lenken «Open the report» til kjøringens Playwright-rapport og «all runs» til forsiden. Forsiden lister testkanalens kjøringer de siste 7 dagene, nyeste først: kjøringen, commiten med branch og emnelinje, og en kolonne for E2E og en for integrasjon med utfall, antall og lenke til rapporten. Et nytt forsøk av en kjøring står på en egen rad. Rapporten åpnes rett i nettleseren, med skjermbilder, video og sporinger (traces), og sporingsvisningen virker der, fordi området serveres over HTTPS. Tittelen er `PP365 e2e · <branch> · run <nummer>` (`PLAYWRIGHT_HTML_TITLE` i teststeget). Området er privat: GitHub ber om innlogging, og alle med lesetilgang til rapportrepoet slipper inn. Rapporten kommer et minutt eller to etter at jobben er ferdig. Hvordan den er satt opp, står under «Testrapportsiden» i [Kontinuerlig integrasjon](../ci/kontinuerlig-integrasjon.md).
+- **Artefaktet, når testrapportsiden ikke har rapporten** (området er ikke satt opp, eller publiseringen feilet; steget viser da en advarsel): nederst på oppsummeringssiden, under «Artifacts», ligger `playwright-report-test-channel` (7 dager, det lengste repoet tillater). Zip-filen inneholder `playwright-report/` (HTML-rapporten) og `test-results/` (per feilet test: `error-context.md` med sidens tilgjengelighetssnapshot, skjermbilde og video), samt `test-results/junit.xml` og `test-results/results.json`. Sporingene er tatt ut (`playwright-report/data/*.zip`, `playwright-report/trace` og `test-results/**/trace.zip`), og det samme er innloggingens egne resultater (`test-results/auth.setup*`), fordi sidesnapshotet deres viser innloggingsskjemaet. Alt finnes på testrapportsiden. Fra `e2e/`:
 
   ```bash
   gh run download <run-id> -n playwright-report-test-channel -D ci-report
   npx playwright show-report ci-report/playwright-report   # åpner http://localhost:9323
-  npx playwright show-trace ci-report/test-results/<test>/trace.zip
   ```
 
-  `index.html` kan også åpnes rett fra filsystemet, men sporinger krever `show-report` eller trace.playwright.dev.
-- Rapporten inneholder snapshot av sider i testtenanten. Den publiseres ikke utenfor GitHub, og artefakt-tilgangen på repoet skal ikke utvides.
+  `index.html` kan også åpnes rett fra filsystemet.
+- **Rapportene går bare til den private testrapportsiden.** De inneholder snapshot av sider i testtenanten, og sporingene inneholder e2e-brukerens øktinformasjonskapsler, `storageState` og forespørselshodene: Playwright 1.63 maskerer ingenting (sjekket 2026-10-14). Repoet er offentlig, så artefaktene kan lastes ned av alle som er logget inn på GitHub, og derfor er sporingene tatt ut av artefaktet. Testrapportsiden skal forbli privat, rapportene publiseres ikke noe annet sted, og tilgangen til artefaktene og rapportrepoet skal ikke utvides.
+- **Aldri en hemmelighet i et steg.** `fill(verdi)` gir steget tittelen `Fill "<verdi>"`, og HTML-rapporten beholder hvert steg i hver test, også i dem som består. Til 14. oktober 2026 brukte `auth.setup.ts` `fill(password)`, så hver CI-rapport siden suiten kom, hadde e2e-brukerens passord i klartekst, i et artefakt alle innloggede GitHub-brukere kunne laste ned i 7 dager. Nå skriver `enterSecret()` i `auth.setup.ts` inn brukernavnet og passordet: `fill('')` tømmer feltet etter de samme kontrollene som før, og Chromiums `Input.insertText`, som `fill()` selv ender i, skriver verdien som ekte inndata. Et protokollkall blir ikke noe steg i rapporten (`type()`, `pressSequentially()` og `insertText()` har verdien i tittelen, de også). Bruk den for hver hemmelighet en test skriver inn. To ting til holder passordet ute: når en test feiler, skriver Playwright `error-context.md` med et tilgjengelighetssnapshot av siden, og der står verdien i hvert felt, også passordfelt. Derfor tømmer en `afterEach` i `auth.setup.ts` passordfeltene før snapshotet tas. I tillegg har oppsettsprosjektet `setup` `trace: 'off'` i CI, fordi en sporing beholder argumentene til hver handling og verdiene i feltene. Lokalt overstyrer `--trace on` og `npm run test:ui` dette, men `test-results/` er ikke i git. Har en hemmelighet havnet i en rapport, roteres den, testbrukerens økter tilbakekalles, og artefaktene med den slettes.
 
 Variabler og hemmeligheter i GitHub:
 
@@ -1675,11 +1697,15 @@ Variabler og hemmeligheter i GitHub:
 | `E2E_USERNAME` | hemmelighet | Testbrukerens UPN |
 | `E2E_PASSWORD` | hemmelighet | Testbrukerens passord |
 
+Publiseringen til testrapportsiden bruker `TEST_REPORTS_DEPLOY_KEY`, `TEST_REPORTS_REPOSITORY` og `TEST_REPORTS_URL`; de står under «Testrapportsiden» i [Kontinuerlig integrasjon](../ci/kontinuerlig-integrasjon.md).
+
 Krav til testbrukeren: en egen konto (for eksempel `pp365-e2e@<tenant>.onmicrosoft.com`) som er medlem av porteføljen og prosjektet, med minst mulig rettigheter ellers, ekskludert fra MFA gjennom en Conditional Access-policy som gjelder bare denne kontoen, og med passord som roteres og bare finnes som GitHub-hemmelighet. Ikke bruk en personlig konto, og ikke gjenbruk sertifikat-appen som utrullingen bruker: E2E trenger en brukersesjon i nettleseren.
 
 Testene gjør mer enn å vente på at webdelene monteres: de prøveklikker (trial click) kontroller som må kunne nås (prosjektlenkene i tidslinjen, fasene i fasevelgeren), åpner filterpanel og informasjonspanel og lukker dem igjen, søker i porteføljeoversikten og sjekker resultattelleren, og feiler hvis en webdel viser feilgrensen «Noe gikk galt» eller nettleseren melder at en bundle ikke kunne lastes («Could not load … in require»). Layout som dekker kontroller (slik tidslinjen gjorde da tredjeparts-CSS ble hashet) feiler dermed på prøveklikket. Utgivelsesbygget sjekker i tillegg at ingen bundle inneholder hashede klassenavn fra tredjeparts stilark.
 
 Sidenavn varierer mellom norsk og engelsk provisjonering og mellom tenanter. Hver test slår derfor opp siden i hubens eget SitePages-bibliotek (første eksisterende kandidat vinner, `E2E_PAGE_*` først) og hopper over med listen over sider som finnes når ingen kandidat passer. En hub-URL uten avsluttende skråstrek normaliseres, og en 404 rapporteres med URL-en som ble forsøkt. Testene venter på `[data-sp-web-part-id]`, som finnes både på lerretssider (Home.aspx) og på enkeltwebdel-appsider (Porteføljeoversikt, Prosjekttidslinje, Nytteoversikt). Verdien er webdelens komponent-id, og `openPage` feiler når en PP365-webdel på siden hører til en annen kanal enn den som testes (`E2E_CHANNEL`, standard `test`): siden kjører da den kanalens kode, og testen sier ingenting om bygget. Slik ble det oppdaget at tre av testhubens aggregerte oversikter, den dynamiske listen og prosjektets tidslinje brukte hovedkanalens webdeler (rettet på testmiljøet 2026-10-09).
+
+SharePoint kan slutte å godta økten til e2e-brukeren midt i en kjøring. REST-kallene får da 401 eller 403, mens sidene fortsatt laster, fordi en side logger inn igjen av seg selv og fornyer informasjonskapselen. Det kan ikke et REST-kall. 20. oktober 2026 skjedde det fire minutter inn i en CI-kjøring, og 52 tester feilet. Fixturenes REST-kall (`listSitePages`, `restGet` og `restPost`) går derfor gjennom `withSessionRenewal` i `fixtures/pp365.ts`: får et kall 401 eller 403, lastes én side på området i en egen fane, og kallet sendes én gang til. Et kall brukeren virkelig ikke har lov til, avvises igjen.
 
 Lokalt: `cp e2e/.env.example e2e/.env`, fyll inn, `npx playwright install chromium`, så `npm test` eller `npm run test:ui` i `e2e/`. Nye tester planlegges, genereres og repareres med Playwright-CLI-ferdigheten i `.claude/skills/playwright-cli` (`references/test-generation.md`).
 
@@ -1708,7 +1734,9 @@ Regler for testene:
 - Sjekk det SharePoint returnerte eller lagret, lest tilbake, ikke det koden sendte. Hold påstandene uavhengige av tidssone og av andre prosjekters data.
 - Ingen hemmelighet havner i en logg, en rapport eller en fil: ingen token, informasjonskapsel eller sertifikat skrives ut.
 
-I CI kjører jobben «Integration tests (test channel)» i `ci-channel-test.yml` etter den samme oppgraderingen som E2E (begge løpene), ved siden av E2E-jobben. Den installerer `--to pp365-integration --to pp365-templates`, genererer bibliotekets delte strenger fra `.resx`-filene (`npm run generate-resx-ts` i `Templates`; de ligger ikke i git), bygger biblioteket (`heft build --production`, uten Jest), kompilerer ProjectWebParts' `lib-commonjs` med TypeScript alene (`--noCheck`, med strengfilene kopiert ved siden av; bunting og typesjekk av løsningen gjør utgivelsesbygget) og kjører `npm run test:ci`. Spec-rapporten havner i loggen, og JUnit-rapporten i `integration/test-results/junit.xml`, lastet opp som `integration-report-test-channel` (7 dager). `[skip-integration]` i commit-emnet hopper over jobben.
+I CI kjører jobben «Integration tests (test channel)» i `ci-channel-test.yml` etter den samme oppgraderingen som E2E (begge løpene), ved siden av E2E-jobben. Den installerer `--to pp365-integration --to pp365-templates`, genererer bibliotekets delte strenger fra `.resx`-filene (`npm run generate-resx-ts` i `Templates`; de ligger ikke i git), bygger biblioteket (`heft build --production`, uten Jest), kompilerer ProjectWebParts' `lib-commonjs` med TypeScript alene (`--noCheck`, med strengfilene kopiert ved siden av; bunting og typesjekk av løsningen gjør utgivelsesbygget) og kjører `npm run test:ci`. Spec-rapporten havner i loggen, JUnit-rapporten i `integration/test-results/junit.xml` og HTML-rapporten i `integration/test-results/index.html`. Mappen lastes opp som `integration-report-test-channel` (7 dager) og publiseres på testrapportsiden, som E2E-rapporten. `[skip-integration]` i commit-emnet hopper over jobben.
+
+HTML-rapporten lages av `src/reporters/html.ts`, en egen rapportør for `node:test` (en asynkron generator, typestrippet TypeScript som testene) som `test:ci` kjører som tredje rapportør ved siden av spec og JUnit. Den viser et tre per fil med suiter og tester og status (bestått, feilet, avbrutt, hoppet over, `todo`), begrunnelsen for en test som ble hoppet over, linjene fra `t.diagnostic`, feilene (en krok som feilet, er navngitt, `cause`-kjeden er med, og stakken er uten repoets rot og Nodes interne rammer), det hver fil skrev til stdout og stderr, filer som feilet før testene kjørte, og totalene fra Nodes siste `test:summary`. Totalene bygges inn i HTML-filen som `<script type="application/json" id="report-summary">`, og testrapportsiden leser antallene derfra. Med tre rapportører skriver Node en `MaxListenersExceededWarning`; den er ufarlig. Rapportøren testes uten tenant i `tests/html-reporter.test.ts`, som kjører i `npm test` og i CI-jobben.
 
 | Navn i GitHub | Type | Brukes som |
 |---|---|---|
@@ -1729,7 +1757,7 @@ I CI kjører jobben «Integration tests (test channel)» i `ci-channel-test.yml`
 
 **E2E feiler etter utrulling til testkanalen**
 
-1. Åpne artefaktet `playwright-report-test-channel` fra kjøringen. Sporingen viser hvert steg, nettverkskall og konsoll.
+1. Åpne rapporten på testrapportsiden fra lenken i jobbens sammendrag, eller artefaktet `playwright-report-test-channel` når testrapportsiden ikke har den (uten sporinger). Sporingen, som tas ved nytt forsøk, viser hvert steg, nettverkskall og konsoll.
 2. Klassifiser:
    - *Miljø*: innlogging feilet (utløpt passord, MFA-krav, endret policy), siden finnes ikke, tenanten svarer ikke. Rett hemmelighet, policy eller variabel; kjør jobben på nytt.
    - *Utrulling*: rett etter en oppgradering kan SharePoint i noen minutter gi en side forrige versjons manifest for en komponent, og bunten det peker på har oppgraderingen fjernet («Could not load … in require»). Oppsettet `tests/deployment.setup.ts` venter derfor inntil ti minutter på at hubben og prosjektets forside laster alle bunter fra appkatalogen før testene starter. Feiler oppsettet, er en bunt fortsatt borte etter ti minutter, og utrullingen er ødelagt.
@@ -1739,7 +1767,7 @@ I CI kjører jobben «Integration tests (test channel)» i `ci-channel-test.yml`
 
 **Integrasjonstest feiler etter utrulling**
 
-1. Jobbloggen viser hver test og påstanden som feilet. Rapporten hentes med `gh run download <run-id> -n integration-report-test-channel`.
+1. Jobbloggen viser hver test og påstanden som feilet. HTML-rapporten på testrapportsiden (lenken i jobbens sammendrag) viser feilen med stakk og det filen skrev til stdout og stderr. Mangler den der, hentes den med `gh run download <run-id> -n integration-report-test-channel`, og `index.html` åpnes rett fra filsystemet.
 2. Klassifiser som for E2E: *miljø* (innloggingen, rettighetene til CI-appen, en variabel som mangler; med `INTEGRATION_STRICT` feiler det i stedet for å hoppes over), *regresjon* i datalaget (rett koden; testen peker på én funksjon), eller *endret svar fra SharePoint* (rett koden som leser svaret, og la testen dokumentere den nye formen).
 3. `node:test` prøver ikke på nytt. En ustabil test rettes eller merkes `todo` med et issue; omprøving legges eventuelt bare rundt innloggingen og første kall (se planen).
 
@@ -1774,7 +1802,7 @@ Hvilke automatiske tester som dekker hver komponent, lag for lag, med noen ord o
 |---|---|---|
 | Jest | 192 | 1 268: PortfolioExtensions 101, PortfolioWebParts 240, ProgramWebParts 59, ProjectExtensions 118, ProjectWebParts 239, shared-library 511 |
 | Kjøretidskontrakt | 2 | 6 |
-| Integrasjon | 10 | 42: 12 uten tenant, 30 mot testtenanten |
+| Integrasjon | 11 | 50: 20 uten tenant, 30 mot testtenanten |
 | E2E | 27 spesifikasjoner | 59: smoke 22, flows 29 (de to i CI), local 8 |
 
 I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder etter seg. «Indirekte» betyr at komponenten står på en side en E2E-test åpner. Testen sjekker da ikke komponenten selv, men `openPage` feiler fortsatt på feilgrensen «Noe gikk galt», på en webdel fra en annen kanal og på bunter som ikke lastes.
@@ -1783,9 +1811,9 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 
 | Komponent | Jest | E2E | Integrasjon | Ikke dekket / manuelt |
 |---|---|---|---|---|
-| Porteføljeoversikt | 10 filer, 73: reducer, filtrering, Excel-eksport, kolonnemeny, kolonneskjema, porteføljevelgeren og visningsvelgeren (sammenslått visning, egne visninger, programmer, hvem som kan lage og endre visninger) | Smoke: listen, søk, filter, Excel-eksport. Flows: kolonnemeny på høyreklikk, dra kolonner, panelets topp, tittelknappen, typografi, navigasjon, ny kolonne (skriver) | Prosjektkolonner; ny kolonne i en visning, også med skjulte kolonner (skriver); kolonnekonfigurasjon; standardvisningen og fargene for `Status muligheter` etter oppgradering | — |
+| Porteføljeoversikt | 10 filer, 73: reducer, filtrering, Excel-eksport, kolonnemeny, kolonneskjema, porteføljevelgeren og visningsvelgeren (sammenslått visning, egne visninger, programmer, hvem som kan lage og endre visninger) | Smoke: listen, søk, filter, Excel-eksport. Flows: kolonnemeny på høyreklikk, dra kolonner, panelets topp, tittelknappen, typografi, verktøylinjen på én linje med søkefeltet som gir etter (og innenfor webdelen ved 320 px), navigasjon, ny kolonne (skriver) | Prosjektkolonner; ny kolonne i en visning, også med skjulte kolonner (skriver); kolonnekonfigurasjon; standardvisningen og fargene for `Status muligheter` etter oppgradering | — |
 | Delt liste (`List`, `ListGrid`, `Vis eller skjul kolonner`) | 6 filer, 41 | Gjennom flytene for porteføljeoversikten | — | — |
-| Portefølje aggregeringsoversikt | 10 filer, 78: reducer (51), datahenting, Excel-eksport, verktøylinje, gruppering (også gruppenavn for personer, termer og oppslag), søk i kolonnene som vises | Smoke: aggregeringssidene og Nytteoversikt med filter. Flows: typografi | — | Hubens dataadapter |
+| Portefølje aggregeringsoversikt | 10 filer, 78: reducer (51), datahenting, Excel-eksport, verktøylinje, gruppering (også gruppenavn for personer, termer og oppslag), søk i kolonnene som vises | Smoke: aggregeringssidene og Nytteoversikt med filter. Flows: typografi, verktøylinjen på én linje | — | Hubens dataadapter |
 | Prosjektutlisting | 6 filer, 35: også fanenes filtre (feltbetingelser med `$ne`/`$in`/`$nin`, tilstand, tilgang) og listevisningens kolonner | Flows: kortets panel viser prosjektnavnet | — | — |
 | Prosjekttidslinje (porteføljenivå) | Via bibliotekets `ProjectTimeline` (22) | Smoke: prøveklikk på en prosjektlenke, filter | — | Ingen test av webdelen selv |
 | Siste prosjekter | 5: nyeste områder, vis flere/færre, tom, feil | Indirekte (hubens forside) | — | — |
@@ -1812,7 +1840,7 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 | Risikomatrise og Mulighetsmatrise | 4 og 2, og 15 delte: begge webdelene, prosjekt- og programmodus | Smoke: matrisen i statusrapportens usikkerhetsseksjon (når rapporten har usikkerheter), og `Usikkerhet.aspx` med begge webdelene (`E2E_PAGE_MATRIX` overstyrer navnet); ingen malside har dem, så siden legges på E2E-prosjektet med `npm run add-matrix-page -- <url>` i `integration/`, og testen hopper over til den finnes | Søket med matrisens datakilde, også gjennom ProjectWebParts' adapter på programmet; datakildene finnes etter oppgradering | — |
 | Prosjekttidslinje (prosjektnivå) | 4 filer, 17 | Smoke: listen får plass i 1280 og 1920 px. Flows: typografi | — | Tidslinjens stolper |
 | Prosjektnyheter | 2 filer, 7 | Indirekte (prosjektets forside) | — | Å opprette en nyhetsside |
-| Dynamisk liste | 6 filer, 33 | Flows: typografi (hoppes over når siden mangler) | — | Skriving og egne handlinger |
+| Dynamisk liste | 6 filer, 33 | Flows: typografi, verktøylinjen på én linje (hoppes over når siden mangler) | — | Skriving og egne handlinger |
 
 ### Utvidelser (PortfolioExtensions og ProjectExtensions)
 
@@ -1849,6 +1877,7 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 | Fil | Tester | Sjekker |
 |---|---|---|
 | `harness` | 12, uten tenant | Strengene, AMD-feil, at tjenestene lastes, SPFx-konteksten, språksjekken, sertifikatet, `appOnlyDenied` |
+| `html-reporter` | 8, uten tenant | HTML-rapporten fra `src/reporters/html.ts`: treet og statusene, stakken uten roten og Nodes rammer, krok som feilet og `cause`-kjeden, fil som feilet ved lasting, en prosess som døde etter testene og en test som aldri ble ferdig, totalene fra sammendraget, escaping, og at en ødelagt strøm likevel gir en side |
 | `reachability` | 3 | Hubens web, søk og termlageret i innloggingsmodusen |
 | `portal-data-service` | 2 | Prosjektkolonnene, og at prosjektet finner huben |
 | `search` | 4 | Matrisens egenskaper og formater, sider, oppdeling, eget område |
@@ -1865,7 +1894,233 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 - **Integrasjon, men ingen E2E:** Program aggregeringsoversikt. Matrisene har E2E på statussiden bare der rapporten har usikkerheter, og som webdeler på en side testharnesset legger til (`add-matrix-page`), siden ingen malside har dem.
 - **Bare indirekte i E2E:** Siste prosjekter og Prosjektnyheter.
 - **Manuelt:** prosjektoppsett, publisering av statusrapport, idéflyten og å endre fase.
-- **Utenfor komponentene:** `.tasks/check-channel-ids.test.js` (5 tester) og `.tasks/modify-solution-files.test.js` (3 tester: kanal-ID-ene, versjonsstempelet og at bare en kanal med egne ID-er skjuler webdelene), med `npm run test:tasks`.
+- **Tilgjengelighet (#1788):** `tests/smoke/a11y-baseline.spec.ts` skanner med axe alle PP365-webdeler på sidene i `tests/fixtures/pages.ts`, som er sidene røyktestene åpner, pluss Dynamisk liste. `tests/smoke/a11y-surfaces.spec.ts` åpner panelene, dialogene, menyene og popoverne ingen annen test åpner. Den skanner dem og sjekker at fokus går tilbake når de lukkes med Escape. Røyktestene for tiltaksfeltet og «Hent dokumentmal», og flytene for øyeblikksbildet, statusrapporten og programadministrasjonen, skanner flatene de åpner. `tests/smoke/a11y-visual.spec.ts` legger ved målinger og bilder for det visuelle steget: 320 px, tekstavstand og kontrastmodus. Den feiler ingenting. Skanningene feiler bare for komponentene i `A11Y_BLOCKING`. Resultatet per komponent står i [Tilgjengelighet](tilgjengelighet.md). I Jest gir `pp365-jest-config/lib/axe` det samme for en komponent, brukt i `FieldContainer`, `LoadingSkeleton` og `WebPartTitle`.
+- **Utenfor komponentene:** `.tasks/check-channel-ids.test.js` (5 tester), `.tasks/modify-solution-files.test.js` (3 tester: kanal-ID-ene, versjonsstempelet og at bare en kanal med egne ID-er skjuler webdelene) og `.tasks/publish-test-report.test.js` (11 tester av testrapportsiden, mot et lokalt bart repo: rapport og metadata, én rad per kjøring og forsøk, 7 dager, størrelsesbudsjettet, escaping, antallene, commit uten foreldre, ny runde når den andre jobben pushet først, ingen publisering til et område som svarer uten innlogging, og deploy-nøkkelen på disk), med `npm run test:tasks`, som CI ikke kjører.
+
+
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#tilgjengelighet)
+
+## ➤ Tilgjengelighet
+
+Status for universell utforming per komponent, arbeidet i [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788). Status per WCAG-kriterium, for kunder og anskaffelser, står i [Tilgjengelighet per WCAG-kriterium](tilgjengelighet-wcag.md). Målet er WCAG 2.1 nivå A og AA, og i tillegg fire kriterier fra WCAG 2.2: 2.4.11, 2.5.7, 2.5.8 og 3.3.7. Planen og rekkefølgen står i `docs/plans/universal-design-wcag.md`. Reglene for koden og fremgangsmåten står i skillen `pp365-a11y`.
+
+### Slik leses tabellene
+
+- **axe** er det axe fant i grunnlagsmålingen 14.10.2026: regelen og hvor mange elementer som brøt den. «Ingen» betyr at axe ikke fant noe. Det betyr ikke at komponenten er tilgjengelig, siden axe bare finner en del av det WCAG krever.
+- **Gjennomgått** er datoen komponenten har vært gjennom alle sju stegene: axe, jest-axe, tastatur, skjermleser, visuelt, skjema og registrering.
+- **Tastatur**, **Skjermleser**, **Visuelt** og **Skjema** fylles ut ved gjennomgangen: ✓ for bestått, ✗ for funn (se merknaden) og – når det ikke er relevant.
+- **Merknad** sier hva som er rettet og hva som gjenstår, og hva jest-axe fant der komponenten har komponenttester.
+
+### Grunnlagsmålingen
+
+axe-core 4.13 gjennom `@axe-core/playwright` skannet hver PP365-webdel fra testkanalen på sidene røyktestene åpner, og flatene testene for tiltaksfeltet og «Hent dokumentmal» åpner. Reglene var WCAG 2.1 A og AA og WCAG 2.2 AA. Fluents fokusvakter (`i[data-tabster-dummy]`) er holdt utenfor. De flagges av `aria-hidden-focus`, men flytter fokus videre med en gang og er Fluents egne. Skanningen venter til Fluent er ferdig med å animere inn dialoger, paneler og menyer. Målt midt i animasjonen ga de kontrastfunn som ikke fantes, så flatene ble skannet på nytt samme dag.
+
+Målingen er et øyeblikksbilde. Antallet varierer noe med hvor mye data som har lastet når skanningen går. Webdeler under folden, som Prosjektnyheter på prosjektets forside, monteres først når siden rulles og er ikke med. De skannes i sin egen gjennomgang.
+
+Testene går i `e2e/tests/smoke/a11y-baseline.spec.ts`, `risk-action.spec.ts` og `document-template-dialog.spec.ts`. Hver skanning legger ved `axe-<komponent>.json` og en `a11y`-merknad i rapporten. En skanning feiler bare for komponenter som står i `A11Y_BLOCKING`.
+
+### Nettlesertestene fra 19.10.2026
+
+- **Blokkerende:** de 24 webdelene og flatene som var uten funn i CI-kjøringen 19.10.2026, og de 29 som var uten funn 21.10.2026, står i `A11Y_BLOCKING`. Et nytt alvorlig eller kritisk funn i dem stopper bygget, også før håndrunden er gjort.
+- **Flatene:** `a11y-surfaces.spec.ts` åpner panelene, dialogene, menyene og popoverne ingen annen test åpner. Hver blir skannet, lukket med Escape, og testen sjekker at fokus går tilbake til det som åpnet den. Testen bare leser. Nettlesertestene for øyeblikksbildet, statusrapportens redigeringspanel, dialogen for å legge til underområder og detaljene i porteføljens tidslinje skanner også flatene de åpner.
+- **Visuelt:** `a11y-visual.spec.ts` går gjennom de samme sidene som axe og legger ved målinger og bilder for håndrunden. Den feiler ingenting. Den måler
+  - hva som blir bredere enn siden ved 320 px (datatabeller og tidslinjer er unntatt);
+  - tekst som blir kuttet av med tekstavstanden fra 1.4.12;
+  - og den tar bilder i kontrastmodus (`forced-colors`).
+- **Sidene:** listen over sider ligger i `e2e/tests/fixtures/pages.ts`, og Dynamisk liste (`DynList.aspx` på huben) er med.
+
+### shared-library
+
+| Komponent | axe | Gjennomgått | Tastatur | Skjermleser | Visuelt | Skjema | Merknad |
+|---|---|---|---|---|---|---|---|
+| BasePanel | Ingen, i tiltakspanelet |  |  |  |  |  | jest-axe: ingen funn. Panelet heter det overskriften sier, også når toppen er skjult. Et panel som leses og ikke arbeides i, kan gjøre innholdet til en region som får fokus og kan rulles med tastaturet (`isBodyFocusable`); skjemapanelene har sine felt som stopp |
+| Toolbar | Ikke målt alene |  |  |  |  |  | jest-axe: ingen funn. En knapp uten tekst heter det beskrivelsen sier. Rettet: en deaktivert knapp kan fokuseres, så piltastene når den og beskrivelsen, som sier hvorfor, leses opp. Når et panel eller en dialog en knapp åpnet, lukkes, går fokus tilbake til knappen; et panel som åpnes fra tilstand, som filterpanelet, ga det før til toppen av siden. En knapp som åpner en meny, som visningsvelgeren, sa ikke at den åpner en meny eller om menyen er åpen, fordi attributtene havnet på boksen rundt knappen. Nå sier knappen det, og fokus går tilbake til den når et panel et menyvalg åpnet, lukkes, som visningsskjemaet (funnet av nettlesertesten for flatene, 19.10.2026). Når verktøylinjen smalner, er det søkefeltet som gir etter, og ingenting brytes. Først under 480 px, som ved 320 px, går knappene til neste linje. Før krympet knappene, og resten havnet utenfor webdelen (1.4.10, funnet av den visuelle nettlesertesten 20.10.2026). Nettlesertesten for listene sjekker at verktøylinjen holder seg på én linje ved 1440, 1024 og 768 px, og at ingenting går utenfor webdelen ved 320 px. En undermeny i en meny, som programmene i porteføljeoversiktens visningsmeny, åpnes nå fra et menyvalg. Utløseren var en verktøylinjeknapp inne i menyen, som axe fant som en meny uten de barna den skal ha (aria-required-children, kritisk, 21.10.2026). |
+| DataGridList | Se «Hent dokumentmal» |  |  |  |  |  | jest-axe: ingen funn, med sortering og avkrysning |
+| FieldContainer og skjemafeltene | Ikke målt alene |  |  |  |  |  | jest-axe: ingen funn, også med datovelgeren |
+| CustomEditPanel | Ikke målt |  |  |  |  |  | jest-axe: ingen funn. «Lagre» kan nås med tastaturet når påkrevde felt mangler, og grunnen leses opp. Før var knappen deaktivert, og grunnen stod bare i `title` |
+| PeoplePicker | Ikke målt alene |  |  |  |  |  | Rettet: bildet ved navnet er skjult for skjermlesere, så navnet leses én gang, ikke to. Fluent tegner en knapp som åpner forslagene, og ga den navn etter feltet på engelsk («Open …»). I et felt for én person som har én, uten felt å skrive i, fikk den ikke noe navn (aria-command-name, funnet av nettlesertesten i egenskapspanelet 19.10.2026). Nå heter den «Vis forslag», og i et fullt felt for én er den borte, siden den ikke har noe å vise (21.10.2026). |
+| FilterPanel | Ikke målt |  |  |  |  |  | Rettet: seksjonstoppen er en knapp som sier om filteret er åpent |
+| UserMessage | Ikke målt |  |  |  |  |  | Rettet: leses opp, siden hver React-rot nå har en `AriaLiveAnnouncer`. jest-axe: ingen funn |
+| WebPartTitle | Ikke målt alene |  |  |  |  |  | Rettet: én overskrift, der det var to, og info-knappen heter «Informasjon om …» på norsk, der Fluent kalte den «information». En seksjon inne i en webdel får nivå 3 (`headingLevel={3}`) |
+| ConfirmDialog | Ikke målt |  |  |  |  |  | Rettet: dialogen beskrives av teksten sin, så spørsmålet leses opp når den åpnes, ikke bare tittelen |
+| OverflowTagMenu | Ikke målt |  |  |  |  |  | Rettet: taggene er en liste med tekst, der de var knapper som ikke gjorde noe, og `+n`-knappen sier hvor mange tagger den skjuler. En tagg som ikke får plass, slutter med «…» i stedet for å klippes; den ene taggen som alltid vises, ble klippt i en smal celle og med økt tekstavstand (1.4.12, 21.10.2026). Hele teksten står i `title` og leses av skjermlesere. Et verktøytips med hele teksten ble vurdert og valgt bort: «…» og `title` holder visningen lik den vi har. |
+| ItemColumn | Se porteføljeoversikten |  |  |  |  |  | Rettet: trendikonet har tekst, en lenke uten beskrivelse viser adressen (den var tom), filnavn er lenker, ikke knapper, og bildet ved et personnavn leses ikke opp i tillegg til navnet. Med aggregert oversikt: et trendikon med for svak farge (gull 1,25:1 og grønn 2,6:1 mot en markert rad, kravet er 3:1) får en kant i en mørkere tone av fargen (#a38a00 og #24a058), så fargen beholdes; rødt holder alene. Flere personer i én celle tar fokus, så verktøytipset med navnet vises for tastaturet også. Instrumentets måler har tekst («Siste måling 30, startverdi 10, målverdi 50»), og popoveren tar fokus når den åpnes, har navn etter indikatoren og leses opp med måling og enhet. Merket: målerens farger går fra rødt til grønt, med verdiene i tekst. Taggkolonnen holdt de siste 28 px av cellen fri, så en tagg som fikk plass i cellen rant ut av gruppen sin og kunne ikke få «…»; nå bruker taggene hele cellen (21.10.2026). |
+| LoadingSkeleton | aria-progressbar-name 1, i ressursallokeringen |  |  |  |  |  | Rettet: skjelettet heter «Laster...» |
+| ProjectLogo og FileTypeIcon | Ikke målt alene |  |  |  |  |  | jest-axe: ingen funn. Logoen og initialene har samme navn, og filtypeikonet er pynt (`alt=""`) ved filnavnet |
+| Autocomplete og ColumnSearchPropertyField | Ikke målt |  |  |  |  |  | Komponenttestene bruker en erstatning for Fluents kombinasjonsboks, så de skannes i nettleseren, med kolonneskjemaene |
+| ProjectTimeline | Se tidslinjene |  |  |  |  |  | Rettet: elementene er knapper som åpnes med Enter eller mellomrom, milepælene har navn, og fokus går tilbake til elementet når detaljene lukkes med Escape. Rulleområdet kan nås med tastaturet og rulles med piltastene. Søylene fra tidslinjekonfigurasjonen tegnes i en lys tone av fargen, med kant i fargen (mørkere der den har under 3:1 mot de grå radene) og svart tekst, og milepælene får kant i en mørkere tone av sin egen farge. Standardfargene ga hvit tekst med 3,2–3,7:1, og standardgult hadde 1,6:1 mot hvitt. Ressursallokeringens søyler beholder fyllet sitt, med en kant i den fulle fargen (`edgeColor`), og teksten der er svart eller hvit etter kontrasten. Elementene blir litt mørkere under pekeren, ikke lysere. Selve tidslinjebiblioteket har ingen tastaturstøtte, så dette er lagt på der vi tegner elementene. Detaljene tar fokus når de åpnes og beskrives av innholdet; en milepæls eller fases detaljer har ingen lenker, så fokus ble på elementet bak, og en skjermleser hørte ikke at noe åpnet seg. Gjenstår: en liste som alternativ der tidslinjen ikke har en (egen sak). Dagens dato har etiketten «I dag» ved streken; før var den bare en farget strek (1.1.1, 1.4.1). Markøren for tidsforløp i prosjekttidslinjen er mørket til 3:1 mot de grå radene; den hadde 2,85:1 (1.4.11). Tidslinjens topp brytes først under 480 px, som ved 320 px |
+
+### ProjectWebParts
+
+| Komponent | axe | Gjennomgått | Tastatur | Skjermleser | Visuelt | Skjema | Merknad |
+|---|---|---|---|---|---|---|---|
+| Prosjektinformasjon | Ingen |  |  |  |  |  | Rettet: egenskapene er en beskrivelsesliste, så skjermleseren vet hvilken verdi som hører til hvilket navn, og en person leses én gang (bildet ved navnet leses ikke opp). Handlingene som går til en annen side (versjonshistorikk, administrer underområder) og de overordnede og underordnede prosjektene er lenker, ikke knapper, og prosjektene står i lister under overskrifter på nivå 3. Arkivstatusens popover holder fokus til den lukkes, og statusmerkene har ikke lenger oransje tekst (2:1). Lasteplassholderen og spinnerne i dialogene har navn. jest-axe: ingen funn. Funnet av nettlesertesten for flatene (19.10.2026): når panelet eller dialogen en handling åpnet, lukkes (alle egenskaper, rediger, gjør om til overordnet prosjekt, kjør oppsettveiviser), gikk fokus til toppen av siden. Nå går det tilbake til handlingen. Statusrapporten er en seksjon på nivå 3 under webdelens tittel; den var en overskrift på nivå 2. Arkivstatusens varselikon var CSS-oransje med 1,8:1 mot taggen. Statusen står som overskrift, men ikonet er nå Fluents oransje med 4,6:1 (1.4.11, gjennomgangen av faste farger 21.10.2026). |
+| Fasevelger | color-contrast 8–10, list 1 |  |  |  |  |  | Rettet: fasene er en navngitt liste der hver fase er en knapp, og gjeldende fase er merket som gjeldende trinn. Popoveren holder fokus til den lukkes (Tab sendte fokus til toppen av siden og lot den stå åpen) og heter det fasen heter. Standardfasene er lyse med svart tekst, og gjeldende fase er mørk med hvit tekst, med minst 4,5:1 i ro og under pekeren (hvitt på de gamle fargene ga 1,7–2,7:1). Egne fasefarger (PhaseColor på termene) er kundens ansvar: koden velger svart eller hvit tekst etter kontrasten, men kan ikke gjøre en svak farge god nok. Knappen for å endre fase er fokuserbar også når den ikke kan brukes, så grunnen nås. I dialogen for faseskifte har kommentaren etikett, sjekkpunktene er trinn i stedet for faner uten funksjon, deaktiverte knapper kan nås med grunnen, Escape lukker, faseskiftet leses opp når det starter, og oppsummeringen har tekst for statusikonene og sier om en kommentar vises. jest-axe: ingen funn |
+| Prosjektstatus | Ingen |  |  |  |  |  | Rettet: hver seksjon har overskrift (nivå 3) under webdelens tittel, og rapportens tilstand («Publisert …») står som tekst ved tittelen i stedet for som en ekstra overskrift. Et statusikon som vises alene, heter seksjonen og statusen. Feltene i egenskapsseksjonen er en beskrivelsesliste, fanen for seksjoner uten plass heter «n flere seksjoner», og det som får fokus i en seksjon holdes fri av de festede fanene. Deaktiverte knapper i verktøylinjen kan nås, så grunnen leses opp. Prosjektinformasjonens sammendrag viser ikoner som standard, som før: hvert ikon er navngitt med seksjon og status og har statusmerket, så valget oppfyller 1.4.1. Standarden ble snudd til full visning 16.10 og tilbake 21.10, da merket gjorde snuingen unødvendig. Hvert statusikon har et lite merke ved siden av, en hake, et varseltegn eller et kryss, så statusen ikke vises bare med farge (1.4.1, `StatusMark`, 20.10.2026). Egenskapsruten advarer derfor ikke lenger. Ikonene er 20 px i sammendraget og 40 px på statussiden, hele multipler av ikonenes rutenett, så de er skarpe også på vanlige skjermer. jest-axe: ingen funn. Kopier lenke i øyeblikksbildet er stedet fokus går tilbake til når kopi-dialogen lukkes; uten det gikk fokus til verktøylinjens knapp bak den åpne dialogen, og fullskjerm kunne ikke forlates (fanget av nettlesertestene i CI, 2026-10-19) Funnet av den visuelle nettlesertesten og rettet 21.10.2026: fanelisten var 64 px bredere enn webdelen i alle bredder, siden polstringen lå på listen Fluent måler, og «+n» havnet utenfor ved 320 px; sammendraget la statusikonene ved siden av prosjektinformasjonen også ved 320 px, så de fikk 16 px og havnet utenfor (1.4.10). Polstringen ligger nå rundt listen, og sammendraget stables under 480 px. Rammen rundt øyeblikksbildet ruller en høy rapport og kan nå nås med tastaturet, som et område med rapportens navn (2.1.1, axe-regelen scrollable-region-focusable). |
+| Prosjekttidslinje | color-contrast 2, scrollable-region-focusable 1 |  |  |  |  |  | Har en liste ved siden av, der en person nå leses én gang. Rettet i bibliotekets tidslinje: elementene kan åpnes med tastaturet, tidslinjen rulles med piltastene, og søylene, teksten og milepælene har nok kontrast |
+| Risikomatrise | Ingen |  |  |  |  |  | Rettet: matrisen er en tabell for skjermlesere, med rad- og kolonneoverskrifter, så det høres hvor et element står. Elementene kan nås med tastaturet, som viser verktøytipset slik musen gjør, og har navn (nummer og tittel) og innholdet i verktøytipset som beskrivelse. Elementene for den visningen som ikke vises (før eller etter tiltak), er skjult og ikke bare gjennomsiktige, så skjermlesere leser ikke lenger begge. jest-axe: ingen funn |
+| Mulighetsmatrise | Ingen |  |  |  |  |  | Rettet: matrisen er en tabell for skjermlesere, med rad- og kolonneoverskrifter, så det høres hvor et element står. Elementene kan nås med tastaturet, som viser verktøytipset slik musen gjør, og har navn (nummer og tittel) og innholdet i verktøytipset som beskrivelse. Elementene for den visningen som ikke vises (før eller etter tiltak), er skjult og ikke bare gjennomsiktige, så skjermlesere leser ikke lenger begge. jest-axe: ingen funn |
+| Prosjektnyheter | Ikke målt |  |  |  |  |  | Under folden. Rettet: nyhetene er en liste, «Vis flere» sier om flere vises, og skillestreken mellom forfatter og dato leses ikke opp. Dialogen for ny nyhet sier fra når nyheten opprettes og når den er opprettet, og tittel og mal har ikke lenger faste id-er, så et klikk på etiketten flytter fokus til feltet og to webdeler på samme side ikke gir like id-er. jest-axe: ingen funn. Når dialogen lukkes, går fokus tilbake til «Opprett nyhetsartikkel»; før gikk det til toppen av siden (funnet av nettlesertesten for flatene, 19.10.2026) |
+| Dynamisk liste | Ikke målt |  |  |  |  |  | Siden er `DynList.aspx` på huben, og nettlesertestene skanner den fra 19.10.2026. Før det var axe bare kjørt i Jest. Rettet: fokus går til elementet som åpnes fra listen (overskriften) og til mappen som åpnes (gjeldende mappe i brødsmulestien), og tilbake til lenken man kom fra når man går tilbake; før falt fokus til toppen av siden. Verktøylinjen blir stående mens listen hentes på nytt, så fokus blir på oppdateringsknappen, og det leses opp når listen er oppdatert. Et søk eller filter leser opp hvor mange elementer som vises. Opplasting, nye dokumenter og sletting sier fra i en melding når de er gjort og når de feiler; før var de tause, og en feil havnet bare i konsollen. En feil ved henting vises som en melding på norsk («Feil»), ikke som «Error:». Eksportknappen heter «Eksporter 3 valgte elementer til Excel», ikke «3». Enkeltvisningen har elementets tittel som overskrift på nivå 3 (var nivå 1) og feltene som en beskrivelsesliste, og feltene får plass ved 320 px. Tittelens skjelett ved innlasting leses ikke opp to ganger, og ventesymbolet i dialogen for egne handlinger har navn. Kolonnetoppen har en meny som åpnes med høyreklikk, og med Shift+F10 eller menytasten fra tastaturet: «Sorter stigende», «Sorter synkende» og «Endre kolonnebredde», som lar piltastene endre bredden. Før stoppet høyreklikk nettleserens egen meny uten å åpne noe, menyen var halvferdig og tegnet ingen steder, og bredden kunne bare endres med mus (2.1.1, rettet 20.10.2026) |
+| Prosjektinformasjonspanel | Ikke målt |  |  |  |  |  | Åpnes fra prosjektkortene og porteføljelistene. Innholdet er Prosjektinformasjon i bibliotekets panel, og begge er gjennomgått; jest-axe finner ingenting i panelet, og nettlesertesten skanner det nå når et prosjektkort åpner det. Rettet: fokus går tilbake til knappen som åpnet panelet når det lukkes; før ble det liggende på toppen av siden, fordi panelet åpnes fra tilstand og Fluents skuff ikke hadde noe å gi fokus tilbake til. Knappen på kortet hadde samme tekst i `title` og i verktøytipset, så navnet ble lest to ganger; verktøytipset er navnet nå, og `title` er borte. Innholdet ruller, og uten noe som kan få fokus i det, kunne tastaturet ikke rulle det (axe: scrollable-region-focusable, i CI 2026-10-19); nå er innholdet en region med prosjektets navn som tar fokus |
+
+### ProjectExtensions
+
+| Komponent | axe | Gjennomgått | Tastatur | Skjermleser | Visuelt | Skjema | Merknad |
+|---|---|---|---|---|---|---|---|
+| Oppsett av prosjekt | Ikke målt |  |  |  |  |  | Vises bare på et nytt område, så axe er kjørt i Jest over dialogen, seksjonene, fremdriften og feildialogen. Rettet: valget mellom mal og ingen mal har navn; hver seksjon er fanepanelet til fanen sin, og en fane med tall sier hva tallet er («Prosjekttillegg, 2 valgt»); søkefeltene har navn, ikke bare plassholder, og et søk leser opp hvor mange som vises; antall valgte er en status som leses opp når det endres, ikke en deaktivert knapp; låsen på et tillegg som ikke kan velges bort, har navn. Det leses opp når en skymal hentes og når den er klar. Fremdriften leser opp hvert steg når det starter; knappen for avansert logg sier om loggen vises; hvert steg i loggen har navn med status («fullført», «feilet» …) og antall loggføringer, som før bare ikon og farge viste; hver loggføring har nivået sitt i ord, og loggen kan nås med tastaturet for å rulle. Statusikonene har Fluents farger (advarselen hadde 1,9:1), og «Venter» har 4,5:1 (hadde 3,5:1). En skjult melding ble lest opp likevel («Prosjektdata funnet» på alle oppsett, og stakken i feildialogen); de vises nå bare når de gjelder. En fane uten noe å velge (ingen tillegg eller standardinnhold) var deaktivert, med grunnen bare i et verktøytips tastaturet ikke nådde. Nå kan den velges, og panelet sier hvorfor det er tomt (rettet 20.10.2026) |
+| Oppgradering av prosjekt | Ingen grensesnitt |  |  |  |  |  | Utvidelsen gjør ingenting på siden (`onInit` returnerer med en gang); oppgraderingen kjøres fra installasjonsskriptet. Ingenting å gjennomgå |
+| Hent dokumentmal | Velg maler: target-size 2. Målmappe: target-size 3 |  |  |  |  |  | Rettet: mappenavnene i listene er minst 24 px høye (`target-size`: de var 16 px tekst ved siden av radens avkrysning), og mappestien har navn («Mappenavigasjon»). Åpnes en mappe, går fokus til mappen i stien; går man opp, går det til lenken for mappen man forlot; før falt fokus til toppen av siden. Overskriften på hver kopi er en knapp som sier om feltene vises (var et klikkbart `div` tastaturet ikke nådde), og et klikk på merkelappen «Filnavn» eller «Tittel» gir feltet fokus. Kopieringen leser opp hver fil når den kopieres. Å bytte bibliotek i målmappetrinnet gir fokus til biblioteket i stien, slik en åpnet mappe gjør. Det ble merket som en mangel 16.10, men en test 20.10 viste at det virker, og testen står nå som vern. Kjørt fra «Mer» i kommandolinjen åpnes dialogen først når menyen er lukket, så SharePoint ikke skjuler den for skjermlesere, og fokus går tilbake til kommandoen når den lukkes, som i Malpakkekatalog (rettet 21.10.2026) |
+| Planner-tiltak | Ingen, i cellen, menyen, panelet og migreringsdialogen |  |  |  |  |  | Rettet: en risiko uten tiltak viste en melding som ble lest opp i hver rad i listen; nå er det en knapp med samme utseende. Planner-oppgavene er en liste, og en fullført oppgave sier det i navnet (var bare gjennomstreket). Popoverne for tiltakene og for en oppgave holder fokus mens de er åpne, og har navn; personene i en oppgave leses én gang, egenskapene er en beskrivelsesliste, og «Åpne i Planner» er en lenke. Den skjulte meldingen om siste synkronisering ble lest opp; den vises nå bare når den gjelder. Synkronisering, nytt tiltak og migrering sier fra når de er gjort, og viser feilen når de ikke blir det (før var de tause, og en feil ble ikke fanget). Under migreringen blir knappene stående, så fokus blir der, og fremdriftslinjen har navn. «Administrer» vises når tastaturet når den, og alltid på berøringsskjerm (var 0,2 i opasitet, 1,3:1) |
+
+### PortfolioWebParts
+
+| Komponent | axe | Gjennomgått | Tastatur | Skjermleser | Visuelt | Skjema | Merknad |
+|---|---|---|---|---|---|---|---|
+| Prosjektutlisting | aria-roles 36 (kritisk), link-name 5–7 |  |  |  |  |  | Rettet: avatarene fikk feltets interne navn som ARIA-rolle (`role="GtProjectManager"`, de 36 kritiske); nå er de bilder med navn og rolle («Prosjektleder: Kari Nordmann») på kortene, og skjult ved navnet i listevisningen. Lenken til prosjektet på kortet har navn (logoen er tom mens den lastes, de 5–7 `link-name`), og ved siden av tittellenken er den bare for musen. Fasemerket og prosjekttypen er bilder med navn (typen var en knapp som ikke gjorde noe, fasen bare en bokstav); knappen for prosjektinformasjon leses én gang. Hurtigmenyen var lenker inni menyvalg, som tastaturet ikke nådde; nå er menyvalgene lenkene. Fanen for flere utvalg heter «3 flere utvalg» (ikke «+3»), prosjektene er utvalgsfanens panel, visningsknappen heter «Kort, visningsmodus», og et søk leser opp hvor mange som vises. Kortene ble laget på nytt ved hver endring i listen, så fokus mistet knappen den kom fra (rettet med prosjektinformasjonspanelet). Personene, fasen og typen på kortet viste teksten bare i et verktøytips; de tar nå fokus, så tipset vises for tastaturet også (rettet med aggregert oversikt). Søkefeltet gir etter når listen smalner, og først under 480 px går verktøylinjen under det (1.4.10). Lange prosjektnavn på kortene ble kuttet med økt tekstavstand, og et navn med ett langt ord ble kuttet også uten (1.4.12, funnet av den visuelle nettlesertesten 20.10.2026). Rettet 21.10.2026: navnet står i et eget element i logofeltet, et langt ord brytes, og et langt navn slutter med «…» etter fire linjer. Hele navnet står i `title` |
+| Siste prosjekter | Ingen |  |  |  |  |  | Rettet: prosjektene er en liste navngitt etter webdelens tittel, logoen ved lenken leses ikke opp (prosjektet ble lest to ganger), og «Vis flere» sier om flere vises |
+| Porteføljeoversikt | Ingen |  |  |  |  |  | Del 1 rettet: en kolonnetopp sier at den åpner en meny, og fokus går tilbake til den når menyen eller et panel den åpnet lukkes; en gruppe sier at den spenner over raden, og knappen for alle grupper leses én gang. Antall treff («Viser 10 av 42») leses opp når søk, filter eller lasting endrer det. I «Vis eller skjul kolonner» viser raden fokus, flytteknappene vises når fokus er i raden (før bare under musen, så tastaturet nådde dem ikke), heter etter kolonnen («Flytt Tittel opp»), er fokuserbare med grunnen når flyttet ikke kan gjøres, og leser opp hvor kolonnen havnet; dra med tastaturet har instruksjoner og kunngjøringer på norsk (biblioteket sa dem på engelsk). Del 2 rettet: visnings- og porteføljevelgeren heter etter hva de velger, ikke bare etter valget («Alle prosjekter, Porteføljevisninger»). Advarselen om at en standardvisning alt er satt, ble lest opp hver gang visningsskjemaet åpnet, også for en personlig visning, hvor feltet er skjult; nå vises den bare med feltet. Kolonneskjemaet: hvert felt har merkelapp og beskrivelse, de påkrevde er merket, og en lagringsfeil vises og leses opp; ingenting å rette. Funnet i CI-skanningen 2026-10-19: statusrapportkolonnen var en knapp uten navn i hver rad (aria-command-name 42, alvorlig), og en tom knapp for prosjekter uten rapport; nå heter den etter hver seksjons status, og en rad uten rapport viser ingenting. «Status rapportert» i popoveren var hardkodet. «Slett» i kolonneskjemaet er stedet fokus går tilbake til når bekreftelsen lukkes (ellers kolonnetoppen bak panelet). Visningsskjemaet gir fokus tilbake til visningsvelgeren (rettet i Toolbar). Statusikonene i cellen viste status bare med farge, og teksten kom først ved peker eller fokus (1.4.1). Nå har hvert ikon et lite merke ved siden av: en hake, et varseltegn eller et kryss etter fargen, eller statusverdiens eget ikon i Prosjektkolonnekonfigurasjon (20.10.2026). «Lagre» i kolonne- og visningsskjemaet kan nås med tastaturet når skjemaet ikke er ferdig, og sier hva som mangler. Søkespørringen i visningsskjemaet er merket som påkrevd, slik lagringen krever. Feltene som ikke kan endres for en eksisterende kolonne, er skrivebeskyttet og sier hvorfor; de var deaktivert uten grunn (rettet 20.10.2026) Listetoppen her og i aggregert oversikt har søkefeltet ved siden av verktøylinjen, ikke i den. Søkefeltet gir nå etter også her, og under 480 px går verktøylinjen under det. Ved 320 px var verktøylinjen klemt til 14 px og gikk utenfor webdelen (1.4.10, funnet av nettlesertesten for listene etter utrullingen 21.10.2026). «Vis eller skjul kolonner»: hver rad var dra-håndtak og dermed en knapp, med avkrysningsboksen og flytteknappene inni seg (nested-interactive, alvorlig, 12 rader, CI 21.10.2026). Raden dras nå bare med mus, og tastaturet flytter med flytteknappene, som sier hvor kolonnen havnet. Dra med mellomrom og piltaster er dermed borte, sammen med instruksjonene for det. |
+| Aggregert oversikt | Ingen |  |  |  |  |  | Rettet: visningsvelgeren heter etter hva den velger («Alle prosjekter, Porteføljevisninger»). Listen, kolonnetoppene, antall treff og «Vis eller skjul kolonner» deles med porteføljeoversikten og ble rettet der, cellene (trend, personer, instrument) under ItemColumn. Kolonne- og visningsskjemaet: hvert felt har merkelapp og beskrivelse, de påkrevde er merket, og en lagringsfeil leses opp; ingenting å rette. Kategori og nivå var deaktiverte felt, og «Slett» var deaktivert for tittelkolonnen uten at grunnen stod. Nå er kategori og nivå skrivebeskyttet og sier at de kommer fra datakilden, og «Slett» og «Lagre» kan nås med tastaturet og sier hvorfor de ikke kan brukes (rettet 20.10.2026). «Slett» i kolonneskjemaet er stedet fokus går tilbake til når bekreftelsen lukkes |
+| Prosjekttidslinje (portefølje) | color-contrast 8, scrollable-region-focusable 1 |  |  |  |  |  | Ingen liste ved siden av (egen sak). Rettet i bibliotekets tidslinje: elementene kan åpnes med tastaturet, tidslinjen rulles med piltastene, og søylene, teksten og milepælene har nok kontrast. Med porteføljetidslinjen: detaljene tar fokus når de åpnes, og filterknappen får fokus tilbake når filterpanelet lukkes (i biblioteket, så alle tidslinjene og verktøylinjene har det). Webdelen har ellers ingenting eget. Dagens dato har etiketten «I dag» (rettet 21.10.2026). Merket: prosjektnavnene viser to verktøytips under pekeren (`title` og Fluents) |
+| Ressursallokering | aria-progressbar-name 1 |  |  |  |  |  | Ingen liste ved siden av (egen sak). Rettet i bibliotekets tidslinje: elementene kan åpnes med tastaturet, tidslinjen rulles med piltastene, og teksten har nok kontrast. Med PortfolioWebParts: søylene blekner med allokeringen (ved 30 % 1,3:1 mot de grå radene, kravet er 3:1) og har nå en kant i den fulle fargen, gjort mørkere der den står for svakt (standardgrønt og -blått holder alene), så hele søylen synes; fyllet viser fortsatt andelen, som også står i teksten. Skjelettet har navn (rettet i slice 1), og detaljene og filterpanelet tar og gir tilbake fokus som i porteføljetidslinjen |
+| Idémodul | Ingen |  |  |  |  |  | Rettet: menyknappen het «NavigationMenu» og «Navigation» (hardkodet engelsk, to verktøytips i hverandre); nå heter den «Navigasjonsmeny», sier om menyen er åpen, og når menyen åpnes eller lukkes, går fokus til knappen som tar dens plass (før falt det til toppen av siden). Fasestolpen var faner som ikke gjorde noe, de andre fasene deaktiverte (1,9:1) og pilene mellom dem navnløse faner; nå er den en ordnet liste med gjeldende fase markert, de andre i lesbar grå (6,2:1), og tre fasenavn som var hardkodet, kommer fra tekstene. Idéens tittel er en h2 under sidens tittel (var h1), «Status» en h3 fra tekstene, og tittelen «Ingen idé funnet» kommer fra tekstene. Feltene er en beskrivelsesliste; en person leses én gang, og påloggingsnavnet ble ikke lenger id på personen. Oversikten er aggregert oversikt (rettet der) Ved 320 px tok menyen, 340 px, hele bredden, og listen over idéer fikk 0 px (1.4.10, funnet av den visuelle nettlesertesten). Under 480 px starter menyen lukket og lukkes når en idé eller oversikten velges, med fokus på menyknappen ved innholdet (21.10.2026). Menyen lukkes også når vinduet blir smalt etter at siden er lastet, som ved zoom; den visuelle testen fant den åpen ved 320 px etter å ha lastet siden bredt (21.10.2026). |
+| Prosjektkort | Ikke målt |  |  |  |  |  | Samme kort som i Prosjektutlisting, rettet der: personene, fasen, prosjekttypen, knappen for prosjektinformasjon og hurtigmenyen. Fokus går tilbake til knappen når panelet lukkes, og personene, fasen og typen tar fokus, så verktøytipsene vises for tastaturet (rettet med aggregert oversikt). Webdelen har ellers ingenting eget. Den viste ingenting mens den lastet, og ingenting når hentingen feilet, fordi feilen ikke ble fanget. Nå viser den et skjelett med navn mens den laster, og en melding når hentingen feiler (rettet 20.10.2026) |
+
+### PortfolioExtensions
+
+| Komponent | axe | Gjennomgått | Tastatur | Skjermleser | Visuelt | Skjema | Merknad |
+|---|---|---|---|---|---|---|---|
+| Bunntekst | Ikke målt |  |  |  |  |  | Rettet: minimert var bunnteksten usynlig og 12 px høy også når tastaturet var i den; den vises nå når fokus er i den. Assistentens skuff hadde rollen «panel», som ikke finnes; nå er den en dialog med navn, knappene i toppen har navn (bare `title` før), innstillingene er en lenke for administratorer (en deaktivert knapp for andre, uten grunn), og fokus går tilbake til assistentknappen når skuffen lukkes. Områdeinnstillinger, områdeinnhold, konfigurasjonen, installasjonsloggen, GitHub-lenkene, de nyttige lenkene og hjelpens lenke åpnet sider med `window.open` fra knapper; nå er de lenker. Menyknappen i områdeinnstillinger het det samme som innstillingene; nå «Flere valg for området». Lenken til lenkelisten lå i et verktøytips tastaturet ikke nådde; nå er den nederst i menyen. Favorittprosjektene og installasjonen holder fokus mens de er åpne, og har navn. Hjelpen har tittel og lukkeknapp (dialogen hadde ingen navn), hver fane er knyttet til innholdet sitt, og hjelpeknappen kan fokuseres når det ikke finnes hjelp, så grunnen leses. Versjonsikonet for en eldre GitHub-versjon var oransje 2:1, nå 5,1:1, og nyhetene i versjonen er et navngitt område. «Nyttige lenker» åpnet på en spinner uten noe som kunne få fokus. Fokus ble derfor stående på knappen utenfor menyen: piltastene nådde ikke lenkene, og Escape lukket ikke menyen (funnet av nettlesertesten for flatene, 19.10.2026). Nå får den første lenken fokus når lenkene er lastet. På listesider ble bunnteksten som regel ikke vist. Den ble bare tegnet ved SharePoints navigasjonshendelse, og der definerer SharePoint ofte plassholderne først etter at bunnteksten har startet. Nå tegnes den når den har startet, når SharePoints plassholdere endres og ved hver navigasjon (rettet 20.10.2026) Ved 320 px var knappene i bunnteksten til sammen 750 px brede og havnet utenfor (1.4.10). Under 480 px brytes de over flere linjer, og bunnteksten ligger under siden i stedet for over den, så den ikke dekker slutten av innholdet (2.4.11). Lenkene i versjonsnotatene er understreket, ikke bare farget (1.4.1, axe-regelen link-in-text-block, 21.10.2026). |
+| Idéregistrering | Ikke målt |  |  |  |  |  | Ikke gjennomgått: utvidelsen skal fases ut (avgjort 2026-10-19) |
+| Idébehandling | Ikke målt |  |  |  |  |  | Ikke gjennomgått: utvidelsen skal fases ut (avgjort 2026-10-19) |
+| Idé – prosjektdata | Ikke målt |  |  |  |  |  | Ikke gjennomgått: utvidelsen skal fases ut (avgjort 2026-10-19) |
+| Malpakkekatalog | Ikke målt |  |  |  |  |  | Rettet: et pakkekort var et listeelement med `aria-selected` (ikke tillatt) som kunne velges; nå er cellen listeelementet og kortet en knapp med pakkens navn, den valgte markert som gjeldende. Søk og filtre var en verktøylinje (som lover ett stopp og piltaster) og er nå et søkeområde med navn; visningsknappene er en gruppe som heter «Visning» (het «Rutenett»). Fokus gikk til detaljrutens ramme, uten navn og uten fokusramme; nå går det til pakkenavnet, som er en overskrift. Handlingene kan fokuseres når de ikke kan brukes (grunnen leses) og mens de kjører. Installasjonen tar fokus når den erstatter detaljene, og gir det tilbake når den lukkes; fremdriftslinjen og hvert trinns status har navn, loggknappen sier om loggen er åpen, og hvert trinn leses opp når det starter. Meldingene går gjennom rotens kunngjører fra `renderReact`; en ekstra kunngjører lagt inn 19.10 er fjernet 21.10.2026, siden roten har én. Lukkeknappen het to ting; nå én. Når katalogen lukkes, går fokus tilbake til knappen i SharePoints kommandolinje. Åpnet fra «Mer» i kommandolinjen var katalogen skjult for skjermlesere. SharePoints egen fokusstyring (Tabster i listesidens kode) satte `aria-hidden="true"` på den mens menyen lukket seg, og tok det aldri bort. Fokus gikk også tilbake til menyvalget, som da var borte (funnet av nettlesertesten for flatene, 19.10.2026). Nå åpnes katalogen først når menyen er lukket, og fokus går tilbake til «Mer». Bekreftes av nettlesertesten etter utrulling |
+
+### ProgramWebParts
+
+| Komponent | axe | Gjennomgått | Tastatur | Skjermleser | Visuelt | Skjema | Merknad |
+|---|---|---|---|---|---|---|---|
+| Administrasjon av underområder | Ingen |  |  |  |  |  | Rettet: søkefeltene (på siden og i dialogen) hadde bare plassholdertekst; nå har de navn. Logoen ved prosjektnavnet het «Logo for prosjekt: …», så prosjektet ble lest to ganger; den er skjult. Dialogen for å legge til hadde en overskrift inni tittelen, som selv er en overskrift. Listen er porteføljeoversiktens (rettet der), og kommandoene den delte verktøylinjen, som gir fokus tilbake fra dialogen. Tømmeknappen i søkefeltene het «clear» på engelsk (gjaldt alle søkefelt); nå «Tøm søket». En feil når prosjekter legges til, ble ikke fanget og ikke vist. Nå blir dialogen stående med feilen. «Legg til» kan nås med tastaturet før et prosjekt er valgt, og sier hva den trenger (rettet 20.10.2026) Søkefeltet holdt sine 420 px, og kommandoene gikk utenfor allerede ved 768 px. Nå gir søkefeltet etter, og under 480 px ligger det over kommandoene (1.4.10, funnet av den visuelle nettlesertesten, rettet 21.10.2026). |
+| Innholdsaggregering for program | Ingen |  |  |  |  |  | Webdelen tegner porteføljens aggregering, og programmodusen endrer bare dataene: rettet med aggregert oversikt, ingenting eget |
+| Oversikt over underområder | aria-command-name 24 |  |  |  |  |  | Kommandoer uten navn. Grunnlinjens 24 kommandoer uten navn finnes ikke i CI-skanningen 2026-10-19. Webdelen tegner porteføljeoversikten og har dens rettinger, også merkene på statuskolonnen |
+| Tidslinje for underområder | color-contrast 4, scrollable-region-focusable 1 |  |  |  |  |  | Ingen liste ved siden av (egen sak). Rettet i bibliotekets tidslinje: elementene kan åpnes med tastaturet, tidslinjen rulles med piltastene, og søylene, teksten og milepælene har nok kontrast. Webdelen tegner bibliotekets tidslinje og har det samme som porteføljetidslinjen: detaljene tar fokus, og filterknappen får fokus tilbake. Ingen brudd i CI-skanningen 2026-10-19 |
+
+
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#tilgjengelighet-per-wcag-kriterium)
+
+## ➤ Tilgjengelighet per WCAG-kriterium
+
+Denne oversikten viser hvordan Prosjektportalen 365 versjon 1.15.0 står mot hvert suksesskriterium i WCAG 2.1 nivå A og AA. Den tar også med de fire kriteriene fra WCAG 2.2 som er tatt med i arbeidet ([#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)). Den er skrevet for virksomheter som skal vurdere eller anskaffe løsningen. Resultatet per webdel og utvidelse står i [Tilgjengelighet](tilgjengelighet.md).
+
+### Hva oversikten gjelder
+
+- Webdelene og utvidelsene i Prosjektportalen 365, slik de selv viser innhold.
+- Ikke SharePoints eget grensesnitt, som sidetopp, navigasjon, listevisninger, kommandolinje og egenskapsruten. Det står som «SharePoint» i tabellen.
+- Ikke innhold redaktørene lager, som nyheter, sidetekst, hjelpeinnhold og dokumentmaler.
+- Ikke det indre av PnP-kontrollene, som taksonomivelgeren.
+- Ikke idé-utvidelsene (idéregistrering, idébehandling og prosjektdata for idé). De skal fases ut.
+
+### Grunnlag og status
+
+- **Grunnlaget er foreløpig, per 20.10.2026.**
+  - Automatiske tester med axe i nettleseren mot testmiljøet, både på sidene og i panelene, dialogene og menyene.
+  - jest-axe i komponenttestene.
+  - Kontroll av tastatur og fokus i testene.
+  - Gjennomgang av koden.
+- **Håndrundene gjenstår:** VoiceOver og NVDA, zoom, tekstavstand og kontrastmodus. Til de er gjort, er «Støttes» en vurdering fra testene og koden, og statusen kan endre seg.
+- **Statusene:**
+  - **Støttes:** kriteriet er oppfylt i det PP365 selv viser.
+  - **Delvis støttet:** oppfylt de fleste steder, med kjente unntak i merknaden.
+  - **Støttes ikke:** ikke oppfylt.
+  - **Ikke relevant:** PP365 har ikke innhold kriteriet gjelder.
+  - **SharePoint:** kriteriet gjelder SharePoints side rundt webdelene.
+- **Farger fra konfigurasjonen** er kundens valg. Det gjelder temaets primærfarge, fasefarger og farger i tidslinjekonfigurasjonen. Der vi tegner dem, velger koden lesbar tekstfarge og kanter med nok kontrast. Men den kan ikke gjøre en svak farge god nok som flate.
+
+### Oppfattbar
+
+| Kriterium | Nivå | Status | Merknad |
+|---|---|---|---|
+| 1.1.1 Ikke-tekstlig innhold | A | Støttes | Ikoner som bærer mening har tekst. Det gjelder trend, status, fase, prosjekttype og logo. Pynt er skjult for skjermlesere. |
+| 1.2.1 Bare lyd og bare video (forhåndsinnspilt) | A | Ikke relevant | PP365 viser ikke egen lyd eller video. |
+| 1.2.2 Teksting (forhåndsinnspilt) | A | Ikke relevant | Som over. |
+| 1.2.3 Synstolking eller mediealternativ (forhåndsinnspilt) | A | Ikke relevant | Som over. |
+| 1.2.4 Teksting (direkte) | AA | Ikke relevant | Som over. |
+| 1.2.5 Synstolking (forhåndsinnspilt) | AA | Ikke relevant | Som over. |
+| 1.3.1 Informasjon og relasjoner | A | Delvis støttet | Webdelene har en overskriftsstruktur under tittelen. Lister, navn og verdier er beskrivelseslister, og matrisene er tabeller. Tidslinjene i porteføljen, programmet og ressursallokeringen har ingen liste ved siden av, slik prosjekttidslinjen har ([#1789](https://github.com/Puzzlepart/prosjektportalen365/issues/1789)). |
+| 1.3.2 Meningsfylt rekkefølge | A | Støttes | |
+| 1.3.3 Sensoriske egenskaper | A | Støttes | Ingen instruksjoner bygger bare på form, plassering eller farge. |
+| 1.3.4 Visningsretning | AA | Støttes | Ingen visning er låst til én retning. |
+| 1.3.5 Identifiser formål med inndata | AA | Ikke relevant | Skjemaene samler prosjektdata, ikke opplysninger om brukeren selv. |
+| 1.4.1 Bruk av farge | A | Støttes | Status, fase og trend vises også med tekst, navn eller form, og dagens dato i tidslinjene har etiketten «I dag». Statusikonene i statuskolonnen, på statussiden og i sammendraget i Prosjektinformasjon, også med «Vis kun ikoner», har et lite merke ved siden av: en hake, et varseltegn eller et kryss etter fargen i Prosjektkolonnekonfigurasjon, eller statusverdiens eget ikon der den har et. En farge som verken er grønn, gul eller rød, gir ikke noe merke når verdien heller ikke har eget ikon. |
+| 1.4.2 Styring av lyd | A | Ikke relevant | |
+| 1.4.3 Kontrast (minimum) | AA | Støttes | Fluents farger og våre egne er kontrollert. Konfigurerte farger får lesbar tekstfarge. Se avsnittet om farger over. |
+| 1.4.4 Endring av tekststørrelse | AA | Støttes | Foreløpig. Zoom 200 % kontrolleres i håndrunden. |
+| 1.4.5 Bilder av tekst | AA | Støttes | Øyeblikksbildet av en publisert statusrapport er et bilde av rapporten. Det samme innholdet vises som tekst når rapporten velges. |
+| 1.4.10 Dynamisk tilpasning (Reflow) | AA | Delvis støttet | På verktøylinjene er det søkefeltet som gir etter når bredden minker. Først under 480 px, som ved 320 px, går knappene til neste linje. Bunnteksten brytes også, statussidens faner og sammendrag tilpasses, og idémodulens meny starter lukket på smale skjermer. Datatabeller og tidslinjer trenger to dimensjoner og er unntatt etter kriteriet. Resten måles i nettlesertestene og kontrolleres i håndrunden. |
+| 1.4.11 Kontrast for ikke-tekstlig innhold | AA | Støttes | Søyler, milepæler, markører og trendikoner har kanter med minst 3:1, og fokusrammen kommer fra Fluent. |
+| 1.4.12 Tekstavstand | AA | Delvis støttet | Lange prosjektnavn på prosjektkortene brytes og slutter med «…» etter fire linjer. Tagger i listecellene som ikke får plass, slutter med «…», og hele teksten står i `title` og leses av skjermlesere; de ble klippt uten «…». Titler i listene avkortes med «…» som før. Et verktøytips med hele teksten ved peker og fokus ble vurdert og valgt bort for å holde visningen lik den vi har. Resten måles i nettlesertestene og kontrolleres i håndrunden. |
+| 1.4.13 Pekerfølsomt innhold eller innhold ved tastaturfokus | AA | Støttes | Verktøytips og popovere fra Fluent kan lukkes med Escape og holdes åpne under pekeren. Innhold som før bare fantes i verktøytips, kan nås med tastaturet. |
+
+### Mulig å betjene
+
+| Kriterium | Nivå | Status | Merknad |
+|---|---|---|---|
+| 2.1.1 Tastatur | A | Støttes | Alt kan nås og brukes med tastatur. Det gjelder også elementene i tidslinjene og matrisene, flytting av kolonner uten å dra, og kolonnebredden i Dynamisk liste (fra kolonnemenyen). Unntak: det indre av PnP-kontrollene. |
+| 2.1.2 Ingen tastaturfelle | A | Støttes | Dialoger, paneler og popovere holder fokus mens de er åpne og slipper det når de lukkes. |
+| 2.1.4 Hurtigtaster | A | Ikke relevant | PP365 har ingen hurtigtaster med ett tegn. |
+| 2.2.1 Justerbar hastighet | A | Ikke relevant | Ingen tidsgrenser. |
+| 2.2.2 Pause, stopp, skjul | A | Ikke relevant | Ingen innhold beveger seg av seg selv, utenom innlastingsindikatorer. |
+| 2.3.1 Terskelverdi på maksimalt tre glimt | A | Støttes | Ingenting blinker. |
+| 2.4.1 Hoppe over blokker | A | SharePoint | SharePoint gir snarveien til hovedinnholdet. Webdelene har egne overskrifter. |
+| 2.4.2 Sidetitler | A | SharePoint | |
+| 2.4.3 Fokusrekkefølge | A | Støttes | Fokus går tilbake til det som åpnet et panel, en dialog, en meny eller en popover når den lukkes. Nettlesertestene kontrollerer det. |
+| 2.4.4 Formål med lenker (i kontekst) | A | Støttes | |
+| 2.4.5 Flere måter | AA | SharePoint | |
+| 2.4.6 Overskrifter og ledetekster | AA | Støttes | |
+| 2.4.7 Synlig fokus | AA | Støttes | |
+| 2.5.1 Pekerbevegelser | A | Støttes | Ingen funksjon krever bevegelser med flere fingre eller i en bane. |
+| 2.5.2 Pekeravbrytelse | A | Støttes | |
+| 2.5.3 Ledetekst i navn | A | Støttes | Et navn på en knapp med tekst begynner med teksten. |
+| 2.5.4 Bevegelsesaktivering | A | Ikke relevant | |
+
+### Forståelig
+
+| Kriterium | Nivå | Status | Merknad |
+|---|---|---|---|
+| 3.1.1 Språk på siden | A | SharePoint | |
+| 3.1.2 Språk på deler av innhold | AA | Støttes | Tekstene kommer fra språkfilene. Engelske standardnavn fra Fluent, som «clear» i søkefeltene og «information» på info-knappen, er erstattet. |
+| 3.2.1 Fokus | A | Støttes | |
+| 3.2.2 Inndata | A | Støttes | |
+| 3.2.3 Konsekvent navigering | AA | SharePoint | |
+| 3.2.4 Konsekvent identifikasjon | AA | Støttes | |
+| 3.3.1 Identifikasjon av feil | A | Støttes | Feil vises i tekst og leses opp, også når lagring, opplasting og henting feiler. |
+| 3.3.2 Ledetekster eller instruksjoner | A | Støttes | Feltene har etiketter, og påkrevde felt er merket. En knapp som ikke kan brukes ennå, kan nås med tastaturet og sier hva den trenger. |
+| 3.3.3 Forslag ved feil | AA | Støttes | For eksempel om formatet på en nettadresse og grensene for et beløp. |
+| 3.3.4 Forhindre feil (juridiske feil, økonomiske feil, datafeil) | AA | Støttes | Sletting og faseskifte krever bekreftelse. |
+
+### Robust
+
+| Kriterium | Nivå | Status | Merknad |
+|---|---|---|---|
+| 4.1.1 Parsing | A | Støttes | Utgått i WCAG 2.2. |
+| 4.1.2 Navn, rolle, verdi | A | Støttes | Unntak: det indre av PnP-kontrollene. |
+| 4.1.3 Statusbeskjeder | AA | Støttes | Søk, antall treff, lasting, lagring og fremdrift leses opp. |
+
+### Fra WCAG 2.2
+
+| Kriterium | Nivå | Status | Merknad |
+|---|---|---|---|
+| 2.4.11 Fokus ikke skjult (minimum) | AA | Støttes | Det som får fokus under de festede fanene på statussiden, holdes fritt. |
+| 2.5.7 Drabevegelser | AA | Støttes | Kolonner flyttes også med knapper og tastatur. |
+| 2.5.8 Målstørrelse (minimum) | AA | Støttes | Foreløpig. Mappenavnene i «Hent dokumentmal» ble gjort minst 24 px høye. Resten kontrolleres i håndrunden. |
+| 3.3.7 Overflødig inntasting | A | Støttes | Ingen skjemaer ber om det samme to ganger. |
+
+### Kjente avvik
+
+- **Tidslinjene i porteføljen, programmet og ressursallokeringen** har ingen liste ved siden av (1.3.1). Se [#1789](https://github.com/Puzzlepart/prosjektportalen365/issues/1789).
+- **Utvidelsene på listesider:** når nettleseren ikke har SharePoints skript i hurtigbufferen, som ved første besøk eller i et privat vindu, starter SharePoint ofte listevisningen sin to ganger. Bunnteksten og «Hent dokumentmal» får da en annen React-instans enn den som tegner dem, og vises ikke. Bunnteksten kan også utebli fordi SharePoint ikke definerer plassholderen den skal tegnes i. Begge feilene ligger i SharePoint og er meldt til Microsoft ([SharePoint/sp-dev-docs#11068](https://github.com/SharePoint/sp-dev-docs/issues/11068)). Med bufrede skript er de sjeldne, og en ny lasting av siden virker.
 
 
 
@@ -2369,9 +2624,98 @@ Jobbene som rører en tenant, logger inn som appregistreringen **Prosjektportale
 
 ### CI (channels/test)
 
-[ci-channel-test](../../.github/workflows/ci-channel-test.yml) bygger en pakke for kanalen [test](../../channels/test.json), distribuerer den til URL-en som er spesifisert i `SP_URL_TEST`, og kjører deretter Playwright-røyktestene i `e2e/` mot den (jobben «End-to-end smoke (test channel)») og, ved siden av dem, integrasjonstestene i `integration/` (jobben «Integration tests (test channel)», rapport i artefaktet `integration-report-test-channel`). Pakkejobben (`[apps-only]`) skriver tiden per prosjekt i jobbens sammendrag og installerer ikke PnP.PowerShell, som bare malene trenger. Rapporten lastes opp som artefaktet `playwright-report-test-channel`; hvordan den leses står under «Testregime». Arbeidsflyten kan også startes manuelt fra Actions-fanen.
+[ci-channel-test](../../.github/workflows/ci-channel-test.yml) bygger en pakke for kanalen [test](../../channels/test.json), distribuerer den til URL-en som er spesifisert i `SP_URL_TEST`, og kjører deretter Playwright-røyktestene i `e2e/` mot den (jobben «End-to-end smoke (test channel)») og, ved siden av dem, integrasjonstestene i `integration/` (jobben «Integration tests (test channel)», rapport i artefaktet `integration-report-test-channel`). Pakkejobben (`[apps-only]`) skriver tiden per prosjekt i jobbens sammendrag og installerer ikke PnP.PowerShell, som bare malene trenger. Rapporten lastes opp som artefaktet `playwright-report-test-channel`, uten sporingene og uten innloggingens egne resultater; hvordan den leses står under «Testregime». Siste steg i begge testjobbene, «Publish the report to the test report site», legger rapporten på testrapportsiden (se under) og lenken i jobbens sammendrag. Arbeidsflyten kan også startes manuelt fra Actions-fanen.
 
 Alle kjøringene oppgraderer den samme testhuben og appkatalogen, uansett branch, så de deler én `concurrency`-gruppe (`ci-channel-test`): en kjøring venter mens en annen kjører, i stedet for at to deployer samtidig og overskriver hverandres pakker. GitHub holder bare den nyeste ventende kjøringen i gruppen og avbryter en eldre som venter. På samme branch inneholder den nyeste commiten endringene fra den eldre, men malene fra en avbrutt full kjøring blir ikke lagt på. Push derfor commiten som trenger full kjøring sist, eller vent til den er ferdig.
+
+### Testrapportsiden
+
+Testrapportsiden viser Playwright-rapporten og integrasjonsrapporten fra hver kjøring av `ci-channel-test.yml` i nettleseren, så ingen trenger å laste ned et artefakt eller kjøre `show-report`. Det er et privat GitHub Pages-område på branchen `gh-pages` i et eget, privat repo (variabelen `TEST_REPORTS_REPOSITORY`, for eksempel `Puzzlepart/prosjektportalen365-test-reports`). Adressen er tilfeldig, `https://<ord>.pages.github.io/`, og endres ikke så lenge Pages er slått på. Lenken står i jobbens sammendrag. Forsiden lister kjøringene de siste 7 dagene, nyeste først; hvordan rapportene leses, står i «Testregime».
+
+**Hvorfor privat, og hvorfor i et annet repo.** `Puzzlepart/prosjektportalen365` er offentlig: artefaktene kan lastes ned av alle som er logget inn på GitHub, og et Pages-område fra repoet ville vært offentlig. Rapportene inneholder snapshot av sider i testtenanten, og Playwrights sporinger inneholder e2e-brukerens øktinformasjonskapsler, `storageState` og forespørselshodene; Playwright 1.63 maskerer ingenting (sjekket 2026-10-14). Pages med tilgangskontroll finnes bare for private og interne repoer på GitHub Enterprise Cloud. Puzzlepart-organisasjonen er på Enterprise Cloud (ikke EMU), med `members_can_create_private_pages=true`. Uten EMU er et Pages-område offentlig som standard, også fra et privat repo, så synligheten må settes til privat med en gang Pages er slått på, før CI publiserer noe. Området kan åpnes av alle med lesetilgang til rapportrepoet. Organisasjonens basisrettighet er skriv, så det er alle organisasjonens 40 medlemmer (14. oktober 2026): de samme som allerede har skrivetilgang til det offentlige repoet og gjennom en arbeidsflyt kunne lest hemmelighetene der.
+
+**Slik virker det.** Siste steg i E2E-jobben og i integrasjonsjobben, «Publish the report to the test report site» (`if: !cancelled()`, `continue-on-error: true`, `timeout-minutes: 10`), kjører `.tasks/publish-test-report.js` (CommonJS, uten avhengigheter):
+
+1. Sjekker at området er privat, og publiserer ingenting ellers: rapportrepoet er ikke offentlig (jobbens `GITHUB_TOKEN` ser ingen andre private repoer, så API-et svarer 404), repoets offentlige Pages-adresse (`https://puzzlepart.github.io/<repo>/`) viser ingenting, og `TEST_REPORTS_URL` svarer ikke på en anonym forespørsel med innhold (et privat område sender videre til innloggingen på GitHub). Sjekken kjøres ved hver publisering, fordi alle administratorer av rapportrepoet kan sette synligheten tilbake til offentlig. 14. oktober 2026 var alle private Puzzlepart-repoer med Pages offentlige.
+2. Henter `gh-pages` i rapportrepoet over SSH med deploy-nøkkelen. GitHubs vertsnøkler leses fra `https://api.github.com/meta`, så den første tilkoblingen sjekkes i stedet for å stoles på.
+3. Kopierer rapporten til `runs/<kjørings-id>-<forsøk>/<suite>/`: `e2e/playwright-report` for `e2e` og `integration/test-results` for `integration`. Ved siden av skrives `runs/<kjørings-id>-<forsøk>/<suite>.json` med utfallet av teststeget, antallene (fra Playwrights `test-results/results.json` og fra sammendraget integrasjonsrapporten bygger inn), kjøringen, commiten, branchen, emnelinjen og `publishedAt`. Et nytt forsøk av en kjøring får dermed en egen rad.
+4. Sletter kjøringer eldre enn 7 dager, like lenge som artefaktene (organisasjonen holder artefakter og logger i høyst 7 dager), og deretter de eldste kjøringene så lenge kjøringene til sammen er over 800 MB, siden Pages publiserer høyst 1 GB. Kjøringen som publiseres, slettes aldri. En fil over 95 MiB utelates med en advarsel, siden git avviser filer over 100 MiB.
+5. Skriver `.nojekyll`, så Pages publiserer filene som de er, uten Jekyll, og `index.html`, forsiden (på engelsk): kjøring, commit og en kolonne for E2E og en for integrasjon med utfall, antall og lenke.
+6. Pusher én commit uten foreldre med `--force-with-lease`, så branchen aldri samler historikk med gamle rapporter. E2E- og integrasjonsjobben kjører samtidig og pusher begge. Pushen lykkes bare om branchen står der den sto da den ble hentet; en push som taper fordi den andre jobben kom først, begynner på nytt fra steg 2, opptil fem forsøk. Et git-kall som henger, avbrytes etter 5 minutter, og SSH-tilkoblingen har egne tidsgrenser.
+
+Til slutt skriver skriptet lenken til rapporten og til forsiden i jobbens sammendrag (`$GITHUB_STEP_SUMMARY`). Pages publiserer endringen et minutt eller to etter steget, med arbeidsflyten `pages-build-deployment` i rapportrepoet. En feil i publiseringen, også et offentlig område eller et steg som når tidsgrensen, gjør ikke jobben rød, men vises som en advarsel: jobbens resultat er testenes. Skriptets tester ligger i `.tasks/publish-test-report.test.js` og kjører mot et lokalt bart repo (`TEST_REPORTS_REMOTE`) med `npm run test:tasks`, som CI ikke kjører: kjør dem selv etter en endring i skriptet.
+
+| Navn | Type | Innhold |
+|---|---|---|
+| `TEST_REPORTS_DEPLOY_KEY` | hemmelighet | Den private delen av en SSH-deploy-nøkkel med skrivetilgang til rapportrepoet |
+| `TEST_REPORTS_REPOSITORY` | variabel | Rapportrepoet, `eier/navn` |
+| `TEST_REPORTS_URL` | variabel | Områdets adresse, for lenkene i jobbens sammendrag og sjekken av at området er privat |
+
+Uten `TEST_REPORTS_REPOSITORY`, `TEST_REPORTS_URL` eller `TEST_REPORTS_DEPLOY_KEY` skriver steget bare en `::notice` om at testrapportsiden ikke er satt opp, og avslutter med 0, så CI virker før området finnes. Rapportene ligger da bare i artefaktene.
+
+**Engangsoppsett.** En med administratortilgang i organisasjonen gjør det én gang, i denne rekkefølgen. CI oppretter ingenting selv.
+
+> **Viktig:** Pages er offentlig som standard, også fra et privat repo. Gjør området privat (steg 3) før hemmeligheten og variablene settes (steg 4 og 5): fra da publiserer hver kjøring rapportene, med sporingene.
+
+1. Opprett et privat repo bare for rapportene, uten hemmeligheter og uten issues:
+
+   ```bash
+   gh repo create Puzzlepart/prosjektportalen365-test-reports --private --add-readme --description "CI test reports for prosjektportalen365 (private GitHub Pages)"
+   ```
+
+2. Lag branchen `gh-pages` fra `main`:
+
+   ```bash
+   gh api repos/Puzzlepart/prosjektportalen365-test-reports/git/refs -f ref=refs/heads/gh-pages -f sha=$(gh api repos/Puzzlepart/prosjektportalen365-test-reports/git/ref/heads/main --jq .object.sha)
+   ```
+
+3. Slå på Pages fra den branchen, og gjør området privat med en gang:
+
+   ```bash
+   gh api -X POST repos/Puzzlepart/prosjektportalen365-test-reports/pages -f 'source[branch]=gh-pages' -f 'source[path]=/'
+   ```
+
+   ```bash
+   gh api -X PUT repos/Puzzlepart/prosjektportalen365-test-reports/pages -F public=false
+   ```
+
+   Det samme i nettleseren: Settings > Pages, Source «Deploy from a branch», `gh-pages`, `/ (root)`, og «GitHub Pages visibility» Private. Sjekk i et privat nettleservindu at adressen ber om innlogging på GitHub. Adressen er tilfeldig:
+
+   ```bash
+   gh api repos/Puzzlepart/prosjektportalen365-test-reports/pages --jq .html_url
+   ```
+
+   Actions må være slått på i rapportrepoet, fordi Pages bygger området med arbeidsflyten `pages-build-deployment` der.
+
+4. Lag deploy-nøkkelen, legg den offentlige delen i rapportrepoet med skrivetilgang og den private som hemmelighet i dette repoet, og slett begge filene etterpå:
+
+   ```bash
+   ssh-keygen -t ed25519 -N "" -C "prosjektportalen365 CI test reports" -f pp365-test-reports
+   ```
+
+   ```bash
+   gh repo deploy-key add pp365-test-reports.pub --repo Puzzlepart/prosjektportalen365-test-reports --allow-write --title "prosjektportalen365 CI"
+   ```
+
+   ```bash
+   gh secret set TEST_REPORTS_DEPLOY_KEY --repo Puzzlepart/prosjektportalen365 < pp365-test-reports
+   ```
+
+   ```bash
+   rm pp365-test-reports pp365-test-reports.pub
+   ```
+
+5. Sett variablene, med adressen fra steg 3:
+
+   ```bash
+   gh variable set TEST_REPORTS_REPOSITORY --repo Puzzlepart/prosjektportalen365 --body Puzzlepart/prosjektportalen365-test-reports
+   ```
+
+   ```bash
+   gh variable set TEST_REPORTS_URL --repo Puzzlepart/prosjektportalen365 --body https://<ord>.pages.github.io/
+   ```
+
+Neste kjøring av `ci-channel-test.yml` publiserer. Valgfri herding: et regelsett (ruleset) i rapportrepoet som beskytter `main` mot deploy-nøkkelen, som ellers kan pushe til alle brancher der. Sett aldri Pages-synligheten tilbake til offentlig.
 
 ### CI (build debug)
 
@@ -2387,8 +2731,8 @@ To ting å vite når du måler: løperne varierer mye (samme bygg har tatt 506 o
 
 ### Felles for arbeidsflytene
 
-- **Tidsgrenser.** Hver jobb har `timeout-minutes`: bygg 45, full oppgradering 60, pakkeoppgradering 20, E2E 30, integrasjonstester 20 og `UpgradeAllSitesToLatest.ps1` 120. GitHubs standard er seks timer, og når kjøringene venter på hverandre (`concurrency`), holder en jobb som henger, alle senere like lenge.
-- **Rettigheter.** `permissions: contents: read` for `GITHUB_TOKEN`; bare SBOM-jobben skriver, siden den committer `SBOM.md` ved manuell kjøring.
+- **Tidsgrenser.** Hver jobb har `timeout-minutes`: bygg 45, full oppgradering 60, pakkeoppgradering 20, E2E 30, integrasjonstester 20 og `UpgradeAllSitesToLatest.ps1` 120. Publiseringsstegene til testrapportsiden har sin egen grense på 10 minutter, så et steg som henger, ikke tar testjobben med seg. GitHubs standard er seks timer, og når kjøringene venter på hverandre (`concurrency`), holder en jobb som henger, alle senere like lenge.
+- **Rettigheter.** `permissions: contents: read` for `GITHUB_TOKEN`; bare SBOM-jobben skriver, siden den committer `SBOM.md` ved manuell kjøring. Publiseringsstegene i `ci-channel-test.yml` pusher til et annet repo, rapportrepoet bak testrapportsiden, med deploy-nøkkelen `TEST_REPORTS_DEPLOY_KEY` over SSH, ikke med `GITHUB_TOKEN`.
 - **Rush-loggene** lastes opp som artefakt (`rush-logs-…`, 7 dager) når et bygg feiler. `Build-Release.ps1` skriver bare de siste 200 linjene i jobbloggen.
 - **Hemmelighetene** sendes til skriptene som `$env:CI_CERT_BASE64`, `$env:CI_TENANT` og `$env:CI_CLIENT_ID`, som PowerShell leser når steget kjører. De skrives dermed aldri inn i stegets skript på runneren.
 - **PnP.PowerShell** installeres i CI med `Install-ModuleWithRetry` fra `Install/Scripts/SharedFunctions.ps1`: tre forsøk med 30 sekunder imellom, siden runneren av og til ikke når PowerShell Gallery (kjøring 38522211703).
@@ -2402,7 +2746,7 @@ GitHub kjører bare arbeidsflytfilene som ligger rett i `.github/workflows/`. Ma
 | Arbeidsflytfil        | Beskrivelse                                                                  | Utløser                                                                                  |
 | --------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | `ci-releases.yml`     | Bygg og oppgrader utviklingsmiljøet; ny installasjon med `[fresh-install]`   | Push til `releases/1.15` (stier: SPFx, Install, Templates)                               |
-| `ci-channel-test.yml` | Bygg og distribuer testkanalen, og kjør Playwright- og integrasjonstestene mot den | Push til `releases/1.15` og `feat/technical-backlog*` (stier: SPFx, Install, Templates, e2e, integration) |
+| `ci-channel-test.yml` | Bygg og distribuer testkanalen, og kjør Playwright- og integrasjonstestene mot den | Push til `releases/1.15` (stier: SPFx, Install, Templates, e2e, integration, `.tasks/publish-test-report.js` og arbeidsflytfilen) |
 | `ci-build-debug.yml`  | Bygg testkanalens pakke uten utrulling: for å prøve endringer i bygget, og som påkrevd bygg på pull requests | Push til `releases/1.15` eller en `feat/**`-branch med `[build-debug]` i emnelinjen, og hver pull request mot `releases/**` |
 | `build-release.yml`   | Bygg utgivelsespakke og test/kurs-kanalpakker                                | Push til `main` (stier: SPFx, Install, Templates)                                        |
 | `generate-sbom.yml`   | Generer SBOM.md som artefakt; committer den bare ved manuell kjøring fra en branch | Tag-push `v*` eller manuell utløsning                                              |

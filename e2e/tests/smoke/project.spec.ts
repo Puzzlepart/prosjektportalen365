@@ -58,6 +58,42 @@ test.describe('project site', () => {
     await page.keyboard.press('Escape')
   })
 
+  test('the phases open from the keyboard, hold the focus while open and give it back (#1788)', async ({
+    page,
+    openPage,
+    resolvePage
+  }) => {
+    await openPage(await resolvePage(projectUrl!, ['ProjectHome.aspx', 'Hjem.aspx', 'Home.aspx']))
+    const list = webPartByAlias(page, 'ProjectPhases').getByRole('list', {
+      name: /prosjektets faser|the project's phases/i
+    })
+    await expect(list).toBeVisible(MOUNT_TIMEOUT)
+    // Each phase is a button in its list item, and the current phase is the current step.
+    await expect(list.locator('li > button[aria-current="step"]')).toHaveCount(1)
+    const phase = list.getByRole('button').first()
+    await phase.focus()
+    await page.keyboard.press('Enter')
+    const details = page.locator('.fui-PopoverSurface[role="dialog"]')
+    await expect(details).toBeVisible()
+    // Tab used to leave the open phase for the top of the page, leaving it open behind. It stays
+    // in the phase now, or leaves the page for the browser's own controls, never for the page.
+    for (let i = 0; i < 4; i++) {
+      await page.keyboard.press('Tab')
+      const where = await page.evaluate(() => {
+        const active = document.activeElement
+        if (!active || active === document.body || active.hasAttribute('data-tabster-dummy'))
+          return 'browser'
+        return active.closest('.fui-PopoverSurface')
+          ? 'phase'
+          : `page: ${active.tagName} ${(active.textContent ?? '').trim().slice(0, 40)}`
+      })
+      expect(where, 'Tab in an open phase goes to the page behind it').not.toMatch(/^page/)
+    }
+    await page.keyboard.press('Escape')
+    await expect(details).toBeHidden()
+    await expect(phase).toBeFocused()
+  })
+
   test('project status page mounts its web part', async ({ page, openPage, resolvePage }) => {
     // Prosjektstatus.aspx is a single web part app page: SharePoint sets no data-sp-feature-tag
     // there, so the mount is asserted through the generic web part container (openPage does that).

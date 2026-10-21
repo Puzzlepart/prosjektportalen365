@@ -1,7 +1,7 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
 // Babel, so mocks are not hoisted. Stand-ins keep Fluent's contracts where jsdom cannot run the
 // real controls (see the testing guide): the popovers toggle through `onOpenChange` and show their
-// surface while open; the responsible is the harness's TagPicker stand-in (a combobox for the
+// surface while open, a dialog named as it is told when the popover traps the focus; the responsible is the harness's TagPicker stand-in (a combobox for the
 // search, an option per person found); the separator (`Dropdown`) is a native select, whose choice
 // calls `onOptionSelect` with the option's value and text; the date pickers are inputs that write a
 // day through `formatDate` and read a typed one through `parseDateFromString`, as `allowTextInput`
@@ -9,20 +9,39 @@
 jest.mock('@fluentui/react-components', () => {
   const base = jest.requireActual('pp365-jest-config/lib/tagPickerStandIn').withTagPickerStandIn()
   const React = jest.requireActual('react')
-  const PopoverContext = React.createContext({ open: false, toggle: (_event: any) => undefined })
-  const Popover = ({ open: controlled, onOpenChange, children }: any) => {
+  const PopoverContext = React.createContext({
+    open: false,
+    trapFocus: false,
+    toggle: (_event: any) => undefined
+  })
+  const Popover = ({ open: controlled, onOpenChange, trapFocus, children }: any) => {
     const [uncontrolled, setUncontrolled] = React.useState(false)
     const open = controlled ?? uncontrolled
     const toggle = (event: any) => {
       setUncontrolled(!open)
       onOpenChange?.(event, { open: !open })
     }
-    return React.createElement(PopoverContext.Provider, { value: { open, toggle } }, children)
+    return React.createElement(
+      PopoverContext.Provider,
+      { value: { open, trapFocus: !!trapFocus, toggle } },
+      children
+    )
   }
   const PopoverTrigger = ({ children }: any) =>
     React.createElement('span', { onClick: React.useContext(PopoverContext).toggle }, children)
-  const PopoverSurface = ({ children }: any) =>
-    React.useContext(PopoverContext).open ? React.createElement('div', null, children) : null
+  const PopoverSurface = ({ children, ...props }: any) => {
+    const { open, trapFocus } = React.useContext(PopoverContext)
+    return open
+      ? React.createElement(
+          'div',
+          {
+            role: trapFocus ? 'dialog' : undefined,
+            'aria-labelledby': props['aria-labelledby']
+          },
+          children
+        )
+      : null
+  }
   const pick = (onOptionSelect: any) => (event: any) => {
     const option = event.target.options[event.target.selectedIndex]
     onOptionSelect?.(event, { optionValue: option.value, optionText: option.textContent })
@@ -63,6 +82,7 @@ jest.mock('@fluentui/react-datepicker-compat', () => {
   return { __esModule: true, DatePicker }
 })
 
+import { AriaLiveAnnouncer } from '@fluentui/react-components'
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import strings from 'ProjectExtensionsStrings'
@@ -116,14 +136,30 @@ function renderRiskAction(
       : undefined
   }
   render(
-    <RiskActionFieldCustomizerContext.Provider
-      value={{ dataAdapter: adapter as any, itemContext: itemContext as any }}
-    >
-      <RiskAction />
-    </RiskActionFieldCustomizerContext.Provider>
+    <AriaLiveAnnouncer>
+      <RiskActionFieldCustomizerContext.Provider
+        value={{ dataAdapter: adapter as any, itemContext: itemContext as any }}
+      >
+        <RiskAction />
+      </RiskActionFieldCustomizerContext.Provider>
+    </AriaLiveAnnouncer>
   )
   return itemContext
 }
+
+/**
+ * What the announcer's live region holds now. It writes each message as `innerText` on a span of
+ * its own, which jsdom keeps as a property rather than as text, and clears the region through
+ * `innerText` too, which jsdom ignores: the newest message is the last span.
+ */
+const announced = () =>
+  Array.from(document.body.querySelectorAll('[aria-live]'))
+    .map((region) => {
+      const spans = region.querySelectorAll('span')
+      const span = spans[spans.length - 1] as HTMLElement | undefined
+      return (span && (span.innerText || span.textContent)) || region.textContent || ''
+    })
+    .join(' ')
 
 const button = (text: string) => screen.getByText(text).closest('button')
 
@@ -235,11 +271,15 @@ describe('RiskAction', () => {
     expect(screen.getByText('Kari Nordmann')).toBeInTheDocument()
     expect(screen.getByText('21.09.2026')).toBeInTheDocument()
     expect(screen.getByText('02.10.2026')).toBeInTheDocument()
-    fireEvent.click(screen.getByText(strings.RiskActionPlannerTaskPreviewPlannerLinkText))
-    expect(open).toHaveBeenCalledWith(
-      'https://planner.cloud.microsoft/webui/plan/plan-1/task/task-1',
-      '_blank'
+    // A link, which goes somewhere, where a button called window.open (WCAG 4.1.2).
+    const link = screen.getByRole('link', {
+      name: strings.RiskActionPlannerTaskPreviewPlannerLinkText
+    })
+    expect(link).toHaveAttribute(
+      'href',
+      'https://planner.cloud.microsoft/webui/plan/plan-1/task/task-1'
     )
+    expect(link).toHaveAttribute('target', '_blank')
   })
 
   it('says when a Planner task is done', async () => {
@@ -251,8 +291,127 @@ describe('RiskAction', () => {
     expect(
       await screen.findByText(strings.RiskActionPlannerTaskPreviewCompletedText)
     ).toBeInTheDocument()
-    fireEvent.click(screen.getByText(strings.RiskActionPlannerTaskPreviewPlannerLinkText))
-    expect(open).toHaveBeenCalledWith('https://tasks.office.com/home/task/task-2', '_blank')
+    expect(
+      screen.getByRole('link', { name: strings.RiskActionPlannerTaskPreviewPlannerLinkText })
+    ).toHaveAttribute('href', 'https://tasks.office.com/home/task/task-2')
+  })
+
+  it('says that the risk has no actions yet from a button, not a message announced in every row (WCAG 4.1.3)', () => {
+    renderRiskAction('')
+    const empty = screen.getByRole('button', { name: 'Ingen tiltak ennå' })
+    expect(empty.closest('.fui-MessageBar')).toBeNull()
+    fireEvent.click(empty)
+    expect(screen.getByText(strings.RiskActionPopoverInfoText)).toBeInTheDocument()
+  })
+
+  it('lists the Planner tasks, a done one named so, and keeps the focus in the actions, named by their risk (WCAG 1.3.1, 2.4.3)', () => {
+    renderRiskAction('', PLANNER_TASKS)
+    const list = screen.getByRole('list', { name: strings.RiskActionTasksLabel })
+    expect(within(list).getAllByRole('listitem')).toHaveLength(2)
+    expect(screen.getByText('Avtal en reserve')).toHaveAttribute(
+      'aria-label',
+      format(strings.RiskActionTaskCompletedLabel, 'Avtal en reserve')
+    )
+    fireEvent.click(screen.getByText(strings.RiskActionFieldValueAdminButtonText))
+    expect(
+      screen.getByRole('dialog', { name: format(strings.RiskActionPopoverTitle, RISK) })
+    ).toBeInTheDocument()
+    // The time of the last synchronisation is not shown, so not there to be announced.
+    expect(
+      screen.queryByText(format(strings.RiskActionPopoverLastUpdated, '01.10.2026, 10:00'))
+    ).toBeNull()
+  })
+
+  it('previews a Planner task in a dialog named by it, reading its people once and its properties in pairs (WCAG 1.3.1, 2.4.3)', async () => {
+    adapter.getTask.mockImplementation(() =>
+      Promise.resolve({
+        description: 'Ring før fredag',
+        startDateTime: new Date(2026, 8, 21),
+        dueDateTime: new Date(2026, 9, 2),
+        progress: 'Pågår',
+        assignees: [{ displayName: 'Kari Nordmann', mail: 'kari@contoso.no' }],
+        planId: 'plan-1'
+      })
+    )
+    renderRiskAction('', PLANNER_TASKS)
+    fireEvent.click(screen.getByText('Ring leverandøren'))
+    const preview = await screen.findByRole('dialog', { name: 'Ring leverandøren' })
+    await within(preview).findByText('Ring før fredag')
+    expect(within(preview).getByText(strings.StartDateLabel).closest('dt')).not.toBeNull()
+    expect(within(preview).getByText('21.09.2026').closest('dd')).not.toBeNull()
+    expect(preview.querySelector('.fui-Avatar')).toHaveAttribute('aria-hidden', 'true')
+  })
+
+  it('says when the tasks are synchronised, and when they could not be (WCAG 4.1.3)', async () => {
+    const itemContext = renderRiskAction('', PLANNER_TASKS)
+    adapter.syncTasks.mockImplementationOnce(() => Promise.reject(new Error('Planner svarte ikke')))
+    fireEvent.click(screen.getByText(strings.RiskActionFieldValueAdminButtonText))
+    fireEvent.click(screen.getByText(strings.NewRiskActionPanelUpdateTaskStatus))
+    expect(await screen.findByText(strings.RiskActionSyncFailed)).toBeInTheDocument()
+    // Closed and opened again, the popover starts clean: the failure belonged to that attempt.
+    fireEvent.click(screen.getByText(strings.RiskActionFieldValueAdminButtonText))
+    await waitFor(() => expect(screen.queryByText(strings.RiskActionSyncFailed)).toBeNull())
+    fireEvent.click(screen.getByText(strings.RiskActionFieldValueAdminButtonText))
+    expect(screen.queryByText(strings.RiskActionSyncFailed)).toBeNull()
+    adapter.syncTasks.mockImplementationOnce(() => Promise.resolve({ ...itemContext }))
+    fireEvent.click(screen.getByText(strings.NewRiskActionPanelUpdateTaskStatus))
+    await waitFor(() => expect(announced()).toContain(strings.RiskActionSyncDone))
+  })
+
+  it('says when an action is added, and shows why when it is not (WCAG 3.3.1, 4.1.3)', async () => {
+    renderRiskAction('')
+    fireEvent.click(screen.getByText('Ingen tiltak ennå'))
+    const panel = await openNewActionPanel()
+    const title = within(panel).getAllByRole('textbox')[0]
+    fireEvent.change(title, { target: { value: 'Første' } })
+    fireEvent.click(within(panel).getByRole('switch'))
+    adapter.addTask.mockImplementationOnce(() => Promise.reject(new Error('Ingen tilgang')))
+    fireEvent.click(button(strings.SaveButtonLabel))
+    expect(await within(panel).findByText(strings.NewRiskActionSaveFailed)).toBeInTheDocument()
+    expect(within(panel).getByText('Ingen tilgang')).toBeInTheDocument()
+    fireEvent.click(button(strings.SaveButtonLabel))
+    await waitFor(() => expect(announced()).toContain(format(strings.NewRiskActionSaved, 'Første')))
+  })
+
+  it('starts clean when the panel is opened again after a failed save', async () => {
+    renderRiskAction('')
+    fireEvent.click(screen.getByText('Ingen tiltak ennå'))
+    let panel = await openNewActionPanel()
+    fireEvent.change(within(panel).getAllByRole('textbox')[0], { target: { value: 'Første' } })
+    adapter.addTask.mockImplementationOnce(() => Promise.reject(new Error('Ingen tilgang')))
+    fireEvent.click(button(strings.SaveButtonLabel))
+    expect(await within(panel).findByText(strings.NewRiskActionSaveFailed)).toBeInTheDocument()
+    // The panel stays mounted while closed: the error must not wait there for the next opening,
+    // where its message bar would announce itself again.
+    fireEvent.click(button(strings.CancelButtonLabel))
+    await waitFor(() =>
+      expect(screen.queryByText(format(strings.NewRiskActionPanelTitle, RISK))).toBeNull()
+    )
+    fireEvent.click(screen.getByText('Ingen tiltak ennå'))
+    panel = await openNewActionPanel()
+    expect(within(panel).queryByText(strings.NewRiskActionSaveFailed)).toBeNull()
+  })
+
+  it('keeps the focus and names the progress while the actions are migrated, and says when they are (WCAG 2.4.3, 4.1.2, 4.1.3)', async () => {
+    let finish: (tasks: any[]) => void
+    adapter.addTasks.mockImplementationOnce(() => new Promise((resolve) => (finish = resolve)))
+    renderRiskAction('Ring leverandøren')
+    fireEvent.click(screen.getByText('Ring leverandøren'))
+    fireEvent.click(screen.getByText(strings.NewRiskActionPanelMigrateRiskActions))
+    const create = await screen.findByText(
+      format(strings.MigrateRiskActionsDialogCreatePlannerTasks, 1)
+    )
+    const createButton = create.closest('button')
+    createButton.focus()
+    fireEvent.click(createButton)
+    expect(createButton).toBeInTheDocument()
+    expect(createButton).toHaveAttribute('aria-disabled', 'true')
+    expect(createButton).toHaveFocus()
+    expect(
+      screen.getByRole('progressbar', { name: strings.MigrateRiskActionsDialogProgressText })
+    ).toBeInTheDocument()
+    await act(async () => finish([{ id: 'new-0', title: 'Ring leverandøren', isCompleted: '0' }]))
+    await waitFor(() => expect(announced()).toContain(format(strings.MigrateRiskActionsDone, 1)))
   })
 
   it('adds a new action to Planner with its title, days and responsible, and closes', async () => {

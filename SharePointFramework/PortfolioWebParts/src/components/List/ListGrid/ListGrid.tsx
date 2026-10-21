@@ -9,6 +9,7 @@ import {
   TableHeaderCell,
   TableRow,
   TableSelectionCell,
+  Tooltip,
   mergeClasses
 } from '@fluentui/react-components'
 import { ChevronDownRegular, ChevronRightRegular } from '@fluentui/react-icons'
@@ -53,6 +54,7 @@ function sortDirection(column: IListColumn) {
  */
 export const ListGrid: FC<IListGridProps> = (props) => {
   const {
+    headerMenuProps,
     containerRef,
     tableRef,
     columnSizing,
@@ -103,22 +105,22 @@ export const ListGrid: FC<IListGridProps> = (props) => {
             )}
             {isGrouped && (
               <TableCell role='columnheader' className={styles.expanderCell}>
-                <Button
-                  appearance='transparent'
-                  size='small'
-                  icon={allCollapsed ? <ChevronRightRegular /> : <ChevronDownRegular />}
-                  aria-label={
+                {/* Named by its tooltip: a title of the same text as well was read twice. */}
+                <Tooltip
+                  content={
                     allCollapsed
                       ? strings.ListExpandAllGroupsLabel
                       : strings.ListCollapseAllGroupsLabel
                   }
-                  title={
-                    allCollapsed
-                      ? strings.ListExpandAllGroupsLabel
-                      : strings.ListCollapseAllGroupsLabel
-                  }
-                  onClick={toggleAllCollapsed}
-                />
+                  relationship='label'
+                >
+                  <Button
+                    appearance='transparent'
+                    size='small'
+                    icon={allCollapsed ? <ChevronRightRegular /> : <ChevronDownRegular />}
+                    onClick={toggleAllCollapsed}
+                  />
+                </Tooltip>
               </TableCell>
             )}
             {props.columns.map((column) => (
@@ -130,7 +132,8 @@ export const ListGrid: FC<IListGridProps> = (props) => {
                 button={{
                   onClick: onHeaderClick(column),
                   onContextMenu: onHeaderContextMenu(column),
-                  className: styles.headerButton
+                  className: styles.headerButton,
+                  ...headerMenuProps
                 }}
               >
                 {column.iconName && (
@@ -177,7 +180,12 @@ export const ListGrid: FC<IListGridProps> = (props) => {
                         }}
                       />
                     )}
-                    <TableCell role='gridcell' className={styles.groupCell}>
+                    {/* The group's name spans the row's other cells (WCAG 1.3.1). */}
+                    <TableCell
+                      role='gridcell'
+                      className={styles.groupCell}
+                      aria-colspan={props.columns.length + 1}
+                    >
                       <Button
                         appearance='transparent'
                         icon={entry.collapsed ? <ChevronRightRegular /> : <ChevronDownRegular />}

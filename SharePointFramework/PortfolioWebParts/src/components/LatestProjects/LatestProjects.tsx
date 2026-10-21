@@ -33,7 +33,9 @@ export const LATEST_PROJECTS_DEFAULT_PROPS: Partial<ILatestProjectsProps> = {
 
 /**
  * Renders a list of the latest projects. The list is sorted by the Created date
- * by default.
+ * by default. The projects are a list named by the web part's title, each read once (the logo
+ * beside its link is hidden), and «Vis flere» says whether the rest are shown (WCAG 1.3.1,
+ * 4.1.2).
  *
  * @param props - The component props.
  */
@@ -52,30 +54,36 @@ export const LatestProjects: FC<ILatestProjectsProps> = (incomingProps) => {
       )
     }
     const viewCount = viewAll ? projects.length : props.rowLimit
-    return [...projects].slice(0, viewCount).map((site, idx) => {
-      const created = formatDate(site.Created, true)
-      const url = site?.Path || site?.SPWebUrl
+    return (
+      <ul className={styles.list} aria-label={props.title}>
+        {[...projects].slice(0, viewCount).map((site, idx) => {
+          const created = formatDate(site.Created, true)
+          const url = site?.Path || site?.SPWebUrl
 
-      return (
-        <div key={idx} className={className}>
-          <ProjectLogo
-            title={site.Title}
-            url={url}
-            renderMode='list'
-            size='48px'
-            hidden={!props.showProjectLogo}
-          />
-          <div className={styles.container}>
-            <div className={styles.title}>
-              <Link href={url} target='_blank' title={site.Title}>
-                {site.Title}
-              </Link>
-            </div>
-            <Caption1 title={format(strings.CreatedTooltipText, created)}>{created}</Caption1>
-          </div>
-        </div>
-      )
-    })
+          return (
+            <li key={idx} className={className}>
+              <div aria-hidden>
+                <ProjectLogo
+                  title={site.Title}
+                  url={url}
+                  renderMode='list'
+                  size='48px'
+                  hidden={!props.showProjectLogo}
+                />
+              </div>
+              <div className={styles.container}>
+                <div className={styles.title}>
+                  <Link href={url} target='_blank' title={site.Title}>
+                    {site.Title}
+                  </Link>
+                </div>
+                <Caption1 title={format(strings.CreatedTooltipText, created)}>{created}</Caption1>
+              </div>
+            </li>
+          )
+        })}
+      </ul>
+    )
   }
 
   return (
@@ -90,7 +98,7 @@ export const LatestProjects: FC<ILatestProjectsProps> = (incomingProps) => {
                 appearance='subtle'
                 size='small'
                 icon={viewAll ? <ChevronUpFilled /> : <ChevronDownFilled />}
-                title={viewAll ? strings.ViewLessText : strings.ViewMoreText}
+                aria-expanded={viewAll}
                 onClick={toggleViewAll}
               >
                 {viewAll ? strings.ViewLessText : strings.ViewMoreText}

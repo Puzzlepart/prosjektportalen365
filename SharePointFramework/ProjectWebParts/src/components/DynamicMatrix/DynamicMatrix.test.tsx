@@ -1,4 +1,5 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import * as React from 'react'
 import { DynamicMatrix } from './DynamicMatrix'
 import { generateMatrixConfiguration } from './generateMatrixConfiguration'
@@ -61,5 +62,50 @@ describe('DynamicMatrix', () => {
     }
     expect(screen.getByTitle('Risiko 1')).toHaveTextContent('1')
     expect(screen.getByTitle('Risiko 2')).toHaveTextContent('2')
+  })
+
+  it('is a table: each element in the row of its probability and the column of its consequence, named, reachable and described (WCAG 1.3.1, 2.1.1)', async () => {
+    const configuration = generateMatrixConfiguration(4, headers)
+    render(
+      <DynamicMatrix
+        title='Risikomatrise'
+        configuration={configuration}
+        width='100%'
+        calloutTemplate='<h3>{Title}</h3><p>Status: {Status}</p>'
+        getElementsForCell={(cell) =>
+          cell.x === 1 && cell.y === 4
+            ? [
+                {
+                  model: {
+                    id: 7,
+                    tooltip: 'Leverandør',
+                    item: { Title: 'Leverandør', Status: 'Åpen' }
+                  },
+                  title: 'Leverandør'
+                }
+              ]
+            : []
+        }
+      />
+    )
+    const table = screen.getByRole('table', { name: 'Risikomatrise' })
+    expect(
+      within(table)
+        .getAllByRole('columnheader')
+        .map((header) => header.textContent)
+    ).toEqual(['', 'Ubetydelig', 'Liten', 'Moderat', 'Alvorlig'])
+    expect(
+      within(table)
+        .getAllByRole('rowheader')
+        .map((header) => header.textContent)
+    ).toEqual(['Svært høy', 'Høy', 'Middels', 'Lav'])
+    // The number it shows, and what it is; the callout's text as its description, which the
+    // tooltip showed only under the mouse.
+    const element = within(table).getByRole('img', { name: '7: Leverandør' })
+    expect(element).toHaveAttribute('tabindex', '0')
+    expect(element).toHaveAccessibleDescription(/Leverandør\s*Status: Åpen/)
+    const row = element.closest('[role="row"]') as HTMLElement
+    expect(within(row).getByRole('rowheader')).toHaveTextContent('Svært høy')
+    expect(await axeComponent(table)).toHaveNoViolations()
   })
 })

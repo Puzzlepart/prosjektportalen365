@@ -1,4 +1,5 @@
 import { act, cleanup, render, screen, waitFor } from '@testing-library/react'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import strings from 'SharedLibraryStrings'
 import * as React from 'react'
 import { ProjectLogo } from '.'
@@ -67,6 +68,16 @@ describe('ProjectLogo', () => {
     expect(await screen.findByText('Frisbeegolfbane')).toBeInTheDocument()
   })
 
+  it('sets the title on a card in its own element, which wraps a long word and ends in «…» after four lines (WCAG 1.4.12)', async () => {
+    // The avatar centres its initials with flexbox, which cannot cut lines off: a name of one long
+    // word, or any long name with more text spacing, went past the box and was cut.
+    logo.height = 648
+    render(<ProjectLogo title='EtAldriSåLiteProsjektForTesting' url={URL} renderMode='card' />)
+    const title = await screen.findByText('EtAldriSåLiteProsjektForTesting')
+    expect(title).toHaveClass('cardTitle')
+    expect(title).not.toHaveClass('fui-Avatar__initials')
+  })
+
   it("shows the template's image when the project has no logo of its own", async () => {
     logo.height = 1024
     render(<ProjectLogo title='Frisbeegolfbane' url={URL} fallbackImageUrl='/maler/bygg.png' />)
@@ -83,5 +94,19 @@ describe('ProjectLogo', () => {
     unmount()
     render(<ProjectLogo title='Frisbeegolfbane' url={URL} />)
     expect(await screen.findByText('FR')).toBeInTheDocument()
+  })
+
+  it('names the logo and the initials alike, and breaks no rule axe can check', async () => {
+    const name = format(strings.Aria.ProjectTitle, 'Frisbeegolfbane')
+    const logoShown = render(<ProjectLogo title='Frisbeegolfbane' url={URL} />)
+    await waitFor(() => expect(image()).toBeVisible())
+    expect(screen.getByRole('img', { name })).toBe(image())
+    expect(await axeComponent(logoShown.container)).toHaveNoViolations()
+    logoShown.unmount()
+    logo.height = 96
+    const initials = render(<ProjectLogo title='Frisbeegolfbane' url={URL} />)
+    expect(await screen.findByText('FR')).toBeInTheDocument()
+    expect(screen.getByRole('img', { name })).not.toBe(image())
+    expect(await axeComponent(initials.container)).toHaveNoViolations()
   })
 })

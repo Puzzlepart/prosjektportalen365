@@ -1,6 +1,6 @@
 import { SearchBox } from '@fluentui/react-components'
 import strings from 'ProjectExtensionsStrings'
-import { DataGridList, Toolbar } from 'pp365-shared-library'
+import { DataGridList, getFluentIcon, getSearchBoxDismissProps } from 'pp365-shared-library'
 import React from 'react'
 import { ProjectSetupDialogSectionComponent } from '../types'
 import styles from './ContentConfigSection.module.scss'
@@ -10,15 +10,24 @@ import { useContentConfigSection } from './useContentConfigSection'
  * Section for selection of content configurations.
  */
 export const ContentConfigSection: ProjectSetupDialogSectionComponent = () => {
-  const { items, columns, selectedRowIds, onSelectionChange, searchTerm, onSearch, toolbarItems } =
-    useContentConfigSection()
+  const {
+    items,
+    columns,
+    selectedRowIds,
+    onSelectionChange,
+    searchTerm,
+    onSearch,
+    selectedCountText
+  } = useContentConfigSection()
 
   return (
     <div className={styles.root}>
       <div className={styles.commands}>
         <div className={styles.search}>
           <SearchBox
+            dismiss={getSearchBoxDismissProps()}
             placeholder={strings.ContentConfigSectionSearchPlaceholder}
+            aria-label={strings.ContentConfigSectionSearchLabel}
             value={searchTerm}
             onChange={(_, { value }) => onSearch(value)}
             size='large'
@@ -27,7 +36,10 @@ export const ContentConfigSection: ProjectSetupDialogSectionComponent = () => {
             contentAfter={{ onClick: () => onSearch('') }}
           />
         </div>
-        <Toolbar farItems={toolbarItems} />
+        <span className={styles.selectedCount} role='status'>
+          {getFluentIcon('CheckmarkCircle', { size: 20 })}
+          {selectedCountText}
+        </span>
       </div>
       <DataGridList
         items={items}

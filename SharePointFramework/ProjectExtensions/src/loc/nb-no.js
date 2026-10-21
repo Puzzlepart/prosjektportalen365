@@ -5,29 +5,24 @@ define([], function () {
     PlannerTaskCompleted: 'Fullført',
     RiskActionPlannerTaskPreviewPlannerLinkText: 'Gå til oppgaven i Planner',
     MigrateRiskActionsDialogTitle: 'Migrering av tiltak for {0}',
-    RiskActionFieldValueAdminButtonText: 'Administrer tiltak',
+    RiskActionFieldValueAdminButtonText: "Administrer tiltak",
     CreateMultipleLabel: 'Opprett flere',
-    CreateMultipleDescription:
-      'Huk av for å unngå at panelet lukkes etter opprettelse av tiltaket.',
+    CreateMultipleDescription: 'Huk av for å unngå at panelet lukkes etter opprettelse av tiltaket.',
     RiskActionPopoverTitle: 'Tiltak for {0}',
     RiskActionPlannerTaskPreviewCompletedText: 'Oppgaven er fullført',
     MigrateRiskActionsDialogSeparatorOptionLinebreak: 'Linjeskift',
     MigrateRiskActionsDialogSeparatorOptionComma: 'Komma',
     MigrateRiskActionsDialogSeparatorOptionCommaNoSpaces: 'Komma (ingen mellomrom)',
     MigrateRiskActionsDialogSeparatorLabel: 'Hvordan er tiltakene adskilt?',
-    MigrateRiskActionsDialogProgressText:
-      'Oppretter tiltakene i Planner. Dette kan ta litt tid. Ikke lukk dialogen...',
+    MigrateRiskActionsDialogProgressText: 'Oppretter tiltakene i Planner. Dette kan ta litt tid. Ikke lukk dialogen...',
     MigrateRiskActionsDialogCancel: 'Lukk',
     NewRiskActionPanelMigrateRiskActions: 'Migrer tiltakene til Planner',
     MigrateRiskActionsDialogCreatePlannerTasks: 'Opprett {0} tiltak i Planner',
-    MigrateRiskActionsDialogInfoText:
-      'Du kan velge å bruke Planner for å håndtere tiltakene for denne risikoen, men du kan også fortsette med den tidligere måten å håndtere tiltakene på.',
+    MigrateRiskActionsDialogInfoText: 'Du kan velge å bruke Planner for å håndtere tiltakene for denne risikoen, men du kan også fortsette med den tidligere måten å håndtere tiltakene på.',
     RiskActionPopoverLastUpdated: 'Oppgavene ble sist synkronisert fra Planner {0}.',
     NewRiskActionPanelUpdateTaskStatus: 'Synkroniser endringer',
-    RiskActionPopoverInfoText:
-      'Legg til nytt tiltak som oppgave i Planner, eller oppdater eksisterende oppgaver.',
-    RiskActionPopoverInfoTextNoPlanner:
-      'Legg til nytt tiltak som oppgave i Planner, eller oppdater eksisterende oppgaver. Om du allerede har fyllt ut tiltak manuelt, vil disse bli erstattet med tiltakene som lagres i Planner.',
+    RiskActionPopoverInfoText: 'Legg til nytt tiltak som oppgave i Planner, eller oppdater eksisterende oppgaver.',
+    RiskActionPopoverInfoTextNoPlanner: 'Legg til nytt tiltak som oppgave i Planner, eller oppdater eksisterende oppgaver. Om du allerede har fyllt ut tiltak manuelt, vil disse bli erstattet med tiltakene som lagres i Planner.',
     StartDateLabel: 'Startdato',
     DueDateLabel: 'Forfallsdato',
     NewRiskActionPanelTitle: 'Legg til nytt tiltak for {0}',
@@ -52,12 +47,10 @@ define([], function () {
     CmdSelectionCountText: '{0} er merket',
     CmdSelectionCountTooltipText: 'Følgende elementer er valgt:',
     ConfiguredSpecifiedTaskTitle: 'Spesifikke steg angitt',
-    ConfiguredSpecifiedTaskMessage:
-      'Oppsettveiviseren er konfigurert til å kun kjøre følgende steg: {0}',
+    ConfiguredSpecifiedTaskMessage: 'Oppsettveiviseren er konfigurert til å kun kjøre følgende steg: {0}',
     ContentConfigLockedTooltipText: 'Standardinnhold-elementet er låst og kan ikke velges bort.',
     ContentConfigSectionHeaderText: 'Standardinnhold',
-    ContentConfigSectionTooltip:
-      'Standardinnhold legger til forhåndsdefinerte listeelementer i prosjektområdet.',
+    ContentConfigSectionTooltip: 'Standardinnhold legger til forhåndsdefinerte listeelementer i prosjektområdet.',
     ContentConfigSectionDisabledTooltip: 'Ingen standardinnhold er tilgjengelig.',
     ContentConfigSectionSearchPlaceholder: 'Søk i standardinnhold...',
     ContinueToProjectText: 'Fortsett til prosjekt',
@@ -72,18 +65,14 @@ define([], function () {
     CustomActionsText: 'Egendefinerte handlinger',
     DescriptionLabel: 'Beskrivelse',
     DocumentTemplateDialogScreenEditCopyInfoTitle: 'Angi metadata for dokumentene',
-    DocumentTemplateDialogScreenEditCopyInfoMessage:
-      'Her kan du sette **Fil/mappenavn** og **Tittel** for dokumentene og mappene som kopieres over.<br /><br />**Obs:** Mapper kopieres med alt innhold rekursivt til målmappen.<br /><br />Når du er ferdig, trykk **Start kopiering** for å starte kopieringen.',
+    DocumentTemplateDialogScreenEditCopyInfoMessage: 'Her kan du sette **Fil/mappenavn** og **Tittel** for dokumentene og mappene som kopieres over.<br /><br />**Obs:** Mapper kopieres med alt innhold rekursivt til målmappen.<br /><br />Når du er ferdig, trykk **Start kopiering** for å starte kopieringen.',
     DocumentTemplateDialogScreenSelectInfoTitle: 'Valg av dokumentmaler',
-    DocumentTemplateDialogScreenSelectInfoMessage:
-      'Velg dokumentmalene og/eller mappene du vil kopiere til prosjektområdet.<br /><br />Malene hentes fra <a href="{0}" target="_blank">{1}</a> og det hentes **siste versjon** av malene.<br /><br />**Obs:** Mapper kopieres med alt innhold rekursivt.<br /><br />Når du trykker **Velg** sendes du videre til et skjermbilde hvor du velger destinasjonen du ønsker å kopiere til.',
+    DocumentTemplateDialogScreenSelectInfoMessage: 'Velg dokumentmalene og/eller mappene du vil kopiere til prosjektområdet.<br /><br />Malene hentes fra <a href="{0}" target="_blank">{1}</a> og det hentes **siste versjon** av malene.<br /><br />**Obs:** Mapper kopieres med alt innhold rekursivt.<br /><br />Når du trykker **Velg** sendes du videre til et skjermbilde hvor du velger destinasjonen du ønsker å kopiere til.',
     DocumentTemplateDialogScreenTargetFolderInfoTitle: 'Velg mål for malene',
-    DocumentTemplateDialogScreenTargetFolderInfoMessage:
-      'Velg mål for de valgte malene og/eller mappene. Dersom det er flere enn ett dokumentbibliotek kan du trykke **Bibliotek** for å velge et annet bibliotek.<br /><br />Når du trykker **Kopier hit** sendes du videre til et skjermbilde hvor du kan sette tittel og filnavn for malene som kopieres over.',
-    ExtensionLockedTooltipText: 'Prosjekttilegget er låst og kan ikke velges bort.',
+    DocumentTemplateDialogScreenTargetFolderInfoMessage: 'Velg mål for de valgte malene og/eller mappene. Dersom det er flere enn ett dokumentbibliotek kan du trykke **Bibliotek** for å velge et annet bibliotek.<br /><br />Når du trykker **Kopier hit** sendes du videre til et skjermbilde hvor du kan sette tittel og filnavn for malene som kopieres over.',
+    ExtensionLockedTooltipText: 'Prosjekttillegget er låst og kan ikke velges bort.',
     ExtensionsSectionHeaderText: 'Prosjekttillegg',
-    ExtensionsSectionTooltip:
-      'Prosjekttillegg gir ekstra funksjonalitet til prosjektområdet, som for eksempel tilleggslister, venstremeny og annen konfigurasjon.',
+    ExtensionsSectionTooltip: 'Prosjekttillegg gir ekstra funksjonalitet til prosjektområdet, som for eksempel tilleggslister, venstremeny og annen konfigurasjon.',
     ExtensionsSectionDisabledTooltip: 'Ingen prosjekttillegg er tilgjengelig.',
     ExtensionsSectionSearchPlaceholder: 'Søk i prosjekttillegg...',
     FilenameAlreadyInUseErrorText: 'Filnavnet er allerede i bruk.',
@@ -96,77 +85,56 @@ define([], function () {
     FolderNameInValidErrorText: 'Mappenavnet er ugyldig.',
     GetMoreText: 'Hent flere',
     GetSetupDataErrorMessage: 'Det skjedde en feil',
-    GetSetupDataErrorStack:
-      'Det skjedde en feil under uthenting av data fra hubområdet. Dersom Prosjektportalen nylig er installert, kan det være grunnen. Prøv igjen litt senere.',
+    GetSetupDataErrorStack: 'Det skjedde en feil under uthenting av data fra hubområdet. Dersom Prosjektportalen nylig er installert, kan det være grunnen. Prøv igjen litt senere.',
     IdeaDecisionStatusApprovedAndSynced: 'Godkjent og synkronisert',
-    InvalidLanguageErrorMessage:
-      'Ugyldig språk for området. Språket må være det samme som på hubområdet.',
-    InvalidLanguageErrorStack:
-      'Språket som er satt for området støttes ikke. Området må være opprettet med norsk språk.',
+    InvalidLanguageErrorMessage: 'Ugyldig språk for området. Språket må være det samme som på hubområdet.',
+    InvalidLanguageErrorStack: 'Språket som er satt for området støttes ikke. Området må være opprettet med norsk språk.',
     IsHubSiteErrorMessage: 'Kan ikke legge prosjektmalen på et hubområde',
-    IsHubSiteErrorStack:
-      'Det er ikke mulig å legge områdedesign for prosjekt på et hubområde. Operasjon avbrutt.',
+    IsHubSiteErrorStack: 'Det er ikke mulig å legge områdedesign for prosjekt på et hubområde. Operasjon avbrutt.',
     Library: 'Bibliotek',
     LibraryDropdownLabel: 'Bibliotek',
     ModifiedLabel: 'Endret',
     NameLabel: 'Navn',
-    NoFoldersAvailableText:
-      'Ingen undermapper tilgjengelig i denne mappen. Du kan kopiere til denne mappen ved å klikke "Kopier hit".',
+    NoFoldersAvailableText: 'Ingen undermapper tilgjengelig i denne mappen. Du kan kopiere til denne mappen ved å klikke "Kopier hit".',
     NoGroupIdErrorMessage: 'Kan ikke hente gruppe-ID',
     NoGroupIdErrorStack: 'Det skjedde en feil under henting av gruppe-ID for området.',
     NoHubSiteErrorMessage: 'SharePoint-området er ikke koblet til et hubområde',
-    NoHubSiteErrorStack:
-      'SharePoint-området kan ikke settes opp uten å være koblet til et hubområde. Koble området til et hubområde for portefølje, og last siden på nytt.<br/><br/>Gå til `Innstillinger`, finn `Nettstedsinformasjon` og velg hub/portefølje under `Tilknytning til hubområde`.',
+    NoHubSiteErrorStack: 'SharePoint-området kan ikke settes opp uten å være koblet til et hubområde. Koble området til et hubområde for portefølje, og last siden på nytt.<br/><br/>Gå til `Innstillinger`, finn `Nettstedsinformasjon` og velg hub/portefølje under `Tilknytning til hubområde`.',
     NotSiteAdminErrorMessage: 'Ikke tilgang til å sette opp området',
-    NotSiteAdminErrorStack:
-      'Du har ikke tilstrekkelige rettigheter til å sette opp området. Kontakt en administrator for å sette opp området eller gi deg selv administratorrettigheter og prøv igjen.',
+    NotSiteAdminErrorStack: 'Du har ikke tilstrekkelige rettigheter til å sette opp området. Kontakt en administrator for å sette opp området eller gi deg selv administratorrettigheter og prøv igjen.',
     OnGoBackText: 'Gå tilbake',
     OnStartCopyText: 'Start kopiering',
     OnSubmitSelectionText: 'Velg',
     PermissionConfigurationList: 'Tillatelseskonfigurasjon',
     PhaseLabel: 'Fase',
-    PlannerConfigurationErrorMessage:
-      'Det skjedde en feil under opprettelse av standardoppgaver i Planner. Prøv igjen ved å laste siden på nytt.',
+    PlannerConfigurationErrorMessage: 'Det skjedde en feil under opprettelse av standardoppgaver i Planner. Prøv igjen ved å laste siden på nytt.',
     PlannerConfigurationText: 'Oppretter standardoppgaver i Planner',
-    PlannerTagsLimitLogText:
-      'Kan ikke legge til mer enn 25 etiketter til planneren "{0}", fjerner overskytende etiketter.',
-    PlannerTaskAttachmentLimitLogText:
-      'Kan ikke legge til mer enn 8 vedlegg til oppgave "{0}", fjerner overskytende vedlegg.',
-    PlannerTaskChecklistLimitLogText:
-      'Kan ikke legge til mer enn 20 punkter i sjekklisten for oppgave "{0}", fjerner overskytende punkter.',
+    PlannerTagsLimitLogText: 'Kan ikke legge til mer enn 25 etiketter til planneren "{0}", fjerner overskytende etiketter.',
+    PlannerTaskAttachmentLimitLogText: 'Kan ikke legge til mer enn 8 vedlegg til oppgave "{0}", fjerner overskytende vedlegg.',
+    PlannerTaskChecklistLimitLogText: 'Kan ikke legge til mer enn 20 punkter i sjekklisten for oppgave "{0}", fjerner overskytende punkter.',
     TimelineConfigurationText: 'Oppretter standardelementer for tidslinje',
     CreatingTimelineItemText: 'Oppretter tidslinjeelement: {0}',
-    TimelineConfigurationErrorMessage:
-      'Det skjedde en feil under opprettelse av standardelementer for tidslinje. Prøv igjen ved å laste siden på nytt.',
-    PreTaskContentTypeValidationErrorMessage:
-      'Validering av innholdstypen feilet. Sjekk at prosjektegenskaper- og prosjektstatusinnholdstypene er korrekte i maloppsettet.',
+    TimelineConfigurationErrorMessage: 'Det skjedde en feil under opprettelse av standardelementer for tidslinje. Prøv igjen ved å laste siden på nytt.',
+    PreTaskContentTypeValidationErrorMessage: 'Validering av innholdstypen feilet. Sjekk at prosjektegenskaper- og prosjektstatusinnholdstypene er korrekte i maloppsettet.',
     PreTaskErrorMessage: 'Det skjedde en feil',
     PreTaskTermSetIdValidationErrorMessage: 'Validering av fasetermsettet feilet.',
     ProcessFileText: 'Kopierer fil {0} av {1}',
     ProcessFolderText: 'Kopierer mappe {0} av {1}',
     ProcessListItemText: 'Prosesserer batch {0} med {1} listeelementer',
-    ProgressDialogDescription:
-      'Vennligst vent. Ikke lukk nettleservinduet - da vil ikke prosjektområdet bli riktig satt opp.',
+    ProgressDialogDescription: 'Vennligst vent. Ikke lukk nettleservinduet - da vil ikke prosjektområdet bli riktig satt opp.',
     ProgressDialogLabel: 'Klargjør prosjektområdet',
-    ProgressDialogSubText:
-      'Vennligst vent. Ikke lukk nettleservinduet - da vil ikke prosjektområdet bli riktig satt opp.',
+    ProgressDialogSubText: 'Vennligst vent. Ikke lukk nettleservinduet - da vil ikke prosjektområdet bli riktig satt opp.',
     ProgressDialogTitle: 'Setter opp prosjektområdet',
     ProjectAlreadySetupMessage: 'Prosjektet er allerede satt opp',
-    ProjectAlreadySetupStack:
-      'Det ser ut til at prosjektet allerede er satt opp. Vil du kjøre oppsettveiviseren på nytt (ikke anbefalt) eller hoppe over oppsett?',
+    ProjectAlreadySetupStack: 'Det ser ut til at prosjektet allerede er satt opp. Vil du kjøre oppsettveiviseren på nytt (ikke anbefalt) eller hoppe over oppsett?',
     ProjectDataFoundTitle: 'Prosjektdata funnet',
-    ProjectDataFoundMessage:
-      'Det ble funnet prosjektdata for dette prosjektet. Prosjektdata blir brukt til å fylle ut prosjektinformasjon.',
+    ProjectDataFoundMessage: 'Det ble funnet prosjektdata for dette prosjektet. Prosjektdata blir brukt til å fylle ut prosjektinformasjon.',
     NoHubWriteAccessTitle: 'Du mangler skrivetilgang til porteføljeområdet',
-    NoHubWriteAccessMessage:
-      'Du kan ikke legge til elementer i listen «{0}» på porteføljeområdet. Prosjektområdet blir satt opp, men ingenting skrives til porteføljeområdet. Prosjektet registreres i porteføljen første gang noen med skrivetilgang til listen lagrer endringer i «Prosjektinformasjon» eller endrer fase på prosjektets forside, og vises ikke i porteføljeoversikten før det. Be en administrator om skrivetilgang til listen før du fortsetter hvis prosjektet skal registreres med en gang.',
-    HubWriteSkippedLogText:
-      'Mangler skrivetilgang til porteføljeområdet. Prosjektet registreres ikke i porteføljen.',
-    HubWriteDeniedLogText:
-      'Porteføljeområdet avviste registreringen av prosjektet ({0}). Oppsettet fortsetter uten å skrive til porteføljeområdet.',
+    NoHubWriteAccessMessage: 'Du kan ikke legge til elementer i listen «{0}» på porteføljeområdet. Prosjektområdet blir satt opp, men ingenting skrives til porteføljeområdet. Prosjektet registreres i porteføljen første gang noen med skrivetilgang til listen lagrer endringer i «Prosjektinformasjon» eller endrer fase på prosjektets forside, og vises ikke i porteføljeoversikten før det. Be en administrator om skrivetilgang til listen før du fortsetter hvis prosjektet skal registreres med en gang.',
+    HubWriteSkippedLogText: 'Mangler skrivetilgang til porteføljeområdet. Prosjektet registreres ikke i porteføljen.',
+    HubWriteDeniedLogText: 'Porteføljeområdet avviste registreringen av prosjektet ({0}). Oppsettet fortsetter uten å skrive til porteføljeområdet.',
     ProjectNotRegisteredInHubTitle: 'Prosjektet er ikke registrert i porteføljen',
-    ProjectNotRegisteredInHubMessage:
-      'Prosjektområdet er satt opp, men prosjektet ble ikke lagt til i listen «{0}» på porteføljeområdet fordi du mangler skrivetilgang der. Prosjektet registreres i porteføljen første gang noen med skrivetilgang til listen lagrer endringer i «Prosjektinformasjon» eller endrer fase på prosjektets forside. Til da vises det ikke i porteføljeoversikten.',
+    ProjectNotRegisteredInHubMessage: 'Prosjektområdet er satt opp, men prosjektet ble ikke lagt til i listen «{0}» på porteføljeområdet fordi du mangler skrivetilgang der. Prosjektet registreres i porteføljen første gang noen med skrivetilgang til listen lagrer endringer i «Prosjektinformasjon» eller endrer fase på prosjektets forside. Til da vises det ikke i porteføljeoversikten.',
     ProjectPropertiesHeader: 'Prosjektinformasjon',
     ProjectProvisioningStartLogText: 'Starter provisjonering av prosjektet {0}.',
     ProjectProvisioningSuccessLogText: 'Prosjektet {0} ble provisjonert uten feil.',
@@ -177,15 +145,12 @@ define([], function () {
     RecycleBinText: 'Papirkurv',
     RemoveAlternativeLanguagesText: 'Fjerner alternative språk',
     RemoveAlternativeLanguagesSubText: 'Konfigurerer områdets språkinnstillinger',
-    RemoveAlternativeLanguagesErrorMessage:
-      'Det skjedde en feil under fjerning av alternative språk',
-    RemoveAlternativeLanguagesProgressText:
-      'Validerer området før oppsett. Fjerner alternative språk fra området for å sikre at vi oppfyller kravene.',
+    RemoveAlternativeLanguagesErrorMessage: 'Det skjedde en feil under fjerning av alternative språk',
+    RemoveAlternativeLanguagesProgressText: 'Validerer området før oppsett. Fjerner alternative språk fra området for å sikre at vi oppfyller kravene.',
     RunHooksText: 'Kjøring av hooks',
     SetTaxonomyFieldsErrorMessage: 'Det skjedde en feil under konfigurering av taksonomifelter',
     SetupAbortedText: 'Installasjon avbrutt av bruker',
-    SetupProjectInformationErrorMessage:
-      'Det skjedde en feil under initialisering av prosjektegenskaper',
+    SetupProjectInformationErrorMessage: 'Det skjedde en feil under initialisering av prosjektegenskaper',
     SetupProjectInformationText: 'Setter opp prosjektegenskaper',
     SitePermissionsSubText: 'Kopierer tillatelsekonfigurasjon fra hubområdet.',
     SitePermissionsText: 'Setter opp tillatelser for området',
@@ -204,10 +169,8 @@ define([], function () {
       '**{0}** krever innhold på hub-området (f.eks. filer eller dokumentbiblioteker på hub-området) som ikke settes opp når pakken tilgjengeliggjøres som skymal. Tillegg og listeinnhold blir lagt til, men dette hub-innholdet hoppes over. Fortsett på eget ansvar.',
     TemplateConfigConjunction: ' og ',
     DataGridSelectAllLabel: 'Velg alle',
-    PlannerMemberWarningMessage:
-      'Du må være medlem av Microsoft 365 gruppa for å kunne konfigurere Planner. Vennligst legg deg selv til som medlem eller spør en administrator og prøv deretter igjen.',
-    ProjectSetupDialogInfoText:
-      'Oppsettet av prosjektområdet tar omtrent 5-10 minutter. Ikke lukk nettleservinduet mens området settes opp. Det anbefales ikke å sette opp flere områder samtidig.',
+    PlannerMemberWarningMessage: 'Du må være medlem av Microsoft 365 gruppa for å kunne konfigurere Planner. Vennligst legg deg selv til som medlem eller spør en administrator og prøv deretter igjen.',
+    ProjectSetupDialogInfoText: 'Oppsettet av prosjektområdet tar omtrent 5-10 minutter. Ikke lukk nettleservinduet mens området settes opp. Det anbefales ikke å sette opp flere områder samtidig.',
     ProjectSetupDialogSubmitButtonText: 'Sett opp området',
     ProjectSetupDialogTitle: 'Oppsettveiviser',
     ProjectSetupDialogVersionTooltip: 'Prosjektportalen versjon {0}',
@@ -216,15 +179,13 @@ define([], function () {
     ProjectTemplateSelectorNoMatchText: 'Ingen prosjektmaler samsvarer med søket.',
     ProjectTemplateSelectorTitle: 'Prosjektmal',
     ProjectTemplateSelectorNoTemplateLabel: 'Ingen mal',
-    ProjectTemplateSelectorNoTemplateDescription:
-      'Bruk dette alternativet for å kjøre oppsettveiviseren uten å anvende en mal. Du kan fortsatt legge til tillegg og standardinnhold.',
+    ProjectTemplateSelectorNoTemplateDescription: 'Bruk dette alternativet for å kjøre oppsettveiviseren uten å anvende en mal. Du kan fortsatt legge til tillegg og standardinnhold.',
     ProjectTemplateSelectorNoTemplateRadioLabel: 'Ikke legg på mal på området',
     ProjectTemplateSelectorSelectTemplateRadioLabel: 'Velg en prosjektmal',
     TemplateLibrarySelectModalTitle: 'Hent dokumentmal',
     TemplateSelectorCommandTitle: 'Hent dokumentmal',
     TemplateSelectorCommandDisabledTitle: 'Denne funksjonaliteten er ikke tilgjengelig',
-    TermSetDoesNotExistError:
-      'Finner ikke termsett ID. Sjekk at termsett ID er korrekt i maloppsett-listen.',
+    TermSetDoesNotExistError: 'Finner ikke termsett ID. Sjekk at termsett ID er korrekt i maloppsett-listen.',
     TitleLabel: 'Tittel',
     ProgressLabel: 'Fremdrift',
     AssignedToLabel: 'Tilordnet til',
@@ -232,8 +193,7 @@ define([], function () {
     CancelButtonLabel: 'Avbryt',
     NoTemplateSelectedText: 'Velg en prosjektmal for å fortsette.',
     SelectedCountLabel: '{0} valgte elementer',
-    MandatoryItemTooltipText:
-      'Dette elementet er påkrevd av den valgte prosjektmalen og kan ikke fjernes.',
+    MandatoryItemTooltipText: 'Dette elementet er påkrevd av den valgte prosjektmalen og kan ikke fjernes.',
     ProgressAdvancedLogLabel: 'Avansert logg',
     ProgressTaskPendingText: 'Venter',
     ProgressTaskRunningText: 'Kjører',
@@ -241,6 +201,33 @@ define([], function () {
     ProgressTaskErrorText: 'Feil',
     ProgressTaskWarningText: 'Advarsel',
     ProgressStepCountText: 'Steg {0} av {1}',
-    ProgressAdvancedLogDescription: 'Klikk for å vise detaljert logg for hvert steg i oppsettet.'
+    ProgressAdvancedLogDescription: 'Klikk for å vise detaljert logg for hvert steg i oppsettet.',
+    ProjectTemplateSelectorModeLabel: 'Mal på området',
+    ConfigTabSelectedLabel: '{0}, {1} valgt',
+    ExtensionsSectionSearchLabel: 'Søk i prosjekttillegg',
+    ContentConfigSectionSearchLabel: 'Søk i standardinnhold',
+    SearchResultsCount: 'Viser {0} av {1}',
+    CloudTemplateResolved: 'Skymalen er lest, og prosjektet kan settes opp',
+    ProgressStepAnnouncement: 'Steg {0} av {1}: {2}',
+    ProgressTaskStatusPending: 'venter',
+    ProgressTaskStatusRunning: 'pågår',
+    ProgressTaskStatusCompleted: 'fullført',
+    ProgressTaskStatusError: 'feilet',
+    ProgressTaskStatusWarning: 'fullført med advarsler',
+    ProgressTaskLabel: '{0}: {1}',
+    ProgressTaskLabelWithEntries: '{0}: {1} ({2} i loggen)',
+    ProgressLogLevelInfo: 'Info',
+    ProgressLogLevelWarning: 'Advarsel',
+    ProgressLogLevelError: 'Feil',
+    FolderNavigationLabel: 'Mappenavigasjon',
+    CopyProgressAnnouncement: 'Kopierer {0}',
+    RiskActionTasksLabel: 'Tiltak i Planner',
+    RiskActionTaskCompletedLabel: '{0}, fullført',
+    RiskActionSyncDone: 'Oppgavestatusen er oppdatert',
+    RiskActionSyncFailed: 'Oppgavestatusen ble ikke oppdatert',
+    NewRiskActionSaved: 'Tiltaket «{0}» er lagt til i Planner',
+    NewRiskActionSaveFailed: 'Tiltaket ble ikke lagt til',
+    MigrateRiskActionsDone: '{0} oppgaver er opprettet i Planner',
+    MigrateRiskActionsFailed: 'Oppgavene ble ikke opprettet'
   }
 })

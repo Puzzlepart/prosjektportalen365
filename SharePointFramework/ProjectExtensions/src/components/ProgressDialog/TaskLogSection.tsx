@@ -16,7 +16,7 @@ import {
   InfoRegular
 } from '@fluentui/react-icons'
 import strings from 'ProjectExtensionsStrings'
-import { getUILocale } from 'pp365-shared-library'
+import { format, getUILocale } from 'pp365-shared-library'
 import { ITaskProgress, TaskStatus, LogLevel } from './types'
 import styles from './ProgressDialog.module.scss'
 
@@ -24,31 +24,65 @@ interface ITaskLogSectionProps {
   tasks: ITaskProgress[]
 }
 
+/** A step's status in words, which its icon and colour show to the eye alone (WCAG 1.4.1). */
+const TASK_STATUS_TEXT: Record<TaskStatus, string> = {
+  pending: strings.ProgressTaskStatusPending,
+  running: strings.ProgressTaskStatusRunning,
+  completed: strings.ProgressTaskStatusCompleted,
+  error: strings.ProgressTaskStatusError,
+  warning: strings.ProgressTaskStatusWarning
+}
+
+/** A log entry's level in words, for the icon that shows it. */
+const LOG_LEVEL_TEXT: Record<LogLevel, string> = {
+  info: strings.ProgressLogLevelInfo,
+  warning: strings.ProgressLogLevelWarning,
+  error: strings.ProgressLogLevelError
+}
+
 const getTaskStatusIcon = (status: TaskStatus) => {
   switch (status) {
     case 'running':
-      return <Spinner size='tiny' />
+      return <Spinner size='tiny' aria-hidden />
+    // Fluent's status colours, 3:1 at least against the dialog (WCAG 1.4.11): the warning's
+    // #ffaa44 was 1.9:1 and the pending circle's #8a8886 3.5:1.
     case 'completed':
-      return <CheckmarkCircleFilled style={{ color: '#107c10', fontSize: 16 }} />
+      return (
+        <CheckmarkCircleFilled
+          style={{ color: 'var(--colorPaletteGreenForeground1)', fontSize: 16 }}
+        />
+      )
     case 'error':
-      return <ErrorCircleFilled style={{ color: '#d13438', fontSize: 16 }} />
+      return (
+        <ErrorCircleFilled style={{ color: 'var(--colorPaletteRedForeground1)', fontSize: 16 }} />
+      )
     case 'warning':
-      return <WarningFilled style={{ color: '#ffaa44', fontSize: 16 }} />
+      return (
+        <WarningFilled
+          style={{ color: 'var(--colorPaletteDarkOrangeForeground1)', fontSize: 16 }}
+        />
+      )
     case 'pending':
     default:
-      return <CircleRegular style={{ color: '#8a8886', fontSize: 16 }} />
+      return <CircleRegular style={{ color: 'var(--colorNeutralForeground3)', fontSize: 16 }} />
   }
 }
 
 const getLogLevelIcon = (level: LogLevel) => {
   switch (level) {
     case 'error':
-      return <ErrorCircleFilled style={{ color: '#d13438', fontSize: 12 }} />
+      return (
+        <ErrorCircleFilled style={{ color: 'var(--colorPaletteRedForeground1)', fontSize: 12 }} />
+      )
     case 'warning':
-      return <WarningFilled style={{ color: '#ffaa44', fontSize: 12 }} />
+      return (
+        <WarningFilled
+          style={{ color: 'var(--colorPaletteDarkOrangeForeground1)', fontSize: 12 }}
+        />
+      )
     case 'info':
     default:
-      return <InfoRegular style={{ color: '#8a8886', fontSize: 12 }} />
+      return <InfoRegular style={{ color: 'var(--colorNeutralForeground3)', fontSize: 12 }} />
   }
 }
 
@@ -63,6 +97,10 @@ const getLogEntryColor = (level: LogLevel): string => {
   }
 }
 
+/**
+ * A step's log: a `log` the keyboard can reach to scroll it (WCAG 2.1.1), named by the step, each
+ * entry's level named for its icon.
+ */
 const TaskLogEntries: FC<{ task: ITaskProgress }> = ({ task }) => {
   const logRef = useRef<HTMLDivElement>(null)
 
@@ -73,10 +111,16 @@ const TaskLogEntries: FC<{ task: ITaskProgress }> = ({ task }) => {
   }, [task.entries.length])
 
   return (
-    <div ref={logRef} className={styles.logEntries}>
+    <div ref={logRef} className={styles.logEntries} role='log' tabIndex={0} aria-label={task.name}>
       {task.entries.map((entry, idx) => (
         <div key={idx} className={styles.logEntry}>
-          <span className={styles.logEntryIcon}>{getLogLevelIcon(entry.level)}</span>
+          <span
+            className={styles.logEntryIcon}
+            role='img'
+            aria-label={LOG_LEVEL_TEXT[entry.level] ?? LOG_LEVEL_TEXT.info}
+          >
+            {getLogLevelIcon(entry.level)}
+          </span>
           <span className={styles.logEntryTime}>
             {entry.timestamp.toLocaleTimeString(getUILocale(), {
               hour: '2-digit',
@@ -90,7 +134,7 @@ const TaskLogEntries: FC<{ task: ITaskProgress }> = ({ task }) => {
         </div>
       ))}
       {task.entries.length === 0 && task.status === 'pending' && (
-        <Text size={200} style={{ color: '#8a8886', fontStyle: 'italic' }}>
+        <Text size={200} className={styles.pendingText}>
           {strings.ProgressTaskPendingText}
         </Text>
       )}
@@ -134,9 +178,25 @@ export const TaskLogSection: FC<ITaskLogSectionProps> = ({ tasks }) => {
       >
         {tasks.map((task) => (
           <AccordionItem key={task.name} value={task.name}>
-            <AccordionHeader size='small'>
+            <AccordionHeader
+              size='small'
+              // Named by the step, its status and its entries, which the icon and the badge show.
+              button={{
+                'aria-label':
+                  task.entries.length > 0
+                    ? format(
+                        strings.ProgressTaskLabelWithEntries,
+                        task.name,
+                        TASK_STATUS_TEXT[task.status],
+                        task.entries.length
+                      )
+                    : format(strings.ProgressTaskLabel, task.name, TASK_STATUS_TEXT[task.status])
+              }}
+            >
               <span className={styles.taskHeader}>
-                <span className={styles.taskStatusIcon}>{getTaskStatusIcon(task.status)}</span>
+                <span className={styles.taskStatusIcon} aria-hidden>
+                  {getTaskStatusIcon(task.status)}
+                </span>
                 <Text size={200} weight='semibold'>
                   {task.name}
                 </Text>

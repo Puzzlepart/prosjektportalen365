@@ -1,6 +1,7 @@
+import { useAnnounce } from '@fluentui/react-components'
 import { IPersonaItem, format } from 'pp365-shared-library'
 import strings from 'ProjectExtensionsStrings'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRiskActionFieldCustomizerContext } from '../../../../extensions/riskAction/context'
 import { useRiskActionContext } from '../../context'
 import { INewRiskActionForm, INewRiskActionPanelProps } from './types'
@@ -43,6 +44,14 @@ export function useNewRiskActionPanel(props: INewRiskActionPanelProps) {
   const { itemContext, setItemContext } = useRiskActionContext()
   const [form, setForm] = useState<INewRiskActionForm>(EMPTY_FORM)
   const [isSaving, setIsSaving] = useState(false)
+  const [saveError, setSaveError] = useState<string>()
+  const { announce } = useAnnounce()
+
+  // A failed save is told while the panel is open. The panel stays mounted while closed, so the
+  // error is let go of as it opens again, and the opening starts clean.
+  useEffect(() => {
+    if (props.open) setSaveError(undefined)
+  }, [props.open])
 
   const setField = useCallback(
     <K extends keyof INewRiskActionForm>(key: K, value: INewRiskActionForm[K]) => {
@@ -59,19 +68,26 @@ export function useNewRiskActionPanel(props: INewRiskActionPanelProps) {
 
   const onSave = useCallback(async (): Promise<void> => {
     setIsSaving(true)
+    setSaveError(undefined)
     try {
       const task = await context.dataAdapter.addTask(toTaskModel(form), itemContext)
       setItemContext(await context.dataAdapter.updateItem([task], itemContext))
+    } catch (error) {
+      // The panel stays open with the form as typed, and says why (WCAG 3.3.1).
+      setSaveError(error?.message ?? '')
+      return
     } finally {
       setIsSaving(false)
     }
+    // Said either way: with «create several» the panel stays, its form cleared in silence.
+    announce(format(strings.NewRiskActionSaved, form.title), { polite: true })
     if (form.createMultiple) {
       setForm({ ...EMPTY_FORM, createMultiple: true })
     } else {
       setForm(EMPTY_FORM)
       props.onClose?.()
     }
-  }, [context.dataAdapter, form, itemContext, props.onClose, setItemContext])
+  }, [announce, context.dataAdapter, form, itemContext, props.onClose, setItemContext])
 
   return {
     headerText: format(strings.NewRiskActionPanelTitle, context.itemContext.title),
@@ -80,6 +96,7 @@ export function useNewRiskActionPanel(props: INewRiskActionPanelProps) {
     resolvePeople,
     onSave,
     isSaving,
+    saveError,
     canSave: form.title.trim().length > 0 && !isSaving
   }
 }

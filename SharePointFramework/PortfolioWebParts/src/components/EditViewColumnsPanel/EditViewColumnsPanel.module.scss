@@ -1,5 +1,4 @@
 .root {
-
   .columnItem {
     display: flex;
     flex-direction: row;
@@ -7,12 +6,19 @@
     align-items: center;
     height: 20px;
     margin: 4px 0;
-    outline: 0;
     padding: 6px;
 
     &:hover {
       background-color: var(--colorBrandBackground2);
 
+      .columnItemActions {
+        display: flex;
+      }
+    }
+
+    // The row drags with the mouse only; the keyboard moves a column with the buttons, which show
+    // while the focus is in the row, the way to them without a pointer.
+    &:focus-within {
       .columnItemActions {
         display: flex;
       }

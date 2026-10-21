@@ -1,4 +1,5 @@
 import { baseURL } from '../../playwright.config'
+import { scanAccessibility, SURFACES } from '../fixtures/a11y'
 import { configuredUrl, expect, test } from '../fixtures/pp365'
 import {
   deleteOwnDraftReports,
@@ -69,6 +70,7 @@ test.describe('status report draft', () => {
         .filter({ hasText: /ny statusrapport|new status report/i })
         .first()
       await expect(panel).toBeVisible({ timeout: 60_000 })
+      await scanAccessibility(page, { component: 'EditStatusPanel', include: [SURFACES.drawer] })
       const save = panel.getByRole('button', { name: /^lagre$|^save$/i })
       if (!(await save.isEnabled({ timeout: 10_000 }).catch(() => false))) {
         await page.keyboard.press('Escape')

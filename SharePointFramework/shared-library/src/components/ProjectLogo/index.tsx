@@ -54,7 +54,9 @@ export const ProjectLogo: FC<IProjectLogoProps> = (incomingProps: IProjectLogoPr
         }}
         name={props.title?.slice(-2).toUpperCase()}
         initials={
-          props.renderMode === 'card' ? props.title : props.title?.slice(0, 2).toUpperCase()
+          props.renderMode === 'card'
+            ? { children: <span className={styles.cardTitle}>{props.title}</span> }
+            : props.title?.slice(0, 2).toUpperCase()
         }
       />
       <img

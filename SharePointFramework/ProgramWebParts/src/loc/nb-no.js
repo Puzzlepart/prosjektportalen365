@@ -19,6 +19,8 @@ define([], function () {
     AddColumnLabel: 'Legg til en kolonne',
     AddColumnLabel: 'Legg til en kolonne',
     AddProjectDialogSearchBoxPlaceholder: 'Søk i prosjekter...',
+    AddProjectsDisabledReason: 'Velg prosjektene du vil legge til',
+    AddProjectsErrorTitle: 'Prosjektene kunne ikke legges til',
     BooleanNo: 'Nei',
     BooleanOff: 'Av',
     BooleanOn: 'På',

@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'SharedLibraryStrings'
 import React from 'react'
@@ -19,14 +18,14 @@ export const UrlColumn: ColumnRenderComponent<IUrlColumnProps> = (incomingProps)
     return null
   }
 
-  let [url, description] = props.columnValue.split(', ').filter((v) => !stringIsNullOrEmpty(v))
+  const [url, ownDescription] = props.columnValue.split(', ').filter((v) => !stringIsNullOrEmpty(v))
   const target = props.openInNewTab === false ? '_self' : '_blank'
-  if (stringIsNullOrEmpty(description)) {
-    description = props.description ?? url
-  }
+  // The column's description first, as its setting says, then the link's own, then the address:
+  // a link always has a text to be read and found by (WCAG 2.4.4).
+  const text = [props.description, ownDescription, url].find((v) => !stringIsNullOrEmpty(v))
   return (
     <Link href={url} target={target} rel='noopener noreferrer'>
-      {props.description}
+      {text}
     </Link>
   )
 }

@@ -1,4 +1,4 @@
-import { expect, test as base, Page } from '@playwright/test'
+import { APIResponse, expect, test as base, Page } from '@playwright/test'
 import * as fs from 'fs'
 import * as path from 'path'
 
@@ -69,6 +69,45 @@ export async function withNetworkRetry<T>(send: () => Promise<T>): Promise<T> {
   }
 }
 
+/**
+ * Loads a page of the site in a tab of its own, which the test's page is left out of. SharePoint
+ * refuses REST calls with 401 or 403 once its session cookie has expired or been revoked, while a
+ * page still loads: the page signs in again on its own and renews the cookie, which a REST call
+ * cannot do. A CI run lost its session four minutes in and failed every test after (2026-10-20).
+ *
+ * @param page The test's page, whose browser context the tab shares
+ * @param url A URL on the site, such as a REST call's
+ */
+async function renewSession(page: Page, url: string) {
+  const tab = await page.context().newPage()
+  try {
+    await withNetworkRetry(() =>
+      tab.goto(url.split('/_api/')[0], { waitUntil: 'domcontentloaded', timeout: 60_000 })
+    )
+  } finally {
+    await tab.close()
+  }
+}
+
+/**
+ * Sends a REST call, and once more after renewing the session when SharePoint refuses it as
+ * signed out (401 or 403). A call the user truly may not make is refused again.
+ *
+ * @param page The test's page
+ * @param url The call's URL
+ * @param send Sends the call
+ */
+export async function withSessionRenewal(
+  page: Page,
+  url: string,
+  send: () => Promise<APIResponse>
+): Promise<APIResponse> {
+  const response = await send()
+  if (response.status() !== 401 && response.status() !== 403) return response
+  await renewSession(page, url)
+  return send()
+}
+
 // A site's pages do not change during a run, and every test resolves its page before it starts:
 // one listing per site per worker, instead of one per test.
 const sitePagesCache = new Map<string, string[]>()
@@ -79,10 +118,13 @@ export async function listSitePages(page: Page, siteUrl: string): Promise<string
   const cached = sitePagesCache.get(site)
   if (cached) return cached
   const sitePath = new URL(site).pathname
-  const response = await withNetworkRetry(() =>
-    page.request.get(
-      `${site}/_api/web/GetFolderByServerRelativePath(decodedurl='${encodeURIComponent(sitePath + '/SitePages')}')/Files?$select=Name&$top=500`,
-      { headers: { Accept: 'application/json;odata=nometadata' }, timeout: REQUEST_TIMEOUT }
+  const url = `${site}/_api/web/GetFolderByServerRelativePath(decodedurl='${encodeURIComponent(sitePath + '/SitePages')}')/Files?$select=Name&$top=500`
+  const response = await withSessionRenewal(page, url, () =>
+    withNetworkRetry(() =>
+      page.request.get(url, {
+        headers: { Accept: 'application/json;odata=nometadata' },
+        timeout: REQUEST_TIMEOUT
+      })
     )
   )
   if (!response.ok()) {
@@ -112,9 +154,10 @@ export const test = base.extend<Pp365Fixtures>({
       errors.push(`pageerror: ${error.message} ${error.stack ?? ''}`.trim())
     )
     await use({ errors })
-    // Every browser error is attached to the report as evidence (the deployed build throws an
-    // unhandled rejection with an undefined reason on app pages, for example); only the patterns
-    // that mean a broken bundle fail the test.
+    // Every browser error is attached to the report as evidence; only the patterns that mean a
+    // broken bundle fail the test. The "pageerror: undefined" on most pages is SharePoint's own:
+    // a promise its page assembly (sp-pages-assembly) rejects with no reason as the page loads,
+    // traced with the debugger on 2026-10-19, as are its list bundle's rejections on project pages.
     if (errors.length > 0) {
       await base
         .info()
@@ -192,6 +235,29 @@ const CHANNEL_COMPONENTS: Map<string, { channel: string; name: string }> = (() =
   }
   return components
 })()
+
+/**
+ * The web parts on the page that are PP365 components of the channel under test, each with the
+ * alias `channels/<channel>.json` gives it ("ProjectInformationWebPart") and a CSS selector for
+ * its containers, in page order. A web part used twice on a page is listed once; its selector
+ * matches both.
+ */
+export async function channelWebPartsOnPage(
+  page: Page
+): Promise<Array<{ alias: string; selector: string }>> {
+  const ids = await page
+    .locator(WEB_PART)
+    .evaluateAll((elements) =>
+      elements.map((e) => (e.getAttribute('data-sp-web-part-id') ?? '').toLowerCase())
+    )
+  const parts = new Map<string, { alias: string; selector: string }>()
+  for (const id of ids) {
+    const component = CHANNEL_COMPONENTS.get(id)
+    if (!component || component.channel !== CHANNEL || parts.has(id)) continue
+    parts.set(id, { alias: component.name, selector: `[data-sp-web-part-id="${id}" i]` })
+  }
+  return [...parts.values()]
+}
 
 /**
  * Fails when a web part on the page is a PP365 component of another release channel than the one

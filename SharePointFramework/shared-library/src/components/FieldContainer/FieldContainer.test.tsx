@@ -1,5 +1,6 @@
 import { act, cleanup, render, screen } from '@testing-library/react'
 import { Input } from '@fluentui/react-components'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import * as React from 'react'
 import { FieldContainer } from '.'
 
@@ -56,5 +57,25 @@ describe('FieldContainer', () => {
       </FieldContainer>
     )
     expect(container.firstElementChild).not.toBeVisible()
+  })
+
+  it('breaks no WCAG 2.1 A or AA rule axe can check, with or without an icon', async () => {
+    const { container } = render(
+      <>
+        <FieldContainer label='Tittel' iconName='TextNumberFormat' required description='Navnet'>
+          <Input />
+        </FieldContainer>
+        <FieldContainer label='Kommentar'>
+          <Input />
+        </FieldContainer>
+      </>
+    )
+    expect(await axeComponent(container)).toHaveNoViolations()
+  })
+
+  it('is what keeps axe from finding an input without a label', async () => {
+    const { container } = render(<Input />)
+    const { violations } = await axeComponent(container)
+    expect(violations.map((violation) => violation.id)).toContain('label')
   })
 })

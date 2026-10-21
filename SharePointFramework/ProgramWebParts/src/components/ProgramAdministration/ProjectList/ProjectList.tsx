@@ -1,6 +1,6 @@
 import { mergeClasses, SearchBox } from '@fluentui/react-components'
 import { ListGrid } from 'pp365-portfoliowebparts/lib/components/List/ListGrid'
-import { UserMessage } from 'pp365-shared-library'
+import { getSearchBoxDismissProps, UserMessage } from 'pp365-shared-library'
 import strings from 'ProgramWebPartsStrings'
 import React, { FC } from 'react'
 import { Commands } from '../Commands'
@@ -34,6 +34,9 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         <div className={styles.search}>
           <SearchBox
             {...props.search}
+            dismiss={getSearchBoxDismissProps()}
+            // Named by what its placeholder says: a placeholder is no name (WCAG 1.3.1, 4.1.2).
+            aria-label={props.search?.['aria-label'] ?? props.search?.placeholder}
             className={styles.searchBox}
             appearance='filled-lighter'
             size='large'

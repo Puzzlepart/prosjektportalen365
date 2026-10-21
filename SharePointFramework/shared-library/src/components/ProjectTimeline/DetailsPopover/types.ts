@@ -1,4 +1,5 @@
 import { PopoverProps } from '@fluentui/react-components'
+import { SyntheticEvent } from 'react'
 import { ITimelineItem } from '../../../interfaces/ITimelineItem'
 
 export interface IDetailsPopoverProps extends Pick<PopoverProps, 'open'> {
@@ -8,7 +9,7 @@ export interface IDetailsPopoverProps extends Pick<PopoverProps, 'open'> {
   timelineItem: { item: ITimelineItem; element: HTMLElement }
 
   /**
-   * Callback to dismiss the popover.
+   * Callback to dismiss the popover, with the event that dismissed it.
    */
-  onDismiss: () => void
+  onDismiss: (event?: SyntheticEvent | Event) => void
 }

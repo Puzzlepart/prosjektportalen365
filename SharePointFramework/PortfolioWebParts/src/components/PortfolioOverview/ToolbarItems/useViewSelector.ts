@@ -1,5 +1,5 @@
 import strings from 'PortfolioWebPartsStrings'
-import { ListMenuItem, ListMenuItemDivider, ListMenuItemHeader } from 'pp365-shared-library'
+import { ListMenuItem, ListMenuItemDivider, ListMenuItemHeader, format } from 'pp365-shared-library'
 import { useMemo } from 'react'
 import _ from 'underscore'
 import { IPortfolioOverviewContext } from '../context'
@@ -28,6 +28,14 @@ export function useViewSelector(context: IPortfolioOverviewContext) {
   return useMemo<ListMenuItem>(
     () =>
       new ListMenuItem(context.state.currentView?.title, resource.Lists_PortfolioViews_Title)
+        // Named by what it chooses too, not only by the view it shows (WCAG 2.4.6).
+        .setAriaLabel(
+          format(
+            strings.SelectorButtonLabel,
+            context.state.currentView?.title,
+            resource.Lists_PortfolioViews_Title
+          )
+        )
         .setIcon('ContentView')
         .setWidth('fit-content')
         .setStyle({ minWidth: '145px' })

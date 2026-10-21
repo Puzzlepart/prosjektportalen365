@@ -1,6 +1,6 @@
 import { AppsListRegular, TextBulletListLtrRegular } from '@fluentui/react-icons'
 import * as strings from 'PortfolioWebPartsStrings'
-import { ListMenuItem, ListMenuItemDivider } from 'pp365-shared-library'
+import { ListMenuItem, ListMenuItemDivider, format } from 'pp365-shared-library'
 import { useMemo } from 'react'
 import { IPortfolioAggregationContext } from '../context'
 import {
@@ -51,6 +51,14 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
         .setStyle({ color: '#10793F' })
         .setHidden(!context.props.showExcelExportButton),
       new ListMenuItem(context.state.currentView?.title, resource.Lists_PortfolioViews_Title)
+        // Named by what it chooses too, not only by the view it shows (WCAG 2.4.6).
+        .setAriaLabel(
+          format(
+            strings.SelectorButtonLabel,
+            context.state.currentView?.title,
+            resource.Lists_PortfolioViews_Title
+          )
+        )
         .setIcon(Icons.ContentView)
         .setWidth('fit-content')
         .setStyle({ minWidth: '145px' })

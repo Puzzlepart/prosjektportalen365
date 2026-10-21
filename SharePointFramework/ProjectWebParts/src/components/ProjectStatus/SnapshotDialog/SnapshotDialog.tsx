@@ -6,7 +6,8 @@ import {
   makeStyles,
   Text,
   tokens,
-  Tooltip
+  Tooltip,
+  useRestoreFocusTarget
 } from '@fluentui/react-components'
 import strings from 'ProjectWebPartsStrings'
 import { getFluentIcon } from 'pp365-shared-library'
@@ -49,7 +50,11 @@ const useStyles = makeStyles({
     minHeight: 0,
     overflow: 'auto',
     backgroundColor: tokens.colorNeutralBackground3,
-    borderRadius: tokens.borderRadiusMedium
+    borderRadius: tokens.borderRadiusMedium,
+    ':focus-visible': {
+      outline: `${tokens.strokeWidthThick} solid ${tokens.colorStrokeFocus2}`,
+      outlineOffset: '-2px'
+    }
   },
   // Natural size, shrunk only to the window width — never to its height, which is what
   // makes a tall report unreadable in the browser's own image viewer.
@@ -85,6 +90,10 @@ export const SnapshotDialog: FC = () => {
     dismissCopyLink,
     onDismiss
   } = useSnapshotDialog()
+  // The copy dialog opens from state: its button is where the focus goes back as it closes. Else
+  // Fluent gives it to the latest restore target, the status toolbar's snapshot button, behind
+  // this dialog (WCAG 2.4.3).
+  const restoreFocusTarget = useRestoreFocusTarget()
 
   return (
     <Dialog open={isOpen} onOpenChange={(_, data) => !data.open && onDismiss()}>
@@ -106,7 +115,12 @@ export const SnapshotDialog: FC = () => {
                     : strings.SnapshotEnterFullscreenLabel}
                 </Button>
               )}
-              <Button appearance='subtle' icon={getFluentIcon('Link')} onClick={copyPageLink}>
+              <Button
+                {...restoreFocusTarget}
+                appearance='subtle'
+                icon={getFluentIcon('Link')}
+                onClick={copyPageLink}
+              >
                 {strings.SnapshotCopyLinkLabel}
               </Button>
               <Button appearance='subtle' icon={getFluentIcon('Open')} onClick={openInNewTab}>
@@ -117,7 +131,9 @@ export const SnapshotDialog: FC = () => {
               </Tooltip>
             </div>
           </div>
-          <div className={styles.frame}>
+          {/* It scrolls a tall report, and holds nothing that takes the focus: a stop for the
+              keyboard, named as a region (WCAG 2.1.1). */}
+          <div className={styles.frame} tabIndex={0} role='region' aria-label={title}>
             <img className={styles.image} src={snapshotUrl} alt={title} />
           </div>
           <CopyLinkDialog

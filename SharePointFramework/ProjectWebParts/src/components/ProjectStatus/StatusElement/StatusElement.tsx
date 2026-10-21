@@ -11,7 +11,8 @@ import { useStatusElement } from './useStatusElement'
 
 export const StatusElement: FC<IStatusElementProps> = (props) => {
   const { headerProps } = useContext(SectionContext)
-  const { commentProps, iconSize, useWrapper, fluentProviderId } = useStatusElement(props)
+  const { commentProps, iconSize, useWrapper, fluentProviderId, iconName } = useStatusElement(props)
+  const Label = props.asHeading ? 'h3' : 'div'
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>
@@ -29,9 +30,7 @@ export const StatusElement: FC<IStatusElementProps> = (props) => {
             >
               <span
                 className={styles.tooltipHost}
-                {...(props.iconsOnly
-                  ? { tabIndex: 0, role: 'img', 'aria-label': headerProps.label }
-                  : {})}
+                {...(props.iconsOnly ? { tabIndex: 0, role: 'img', 'aria-label': iconName } : {})}
               >
                 {children}
               </span>
@@ -46,7 +45,7 @@ export const StatusElement: FC<IStatusElementProps> = (props) => {
                 <div className={styles.main}>
                   <StatusElementIcon iconSize={iconSize} />
                   <div className={styles.content}>
-                    <div className={styles.label}>{headerProps.label}</div>
+                    <Label className={styles.label}>{headerProps.label}</Label>
                     <div
                       className={styles.value}
                       title={`${strings.StatusElementText} ${headerProps.label}: ${headerProps.value}`}

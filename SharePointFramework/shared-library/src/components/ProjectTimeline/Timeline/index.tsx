@@ -34,9 +34,11 @@ export const Timeline: FC<ITimelineProps> = (incomingProps) => {
     showDetails,
     menuItems,
     setShowFilterPanel,
-    setShowDetails,
+    onDetailsDismiss,
+    scrollRef,
     itemRenderer,
-    groupRenderer
+    groupRenderer,
+    timeLapseMarkerColor
   } = useTimeline(props)
 
   return (
@@ -63,18 +65,22 @@ export const Timeline: FC<ITimelineProps> = (incomingProps) => {
             sidebarWidth={sidebarWidth}
             itemRenderer={itemRenderer}
             groupRenderer={groupRenderer}
+            scrollRef={scrollRef}
           >
             <TimelineMarkers>
               <CustomMarker date={props.timeLapseMarker}>
-                {({ styles }) => {
-                  const customStyles = {
-                    ...styles,
-                    backgroundColor: '#f35d69'
-                  }
-                  return <div style={customStyles} />
-                }}
+                {({ styles: markerStyles }) => (
+                  <div style={{ ...markerStyles, backgroundColor: timeLapseMarkerColor }} />
+                )}
               </CustomMarker>
-              <TodayMarker date={moment().toDate()} />
+              {/* Today is a line in colour; its label says what it is (WCAG 1.1.1, 1.4.1). */}
+              <TodayMarker date={moment().toDate()}>
+                {({ styles: markerStyles }) => (
+                  <div style={markerStyles}>
+                    <span className={styles.todayLabel}>{strings.TimelineTodayLabel}</span>
+                  </div>
+                )}
+              </TodayMarker>
             </TimelineMarkers>
           </ReactTimeline>
         </div>
@@ -86,9 +92,7 @@ export const Timeline: FC<ITimelineProps> = (incomingProps) => {
           isLightDismiss
           onClose={() => setShowFilterPanel(false)}
         />
-        {showDetails && (
-          <DetailsPopover timelineItem={showDetails} onDismiss={() => setShowDetails(null)} />
-        )}
+        {showDetails && <DetailsPopover timelineItem={showDetails} onDismiss={onDetailsDismiss} />}
       </FluentProvider>
     </IdPrefixProvider>
   )

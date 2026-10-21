@@ -8,6 +8,7 @@ import resource from 'SharedResources'
 import {
   ColumnRenderComponent,
   getFluentIconWithFallback,
+  StatusMark,
   withDefaults
 } from 'pp365-shared-library'
 import { Popover, PopoverSurface, PopoverTrigger } from '@fluentui/react-components'
@@ -31,7 +32,9 @@ export const StatusReportColumn: ColumnRenderComponent<IStatusColumnProps> = (
   incomingProps
 ): JSX.Element => {
   const props = withDefaults(incomingProps, STATUS_REPORT_COLUMN_DEFAULT_PROPS)
-  const { status, open, onOpenChange, cancelPendingOpen } = useStatusReportColumn(props)
+  const { status, label, open, onOpenChange, cancelPendingOpen } = useStatusReportColumn(props)
+  // No report, nothing to show: the trigger was an empty button.
+  if (!label) return null
 
   return (
     <Popover
@@ -43,10 +46,11 @@ export const StatusReportColumn: ColumnRenderComponent<IStatusColumnProps> = (
       onOpenChange={onOpenChange}
     >
       <PopoverTrigger disableButtonEnhancement>
-        <div className={styles.root} onPointerLeave={cancelPendingOpen}>
-          {status?.sections?.map(({ fieldName, iconName, color }) => (
+        <div className={styles.root} aria-label={label} onPointerLeave={cancelPendingOpen}>
+          {status?.sections?.map(({ fieldName, iconName, color, statusIconName }) => (
             <span key={fieldName} className={styles.icon} style={{ color }}>
               {getFluentIconWithFallback(iconName, { color })}
+              <StatusMark color={color} iconName={statusIconName} />
             </span>
           ))}
         </div>

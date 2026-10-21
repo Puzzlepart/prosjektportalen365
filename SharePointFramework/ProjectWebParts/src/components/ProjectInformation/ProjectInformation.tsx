@@ -26,6 +26,7 @@ import { ProjectInformationContextProvider } from './context'
 import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
 import resource from 'SharedResources'
+import { format } from 'pp365-shared-library'
 
 export const PROJECT_INFORMATION_DEFAULT_PROPS: Partial<IProjectInformationProps> = {
   title: resource.WebParts_ProjectInformation_Title,
@@ -38,6 +39,8 @@ export const PROJECT_INFORMATION_DEFAULT_PROPS: Partial<IProjectInformationProps
   hideArchiveStatus: true,
   showSustainabilityGoalsAsIcons: false,
   sustainabilityGoalIconSize: 48,
+  // Icons by default, as in 1.14: each is named by its section and status, and its mark tells
+  // the status by shape, not by colour alone (WCAG 1.4.1).
   statusReportShowOnlyIcons: true,
   rowLimit: 6,
   minRowLimit: 4,
@@ -63,7 +66,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (incomingProps) 
     return (
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
-          <LoadingSkeleton />
+          <LoadingSkeleton aria-label={format(strings.LoadingText, props.title)} />
         </FluentProvider>
       </IdPrefixProvider>
     )

@@ -7,27 +7,22 @@ define([], function () {
     MigrateRiskActionsDialogTitle: 'Migration of risk actions for {0}',
     RiskActionFieldValueAdminButtonText: 'Manage risk actions',
     CreateMultipleLabel: 'Create multiple',
-    CreateMultipleDescription:
-      'Check this box to create multiple risk actions without closing the panel after each one.',
+    CreateMultipleDescription: 'Check this box to create multiple risk actions without closing the panel after each one.',
     RiskActionPopoverTitle: 'Risk action for {0}',
     RiskActionPlannerTaskPreviewCompletedText: 'This risk action has been completed',
     MigrateRiskActionsDialogSeparatorOptionLinebreak: 'Line break',
     MigrateRiskActionsDialogSeparatorOptionComma: 'Comma',
     MigrateRiskActionsDialogSeparatorOptionCommaNoSpaces: 'Comma (no spaces)',
     MigrateRiskActionsDialogSeparatorLabel: 'How are the risk actions separated?',
-    MigrateRiskActionsDialogProgressText:
-      'Creating the risk actions in Planner. This may take some time. Do not close the dialog...',
+    MigrateRiskActionsDialogProgressText: 'Creating the risk actions in Planner. This may take some time. Do not close the dialog...',
     MigrateRiskActionsDialogCancel: 'Cancel',
     NewRiskActionPanelMigrateRiskActions: 'Migrate risk actions to Planner',
     MigrateRiskActionsDialogCreatePlannerTasks: 'Create planner tasks',
-    MigrateRiskActionsDialogInfoText:
-      'You can choose to use Planner to manage the actions for this risk, but you can also continue with the previous way of managing the actions.',
+    MigrateRiskActionsDialogInfoText: 'You can choose to use Planner to manage the actions for this risk, but you can also continue with the previous way of managing the actions.',
     RiskActionPopoverLastUpdated: 'The tasks were last synchronized from Planner {0}',
     NewRiskActionPanelUpdateTaskStatus: 'Synchronize changes',
-    RiskActionPopoverInfoText:
-      'Add a new risk action as a task in Planner, or update an existing task.',
-    RiskActionPopoverInfoTextNoPlanner:
-      'Add a new risk action as a task in Planner, or update existing tasks. If you have already filled out actions manually, these will be replaced with the actions stored in Planner.',
+    RiskActionPopoverInfoText: 'Add a new risk action as a task in Planner, or update an existing task.',
+    RiskActionPopoverInfoTextNoPlanner: 'Add a new risk action as a task in Planner, or update existing tasks. If you have already filled out actions manually, these will be replaced with the actions stored in Planner.',
     StartDateLabel: 'Start date',
     DueDateLabel: 'Due date',
     NewRiskActionPanelTitle: 'New risk action',
@@ -41,21 +36,15 @@ define([], function () {
     NoGroupIdErrorMessage: 'No group ID found',
     NoGroupIdErrorStack: 'Failed to find group ID for the project.',
     NotSiteAdminErrorMessage: 'You are not a site admin',
-    NotSiteAdminErrorStack:
-      'You do not have sufficient permissions to set up the project. Please ask a site admin to set up the project or give you site admin permissions and try again.',
+    NotSiteAdminErrorStack: 'You do not have sufficient permissions to set up the project. Please ask a site admin to set up the project or give you site admin permissions and try again.',
     ProjectDataFoundTitle: 'Project data found',
-    ProjectDataFoundMessage:
-      'Project data was found for the site. The project data will be used when setting up the project.',
+    ProjectDataFoundMessage: 'Project data was found for the site. The project data will be used when setting up the project.',
     NoHubWriteAccessTitle: 'You do not have write access to the portfolio site',
-    NoHubWriteAccessMessage:
-      'You cannot add items to the list "{0}" on the portfolio site. The project site will be set up, but nothing is written to the portfolio site. The project is registered in the portfolio the first time someone with write access to the list saves changes in "Project information" or changes the phase on the project\'s front page, and does not appear in the portfolio overview until then. Ask an administrator for write access to the list before you continue if the project should be registered right away.',
-    HubWriteSkippedLogText:
-      'No write access to the portfolio site. The project will not be registered in the portfolio.',
-    HubWriteDeniedLogText:
-      'The portfolio site rejected the registration of the project ({0}). The setup continues without writing to the portfolio site.',
+    NoHubWriteAccessMessage: 'You cannot add items to the list "{0}" on the portfolio site. The project site will be set up, but nothing is written to the portfolio site. The project is registered in the portfolio the first time someone with write access to the list saves changes in "Project information" or changes the phase on the project\'s front page, and does not appear in the portfolio overview until then. Ask an administrator for write access to the list before you continue if the project should be registered right away.',
+    HubWriteSkippedLogText: 'No write access to the portfolio site. The project will not be registered in the portfolio.',
+    HubWriteDeniedLogText: 'The portfolio site rejected the registration of the project ({0}). The setup continues without writing to the portfolio site.',
     ProjectNotRegisteredInHubTitle: 'The project is not registered in the portfolio',
-    ProjectNotRegisteredInHubMessage:
-      'The project site has been set up, but the project was not added to the list "{0}" on the portfolio site because you do not have write access there. The project is registered in the portfolio the first time someone with write access to the list saves changes in "Project information" or changes the phase on the project\'s front page. Until then it does not appear in the portfolio overview.',
+    ProjectNotRegisteredInHubMessage: 'The project site has been set up, but the project was not added to the list "{0}" on the portfolio site because you do not have write access there. The project is registered in the portfolio the first time someone with write access to the list saves changes in "Project information" or changes the phase on the project\'s front page. Until then it does not appear in the portfolio overview.',
     ProjectPropertiesHeader: 'Project properties',
     SummaryTitle: 'Summary',
     ApplyExtensionHooks: 'Running hooks defined in project extension',
@@ -77,8 +66,7 @@ define([], function () {
     CmdSelectionCountText: '{0} are selected',
     CmdSelectionCountTooltipText: 'The following items have been selected:',
     ConfiguredSpecifiedTaskMessage: 'Configured to run only the following steps: {0}',
-    ContentConfigLockedTooltipText:
-      'The default content element is locked and cannot be unselected.',
+    ContentConfigLockedTooltipText: 'The default content element is locked and cannot be unselected.',
     ContentConfigSectionHeaderText: 'Default content',
     ContentConfigSectionTooltip: 'Default content adds predefined list items to the project site.',
     ContentConfigSectionDisabledTooltip: 'No default content is available.',
@@ -94,16 +82,12 @@ define([], function () {
     CustomActionsSubText: 'Adjusting custom actions for the project...',
     CustomActionsText: 'Custom actions',
     DescriptionLabel: 'Description',
-    DocumentTemplateDialogScreenEditCopyInfoMessage:
-      'Here you can set **Filename** and **Title** for the documents and folders to be copied over.<br /><br />**Note:** Folders are copied recursively with all content to the target folder.<br /><br />When you are finished, press **Start copy** to start copying.',
-    DocumentTemplateDialogScreenSelectInfoMessage:
-      'Select the document templates and/or folders you want to copy to the project.<br /><br />The templates are retrieved from <a href="{0}" target="_blank">{1}</a> and the **latest version** is retrieved.<br /><br />**Note:** Folders are copied recursively with all content.<br /><br />When you press **Select** you are forwarded to a screen where you select the destination you wish to copy to.',
-    DocumentTemplateDialogScreenTargetFolderInfoMessage:
-      'Select the target for the selected templates and/or folders. If there is more than one document library, you can press **Library** to select another library.<br /><br />When you press **Copy here**, you are forwarded to a screen where you can set a title and file names for the templates that are copied over.',
+    DocumentTemplateDialogScreenEditCopyInfoMessage: 'Here you can set **Filename** and **Title** for the documents and folders to be copied over.<br /><br />**Note:** Folders are copied recursively with all content to the target folder.<br /><br />When you are finished, press **Start copy** to start copying.',
+    DocumentTemplateDialogScreenSelectInfoMessage: 'Select the document templates and/or folders you want to copy to the project.<br /><br />The templates are retrieved from <a href="{0}" target="_blank">{1}</a> and the **latest version** is retrieved.<br /><br />**Note:** Folders are copied recursively with all content.<br /><br />When you press **Select** you are forwarded to a screen where you select the destination you wish to copy to.',
+    DocumentTemplateDialogScreenTargetFolderInfoMessage: 'Select the target for the selected templates and/or folders. If there is more than one document library, you can press **Library** to select another library.<br /><br />When you press **Copy here**, you are forwarded to a screen where you can set a title and file names for the templates that are copied over.',
     ExtensionLockedTooltipText: 'The project extension is locked and cannot be unselected.',
     ExtensionsSectionHeaderText: 'Project extensions',
-    ExtensionsSectionTooltip:
-      'Project extensions add extra functionality to the project site, such as additional lists, left menu and other configuration.',
+    ExtensionsSectionTooltip: 'Project extensions add extra functionality to the project site, such as additional lists, left menu and other configuration.',
     ExtensionsSectionDisabledTooltip: 'No project extensions are available.',
     ExtensionsSectionSearchPlaceholder: 'Search project extensions...',
     FilenameAlreadyInUseErrorText: 'The filename is already in use.',
@@ -116,58 +100,43 @@ define([], function () {
     FolderNameInValidErrorText: 'The folder name is invalid.',
     GetMoreText: 'Get more',
     GetSetupDataErrorMessage: 'An error occured',
-    GetSetupDataErrorStack:
-      'An error occurred while retrieving data from the hub site. If the Project Portal has recently been installed, this may be the reason. Try again a little later.',
-    InvalidLanguageErrorMessage:
-      'Invalid language for the site. The site must be the same language as the hub site.',
-    InvalidLanguageErrorStack:
-      'The language set for the site is not supported. The site must be created with Norwegian language.',
+    GetSetupDataErrorStack: 'An error occurred while retrieving data from the hub site. If the Project Portal has recently been installed, this may be the reason. Try again a little later.',
+    InvalidLanguageErrorMessage: 'Invalid language for the site. The site must be the same language as the hub site.',
+    InvalidLanguageErrorStack: 'The language set for the site is not supported. The site must be created with Norwegian language.',
     IsHubSiteErrorMessage: 'Cannot apply the project template on a hub site',
-    IsHubSiteErrorStack:
-      'It is not possible to add site designs for projects to a hub site. Operation aborted.',
+    IsHubSiteErrorStack: 'It is not possible to add site designs for projects to a hub site. Operation aborted.',
     Library: 'Library',
     LibraryDropdownLabel: 'Library',
     ModifiedLabel: 'Modified',
     NameLabel: 'Name',
-    NoFoldersAvailableText:
-      'No subfolders available in this folder. You can copy to this folder by clicking "Copy here".',
+    NoFoldersAvailableText: 'No subfolders available in this folder. You can copy to this folder by clicking "Copy here".',
     NoHubSiteErrorMessage: 'The SharePoint site is not connected to a hub site',
-    NoHubSiteErrorStack:
-      'The SharePoint site cannot be set up without being connected to a hub site. Link the site to a portfolio hub site and reload the page.<br/><br/>Go to `Settings`, find `Site Information` and select hub/portfolio under `Link to hub site`.',
+    NoHubSiteErrorStack: 'The SharePoint site cannot be set up without being connected to a hub site. Link the site to a portfolio hub site and reload the page.<br/><br/>Go to `Settings`, find `Site Information` and select hub/portfolio under `Link to hub site`.',
     OnGoBackText: 'Go back',
     OnStartCopyText: 'Start copy',
     OnSubmitSelectionText: 'Select',
     PermissionConfigurationList: 'Permission configuration',
     PhaseLabel: 'Phase',
-    PlannerConfigurationErrorMessage:
-      'An error occurred while creating default tasks in Planner. Try again by reloading the page.',
+    PlannerConfigurationErrorMessage: 'An error occurred while creating default tasks in Planner. Try again by reloading the page.',
     PlannerConfigurationText: 'Creating default tasks in planner',
-    PlannerTagsLimitLogText:
-      'Unable to add more than 25 labels to planner "{0}", removing excess labels.',
-    PlannerTaskAttachmentLimitLogText:
-      'Unable to add more than 8 attachments to task "{0}", removing excess attachments.',
-    PlannerTaskChecklistLimitLogText:
-      'Unable to add more than 20 items to checklist for task "{0}", removing excess items.',
+    PlannerTagsLimitLogText: 'Unable to add more than 25 labels to planner "{0}", removing excess labels.',
+    PlannerTaskAttachmentLimitLogText: 'Unable to add more than 8 attachments to task "{0}", removing excess attachments.',
+    PlannerTaskChecklistLimitLogText: 'Unable to add more than 20 items to checklist for task "{0}", removing excess items.',
     TimelineConfigurationText: 'Creating standard timeline elements',
     CreatingTimelineItemText: 'Creating timeline element: {0}',
-    TimelineConfigurationErrorMessage:
-      'An error occurred while creating standard timeline elements. Try again by reloading the page.',
-    PreTaskContentTypeValidationErrorMessage:
-      'Content type validation failed. check that the project properties and project status content types are correct in the template setup.',
+    TimelineConfigurationErrorMessage: 'An error occurred while creating standard timeline elements. Try again by reloading the page.',
+    PreTaskContentTypeValidationErrorMessage: 'Content type validation failed. check that the project properties and project status content types are correct in the template setup.',
     PreTaskErrorMessage: 'An error occured',
     PreTaskTermSetIdValidationErrorMessage: 'Phase term set validation failed.',
     ProcessFileText: 'Copying file {0} of {1}',
     ProcessFolderText: 'Copying folder {0} of {1}',
     ProcessListItemText: 'Processing batch {0} with {1} list items',
-    ProgressDialogDescription:
-      'Please wait. Do not close the browser window - then the project will not be set up correctly.',
+    ProgressDialogDescription: 'Please wait. Do not close the browser window - then the project will not be set up correctly.',
     ProgressDialogLabel: 'Preparing the project',
-    ProgressDialogSubText:
-      'Please wait. Do not close the browser window - then the project will not be set up correctly.',
+    ProgressDialogSubText: 'Please wait. Do not close the browser window - then the project will not be set up correctly.',
     ProgressDialogTitle: 'Configuring the project',
     ProjectAlreadySetupMessage: 'The project is already set up',
-    ProjectAlreadySetupStack:
-      'It seems that the project is already set up. Do you want to run the setup wizard again (not recommended) or skip setup?',
+    ProjectAlreadySetupStack: 'It seems that the project is already set up. Do you want to run the setup wizard again (not recommended) or skip setup?',
     ProjectProvisioningStartLogText: 'Starting provisioning of the project {0}.',
     ProjectProvisioningSuccessLogText: 'The project {0} was provisioned without error.',
     ProvisionSiteFieldsErrorMessage: 'An error occurred while provisioning site columns',
@@ -177,10 +146,8 @@ define([], function () {
     RecycleBinText: 'Recycle bin',
     RemoveAlternativeLanguagesText: 'Removing alternative languages',
     RemoveAlternativeLanguagesSubText: 'Configuring site language settings',
-    RemoveAlternativeLanguagesErrorMessage:
-      'An error occurred while removing alternative languages',
-    RemoveAlternativeLanguagesProgressText:
-      'Validating site before setup. Removing alternative languages to ensure matching setup conditions.',
+    RemoveAlternativeLanguagesErrorMessage: 'An error occurred while removing alternative languages',
+    RemoveAlternativeLanguagesProgressText: 'Validating site before setup. Removing alternative languages to ensure matching setup conditions.',
     RunHooksText: 'Run hooks',
     SetTaxonomyFieldsErrorMessage: 'An error occurred while configuring taxonomy fields',
     SetupAbortedText: 'Installation cancelled by user',
@@ -197,16 +164,13 @@ define([], function () {
     CloudTemplateResolvingMessage: 'Downloading and reading cloud template…',
     CloudContentConfigDestinationListMissing:
       'The list "{0}" was not found in the project. The content from "{1}" cannot be copied.',
-    CloudTemplateResolveErrorMessage:
-      'Could not download the cloud template. Try selecting it again.',
+    CloudTemplateResolveErrorMessage: 'Could not download the cloud template. Try selecting it again.',
     CloudTemplateNotCompatibleWarning:
       '**{0}** requires hub content (e.g. files or document libraries on the hub site) that is not set up when the package is published as a cloud template. Extensions and list content are still applied, but that hub content is skipped. Continue at your own risk.',
     TemplateConfigConjunction: ' and ',
     DataGridSelectAllLabel: 'Select all',
-    PlannerMemberWarningMessage:
-      'You must be a member of the Microsoft 365 group to configure Planner. Please add yourself as a member or ask an administrator and try again.',
-    ProjectSetupDialogInfoText:
-      'Setting up the project takes about 5-10 minutes. Do not close the browser window while the site is being set up. It is not recommended to set up several sites at the same time.',
+    PlannerMemberWarningMessage: 'You must be a member of the Microsoft 365 group to configure Planner. Please add yourself as a member or ask an administrator and try again.',
+    ProjectSetupDialogInfoText: 'Setting up the project takes about 5-10 minutes. Do not close the browser window while the site is being set up. It is not recommended to set up several sites at the same time.',
     ProjectSetupDialogSubmitButtonText: 'Set up the site',
     ProjectSetupDialogTitle: 'Setup wizard for site',
     ProjectSetupDialogVersionTooltip: 'Project Portal version {0}',
@@ -215,15 +179,13 @@ define([], function () {
     ProjectTemplateSelectorNoMatchText: 'No project templates match your search.',
     ProjectTemplateSelectorTitle: 'Project template',
     ProjectTemplateSelectorNoTemplateLabel: 'No template',
-    ProjectTemplateSelectorNoTemplateDescription:
-      'Use this option to run the setup wizard without applying a template. You can still add extensions and list content.',
+    ProjectTemplateSelectorNoTemplateDescription: 'Use this option to run the setup wizard without applying a template. You can still add extensions and list content.',
     ProjectTemplateSelectorNoTemplateRadioLabel: 'Do not apply a template to the site',
     ProjectTemplateSelectorSelectTemplateRadioLabel: 'Select a project template',
     TemplateLibrarySelectModalTitle: 'Get document template',
     TemplateSelectorCommandTitle: 'Get document template',
     TemplateSelectorCommandDisabledTitle: 'This functionality is not available',
-    TermSetDoesNotExistError:
-      'Cannot find term set ID. Check that the term set ID is correct in the template options-list.',
+    TermSetDoesNotExistError: 'Cannot find term set ID. Check that the term set ID is correct in the template options-list.',
     TitleLabel: 'Title',
     ProgressLabel: 'Progress',
     AssignedToLabel: 'Assigned to',
@@ -231,8 +193,7 @@ define([], function () {
     CancelButtonLabel: 'Cancel',
     NoTemplateSelectedText: 'Select a project template to continue.',
     SelectedCountLabel: '{0} selected items',
-    MandatoryItemTooltipText:
-      'This item is required by the selected project template and cannot be removed.',
+    MandatoryItemTooltipText: 'This item is required by the selected project template and cannot be removed.',
     ProgressAdvancedLogLabel: 'Advanced log',
     ProgressTaskPendingText: 'Pending',
     ProgressTaskRunningText: 'Running',
@@ -240,6 +201,33 @@ define([], function () {
     ProgressTaskErrorText: 'Error',
     ProgressTaskWarningText: 'Warning',
     ProgressStepCountText: 'Step {0} of {1}',
-    ProgressAdvancedLogDescription: 'Click to view detailed log for each step in the setup.'
+    ProgressAdvancedLogDescription: 'Click to view detailed log for each step in the setup.',
+    ProjectTemplateSelectorModeLabel: 'Template on the site',
+    ConfigTabSelectedLabel: '{0}, {1} selected',
+    ExtensionsSectionSearchLabel: 'Search project extensions',
+    ContentConfigSectionSearchLabel: 'Search default content',
+    SearchResultsCount: 'Showing {0} of {1}',
+    CloudTemplateResolved: 'The cloud template is read, and the project can be set up',
+    ProgressStepAnnouncement: 'Step {0} of {1}: {2}',
+    ProgressTaskStatusPending: 'waiting',
+    ProgressTaskStatusRunning: 'running',
+    ProgressTaskStatusCompleted: 'completed',
+    ProgressTaskStatusError: 'failed',
+    ProgressTaskStatusWarning: 'completed with warnings',
+    ProgressTaskLabel: '{0}: {1}',
+    ProgressTaskLabelWithEntries: '{0}: {1} ({2} in the log)',
+    ProgressLogLevelInfo: 'Info',
+    ProgressLogLevelWarning: 'Warning',
+    ProgressLogLevelError: 'Error',
+    FolderNavigationLabel: 'Folder navigation',
+    CopyProgressAnnouncement: 'Copying {0}',
+    RiskActionTasksLabel: 'Actions in Planner',
+    RiskActionTaskCompletedLabel: '{0}, completed',
+    RiskActionSyncDone: 'The task status is updated',
+    RiskActionSyncFailed: 'The task status was not updated',
+    NewRiskActionSaved: 'The action «{0}» was added to Planner',
+    NewRiskActionSaveFailed: 'The action was not added',
+    MigrateRiskActionsDone: '{0} tasks were created in Planner',
+    MigrateRiskActionsFailed: 'The tasks were not created'
   }
 })

@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test'
-import { REQUEST_TIMEOUT, withNetworkRetry } from './pp365'
+import { REQUEST_TIMEOUT, withNetworkRetry, withSessionRenewal } from './pp365'
 
 /**
  * Writes through SharePoint's REST API with the signed-in session, for the flows' clean-up: what
@@ -7,22 +7,31 @@ import { REQUEST_TIMEOUT, withNetworkRetry } from './pp365'
  */
 const JSON_HEADERS = { Accept: 'application/json;odata=nometadata' }
 
-/** A REST read with the signed-in session: bounded, and sent again after a network failure. */
+/**
+ * A REST read with the signed-in session: bounded, sent again after a network failure, and once
+ * more after renewing a session SharePoint no longer accepts.
+ */
 export function restGet(page: Page, url: string) {
-  return withNetworkRetry(() =>
-    page.request.get(url, { headers: JSON_HEADERS, timeout: REQUEST_TIMEOUT })
+  return withSessionRenewal(page, url, () =>
+    withNetworkRetry(() =>
+      page.request.get(url, { headers: JSON_HEADERS, timeout: REQUEST_TIMEOUT })
+    )
   )
 }
 
 /**
- * A REST write (SharePoint's deletes are POSTs with a method header): bounded, but sent once. A
- * write whose connection stalled may still have been applied, and a second delete would be a 404.
+ * A REST write (SharePoint's deletes are POSTs with a method header): bounded, but sent once after
+ * a network failure. A write whose connection stalled may still have been applied, and a second
+ * delete would be a 404. A write refused as signed out was not applied, so it is sent once more
+ * after the session is renewed.
  */
 export function restPost(page: Page, url: string, headers: Record<string, string> = {}) {
-  return page.request.post(url, {
-    headers: { ...JSON_HEADERS, ...headers },
-    timeout: REQUEST_TIMEOUT
-  })
+  return withSessionRenewal(page, url, () =>
+    page.request.post(url, {
+      headers: { ...JSON_HEADERS, ...headers },
+      timeout: REQUEST_TIMEOUT
+    })
+  )
 }
 
 /** A request digest for the site, which every write needs. Idempotent, so retried like a read. */

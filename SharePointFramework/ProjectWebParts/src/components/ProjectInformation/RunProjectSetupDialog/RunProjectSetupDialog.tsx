@@ -71,7 +71,7 @@ export const RunProjectSetupDialog: FC = () => {
               <DialogContent>{strings.RunProjectSetupDialogSubText}</DialogContent>
               {isLoading ? (
                 <DialogActions>
-                  <Spinner size='medium' />
+                  <Spinner size='medium' label={strings.PleaseWaitText} />
                 </DialogActions>
               ) : (
                 <DialogActions>

@@ -35,7 +35,8 @@ jest.mock('@fluentui/react-components', () => {
   }
 })
 
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import strings from 'SharedLibraryStrings'
 import * as React from 'react'
 import { OverflowTagMenu } from '.'
@@ -71,5 +72,22 @@ describe('OverflowTagMenu', () => {
     expect(container.firstElementChild).toBeEmptyDOMElement()
     rerender(<OverflowTagMenu tags={['Helse']} hidden />)
     expect(container.firstElementChild).not.toBeVisible()
+  })
+
+  it('lists the tags as text, not as buttons that do nothing, and names the button for the rest (WCAG 4.1.2)', async () => {
+    overflow.hidden = ['Kultur']
+    const { container } = render(
+      <OverflowTagMenu text='Tjenesteområde' tags={['Helse', 'Skole', 'Kultur']} />
+    )
+    const list = screen.getByRole('list', { name: 'Tjenesteområde' })
+    expect(
+      within(list)
+        .getAllByRole('listitem')
+        .map((item) => item.textContent)
+    ).toEqual(['Helse', 'Skole', 'Kultur', '+1'])
+    expect(screen.getAllByRole('button')).toEqual([
+      screen.getByRole('button', { name: format(strings.Aria.MenuOverflowCount, 1) })
+    ])
+    expect(await axeComponent(container)).toHaveNoViolations()
   })
 })

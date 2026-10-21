@@ -42,10 +42,12 @@ export const ErrorDialog: FC<IErrorDialogProps> = ({
       onDismiss={onDismiss}
       footer={footer()}
     >
-      {showStackAsSubText && <p className={styles.subText}>{error.stack}</p>}
-      <div hidden={showStackAsSubText}>
+      {/* One or the other: a message bar announces itself when it mounts, hidden or not. */}
+      {showStackAsSubText ? (
+        <p className={styles.subText}>{error.stack}</p>
+      ) : (
         <UserMessage text={error.stack} intent={intent} />
-      </div>
+      )}
     </BaseDialog>
   )
 }

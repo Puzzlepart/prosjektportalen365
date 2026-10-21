@@ -4,8 +4,7 @@ define([], function () {
     ToggleOffText: 'Av',
     EditTimelineContentText: 'Rediger element',
     NewTimelineContentText: 'Nytt element',
-    TimelineEndDateMilestoneDescription:
-      'Sluttdato er påkrevd for elementtyper som vises som punkt på tidslinjen ({0})',
+    TimelineEndDateMilestoneDescription: 'Sluttdato er påkrevd for elementtyper som vises som punkt på tidslinjen ({0})',
     NewStatusPanelTitle: 'Ny statusrapport',
     EditStatusPanelText: 'Rediger statusrapport',
     ArchiveLogStatusSuccess: 'Arkivert',
@@ -19,7 +18,10 @@ define([], function () {
     ArchiveLogOperationEndClosed: 'Avsluttet/Stengt/Låst',
     Aria: {
       CurrentPhaseText:
-        'Dette er den gjeldende fasen. Det er derfor ikke mulig å endre til denne fasen.'
+        'Dette er den gjeldende fasen. Det er derfor ikke mulig å endre til denne fasen.',
+      PhaseListLabel: 'Prosjektets faser',
+      ChecklistStepsLabel: 'Sjekkpunkter',
+      MoreSectionsLabel: '{0} flere seksjoner'
     },
     Placeholder: {
       DatePicker: 'Angi en dato',
@@ -98,8 +100,7 @@ define([], function () {
       'Det skjedde en feil under uthenting av data fra datakilde med navn {0}. Oppdater siden og prøv igjen.',
     DataSourceLabel: 'Datakilde',
     DataSourceNotFound: 'Finner ingen datakilde med navn {0}.',
-    FilterByShowInPortfolioLabel:
-      "Vis kun underområdenes elementer flagget med 'Vis i porteføljen'",
+    FilterByShowInPortfolioLabel: "Vis kun underområdenes elementer flagget med 'Vis i porteføljen'",
     DefaultGroupByLabel: 'Standard gruppering',
     DefaultTimeframeEndLabel: 'Standard sluttdato',
     DefaultTimeframeEndValue: '{0} måneder frem i tid',
@@ -137,8 +138,7 @@ define([], function () {
     SnapshotPageLinkLabel: 'Lenke til øyeblikksbildet på statussiden',
     SnapshotImageLinkLabel: 'Direkte lenke til bildefilen',
     SnapshotLinkCopiedText: 'Lenken er kopiert.',
-    SnapshotLinkCopyFailedText:
-      'Lenken kunne ikke kopieres automatisk. Marker lenken og kopier den.',
+    SnapshotLinkCopyFailedText: 'Lenken kunne ikke kopieres automatisk. Marker lenken og kopier den.',
     SnapshotLinkAccessText:
       'Lenken til statussiden åpner øyeblikksbildet i full bredde, for alle med tilgang til prosjektområdet og Prosjektportalen (porteføljeområdet). Bildefilen kan åpnes av alle med tilgang til porteføljeområdet.',
     SnapshotGroupName: 'Øyeblikksbilde',
@@ -219,8 +219,7 @@ define([], function () {
     ArchiveGroupName: 'Arkivering',
     HideArchiveStatusLabel: 'Skjul arkiveringsstatus',
     ParentProjectsGroupName: 'Overordnede prosjekter',
-    ParentProjectsHeaderDescription:
-      'Her listes alle program/overordnede prosjekter som dette prosjektet tilhører.',
+    ParentProjectsHeaderDescription: 'Her listes alle program/overordnede prosjekter som dette prosjektet tilhører.',
     ParentProjectsHeaderText: 'Overordnede prosjekter',
     ChildProjectsGroupName: 'Underområder',
     ChildProjectsHeaderDescription: 'Underområder som administreres av dette prosjektet',
@@ -309,12 +308,9 @@ define([], function () {
     SyncProjectPropertiesValuesProgressDescription: 'Vennligst vent...',
     SyncProjectPropertiesValuesProgressLabel: 'Synkroniserer egenskaper',
     HubSyncWarningTitle: 'Porteføljeområdet ble ikke oppdatert',
-    HubSyncNoWriteAccessReason:
-      'Du mangler skrivetilgang til listen «{0}» på porteføljeområdet. Be en administrator om tilgang, eller be noen med tilgang om å lagre prosjektinformasjonen.',
-    ProjectPropertiesNotSyncedToHubText:
-      'Endringene er lagret på prosjektområdet, men ble ikke synkronisert til porteføljeområdet. {0}',
-    PhaseNotSyncedToHubText:
-      'Fasen er endret på prosjektområdet, men ikke på porteføljeområdet. {0} Last inn siden på nytt for å se den nye fasen i de andre webdelene.',
+    HubSyncNoWriteAccessReason: 'Du mangler skrivetilgang til listen «{0}» på porteføljeområdet. Be en administrator om tilgang, eller be noen med tilgang om å lagre prosjektinformasjonen.',
+    ProjectPropertiesNotSyncedToHubText: 'Endringene er lagret på prosjektområdet, men ble ikke synkronisert til porteføljeområdet. {0}',
+    PhaseNotSyncedToHubText: 'Fasen er endret på prosjektområdet, men ikke på porteføljeområdet. {0} Last inn siden på nytt for å se den nye fasen i de andre webdelene.',
     SyncPropertiesAfterPhaseChangeFieldLabel: 'Synkroniser prosjektegenskaper etter faseendring',
     TagFieldLabel: 'Etikett',
     TasksLinkText: 'Gå til oppgaver',
@@ -334,12 +330,10 @@ define([], function () {
       "Her kan du velge om det skal kjøres hooks ved endring av faser. Ved endring av fase vil det bli eksekvert et kall mot url-en som er spesifisert under. Dersom kallet krever autentisering, kan dette fylles inn under url feltet. Kallet som blir eksekvert sender med følgende parametere:  'webUrl' og  'apiKey', disse er begge av typen  'string'.",
     UsePhaseHooksFieldLabel: 'Bruk fasevelger hooks',
     ArchiveViewTitle: 'Arkivering av dokumenter og lister',
-    ArchiveViewDescription:
-      'Velg hvilke dokumenter og/eller lister du ønsker å arkivere under faseendringen.',
+    ArchiveViewDescription: 'Velg hvilke dokumenter og/eller lister du ønsker å arkivere under faseendringen.',
     ArchiveInformationTitle: 'Hva skal arkiveres?',
     ArchiveMoreInformationText: 'Trykk her for mer informasjon',
-    ArchiveInformationText:
-      "Under kan du velge hvilke dokumenter og/eller lister som skal arkiveres. Trykk deretter på '<b>Fortsett</b>' for å gå videre i prosessen.<br /><br />Denne prosessen innebærer at valgte dokumenter og/eller lister fra området blir hentet ut og logget for arkivering. Dokumentene som blir hentet er filtrert på gjeldende fase, dokumenter som ikke har fase vil også blir inkludert.<br /><br />Det vil være en arkivpost per element som arkiveres, dette blir plukket opp av en arkivjobb som arkiverer dette til en arkivkjerne.<br /><br />Loggføringen vil inneholde informasjon om hvilke elementer som er markert for arkivering, det angis hvilke fase man endrer fra og til, samt hvem som utførte fasebyttet og når.",
+    ArchiveInformationText: 'Under kan du velge hvilke dokumenter og/eller lister som skal arkiveres. Trykk deretter på \'<b>Fortsett</b>\' for å gå videre i prosessen.<br /><br />Denne prosessen innebærer at valgte dokumenter og/eller lister fra området blir hentet ut og logget for arkivering. Dokumentene som blir hentet er filtrert på gjeldende fase, dokumenter som ikke har fase vil også blir inkludert.<br /><br />Det vil være en arkivpost per element som arkiveres, dette blir plukket opp av en arkivjobb som arkiverer dette til en arkivkjerne.<br /><br />Loggføringen vil inneholde informasjon om hvilke elementer som er markert for arkivering, det angis hvilke fase man endrer fra og til, samt hvem som utførte fasebyttet og når.',
     ArchiveDocumentsSection: 'Dokumenter',
     ArchiveListsSection: 'Lister',
     ArchiveSelectedItemsInfo: '{0} element(er) valgt for arkivering',
@@ -354,11 +348,9 @@ define([], function () {
     ArchivePhaseTransition: 'Fra {0}-fase til {1}-fase',
     UseArchiveFieldLabel: 'Bruk arkivfunksjonalitet',
     HookArchiveUrlFieldLabel: 'Arkiv hook URL',
-    HookArchiveUrlFieldDescription:
-      'URL for arkiv webhook endpoint som håndterer arkiveringsprosessen',
+    HookArchiveUrlFieldDescription: 'URL for arkiv webhook endpoint som håndterer arkiveringsprosessen',
     HookArchiveAuthFieldLabel: 'Arkiv hook autentisering',
-    HookArchiveAuthFieldDescription:
-      'Autentiseringstoken eller API-nøkkel for arkiv webhook endpoint',
+    HookArchiveAuthFieldDescription: 'Autentiseringstoken eller API-nøkkel for arkiv webhook endpoint',
     ViewsGroupName: 'Visninger',
     ViewVersionHistoryText: 'Vis versjonshistorikk',
     ViewXmlFieldLabel: 'CAML-spørring (View XML)',
@@ -369,11 +361,9 @@ define([], function () {
     PhaseCheckListItem: 'Sjekkpunkt {0}',
     ProjectNewsWebPartTitle: 'Prosjektnyheter',
     DialogTitle: 'Opprett nyhetsartikkel',
-    DialogDescription:
-      'Her kan du opprette en nyhetsartikkel for prosjektet. Nyhetsartikkelen vil bli tilknyttet prosjektet. I nedtrekksmenyen for "Mal" kan du velge en mal som vil forhåndsutfylle nyhetsartikkelen, her er det mulig å få en forhåndsvisning av innholdet, ved å trykke på knappen "Forhåndsvis valgt mal".',
+    DialogDescription: 'Her kan du opprette en nyhetsartikkel for prosjektet. Nyhetsartikkelen vil bli tilknyttet prosjektet. I nedtrekksmenyen for "Mal" kan du velge en mal som vil forhåndsutfylle nyhetsartikkelen, her er det mulig å få en forhåndsvisning av innholdet, ved å trykke på knappen "Forhåndsvis valgt mal".',
     NewsHubLevelWarningTitle: 'Advarsel',
-    NewsHubLevelWarningText:
-      'Du oppretter nå en nyhetsartikkel på porteføljenivået til Prosjektportalen. Innholdet blir synlig for alle med tilgang til Prosjektportalen i din virksomhet, og SharePoint kan sende e-postvarslinger om nyheten til kollegaer som følger porteføljeområdet.',
+    NewsHubLevelWarningText: 'Du oppretter nå en nyhetsartikkel på porteføljenivået til Prosjektportalen. Innholdet blir synlig for alle med tilgang til Prosjektportalen i din virksomhet, og SharePoint kan sende e-postvarslinger om nyheten til kollegaer som følger porteføljeområdet.',
     CreatingNewArticleStatus: 'Oppretter nyhetsartikkel...',
     NewsCreatedSuccessfully: 'Nyhetsartikkelen ble opprettet.',
     NewsTitleLabel: 'Tittel',
@@ -385,14 +375,14 @@ define([], function () {
     TemplateRequired: 'En mal må velges for å opprette en nyhetsartikkel.',
     TemplatePlaceholder: 'Velg et alternativ',
     TemplateLabel: 'Mal',
-    NoRecentNews:
-      'Her kan du opprette nyhetsartikler for prosjektet. Det er for øyeblikket ingen nyhetsartikler.',
+    NoRecentNews: 'Her kan du opprette nyhetsartikler for prosjektet. Det er for øyeblikket ingen nyhetsartikler.',
     ShowMoreNews: 'Vis flere',
     ShowMoreChildProjectsText: 'Vis flere',
     ShowLessChildProjectsText: 'Vis mindre',
     ShowLessNews: 'Vis færre',
     ModifiedTooltipText: 'Redigert {0}',
-    MaxVisibleNewsDescription: 'Angi antallet nyhetsartikler som skal vises i listen.',
+    MaxVisibleNewsDescription:
+      'Angi antallet nyhetsartikler som skal vises i listen.',
     MaxVisibleNewsLabel: 'Antall synlige nyheter (før vis mer)',
     SiteUrlLabel: 'URL til området',
     SiteUrlDescription: 'Angi URL-en til området der nyhetene skal publiseres.',
@@ -407,8 +397,7 @@ define([], function () {
     NewsFolderError: 'Feil ved oppretting av nyhetsmappe: ',
     LoadingLabel: 'Laster nyheter...',
     GenericErrorMessage: 'Noe gikk galt. Vennligst prøv igjen senere eller kontakt brukerstøtte.',
-    NewsCreateDuplicateFileError:
-      'En nyhetsartikkel med samme navn finnes allerede. Vennligst velg et annet navn.',
+    NewsCreateDuplicateFileError: 'En nyhetsartikkel med samme navn finnes allerede. Vennligst velg et annet navn.',
     PreviewLabel: 'Forhåndsvis valgt mal',
     NoPreviewAvailable: 'Ingen forhåndsvisning tilgjengelig.',
     NewsCreateSuccess: 'Nyhetsartikkel opprettet',
@@ -428,8 +417,7 @@ define([], function () {
       NoListSelectedMessage: 'Vennligst velg en liste i webdel-egenskapene for å vise innhold.',
       RefetchingData: 'Oppdaterer og henter data på nytt...',
       SiteIdFieldsMissing: 'Område-id relaterte felter ikke funnet',
-      SiteIdFieldsMissingMessage:
-        'Område-id (GtSiteId) og Område tittel (GtSiteTitle) feltene må finnes på liste/dokumentbiblioteket for å ta i bruk denne funksjonaliteten. Bruk knappen i webdel-egenskapene for å legge til feltene, eller opprett dette manuelt på listen/dokumentbiblioteket.',
+      SiteIdFieldsMissingMessage: 'Område-id (GtSiteId) og Område tittel (GtSiteTitle) feltene må finnes på liste/dokumentbiblioteket for å ta i bruk denne funksjonaliteten. Bruk knappen i webdel-egenskapene for å legge til feltene, eller opprett dette manuelt på listen/dokumentbiblioteket.',
       NoItemsToShow: 'Ingen elementer å vise',
       NoColumnsToShow: 'Ingen kolonner å vise',
       ConfirmDelete: 'Er du sikker på at du vil slette {0} element?',
@@ -440,8 +428,7 @@ define([], function () {
       NoItemsSelectedMessage: 'Vennligst velg minst ett element for å utføre denne handlingen.',
       ActionCompleted: 'Handlingen ble utført. {0}',
       ActionFailed: 'Feil ved utføring',
-      CorsError:
-        'CORS-feil: Serveren tillater ikke forespørsler fra denne domenen. Kontakt administrator for å konfigurere CORS-headere.',
+      CorsError: 'CORS-feil: Serveren tillater ikke forespørsler fra denne domenen. Kontakt administrator for å konfigurere CORS-headere.',
       CouldNotExecuteAction: 'Kunne ikke utføre handlingen: {0}',
       Back: 'Tilbake',
       BackToListView: 'Tilbake til listevisning',
@@ -460,8 +447,7 @@ define([], function () {
       ExportSelected: 'Eksporter {0} valgt element til Excel',
       ExportSelectedMultiple: 'Eksporter {0} valgte elementer til Excel',
       ExportErrorTitle: 'Eksporten til Excel mislyktes',
-      ExportErrorMessage:
-        'Filen ble ikke laget. Prøv igjen, og kontakt administrator hvis det ikke lykkes.',
+      ExportErrorMessage: 'Filen ble ikke laget. Prøv igjen, og kontakt administrator hvis det ikke lykkes.',
       ExportToExcel: 'Eksporter til Excel',
       FolderView: 'Mappevisning',
       FlatView: 'Flat visning',
@@ -479,8 +465,7 @@ define([], function () {
       NoItemsMessage: 'Det finnes ingen elementer å vise',
       Untitled: 'Uten tittel',
       Documents: 'Dokumenter',
-      NoDocumentsInFolder:
-        'Ingen dokumenter å vise i valgt mappe, gå tilbake ved å navigere i menyen over',
+      NoDocumentsInFolder: 'Ingen dokumenter å vise i valgt mappe, gå tilbake ved å navigere i menyen over',
       NoDocuments: 'Ingen dokumenter å vise',
       DragFilesOrClick: 'Dra filer hit eller klikk for å laste opp',
       UploadingFiles: 'Laster opp filer...',
@@ -505,9 +490,22 @@ define([], function () {
       Close: 'Lukk',
       NoItemsFound: 'Ingen elementer funnet',
       ListTable: 'Listetabell',
-      GroupByColumn: 'Grupper etter {0}',
+      SortAscending: 'Sorter stigende',
+      SortDescending: 'Sorter synkende',
+      ResizeColumn: 'Endre kolonnebredde',
       FolderNavigation: 'Mappenavigasjon',
-      HiddenFromView: 'Skjult fra visning'
+      HiddenFromView: 'Skjult fra visning',
+      RefreshDone: 'Listen er oppdatert',
+      ItemsShown: 'Viser {0} av {1} elementer',
+      FileUploaded: '{0} er lastet opp',
+      FilesUploaded: '{0} filer er lastet opp',
+      UploadFailed: 'Opplastingen feilet',
+      DocumentCreated: '{0} er opprettet',
+      DocumentCreateFailed: 'Dokumentet ble ikke opprettet',
+      ItemDeleted: 'Elementet er slettet',
+      ItemsDeleted: '{0} elementer er slettet',
+      DeleteFailed: 'Slettingen feilet',
+      DefaultListName: 'liste'
     }
   }
 })

@@ -3,7 +3,7 @@ jest.mock('data', () => ({
   SPDataAdapter: { getFolders: jest.fn() }
 }))
 
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import * as React from 'react'
 import * as strings from 'ProjectExtensionsStrings'
@@ -107,6 +107,23 @@ describe('TargetFolderScreen', () => {
     expect(screen.queryByText('2026')).toBeNull()
   })
 
+  it('names its folder trail, and moves the focus to a folder opened and back to its link (WCAG 2.4.3, 2.4.6)', async () => {
+    const user = setupUser()
+    const { getFolders } = renderScreen({
+      currentLibrary: folder('Dokumenter', {
+        isLibrary: true,
+        folders: [folder('Rapporter', { url: '/sites/x/Dokumenter/Rapporter' })]
+      })
+    })
+    getFolders.mockResolvedValue([folder('2026', { url: '/sites/x/Dokumenter/Rapporter/2026' })])
+    const trail = () => screen.getByRole('navigation', { name: strings.FolderNavigationLabel })
+    await user.click(screen.getByRole('button', { name: 'Rapporter' }))
+    await screen.findByText('2026')
+    expect(within(trail()).getByRole('button', { name: 'Rapporter' })).toHaveFocus()
+    await user.click(within(trail()).getByRole('button', { name: 'Dokumenter' }))
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Rapporter' })).toHaveFocus())
+  })
+
   it('says so when a folder is empty', async () => {
     const user = setupUser()
     const { getFolders } = renderScreen({
@@ -143,5 +160,17 @@ describe('TargetFolderScreen', () => {
     await user.click(screen.getByText('Bilder'))
     await waitFor(() => expect(getFolders).toHaveBeenCalledWith('/sites/x/Bilder'))
     expect(await screen.findByText('Ferie')).toBeInTheDocument()
+  })
+
+  it("gives the focus to the opened library's step in the trail, as for a folder (WCAG 2.4.3)", async () => {
+    // The library's link leaves the page with the list of libraries.
+    const user = setupUser()
+    const { getFolders } = renderScreen({ libraries: [folder('Bilder', { isLibrary: true })] })
+    getFolders.mockResolvedValue([folder('Ferie')])
+    await user.click(screen.getByRole('button', { name: strings.Library }))
+    await user.click(await screen.findByRole('button', { name: 'Bilder' }))
+    expect(await screen.findByText('Ferie')).toBeInTheDocument()
+    const trail = screen.getByRole('navigation', { name: strings.FolderNavigationLabel })
+    await waitFor(() => expect(within(trail).getByRole('button', { name: 'Bilder' })).toHaveFocus())
   })
 })

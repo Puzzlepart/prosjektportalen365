@@ -2,6 +2,7 @@ import {
   createTableColumn,
   TableColumnSizingOptions,
   useArrowNavigationGroup,
+  useRestoreFocusTarget,
   useTableColumnSizing_unstable,
   useTableFeatures
 } from '@fluentui/react-components'
@@ -162,7 +163,15 @@ export function useListGrid(props: IListGridProps): IListGridState {
   // v8's list and Fluent's DataGrid.
   const arrowNavigation = useArrowNavigationGroup({ axis: 'grid' })
 
+  // A header that opens the column menu says so, and is where the focus returns when the menu
+  // or a panel it opened closes: the menu opens from state, with no trigger of Fluent's.
+  const restoreFocusTarget = useRestoreFocusTarget()
+  const headerMenuProps = props.headerOpensMenu
+    ? { 'aria-haspopup': 'menu' as const, ...restoreFocusTarget }
+    : {}
+
   return {
+    headerMenuProps,
     containerRef,
     tableRef,
     columnSizing,

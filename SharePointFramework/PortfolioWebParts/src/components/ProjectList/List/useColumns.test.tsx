@@ -188,7 +188,8 @@ describe('the project list columns', () => {
       ['small', '32px', 24, 'small']
     ] as const) {
       const column = columnsWith({ size })
-      expect((column('logo').renderCell(project()) as any).props.size).toBe(logo)
+      // The logo sits in a wrapper hidden from screen readers, beside the title's link.
+      expect((column('logo').renderCell(project()) as any).props.children.props.size).toBe(logo)
       expect(
         (column('primaryUserRole').renderCell(project()) as any).props.children[0].props.size
       ).toBe(avatar)

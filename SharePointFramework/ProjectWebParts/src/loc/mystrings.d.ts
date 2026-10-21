@@ -7,6 +7,9 @@ declare interface IProjectWebPartsStrings {
   EditStatusPanelText: string
   Aria: {
     CurrentPhaseText: string
+    PhaseListLabel: string
+    ChecklistStepsLabel: string
+    MoreSectionsLabel: string
   }
   SaveText: string
   ErrorBoundaryFallbackDescription: string
@@ -434,9 +437,22 @@ declare interface IProjectWebPartsStrings {
     Close: string
     NoItemsFound: string
     ListTable: string
-    GroupByColumn: string
+    SortAscending: string
+    SortDescending: string
+    ResizeColumn: string
     FolderNavigation: string
     HiddenFromView: string
+    RefreshDone: string
+    ItemsShown: string
+    FileUploaded: string
+    FilesUploaded: string
+    UploadFailed: string
+    DocumentCreated: string
+    DocumentCreateFailed: string
+    ItemDeleted: string
+    ItemsDeleted: string
+    DeleteFailed: string
+    DefaultListName: string
   }
 }
 

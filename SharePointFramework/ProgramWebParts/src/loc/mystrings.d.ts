@@ -17,6 +17,8 @@ declare interface IProgramWebPartsStrings {
   AddColumnLabel: string
   AddColumnLabel: string
   AddProjectDialogSearchBoxPlaceholder: string
+  AddProjectsDisabledReason: string
+  AddProjectsErrorTitle: string
   BooleanNo: string
   BooleanOff: string
   BooleanOn: string

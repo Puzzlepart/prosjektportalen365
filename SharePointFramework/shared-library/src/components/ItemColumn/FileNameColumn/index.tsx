@@ -3,7 +3,7 @@ import strings from 'SharedLibraryStrings'
 import React from 'react'
 import { ColumnRenderComponent } from '../types'
 import { IFileNameColumnProps } from './types'
-import { Button } from '@fluentui/react-components'
+import { Link } from '@fluentui/react-components'
 import { FileTypeIcon } from '../../FileTypeIcon'
 import { withDefaults } from '../../../util'
 
@@ -56,13 +56,9 @@ export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (inco
       {isFolder ? (
         <span style={{ marginLeft: 8 }}>{props.columnValue}</span>
       ) : fileUrl ? (
-        <Button
-          appearance='transparent'
-          onClick={() => window.open(fileUrl, '_blank', 'noopener,noreferrer')}
-          style={{ marginLeft: 8 }}
-        >
+        <Link href={fileUrl} target='_blank' rel='noopener noreferrer' style={{ marginLeft: 8 }}>
           {props.columnValue}
-        </Button>
+        </Link>
       ) : (
         <span style={{ marginLeft: 8 }}>{props.columnValue}</span>
       )}

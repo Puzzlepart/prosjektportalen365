@@ -7,6 +7,7 @@ import {
   openTargetFolderScreen
 } from '../fixtures/document-template-dialog'
 import { deleteFolder, ensureFolder } from '../fixtures/rest'
+import { scanAccessibility, SURFACES } from '../fixtures/a11y'
 import { baseURL } from '../../playwright.config'
 import { configuredUrl, expect, test, withNetworkRetry } from '../fixtures/pp365'
 
@@ -65,9 +66,18 @@ test.describe('document template dialog', () => {
     try {
       await withNetworkRetry(() => page.goto(library.url, { timeout: 90_000 }))
       const dialog = await openDocumentTemplateDialog(page)
+      // #1788: the template screen and the target folder screen, reported.
+      await scanAccessibility(page, {
+        component: 'DocumentTemplateDialog-select',
+        include: [SURFACES.dialog]
+      })
       await openTargetFolderScreen(dialog)
       const rows = dialog.locator('.fui-DataGridBody [role="row"]')
       await expect(rows.first()).toBeVisible({ timeout: 30_000 })
+      await scanAccessibility(page, {
+        component: 'DocumentTemplateDialog-target',
+        include: [SURFACES.dialog]
+      })
       // The last cell of the row, not the name: the name enters the folder.
       const row = rows.first()
       await row.locator('.fui-DataGridCell').last().click()

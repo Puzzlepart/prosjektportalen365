@@ -1,5 +1,6 @@
 import { act, renderHook } from '@testing-library/react'
 import strings from 'PortfolioWebPartsStrings'
+import { format } from 'pp365-shared-library'
 import { TOGGLE_MERGED_VIEW } from '../reducer'
 import { usePortfolioSelector } from './usePortfolioSelector'
 
@@ -48,6 +49,13 @@ describe('usePortfolioSelector', () => {
       undefined,
       'TextBulletListTree'
     ])
+  })
+
+  it('is named by what it chooses as well as the portfolio it shows (WCAG 2.4.6)', () => {
+    const { result } = selectorFor(contextWith({ selectedPortfolioId: 'b' }))
+    expect(result.current.ariaLabel).toBe(
+      format(strings.SelectorButtonLabel, 'Portefølje B', strings.PortfolioSelectorDescription)
+    )
   })
 
   it('falls back to the first portfolio without a selection, or with one no longer configured', () => {

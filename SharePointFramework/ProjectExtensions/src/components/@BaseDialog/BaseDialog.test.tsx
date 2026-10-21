@@ -1,4 +1,5 @@
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
 import { BaseDialog } from '.'
@@ -37,5 +38,20 @@ describe('BaseDialog', () => {
   it('has no close button when it blocks the page', () => {
     render(<BaseDialog title='Oppsettveiviser' isBlocking onDismiss={jest.fn()} />)
     expect(screen.queryByRole('button')).toBeNull()
+  })
+
+  it('shows its version as text, explained, and breaks no rule axe can check', async () => {
+    render(
+      <BaseDialog
+        title='Oppsettveiviser'
+        version='v1.15.0'
+        versionTooltip='Prosjektportalen versjon v1.15.0'
+        onDismiss={jest.fn()}
+      >
+        <p>Innholdet</p>
+      </BaseDialog>
+    )
+    expect(screen.getByText('v1.15.0')).toBeInTheDocument()
+    expect(await axeComponent(screen.getByRole('dialog'))).toHaveNoViolations()
   })
 })

@@ -92,11 +92,12 @@ describe('ProgramAdministration Commands', () => {
 
   it('disables both commands without manage permission', () => {
     renderCommands({ userHasManagePermission: false })
+    // Disabled but focusable in the toolbar, so the keyboard reaches why in the description.
     expect(
       screen.getByText(strings.ProgramAdministrationAddChildsButtonLabel).closest('button')
-    ).toBeDisabled()
+    ).toHaveAttribute('aria-disabled', 'true')
     expect(
       screen.getByText(strings.ProgramRemoveChildsButtonLabel).closest('button')
-    ).toBeDisabled()
+    ).toHaveAttribute('aria-disabled', 'true')
   })
 })
