@@ -3,6 +3,7 @@ import {
   addEntityItem,
   createEntityUrls,
   createNewEntityProperties,
+  ensureEntityItem,
   escapeODataStringLiteral,
   fetchEntity,
   getEntityFields,
@@ -542,5 +543,54 @@ describe('addEntityItem', () => {
     const result = await addEntityItem(fake.list, { Title: 'Project A' })
     expect(result).toBe(addResult)
     expect(fake.addCalls).toEqual([{ Title: 'Project A' }])
+  })
+})
+
+describe('ensureEntityItem', () => {
+  const params = { identityFieldName: 'GtSiteId', urlFieldName: 'GtSiteUrl' }
+  const PROJECT_URL = 'https://contoso.sharepoint.com/sites/project'
+
+  it('updates the entity when there is one, and leaves the new entity properties out', async () => {
+    const fake = createFakeList({ items: [{ Id: 55 }] })
+    const added = await ensureEntityItem(
+      fake.list,
+      params,
+      SITE_ID,
+      PROJECT_URL,
+      { Title: 'New' },
+      { GtGroupId: 'group-1' }
+    )
+    expect(added).toBe(false)
+    expect(fake.updateCalls).toEqual([{ properties: { Title: 'New' }, eTag: '*' }])
+    expect(fake.addCalls).toEqual([])
+  })
+
+  it('adds the entity with its identity, URL and the new entity properties when there is none', async () => {
+    const fake = createFakeList({ items: [] })
+    const added = await ensureEntityItem(
+      fake.list,
+      params,
+      `{${SITE_ID}}`,
+      PROJECT_URL,
+      { Title: 'New', GtIsProgram: false },
+      { GtGroupId: 'group-1', Title: 'Old' }
+    )
+    expect(added).toBe(true)
+    expect(fake.updateCalls).toEqual([])
+    expect(fake.addCalls).toEqual([
+      {
+        GtSiteId: SITE_ID,
+        GtSiteUrl: PROJECT_URL,
+        GtGroupId: 'group-1',
+        Title: 'New',
+        GtIsProgram: false
+      }
+    ])
+  })
+
+  it('passes the supplied eTag through to the update', async () => {
+    const fake = createFakeList({ items: [{ Id: 55 }] })
+    await ensureEntityItem(fake.list, params, SITE_ID, PROJECT_URL, {}, {}, '"3"')
+    expect(fake.updateCalls[0].eTag).toBe('"3"')
   })
 })

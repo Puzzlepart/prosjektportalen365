@@ -18,10 +18,13 @@ jest.mock('@pnp/sp', () => ({
 jest.mock('../../data/createSpfiInstance', () => ({
   createSpfiInstance: jest.fn((context: any) => ({ web: `the web of ${context.name}` }))
 }))
-jest.mock('./operations', () => ({ fetchEntity: jest.fn(() => Promise.resolve({})) }))
+jest.mock('./operations', () => ({
+  fetchEntity: jest.fn(() => Promise.resolve({})),
+  ensureEntityItem: jest.fn(() => Promise.resolve(true))
+}))
 
 import { createSpfiInstance } from '../../data/createSpfiInstance'
-import { fetchEntity } from './operations'
+import { ensureEntityItem, fetchEntity } from './operations'
 import { SpEntityPortalService } from './SpEntityPortalService'
 
 /**
@@ -59,6 +62,25 @@ describe('SpEntityPortalService', () => {
       { title: 'Prosjekter' },
       'fields of 0x0100',
       expect.objectContaining({ identity: 'site-id', origin: 'https://tenant.sharepoint.com' })
+    )
+  })
+
+  it('ensures the entity in the entity list with its identity and URL field names', async () => {
+    const added = await new SpEntityPortalService(context, params).ensureEntityItem(
+      'site-id',
+      'https://tenant.sharepoint.com/sites/project',
+      { Title: 'Prosjekt' },
+      { GtGroupId: 'group-id' }
+    )
+    expect(added).toBe(true)
+    expect(ensureEntityItem).toHaveBeenCalledWith(
+      { title: 'Prosjekter' },
+      expect.objectContaining({ identityFieldName: 'GtSiteId', urlFieldName: 'GtSiteUrl' }),
+      'site-id',
+      'https://tenant.sharepoint.com/sites/project',
+      { Title: 'Prosjekt' },
+      { GtGroupId: 'group-id' },
+      '*'
     )
   })
 })

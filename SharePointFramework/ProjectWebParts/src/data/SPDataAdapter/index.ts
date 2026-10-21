@@ -26,6 +26,7 @@ import {
 } from './types'
 import resource from 'SharedResources'
 import { IProgressProps } from 'pp365-shared-library'
+import { getNewEntityProperties } from './newEntityProperties'
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService
@@ -165,9 +166,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
 
   /**
    * Sync property item from site to associated hub. `this.getMappedProjectProperties` is used to
-   * map the properties item fields to the hub fields. `updateEntityItem` from `SpEntityPortalService`
-   * (pp365-shared-library) is used to update the hub entity item. If any errors occur, the original
-   * error is passed to the caller.
+   * map the properties item fields to the hub fields. `ensureEntityItem` from `SpEntityPortalService`
+   * (pp365-shared-library) is used to update the hub entity item, or to add it when the project was
+   * set up without one (by a user without write access to the hub). If any errors occur, the
+   * original error is passed to the caller.
    *
    * @param title Title of the project
    * @param fieldValues Field values for the properties item
@@ -193,12 +195,20 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       customSiteFieldsGroup: templateParameters.CustomSiteFields,
       projectContentTypeId: templateParameters.ProjectContentTypeId
     })
-    await this.entityService.updateEntityItem(this.settings.siteId, {
-      ...properties,
-      Title: title
-    })
+    const added = await this.entityService.ensureEntityItem(
+      this.settings.siteId,
+      this.settings.webUrl,
+      { ...properties, Title: title },
+      getNewEntityProperties(
+        this.spfxContext.pageContext.legacyPageContext?.groupId,
+        fieldValues,
+        templateParameters.ProjectContentTypeId
+      )
+    )
     Logger.log({
-      message: `(${this._name}) (syncPropertyItemToHub) Successfully synced item to hub entity.`,
+      message: `(${this._name}) (syncPropertyItemToHub) Successfully ${
+        added ? 'added' : 'synced'
+      } item to hub entity.`,
       data: { properties },
       level: LogLevel.Info
     })
