@@ -98,7 +98,10 @@ test.describe('toolbar of the hub lists', () => {
         await page.setViewportSize({ width, height: 900 })
         await page.waitForTimeout(1_000)
         const layout = await toolbar.evaluate((root) => {
-          const items = Array.from(root.querySelectorAll('.fui-Toolbar > *'))
+          // Not Tabster's focus guards: 1 px `i` elements fixed at the page's top left.
+          const items = Array.from(
+            root.querySelectorAll('.fui-Toolbar > :not([data-tabster-dummy])')
+          )
             .map((item) => item.getBoundingClientRect())
             .filter((box) => box.width > 0 && box.height > 0)
           const search = root.querySelector('.fui-SearchBox')

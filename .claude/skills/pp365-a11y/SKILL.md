@@ -319,6 +319,10 @@ checked by hand and with which reader and browser: axe finds only part of what W
   kept that many pixels of tabs past the edge (`SectionTabs`). Put the padding on a wrapper.
 - A submenu's trigger inside a `MenuList` is a `MenuItem`; a button there makes the menu one
   without the children it must have (axe's `aria-required-children`, `Toolbar`'s submenus).
+- A drag handle from `@hello-pangea/dnd` is a button (`role="button"`, `tabIndex`): on a row that
+  holds controls it is a button with controls inside, which a screen reader cannot reach (axe's
+  `nested-interactive`, `EditViewColumnsPanel`). Spread its props without `role`, `tabIndex` and
+  `aria-describedby`, so the row drags with the mouse only, and give the keyboard move buttons.
 - What sits over the page at a fixed height (the footer, absolute over a 40 px spacer) covers
   the end of the content once it wraps on a narrow screen: put it in the flow there (2.4.11).
 - `opacity: 0` hides nothing from a screen reader or the keyboard: the matrices drew both the

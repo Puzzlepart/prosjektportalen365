@@ -35,6 +35,10 @@ import { render, screen } from '@testing-library/react'
 import strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
 import { ArchiveStatus } from '.'
+import { getContrastRatio } from 'pp365-shared-library'
+
+const { ARCHIVE_STATUS_COLORS } =
+  jest.requireActual<typeof import('./useArchiveStatus')>('./useArchiveStatus')
 
 /**
  * The archive status of the project information: a message with the last archiving, which opens
@@ -72,5 +76,14 @@ describe('ArchiveStatus', () => {
     expect(screen.getByText('Dokumenter (2)').closest('.fui-Tag')).not.toHaveStyle({
       color: '#ffa500'
     })
+  })
+})
+
+describe('ARCHIVE_STATUS_COLORS', () => {
+  it("gives each status icon 3:1 against the tag it sits in, where the warning's orange had 1.8:1 (WCAG 1.4.11)", () => {
+    // Fluent's filled tag is colorNeutralBackground3.
+    for (const color of Object.values(ARCHIVE_STATUS_COLORS)) {
+      expect(getContrastRatio(color, '#f5f5f5')).toBeGreaterThanOrEqual(3)
+    }
   })
 })

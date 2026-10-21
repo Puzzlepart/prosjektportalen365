@@ -1415,3 +1415,97 @@ loaded 28 times, each in a new tab of a signed-in browser, and measured on
   SPFx has not defined. A fallback that renders into SharePoint's element directly was weighed and
   set aside. The question is in the reply to sp-dev-docs#11068, and it is a known fault in 1.15.
 
+### Close-out, part 5 — the fixed colours, the cards' names, the list header, a sturdier e2e (2026-10-21)
+
+**The fixed colours.** The issue's open point from 14 October (43 fixed colours in 16 files) was
+gone through one by one, each against the background it stands on.
+
+| Colour | Where | Ratio | Verdict |
+|---|---|---|---|
+| `#fff` on `#667eea`–`#764ba2` | The assistant's header: its title (20 px bold) and icons | 3.7–6.4:1 | Meets 3:1 for large text and graphics |
+| `#444`, `#666` | The status column's popover | 9.7:1, 5.7:1 | Meets |
+| `#605e5c` | The dialogs' subtexts, the property pane's description | 6.5:1 | Meets |
+| `#444` on `#f4f4f4` | The timeline's header | 8.9:1 | Meets |
+| `#2da748` | The published report's icon, beside its text | 3.1:1 | Meets, and decorative |
+| `#ffa500` on `#f5f5f5` | The archive status's warning icon | 1.8:1 | Fixed: Fluent's `#bc4b09`, 4.6:1 |
+| `#e81123`, `#107c10` | The change phase dialog's checklist | 4.6:1, 5.4:1 | Meets |
+| `#d13438`, `#8a6914` | The setup's task log | 4.9:1, 5.1:1 | Meets |
+| `#10793f` | The Excel export button | 5.5:1 | Meets |
+| The package badges | The template catalog | 6.6–8.1:1 | Meets |
+| `#0078d4` | In progress, the catalog's command icon | 4.5:1 | Meets |
+
+- **The rest** are shadows, overlays and borders that carry nothing.
+- **Already fixed in their own rounds:** colours from configuration (the timeline's, the phases',
+  the resource allocation's) go through `util/contrast.ts`.
+
+**The fixed heights.** They are judged by what the visual test's text spacing step finds cut off
+per web part, not by reading the stylesheets.
+
+- **The project cards' names.** On a card without a logo, `ProjectLogo` drew the name as an
+  avatar's initials, on one line in a flexbox, which cannot cut lines off.
+  - Two names of one long word were cut even with normal spacing, and three more with the
+    criterion's spacing.
+  - The name is now in an element of its own: a long word wraps, and a long name ends in «…»
+    after four lines (`-webkit-line-clamp`), with the whole name in the avatar's title.
+  - It has a line height of 1.3, since with `normal` the box cut 2 px off the last line.
+  - Measured on the hub with the element added by script: with normal spacing nothing is cut, and
+    with the criterion's spacing one long name ends in «…».
+
+**The list header.** The portfolio overview's and the aggregation's search box is not in the
+toolbar but beside it, in `ListHeader`'s commands, which neither wrapped nor let the search box
+give way.
+
+- At 320 px the toolbar was squeezed to 14 px, and its buttons went past the edge.
+- The experiment of part 4 had matched it by accident: its selector `commands_` also matched
+  `ListHeader`, and the rules went only into the project list's commands.
+- The list layout e2e found it once deployed. `ListHeader` has the same rules now, checked on the
+  deployed page with them injected.
+- The same run showed a fault in the test itself: Tabster's focus guards, 1 px `i` elements at the
+  page's top left, were measured as toolbar items. The test leaves out `[data-tabster-dummy]`.
+
+**The e2e session.** The fixtures' REST calls (`listSitePages`, `restGet`, `restPost`) go
+through `withSessionRenewal`.
+
+- On 401 or 403 it loads a page of the site in a tab of its own, which renews the session, and
+  sends the call once more.
+- A smoke test run locally on an expired stored session failed with the 403 before, and passes
+  now.
+
+**The test-channel run for part 4 (39574921518, commit ceaea0af0):**
+
+- **Green:** the build (with the coverage floors), the upgrade and the integration tests.
+- **The e2e: 99 passed, 3 failed and 2 flaky.**
+  - **The 3 failures** were the new toolbar layout test: Tabster's guards, and the list header
+    above.
+  - **The 2 flaky:**
+    - the template copy's dialog on a list page, the known fault;
+    - a bundle that did not load right after the deployment, on the program's home.
+- **axe.** Every surface the tests open was clean but two:
+  - **EditPropertiesPanel:** PnP's taxonomy button, which is reported to PnP.
+  - **EditViewColumnsPanel:** `nested-interactive`, serious, on its 12 rows. Each row was the
+    drag handle of `@hello-pangea/dnd`, a button with the checkbox and the move buttons inside.
+    Its handle props are now spread without `role`, `tabIndex` and `aria-describedby`.
+    - The row drags with the mouse only, and the keyboard moves with the move buttons.
+    - The keyboard drag and its instructions (`DragHandleInstructions`) are gone (decided
+      2026-10-21).
+    - Its test failed on the code before.
+- **Blocking.** The 29 surfaces and web parts clean in this run joined `A11Y_BLOCKING`: the forms
+  and menus of the overviews, the footer and its popovers, the catalog, the dialogs and panels
+  of the project's home and status, and the dynamic list (decided 2026-10-21).
+- **320 px:**
+  - **The list headers:** fixed above.
+  - **The idea module's menu.** It was open at 320 px, since the test loads the page wide and
+    then narrows it. The menu now also closes when the window narrows (a `change` listener on the
+    media query), and gives the focus to the button beside the content where it was in the menu.
+    Its test failed before.
+  - **The program administration.** Its search box kept `min-width: 420px`, and the commands went
+    past the edge from 768 px. It is the flexible part now, and goes above the commands under
+    480 px.
+    - Measured on the tenant with the rules injected: 420 px at 1440 px, 318 px at 768 px with
+      the commands on the line, and the commands under it at 320 px.
+- **The text spacing step** counted text that ends in «…» as cut off: 68 «cut» in the portfolio
+  overview were dates, titles and tags that are shortened with their whole text in the title.
+  - It now tells them apart: `cutOff` for what is cut without «…», `endsInEllipsis` for the
+    rest, and the annotation counts both.
+  - Run locally on the deployed code, the overview has 0 cut off and 73 ending in «…».
+

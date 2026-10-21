@@ -79,7 +79,38 @@ export const A11Y_BLOCKING: ReadonlySet<string> = new Set<string>([
   'ResourceAllocationWebPart',
   'RiskActionPlanner',
   'RiskActionPopover',
-  'RiskMatrixWebPart'
+  'RiskMatrixWebPart',
+  // Clean in the test channel's run of 2026-10-21 (39574921518), the surfaces the browser tests
+  // open and the dynamic list, blocking on the same terms (decided 2026-10-21).
+  'AddProjectDialog',
+  'AggregationColumnContextMenu',
+  'AggregationColumnFormPanel',
+  'AggregationViewFormPanel',
+  'AllPropertiesPanel',
+  'ChangePhaseDialog',
+  'ColumnContextMenu',
+  'ColumnFormPanel',
+  'ConfirmDialog',
+  'CreateNewsDialog',
+  'CreateParentDialog',
+  'DynamicListWebPart',
+  'EditStatusPanel',
+  'FilterPanel',
+  'Footer',
+  'FooterAssistant',
+  'FooterFavoriteProjects',
+  'FooterHelpContent',
+  'FooterInstallVersion',
+  'FooterPromotedLinks',
+  'FooterSiteSettingsMenu',
+  'ProjectInformationPanel',
+  'ProjectPhasePopover',
+  'RunProjectSetupDialog',
+  'SnapshotDialog',
+  'TemplatePackageCatalog',
+  'TimelineDetailsPopover',
+  'ViewFormPanel',
+  'ViewSelectorMenu'
 ])
 
 /** Fluent UI v9's surfaces that render in a portal, outside the web part: where our dialogs, drawers, menus and popovers are. */

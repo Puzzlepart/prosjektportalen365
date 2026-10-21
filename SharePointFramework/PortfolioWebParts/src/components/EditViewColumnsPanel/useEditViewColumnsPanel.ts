@@ -1,5 +1,10 @@
 import { useAnnounce } from '@fluentui/react-components'
-import { OnDragEndResponder, OnDragStartResponder, OnDragUpdateResponder } from '@hello-pangea/dnd'
+import {
+  DraggableProvidedDragHandleProps,
+  OnDragEndResponder,
+  OnDragStartResponder,
+  OnDragUpdateResponder
+} from '@hello-pangea/dnd'
 import strings from 'PortfolioWebPartsStrings'
 import { IEditViewColumnsPanelProps } from './types'
 import { useSelectableColumns } from './useSelectableColumns'
@@ -8,9 +13,9 @@ import { IListColumn, format } from 'pp365-shared-library'
 
 /**
  * Hook that provides functionality for editing and selecting columns in a view, including
- * drag-and-drop reordering and saving the selected columns. A move, by the buttons or by a drag
- * from the keyboard, is told in Norwegian as it happens (WCAG 3.1.2, 4.1.3): the drag-and-drop
- * library's own announcements are English.
+ * drag-and-drop reordering and saving the selected columns. A move, by the buttons or by a drag,
+ * is told in Norwegian as it happens (WCAG 3.1.2, 4.1.3): the drag-and-drop library's own
+ * announcements are English.
  *
  * @param props The properties for the component.
  *
@@ -81,10 +86,21 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
     )
   }
 
+  /**
+   * The row's drag handle props for the mouse only. As a handle for the keyboard too, the row was
+   * a button holding the checkbox and the move buttons, which a screen reader cannot reach inside
+   * (axe's nested-interactive). The keyboard moves a column with the move buttons instead.
+   *
+   * @param dragHandleProps What the library hands the row to drag it by
+   */
+  const mouseDragHandleProps = (dragHandleProps: DraggableProvidedDragHandleProps | null) =>
+    dragHandleProps && _.omit(dragHandleProps, 'role', 'tabIndex', 'aria-describedby')
+
   return {
     onDragStart,
     onDragUpdate,
     onDragEnd,
+    mouseDragHandleProps,
     selectableColumns,
     onChange,
     onSave,

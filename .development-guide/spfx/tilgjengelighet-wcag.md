@@ -48,7 +48,7 @@ Denne oversikten viser hvordan Prosjektportalen 365 versjon 1.15.0 står mot hve
 | 1.4.5 Bilder av tekst | AA | Støttes | Øyeblikksbildet av en publisert statusrapport er et bilde av rapporten. Det samme innholdet vises som tekst når rapporten velges. |
 | 1.4.10 Dynamisk tilpasning (Reflow) | AA | Delvis støttet | På verktøylinjene er det søkefeltet som gir etter når bredden minker. Først under 480 px, som ved 320 px, går knappene til neste linje. Bunnteksten brytes også, statussidens faner og sammendrag tilpasses, og idémodulens meny starter lukket på smale skjermer. Datatabeller og tidslinjer trenger to dimensjoner og er unntatt etter kriteriet. Resten måles i nettlesertestene og kontrolleres i håndrunden. |
 | 1.4.11 Kontrast for ikke-tekstlig innhold | AA | Støttes | Søyler, milepæler, markører og trendikoner har kanter med minst 3:1, og fokusrammen kommer fra Fluent. |
-| 1.4.12 Tekstavstand | AA | Delvis støttet | Med økt tekstavstand kuttes lange prosjektnavn på prosjektkortene. Tagger i listecellene som ikke får plass, slutter med «…», og hele teksten står i `title` og leses av skjermlesere; de ble klippt uten «…». Titler i listene avkortes med «…» som før. Et verktøytips med hele teksten ved peker og fokus ble vurdert og valgt bort for å holde visningen lik den vi har. Resten måles i nettlesertestene og kontrolleres i håndrunden. |
+| 1.4.12 Tekstavstand | AA | Delvis støttet | Lange prosjektnavn på prosjektkortene brytes og slutter med «…» etter fire linjer. Tagger i listecellene som ikke får plass, slutter med «…», og hele teksten står i `title` og leses av skjermlesere; de ble klippt uten «…». Titler i listene avkortes med «…» som før. Et verktøytips med hele teksten ved peker og fokus ble vurdert og valgt bort for å holde visningen lik den vi har. Resten måles i nettlesertestene og kontrolleres i håndrunden. |
 | 1.4.13 Pekerfølsomt innhold eller innhold ved tastaturfokus | AA | Støttes | Verktøytips og popovere fra Fluent kan lukkes med Escape og holdes åpne under pekeren. Innhold som før bare fantes i verktøytips, kan nås med tastaturet. |
 
 ### Mulig å betjene
@@ -108,5 +108,4 @@ Denne oversikten viser hvordan Prosjektportalen 365 versjon 1.15.0 står mot hve
 ### Kjente avvik
 
 - **Tidslinjene i porteføljen, programmet og ressursallokeringen** har ingen liste ved siden av (1.3.1). Se [#1789](https://github.com/Puzzlepart/prosjektportalen365/issues/1789).
-- **Lange prosjektnavn på prosjektkortene** kuttes med økt tekstavstand (1.4.12).
-- **Utvidelser på listesider:** på SharePoints listesider kan utvidelsene en sjelden gang feile under lasting. Det skyldes SharePoints håndtering av React i SPFx 1.24 RC, og er meldt til Microsoft ([SharePoint/sp-dev-docs#11068](https://github.com/SharePoint/sp-dev-docs/issues/11068)).
+- **Bunnteksten på listesider:** på SharePoints listesider vises bunnteksten ikke på omtrent 1 av 4 lastinger, fordi SharePoint ikke definerer plassholderne den skal tegnes i. Det er meldt til Microsoft ([SharePoint/sp-dev-docs#11068](https://github.com/SharePoint/sp-dev-docs/issues/11068)). En React-feil som også ble meldt der, har ikke vist seg siden 20.10.2026.

@@ -129,10 +129,19 @@ describe('EditViewColumnsPanel', () => {
     )
   })
 
-  it('tells in Norwegian how to drag a column with the keyboard, and where it is as it goes (WCAG 3.1.2, 4.1.3)', () => {
+  it('is dragged with the mouse only: a row is no button around its checkbox and move buttons (WCAG 4.1.2)', () => {
+    // As the drag handle, the row was a button holding controls, which a screen reader cannot
+    // reach inside (axe's nested-interactive, 2026-10-21). The keyboard moves a column with the
+    // move buttons, which say where it went.
     renderPanel()
-    // The drag-and-drop library's own instructions and announcements are English.
-    expect(screen.getByText(strings.DragHandleInstructions)).toBeInTheDocument()
+    const row = screen.getByText('Fase').closest('[data-rfd-draggable-id]')
+    expect(row).not.toHaveAttribute('role')
+    expect(row).not.toHaveAttribute('tabindex')
+    expect(row).not.toHaveAttribute('aria-describedby')
+  })
+
+  it('tells in Norwegian where a dragged column is as it goes (WCAG 3.1.2, 4.1.3)', () => {
+    // The drag-and-drop library's own announcements are English.
     let panel: ReturnType<typeof useEditViewColumnsPanel>
     const props = {
       ...EDIT_VIEW_COLUMNS_PANEL_DEFAULT_PROPS,

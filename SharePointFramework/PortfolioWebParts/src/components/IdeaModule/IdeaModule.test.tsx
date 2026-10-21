@@ -18,7 +18,7 @@ jest.mock('components', () => {
   }
 })
 
-import { render, screen, within } from '@testing-library/react'
+import { act, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import strings from 'PortfolioWebPartsStrings'
 import * as React from 'react'
@@ -98,6 +98,30 @@ describe('IdeaModule', () => {
     await user.click(beside)
     expect(document.activeElement).toHaveAccessibleName(name)
     expect(document.activeElement).toHaveAttribute('aria-expanded', 'true')
+  })
+
+  it('closes the menu when the window narrows after the page has loaded, as with zoom (WCAG 1.4.10)', async () => {
+    const matchMedia = window.matchMedia
+    let narrowed: (event: { matches: boolean }) => void = () => undefined
+    window.matchMedia = (query: string) =>
+      ({
+        ...matchMedia(query),
+        matches: false,
+        addEventListener: (_type: string, listener: any) => {
+          if (query === '(max-width: 480px)') narrowed = listener
+        },
+        removeEventListener: () => undefined
+      }) as MediaQueryList
+    try {
+      renderModule()
+      await screen.findByText('Idéoversikt: Alle idéer')
+      const name = strings.Idea.NavigationMenuLabel
+      expect(screen.getByRole('button', { name })).toHaveAttribute('aria-expanded', 'true')
+      act(() => narrowed({ matches: true }))
+      expect(document.querySelector('.hamburger button')).toHaveAttribute('aria-expanded', 'false')
+    } finally {
+      window.matchMedia = matchMedia
+    }
   })
 
   describe('on a narrow screen', () => {

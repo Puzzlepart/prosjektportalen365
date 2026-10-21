@@ -71,21 +71,31 @@ async function measureReflow(webPart: Locator) {
   }, REFLOW_EXEMPT)
 }
 
-/** The elements of a web part whose text is cut off by their own box, keyed by a description. */
-async function clippedText(webPart: Locator): Promise<Record<string, string>> {
+/**
+ * The elements of a web part whose text does not fit their own box, keyed by a description: the
+ * text, and whether it ends in «…» (`text-overflow: ellipsis` across, a line clamp down), as the
+ * titles, dates and tags of the lists do with the whole text in their title, which is accepted
+ * (decided 2026-10-20). Text that is cut off without «…» is what needs a look.
+ */
+async function clippedText(
+  webPart: Locator
+): Promise<Record<string, { text: string; ellipsis: boolean }>> {
   return webPart.first().evaluate((root) => {
-    const clipped: Record<string, string> = {}
+    const clipped: Record<string, { text: string; ellipsis: boolean }> = {}
     const all = Array.from(root.querySelectorAll<HTMLElement>('*'))
     all.forEach((element, index) => {
       const style = getComputedStyle(element)
       if (!/hidden|clip/.test(`${style.overflowX} ${style.overflowY}`)) return
       const text = (element.innerText ?? '').trim().replace(/\s+/g, ' ')
       if (!text || element.offsetWidth === 0 || element.offsetHeight === 0) return
-      if (
-        element.scrollWidth > element.clientWidth + 1 ||
-        element.scrollHeight > element.clientHeight + 1
-      ) {
-        clipped[`${index}:${element.tagName.toLowerCase()}`] = text.slice(0, 60)
+      const across = element.scrollWidth > element.clientWidth + 1
+      const down = element.scrollHeight > element.clientHeight + 1
+      if (across || down) {
+        const clamped = style.getPropertyValue('-webkit-line-clamp')
+        const ellipsis =
+          (!across || style.textOverflow === 'ellipsis') &&
+          (!down || (!!clamped && clamped !== 'none'))
+        clipped[`${index}:${element.tagName.toLowerCase()}`] = { text: text.slice(0, 60), ellipsis }
       }
     })
     return clipped
@@ -139,12 +149,24 @@ test.describe('visual checks of the pages', () => {
         }, TEXT_SPACING)
         await page.waitForTimeout(1_000)
         const after = await clippedText(page.locator(part.selector))
-        const cut = Object.entries(after)
+        const changed = Object.entries(after)
           .filter(([key]) => !(key in before))
-          .map(([, text]) => text)
-        note(part.alias, `text spacing: ${cut.length} cut off`)
+          .map(([, found]) => found)
+        const cut = changed.filter((found) => !found.ellipsis).map((found) => found.text)
+        const shortened = changed.filter((found) => found.ellipsis).map((found) => found.text)
+        note(part.alias, `text spacing: ${cut.length} cut off, ${shortened.length} end in «…»`)
         await test.info().attach(`text-spacing-${part.alias}.json`, {
-          body: JSON.stringify({ cutOff: cut, cutOffBefore: Object.values(before) }, null, 2),
+          body: JSON.stringify(
+            {
+              cutOff: cut,
+              endsInEllipsis: shortened,
+              cutOffBefore: Object.values(before)
+                .filter((found) => !found.ellipsis)
+                .map((found) => found.text)
+            },
+            null,
+            2
+          ),
           contentType: 'application/json'
         })
         await picture(page.locator(part.selector), `text-spacing-${part.alias}.jpg`)

@@ -201,6 +201,21 @@ export function useIdeaModule(props: IIdeaModuleProps) {
     button?.focus()
   }, [isOpen])
 
+  // The window can narrow after the page has loaded, as when it is zoomed: the menu closes then
+  // too. Where the focus was in it, the focus goes to the button beside the content.
+  useEffect(() => {
+    const query = window.matchMedia?.(NARROW_SCREEN_QUERY)
+    if (!query?.addEventListener) return
+    const onChange = (event: { matches: boolean }) => {
+      if (!event.matches) return
+      const menu = menuButtonRef.current?.closest('.fui-NavDrawer')
+      isToggled.current = !!menu?.contains(document.activeElement)
+      setIsOpen(false)
+    }
+    query.addEventListener('change', onChange)
+    return () => query.removeEventListener('change', onChange)
+  }, [])
+
   /**
    * Closes the menu once an idea or the overview is chosen from it on a narrow screen, where the
    * menu covers what was chosen. The focus goes to the button beside the content.

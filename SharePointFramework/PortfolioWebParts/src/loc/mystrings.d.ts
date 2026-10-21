@@ -346,7 +346,6 @@ declare interface IPortfolioWebPartsStrings {
   ColumnLiftedAnnouncement: string
   ColumnDragPositionAnnouncement: string
   ColumnDropCancelledAnnouncement: string
-  DragHandleInstructions: string
   SelectorButtonLabel: string
 }
 

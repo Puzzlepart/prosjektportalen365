@@ -28,6 +28,7 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (incomingPro
     onDragStart,
     onDragUpdate,
     onDragEnd,
+    mouseDragHandleProps,
     selectableColumns,
     onChange,
     onSave,
@@ -53,7 +54,7 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (incomingPro
         className={styles.columnItem}
         ref={provided.innerRef}
         {...provided.draggableProps}
-        {...provided.dragHandleProps}
+        {...mouseDragHandleProps(provided.dragHandleProps)}
         style={getItemStyle(isDragging, provided.draggableProps.style) as any}
       >
         <Checkbox
@@ -133,12 +134,7 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (incomingPro
       className={styles.root}
     >
       <WebPartTitle title={props.title} description={props.helpText} />
-      <DragDropContext
-        onDragStart={onDragStart}
-        onDragUpdate={onDragUpdate}
-        onDragEnd={onDragEnd}
-        dragHandleUsageInstructions={strings.DragHandleInstructions}
-      >
+      <DragDropContext onDragStart={onDragStart} onDragUpdate={onDragUpdate} onDragEnd={onDragEnd}>
         <Droppable
           droppableId='droppable'
           // The drawer keeps an identity transform after sliding in, which makes it the
