@@ -31,6 +31,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 
 ### Feilrettinger
 
+- Oppsettveiviseren stopper ikke lenger med «Access is denied» når brukeren mangler skrivetilgang til porteføljeområdet. Veiviseren sjekker nå før oppsettet om brukeren kan legge til elementer i listen `Prosjekter` på porteføljeområdet, og advarer i dialogen om at prosjektet ikke blir registrert i porteføljen hvis tilgangen mangler. Oppsettet av prosjektområdet fullføres da uten å skrive noe til porteføljeområdet (registrering i `Prosjekter`, logg, idéstatus og tidslinjeelementer), og en advarsel når oppsettet er ferdig forteller at prosjektet må registreres av en administrator. Det samme skjer hvis porteføljeområdet avviser registreringen av prosjektet med 403 under oppsettet
 - Rettet en feil hvor person-/brukerfelter på statusrapporter ble lagret med bruker-ID fra prosjektområdet i stedet for hubområdet, slik at feil person kunne vises i porteføljen
 - Rettet en latent feil hvor egenskapsruten til risiko- og mulighetsmatrisewebdelene krasjet dersom initialiseringen av webdelen hadde feilet
 - Matrise-elementer med ID over 99 vises nå korrekt (tidligere «99+»)

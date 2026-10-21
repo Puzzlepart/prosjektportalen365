@@ -19,7 +19,7 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
   const subText = props.subText ?? strings.ProgressDialogSubText
 
   useEffect(() => {
-    if (props.isComplete && !logExpanded) {
+    if (props.isComplete && !logExpanded && !props.warning) {
       props.onDismiss?.()
     }
   }, [props.isComplete])
@@ -28,7 +28,7 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
     <Button appearance='primary' onClick={props.onDismiss}>
       {strings.CloseModalText}
     </Button>
-  ) : props.isComplete && logExpanded ? (
+  ) : props.isComplete && (logExpanded || props.warning) ? (
     <Button appearance='primary' onClick={props.onDismiss}>
       {strings.ContinueToProjectText}
     </Button>
@@ -97,6 +97,14 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
           title={props.error.message}
           text={props.error.stack}
           intent='error'
+          containerStyle={{ marginTop: 12 }}
+        />
+      )}
+      {props.isComplete && props.warning && (
+        <UserMessage
+          title={props.warning.title}
+          text={props.warning.text}
+          intent='warning'
           containerStyle={{ marginTop: 12 }}
         />
       )}

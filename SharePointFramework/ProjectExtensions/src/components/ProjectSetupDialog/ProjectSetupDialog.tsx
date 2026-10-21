@@ -10,6 +10,7 @@ import { TemplateSelector } from './TemplateSelector'
 import { IProjectSetupDialogProps } from './types'
 import { useProjectSetupDialog } from './useProjectSetupDialog'
 import { getFluentIcon, UserMessage, format } from 'pp365-shared-library'
+import resource from 'SharedResources'
 
 type ConfigTab = 'extensions' | 'contentConfig'
 
@@ -77,6 +78,15 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
         footer={footer}
       >
         <p className={styles.subText}>{strings.ProjectSetupDialogInfoText}</p>
+        {props.data.hasHubWriteAccess === false && (
+          <div className={styles.hubAccessMessage}>
+            <UserMessage
+              title={strings.NoHubWriteAccessTitle}
+              text={format(strings.NoHubWriteAccessMessage, resource.Lists_Projects_Title)}
+              intent='warning'
+            />
+          </div>
+        )}
         <TemplateSelector />
         <div className={styles.configPane}>
           <TabList

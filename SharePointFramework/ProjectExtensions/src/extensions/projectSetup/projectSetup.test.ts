@@ -10,7 +10,9 @@ const hub = {
   lists: {} as Record<string, any[]>,
   failFetch: false,
   language: 1044,
-  updates: [] as any[]
+  updates: [] as any[],
+  /** Whether the user can add to the hub's project list; `undefined` makes the check fail. */
+  canWrite: true as boolean | undefined
 }
 class FakePortalDataService {
   public web = { select: () => () => Promise.resolve({ Language: hub.language }) }
@@ -23,6 +25,10 @@ class FakePortalDataService {
   }
   public getProjectData() {
     return Promise.resolve(undefined)
+  }
+  public currentUserHasPermissionsToList() {
+    if (hub.canWrite === undefined) return Promise.reject(new Error('Fant ikke listen'))
+    return Promise.resolve(hub.canWrite)
   }
 }
 const listLogger = { init: jest.fn(), log: jest.fn(() => Promise.resolve()) }
@@ -216,6 +222,7 @@ beforeEach(() => {
   hub.failFetch = false
   hub.language = 1044
   hub.updates = []
+  hub.canWrite = true
   graph.members = [{ mail: USER }]
   run.tasks = [task('PreTask'), task('SitePermissions'), task('ApplyTemplate')]
   removal.deleteCustomizer.mockClear()
@@ -450,6 +457,38 @@ describe('ProjectSetup', () => {
     ])
     expect(hub.updates).toEqual([{ id: 42, properties: { GtIsParentProject: true } }])
     expect(dialogs.progress.isComplete).toBe(true)
+  })
+
+  it('warns before the setup, and writes nothing to the hub, when the user cannot add to its project list', async () => {
+    hub.canWrite = false
+    await projectSetup()
+    expect(dialogs.setup.data.hasHubWriteAccess).toBe(false)
+    await setUpWith()
+    expect(run.tasks[2].execute).toHaveBeenCalled()
+    expect(listLogger.log).not.toHaveBeenCalled()
+    expect(dialogs.progress.isComplete).toBe(true)
+    expect(dialogs.progress.warning.title).toBe(strings.ProjectNotRegisteredInHubTitle)
+    expect(removal.deleteCustomizer).toHaveBeenCalledTimes(1)
+  })
+
+  it('sets up as usual when the write access to the hub cannot be checked', async () => {
+    hub.canWrite = undefined
+    await projectSetup()
+    expect(dialogs.setup.data.hasHubWriteAccess).toBeUndefined()
+    await setUpWith()
+    expect(listLogger.log).toHaveBeenCalled()
+    expect(dialogs.progress.warning).toBeUndefined()
+  })
+
+  it('leaves the hub alone when a forced parent project is set up without write access to it', async () => {
+    hub.canWrite = false
+    localStorage.setItem('pp_navigationNodes', JSON.stringify([]))
+    await projectSetup({
+      web: { WelcomePage: 'SitePages/Prosjektforside.aspx' },
+      properties: { forceTemplate: 'Byggeprosjekt' }
+    })
+    expect(hub.updates).toEqual([])
+    expect(dialogs.progress.warning.title).toBe(strings.ProjectNotRegisteredInHubTitle)
   })
 
   it('switches a multilingual site to one language and reloads before the setup', async () => {

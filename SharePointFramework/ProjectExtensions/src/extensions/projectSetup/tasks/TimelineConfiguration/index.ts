@@ -124,6 +124,12 @@ export class TimelineConfiguration extends BaseTask {
       return params
     }
 
+    // Timeline items live on the hub and reference the project's hub entry.
+    if (this.data.hasHubWriteAccess === false) {
+      this.logWarning('Skipping timeline configuration: No write access to the hub')
+      return params
+    }
+
     this.logInformation(
       `Setting up timeline items from ${this._contentConfig.sourceListProps.Title}`
     )
