@@ -1389,16 +1389,18 @@ if ($fulltOppsett) {
   } else {
     Add-PPCheck -Navn 'Chat-deployment' -Status 'ADVARSEL' -Detalj "'$ChatDeployment' inneholder ikke «gpt-5»" -Fiks 'Filvedlegg (PDF) i assistenten blir utilgjengelig. Bruk en deployment i gpt-5-familien hvis dere vil ha det.'
   }
-  if ($SkipModelTest) {
-    Add-PPCheck -Navn 'Chatmodellen svarer' -Status 'HOPPET OVER' -Detalj '-SkipModelTest'
-  } elseif ($ProvisionFoundry) {
-    Add-PPCheck -Navn 'Chatmodellen svarer' -Status 'HOPPET OVER' -Detalj 'testes etter at Foundry-deploymenten er opprettet'
-  } else {
-    try {
-      Test-PPChatDeployment $script:ChatBase $ChatApiKey $ChatDeployment
-      Add-PPCheck -Navn 'Chatmodellen svarer' -Status 'OK' -Detalj "$($script:ChatBase) -> $ChatDeployment"
-    } catch {
-      Add-PPCheck -Navn 'Chatmodellen svarer' -Status 'MANGLER' -Detalj $_.Exception.Message -Fiks 'Kontroller endepunkt, nøkkel og deployment-navn i Azure AI Foundry (steg 1 i veiledningen).'
+  # Med -ProvisionFoundry finnes modellen ikke før den er opprettet. Den testes etter opprettelsen,
+  # så forhåndssjekken får ingen linje for den.
+  if (-not $ProvisionFoundry) {
+    if ($SkipModelTest) {
+      Add-PPCheck -Navn 'Chatmodellen svarer' -Status 'HOPPET OVER' -Detalj '-SkipModelTest'
+    } else {
+      try {
+        Test-PPChatDeployment $script:ChatBase $ChatApiKey $ChatDeployment
+        Add-PPCheck -Navn 'Chatmodellen svarer' -Status 'OK' -Detalj "$($script:ChatBase) -> $ChatDeployment"
+      } catch {
+        Add-PPCheck -Navn 'Chatmodellen svarer' -Status 'MANGLER' -Detalj $_.Exception.Message -Fiks 'Kontroller endepunkt, nøkkel og deployment-navn i Azure AI Foundry (steg 1 i veiledningen).'
+      }
     }
   }
 }
