@@ -9,7 +9,7 @@ import { useChangeWelcomePage } from './useChangeWelcomePage'
 import { useModifyCurrentPhaseView } from './useModifyCurrentPhaseView'
 import strings from 'ProjectWebPartsStrings'
 import { format } from 'pp365-shared-library'
-import { getHubSyncErrorReason } from 'data/hubSyncError'
+import { getHubSyncErrorReason } from '../../data/hubSyncError'
 
 /**
  * Hook for changing the current phase for the current project. Returns

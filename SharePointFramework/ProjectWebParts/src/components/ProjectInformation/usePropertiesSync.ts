@@ -7,7 +7,7 @@ import { IProjectInformationData, ProjectInformation } from './index'
 import { SET_HUB_SYNC_WARNING, SET_PROGRESS } from './reducer'
 import resource from 'SharedResources'
 import { IProgressProps, format } from 'pp365-shared-library'
-import { getHubSyncErrorReason } from 'data/hubSyncError'
+import { getHubSyncErrorReason } from '../../data/hubSyncError'
 
 interface IUsePropertiesSyncParams {
   /**
