@@ -174,7 +174,7 @@ param(
   [ValidateSet('GlobalStandard', 'DataZoneStandard', 'Standard')] [string] $FoundryImagesDeploymentType,   # default: -FoundryDeploymentType
 
   [string] $TenantId,
-  [string] $CustomerName,
+  [string] $CustomerName,   # default: organisasjonens navn i Entra ID
   [switch] $SkipConsent,
   [switch] $ForceConsent,
   # Opt-in. Uten denne bryteren endres ingen SharePoint-tilgang, og «sett som prosjektlogo»
@@ -298,7 +298,7 @@ function Show-PPSummary($Tenant, $AzContext, $VaultFinnes, $Consent, $SharePoint
   Write-Host ''
   Write-Host '  Koblet til:' -ForegroundColor Yellow
   Write-Host "    Hub-URL:            $HubUrl"
-  Write-Host "    Entra-tenant:       $($Tenant.Name).onmicrosoft.com ($($Tenant.Id))"
+  Write-Host "    Entra-tenant:       $(if ($script:OrgNavn) { "$($script:OrgNavn) - " })$($Tenant.Name).onmicrosoft.com ($($Tenant.Id))"
   Write-Host "    Innlogget som:      $($AzContext.Account.Id)"
   Write-Host "    Abonnement:         $($AzContext.Subscription.Name) ($($AzContext.Subscription.Id))"
   Write-Host ''
@@ -915,22 +915,20 @@ function Test-PPFoundryPlan {
         # Kvoten er ikke kontrollert - da kan fallbacken slå inn ved opprettelsen, og
         # oppsummeringen skal si det.
         $d.Ukontrollert = $true
-        $fallback = if ($d.Rolle -eq 'Images' -and $d.Type -ne 'GlobalStandard' -and -not $script:BildeTypeEksplisitt) { ' Bildemodellen faller da tilbake til GlobalStandard.' } else { '' }
         if ($script:KvoteListeTom) {
-          Add-PPCheck -Navn $sjekk -Status 'UKJENT' -Detalj "$($d.Modell) $($d.Versjon), $($d.Type): kvotelisten for $($konto.Location) er tom - trolig mangler du rollen Cognitive Services Usages Reader på abonnementet" -Fiks "Kvoteoppslaget krever den rollen på abonnementet; Owner på ressursgruppen holder ikke. Be eieren av abonnementet om den (den gir bare lesetilgang til kvote), eller kjør videre: kvoten kontrolleres da når deploymenten opprettes, og mangler den, stopper skriptet.$fallback"
+          # Tom liste = mangler Cognitive Services Usages Reader på abonnementet (se wikien).
+          # Ingenting å gjøre for den som kjører: kvoten kontrolleres ved opprettelsen.
+          Add-PPCheck -Navn $sjekk -Status 'UKJENT' -Detalj "$($d.Modell) $($d.Versjon), $($d.Type): kvoten kunne ikke leses - kontrolleres ved opprettelsen"
         } else {
-          Add-PPCheck -Navn $sjekk -Status 'UKJENT' -Detalj "$($d.Modell) $($d.Versjon), $($d.Type): fant ikke kvoteoppføringen '$($valg.UsageName)'" -Fiks "Kan bety at abonnementet ikke har kvote for modellen i regionen. Kontroller Management -> Quota i Foundry-portalen. Mangler kvoten, stopper skriptet når deploymenten opprettes.$fallback"
+          Add-PPCheck -Navn $sjekk -Status 'UKJENT' -Detalj "$($d.Modell) $($d.Versjon), $($d.Type): fant ikke kvoteoppføringen '$($valg.UsageName)'" -Fiks 'Kan bety at abonnementet ikke har kvote for modellen. Se Management -> Quota i Foundry-portalen.'
         }
       } else {
         Add-PPCheck -Navn $sjekk -Status 'OK' -Detalj "$($d.Modell) $($d.Versjon), $($d.Type), kapasitet $($d.Kapasitet) (ledig $($valg.Ledig))"
       }
     } catch {
       $d.Ukontrollert = $true
-      $fallback = if ($d.Rolle -eq 'Images' -and $d.Type -ne 'GlobalStandard' -and -not $script:BildeTypeEksplisitt) { ' Bildemodellen faller tilbake til GlobalStandard om den ikke kan opprettes som valgt.' } else { '' }
-      $fiks = if ($_.Exception.Message -match '403|AuthorizationFailed') {
-        "Modellkatalogen og kvoten ligger på abonnementet, og du har trolig bare tilgang på ressursgruppen. Kontrolleres når ressursen er opprettet; mangler kvote, stopper skriptet da.$fallback"
-      } elseif ($script:RpStatus['Microsoft.CognitiveServices'] -eq $false) { "Kontrolleres på nytt etter at ressursleverandøren er registrert.$fallback" } else { $fallback.Trim() }
-      Add-PPCheck -Navn $sjekk -Status 'UKJENT' -Detalj "kunne ikke kontrollere $($d.Modell) som $($d.Type) ($($_.Exception.Message))" -Fiks $fiks
+      Write-Verbose "Modellkatalogen for $($d.Modell): $($_.Exception.Message)"
+      Add-PPCheck -Navn $sjekk -Status 'UKJENT' -Detalj "$($d.Modell), $($d.Type): modellkatalogen kunne ikke leses - kontrolleres ved opprettelsen"
     }
   }
 }
@@ -1206,16 +1204,14 @@ function Show-PPSharePointScopeStatus($AssistantSp) {
   } catch {
     Write-Info "Kunne ikke lese nåværende scope ($($_.Exception.Message))."
   }
-  Write-Info '«Sett som prosjektlogo» er ikke aktivert. Alt annet i assistenten virker.'
-  Write-Info 'Vil du ha den: kjør på nytt med -GrantSharePointFullControl. Tillatelsen er delegert -'
-  Write-Info 'assistenten får aldri mer tilgang enn den pålogde brukeren selv har.'
+  Write-Info '«Sett som prosjektlogo» er av. Slå på med -GrantSharePointFullControl.'
 }
 
 # Skrives ut i BEGGE moduser. Hand-off-blokken er det teamet trenger for å registrere
 # tenanten, og den skal se lik ut uansett om kunden satte opp modeller i samme kjøring
 # eller bare fornyet godkjenninger – ellers vet ikke mottakeren hva som mangler.
 function Write-PPResult($Tenant, [string] $TenantName, $Vault, [bool] $HasImages, $AssistantSp, [bool] $FulltOppsett = $true) {
-  $name = if ($CustomerName) { $CustomerName } else { $TenantName }
+  $name = if ($CustomerName) { $CustomerName } elseif ($script:OrgNavn) { $script:OrgNavn } else { $TenantName }
   $config = [ordered]@{ TenantId = $Tenant; ApiScope = $ApiScope } | ConvertTo-Json
 
   Write-Step 'Lim inn i Prosjektportalen -> Globale innstillinger -> «Konfigurasjonsoppsett for assistenten»'
@@ -1252,9 +1248,13 @@ Tidspunkt:         $(Get-Date -Format 'yyyy-MM-dd HH:mm')
     if ($FulltOppsett -and -not $AssistantSp) { Write-Info 'Det som finnes fra før, gjenbrukes. Det som gjenstår, er lesetilgangen for «Prosjektportalen Assistent» til vaulten.' }
     elseif ($AssistantSp) { Write-Info "Eller bare: .\Setup-PPAssistant.ps1 -HubUrl $($HubUrl.TrimEnd('/')) - da kontrolleres og fornyes kun godkjenningene." }
   }
-  Write-Info 'Er virksomheten allerede registrert, trenger teamet ikke blokken – sammenlign bare hub-URL og vault-navn med det som er registrert.'
-  Write-Info 'Ellers svarer assistenten «tenant_not_onboarded» til registreringen er gjort. Du får bekreftelse på e-post.'
-  Write-Info 'Brukere må laste assistenten på nytt (F5) for at et nytt token skal hentes.'
+  # Bare det som krever handling: en ny vault hos en virksomhet som var satt opp fra før blir
+  # ikke brukt før registreringen peker til den, og en ny virksomhet må registreres.
+  if ($FulltOppsett -and $assistantSpCurrent -and -not $vaultFinnes) {
+    Write-Warning "Virksomheten var satt opp fra før, og vaulten '$vaultNavn' er ny. Er den registrert med en annen vault, må registreringen oppdateres - ellers bruker assistenten fortsatt de gamle modellene."
+  } elseif (-not $assistantSpCurrent) {
+    Write-Info 'Til registreringen er gjort, svarer assistenten «tenant_not_onboarded».'
+  }
 }
 
 # ---------------- Kjøring ----------------
@@ -1363,6 +1363,11 @@ Connect-PPAzure $tenant.Id
 $azContext = Get-AzContext
 Add-PPCheck -Navn 'Azure-innlogging' -Status 'OK' -Detalj "$($azContext.Account.Id) i riktig tenant"
 $script:SubId = $azContext.Subscription.Id
+
+# Organisasjonens navn i Entra ID - til oppsummeringen (kontroll av tenant) og blokken til
+# registreringen, så -CustomerName ikke trengs. Faller tilbake til tenantnavnet.
+$script:OrgNavn = $null
+try { $script:OrgNavn = (Invoke-PPGraph GET "$Graph/organization?`$select=displayName").value[0].displayName } catch {}
 
 if ($ProvisionFoundry) {
   Test-PPFoundryPlan
