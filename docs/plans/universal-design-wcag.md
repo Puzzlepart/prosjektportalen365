@@ -1531,3 +1531,42 @@ through `withSessionRenewal`.
     state while the web part loaded.
   - If it comes back, the scan should wait for the list's data before it runs.
 
+**The React fault traced (2026-10-21).** Microsoft could not reproduce it with a minimal
+extension and asked for traces. Cold loads in a fresh browser context, as each CI test has,
+reproduce it on the project's document library:
+
+| Loads | Result |
+|---|---|
+| Chromium, the dialog opened | 7 of 10 failed |
+| Microsoft Edge 141, the dialog opened | 3 of 6 failed |
+| Chromium, the footer only | 7 of 8 failed |
+| Chromium, warm cache | 1 of 8 failed, while the cache filled |
+
+**The mechanism**, from a wrapper round `window.define` installed before the page's scripts:
+
+- `listview-host-assembly` is fetched by the page's own `<script>`. On many cold loads it is
+  fetched again by `plt.odsp-common.js`, from `splistwebpack.js`.
+- Each run registers SPFx's React module, `0d910c1c-…_18.3.1`, through `V.ensure` ← `new K` ←
+  `ai.start`. The RequireJS map points our extensions' `react`, and `react-dom-18-bundle`'s, at
+  that id.
+- **When `react-dom-18-bundle` registers between the two React registrations,** it and our
+  extensions hold different React instances, and the first hook throws.
+  - Of 30 loads where the order was recorded, all 15 with `react-dom` between failed.
+  - The 15 with one registration, or both before `react-dom`, passed.
+
+**The missing placeholder:**
+
+- **On the document library:** «Defined clientSidePlaceholders» was never logged on any of the
+  7 loads that ran the host twice.
+- **On the hub's list, warm cache:** one load lacked the log with a single host run, and no
+  error.
+- So it is a fault of its own, as Microsoft suggested, which the double run also triggers. It
+  gets a separate issue, cross-linked.
+
+**The answers to Microsoft:**
+
+- **Manual testing:** not seen by hand. Manual use has a warm cache, where the fault is rare.
+- **No minimal extension yet** (decided 2026-10-21). The traces point at SharePoint's loader,
+  and one is offered if they still cannot reproduce it with a cold cache.
+- **The code notes are updated:** the e2e specs on list pages and pp365-a11y.
+

@@ -211,11 +211,14 @@ checked by hand and with which reader and browser: axe finds only part of what W
   `aria-hidden="true"` from SharePoint and keeps it, so a dialog is invisible to screen readers
   (the template package catalog, 2026-10-19). Render a command set's surface after
   `await whenHostMenuHasClosed()` (shared-library), and take the opener for the focus after it.
-- On SharePoint's list pages, SPFx 1.24 RC sometimes resolves the `react` an extension imports to
-  the list view host's copy (`listview-host-assembly`) while `react-dom-18-bundle` renders it:
-  the first hook throws "Cannot read properties of null (reading 'useContext')" and nothing
-  shows (about one load in twenty; the template dialog's e2e flake). Not ours: the bundles hold
-  no React of their own. Reported as SharePoint/sp-dev-docs#11068; check again on SPFx 1.24 GA.
+- On SharePoint's list pages, SPFx 1.24 RC sometimes gives an extension a different React than
+  `react-dom-18-bundle` renders it with. With a cold cache the list view host
+  (`listview-host-assembly`) often runs twice, each run registers SPFx's React module, and when
+  `react-dom` registers between the two, the first hook throws "Cannot read properties of null
+  (reading 'useContext')" and nothing shows (7 of 10 cold loads of a document library on
+  2026-10-21; rare with a warm cache, so CI's fresh contexts meet it far more than people do).
+  Not ours: the bundles hold no React of their own. Reported as SharePoint/sp-dev-docs#11068
+  with the traces; check again on SPFx 1.24 GA.
 - Spreading a data object onto a Fluent component passes its every key as a prop: the project
   list's people carried `role` (the field's internal name) from the data adapter, and every
   `Avatar` got `role="GtProjectManager"`, axe's critical `aria-roles` 36 times; the idea
