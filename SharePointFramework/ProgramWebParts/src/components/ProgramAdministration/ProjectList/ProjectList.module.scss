@@ -5,6 +5,9 @@
   gap: 16px;
   min-height: 0;
 
+  // The search box is the flexible part, as in the library's toolbar: 420 px where there is room,
+  // narrower as the page narrows, and nothing else shrinks. It kept its 420 px, and the commands
+  // went past the edge already at 768 px. Only under 480 px does it go above them (WCAG 1.4.10).
   .header {
     padding: 2px;
     display: flex;
@@ -12,17 +15,32 @@
     gap: 16px;
 
     .search {
-      min-width: 420px;
+      flex: 0 1 420px;
+      min-width: 0;
 
       .searchBox {
         box-shadow: var(--shadow2);
         width: 100%;
+        min-width: 0;
       }
     }
 
     .commands {
-      width: 100%;
+      flex: 1 0 auto;
       gap: 16px;
+    }
+
+    @media (max-width: 480px) {
+      flex-wrap: wrap;
+
+      .search {
+        flex-basis: 100%;
+      }
+
+      .commands {
+        flex-shrink: 1;
+        min-width: 0;
+      }
     }
   }
 

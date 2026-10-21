@@ -75,6 +75,26 @@ const shownTitles = () =>
   screen.getAllByText(/^(Alfa|Bravo|Charlie)$/).map((element) => element.textContent)
 
 describe('ProjectList', () => {
+  it('names its search box, and reads each project once, its logo beside its name hidden (WCAG 1.3.1, 1.1.1)', () => {
+    renderList()
+    // A placeholder is no name.
+    expect(screen.getByRole('searchbox', { name: 'Søk' })).toBeInTheDocument()
+    const logos = document.querySelectorAll('.logo')
+    expect(logos.length).toBeGreaterThan(0)
+    logos.forEach((logo) => expect(logo).toHaveAttribute('aria-hidden', 'true'))
+  })
+
+  it("names the search box's clear button in the page's language, where Fluent says «clear» (WCAG 3.1.2, 4.1.2)", () => {
+    renderList()
+    // SharedLibraryStrings' Aria.SearchBoxClearLabel.
+    expect(screen.getByRole('button', { name: 'Tøm søket' })).toBeInTheDocument()
+  })
+
+  it('takes the name its caller gives the search box over the placeholder', () => {
+    renderList({ props: { search: { placeholder: 'Søk', 'aria-label': 'Søk i underområdene' } } })
+    expect(screen.getByRole('searchbox', { name: 'Søk i underområdene' })).toBeInTheDocument()
+  })
+
   it('lists the projects by title', () => {
     renderList()
     expect(shownTitles()).toEqual(['Alfa', 'Bravo'])

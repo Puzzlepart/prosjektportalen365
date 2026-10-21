@@ -4,8 +4,9 @@ jest.mock('./useExcelExport', () => ({ useExcelExport: () => ({ exportToExcel: j
 
 import { render } from '@testing-library/react'
 import * as strings from 'PortfolioWebPartsStrings'
-import { ListMenuItem } from 'pp365-shared-library'
+import { ListMenuItem, format } from 'pp365-shared-library'
 import * as React from 'react'
+import resource from 'SharedResources'
 import { TOGGLE_COMPACT } from '../reducer'
 import { useToolbarItems } from './useToolbarItems'
 
@@ -39,6 +40,14 @@ describe('useToolbarItems', () => {
       compact.onClick(null)
       expect(dispatch.mock.calls).toEqual([[TOGGLE_COMPACT(false)], [TOGGLE_COMPACT(true)]])
     }
+  })
+
+  it('names the view selector by what it chooses as well as the view it shows (WCAG 2.4.6)', () => {
+    const { viewSelector } = toolbar({ currentView: { id: 1, title: 'Alle prosjekter' } })
+    expect(viewSelector.text).toBe('Alle prosjekter')
+    expect(viewSelector.ariaLabel).toBe(
+      format(strings.SelectorButtonLabel, 'Alle prosjekter', resource.Lists_PortfolioViews_Title)
+    )
   })
 
   it('checks the mode that is on', () => {

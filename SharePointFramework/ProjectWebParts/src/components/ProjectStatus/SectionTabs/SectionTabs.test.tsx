@@ -7,6 +7,18 @@ const SECTIONS = [
   { id: 3, name: 'Usikkerhet' }
 ]
 jest.mock('../Sections/useSections', () => ({ useSections: () => mockSections.value }))
+// jsdom has no layout, so nothing ever overflows; the test says how many tabs are out of room
+// (`overflow.count`, the last ones), and Fluent's overflow hooks answer from it.
+const overflow = { count: 0 }
+jest.mock('@fluentui/react-components', () => ({
+  ...jest.requireActual('@fluentui/react-components'),
+  useOverflowMenu: () => ({
+    ref: { current: null },
+    isOverflowing: overflow.count > 0,
+    overflowCount: overflow.count
+  }),
+  useIsOverflowItemVisible: () => overflow.count === 0
+}))
 window.ResizeObserver =
   window.ResizeObserver ??
   (class {
@@ -17,6 +29,7 @@ window.ResizeObserver =
 
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import strings from 'ProjectWebPartsStrings'
 import { SectionTabs } from './SectionTabs'
@@ -52,7 +65,17 @@ describe('SectionTabs', () => {
     scrollIntoView.mockClear()
   })
 
-  afterEach(() => jest.useRealTimers())
+  afterEach(() => {
+    overflow.count = 0
+    jest.useRealTimers()
+  })
+
+  it('names the tab for the sections out of room by how many they are (WCAG 2.4.6)', () => {
+    overflow.count = 2
+    render(<SectionTabs />)
+    const more = screen.getByRole('tab', { name: format(strings.Aria.MoreSectionsLabel, 2) })
+    expect(more).toHaveTextContent('+2')
+  })
 
   it('shows a tab for every section', () => {
     render(<SectionTabs />)

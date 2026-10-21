@@ -77,6 +77,14 @@ export interface IBasePanelProps<T extends string = string> {
    */
   footer?: React.ReactNode
 
+  /**
+   * Makes the body a stop for the keyboard, a region named by `headerText`, for a panel whose
+   * content is read rather than worked in: the body scrolls, and with no focusable element in it
+   * the keyboard could not scroll it (WCAG 2.1.1; axe's `scrollable-region-focusable`). A panel of
+   * fields leaves it off, its fields being its stops.
+   */
+  isBodyFocusable?: boolean
+
   children?: React.ReactNode
 
   /**

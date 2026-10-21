@@ -20,7 +20,7 @@
 | ProgramProjectOverviewWebPart | ProgramWebParts     | Programoversikt                                        | 01417142-67c8-498b-a6da-6e78003023dd |
 | ProgramTimelineWebPart        | ProgramWebParts     | Prosjekttidslinje (Programnivå)                        | f97a38ab-78c2-400e-899f-b0d4cda76166 |
 | ProjectSetup                  | ProjectExtensions   | Oppsett av prosjekt-dialog                             | ce34553d-ab47-4107-8dd1-e980d953996d |
-| ProjectUpgrade                | ProjectExtensions   | Oppgradering av prosjekt-dialog                        | 453a6c1e-e1d0-4b12-a3fc-690a36da1f0c |
+| ProjectUpgrade                | ProjectExtensions   | Gjør ingenting på siden; oppgraderingen kjøres fra installasjonsskriptet | 453a6c1e-e1d0-4b12-a3fc-690a36da1f0c |
 | TemplateSelectorCommand       | ProjectExtensions   | Dokumentmalvelger-dialog (Malbibliotek)                | c9080212-e63e-47cc-8278-00ad38c3f5a5 |
 | RiskActionPlanner             | ProjectExtensions   | Planner-tiltak                                         | 1dd9fdb3-df0f-4248-a869-ca6f512e3d0f |
 | OpportunityMatrixWebPart      | ProjectWebParts     | Mulighetsmatrise                                       | aff0baa2-9ab4-4c13-a062-d5fa5028121c |
@@ -33,4 +33,4 @@
 | DynamicListWebPart            | ProjectWebParts     | Dynamisk liste                                         | 2f66a372-7d6f-4d36-90b4-22b26465aa3c |
 | SharedLibrary                 | SharedLibrary       | Pakke med delte komponenter                            | 0f65a874-dc9d-491d-b979-6ce1d943dd00 |
 
-Hvilke tester som dekker hver komponent, står i [testoversikten](testoversikt.md).
+Hvilke tester som dekker hver komponent, står i [testoversikten](testoversikt.md). Status for universell utforming per komponent står i [Tilgjengelighet](tilgjengelighet.md).

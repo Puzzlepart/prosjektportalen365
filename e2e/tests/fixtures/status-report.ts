@@ -1,5 +1,6 @@
 import { expect, Locator, Page, test } from '@playwright/test'
 import { baseURL } from '../../playwright.config'
+import { scanAccessibility, SURFACES } from './a11y'
 import { deleteItem, currentUserId, restGet, siteId } from './rest'
 
 /**
@@ -196,6 +197,7 @@ export async function snapshotJourney(
       timeout: 30_000
     })
     .toBe(true)
+  await scanAccessibility(page, { component: 'SnapshotDialog', include: [SURFACES.dialog] })
 
   // Full screen is the browser's to grant: a host that refuses it hides the button, and a headless
   // browser may ignore the request. When it is granted, the link is copied in full screen, where

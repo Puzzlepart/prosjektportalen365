@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
 import { ProjectInformationContextProvider } from '../context'
@@ -68,6 +69,23 @@ describe('ProjectProperties', () => {
       'https://contoso.no'
     )
     expect(screen.getByText(/Linje 1/).innerHTML).toContain('<br>')
+  })
+
+  it('pairs each name with its value in a description list, and reads a person once (WCAG 1.3.1)', async () => {
+    const { container } = renderProperties([
+      property('GtProjectGoals', 'Prosjektmål', 'Bedre flyt'),
+      property('GtProjectOwner', 'Prosjekteier', [{ text: 'Kari Nordmann', imageUrl: '' }], 'User')
+    ])
+    expect(screen.getAllByRole('term').map((term) => term.textContent)).toEqual([
+      'Prosjektmål',
+      'Prosjekteier'
+    ])
+    const [goals, owner] = screen.getAllByRole('definition')
+    expect(goals).toHaveTextContent('Bedre flyt')
+    // The picture beside the name is hidden from screen readers, which read the name once.
+    expect(owner).toHaveTextContent('Kari Nordmann')
+    expect(screen.queryByRole('img', { name: 'Kari Nordmann' })).toBeNull()
+    expect(await axeComponent(container)).toHaveNoViolations()
   })
 
   it("writes a date in SharePoint's UI language, not the browser's", () => {

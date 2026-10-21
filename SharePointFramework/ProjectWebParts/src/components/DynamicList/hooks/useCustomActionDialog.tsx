@@ -308,7 +308,7 @@ export function useCustomActionDialog() {
                       padding: '32px'
                     }}
                   >
-                    <Spinner size='large' />
+                    <Spinner size='large' aria-label={strings.DynamicList.PleaseWait} />
                     {dialogState.isSending && (
                       <MessageBar intent='info'>
                         <MessageBarBody>{strings.DynamicList.SendingData}</MessageBarBody>

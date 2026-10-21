@@ -7,10 +7,17 @@ define([], function () {
     CloseText: 'Close',
     Aria: {
       InfoLabelTitle: 'Information about {0}',
+      InstrumentGaugeLabel: 'Latest measurement {0}, start value {1}, target value {2}',
       MenuOverflowCount: '{0} more items',
       ProjectTitle: 'Logo for project: {0}',
       SaveTitle: 'Save',
-      SaveDisabledTitle: 'There are required fields that are not filled out, fill these out to save'
+      SaveDisabledTitle:
+        'There are required fields that are not filled out, fill these out to save',
+      SearchBoxClearLabel: 'Clear the search',
+      TimelineScrollLabel: 'The timeline. Scroll in time with the arrow keys',
+      TrendBetter: 'Better than the previous measurement',
+      TrendTargetReached: 'Target reached',
+      TrendWorse: 'Worse than the previous measurement'
     },
     DatePicker: {
       GoToToday: 'Go to today',
@@ -58,6 +65,7 @@ define([], function () {
     FiltersString: 'Filters',
     FilterText: 'Filter',
     FilterPanelEmptyTitle: 'No filters available',
+    PeoplePickerExpandLabel: 'Show suggestions',
     PeoplePickerNoResults: 'No people found',
     PeoplePickerSelectedLabel: 'Selected people',
     FilterPanelEmptyMessage:
@@ -73,6 +81,7 @@ define([], function () {
     ProjectTimelineInfoText:
       'Here is a list of all projects with start and end date. The project timeline also supports phases, subphases and milestones. To zoom in/out in the timeline: ALT+Mouse wheel.',
     ProjectTimelineTitle: 'Project timeline',
+    TimelineTodayLabel: 'Today',
     ProjectTimelineItemInfo: '{0} - project timeline',
     ProgramTimelineTitle: 'Program timeline',
     ResourceLabel: 'Resource',

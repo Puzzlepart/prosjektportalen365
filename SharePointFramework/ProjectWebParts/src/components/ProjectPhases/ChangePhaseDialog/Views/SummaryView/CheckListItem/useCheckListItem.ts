@@ -1,5 +1,6 @@
 import { stringIsNullOrEmpty } from '@pnp/core'
 import * as strings from 'ProjectWebPartsStrings'
+import { useId } from '@fluentui/react-components'
 import { useState } from 'react'
 import { STATUS_COLORS } from './types'
 import { ChecklistItemModel, getFluentIcon } from 'pp365-shared-library'
@@ -13,6 +14,7 @@ import { ChecklistItemModel, getFluentIcon } from 'pp365-shared-library'
  */
 export function useCheckListItem(item: ChecklistItemModel) {
   const [commentHidden, setCommentHidden] = useState(true)
+  const commentId = useId('checklist-item-comment')
   const hasComment = !stringIsNullOrEmpty(item.comment)
 
   const statusIcon = getFluentIcon(
@@ -24,5 +26,5 @@ export function useCheckListItem(item: ChecklistItemModel) {
     { color: STATUS_COLORS[item.status], size: 24 }
   )
 
-  return { commentHidden, setCommentHidden, hasComment, statusIcon }
+  return { commentHidden, setCommentHidden, hasComment, statusIcon, commentId }
 }

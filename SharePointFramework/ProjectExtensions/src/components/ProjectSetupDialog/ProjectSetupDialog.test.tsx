@@ -64,8 +64,10 @@ jest.mock('@fluentui/react-components', () => {
   return { __esModule: true, ...actual, Combobox, Option }
 })
 
-import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
+import { AriaLiveAnnouncer } from '@fluentui/react-components'
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import strings from 'ProjectExtensionsStrings'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import { ProjectSetupValidation } from '../../extensions/projectSetup/types'
@@ -78,16 +80,32 @@ function renderDialog(props: Record<string, any> = {}) {
   const onSubmit = jest.fn()
   const onDismiss = jest.fn()
   render(
-    <ProjectSetupDialog
-      data={setupData()}
-      version='v1.15.0'
-      onSubmit={onSubmit}
-      onDismiss={onDismiss}
-      {...props}
-    />
+    <AriaLiveAnnouncer>
+      <ProjectSetupDialog
+        data={setupData()}
+        version='v1.15.0'
+        onSubmit={onSubmit}
+        onDismiss={onDismiss}
+        {...props}
+      />
+    </AriaLiveAnnouncer>
   )
   return { onSubmit, onDismiss }
 }
+
+/**
+ * What the announcer's live region holds now. It writes each message as `innerText` on a span of
+ * its own, which jsdom keeps as a property rather than as text, and clears the region through
+ * `innerText` too, which jsdom ignores: the newest message is the last span.
+ */
+const announced = () =>
+  Array.from(document.body.querySelectorAll('[aria-live]'))
+    .map((region) => {
+      const spans = region.querySelectorAll('span')
+      const span = spans[spans.length - 1] as HTMLElement | undefined
+      return (span && (span.innerText || span.textContent)) || region.textContent || ''
+    })
+    .join(' ')
 
 const picker = () => screen.getByLabelText(strings.ProjectTemplateSelectorSearchPlaceholder)
 const submit = () => screen.getByText(strings.ProjectSetupDialogSubmitButtonText).closest('button')
@@ -150,6 +168,56 @@ describe('ProjectSetupDialog', () => {
     expect(picker()).toHaveValue('1')
   })
 
+  it('names its choice of whether to use a template (WCAG 1.3.1, 4.1.2)', () => {
+    renderDialog({ data: setupData({ hasExistingTemplate: true }) })
+    expect(
+      screen.getByRole('radiogroup', { name: strings.ProjectTemplateSelectorModeLabel })
+    ).toBeInTheDocument()
+  })
+
+  it('ties each section to its tab, which tells how many are chosen in it, and breaks no rule axe can check (WCAG 1.3.1, 4.1.2)', async () => {
+    renderDialog()
+    const name = format(strings.ConfigTabSelectedLabel, strings.ExtensionsSectionHeaderText, 1)
+    expect(screen.getByRole('tab', { name })).toHaveAttribute('aria-selected', 'true')
+    expect(
+      within(screen.getByRole('tabpanel', { name })).getByText('Gevinstoversikt')
+    ).toBeInTheDocument()
+    expect(await axeComponent(screen.getByRole('alertdialog'))).toHaveNoViolations()
+  })
+
+  it('lets the keyboard reach a section with nothing to choose, which says so (WCAG 2.1.1, 1.3.1)', () => {
+    // A disabled tab is skipped by the keyboard, and why it was disabled was only in its tooltip.
+    renderDialog({ data: setupData({ extensions: [] }) })
+    const tab = screen.getByRole('tab', { name: new RegExp(strings.ExtensionsSectionHeaderText) })
+    expect(tab).not.toBeDisabled()
+    fireEvent.click(tab)
+    expect(tab).toHaveAttribute('aria-selected', 'true')
+    expect(
+      within(screen.getByRole('tabpanel')).getByText(strings.ExtensionsSectionDisabledTooltip)
+    ).toBeInTheDocument()
+  })
+
+  it('tells while a cloud template is read, and when it is ready (WCAG 4.1.3)', async () => {
+    let finish: (value: any) => void
+    cloud.resolve.mockImplementation(() => new Promise((resolve) => (finish = resolve)))
+    renderDialog({ data: setupData({ templates: [...TEMPLATES, CLOUD] }) })
+    fireEvent.change(picker(), { target: { value: '3' } })
+    await waitFor(() => expect(announced()).toContain(strings.CloudTemplateResolvingMessage))
+    // A hidden message's announcement waited in the queue and came out with this one.
+    expect(announced()).not.toContain(strings.ProjectDataFoundTitle)
+    await act(async () =>
+      finish({
+        templateId: 3,
+        package: { manifest: { cloudCompatible: true } },
+        extensions: [],
+        contentConfig: []
+      })
+    )
+    await waitFor(() => expect(announced()).toContain(strings.CloudTemplateResolved), {
+      timeout: 3000
+    })
+  })
+
   it('cannot set up a project without a template to choose', () => {
     renderDialog({ data: setupData({ templates: [] }) })
     expect(submit()).toBeDisabled()
@@ -170,9 +238,10 @@ describe('ProjectSetupDialog', () => {
     expect(screen.getByText(strings.ProjectDataFoundTitle)).toBeVisible()
   })
 
-  it('leaves the project data message hidden when there is none', () => {
+  it('says nothing of project data when there is none, not even to a screen reader (WCAG 4.1.3)', () => {
+    // A message bar announces itself when it mounts, hidden or not.
     renderDialog()
-    expect(screen.getByText(strings.ProjectDataFoundTitle)).not.toBeVisible()
+    expect(screen.queryByText(strings.ProjectDataFoundTitle)).toBeNull()
   })
 
   it('warns that Planner needs membership of the group', () => {

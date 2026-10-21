@@ -11,7 +11,7 @@ const MATRIX_HEADER_CELL_DEFAULT_PROPS: Partial<IMatrixHeaderCellProps> = {
 export const MatrixHeaderCell: FC<IMatrixHeaderCellProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, MATRIX_HEADER_CELL_DEFAULT_PROPS)
   return (
-    <div className={styles.matrixHeaderCell}>
+    <div className={styles.matrixHeaderCell} role={props.role}>
       <div className={styles.headerCell}>
         <Text weight='semibold'>{props.text}</Text>
       </div>

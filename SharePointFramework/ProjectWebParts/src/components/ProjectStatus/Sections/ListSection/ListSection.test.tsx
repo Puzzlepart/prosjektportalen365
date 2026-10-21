@@ -2,7 +2,11 @@
 // are mocked before the component is imported; see .development-guide/spfx/testing.md on ordering.
 const mockFetchListData = jest.fn()
 jest.mock('./useFetchListData', () => ({ useFetchListData: () => mockFetchListData }))
-jest.mock('../../StatusElement', () => ({ StatusElement: () => null }))
+// The status element stands in as the section's heading when it is asked to head the section.
+jest.mock('../../StatusElement', () => ({
+  StatusElement: ({ asHeading }: any) =>
+    asHeading ? jest.requireActual('react').createElement('h3', null, 'Seksjonstittel') : null
+}))
 
 import { render, screen, waitFor } from '@testing-library/react'
 import * as React from 'react'
@@ -59,6 +63,8 @@ describe('ListSection', () => {
     mockFetchListData.mockResolvedValue(data)
     renderSection()
     expect(await screen.findByText('Tittel')).toBeInTheDocument()
+    // Its status element heads it (WCAG 1.3.1).
+    expect(screen.getByRole('heading', { level: 3, name: 'Seksjonstittel' })).toBeInTheDocument()
     expect(screen.getByText('Status')).toBeInTheDocument()
     expect(screen.getByText('Leveranse A')).toBeInTheDocument()
     expect(screen.getByText('Ferdig')).toBeInTheDocument()

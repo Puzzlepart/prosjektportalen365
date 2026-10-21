@@ -59,12 +59,14 @@ test('the status page shows its dates as the site shows them from a browser west
     `${hub}/_api/web/lists/getbytitle('${list}')/fields?$select=InternalName,Title,DisplayFormat&$filter=TypeAsString eq 'DateTime' and Hidden eq false`
   )
   const fields = ((await fieldsResponse.json()) as { value: DateField[] }).value
-  const texts = ['Modified', ...fields.map((f) => f.InternalName)]
-    .map((name) => `FieldValuesAsText/${name}`)
-    .join(',')
+  // FieldValuesAsText holds the text of the fields the query selects, and of Created and Modified:
+  // with only the texts selected, the report dates and the date-only fields were never there, and
+  // the test checked none of them (0 of 1 from 2026-10-14).
+  const names = ['Modified', ...fields.map((f) => f.InternalName)]
+  const texts = names.map((name) => `FieldValuesAsText/${name}`).join(',')
   const reportsResponse = await restGet(
     page,
-    `${hub}/_api/web/lists/getbytitle('${list}')/items?$select=Id,GtModerationStatus,${texts}&$expand=FieldValuesAsText&$filter=GtSiteId eq '${site}'&$orderby=Created desc&$top=50`
+    `${hub}/_api/web/lists/getbytitle('${list}')/items?$select=Id,GtModerationStatus,${names.join(',')},${texts}&$expand=FieldValuesAsText&$filter=GtSiteId eq '${site}'&$orderby=Created desc&$top=50`
   )
   if (!reportsResponse.ok())
     throw new Error(`Could not list the reports: HTTP ${reportsResponse.status()}`)
@@ -111,7 +113,12 @@ test('the status page shows its dates as the site shows them from a browser west
   }
 
   // A date-only field of the report in a project information section: stored as the site's
-  // midnight, it read as the day before in Los Angeles.
+  // midnight, it read as the day before in Los Angeles. The sections render after the selector.
+  await webPart
+    .locator('[class*="statusSectionField"]')
+    .first()
+    .waitFor({ timeout: 30_000 })
+    .catch(() => undefined)
   let checked = 0
   for (const field of fields.filter((f) => f.DisplayFormat === 0)) {
     const stored = report.FieldValuesAsText[field.InternalName]

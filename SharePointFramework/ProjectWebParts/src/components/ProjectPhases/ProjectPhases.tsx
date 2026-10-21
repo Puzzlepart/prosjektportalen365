@@ -7,6 +7,7 @@ import { IProjectPhasesProps } from './types'
 import { useProjectPhases } from './useProjectPhases'
 import { FluentProvider, IdPrefixProvider, Toaster } from '@fluentui/react-components'
 import { LoadingSkeleton, customLightTheme, withDefaults } from 'pp365-shared-library'
+import strings from 'ProjectWebPartsStrings'
 import resource from 'SharedResources'
 
 const PROJECT_PHASES_DEFAULT_PROPS: Partial<IProjectPhasesProps> = {
@@ -27,7 +28,7 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (incomingProps) => {
           <ProjectPhasesContext.Provider value={context}>
             {context.state.isDataLoaded || !!context.state.error ? (
               <>
-                <ul className={styles.phaseList}>
+                <ul className={styles.phaseList} aria-label={strings.Aria.PhaseListLabel}>
                   {context.state.data.phases
                     .filter((p) => p.isVisible)
                     .map((phase, idx, phases) => {

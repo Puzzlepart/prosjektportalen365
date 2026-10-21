@@ -63,15 +63,11 @@ export function useIdeaField(props: IIdeaFieldProps) {
           if (user) {
             return (
               <Persona
-                {...user}
-                title={user.text}
                 name={user.text}
+                secondaryText={user.secondaryText}
                 size='small'
-                avatar={{
-                  image: {
-                    src: user.imageUrl
-                  }
-                }}
+                // The picture is beside the name: read once, not twice (WCAG 1.1.1).
+                avatar={{ 'aria-hidden': true, image: { src: user.imageUrl } }}
                 style={{ marginTop: 6 }}
               />
             )
@@ -88,15 +84,10 @@ export function useIdeaField(props: IIdeaFieldProps) {
               {users.map((user, key) => (
                 <Persona
                   key={key}
-                  {...user}
-                  title={user.text}
                   name={user.text}
+                  secondaryText={user.secondaryText}
                   size='small'
-                  avatar={{
-                    image: {
-                      src: user.imageUrl
-                    }
-                  }}
+                  avatar={{ 'aria-hidden': true, image: { src: user.imageUrl } }}
                   style={{ marginTop: 6 }}
                 />
               ))}

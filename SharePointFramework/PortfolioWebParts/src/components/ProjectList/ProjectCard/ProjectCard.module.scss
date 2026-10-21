@@ -26,6 +26,10 @@
     .phaseBadge:hover {
       background-color: var(--colorSubtleBackgroundLightAlphaHover);
     }
+
+    .phaseBadge:focus-visible {
+      outline: 2px solid var(--colorStrokeFocus2);
+    }
   }
 
   .card:hover {

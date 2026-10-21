@@ -87,7 +87,7 @@ describe('List', () => {
       searchBox: { placeholder: 'Søk i Alle prosjekter' },
       menuItems: [new ListMenuItem('Eksporter til Excel')]
     })
-    // WebPartTitle renders an <h2> around a span[role=heading]; both carry the text, so target the span.
+    // WebPartTitle renders one <h2> with the title in a span; the span holds the text alone.
     const heading = screen.getByText('Porteføljeoversikt', { selector: 'span' })
     const search = screen.getByPlaceholderText('Søk i Alle prosjekter')
     const toolbar = screen.getByRole('button', { name: 'Eksporter til Excel' })
@@ -235,20 +235,22 @@ describe('List', () => {
     expect(screen.queryByText('Charlie')).toBeNull()
   })
 
-  it('opens and closes a group from its header, and every group from the column headers', async () => {
-    const user = setupUser()
+  it('opens and closes a group from its header, and every group from the column headers', () => {
     renderList({ items: ITEMS, groups: GROUPS })
+    // fireEvent, not user-event: the expand-all button sits in a Fluent tooltip, which user-event's
+    // pointer opens and positions, and that stalled this test past 30 s in CI (see the testing
+    // guide). The click is what is under test.
     const planlegge = screen.getByRole('button', { name: /Fase: Planlegge/ })
     expect(planlegge).toHaveAttribute('aria-expanded', 'true')
-    await user.click(planlegge)
+    fireEvent.click(planlegge)
     expect(planlegge).toHaveAttribute('aria-expanded', 'false')
     expect(screen.queryByText('Bravo')).toBeNull()
     expect(screen.getByText('Delta')).toBeInTheDocument()
-    await user.click(planlegge)
+    fireEvent.click(planlegge)
     expect(screen.getByText('Bravo')).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: strings.ListCollapseAllGroupsLabel }))
+    fireEvent.click(screen.getByRole('button', { name: strings.ListCollapseAllGroupsLabel }))
     expect(itemRows()).toHaveLength(0)
-    await user.click(screen.getByRole('button', { name: strings.ListExpandAllGroupsLabel }))
+    fireEvent.click(screen.getByRole('button', { name: strings.ListExpandAllGroupsLabel }))
     expect(itemRows()).toHaveLength(4)
   })
 

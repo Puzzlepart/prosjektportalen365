@@ -1,29 +1,29 @@
 .migrateRiskActionsDialog {
-    .migrateRiskActionsDialogBody {
-        .migrateRiskActionsDialogTitle {
-            font-size: 18px;
-            margin: 0 0 12px 0;
-        }
-
-        .migrateRiskActionsDialogContent {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-
-            .infoText {
-                padding: 8px;
-                font-size: 12px;
-
-                // The message bar's body sets its own size; the dialog's text is smaller.
-                :global(.fui-MessageBarBody) {
-                    font-size: inherit;
-                    line-height: normal;
-                }
-            }
-
-            .progress {
-                margin: 12px 0 0 0;
-            }
-        }
+  .migrateRiskActionsDialogBody {
+    .migrateRiskActionsDialogTitle {
+      font-size: 18px;
+      margin: 0 0 12px 0;
     }
+
+    .migrateRiskActionsDialogContent {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      .infoText {
+        padding: 8px;
+        font-size: 12px;
+
+        // The message bar's body sets its own size; the dialog's text is smaller.
+        :global(.fui-MessageBarBody) {
+          font-size: inherit;
+          line-height: normal;
+        }
+      }
+
+      .progress {
+        margin: 12px 0 0 0;
+      }
+    }
+  }
 }

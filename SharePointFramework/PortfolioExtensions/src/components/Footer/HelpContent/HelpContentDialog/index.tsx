@@ -2,11 +2,13 @@ import React, { FC, ReactElement, ReactNode, useContext } from 'react'
 import styles from './HelpContentDialog.module.scss'
 import { FooterContext } from 'components/Footer/context'
 import {
+  Button,
   Dialog,
   DialogBody,
   DialogContent,
   DialogProps,
   DialogSurface,
+  DialogTitle,
   DialogTrigger,
   FluentProvider,
   IdPrefixProvider,
@@ -19,13 +21,14 @@ import {
   useId
 } from '@fluentui/react-components'
 import { Content } from './Content'
-import { customLightTheme } from 'pp365-shared-library'
+import { customLightTheme, getFluentIcon } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
 
 export const HelpContentDialog: FC<Omit<DialogProps, 'children'> & { children?: ReactNode }> = (
   props
 ) => {
   const fluentProviderId = useId('fp-help-dialog')
+  const tabsId = useId('help-tab')
   const context = useContext(FooterContext)
   const [selectedValue, setSelectedValue] = React.useState<TabValue>()
   const activeValue = selectedValue ?? context.helpContent[0]?.title
@@ -47,6 +50,20 @@ export const HelpContentDialog: FC<Omit<DialogProps, 'children'> & { children?: 
           <DialogTrigger disableButtonEnhancement>{props.children as ReactElement}</DialogTrigger>
           <DialogSurface>
             <DialogBody>
+              {/* The dialog's name, with a button that closes it; it had neither (WCAG 4.1.2). */}
+              <DialogTitle
+                action={
+                  <DialogTrigger action='close'>
+                    <Button
+                      appearance='subtle'
+                      aria-label={strings.CloseLabel}
+                      icon={getFluentIcon('Dismiss')}
+                    />
+                  </DialogTrigger>
+                }
+              >
+                {strings.HelpContentDialogTitle}
+              </DialogTitle>
               <DialogContent className={styles.content}>
                 {!context.isHelpContentLoaded || context.isHelpContentLoading ? (
                   <Spinner size='tiny' label={strings.HelpContentAvailableLabel} />
@@ -56,15 +73,19 @@ export const HelpContentDialog: FC<Omit<DialogProps, 'children'> & { children?: 
                   <>
                     <TabList selectedValue={activeValue} onTabSelect={onTabSelect}>
                       {context.helpContent.map((content, index) => (
-                        <Tab key={index} value={content.title}>
+                        <Tab key={index} id={`${tabsId}-${index}`} value={content.title}>
                           {content.title}
                         </Tab>
                       ))}
                     </TabList>
                     {context.helpContent.map(
-                      (content) =>
+                      (content, index) =>
                         activeValue === content.title && (
-                          <Content key={content.title} content={content} />
+                          <Content
+                            key={content.title}
+                            content={content}
+                            tabId={`${tabsId}-${index}`}
+                          />
                         )
                     )}
                   </>

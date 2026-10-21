@@ -222,6 +222,8 @@ const KNOWN = {
   PropertyPaneTextField: (targetProperty, properties) => ({ type: 3, targetProperty, properties }),
   PropertyPaneToggle: (targetProperty, properties) => ({ type: 5, targetProperty, properties }),
   PropertyPaneDropdown: (targetProperty, properties) => ({ type: 6, targetProperty, properties }),
+  PropertyPaneLabel: (targetProperty, properties) => ({ type: 7, targetProperty, properties }),
+  PropertyPaneSlider: (targetProperty, properties) => ({ type: 8, targetProperty, properties }),
   // @microsoft/sp-application-base
   PlaceholderName: { Top: 0, Bottom: 1 },
   BaseApplicationCustomizer,

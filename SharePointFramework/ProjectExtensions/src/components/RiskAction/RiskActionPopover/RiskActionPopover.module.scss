@@ -1,38 +1,39 @@
 .riskActionPopover {
-    max-width: 340px;
+  max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .title {
+    font-size: 16px;
+    margin: 0 0 8px 0;
+  }
+
+  .alert {
+    white-space: pre-wrap;
+
+    // The message bar's body sets its own size; the popover's texts are smaller.
+    :global(.fui-MessageBarBody) {
+      font-size: inherit;
+      line-height: normal;
+    }
+  }
+
+  .infoText,
+  .lastUpdated {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .actions {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    flex-direction: row;
+    gap: 6px;
+    margin: 15px 0 0 0;
 
-    .title {
-        font-size: 16px;
-        margin: 0 0 8px 0;
+    button {
+      padding-left: 0;
+      padding-right: 0;
     }
-
-    .alert {
-        white-space: pre-wrap;
-
-        // The message bar's body sets its own size; the popover's texts are smaller.
-        :global(.fui-MessageBarBody) {
-            font-size: inherit;
-            line-height: normal;
-        }
-    }
-
-    .infoText, .lastUpdated {
-        padding: 8px;
-        font-size: 12px;
-    }
-
-    .actions {
-        display: flex;
-        flex-direction: row;
-        gap: 6px;
-        margin: 15px 0 0 0;
-
-        button {
-            padding-left: 0;
-            padding-right: 0;
-        }
-    }
+  }
 }

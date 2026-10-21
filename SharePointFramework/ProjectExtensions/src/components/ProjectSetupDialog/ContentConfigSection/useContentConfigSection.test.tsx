@@ -1,4 +1,7 @@
-import { render, screen } from '@testing-library/react'
+import { AriaLiveAnnouncer } from '@fluentui/react-components'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import strings from 'ProjectExtensionsStrings'
+import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import { ProjectSetupDialogContext } from '../context'
 import { useContentConfigSection } from './useContentConfigSection'
@@ -32,6 +35,20 @@ function renderProbe(all: any[], selected: any[]) {
   )
 }
 
+/**
+ * What the announcer's live region holds now. It writes each message as `innerText` on a span of
+ * its own, which jsdom keeps as a property rather than as text, and clears the region through
+ * `innerText` too, which jsdom ignores: the newest message is the last span.
+ */
+const announced = () =>
+  Array.from(document.body.querySelectorAll('[aria-live]'))
+    .map((region) => {
+      const spans = region.querySelectorAll('span')
+      const span = spans[spans.length - 1] as HTMLElement | undefined
+      return (span && (span.innerText || span.textContent)) || region.textContent || ''
+    })
+    .join(' ')
+
 describe('useContentConfigSection', () => {
   it('lists the mandatory items first, then the selected, then the rest, each in title order', () => {
     const sierra = item('s1', 'Sierra')
@@ -54,5 +71,35 @@ describe('useContentConfigSection', () => {
     renderProbe([item('a', 'Alfa'), { ...item('h', 'Skjult'), hidden: true }], [])
     expect(screen.getByTestId('items')).toHaveTextContent('Alfa')
     expect(screen.getByTestId('items')).not.toHaveTextContent('Skjult')
+  })
+
+  it('tells how many items a search leaves (WCAG 4.1.3)', async () => {
+    const Search: React.FC = () => {
+      const { onSearch } = useContentConfigSection()
+      return <button onClick={() => onSearch('ech')}>Søk</button>
+    }
+    render(
+      <AriaLiveAnnouncer>
+        <ProjectSetupDialogContext.Provider
+          value={
+            {
+              props: {
+                data: {
+                  contentConfig: [item('r1', 'Echo'), item('r2', 'Zulu'), item('r3', 'Alfa')]
+                }
+              },
+              state: { selectedTemplate: {}, selectedContentConfig: [] },
+              dispatch: jest.fn()
+            } as any
+          }
+        >
+          <Search />
+        </ProjectSetupDialogContext.Provider>
+      </AriaLiveAnnouncer>
+    )
+    fireEvent.click(screen.getByText('Søk'))
+    await waitFor(() => expect(announced()).toContain(format(strings.SearchResultsCount, 1, 3)), {
+      timeout: 2000
+    })
   })
 })

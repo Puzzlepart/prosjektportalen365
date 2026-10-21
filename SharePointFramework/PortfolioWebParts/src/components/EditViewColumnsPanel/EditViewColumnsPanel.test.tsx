@@ -1,6 +1,8 @@
-import { act, render, screen } from '@testing-library/react'
+import { AriaLiveAnnouncer } from '@fluentui/react-components'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import strings from 'PortfolioWebPartsStrings'
+import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import { EDIT_VIEW_COLUMNS_PANEL_DEFAULT_PROPS, EditViewColumnsPanel } from './EditViewColumnsPanel'
 import { EditViewColumnsPanelSortMode } from './types'
@@ -36,17 +38,33 @@ const columns = () => [
 function renderPanel(props: Record<string, any> = {}) {
   const onSave = jest.fn()
   render(
-    <EditViewColumnsPanel
-      open
-      onClose={jest.fn()}
-      onSave={onSave}
-      sortMode={EditViewColumnsPanelSortMode.CustomSelectedOnTop}
-      columns={columns()}
-      {...props}
-    />
+    <AriaLiveAnnouncer>
+      <EditViewColumnsPanel
+        open
+        onClose={jest.fn()}
+        onSave={onSave}
+        sortMode={EditViewColumnsPanelSortMode.CustomSelectedOnTop}
+        columns={columns()}
+        {...props}
+      />
+    </AriaLiveAnnouncer>
   )
   return onSave
 }
+
+/**
+ * What the announcer's live region holds now. It writes each message as `innerText` on a span of
+ * its own, which jsdom keeps as a property rather than as text, and clears the region through
+ * `innerText` too, which jsdom ignores: the newest message is the last span.
+ */
+const announced = () =>
+  Array.from(document.body.querySelectorAll('[aria-live]'))
+    .map((region) => {
+      const spans = region.querySelectorAll('span')
+      const span = spans[spans.length - 1] as HTMLElement | undefined
+      return (span && (span.innerText || span.textContent)) || region.textContent || ''
+    })
+    .join(' ')
 
 /** The column names in the order the panel lists them. */
 const listedNames = () =>
@@ -88,13 +106,85 @@ describe('EditViewColumnsPanel', () => {
   it('moves a selected column down and up again', async () => {
     const user = setupUser()
     const onSave = renderPanel()
-    await user.click(screen.getByTitle(strings.Aria.MoveDown))
+    const move = (direction: string) =>
+      screen.getByRole('button', { name: format(direction, 'Tittel') })
+    await user.click(move(strings.MoveColumnDown))
     expect(listedNames()).toEqual(['Fase', 'Tittel', 'Budsjett'])
-    await user.click(screen.getByTitle(strings.Aria.MoveUp))
+    await user.click(move(strings.MoveColumnUp))
     expect(listedNames()).toEqual(['Tittel', 'Fase', 'Budsjett'])
-    await user.click(screen.getByTitle(strings.Aria.MoveDown))
+    await user.click(move(strings.MoveColumnDown))
     await user.click(screen.getByRole('button', { name: strings.UseChangesButtonText }))
     expect(onSave.mock.calls[0][1]).toEqual([2, 1])
+  })
+
+  it('names each move by its column, keeps one that cannot be made focusable with its reason, and tells where a column went (WCAG 2.1.1, 2.4.6, 4.1.3)', async () => {
+    const user = setupUser()
+    renderPanel()
+    const up = screen.getByRole('button', { name: format(strings.MoveColumnUp, 'Tittel') })
+    expect(up).toHaveAttribute('aria-disabled', 'true')
+    expect(up).toHaveAttribute('title', strings.Aria.MoveUpDisabled)
+    await user.click(screen.getByRole('button', { name: format(strings.MoveColumnDown, 'Tittel') }))
+    await waitFor(() =>
+      expect(announced()).toContain(format(strings.ColumnMovedAnnouncement, 'Tittel', 2, 2))
+    )
+  })
+
+  it('is dragged with the mouse only: a row is no button around its checkbox and move buttons (WCAG 4.1.2)', () => {
+    // As the drag handle, the row was a button holding controls, which a screen reader cannot
+    // reach inside (axe's nested-interactive, 2026-10-21). The keyboard moves a column with the
+    // move buttons, which say where it went.
+    renderPanel()
+    const row = screen.getByText('Fase').closest('[data-rfd-draggable-id]')
+    expect(row).not.toHaveAttribute('role')
+    expect(row).not.toHaveAttribute('tabindex')
+    expect(row).not.toHaveAttribute('aria-describedby')
+  })
+
+  it('tells in Norwegian where a dragged column is as it goes (WCAG 3.1.2, 4.1.3)', () => {
+    // The drag-and-drop library's own announcements are English.
+    let panel: ReturnType<typeof useEditViewColumnsPanel>
+    const props = {
+      ...EDIT_VIEW_COLUMNS_PANEL_DEFAULT_PROPS,
+      open: true,
+      onClose: jest.fn(),
+      onSave: jest.fn(),
+      sortMode: EditViewColumnsPanelSortMode.CustomSelectedOnTop,
+      columns: columns()
+    } as any
+    const Probe: React.FC = () => {
+      panel = useEditViewColumnsPanel(props)
+      return null
+    }
+    render(<Probe />)
+    const announce = jest.fn()
+    act(() =>
+      panel.onDragStart({ source: { index: 0 }, draggableId: 'Tittel' } as any, { announce })
+    )
+    expect(announce).toHaveBeenLastCalledWith(format(strings.ColumnLiftedAnnouncement, 'Tittel', 1))
+    act(() =>
+      panel.onDragUpdate(
+        { source: { index: 0 }, destination: { index: 1 }, draggableId: 'Tittel' } as any,
+        { announce }
+      )
+    )
+    expect(announce).toHaveBeenLastCalledWith(format(strings.ColumnDragPositionAnnouncement, 2, 2))
+    act(() =>
+      panel.onDragEnd({ source: { index: 0 }, destination: null, draggableId: 'Tittel' } as any, {
+        announce
+      })
+    )
+    expect(announce).toHaveBeenLastCalledWith(
+      format(strings.ColumnDropCancelledAnnouncement, 'Tittel', 1)
+    )
+    act(() =>
+      panel.onDragEnd(
+        { source: { index: 0 }, destination: { index: 1 }, draggableId: 'Tittel' } as any,
+        { announce }
+      )
+    )
+    expect(announce).toHaveBeenLastCalledWith(
+      format(strings.ColumnMovedAnnouncement, 'Tittel', 2, 2)
+    )
   })
 
   it('drops a dragged column where it lands, and ignores a drop outside the list', () => {

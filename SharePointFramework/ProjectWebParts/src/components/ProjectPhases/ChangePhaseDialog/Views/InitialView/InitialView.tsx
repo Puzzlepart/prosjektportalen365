@@ -2,7 +2,7 @@ import * as strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
 import styles from './InitialView.module.scss'
 import { useInitialView } from './useInitialView'
-import { Field, Label, Tab, TabList, Textarea } from '@fluentui/react-components'
+import { Field, Label, Textarea } from '@fluentui/react-components'
 import { StatusActions } from './StatusActions/StatusActions'
 import { format } from 'pp365-shared-library'
 
@@ -12,20 +12,22 @@ export const InitialView: FC = () => {
 
   return (
     <div className={styles.root}>
-      <TabList className={styles.tabList} selectedValue={checklistItem.id}>
+      {/* The checkpoints as steps, not tabs: no panel belongs to a checkpoint, and choosing one
+          did nothing. */}
+      <ol className={styles.steps} role='list' aria-label={strings.Aria.ChecklistStepsLabel}>
         {checklistItems.map((item) => (
-          <Tab
-            className={styles.tabItem}
+          <li
             key={item.id}
+            className={item.id === checklistItem.id ? styles.currentStep : styles.step}
+            aria-current={item.id === checklistItem.id ? 'step' : undefined}
             title={format(strings.PhaseCheckListItem, item.id)}
-            value={item.id}
           >
             {item.id}
-          </Tab>
+          </li>
         ))}
-      </TabList>
+      </ol>
       <Label weight='semibold'>{checklistItem.title}</Label>
-      <Field hint={strings.ChecklistCommentDescription}>
+      <Field label={strings.CommentLabel} hint={strings.ChecklistCommentDescription}>
         <Textarea
           rows={4}
           value={comment}

@@ -1,12 +1,21 @@
-import { OnDragEndResponder } from '@hello-pangea/dnd'
+import { useAnnounce } from '@fluentui/react-components'
+import {
+  DraggableProvidedDragHandleProps,
+  OnDragEndResponder,
+  OnDragStartResponder,
+  OnDragUpdateResponder
+} from '@hello-pangea/dnd'
+import strings from 'PortfolioWebPartsStrings'
 import { IEditViewColumnsPanelProps } from './types'
 import { useSelectableColumns } from './useSelectableColumns'
 import _ from 'lodash'
-import { IListColumn } from 'pp365-shared-library'
+import { IListColumn, format } from 'pp365-shared-library'
 
 /**
  * Hook that provides functionality for editing and selecting columns in a view, including
- * drag-and-drop reordering and saving the selected columns.
+ * drag-and-drop reordering and saving the selected columns. A move, by the buttons or by a drag,
+ * is told in Norwegian as it happens (WCAG 3.1.2, 4.1.3): the drag-and-drop library's own
+ * announcements are English.
  *
  * @param props The properties for the component.
  *
@@ -15,6 +24,8 @@ import { IListColumn } from 'pp365-shared-library'
 export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
   const { selectableColumns, selectedColumns, selectColumn, moveColumn } =
     useSelectableColumns(props)
+  const { announce } = useAnnounce()
+  const count = selectedColumns.length
 
   /**
    * On save event handler.
@@ -36,20 +47,60 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
     selectColumn(col, isSelected)
   }
 
+  /** A column lifted for a drag: where it was. */
+  const onDragStart: OnDragStartResponder = (start, provided) => {
+    provided.announce(
+      format(strings.ColumnLiftedAnnouncement, start.draggableId, start.source.index + 1)
+    )
+  }
+
+  /** A column moved as it is dragged: where it would land. */
+  const onDragUpdate: OnDragUpdateResponder = (update, provided) => {
+    if (!update.destination) return
+    provided.announce(
+      format(strings.ColumnDragPositionAnnouncement, update.destination.index + 1, count)
+    )
+  }
+
   /**
-   * On drag end event handler.
+   * On drag end event handler: the column moved where it was dropped, or back where it was.
    *
    * @param result Drag and drop result
+   * @param provided What the library gives to announce with
    */
-  const onDragEnd: OnDragEndResponder = (result) => {
+  const onDragEnd: OnDragEndResponder = (result, provided) => {
     if (!result.destination) {
+      provided?.announce(
+        format(strings.ColumnDropCancelledAnnouncement, result.draggableId, result.source.index + 1)
+      )
       return
     }
     moveColumn(result.source.index, result.destination.index)
+    provided?.announce(
+      format(
+        strings.ColumnMovedAnnouncement,
+        result.draggableId,
+        result.destination.index + 1,
+        count
+      )
+    )
   }
 
+  /**
+   * The row's drag handle props for the mouse only. As a handle for the keyboard too, the row was
+   * a button holding the checkbox and the move buttons, which a screen reader cannot reach inside
+   * (axe's nested-interactive). The keyboard moves a column with the move buttons instead.
+   *
+   * @param dragHandleProps What the library hands the row to drag it by
+   */
+  const mouseDragHandleProps = (dragHandleProps: DraggableProvidedDragHandleProps | null) =>
+    dragHandleProps && _.omit(dragHandleProps, 'role', 'tabIndex', 'aria-describedby')
+
   return {
+    onDragStart,
+    onDragUpdate,
     onDragEnd,
+    mouseDragHandleProps,
     selectableColumns,
     onChange,
     onSave,
@@ -57,6 +108,10 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
       const columnIndex = selectedColumns.findIndex((c) => c.fieldName === column.fieldName)
       if (columnIndex > -1) {
         moveColumn(columnIndex, columnIndex + moveIndex)
+        announce(
+          format(strings.ColumnMovedAnnouncement, column.name, columnIndex + moveIndex + 1, count),
+          { polite: true }
+        )
       }
     },
     selectedColumns

@@ -12,8 +12,10 @@ jest.mock('./useProjectNewsDataFetch', () => ({
 }))
 jest.mock('./NewsDialog', () => ({ NewsDialog: () => null }))
 
-import { render, screen } from '@testing-library/react'
+import { useRestoreFocusTarget } from '@fluentui/react-components'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import strings from 'ProjectWebPartsStrings'
 import { format } from 'pp365-shared-library'
 import * as React from 'react'
@@ -70,6 +72,26 @@ describe('ProjectNews', () => {
     expect(screen.queryByRole('link', { name: 'Dugnad' })).toBeNull()
   })
 
+  it('lists the news, says whether more are shown, and keeps the separator from being read (WCAG 1.3.1, 4.1.2)', async () => {
+    const user = userEvent.setup()
+    renderNews({
+      data: { news: [news(1, 'Ny-bane.aspx'), news(2, 'Åpning.aspx'), news(3, 'Dugnad.aspx')] }
+    })
+    const list = await screen.findByRole('list')
+    expect(within(list).getAllByRole('listitem')).toHaveLength(2)
+    const more = screen.getByRole('button', { name: strings.ShowMoreNews })
+    expect(more).toHaveAttribute('aria-expanded', 'false')
+    await user.click(more)
+    expect(within(list).getAllByRole('listitem')).toHaveLength(3)
+    expect(screen.getByRole('button', { name: strings.ShowLessNews })).toHaveAttribute(
+      'aria-expanded',
+      'true'
+    )
+    const [date] = screen.getAllByTitle(format(strings.ModifiedTooltipText, '01.09.2026'))
+    expect(date.querySelector('[aria-hidden="true"]')).toHaveTextContent('|')
+    expect(await axeComponent(list)).toHaveNoViolations()
+  })
+
   it('tells when there are no pages yet', async () => {
     renderNews({ data: { news: [] } })
     expect(await screen.findByText(strings.NoRecentNews)).toBeInTheDocument()
@@ -78,6 +100,22 @@ describe('ProjectNews', () => {
   it('shows the spinner while loading', () => {
     renderNews(undefined)
     expect(screen.getByText(format(strings.LoadingText, 'Prosjektnyheter'))).toBeInTheDocument()
+  })
+
+  it('marks the create button as where the focus goes back to when the dialog closes (WCAG 2.4.3)', async () => {
+    // The dialog opens from state, so Fluent has no trigger of its own to give the focus back to,
+    // and it was left on the page's start.
+    let target: ReturnType<typeof useRestoreFocusTarget>
+    const Probe: React.FC = () => {
+      target = useRestoreFocusTarget()
+      return null
+    }
+    render(<Probe />)
+    renderNews({ data: { news: [] } })
+    const [attribute, value] = Object.entries(target)[0]
+    expect(
+      await screen.findByRole('button', { name: strings.CreateNewsLinkLabel })
+    ).toHaveAttribute(attribute, value)
   })
 
   it('shows the error when the pages cannot be fetched', async () => {

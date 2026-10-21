@@ -12,6 +12,12 @@ export interface ITimelineItemData {
   sortOrder?: number
   bgColorHex?: string
   textColorHex?: string
+  /**
+   * The colour a bar from elsewhere than the timeline configuration is edged in (the resource
+   * allocation's full colour, whose fill fades), darkened by the timeline where it stands out too
+   * little from the rows (WCAG 1.4.11). No edge without one.
+   */
+  edgeColor?: string
   category?: string
   elementType?: string
   filter?: boolean

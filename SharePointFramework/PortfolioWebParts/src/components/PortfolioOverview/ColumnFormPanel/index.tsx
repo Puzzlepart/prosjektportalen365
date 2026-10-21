@@ -41,6 +41,10 @@ export const ColumnFormPanel: FC = () => {
 
   if (!context) return null
 
+  // What cannot change for an existing column says so (WCAG 3.3.2).
+  const lockedWhenEditing = (description: string) =>
+    isEditing ? `${description} ${strings.ColumnFieldLockedText}` : description
+
   return (
     <BasePanel
       open={context.state.columnForm.isOpen}
@@ -81,12 +85,12 @@ export const ColumnFormPanel: FC = () => {
           <FieldContainer
             iconName='TextNumberFormat'
             label={strings.InternalNameLabel}
-            description={strings.InternalNameDescription}
+            description={lockedWhenEditing(strings.InternalNameDescription)}
             required={true}
           >
             <Input
               value={column.get('internalName')}
-              disabled={isEditing}
+              readOnly={isEditing}
               onChange={(_, data) => setColumn('internalName', data.value)}
               placeholder={strings.Placeholder.TextField}
               onBlur={findMatchingSearchProperty}
@@ -95,14 +99,14 @@ export const ColumnFormPanel: FC = () => {
           <FieldContainer
             iconName='DatabaseSearch'
             label={strings.SearchPropertyLabel}
-            description={strings.SearchPropertyDescription}
+            description={lockedWhenEditing(strings.SearchPropertyDescription)}
             required={true}
           >
             <ColumnSearchPropertyField
               placeholder={strings.SearchPropertyPlaceholder}
               value={column.get('fieldName')}
               onChange={(value) => setColumn('fieldName', value)}
-              disabled={isEditing}
+              readOnly={isEditing}
               // managedProperties={context.state.managedProperties} - AutoComplete doesn't properly when trying to create a new by just typing. Removed for now to use input instead.
             />
             {/* {columnMessages.get('fieldName') && (

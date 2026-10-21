@@ -129,7 +129,7 @@ const transformGroups = (searchResults: IEnrichedAllocationSearchResult[]): ITim
  *
  * @returns Timeline items
  */
-const transformItems = (
+export const transformItems = (
   searchResults: IEnrichedAllocationSearchResult[],
   groups: ITimelineGroup[],
   props: IResourceAllocationProps
@@ -172,6 +172,9 @@ const transformItems = (
         itemProps: { style },
         props: res,
         data: {
+          // The fill fades with the allocation, so the bar is edged in the full colour, which the
+          // timeline darkens where it stands out too little from its rows (WCAG 1.4.11).
+          edgeColor: `rgb(${backgroundColor})`,
           project: isAbsence ? '' : res.SiteTitle,
           projectUrl: isAbsence ? '' : res.SiteName,
           type: isAbsence ? strings.ResourceAbsenceLabel : strings.ResourceLabel,

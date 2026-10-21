@@ -13,10 +13,12 @@ export const UserColumn: ColumnRenderComponent = ({ columnValue, column }) => {
       <span>
         {columnValue?.split(';').map((value, key) => (
           <span key={key}>
+            {/* The names are only in the tooltips, which show on focus too (WCAG 2.1.1). */}
             <Tooltip content={value} relationship='label' withArrow>
               <Avatar
-                title={value}
                 name={value}
+                tabIndex={0}
+                className={styles.person}
                 size={28}
                 color='colorful'
                 style={{ marginRight: 4 }}
@@ -37,6 +39,8 @@ export const UserColumn: ColumnRenderComponent = ({ columnValue, column }) => {
         <Avatar
           title={text}
           name={text}
+          // The name is beside it: read once, not twice (WCAG 1.1.1).
+          aria-hidden
           image={{
             src: getUserPhoto(email)
           }}
@@ -55,6 +59,7 @@ export const UserColumn: ColumnRenderComponent = ({ columnValue, column }) => {
       <Avatar
         title={columnValue}
         name={columnValue}
+        aria-hidden
         size={28}
         color='colorful'
         style={{ marginRight: 4 }}

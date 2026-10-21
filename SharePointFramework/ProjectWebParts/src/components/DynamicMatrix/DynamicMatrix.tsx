@@ -8,10 +8,20 @@ import { IDynamicMatrixProps } from './types'
 import { FluentProvider } from '@fluentui/react-components'
 import { customLightTheme } from 'pp365-shared-library'
 
+/**
+ * The matrix, drawn as a grid and read as a table (WCAG 1.3.1): the top row's headers are the
+ * columns' (consequence), each row's first the row's (probability), so a screen reader tells where
+ * an element sits.
+ */
 export const DynamicMatrix: FC<IDynamicMatrixProps> = (props) => (
   <DynamicMatrixContext.Provider value={{ props }}>
     <FluentProvider theme={customLightTheme}>
-      <div className={styles.dynamicMatrix} style={{ width: props.width }}>
+      <div
+        className={styles.dynamicMatrix}
+        style={{ width: props.width }}
+        role='table'
+        aria-label={props.title}
+      >
         {props.configuration.map((row, rowIndex) => {
           const cells = row.map((cell, cellIndex) => {
             const elements = props.getElementsForCell(cell)
@@ -31,6 +41,7 @@ export const DynamicMatrix: FC<IDynamicMatrixProps> = (props) => (
                     key={cellIndex}
                     text={cell.cellValue}
                     className={cell.className}
+                    role={rowIndex === 0 ? 'columnheader' : 'rowheader'}
                   />
                 )
               }

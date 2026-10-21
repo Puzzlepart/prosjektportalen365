@@ -20,6 +20,7 @@ declare interface IPortfolioExtensionsStrings {
   CreateLabel: string
   HelpContentAvailableDescription: string
   HelpContentAvailableLabel: string
+  HelpContentDialogTitle: string
   HelpContentUnavailableDescription: string
   HelpContentUnavailableLabel: string
   IdeaAlreadyApproved: string
@@ -43,12 +44,14 @@ declare interface IPortfolioExtensionsStrings {
   LatestGitHubReleaseHighlightsLabel: string
   LinksListDescription: string
   LinksListLabel: string
+  LinksListOpenLabel: string
   SeeAllInstallationsLinkText: string
   SetRecommendationSubtitle: string
   SetRecommendationTitle: string
   SiteContentsLabel: string
   SiteSettingsDescription: string
   SiteSettingsLabel: string
+  SiteSettingsMoreLabel: string
   SubmitLabel: string
   IdeaRegistrationIncludeString: string
   IdeaProcessingCommandTitle: string
@@ -60,9 +63,9 @@ declare interface IPortfolioExtensionsStrings {
   FavoriteProjectsNoItemsMessage: string
   TemplatePackageCatalogCommandTitle: string
   CatalogDrawerTitle: string
+  CatalogToolbarLabel: string
   CatalogSubtitle: string
   CatalogUserGuideLinkText: string
-  CatalogCloseAria: string
   CatalogLoadingText: string
   CatalogSearchPlaceholder: string
   CatalogFilterTypeLabel: string
@@ -77,6 +80,7 @@ declare interface IPortfolioExtensionsStrings {
   CatalogSortName: string
   CatalogViewGrid: string
   CatalogViewList: string
+  CatalogViewLabel: string
   CatalogTypeTemplate: string
   CatalogTypeExtension: string
   CatalogTypeContent: string
@@ -139,6 +143,7 @@ declare interface IPortfolioExtensionsStrings {
   CatalogStepListContent: string
   CatalogStepListContentDetail: string
   CatalogAdvancedLogLabel: string
+  CatalogInstallProgressLabel: string
   CatalogLogDownloaded: string
   CatalogLogManifestValidated: string
   CatalogLogHubProvisioned: string

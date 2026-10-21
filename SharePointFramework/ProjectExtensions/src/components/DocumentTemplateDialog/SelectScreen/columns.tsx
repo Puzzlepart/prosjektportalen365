@@ -1,8 +1,8 @@
-import { Link } from '@fluentui/react-components'
 import { FileTypeIcon, IListColumn, getId } from 'pp365-shared-library'
 import { TemplateItem } from 'models'
 import * as ProjectExtensionsStrings from 'ProjectExtensionsStrings'
 import React from 'react'
+import { FolderLink } from '../FolderLink'
 
 export default ({ setFolder }: { setFolder: (folder: TemplateItem) => void }) =>
   [
@@ -22,9 +22,11 @@ export default ({ setFolder }: { setFolder: (folder: TemplateItem) => void }) =>
       onRender: (item: TemplateItem) => {
         if (item.isFolder) {
           return (
-            <Link onClick={() => setFolder(item)}>
-              <span style={{ marginLeft: 4 }}>{item.name}</span>
-            </Link>
+            <FolderLink
+              name={item.name}
+              url={item.serverRelativeUrl}
+              onClick={() => setFolder(item)}
+            />
           )
         }
         return item.name

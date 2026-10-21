@@ -32,6 +32,7 @@ export const fetchData = async (web: IWeb, column?: ProjectColumn) => {
       .getByTitle(props.columnConfigListName)
       .items.select(
         'GtPortfolioColumnColor',
+        'GtPortfolioColumnIconName',
         'GtPortfolioColumnValue',
         'GtPortfolioColumn/Title',
         'GtPortfolioColumn/GtInternalName'
@@ -48,6 +49,8 @@ export const fetchData = async (web: IWeb, column?: ProjectColumn) => {
     obj[key].name = obj[key].name || item.GtPortfolioColumn.Title
     obj[key].colors = obj[key].colors || {}
     obj[key].colors[item.GtPortfolioColumnValue] = item.GtPortfolioColumnColor
+    obj[key].icons = obj[key].icons || {}
+    obj[key].icons[item.GtPortfolioColumnValue] = item.GtPortfolioColumnIconName
     return obj
   }, {})
   return statusReports.map(

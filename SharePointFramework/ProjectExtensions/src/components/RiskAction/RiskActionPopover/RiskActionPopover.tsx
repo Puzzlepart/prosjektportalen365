@@ -2,6 +2,7 @@ import {
   Button,
   MessageBar,
   MessageBarBody,
+  MessageBarTitle,
   Popover,
   PopoverSurface,
   mergeClasses
@@ -18,10 +19,13 @@ import { useRiskActionPopover } from './useRiskActionPopover'
 /**
  * Risk action popover. This popover is used to handle actions for risk actions. Children
  * are rendered inside the popover, so the `PopoverTrigger` component can be used anywhere
- * within the children component(s).
+ * within the children component(s). It keeps the focus while it is open (`trapFocus`), so Tab
+ * does not leave it for the page's start, and is named by its title.
  */
 export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
   const {
+    titleId,
+    syncError,
     infoText,
     isPopoverOpen,
     onPopoverOpenChange,
@@ -39,18 +43,20 @@ export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
         withArrow
         closeOnIframeFocus
         closeOnScroll
+        trapFocus
         open={isPopoverOpen}
         onOpenChange={onPopoverOpenChange}
       >
         <div>{props.children}</div>
-        <PopoverSurface className={styles.riskActionPopover}>
-          <div className={styles.title}>
+        <PopoverSurface className={styles.riskActionPopover} aria-labelledby={titleId}>
+          <div className={styles.title} id={titleId}>
             {format(strings.RiskActionPopoverTitle, itemContext.title)}
           </div>
           <MessageBar intent='info' className={mergeClasses(styles.alert, styles.infoText)}>
             <MessageBarBody>{infoText}</MessageBarBody>
           </MessageBar>
-          <div hidden={!lastUpdated || !showLastSyncTime}>
+          {/* Rendered only when shown: a message bar announces itself, hidden or not. */}
+          {lastUpdated && showLastSyncTime && (
             <MessageBar
               className={mergeClasses(styles.alert, styles.lastUpdated)}
               icon={getFluentIcon('ArrowSync', { color: 'green' })}
@@ -59,7 +65,15 @@ export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
                 {format(strings.RiskActionPopoverLastUpdated, lastUpdated)}
               </MessageBarBody>
             </MessageBar>
-          </div>
+          )}
+          {syncError !== undefined && (
+            <MessageBar intent='error' className={styles.alert}>
+              <MessageBarBody>
+                <MessageBarTitle>{strings.RiskActionSyncFailed}</MessageBarTitle>
+                {syncError}
+              </MessageBarBody>
+            </MessageBar>
+          )}
           <div className={styles.actions}>
             <div>
               <Button

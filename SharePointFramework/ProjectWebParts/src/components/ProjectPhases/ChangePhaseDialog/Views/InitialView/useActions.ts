@@ -20,7 +20,9 @@ export function useActions(
   const actions = [
     {
       text: strings.StatusNotRelevant,
-      disabled: !isCommentValid || isDisabled.value,
+      // Focusable while unavailable, so the keyboard and a screen reader reach the reason in the
+      // title, and the focus stays on the button while the status is saved.
+      disabledFocusable: !isCommentValid || isDisabled.value,
       title: isCommentValid
         ? strings.CheckpointNotRelevantTooltip
         : strings.CheckpointNotRelevantTooltipCommentEmpty,
@@ -32,7 +34,7 @@ export function useActions(
     },
     {
       text: strings.StatusStillOpen,
-      disabled: !isCommentValid || isDisabled.value,
+      disabledFocusable: !isCommentValid || isDisabled.value,
       title: isCommentValid
         ? strings.CheckpointStillOpenTooltip
         : strings.CheckpointStillOpenTooltipCommentEmpty,
@@ -44,7 +46,7 @@ export function useActions(
     },
     {
       text: strings.StatusClosed,
-      disabled: isDisabled.value,
+      disabledFocusable: isDisabled.value,
       title: strings.CheckpointDoneTooltip,
       onClick: () => {
         isDisabled.setTrue()

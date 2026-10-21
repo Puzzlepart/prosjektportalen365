@@ -7,10 +7,16 @@ define([], function () {
     CloseText: 'Lukk',
     Aria: {
       InfoLabelTitle: 'Informasjon om {0}',
+      InstrumentGaugeLabel: 'Siste måling {0}, startverdi {1}, målverdi {2}',
       MenuOverflowCount: '{0} flere elementer',
       ProjectTitle: 'Logo for prosjekt: {0}',
       SaveTitle: 'Lagre',
-      SaveDisabledTitle: 'Det er påkrevde felter som ikke er utfylt, fyll ut disse for å lagre'
+      SaveDisabledTitle: 'Det er påkrevde felter som ikke er utfylt, fyll ut disse for å lagre',
+      SearchBoxClearLabel: 'Tøm søket',
+      TimelineScrollLabel: 'Tidslinjen. Rull i tid med piltastene',
+      TrendBetter: 'Bedre enn forrige måling',
+      TrendTargetReached: 'Målet er nådd',
+      TrendWorse: 'Dårligere enn forrige måling'
     },
     DatePicker: {
       GoToToday: 'Gå til i dag',
@@ -58,6 +64,7 @@ define([], function () {
     FiltersString: 'Filtre',
     FilterText: 'Filtrer',
     FilterPanelEmptyTitle: 'Ingen filtre tilgjengelig',
+    PeoplePickerExpandLabel: 'Vis forslag',
     PeoplePickerNoResults: 'Fant ingen personer',
     PeoplePickerSelectedLabel: 'Valgte personer',
     FilterPanelEmptyMessage:
@@ -73,6 +80,7 @@ define([], function () {
     ProjectTimelineInfoText:
       'Her listes alle prosjektene med start- og sluttdato. Prosjekttidslinjen støtter også faser, delfaser og milepæler. For å zoome inn/ut i tidslinje: ALT+Musehjul.',
     ProjectTimelineTitle: 'Prosjekttidslinje',
+    TimelineTodayLabel: 'I dag',
     ProjectTimelineItemInfo: '{0} - prosjektets tidsforløp',
     ProgramTimelineTitle: 'Programtidslinje',
     ResourceLabel: 'Ressurs',

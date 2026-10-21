@@ -1,14 +1,63 @@
 import { Skeleton, SkeletonItem } from '@fluentui/react-components'
 import { ProjectListModel } from 'pp365-shared-library'
-import React, { FC, useMemo } from 'react'
+import React, { FC } from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
-import { FixedSizeList } from 'react-window'
+import { FixedSizeList, ListChildComponentProps } from 'react-window'
 import { List, ListContext } from './List'
 import { ProjectCard, ProjectCardContext } from './ProjectCard'
 import styles from './ProjectList.module.scss'
 import { IProjectListContext } from './context'
 
 const SKELETON_CARD_COUNT = 12
+
+/** What a row of cards gets: the projects shown, how many fit a row, and how a card's context is made. */
+interface IProjectRowData {
+  projects: ProjectListModel[]
+  itemsPerRow: number
+  isLoading: boolean
+  createCardContext: IProjectListContext['createCardContext']
+}
+
+/**
+ * A row of project cards, or of their skeletons while the projects load. A component of its own,
+ * given to `FixedSizeList` once: an inline function there was a new component on every render of
+ * the list, so every row and card was made anew, and the card button that opened the project
+ * information was gone when it closed, leaving the focus nowhere to return to (WCAG 2.4.3).
+ */
+const ProjectRow: FC<ListChildComponentProps<IProjectRowData>> = ({ index, style, data }) => {
+  const { projects, itemsPerRow, isLoading, createCardContext } = data
+  const first = index * itemsPerRow
+  if (isLoading) {
+    const count = Math.min(itemsPerRow, Math.max(0, SKELETON_CARD_COUNT - first))
+    return (
+      <div className={styles.projectRow} style={style}>
+        {Array.from({ length: count }).map((_, idx) => (
+          <ProjectCardContext.Provider
+            key={`skeleton-${first + idx}`}
+            value={createCardContext(undefined)}
+          >
+            <ProjectCard />
+          </ProjectCardContext.Provider>
+        ))}
+      </div>
+    )
+  }
+  return (
+    <div className={styles.projectRow} style={style}>
+      {projects
+        .slice(first, first + itemsPerRow)
+        .filter(Boolean)
+        .map((project, idx) => (
+          <ProjectCardContext.Provider
+            key={project.siteId ?? project.url ?? first + idx}
+            value={createCardContext(project)}
+          >
+            <ProjectCard />
+          </ProjectCardContext.Provider>
+        ))}
+    </div>
+  )
+}
 
 export function useProjectListRenderer({
   props,
@@ -22,58 +71,6 @@ export function useProjectListRenderer({
    * @param projects - Projects to render
    */
   const renderProjects = (projects: ProjectListModel[]) => {
-    const projectRow: FC<{
-      index: number
-      style: React.CSSProperties
-      itemsPerRow: number
-    }> = ({ index, style, itemsPerRow }) => {
-      const items = useMemo(() => {
-        const convertedIndex = index * itemsPerRow
-        const items = []
-
-        items.push(
-          ...projects
-            .slice(convertedIndex, convertedIndex + itemsPerRow)
-            .filter(Boolean)
-            .map((project, idx) => (
-              <ProjectCardContext.Provider key={idx} value={createCardContext(project)}>
-                <ProjectCard />
-              </ProjectCardContext.Provider>
-            ))
-        )
-        return items
-      }, [itemsPerRow])
-
-      return (
-        <div className={styles.projectRow} key={index} style={style}>
-          {items}
-        </div>
-      )
-    }
-
-    const skeletonRow: FC<{
-      index: number
-      style: React.CSSProperties
-      itemsPerRow: number
-    }> = ({ index, style, itemsPerRow }) => {
-      const convertedIndex = index * itemsPerRow
-      const remaining = Math.max(0, SKELETON_CARD_COUNT - convertedIndex)
-      const count = Math.min(itemsPerRow, remaining)
-      const items = Array.from({ length: count }).map((_, idx) => (
-        <ProjectCardContext.Provider
-          key={`skeleton-${convertedIndex + idx}`}
-          value={createCardContext(undefined)}
-        >
-          <ProjectCard />
-        </ProjectCardContext.Provider>
-      ))
-      return (
-        <div className={styles.projectRow} key={`skeleton-row-${index}`} style={style}>
-          {items}
-        </div>
-      )
-    }
-
     switch (state.renderMode) {
       case 'tiles': {
         return (
@@ -87,7 +84,7 @@ export function useProjectListRenderer({
               const listHeight = Math.ceil(itemCount * 300)
 
               return (
-                <FixedSizeList
+                <FixedSizeList<IProjectRowData>
                   className={styles.projectsSection}
                   style={{ gap: 12 }}
                   height={listHeight < 880 ? listHeight : 880}
@@ -95,12 +92,9 @@ export function useProjectListRenderer({
                   overscanCount={2}
                   itemSize={290}
                   width={width}
+                  itemData={{ projects, itemsPerRow, isLoading, createCardContext }}
                 >
-                  {({ index, style }) =>
-                    isLoading
-                      ? skeletonRow({ index, style, itemsPerRow })
-                      : projectRow({ index, style, itemsPerRow })
-                  }
+                  {ProjectRow}
                 </FixedSizeList>
               )
             }}

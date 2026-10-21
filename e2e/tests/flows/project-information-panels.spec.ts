@@ -1,4 +1,5 @@
 import { baseURL } from '../../playwright.config'
+import { scanAccessibility, SURFACES } from '../fixtures/a11y'
 import { configuredUrl, expect, test, webPartByAlias } from '../fixtures/pp365'
 
 /**
@@ -9,7 +10,9 @@ import { configuredUrl, expect, test, webPartByAlias } from '../fixtures/pp365'
  * the placeholder sat against the border.
  *
  * The panel a project card opens names the project in its header, on the close button's line:
- * it once had an empty header and the name as a web part title in its body.
+ * it once had an empty header and the name as a web part title in its body. It is scanned with
+ * axe, and closing it gives the focus back to the card's button: the panel opens from state, so
+ * Fluent's drawer had no trigger to return it to and left it on the page's start.
  */
 const hub = baseURL.replace(/\/+$/, '')
 const projectUrl = configuredUrl(process.env.E2E_PROJECT_URL)
@@ -96,9 +99,14 @@ test('the panel a project card opens names the project in its header, not in its
     drawer.locator('.fui-DrawerBody').getByRole('heading', { name, exact: true }),
     'the body does not repeat the name as a title'
   ).toHaveCount(0)
-  await drawer
-    .locator('.fui-DrawerHeader')
-    .getByRole('button', { name: /^lukk$|^close$/i })
-    .click()
+  await scanAccessibility(page, {
+    component: 'ProjectInformationPanel',
+    include: [SURFACES.drawer]
+  })
+  await page.keyboard.press('Escape')
   await expect(drawer).toBeHidden({ timeout: 10_000 })
+  await expect(
+    open,
+    "closing the panel gives the focus back to the card's button"
+  ).toBeFocused()
 })

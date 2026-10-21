@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Skeleton, SkeletonItem } from '@fluentui/react-components'
 import type { SkeletonProps } from '@fluentui/react-components'
+import strings from 'SharedLibraryStrings'
 import styles from './LoadingSkeleton.module.scss'
 
 /** Widths available for a skeleton row, as defined in the stylesheet. */
@@ -18,9 +19,13 @@ export interface ILoadingSkeletonProps extends Partial<SkeletonProps> {
 
 const DEFAULT_ROWS: LoadingSkeletonRow[] = ['xlarge', 'large', 'medium']
 
+/**
+ * Placeholder rows while something loads. Fluent's `Skeleton` is a progress bar to assistive
+ * technology, which needs a name (WCAG 4.1.2): "Laster..." unless the caller gives one.
+ */
 export const LoadingSkeleton = ({ rows = DEFAULT_ROWS, ...props }: ILoadingSkeletonProps) => {
   return (
-    <Skeleton className={styles.loadingSkeleton} {...props}>
+    <Skeleton className={styles.loadingSkeleton} aria-label={strings.LoadingText} {...props}>
       {rows.map((row, index) => (
         <SkeletonItem key={index} className={styles[row]} />
       ))}

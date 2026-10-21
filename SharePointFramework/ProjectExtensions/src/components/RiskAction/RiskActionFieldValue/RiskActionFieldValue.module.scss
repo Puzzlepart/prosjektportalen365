@@ -3,14 +3,27 @@
   display: block;
   height: 100%;
 
-  .alert {
+  // The look of the info message bar it replaces: a light box with an icon, the cell's small text.
+  .noActions {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    min-height: 24px;
+    padding: 4px 8px;
     white-space: pre-wrap;
+    text-align: left;
     font-size: 10px;
+    font-weight: var(--fontWeightRegular);
+    line-height: normal;
+    color: var(--colorNeutralForeground1);
+    background-color: var(--colorNeutralBackground3);
+    border: var(--strokeWidthThin) solid var(--colorNeutralStroke1);
+    border-radius: var(--borderRadiusMedium);
 
-    // The message bar's body sets its own size; the cell's text is smaller.
-    :global(.fui-MessageBarBody) {
-      font-size: inherit;
-      line-height: normal;
+    :global(.fui-Button__icon) {
+      color: var(--colorNeutralForeground3);
     }
   }
 
@@ -31,11 +44,24 @@
       flex-wrap: wrap;
     }
 
+    // Shown under the pointer and when the keyboard reaches it; at 0.2 its text read 1.3:1, and
+    // it stayed faint while it had the focus (WCAG 1.4.3, 2.4.7). Without a pointer that hovers
+    // (a touch screen) it shows always.
     .adminButton {
       margin: 10px 0 0 0;
       padding: 0;
-      opacity: 0.2;
-      transition: opacity 0.8 s ease-in-out;
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out;
+
+      @media (hover: none) {
+        opacity: 1;
+      }
+    }
+
+    &:focus-within {
+      .adminButton {
+        opacity: 1;
+      }
     }
   }
 }

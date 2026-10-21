@@ -1,11 +1,12 @@
 import { SPDataAdapter } from 'data'
 import { SPFolder, createDataGridColumns } from 'pp365-shared-library'
 import strings from 'ProjectExtensionsStrings'
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { TemplateSelectorContext } from '../../../extensions/templateSelector/context'
 import { DocumentTemplateDialogContext } from '../context'
 import { IFolderNavigationItem } from '../FolderNavigation'
 import { BROWSE_FOLDER, OPEN_LIBRARY, SELECT_FOLDER, SHOW_LIBRARIES } from '../reducer'
+import { useFolderFocus } from '../useFolderFocus'
 import columns from './columns'
 
 /**
@@ -47,6 +48,8 @@ export function useTargetFolderScreen() {
     () => [...folders].sort((a, b) => (a.name > b.name ? 1 : -1)),
     [folders]
   )
+  const containerRef = useRef<HTMLDivElement>(null)
+  useFolderFocus(browse.folder ?? '', containerRef)
 
   // The way to the list of libraries, when the site has more than one.
   const navigationItems: IFolderNavigationItem[] | undefined =
@@ -55,6 +58,7 @@ export function useTargetFolderScreen() {
       : undefined
 
   return {
+    containerRef,
     browse,
     folders: sortedFolders,
     columns: grid.columns,

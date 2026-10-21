@@ -79,6 +79,7 @@ export const ArchiveView: FC = () => {
             onClick={() => toggleSection(section.key)}
             role='button'
             tabIndex={0}
+            aria-expanded={section.expanded}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault()

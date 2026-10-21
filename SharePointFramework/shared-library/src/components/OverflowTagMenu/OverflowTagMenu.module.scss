@@ -12,15 +12,26 @@ div > .menuItem {
 
   .tagGroup {
     display: flex;
+
+    // A tag that does not fit ends in «…» rather than being cut off, as the one tag always shown
+    // was in a narrow cell or with more text spacing (WCAG 1.4.12). Its full text is its title,
+    // and what a screen reader reads.
+    .tag {
+      min-width: 0;
+      max-width: 100%;
+
+      :global(.fui-Tag__primaryText) {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
   }
 }
 
 .tag {
   cursor: default !important;
-
-  button {
-    cursor: default !important;
-  }
 
   &.tagPreview {
     max-width: 50%;

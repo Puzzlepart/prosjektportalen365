@@ -1,4 +1,5 @@
-import { Button, MessageBar, MessageBarBody, PopoverTrigger } from '@fluentui/react-components'
+import { Button, PopoverTrigger } from '@fluentui/react-components'
+import { InfoRegular } from '@fluentui/react-icons'
 import strings from 'ProjectExtensionsStrings'
 import React, { FC, ReactElement } from 'react'
 import { useRiskActionFieldCustomizerContext } from '../../../extensions/riskAction/context'
@@ -34,6 +35,8 @@ export const RiskActionFieldValue: FC<IRiskActionFieldValueProps> = (incomingPro
         <div
           className={styles.linkList}
           style={{ flexDirection: horizontalLayout ? 'row' : 'column', gap }}
+          role='list'
+          aria-label={strings.RiskActionTasksLabel}
         >
           {tasks.map((task, index) => (
             <PlannerTaskItem key={index} task={task} />
@@ -54,13 +57,17 @@ export const RiskActionFieldValue: FC<IRiskActionFieldValueProps> = (incomingPro
         </PopoverTrigger>
       )
     } else {
+      // A button with the look of an info message: a message bar announces itself as it mounts,
+      // so one in every row of the list was read out as the list loaded (WCAG 4.1.3).
       element = (
         <PopoverTrigger disableButtonEnhancement>
-          <MessageBar intent='info' className={styles.alert}>
-            <MessageBarBody>
-              {context.dataAdapter.globalSettings.get('RiskActionPlannerNoActionsText')}
-            </MessageBarBody>
-          </MessageBar>
+          <Button
+            className={styles.noActions}
+            appearance='transparent'
+            icon={<InfoRegular fontSize={16} />}
+          >
+            {context.dataAdapter.globalSettings.get('RiskActionPlannerNoActionsText')}
+          </Button>
         </PopoverTrigger>
       )
     }

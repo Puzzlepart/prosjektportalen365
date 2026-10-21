@@ -2,25 +2,38 @@
 // Babel, so mocks are not hoisted. An open Fluent popover or menu is positioned against its
 // trigger, which costs seconds per test under jsdom (see the testing guide), so the footer's
 // popovers and menus are plain stand-ins that keep Fluent's contract: the trigger toggles through
-// `onOpenChange`, and the surface shows while open.
+// `onOpenChange` (a render function gets its props, as a split button's menu button does), and the
+// surface shows while open, with its props, marked when it was asked to trap the focus.
 jest.mock('@fluentui/react-components', () => {
   const actual = jest.requireActual('@fluentui/react-components')
   const React = jest.requireActual('react')
   const overlay = (role: string) => {
-    const Context = React.createContext({ open: false, toggle: (_event: any) => undefined })
-    const Root = ({ open: controlled, onOpenChange, children }: any) => {
+    const Context = React.createContext({
+      open: false,
+      toggle: (_event: any) => undefined,
+      trapFocus: undefined
+    })
+    const Root = ({ open: controlled, onOpenChange, trapFocus, children }: any) => {
       const [uncontrolled, setUncontrolled] = React.useState(false)
       const open = controlled ?? uncontrolled
       const toggle = (event: any) => {
         setUncontrolled(!open)
         onOpenChange?.(event, { open: !open })
       }
-      return React.createElement(Context.Provider, { value: { open, toggle } }, children)
+      return React.createElement(Context.Provider, { value: { open, toggle, trapFocus } }, children)
     }
-    const Trigger = ({ children }: any) =>
-      React.createElement('span', { onClick: React.useContext(Context).toggle }, children)
-    const Surface = ({ children }: any) =>
-      React.useContext(Context).open ? React.createElement('div', { role }, children) : null
+    const Trigger = ({ children }: any) => {
+      const { toggle } = React.useContext(Context)
+      return typeof children === 'function'
+        ? children({ onClick: toggle })
+        : React.createElement('span', { onClick: toggle }, children)
+    }
+    const Surface = ({ children, ...props }: any) => {
+      const { open, trapFocus } = React.useContext(Context)
+      return open
+        ? React.createElement('div', { role, ...props, 'data-trap-focus': trapFocus }, children)
+        : null
+    }
     return { Root, Trigger, Surface }
   }
   const popover = overlay('dialog')
@@ -36,14 +49,16 @@ jest.mock('@fluentui/react-components', () => {
     MenuPopover: menu.Surface,
     MenuList: ({ children }: any) => React.createElement(React.Fragment, null, children),
     MenuItem: ({ children, onClick }: any) =>
-      React.createElement('button', { role: 'menuitem', onClick }, children)
+      React.createElement('button', { role: 'menuitem', onClick }, children),
+    MenuItemLink: ({ children, href, target }: any) =>
+      React.createElement('a', { role: 'menuitem', href, target }, children)
   }
 })
 
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { HelpContentModel, IGitHubRelease, InstallationEntry } from 'extensions/footer/types'
 import strings from 'PortfolioExtensionsStrings'
-import { formatDate } from 'pp365-shared-library'
+import { formatDate, getContrastRatio } from 'pp365-shared-library'
 import * as React from 'react'
 import resource from 'SharedResources'
 import { useAssistant } from './Assistant/useAssistant'
@@ -156,16 +171,22 @@ describe('Footer', () => {
     expect(screen.queryByText(strings.ConfigurationLabel)).toBeNull()
   })
 
-  it("opens the hub's site settings, its site contents and the configuration page", () => {
+  it("links to the hub's site settings, its site contents and the configuration page (WCAG 4.1.2)", () => {
     render(<Footer {...footerProps()} />)
-    fireEvent.click(screen.getByText(strings.SiteSettingsLabel))
-    expect(open).toHaveBeenCalledWith(`${HUB}/_layouts/15/settings.aspx`, '_blank')
-    fireEvent.click(screen.getByText(strings.SiteContentsLabel))
-    expect(open).toHaveBeenCalledWith(`${HUB}/_layouts/15/viewlsts.aspx`, '_blank')
-    fireEvent.click(screen.getByText(strings.ConfigurationLabel))
-    expect(open).toHaveBeenCalledWith(
-      `${HUB}/SitePages/${resource.ClientSidePages_Configuration_PageName}`,
-      '_blank'
+    // What goes somewhere is a link, which can be opened where the user wants it.
+    expect(screen.getByRole('link', { name: strings.SiteSettingsLabel })).toHaveAttribute(
+      'href',
+      `${HUB}/_layouts/15/settings.aspx`
+    )
+    // The split button's menu button has a name of its own: without one it took the settings'.
+    fireEvent.click(screen.getByRole('button', { name: strings.SiteSettingsMoreLabel }))
+    expect(screen.getByRole('menuitem', { name: strings.SiteContentsLabel })).toHaveAttribute(
+      'href',
+      `${HUB}/_layouts/15/viewlsts.aspx`
+    )
+    expect(screen.getByRole('link', { name: strings.ConfigurationLabel })).toHaveAttribute(
+      'href',
+      `${HUB}/SitePages/${resource.ClientSidePages_Configuration_PageName}`
     )
   })
 
@@ -181,6 +202,23 @@ describe('Footer', () => {
     fireEvent.click(trigger)
     expect(screen.getByText('Frisbeegolfbane')).toBeInTheDocument()
     expect(loadFavoriteProjects).toHaveBeenCalledTimes(1)
+  })
+
+  it('keeps the focus in the favourite projects and the installation while open, each named (WCAG 2.4.3, 4.1.2)', async () => {
+    render(<Footer {...footerProps()} />)
+    fireEvent.click(screen.getByText(strings.FavoriteProjectsLabel, { selector: 'button' }))
+    // Without the trap, Tab from the last link went to the top of the page, leaving it open.
+    expect(screen.getByRole('dialog', { name: strings.FavoriteProjectsLabel })).toHaveAttribute(
+      'data-trap-focus',
+      'true'
+    )
+    await screen.findByText(strings.FavoriteProjectsNoItemsMessage)
+    fireEvent.click(screen.getByText('v1.15.0.a1b2c3d (test)'))
+    expect(screen.getByRole('dialog', { name: strings.LastInstallHeaderText })).toHaveAttribute(
+      'data-trap-focus',
+      'true'
+    )
+    await screen.findByText('1.15.2')
   })
 
   it('says so when the user follows no projects', async () => {
@@ -202,9 +240,16 @@ describe('Footer', () => {
       <Footer {...footerProps({ loadLinks: jest.fn(() => Promise.resolve(links)) })} />
     )
     fireEvent.click(screen.getByText(strings.LinksListLabel))
-    fireEvent.click(await screen.findByText('Alfa'))
-    expect(open).toHaveBeenCalledWith('https://alfa.example', '_blank')
+    expect(await screen.findByRole('menuitem', { name: 'Alfa' })).toHaveAttribute(
+      'href',
+      'https://alfa.example'
+    )
     expect(screen.getByText('Kun for administratorer')).toBeInTheDocument()
+    // The list the links come from is in the menu: the tooltip held a link no keyboard reached.
+    expect(screen.getByRole('menuitem', { name: strings.LinksListOpenLabel })).toHaveAttribute(
+      'href',
+      `${HUB}/${resource.Lists_Links_Url}/AllItems.aspx`
+    )
     unmount()
 
     render(
@@ -218,6 +263,22 @@ describe('Footer', () => {
     fireEvent.click(screen.getByText(strings.LinksListLabel))
     expect(await screen.findByText('Alfa')).toBeInTheDocument()
     expect(screen.queryByText('Kun for administratorer')).toBeNull()
+  })
+
+  it('moves the focus into the useful links once they have loaded, so the arrow keys and Escape reach the menu (WCAG 2.1.1)', async () => {
+    // The menu opens on a spinner, with nothing in it to take the focus; the focus stayed on the
+    // button, outside the menu, and Escape left the menu open.
+    let resolveLinks: (links: any[]) => void
+    render(
+      <Footer
+        {...footerProps({
+          loadLinks: jest.fn(() => new Promise<any[]>((resolve) => (resolveLinks = resolve)))
+        })}
+      />
+    )
+    fireEvent.click(screen.getByText(strings.LinksListLabel))
+    await act(async () => resolveLinks([{ Url: 'https://alfa.example', Description: 'Alfa' }]))
+    await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Alfa' })).toHaveFocus())
   })
 
   it('shows the installed version and, opened, the installation and the latest release', async () => {
@@ -234,21 +295,26 @@ describe('Footer', () => {
     expect(screen.getByText('Risiko- og mulighetsmatrise for program')).toBeInTheDocument()
     expect(loadGitHubReleases).toHaveBeenCalledTimes(1)
 
-    // A newer release than the installed one offers the download.
-    fireEvent.click(screen.getByText(strings.LatestGitHubReleaseDownloadButtonText))
-    expect(open).toHaveBeenCalledWith(
-      'https://github.com/Puzzlepart/prosjektportalen365/releases',
-      '_blank'
+    // A newer release than the installed one offers the download. Each of these goes somewhere,
+    // so each is a link (WCAG 4.1.2); the release notes' link had no address at all.
+    const link = (name: string) => screen.getByRole('link', { name })
+    expect(link(strings.LatestGitHubReleaseDownloadButtonText)).toHaveAttribute(
+      'href',
+      'https://github.com/Puzzlepart/prosjektportalen365/releases'
     )
-    fireEvent.click(screen.getByText(strings.LatestGitHubReleaseLinkTitle))
-    expect(open).toHaveBeenCalledWith(
-      'https://github.com/Puzzlepart/prosjektportalen365/blob/main/releasenotes/1.15.0.md',
-      '_blank'
+    expect(link(strings.LatestGitHubReleaseLinkTitle)).toHaveAttribute(
+      'href',
+      'https://github.com/Puzzlepart/prosjektportalen365/blob/main/releasenotes/1.15.0.md'
     )
-    fireEvent.click(screen.getByText('1.15.2'))
-    expect(open).toHaveBeenCalledWith(release('v1.15.2').html_url, '_blank')
-    fireEvent.click(screen.getByText(strings.SeeAllInstallationsLinkText))
-    expect(open).toHaveBeenCalledWith(`${HUB}/${resource.Lists_InstallationLog_Url}`, '_blank')
+    expect(link('1.15.2')).toHaveAttribute('href', release('v1.15.2').html_url)
+    expect(link(strings.SeeAllInstallationsLinkText)).toHaveAttribute(
+      'href',
+      `${HUB}/${resource.Lists_InstallationLog_Url}`
+    )
+    // The release's highlights scroll: a named region the keyboard reaches.
+    expect(
+      screen.getByRole('region', { name: strings.LatestGitHubReleaseHighlightsLabel })
+    ).toHaveAttribute('tabindex', '0')
   })
 
   it('offers no download when the installed version is the latest', async () => {
@@ -281,9 +347,16 @@ describe('Footer', () => {
     render(<Footer {...footerProps({ loadHelpContent })} />)
     fireEvent.click(screen.getByText(strings.HelpContentAvailableLabel))
     expect(await screen.findByText('Velkommen')).toBeInTheDocument()
+    // Named by its title, with a button that closes it; it had neither (WCAG 4.1.2).
+    expect(screen.getByRole('dialog', { name: strings.HelpContentDialogTitle })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: strings.CloseLabel })).toBeInTheDocument()
     expect(screen.getByRole('tab', { name: 'Kom i gang' })).toHaveAttribute('aria-selected', 'true')
-    fireEvent.click(screen.getByText('Les mer'))
-    expect(open).toHaveBeenCalledWith('https://hjelp.example/start', '_blank')
+    // The tab's content is its panel (WCAG 1.3.1).
+    expect(screen.getByRole('tabpanel', { name: 'Kom i gang' })).toHaveTextContent('Velkommen')
+    expect(screen.getByRole('link', { name: 'Les mer' })).toHaveAttribute(
+      'href',
+      'https://hjelp.example/start'
+    )
 
     fireEvent.click(screen.getByRole('tab', { name: 'Statusrapport' }))
     expect(screen.getByText('Slik rapporterer du status')).toBeInTheDocument()
@@ -299,23 +372,35 @@ describe('Footer', () => {
     expect(
       await within(dialog).findByText(strings.HelpContentUnavailableDescription)
     ).toBeInTheDocument()
-    expect(screen.getByText(strings.HelpContentUnavailableLabel).closest('button')).toBeDisabled()
+    // Focusable while it cannot be used, so the keyboard reaches the description that says why.
+    const button = screen.getByText(strings.HelpContentUnavailableLabel).closest('button')
+    expect(button).toHaveAttribute('aria-disabled', 'true')
+    expect(button).not.toHaveAttribute('disabled')
   })
 
   it('offers the assistant to users with access, with the page as its source', async () => {
     render(<Footer {...footerProps({ useAssistant: true, hasAssistantAccess: true })} />)
-    fireEvent.click(screen.getByText(strings.AssistantButtonLabel))
+    // The drawer opens from state: the button is where the focus goes back as it closes.
+    const button = screen.getByText(strings.AssistantButtonLabel).closest('button')
+    expect(button.getAttribute('data-tabster')).toContain('restorer')
+    fireEvent.click(button)
     const frame = await screen.findByTitle(strings.AssistantIframeTitle)
+    // A dialog named by its title; its role was 'panel', which is no role.
+    expect(screen.getByRole('dialog', { name: strings.AssistantDrawerTitle })).toBeInTheDocument()
     expect(frame).toHaveAttribute('src', `https://assistent.example/chat?source=${HUB}`)
     expect(frame).toHaveAttribute('allow', 'clipboard-write')
     expect(screen.getByText(strings.AssistantLoadingText)).toBeInTheDocument()
     fireEvent.load(frame)
     expect(screen.queryByText(strings.AssistantLoadingText)).toBeNull()
-    fireEvent.click(screen.getByTitle(strings.AssistantSettingsTooltip))
-    expect(open).toHaveBeenCalledWith(`${HUB}/${resource.Lists_Global_Settings_Url}`, '_blank')
+    // Named, where a title was all; the settings are a list, so a link.
+    expect(screen.getByRole('link', { name: strings.AssistantSettingsTooltip })).toHaveAttribute(
+      'href',
+      `${HUB}/${resource.Lists_Global_Settings_Url}`
+    )
+    expect(screen.getByRole('button', { name: strings.CloseLabel })).toBeInTheDocument()
   })
 
-  it("keeps the assistant's settings to site admins", async () => {
+  it("shows the assistant's settings to site admins only", async () => {
     render(
       <Footer
         {...footerProps({ useAssistant: true, hasAssistantAccess: true }, { isSiteAdmin: false })}
@@ -323,7 +408,9 @@ describe('Footer', () => {
     )
     fireEvent.click(screen.getByText(strings.AssistantButtonLabel))
     await screen.findByTitle(strings.AssistantIframeTitle)
-    expect(screen.getByTitle(strings.AssistantSettingsTooltip)).toBeDisabled()
+    // A link cannot be disabled, and a disabled button said nothing of why.
+    expect(screen.queryByTitle(strings.AssistantSettingsTooltip)).toBeNull()
+    expect(screen.queryByRole('link', { name: strings.AssistantSettingsTooltip })).toBeNull()
   })
 
   it('leaves the assistant out when it is off or the user has no access', () => {
@@ -342,19 +429,32 @@ describe('useLatestGitHubRelease', () => {
       () => useLatestGitHubRelease(LATEST_GIT_HUB_RELEASE_DEFAULT_PROPS)
     ).versionComparisonIconProps
 
+  const {
+    latestGitHubReleaseIsNewerIconColor: newer,
+    latestGitHubReleaseIsOlderIconColor: older,
+    latestGitHubReleaseIsSameIconColor: same
+  } = LATEST_GIT_HUB_RELEASE_DEFAULT_PROPS
+
   it('compares the latest release with the installed version', () => {
     expect(compare('v1.15.2')).toEqual({
       name: 'ArrowCircleUpSparkle',
-      options: { color: 'green', title: strings.LatestGitHubReleaseIsNewerText }
+      options: { color: newer, title: strings.LatestGitHubReleaseIsNewerText }
     })
     expect(compare('v1.14.3')).toEqual({
       name: 'ArrowCircleDown',
-      options: { color: 'orange', title: strings.LatestGitHubReleaseIsOlderText }
+      options: { color: older, title: strings.LatestGitHubReleaseIsOlderText }
     })
     expect(compare('v1.15.0')).toEqual({
       name: 'CheckmarkCircle',
-      options: { color: 'black', title: strings.LatestGitHubReleaseIsSameText }
+      options: { color: same, title: strings.LatestGitHubReleaseIsSameText }
     })
+  })
+
+  it('draws the comparison in colours that stand out from the popover (WCAG 1.4.11)', () => {
+    // Orange was 2:1 against white.
+    for (const color of [newer, older, same]) {
+      expect(getContrastRatio(color, '#ffffff')).toBeGreaterThanOrEqual(3)
+    }
   })
 })
 

@@ -63,6 +63,9 @@ define([], function () {
     PhaseCheckListItem: "Checklist item {0}",
     Aria: {
       CurrentPhaseText: 'This is the current phase. It is therefore not possible to change to this phase.',
+      PhaseListLabel: "The project's phases",
+      ChecklistStepsLabel: 'Checkpoints',
+      MoreSectionsLabel: '{0} more sections',
     },
     SaveText: 'Save',
     UpdatingProjectPropertiesStatusText: 'Updating project properties ...',
@@ -462,9 +465,22 @@ define([], function () {
       Close: 'Close',
       NoItemsFound: 'No items found',
       ListTable: 'List table',
-      GroupByColumn: 'Group by {0}',
+      SortAscending: 'Sort ascending',
+      SortDescending: 'Sort descending',
+      ResizeColumn: 'Resize column',
       FolderNavigation: 'Folder navigation',
-      HiddenFromView: 'Hidden from view'
+      HiddenFromView: 'Hidden from view',
+      RefreshDone: 'The list is updated',
+      ItemsShown: 'Showing {0} of {1} items',
+      FileUploaded: '{0} uploaded',
+      FilesUploaded: '{0} files uploaded',
+      UploadFailed: 'The upload failed',
+      DocumentCreated: '{0} created',
+      DocumentCreateFailed: 'The document was not created',
+      ItemDeleted: 'The item was deleted',
+      ItemsDeleted: '{0} items deleted',
+      DeleteFailed: 'The deletion failed',
+      DefaultListName: 'list'
     }
   }
 })
