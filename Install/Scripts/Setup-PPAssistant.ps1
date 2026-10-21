@@ -672,7 +672,9 @@ function Test-PPAzurePermissions([bool] $VaultFinnes) {
 # Gjør en Azure-tilgangsfeil om til en forklaring. Andre feil slipper gjennom til kalleren.
 function Assert-PPAzureTilgang($Feil, [string] $Hva) {
   if ("$($Feil.Exception.Message)" -match 'AuthorizationFailed|does not have authorization') {
-    throw "Du har ikke lov til å $Hva ($($Feil.Exception.Message)). $($script:AzureTilgangFiks)"
+    # Skriptet gjenbruker en eksisterende Az-innlogging. Er tilgangen gitt etter at den ble laget,
+    # bærer den fortsatt med seg den gamle - da hjelper det å logge ut og inn igjen.
+    throw "Du har ikke lov til å $Hva ($($Feil.Exception.Message)). Har du nettopp fått tilgangen: kjør Disconnect-AzAccount, vent et par minutter og kjør skriptet på nytt med samme parametre - det som er opprettet, gjenbrukes. Ellers: $($script:AzureTilgangFiks)"
   }
 }
 
