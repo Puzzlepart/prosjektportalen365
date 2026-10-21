@@ -315,6 +315,9 @@ function Show-PPSummary($Tenant, $AzContext, $VaultFinnes, $Consent, $SharePoint
   if ($ProvisionFoundry) {
     foreach ($konto in $script:FoundryKontoer.Values) {
       Write-PPPlan 'Foundry-ressurs' ('{0} ({1}) - {2}' -f $konto.Navn, $konto.Location, $(if ($konto.Finnes) { 'finnes, gjenbrukes' } else { "OPPRETTES i $ResourceGroupName" }))
+      if ($konto.KanHaProsjekt) {
+        Write-PPPlan 'Foundry-prosjekt' $(if ($konto.ProsjektFinnes) { "$($konto.Prosjekt) - finnes" } else { "$($konto.Prosjekt) - OPPRETTES (standardprosjekt for Foundry-portalen; assistenten bruker det ikke)" })
+      }
     }
     foreach ($d in $script:FoundryPlan) {
       $status = if ($d.Finnes) { "finnes ($($d.Type)), gjenbrukes" } else { "OPPRETTES ($($d.Type), kapasitet $($d.Kapasitet))" }
@@ -828,6 +831,15 @@ function Test-PPFoundryPlan {
       $rg = ($eksisterende.id -split '/')[4]
       if ($eksisterende.location -ne $konto.Location) { Write-Info "Foundry-ressursen '$($konto.Navn)' ligger i $($eksisterende.location), ikke $($konto.Location) - bruker den som den er." }
       $konto.Location = $eksisterende.location
+      # Prosjekter finnes bare på Foundry-ressurser med allowProjectManagement. En eldre
+      # Azure OpenAI-ressurs får ikke noe prosjekt; assistenten trenger det uansett ikke.
+      $konto.KanHaProsjekt = $eksisterende.kind -eq 'AIServices' -and $eksisterende.properties.allowProjectManagement -eq $true
+      if ($konto.KanHaProsjekt) {
+        try {
+          $prosjekter = @(Get-PPArmList "$($eksisterende.id)/projects?api-version=$CogApiVersion")
+          if ($prosjekter.Count -gt 0) { $konto.Prosjekt = ($prosjekter[0].name -split '/')[-1]; $konto.ProsjektFinnes = $true }
+        } catch {}
+      }
       if ($eksisterende.kind -notin @('AIServices', 'OpenAI')) {
         Add-PPCheck -Navn $sjekk -Status 'MANGLER' -Detalj "finnes, men er av typen $($eksisterende.kind)" -Fiks 'Velg et annet navn med -FoundryName.'
       } elseif ($eksisterende.properties.disableLocalAuth) {
@@ -945,6 +957,34 @@ function Get-PPFoundryConnection($Konto) {
   return @{ Base = $base; Key = (ConvertTo-SecureString $nokler.key1 -AsPlainText -Force) }
 }
 
+# Oppretter et standardprosjekt på ressursen. Assistenten trenger det ikke - den kaller
+# deploymentene på ressursen direkte - men Foundry-portalen krever et prosjekt før den viser
+# noe, og uten det møter kundens administrator «Create a project to continue». Feiler det,
+# er det en advarsel, ikke en stopp.
+function New-PPFoundryProject($Konto) {
+  if (-not $Konto.KanHaProsjekt) { return }
+  if ($Konto.ProsjektFinnes) { Write-Ok "Foundry-prosjekt '$($Konto.Prosjekt)': finnes"; return }
+  if (-not $PSCmdlet.ShouldProcess("$($Konto.Navn)/$($Konto.Prosjekt)", 'Opprette standardprosjekt for Foundry-portalen')) { return }
+  $sti = "$($Konto.Id)/projects/$($Konto.Prosjekt)?api-version=$CogApiVersion"
+  $body = @{
+    location   = $Konto.Location
+    identity   = @{ type = 'SystemAssigned' }
+    tags       = @{ 'pp365-usage' = 'assistant' }
+    properties = @{
+      displayName = $Konto.Prosjekt
+      description = 'Standardprosjekt for Foundry-portalen. Prosjektportalen Assistenten bruker deploymentene på ressursen, ikke dette prosjektet.'
+    }
+  }
+  try {
+    Invoke-PPArm PUT $sti $body | Out-Null
+    Wait-PPArmProvisioning $sti "Foundry-prosjektet '$($Konto.Prosjekt)'" | Out-Null
+    $Konto.ProsjektFinnes = $true
+    Write-Ok "Foundry-prosjekt '$($Konto.Prosjekt)': opprettet"
+  } catch {
+    Write-Warning "Kunne ikke opprette Foundry-prosjektet '$($Konto.Prosjekt)' ($($_.Exception.Message)). Assistenten virker uten. Foundry-portalen ber om et prosjekt første gang ressursen åpnes - det kan opprettes der."
+  }
+}
+
 # Oppretter én deployment som $Type og venter til den er klar. Kaster ved feil, slik at
 # kalleren kan prøve en annen type. Versjonen hentes fra ressursens egen modelliste når
 # forhåndssjekken ikke fant den (eller typen er byttet); finnes den ikke der heller, utelates
@@ -1012,6 +1052,8 @@ function New-PPFoundry {
     $konto.Finnes = $true
     Write-Ok "Foundry-ressurs '$($konto.Navn)': opprettet i $($konto.Location)"
   }
+
+  foreach ($konto in $script:FoundryKontoer.Values) { New-PPFoundryProject $konto }
 
   foreach ($d in $script:FoundryPlan) {
     $konto = $script:FoundryKontoer[$d.Konto]
@@ -1287,14 +1329,14 @@ if ($ProvisionFoundry) {
   $navn = if ($FoundryName) { $FoundryName } else { "pp365-$tenantKort-ai" }
   $bildeRegion = if ($FoundryImagesLocation) { $FoundryImagesLocation } else { $FoundryLocation }
   $script:FoundryKontoer = [ordered]@{}
-  $script:FoundryKontoer[$navn] = [pscustomobject]@{ Navn = $navn; Location = $FoundryLocation; Finnes = $false; Id = $null }
+  $script:FoundryKontoer[$navn] = [pscustomobject]@{ Navn = $navn; Location = $FoundryLocation; Finnes = $false; Id = $null; Prosjekt = "$navn-project"; ProsjektFinnes = $false; KanHaProsjekt = $true }
   $bildeType = if ($FoundryImagesDeploymentType) { $FoundryImagesDeploymentType } else { $FoundryDeploymentType }
   $script:FoundryPlan = @([pscustomobject]@{ Rolle = 'Chat'; Konto = $navn; Modell = $FoundryChatModel; Type = $FoundryDeploymentType; Kapasitet = $FoundryChatCapacity; Versjon = $null; Finnes = $false; Hoppes = $false; Ukontrollert = $false })
   if ($hasImages) {
     # Bildemodellene finnes ikke i alle regioner (f.eks. ikke norwayeast). Egen region gir egen ressurs.
     $bildeNavn = if ($bildeRegion -ne $FoundryLocation) { "$navn-img" } else { $navn }
     if (-not $script:FoundryKontoer.Contains($bildeNavn)) {
-      $script:FoundryKontoer[$bildeNavn] = [pscustomobject]@{ Navn = $bildeNavn; Location = $bildeRegion; Finnes = $false; Id = $null }
+      $script:FoundryKontoer[$bildeNavn] = [pscustomobject]@{ Navn = $bildeNavn; Location = $bildeRegion; Finnes = $false; Id = $null; Prosjekt = "$bildeNavn-project"; ProsjektFinnes = $false; KanHaProsjekt = $true }
     }
     $script:FoundryPlan += [pscustomobject]@{ Rolle = 'Images'; Konto = $bildeNavn; Modell = $FoundryImagesModel; Type = $bildeType; Kapasitet = $FoundryImagesCapacity; Versjon = $null; Finnes = $false; Hoppes = $false; Ukontrollert = $false }
   }
