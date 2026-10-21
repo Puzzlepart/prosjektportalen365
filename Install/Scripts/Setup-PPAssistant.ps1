@@ -863,6 +863,9 @@ function Test-PPFoundryPlan {
       }
       $d.Versjon = $valg.Versjon
       if ($null -eq $valg.Ledig) {
+        # Kvoten er ikke kontrollert - da kan fallbacken slå inn ved opprettelsen, og
+        # oppsummeringen skal si det.
+        $d.Ukontrollert = $true
         $fallback = if ($d.Rolle -eq 'Images' -and $d.Type -ne 'GlobalStandard' -and -not $script:BildeTypeEksplisitt) { ' Bildemodellen faller da tilbake til GlobalStandard.' } else { '' }
         if ($script:KvoteListeTom) {
           Add-PPCheck -Navn $sjekk -Status 'UKJENT' -Detalj "$($d.Modell) $($d.Versjon), $($d.Type): kvotelisten for $($konto.Location) er tom - trolig mangler du rollen Cognitive Services Usages Reader på abonnementet" -Fiks "Kvoteoppslaget krever den rollen på abonnementet; Owner på ressursgruppen holder ikke. Be eieren av abonnementet om den (den gir bare lesetilgang til kvote), eller kjør videre: kvoten kontrolleres da når deploymenten opprettes, og mangler den, stopper skriptet.$fallback"
