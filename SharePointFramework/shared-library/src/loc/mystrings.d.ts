@@ -64,6 +64,7 @@ declare interface ISharedLibraryStrings {
   FiltersString: string
   FilterText: string
   FilterPanelEmptyTitle: string
+  PeoplePickerExpandLabel: string
   PeoplePickerNoResults: string
   PeoplePickerSelectedLabel: string
   FilterPanelEmptyMessage: string

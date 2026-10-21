@@ -1,24 +1,36 @@
 .root {
   display: flex;
   justify-content: space-between;
-  // Wraps where it does not fit, as at 320 px (WCAG 1.4.10): the buttons shrank and the rest
-  // were cut off past the web part's edge.
-  flex-wrap: wrap;
-  gap: 8px 15px;
+  gap: 15px;
 
+  // The search box is the flexible part: as the toolbar narrows it gives way, and nothing else
+  // shrinks or wraps. Only the toolbar that holds it may shrink, and in it only the search box.
   .toolbar {
-    flex-wrap: wrap;
-    gap: 8px 15px;
-    min-height: 40px;
+    gap: 15px;
+    height: 40px;
     padding: 0 !important;
+    flex-shrink: 0;
+
+    &:has(.search) {
+      flex-shrink: 1;
+      min-width: 0;
+    }
+
+    > * {
+      flex-shrink: 0;
+    }
 
     .search {
       flex-grow: 1;
+      flex-shrink: 1;
+      min-width: 0;
       max-width: 320px;
 
+      // Its own width, not its input's: with `inherit` it kept the input's natural width.
       .searchBox {
         box-shadow: var(--shadow2);
-        width: inherit;
+        width: 100%;
+        min-width: 0;
         max-width: inherit;
       }
     }
@@ -34,6 +46,23 @@
 
     button:hover {
       background-color: transparent;
+    }
+  }
+
+  // Only where even a narrowed search box leaves the buttons no room, as at 320 px, do they go
+  // to the next line rather than past the edge (WCAG 1.4.10).
+  @media (max-width: 480px) {
+    flex-wrap: wrap;
+    row-gap: 8px;
+
+    .toolbar {
+      flex-wrap: wrap;
+      flex-shrink: 1;
+      min-width: 0;
+      max-width: 100%;
+      row-gap: 8px;
+      height: auto;
+      min-height: 40px;
     }
   }
 }

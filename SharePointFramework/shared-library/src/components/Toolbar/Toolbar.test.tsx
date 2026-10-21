@@ -247,6 +247,32 @@ describe('Toolbar', () => {
     expect(onAll).toHaveBeenCalled()
   })
 
+  it('opens a submenu from a menu item, for a menu holds only menu items (WCAG 1.3.1, 4.1.2)', () => {
+    // The overview's view menu has the programs in a submenu; its trigger was a toolbar button
+    // inside the menu, which axe found as a menu without the children it must have.
+    const onProgram = jest.fn()
+    render(
+      <Toolbar
+        items={[
+          new ListMenuItem('Visning').setItems([
+            new ListMenuItem('Alle'),
+            new ListMenuItem('Velg et programområde').setItems([
+              new ListMenuItem('Program A').setOnClick(onProgram)
+            ])
+          ])
+        ]}
+      />
+    )
+    fireEvent.click(screen.getByText('Visning'))
+    expect(screen.queryByRole('button', { name: 'Velg et programområde' })).toBeNull()
+    const trigger = screen.getByRole('menuitem', { name: 'Velg et programområde' })
+    expect(trigger).toHaveAttribute('aria-haspopup', 'menu')
+    fireEvent.click(trigger)
+    fireEvent.click(screen.getByText('Program A'))
+    expect(onProgram).toHaveBeenCalled()
+    expect(screen.queryByText('Program A')).toBeNull()
+  })
+
   it('opens the filter panel it is given', () => {
     render(
       <Toolbar

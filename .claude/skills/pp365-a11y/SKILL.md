@@ -93,7 +93,9 @@ Rules 1, 2, 5, 6, 8 and the tooltip handling are adapted from Microsoft's
    pair of move buttons).
 9. **Colour** comes from Fluent's tokens, not hex: 4.5:1 for text, 3:1 for large text and for
    non-text that carries meaning (borders of inputs, focus, status icons). Colour is never alone:
-   a matrix cell or a status shows its value or its text as well. Colours from configuration
+   a matrix cell or a status shows its value or its text as well, and a status icon shown without
+   its text has a `StatusMark` beside it (a check, a warning or a cross from its colour's hue, or
+   the status value's own `GtPortfolioColumnIconName`). Colours from configuration
    (the timeline's) go through `util/contrast.ts`: `getReadableTextColor` keeps the configured
    text colour where it reads 4.5:1 and puts black or white in its place where it does not;
    `getContrastingShade` darkens a configured colour just until it reaches 3:1 against the
@@ -309,6 +311,16 @@ checked by hand and with which reader and browser: axe finds only part of what W
 - jest-axe over a stand-in judges the stand-in. The combobox family (`Autocomplete`,
   `PeoplePicker`, `ColumnSearchPropertyField`) runs on stand-ins in Jest: assert names there and
   let the browser scans judge the markup.
+- Fluent's `TagPicker` draws a button that opens the list unless `expandIcon` is null, and names
+  it after the input, in English («Open …»); where there is no input (`PeoplePicker`'s field for
+  one that holds one) it has no name. Give it `expandIcon={{ 'aria-label': …, children: <icon> }}`
+  from the strings, or null where it has nothing to show.
+- Fluent's `Overflow` measures its container's whole width, padding too: padding on a `TabList`
+  kept that many pixels of tabs past the edge (`SectionTabs`). Put the padding on a wrapper.
+- A submenu's trigger inside a `MenuList` is a `MenuItem`; a button there makes the menu one
+  without the children it must have (axe's `aria-required-children`, `Toolbar`'s submenus).
+- What sits over the page at a fixed height (the footer, absolute over a 40 px spacer) covers
+  the end of the content once it wraps on a narrow screen: put it in the flow there (2.4.11).
 - `opacity: 0` hides nothing from a screen reader or the keyboard: the matrices drew both the
   before and after positions and faded one out, and both were read. Hide with `visibility`, and
   transition it with the opacity so the fade still runs (`MatrixElement.module.scss`). Where it

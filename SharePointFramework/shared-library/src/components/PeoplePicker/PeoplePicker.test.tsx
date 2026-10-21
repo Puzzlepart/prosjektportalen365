@@ -143,6 +143,20 @@ describe('PeoplePicker', () => {
     expect(screen.queryByRole('combobox')).toBeNull()
   })
 
+  it("names the button that opens the suggestions in the page's language, where Fluent says «Open» (WCAG 3.1.2, 4.1.2)", () => {
+    render(<PeoplePicker onChange={jest.fn()} onResolveSuggestions={jest.fn()} />)
+    expect(
+      screen.getByRole('button', { name: strings.PeoplePickerExpandLabel })
+    ).toBeInTheDocument()
+  })
+
+  it('has no such button in a field for one person while it holds one, where it had no name (WCAG 4.1.2)', () => {
+    render(<PeoplePicker selected={[KARI]} onChange={jest.fn()} onResolveSuggestions={jest.fn()} />)
+    // With no input, Fluent had nothing to name it from, and there was nothing for it to open.
+    expect(screen.queryByRole('button', { name: strings.PeoplePickerExpandLabel })).toBeNull()
+    expect(screen.getAllByRole('button')).toHaveLength(1)
+  })
+
   it('says so when no one is found, and picking that does nothing', async () => {
     const onChange = jest.fn()
     render(<PeoplePicker onChange={onChange} onResolveSuggestions={() => Promise.resolve([])} />)

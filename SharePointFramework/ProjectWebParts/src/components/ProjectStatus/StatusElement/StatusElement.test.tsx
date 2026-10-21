@@ -18,7 +18,7 @@ const headerProps = {
   iconColor: '#107c10'
 }
 
-function renderElement(props: Record<string, any> = {}, header = headerProps) {
+function renderElement(props: Record<string, any> = {}, header: Record<string, any> = headerProps) {
   return render(
     <SectionContext.Provider value={{ headerProps: header, section: {} } as any}>
       <StatusElement {...props} />
@@ -63,6 +63,38 @@ describe('StatusElement', () => {
   it('names an icon without a status by its section alone', () => {
     renderElement({ iconsOnly: true }, { ...headerProps, value: '' })
     expect(screen.getByRole('img', { name: 'Fremdrift' })).toBeInTheDocument()
+  })
+
+  it('has a mark beside its icon whose shape tells the status, as the colour does (WCAG 1.4.1)', () => {
+    const { container } = renderElement()
+    expect(container.querySelector('.icon [data-status-mark]')).toHaveAttribute(
+      'data-status-mark',
+      'CheckmarkCircle'
+    )
+  })
+
+  it('has the mark when it shows only the icon, too', () => {
+    const { container } = renderElement({ iconsOnly: true })
+    expect(container.querySelector('[data-status-mark]')).toHaveAttribute(
+      'data-status-mark',
+      'CheckmarkCircle'
+    )
+  })
+
+  it("takes the status value's own icon as the mark, and has none where neither tells the status", () => {
+    const { container, rerender } = renderElement({}, { ...headerProps, statusIconName: 'Flag' })
+    expect(container.querySelector('[data-status-mark]')).toHaveAttribute(
+      'data-status-mark',
+      'Flag'
+    )
+    rerender(
+      <SectionContext.Provider
+        value={{ headerProps: { ...headerProps, iconColor: '#444' }, section: {} } as any}
+      >
+        <StatusElement />
+      </SectionContext.Provider>
+    )
+    expect(container.querySelector('[data-status-mark]')).toBeNull()
   })
 
   it("is the section's heading when it heads a section, and breaks no rule axe can check (WCAG 1.3.1)", async () => {

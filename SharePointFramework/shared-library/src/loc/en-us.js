@@ -65,6 +65,7 @@ define([], function () {
     FiltersString: 'Filters',
     FilterText: 'Filter',
     FilterPanelEmptyTitle: 'No filters available',
+    PeoplePickerExpandLabel: 'Show suggestions',
     PeoplePickerNoResults: 'No people found',
     PeoplePickerSelectedLabel: 'Selected people',
     FilterPanelEmptyMessage:

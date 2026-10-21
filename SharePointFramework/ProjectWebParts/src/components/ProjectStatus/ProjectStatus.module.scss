@@ -3,13 +3,15 @@
 
   // Pinned at the top of the page's scroll region while the report scrolls under it. The suite
   // bar sits outside that region, so no offset is needed.
+  // The tabs' side padding is here, not on the tab list: Fluent's overflow measures the list's
+  // whole width, padding too, and kept 64 px more tabs than fitted, past the web part's edge at
+  // 320 px (WCAG 1.4.10).
   .stickyTabs {
     position: sticky;
     top: 0;
     z-index: 1;
     margin: 0;
-    padding-top: 16px;
-    padding-bottom: 16px;
+    padding: 16px 32px;
     background-color: var(--colorNeutralBackground1);
   }
 
@@ -50,9 +52,9 @@
   .sectionTabs {
     display: flex;
     flex-direction: row;
+    box-sizing: border-box;
     width: 100%;
     height: 42px;
-    padding: 0 32px;
   }
 
   .messageContainer {

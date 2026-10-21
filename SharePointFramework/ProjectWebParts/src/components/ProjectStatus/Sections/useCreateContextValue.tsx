@@ -31,7 +31,8 @@ export function useCreateContextValue({ iconSize = 40 }) {
         comment,
         iconName: section.iconName,
         iconSize,
-        iconColor: columnConfig?.color ?? '#444'
+        iconColor: columnConfig?.color ?? '#444',
+        statusIconName: columnConfig?.iconName
       },
       section
     } as ISectionContext

@@ -66,18 +66,17 @@ function statusReportFields(webPart: any): Record<string, any> {
 }
 
 describe('ProjectInformation web part status report properties', () => {
-  it('shows the full status report by default, with no warning', () => {
+  it('shows the full status report by default', () => {
     const fields = statusReportFields(createWebPart())
     expect(fields.statusReportShowOnlyIcons.checked).toBeFalsy()
     expect(fields.statusReportShowOnlyIconsWarning).toBeUndefined()
     expect(fields.statusReportTruncateComments).toBeDefined()
   })
 
-  it('warns that icons alone show the status by colour only (WCAG 1.4.1)', () => {
+  it('shows icons alone with no warning, for their marks tell the status by shape (WCAG 1.4.1)', () => {
     const fields = statusReportFields(createWebPart({ statusReportShowOnlyIcons: true }))
     expect(fields.statusReportShowOnlyIcons.checked).toBe(true)
-    expect(fields.statusReportShowOnlyIconsWarning).toEqual({
-      text: strings.StatusReportShowOnlyIconsWarning
-    })
+    expect(fields.statusReportShowOnlyIconsWarning).toBeUndefined()
+    expect(Object.keys(fields)).toEqual(['hideStatusReport', 'statusReportShowOnlyIcons'])
   })
 })

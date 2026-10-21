@@ -1209,8 +1209,15 @@ noted below.
 
 - **Reflow (1.4.10).** The visual test found the toolbars too wide at 320 px: their buttons
   shrank, and the rest went past the web part's edge.
-  - The library's `Toolbar` and the timeline's header wrap.
-  - The project list's search box and toolbar wrap onto two lines.
+  - The search box is the flexible part of the library's `Toolbar` and of the project list's
+    commands: it gives way as the width narrows, and nothing else shrinks or wraps. Only under
+    480 px do the buttons, and the timeline's header, go to the next line.
+  - A first version wrapped at every width, so the overviews' toolbars took two lines on a
+    desktop screen (reported 20.10.2026). The list layout test now holds the portfolio overview's,
+    the aggregation's and the dynamic list's toolbars to one line at 1440, 1024 and 768 px, with
+    the search box narrowing, and nothing past the web part at 320 px.
+  - On the dynamic list, whose toolbar has the most buttons, the search box is about 12 px wide
+    at 768 px: the price of not wrapping.
   - These are CSS, so they were tried on the tenant's pages with the styles injected before they
     went in. The visual test measures them after deployment.
 - **The timeline's markers.**
@@ -1291,3 +1298,120 @@ The run after part 3 deployed 38b1b70, and the footer still did not show on list
 - **The fix.** The footer now also renders on `placeholderProvider.changedEvent`, as SPFx
   recommends. Its test failed on the code before. The count of the React fault on list pages,
   for sp-dev-docs#11068, waits for this to be deployed.
+
+### Close-out, part 4 — the status mark and the toolbars (2026-10-20)
+
+**The status mark (1.4.1).** The status column was the last deviation from 1.4.1: its icons told
+the status by colour, and the text came only on hover or focus. The decision was to keep the
+icons and their colours and add a shape.
+
+- **`StatusMark`** (shared library) draws a small filled shape beside a status icon, hidden from
+  screen readers, since the icon is named by its status already.
+  - The shape is the status value's own icon (`GtPortfolioColumnIconName`) where it has one.
+  - Otherwise it comes from the colour's hue (`getStatusMark`, `util/statusMark.ts`): green gives
+    a check, yellow and orange a warning, red a cross.
+  - Grey, blue and other colours give none, and so does `CircleFill`, which the hub template sets
+    on every value. So the template needs no change, and its colours give the three shapes.
+- **Its colour** is the status colour, darkened to 3:1 against `#f2f2f2` where it is fainter
+  (`getContrastingShade`). The template's yellow has 1.7:1.
+- **It shows wherever a section icon does:**
+  - in the status column, which now also fetches `GtPortfolioColumnIconName`;
+  - on the status page;
+  - in the project information's summary, also with «Vis kun ikoner». The property pane's warning
+    about that choice is gone, with its string.
+- **Size.** The mark is 40 % of the icon beside it, at least 12 px: 16 px beside the status page's
+  40 px icons.
+- **Tests first.** All of these failed on the code before:
+  - the mark's shape, colour and size (9);
+  - the column's marks, and the fetched icon field;
+  - the status element's mark;
+  - the header props' `statusIconName`;
+  - the property pane without the warning.
+
+**The toolbars.** The reflow fix of part 3 let the toolbars wrap at every width, so the
+overviews' toolbars took two lines on a desktop screen. Part 3's reflow notes describe the
+correction: the search box gives way, and only under 480 px does anything wrap. It was measured
+on the tenant with the final rules injected:
+
+| Page | 1440, 1024, 768 px | 320 px |
+|---|---|---|
+| Portfolio overview | one line | wraps |
+| Aggregation | one line | wraps |
+| Hub home | one line | wraps |
+| Dynamic list | one line | wraps |
+
+At none of these widths did anything go past the web part.
+
+**The test-channel run for part 3 (39419917488, commit 4f3dda351):**
+
+- **Green:** the build, the upgrade and the integration tests.
+- **The e2e: 49 passed and 52 failed.**
+  - **A dead session, not a regression.** From 13:08 UTC every REST call the specs made as the
+    e2e user (`resolvePage`, the library listings) got 403, on the hub too, while its pages still
+    loaded.
+  - **Reproduced locally.** A stored session got 403 on `/_api/web` until the context loaded a
+    page. After that, the same calls returned 200 with no other change.
+  - **The cause is on the SharePoint side:** its session cookie was no longer accepted for REST,
+    though a page load still renewed it silently.
+  - **The next run** signs in afresh.
+
+**The findings of the browser tests in CI** (the runs of 19 and 20 October, the scans and the
+visual step), fixed in the same round:
+
+- **`PeoplePicker`'s chevron.** Fluent's `TagPicker` draws a button that opens the list and
+  names it after the input, in English. A field for one that holds one has no input, so the
+  button had no name (`aria-command-name` in the edit properties panel). It is «Vis forslag»
+  now, and left out where the field is full. The harness's TagPicker stand-in draws it, named
+  only by the `aria-label` it is given.
+- **The toolbar's submenus.** An item with items inside a menu rendered a toolbar button inside
+  the menu (`aria-required-children` on the view menu, with its programs). It is a Fluent
+  submenu now, opened by a menu item, and choosing in it closes the whole menu.
+- **The release notes in the footer.** Their links were told from the text by colour alone
+  (`link-in-text-block`). They are underlined.
+- **The snapshot's frame.** It scrolls a tall report and held nothing that takes the focus
+  (`scrollable-region-focusable`). It is a focusable region named by the report.
+- **320 px:**
+  - **The status page's tabs** were 64 px wider than the web part at every width: their padding
+    was on the list Fluent's `Overflow` measures. It is on the wrapper now.
+  - **The status summary** kept the project information beside the status icons, which got
+    16 px. It stacks under 480 px.
+  - **The idea module's menu**, 340 px and open, left the ideas 0 px. Under 480 px it starts
+    closed and closes when an idea or the overview is chosen, the focus going to the menu button
+    beside the content.
+  - **The footer's buttons** were 750 px wide in all. Under 480 px they wrap, and the footer
+    takes its place in the page's flow, since at its new height it covered the end of the
+    content.
+  - **Left:** the uncertainty matrix on the status page is a table and is exempt. On project
+    home, SharePoint's own web parts go past the edge, and they are not ours.
+- **Tags in list cells (1.4.12).** A tag that does not fit ends in «…» instead of being cut off.
+  The tags column no longer keeps its last 28 px clear: a tag that fitted the cell spilled into
+  them. With normal spacing only the tag that was cut before («Organisasjonsutvikling») ends in
+  «…».
+  - The decision was «…» only: a tooltip with the full text on pointer and focus was shown,
+    weighed and set aside, to keep the list as it is.
+  - The full text is the tag's title, and a screen reader reads all of it.
+- **The taxonomy picker** (PnP's `ModernTaxonomyPicker`) has a button with no name, which is
+  PnP's. An issue for pnp/sp-dev-fx-controls-react is drafted. The button is still nameless in
+  their `main`.
+- **Tests first.** Seen failing on the code before:
+  - the chevron's name and its absence (2);
+  - the submenu;
+  - the snapshot's region;
+  - the idea module's menu on a narrow screen (2).
+
+  The CSS fixes were measured on the tenant with the rules injected, before they went in.
+
+**The footer on list pages after 4f3dda351 (2026-10-21).** A modern list view on the hub was
+loaded 28 times, each in a new tab of a signed-in browser, and measured on
+`[data-sp-placeholder="Bottom"]`.
+
+- **The React fault did not occur.** It is noted in the reply drafted for sp-dev-docs#11068.
+- **The footer rendered on 21 of the 28 loads.** On the other 7 there was no error.
+  - The `Bottom` element was in the DOM and the footer's bundle was loaded.
+  - On the two of these traced with the console, SharePoint never logged «Defined
+    clientSidePlaceholders», and `changedEvent` never fired.
+  - On the three loads traced where the footer rendered, that line came near the bundle.
+- **Decided: reported, not worked around.** The customizer cannot create content in a placeholder
+  SPFx has not defined. A fallback that renders into SharePoint's element directly was weighed and
+  set aside. The question is in the reply to sp-dev-docs#11068, and it is a known fault in 1.15.
+

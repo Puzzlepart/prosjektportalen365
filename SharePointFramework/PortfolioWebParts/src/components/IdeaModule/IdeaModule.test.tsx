@@ -100,6 +100,39 @@ describe('IdeaModule', () => {
     expect(document.activeElement).toHaveAttribute('aria-expanded', 'true')
   })
 
+  describe('on a narrow screen', () => {
+    const matchMedia = window.matchMedia
+    beforeEach(() => {
+      window.matchMedia = (query: string) =>
+        ({ ...matchMedia(query), matches: query === '(max-width: 480px)' }) as MediaQueryList
+    })
+    afterEach(() => {
+      window.matchMedia = matchMedia
+    })
+
+    it('starts with the menu closed, where it took the whole width and left the ideas none (WCAG 1.4.10)', async () => {
+      renderModule()
+      expect(await screen.findByText('Idéoversikt: Alle idéer')).toBeInTheDocument()
+      const beside = document.querySelector<HTMLElement>('.hamburger button')
+      expect(beside).toHaveAccessibleName(strings.Idea.NavigationMenuLabel)
+      expect(beside).toHaveAttribute('aria-expanded', 'false')
+    })
+
+    it('closes the menu once an idea is chosen, and gives the focus to the button beside it', async () => {
+      const user = userEvent.setup({ pointerEventsCheck: 0 })
+      renderModule()
+      await screen.findByText('Idéoversikt: Alle idéer')
+      await user.click(document.querySelector<HTMLElement>('.hamburger button'))
+      await user.click(screen.getByText('Sykkelparkering'))
+      expect(
+        await screen.findByRole('heading', { level: 2, name: 'Sykkelparkering' })
+      ).toBeInTheDocument()
+      const beside = document.querySelector<HTMLElement>('.hamburger button')
+      expect(beside).toHaveAttribute('aria-expanded', 'false')
+      expect(beside).toHaveFocus()
+    })
+  })
+
   it('opens an idea under a heading below the page title, its phases a list marking the current, and its status under its own heading (WCAG 1.3.1)', async () => {
     window.location.hash = '#ideaId=1'
     renderModule()

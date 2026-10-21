@@ -8,6 +8,12 @@ export interface IStatusElement {
   height?: string | number
   iconSize?: number
   iconColor?: string
+
+  /**
+   * The status value's own icon (`GtPortfolioColumnIconName` in `Prosjektkolonnekonfigurasjon`),
+   * which the mark beside the section's icon takes as its shape.
+   */
+  statusIconName?: string
 }
 
 export interface IStatusElementProps extends Pick<IStatusElement, 'iconSize'> {

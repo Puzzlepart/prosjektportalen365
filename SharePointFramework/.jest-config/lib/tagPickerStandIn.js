@@ -15,7 +15,10 @@
  * - a tag reports its removal with the selected options less it, as Backspace in the empty input
  *   does for the last tag;
  * - a tag and an option show their `media` (a picture) before their text, so a test sees what a
- *   screen reader would read in them.
+ *   screen reader would read in them;
+ * - the control draws the button that opens the list unless its `expandIcon` is null. Fluent
+ *   names it from the input, in English, and not at all where there is no input; the stand-in
+ *   names it only by the `aria-label` it is given.
  *
  * Usage, above the test's imports:
  *
@@ -33,7 +36,15 @@ function withTagPickerStandIn() {
 
   const TagPicker = ({ selectedOptions = [], onOptionSelect, disabled, children }) =>
     h(Picker.Provider, { value: { selectedOptions, onOptionSelect, disabled } }, h('div', null, children))
-  const TagPickerControl = ({ className, children }) => h('div', { className }, children)
+  const TagPickerControl = ({ className, children, expandIcon }) =>
+    h(
+      'div',
+      { className },
+      children,
+      expandIcon === null
+        ? null
+        : h('span', { role: 'button', 'aria-label': expandIcon?.['aria-label'] }, expandIcon?.children)
+    )
   const TagPickerGroup = (props) =>
     h('div', { role: 'group', 'aria-label': props['aria-label'] }, props.children)
   const Tag = ({ value, media, children }) => {

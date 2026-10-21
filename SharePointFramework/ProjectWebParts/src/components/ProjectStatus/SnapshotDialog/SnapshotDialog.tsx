@@ -50,7 +50,11 @@ const useStyles = makeStyles({
     minHeight: 0,
     overflow: 'auto',
     backgroundColor: tokens.colorNeutralBackground3,
-    borderRadius: tokens.borderRadiusMedium
+    borderRadius: tokens.borderRadiusMedium,
+    ':focus-visible': {
+      outline: `${tokens.strokeWidthThick} solid ${tokens.colorStrokeFocus2}`,
+      outlineOffset: '-2px'
+    }
   },
   // Natural size, shrunk only to the window width — never to its height, which is what
   // makes a tall report unreadable in the browser's own image viewer.
@@ -127,7 +131,9 @@ export const SnapshotDialog: FC = () => {
               </Tooltip>
             </div>
           </div>
-          <div className={styles.frame}>
+          {/* It scrolls a tall report, and holds nothing that takes the focus: a stop for the
+              keyboard, named as a region (WCAG 2.1.1). */}
+          <div className={styles.frame} tabIndex={0} role='region' aria-label={title}>
             <img className={styles.image} src={snapshotUrl} alt={title} />
           </div>
           <CopyLinkDialog

@@ -8,6 +8,7 @@ import resource from 'SharedResources'
 import {
   ColumnRenderComponent,
   getFluentIconWithFallback,
+  StatusMark,
   withDefaults
 } from 'pp365-shared-library'
 import { Popover, PopoverSurface, PopoverTrigger } from '@fluentui/react-components'
@@ -46,9 +47,10 @@ export const StatusReportColumn: ColumnRenderComponent<IStatusColumnProps> = (
     >
       <PopoverTrigger disableButtonEnhancement>
         <div className={styles.root} aria-label={label} onPointerLeave={cancelPendingOpen}>
-          {status?.sections?.map(({ fieldName, iconName, color }) => (
+          {status?.sections?.map(({ fieldName, iconName, color, statusIconName }) => (
             <span key={fieldName} className={styles.icon} style={{ color }}>
               {getFluentIconWithFallback(iconName, { color })}
+              <StatusMark color={color} iconName={statusIconName} />
             </span>
           ))}
         </div>

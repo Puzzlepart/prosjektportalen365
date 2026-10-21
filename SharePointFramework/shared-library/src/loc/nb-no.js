@@ -64,6 +64,7 @@ define([], function () {
     FiltersString: 'Filtre',
     FilterText: 'Filtrer',
     FilterPanelEmptyTitle: 'Ingen filtre tilgjengelig',
+    PeoplePickerExpandLabel: 'Vis forslag',
     PeoplePickerNoResults: 'Fant ingen personer',
     PeoplePickerSelectedLabel: 'Valgte personer',
     FilterPanelEmptyMessage:

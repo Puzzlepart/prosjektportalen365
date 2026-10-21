@@ -16,6 +16,16 @@ import { RefObject, useEffect, useRef, useState } from 'react'
 import styles from './IdeaModule.module.scss'
 import { IdeaField } from './IdeaField'
 
+/** The screens on which the menu leaves the ideas no room beside it. */
+export const NARROW_SCREEN_QUERY = '(max-width: 480px)'
+
+/**
+ * Whether the screen is narrow (`NARROW_SCREEN_QUERY`).
+ */
+function isNarrowScreen() {
+  return !!window.matchMedia?.(NARROW_SCREEN_QUERY).matches
+}
+
 /**
  * Component logic hook for `IdeaModule` component.
  *
@@ -175,7 +185,9 @@ export function useIdeaModule(props: IIdeaModuleProps) {
   }
 
   const [openItems, setOpenItems] = useState(['registration'])
-  const [isOpen, setIsOpen] = useState(true)
+  // On a narrow screen the menu, 340 px, took the whole width and left the ideas none: there it
+  // starts closed (WCAG 1.4.10).
+  const [isOpen, setIsOpen] = useState(() => !isNarrowScreen())
 
   // The menu's button goes with the menu, and the one beside the content comes as it closes: a
   // toggle gives the focus to the button that takes the other's place (WCAG 2.4.3).
@@ -188,6 +200,16 @@ export function useIdeaModule(props: IIdeaModuleProps) {
     const button = isOpen ? menuButtonRef.current : contentButtonRef.current
     button?.focus()
   }, [isOpen])
+
+  /**
+   * Closes the menu once an idea or the overview is chosen from it on a narrow screen, where the
+   * menu covers what was chosen. The focus goes to the button beside the content.
+   */
+  const closeMenuOnNarrowScreen = () => {
+    if (!isOpen || !isNarrowScreen()) return
+    isToggled.current = true
+    setIsOpen(false)
+  }
 
   const handleToggle: AccordionToggleEventHandler<string> = (event, data) => {
     setOpenItems(data.openItems)
@@ -305,6 +327,7 @@ export function useIdeaModule(props: IIdeaModuleProps) {
     handleToggle,
     ignoreFields,
     isOpen,
+    closeMenuOnNarrowScreen,
     openItems,
     fluentProviderId
   }

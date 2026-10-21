@@ -132,6 +132,16 @@ describe('ProjectStatus SnapshotDialog', () => {
     expect(mockDialog.openInNewTab).toHaveBeenCalledTimes(1)
   })
 
+  it('lets the keyboard scroll the snapshot: its frame takes the focus, named by the report (WCAG 2.1.1)', () => {
+    // A tall report scrolls in its frame, which nothing in it could focus (axe's
+    // scrollable-region-focusable in the browser test, 2026-10-19).
+    render(<SnapshotDialog />)
+    const frame = screen.getByAltText(title).parentElement
+    expect(frame).toHaveAttribute('tabindex', '0')
+    expect(frame).toHaveAttribute('role', 'region')
+    expect(frame).toHaveAttribute('aria-label', title)
+  })
+
   it('calls onDismiss when the close button is clicked', () => {
     render(<SnapshotDialog />)
     fireEvent.click(screen.getByRole('button', { name: 'Lukk' }))

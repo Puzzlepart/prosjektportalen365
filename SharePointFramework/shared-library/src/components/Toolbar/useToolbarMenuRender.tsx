@@ -59,13 +59,13 @@ export function useToolbarMenuRender() {
   /**
    * Renders a menu item based on the provided `IListMenuItem`.
    * If the `IListMenuItem` has a `value` property, it will render a `MenuItemCheckbox`.
-   * If the `IListMenuItem` has an `items` property, it will recursively call `renderMenu`.
+   * If the `IListMenuItem` has an `items` property, it will render a submenu opened by a menu item.
    * Otherwise, it will render a regular `MenuItem`.
    *
    * @param item - The `IListMenuItem` to render.
    * @param closeMenu - A function that closes the menu.
    *
-   * @returns The rendered `MenuItem`, `MenuItemCheckbox`, or `Menu` (if `item` has `items`).
+   * @returns The rendered `MenuItem`, `MenuItemCheckbox`, or submenu (if `item` has `items`).
    */
   function renderMenuItem(item: ListMenuItem, closeMenu?: () => void) {
     if (item.type === 'divider') return <MenuDivider />
@@ -90,7 +90,9 @@ export function useToolbarMenuRender() {
       )
     }
 
-    if (item.items) return renderMenu(item)
+    if (item.items) {
+      return <SubmenuComponent item={item} renderMenuItem={renderMenuItem} closeMenu={closeMenu} />
+    }
 
     return (
       <div hidden={item.hidden}>
@@ -178,6 +180,51 @@ function MenuComponent({
               <React.Fragment key={index}>
                 {renderMenuItem(menuItem, () => setOpen(false))}
               </React.Fragment>
+            ))}
+          </MenuList>
+        </MenuPopover>
+      </Menu>
+    </div>
+  )
+}
+
+/**
+ * A submenu inside a menu, such as the programs in the portfolio overview's view menu. Its
+ * trigger is a menu item, for a menu holds only menu items; it was a toolbar button, which axe
+ * found as a menu without the children it must have (WCAG 1.3.1, 4.1.2). Choosing one of its
+ * items closes the whole menu.
+ */
+function SubmenuComponent({
+  item,
+  renderMenuItem,
+  closeMenu
+}: {
+  item: ListMenuItem
+  renderMenuItem: (item: ListMenuItem, closeMenu?: () => void) => JSX.Element
+  closeMenu?: () => void
+}) {
+  const [open, setOpen] = useState(false)
+  const onOpenChange: MenuProps['onOpenChange'] = (_, data) => {
+    setOpen(data.open)
+  }
+
+  return (
+    <div hidden={item.hidden}>
+      <Menu open={open} onOpenChange={onOpenChange}>
+        <MenuTrigger disableButtonEnhancement>
+          <MenuItem icon={createIcon(item)} style={createStyle(item)} disabled={item.disabled}>
+            {item.text}
+          </MenuItem>
+        </MenuTrigger>
+        <MenuPopover>
+          <MenuList
+            hasCheckmarks={item.items.some((i) => i.value)}
+            hasIcons={item.items.some((i) => i.icon)}
+            checkedValues={item.checkedValues}
+          >
+            {item.items.map((menuItem, index) => (
+              // A ListMenuItem has no key of its own; the menu's order is stable, so the index is one.
+              <React.Fragment key={index}>{renderMenuItem(menuItem, closeMenu)}</React.Fragment>
             ))}
           </MenuList>
         </MenuPopover>

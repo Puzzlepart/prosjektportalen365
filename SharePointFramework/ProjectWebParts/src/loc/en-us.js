@@ -277,7 +277,6 @@ define([], function () {
     StatusNotRelevant: 'Not applicable',
     StatusOpen: 'Open',
     StatusReportShowOnlyIconsLabel: 'Show icons only',
-    StatusReportShowOnlyIconsWarning: 'With icons only, the status is shown by colour alone, which does not meet the requirements of universal design (WCAG 1.4.1). The full view shows the status as text.',
     StatusReportTruncateCommentsLabel: 'Truncate comments',
     StatusStillOpen: 'Still open',
     SubTextTruncateLengthFieldLabel: 'Truncate length for sub text',

@@ -41,14 +41,14 @@ Denne oversikten viser hvordan Prosjektportalen 365 versjon 1.15.0 står mot hve
 | 1.3.3 Sensoriske egenskaper | A | Støttes | Ingen instruksjoner bygger bare på form, plassering eller farge. |
 | 1.3.4 Visningsretning | AA | Støttes | Ingen visning er låst til én retning. |
 | 1.3.5 Identifiser formål med inndata | AA | Ikke relevant | Skjemaene samler prosjektdata, ikke opplysninger om brukeren selv. |
-| 1.4.1 Bruk av farge | A | Delvis støttet | Status, fase og trend vises også med tekst eller navn, og dagens dato i tidslinjene har etiketten «I dag». Unntak: statuskolonnen i porteføljeoversikten viser status bare med farge i cellen, og teksten kommer ved peker eller fokus (egen sak). «Vis kun ikoner» i Prosjektinformasjon gjør det samme; egenskapsruten advarer når den slås på. |
+| 1.4.1 Bruk av farge | A | Støttes | Status, fase og trend vises også med tekst, navn eller form, og dagens dato i tidslinjene har etiketten «I dag». Statusikonene i statuskolonnen, på statussiden og i sammendraget i Prosjektinformasjon, også med «Vis kun ikoner», har et lite merke ved siden av: en hake, et varseltegn eller et kryss etter fargen i Prosjektkolonnekonfigurasjon, eller statusverdiens eget ikon der den har et. En farge som verken er grønn, gul eller rød, gir ikke noe merke når verdien heller ikke har eget ikon. |
 | 1.4.2 Styring av lyd | A | Ikke relevant | |
 | 1.4.3 Kontrast (minimum) | AA | Støttes | Fluents farger og våre egne er kontrollert. Konfigurerte farger får lesbar tekstfarge. Se avsnittet om farger over. |
 | 1.4.4 Endring av tekststørrelse | AA | Støttes | Foreløpig. Zoom 200 % kontrolleres i håndrunden. |
 | 1.4.5 Bilder av tekst | AA | Støttes | Øyeblikksbildet av en publisert statusrapport er et bilde av rapporten. Det samme innholdet vises som tekst når rapporten velges. |
-| 1.4.10 Dynamisk tilpasning (Reflow) | AA | Delvis støttet | Verktøylinjene brytes ved 320 px. Datatabeller og tidslinjer trenger to dimensjoner og er unntatt etter kriteriet. Resten måles i nettlesertestene og kontrolleres i håndrunden. |
+| 1.4.10 Dynamisk tilpasning (Reflow) | AA | Delvis støttet | På verktøylinjene er det søkefeltet som gir etter når bredden minker. Først under 480 px, som ved 320 px, går knappene til neste linje. Bunnteksten brytes også, statussidens faner og sammendrag tilpasses, og idémodulens meny starter lukket på smale skjermer. Datatabeller og tidslinjer trenger to dimensjoner og er unntatt etter kriteriet. Resten måles i nettlesertestene og kontrolleres i håndrunden. |
 | 1.4.11 Kontrast for ikke-tekstlig innhold | AA | Støttes | Søyler, milepæler, markører og trendikoner har kanter med minst 3:1, og fokusrammen kommer fra Fluent. |
-| 1.4.12 Tekstavstand | AA | Delvis støttet | Med økt tekstavstand kuttes lange prosjektnavn på prosjektkortene. Resten måles i nettlesertestene og kontrolleres i håndrunden. |
+| 1.4.12 Tekstavstand | AA | Delvis støttet | Med økt tekstavstand kuttes lange prosjektnavn på prosjektkortene. Tagger i listecellene som ikke får plass, slutter med «…», og hele teksten står i `title` og leses av skjermlesere; de ble klippt uten «…». Titler i listene avkortes med «…» som før. Et verktøytips med hele teksten ved peker og fokus ble vurdert og valgt bort for å holde visningen lik den vi har. Resten måles i nettlesertestene og kontrolleres i håndrunden. |
 | 1.4.13 Pekerfølsomt innhold eller innhold ved tastaturfokus | AA | Støttes | Verktøytips og popovere fra Fluent kan lukkes med Escape og holdes åpne under pekeren. Innhold som før bare fantes i verktøytips, kan nås med tastaturet. |
 
 ### Mulig å betjene
@@ -107,7 +107,6 @@ Denne oversikten viser hvordan Prosjektportalen 365 versjon 1.15.0 står mot hve
 
 ### Kjente avvik
 
-- **Statuskolonnen i porteføljeoversikten** viser status bare med farge i cellen (1.4.1). Det løses i en egen sak.
 - **Tidslinjene i porteføljen, programmet og ressursallokeringen** har ingen liste ved siden av (1.3.1). Se [#1789](https://github.com/Puzzlepart/prosjektportalen365/issues/1789).
 - **Lange prosjektnavn på prosjektkortene** kuttes med økt tekstavstand (1.4.12).
 - **Utvidelser på listesider:** på SharePoints listesider kan utvidelsene en sjelden gang feile under lasting. Det skyldes SharePoints håndtering av React i SPFx 1.24 RC, og er meldt til Microsoft ([SharePoint/sp-dev-docs#11068](https://github.com/SharePoint/sp-dev-docs/issues/11068)).

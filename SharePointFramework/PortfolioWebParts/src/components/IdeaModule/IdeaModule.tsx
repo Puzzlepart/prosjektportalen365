@@ -98,6 +98,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (incomingProps) => {
     handleToggle,
     ignoreFields,
     isOpen,
+    closeMenuOnNarrowScreen,
     openItems,
     fluentProviderId
   } = useIdeaModule(props)
@@ -143,6 +144,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (incomingProps) => {
                     onClick={() => {
                       setUrlHash({ viewId: _.first(props.configuration.views).id })
                       getSelectedView()
+                      closeMenuOnNarrowScreen()
                     }}
                   >
                     {strings.Idea.OverviewTitle}
@@ -163,6 +165,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (incomingProps) => {
                               onClick={() => {
                                 setUrlHash({ ideaId: idea.Id.toString() })
                                 getSelectedIdea()
+                                closeMenuOnNarrowScreen()
                               }}
                             >
                               {idea?.Title}
@@ -190,6 +193,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (incomingProps) => {
                               onClick={() => {
                                 setUrlHash({ ideaId: idea.Id.toString() })
                                 getSelectedIdea()
+                                closeMenuOnNarrowScreen()
                               }}
                             >
                               {idea?.Title}
