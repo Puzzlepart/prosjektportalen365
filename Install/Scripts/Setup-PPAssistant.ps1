@@ -511,28 +511,37 @@ function Get-PPConsentUrl([string] $Tenant) {
   "https://login.microsoftonline.com/$Tenant/adminconsent?client_id=$AssistantAppId&redirect_uri=$ConsentRedirect"
 }
 
-function Request-PPAdminConsent([string] $Tenant) {
-  Write-Step 'Admin-consent'
+<#
+  Tre grants må finnes: klient -> API (Assistant.Access), API -> SharePoint (OBO) og
+  API -> Graph med Tasks.Read (Planner-oppgaver, lagt til 2026-09-09). Det siste mangler hos
+  tenanter som ble onboardet før det, og skal fanges, så de får re-consent i stedet for «alt ok».
+  Bare lesing - brukes både av forhåndssjekken og før consent-siden åpnes.
+#>
+function Get-PPConsentStatus {
   $assistantSp = Get-AzADServicePrincipal -ApplicationId $AssistantAppId -ErrorAction SilentlyContinue
   $apiSp       = Get-AzADServicePrincipal -ApplicationId $ApiAppId -ErrorAction SilentlyContinue
-  $spSp        = Get-AzADServicePrincipal -ApplicationId $SharePointAppId
-  $graphSp     = Get-AzADServicePrincipal -ApplicationId $GraphAppId
-
-  # Tre grants må finnes: klient -> API (Assistant.Access), API -> SharePoint (OBO) og
-  # API -> Graph med Tasks.Read (Planner-oppgaver, lagt til 2026-09-09). Det siste mangler hos
-  # tenanter som ble onboardet før det, og fanges her så de får re-consent i stedet for «alt ok».
-  $ok = $false
+  $mangler = @()
+  if (-not $assistantSp) { $mangler += '«Prosjektportalen Assistent» finnes ikke i tenanten' }
+  if (-not $apiSp) { $mangler += '«Prosjektportalen Assistent API» finnes ikke i tenanten' }
   if ($assistantSp -and $apiSp) {
+    $spSp    = Get-AzADServicePrincipal -ApplicationId $SharePointAppId
+    $graphSp = Get-AzADServicePrincipal -ApplicationId $GraphAppId
     $clientGrants = Get-PPGrants $assistantSp.Id
     $apiGrants    = Get-PPGrants $apiSp.Id
-    $hasScope = $clientGrants | Where-Object { $_.resourceId -eq $apiSp.Id -and ($_.scope -split ' ') -contains 'Assistant.Access' }
-    $hasObo   = $apiGrants    | Where-Object { $_.resourceId -eq $spSp.Id }
-    $hasGraph = $apiGrants    | Where-Object { $_.resourceId -eq $graphSp.Id -and ($_.scope -split ' ') -contains 'Tasks.Read' }
-    $ok = [bool]$hasScope -and [bool]$hasObo -and [bool]$hasGraph
-    if ($hasScope -and $hasObo -and -not $hasGraph) { Write-Info 'Consent finnes, men mangler Graph Tasks.Read (Planner-oppgaver) - ber om godkjenning på nytt.' }
+    if (-not ($clientGrants | Where-Object { $_.resourceId -eq $apiSp.Id -and ($_.scope -split ' ') -contains 'Assistant.Access' })) { $mangler += 'klient -> API (Assistant.Access)' }
+    if (-not ($apiGrants | Where-Object { $_.resourceId -eq $spSp.Id })) { $mangler += 'API -> SharePoint' }
+    if (-not ($apiGrants | Where-Object { $_.resourceId -eq $graphSp.Id -and ($_.scope -split ' ') -contains 'Tasks.Read' })) { $mangler += 'API -> Graph Tasks.Read (Planner-oppgaver)' }
   }
+  [pscustomobject]@{ AssistantSp = $assistantSp; Ok = ($mangler.Count -eq 0); Mangler = $mangler }
+}
 
-  if ($ok -and -not $ForceConsent) { Write-Ok 'Consent finnes allerede for begge apper (inkl. Tasks.Read)'; return $assistantSp }
+function Request-PPAdminConsent([string] $Tenant) {
+  Write-Step 'Admin-consent'
+  $status = Get-PPConsentStatus
+  $assistantSp = $status.AssistantSp
+  if (-not $status.Ok -and $assistantSp) { Write-Info "Consent finnes, men mangler: $($status.Mangler -join ', ') - ber om godkjenning på nytt." }
+
+  if ($status.Ok -and -not $ForceConsent) { Write-Ok 'Consent finnes allerede for begge apper (inkl. Tasks.Read)'; return $assistantSp }
 
   $url = Get-PPConsentUrl $Tenant
   Write-Info 'Godkjenn som administrator i nettleseren. Etter godkjenning vises en bekreftelsesside:'
@@ -543,15 +552,8 @@ function Request-PPAdminConsent([string] $Tenant) {
   $deadline = (Get-Date).AddMinutes(5)
   do {
     Start-Sleep 5
-    $assistantSp = Get-AzADServicePrincipal -ApplicationId $AssistantAppId -ErrorAction SilentlyContinue
-    $apiSp       = Get-AzADServicePrincipal -ApplicationId $ApiAppId -ErrorAction SilentlyContinue
-    if ($assistantSp -and $apiSp) {
-      $apiGrants = Get-PPGrants $apiSp.Id
-      $hasScope = Get-PPGrants $assistantSp.Id | Where-Object { $_.resourceId -eq $apiSp.Id -and ($_.scope -split ' ') -contains 'Assistant.Access' }
-      $hasObo   = $apiGrants | Where-Object { $_.resourceId -eq $spSp.Id }
-      $hasGraph = $apiGrants | Where-Object { $_.resourceId -eq $graphSp.Id -and ($_.scope -split ' ') -contains 'Tasks.Read' }
-      if ($hasScope -and $hasObo -and $hasGraph) { Write-Ok 'Consent registrert'; return $assistantSp }
-    }
+    $status = Get-PPConsentStatus
+    if ($status.Ok) { Write-Ok 'Consent registrert'; return $status.AssistantSp }
     Write-Host '   venter på consent ...'
   } while ((Get-Date) -lt $deadline)
   throw 'Fikk ikke bekreftet consent innen 5 minutter. Kjør skriptet igjen når godkjenningen er gjort.'
@@ -1240,12 +1242,15 @@ Tidspunkt:         $(Get-Date -Format 'yyyy-MM-dd HH:mm')
 "@
   Write-Host $handoff -ForegroundColor Yellow
 
-  if (-not $AssistantSp) {
+  $ufullstendig = $SkipConsent -and $script:ConsentStatus -and -not $script:ConsentStatus.Ok
+  if (-not $AssistantSp -or $ufullstendig) {
     Write-Step 'Gjenstår: admin-consent'
+    if ($AssistantSp) { Write-Info "Appen er godkjent, men mangler: $($script:ConsentStatus.Mangler -join ', ')." }
     Write-Info 'Send denne lenken til en Global Administrator, Privileged Role Administrator eller Cloud Application Administrator:'
     Write-Host "   $(Get-PPConsentUrl $Tenant)" -ForegroundColor Yellow
     Write-Info 'Når godkjenningen er gjort: kjør skriptet på nytt med de samme parametrene, uten -SkipConsent.'
-    if ($FulltOppsett) { Write-Info 'Det som finnes fra før, gjenbrukes. Det som gjenstår, er lesetilgangen for «Prosjektportalen Assistent» til vaulten.' }
+    if ($FulltOppsett -and -not $AssistantSp) { Write-Info 'Det som finnes fra før, gjenbrukes. Det som gjenstår, er lesetilgangen for «Prosjektportalen Assistent» til vaulten.' }
+    elseif ($AssistantSp) { Write-Info "Eller bare: .\Setup-PPAssistant.ps1 -HubUrl $($HubUrl.TrimEnd('/')) - da kontrolleres og fornyes kun godkjenningene." }
   }
   Write-Info 'Er virksomheten allerede registrert, trenger teamet ikke blokken – sammenlign bare hub-URL og vault-navn med det som er registrert.'
   Write-Info 'Ellers svarer assistenten «tenant_not_onboarded» til registreringen er gjort. Du får bekreftelse på e-post.'
@@ -1395,8 +1400,16 @@ if ($assistantSpCurrent) {
     $grantCurrent = Get-PPGrants $assistantSpCurrent.Id | Where-Object { $_.resourceId -eq $spSpCurrent.Id } | Select-Object -First 1
     $scopeCurrent = @(if ($grantCurrent) { ($grantCurrent.scope -split ' ') | Where-Object { $_ } })
     if ($scopeCurrent.Count -gt 0) { $scopeTekst = $scopeCurrent -join ' ' }
-    $consentTekst = 'appen er godkjent fra før'
-    Add-PPCheck -Navn 'Admin-consent' -Status 'OK' -Detalj 'appen finnes i tenanten'
+    $script:ConsentStatus = Get-PPConsentStatus
+    if ($script:ConsentStatus.Ok) {
+      $consentTekst = 'alle godkjenninger er gitt'
+      Add-PPCheck -Navn 'Admin-consent' -Status 'OK' -Detalj 'alle tre godkjenningene finnes (inkl. Graph Tasks.Read)'
+    } else {
+      $consentTekst = "appen finnes, men mangler: $($script:ConsentStatus.Mangler -join ', ')"
+      $fiks = if ($SkipConsent) { 'Hoppes over (-SkipConsent). Be en administrator godkjenne på nytt - lenken skrives ut til slutt. Uten den svarer Planner-oppgaver consent_required; alt annet virker.' }
+              else { 'Skriptet ber om godkjenning på nytt etter bekreftelsen. Det krever administrator; er du ikke det, kjør med -SkipConsent og send lenken til en administrator.' }
+      Add-PPCheck -Navn 'Admin-consent' -Status 'ADVARSEL' -Detalj "mangler: $($script:ConsentStatus.Mangler -join ', ')" -Fiks $fiks
+    }
   } catch {
     $consentTekst = 'kunne ikke leses'
     Add-PPCheck -Navn 'Admin-consent' -Status 'UKJENT' -Detalj $_.Exception.Message
