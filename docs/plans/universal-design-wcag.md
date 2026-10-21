@@ -1509,3 +1509,21 @@ through `withSessionRenewal`.
     rest, and the annotation counts both.
   - Run locally on the deployed code, the overview has 0 cut off and 73 ending in «…».
 
+**The test-channel run for part 5 (39585979136, commit 64db330d9):**
+
+- **Green:** the build, the upgrade and the integration tests.
+- **The e2e: 100 passed, 3 flaky and 1 failed.**
+- **The failure, and two of the flaky, are the React fault on list pages.**
+  - They are the tests that open «Hent dokumentmal» in the project's document library.
+  - The fault struck on 4 of 6 attempts: `useContext` of null in SharePoint's
+    `listview-host-assembly`, and the dialog never rendered.
+  - So the 28 clean loads of a hub list view (part 4) do not mean the fault is gone. It still
+    strikes in a document library right after deployment. The reply to sp-dev-docs#11068 says
+    so.
+- **The third flaky** was a `color-contrast` finding, serious, on the label of a menu button in
+  the second aggregation web part on the benefit overview page.
+  - That web part is blocking. The retry was clean, and locally the page is clean.
+  - The button was not disabled: axe skips `aria-disabled` ones. The finding came from a passing
+    state while the web part loaded.
+  - If it comes back, the scan should wait for the list's data before it runs.
+
