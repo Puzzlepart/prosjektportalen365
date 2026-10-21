@@ -1,70 +1,36 @@
-import {
-  Button,
-  Divider,
-  Field,
-  ProgressBar,
-  Text,
-  useAnnounce,
-  useId
-} from '@fluentui/react-components'
+import { Button, Divider, Field, ProgressBar, Text } from '@fluentui/react-components'
 import { ChevronDownRegular, ChevronUpRegular } from '@fluentui/react-icons'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { FC, useEffect, useRef, useState } from 'react'
-import { UserMessage, format, getFluentIconWithFallback } from 'pp365-shared-library'
+import React, { FC } from 'react'
+import { UserMessage, getFluentIconWithFallback } from 'pp365-shared-library'
 import { BaseDialog } from '../@BaseDialog'
 import styles from './ProgressDialog.module.scss'
 import { IProgressDialogProps } from './types'
 import { TaskLogSection } from './TaskLogSection'
+import { useProgressDialog } from './useProgressDialog'
 
 /**
  * The dialog that shows the setup as it runs: the step it is on, how far along it is, and the
- * advanced log. A new step is told to a screen reader as it starts (WCAG 4.1.3), since the bar
- * and the step count change in silence.
+ * advanced log. A new step is told to a screen reader as it starts (`useProgressDialog`).
  */
 export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
-  const [logExpanded, setLogExpanded] = useState(false)
-  const logId = useId('progress-log')
-  const { announce } = useAnnounce()
-  const step = props.progressIndicator?.label
-  const isFirstStep = useRef(true)
-
-  useEffect(() => {
-    if (isFirstStep.current) {
-      isFirstStep.current = false
-      return
-    }
-    if (!step) return
-    announce(
-      props.totalSteps > 0
-        ? format(
-            strings.ProgressStepAnnouncement,
-            Math.min((props.currentStep ?? 0) + 1, props.totalSteps),
-            props.totalSteps,
-            step
-          )
-        : step,
-      { polite: true }
-    )
-  }, [step])
-
-  const hasTaskProgress = props.taskProgress && props.taskProgress.length > 0
-  const hasError =
-    !!props.error || (hasTaskProgress && props.taskProgress.some((t) => t.status === 'error'))
-  const isExpanded = logExpanded || hasError
-  const title = props.title ?? strings.ProgressDialogTitle
-  const subText = props.subText ?? strings.ProgressDialogSubText
-
-  useEffect(() => {
-    if (props.isComplete && !logExpanded) {
-      props.onDismiss?.()
-    }
-  }, [props.isComplete])
+  const {
+    title,
+    subText,
+    progressValue,
+    stepCountText,
+    hasTaskProgress,
+    isLogExpanded,
+    toggleLog,
+    logId,
+    showContinue
+  } = useProgressDialog(props)
 
   const footer = props.error ? (
     <Button appearance='primary' onClick={props.onDismiss}>
       {strings.CloseModalText}
     </Button>
-  ) : props.isComplete && logExpanded ? (
+  ) : showContinue ? (
     <Button appearance='primary' onClick={props.onDismiss}>
       {strings.ContinueToProjectText}
     </Button>
@@ -85,21 +51,11 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
         <div className={styles.icon}>{getFluentIconWithFallback(props.iconName, { size: 42 })}</div>
         <div className={styles.indicator}>
           <Field label={props.progressIndicator?.label} hint={props.progressIndicator?.description}>
-            <ProgressBar
-              value={
-                props.totalSteps > 0
-                  ? Math.min((props.currentStep ?? 0) + 1, props.totalSteps) / props.totalSteps
-                  : undefined
-              }
-            />
+            <ProgressBar value={progressValue} />
           </Field>
-          {props.totalSteps > 0 && (
+          {stepCountText && (
             <Text size={200} className={styles.stepCount}>
-              {format(
-                strings.ProgressStepCountText,
-                String(Math.min((props.currentStep ?? 0) + 1, props.totalSteps)),
-                String(props.totalSteps)
-              )}
+              {stepCountText}
             </Text>
           )}
         </div>
@@ -112,9 +68,9 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
             <Button
               appearance='subtle'
               size='small'
-              icon={isExpanded ? <ChevronUpRegular /> : <ChevronDownRegular />}
-              onClick={() => setLogExpanded(!logExpanded)}
-              aria-expanded={isExpanded}
+              icon={isLogExpanded ? <ChevronUpRegular /> : <ChevronDownRegular />}
+              onClick={toggleLog}
+              aria-expanded={isLogExpanded}
               aria-controls={logId}
             >
               {strings.ProgressAdvancedLogLabel}
@@ -123,8 +79,8 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
               {strings.ProgressAdvancedLogDescription}
             </Text>
           </div>
-          <div id={logId} className={styles.logContainer} hidden={!isExpanded}>
-            {isExpanded && <TaskLogSection tasks={props.taskProgress} />}
+          <div id={logId} className={styles.logContainer} hidden={!isLogExpanded}>
+            {isLogExpanded && <TaskLogSection tasks={props.taskProgress} />}
           </div>
         </>
       )}

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import {
   Card,
   CardHeader,
@@ -12,18 +12,21 @@ import * as strings from 'ProjectWebPartsStrings'
 import styles from './RecentNews.module.scss'
 import { getFluentIcon, format, formatShortDate } from 'pp365-shared-library'
 import { IRecentNewsProps } from './types'
+import { useRecentNews } from './useRecentNews'
 
-export const RecentNews: FC<IRecentNewsProps> = ({ news, maxVisible = 4 }) => {
-  const [showAll, setShowAll] = useState(false)
-  const visibleNews = showAll ? news : news.slice(0, maxVisible)
+/**
+ * The project's latest news as a list, the first few shown, and a button that shows the rest.
+ */
+export const RecentNews: FC<IRecentNewsProps> = (props) => {
+  const { showAll, toggleShowAll, visibleNews, hasMore, listId } = useRecentNews(props)
 
   return (
     <>
-      {news.length === 0 ? (
+      {props.news.length === 0 ? (
         <div className={styles.noRecentNews}>{strings.NoRecentNews}</div>
       ) : (
         <>
-          <div className={styles.recentNews} role='list'>
+          <div id={listId} className={styles.recentNews} role='list'>
             {visibleNews.map((item) => (
               <Card key={item.name} className={styles.card} role='listitem'>
                 {item.imageUrl && <img src={item.imageUrl} alt='' className={styles.cardImage} />}
@@ -61,13 +64,14 @@ export const RecentNews: FC<IRecentNewsProps> = ({ news, maxVisible = 4 }) => {
               </Card>
             ))}
           </div>
-          <div hidden={news.length <= maxVisible}>
+          <div hidden={!hasMore}>
             <Button
               appearance='subtle'
               size='small'
               icon={showAll ? getFluentIcon('ChevronUp') : getFluentIcon('ChevronDown')}
               aria-expanded={showAll}
-              onClick={() => setShowAll(!showAll)}
+              aria-controls={listId}
+              onClick={toggleShowAll}
             >
               {showAll ? strings.ShowLessNews : strings.ShowMoreNews}
             </Button>

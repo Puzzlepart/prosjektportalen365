@@ -3,7 +3,7 @@ import strings from 'PortfolioWebPartsStrings'
 import { format } from 'pp365-shared-library'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
 import { sortAlphabetically } from 'pp365-shared-library/lib/util/sortAlphabetically'
-import { useEffect, useRef } from 'react'
+import { Key, useEffect, useRef } from 'react'
 import _ from 'underscore'
 import { IProjectCardContext } from './ProjectCard/context'
 import { IProjectListProps } from './types'
@@ -117,6 +117,12 @@ export const useProjectList = (props: IProjectListProps) => {
     }
   }
 
+  /** The id of a selection's tab, which names the projects' panel while it is selected. */
+  const getTabId = (key: Key) => `${fluentProviderId}-tab-${String(key)}`
+  // While the list loads the tabs are skeletons: the panel would name itself by a tab not there.
+  const selectedTabId =
+    state.isDataLoaded && state.selectedVertical ? getTabId(state.selectedVertical.key) : undefined
+
   return {
     props,
     state,
@@ -125,6 +131,8 @@ export const useProjectList = (props: IProjectListProps) => {
     verticals,
     createCardContext,
     shouldDisplay,
-    fluentProviderId
+    fluentProviderId,
+    getTabId,
+    selectedTabId
   }
 }

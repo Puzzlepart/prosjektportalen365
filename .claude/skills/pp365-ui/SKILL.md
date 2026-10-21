@@ -129,7 +129,7 @@ Names, labels (the `FieldContainer` wiring, `useFieldControlProps_unstable`, `Pe
 - Use `isOpen`/`onDismiss` on `BasePanel`, a `non-modal` drawer, or `applyStylesToPortals={false}`.
 - Add a provider around or inside a wrapper that has its own, or one per cell or row; call `bundleIcon` in a render; animate list rows in.
 - Render Fluent's `DataGrid` directly for a new list, or rebuild a list's columns on every render.
-- Style with Griffel `makeStyles` outside the two components that already do (`TemplatePackageCatalog`, `ProjectMenu`); use `.module.scss`.
+- Style with Griffel `makeStyles` outside the components that already do (`TemplatePackageCatalog` and its parts, `ProjectMenu`, the status page's `SnapshotDialog` and its `CopyLinkDialog`); use `.module.scss`.
 - Hard-code user-facing text in either language, error messages and `aria-label`s included.
 - Remove a `fabricIconAliases.ts` entry; tenants keep the old names in their lists for good.
 - Take `npx tsc --noEmit` as the check: it runs no ESLint, and the error-level rules (`unused-imports/no-unused-imports`, `react/jsx-key`, `prettier/prettier`, the restricted imports) fail `heft build`; run `npx eslint <files>` in the solution.

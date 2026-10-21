@@ -147,12 +147,19 @@ describe('TemplatePackageCatalogCommandSet', () => {
     menu.appendChild(item)
     document.body.append(more, menu)
     item.focus()
-    const opening = command.onExecute(execute(OPEN))
-    await act(() => new Promise((resolve) => setTimeout(resolve, 100)))
-    expect(screen.queryByText(/Katalog fra/)).toBeNull()
-    menu.remove()
-    more.focus()
-    await act(() => opening)
+    // The clock stands still, so the wait for the menu to close cannot time out however slow the
+    // worker is; it would then open with the focus still in the menu.
+    const now = jest.spyOn(Date, 'now').mockReturnValue(Date.now())
+    try {
+      const opening = command.onExecute(execute(OPEN))
+      await act(() => new Promise((resolve) => setTimeout(resolve, 100)))
+      expect(screen.queryByText(/Katalog fra/)).toBeNull()
+      menu.remove()
+      more.focus()
+      await act(() => opening)
+    } finally {
+      now.mockRestore()
+    }
     const catalog = screen.getByText(/Katalog fra/)
     catalog.focus()
     act(() => {

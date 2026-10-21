@@ -7,13 +7,13 @@ import { ITimelineProps } from './types'
 import { useGroupRenderer } from './useGroupRenderer'
 import { TIMELINE_ROW_BACKGROUND, useItemRenderer } from './useItemRenderer'
 import { getContrastingShade } from '../../../util'
+import { useToolbarItems } from './ToolbarItems/useToolbarItems'
 
 /**
  * The time-lapse marker's red, darkened just until it reaches 3:1 against the grey rows: as
  * configured, #f35d69 had 2.85:1 (WCAG 1.4.11).
  */
 const TIME_LAPSE_MARKER_COLOR = getContrastingShade('#f35d69', TIMELINE_ROW_BACKGROUND) ?? '#f35d69'
-import { useToolbarItems } from './ToolbarItems/useToolbarItems'
 
 export function useTimeline(props: ITimelineProps) {
   const [showDetails, setShowDetails] = useState<{

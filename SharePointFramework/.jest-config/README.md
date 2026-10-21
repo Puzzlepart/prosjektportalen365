@@ -21,3 +21,8 @@ AA and WCAG 2.2 AA rules (#1788): `import { axeComponent } from 'pp365-jest-conf
 then `expect(await axeComponent(container)).toHaveNoViolations()`. Colour contrast is off, since
 jsdom has no layout; the browser suite measures it. Requiring the module registers the matcher,
 so only the tests that use it load axe-core.
+
+`lib/announce.js` reads what Fluent's `AriaLiveAnnouncer` said, the newest message in each live
+region: `import { announced } from 'pp365-jest-config/lib/announce'`, then
+`await waitFor(() => expect(announced()).toContain(strings.Saved))`. jsdom keeps the announcer's
+`innerText` as a property and ignores its clearing, so the newest message is the last span.

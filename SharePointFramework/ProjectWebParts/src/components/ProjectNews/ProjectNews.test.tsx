@@ -81,6 +81,8 @@ describe('ProjectNews', () => {
     expect(within(list).getAllByRole('listitem')).toHaveLength(2)
     const more = screen.getByRole('button', { name: strings.ShowMoreNews })
     expect(more).toHaveAttribute('aria-expanded', 'false')
+    // It names the list it opens.
+    expect(more).toHaveAttribute('aria-controls', list.id)
     await user.click(more)
     expect(within(list).getAllByRole('listitem')).toHaveLength(3)
     expect(screen.getByRole('button', { name: strings.ShowLessNews })).toHaveAttribute(

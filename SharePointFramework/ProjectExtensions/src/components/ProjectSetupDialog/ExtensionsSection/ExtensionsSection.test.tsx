@@ -14,7 +14,6 @@ jest.mock('./useExtensionsSection', () => ({
     onSelectionChange: mockOnSelectionChange,
     searchTerm: '',
     onSearch: mockOnSearch,
-    toolbarItems: [],
     selectedCountText: '1 valgte elementer'
   })
 }))

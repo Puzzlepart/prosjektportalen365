@@ -23,6 +23,14 @@
 
       .progress {
         margin: 12px 0 0 0;
+
+        // As a field's message: Fluent's caption under the bar.
+        .progressText {
+          margin-top: var(--spacingVerticalXXS);
+          color: var(--colorNeutralForeground3);
+          font-size: var(--fontSizeBase200);
+          line-height: var(--lineHeightBase200);
+        }
       }
     }
   }

@@ -59,9 +59,8 @@ const Icons = {
 
 export function useToolbarItems(isSingleView: boolean = false, showNewButton: boolean = true) {
   const context = useContext(DynamicListContext)
-  const ownToasterId = useId('toaster')
-  // The web part's toaster, which a drop on the library also tells in.
-  const toasterId = context.toasterId ?? ownToasterId
+  // The web part's toaster, which a drop on the library and every action tell in.
+  const toasterId = context.toasterId
   const exportToExcel = useExcelExport(toasterId)
   const fluentProviderId = useId('fp-dynamic-list-actions')
   const { dispatchToast } = useToastController(toasterId)

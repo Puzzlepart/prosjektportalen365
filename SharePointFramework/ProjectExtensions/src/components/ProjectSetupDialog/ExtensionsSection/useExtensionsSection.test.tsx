@@ -5,6 +5,7 @@ import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import { ProjectSetupDialogContext } from '../context'
 import { useExtensionsSection } from './useExtensionsSection'
+import { announced } from 'pp365-jest-config/lib/announce'
 
 /**
  * The order the section lists its items in: the ones the chosen template makes mandatory first,
@@ -34,20 +35,6 @@ function renderProbe(all: any[], selected: any[]) {
     </ProjectSetupDialogContext.Provider>
   )
 }
-
-/**
- * What the announcer's live region holds now. It writes each message as `innerText` on a span of
- * its own, which jsdom keeps as a property rather than as text, and clears the region through
- * `innerText` too, which jsdom ignores: the newest message is the last span.
- */
-const announced = () =>
-  Array.from(document.body.querySelectorAll('[aria-live]'))
-    .map((region) => {
-      const spans = region.querySelectorAll('span')
-      const span = spans[spans.length - 1] as HTMLElement | undefined
-      return (span && (span.innerText || span.textContent)) || region.textContent || ''
-    })
-    .join(' ')
 
 describe('useExtensionsSection', () => {
   it('lists the mandatory items first, then the selected, then the rest, each in title order', () => {

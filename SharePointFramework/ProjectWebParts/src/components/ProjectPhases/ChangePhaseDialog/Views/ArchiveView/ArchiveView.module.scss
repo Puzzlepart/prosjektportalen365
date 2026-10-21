@@ -18,11 +18,25 @@
       flex-direction: row;
       align-items: center;
       gap: 8px;
+      width: 100%;
+      margin: 0;
       padding: 6px;
+      border: none;
+      background: none;
+      color: inherit;
+      font: inherit;
+      text-align: left;
       cursor: pointer;
 
       &:hover {
         background-color: var(--colorSubtleBackgroundHover);
+        border-radius: var(--borderRadiusSmall);
+      }
+
+      // A button of our own: the focus ring Fluent's buttons draw (WCAG 2.4.7).
+      &:focus-visible {
+        outline: var(--strokeWidthThick) solid var(--colorStrokeFocus2);
+        outline-offset: calc(var(--strokeWidthThick) * -1);
         border-radius: var(--borderRadiusSmall);
       }
 

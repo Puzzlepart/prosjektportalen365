@@ -15,7 +15,9 @@ export function useChangingPhaseView() {
   const description = format(strings.ChangingPhaseDescription, context.state.confirmPhase.name)
 
   useEffect(() => {
-    announce(`${strings.PleaseWaitText}. ${description}`, { polite: true })
+    announce(format(strings.Aria.ChangingPhaseAnnouncement, strings.PleaseWaitText, description), {
+      polite: true
+    })
   }, [announce, description])
 
   return { description }

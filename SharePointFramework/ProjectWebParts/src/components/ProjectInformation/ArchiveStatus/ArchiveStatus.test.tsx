@@ -67,15 +67,16 @@ describe('ArchiveStatus', () => {
       }
     ]
     render(<ArchiveStatus />)
-    expect(screen.getByRole('heading', { level: 3, name: strings.ArchiveStatusHeaderText }))
+    expect(
+      screen.getByRole('heading', { level: 3, name: strings.ArchiveStatusHeaderText })
+    ).toBeInTheDocument()
     const dialog = screen.getByRole('dialog', { name: strings.ArchiveStatusHeaderText })
     expect(dialog).toBeInTheDocument()
     expect(popover.trapFocus).toBe(true)
-    // The status is the group's heading; its colour is the icon's, not the text's, which in the
-    // warning's orange read 2:1 (WCAG 1.4.3).
-    expect(screen.getByText('Dokumenter (2)').closest('.fui-Tag')).not.toHaveStyle({
-      color: '#ffa500'
-    })
+    // The status is the group's heading; its colour is the icon's, and the text takes none of its
+    // own: in the warning's orange it read 2:1 (WCAG 1.4.3).
+    const tag = screen.getByText('Dokumenter (2)').closest('.fui-Tag') as HTMLElement
+    expect(tag.style.color).toBe('')
   })
 })
 

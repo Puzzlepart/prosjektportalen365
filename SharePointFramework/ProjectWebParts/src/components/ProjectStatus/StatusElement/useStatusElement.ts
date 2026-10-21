@@ -3,6 +3,8 @@ import { SectionContext } from '../Sections/context'
 import styles from './StatusElement.module.scss'
 import { IStatusElementProps } from './types'
 import { useId } from '@fluentui/react-components'
+import { format } from 'pp365-shared-library'
+import * as strings from 'ProjectWebPartsStrings'
 
 /**
  * Component logic hook for `StatusElement`. Handles truncating of the comment
@@ -33,7 +35,7 @@ export function useStatusElement(props: IStatusElementProps) {
   // The name of the icon shown alone: the section and its status, which the icon shows by its
   // colour only (WCAG 1.1.1).
   const iconName = headerProps.value
-    ? `${headerProps.label}: ${headerProps.value}`
+    ? format(strings.Aria.NameValueLabel, headerProps.label, headerProps.value)
     : headerProps.label
 
   return {

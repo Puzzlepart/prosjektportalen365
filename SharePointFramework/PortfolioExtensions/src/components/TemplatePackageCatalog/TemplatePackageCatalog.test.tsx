@@ -17,6 +17,7 @@ import { InstallProgress } from './InstallProgress'
 import { PackageDetails } from './PackageDetails'
 import { PackageList } from './PackageList'
 import { ALL_FILTER } from './types'
+import { announced } from 'pp365-jest-config/lib/announce'
 
 /**
  * The template package catalog's parts, each under a context stand-in: the list of packages to
@@ -98,19 +99,6 @@ function renderIn(value: any, element: React.ReactElement) {
   return result
 }
 
-/**
- * What the announcer's live region holds now. It writes each message as `innerText` on a span of
- * its own, which jsdom keeps as a property rather than as text: the newest message is the last.
- */
-const announced = () =>
-  Array.from(document.body.querySelectorAll('[aria-live]'))
-    .map((region) => {
-      const spans = region.querySelectorAll('span')
-      const span = spans[spans.length - 1] as HTMLElement | undefined
-      return (span && (span.innerText || span.textContent)) || region.textContent || ''
-    })
-    .join(' ')
-
 describe('TemplatePackageCatalog', () => {
   it('lists the packages as buttons that choose one, the chosen marked current (WCAG 4.1.2)', () => {
     renderIn(context(), <PackageList />)
@@ -150,6 +138,10 @@ describe('TemplatePackageCatalog', () => {
     const action = screen.getByRole('button', { name: strings.CatalogActionImport })
     expect(action).toHaveAttribute('aria-disabled', 'true')
     expect(action).not.toHaveAttribute('disabled')
+    // Why, in its description: the message above the actions was not reached from it.
+    expect(action).toHaveAccessibleDescription(
+      format(strings.CatalogIncompatibleText, '1.16.0', '?')
+    )
   })
 
   it('gives the focus back to the package when its installation is closed (WCAG 2.4.3)', () => {

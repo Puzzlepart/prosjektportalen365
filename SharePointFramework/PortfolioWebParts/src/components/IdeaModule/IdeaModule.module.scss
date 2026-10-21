@@ -82,11 +82,12 @@
       border-radius: var(--borderRadiusXLarge);
       width: fit-content;
 
-      // An h3 under the idea's title, the size of the h2 it was.
+      // An h3 under the idea's title, about the size of the h2 it was (21 px then, 20 px now).
       .statusTitle {
-        font-size: 1.5em;
-        font-weight: bold;
-        margin: 0.83em 0;
+        font-size: var(--fontSizeBase500);
+        line-height: var(--lineHeightBase500);
+        font-weight: var(--fontWeightBold);
+        margin: var(--spacingVerticalL) 0;
       }
 
       .ideaTitle {

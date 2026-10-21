@@ -10,6 +10,8 @@ declare interface IProjectWebPartsStrings {
     PhaseListLabel: string
     ChecklistStepsLabel: string
     MoreSectionsLabel: string
+    NameValueLabel: string
+    ChangingPhaseAnnouncement: string
   }
   SaveText: string
   ErrorBoundaryFallbackDescription: string

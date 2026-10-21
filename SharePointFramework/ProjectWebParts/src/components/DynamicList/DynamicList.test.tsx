@@ -111,6 +111,7 @@ import strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
 import { DynamicList } from './DynamicList'
 import { DynamicListMode } from './types'
+import { announced } from 'pp365-jest-config/lib/announce'
 
 /**
  * The dynamic list web part as a whole: the message without a list, the title from the list,
@@ -140,20 +141,6 @@ function renderList(state: Record<string, any> | undefined, props: Record<string
     </AriaLiveAnnouncer>
   )
 }
-
-/**
- * What the announcer's live region holds now. It writes each message as `innerText` on a span of
- * its own, which jsdom keeps as a property rather than as text, and clears the region through
- * `innerText` too, which jsdom ignores: the newest message is the last span.
- */
-const announced = () =>
-  Array.from(document.body.querySelectorAll('[aria-live]'))
-    .map((region) => {
-      const spans = region.querySelectorAll('span')
-      const span = spans[spans.length - 1] as HTMLElement | undefined
-      return (span && (span.innerText || span.textContent)) || region.textContent || ''
-    })
-    .join(' ')
 
 const toolbarButton = (name: string) => screen.getByText(name).closest('button') as HTMLElement
 

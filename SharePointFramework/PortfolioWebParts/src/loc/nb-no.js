@@ -38,9 +38,7 @@ define([], function () {
     Aria: {
       MenuOverflowCount: '{0} flere elementer',
       MoveDisabled: 'Kan ikke flytte skjult kolonne',
-      MoveUp: 'Flytt opp',
       MoveUpDisabled: 'Kan ikke flytte opp, øverste element',
-      MoveDown: 'Flytt ned',
       MoveDownDisabled: 'Kan ikke flytte ned, nederste element'
     },
     Placeholder: {
@@ -100,6 +98,7 @@ define([], function () {
     ColumnCategoryDescription: 'Angi en kategori for kolonnen. Kolonnen vil dukke opp i alle visninger som bruker denne kategorien. Om du ønsker å endre kategorien for alle webdeler og visninger, kan du endre kategorien i listen Prosjektkolonner.',
     ColumnCategoryLabel: 'Kategori for kolonnen',
     ColumnFieldLockedText: 'Kan ikke endres for en kolonne som finnes.',
+    ColumnFieldLockedDescription: '{0} {1}',
     ColumnFormSaveDisabledReason: 'Fyll ut internt feltnavn, søkeegenskap og visningsnavn, med minst to tegn i hvert, for å lagre',
     ColumnRenderDataTypePropertiesHeaderText: 'Egenskaper for visningsmodus',
     ColumnRenderDescription: 'Velg hvordan kolonnen skal vises. Om det er tekstfelt som skal vises over flere linjer, velg Notat.',
@@ -109,7 +108,6 @@ define([], function () {
     ColumnVisibilityDescription: 'Angi hvor kolonnen skal vises. Prosjektforside, prosjektstatus-siden, porterføljeoversikten eller alle steder.',
     ColumnVisibilityLabel: 'Synlighet for kolonne',
     CommandBarGroupName: 'Kommandolinje',
-    CommentLabel: 'Kommentar',
     CompactViewText: 'Kompakt liste',
     ConfigItemTitleFieldDescription: 'Dersom det er spesifisert et element med tittelen angitt her i tidslinjekonfigurasjon listen så vil dette vises på tidslinjen.',
     ConfigItemTitleFieldLabel: 'Element tittel (konfigurasjon)',
@@ -339,7 +337,7 @@ define([], function () {
     NameValueLabel: '{0}: {1}',
     StatusReportedText: 'Status rapportert {0}',
     ProjectTypeIconLabel: '{0} ({1})',
-    MoreVerticalsLabel: '{0} flere utvalg',
+    MoreVerticalsLabel: '+{0} flere utvalg',
     ProjectsShownAnnouncement: 'Viser {0} av {1} prosjekter',
     RenderModeButtonLabel: '{0}, visningsmodus',
     MoveColumnUp: 'Flytt {0} opp',

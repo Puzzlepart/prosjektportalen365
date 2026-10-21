@@ -3,6 +3,7 @@ import { act, waitFor } from '@testing-library/react'
 import React, { FC, useLayoutEffect, useState } from 'react'
 import { UserMessage } from '../components/UserMessage'
 import { renderReact, unmountReact } from './reactRoot'
+import { announced } from 'pp365-jest-config/lib/announce'
 
 /**
  * The one place the solutions mount React: a render shows the element, a second render into the
@@ -73,15 +74,6 @@ describe('renderReact and unmountReact', () => {
   })
 
   describe('status messages', () => {
-    /** What the page's live regions hold now: the announcer writes its message as `innerText`. */
-    const announced = () =>
-      Array.from(document.body.querySelectorAll('[aria-live]'))
-        .map((region) => {
-          const span = region.querySelector('span') as HTMLElement | null
-          return (span && (span.innerText || span.textContent)) || region.textContent || ''
-        })
-        .join(' ')
-
     // A status message follows something the user did or something that loaded, after the root
     // has mounted: the announcer's live region is made in its own effect, which runs after its
     // children's on the first render, so what a child announces while mounting waits in the

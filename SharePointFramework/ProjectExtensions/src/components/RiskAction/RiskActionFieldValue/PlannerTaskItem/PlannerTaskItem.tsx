@@ -7,7 +7,7 @@ import {
   Persona
 } from '@fluentui/react-components'
 import strings from 'ProjectExtensionsStrings'
-import { format, formatShortDate, getFluentIcon } from 'pp365-shared-library'
+import { formatShortDate, getFluentIcon } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import styles from './PlannerTaskItem.module.scss'
 import { IPlannerTaskItemProps } from './types'
@@ -20,8 +20,7 @@ import { PlannerTaskItemProperty } from './PlannerTaskItemProperty'
  * the task; its properties are a description list, and its link goes to the task in Planner.
  */
 export const PlannerTaskItem: FC<IPlannerTaskItemProps> = (props) => {
-  const { onOpenChange, task, taskLink, titleId } = usePlannerTaskItem(props)
-  const isCompleted = props.task.isCompleted === '1'
+  const { onOpenChange, task, taskLink, titleId, isCompleted, label } = usePlannerTaskItem(props)
   return (
     <div className={styles.plannerTaskItem} role='listitem'>
       <Popover onOpenChange={onOpenChange} trapFocus>
@@ -29,11 +28,7 @@ export const PlannerTaskItem: FC<IPlannerTaskItemProps> = (props) => {
           <div
             className={mergeClasses(styles.text, isCompleted && styles.isCompleted)}
             // Struck through to the eye; said in words to a screen reader (WCAG 1.3.1).
-            aria-label={
-              isCompleted
-                ? format(strings.RiskActionTaskCompletedLabel, props.task.title)
-                : undefined
-            }
+            aria-label={label}
           >
             {props.task.title}
           </div>
@@ -71,7 +66,7 @@ export const PlannerTaskItem: FC<IPlannerTaskItemProps> = (props) => {
                 ))}
               </PlannerTaskItemProperty>
             </dl>
-            {props.task.isCompleted === '1' && (
+            {isCompleted && (
               <div className={styles.completedText}>
                 {getFluentIcon('CheckmarkCircle', { color: 'green' })}
                 <span>{strings.RiskActionPlannerTaskPreviewCompletedText}</span>

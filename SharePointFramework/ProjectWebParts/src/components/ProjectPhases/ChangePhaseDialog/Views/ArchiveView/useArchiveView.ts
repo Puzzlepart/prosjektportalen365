@@ -1,3 +1,4 @@
+import { useId } from '@fluentui/react-components'
 import { useContext, useEffect, useState } from 'react'
 import * as strings from 'ProjectWebPartsStrings'
 import { ProjectPhasesContext } from '../../../context'
@@ -13,6 +14,7 @@ export function useArchiveView() {
   const dialogContext = useContext(ChangePhaseDialogContext)
   const [sections, setSections] = useState<IArchiveSection[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const sectionIdPrefix = useId('archive-section')
 
   useEffect(() => {
     const initializeSections = () => {
@@ -127,9 +129,13 @@ export function useArchiveView() {
     }, 0)
   }
 
+  /** The id of a section's items, which its header names as what it folds. */
+  const getSectionContentId = (key: string) => `${sectionIdPrefix}-${key}`
+
   return {
     sections,
     isLoading,
+    getSectionContentId,
     toggleSection,
     toggleItemSelection,
     toggleSectionSelectAll,

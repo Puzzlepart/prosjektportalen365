@@ -142,18 +142,22 @@ describe('useToolbarItems', () => {
     // The hook never answers, so the action keeps running.
     const fetch = global.fetch
     global.fetch = jest.fn(() => new Promise(() => undefined)) as any
-    renderToolbar(
-      { selectedItems: [0], data: { listItems: [{ Id: 1 }], listColumns: [] } },
-      {
-        customActions: [
-          { name: 'Send til arkiv', actionType: CustomActionType.Dialog, hookUrl: 'https://hook' }
-        ]
-      }
-    )
-    fireEvent.click(screen.getByRole('button', { name: 'Send til arkiv' }))
-    expect(
-      await screen.findByRole('progressbar', { name: strings.DynamicList.PleaseWait })
-    ).toBeInTheDocument()
-    global.fetch = fetch
+    try {
+      renderToolbar(
+        { selectedItems: [0], data: { listItems: [{ Id: 1 }], listColumns: [] } },
+        {
+          customActions: [
+            { name: 'Send til arkiv', actionType: CustomActionType.Dialog, hookUrl: 'https://hook' }
+          ]
+        }
+      )
+      fireEvent.click(screen.getByRole('button', { name: 'Send til arkiv' }))
+      expect(
+        await screen.findByRole('progressbar', { name: strings.DynamicList.PleaseWait })
+      ).toBeInTheDocument()
+    } finally {
+      // Back for the tests after this one, failed or not.
+      global.fetch = fetch
+    }
   })
 })

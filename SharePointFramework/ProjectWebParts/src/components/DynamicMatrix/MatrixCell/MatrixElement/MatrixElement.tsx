@@ -1,4 +1,5 @@
-import { replaceTokens } from 'pp365-shared-library/lib/util'
+import { format, replaceTokens } from 'pp365-shared-library/lib/util'
+import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { DynamicMatrixContext } from '../../context'
 import { IMatrixElementProps } from './types'
@@ -38,7 +39,11 @@ export const MatrixElement: FC<IMatrixElementProps> = (props) => {
           hidden={props.hidden}
           role='img'
           tabIndex={0}
-          aria-label={props.title ? `${props.model.id}: ${props.title}` : String(props.model.id)}
+          aria-label={
+            props.title
+              ? format(strings.Aria.NameValueLabel, props.model.id, props.title)
+              : String(props.model.id)
+          }
           aria-describedby={details ? detailsId : undefined}
         >
           {props.model.id}

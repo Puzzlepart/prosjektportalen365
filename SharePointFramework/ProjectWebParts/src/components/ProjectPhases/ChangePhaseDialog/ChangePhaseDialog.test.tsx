@@ -36,6 +36,7 @@ import * as React from 'react'
 import { ProjectPhasesContext } from '../context'
 import { checklistItem, phase } from '../testFixtures'
 import { ChangePhaseDialog } from './ChangePhaseDialog'
+import { announced } from 'pp365-jest-config/lib/announce'
 
 /**
  * The change-phase dialog: the open checkpoints one by one with a comment and a status, the
@@ -74,18 +75,6 @@ function renderDialog(current: any, next: any, props: Record<string, any> = {}) 
 }
 
 const planning = phase('p2', 'Planlegge')
-
-/**
- * What the announcer's live region holds now. It writes its message as `innerText`, which jsdom
- * keeps as a property rather than as text in the document.
- */
-const announced = () =>
-  Array.from(document.body.querySelectorAll('[aria-live]'))
-    .map((region) => {
-      const span = region.querySelector('span') as HTMLElement | null
-      return (span && (span.innerText || span.textContent)) || region.textContent || ''
-    })
-    .join(' ')
 
 /**
  * A button that cannot be used yet, but stays focusable so the keyboard and a screen reader reach
@@ -290,6 +279,11 @@ describe('ChangePhaseDialog', () => {
       'aria-expanded',
       'false'
     )
-    expect(screen.getByRole('button', { name: /^Lister/ })).toHaveAttribute('aria-expanded', 'true')
+    const lists = screen.getByRole('button', { name: /^Lister/ })
+    expect(lists).toHaveAttribute('aria-expanded', 'true')
+    // It names the items it folds.
+    expect(document.getElementById(lists.getAttribute('aria-controls'))).toHaveTextContent(
+      'Risikoer'
+    )
   })
 })
