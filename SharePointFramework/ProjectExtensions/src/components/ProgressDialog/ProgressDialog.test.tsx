@@ -202,4 +202,25 @@ describe('ProgressDialog', () => {
     fireEvent.click(screen.getByRole('button', { name: strings.ContinueToProjectText }))
     expect(onDismiss).toHaveBeenCalled()
   })
+
+  it('waits for the user and shows the warning when setup completes with one', () => {
+    const onDismiss = jest.fn()
+    const warning = { title: 'Ikke registrert i porteføljen', text: 'Kontakt en administrator.' }
+    const { rerender } = render(
+      <ProgressDialog progressIndicator={INDICATOR} taskProgress={tasks()} onDismiss={onDismiss} />
+    )
+    rerender(
+      <ProgressDialog
+        progressIndicator={INDICATOR}
+        taskProgress={tasks()}
+        onDismiss={onDismiss}
+        warning={warning}
+        isComplete
+      />
+    )
+    expect(onDismiss).not.toHaveBeenCalled()
+    expect(screen.getByText(warning.title)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: strings.ContinueToProjectText }))
+    expect(onDismiss).toHaveBeenCalled()
+  })
 })

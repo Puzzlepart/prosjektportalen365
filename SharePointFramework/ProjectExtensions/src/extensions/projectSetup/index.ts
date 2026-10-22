@@ -4,6 +4,7 @@ import { isArray, stringIsNullOrEmpty } from '@pnp/core'
 import { ConsoleListener, LogLevel, Logger } from '@pnp/logging'
 import { SPFI } from '@pnp/sp'
 import { IMenuNode } from '@pnp/sp/navigation'
+import { PermissionKind } from '@pnp/sp/security'
 import strings from 'ProjectExtensionsStrings'
 import resource from 'SharedResources'
 import { SPDataAdapter } from 'data'
@@ -187,7 +188,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       const languageRemovedKey = `pp_languagesRemoved_${this.context.pageContext.site.id.toString()}`
       if (sessionStorage.getItem(languageRemovedKey) === 'true') {
         sessionStorage.removeItem(languageRemovedKey)
-        await ListLogger.log({
+        await this._logToHub(data, {
           message: `Removed alternative languages from site: ${this.context.pageContext.web.title}`,
           functionName: '_removeAlternativeLanguages',
           component: 'ProjectSetup'
@@ -216,7 +217,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           .getByTitle(resource.Lists_ProjectProperties_Title)
           .items.getById(1)
           .update({ GtIsParentProject: true, GtChildProjects: JSON.stringify([]) })
-        await this._ensureParentProjectPatch()
+        if (data.hasHubWriteAccess !== false) {
+          await this._ensureParentProjectPatch()
+        }
       }
 
       await deleteCustomizer(this)
@@ -233,6 +236,16 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           currentStep: this._totalTasks,
           totalSteps: this._totalTasks,
           isComplete: true,
+          warning:
+            data.hasHubWriteAccess === false
+              ? {
+                  title: strings.ProjectNotRegisteredInHubTitle,
+                  text: format(
+                    strings.ProjectNotRegisteredInHubMessage,
+                    resource.Lists_Projects_Title
+                  )
+                }
+              : undefined,
           onDismiss: () => {
             window.location.href = this.context.pageContext.web.absoluteUrl
           }
@@ -427,7 +440,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     this._currentTaskIndex = 0
 
     try {
-      await ListLogger.log({
+      await this._logToHub(data, {
         message: format(
           strings.ProjectProvisioningStartLogText,
           this.context.pageContext.web.title
@@ -458,7 +471,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           throw error
         }
       }
-      await ListLogger.log({
+      await this._logToHub(data, {
         message: format(
           strings.ProjectProvisioningSuccessLogText,
           this.context.pageContext.web.title
@@ -467,7 +480,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         component: 'ProjectSetup'
       })
     } catch (error) {
-      await ListLogger.log({
+      await this._logToHub(data, {
         message: error.message,
         functionName: '_startProvision',
         component: 'ProjectSetup',
@@ -476,6 +489,17 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       })
       throw error
     }
+  }
+
+  /**
+   * Write an entry to the log list on the hub, unless the setup must not write to the hub.
+   *
+   * @param data Project setup data
+   * @param entry Log entry
+   */
+  private async _logToHub(data: IProjectSetupData, entry: Parameters<typeof ListLogger.log>[0]) {
+    if (data.hasHubWriteAccess === false) return
+    await ListLogger.log(entry)
   }
 
   /**
@@ -578,8 +602,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         spfxContext: this.context
       })
 
-      const [_templates, extensions, contentConfig, templateFiles, projectData] = await Promise.all(
-        [
+      const [_templates, extensions, contentConfig, templateFiles, projectData, hasHubWriteAccess] =
+        await Promise.all([
           this._getTemplates(),
           this._portalDataService.getItems(
             resource.Lists_ProjectExtensions_Title,
@@ -601,9 +625,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             },
             ['File']
           ),
-          this._portalDataService.getProjectData()
-        ]
-      )
+          this._portalDataService.getProjectData(),
+          this._checkHubWriteAccess()
+        ])
       const templates = _templates.map((tmpl) => {
         const [tmplFile] = templateFiles.filter((file) => file.id === tmpl.projectTemplateId)
         tmpl.projectTemplateUrl = tmplFile?.serverRelativeUrl
@@ -627,7 +651,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         contentConfig,
         templates,
         projectData,
-        hasExistingTemplate
+        hasExistingTemplate,
+        hasHubWriteAccess
       } as IProjectSetupData
     } catch (error) {
       throw new ProjectSetupError(
@@ -635,6 +660,27 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         strings.GetSetupDataErrorMessage,
         strings.GetSetupDataErrorStack + error.message
       )
+    }
+  }
+
+  /**
+   * Check whether the current user can add items to the project list on the hub,
+   * which the setup needs to register the project in the portfolio.
+   *
+   * @returns `undefined` when the check fails, so the setup writes to the hub as usual
+   */
+  private async _checkHubWriteAccess(): Promise<boolean | undefined> {
+    try {
+      return await this._portalDataService.currentUserHasPermissionsToList(
+        'PROJECTS',
+        PermissionKind.AddListItems
+      )
+    } catch (error) {
+      Logger.write(
+        `(ProjectSetup) Could not check write access to the hub project list: ${error?.message}`,
+        LogLevel.Warning
+      )
+      return undefined
     }
   }
 

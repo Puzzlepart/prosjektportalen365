@@ -258,6 +258,20 @@ describe('ProjectSetupDialog', () => {
     expect(screen.queryByText(strings.ProjectDataFoundTitle)).toBeNull()
   })
 
+  it('warns before setup that the project is not registered in the portfolio without write access to the hub', () => {
+    renderDialog({ data: setupData({ hasHubWriteAccess: false }) })
+    expect(screen.getByText(strings.NoHubWriteAccessTitle)).toBeInTheDocument()
+    expect(submit()).toBeEnabled()
+  })
+
+  it('does not warn about the hub when the user can write to it, or it could not be checked', () => {
+    renderDialog({ data: setupData({ hasHubWriteAccess: true }) })
+    expect(screen.queryByText(strings.NoHubWriteAccessTitle)).toBeNull()
+    cleanup()
+    renderDialog()
+    expect(screen.queryByText(strings.NoHubWriteAccessTitle)).toBeNull()
+  })
+
   it('warns that Planner needs membership of the group', () => {
     renderDialog({ validation: ProjectSetupValidation.UserNotGroupMember })
     expect(screen.getByText(strings.PlannerMemberWarningMessage)).toBeInTheDocument()

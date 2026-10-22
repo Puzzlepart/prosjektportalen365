@@ -326,3 +326,44 @@ export async function addEntityItem<T = any>(
 ): Promise<T> {
   return await list.items.add(properties)
 }
+
+/**
+ * Update the entity item matching `identity`, or add it when there is none.
+ *
+ * A project set up by a user without write access to the hub has no entity, and every later
+ * sync failed on it. Adding the entity on the sync registers the project the first time
+ * someone with write access to the hub saves it.
+ *
+ * @param list Entity list
+ * @param params Identity and URL field names
+ * @param identity Identity of the entity
+ * @param url Site URL of the entity, set only on a new entity
+ * @param properties Properties to update, or to add the entity with
+ * @param newEntityProperties Properties set only on a new entity
+ * @param eTag ETag for the `If-Match` header of an update
+ *
+ * @returns `true` when the entity was added, `false` when it was updated
+ */
+export async function ensureEntityItem(
+  list: ISpListShape,
+  params: Pick<ISpEntityPortalServiceParams, 'identityFieldName' | 'urlFieldName'>,
+  identity: string,
+  url: string,
+  properties: Record<string, any>,
+  newEntityProperties: Record<string, any> = {},
+  eTag = '*'
+): Promise<boolean> {
+  const item = await getEntityItem(list, params.identityFieldName, identity)
+  if (item) {
+    await list.items.getById(item.Id).update(properties, eTag)
+    return false
+  }
+  await addEntityItem(
+    list,
+    createNewEntityProperties(params, normalizeEntityIdentity(identity), url, {
+      ...newEntityProperties,
+      ...properties
+    })
+  )
+  return true
+}
