@@ -21,7 +21,8 @@ jest.mock('./Views/ArchiveView/useArchiveView', () => ({
     toggleSection: jest.fn(),
     toggleItemSelection: jest.fn(),
     toggleSectionSelectAll: jest.fn(),
-    getSelectedItemsCount: () => 0
+    getSelectedItemsCount: () => 0,
+    getSectionContentId: (key: string) => `archive-section-${key}`
   })
 }))
 
