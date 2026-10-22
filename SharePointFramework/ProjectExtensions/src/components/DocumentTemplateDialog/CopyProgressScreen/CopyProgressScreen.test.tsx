@@ -4,20 +4,7 @@ import { format } from 'pp365-shared-library'
 import strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
 import { CopyProgressScreen } from './index'
-
-/**
- * What the announcer's live region holds now. It writes each message as `innerText` on a span of
- * its own, which jsdom keeps as a property rather than as text, and clears the region through
- * `innerText` too, which jsdom ignores: the newest message is the last span.
- */
-const announced = () =>
-  Array.from(document.body.querySelectorAll('[aria-live]'))
-    .map((region) => {
-      const spans = region.querySelectorAll('span')
-      const span = spans[spans.length - 1] as HTMLElement | undefined
-      return (span && (span.innerText || span.textContent)) || region.textContent || ''
-    })
-    .join(' ')
+import { announced } from 'pp365-jest-config/lib/announce'
 
 /**
  * The screen shown while the copies are made: the file being copied is told to a screen reader as

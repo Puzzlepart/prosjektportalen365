@@ -59,7 +59,7 @@ const OverflowMenu: FC<{
   return (
     <Menu>
       <MenuTrigger disableButtonEnhancement>
-        {/* «+3» said what it holds: «3 flere utvalg». */}
+        {/* Named by what it shows and what it holds: «+3 flere utvalg» (WCAG 2.4.6, 2.5.3). */}
         <Tab
           ref={ref}
           role='tab'
@@ -239,7 +239,7 @@ export const ProjectList: FC<IProjectListProps> = (incomingProps) => {
                           <OverflowItem key={vertical.key} id={String(vertical.key)}>
                             <Tab
                               key={vertical.key}
-                              id={`${context.fluentProviderId}-tab-${vertical.key}`}
+                              id={context.getTabId(vertical.key)}
                               value={vertical.value}
                               icon={<Icon />}
                             >
@@ -281,11 +281,11 @@ export const ProjectList: FC<IProjectListProps> = (incomingProps) => {
                 />
               </div>
             )}
-            {/* The projects are what the selection's tab shows (WCAG 1.3.1). */}
+            {/* The projects are what the selection's tab shows (WCAG 1.3.1), once there is one. */}
             <div
               className={styles.projects}
-              role='tabpanel'
-              aria-labelledby={`${context.fluentProviderId}-tab-${context.state.selectedVertical?.key}`}
+              role={context.selectedTabId ? 'tabpanel' : undefined}
+              aria-labelledby={context.selectedTabId}
             >
               {renderProjects(context.projects)}
             </div>

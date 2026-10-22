@@ -73,6 +73,12 @@ export const PackageDetails: FC = () => {
   // publish button is shown disabled with the reason in its tooltip.
   const notCloudCompatible = pkg.cloudCompatible === false
   const supported = isSupported(pkg)
+  // Why the package cannot be imported: in the message above its actions, and in the main
+  // action's description, which the keyboard reaches (WCAG 3.3.2).
+  const unsupportedReason =
+    !supported && pkg.minPPVersion
+      ? format(strings.CatalogIncompatibleText, pkg.minPPVersion, state.installedVersion ?? '?')
+      : undefined
   // Same-named extension exists locally but wasn't installed from the catalog —
   // replacing it needs an explicit confirmation.
   const isUnmanaged = !!ref?.unmanaged
@@ -164,22 +170,19 @@ export const PackageDetails: FC = () => {
 
       {isExtension && <UserMessage intent='info' text={strings.CatalogExtensionInfo} />}
 
-      {!supported && pkg.minPPVersion && (
+      {unsupportedReason && (
         <UserMessage
           intent='warning'
           title={strings.CatalogIncompatibleTitle}
-          text={format(
-            strings.CatalogIncompatibleText,
-            pkg.minPPVersion,
-            state.installedVersion ?? '?'
-          )}
+          text={unsupportedReason}
         />
       )}
 
       <div className={styles.actions}>
         <Tooltip
           content={
-            isExtension
+            unsupportedReason ??
+            (isExtension
               ? isUnmanaged
                 ? strings.CatalogBadgeLocalTooltip
                 : updateAvailable
@@ -197,7 +200,7 @@ export const PackageDetails: FC = () => {
                       strings.CatalogActionReinstallTooltip,
                       ref?.installedVersion || pkg.version
                     )
-                  : strings.CatalogActionImportTooltip
+                  : strings.CatalogActionImportTooltip)
           }
           relationship='description'
         >

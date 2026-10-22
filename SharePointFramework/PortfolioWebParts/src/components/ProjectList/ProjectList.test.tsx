@@ -26,6 +26,7 @@ import strings from 'PortfolioWebPartsStrings'
 import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import { ProjectList } from './ProjectList'
+import { announced } from 'pp365-jest-config/lib/announce'
 
 /**
  * The project list web part as a whole: a tab per vertical the user may see, the default
@@ -84,20 +85,6 @@ const PROJECT_COLUMNS = [
   { internalName: 'GtProjectOwner', fieldName: 'gtprojectowner', name: 'Prosjekteier' },
   { internalName: 'GtProjectManager', fieldName: 'gtprojectmanager', name: 'Prosjektleder' }
 ]
-
-/**
- * What the announcer's live region holds now. It writes each message as `innerText` on a span of
- * its own, which jsdom keeps as a property rather than as text, and clears the region through
- * `innerText` too, which jsdom ignores: the newest message is the last span.
- */
-const announced = () =>
-  Array.from(document.body.querySelectorAll('[aria-live]'))
-    .map((region) => {
-      const spans = region.querySelectorAll('span')
-      const span = spans[spans.length - 1] as HTMLElement | undefined
-      return (span && (span.innerText || span.textContent)) || region.textContent || ''
-    })
-    .join(' ')
 
 const projects = () => [
   project('Alfa', { isUserMember: true }),
@@ -232,6 +219,18 @@ describe('ProjectList', () => {
       button.getAttribute('aria-label').endsWith(format(strings.RenderModeButtonLabel, ''))
     )
     expect(viewMode).toBeTruthy()
+  })
+
+  it('names the projects by their tab only once the tabs are there (WCAG 1.3.1)', () => {
+    // While the list loads its tabs are skeletons: the projects named themselves by a tab that was
+    // not there.
+    const { container } = renderListIn({ isDataLoaded: false })
+    expect(container.querySelector('[role="tabpanel"]')).toBeNull()
+    for (const element of Array.from(container.querySelectorAll('[aria-labelledby]'))) {
+      for (const id of element.getAttribute('aria-labelledby').split(' ')) {
+        expect(document.getElementById(id)).not.toBeNull()
+      }
+    }
   })
 
   it('tells how many of the selection a search shows (WCAG 4.1.3)', async () => {

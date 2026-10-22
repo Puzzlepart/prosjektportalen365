@@ -1570,3 +1570,29 @@ reproduce it on the project's document library:
   and one is offered if they still cannot reproduce it with a cold cache.
 - **The code notes are updated:** the e2e specs on list pages and pp365-a11y.
 
+### After the merge — the review's follow-ups (2026-10-21)
+
+What the review before the merge left for after it, on `releases/1.15`. The footer's events at
+dispose were dropped from the list: SPFx removes a handler itself when the component that passed
+itself as `observer` to `add()` is disposed, as the footer does.
+
+- **The cloud template's «ready»** is told when the template chosen has been read; choosing another
+  template while one was read said it too.
+- **The overflow tabs** are named by what they show first («+3 flere utvalg», «+2 flere
+  seksjoner»), and the project list's projects name their tab only once the tabs are there.
+- **The dynamic list** has one toaster, the web part's: the toolbar kept a fallback of its own that
+  the notices from deleting, creating and uploading never reached.
+- **The strings:** 23 keys nothing used are gone, most of them in one bundle only; every triad now
+  has the same keys in all three files. Names and announcements joined in code (`${a}: ${b}`) are
+  joined by the strings (`NameValueLabel`, `ChangingPhaseAnnouncement`,
+  `ColumnFieldLockedDescription`).
+- **The tests' status messages** are read by `announced()` from `pp365-jest-config/lib/announce`,
+  where 13 tests had a copy and 3 of them read the first span, the oldest message.
+- **Small things:** the migration's progress bar is named once, the archive sections are buttons,
+  «Vis flere» names its list, the catalog's main action says why it cannot run, the idea module's
+  status heading takes the type ramp, the project card logs through PnP's logger.
+- **Logic out of the components** into hooks: `ProgressDialog`, `CopyProgressScreen`,
+  `IdeaPhaseBar`, `DocumentLibraryView` (its items from a pure `getItemsInView`, now tested, whose
+  inputs are all in the memo's dependencies), `ProjectSetupDialog`, `PlannerTaskItem`, `RecentNews`;
+  the column forms share `lockedWhenEditing`.
+

@@ -1,6 +1,5 @@
 define([], function () {
   return {
-    ResultsCountLabel: 'Viser {0} av {1} prosjekter',
     Aria: {
       MenuOverflowCount: '{0} flere elementer',
       MoveDisabled: 'Kan ikke flytte skjult kolonne',
@@ -180,7 +179,6 @@ define([], function () {
     SortDescLabel: 'A til Å',
     SortOrderDescription: 'Sorteringsrekkefølgen bestemmer hvilken rekkefølge visningene vises i. Lavest verdi vises først.',
     SortOrderLabel: 'Sorteringsrekkefølge',
-    TitleDescription: 'Tittel for visningen.',
     TitleLabel: 'Tittel',
     ToggleColumnFormPanelLabel: 'Legg til kolonne',
     UseChangesButtonText: 'Bruk',

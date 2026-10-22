@@ -1,4 +1,4 @@
-import { useAnnounce } from '@fluentui/react-components'
+import { useAnnounce, useId } from '@fluentui/react-components'
 import { format } from 'pp365-shared-library'
 import strings from 'ProjectExtensionsStrings'
 import { useState } from 'react'
@@ -16,6 +16,7 @@ export function useMigrateRiskActionsDialog() {
   const [isMigrating, setIsMigrating] = useState(false)
   const [migrateError, setMigrateError] = useState<string>()
   const { announce } = useAnnounce()
+  const progressTextId = useId('migrate-progress-text')
   const [separator, setSeparator] = useState(
     strings.MigrateRiskActionsDialogSeparatorOptionLinebreak
   )
@@ -57,6 +58,7 @@ export function useMigrateRiskActionsDialog() {
     setOpen: dialogState.setValue,
     isMigrating,
     migrateError,
+    progressTextId,
     separator,
     setSeparator
   }

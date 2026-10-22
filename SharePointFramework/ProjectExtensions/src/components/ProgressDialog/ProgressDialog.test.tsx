@@ -6,20 +6,7 @@ import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import { ProgressDialog } from '.'
 import { ITaskProgress } from './types'
-
-/**
- * What the announcer's live region holds now. It writes each message as `innerText` on a span of
- * its own, which jsdom keeps as a property rather than as text, and clears the region through
- * `innerText` too, which jsdom ignores: the newest message is the last span.
- */
-const announced = () =>
-  Array.from(document.body.querySelectorAll('[aria-live]'))
-    .map((region) => {
-      const spans = region.querySelectorAll('span')
-      const span = spans[spans.length - 1] as HTMLElement | undefined
-      return (span && (span.innerText || span.textContent)) || region.textContent || ''
-    })
-    .join(' ')
+import { announced } from 'pp365-jest-config/lib/announce'
 
 /** 2 October 2026, 14:05:09 in the machine's time zone. */
 const AT = new Date(2026, 9, 2, 14, 5, 9)

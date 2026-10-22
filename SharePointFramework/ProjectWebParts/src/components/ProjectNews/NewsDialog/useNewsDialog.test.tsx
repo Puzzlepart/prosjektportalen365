@@ -29,18 +29,7 @@ import strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
 import { ProjectNewsContext } from '../context'
 import { useNewsDialog } from './useNewsDialog'
-
-/**
- * What the announcer's live region holds now. It writes its message as `innerText`, which jsdom
- * keeps as a property rather than as text in the document.
- */
-const announced = () =>
-  Array.from(document.body.querySelectorAll('[aria-live]'))
-    .map((region) => {
-      const span = region.querySelector('span') as HTMLElement | null
-      return (span && (span.innerText || span.textContent)) || region.textContent || ''
-    })
-    .join(' ')
+import { announced } from 'pp365-jest-config/lib/announce'
 
 describe('useNewsDialog', () => {
   it('tells a screen reader that the news is being made, and that it is made (WCAG 4.1.3)', async () => {

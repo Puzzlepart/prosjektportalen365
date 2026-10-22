@@ -3,9 +3,12 @@
 // of what the dialog has selected. Fluent's combobox family cannot be opened under jsdom on React
 // 17 (it loops the Jest worker; see the testing guide), so the template picker is a native select
 // that keeps Fluent's contract: choosing an option calls `onOptionSelect` with its value. A cloud
-// template's package is resolved by `cloud.resolve`.
+// template's package is resolved by `cloud.resolve`. Every message announced goes to `announcements`
+// as well, so a test can show that something was not said: a message is on the page for half a
+// second only.
 ;(globalThis as any).DEBUG = false
 const cloud: { resolve: jest.Mock } = { resolve: jest.fn() }
+const announcements: string[] = []
 jest.mock('./resolveCloudTemplate', () => ({
   resolveCloudTemplate: (template: any) => cloud.resolve(template)
 }))
@@ -61,7 +64,19 @@ jest.mock('@fluentui/react-components', () => {
     )
   const Option = ({ value, text, disabled }: any) =>
     React.createElement('option', { value, disabled }, text)
-  return { __esModule: true, ...actual, Combobox, Option }
+  const useAnnounce = () => {
+    const { announce } = actual.useAnnounce()
+    return React.useMemo(
+      () => ({
+        announce: (message: string, options: any) => {
+          announcements.push(message)
+          announce(message, options)
+        }
+      }),
+      [announce]
+    )
+  }
+  return { __esModule: true, ...actual, Combobox, Option, useAnnounce }
 })
 
 import { AriaLiveAnnouncer } from '@fluentui/react-components'
@@ -73,6 +88,7 @@ import * as React from 'react'
 import { ProjectSetupValidation } from '../../extensions/projectSetup/types'
 import { ProjectSetupDialog } from './ProjectSetupDialog'
 import { TEMPLATES, extension, setupData, template } from './testFixtures'
+import { announced } from 'pp365-jest-config/lib/announce'
 
 const CLOUD = template(3, 'Skymal', { isCloudTemplate: true })
 
@@ -92,20 +108,6 @@ function renderDialog(props: Record<string, any> = {}) {
   )
   return { onSubmit, onDismiss }
 }
-
-/**
- * What the announcer's live region holds now. It writes each message as `innerText` on a span of
- * its own, which jsdom keeps as a property rather than as text, and clears the region through
- * `innerText` too, which jsdom ignores: the newest message is the last span.
- */
-const announced = () =>
-  Array.from(document.body.querySelectorAll('[aria-live]'))
-    .map((region) => {
-      const spans = region.querySelectorAll('span')
-      const span = spans[spans.length - 1] as HTMLElement | undefined
-      return (span && (span.innerText || span.textContent)) || region.textContent || ''
-    })
-    .join(' ')
 
 const picker = () => screen.getByLabelText(strings.ProjectTemplateSelectorSearchPlaceholder)
 const submit = () => screen.getByText(strings.ProjectSetupDialogSubmitButtonText).closest('button')
@@ -216,6 +218,18 @@ describe('ProjectSetupDialog', () => {
     await waitFor(() => expect(announced()).toContain(strings.CloudTemplateResolved), {
       timeout: 3000
     })
+  })
+
+  it('does not tell a cloud template is ready when another template is chosen while it is read (WCAG 4.1.3)', async () => {
+    cloud.resolve.mockImplementation(() => new Promise(() => undefined))
+    renderDialog({ data: setupData({ templates: [...TEMPLATES, CLOUD] }) })
+    fireEvent.change(picker(), { target: { value: '3' } })
+    await waitFor(() => expect(announcements).toContain(strings.CloudTemplateResolvingMessage))
+    // Choosing another template stops the reading, with nothing read: «ready» was said all the same.
+    announcements.length = 0
+    fireEvent.change(picker(), { target: { value: '2' } })
+    await act(() => new Promise((resolve) => setTimeout(resolve, 50)))
+    expect(announcements).not.toContain(strings.CloudTemplateResolved)
   })
 
   it('cannot set up a project without a template to choose', () => {

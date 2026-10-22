@@ -90,6 +90,7 @@ import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import { RiskActionFieldCustomizerContext } from '../../extensions/riskAction/context'
 import { RiskAction } from './RiskAction'
+import { announced } from 'pp365-jest-config/lib/announce'
 
 const RISK = 'Leverandøren går konkurs'
 const PLANNER_TASKS = [
@@ -147,20 +148,6 @@ function renderRiskAction(
   return itemContext
 }
 
-/**
- * What the announcer's live region holds now. It writes each message as `innerText` on a span of
- * its own, which jsdom keeps as a property rather than as text, and clears the region through
- * `innerText` too, which jsdom ignores: the newest message is the last span.
- */
-const announced = () =>
-  Array.from(document.body.querySelectorAll('[aria-live]'))
-    .map((region) => {
-      const spans = region.querySelectorAll('span')
-      const span = spans[spans.length - 1] as HTMLElement | undefined
-      return (span && (span.innerText || span.textContent)) || region.textContent || ''
-    })
-    .join(' ')
-
 const button = (text: string) => screen.getByText(text).closest('button')
 
 /**
@@ -194,10 +181,7 @@ async function searchResponsible(panel: HTMLElement, name: string) {
   return user
 }
 
-let open: jest.SpyInstance
-
 beforeEach(() => {
-  open = jest.spyOn(window, 'open').mockImplementation(() => null)
   jest.clearAllMocks()
   adapter.clientPeoplePickerSearchUser.mockImplementation(() => Promise.resolve([]))
 })
@@ -205,7 +189,6 @@ beforeEach(() => {
 afterEach(async () => {
   cleanup()
   await act(() => new Promise((resolve) => setTimeout(resolve, 50)))
-  open.mockRestore()
 })
 
 describe('RiskAction', () => {
@@ -407,9 +390,10 @@ describe('RiskAction', () => {
     expect(createButton).toBeInTheDocument()
     expect(createButton).toHaveAttribute('aria-disabled', 'true')
     expect(createButton).toHaveFocus()
+    // Named by the text under it, once: as the field's message it was its description as well.
     expect(
       screen.getByRole('progressbar', { name: strings.MigrateRiskActionsDialogProgressText })
-    ).toBeInTheDocument()
+    ).not.toHaveAccessibleDescription()
     await act(async () => finish([{ id: 'new-0', title: 'Ring leverandøren', isCompleted: '0' }]))
     await waitFor(() => expect(announced()).toContain(format(strings.MigrateRiskActionsDone, 1)))
   })

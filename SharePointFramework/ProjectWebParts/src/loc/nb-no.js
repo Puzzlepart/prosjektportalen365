@@ -21,18 +21,9 @@ define([], function () {
         'Dette er den gjeldende fasen. Det er derfor ikke mulig å endre til denne fasen.',
       PhaseListLabel: 'Prosjektets faser',
       ChecklistStepsLabel: 'Sjekkpunkter',
-      MoreSectionsLabel: '{0} flere seksjoner'
-    },
-    Placeholder: {
-      DatePicker: 'Angi en dato',
-      TextField: 'Angi verdi her',
-      UrlField: 'Angi en nettadresse',
-      UrlFieldAlternative: 'Alternativ tekst',
-      TaxonomyPicker: 'Skriv inn termen som skal merkes',
-      PeoplePicker: 'Angi et navn eller en e-postadresse',
-      NumberField: 'Skriv inn et tall',
-      ChoiceField: 'Velg et alternativ',
-      MultiChoiceField: 'Velg ett eller flere alternativer'
+      MoreSectionsLabel: '+{0} flere seksjoner',
+      NameValueLabel: '{0}: {1}',
+      ChangingPhaseAnnouncement: '{0}. {1}'
     },
     SaveText: 'Lagre',
     ErrorBoundaryFallbackText: 'Det oppstod en feil under lasting av {0}.',

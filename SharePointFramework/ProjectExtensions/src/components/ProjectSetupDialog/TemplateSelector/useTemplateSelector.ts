@@ -91,15 +91,24 @@ export function useTemplateSelector() {
       : undefined
 
   const { announce } = useAnnounce()
+  // Ready when the template chosen has been read, not when the reading stops: choosing another
+  // template stops it too, with nothing read.
+  const isCloudTemplateResolved =
+    isCloudTemplate && context.state.resolvedCloudTemplate?.templateId === selectedTemplate?.id
   const wasResolving = useRef(isResolvingCloudTemplate)
+  const wasResolved = useRef(isCloudTemplateResolved)
   useEffect(() => {
     if (isResolvingCloudTemplate && !wasResolving.current) {
       announce(strings.CloudTemplateResolvingMessage, { polite: true })
-    } else if (!isResolvingCloudTemplate && wasResolving.current && !cloudTemplateError) {
-      announce(strings.CloudTemplateResolved, { polite: true })
     }
     wasResolving.current = isResolvingCloudTemplate
   }, [isResolvingCloudTemplate])
+  useEffect(() => {
+    if (isCloudTemplateResolved && !wasResolved.current) {
+      announce(strings.CloudTemplateResolved, { polite: true })
+    }
+    wasResolved.current = isCloudTemplateResolved
+  }, [isCloudTemplateResolved])
 
   useEffect(() => {
     if (!selectedTemplate?.isCloudTemplate) return

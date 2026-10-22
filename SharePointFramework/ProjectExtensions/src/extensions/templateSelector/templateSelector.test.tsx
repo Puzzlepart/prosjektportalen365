@@ -160,12 +160,19 @@ describe('TemplateSelectorCommand', () => {
     menu.appendChild(item)
     document.body.append(more, menu)
     item.focus()
-    const opening = command.onExecute({ itemId: OPEN } as any)
-    await act(() => new Promise((resolve) => setTimeout(resolve, 100)))
-    expect(screen.queryByText(strings.TemplateLibrarySelectModalTitle)).toBeNull()
-    menu.remove()
-    more.focus()
-    await act(() => opening)
+    // The clock stands still, so the wait for the menu to close cannot time out however slow the
+    // worker is; it would then open with the focus still in the menu.
+    const now = jest.spyOn(Date, 'now').mockReturnValue(Date.now())
+    try {
+      const opening = command.onExecute({ itemId: OPEN } as any)
+      await act(() => new Promise((resolve) => setTimeout(resolve, 100)))
+      expect(screen.queryByText(strings.TemplateLibrarySelectModalTitle)).toBeNull()
+      menu.remove()
+      more.focus()
+      await act(() => opening)
+    } finally {
+      now.mockRestore()
+    }
     const dialog = screen.getByText(strings.TemplateLibrarySelectModalTitle)
     dialog.focus()
     fireEvent.click(dialog)

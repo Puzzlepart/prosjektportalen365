@@ -12,9 +12,10 @@ export interface IDynamicListContext {
    */
   web: IWeb
   /**
-   * The toaster the web part tells what an action did in: an upload, a new document, a deletion.
+   * The toaster the web part tells what an action did in: an upload, a new document, a deletion,
+   * an export. The toolbar renders it.
    */
-  toasterId?: string
+  toasterId: string
 }
 
 export const DynamicListContext = createContext<IDynamicListContext>(null)

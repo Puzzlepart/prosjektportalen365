@@ -290,9 +290,9 @@ checked by hand and with which reader and browser: axe finds only part of what W
   was not).
 - A status message in Jest: the announcer writes each message as `innerText` on a new span, which
   jsdom keeps as a property, not as text, and clears the region through `innerText` too, which
-  jsdom ignores: read the last span's `innerText` in the live region, or a second message reads
-  as the first (`ProjectSetupDialog.test.tsx`). The announcer sends a moment after `announce`:
-  `await waitFor(...)`.
+  jsdom ignores: the newest message is the last span's `innerText`, and a second message read
+  from the first span reads as the first. `announced()` from `pp365-jest-config/lib/announce`
+  reads it so. The announcer sends a moment after `announce`: `await waitFor(...)`.
 - A card or item that is chosen from a list: the list's cell is the `listitem`, the card a
   `button` named by the item, the chosen one `aria-current` (the catalog's `PackageCard`).
   `aria-selected` belongs to options, rows, tabs and grid cells, not to list items.

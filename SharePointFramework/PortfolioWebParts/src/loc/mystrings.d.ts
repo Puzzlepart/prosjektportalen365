@@ -37,9 +37,7 @@ declare interface IPortfolioWebPartsStrings {
   Aria: {
     MenuOverflowCount: string
     MoveDisabled: string
-    MoveUp: string
     MoveUpDisabled: string
-    MoveDown: string
     MoveDownDisabled: string
   }
   Placeholder: {
@@ -99,6 +97,7 @@ declare interface IPortfolioWebPartsStrings {
   ColumnCategoryDescription: string
   ColumnCategoryLabel: string
   ColumnFieldLockedText: string
+  ColumnFieldLockedDescription: string
   ColumnFormSaveDisabledReason: string
   ColumnRenderDataTypePropertiesHeaderText: string
   ColumnRenderDescription: string

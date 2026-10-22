@@ -9,11 +9,11 @@ import {
   BasePanel,
   IListColumn,
   WebPartTitle,
+  format,
   getFluentIcon,
   withDefaults
 } from 'pp365-shared-library'
 import { getItemStyle } from './getItemStyle'
-import { format } from 'pp365-shared-library'
 
 export const EDIT_VIEW_COLUMNS_PANEL_DEFAULT_PROPS: Partial<IEditViewColumnsPanelProps> = {
   title: strings.EditViewColumnsPanelHeaderText,

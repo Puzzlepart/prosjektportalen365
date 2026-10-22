@@ -39,6 +39,7 @@ Each `config/jest.config.json` extends `pp365-jest-config/jest-shared.config.jso
 - `moduleNameMapper`: `pp365-shared-library`, `pp365-projectwebparts`, `pp365-portfoliowebparts` resolve to their `lib-commonjs/` output. `moduleDirectories: ["node_modules", "lib-commonjs"]` resolves the consumers' bare `baseUrl` imports (`'data'`, `'models'`, `'components/X'`).
 - jest-dom types come from `src/jest-dom.d.ts` in each solution (the rig pins `typeRoots`, so `compilerOptions.types` cannot list the package).
 - `lib/axe.js` (with `lib/axe.d.ts`): `import { axeComponent } from 'pp365-jest-config/lib/axe'`, then `expect(await axeComponent(container)).toHaveNoViolations()`, axe-core through jest-axe with the WCAG 2.1 A and AA and 2.2 AA rules, `color-contrast` off. Requiring it registers the matcher, so only tests that use it load axe-core. When and how: pp365-a11y.
+- `lib/announce.js` (with `lib/announce.d.ts`): `import { announced } from 'pp365-jest-config/lib/announce'` returns the newest message in each live region on the page, for `await waitFor(() => expect(announced()).toContain(...))`. Fluent's announcer writes each message as `innerText` on a span of its own, which jsdom keeps as a property, and its clearing is ignored, so the newest is the last span; read from the first, a second message read as the first. Use it rather than a copy in the test (13 copies were folded into it, 2026-10-21).
 
 ## Writing tests
 

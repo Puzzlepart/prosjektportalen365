@@ -22,6 +22,7 @@ import {
 } from '@fluentui/react-components'
 import _ from 'lodash'
 import { visibilityOptions } from './types'
+import { lockedWhenEditing } from '../../List/lockedWhenEditing'
 
 export const ColumnFormPanel: FC = () => {
   const context = useContext(PortfolioOverviewContext)
@@ -40,10 +41,6 @@ export const ColumnFormPanel: FC = () => {
   } = useColumnFormPanel()
 
   if (!context) return null
-
-  // What cannot change for an existing column says so (WCAG 3.3.2).
-  const lockedWhenEditing = (description: string) =>
-    isEditing ? `${description} ${strings.ColumnFieldLockedText}` : description
 
   return (
     <BasePanel
@@ -85,7 +82,7 @@ export const ColumnFormPanel: FC = () => {
           <FieldContainer
             iconName='TextNumberFormat'
             label={strings.InternalNameLabel}
-            description={lockedWhenEditing(strings.InternalNameDescription)}
+            description={lockedWhenEditing(strings.InternalNameDescription, isEditing)}
             required={true}
           >
             <Input
@@ -99,7 +96,7 @@ export const ColumnFormPanel: FC = () => {
           <FieldContainer
             iconName='DatabaseSearch'
             label={strings.SearchPropertyLabel}
-            description={lockedWhenEditing(strings.SearchPropertyDescription)}
+            description={lockedWhenEditing(strings.SearchPropertyDescription, isEditing)}
             required={true}
           >
             <ColumnSearchPropertyField

@@ -35,6 +35,7 @@ export const MigrateRiskActionsDialog: FC<{ children?: ReactNode }> = (props) =>
     setOpen,
     isMigrating,
     migrateError,
+    progressTextId,
     separator,
     setSeparator
   } = useMigrateRiskActionsDialog()
@@ -85,14 +86,14 @@ export const MigrateRiskActionsDialog: FC<{ children?: ReactNode }> = (props) =>
                 <li key={index}>{t}</li>
               ))}
             </ol>
+            {/* Named by the text under it, once: as a field's message the text was its
+                description too, and read twice. */}
             {isMigrating && (
               <div className={styles.progress}>
-                <Field
-                  validationMessage={strings.MigrateRiskActionsDialogProgressText}
-                  validationState='none'
-                >
-                  <ProgressBar aria-label={strings.MigrateRiskActionsDialogProgressText} />
-                </Field>
+                <ProgressBar aria-labelledby={progressTextId} />
+                <div id={progressTextId} className={styles.progressText}>
+                  {strings.MigrateRiskActionsDialogProgressText}
+                </div>
               </div>
             )}
             {migrateError !== undefined && (

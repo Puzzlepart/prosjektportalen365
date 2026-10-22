@@ -1,3 +1,4 @@
+import { Logger, LogLevel } from '@pnp/logging'
 import { useEffect } from 'react'
 import { IProjectCardProps, IProjectCardState } from './types'
 
@@ -20,8 +21,10 @@ export function useProjectCardDataFetch(
       .then((project) => setState({ project, isDataLoaded: true, loading: false }))
       // A failure was not caught, and the web part stayed empty: it says so now.
       .catch((error: Error) => {
-        // eslint-disable-next-line no-console
-        console.error('(ProjectCard) could not fetch the project', error)
+        Logger.log({
+          message: `(ProjectCard) could not fetch the project: ${error?.message}`,
+          level: LogLevel.Error
+        })
         setState({ error, loading: false })
       })
   }, [refetch])
