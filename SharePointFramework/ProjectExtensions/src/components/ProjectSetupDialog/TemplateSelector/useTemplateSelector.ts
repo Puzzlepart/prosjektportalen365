@@ -1,6 +1,7 @@
+import { useAnnounce } from '@fluentui/react-components'
 import { Logger, LogLevel } from '@pnp/logging'
 import strings from 'ProjectExtensionsStrings'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { isEmpty } from 'underscore'
 import { ProjectSetupValidation } from '../../../extensions/projectSetup/types'
 import { useProjectSetupDialogContext } from '../context'
@@ -20,7 +21,10 @@ import { format } from 'pp365-shared-library'
  *
  * Cloud resolution exposes bundled artifacts without provisioning hub content.
  * Unsupported hub content is warned about and skipped instead of blocking
- * extensions and list content that can still be applied.
+ * extensions and list content that can still be applied. It tells when it starts reading a
+ * cloud template and when the template is read (WCAG 4.1.3): the spinner meanwhile says nothing
+ * to a screen reader, and the setup button turns usable in silence; a failure is a message that
+ * says itself.
  */
 export function useTemplateSelector() {
   const context = useProjectSetupDialogContext()
@@ -85,6 +89,26 @@ export function useTemplateSelector() {
     context.state.resolvedCloudTemplate?.package?.manifest?.cloudCompatible === false
       ? format(strings.CloudTemplateNotCompatibleWarning, selectedTemplate?.text)
       : undefined
+
+  const { announce } = useAnnounce()
+  // Ready when the template chosen has been read, not when the reading stops: choosing another
+  // template stops it too, with nothing read.
+  const isCloudTemplateResolved =
+    isCloudTemplate && context.state.resolvedCloudTemplate?.templateId === selectedTemplate?.id
+  const wasResolving = useRef(isResolvingCloudTemplate)
+  const wasResolved = useRef(isCloudTemplateResolved)
+  useEffect(() => {
+    if (isResolvingCloudTemplate && !wasResolving.current) {
+      announce(strings.CloudTemplateResolvingMessage, { polite: true })
+    }
+    wasResolving.current = isResolvingCloudTemplate
+  }, [isResolvingCloudTemplate])
+  useEffect(() => {
+    if (isCloudTemplateResolved && !wasResolved.current) {
+      announce(strings.CloudTemplateResolved, { polite: true })
+    }
+    wasResolved.current = isCloudTemplateResolved
+  }, [isCloudTemplateResolved])
 
   useEffect(() => {
     if (!selectedTemplate?.isCloudTemplate) return

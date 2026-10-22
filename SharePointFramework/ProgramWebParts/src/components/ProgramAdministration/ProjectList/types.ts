@@ -21,7 +21,10 @@ export interface IProjectListProps {
    * search hides included.
    */
   onSelectionChange: (selectedItems: (string | number)[]) => void
-  search: Pick<SearchBoxProps, 'placeholder'>
+  /**
+   * The search box's placeholder, and its name: the placeholder's text unless one is given.
+   */
+  search: Pick<SearchBoxProps, 'placeholder' | 'aria-label'>
 
   /**
    * Link the titles to the projects' sites.

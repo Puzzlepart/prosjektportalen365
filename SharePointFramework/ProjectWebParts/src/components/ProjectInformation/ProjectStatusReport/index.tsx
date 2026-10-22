@@ -14,13 +14,15 @@ export const ProjectStatusReport: FC = () => {
           key={projectStatusContext.state.selectedReport.id}
           value={projectStatusContext}
         >
-          <Header />
+          {/* A section under the project information's own heading (WCAG 1.3.1). */}
+          <Header headingLevel={3} />
           <SummarySection
             transparent
             noPadding
             noMargin
             iconsOnly={context.props.statusReportShowOnlyIcons}
-            iconSize={18}
+            // The icons' own 20 px grid: crisp, where 18 px blurred their strokes.
+            iconSize={20}
             truncateComment={context.props.statusReportTruncateComments}
           />
         </ProjectStatusContext.Provider>

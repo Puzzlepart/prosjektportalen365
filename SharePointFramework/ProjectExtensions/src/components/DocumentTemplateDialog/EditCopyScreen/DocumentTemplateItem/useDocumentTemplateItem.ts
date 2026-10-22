@@ -11,15 +11,15 @@ export const MAX_LENGTH = 255
 
 /**
  * Component logic hook for `DocumentTemplateItem`: whether the fields are shown, the lengths they
- * count, and the edits, reported once typing pauses with what SharePoint says about a name. The
- * two inputs are told apart by their element id, so the ids are the dispatch keys.
+ * count, and the edits, reported once typing pauses with what SharePoint says about a name. Each
+ * field has its own handler, so the inputs keep the ids their `Field` gives them and a click on a
+ * label reaches its input.
  *
  * @param props The item's props
  */
 export function useDocumentTemplateItem(props: IDocumentTemplateItemProps) {
   const { state } = useContext(DocumentTemplateDialogContext)
-  const nameId = useId('name')
-  const titleId = useId('title')
+  const fieldsId = useId('copy-fields')
   const changeTimeout = useRef<ReturnType<typeof setTimeout>>()
   const [isExpanded, setIsExpanded] = useState(false)
   const [nameLength, setNameLength] = useState(
@@ -28,25 +28,24 @@ export function useDocumentTemplateItem(props: IDocumentTemplateItemProps) {
   const [titleLength, setTitleLength] = useState(props.item.title?.length || 0)
 
   /**
-   * Takes a keystroke in either field: the length counts at once, the edit once typing pauses.
+   * Takes a keystroke in one of the fields: the length counts at once, the edit once typing pauses.
    *
-   * @param event The change event, whose target's id says which field
+   * @param field Which field
    * @param data The new value
    * @param resolveDelay How long typing pauses before the edit is reported, in milliseconds
    */
-  function onInputChange(
-    event: ChangeEvent<HTMLInputElement>,
+  function onFieldChange(
+    field: 'name' | 'title',
     data: { value: string },
     resolveDelay: number = 400
   ) {
     const newValue = data.value
     clearTimeout(changeTimeout.current)
-    const targetId = (event.target as HTMLInputElement).id
-    if (targetId === nameId) setNameLength(newValue?.length || 0)
-    if (targetId === titleId) setTitleLength(newValue?.length || 0)
+    if (field === 'name') setNameLength(newValue?.length || 0)
+    if (field === 'title') setTitleLength(newValue?.length || 0)
     changeTimeout.current = setTimeout(async () => {
-      switch (targetId) {
-        case nameId:
+      switch (field) {
+        case 'name':
           {
             const newName = props.item.isFolder
               ? newValue
@@ -59,7 +58,7 @@ export function useDocumentTemplateItem(props: IDocumentTemplateItemProps) {
             props.onInputChanged(props.item.id, { newName }, errorMsg)
           }
           break
-        case titleId:
+        case 'title':
           props.onInputChanged(props.item.id, { newTitle: newValue })
           break
       }
@@ -81,12 +80,14 @@ export function useDocumentTemplateItem(props: IDocumentTemplateItemProps) {
   }, [state.targetFolder])
 
   return {
-    nameId,
-    titleId,
+    fieldsId,
     isExpanded,
     toggleExpanded: () => setIsExpanded(!isExpanded),
     nameLength,
     titleLength,
-    onInputChange
+    onNameChange: (_: ChangeEvent<HTMLInputElement>, data: { value: string }) =>
+      onFieldChange('name', data),
+    onTitleChange: (_: ChangeEvent<HTMLInputElement>, data: { value: string }) =>
+      onFieldChange('title', data)
   }
 }

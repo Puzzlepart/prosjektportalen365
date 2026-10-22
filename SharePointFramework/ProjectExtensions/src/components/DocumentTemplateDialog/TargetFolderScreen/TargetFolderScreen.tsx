@@ -11,6 +11,7 @@ import { useTargetFolderScreen } from './useTargetFolderScreen'
  */
 export const TargetFolderScreen: FC = () => {
   const {
+    containerRef,
     browse,
     folders,
     columns,
@@ -20,7 +21,7 @@ export const TargetFolderScreen: FC = () => {
     onSelectionChange
   } = useTargetFolderScreen()
   return (
-    <div className={styles.root}>
+    <div className={styles.root} ref={containerRef}>
       <UserMessage
         title={strings.DocumentTemplateDialogScreenTargetFolderInfoTitle}
         text={strings.DocumentTemplateDialogScreenTargetFolderInfoMessage}

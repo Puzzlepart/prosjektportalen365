@@ -1,4 +1,5 @@
-import { ReactElement } from 'react'
+import { AriaLiveAnnouncer } from '@fluentui/react-components'
+import { createElement, ReactElement } from 'react'
 import { createRoot, Root } from 'react-dom/client'
 
 /** The root of each container rendered into, from its first render until its unmount. */
@@ -13,6 +14,10 @@ const roots = new WeakMap<Element, Root>()
  * when `createRoot` is called twice on one container. The render is scheduled, not done when the
  * call returns.
  *
+ * Each root gets Fluent's `AriaLiveAnnouncer`, which keeps a live region for screen readers while
+ * the root is mounted: without one, Fluent's `useAnnounce` does nothing, so a `MessageBar` (our
+ * `UserMessage`) and every status message we announce went unheard (WCAG 4.1.3, #1788).
+ *
  * @param element Element to render
  * @param container DOM element to render it into
  */
@@ -22,7 +27,7 @@ export function renderReact(element: ReactElement, container: Element): void {
     root = createRoot(container)
     roots.set(container, root)
   }
-  root.render(element)
+  root.render(createElement(AriaLiveAnnouncer, null, element))
 }
 
 /**

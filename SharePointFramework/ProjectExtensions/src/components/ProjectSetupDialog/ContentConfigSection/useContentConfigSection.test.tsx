@@ -1,7 +1,11 @@
-import { render, screen } from '@testing-library/react'
+import { AriaLiveAnnouncer } from '@fluentui/react-components'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import strings from 'ProjectExtensionsStrings'
+import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import { ProjectSetupDialogContext } from '../context'
 import { useContentConfigSection } from './useContentConfigSection'
+import { announced } from 'pp365-jest-config/lib/announce'
 
 /**
  * The order the section lists its items in: the ones the chosen template makes mandatory first,
@@ -54,5 +58,35 @@ describe('useContentConfigSection', () => {
     renderProbe([item('a', 'Alfa'), { ...item('h', 'Skjult'), hidden: true }], [])
     expect(screen.getByTestId('items')).toHaveTextContent('Alfa')
     expect(screen.getByTestId('items')).not.toHaveTextContent('Skjult')
+  })
+
+  it('tells how many items a search leaves (WCAG 4.1.3)', async () => {
+    const Search: React.FC = () => {
+      const { onSearch } = useContentConfigSection()
+      return <button onClick={() => onSearch('ech')}>Søk</button>
+    }
+    render(
+      <AriaLiveAnnouncer>
+        <ProjectSetupDialogContext.Provider
+          value={
+            {
+              props: {
+                data: {
+                  contentConfig: [item('r1', 'Echo'), item('r2', 'Zulu'), item('r3', 'Alfa')]
+                }
+              },
+              state: { selectedTemplate: {}, selectedContentConfig: [] },
+              dispatch: jest.fn()
+            } as any
+          }
+        >
+          <Search />
+        </ProjectSetupDialogContext.Provider>
+      </AriaLiveAnnouncer>
+    )
+    fireEvent.click(screen.getByText('Søk'))
+    await waitFor(() => expect(announced()).toContain(format(strings.SearchResultsCount, 1, 3)), {
+      timeout: 2000
+    })
   })
 })

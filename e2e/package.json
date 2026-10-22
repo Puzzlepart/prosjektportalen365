@@ -13,6 +13,7 @@
     "validate-loc": "echo \"No localization in pp365-e2e\""
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
     "@playwright/test": "1.63.0",
     "@types/node": "22.20.3",
     "dotenv": "17.2.3",

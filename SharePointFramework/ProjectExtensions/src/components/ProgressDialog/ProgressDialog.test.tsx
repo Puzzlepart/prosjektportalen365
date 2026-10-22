@@ -1,9 +1,12 @@
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { AriaLiveAnnouncer } from '@fluentui/react-components'
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import strings from 'ProjectExtensionsStrings'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import { ProgressDialog } from '.'
 import { ITaskProgress } from './types'
+import { announced } from 'pp365-jest-config/lib/announce'
 
 /** 2 October 2026, 14:05:09 in the machine's time zone. */
 const AT = new Date(2026, 9, 2, 14, 5, 9)
@@ -113,6 +116,72 @@ describe('ProgressDialog', () => {
       />
     )
     expect(onDismiss).toHaveBeenCalledTimes(1)
+  })
+
+  it('tells each step as it starts (WCAG 4.1.3)', async () => {
+    const dialog = (label: string, currentStep: number) => (
+      <AriaLiveAnnouncer>
+        <ProgressDialog
+          progressIndicator={{ label, description: '' }}
+          taskProgress={tasks()}
+          currentStep={currentStep}
+          totalSteps={3}
+        />
+      </AriaLiveAnnouncer>
+    )
+    const { rerender } = render(dialog('SitePermissions', 1))
+    rerender(dialog('ApplyTemplate', 2))
+    await waitFor(() =>
+      expect(announced()).toContain(format(strings.ProgressStepAnnouncement, 3, 3, 'ApplyTemplate'))
+    )
+  })
+
+  it('says whether the advanced log is shown, and names each step by its status and its log (WCAG 1.1.1, 1.4.1, 4.1.2)', () => {
+    render(
+      <ProgressDialog
+        progressIndicator={INDICATOR}
+        taskProgress={tasks()}
+        currentStep={1}
+        totalSteps={3}
+      />
+    )
+    const toggle = screen.getByRole('button', { name: strings.ProgressAdvancedLogLabel })
+    expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    fireEvent.click(toggle)
+    expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    expect(document.getElementById(toggle.getAttribute('aria-controls'))).toBeInTheDocument()
+    const step = (task: string, status: string, entries?: number) =>
+      screen.getByRole('button', {
+        name: entries
+          ? format(strings.ProgressTaskLabelWithEntries, task, status, entries)
+          : format(strings.ProgressTaskLabel, task, status)
+      })
+    expect(step('PreTask', strings.ProgressTaskStatusCompleted, 1)).toBeInTheDocument()
+    expect(step('SitePermissions', strings.ProgressTaskStatusRunning, 2)).toHaveAttribute(
+      'aria-expanded',
+      'true'
+    )
+    expect(step('ApplyTemplate', strings.ProgressTaskStatusPending)).toBeInTheDocument()
+  })
+
+  it('names the level of each log entry, lets the keyboard scroll the log, and breaks no rule axe can check (WCAG 1.1.1, 2.1.1)', async () => {
+    render(
+      <ProgressDialog
+        progressIndicator={INDICATOR}
+        taskProgress={tasks()}
+        currentStep={1}
+        totalSteps={3}
+        version='v1.15.0'
+      />
+    )
+    fireEvent.click(screen.getByText(strings.ProgressAdvancedLogLabel))
+    const log = screen.getByRole('log', { name: 'SitePermissions' })
+    expect(log).toHaveAttribute('tabindex', '0')
+    expect(
+      within(log).getByRole('img', { name: strings.ProgressLogLevelWarning })
+    ).toBeInTheDocument()
+    expect(within(log).getByRole('img', { name: strings.ProgressLogLevelInfo })).toBeInTheDocument()
+    expect(await axeComponent(screen.getByRole('alertdialog'))).toHaveNoViolations()
   })
 
   it('waits for the user when the log is open as setup completes', () => {

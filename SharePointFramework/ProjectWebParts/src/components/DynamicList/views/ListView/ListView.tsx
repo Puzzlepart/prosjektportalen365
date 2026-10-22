@@ -16,7 +16,12 @@ import {
   useTableColumnSizing_unstable,
   TableRowId,
   TableColumnSizingOptions,
-  Link
+  Link,
+  Menu,
+  MenuItem,
+  MenuList,
+  MenuPopover,
+  MenuTrigger
 } from '@fluentui/react-components'
 import * as React from 'react'
 import { FC, useContext, useMemo, useCallback } from 'react'
@@ -25,14 +30,19 @@ import { customLightTheme, UserMessage } from 'pp365-shared-library'
 import styles from './ListView.module.scss'
 import { IListViewProps } from './types'
 import * as strings from 'ProjectWebPartsStrings'
+import { useResultsAnnouncement } from '../../useAnnouncements'
+import { NAVIGATION_KEY_ATTRIBUTE } from '../../useNavigationFocus'
 
 /**
  * Base ListView component that provides common table rendering functionality
- * for both DynamicListView and DocumentLibraryView.
+ * for both DynamicListView and DocumentLibraryView. It tells how many items a search or a filter
+ * leaves (`useResultsAnnouncement`), and marks each item's link by its id, a file's or folder's by
+ * its name, so going back gives it the focus (`useNavigationFocus`).
  */
 export const ListView: FC<IListViewProps> = ({
   columns,
   items,
+  total,
   isDocumentLibrary,
   onFirstColumnClick,
   emptyMessage = strings.DynamicList.NoItemsToShow,
@@ -41,6 +51,7 @@ export const ListView: FC<IListViewProps> = ({
 }) => {
   const context = useContext(DynamicListContext)
   const fluentProviderId = useId('fp-list-view')
+  useResultsAnnouncement(items.length, total ?? items.length)
 
   const selectedRows = useMemo(() => {
     const selectedIndices = new Set<TableRowId>()
@@ -100,7 +111,7 @@ export const ListView: FC<IListViewProps> = ({
   const {
     getRows,
     selection: { allRowsSelected, someRowsSelected, toggleAllRows, toggleRow, isRowSelected },
-    sort: { getSortDirection, toggleColumnSort, sort },
+    sort: { getSortDirection, toggleColumnSort, setColumnSort, sort },
     columnSizing_unstable: columnSizingState,
     tableRef
   } = useTableFeatures(
@@ -208,27 +219,33 @@ export const ListView: FC<IListViewProps> = ({
                   checkboxIndicator={{ 'aria-label': strings.DynamicList.SelectAll }}
                 />
                 {columns.map((column) => (
-                  <TableHeaderCell
-                    key={column.columnId}
-                    {...columnSizingState.getTableHeaderCellProps(column.columnId)}
-                    sortDirection={getSortDirection(column.columnId)}
-                    onClick={(e) => toggleColumnSort(e, column.columnId)}
-                    onContextMenu={(e) => {
-                      e.preventDefault()
-                      context.setState({
-                        columnContextMenu: {
-                          column: {
-                            ...column,
-                            isSorted: !!getSortDirection(column.columnId),
-                            isSortedDescending: getSortDirection(column.columnId) === 'descending'
-                          },
-                          target: e.currentTarget as HTMLElement
-                        }
-                      })
-                    }}
-                  >
-                    {column.renderHeaderCell ? column.renderHeaderCell() : column.columnId}
-                  </TableHeaderCell>
+                  // The column's menu opens on a right click, and on Shift+F10 or the menu key
+                  // from the keyboard. Its width can be changed from there with the arrow keys,
+                  // where only a mouse could before (WCAG 2.1.1).
+                  <Menu key={column.columnId} openOnContext>
+                    <MenuTrigger disableButtonEnhancement>
+                      <TableHeaderCell
+                        {...columnSizingState.getTableHeaderCellProps(column.columnId)}
+                        sortDirection={getSortDirection(column.columnId)}
+                        onClick={(e) => toggleColumnSort(e, column.columnId)}
+                      >
+                        {column.renderHeaderCell ? column.renderHeaderCell() : column.columnId}
+                      </TableHeaderCell>
+                    </MenuTrigger>
+                    <MenuPopover>
+                      <MenuList>
+                        <MenuItem onClick={(e) => setColumnSort(e, column.columnId, 'ascending')}>
+                          {strings.DynamicList.SortAscending}
+                        </MenuItem>
+                        <MenuItem onClick={(e) => setColumnSort(e, column.columnId, 'descending')}>
+                          {strings.DynamicList.SortDescending}
+                        </MenuItem>
+                        <MenuItem onClick={columnSizingState.enableKeyboardMode(column.columnId)}>
+                          {strings.DynamicList.ResizeColumn}
+                        </MenuItem>
+                      </MenuList>
+                    </MenuPopover>
+                  </Menu>
                 ))}
               </TableRow>
             </TableHeader>
@@ -254,6 +271,11 @@ export const ListView: FC<IListViewProps> = ({
                     const isFolder = isDocumentLibrary && (item as any).FSObjType === 1
                     const isFile = isDocumentLibrary && !isFolder
                     const fileUrl = isFile ? (item as any).FileRef : null
+                    const navigationKey = {
+                      [NAVIGATION_KEY_ATTRIBUTE]: String(
+                        isDocumentLibrary ? (item as any).FileLeafRef : (item as any).Id
+                      )
+                    }
 
                     return (
                       <TableCell
@@ -263,7 +285,12 @@ export const ListView: FC<IListViewProps> = ({
                         {isFirstColumn && onFirstColumnClick ? (
                           <TableCellLayout>
                             {isFile && fileUrl ? (
-                              <Link href={fileUrl} target='_blank' rel='noopener noreferrer'>
+                              <Link
+                                href={fileUrl}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                                {...navigationKey}
+                              >
                                 {cellContent}
                               </Link>
                             ) : (
@@ -272,6 +299,7 @@ export const ListView: FC<IListViewProps> = ({
                                   e.stopPropagation()
                                   onFirstColumnClick(item)
                                 }}
+                                {...navigationKey}
                               >
                                 {cellContent}
                               </Link>

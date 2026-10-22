@@ -51,6 +51,14 @@ export class ListMenuItem {
   description?: string
 
   /**
+   * The accessible name of an item whose text alone does not say what it does, such as a count
+   * (WCAG 2.4.6). It must hold the text, so voice control finds the item by what it shows
+   * (WCAG 2.5.3). Without it, an item is named by its text, or by its description when it has
+   * none.
+   */
+  ariaLabel?: string
+
+  /**
    * The icon to display in the menu item. Could either be a
    * `FluentIcon` or a string representing the icon name. Then
    * the `<Icon />` component from `@fluentui/react`
@@ -113,6 +121,19 @@ export class ListMenuItem {
   constructor(text?: string, description?: string) {
     this.text = text
     this.description = description
+  }
+
+  /**
+   * Sets the accessible name of the `ListMenuItem`, for an item whose text alone does not say
+   * what it does. The name must hold the text.
+   *
+   * @param ariaLabel The name
+   *
+   * @returns The updated `ListMenuItem` instance.
+   */
+  public setAriaLabel(ariaLabel: ListMenuItem['ariaLabel']) {
+    this.ariaLabel = ariaLabel
+    return this
   }
 
   /**

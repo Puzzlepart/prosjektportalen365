@@ -66,10 +66,14 @@ describe('RiskMatrix', () => {
     const [before, after] = screen.getAllByTitle('Risiko 1')
     expect(before).toHaveStyle({ opacity: '1' })
     expect(after).toHaveStyle({ opacity: '0' })
+    // The set not shown is hidden, not only transparent: a screen reader read both, and the
+    // keyboard would have reached an element no one could see.
+    expect(screen.getAllByRole('img', { name: '1: Risiko 1' })).toEqual([before])
     await user.click(screen.getByRole('switch'))
     expect(screen.getByText(strings.ToggleUncertaintyPostActionOnText)).toBeInTheDocument()
     expect(before).toHaveStyle({ opacity: '0' })
     expect(after).toHaveStyle({ opacity: '1' })
+    expect(screen.getAllByRole('img', { name: '1: Risiko 1' })).toEqual([after])
   })
 
   it('tells when the configuration cannot be read', async () => {

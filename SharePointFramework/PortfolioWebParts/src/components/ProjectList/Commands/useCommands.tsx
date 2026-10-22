@@ -23,6 +23,8 @@ export function useCommands() {
 
   const toolbarItems = [
     new ListMenuItem(selectedRenderMode?.text, strings.RenderModeLabel)
+      // Named by what it does as well as the mode it shows: «Kort, visningsmodus».
+      .setAriaLabel(format(strings.RenderModeButtonLabel, selectedRenderMode?.text))
       .setHidden(!context.props.showRenderModeSelector)
       .setIcon(selectedRenderMode?.icon)
       .setWidth('fit-content')

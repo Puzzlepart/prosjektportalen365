@@ -1,6 +1,9 @@
-import { act } from '@testing-library/react'
-import React, { FC, useLayoutEffect } from 'react'
+import { useAnnounce } from '@fluentui/react-components'
+import { act, waitFor } from '@testing-library/react'
+import React, { FC, useLayoutEffect, useState } from 'react'
+import { UserMessage } from '../components/UserMessage'
 import { renderReact, unmountReact } from './reactRoot'
+import { announced } from 'pp365-jest-config/lib/announce'
 
 /**
  * The one place the solutions mount React: a render shows the element, a second render into the
@@ -68,5 +71,47 @@ describe('renderReact and unmountReact', () => {
     expect(second.textContent).toBe('Hei, Ola')
     expect(mounts.count).toBe(1)
     act(() => unmountReact(second))
+  })
+
+  describe('status messages', () => {
+    // A status message follows something the user did or something that loaded, after the root
+    // has mounted: the announcer's live region is made in its own effect, which runs after its
+    // children's on the first render, so what a child announces while mounting waits in the
+    // announcer's queue for the next message.
+    const Save: FC = () => {
+      const { announce } = useAnnounce()
+      return <button onClick={() => announce('Lagret', { polite: true })}>Lagre</button>
+    }
+
+    const Search: FC = () => {
+      const [done, setDone] = useState(false)
+      return done ? (
+        <UserMessage text='Ingen prosjekter funnet' />
+      ) : (
+        <button onClick={() => setDone(true)}>Søk</button>
+      )
+    }
+
+    it('gives what it renders an announcer, so a status message reaches screen readers', async () => {
+      const container = document.createElement('div')
+      document.body.append(container)
+      act(() => renderReact(<Save />, container))
+      act(() => container.querySelector('button').click())
+      await waitFor(() => expect(announced()).toContain('Lagret'))
+      act(() => unmountReact(container))
+      container.remove()
+      // The live region goes with the root.
+      expect(document.body.querySelectorAll('[aria-live]')).toHaveLength(0)
+    })
+
+    it('lets a message bar announce itself', async () => {
+      const container = document.createElement('div')
+      document.body.append(container)
+      act(() => renderReact(<Search />, container))
+      act(() => container.querySelector('button').click())
+      await waitFor(() => expect(announced()).toContain('Ingen prosjekter funnet'))
+      act(() => unmountReact(container))
+      container.remove()
+    })
   })
 })

@@ -4,7 +4,8 @@ import {
   ListMenuItem,
   ItemFieldValues,
   ListMenuItemDivider,
-  customLightTheme
+  customLightTheme,
+  format
 } from 'pp365-shared-library'
 import { DocumentLibraryViewMode, CustomActionType, ICustomAction } from './types'
 import {
@@ -24,7 +25,13 @@ import '@pnp/sp/files'
 import '@pnp/sp/files/folder'
 import type { IFileInfo } from '@pnp/sp/files'
 import _ from 'lodash'
-import { getExportButtonText, useExcelExport, useCustomActionDialog } from './hooks'
+import {
+  getExportButtonText,
+  useExcelExport,
+  useCustomActionDialog,
+  useFileUpload,
+  useNotify
+} from './hooks'
 import { fetchSingleItem } from './data/fetchListData'
 import {
   getSelectedItems,
@@ -32,6 +39,7 @@ import {
   buildCustomActionPayload,
   isCorsError
 } from './utils/listOperationUtils'
+import { goBack } from './utils/navigation'
 import * as React from 'react'
 import {
   Toaster,
@@ -51,11 +59,14 @@ const Icons = {
 
 export function useToolbarItems(isSingleView: boolean = false, showNewButton: boolean = true) {
   const context = useContext(DynamicListContext)
-  const toasterId = useId('toaster')
+  // The web part's toaster, which a drop on the library and every action tell in.
+  const toasterId = context.toasterId
   const exportToExcel = useExcelExport(toasterId)
   const fluentProviderId = useId('fp-dynamic-list-actions')
   const { dispatchToast } = useToastController(toasterId)
   const { openDialog, dialogComponent, toasterId: dialogToasterId } = useCustomActionDialog()
+  const notify = useNotify()
+  const uploadFiles = useFileUpload()
 
   const checkedValues = useMemo(() => {
     const viewMode =
@@ -126,19 +137,31 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
     const selected = getSelectedItems(context)
 
-    await Promise.all(
-      selected.map(async (item: any) => {
-        if (item?.Id) {
-          await list.items.getById(item.Id).delete()
-        }
-      })
-    )
+    try {
+      await Promise.all(
+        selected.map(async (item: any) => {
+          if (item?.Id) {
+            await list.items.getById(item.Id).delete()
+          }
+        })
+      )
+    } catch (error) {
+      console.error('[DynamicList] Error deleting items:', error)
+      notify('error', strings.DynamicList.DeleteFailed, error?.message)
+      return
+    }
 
     const deletedItemIds = new Set(selected.map((item: any) => item?.Id).filter(Boolean))
     const updatedListItems = context.state.data.listItems.filter(
       (item: any) => !deletedItemIds.has(item.Id)
     )
 
+    notify(
+      'success',
+      selected.length === 1
+        ? strings.DynamicList.ItemDeleted
+        : format(strings.DynamicList.ItemsDeleted, selected.length)
+    )
     context.setState({
       selectedItems: [],
       data: {
@@ -146,7 +169,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         listItems: updatedListItems
       }
     })
-  }, [context.state, context.props, context.setState])
+  }, [context.state, context.props, context.setState, notify])
 
   /**
    * Dismisses the edit panel and triggers a data refetch.
@@ -191,78 +214,6 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       }
     },
     [context.props, context.state.data, context.setState, context.web, dismissPanel]
-  )
-
-  /**
-   * Upload files to the document library.
-   *
-   * @param files The files to upload
-   */
-  const uploadFiles = useCallback(
-    async (files: File[]) => {
-      if (!context.props.listName) return
-
-      try {
-        const list = context.web.lists.getByTitle(context.props.listName)
-        let folderPath = context.state.currentFolderPath || ''
-
-        if (context.props.useProjectFolder && context.state.isDocumentLibrary) {
-          const projectFolderName = context.props.webTitle
-          if (projectFolderName) {
-            try {
-              await list.rootFolder.folders.getByUrl(projectFolderName)()
-            } catch {
-              await list.rootFolder.folders.addUsingPath(projectFolderName)
-            }
-            if (!folderPath) {
-              folderPath = projectFolderName
-            }
-          }
-        }
-
-        const listData = await list.select('RootFolder/ServerRelativeUrl').expand('RootFolder')()
-        const listRootPath = listData.RootFolder.ServerRelativeUrl
-
-        for (const file of files) {
-          let addedFile: IFileInfo
-          if (folderPath) {
-            const folderServerRelativeUrl = `${listRootPath}/${folderPath}`
-            sessionStorage.DEBUG ||
-              (DEBUG &&
-                console.log('[useToolbarItems.uploadFiles] Uploading to folder:', {
-                  listName: context.props.listName,
-                  folderPath,
-                  folderServerRelativeUrl
-                }))
-            const targetFolder = context.web.getFolderByServerRelativePath(folderServerRelativeUrl)
-            addedFile = await targetFolder.files.addUsingPath(file.name, file, { Overwrite: true })
-          } else {
-            addedFile = await list.rootFolder.files.addUsingPath(file.name, file, {
-              Overwrite: true
-            })
-          }
-
-          if (context.props.useSiteIdFiltering && addedFile) {
-            await stampSiteIdFieldsOnFile(
-              context.web,
-              addedFile,
-              context.props.siteId,
-              context.props.webTitle
-            )
-          }
-        }
-
-        context.setState({ refetch: Date.now() })
-      } catch (error) {
-        console.error('Error uploading files:', error)
-      }
-    },
-    [
-      context.props,
-      context.state.currentFolderPath,
-      context.state.isDocumentLibrary,
-      context.setState
-    ]
   )
 
   /**
@@ -354,12 +305,14 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
           )
         }
 
+        notify('success', format(strings.DynamicList.DocumentCreated, fileName))
         context.setState({ refetch: Date.now() })
       } catch (error) {
         console.error('Error creating document:', error)
+        notify('error', strings.DynamicList.DocumentCreateFailed, error?.message)
       }
     },
-    [context.props, context.state.currentFolderPath, context.setState]
+    [context.props, context.state.currentFolderPath, context.setState, notify]
   )
 
   /**
@@ -493,22 +446,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
       items.push(
         new ListMenuItem(strings.DynamicList.Back, strings.DynamicList.BackToListView)
           .setIcon(ArrowLeftRegular)
-          .setOnClick(() => {
-            if (context.state.isDrilledDown) {
-              context.setState({
-                isDrilledDown: false,
-                selectedItem: undefined,
-                selectedItems: []
-              })
-            } else if (isInFolder) {
-              const currentPath = context.state.currentFolderPath || ''
-              const pathParts = currentPath.split('/')
-              pathParts.pop()
-              const newPath = pathParts.join('/')
-
-              context.setState({ currentFolderPath: newPath })
-            }
-          })
+          .setOnClick(() => goBack(context))
       )
     }
 
@@ -638,7 +576,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
               '{0}',
               context.state.currentView?.title?.toLowerCase() ||
                 context.state.data?.listTitle?.toLowerCase() ||
-                'liste'
+                strings.DynamicList.DefaultListName
             ),
             title: strings.DynamicList.Search,
             'aria-label': strings.DynamicList.Search,
@@ -699,6 +637,8 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
       items.push(
         new ListMenuItem(selectedCount > 0 ? selectedCount.toString() : undefined, tooltipText)
+          // Named by what it does, not by the count it shows (WCAG 2.4.6); the name holds it.
+          .setAriaLabel(tooltipText)
           .setIcon('ExcelLogoInverse')
           .setOnClick(exportToExcel)
           .setDisabled(

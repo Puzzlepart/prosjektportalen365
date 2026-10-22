@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import * as React from 'react'
 import { BasePanel } from './BasePanel'
 
@@ -76,5 +77,38 @@ describe('BasePanel', () => {
     expect(close).toBeTruthy()
     await user.click(close)
     await waitFor(() => expect(onClose).toHaveBeenCalled())
+  })
+
+  it('lets the keyboard reach and scroll a body with no control in it, as a region named by its header, when asked (WCAG 2.1.1)', () => {
+    const { rerender } = render(
+      <BasePanel open headerText='Alle egenskaper' isBodyFocusable>
+        <div>Innhold</div>
+      </BasePanel>
+    )
+    // axe's scrollable-region-focusable: a body that scrolls with nothing focusable in it.
+    expect(screen.getByRole('region', { name: 'Alle egenskaper' })).toHaveAttribute('tabindex', '0')
+    rerender(
+      <BasePanel open headerText='Alle egenskaper'>
+        <div>Innhold</div>
+      </BasePanel>
+    )
+    // A panel of fields has its own stops; its body takes none.
+    expect(screen.queryByRole('region')).toBeNull()
+  })
+
+  it('is a dialog named by its header, also while the header is hidden, and breaks no rule axe can check', async () => {
+    const { rerender } = render(
+      <BasePanel open headerText='Alle egenskaper' footer={<button>Lagre</button>}>
+        <div>Innhold</div>
+      </BasePanel>
+    )
+    expect(screen.getByRole('dialog')).toHaveAccessibleName('Alle egenskaper')
+    expect(await axeComponent(document.body)).toHaveNoViolations()
+    rerender(
+      <BasePanel open hidden headerText='Alle egenskaper'>
+        <div>Innhold</div>
+      </BasePanel>
+    )
+    expect(screen.getByRole('dialog')).toHaveAccessibleName('Alle egenskaper')
   })
 })

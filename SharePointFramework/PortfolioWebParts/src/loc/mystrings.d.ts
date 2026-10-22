@@ -37,9 +37,7 @@ declare interface IPortfolioWebPartsStrings {
   Aria: {
     MenuOverflowCount: string
     MoveDisabled: string
-    MoveUp: string
     MoveUpDisabled: string
-    MoveDown: string
     MoveDownDisabled: string
   }
   Placeholder: {
@@ -71,6 +69,13 @@ declare interface IPortfolioWebPartsStrings {
     NoViewFoundErrorMessage: string
     NoIdeaFoundErrorMessage: string
     ProvisionAreaTitle: string
+    NavigationMenuLabel: string
+    PhasesLabel: string
+    RegistrationPhaseTitle: string
+    ProcessingPhaseTitle: string
+    ApprovedPhaseTitle: string
+    StatusTitle: string
+    NoIdeaFoundTitle: string
     ConfigurationListFieldLabel: string
     ConfigurationListFieldDescription: string
     ConfigurationNameFieldLabel: string
@@ -91,6 +96,9 @@ declare interface IPortfolioWebPartsStrings {
   CancelButtonLabel: string
   ColumnCategoryDescription: string
   ColumnCategoryLabel: string
+  ColumnFieldLockedText: string
+  ColumnFieldLockedDescription: string
+  ColumnFormSaveDisabledReason: string
   ColumnRenderDataTypePropertiesHeaderText: string
   ColumnRenderDescription: string
   ColumnRenderLabel: string
@@ -120,6 +128,7 @@ declare interface IPortfolioWebPartsStrings {
   DataSourceLabel: string
   DataSourceLevelDescription: string
   DataSourceLevelLabel: string
+  ReadOnlyFromDataSourceText: string
   DataSourceNotFound: string
   DefaultDataSourceViewLabel: string
   DefaultRenderModeDescription: string
@@ -232,6 +241,7 @@ declare interface IPortfolioWebPartsStrings {
     WebPartDescription: string
     ProjectSiteIdFieldLabel: string
     ProjectSiteIdFieldDescription: string
+    LoadErrorText: string
   }
   ProjectsAccessHeaderText: string
   ProjectsAccessSearchBoxPlaceholderText: string
@@ -294,6 +304,8 @@ declare interface IPortfolioWebPartsStrings {
   StatusReportsCountLabel: string
   TileViewGroupName: string
   TitleLabel: string
+  TitleColumnDeleteDisabledReason: string
+  ViewFormSaveDisabledReason: string
   TitleDescription: string
   ToggleColumnFormPanelLabel: string
   UseChangesButtonText: string
@@ -321,6 +333,19 @@ declare interface IPortfolioWebPartsStrings {
   ListSelectGroupLabel: string
   ListCollapseAllGroupsLabel: string
   ListExpandAllGroupsLabel: string
+  NameValueLabel: string
+  StatusReportedText: string
+  ProjectTypeIconLabel: string
+  MoreVerticalsLabel: string
+  ProjectsShownAnnouncement: string
+  RenderModeButtonLabel: string
+  MoveColumnUp: string
+  MoveColumnDown: string
+  ColumnMovedAnnouncement: string
+  ColumnLiftedAnnouncement: string
+  ColumnDragPositionAnnouncement: string
+  ColumnDropCancelledAnnouncement: string
+  SelectorButtonLabel: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

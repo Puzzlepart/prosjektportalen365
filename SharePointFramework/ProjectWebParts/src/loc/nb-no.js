@@ -18,18 +18,12 @@ define([], function () {
     ArchiveLogOperationEndClosed: 'Avsluttet/Stengt/Låst',
     Aria: {
       CurrentPhaseText:
-        'Dette er den gjeldende fasen. Det er derfor ikke mulig å endre til denne fasen.'
-    },
-    Placeholder: {
-      DatePicker: 'Angi en dato',
-      TextField: 'Angi verdi her',
-      UrlField: 'Angi en nettadresse',
-      UrlFieldAlternative: 'Alternativ tekst',
-      TaxonomyPicker: 'Skriv inn termen som skal merkes',
-      PeoplePicker: 'Angi et navn eller en e-postadresse',
-      NumberField: 'Skriv inn et tall',
-      ChoiceField: 'Velg et alternativ',
-      MultiChoiceField: 'Velg ett eller flere alternativer'
+        'Dette er den gjeldende fasen. Det er derfor ikke mulig å endre til denne fasen.',
+      PhaseListLabel: 'Prosjektets faser',
+      ChecklistStepsLabel: 'Sjekkpunkter',
+      MoreSectionsLabel: '+{0} flere seksjoner',
+      NameValueLabel: '{0}: {1}',
+      ChangingPhaseAnnouncement: '{0}. {1}'
     },
     SaveText: 'Lagre',
     ErrorBoundaryFallbackText: 'Det oppstod en feil under lasting av {0}.',
@@ -483,9 +477,22 @@ define([], function () {
       Close: 'Lukk',
       NoItemsFound: 'Ingen elementer funnet',
       ListTable: 'Listetabell',
-      GroupByColumn: 'Grupper etter {0}',
+      SortAscending: 'Sorter stigende',
+      SortDescending: 'Sorter synkende',
+      ResizeColumn: 'Endre kolonnebredde',
       FolderNavigation: 'Mappenavigasjon',
-      HiddenFromView: 'Skjult fra visning'
+      HiddenFromView: 'Skjult fra visning',
+      RefreshDone: 'Listen er oppdatert',
+      ItemsShown: 'Viser {0} av {1} elementer',
+      FileUploaded: '{0} er lastet opp',
+      FilesUploaded: '{0} filer er lastet opp',
+      UploadFailed: 'Opplastingen feilet',
+      DocumentCreated: '{0} er opprettet',
+      DocumentCreateFailed: 'Dokumentet ble ikke opprettet',
+      ItemDeleted: 'Elementet er slettet',
+      ItemsDeleted: '{0} elementer er slettet',
+      DeleteFailed: 'Slettingen feilet',
+      DefaultListName: 'liste'
     }
   }
 })

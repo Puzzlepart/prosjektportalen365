@@ -6,7 +6,13 @@ import {
 } from '@microsoft/sp-listview-extensibility'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { PermissionKind } from '@pnp/sp/security'
-import { getId, themeColor, renderReact, unmountReact } from 'pp365-shared-library'
+import {
+  getId,
+  themeColor,
+  renderReact,
+  unmountReact,
+  whenHostMenuHasClosed
+} from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
 import React from 'react'
 import resource from 'SharedResources'
@@ -93,8 +99,14 @@ export default class TemplatePackageCatalogCommandSet extends BaseListViewComman
   }
 
   @override
-  public onExecute(event: IListViewCommandSetExecuteEventParameters): void {
+  public async onExecute(event: IListViewCommandSetExecuteEventParameters): Promise<void> {
     if (event.itemId !== OPEN_COMMAND) return
+    // Run from SharePoint's "Mer" menu, the catalog was hidden from screen readers by SharePoint
+    // as the menu closed; it opens once the menu has (WCAG 4.1.2).
+    await whenHostMenuHasClosed()
+    // The catalog opens in a place of its own, from SharePoint's command button, with no trigger
+    // of Fluent's to give the focus back to: it goes back to the button as it closes (WCAG 2.4.3).
+    const opener = document.activeElement as HTMLElement | null
     const placeholder = this._getPlaceholder()
     renderReact(
       React.createElement(TemplatePackageCatalog, {
@@ -103,7 +115,7 @@ export default class TemplatePackageCatalogCommandSet extends BaseListViewComman
         userGuideUrl: this.properties.userGuideUrl,
         featureFlagProvisioning: this.properties.featureFlagProvisioning,
         telemetryUrl: this.properties.telemetryUrl,
-        onDismiss: () => this._unmount(placeholder)
+        onDismiss: () => this._unmount(placeholder, opener)
       }),
       placeholder
     )
@@ -119,8 +131,9 @@ export default class TemplatePackageCatalogCommandSet extends BaseListViewComman
     return placeholder
   }
 
-  private _unmount(placeholder: HTMLElement): void {
+  private _unmount(placeholder: HTMLElement, opener?: HTMLElement | null): void {
     unmountReact(placeholder)
+    if (opener?.isConnected) opener.focus()
   }
 
   private _getIcon(): string {

@@ -148,6 +148,8 @@ define([], function () {
     MeasurementAchievementLabel: 'Goal achievement',
     Add: 'Add',
     AddProjectDialogSearchBoxPlaceholder: 'Search projects...',
+    AddProjectsDisabledReason: 'Choose the projects to add',
+    AddProjectsErrorTitle: 'The projects could not be added',
     Cancel: 'Cancel',
     CmdSelectionCountText: '{0} is marked',
     CmdSelectionCountTooltipText: 'The following projects have been selected:',

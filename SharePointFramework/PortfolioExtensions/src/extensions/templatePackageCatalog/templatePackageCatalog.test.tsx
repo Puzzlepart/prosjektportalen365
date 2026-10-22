@@ -99,7 +99,7 @@ describe('TemplatePackageCatalogCommandSet', () => {
 
   it('opens the catalog on top of the page and removes it when it is dismissed', async () => {
     const { command } = await catalogCommand()
-    act(() => command.onExecute(execute(OPEN)))
+    await act(() => command.onExecute(execute(OPEN)))
     const catalog = screen.getByText('Katalog fra https://katalog.example/catalog.json')
     expect(catalog.parentElement.parentElement).toBe(document.body)
     act(() => {
@@ -108,8 +108,8 @@ describe('TemplatePackageCatalogCommandSet', () => {
     expect(screen.queryByText(/Katalog fra/)).toBeNull()
 
     // Opened again, it reuses its place on the page.
-    act(() => command.onExecute(execute(OPEN)))
-    act(() => command.onExecute(execute(OPEN)))
+    await act(() => command.onExecute(execute(OPEN)))
+    await act(() => command.onExecute(execute(OPEN)))
     expect(screen.getAllByText(/Katalog fra/)).toHaveLength(1)
     act(() => {
       fireEvent.click(screen.getByText(/Katalog fra/))
@@ -117,9 +117,61 @@ describe('TemplatePackageCatalogCommandSet', () => {
     expect(document.body.querySelectorAll(':scope > div')).toHaveLength(1)
   })
 
+  it('gives the focus back to what opened it when it is dismissed (WCAG 2.4.3)', async () => {
+    const { command } = await catalogCommand()
+    // SharePoint's command bar button: the catalog opens in a place of its own, with no trigger
+    // of Fluent's to give the focus back to.
+    const opener = document.createElement('button')
+    document.body.appendChild(opener)
+    opener.focus()
+    await act(() => command.onExecute(execute(OPEN)))
+    const catalog = screen.getByText(/Katalog fra/)
+    catalog.focus()
+    act(() => {
+      fireEvent.click(catalog)
+    })
+    expect(opener).toHaveFocus()
+    opener.remove()
+  })
+
+  it('opens from SharePoint\'s "Mer" menu once the menu has closed, and gives the focus back to the menu\'s button (WCAG 4.1.2, 2.4.3)', async () => {
+    const { command } = await catalogCommand()
+    // The command runs while SharePoint's menu has the focus. Rendered then, the catalog was
+    // hidden from screen readers by SharePoint's own focus manager as the menu closed, and the
+    // focus went back to the menu item, which was gone.
+    const more = document.createElement('button')
+    const menu = document.createElement('div')
+    menu.setAttribute('role', 'menu')
+    const item = document.createElement('button')
+    item.setAttribute('role', 'menuitem')
+    menu.appendChild(item)
+    document.body.append(more, menu)
+    item.focus()
+    // The clock stands still, so the wait for the menu to close cannot time out however slow the
+    // worker is; it would then open with the focus still in the menu.
+    const now = jest.spyOn(Date, 'now').mockReturnValue(Date.now())
+    try {
+      const opening = command.onExecute(execute(OPEN))
+      await act(() => new Promise((resolve) => setTimeout(resolve, 100)))
+      expect(screen.queryByText(/Katalog fra/)).toBeNull()
+      menu.remove()
+      more.focus()
+      await act(() => opening)
+    } finally {
+      now.mockRestore()
+    }
+    const catalog = screen.getByText(/Katalog fra/)
+    catalog.focus()
+    act(() => {
+      fireEvent.click(catalog)
+    })
+    expect(more).toHaveFocus()
+    more.remove()
+  })
+
   it('ignores the commands of other command sets', async () => {
     const { command } = await catalogCommand()
-    act(() => command.onExecute(execute('ANNEN')))
+    await act(() => command.onExecute(execute('ANNEN')))
     expect(screen.queryByText(/Katalog fra/)).toBeNull()
   })
 

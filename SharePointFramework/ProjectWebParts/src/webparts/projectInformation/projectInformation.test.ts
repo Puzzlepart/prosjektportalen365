@@ -5,7 +5,8 @@ jest.mock('components/ProjectInformation', () => ({
     minRowLimit: 4,
     maxRowLimit: 100,
     showSustainabilityGoalsAsIcons: false,
-    sustainabilityGoalIconSize: 48
+    sustainabilityGoalIconSize: 48,
+    statusReportShowOnlyIcons: true
   }
 }))
 
@@ -53,5 +54,29 @@ describe('ProjectInformation web part sustainability properties', () => {
       { key: 48, text: '48 px' },
       { key: 64, text: '64 px' }
     ])
+  })
+})
+
+/** The fields of the property pane's status report group, by the property they set. */
+function statusReportFields(webPart: any): Record<string, any> {
+  const groups = webPart.getPropertyPaneConfiguration().pages[0].groups
+  const group = groups.find(({ groupName }) => groupName === strings.ProjectStatusGroupName)
+  return Object.fromEntries(
+    group.groupFields.map((field) => [field.targetProperty, field.properties])
+  )
+}
+
+describe('ProjectInformation web part status report properties', () => {
+  it('shows the status report as icons by default, with no warning, for their marks tell the status by shape (WCAG 1.4.1)', () => {
+    const fields = statusReportFields(createWebPart())
+    expect(fields.statusReportShowOnlyIcons.checked).toBe(true)
+    expect(fields.statusReportShowOnlyIconsWarning).toBeUndefined()
+    expect(Object.keys(fields)).toEqual(['hideStatusReport', 'statusReportShowOnlyIcons'])
+  })
+
+  it('offers the comment length for the full report', () => {
+    const fields = statusReportFields(createWebPart({ statusReportShowOnlyIcons: false }))
+    expect(fields.statusReportShowOnlyIcons.checked).toBe(false)
+    expect(fields.statusReportTruncateComments).toBeDefined()
   })
 })

@@ -18,11 +18,14 @@ import { packageCardId } from '../PackageCard'
  */
 export function usePackageDetails() {
   const ctx = useCatalogContext()
-  const { state, selectedPackage, closeDetail, setCategories } = ctx
+  const { state, setState, selectedPackage, closeDetail, setCategories } = ctx
   const [imageError, setImageError] = useState(false)
   const [confirmReplace, setConfirmReplace] = useState(false)
   const [confirmRemove, setConfirmRemove] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
+  // The package's heading takes the focus, named, where the pane's frame took it with no name
+  // and no outline (WCAG 2.4.3, 2.4.7).
+  const titleRef = useRef<HTMLHeadingElement>(null)
   const wasDetailOpen = useRef(state.detailOpen)
 
   useEffect(() => {
@@ -36,9 +39,16 @@ export function usePackageDetails() {
     // package on load.
     if (selectedPackage && state.detailOpen) {
       rootRef.current?.parentElement?.scrollTo({ top: 0 })
-      rootRef.current?.focus({ preventScroll: true })
+      titleRef.current?.focus({ preventScroll: true })
     }
   }, [selectedPackage?.id, state.detailOpen])
+
+  // Back from an installation's progress, which replaced the details and took the focus.
+  useEffect(() => {
+    if (!state.focusDetails) return
+    titleRef.current?.focus()
+    setState({ focusDetails: false })
+  }, [state.focusDetails])
 
   useEffect(() => {
     if (wasDetailOpen.current && !state.detailOpen && selectedPackage) {
@@ -61,6 +71,7 @@ export function usePackageDetails() {
     confirmRemove,
     setConfirmRemove,
     rootRef,
+    titleRef,
     filterByTag
   }
 }

@@ -1,9 +1,10 @@
 import { TableRowId } from '@fluentui/react-components'
 import strings from 'ProjectExtensionsStrings'
-import { ListMenuItem, format } from 'pp365-shared-library'
+import { format } from 'pp365-shared-library'
 import { useState } from 'react'
 import { useProjectSetupDialogContext } from '../context'
 import { ON_LIST_CONTENT_CONFIG_CHANGED } from '../reducer'
+import { useSearchAnnouncement } from '../useSearchAnnouncement'
 import { useColumns } from './useColumns'
 
 /**
@@ -61,15 +62,9 @@ export function useContentConfigSection() {
     (item) => !item.hidden
   ).length
 
-  const toolbarItems = [
-    new ListMenuItem(
-      format(strings.SelectedCountLabel, visibleSelectedCount),
-      format(strings.SelectedCountLabel, visibleSelectedCount)
-    )
-      .setIcon('CheckmarkCircle')
-      .setDisabled(true)
-      .setStyle({ minWidth: '200px', cursor: 'default' })
-  ]
+  // A status, not a button: the count changes as items are picked, and is read out then.
+  const selectedCountText = format(strings.SelectedCountLabel, visibleSelectedCount)
+  useSearchAnnouncement(searchTerm, items.length, allItems.length)
 
   return {
     items,
@@ -78,6 +73,6 @@ export function useContentConfigSection() {
     onSelectionChange,
     searchTerm,
     onSearch: setSearchTerm,
-    toolbarItems
+    selectedCountText
   }
 }

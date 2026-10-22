@@ -22,6 +22,7 @@ import {
 } from '@fluentui/react-components'
 import _ from 'lodash'
 import { visibilityOptions } from './types'
+import { lockedWhenEditing } from '../../List/lockedWhenEditing'
 
 export const ColumnFormPanel: FC = () => {
   const context = useContext(PortfolioOverviewContext)
@@ -81,12 +82,12 @@ export const ColumnFormPanel: FC = () => {
           <FieldContainer
             iconName='TextNumberFormat'
             label={strings.InternalNameLabel}
-            description={strings.InternalNameDescription}
+            description={lockedWhenEditing(strings.InternalNameDescription, isEditing)}
             required={true}
           >
             <Input
               value={column.get('internalName')}
-              disabled={isEditing}
+              readOnly={isEditing}
               onChange={(_, data) => setColumn('internalName', data.value)}
               placeholder={strings.Placeholder.TextField}
               onBlur={findMatchingSearchProperty}
@@ -95,14 +96,14 @@ export const ColumnFormPanel: FC = () => {
           <FieldContainer
             iconName='DatabaseSearch'
             label={strings.SearchPropertyLabel}
-            description={strings.SearchPropertyDescription}
+            description={lockedWhenEditing(strings.SearchPropertyDescription, isEditing)}
             required={true}
           >
             <ColumnSearchPropertyField
               placeholder={strings.SearchPropertyPlaceholder}
               value={column.get('fieldName')}
               onChange={(value) => setColumn('fieldName', value)}
-              disabled={isEditing}
+              readOnly={isEditing}
               // managedProperties={context.state.managedProperties} - AutoComplete doesn't properly when trying to create a new by just typing. Removed for now to use input instead.
             />
             {/* {columnMessages.get('fieldName') && (

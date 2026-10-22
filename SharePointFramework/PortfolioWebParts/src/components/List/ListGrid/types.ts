@@ -47,6 +47,13 @@ export interface IListGridProps {
   /**
    * Called on a click on a column header, with the element to place a menu by.
    */
+  /**
+   * Whether a click on a column header opens a menu (the hub's column menu), which the header
+   * then says (`aria-haspopup`) and is where the focus returns when the menu or a panel it
+   * opened closes. A header that sorts (the program administration's) is a plain button.
+   */
+  headerOpensMenu?: boolean
+
   onColumnHeaderClick?: (column: IListColumn, target: HTMLElement) => void
 
   /**
@@ -100,6 +107,11 @@ export type ListGridEntry =
  * What `useListGrid` gives `ListGrid` to render.
  */
 export interface IListGridState {
+  /**
+   * The props a column header's button takes when a click on it opens the column menu: it says
+   * so (`aria-haspopup`) and is marked as where the focus returns. Empty otherwise.
+   */
+  headerMenuProps: Record<string, string>
   /**
    * The grid's container, measured for the justified layout.
    */

@@ -1,9 +1,11 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
 // Babel, so mocks are not hoisted. The calendar (`react-calendar-timeline`) needs a real layout,
-// so it is a stand-in that draws each group and item through the timeline's own renderers and
-// shows the time frame and sidebar it was given. Fluent's popover and menu are stand-ins that keep
-// their contract (see the testing guide): the details popover shows while open and reports
-// Escape through `onOpenChange`, and the menu trigger toggles through `onOpenChange`.
+// so it is a stand-in that draws each group and item through the timeline's own renderers, the
+// items inside its scroll element (`.rct-scroll`, handed to `scrollRef` as the calendar does), and
+// shows the time frame and sidebar it was given, and its markers. Fluent's popover and menu are stand-ins that keep
+// their contract (see the testing guide): the details popover shows while open, with the props its
+// surface is given, and reports Escape through `onOpenChange`, and the menu trigger toggles through
+// `onOpenChange`.
 jest.mock('react-calendar-timeline', () => {
   const React = jest.requireActual('react')
   const Calendar = (props: any) =>
@@ -18,25 +20,37 @@ jest.mock('react-calendar-timeline', () => {
       props.groups.map((group: any) =>
         React.createElement('div', { key: `group-${group.id}` }, props.groupRenderer({ group }))
       ),
-      props.items.map((item: any) =>
-        React.createElement(
-          'div',
-          { key: `item-${item.id}` },
-          props.itemRenderer({
-            item,
-            itemContext: { dimensions: { height: 20 } },
-            getItemProps: (itemProps: any) => itemProps
-          })
+      React.createElement(
+        'div',
+        { className: 'rct-scroll', ref: props.scrollRef },
+        props.items.map((item: any) =>
+          React.createElement(
+            'div',
+            { key: `item-${item.id}` },
+            props.itemRenderer({
+              item,
+              itemContext: { dimensions: { height: 20 } },
+              getItemProps: (itemProps: any) => itemProps
+            })
+          )
         )
-      )
+      ),
+      props.children
     )
-  const Empty = () => null
+  // A marker draws what its render function returns from the styles of its line, as the
+  // calendar's do, or a bare line without one.
+  const marker =
+    (left: number) =>
+    ({ children, date }: any) =>
+      children
+        ? children({ styles: { position: 'absolute', left, width: '2px' }, date })
+        : React.createElement('div', { 'data-testid': 'bare-marker' })
   return {
     __esModule: true,
     default: Calendar,
-    TimelineMarkers: Empty,
-    CustomMarker: Empty,
-    TodayMarker: Empty
+    TimelineMarkers: ({ children }: any) => React.createElement(React.Fragment, null, children),
+    CustomMarker: marker(10),
+    TodayMarker: marker(20)
   }
 })
 jest.mock('@fluentui/react-components', () => {
@@ -53,8 +67,8 @@ jest.mock('@fluentui/react-components', () => {
           children
         )
       : null
-  const PopoverSurface = ({ children }: any) =>
-    React.createElement('div', { role: 'dialog' }, children)
+  const PopoverSurface = ({ children, ...props }: any) =>
+    React.createElement('div', { role: 'dialog', ...props }, children)
   const MenuContext = React.createContext({ open: false, toggle: (_event: any) => undefined })
   const Menu = ({ open, onOpenChange, children }: any) =>
     React.createElement(
@@ -79,12 +93,13 @@ jest.mock('@fluentui/react-components', () => {
 
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import moment from 'moment'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import strings from 'SharedLibraryStrings'
 import * as React from 'react'
 import resource from 'SharedResources'
 import { Timeline } from '.'
 import { ITimelineGroup, ITimelineItem, TimelineGroupType } from '../../../interfaces'
-import { formatDate, tryParseCurrency } from '../../../util'
+import { formatDate, getContrastRatio, tryParseCurrency } from '../../../util'
 
 const FRISBEE = 'https://contoso.sharepoint.com/sites/frisbee'
 
@@ -159,6 +174,10 @@ function renderTimeline(props: Record<string, any> = {}) {
 
 const calendar = () => screen.getByTestId('calendar')
 const details = () => screen.getByRole('dialog')
+const button = (name: string) => within(calendar()).getByRole('button', { name })
+
+/** The timeline's grey rows, `rgba(0, 0, 0, 0.05)` over white, the fainter of its backgrounds. */
+const GREY_ROW = '#f2f2f2'
 
 afterEach(async () => {
   cleanup()
@@ -335,5 +354,182 @@ describe('Timeline', () => {
     fireEvent.click(within(calendar()).getByText('Kontrakt signert'))
     expect(within(details()).getAllByText('Kontrakt signert').length).toBeGreaterThan(0)
     expect(within(details()).getByText('0%')).toBeInTheDocument()
+  })
+
+  it('opens an item from the keyboard, and gives focus back to it on Escape (WCAG 2.1.1)', () => {
+    renderTimeline()
+    const bar = within(calendar()).getByRole('button', { name: 'Prosjekt: Frisbeegolfbane' })
+    expect(bar).toHaveAttribute('tabindex', '0')
+    expect(bar).toHaveAttribute('aria-haspopup', 'dialog')
+    bar.focus()
+    fireEvent.keyDown(bar, { key: 'Enter' })
+    expect(details()).toHaveAccessibleName('Prosjekt: Frisbeegolfbane')
+    // Fluent's popover takes focus into the details; Escape there closes them.
+    const link = within(details()).getByText('Frisbeegolfbane')
+    link.focus()
+    fireEvent.keyDown(link, { key: 'Escape' })
+    expect(screen.queryByRole('dialog')).toBeNull()
+    expect(bar).toHaveFocus()
+    fireEvent.keyDown(within(calendar()).getByRole('button', { name: 'Åpning' }), { key: ' ' })
+    expect(within(details()).getByText(`${strings.MilestoneDateLabel}:`)).toBeInTheDocument()
+  })
+
+  it('takes the focus into details that hold no link, named by the item and described by what they show (WCAG 2.4.3, 4.1.2)', () => {
+    renderTimeline()
+    fireEvent.keyDown(within(calendar()).getByRole('button', { name: 'Åpning' }), { key: 'Enter' })
+    // Fluent focuses a surface with a tab index as it opens; without one, the focus stayed on the
+    // item behind the details of a milestone or a phase, and a screen reader heard nothing open.
+    expect(details()).toHaveAttribute('tabindex', '-1')
+    expect(details()).toHaveAccessibleName('Åpning')
+    const date = formatDate(MILESTONE.end_time.toString())
+    expect(details()).toHaveAccessibleDescription(
+      expect.stringContaining(`${strings.MilestoneDateLabel}: ${date}`)
+    )
+  })
+
+  it('names a milestone, which shows no text, by its title (WCAG 4.1.2)', () => {
+    renderTimeline()
+    expect(within(calendar()).getByRole('button', { name: 'Åpning' })).toBeInTheDocument()
+    expect(within(calendar()).getByRole('button', { name: 'Forprosjekt' })).toBeInTheDocument()
+  })
+
+  it('lets the keyboard reach the timeline to scroll it, as a named group (WCAG 2.1.1)', async () => {
+    renderTimeline()
+    const scroll = screen.getByRole('group', { name: strings.Aria.TimelineScrollLabel })
+    expect(scroll).toHaveClass('rct-scroll')
+    expect(scroll).toHaveAttribute('tabindex', '0')
+    expect(await axeComponent(calendar())).toHaveNoViolations()
+  })
+
+  it('draws a bar of the timeline configuration in a light tone of its colour, edged in the colour, in black (WCAG 1.4.3, 1.4.11)', () => {
+    const bar = (id: number, title: string, background: string) => ({
+      ...item(id, title, {
+        type: resource.TimelineConfiguration_Project_Title,
+        elementType: resource.TimelineConfiguration_Bar_ElementType
+      }),
+      itemProps: { style: { background, backgroundColor: background, color: '#ffffff' } }
+    })
+    renderTimeline({
+      items: [bar(6, 'Prosjekt', '#f35d69'), bar(7, 'Fase', '#2589d6'), bar(8, 'Mørk', '#1f4e79')]
+    })
+    // The template's blue stands out against the grey rows by itself (3.33:1) and edges its bar;
+    // its red (2.85:1) is darkened until it does.
+    expect(button('Fase')).toHaveStyle({
+      backgroundColor: '#a8d0ef',
+      border: '1px solid #2589d6',
+      color: '#000000'
+    })
+    expect(button('Prosjekt')).toHaveStyle({ backgroundColor: '#fabec3', color: '#000000' })
+    const edge = button('Prosjekt').style.borderColor
+    expect(getContrastRatio(edge, GREY_ROW)).toBeGreaterThanOrEqual(3)
+    expect(getContrastRatio(edge, GREY_ROW)).toBeLessThan(3.1)
+    // A tone of a dark colour is light too, so its configured white text gives way to black.
+    expect(button('Mørk')).toHaveStyle({ color: '#000000' })
+  })
+
+  it('keeps the colour of an item from elsewhere, such as an allocation, in readable text (WCAG 1.4.3)', () => {
+    const allocation = (id: number, title: string, background: string) => ({
+      ...item(id, title, { type: strings.ResourceLabel, allocation: 80 }),
+      itemProps: { style: { background, backgroundColor: background, color: '#ffffff' } }
+    })
+    renderTimeline({
+      items: [allocation(9, 'Kari', 'rgba(51, 153, 51, 0.8)'), allocation(10, 'Ola', '#1f4e79')]
+    })
+    // The allocation's colour fades with its share, so it is not toned or edged; white on the
+    // green at 80 % is 2.6:1, black on it 7.8:1.
+    expect(button('Kari')).toHaveStyle({
+      backgroundColor: 'rgba(51, 153, 51, 0.8)',
+      color: '#000000'
+    })
+    expect(button('Kari').style.borderStyle).not.toBe('solid')
+    expect(button('Ola')).toHaveStyle({ backgroundColor: '#1f4e79', color: '#ffffff' })
+  })
+
+  it('edges a bar from elsewhere in the colour it asks for, darkened where that stands out too little, and keeps its fill (WCAG 1.4.11)', () => {
+    const allocation = (id: number, title: string, edgeColor: string) => ({
+      ...item(id, title, { type: strings.ResourceLabel, allocation: 30, edgeColor }),
+      itemProps: { style: { backgroundColor: 'rgba(51, 153, 51, 0.3)', color: '#000000' } }
+    })
+    renderTimeline({
+      items: [
+        allocation(11, 'Kari', 'rgb(51, 153, 51)'),
+        allocation(12, 'Ola', 'rgb(173, 216, 230)')
+      ]
+    })
+    // The allocation's fill fades with its share, 1.3:1 against the grey rows at 30 %; its edge is
+    // its full colour, which stands out by itself (3.27:1), and the edge takes 2px of the height.
+    expect(button('Kari')).toHaveStyle({
+      backgroundColor: 'rgba(51, 153, 51, 0.3)',
+      border: '1px solid #339933',
+      lineHeight: '18px'
+    })
+    // A pale colour is darkened until its edge stands out.
+    expect(getContrastRatio(button('Ola').style.borderColor, GREY_ROW)).toBeGreaterThanOrEqual(3)
+  })
+
+  it('edges a milestone in a darker shade of its colour, which stands out on the grey rows (WCAG 1.4.11)', () => {
+    const milestone = (
+      id: number,
+      title: string,
+      bgColorHex?: string,
+      elementType = resource.TimelineConfiguration_Diamond_ElementType
+    ) =>
+      item(id, title, {
+        type: resource.TimelineConfiguration_Milestone_Title,
+        elementType,
+        bgColorHex
+      })
+    renderTimeline({
+      items: [
+        milestone(11, 'Gul', '#ffc800'),
+        milestone(12, 'Blå', '#6495ed'),
+        milestone(13, 'Uten farge'),
+        milestone(14, 'Trekant', undefined, resource.TimelineConfiguration_Triangle_ElementType)
+      ]
+    })
+    const shape = (name: string) => button(name).firstElementChild as HTMLElement
+    const colours = (name: string) => [
+      shape(name).style.getPropertyValue('--milestone-fill'),
+      shape(name).style.getPropertyValue('--milestone-edge')
+    ]
+    expect(colours('Gul')).toEqual(['#ffc800', '#ac8700'])
+    // At least a quarter darker, so the edge shows round a colour that stands out by itself.
+    expect(colours('Blå')).toEqual(['#6495ed', '#4b70b2'])
+    // The default colours: the template's yellow for a diamond, light blue for a triangle.
+    expect(colours('Uten farge')).toEqual(['#ffc800', '#ac8700'])
+    expect(shape('Uten farge')).toHaveClass('diamond')
+    const [fill, edge] = colours('Trekant')
+    expect(fill).toBe('#add8e6')
+    expect(getContrastRatio(edge, GREY_ROW)).toBeGreaterThanOrEqual(3)
+    expect(shape('Trekant')).toHaveClass('triangle')
+  })
+
+  it('marks today with a label in text, where a coloured line was all (WCAG 1.1.1, 1.4.1)', () => {
+    renderTimeline()
+    expect(screen.getByText(strings.TimelineTodayLabel)).toBeInTheDocument()
+  })
+
+  it('draws the time-lapse marker in a shade that stands out on the grey rows (WCAG 1.4.11)', () => {
+    // Its red, #f35d69, had 2.85:1 against them.
+    renderTimeline({ timeLapseMarker: new Date() })
+    // The stand-in places the custom marker, the time lapse's, 10 px in.
+    const marker = document.querySelector<HTMLElement>('[style*="left: 10px"]')
+    expect(getContrastRatio(marker.style.backgroundColor, GREY_ROW)).toBeGreaterThanOrEqual(3)
+  })
+
+  it('writes the tag in the details in a colour readable on the item colour (WCAG 1.4.3)', () => {
+    const tagged = (id: number, title: string, bgColorHex: string) =>
+      item(id, title, {
+        type: resource.TimelineConfiguration_Project_Title,
+        elementType: resource.TimelineConfiguration_Bar_ElementType,
+        tag: 'Idrett',
+        bgColorHex
+      })
+    renderTimeline({ items: [tagged(15, 'Rød', '#f35d69'), tagged(16, 'Blå', '#0078d4')] })
+    fireEvent.click(button('Rød'))
+    expect(within(details()).getByTitle(strings.TagFieldLabel)).toHaveStyle({ color: '#000000' })
+    fireEvent.keyDown(details(), { key: 'Escape' })
+    fireEvent.click(button('Blå'))
+    expect(within(details()).getByTitle(strings.TagFieldLabel)).toHaveStyle({ color: '#ffffff' })
   })
 })

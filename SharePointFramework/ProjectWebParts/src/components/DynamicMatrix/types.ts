@@ -54,4 +54,9 @@ export interface IDynamicMatrixProps {
    * Manual configuration URL. File must be a JSON file stored in SharePoint.
    */
   manualConfigurationPath?: string
+
+  /**
+   * The matrix's name for screen readers, the title of the web part it is in.
+   */
+  title?: string
 }

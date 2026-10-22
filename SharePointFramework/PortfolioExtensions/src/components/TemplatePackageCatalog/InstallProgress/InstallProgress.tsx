@@ -11,7 +11,9 @@ import {
   Spinner,
   Text,
   tokens,
-  Tooltip
+  Tooltip,
+  useAnnounce,
+  useId
 } from '@fluentui/react-components'
 import {
   CheckmarkCircle24Filled,
@@ -24,7 +26,7 @@ import {
   SubtractCircle24Regular,
   Warning16Filled
 } from '@fluentui/react-icons'
-import { UserMessage } from 'pp365-shared-library'
+import { format, UserMessage } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useEffect, useRef, useState } from 'react'
 import { IInstallLogEntry, InstallStepKey, InstallStepStatus } from 'models'
@@ -144,13 +146,30 @@ export const InstallProgress: FC = () => {
   useEffect(() => {
     if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight
   }, [totalLogEntries])
+
+  // It replaces the details, whose button started it, so it takes the focus, as a region named
+  // by the package (WCAG 2.4.3). Both of its states render the same root, which keeps the focus.
+  const rootRef = useRef<HTMLDivElement>(null)
+  const label = format(strings.CatalogInstallProgressLabel, selectedPackage?.name ?? '')
+  useEffect(() => {
+    rootRef.current?.focus()
+  }, [])
+
+  // Each step is told as it starts (WCAG 4.1.3).
+  const { announce } = useAnnounce()
+  const runningStep = progress?.steps.find((step) => step.status === 'running')?.key
+  useEffect(() => {
+    if (runningStep) announce(stepLabel(runningStep), { polite: true })
+  }, [runningStep])
+
+  const logId = useId('install-log')
   if (!progress) return null
 
   const isExtension = selectedPackage?.type === 'extension'
 
   if (progress.steps.length === 0) {
     return (
-      <div className={styles.loading}>
+      <div ref={rootRef} tabIndex={-1} role='region' aria-label={label} className={styles.loading}>
         <Spinner label={strings.CatalogStepDownload} />
       </div>
     )
@@ -191,13 +210,14 @@ export const InstallProgress: FC = () => {
   const isLogExpanded = logExpanded || hasLogError
 
   return (
-    <div className={styles.root}>
-      <ProgressBar value={completed / total} max={1} />
+    <div ref={rootRef} tabIndex={-1} role='region' aria-label={label} className={styles.root}>
+      <ProgressBar value={completed / total} max={1} aria-label={label} />
       <div className={styles.steps}>
         {progress.steps.map((step) => (
           <div key={step.key} className={styles.step}>
+            {/* An image named by its status; a name on a plain span is not read. */}
             <Tooltip content={statusLabel(step.status)} relationship='label'>
-              <span className={styles.stepIcon}>
+              <span className={styles.stepIcon} role='img'>
                 <StepIcon status={step.status} />
               </span>
             </Tooltip>
@@ -219,12 +239,14 @@ export const InstallProgress: FC = () => {
             appearance='subtle'
             size='small'
             icon={isLogExpanded ? <ChevronUp16Regular /> : <ChevronDown16Regular />}
+            aria-expanded={isLogExpanded}
+            aria-controls={logId}
             onClick={() => setLogExpanded(!logExpanded)}
           >
             {strings.CatalogAdvancedLogLabel}
           </Button>
           {isLogExpanded && (
-            <div ref={logRef} className={cls.log}>
+            <div ref={logRef} id={logId} className={cls.log}>
               <Accordion multiple collapsible openItems={openLogItems}>
                 {logGroups.map((group) => {
                   const status = groupStatus(group)
@@ -304,6 +326,8 @@ export const InstallProgress: FC = () => {
             <Button
               appearance='primary'
               onClick={() => {
+                // The button goes as the retry starts: the focus stays in the progress.
+                rootRef.current?.focus()
                 void importPackage(selectedPackage)
               }}
             >
@@ -312,7 +336,7 @@ export const InstallProgress: FC = () => {
           )}
           <Button
             appearance={progress.status === 'error' ? 'secondary' : 'primary'}
-            onClick={() => setState({ installProgress: undefined })}
+            onClick={() => setState({ installProgress: undefined, focusDetails: true })}
           >
             {strings.CloseLabel}
           </Button>

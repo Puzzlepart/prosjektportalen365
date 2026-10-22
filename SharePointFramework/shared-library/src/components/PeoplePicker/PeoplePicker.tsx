@@ -8,6 +8,7 @@ import {
   TagPickerList,
   TagPickerOption
 } from '@fluentui/react-components'
+import { ChevronDownRegular } from '@fluentui/react-icons'
 import React, { FC } from 'react'
 import strings from 'SharedLibraryStrings'
 import { IPersonaItem } from '../../types'
@@ -15,13 +16,15 @@ import { IPeoplePickerProps } from './types'
 import { NO_PEOPLE_FOUND, personKey, usePeoplePicker } from './usePeoplePicker'
 
 /**
- * The person's picture, or their initials where there is none.
+ * The person's picture, or their initials where there is none. Hidden from screen readers: the
+ * person's name is beside it, and would otherwise be read twice (WCAG 1.1.1).
  */
 const PersonAvatar: FC<{ person: IPersonaItem; shape?: 'circular' | 'square' }> = ({
   person,
   shape
 }) => (
   <Avatar
+    aria-hidden
     name={person.text}
     image={person.imageUrl ? { src: person.imageUrl } : undefined}
     shape={shape}
@@ -53,7 +56,17 @@ export const PeoplePicker: FC<IPeoplePickerProps> = (props) => {
       selectedOptions={selected.map(personKey)}
       disabled={props.disabled}
     >
-      <TagPickerControl className={props.className}>
+      <TagPickerControl
+        className={props.className}
+        // Fluent names the button that opens the list after the input, in English, and leaves it
+        // nameless in a field for one that holds one, where there is no input and nothing to
+        // show (WCAG 3.1.2, 4.1.2): it has a name from the strings, and there it is left out.
+        expandIcon={
+          atLimit
+            ? null
+            : { 'aria-label': strings.PeoplePickerExpandLabel, children: <ChevronDownRegular /> }
+        }
+      >
         <TagPickerGroup aria-label={strings.PeoplePickerSelectedLabel}>
           {selected.map((person) => (
             <Tag

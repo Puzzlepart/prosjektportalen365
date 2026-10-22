@@ -3,9 +3,12 @@
 // of what the dialog has selected. Fluent's combobox family cannot be opened under jsdom on React
 // 17 (it loops the Jest worker; see the testing guide), so the template picker is a native select
 // that keeps Fluent's contract: choosing an option calls `onOptionSelect` with its value. A cloud
-// template's package is resolved by `cloud.resolve`.
+// template's package is resolved by `cloud.resolve`. Every message announced goes to `announcements`
+// as well, so a test can show that something was not said: a message is on the page for half a
+// second only.
 ;(globalThis as any).DEBUG = false
 const cloud: { resolve: jest.Mock } = { resolve: jest.fn() }
+const announcements: string[] = []
 jest.mock('./resolveCloudTemplate', () => ({
   resolveCloudTemplate: (template: any) => cloud.resolve(template)
 }))
@@ -61,16 +64,31 @@ jest.mock('@fluentui/react-components', () => {
     )
   const Option = ({ value, text, disabled }: any) =>
     React.createElement('option', { value, disabled }, text)
-  return { __esModule: true, ...actual, Combobox, Option }
+  const useAnnounce = () => {
+    const { announce } = actual.useAnnounce()
+    return React.useMemo(
+      () => ({
+        announce: (message: string, options: any) => {
+          announcements.push(message)
+          announce(message, options)
+        }
+      }),
+      [announce]
+    )
+  }
+  return { __esModule: true, ...actual, Combobox, Option, useAnnounce }
 })
 
-import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
+import { AriaLiveAnnouncer } from '@fluentui/react-components'
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import strings from 'ProjectExtensionsStrings'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import { ProjectSetupValidation } from '../../extensions/projectSetup/types'
 import { ProjectSetupDialog } from './ProjectSetupDialog'
 import { TEMPLATES, extension, setupData, template } from './testFixtures'
+import { announced } from 'pp365-jest-config/lib/announce'
 
 const CLOUD = template(3, 'Skymal', { isCloudTemplate: true })
 
@@ -78,13 +96,15 @@ function renderDialog(props: Record<string, any> = {}) {
   const onSubmit = jest.fn()
   const onDismiss = jest.fn()
   render(
-    <ProjectSetupDialog
-      data={setupData()}
-      version='v1.15.0'
-      onSubmit={onSubmit}
-      onDismiss={onDismiss}
-      {...props}
-    />
+    <AriaLiveAnnouncer>
+      <ProjectSetupDialog
+        data={setupData()}
+        version='v1.15.0'
+        onSubmit={onSubmit}
+        onDismiss={onDismiss}
+        {...props}
+      />
+    </AriaLiveAnnouncer>
   )
   return { onSubmit, onDismiss }
 }
@@ -150,6 +170,68 @@ describe('ProjectSetupDialog', () => {
     expect(picker()).toHaveValue('1')
   })
 
+  it('names its choice of whether to use a template (WCAG 1.3.1, 4.1.2)', () => {
+    renderDialog({ data: setupData({ hasExistingTemplate: true }) })
+    expect(
+      screen.getByRole('radiogroup', { name: strings.ProjectTemplateSelectorModeLabel })
+    ).toBeInTheDocument()
+  })
+
+  it('ties each section to its tab, which tells how many are chosen in it, and breaks no rule axe can check (WCAG 1.3.1, 4.1.2)', async () => {
+    renderDialog()
+    const name = format(strings.ConfigTabSelectedLabel, strings.ExtensionsSectionHeaderText, 1)
+    expect(screen.getByRole('tab', { name })).toHaveAttribute('aria-selected', 'true')
+    expect(
+      within(screen.getByRole('tabpanel', { name })).getByText('Gevinstoversikt')
+    ).toBeInTheDocument()
+    expect(await axeComponent(screen.getByRole('alertdialog'))).toHaveNoViolations()
+  })
+
+  it('lets the keyboard reach a section with nothing to choose, which says so (WCAG 2.1.1, 1.3.1)', () => {
+    // A disabled tab is skipped by the keyboard, and why it was disabled was only in its tooltip.
+    renderDialog({ data: setupData({ extensions: [] }) })
+    const tab = screen.getByRole('tab', { name: new RegExp(strings.ExtensionsSectionHeaderText) })
+    expect(tab).not.toBeDisabled()
+    fireEvent.click(tab)
+    expect(tab).toHaveAttribute('aria-selected', 'true')
+    expect(
+      within(screen.getByRole('tabpanel')).getByText(strings.ExtensionsSectionDisabledTooltip)
+    ).toBeInTheDocument()
+  })
+
+  it('tells while a cloud template is read, and when it is ready (WCAG 4.1.3)', async () => {
+    let finish: (value: any) => void
+    cloud.resolve.mockImplementation(() => new Promise((resolve) => (finish = resolve)))
+    renderDialog({ data: setupData({ templates: [...TEMPLATES, CLOUD] }) })
+    fireEvent.change(picker(), { target: { value: '3' } })
+    await waitFor(() => expect(announced()).toContain(strings.CloudTemplateResolvingMessage))
+    // A hidden message's announcement waited in the queue and came out with this one.
+    expect(announced()).not.toContain(strings.ProjectDataFoundTitle)
+    await act(async () =>
+      finish({
+        templateId: 3,
+        package: { manifest: { cloudCompatible: true } },
+        extensions: [],
+        contentConfig: []
+      })
+    )
+    await waitFor(() => expect(announced()).toContain(strings.CloudTemplateResolved), {
+      timeout: 3000
+    })
+  })
+
+  it('does not tell a cloud template is ready when another template is chosen while it is read (WCAG 4.1.3)', async () => {
+    cloud.resolve.mockImplementation(() => new Promise(() => undefined))
+    renderDialog({ data: setupData({ templates: [...TEMPLATES, CLOUD] }) })
+    fireEvent.change(picker(), { target: { value: '3' } })
+    await waitFor(() => expect(announcements).toContain(strings.CloudTemplateResolvingMessage))
+    // Choosing another template stops the reading, with nothing read: «ready» was said all the same.
+    announcements.length = 0
+    fireEvent.change(picker(), { target: { value: '2' } })
+    await act(() => new Promise((resolve) => setTimeout(resolve, 50)))
+    expect(announcements).not.toContain(strings.CloudTemplateResolved)
+  })
+
   it('cannot set up a project without a template to choose', () => {
     renderDialog({ data: setupData({ templates: [] }) })
     expect(submit()).toBeDisabled()
@@ -170,9 +252,10 @@ describe('ProjectSetupDialog', () => {
     expect(screen.getByText(strings.ProjectDataFoundTitle)).toBeVisible()
   })
 
-  it('leaves the project data message hidden when there is none', () => {
+  it('says nothing of project data when there is none, not even to a screen reader (WCAG 4.1.3)', () => {
+    // A message bar announces itself when it mounts, hidden or not.
     renderDialog()
-    expect(screen.getByText(strings.ProjectDataFoundTitle)).not.toBeVisible()
+    expect(screen.queryByText(strings.ProjectDataFoundTitle)).toBeNull()
   })
 
   it('warns that Planner needs membership of the group', () => {

@@ -68,7 +68,7 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
       grid-gap: 16px;
-      margin-bottom: 16px;
+      margin: 0 0 16px;
 
       .ideaField {
         margin: 0;
@@ -82,6 +82,14 @@
       border-radius: var(--borderRadiusXLarge);
       width: fit-content;
 
+      // An h3 under the idea's title, about the size of the h2 it was (21 px then, 20 px now).
+      .statusTitle {
+        font-size: var(--fontSizeBase500);
+        line-height: var(--lineHeightBase500);
+        font-weight: var(--fontWeightBold);
+        margin: var(--spacingVerticalL) 0;
+      }
+
       .ideaTitle {
         font-size: 1rem;
         font-weight: bold;
@@ -94,7 +102,7 @@
         flex-wrap: wrap;
         flex-direction: row;
         gap: 32px;
-        margin-bottom: 16px;
+        margin: 0 0 16px;
 
         .field {
           max-width: 620px;
@@ -106,6 +114,7 @@
   .nav {
     min-height: -webkit-fill-available;
     width: 340px;
+    max-width: 100%;
 
     .navBody {
       padding-bottom: 20px;

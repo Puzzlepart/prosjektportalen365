@@ -13,6 +13,7 @@ import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
 import { useColumnFormPanel } from './useColumnFormPanel'
 import { FluentProvider, IdPrefixProvider, Input, Switch } from '@fluentui/react-components'
 import { ColumnDataTypeField } from 'pp365-shared-library/lib/components/ItemColumn/ColumnDataTypeField'
+import { lockedWhenEditing } from '../../List/lockedWhenEditing'
 
 export const ColumnFormPanel: FC = () => {
   const context = usePortfolioAggregationContext()
@@ -57,7 +58,7 @@ export const ColumnFormPanel: FC = () => {
           <FieldContainer
             iconName='NumberSymbolSquare'
             label={strings.SortOrderLabel}
-            description={strings.SortOrderDescription}
+            description={lockedWhenEditing(strings.SortOrderDescription, isEditing)}
           >
             <Input
               value={column.get('sortOrder')?.toString()}
@@ -66,7 +67,7 @@ export const ColumnFormPanel: FC = () => {
               min={40}
               max={400}
               step={2}
-              disabled={isEditing}
+              readOnly={isEditing}
               onChange={(_, data) => setColumn('sortOrder', parseInt(data.value))}
               placeholder={strings.Placeholder.TextField}
             />
@@ -74,12 +75,12 @@ export const ColumnFormPanel: FC = () => {
           <FieldContainer
             iconName='TextNumberFormat'
             label={strings.InternalNameLabel}
-            description={strings.InternalNameDescription}
+            description={lockedWhenEditing(strings.InternalNameDescription, isEditing)}
             required={true}
           >
             <Input
               value={column.get('internalName')}
-              disabled={isEditing}
+              readOnly={isEditing}
               onChange={(_, data) => setColumn('internalName', data.value)}
               placeholder={strings.Placeholder.TextField}
             />
@@ -87,14 +88,14 @@ export const ColumnFormPanel: FC = () => {
           <FieldContainer
             iconName='DatabaseSearch'
             label={strings.SearchPropertyLabel}
-            description={strings.SearchPropertyDescription}
+            description={lockedWhenEditing(strings.SearchPropertyDescription, isEditing)}
             required={true}
           >
             <ColumnSearchPropertyField
               placeholder={strings.SearchPropertyPlaceholder}
               value={column.get('fieldName')}
               onChange={(value) => setColumn('fieldName', value)}
-              disabled={isEditing}
+              readOnly={isEditing}
             />
           </FieldContainer>
           <FieldContainer
@@ -170,9 +171,10 @@ export const ColumnFormPanel: FC = () => {
           <FieldContainer
             iconName='GroupList'
             label={strings.ColumnCategoryLabel}
-            description={strings.ColumnCategoryDescription}
+            description={`${strings.ColumnCategoryDescription} ${strings.ReadOnlyFromDataSourceText}`}
           >
-            <Input value={context.props.dataSourceCategory} disabled={true} />
+            {/* Read-only, not disabled: the keyboard reaches it and its value can be read. */}
+            <Input value={context.props.dataSourceCategory} readOnly />
           </FieldContainer>
         </FluentProvider>
       </IdPrefixProvider>

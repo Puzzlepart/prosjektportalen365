@@ -78,7 +78,9 @@ export function useProjectProperty(props: IProjectPropertyProps) {
               title={user.text}
               name={user.text}
               size='small'
+              // The name is beside the picture: read once, not twice (WCAG 1.1.1).
               avatar={{
+                'aria-hidden': true,
                 image: {
                   src: user.imageUrl
                 }
@@ -101,6 +103,7 @@ export function useProjectProperty(props: IProjectPropertyProps) {
                   name={user.text}
                   size='small'
                   avatar={{
+                    'aria-hidden': true,
                     image: {
                       src: user.imageUrl
                     }

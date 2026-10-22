@@ -2,6 +2,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { Page } from '@playwright/test'
 import { baseURL } from '../../playwright.config'
+import { scanAccessibility, SURFACES } from '../fixtures/a11y'
 import { configuredUrl, expect, test, withNetworkRetry } from '../fixtures/pp365'
 import { restGet } from '../fixtures/rest'
 
@@ -18,7 +19,15 @@ import { restGet } from '../fixtures/rest'
  *
  * The risk used has actions written as text and no Planner tasks (`RiskActionData` empty): a risk
  * with tasks, which a hand test leaves behind, shows the tasks instead and offers synchronising
- * rather than migrating. With no such risk left, the test skips and says so.
+ * rather than migrating. With no such risk left, the test skips and says so. *
+ * Known flake on list pages (SPFx 1.24.0-rc.0, SharePoint's fault): with a cold browser cache, as
+ * each test's fresh context has, SharePoint often runs its list view host
+ * (`listview-host-assembly`) twice, and each run registers SPFx's React module. When
+ * `react-dom-18-bundle` registers between the two, it and our extensions hold different React
+ * instances, so their first hook throws "Cannot read properties of null (reading 'useContext')"
+ * and nothing opens: 7 of 10 cold loads of a document library on 2026-10-21, rare with a warm
+ * cache. The CI retry usually passes. Reported as SharePoint/sp-dev-docs#11068 with the traces;
+ * check again on SPFx 1.24 GA.
  */
 const projectUrl = configuredUrl(process.env.E2E_PROJECT_URL)
 const hubUrl = baseURL.replace(/\/+$/, '')
@@ -187,10 +196,17 @@ test.describe('risk actions', () => {
     await expect(
       page.getByRole('button', { name: /synkroniser endringer|synchronize changes/i })
     ).toBeHidden()
+    // #1788: the cell (our provider inside SharePoint's row) and the popover, reported.
+    await scanAccessibility(page, {
+      component: 'RiskActionPlanner',
+      include: ['[data-automationid="DetailsRow"] .fui-FluentProvider']
+    })
+    await scanAccessibility(page, { component: 'RiskActionPopover', include: [SURFACES.popover] })
 
     // The panel for a new task: its fields, save disabled without a title, closed unsaved.
     await addButton.click()
-    const panel = page.getByRole('dialog')
+    // By name: the popover is a dialog too, since it keeps the focus (`trapFocus`, #1788).
+    const panel = page.getByRole('dialog', { name: /legg til nytt tiltak for|new risk action/i })
     await expect(panel).toBeVisible()
     await expect(panel.getByText(/legg til nytt tiltak for|new risk action/i).first()).toBeVisible()
     for (const label of [
@@ -204,6 +220,7 @@ test.describe('risk actions', () => {
       await expect(panel.getByText(label).first(), `the panel has the field ${label}`).toBeVisible()
     }
     await expect(panel.getByRole('button', { name: /^(lagre|save)$/i })).toBeDisabled()
+    await scanAccessibility(page, { component: 'NewRiskActionPanel', include: [SURFACES.drawer] })
     await panel.getByRole('button', { name: /^(lukk|close)$/i }).click()
     await expect(panel).toBeHidden()
 
@@ -211,7 +228,10 @@ test.describe('risk actions', () => {
     await cellText.first().click()
     await expect(migrateButton).toBeVisible()
     await migrateButton.click()
-    const dialog = page.getByRole('dialog')
+    // The popover it opens from stays open behind it, a dialog as well.
+    const dialog = page.getByRole('dialog', {
+      name: /migrering av tiltak for|migration of risk actions for/i
+    })
     await expect(
       dialog.getByText(/migrering av tiltak for|migration of risk actions for/i)
     ).toBeVisible()
@@ -219,6 +239,10 @@ test.describe('risk actions', () => {
     await expect(
       dialog.getByRole('button', { name: /opprett \d+ tiltak i planner|create planner tasks/i })
     ).toBeVisible()
+    await scanAccessibility(page, {
+      component: 'MigrateRiskActionsDialog',
+      include: [SURFACES.dialog]
+    })
     // The text button, not the title's close cross: both are named «Lukk» in Norwegian.
     await dialog.getByText(/^(lukk|cancel)$/i).click()
     await expect(dialog).toBeHidden()

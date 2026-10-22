@@ -1,5 +1,5 @@
 import strings from 'PortfolioWebPartsStrings'
-import { ListMenuItem, ListMenuItemDivider } from 'pp365-shared-library'
+import { ListMenuItem, ListMenuItemDivider, format } from 'pp365-shared-library'
 import { useMemo, useState } from 'react'
 import { IPortfolioOverviewContext } from '../context'
 import { TOGGLE_MERGED_VIEW } from '../reducer'
@@ -90,6 +90,10 @@ export function usePortfolioSelector(context: IPortfolioOverviewContext) {
   return useMemo<ListMenuItem>(
     () =>
       new ListMenuItem(displayText, strings.PortfolioSelectorDescription)
+        // Named by what it chooses too, not only by the portfolio it shows (WCAG 2.4.6).
+        .setAriaLabel(
+          format(strings.SelectorButtonLabel, displayText, strings.PortfolioSelectorDescription)
+        )
         .setIcon('Collections')
         .setWidth('fit-content')
         .setStyle({ minWidth: '145px' })

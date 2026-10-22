@@ -1,5 +1,7 @@
 import * as React from 'react'
-import { render } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
+import strings from 'SharedLibraryStrings'
 import { LoadingSkeleton } from './LoadingSkeleton'
 
 /**
@@ -23,6 +25,12 @@ describe('LoadingSkeleton', () => {
     const { container } = render(<LoadingSkeleton rows={['medium']} />)
     expect(container.querySelectorAll('.xlarge, .large, .medium')).toHaveLength(1)
     expect(container.querySelector('.medium')).toBeTruthy()
+  })
+
+  it('is named, so a screen reader says something is loading (WCAG 4.1.2)', async () => {
+    const { container } = render(<LoadingSkeleton />)
+    expect(screen.getByRole('progressbar', { name: strings.LoadingText })).toBeInTheDocument()
+    expect(await axeComponent(container)).toHaveNoViolations()
   })
 
   it('renders nothing but the container for an empty row list', () => {

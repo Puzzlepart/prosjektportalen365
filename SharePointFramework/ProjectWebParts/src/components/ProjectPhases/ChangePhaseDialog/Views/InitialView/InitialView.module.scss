@@ -3,17 +3,27 @@
   flex-direction: column;
   gap: 12px;
 
-  .tabList {
+  // The checkpoints, drawn as Fluent draws tabs: the current one with the selected tab's bar.
+  .steps {
     display: flex;
-    justify-content: flex-start;
     flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 
-    .tabItem {
-      cursor: default;
+    .step,
+    .currentStep {
+      min-width: 20px;
+      padding: var(--spacingVerticalS) var(--spacingHorizontalMNudge);
+      text-align: center;
+      color: var(--colorNeutralForeground2);
+      border-bottom: var(--strokeWidthThicker) solid transparent;
+    }
 
-      &:hover::before {
-        display: none;
-      }
+    .currentStep {
+      color: var(--colorNeutralForeground1);
+      font-weight: var(--fontWeightSemibold);
+      border-bottom-color: var(--colorCompoundBrandStroke);
     }
   }
 }

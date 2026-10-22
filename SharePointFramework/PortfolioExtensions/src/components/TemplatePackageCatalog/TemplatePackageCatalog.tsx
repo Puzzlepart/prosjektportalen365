@@ -49,12 +49,7 @@ export const TemplatePackageCatalog: FC<ITemplatePackageCatalogProps> = (props) 
               <DrawerHeaderTitle
                 action={
                   <Tooltip content={strings.CatalogCloseTooltip} relationship='label'>
-                    <Button
-                      appearance='subtle'
-                      aria-label={strings.CatalogCloseAria}
-                      icon={<Dismiss24Regular />}
-                      onClick={close}
-                    />
+                    <Button appearance='subtle' icon={<Dismiss24Regular />} onClick={close} />
                   </Tooltip>
                 }
               >

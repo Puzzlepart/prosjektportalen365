@@ -1,8 +1,7 @@
 import {
-  Link,
   Menu,
   MenuButton,
-  MenuItem,
+  MenuItemLink,
   MenuList,
   MenuPopover,
   MenuTrigger,
@@ -46,14 +45,14 @@ export const ProjectMenu: FC<IProjectMenu> = (props) => {
           {props.context.quickLaunchMenu
             ?.sort((a, b) => a.order - b.order)
             ?.map((quickLaunchItem, idx) => (
-              <MenuItem key={idx}>
-                <Link
-                  href={(props.project?.url || '') + quickLaunchItem.relativeUrl}
-                  title={quickLaunchItem.text}
-                >
-                  {quickLaunchItem.text}
-                </Link>
-              </MenuItem>
+              // The menu item is the link: a link inside a menu item was out of the keyboard's
+              // reach, as the item takes the focus and did nothing on Enter (WCAG 2.1.1).
+              <MenuItemLink
+                key={idx}
+                href={(props.project?.url || '') + quickLaunchItem.relativeUrl}
+              >
+                {quickLaunchItem.text}
+              </MenuItemLink>
             ))}
         </MenuList>
       </MenuPopover>

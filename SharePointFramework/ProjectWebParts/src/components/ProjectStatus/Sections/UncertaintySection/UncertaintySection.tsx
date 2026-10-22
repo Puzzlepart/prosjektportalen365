@@ -67,7 +67,7 @@ export const UncertaintySection: FC = () => {
 
   return (
     <BaseSection>
-      <StatusElement summation={summation} />
+      <StatusElement summation={summation} asHeading />
       {(shouldRenderContent || state.error) && renderContent()}
     </BaseSection>
   )

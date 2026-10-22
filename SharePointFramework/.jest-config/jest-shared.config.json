@@ -44,6 +44,12 @@
   // The rig ignores everything in lib-commonjs for transformation because TypeScript already
   // emitted CommonJS there. The localized string bundles are copied verbatim (they are hand
   // written AMD), so they must be allowed through to the AMD transform.
+  // A test's time limit, where Jest's default is 5 s. The first render with Fluent UI v9 in a file
+  // takes seconds, and more under load: CI runs two solutions' builds at once (RUSH_PARALLELISM), and
+  // tests that took 1-2 s locally failed at random there on 5 s (2026-10-19). A test that hangs
+  // still fails, 30 s on.
+  "testTimeout": 30000,
+
   "transformIgnorePatterns": ["[\\/]lib-commonjs[\\/](?!loc[\\/]).*\\.js$"],
 
   // Jest matches these keys against the native path and, unlike transformIgnorePatterns, does

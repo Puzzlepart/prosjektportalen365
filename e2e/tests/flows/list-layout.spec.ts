@@ -1,4 +1,5 @@
 import { baseURL } from '../../playwright.config'
+import { scanAccessibility, SURFACES } from '../fixtures/a11y'
 import { addButton, openAdministration } from '../fixtures/program-administration'
 import {
   expectListTypography,
@@ -72,6 +73,70 @@ test.describe('list typography', () => {
   }
 })
 
+/**
+ * The toolbar over the hub's lists keeps to one line: its search box is the part that gives way as
+ * the window narrows, and nothing wraps until the window is under 480 px, where the buttons would
+ * otherwise go past the edge (WCAG 1.4.10). A wrap at every width slipped in once (2026-10-20).
+ */
+// The search box is the toolbar's flexible part: it gives way as the window narrows, and nothing
+// wraps until even a narrowed search box leaves the buttons no room (under 480 px).
+test.describe('toolbar of the hub lists', () => {
+  for (const list of LISTS.slice(0, 3)) {
+    test(`the ${list.name}'s toolbar stays on one line, its search box giving way`, async ({
+      page,
+      openPage,
+      resolvePage
+    }) => {
+      test.setTimeout(180_000)
+      await openPage(await resolvePage(list.site()!, list.pages))
+      const toolbar = page.locator(`${WEB_PART} .fui-FluentProvider:has(> .fui-Toolbar)`).first()
+      await expect(toolbar.locator('.fui-Toolbar button').first()).toBeVisible({
+        timeout: 60_000
+      })
+      let previousSearchWidth = Infinity
+      for (const width of [1440, 1024, 768]) {
+        await page.setViewportSize({ width, height: 900 })
+        await page.waitForTimeout(1_000)
+        const layout = await toolbar.evaluate((root) => {
+          // Not Tabster's focus guards: 1 px `i` elements fixed at the page's top left.
+          const items = Array.from(
+            root.querySelectorAll('.fui-Toolbar > :not([data-tabster-dummy])')
+          )
+            .map((item) => item.getBoundingClientRect())
+            .filter((box) => box.width > 0 && box.height > 0)
+          const search = root.querySelector('.fui-SearchBox')
+          return {
+            height: Math.round(root.getBoundingClientRect().height),
+            tops: items.map((box) => Math.round(box.top + box.height / 2)),
+            searchWidth: search ? Math.round(search.getBoundingClientRect().width) : null
+          }
+        })
+        expect(layout.height, `the toolbar is one line high at ${width}px`).toBeLessThanOrEqual(56)
+        expect(
+          Math.max(...layout.tops) - Math.min(...layout.tops),
+          `the toolbar's items share one line at ${width}px`
+        ).toBeLessThanOrEqual(8)
+        if (layout.searchWidth !== null) {
+          expect(
+            layout.searchWidth,
+            `the search box gives way as the window narrows to ${width}px`
+          ).toBeLessThanOrEqual(previousSearchWidth)
+          previousSearchWidth = layout.searchWidth
+        }
+      }
+      await page.setViewportSize({ width: 320, height: 900 })
+      await page.waitForTimeout(1_000)
+      const outside = await toolbar.evaluate((root) => {
+        const edge = root.closest('[data-sp-web-part-id]')!.getBoundingClientRect().right
+        return Array.from(root.querySelectorAll('.fui-Toolbar button, .fui-SearchBox'))
+          .filter((control) => control.getBoundingClientRect().right > edge + 1)
+          .map((control) => control.getAttribute('aria-label') || control.textContent)
+      })
+      expect(outside, 'at 320px the toolbar wraps rather than go past the web part').toEqual([])
+    })
+  }
+})
+
 test.describe('program administration column headers', () => {
   test.skip(
     !programUrl,
@@ -117,6 +182,7 @@ test.describe('program administration column headers', () => {
     const dialog = page.getByRole('dialog').last()
     const header = dialog.locator('.fui-TableHeader').first()
     await expect(header).toBeVisible({ timeout: 90_000 })
+    await scanAccessibility(page, { component: 'AddProjectDialog', include: [SURFACES.dialog] })
     const search = dialog
       .getByRole('searchbox')
       .or(dialog.getByPlaceholder(/søk|search/i))

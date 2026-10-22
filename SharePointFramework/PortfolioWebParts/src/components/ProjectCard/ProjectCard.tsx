@@ -4,7 +4,14 @@ import { IProjectCardProps } from './types'
 import { useProjectCard } from './useProjectCard'
 import { FluentProvider, IdPrefixProvider } from '@fluentui/react-components'
 import { ProjectCard as ProjectNewsCard } from '../ProjectList/ProjectCard'
-import { customLightTheme, SiteContext, withDefaults } from 'pp365-shared-library'
+import {
+  customLightTheme,
+  LoadingSkeleton,
+  SiteContext,
+  UserMessage,
+  withDefaults
+} from 'pp365-shared-library'
+import strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
 import resource from 'SharedResources'
 
@@ -53,6 +60,9 @@ export const ProjectCard: FC<IProjectCardProps> = (incomingProps) => {
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>
+        {/* It showed nothing while loading, and nothing when the fetch failed. */}
+        {state.loading && <LoadingSkeleton />}
+        {state.error && <UserMessage intent='error' text={strings.ProjectCard.LoadErrorText} />}
         {state.isDataLoaded && (
           <ProjectCardContext.Provider value={createCardContext(state.project)}>
             <ProjectNewsCard />

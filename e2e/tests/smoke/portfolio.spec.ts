@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { baseURL } from '../../playwright.config'
+import { scanAccessibility, SURFACES } from '../fixtures/a11y'
 import { WEB_PART, expect, test, webPart } from '../fixtures/pp365'
 
 /**
@@ -172,36 +173,79 @@ test.describe('portfolio hub', () => {
     const firstProjectLink = page.locator('.react-calendar-timeline a[href]').first()
     await expect(firstProjectLink).toBeVisible({ timeout: 60_000 })
     await firstProjectLink.click({ trial: true })
-    // The filter toolbar button must open its panel and close again.
-    await page
+    // The filter toolbar button must open its panel and close again, and the focus go back to
+    // it: the panel opens from state, with no trigger of Fluent's to return it to (#1788).
+    const filter = page
       .locator(WEB_PART)
       .first()
       .getByRole('button', { name: /^filtrer$|^filter$/i })
-      .click()
+    await filter.click()
     // The filter panel's own root has no box, so the visible proof is its heading.
     // The level is deliberately not asserted: it is the panel implementation's
     // choice (v8 rendered an h1, the v9 drawer renders an h2) and not a contract.
-    await expect(
-      page.getByRole('dialog').getByRole('heading', { name: /^filtr|^filter/i })
-    ).toBeVisible()
+    const panelHeading = page
+      .getByRole('dialog')
+      .getByRole('heading', { name: /^filtr|^filter/i })
+    await expect(panelHeading).toBeVisible()
     await page.keyboard.press('Escape')
+    await expect(panelHeading).toBeHidden({ timeout: 10_000 })
+    await expect(
+      filter,
+      'closing the filter panel gives the focus back to its button'
+    ).toBeFocused()
+  })
+
+  test("the project timeline's items open from the keyboard, and its scroll area takes focus (#1788)", async ({
+    page,
+    openPage,
+    resolvePage
+  }) => {
+    await openPage(await resolvePage(hub, PAGES.timeline))
+    const timeline = page.locator('.react-calendar-timeline').first()
+    // The calendar renders its scroll area itself; the timeline names it and puts it in the tab
+    // order through the calendar's `scrollRef`, so the arrow keys scroll it (WCAG 2.1.1).
+    const scrollArea = timeline.getByRole('group', {
+      name: /rull i tid med piltastene|scroll in time with the arrow keys/i
+    })
+    await expect(scrollArea).toBeVisible({ timeout: 60_000 })
+    await expect(scrollArea).toHaveAttribute('tabindex', '0')
+    // An item is a button: Enter opens its details, and Escape closes them and gives focus back
+    // to the item, which the popover, opened without a trigger of Fluent's, would not.
+    const item = timeline.locator('.rc-item[role="button"]').first()
+    await expect(item).toBeVisible({ timeout: 60_000 })
+    await item.focus()
+    await page.keyboard.press('Enter')
+    const details = page.locator(SURFACES.popover)
+    await expect(details).toBeVisible()
+    // The details take the focus, link or none, so a screen reader hears them open.
+    await expect(details, 'the details take the focus as they open').toBeFocused()
+    await scanAccessibility(page, { component: 'TimelineDetailsPopover', include: [SURFACES.popover] })
+    await page.keyboard.press('Escape')
+    await expect(details).toBeHidden()
+    await expect(item).toBeFocused()
   })
 
   test('benefit overview page loads', async ({ page, openPage, resolvePage }) => {
     await openPage(await resolvePage(hub, PAGES.benefits))
     await expect(webPart(page, /nytte|benefit/i).first()).toBeVisible()
-    await page
+    const filter = page
       .locator(WEB_PART)
       .first()
       .getByRole('button', { name: /^filtrer$|^filter$/i })
-      .click()
+    await filter.click()
     // The filter panel's own root has no box, so the visible proof is its heading.
     // The level is deliberately not asserted: it is the panel implementation's
     // choice (v8 rendered an h1, the v9 drawer renders an h2) and not a contract.
-    await expect(
-      page.getByRole('dialog').getByRole('heading', { name: /^filtr|^filter/i })
-    ).toBeVisible()
+    const panelHeading = page
+      .getByRole('dialog')
+      .getByRole('heading', { name: /^filtr|^filter/i })
+    await expect(panelHeading).toBeVisible()
     await page.keyboard.press('Escape')
+    await expect(panelHeading).toBeHidden({ timeout: 10_000 })
+    await expect(
+      filter,
+      'closing the filter panel gives the focus back to its button'
+    ).toBeFocused()
   })
 
   test('footer application customizer renders the version', async ({

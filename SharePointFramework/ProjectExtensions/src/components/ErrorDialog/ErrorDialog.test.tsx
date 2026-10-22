@@ -1,5 +1,6 @@
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import strings from 'ProjectExtensionsStrings'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import * as React from 'react'
 import { ProjectSetupError } from '../../extensions/projectSetup/ProjectSetupError'
 import { ErrorDialog } from '.'
@@ -28,6 +29,8 @@ describe('ErrorDialog', () => {
     )
     expect(screen.getByText(strings.NoHubSiteErrorMessage)).toBeInTheDocument()
     expect(screen.getByText(strings.NoHubSiteErrorStack, { selector: 'p' })).toBeVisible()
+    // Once: a message bar hidden beside it would still be announced.
+    expect(screen.getAllByText(strings.NoHubSiteErrorStack)).toHaveLength(1)
     // By text: the title's close button carries the same name, as an aria-label.
     fireEvent.click(screen.getByText(strings.CloseModalText))
     expect(onDismiss).toHaveBeenCalled()
@@ -40,6 +43,13 @@ describe('ErrorDialog', () => {
     expect(screen.getByText('Uventet feil')).toBeInTheDocument()
     expect(screen.getByText('Hubområdet svarte ikke')).toBeVisible()
     expect(screen.queryByText('Hubområdet svarte ikke', { selector: 'p' })).toBeNull()
+  })
+
+  it('breaks no rule axe can check, with its version', async () => {
+    const error = new Error('Uventet feil')
+    error.stack = 'Hubområdet svarte ikke'
+    render(<ErrorDialog error={error} version='v1.15.0' onDismiss={jest.fn()} />)
+    expect(await axeComponent(screen.getByRole('dialog'))).toHaveNoViolations()
   })
 
   it('offers the setup again, or the project, when the project is set up already', () => {
