@@ -163,7 +163,9 @@
       <pnp:DataValue FieldName="GtSettingsKey">AssistantConfig</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsValue">{
                 "TenantId": "",
-                "KeyVaultName": ""
+                "ApiScope": "api://1bf9aa43-3416-493d-8709-b222cf5ac32a/Assistant.Access",
+                "PortfolioAccessGroups": ["{resource:Security_SiteGroup_PortfolioAdministrators_Title}"],
+                "DisabledOperations": []
             }</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_Assistant}</pnp:DataValue>
