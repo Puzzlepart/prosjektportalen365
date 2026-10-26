@@ -66,6 +66,27 @@ test('adds a suite report under its run, with its metadata, .nojekyll and an ind
     assert.match(index, /href="runs\/2001-1\/e2e\/index.html">failed<\/a>/)
     assert.match(index, /<b>2 failed<\/b> · 1 flaky · 5 min 30 s/)
     assert.match(index, />#1001<\/a>/)
+    assert.match(index, /<div data-pp365-internal[^>]*>Internal only<\/div>\n<\/body>/)
+})
+
+test('tags the front page and every report as internal only, once, those published before the tag too', () => {
+    const site = tempDir('site')
+    const read = (file) => fs.readFileSync(path.join(site, file), 'utf8')
+    // Playwright's report is one page of scripts: the tag goes before the last closing body tag.
+    const page = '<html><body><script>const end = "</body>"</script><div id="root"></div></body></html>'
+    addReport(site, { suite: 'e2e', reportDir: reportFolder({ 'index.html': page }), outcome: 'success', run: run(2001), now: NOW })
+    assert.match(
+        read('runs/2001-1/e2e/index.html'),
+        /const end = "<\/body>"<\/script><div id="root"><\/div><div data-pp365-internal[^>]*>Internal only<\/div><\/body><\/html>$/
+    )
+    // A report published before the tag, as it was then.
+    fs.writeFileSync(path.join(site, 'runs/2001-1/e2e/index.html'), '<html><body>earlier</body></html>')
+    const later = new Date(NOW.getTime() + 1000)
+    addReport(site, { suite: 'integration', reportDir: reportFolder(), outcome: 'success', run: run(2002), now: later })
+    const tags = (file) => read(file).split('data-pp365-internal').length - 1
+    assert.equal(tags('index.html'), 1)
+    assert.equal(tags('runs/2001-1/e2e/index.html'), 1)
+    assert.equal(tags('runs/2002-1/integration/index.html'), 1)
 })
 
 test('puts both suites of a run in one row, and a rerun in a row of its own', () => {
