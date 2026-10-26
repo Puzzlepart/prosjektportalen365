@@ -70,6 +70,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 
 ### Feilrettinger
 
+- Oppgraderingsskriptet `UpgradeAllSitesToLatest.ps1` legger nå til `Footer`-utvidelsen på alle prosjektområder som mangler den, uavhengig av hvilken versjon det oppgraderes fra. Steget kjørte bare ved oppgradering fra 1.9.0 eller eldre, så et prosjektområde som ble hoppet over den gangen (ikke i huben ennå, eller uten tilgang for den som oppgraderte) fikk aldri bunnteksten i senere oppgraderinger. Den utdaterte `Hjelpeinnhold`-utvidelsen fra før 1.9.0, som ikke lenger finnes i noen pakke, fjernes samtidig fra områdene som fortsatt har den
 - Sammenslått visning i `Porteføljeoversikt` sier fra over listen når en hub ikke kunne hentes, der den før viste listen uten den uten et ord. Med tre eller flere hubber viste den også den andre hubens prosjekter under den tredjes navn, fordi én tilkobling ble brukt om igjen; hver hub leses nå med sin egen
 - `Administrasjon av underområder` bruker programmets egen hub når den globale innstillingen `AvailableProgramHubs` er tom eller slått av, der listen og «Legg til underområder» før ble stående tomme uten forklaring
 - Bunnteksten på porteføljeområdet vises nå også på SharePoints listesider, der den som regel manglet fordi den bare ventet på navigasjonshendelsen og ikke på at SharePoint gjorde plassholderne klare (#1788)
