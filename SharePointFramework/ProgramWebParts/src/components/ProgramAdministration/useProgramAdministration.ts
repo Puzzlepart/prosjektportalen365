@@ -1,4 +1,4 @@
-import { ProjectAdminPermission } from 'pp365-shared-library/lib'
+import { ProjectAdminPermission } from 'pp365-shared-library'
 import { useEffect, useMemo, useReducer, useState } from 'react'
 import reducer, { DATA_LOADED, SET_SELECTED_TO_DELETE, initialState } from './reducer'
 import { IProgramAdministrationProps } from './types'

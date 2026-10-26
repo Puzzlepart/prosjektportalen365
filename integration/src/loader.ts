@@ -7,8 +7,8 @@ import { env } from './env.ts'
 /**
  * Lets Node load the CommonJS builds (`lib-commonjs`) of the shared library and of the solutions
  * the tests use, as the Jest harness lets Jest:
- *  - the workspace packages, and their `lib/...` paths, resolve to `lib-commonjs` (`lib` is ESM for
- *    webpack): a solution's import of `pp365-shared-library/lib/data` must reach the same module the
+ *  - the workspace packages, their `lib` folder and its paths, resolve to `lib-commonjs` (`lib` is ESM
+ *    for webpack): a solution's import of `pp365-shared-library/lib/data` must reach the same module the
  *    tests load, or the tests' sign-in (`setSpfiFactory`) would not reach the solution's clients;
  *  - a solution's bare imports of its own folders (`types`, `data`, `components/X`; its `baseUrl` is
  *    `src`) resolve in its `lib-commonjs`, as Jest's `moduleDirectories` has them;
@@ -79,9 +79,13 @@ const STRING_FILES = new Set(
   Array.from(STRING_MODULES.values(), (file) => pathToFileURL(file).href)
 )
 
-/** The workspace packages' names and their `lib/...` paths, which resolve to `lib-commonjs`. */
+/**
+ * The workspace packages' names, their `lib` folder and its paths, which resolve to `lib-commonjs`.
+ * The folder alone (`pp365-shared-library/lib`, as ProjectWebParts' status report data imports it)
+ * would otherwise load the ES module build, a second copy of the library.
+ */
 const WORKSPACE_PACKAGE =
-  /^(pp365-shared-library|pp365-projectwebparts|pp365-portfoliowebparts)(?:\/lib\/(.+))?$/
+  /^(pp365-shared-library|pp365-projectwebparts|pp365-portfoliowebparts)(?:\/lib(?:\/(.+))?)?$/
 
 /** The package whose `lib-commonjs` a module is in, for its bare imports of its own folders. */
 function packageOf(parentURL: string | undefined): IPackage | undefined {

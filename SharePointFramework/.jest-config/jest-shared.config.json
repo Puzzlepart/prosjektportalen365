@@ -33,6 +33,10 @@
 
   "moduleNameMapper": {
     "^(pp365-shared-library|pp365-projectwebparts|pp365-portfoliowebparts)$": "<rootDir>/node_modules/$1/lib-commonjs/index.js",
+    // The package by its `lib` folder (`pp365-shared-library/lib`), which webpack resolves to the same
+    // `lib/index.js`: without a line of its own Jest loaded that ES module build and could not parse
+    // it (the program administration's hook test, CI run 40296711292).
+    "^(pp365-shared-library|pp365-projectwebparts|pp365-portfoliowebparts)/lib$": "<rootDir>/node_modules/$1/lib-commonjs/index.js",
     "^(pp365-shared-library|pp365-projectwebparts|pp365-portfoliowebparts)/lib/(.*)$": "<rootDir>/node_modules/$1/lib-commonjs/$2",
     "^@pnp/.*$": "<configDir>/lib/pnpStub.js",
     "^react-markdown$": "<configDir>/lib/reactMarkdownStub.js",

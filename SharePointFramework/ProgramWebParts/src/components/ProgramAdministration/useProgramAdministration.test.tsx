@@ -78,7 +78,9 @@ describe('useProgramAdministration', () => {
       Promise.reject(new Error('404'))
     )
     const result = renderHook(dataAdapter)
-    await waitFor(() => expect(result().context.state.childProjects).toEqual([]))
+    // Done when the data is loaded: the list is empty from the start, so it alone proves nothing.
+    await waitFor(() => expect(result().context.state.loading).toBe(false))
+    expect(result().context.state.childProjects).toEqual([])
     expect(dataAdapter.fetchChildProjects).not.toHaveBeenCalled()
     expect(result().programHubs).toBeUndefined()
   })
