@@ -22,6 +22,12 @@ async function deleteTestCopies(page: import('@playwright/test').Page, folder: s
   return files.length
 }
 
+/** The file of this name in a folder of the project, if there is one. */
+async function fileNamed(page: import('@playwright/test').Page, folder: string, fileName: string) {
+  const files = await filesWithPrefix(page, projectUrl!, folder, fileName)
+  return files.find((file) => file.Name.toLowerCase() === fileName.toLowerCase())
+}
+
 test.describe('document template copy', () => {
   test.skip(
     !projectUrl,
@@ -46,6 +52,10 @@ test.describe('document template copy', () => {
     await withNetworkRetry(() => page.goto(libraryPage, { timeout: 90_000 }))
     await deleteTestCopies(page, decodeURIComponent(folder))
 
+    // The template's own name, when it was free before the copy. A copy under it is then this
+    // run's, made because the copy started before the new name was applied, and the clean-up
+    // removes it: left behind, it makes the next run find the name taken (run 40313190157).
+    let ownName: string | undefined
     try {
       const dialog = await openDocumentTemplateDialog(page)
       // A file, not a folder: a folder's name is a v8 Link without an href, which is a button that
@@ -59,19 +69,24 @@ test.describe('document template copy', () => {
       await dialog.getByRole('button', { name: /^velg$|^select$/i }).click()
       // The library root is the target when no folder is chosen.
       await dialog.getByRole('button', { name: /kopier hit|copy here/i }).click()
-      // Each item is collapsed until its header is clicked; its inputs carry placeholders, not
-      // linked labels.
+      // Each item starts closed, and opens by itself once the library says its name is taken; a
+      // click on an open item closes it. So click only while it is closed, and look again until
+      // the field shows: a click that met the item opening by itself closed it (run 40313190157).
+      // The inputs carry placeholders, not linked labels.
+      const header = dialog.locator('button[aria-expanded]').first()
       const fileName = dialog.getByPlaceholder(/^filnavn$|^file name$/i).first()
-      if (!(await fileName.isVisible().catch(() => false))) {
-        await dialog.locator('[class*="chevronIcon"]').first().click()
-      }
-      await expect(fileName).toBeVisible({ timeout: 30_000 })
+      await expect(async () => {
+        if ((await header.getAttribute('aria-expanded')) === 'false') await header.click()
+        await expect(fileName).toBeVisible({ timeout: 2_000 })
+      }).toPass({ timeout: 30_000 })
+      const templateName = (await header.innerText()).trim()
       await fileName.fill(name)
       // The new name is applied 400 ms after the last keystroke, once the library has confirmed
       // it is free; starting the copy before that would copy under the template's own name.
       await page.waitForTimeout(1500)
       const start = dialog.getByRole('button', { name: /start kopiering|start copy/i })
       await expect(start).toBeEnabled({ timeout: 15_000 })
+      if (!(await fileNamed(page, decodeURIComponent(folder), templateName))) ownName = templateName
       await start.click()
       // The summary's "Lukk" ends the copy. The title's X is named "Lukk" too and is always there,
       // so the footer's button is found by its text, which the X (an icon) has not.
@@ -85,6 +100,8 @@ test.describe('document template copy', () => {
       await close.click()
     } finally {
       await deleteTestCopies(page, decodeURIComponent(folder))
+      const ownNameCopy = ownName && (await fileNamed(page, decodeURIComponent(folder), ownName))
+      if (ownNameCopy) await deleteFile(page, projectUrl!, ownNameCopy.ServerRelativeUrl)
     }
     expect(
       await filesWithPrefix(page, projectUrl!, decodeURIComponent(folder), name),
