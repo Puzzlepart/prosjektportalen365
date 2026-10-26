@@ -3,7 +3,7 @@ import * as path from 'path'
 import { Page } from '@playwright/test'
 import { baseURL } from '../../playwright.config'
 import { scanAccessibility, SURFACES } from '../fixtures/a11y'
-import { configuredUrl, expect, test, withNetworkRetry } from '../fixtures/pp365'
+import { configuredUrl, expect, onListPage, test } from '../fixtures/pp365'
 import { restGet } from '../fixtures/rest'
 
 /**
@@ -19,15 +19,10 @@ import { restGet } from '../fixtures/rest'
  *
  * The risk used has actions written as text and no Planner tasks (`RiskActionData` empty): a risk
  * with tasks, which a hand test leaves behind, shows the tasks instead and offers synchronising
- * rather than migrating. With no such risk left, the test skips and says so. *
- * Known flake on list pages (SPFx 1.24.0-rc.0, SharePoint's fault): with a cold browser cache, as
- * each test's fresh context has, SharePoint often runs its list view host
- * (`listview-host-assembly`) twice, and each run registers SPFx's React module. When
- * `react-dom-18-bundle` registers between the two, it and our extensions hold different React
- * instances, so their first hook throws "Cannot read properties of null (reading 'useContext')"
- * and nothing opens: 7 of 10 cold loads of a document library on 2026-10-21, rare with a warm
- * cache. The CI retry usually passes. Reported as SharePoint/sp-dev-docs#11068 with the traces;
- * check again on SPFx 1.24 GA.
+ * rather than migrating. With no such risk left, the test skips and says so.
+ *
+ * SharePoint's React fault on list pages can leave the cell empty, as it did in run 40353867255:
+ * `onListPage` loads the list once more when it strikes.
  */
 const projectUrl = configuredUrl(process.env.E2E_PROJECT_URL)
 const hubUrl = baseURL.replace(/\/+$/, '')
@@ -124,7 +119,8 @@ test.describe('risk actions', () => {
     consoleGuard
   }) => {
     void consoleGuard
-    test.setTimeout(180_000)
+    // Room for a second load of the list, when SharePoint's React fault struck the first.
+    test.setTimeout(300_000)
     expect(
       await hubSetting(page, 'RiskActionPlannerEnabled'),
       'RiskActionPlannerEnabled must be 1 on the hub for the customizer to render'
@@ -171,14 +167,14 @@ test.describe('risk actions', () => {
     // The first line of the actions, as the cell shows the text: enough of it to be found.
     const actions = risk!.GtRiskAction!.split(/\r?\n/)[0].trim().slice(0, 40)
 
-    // A list view is not an SPFx web part page, so the canvas wait of `openPage` does not apply.
-    await withNetworkRetry(() => page.goto(list!.url, { timeout: 90_000 }))
     const row = page.locator('[data-automationid="DetailsRow"]').filter({ hasText: risk!.Title })
-    await expect(row.first()).toBeVisible(MOUNT_TIMEOUT)
     const cellText = row.first().getByText(actions)
-    await expect(cellText.first(), 'the customizer shows the actions in the cell').toBeVisible(
-      MOUNT_TIMEOUT
-    )
+    await onListPage(page, list!.url, async () => {
+      await expect(row.first()).toBeVisible(MOUNT_TIMEOUT)
+      await expect(cellText.first(), 'the customizer shows the actions in the cell').toBeVisible(
+        MOUNT_TIMEOUT
+      )
+    })
 
     // The popover: the risk's title, and the two things to do with text that is not in Planner.
     await cellText.first().click()

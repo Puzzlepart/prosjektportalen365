@@ -70,6 +70,55 @@ export async function withNetworkRetry<T>(send: () => Promise<T>): Promise<T> {
 }
 
 /**
+ * SharePoint's React fault on list pages (SPFx 1.24.0-rc.0, SharePoint/sp-dev-docs#11068): with a
+ * cold browser cache, as each test's fresh context has, SharePoint often runs its list view host
+ * (`listview-host-assembly`) twice, and each run registers SPFx's React module. When
+ * `react-dom-18-bundle` registers between the two, it and our extensions hold different React
+ * instances, so their first hook throws this and nothing of theirs renders: 7 of 10 cold loads of
+ * a document library on 2026-10-21, 1 of 8 with a warm cache. Check again on SPFx 1.24 GA.
+ */
+const LIST_PAGE_REACT_FAULT = /Cannot read properties of null \(reading 'useContext'\)/
+
+/**
+ * Opens a list page, a library or list view (no web part page, so not `openPage`), and runs `step`
+ * there. When the step fails after SharePoint's React fault on list pages struck, the page is
+ * loaded once more and the step run again: a reload has a warm cache, where the fault is rare,
+ * while the CI retry starts a fresh context with a cold one (both attempts of a dialog test failed
+ * so in run 40353867255). A failure without the fault, and a second one, fail the test as they
+ * are; a reload is noted on the test.
+ *
+ * @param page The test's page
+ * @param url The list page
+ * @param step What should work there, such as opening a dialog or finding a cell's text
+ */
+export async function onListPage<T>(page: Page, url: string, step: () => Promise<T>): Promise<T> {
+  let struck = false
+  const onPageError = (error: Error) => {
+    if (LIST_PAGE_REACT_FAULT.test(error.message)) struck = true
+  }
+  page.on('pageerror', onPageError)
+  try {
+    // A list view is heavy, and the runner has timed out on 30 s; a connection SharePoint never
+    // answered (net::ERR_TIMED_OUT, run 38522211703) is tried once more, as `openPage` does.
+    await withNetworkRetry(() => page.goto(url, { timeout: 90_000 }))
+    try {
+      return await step()
+    } catch (error) {
+      if (!struck) throw error
+      base.info().annotations.push({
+        type: 'list page reloaded',
+        description:
+          "SharePoint's React fault on list pages (sp-dev-docs#11068) struck the first load"
+      })
+      await withNetworkRetry(() => page.reload({ timeout: 90_000 }))
+      return await step()
+    }
+  } finally {
+    page.off('pageerror', onPageError)
+  }
+}
+
+/**
  * Loads a page of the site in a tab of its own, which the test's page is left out of. SharePoint
  * refuses REST calls with 401 or 403 once its session cookie has expired or been revoked, while a
  * page still loads: the page signs in again on its own and renews the cookie, which a REST call

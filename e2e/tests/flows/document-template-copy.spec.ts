@@ -1,5 +1,5 @@
 import { baseURL } from '../../playwright.config'
-import { configuredUrl, expect, test, withNetworkRetry } from '../fixtures/pp365'
+import { configuredUrl, expect, onListPage, test } from '../fixtures/pp365'
 import {
   findDocumentLibrary,
   openDocumentTemplateDialog
@@ -43,13 +43,11 @@ test.describe('document template copy', () => {
     consoleGuard
   }) => {
     void consoleGuard
-    test.setTimeout(240_000)
+    // With room for a second load of the library, when SharePoint's React fault struck the first.
+    test.setTimeout(300_000)
     const name = `${COPY_PREFIX}${Date.now().toString().slice(-6)}`
     const libraryPage = await findDocumentLibrary(page, projectUrl!)
     const folder = new URL(libraryPage).pathname.replace(/\/Forms\/AllItems\.aspx$/i, '')
-    // A library view is no web part page, so not `openPage`; a connection SharePoint never
-    // answered (net::ERR_TIMED_OUT, run 38522211703) is tried once more, as `openPage` does.
-    await withNetworkRetry(() => page.goto(libraryPage, { timeout: 90_000 }))
     await deleteTestCopies(page, decodeURIComponent(folder))
 
     // The template's own name, when it was free before the copy. A copy under it is then this
@@ -57,7 +55,7 @@ test.describe('document template copy', () => {
     // removes it: left behind, it makes the next run find the name taken (run 40313190157).
     let ownName: string | undefined
     try {
-      const dialog = await openDocumentTemplateDialog(page)
+      const dialog = await onListPage(page, libraryPage, () => openDocumentTemplateDialog(page))
       // A file, not a folder: a folder's name is a v8 Link without an href, which is a button that
       // enters the folder, so a file row is one without a button.
       const fileRow = dialog
