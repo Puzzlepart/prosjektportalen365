@@ -362,6 +362,20 @@ async function fetchWithRetry(fetchImpl, url, init = {}) {
     throw lastError
 }
 
+/**
+ * Whether a URL is GitHub's sign-in, where a private Pages site sends an anonymous visitor.
+ *
+ * @param {string | undefined} url
+ */
+function isGitHubSignIn(url) {
+    try {
+        const { hostname, pathname } = new URL(url)
+        return hostname === 'github.com' && (pathname === '/login' || pathname.startsWith('/pages/auth'))
+    } catch {
+        return false
+    }
+}
+
 /** Headers for api.github.com: the job's token, when there is one, lifts the anonymous rate limit. */
 function apiHeaders(env) {
     return { accept: 'application/vnd.github+json', ...(env.GITHUB_TOKEN ? { authorization: `Bearer ${env.GITHUB_TOKEN}` } : {}) }
@@ -373,8 +387,11 @@ function apiHeaders(env) {
  * private Puzzlepart repository with Pages was public on 2026-10-14), and any admin of the
  * repository can switch it back, so this is checked on every publish rather than trusted:
  * the site repository is not public (this job's token sees no other private repository: 404),
- * the repository's public Pages address serves nothing, and the site's own address answers an
- * anonymous request with no content (a private site redirects to GitHub's sign-in).
+ * the repository's public Pages address serves nothing without a sign-in, and the site's own
+ * address answers an anonymous request with no content (a private site redirects to GitHub's
+ * sign-in). A private site's public address redirects to the site's own address and on to the
+ * sign-in, a page that answers 200, so where the redirects end decides, not the last status: the
+ * first private site was refused for it on 2026-10-26.
  *
  * @param {NodeJS.ProcessEnv} env TEST_REPORTS_REPOSITORY, TEST_REPORTS_URL, GITHUB_TOKEN
  * @param {typeof fetch} [fetchImpl]
@@ -388,7 +405,8 @@ async function assertSitePrivate(env, fetchImpl = fetch) {
     if (repo.ok) refuse(`${env.TEST_REPORTS_REPOSITORY} is a public repository.`)
     if (repo.status !== 404) refuse(`Whether ${env.TEST_REPORTS_REPOSITORY} is private could not be checked (${repo.status}).`)
     const publicSite = `https://${owner.toLowerCase()}.github.io/${name}/`
-    if ((await fetchWithRetry(fetchImpl, publicSite, { redirect: 'follow' })).ok) {
+    const atPublicSite = await fetchWithRetry(fetchImpl, publicSite, { redirect: 'follow' })
+    if (atPublicSite.ok && !isGitHubSignIn(atPublicSite.url)) {
         refuse(`The site is public at ${publicSite}: set its Pages visibility to Private.`)
     }
     const site = await fetchWithRetry(fetchImpl, env.TEST_REPORTS_URL.replace(/\/+$/, '') + '/', { redirect: 'manual' })

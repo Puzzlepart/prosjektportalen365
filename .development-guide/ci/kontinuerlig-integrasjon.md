@@ -59,7 +59,7 @@ Testrapportsiden viser Playwright-rapporten og integrasjonsrapporten fra hver kj
 
 **Slik virker det.** Siste steg i E2E-jobben og i integrasjonsjobben, «Publish the report to the test report site» (`if: !cancelled()`, `continue-on-error: true`, `timeout-minutes: 10`), kjører `.tasks/publish-test-report.js` (CommonJS, uten avhengigheter):
 
-1. Sjekker at området er privat, og publiserer ingenting ellers: rapportrepoet er ikke offentlig (jobbens `GITHUB_TOKEN` ser ingen andre private repoer, så API-et svarer 404), repoets offentlige Pages-adresse (`https://puzzlepart.github.io/<repo>/`) viser ingenting, og `TEST_REPORTS_URL` svarer ikke på en anonym forespørsel med innhold (et privat område sender videre til innloggingen på GitHub). Sjekken kjøres ved hver publisering, fordi alle administratorer av rapportrepoet kan sette synligheten tilbake til offentlig. 14. oktober 2026 var alle private Puzzlepart-repoer med Pages offentlige.
+1. Sjekker at området er privat, og publiserer ingenting ellers: rapportrepoet er ikke offentlig (jobbens `GITHUB_TOKEN` ser ingen andre private repoer, så API-et svarer 404), repoets offentlige Pages-adresse (`https://puzzlepart.github.io/<repo>/`) viser ingenting uten innlogging (hos et privat område sender den videre til områdets egen adresse og derfra til innloggingen på GitHub, en side som svarer 200, så det er hvor videresendingene ender som avgjør), og `TEST_REPORTS_URL` svarer ikke på en anonym forespørsel med innhold (et privat område sender videre til innloggingen på GitHub). Sjekken kjøres ved hver publisering, fordi alle administratorer av rapportrepoet kan sette synligheten tilbake til offentlig. 14. oktober 2026 var alle private Puzzlepart-repoer med Pages offentlige.
 2. Henter `gh-pages` i rapportrepoet over SSH med deploy-nøkkelen. GitHubs vertsnøkler leses fra `https://api.github.com/meta`, så den første tilkoblingen sjekkes i stedet for å stoles på.
 3. Kopierer rapporten til `runs/<kjørings-id>-<forsøk>/<suite>/`: `e2e/playwright-report` for `e2e` og `integration/test-results` for `integration`. Ved siden av skrives `runs/<kjørings-id>-<forsøk>/<suite>.json` med utfallet av teststeget, antallene (fra Playwrights `test-results/results.json` og fra sammendraget integrasjonsrapporten bygger inn), kjøringen, commiten, branchen, emnelinjen og `publishedAt`. Et nytt forsøk av en kjøring får dermed en egen rad.
 4. Sletter kjøringer eldre enn 7 dager, like lenge som artefaktene (organisasjonen holder artefakter og logger i høyst 7 dager), og deretter de eldste kjøringene så lenge kjøringene til sammen er over 800 MB, siden Pages publiserer høyst 1 GB. Kjøringen som publiseres, slettes aldri. En fil over 95 MiB utelates med en advarsel, siden git avviser filer over 100 MiB.
@@ -75,6 +75,8 @@ Til slutt skriver skriptet lenken til rapporten og til forsiden i jobbens sammen
 | `TEST_REPORTS_URL` | variabel | Områdets adresse, for lenkene i jobbens sammendrag og sjekken av at området er privat |
 
 Uten `TEST_REPORTS_REPOSITORY`, `TEST_REPORTS_URL` eller `TEST_REPORTS_DEPLOY_KEY` skriver steget bare en `::notice` om at testrapportsiden ikke er satt opp, og avslutter med 0, så CI virker før området finnes. Rapportene ligger da bare i artefaktene.
+
+Området ble satt opp 26. oktober 2026 etter stegene under: rapportrepoet er `Puzzlepart/prosjektportalen365-test-reports`, og adressen står i variabelen `TEST_REPORTS_URL`.
 
 **Engangsoppsett.** En med administratortilgang i organisasjonen gjør det én gang, i denne rekkefølgen. CI oppretter ingenting selv.
 

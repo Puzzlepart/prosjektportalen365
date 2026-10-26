@@ -203,13 +203,17 @@ test('starts over when another job pushed between its fetch and its push, so nei
     assert.equal(git(remote, 'rev-list', '--count', 'gh-pages'), '1')
 })
 
-/** A fetch that answers each URL with the given status (404 otherwise) and records what it was asked. */
-function fakeFetch(statuses) {
+/**
+ * A fetch that answers each URL with the given status (404 otherwise), or with `{ status, url }`
+ * when its redirects end elsewhere, and records what it was asked.
+ */
+function fakeFetch(answers) {
     const asked = []
     const impl = async (url, init = {}) => {
         asked.push({ url, redirect: init.redirect, authorization: init.headers?.authorization })
-        const status = statuses[url] ?? 404
-        return { ok: status >= 200 && status < 300, status, json: async () => ({ ssh_keys: ['ssh-ed25519 AAAAC3'] }) }
+        const answer = answers[url] ?? 404
+        const { status, url: finalUrl = url } = typeof answer === 'number' ? { status: answer } : answer
+        return { ok: status >= 200 && status < 300, status, url: finalUrl, json: async () => ({ ssh_keys: ['ssh-ed25519 AAAAC3'] }) }
     }
     return { impl, asked }
 }
@@ -236,10 +240,28 @@ test('publishes only to a site that asks for a GitHub sign-in, since Pages is pu
         [{ 'https://api.github.com/repos/Puzzlepart/pp365-reports': 200 }, /is a public repository/],
         [{ 'https://api.github.com/repos/Puzzlepart/pp365-reports': 403 }, /could not be checked \(403\)/],
         [{ 'https://puzzlepart.github.io/pp365-reports/': 200 }, /public at https:\/\/puzzlepart\.github\.io\/pp365-reports\//],
+        [
+            { 'https://puzzlepart.github.io/pp365-reports/': { status: 200, url: 'https://calm-word-1a2b.pages.github.io/' } },
+            /public at https:\/\/puzzlepart\.github\.io\/pp365-reports\//
+        ],
         [{ 'https://calm-word-1a2b.pages.github.io/': 200 }, /answers without a GitHub sign-in/]
     ]) {
         await assert.rejects(assertSitePrivate(SITE_ENV, fakeFetch(statuses).impl), reason)
     }
+})
+
+test("accepts a private site whose public address redirects on to GitHub's sign-in", async () => {
+    // What GitHub did once the first site was private (2026-10-26): the public address answers 301
+    // to the site's own address, which sends an anonymous visitor to GitHub's sign-in, a page that
+    // answers 200.
+    const site = fakeFetch({
+        'https://puzzlepart.github.io/pp365-reports/': {
+            status: 200,
+            url: 'https://github.com/login?return_to=https%3A%2F%2Fgithub.com%2Fpages%2Fauth%3Fpage_id%3D1'
+        },
+        'https://calm-word-1a2b.pages.github.io/': 302
+    })
+    await assertSitePrivate(SITE_ENV, site.impl)
 })
 
 test('writes the deploy key with LF line ends, for its owner only, and removes it again', async () => {
