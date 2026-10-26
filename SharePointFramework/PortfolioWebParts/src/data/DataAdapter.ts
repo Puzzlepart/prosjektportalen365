@@ -2,7 +2,7 @@
 
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, getHashCode, PnPClientStorage } from '@pnp/core'
-import { LogLevel } from '@pnp/logging'
+import { Logger, LogLevel } from '@pnp/logging'
 import { spfi, SPFx } from '@pnp/sp'
 import {
   ISearchResult,
@@ -58,6 +58,7 @@ import {
   SPIdeaConfigurationItem
 } from '../models'
 import * as config from './config'
+import { fetchMergedViewData, replaceDepartmentId } from './mergedViewData'
 import {
   GetPortfolioConfigError,
   IEnrichedProjectsFields,
@@ -229,90 +230,40 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
+  /**
+   * The merged view: the primary portfolio's rows, then each other portfolio's through an adapter
+   * of its own against that hub, with the view's search scoped to it (`mergedViewData.ts`). A
+   * portfolio that cannot be read is left out and named in `failedPortfolios`, which the overview
+   * tells. It was left out in silence, and one adapter was reused for every other portfolio, whose
+   * `configure` keeps the first hub it was given: from the third portfolio on, the rows were the
+   * second's under the third's name.
+   */
   public async fetchMergedViewData(
     view: PortfolioOverviewView,
     portfolios: PortfolioInstance[],
     primaryConfiguration: IPortfolioOverviewConfiguration
   ): Promise<IPortfolioViewData> {
-    const includedPortfolios = portfolios.filter((p) => p.includeInMergedView !== false)
-
-    if (includedPortfolios.length === 0) {
-      return { items: [], managedProperties: [] }
-    }
-
-    const primaryPortfolio = includedPortfolios[0]
-    const primaryData = await this.fetchDataForView(
-      view,
-      primaryConfiguration,
-      primaryConfiguration.hubSiteId
-    )
-
-    const primaryHubMetadata = {
-      _hubId: primaryPortfolio.uniqueId,
-      _hubTitle: primaryPortfolio.title,
-      _hubUrl: primaryPortfolio.url
-    }
-
-    const mergedResult: IPortfolioViewData = {
-      items: primaryData.items.map((item) => ({ ...item, ...primaryHubMetadata })),
-      managedProperties: [...primaryData.managedProperties]
-    }
-
-    const tempAdapter = new DataAdapter(this._spfxContext, this._sp)
-
-    for (let i = 1; i < includedPortfolios.length; i++) {
-      const portfolio = includedPortfolios[i]
-      const hubMetadata = {
-        _hubId: portfolio.uniqueId,
-        _hubTitle: portfolio.title,
-        _hubUrl: portfolio.url
-      }
-
-      try {
-        await tempAdapter.configure(null, null, portfolio)
-
-        const portfolioConfig = await tempAdapter.getPortfolioConfig()
-        const portfolioHubSiteId = portfolioConfig.hubSiteId
-
+    return fetchMergedViewData(
+      portfolios,
+      () => this.fetchDataForView(view, primaryConfiguration, primaryConfiguration.hubSiteId),
+      async (portfolio) => {
+        const adapter = await new DataAdapter(this._spfxContext, this._sp).configure(
+          null,
+          null,
+          portfolio
+        )
+        const configuration = await adapter.getPortfolioConfig()
         const portfolioView = new PortfolioOverviewView()
         Object.assign(portfolioView, view)
-        portfolioView.searchQuery = view.searchQuery.replace(
-          /DepartmentId:\{[a-f0-9-]+\}/gi,
-          `DepartmentId:{${portfolioHubSiteId}}`
-        )
-
-        const { items, managedProperties } = await tempAdapter.fetchDataForView(
-          portfolioView,
-          portfolioConfig,
-          portfolioHubSiteId
-        )
-
-        mergedResult.items.push(...items.map((item) => ({ ...item, ...hubMetadata })))
-
-        managedProperties.forEach((prop) => {
-          if (!mergedResult.managedProperties.includes(prop)) {
-            mergedResult.managedProperties.push(prop)
-          }
+        portfolioView.searchQuery = replaceDepartmentId(view.searchQuery, configuration.hubSiteId)
+        return adapter.fetchDataForView(portfolioView, configuration, configuration.hubSiteId)
+      },
+      (portfolio, error) =>
+        Logger.log({
+          message: `(DataAdapter) (fetchMergedViewData) ${portfolio.title} could not be read: ${error?.message}`,
+          level: LogLevel.Warning
         })
-      } catch (error) {
-        console.error(`Failed to fetch data from portfolio ${portfolio.title}:`, error)
-      }
-    }
-
-    const seenKeys = new Set<string>()
-    const uniqueItems = mergedResult.items.filter((item) => {
-      const key = `${item.SiteId}_${item.ScopeKey ?? ''}_${item._hubId}`
-      if (seenKeys.has(key)) {
-        return false
-      }
-      seenKeys.add(key)
-      return true
-    }) as IFetchDataForViewItemResult[]
-
-    return {
-      items: uniqueItems,
-      managedProperties: mergedResult.managedProperties
-    }
+    )
   }
 
   public async fetchDataForRegularView(

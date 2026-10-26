@@ -69,6 +69,8 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 
 ### Feilrettinger
 
+- Sammenslått visning i `Porteføljeoversikt` sier fra over listen når en hub ikke kunne hentes, der den før viste listen uten den uten et ord. Med tre eller flere hubber viste den også den andre hubens prosjekter under den tredjes navn, fordi én tilkobling ble brukt om igjen; hver hub leses nå med sin egen
+- `Administrasjon av underområder` bruker programmets egen hub når den globale innstillingen `AvailableProgramHubs` er tom eller slått av, der listen og «Legg til underområder» før ble stående tomme uten forklaring
 - Bunnteksten på porteføljeområdet vises nå også på SharePoints listesider, der den som regel manglet fordi den bare ventet på navigasjonshendelsen og ikke på at SharePoint gjorde plassholderne klare (#1788)
 - `Prosjektkort` viser at prosjektet lastes, og sier fra når det ikke kan hentes, der webdelen før var tom (#1788)
 - En feil når prosjekter legges til i `Administrasjon av underområder`, vises i dialogen, der den før ikke ble fanget (#1788)

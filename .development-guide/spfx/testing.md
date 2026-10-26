@@ -190,6 +190,7 @@ HTML-rapporten lages av `src/reporters/html.ts`, en egen rapportør for `node:te
 | `SP_URL_TEST` | variabel | `INTEGRATION_HUB_URL` |
 | `E2E_PROGRAM_URL` | variabel | `INTEGRATION_PROGRAM_URL` |
 | `INTEGRATION_PROJECT_URL` | variabel | Prosjektet testene skriver til, reservert for dem |
+| `INTEGRATION_SECOND_HUB_URL` | variabel | En hub nummer to blant dem `AvailableProgramHubs` nevner; bare lesing (`tests/multi-hub.test.ts`) |
 | `E2E_USERNAME` | hemmelighet | `INTEGRATION_USER`, brukeren biblioteket handler for app-only |
 | `CI_CERT_BASE64`, `CI_CLIENT_ID`, `CI_TENANT` | hemmeligheter | Sertifikatinnloggingen, fra arbeidsflytens `env` |
 

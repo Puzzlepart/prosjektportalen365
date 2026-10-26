@@ -5,6 +5,13 @@ import { IProgramAdministrationProps } from './types'
 import { useId } from '@fluentui/react-components'
 import { IProgramHub } from 'data'
 
+/**
+ * Component logic hook for `ProgramAdministration`: the program's hubs, from the global setting
+ * `AvailableProgramHubs` (absolute URLs, `;`-separated), or the program's own hub when the setting
+ * is empty or disabled; the child projects read from them; and the selection.
+ *
+ * @param props Props for the component
+ */
 export const useProgramAdministration = (props: IProgramAdministrationProps) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
@@ -26,6 +33,11 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
           .split(';')
           .map((s) => s.trim())
           .filter(Boolean)
+      }
+      // The program's own hub when the setting is empty or disabled: without it the list and the
+      // add dialog were empty, with no word of why.
+      if (parsedHubs.length === 0 && props.dataAdapter.portalDataService.url) {
+        parsedHubs = [props.dataAdapter.portalDataService.url]
       }
 
       let resolvedHubs: IProgramHub[] = []

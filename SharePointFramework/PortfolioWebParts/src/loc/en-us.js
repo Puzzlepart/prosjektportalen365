@@ -59,6 +59,9 @@ define([], function () {
     ColumnRenderOptionCalculated: 'Calculated column',
     PortfolioSelectorLabel: 'Portfolio selector',
     MergedViewLabel: 'Show all hubs',
+    MergedViewHubFailedTitle: 'Not every hub could be read',
+    MergedViewHubFailedText:
+      'The projects from {0} are not shown. Try again, or check your access there.',
     PortfoliosFieldDescription: 'Select the portfolios to be displayed in the portfolio selector.',
     SelectedPortfolioDescription: 'The portfolio selected in the portfolio selector.',
     ShowPortfolioSelectorDescription: 'Show the portfolio selector.',
