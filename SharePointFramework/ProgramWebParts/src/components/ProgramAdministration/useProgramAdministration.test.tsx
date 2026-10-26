@@ -10,6 +10,8 @@ import { useProgramAdministration } from './useProgramAdministration'
 const HUB = 'https://contoso.sharepoint.com/sites/pp365'
 const OTHER = 'https://contoso.sharepoint.com/sites/pp365-bygg'
 const ALFA = { SiteId: 'a', Title: 'Alfa' }
+/** Alfa as the list gets it: the reducer keys each row by its site id. */
+const ALFA_ROW = { key: ALFA.SiteId, ...ALFA }
 
 /** The hub a URL resolves to in these tests: its id and title from the URL's last segment. */
 const resolved = (url: string) => {
@@ -56,7 +58,7 @@ describe('useProgramAdministration', () => {
       expect(dataAdapter.fetchChildProjects).toHaveBeenCalledWith([resolved(HUB), resolved(OTHER)])
     )
     expect(dataAdapter.initializeHubWebs).toHaveBeenCalledWith([resolved(HUB), resolved(OTHER)])
-    await waitFor(() => expect(result().childProjects).toEqual([ALFA]))
+    await waitFor(() => expect(result().childProjects).toEqual([ALFA_ROW]))
     expect(result().programHubs).toEqual([resolved(HUB), resolved(OTHER)])
   })
 
@@ -68,7 +70,7 @@ describe('useProgramAdministration', () => {
     await waitFor(() =>
       expect(dataAdapter.fetchChildProjects).toHaveBeenCalledWith([resolved(HUB)])
     )
-    await waitFor(() => expect(result().childProjects).toEqual([ALFA]))
+    await waitFor(() => expect(result().childProjects).toEqual([ALFA_ROW]))
     expect(result().programHubs).toEqual([resolved(HUB)])
   })
 
