@@ -5,12 +5,13 @@
   admin-consent og ferdig konfigurasjon til Prosjektportalen.
 
 .DESCRIPTION
-  Kilde: https://github.com/Puzzlepart/prosjektportalen365 (Install/Scripts/Setup-PPAssistant.ps1). Versjon 1.2.
+  Kilde: https://github.com/Puzzlepart/prosjektportalen365 (Install/Scripts/Setup-PPAssistant.ps1). Versjon 1.3.
   Siste versjon: https://raw.githubusercontent.com/Puzzlepart/prosjektportalen365/main/Install/Scripts/Setup-PPAssistant.ps1
 
   Prosjektportalen Assistenten driftes av Prosjektportalen-teamet. Du tar med deg egne Azure AI Foundry-
   modeller (BYO) og egen Key Vault (eksisterende eller ny). Skriptet:
-    1. validerer Foundry-endepunktet og tester chat-deploymenten (ett lite kall)
+    1. validerer Foundry-endepunktet og tester chat-deploymenten (ett lite kall). Med -ProvisionFoundry
+       opprettes ressursen, deploymentene og et budsjettvarsel først (se under)
     2. finner tenant-id fra hub-URL-en (via <navn>.onmicrosoft.com - aldri e-postdomenet)
     3. gir admin-consent for «Prosjektportalen Assistent» (åpner nettleseren ved behov). Samme godkjenning
        dekker API-appens SharePoint-tilgang og Graph-tillatelsen Tasks.Read (Planner-oppgaver i prosjektet);
@@ -39,6 +40,13 @@
   forhåndssjekken og oppsummeringen sier det. Chatmodellen faller aldri tilbake til Global Standard.
   Finnes ressursen eller deploymenten fra før, gjenbrukes den.
   Endepunkt og nøkkel hentes fra ressursen og skrives til Key Vault som ellers - du ser dem aldri.
+  Skriptet setter også et budsjettvarsel i Azure Cost Management på Foundry-ressursen: 1000 i
+  abonnementets faktureringsvaluta per måned (NOK for de fleste norske abonnement), med e-post til
+  deg ved 50, 80 og 100 prosent og når prognosen passerer 100 prosent. Beløpet velges med
+  -FoundryBudget, mottakerne med -FoundryBudgetEmail, og -NoFoundryBudget dropper det. Et budsjett
+  er et VARSEL, ikke et tak: Azure stopper ikke forbruket, og varselet kommer typisk 8-24 timer
+  etter at forbruket skjedde. Det er likevel den første beskjeden dere får om en nøkkel er på
+  avveie. Det som faktisk begrenser forbruket, er kapasiteten på deploymenten (-FoundryChatCapacity).
 
   Før noe skrives kjører en forhåndssjekk, og deretter vises en oppsummering med de
   OPPLØSTE verdiene: hvilken tenant hub-URL-en peker på, hvilken konto du er logget inn som,
@@ -105,6 +113,16 @@
   Deploymenttype for bildemodellen. Standard: samme som -FoundryDeploymentType, med fallback til
   GlobalStandard om den ikke kan settes opp slik. Oppgis den, brukes den uten fallback - f.eks.
   -FoundryImagesDeploymentType DataZoneStandard for å kreve at også bildene behandles i EU.
+.PARAMETER FoundryBudget
+  Månedlig budsjettvarsel for Foundry-ressursen(e), i abonnementets faktureringsvaluta. Standard: 1000.
+  Budsjettet heter pp365-assistent og ligger på ressursgruppen, avgrenset til Foundry-ressursene.
+  Finnes det fra før, beholdes beløpet som står der; oppgi -FoundryBudget for å endre det.
+  Et varsel, ikke et tak - Azure stopper ikke forbruket når det passeres.
+.PARAMETER FoundryBudgetEmail
+  E-postadresser som får budsjettvarslene. Standard: kontoen du er logget inn med. Er den ikke en
+  e-postadresse (f.eks. en tjenestekonto), må parameteren oppgis.
+.PARAMETER NoFoundryBudget
+  Ikke opprett budsjettvarsel. Sett det heller opp selv under Cost Management -> Budgets i Azure-portalen.
 
 .EXAMPLE
   ./Setup-PPAssistant.ps1 -HubUrl https://kontoso.sharepoint.com/sites/pp365 -KeyVaultName kv-kontoso-pp365 `
@@ -115,9 +133,14 @@
 .EXAMPLE
   ./Setup-PPAssistant.ps1 -HubUrl https://kontoso.sharepoint.com/sites/pp365 -ProvisionFoundry -CustomerName "Kontoso AS"
   # Oppretter Foundry-ressursen pp365-kontoso-ai i swedencentral med gpt-5.6-terra og gpt-image-1.5
-  # (Data Zone Standard, behandling i EU), og fortsetter med Key Vault, secrets og godkjenninger som
-  # vanlig. Legg til -Preflight for å se om modellene finnes i regionen og om det er kvote, uten å
-  # endre noe.
+  # (Data Zone Standard, behandling i EU), setter et budsjettvarsel på 1000 per måned, og fortsetter
+  # med Key Vault, secrets og godkjenninger som vanlig. Legg til -Preflight for å se om modellene
+  # finnes i regionen og om det er kvote, uten å endre noe.
+
+.EXAMPLE
+  ./Setup-PPAssistant.ps1 -HubUrl https://kontoso.sharepoint.com/sites/pp365 -ProvisionFoundry -FoundryBudget 3000 -FoundryBudgetEmail it-drift@kontoso.no
+  # Som over, med budsjettvarsel på 3000 per måned til en felles postkasse. Kjøres den igjen senere
+  # med et annet beløp, oppdateres budsjettet; uten -FoundryBudget beholdes det som står i Azure.
 
 .EXAMPLE
   ./Setup-PPAssistant.ps1 -HubUrl https://kontoso.sharepoint.com/sites/pp365
@@ -172,6 +195,12 @@ param(
   [ValidatePattern('^[a-z0-9]+$')] [string] $FoundryImagesLocation,
   [ValidateRange(1, 1000)] [int] $FoundryImagesCapacity = 1,
   [ValidateSet('GlobalStandard', 'DataZoneStandard', 'Standard')] [string] $FoundryImagesDeploymentType,   # default: -FoundryDeploymentType
+  # Budsjettvarsel i Azure Cost Management på Foundry-ressursen(e), per måned i abonnementets
+  # faktureringsvaluta. Et varsel, ikke et tak: Azure stopper ikke forbruket. Men det er den
+  # første beskjeden kunden får om nøkkelen er på avveie, så den er på som standard.
+  [ValidateRange(1, 100000000)] [int] $FoundryBudget = 1000,
+  [string[]] $FoundryBudgetEmail,   # default: kontoen du er logget inn med
+  [switch] $NoFoundryBudget,
 
   [string] $TenantId,
   [string] $CustomerName,   # default: organisasjonens navn i Entra ID
@@ -209,6 +238,9 @@ $HandoffMail     = 'setup@prosjektportalen.no'
 $Graph           = 'https://graph.microsoft.com/v1.0'
 $CogApiVersion   = '2025-06-01'   # Microsoft.CognitiveServices (allowProjectManagement krever >= 2025-04-01-preview)
 $RpApiVersion    = '2021-04-01'   # registrering av ressursleverandøren
+$BudgetApiVersion = '2023-05-01'  # Microsoft.Consumption/budgets
+$CostApiVersion  = '2023-11-01'   # Microsoft.CostManagement/query (bare til å lese faktureringsvalutaen)
+$BudgetName      = 'pp365-assistent'
 
 # ---------------------------------------------------------------------------
 # Forhåndssjekk
@@ -333,6 +365,16 @@ function Show-PPSummary($Tenant, $AzContext, $VaultFinnes, $Consent, $SharePoint
         'DataZoneStandard' { 'Data Zone Standard - forespørslene behandles innenfor regionens datasone (EU)' }
         'Standard'         { 'Standard - forespørslene behandles i regionen' }
       })
+    }
+    $b = $script:Budsjett
+    if (-not $b -or $b.Epost.Count -eq 0) { Write-PPPlan 'Budsjettvarsel' '' $true }
+    else {
+      $valuta = if ($b.Valuta) { $b.Valuta } else { '(faktureringsvaluta)' }
+      $status = if ($b.Finnes -and $b.Oppdater) { "finnes ($($b.Belop) $valuta/mnd) - ENDRES til $FoundryBudget $valuta/mnd" }
+                elseif ($b.Finnes) { "finnes ($($b.Belop) $valuta/mnd), beholdes" }
+                else { "OPPRETTES: $FoundryBudget $valuta/mnd, varsel til $($b.Epost -join ', ')" }
+      Write-PPPlan 'Budsjettvarsel' "$($b.Navn) på $($b.Rg) - $status"
+      Write-Host '                        (et varsel, ikke et tak - Azure stopper ikke forbruket når det passeres)' -ForegroundColor DarkGray
     }
   }
   if ($fulltOppsett) {
@@ -638,6 +680,9 @@ function Test-PPAzurePermissions([bool] $VaultFinnes) {
     $trengs['Microsoft.CognitiveServices/accounts/deployments/write'] = @($rgId, 'opprette modell-deployments')
   }
   if ($ProvisionFoundry) { $trengs['Microsoft.CognitiveServices/accounts/listKeys/action'] = @($rgId, 'lese nøkkelen til Foundry-ressursen') }
+  if ($script:Budsjett -and $script:Budsjett.Scope -and (-not $script:Budsjett.Finnes -or $script:Budsjett.Oppdater)) {
+    $trengs['Microsoft.Consumption/budgets/write'] = @($script:Budsjett.Scope, 'opprette budsjettvarsel (Owner eller Contributor har det)')
+  }
   if (-not $VaultFinnes) {
     $trengs['Microsoft.KeyVault/vaults/write'] = @($rgId, 'opprette Key Vault')
     $trengs['Microsoft.Authorization/roleAssignments/write'] = @($rgId, 'tildele roller på vaulten (krever Owner eller User Access Administrator)')
@@ -1180,8 +1225,154 @@ function New-PPFoundry {
   foreach ($konto in $script:FoundryKontoer.Values) { $tilkoblinger[$konto.Navn] = Get-PPFoundryConnection $konto }
   $resultat = @{}
   foreach ($d in $script:FoundryPlan | Where-Object { -not $_.Hoppes }) { $resultat[$d.Rolle] = $tilkoblinger[$d.Konto] }
-  Write-Info 'Tips: sett et budsjettvarsel på abonnementet, så dere ser forbruket før fakturaen gjør det.'
   return $resultat
+}
+
+# ---------------------------------------------------------------------------
+# Budsjettvarsel (Azure Cost Management)
+#
+# Et budsjett i Azure er et VARSEL: det sender e-post når forbruket passerer tersklene, men
+# stopper ingenting. Verdien er at kunden får beskjed om en nøkkel på avveie før fakturaen
+# kommer - og kostnadsdataene ligger 8-24 timer etter, så det er heller ingen bremse. Det som
+# faktisk begrenser forbruket, er kapasiteten på deploymenten. Budsjettet ligger på
+# ressursgruppen, avgrenset til Foundry-ressursene, så det måler assistentens modeller og
+# ikke resten av gruppen. Beløpet er i abonnementets faktureringsvaluta; API-et tar ingen valuta.
+# ---------------------------------------------------------------------------
+
+# Faktureringsvalutaen, lest fra kostnadsdataene for ressursgruppen eller abonnementet. Best
+# effort: en ny ressursgruppe har ingen kostnader ennå, oppslaget på abonnementet krever tilgang
+# der, og kostnads-API-et finnes ikke for alle abonnementstyper. $null når den ikke kan leses.
+function Get-PPBillingCurrency([string[]] $Scopes) {
+  foreach ($scope in $Scopes) {
+    foreach ($periode in 'MonthToDate', 'TheLastMonth') {
+      try {
+        $body = @{ type = 'ActualCost'; timeframe = $periode; dataset = @{ granularity = 'None'; aggregation = @{ totalCost = @{ name = 'Cost'; function = 'Sum' } } } }
+        $svar = Invoke-PPArm POST "$scope/providers/Microsoft.CostManagement/query?api-version=$CostApiVersion" $body
+        $kolonne = [array]::IndexOf(@($svar.properties.columns.name), 'Currency')
+        $rader = @($svar.properties.rows)
+        if ($kolonne -ge 0 -and $rader.Count -gt 0 -and $rader[0][$kolonne]) { return [string]$rader[0][$kolonne] }
+      } catch { Write-Verbose "Valuta ($scope, $periode): $($_.Exception.Message)" }
+    }
+  }
+  return $null
+}
+
+<#
+  Forhåndssjekk for budsjettvarselet. Bare lesing: hvilken ressursgruppe det skal ligge på, om
+  det finnes fra før (og med hvilket beløp), hvem som skal varsles, og faktureringsvalutaen.
+  Kjøres etter Test-PPFoundryPlan, som har funnet ressursenes id-er.
+#>
+function Test-PPFoundryBudget {
+  $b = $script:Budsjett
+  $sjekk = 'Foundry: budsjettvarsel'
+
+  # Ressursgruppen til chatmodellens ressurs er budsjettets omfang. En bilderessurs i en annen
+  # gruppe (gjenbrukt fra før) dekkes ikke av dette budsjettet - det sies, men stopper ikke.
+  $chatKonto = $script:FoundryKontoer[($script:FoundryPlan | Where-Object { $_.Rolle -eq 'Chat' } | Select-Object -First 1).Konto]
+  $b.Rg = ($chatKonto.Id -split '/')[4]
+  $b.Scope = "/subscriptions/$($script:SubId)/resourceGroups/$($b.Rg)"
+  $b.Dekker = @($script:FoundryKontoer.Values | Where-Object { ($_.Id -split '/')[4] -eq $b.Rg })
+  $utenfor = @($script:FoundryKontoer.Values | Where-Object { $_.Navn -notin $b.Dekker.Navn })
+
+  $b.Epost = @(if ($FoundryBudgetEmail) { $FoundryBudgetEmail } elseif ($azContext.Account.Id -match '^[^@\s]+@[^@\s]+\.[^@\s]+$') { $azContext.Account.Id })
+  if ($b.Epost.Count -eq 0) {
+    Add-PPCheck -Navn $sjekk -Status 'MANGLER' -Detalj "ingen e-postadresse å varsle ($($azContext.Account.Id) er ikke en e-postadresse)" -Fiks 'Oppgi -FoundryBudgetEmail <adresse>, eller -NoFoundryBudget for å sette det opp selv i Azure-portalen.'
+    return
+  }
+
+  $eksisterende = $null
+  $lesefeil = $null
+  $rgFinnes = [bool](Get-AzResourceGroup -Name $b.Rg -ErrorAction SilentlyContinue)
+  if ($rgFinnes) {
+    try { $eksisterende = Invoke-PPArm GET "$($b.Scope)/providers/Microsoft.Consumption/budgets/$($b.Navn)?api-version=$BudgetApiVersion" -AllowNotFound }
+    catch { $lesefeil = $_.Exception.Message }
+  }
+  if ($eksisterende) {
+    $b.Finnes = $true
+    $b.Belop = [int]$eksisterende.properties.amount
+    $b.Eksisterende = $eksisterende
+    # currentSpend.unit er valutaen budsjettet måles i - gratis, og sikrere enn kostnadsoppslaget.
+    $b.Valuta = $eksisterende.properties.currentSpend.unit
+    $b.Oppdater = $script:BudsjettEksplisitt -and $b.Belop -ne $FoundryBudget
+  }
+  if (-not $b.Valuta) {
+    $scopes = @(if ($rgFinnes) { $b.Scope }) + "/subscriptions/$($script:SubId)"
+    $b.Valuta = Get-PPBillingCurrency $scopes
+  }
+  $valuta = if ($b.Valuta) { $b.Valuta } else { '(faktureringsvaluta - kunne ikke leses)' }
+
+  if ($b.Finnes -and $b.Oppdater) {
+    Add-PPCheck -Navn $sjekk -Status 'OK' -Detalj "$($b.Navn) finnes ($($b.Belop) $valuta/mnd), endres til $FoundryBudget $valuta/mnd"
+  } elseif ($b.Finnes) {
+    $hint = if ($b.Belop -ne $FoundryBudget) { " Oppgi -FoundryBudget for å endre beløpet." } else { '' }
+    Add-PPCheck -Navn $sjekk -Status 'OK' -Detalj "$($b.Navn) finnes ($($b.Belop) $valuta/mnd), beholdes.$hint"
+  } elseif ($lesefeil) {
+    Add-PPCheck -Navn $sjekk -Status 'UKJENT' -Detalj "kunne ikke lese om budsjettet finnes ($lesefeil) - opprettes eller oppdateres etter bekreftelsen"
+  } else {
+    Add-PPCheck -Navn $sjekk -Status 'OK' -Detalj "opprettes: $FoundryBudget $valuta/mnd på $($b.Rg), varsel til $($b.Epost -join ', ')"
+  }
+  if ($utenfor.Count -gt 0) {
+    Add-PPCheck -Navn $sjekk -Status 'ADVARSEL' -Detalj "$($utenfor.Navn -join ', ') ligger i en annen ressursgruppe og dekkes ikke av budsjettet" -Fiks 'Sett et eget budsjettvarsel der under Cost Management -> Budgets i Azure-portalen.'
+  }
+}
+
+# Oppretter eller oppdaterer budsjettvarselet. Feiler det, er det en advarsel, ikke en stopp:
+# assistenten virker uten, og kunden kan sette det opp i portalen. Kjøres etter at
+# Foundry-ressursene finnes, så filteret peker på ressurser som faktisk eksisterer.
+function Set-PPFoundryBudget {
+  $b = $script:Budsjett
+  if (-not $b -or $b.Epost.Count -eq 0 -or -not $b.Scope) { return }
+  Write-Step 'Budsjettvarsel (Azure Cost Management)'
+  $valuta = if ($b.Valuta) { $b.Valuta } else { '(faktureringsvaluta)' }
+  if ($b.Finnes -and -not $b.Oppdater) {
+    Write-Ok "Budsjettet '$($b.Navn)' finnes ($($b.Belop) $valuta per måned) - beholdes. Endre beløpet med -FoundryBudget."
+    return
+  }
+  $hva = if ($b.Finnes) { "Endre budsjettvarselet fra $($b.Belop) til $FoundryBudget $valuta per måned" } else { "Opprette budsjettvarsel på $FoundryBudget $valuta per måned, varsel til $($b.Epost -join ', ')" }
+  if (-not $PSCmdlet.ShouldProcess("$($b.Rg)/$($b.Navn)", $hva)) { return }
+
+  $varsler = [ordered]@{}
+  foreach ($terskel in 50, 80, 100) {
+    $varsler["Faktisk_$terskel"] = @{ enabled = $true; operator = 'GreaterThanOrEqualTo'; threshold = $terskel; thresholdType = 'Actual'; contactEmails = @($b.Epost) }
+  }
+  $varsler['Prognose_100'] = @{ enabled = $true; operator = 'GreaterThanOrEqualTo'; threshold = 100; thresholdType = 'Forecasted'; contactEmails = @($b.Epost) }
+
+  if ($b.Finnes) {
+    # Eksisterende budsjett: behold periode og filter slik de står (startdatoen kan ikke flyttes
+    # bakover), bytt beløp og mottakere. currentSpend/forecastSpend er lesefelt og tas ikke med.
+    $e = $b.Eksisterende.properties
+    $egenskaper = @{ category = 'Cost'; amount = $FoundryBudget; timeGrain = $e.timeGrain; timePeriod = $e.timePeriod; notifications = $varsler }
+    if ($e.filter) { $egenskaper.filter = $e.filter }
+    $body = @{ properties = $egenskaper }
+    if ($b.Eksisterende.eTag) { $body.eTag = $b.Eksisterende.eTag }
+  } else {
+    # Startdatoen må være den første i måneden. Sluttdatoen må oppgis; ti år er grensen, så
+    # vi stopper én måned før den.
+    $start = [datetime]::new((Get-Date).Year, (Get-Date).Month, 1, 0, 0, 0, [DateTimeKind]::Utc)
+    $body = @{
+      properties = @{
+        category   = 'Cost'
+        amount     = $FoundryBudget
+        timeGrain  = 'Monthly'
+        timePeriod = @{ startDate = $start.ToString('yyyy-MM-ddTHH:mm:ssZ'); endDate = $start.AddYears(10).AddMonths(-1).ToString('yyyy-MM-ddTHH:mm:ssZ') }
+        # Bare Foundry-ressursene, ikke resten av ressursgruppen. Kostnadsdata bruker små bokstaver i id-ene.
+        filter     = @{ dimensions = @{ name = 'ResourceId'; operator = 'In'; values = @($b.Dekker.Id | ForEach-Object { $_.ToLowerInvariant() }) } }
+        notifications = $varsler
+      }
+    }
+  }
+
+  try {
+    Invoke-PPArm PUT "$($b.Scope)/providers/Microsoft.Consumption/budgets/$($b.Navn)?api-version=$BudgetApiVersion" $body | Out-Null
+  } catch {
+    Write-Warning "Kunne ikke $(if ($b.Finnes) { 'oppdatere' } else { 'opprette' }) budsjettvarselet ($($_.Exception.Message)). Assistenten virker uten. Sett det opp i Azure-portalen: ressursgruppen $($b.Rg) -> Cost Management -> Budgets. Enkelte abonnementstyper (eldre CSP, sponsorerte) støtter ikke budsjetter - da må forbruket følges opp hos den som fakturerer."
+    return
+  }
+  $b.Finnes = $true
+  $b.Belop = $FoundryBudget
+  Write-Ok "Budsjettvarsel '$($b.Navn)': $(if ($b.Oppdater) { 'oppdatert' } else { 'opprettet' }) - $FoundryBudget $valuta per måned, e-post til $($b.Epost -join ', ') ved 50, 80 og 100 % og når prognosen passerer 100 %"
+  Write-Info 'Et varsel, ikke et tak: Azure stopper ikke forbruket, og varselet kommer typisk 8-24 timer etter at forbruket skjedde.'
+  Write-Info 'Kommer et varsel dere ikke kjenner igjen: regenerer nøkkelen i Foundry-portalen (Keys and Endpoint) og kjør skriptet igjen med -ProvisionFoundry, så skrives den nye nøkkelen til Key Vault.'
 }
 
 # Gir AllSites.FullControl, som «sett som prosjektlogo» trenger.
@@ -1354,9 +1545,11 @@ if ($ProvisionFoundry) {
   }
   $ChatDeployment = $FoundryChatModel
   $ImagesDeployment = $FoundryImagesModel
-} elseif (@('FoundryName', 'FoundryImagesModel', 'FoundryImagesLocation', 'FoundryImagesDeploymentType', 'NoFoundryImages') | Where-Object { $PSBoundParameters.ContainsKey($_) }) {
-  throw '-FoundryName, -FoundryImages* og -NoFoundryImages brukes bare sammen med -ProvisionFoundry.'
+} elseif (@('FoundryName', 'FoundryImagesModel', 'FoundryImagesLocation', 'FoundryImagesDeploymentType', 'NoFoundryImages', 'FoundryBudget', 'FoundryBudgetEmail', 'NoFoundryBudget') | Where-Object { $PSBoundParameters.ContainsKey($_) }) {
+  throw '-FoundryName, -FoundryImages*, -NoFoundryImages, -FoundryBudget, -FoundryBudgetEmail og -NoFoundryBudget brukes bare sammen med -ProvisionFoundry. Setter dere opp Foundry selv, sett budsjettvarselet under Cost Management -> Budgets i Azure-portalen.'
 }
+# Et oppgitt beløp er et ønske om å endre et budsjett som finnes; uten det beholdes det som står i Azure.
+$script:BudsjettEksplisitt = $PSBoundParameters.ContainsKey('FoundryBudget')
 # Ba brukeren selv om bildemodellen, skal den stoppe kjøringen om den ikke kan settes opp.
 # Som standard er den et tillegg som hoppes over med en advarsel.
 $script:BildeEksplisitt = [bool](@('FoundryImagesModel', 'FoundryImagesLocation', 'FoundryImagesDeploymentType') | Where-Object { $PSBoundParameters.ContainsKey($_) })
@@ -1440,6 +1633,10 @@ if ($ProvisionFoundry) {
     }
     $script:FoundryPlan += [pscustomobject]@{ Rolle = 'Images'; Konto = $bildeNavn; Modell = $FoundryImagesModel; Type = $bildeType; Kapasitet = $FoundryImagesCapacity; Versjon = $null; Finnes = $false; Hoppes = $false; Ukontrollert = $false }
   }
+  # Budsjettvarselet. Ressursgruppe, mottakere og om det finnes fra før fylles inn av forhåndssjekken.
+  $script:Budsjett = if ($NoFoundryBudget) { $null } else {
+    [pscustomobject]@{ Navn = $BudgetName; Rg = $null; Scope = $null; Dekker = @(); Epost = @(); Finnes = $false; Belop = $null; Valuta = $null; Oppdater = $false; Eksisterende = $null }
+  }
 }
 
 Import-PPAzModules
@@ -1467,6 +1664,7 @@ if ($ProvisionFoundry -and -not $script:IngenAbonnement) {
       if ($n -notin $script:FoundryPlan.Konto) { $script:FoundryKontoer.Remove($n) }
     }
   }
+  if ($script:Budsjett) { Test-PPFoundryBudget }
 }
 
 # Finnes vaulten fra før? Avgjør om oppsummeringen sier «gjenbrukes» eller «OPPRETTES».
@@ -1553,6 +1751,7 @@ if ($ProvisionFoundry) {
   if ($ChatApiKey -and -not $SkipModelTest) {
     Test-PPChatDeployment $script:ChatBase $ChatApiKey $ChatDeployment -Attempts 12
   }
+  Set-PPFoundryBudget
 }
 
 $assistantSp = if ($SkipConsent) { $assistantSpCurrent } else { Request-PPAdminConsent $tenant.Id }
