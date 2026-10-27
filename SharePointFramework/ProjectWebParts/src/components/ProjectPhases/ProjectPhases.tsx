@@ -10,7 +10,10 @@ import { LoadingSkeleton, UserMessage, customLightTheme, withDefaults } from 'pp
 import strings from 'ProjectWebPartsStrings'
 import resource from 'SharedResources'
 
-const PROJECT_PHASES_DEFAULT_PROPS: Partial<IProjectPhasesProps> = {
+/**
+ * Default props for `ProjectPhases`, also used by the web part property pane
+ */
+export const PROJECT_PHASES_DEFAULT_PROPS: Partial<IProjectPhasesProps> = {
   phaseField: resource.SiteFields_GtProjectPhase_DisplayName,
   currentPhaseViewName: resource.View_CurrentPhase_DisplayName,
   syncPropertiesAfterPhaseChange: true,

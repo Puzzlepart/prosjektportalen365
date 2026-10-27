@@ -1,5 +1,5 @@
 import { ProjectPhasesContext } from 'components/ProjectPhases/context'
-import { getFluentIcon } from 'pp365-shared-library'
+import { format, getFluentIcon } from 'pp365-shared-library'
 import * as strings from 'ProjectWebPartsStrings'
 import { useContext } from 'react'
 import { useBoolean } from 'usehooks-ts'
@@ -14,8 +14,8 @@ export function useActions(
   comment: string,
   onNextChecklistItem: (statusValue: string) => Promise<void>
 ) {
-  const context = useContext(ProjectPhasesContext)
-  const isCommentValid = comment?.length >= context.props.commentMinLength
+  const { commentMinLength } = useContext(ProjectPhasesContext).props
+  const isCommentValid = comment?.length >= commentMinLength
   const isDisabled = useBoolean(false)
   const actions = [
     {
@@ -25,7 +25,7 @@ export function useActions(
       disabledFocusable: !isCommentValid || isDisabled.value,
       title: isCommentValid
         ? strings.CheckpointNotRelevantTooltip
-        : strings.CheckpointNotRelevantTooltipCommentEmpty,
+        : format(strings.CheckpointNotRelevantTooltipCommentEmpty, commentMinLength),
       onClick: () => {
         isDisabled.setTrue()
         void onNextChecklistItem(strings.StatusNotRelevant).then(isDisabled.setFalse)
@@ -37,7 +37,7 @@ export function useActions(
       disabledFocusable: !isCommentValid || isDisabled.value,
       title: isCommentValid
         ? strings.CheckpointStillOpenTooltip
-        : strings.CheckpointStillOpenTooltipCommentEmpty,
+        : format(strings.CheckpointStillOpenTooltipCommentEmpty, commentMinLength),
       onClick: () => {
         isDisabled.setTrue()
         void onNextChecklistItem(strings.StatusStillOpen).then(isDisabled.setFalse)
