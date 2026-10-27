@@ -26,8 +26,13 @@ export const baseURL = configuredBaseURL.replace(/\/+$/, '') + '/'
 export default defineConfig({
   testDir: './tests',
   // tests/local/* load a solution's local bundle through SPFx's debug manifests and need a dev
-  // server; they run only when asked for (E2E_LOCAL_BUNDLE=1), never in CI.
-  testIgnore: process.env.E2E_LOCAL_BUNDLE ? [] : ['**/local/**'],
+  // server; they run only when asked for (E2E_LOCAL_BUNDLE=1), never in CI. tests/diagnostics/*
+  // measure SharePoint for a report to Microsoft and take half an hour or more; they too run only
+  // when asked for (E2E_PLACEHOLDER_DIAGNOSTICS=1), never in CI.
+  testIgnore: [
+    ...(process.env.E2E_LOCAL_BUNDLE ? [] : ['**/local/**']),
+    ...(process.env.E2E_PLACEHOLDER_DIAGNOSTICS ? [] : ['**/diagnostics/**'])
+  ],
   // SharePoint pages are slow to settle; one retry in CI absorbs transient throttling without
   // hiding a real regression (a test that only passes on retry is reported as "flaky").
   retries: process.env.CI ? 1 : 0,

@@ -20,6 +20,7 @@ import {
   IGitHubRelease,
   InstallationEntry
 } from './types'
+import { PlaceholderTrace, tracePlaceholders } from './placeholderTrace'
 import strings from 'PortfolioExtensionsStrings'
 
 export default class FooterApplicationCustomizer extends BaseApplicationCustomizer<IFooterApplicationCustomizerProperties> {
@@ -33,11 +34,15 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   private _showFooter: boolean
   private _minimizeFooter: boolean
   private _globalSettings: Map<string, string>
+  /** Writes the placeholder trace when it is on (sp-dev-docs#11070), and nothing otherwise. */
+  private _trace: PlaceholderTrace = () => undefined
 
   /**
    * Initializes the settings and data required for the visible footer.
    */
   public async onInit(): Promise<void> {
+    // First, so the trace sees what SharePoint does during the set-up below.
+    this._trace = tracePlaceholders(this.context)
     await super.onInit()
     await SPDataAdapter.configure(this.context, {})
     this._portalDataService = SPDataAdapter.portalDataService
@@ -70,6 +75,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     ])
     this._installEntries = installEntries
     this._hasAssistantAccess = hasAssistantAccess
+    this._trace('setUp')
     this.context.application.navigatedEvent.add(this, this._handleNavigatedEvent)
     // On a list page SharePoint may define its placeholders after the footer has started, and
     // the first navigation may have come and gone: the footer showed on few loads there. It
@@ -330,6 +336,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       this._bottomPlaceholder = this.context.placeholderProvider.tryCreateContent(name, {
         onDispose: () => this._onDispose()
       })
+      this._trace('tryCreateContent', { acquired: !!this._bottomPlaceholder })
     }
     // SharePoint has no placeholder for it yet: its changed event renders it.
     if (!this._bottomPlaceholder) return

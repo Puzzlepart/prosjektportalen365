@@ -67,3 +67,29 @@ and program pages are on the test channel), or the page never asks the dev serve
 `node ../.tasks/modifySolutionFiles.js --force` first (and `--revert` after), with `SERVE_CHANNEL=test`
 in the solution's `.env`. Setting the variables in the `.env` files works in every shell; a
 `VAR=value command` prefix works only in bash and zsh.
+
+## Measuring the footer's placeholders on list pages
+
+On some loads of a list page SharePoint never defines its placeholders, and the footer, an
+application customizer, has nowhere to render (SharePoint/sp-dev-docs#11070).
+`tests/diagnostics/placeholders.spec.ts` measures how often, and keeps the logs Microsoft asked
+for. It loads a custom list on the hub and the project's document library 20 times each
+(`PLACEHOLDER_LOADS`), in one browser context (a warm cache) and in a fresh context for each load
+(a cold cache), with the footer's placeholder trace on. It asserts nothing, takes half an hour or
+more, and never runs in CI:
+
+```bash
+cd e2e && npx playwright test tests/diagnostics   # with E2E_PLACEHOLDER_DIAGNOSTICS=1 in e2e/.env
+```
+
+The results go to `e2e/placeholder-diagnostics/<time>/`, which git ignores. `summary.md` holds the
+counts, and the trace of each load where the footer did not show. Next to it are each page and
+cache's loads as JSON. `logs/` holds the console of those loads, and of the first load with the
+footer for comparison. The tenant's name, the sites' paths, e-mail addresses and tokens are
+replaced; read the files before you share them all the same.
+
+The trace is in the footer itself (PortfolioExtensions, `src/extensions/footer/placeholderTrace.ts`),
+so it needs a deployed build that has it. In a browser of your own, run
+`localStorage.setItem('pp365.debug.placeholders', '1')` in DevTools on the site, open the list in
+new tabs, and read the console lines that start with `[pp365 placeholders]`.
+`localStorage.removeItem('pp365.debug.placeholders')` turns it off again.

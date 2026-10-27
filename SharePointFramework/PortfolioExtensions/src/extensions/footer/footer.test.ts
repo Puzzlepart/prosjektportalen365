@@ -29,6 +29,7 @@ import { ProjectAdminPermission } from 'pp365-shared-library'
 import resource from 'SharedResources'
 import FooterApplicationCustomizer from '.'
 import { HelpContentModel, InstallationEntry } from './types'
+import { PLACEHOLDER_TRACE_KEY, PLACEHOLDER_TRACE_PREFIX } from './placeholderTrace'
 
 const HUB = 'https://contoso.sharepoint.com/sites/pp365'
 const PROJECT = 'https://contoso.sharepoint.com/sites/frisbee'
@@ -95,6 +96,7 @@ async function footerCustomizer(portal = portalDataService(), { onHub = true } =
       }
     },
     placeholderProvider: {
+      placeholderNames: [PlaceholderName.Top, PlaceholderName.Bottom],
       tryCreateContent: jest.fn(() => placeholder),
       changedEvent: { add: jest.fn() }
     }
@@ -208,6 +210,25 @@ describe('FooterApplicationCustomizer', () => {
     })
     expect(rendered.props).toMatchObject({ portalUrl: HUB, showFooter: true })
     expect(placeholder.domElement.childNodes).toHaveLength(1)
+  })
+
+  it('traces the placeholders from the first line of onInit when asked to (sp-dev-docs#11070)', async () => {
+    window.sessionStorage.setItem(PLACEHOLDER_TRACE_KEY, '1')
+    const info = jest.spyOn(console, 'info').mockImplementation(() => undefined)
+    try {
+      await footerCustomizer()
+      const lines = info.mock.calls
+        .filter(([prefix]) => prefix === PLACEHOLDER_TRACE_PREFIX)
+        .map(([, json]) => JSON.parse(json))
+      expect(lines).toEqual([
+        expect.objectContaining({ step: 'onInit', placeholderNames: ['Top', 'Bottom'] }),
+        expect.objectContaining({ step: 'setUp' }),
+        expect.objectContaining({ step: 'tryCreateContent', acquired: true })
+      ])
+    } finally {
+      info.mockRestore()
+      window.sessionStorage.removeItem(PLACEHOLDER_TRACE_KEY)
+    }
   })
 
   it('keeps one footer mounted across navigations, and unmounts it with its placeholder', async () => {
