@@ -47,7 +47,7 @@ if ($null -eq $field) {
 # The list's item content type is "Element" on a Norwegian site and "Item" on an English one, so
 # pick it by its id (0x0100 is Item) instead of its name.
 Get-PnPContentType -List $listName -ErrorAction SilentlyContinue | Where-Object { $_.Id.StringValue -like "0x0100*" } | ForEach-Object {
-  $newfieldct = Add-PnPFieldToContentType -Field $fieldName -ContentType $_.Name -ErrorAction SilentlyContinue
+  $newfieldct = Add-PnPFieldToContentType -Field $field -ContentType $_ -ErrorAction SilentlyContinue
 }
 
 $defaultValue = Get-Resource -Name "Lists_ProjectAdminRoles_SPAdmin"
