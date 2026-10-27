@@ -1,4 +1,5 @@
 import { ApplicationCustomizerContext, PlaceholderName } from '@microsoft/sp-application-base'
+import { ISPEventObserver } from '@microsoft/sp-core-library'
 
 /**
  * Turns the footer's placeholder trace on: `'1'` under this key in `sessionStorage` or
@@ -39,13 +40,19 @@ function placeholderNames(context: ApplicationCustomizerContext): string[] {
  * `onInit`, before the footer's own set-up and before React, it logs the placeholder names and
  * whether SharePoint's bottom placeholder element is in the page: as it starts, on every change
  * of the placeholders and every navigation, and at each step the footer reports, with the
- * milliseconds since the page began to load. Off unless `PLACEHOLDER_TRACE_KEY` is set, and then
- * it subscribes to nothing and its trace writes nothing.
+ * milliseconds since the page began to load. Both events are sticky in SPFx: one SharePoint raised
+ * before the trace started is replayed as the trace subscribes, right after its first line. Off
+ * unless `PLACEHOLDER_TRACE_KEY` is set, and then it subscribes to nothing and its trace writes
+ * nothing.
  *
+ * @param observer The customizer, which SPFx's events take as the observer of a handler
  * @param context The customizer's context
  * @returns The function that writes a step of the trace
  */
-export function tracePlaceholders(context: ApplicationCustomizerContext): PlaceholderTrace {
+export function tracePlaceholders(
+  observer: ISPEventObserver,
+  context: ApplicationCustomizerContext
+): PlaceholderTrace {
   if (!isTraceOn()) return () => undefined
   const trace: PlaceholderTrace = (step, details = {}) => {
     const line = {
@@ -60,10 +67,9 @@ export function tracePlaceholders(context: ApplicationCustomizerContext): Placeh
     // eslint-disable-next-line no-console -- the trace is meant for the console
     console.info(PLACEHOLDER_TRACE_PREFIX, JSON.stringify(line))
   }
-  // An observer of its own, so the trace's handlers stay apart from the footer's.
-  const observer = {}
+  trace('onInit')
+  // SPFx keeps a list of handlers per event, so these sit beside the footer's own.
   context.placeholderProvider.changedEvent.add(observer, () => trace('changedEvent'))
   context.application.navigatedEvent.add(observer, () => trace('navigatedEvent'))
-  trace('onInit')
   return trace
 }

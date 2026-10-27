@@ -42,7 +42,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
    */
   public async onInit(): Promise<void> {
     // First, so the trace sees what SharePoint does during the set-up below.
-    this._trace = tracePlaceholders(this.context)
+    this._trace = tracePlaceholders(this, this.context)
     await super.onInit()
     await SPDataAdapter.configure(this.context, {})
     this._portalDataService = SPDataAdapter.portalDataService
