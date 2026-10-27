@@ -1,3 +1,4 @@
+import { Locator } from '@playwright/test'
 import { readFileSync } from 'node:fs'
 import { baseURL } from '../../playwright.config'
 import { scanAccessibility, SURFACES } from '../fixtures/a11y'
@@ -183,9 +184,7 @@ test.describe('portfolio hub', () => {
     // The filter panel's own root has no box, so the visible proof is its heading.
     // The level is deliberately not asserted: it is the panel implementation's
     // choice (v8 rendered an h1, the v9 drawer renders an h2) and not a contract.
-    const panelHeading = page
-      .getByRole('dialog')
-      .getByRole('heading', { name: /^filtr|^filter/i })
+    const panelHeading = page.getByRole('dialog').getByRole('heading', { name: /^filtr|^filter/i })
     await expect(panelHeading).toBeVisible()
     await page.keyboard.press('Escape')
     await expect(panelHeading).toBeHidden({ timeout: 10_000 })
@@ -219,10 +218,61 @@ test.describe('portfolio hub', () => {
     await expect(details).toBeVisible()
     // The details take the focus, link or none, so a screen reader hears them open.
     await expect(details, 'the details take the focus as they open').toBeFocused()
-    await scanAccessibility(page, { component: 'TimelineDetailsPopover', include: [SURFACES.popover] })
+    await scanAccessibility(page, {
+      component: 'TimelineDetailsPopover',
+      include: [SURFACES.popover]
+    })
     await page.keyboard.press('Escape')
     await expect(details).toBeHidden()
     await expect(item).toBeFocused()
+  })
+
+  test('the merged view, where the overview offers it, reads every hub (#1788)', async ({
+    page,
+    openPage,
+    resolvePage
+  }) => {
+    test.setTimeout(180_000)
+    await openPage(await resolvePage(hub, PAGES.overview))
+    const overview = page.locator(WEB_PART).first()
+    await expect(overview.getByRole('columnheader').first()).toBeVisible({ timeout: 60_000 })
+    // «Vis alle hubber» is in the portfolio selector when the web part has several portfolios,
+    // or in the view selector when it is set to show it there.
+    const selectors = [
+      overview.getByRole('button', { name: /velg en portefølje|select the portfolio/i }),
+      overview.getByRole('button', { name: /porteføljevisninger|portfolio views/i })
+    ]
+    const merged = /^vis alle hubber$|^show all hubs$/i
+    let opener: Locator | undefined
+    for (const selector of selectors) {
+      if ((await selector.count()) === 0) continue
+      await selector.click()
+      const menu = page.locator(SURFACES.menu).last()
+      await expect(menu).toBeVisible()
+      if ((await menu.getByRole('menuitem', { name: merged }).count()) > 0) {
+        opener = selector
+        break
+      }
+      await page.keyboard.press('Escape')
+      await expect(menu).toBeHidden()
+    }
+    test.skip(
+      !opener,
+      'the overview offers no merged view: one portfolio, or the view selector is not set to show it'
+    )
+    await page.locator(SURFACES.menu).last().getByRole('menuitem', { name: merged }).click()
+    // The selector says what shows, and the list is read again.
+    await expect(opener!).toHaveAccessibleName(/vis alle hubber|show all hubs/i)
+    await expect(overview.locator('[class*="resultsCount"]').first()).toHaveText(
+      /viser [1-9]\d* av \d+|showing [1-9]\d* of \d+/i,
+      { timeout: 60_000 }
+    )
+    // Every hub was read: a hub that could not be is told above the list, where it used to be
+    // left out in silence.
+    await expect(
+      overview.getByText(/ikke alle hubber kunne hentes|not every hub could be read/i),
+      'a hub of the merged view could not be read'
+    ).toHaveCount(0)
   })
 
   test('benefit overview page loads', async ({ page, openPage, resolvePage }) => {
@@ -236,9 +286,7 @@ test.describe('portfolio hub', () => {
     // The filter panel's own root has no box, so the visible proof is its heading.
     // The level is deliberately not asserted: it is the panel implementation's
     // choice (v8 rendered an h1, the v9 drawer renders an h2) and not a contract.
-    const panelHeading = page
-      .getByRole('dialog')
-      .getByRole('heading', { name: /^filtr|^filter/i })
+    const panelHeading = page.getByRole('dialog').getByRole('heading', { name: /^filtr|^filter/i })
     await expect(panelHeading).toBeVisible()
     await page.keyboard.press('Escape')
     await expect(panelHeading).toBeHidden({ timeout: 10_000 })

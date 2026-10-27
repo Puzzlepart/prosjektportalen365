@@ -218,7 +218,8 @@ checked by hand and with which reader and browser: axe finds only part of what W
   (reading 'useContext')" and nothing shows (7 of 10 cold loads of a document library on
   2026-10-21; rare with a warm cache, so CI's fresh contexts meet it far more than people do).
   Not ours: the bundles hold no React of their own. Reported as SharePoint/sp-dev-docs#11068
-  with the traces; check again on SPFx 1.24 GA.
+  with the traces; check again on SPFx 1.24 GA. The e2e suite's `onListPage` loads a list page
+  once more when it strikes: the CI retry starts a cold context again.
 - Spreading a data object onto a Fluent component passes its every key as a prop: the project
   list's people carried `role` (the field's internal name) from the data adapter, and every
   `Avatar` got `role="GtProjectManager"`, axe's critical `aria-roles` 36 times; the idea

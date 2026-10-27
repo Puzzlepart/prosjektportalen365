@@ -7,6 +7,8 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderOptionCalculated: string
   PortfolioSelectorLabel: string
   MergedViewLabel: string
+  MergedViewHubFailedTitle: string
+  MergedViewHubFailedText: string
   PortfoliosFieldDescription: string
   SelectedPortfolioDescription: string
   ShowPortfolioSelectorDescription: string

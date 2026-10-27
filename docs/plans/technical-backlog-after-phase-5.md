@@ -386,3 +386,35 @@ names a skipped job by its unevaluated `name:` expression, which the branch prot
 offered and which was picked, a check no pull request reports. The rule for `releases/1.15` is to
 require «Build release package (pull request)», in a rule for that exact name, since the branches
 up to 1.14 that `releases/1.1*` also covers run no workflow on a pull request.
+
+### After the merge of #1793 — the data across hubs (2026-10-22)
+
+What the review of the test gaps found in the two places the solution reads from several hubs,
+with the user's choice to fix all three and cover them.
+
+- **The program administration without `AvailableProgramHubs`.** The hubs came from the global
+  setting alone: a row emptied or disabled left `programHubs` undefined, the list empty and the
+  add dialog empty, with no word of why, although `GtChildProjects` held projects. The template
+  seeds the hub's own URL and `PostInstallUpgrade.ps1` keeps the row, so only an administrator's
+  hand got there. The hook falls back to the program's own hub (`portalDataService.url`);
+  `useProgramAdministration.test.tsx` covers the setting read, the fallback and a hub that cannot
+  be resolved.
+- **The merged view.** `fetchMergedViewData` swallowed a hub that failed with `console.error` and
+  showed the list without it, and reused one adapter for every other portfolio, whose `configure`
+  returns the first hub it was given: from the third portfolio on, the rows were the second's
+  under the third's name. The fetch is now `data/mergedViewData.ts`, pure and tested (the
+  `DepartmentId` swap, the merge with hub metadata and the dedupe, the orchestration with a
+  failing hub); the adapter makes a fresh `DataAdapter` per portfolio and names the hubs that
+  failed in `failedPortfolios`, which the reducer keeps as `mergedViewFailures` and the overview
+  tells above the list in a warning (`MergedViewHubFailedTitle`/`Text`). No test imports the
+  adapter: its 34 untested methods would have pulled the functions floor down (pp365-testing).
+- **Several hubs in integration and E2E.** The test program spans two hubs (the hub-group tests of
+  `program-administration.spec.ts` ran, not skipped, in run 39615813511), yet neither suite knew a
+  second hub. `INTEGRATION_SECOND_HUB_URL` (a repository variable, one of the hubs
+  `AvailableProgramHubs` names) and `tests/multi-hub.test.ts`: the hubs the setting names resolve,
+  a second hub is read as the merged view reads one (its own views and columns, its sites by
+  `DepartmentId`), and one search finds sites in every hub as the program administration's does.
+  `portfolio.spec.ts` chooses «Vis alle hubber» where the overview offers it and expects no hub
+  told as unread, skipping with the reason where it does not.
+- **Left:** `addChildProjects`' writes to another hub are covered only by the browser flow that
+  adds a removed project back; the integration harness writes to the reserved project alone.

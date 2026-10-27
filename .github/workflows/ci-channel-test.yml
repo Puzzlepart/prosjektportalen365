@@ -298,6 +298,7 @@ jobs:
       INTEGRATION_HUB_URL: ${{ vars.SP_URL_TEST }}
       INTEGRATION_PROGRAM_URL: ${{ vars.E2E_PROGRAM_URL }}
       INTEGRATION_PROJECT_URL: ${{ vars.INTEGRATION_PROJECT_URL }}
+      INTEGRATION_SECOND_HUB_URL: ${{ vars.INTEGRATION_SECOND_HUB_URL }}
       INTEGRATION_USER: ${{ secrets.E2E_USERNAME }}
       # A missing variable or secret fails the job: skipped whole, the suite would pass untested.
       INTEGRATION_STRICT: 'true'

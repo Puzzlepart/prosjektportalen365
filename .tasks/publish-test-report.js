@@ -152,6 +152,43 @@ function dropOversizedFiles(dir, warn) {
 }
 
 /**
+ * The tag every page of the site carries at its bottom right: the reports hold the test tenant's
+ * pages and, in the traces, the test user's session, so they are for Puzzlepart only. Styled
+ * inline, since it goes into Playwright's report and the integration report as well as the front
+ * page, white on red at 7:1, and clicks pass through it to what lies under it.
+ */
+const INTERNAL_TAG =
+    '<div data-pp365-internal role="note" style="position:fixed;right:16px;bottom:16px;z-index:2147483647;' +
+    'pointer-events:none;padding:4px 10px;border-radius:12px;background:#a4262c;color:#fff;' +
+    "font:600 12px/1.5 system-ui,-apple-system,'Segoe UI',sans-serif;box-shadow:0 1px 4px rgba(0,0,0,.3)\">" +
+    'Internal only</div>'
+
+/**
+ * Puts the internal tag into a page once: before its last closing body tag, since Playwright's
+ * report is one page of scripts where an earlier one can be inside a script, or at its end.
+ *
+ * @param {string} html
+ */
+function markInternal(html) {
+    if (html.includes('data-pp365-internal')) return html
+    const at = html.toLowerCase().lastIndexOf('</body>')
+    return at === -1 ? html + INTERNAL_TAG : html.slice(0, at) + INTERNAL_TAG + html.slice(at)
+}
+
+/** Tags every report on the site as internal only, those published before the tag too. */
+function markReports(siteDir) {
+    for (const { suites } of listRuns(siteDir)) {
+        for (const { entry } of Object.values(suites)) {
+            const file = path.join(siteDir, entry)
+            if (!fs.existsSync(file)) continue
+            const html = fs.readFileSync(file, 'utf8')
+            const marked = markInternal(html)
+            if (marked !== html) fs.writeFileSync(file, marked)
+        }
+    }
+}
+
+/**
  * Adds a suite's report to a checked-out site, drops what is too old or too much, and rebuilds the
  * index. The current run is never dropped.
  *
@@ -181,6 +218,7 @@ function addReport(
     const meta = { suite, outcome, counts, publishedAt: now.toISOString(), entry, run }
     fs.writeFileSync(path.join(runDir, `${suite}.json`), JSON.stringify(meta, null, 2) + '\n')
     prune(siteDir, run.key, now, maxSiteBytes, warn)
+    markReports(siteDir)
     fs.writeFileSync(path.join(siteDir, '.nojekyll'), '')
     fs.writeFileSync(path.join(siteDir, 'index.html'), renderIndex(listRuns(siteDir), now))
     return entry
@@ -330,6 +368,7 @@ ${rows || `<tr><td colspan="${2 + Object.keys(SUITES).length}" class="none">No r
 </tbody>
 </table></div>
 </main>
+${INTERNAL_TAG}
 </body>
 </html>
 `
@@ -362,6 +401,20 @@ async function fetchWithRetry(fetchImpl, url, init = {}) {
     throw lastError
 }
 
+/**
+ * Whether a URL is GitHub's sign-in, where a private Pages site sends an anonymous visitor.
+ *
+ * @param {string | undefined} url
+ */
+function isGitHubSignIn(url) {
+    try {
+        const { hostname, pathname } = new URL(url)
+        return hostname === 'github.com' && (pathname === '/login' || pathname.startsWith('/pages/auth'))
+    } catch {
+        return false
+    }
+}
+
 /** Headers for api.github.com: the job's token, when there is one, lifts the anonymous rate limit. */
 function apiHeaders(env) {
     return { accept: 'application/vnd.github+json', ...(env.GITHUB_TOKEN ? { authorization: `Bearer ${env.GITHUB_TOKEN}` } : {}) }
@@ -373,8 +426,11 @@ function apiHeaders(env) {
  * private Puzzlepart repository with Pages was public on 2026-10-14), and any admin of the
  * repository can switch it back, so this is checked on every publish rather than trusted:
  * the site repository is not public (this job's token sees no other private repository: 404),
- * the repository's public Pages address serves nothing, and the site's own address answers an
- * anonymous request with no content (a private site redirects to GitHub's sign-in).
+ * the repository's public Pages address serves nothing without a sign-in, and the site's own
+ * address answers an anonymous request with no content (a private site redirects to GitHub's
+ * sign-in). A private site's public address redirects to the site's own address and on to the
+ * sign-in, a page that answers 200, so where the redirects end decides, not the last status: the
+ * first private site was refused for it on 2026-10-26.
  *
  * @param {NodeJS.ProcessEnv} env TEST_REPORTS_REPOSITORY, TEST_REPORTS_URL, GITHUB_TOKEN
  * @param {typeof fetch} [fetchImpl]
@@ -388,7 +444,8 @@ async function assertSitePrivate(env, fetchImpl = fetch) {
     if (repo.ok) refuse(`${env.TEST_REPORTS_REPOSITORY} is a public repository.`)
     if (repo.status !== 404) refuse(`Whether ${env.TEST_REPORTS_REPOSITORY} is private could not be checked (${repo.status}).`)
     const publicSite = `https://${owner.toLowerCase()}.github.io/${name}/`
-    if ((await fetchWithRetry(fetchImpl, publicSite, { redirect: 'follow' })).ok) {
+    const atPublicSite = await fetchWithRetry(fetchImpl, publicSite, { redirect: 'follow' })
+    if (atPublicSite.ok && !isGitHubSignIn(atPublicSite.url)) {
         refuse(`The site is public at ${publicSite}: set its Pages visibility to Private.`)
     }
     const site = await fetchWithRetry(fetchImpl, env.TEST_REPORTS_URL.replace(/\/+$/, '') + '/', { redirect: 'manual' })

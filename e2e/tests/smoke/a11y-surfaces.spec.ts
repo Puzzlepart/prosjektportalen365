@@ -4,10 +4,10 @@ import { scanAccessibility, SURFACES, waitForContent } from '../fixtures/a11y'
 import {
   configuredUrl,
   expect,
+  onListPage,
   test,
   WEB_PART,
-  webPartByAlias,
-  withNetworkRetry
+  webPartByAlias
 } from '../fixtures/pp365'
 import { restGet } from '../fixtures/rest'
 
@@ -36,6 +36,24 @@ interface IOpenSurface {
 }
 
 /**
+ * Where the focus is, for a failure message: inside the surface or outside it, and on what. The
+ * CI artifact holds no traces, so a failed Escape has to say this itself (the footer's useful
+ * links stayed open once in run 40377546556, with the links loaded and the scan done).
+ *
+ * @param surface The open surface
+ */
+async function focusAgainst(surface: Locator) {
+  return surface.evaluate((element) => {
+    const active = document.activeElement
+    if (!active || active === document.body) return 'on the page itself'
+    const role = active.getAttribute('role')
+    const name = (active.getAttribute('aria-label') ?? active.textContent ?? '').trim().slice(0, 40)
+    const what = `${active.tagName.toLowerCase()}${role ? ` (${role})` : ''} «${name}»`
+    return `${element.contains(active) ? 'inside it' : 'outside it'}, on ${what}`
+  })
+}
+
+/**
  * Scans the surface just opened, closes it with Escape and checks where the focus went. Escape
  * that leaves the surface open and focus that does not come back fail the test at its end, so
  * one run reports every surface; a surface Escape did not close is closed from inside it.
@@ -48,12 +66,13 @@ async function scanAndClose(page: Page, { component, surface, exclude, focusBack
   await expect(opened, `${component} opens`).toBeVisible({ timeout: 30_000 })
   await waitForContent(page, [surface], 15_000)
   await scanAccessibility(page, { component, include: [surface], exclude })
+  const focus = await focusAgainst(opened)
   await page.keyboard.press('Escape')
   const closed = await opened.waitFor({ state: 'hidden', timeout: 10_000 }).then(
     () => true,
     () => false
   )
-  expect.soft(closed, `Escape closes ${component}`).toBe(true)
+  expect.soft(closed, `Escape closes ${component} (the focus was ${focus})`).toBe(true)
   if (!closed) {
     await opened.locator('a, button, [role^="menuitem"]').first().focus()
     await page.keyboard.press('Escape')
@@ -346,6 +365,9 @@ test.describe('the footer', () => {
 test.describe('the template package catalog', () => {
   test('the catalog and a package', async ({ page, consoleGuard }) => {
     void consoleGuard
+    // Room for a second load of the list, when SharePoint's React fault struck the first (run
+    // 40377546556).
+    test.setTimeout(240_000)
     const response = await restGet(
       page,
       `${hub}/_api/web/lists?$select=Title,RootFolder/ServerRelativeUrl&$expand=RootFolder&$top=500`
@@ -359,39 +381,36 @@ test.describe('the template package catalog', () => {
       /\/lists\/(maloppsett|templateoptions)$/i.test(l.RootFolder.ServerRelativeUrl)
     )
     test.skip(!list, 'the hub has no template options list')
-    await withNetworkRetry(() =>
-      page.goto(`${new URL(hub).origin}${list!.RootFolder.ServerRelativeUrl}/AllItems.aspx`, {
-        timeout: 90_000
-      })
-    )
-    await expect(
-      page.locator('[data-automationid="CommandBar"], [role="menubar"]').first()
-    ).toBeVisible(MOUNT)
     const name = /^malpakkekatalog$|^template package catalog$/i
-    let command = page
-      .getByRole('menuitem', { name })
-      .or(page.getByRole('button', { name }))
-      .first()
-    // The command set adds its command once it has checked the user's permissions.
-    await command.waitFor({ timeout: 15_000 }).catch(() => undefined)
-    // Where the focus goes back to: the command, or SharePoint's "Mer" when the command is in
-    // its menu.
-    let opener = command
-    if (!(await command.isVisible())) {
-      opener = page.getByRole('menuitem', { name: /^mer$|^more$/i }).first()
-      await opener.click()
-      command = page.getByRole('menuitem', { name }).first()
-    }
-    await expect(command, 'the catalog command is offered to an admin').toBeVisible({
-      timeout: 30_000
-    })
-    await command.click()
     // By its role and name, which only a catalog screen readers can find has: opened from "Mer",
     // SharePoint hid it from them (aria-hidden, 2026-10-19).
-    const catalog = page.getByRole('dialog', {
-      name: /^malpakkekatalog$|^template package catalog$/i
+    const catalog = page.getByRole('dialog', { name })
+    const listUrl = `${new URL(hub).origin}${list!.RootFolder.ServerRelativeUrl}/AllItems.aspx`
+    // Where the focus goes back to: the command, or SharePoint's "Mer" when the command is in its
+    // menu.
+    const opener = await onListPage(page, listUrl, async () => {
+      await expect(
+        page.locator('[data-automationid="CommandBar"], [role="menubar"]').first()
+      ).toBeVisible(MOUNT)
+      let command = page
+        .getByRole('menuitem', { name })
+        .or(page.getByRole('button', { name }))
+        .first()
+      // The command set adds its command once it has checked the user's permissions.
+      await command.waitFor({ timeout: 15_000 }).catch(() => undefined)
+      let trigger = command
+      if (!(await command.isVisible())) {
+        trigger = page.getByRole('menuitem', { name: /^mer$|^more$/i }).first()
+        await trigger.click()
+        command = page.getByRole('menuitem', { name }).first()
+      }
+      await expect(command, 'the catalog command is offered to an admin').toBeVisible({
+        timeout: 30_000
+      })
+      await command.click()
+      await expect(catalog).toBeVisible({ timeout: 30_000 })
+      return trigger
     })
-    await expect(catalog).toBeVisible({ timeout: 30_000 })
     // Each package is a card, a button named by the package, in a cell of the catalog's list.
     await expect(catalog.getByRole('listitem').getByRole('button').first()).toBeVisible(MOUNT)
     // The first package is chosen as the catalog opens, its details beside the list (its name a

@@ -111,6 +111,7 @@ commit subject skips it. `tests/html-reporter.test.ts` tests the reporter offlin
 | `SP_URL_TEST` | variable | `INTEGRATION_HUB_URL` |
 | `E2E_PROGRAM_URL` | variable | `INTEGRATION_PROGRAM_URL` |
 | `INTEGRATION_PROJECT_URL` | variable | `INTEGRATION_PROJECT_URL`, the project reserved for these tests |
+| `INTEGRATION_SECOND_HUB_URL` | variable | `INTEGRATION_SECOND_HUB_URL`, a second hub `AvailableProgramHubs` names, read only (`tests/multi-hub.test.ts`) |
 | `E2E_USERNAME` | secret | `INTEGRATION_USER` |
 | `CI_CERT_BASE64`, `CI_CLIENT_ID`, `CI_TENANT` | secrets | The certificate sign-in, from the workflow's `env` |
 

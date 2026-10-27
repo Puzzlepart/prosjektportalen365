@@ -73,6 +73,8 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         state.columns = payload.currentView.columns
         state.managedProperties = payload.managedProperties ?? []
         state.isUserInPortfolioManagerGroup = payload.isUserInPortfolioManagerGroup
+        // The hubs a merged view could not read, told above the list.
+        state.mergedViewFailures = (payload.failedPortfolios ?? []).map((p) => p.title)
         state.showChildProjectInfoInProgram = payload.showChildProjectInfoInProgram
         state.loading = false
         state.error = null

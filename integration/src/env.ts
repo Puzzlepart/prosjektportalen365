@@ -44,6 +44,8 @@ export const env = {
   hubUrl: configured('INTEGRATION_HUB_URL'),
   programUrl: configured('INTEGRATION_PROGRAM_URL'),
   projectUrl: configured('INTEGRATION_PROJECT_URL'),
+  /** A second hub the program administration and the merged view read from, read only. */
+  secondHubUrl: configured('INTEGRATION_SECOND_HUB_URL'),
   /** The language of the string bundles the library loads, as SPFx names them (`nb-no`). */
   locale: (configured('INTEGRATION_LOCALE') ?? 'nb-no').toLowerCase(),
   /** The user an app-only run acts for where the library asks for one. */
@@ -88,12 +90,13 @@ export function authMode(): AuthMode | undefined {
  * @param sites The sites the test needs
  */
 export function skipReason(
-  ...sites: Array<'hubUrl' | 'programUrl' | 'projectUrl'>
+  ...sites: Array<'hubUrl' | 'programUrl' | 'projectUrl' | 'secondHubUrl'>
 ): string | undefined {
   const variables = {
     hubUrl: 'INTEGRATION_HUB_URL',
     programUrl: 'INTEGRATION_PROGRAM_URL',
-    projectUrl: 'INTEGRATION_PROJECT_URL'
+    projectUrl: 'INTEGRATION_PROJECT_URL',
+    secondHubUrl: 'INTEGRATION_SECOND_HUB_URL'
   }
   const missing = sites.filter((site) => !env[site]).map((site) => variables[site])
   const reason = !authMode()

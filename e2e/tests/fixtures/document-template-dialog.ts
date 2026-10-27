@@ -34,15 +34,8 @@ export async function findDocumentLibrary(page: import('@playwright/test').Page,
 
 /**
  * Runs the command from the library's command bar, or from its "Mer" overflow when the bar is narrow.
- *
- * Known flake on list pages (SPFx 1.24.0-rc.0, SharePoint's fault): with a cold browser cache, as
- * each test's fresh context has, SharePoint often runs its list view host
- * (`listview-host-assembly`) twice, and each run registers SPFx's React module. When
- * `react-dom-18-bundle` registers between the two, it and our extensions hold different React
- * instances, so their first hook throws "Cannot read properties of null (reading 'useContext')"
- * and nothing opens: 7 of 10 cold loads of a document library on 2026-10-21, rare with a warm
- * cache. The CI retry usually passes. Reported as SharePoint/sp-dev-docs#11068 with the traces;
- * check again on SPFx 1.24 GA.
+ * Open the library with `onListPage`, which loads it once more when SharePoint's React fault on
+ * list pages left the dialog unrendered.
  */
 export async function openDocumentTemplateDialog(page: import('@playwright/test').Page) {
   await expect(

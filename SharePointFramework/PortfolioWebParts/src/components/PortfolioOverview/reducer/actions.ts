@@ -7,6 +7,7 @@ import {
 } from 'pp365-shared-library/lib/models'
 import { OnColumnContextMenu } from '../../List'
 import { IColumnFormPanel } from '../ColumnFormPanel/types'
+import { PortfolioInstance } from 'data'
 
 /**
  * `STARTING_DATA_FETCH`: Action dispatched when data fetch is started
@@ -23,6 +24,8 @@ export const DATA_FETCHED = createAction<{
   managedProperties: string[]
   isUserInPortfolioManagerGroup: boolean
   showChildProjectInfoInProgram: boolean
+  /** The portfolios a merged view could not read. */
+  failedPortfolios?: PortfolioInstance[]
 }>('DATA_FETCHED')
 
 /**

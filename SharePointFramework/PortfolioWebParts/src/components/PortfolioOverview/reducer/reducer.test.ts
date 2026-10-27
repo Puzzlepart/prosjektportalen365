@@ -403,6 +403,23 @@ describe('PortfolioOverview reducer', () => {
     expect(next.showChildProjectInfoInProgram).toBe(true)
   })
 
+  it('keeps the titles of the hubs a merged view could not read, to be told above the list', () => {
+    const { reducer, state } = setup()
+    const next = reducer(
+      state,
+      DATA_FETCHED({
+        items: [],
+        currentView: view(),
+        groupBy: undefined,
+        failedPortfolios: [{ title: 'Hub B' }, { title: 'Hub C' }]
+      } as any)
+    )
+    expect(next.mergedViewFailures).toEqual(['Hub B', 'Hub C'])
+    // A fetch that read every hub clears them.
+    const read = reducer(next, DATA_FETCHED({ items: [], currentView: view() } as any))
+    expect(read.mergedViewFailures).toEqual([])
+  })
+
   it('keeps the grouping in the address when the view changes, and names no view when none was open', () => {
     window.history.replaceState(null, '', '/')
     const grouped = setup({ currentView: view(), groupBy: phase })

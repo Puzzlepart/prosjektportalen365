@@ -1395,8 +1395,8 @@ visual step), fixed in the same round:
     weighed and set aside, to keep the list as it is.
   - The full text is the tag's title, and a screen reader reads all of it.
 - **The taxonomy picker** (PnP's `ModernTaxonomyPicker`) has a button with no name, which is
-  PnP's. An issue for pnp/sp-dev-fx-controls-react is drafted. The button is still nameless in
-  their `main`.
+  PnP's. It is reported as pnp/sp-dev-fx-controls-react#2182 (2026-10-21). The button is still
+  nameless in their `dev` and in 3.25.0, their latest release (2026-10-26).
 - **Tests first.** Seen failing on the code before:
   - the chevron's name and its absence (2);
   - the submenu;
@@ -1596,3 +1596,16 @@ itself as `observer` to `add()` is disposed, as the footer does.
   inputs are all in the memo's dependencies), `ProjectSetupDialog`, `PlannerTaskItem`, `RecentNews`;
   the column forms share `lockedWhenEditing`.
 
+### The open ends after the last test runs (2026-10-26)
+
+- **sp-dev-docs#11068.** Microsoft could not reproduce the fault and consults internally
+  (2026-10-26), and the developer answered the same day. The issue still carries «Needs: Author
+  Feedback», so the repository's bot marks it stale after 7 days without activity and closes it
+  7 days later. What CI added that day: a field customizer struck too, on a newer list view host,
+  in 5 of 14 cold loads. The e2e suite's `onListPage` loads a list page once more when it
+  strikes, and did so in the first green run after it (40377546556).
+- **PnP's taxonomy button** is pnp/sp-dev-fx-controls-react#2182, unanswered. The tooltip's
+  hidden text gives the button a description, not a name.
+- **The list beside the timelines (#1789)** is in the 1.15.0 milestone, on the backlog until the
+  work starts. Its three questions need answers first: the list under the timeline or a view to
+  switch to, a property to turn it off, and the resource allocation's columns.

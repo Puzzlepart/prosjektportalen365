@@ -8,6 +8,9 @@ define([], function () {
     ColumnRenderOptionCalculated: 'Beregnet kolonne',
     PortfolioSelectorLabel: 'Portefølje',
     MergedViewLabel: 'Vis alle hubber',
+    MergedViewHubFailedTitle: 'Ikke alle hubber kunne hentes',
+    MergedViewHubFailedText:
+      'Prosjektene fra {0} vises ikke. Prøv igjen, eller sjekk tilgangen din der.',
     IconNameFieldLabel: 'Ikonnavn',
     IconNameFieldPlaceholder: 'Skriv inn et ikonnavn fra Fluent UI (f.eks. "Folder")',
     LanguageFieldLabel: 'Språk',

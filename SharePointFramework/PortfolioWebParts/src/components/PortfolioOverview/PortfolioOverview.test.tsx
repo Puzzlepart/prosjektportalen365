@@ -121,4 +121,23 @@ describe('PortfolioOverview', () => {
     expect(await screen.findByText(strings.ErrorTitle)).toBeInTheDocument()
     expect(screen.getByText(/Kilden svarte ikke/)).toBeInTheDocument()
   })
+
+  it('tells which hubs a merged view could not read, above the list (WCAG 3.3.1)', async () => {
+    // They were left out in silence: the list showed fewer projects with no word of why.
+    renderOverview(() =>
+      DATA_FETCHED({
+        items: [],
+        currentView: view,
+        groupBy: undefined,
+        managedProperties: [],
+        isUserInPortfolioManagerGroup: false,
+        showChildProjectInfoInProgram: false,
+        failedPortfolios: [{ title: 'Hub Bygg' }]
+      } as any)
+    )
+    expect(await screen.findByText(strings.MergedViewHubFailedTitle)).toBeInTheDocument()
+    expect(
+      screen.getByText(format(strings.MergedViewHubFailedText, 'Hub Bygg'))
+    ).toBeInTheDocument()
+  })
 })
