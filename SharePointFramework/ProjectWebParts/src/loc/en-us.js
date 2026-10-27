@@ -82,19 +82,20 @@ define([], function () {
     ChangePhaseText: 'Change to this phase',
     ChangingPhaseDescription: 'Changing phase to {0}',
     ChecklistCommentDescription:
-      'Comment is mandatory if the checkpoint is to be marked as "Not relevant" or "Still open".',
+      'A comment of at least {0} character(s) is mandatory if the checkpoint is to be marked as "Not applicable" or "Still open".',
     ChecklistCommentPlaceholder: 'Enter a comment...',
     CheckpointDoneTooltip: 'Checkpoint completed',
     CheckpointNotRelevantTooltip: 'Checkpoint is not relevant',
     CheckpointNotRelevantTooltipCommentEmpty:
-      "You cannot set the checkpoint as 'Not Relevant' without commenting.",
+      "You cannot set the checkpoint as 'Not applicable' without a comment of at least {0} character(s).",
     CheckPointsStatus: '{0} checkpoints: **{1}**',
     CheckpointStillOpenTooltip: 'Checkpoint is still open',
     CheckpointStillOpenTooltipCommentEmpty:
-      "You cannot set the checkpoint as 'Still open' without posting a comment.",
+      "You cannot set the checkpoint as 'Still open' without a comment of at least {0} character(s).",
     ChildProjectAdminLabel: 'Manage childprojects',
     CloseText: 'Close',
     CommentLabel: 'Comment',
+    CommentMinLengthFieldLabel: 'Minimum number of characters in checkpoint comment (0 = not required)',
     ConfigItemTitleFieldLabel: 'Element title (configuration)',
     ConfirmChangePhase: 'Do you want to change phase to {0}?',
     ConsequenceFieldNameFieldLabel: 'Field name - Consequence',
