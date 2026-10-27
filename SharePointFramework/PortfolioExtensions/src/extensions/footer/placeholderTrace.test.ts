@@ -12,12 +12,16 @@ function customizerContext(names: PlaceholderName[] = [PlaceholderName.Top]) {
     placeholderProvider: {
       placeholderNames: names,
       changedEvent: {
-        add: jest.fn((_observer: unknown, handler: () => void) => handlers.changed.push(handler))
+        add: jest.fn((_observer: unknown, handler: () => void) => {
+          handlers.changed.push(handler)
+        })
       }
     },
     application: {
       navigatedEvent: {
-        add: jest.fn((_observer: unknown, handler: () => void) => handlers.navigated.push(handler))
+        add: jest.fn((_observer: unknown, handler: () => void) => {
+          handlers.navigated.push(handler)
+        })
       }
     }
   }
@@ -47,7 +51,7 @@ afterEach(() => {
 describe('tracePlaceholders', () => {
   it('is off unless asked for: it subscribes to nothing and writes nothing', () => {
     const { context } = customizerContext()
-    const trace = tracePlaceholders(context as any)
+    const trace = tracePlaceholders({} as any, context as any)
     trace('tryCreateContent', { acquired: false })
     expect(context.placeholderProvider.changedEvent.add).not.toHaveBeenCalled()
     expect(context.application.navigatedEvent.add).not.toHaveBeenCalled()
@@ -57,7 +61,17 @@ describe('tracePlaceholders', () => {
   it('logs the placeholders as it starts, on each change and navigation, and each step it is told', () => {
     window.sessionStorage.setItem(PLACEHOLDER_TRACE_KEY, '1')
     const { context, handlers } = customizerContext([PlaceholderName.Top])
-    const trace = tracePlaceholders(context as any)
+    // The customizer: SPFx's events take it as the observer of each handler.
+    const observer = { instanceId: 'footer' }
+    const trace = tracePlaceholders(observer as any, context as any)
+    expect(context.placeholderProvider.changedEvent.add).toHaveBeenCalledWith(
+      observer,
+      expect.any(Function)
+    )
+    expect(context.application.navigatedEvent.add).toHaveBeenCalledWith(
+      observer,
+      expect.any(Function)
+    )
     // SharePoint defines the bottom placeholder later, and says so.
     context.placeholderProvider.placeholderNames = [PlaceholderName.Top, PlaceholderName.Bottom]
     const bottom = document.createElement('div')
@@ -80,9 +94,20 @@ describe('tracePlaceholders', () => {
     expect(lines[0].ms).toEqual(expect.any(Number))
   })
 
+  it('logs an event SharePoint raised before it started right after its first line, as SPFx replays it', () => {
+    window.sessionStorage.setItem(PLACEHOLDER_TRACE_KEY, '1')
+    const { context } = customizerContext([PlaceholderName.Top, PlaceholderName.Bottom])
+    // The placeholder event is sticky: SPFx calls a handler added after it was raised at once.
+    context.placeholderProvider.changedEvent.add.mockImplementation((_observer, handler) =>
+      handler()
+    )
+    tracePlaceholders({} as any, context as any)
+    expect(traceLines(info).map((line) => line.step)).toEqual(['onInit', 'changedEvent'])
+  })
+
   it('reads the flag from localStorage too, which every new tab shares', () => {
     window.localStorage.setItem(PLACEHOLDER_TRACE_KEY, '1')
-    tracePlaceholders(customizerContext().context as any)
+    tracePlaceholders({} as any, customizerContext().context as any)
     expect(traceLines(info)).toEqual([expect.objectContaining({ step: 'onInit' })])
   })
 
@@ -92,7 +117,7 @@ describe('tracePlaceholders', () => {
     })
     try {
       const { context } = customizerContext()
-      tracePlaceholders(context as any)
+      tracePlaceholders({} as any, context as any)
       expect(context.placeholderProvider.changedEvent.add).not.toHaveBeenCalled()
       expect(info).not.toHaveBeenCalled()
     } finally {
