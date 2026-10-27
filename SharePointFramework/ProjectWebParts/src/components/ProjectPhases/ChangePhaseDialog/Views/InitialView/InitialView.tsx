@@ -7,7 +7,7 @@ import { StatusActions } from './StatusActions/StatusActions'
 import { format } from 'pp365-shared-library'
 
 export const InitialView: FC = () => {
-  const { checklistItem, checklistItems, setComment, comment, isCommentRequired, actions } =
+  const { checklistItem, checklistItems, setComment, comment, commentHint, actions } =
     useInitialView()
   if (!checklistItem) return null
 
@@ -28,10 +28,7 @@ export const InitialView: FC = () => {
         ))}
       </ol>
       <Label weight='semibold'>{checklistItem.title}</Label>
-      <Field
-        label={strings.CommentLabel}
-        hint={isCommentRequired ? strings.ChecklistCommentDescription : undefined}
-      >
+      <Field label={strings.CommentLabel} hint={commentHint}>
         <Textarea
           rows={4}
           value={comment}

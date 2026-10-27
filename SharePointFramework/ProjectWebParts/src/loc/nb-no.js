@@ -49,18 +49,18 @@ define([], function () {
     ChangePhaseText: 'Endre til denne fasen',
     ChangingPhaseDescription: 'Endrer fase til {0}',
     ChecklistCommentDescription:
-      'Kommentar er obligatorisk om sjekkpunktet skal markeres som "Ikke relevant" eller "Fortsatt åpen".',
+      'Kommentar på minst {0} tegn er obligatorisk om sjekkpunktet skal markeres som "Ikke relevant" eller "Fortsatt åpen".',
     ChecklistCommentPlaceholder: 'Skriv inn en kommentar...',
     ChecklistMandatory:
       'Sjekkpunkter for endring til denne fasen er obligatoriske og kan ikke hoppes over.',
     CheckpointDoneTooltip: 'Sjekkpunktet er utført',
     CheckpointNotRelevantTooltip: 'Sjekkpunktet er ikke relevant',
     CheckpointNotRelevantTooltipCommentEmpty:
-      "Du kan ikke sette sjekkpunktet som 'Ikke relevant' uten å legge inn en kommentar.",
+      "Du kan ikke sette sjekkpunktet som 'Ikke relevant' uten en kommentar på minst {0} tegn.",
     CheckPointsStatus: '{0} sjekkpunkt(er): **{1}**',
     CheckpointStillOpenTooltip: 'Sjekkpunktet er fortsatt åpent',
     CheckpointStillOpenTooltipCommentEmpty:
-      "Du kan ikke sette sjekkpunktet som 'Fortsatt åpen' uten å legge inn en kommentar.",
+      "Du kan ikke sette sjekkpunktet som 'Fortsatt åpen' uten en kommentar på minst {0} tegn.",
     ChildProjectAdminLabel: 'Administrer underområder',
     CloseText: 'Lukk',
     CommentLabel: 'Kommentar',

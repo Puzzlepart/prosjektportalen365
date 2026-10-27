@@ -11,7 +11,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Ny egenskap `Vis tittel` med valgfri egendefinert tittel på risiko- og mulighetsmatrisewebdelene
 - Ny egenskap `Ekskluderte seksjoner` i `Prosjektstatus`-webdelen — én seksjonstittel per linje for å skjule seksjoner fra statussiden
 - `Prosjektinformasjon` kan vise valgte FN-bærekraftsmål som sorterte SVG-ikoner i stedet for vanlige merkelapper. Ikonvisningen er av som standard og kan slås på med valgfri ikonstørrelse i webdelens egenskaper [#1230](https://github.com/Puzzlepart/prosjektportalen365/issues/1230)
-- Ny egenskap `Minimum antall tegn i kommentar på sjekkpunkt` i `Fasevelger`-webdelen. Styrer hvor lang kommentaren må være før et fasesjekkpunkt kan settes til `Ikke relevant` eller `Fortsatt åpen` (0–20 tegn, der 0 betyr at kommentar ikke kreves; standard 4 som før). Egenskapen kunne tidligere bare settes via prosjektmal eller skript
+- Ny egenskap `Minimum antall tegn i kommentar på sjekkpunkt` i `Fasevelger`-webdelen. Styrer hvor lang kommentaren må være før et fasesjekkpunkt kan settes til `Ikke relevant` eller `Fortsatt åpen` (0–20 tegn, der 0 betyr at kommentar ikke kreves; standard 4 som før). Egenskapen kunne tidligere bare settes via prosjektmal eller skript. Hjelpeteksten under kommentarfeltet og forklaringen på `Ikke relevant` og `Fortsatt åpen` sier nå hvor mange tegn som kreves
 
 ### Forbedringer
 

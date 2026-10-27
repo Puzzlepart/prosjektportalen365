@@ -200,9 +200,51 @@ describe('ChangePhaseDialog', () => {
     const user = userEvent.setup()
     renderDialog(phase('p1', 'Konsept', {}, [checklistItem(1, 'Mandat godkjent')]), planning)
     const notRelevant = screen.getByRole('button', { name: strings.StatusNotRelevant })
-    expectUnavailable(notRelevant, strings.CheckpointNotRelevantTooltipCommentEmpty)
+    expectUnavailable(notRelevant, format(strings.CheckpointNotRelevantTooltipCommentEmpty, 4))
     await user.click(notRelevant)
     expect(mockUpdateChecklistItem).not.toHaveBeenCalled()
+  })
+
+  it('says how long the comment must be, in its hint and in why a status waits (WCAG 3.3.2, 3.3.3)', async () => {
+    const user = userEvent.setup()
+    renderDialog(phase('p1', 'Konsept', {}, [checklistItem(1, 'Mandat godkjent')]), planning, {
+      commentMinLength: 2
+    })
+    const comment = screen.getByRole('textbox', { name: strings.CommentLabel })
+    expect(comment).toHaveAccessibleDescription(format(strings.ChecklistCommentDescription, 2))
+    // A comment, but too short: the reason names the length, not a missing comment.
+    await user.type(comment, 'O')
+    expectUnavailable(
+      screen.getByRole('button', { name: strings.StatusNotRelevant }),
+      format(strings.CheckpointNotRelevantTooltipCommentEmpty, 2)
+    )
+    expectUnavailable(
+      screen.getByRole('button', { name: strings.StatusStillOpen }),
+      format(strings.CheckpointStillOpenTooltipCommentEmpty, 2)
+    )
+    await user.type(comment, 'K')
+    for (const name of [strings.StatusNotRelevant, strings.StatusStillOpen]) {
+      expect(screen.getByRole('button', { name })).not.toHaveAttribute('aria-disabled')
+    }
+  })
+
+  it('needs no comment, and gives no hint, when the minimum is 0', async () => {
+    const user = userEvent.setup()
+    renderDialog(phase('p1', 'Konsept', {}, [checklistItem(1, 'Mandat godkjent')]), planning, {
+      commentMinLength: 0
+    })
+    const comment = screen.getByRole('textbox', { name: strings.CommentLabel })
+    expect(comment).not.toHaveAccessibleDescription()
+    for (const name of [strings.StatusNotRelevant, strings.StatusStillOpen]) {
+      expect(screen.getByRole('button', { name })).not.toHaveAttribute('aria-disabled')
+    }
+    await user.click(screen.getByRole('button', { name: strings.StatusNotRelevant }))
+    await waitFor(() =>
+      expect(mockUpdateChecklistItem).toHaveBeenCalledWith(resource.Lists_PhaseChecklist_Title, 1, {
+        GtChecklistStatus: strings.StatusNotRelevant,
+        GtComment: ''
+      })
+    )
   })
 
   it('closes on Escape, but not while the phase is changing', async () => {
