@@ -10,6 +10,7 @@ import {
   OPEN_DIALOG,
   OPEN_PANEL,
   PROPERTIES_UPDATED,
+  SET_HUB_SYNC_WARNING,
   SET_PROGRESS,
   UPDATE_DATA
 } from './actions'
@@ -81,6 +82,9 @@ const createProjectInformationReducer = (spfxContext: SPFxContext) =>
         if (action.payload.refetch) {
           state.propertiesLastUpdated = new Date()
         }
+      })
+      .addCase(SET_HUB_SYNC_WARNING, (state, action) => {
+        state.hubSyncWarning = action.payload
       })
   )
 

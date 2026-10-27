@@ -129,6 +129,12 @@ declare interface IProjectExtensionsStrings {
   ProjectAlreadySetupStack: string
   ProjectDataFoundTitle: string
   ProjectDataFoundMessage: string
+  NoHubWriteAccessTitle: string
+  NoHubWriteAccessMessage: string
+  HubWriteSkippedLogText: string
+  HubWriteDeniedLogText: string
+  ProjectNotRegisteredInHubTitle: string
+  ProjectNotRegisteredInHubMessage: string
   ProjectPropertiesHeader: string
   ProjectProvisioningStartLogText: string
   ProjectProvisioningSuccessLogText: string

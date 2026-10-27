@@ -6,7 +6,7 @@ import styles from './ProjectPhases.module.scss'
 import { IProjectPhasesProps } from './types'
 import { useProjectPhases } from './useProjectPhases'
 import { FluentProvider, IdPrefixProvider, Toaster } from '@fluentui/react-components'
-import { LoadingSkeleton, customLightTheme, withDefaults } from 'pp365-shared-library'
+import { LoadingSkeleton, UserMessage, customLightTheme, withDefaults } from 'pp365-shared-library'
 import strings from 'ProjectWebPartsStrings'
 import resource from 'SharedResources'
 
@@ -46,6 +46,15 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (incomingProps) => {
                       return <ProjectPhase key={idx} phase={phase} />
                     })}
                 </ul>
+                {context.state.hubSyncWarning && (
+                  <div className={styles.hubSyncWarning}>
+                    <UserMessage
+                      title={strings.HubSyncWarningTitle}
+                      text={context.state.hubSyncWarning}
+                      intent='warning'
+                    />
+                  </div>
+                )}
                 {/* Mounted while a phase waits for confirmation, so each opening starts afresh. */}
                 {context.state.confirmPhase && <ChangePhaseDialog />}
               </>

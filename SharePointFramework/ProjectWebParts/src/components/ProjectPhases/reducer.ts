@@ -11,6 +11,7 @@ export const DISMISS_CHANGE_PHASE_DIALOG = createAction('DISMISS_CHANGE_PHASE_DI
 export const INIT_CHANGE_PHASE = createAction('INIT_CHANGE_PHASE')
 export const CHANGE_PHASE_ERROR = createAction<{ error: Error }>('CHANGE_PHASE_ERROR')
 export const SET_PHASE = createAction<{ phase: ProjectPhaseModel }>('SET_PHASE')
+export const HUB_SYNC_FAILED = createAction<{ warning: string }>('HUB_SYNC_FAILED')
 export const CHECKLIST_ITEM_SAVED = createAction<{ item: ChecklistItemModel }>(
   'CHECKLIST_ITEM_SAVED'
 )
@@ -67,6 +68,8 @@ export default createReducer(initialState, (builder) =>
     .addCase(SET_PHASE, (state, { payload }) => {
       state.phase = payload.phase
       state.isChangingPhase = false
+      // A change the hub takes clears the warning an earlier one left; a failed one sets it again.
+      state.hubSyncWarning = undefined
     })
     .addCase(CHECKLIST_ITEM_SAVED, (state, { payload }) => {
       // The change-phase dialog starts from the loaded checklist each time it opens, so a saved
@@ -79,6 +82,9 @@ export default createReducer(initialState, (builder) =>
       state.data.phases = phases
       state.data.currentPhase = saved(data.currentPhase)
       state.phase = saved(phase)
+    })
+    .addCase(HUB_SYNC_FAILED, (state, { payload }) => {
+      state.hubSyncWarning = payload.warning
     })
     .addCase(CHANGE_PHASE_ERROR, (state, { payload }) => {
       state.isChangingPhase = false

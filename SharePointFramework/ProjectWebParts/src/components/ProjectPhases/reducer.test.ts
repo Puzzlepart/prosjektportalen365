@@ -5,6 +5,7 @@ import reducer, {
   CHECKLIST_ITEM_SAVED,
   DISMISS_CHANGE_PHASE_DIALOG,
   DISMISS_POPOVER,
+  HUB_SYNC_FAILED,
   INIT_CHANGE_PHASE,
   INIT_DATA,
   OPEN_POPOVER,
@@ -105,6 +106,27 @@ describe('ProjectPhases reducer', () => {
     expect(state.error.type).toBe('error')
     expect(state.phase).toBe(concept)
     expect(reducer(running, CHANGE_PHASE_ERROR({ error: null })).error).toBeNull()
+  })
+
+  it('a change the hub did not take keeps the new phase and shows the warning', () => {
+    const changed = reducer(reducer(loaded(), INIT_CHANGE_PHASE()), SET_PHASE({ phase: planning }))
+    const state = reducer(
+      changed,
+      HUB_SYNC_FAILED({ warning: 'Porteføljeområdet ble ikke oppdatert' })
+    )
+    expect(state.phase).toBe(planning)
+    expect(state.hubSyncWarning).toBe('Porteføljeområdet ble ikke oppdatert')
+    expect(state.error).toBeUndefined()
+  })
+
+  it('a later change the hub takes clears the warning an earlier one left', () => {
+    const warned = reducer(
+      reducer(reducer(loaded(), INIT_CHANGE_PHASE()), SET_PHASE({ phase: planning })),
+      HUB_SYNC_FAILED({ warning: 'Porteføljeområdet ble ikke oppdatert' })
+    )
+    const state = reducer(reducer(warned, INIT_CHANGE_PHASE()), SET_PHASE({ phase: concept }))
+    expect(state.phase).toBe(concept)
+    expect(state.hubSyncWarning).toBeUndefined()
   })
 
   it('a saved checkpoint replaces its old version in its phase, counted again, current phase included', () => {

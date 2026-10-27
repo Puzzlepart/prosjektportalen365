@@ -8,7 +8,7 @@ import { IProgressDialogProps } from './types'
  * Component logic hook for `ProgressDialog`: the step the setup is on, how far along it is, and
  * the advanced log. A new step is told to a screen reader as it starts (WCAG 4.1.3), since the bar
  * and the step count change in silence. The dialog closes by itself when the setup is done, unless
- * the log is open.
+ * the log is open or the setup completed with a warning the user must read.
  *
  * @param props Props for the component
  */
@@ -37,7 +37,7 @@ export function useProgressDialog(props: IProgressDialogProps) {
   }, [step])
 
   useEffect(() => {
-    if (props.isComplete && !logExpanded) {
+    if (props.isComplete && !logExpanded && !props.warning) {
       props.onDismiss?.()
     }
   }, [props.isComplete])
@@ -58,6 +58,6 @@ export function useProgressDialog(props: IProgressDialogProps) {
     isLogExpanded: logExpanded || hasError,
     toggleLog: () => setLogExpanded(!logExpanded),
     logId,
-    showContinue: props.isComplete && logExpanded
+    showContinue: props.isComplete && (logExpanded || !!props.warning)
   } as const
 }

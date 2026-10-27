@@ -4,12 +4,14 @@ import {
   DataSource,
   ItemFieldValues,
   ProjectInformationChildProject,
+  ProjectPhaseModel,
   searchAggregatedItems,
   format
 } from 'pp365-shared-library'
 import { DefaultCaching, SPDataAdapterBase } from 'pp365-shared-library/lib/data'
 import {
   DataSourceService,
+  IPhaseField,
   IProjectDataServiceParams,
   ProjectDataService
 } from 'pp365-shared-library/lib/services'
@@ -26,6 +28,8 @@ import {
 } from './types'
 import resource from 'SharedResources'
 import { IProgressProps } from 'pp365-shared-library'
+import { getNewEntityProperties } from './newEntityProperties'
+import { syncPhaseToHub } from './syncPhaseToHub'
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService
@@ -165,9 +169,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
 
   /**
    * Sync property item from site to associated hub. `this.getMappedProjectProperties` is used to
-   * map the properties item fields to the hub fields. `updateEntityItem` from `SpEntityPortalService`
-   * (pp365-shared-library) is used to update the hub entity item. If any errors occur, the original
-   * error is passed to the caller.
+   * map the properties item fields to the hub fields. `ensureEntityItem` from `SpEntityPortalService`
+   * (pp365-shared-library) is used to update the hub entity item, or to add it when the project was
+   * set up without one (by a user without write access to the hub). If any errors occur, the
+   * original error is passed to the caller.
    *
    * @param title Title of the project
    * @param fieldValues Field values for the properties item
@@ -181,9 +186,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     progressFunc: (props: IProgressProps) => void
   ): Promise<void> {
     if (!this.entityService) {
-      throw new Error(
-        `(${this._name}) (syncPropertyItemToHub) entityService is not initialized — portal is unavailable.`
-      )
+      throw new Error(strings.HubSyncHubUnavailableReason)
     }
     progressFunc({
       label: strings.SyncProjectPropertiesValuesProgressLabel,
@@ -193,15 +196,61 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       customSiteFieldsGroup: templateParameters.CustomSiteFields,
       projectContentTypeId: templateParameters.ProjectContentTypeId
     })
-    await this.entityService.updateEntityItem(this.settings.siteId, {
-      ...properties,
-      Title: title
-    })
+    const added = await this.entityService.ensureEntityItem(
+      this.settings.siteId,
+      this.settings.webUrl,
+      { ...properties, Title: title },
+      getNewEntityProperties(
+        this.spfxContext.pageContext.legacyPageContext?.groupId,
+        fieldValues,
+        templateParameters.ProjectContentTypeId
+      )
+    )
     Logger.log({
-      message: `(${this._name}) (syncPropertyItemToHub) Successfully synced item to hub entity.`,
+      message: `(${this._name}) (syncPropertyItemToHub) Successfully ${
+        added ? 'added' : 'synced'
+      } item to hub entity.`,
       data: { properties },
       level: LogLevel.Info
     })
+  }
+
+  /**
+   * Change the project's phase on its properties item, then on its entity in the hub. A project
+   * without an entity in the hub is registered with all its properties (`syncPropertyItemToHub`).
+   *
+   * A failed hub update does not undo the phase change: the error is returned for the caller to
+   * report, while an error on the project's own item is thrown.
+   *
+   * @param phase Phase to change to
+   * @param phaseField Phase field
+   *
+   * @returns The error from the hub (also when it is out of reach), or `null` when it was updated
+   */
+  public async updateProjectPhase(
+    phase: ProjectPhaseModel,
+    phaseField: IPhaseField
+  ): Promise<Error | null> {
+    const phaseProperties = await this.project.updateProjectPhase(phase, phaseField, false)
+    if (!this.entityService) return new Error(strings.HubSyncHubUnavailableReason)
+    try {
+      await syncPhaseToHub(this.entityService, this.settings.siteId, phaseProperties, async () => {
+        const data = await this.project.getProjectInformationData()
+        await this.syncPropertyItemToHub(
+          this.spfxContext.pageContext.web.title,
+          data.fieldValues,
+          data.templateParameters ?? {},
+          () => null
+        )
+      })
+      return null
+    } catch (error) {
+      Logger.log({
+        message: `(${this._name}) (updateProjectPhase) The phase was not changed in the hub: ${error?.message}`,
+        level: LogLevel.Warning
+      })
+      return error
+    }
   }
 
   /**

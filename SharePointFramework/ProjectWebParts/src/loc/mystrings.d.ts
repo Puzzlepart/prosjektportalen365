@@ -253,6 +253,11 @@ declare interface IProjectWebPartsStrings {
   SyncProjectPropertiesProgressLabel: string
   SyncProjectPropertiesValuesProgressDescription: string
   SyncProjectPropertiesValuesProgressLabel: string
+  HubSyncWarningTitle: string
+  HubSyncNoWriteAccessReason: string
+  HubSyncHubUnavailableReason: string
+  ProjectPropertiesNotSyncedToHubText: string
+  PhaseNotSyncedToHubText: string
   SyncPropertiesAfterPhaseChangeFieldLabel: string
   TagFieldLabel: string
   TasksLinkText: string
