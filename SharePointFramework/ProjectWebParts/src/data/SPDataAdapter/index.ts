@@ -186,9 +186,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     progressFunc: (props: IProgressProps) => void
   ): Promise<void> {
     if (!this.entityService) {
-      throw new Error(
-        `(${this._name}) (syncPropertyItemToHub) entityService is not initialized — portal is unavailable.`
-      )
+      throw new Error(strings.HubSyncHubUnavailableReason)
     }
     progressFunc({
       label: strings.SyncProjectPropertiesValuesProgressLabel,
@@ -227,14 +225,14 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param phase Phase to change to
    * @param phaseField Phase field
    *
-   * @returns The error from the hub, or `null` when the hub was updated or is out of reach
+   * @returns The error from the hub (also when it is out of reach), or `null` when it was updated
    */
   public async updateProjectPhase(
     phase: ProjectPhaseModel,
     phaseField: IPhaseField
   ): Promise<Error | null> {
     const phaseProperties = await this.project.updateProjectPhase(phase, phaseField, false)
-    if (!this.entityService) return null
+    if (!this.entityService) return new Error(strings.HubSyncHubUnavailableReason)
     try {
       await syncPhaseToHub(this.entityService, this.settings.siteId, phaseProperties, async () => {
         const data = await this.project.getProjectInformationData()

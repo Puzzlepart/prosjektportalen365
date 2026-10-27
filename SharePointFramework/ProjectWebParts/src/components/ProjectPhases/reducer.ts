@@ -68,6 +68,8 @@ export default createReducer(initialState, (builder) =>
     .addCase(SET_PHASE, (state, { payload }) => {
       state.phase = payload.phase
       state.isChangingPhase = false
+      // A change the hub takes clears the warning an earlier one left; a failed one sets it again.
+      state.hubSyncWarning = undefined
     })
     .addCase(CHECKLIST_ITEM_SAVED, (state, { payload }) => {
       // The change-phase dialog starts from the loaded checklist each time it opens, so a saved

@@ -300,6 +300,7 @@ define([], function () {
     SyncProjectPropertiesValuesProgressLabel: 'Synkroniserer egenskaper',
     HubSyncWarningTitle: 'Porteføljeområdet ble ikke oppdatert',
     HubSyncNoWriteAccessReason: 'Du mangler skrivetilgang til listen «{0}» på porteføljeområdet. Be en administrator om tilgang, eller be noen med tilgang om å lagre prosjektinformasjonen.',
+    HubSyncHubUnavailableReason: 'Porteføljeområdet er ikke tilgjengelig for deg.',
     ProjectPropertiesNotSyncedToHubText: 'Endringene er lagret på prosjektområdet, men ble ikke synkronisert til porteføljeområdet. {0}',
     PhaseNotSyncedToHubText: 'Fasen er endret på prosjektområdet, men ikke på porteføljeområdet. {0} Last inn siden på nytt for å se den nye fasen i de andre webdelene.',
     SyncPropertiesAfterPhaseChangeFieldLabel: 'Synkroniser prosjektegenskaper etter faseendring',

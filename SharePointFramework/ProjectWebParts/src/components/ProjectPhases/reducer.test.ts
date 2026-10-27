@@ -119,6 +119,16 @@ describe('ProjectPhases reducer', () => {
     expect(state.error).toBeUndefined()
   })
 
+  it('a later change the hub takes clears the warning an earlier one left', () => {
+    const warned = reducer(
+      reducer(reducer(loaded(), INIT_CHANGE_PHASE()), SET_PHASE({ phase: planning })),
+      HUB_SYNC_FAILED({ warning: 'Porteføljeområdet ble ikke oppdatert' })
+    )
+    const state = reducer(reducer(warned, INIT_CHANGE_PHASE()), SET_PHASE({ phase: concept }))
+    expect(state.phase).toBe(concept)
+    expect(state.hubSyncWarning).toBeUndefined()
+  })
+
   it('a saved checkpoint replaces its old version in its phase, counted again, current phase included', () => {
     const open = checklistItem(1, 'Mandat godkjent')
     const done = checklistItem(2, 'Plan laget', strings.StatusClosed)
