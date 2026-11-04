@@ -118,21 +118,41 @@ export async function onListPage<T>(page: Page, url: string, step: () => Promise
   }
 }
 
+/** SharePoint's own steps of a sign-in, on the site's host: the tab is not back on the site there. */
+const SIGN_IN_PATH = /\/_forms\/|\/_layouts\/15\/Authenticate\.aspx/i
+
 /**
  * Loads a page of the site in a tab of its own, which the test's page is left out of. SharePoint
  * refuses REST calls with 401 or 403 once its session cookie has expired or been revoked, while a
  * page still loads: the page signs in again on its own and renews the cookie, which a REST call
  * cannot do. A CI run lost its session four minutes in and failed every test after (2026-10-20).
  *
+ * Since 2026-10-27 the session lasts about ten minutes, and SharePoint no longer takes its root
+ * cookie (`rtFa`) either, so the tab goes through Entra ID's sign-in. That sign-in goes on with
+ * scripts and redirects after its first page has loaded: closing the tab as `goto` returned cut it
+ * off, the cookie was never renewed, and every REST call after was refused (run 40533981903, 26
+ * tests). The tab waits until it is back on the site, where the new cookie has been set.
+ *
  * @param page The test's page, whose browser context the tab shares
  * @param url A URL on the site, such as a REST call's
  */
 async function renewSession(page: Page, url: string) {
+  const site = url.split('/_api/')[0]
+  const origin = new URL(site).origin
   const tab = await page.context().newPage()
   try {
-    await withNetworkRetry(() =>
-      tab.goto(url.split('/_api/')[0], { waitUntil: 'domcontentloaded', timeout: 60_000 })
-    )
+    await withNetworkRetry(() => tab.goto(site, { waitUntil: 'domcontentloaded', timeout: 60_000 }))
+    try {
+      await tab.waitForURL(
+        (current) => current.origin === origin && !SIGN_IN_PATH.test(current.pathname),
+        { waitUntil: 'domcontentloaded', timeout: 60_000 }
+      )
+    } catch {
+      const stopped = new URL(tab.url())
+      throw new Error(
+        `SharePoint's session could not be renewed: the sign-in stopped at ${stopped.origin}${stopped.pathname}`
+      )
+    }
   } finally {
     await tab.close()
   }
