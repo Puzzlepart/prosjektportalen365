@@ -1606,6 +1606,8 @@ itself as `observer` to `add()` is disposed, as the footer does.
   strikes, and did so in the first green run after it (40377546556).
 - **PnP's taxonomy button** is pnp/sp-dev-fx-controls-react#2182, unanswered. The tooltip's
   hidden text gives the button a description, not a name.
-- **The list beside the timelines (#1789)** is in the 1.15.0 milestone, on the backlog until the
-  work starts. Its three questions need answers first: the list under the timeline or a view to
-  switch to, a property to turn it off, and the resource allocation's columns.
+- **The list beside the timelines (#1789)** moved to the 1.16.0 milestone on 2026-11-04: after
+  #1788 the timelines meet 2.1.1, 1.4.10 exempts content that needs two dimensions, and 1.15's
+  last weeks go to the hand rounds. Its three questions need answers first: the list under the
+  timeline or a view to switch to, a property to turn it off, and the resource allocation's
+  columns.

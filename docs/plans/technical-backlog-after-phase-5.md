@@ -111,9 +111,9 @@ release).
 | 2 | `defaultProps` | — | Per solution, smallest first (PortfolioExtensions 1, ProjectExtensions 3, ProjectWebParts 11, PortfolioWebParts 12, shared-library 20), each a commit; D2's two shapes; the existing component tests guard each file, and a file without one gets a render test first; the lint rule last | 2–3 days | Zero `defaultProps` in `src`; the rule in `pp365-eslint-config` |
 | 3 | Dates in the site's time zone | — | `getSiteTimeZone()` in the library from the page context (offset and daylight rules); `formatDate`/`formatShortDate` take the zone for date-only values; `DateColumn`, the Excel export's dates and the timeline's list follow; an integration case in `project-properties`' five-zone matrix reads a list value through search; changelog line (done 2026-10-13, see the log) | done | The overview shows the day the site shows in all five zones |
 | 4 | Test gaps | the matrices need a page | The icon helpers (`getFluentIcon`, `resolveFluentIcon`, `getIconComponentWithFallback`) and `DataService.ts` in Jest; `Tidslinje.aspx` in the program smoke; a matrix page on the e2e project (the user adds it once), then a read-only smoke for both matrices (done 2026-10-14, see the log; the matrix page added with `add-matrix-page`) | done | `testoversikt.md` lists no "Ingen test" but by choice |
-| 5 | SPFx 1.24 GA | Microsoft | P5-4: a version bump through CI and a hand round | ½ day | 1.15.0 cut on GA |
-| 6 | PnP controls on React 18 | PnP | A release whose peers allow React 18; then the bump, the term field and property panes by hand (P5-6) | ½ day | — |
-| 7 | react-calendar-timeline 0.30 | the project | A stable release; `moment` → `dayjs` in the timeline's data and items, `interactjs` to its peer; the timeline's Jest (22) and smoke tests | 2 days | — |
+| 5 | SPFx 1.24 GA | Microsoft | P5-4: a version bump through CI and a hand round (the bump done 2026-11-04, see the log) | ½ day | 1.15.0 cut on GA |
+| 6 | PnP controls on React 18 | PnP | A release whose peers allow React 18; then the bump, the term field and property panes by hand (P5-6) | ½ day | Next check 2026-12-04 |
+| 7 | react-calendar-timeline 0.30 | the project | A stable release; `moment` → `dayjs` in the timeline's data and items, `interactjs` to its peer; the timeline's Jest (22) and smoke tests | 2 days | Next check 2027-02-04 |
 | 8 | `ListGrid` to the library | a third consumer | Not before one exists (the dynamic list's table is the candidate); then `List/ListGrid`, its context and cell registry move with their tests | 2 days | — |
 
 Slices 1 to 3 fit the wait for GA; 4 can go between them. 5 to 7 are external and ordered by how
@@ -440,3 +440,30 @@ so the swap went to 1.24.1.
   and the `engines` (`>=26.11.0 <27.0.0`) admits it and stays.
 - **Left:** SharePoint's faults on list pages, sp-dev-docs#11068 and #11070, measured again once
   1.24.1 is deployed (`e2e/tests/diagnostics`), and the hand round P5-4 asks for.
+
+### Slice 5, through CI (2026-11-04)
+
+- **The pushes.** The swap's own push failed in both deploy workflows at `rush install`: the
+  lockfile was left out of the commit, and the lockfile pushed on its own started no deploy
+  workflow, since `common/config/rush/**` is in no `paths` (the trap is in the `pp365-release`
+  skill now). The next push, an integration test with `[upgrade-all-sites-to-latest]`, took
+  1.24.1 to the test hub (run #1404). Build, upgrade, integration tests and the upgrade of all
+  sites were green. E2E had 102 passed, 1 failed (the footer's Escape test in
+  `a11y-surfaces.spec.ts`, with the focus on a link inside the menu) and 1 flaky (an MSAL
+  `interaction_in_progress` in `risk-action.spec.ts`). The merge of #1794 (`[apps-only]`) took
+  1.24.1 to the dev hub and ran the test channel again: e2e 103 passed and 1 flaky
+  (`document-template-dialog.spec.ts` at 1280 px), the Escape test green; integration green. The
+  Escape test failed in one run of two, so it is watched, not changed.
+- **The report site.** Run #1404 published nothing. Every push to the report repository failed
+  with `Permission denied (publickey)` during a GitHub incident (Git Operations, declared 09:49
+  UTC), while the deploy key, the secret and the organization's settings were unchanged, and the
+  script logged each failure as lost to another job. It now tells a site repository it cannot
+  reach from a race, waits 10 to 40 s between those attempts, and names githubstatus.com and the
+  deploy key in its warning (`.tasks/publish-test-report.test.js`, seen failing first). The next
+  run published as before.
+- **External checks (D3).** The PnP controls have no release for React 18: `latest` 3.25.0 and
+  `next` 3.26.0-beta both declare `react` 17.0.1, so P5-6 stands (next check 2026-12-04).
+  react-calendar-timeline has no stable 0.30, `beta` being 0.30.0-beta.19 (next check
+  2027-02-04).
+- **Left:** the diagnostics for sp-dev-docs#11068 and #11070 on 1.24.1, which the test hub now
+  runs, and the hand round P5-4 asks for.

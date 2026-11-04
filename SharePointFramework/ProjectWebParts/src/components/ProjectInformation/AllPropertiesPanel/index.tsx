@@ -15,11 +15,13 @@ export const AllPropertiesPanel: FC<IBasePanelProps> = (incomingProps) => {
   const context = useProjectInformationContext()
 
   return (
+    // Text to read, nothing to work in: the body takes the focus so the keyboard can scroll it.
     <BasePanel
       {...props}
       headerText={context.props.title}
       open={context.state.activePanel === 'AllPropertiesPanel'}
       onClose={() => context.dispatch(CLOSE_PANEL())}
+      isBodyFocusable
     >
       <ProjectProperties displayAllProperties />
     </BasePanel>

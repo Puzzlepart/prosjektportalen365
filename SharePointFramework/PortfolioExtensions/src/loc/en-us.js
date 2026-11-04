@@ -264,6 +264,7 @@ define([], function () {
     CatalogCompatibilityTitle: 'Compatibility check',
     CatalogCompatibilityIntro:
       'The following conflicts were found against what already exists in your installation. You can cancel and fix them manually, or continue — items will be overwritten or skipped (when overwrite is not possible).',
+    CatalogCompatibilityConflictsLabel: 'Conflicts',
     CatalogCompatibilityContinue: 'Continue anyway',
     CatalogResolutionOverwrite: 'Overwritten',
     CatalogResolutionSkip: 'Skipped',

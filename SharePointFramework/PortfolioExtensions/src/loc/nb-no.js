@@ -262,6 +262,7 @@ define([], function () {
     CatalogCompatibilityTitle: 'Kompatibilitetssjekk',
     CatalogCompatibilityIntro:
       'Følgende konflikter ble funnet mot det som allerede finnes i installasjonen. Du kan avbryte og rette opp manuelt, eller fortsette – elementer blir overskrevet eller hoppet over (når overskriving ikke er mulig).',
+    CatalogCompatibilityConflictsLabel: 'Konflikter',
     CatalogCompatibilityContinue: 'Fortsett likevel',
     CatalogResolutionOverwrite: 'Overskrives',
     CatalogResolutionSkip: 'Hoppes over',

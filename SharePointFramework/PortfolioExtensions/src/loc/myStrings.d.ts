@@ -244,6 +244,7 @@ declare interface IPortfolioExtensionsStrings {
   CatalogImportCancelled: string
   CatalogCompatibilityTitle: string
   CatalogCompatibilityIntro: string
+  CatalogCompatibilityConflictsLabel: string
   CatalogCompatibilityContinue: string
   CatalogResolutionOverwrite: string
   CatalogResolutionSkip: string

@@ -217,11 +217,35 @@ test('starts over when another job pushed between its fetch and its push, so nei
         }
     })
     assert.equal(messages.length, 1)
-    assert.match(messages[0], /Attempt 1 of 5 failed/)
+    assert.match(messages[0], /Attempt 1 of 5 lost to another job's push/)
     const files = git(remote, 'ls-tree', '-r', '--name-only', 'gh-pages').split('\n')
     assert.ok(files.includes('runs/2001-1/e2e/index.html'))
     assert.ok(files.includes('runs/2001-1/integration/index.html'))
     assert.equal(git(remote, 'rev-list', '--count', 'gh-pages'), '1')
+})
+
+test('tells a site repository it cannot reach from a race, waits longer for it, and says where to look', () => {
+    // git says "Could not read from remote repository" for a path that is no repository, as it
+    // does after GitHub's "Permission denied (publickey)": every push of run #1404 on 2026-11-04,
+    // in a GitHub incident, was logged as lost to another job.
+    const remote = path.join(tempDir('remote'), 'missing.git')
+    const report = { suite: 'e2e', reportDir: reportFolder(), outcome: 'success', run: run(2001), now: NOW }
+    const messages = []
+    const waits = []
+    assert.throws(
+        () => publish({ remote, report, log: (message) => messages.push(message), sleep: (ms) => waits.push(ms) }),
+        (error) => {
+            const [warning] = error.message.split('\n')
+            assert.match(warning, /could not reach the site repository/)
+            assert.match(warning, /githubstatus\.com/)
+            assert.match(error.message, /Could not read from remote repository/)
+            return true
+        }
+    )
+    assert.equal(messages.length, 4)
+    assert.match(messages[0], /^Attempt 1 of 5 could not reach the site repository \(.+\); trying again in 10 s\.$/)
+    assert.ok(messages.every((message) => !/another job/.test(message)), messages.join('\n'))
+    assert.deepEqual(waits, [10_000, 20_000, 30_000, 40_000])
 })
 
 /**

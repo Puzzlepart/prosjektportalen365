@@ -46,6 +46,11 @@ const MAX_FILE_BYTES = 95 * 1024 * 1024
 const PUSH_ATTEMPTS = 5
 /** A git call that takes longer has hung; the step's own timeout is the last resort. */
 const GIT_TIMEOUT_MS = 5 * 60 * 1000
+/** What git prints when a push lost its lease: another job pushed after this one fetched. */
+const LOST_LEASE = /\(stale info\)|\[rejected\]|non-fast-forward|\(fetch first\)/
+/** What git and ssh print when GitHub refuses the deploy key or cannot be reached. */
+const UNREACHABLE =
+    /Permission denied \(publickey\)|Could not read from remote repository|Host key verification failed|Could not resolve hostname|Connection (?:timed out|refused|reset|closed)|kex_exchange_identification|remote end hung up|early EOF|unable to access/i
 
 /** Parses `--name value` pairs. */
 function parseArgs(argv) {
@@ -488,8 +493,52 @@ async function prepareSsh(deployKey, env, fetchImpl = fetch) {
 }
 
 /**
+ * Why a git call against the site repository failed: `race` when the push lost its lease to
+ * another job's push, `unreachable` when GitHub refused the deploy key or could not be reached (in
+ * a GitHub incident on 2026-11-04 it refused a deploy key that was in order), `other` otherwise.
+ *
+ * @param {Error & { stderr?: string, code?: string }} error
+ * @returns {'race' | 'unreachable' | 'other'}
+ */
+function classifyFailure(error) {
+    const output = `${error.stderr ?? ''}\n${error.message ?? ''}`
+    if (LOST_LEASE.test(output)) return 'race'
+    if (error.code === 'ETIMEDOUT' || UNREACHABLE.test(output)) return 'unreachable'
+    return 'other'
+}
+
+/** The first line of what a failed git call printed. */
+function firstLine(error) {
+    return (String(error.stderr ?? '').trim() || String(error.message ?? '')).split('\n')[0].trim()
+}
+
+/** Why the report could not be pushed: a first line for the job's warning, then what git printed. */
+function failureMessage(error) {
+    const lead = `The report could not be pushed after ${PUSH_ATTEMPTS} attempts`
+    const output = String(error.stderr || error.message).trim()
+    switch (classifyFailure(error)) {
+        case 'unreachable':
+            return (
+                `${lead}: could not reach the site repository (${firstLine(error)}). Check https://www.githubstatus.com first; ` +
+                'if GitHub is up, check the deploy key and TEST_REPORTS_DEPLOY_KEY («Testrapportsiden» in ' +
+                `.development-guide/ci/kontinuerlig-integrasjon.md).\n${output}`
+            )
+        case 'race':
+            return `${lead}: another job pushed first every time.\n${output}`
+        default:
+            return `${lead}: ${output}`
+    }
+}
+
+/** Blocks for `ms`: the script is synchronous, and the job runs nothing else meanwhile. */
+function sleepSync(ms) {
+    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms)
+}
+
+/**
  * Fetches the site branch, adds the report and pushes one parentless commit, conditional on the
- * branch not having moved; starts over when another job pushed in between.
+ * branch not having moved; starts over when another job pushed in between, and waits longer
+ * before it starts over when the site repository could not be reached.
  *
  * @param {object} options
  * @param {string} options.remote git URL or path of the site repository
@@ -497,9 +546,10 @@ async function prepareSsh(deployKey, env, fetchImpl = fetch) {
  * @param {Parameters<typeof addReport>[1]} options.report
  * @param {(workDir: string) => void} [options.beforePush] For the tests: runs before each push
  * @param {(message: string) => void} [options.log]
+ * @param {(ms: number) => void} [options.sleep] For the tests: the wait between attempts
  * @returns {string} The report's path in the site
  */
-function publish({ remote, gitEnv = process.env, report, beforePush, log = console.log }) {
+function publish({ remote, gitEnv = process.env, report, beforePush, log = console.log, sleep = sleepSync }) {
     const env = {
         ...gitEnv,
         GIT_AUTHOR_NAME: 'github-actions[bot]',
@@ -531,15 +581,25 @@ function publish({ remote, gitEnv = process.env, report, beforePush, log = conso
         } catch (error) {
             lastError = error
             if (attempt < PUSH_ATTEMPTS) {
-                log(`Attempt ${attempt} of ${PUSH_ATTEMPTS} failed (another job may have published first); trying again.`)
-                // The other job pushes within seconds; waiting a little longer each time spreads the retries.
-                Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 1000 * attempt)
+                const failure = classifyFailure(error)
+                if (failure === 'race') {
+                    log(`Attempt ${attempt} of ${PUSH_ATTEMPTS} lost to another job's push; trying again.`)
+                    // The other job pushes within seconds; waiting a little longer each time spreads the retries.
+                    sleep(1000 * attempt)
+                } else if (failure === 'unreachable') {
+                    log(`Attempt ${attempt} of ${PUSH_ATTEMPTS} could not reach the site repository (${firstLine(error)}); trying again in ${10 * attempt} s.`)
+                    // A blip in GitHub's Git service takes longer to pass than a race.
+                    sleep(10_000 * attempt)
+                } else {
+                    log(`Attempt ${attempt} of ${PUSH_ATTEMPTS} failed (${firstLine(error)}); trying again.`)
+                    sleep(1000 * attempt)
+                }
             }
         } finally {
             fs.rmSync(workDir, { recursive: true, force: true })
         }
     }
-    throw new Error(`The report could not be pushed after ${PUSH_ATTEMPTS} attempts: ${lastError?.stderr || lastError?.message}`)
+    throw new Error(failureMessage(lastError))
 }
 
 /** Appends to the job summary on the run's page, when there is one. */

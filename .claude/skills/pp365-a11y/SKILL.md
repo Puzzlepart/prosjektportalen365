@@ -267,7 +267,12 @@ checked by hand and with which reader and browser: axe finds only part of what W
 - A panel's body scrolls (`BasePanel`'s `DrawerBody`); with nothing focusable in it the keyboard
   cannot scroll it (axe's `scrollable-region-focusable`). A panel read rather than worked in sets
   `isBodyFocusable`, which makes the body a region named by the header that takes the focus (the
-  project information panel); a panel of fields leaves it off.
+  project information panel, the panel of all properties); a panel of fields leaves it off. Any
+  other box with its own `overflow: auto` and a height limit that holds only text does the same:
+  `tabIndex={0}` and a name, as a region unless it has a role of its own (the status snapshot's
+  frame, the catalog's file preview and conflict list, the setup's task log). axe in Jest never
+  sees one (jsdom lays nothing out), and the browser suite only where the box overflows at its
+  viewport: the panel of all properties was found by the hand round at 200 % zoom (2026-10-26).
 - Every restore target changes where the focus goes for each dialog opened from state after it:
   Tabster gives the focus to the latest target. A dialog opened from state inside a dialog or a
   panel then sends it out, behind what is still open (the status snapshot's copy dialog, held in

@@ -107,5 +107,5 @@ Denne oversikten viser hvordan Prosjektportalen 365 versjon 1.15.0 står mot hve
 
 ### Kjente avvik
 
-- **Tidslinjene i porteføljen, programmet og ressursallokeringen** har ingen liste ved siden av (1.3.1). Se [#1789](https://github.com/Puzzlepart/prosjektportalen365/issues/1789).
+- **Tidslinjene i porteføljen, programmet og ressursallokeringen** har ingen liste ved siden av (1.3.1). Listen er planlagt til 1.16.0, se [#1789](https://github.com/Puzzlepart/prosjektportalen365/issues/1789).
 - **Utvidelsene på listesider:** når nettleseren ikke har SharePoints skript i hurtigbufferen, som ved første besøk eller i et privat vindu, starter SharePoint ofte listevisningen sin to ganger. Bunnteksten og «Hent dokumentmal» får da en annen React-instans enn den som tegner dem, og vises ikke. Bunnteksten kan også utebli fordi SharePoint ikke definerer plassholderen den skal tegnes i. Begge feilene ligger i SharePoint og er meldt til Microsoft ([SharePoint/sp-dev-docs#11068](https://github.com/SharePoint/sp-dev-docs/issues/11068)). Med bufrede skript er de sjeldne, og en ny lasting av siden virker.

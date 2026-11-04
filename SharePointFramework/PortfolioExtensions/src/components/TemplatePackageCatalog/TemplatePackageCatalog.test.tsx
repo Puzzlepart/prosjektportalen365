@@ -1,9 +1,19 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
 // Babel, so mocks are not hoisted. The parts of the details that fetch (the content summary, the
-// history, the screenshots) are not under test here and render nothing.
+// history, the screenshots) are not under test here and render nothing. A file preview fetches a
+// JSON file.
 jest.mock('./PackageDetails/PackageContentSummary', () => ({ PackageContentSummary: () => null }))
 jest.mock('./PackageDetails/PackageHistory', () => ({ PackageHistory: () => null }))
 jest.mock('./PackageDetails/PackageScreenshots', () => ({ PackageScreenshots: () => null }))
+jest.mock('./PackageDetails/usePackageFilePreview', () => ({
+  usePackageFilePreview: (url?: string) => ({
+    content: url ? { value: '{\n  "Title": "Prosjektstatus"\n}', isJson: true } : undefined,
+    loading: false,
+    error: false,
+    copied: false,
+    copy: (): void => undefined
+  })
+}))
 
 import { AriaLiveAnnouncer } from '@fluentui/react-components'
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
@@ -12,9 +22,11 @@ import strings from 'PortfolioExtensionsStrings'
 import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import { CatalogToolbar } from './CatalogToolbar'
+import { CompatibilityDialog } from './CompatibilityDialog'
 import { TemplatePackageCatalogContext } from './context'
 import { InstallProgress } from './InstallProgress'
 import { PackageDetails } from './PackageDetails'
+import { PackageFilePreview } from './PackageDetails/PackageFilePreview'
 import { PackageList } from './PackageList'
 import { ALL_FILTER } from './types'
 import { announced } from 'pp365-jest-config/lib/announce'
@@ -189,6 +201,39 @@ describe('TemplatePackageCatalog', () => {
     renderIn(value, <InstallProgress />)
     fireEvent.click(screen.getByRole('button', { name: strings.CloseLabel }))
     expect(value.setState).toHaveBeenCalledWith({ installProgress: undefined, focusDetails: true })
+  })
+
+  // The two boxes below scroll on their own and hold nothing to focus, so without a stop of their
+  // own the keyboard could not scroll them (axe's scrollable-region-focusable, which jsdom cannot
+  // check: it lays nothing out).
+  it('lets the keyboard scroll a file preview: the code is a region named by the file that takes the focus (WCAG 2.1.1)', () => {
+    render(
+      <PackageFilePreview
+        title='Prosjektstatus.json'
+        url='https://example.com/Prosjektstatus.json'
+        onClose={jest.fn()}
+      />
+    )
+    const code = screen.getByRole('region', { name: 'Prosjektstatus.json' })
+    expect(code).toHaveAttribute('tabindex', '0')
+    expect(code).toHaveTextContent('"Title": "Prosjektstatus"')
+  })
+
+  it('lets the keyboard scroll the conflicts of a compatibility check: the list takes the focus, named (WCAG 2.1.1)', () => {
+    const conflicts = [
+      { resolution: 'overwrite', detail: 'Feltet GtProjectPhase finnes' },
+      { resolution: 'blocked', detail: 'Listen Prosjektstatus finnes' }
+    ]
+    renderIn(
+      context({}, { compatibilityReport: { conflicts, hasConflicts: true } }),
+      <CompatibilityDialog />
+    )
+    const list = screen.getByRole('list', { name: strings.CatalogCompatibilityConflictsLabel })
+    expect(list).toHaveAttribute('tabindex', '0')
+    // The blocked conflict first.
+    expect(within(list).getAllByRole('listitem')[0]).toHaveTextContent(
+      strings.CatalogResolutionBlocked
+    )
   })
 })
 
