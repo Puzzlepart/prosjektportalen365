@@ -2,7 +2,7 @@
 
 Operational guide for AI coding agents working in **Prosjektportalen 365** — an open-source (Puzzlepart) SharePoint Framework (SPFx) monorepo managed with **Rush + pnpm**.
 
-The build toolchain is **Heft** (SPFx 1.24, on its release candidate 1.24.0-rc.0 until GA; React 18; Rush Stack). The gulp toolchain was retired in the 1.17.4 to 1.23.2 migration; see `docs/plans/spfx-1.23-heft-toolchain.md` and the `pp365-toolchain` skill.
+The build toolchain is **Heft** (SPFx 1.24.1; React 18; Rush Stack). The gulp toolchain was retired in the 1.17.4 to 1.23.2 migration; see `docs/plans/spfx-1.23-heft-toolchain.md` and the `pp365-toolchain` skill.
 
 This is a thin operational index. The authoritative, detailed conventions live in **`.development-guide/`** (Norwegian) — read it for depth on anything below, and load the skill that covers your task (see [Skills](#skills)). Human contributors: see also `CONTRIBUTING.md`, and new developers `.development-guide/kom-i-gang.md` (a first-week path through the guide).
 
@@ -30,7 +30,7 @@ Every Rush project is listed in `rush.json`.
 3. **Do not hand-edit generated files** — they are gitignored and regenerated on build:
    - Sass typings — generated into `temp/sass-ts/` by the Heft build (they used to sit next to the source as `**/*.module.scss.ts`). Edit the `.scss`; keep the set of class names stable. Never edit or commit anything under `temp/`.
    - `**/src/loc/shared/*` — regenerated from `Templates/Portfolio/Resources.*.resx` (via the `Templates` `generate-resx-ts` task).
-4. **Node 26** (`.nvmrc` = `26.11.1`, `rush.json` enforces `>=26.11.0 <27.0.0`). SPFx 1.24 allows 22, 24 and 26, and the repo pins one so every build is the same build: another major fails `rush`, and `build-release` refuses to run.
+4. **Node 26** (`.nvmrc` = `26.13.0`, Node 26's first LTS patch; `rush.json` enforces `>=26.11.0 <27.0.0`). SPFx 1.24 allows 22, 24 and 26, and the repo pins one so every build is the same build: another major fails `rush`, and `build-release` refuses to run.
 5. **CI runs on Linux, so every path is case sensitive.** macOS hid mismatches such as `SiteScripts/Src` vs the real `SiteScripts/src` and `build-release.ps1` vs `Build-Release.ps1`; on `ubuntu-latest` they fail the release build. Spell paths in scripts, workflows and imports exactly as the filesystem does, and check with `ls` when in doubt.
 6. **Production builds need more than Node's default heap on small machines.** The PortfolioWebParts build fails at a 2 GB heap and passes at 3 GB. CI (`ubuntu-latest`) and `Install/Build-Release.ps1` set `NODE_OPTIONS=--max-old-space-size=8192`; if a local `heft build --production` or `rush rebuild` dies with "Reached heap limit", export the same variable first.
 7. **Lint errors fail the build** (Heft lints in its build phase; warnings do not fail). The house rules are in `SharePointFramework/.eslint-config/index.js`: no `import * as` from `@fluentui/react-icons`; no root import of `@pnp/spfx-controls-react` or `@pnp/spfx-property-controls` (import each control from its `/lib/<Control>` entry point); no deep import of `pp365-shared-library/lib/icons/iconCatalog`. `@typescript-eslint/no-floating-promises`, `no-void` (allowed only as a statement, `void promise;` for a deliberate fire-and-forget), `eqeqeq` (`== null` allowed), `react/jsx-key`, `unused-imports/no-unused-imports` and `prettier/prettier` are errors.

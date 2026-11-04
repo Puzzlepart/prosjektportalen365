@@ -418,3 +418,25 @@ with the user's choice to fix all three and cover them.
   told as unread, skipping with the reason where it does not.
 - **Left:** `addChildProjects`' writes to another hub are covered only by the browser flow that
   adds a removed project back; the integration harness writes to the reserved project alone.
+
+### Slice 5 — SPFx 1.24.1 and Node 26 LTS (2026-11-04)
+
+SPFx 1.24.0 came out on 2026-10-28 and 1.24.1 on 2026-11-02; 1.24.1 fixed a generator that still
+scaffolded `1.24.0-rc.0` references (sp-dev-docs#11078). Microsoft asks projects on a beta or a
+release candidate to move before they deploy to production, and 1.15.0 is not cut on one (P5-4),
+so the swap went to 1.24.1.
+
+- **What changed from the RC: nothing under the rig.** Heft 1.3.2 and its Jest, lint and Sass
+  plugins, the rig's TypeScript 5.3.3, ESLint 9.37.0, webpack 5.105.4, React 18.3.1 and its types
+  and the supported Node versions are the same in the RC, 1.24.0 and 1.24.1 (`npm view` of the
+  rig, the Heft plugins and the lint config, and the generator's `lib/common/dependencies.json`
+  diffed). The release notes add no deprecation; GA's one feature, Copilot UX components, is not
+  ours.
+- **The change.** The 68 `@microsoft/*` pins in the six solutions and the lint and Jest configs,
+  from `1.24.0-rc.0` to `1.24.1`, and `rush update`. The template's one new override,
+  `serialize-javascript ^7.1.3` (GHSA-m5mm-p8h7-m29v, low), in `globalOverrides`: it comes only
+  through the SPFx minifier (`@rushstack/module-minifier` pins 7.0.5), and 7.1 is CommonJS too.
+  `.nvmrc` ×7 to 26.13.0, Node 26's first LTS patch (2026-10-28, D1); the range in `rush.json`
+  and the `engines` (`>=26.11.0 <27.0.0`) admits it and stays.
+- **Left:** SharePoint's faults on list pages, sp-dev-docs#11068 and #11070, measured again once
+  1.24.1 is deployed (`e2e/tests/diagnostics`), and the hand round P5-4 asks for.
