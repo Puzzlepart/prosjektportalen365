@@ -300,24 +300,26 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
    *
    * @param phase Phase
    * @param phaseField Phase field
+   * @param syncToHub Whether to update the project's entity in the hub too (default `true`).
+   * `false` leaves the hub to the caller, which then decides what a failed hub update means.
+   *
+   * @returns The phase properties written, for the caller to write to the hub
    */
   public async updateProjectPhase(
     phase: ProjectPhaseModel,
-    phaseField: IPhaseField
-  ): Promise<void> {
+    phaseField: IPhaseField,
+    syncToHub = true
+  ): Promise<Record<string, string>> {
     const properties = {
       [phaseField.textField]: phase.toString(),
       [`${phaseField.fieldName}Text`]: phase.name
     }
-    try {
-      const propertyItemContext = await this._getLocalProjectInformationItemContext()
-      if (propertyItemContext) await propertyItemContext.item.update(properties)
-      if (this._params.entityService) {
-        await this._params.entityService.updateEntityItem(this._params.siteId, properties)
-      }
-    } catch (error) {
-      throw error
+    const propertyItemContext = await this._getLocalProjectInformationItemContext()
+    if (propertyItemContext) await propertyItemContext.item.update(properties)
+    if (syncToHub && this._params.entityService) {
+      await this._params.entityService.updateEntityItem(this._params.siteId, properties)
     }
+    return properties
   }
 
   /**

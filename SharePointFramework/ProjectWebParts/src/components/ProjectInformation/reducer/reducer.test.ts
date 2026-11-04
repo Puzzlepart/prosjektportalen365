@@ -8,6 +8,7 @@ import {
   OPEN_DIALOG,
   OPEN_PANEL,
   PROPERTIES_UPDATED,
+  SET_HUB_SYNC_WARNING,
   SET_PROGRESS,
   UPDATE_DATA,
   useProjectInformationReducer
@@ -201,5 +202,14 @@ describe('ProjectInformation reducer', () => {
     expect(hook.dispatch(PROPERTIES_UPDATED({ refetch: false })).propertiesLastUpdated).toBe(
       stamped
     )
+  })
+
+  it('shows the warning from a sync the hub did not take, and clears it for the next sync', () => {
+    const hook = loaded()
+    expect(hook.state.hubSyncWarning).toBeUndefined()
+    expect(
+      hook.dispatch(SET_HUB_SYNC_WARNING('Porteføljeområdet ble ikke oppdatert')).hubSyncWarning
+    ).toBe('Porteføljeområdet ble ikke oppdatert')
+    expect(hook.dispatch(SET_HUB_SYNC_WARNING(null)).hubSyncWarning).toBeNull()
   })
 })
