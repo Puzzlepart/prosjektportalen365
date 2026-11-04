@@ -202,4 +202,43 @@ describe('ProgressDialog', () => {
     fireEvent.click(screen.getByRole('button', { name: strings.ContinueToProjectText }))
     expect(onDismiss).toHaveBeenCalled()
   })
+
+  it('waits for the user and shows the warning when setup completes with one', () => {
+    const onDismiss = jest.fn()
+    const warning = { title: 'Ikke registrert i porteføljen', text: 'Kontakt en administrator.' }
+    const { rerender } = render(
+      <ProgressDialog progressIndicator={INDICATOR} taskProgress={tasks()} onDismiss={onDismiss} />
+    )
+    rerender(
+      <ProgressDialog
+        progressIndicator={INDICATOR}
+        taskProgress={tasks()}
+        onDismiss={onDismiss}
+        warning={warning}
+        isComplete
+      />
+    )
+    expect(onDismiss).not.toHaveBeenCalled()
+    expect(screen.getByText(warning.title)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: strings.ContinueToProjectText }))
+    expect(onDismiss).toHaveBeenCalled()
+  })
+
+  it('tells a screen reader the warning a completed setup shows, and breaks no rule axe can check (WCAG 4.1.3)', async () => {
+    const warning = { title: 'Ikke registrert i porteføljen', text: 'Kontakt en administrator.' }
+    const dialog = (props: Record<string, any> = {}) => (
+      <AriaLiveAnnouncer>
+        <ProgressDialog
+          progressIndicator={INDICATOR}
+          taskProgress={tasks()}
+          onDismiss={jest.fn()}
+          {...props}
+        />
+      </AriaLiveAnnouncer>
+    )
+    const { rerender } = render(dialog())
+    rerender(dialog({ warning, isComplete: true }))
+    await waitFor(() => expect(announced()).toContain(warning.text))
+    expect(await axeComponent(screen.getByRole('alertdialog'))).toHaveNoViolations()
+  })
 })

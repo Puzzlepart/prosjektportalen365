@@ -92,6 +92,14 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
           containerStyle={{ marginTop: 12 }}
         />
       )}
+      {props.isComplete && props.warning && (
+        <UserMessage
+          title={props.warning.title}
+          text={props.warning.text}
+          intent='warning'
+          containerStyle={{ marginTop: 12 }}
+        />
+      )}
     </BaseDialog>
   )
 }

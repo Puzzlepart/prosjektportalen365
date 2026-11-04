@@ -3,6 +3,7 @@ import {
   addEntityItem,
   createEntityUrls,
   createNewEntityProperties,
+  ensureEntityItem,
   escapeODataStringLiteral,
   fetchEntity,
   getEntityFields,
@@ -136,6 +137,12 @@ interface ICreateFakeListOptions {
   items?: any[]
 
   /**
+   * Items for the query's filter, for a test where the filter decides; `undefined` falls back
+   * to `items`.
+   */
+  itemsWhere?: (filter: string) => any[] | undefined
+
+  /**
    * Fields the content type field query resolves to.
    */
   fields?: any[]
@@ -173,6 +180,7 @@ interface ICreateFakeListOptions {
 function createFakeList(options: ICreateFakeListOptions = {}): IFakeList {
   const {
     items = [],
+    itemsWhere,
     fields = [],
     listMetadata = {
       Id: 'list-id',
@@ -207,7 +215,10 @@ function createFakeList(options: ICreateFakeListOptions = {}): IFakeList {
   }
 
   const createItemsCollection = (): ISpItemsShape => {
-    const itemsQueryable = createFakeQueryable<any[]>(items)
+    const itemsQueryable: FakeQueryable<any[]> = createFakeQueryable<any[]>(() => {
+      const { filter } = itemsQueryable.recorded
+      return itemsWhere?.(filter[filter.length - 1] ?? '') ?? items
+    })
     itemsQueries.push(itemsQueryable.recorded)
     const itemsCollection: any = itemsQueryable
     itemsCollection.getById = (id: number) => {
@@ -542,5 +553,123 @@ describe('addEntityItem', () => {
     const result = await addEntityItem(fake.list, { Title: 'Project A' })
     expect(result).toBe(addResult)
     expect(fake.addCalls).toEqual([{ Title: 'Project A' }])
+  })
+})
+
+describe('ensureEntityItem', () => {
+  const params = { identityFieldName: 'GtSiteId', urlFieldName: 'GtSiteUrl' }
+  const PROJECT_URL = 'https://contoso.sharepoint.com/sites/project'
+
+  it('updates the entity when there is one, and leaves the new entity properties out', async () => {
+    const fake = createFakeList({ items: [{ Id: 55 }] })
+    const added = await ensureEntityItem(
+      fake.list,
+      params,
+      SITE_ID,
+      PROJECT_URL,
+      { Title: 'New' },
+      { GtGroupId: 'group-1' }
+    )
+    expect(added).toBe(false)
+    expect(fake.updateCalls).toEqual([{ properties: { Title: 'New' }, eTag: '*' }])
+    expect(fake.addCalls).toEqual([])
+  })
+
+  it('adds the entity with its identity, URL and the new entity properties when there is none', async () => {
+    const fake = createFakeList({ items: [] })
+    const added = await ensureEntityItem(
+      fake.list,
+      params,
+      `{${SITE_ID}}`,
+      PROJECT_URL,
+      { Title: 'New', GtIsProgram: false },
+      { GtGroupId: 'group-1', Title: 'Old' }
+    )
+    expect(added).toBe(true)
+    expect(fake.updateCalls).toEqual([])
+    expect(fake.addCalls).toEqual([
+      {
+        GtSiteId: SITE_ID,
+        GtSiteUrl: PROJECT_URL,
+        GtGroupId: 'group-1',
+        Title: 'New',
+        GtIsProgram: false
+      }
+    ])
+  })
+
+  it('passes the supplied eTag through to the update', async () => {
+    const fake = createFakeList({ items: [{ Id: 55 }] })
+    await ensureEntityItem(fake.list, params, SITE_ID, PROJECT_URL, {}, {}, {}, '"3"')
+    expect(fake.updateCalls[0].eTag).toBe('"3"')
+  })
+
+  it('updates an entity it finds by an alternate key, and fills in its identity, instead of adding a second one', async () => {
+    // The setup finds an entity by its group ID and leaves it as it is, so an entity registered
+    // that way can lack the site ID the sync looks it up by.
+    const fake = createFakeList({
+      itemsWhere: (filter) => (filter.startsWith('GtGroupId') ? [{ Id: 77, GtSiteId: null }] : [])
+    })
+    const added = await ensureEntityItem(
+      fake.list,
+      params,
+      SITE_ID,
+      PROJECT_URL,
+      { Title: 'New' },
+      { GtGroupId: 'group-1' },
+      { GtGroupId: 'group-1', GtSiteUrl: PROJECT_URL }
+    )
+    expect(added).toBe(false)
+    expect(fake.addCalls).toEqual([])
+    expect(fake.getByIdCalls).toEqual([77])
+    expect(fake.updateCalls).toEqual([
+      { properties: { Title: 'New', GtSiteId: SITE_ID }, eTag: '*' }
+    ])
+  })
+
+  it('takes over an entity whose identity is the same written with braces or in upper case', async () => {
+    const fake = createFakeList({
+      itemsWhere: (filter) =>
+        filter.startsWith('GtSiteUrl') ? [{ Id: 78, GtSiteId: `{${SITE_ID.toUpperCase()}}` }] : []
+    })
+    const added = await ensureEntityItem(
+      fake.list,
+      params,
+      SITE_ID,
+      PROJECT_URL,
+      { Title: 'New' },
+      {},
+      { GtSiteUrl: PROJECT_URL }
+    )
+    expect(added).toBe(false)
+    expect(fake.updateCalls).toEqual([
+      { properties: { Title: 'New', GtSiteId: SITE_ID }, eTag: '*' }
+    ])
+  })
+
+  it("leaves another site's entity at the same URL alone, skips a key without a value, and adds the entity", async () => {
+    // A deleted site's entity keeps its URL, and a new site there is a new project.
+    const fake = createFakeList({
+      itemsWhere: (filter) =>
+        filter.startsWith('GtSiteUrl')
+          ? [{ Id: 79, GtSiteId: '99999999-1111-2222-3333-444444444444' }]
+          : []
+    })
+    const added = await ensureEntityItem(
+      fake.list,
+      params,
+      SITE_ID,
+      PROJECT_URL,
+      { Title: 'New' },
+      {},
+      { GtGroupId: '', GtSiteUrl: PROJECT_URL }
+    )
+    expect(added).toBe(true)
+    expect(fake.updateCalls).toEqual([])
+    expect(fake.itemsQueries.map((query) => query.filter[0]).filter(Boolean)).toEqual([
+      `GtSiteId eq '${SITE_ID}'`,
+      `GtSiteUrl eq '${PROJECT_URL}'`
+    ])
+    expect(fake.addCalls).toHaveLength(1)
   })
 })

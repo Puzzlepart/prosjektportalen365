@@ -54,4 +54,10 @@ export interface IProgressDialogProps extends IBaseDialogProps {
    * in the footer.
    */
   error?: Error
+
+  /**
+   * Warning to show when the setup completed with a limitation the user must know
+   * about. Keeps the dialog open on completion instead of continuing to the project.
+   */
+  warning?: { title: string; text: string }
 }

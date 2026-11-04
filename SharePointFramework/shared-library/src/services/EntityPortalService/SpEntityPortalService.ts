@@ -6,6 +6,7 @@ import { SPFxContext } from '../../types'
 import {
   addEntityItem,
   createNewEntityProperties,
+  ensureEntityItem,
   fetchEntity,
   getEntityFields,
   getEntityItem,
@@ -122,6 +123,38 @@ export class SpEntityPortalService {
       this._params.identityFieldName,
       identity,
       properties,
+      eTag
+    )
+  }
+
+  /**
+   * Update the entity item matching `identity`, or add it when there is none.
+   *
+   * @param identity Identity of the entity
+   * @param url Site URL of the entity, set only on a new entity
+   * @param properties Properties to update, or to add the entity with
+   * @param newEntityProperties Properties set only on a new entity
+   * @param alternateKeys Other fields that identify the entity, looked up before one is added
+   * @param eTag ETag for the `If-Match` header of an update
+   *
+   * @returns `true` when the entity was added, `false` when it was updated
+   */
+  public ensureEntityItem(
+    identity: string,
+    url: string,
+    properties: Record<string, any>,
+    newEntityProperties?: Record<string, any>,
+    alternateKeys?: Record<string, string>,
+    eTag = '*'
+  ): Promise<boolean> {
+    return ensureEntityItem(
+      this._list,
+      this._params,
+      identity,
+      url,
+      properties,
+      newEntityProperties,
+      alternateKeys,
       eTag
     )
   }
