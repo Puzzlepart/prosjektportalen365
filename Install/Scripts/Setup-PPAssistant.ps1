@@ -69,6 +69,13 @@
 .PARAMETER Preflight
   Kjør kun forhåndssjekken og skriv ut sjekklista og oppsummeringen av hva som ville blitt gjort.
   Endrer ingenting og spør ikke. Avslutningskode 1 hvis noe mangler.
+.PARAMETER Force
+  Fortsett selv om forhåndssjekken fant noe som MANGLER. Forhåndssjekken leser rettigheter, kvote
+  og modellkatalog, og de kan være utdaterte eller ufullstendige (nylig gitt rolle, rolle på en
+  ressursgruppe som ikke finnes ennå, kvote-API-et uten innsyn). Med -Force får opprettelsen
+  avgjøre: feiler den, er feilmeldingen fra Azure like god, og det som ble opprettet, gjenbrukes
+  ved neste kjøring. Oppsummeringen og bekreftelsen vises som vanlig. Uten Azure-abonnement
+  stopper kjøringen uansett - da kan ingenting opprettes.
 .PARAMETER SkipConfirmation
   Hopp over oppsummeringen og bekreftelsen. For uovervåkede kjøringer.
 .PARAMETER ImagesApiBase
@@ -128,6 +135,12 @@
   ./Setup-PPAssistant.ps1 -HubUrl https://kontoso.sharepoint.com/sites/pp365 -Preflight
   # Kun forhåndssjekk: kontrollerer tenant, innlogging, Key Vault og godkjenninger, skriver ut
   # sjekklista og oppsummeringen av hva som ville blitt gjort, og avslutter. Endrer ingenting.
+
+.EXAMPLE
+  ./Setup-PPAssistant.ps1 -HubUrl https://kontoso.sharepoint.com/sites/pp365 -ProvisionFoundry -Force
+  # Forhåndssjekken sa MANGLER (f.eks. Azure-tilgang eller kvote), men du mener den tar feil:
+  # fortsetter til oppsummeringen og lar opprettelsen avgjøre. Feiler den, er ingenting halvveis -
+  # det som ble opprettet, gjenbrukes når du kjører igjen.
 
 .EXAMPLE
   ./Setup-PPAssistant.ps1 -HubUrl https://kontoso.sharepoint.com/sites/pp365 -GrantSharePointFullControl
@@ -190,6 +203,10 @@ param(
   # Kjør kun forhåndssjekken, skriv ut sjekklista og avslutt. Endrer ingenting.
   # Avslutningskoden er 1 hvis noe mangler, 0 ellers - brukbart i en pipeline.
   [switch] $Preflight,
+  # Fortsett selv om forhåndssjekken fant noe som MANGLER. Sjekkene leser rettigheter, kvote og
+  # modellkatalog, og de kan ta feil - da får opprettelsen avgjøre. Oppsummeringen og bekreftelsen
+  # vises som vanlig, så dette er ikke det samme som -SkipConfirmation.
+  [switch] $Force,
   # Hopp over oppsummeringen og bekreftelsesspørsmålet. For uovervåkede kjøringer.
   # Bruk den ikke når du kjører mot en kundetenant for første gang - oppsummeringen er
   # nettopp der du oppdager at du er logget inn feil sted.
@@ -218,6 +235,11 @@ $RpApiVersion    = '2021-04-01'   # registrering av ressursleverandøren
 # nytt og får neste vegg. MANGLER stopper kjøringen (etter at alle sjekker har
 # gått), ADVARSEL gjør det ikke. Mønsteret er lånt fra bestillingsportalens
 # deploy.ps1.
+#
+# Sjekkene er lesing av rettigheter, kvote og katalog, og de kan ta feil (se
+# -Force). Derfor skal en MANGLER aldri være den eneste veien til et svar: alt
+# den stopper, må også feile forståelig i selve opprettelsen, slik at -Force
+# kan la opprettelsen avgjøre uten å etterlate et halvt oppsett.
 # ---------------------------------------------------------------------------
 $script:Sjekker = @()
 
@@ -305,6 +327,10 @@ function Show-PPSummary($Tenant, $AzContext, $VaultFinnes, $Consent, $SharePoint
   Write-Host '  Nåværende tilstand:' -ForegroundColor Yellow
   Write-Host "    Admin-consent:      $Consent"
   Write-Host "    SharePoint-scope:   $SharePointScope"
+  $mangler = @($script:Sjekker | Where-Object { $_.Status -eq 'MANGLER' })
+  if ($Force -and $mangler.Count -gt 0) {
+    Write-Host "    Forhåndssjekk:      $($mangler.Count) MANGLER overstyrt med -Force ($($mangler.Navn -join ', ')) - opprettelsen avgjør" -ForegroundColor Yellow
+  }
   Write-Host ''
   Write-Host $(if ($Preflight) { '  Dette ville blitt gjort:' } else { '  Dette blir gjort:' }) -ForegroundColor Yellow
 
@@ -1525,12 +1551,19 @@ if ($assistantSpCurrent) {
 $antallMangler = Show-PPChecklist
 if ($Preflight) {
   Show-PPSummary $tenant $azContext $vaultFinnes $consentTekst $scopeTekst
-  if ($antallMangler -gt 0) { Write-Host "Forhåndssjekken fant $antallMangler ting som mangler - kjøringen ville stoppet før noe ble endret." -ForegroundColor Red }
+  if ($antallMangler -gt 0) { Write-Host "Forhåndssjekken fant $antallMangler ting som mangler - kjøringen ville stoppet før noe ble endret (eller fortsatt, med -Force)." -ForegroundColor Red }
   Write-Info 'Kun forhåndssjekk (-Preflight). Ingenting er endret.'
   exit $(if ($antallMangler -gt 0) { 1 } else { 0 })
 }
 if ($antallMangler -gt 0) {
-  throw "Forhåndssjekken fant $antallMangler ting som mangler (se over). Ingenting er endret."
+  # Uten abonnement finnes det ingenting å prøve mot - alle stier under ville vært tomme.
+  if ($script:IngenAbonnement) {
+    throw "Forhåndssjekken fant $antallMangler ting som mangler (se over), og uten Azure-abonnement kan ingenting opprettes - heller ikke med -Force. Ingenting er endret."
+  }
+  if (-not $Force) {
+    throw "Forhåndssjekken fant $antallMangler ting som mangler (se over). Ingenting er endret. Mener du den tar feil - den leser rettigheter, kvote og modellkatalog, som kan være utdaterte - kjør igjen med -Force, så får opprettelsen avgjøre."
+  }
+  Write-Warning "Fortsetter tross $antallMangler ting som mangler (-Force). Opprettelsen avgjør; feiler den, gjenbrukes det som ble opprettet ved neste kjøring."
 }
 
 Confirm-PPSetup $tenant $azContext $vaultFinnes $consentTekst $scopeTekst
