@@ -40,24 +40,30 @@ describe("the upgrade's result", { skip: skipReason('hubUrl', 'projectUrl') }, (
   })
 
   it('names the upgrade that just ran, with its version, in the installation log', async (t) => {
-    const [entry] = await hub.sp.web.lists
+    // `UpgradeAllSitesToLatest.ps1` logs its own run too, with the installed version unstamped
+    // (`1.14.0`). With `[upgrade-all-sites-to-latest]` it runs beside this test, and its entry was
+    // the newest (run 41790073082): the upgrade's own entry is the newest one stamped.
+    const entries = await hub.sp.web.lists
       .getByTitle(resources.Lists_InstallationLog_Title)
       .items.select('Id', 'InstallVersion', 'InstallChannel')
       .orderBy('Id', false)
-      .top(1)<Array<{ InstallVersion: string; InstallChannel: string }>>()
-    assert.ok(entry, 'the installation log is empty')
+      .top(5)<Array<{ InstallVersion: string; InstallChannel: string }>>()
+    assert.ok(entries.length > 0, 'the installation log is empty')
     // `Build-Release.ps1` stamps the root package's version and the commit's short hash.
     const { version } = JSON.parse(readFileSync(resolve(ROOT, '..', 'package.json'), 'utf8'))
+    const entry = entries.find((e) => e.InstallVersion?.startsWith(`${version}.`))
     assert.ok(
-      entry.InstallVersion.startsWith(`${version}.`),
-      `the newest installation is ${entry.InstallVersion}, not version ${version}`
+      entry,
+      `none of the newest installations is stamped with version ${version}: ${entries.map((e) => e.InstallVersion).join(', ')}`
     )
     if (!env.commit)
-      return t.diagnostic(`newest installation ${entry.InstallVersion}; no commit to compare`)
+      return t.diagnostic(
+        `newest stamped installation ${entry.InstallVersion}; no commit to compare`
+      )
     const hash = entry.InstallVersion.slice(version.length + 1)
     assert.ok(
       hash.length >= 7 && env.commit.startsWith(hash),
-      `the newest installation is ${entry.InstallVersion}, not this run's commit ${env.commit.slice(0, 7)}`
+      `the newest stamped installation is ${entry.InstallVersion}, not this run's commit ${env.commit.slice(0, 7)}`
     )
     assert.equal(entry.InstallChannel, 'test')
   })
