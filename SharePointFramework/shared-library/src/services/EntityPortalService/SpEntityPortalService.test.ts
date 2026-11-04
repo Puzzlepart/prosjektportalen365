@@ -70,6 +70,7 @@ describe('SpEntityPortalService', () => {
       'site-id',
       'https://tenant.sharepoint.com/sites/project',
       { Title: 'Prosjekt' },
+      { GtGroupId: 'group-id' },
       { GtGroupId: 'group-id' }
     )
     expect(added).toBe(true)
@@ -79,6 +80,7 @@ describe('SpEntityPortalService', () => {
       'site-id',
       'https://tenant.sharepoint.com/sites/project',
       { Title: 'Prosjekt' },
+      { GtGroupId: 'group-id' },
       { GtGroupId: 'group-id' },
       '*'
     )

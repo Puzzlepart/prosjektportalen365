@@ -196,15 +196,15 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       customSiteFieldsGroup: templateParameters.CustomSiteFields,
       projectContentTypeId: templateParameters.ProjectContentTypeId
     })
+    const groupId = this.spfxContext.pageContext.legacyPageContext?.groupId
     const added = await this.entityService.ensureEntityItem(
       this.settings.siteId,
       this.settings.webUrl,
       { ...properties, Title: title },
-      getNewEntityProperties(
-        this.spfxContext.pageContext.legacyPageContext?.groupId,
-        fieldValues,
-        templateParameters.ProjectContentTypeId
-      )
+      getNewEntityProperties(groupId, fieldValues, templateParameters.ProjectContentTypeId),
+      // The setup's key, and the URL of a project registered by hand: an entity without the
+      // site ID is found by these and updated, not doubled.
+      { GtGroupId: groupId, GtSiteUrl: this.settings.webUrl }
     )
     Logger.log({
       message: `(${this._name}) (syncPropertyItemToHub) Successfully ${

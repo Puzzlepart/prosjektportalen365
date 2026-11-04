@@ -272,6 +272,13 @@ describe('ProjectSetupDialog', () => {
     expect(screen.queryByText(strings.NoHubWriteAccessTitle)).toBeNull()
   })
 
+  it('shows the warning about the hub in the dialog, where a screen reader reads it, and breaks no rule axe can check (WCAG 1.3.1)', async () => {
+    renderDialog({ data: setupData({ hasHubWriteAccess: false }) })
+    const dialog = screen.getByRole('alertdialog')
+    expect(within(dialog).getByText(strings.NoHubWriteAccessTitle)).toBeInTheDocument()
+    expect(await axeComponent(dialog)).toHaveNoViolations()
+  })
+
   it('warns that Planner needs membership of the group', () => {
     renderDialog({ validation: ProjectSetupValidation.UserNotGroupMember })
     expect(screen.getByText(strings.PlannerMemberWarningMessage)).toBeInTheDocument()

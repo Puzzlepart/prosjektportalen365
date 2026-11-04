@@ -1,10 +1,12 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
-// Babel, so mocks are not hoisted. The data fetch dispatches what `fetched.action()` returns; the
-// data adapter and the panels and dialogs (all reach SharePoint) are stand-ins.
-const fetched: { action: () => any } = { action: () => null }
+// Babel, so mocks are not hoisted. The data fetch dispatches what `fetched.action()` returns, and
+// keeps the dispatch for a test that acts once the data is in, as a save does; the data adapter
+// and the panels and dialogs (all reach SharePoint) are stand-ins.
+const fetched: { action: () => any; dispatch?: (action: any) => void } = { action: () => null }
 jest.mock('./data', () => ({
   useProjectInformationDataFetch: (context: any) => {
     const { useEffect } = jest.requireActual('react')
+    fetched.dispatch = context.dispatch
     useEffect(() => {
       const action = fetched.action()
       if (action) context.dispatch(action)
@@ -45,14 +47,16 @@ jest.mock('./SustainabilityGoals', () => ({
   }
 }))
 
-import { render, screen, within } from '@testing-library/react'
+import { AriaLiveAnnouncer } from '@fluentui/react-components'
+import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { axeComponent } from 'pp365-jest-config/lib/axe'
+import { announced } from 'pp365-jest-config/lib/announce'
 import strings from 'ProjectWebPartsStrings'
 import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import { ProjectInformation } from './ProjectInformation'
-import { FETCH_DATA_ERROR, INIT_DATA } from './reducer'
+import { FETCH_DATA_ERROR, INIT_DATA, SET_HUB_SYNC_WARNING } from './reducer'
 
 /**
  * The project information web part as a whole: the loading state, the title, the properties (or
@@ -241,5 +245,25 @@ describe('ProjectInformation', () => {
     expect(
       await screen.findByText(strings.ProjectInformationNoHubAccessMessage)
     ).toBeInTheDocument()
+  })
+
+  it('tells when saved changes did not reach the hub, in words at its end and to a screen reader (WCAG 4.1.3)', async () => {
+    const warning = format(
+      strings.ProjectPropertiesNotSyncedToHubText,
+      format(strings.HubSyncNoWriteAccessReason, 'Prosjekter')
+    )
+    fetched.action = () => initData()
+    render(<AriaLiveAnnouncer>{information()}</AriaLiveAnnouncer>)
+    await screen.findByText('Prosjektinformasjon', { selector: 'span' })
+    // As the sync does when the hub does not take the saved changes.
+    act(() => {
+      fetched.dispatch?.(SET_HUB_SYNC_WARNING(warning))
+    })
+    const message = (await screen.findByText(strings.HubSyncWarningTitle)).closest(
+      '.fui-MessageBar'
+    )
+    expect(message).toHaveTextContent(warning)
+    await waitFor(() => expect(announced()).toContain(warning))
+    expect(await axeComponent(message as HTMLElement)).toHaveNoViolations()
   })
 })

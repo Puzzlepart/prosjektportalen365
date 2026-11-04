@@ -1,11 +1,13 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
-// Babel, so mocks are not hoisted. The data fetch dispatches what `fetched.data` holds; the data
+// Babel, so mocks are not hoisted. The data fetch dispatches what `fetched.data` holds, and keeps
+// the dispatch for a test that acts once the phases are in, as a phase change does; the data
 // adapter and the hooks that change the phase (all reach SharePoint) are stand-ins.
-const fetched: { data: any; error?: Error } = { data: null }
+const fetched: { data: any; error?: Error; dispatch?: (action: any) => void } = { data: null }
 jest.mock('./useProjectPhasesDataFetch', () => ({
   useProjectPhasesDataFetch: (_props: any, dispatch: any) => {
     const { useEffect } = jest.requireActual('react')
     const { INIT_DATA } = jest.requireActual('./reducer')
+    fetched.dispatch = dispatch
     useEffect(() => {
       if (fetched.data) dispatch(INIT_DATA({ data: fetched.data, error: fetched.error }))
     }, [])
@@ -56,12 +58,15 @@ jest.mock('@fluentui/react-components', () => {
 jest.mock('./useChangePhase', () => ({ useChangePhase: () => jest.fn() }))
 jest.mock('./usePhaseHooks', () => ({ usePhaseHooks: () => [jest.fn(), jest.fn()] }))
 
-import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
+import { AriaLiveAnnouncer } from '@fluentui/react-components'
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { axeComponent } from 'pp365-jest-config/lib/axe'
+import { announced } from 'pp365-jest-config/lib/announce'
 import strings from 'ProjectWebPartsStrings'
 import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import { ProjectPhases } from './ProjectPhases'
+import { HUB_SYNC_FAILED, SET_PHASE } from './reducer'
 import { checklistItem, phase } from './testFixtures'
 
 /**
@@ -114,7 +119,10 @@ function renderPhases(
       commentMinLength={4}
       webAbsoluteUrl='https://contoso.sharepoint.com/sites/alfa'
       {...props}
-    />
+    />,
+    // Under an `AriaLiveAnnouncer`, as every root of ours is (`renderReact`), so what the phase
+    // selector announces can be read.
+    { wrapper: AriaLiveAnnouncer }
   )
 }
 
@@ -283,5 +291,26 @@ describe('ProjectPhases', () => {
     expect(style('Mørk').getPropertyValue('--phase-hover-color')).toBe(
       style('Mørk').getPropertyValue('--phase-current-color')
     )
+  })
+
+  it('tells when a phase change did not reach the hub, in words under the phases and to a screen reader (WCAG 4.1.3)', async () => {
+    renderPhases(phases[0])
+    await screen.findByTitle('Konsept')
+    const warning = format(
+      strings.PhaseNotSyncedToHubText,
+      format(strings.HubSyncNoWriteAccessReason, 'Prosjekter')
+    )
+    // As the change-phase hook does when the hub does not take the change.
+    act(() => {
+      fetched.dispatch?.(SET_PHASE({ phase: phases[1] }))
+      fetched.dispatch?.(HUB_SYNC_FAILED({ warning }))
+    })
+    const message = (await screen.findByText(strings.HubSyncWarningTitle)).closest(
+      '.fui-MessageBar'
+    )
+    expect(message).toHaveTextContent(warning)
+    expect(screen.getByTitle('Planlegge').closest('li')).toHaveClass('isCurrentPhase')
+    await waitFor(() => expect(announced()).toContain(warning))
+    expect(await axeComponent(message as HTMLElement)).toHaveNoViolations()
   })
 })
