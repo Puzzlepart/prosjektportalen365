@@ -119,7 +119,7 @@ export async function onListPage<T>(page: Page, url: string, step: () => Promise
 }
 
 /** SharePoint's own steps of a sign-in, on the site's host: the tab is not back on the site there. */
-const SIGN_IN_PATH = /\/_forms\/|\/_layouts\/15\/Authenticate\.aspx/i
+export const SIGN_IN_PATH = /\/_forms\/|\/_layouts\/15\/Authenticate\.aspx/i
 
 /**
  * Loads a page of the site in a tab of its own, which the test's page is left out of. SharePoint

@@ -3,7 +3,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { baseURL, STORAGE_STATE } from '../../playwright.config'
 import { documentLibrary } from '../fixtures/document-template-dialog'
-import { configuredUrl, withNetworkRetry } from '../fixtures/pp365'
+import { configuredUrl, SIGN_IN_PATH, withNetworkRetry } from '../fixtures/pp365'
 import { restGet } from '../fixtures/rest'
 
 /**
@@ -77,9 +77,18 @@ interface Group {
   target: string
   cache: 'warm' | 'cold'
   loads: Load[]
+  /** Loads that went through a sign-in first, and were made again. */
+  signIns: number
 }
 
 const groups: Group[] = []
+
+/**
+ * The signed-in state each new context starts from. SharePoint's session on the test tenant lasts
+ * about ten minutes since 2026-10-27, and a run takes half an hour or more: a load that went
+ * through Entra ID's sign-in again leaves its renewed session here.
+ */
+let session: string | Awaited<ReturnType<BrowserContext['storageState']>> = STORAGE_STATE
 
 /** Escapes a text for a regular expression. */
 function escapeRegExp(text: string): string {
@@ -135,7 +144,7 @@ async function hubList(page: Page) {
 async function newContext(browser: Browser): Promise<BrowserContext> {
   const context = await browser.newContext({
     ...devices['Desktop Chrome'],
-    storageState: STORAGE_STATE,
+    storageState: session,
     locale: 'nb-NO',
     timezoneId: 'Europe/Oslo'
   })
@@ -149,9 +158,21 @@ async function newContext(browser: Browser): Promise<BrowserContext> {
   return context
 }
 
-/** Loads the page in a new tab of the context, and records what came. */
-async function loadOnce(context: BrowserContext, url: string, n: number): Promise<Load> {
+/**
+ * Loads the page in a new tab of the context, and records what came. A load that had to sign in
+ * again is not recorded: the sign-in's redirects would count as time the footer took, or as a
+ * footer that never came. It waits until the tab is back on the site, keeps the renewed session
+ * for the contexts after it, and returns nothing, so the load is made again.
+ */
+async function loadOnce(context: BrowserContext, url: string, n: number): Promise<Load | undefined> {
   const page = await context.newPage()
+  const origin = new URL(url).origin
+  let signedIn = false
+  page.on('framenavigated', (frame) => {
+    if (frame !== page.mainFrame() || !/^https?:/.test(frame.url())) return
+    const current = new URL(frame.url())
+    if (current.origin !== origin || SIGN_IN_PATH.test(current.pathname)) signedIn = true
+  })
   const record: Load = {
     load: n,
     footerShown: false,
@@ -186,6 +207,14 @@ async function loadOnce(context: BrowserContext, url: string, n: number): Promis
   })
   try {
     await withNetworkRetry(() => page.goto(url, { waitUntil: 'domcontentloaded', timeout: 90_000 }))
+    if (signedIn) {
+      await page.waitForURL(
+        (current) => current.origin === origin && !SIGN_IN_PATH.test(current.pathname),
+        { waitUntil: 'domcontentloaded', timeout: 60_000 }
+      )
+      session = await context.storageState()
+      return undefined
+    }
     record.footerShown = await page
       .locator(FOOTER_BUTTON)
       .first()
@@ -240,10 +269,17 @@ function count(loads: Load[], holds: (load: Load) => boolean): number {
 /** The counts of every group, then each load without the footer with its trace. */
 function summary(): string {
   const traced = groups.some((group) => group.loads.some((load) => load.trace.length > 0))
+  const signIns = groups.reduce((sum, group) => sum + group.signIns, 0)
   const lines = [
     '# The footer on list pages (SharePoint/sp-dev-docs#11070)',
     '',
     `${new Date().toISOString()}: ${LOADS} loads per page and cache, waiting ${WAIT_MS / 1000} s for the footer.`,
+    ...(signIns
+      ? [
+          '',
+          `${signIns} loads went through the sign-in first, as the session ran out, and were made again; they are not counted.`
+        ]
+      : []),
     ...(traced
       ? []
       : [
@@ -290,15 +326,20 @@ async function measure(
   url: string,
   cache: 'warm' | 'cold'
 ) {
-  const group: Group = { target, cache, loads: [] }
+  const group: Group = { target, cache, loads: [], signIns: 0 }
   const warm = cache === 'warm' ? await newContext(browser) : undefined
   try {
     // The warm context's first load fills its cache, and is not counted.
     if (warm) await loadOnce(warm, url, 0)
-    for (let n = 1; n <= LOADS; n++) {
+    while (group.loads.length < LOADS) {
+      // A session lasts ten minutes, so a group of loads needs a few sign-ins at most; more mean
+      // the sign-in itself fails, and the loads would never end.
+      if (group.signIns > 5) throw new Error(`${target}: more than five loads had to sign in again`)
       const context = warm ?? (await newContext(browser))
       try {
-        group.loads.push(await loadOnce(context, url, n))
+        const load = await loadOnce(context, url, group.loads.length + 1)
+        if (load) group.loads.push(load)
+        else group.signIns++
       } finally {
         if (!warm) await context.close()
       }
