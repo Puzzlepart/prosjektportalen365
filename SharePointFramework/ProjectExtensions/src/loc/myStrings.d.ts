@@ -138,6 +138,7 @@ declare interface IProjectExtensionsStrings {
   ProjectPropertiesHeader: string
   ProjectProvisioningStartLogText: string
   ProjectProvisioningSuccessLogText: string
+  ProjectProvisioningErrorsLogText: string
   ProvisionSiteFieldsErrorMessage: string
   ProvisionSiteFieldsText: string
   ProvisionSiteFieldText: string
@@ -149,6 +150,8 @@ declare interface IProjectExtensionsStrings {
   RemoveAlternativeLanguagesProgressText: string
   SetTaxonomyFieldsErrorMessage: string
   SetupAbortedText: string
+  SetupCompletedWithErrorsTitle: string
+  SetupCompletedWithErrorsMessage: string
   SetupProjectInformationErrorMessage: string
   SetupProjectInformationText: string
   SitePermissionsSubText: string

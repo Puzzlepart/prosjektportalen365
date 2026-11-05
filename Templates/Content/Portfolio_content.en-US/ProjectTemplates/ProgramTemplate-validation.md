@@ -2,6 +2,14 @@ The template contains the following tokens that has not been found in the .resx 
 
 _No tokens with missing translations or replacement values found._
 
+The template contains the following `{listid:}` tokens that name neither a list of the template nor a list every project site has:
+
+_No `{listid:}` tokens without a list found._
+
+The template contains the following navigation nodes whose `Lists/` URL names no list the template creates:
+
+_No navigation nodes without a list found._
+
 ---
 
 ## Template Content
@@ -1113,7 +1121,7 @@ _No tokens with missing translations or replacement values found._
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"Lookup\" DisplayName=\"Project log product\" List=\"{listid:Project Deliveries}\" ShowField=\"Title\" ID=\"{022cc93f-13df-4420-bd47-55e4fdae5d18}\" Description=\"What is the product that the project log is related to?\" StaticName=\"GtProjectLogProductLookup\" Name=\"GtProjectLogProductLookup\" />"
+                "<Field Type=\"Lookup\" DisplayName=\"Project log product\" List=\"{listid:Program Deliveries}\" ShowField=\"Title\" ID=\"{022cc93f-13df-4420-bd47-55e4fdae5d18}\" Description=\"What is the product that the project log is related to?\" StaticName=\"GtProjectLogProductLookup\" Name=\"GtProjectLogProductLookup\" />"
             ],
             "Views": [
                 {
@@ -1150,7 +1158,7 @@ _No tokens with missing translations or replacement values found._
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"LookupMulti\" DisplayName=\"Delivery stakeholders\" List=\"{listid:Stakeholders}\" ShowField=\"Title\" ID=\"{6d90e0b6-73e6-48fb-aa1e-b897b214f934}\" Description=\"Who is the target group (stakeholder) for the delivery activity?\" Name=\"GtDeliveryStakeholders\" StaticName=\"GtDeliveryStakeholders\" Name=\"GtDeliveryStakeholders\" Mult=\"TRUE\" />"
+                "<Field Type=\"LookupMulti\" DisplayName=\"Delivery stakeholders\" List=\"{listid:Stakeholders}\" ShowField=\"Title\" ID=\"{6d90e0b6-73e6-48fb-aa1e-b897b214f934}\" Description=\"Who is the target group (stakeholder) for the delivery activity?\" StaticName=\"GtDeliveryStakeholders\" Name=\"GtDeliveryStakeholders\" Mult=\"TRUE\" />"
             ],
             "Views": [
                 {

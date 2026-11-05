@@ -4,7 +4,8 @@
 // data service and adapter, Microsoft Graph, the tasks (`run.tasks`) and the dialogs, which record
 // the props they were last rendered with in `dialogs`.
 ;(globalThis as any).DEBUG = false
-const site: { sp?: any } = {}
+/** The project site's PnPjs instance, and the menu URLs SharePoint refuses (their target is gone). */
+const site: { sp?: any; refusedUrls: string[] } = { refusedUrls: [] }
 const hub = {
   templates: [] as any[],
   lists: {} as Record<string, any[]>,
@@ -85,6 +86,7 @@ jest.mock('../../components', () => {
 
 import { act } from '@testing-library/react'
 import strings from 'ProjectExtensionsStrings'
+import { format } from 'pp365-shared-library'
 import resource from 'SharedResources'
 import ProjectSetup from '.'
 import { ProjectSetupValidation } from './types'
@@ -96,8 +98,34 @@ const TEMPLATES = [
   { id: 2, text: 'Byggeprosjekt', autoConfigure: false, iconProps: { iconName: 'Build' } }
 ]
 
-/** The project site, as the customizer's PnPjs instance sees it; `calls` records its writes. */
-function fakeSite(web: Record<string, any> = {}) {
+/** A Quick Launch node of the fake site. */
+interface IFakeNode {
+  Id: number
+  Title: string
+  Url: string
+  Children: IFakeNode[]
+}
+
+/** A Quick Launch node with its children, for `fakeSite`. */
+const node = (Title: string, Url: string, Children: IFakeNode[] = []): IFakeNode => ({
+  Id: 0,
+  Title,
+  Url,
+  Children
+})
+
+/** The menu as its titles, a child after its parent: `Gevinster > Gevinstanalyse`. */
+const outline = (nodes: IFakeNode[], parent = ''): string[] =>
+  nodes.flatMap(({ Title, Children }) => [
+    `${parent}${Title}`,
+    ...outline(Children, `${parent}${Title} > `)
+  ])
+
+/**
+ * The project site, as the customizer's PnPjs instance sees it; `calls` records its writes, and
+ * `calls.menu` is its Quick Launch, `quickLaunch` (the menu the template left) to begin with.
+ */
+function fakeSite(web: Record<string, any> = {}, quickLaunch: IFakeNode[] = []) {
   const info = {
     WebTemplate: 'GROUP',
     Language: 1044,
@@ -108,7 +136,12 @@ function fakeSite(web: Record<string, any> = {}) {
     GtProjectTemplate: '',
     ...web
   }
-  const calls = { webUpdates: [] as any[], propertyUpdates: [] as any[], quickLaunch: [] as any[] }
+  const calls = {
+    webUpdates: [] as any[],
+    propertyUpdates: [] as any[],
+    quickLaunch: [] as any[],
+    menu: quickLaunch
+  }
   const query = (result: () => any) => {
     const invocable: any = () => Promise.resolve(result())
     invocable.select = () => invocable
@@ -127,13 +160,34 @@ function fakeSite(web: Record<string, any> = {}) {
       })
     }
   )
-  const quicklaunch = {
+  let lastId = 0
+  const number = (nodes: IFakeNode[]) =>
+    nodes.forEach((stored) => {
+      stored.Id = ++lastId
+      number(stored.Children)
+    })
+  number(quickLaunch)
+  const find = (nodes: IFakeNode[], id: number): IFakeNode =>
+    nodes.reduce(
+      (found, stored) => found ?? (stored.Id === id ? stored : find(stored.Children, id)),
+      undefined
+    )
+  // A level of the menu; `getById` reaches any node, as SharePoint's does.
+  const level = (nodes: IFakeNode[]) => ({
+    select: () => () => Promise.resolve(nodes.map(({ Id, Title }) => ({ Id, Title }))),
     add: (title: string, url: string) => {
       calls.quickLaunch.push([title, url])
-      return Promise.resolve({ Id: calls.quickLaunch.length })
+      if (site.refusedUrls.includes(url)) {
+        return Promise.reject(new Error(`Cannot open file "${url}".`))
+      }
+      const added = node(title, url)
+      added.Id = ++lastId
+      nodes.push(added)
+      return Promise.resolve({ Id: added.Id })
     },
-    getById: () => ({ children: quicklaunch })
-  }
+    getById: (id: number) => ({ children: level(find(quickLaunch, id).Children) })
+  })
+  const quicklaunch = level(quickLaunch)
   site.sp = {
     web: {
       select: () => query(() => info),
@@ -149,16 +203,59 @@ function fakeSite(web: Record<string, any> = {}) {
   return calls
 }
 
-/** A task that reports its progress once and passes the parameters on, or fails with `error`. */
-function task(taskName: string, error?: Error) {
+/**
+ * A task that reports its progress once, then the entries in `log` (as the engine's warnings and
+ * errors are), and passes the parameters on, or fails with `error`.
+ */
+function task(
+  taskName: string,
+  error?: Error,
+  log: Array<{ message: string; level: string }> = []
+) {
   return {
     taskName,
     execute: jest.fn((params: any, onProgress: (...args: any[]) => void) => {
       onProgress(taskName, `${taskName} kjører`, 'Page')
+      log.forEach((entry) => onProgress(taskName, `${taskName} kjører`, 'Page', entry))
       return error ? Promise.reject(error) : Promise.resolve({ ...params, [taskName]: true })
     })
   }
 }
+
+/**
+ * ApplyTemplate's stand-in: passes on, as the task does, the `Navigation.QuickLaunch` of the
+ * template and of each extension, one argument each.
+ */
+function applyTemplate(...declaredQuickLaunch: any[][]) {
+  return {
+    taskName: 'ApplyTemplate',
+    execute: jest.fn((params: any) =>
+      Promise.resolve({ ...params, ApplyTemplate: true, declaredQuickLaunch })
+    )
+  }
+}
+
+/** A part of Standardmal's `Navigation.QuickLaunch`, as its schema declares it. */
+const STANDARDMAL_QUICK_LAUNCH = [
+  { Title: 'Hjem', Url: 'SitePages/ProjectHome.aspx' },
+  { Title: 'Prosjektstatus', Url: 'SitePages/Prosjektstatus.aspx' },
+  { Title: 'Prosjektlogg', Url: 'Lists/Prosjektlogg/AllItems.aspx' },
+  {
+    Title: 'Nytteoversikt',
+    Url: 'SitePages/Nytteoversikt.aspx',
+    Children: [
+      {
+        Title: 'Nytteanalyse og plan for nyttestyring',
+        Url: 'Lists/Nytteanalyse og plan for nyttestyring/AllItems.aspx'
+      },
+      { Title: 'Nytteoppfølging', Url: 'Lists/Nytteoppflging/AllItems.aspx' }
+    ]
+  }
+]
+
+/** Saves the menu as ProjectWebParts does before the setup runs on a set-up project. */
+const saveMenu = (nodes: any[], webUrl = PROJECT) =>
+  localStorage.setItem('pp_navigationNodes', JSON.stringify({ webUrl, nodes }))
 
 /** Lets the setup run as far as it can on its own: to a dialog, or to its end. */
 const settle = () => act(() => new Promise((resolve) => setTimeout(resolve, 0)))
@@ -168,14 +265,16 @@ async function projectSetup({
   web = {},
   legacy = {},
   language = 1044,
-  properties = {}
+  properties = {},
+  quickLaunch = []
 }: {
   web?: Record<string, any>
   legacy?: Record<string, any>
   language?: number
   properties?: Record<string, any>
+  quickLaunch?: IFakeNode[]
 } = {}) {
-  const calls = fakeSite(web)
+  const calls = fakeSite(web, quickLaunch)
   const top = document.body.appendChild(document.createElement('div'))
   const customizer = new ProjectSetup()
   ;(customizer as any).context = {
@@ -223,6 +322,7 @@ beforeEach(() => {
   hub.language = 1044
   hub.updates = []
   hub.canWrite = true
+  site.refusedUrls = []
   graph.members = [{ mail: USER }]
   run.tasks = [task('PreTask'), task('SitePermissions'), task('ApplyTemplate')]
   removal.deleteCustomizer.mockClear()
@@ -427,36 +527,323 @@ describe('ProjectSetup', () => {
     expect(sessionStorage.getItem('pp_skipAlreadySetupCheck')).toBeNull()
   })
 
-  it('turns a set-up project into a parent project with its old menu when the template is forced', async () => {
-    localStorage.setItem(
-      'pp_navigationNodes',
-      JSON.stringify([
-        {
-          Title: 'Dokumenter',
-          SimpleUrl: '/sites/frisbee/Delte dokumenter',
-          Nodes: [{ Title: 'Møter', SimpleUrl: '/sites/frisbee/Delte dokumenter/Møter' }]
-        },
-        {
-          Title: strings.RecycleBinText,
-          SimpleUrl: '/sites/frisbee/_layouts/15/RecycleBin.aspx',
-          Nodes: []
-        }
-      ])
-    )
+  it('turns a set-up project into a parent project, with the links of its old menu, when the template is forced', async () => {
+    saveMenu([
+      {
+        Title: 'Dokumenter',
+        SimpleUrl: '/sites/frisbee/Delte dokumenter',
+        Nodes: [{ Title: 'Møter', SimpleUrl: '/sites/frisbee/Delte dokumenter/Møter', Nodes: [] }]
+      },
+      { Title: 'Banekart', SimpleUrl: 'https://kart.contoso.no/frisbee', Nodes: [] },
+      {
+        Title: strings.RecycleBinText,
+        SimpleUrl: '/sites/frisbee/_layouts/15/RecycleBin.aspx',
+        Nodes: []
+      }
+    ])
     const { calls } = await projectSetup({
       web: { WelcomePage: 'SitePages/Prosjektforside.aspx' },
-      properties: { forceTemplate: 'Byggeprosjekt' }
+      properties: { forceTemplate: 'Byggeprosjekt' },
+      quickLaunch: [
+        node('Hjem', '/sites/frisbee/SitePages/ProjectHome.aspx'),
+        node('Dokumenter', '/sites/frisbee/Delte dokumenter/Forms/AllItems.aspx')
+      ]
     })
     expect(dialogs.setup).toBeUndefined()
-    expect(calls.quickLaunch).toEqual([
-      ['Dokumenter', '/sites/frisbee/Delte dokumenter'],
-      ['Møter', '/sites/frisbee/Delte dokumenter/Møter']
-    ])
+    expect(outline(calls.menu)).toEqual(['Hjem', 'Dokumenter', 'Dokumenter > Møter', 'Banekart'])
+    expect(localStorage.getItem('pp_navigationNodes')).toBeNull()
     expect(calls.propertyUpdates).toEqual([
       { GtIsParentProject: true, GtChildProjects: JSON.stringify([]) }
     ])
     expect(hub.updates).toEqual([{ id: 42, properties: { GtIsParentProject: true } }])
     expect(dialogs.progress.isComplete).toBe(true)
+  })
+
+  it('adds back, after «Kjør oppsettveiviser», the saved links whose title the menu lacks at their level', async () => {
+    saveMenu([
+      { Title: 'Hjem', SimpleUrl: '/sites/frisbee/SitePages/ProjectHome.aspx', Nodes: [] },
+      {
+        Title: 'Gevinster',
+        SimpleUrl: '/sites/frisbee/SitePages/Gevinstoversikt.aspx',
+        Nodes: [
+          { Title: 'Gevinstanalyse', SimpleUrl: '/sites/frisbee/Lists/Gevinstanalyse', Nodes: [] },
+          { Title: 'Nyttekalkyle', SimpleUrl: 'https://regneark.contoso.no/nytte', Nodes: [] },
+          { Title: 'Nyttekalkyle', SimpleUrl: 'https://regneark.contoso.no/nytte', Nodes: [] }
+        ]
+      },
+      {
+        Title: 'Lenker',
+        SimpleUrl: 'http://linkless.header/',
+        Nodes: [
+          { Title: 'Banekart', SimpleUrl: 'https://kart.contoso.no/frisbee', Nodes: [] },
+          { Title: 'Gammelt arkiv', SimpleUrl: '/sites/frisbee/Slettet', Nodes: [] }
+        ]
+      }
+    ])
+    site.refusedUrls = ['/sites/frisbee/Slettet']
+    const { calls } = await projectSetup({
+      web: { WelcomePage: 'SitePages/Prosjektforside.aspx' },
+      properties: { forceTemplate: '__SELECT_TEMPLATE__', skipAlreadySetupCheck: true },
+      quickLaunch: [
+        node('Hjem', '/sites/frisbee/SitePages/ProjectHome.aspx'),
+        node('Gevinster', '/sites/frisbee/SitePages/Gevinstoversikt.aspx', [
+          node('Gevinstanalyse', '/sites/frisbee/Lists/Gevinstanalyse')
+        ])
+      ]
+    })
+    await setUpWith()
+    expect(outline(calls.menu)).toEqual([
+      'Hjem',
+      'Gevinster',
+      'Gevinster > Gevinstanalyse',
+      'Gevinster > Nyttekalkyle',
+      'Lenker',
+      'Lenker > Banekart'
+    ])
+    expect(calls.quickLaunch).toContainEqual(['Gammelt arkiv', '/sites/frisbee/Slettet'])
+    expect(localStorage.getItem('pp_navigationNodes')).toBeNull()
+    expect(calls.propertyUpdates).toEqual([])
+    expect(hub.updates).toEqual([])
+    expect(dialogs.progress.isComplete).toBe(true)
+    expect(dialogs.progress.error).toBeUndefined()
+  })
+
+  it("adds back only the owners' links when an extension's menu replaced the template's", async () => {
+    // «Enkel venstremeny» declares its own QuickLaunch, so the template's is left out, and the
+    // extension's deleted the template's nodes it does not have.
+    run.tasks[2] = applyTemplate(STANDARDMAL_QUICK_LAUNCH, [
+      { Title: 'Hjem', Url: 'SitePages/ProjectHome.aspx' },
+      { Title: 'Prosjektstatus', Url: 'SitePages/Prosjektstatus.aspx' }
+    ])
+    saveMenu([
+      { Title: 'Hjem', SimpleUrl: '/sites/frisbee/SitePages/ProjectHome.aspx', Nodes: [] },
+      {
+        Title: 'Prosjektlogg',
+        SimpleUrl: '/sites/frisbee/Lists/Prosjektlogg/AllItems.aspx',
+        Nodes: []
+      },
+      {
+        Title: 'Nytteoversikt',
+        SimpleUrl: '/sites/frisbee/SitePages/Nytteoversikt.aspx',
+        Nodes: [
+          {
+            Title: 'Nytteoppfølging',
+            SimpleUrl: '/sites/frisbee/Lists/Nytteoppflging/AllItems.aspx',
+            Nodes: []
+          }
+        ]
+      },
+      { Title: 'Banekart', SimpleUrl: 'https://kart.contoso.no/frisbee', Nodes: [] }
+    ])
+    const { calls } = await projectSetup({
+      web: { WelcomePage: 'SitePages/Prosjektforside.aspx' },
+      properties: { forceTemplate: '__SELECT_TEMPLATE__', skipAlreadySetupCheck: true },
+      quickLaunch: [
+        node('Hjem', '/sites/frisbee/SitePages/ProjectHome.aspx'),
+        node('Prosjektstatus', '/sites/frisbee/SitePages/Prosjektstatus.aspx')
+      ]
+    })
+    await setUpWith()
+    expect(outline(calls.menu)).toEqual(['Hjem', 'Prosjektstatus', 'Banekart'])
+    expect(calls.quickLaunch).toEqual([['Banekart', 'https://kart.contoso.no/frisbee']])
+    expect(dialogs.progress.isComplete).toBe(true)
+  })
+
+  it('adds back no node of the template under a title it had before a rename, nor its children', async () => {
+    run.tasks[2] = applyTemplate(STANDARDMAL_QUICK_LAUNCH)
+    saveMenu([
+      { Title: 'Hjem', SimpleUrl: '/sites/frisbee/SitePages/ProjectHome.aspx', Nodes: [] },
+      {
+        Title: 'Gevinstoversikt',
+        SimpleUrl: '/sites/frisbee/SitePages/Gevinstoversikt.aspx',
+        Nodes: [
+          {
+            Title: 'Gevinstanalyse og gevinstrealiseringsplan',
+            SimpleUrl:
+              '/sites/frisbee/Lists/Gevinstanalyse og gevinstrealiseringsplan/AllItems.aspx',
+            Nodes: []
+          },
+          { Title: 'Nyttekalkyle', SimpleUrl: 'https://regneark.contoso.no/nytte', Nodes: [] }
+        ]
+      },
+      { Title: 'Banekart', SimpleUrl: 'https://kart.contoso.no/frisbee', Nodes: [] }
+    ])
+    const { calls } = await projectSetup({
+      web: { WelcomePage: 'SitePages/Prosjektforside.aspx' },
+      properties: { forceTemplate: '__SELECT_TEMPLATE__', skipAlreadySetupCheck: true },
+      quickLaunch: [
+        node('Hjem', '/sites/frisbee/SitePages/ProjectHome.aspx'),
+        node('Nytteoversikt', '/sites/frisbee/SitePages/Nytteoversikt.aspx', [
+          node(
+            'Nytteanalyse og plan for nyttestyring',
+            '/sites/frisbee/Lists/Nytteanalyse og plan for nyttestyring/AllItems.aspx'
+          )
+        ])
+      ]
+    })
+    await setUpWith()
+    expect(outline(calls.menu)).toEqual([
+      'Hjem',
+      'Nytteoversikt',
+      'Nytteoversikt > Nytteanalyse og plan for nyttestyring',
+      'Banekart'
+    ])
+  })
+
+  it('adds back a node under an earlier title of a template whose menu has no successor for it', async () => {
+    // «Gjør om til overordnet prosjekt»: the parent template's menu has none of the project's
+    // nodes, so all of them come back, the benefit overview under its old title too.
+    run.tasks[2] = applyTemplate([
+      { Title: 'Underordnet innhold', Url: 'SitePages/Underordnet.aspx' }
+    ])
+    saveMenu([
+      { Title: 'Hjem', SimpleUrl: '/sites/frisbee/SitePages/ProjectHome.aspx', Nodes: [] },
+      {
+        Title: 'Gevinstoversikt',
+        SimpleUrl: '/sites/frisbee/SitePages/Gevinstoversikt.aspx',
+        Nodes: []
+      }
+    ])
+    const { calls } = await projectSetup({
+      web: { WelcomePage: 'SitePages/Prosjektforside.aspx' },
+      properties: { forceTemplate: 'Byggeprosjekt' },
+      quickLaunch: [node('Underordnet innhold', '/sites/frisbee/SitePages/Underordnet.aspx')]
+    })
+    expect(outline(calls.menu)).toEqual(['Underordnet innhold', 'Hjem', 'Gevinstoversikt'])
+  })
+
+  it("adds back an owner's link under a node of the template, but not a node with the template's URL", async () => {
+    // The template's Prosjektlogg has no children, so the engine deleted the owner's link under
+    // it. «Logg» is the template's Prosjektlogg, renamed by an owner: the engine added the
+    // template's node and deleted it.
+    run.tasks[2] = applyTemplate(STANDARDMAL_QUICK_LAUNCH)
+    saveMenu([
+      { Title: 'Hjem', SimpleUrl: '/sites/frisbee/SitePages/ProjectHome.aspx', Nodes: [] },
+      {
+        Title: 'Logg',
+        SimpleUrl: '/sites/frisbee/Lists/Prosjektlogg/AllItems.aspx',
+        Nodes: [{ Title: 'Møtereferater', SimpleUrl: 'https://møter.contoso.no', Nodes: [] }]
+      },
+      {
+        Title: 'Prosjektlogg',
+        SimpleUrl: '/sites/frisbee/Lists/Prosjektlogg/AllItems.aspx',
+        Nodes: [
+          {
+            Title: 'Beslutningslogg',
+            SimpleUrl: '/sites/frisbee/Lists/Prosjektlogg/Beslutninger.aspx',
+            Nodes: []
+          }
+        ]
+      },
+      {
+        Title: 'Nytteoversikt',
+        SimpleUrl: '/sites/frisbee/SitePages/Nytteoversikt.aspx',
+        Nodes: [
+          {
+            Title: 'Nytteanalyse',
+            SimpleUrl:
+              '/sites/frisbee/Lists/Nytteanalyse%20og%20plan%20for%20nyttestyring/AllItems.aspx',
+            Nodes: []
+          },
+          { Title: 'Nyttekalkyle', SimpleUrl: 'https://regneark.contoso.no/nytte', Nodes: [] }
+        ]
+      }
+    ])
+    const { calls } = await projectSetup({
+      web: { WelcomePage: 'SitePages/Prosjektforside.aspx' },
+      properties: { forceTemplate: '__SELECT_TEMPLATE__', skipAlreadySetupCheck: true },
+      quickLaunch: [
+        node('Hjem', '/sites/frisbee/SitePages/ProjectHome.aspx'),
+        node('Prosjektlogg', '/sites/frisbee/Lists/Prosjektlogg/AllItems.aspx'),
+        node('Nytteoversikt', '/sites/frisbee/SitePages/Nytteoversikt.aspx', [
+          node(
+            'Nytteanalyse og plan for nyttestyring',
+            '/sites/frisbee/Lists/Nytteanalyse og plan for nyttestyring/AllItems.aspx'
+          )
+        ])
+      ]
+    })
+    await setUpWith()
+    expect(outline(calls.menu)).toEqual([
+      'Hjem',
+      'Prosjektlogg',
+      'Prosjektlogg > Beslutningslogg',
+      'Nytteoversikt',
+      'Nytteoversikt > Nytteanalyse og plan for nyttestyring',
+      'Nytteoversikt > Nyttekalkyle'
+    ])
+  })
+
+  it('adds back no menu saved for another site', async () => {
+    saveMenu(
+      [{ Title: 'Banekart', SimpleUrl: 'https://kart.contoso.no/frisbee', Nodes: [] }],
+      'https://contoso.sharepoint.com/sites/alfa'
+    )
+    const { calls } = await projectSetup({
+      web: { WelcomePage: 'SitePages/Prosjektforside.aspx' },
+      properties: { forceTemplate: '__SELECT_TEMPLATE__', skipAlreadySetupCheck: true },
+      quickLaunch: [node('Hjem', '/sites/frisbee/SitePages/ProjectHome.aspx')]
+    })
+    await setUpWith()
+    expect(outline(calls.menu)).toEqual(['Hjem'])
+    expect(localStorage.getItem('pp_navigationNodes')).toBeNull()
+    expect(dialogs.progress.isComplete).toBe(true)
+  })
+
+  it('goes on without the old menu when the saved one cannot be read', async () => {
+    localStorage.setItem('pp_navigationNodes', '{"webUrl":')
+    const { calls } = await projectSetup({
+      web: { WelcomePage: 'SitePages/Prosjektforside.aspx' },
+      properties: { forceTemplate: 'Byggeprosjekt' },
+      quickLaunch: [node('Hjem', '/sites/frisbee/SitePages/ProjectHome.aspx')]
+    })
+    expect(outline(calls.menu)).toEqual(['Hjem'])
+    expect(localStorage.getItem('pp_navigationNodes')).toBeNull()
+    expect(hub.updates).toEqual([{ id: 42, properties: { GtIsParentProject: true } }])
+    expect(dialogs.progress.isComplete).toBe(true)
+  })
+
+  it('completes with a warning, and logs the errors to the hub, when a step logged errors', async () => {
+    run.tasks[2] = task('ApplyTemplate', undefined, [
+      { message: '(Lists): (processList): Failed to add field GtGainLookup', level: 'error' },
+      { message: '(SiteFields): Field GtProjectType keeps its type', level: 'warning' }
+    ])
+    await projectSetup()
+    await setUpWith()
+    expect(dialogs.progress.taskProgress.map(({ status }) => status)).toEqual([
+      'completed',
+      'completed',
+      'warning'
+    ])
+    expect(dialogs.progress.isComplete).toBe(true)
+    expect(dialogs.progress.warning).toEqual({
+      title: strings.SetupCompletedWithErrorsTitle,
+      text: format(strings.SetupCompletedWithErrorsMessage, 1)
+    })
+    expect(listLogger.log).toHaveBeenCalledWith(
+      expect.objectContaining({
+        level: 'Warning',
+        message: [
+          format(strings.ProjectProvisioningErrorsLogText, 'Frisbeegolfbane', 1),
+          'ApplyTemplate: (Lists): (processList): Failed to add field GtGainLookup'
+        ].join('\n')
+      })
+    )
+  })
+
+  it('tells both, when a step logged errors and the project is not registered in the portfolio', async () => {
+    hub.canWrite = false
+    run.tasks[2] = task('ApplyTemplate', undefined, [
+      { message: '(Lists): (processList): Failed to add field GtGainLookup', level: 'error' }
+    ])
+    await projectSetup()
+    await setUpWith()
+    expect(dialogs.progress.warning.title).toBe(strings.SetupCompletedWithErrorsTitle)
+    expect(dialogs.progress.warning.text).toContain(
+      format(strings.SetupCompletedWithErrorsMessage, 1)
+    )
+    expect(dialogs.progress.warning.text).toContain(strings.ProjectNotRegisteredInHubTitle)
+    expect(listLogger.log).not.toHaveBeenCalled()
   })
 
   it('warns before the setup, and writes nothing to the hub, when the user cannot add to its project list', async () => {
@@ -482,7 +869,7 @@ describe('ProjectSetup', () => {
 
   it('leaves the hub alone when a forced parent project is set up without write access to it', async () => {
     hub.canWrite = false
-    localStorage.setItem('pp_navigationNodes', JSON.stringify([]))
+    saveMenu([])
     await projectSetup({
       web: { WelcomePage: 'SitePages/Prosjektforside.aspx' },
       properties: { forceTemplate: 'Byggeprosjekt' }

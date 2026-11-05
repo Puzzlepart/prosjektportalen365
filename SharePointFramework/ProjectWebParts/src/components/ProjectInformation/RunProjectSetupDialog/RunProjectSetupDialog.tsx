@@ -12,11 +12,11 @@ import {
   useId
 } from '@fluentui/react-components'
 import { customLightTheme } from 'pp365-shared-library'
-import { IMenuNode } from '@pnp/sp/navigation'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC, useState } from 'react'
 import { useProjectInformationContext } from '../context'
 import { CLOSE_DIALOG } from '../reducer'
+import { saveNavigationNodes } from '../saveNavigationNodes'
 import { createProjectSetupCustomAction } from './ProjectSetupCustomAction'
 
 export const RunProjectSetupDialog: FC = () => {
@@ -33,25 +33,6 @@ export const RunProjectSetupDialog: FC = () => {
     await context.props.sp.web.userCustomActions.add(customAction)
     sessionStorage.setItem('pp_skipAlreadySetupCheck', 'true')
     location.reload()
-  }
-
-  /**
-   * Fetches current navigation nodes and stores it in local storage.
-   * The nodes are used to create new nodes in the navigation menu
-   * after the template is applied.
-   */
-  async function saveNavigationNodes() {
-    try {
-      const nodes = await getNavigationNodes()
-      localStorage.setItem('pp_navigationNodes', JSON.stringify(nodes))
-    } catch (error) {
-      console.error('Failed to save navigation nodes:', error)
-    }
-  }
-
-  async function getNavigationNodes(): Promise<IMenuNode[]> {
-    const menuState = await context.props.sp.navigation.getMenuState()
-    return menuState.Nodes
   }
 
   const fluentProviderId = useId('fp-run-project-setup-dialog')
@@ -81,7 +62,11 @@ export const RunProjectSetupDialog: FC = () => {
                   <Button
                     appearance='primary'
                     onClick={async () => {
-                      await saveNavigationNodes()
+                      // The setup adds back the links the template's menu does not have.
+                      await saveNavigationNodes(
+                        context.props.sp,
+                        context.props.pageContext.web.absoluteUrl
+                      )
                       await applyCustomAction()
                     }}
                   >

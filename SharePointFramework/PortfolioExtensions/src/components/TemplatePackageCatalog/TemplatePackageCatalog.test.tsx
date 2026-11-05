@@ -450,6 +450,37 @@ describe('TemplatePackageCatalog, its behaviour', () => {
     ).toHaveFocus()
   })
 
+  it('shows an installation the engine logged errors in as completed with a warning, its log open on them', () => {
+    const detail = format(strings.CatalogStepProvisionHubErrorsDetail, 1)
+    const progress = {
+      status: 'warning',
+      provisionErrors: 1,
+      steps: [
+        { key: InstallStepKey.ProvisionHub, status: 'warning', detail },
+        { key: InstallStepKey.UpdateTemplateOptions, status: 'done' }
+      ],
+      log: [
+        { group: 'SiteFields', message: 'Site column GtPhase (Fase) is unchanged.', level: 'info' },
+        { group: 'SiteFields', message: 'Failed to create site column GtArea', level: 'error' }
+      ]
+    }
+    const value = context({}, { installProgress: progress })
+    renderIn(value, <InstallProgress />)
+    expect(screen.getByRole('img', { name: strings.CatalogStepStatusWarning })).toBeInTheDocument()
+    expect(screen.getByText(detail)).toBeInTheDocument()
+    // The step completed: the progress is full.
+    expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '1')
+    // The errors open the log.
+    expect(button(strings.CatalogAdvancedLogLabel)).toHaveAttribute('aria-expanded', 'true')
+    expect(screen.getByText('Failed to create site column GtArea')).toBeInTheDocument()
+    expect(screen.getByText(strings.CatalogInstallWarningTitle)).toBeInTheDocument()
+    expect(screen.getByText(format(strings.CatalogInstallWarningText, 1))).toBeInTheDocument()
+    // Nothing to retry: the template is in place.
+    expect(screen.queryByRole('button', { name: strings.CatalogRetryText })).toBeNull()
+    fireEvent.click(button(strings.CloseLabel))
+    expect(value.setState).toHaveBeenCalledWith({ installProgress: undefined, focusDetails: true })
+  })
+
   it("opens and closes the log of a running installation, and tells an extension's success", () => {
     const running = {
       status: 'running',
