@@ -9,7 +9,7 @@ import {
   captureEngineLog,
   engineLogLevel
 } from '../@BaseTask'
-import { OnProgressCallbackFunction } from '../types'
+import { ILogEntry, OnProgressCallbackFunction } from '../types'
 import {
   ITaskDetails,
   PlannerConfiguration,
@@ -22,12 +22,14 @@ import { IWeb } from '@pnp/sp/webs'
 import '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/items'
+import '@pnp/sp/fields'
 import '@pnp/sp/batching'
 import { createBatch } from '@pnp/sp/batching'
 import {
   CloudContentConfig,
   ContentConfig,
   ContentConfigType,
+  IPackageDataRows,
   getAllItems,
   format
 } from 'pp365-shared-library'
@@ -194,13 +196,15 @@ export class CopyListData extends BaseTask {
    * Apply a **cloud template** list-content config: read the bundled rows and
    * folder hierarchy from the `.pppkg`, project the rows to the config's
    * `fields` subset (with the rows' KeyColumn, which the engine matches existing
-   * items by), and write them into the project's destination list via
-   * the sp-js-provisioning `DataRows`/`Folders` handlers (run on the project
+   * items by, when the destination list has that column), and write them into
+   * the project's destination list via the sp-js-provisioning
+   * `DataRows`/`Folders` handlers (run on the project
    * web, after `SetTaxonomyFields` so the `GtProjectPhase` term field is
    * already bound). Folder structures (e.g. «Standarddokumenter») come from
    * the bundled list's `Folders` block. Nothing is read from the hub. The
    * engine's warnings and errors (a row SharePoint refuses, an unresolved
-   * lookup) are added to the step's log.
+   * lookup) are added to the step's log, and so is a KeyColumn the destination
+   * list does not have.
    *
    * @param config Cloud content config
    * @param params Task parameters
@@ -219,20 +223,6 @@ export class CopyListData extends BaseTask {
       this.logInformation(`No bundled rows or folders for cloud content config ${config.text}`)
       return
     }
-    // The engine matches a row to an existing item by its KeyColumn, so the projection keeps it:
-    // without it every row was added again on each run.
-    const keyColumn = dataRows?.KeyColumn ?? 'Title'
-    const fields =
-      config.fields.length > 0 && !config.fields.includes(keyColumn)
-        ? [...config.fields, keyColumn]
-        : config.fields
-    const rows = (dataRows?.Rows ?? []).map((row) => {
-      if (fields.length === 0) return row
-      return fields.reduce((projected: Record<string, any>, fieldName) => {
-        if (row[fieldName] !== undefined) projected[fieldName] = row[fieldName]
-        return projected
-      }, {})
-    })
     // Recursive count so a folders-only config reports the whole tree, not just
     // the top level.
     const countFolders = (items: Array<{ Folders?: any[] }>): number =>
@@ -240,7 +230,7 @@ export class CopyListData extends BaseTask {
     const progressText = hasRows
       ? format(
           strings.CopyListItemsText,
-          rows.length,
+          dataRows.Rows.length,
           config.sourceListTitle,
           config.destinationListTitle
         )
@@ -281,11 +271,9 @@ export class CopyListData extends BaseTask {
       ContentTypesEnabled: !!destinationProps.ContentTypesEnabled
     }
     if (hasRows) {
-      listSchema.DataRows = {
-        KeyColumn: dataRows.KeyColumn ?? 'Title',
-        UpdateBehavior: dataRows.UpdateBehavior ?? 'Overwrite',
-        Rows: rows
-      }
+      listSchema.DataRows = await this._getCloudDataRows(config, dataRows, params.web, (entry) =>
+        this.onProgress(progressText, '', iconName, entry)
+      )
     }
     if (hasFolders) {
       listSchema.Folders = folders
@@ -300,6 +288,91 @@ export class CopyListData extends BaseTask {
       (entry) => this.onProgress(progressText, '', iconName, entry),
       CLOUD_LOG_PREFIX
     )
+  }
+
+  /**
+   * The `DataRows` of a cloud template's list content for the engine: the bundled rows projected
+   * to the config's `fields`, matched by the rows' KeyColumn (`Title` when the bundle names none)
+   * when the project's list has that column. The engine finds a row's item by filtering the list
+   * on the KeyColumn, and SharePoint refuses a filter on a column the list does not have (one only
+   * the hub's list has, such as `GtDataRowUniqueKey`), so every row would fail. Then the rows go
+   * without the KeyColumn, and without its values, which the list has no column for: they are
+   * added, as before 1.15, and `log` gets a warning that a re-run may add them again.
+   *
+   * @param config Cloud content config
+   * @param dataRows The bundled rows
+   * @param web The project web
+   * @param log Receives the warning for the step's log
+   */
+  private async _getCloudDataRows(
+    config: CloudContentConfig,
+    dataRows: IPackageDataRows,
+    web: IWeb,
+    log: (entry: ILogEntry) => void
+  ): Promise<IPackageDataRows> {
+    const bundledKey = dataRows.KeyColumn ?? 'Title'
+    const keyColumn = (await this._listHasColumn(web, config.destinationListTitle, bundledKey))
+      ? bundledKey
+      : undefined
+    if (!keyColumn) {
+      const message = format(
+        strings.CloudContentConfigKeyColumnMissing,
+        config.destinationListTitle,
+        bundledKey
+      )
+      this.logWarning(message)
+      log({ message, level: 'warning' })
+    }
+    // Without the KeyColumn in the projection every row was added again on each run.
+    const fields =
+      keyColumn && config.fields.length > 0 && !config.fields.includes(keyColumn)
+        ? [...config.fields, keyColumn]
+        : config.fields
+    const rows = dataRows.Rows.map((row) => {
+      const projected =
+        fields.length === 0
+          ? { ...row }
+          : fields.reduce((values: Record<string, any>, fieldName) => {
+              if (row[fieldName] !== undefined) values[fieldName] = row[fieldName]
+              return values
+            }, {})
+      if (!keyColumn) delete projected[bundledKey]
+      return projected
+    })
+    const result: IPackageDataRows = {
+      UpdateBehavior: dataRows.UpdateBehavior ?? 'Overwrite',
+      Rows: rows
+    }
+    if (keyColumn) result.KeyColumn = keyColumn
+    return result
+  }
+
+  /**
+   * Whether the project's list `listTitle` has the column `columnName`. `Title` is on every list
+   * and is not read. When the list's columns cannot be read, the column is taken to be there, as
+   * it was before this check, and the failure is logged.
+   *
+   * @param web The project web
+   * @param listTitle The list's title
+   * @param columnName The column's internal name
+   */
+  private async _listHasColumn(web: IWeb, listTitle: string, columnName: string): Promise<boolean> {
+    if (columnName === 'Title') return true
+    try {
+      // A queryable of its own: PnPjs 4's select sets the query on the queryable it is called on.
+      const fields = await web.lists.getByTitle(listTitle).fields.select('InternalName')<
+        Array<{ InternalName: string }>
+      >()
+      return fields.some((field) => field.InternalName === columnName)
+    } catch (error) {
+      this.logWarning(
+        `Could not read the columns of list '${listTitle}' to check for '${columnName}', which the rows are matched by, so it is used: ${
+          error?.message ?? error
+        }`,
+        { error }
+      )
+      return true
+    }
   }
 
   /**

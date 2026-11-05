@@ -167,6 +167,8 @@ define([], function () {
     CloudTemplateResolvingMessage: 'Laster ned og leser skymal…',
     CloudContentConfigDestinationListMissing:
       'Fant ikke listen «{0}» i prosjektet. Innholdet fra «{1}» kan ikke kopieres.',
+    CloudContentConfigKeyColumnMissing:
+      'Listen «{0}» i prosjektet har ikke kolonnen «{1}», som radene kjennes igjen på. Radene legges til uten å sammenlignes med elementene i listen, og kan bli lagt til på nytt hvis oppsettveiviseren kjøres igjen.',
     CloudTemplateResolveErrorMessage: 'Kunne ikke laste ned skymalen. Prøv å velge den på nytt.',
     CloudTemplateNotCompatibleWarning:
       '**{0}** krever innhold på hub-området (f.eks. filer eller dokumentbiblioteker på hub-området) som ikke settes opp når pakken tilgjengeliggjøres som skymal. Tillegg og listeinnhold blir lagt til, men dette hub-innholdet hoppes over. Fortsett på eget ansvar.',

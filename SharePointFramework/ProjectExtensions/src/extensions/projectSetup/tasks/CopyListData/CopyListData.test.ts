@@ -86,8 +86,20 @@ function hubContent(items: Array<Record<string, any>>, refused: string[] = []) {
   } as any
 }
 
-/** Task parameters for a project whose destination list exists, unless `missing` says not. */
-function taskParams(missing = false) {
+/** The columns of the project's «Fasesjekkliste», the rows' KeyColumn among them. */
+const COLUMNS = ['ID', 'Title', 'GtSortOrder', 'GtProjectPhase', 'GtDataRowUniqueKey']
+
+/** Each read of the project's list's columns: the list's title and the selected properties. */
+let columnReads: Array<{ list: string; select: string[] }> = []
+
+/**
+ * Task parameters for a project whose destination list exists, unless `missing` says not, and
+ * has the `columns` (internal names), or fails to read them with `columns` when it is an error.
+ */
+function taskParams({
+  missing = false,
+  columns = COLUMNS
+}: { missing?: boolean; columns?: string[] | Error } = {}) {
   const destination = Object.assign(
     () =>
       missing
@@ -99,17 +111,34 @@ function taskParams(missing = false) {
           }),
     { select: () => destination }
   )
+  const fields = (list: string) => ({
+    select:
+      (...select: string[]) =>
+      () => {
+        columnReads.push({ list, select })
+        return columns instanceof Error
+          ? Promise.reject(columns)
+          : Promise.resolve(columns.map((InternalName) => ({ InternalName })))
+      }
+  })
   return {
-    web: { lists: { getByTitle: () => ({ select: () => destination }) } },
+    web: {
+      lists: {
+        getByTitle: (list: string) => ({ select: () => destination, fields: fields(list) })
+      }
+    },
     context: { pageContext: { legacyPageContext: { groupId: 'group-1' } } }
   } as any
 }
 
-/** Copies `contentConfig` and returns the list the engine was given, and what was logged. */
-async function copy(contentConfig: CloudContentConfig) {
+/**
+ * Copies `contentConfig` into a project with the `params` and returns the list the engine was
+ * given, and what was logged.
+ */
+async function copy(contentConfig: CloudContentConfig, params = taskParams()) {
   const onProgress = jest.fn()
   await new CopyListData({ selectedContentConfig: [contentConfig] } as any).execute(
-    taskParams(),
+    params,
     onProgress
   )
   const [list] = engine.applied[0]?.Lists ?? []
@@ -121,15 +150,30 @@ async function copy(contentConfig: CloudContentConfig) {
   return { list, logged, onProgress }
 }
 
+/**
+ * Subscribes to the `Logger` of `@pnp/logging` the tasks log to, and returns the warnings logged
+ * from then on.
+ */
+function loggedWarnings() {
+  const warnings: string[] = []
+  jest.requireMock('@pnp/logging').Logger.subscribe({
+    log: ({ message, level }: { message: string; level: number }) => {
+      if (level === 2) warnings.push(message)
+    }
+  })
+  return warnings
+}
+
 beforeEach(() => {
   engine.setups = []
   engine.applied = []
   engine.log = []
+  columnReads = []
 })
 
 describe('CopyListData', () => {
-  it("keeps the rows' KeyColumn among the fields of a cloud template's content, so a re-run updates the rows", async () => {
-    const { list } = await copy(
+  it("keeps the rows' KeyColumn among the fields of a cloud template's content when the project's list has that column, so a re-run updates the rows", async () => {
+    const { list, logged } = await copy(
       cloudContent('GtSortOrder,Title,GtProjectPhase', {
         KeyColumn: 'GtDataRowUniqueKey',
         Rows: ROWS
@@ -145,15 +189,82 @@ describe('CopyListData', () => {
         GtDataRowUniqueKey
       }))
     })
+    expect(columnReads).toEqual([{ list: 'Fasesjekkliste', select: ['InternalName'] }])
+    expect(logged('warning')).toEqual([])
   })
 
-  it('keys the rows by Title when the bundle names no KeyColumn', async () => {
-    const { list } = await copy(cloudContent('GtSortOrder', { Rows: ROWS }))
+  it("leaves out a KeyColumn the project's list does not have, so the rows are added, and says so in the step's log", async () => {
+    const warnings = loggedWarnings()
+    const { list, logged } = await copy(
+      cloudContent('GtSortOrder,Title,GtProjectPhase', {
+        KeyColumn: 'GtDataRowUniqueKey',
+        UpdateBehavior: 'Skip',
+        Rows: ROWS
+      }),
+      taskParams({ columns: ['ID', 'Title', 'GtSortOrder', 'GtProjectPhase'] })
+    )
+    expect(list.DataRows).toStrictEqual({
+      UpdateBehavior: 'Skip',
+      Rows: ROWS.map(({ Title, GtSortOrder, GtProjectPhase }) => ({
+        GtSortOrder,
+        Title,
+        GtProjectPhase
+      }))
+    })
+    const message = format(
+      strings.CloudContentConfigKeyColumnMissing,
+      'Fasesjekkliste',
+      'GtDataRowUniqueKey'
+    )
+    expect(logged('warning')).toEqual([message])
+    expect(warnings).toEqual([`(ProjectSetup) [CopyListData]: ${message}`])
+    expect(columnReads).toHaveLength(1)
+  })
+
+  it("leaves the values of a KeyColumn the project's list does not have out of whole rows too", async () => {
+    const { list } = await copy(
+      cloudContent('', { KeyColumn: 'GtDataRowUniqueKey', Rows: ROWS }),
+      taskParams({ columns: ['ID', 'Title', 'GtSortOrder', 'GtProjectPhase'] })
+    )
+    expect(list.DataRows).not.toHaveProperty('KeyColumn')
+    expect(list.DataRows.Rows).toStrictEqual(
+      ROWS.map(({ Title, GtSortOrder, GtProjectPhase }) => ({ Title, GtSortOrder, GtProjectPhase }))
+    )
+  })
+
+  it("keys the rows by Title when the bundle names no KeyColumn, without reading the list's columns", async () => {
+    const { list, logged } = await copy(
+      cloudContent('GtSortOrder', { Rows: ROWS }),
+      taskParams({ columns: [] })
+    )
     expect(list.DataRows.KeyColumn).toBe('Title')
     expect(list.DataRows.Rows).toEqual([
       { GtSortOrder: 1, Title: 'Avklare mål' },
       { GtSortOrder: 2, Title: 'Velge bane' }
     ])
+    expect(columnReads).toEqual([])
+    expect(logged('warning')).toEqual([])
+  })
+
+  it("keeps the rows' KeyColumn when the list's columns cannot be read, and logs the failure", async () => {
+    const warnings = loggedWarnings()
+    const { list, logged } = await copy(
+      cloudContent('GtSortOrder,Title', { KeyColumn: 'GtDataRowUniqueKey', Rows: ROWS }),
+      taskParams({ columns: new Error('Too many requests') })
+    )
+    expect(list.DataRows).toEqual({
+      KeyColumn: 'GtDataRowUniqueKey',
+      UpdateBehavior: 'Overwrite',
+      Rows: ROWS.map(({ GtDataRowUniqueKey, Title, GtSortOrder }) => ({
+        GtSortOrder,
+        Title,
+        GtDataRowUniqueKey
+      }))
+    })
+    expect(warnings).toEqual([
+      "(ProjectSetup) [CopyListData]: Could not read the columns of list 'Fasesjekkliste' to check for 'GtDataRowUniqueKey', which the rows are matched by, so it is used: Too many requests"
+    ])
+    expect(logged('warning')).toEqual([])
   })
 
   it('copies the whole rows when the content names no fields', async () => {
@@ -241,7 +352,7 @@ describe('CopyListData', () => {
     await expect(
       new CopyListData({
         selectedContentConfig: [cloudContent('', { Rows: ROWS })]
-      } as any).execute(taskParams(true), jest.fn())
+      } as any).execute(taskParams({ missing: true }), jest.fn())
     ).rejects.toMatchObject({ message: strings.CopyListDataErrorMessage })
     expect(engine.applied).toEqual([])
   })

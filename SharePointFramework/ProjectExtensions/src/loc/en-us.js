@@ -167,6 +167,8 @@ define([], function () {
     CloudTemplateResolvingMessage: 'Downloading and reading cloud template…',
     CloudContentConfigDestinationListMissing:
       'The list "{0}" was not found in the project. The content from "{1}" cannot be copied.',
+    CloudContentConfigKeyColumnMissing:
+      'The list "{0}" in the project does not have the column "{1}", which the rows are matched by. The rows are added without being matched to the items in the list, and may be added again if the setup wizard is run again.',
     CloudTemplateResolveErrorMessage: 'Could not download the cloud template. Try selecting it again.',
     CloudTemplateNotCompatibleWarning:
       '**{0}** requires hub content (e.g. files or document libraries on the hub site) that is not set up when the package is published as a cloud template. Extensions and list content are still applied, but that hub content is skipped. Continue at your own risk.',
