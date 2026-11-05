@@ -336,7 +336,12 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       this._bottomPlaceholder = this.context.placeholderProvider.tryCreateContent(name, {
         onDispose: () => this._onDispose()
       })
-      this._trace('tryCreateContent', { acquired: !!this._bottomPlaceholder })
+      // On a list page whose placeholders SharePoint never defined, the content it hands out is
+      // not in the page, and the footer rendered there is never seen (sp-dev-docs#11070).
+      this._trace('tryCreateContent', {
+        acquired: !!this._bottomPlaceholder,
+        connected: this._bottomPlaceholder?.domElement.isConnected
+      })
     }
     // SharePoint has no placeholder for it yet: its changed event renders it.
     if (!this._bottomPlaceholder) return

@@ -8,7 +8,7 @@ const assert = require('node:assert/strict')
 const fs = require('fs')
 const os = require('os')
 const path = require('path')
-const { findChannelIdMismatches } = require('./check-channel-ids')
+const { findChannelIdMismatches, findFooterStepMismatches, FOOTER_STEP } = require('./check-channel-ids')
 
 const MAIN = {
     name: 'main',
@@ -111,4 +111,36 @@ test('checks only the solutions it is given', () => {
     )
     assert.deepEqual(findChannelIdMismatches(root, ['ProjectWebParts']), [])
     assert.equal(findChannelIdMismatches(root, ['PortfolioWebParts']).length, 1)
+})
+
+/** A repository root with a channel file per footer id, and the footer step listing `listed`. */
+function footerFixture(channels, listed) {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'pp365-footer-ids-'))
+    fs.mkdirSync(path.join(root, 'channels'))
+    fs.writeFileSync(path.join(root, 'channels', '$schema.json'), '{}')
+    for (const [name, footer] of Object.entries(channels)) {
+        const config = { name, spfx: { solutions: { PortfolioExtensions: { components: { Footer: footer } } } } }
+        fs.writeFileSync(path.join(root, 'channels', `${name}.json`), JSON.stringify(config))
+    }
+    fs.mkdirSync(path.dirname(path.join(root, FOOTER_STEP)), { recursive: true })
+    const ids = listed.map((id) => `  "${id}", # a channel`).join('\n')
+    fs.writeFileSync(path.join(root, FOOTER_STEP), `$ChannelFooterIds = @(\n${ids}\n)\n$CustomActions = @()\n`)
+    return root
+}
+
+const MAIN_FOOTER = '84f27cec-ffde-4e00-a4cf-25c69f691054'
+const TEST_FOOTER = '65d27710-49a9-4492-a4ec-3ac4f1e798d2'
+
+test("the footer step knows the footer of every channel, and no other, so it removes only another channel's", () => {
+    assert.deepEqual(findFooterStepMismatches(footerFixture({ main: MAIN_FOOTER, test: TEST_FOOTER }, [MAIN_FOOTER, TEST_FOOTER.toUpperCase()])), [])
+    const missing = findFooterStepMismatches(footerFixture({ main: MAIN_FOOTER, test: TEST_FOOTER }, [MAIN_FOOTER]))
+    assert.equal(missing.length, 1)
+    assert.match(missing[0], /lacks the footer of channels\/test\.json/)
+    const extra = findFooterStepMismatches(footerFixture({ main: MAIN_FOOTER }, [MAIN_FOOTER, TEST_FOOTER]))
+    assert.equal(extra.length, 1)
+    assert.match(extra[0], new RegExp(`${TEST_FOOTER}, the footer of no channel`))
+})
+
+test("the repository's footer step matches its channels", () => {
+    assert.deepEqual(findFooterStepMismatches(path.resolve(__dirname, '..')), [])
 })

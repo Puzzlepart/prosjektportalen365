@@ -76,11 +76,18 @@ function portalDataService({
   }
 }
 
-/** The customizer on the hub (or a project site), initialised with `portal`. */
-async function footerCustomizer(portal = portalDataService(), { onHub = true } = {}) {
+/**
+ * The customizer on the hub (or a project site), initialised with `portal`. The placeholder's
+ * element is in the document only when `attached`.
+ */
+async function footerCustomizer(
+  portal = portalDataService(),
+  { onHub = true, attached = false } = {}
+) {
   adapter.portalDataService = portal
   const navigated: (() => Promise<void>)[] = []
   const placeholder = { domElement: document.createElement('div'), dispose: jest.fn() }
+  if (attached) document.body.appendChild(placeholder.domElement)
   const context = {
     pageContext: {
       web: { absoluteUrl: onHub ? HUB : PROJECT },
@@ -212,19 +219,28 @@ describe('FooterApplicationCustomizer', () => {
     expect(placeholder.domElement.childNodes).toHaveLength(1)
   })
 
-  it('traces the placeholders from the first line of onInit when asked to (sp-dev-docs#11070)', async () => {
+  it('traces the placeholders from the first line of onInit when asked to, and whether the content it was given is in the page (sp-dev-docs#11070)', async () => {
     window.sessionStorage.setItem(PLACEHOLDER_TRACE_KEY, '1')
     const info = jest.spyOn(console, 'info').mockImplementation(() => undefined)
-    try {
-      await footerCustomizer()
-      const lines = info.mock.calls
+    const lines = () =>
+      info.mock.calls
         .filter(([prefix]) => prefix === PLACEHOLDER_TRACE_PREFIX)
         .map(([, json]) => JSON.parse(json))
-      expect(lines).toEqual([
+    try {
+      // Content outside the document, as SharePoint hands out on a list page whose placeholders
+      // it never defined.
+      await footerCustomizer()
+      expect(lines()).toEqual([
         expect.objectContaining({ step: 'onInit', placeholderNames: ['Top', 'Bottom'] }),
         expect.objectContaining({ step: 'setUp' }),
-        expect.objectContaining({ step: 'tryCreateContent', acquired: true })
+        expect.objectContaining({ step: 'tryCreateContent', acquired: true, connected: false })
       ])
+      info.mockClear()
+      const { placeholder } = await footerCustomizer(undefined, { attached: true })
+      expect(lines()).toContainEqual(
+        expect.objectContaining({ step: 'tryCreateContent', acquired: true, connected: true })
+      )
+      placeholder.domElement.remove()
     } finally {
       info.mockRestore()
       window.sessionStorage.removeItem(PLACEHOLDER_TRACE_KEY)

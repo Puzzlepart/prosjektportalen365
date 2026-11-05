@@ -123,7 +123,7 @@ A project site, once, at creation:
 - `pwsh assets/scripts/Check-HardcodedAttributes.ps1 -Path <file or folder>` lists `DisplayName` and `Description` values that do not use `{resource:`.
 - New wording in a `Skip` row keyed on `Title` lands as a second row on existing hubs.
 - A leftover `.current-channel-config.json` at the root (an aborted channel build) makes local generation use that channel's ids: delete it.
-- The extensions came from site scripts until 1.14.0 and from the JSON templates' `CustomActions` since. `Standardmal` and `Programmal` carry `ProjectUpgrade`, the template selector and the footer; `Overordnet` carries only the footer, and only since 1.15.0. A parent site made with 1.14 has none of them until `EnsureFooterExtension.ps1` adds the footer.
+- The extensions came from site scripts until 1.14.0 and from the JSON templates' `CustomActions` since. `Standardmal` and `Programmal` carry `ProjectUpgrade`, the template selector and the footer; `Overordnet` carries only the footer, and only since 1.15.0. A parent site made with 1.14 has none of them until `EnsureFooterExtension.ps1` adds the footer. The templates get the channel's footer through `{{ControlId_Footer}}`, but a site can still hold another channel's footer from an older template, and then runs two (the e2e project on the test hub had the main channel's beside the test channel's, 2026-11-04). Since 1.15.0 the step removes the footer of any other channel it lists in `$ChannelFooterIds`; `.tasks/check-channel-ids.js` fails the release build when that list and `channels/*.json` differ, so a new channel goes into both.
 
 ## Do not
 

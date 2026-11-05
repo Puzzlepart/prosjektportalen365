@@ -53,6 +53,8 @@ interface TraceLine {
   placeholderNames: string[]
   bottomElement: boolean
   acquired?: boolean
+  /** Whether the content SharePoint gave the footer is in the document (since 2026-11-05). */
+  connected?: boolean
 }
 
 /** What one load showed. */
@@ -62,6 +64,12 @@ interface Load {
   sharePointDefinedPlaceholders: boolean
   /** The footer's last attempt to take the bottom placeholder; null when no trace came. */
   acquired: boolean | null
+  /**
+   * Whether the content of that attempt was in the document. SharePoint can hand out content that
+   * never is, and the footer is then rendered where no one sees it. Null when the trace does not
+   * say, as a footer deployed before 2026-11-05 does not.
+   */
+  attached: boolean | null
   changedEvents: number
   navigatedEvents: number
   reactFault: boolean
@@ -178,6 +186,7 @@ async function loadOnce(context: BrowserContext, url: string, n: number): Promis
     footerShown: false,
     sharePointDefinedPlaceholders: false,
     acquired: null,
+    attached: null,
     changedEvents: 0,
     navigatedEvents: 0,
     reactFault: false,
@@ -228,7 +237,12 @@ async function loadOnce(context: BrowserContext, url: string, n: number): Promis
     await page.close()
   }
   const acquisitions = record.trace.filter((line) => line.step === 'tryCreateContent')
-  record.acquired = acquisitions.length ? !!acquisitions[acquisitions.length - 1].acquired : null
+  const lastAcquisition = acquisitions[acquisitions.length - 1]
+  record.acquired = lastAcquisition ? !!lastAcquisition.acquired : null
+  record.attached =
+    lastAcquisition && typeof lastAcquisition.connected === 'boolean'
+      ? lastAcquisition.connected
+      : null
   record.changedEvents = record.trace.filter((line) => line.step === 'changedEvent').length
   record.navigatedEvents = record.trace.filter((line) => line.step === 'navigatedEvent').length
   return record
@@ -287,11 +301,11 @@ function summary(): string {
           '**No line of the footer trace came: the deployed footer has no placeholder trace.**'
         ]),
     '',
-    '| Page | Cache | Loads | Footer missing | SharePoint defined its placeholders | Bottom placeholder taken | A placeholder change event | React fault (#11068) | List view host twice |',
-    '|---|---|---|---|---|---|---|---|---|',
+    '| Page | Cache | Loads | Footer missing | SharePoint defined its placeholders | Bottom placeholder taken | Its content in the page | A placeholder change event | React fault (#11068) | List view host twice |',
+    '|---|---|---|---|---|---|---|---|---|---|',
     ...groups.map(
       ({ target, cache, loads }) =>
-        `| ${target} | ${cache} | ${loads.length} | ${count(loads, (l) => !l.footerShown)} | ${count(loads, (l) => l.sharePointDefinedPlaceholders)} | ${count(loads, (l) => l.acquired === true)} | ${count(loads, (l) => l.changedEvents > 0)} | ${count(loads, (l) => l.reactFault)} | ${count(loads, (l) => l.listViewHosts.length > 1)} |`
+        `| ${target} | ${cache} | ${loads.length} | ${count(loads, (l) => !l.footerShown)} | ${count(loads, (l) => l.sharePointDefinedPlaceholders)} | ${count(loads, (l) => l.acquired === true)} | ${loads.some((l) => l.attached !== null) ? count(loads, (l) => l.attached === true) : '–'} | ${count(loads, (l) => l.changedEvents > 0)} | ${count(loads, (l) => l.reactFault)} | ${count(loads, (l) => l.listViewHosts.length > 1)} |`
     )
   ]
   for (const group of groups) {

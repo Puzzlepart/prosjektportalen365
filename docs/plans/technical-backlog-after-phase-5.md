@@ -467,3 +467,28 @@ so the swap went to 1.24.1.
   2027-02-04).
 - **Left:** the diagnostics for sp-dev-docs#11068 and #11070 on 1.24.1, which the test hub now
   runs, and the hand round P5-4 asks for.
+
+### The footer on list pages, measured on 1.24.1 (2026-11-04 and 05)
+
+- **The run.** `e2e/tests/diagnostics` ran against the test hub, 20 loads per case. The spec now
+  repeats a load that had to sign in, since the session lasts about ten minutes; no load needed
+  it in the 25-minute run.
+- **The finding.** On the hub's custom list, the footer showed in exactly the loads where
+  SharePoint raised the placeholders' change event: 24 of 24 with it, 0 of 16 without. With a
+  cold cache it was missing in 15 of 20. A DOM probe found why: without the change event,
+  `tryCreateContent(Bottom)` returns content in an element that is not in the document
+  (`div.ms-SPLegacyFabricBlock` in a `div` with no parent), while the page's own
+  `div[data-sp-placeholder="Bottom"]` stays empty. On a site page, the element sits in
+  `#spBottomPlaceholder`.
+- **The reply.** Posted on sp-dev-docs#11070 on 2026-11-05: the numbers, the probe, the tenant's
+  release preference (Targeted release for everyone), and why the trace answers Microsoft's
+  question about a minimal customizer.
+- **The document library.** Left out of the reply. The e2e project had the main channel's footer,
+  from an older template, beside the test channel's, so two footers ran on every load.
+  `EnsureFooterExtension.ps1` now removes another channel's footer, and `check-channel-ids.js`
+  keeps the step's list of footers in step with `channels/`.
+- **The trace.** It now says whether the content SharePoint handed out is in the page
+  (`connected`), and the diagnostics' summary has a column for it.
+- **Left:** measure the library again once a run with `[upgrade-all-sites-to-latest]` has removed
+  the second footer; decide on a workaround in the footer (render into the page's own Bottom
+  placeholder when the content is detached); and the hand round P5-4 asks for.

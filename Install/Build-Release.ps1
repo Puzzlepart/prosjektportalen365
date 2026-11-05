@@ -160,9 +160,10 @@ if ($NODE_MAJOR -ne 26) {
 # config/package-solution.json and the manifests, and a commit can carry them. The source must carry
 # the main channel's ids, whichever channel this builds: a channel build swaps its own in from them,
 # a main build packages them as they are. Stop here rather than package another channel's solution.
+# The same check stops when EnsureFooterExtension.ps1 does not list every channel's footer id.
 node "$ROOT_PATH/.tasks/check-channel-ids.js" @Solutions
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "[ERROR] The source carries another channel's ids (listed above). Aborting build of release." -ForegroundColor Red
+    Write-Host "[ERROR] The channel ids do not match channels/ (listed above). Aborting build of release." -ForegroundColor Red
     exit 1
 }
 #endregion

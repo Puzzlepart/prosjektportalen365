@@ -80,6 +80,37 @@ function findChannelIdMismatches(root, solutions = SOLUTIONS, channel = 'main') 
     return found
 }
 
+/** The upgrade step that removes another channel's footer from a site, by the ids it lists. */
+const FOOTER_STEP = 'Install/Scripts/UpgradeAllSitesToLatest/EnsureFooterExtension.ps1'
+
+const GUID = /[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}/gi
+
+/**
+ * Lists where the footer ids in `$ChannelFooterIds` of the footer step differ from the footer of
+ * each channel in `channels/`. A channel the step does not know keeps its footer on a site of
+ * another channel, which then runs two footers. Empty when they match.
+ *
+ * @param {string} root Repository root
+ * @returns {string[]} One line per channel the step lacks and per id no channel has
+ */
+function findFooterStepMismatches(root) {
+    const channels = new Map()
+    for (const file of fs.readdirSync(path.join(root, 'channels')).filter((f) => f.endsWith('.json') && !f.startsWith('$'))) {
+        const footer = readJson(root, `channels/${file}`).spfx?.solutions?.PortfolioExtensions?.components?.Footer
+        if (footer) channels.set(footer.toLowerCase(), file)
+    }
+    const block = /\$ChannelFooterIds\s*=\s*@\(([\s\S]*?)\)/.exec(fs.readFileSync(path.join(root, FOOTER_STEP), 'utf8'))
+    const listed = new Set((block?.[1].match(GUID) ?? []).map((id) => id.toLowerCase()))
+    const found = []
+    for (const [id, file] of channels) {
+        if (!listed.has(id)) found.push(`${FOOTER_STEP}: $ChannelFooterIds lacks the footer of channels/${file} (${id})`)
+    }
+    for (const id of listed) {
+        if (!channels.has(id)) found.push(`${FOOTER_STEP}: $ChannelFooterIds has ${id}, the footer of no channel in channels/`)
+    }
+    return found
+}
+
 if (require.main === module) {
     const root = path.resolve(__dirname, '..')
     const solutions = process.argv.slice(2)
@@ -94,7 +125,14 @@ if (require.main === module) {
         )
         process.exit(1)
     }
-    console.log(`Channel ids: ${solutions.length || SOLUTIONS.length} solution(s) carry the main channel ids.`)
+    const footerStep = findFooterStepMismatches(root)
+    if (footerStep.length > 0) {
+        console.error("The footer step's channel ids differ from channels/:")
+        for (const line of footerStep) console.error(`  ${line}`)
+        console.error('List the footer of every channel in $ChannelFooterIds, as channels/<name>.json has it.')
+        process.exit(1)
+    }
+    console.log(`Channel ids: ${solutions.length || SOLUTIONS.length} solution(s) carry the main channel ids; the footer step knows every channel.`)
 }
 
-module.exports = { findChannelIdMismatches, SOLUTIONS }
+module.exports = { findChannelIdMismatches, findFooterStepMismatches, FOOTER_STEP, SOLUTIONS }
