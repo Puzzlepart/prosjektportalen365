@@ -125,6 +125,13 @@
       margin-bottom: var(--spacingVerticalM);
       flex-shrink: 0;
 
+      .details {
+        max-height: 160px;
+        overflow-y: auto;
+        margin: var(--spacingVerticalXS) 0 0;
+        padding-left: var(--spacingHorizontalL);
+      }
+
       .retryButton {
         margin-top: var(--spacingVerticalS);
         align-self: flex-start;

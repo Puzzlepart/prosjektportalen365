@@ -138,6 +138,7 @@ define([], function () {
     CatalogStepValidateManifest: 'Validating manifest',
     CatalogStepCheckVersion: 'Checking version',
     CatalogStepProvisionHub: 'Provisioning hub',
+    CatalogStepProvisionHubErrorsDetail: '{0} error(s) logged, see the advanced log',
     CatalogStepTaxonomy: 'Provisioning taxonomy',
     CatalogStepStoreProjectTemplate: 'Storing project template',
     CatalogStepExtensions: 'Adding to Project Extensions',
@@ -158,12 +159,18 @@ define([], function () {
     CatalogStepSkippedFeatureFlag: 'Skipped (feature flag off)',
     CatalogInstallSuccessTitle: 'Package imported',
     CatalogInstallSuccessText: 'The template is now available in the setup wizard.',
+    CatalogInstallWarningTitle: 'Package imported with errors',
+    CatalogInstallWarningText:
+      'The template is available in the setup wizard, but {0} error(s) were logged while provisioning the hub, and what failed was not provisioned. The advanced log shows the errors.',
     CatalogInstallErrorTitle: 'Import failed',
     CatalogPublishSuccessText: 'The cloud template is now available in the setup wizard.',
     CatalogPublishErrorText: 'Could not make the cloud template available.',
     CatalogPublishTaxonomySkippedText:
       'The cloud template was made available, but taxonomy was skipped (feature flag off).',
     CatalogPublishCancelledText: 'Publishing as a cloud template was cancelled.',
+    CatalogPublishErrorsText:
+      '{0} {1} error(s) were logged while provisioning the hub dependencies, and what failed was not provisioned:',
+    CatalogPublishErrorsLabel: 'Errors logged while provisioning the hub dependencies',
     CatalogRemoveSuccessText: 'The template was removed.',
     CatalogRemoveSuccessTextExtension: 'The extension was removed.',
     CatalogRemoveErrorText: 'Could not remove the template.',
@@ -223,6 +230,7 @@ define([], function () {
     CatalogStepStatusError: 'Failed',
     CatalogStepStatusSkipped: 'Skipped',
     CatalogStepStatusPending: 'Pending',
+    CatalogStepStatusWarning: 'Completed with errors',
     CatalogActionAddExtension: 'Add as project extension',
     CatalogActionReinstallExtension: 'Add again',
     CatalogActionUpdateExtension: 'Update extension to v{0}',
@@ -276,13 +284,20 @@ define([], function () {
     CatalogConflictSiteField:
       'The site column "{0}" already exists with a different ID. Its properties are updated, but the ID is kept.',
     CatalogConflictSiteFieldType:
-      'The site column "{0}" already exists with a different type ({1}). Updating it may fail.',
+      'The site column "{0}" is {1} on the hub, but the package says {2}. Only a widening type change keeps the values, so the column is left as it is (logged as a warning).',
+    CatalogConflictSiteFieldWidened:
+      'The site column "{0}" is {1} on the hub and is changed to {2}, as the package says. Its values are kept.',
     CatalogConflictSiteFieldReused:
-      'The field ID of "{0}" is already used by the column "{1}". The column cannot be added and is skipped.',
+      'The field ID of "{0}" is already used by the column "{1}". The column is not added (logged as an error), and the rest of the package is still provisioned.',
     CatalogConflictListField:
-      'The list column "{0}" in the list "{1}" has an ID that already exists. It would be deleted and recreated (data may be lost), so it is skipped.',
+      'The list "{1}" already has a column named "{0}" with a different ID. The package\'s column is not added, and the existing one is left as it is (logged as a warning).',
+    CatalogConflictListFieldType:
+      'The list column "{0}" in the list "{1}" is {2}, but the package says {3}. Only a widening type change keeps the values, so the column is left as it is (logged as a warning).',
+    CatalogConflictListFieldWidened:
+      'The list column "{0}" in the list "{1}" is {2} and is changed to {3}, as the package says. Its values are kept.',
     CatalogConflictListView: 'The view "{0}" in the list "{1}" already exists and will be overwritten.',
-    CatalogConflictList: 'The list "{0}" will have its existing content types removed.',
+    CatalogConflictList:
+      'The list "{0}" already exists, so its existing content types are kept. The package removes content types only from lists it creates.',
     CatalogConflictExtension: 'The project extension "{0}" already exists and will be overwritten.',
     CatalogConflictTaxonomy:
       'The term set "{0}" already exists in the term store with the name "{1}". The existing one is kept.',

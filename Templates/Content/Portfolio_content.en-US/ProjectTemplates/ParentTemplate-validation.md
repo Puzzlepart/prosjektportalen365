@@ -2,6 +2,14 @@ The template contains the following tokens that has not been found in the .resx 
 
 _No tokens with missing translations or replacement values found._
 
+The template contains the following `{listid:}` tokens that name neither a list of the template nor a list every project site has:
+
+_No `{listid:}` tokens without a list found._
+
+The template contains the following navigation nodes whose `Lists/` URL names no list the template creates:
+
+_No navigation nodes without a list found._
+
 ---
 
 ## Template Content
@@ -57,6 +65,15 @@ _No tokens with missing translations or replacement values found._
             }
         ]
     },
+    "CustomActions": [
+        {
+            "Name": "Footer",
+            "Title": "Footer",
+            "Location": "ClientSideExtension.ApplicationCustomizer",
+            "ClientSideComponentId": "84f27cec-ffde-4e00-a4cf-25c69f691054",
+            "ClientSideComponentProperties": "{}"
+        }
+    ],
     "ClientSidePages": [
         {
             "Name": "Admin.aspx",

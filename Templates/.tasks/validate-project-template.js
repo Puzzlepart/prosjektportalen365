@@ -3,6 +3,7 @@
 const fs = require('fs')
 const path = require('path')
 const { getFileContent } = require('./util')
+const { findListReferenceProblems } = require('./list-references')
 
 // Recursively find all files with the given extension in a directory
 function findFilesRecursive(dir, extension) {
@@ -65,6 +66,18 @@ for (const templatePath of templates) {
     // Sort tokens alphabetically and remove duplicates
     tokens = new Set(Array.from(tokens).sort())
 
+    // List references to lists the template does not have. The content template folder is
+    // `Portfolio_content.<lng>`. They are also written to the console, since the run exits with 0.
+    const relativeTemplatePath = path.relative(path.resolve(__dirname, '..'), templatePath).split(path.sep).join('/')
+    const lng = path.basename(path.dirname(path.dirname(templatePath))).replace(/^Portfolio_content\./, '')
+    const problems = findListReferenceProblems(JSON.parse(templateContent), lng)
+    for (const token of problems.listIds) {
+        console.warn(`[validate-project-template] ${relativeTemplatePath}: ${token} names neither a list of the template nor a list every project site has`)
+    }
+    for (const node of problems.navigation) {
+        console.warn(`[validate-project-template] ${relativeTemplatePath}: ${node} names no list the template creates`)
+    }
+
     // No date and no absolute path: the report is tracked, so it must come out the same on every
     // machine (macOS or Windows, any locale) as long as the template does not change.
     let markdownContent = `The template contains the following tokens that has not been found in the .resx files:\n\n`
@@ -75,6 +88,22 @@ for (const templatePath of templates) {
         markdownContent += Array.from(tokens).map(t => `- ${t}`).join('\n')
     }
 
+    markdownContent += '\n\nThe template contains the following `{listid:}` tokens that name neither a list of the template nor a list every project site has:\n\n'
+    if (problems.listIds.length === 0) {
+        markdownContent += '_No `{listid:}` tokens without a list found._'
+    }
+    else {
+        markdownContent += problems.listIds.map(t => `- ${t}`).join('\n')
+    }
+
+    markdownContent += '\n\nThe template contains the following navigation nodes whose `Lists/` URL names no list the template creates:\n\n'
+    if (problems.navigation.length === 0) {
+        markdownContent += '_No navigation nodes without a list found._'
+    }
+    else {
+        markdownContent += problems.navigation.map(n => `- ${n}`).join('\n')
+    }
+
     markdownContent += '\n\n---\n\n'
     markdownContent += '## Template Content\n\n'
     markdownContent += '```txt\n'
@@ -82,7 +111,7 @@ for (const templatePath of templates) {
     markdownContent += '\n```\n\n'
     markdownContent += '## Template Path\n\n'
     markdownContent += '```txt\n'
-    markdownContent += path.relative(path.resolve(__dirname, '..'), templatePath).split(path.sep).join('/')
+    markdownContent += relativeTemplatePath
     markdownContent += '\n```\n\n'
 
     const filePath = templatePath.replace(/\.txt$/, '-validation.md')

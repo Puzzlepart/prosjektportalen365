@@ -24,7 +24,8 @@ import {
   ErrorCircle24Filled,
   Info16Regular,
   SubtractCircle24Regular,
-  Warning16Filled
+  Warning16Filled,
+  Warning24Filled
 } from '@fluentui/react-icons'
 import { format, UserMessage } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
@@ -101,6 +102,8 @@ function statusLabel(status: InstallStepStatus): string {
       return strings.CatalogStepStatusRunning
     case 'done':
       return strings.CatalogStepStatusDone
+    case 'warning':
+      return strings.CatalogStepStatusWarning
     case 'error':
       return strings.CatalogStepStatusError
     case 'skipped':
@@ -116,6 +119,8 @@ const StepIcon: FC<{ status: InstallStepStatus }> = ({ status }) => {
       return <Spinner size='tiny' />
     case 'done':
       return <CheckmarkCircle24Filled className={styles.successIcon} />
+    case 'warning':
+      return <Warning24Filled className={styles.warningIcon} />
     case 'error':
       return <ErrorCircle24Filled className={styles.errorIcon} />
     case 'skipped':
@@ -177,9 +182,10 @@ export const InstallProgress: FC = () => {
 
   const total = progress.steps.length
   const completed = progress.steps.filter(
-    (s) => s.status === 'done' || s.status === 'skipped'
+    (s) => s.status === 'done' || s.status === 'warning' || s.status === 'skipped'
   ).length
-  const isTerminal = progress.status === 'success' || progress.status === 'error'
+  const isTerminal =
+    progress.status === 'success' || progress.status === 'warning' || progress.status === 'error'
 
   // Group the advanced-log lines by type (handler / install phase), preserving
   // first-seen order — like ProjectSetup's advanced log.
@@ -306,6 +312,13 @@ export const InstallProgress: FC = () => {
               ? strings.CatalogInstallSuccessTextExtension
               : strings.CatalogInstallSuccessText
           }
+        />
+      )}
+      {progress.status === 'warning' && (
+        <UserMessage
+          intent='warning'
+          title={strings.CatalogInstallWarningTitle}
+          text={format(strings.CatalogInstallWarningText, progress.provisionErrors ?? 0)}
         />
       )}
       {progress.status === 'error' && (

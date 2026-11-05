@@ -9,8 +9,9 @@ interface IApplyTemplateStatus {
 
   /**
    * Returns one advanced log message per item the handler will apply,
-   * enumerated from the template schema. The provisioning library gives
-   * no per-item feedback, so the messages are emitted when the handler starts.
+   * enumerated from the template schema. The provisioning library reports
+   * no progress per item (only its warnings and errors, which `captureEngineLog`
+   * adds to the log), so the messages are emitted when the handler starts.
    */
   getLogMessages?: (schema: Schema) => string[]
 }

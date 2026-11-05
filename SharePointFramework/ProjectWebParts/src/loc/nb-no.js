@@ -80,6 +80,14 @@ define([], function () {
     RunProjectSetupDialogSubText:
       'Dette lar deg velge en mal, tillegg eller standardinnhold som skal legges til prosjektet. Dette kan brukes for feilsøking eller for å legge til ny funksjonalitet.',
     RunProjectSetupDialogProgressText: 'Kjører oppsettveiviser',
+    SetupMenuNotSavedTitle: 'Menyen kunne ikke lagres',
+    SetupMenuNotSavedText:
+      'Fortsetter du likevel, blir lenkene eierne selv har lagt til i menyen, ikke lagt tilbake etter oppsettet.',
+    ContinueAnywayText: 'Fortsett likevel',
+    SetupNotStartedTitle: 'Oppsettet kunne ikke startes',
+    SetupNotStartedText:
+      'Lukk og prøv igjen. Lykkes det ikke, kan en administrator se på feilmeldingen.',
+    SetupNotStartedErrorText: 'Feilmelding: {0}',
     CurrentPhaseViewNameFieldLabel: 'Visningsnavn for gjeldende fase',
     DataFetchModeAutoText: 'Automatisk (datakilde for overordnede områder)',
     DataFetchModeDataSourceText: 'Datakilde',

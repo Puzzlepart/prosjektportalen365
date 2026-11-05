@@ -46,7 +46,11 @@ export enum InstallStepKey {
   UpdateTemplateOptions = 'updateTemplateOptions'
 }
 
-export type InstallStepStatus = 'pending' | 'running' | 'done' | 'skipped' | 'error'
+/**
+ * Status of an install step. `warning` is a step that completed although part of
+ * it failed: sp-js-provisioning logs what it could not apply as an error and goes on.
+ */
+export type InstallStepStatus = 'pending' | 'running' | 'done' | 'warning' | 'skipped' | 'error'
 
 /**
  * A single granular line in the advanced install log. `group` is the type it
@@ -79,7 +83,11 @@ export interface IInstallStep {
 export interface IInstallProgress {
   steps: IInstallStep[]
   currentStep?: InstallStepKey
-  status: 'running' | 'success' | 'error'
+  /**
+   * `warning` when the install completed, but sp-js-provisioning logged errors while
+   * provisioning the hub (see {@link IInstallProgress.provisionErrors}).
+   */
+  status: 'running' | 'success' | 'warning' | 'error'
   /**
    * Flat, ordered advanced-log lines (grouped by {@link IInstallLogEntry.group}
    * in the UI). Captures every provisioning line plus curated step notes.
@@ -89,4 +97,9 @@ export interface IInstallProgress {
    * Terminal error message (when `status === 'error'`).
    */
   error?: string
+  /**
+   * The number of error lines sp-js-provisioning logged while provisioning the hub
+   * (when `status === 'warning'`). The lines themselves are in {@link IInstallProgress.log}.
+   */
+  provisionErrors?: number
 }

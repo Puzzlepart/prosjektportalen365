@@ -2,7 +2,13 @@ import { stringIsNullOrEmpty } from '@pnp/core'
 import { IProjectSetupData } from 'extensions/projectSetup'
 import * as strings from 'ProjectExtensionsStrings'
 import { SPField } from 'pp365-shared-library/lib/models/SPField'
-import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
+import {
+  BaseTask,
+  BaseTaskError,
+  IBaseTaskParams,
+  captureEngineLog,
+  engineLogLevel
+} from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../types'
 import {
   ITaskDetails,
@@ -25,9 +31,14 @@ import {
   getAllItems,
   format
 } from 'pp365-shared-library'
-import { LogLevel } from '@pnp/logging'
 import { WebProvisioner } from 'sp-js-provisioning'
 import { IPlannerTaskSPItem } from './types'
+
+/**
+ * The prefix of the engine's log lines from a cloud template's content, left out of the lines in
+ * the advanced log.
+ */
+const CLOUD_LOG_PREFIX = '(ProjectSetup) (CopyListData) (Cloud)'
 
 export class CopyListData extends BaseTask {
   constructor(data: IProjectSetupData) {
@@ -182,11 +193,14 @@ export class CopyListData extends BaseTask {
   /**
    * Apply a **cloud template** list-content config: read the bundled rows and
    * folder hierarchy from the `.pppkg`, project the rows to the config's
-   * `fields` subset, and write them into the project's destination list via
+   * `fields` subset (with the rows' KeyColumn, which the engine matches existing
+   * items by), and write them into the project's destination list via
    * the sp-js-provisioning `DataRows`/`Folders` handlers (run on the project
    * web, after `SetTaxonomyFields` so the `GtProjectPhase` term field is
    * already bound). Folder structures (e.g. «Standarddokumenter») come from
-   * the bundled list's `Folders` block. Nothing is read from the hub.
+   * the bundled list's `Folders` block. Nothing is read from the hub. The
+   * engine's warnings and errors (a row SharePoint refuses, an unresolved
+   * lookup) are added to the step's log.
    *
    * @param config Cloud content config
    * @param params Task parameters
@@ -205,7 +219,13 @@ export class CopyListData extends BaseTask {
       this.logInformation(`No bundled rows or folders for cloud content config ${config.text}`)
       return
     }
-    const fields = config.fields
+    // The engine matches a row to an existing item by its KeyColumn, so the projection keeps it:
+    // without it every row was added again on each run.
+    const keyColumn = dataRows?.KeyColumn ?? 'Title'
+    const fields =
+      config.fields.length > 0 && !config.fields.includes(keyColumn)
+        ? [...config.fields, keyColumn]
+        : config.fields
     const rows = (dataRows?.Rows ?? []).map((row) => {
       if (fields.length === 0) return row
       return fields.reduce((projected: Record<string, any>, fieldName) => {
@@ -217,25 +237,24 @@ export class CopyListData extends BaseTask {
     // the top level.
     const countFolders = (items: Array<{ Folders?: any[] }>): number =>
       items.reduce((sum, folder) => sum + 1 + countFolders(folder.Folders ?? []), 0)
-    this.onProgress(
-      hasRows
-        ? format(
-            strings.CopyListItemsText,
-            rows.length,
-            config.sourceListTitle,
-            config.destinationListTitle
-          )
-        : format(
-            strings.CopyFilesText,
-            countFolders(folders),
-            config.sourceListTitle,
-            config.destinationListTitle
-          ),
-      '',
-      hasRows ? 'List' : 'Documentation'
-    )
-    // DataRows/Folders uses lists.ensure, which updates existing list settings.
-    // Mirror destination metadata and fail when missing to avoid a stray generic list.
+    const progressText = hasRows
+      ? format(
+          strings.CopyListItemsText,
+          rows.length,
+          config.sourceListTitle,
+          config.destinationListTitle
+        )
+      : format(
+          strings.CopyFilesText,
+          countFolders(folders),
+          config.sourceListTitle,
+          config.destinationListTitle
+        )
+    const iconName = hasRows ? 'List' : 'Documentation'
+    this.onProgress(progressText, '', iconName)
+    // The engine updates an existing list with the settings the schema states: the destination's
+    // own, so they stay as they are. It would create a missing list, so the step fails instead of
+    // making a generic one.
     let destinationProps: {
       BaseTemplate?: number
       Description?: string
@@ -274,9 +293,13 @@ export class CopyListData extends BaseTask {
     const schema = { Lists: [listSchema] }
     const provisioner = new WebProvisioner(params.web).setup({
       spfxContext: params.context,
-      logging: { prefix: '(ProjectSetup) (CopyListData) (Cloud)', activeLogLevel: LogLevel.Info }
+      logging: { prefix: CLOUD_LOG_PREFIX, activeLogLevel: engineLogLevel() }
     } as any)
-    await provisioner.applyTemplate(schema as any, null)
+    await captureEngineLog(
+      () => provisioner.applyTemplate(schema as any, null),
+      (entry) => this.onProgress(progressText, '', iconName, entry),
+      CLOUD_LOG_PREFIX
+    )
   }
 
   /**
@@ -443,21 +466,22 @@ export class CopyListData extends BaseTask {
         )
         await execute()
         const batchFailures = (await Promise.all(adds)).filter(Boolean)
+        // In the step's log too, which ends the setup with a warning: the step goes on past them.
         for (const failure of batchFailures) {
-          this.logError(
-            `Failed to add item '${failure.properties?.Title ?? ''}' to list '${
-              config.destListProps.Title
-            }': ${failure.error?.message ?? failure.error}`,
-            { properties: failure.properties, error: failure.error }
-          )
+          const message = `Failed to add item '${failure.properties?.Title ?? ''}' to list '${
+            config.destListProps.Title
+          }': ${failure.error?.message ?? failure.error}`
+          this.logError(message, { properties: failure.properties, error: failure.error })
+          this.onProgress(progressText, '', 'List', { message, level: 'error' })
         }
         failed.push(...batchFailures)
       }
       if (failed.length > 0) {
-        this.logWarning(
-          `${failed.length} of ${itemsToAdd.length} item(s) could not be copied from '${config.sourceListProps.Title}' to '${config.destListProps.Title}'`,
-          { failedItems: failed.map((failure) => failure.properties?.Title) }
-        )
+        const message = `${failed.length} of ${itemsToAdd.length} item(s) could not be copied from '${config.sourceListProps.Title}' to '${config.destListProps.Title}'`
+        this.logWarning(message, {
+          failedItems: failed.map((failure) => failure.properties?.Title)
+        })
+        this.onProgress(progressText, '', 'List', { message, level: 'warning' })
         if (failed.length === itemsToAdd.length) {
           throw new Error(
             `None of the ${itemsToAdd.length} item(s) could be copied to list '${

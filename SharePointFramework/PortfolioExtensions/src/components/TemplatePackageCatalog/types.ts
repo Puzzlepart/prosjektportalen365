@@ -64,6 +64,11 @@ export interface ICatalogFilters {
 export interface ICatalogNotification {
   intent: 'success' | 'warning' | 'error'
   text: string
+  /**
+   * Lines listed under the text as they are, in a list named by `label`: the errors
+   * sp-js-provisioning logged while a cloud template's hub dependencies were provisioned.
+   */
+  details?: { label: string; lines: string[] }
 }
 
 export interface ITemplatePackageCatalogState {

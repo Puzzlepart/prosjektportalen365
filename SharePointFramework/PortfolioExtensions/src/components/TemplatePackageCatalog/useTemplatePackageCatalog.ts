@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import strings from 'PortfolioExtensionsStrings'
+import { format } from 'pp365-shared-library'
 import { ICatalogPackage, ICompatibilityReport, ICrossReference } from 'models'
 import {
   CatalogService,
@@ -291,7 +292,7 @@ export function useTemplatePackageCatalog(
     const priorRef = crossRefFor(pkg.id)
     const action = priorRef?.itemId ? ('update' as const) : ('install' as const)
     try {
-      const completed = await PackageInstaller.runImport({
+      const { completed, errors } = await PackageInstaller.runImport({
         package: pkg,
         context: props.context,
         featureFlagProvisioning: props.featureFlagProvisioning,
@@ -318,14 +319,22 @@ export function useTemplatePackageCatalog(
         previousVersion: priorRef?.installedVersion,
         ppVersion: state.installedVersion
       })
+      // Errors sp-js-provisioning logged and went on after: the progress pane's
+      // advanced log lists them.
       setState({
-        notification: {
-          intent: 'success',
-          text:
-            pkg.type === 'extension'
-              ? strings.CatalogInstallSuccessTextExtension
-              : strings.CatalogInstallSuccessText
-        }
+        notification:
+          errors.length > 0
+            ? {
+                intent: 'warning',
+                text: format(strings.CatalogInstallWarningText, errors.length)
+              }
+            : {
+                intent: 'success',
+                text:
+                  pkg.type === 'extension'
+                    ? strings.CatalogInstallSuccessTextExtension
+                    : strings.CatalogInstallSuccessText
+              }
       })
     } catch (error) {
       void TelemetryService.track(props, {
@@ -390,10 +399,20 @@ export function useTemplatePackageCatalog(
         ppVersion: state.installedVersion,
         detail: { taxonomySkipped: result.taxonomySkipped }
       })
+      const publishedText = result.taxonomySkipped
+        ? strings.CatalogPublishTaxonomySkippedText
+        : strings.CatalogPublishSuccessText
+      // Publishing has no advanced log: the errors sp-js-provisioning logged and went
+      // on after are listed in the notification.
       setState({
-        notification: result.taxonomySkipped
-          ? { intent: 'warning', text: strings.CatalogPublishTaxonomySkippedText }
-          : { intent: 'success', text: strings.CatalogPublishSuccessText }
+        notification:
+          result.errors.length > 0
+            ? {
+                intent: 'warning',
+                text: format(strings.CatalogPublishErrorsText, publishedText, result.errors.length),
+                details: { label: strings.CatalogPublishErrorsLabel, lines: result.errors }
+              }
+            : { intent: result.taxonomySkipped ? 'warning' : 'success', text: publishedText }
       })
     } catch (error) {
       void TelemetryService.track(props, {

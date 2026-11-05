@@ -77,4 +77,5 @@ export abstract class BaseTask implements IBaseTask {
   }
 }
 
+export * from './engineLog'
 export * from './types'

@@ -34,17 +34,19 @@ const PACKAGE_STORE_FOLDER = TEMPLATE_PACKAGE_STORE_FOLDER
 /**
  * Routes every PnP `Logger` line (sp-js-provisioning's per-field / per-content-type /
  * per-list / per-term output, plus our own) into the grouped advanced log while an
- * import is running. Subscribed once; a no-op until an import sets `_logCapture`,
- * and cleared again when the import ends.
+ * import is running, and its Error lines to each list `collectErrors` holds open.
+ * Subscribed once; a no-op until an import sets `_logCapture` (cleared again when the
+ * import ends) or `collectErrors` runs.
  */
 let _logCapture: ((message: string, level: 'info' | 'warning' | 'error') => void) | undefined
+const _errorCollectors = new Set<string[]>()
 let _logCaptureSubscribed = false
 function ensureLogCaptureSubscribed(): void {
   if (_logCaptureSubscribed) return
   _logCaptureSubscribed = true
   Logger.subscribe(
     FunctionListener((entry) => {
-      if (!_logCapture || !entry || !entry.message) return
+      if ((!_logCapture && _errorCollectors.size === 0) || !entry || !entry.message) return
       const level =
         entry.level === LogLevel.Error
           ? 'error'
@@ -53,12 +55,34 @@ function ensureLogCaptureSubscribed(): void {
             : 'info'
       // Drop the redundant catalog prefix (and the optional cloud marker) so the
       // leading "(Handler):" stays first — that's what the advanced log groups on.
-      _logCapture(
-        `${entry.message}`.replace(/^\(TemplatePackageCatalog\)\s*(\(Cloud\)\s*)?/, ''),
-        level
+      const message = `${entry.message}`.replace(
+        /^\(TemplatePackageCatalog\)\s*(\(Cloud\)\s*)?/,
+        ''
       )
+      if (level === 'error') _errorCollectors.forEach((errors) => errors.push(message))
+      _logCapture?.(message, level)
     })
   )
+}
+
+/**
+ * Runs `apply` and returns the error lines the PnP `Logger` got meanwhile. sp-js-provisioning
+ * logs what it could not apply (a site column, a list field, a content type binding, a data
+ * row) as an error and goes on, so `applyTemplate` resolves after a partial result. The lines
+ * still reach an import's advanced log (`_logCapture`).
+ *
+ * @param apply - The provisioning to run
+ */
+async function collectErrors(apply: () => Promise<unknown>): Promise<string[]> {
+  ensureLogCaptureSubscribed()
+  const errors: string[] = []
+  _errorCollectors.add(errors)
+  try {
+    await apply()
+  } finally {
+    _errorCollectors.delete(errors)
+  }
+  return errors
 }
 
 export interface IPackageInstallOptions {
@@ -72,11 +96,24 @@ export interface IPackageInstallOptions {
   onProgress: (progress: IInstallProgress) => void
   /**
    * Invoked when the pre-import compatibility check finds conflicts. Resolve
-   * `true` to continue (conflicting entries are stripped/overwritten per their
-   * resolution) or `false` to cancel the import. When omitted, the import
-   * proceeds as if confirmed.
+   * `true` to continue (each conflict is handled as its resolution says, see
+   * `ConflictResolution`) or `false` to cancel the import. When omitted, the
+   * import proceeds as if confirmed.
    */
   onConflicts?: (report: ICompatibilityReport) => Promise<boolean>
+}
+
+export interface IPackageImportResult {
+  /**
+   * `false` when the import stopped before writing to the hub: cancelled at the
+   * compatibility prompt, or a taxonomy package without term store access.
+   */
+  completed: boolean
+  /**
+   * The error lines sp-js-provisioning logged while provisioning the hub (see
+   * `collectErrors`). The import still completes after them, with the status `warning`.
+   */
+  errors: string[]
 }
 
 export interface ICloudPublishOptions {
@@ -87,9 +124,9 @@ export interface ICloudPublishOptions {
   featureFlagProvisioning?: boolean
   /**
    * Invoked when the pre-publish compatibility check finds conflicts. Resolve
-   * `true` to continue (conflicting entries are stripped/overwritten per their
-   * resolution) or `false` to cancel. When omitted, publishing proceeds as if
-   * confirmed.
+   * `true` to continue (each conflict is handled as its resolution says, see
+   * `ConflictResolution`) or `false` to cancel. When omitted, publishing
+   * proceeds as if confirmed.
    */
   onConflicts?: (report: ICompatibilityReport) => Promise<boolean>
 }
@@ -114,6 +151,11 @@ export interface ICloudPublishResult {
    */
   localizedName?: string
   localizedDescription?: string
+  /**
+   * The error lines sp-js-provisioning logged while provisioning the hub
+   * dependencies (see `collectErrors`); empty when nothing failed.
+   */
+  errors: string[]
 }
 
 /**
@@ -133,7 +175,7 @@ export interface ICloudPublishResult {
  *   {@link provisionCloudTemplateHubDependencies} (Mode B publish).
  */
 export class PackageInstaller {
-  public static async runImport(options: IPackageInstallOptions): Promise<boolean> {
+  public static async runImport(options: IPackageInstallOptions): Promise<IPackageImportResult> {
     const { package: pkg, context, featureFlagProvisioning, existingItemId, onProgress } = options
     const isExtension = pkg.type === 'extension'
 
@@ -264,7 +306,7 @@ export class PackageInstaller {
         progress.status = 'success'
         progress.currentStep = undefined
         emit()
-        return true
+        return { completed: true, errors: [] }
       }
 
       // Pre-import compatibility check: detect conflicts with existing hub
@@ -283,7 +325,7 @@ export class PackageInstaller {
           progress.error = strings.CatalogImportCancelled
           progress.currentStep = undefined
           emit()
-          return false
+          return { completed: false, errors: [] }
         }
         setStatus(InstallStepKey.CheckCompatibility, 'done', detail)
       } else {
@@ -317,12 +359,29 @@ export class PackageInstaller {
         progress.error = strings.CatalogTaxonomyPermissionBlocked
         progress.currentStep = undefined
         emit()
-        return false
+        return { completed: false, errors: [] }
       }
 
       setStatus(InstallStepKey.ProvisionHub, 'running')
-      await PackageInstaller._provisionHub(zip, manifest, context, enableTaxonomy, report)
-      setStatus(InstallStepKey.ProvisionHub, 'done')
+      const errors = await PackageInstaller._provisionHub(
+        zip,
+        manifest,
+        context,
+        enableTaxonomy,
+        report
+      )
+      // What failed is in the advanced log already; the import goes on, as the
+      // provisioning did, and ends as a warning.
+      if (errors.length > 0) {
+        progress.provisionErrors = errors.length
+        setStatus(
+          InstallStepKey.ProvisionHub,
+          'warning',
+          format(strings.CatalogStepProvisionHubErrorsDetail, errors.length)
+        )
+      } else {
+        setStatus(InstallStepKey.ProvisionHub, 'done')
+      }
       addLog(InstallStepKey.ProvisionHub, strings.CatalogLogHubProvisioned)
 
       // An enabled-but-no-taxonomy package makes the Taxonomy step a no-op
@@ -393,10 +452,10 @@ export class PackageInstaller {
       setStatus(InstallStepKey.UpdateTemplateOptions, 'done')
       addLog(InstallStepKey.UpdateTemplateOptions, strings.CatalogLogTemplateOptionsUpdated)
 
-      progress.status = 'success'
+      progress.status = errors.length > 0 ? 'warning' : 'success'
       progress.currentStep = undefined
       emit()
-      return true
+      return { completed: true, errors }
     } catch (error) {
       const running = steps.find((s) => s.status === 'running')
       if (running) {
@@ -532,15 +591,20 @@ export class PackageInstaller {
     }
   }
 
+  /**
+   * Apply the package's hub template to the hub web.
+   *
+   * @returns The error lines sp-js-provisioning logged (see `collectErrors`)
+   */
   private static async _provisionHub(
     zip: any,
     manifest: IPackageManifest,
     context: ListViewCommandSetContext,
     includeTaxonomy: boolean,
     report?: ICompatibilityReport
-  ): Promise<void> {
+  ): Promise<string[]> {
     const hubTemplate = manifest.provisioning?.hubTemplate
-    if (!hubTemplate) return
+    if (!hubTemplate) return []
     const file = zip.file(hubTemplate)
     if (!file) {
       throw new Error(format(strings.CatalogHubTemplateMissing, hubTemplate))
@@ -551,9 +615,11 @@ export class PackageInstaller {
     if (!includeTaxonomy && schema.Taxonomy) {
       delete schema.Taxonomy
     }
-    // Strip the entries the admin chose to skip (id clashes that would clobber a
-    // different object, or blocked items that would abort applyTemplate), so the
-    // existing hub objects are left untouched and the rest still provisions.
+    // Strip the content types and term sets the admin chose to skip (an id owned
+    // by a different object, or a field reference the hub lacks, which would abort
+    // applyTemplate), so those hub objects are left untouched and the rest still
+    // provisions. Site columns and list fields stay: sp-js-provisioning updates
+    // them in place and logs what it leaves alone (see CompatibilityService).
     if (report?.hasConflicts) {
       schema = CompatibilityService.stripConflicts(schema, report)
     }
@@ -563,12 +629,14 @@ export class PackageInstaller {
       spfxContext: context,
       logging: { prefix: '(TemplatePackageCatalog)', activeLogLevel: LogLevel.Info }
     } as any)
-    await provisioner.applyTemplate(schema, null, (handler) => {
-      Logger.log({
-        message: `(PackageInstaller) provisionHub: applying handler ${handler}`,
-        level: LogLevel.Info
+    return collectErrors(() =>
+      provisioner.applyTemplate(schema, null, (handler) => {
+        Logger.log({
+          message: `(PackageInstaller) provisionHub: applying handler ${handler}`,
+          level: LogLevel.Info
+        })
       })
-    })
+    )
   }
 
   /**
@@ -584,7 +652,8 @@ export class PackageInstaller {
    * source lists are dropped — their rows and folder structures are project
    * content pulled straight from the `.pppkg` at project-setup time. The same
    * pre-flight compatibility check as the import flow runs against the applied
-   * subset (`options.onConflicts` decides whether to continue).
+   * subset (`options.onConflicts` decides whether to continue). What
+   * sp-js-provisioning could not apply comes back as `errors`.
    */
   public static async provisionCloudTemplateHubDependencies(
     pkg: ICatalogPackage,
@@ -607,7 +676,8 @@ export class PackageInstaller {
       taxonomySkipped: false,
       manifest,
       localizedName,
-      localizedDescription
+      localizedDescription,
+      errors: []
     }
     const hubTemplate = manifest.provisioning?.hubTemplate
     if (!hubTemplate) return result
@@ -686,12 +756,14 @@ export class PackageInstaller {
       spfxContext: context,
       logging: { prefix: '(TemplatePackageCatalog) (Cloud)', activeLogLevel: LogLevel.Info }
     } as any)
-    await provisioner.applyTemplate(schemaToApply, null, (handler) => {
-      Logger.log({
-        message: `(PackageInstaller) provisionCloudTemplateHubDependencies: applying handler ${handler}`,
-        level: LogLevel.Info
+    result.errors = await collectErrors(() =>
+      provisioner.applyTemplate(schemaToApply, null, (handler) => {
+        Logger.log({
+          message: `(PackageInstaller) provisionCloudTemplateHubDependencies: applying handler ${handler}`,
+          level: LogLevel.Info
+        })
       })
-    })
+    )
     return result
   }
 
