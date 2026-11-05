@@ -111,6 +111,14 @@ define([], function () {
     RunProjectSetupDialogSubText:
       'This allows you to select a template, extension, or standard content to be added to the project. This can be used for troubleshooting or to add new functionality.',
     RunProjectSetupDialogProgressText: 'Running setup wizard',
+    SetupMenuNotSavedTitle: 'The menu could not be saved',
+    SetupMenuNotSavedText:
+      'If you continue anyway, the links the owners added to the menu themselves will not be put back after the setup.',
+    ContinueAnywayText: 'Continue anyway',
+    SetupNotStartedTitle: 'The setup could not be started',
+    SetupNotStartedText:
+      'Close and try again. If it still fails, an administrator can look at the error message.',
+    SetupNotStartedErrorText: 'Error message: {0}',
     CurrentPhaseViewNameFieldLabel: 'Display name for current phase',
     DataFetchModeAutoText: 'Automatic (data source on parent sites)',
     DataFetchModeDataSourceText: 'Data source',

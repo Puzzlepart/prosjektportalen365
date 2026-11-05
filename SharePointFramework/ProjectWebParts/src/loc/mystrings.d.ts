@@ -62,6 +62,12 @@ declare interface IProjectWebPartsStrings {
   RunProjectSetupDialogTitle: string
   RunProjectSetupDialogSubText: string
   RunProjectSetupDialogProgressText: string
+  SetupMenuNotSavedTitle: string
+  SetupMenuNotSavedText: string
+  ContinueAnywayText: string
+  SetupNotStartedTitle: string
+  SetupNotStartedText: string
+  SetupNotStartedErrorText: string
   CurrentPhaseViewNameFieldLabel: string
   DataFetchModeAutoText: string
   DataFetchModeDataSourceText: string
