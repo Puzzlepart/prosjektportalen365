@@ -9,7 +9,7 @@ name: CI (build debug)
 # keep the live test-channel workflow from building and deploying that commit. It also runs on
 # every pull request to a release branch, as the build the branch protection requires before a
 # merge (the job "Build release package (pull request)"): the rebuild with Jest, the coverage
-# floors and the packaging proofs. workflow_dispatch
+# floors, the packaging proofs and the scripts' tests (npm run test:tasks). workflow_dispatch
 # works once this file is on the default branch.
 on:
   push:
@@ -85,6 +85,13 @@ jobs:
           path: release
           # Dotfiles too: UpgradeAllSitesToLatest.ps1 reads the channel from .current-channel-config.json.
           include-hidden-files: true
+
+      - name: The scripts' tests (.tasks/*.test.js)
+        # After the build, which installs what they need: modify-solution-files.test.js runs
+        # SharePointFramework/.tasks/modifySolutionFiles.js, which needs dotenv, glob, yargs and colors
+        # from the Rush project pp365-spfx-tasks (rush install, in Build-Release.ps1). The test report
+        # publisher's tests need Node and git only, and inject their waits: seconds.
+        run: npm run test:tasks
 
       - name: Upload the Rush logs
         if: always()

@@ -15,10 +15,27 @@
  * reports. The e2e and integration jobs run at once and both push: a push is conditional on the
  * branch being where it was fetched (`--force-with-lease`), and one that loses starts over.
  *
+ * Another repository publishes to the same site with `--project <name>`: its reports, their
+ * metadata and its own front page go to the folder `<name>/` (`<name>/runs/<run id>-<attempt>/<suite>/`,
+ * `<name>/index.html`, `<name>/project.json`), with the same 7 days and a budget of its own, and
+ * nothing outside that folder changes. prosjektportalen365's publishes (without `--project`) render
+ * the site's front page, with a line linking each folder whose `project.json` names it ("Also on
+ * this site"). Each publisher owns its paths: prosjektportalen365 `runs/`, the front page and
+ * `.nojekyll`, a project its folder. A publish that would change anything else is refused before
+ * the push, so an older or newer copy of this file cannot remove another repository's reports. The
+ * file is the same, byte for byte, in prosjektportalen365 and sp-js-provisioning
+ * (`.tasks/publish-test-report.js`, with its tests): change it in one, copy it to the other, and
+ * compare the two with `git hash-object`.
+ *
  * Usage, from the repo root (CI):
  *   node .tasks/publish-test-report.js --suite e2e --report e2e/playwright-report
  *     --results e2e/test-results/results.json --outcome success
  *   node .tasks/publish-test-report.js --suite integration --report integration/test-results --outcome failure
+ *   node .tasks/publish-test-report.js --project sp-js-provisioning --suite unit --title Unit
+ *     --report test-results/unit --outcome success
+ *
+ * The counts come from `--results` (Playwright's JSON report) when it is given, else from the
+ * summary a node:test HTML reporter embeds in the report's `index.html`.
  *
  * Environment: TEST_REPORTS_REPOSITORY (owner/name), TEST_REPORTS_URL (the site's address) and
  * TEST_REPORTS_DEPLOY_KEY (an SSH deploy key with write access to that repository); COMMIT_SUBJECT;
@@ -26,6 +43,9 @@
  * three it says so and exits 0: the report is then only in the artifact. Before every push it
  * checks that the site is private, and refuses when it is not. TEST_REPORTS_REMOTE replaces the
  * SSH remote (and the check) with any git URL or path; the tests use a local bare repository.
+ *
+ * Without COMMIT_SUBJECT (a run started by hand) the subject comes from `git log` of GITHUB_SHA in
+ * the checkout. A publish that fails is written to the job summary too, beside the warning.
  */
 const { execFileSync } = require('child_process')
 const fs = require('fs')
@@ -33,14 +53,20 @@ const os = require('os')
 const path = require('path')
 
 const SUITES = {
-    e2e: { title: 'End-to-end', entry: 'index.html' },
-    integration: { title: 'Integration', entry: 'index.html' }
+    e2e: { title: 'End-to-end' },
+    integration: { title: 'Integration' }
 }
+/** The page a report opens at. */
+const ENTRY = 'index.html'
+/** A project's folder, and a suite of a project. `runs` is prosjektportalen365's folder. */
+const NAME = /^[a-z0-9][a-z0-9-]*$/
 const BRANCH = 'gh-pages'
 /** As long as the artifacts are kept: the organization caps them at 7 days. */
 const RETENTION_DAYS = 7
 /** GitHub Pages publishes at most 1 GB; the rest is headroom for the next run. */
 const MAX_SITE_BYTES = 800 * 1024 * 1024
+/** A project's runs, beside prosjektportalen365's 800 MB: together still under the 1 GB. */
+const MAX_PROJECT_BYTES = 100 * 1024 * 1024
 /** git refuses files over 100 MiB. */
 const MAX_FILE_BYTES = 95 * 1024 * 1024
 const PUSH_ATTEMPTS = 5
@@ -51,6 +77,9 @@ const LOST_LEASE = /\(stale info\)|\[rejected\]|non-fast-forward|\(fetch first\)
 /** What git and ssh print when GitHub refuses the deploy key or cannot be reached. */
 const UNREACHABLE =
     /Permission denied \(publickey\)|Could not read from remote repository|Host key verification failed|Could not resolve hostname|Connection (?:timed out|refused|reset|closed)|kex_exchange_identification|remote end hung up|early EOF|unable to access/i
+
+/** A publish that would change paths its publisher does not own: trying again cannot help. */
+class RefusedError extends Error {}
 
 /** Parses `--name value` pairs. */
 function parseArgs(argv) {
@@ -81,18 +110,18 @@ function readJson(file) {
 }
 
 /**
- * The counts of a suite's report: Playwright's `results.json` stats for e2e, the summary the
- * integration reporter embeds in its page (`integration/src/reporters/html.ts`). `undefined` when
- * the report has none.
+ * The counts of a report: Playwright's `results.json` stats when it is given (e2e), else the
+ * summary a node:test HTML reporter embeds in the report's page (prosjektportalen365's
+ * `integration/src/reporters/html.ts`, sp-js-provisioning's `tests/reporters/html.ts`).
+ * `undefined` when the report has none.
  *
- * @param {'e2e' | 'integration'} suite
  * @param {string} reportDir The report folder
  * @param {string} [resultsFile] Playwright's JSON report (e2e)
  * @returns {{ passed: number, failed: number, flaky: number, skipped: number, durationMs?: number } | undefined}
  */
-function readCounts(suite, reportDir, resultsFile) {
-    if (suite === 'e2e') {
-        const stats = resultsFile && readJson(resultsFile)?.stats
+function readCounts(reportDir, resultsFile) {
+    if (resultsFile) {
+        const stats = readJson(resultsFile)?.stats
         if (!stats) return undefined
         return {
             passed: stats.expected ?? 0,
@@ -102,7 +131,7 @@ function readCounts(suite, reportDir, resultsFile) {
             durationMs: stats.duration
         }
     }
-    const page = path.join(reportDir, SUITES.integration.entry)
+    const page = path.join(reportDir, ENTRY)
     if (!fs.existsSync(page)) return undefined
     const match = /<script type="application\/json" id="report-summary">(.*?)<\/script>/s.exec(fs.readFileSync(page, 'utf8'))
     let summary
@@ -141,7 +170,23 @@ function runFromEnvironment(env) {
         branch: env.GITHUB_REF_NAME || undefined,
         sha: env.GITHUB_SHA || undefined,
         commitUrl: env.GITHUB_SHA ? `${server}/${repository}/commit/${env.GITHUB_SHA}` : undefined,
-        subject: env.COMMIT_SUBJECT || undefined
+        subject: env.COMMIT_SUBJECT || undefined,
+        repository
+    }
+}
+
+/**
+ * The subject of the run's commit, from the checkout: a run started by hand has no head commit
+ * message to take COMMIT_SUBJECT from. `undefined` when the commit is not there.
+ *
+ * @param {string} [sha]
+ */
+function commitSubject(sha) {
+    if (!sha) return undefined
+    try {
+        return git(['log', '-1', '--format=%s', sha], {}) || undefined
+    } catch {
+        return undefined
     }
 }
 
@@ -180,9 +225,9 @@ function markInternal(html) {
     return at === -1 ? html + INTERNAL_TAG : html.slice(0, at) + INTERNAL_TAG + html.slice(at)
 }
 
-/** Tags every report on the site as internal only, those published before the tag too. */
-function markReports(siteDir) {
-    for (const { suites } of listRuns(siteDir)) {
+/** Tags every report of the site's runs (or a project's) as internal only, those published before the tag too. */
+function markReports(siteDir, project) {
+    for (const { suites } of listRuns(siteDir, project)) {
         for (const { entry } of Object.values(suites)) {
             const file = path.join(siteDir, entry)
             if (!fs.existsSync(file)) continue
@@ -195,54 +240,78 @@ function markReports(siteDir) {
 
 /**
  * Adds a suite's report to a checked-out site, drops what is too old or too much, and rebuilds the
- * index. The current run is never dropped.
+ * index. The current run is never dropped. With a project, all of it happens in the project's
+ * folder, and nothing outside it changes: the front page and `.nojekyll` are prosjektportalen365's.
  *
  * @param {string} siteDir The site branch's working tree
  * @param {object} options
- * @param {'e2e' | 'integration'} options.suite
+ * @param {string} [options.project] The project's folder, for another repository's reports
+ * @param {string} options.suite `e2e` or `integration`; any name with a project
+ * @param {string} [options.title] The suite's column on the project's page
  * @param {string} options.reportDir The report folder to publish
  * @param {string} options.outcome The test step's outcome: success, failure, cancelled or skipped
  * @param {object} [options.counts] From {@link readCounts}
  * @param {ReturnType<typeof runFromEnvironment>} options.run
  * @param {Date} [options.now]
- * @param {number} [options.maxSiteBytes] Size budget of the runs on the site
+ * @param {number} [options.maxSiteBytes] Size budget of the runs on the site (or of the project's)
  * @param {(message: string) => void} [options.warn]
  * @returns {string} The report's path in the site, such as `runs/123-1/e2e/index.html`
  */
 function addReport(
     siteDir,
-    { suite, reportDir, outcome, counts, run, now = new Date(), maxSiteBytes = MAX_SITE_BYTES, warn = () => undefined }
+    {
+        project,
+        suite,
+        title,
+        reportDir,
+        outcome,
+        counts,
+        run,
+        now = new Date(),
+        maxSiteBytes = project ? MAX_PROJECT_BYTES : MAX_SITE_BYTES,
+        warn = () => undefined
+    }
 ) {
-    const runDir = path.join(siteDir, 'runs', run.key)
+    const base = project ? `${project}/` : ''
+    const runDir = path.join(siteDir, base, 'runs', run.key)
     const target = path.join(runDir, suite)
     fs.rmSync(target, { recursive: true, force: true })
     fs.mkdirSync(runDir, { recursive: true })
     fs.cpSync(reportDir, target, { recursive: true })
     dropOversizedFiles(target, warn)
-    const entry = `runs/${run.key}/${suite}/${SUITES[suite].entry}`
-    const meta = { suite, outcome, counts, publishedAt: now.toISOString(), entry, run }
+    const entry = `${base}runs/${run.key}/${suite}/${ENTRY}`
+    const published = { outcome, counts, publishedAt: now.toISOString(), entry, run }
+    const meta = project ? { project, suite, title: title || suite, ...published } : { suite, ...published }
     fs.writeFileSync(path.join(runDir, `${suite}.json`), JSON.stringify(meta, null, 2) + '\n')
-    prune(siteDir, run.key, now, maxSiteBytes, warn)
-    markReports(siteDir)
+    prune(siteDir, run.key, now, maxSiteBytes, warn, project)
+    markReports(siteDir, project)
+    if (project) {
+        fs.writeFileSync(path.join(siteDir, project, 'index.html'), renderProjectIndex(project, listRuns(siteDir, project), now))
+        const about = { project, title: `${project} test reports`, repository: run.repository, updatedAt: now.toISOString() }
+        fs.writeFileSync(path.join(siteDir, project, 'project.json'), JSON.stringify(about, null, 2) + '\n')
+        return entry
+    }
     fs.writeFileSync(path.join(siteDir, '.nojekyll'), '')
-    fs.writeFileSync(path.join(siteDir, 'index.html'), renderIndex(listRuns(siteDir), now))
+    fs.writeFileSync(path.join(siteDir, 'index.html'), renderIndex(listRuns(siteDir), now, listProjects(siteDir)))
     return entry
 }
 
 /**
- * The runs on the site, newest first: each with the metadata of its suites.
+ * The runs on the site (or in a project's folder), newest first: each with the metadata of its
+ * suites. The site's runs have the suites in `SUITES`; a project's, any it published.
  *
  * @param {string} siteDir
+ * @param {string} [project]
  */
-function listRuns(siteDir) {
-    const runsDir = path.join(siteDir, 'runs')
+function listRuns(siteDir, project) {
+    const runsDir = path.join(siteDir, project ?? '', 'runs')
     if (!fs.existsSync(runsDir)) return []
     return fs
         .readdirSync(runsDir, { withFileTypes: true })
         .filter((entry) => entry.isDirectory())
         .map((entry) => {
             const suites = {}
-            for (const suite of Object.keys(SUITES)) {
+            for (const suite of project ? suitesIn(path.join(runsDir, entry.name)) : Object.keys(SUITES)) {
                 const meta = readJson(path.join(runsDir, entry.name, `${suite}.json`))
                 if (meta) suites[suite] = meta
             }
@@ -253,23 +322,47 @@ function listRuns(siteDir) {
         .sort((a, b) => String(b.publishedAt ?? '').localeCompare(String(a.publishedAt ?? '')))
 }
 
-/** Drops runs older than the retention, then the oldest while the site is over its size budget. */
-function prune(siteDir, keep, now, maxSiteBytes, warn) {
+/** The suites a project's run folder has metadata for. */
+function suitesIn(runDir) {
+    return fs
+        .readdirSync(runDir)
+        .filter((name) => name.endsWith('.json'))
+        .map((name) => name.slice(0, -'.json'.length))
+        .filter((name) => NAME.test(name))
+        .sort()
+}
+
+/** The projects on the site, by name: the top-level folders whose `project.json` names them. */
+function listProjects(siteDir) {
+    return fs
+        .readdirSync(siteDir, { withFileTypes: true })
+        .filter((entry) => entry.isDirectory() && entry.name !== 'runs' && NAME.test(entry.name))
+        .filter((entry) => readJson(path.join(siteDir, entry.name, 'project.json'))?.project === entry.name)
+        .map((entry) => entry.name)
+        .sort()
+}
+
+/**
+ * Drops runs older than the retention, then the oldest while the runs are over their size budget:
+ * the site's runs, or a project's, never both.
+ */
+function prune(siteDir, keep, now, maxSiteBytes, warn, project) {
+    const runsDir = path.join(siteDir, project ?? '', 'runs')
     const oldest = now.getTime() - RETENTION_DAYS * 24 * 60 * 60 * 1000
-    const runs = listRuns(siteDir)
-    const remove = (key) => fs.rmSync(path.join(siteDir, 'runs', key), { recursive: true, force: true })
+    const runs = listRuns(siteDir, project)
+    const remove = (key) => fs.rmSync(path.join(runsDir, key), { recursive: true, force: true })
     for (const run of runs) {
         if (run.key !== keep && (!run.publishedAt || Date.parse(run.publishedAt) < oldest)) remove(run.key)
     }
-    const left = listRuns(siteDir)
-    let size = directorySize(path.join(siteDir, 'runs'))
+    const left = listRuns(siteDir, project)
+    let size = directorySize(runsDir)
     while (size > maxSiteBytes) {
         const victim = left.filter((run) => run.key !== keep).pop()
         if (!victim) break
-        size -= directorySize(path.join(siteDir, 'runs', victim.key))
+        size -= directorySize(path.join(runsDir, victim.key))
         remove(victim.key)
         left.splice(left.indexOf(victim), 1)
-        warn(`The site is over its size budget: dropped run ${victim.key}.`)
+        warn(`${project ?? 'The site'} is over its size budget: dropped run ${victim.key}.`)
     }
 }
 
@@ -297,8 +390,13 @@ function formatDuration(ms) {
     return seconds < 60 ? `${seconds} s` : `${Math.floor(seconds / 60)} min ${seconds % 60} s`
 }
 
-/** One suite's cell: its verdict, counts and the link to its report. */
-function renderSuiteCell(meta) {
+/**
+ * One suite's cell: its verdict, counts and the link to its report.
+ *
+ * @param {object} [meta]
+ * @param {string} [base] The folder of the page the cell is on, which the link is relative to
+ */
+function renderSuiteCell(meta, base = '') {
     if (!meta) return '<td class="none">–</td>'
     const verdict = { success: 'passed', failure: 'failed', cancelled: 'cancelled', skipped: 'skipped' }[meta.outcome] ?? 'unknown'
     const counts = meta.counts
@@ -311,45 +409,101 @@ function renderSuiteCell(meta) {
               formatDuration(counts.durationMs)
           ].filter(Boolean)
         : []
+    const href = meta.entry.startsWith(base) ? meta.entry.slice(base.length) : meta.entry
     return (
-        `<td><a class="verdict ${verdict}" href="${escapeHtml(meta.entry)}">${verdict}</a>` +
+        `<td><a class="verdict ${verdict}" href="${escapeHtml(href)}">${verdict}</a>` +
         `<div class="counts">${parts.join(' · ')}</div></td>`
+    )
+}
+
+/** A run's first two cells: the run, and its commit. */
+function renderRunCells({ key, run = {}, publishedAt }) {
+    const number = run.number ? `#${run.number}` : key
+    const attempt = run.attempt > 1 ? ` <span class="muted">attempt ${run.attempt}</span>` : ''
+    const runCell = run.url ? `<a href="${escapeHtml(run.url)}">${escapeHtml(number)}</a>${attempt}` : `${escapeHtml(number)}${attempt}`
+    const sha = run.sha ? run.sha.slice(0, 7) : ''
+    const commit = run.commitUrl ? `<a href="${escapeHtml(run.commitUrl)}"><code>${escapeHtml(sha)}</code></a>` : `<code>${escapeHtml(sha)}</code>`
+    const published = publishedAt ? DATE_FORMAT.format(new Date(publishedAt)) : ''
+    return (
+        `<td class="run">${runCell}<div class="muted">${escapeHtml(published)}</div></td>` +
+        `<td><div class="branch">${escapeHtml(run.branch ?? '')}</div>${commit} ${escapeHtml(run.subject ?? '')}</td>`
     )
 }
 
 /**
  * The site's front page: every run on it, newest first, with each suite's verdict and a link to
- * its report. Self-contained: no script, no external file.
+ * its report, and a line linking each project's page. Self-contained: no script, no external file.
  *
  * @param {ReturnType<typeof listRuns>} runs
  * @param {Date} now
+ * @param {string[]} [projects] From {@link listProjects}
  */
-function renderIndex(runs, now) {
+function renderIndex(runs, now, projects = []) {
     const rows = runs
-        .map(({ key, run = {}, suites, publishedAt }) => {
-            const number = run.number ? `#${run.number}` : key
-            const attempt = run.attempt > 1 ? ` <span class="muted">attempt ${run.attempt}</span>` : ''
-            const runCell = run.url ? `<a href="${escapeHtml(run.url)}">${escapeHtml(number)}</a>${attempt}` : `${escapeHtml(number)}${attempt}`
-            const sha = run.sha ? run.sha.slice(0, 7) : ''
-            const commit = run.commitUrl ? `<a href="${escapeHtml(run.commitUrl)}"><code>${escapeHtml(sha)}</code></a>` : `<code>${escapeHtml(sha)}</code>`
-            const published = publishedAt ? DATE_FORMAT.format(new Date(publishedAt)) : ''
-            return (
-                `<tr><td class="run">${runCell}<div class="muted">${escapeHtml(published)}</div></td>` +
-                `<td><div class="branch">${escapeHtml(run.branch ?? '')}</div>${commit} ${escapeHtml(run.subject ?? '')}</td>` +
-                `${Object.keys(SUITES).map((suite) => renderSuiteCell(suites[suite])).join('')}</tr>`
-            )
-        })
+        .map((entry) => `<tr>${renderRunCells(entry)}${Object.keys(SUITES).map((suite) => renderSuiteCell(entry.suites[suite])).join('')}</tr>`)
         .join('\n')
     const head = Object.values(SUITES)
         .map((suite) => `<th>${suite.title}</th>`)
         .join('')
+    return renderPage({
+        title: 'PP365 test reports',
+        intro:
+            `<p>The test channel's end-to-end and integration runs of the last ${RETENTION_DAYS} days, newest first. ` +
+            `Updated ${escapeHtml(DATE_FORMAT.format(now))} (Oslo time).</p>\n${renderProjectsLine(projects)}`,
+        head,
+        rows,
+        columns: 2 + Object.keys(SUITES).length
+    })
+}
+
+/**
+ * A project's front page, in its folder: its runs, newest first, with a column for each suite it
+ * published (titled by the newest run's metadata).
+ *
+ * @param {string} project
+ * @param {ReturnType<typeof listRuns>} runs
+ * @param {Date} now
+ */
+function renderProjectIndex(project, runs, now) {
+    const titles = {}
+    for (const { suites } of runs) {
+        for (const [suite, meta] of Object.entries(suites)) titles[suite] ??= meta.title || suite
+    }
+    const suites = Object.keys(titles).sort()
+    const rows = runs
+        .map((entry) => `<tr>${renderRunCells(entry)}${suites.map((suite) => renderSuiteCell(entry.suites[suite], `${project}/`)).join('')}</tr>`)
+        .join('\n')
+    return renderPage({
+        title: `${escapeHtml(project)} test reports`,
+        intro:
+            `<p>The CI runs of the last ${RETENTION_DAYS} days, newest first. Updated ${escapeHtml(DATE_FORMAT.format(now))} ` +
+            '(Oslo time). <a href="../">All test reports</a></p>\n',
+        head: suites.map((suite) => `<th>${escapeHtml(titles[suite])}</th>`).join(''),
+        rows,
+        columns: 2 + suites.length
+    })
+}
+
+/**
+ * The front page's line linking each project's page, or nothing when there is none.
+ *
+ * @param {string[]} projects
+ */
+function renderProjectsLine(projects) {
+    if (!projects.length) return ''
+    const links = projects.map((name) => `<a href="${escapeHtml(name)}/">${escapeHtml(name)}</a>`)
+    return `<p class="projects">Also on this site: ${links.join(' · ')}</p>\n`
+}
+
+/** A page of the site: a table of runs. Self-contained: no script, no external file. */
+function renderPage({ title, intro, head, rows, columns }) {
     return `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
-<title>PP365 test reports</title>
+<title>${title}</title>
 <style>
 :root{color-scheme:light dark;--bg:#fff;--fg:#1f2328;--muted:#59636e;--line:#d1d9e0;--head:#f6f8fa;--passed:#1a7f37;--failed:#cf222e;--cancelled:#9a6700;--skipped:#59636e}
 @media (prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--line:#3d444d;--head:#151b23;--passed:#3fb950;--failed:#f85149;--cancelled:#d29922;--skipped:#9198a1}}
@@ -364,12 +518,11 @@ th{background:var(--head);font-weight:600}a{color:inherit}.muted,.counts,.none{c
 </head>
 <body>
 <main>
-<h1>PP365 test reports</h1>
-<p>The test channel's end-to-end and integration runs of the last ${RETENTION_DAYS} days, newest first. Updated ${escapeHtml(DATE_FORMAT.format(now))} (Oslo time).</p>
-<div class="table"><table>
+<h1>${title}</h1>
+${intro}<div class="table"><table>
 <thead><tr><th>Run</th><th>Commit</th>${head}</tr></thead>
 <tbody>
-${rows || `<tr><td colspan="${2 + Object.keys(SUITES).length}" class="none">No runs yet.</td></tr>`}
+${rows || `<tr><td colspan="${columns}" class="none">No runs yet.</td></tr>`}
 </tbody>
 </table></div>
 </main>
@@ -536,15 +689,29 @@ function sleepSync(ms) {
 }
 
 /**
+ * The paths a publish changed that its publisher does not own: prosjektportalen365 owns `runs/`,
+ * the front page and `.nojekyll`, a project only its folder.
+ *
+ * @param {string[]} changed The paths the commit adds, changes or removes
+ * @param {string} [project]
+ * @returns {string[]}
+ */
+function foreignChanges(changed, project) {
+    const owned = project ? (file) => file.startsWith(`${project}/`) : (file) => file === 'index.html' || file === '.nojekyll' || file.startsWith('runs/')
+    return changed.filter((file) => !owned(file))
+}
+
+/**
  * Fetches the site branch, adds the report and pushes one parentless commit, conditional on the
  * branch not having moved; starts over when another job pushed in between, and waits longer
- * before it starts over when the site repository could not be reached.
+ * before it starts over when the site repository could not be reached. A commit that would change
+ * paths its publisher does not own is refused, without a push and without trying again.
  *
  * @param {object} options
  * @param {string} options.remote git URL or path of the site repository
  * @param {NodeJS.ProcessEnv} [options.gitEnv] Environment for git (GIT_SSH_COMMAND)
  * @param {Parameters<typeof addReport>[1]} options.report
- * @param {(workDir: string) => void} [options.beforePush] For the tests: runs before each push
+ * @param {(workDir: string) => void} [options.beforePush] For the tests: runs once the report is added, before each commit and push
  * @param {(message: string) => void} [options.log]
  * @param {(ms: number) => void} [options.sleep] For the tests: the wait between attempts
  * @returns {string} The report's path in the site
@@ -572,13 +739,26 @@ function publish({ remote, gitEnv = process.env, report, beforePush, log = conso
                 run(['checkout', '--quiet', '--detach', tip])
             }
             const entry = addReport(workDir, { ...report, warn: report.warn ?? log })
-            run(['add', '--all'])
-            const message = `${report.suite} report for run ${report.run.key}${report.run.branch ? ` (${report.run.branch})` : ''}`
-            const commit = run(['commit-tree', run(['write-tree']), '-m', message])
             beforePush?.(workDir)
+            run(['add', '--all'])
+            const changed = (tip ? run(['diff', '--cached', '--name-only', '--no-renames', '-z', tip]) : run(['ls-files', '-z']))
+                .split('\0')
+                .filter(Boolean)
+            const foreign = foreignChanges(changed, report.project)
+            if (foreign.length) {
+                const listed = foreign.slice(0, 5).join(', ') + (foreign.length > 5 ? ` and ${foreign.length - 5} more` : '')
+                throw new RefusedError(
+                    `Refused to publish: the commit would change ${listed}, which ${report.project ? `${report.project}'s` : "prosjektportalen365's"} ` +
+                        'reports do not own. Nothing was pushed.'
+                )
+            }
+            const name = report.project ? `${report.project} ${report.suite}` : report.suite
+            const message = `${name} report for run ${report.run.key}${report.run.branch ? ` (${report.run.branch})` : ''}`
+            const commit = run(['commit-tree', run(['write-tree']), '-m', message])
             run(['push', '--quiet', `--force-with-lease=refs/heads/${BRANCH}:${tip}`, remote, `${commit}:refs/heads/${BRANCH}`])
             return entry
         } catch (error) {
+            if (error instanceof RefusedError) throw error
             lastError = error
             if (attempt < PUSH_ATTEMPTS) {
                 const failure = classifyFailure(error)
@@ -607,13 +787,23 @@ function writeSummary(env, markdown) {
     if (env.GITHUB_STEP_SUMMARY) fs.appendFileSync(env.GITHUB_STEP_SUMMARY, markdown + '\n')
 }
 
-async function main(argv, env) {
+/**
+ * @param {string[]} argv
+ * @param {NodeJS.ProcessEnv} env
+ * @param {{ log?: (message: string) => void, sleep?: (ms: number) => void }} [options] For the tests: the push's log and its wait between attempts
+ */
+async function main(argv, env, { log, sleep } = {}) {
     const args = parseArgs(argv)
-    const suite = args.suite
-    if (!SUITES[suite] || !args.report) {
-        throw new Error('Usage: node .tasks/publish-test-report.js --suite e2e|integration --report <dir> [--results <file>] [--outcome <outcome>]')
+    const { project, suite } = args
+    const known = project ? NAME.test(project) && project !== 'runs' && NAME.test(suite ?? '') : Boolean(SUITES[suite])
+    if (!known || !args.report) {
+        throw new Error(
+            'Usage: node .tasks/publish-test-report.js --suite e2e|integration --report <dir> [--results <file>] [--outcome <outcome>]\n' +
+                '       node .tasks/publish-test-report.js --project <name> --suite <name> [--title <title>] --report <dir> [--results <file>] [--outcome <outcome>]'
+        )
     }
-    const title = `${SUITES[suite].title} report`
+    const suiteTitle = project ? args.title || suite : SUITES[suite].title
+    const title = `${suiteTitle} report`
     const remoteOverride = env.TEST_REPORTS_REMOTE
     if (!remoteOverride && (!env.TEST_REPORTS_REPOSITORY || !env.TEST_REPORTS_URL || !env.TEST_REPORTS_DEPLOY_KEY)) {
         console.log(
@@ -628,31 +818,40 @@ async function main(argv, env) {
         return
     }
     const report = {
+        project,
         suite,
+        title: project ? suiteTitle : undefined,
         reportDir,
         outcome: args.outcome || 'unknown',
-        counts: readCounts(suite, reportDir, args.results && path.resolve(args.results)),
-        run: runFromEnvironment(env),
+        counts: readCounts(reportDir, args.results && path.resolve(args.results)),
+        run: runFromEnvironment({ ...env, COMMIT_SUBJECT: env.COMMIT_SUBJECT || commitSubject(env.GITHUB_SHA) }),
         warn: (message) => console.log(`::warning title=${title}::${message}`)
     }
-    if (!remoteOverride) await assertSitePrivate(env)
-    const ssh = remoteOverride ? undefined : await prepareSsh(env.TEST_REPORTS_DEPLOY_KEY, env)
     try {
-        const entry = publish({
-            remote: remoteOverride || `git@github.com:${env.TEST_REPORTS_REPOSITORY}.git`,
-            gitEnv: ssh ? { ...env, GIT_SSH_COMMAND: ssh.sshCommand } : env,
-            report
-        })
-        const site = env.TEST_REPORTS_URL ? env.TEST_REPORTS_URL.replace(/\/+$/, '') + '/' : undefined
-        console.log(`Published ${entry}${site ? `: ${site}${entry}` : ''} (GitHub Pages deploys it within a minute or two).`)
-        writeSummary(
-            env,
-            site
-                ? `### ${title}\n\n[Open the report](${site}${entry}) · [all runs](${site}) (private site; it deploys a minute or two after this step)`
-                : `### ${title}\n\nPublished to \`${entry}\` on the test report site (set the TEST_REPORTS_URL variable for a link).`
-        )
-    } finally {
-        ssh?.cleanup()
+        if (!remoteOverride) await assertSitePrivate(env)
+        const ssh = remoteOverride ? undefined : await prepareSsh(env.TEST_REPORTS_DEPLOY_KEY, env)
+        try {
+            const entry = publish({
+                remote: remoteOverride || `git@github.com:${env.TEST_REPORTS_REPOSITORY}.git`,
+                gitEnv: ssh ? { ...env, GIT_SSH_COMMAND: ssh.sshCommand } : env,
+                report,
+                log,
+                sleep
+            })
+            const site = env.TEST_REPORTS_URL ? env.TEST_REPORTS_URL.replace(/\/+$/, '') + '/' : undefined
+            console.log(`Published ${entry}${site ? `: ${site}${entry}` : ''} (GitHub Pages deploys it within a minute or two).`)
+            writeSummary(
+                env,
+                site
+                    ? `### ${title}\n\n[Open the report](${site}${entry}) · [all runs](${site}${project ? `${project}/` : ''}) (private site; it deploys a minute or two after this step)`
+                    : `### ${title}\n\nPublished to \`${entry}\` on the test report site (set the TEST_REPORTS_URL variable for a link).`
+            )
+        } finally {
+            ssh?.cleanup()
+        }
+    } catch (error) {
+        writeSummary(env, `### ${title}\n\nNot published to the test report site: ${firstLine(error)} The report is only in the artifact.`)
+        throw error
     }
 }
 
@@ -667,13 +866,17 @@ if (require.main === module) {
 module.exports = {
     addReport,
     assertSitePrivate,
+    foreignChanges,
+    listProjects,
     listRuns,
+    main,
     parseArgs,
     prepareSsh,
     publish,
     readCounts,
     renderIndex,
     runFromEnvironment,
+    MAX_PROJECT_BYTES,
     MAX_SITE_BYTES,
     RETENTION_DAYS
 }
