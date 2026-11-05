@@ -33,8 +33,8 @@ const TRACE_PREFIX = '[pp365 placeholders]'
 const SHAREPOINT_PLACEHOLDERS_LINE = /Defined clientSidePlaceholders/i
 const REACT_FAULT = /Cannot read properties of null \(reading 'useContext'\)/
 const LIST_VIEW_HOST = /listview-host-assembly[^/?#]*\.js/i
-/** A button of the footer: in a list page's bottom placeholder, or in the one of other pages. */
-const FOOTER_BUTTON = '[data-sp-placeholder="Bottom"] button, #spBottomPlaceholder button'
+/** The bottom placeholder: a list page's, or the one of other pages. */
+const BOTTOM_PLACEHOLDER = '[data-sp-placeholder="Bottom"], #spBottomPlaceholder'
 const OUTPUT = path.join(
   __dirname,
   '..',
@@ -172,7 +172,11 @@ async function newContext(browser: Browser): Promise<BrowserContext> {
  * footer that never came. It waits until the tab is back on the site, keeps the renewed session
  * for the contexts after it, and returns nothing, so the load is made again.
  */
-async function loadOnce(context: BrowserContext, url: string, n: number): Promise<Load | undefined> {
+async function loadOnce(
+  context: BrowserContext,
+  url: string,
+  n: number
+): Promise<Load | undefined> {
   const page = await context.newPage()
   const origin = new URL(url).origin
   let signedIn = false
@@ -224,8 +228,11 @@ async function loadOnce(context: BrowserContext, url: string, n: number): Promis
       session = await context.storageState()
       return undefined
     }
+    // A button the user can see, as the smoke test's: the footer's first button, the hub's site
+    // settings, is hidden on a project, and waiting for it counted every project load as missing.
     record.footerShown = await page
-      .locator(FOOTER_BUTTON)
+      .locator(BOTTOM_PLACEHOLDER)
+      .getByRole('button')
       .first()
       .waitFor({ state: 'visible', timeout: WAIT_MS })
       .then(

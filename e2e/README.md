@@ -87,7 +87,10 @@ cd e2e && npx playwright test tests/diagnostics   # with E2E_PLACEHOLDER_DIAGNOS
 ```
 
 The results go to `e2e/placeholder-diagnostics/<time>/`, which git ignores. `summary.md` holds the
-counts, and the trace of each load where the footer did not show. «Bottom placeholder taken»
+counts, and the trace of each load where the footer did not show. The footer counts as shown when
+a button a user can see is in the bottom placeholder. Until 2026-11-05 the spec waited for the
+first button, the hub's site settings, which is hidden on a project, so the library's earlier
+counts say «missing» for every load: read «Its content in the page» there. «Bottom placeholder taken»
 counts what SharePoint reported; «Its content in the page» counts the loads where that content
 really was in the document (the trace's `connected`, in builds from 2026-11-05). Next to it are
 each page and cache's loads as JSON. `logs/` holds the console of those loads, and of the first

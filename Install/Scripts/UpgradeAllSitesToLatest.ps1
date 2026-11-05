@@ -65,7 +65,10 @@ $ScriptDir = (Split-Path -Path $MyInvocation.MyCommand.Definition -Parent)
 ## Checks if file .current-channel-config.json exists and loads it if it does
 if (Test-Path -Path "$ScriptDir/../.current-channel-config.json") {
     $global:__CurrentChannelConfig = Get-Content -Path "$ScriptDir/../.current-channel-config.json" -Raw -ErrorAction SilentlyContinue | ConvertFrom-Json
-    Write-Host "Loaded channel config from file .current-channel-config.json, will use channel $($global:__CurrentChannelConfig.Channel) when upgrading all sites to latest" -ForegroundColor Yellow
+    Write-Host "Loaded channel config from file .current-channel-config.json, will use channel $($global:__CurrentChannelConfig.name) when upgrading all sites to latest" -ForegroundColor Yellow
+}
+else {
+    Write-Host "No .current-channel-config.json in the package: upgrading all sites with the main channel's ids" -ForegroundColor Yellow
 }
 
 function UpgradeSite($Url) {

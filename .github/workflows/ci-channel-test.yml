@@ -89,6 +89,8 @@ jobs:
         with:
           name: release-package-test
           path: release
+          # Dotfiles too: UpgradeAllSitesToLatest.ps1 reads the channel from .current-channel-config.json.
+          include-hidden-files: true
 
       # Build-Release.ps1 prints the last 200 lines of a failed rebuild; the whole logs are here.
       - name: Upload the Rush logs
@@ -182,6 +184,8 @@ jobs:
         with:
           name: release-package-test
           path: release
+          # Dotfiles too: UpgradeAllSitesToLatest.ps1 reads the channel from .current-channel-config.json.
+          include-hidden-files: true
 
       - name: Upload the Rush logs
         if: failure()

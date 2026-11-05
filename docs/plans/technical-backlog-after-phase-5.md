@@ -483,12 +483,33 @@ so the swap went to 1.24.1.
 - **The reply.** Posted on sp-dev-docs#11070 on 2026-11-05: the numbers, the probe, the tenant's
   release preference (Targeted release for everyone), and why the trace answers Microsoft's
   question about a minimal customizer.
-- **The document library.** Left out of the reply. The e2e project had the main channel's footer,
-  from an older template, beside the test channel's, so two footers ran on every load.
-  `EnsureFooterExtension.ps1` now removes another channel's footer, and `check-channel-ids.js`
-  keeps the step's list of footers in step with `channels/`.
+- **The document library.** Left out of the reply. The e2e project ran two footers on every
+  load, the test channel's and the main channel's. The main channel's came from our own all-sites
+  upgrades: CI's release artifact left out `.current-channel-config.json` (upload-artifact skips
+  dotfiles unless told otherwise), so `UpgradeAllSitesToLatest.ps1` upgraded the test hub's
+  projects with the main channel's ids, and the footer step added the main channel's footer.
 - **The trace.** It now says whether the content SharePoint handed out is in the page
   (`connected`), and the diagnostics' summary has a column for it.
-- **Left:** measure the library again once a run with `[upgrade-all-sites-to-latest]` has removed
-  the second footer; decide on a workaround in the footer (render into the page's own Bottom
-  placeholder when the content is detached); and the hand round P5-4 asks for.
+- **The cleanup removed the wrong footer (2026-11-05).** `EnsureFooterExtension.ps1` began
+  removing another channel's footer. Run as main for the same reason, it removed the test
+  channel's footer from 42 of the test hub's projects (44 custom actions: two projects had it
+  twice) and kept the main channel's; the next measurement found the library loading the main
+  channel's bundle. Now every `release-package*`
+  upload has `include-hidden-files: true`, `UpgradeAllSitesToLatest.ps1` says when the package
+  names no channel, and without a channel the step removes no footer and adds the main channel's
+  only to a site with none (six cases dry-run in `pwsh` with the PnP cmdlets mocked). The next
+  test-channel run with `[upgrade-all-sites-to-latest]` puts the test channel's footer back and
+  removes the main channel's.
+- **The second run (2026-11-05, after the all-sites upgrade).** Hub list: the footer was missing
+  in 1 of 20 warm and 4 of 20 cold loads (15 of 20 cold the day before), and it showed in exactly
+  the 35 of 40 loads whose content was in the page. Library: the spec counted every load as
+  missing, because it waited for the footer's first button, the hub's site settings, which is
+  hidden on a project; the day before's library counts were wrong the same way. By `connected`,
+  the footer was in the page in 19 of 20 warm and 2 of 20 cold loads. Each of the 18 cold loads
+  without it had the React fault of #11068, the list view host loaded twice and no change event,
+  and no load with the footer in the page had the fault. The spec now waits for a button a user
+  can see (`getByRole`, as the smoke test does).
+- **Left:** measure the library again with the fixed spec once the test channel's footer is back;
+  tell Microsoft that #11068 and #11070 come together on the library; decide on a workaround in
+  the footer (render into the page's own Bottom placeholder when the content is detached); and
+  the hand round P5-4 asks for.
