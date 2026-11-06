@@ -17,7 +17,9 @@
 #   same id. A column with values is left as it is, with a warning, for an administrator to decide.
 #   A lookup to a missing list offers nothing to choose in SharePoint's forms, so a value in one
 #   was written by a script, and only its author knows what it meant;
-# - it points at Programleveranser, or at another list of the site: it is left as it is.
+# - it points at Programleveranser, or at another list of the site: it is left as it is. A column
+#   pointing at Programleveranser that still has its internal name as title (an earlier add whose
+#   titling failed) gets the release's title.
 #
 # Nothing is deleted. Without Programleveranser the step says so and changes nothing. Names come
 # from the release's resources, so English program sites are handled too.
@@ -48,6 +50,7 @@ function Repair-ProgramProjectLogProductLookup {
     return
   }
   $ProjectDeliveries = $WebLists | Where-Object { $_.Title -eq $ProjectDeliveriesTitle } | Select-Object -First 1
+  $FieldTitle = Get-Resource -Name "ListFields_ProjectLogProductLookup_DisplayName"
 
   $Field = Get-PnPField -List $ProjectLog -Identity $FieldId -ErrorAction SilentlyContinue
   if ($null -eq $Field) {
@@ -64,10 +67,22 @@ function Repair-ProgramProjectLogProductLookup {
     Write-Host "`t`tAdding $FieldName to $ProjectLogTitle, looking up $ProgramDeliveriesTitle"
     $ProjectLog.Fields.AddFieldAsXml($FieldXml, $false, [Microsoft.SharePoint.Client.AddFieldOptions]::AddToDefaultContentType) | Out-Null
     Invoke-PnPQuery
-    Set-PnPField -List $ProjectLog -Identity $FieldId -Values @{ Title = (Get-Resource -Name "ListFields_ProjectLogProductLookup_DisplayName") } | Out-Null
+    Set-PnPField -List $ProjectLog -Identity $FieldId -Values @{ Title = $FieldTitle } | Out-Null
     $Added = Get-PnPField -List $ProjectLog -Identity $FieldId -ErrorAction SilentlyContinue
     if ($null -eq $Added) {
       Write-Host "`t`t[ERROR] SharePoint did not add $FieldName to $ProjectLogTitle" -ForegroundColor Yellow
+      return
+    }
+    # Read back: the list it looks up and its title, not only that it exists.
+    $Added.Context.Load($Added)
+    Invoke-PnPQuery
+    [xml]$AddedSchema = $Added.SchemaXml
+    $AddedListId = [guid]::Empty
+    if (-not ([guid]::TryParse($AddedSchema.DocumentElement.GetAttribute("List"), [ref]$AddedListId) -and $AddedListId -eq $ProgramDeliveries.Id)) {
+      Write-Host "`t`t[ERROR] SharePoint added $FieldName to $ProjectLogTitle, but it does not look up $ProgramDeliveriesTitle" -ForegroundColor Yellow
+    }
+    elseif ($Added.Title -ne $FieldTitle) {
+      Write-Host "`t`t[ERROR] SharePoint added $FieldName to $ProjectLogTitle, but its title is '$($Added.Title)', not '$FieldTitle'" -ForegroundColor Yellow
     }
     else {
       Write-Host "`t`tAdded $FieldName to $ProjectLogTitle" -ForegroundColor Green
@@ -89,6 +104,13 @@ function Repair-ProgramProjectLogProductLookup {
     $Target = $WebLists | Where-Object { $_.Id -eq $StoredListId } | Select-Object -First 1
   }
   if ($null -ne $Target -and $Target.Id -eq $ProgramDeliveries.Id) {
+    # An earlier add whose titling failed left the internal name as title; an administrator's own
+    # title is kept.
+    if ($Field.Title -eq $FieldName) {
+      Set-PnPField -List $ProjectLog -Identity $FieldId -Values @{ Title = $FieldTitle } | Out-Null
+      Write-Host "`t`t$FieldName in $ProjectLogTitle already looks up $ProgramDeliveriesTitle; titled '$FieldTitle'" -ForegroundColor Green
+      return
+    }
     Write-Host "`t`t$FieldName in $ProjectLogTitle already looks up $ProgramDeliveriesTitle" -ForegroundColor Green
     return
   }
