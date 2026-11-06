@@ -18,6 +18,20 @@ const MATRIX_DATA_SOURCES = {
   opportunity: 'dc3a4676-a38a-4fa7-a2b3-790f89046b52'
 }
 
+/** Prosjektlogg's lookup to the deliveries (`_JsonTemplate{Project,Program}.json`). */
+const PROJECT_LOG_PRODUCT = 'GtProjectLogProductLookup'
+
+/**
+ * The list a lookup's schema XML points at, as a bare lower-case id, or the attribute as it is.
+ *
+ * @param schemaXml The field's schema XML
+ */
+const lookupList = (schemaXml: string): string | undefined =>
+  /\sList="([^"]*)"/
+    .exec(schemaXml)?.[1]
+    .replace(/^\{|\}$/g, '')
+    .toLowerCase()
+
 /** Why the tests of the templates' state do not run: the run's upgrade applied no templates. */
 const templatesSkip = env.templatesApplied
   ? undefined
@@ -132,6 +146,44 @@ describe("the upgrade's result", { skip: skipReason('hubUrl', 'projectUrl') }, (
       assert.ok(
         /^[0-9a-f-]{36}$/i.test(field.TermSetId) && !/^0{8}-/.test(field.TermSetId),
         'no term set'
+      )
+    }
+  )
+
+  it(
+    "points the program's project log product column at the program's own deliveries",
+    { skip: templatesSkip ?? skipReason('programUrl') },
+    async (t) => {
+      const program = await connect(env.programUrl!)
+      const lists = program.sp.web.lists
+      const [field] = await lists
+        .getByTitle(resources.Lists_ProjectLog_Title)
+        .fields.filter(`InternalName eq '${PROJECT_LOG_PRODUCT}'`)
+        .select('Title', 'TypeAsString', 'SchemaXml')<
+        Array<{ Title: string; TypeAsString: string; SchemaXml: string }>
+      >()
+      // Programs set up before 1.15.0 have no such column: the template pointed it at
+      // Prosjektleveranser, which they lack, and SharePoint refused it. `UpgradeAllSitesToLatest.ps1`
+      // adds it, but with `[upgrade-all-sites-to-latest]` it runs beside this test, and may not have
+      // reached the program yet.
+      if (!field)
+        return t.skip(
+          `the program's ${resources.Lists_ProjectLog_Title} has no ${PROJECT_LOG_PRODUCT} yet: UpgradeAllSitesToLatest.ps1 adds it`
+        )
+      const deliveries = await lists
+        .getByTitle(resources.Lists_ProgramDeliveries_Title)
+        .select('Id')<{ Id: string }>()
+      assert.deepEqual(
+        {
+          Title: field.Title,
+          TypeAsString: field.TypeAsString,
+          List: lookupList(field.SchemaXml)
+        },
+        {
+          Title: resources.ListFields_ProjectLogProductLookup_DisplayName,
+          TypeAsString: 'Lookup',
+          List: deliveries.Id.toLowerCase()
+        }
       )
     }
   )

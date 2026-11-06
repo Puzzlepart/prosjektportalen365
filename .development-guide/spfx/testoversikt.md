@@ -99,7 +99,7 @@ I kolonnene under betyr «skriver» at testen skriver til testtenanten og rydder
 | `project-properties` | 5 (skriver) | Datoer lagret, vist og formatert for siden og Excel i fem tidssoner (områdets sone fra harnessets kontekst), tekst/valg/person, termer |
 | `hub` | 5 (2 skriver) | Hubraden, synkroniseringen, ny kolonne i en visning, kolonnekonfigurasjon og innstillinger, program og prosjekter |
 | `status-reports` | 1 (skriver) | Kladd i en egen rapportserie, utfylt, lest med personen og slettet |
-| `template` | 5 (4 etter full oppgradering) | Installasjonsloggen, fargene for `Status muligheter`, interessentfeltet, matrisenes datakilder, standardvisningen |
+| `template` | 6 (5 etter full oppgradering) | Installasjonsloggen, fargene for `Status muligheter`, interessentfeltet, programmets `Prosjektloggprodukt` mot `Programleveranser` (hoppes over til `UpgradeAllSitesToLatest.ps1` har lagt den til), matrisenes datakilder, standardvisningen |
 | `project-web-parts` | 2 (1 skriver) | ProjectWebParts' synkronisering til huben, og matrisens datakilde på programmet |
 
 ### Hull verdt å kjenne til
