@@ -1,6 +1,6 @@
 # Skjermede prosjekter – teknisk kartlegging
 
-**Status:** utkast til diskusjon, 7. oktober 2026. Kartleggingen bygger på kodebasen og er ikke verifisert mot en tenant. Linjenumre kan avvike noe fra `main`. Løsningsforslaget står i `skjermede-prosjekter-losningsforslag.md`. Punkter som må sjekkes i en tenant står i avsnitt 7.
+**Status:** kartlegging fra oktober 2026, mot kodebasen før 1.15. Beskriver hvor prosjektdata lå på huben da. Linjenumre kan avvike fra `releases/1.15`. Beslutningene og den vedtatte planen står i `skjermede-prosjekter-losningsforslag.md`.
 
 ## 1. Sammendrag
 
@@ -43,7 +43,7 @@ Følgende er **konfigurasjon** og kan bli liggende på huben: Statusseksjoner, P
 
 | Alternativ | Hvordan | Vurdering |
 |---|---|---|
-| **Hele huben** | En nøkkel i Globale innstillinger, for eksempel `ShieldedProjects=1`, satt med en parameter til `Install.ps1` og lagt inn i `PostInstallUpgrade.ps1` | Enklest å resonnere om, og passer Bydelsreformen med egen hub. Prosjektoppsettet leser ikke Globale innstillinger i dag (`projectSetup/index.ts:173`), så det må legges til. |
+| **Hele huben** | En nøkkel i Globale innstillinger, for eksempel `ShieldedProjects=1`, satt med en parameter til `Install.ps1` og lagt inn i `PostInstallUpgrade.ps1` | Enklest å resonnere om, og passer en kunde som vil ha en egen hub for skjermede prosjekter. Prosjektoppsettet leser ikke Globale innstillinger i dag (`projectSetup/index.ts:173`), så det må legges til. |
 | **Per mal** | En ny kolonne på Maloppsett, etter samme mønster som `GtTimelineContentType` → `ProjectTemplate.getSchema` | Hubadministratorer styrer hvilke maler som er skjermede, og vanlige og skjermede prosjekter kan ligge på samme hub. Krever blandet kildehåndtering på porteføljesiden. |
 | **Per prosjekt** | Et flagg på prosjektet, i property bag (som `pp_*_template`) og/eller på Prosjektegenskaper-elementet | Mest fleksibelt. Å endre flagget på et eksisterende prosjekt betyr migrering av prosjektets data. |
 
