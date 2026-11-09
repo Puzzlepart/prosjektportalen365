@@ -101,6 +101,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       loadLinks: () => this._fetchLinks(),
       loadFavoriteProjects: () => this._fetchFavoriteProjects(),
       pageContext: this.context.pageContext,
+      pagePath: window.location.pathname,
       portalUrl: this._portalDataService.url,
       useAssistant: this._useAssistant,
       hasAssistantAccess: this._hasAssistantAccess,

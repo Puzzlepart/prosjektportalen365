@@ -31,7 +31,11 @@ export const HelpContentDialog: FC<Omit<DialogProps, 'children'> & { children?: 
   const tabsId = useId('help-tab')
   const context = useContext(FooterContext)
   const [selectedValue, setSelectedValue] = React.useState<TabValue>()
-  const activeValue = selectedValue ?? context.helpContent[0]?.title
+  // A tab chosen on another page is not among this page's help: the dialog stays mounted with
+  // the footer across navigations.
+  const activeValue = context.helpContent.some((content) => content.title === selectedValue)
+    ? selectedValue
+    : context.helpContent[0]?.title
 
   const onTabSelect = (_: SelectTabEvent, data: SelectTabData) => {
     setSelectedValue(data.value)

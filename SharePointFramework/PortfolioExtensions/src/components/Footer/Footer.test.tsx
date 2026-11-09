@@ -378,6 +378,65 @@ describe('Footer', () => {
     expect(button).not.toHaveAttribute('disabled')
   })
 
+  it('loads the help of the next page, which a client-side navigation keeps it mounted on', async () => {
+    const loadHelpContent = jest
+      .fn()
+      .mockResolvedValueOnce([
+        help('Porteføljenivå', 'Om porteføljen'),
+        help('Opprett prosjekt', 'Slik oppretter du et prosjekt')
+      ])
+      .mockResolvedValueOnce([help('Porteføljeoversikt', 'Om porteføljeoversikten')])
+    const props = footerProps({ loadHelpContent, pagePath: '/sites/pp365/SitePages/Home.aspx' })
+    const { rerender } = render(<Footer {...props} />)
+    fireEvent.click(screen.getByText(strings.HelpContentAvailableLabel))
+    expect(await screen.findByText('Om porteføljen')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('tab', { name: 'Opprett prosjekt' }))
+
+    rerender(<Footer {...props} pagePath='/sites/pp365/SitePages/Portef%C3%B8ljeoversikt.aspx' />)
+    // At once, since it was loaded on the last page; the tab chosen there is not on this one.
+    expect(await screen.findByText('Om porteføljeoversikten')).toBeInTheDocument()
+    expect(screen.getByRole('tab', { name: 'Porteføljeoversikt' })).toHaveAttribute(
+      'aria-selected',
+      'true'
+    )
+    expect(screen.queryByText('Om porteføljen')).toBeNull()
+    expect(loadHelpContent).toHaveBeenCalledTimes(2)
+  })
+
+  it('waits until the help is opened before it loads it on the next page', async () => {
+    const loadHelpContent = jest.fn(() =>
+      Promise.resolve([help('Porteføljeoversikt', 'Om porteføljeoversikten')])
+    )
+    const props = footerProps({ loadHelpContent, pagePath: '/sites/pp365/SitePages/Home.aspx' })
+    const { rerender } = render(<Footer {...props} />)
+    rerender(<Footer {...props} pagePath='/sites/pp365/SitePages/Portef%C3%B8ljeoversikt.aspx' />)
+    expect(loadHelpContent).not.toHaveBeenCalled()
+    fireEvent.click(screen.getByText(strings.HelpContentAvailableLabel))
+    expect(await screen.findByText('Om porteføljeoversikten')).toBeInTheDocument()
+    expect(loadHelpContent).toHaveBeenCalledTimes(1)
+  })
+
+  it('drops help that arrives for a page it has left', async () => {
+    let answerFirst: (items: HelpContentModel[]) => void
+    const loadHelpContent = jest
+      .fn()
+      .mockImplementationOnce(
+        () =>
+          new Promise<HelpContentModel[]>((resolve) => {
+            answerFirst = resolve
+          })
+      )
+      .mockResolvedValueOnce([help('Porteføljeoversikt', 'Om porteføljeoversikten')])
+    const props = footerProps({ loadHelpContent, pagePath: '/sites/pp365/SitePages/Home.aspx' })
+    const { rerender } = render(<Footer {...props} />)
+    fireEvent.click(screen.getByText(strings.HelpContentAvailableLabel))
+    rerender(<Footer {...props} pagePath='/sites/pp365/SitePages/Portef%C3%B8ljeoversikt.aspx' />)
+    expect(await screen.findByText('Om porteføljeoversikten')).toBeInTheDocument()
+    await act(async () => answerFirst([help('Porteføljenivå', 'Om porteføljen')]))
+    expect(screen.queryByText('Om porteføljen')).toBeNull()
+    expect(screen.getByText('Om porteføljeoversikten')).toBeInTheDocument()
+  })
+
   it('offers the assistant to users with access, with the page as its source', async () => {
     render(<Footer {...footerProps({ useAssistant: true, hasAssistantAccess: true })} />)
     // The drawer opens from state: the button is where the focus goes back as it closes.

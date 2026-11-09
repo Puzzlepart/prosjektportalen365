@@ -265,6 +265,16 @@ describe('FooterApplicationCustomizer', () => {
     expect(placeholder.domElement.childNodes).toHaveLength(1)
   })
 
+  it('tells the footer which page it is on, which a navigation changes while it stays mounted', async () => {
+    window.history.replaceState({}, '', '/sites/pp365/SitePages/Home.aspx')
+    const { navigate } = await footerCustomizer()
+    expect(rendered.props.pagePath).toBe('/sites/pp365/SitePages/Home.aspx')
+    window.history.pushState({}, '', '/sites/pp365/SitePages/Portef%C3%B8ljeoversikt.aspx')
+    await navigate()
+    expect(rendered.props.pagePath).toBe('/sites/pp365/SitePages/Portef%C3%B8ljeoversikt.aspx')
+    expect(rendered.mounted).toBe(1)
+  })
+
   it.each([
     ['the hub is out of reach', portalDataService({ isAvailable: false })],
     ['the footer is turned off', portalDataService({ settings: {} })]
