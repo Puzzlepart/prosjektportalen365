@@ -144,7 +144,8 @@ export interface IColumnDataTypeFieldProps {
   children?: ReactNode
 
   /**
-   * Key of the data type selected when the field first renders.
+   * Key of the data type the field starts from. A new key starts the field over: the dropdown
+   * selects that data type, and the type's fields are read again from `dataTypeProperties`.
    */
   defaultSelectedKey?: string
 
@@ -156,7 +157,7 @@ export interface IColumnDataTypeFieldProps {
   onChange: (value: string) => void
 
   /**
-   * Current properties for the data type
+   * Properties for the data type, read when the field starts (see `defaultSelectedKey`)
    */
   dataTypeProperties?: Record<string, any>
 

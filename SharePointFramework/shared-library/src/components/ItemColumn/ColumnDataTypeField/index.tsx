@@ -20,16 +20,10 @@ const OptionContent: FC<{ option: IColumnDataTypeFieldOption }> = ({ option }) =
 )
 
 /**
- * Renders a dropdown field for selecting a column data type, along with additional fields
- * for configuring the selected data type. Also includes an optional switch for persisting
- * the render globally.
- *
- * @param props - The component props.
- * @param props.description - The description to display above the dropdown field.
- * @param props.persistRenderGloballyField - The switch field for persisting the render globally.
- * @param props.children - Additional child components to render.
+ * The dropdown and the selected data type's fields. Its hooks read `defaultSelectedKey` and
+ * `dataTypeProperties` once, when it mounts.
  */
-export const ColumnDataTypeField: FC<IColumnDataTypeFieldProps> = (props) => {
+const ColumnDataTypeFieldContent: FC<IColumnDataTypeFieldProps> = (props) => {
   const dropdown = useDataTypeDropdown(props)
   const dataTypeFields = useDataTypeProperties(props, dropdown)
   const { selectedOption } = dropdown
@@ -75,5 +69,24 @@ export const ColumnDataTypeField: FC<IColumnDataTypeFieldProps> = (props) => {
     </div>
   )
 }
+
+/**
+ * Renders a dropdown field for selecting a column data type, along with additional fields
+ * for configuring the selected data type. Also includes an optional switch for persisting
+ * the render globally.
+ *
+ * A new `defaultSelectedKey` starts the field over, from that data type and the
+ * `dataTypeProperties` given with it. The column forms get the column they edit after their first
+ * render: the field kept the empty start, so the dropdown showed no data type, the type's
+ * properties were lost, and saving an edited column stored it as text.
+ *
+ * @param props - The component props.
+ * @param props.description - The description to display above the dropdown field.
+ * @param props.persistRenderGloballyField - The switch field for persisting the render globally.
+ * @param props.children - Additional child components to render.
+ */
+export const ColumnDataTypeField: FC<IColumnDataTypeFieldProps> = (props) => (
+  <ColumnDataTypeFieldContent key={props.defaultSelectedKey ?? ''} {...props} />
+)
 
 export * from './types'

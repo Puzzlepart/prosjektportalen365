@@ -51,6 +51,41 @@ describe('ColumnDataTypeField', () => {
     await waitFor(() => expect(onChange).toHaveBeenCalledWith('URL'))
   })
 
+  // The column forms get the column they edit after their first render, so the field first renders
+  // with no data type and then with the column's own. Kept from the first render, the dropdown was
+  // empty and a save stored the column as text.
+  it('starts over from a data type it gets after the first render', async () => {
+    const onChange = jest.fn()
+    const { rerender } = render(<Harness onChange={onChange} />)
+    rerender(<Harness defaultSelectedKey='percentage' onChange={onChange} />)
+    expect(await screen.findByRole('combobox')).toHaveTextContent(
+      strings.ColumnRenderOptionPercentage
+    )
+    await waitFor(() => expect(onChange).toHaveBeenCalledWith('Percentage'))
+  })
+
+  it('reads the properties again with a data type it gets after the first render', async () => {
+    const user = setupUser()
+    const onDataTypePropertiesChange = jest.fn()
+    const { rerender } = render(<Harness onDataTypePropertiesChange={onDataTypePropertiesChange} />)
+    rerender(
+      <Harness
+        defaultSelectedKey='url'
+        dataTypeProperties={{ openInNewTab: true }}
+        onDataTypePropertiesChange={onDataTypePropertiesChange}
+      />
+    )
+    await user.click(
+      await screen.findByRole('button', { name: strings.ShowDataTypePropertiesLabel })
+    )
+    expect(
+      screen.getByRole('switch', { name: strings.ColumnRenderOptionUrlOpenInNewTabLabel })
+    ).toBeChecked()
+    await waitFor(() =>
+      expect(onDataTypePropertiesChange).toHaveBeenLastCalledWith({ openInNewTab: true })
+    )
+  })
+
   // Opening the list and picking another type is checked by hand: the v9 dropdown looped under Jest
   // on React 17 and takes tens of seconds to open on React 18, while it works in the browser (see
   // useDataTypeDropdown).
