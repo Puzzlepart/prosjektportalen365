@@ -217,12 +217,64 @@ describe('PortalDataService', () => {
       expect(reports.map(({ id }) => id)).toEqual([4])
     })
 
-    it('gives no reports, and takes the hub as out of reach, when access is denied', async () => {
+    it('gives no reports when access to the list is denied, and keeps the rest of the hub', async () => {
       const { service, queries } = portal({ [LISTS.PROJECT_STATUS]: () => forbidden() })
       expect(await service.getStatusReports({})).toEqual([])
-      expect(service.isAvailable).toBe(false)
+      expect(service.isListAvailable('PROJECT_STATUS')).toBe(false)
+      expect(service.isAvailable).toBe(true)
+      // The denied list is not asked again.
       expect(await service.getStatusReports({})).toEqual([])
       expect(queries).toHaveLength(1)
+    })
+  })
+
+  describe('a member of «Minimum lesetilganger på hub»', () => {
+    // The group reads the configuration lists, but not the lists with data about all projects.
+    const answers = {
+      [LISTS.GLOBAL_SETTINGS]: () => [{ GtSettingsKey: 'ShowFooter', GtSettingsValue: '1' }],
+      [LISTS.PROJECT_COLUMNS]: () => [{ Id: 1, GtInternalName: 'GtProjectManager' }],
+      [LISTS.PROJECT_ADMIN_ROLES]: () => [{ Id: 1, Title: 'Prosjektleder' }],
+      [LISTS.PROJECT_STATUS]: () => forbidden(),
+      [LISTS.PROJECTS]: () => forbidden()
+    }
+
+    it('reads the configuration after the lists with data about all projects were denied', async () => {
+      const { service } = portal(answers)
+      expect(await service.getStatusReports({})).toEqual([])
+      expect(await service.getProjectDetails()).toBeNull()
+      expect(service.isAvailable).toBe(true)
+      expect((await service.getGlobalSettings()).get('ShowFooter')).toBe('1')
+      expect((await service.getProjectColumns()).map((column) => column.internalName)).toEqual([
+        'GtProjectManager'
+      ])
+      expect((await service.getProjectAdminRoles()).map((role) => role.title)).toEqual([
+        'Prosjektleder'
+      ])
+    })
+
+    it('marks only the denied lists', async () => {
+      const { service } = portal(answers)
+      await service.getStatusReports({})
+      await service.getProjectDetails()
+      expect(service.isListAvailable('PROJECT_STATUS')).toBe(false)
+      expect(service.isListAvailable('PROJECTS')).toBe(false)
+      expect(service.isListAvailable('PROJECT_COLUMNS')).toBe(true)
+      expect(service.isListAvailable('GLOBAL_SETTINGS')).toBe(true)
+    })
+  })
+
+  describe('a user without access to the hub', () => {
+    it('takes the hub as out of reach when `Globale innstillinger` is denied', async () => {
+      const { service, queries } = portal({
+        [LISTS.GLOBAL_SETTINGS]: () => forbidden(),
+        [LISTS.PROJECT_COLUMNS]: () => [{ Id: 1, GtInternalName: 'GtProjectManager' }]
+      })
+      await service.getGlobalSettings()
+      expect(service.isAvailable).toBe(false)
+      expect(service.isListAvailable('PROJECT_COLUMNS')).toBe(false)
+      // The other lists are not asked once the hub is out of reach.
+      expect(await service.getProjectColumns()).toEqual([])
+      expect(queries.map(({ list }) => list)).toEqual([LISTS.GLOBAL_SETTINGS])
     })
   })
 
