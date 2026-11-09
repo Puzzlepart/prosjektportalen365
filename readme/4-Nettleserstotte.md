@@ -1,3 +1,3 @@
 ## Nettleserstøtte
 
-Vi gjør vårt beste for å støtte alle nettlesere, men følger retningslinjer fra Microsoft og Microsoft 365. Noen eldre nettlesere har dårlig støtte og anbefales ikke. Se oppdatert oversikt hos Microsoft på [Hvilke nettlesere som fungerer med Microsoft 365 for nettet og Microsoft 365-tillegg](https://support.microsoft.com/nb-no/office/hvilke-nettlesere-som-fungerer-med-microsoft-365-for-nettet-og-microsoft-365-tillegg-ad1303e0-a318-47aa-b409-d3a5eb44e452) 
+Prosjektportalen følger Microsofts retningslinjer for hvilke nettlesere som støttes i Microsoft 365. Noen eldre nettlesere har dårlig støtte og anbefales ikke. Se oppdatert oversikt hos Microsoft på [Hvilke nettlesere som fungerer med Microsoft 365 for nettet og Microsoft 365-tillegg](https://support.microsoft.com/nb-no/office/hvilke-nettlesere-som-fungerer-med-microsoft-365-for-nettet-og-microsoft-365-tillegg-ad1303e0-a318-47aa-b409-d3a5eb44e452) 
