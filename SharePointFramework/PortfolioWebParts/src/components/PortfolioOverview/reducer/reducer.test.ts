@@ -258,6 +258,19 @@ describe('PortfolioOverview reducer', () => {
     expect(noOrder.currentView.columnOrder).toEqual([])
   })
 
+  it('replaces only the edited column, found by its id, when another column shows the same managed property', () => {
+    // A column on GtProjectNumberOWSTEXT replaced Prosjektnummer in the list until the page was
+    // loaded again (1.15 smoke test).
+    const projectNumber = column('GtProjectNumberOWSTEXT', 'Prosjektnummer', { id: 7 })
+    const copy = column('GtProjectNumberOWSTEXT', 'Prosjektnummer (kopi)', { id: 8 })
+    const { reducer, state } = setup({ currentView: view(), columns: [title, projectNumber, copy] })
+    const edited = reducer(
+      state,
+      COLUMN_FORM_PANEL_ON_SAVED({ column: { ...copy, name: 'Nummer' }, isNew: false })
+    )
+    expect(edited.columns.map((c: any) => c.name)).toEqual(['Tittel', 'Prosjektnummer', 'Nummer'])
+  })
+
   it('removes a deleted column and takes the columns chosen in the show/hide panel', () => {
     const { reducer, state } = setup({
       currentView: view(),
@@ -268,6 +281,9 @@ describe('PortfolioOverview reducer', () => {
     })
     const deleted = reducer(state, COLUMN_DELETED({ columnId: 2 }))
     expect(deleted.columns.map((c: any) => c.key)).toEqual(['Title'])
+    // The configuration still lists it until the page loads again: the column form must not
+    // count its managed property as taken.
+    expect(deleted.deletedColumnIds).toEqual([2])
     const chosen = reducer(
       state,
       TOGGLE_EDIT_VIEW_COLUMNS_PANEL({

@@ -20,8 +20,11 @@ export const ColumnFormPanel: FC = () => {
   const {
     onSave,
     isSaveDisabled,
+    propertyInUseMessage,
+    isGroupable,
     onDeleteColumn,
     isDeleteDisabled,
+    deleteDisabledReason,
     onDismiss,
     column,
     setColumn,
@@ -43,7 +46,9 @@ export const ColumnFormPanel: FC = () => {
           onDeleteColumn={onDeleteColumn}
           isEditing={isEditing}
           isSaveDisabled={isSaveDisabled}
+          saveDisabledReason={propertyInUseMessage}
           isDeleteDisabled={isDeleteDisabled}
+          deleteDisabledReason={deleteDisabledReason}
         />
       }
       onClose={onDismiss}
@@ -61,9 +66,8 @@ export const ColumnFormPanel: FC = () => {
             description={lockedWhenEditing(strings.SortOrderDescription, isEditing)}
           >
             <Input
-              value={column.get('sortOrder')?.toString()}
+              value={column.get('sortOrder')?.toString() ?? ''}
               type='number'
-              defaultValue='100'
               min={40}
               max={400}
               step={2}
@@ -90,6 +94,8 @@ export const ColumnFormPanel: FC = () => {
             label={strings.SearchPropertyLabel}
             description={lockedWhenEditing(strings.SearchPropertyDescription, isEditing)}
             required={true}
+            validationState={propertyInUseMessage ? 'error' : undefined}
+            validationMessage={propertyInUseMessage}
           >
             <ColumnSearchPropertyField
               placeholder={strings.SearchPropertyPlaceholder}
@@ -116,9 +122,8 @@ export const ColumnFormPanel: FC = () => {
             description={strings.MinWidthDescription}
           >
             <Input
-              value={column.get('minWidth')?.toString()}
+              value={column.get('minWidth')?.toString() ?? ''}
               type='number'
-              defaultValue='80'
               min={40}
               max={column.get('maxWidth') ?? 400}
               step={2}
@@ -132,9 +137,8 @@ export const ColumnFormPanel: FC = () => {
             description={strings.MaxWidthDescription}
           >
             <Input
-              value={column.get('maxWidth')?.toString()}
+              value={column.get('maxWidth')?.toString() ?? ''}
               type='number'
-              defaultValue='120'
               min={column.get('minWidth') ?? 40}
               max={400}
               step={2}
@@ -164,7 +168,7 @@ export const ColumnFormPanel: FC = () => {
             description={strings.IsGroupableDescription}
           >
             <Switch
-              defaultChecked={column.get('data').isGroupable}
+              checked={isGroupable}
               onChange={(_, data) => setColumn('isGroupable', data.checked)}
             />
           </FieldContainer>

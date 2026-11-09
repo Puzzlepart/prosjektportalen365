@@ -254,6 +254,11 @@ export interface IPortfolioAggregationState extends Pick<
   columnDeleted?: number
 
   /**
+   * Ids of the columns deleted since the configuration was read, which still lists them
+   */
+  deletedColumnIds?: number[]
+
+  /**
    * Column shown/hidden timestamp
    */
   columnShowHide?: number

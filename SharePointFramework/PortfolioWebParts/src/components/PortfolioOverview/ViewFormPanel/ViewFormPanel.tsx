@@ -36,7 +36,7 @@ export const ViewFormPanel: FC = () => {
           >
             <Input
               type='number'
-              defaultValue={view.get('sortOrder')?.toString()}
+              value={view.get('sortOrder')?.toString() ?? ''}
               min={10}
               max={900}
               step={1}
@@ -52,7 +52,7 @@ export const ViewFormPanel: FC = () => {
             required={true}
           >
             <Input
-              value={view.get('title')}
+              value={view.get('title') ?? ''}
               onChange={(_, data) => setView('title', data.value)}
               placeholder={strings.Placeholder.TextField}
             />
@@ -64,10 +64,10 @@ export const ViewFormPanel: FC = () => {
             required={true}
           >
             <Textarea
-              defaultValue={view.get('searchQuery')}
+              value={view.get('searchQuery') ?? ''}
               rows={12}
               placeholder={strings.Placeholder.TextField}
-              onBlur={(event) => setView('searchQuery', event.target.value)}
+              onChange={(_, data) => setView('searchQuery', data.value)}
             />
           </FieldContainer>
           <FieldContainer
@@ -76,7 +76,7 @@ export const ViewFormPanel: FC = () => {
             description={strings.IconNameDescription}
           >
             <Input
-              value={view.get('iconName')}
+              value={view.get('iconName') ?? ''}
               onChange={(_, data) => setView('iconName', data.value)}
               placeholder={strings.Placeholder.Icon}
             />
@@ -88,7 +88,7 @@ export const ViewFormPanel: FC = () => {
             hidden={view.get('isPersonalView')}
           >
             <Switch
-              defaultChecked={view.get('isDefaultView')}
+              checked={!!view.get('isDefaultView')}
               onChange={(_, data) => setView('isDefaultView', data.checked)}
               disabled={isDefaultViewSet}
             />
@@ -108,7 +108,7 @@ export const ViewFormPanel: FC = () => {
             hidden={view.get('isDefaultView')}
           >
             <Switch
-              defaultChecked={view.get('isPersonalView')}
+              checked={!!view.get('isPersonalView')}
               onChange={(_, data) => setView('isPersonalView', data.checked)}
             />
           </FieldContainer>

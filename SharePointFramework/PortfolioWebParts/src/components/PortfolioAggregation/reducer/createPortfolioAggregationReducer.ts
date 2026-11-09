@@ -41,6 +41,7 @@ import { ProjectContentColumn } from 'pp365-shared-library/lib/models/ProjectCon
 import { format } from 'pp365-shared-library'
 import { parseDisplayValue } from '../createGroups'
 import { sortItems } from '../../List/sortItems'
+import { isSameColumn } from '../../EditViewColumnsPanel/columnIdentity'
 
 /**
  * Sorts the rows by the sort column as the list sorts (`sortItems`), or by project name when there
@@ -129,7 +130,7 @@ export const createPortfolioAggregationReducer = (
           const col =
             c instanceof ProjectContentColumn ? c : Object.assign(new ProjectContentColumn(), c)
           const column = col.setData({
-            isSelected: _.some(selectedColumns, ({ key }) => key === col.key) || col.data?.isLocked
+            isSelected: _.some(selectedColumns, (s) => isSameColumn(s, col)) || col.data?.isLocked
           })
           if (
             column.fieldName &&
@@ -149,7 +150,7 @@ export const createPortfolioAggregationReducer = (
 
         selectedColumns = selectedColumns
           .map((c) => {
-            const col = _.find(allColumnsForCategory, ({ key }) => key === c.key)
+            const col = _.find(allColumnsForCategory, (a) => isSameColumn(a, c))
             return col ? col.merge(c) : null
           })
           .filter(Boolean)
@@ -173,10 +174,11 @@ export const createPortfolioAggregationReducer = (
           state.columns = payload.columns
           persistSelectedColumnsInWebPartProperties(props, current(state).columns)
 
-          const selectedColumnKeys = new Set(payload.columns.map((c) => c.key))
           state.allColumnsForCategory = current(state).allColumnsForCategory.map((c) => {
             const col = Object.assign(new ProjectContentColumn(), c)
-            col.setData({ isSelected: selectedColumnKeys.has(col.key) || c.data?.isLocked })
+            col.setData({
+              isSelected: payload.columns.some((s) => isSameColumn(s, col)) || c.data?.isLocked
+            })
             return col
           })
 
@@ -205,10 +207,10 @@ export const createPortfolioAggregationReducer = (
           state.allColumnsForCategory = [...state.allColumnsForCategory, column]
         } else {
           state.columns = state.columns.map((col) =>
-            col.fieldName === payload.column.fieldName ? payload.column : col
+            isSameColumn(col, payload.column) ? payload.column : col
           )
           state.allColumnsForCategory = state.allColumnsForCategory.map((col) =>
-            col.fieldName === column.fieldName ? column : col
+            isSameColumn(col, column) ? column : col
           )
         }
         state.columnForm = { isOpen: false }
@@ -220,6 +222,7 @@ export const createPortfolioAggregationReducer = (
         state.allColumnsForCategory = state.allColumnsForCategory.filter(
           (col) => col.id !== payload.columnId
         )
+        state.deletedColumnIds = [...(state.deletedColumnIds ?? []), payload.columnId]
         state.columnForm = { isOpen: false }
         state.columnDeleted = new Date().getTime()
         persistSelectedColumnsInWebPartProperties(props, current(state).columns)

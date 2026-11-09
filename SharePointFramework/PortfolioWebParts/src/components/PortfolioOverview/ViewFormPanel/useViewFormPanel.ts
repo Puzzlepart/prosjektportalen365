@@ -87,8 +87,10 @@ export function useViewFormPanel() {
 
   /**
    * Save is disabled if the view title is less than 2 characters or the search query is less than 51 characters.
+   * A view saved without a search query has none, and the form failed as it opened to edit it.
    */
-  const isSaveDisabled = view.get('title').length < 2 || view.get('searchQuery').length < 51
+  const isSaveDisabled =
+    (view.get('title') ?? '').length < 2 || (view.get('searchQuery') ?? '').length < 51
 
   /**
    * `true` if any of the views is set as the default view and the current view is not the default view.

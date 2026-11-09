@@ -33,7 +33,7 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (incomingPro
     onChange,
     onSave,
     moveColumn,
-    selectedColumns
+    canMoveColumn
   } = useEditViewColumnsPanel(props)
 
   /**
@@ -41,14 +41,9 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (incomingPro
    * the column and stay focusable when the move cannot be made, their title saying why (WCAG
    * 2.1.1, 2.4.6); they show under the pointer and while the focus is in the row.
    */
-  const renderColumnItem = (
-    col: IListColumn,
-    idx: number,
-    provided: DraggableProvided,
-    isDragging: boolean
-  ) => {
-    const canMoveUp = col.data.isSelected && idx > 0
-    const canMoveDown = col.data.isSelected && idx < selectedColumns.length - 1
+  const renderColumnItem = (col: IListColumn, provided: DraggableProvided, isDragging: boolean) => {
+    const canMoveUp = canMoveColumn(col, -1)
+    const canMoveDown = canMoveColumn(col, 1)
     return (
       <div
         className={styles.columnItem}
@@ -147,7 +142,6 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (incomingPro
               <div className={styles.root}>
                 {renderColumnItem(
                   selectableColumns[rubric.source.index],
-                  rubric.source.index,
                   provided,
                   snapshot.isDragging
                 )}
@@ -164,9 +158,7 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (incomingPro
                   index={idx}
                   isDragDisabled={!col.data.isSelected}
                 >
-                  {(provided, snapshot) =>
-                    renderColumnItem(col, idx, provided, snapshot.isDragging)
-                  }
+                  {(provided, snapshot) => renderColumnItem(col, provided, snapshot.isDragging)}
                 </Draggable>
               ))}
               {provided.placeholder}

@@ -20,7 +20,6 @@ import {
   Switch,
   IdPrefixProvider
 } from '@fluentui/react-components'
-import _ from 'lodash'
 import { visibilityOptions } from './types'
 import { lockedWhenEditing } from '../../List/lockedWhenEditing'
 
@@ -34,6 +33,12 @@ export const ColumnFormPanel: FC = () => {
     setColumnData,
     isEditing,
     isSaveDisabled,
+    propertyInUseMessage,
+    visibility,
+    visibilityText,
+    onVisibilityChange,
+    isRefinable,
+    isGroupable,
     onDeleteColumn,
     findMatchingSearchProperty,
     saveError,
@@ -52,6 +57,7 @@ export const ColumnFormPanel: FC = () => {
           onDeleteColumn={onDeleteColumn}
           isEditing={isEditing}
           isSaveDisabled={isSaveDisabled}
+          saveDisabledReason={propertyInUseMessage}
         />
       }
       onClose={onDismiss}
@@ -69,9 +75,8 @@ export const ColumnFormPanel: FC = () => {
             description={strings.SortOrderDescription}
           >
             <Input
-              value={column.get('sortOrder')?.toString()}
+              value={column.get('sortOrder')?.toString() ?? ''}
               type='number'
-              defaultValue='100'
               min={10}
               max={990}
               step={2}
@@ -98,6 +103,8 @@ export const ColumnFormPanel: FC = () => {
             label={strings.SearchPropertyLabel}
             description={lockedWhenEditing(strings.SearchPropertyDescription, isEditing)}
             required={true}
+            validationState={propertyInUseMessage ? 'error' : undefined}
+            validationMessage={propertyInUseMessage}
           >
             <ColumnSearchPropertyField
               placeholder={strings.SearchPropertyPlaceholder}
@@ -131,9 +138,8 @@ export const ColumnFormPanel: FC = () => {
             description={strings.MinWidthDescription}
           >
             <Input
-              value={column.get('minWidth')?.toString()}
+              value={column.get('minWidth')?.toString() ?? ''}
               type='number'
-              defaultValue='80'
               min={40}
               max={400}
               step={2}
@@ -147,9 +153,8 @@ export const ColumnFormPanel: FC = () => {
             description={strings.MaxWidthDescription}
           >
             <Input
-              value={column.get('maxWidth')?.toString()}
+              value={column.get('maxWidth')?.toString() ?? ''}
               type='number'
-              defaultValue='120'
               min={column.get('minWidth') ?? 40}
               max={400}
               step={2}
@@ -173,18 +178,11 @@ export const ColumnFormPanel: FC = () => {
             description={strings.ColumnVisibilityDescription}
           >
             <Combobox
-              defaultSelectedOptions={
-                column.get('data')?.visibility ? column.get('data')?.visibility : []
-              }
+              selectedOptions={visibility}
+              value={visibilityText}
               multiselect
               placeholder={strings.Placeholder.MultiChoiceField}
-              onOptionSelect={(e, data) => {
-                if (!_.isEmpty(data.selectedOptions)) {
-                  setColumnData('visibility', data.selectedOptions)
-                } else {
-                  setColumnData('visibility', [''])
-                }
-              }}
+              onOptionSelect={onVisibilityChange}
             >
               {visibilityOptions.map((choice) => (
                 <Option key={choice.text} value={choice.value}>
@@ -199,7 +197,7 @@ export const ColumnFormPanel: FC = () => {
             description={strings.IsRefinableDescription}
           >
             <Switch
-              defaultChecked={column.get('isRefinable')}
+              checked={isRefinable}
               onChange={(_, data) => setColumn('isRefinable', data.checked)}
             />
           </FieldContainer>
@@ -209,7 +207,7 @@ export const ColumnFormPanel: FC = () => {
             description={strings.IsGroupableDescription}
           >
             <Switch
-              defaultChecked={column.get('data').isGroupable}
+              checked={isGroupable}
               onChange={(_, data) => setColumn('isGroupable', data.checked)}
             />
           </FieldContainer>

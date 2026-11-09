@@ -331,6 +331,39 @@ describe('PortfolioAggregation reducer', () => {
       expect(next.allColumnsForCategory.map((c) => c.dataType)).toEqual(['tags', 'note'])
     })
 
+    it('keeps two columns on the same managed property apart, each by its id', () => {
+      // A column on SiteTitle made by the column form merged with the locked project column
+      // (Prosjektinnholdskolonner ID 36), which the form then edited and deleted (1.15 smoke test).
+      const project = column(36, 'Prosjekt', 'SiteTitle', { GtFieldLocked: true })
+      const { title } = categoryColumns()
+      const test = column(50, 'Prosjekt (test)', 'SiteTitle')
+      const all = [project, title, test]
+      const { reducer, state } = setup()
+      const next = reducer(
+        state,
+        DATA_FETCHED({ items: [], columns: all, dataSource: view(1, 'Alle', [36, 2, 50], all) })
+      )
+      expect(next.columns.map((c) => [c.id, c.name])).toEqual([
+        [36, 'Prosjekt'],
+        [2, 'Tittel'],
+        [50, 'Prosjekt (test)']
+      ])
+      // Only the view's columns are selected: the test column is not, by sharing a property.
+      const other = setup()
+      const onlyProject = other.reducer(
+        other.state,
+        DATA_FETCHED({
+          items: [],
+          columns: [
+            column(36, 'Prosjekt', 'SiteTitle'),
+            column(50, 'Prosjekt (test)', 'SiteTitle')
+          ],
+          dataSource: view(1, 'Alle', [36], [column(36, 'Prosjekt', 'SiteTitle')])
+        })
+      )
+      expect(selected(onlyProject.allColumnsForCategory)).toEqual([true, false])
+    })
+
     it('throws when columns arrive without a data source', () => {
       const { title } = categoryColumns()
       const { reducer, state } = setup()
@@ -432,7 +465,7 @@ describe('PortfolioAggregation reducer', () => {
       ])
     })
 
-    it('replaces an edited column, found by field name, in the list and the category', () => {
+    it('replaces an edited column, found by its id, in the list and the category', () => {
       const { title, phase, budget } = categoryColumns()
       title.setData({ isSelected: true })
       phase.setData({ isSelected: true })
@@ -461,6 +494,29 @@ describe('PortfolioAggregation reducer', () => {
       ])
     })
 
+    it('replaces only the edited column when another column shows the same managed property', () => {
+      const project = column(36, 'Prosjekt', 'SiteTitle', { GtFieldLocked: true })
+      const test = column(50, 'Prosjekt (test)', 'SiteTitle')
+      project.setData({ isSelected: true })
+      test.setData({ isSelected: true })
+      const { reducer, state } = setup(
+        {},
+        { columns: [project, test], allColumnsForCategory: [project, test] }
+      )
+      const next = reducer(
+        state,
+        COLUMN_FORM_PANEL_ON_SAVED({
+          column: column(50, 'Prosjekt (testkolonne)', 'SiteTitle'),
+          isNew: false
+        })
+      )
+      expect(next.columns.map((c) => c.name)).toEqual(['Prosjekt', 'Prosjekt (testkolonne)'])
+      expect(next.allColumnsForCategory.map((c) => c.name)).toEqual([
+        'Prosjekt',
+        'Prosjekt (testkolonne)'
+      ])
+    })
+
     it('removes a deleted column from the list, the category and the web part', () => {
       const { title, phase, budget } = categoryColumns()
       title.setData({ isSelected: true })
@@ -476,6 +532,10 @@ describe('PortfolioAggregation reducer', () => {
       const before = Date.now()
       const next = reducer(state, COLUMN_DELETED({ columnId: 3 }))
       expect(keys(next.columns)).toEqual(['Title'])
+      // The configuration still lists it until the page loads again: the column form must not
+      // count its managed property as taken.
+      expect(next.deletedColumnIds).toEqual([3])
+      expect(reducer(next, COLUMN_DELETED({ columnId: 2 })).deletedColumnIds).toEqual([3, 2])
       // The show/hide panel offers the category's columns: the deleted one is gone there too.
       expect(keys(next.allColumnsForCategory)).toEqual(['Title', 'GtBudgetTotal'])
       expect(next.columnForm).toEqual({ isOpen: false })
@@ -538,6 +598,23 @@ describe('PortfolioAggregation reducer', () => {
         'maxWidth',
         'data'
       ])
+    })
+
+    it('marks only the chosen column selected when another column shows the same managed property', () => {
+      const project = column(36, 'Prosjekt', 'SiteTitle')
+      const test = column(50, 'Prosjekt (test)', 'SiteTitle')
+      const { reducer, state } = setup(
+        {},
+        { columns: [project], allColumnsForCategory: [project, test] }
+      )
+      const next = reducer(
+        state,
+        TOGGLE_EDIT_VIEW_COLUMNS_PANEL({
+          isOpen: false,
+          columns: [column(50, 'Prosjekt (test)', 'SiteTitle').setData({ isSelected: true })]
+        })
+      )
+      expect(selected(next.allColumnsForCategory)).toEqual([false, true])
     })
 
     it('without a current view, or one missing from the views, only the list and the category change', () => {

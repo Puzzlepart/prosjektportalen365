@@ -3,6 +3,7 @@ import strings from 'PortfolioWebPartsStrings'
 import { ProjectColumn, setUrlHash, format } from 'pp365-shared-library'
 import _ from 'underscore'
 import { sortItems } from '../../List/sortItems'
+import { isSameColumn } from '../../EditViewColumnsPanel/columnIdentity'
 import { IPortfolioOverviewHashState, IPortfolioOverviewState } from '../types'
 import {
   CHANGE_VIEW,
@@ -175,13 +176,14 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
           }
         } else {
           state.columns = state.columns.map((col) =>
-            col.key === payload.column.key ? payload.column : col
+            isSameColumn(col, payload.column) ? payload.column : col
           )
         }
         state.columnForm = { isOpen: false }
       })
       .addCase(COLUMN_DELETED, (state, { payload }) => {
         state.columns = state.columns.filter((c) => c.id !== payload.columnId)
+        state.deletedColumnIds = [...(state.deletedColumnIds ?? []), payload.columnId]
         state.columnForm = { isOpen: false }
       })
       .addCase(TOGGLE_EDIT_VIEW_COLUMNS_PANEL, (state, { payload }) => {

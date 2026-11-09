@@ -2,6 +2,7 @@ import { useRestoreFocusTarget } from '@fluentui/react-components'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import strings from 'PortfolioWebPartsStrings'
+import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import { PortfolioOverviewContext } from '../../context'
 import { ColumnFormPanelFooter } from './index'
@@ -69,6 +70,12 @@ describe('ColumnFormPanelFooter', () => {
     expect(save).toHaveAccessibleDescription(strings.ColumnFormSaveDisabledReason)
     await user.click(save)
     expect(onSave).not.toHaveBeenCalled()
+  })
+
+  it('names what else keeps save from saving when the form gives a reason (WCAG 3.3.1)', () => {
+    const reason = format(strings.SearchPropertyInUseMessage, 'Prosjektnummer')
+    renderFooter({ isSaveDisabled: true, saveDisabledReason: reason })
+    expect(screen.getByRole('button', { name: 'Lagre' })).toHaveAccessibleDescription(reason)
   })
 
   it('closes the panel on cancel without saving', async () => {

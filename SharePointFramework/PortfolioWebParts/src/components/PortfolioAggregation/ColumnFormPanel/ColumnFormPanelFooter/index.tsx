@@ -28,7 +28,11 @@ export const ColumnFormPanelFooter: FC<ColumnFormPanelFooterProps> = (props) => 
           // Focusable while it cannot save, with what it needs: a disabled button is skipped by
           // the keyboard (WCAG 2.1.1, 3.3.2).
           disabledFocusable={props.isSaveDisabled}
-          title={props.isSaveDisabled ? strings.ColumnFormSaveDisabledReason : undefined}
+          title={
+            props.isSaveDisabled
+              ? (props.saveDisabledReason ?? strings.ColumnFormSaveDisabledReason)
+              : undefined
+          }
           appearance='primary'
         >
           {strings.SaveButtonLabel}
@@ -55,7 +59,11 @@ export const ColumnFormPanelFooter: FC<ColumnFormPanelFooterProps> = (props) => 
               if (response) void props.onDeleteColumn()
             }}
             disabledFocusable={props.isDeleteDisabled}
-            title={props.isDeleteDisabled ? strings.TitleColumnDeleteDisabledReason : undefined}
+            title={
+              props.isDeleteDisabled
+                ? (props.deleteDisabledReason ?? strings.TitleColumnDeleteDisabledReason)
+                : undefined
+            }
           >
             {strings.DeleteButtonLabel}
           </Button>

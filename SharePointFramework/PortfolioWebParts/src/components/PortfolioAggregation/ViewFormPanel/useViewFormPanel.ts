@@ -86,14 +86,17 @@ export function useViewFormPanel() {
 
   /**
    * Determines whether the save button should be disabled based on the length of the view title and search query.
+   * A data source saved without a search query has none, and the form failed as it opened to edit
+   * it.
    */
-  const isSaveDisabled = view.get('title').length < 2 || view.get('searchQuery').length < 51
+  const isSaveDisabled =
+    (view.get('title') ?? '').length < 2 || (view.get('searchQuery') ?? '').length < 51
 
   const fluentProviderId = useId('fp-view-form-panel')
 
   return {
     onSave: !isSaveDisabled ? onSave : undefined,
-    isEditing: false,
+    isEditing,
     onDismiss,
     view,
     setView,

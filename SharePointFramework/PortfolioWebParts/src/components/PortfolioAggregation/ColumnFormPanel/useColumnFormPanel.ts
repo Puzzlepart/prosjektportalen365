@@ -1,9 +1,12 @@
-import { ProjectContentColumn, SPProjectContentColumnItem } from 'pp365-shared-library'
+import strings from 'PortfolioWebPartsStrings'
+import { SPProjectContentColumnItem, format } from 'pp365-shared-library'
 import { useState } from 'react'
 import { usePortfolioAggregationContext } from '../context'
 import { COLUMN_DELETED, COLUMN_FORM_PANEL_ON_SAVED, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import { useEditableColumn } from './useEditableColumn'
 import { useId } from '@fluentui/react-components'
+import { findColumnUsingProperty } from '../../EditViewColumnsPanel/columnIdentity'
+import { savedColumn } from './savedColumn'
 
 /**
  * Component logic hook for ColumnFormPanel. Handles state and dispatches actions to the reducer.
@@ -13,6 +16,45 @@ export function useColumnFormPanel() {
   const context = usePortfolioAggregationContext()
   const { column, setColumn, setColumnData, isEditing } = useEditableColumn()
   const [persistRenderGlobally, setPersistRenderGlobally] = useState(false)
+
+  /**
+   * The column of the category that already shows the managed property given for a new column,
+   * the locked project and title columns too, which a project-level data source leaves out of
+   * its columns. Two columns on one property were mixed up in the overview, which then edited and
+   * deleted the one in the other's place, so a new one may not take it.
+   */
+  const columnUsingProperty = isEditing
+    ? undefined
+    : findColumnUsingProperty(
+        column.get('fieldName'),
+        [
+          ...(context.state.allColumnsForCategory ?? []),
+          ...(context.state.columns ?? []),
+          ...(context.props.configuration?.columns ?? [])
+        ],
+        context.state.deletedColumnIds
+      )
+  const propertyInUseMessage = columnUsingProperty
+    ? format(strings.SearchPropertyInUseMessage, columnUsingProperty.name)
+    : undefined
+
+  /**
+   * Whether the column can be grouped by. The switch keeps its choice in `isGroupable`, which save
+   * reads; until then it shows what the column has.
+   */
+  const isGroupable = !!(column.get('isGroupable') ?? column.get('data')?.isGroupable)
+
+  /**
+   * Why the column cannot be deleted, when it cannot: the title column, and a locked column (the
+   * project column among them), which the overview's lists depend on.
+   */
+  const deleteDisabledReason =
+    context.state.columnForm?.column?.fieldName === 'Title'
+      ? strings.TitleColumnDeleteDisabledReason
+      : context.state.columnForm?.column?.data?.isLocked
+        ? strings.LockedColumnDeleteDisabledReason
+        : undefined
+  const isDeleteDisabled = !!deleteDisabledReason
 
   /**
    * Saves the column to the list. If the column is new, it will
@@ -30,6 +72,7 @@ export function useColumnFormPanel() {
   const [saveError, setSaveError] = useState<Error>(null)
 
   const onSave = async () => {
+    if (columnUsingProperty) return
     setSaveError(null)
     const colummData = column.get('data') ?? {}
     const columnItem: SPProjectContentColumnItem = {
@@ -63,7 +106,7 @@ export function useColumnFormPanel() {
 
       context.dispatch(
         COLUMN_FORM_PANEL_ON_SAVED({
-          column: new ProjectContentColumn(columnItem),
+          column: savedColumn(columnItem, isEditing ? context.state.columnForm.column : undefined),
           isNew: !isEditing
         })
       )
@@ -78,6 +121,7 @@ export function useColumnFormPanel() {
    * successfully, it will dispatch the `COLUMN_DELETED` action to the reducer.
    */
   const onDeleteColumn = async () => {
+    if (isDeleteDisabled) return
     setSaveError(null)
     let isDeleted: boolean
     try {
@@ -107,25 +151,25 @@ export function useColumnFormPanel() {
   }
 
   /**
-   * Save is disabled if the column name or field name is less than 2 characters.
+   * Save is disabled if the column name or field name is less than 2 characters, or if another
+   * column shows the managed property already.
    */
   const isSaveDisabled =
     column.get('internalName').length < 2 ||
     column.get('fieldName').length < 2 ||
-    column.get('name').length < 2
-
-  /**
-   * Save is disabled if the column field name is Title
-   */
-  const isDeleteDisabled = context.state.columnForm?.column?.fieldName === 'Title'
+    column.get('name').length < 2 ||
+    !!columnUsingProperty
 
   const fluentProviderId = useId('fp-column-form-panel')
 
   return {
     onSave,
     isSaveDisabled,
+    propertyInUseMessage,
+    isGroupable,
     onDeleteColumn,
     isDeleteDisabled,
+    deleteDisabledReason,
     onDismiss,
     column,
     setColumn,

@@ -28,7 +28,7 @@ export const ViewFormPanel: FC = () => {
             required={true}
           >
             <Input
-              value={view.get('title')}
+              value={view.get('title') ?? ''}
               onChange={(_, data) => setView('title', data.value)}
               placeholder={strings.Placeholder.TextField}
             />
@@ -40,7 +40,7 @@ export const ViewFormPanel: FC = () => {
             required={true}
           >
             <Textarea
-              defaultValue={view.get('searchQuery')}
+              value={view.get('searchQuery') ?? ''}
               onChange={(_, data) => setView('searchQuery', data.value)}
               rows={12}
               placeholder={strings.Placeholder.TextField}
@@ -52,7 +52,7 @@ export const ViewFormPanel: FC = () => {
             description={strings.IconNameDescription}
           >
             <Input
-              value={view.get('iconName')}
+              value={view.get('iconName') ?? ''}
               onChange={(_, data) => setView('iconName', data.value)}
               placeholder={strings.Placeholder.Icon}
             />

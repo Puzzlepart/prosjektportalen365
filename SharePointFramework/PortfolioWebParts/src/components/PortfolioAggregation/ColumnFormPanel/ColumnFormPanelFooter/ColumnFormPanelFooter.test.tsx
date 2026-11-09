@@ -2,6 +2,7 @@ import { useRestoreFocusTarget } from '@fluentui/react-components'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import strings from 'PortfolioWebPartsStrings'
+import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import { PortfolioAggregationContext } from '../../context'
 import { ColumnFormPanelFooter } from './index'
@@ -56,5 +57,40 @@ describe('ColumnFormPanelFooter (aggregated overview)', () => {
     expect(remove).toHaveAccessibleDescription(strings.TitleColumnDeleteDisabledReason)
     await user.click(save)
     expect(onSave).not.toHaveBeenCalled()
+  })
+
+  it('names what else keeps save from saving when the form gives a reason (WCAG 3.3.1)', () => {
+    const reason = format(strings.SearchPropertyInUseMessage, 'Prosjekt')
+    render(
+      <PortfolioAggregationContext.Provider value={{ dispatch: jest.fn() } as any}>
+        <ColumnFormPanelFooter
+          onSave={jest.fn()}
+          onDeleteColumn={jest.fn()}
+          isEditing={false}
+          isSaveDisabled
+          saveDisabledReason={reason}
+          isDeleteDisabled={false}
+        />
+      </PortfolioAggregationContext.Provider>
+    )
+    expect(screen.getByRole('button', { name: 'Lagre' })).toHaveAccessibleDescription(reason)
+  })
+
+  it('names why a locked column cannot be deleted (WCAG 3.3.2)', () => {
+    render(
+      <PortfolioAggregationContext.Provider value={{ dispatch: jest.fn() } as any}>
+        <ColumnFormPanelFooter
+          onSave={jest.fn()}
+          onDeleteColumn={jest.fn()}
+          isEditing
+          isSaveDisabled={false}
+          isDeleteDisabled
+          deleteDisabledReason={strings.LockedColumnDeleteDisabledReason}
+        />
+      </PortfolioAggregationContext.Provider>
+    )
+    const remove = screen.getByRole('button', { name: 'Slett' })
+    expect(remove).toHaveAttribute('aria-disabled', 'true')
+    expect(remove).toHaveAccessibleDescription(strings.LockedColumnDeleteDisabledReason)
   })
 })

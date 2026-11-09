@@ -272,6 +272,7 @@ declare interface IPortfolioWebPartsStrings {
   SearchPropertyDescription: string
   SearchPropertyFoundMessage: string
   SearchPropertyFoundTitle: string
+  SearchPropertyInUseMessage: string
   SearchPropertyLabel: string
   SearchPropertyPlaceholder: string
   SearchQueryLabel: string
@@ -307,6 +308,7 @@ declare interface IPortfolioWebPartsStrings {
   TileViewGroupName: string
   TitleLabel: string
   TitleColumnDeleteDisabledReason: string
+  LockedColumnDeleteDisabledReason: string
   ViewFormSaveDisabledReason: string
   TitleDescription: string
   ToggleColumnFormPanelLabel: string

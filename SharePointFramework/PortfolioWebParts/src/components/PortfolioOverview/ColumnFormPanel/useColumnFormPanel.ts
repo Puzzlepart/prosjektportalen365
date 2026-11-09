@@ -1,12 +1,15 @@
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
-import { ProjectColumn, SPProjectColumnItem, format } from 'pp365-shared-library'
+import { SPProjectColumnItem, format } from 'pp365-shared-library'
 import { useContext, useState } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import { COLUMN_DELETED, COLUMN_FORM_PANEL_ON_SAVED, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import { useEditableColumn } from './useEditableColumn'
-import { useId } from '@fluentui/react-components'
+import { ComboboxProps, useId } from '@fluentui/react-components'
+import { visibilityOptions } from './types'
+import { findColumnUsingProperty } from '../../EditViewColumnsPanel/columnIdentity'
+import { savedColumn } from './savedColumn'
 
 /**
  * Component logic hook for `ColumnFormPanel`. Handles state and dispatches actions to the reducer.
@@ -20,6 +23,53 @@ export function useColumnFormPanel() {
   // permission. A user whose menu was enabled but who lacks that permission gets a rejection here,
   // and must be told rather than left looking at a panel that did nothing.
   const [saveError, setSaveError] = useState<Error>(null)
+
+  /**
+   * The column of the list that already shows the managed property given for a new column. Two
+   * columns on one property were mixed up in the overview, so a new one may not take it.
+   */
+  const columnUsingProperty = isEditing
+    ? undefined
+    : findColumnUsingProperty(
+        column.get('fieldName'),
+        [...(context?.state.columns ?? []), ...(context?.props.configuration?.columns ?? [])],
+        context?.state.deletedColumnIds
+      )
+  const propertyInUseMessage = columnUsingProperty
+    ? format(strings.SearchPropertyInUseMessage, columnUsingProperty.name)
+    : undefined
+
+  /**
+   * The values of the pages the column shows on. A column shown on none keeps `['']`.
+   */
+  const visibility: string[] = (column.get('data')?.visibility ?? []).filter(Boolean)
+
+  /**
+   * The names of the pages the column shows on, for the closed visibility field: a multiselect
+   * combobox shows only its placeholder by itself.
+   */
+  const visibilityText = visibilityOptions
+    .filter((option) => visibility.includes(option.value))
+    .map((option) => option.text)
+    .join(', ')
+
+  /**
+   * Keeps the pages chosen in the visibility field.
+   */
+  const onVisibilityChange: ComboboxProps['onOptionSelect'] = (_event, data) => {
+    setColumnData('visibility', _.isEmpty(data.selectedOptions) ? [''] : data.selectedOptions)
+  }
+
+  /**
+   * Whether the column can be grouped by. The switch keeps its choice in `isGroupable`, which save
+   * reads; until then it shows what the column has.
+   */
+  const isGroupable = !!(column.get('isGroupable') ?? column.get('data')?.isGroupable)
+
+  /**
+   * Whether the column can be filtered on.
+   */
+  const isRefinable = !!column.get('isRefinable')
 
   /**
    * Dismisses the form panel by dispatching the `TOGGLE_COLUMN_FORM_PANEL` action.
@@ -40,6 +90,7 @@ export function useColumnFormPanel() {
    * the shared `dataAdapter`.
    */
   const onSave = async () => {
+    if (columnUsingProperty) return
     setSaveError(null)
     const colummData = column.get('data') ?? {}
     const columnItem: SPProjectColumnItem = {
@@ -81,7 +132,7 @@ export function useColumnFormPanel() {
     }
     context.dispatch(
       COLUMN_FORM_PANEL_ON_SAVED({
-        column: new ProjectColumn(columnItem),
+        column: savedColumn(columnItem, isEditing ? context.state.columnForm.column : undefined),
         isNew: !isEditing
       })
     )
@@ -114,12 +165,14 @@ export function useColumnFormPanel() {
   }
 
   /**
-   * Save is disabled if the column name or field name is less than 2 characters.
+   * Save is disabled if the column name or field name is less than 2 characters, or if another
+   * column shows the managed property already.
    */
   const isSaveDisabled =
     column.get('internalName').length < 2 ||
     column.get('fieldName').length < 2 ||
-    column.get('name').length < 2
+    column.get('name').length < 2 ||
+    !!columnUsingProperty
 
   /**
    * Set column message for a specific column for a specific duration (default 5 seconds)
@@ -175,6 +228,12 @@ export function useColumnFormPanel() {
     setColumnData,
     isEditing,
     isSaveDisabled,
+    propertyInUseMessage,
+    visibility,
+    visibilityText,
+    onVisibilityChange,
+    isRefinable,
+    isGroupable,
     onDeleteColumn,
     findMatchingSearchProperty,
     columnMessages,

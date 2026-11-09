@@ -279,6 +279,11 @@ export interface IPortfolioOverviewState extends Pick<
   columnForm: IColumnFormPanel
 
   /**
+   * Ids of the columns deleted since the configuration was read, which still lists them
+   */
+  deletedColumnIds?: number[]
+
+  /**
    * View form panel props. Consists of two properties:
    * - `isOpen` - whether the panel is open
    * - `view` - the view to edit (if not specified, a new view will be created)
