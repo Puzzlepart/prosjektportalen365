@@ -58,7 +58,7 @@ cp .env.example .env                                    # the test hub, a progra
 npm test
 ```
 
-The tests of the templates' state (`tests/template.test.ts`) run only with
+The tests of the templates' state (`tests/template.test.ts`, and the group in `tests/hub-minimum-read.test.ts`) run only with
 `INTEGRATION_TEMPLATES_APPLIED=true`, which CI sets after its full upgrade (the packages-only one
 applies no templates); in CI the installation log's newest entry must also name the commit under
 test (`GITHUB_SHA`). A test skips, with the reason, when a site or the sign-in it needs is not
