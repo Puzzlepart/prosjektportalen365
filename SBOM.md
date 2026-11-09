@@ -1,82 +1,82 @@
 # Software Bill of Materials (SBOM)
 
-**Project:** Prosjektportalen 365  
-**Version:** 1.14.0  
-**Generated:** 2026-11-04T11:57:02.638Z  
+**Project:** Prosjektportalen 365<br>
+**Version:** 1.15.0<br>
+**Generated:** 2026-11-09T08:57:23.535Z<br>
 **Format:** CycloneDX-inspired Markdown
 
 ## Overview
 
 This SBOM documents all software dependencies used in the Prosjektportalen 365 project, including all packages in the monorepo.
 
-**Total Dependencies:** 120  
-**Production Dependencies:** 74  
-**Development Dependencies:** 46  
+**Total Dependencies:** 120<br>
+**Production Dependencies:** 74<br>
+**Development Dependencies:** 46<br>
 **Projects in Monorepo:** 13
 
 ## Projects in Monorepo
 
-### pp365 (1.14.0)
+### pp365 (1.15.0)
 
 - **Production Dependencies:** 0
 - **Development Dependencies:** 5
 
-### pp365-shared-library (1.14.0)
+### pp365-shared-library (1.15.0)
 
 - **Production Dependencies:** 36
 - **Development Dependencies:** 23
 
-### pp365-portfolioextensions (1.14.0)
+### pp365-portfolioextensions (1.15.0)
 
 - **Production Dependencies:** 22
 - **Development Dependencies:** 24
 
-### pp365-portfoliowebparts (1.14.0)
+### pp365-portfoliowebparts (1.15.0)
 
 - **Production Dependencies:** 37
 - **Development Dependencies:** 25
 
-### pp365-programwebparts (1.14.0)
+### pp365-programwebparts (1.15.0)
 
 - **Production Dependencies:** 32
 - **Development Dependencies:** 24
 
-### pp365-projectextensions (1.14.0)
+### pp365-projectextensions (1.15.0)
 
 - **Production Dependencies:** 32
 - **Development Dependencies:** 24
 
-### pp365-projectwebparts (1.14.0)
+### pp365-projectwebparts (1.15.0)
 
 - **Production Dependencies:** 42
 - **Development Dependencies:** 26
 
-### pp365-templates (1.14.0)
+### pp365-templates (1.15.0)
 
 - **Production Dependencies:** 3
 - **Development Dependencies:** 3
 
-### pp365-spfx-tasks (1.14.0)
+### pp365-spfx-tasks (1.15.0)
 
 - **Production Dependencies:** 6
 - **Development Dependencies:** 2
 
-### pp365-eslint-config (1.14.0)
+### pp365-eslint-config (1.15.0)
 
 - **Production Dependencies:** 9
 - **Development Dependencies:** 0
 
-### pp365-jest-config (1.14.0)
+### pp365-jest-config (1.15.0)
 
 - **Production Dependencies:** 6
 - **Development Dependencies:** 0
 
-### pp365-e2e (1.14.0)
+### pp365-e2e (1.15.0)
 
 - **Production Dependencies:** 0
 - **Development Dependencies:** 5
 
-### pp365-integration (1.14.0)
+### pp365-integration (1.15.0)
 
 - **Production Dependencies:** 0
 - **Development Dependencies:** 14

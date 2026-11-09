@@ -1,6 +1,6 @@
 {
   "name": "pp365-integration",
-  "version": "1.14.0",
+  "version": "1.15.0",
   "private": true,
   "type": "module",
   "description": "Integration tests for Prosjektportalen 365: the shared library's data layer, run in Node against the test tenant's sites, asserting on what SharePoint returns and stores.",

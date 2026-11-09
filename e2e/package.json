@@ -1,6 +1,6 @@
 {
   "name": "pp365-e2e",
-  "version": "1.14.0",
+  "version": "1.15.0",
   "private": true,
   "description": "End-to-end smoke tests for Prosjektportalen 365, run with Playwright against the test tenant after the test channel is deployed.",
   "scripts": {
