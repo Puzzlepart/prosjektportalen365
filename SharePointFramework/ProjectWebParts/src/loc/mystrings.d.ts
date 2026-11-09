@@ -261,6 +261,9 @@ declare interface IProjectWebPartsStrings {
   SyncProjectPropertiesValuesProgressLabel: string
   HubSyncWarningTitle: string
   HubSyncNoWriteAccessReason: string
+  ArchiveLogWarningTitle: string
+  ArchiveLogNotWrittenText: string
+  ArchiveLogNoWriteAccessReason: string
   HubSyncHubUnavailableReason: string
   ProjectPropertiesNotSyncedToHubText: string
   PhaseNotSyncedToHubText: string
@@ -344,6 +347,7 @@ declare interface IProjectWebPartsStrings {
   FileNameNoLeadingTrailingSpaces: string
   FileNameReserved: string
   NewsFolderError: string
+  NewsNoAccessErrorText: string
   LoadingLabel: string
   GenericErrorMessage: string
   NewsCreateDuplicateFileError: string

@@ -6,6 +6,24 @@ import { TemplateFile } from './types'
 import SPDataAdapter from 'data'
 import resource from 'SharedResources'
 
+/**
+ * The error for a news site the user may not read or write (401, 403), with the status, so
+ * `isUnauthorizedError` knows it. The news site is the hub unless `ProjectNewsHubUrl` says
+ * otherwise, and a member of «Minimum lesetilganger på hub» does not read the hub's pages.
+ */
+export function newsNoAccessError(): Error {
+  return Object.assign(new Error(strings.NewsNoAccessErrorText), { status: 403 })
+}
+
+/**
+ * Whether a response from the news site refused the user.
+ *
+ * @param response Response
+ */
+export function isNewsAccessDenied(response: SPHttpClientResponse): boolean {
+  return response.status === 401 || response.status === 403
+}
+
 // --- SharePoint file name validation constants ---
 const invalidChars = /["*:<>?/\\|#%;]/g
 const reservedNames = /^(con|prn|aux|nul|com[0-9]|lpt[0-9]|\.lock|desktop\.ini|_vti_|~\$|forms)$/i
@@ -64,6 +82,7 @@ export async function ensureProjectNewsFolder(
 
   const res = await spHttpClient.get(folderUrl, SPHttpClient.configurations.v1)
   if (res.ok) return
+  if (isNewsAccessDenied(res)) throw newsNoAccessError()
 
   if (res.status === 404) {
     const createRes = await spHttpClient.post(createFolderUrl, SPHttpClient.configurations.v1, {
@@ -312,11 +331,18 @@ export async function setOriginalSourceSiteId(
 
   const projectFields = fields.filter((field) => !['GtSiteId', 'GtHubSiteId'].includes(field))
 
-  const [projectData] = await SPDataAdapter.portalDataService.web.lists
-    .getByTitle(resource.Lists_Projects_Title)
-    .items.select(...projectFields)
-    .filter(`GtSiteId eq '${siteId}'`)
-    .top(1)()
+  // The page is made by now: a hub that does not let the user read `Prosjekter` leaves it with
+  // the site and hub ids only, rather than failing the news article.
+  let projectData: Record<string, any> | undefined
+  try {
+    ;[projectData] = await SPDataAdapter.portalDataService.web.lists
+      .getByTitle(resource.Lists_Projects_Title)
+      .items.select(...projectFields)
+      .filter(`GtSiteId eq '${siteId}'`)
+      .top(1)()
+  } catch (error) {
+    console.warn('Could not read the project from the hub for the news article:', error)
+  }
 
   const updateBody: any = {
     GtSiteId: siteId,

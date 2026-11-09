@@ -55,6 +55,15 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (incomingProps) => {
                     />
                   </div>
                 )}
+                {context.state.archiveLogWarning && (
+                  <div className={styles.hubSyncWarning}>
+                    <UserMessage
+                      title={strings.ArchiveLogWarningTitle}
+                      text={context.state.archiveLogWarning}
+                      intent='warning'
+                    />
+                  </div>
+                )}
                 {/* Mounted while a phase waits for confirmation, so each opening starts afresh. */}
                 {context.state.confirmPhase && <ChangePhaseDialog />}
               </>

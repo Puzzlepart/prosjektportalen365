@@ -3,10 +3,14 @@
 jest.mock('data', () => ({ __esModule: true, default: {} }))
 
 import strings from 'ProjectWebPartsStrings'
+import { isUnauthorizedError } from 'pp365-shared-library'
 import {
+  ensureProjectNewsFolder,
   getNewsEditUrl,
   getNewsPageName,
   getServerRelativeUrl,
+  isNewsAccessDenied,
+  newsNoAccessError,
   validateSharePointFileName
 } from './util'
 
@@ -28,6 +32,26 @@ describe('ProjectNews util', () => {
     expect(
       getServerRelativeUrl('https://contoso.sharepoint.com/sites/alfa/', 'SitePages', 'Nyheter')
     ).toBe('/sites/alfa/SitePages/Nyheter')
+  })
+
+  it('tells a refused news site from other answers', () => {
+    expect(isNewsAccessDenied({ status: 403 } as any)).toBe(true)
+    expect(isNewsAccessDenied({ status: 401 } as any)).toBe(true)
+    expect(isNewsAccessDenied({ status: 404 } as any)).toBe(false)
+    const error = newsNoAccessError()
+    expect(error.message).toBe(strings.NewsNoAccessErrorText)
+    expect(isUnauthorizedError(error)).toBe(true)
+  })
+
+  it('says access is missing when the news site refuses the folder', async () => {
+    const spHttpClient = { get: jest.fn(() => Promise.resolve({ ok: false, status: 403 })) }
+    await expect(
+      ensureProjectNewsFolder(
+        'https://contoso.sharepoint.com/sites/portefolje',
+        spHttpClient as any,
+        'Prosjektnyheter'
+      )
+    ).rejects.toThrow(strings.NewsNoAccessErrorText)
   })
 
   it('validates a file name the way SharePoint does', () => {

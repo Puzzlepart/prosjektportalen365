@@ -1,7 +1,12 @@
 import { useEffect } from 'react'
 import { SPHttpClient } from '@microsoft/sp-http'
 import { INewsItem, IProjectNewsProps, IProjectNewsState } from './types'
-import { getNewsImageUrl, getServerRelativeUrl } from './util'
+import {
+  getNewsImageUrl,
+  getServerRelativeUrl,
+  isNewsAccessDenied,
+  newsNoAccessError
+} from './util'
 import strings from 'ProjectWebPartsStrings'
 
 /**
@@ -22,6 +27,9 @@ export function useProjectNewsDataFetch(
     setState({ loading: true })
     const fetchData = async (): Promise<void> => {
       try {
+        // The news site comes from the hub's settings (`ProjectNewsHubUrl`) unless the web part
+        // names one: without either, the hub could not be read.
+        if (!props.siteUrl) throw newsNoAccessError()
         const folderName = props.newsFolderName || strings.NewsFolderNameDefault
         const sitePagesServerRelativeUrl = getServerRelativeUrl(props.siteUrl, 'SitePages')
         const folderServerRelativeUrl = getServerRelativeUrl(props.siteUrl, 'SitePages', folderName)
@@ -34,6 +42,8 @@ export function useProjectNewsDataFetch(
           '&$expand=Author,Editor,File'
 
         const res = await props.spHttpClient.get(url, SPHttpClient.configurations.v1)
+        // Without this a refused request read as no news.
+        if (isNewsAccessDenied(res)) throw newsNoAccessError()
         const data = await res.json()
         const news = (data.value || [])
           .map((item): INewsItem => ({

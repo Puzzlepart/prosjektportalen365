@@ -122,6 +122,12 @@ export interface IProjectPhasesState extends IBaseWebPartComponentState<IProject
    * Warning shown when the phase was changed on the project but not in the hub, with the reason
    */
   hubSyncWarning?: string
+
+  /**
+   * Warning shown when the phase was changed but the archiving was not written to the hub's
+   * archive log (`Arkiveringslogg`), with the reason
+   */
+  archiveLogWarning?: string
 }
 
 export type ChecklistData = Record<string, ProjectPhaseChecklistData>
