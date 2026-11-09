@@ -31,12 +31,17 @@ const NOT_STANDARD_LISTS = [
   'Lists_Projects_Title',
   'Lists_ProjectStatus_Title',
   'Lists_ProjectStatusAttachments_Title',
-  'Lists_TimelineContent_Title'
+  'Lists_TimelineContent_Title',
+  'Lists_ArchiveLog_Title'
 ]
 
-/** `RoleType`: SharePoint's own limited access, and Read. */
+/** `RoleType`: SharePoint's own limited access, Read and Contribute. */
 const LIMITED_ACCESS = 1
 const READER = 2
+const CONTRIBUTOR = 3
+
+/** `ReadSecurity` and `WriteSecurity`: only the items the user created. */
+const OWN_ITEMS_ONLY = 2
 
 /** Why the tests of the templates' state do not run: the run's upgrade applied no templates. */
 const templatesSkip = env.templatesApplied
@@ -51,9 +56,10 @@ interface IRoleAssignments {
 
 /**
  * The group «Minimum lesetilganger på hub» as the template (`Objects/Security.xml`,
- * `Lists/Security/MinimumReadSecurity.xml`) and `Scripts/PostInstall.ps1` leave it on the test hub:
- * no role on the hub itself, Read on the lists projects read, and on the matrix configurations, and
- * nothing on the lists with data about all projects. Read-only.
+ * `Lists/Security/MinimumReadSecurity.xml`, `LogSecurity.xml`) and `Scripts/PostInstall.ps1` leave it
+ * on the test hub: no role on the hub itself, Read on the lists projects read and on the matrix
+ * configurations, Contribute on `Logg` with each user's own entries only, and nothing on the lists
+ * with data about all projects. Read-only.
  */
 describe(
   'the group «Minimum lesetilganger på hub»',
@@ -128,6 +134,37 @@ describe(
       assert.deepEqual(await groupRoles(item.roleAssignments as unknown as IRoleAssignments), [
         READER
       ])
+    })
+
+    it('writes to the log, where each user reads and edits only their own entries', async () => {
+      const list = hub.sp.web.lists.getByTitle(resources.Lists_Log_Title)
+      const settings = await list.select(
+        'HasUniqueRoleAssignments',
+        'ReadSecurity',
+        'WriteSecurity',
+        'NoCrawl'
+      )<{
+        HasUniqueRoleAssignments: boolean
+        ReadSecurity: number
+        WriteSecurity: number
+        NoCrawl: boolean
+      }>()
+      assert.deepEqual(settings, {
+        ...settings,
+        HasUniqueRoleAssignments: true,
+        ReadSecurity: OWN_ITEMS_ONLY,
+        WriteSecurity: OWN_ITEMS_ONLY,
+        NoCrawl: true
+      })
+      assert.deepEqual(await groupRoles(list.roleAssignments as unknown as IRoleAssignments), [
+        CONTRIBUTOR
+      ])
+      // The hub's roles were copied when the inheritance was broken, so its members kept theirs.
+      const members = await hub.sp.web.associatedMemberGroup.select('Id')()
+      const memberRoles = await (list.roleAssignments as unknown as IRoleAssignments).filter(
+        `PrincipalId eq ${members.Id}`
+      )()
+      assert.ok(memberRoles.length > 0, 'the members of the hub lost their role on the log')
     })
 
     it('does not read the lists with data about all projects', async () => {

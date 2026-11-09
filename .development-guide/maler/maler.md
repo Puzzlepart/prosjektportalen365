@@ -58,11 +58,12 @@ Hubens sider har `Overwrite="false"`, unntatt `Idemodul.xml` og `Konfigurasjon.x
 
 #### Rettigheter på hubens lister
 
-En ny liste på huben får én av tre:
+En ny liste på huben får én av disse:
 
 - **`Security/MinimumReadSecurity.xml`:** oppsett prosjektene leser (`Globale innstillinger`, `Prosjektkolonner`, `Maloppsett` og de andre listene som inkluderer filen). Eiere har full kontroll, medlemmer og besøkende kan lese, og gruppen `Minimum lesetilganger på hub` kan lese.
 - **`Security/DefaultSecurity.xml`:** oppsett som bare brukes på huben (`Idékonfigurasjon`, `Porteføljevisninger`). Samme rettigheter, uten gruppen.
-- **Ingen:** lister brukerne skriver til eller som har data om alle prosjekter (`Prosjekter`, `Prosjektstatus`, `Tidslinjeinnhold`, `Logg`, `Arkiveringslogg`). De arver fra huben.
+- **`Security/LogSecurity.xml`** (bare `Logg`): rettighetene kopieres fra huben, og gruppen kan bidra. Listen har «bare egne elementer» for lesing og redigering (`ReadSecurity` og `WriteSecurity` lik 2) og er tatt ut av søket (`NoCrawl`). Bare eiere ser alle radene. `PostInstall.ps1` setter innstillingene også på huber som har listen fra før.
+- **Ingen:** lister brukerne skriver til eller som har data om alle prosjekter (`Prosjekter`, `Prosjektstatus`, `Tidslinjeinnhold`, `Arkiveringslogg`). De arver fra huben. `Arkiveringslogg` får ikke «bare egne elementer», fordi prosjektet skal se hva andre har arkivert.
 
 Gruppen har ingen rettigheter på selve huben. Den får aldri en liste med data om alle prosjekter som standard. Mappen `SiteAssets/Konfigurasjon` (matrisene) får gruppen fra `PostInstall.ps1`, fordi innholdsmalen bare legges på med `Files` ved oppgradering. Å gi en liste som arver, en sikkerhetsfil, bryter arven uten å kopiere rettighetene ved neste oppgradering, så kundenes egne tilganger på den listen faller bort. Skriv det i endringsloggen under `### Merk`.
 

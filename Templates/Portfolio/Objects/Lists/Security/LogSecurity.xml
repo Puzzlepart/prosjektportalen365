@@ -1,0 +1,9 @@
+<pnp:Security xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
+    <!-- Only for Logg, which every user writes to: the roles are copied from the hub, so members,
+         visitors and customers' own groups keep theirs, and the group «Minimum lesetilganger på
+         hub» can add entries. The list lets each user read and edit only their own entries
+         (ReadSecurity, WriteSecurity), so the group reads no data about other projects. -->
+    <pnp:BreakRoleInheritance CopyRoleAssignments="true" ClearSubscopes="false">
+        <pnp:RoleAssignment Principal="{resource:Security_SiteGroup_MinimumHubReadAccess_Title}" RoleDefinition="{resource:Choice_GtPermissionLevel_Contribute}" />
+    </pnp:BreakRoleInheritance>
+</pnp:Security>

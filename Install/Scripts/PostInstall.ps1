@@ -275,3 +275,31 @@ try {
 catch {
     Write-Host "[WARNING] Failed to give the group for minimum hub read access read access to the matrix configurations: $($_.Exception.Message)" -ForegroundColor Yellow
 }
+
+
+Write-Host "[INFO] Post-install action: Letting each user read and edit only their own entries in the log list"
+# Lists/Logg.xml sets ReadSecurity, WriteSecurity and NoCrawl, but an upgrade does not reliably
+# change them on a list the hub already has. Everyone writes to the log, the group «Minimum
+# lesetilganger på hub» too (Lists/Security/LogSecurity.xml), and only owners of the hub may read
+# other users' entries. Kept out of search, which is not known to respect the setting. Idempotent.
+try {
+    $LogListTitle = Get-Resource -Name "Lists_Log_Title"
+    $LogList = Get-PnPList -Identity $LogListTitle -ErrorAction SilentlyContinue
+    if ($null -eq $LogList) {
+        Write-Host "[WARNING] List [$LogListTitle] not found - skipping its item-level permissions" -ForegroundColor Yellow
+    }
+    else {
+        $null = Get-PnPProperty -ClientObject $LogList -Property "ReadSecurity", "WriteSecurity", "NoCrawl"
+        if ($LogList.ReadSecurity -eq 2 -and $LogList.WriteSecurity -eq 2 -and $LogList.NoCrawl) {
+            Write-Host "[INFO] [$LogListTitle] already lets each user read and edit only their own entries"
+        }
+        else {
+            # 2 = only the items the user created (ListReadSecurity, ListWriteSecurity).
+            Set-PnPList -Identity $LogList -ReadSecurity 2 -WriteSecurity 2 -NoCrawl:$true | Out-Null
+            Write-Host "[SUCCESS] [$LogListTitle] lets each user read and edit only their own entries, and is kept out of search" -ForegroundColor Green
+        }
+    }
+}
+catch {
+    Write-Host "[WARNING] Failed to set the item-level permissions of the log list: $($_.Exception.Message)" -ForegroundColor Yellow
+}

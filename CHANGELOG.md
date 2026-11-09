@@ -12,7 +12,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Ny egenskap `Ekskluderte seksjoner` i `Prosjektstatus`-webdelen — én seksjonstittel per linje for å skjule seksjoner fra statussiden
 - `Prosjektinformasjon` kan vise valgte FN-bærekraftsmål som sorterte SVG-ikoner i stedet for vanlige merkelapper. Ikonvisningen er av som standard og kan slås på med valgfri ikonstørrelse i webdelens egenskaper [#1230](https://github.com/Puzzlepart/prosjektportalen365/issues/1230)
 - Ny egenskap `Minimum antall tegn i kommentar på sjekkpunkt` i `Fasevelger`-webdelen. Styrer hvor lang kommentaren må være før et fasesjekkpunkt kan settes til `Ikke relevant` eller `Fortsatt åpen` (0–20 tegn, der 0 betyr at kommentar ikke kreves; standard 4 som før). Egenskapen kunne tidligere bare settes via prosjektmal eller skript. Hjelpeteksten under kommentarfeltet og forklaringen på `Ikke relevant` og `Fortsatt åpen` sier nå hvor mange tegn som kreves
-- **Minimum lesetilganger på hub.** Ny SharePoint-gruppe på huben, `Minimum lesetilganger på hub`, som gir lesetilgang til listene og mappene prosjektene trenger, uten tilgang til selve huben. Medlemmer, for eksempel eksterne gjester, får `Prosjektinformasjon` med samme felt og roller som interne, risiko- og mulighetsmatrisen, `Hent dokumentmal` og bunnteksten. Lister med data om alle prosjekter er ikke standard. Se releasenotes for 1.15.0 for detaljer
+- **Minimum lesetilganger på hub.** Ny SharePoint-gruppe på huben, `Minimum lesetilganger på hub`, som gir lesetilgang til listene og mappene prosjektene trenger, uten tilgang til selve huben. Medlemmer, for eksempel eksterne gjester, får `Prosjektinformasjon` med samme felt og roller som interne, risiko- og mulighetsmatrisen, `Hent dokumentmal` og bunnteksten. Gruppen kan også skrive til `Logg`, så feil fra webdelene logges, men ser bare sine egne rader. Lister med data om alle prosjekter er ikke standard. Se releasenotes for 1.15.0 for detaljer
 
 ### Forbedringer
 
@@ -214,6 +214,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 ### Merk
 
 - `Tidslinjekonfigurasjon`, `Idékonfigurasjon` og `Lenker` på huben får egne rettigheter ved oppgradering, som de andre konfigurasjonslistene: eiere har full kontroll, medlemmer og besøkende lesetilgang. Medlemmer av huben kan ikke lenger endre dem, og grupper som hadde tilgang gjennom arv, må gis tilgang på nytt
+- `Logg` på huben får egne rettigheter, kopiert fra huben, og innstillingen «bare egne elementer» for lesing og redigering, og tas ut av søket. Bare eiere av huben ser alle radene; medlemmer ser sine egne
 - `Arkiveringslogg` arver rettighetene fra huben på nye installasjoner, slik at medlemmer kan føre arkiveringen fra `Fasevelger`. Eksisterende huber beholder listens egne rettigheter, der medlemmer bare har lesetilgang: gi dem tilgang til å bidra i listen før arkiveringen tas i bruk
 
 ## 1.14.1 - 16.10.2026
