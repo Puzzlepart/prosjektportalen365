@@ -40,6 +40,8 @@ const OverflowMenuItem: FC<OverflowMenuItemProps> = (props) => {
  * The `+n` button for the tags out of room, and the menu that lists them. An item of the tags'
  * list, so the list holds items only. The button is named by how many tags it holds, and takes the
  * menu trigger's state (`aria-haspopup`, `aria-expanded`) on itself, the element that has focus.
+ * Registered with `Overflow` through `ref`, which keeps room for it; without it only `padding` was
+ * kept free, and the button could be cut off at the end of the cell.
  */
 const OverflowMenu: FC<{
   tags: {
@@ -50,7 +52,7 @@ const OverflowMenu: FC<{
   }[]
 }> = (props) => {
   const { tags } = props
-  const { isOverflowing, overflowCount } = useOverflowMenu<HTMLButtonElement>()
+  const { ref, isOverflowing, overflowCount } = useOverflowMenu<HTMLDivElement>()
 
   if (!isOverflowing) {
     return null
@@ -63,7 +65,7 @@ const OverflowMenu: FC<{
   const name = format(strings.Aria.MenuOverflowCount, overflowCount)
 
   return (
-    <div role='listitem' onClick={handleClick} onMouseDown={handleClick}>
+    <div ref={ref} role='listitem' onClick={handleClick} onMouseDown={handleClick}>
       <InteractionTag appearance='brand'>
         <Menu closeOnScroll>
           <MenuTrigger disableButtonEnhancement>

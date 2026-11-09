@@ -13,10 +13,13 @@ div > .menuItem {
   .tagGroup {
     display: flex;
 
-    // A tag that does not fit ends in «…» rather than being cut off, as the one tag always shown
-    // was in a narrow cell or with more text spacing (WCAG 1.4.12). Its full text is its title,
-    // and what a screen reader reads.
+    // A tag keeps its own width, so the tags out of room overflow and go behind `+n`: allowed to
+    // shrink, every tag fitted at a few pixels, showing only its icon and «…», and `+n` never
+    // showed. The one tag always shown, wider than the cell or with more text spacing, ends in «…»
+    // rather than being cut off (WCAG 1.4.12). Its full text is its title, and what a screen
+    // reader reads.
     .tag {
+      flex-shrink: 0;
       min-width: 0;
       max-width: 100%;
 
