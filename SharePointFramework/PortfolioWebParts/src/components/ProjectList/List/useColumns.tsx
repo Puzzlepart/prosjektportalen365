@@ -4,6 +4,7 @@ import * as strings from 'PortfolioWebPartsStrings'
 import { OverflowTagMenu, ProjectLogo } from 'pp365-shared-library'
 import React, { useContext } from 'react'
 import _ from 'underscore'
+import { getFieldOptionKey } from '../getFieldOptionKey'
 import { ProjectMenu } from '../ProjectMenu'
 import { ListContext } from './context'
 import { IListColumn } from './types'
@@ -41,8 +42,16 @@ export const useColumns = (): IListColumn[] => {
     return values.length ? values : []
   }
 
-  const findColumn = (field?: string) =>
-    _.find(context.projectColumns, (col) => col.internalName === field || col.fieldName === field)
+  const columnKeys = _.map(context.projectColumns, (col) => ({ key: col.internalName }))
+
+  // A text field, as the web part's defaults are (`GtProjectServiceAreaText`), is its column's.
+  const findColumn = (field?: string) => {
+    const internalName = getFieldOptionKey(field, columnKeys)
+    return _.find(
+      context.projectColumns,
+      (col) => col.internalName === internalName || col.fieldName === field
+    )
+  }
 
   const primaryUserRole =
     findColumn(context.primaryUserField)?.name || strings.PrimaryUserFieldLabel

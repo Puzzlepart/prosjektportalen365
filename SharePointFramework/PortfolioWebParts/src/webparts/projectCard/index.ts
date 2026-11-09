@@ -8,6 +8,8 @@ import {
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 import { IProjectCardProps, PROJECT_CARD_DEFAULT_PROPS, ProjectCard } from 'components/ProjectCard'
+// Not the project list's barrel, which would bring the whole list into this bundle.
+import { getFieldOptionKey } from 'components/ProjectList/getFieldOptionKey'
 import {
   CustomCollectionFieldType,
   PropertyFieldCollectionData
@@ -222,7 +224,10 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
                     key: option.key,
                     text: option.text
                   })),
-                  selectedKey: this.properties.primaryField ?? 'GtProjectServiceArea',
+                  selectedKey: getFieldOptionKey(
+                    this.properties.primaryField ?? PROJECT_CARD_DEFAULT_PROPS.primaryField,
+                    this._columnFieldOptions
+                  ),
                   calloutWidth: 430,
                   calloutContent: createElement('p', {}, strings.RefreshRequiredDescription)
                 }),
@@ -234,7 +239,10 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
                     key: option.key,
                     text: option.text
                   })),
-                  selectedKey: this.properties.secondaryField ?? 'GtProjectType',
+                  selectedKey: getFieldOptionKey(
+                    this.properties.secondaryField ?? PROJECT_CARD_DEFAULT_PROPS.secondaryField,
+                    this._columnFieldOptions
+                  ),
                   calloutWidth: 430,
                   calloutContent: createElement('p', {}, strings.RefreshRequiredDescription)
                 }),

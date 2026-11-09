@@ -51,8 +51,35 @@ describe('ProjectCard', () => {
         name: format(strings.NameValueLabel, strings.PhaseLabel, 'Konsept')
       })
     ).toBeInTheDocument()
-    expect(dataAdapter.fetchEnrichedProject).toHaveBeenCalledWith('site-1', undefined)
+    // With the card's fields and people: without the people none was found («Ikke satt»).
+    expect(dataAdapter.fetchEnrichedProject).toHaveBeenCalledWith('site-1', undefined, {
+      primaryField: 'GtProjectServiceAreaText',
+      secondaryField: 'GtProjectTypeText',
+      primaryUserField: 'GtProjectOwner',
+      secondaryUserField: 'GtProjectManager'
+    })
     expect(screen.getAllByRole('link')[0]).toHaveAttribute('href', '/sites/alfa')
+  })
+
+  it('fetches the fields and people chosen in its pane', () => {
+    const dataAdapter = { fetchEnrichedProject: jest.fn(() => new Promise(() => undefined)) }
+    render(
+      <ProjectCard
+        dataAdapter={dataAdapter as any}
+        projectSiteId='site-1'
+        spfxContext={spfxContext}
+        primaryField='GtProjectPhase'
+        secondaryField='GtProjectNumber'
+        primaryUserField='GtProjectSponsor'
+        secondaryUserField='GtProjectManager'
+      />
+    )
+    expect(dataAdapter.fetchEnrichedProject).toHaveBeenCalledWith('site-1', undefined, {
+      primaryField: 'GtProjectPhase',
+      secondaryField: 'GtProjectNumber',
+      primaryUserField: 'GtProjectSponsor',
+      secondaryUserField: 'GtProjectManager'
+    })
   })
 
   it('says it is loading while the project is fetched (WCAG 4.1.2)', () => {

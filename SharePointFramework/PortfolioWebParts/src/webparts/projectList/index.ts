@@ -8,7 +8,12 @@ import {
 } from '@pnp/spfx-property-controls/lib/PropertyFieldCollectionData'
 import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHeader'
 import * as strings from 'PortfolioWebPartsStrings'
-import { IProjectListProps, PROJECT_LIST_DEFAULT_PROPS, ProjectList } from 'components/ProjectList'
+import {
+  IProjectListProps,
+  PROJECT_LIST_DEFAULT_PROPS,
+  ProjectList,
+  getFieldOptionKey
+} from 'components/ProjectList'
 import React from 'react'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 import { PortalDataService, ProjectColumn, getFluentIcons } from 'pp365-shared-library'
@@ -288,7 +293,10 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                     key: option.key,
                     text: option.text
                   })),
-                  selectedKey: this.properties.primaryField ?? 'GtProjectServiceArea',
+                  selectedKey: getFieldOptionKey(
+                    this.properties.primaryField ?? PROJECT_LIST_DEFAULT_PROPS.primaryField,
+                    this._columnFieldOptions
+                  ),
                   calloutWidth: 430,
                   calloutContent: React.createElement('p', {}, strings.RefreshRequiredDescription)
                 }),
@@ -300,7 +308,10 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                     key: option.key,
                     text: option.text
                   })),
-                  selectedKey: this.properties.secondaryField ?? 'GtProjectType',
+                  selectedKey: getFieldOptionKey(
+                    this.properties.secondaryField ?? PROJECT_LIST_DEFAULT_PROPS.secondaryField,
+                    this._columnFieldOptions
+                  ),
                   calloutWidth: 430,
                   calloutContent: React.createElement('p', {}, strings.RefreshRequiredDescription)
                 }),

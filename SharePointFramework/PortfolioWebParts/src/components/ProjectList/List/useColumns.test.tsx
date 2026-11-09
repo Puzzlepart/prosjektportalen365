@@ -114,6 +114,29 @@ describe('the project list columns', () => {
     expect(defaults('actions').renderHeaderCell()).toBeNull()
   })
 
+  it("heads the web part's default text fields with the project columns they belong to", () => {
+    // The defaults are the text fields beside the columns, which are neither a column's internal
+    // name nor its managed property: they were headed «Primært felt» and «Sekundært felt».
+    const column = columnsWith({
+      projectColumns: [
+        {
+          internalName: 'GtProjectServiceArea',
+          fieldName: 'GtProjectServiceAreaTextOWSTEXT',
+          name: 'Tjenesteområde'
+        },
+        {
+          internalName: 'GtProjectType',
+          fieldName: 'GtProjectTypeTextOWSTEXT',
+          name: 'Prosjekttype'
+        }
+      ] as any,
+      primaryField: 'GtProjectServiceAreaText',
+      secondaryField: 'GtProjectTypeText'
+    })
+    expect(column('primaryField').renderHeaderCell()).toBe('Tjenesteområde')
+    expect(column('secondaryField').renderHeaderCell()).toBe('Prosjekttype')
+  })
+
   it('links the title for a project the user can open, and writes it for one they cannot', () => {
     const column = columnsWith()
     const linked = column('title').renderCell(project()) as React.ReactElement

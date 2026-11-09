@@ -335,8 +335,13 @@ export interface IPortfolioWebPartsDataAdapter {
    *
    * @param siteId Site ID to fetch the project
    * @param hubContext Optional hub context for cross-hub data access
+   * @param fields The fields and person fields the project card shows
    */
-  fetchEnrichedProject?(siteId: string, hubContext?: IHubContext): Promise<ProjectListModel>
+  fetchEnrichedProject?(
+    siteId: string,
+    hubContext?: IHubContext,
+    fields?: IEnrichedProjectsFields
+  ): Promise<ProjectListModel>
 
   /**
    * Fetch projects from the projects list filtered by the `odataQuery`

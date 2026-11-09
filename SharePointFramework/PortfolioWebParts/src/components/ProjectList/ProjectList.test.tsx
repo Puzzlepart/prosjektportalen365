@@ -205,6 +205,27 @@ describe('ProjectList', () => {
     expect(screen.getByRole('link', { name: 'Alfa' })).toHaveAttribute('href', '/sites/alfa')
   })
 
+  it('names the sort button by the name of the field the cards are sorted by (WCAG 2.4.6)', async () => {
+    // It gave the internal name, «Sorter flisene etter: Title», since 1.9.0.
+    renderList({ projects: projects() }, 'tiles')
+    expect(
+      await screen.findByTitle(format(strings.SortCardsByLabel, strings.TitleLabel))
+    ).toBeInTheDocument()
+  })
+
+  it("names the sort button by the field's project column when the cards are sorted by another field", async () => {
+    renderList({ projects: projects() }, 'tiles', {
+      sortBy: 'GtProjectPhase',
+      projectColumns: [
+        ...PROJECT_COLUMNS,
+        { internalName: 'GtProjectPhase', fieldName: 'GtProjectPhaseOWSCHCS', name: 'Prosjektfase' }
+      ]
+    })
+    expect(
+      await screen.findByTitle(format(strings.SortCardsByLabel, 'Prosjektfase'))
+    ).toBeInTheDocument()
+  })
+
   // Selectors where the tree is large: `getByRole` computes it whole per call, and under a full
   // run's load this test took over five seconds by roles (see the testing guide).
   it('ties the projects to the tab of their selection, and names the view mode button by what it does (WCAG 1.3.1, 2.4.6)', async () => {

@@ -676,6 +676,70 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   /**
+   * The types of the Projects list's `Gt` fields on the hub `sp` reaches, by internal name, read
+   * once per hub and kept beside the list's items (`getOrFetchProjectsCache`). `undefined` when
+   * they cannot be read, or none came back.
+   *
+   * @param sp The hub's SPFI instance
+   * @param hubSiteId The hub's site id
+   */
+  private async _fetchProjectListFieldTypes(
+    sp: SPFI,
+    hubSiteId: string
+  ): Promise<Record<string, string> | undefined> {
+    try {
+      const types = await getOrFetchProjectsCache('items', `${hubSiteId}_fields`, async () => {
+        const fields = await sp.web.lists
+          .getByTitle(resource.Lists_Projects_Title)
+          .fields.select('InternalName', 'TypeAsString')
+          .filter("startswith(InternalName,'Gt')")<
+          { InternalName: string; TypeAsString: string }[]
+        >()
+        return fields.reduce<Record<string, string>>(
+          (byName, { InternalName, TypeAsString }) => ({ ...byName, [InternalName]: TypeAsString }),
+          {}
+        )
+      })
+      return _.isEmpty(types) ? undefined : types
+    } catch (error) {
+      Logger.log({
+        message: `(DataAdapter) could not read the fields of the Projects list: ${error?.message}`,
+        level: LogLevel.Warning
+      })
+      return undefined
+    }
+  }
+
+  /**
+   * The fields of `selectFields` the hub's Projects list can give. The web parts' panes offer
+   * every project column, and one the list does not have (the status and budget columns), or a
+   * person column asked for by name, fails the whole query with a 400: such a field is left out,
+   * and the rest is shown. A `Gt` field is kept when the list has it and it is not a person or
+   * lookup field, a `…Id` when the list has that person or lookup field, and any other field
+   * (`Title`, `Id`) as it is. When the list's fields cannot be read, only `SPProjectItem`'s
+   * fields are selected.
+   *
+   * @param sp The hub's SPFI instance
+   * @param hubSiteId The hub's site id
+   * @param selectFields The fields to select
+   */
+  private async _selectProjectListFields(
+    sp: SPFI,
+    hubSiteId: string,
+    selectFields: string[]
+  ): Promise<string[]> {
+    const types = await this._fetchProjectListFieldTypes(sp, hubSiteId)
+    if (!types) return this._buildProjectItemsSelectFields()
+    const isLookup = (field: string) => /^(Lookup|User)(Multi)?$/.test(types[field])
+    return selectFields.filter(
+      (field) =>
+        !/^Gt/.test(field) ||
+        (field in types && !isLookup(field)) ||
+        (/Id$/.test(field) && isLookup(field.slice(0, -2)))
+    )
+  }
+
+  /**
    * Fetches the raw Projects list items. Shared across webparts on the same
    * page via `getOrFetchProjectsCache`. The cache key includes a hash of the
    * sorted select fields so callers with different field configurations
@@ -688,7 +752,11 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     fields?: IEnrichedProjectsFields
   ): Promise<any[]> {
     const list = this._sp.web.lists.getByTitle(resource.Lists_Projects_Title)
-    const selectFields = this._buildProjectItemsSelectFields(fields)
+    const selectFields = await this._selectProjectListFields(
+      this._sp,
+      siteId,
+      this._buildProjectItemsSelectFields(fields)
+    )
     const fieldsHash = getHashCode(selectFields.slice().sort().join(','))
     return getOrFetchProjectsCache('items', `${siteId}_${fieldsHash}`, () =>
       getAllItems(list.items.select(...selectFields))
@@ -852,20 +920,29 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
   public async fetchEnrichedProject(
     siteId: string,
-    hubContext?: IHubContext
+    hubContext?: IHubContext,
+    fields?: IEnrichedProjectsFields
   ): Promise<ProjectListModel> {
     const localStore = new PnPClientStorage().local
 
     // Use hub context if provided, otherwise use current context
     const spfxHubContext = hubContext?.spfxContext || this._spfxContext
     const spHub = hubContext ? spfi(hubContext.hubSiteUrl).using(SPFx(spfxHubContext)) : this._sp
-
-    const cacheKey = hubContext
-      ? `pp365_fetchenrichedproject_${siteId}_hub_${hubContext.hubSiteId}`
-      : `pp365_fetchenrichedproject_${siteId}`
+    const hubSiteId = hubContext?.hubSiteId ?? this._spfxContext.pageContext.site.id.toString()
 
     const list = spHub.web.lists.getByTitle(resource.Lists_Projects_Title)
-    const selectFields = Object.keys(new SPProjectItem())
+    const selectFields = await this._selectProjectListFields(
+      spHub,
+      hubSiteId,
+      this._buildProjectItemsSelectFields(fields)
+    )
+
+    // The fields are part of the key: a field chosen in the card's pane shows on the next load,
+    // not when the cached project expires.
+    const fieldsHash = getHashCode(selectFields.slice().sort().join(','))
+    const cacheKey = hubContext
+      ? `pp365_fetchenrichedproject_${siteId}_hub_${hubContext.hubSiteId}_${fieldsHash}`
+      : `pp365_fetchenrichedproject_${siteId}_${fieldsHash}`
 
     let templates = []
     try {
@@ -904,7 +981,13 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       memberOfGroups,
       users
     }
-    const projects = this._combineResultData(result, undefined, undefined, templateMap)
+    // Without the person fields no person was found: the card showed «Ikke satt» since 1.12.0.
+    const projects = this._combineResultData(
+      result,
+      fields?.primaryUserField,
+      fields?.secondaryUserField,
+      templateMap
+    )
     const project = _.first(projects)
     return project
   }
