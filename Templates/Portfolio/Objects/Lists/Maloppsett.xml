@@ -20,7 +20,7 @@
       <JSLink>clienttemplates.js</JSLink>
     </View>
   </pnp:Views>
-  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/MinimumReadSecurity.xml" />
   <pnp:Fields>
     <Field Type="Text" DisplayName="{resource:Lists_TemplateOptions_Fields_IconName_DisplayName}" MaxLength="255" ID="{d953c1a3-9f7a-4cc3-8147-b6ce924a7901}" StaticName="IconName" Name="IconName">
       <Default>Page</Default>

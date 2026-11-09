@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { useAnnounce } from '@fluentui/react-components'
 import strings from 'ProjectWebPartsStrings'
+import { isUnauthorizedError } from 'pp365-shared-library'
 import {
   ensureProjectNewsFolder,
   getTemplates,
@@ -120,9 +121,11 @@ export const useNewsDialog = () => {
         }
       } catch (err: any) {
         newsForm.setFormErrorMessage(
-          `${strings.NewsCreateError} ${
-            err?.error?.message || err?.error?.message?.value || err?.message
-          }`
+          isUnauthorizedError(err)
+            ? strings.NewsNoAccessErrorText
+            : `${strings.NewsCreateError} ${
+                err?.error?.message || err?.error?.message?.value || err?.message
+              }`
         )
         console.error('Error creating news article:', err)
         setSpinnerMode('idle')

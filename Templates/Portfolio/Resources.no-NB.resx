@@ -2446,6 +2446,12 @@
   <data name="Security_SiteGroup_IdeaProcessors_Title" xml:space="preserve">
     <value>Idebehandlere</value>
   </data>
+  <data name="Security_SiteGroup_MinimumHubReadAccess_Description" xml:space="preserve">
+    <value>Lesetilgang til listene og mappene prosjektene trenger fra huben, uten tilgang til selve huben. Gir ikke tilgang til lister med data om alle prosjekter.</value>
+  </data>
+  <data name="Security_SiteGroup_MinimumHubReadAccess_Title" xml:space="preserve">
+    <value>Minimum lesetilganger på hub</value>
+  </data>
   <data name="Security_SiteGroup_PortfolioAdministrators_Description" xml:space="preserve">
     <value>Porteføljeadministratorer har som standard full kontroll på alle prosjektområder gjennom listen &lt;a href="{site}/Lists/Tillatelseskonfigurasjon"&gt;Tillatelseskonfigurasjon&lt;/a&gt;.</value>
   </data>
