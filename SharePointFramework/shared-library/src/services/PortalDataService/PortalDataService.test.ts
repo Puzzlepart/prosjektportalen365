@@ -225,4 +225,43 @@ describe('PortalDataService', () => {
       expect(queries).toHaveLength(1)
     })
   })
+
+  describe('deleteItemFromList', () => {
+    /** A list whose item records what was done to it, and fails with `error` when given one. */
+    function listService(error?: Error) {
+      const calls: string[] = []
+      const answer = (name: string) => {
+        calls.push(name)
+        return error ? Promise.reject(error) : Promise.resolve()
+      }
+      const web = {
+        lists: {
+          getByTitle: (list: string) => ({
+            items: {
+              getById: (id: number) => {
+                calls.push(`${list} ${id}`)
+                return { recycle: () => answer('recycle'), delete: () => answer('delete') }
+              }
+            }
+          })
+        }
+      }
+      const service = new PortalDataService()
+      service.web = web as any
+      ;(service as any)._configuration = PortalDataServiceDefaultConfiguration
+      return { service, calls }
+    }
+
+    it('moves the item to the recycle bin, where it can be restored, rather than deleting it for good', async () => {
+      // The column forms deleted the locked project column for good (1.15 smoke test).
+      const { service, calls } = listService()
+      expect(await service.deleteItemFromList('PROJECT_CONTENT_COLUMNS', 36)).toBe(true)
+      expect(calls).toEqual([`${LISTS.PROJECT_CONTENT_COLUMNS} 36`, 'recycle'])
+    })
+
+    it('says so when the item cannot be removed', async () => {
+      const { service } = listService(forbidden())
+      expect(await service.deleteItemFromList('PROJECT_CONTENT_COLUMNS', 36)).toBe(false)
+    })
+  })
 })

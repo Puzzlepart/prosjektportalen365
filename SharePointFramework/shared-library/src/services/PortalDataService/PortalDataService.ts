@@ -1010,14 +1010,18 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   }
 
   /**
-   * Deletes the item with the specified ID from the specified list.
+   * Deletes the item with the specified ID from the specified list by moving it to the site's
+   * recycle bin, from where it can be restored. Deleted for good, a column the column forms
+   * deleted by mistake could not be brought back.
    *
    * @param list List
    * @param itemId Item ID
+   *
+   * @returns `true` when the item was moved to the recycle bin, `false` when it could not be
    */
   public async deleteItemFromList(list: PortalDataServiceList, itemId: number): Promise<boolean> {
     try {
-      await this._getList(list).items.getById(itemId).delete()
+      await this._getList(list).items.getById(itemId).recycle()
       return true
     } catch {
       return false
