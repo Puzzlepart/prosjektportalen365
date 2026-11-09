@@ -56,6 +56,16 @@ Startrader (`<pnp:DataRows>`) oppfører seg etter `UpdateBehavior`:
 
 Hubens sider har `Overwrite="false"`, unntatt `Idemodul.xml` og `Konfigurasjon.xml`, så andre sider som finnes, blir stående. Navigasjonen hoppes over ved oppgradering; nye noder legges til i `PostInstallUpgrade.ps1`.
 
+#### Rettigheter på hubens lister
+
+En ny liste på huben får én av tre:
+
+- **`Security/MinimumReadSecurity.xml`:** oppsett prosjektene leser (`Globale innstillinger`, `Prosjektkolonner`, `Maloppsett` og de andre listene som inkluderer filen). Eiere har full kontroll, medlemmer og besøkende kan lese, og gruppen `Minimum lesetilganger på hub` kan lese.
+- **`Security/DefaultSecurity.xml`:** oppsett som bare brukes på huben (`Idékonfigurasjon`, `Porteføljevisninger`). Samme rettigheter, uten gruppen.
+- **Ingen:** lister brukerne skriver til eller som har data om alle prosjekter (`Prosjekter`, `Prosjektstatus`, `Tidslinjeinnhold`, `Logg`, `Arkiveringslogg`). De arver fra huben.
+
+Gruppen har ingen rettigheter på selve huben. Den får aldri en liste med data om alle prosjekter som standard. Mappen `SiteAssets/Konfigurasjon` (matrisene) får gruppen fra `PostInstall.ps1`, fordi innholdsmalen bare legges på med `Files` ved oppgradering. Å gi en liste som arver, en sikkerhetsfil, bryter arven uten å kopiere rettighetene ved neste oppgradering, så kundenes egne tilganger på den listen faller bort. Skriv det i endringsloggen under `### Merk`.
+
 ### Slik når innholdet prosjektområdene
 
 Et prosjektområde får malen én gang, når oppsettveiviseren kjører: se [Prosjektmaler (JSON)](js-provisjoneringsmal.md). Malinnholdet på eksisterende prosjekter endres etterpå bare på tre måter:
