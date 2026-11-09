@@ -214,7 +214,8 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
         </View>`
             }
           )
-          items = items.filter((i) => i.matchPattern(window.location.pathname)).splice(0, 3)
+          const pagePath = this._getHelpPagePath(level)
+          items = items.filter((i) => i.matchPattern(pagePath)).splice(0, 3)
           for (let i = 0; i < items.length; i++) {
             if (items[i].externalUrl) {
               await items[i].fetchExternalContent(this.properties.publicMediaBasePath)
@@ -227,6 +228,25 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     } catch (e) {
       return []
     }
+  }
+
+  /**
+   * The address the help rows are matched against: the page's own, or on the site's address the
+   * front page's. Client-side navigation to a site, by the hub's title for one, leaves the address
+   * without the front page the help rows name (`SitePages/Home.aspx` on the hub,
+   * `SitePages/ProjectHome.aspx` on a project), and the help was unavailable there.
+   *
+   * @param level Help content level of the site
+   */
+  private _getHelpPagePath(level: string): string {
+    const path = window.location.pathname
+    const sitePath = new URL(this.context.pageContext.web.absoluteUrl).pathname.replace(/\/$/, '')
+    if (decodeURIComponent(path).replace(/\/$/, '') !== decodeURIComponent(sitePath)) return path
+    const frontPage =
+      level === resource.Lists_HelpContent_Level_Portfolio
+        ? 'SitePages/Home.aspx'
+        : 'SitePages/ProjectHome.aspx'
+    return `${sitePath}/${frontPage}`
   }
 
   /**

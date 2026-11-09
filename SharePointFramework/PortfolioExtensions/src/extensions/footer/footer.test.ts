@@ -410,6 +410,39 @@ describe('FooterApplicationCustomizer', () => {
       )
     }
   )
+
+  // Client-side navigation to a site, by the hub's title for one, leaves the address without the
+  // front page the help rows name, and the help was unavailable there.
+  it.each([
+    {
+      site: 'the hub',
+      onHub: true,
+      project: null,
+      frontPage: 'SitePages/Home.aspx',
+      address: '/sites/pp365'
+    },
+    {
+      site: 'a project',
+      onHub: false,
+      project: { isParentProject: false },
+      frontPage: 'SitePages/ProjectHome.aspx',
+      address: '/sites/frisbee/'
+    }
+  ])(
+    "loads the front page's help on the address of $site",
+    async ({ onHub, project, frontPage, address }) => {
+      window.history.replaceState({}, '', address)
+      const helpItems = [
+        { Title: 'Forsiden', GtURL: frontPage },
+        { Title: 'Annen side', GtURL: 'SitePages/Annet.aspx' }
+      ]
+      const portal = portalDataService({ project, helpItems })
+      const { navigate } = await footerCustomizer(portal, { onHub })
+      await navigate()
+      const help = await rendered.props.loadHelpContent()
+      expect(help.map(({ title }) => title)).toEqual(['Forsiden'])
+    }
+  )
 })
 
 describe('InstallationEntry', () => {
