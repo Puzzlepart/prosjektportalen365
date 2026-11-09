@@ -2446,6 +2446,12 @@
   <data name="Security_SiteGroup_IdeaProcessors_Title" xml:space="preserve">
     <value>Idea processors</value>
   </data>
+  <data name="Security_SiteGroup_MinimumHubReadAccess_Description" xml:space="preserve">
+    <value>Read access to the lists and folders projects need from the hub, without access to the hub itself. Gives no access to lists with data about all projects.</value>
+  </data>
+  <data name="Security_SiteGroup_MinimumHubReadAccess_Title" xml:space="preserve">
+    <value>Minimum read access to hub</value>
+  </data>
   <data name="Security_SiteGroup_PortfolioAdministrators_Description" xml:space="preserve">
     <value>Portfolio administrators have by default full control over all project areas through the list &lt;a href="{site}/Lists/Tillatelseskonfigurasjon"&gt;Permission Configuration&lt;/a&gt;.</value>
   </data>
