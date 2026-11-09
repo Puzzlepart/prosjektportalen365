@@ -1,7 +1,8 @@
 import { OnOpenChangeData, OpenPopoverEvents } from '@fluentui/react-components'
 import _ from 'lodash'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { getScopeSeriesKey } from 'pp365-shared-library'
+import strings from 'PortfolioWebPartsStrings'
+import { format, getScopeSeriesKey } from 'pp365-shared-library'
 import { IStatusColumnProps } from './types'
 
 /**
@@ -16,6 +17,9 @@ import { IStatusColumnProps } from './types'
  * `mouseenter`. `cancelPendingOpen` must be wired to the trigger's own
  * `pointerleave` — Fluent delays the close notification by `mouseLeaveDelay`,
  * so a pending open could otherwise fire after the pointer has left the cell.
+ *
+ * Fluent's popover trigger makes the icons a button: it is named by each section's status, which
+ * the icons show by colour alone (WCAG 4.1.2).
  *
  * @param props Props for the status report column
  */
@@ -47,8 +51,19 @@ export function useStatusReportColumn(props: IStatusColumnProps) {
 
   useEffect(() => () => window.clearTimeout(openTimeout.current), [])
 
+  const label = status?.sections?.length
+    ? format(
+        strings.NameValueLabel,
+        strings.ColumnRenderOptionStatusReport,
+        status.sections
+          .map(({ name, value }) => format(strings.NameValueLabel, name, value))
+          .join(', ')
+      )
+    : undefined
+
   return {
     status,
+    label,
     open,
     onOpenChange,
     cancelPendingOpen

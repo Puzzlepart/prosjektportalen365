@@ -1,4 +1,7 @@
+import { Locator } from '@playwright/test'
+import { readFileSync } from 'node:fs'
 import { baseURL } from '../../playwright.config'
+import { scanAccessibility, SURFACES } from '../fixtures/a11y'
 import { WEB_PART, expect, test, webPart } from '../fixtures/pp365'
 
 /**
@@ -63,10 +66,28 @@ test.describe('portfolio hub', () => {
     await expect(page.getByRole('grid').or(page.getByRole('table')).first()).toBeVisible({
       timeout: 60_000
     })
+    const overview = page.locator(WEB_PART).first()
+    // A column name stays on one line inside its column and ends in an ellipsis, and the header
+    // shows no resize grip of the browser's own (columns resize from the handle at the edge).
+    // This is CSS, which no unit test applies, so it is read from the browser.
+    const headerStyle = await overview
+      .getByRole('columnheader', { name: /^tittel|^title/i })
+      .first()
+      .getByRole('button')
+      .first()
+      .evaluate((button) => {
+        const name = button.querySelector('[title]')
+        return {
+          resize: getComputedStyle(button).resize,
+          overflow: getComputedStyle(button).overflow,
+          name:
+            name && `${getComputedStyle(name).whiteSpace} ${getComputedStyle(name).textOverflow}`
+        }
+      })
+    expect(headerStyle).toEqual({ resize: 'none', overflow: 'hidden', name: 'nowrap ellipsis' })
     // Searching narrows the list: the results counter reports 0 of N for a nonsense term. This
     // exercises the toolbar (a covered or dead search box fails the fill) and the list binding.
     // Scoped to the web part: the page also has SharePoint's suite bar search box.
-    const overview = page.locator(WEB_PART).first()
     const search = overview
       .getByRole('searchbox')
       .or(overview.getByPlaceholder(/søk|search/i))
@@ -83,6 +104,42 @@ test.describe('portfolio hub', () => {
       page.getByRole('dialog').getByRole('heading', { name: /^filtr|^filter/i })
     ).toBeVisible()
     await page.keyboard.press('Escape')
+  })
+
+  test('portfolio overview exports its list to an Excel file', async ({
+    page,
+    openPage,
+    resolvePage
+  }) => {
+    await openPage(await resolvePage(hub, PAGES.overview))
+    const overview = page.locator(WEB_PART).first()
+    await expect(overview.getByRole('grid').or(overview.getByRole('table')).first()).toBeVisible({
+      timeout: 60_000
+    })
+    // The button is a web part property ("Vis eksport til Excel-knapp"). The hub template turns it
+    // on, but an installation can have it off, so it is looked for once the toolbar has rendered.
+    await expect(overview.getByRole('toolbar').first().getByRole('button').first()).toBeVisible({
+      timeout: 30_000
+    })
+    const exportButton = overview.getByRole('button', {
+      name: /^eksporter til excel$|^export to excel$/i
+    })
+    test.skip(
+      (await exportButton.count()) === 0,
+      'The overview shows no export button: turn on "Vis eksport til Excel-knapp" in its properties'
+    )
+    // Only here does the export run as users run it: the browser takes SheetJS's ES module build
+    // through webpack, while Jest takes its CommonJS build in Node.
+    const download = page.waitForEvent('download')
+    await exportButton.first().click()
+    const file = await download
+    expect(file.suggestedFilename()).toMatch(/\.xlsx$/)
+    // An xlsx file is a ZIP package. The entry names are stored uncompressed, whichever way the
+    // parts themselves are compressed, so the workbook and its first sheet can be found as text.
+    const bytes = readFileSync(await file.path())
+    expect(bytes.subarray(0, 4).toString('latin1')).toBe('PK\u0003\u0004')
+    expect(bytes.includes('xl/workbook.xml')).toBe(true)
+    expect(bytes.includes('xl/worksheets/sheet1.xml')).toBe(true)
   })
 
   test('portfolio aggregation page mounts its web part', async ({
@@ -117,36 +174,126 @@ test.describe('portfolio hub', () => {
     const firstProjectLink = page.locator('.react-calendar-timeline a[href]').first()
     await expect(firstProjectLink).toBeVisible({ timeout: 60_000 })
     await firstProjectLink.click({ trial: true })
-    // The filter toolbar button must open its panel and close again.
-    await page
+    // The filter toolbar button must open its panel and close again, and the focus go back to
+    // it: the panel opens from state, with no trigger of Fluent's to return it to (#1788).
+    const filter = page
       .locator(WEB_PART)
       .first()
       .getByRole('button', { name: /^filtrer$|^filter$/i })
-      .click()
+    await filter.click()
     // The filter panel's own root has no box, so the visible proof is its heading.
     // The level is deliberately not asserted: it is the panel implementation's
     // choice (v8 rendered an h1, the v9 drawer renders an h2) and not a contract.
-    await expect(
-      page.getByRole('dialog').getByRole('heading', { name: /^filtr|^filter/i })
-    ).toBeVisible()
+    const panelHeading = page.getByRole('dialog').getByRole('heading', { name: /^filtr|^filter/i })
+    await expect(panelHeading).toBeVisible()
     await page.keyboard.press('Escape')
+    await expect(panelHeading).toBeHidden({ timeout: 10_000 })
+    await expect(
+      filter,
+      'closing the filter panel gives the focus back to its button'
+    ).toBeFocused()
+  })
+
+  test("the project timeline's items open from the keyboard, and its scroll area takes focus (#1788)", async ({
+    page,
+    openPage,
+    resolvePage
+  }) => {
+    await openPage(await resolvePage(hub, PAGES.timeline))
+    const timeline = page.locator('.react-calendar-timeline').first()
+    // The calendar renders its scroll area itself; the timeline names it and puts it in the tab
+    // order through the calendar's `scrollRef`, so the arrow keys scroll it (WCAG 2.1.1).
+    const scrollArea = timeline.getByRole('group', {
+      name: /rull i tid med piltastene|scroll in time with the arrow keys/i
+    })
+    await expect(scrollArea).toBeVisible({ timeout: 60_000 })
+    await expect(scrollArea).toHaveAttribute('tabindex', '0')
+    // An item is a button: Enter opens its details, and Escape closes them and gives focus back
+    // to the item, which the popover, opened without a trigger of Fluent's, would not.
+    const item = timeline.locator('.rc-item[role="button"]').first()
+    await expect(item).toBeVisible({ timeout: 60_000 })
+    await item.focus()
+    await page.keyboard.press('Enter')
+    const details = page.locator(SURFACES.popover)
+    await expect(details).toBeVisible()
+    // The details take the focus, link or none, so a screen reader hears them open.
+    await expect(details, 'the details take the focus as they open').toBeFocused()
+    await scanAccessibility(page, {
+      component: 'TimelineDetailsPopover',
+      include: [SURFACES.popover]
+    })
+    await page.keyboard.press('Escape')
+    await expect(details).toBeHidden()
+    await expect(item).toBeFocused()
+  })
+
+  test('the merged view, where the overview offers it, reads every hub (#1788)', async ({
+    page,
+    openPage,
+    resolvePage
+  }) => {
+    test.setTimeout(180_000)
+    await openPage(await resolvePage(hub, PAGES.overview))
+    const overview = page.locator(WEB_PART).first()
+    await expect(overview.getByRole('columnheader').first()).toBeVisible({ timeout: 60_000 })
+    // «Vis alle hubber» is in the portfolio selector when the web part has several portfolios,
+    // or in the view selector when it is set to show it there.
+    const selectors = [
+      overview.getByRole('button', { name: /velg en portefølje|select the portfolio/i }),
+      overview.getByRole('button', { name: /porteføljevisninger|portfolio views/i })
+    ]
+    const merged = /^vis alle hubber$|^show all hubs$/i
+    let opener: Locator | undefined
+    for (const selector of selectors) {
+      if ((await selector.count()) === 0) continue
+      await selector.click()
+      const menu = page.locator(SURFACES.menu).last()
+      await expect(menu).toBeVisible()
+      if ((await menu.getByRole('menuitem', { name: merged }).count()) > 0) {
+        opener = selector
+        break
+      }
+      await page.keyboard.press('Escape')
+      await expect(menu).toBeHidden()
+    }
+    test.skip(
+      !opener,
+      'the overview offers no merged view: one portfolio, or the view selector is not set to show it'
+    )
+    await page.locator(SURFACES.menu).last().getByRole('menuitem', { name: merged }).click()
+    // The selector says what shows, and the list is read again.
+    await expect(opener!).toHaveAccessibleName(/vis alle hubber|show all hubs/i)
+    await expect(overview.locator('[class*="resultsCount"]').first()).toHaveText(
+      /viser [1-9]\d* av \d+|showing [1-9]\d* of \d+/i,
+      { timeout: 60_000 }
+    )
+    // Every hub was read: a hub that could not be is told above the list, where it used to be
+    // left out in silence.
+    await expect(
+      overview.getByText(/ikke alle hubber kunne hentes|not every hub could be read/i),
+      'a hub of the merged view could not be read'
+    ).toHaveCount(0)
   })
 
   test('benefit overview page loads', async ({ page, openPage, resolvePage }) => {
     await openPage(await resolvePage(hub, PAGES.benefits))
     await expect(webPart(page, /nytte|benefit/i).first()).toBeVisible()
-    await page
+    const filter = page
       .locator(WEB_PART)
       .first()
       .getByRole('button', { name: /^filtrer$|^filter$/i })
-      .click()
+    await filter.click()
     // The filter panel's own root has no box, so the visible proof is its heading.
     // The level is deliberately not asserted: it is the panel implementation's
     // choice (v8 rendered an h1, the v9 drawer renders an h2) and not a contract.
-    await expect(
-      page.getByRole('dialog').getByRole('heading', { name: /^filtr|^filter/i })
-    ).toBeVisible()
+    const panelHeading = page.getByRole('dialog').getByRole('heading', { name: /^filtr|^filter/i })
+    await expect(panelHeading).toBeVisible()
     await page.keyboard.press('Escape')
+    await expect(panelHeading).toBeHidden({ timeout: 10_000 })
+    await expect(
+      filter,
+      'closing the filter panel gives the focus back to its button'
+    ).toBeFocused()
   })
 
   test('footer application customizer renders the version', async ({

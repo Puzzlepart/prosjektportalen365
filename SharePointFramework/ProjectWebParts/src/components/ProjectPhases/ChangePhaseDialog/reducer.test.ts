@@ -1,5 +1,5 @@
 import strings from 'ProjectWebPartsStrings'
-import { CHECKLIST_ITEM_UPDATED, INIT, SET_VIEW } from './reducer'
+import { CHECKLIST_ITEM_UPDATED, INIT, SET_ARCHIVE_CONFIGURATION, SET_VIEW } from './reducer'
 import { getNextIndex } from './getNextIndex'
 import { View } from './Views'
 import { checklistItem, phase } from '../testFixtures'
@@ -11,7 +11,7 @@ import { renderHook } from './testHooks'
 /**
  * Where the change-phase dialog starts and how it moves on: through the open checkpoints one at a
  * time, to the summary, and to the confirmation (or the archive step) when there is nothing to
- * check.
+ * check; and what the archive step remembers of the documents and lists the user ticked.
  */
 const open = (id: number, title: string) => checklistItem(id, title)
 const closed = (id: number, title: string) =>
@@ -99,5 +99,24 @@ describe('ChangePhaseDialog reducer', () => {
       INIT({ context: context(current) })
     )
     expect(hook.dispatch(SET_VIEW({ view: View.ChangingPhase })).view).toBe(View.ChangingPhase)
+  })
+
+  it('remembers the documents and lists ticked for the archive, replacing the earlier choice and staying on the step', () => {
+    const current = phase('p1', 'Konsept')
+    const hook = renderHook(
+      reducerModule.useChangePhaseDialogReducer,
+      INIT({ context: context(current, true) })
+    )
+    const plan = { id: 1, title: 'Prosjektplan.docx', type: 'file', selected: true } as const
+    const list = { id: 'risiko', title: 'Usikkerhet', type: 'list', selected: true } as const
+    const first = hook.dispatch(
+      SET_ARCHIVE_CONFIGURATION({ archiveConfiguration: { documents: [plan], lists: [list] } })
+    )
+    expect(first.archiveConfiguration).toEqual({ documents: [plan], lists: [list] })
+    expect(first.view).toBe(View.Archive)
+    const second = hook.dispatch(
+      SET_ARCHIVE_CONFIGURATION({ archiveConfiguration: { documents: [], lists: [list] } })
+    )
+    expect(second.archiveConfiguration).toEqual({ documents: [], lists: [list] })
   })
 })

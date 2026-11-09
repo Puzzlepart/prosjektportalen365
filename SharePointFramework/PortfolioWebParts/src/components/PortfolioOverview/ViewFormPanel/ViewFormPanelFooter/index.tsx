@@ -13,7 +13,14 @@ export const ViewFormPanelFooter: FC<IViewFormPanelFooterProps> = ({ onSave }) =
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme} className={styles.root}>
-        <Button onClick={onSave} disabled={!onSave} appearance='primary'>
+        <Button
+          onClick={onSave}
+          // Focusable while it cannot save, with what it needs: a disabled button is skipped by
+          // the keyboard (WCAG 2.1.1, 3.3.2).
+          disabledFocusable={!onSave}
+          title={onSave ? undefined : strings.ViewFormSaveDisabledReason}
+          appearance='primary'
+        >
           {strings.SaveButtonLabel}
         </Button>
         <Button

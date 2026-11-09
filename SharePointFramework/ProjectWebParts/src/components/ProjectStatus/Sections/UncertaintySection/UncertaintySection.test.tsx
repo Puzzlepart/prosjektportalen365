@@ -2,7 +2,11 @@
 // matrices are heavy; all are mocked before the component is imported.
 const mockFetchListData = jest.fn()
 jest.mock('../ListSection/useFetchListData', () => ({ useFetchListData: () => mockFetchListData }))
-jest.mock('../../StatusElement', () => ({ StatusElement: () => null }))
+// The status element stands in as the section's heading when it is asked to head the section.
+jest.mock('../../StatusElement', () => ({
+  StatusElement: ({ asHeading }: any) =>
+    asHeading ? jest.requireActual('react').createElement('h3', null, 'Seksjonstittel') : null
+}))
 jest.mock('../../../RiskMatrix', () => ({ RiskMatrix: () => <div>risikomatrise</div> }))
 jest.mock('../../../OpportunityMatrix', () => ({
   OpportunityMatrix: () => <div>mulighetsmatrise</div>
@@ -66,6 +70,8 @@ describe('UncertaintySection', () => {
     })
     renderSection()
     expect(await screen.findByText('Tittel')).toBeInTheDocument()
+    // Its status element heads it (WCAG 1.3.1).
+    expect(screen.getByRole('heading', { level: 3, name: 'Seksjonstittel' })).toBeInTheDocument()
     expect(screen.getByText('Sannsynlighet')).toBeInTheDocument()
     expect(screen.getByText('Forsinkelse')).toBeInTheDocument()
   })

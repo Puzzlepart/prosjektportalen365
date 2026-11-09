@@ -7,7 +7,8 @@ export type OverflowMenuItemProps = {
 
 export interface IOverflowTagMenuProps {
   /**
-   * Text to display.
+   * The name of the tags' list, read by screen readers: what the tags are, such as the field's
+   * display name.
    */
   text?: string
 

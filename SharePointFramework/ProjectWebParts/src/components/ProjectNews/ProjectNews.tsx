@@ -6,7 +6,8 @@ import {
   getFluentIcon,
   UserMessage,
   WebPartTitle,
-  format
+  format,
+  withDefaults
 } from 'pp365-shared-library'
 import { useProjectNews } from './useProjectNews'
 import { ProjectNewsContext } from './context'
@@ -15,8 +16,16 @@ import styles from './ProjectNews.module.scss'
 import { RecentNews } from './RecentNews'
 import { NewsDialog } from './NewsDialog'
 
-export const ProjectNews: FC<IProjectNewsProps> = (props) => {
-  const { context, recentNews, fluentProviderId } = useProjectNews(props)
+const PROJECT_NEWS_DEFAULT_PROPS: Partial<IProjectNewsProps> = {
+  siteUrl: '',
+  title: strings.ProjectNewsWebPartTitle,
+  newsFolderName: strings.NewsFolderNameDefault,
+  maxVisibleNews: 4
+}
+
+export const ProjectNews: FC<IProjectNewsProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, PROJECT_NEWS_DEFAULT_PROPS)
+  const { context, recentNews, fluentProviderId, restoreFocusTarget } = useProjectNews(props)
 
   return (
     <ProjectNewsContext.Provider value={context}>
@@ -25,14 +34,12 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
           <section className={styles.projectNews}>
             {props.title && <WebPartTitle title={props.title} description={props.description} />}
             <Button
+              {...restoreFocusTarget}
               className={styles.button}
               appearance='subtle'
               icon={getFluentIcon('News')}
               iconPosition='before'
               onClick={() => context.setState({ isDialogOpen: true })}
-              aria-label={strings.CreateNewsLinkLabel}
-              role='button'
-              tabIndex={0}
               aria-haspopup='dialog'
             >
               {strings.CreateNewsLinkLabel}
@@ -61,11 +68,4 @@ export const ProjectNews: FC<IProjectNewsProps> = (props) => {
       </IdPrefixProvider>
     </ProjectNewsContext.Provider>
   )
-}
-
-ProjectNews.defaultProps = {
-  siteUrl: '',
-  title: strings.ProjectNewsWebPartTitle,
-  newsFolderName: strings.NewsFolderNameDefault,
-  maxVisibleNews: 4
 }

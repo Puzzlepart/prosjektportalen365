@@ -2,21 +2,22 @@ import { searchAggregatedItems } from './searchAggregatedItems'
 
 /**
  * A search stand-in: answers each query with the rows whose page it asks for, `rowLimit` at a
- * time, out of `total` rows, and records the queries.
+ * time, out of `total` rows, and records the queries. Like SharePoint, it ranks every request
+ * anew, so the order differs from one request to the next unless the query sorts on the document
+ * id; pages without that sort overlap, as they did on the test tenant.
  */
 function searchFor(total: number) {
   const queries: any[] = []
   const sp: any = {
     search: (query: any) => {
       queries.push(query)
-      const start = query.StartRow
-      const rows = Array.from(
-        { length: Math.max(0, Math.min(query.RowLimit, total - start)) },
-        (_, i) => ({
-          Title: `Element ${start + i + 1}`,
-          query: query.QueryTemplate
-        })
-      )
+      const sorted = query.SortList?.some((sort: any) => sort.Property === 'docid')
+      const shift = sorted ? 0 : queries.length - 1
+      const order = Array.from({ length: total }, (_, i) => (i + shift) % total)
+      const rows = order.slice(query.StartRow, query.StartRow + query.RowLimit).map((i) => ({
+        Title: `Element ${i + 1}`,
+        query: query.QueryTemplate
+      }))
       return Promise.resolve({ PrimarySearchResults: rows, TotalRows: total })
     }
   }
@@ -52,15 +53,18 @@ describe('searchAggregatedItems', () => {
     expect(queries[0].QueryTemplate).toContain('ContentType:Risiko')
   })
 
-  it('pages through every row the search has', async () => {
+  it('pages through every row once, in an order that holds from page to page', async () => {
     const { sp, queries } = searchFor(5)
     const items = await searchAggregatedItems(sp, {
       siteIds: ['site-1'],
       queryTemplate: 'ContentType:Risiko',
       rowLimit: 2
     })
-    expect(items).toHaveLength(5)
+    expect(items.map(({ Title }) => Title)).toEqual([1, 2, 3, 4, 5].map((n) => `Element ${n}`))
     expect(queries.map(({ StartRow }) => StartRow)).toEqual([0, 2, 4])
+    for (const query of queries) {
+      expect(query.SortList).toEqual([{ Property: 'docid', Direction: 0 }])
+    }
   })
 
   it('includes the site itself first when asked to, under its own property', async () => {

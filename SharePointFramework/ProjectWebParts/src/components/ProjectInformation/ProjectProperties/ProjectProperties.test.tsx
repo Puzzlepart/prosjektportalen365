@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
 import { ProjectInformationContextProvider } from '../context'
@@ -31,7 +32,7 @@ function property(
 }
 
 function renderProperties(properties: Property[], props: Record<string, any> = {}) {
-  render(
+  return render(
     <ProjectInformationContextProvider
       value={
         {
@@ -67,10 +68,37 @@ describe('ProjectProperties', () => {
       'href',
       'https://contoso.no'
     )
-    expect(
-      screen.getByText(new Date('2026-03-15T00:00:00').toLocaleDateString())
-    ).toBeInTheDocument()
     expect(screen.getByText(/Linje 1/).innerHTML).toContain('<br>')
+  })
+
+  it('pairs each name with its value in a description list, and reads a person once (WCAG 1.3.1)', async () => {
+    const { container } = renderProperties([
+      property('GtProjectGoals', 'Prosjektmål', 'Bedre flyt'),
+      property('GtProjectOwner', 'Prosjekteier', [{ text: 'Kari Nordmann', imageUrl: '' }], 'User')
+    ])
+    expect(screen.getAllByRole('term').map((term) => term.textContent)).toEqual([
+      'Prosjektmål',
+      'Prosjekteier'
+    ])
+    const [goals, owner] = screen.getAllByRole('definition')
+    expect(goals).toHaveTextContent('Bedre flyt')
+    // The picture beside the name is hidden from screen readers, which read the name once.
+    expect(owner).toHaveTextContent('Kari Nordmann')
+    expect(screen.queryByRole('img', { name: 'Kari Nordmann' })).toBeNull()
+    expect(await axeComponent(container)).toHaveNoViolations()
+  })
+
+  it("writes a date in SharePoint's UI language, not the browser's", () => {
+    // jsdom's browser language is en-US, where the date would read 3/15/2026.
+    ;(window as any)._spPageContextInfo = { currentUICultureName: 'nb-NO' }
+    try {
+      renderProperties([
+        property('GtStartDate', 'Startdato', new Date('2026-03-15T00:00:00'), 'DateTime')
+      ])
+      expect(screen.getByText('15.03.2026')).toHaveAttribute('title', '15.03.2026')
+    } finally {
+      delete (window as any)._spPageContextInfo
+    }
   })
 
   it('leaves out hidden, empty and system properties', () => {
@@ -91,6 +119,64 @@ describe('ProjectProperties', () => {
       displayAllProperties: true
     })
     expect(screen.getByText('Skjult')).toBeInTheDocument()
+  })
+
+  it('renders sustainability goals as tags by default and leaves them to icon mode when enabled', () => {
+    const sustainabilityGoals = property(
+      'GtUNSustDevGoals',
+      'FNs bærekraftsmål',
+      [{ key: 'energy', name: '07. Ren energi til alle' }],
+      'TaxonomyFieldTypeMulti'
+    )
+    const view = renderProperties([sustainabilityGoals])
+    expect(screen.getByText('FNs bærekraftsmål')).toBeInTheDocument()
+    expect(screen.getByText('07. Ren energi til alle')).toBeInTheDocument()
+
+    view.rerender(
+      <ProjectInformationContextProvider
+        value={
+          {
+            props: {
+              page: 'Frontpage',
+              showFieldExternal: {},
+              fallbackVisibleFields: [],
+              showSustainabilityGoalsAsIcons: true
+            },
+            state: {
+              properties: [sustainabilityGoals],
+              data: { fieldValues: { get: () => '' } }
+            },
+            dispatch: jest.fn()
+          } as any
+        }
+      >
+        <ProjectProperties />
+      </ProjectInformationContextProvider>
+    )
+    expect(screen.queryByText('FNs bærekraftsmål')).toBeNull()
+
+    view.rerender(
+      <ProjectInformationContextProvider
+        value={
+          {
+            props: {
+              page: 'Frontpage',
+              showFieldExternal: {},
+              fallbackVisibleFields: [],
+              showSustainabilityGoalsAsIcons: true
+            },
+            state: {
+              properties: [sustainabilityGoals],
+              data: { fieldValues: { get: () => '' } }
+            },
+            dispatch: jest.fn()
+          } as any
+        }
+      >
+        <ProjectProperties displayAllProperties />
+      </ProjectInformationContextProvider>
+    )
+    expect(screen.getByText('FNs bærekraftsmål')).toBeInTheDocument()
   })
 
   it('tells when no property is left to show', () => {

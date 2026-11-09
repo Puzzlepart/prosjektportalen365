@@ -50,6 +50,25 @@ test.describe('program site', () => {
     await expect(webPart(page, /tidslinje|timeline/i).first()).toBeVisible()
   })
 
+  test("the program's own timeline page draws the timeline of the program's items", async ({
+    page,
+    openPage,
+    resolvePage
+  }) => {
+    // The template's second timeline page (Tidslinje.aspx, titled "Programtidslinje") holds
+    // ProjectWebParts' timeline, the one a project has, fed with the program's own items. It is a
+    // single web part app page, where SharePoint sets no feature tag, so the web part is found by
+    // the title it renders.
+    await openPage(await resolvePage(programUrl!, ['Tidslinje.aspx', 'Timeline.aspx']))
+    const timeline = webPart(page, /programtidslinje|program timeline/i).first()
+    await expect(timeline).toBeVisible({ timeout: 60_000 })
+    // react-calendar-timeline draws into this root once the items are fetched; a web part that
+    // failed to fetch shows a message and no timeline.
+    await expect(timeline.locator('.react-calendar-timeline').first()).toBeVisible({
+      timeout: 60_000
+    })
+  })
+
   test('program status page loads', async ({ page, openPage, resolvePage }) => {
     await openPage(
       await resolvePage(programUrl!, [

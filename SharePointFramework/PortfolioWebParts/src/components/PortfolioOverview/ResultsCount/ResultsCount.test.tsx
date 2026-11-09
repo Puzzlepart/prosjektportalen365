@@ -20,4 +20,12 @@ describe('PortfolioOverview ResultsCount', () => {
     const { container } = render(<ResultsCount displayCount={10} />)
     expect(container).toBeEmptyDOMElement()
   })
+
+  it('is a status, read out as the count changes (WCAG 4.1.3)', () => {
+    useContextMock.mockReturnValue({ state: { items: new Array(42) } })
+    render(<ResultsCount displayCount={10} />)
+    expect(screen.getByRole('status')).toHaveTextContent(
+      strings.ResultsCountLabel.replace('{0}', '10').replace('{1}', '42')
+    )
+  })
 })

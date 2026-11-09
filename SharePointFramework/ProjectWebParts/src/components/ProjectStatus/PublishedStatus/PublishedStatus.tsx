@@ -1,4 +1,3 @@
-import { WebPartTitle } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { useProjectStatusContext } from '../context'
 import styles from '../ProjectStatus.module.scss'
@@ -14,7 +13,10 @@ export const PublishedStatus: FC = () => {
           <CheckmarkSquare24Filled />
         </div>
       )}
-      <WebPartTitle title={context.state.reportStatus} />
+      {/* The report's state beside the web part's title, not a second title (WCAG 1.3.1). */}
+      {context.state.reportStatus && (
+        <p className={styles.reportStatus}>{context.state.reportStatus}</p>
+      )}
     </div>
   )
 }

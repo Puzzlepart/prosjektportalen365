@@ -21,6 +21,7 @@ import { render, screen } from '@testing-library/react'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectColumn, format } from 'pp365-shared-library'
 import * as React from 'react'
+import resource from 'SharedResources'
 import { PortfolioOverview } from './PortfolioOverview'
 import { DATA_FETCHED, DATA_FETCH_ERROR } from './reducer'
 
@@ -101,7 +102,16 @@ describe('PortfolioOverview', () => {
     expect(
       screen.getByPlaceholderText(format(strings.SearchBoxPlaceholderText, 'Alle prosjekter'))
     ).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Alle prosjekter' })).toBeInTheDocument()
+    // The view selector names the view and what it selects (WCAG 2.5.3: the shown text first).
+    expect(
+      screen.getByRole('button', {
+        name: format(
+          strings.SelectorButtonLabel,
+          'Alle prosjekter',
+          resource.Lists_PortfolioViews_Title
+        )
+      })
+    ).toBeInTheDocument()
     expect(screen.getByTitle(strings.ExcelExportButtonLabel)).toBeInTheDocument()
     expect(screen.getByTitle(strings.FilterText)).toBeInTheDocument()
   })
@@ -110,5 +120,24 @@ describe('PortfolioOverview', () => {
     renderOverview(() => DATA_FETCH_ERROR({ error: new Error('Kilden svarte ikke'), view }))
     expect(await screen.findByText(strings.ErrorTitle)).toBeInTheDocument()
     expect(screen.getByText(/Kilden svarte ikke/)).toBeInTheDocument()
+  })
+
+  it('tells which hubs a merged view could not read, above the list (WCAG 3.3.1)', async () => {
+    // They were left out in silence: the list showed fewer projects with no word of why.
+    renderOverview(() =>
+      DATA_FETCHED({
+        items: [],
+        currentView: view,
+        groupBy: undefined,
+        managedProperties: [],
+        isUserInPortfolioManagerGroup: false,
+        showChildProjectInfoInProgram: false,
+        failedPortfolios: [{ title: 'Hub Bygg' }]
+      } as any)
+    )
+    expect(await screen.findByText(strings.MergedViewHubFailedTitle)).toBeInTheDocument()
+    expect(
+      screen.getByText(format(strings.MergedViewHubFailedText, 'Hub Bygg'))
+    ).toBeInTheDocument()
   })
 })

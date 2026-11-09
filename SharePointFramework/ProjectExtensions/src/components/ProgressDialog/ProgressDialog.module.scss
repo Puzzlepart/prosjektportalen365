@@ -121,4 +121,10 @@
       word-break: break-word;
     }
   }
+
+  // «Venter» in the grey that reads 4.5:1, where #8a8886 read 3.5:1.
+  .pendingText {
+    color: var(--colorNeutralForeground3);
+    font-style: italic;
+  }
 }

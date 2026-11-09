@@ -1,6 +1,6 @@
 import { BenefitBase, BenefitMeasurementIndicator } from './'
 import { IBenefitsSearchResult } from 'interfaces'
-import { ITrendIcon } from 'pp365-shared-library'
+import { formatShortDate, ITrendIcon } from 'pp365-shared-library'
 
 export class BenefitMeasurement extends BenefitBase {
   public Date: Date
@@ -23,7 +23,8 @@ export class BenefitMeasurement extends BenefitBase {
   constructor(result: IBenefitsSearchResult, fractionDigits: number = 2) {
     super(result)
     this.Date = new Date(result.GtMeasurementDateOWSDATE)
-    this.DateDisplay = this.Date.toLocaleDateString()
+    // For display only: the Excel export writes `Date` itself.
+    this.DateDisplay = formatShortDate(this.Date)
     this.Value = !isNaN(parseFloat(result.GtMeasurementValueOWSNMBR))
       ? parseFloat(result.GtMeasurementValueOWSNMBR)
       : null
@@ -62,7 +63,8 @@ export class BenefitMeasurement extends BenefitBase {
   public setTrendIcon(prevMeasurement: BenefitMeasurement): BenefitMeasurement {
     const shouldIncrease = this.Indicator.DesiredValue > this.Indicator.StartValue
     if (this.Achievement >= 100) {
-      this.TrendIcon = { iconName: 'Trophy', color: 'gold' }
+      // As hex, which the trend cell can measure to frame it (gold stands out too little).
+      this.TrendIcon = { iconName: 'Trophy', color: '#ffd700' }
       return this
     }
     if (prevMeasurement && prevMeasurement.Value !== this.Value) {

@@ -18,7 +18,18 @@
   gap: 8px;
 
   .title {
-   font-size: 18px;
+    font-size: 18px;
+  }
+
+  .description {
+    margin: 0;
+  }
+
+  .properties {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
   }
 
   .completedText {

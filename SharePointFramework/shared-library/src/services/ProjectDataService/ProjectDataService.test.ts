@@ -213,6 +213,14 @@ describe('ProjectDataService', () => {
         expect(entityService.updateEntityItem).toHaveBeenCalledWith(SITE_ID, PHASE_PROPERTIES)
       }
     })
+
+    it("leaves the hub to the caller when asked, and returns what it wrote to the project's item", async () => {
+      const entityService = hub()
+      const { instance, updates } = service({}, entityService)
+      expect(await instance.updateProjectPhase(PHASE, PHASE_FIELD, false)).toEqual(PHASE_PROPERTIES)
+      expect(updates).toEqual([{ list: LIST_ID, id: 1, properties: PHASE_PROPERTIES }])
+      expect(entityService.updateEntityItem).not.toHaveBeenCalled()
+    })
   })
 
   describe('updateProjectProperties', () => {

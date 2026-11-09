@@ -11,6 +11,12 @@ $xl: 1366px;
   gap: 16px;
   height: fit-content;
 
+  // On a narrow screen the status goes under the project information, which left it 16 px at
+  // 320 px (WCAG 1.4.10).
+  @media (max-width: 480px) {
+    flex-direction: column;
+  }
+
   .projectInformation {
     max-width: 520px;
   }

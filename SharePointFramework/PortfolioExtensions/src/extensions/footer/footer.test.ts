@@ -1,25 +1,35 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
 // Babel, so mocks are not hoisted. The data adapter hands out the test's portal data service, and
-// the footer component (tested on its own) records the props the customizer renders it with.
+// the footer component (tested on its own) records the props the customizer renders it with and
+// how many footers are mounted (in a layout effect, which runs as react-dom's `render` returns).
 const adapter = {
   configure: jest.fn(() => Promise.resolve()),
   portalDataService: undefined as any,
   checkProjectAdminPermissions: jest.fn(() => Promise.resolve(true))
 }
 jest.mock('../../data/SPDataAdapter', () => ({ __esModule: true, default: adapter }))
-const rendered: { props?: any } = {}
+const rendered: { props?: any; mounted: number } = { mounted: 0 }
 jest.mock('components/Footer', () => ({
   Footer: (props: any) => {
+    const { useLayoutEffect } = jest.requireActual('react')
     rendered.props = props
+    useLayoutEffect(() => {
+      rendered.mounted++
+      return () => {
+        rendered.mounted--
+      }
+    }, [])
     return null
   }
 }))
 
 import { PlaceholderName } from '@microsoft/sp-application-base'
+import { act } from '@testing-library/react'
 import { ProjectAdminPermission } from 'pp365-shared-library'
 import resource from 'SharedResources'
 import FooterApplicationCustomizer from '.'
 import { HelpContentModel, InstallationEntry } from './types'
+import { PLACEHOLDER_TRACE_KEY, PLACEHOLDER_TRACE_PREFIX } from './placeholderTrace'
 
 const HUB = 'https://contoso.sharepoint.com/sites/pp365'
 const PROJECT = 'https://contoso.sharepoint.com/sites/frisbee'
@@ -66,11 +76,18 @@ function portalDataService({
   }
 }
 
-/** The customizer on the hub (or a project site), initialised with `portal`. */
-async function footerCustomizer(portal = portalDataService(), { onHub = true } = {}) {
+/**
+ * The customizer on the hub (or a project site), initialised with `portal`. The placeholder's
+ * element is in the document only when `attached`.
+ */
+async function footerCustomizer(
+  portal = portalDataService(),
+  { onHub = true, attached = false } = {}
+) {
   adapter.portalDataService = portal
   const navigated: (() => Promise<void>)[] = []
   const placeholder = { domElement: document.createElement('div'), dispose: jest.fn() }
+  if (attached) document.body.appendChild(placeholder.domElement)
   const context = {
     pageContext: {
       web: { absoluteUrl: onHub ? HUB : PROJECT },
@@ -85,14 +102,25 @@ async function footerCustomizer(portal = portalDataService(), { onHub = true } =
         add: (observer: any, handler: () => Promise<void>) => navigated.push(handler.bind(observer))
       }
     },
-    placeholderProvider: { tryCreateContent: jest.fn(() => placeholder) }
+    placeholderProvider: {
+      placeholderNames: [PlaceholderName.Top, PlaceholderName.Bottom],
+      tryCreateContent: jest.fn(() => placeholder),
+      changedEvent: { add: jest.fn() }
+    }
   }
   const customizer = new FooterApplicationCustomizer()
   ;(customizer as any).context = context
   ;(customizer as any).properties = { publicMediaBasePath: 'https://media.example/media' }
-  await customizer.onInit()
+  // Through `act` too: the customizer renders the footer as it starts, and outside `act` React
+  // 18 would render it after the test, into the next one.
+  await act(async () => {
+    await customizer.onInit()
+  })
+  // Through `act`: React 18's `createRoot` renders the footer after the handler returns.
   const navigate = async () => {
-    for (const handler of navigated) await handler()
+    await act(async () => {
+      for (const handler of navigated) await handler()
+    })
   }
   return { context, placeholder, navigate }
 }
@@ -112,6 +140,7 @@ const originalFetch = global.fetch
 
 beforeEach(() => {
   rendered.props = undefined
+  rendered.mounted = 0
   adapter.checkProjectAdminPermissions.mockImplementation(() => Promise.resolve(true))
 })
 
@@ -143,6 +172,107 @@ describe('FooterApplicationCustomizer', () => {
     await navigate()
     expect(placeholder.domElement.childNodes).toHaveLength(1)
     expect(context.placeholderProvider.tryCreateContent).toHaveBeenCalledTimes(1)
+  })
+
+  it('renders as soon as it has started, without waiting for a navigation', async () => {
+    // It rendered on SharePoint's navigated event only, which it subscribed to after its own
+    // fetches: on a list page that event had come and gone, and the footer never showed.
+    await footerCustomizer(portalDataService({ settings: { ShowFooter: '1' } }))
+    expect(rendered.props).toMatchObject({ portalUrl: HUB, showFooter: true })
+  })
+
+  it('renders once SharePoint has its placeholders, which on a list page it can define after the footer has started', async () => {
+    // With no placeholder at the start it waited for a navigation, which on a list page never
+    // came: the footer showed on few loads there (2026-10-20).
+    const placeholder = { domElement: document.createElement('div'), dispose: jest.fn() }
+    let available = false
+    const placeholdersChanged: Array<() => void> = []
+    const placeholderProvider = {
+      tryCreateContent: jest.fn(() => (available ? placeholder : undefined)),
+      changedEvent: {
+        add: jest.fn((observer: any, handler: () => void) =>
+          placeholdersChanged.push(handler.bind(observer))
+        )
+      }
+    }
+    adapter.portalDataService = portalDataService({ settings: { ShowFooter: '1' } })
+    const customizer = new FooterApplicationCustomizer()
+    ;(customizer as any).context = {
+      pageContext: {
+        web: { absoluteUrl: HUB },
+        legacyPageContext: { siteId: '{hub-1}', hubSiteId: 'hub-1', isSiteAdmin: true }
+      },
+      application: { navigatedEvent: { add: jest.fn() } },
+      placeholderProvider
+    }
+    ;(customizer as any).properties = {}
+    await act(async () => {
+      await expect(customizer.onInit()).resolves.toBeUndefined()
+    })
+    expect(placeholderProvider.tryCreateContent).toHaveBeenCalled()
+    expect(rendered.props).toBeUndefined()
+    available = true
+    await act(async () => {
+      for (const changed of placeholdersChanged) changed()
+    })
+    expect(rendered.props).toMatchObject({ portalUrl: HUB, showFooter: true })
+    expect(placeholder.domElement.childNodes).toHaveLength(1)
+  })
+
+  it('traces the placeholders from the first line of onInit when asked to, and whether the content it was given is in the page (sp-dev-docs#11070)', async () => {
+    window.sessionStorage.setItem(PLACEHOLDER_TRACE_KEY, '1')
+    const info = jest.spyOn(console, 'info').mockImplementation(() => undefined)
+    const lines = () =>
+      info.mock.calls
+        .filter(([prefix]) => prefix === PLACEHOLDER_TRACE_PREFIX)
+        .map(([, json]) => JSON.parse(json))
+    try {
+      // Content outside the document, as SharePoint hands out on a list page whose placeholders
+      // it never defined.
+      await footerCustomizer()
+      expect(lines()).toEqual([
+        expect.objectContaining({ step: 'onInit', placeholderNames: ['Top', 'Bottom'] }),
+        expect.objectContaining({ step: 'setUp' }),
+        expect.objectContaining({ step: 'tryCreateContent', acquired: true, connected: false })
+      ])
+      info.mockClear()
+      const { placeholder } = await footerCustomizer(undefined, { attached: true })
+      expect(lines()).toContainEqual(
+        expect.objectContaining({ step: 'tryCreateContent', acquired: true, connected: true })
+      )
+      placeholder.domElement.remove()
+    } finally {
+      info.mockRestore()
+      window.sessionStorage.removeItem(PLACEHOLDER_TRACE_KEY)
+    }
+  })
+
+  it('keeps one footer mounted across navigations, and unmounts it with its placeholder', async () => {
+    const { context, placeholder, navigate } = await footerCustomizer()
+    await navigate()
+    await navigate()
+    await navigate()
+    expect(rendered.mounted).toBe(1)
+    // SharePoint calls `onDispose` when it removes the placeholder, and the next page makes a new one.
+    const [, options] = (context.placeholderProvider.tryCreateContent as jest.Mock).mock.calls[0]
+    act(() => {
+      options.onDispose(placeholder)
+    })
+    expect(rendered.mounted).toBe(0)
+    await navigate()
+    expect(context.placeholderProvider.tryCreateContent).toHaveBeenCalledTimes(2)
+    expect(rendered.mounted).toBe(1)
+    expect(placeholder.domElement.childNodes).toHaveLength(1)
+  })
+
+  it('tells the footer which page it is on, which a navigation changes while it stays mounted', async () => {
+    window.history.replaceState({}, '', '/sites/pp365/SitePages/Home.aspx')
+    const { navigate } = await footerCustomizer()
+    expect(rendered.props.pagePath).toBe('/sites/pp365/SitePages/Home.aspx')
+    window.history.pushState({}, '', '/sites/pp365/SitePages/Portef%C3%B8ljeoversikt.aspx')
+    await navigate()
+    expect(rendered.props.pagePath).toBe('/sites/pp365/SitePages/Portef%C3%B8ljeoversikt.aspx')
+    expect(rendered.mounted).toBe(1)
   })
 
   it.each([

@@ -3,11 +3,11 @@ import {
   IFieldCustomizerCellEventParameters
 } from '@microsoft/sp-listview-extensibility'
 import { createElement } from 'react'
-import { render, unmountComponentAtNode } from 'react-dom'
 import { RiskAction } from '../../components/RiskAction'
 import { RiskActionFieldCustomizerContext } from './context'
 import { DataAdapter } from './dataAdapter'
 import { RiskActionItemContext } from './types'
+import { renderReact, unmountReact } from 'pp365-shared-library'
 
 export default class RiskActionFieldCustomizer extends BaseFieldCustomizer<null> {
   protected _dataAdapter: DataAdapter
@@ -59,11 +59,11 @@ export default class RiskActionFieldCustomizer extends BaseFieldCustomizer<null>
       },
       riskAction
     )
-    render(element, event.domElement)
+    renderReact(element, event.domElement)
   }
 
   public onDisposeCell(event: IFieldCustomizerCellEventParameters): void {
-    unmountComponentAtNode(event.domElement)
+    unmountReact(event.domElement)
     super.onDisposeCell(event)
   }
 }

@@ -1,4 +1,5 @@
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import * as React from 'react'
 import { ConfirmDialogResponseValue, IConfirmDialogProps, useConfirmationDialog } from '.'
 
@@ -54,5 +55,15 @@ describe('useConfirmationDialog', () => {
     const answer = openDialog(DELETE)
     fireEvent.keyDown(screen.getByText('Slette visningen?'), { key: 'Escape' })
     await expect(answer()).resolves.toBeUndefined()
+  })
+
+  it('is a dialog named by its title and described by its text, so both are read as it opens', async () => {
+    openDialog({ ...DELETE, children: <p>Den brukes av tre personer.</p> })
+    const dialog = screen.getByRole('dialog')
+    expect(dialog).toHaveAccessibleName('Slette visningen?')
+    expect(dialog).toHaveAccessibleDescription(
+      /^Visningen kan ikke gjenopprettes\.\s*Den brukes av tre personer\.$/
+    )
+    expect(await axeComponent(document.body)).toHaveNoViolations()
   })
 })

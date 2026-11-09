@@ -7,8 +7,8 @@ import { expect } from '@playwright/test'
 /** Widths of the list, its container and its columns, read from the rendered grid. */
 export async function measureTimelineList(page: import('@playwright/test').Page) {
   const list = page.locator('[class*="timelineList"]').first()
-  await expect(list).toBeVisible({ timeout: 60_000 })
-  await expect(list.locator('.fui-DataGrid').first()).toBeVisible({ timeout: 60_000 })
+  await expect(list).toBeVisible({ timeout: 90_000 })
+  await expect(list.locator('.fui-DataGrid').first()).toBeVisible({ timeout: 90_000 })
   // Let the container measurement and Fluent's auto-fit settle.
   await page.waitForTimeout(3000)
   return list.evaluate((root) => {

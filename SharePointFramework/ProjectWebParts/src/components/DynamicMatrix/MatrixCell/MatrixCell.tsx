@@ -7,6 +7,7 @@ export const MatrixCell: FC<IMatrixCellProps> = (props) => {
     <div
       className={styles.matrixCell}
       style={{ backgroundColor: props.cell.backgroundColor, ...props.style }}
+      role='cell'
     >
       <div className={styles.cell}>
         <span>{props.children}</span>

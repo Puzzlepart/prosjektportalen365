@@ -1,9 +1,12 @@
+import { AssignFrom } from '@pnp/core'
 import '@pnp/sp/presets/all'
-import { IContentType, IList, IWeb, SPFI, SPFx, spfi } from '@pnp/sp/presets/all'
+import { IContentType, IList, IWeb, SPFI, spfi } from '@pnp/sp/presets/all'
+import { createSpfiInstance } from '../../data/createSpfiInstance'
 import { SPFxContext } from '../../types'
 import {
   addEntityItem,
   createNewEntityProperties,
+  ensureEntityItem,
   fetchEntity,
   getEntityFields,
   getEntityItem,
@@ -38,7 +41,9 @@ export class SpEntityPortalService {
     private _spfxContext: SPFxContext,
     private _params: ISpEntityPortalServiceParams
   ) {
-    this.sp = spfi(_params.portalUrl).using(SPFx(_spfxContext))
+    // Connected the way the library's other clients are (`createSpfiInstance`), so a factory the
+    // integration tests register reaches this client too.
+    this.sp = spfi(_params.portalUrl).using(AssignFrom(createSpfiInstance(_spfxContext).web))
     this.web = this.sp.web
     this._entityList = this.web.lists.getByTitle(_params.listName)
     this._entityContentType = _params.contentTypeId
@@ -71,7 +76,8 @@ export class SpEntityPortalService {
       identity,
       sourceUrl,
       onFieldsError,
-      origin: `${window.location.protocol}//${window.location.hostname}`,
+      // The page's origin, from the context rather than `window`, which Node does not have.
+      origin: new URL(this._spfxContext.pageContext.web.absoluteUrl).origin,
       portalUrl: this._params.portalUrl,
       listName: this._params.listName,
       identityFieldName: this._params.identityFieldName,
@@ -117,6 +123,38 @@ export class SpEntityPortalService {
       this._params.identityFieldName,
       identity,
       properties,
+      eTag
+    )
+  }
+
+  /**
+   * Update the entity item matching `identity`, or add it when there is none.
+   *
+   * @param identity Identity of the entity
+   * @param url Site URL of the entity, set only on a new entity
+   * @param properties Properties to update, or to add the entity with
+   * @param newEntityProperties Properties set only on a new entity
+   * @param alternateKeys Other fields that identify the entity, looked up before one is added
+   * @param eTag ETag for the `If-Match` header of an update
+   *
+   * @returns `true` when the entity was added, `false` when it was updated
+   */
+  public ensureEntityItem(
+    identity: string,
+    url: string,
+    properties: Record<string, any>,
+    newEntityProperties?: Record<string, any>,
+    alternateKeys?: Record<string, string>,
+    eTag = '*'
+  ): Promise<boolean> {
+    return ensureEntityItem(
+      this._list,
+      this._params,
+      identity,
+      url,
+      properties,
+      newEntityProperties,
+      alternateKeys,
       eTag
     )
   }

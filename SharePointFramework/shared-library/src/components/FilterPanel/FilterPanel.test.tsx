@@ -40,6 +40,19 @@ afterEach(async () => {
 })
 
 describe('FilterPanel', () => {
+  it("folds a filter with its section's button, which says whether the filter is open", () => {
+    renderPanel([filter(PHASE, ['Konsept', 'Gjennomføring'])])
+    // A button, so the keyboard reaches it and a screen reader hears its state (WCAG 2.1.1, 4.1.2).
+    const section = screen.getByRole('button', { name: 'Fase', expanded: true })
+    // The button names what it folds, and that is where the values are.
+    const content = document.getElementById(section.getAttribute('aria-controls'))
+    expect(content).toContainElement(checkbox('Konsept'))
+    expect(content).not.toHaveAttribute('hidden')
+    fireEvent.click(section)
+    expect(screen.getByRole('button', { name: 'Fase', expanded: false })).toBe(section)
+    expect(content).toHaveAttribute('hidden')
+  })
+
   it('says so when there is nothing to filter on', () => {
     renderPanel([filter(PHASE, ['Konsept'])])
     expect(screen.getByText(strings.FilterPanelEmptyTitle)).toBeInTheDocument()

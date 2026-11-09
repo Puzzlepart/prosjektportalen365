@@ -3,9 +3,8 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { ConsoleListener, LogLevel, Logger } from '@pnp/logging'
 import { SPFI } from '@pnp/sp/presets/all'
 import { IBaseComponentProps } from 'components/types'
-import { SiteContext, createSpfiInstance } from 'pp365-shared-library'
+import { SiteContext, createSpfiInstance, renderReact, unmountReact } from 'pp365-shared-library'
 import React, { ComponentClass, FC, createElement } from 'react'
-import { render, unmountComponentAtNode } from 'react-dom'
 import { ErrorBoundary } from 'react-error-boundary'
 import { DataAdapter, PortfolioInstance } from '../../data'
 import { ErrorBoundaryFallback } from './ErrorBoundary'
@@ -57,7 +56,7 @@ export abstract class BasePortfolioWebPart<
     const combinedProps = this.createPropsForComponent(props)
     const element = createElement(component, combinedProps)
 
-    render(
+    renderReact(
       <ErrorBoundary
         fallbackRender={(p) => {
           return <ErrorBoundaryFallback {...p} title={combinedProps['title']} />
@@ -130,7 +129,7 @@ export abstract class BasePortfolioWebPart<
    */
   protected onDispose(): void {
     if (this.domElement) {
-      unmountComponentAtNode(this.domElement)
+      unmountReact(this.domElement)
     }
   }
 }

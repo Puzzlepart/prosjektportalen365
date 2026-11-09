@@ -99,6 +99,27 @@ describe('useToolbarItems', () => {
     )
   })
 
+  it('opens the snapshot of the selected report in the snapshot dialog', () => {
+    const { farMenuItems, dispatch } = toolbar({
+      selectedReport: published,
+      data: { reports: [published], scopeKeysWithReports: [] }
+    })
+    byText(farMenuItems, strings.GetSnapshotButtonLabel).onClick(null)
+    expect(dispatch).toHaveBeenCalledWith(expect.objectContaining({ type: 'OPEN_SNAPSHOT' }))
+  })
+
+  it('opens the snapshot in a new tab instead when the web part has the dialog turned off', () => {
+    const open = jest.spyOn(window, 'open').mockReturnValue(null)
+    const { farMenuItems, dispatch } = toolbar(
+      { selectedReport: published, data: { reports: [published], scopeKeysWithReports: [] } },
+      { snapshotInDialog: false }
+    )
+    byText(farMenuItems, strings.GetSnapshotButtonLabel).onClick(null)
+    expect(open).toHaveBeenCalledWith('/snapshots/2.png', '_blank', 'noopener')
+    expect(dispatch).not.toHaveBeenCalledWith(expect.objectContaining({ type: 'OPEN_SNAPSHOT' }))
+    open.mockRestore()
+  })
+
   it('disables every report command without the admin permission', () => {
     const { menuItems, farMenuItems } = toolbar({
       selectedReport: draft,

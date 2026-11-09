@@ -33,6 +33,8 @@ test.describe('project timeline list', () => {
       openPage,
       resolvePage
     }, testInfo) => {
+      // A cold project page can take a minute before the timeline's list renders.
+      test.setTimeout(180_000)
       await page.setViewportSize(viewport)
       await openPage(
         await resolvePage(projectUrl!, [

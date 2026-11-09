@@ -21,6 +21,12 @@ export interface IListViewProps {
   items: any[]
 
   /**
+   * The number of items before the search and the filters, told with the number shown when a
+   * search or a filter changes. The items shown when not given.
+   */
+  total?: number
+
+  /**
    * Flag indicating if the view is for a document library.
    */
   isDocumentLibrary?: boolean

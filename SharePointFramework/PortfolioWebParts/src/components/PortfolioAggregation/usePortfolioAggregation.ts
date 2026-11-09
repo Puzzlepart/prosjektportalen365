@@ -32,7 +32,7 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
 
   useEffect(() => {
     if (props.dataSourceCategory) {
-      context.dispatch(SET_CURRENT_VIEW)
+      context.dispatch(SET_CURRENT_VIEW())
     }
   }, [props.dataSourceCategory, props.defaultViewId])
 

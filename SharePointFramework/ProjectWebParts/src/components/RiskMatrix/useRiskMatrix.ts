@@ -27,7 +27,11 @@ export function useRiskMatrix(props: IRiskMatrixProps) {
         (item) =>
           ({
             model: item,
-            style: { opacity: showPostAction ? 0 : 1 },
+            // Hidden, not only transparent, when not shown: see MatrixElement.module.scss.
+            style: {
+              opacity: showPostAction ? 0 : 1,
+              visibility: showPostAction ? 'hidden' : 'visible'
+            },
             title: item.tooltip
           }) as IMatrixElementProps
       )
@@ -39,7 +43,10 @@ export function useRiskMatrix(props: IRiskMatrixProps) {
         (item) =>
           ({
             model: item,
-            style: { opacity: showPostAction ? 1 : 0 },
+            style: {
+              opacity: showPostAction ? 1 : 0,
+              visibility: showPostAction ? 'visible' : 'hidden'
+            },
             title: item.tooltip
           }) as IMatrixElementProps
       )

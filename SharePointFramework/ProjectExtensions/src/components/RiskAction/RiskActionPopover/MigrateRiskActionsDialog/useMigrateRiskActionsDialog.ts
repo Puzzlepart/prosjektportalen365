@@ -1,3 +1,5 @@
+import { useAnnounce, useId } from '@fluentui/react-components'
+import { format } from 'pp365-shared-library'
 import strings from 'ProjectExtensionsStrings'
 import { useState } from 'react'
 import { useBoolean } from 'usehooks-ts'
@@ -12,6 +14,9 @@ export function useMigrateRiskActionsDialog() {
   const { itemContext, setItemContext } = useRiskActionContext()
   const dialogState = useBoolean(false)
   const [isMigrating, setIsMigrating] = useState(false)
+  const [migrateError, setMigrateError] = useState<string>()
+  const { announce } = useAnnounce()
+  const progressTextId = useId('migrate-progress-text')
   const [separator, setSeparator] = useState(
     strings.MigrateRiskActionsDialogSeparatorOptionLinebreak
   )
@@ -26,15 +31,23 @@ export function useMigrateRiskActionsDialog() {
     .filter(Boolean)
 
   /**
-   * Migrates the risk actions to Planner tasks.
+   * Migrates the risk actions to Planner tasks, and says how many were made (WCAG 4.1.3); a failure
+   * stays in the dialog, said in a message.
    */
   const onMigrate = async () => {
     setIsMigrating(true)
-    const newTasks = await dataAdapter.addTasks(tasks, itemContext)
-    const updatedItemContext = await dataAdapter.updateItem(newTasks, itemContext)
-    setItemContext(updatedItemContext)
-    dialogState.setFalse()
-    setIsMigrating(false)
+    setMigrateError(undefined)
+    try {
+      const newTasks = await dataAdapter.addTasks(tasks, itemContext)
+      const updatedItemContext = await dataAdapter.updateItem(newTasks, itemContext)
+      setItemContext(updatedItemContext)
+      dialogState.setFalse()
+      announce(format(strings.MigrateRiskActionsDone, newTasks.length), { polite: true })
+    } catch (error) {
+      setMigrateError(error?.message ?? '')
+    } finally {
+      setIsMigrating(false)
+    }
   }
 
   return {
@@ -44,6 +57,8 @@ export function useMigrateRiskActionsDialog() {
     open: dialogState.value,
     setOpen: dialogState.setValue,
     isMigrating,
+    migrateError,
+    progressTextId,
     separator,
     setSeparator
   }

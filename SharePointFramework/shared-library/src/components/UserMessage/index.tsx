@@ -12,14 +12,20 @@ import rehypeRaw from 'rehype-raw'
 import { IUserMessageProps } from './types'
 import { useUserMessage } from './useUserMessage'
 import styles from './UserMessage.module.scss'
-import { customLightTheme } from '../../util'
+import { customLightTheme, withDefaults } from '../../util'
+
+const USER_MESSAGE_DEFAULT_PROPS: Partial<IUserMessageProps> = {
+  linkTarget: '_blank',
+  style: {}
+}
 
 /**
  * A component that supports a MessageBar with markdown using react-markdown
  *
  * @category UserMessage
  */
-export const UserMessage: FC<IUserMessageProps> = (props: IUserMessageProps) => {
+export const UserMessage: FC<IUserMessageProps> = (incomingProps: IUserMessageProps) => {
+  const props = withDefaults(incomingProps, USER_MESSAGE_DEFAULT_PROPS)
   const fluentProviderId = useId('fp-user-message')
   const messageProps = useUserMessage(props)
 
@@ -46,11 +52,6 @@ export const UserMessage: FC<IUserMessageProps> = (props: IUserMessageProps) => 
       </FluentProvider>
     </IdPrefixProvider>
   )
-}
-
-UserMessage.defaultProps = {
-  linkTarget: '_blank',
-  style: {}
 }
 
 export * from './types'

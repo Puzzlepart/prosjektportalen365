@@ -6,12 +6,13 @@ import { useProjectInformationContext } from '../context'
 import { useId } from '@fluentui/react-components'
 
 /**
- * Status colors for archive scope statuses
+ * Status colors for archive scope statuses. Each icon stands out from its tag by at least 3:1
+ * (WCAG 1.4.11): the warning is Fluent's orange (4.6:1), where CSS orange had 1.8:1.
  */
 export const ARCHIVE_STATUS_COLORS = {
   [strings.ArchiveLogStatusSuccess]: '#107c10',
   [strings.ArchiveLogStatusError]: '#d13438',
-  [strings.ArchiveLogStatusWarning]: '#ffa500',
+  [strings.ArchiveLogStatusWarning]: '#bc4b09',
   [strings.ArchiveLogStatusInProgress]: '#0078d4'
 }
 

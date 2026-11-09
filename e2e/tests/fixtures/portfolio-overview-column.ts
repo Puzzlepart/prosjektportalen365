@@ -21,20 +21,6 @@ export async function findColumnsList(page: Page) {
   return list
 }
 
-/** The columns whose title starts with the prefix, as SharePoint has them. */
-export async function findTestColumns(page: Page) {
-  const list = await findColumnsList(page)
-  const items = await restGet(
-    page,
-    `${hub}/_api/web/lists(guid'${list.Id}')/items?$select=Id,Title,GtShowFieldPortfolio&$filter=startswith(Title,'${COLUMN_PREFIX}')`
-  )
-  return (
-    (await items.json()) as {
-      value: { Id: number; Title: string; GtShowFieldPortfolio: boolean }[]
-    }
-  ).value
-}
-
 /** Deletes every column whose title starts with the prefix, through the REST API. */
 export async function deleteTestColumns(page: Page) {
   const list = await findColumnsList(page)

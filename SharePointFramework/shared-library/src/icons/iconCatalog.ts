@@ -31,6 +31,8 @@ import {
   BranchForkRegular,
   CalendarClockFilled,
   CalendarClockRegular,
+  CopyFilled,
+  CopyRegular,
   CubeFilled,
   CubeRegular,
   BoxToolboxFilled,
@@ -93,6 +95,10 @@ import {
   FolderRegular,
   FormNewFilled,
   FormNewRegular,
+  FullScreenMaximizeFilled,
+  FullScreenMaximizeRegular,
+  FullScreenMinimizeFilled,
+  FullScreenMinimizeRegular,
   GlobeFilled,
   GlobeRegular,
   GridFilled,
@@ -137,6 +143,8 @@ import {
   NumberSymbolRegular,
   NumberSymbolSquareFilled,
   NumberSymbolSquareRegular,
+  OpenFilled,
+  OpenRegular,
   PeopleAudienceFilled,
   PeopleAudienceRegular,
   PeopleCommunityFilled,
@@ -628,5 +636,21 @@ export const iconCatalog = {
   TextBulletListTree: {
     regular: TextBulletListTreeRegular,
     filled: TextBulletListTreeFilled
+  },
+  Copy: {
+    regular: CopyRegular,
+    filled: CopyFilled
+  },
+  FullScreenMaximize: {
+    regular: FullScreenMaximizeRegular,
+    filled: FullScreenMaximizeFilled
+  },
+  FullScreenMinimize: {
+    regular: FullScreenMinimizeRegular,
+    filled: FullScreenMinimizeFilled
+  },
+  Open: {
+    regular: OpenRegular,
+    filled: OpenFilled
   }
 }

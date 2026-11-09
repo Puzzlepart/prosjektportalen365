@@ -54,7 +54,9 @@ export const ArchiveStatusPopover: FC<IArchiveStatusPopoverProps> = (props) => {
                             <ul className={styles.scopeList}>
                               {scopesByStatus[statusKey].map((scopeItem, index) => (
                                 <li key={`${statusKey}-${index}`}>
-                                  <Tag media={scopeItem.icon} style={{ color: scopeItem.color }}>
+                                  {/* The status is the group's heading; its colour is the
+                                      icon's alone, since the warning's orange text read 2:1. */}
+                                  <Tag media={scopeItem.icon}>
                                     {scopeItem.scope} ({scopeItem.count})
                                   </Tag>
                                 </li>

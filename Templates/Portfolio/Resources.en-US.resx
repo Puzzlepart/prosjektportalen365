@@ -1120,6 +1120,9 @@
   <data name="Lists_BenefitsAnalysis_Title" xml:space="preserve">
     <value>Benefit analysis and benefit management plan</value>
   </data>
+  <data name="Lists_BenefitsAnalysis_Url" xml:space="preserve">
+    <value>Lists/Benefit analysis and benefit management plan</value>
+  </data>
   <data name="Lists_BenefitsFollowup_Title" xml:space="preserve">
     <value>Benefits follow-up</value>
   </data>

@@ -1,5 +1,5 @@
 [[ template:contributors ]]
 
-Det er flere aktive bidragsytere internt i Puzzlepart - nå Crayon Consulting - som fortjener en takk. Det tilhører sjeldenhetene at eksterne kommer med bidrag, og vi tar gjerne imot flere aktive bidragsytere fra andre virksomheter.
+Prosjektportalen-teamet har mange flere aktive bidragsytere enn de som står over, og alle fortjener en takk. Bidrag fra andre virksomheter er sjeldne, men svært velkomne, både som issues og pull requests.
 
-I tillegg til de aktive bidragsyterne vil vi anerkjenne tidligere utviklere for hederlig innsats gjennom årene, de har bidratt til at løsningen har kommet dit den er i dag.
+Takk også til tidligere utviklere for innsatsen gjennom årene. De har bidratt til at løsningen er der den er i dag.

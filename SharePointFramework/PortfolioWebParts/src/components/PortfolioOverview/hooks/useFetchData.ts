@@ -95,12 +95,13 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
               context.props.configuration.hubSiteId
             )
 
-      const [{ items, managedProperties }, isUserInPortfolioManagerGroup] = await Promise.all([
+      const [viewData, isUserInPortfolioManagerGroup] = await Promise.all([
         fetchViewData,
         context.props.dataAdapter.isUserInGroup?.(
           resource.Security_SiteGroup_PortfolioInsight_Title
         ) ?? Promise.resolve(false)
       ])
+      const { items, managedProperties, failedPortfolios } = viewData
 
       // `globalSettings` is only populated in program/parent context, so this stays false elsewhere.
       const showChildProjectInfoInProgram =
@@ -132,7 +133,8 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
           groupBy,
           managedProperties,
           isUserInPortfolioManagerGroup,
-          showChildProjectInfoInProgram
+          showChildProjectInfoInProgram,
+          failedPortfolios
         })
       )
     } catch (error) {

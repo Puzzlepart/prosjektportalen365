@@ -1,0 +1,26 @@
+# Text is stored as LF and checked out as LF on every OS, whatever core.autocrlf says, so Windows,
+# macOS and CI lint, test and build from the same bytes. Prettier's `endOfLine: auto`
+# (SharePointFramework/.prettierrc.yaml) stays as a safety net for a CRLF file an editor writes.
+* text=auto eol=lf
+
+# Windows formats that need CRLF (none in the repo today)
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# The vendored, Authenticode-signed PowerShell module is never converted
+Install/PnP.PowerShell/** -text
+
+# Binary
+*.png binary
+*.gif binary
+*.jpg binary
+*.ico binary
+*.docx binary
+*.xlsx binary
+*.pptx binary
+*.dll binary
+*.pdb binary
+*.so binary
+*.sppkg binary
+*.pnp binary
+*.zip binary

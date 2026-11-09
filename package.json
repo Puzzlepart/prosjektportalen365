@@ -1,7 +1,7 @@
 {
   "name": "pp365",
-  "version": "1.14.0",
-  "description": "Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.",
+  "version": "1.15.0",
+  "description": "Prosjektportalen er et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.",
   "scripts": {
     "sync-version": "node ./.tasks/automatic-versioning.js",
     "generate-readme": "npx @appnest/readme generate && npx @appnest/readme generate --config .development-guide/blueprint.json",
@@ -10,6 +10,9 @@
     "generate-pnp-templates": "node ./.tasks/generate-pnp-templates.js",
     "generate-site-scripts": "node ./.tasks/generate-site-scripts.js --silent",
     "generate-sbom": "node ./.tasks/generate-sbom.js",
+    "check-skills": "node ./.tasks/check-skills.js",
+    "check-channel-ids": "node ./.tasks/check-channel-ids.js",
+    "test:tasks": "node --test \".tasks/*.test.js\"",
     "postversion": "npm run generate-readme && npm run sync-version && npm run generate-sbom",
     "rush:init": "npm run rush:update && npm run rush:build",
     "rush:update": "node common/scripts/install-run-rush.js update",
@@ -30,14 +33,14 @@
   "contributors": [
     {
       "name": "Tarjei Ormestøyl",
-      "email": "tarjei.ormestoyl@crayon.no"
+      "url": "https://github.com/tarjeieo"
     },
     {
       "name": "Remi Blom-Ohlsen",
-      "email": "remi.blom-ohlsen@crayon.no"
+      "url": "https://github.com/Remi749"
     }
   ],
-  "author": "tarjei.ormestoyl@crayon.no",
+  "author": "Prosjektportalen-teamet <kontakt@prosjektportalen.no>",
   "license": "MIT",
   "devDependencies": {
     "fs-extra": "11.1.0",

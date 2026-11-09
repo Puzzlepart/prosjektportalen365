@@ -13,8 +13,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const util = require('util');
-const glob = util.promisify(require('glob'));
 
 /**
  * Get file content as JSON
@@ -27,25 +25,18 @@ function getFileContent(filePath) {
 }
 
 /**
- * Get all package.json files in the monorepo
+ * Get the package.json of the root and of every project in rush.json, the dot folders under
+ * `SharePointFramework/` and `e2e` included (a glob over `SharePointFramework/*` missed them), so a
+ * new project is covered without a change here
  * @returns {Promise<string[]>} Array of package.json file paths
  */
 async function getAllPackageFiles() {
-    const rootPkg = path.resolve(__dirname, '..', 'package.json');
-    const spfxPkgs = await glob('SharePointFramework/*/package.json', { cwd: path.resolve(__dirname, '..') });
-    const templatePkg = path.resolve(__dirname, '..', 'Templates/package.json');
-    
-    const allPkgs = [
-        rootPkg,
-        ...spfxPkgs.map(p => path.resolve(__dirname, '..', p))
+    const root = path.resolve(__dirname, '..');
+    const rush = getFileContent(path.resolve(root, 'rush.json'));
+    return [
+        path.resolve(root, 'package.json'),
+        ...rush.projects.map((project) => path.resolve(root, project.projectFolder, 'package.json'))
     ];
-    
-    // Add Templates package if it exists
-    if (fs.existsSync(templatePkg)) {
-        allPkgs.push(templatePkg);
-    }
-    
-    return allPkgs;
 }
 
 /**
@@ -130,18 +121,18 @@ function generateSBOM(data, projectVersion) {
     
     let sbom = `# Software Bill of Materials (SBOM)
 
-**Project:** Prosjektportalen 365  
-**Version:** ${projectVersion}  
-**Generated:** ${timestamp}  
+**Project:** Prosjektportalen 365<br>
+**Version:** ${projectVersion}<br>
+**Generated:** ${timestamp}<br>
 **Format:** CycloneDX-inspired Markdown
 
 ## Overview
 
 This SBOM documents all software dependencies used in the Prosjektportalen 365 project, including all packages in the monorepo.
 
-**Total Dependencies:** ${allDeps.size}  
-**Production Dependencies:** ${Array.from(allDeps.values()).filter(d => d.type === 'production').length}  
-**Development Dependencies:** ${Array.from(allDeps.values()).filter(d => d.type === 'development').length}  
+**Total Dependencies:** ${allDeps.size}<br>
+**Production Dependencies:** ${Array.from(allDeps.values()).filter(d => d.type === 'production').length}<br>
+**Development Dependencies:** ${Array.from(allDeps.values()).filter(d => d.type === 'development').length}<br>
 **Projects in Monorepo:** ${projectDeps.length}
 
 ## Projects in Monorepo
@@ -165,7 +156,7 @@ This SBOM documents all software dependencies used in the Prosjektportalen 365 p
     
     // Sort dependencies alphabetically
     const sortedDeps = Array.from(allDeps.values()).sort((a, b) => 
-        a.name.localeCompare(b.name)
+        a.name.localeCompare(b.name, 'en')
     );
     
     // Group by type
@@ -220,7 +211,7 @@ This SBOM documents all software dependencies used in the Prosjektportalen 365 p
             sbom += `|---------|----------|\n`;
             
             Object.entries(proj.dependencies)
-                .sort(([a], [b]) => a.localeCompare(b))
+                .sort(([a], [b]) => a.localeCompare(b, 'en'))
                 .forEach(([name, version]) => {
                     sbom += `| ${name} | ${version} |\n`;
                 });
@@ -235,7 +226,7 @@ This SBOM documents all software dependencies used in the Prosjektportalen 365 p
             sbom += `|---------|----------|\n`;
             
             Object.entries(proj.devDependencies)
-                .sort(([a], [b]) => a.localeCompare(b))
+                .sort(([a], [b]) => a.localeCompare(b, 'en'))
                 .forEach(([name, version]) => {
                     sbom += `| ${name} | ${version} |\n`;
                 });

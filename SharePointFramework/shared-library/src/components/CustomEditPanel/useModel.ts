@@ -3,6 +3,7 @@ import { EditableSPField } from '../../models'
 import { IPersonaItem } from '../../types'
 import { DefaultCaching } from '../../data/cache'
 import { getTermLabel, ITermInfo } from '../../taxonomy'
+import { toCalendarDate } from '../../util/formatDate'
 import { ICustomEditPanelProps } from './types'
 
 /**
@@ -113,7 +114,9 @@ export function useModel(props: ICustomEditPanelProps) {
         () => {
           return [value, `${field.internalName}Id`]
         }
-      ]
+      ],
+      // The day picked, which SharePoint reads in the site's time zone (`toCalendarDate`).
+      ['DateTime', () => [toCalendarDate(value)]]
     ])
     if (valueMap.has(field.type)) {
       const [transformedValue, internalName] = await valueMap.get(field.type)()

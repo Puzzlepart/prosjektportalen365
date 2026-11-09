@@ -98,14 +98,6 @@ export interface ICustomAction {
   order?: number
 }
 
-/**
- * Column context menu configuration.
- */
-export interface IColumnContextMenu {
-  column: any
-  target: HTMLElement
-}
-
 export interface IFileItem extends Record<string, any> {
   Id: number
   FileRef: string
@@ -317,7 +309,15 @@ export interface IDynamicListProps extends IBaseWebPartComponentProps {
   customActions?: ICustomAction[]
 }
 
-export interface IDynamicListState extends IBaseWebPartComponentState<IDynamicListData> {
+export interface IDynamicListState extends Omit<
+  IBaseWebPartComponentState<IDynamicListData>,
+  'error'
+> {
+  /**
+   * Message of a failed fetch, shown in place of the list
+   */
+  error?: string
+
   /**
    * Loading state
    */
@@ -402,11 +402,6 @@ export interface IDynamicListState extends IBaseWebPartComponentState<IDynamicLi
    * Document library view mode (flat or folders)
    */
   documentLibraryViewMode?: DocumentLibraryViewMode
-
-  /**
-   * Column context menu state
-   */
-  columnContextMenu?: IColumnContextMenu
 
   /**
    * Whether Excel export is in progress

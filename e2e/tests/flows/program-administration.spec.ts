@@ -3,9 +3,14 @@ import { configuredUrl, expect, test } from '../fixtures/pp365'
 import {
   addProject,
   firstRowTitle,
+  groupButtons,
   openAdministration,
+  projectRowTexts,
   removeButton,
-  rowOf
+  rowCheckOf,
+  rowChecks,
+  rowOf,
+  searchBox
 } from '../fixtures/program-administration'
 
 /**
@@ -23,6 +28,8 @@ const hubUrl = baseURL.replace(/\/+$/, '').toLowerCase()
 const pointsAtHub = !!programUrl && programUrl.toLowerCase() === hubUrl
 
 test.describe('program administration', () => {
+  // The administration and its list each wait up to a minute on a cold program site.
+  test.describe.configure({ timeout: 180_000 })
   test.skip(
     !programUrl,
     'E2E_PROGRAM_URL is not set (or is the .env.example placeholder); skipping'
@@ -38,16 +45,15 @@ test.describe('program administration', () => {
     resolvePage
   }) => {
     const admin = await openAdministration(page, programUrl!, openPage, resolvePage)
-    const checkboxes = admin.getByRole('grid').first().getByRole('checkbox')
+    const checkboxes = rowChecks(admin.getByRole('grid').first())
     test.skip(
       (await checkboxes.count()) === 0,
       'the test user may not manage the program, so there is no selection'
     )
     await expect(removeButton(admin)).toBeDisabled()
-    // The first checkbox selects all; the second is the first row.
-    await checkboxes.nth(1).click()
+    await checkboxes.first().click()
     await expect(removeButton(admin)).toBeEnabled()
-    await checkboxes.nth(1).click()
+    await checkboxes.first().click()
     await expect(
       removeButton(admin),
       'nothing is selected, so nothing can be removed'
@@ -60,27 +66,72 @@ test.describe('program administration', () => {
     resolvePage
   }) => {
     const admin = await openAdministration(page, programUrl!, openPage, resolvePage)
-    const groupHeaders = admin.locator('[class*="groupHeader"]')
-    test.skip((await groupHeaders.count()) < 2, 'the program spans one hub, so there are no groups')
-    const first = groupHeaders.first()
-    // The group is the header's parent; its grid unmounts on collapse, and "the first grid in the
-    // web part" would then be the next group's.
-    const firstGroup = first.locator('..')
-    const grid = firstGroup.getByRole('grid')
+    const grid = admin.getByRole('grid').first()
+    const groups = groupButtons(grid)
+    test.skip((await groups.count()) < 2, 'the program spans one hub, so there are no groups')
     test.skip(
-      (await grid.getByRole('checkbox').count()) === 0,
+      (await rowChecks(grid).count()) === 0,
       'the test user may not manage the program, so there is no selection'
     )
-    await grid.getByRole('checkbox').nth(1).click()
+    // The page opens every group, so the first project row is the first group's.
+    const title = await firstRowTitle(grid)
+    await rowCheckOf(admin, title).click()
     await expect(removeButton(admin)).toBeEnabled()
-    await first.click()
-    await expect(grid).toBeHidden()
-    await first.click()
+    await groups.first().click()
+    await expect(rowOf(admin, title)).toBeHidden()
+    await groups.first().click()
     await expect(
-      firstGroup.getByRole('grid').getByRole('checkbox').nth(1),
+      rowCheckOf(admin, title),
       'the selection should survive the collapse'
     ).toBeChecked()
     await expect(removeButton(admin)).toBeEnabled()
+  })
+
+  test('shows the phase and creation date, and a group per hub with its name and count', async ({
+    page,
+    openPage,
+    resolvePage
+  }) => {
+    const admin = await openAdministration(page, programUrl!, openPage, resolvePage)
+    const grid = admin.getByRole('grid').first()
+    for (const name of [/^(tittel|title)$/i, /^(fase|phase)$/i, /^(opprettet|created)$/i]) {
+      await expect(grid.getByRole('columnheader', { name })).toBeVisible()
+    }
+    const groups = groupButtons(grid)
+    test.skip((await groups.count()) < 2, 'the program spans one hub, so there are no groups')
+    for (const group of await groups.all()) {
+      await expect(group, 'a hub group names the hub and counts its projects').toHaveText(
+        /\S.*\(\d+\)$/
+      )
+    }
+  })
+
+  test('a search opens a group closed by hand', async ({ page, openPage, resolvePage }) => {
+    const admin = await openAdministration(page, programUrl!, openPage, resolvePage)
+    const grid = admin.getByRole('grid').first()
+    const groups = groupButtons(grid)
+    test.skip((await groups.count()) < 2, 'the program spans one hub, so there are no groups')
+    // The page opens every group, so the first project row is the first group's.
+    const title = await firstRowTitle(grid)
+    await groups.first().click()
+    await expect(rowOf(admin, title)).toBeHidden()
+    await searchBox(admin).fill(title)
+    await expect(rowOf(admin, title), 'the search opens the closed group').toBeVisible()
+    await searchBox(admin).fill('')
+  })
+
+  test('a right click on a column header neither sorts nor opens a menu', async ({
+    page,
+    openPage,
+    resolvePage
+  }) => {
+    const admin = await openAdministration(page, programUrl!, openPage, resolvePage)
+    const grid = admin.getByRole('grid').first()
+    const before = await projectRowTexts(grid)
+    await grid.getByRole('columnheader', { name: /^(tittel|title)$/i }).click({ button: 'right' })
+    await page.waitForTimeout(500)
+    await expect(page.getByRole('menu')).toHaveCount(0)
+    expect(await projectRowTexts(grid), 'the rows keep their order').toEqual(before)
   })
 
   test('a removed project can be added back, and does not linger in the selection', async ({
@@ -92,11 +143,11 @@ test.describe('program administration', () => {
     const admin = await openAdministration(page, programUrl!, openPage, resolvePage)
     const grid = admin.getByRole('grid').first()
     test.skip(
-      (await grid.getByRole('checkbox').count()) === 0,
+      (await rowChecks(grid).count()) === 0,
       'the test user may not manage the program, so there is no selection'
     )
     test.skip(
-      (await grid.getByRole('row').count()) < 3,
+      (await rowChecks(grid).count()) < 2,
       'the program needs at least two child projects for this flow'
     )
     const title = await firstRowTitle(grid)
@@ -104,7 +155,7 @@ test.describe('program administration', () => {
 
     let removed = false
     try {
-      await grid.getByRole('row').nth(1).getByRole('checkbox').click()
+      await rowCheckOf(admin, title).click()
       await expect(removeButton(admin)).toBeEnabled()
       await removeButton(admin).click()
       removed = true
@@ -115,9 +166,9 @@ test.describe('program administration', () => {
 
       // The removed project must not linger in the selection: after removal, nothing is selected.
       await expect(removeButton(admin), 'nothing is selected after a removal').toBeDisabled()
-      const remaining = admin.getByRole('grid').first().getByRole('checkbox')
-      await remaining.nth(1).click()
-      await remaining.nth(1).click()
+      const remaining = rowChecks(admin.getByRole('grid').first())
+      await remaining.first().click()
+      await remaining.first().click()
       await expect(
         removeButton(admin),
         'selecting and unselecting another row leaves nothing selected'

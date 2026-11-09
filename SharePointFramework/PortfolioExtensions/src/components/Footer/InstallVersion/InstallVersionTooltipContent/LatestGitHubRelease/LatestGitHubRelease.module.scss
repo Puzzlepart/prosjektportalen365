@@ -93,12 +93,14 @@
         }
       }
 
+      // Underlined, for a link in the text must stand out by more than its colour (WCAG 1.4.1,
+      // axe's link-in-text-block in the browser test, 2026-10-19).
       a {
         color: var(--colorBrandForeground1);
-        text-decoration: none;
+        text-decoration: underline;
 
         &:hover {
-          text-decoration: underline;
+          text-decoration-thickness: 2px;
         }
       }
     }

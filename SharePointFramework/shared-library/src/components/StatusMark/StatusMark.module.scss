@@ -1,0 +1,7 @@
+// Beside the status icon, at its foot.
+.statusMark {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-self: flex-end;
+  line-height: 0;
+}

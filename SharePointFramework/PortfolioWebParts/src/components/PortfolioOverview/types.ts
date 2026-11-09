@@ -231,6 +231,11 @@ export interface IPortfolioOverviewState extends Pick<
   activeFilters?: { [key: string]: string[] }
 
   /**
+   * The titles of the hubs the merged view could not read, told above the list.
+   */
+  mergedViewFailures?: string[]
+
+  /**
    * Error if any
    */
   error?: PortfolioOverviewErrorMessage

@@ -1,4 +1,5 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import userEvent from '@testing-library/user-event'
 import * as React from 'react'
 import * as strings from 'ProjectExtensionsStrings'
@@ -89,6 +90,25 @@ describe('SelectScreen', () => {
       'Mal A.docx',
       'Mal B.docx'
     ])
+  })
+
+  it('names its folder trail, and moves the focus to a folder opened and back to its link (WCAG 2.4.3, 2.4.6)', async () => {
+    const user = setupUser()
+    renderScreen([
+      template('Rapporter', { isFolder: true, serverRelativeUrl: '/sites/x/Maler/Rapporter' }),
+      template('Årsrapport.docx', { level: 2, parentFolderUrl: '/sites/x/Maler/Rapporter' })
+    ])
+    const trail = () => screen.getByRole('navigation', { name: strings.FolderNavigationLabel })
+    await user.click(screen.getByRole('button', { name: 'Rapporter' }))
+    await screen.findByText('Årsrapport.docx')
+    expect(within(trail()).getByRole('button', { name: 'Rapporter' })).toHaveFocus()
+    await user.click(within(trail()).getByRole('button', { name: 'Maler' }))
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Rapporter' })).toHaveFocus())
+  })
+
+  it('breaks no rule axe can check', async () => {
+    renderScreen([template('Rapporter', { isFolder: true }), template('Mal A.docx')])
+    expect(await axeComponent(document.body)).toHaveNoViolations()
   })
 
   it('opens a folder and lists the templates in it', async () => {

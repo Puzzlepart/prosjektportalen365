@@ -1,10 +1,12 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
-// Babel, so mocks are not hoisted. The data fetch dispatches what `fetched.action()` returns; the
-// data adapter and the panels and dialogs (all reach SharePoint) are stand-ins.
-const fetched: { action: () => any } = { action: () => null }
+// Babel, so mocks are not hoisted. The data fetch dispatches what `fetched.action()` returns, and
+// keeps the dispatch for a test that acts once the data is in, as a save does; the data adapter
+// and the panels and dialogs (all reach SharePoint) are stand-ins.
+const fetched: { action: () => any; dispatch?: (action: any) => void } = { action: () => null }
 jest.mock('./data', () => ({
   useProjectInformationDataFetch: (context: any) => {
     const { useEffect } = jest.requireActual('react')
+    fetched.dispatch = context.dispatch
     useEffect(() => {
       const action = fetched.action()
       if (action) context.dispatch(action)
@@ -20,15 +22,41 @@ jest.mock('./EditPropertiesPanel', () => ({ EditPropertiesPanel: () => null }))
 jest.mock('./CreateParentDialog', () => ({ CreateParentDialog: () => null }))
 jest.mock('./RunProjectSetupDialog', () => ({ RunProjectSetupDialog: () => null }))
 jest.mock('./ProgressDialog', () => ({ ProgressDialog: () => null }))
-jest.mock('./ProjectStatusReport', () => ({ ProjectStatusReport: () => null }))
+jest.mock('./ProjectStatusReport', () => ({
+  ProjectStatusReport: () => {
+    const React = jest.requireActual('react')
+    const { useProjectInformationContext } = jest.requireActual('./context')
+    const context = useProjectInformationContext()
+    return React.createElement(
+      'span',
+      { 'data-testid': 'status-report-props' },
+      `iconsOnly:${context.props.statusReportShowOnlyIcons}`
+    )
+  }
+}))
+jest.mock('./SustainabilityGoals', () => ({
+  SustainabilityGoals: () => {
+    const React = jest.requireActual('react')
+    const { useProjectInformationContext } = jest.requireActual('./context')
+    const context = useProjectInformationContext()
+    return React.createElement(
+      'span',
+      { 'data-testid': 'sustainability-props' },
+      `${context.props.showSustainabilityGoalsAsIcons}:${context.props.sustainabilityGoalIconSize}`
+    )
+  }
+}))
 
-import { render, screen } from '@testing-library/react'
+import { AriaLiveAnnouncer } from '@fluentui/react-components'
+import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
+import { announced } from 'pp365-jest-config/lib/announce'
 import strings from 'ProjectWebPartsStrings'
 import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import { ProjectInformation } from './ProjectInformation'
-import { FETCH_DATA_ERROR, INIT_DATA } from './reducer'
+import { FETCH_DATA_ERROR, INIT_DATA, SET_HUB_SYNC_WARNING } from './reducer'
 
 /**
  * The project information web part as a whole: the loading state, the title, the properties (or
@@ -68,9 +96,8 @@ function initData(overrides: Record<string, any> = {}, state: Record<string, any
   })
 }
 
-function renderInformation(action: () => any, props: Record<string, any> = {}) {
-  fetched.action = action
-  render(
+function information(props: Record<string, any> = {}) {
+  return (
     <ProjectInformation
       title='Prosjektinformasjon'
       page='Frontpage'
@@ -83,12 +110,20 @@ function renderInformation(action: () => any, props: Record<string, any> = {}) {
   )
 }
 
+function renderInformation(action: () => any, props: Record<string, any> = {}) {
+  fetched.action = action
+  return render(information(props))
+}
+
 const project = (title: string) => ({ title, url: `/sites/${title.toLowerCase()}` })
 
 describe('ProjectInformation', () => {
-  it('shows nothing but a skeleton until the data is there', () => {
+  it('shows nothing but a skeleton until the data is there, named for a screen reader', () => {
     renderInformation(() => null)
     expect(screen.queryByText('Prosjektinformasjon', { selector: 'span' })).toBeNull()
+    expect(
+      screen.getByRole('progressbar', { name: format(strings.LoadingText, 'Prosjektinformasjon') })
+    ).toBeInTheDocument()
   })
 
   it('shows the title, the properties message and the actions the permission allows', async () => {
@@ -110,6 +145,30 @@ describe('ProjectInformation', () => {
     expect(screen.queryByRole('button', { name: strings.RunProjectSetupLabel })).toBeNull()
   })
 
+  it('leaves its title to a host that shows it, and still names its actions after it', async () => {
+    renderInformation(() => initData(), { hideTitle: true })
+    expect(await screen.findByText(strings.NoPropertiesTitle)).toBeInTheDocument()
+    expect(screen.queryByText('Prosjektinformasjon', { selector: 'span' })).toBeNull()
+    expect(
+      screen.getByRole('button', {
+        name: format(strings.ShowAllProjectInformationText, 'prosjektinformasjon')
+      })
+    ).toBeInTheDocument()
+  })
+
+  it('updates sustainability properties in its context when web part properties change', async () => {
+    const view = renderInformation(() => initData(), {
+      showSustainabilityGoalsAsIcons: true,
+      sustainabilityGoalIconSize: 32
+    })
+    expect(await screen.findByTestId('sustainability-props')).toHaveTextContent('true:32')
+
+    view.rerender(
+      information({ showSustainabilityGoalsAsIcons: false, sustainabilityGoalIconSize: 64 })
+    )
+    expect(screen.getByTestId('sustainability-props')).toHaveTextContent('false:64')
+  })
+
   it('hides the editing actions from a user without the edit permission', async () => {
     renderInformation(() => initData({}, { userHasEditPermission: false }))
     await screen.findByText('Prosjektinformasjon', { selector: 'span' })
@@ -118,7 +177,7 @@ describe('ProjectInformation', () => {
         name: format(strings.EditProjectInformationText, 'prosjektinformasjon')
       })
     ).toBeNull()
-    expect(screen.queryByRole('button', { name: strings.ViewVersionHistoryText })).toBeNull()
+    expect(screen.queryByRole('link', { name: strings.ViewVersionHistoryText })).toBeNull()
   })
 
   it('lists the parent projects and the child projects, the latter folded past the row limit', async () => {
@@ -136,14 +195,38 @@ describe('ProjectInformation', () => {
     expect(
       await screen.findByText(strings.ParentProjectsHeaderText, { selector: 'span' })
     ).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Program Nord' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Program Nord' })).toBeInTheDocument()
     expect(
       screen.getByText(strings.ChildProjectsHeaderText, { selector: 'span' })
     ).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Foxtrot' })).toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: 'Golf' })).toBeNull()
+    expect(screen.getByRole('link', { name: 'Foxtrot' })).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'Golf' })).toBeNull()
     await user.click(screen.getByRole('button', { name: strings.ShowMoreChildProjectsText }))
-    expect(screen.getByRole('button', { name: 'Golf' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Golf' })).toBeInTheDocument()
+  })
+
+  it('links the parent and child projects in lists under section headings (WCAG 1.3.1, 4.1.2)', async () => {
+    const { container } = renderInformation(() =>
+      initData({ parentProjects: [project('Program Nord')], childProjects: [project('Alfa')] })
+    )
+    const parents = await screen.findByRole('heading', {
+      level: 3,
+      name: strings.ParentProjectsHeaderText
+    })
+    expect(parents).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { level: 3, name: strings.ChildProjectsHeaderText })
+    ).toBeInTheDocument()
+    const [parentList, childList] = screen.getAllByRole('list')
+    expect(within(parentList).getByRole('link', { name: 'Program Nord' })).toHaveAttribute(
+      'href',
+      '/sites/program nord'
+    )
+    expect(within(childList).getByRole('link', { name: 'Alfa' })).toHaveAttribute(
+      'href',
+      '/sites/alfa'
+    )
+    expect(await axeComponent(container)).toHaveNoViolations()
   })
 
   it('shows the error when the data cannot be fetched', async () => {
@@ -152,10 +235,35 @@ describe('ProjectInformation', () => {
     expect(screen.getByText('Kilden svarte ikke')).toBeInTheDocument()
   })
 
+  it('shows the status report as icons by default, as before, their marks telling the status by shape (WCAG 1.4.1)', async () => {
+    renderInformation(() => initData())
+    expect(await screen.findByTestId('status-report-props')).toHaveTextContent('iconsOnly:true')
+  })
+
   it('tells when the hub is out of reach', async () => {
     renderInformation(() => initData({}, { hubIsAvailable: false }))
     expect(
       await screen.findByText(strings.ProjectInformationNoHubAccessMessage)
     ).toBeInTheDocument()
+  })
+
+  it('tells when saved changes did not reach the hub, in words at its end and to a screen reader (WCAG 4.1.3)', async () => {
+    const warning = format(
+      strings.ProjectPropertiesNotSyncedToHubText,
+      format(strings.HubSyncNoWriteAccessReason, 'Prosjekter')
+    )
+    fetched.action = () => initData()
+    render(<AriaLiveAnnouncer>{information()}</AriaLiveAnnouncer>)
+    await screen.findByText('Prosjektinformasjon', { selector: 'span' })
+    // As the sync does when the hub does not take the saved changes.
+    act(() => {
+      fetched.dispatch?.(SET_HUB_SYNC_WARNING(warning))
+    })
+    const message = (await screen.findByText(strings.HubSyncWarningTitle)).closest(
+      '.fui-MessageBar'
+    )
+    expect(message).toHaveTextContent(warning)
+    await waitFor(() => expect(announced()).toContain(warning))
+    expect(await axeComponent(message as HTMLElement)).toHaveNoViolations()
   })
 })

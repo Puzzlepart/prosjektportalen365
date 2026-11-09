@@ -1120,6 +1120,9 @@
   <data name="Lists_BenefitsAnalysis_Title" xml:space="preserve">
     <value>Nytteanalyse og plan for nyttestyring</value>
   </data>
+  <data name="Lists_BenefitsAnalysis_Url" xml:space="preserve">
+    <value>Lists/Nytteanalyse og plan for nyttestyring</value>
+  </data>
   <data name="Lists_BenefitsFollowup_Title" xml:space="preserve">
     <value>Nytteoppfølging</value>
   </data>

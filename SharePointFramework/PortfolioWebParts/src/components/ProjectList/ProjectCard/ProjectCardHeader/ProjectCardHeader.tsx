@@ -43,10 +43,15 @@ export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
         )}
         {context.showProjectLogo && (
           <div className={styles.logo}>
+            {/* Named by the project: its logo is empty while it loads (axe's `link-name`). Beside
+                the title's link to the same page it is left to the pointer. */}
             <Link
               href={context.project?.url || '#'}
               target='_blank'
               className={styles.link}
+              aria-label={context.project?.title || strings.ProjectNotFound}
+              aria-hidden={showCustomImage || undefined}
+              tabIndex={showCustomImage ? -1 : undefined}
               style={{
                 background: `linear-gradient(to right,
                 ${colors && colors[0]},

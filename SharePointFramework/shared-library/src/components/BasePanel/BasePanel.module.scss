@@ -8,6 +8,12 @@
   gap: 16px;
   overflow-y: auto;
   overflow-x: hidden;
+
+  // Focusable when `isBodyFocusable` is set.
+  &:focus-visible {
+    outline: 2px solid var(--colorStrokeFocus2);
+    outline-offset: -2px;
+  }
 }
 
 .footer {

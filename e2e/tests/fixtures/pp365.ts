@@ -1,4 +1,6 @@
-import { expect, test as base, Page } from '@playwright/test'
+import { APIResponse, expect, test as base, Page } from '@playwright/test'
+import * as fs from 'fs'
+import * as path from 'path'
 
 /**
  * Browser-side failures that mean the deployed bundles are broken, not the page content.
@@ -67,6 +69,114 @@ export async function withNetworkRetry<T>(send: () => Promise<T>): Promise<T> {
   }
 }
 
+/**
+ * SharePoint's React fault on list pages (SPFx 1.24.0-rc.0, SharePoint/sp-dev-docs#11068): with a
+ * cold browser cache, as each test's fresh context has, SharePoint often runs its list view host
+ * (`listview-host-assembly`) twice, and each run registers SPFx's React module. When
+ * `react-dom-18-bundle` registers between the two, it and our extensions hold different React
+ * instances, so their first hook throws this and nothing of theirs renders: 7 of 10 cold loads of
+ * a document library on 2026-10-21, 1 of 8 with a warm cache. Check again on SPFx 1.24 GA.
+ */
+const LIST_PAGE_REACT_FAULT = /Cannot read properties of null \(reading 'useContext'\)/
+
+/**
+ * Opens a list page, a library or list view (no web part page, so not `openPage`), and runs `step`
+ * there. When the step fails after SharePoint's React fault on list pages struck, the page is
+ * loaded once more and the step run again: a reload has a warm cache, where the fault is rare,
+ * while the CI retry starts a fresh context with a cold one (both attempts of a dialog test failed
+ * so in run 40353867255). A failure without the fault, and a second one, fail the test as they
+ * are; a reload is noted on the test.
+ *
+ * @param page The test's page
+ * @param url The list page
+ * @param step What should work there, such as opening a dialog or finding a cell's text
+ */
+export async function onListPage<T>(page: Page, url: string, step: () => Promise<T>): Promise<T> {
+  let struck = false
+  const onPageError = (error: Error) => {
+    if (LIST_PAGE_REACT_FAULT.test(error.message)) struck = true
+  }
+  page.on('pageerror', onPageError)
+  try {
+    // A list view is heavy, and the runner has timed out on 30 s; a connection SharePoint never
+    // answered (net::ERR_TIMED_OUT, run 38522211703) is tried once more, as `openPage` does.
+    await withNetworkRetry(() => page.goto(url, { timeout: 90_000 }))
+    try {
+      return await step()
+    } catch (error) {
+      if (!struck) throw error
+      base.info().annotations.push({
+        type: 'list page reloaded',
+        description:
+          "SharePoint's React fault on list pages (sp-dev-docs#11068) struck the first load"
+      })
+      await withNetworkRetry(() => page.reload({ timeout: 90_000 }))
+      return await step()
+    }
+  } finally {
+    page.off('pageerror', onPageError)
+  }
+}
+
+/** SharePoint's own steps of a sign-in, on the site's host: the tab is not back on the site there. */
+export const SIGN_IN_PATH = /\/_forms\/|\/_layouts\/15\/Authenticate\.aspx/i
+
+/**
+ * Loads a page of the site in a tab of its own, which the test's page is left out of. SharePoint
+ * refuses REST calls with 401 or 403 once its session cookie has expired or been revoked, while a
+ * page still loads: the page signs in again on its own and renews the cookie, which a REST call
+ * cannot do. A CI run lost its session four minutes in and failed every test after (2026-10-20).
+ *
+ * Since 2026-10-27 the session lasts about ten minutes, and SharePoint no longer takes its root
+ * cookie (`rtFa`) either, so the tab goes through Entra ID's sign-in. That sign-in goes on with
+ * scripts and redirects after its first page has loaded: closing the tab as `goto` returned cut it
+ * off, the cookie was never renewed, and every REST call after was refused (run 40533981903, 26
+ * tests). The tab waits until it is back on the site, where the new cookie has been set.
+ *
+ * @param page The test's page, whose browser context the tab shares
+ * @param url A URL on the site, such as a REST call's
+ */
+async function renewSession(page: Page, url: string) {
+  const site = url.split('/_api/')[0]
+  const origin = new URL(site).origin
+  const tab = await page.context().newPage()
+  try {
+    await withNetworkRetry(() => tab.goto(site, { waitUntil: 'domcontentloaded', timeout: 60_000 }))
+    try {
+      await tab.waitForURL(
+        (current) => current.origin === origin && !SIGN_IN_PATH.test(current.pathname),
+        { waitUntil: 'domcontentloaded', timeout: 60_000 }
+      )
+    } catch {
+      const stopped = new URL(tab.url())
+      throw new Error(
+        `SharePoint's session could not be renewed: the sign-in stopped at ${stopped.origin}${stopped.pathname}`
+      )
+    }
+  } finally {
+    await tab.close()
+  }
+}
+
+/**
+ * Sends a REST call, and once more after renewing the session when SharePoint refuses it as
+ * signed out (401 or 403). A call the user truly may not make is refused again.
+ *
+ * @param page The test's page
+ * @param url The call's URL
+ * @param send Sends the call
+ */
+export async function withSessionRenewal(
+  page: Page,
+  url: string,
+  send: () => Promise<APIResponse>
+): Promise<APIResponse> {
+  const response = await send()
+  if (response.status() !== 401 && response.status() !== 403) return response
+  await renewSession(page, url)
+  return send()
+}
+
 // A site's pages do not change during a run, and every test resolves its page before it starts:
 // one listing per site per worker, instead of one per test.
 const sitePagesCache = new Map<string, string[]>()
@@ -77,10 +187,13 @@ export async function listSitePages(page: Page, siteUrl: string): Promise<string
   const cached = sitePagesCache.get(site)
   if (cached) return cached
   const sitePath = new URL(site).pathname
-  const response = await withNetworkRetry(() =>
-    page.request.get(
-      `${site}/_api/web/GetFolderByServerRelativePath(decodedurl='${encodeURIComponent(sitePath + '/SitePages')}')/Files?$select=Name&$top=500`,
-      { headers: { Accept: 'application/json;odata=nometadata' }, timeout: REQUEST_TIMEOUT }
+  const url = `${site}/_api/web/GetFolderByServerRelativePath(decodedurl='${encodeURIComponent(sitePath + '/SitePages')}')/Files?$select=Name&$top=500`
+  const response = await withSessionRenewal(page, url, () =>
+    withNetworkRetry(() =>
+      page.request.get(url, {
+        headers: { Accept: 'application/json;odata=nometadata' },
+        timeout: REQUEST_TIMEOUT
+      })
     )
   )
   if (!response.ok()) {
@@ -110,9 +223,10 @@ export const test = base.extend<Pp365Fixtures>({
       errors.push(`pageerror: ${error.message} ${error.stack ?? ''}`.trim())
     )
     await use({ errors })
-    // Every browser error is attached to the report as evidence (the deployed build throws an
-    // unhandled rejection with an undefined reason on app pages, for example); only the patterns
-    // that mean a broken bundle fail the test.
+    // Every browser error is attached to the report as evidence; only the patterns that mean a
+    // broken bundle fail the test. The "pageerror: undefined" on most pages is SharePoint's own:
+    // a promise its page assembly (sp-pages-assembly) rejects with no reason as the page loads,
+    // traced with the debugger on 2026-10-19, as are its list bundle's rejections on project pages.
     if (errors.length > 0) {
       await base
         .info()
@@ -135,6 +249,7 @@ export const test = base.extend<Pp365Fixtures>({
         throw new Error(`Page not found: ${response.url()}`)
       }
       await expectCanvasRendered(page)
+      await expectReleaseChannel(page)
       // Every PP365 web part renders the same error boundary when its bundle or data fails; one
       // of these headings on a smoke page is a failure regardless of what else mounted.
       await expect(
@@ -165,6 +280,88 @@ export { expect }
 
 /** Selector for a mounted SPFx web part. Present on canvas pages and on single web part app pages alike. */
 export const WEB_PART = '[data-sp-web-part-id]'
+
+/** The release channel under test: the test channel, which CI deploys before the suite runs. */
+const CHANNEL = process.env.E2E_CHANNEL || 'test'
+
+/**
+ * Every PP365 component id of every release channel (`channels/<name>.json`), with its channel and
+ * its name: what tells a page's web part of the channel under test from another channel's.
+ */
+const CHANNEL_COMPONENTS: Map<string, { channel: string; name: string }> = (() => {
+  const components = new Map<string, { channel: string; name: string }>()
+  const dir = path.resolve(__dirname, '..', '..', '..', 'channels')
+  for (const file of fs.readdirSync(dir).filter((name) => /^[a-z0-9]+\.json$/.test(name))) {
+    const channel = file.replace(/\.json$/, '')
+    const walk = (node: unknown, key: string) => {
+      if (typeof node === 'string' && /^[0-9a-f-]{36}$/i.test(node)) {
+        components.set(node.toLowerCase(), { channel, name: key })
+      } else if (node && typeof node === 'object') {
+        for (const [childKey, child] of Object.entries(node)) walk(child, childKey)
+      }
+    }
+    walk(JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8')), '')
+  }
+  return components
+})()
+
+/**
+ * The web parts on the page that are PP365 components of the channel under test, each with the
+ * alias `channels/<channel>.json` gives it ("ProjectInformationWebPart") and a CSS selector for
+ * its containers, in page order. A web part used twice on a page is listed once; its selector
+ * matches both.
+ */
+export async function channelWebPartsOnPage(
+  page: Page
+): Promise<Array<{ alias: string; selector: string }>> {
+  const ids = await page
+    .locator(WEB_PART)
+    .evaluateAll((elements) =>
+      elements.map((e) => (e.getAttribute('data-sp-web-part-id') ?? '').toLowerCase())
+    )
+  const parts = new Map<string, { alias: string; selector: string }>()
+  for (const id of ids) {
+    const component = CHANNEL_COMPONENTS.get(id)
+    if (!component || component.channel !== CHANNEL || parts.has(id)) continue
+    parts.set(id, { alias: component.name, selector: `[data-sp-web-part-id="${id}" i]` })
+  }
+  return [...parts.values()]
+}
+
+/**
+ * Fails when a web part on the page is a PP365 component of another release channel than the one
+ * under test. Such a page runs that channel's code (the main channel's is the last release), so a
+ * pass or a failure there says nothing about this build: on 2026-10-09 three of the hub's
+ * aggregated overviews, the dynamic list and the project's timeline turned out to run the main
+ * channel's. Out-of-the-box web parts are left alone.
+ */
+export async function expectReleaseChannel(page: Page): Promise<void> {
+  const webParts = await page.locator(WEB_PART).evaluateAll((elements) =>
+    elements.map((e) => ({
+      id: (e.getAttribute('data-sp-web-part-id') ?? '').toLowerCase(),
+      // "RiskMatrixWebPart web part (Risikomatrise)" on canvas pages; app pages have no tag.
+      alias: /^(\w+) web part/.exec(e.getAttribute('data-sp-feature-tag') ?? '')?.[1]
+    }))
+  )
+  const names = new Set(
+    [...CHANNEL_COMPONENTS.values()].filter((c) => c.channel === CHANNEL).map((c) => c.name)
+  )
+  const foreign = webParts
+    .map(({ id, alias }) => {
+      const component = CHANNEL_COMPONENTS.get(id)
+      if (component) return component.channel === CHANNEL ? undefined : component
+      // A PP365 web part whose id no channel file knows: a package outside the channels, as the
+      // old packages a tenant's app catalog keeps (a 1.8.1 risk matrix on the test tenant).
+      return alias && names.has(alias) ? { name: alias, channel: `package ${id}` } : undefined
+    })
+    .filter((component) => component)
+    .map((component) => `${component!.name} (${component!.channel})`)
+  expect(
+    foreign,
+    `${page.url()} runs web parts of another release channel than "${CHANNEL}"; point them at the ` +
+      `${CHANNEL} channel's components (channels/${CHANNEL}.json)`
+  ).toEqual([])
+}
 
 /**
  * Waits until at least one SPFx web part has mounted. PP365 uses both page kinds: Home.aspx is a

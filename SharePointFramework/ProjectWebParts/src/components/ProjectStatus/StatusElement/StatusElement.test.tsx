@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
 import { SectionContext } from '../Sections/context'
@@ -17,8 +18,8 @@ const headerProps = {
   iconColor: '#107c10'
 }
 
-function renderElement(props: Record<string, any> = {}, header = headerProps) {
-  render(
+function renderElement(props: Record<string, any> = {}, header: Record<string, any> = headerProps) {
+  return render(
     <SectionContext.Provider value={{ headerProps: header, section: {} } as any}>
       <StatusElement {...props} />
     </SectionContext.Provider>
@@ -43,9 +44,10 @@ describe('StatusElement', () => {
     expect(screen.getByText('Alle milep...')).toBeInTheDocument()
   })
 
-  it('shows only the icon, labelled for screen readers, when asked', () => {
+  it('shows only the icon, named by its section and its status for screen readers, when asked', () => {
     renderElement({ iconsOnly: true, iconSize: 18 })
-    const host = screen.getByRole('img', { name: 'Fremdrift' })
+    // The status is the point of the icon, which shows it by its colour alone (WCAG 1.1.1).
+    const host = screen.getByRole('img', { name: 'Fremdrift: Grønn' })
     expect(host.querySelector('.element')).toBeNull()
     expect(host.querySelector('.icon')).not.toBeNull()
   })
@@ -56,5 +58,55 @@ describe('StatusElement', () => {
     })
     expect(screen.getByText('Sum budsjett')).toBeInTheDocument()
     expect(screen.getByText((content) => /1\D{0,2}200/.test(content))).toBeInTheDocument()
+  })
+
+  it('names an icon without a status by its section alone', () => {
+    renderElement({ iconsOnly: true }, { ...headerProps, value: '' })
+    expect(screen.getByRole('img', { name: 'Fremdrift' })).toBeInTheDocument()
+  })
+
+  it('has a mark beside its icon whose shape tells the status, as the colour does (WCAG 1.4.1)', () => {
+    const { container } = renderElement()
+    expect(container.querySelector('.icon [data-status-mark]')).toHaveAttribute(
+      'data-status-mark',
+      'CheckmarkCircle'
+    )
+  })
+
+  it('has the mark when it shows only the icon, too', () => {
+    const { container } = renderElement({ iconsOnly: true })
+    expect(container.querySelector('[data-status-mark]')).toHaveAttribute(
+      'data-status-mark',
+      'CheckmarkCircle'
+    )
+  })
+
+  it("takes the status value's own icon as the mark, and has none where neither tells the status", () => {
+    const { container, rerender } = renderElement({}, { ...headerProps, statusIconName: 'Flag' })
+    expect(container.querySelector('[data-status-mark]')).toHaveAttribute(
+      'data-status-mark',
+      'Flag'
+    )
+    rerender(
+      <SectionContext.Provider
+        value={{ headerProps: { ...headerProps, iconColor: '#444' }, section: {} } as any}
+      >
+        <StatusElement />
+      </SectionContext.Provider>
+    )
+    expect(container.querySelector('[data-status-mark]')).toBeNull()
+  })
+
+  it("is the section's heading when it heads a section, and breaks no rule axe can check (WCAG 1.3.1)", async () => {
+    const { container, rerender } = renderElement({ asHeading: true })
+    expect(screen.getByRole('heading', { level: 3, name: 'Fremdrift' })).toBeInTheDocument()
+    expect(await axeComponent(container)).toHaveNoViolations()
+    // In the summary, among the other sections' elements, it is no heading.
+    rerender(
+      <SectionContext.Provider value={{ headerProps, section: {} } as any}>
+        <StatusElement />
+      </SectionContext.Provider>
+    )
+    expect(screen.queryByRole('heading')).toBeNull()
   })
 })

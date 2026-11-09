@@ -4,14 +4,21 @@
  * The combobox family (`Combobox`, `Dropdown` and `TagPicker`, all built on
  * `@fluentui/react-combobox`) sends the Jest worker into an endless render loop on React 17 the
  * moment it opens. In the browser it works: Fluent's own TagPicker example on React 17 typed,
- * picked and removed in a handful of renders (phase 4, slice 7). The stand-in keeps the contract a
- * TagPicker's caller relies on, so the caller's own logic is what the test runs:
+ * picked and removed in a handful of renders (phase 4, slice 7). On React 18 the loop is gone (a
+ * real TagPicker typed and picked under jsdom, 2026-10-07), but opening it took close to a minute
+ * on a loaded machine, so the stand-in stays. It keeps the contract a TagPicker's caller relies
+ * on, so the caller's own logic is what the test runs:
  *
  * - the picker hands its `selectedOptions`, `onOptionSelect` and `disabled` to its parts;
  * - the input is a combobox that shows `value` and reports typing through `onChange`;
  * - an option reports a pick with its value and the selected options plus it;
  * - a tag reports its removal with the selected options less it, as Backspace in the empty input
- *   does for the last tag.
+ *   does for the last tag;
+ * - a tag and an option show their `media` (a picture) before their text, so a test sees what a
+ *   screen reader would read in them;
+ * - the control draws the button that opens the list unless its `expandIcon` is null. Fluent
+ *   names it from the input, in English, and not at all where there is no input; the stand-in
+ *   names it only by the `aria-label` it is given.
  *
  * Usage, above the test's imports:
  *
@@ -29,10 +36,18 @@ function withTagPickerStandIn() {
 
   const TagPicker = ({ selectedOptions = [], onOptionSelect, disabled, children }) =>
     h(Picker.Provider, { value: { selectedOptions, onOptionSelect, disabled } }, h('div', null, children))
-  const TagPickerControl = ({ className, children }) => h('div', { className }, children)
+  const TagPickerControl = ({ className, children, expandIcon }) =>
+    h(
+      'div',
+      { className },
+      children,
+      expandIcon === null
+        ? null
+        : h('span', { role: 'button', 'aria-label': expandIcon?.['aria-label'] }, expandIcon?.children)
+    )
   const TagPickerGroup = (props) =>
     h('div', { role: 'group', 'aria-label': props['aria-label'] }, props.children)
-  const Tag = ({ value, children }) => {
+  const Tag = ({ value, media, children }) => {
     const context = React.useContext(Picker)
     return h(
       'button',
@@ -41,6 +56,7 @@ function withTagPickerStandIn() {
         onClick: (event) =>
           select(context, event, value, context.selectedOptions.filter((option) => option !== value))
       },
+      media,
       children
     )
   }
@@ -62,7 +78,7 @@ function withTagPickerStandIn() {
     })
   }
   const TagPickerList = ({ children }) => h('div', { role: 'listbox' }, children)
-  const TagPickerOption = ({ value, children, secondaryContent }) => {
+  const TagPickerOption = ({ value, media, children, secondaryContent }) => {
     const context = React.useContext(Picker)
     return h(
       'div',
@@ -71,6 +87,7 @@ function withTagPickerStandIn() {
         'aria-selected': false,
         onClick: (event) => select(context, event, value, [...context.selectedOptions, value])
       },
+      media,
       children,
       secondaryContent ? h('span', null, ' ', secondaryContent) : null
     )

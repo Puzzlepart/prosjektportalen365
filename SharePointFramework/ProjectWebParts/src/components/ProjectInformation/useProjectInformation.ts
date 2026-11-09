@@ -22,7 +22,10 @@ import resource from 'SharedResources'
  */
 export const useProjectInformation = (props: IProjectInformationProps) => {
   const { state, dispatch } = useProjectInformationReducer(props.spfxContext)
-  const context = useMemo<IProjectInformationContext>(() => ({ props, state, dispatch }), [state])
+  const context = useMemo<IProjectInformationContext>(
+    () => ({ props, state, dispatch }),
+    [props, state]
+  )
 
   if (SPDataAdapter.isConfigured) {
     ListLogger.init(

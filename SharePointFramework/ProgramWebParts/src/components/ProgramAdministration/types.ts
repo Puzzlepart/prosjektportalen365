@@ -10,6 +10,17 @@ export interface IProgramAdministrationProject extends Record<string, any> {
   HubSiteId?: string
   HubSiteUrl?: string
   HubSiteTitle?: string
+
+  /**
+   * When the project's site was created, as search gives it. Shown only, not stored in
+   * `GtChildProjects`.
+   */
+  Created?: string
+
+  /**
+   * The project's phase (`GtProjectPhaseText`). Shown only, not stored in `GtChildProjects`.
+   */
+  Phase?: string
 }
 
 export interface IProgramAdministrationProps {

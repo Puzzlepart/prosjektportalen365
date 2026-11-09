@@ -16,7 +16,7 @@ import { useCatalogContext } from '../context'
 import { languageLabel } from '../language'
 import { ALL_FILTER, SortKey } from '../types'
 import styles from './CatalogToolbar.module.scss'
-import { format } from 'pp365-shared-library'
+import { format, getSearchBoxDismissProps } from 'pp365-shared-library'
 
 export const CatalogToolbar: FC = () => {
   const {
@@ -91,10 +91,12 @@ export const CatalogToolbar: FC = () => {
   const sortValue = `${strings.CatalogSortLabel}: ${textFor(sortOptions, sort)}`
 
   return (
-    <div className={styles.toolbar} role='toolbar' aria-label={strings.CatalogDrawerTitle}>
+    // A search with its filters, not a toolbar, which takes one stop and the arrow keys.
+    <div className={styles.toolbar} role='search' aria-label={strings.CatalogToolbarLabel}>
       <div className={styles.filterRow}>
         <SearchBox
           ref={searchBoxRef}
+          dismiss={getSearchBoxDismissProps()}
           className={styles.search}
           placeholder={strings.CatalogSearchPlaceholder}
           aria-label={strings.CatalogSearchPlaceholder}
@@ -201,13 +203,13 @@ export const CatalogToolbar: FC = () => {
           </Dropdown>
         </Tooltip>
 
-        <div className={styles.viewToggle} role='group' aria-label={strings.CatalogViewGrid}>
+        {/* Named for what the buttons choose; each is named by its tooltip alone. */}
+        <div className={styles.viewToggle} role='group' aria-label={strings.CatalogViewLabel}>
           <Tooltip content={strings.CatalogViewGrid} relationship='label'>
             <ToggleButton
               appearance='subtle'
               checked={renderMode === 'grid'}
               icon={<Grid20Regular />}
-              aria-label={strings.CatalogViewGrid}
               onClick={() => setRenderMode('grid')}
             />
           </Tooltip>
@@ -216,7 +218,6 @@ export const CatalogToolbar: FC = () => {
               appearance='subtle'
               checked={renderMode === 'list'}
               icon={<List20Regular />}
-              aria-label={strings.CatalogViewList}
               onClick={() => setRenderMode('list')}
             />
           </Tooltip>

@@ -29,10 +29,11 @@ export const HelpContent: FC = () => {
                 : strings.HelpContentAvailableDescription
             }
           >
+            {/* Focusable while it cannot be used: the description says why (WCAG 2.1.1). */}
             <Button
               size='small'
               appearance='subtle'
-              disabled={isUnavailable}
+              disabledFocusable={isUnavailable}
               icon={getFluentIcon('QuestionCircle')}
             >
               {isUnavailable

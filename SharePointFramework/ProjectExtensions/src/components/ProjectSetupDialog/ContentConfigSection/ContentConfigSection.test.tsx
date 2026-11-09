@@ -14,12 +14,14 @@ jest.mock('./useContentConfigSection', () => ({
     onSelectionChange: mockOnSelectionChange,
     searchTerm: '',
     onSearch: mockOnSearch,
-    toolbarItems: []
+    selectedCountText: '1 valgte elementer'
   })
 }))
 
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
+import strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
 import { ContentConfigSection } from './ContentConfigSection'
 
@@ -43,6 +45,23 @@ describe('ContentConfigSection', () => {
     expect(checkboxes[2]).not.toBeChecked()
     await user.click(checkboxes[2])
     expect(mockOnSelectionChange).toHaveBeenLastCalledWith(['a', 'b'])
+  })
+
+  it('names its search box, and the lock on an item that cannot be left out (WCAG 1.1.1, 4.1.2)', () => {
+    render(<ContentConfigSection />)
+    expect(
+      screen.getByRole('searchbox', { name: strings.ContentConfigSectionSearchLabel })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('img', { name: strings.ContentConfigLockedTooltipText })
+    ).toBeInTheDocument()
+  })
+
+  it('tells how many are selected as a status, not as a button (WCAG 4.1.2, 4.1.3)', async () => {
+    const { container } = render(<ContentConfigSection />)
+    expect(screen.getByRole('status')).toHaveTextContent('1 valgte elementer')
+    expect(screen.queryByRole('button', { name: '1 valgte elementer' })).toBeNull()
+    expect(await axeComponent(container)).toHaveNoViolations()
   })
 
   it('passes what is typed to the search', async () => {

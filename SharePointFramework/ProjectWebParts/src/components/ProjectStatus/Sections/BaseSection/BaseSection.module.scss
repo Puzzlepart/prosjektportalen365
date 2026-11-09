@@ -1,5 +1,6 @@
 .baseSection {
-  // Clear of the pinned section tabs when scrolled into view.
+  // Clear of the pinned section tabs when scrolled into view, and so is whatever inside it takes
+  // the focus (WCAG 2.4.11).
   scroll-margin-top: 80px;
   box-shadow: var(--shadow4);
   border-radius: var(--borderRadiusMedium);
@@ -20,5 +21,9 @@
 
   .container {
     padding: 28px;
+  }
+
+  * {
+    scroll-margin-top: 80px;
   }
 }

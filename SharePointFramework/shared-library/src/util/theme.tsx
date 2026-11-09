@@ -6,11 +6,14 @@ import pSBC from 'shade-blend-color'
  * this module loads. The site's own theme is on `window.__themeState__` on every modern page, but
  * an application customizer can load before it is there: a bare read crashed the footer's whole
  * bundle ("Could not load footer-application-customizer in require: Cannot read properties of
- * undefined (reading 'themePrimary')") on a project site in the test tenant.
+ * undefined (reading 'themePrimary')") on a project site in the test tenant. Outside a page there
+ * is no `window` at all: the integration tests load the data layer, which imports this module
+ * through `util`, in Node.
  */
 const DEFAULT_PRIMARY_COLOR = '#0078d4'
 
-const themeColors: Record<string, string> = (window as any).__themeState__?.theme ?? {}
+const themeColors: Record<string, string> =
+  (typeof window === 'undefined' ? undefined : (window as any).__themeState__?.theme) ?? {}
 const primaryColor: string = themeColors.themePrimary ?? DEFAULT_PRIMARY_COLOR
 
 const brandVariants: BrandVariants = {

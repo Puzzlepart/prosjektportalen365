@@ -51,8 +51,9 @@ describe('ColumnDataTypeField', () => {
     await waitFor(() => expect(onChange).toHaveBeenCalledWith('URL'))
   })
 
-  // Opening the list and picking another type is checked by hand: the v9 dropdown loops under
-  // Jest on React 17 the moment it opens, while it works in the browser (see useDataTypeDropdown).
+  // Opening the list and picking another type is checked by hand: the v9 dropdown looped under Jest
+  // on React 17 and takes tens of seconds to open on React 18, while it works in the browser (see
+  // useDataTypeDropdown).
 
   it('shows the properties of the selected data type', async () => {
     const user = setupUser()

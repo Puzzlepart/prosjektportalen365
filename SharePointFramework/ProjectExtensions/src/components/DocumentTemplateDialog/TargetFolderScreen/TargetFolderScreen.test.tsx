@@ -3,21 +3,22 @@ jest.mock('data', () => ({
   SPDataAdapter: { getFolders: jest.fn() }
 }))
 
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import * as React from 'react'
 import * as strings from 'ProjectExtensionsStrings'
 import { SPDataAdapter } from 'data'
 import { TemplateSelectorContext } from '../../../extensions/templateSelector/context'
 import { DocumentTemplateDialogContext } from '../context'
-import { SET_SCREEN, SET_TARGET } from '../reducer'
-import { DocumentTemplateDialogScreen } from '../types'
+import reducer, { initState } from '../reducer'
 import { TargetFolderScreen } from './index'
 
 /**
- * The screen where the user picks where the copied templates go: the current library's folders,
- * navigation into them, and the buttons that confirm or go back. Asserted through text, roles and
- * the actions it dispatches, so it holds whichever Fluent UI list renders the folders.
+ * The screen where the user browses to where the copied templates go: the current library's
+ * folders, navigation into them, the other libraries, and the row that picks a folder. Its
+ * buttons are the dialog's footer, tested with the dialog. Asserted through text and roles, so it
+ * holds whichever Fluent UI list renders the folders, and run on the dialog's own reducer, which
+ * is where the browsing lives.
  */
 
 /**
@@ -35,28 +36,34 @@ function folder(name: string, overrides: Record<string, any> = {}) {
   }
 }
 
-function renderScreen({
-  libraries = [] as any[],
-  currentLibrary = folder('Dokumenter', { isLibrary: true }),
-  targetFolder = undefined as string
-} = {}) {
-  const dispatch = jest.fn()
-  const getFolders = SPDataAdapter.getFolders as jest.Mock
-  getFolders.mockReset()
-  render(
-    <TemplateSelectorContext.Provider
-      value={{
-        currentLibrary: currentLibrary as any,
-        libraries: [currentLibrary, ...libraries] as any,
-        currentFolderUrl: ''
-      }}
-    >
-      <DocumentTemplateDialogContext.Provider value={{ state: { targetFolder } as any, dispatch }}>
+/** The screen in the dialog's state, as the dialog holds it. */
+const Harness: React.FC<{ context: any }> = ({ context }) => {
+  const [state, dispatch] = React.useReducer(reducer, context, initState)
+  return (
+    <TemplateSelectorContext.Provider value={context}>
+      <DocumentTemplateDialogContext.Provider value={{ state, dispatch }}>
         <TargetFolderScreen />
       </DocumentTemplateDialogContext.Provider>
     </TemplateSelectorContext.Provider>
   )
-  return { dispatch, getFolders }
+}
+
+function renderScreen({
+  libraries = [] as any[],
+  currentLibrary = folder('Dokumenter', { isLibrary: true })
+} = {}) {
+  const getFolders = SPDataAdapter.getFolders as jest.Mock
+  getFolders.mockReset()
+  render(
+    <Harness
+      context={{
+        currentLibrary,
+        libraries: [currentLibrary, ...libraries],
+        currentFolderUrl: ''
+      }}
+    />
+  )
+  return { getFolders }
 }
 
 const setupUser = () => userEvent.setup({ pointerEventsCheck: 0 })
@@ -82,15 +89,39 @@ describe('TargetFolderScreen', () => {
     expect(first.compareDocumentPosition(second) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 
-  it('opens a folder and lists what is inside it', async () => {
+  it('opens a folder and lists what is inside it, and the trail leads back to the library', async () => {
+    const user = setupUser()
+    // The trail reads the folder's place from its URL, below the site and the library.
+    const { getFolders } = renderScreen({
+      currentLibrary: folder('Dokumenter', {
+        isLibrary: true,
+        folders: [folder('Rapporter', { url: '/sites/x/Dokumenter/Rapporter' })]
+      })
+    })
+    getFolders.mockResolvedValue([folder('2026', { url: '/sites/x/Dokumenter/Rapporter/2026' })])
+    await user.click(screen.getByText('Rapporter'))
+    await waitFor(() => expect(getFolders).toHaveBeenCalledWith('/sites/x/Dokumenter/Rapporter'))
+    expect(await screen.findByText('2026')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Dokumenter' }))
+    expect(await screen.findByText('Rapporter')).toBeInTheDocument()
+    expect(screen.queryByText('2026')).toBeNull()
+  })
+
+  it('names its folder trail, and moves the focus to a folder opened and back to its link (WCAG 2.4.3, 2.4.6)', async () => {
     const user = setupUser()
     const { getFolders } = renderScreen({
-      currentLibrary: folder('Dokumenter', { isLibrary: true, folders: [folder('Rapporter')] })
+      currentLibrary: folder('Dokumenter', {
+        isLibrary: true,
+        folders: [folder('Rapporter', { url: '/sites/x/Dokumenter/Rapporter' })]
+      })
     })
-    getFolders.mockResolvedValue([folder('2026')])
-    await user.click(screen.getByText('Rapporter'))
-    await waitFor(() => expect(getFolders).toHaveBeenCalledWith('/sites/x/Rapporter'))
-    expect(await screen.findByText('2026')).toBeInTheDocument()
+    getFolders.mockResolvedValue([folder('2026', { url: '/sites/x/Dokumenter/Rapporter/2026' })])
+    const trail = () => screen.getByRole('navigation', { name: strings.FolderNavigationLabel })
+    await user.click(screen.getByRole('button', { name: 'Rapporter' }))
+    await screen.findByText('2026')
+    expect(within(trail()).getByRole('button', { name: 'Rapporter' })).toHaveFocus()
+    await user.click(within(trail()).getByRole('button', { name: 'Dokumenter' }))
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Rapporter' })).toHaveFocus())
   })
 
   it('says so when a folder is empty', async () => {
@@ -103,60 +134,43 @@ describe('TargetFolderScreen', () => {
     expect(await screen.findByText(strings.NoFoldersAvailableText)).toBeInTheDocument()
   })
 
-  it('copies to the library root when nothing deeper is chosen', async () => {
+  it('marks the folder whose row is selected, and unmarks it on a second click', async () => {
     const user = setupUser()
-    const { dispatch } = renderScreen()
-    await user.click(screen.getByRole('button', { name: strings.CopyHereText }))
-    expect(dispatch).toHaveBeenCalledWith(
-      SET_SCREEN({ screen: DocumentTemplateDialogScreen.EditCopy })
-    )
-    expect(dispatch).toHaveBeenCalledWith(SET_TARGET({ folder: '/sites/x/Dokumenter' }))
-  })
-
-  it('copies to the folder whose row is selected, without entering it', async () => {
-    const user = setupUser()
-    const { dispatch, getFolders } = renderScreen({
+    const { getFolders } = renderScreen({
       currentLibrary: folder('Dokumenter', {
         isLibrary: true,
         folders: [folder('Rapporter'), folder('Avtaler')]
       })
     })
     // The row, not the name: the name enters the folder.
-    await user.click(screen.getByText('Rapporter').closest('[role=row]'))
-    expect(getFolders).not.toHaveBeenCalled()
-    await user.click(screen.getByRole('button', { name: strings.CopyHereText }))
-    expect(dispatch).toHaveBeenCalledWith(SET_TARGET({ folder: '/sites/x/Rapporter' }))
-  })
-
-  it('copies to the library root again when the selected folder is clicked a second time', async () => {
-    const user = setupUser()
-    const { dispatch } = renderScreen({
-      currentLibrary: folder('Dokumenter', {
-        isLibrary: true,
-        folders: [folder('Rapporter'), folder('Avtaler')]
-      })
-    })
     const row = () => screen.getByText('Rapporter').closest('[role=row]')
     await user.click(row())
+    expect(row()).toHaveAttribute('aria-selected', 'true')
+    expect(getFolders).not.toHaveBeenCalled()
     await user.click(row())
-    await user.click(screen.getByRole('button', { name: strings.CopyHereText }))
-    expect(dispatch).toHaveBeenCalledWith(SET_TARGET({ folder: '/sites/x/Dokumenter' }))
+    expect(row()).toHaveAttribute('aria-selected', 'false')
   })
 
-  it('goes back to the template selection', async () => {
+  it('offers the other libraries when there are several, and opens one', async () => {
     const user = setupUser()
-    const { dispatch } = renderScreen()
-    await user.click(screen.getByRole('button', { name: strings.OnGoBackText }))
-    expect(dispatch).toHaveBeenCalledWith(
-      SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select })
-    )
-  })
-
-  it('offers the other libraries when there are several, and cannot copy to the list of them', async () => {
-    const user = setupUser()
-    renderScreen({ libraries: [folder('Bilder', { isLibrary: true })] })
+    const { getFolders } = renderScreen({ libraries: [folder('Bilder', { isLibrary: true })] })
     await user.click(screen.getByRole('button', { name: strings.Library }))
     expect(await screen.findByText('Bilder')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: strings.CopyHereText })).toBeDisabled()
+    getFolders.mockResolvedValue([folder('Ferie')])
+    await user.click(screen.getByText('Bilder'))
+    await waitFor(() => expect(getFolders).toHaveBeenCalledWith('/sites/x/Bilder'))
+    expect(await screen.findByText('Ferie')).toBeInTheDocument()
+  })
+
+  it("gives the focus to the opened library's step in the trail, as for a folder (WCAG 2.4.3)", async () => {
+    // The library's link leaves the page with the list of libraries.
+    const user = setupUser()
+    const { getFolders } = renderScreen({ libraries: [folder('Bilder', { isLibrary: true })] })
+    getFolders.mockResolvedValue([folder('Ferie')])
+    await user.click(screen.getByRole('button', { name: strings.Library }))
+    await user.click(await screen.findByRole('button', { name: 'Bilder' }))
+    expect(await screen.findByText('Ferie')).toBeInTheDocument()
+    const trail = screen.getByRole('navigation', { name: strings.FolderNavigationLabel })
+    await waitFor(() => expect(within(trail).getByRole('button', { name: 'Bilder' })).toHaveFocus())
   })
 })

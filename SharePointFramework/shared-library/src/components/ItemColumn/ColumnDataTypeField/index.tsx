@@ -76,6 +76,4 @@ export const ColumnDataTypeField: FC<IColumnDataTypeFieldProps> = (props) => {
   )
 }
 
-ColumnDataTypeField.defaultProps = {}
-
 export * from './types'

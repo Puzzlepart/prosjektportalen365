@@ -1,4 +1,7 @@
 import { useContext, useState } from 'react'
+import { format } from 'pp365-shared-library'
+import * as strings from 'ProjectWebPartsStrings'
+import { ProjectPhasesContext } from 'components/ProjectPhases/context'
 import { ChangePhaseDialogContext } from '../../context'
 import { useActions } from './useActions'
 
@@ -10,6 +13,9 @@ export function useInitialView() {
   const checklistItem = state.checklistItems[state.currentIdx]
   const checklistItems = state.checklistItems
   const { nextChecklistItem } = useContext(ChangePhaseDialogContext)
+  const { commentMinLength } = useContext(ProjectPhasesContext).props
+  const commentHint =
+    commentMinLength > 0 ? format(strings.ChecklistCommentDescription, commentMinLength) : undefined
   const [comment, setComment] = useState(checklistItem.comment || '')
 
   /**
@@ -27,5 +33,12 @@ export function useInitialView() {
 
   const actions = useActions(comment, onNextChecklistItem)
 
-  return { checklistItem, checklistItems, setComment, comment, actions } as const
+  return {
+    checklistItem,
+    checklistItems,
+    setComment,
+    comment,
+    commentHint,
+    actions
+  } as const
 }

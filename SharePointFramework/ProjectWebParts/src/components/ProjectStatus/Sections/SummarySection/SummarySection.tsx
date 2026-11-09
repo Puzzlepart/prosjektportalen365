@@ -49,7 +49,9 @@ export const SummarySection: FC<ISummarySectionProps> = (props) => {
     <BaseSection {...props}>
       <div className={styles.summarySection}>
         {props.showProjectInformation && (
-          <div className={styles.projectInformation}>
+          // The published snapshot puts the project title at the top of this column, see
+          // `SNAPSHOT_TITLE_ANCHOR` in useCaptureReportSnapshot.
+          <div className={styles.projectInformation} data-snapshot-title-anchor=''>
             <ProjectInformation
               {...pick(context.props, 'siteId', 'webAbsoluteUrl', 'spfxContext')}
               page='ProjectStatus'

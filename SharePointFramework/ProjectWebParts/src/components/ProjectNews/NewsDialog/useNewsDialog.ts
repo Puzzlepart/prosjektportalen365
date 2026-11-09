@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import React, { useState, useEffect, useCallback, useContext } from 'react'
+import { useAnnounce } from '@fluentui/react-components'
 import strings from 'ProjectWebPartsStrings'
 import {
   ensureProjectNewsFolder,
@@ -22,6 +23,9 @@ import { useNewsForm } from './useNewsForm'
 export const useNewsDialog = () => {
   const context = useContext(ProjectNewsContext)
   const newsForm = useNewsForm()
+  // The dialog's content gives way to a spinner and then to the result, which a screen reader is
+  // told of (WCAG 4.1.3); an error shows in the title field's message, which Fluent reads out.
+  const { announce } = useAnnounce()
 
   const [spinnerMode, setSpinnerMode] = useState<'idle' | 'creating' | 'success'>('idle')
   const [templates, setTemplates] = useState<TemplateFile[]>([])
@@ -50,6 +54,7 @@ export const useNewsDialog = () => {
       }
 
       setSpinnerMode('creating')
+      announce(strings.CreatingNewArticleStatus, { polite: true })
       newsForm.setFormErrorMessage('')
 
       try {
@@ -97,6 +102,7 @@ export const useNewsDialog = () => {
         }
         if (res.ok) {
           setSpinnerMode('success')
+          announce(strings.NewsCreatedSuccessfully, { polite: true })
           setTimeout(() => {
             context.setState({ isDialogOpen: false })
             setSpinnerMode('idle')
@@ -128,7 +134,8 @@ export const useNewsDialog = () => {
       context.props.spHttpClient,
       folderName,
       currentSiteId,
-      context
+      context,
+      announce
     ]
   )
 

@@ -5,6 +5,12 @@ import { IColumnDataTypePropertyField, textField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'
 import { IBooleanColumnProps } from './types'
 import { Text } from '@fluentui/react-components'
+import { withDefaults } from '../../../util'
+
+const BOOLEAN_COLUMN_DEFAULT_PROPS: Partial<IBooleanColumnProps> = {
+  valueIfTrue: strings.BooleanYes,
+  valueIfFalse: strings.BooleanNo
+}
 
 /**
  * Renders a boolean column that displays a custom string value for true and false values.
@@ -16,16 +22,12 @@ import { Text } from '@fluentui/react-components'
  *
  * @returns The rendered component.
  */
-export const BooleanColumn: ColumnRenderComponent<IBooleanColumnProps> = (props) => {
+export const BooleanColumn: ColumnRenderComponent<IBooleanColumnProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, BOOLEAN_COLUMN_DEFAULT_PROPS)
   const displayValue = isTrueBooleanValue(props.columnValue)
     ? props.valueIfTrue
     : props.valueIfFalse
   return <Text size={200}>{displayValue}</Text>
-}
-
-BooleanColumn.defaultProps = {
-  valueIfTrue: strings.BooleanYes,
-  valueIfFalse: strings.BooleanNo
 }
 BooleanColumn.key = 'boolean'
 BooleanColumn.id = 'Boolean'
@@ -35,13 +37,13 @@ BooleanColumn.getDataTypeProperties = (onChange, dataTypeProperties: Record<stri
   const properties: IColumnDataTypePropertyField[] = [
     textField({
       label: strings.ColumnRenderOptionBooleanTrue,
-      placeholder: BooleanColumn.defaultProps.valueIfTrue,
+      placeholder: BOOLEAN_COLUMN_DEFAULT_PROPS.valueIfTrue,
       value: dataTypeProperties.valueIfTrue,
       onChange: (value) => onChange('valueIfTrue', value)
     }),
     textField({
       label: strings.ColumnRenderOptionBooleanFalse,
-      placeholder: BooleanColumn.defaultProps.valueIfFalse,
+      placeholder: BOOLEAN_COLUMN_DEFAULT_PROPS.valueIfFalse,
       value: dataTypeProperties.valueIfFalse,
       onChange: (value) => onChange('valueIfFalse', value)
     })

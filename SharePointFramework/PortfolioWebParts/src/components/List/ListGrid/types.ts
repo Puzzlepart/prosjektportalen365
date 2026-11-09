@@ -45,14 +45,50 @@ export interface IListGridProps {
   justified?: boolean
 
   /**
-   * Called on a click and a right click on a column header, with the element to place a menu by.
+   * Called on a click on a column header, with the element to place a menu by.
    */
+  /**
+   * Whether a click on a column header opens a menu (the hub's column menu), which the header
+   * then says (`aria-haspopup`) and is where the focus returns when the menu or a panel it
+   * opened closes. A header that sorts (the program administration's) is a plain button.
+   */
+  headerOpensMenu?: boolean
+
   onColumnHeaderClick?: (column: IListColumn, target: HTMLElement) => void
+
+  /**
+   * Called on a right click on a column header, with the element to place a menu by; the hub opens
+   * the column menu with both. Without it a right click is the browser's.
+   */
+  onColumnHeaderContextMenu?: (column: IListColumn, target: HTMLElement) => void
+
+  /**
+   * When it changes, the groups the user opened or closed go back to their `isCollapsed`: the
+   * program administration passes its search, so that a search opens every group.
+   */
+  collapseStateKey?: string | number
 
   /**
    * Called with the selected items whenever the selection changes.
    */
   onSelectionChange?: (selectedItems: Record<string, any>[]) => void
+
+  /**
+   * `'none'` leaves out the checks and the selection by a click on a row, for a user who may only
+   * look. Defaults to `'multiselect'`.
+   */
+  selectionMode?: 'multiselect' | 'none'
+
+  /**
+   * The selected items, kept by the caller: the grid shows these and reports a change through
+   * `onSelectionChange` without keeping a selection of its own. Without it the grid keeps its own.
+   */
+  selectedItems?: Record<string, any>[]
+
+  /**
+   * Class name for the grid's container.
+   */
+  className?: string
 
   /**
    * Renders a cell.
@@ -71,6 +107,11 @@ export type ListGridEntry =
  * What `useListGrid` gives `ListGrid` to render.
  */
 export interface IListGridState {
+  /**
+   * The props a column header's button takes when a click on it opens the column menu: it says
+   * so (`aria-haspopup`) and is marked as where the focus returns. Empty otherwise.
+   */
+  headerMenuProps: Record<string, string>
   /**
    * The grid's container, measured for the justified layout.
    */
@@ -110,6 +151,11 @@ export interface IListGridState {
    * Collapses every group, or opens them all when all are collapsed.
    */
   toggleAllCollapsed: () => void
+
+  /**
+   * Whether the rows can be selected (`selectionMode`).
+   */
+  selectable: boolean
 
   /**
    * The selection.

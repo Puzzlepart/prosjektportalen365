@@ -15,3 +15,14 @@ Jest worker on React 17 the moment it opens (it works in the browser). Above a t
 `jest.mock('@fluentui/react-components', () => jest.requireActual('pp365-jest-config/lib/tagPickerStandIn').withTagPickerStandIn())`
 replaces the picker's parts with plain elements that keep its contract; see the file for what it
 keeps.
+
+`lib/axe.js` runs axe-core over a rendered component through jest-axe, with the WCAG 2.1 A and
+AA and WCAG 2.2 AA rules (#1788): `import { axeComponent } from 'pp365-jest-config/lib/axe'`,
+then `expect(await axeComponent(container)).toHaveNoViolations()`. Colour contrast is off, since
+jsdom has no layout; the browser suite measures it. Requiring the module registers the matcher,
+so only the tests that use it load axe-core.
+
+`lib/announce.js` reads what Fluent's `AriaLiveAnnouncer` said, the newest message in each live
+region: `import { announced } from 'pp365-jest-config/lib/announce'`, then
+`await waitFor(() => expect(announced()).toContain(strings.Saved))`. jsdom keeps the announcer's
+`innerText` as a property and ignores its clearing, so the newest message is the last span.

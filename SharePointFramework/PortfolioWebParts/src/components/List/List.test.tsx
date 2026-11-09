@@ -13,6 +13,7 @@ import userEvent from '@testing-library/user-event'
 import strings from 'PortfolioWebPartsStrings'
 import { ColumnRenderComponentRegistry, format, ListMenuItem } from 'pp365-shared-library'
 import * as React from 'react'
+import { createPortal } from 'react-dom'
 import { HubColumn } from './ItemColumn/HubColumn'
 import { List } from './List'
 import { IListProps } from './types'
@@ -86,7 +87,7 @@ describe('List', () => {
       searchBox: { placeholder: 'Søk i Alle prosjekter' },
       menuItems: [new ListMenuItem('Eksporter til Excel')]
     })
-    // WebPartTitle renders an <h2> around a span[role=heading]; both carry the text, so target the span.
+    // WebPartTitle renders one <h2> with the title in a span; the span holds the text alone.
     const heading = screen.getByText('Porteføljeoversikt', { selector: 'span' })
     const search = screen.getByPlaceholderText('Søk i Alle prosjekter')
     const toolbar = screen.getByRole('button', { name: 'Eksporter til Excel' })
@@ -99,6 +100,15 @@ describe('List', () => {
     expect(follows(search, toolbar)).toBe(true)
     expect(follows(toolbar, firstHeader)).toBe(true)
     expect(columnHeaders()).toEqual(['Tittel', 'Fase', strings.ToggleColumnFormPanelLabel])
+  })
+
+  it('gives a column name an element of its own, with the whole name as its tooltip', () => {
+    const name = 'Ressursallokeringer for underområder'
+    renderList({ columns: [column('Title', 'Tittel'), column('GtResourceAllocation', name)] })
+    // The name is cut with an ellipsis inside the column (CSS, which jsdom does not apply), so the
+    // tooltip is where a long name can be read in full.
+    const header = screen.getByRole('columnheader', { name: /^Ressursallokeringer/ })
+    expect(within(header).getByTitle(name)).toHaveTextContent(name)
   })
 
   it('shows the error in place of the search box and the toolbar', () => {
@@ -225,20 +235,22 @@ describe('List', () => {
     expect(screen.queryByText('Charlie')).toBeNull()
   })
 
-  it('opens and closes a group from its header, and every group from the column headers', async () => {
-    const user = setupUser()
+  it('opens and closes a group from its header, and every group from the column headers', () => {
     renderList({ items: ITEMS, groups: GROUPS })
+    // fireEvent, not user-event: the expand-all button sits in a Fluent tooltip, which user-event's
+    // pointer opens and positions, and that stalled this test past 30 s in CI (see the testing
+    // guide). The click is what is under test.
     const planlegge = screen.getByRole('button', { name: /Fase: Planlegge/ })
     expect(planlegge).toHaveAttribute('aria-expanded', 'true')
-    await user.click(planlegge)
+    fireEvent.click(planlegge)
     expect(planlegge).toHaveAttribute('aria-expanded', 'false')
     expect(screen.queryByText('Bravo')).toBeNull()
     expect(screen.getByText('Delta')).toBeInTheDocument()
-    await user.click(planlegge)
+    fireEvent.click(planlegge)
     expect(screen.getByText('Bravo')).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: strings.ListCollapseAllGroupsLabel }))
+    fireEvent.click(screen.getByRole('button', { name: strings.ListCollapseAllGroupsLabel }))
     expect(itemRows()).toHaveLength(0)
-    await user.click(screen.getByRole('button', { name: strings.ListExpandAllGroupsLabel }))
+    fireEvent.click(screen.getByRole('button', { name: strings.ListExpandAllGroupsLabel }))
     expect(itemRows()).toHaveLength(4)
   })
 
@@ -276,6 +288,23 @@ describe('List', () => {
       onSelectionChange
     })
     fireEvent.click(screen.getByRole('button', { name: 'Alfa' }))
+    expect(onSelectionChange).not.toHaveBeenCalled()
+  })
+
+  it('leaves the selection alone on a click in a dialog that a cell opened', () => {
+    // A cell's dialog (the benefit overview's measurements), popover or menu is portalled to the
+    // end of the page, outside the row, but React passes its clicks up through the row.
+    const onSelectionChange = jest.fn()
+    renderList({
+      items: ITEMS.slice(0, 1),
+      columns: [
+        column('Title', 'Tittel', {
+          onRender: (item: any) => createPortal(<p>Målinger for {item.Title}</p>, document.body)
+        })
+      ],
+      onSelectionChange
+    })
+    fireEvent.click(screen.getByText('Målinger for Alfa'))
     expect(onSelectionChange).not.toHaveBeenCalled()
   })
 

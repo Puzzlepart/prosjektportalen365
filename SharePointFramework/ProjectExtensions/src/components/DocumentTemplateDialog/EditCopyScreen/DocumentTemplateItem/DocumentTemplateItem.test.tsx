@@ -6,6 +6,7 @@ jest.mock('data', () => ({
 
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import * as React from 'react'
 import { SPDataAdapter } from 'data'
 import { DocumentTemplateDialogContext } from 'components/DocumentTemplateDialog/context'
@@ -109,8 +110,7 @@ describe('DocumentTemplateItem', () => {
     await waitFor(() =>
       expect(onInputChanged).toHaveBeenCalledWith('item-1', { newTitle: 'Endelig rapport' })
     )
-    // The two inputs are told apart by their element id, so a title edit must
-    // never be reported as a name change.
+    // Each field has its own handler, so a title edit must never be reported as a name change.
     expect(onInputChanged).not.toHaveBeenCalledWith(
       'item-1',
       expect.objectContaining({ newName: expect.anything() }),
@@ -134,22 +134,26 @@ describe('DocumentTemplateItem', () => {
     )
   })
 
-  it('gives the two fields distinct ids that survive a re-render', async () => {
-    // The ids are the component's dispatch keys, not just DOM ids: onChange
-    // compares event.target.id against them. They must differ from each other
-    // and must not change when typing re-renders the component, which is what
-    // useId guarantees and a per-render generator does not.
+  it('focuses each field from its label (WCAG 1.3.1, 3.3.2)', async () => {
+    // A control with an id of its own is named by the field through aria-labelledby, and a click
+    // on the label then reaches nothing; the field's own id ties the label to the control.
     const { user } = renderItem()
     await expand(user, 'Prosjektplan.docx')
-    const name = screen.getByLabelText('Filnavn')
-    const title = screen.getByLabelText('Tittel')
-    const nameId = name.id
-    const titleId = title.id
-    expect(nameId).toBeTruthy()
-    expect(titleId).toBeTruthy()
-    expect(nameId).not.toBe(titleId)
-    await user.type(title, 'x')
-    expect(screen.getByLabelText('Filnavn').id).toBe(nameId)
-    expect(screen.getByLabelText('Tittel').id).toBe(titleId)
+    await user.click(screen.getByText('Filnavn', { selector: 'label' }))
+    expect(screen.getByLabelText('Filnavn')).toHaveFocus()
+    await user.click(screen.getByText('Tittel', { selector: 'label' }))
+    expect(screen.getByLabelText('Tittel')).toHaveFocus()
+  })
+
+  it('opens the fields from a button that says whether they are shown, and breaks no rule axe can check (WCAG 2.1.1, 4.1.2)', async () => {
+    const { user } = renderItem()
+    const header = screen.getByRole('button', { name: 'Prosjektplan.docx' })
+    expect(header).toHaveAttribute('aria-expanded', 'false')
+    await user.click(header)
+    expect(header).toHaveAttribute('aria-expanded', 'true')
+    expect(document.getElementById(header.getAttribute('aria-controls'))).toContainElement(
+      screen.getByLabelText('Filnavn')
+    )
+    expect(await axeComponent(header.parentElement)).toHaveNoViolations()
   })
 })

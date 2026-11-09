@@ -2,6 +2,7 @@ import {
   createTableColumn,
   TableColumnSizingOptions,
   useArrowNavigationGroup,
+  useRestoreFocusTarget,
   useTableColumnSizing_unstable,
   useTableFeatures
 } from '@fluentui/react-components'
@@ -62,15 +63,18 @@ function createColumnSizingOptions(
  * rows to show and the selection.
  *
  * The groups' collapse state is the grid's own, started from each group's `isCollapsed`; the
- * user's choices are kept per group while the list is filtered or searched.
+ * user's choices are kept per group while the list is filtered or searched, until
+ * `collapseStateKey` changes.
  */
 export function useListGrid(props: IListGridProps): IListGridState {
   const { items, columns, groups, justified } = props
   const isGrouped = !!groups && groups.length > 0
+  const selectable = props.selectionMode !== 'none'
 
   const containerRef = useRef<HTMLDivElement>(null)
   const containerWidth = useContainerWidth(containerRef, justified)
-  const fixedCellsWidth = SELECTION_CELL_WIDTH + (isGrouped ? EXPANDER_CELL_WIDTH : 0)
+  const fixedCellsWidth =
+    (selectable ? SELECTION_CELL_WIDTH : 0) + (isGrouped ? EXPANDER_CELL_WIDTH : 0)
   const columnSizingOptions = useMemo(
     () =>
       createColumnSizingOptions(columns, justified ? containerWidth - fixedCellsWidth : undefined),
@@ -91,7 +95,21 @@ export function useListGrid(props: IListGridProps): IListGridState {
     ]
   )
 
-  const [toggled, setToggled] = useState<Record<string, boolean>>({})
+  // The user's choices, kept with the key they were made under: under a new key there are none.
+  const { collapseStateKey } = props
+  const [collapseState, setCollapseState] = useState<{
+    key: typeof collapseStateKey
+    toggled: Record<string, boolean>
+  }>({ key: collapseStateKey, toggled: {} })
+  const toggled = collapseState.key === collapseStateKey ? collapseState.toggled : {}
+  const setToggled = useCallback(
+    (next: (previous: Record<string, boolean>) => Record<string, boolean>) =>
+      setCollapseState((previous) => ({
+        key: collapseStateKey,
+        toggled: next(previous.key === collapseStateKey ? previous.toggled : {})
+      })),
+    [collapseStateKey]
+  )
   const isCollapsed = useCallback(
     (group: IListGroup) => toggled[groupId(group)] ?? !!group.isCollapsed,
     [toggled]
@@ -102,7 +120,7 @@ export function useListGrid(props: IListGridProps): IListGridState {
         ...previous,
         [groupId(group)]: !(previous[groupId(group)] ?? !!group.isCollapsed)
       })),
-    []
+    [setToggled]
   )
   const allCollapsed = isGrouped && groups.every(isCollapsed)
   const toggleAllCollapsed = useCallback(
@@ -111,7 +129,7 @@ export function useListGrid(props: IListGridProps): IListGridState {
         ...previous,
         ...Object.fromEntries(groups.map((group) => [groupId(group), !allCollapsed]))
       })),
-    [groups, allCollapsed]
+    [groups, allCollapsed, setToggled]
   )
 
   const entries = useMemo<ListGridEntry[]>(() => {
@@ -134,13 +152,26 @@ export function useListGrid(props: IListGridProps): IListGridState {
     () => entries.flatMap((entry) => (entry.type === 'item' ? [entry.item] : [])),
     [entries]
   )
-  const selection = useListSelection(items, visibleItems, props.onSelectionChange)
+  const selection = useListSelection(
+    items,
+    visibleItems,
+    props.onSelectionChange,
+    props.selectedItems
+  )
 
   // One tab stop for the grid, the arrow keys between its checks, links and header buttons, as in
   // v8's list and Fluent's DataGrid.
   const arrowNavigation = useArrowNavigationGroup({ axis: 'grid' })
 
+  // A header that opens the column menu says so, and is where the focus returns when the menu
+  // or a panel it opened closes: the menu opens from state, with no trigger of Fluent's.
+  const restoreFocusTarget = useRestoreFocusTarget()
+  const headerMenuProps = props.headerOpensMenu
+    ? { 'aria-haspopup': 'menu' as const, ...restoreFocusTarget }
+    : {}
+
   return {
+    headerMenuProps,
     containerRef,
     tableRef,
     columnSizing,
@@ -149,6 +180,7 @@ export function useListGrid(props: IListGridProps): IListGridState {
     allCollapsed,
     toggleCollapsed,
     toggleAllCollapsed,
+    selectable,
     selection,
     arrowNavigation
   }

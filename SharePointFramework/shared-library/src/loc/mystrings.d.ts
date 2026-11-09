@@ -7,10 +7,31 @@ declare interface ISharedLibraryStrings {
   CloseText: string
   Aria: {
     InfoLabelTitle: string
+    InstrumentGaugeLabel: string
     MenuOverflowCount: string
     ProjectTitle: string
     SaveTitle: string
     SaveDisabledTitle: string
+    SearchBoxClearLabel: string
+    TimelineScrollLabel: string
+    TrendBetter: string
+    TrendTargetReached: string
+    TrendWorse: string
+  }
+  DatePicker: {
+    GoToToday: string
+    PrevMonth: string
+    NextMonth: string
+    PrevYear: string
+    NextYear: string
+    PrevYearRange: string
+    NextYearRange: string
+    WeekNumber: string
+    SelectedDate: string
+    TodayDate: string
+    MonthPickerHeader: string
+    YearPickerHeader: string
+    DayMarked: string
   }
   Placeholder: {
     DatePicker: string
@@ -43,6 +64,7 @@ declare interface ISharedLibraryStrings {
   FiltersString: string
   FilterText: string
   FilterPanelEmptyTitle: string
+  PeoplePickerExpandLabel: string
   PeoplePickerNoResults: string
   PeoplePickerSelectedLabel: string
   FilterPanelEmptyMessage: string
@@ -55,6 +77,7 @@ declare interface ISharedLibraryStrings {
   ProjectTimelineErrorTransformItemText: string
   ProjectTimelineInfoText: string
   ProjectTimelineTitle: string
+  TimelineTodayLabel: string
   ProjectTimelineItemInfo: string
   ProgramTimelineTitle: string
   ResourceLabel: string

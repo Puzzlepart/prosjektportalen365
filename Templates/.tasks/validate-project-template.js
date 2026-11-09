@@ -3,6 +3,7 @@
 const fs = require('fs')
 const path = require('path')
 const { getFileContent } = require('./util')
+const { findListReferenceProblems } = require('./list-references')
 
 // Recursively find all files with the given extension in a directory
 function findFilesRecursive(dir, extension) {
@@ -54,8 +55,8 @@ for (const contentTemplate of contentTemplates) {
     }
 }
 
-for (const path of templates) {
-    const templateContent = fs.readFileSync(path, 'utf-8')
+for (const templatePath of templates) {
+    const templateContent = fs.readFileSync(templatePath, 'utf-8').replace(/\r\n/g, '\n')
     let tokens = new Set()
     let match
     while ((match = TOKEN_REGEX.exec(templateContent)) !== null) {
@@ -65,13 +66,42 @@ for (const path of templates) {
     // Sort tokens alphabetically and remove duplicates
     tokens = new Set(Array.from(tokens).sort())
 
-    let markdownContent = `_The template was validated ${new Date().toLocaleString()}_\n\n`
-    markdownContent += `The template contains the following tokens that has not been found in the .resx files:\n\n`
+    // List references to lists the template does not have. The content template folder is
+    // `Portfolio_content.<lng>`. They are also written to the console, since the run exits with 0.
+    const relativeTemplatePath = path.relative(path.resolve(__dirname, '..'), templatePath).split(path.sep).join('/')
+    const lng = path.basename(path.dirname(path.dirname(templatePath))).replace(/^Portfolio_content\./, '')
+    const problems = findListReferenceProblems(JSON.parse(templateContent), lng)
+    for (const token of problems.listIds) {
+        console.warn(`[validate-project-template] ${relativeTemplatePath}: ${token} names neither a list of the template nor a list every project site has`)
+    }
+    for (const node of problems.navigation) {
+        console.warn(`[validate-project-template] ${relativeTemplatePath}: ${node} names no list the template creates`)
+    }
+
+    // No date and no absolute path: the report is tracked, so it must come out the same on every
+    // machine (macOS or Windows, any locale) as long as the template does not change.
+    let markdownContent = `The template contains the following tokens that has not been found in the .resx files:\n\n`
     if (tokens.size === 0) {
         markdownContent += '_No tokens with missing translations or replacement values found._'
     }
     else {
         markdownContent += Array.from(tokens).map(t => `- ${t}`).join('\n')
+    }
+
+    markdownContent += '\n\nThe template contains the following `{listid:}` tokens that name neither a list of the template nor a list every project site has:\n\n'
+    if (problems.listIds.length === 0) {
+        markdownContent += '_No `{listid:}` tokens without a list found._'
+    }
+    else {
+        markdownContent += problems.listIds.map(t => `- ${t}`).join('\n')
+    }
+
+    markdownContent += '\n\nThe template contains the following navigation nodes whose `Lists/` URL names no list the template creates:\n\n'
+    if (problems.navigation.length === 0) {
+        markdownContent += '_No navigation nodes without a list found._'
+    }
+    else {
+        markdownContent += problems.navigation.map(n => `- ${n}`).join('\n')
     }
 
     markdownContent += '\n\n---\n\n'
@@ -81,10 +111,10 @@ for (const path of templates) {
     markdownContent += '\n```\n\n'
     markdownContent += '## Template Path\n\n'
     markdownContent += '```txt\n'
-    markdownContent += path
+    markdownContent += relativeTemplatePath
     markdownContent += '\n```\n\n'
 
-    const filePath = path.replace(/\.txt$/, '-validation.md')
+    const filePath = templatePath.replace(/\.txt$/, '-validation.md')
 
     fs.writeFileSync(filePath, markdownContent, { flag: 'w' })
 }

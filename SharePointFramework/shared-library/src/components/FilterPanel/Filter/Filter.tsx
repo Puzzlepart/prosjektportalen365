@@ -5,17 +5,23 @@ import { useFilter } from './useFilter'
 import { getFluentIcon } from '../../../icons'
 
 export const Filter: FC<IFilterProps> = (props) => {
-  const { state, onToggleSectionContent, renderItems } = useFilter(props)
+  const { state, onToggleSectionContent, renderItems, contentId } = useFilter(props)
 
   return (
     <div className={styles.filter}>
-      <div className={styles.sectionHeader} onClick={onToggleSectionContent}>
+      <button
+        type='button'
+        className={styles.sectionHeader}
+        aria-expanded={!state.isCollapsed}
+        aria-controls={contentId}
+        onClick={onToggleSectionContent}
+      >
         <span>{props.column.name}</span>
         {state.isCollapsed
           ? getFluentIcon('ChevronUp', { size: 16 })
           : getFluentIcon('ChevronDown', { size: 16 })}
-      </div>
-      <div hidden={state.isCollapsed}>
+      </button>
+      <div id={contentId} hidden={state.isCollapsed}>
         <div className={styles.sectionContent}>{renderItems()}</div>
       </div>
     </div>

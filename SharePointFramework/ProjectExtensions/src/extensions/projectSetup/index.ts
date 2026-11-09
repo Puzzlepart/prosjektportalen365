@@ -3,7 +3,8 @@ import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-applic
 import { isArray, stringIsNullOrEmpty } from '@pnp/core'
 import { ConsoleListener, LogLevel, Logger } from '@pnp/logging'
 import { SPFI } from '@pnp/sp'
-import { IMenuNode } from '@pnp/sp/navigation'
+import { IMenuNode, INavigationNodes } from '@pnp/sp/navigation'
+import { PermissionKind } from '@pnp/sp/security'
 import strings from 'ProjectExtensionsStrings'
 import resource from 'SharedResources'
 import { SPDataAdapter } from 'data'
@@ -17,10 +18,11 @@ import {
   ProjectTemplateFile,
   createSpfiInstance,
   format,
-  getId
+  getId,
+  renderReact,
+  unmountReact
 } from 'pp365-shared-library'
 import { createElement } from 'react'
-import { render, unmountComponentAtNode } from 'react-dom'
 import _ from 'underscore'
 import {
   ErrorDialog,
@@ -33,7 +35,9 @@ import {
 } from '../../components'
 import { ITaskProgress } from '../../components/ProgressDialog/types'
 import { ProjectSetupError } from './ProjectSetupError'
+import { NAVIGATION_NODES_STORAGE_KEY } from './constants'
 import { deleteCustomizer } from './deleteCustomizer'
+import { TemplateQuickLaunch } from './templateQuickLaunch'
 import * as Tasks from './tasks'
 import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
 
@@ -186,7 +190,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       const languageRemovedKey = `pp_languagesRemoved_${this.context.pageContext.site.id.toString()}`
       if (sessionStorage.getItem(languageRemovedKey) === 'true') {
         sessionStorage.removeItem(languageRemovedKey)
-        await ListLogger.log({
+        await this._logToHub(data, {
           message: `Removed alternative languages from site: ${this.context.pageContext.web.title}`,
           functionName: '_removeAlternativeLanguages',
           component: 'ProjectSetup'
@@ -204,18 +208,24 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         title: this.properties.progressDialogTitle,
         subText: this.properties.progressDialogSubText
       })
-      await this._startSetup(taskParams, data)
+      const { declaredQuickLaunch } = await this._startSetup(taskParams, data)
 
+      // Run again («Kjør oppsettveiviser», `__SELECT_TEMPLATE__`) or made a parent project: the
+      // template's menu has replaced the one the owners had.
+      if (!stringIsNullOrEmpty(this.properties.forceTemplate)) {
+        await this._restoreQuickLaunch(declaredQuickLaunch)
+      }
       if (
         !stringIsNullOrEmpty(this.properties.forceTemplate) &&
         this.properties.forceTemplate !== '__SELECT_TEMPLATE__'
       ) {
-        await this.initializeQuickLaunchMenu()
         await this.sp.web.lists
           .getByTitle(resource.Lists_ProjectProperties_Title)
           .items.getById(1)
           .update({ GtIsParentProject: true, GtChildProjects: JSON.stringify([]) })
-        await this._ensureParentProjectPatch()
+        if (data.hasHubWriteAccess !== false) {
+          await this._ensureParentProjectPatch()
+        }
       }
 
       await deleteCustomizer(this)
@@ -232,6 +242,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           currentStep: this._totalTasks,
           totalSteps: this._totalTasks,
           isComplete: true,
+          warning: this._getCompletionWarning(data),
           onDismiss: () => {
             window.location.href = this.context.pageContext.web.absoluteUrl
           }
@@ -265,21 +276,172 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
-   * Adds the old custom navigation nodes to the quick launch menu
+   * The warning the last dialog shows, which keeps it open: a step logged errors (it completed,
+   * but what failed is not on the site), or the project is not registered in the portfolio.
+   *
+   * @param data Project setup data
    */
-  private async initializeQuickLaunchMenu() {
-    const oldNodes: IMenuNode[] = await JSON.parse(localStorage.getItem('pp_navigationNodes'))
-    const navigationNodes = _.uniq([...oldNodes])
-    for await (const node of navigationNodes) {
-      if (node.Title === strings.RecycleBinText) {
-        continue
+  private _getCompletionWarning(data: IProjectSetupData): IProgressDialogProps['warning'] {
+    const notRegistered =
+      data.hasHubWriteAccess === false
+        ? {
+            title: strings.ProjectNotRegisteredInHubTitle,
+            text: format(strings.ProjectNotRegisteredInHubMessage, resource.Lists_Projects_Title)
+          }
+        : undefined
+    const errorCount = this._getErrorEntries().length
+    if (errorCount === 0) return notRegistered
+    const text = format(strings.SetupCompletedWithErrorsMessage, errorCount)
+    return {
+      title: strings.SetupCompletedWithErrorsTitle,
+      text: notRegistered ? `${text}\n\n**${notRegistered.title}.** ${notRegistered.text}` : text
+    }
+  }
+
+  /**
+   * The error entries in the steps' logs, from steps that completed: the engine's errors, which
+   * it logs and goes on past, and the items a step could not copy.
+   */
+  private _getErrorEntries(): string[] {
+    return this._taskProgress
+      .filter(({ status }) => status === 'warning')
+      .flatMap(({ name, entries }) =>
+        entries.filter(({ level }) => level === 'error').map(({ message }) => `${name}: ${message}`)
+      )
+  }
+
+  /**
+   * Adds back the links the owners had added to the Quick Launch, from the menu saved before the
+   * setup ran again or made the project a parent project. The `Navigation` of the template and of
+   * the extensions makes the menu match their nodes: sp-js-provisioning keeps a node they declare
+   * by its title and deletes the others, the owners' links among them.
+   *
+   * A saved node the menu lacks at its level (by title) is added after the nodes of that level,
+   * unless it is the template's own (see {@link TemplateQuickLaunch.declares}): the template or an
+   * extension declares its title at that level, or the title that replaced it, or its URL. Such a
+   * node was left out or removed on purpose, by an extension's menu or a rename, so it and its
+   * children stay out. Under a node the menu has, or one added back, the saved children are
+   * restored by the same rule. An added node gets a new id and no audiences, and a node SharePoint
+   * refuses (its target is gone) is logged and skipped.
+   *
+   * @param declaredQuickLaunch The `Navigation.QuickLaunch` the template and the extensions declare
+   */
+  private async _restoreQuickLaunch(declaredQuickLaunch?: Tasks.NavigationNodes[]): Promise<void> {
+    const nodes = this._takeSavedQuickLaunch()
+    if (!nodes) return
+    const { web, site } = this.context.pageContext
+    await this._restoreQuickLaunchLevel(
+      nodes,
+      TemplateQuickLaunch.of(declaredQuickLaunch, {
+        webUrl: web.absoluteUrl,
+        siteUrl: site?.absoluteUrl ?? web.absoluteUrl
+      }),
+      () => this.sp.web.navigation.quicklaunch,
+      'the Quick Launch'
+    )
+  }
+
+  /**
+   * Reads and removes the Quick Launch that ProjectWebParts saved for this web
+   * (`{ webUrl, nodes }`). Local storage is shared by every site on the tenant, so a save for
+   * another web is not used.
+   */
+  private _takeSavedQuickLaunch(): IMenuNode[] | undefined {
+    try {
+      const json = localStorage.getItem(NAVIGATION_NODES_STORAGE_KEY)
+      localStorage.removeItem(NAVIGATION_NODES_STORAGE_KEY)
+      const saved = JSON.parse(json)
+      const webUrl = this.context.pageContext.web.absoluteUrl.replace(/\/$/, '').toLowerCase()
+      if (
+        typeof saved?.webUrl === 'string' &&
+        saved.webUrl.replace(/\/$/, '').toLowerCase() === webUrl &&
+        isArray(saved.nodes)
+      ) {
+        return saved.nodes
       }
-      const addedNode = await this.sp.web.navigation.quicklaunch.add(node.Title, node.SimpleUrl)
-      if (node.Nodes.length > 0) {
-        const children = this.sp.web.navigation.quicklaunch.getById(addedNode.Id).children
-        for await (const childNode of node.Nodes) {
-          await children.add(childNode.Title, childNode.SimpleUrl)
+      Logger.write(
+        '(ProjectSetup) No Quick Launch was saved for this site before the setup; nothing to add back.',
+        LogLevel.Warning
+      )
+    } catch (error) {
+      Logger.write(
+        `(ProjectSetup) Could not read the Quick Launch saved before the setup: ${error?.message}`,
+        LogLevel.Warning
+      )
+    }
+    return undefined
+  }
+
+  /**
+   * Adds the saved nodes of one level that the level does not have by title and that are not the
+   * template's own, then goes on into the children of each saved node the level has or got.
+   *
+   * @param saved The saved nodes of the level
+   * @param declared What the template and the extensions declare at this level
+   * @param level Returns the level's nodes: a fresh queryable on every call, since `select()` sets
+   * the query on the instance
+   * @param label The level, for the log
+   * @param stored The level's nodes when they are known (none under a node just added)
+   */
+  private async _restoreQuickLaunchLevel(
+    saved: IMenuNode[],
+    declared: TemplateQuickLaunch,
+    level: () => INavigationNodes,
+    label: string,
+    stored?: Array<{ Id: number; Title: string }>
+  ): Promise<void> {
+    let nodes = stored
+    if (!nodes) {
+      try {
+        nodes = await level().select('Id', 'Title')<Array<{ Id: number; Title: string }>>()
+      } catch (error) {
+        Logger.write(
+          `(ProjectSetup) Could not read ${label} to add back the saved nodes: ${error?.message}`,
+          LogLevel.Warning
+        )
+        return
+      }
+    }
+    for (const node of saved) {
+      if (!node?.Title || node.IsDeleted || node.Title === strings.RecycleBinText) continue
+      let match = nodes.find(({ Title }) => Title === node.Title)
+      const isAdded = !match
+      if (isAdded) {
+        // The template's own node, left out by the menu on purpose: it stays out, its children
+        // with it.
+        const reason = declared.declares(node.Title, node.SimpleUrl)
+        if (reason) {
+          Logger.write(
+            `(ProjectSetup) Not adding back '${node.Title}' (${node.SimpleUrl}) to ${label}: ${reason}`,
+            LogLevel.Info
+          )
+          continue
         }
+        try {
+          const { Id } = await level().add(node.Title, node.SimpleUrl)
+          match = { Id, Title: node.Title }
+          nodes.push(match)
+          Logger.write(
+            `(ProjectSetup) Added back '${node.Title}' (${node.SimpleUrl}) to ${label}`,
+            LogLevel.Info
+          )
+        } catch (error) {
+          Logger.write(
+            `(ProjectSetup) Could not add back '${node.Title}' (${node.SimpleUrl}) to ${label}: ${error?.message}`,
+            LogLevel.Warning
+          )
+          continue
+        }
+      }
+      if (isArray(node.Nodes) && node.Nodes.length > 0) {
+        const { Id } = match
+        await this._restoreQuickLaunchLevel(
+          node.Nodes,
+          declared.childrenOf(node.Title),
+          () => this.sp.web.navigation.quicklaunch.getById(Id).children,
+          `the children of '${node.Title}' in the Quick Launch`,
+          isAdded ? [] : undefined
+        )
       }
     }
   }
@@ -342,7 +504,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           },
           validation: this._validation
         })
-        render(element, placeholder)
+        renderReact(element, placeholder)
       }
     })
   }
@@ -359,7 +521,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       ...props,
       version: this.version
     })
-    render(element, placeholder)
+    renderReact(element, placeholder)
   }
 
   /**
@@ -394,14 +556,15 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         this._unmount(placeholder)
       }
     })
-    render(element, placeholder)
+    renderReact(element, placeholder)
   }
 
   /**
    * Start setup of the new project.
    *
    * Get tasks using `Tasks.getTasks` and runs through them in sequence
-   * executing the `execute` method on each task.
+   * executing the `execute` method on each task. Returns the parameters the
+   * last task returned.
    *
    * @param taskParams Task params
    * @param data Data
@@ -409,7 +572,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   private async _startSetup(
     taskParams: Tasks.IBaseTaskParams,
     data: IProjectSetupData
-  ): Promise<void> {
+  ): Promise<Tasks.IBaseTaskParams> {
     const tasks = Tasks.getTasks(data)
     const activeTasks = tasks.filter(
       (task) =>
@@ -426,7 +589,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     this._currentTaskIndex = 0
 
     try {
-      await ListLogger.log({
+      await this._logToHub(data, {
         message: format(
           strings.ProjectProvisioningStartLogText,
           this.context.pageContext.web.title
@@ -445,7 +608,13 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         )
         try {
           taskParams = await task.execute(taskParams, this._onTaskStatusUpdated.bind(this, i))
-          this._taskProgress[i].status = 'completed'
+          // Completed with errors: the engine logs a failure and goes on, and so does the copy of
+          // list items.
+          this._taskProgress[i].status = this._taskProgress[i].entries.some(
+            ({ level }) => level === 'error'
+          )
+            ? 'warning'
+            : 'completed'
         } catch (error) {
           this._taskProgress[i].status = 'error'
           this._taskProgress[i].entries.push({
@@ -457,16 +626,35 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           throw error
         }
       }
-      await ListLogger.log({
-        message: format(
-          strings.ProjectProvisioningSuccessLogText,
-          this.context.pageContext.web.title
-        ),
-        functionName: '_startProvision',
-        component: 'ProjectSetup'
-      })
+      const errors = this._getErrorEntries()
+      await this._logToHub(
+        data,
+        errors.length > 0
+          ? {
+              message: [
+                format(
+                  strings.ProjectProvisioningErrorsLogText,
+                  this.context.pageContext.web.title,
+                  errors.length
+                ),
+                ...errors
+              ].join('\n'),
+              functionName: '_startProvision',
+              component: 'ProjectSetup',
+              level: 'Warning'
+            }
+          : {
+              message: format(
+                strings.ProjectProvisioningSuccessLogText,
+                this.context.pageContext.web.title
+              ),
+              functionName: '_startProvision',
+              component: 'ProjectSetup'
+            }
+      )
+      return taskParams
     } catch (error) {
-      await ListLogger.log({
+      await this._logToHub(data, {
         message: error.message,
         functionName: '_startProvision',
         component: 'ProjectSetup',
@@ -475,6 +663,17 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       })
       throw error
     }
+  }
+
+  /**
+   * Write an entry to the log list on the hub, unless the setup must not write to the hub.
+   *
+   * @param data Project setup data
+   * @param entry Log entry
+   */
+  private async _logToHub(data: IProjectSetupData, entry: Parameters<typeof ListLogger.log>[0]) {
+    if (data.hasHubWriteAccess === false) return
+    await ListLogger.log(entry)
   }
 
   /**
@@ -577,8 +776,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         spfxContext: this.context
       })
 
-      const [_templates, extensions, contentConfig, templateFiles, projectData] = await Promise.all(
-        [
+      const [_templates, extensions, contentConfig, templateFiles, projectData, hasHubWriteAccess] =
+        await Promise.all([
           this._getTemplates(),
           this._portalDataService.getItems(
             resource.Lists_ProjectExtensions_Title,
@@ -600,9 +799,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             },
             ['File']
           ),
-          this._portalDataService.getProjectData()
-        ]
-      )
+          this._portalDataService.getProjectData(),
+          this._checkHubWriteAccess()
+        ])
       const templates = _templates.map((tmpl) => {
         const [tmplFile] = templateFiles.filter((file) => file.id === tmpl.projectTemplateId)
         tmpl.projectTemplateUrl = tmplFile?.serverRelativeUrl
@@ -626,7 +825,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         contentConfig,
         templates,
         projectData,
-        hasExistingTemplate
+        hasExistingTemplate,
+        hasHubWriteAccess
       } as IProjectSetupData
     } catch (error) {
       throw new ProjectSetupError(
@@ -634,6 +834,27 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         strings.GetSetupDataErrorMessage,
         strings.GetSetupDataErrorStack + error.message
       )
+    }
+  }
+
+  /**
+   * Check whether the current user can add items to the project list on the hub,
+   * which the setup needs to register the project in the portfolio.
+   *
+   * @returns `undefined` when the check fails, so the setup writes to the hub as usual
+   */
+  private async _checkHubWriteAccess(): Promise<boolean | undefined> {
+    try {
+      return await this._portalDataService.currentUserHasPermissionsToList(
+        'PROJECTS',
+        PermissionKind.AddListItems
+      )
+    } catch (error) {
+      Logger.write(
+        `(ProjectSetup) Could not check write access to the hub project list: ${error?.message}`,
+        LogLevel.Warning
+      )
+      return undefined
     }
   }
 
@@ -678,8 +899,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    *
    * @param container - HTML container elememnt
    */
-  private _unmount(container: HTMLElement): boolean {
-    return unmountComponentAtNode(container)
+  private _unmount(container: HTMLElement): void {
+    unmountReact(container)
   }
 
   /**

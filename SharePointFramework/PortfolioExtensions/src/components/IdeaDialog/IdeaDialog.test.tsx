@@ -72,7 +72,8 @@ describe('ProjectDataDialog', () => {
     dialog.submit = jest.fn()
     fireEvent.click(await screen.findByRole('button', { name: strings.CreateLabel }))
     expect(dialog.submit).toHaveBeenCalled()
-    await dialog.close()
+    // The close unmounts a microtask later; React 18 wants that inside act.
+    await act(() => dialog.close())
     expect(screen.queryByText(strings.IdeaProjectDataDialogTitle)).toBeNull()
   })
 })

@@ -1,4 +1,5 @@
 import { act, cleanup, render, screen } from '@testing-library/react'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
 import strings from 'SharedLibraryStrings'
 import * as React from 'react'
 import { WebPartTitle } from '.'
@@ -10,16 +11,27 @@ afterEach(async () => {
 })
 
 describe('WebPartTitle', () => {
-  it('shows the title as a heading, with its description behind an info label', () => {
-    render(<WebPartTitle title='Prosjektstatus' description='Status for prosjektet' />)
-    // The heading is a span inside the h2, so the text is looked up on the span.
-    expect(screen.getByText('Prosjektstatus', { selector: 'span' })).toHaveAttribute(
-      'role',
-      'heading'
+  it('shows the title as one heading, with its description behind an info label', async () => {
+    const { container } = render(
+      <WebPartTitle title='Prosjektstatus' description='Status for <b>prosjektet</b>' />
     )
-    expect(
-      screen.getByTitle(format(strings.Aria.InfoLabelTitle, 'Status for prosjektet'))
-    ).toBeInTheDocument()
+    // One heading: the h2 held a span with role="heading" as well, read as a second heading.
+    expect(screen.getAllByRole('heading')).toHaveLength(1)
+    expect(screen.getByRole('heading', { level: 2, name: 'Prosjektstatus' })).toBeInTheDocument()
+    // The info button is named in the site's language after the web part, where Fluent's own
+    // name for it is "information", and the tooltip names the web part, not the description's HTML.
+    const infoName = format(strings.Aria.InfoLabelTitle, 'Prosjektstatus')
+    expect(screen.getByRole('button', { name: infoName })).toBeInTheDocument()
+    expect(screen.getByTitle(infoName)).toBeInTheDocument()
+    expect(await axeComponent(container)).toHaveNoViolations()
+  })
+
+  it("renders a section's title one level down when asked (WCAG 1.3.1)", () => {
+    render(<WebPartTitle title='Overordnede prosjekter' headingLevel={3} />)
+    expect(screen.getByRole('heading', { name: 'Overordnede prosjekter' })).toHaveProperty(
+      'tagName',
+      'H3'
+    )
   })
 
   it('hides the heading without a title, and the info label without a description', () => {

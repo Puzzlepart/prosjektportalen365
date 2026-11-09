@@ -99,6 +99,18 @@ describe('TimelineList', () => {
     expect(screen.getByText('15.03.2026')).toBeInTheDocument()
     expect(screen.getByText('2500')).toBeInTheDocument()
     expect(screen.getByText('Kari Nordmann')).toBeInTheDocument()
+    // The picture beside the name is hidden from screen readers, which read the name once.
+    expect(screen.queryByRole('img', { name: 'Kari Nordmann' })).toBeNull()
+  })
+
+  it("formats dates in SharePoint's UI language, not a fixed Norwegian one", () => {
+    document.documentElement.lang = 'en-US'
+    try {
+      renderList()
+      expect(screen.getByText('03/15/2026')).toBeInTheDocument()
+    } finally {
+      document.documentElement.lang = ''
+    }
   })
 
   it('sorts by another column when its header is clicked', async () => {

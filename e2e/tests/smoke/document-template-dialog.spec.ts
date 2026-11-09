@@ -7,8 +7,9 @@ import {
   openTargetFolderScreen
 } from '../fixtures/document-template-dialog'
 import { deleteFolder, ensureFolder } from '../fixtures/rest'
+import { scanAccessibility, SURFACES } from '../fixtures/a11y'
 import { baseURL } from '../../playwright.config'
-import { configuredUrl, expect, test } from '../fixtures/pp365'
+import { configuredUrl, expect, onListPage, test } from '../fixtures/pp365'
 
 /**
  * The "Hent dokumentmal" dialog's lists must fit the dialog: no horizontal scrollbar on the
@@ -42,11 +43,11 @@ test.describe('document template dialog', () => {
       consoleGuard
     }, testInfo) => {
       void consoleGuard
+      // Room for a second load of the library, when SharePoint's React fault struck the first.
+      test.setTimeout(180_000)
       await page.setViewportSize(viewport)
-      // A library view is not an SPFx web part page, so the canvas wait of `openPage` does not apply.
-      // A library view is heavy; the CI runner has timed out on its default 30 s once.
-      await page.goto(await findDocumentLibrary(page, projectUrl!), { timeout: 90_000 })
-      const dialog = await openDocumentTemplateDialog(page)
+      const libraryPage = await findDocumentLibrary(page, projectUrl!)
+      const dialog = await onListPage(page, libraryPage, () => openDocumentTemplateDialog(page))
       expectDialogGridsToFit(await measureBothScreens(page, dialog, testInfo))
     })
   }
@@ -56,17 +57,27 @@ test.describe('document template dialog', () => {
     consoleGuard
   }) => {
     void consoleGuard
+    // Room for a second load of the library, when SharePoint's React fault struck the first.
+    test.setTimeout(240_000)
     await page.setViewportSize({ width: 1600, height: 1000 })
     const library = await documentLibrary(page, projectUrl!)
     // The target folder screen lists the library's subfolders; a library without one gets a
     // folder of the test's own for the duration of the test.
     const created = await ensureFolder(page, projectUrl!, library.serverRelativeUrl, FOLDER)
     try {
-      await page.goto(library.url, { timeout: 90_000 })
-      const dialog = await openDocumentTemplateDialog(page)
+      const dialog = await onListPage(page, library.url, () => openDocumentTemplateDialog(page))
+      // #1788: the template screen and the target folder screen, reported.
+      await scanAccessibility(page, {
+        component: 'DocumentTemplateDialog-select',
+        include: [SURFACES.dialog]
+      })
       await openTargetFolderScreen(dialog)
       const rows = dialog.locator('.fui-DataGridBody [role="row"]')
       await expect(rows.first()).toBeVisible({ timeout: 30_000 })
+      await scanAccessibility(page, {
+        component: 'DocumentTemplateDialog-target',
+        include: [SURFACES.dialog]
+      })
       // The last cell of the row, not the name: the name enters the folder.
       const row = rows.first()
       await row.locator('.fui-DataGridCell').last().click()

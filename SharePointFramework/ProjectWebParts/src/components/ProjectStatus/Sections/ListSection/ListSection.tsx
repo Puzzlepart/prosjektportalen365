@@ -30,7 +30,7 @@ export const ListSection: FC = () => {
 
   return (
     <BaseSection>
-      <StatusElement summation={summation} />
+      <StatusElement summation={summation} asHeading />
       {(shouldRenderList || state.error) && renderList()}
     </BaseSection>
   )

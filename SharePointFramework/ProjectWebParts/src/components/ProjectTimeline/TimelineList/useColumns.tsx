@@ -3,8 +3,7 @@ import React, { useContext } from 'react'
 import { ProjectTimelineContext } from '../context'
 import { get } from '@microsoft/sp-lodash-subset'
 import { tryParseCurrency } from 'pp365-shared-library/lib/util/tryParseCurrency'
-import moment from 'moment'
-import { IDataGridColumn, getUserPhoto } from 'pp365-shared-library'
+import { formatShortDate, IDataGridColumn, getUserPhoto } from 'pp365-shared-library'
 
 export const useColumns = (): IDataGridColumn[] => {
   const context = useContext(ProjectTimelineContext)
@@ -16,7 +15,9 @@ export const useColumns = (): IDataGridColumn[] => {
         title={item.Title}
         name={item.Title}
         size='small'
+        // The name is beside the picture: read once, not twice (WCAG 1.1.1).
         avatar={{
+          'aria-hidden': true,
           image: {
             src: getUserPhoto(item.EMail)
           }
@@ -66,7 +67,7 @@ export const useColumns = (): IDataGridColumn[] => {
               break
             case 'date':
             case 'datetime':
-              cellValue = moment(value).format('DD.MM.YYYY')
+              cellValue = formatShortDate(value)
               break
             case 'currency':
               cellValue = tryParseCurrency(value)

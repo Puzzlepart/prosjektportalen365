@@ -1,6 +1,6 @@
 {
   "name": "pp365-e2e",
-  "version": "1.14.0",
+  "version": "1.15.0",
   "private": true,
   "description": "End-to-end smoke tests for Prosjektportalen 365, run with Playwright against the test tenant after the test channel is deployed.",
   "scripts": {
@@ -13,6 +13,7 @@
     "validate-loc": "echo \"No localization in pp365-e2e\""
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
     "@playwright/test": "1.63.0",
     "@types/node": "22.20.3",
     "dotenv": "17.2.3",

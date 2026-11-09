@@ -57,7 +57,11 @@ export interface IBasePanelProps<T extends string = string> {
   closeButtonAriaLabel?: string
 
   /**
-   * Hides the panel without unmounting it.
+   * Hides the panel's header, with the title or `header` content and the
+   * close button, through the `hidden` attribute. The body and footer still
+   * render, and only `open` decides whether the panel shows: without the close
+   * button it closes on Escape, a click outside (`isLightDismiss`) or the
+   * caller's own buttons.
    */
   hidden?: boolean
 
@@ -72,6 +76,14 @@ export interface IBasePanelProps<T extends string = string> {
    * buttons.
    */
   footer?: React.ReactNode
+
+  /**
+   * Makes the body a stop for the keyboard, a region named by `headerText`, for a panel whose
+   * content is read rather than worked in: the body scrolls, and with no focusable element in it
+   * the keyboard could not scroll it (WCAG 2.1.1; axe's `scrollable-region-focusable`). A panel of
+   * fields leaves it off, its fields being its stops.
+   */
+  isBodyFocusable?: boolean
 
   children?: React.ReactNode
 

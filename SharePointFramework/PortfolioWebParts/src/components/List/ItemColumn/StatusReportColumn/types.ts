@@ -29,7 +29,9 @@ class ProjectStatusSection {
     public iconName: string,
     public value: string,
     public comment: string,
-    public color: string
+    public color: string,
+    /** The status value's own icon in `Prosjektkolonnekonfigurasjon`, the shape of its mark. */
+    public statusIconName?: string
   ) {}
 }
 
@@ -50,7 +52,11 @@ export class ProjectStatusModel {
   constructor(
     private item: Record<string, any>,
     private columnConfigurations: {
-      [key: string]: { name: string; iconName: string; colors: any }
+      [key: string]: {
+        name: string
+        colors: Record<string, string>
+        icons?: Record<string, string>
+      }
     },
     private statusSections: Array<IStatusSectionItem>
   ) {
@@ -85,7 +91,8 @@ export class ProjectStatusModel {
       const value = this.item[key]
       const comment = this.item[`${key}Comment`]
       const color = this.columnConfigurations[key]?.colors[value]
-      return new ProjectStatusSection(key, name, iconName, value, comment, color)
+      const statusIconName = this.columnConfigurations[key]?.icons?.[value]
+      return new ProjectStatusSection(key, name, iconName, value, comment, color, statusIconName)
     })
   }
 }

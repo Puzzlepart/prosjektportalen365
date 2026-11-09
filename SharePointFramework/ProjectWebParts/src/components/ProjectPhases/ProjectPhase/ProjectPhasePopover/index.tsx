@@ -42,9 +42,11 @@ export const ProjectPhasePopover: FC<IProjectPhasePopoverProps> = (props) => {
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>
         <div className={styles.root}>
-          <h2 className={styles.title}>{phase.name}</h2>
+          <h2 id={props.titleId} className={styles.title}>
+            {phase.name}
+          </h2>
           <div className={styles.body}>
-            <h4 className={styles.subText}>{phase.subText}</h4>
+            <p className={styles.subText}>{phase.subText}</p>
             <p>{phase.description}</p>
             <div hidden={isEmpty(stats)}>
               {stats.map((status, idx) => (
@@ -110,7 +112,9 @@ export const ProjectPhasePopover: FC<IProjectPhasePopoverProps> = (props) => {
                       : strings.ChangePhaseText
                   }
                   onClick={() => context.dispatch(CHANGE_PHASE())}
-                  disabled={phase.id === context.state.data?.currentPhase?.id}
+                  // Focusable while disabled, so the keyboard and a screen reader reach the reason
+                  // in its title.
+                  disabledFocusable={phase.id === context.state.data?.currentPhase?.id}
                 >
                   <span className={styles.label}>{strings.ChangePhaseText}</span>
                 </Button>

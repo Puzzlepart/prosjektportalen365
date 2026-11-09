@@ -1,14 +1,13 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
-// Babel, so mocks are not hoisted. The data fetch dispatches what `fetched.action()` returns; the
-// data adapter, the edit panel and the project information block (both reach SharePoint) are
-// stand-ins.
+// Babel, so mocks are not hoisted. The data fetch dispatches what `fetched.action()` returns (one
+// action or several, in order); the data adapter, the edit panel and the project information block
+// (both reach SharePoint) are stand-ins.
 const fetched: { action: () => any } = { action: () => null }
 jest.mock('./useProjectStatusDataFetch', () => ({
   useProjectStatusDataFetch: (_props: any, _refetch: number, _scope: string, dispatch: any) => {
     const { useEffect } = jest.requireActual('react')
     useEffect(() => {
-      const action = fetched.action()
-      if (action) dispatch(action)
+      for (const action of [].concat(fetched.action() ?? [])) dispatch(action)
     }, [])
   }
 }))
@@ -30,7 +29,7 @@ import { format } from 'pp365-shared-library'
 import { formatDate } from 'pp365-shared-library/lib/util'
 import * as React from 'react'
 import { ProjectStatus } from './ProjectStatus'
-import { FETCH_DATA_ERROR, INIT_DATA } from './reducer'
+import { FETCH_DATA_ERROR, INIT_DATA, REPORT_DELETE_ERROR } from './reducer'
 import { PROPERTIES_SECTION_CT, report, section } from './testFixtures'
 
 /**
@@ -96,14 +95,19 @@ describe('ProjectStatus', () => {
     ).toBeInTheDocument()
     expect(
       screen.getByText(format(strings.PublishedStatusReport, formatDate(published.publishedDate)), {
-        selector: 'span'
+        selector: 'p'
       })
     ).toBeInTheDocument()
     // Commands: a published report can be followed by a new one, but not edited, published or deleted.
     expect(screen.getByRole('button', { name: strings.NewStatusReportLabel })).toBeEnabled()
-    expect(screen.getByRole('button', { name: strings.EditReportButtonLabel })).toBeDisabled()
-    expect(screen.getByRole('button', { name: strings.PublishReportButtonLabel })).toBeDisabled()
-    expect(screen.getByRole('button', { name: strings.DeleteReportButtonLabel })).toBeDisabled()
+    // Disabled, but focusable in the toolbar, so the keyboard reaches why in the description.
+    for (const name of [
+      strings.EditReportButtonLabel,
+      strings.PublishReportButtonLabel,
+      strings.DeleteReportButtonLabel
+    ]) {
+      expect(screen.getByRole('button', { name })).toHaveAttribute('aria-disabled', 'true')
+    }
     // One tab per section with content; "Økonomi" has no value and is left out.
     for (const name of ['Overordnet status', 'Fremdrift', 'Prosjektinformasjon']) {
       expect(screen.getByRole('tab', { name })).toBeInTheDocument()
@@ -118,24 +122,44 @@ describe('ProjectStatus', () => {
     expect(screen.getByText('Prosjektinformasjon (mock)')).toBeInTheDocument()
   })
 
+  it("heads each section with its name, under the web part's one title (WCAG 1.3.1)", async () => {
+    const published = report(values)
+    renderStatus(() => initData(published))
+    await screen.findByText(strings.ProjectInformationStatusReportHeaderText, { selector: 'span' })
+    // The report's state («Publisert …») is told beside the title, not as a second title.
+    expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(1)
+    expect(screen.getByRole('heading', { level: 3, name: 'Fremdrift' })).toBeInTheDocument()
+    expect(
+      screen.getByText(format(strings.PublishedStatusReport, formatDate(published.publishedDate)))
+    ).toBeInTheDocument()
+  })
+
   it('lets an admin edit, publish and delete a draft, and not create another', async () => {
     const draft = report(values, { published: false })
     renderStatus(() => initData(draft))
     expect(await screen.findByRole('button', { name: strings.EditReportButtonLabel })).toBeEnabled()
     expect(screen.getByRole('button', { name: strings.PublishReportButtonLabel })).toBeEnabled()
     expect(screen.getByRole('button', { name: strings.DeleteReportButtonLabel })).toBeEnabled()
-    expect(screen.getByRole('button', { name: strings.NewStatusReportLabel })).toBeDisabled()
+    expect(screen.getByRole('button', { name: strings.NewStatusReportLabel })).toHaveAttribute(
+      'aria-disabled',
+      'true'
+    )
     expect(
       screen.getByText(format(strings.NotPublishedStatusReport, formatDate(draft.modified)), {
-        selector: 'span'
+        selector: 'p'
       })
     ).toBeInTheDocument()
   })
 
   it('offers no report commands to a user without the admin permission', async () => {
     renderStatus(() => initData(report(values), { userHasAdminPermission: false }))
-    expect(await screen.findByRole('button', { name: strings.NewStatusReportLabel })).toBeDisabled()
-    expect(screen.getByRole('button', { name: strings.EditReportButtonLabel })).toBeDisabled()
+    expect(
+      await screen.findByRole('button', { name: strings.NewStatusReportLabel })
+    ).toHaveAttribute('aria-disabled', 'true')
+    expect(screen.getByRole('button', { name: strings.EditReportButtonLabel })).toHaveAttribute(
+      'aria-disabled',
+      'true'
+    )
   })
 
   it('offers the scope selector only with multi-reporting', async () => {
@@ -162,6 +186,19 @@ describe('ProjectStatus', () => {
       })
     ).toBeInTheDocument()
     expect(screen.getByRole('button', { name: strings.NewStatusReportLabel })).toBeEnabled()
+  })
+
+  it('keeps the report on screen and says why when a delete fails', async () => {
+    const draft = report(values, { published: false })
+    renderStatus(() => [
+      initData(draft),
+      REPORT_DELETE_ERROR({ error: { message: 'Ingen tilgang' } })
+    ])
+    expect(await screen.findByText(strings.DeleteReportErrorTitle)).toBeInTheDocument()
+    expect(screen.getByText('Ingen tilgang')).toBeInTheDocument()
+    expect(screen.queryByText(strings.ErrorTitle)).toBeNull()
+    expect(screen.getByRole('button', { name: strings.DeleteReportButtonLabel })).toBeEnabled()
+    expect(screen.getByRole('tab', { name: 'Fremdrift' })).toBeInTheDocument()
   })
 
   it('shows the error when the data cannot be fetched', async () => {

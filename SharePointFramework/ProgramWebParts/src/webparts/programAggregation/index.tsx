@@ -9,8 +9,7 @@ import { ISPHttpClientOptions, SPHttpClient } from '@microsoft/sp-http'
 import * as strings from 'ProgramWebPartsStrings'
 import _ from 'lodash'
 import { createElement } from 'react'
-import { render } from 'react-dom'
-import { ErrorWithIntent, UserMessage } from 'pp365-shared-library'
+import { ErrorWithIntent, UserMessage, renderReact } from 'pp365-shared-library'
 import {
   IPortfolioAggregationConfiguration,
   IPortfolioAggregationProps,
@@ -27,7 +26,7 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
     if (!this._configuration) {
       // The base web part unmounts the element in onDispose.
       // eslint-disable-next-line @rushstack/pair-react-dom-render-unmount
-      render(
+      renderReact(
         createElement(UserMessage, {
           title: this._configurationError?.name ?? strings.ErrorTitle,
           text: this._configurationError?.message,

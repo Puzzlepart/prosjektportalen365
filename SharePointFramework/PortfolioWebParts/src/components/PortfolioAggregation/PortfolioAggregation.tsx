@@ -1,4 +1,6 @@
+import { Toaster } from '@fluentui/react-components'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { Fluent, withDefaults } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { EditViewColumnsPanel } from '../EditViewColumnsPanel'
 import { List } from '../List'
@@ -10,7 +12,15 @@ import { PortfolioAggregationContext } from './context'
 import { IPortfolioAggregationProps } from './types'
 import { usePortfolioAggregation } from './usePortfolioAggregation'
 
-export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
+const PORTFOLIO_AGGREGATION_DEFAULT_PROPS: Partial<IPortfolioAggregationProps> = {
+  showCommandBar: true,
+  showExcelExportButton: true,
+  showFilters: true,
+  lockedColumns: false
+}
+
+export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, PORTFOLIO_AGGREGATION_DEFAULT_PROPS)
   const {
     context,
     searchBox,
@@ -49,14 +59,10 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
         <ColumnFormPanel />
         <EditViewColumnsPanel {...editViewColumnsPanelProps} />
         <ViewFormPanel />
+        <Fluent>
+          <Toaster toasterId={context.toasterId} />
+        </Fluent>
       </PortfolioAggregationContext.Provider>
     </div>
   )
-}
-
-PortfolioAggregation.defaultProps = {
-  showCommandBar: true,
-  showExcelExportButton: true,
-  showFilters: true,
-  lockedColumns: false
 }

@@ -22,7 +22,7 @@ export function useColumns(mandatoryKeys: Set<string>): IDataGridColumn<ProjectE
                 {item.text}
                 {isMandatory && (
                   <Tooltip content={strings.ExtensionLockedTooltipText} relationship='label'>
-                    <span style={{ marginLeft: 6, display: 'inline-flex' }}>
+                    <span role='img' style={{ marginLeft: 6, display: 'inline-flex' }}>
                       <LockClosedRegular fontSize={12} />
                     </span>
                   </Tooltip>

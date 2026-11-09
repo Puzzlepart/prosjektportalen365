@@ -2,8 +2,17 @@ import _ from 'lodash'
 import React from 'react'
 import { ColumnRenderComponent } from '../types'
 import { IListColumnProps } from './types'
+import { withDefaults } from '../../../util'
 
-export const ListColumn: ColumnRenderComponent<IListColumnProps> = (props) => {
+const LIST_COLUMN_DEFAULT_PROPS: Partial<IListColumnProps> = {
+  valueSeparator: ';#',
+  listStyleType: 'none',
+  margin: 0,
+  padding: 0
+}
+
+export const ListColumn: ColumnRenderComponent<IListColumnProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, LIST_COLUMN_DEFAULT_PROPS)
   const values: string[] = props.columnValue ? props.columnValue.split(props.valueSeparator) : []
   if (_.isEmpty(values)) return null
   return (
@@ -15,13 +24,6 @@ export const ListColumn: ColumnRenderComponent<IListColumnProps> = (props) => {
       ))}
     </ul>
   )
-}
-
-ListColumn.defaultProps = {
-  valueSeparator: ';#',
-  listStyleType: 'none',
-  margin: 0,
-  padding: 0
 }
 ListColumn.key = 'list'
 ListColumn.id = 'List'

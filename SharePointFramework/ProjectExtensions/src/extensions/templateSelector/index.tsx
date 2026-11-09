@@ -9,11 +9,16 @@ import { DocumentTemplateDialog } from 'components'
 import { SPDataAdapter } from 'data'
 import * as strings from 'ProjectExtensionsStrings'
 import React from 'react'
-import { render, unmountComponentAtNode } from 'react-dom'
 import { find, first } from 'underscore'
 import { ITemplateSelectorContext, TemplateSelectorContext } from './context'
 import { ITemplateSelectorCommandProperties } from './types'
-import { getId, themeColor } from 'pp365-shared-library'
+import {
+  getId,
+  themeColor,
+  renderReact,
+  unmountReact,
+  whenHostMenuHasClosed
+} from 'pp365-shared-library'
 import resource from 'SharedResources'
 
 export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITemplateSelectorCommandProperties> {
@@ -72,7 +77,11 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
           new URLSearchParams(window.location.search).get('id') ||
           new URLSearchParams(window.location.search).get('RootFolder') ||
           undefined
-        this._onOpenTemplateSelector()
+        // Run from SharePoint's "Mer" menu, a dialog rendered while the menu closes is hidden from
+        // screen readers by SharePoint (WCAG 4.1.2): it opens once the menu has, and the focus goes
+        // back to what had it then, the command's button, as it closes (WCAG 2.4.3).
+        await whenHostMenuHasClosed()
+        this._onOpenTemplateSelector(document.activeElement as HTMLElement | null)
         break
     }
   }
@@ -129,24 +138,25 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
     }
   }
 
-  private _onOpenTemplateSelector() {
+  private _onOpenTemplateSelector(opener?: HTMLElement | null) {
     const placeholder = this._getPlaceholder()
     const element = (
       <TemplateSelectorContext.Provider value={this._ctxValue}>
         <DocumentTemplateDialog
           title={strings.TemplateLibrarySelectModalTitle}
           onDismiss={(props) => {
-            this._unmount(placeholder)
+            this._unmount(placeholder, opener)
             if (props.reload) document.location.reload()
           }}
         />
       </TemplateSelectorContext.Provider>
     )
-    render(element, placeholder)
+    renderReact(element, placeholder)
   }
 
-  private _unmount(container: HTMLElement) {
-    unmountComponentAtNode(container)
+  private _unmount(container: HTMLElement, opener?: HTMLElement | null) {
+    unmountReact(container)
+    if (opener?.isConnected) opener.focus()
   }
 
   private _getPlaceholder(key = 'DocumentTemplateDialog') {

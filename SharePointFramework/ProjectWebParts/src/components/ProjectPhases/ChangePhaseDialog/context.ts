@@ -1,4 +1,4 @@
-import { AnyAction } from '@reduxjs/toolkit'
+import { UnknownAction } from '@reduxjs/toolkit'
 import { createContext } from 'react'
 import { IChangePhaseDialogState } from './types'
 
@@ -11,7 +11,7 @@ export interface IChangePhaseDialogContext {
   /**
    * Dispatches an action for `ChangePhaseDialog`
    */
-  dispatch: React.Dispatch<AnyAction>
+  dispatch: React.Dispatch<UnknownAction>
 
   /**
    * Next checklist item

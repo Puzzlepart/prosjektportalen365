@@ -14,6 +14,8 @@ import {
   useOverflowMenu
 } from '@fluentui/react-components'
 import { MoreHorizontalRegular } from '@fluentui/react-icons'
+import { format } from 'pp365-shared-library'
+import strings from 'ProjectWebPartsStrings'
 import smoothscroll from 'smoothscroll-polyfill'
 import styles from '../ProjectStatus.module.scss'
 import { useSections } from '../Sections/useSections'
@@ -41,7 +43,13 @@ const OverflowMenu: FC<{
   return (
     <Menu>
       <MenuTrigger disableButtonEnhancement>
-        <Tab ref={ref} role='tab' value='overflow-menu' icon={<MoreHorizontalRegular />}>
+        <Tab
+          ref={ref}
+          role='tab'
+          value='overflow-menu'
+          icon={<MoreHorizontalRegular />}
+          aria-label={format(strings.Aria.MoreSectionsLabel, overflowCount)}
+        >
           +{overflowCount}
         </Tab>
       </MenuTrigger>

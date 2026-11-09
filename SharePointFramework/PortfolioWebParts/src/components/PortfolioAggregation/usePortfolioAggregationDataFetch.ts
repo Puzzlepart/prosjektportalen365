@@ -3,7 +3,13 @@ import _ from 'lodash'
 import { isTaxonomyManagedProperty, parseTaxonomyValue } from 'pp365-shared-library/lib/util'
 import { useEffect } from 'react'
 import { IPortfolioAggregationContext } from './context'
-import { DATA_FETCHED, DATA_FETCH_ERROR, GET_FILTERS, SET_GROUP_BY, START_FETCH } from './reducer'
+import {
+  DATA_FETCHED,
+  DATA_FETCH_ERROR,
+  GET_FILTERS,
+  SET_VIEW_GROUP_BY,
+  START_FETCH
+} from './reducer'
 
 /**
  * Fetches data for the Portfolio Aggregation component. Resolves the current
@@ -102,7 +108,7 @@ export function usePortfolioAggregationDataFetch(context: IPortfolioAggregationC
           defaultCollapsed: true
         }))
         context.dispatch(GET_FILTERS({ filters: [...dataSourceFilters, ...projectFilters] }))
-        context.dispatch(SET_GROUP_BY({ column: data.dataSource.groupBy }))
+        context.dispatch(SET_VIEW_GROUP_BY({ column: data.dataSource.groupBy }))
       })
       .catch((error) => context.dispatch(DATA_FETCH_ERROR({ error })))
   }, [...deps])

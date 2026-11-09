@@ -23,8 +23,10 @@ export const FavoriteProjects: FC = () => {
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>
+        {/* It holds links: the trap keeps Tab in it until Escape (WCAG 2.4.3). */}
         <Popover
           withArrow
+          trapFocus
           positioning='above-start'
           onOpenChange={(_, { open }) => open && context.loadFavoriteProjects()}
         >
@@ -39,7 +41,10 @@ export const FavoriteProjects: FC = () => {
               </Button>
             </Tooltip>
           </PopoverTrigger>
-          <PopoverSurface style={{ maxHeight: '420px', overflow: 'auto' }}>
+          <PopoverSurface
+            aria-label={strings.FavoriteProjectsLabel}
+            style={{ maxHeight: '420px', overflow: 'auto' }}
+          >
             <WebPartTitle
               title={strings.FavoriteProjectsLabel}
               description={strings.FavoriteProjectsDescription}

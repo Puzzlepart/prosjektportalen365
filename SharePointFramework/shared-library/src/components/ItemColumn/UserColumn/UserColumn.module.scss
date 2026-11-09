@@ -8,3 +8,9 @@
   overflow: hidden !important;
   white-space: nowrap !important;
 }
+
+// One of several people, reached by the keyboard so that its tooltip shows the name.
+.person:focus-visible {
+  outline: 2px solid var(--colorStrokeFocus2);
+  outline-offset: 1px;
+}

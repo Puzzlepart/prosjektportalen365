@@ -32,6 +32,7 @@
         </View>
     </pnp:Views>
     <pnp:DataRows KeyColumn="GtInternalName" UpdateBehavior="Skip">
+        <!-- ID = radens posisjon her ved nyinstallasjon; Portefoljevisninger og Prosjektkolonnekonfigurasjon slår opp på den. Eksisterende miljøer har andre ID-er. Nye rader legges til sist. -->
         <pnp:DataRow>            <!-- ID: 1 -->
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_Title_DisplayName}</pnp:DataValue>
@@ -595,7 +596,7 @@
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataTypeProperties">{"valueIfTrue":"Ja","valueIfFalse":"Nei"}</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>            <!-- ID: 32 -->
+        <pnp:DataRow>            <!-- ID: 34 -->
             <pnp:DataValue FieldName="GtSortOrder">320</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectLifecycleStatus_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectLifecycleStatus</pnp:DataValue>
@@ -620,7 +621,7 @@
                 }
             }}</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>            <!-- ID: 33 -->
+        <pnp:DataRow>            <!-- ID: 35 -->
             <pnp:DataValue FieldName="GtSortOrder">330</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtUNSustDevGoals_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtUNSustDevGoals</pnp:DataValue>
@@ -634,7 +635,7 @@
             <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>            <!-- ID: 34 -->
+        <pnp:DataRow>            <!-- ID: 36 -->
             <pnp:DataValue FieldName="GtSortOrder">340</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusOpportunities_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusOpportunities</pnp:DataValue>
@@ -648,7 +649,7 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>            <!-- ID: 35 -->
+        <pnp:DataRow>            <!-- ID: 37 -->
             <pnp:DataValue FieldName="GtSortOrder">350</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusOpportunitiesComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusOpportunitiesComment</pnp:DataValue>
@@ -662,7 +663,7 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>            <!-- ID: 49 -->
+        <pnp:DataRow>            <!-- ID: 38 -->
             <pnp:DataValue FieldName="GtSortOrder">490</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectAdminRoles_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectAdminRoles</pnp:DataValue>
@@ -687,7 +688,7 @@
                 }
             }}</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>            <!-- ID: 50 -->
+        <pnp:DataRow>            <!-- ID: 39 -->
             <pnp:DataValue FieldName="GtSortOrder">500</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:Lists_ProjectColumns_StatusReport_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">-</pnp:DataValue>
@@ -715,7 +716,7 @@
                 }
             }}</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>            <!-- ID: 51 -->
+        <pnp:DataRow>            <!-- ID: 40 -->
             <pnp:DataValue FieldName="GtSortOrder">510</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Hub</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">_hubTitle</pnp:DataValue>
@@ -729,7 +730,7 @@
             <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>            <!-- ID: 52 -->
+        <pnp:DataRow>            <!-- ID: 41 -->
             <pnp:DataValue FieldName="GtSortOrder">520</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectExtensions_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectExtensions</pnp:DataValue>
@@ -743,7 +744,7 @@
             <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>            <!-- ID: 53 -->
+        <pnp:DataRow>            <!-- ID: 42 -->
             <pnp:DataValue FieldName="GtSortOrder">530</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtProjectListContent_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectListContent</pnp:DataValue>
@@ -757,7 +758,7 @@
             <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>            <!-- ny i v6 — item-ID varierer per installasjon; kolonnekonfig-rader settes av oppgraderings-/installasjonsskript (område K) -->
+        <pnp:DataRow>            <!-- ID: 43 (nyinstallasjon); ny i v6 — item-ID varierer per installasjon; kolonnekonfig-rader settes av oppgraderings-/installasjonsskript (område K) -->
             <pnp:DataValue FieldName="GtSortOrder">540</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusScope_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusScope</pnp:DataValue>
@@ -771,7 +772,7 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>            <!-- ny i v6 — item-ID varierer per installasjon; kolonnekonfig-rader settes av oppgraderings-/installasjonsskript (område K) -->
+        <pnp:DataRow>            <!-- ID: 44 (nyinstallasjon); ny i v6 — item-ID varierer per installasjon; kolonnekonfig-rader settes av oppgraderings-/installasjonsskript (område K) -->
             <pnp:DataValue FieldName="GtSortOrder">550</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusScopeComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusScopeComment</pnp:DataValue>
@@ -785,7 +786,7 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>            <!-- ny i v6 — item-ID varierer per installasjon; kolonnekonfig-rader settes av oppgraderings-/installasjonsskript (område K) -->
+        <pnp:DataRow>            <!-- ID: 45 (nyinstallasjon); ny i v6 — item-ID varierer per installasjon; kolonnekonfig-rader settes av oppgraderings-/installasjonsskript (område K) -->
             <pnp:DataValue FieldName="GtSortOrder">560</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusSustainability_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusSustainability</pnp:DataValue>
@@ -799,7 +800,7 @@
             <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>            <!-- ny i v6 — item-ID varierer per installasjon; kolonnekonfig-rader settes av oppgraderings-/installasjonsskript (område K) -->
+        <pnp:DataRow>            <!-- ID: 46 (nyinstallasjon); ny i v6 — item-ID varierer per installasjon; kolonnekonfig-rader settes av oppgraderings-/installasjonsskript (område K) -->
             <pnp:DataValue FieldName="GtSortOrder">570</pnp:DataValue>
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtStatusSustainabilityComment_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtStatusSustainabilityComment</pnp:DataValue>

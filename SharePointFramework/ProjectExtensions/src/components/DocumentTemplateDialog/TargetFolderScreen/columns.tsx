@@ -1,8 +1,8 @@
-import { Link } from '@fluentui/react-components'
 import { FileIconType } from '@fluentui/react-file-type-icons'
 import * as ProjectExtensionsStrings from 'ProjectExtensionsStrings'
 import { FileTypeIcon, IListColumn, SPFolder, getId } from 'pp365-shared-library'
 import React from 'react'
+import { FolderLink } from '../FolderLink'
 
 export default ({ onFolderClick }: { onFolderClick: (folder: SPFolder) => void }) =>
   [
@@ -23,9 +23,7 @@ export default ({ onFolderClick }: { onFolderClick: (folder: SPFolder) => void }
       minWidth: 200,
       onRender: (folder: SPFolder) => {
         return (
-          <Link onClick={() => onFolderClick(folder)}>
-            <span style={{ marginLeft: 4 }}>{folder.name}</span>
-          </Link>
+          <FolderLink name={folder.name} url={folder.url} onClick={() => onFolderClick(folder)} />
         )
       }
     }

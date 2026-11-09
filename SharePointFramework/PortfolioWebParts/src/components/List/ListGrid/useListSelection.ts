@@ -25,41 +25,71 @@ function groupItems(items: Item[], group: IListGroup): Item[] {
  * leave the list (a search, a filter) leave the selection, so an export never takes along rows the
  * user no longer sees. The selected items are reported in list order.
  *
+ * Given `selectedItems`, the caller keeps the selection: the hook reads it from there, and a toggle
+ * reports the next selection without keeping it, so the rows show what the caller passes.
+ *
  * @param items The list's items
  * @param visibleItems The items on the screen, in display order
  * @param onSelectionChange Called with the selected items whenever the selection changes
+ * @param selectedItems The selection, when the caller keeps it
  */
 export function useListSelection(
   items: Item[],
   visibleItems: Item[],
-  onSelectionChange?: (selectedItems: Item[]) => void
+  onSelectionChange?: (selectedItems: Item[]) => void,
+  selectedItems?: Item[]
 ) {
-  const [selected, setSelected] = useState<ReadonlySet<Item>>(() => new Set())
+  const isControlled = selectedItems !== undefined
+  const [ownSelection, setOwnSelection] = useState<ReadonlySet<Item>>(() => new Set())
+  const givenSelection = useMemo(
+    () => (isControlled ? new Set(selectedItems) : null),
+    [isControlled, selectedItems]
+  )
+  const selected: ReadonlySet<Item> = givenSelection ?? ownSelection
   const anchor = useRef<Item>(null)
   // The overview builds its items anew on every render, so the report reads the latest items and
   // runs only when the selection itself changed; reporting on every new items array would render
   // the overview again, and again.
-  const latest = useRef({ items, onSelectionChange })
-  latest.current = { items, onSelectionChange }
+  const latest = useRef({ items, onSelectionChange, selected })
+  latest.current = { items, onSelectionChange, selected }
+
+  // Applies a change: to the grid's own selection, or, kept by the caller, as a report of the
+  // next selection.
+  const setSelected = useCallback(
+    (next: (previous: ReadonlySet<Item>) => ReadonlySet<Item>) => {
+      if (!isControlled) {
+        setOwnSelection(next)
+        return
+      }
+      const nextSelection = next(latest.current.selected)
+      latest.current.onSelectionChange?.(
+        latest.current.items.filter((item) => nextSelection.has(item))
+      )
+    },
+    [isControlled]
+  )
 
   useEffect(() => {
+    if (isControlled) return
     const current = new Set(items)
-    setSelected((previous) => {
+    setOwnSelection((previous) => {
       const kept = Array.from(previous).filter((item) => current.has(item))
       return kept.length === previous.size ? previous : new Set(kept)
     })
-  }, [items])
+  }, [items, isControlled])
 
-  // The first render has nothing to report.
+  // The first render has nothing to report, and a selection the caller keeps is reported as it
+  // changes.
   const reportedOnce = useRef(false)
   useEffect(() => {
+    if (isControlled) return
     if (!reportedOnce.current) {
       reportedOnce.current = true
       return
     }
     const { items: currentItems, onSelectionChange: report } = latest.current
-    report?.(currentItems.filter((item) => selected.has(item)))
-  }, [selected])
+    report?.(currentItems.filter((item) => ownSelection.has(item)))
+  }, [ownSelection, isControlled])
 
   const toggleRow = useCallback(
     (item: Item, range = false) => {
@@ -79,7 +109,7 @@ export function useListSelection(
       // A range keeps its starting point, so a second shift-click reaches from the same row.
       if (!range || !anchor.current) anchor.current = item
     },
-    [visibleItems]
+    [visibleItems, setSelected]
   )
 
   const toggleGroup = useCallback(
@@ -92,14 +122,14 @@ export function useListSelection(
         return next
       })
     },
-    [items]
+    [items, setSelected]
   )
 
   const toggleAll = useCallback(() => {
     setSelected((previous) =>
       items.length > 0 && items.every((item) => previous.has(item)) ? new Set() : new Set(items)
     )
-  }, [items])
+  }, [items, setSelected])
 
   const allState = useMemo(
     () => checkState(items.filter((item) => selected.has(item)).length, items.length),

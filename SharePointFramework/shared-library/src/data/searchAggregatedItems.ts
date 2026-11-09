@@ -1,6 +1,15 @@
 import { SPFI } from '@pnp/sp'
 import '@pnp/sp/search'
+import { ISort } from '@pnp/sp/search'
 import { buildAggregatedSiteIdQueries } from '../util/buildAggregatedSiteIdQueries'
+
+/**
+ * Results in document id order. Without a sort, search ranks every request anew, so the pages of
+ * one query overlap and results go missing (on the test tenant five of 54 in pages of seven).
+ * SharePoint Online sorts on the document id only by its lower-case internal name: `DocId`,
+ * `[DocId]` and `IndexDocId` are refused with 400. `Direction` 0 is `SortDirection.Ascending`.
+ */
+const BY_DOCUMENT_ID: ISort = { Property: 'docid', Direction: 0 }
 
 export interface ISearchAggregatedItemsOptions {
   /**
@@ -78,6 +87,7 @@ export async function searchAggregatedItems(
           RowLimit: rowLimit,
           StartRow: startRow,
           TrimDuplicates: false,
+          SortList: [BY_DOCUMENT_ID],
           SelectProperties: [...selectProperties, 'Path', 'Title', 'SiteTitle', 'SPWebURL']
         })
         const pageItems = response?.PrimarySearchResults ?? []

@@ -11,7 +11,7 @@ import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
 import { useMemo } from 'react'
 import SPDataAdapter from '../../../data'
 import { useProjectStatusContext } from '../context'
-import { OPEN_PANEL, SELECT_REPORT } from '../reducer'
+import { OPEN_PANEL, OPEN_SNAPSHOT, SELECT_REPORT } from '../reducer'
 import { useCreateNewStatusReport } from './useCreateNewStatusReport'
 import { useDeleteReport } from './useDeleteReport'
 import { usePublishReport } from './usePublishReport'
@@ -23,7 +23,8 @@ import { useScopeSelector } from './useScopeSelector'
  * @returns An array of IListMenuItem objects representing the toolbar items.
  */
 export function useToolbarItems() {
-  const { state, dispatch } = useProjectStatusContext()
+  const { state, props, dispatch } = useProjectStatusContext()
+  const snapshotInDialog = props.snapshotInDialog !== false
   const createNewStatusReport = useCreateNewStatusReport()
   const deleteReport = useDeleteReport()
   const publishReport = usePublishReport()
@@ -103,8 +104,9 @@ export function useToolbarItems() {
             .setIcon('Image')
             .setWidth('fit-content')
             .setOnClick(() => {
-              // In a new tab: the report the user is reading stays where it is.
-              window.open(state.selectedReport?.snapshotUrl, '_blank', 'noopener')
+              // Without the dialog, in a new tab: the report the user is reading stays where it is.
+              if (snapshotInDialog) dispatch(OPEN_SNAPSHOT())
+              else window.open(state.selectedReport?.snapshotUrl, '_blank', 'noopener')
             }),
         new ListMenuItem(
           state.selectedReport
@@ -161,7 +163,7 @@ export function useToolbarItems() {
               void deleteReport()
             })
       ].filter(Boolean),
-    [state, scopeSelector]
+    [state, scopeSelector, snapshotInDialog]
   )
 
   return { menuItems, farMenuItems }

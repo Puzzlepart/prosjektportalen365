@@ -26,8 +26,13 @@ export const baseURL = configuredBaseURL.replace(/\/+$/, '') + '/'
 export default defineConfig({
   testDir: './tests',
   // tests/local/* load a solution's local bundle through SPFx's debug manifests and need a dev
-  // server; they run only when asked for (E2E_LOCAL_BUNDLE=1), never in CI.
-  testIgnore: process.env.E2E_LOCAL_BUNDLE ? [] : ['**/local/**'],
+  // server; they run only when asked for (E2E_LOCAL_BUNDLE=1), never in CI. tests/diagnostics/*
+  // measure SharePoint for a report to Microsoft and take half an hour or more; they too run only
+  // when asked for (E2E_PLACEHOLDER_DIAGNOSTICS=1), never in CI.
+  testIgnore: [
+    ...(process.env.E2E_LOCAL_BUNDLE ? [] : ['**/local/**']),
+    ...(process.env.E2E_PLACEHOLDER_DIAGNOSTICS ? [] : ['**/diagnostics/**'])
+  ],
   // SharePoint pages are slow to settle; one retry in CI absorbs transient throttling without
   // hiding a real regression (a test that only passes on retry is reported as "flaky").
   retries: process.env.CI ? 1 : 0,
@@ -35,8 +40,14 @@ export default defineConfig({
   timeout: 90_000,
   expect: { timeout: 20_000 },
   forbidOnly: !!process.env.CI,
+  // results.json gives the test report site its counts (.tasks/publish-test-report.js).
   reporter: process.env.CI
-    ? [['github'], ['junit', { outputFile: 'test-results/junit.xml' }], ['html', { open: 'never' }]]
+    ? [
+        ['github'],
+        ['junit', { outputFile: 'test-results/junit.xml' }],
+        ['json', { outputFile: 'test-results/results.json' }],
+        ['html', { open: 'never' }]
+      ]
     : [['list'], ['html', { open: 'on-failure' }]],
   use: {
     baseURL,
@@ -48,7 +59,9 @@ export default defineConfig({
   },
   projects: [
     // Signs in once with the dedicated test user and stores the session for the other projects.
-    { name: 'setup', testMatch: /auth\.setup\.ts/ },
+    // Never traced: a trace keeps every action's arguments and the page's input values, so a
+    // retried sign-in would put the password into the report.
+    { name: 'setup', testMatch: /auth\.setup\.ts/, use: { trace: 'off' } },
     // Waits until the tenant serves the apps just upgraded (see tests/deployment.setup.ts).
     {
       name: 'deployment',

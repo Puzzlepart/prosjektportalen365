@@ -20,8 +20,10 @@ export const InstallVersion: FC = () => {
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>
+        {/* It holds links: the trap keeps Tab in it until Escape (WCAG 2.4.3). */}
         <Popover
           withArrow
+          trapFocus
           positioning='above-start'
           onOpenChange={(_, { open }) => open && context.loadGitHubReleases()}
         >
@@ -32,7 +34,7 @@ export const InstallVersion: FC = () => {
               </Button>
             </Tooltip>
           </PopoverTrigger>
-          <PopoverSurface>
+          <PopoverSurface aria-label={strings.LastInstallHeaderText}>
             <InstallVersionTooltipContent />
           </PopoverSurface>
         </Popover>

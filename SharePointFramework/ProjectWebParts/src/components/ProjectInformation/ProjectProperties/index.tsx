@@ -41,11 +41,11 @@ export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
           </TabList>
           <div className={styles.tabContainer}>
             {selectedTab === 'view' && (
-              <>
+              <dl className={styles.list}>
                 {properties.map((model, idx) => (
                   <ProjectProperty key={idx} model={model} displayMode={DisplayMode.Read} />
                 ))}
-              </>
+              </dl>
             )}
             {selectedTab === 'config' && (
               <>
@@ -78,12 +78,14 @@ export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
         )
       }
 
+      // A description list: each property's name is a term, its value the description, so a
+      // screen reader tells which value belongs to which name (WCAG 1.3.1).
       return (
-        <div className={styles.root}>
+        <dl className={styles.root}>
           {properties.map((model, idx) => (
             <ProjectProperty key={idx} model={model} />
           ))}
-        </div>
+        </dl>
       )
     }
   }

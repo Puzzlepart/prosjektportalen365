@@ -1,5 +1,6 @@
 import { formatDate, format } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
+import { useId } from '@fluentui/react-components'
 import React, { useMemo, useState } from 'react'
 import { ICatalogPackage } from 'models'
 import { useCatalogContext } from '../context'
@@ -15,6 +16,7 @@ import { useCatalogContext } from '../context'
 export function usePackageCard(pkg: ICatalogPackage) {
   const { state, setSelected } = useCatalogContext()
   const [imageError, setImageError] = useState(false)
+  const descriptionId = useId('package-description')
 
   const isSelected = state.selectedPackageId === pkg.id
   const showImage = Boolean(pkg.thumbnail) && !imageError
@@ -43,5 +45,5 @@ export function usePackageCard(pkg: ICatalogPackage) {
 
   const onImageError = (): void => setImageError(true)
 
-  return { isSelected, showImage, meta, select, onCardKeyDown, onImageError }
+  return { isSelected, showImage, meta, select, onCardKeyDown, onImageError, descriptionId }
 }

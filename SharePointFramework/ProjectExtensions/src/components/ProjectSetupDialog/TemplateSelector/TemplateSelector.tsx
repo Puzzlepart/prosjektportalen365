@@ -39,7 +39,12 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
   return (
     <div className={styles.root}>
       {hasExistingTemplate && (
-        <RadioGroup value={mode} onChange={onModeChanged} layout='horizontal'>
+        <RadioGroup
+          value={mode}
+          onChange={onModeChanged}
+          layout='horizontal'
+          aria-label={strings.ProjectTemplateSelectorModeLabel}
+        >
           <Radio value='notemplate' label={strings.ProjectTemplateSelectorNoTemplateRadioLabel} />
           <Radio
             value='selecttemplate'

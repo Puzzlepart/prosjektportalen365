@@ -44,4 +44,26 @@ describe('createGroups', () => {
     expect(parseDisplayValue('2.50000000000000')).toBe('2.5')
     expect(parseDisplayValue('Konsept')).toBe('Konsept')
   })
+
+  it('names a group by a person, a term or a lookup as they are displayed', () => {
+    // A person from search: the e-mail, the name and the claims, separated by pipes.
+    expect(
+      parseDisplayValue(
+        'kari@contoso.no | Kari Nordmann | 693A30232E667C6D656D626572736869707C6B617269 i:0#.f|membership|kari@contoso.no'
+      )
+    ).toBe('Kari Nordmann')
+    expect(parseDisplayValue('kari@contoso.no | Kari Nordmann')).toBe('Kari Nordmann')
+    expect(parseDisplayValue('Kari | ')).toBe('Kari | ')
+    expect(parseDisplayValue('L0|#0a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d|Konsept')).toBe('Konsept')
+    expect(parseDisplayValue('3;#Gjennomføring|8f3c2d1e-0000-4000-8000-000000000000')).toBe(
+      'Gjennomføring'
+    )
+    // A lookup without a label stays as stored.
+    expect(parseDisplayValue('3;#')).toBe('3;#')
+  })
+
+  it('leaves no value as it is', () => {
+    expect(parseDisplayValue('')).toBe('')
+    expect(parseDisplayValue(undefined)).toBeUndefined()
+  })
 })

@@ -1,5 +1,4 @@
 import * as React from 'react'
-import * as ReactDOM from 'react-dom'
 import { BaseDialog, IDialogConfiguration } from '@microsoft/sp-dialog'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import strings from 'PortfolioExtensionsStrings'
@@ -16,7 +15,7 @@ import {
 import { IIdeaDialogProps } from './types'
 import { FC, useContext } from 'react'
 import { IDeaDialogContext } from './context'
-import { customLightTheme, format } from 'pp365-shared-library'
+import { customLightTheme, format, renderReact, unmountReact } from 'pp365-shared-library'
 import styles from './IdeaDialog.module.scss'
 
 export const IdeaDialog: FC<IIdeaDialogProps> = (props) => {
@@ -74,7 +73,7 @@ export default class ProjectDataDialog extends BaseDialog {
   public isApproved: boolean
 
   public render(): void {
-    ReactDOM.render(
+    renderReact(
       <IdeaDialog
         onClose={this.close}
         onSubmit={this.submit}
@@ -95,7 +94,7 @@ export default class ProjectDataDialog extends BaseDialog {
 
   protected onAfterClose(): void {
     super.onAfterClose()
-    ReactDOM.unmountComponentAtNode(this.domElement)
+    unmountReact(this.domElement)
   }
 
   public submit = () => {

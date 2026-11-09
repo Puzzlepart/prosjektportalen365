@@ -117,6 +117,11 @@ export interface IProjectPhasesState extends IBaseWebPartComponentState<IProject
    * Popover props
    */
   popover?: IProjectPhasePopoverProps
+
+  /**
+   * Warning shown when the phase was changed on the project but not in the hub, with the reason
+   */
+  hubSyncWarning?: string
 }
 
 export type ChecklistData = Record<string, ProjectPhaseChecklistData>

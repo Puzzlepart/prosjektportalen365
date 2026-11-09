@@ -13,11 +13,12 @@ export const usePortfolioAggregationReducer = (
   props: IPortfolioAggregationProps
 ): IPortfolioAggregationContext => {
   const layerHostId = useId('layerHost')
+  const toasterId = useId('toaster')
   const initialState = useMemo(() => getInitialState(props), [props])
   const reducer = useMemo(() => createPortfolioAggregationReducer(props, initialState), [])
   const [state, dispatch] = useReducer(reducer, initialState)
   return useMemo<IPortfolioAggregationContext>(
-    () => ({ props, state, dispatch, layerHostId }),
+    () => ({ props, state, dispatch, layerHostId, toasterId }),
     [state]
   )
 }

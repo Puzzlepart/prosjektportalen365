@@ -57,7 +57,9 @@ export const CustomEditPanelFooter: FC<ICustomEditPanelFooterProps> = ({ isSaveD
             <>
               <Button
                 onClick={handleOnSubmit}
-                disabled={isSaving || context.props.submit.disabled || isSaveDisabled}
+                // Focusable while it cannot save: the keyboard reaches it and a screen reader
+                // reads why (WCAG 2.1.1, 3.3.2).
+                disabledFocusable={isSaving || context.props.submit.disabled || isSaveDisabled}
                 title={isSaveDisabled ? strings.Aria.SaveDisabledTitle : strings.Aria.SaveTitle}
                 appearance='primary'
               >

@@ -4,15 +4,25 @@
   max-width: 1024px;
   gap: 15px;
 
+  // The flexible part: the search box gives way as the commands narrow, and nothing wraps.
   .search {
     width: 100%;
+    min-width: 0;
     max-width: 100%;
 
     .searchBox {
       box-shadow: var(--shadow2);
       width: inherit;
+      min-width: 0;
       max-width: inherit;
     }
+  }
+
+  // Only where even a narrowed search box leaves the buttons no room, as at 320 px, does the
+  // toolbar go under it rather than past the edge (WCAG 1.4.10).
+  @media (max-width: 480px) {
+    flex-wrap: wrap;
+    row-gap: 8px;
   }
 
   .sortBy {

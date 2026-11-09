@@ -32,8 +32,9 @@ export interface IUseDataTypeDropdown {
  *
  * The dropdown is the v9 `Dropdown`, like the visibility `Combobox` beside it in the column form.
  * The v8 `Dropdown` it replaced rendered its list in the v8 layer, underneath the v9 drawer. Both
- * are built on `@fluentui/react-combobox`, which opens fine in the browser and loops under Jest on
- * React 17, so the tests cover everything but opening it; that is checked by hand.
+ * are built on `@fluentui/react-combobox`, which opens fine in the browser, looped under Jest on
+ * React 17 and takes tens of seconds to open there on React 18, so the tests cover everything but
+ * opening it; that is checked by hand.
  *
  * @param props Props for the column data type field.
  */

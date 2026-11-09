@@ -20,6 +20,7 @@ declare interface IPortfolioExtensionsStrings {
   CreateLabel: string
   HelpContentAvailableDescription: string
   HelpContentAvailableLabel: string
+  HelpContentDialogTitle: string
   HelpContentUnavailableDescription: string
   HelpContentUnavailableLabel: string
   IdeaAlreadyApproved: string
@@ -43,12 +44,14 @@ declare interface IPortfolioExtensionsStrings {
   LatestGitHubReleaseHighlightsLabel: string
   LinksListDescription: string
   LinksListLabel: string
+  LinksListOpenLabel: string
   SeeAllInstallationsLinkText: string
   SetRecommendationSubtitle: string
   SetRecommendationTitle: string
   SiteContentsLabel: string
   SiteSettingsDescription: string
   SiteSettingsLabel: string
+  SiteSettingsMoreLabel: string
   SubmitLabel: string
   IdeaRegistrationIncludeString: string
   IdeaProcessingCommandTitle: string
@@ -60,9 +63,9 @@ declare interface IPortfolioExtensionsStrings {
   FavoriteProjectsNoItemsMessage: string
   TemplatePackageCatalogCommandTitle: string
   CatalogDrawerTitle: string
+  CatalogToolbarLabel: string
   CatalogSubtitle: string
   CatalogUserGuideLinkText: string
-  CatalogCloseAria: string
   CatalogLoadingText: string
   CatalogSearchPlaceholder: string
   CatalogFilterTypeLabel: string
@@ -77,6 +80,7 @@ declare interface IPortfolioExtensionsStrings {
   CatalogSortName: string
   CatalogViewGrid: string
   CatalogViewList: string
+  CatalogViewLabel: string
   CatalogTypeTemplate: string
   CatalogTypeExtension: string
   CatalogTypeContent: string
@@ -132,6 +136,7 @@ declare interface IPortfolioExtensionsStrings {
   CatalogStepValidateManifest: string
   CatalogStepCheckVersion: string
   CatalogStepProvisionHub: string
+  CatalogStepProvisionHubErrorsDetail: string
   CatalogStepTaxonomy: string
   CatalogStepStoreProjectTemplate: string
   CatalogStepExtensions: string
@@ -139,6 +144,7 @@ declare interface IPortfolioExtensionsStrings {
   CatalogStepListContent: string
   CatalogStepListContentDetail: string
   CatalogAdvancedLogLabel: string
+  CatalogInstallProgressLabel: string
   CatalogLogDownloaded: string
   CatalogLogManifestValidated: string
   CatalogLogHubProvisioned: string
@@ -151,11 +157,15 @@ declare interface IPortfolioExtensionsStrings {
   CatalogStepSkippedFeatureFlag: string
   CatalogInstallSuccessTitle: string
   CatalogInstallSuccessText: string
+  CatalogInstallWarningTitle: string
+  CatalogInstallWarningText: string
   CatalogInstallErrorTitle: string
   CatalogPublishSuccessText: string
   CatalogPublishErrorText: string
   CatalogPublishTaxonomySkippedText: string
   CatalogPublishCancelledText: string
+  CatalogPublishErrorsText: string
+  CatalogPublishErrorsLabel: string
   CatalogRemoveSuccessText: string
   CatalogRemoveSuccessTextExtension: string
   CatalogRemoveErrorText: string
@@ -207,6 +217,7 @@ declare interface IPortfolioExtensionsStrings {
   CatalogStepStatusError: string
   CatalogStepStatusSkipped: string
   CatalogStepStatusPending: string
+  CatalogStepStatusWarning: string
   CatalogActionAddExtension: string
   CatalogActionReinstallExtension: string
   CatalogActionUpdateExtension: string
@@ -239,6 +250,7 @@ declare interface IPortfolioExtensionsStrings {
   CatalogImportCancelled: string
   CatalogCompatibilityTitle: string
   CatalogCompatibilityIntro: string
+  CatalogCompatibilityConflictsLabel: string
   CatalogCompatibilityContinue: string
   CatalogResolutionOverwrite: string
   CatalogResolutionSkip: string
@@ -247,8 +259,11 @@ declare interface IPortfolioExtensionsStrings {
   CatalogConflictFieldRef: string
   CatalogConflictSiteField: string
   CatalogConflictSiteFieldType: string
+  CatalogConflictSiteFieldWidened: string
   CatalogConflictSiteFieldReused: string
   CatalogConflictListField: string
+  CatalogConflictListFieldType: string
+  CatalogConflictListFieldWidened: string
   CatalogConflictListView: string
   CatalogConflictList: string
   CatalogConflictExtension: string

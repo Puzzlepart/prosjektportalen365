@@ -1,6 +1,7 @@
 import { ISPFieldUser } from '../interfaces'
 import { IPersonaItem } from '../types'
 import { EditableSPFieldValue } from '../models/EditableSPFieldValue'
+import { readStoredDay } from './formatDate'
 import { getUserPhoto } from './getUserPhoto'
 
 /**
@@ -69,7 +70,8 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
       }
     ],
     ['Date', ({ $ }) => new Date($)],
-    ['DateTime', ({ $ }) => new Date($)],
+    // The day SharePoint shows, read from its text, whatever the machine's time zone.
+    ['DateTime', ({ $, value }) => readStoredDay($, value)],
     ['MultiChoice', ({ value }) => value?.split(', ')],
     [
       'User',

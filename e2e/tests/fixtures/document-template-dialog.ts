@@ -32,7 +32,11 @@ export async function findDocumentLibrary(page: import('@playwright/test').Page,
   return (await documentLibrary(page, siteUrl)).url
 }
 
-/** Runs the command from the library's command bar, or from its "Mer" overflow when the bar is narrow. */
+/**
+ * Runs the command from the library's command bar, or from its "Mer" overflow when the bar is narrow.
+ * Open the library with `onListPage`, which loads it once more when SharePoint's React fault on
+ * list pages left the dialog unrendered.
+ */
 export async function openDocumentTemplateDialog(page: import('@playwright/test').Page) {
   await expect(
     page.locator('[data-automationid="CommandBar"], [role="menubar"]').first()

@@ -7,6 +7,11 @@ declare interface IProjectWebPartsStrings {
   EditStatusPanelText: string
   Aria: {
     CurrentPhaseText: string
+    PhaseListLabel: string
+    ChecklistStepsLabel: string
+    MoreSectionsLabel: string
+    NameValueLabel: string
+    ChangingPhaseAnnouncement: string
   }
   SaveText: string
   ErrorBoundaryFallbackDescription: string
@@ -42,8 +47,8 @@ declare interface IProjectWebPartsStrings {
   CheckpointStillOpenTooltipCommentEmpty: string
   ChildProjectAdminLabel: string
   CloseText: string
-  ColorPickerStrings: IColorPickerStrings
   CommentLabel: string
+  CommentMinLengthFieldLabel: string
   ConfigItemTitleFieldLabel: string
   ConfirmChangePhase: string
   ConsequenceFieldNameFieldLabel: string
@@ -57,6 +62,12 @@ declare interface IProjectWebPartsStrings {
   RunProjectSetupDialogTitle: string
   RunProjectSetupDialogSubText: string
   RunProjectSetupDialogProgressText: string
+  SetupMenuNotSavedTitle: string
+  SetupMenuNotSavedText: string
+  ContinueAnywayText: string
+  SetupNotStartedTitle: string
+  SetupNotStartedText: string
+  SetupNotStartedErrorText: string
   CurrentPhaseViewNameFieldLabel: string
   DataFetchModeAutoText: string
   DataFetchModeDataSourceText: string
@@ -78,6 +89,7 @@ declare interface IProjectWebPartsStrings {
   DeleteReportButtonLabel: string
   DeleteReportButtonDescription: string
   DeleteReportButtonDescriptionNoPermission: string
+  DeleteReportErrorTitle: string
   EditItemLabel: string
   EditProjectInformationText: string
   EditReportButtonLabel: string
@@ -91,11 +103,29 @@ declare interface IProjectWebPartsStrings {
   GeneralGroupName: string
   GetSnapshotButtonLabel: string
   GetSnapshotButtonDescription: string
+  SnapshotDialogTitle: string
+  SnapshotOpenInNewTabLabel: string
+  SnapshotEnterFullscreenLabel: string
+  SnapshotExitFullscreenLabel: string
+  SnapshotCopyLinkLabel: string
+  SnapshotCopyLinkDialogTitle: string
+  SnapshotCopyButtonLabel: string
+  SnapshotPageLinkLabel: string
+  SnapshotImageLinkLabel: string
+  SnapshotLinkCopiedText: string
+  SnapshotLinkCopyFailedText: string
+  SnapshotLinkAccessText: string
+  SnapshotGroupName: string
+  SnapshotInDialogFieldLabel: string
+  SnapshotInDialogOnText: string
+  SnapshotInDialogOffText: string
   HideActionsLabel: string
   HideAllActionsLabel: string
   HideParentProjectsLabel: string
   HideChildProjectsLabel: string
   HideStatusReportLabel: string
+  ShowSustainabilityGoalsAsIconsLabel: string
+  SustainabilityGoalIconSizeLabel: string
   HookAuthFieldDescription: string
   HookAuthFieldLabel: string
   HookUrlFieldDescription: string
@@ -229,6 +259,11 @@ declare interface IProjectWebPartsStrings {
   SyncProjectPropertiesProgressLabel: string
   SyncProjectPropertiesValuesProgressDescription: string
   SyncProjectPropertiesValuesProgressLabel: string
+  HubSyncWarningTitle: string
+  HubSyncNoWriteAccessReason: string
+  HubSyncHubUnavailableReason: string
+  ProjectPropertiesNotSyncedToHubText: string
+  PhaseNotSyncedToHubText: string
   SyncPropertiesAfterPhaseChangeFieldLabel: string
   TagFieldLabel: string
   TasksLinkText: string
@@ -367,6 +402,9 @@ declare interface IProjectWebPartsStrings {
     SearchIn: string
     Search: string
     ExportSelected: string
+    ExportSelectedMultiple: string
+    ExportErrorTitle: string
+    ExportErrorMessage: string
     ExportToExcel: string
     FolderView: string
     FlatView: string
@@ -409,9 +447,22 @@ declare interface IProjectWebPartsStrings {
     Close: string
     NoItemsFound: string
     ListTable: string
-    GroupByColumn: string
+    SortAscending: string
+    SortDescending: string
+    ResizeColumn: string
     FolderNavigation: string
     HiddenFromView: string
+    RefreshDone: string
+    ItemsShown: string
+    FileUploaded: string
+    FilesUploaded: string
+    UploadFailed: string
+    DocumentCreated: string
+    DocumentCreateFailed: string
+    ItemDeleted: string
+    ItemsDeleted: string
+    DeleteFailed: string
+    DefaultListName: string
   }
 }
 

@@ -326,3 +326,82 @@ export async function addEntityItem<T = any>(
 ): Promise<T> {
   return await list.items.add(properties)
 }
+
+/**
+ * Update the entity item matching `identity`, or add it when there is none.
+ *
+ * A project set up by a user without write access to the hub has no entity, and every later
+ * sync failed on it. Adding the entity on the sync registers the project the first time
+ * someone with write access to the hub saves it.
+ *
+ * Before it adds one, it looks the entity up by `alternateKeys` too, key by key. An entity
+ * registered some other way, or one the setup found by its group ID and so never gave the
+ * identity, would otherwise be doubled. An entity found so is updated, the identity filled in,
+ * when it has no identity or the same one written differently; one with another site's identity
+ * (a deleted site's, at the same URL) is left alone.
+ *
+ * @param list Entity list
+ * @param params Identity and URL field names
+ * @param identity Identity of the entity
+ * @param url Site URL of the entity, set only on a new entity
+ * @param properties Properties to update, or to add the entity with
+ * @param newEntityProperties Properties set only on a new entity
+ * @param alternateKeys Other fields that identify the entity, with their stored values; a key
+ * without a value is skipped
+ * @param eTag ETag for the `If-Match` header of an update
+ *
+ * @returns `true` when the entity was added, `false` when it was updated
+ */
+export async function ensureEntityItem(
+  list: ISpListShape,
+  params: Pick<ISpEntityPortalServiceParams, 'identityFieldName' | 'urlFieldName'>,
+  identity: string,
+  url: string,
+  properties: Record<string, any>,
+  newEntityProperties: Record<string, any> = {},
+  alternateKeys: Record<string, string> = {},
+  eTag = '*'
+): Promise<boolean> {
+  const item = await getEntityItem(list, params.identityFieldName, identity)
+  if (item) {
+    await list.items.getById(item.Id).update(properties, eTag)
+    return false
+  }
+  const normalized = normalizeEntityIdentity(identity)
+  for (const [fieldName, value] of Object.entries(alternateKeys)) {
+    if (!value) continue
+    const [match] = await list.items
+      .select('Id', params.identityFieldName)
+      .filter(`${fieldName} eq '${escapeODataStringLiteral(value)}'`)
+      .top(1)<Array<Record<string, any>>>()
+    if (!match) continue
+    const stored: string = match[params.identityFieldName]
+    if (stored && !isSameIdentity(stored, normalized)) continue
+    await list.items
+      .getById(match.Id)
+      .update({ ...properties, [params.identityFieldName]: normalized }, eTag)
+    return false
+  }
+  await addEntityItem(
+    list,
+    createNewEntityProperties(params, normalized, url, {
+      ...newEntityProperties,
+      ...properties
+    })
+  )
+  return true
+}
+
+/**
+ * Whether a stored identity names the same entity as `identity`: a GUID may be stored with
+ * braces or in upper case.
+ *
+ * @param stored Identity as stored on an entity
+ * @param identity Identity looked for
+ */
+function isSameIdentity(stored: string, identity: string): boolean {
+  return (
+    normalizeEntityIdentity(stored).toLowerCase() ===
+    normalizeEntityIdentity(identity).toLowerCase()
+  )
+}

@@ -1,11 +1,10 @@
-import { getId } from '../../util'
+import { getId, renderReact, unmountReact } from '../../util'
 import {
   IPropertyPaneCustomFieldProps,
   IPropertyPaneField,
   PropertyPaneFieldType
 } from '@microsoft/sp-property-pane'
 import React from 'react'
-import { render, unmountComponentAtNode } from 'react-dom'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import styles from './PropertyPaneDescription.module.scss'
@@ -39,14 +38,14 @@ class PropertyPaneDescriptionBuilder implements IPropertyPaneField<IPropertyPane
   }
 
   private onDispose(element: HTMLElement): void {
-    unmountComponentAtNode(element)
+    unmountReact(element)
   }
 
   private onRender(elem: HTMLElement): void {
     if (!this.elem) {
       this.elem = elem
     }
-    render(
+    renderReact(
       <div className={styles.propertyPaneDescription}>
         <ReactMarkdown rehypePlugins={[rehypeRaw]}>{this.properties.description}</ReactMarkdown>
       </div>,

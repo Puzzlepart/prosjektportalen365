@@ -7,7 +7,7 @@ import { View } from './Views'
 import { IArchiveConfiguration } from './Views/ArchiveView'
 import { getNextIndex } from './getNextIndex'
 import { IChangePhaseDialogState } from './types'
-import { useReducer } from 'react'
+import { useMemo, useReducer } from 'react'
 
 export const INIT = createAction<{ context: IProjectPhasesContext }>('INIT')
 export const SET_VIEW = createAction<{ view: View }>('SET_VIEW')
@@ -19,39 +19,33 @@ export const SET_ARCHIVE_CONFIGURATION = createAction<{
 }>('SET_ARCHIVE_CONFIGURATION')
 
 const createChangePhaseDialogReducer = () =>
-  createReducer<IChangePhaseDialogState>(
-    {},
-    {
-      [INIT.type]: (state, { payload }: ReturnType<typeof INIT>) => {
+  createReducer<IChangePhaseDialogState>({}, (builder) =>
+    builder
+      .addCase(INIT, (_state, { payload }) => {
+        // A new state, so nothing of an earlier opening (a skipped checklist, an archive choice)
+        // is left.
         const phase =
           payload.context.state.phase ||
           payload.context.state.data.phases.find((phase) => phase.properties.IsInitial)
-
-        if (phase) {
-          const items = phase.checklistData.items ? Object.keys(phase.checklistData.items) : []
-          if (!isEmpty(items)) {
-            const checklistItems = phase.checklistData?.items || []
-            const openChecklistItems = checklistItems.filter(
-              (item: ChecklistItemModel) => item.status === strings.StatusOpen
-            )
-            state.view = isEmpty(openChecklistItems) ? View.Summary : View.Initial
-            state.checklistItems = checklistItems
-            state.currentIdx = getNextIndex(checklistItems)
-            state.isChecklistMandatory = phase.isChecklistMandatory === 'true'
-          } else {
-            state.view = payload.context.props.useArchive ? View.Archive : View.Confirm
-          }
-        } else {
-          state.view = payload.context.props.useArchive ? View.Archive : View.Confirm
+        const checklistItems: ChecklistItemModel[] = phase?.checklistData?.items ?? []
+        if (isEmpty(checklistItems)) {
+          return { view: payload.context.props.useArchive ? View.Archive : View.Confirm }
         }
-      },
-      [SET_VIEW.type]: (state, { payload }: ReturnType<typeof SET_VIEW>) => {
+        const openChecklistItems = checklistItems.filter(
+          (item) => item.status === strings.StatusOpen
+        )
+        return {
+          view: isEmpty(openChecklistItems) ? View.Summary : View.Initial,
+          // A copy: immer freezes what the state holds, and the loaded phase keeps its own list.
+          checklistItems: [...checklistItems],
+          currentIdx: getNextIndex(checklistItems),
+          isChecklistMandatory: phase.isChecklistMandatory === 'true'
+        }
+      })
+      .addCase(SET_VIEW, (state, { payload }) => {
         state.view = payload.view
-      },
-      [CHECKLIST_ITEM_UPDATED.type]: (
-        state,
-        { payload }: ReturnType<typeof CHECKLIST_ITEM_UPDATED>
-      ) => {
+      })
+      .addCase(CHECKLIST_ITEM_UPDATED, (state, { payload }) => {
         const checklistItems = current(state).checklistItems as ChecklistItemModel[]
         const item = checklistItems[state.currentIdx]
         state.checklistItems[state.currentIdx] = item.update(payload.properties)
@@ -61,23 +55,25 @@ const createChangePhaseDialogReducer = () =>
         } else {
           state.view = View.Summary
         }
-      },
-      [SET_ARCHIVE_CONFIGURATION.type]: (
-        state,
-        { payload }: ReturnType<typeof SET_ARCHIVE_CONFIGURATION>
-      ) => {
+      })
+      .addCase(SET_ARCHIVE_CONFIGURATION, (state, { payload }) => {
         state.archiveConfiguration = payload.archiveConfiguration
-      }
-    }
+      })
   )
 
 /**
  * Custom hook that returns the state and dispatch function for the change phase dialog reducer.
+ * Given the phases' context, the state starts from it (`INIT`) as the dialog mounts, which it does
+ * each time it opens.
+ *
+ * @param context Context of the phase selector
  *
  * @returns An object containing the state and dispatch function.
  */
-export const useChangePhaseDialogReducer = () => {
-  const reducer = createChangePhaseDialogReducer()
-  const [state, dispatch] = useReducer(reducer, {})
+export const useChangePhaseDialogReducer = (context?: IProjectPhasesContext) => {
+  const reducer = useMemo(() => createChangePhaseDialogReducer(), [])
+  const [state, dispatch] = useReducer(reducer, {}, (initialState: IChangePhaseDialogState) =>
+    context ? reducer(initialState, INIT({ context })) : initialState
+  )
   return { state, dispatch }
 }

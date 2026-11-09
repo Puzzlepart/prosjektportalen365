@@ -1,5 +1,7 @@
+import { useRestoreFocusTarget } from '@fluentui/react-components'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import strings from 'PortfolioWebPartsStrings'
 import * as React from 'react'
 import { PortfolioOverviewContext } from '../../context'
 import { ColumnFormPanelFooter } from './index'
@@ -41,15 +43,32 @@ describe('ColumnFormPanelFooter', () => {
     expect(screen.getByRole('button', { name: 'Slett' })).toBeVisible()
   })
 
+  it('gives the focus back to delete as its confirmation closes, not to the column header behind the panel (WCAG 2.4.3)', () => {
+    let target: ReturnType<typeof useRestoreFocusTarget>
+    const Probe: React.FC = () => {
+      target = useRestoreFocusTarget()
+      return null
+    }
+    render(<Probe />)
+    renderFooter({ isEditing: true })
+    const [attribute, value] = Object.entries(target)[0]
+    expect(screen.getByRole('button', { name: 'Slett' })).toHaveAttribute(attribute, value)
+  })
+
   it('calls onSave when save is clicked', async () => {
     const { onSave, user } = renderFooter()
     await user.click(screen.getByRole('button', { name: 'Lagre' }))
     expect(onSave).toHaveBeenCalledTimes(1)
   })
 
-  it('disables save when the form says so', () => {
-    renderFooter({ isSaveDisabled: true })
-    expect(screen.getByRole('button', { name: 'Lagre' })).toBeDisabled()
+  it('keeps save from saving while the form is incomplete, and lets the keyboard reach why (WCAG 2.1.1, 3.3.2)', async () => {
+    // A disabled button is skipped by the keyboard, and what it needed was nowhere.
+    const { onSave, user } = renderFooter({ isSaveDisabled: true })
+    const save = screen.getByRole('button', { name: 'Lagre' })
+    expect(save).toHaveAttribute('aria-disabled', 'true')
+    expect(save).toHaveAccessibleDescription(strings.ColumnFormSaveDisabledReason)
+    await user.click(save)
+    expect(onSave).not.toHaveBeenCalled()
   })
 
   it('closes the panel on cancel without saving', async () => {

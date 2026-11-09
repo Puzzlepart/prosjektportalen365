@@ -28,7 +28,7 @@ jest.mock('../../DataGridList', () => {
   }
 })
 
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import * as React from 'react'
 import strings from 'SharedLibraryStrings'
@@ -113,6 +113,26 @@ describe('DialogColumn', () => {
       expect(dialog).toHaveTextContent('Første måling')
       expect(dialog).toHaveTextContent('80 %')
       expect(dialog).toHaveTextContent('01.06.2026')
+    },
+    TEST_TIMEOUT
+  )
+
+  it(
+    'closes from the close button in its title, and has one under the list too',
+    async () => {
+      const user = setupUser()
+      renderCell()
+      await user.click(screen.getByText(strings.ShowAllMeasurementsLinkText))
+      const dialog = await findDialog()
+      const [titleClose, footerClose] = within(dialog).getAllByRole('button', {
+        name: strings.CloseText,
+        hidden: true
+      })
+      expect(footerClose).toHaveTextContent(strings.CloseText)
+      await user.click(titleClose)
+      await waitFor(() => expect(screen.queryByRole('dialog', { hidden: true })).toBeNull(), {
+        timeout: DIALOG_TIMEOUT
+      })
     },
     TEST_TIMEOUT
   )

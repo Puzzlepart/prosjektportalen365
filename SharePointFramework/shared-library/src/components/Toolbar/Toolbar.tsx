@@ -10,9 +10,15 @@ import { useToolbarItemRender } from './useToolbarItemRender'
 import styles from './Toolbar.module.scss'
 import { IToolbarProps } from './types'
 import strings from 'SharedLibraryStrings'
-import { customLightTheme } from '../../util'
+import { customLightTheme, withDefaults } from '../../util'
 
-export const Toolbar: FC<IToolbarProps> = (props) => {
+const TOOLBAR_DEFAULT_PROPS: Partial<IToolbarProps> = {
+  items: [],
+  farItems: []
+}
+
+export const Toolbar: FC<IToolbarProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, TOOLBAR_DEFAULT_PROPS)
   const fluentProviderId = useId('fp-toolbar')
   const { renderToolbarItem } = useToolbarItemRender()
   return (
@@ -44,7 +50,3 @@ export const Toolbar: FC<IToolbarProps> = (props) => {
 }
 
 Toolbar.displayName = 'Toolbar'
-Toolbar.defaultProps = {
-  items: [],
-  farItems: []
-}

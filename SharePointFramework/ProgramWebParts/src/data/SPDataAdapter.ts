@@ -8,7 +8,6 @@ import {
 } from '@pnp/sp/search'
 import * as strings from 'ProgramWebPartsStrings'
 import * as cleanDeep from 'clean-deep'
-import { IProgramAdministrationProject } from 'components/ProgramAdministration/types'
 import MSGraph from 'msgraph-helper'
 import { IPortfolioOverviewConfiguration } from 'pp365-portfoliowebparts/lib/components'
 import { IPortfolioAggregationConfiguration } from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
@@ -56,6 +55,14 @@ import { IList } from '@pnp/sp/lists'
 import { IItem } from '@pnp/sp/items'
 import { PermissionKind, Web } from '@pnp/sp/presets/all'
 import resource from 'SharedResources'
+import { removeChildProjectsFromProgram } from './childProjectRemoval'
+import {
+  HUB_SITE_PROJECT_ITEM_PROPERTIES,
+  HUB_SITE_PROJECT_SITE_PROPERTIES,
+  hubSiteProjectsCacheKey,
+  toHubSiteProjects,
+  toStoredChildProject
+} from './hubSiteProjects'
 
 enum ParentProjectOperation {
   Add = 'add',
@@ -892,6 +899,7 @@ export class SPDataAdapter
               Achievement: m.Achievement,
               AchievementDisplay: m.AchievementDisplay,
               DateDisplay: m.DateDisplay,
+              Date: m.Date,
               TrendIcon: m.TrendIcon
             }
           })
@@ -1092,7 +1100,8 @@ export class SPDataAdapter
    * Fetches all projects associated with the current hubsite context. This is done by querying the
    * search index for all sites with the same DepartmentId as the current hubsite and all project items with
    * the same DepartmentId as the current hubsite. The sites are then matched with the items to
-   * retrieve the SiteId and SPWebURL. The result are cached for 5 minutes.
+   * retrieve the SiteId and SPWebURL, the date the site was created and the project's phase
+   * (`toHubSiteProjects`). The result are cached for 5 minutes.
    *
    * @param hubs Optional array of program hubs with their URLs and hub site IDs
    */
@@ -1120,7 +1129,7 @@ export class SPDataAdapter
     }
 
     const hubSiteQuery = hubSiteIds.map((id) => `DepartmentId:{${id}}`).join(' OR ')
-    const cacheKey = `HubSiteProjects_${hubSiteIds.sort().join('_')}`
+    const cacheKey = hubSiteProjectsCacheKey(hubSiteIds)
 
     return new PnPClientStorage().local.getOrPut(
       cacheKey,
@@ -1130,7 +1139,7 @@ export class SPDataAdapter
           RowLimit: 500,
           StartRow: 0,
           ClientType: 'ContentSearchRegular',
-          SelectProperties: ['SPWebURL', 'Title', 'SiteId', 'Path', 'DepartmentId'],
+          SelectProperties: HUB_SITE_PROJECT_SITE_PROPERTIES,
           TrimDuplicates: false
         }
 
@@ -1147,7 +1156,7 @@ export class SPDataAdapter
           RowLimit: 500,
           StartRow: 0,
           ClientType: 'ContentSearchRegular',
-          SelectProperties: ['GtSiteIdOWSTEXT', 'Title'],
+          SelectProperties: HUB_SITE_PROJECT_ITEM_PROPERTIES,
           TrimDuplicates: false
         }
 
@@ -1159,34 +1168,7 @@ export class SPDataAdapter
           itemResults.push(...(response?.PrimarySearchResults ?? []))
         }
 
-        const [sts_sites, items] = await Promise.all([siteResults, itemResults])
-
-        return items
-          .filter(
-            (item) =>
-              item['GtSiteIdOWSTEXT'] &&
-              item['GtSiteIdOWSTEXT'] !== '00000000-0000-0000-0000-000000000000'
-          )
-          .map<IProgramAdministrationProject>((item) => {
-            const site = sts_sites.find((site) => site.SiteId === item['GtSiteIdOWSTEXT'])
-            const rawHubSiteId = site?.['DepartmentId']
-            const hubSiteId = rawHubSiteId
-              ? rawHubSiteId.replace(/[{}]/g, '').toLowerCase()
-              : rawHubSiteId
-            const hub = hubs?.find((h) => h.hubSiteId === hubSiteId)
-            return {
-              SiteId: item['GtSiteIdOWSTEXT'],
-              Title: site?.Title ?? item.Title,
-              SPWebURL: site?.SPWebUrl,
-              Path: site?.Path,
-              HubSiteId: hubSiteId,
-              HubSiteUrl: hub?.url,
-              HubSiteTitle: hub?.title,
-              _site: site
-            }
-          })
-          .filter((project) => project._site)
-          .map(({ _site, ...project }) => project)
+        return toHubSiteProjects(itemResults, siteResults, hubs)
       },
       dateAdd(new Date(), 'minute', 5)
     )
@@ -1236,7 +1218,7 @@ export class SPDataAdapter
       )
       projects = []
     }
-    const updatedProjects = [...projects, ...newProjects]
+    const updatedProjects = [...projects, ...newProjects.map(toStoredChildProject)]
     const seen = new Set<string>()
     const uniqueProjects = updatedProjects.filter((project: Record<string, string>) => {
       if (seen.has(project.SiteId)) return false
@@ -1265,7 +1247,8 @@ export class SPDataAdapter
   }
 
   /**
-   * Remove child projects.
+   * Remove child projects: the hubs and the parent links first, the program's own list last
+   * (`removeChildProjectsFromProgram`).
    *
    * @param projectToRemove Projects to delete
    */
@@ -1277,39 +1260,26 @@ export class SPDataAdapter
         '(SPDataAdapter) (removeChildProjects) Property item not initialized. Call fetchChildProjects() first.'
       )
     }
-    const { GtChildProjects } = await this._propertyItem.select('GtChildProjects')()
-    let projects: Array<Record<string, string>> = []
-    try {
-      projects = GtChildProjects ? JSON.parse(GtChildProjects) : []
-    } catch (error) {
-      console.warn(
-        '(SPDataAdapter) (removeChildProjects) Failed to parse GtChildProjects. Resetting to empty array.',
-        error
-      )
-      projects = []
-    }
-    const updatedProjects = projects.filter(
-      (p) => !projectToRemove.some((el) => el.SiteId === p.SiteId)
-    )
-    const updateProperties = { GtChildProjects: JSON.stringify(updatedProjects) }
-    await this._propertyItem.update(updateProperties)
-
-    const uniqueHubIds = new Set(projectToRemove.map((p) => p.HubSiteId).filter(Boolean))
-    await Promise.all([
-      ...Array.from(uniqueHubIds).map((hubSiteId) =>
-        this.updateProjectInHub(updateProperties, hubSiteId as string)
-      ),
-      ...projectToRemove.map((project) =>
-        project.HubSiteId
-          ? this._updateChildProjectParents(
-              project.SiteId,
-              project.HubSiteId,
-              ParentProjectOperation.Remove
+    return await removeChildProjectsFromProgram(
+      {
+        readChildProjects: async () => {
+          const { GtChildProjects } = await this._propertyItem.select('GtChildProjects')()
+          try {
+            return GtChildProjects ? JSON.parse(GtChildProjects) : []
+          } catch (error) {
+            console.warn(
+              '(SPDataAdapter) (removeChildProjects) Failed to parse GtChildProjects. Resetting to empty array.',
+              error
             )
-          : Promise.resolve()
-      )
-    ])
-
-    return updatedProjects
+            return []
+          }
+        },
+        writeChildProjects: (properties) => this._propertyItem.update(properties),
+        updateHub: (properties, hubSiteId) => this.updateProjectInHub(properties, hubSiteId),
+        removeParent: (siteId, hubSiteId) =>
+          this._updateChildProjectParents(siteId, hubSiteId, ParentProjectOperation.Remove)
+      },
+      projectToRemove
+    )
   }
 }

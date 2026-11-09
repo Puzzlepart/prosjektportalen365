@@ -1,7 +1,13 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { IIdeaFieldProps } from './types'
 import { Link, Persona, Tag } from '@fluentui/react-components'
-import { getFluentIcon, IPersonaItem, ITagItem, OverflowTagMenu } from 'pp365-shared-library'
+import {
+  formatDay,
+  getFluentIcon,
+  IPersonaItem,
+  ITagItem,
+  OverflowTagMenu
+} from 'pp365-shared-library'
 import {
   ChevronCircleRightFilled,
   EarthFilled,
@@ -57,15 +63,11 @@ export function useIdeaField(props: IIdeaFieldProps) {
           if (user) {
             return (
               <Persona
-                {...user}
-                title={user.text}
                 name={user.text}
+                secondaryText={user.secondaryText}
                 size='small'
-                avatar={{
-                  image: {
-                    src: user.imageUrl
-                  }
-                }}
+                // The picture is beside the name: read once, not twice (WCAG 1.1.1).
+                avatar={{ 'aria-hidden': true, image: { src: user.imageUrl } }}
                 style={{ marginTop: 6 }}
               />
             )
@@ -82,15 +84,10 @@ export function useIdeaField(props: IIdeaFieldProps) {
               {users.map((user, key) => (
                 <Persona
                   key={key}
-                  {...user}
-                  title={user.text}
                   name={user.text}
+                  secondaryText={user.secondaryText}
                   size='small'
-                  avatar={{
-                    image: {
-                      src: user.imageUrl
-                    }
-                  }}
+                  avatar={{ 'aria-hidden': true, image: { src: user.imageUrl } }}
                   style={{ marginTop: 6 }}
                 />
               ))}
@@ -147,7 +144,8 @@ export function useIdeaField(props: IIdeaFieldProps) {
       [
         'DateTime',
         (date: Date) => {
-          return <div title={date.toLocaleDateString()}>{date.toLocaleDateString()}</div>
+          const text = formatDay(date)
+          return <div title={text}>{text}</div>
         }
       ],
       [
@@ -220,7 +218,7 @@ export function useIdeaField(props: IIdeaFieldProps) {
       if (renderMap.has(props.model.type)) {
         return renderMap.get(props.model.type)(value)
       } else {
-        return <div title={value.toString()}>{value}</div>
+        return <div title={value.toString()}>{value as ReactNode}</div>
       }
     } else {
       return null

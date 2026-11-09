@@ -64,6 +64,11 @@ export interface ICatalogFilters {
 export interface ICatalogNotification {
   intent: 'success' | 'warning' | 'error'
   text: string
+  /**
+   * Lines listed under the text as they are, in a list named by `label`: the errors
+   * sp-js-provisioning logged while a cloud template's hub dependencies were provisioned.
+   */
+  details?: { label: string; lines: string[] }
 }
 
 export interface ITemplatePackageCatalogState {
@@ -96,6 +101,11 @@ export interface ITemplatePackageCatalogState {
    * can't double-submit. (Import uses {@link installProgress} instead.)
    */
   busyAction?: 'publish' | 'remove'
+  /**
+   * Set as an installation's progress is closed: the details it replaced take the focus back
+   * (WCAG 2.4.3), and clear it.
+   */
+  focusDetails?: boolean
   /**
    * Whether the detail pane is shown in the <720px collapsed layout.
    */

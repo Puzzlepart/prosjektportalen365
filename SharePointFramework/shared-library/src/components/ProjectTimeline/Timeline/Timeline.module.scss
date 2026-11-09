@@ -5,6 +5,13 @@
     justify-content: space-between;
     padding: 32px 32px 20px 32px;
 
+    // Only on a narrow screen, as at 320 px, does the toolbar go under the title rather than
+    // past the edge (WCAG 1.4.10).
+    @media (max-width: 480px) {
+      flex-wrap: wrap;
+      gap: 8px 16px;
+    }
+
     .commandBar {
       margin: 0;
     }
@@ -14,6 +21,20 @@
     margin: 0px auto;
     padding: 0 32px 0 32px;
     font-size: 12px !important;
+
+    // Today's label, at the top of its line, readable over the bars it may lie on.
+    .todayLabel {
+      position: absolute;
+      top: 2px;
+      left: 4px;
+      padding: 0 4px;
+      border-radius: var(--borderRadiusSmall);
+      background-color: var(--colorNeutralBackground1);
+      color: var(--colorPaletteRedForeground1);
+      font-size: var(--fontSizeBase100);
+      line-height: var(--lineHeightBase100);
+      white-space: nowrap;
+    }
 
     .timelineItem,
     .timelineItemMilestone {
@@ -28,46 +49,91 @@
         width: 100%;
         padding: 0 8px;
       }
+
+      // The items' configured style sets `outline: none`, which the focus ring must win over.
+      &:focus-visible {
+        outline: var(--strokeWidthThick) solid var(--colorStrokeFocus2) !important;
+        outline-offset: 1px;
+      }
     }
 
+    // A milestone is its shape in the edge's colour with the fill laid on top, cut out by the same
+    // shape scaled about its centre: a shape cut out with `clip-path` cannot take a border. The
+    // inner polygons leave an edge about 1.5px wide on the 22 by 24 px diamond and the 22 by 19 px
+    // triangle.
+    .milestone {
+      position: relative;
+      background: var(--milestone-edge);
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: var(--milestone-fill);
+      }
+    }
+
+    .diamond {
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+
+      &::after {
+        clip-path: polygon(50% 9.25%, 90.75% 50%, 50% 90.75%, 9.25% 50%);
+      }
+    }
+
+    .triangle {
+      clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+
+      &::after {
+        clip-path: polygon(50% 15.76%, 88.17% 92.1%, 11.83% 92.1%);
+      }
+    }
+
+    :global(.rct-scroll):focus-visible {
+      outline: var(--strokeWidthThick) solid var(--colorStrokeFocus2);
+      outline-offset: calc(var(--strokeWidthThick) * -1);
+    }
+
+    // Darker under the pointer, not lighter: lighter would fade the edges against the rows and
+    // white text against its bar (WCAG 1.4.3, 1.4.11).
     .timelineItem:hover {
-      filter: brightness(1.2);
+      filter: brightness(0.95);
       box-shadow: var(--shadow2);
     }
 
     .timelineItemMilestone:hover {
-      filter: brightness(1.2);
+      filter: brightness(0.95);
     }
   }
 }
 
-div[class="rct-header-root"] {
+div[class='rct-header-root'] {
   position: sticky;
   top: 0;
   background: #f4f4f4 !important;
   z-index: 8;
 }
 
-div[class="rct-sidebar"] {
+div[class='rct-sidebar'] {
   width: fit-content !important;
   max-width: 320px !important;
   min-width: 0px !important;
 }
 
-div[class="rct-scroll"] {
+div[class='rct-scroll'] {
   z-index: 1 !important;
 }
 
-div[class*="rct-dateHeader-primary"] {
+div[class*='rct-dateHeader-primary'] {
   color: #444 !important;
   border: none !important;
 }
 
-div[class="rct-calendar-header"] {
+div[class='rct-calendar-header'] {
   border: none !important;
 }
 
-div[class*="rct-dateHeader"] {
+div[class*='rct-dateHeader'] {
   font-size: 10px !important;
   border: none !important;
   background: #f4f4f4 !important;

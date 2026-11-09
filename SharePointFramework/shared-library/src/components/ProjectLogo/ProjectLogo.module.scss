@@ -6,6 +6,21 @@
     span {
       padding: 12px;
     }
+
+    // On a card the initials are the project's name. In its own element, since the avatar
+    // centres its initials with flexbox, which cannot cut lines off: a long word wraps, and a long
+    // name ends in «…» after four lines rather than going past the box (WCAG 1.4.12). The whole
+    // name is the avatar's title. A set line height keeps the last line's descenders in the box.
+    .cardTitle {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 4;
+      overflow: hidden;
+      overflow-wrap: anywhere;
+      text-align: center;
+      line-height: 1.3;
+      padding: 0;
+    }
   }
 
   img {

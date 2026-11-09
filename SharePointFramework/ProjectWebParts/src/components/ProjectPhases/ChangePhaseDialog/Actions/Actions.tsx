@@ -70,7 +70,8 @@ export const Actions: FC = () => {
         actions.push({
           text: strings.Skip,
           onClick: () => dispatch(SET_VIEW({ view: getNextView() })),
-          disabled: state.isChecklistMandatory,
+          // Focusable while unavailable, so the keyboard reaches the reason in the title.
+          disabledFocusable: state.isChecklistMandatory,
           title: state.isChecklistMandatory ? strings.ChecklistMandatory : undefined
         })
       }

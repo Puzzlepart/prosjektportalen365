@@ -13,6 +13,7 @@ import { IProjectStatusData } from '../ProjectStatus'
 import { ActionType } from './Actions/types'
 import { IProgressDialogProps } from './ProgressDialog/types'
 import { IArchiveStatusInfo } from '../../data/SPDataAdapter/types'
+import type { SustainabilityGoalIconSize } from './SustainabilityGoals'
 
 export type ProjectInformationPanelType = 'EditPropertiesPanel' | 'AllPropertiesPanel'
 export type ProjectInformationDialogType = 'CreateParentDialog' | 'RunProjectSetupDialog'
@@ -23,6 +24,12 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
    * Page property is used to determine which properties to display
    */
   page: ProjectInformationPage
+
+  /**
+   * Leaves out the web part's title, for a host that shows it itself (the project information
+   * panel names itself after the project in its header). The actions are still named after it.
+   */
+  hideTitle?: boolean
 
   /**
    * Hide all actions for the web part
@@ -84,6 +91,16 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
    * Hide archive status section
    */
   hideArchiveStatus?: boolean
+
+  /**
+   * Render the selected UN Sustainable Development Goals as icons instead of tags
+   */
+  showSustainabilityGoalsAsIcons?: boolean
+
+  /**
+   * Size of the UN Sustainable Development Goal icons
+   */
+  sustainabilityGoalIconSize?: SustainabilityGoalIconSize
 
   /**
    * Truncate status report comments to the specified length and add ellipsis (...)
@@ -177,6 +194,11 @@ export interface IProjectInformationState extends IBaseWebPartComponentState<IPr
    * Properties last updated date/time
    */
   propertiesLastUpdated?: Date
+
+  /**
+   * Warning shown when saved properties were not synced to the hub, with the reason
+   */
+  hubSyncWarning?: string
 }
 
 export interface IProjectInformationData

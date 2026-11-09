@@ -43,6 +43,10 @@ export interface IFetchDataForViewItemResult extends ISearchResult {
 export type IPortfolioViewData = {
   items: IFetchDataForViewItemResult[]
   managedProperties?: string[]
+  /**
+   * The portfolios a merged view could not read, which the overview tells of.
+   */
+  failedPortfolios?: PortfolioInstance[]
 }
 
 /**

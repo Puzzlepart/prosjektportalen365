@@ -12,6 +12,7 @@
     padding-bottom: 16px;
     border-bottom: 1px solid var(--colorNeutralStroke2);
 
+    // An h3 under the web part's h2, with the look the h1 had.
     .title {
       font-size: 2rem;
       font-weight: bold;
@@ -21,17 +22,36 @@
     }
   }
 
+  // Columns of at least 450px, or one as wide as the web part where it is narrower, so nothing is
+  // cut off at 320px (WCAG 1.4.10).
   .fields {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 450px), 1fr));
     grid-gap: 16px;
-    margin-bottom: 16px;
+    margin: 0 0 16px 0;
 
     .field {
       display: flex;
       flex-direction: column;
       text-wrap-style: balance;
       gap: 4px;
+
+      // The look of Fluent's `Text` the fields had: the name semibold at 12px, the value at 14px.
+      .name {
+        font-family: var(--fontFamilyBase);
+        font-size: var(--fontSizeBase200);
+        line-height: var(--lineHeightBase200);
+        font-weight: var(--fontWeightSemibold);
+        color: var(--colorNeutralForeground1);
+      }
+
+      .value {
+        margin: 0;
+        font-family: var(--fontFamilyBase);
+        font-size: var(--fontSizeBase300);
+        line-height: var(--lineHeightBase300);
+        color: var(--colorNeutralForeground1);
+      }
     }
   }
 }

@@ -110,6 +110,58 @@ function Get-PnPVersion {
 
 <#
 .SYNOPSIS
+Install a module from the PowerShell Gallery, trying again when it fails
+
+.DESCRIPTION
+Installs the module for the current user. A CI runner sometimes cannot reach the gallery for a
+moment ("Unable to resolve package source", CI run 38522211703), and a later attempt gets through,
+so a failed attempt is retried after a pause. The last failure is thrown.
+
+.PARAMETER Name
+The module to install
+
+.PARAMETER RequiredVersion
+The exact version to install; the latest when left out
+
+.PARAMETER Attempts
+How many times to try
+
+.PARAMETER DelaySeconds
+The pause before the next attempt
+#>
+function Install-ModuleWithRetry {
+    Param(
+        [Parameter(Mandatory = $true)]
+        [string]$Name,
+        [Parameter(Mandatory = $false)]
+        [string]$RequiredVersion,
+        [Parameter(Mandatory = $false)]
+        [int]$Attempts = 3,
+        [Parameter(Mandatory = $false)]
+        [int]$DelaySeconds = 30
+    )
+    $InstallParams = @{ Name = $Name; Force = $true; Scope = "CurrentUser"; ErrorAction = "Stop" }
+    if (-not [string]::IsNullOrEmpty($RequiredVersion)) {
+        $InstallParams.RequiredVersion = $RequiredVersion
+    }
+    for ($Attempt = 1; $Attempt -le $Attempts; $Attempt++) {
+        try {
+            Install-Module @InstallParams
+            return
+        }
+        catch {
+            if ($Attempt -ge $Attempts) {
+                throw
+            }
+            Write-Host "[WARNING] Installing module $Name failed (attempt $Attempt of $Attempts): $($_.Exception.Message)" -ForegroundColor Yellow
+            Write-Host "[WARNING] Trying again in $DelaySeconds seconds." -ForegroundColor Yellow
+            Start-Sleep -Seconds $DelaySeconds
+        }
+    }
+}
+
+<#
+.SYNOPSIS
 Parse version string
 
 .DESCRIPTION
