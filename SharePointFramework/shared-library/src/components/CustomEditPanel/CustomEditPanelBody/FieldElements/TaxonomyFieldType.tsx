@@ -3,6 +3,7 @@ import { FieldContainer } from '../../../FieldContainer'
 import { useCustomEditPanelContext } from '../../context'
 import { FieldElementComponent } from './types'
 import { ModernTaxonomyPicker } from '@pnp/spfx-controls-react/lib/ModernTaxonomyPicker'
+import { TERM_PICKER_PROPS } from './termPickerProps'
 import { Term, useInitialTaxonomyValues } from './useInitialTaxonomyValues'
 
 export const TaxonomyFieldType: FieldElementComponent = ({ field }) => {
@@ -38,6 +39,7 @@ export const TaxonomyFieldType: FieldElementComponent = ({ field }) => {
         initialValues={normalizeTerms(terms)}
         label=''
         termSetId={field.getProperty('TermSetId')}
+        termPickerProps={TERM_PICKER_PROPS}
         onChange={handleChange}
       />
     </FieldContainer>

@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from 'react'
 import { UncertaintyElementModel } from '../../../../models'
 import { useProjectStatusContext } from '../../context'
 import { PERSIST_SECTION_DATA } from '../../reducer'
+import { getSectionDataErrorMessage } from '../ListSection/sectionDataError'
 import { useFetchListData } from '../ListSection/useFetchListData'
 import { SectionContext } from '../context'
 import { IUncertaintySectionData, IUncertaintySectionState } from './types'
@@ -13,7 +14,8 @@ import { ISummation } from '../ListSection'
  * Component logic hook for `UncertaintySection`. Fetches list data
  * from SharePoint, handles state and dispatches actions to the reducer,
  * as well as handling the logic for rendering the section content using
- * the `shouldRenderContent` flag.
+ * the `shouldRenderContent` flag, and gives the message to show when the
+ * data could not be fetched.
  */
 export function useUncertaintySection() {
   const context = useProjectStatusContext()
@@ -66,6 +68,7 @@ export function useUncertaintySection() {
 
   return {
     state,
+    errorMessage: state.error ? getSectionDataErrorMessage(state.error) : undefined,
     matrixElements: get<any[]>(state, 'data.matrixElements', []),
     items: get<any[]>(state, 'data.items', []),
     columns: get<IListColumn[]>(state, 'data.columns', []),

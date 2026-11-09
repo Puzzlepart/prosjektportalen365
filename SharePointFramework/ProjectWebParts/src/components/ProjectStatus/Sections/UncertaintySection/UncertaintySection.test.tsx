@@ -18,9 +18,11 @@ jest.mock('../../../../models', () => ({
 }))
 
 import { render, screen } from '@testing-library/react'
+import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import * as strings from 'ProjectWebPartsStrings'
 import { ProjectStatusContext } from '../../context'
+import { toSectionDataError } from '../ListSection/sectionDataError'
 import { SectionContext } from '../context'
 import { UncertaintySection } from './UncertaintySection'
 
@@ -98,5 +100,14 @@ describe('UncertaintySection', () => {
     mockFetchListData.mockRejectedValue(new Error('403'))
     renderSection()
     expect(await screen.findByText(strings.ListSectionDataErrorMessage)).toBeInTheDocument()
+  })
+
+  it("names the list when the site does not have it, as is often so for a sub-project series' own list", async () => {
+    const notFound = Object.assign(new Error('List does not exist'), { status: 404 })
+    mockFetchListData.mockRejectedValue(toSectionDataError(notFound, 'Usikkerhet DP1'))
+    renderSection()
+    expect(
+      await screen.findByText(format(strings.ListSectionListNotFoundMessage, 'Usikkerhet DP1'))
+    ).toBeInTheDocument()
   })
 })

@@ -178,6 +178,8 @@ define([], function () {
     ListNameFieldLabel: 'Listname',
     ListSectionDataErrorMessage:
       'An error occurred while retrieving data for the section. Is it configured correctly? ',
+    ListSectionListNotFoundMessage:
+      'Could not find the list "{0}" on the project site. The section gets its data from that list.',
     ListSectionElementIdPrefix: 'section',
     LoadingText: 'Loading {0} ...',
     LookAndFeelGroupName: 'Look and feel',
@@ -385,6 +387,8 @@ define([], function () {
     LoadingLabel: 'Loading news articles...',
     GenericErrorMessage: 'Something went wrong. Please try again later or contact support.',
     NewsCreateDuplicateFileError: 'A news article with the same title already exists. Please choose a different title.',
+    NewsCreateLeftoverPageError: 'The page "{0}" was created in the folder "{1}" all the same, but it is not linked to the project and could not be removed. Delete it in Site Pages before you try again.',
+    NewsPageItemNotFoundError: 'Could not find the page "{0}" in Site Pages after it was created.',
     PreviewLabel: 'Preview selected template',
     NoPreviewAvailable: 'Preview unavailable',
     SynchronizingProjectPropertiesToPortfolioSiteErrorText: 'An error occurred while syncing project properties to the portfolio site. Please try again later.',

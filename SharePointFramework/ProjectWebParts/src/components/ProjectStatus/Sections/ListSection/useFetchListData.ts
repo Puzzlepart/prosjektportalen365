@@ -8,6 +8,7 @@ import { useProjectStatusContext } from '../../context'
 import { getScopeLabel, parseSubProjects } from '../../parseSubProjects'
 import { SectionContext } from '../context'
 import { escapeXmlValue, replaceScopeTokens } from '../scopeTokens'
+import { toSectionDataError } from './sectionDataError'
 import { IListSectionData } from './types'
 import { IListColumn } from 'pp365-shared-library'
 
@@ -22,7 +23,8 @@ type UseFetchListDataView = { ListViewXml: string; ViewFields: { Items: string[]
  * ("delprosjekt") key and label — so one section configuration can serve a
  * different list per report series.
  *
- * @returns A function used to fetch data for `ListSection` and `UncertaintySection`.
+ * @returns A function used to fetch data for `ListSection` and `UncertaintySection`. It rejects
+ * with an `ISectionDataError` that names the list it read.
  */
 export function useFetchListData() {
   const context = useProjectStatusContext()
@@ -31,7 +33,8 @@ export function useFetchListData() {
     const scopeKey = (context.state.selectedScope ?? '').trim()
     const scopeLabel = getScopeLabel(parseSubProjects(context.props.subProjects), scopeKey)
     const web = spfi(context.props.webAbsoluteUrl).using(AssignFrom(context.props.sp.web)).web
-    const list = web.lists.getByTitle(replaceScopeTokens(section.listTitle, scopeKey, scopeLabel))
+    const listTitle = replaceScopeTokens(section.listTitle, scopeKey, scopeLabel)
+    const list = web.lists.getByTitle(listTitle)
     try {
       // The scope key/label are XML-escaped here (and only here — the list/view
       // title lookups are URI-encoded by PnPjs) so the substituted values can
@@ -81,7 +84,7 @@ export function useFetchListData() {
         columns
       } as IListSectionData
     } catch (error) {
-      throw error
+      throw toSectionDataError(error, listTitle)
     }
   }
 }

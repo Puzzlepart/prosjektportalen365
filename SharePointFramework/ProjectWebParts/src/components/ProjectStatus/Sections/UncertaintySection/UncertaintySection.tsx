@@ -11,7 +11,7 @@ import { useUncertaintySection } from './useUncertaintySection'
 
 export const UncertaintySection: FC = () => {
   const context = useProjectStatusContext()
-  const { state, matrixElements, items, columns, summation, shouldRenderContent } =
+  const { state, errorMessage, matrixElements, items, columns, summation, shouldRenderContent } =
     useUncertaintySection()
   const grid = useMemo(() => createDataGridColumns(columns), [columns])
 
@@ -21,13 +21,7 @@ export const UncertaintySection: FC = () => {
    */
   const renderContent = () => {
     if (state.error)
-      return (
-        <UserMessage
-          title={strings.ErrorTitle}
-          text={strings.ListSectionDataErrorMessage}
-          intent='error'
-        />
-      )
+      return <UserMessage title={strings.ErrorTitle} text={errorMessage} intent='error' />
 
     let matrix: ReactElement = null
     switch (state.data.contentTypeIndex) {

@@ -159,6 +159,8 @@ define([], function () {
     ListNameFieldLabel: 'Listenavn',
     ListSectionDataErrorMessage:
       'Det oppsto en feil under uthenting av data for seksjonen. Er den riktig konfigurert?',
+    ListSectionListNotFoundMessage:
+      'Fant ikke listen «{0}» på prosjektområdet. Seksjonen henter dataene sine fra den listen.',
     ListSectionElementIdPrefix: 'seksjon',
     LoadingText: 'Laster {0}...',
     LookAndFeelGroupName: 'Utseende og funksjonalitet',
@@ -399,6 +401,8 @@ define([], function () {
     LoadingLabel: 'Laster nyheter...',
     GenericErrorMessage: 'Noe gikk galt. Vennligst prøv igjen senere eller kontakt brukerstøtte.',
     NewsCreateDuplicateFileError: 'En nyhetsartikkel med samme navn finnes allerede. Vennligst velg et annet navn.',
+    NewsCreateLeftoverPageError: 'Siden «{0}» ble likevel opprettet i mappen «{1}», men er ikke knyttet til prosjektet og kunne ikke fjernes. Slett den i Områdesider før du prøver igjen.',
+    NewsPageItemNotFoundError: 'Fant ikke siden «{0}» i Områdesider etter at den ble opprettet.',
     PreviewLabel: 'Forhåndsvis valgt mal',
     NoPreviewAvailable: 'Ingen forhåndsvisning tilgjengelig.',
     NewsCreateSuccess: 'Nyhetsartikkel opprettet',

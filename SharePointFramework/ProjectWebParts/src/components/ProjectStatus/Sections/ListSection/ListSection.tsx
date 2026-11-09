@@ -7,7 +7,7 @@ import { BaseSection } from '../BaseSection/BaseSection'
 import { useListSection } from './useListSection'
 
 export const ListSection: FC = () => {
-  const { state, items, columns, summation, shouldRenderList } = useListSection()
+  const { state, errorMessage, items, columns, summation, shouldRenderList } = useListSection()
   const grid = useMemo(() => createDataGridColumns(columns), [columns])
 
   /**
@@ -15,13 +15,7 @@ export const ListSection: FC = () => {
    */
   const renderList = () => {
     if (state.error)
-      return (
-        <UserMessage
-          title={strings.ErrorTitle}
-          text={strings.ListSectionDataErrorMessage}
-          intent='error'
-        />
-      )
+      return <UserMessage title={strings.ErrorTitle} text={errorMessage} intent='error' />
     if (!state.isDataLoaded) return <LoadingSkeleton />
     // The v8 list was justified, so the columns shared the section's width; the shared grid does
     // the same when asked to fit, and carries the list typography the sections are meant to have.

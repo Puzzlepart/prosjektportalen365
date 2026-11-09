@@ -1,14 +1,17 @@
 /* eslint-disable no-console */
 import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http'
 import { stringIsNullOrEmpty } from '@pnp/core'
+import { format } from 'pp365-shared-library'
 import * as strings from 'ProjectWebPartsStrings'
 import { TemplateFile } from './types'
 import SPDataAdapter from 'data'
 import resource from 'SharedResources'
+import { getRestErrorMessage, toODataString } from './rest'
 
 // --- SharePoint file name validation constants ---
-const invalidChars = /["*:<>?/\\|#%;]/g
+const invalidChars = /["*:<>?/\\|#%;]/
 const reservedNames = /^(con|prn|aux|nul|com[0-9]|lpt[0-9]|\.lock|desktop\.ini|_vti_|~\$|forms)$/i
+const maxFileNameLength = 100
 
 /**
  * Validates a SharePoint file name according to SharePoint rules.
@@ -19,7 +22,7 @@ export function validateSharePointFileName(name: string): true | string {
   if (!name || name.trim().length === 0) {
     return strings.FileNameRequired
   }
-  if (name.length > 100) {
+  if (name.length > maxFileNameLength) {
     return strings.FileNameTooLong
   }
   if (invalidChars.test(name)) {
@@ -59,7 +62,7 @@ export async function ensureProjectNewsFolder(
   folderName: string
 ) {
   const folderServerRelativeUrl = getServerRelativeUrl(siteUrl, 'SitePages', folderName)
-  const folderUrl = `${siteUrl}/_api/web/GetFolderByServerRelativeUrl('${folderServerRelativeUrl}')`
+  const folderUrl = `${siteUrl}/_api/web/GetFolderByServerRelativeUrl(${toODataString(folderServerRelativeUrl)})`
   const createFolderUrl = `${siteUrl}/_api/web/folders`
 
   const res = await spHttpClient.get(folderUrl, SPHttpClient.configurations.v1)
@@ -78,7 +81,7 @@ export async function ensureProjectNewsFolder(
     if (!createRes.ok) {
       const error = await createRes.json()
       throw new Error(
-        strings.NewsFolderError + (error.error?.message?.value || createRes.statusText)
+        strings.NewsFolderError + (getRestErrorMessage(error) || createRes.statusText)
       )
     }
   } else {
@@ -87,13 +90,23 @@ export async function ensureProjectNewsFolder(
 }
 
 /**
- * Returns a SharePoint page name suitable for a news article based on the given title.
- * Replaces spaces with dashes and appends '.aspx'.
+ * Returns the SharePoint page name for a news article with the given title: the title without
+ * the characters a file name cannot have (`#` and `%` among them, which would also break the REST
+ * URLs), its spaces as dashes, no longer than a file name may be, and `.aspx` added. The name
+ * passes `validateSharePointFileName` unless nothing is left of the title or it is reserved; the
+ * page's title keeps the text as written.
  * @param title The title of the news article
  * @returns The generated SharePoint page name
  */
 export function getNewsPageName(title: string): string {
-  return `${title.replace(/\s+/g, '-')}.aspx`
+  const name = Array.from(title)
+    .filter((char) => !invalidChars.test(char))
+    .join('')
+    .trim()
+    .replace(/\s+/g, '-')
+    .slice(0, maxFileNameLength)
+    .replace(/^\.+|\.+$/g, '')
+  return `${name}.aspx`
 }
 
 /**
@@ -191,31 +204,44 @@ export async function doesSitePageExist(
   fileName: string
 ): Promise<boolean> {
   const serverRelativeUrl = getServerRelativeUrl(siteUrl, 'SitePages', folderName, fileName)
-  const url = `${siteUrl}/_api/web/GetFileByServerRelativeUrl('${serverRelativeUrl}')`
+  const url = `${siteUrl}/_api/web/GetFileByServerRelativeUrl(${toODataString(serverRelativeUrl)})`
   const res = await spHttpClient.get(url, SPHttpClient.configurations.v1)
   return res.ok
 }
 
 /**
- * Retrieves the list item ID for a SharePoint site page given its file name.
+ * Retrieves the list item ID of a SharePoint site page through the page's own file. A filter on
+ * the file name found nothing when its request failed (a name with `'`, a library over the list
+ * view threshold) and could find a page with the same name in another folder. A failed answer,
+ * or one without the item, is asked again, `attempts` times in all, `delay` ms apart.
  *
  * @param siteUrl URL of the SharePoint site
  * @param spHttpClient SPHttpClient instance to use for making the request
- * @param fileName Name of the file to find the item ID for
- * @returns Promise that resolves with an object containing the item ID (if found)
- *          and the server-relative URL of the SitePages library
+ * @param pageServerRelativeUrl Server-relative URL of the page
+ * @param attempts How many times to ask before giving up
+ * @param delay Milliseconds to wait before asking again
+ * @returns Promise that resolves with the item ID and the server-relative URL of the SitePages
+ * library, and rejects, with SharePoint's message when it gave one, when the item is not found
  */
-export async function getSitePageItemIdByFileName(
+export async function getSitePageItemId(
   siteUrl: string,
   spHttpClient: SPHttpClient,
-  fileName: string
-): Promise<{ itemId?: number; sitePagesServerRelativeUrl: string }> {
+  pageServerRelativeUrl: string,
+  attempts = 3,
+  delay = 500
+): Promise<{ itemId: number; sitePagesServerRelativeUrl: string }> {
   const sitePagesServerRelativeUrl = getServerRelativeUrl(siteUrl, 'SitePages')
-  const listItemUrl = `${siteUrl}/_api/web/GetListUsingPath(DecodedUrl=@a1)/items?@a1='${sitePagesServerRelativeUrl}'&$filter=FileLeafRef eq '${fileName}'`
-  const listItemRes = await spHttpClient.get(listItemUrl, SPHttpClient.configurations.v1)
-  const listItemData = await listItemRes.json()
-  const itemId = listItemData.value?.[0]?.Id
-  return { itemId, sitePagesServerRelativeUrl }
+  const itemUrl = `${siteUrl}/_api/web/GetFileByServerRelativeUrl(${toODataString(pageServerRelativeUrl)})/ListItemAllFields?$select=Id`
+  let errorMessage: string | undefined
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    if (attempt > 1) await new Promise((resolve) => setTimeout(resolve, delay))
+    const res = await spHttpClient.get(itemUrl, SPHttpClient.configurations.v1)
+    const data = await res.json().catch(() => ({}))
+    if (res.ok && data?.Id) return { itemId: data.Id, sitePagesServerRelativeUrl }
+    errorMessage = res.ok ? undefined : getRestErrorMessage(data)
+  }
+  const pageName = pageServerRelativeUrl.split('/').pop()
+  throw new Error(errorMessage || format(strings.NewsPageItemNotFoundError, pageName))
 }
 
 /**
@@ -233,63 +259,89 @@ export async function copyTemplatePage(
   selectedTemplate: string,
   newPageServerRelativeUrl: string
 ): Promise<SPHttpClientResponse> {
-  const copyUrl = `${siteUrl}/_api/web/GetFileByServerRelativeUrl('${selectedTemplate}')/copyTo(strNewUrl='${newPageServerRelativeUrl}',bOverWrite=false)`
+  const copyUrl = `${siteUrl}/_api/web/GetFileByServerRelativeUrl(${toODataString(selectedTemplate)})/copyTo(strNewUrl=${toODataString(newPageServerRelativeUrl)},bOverWrite=false)`
   return await spHttpClient.post(copyUrl, SPHttpClient.configurations.v1, {
     headers: { Accept: 'application/json;odata=nometadata' }
   })
 }
 
+/**
+ * Moves a site page to the site's recycle bin, as a copied news page that could not be tied to
+ * the project.
+ *
+ * @param siteUrl URL of the SharePoint site
+ * @param spHttpClient SPHttpClient instance to use for making the request
+ * @param serverRelativeUrl Server-relative URL of the page
+ * @returns Promise that resolves when the page is in the recycle bin, and rejects when it is not
+ */
+export async function recycleSitePage(
+  siteUrl: string,
+  spHttpClient: SPHttpClient,
+  serverRelativeUrl: string
+): Promise<void> {
+  const recycleUrl = `${siteUrl}/_api/web/GetFileByServerRelativeUrl(${toODataString(serverRelativeUrl)})/recycle`
+  const res = await spHttpClient.post(recycleUrl, SPHttpClient.configurations.v1, {
+    headers: { Accept: 'application/json;odata=nometadata' }
+  })
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({}))
+    throw new Error(getRestErrorMessage(error) || res.statusText)
+  }
+}
+
 const sitePagesFieldsCache = new Map<string, string[]>()
 
 /**
- * Gets all field names starting with 'Gt' from the SitePages library.
- * Results are cached per site URL to avoid repeated API calls.
- * Checks for 'Områdesider' (Norwegian) first, then falls back to 'Site Pages' (English).
+ * Gets all field names starting with 'Gt' from the site's page library. The library is found by
+ * its URL (`SitePages`), not by its title, which follows the site's language (`Områdesider`,
+ * `Site Pages`): looked up by title, an English hub's fields were never found. The fields are
+ * cached per library; a failed request is not cached, and gives the two fields every page library
+ * in Prosjektportalen has.
  * @param siteUrl URL of the SharePoint site
  * @param spHttpClient SPHttpClient instance to use for making the request
  * @returns Promise that resolves with an array of field names starting with 'Gt'
  */
 export async function getSitePagesFields(
   siteUrl: string,
-  spHttpClient: SPHttpClient,
-  listTitle = 'Områdesider'
+  spHttpClient: SPHttpClient
 ): Promise<string[]> {
-  if (sitePagesFieldsCache.has(siteUrl)) {
-    const cachedFields = sitePagesFieldsCache.get(siteUrl)
-    if (cachedFields) {
-      return cachedFields
-    }
+  const sitePagesServerRelativeUrl = getServerRelativeUrl(siteUrl, 'SitePages')
+  const fieldsUrl = `${siteUrl}/_api/web/GetListUsingPath(DecodedUrl=@a1)/fields?@a1=${toODataString(sitePagesServerRelativeUrl)}&$select=InternalName&$filter=startswith(InternalName,'Gt')`
+  const cachedFields = sitePagesFieldsCache.get(fieldsUrl)
+  if (cachedFields) {
+    return cachedFields
   }
 
-  const defaultFields = ['GtSiteId', 'GtHubSiteId']
-
   try {
-    const fieldsUrl = `${siteUrl}/_api/web/lists/getByTitle('${listTitle}')/fields?$select=InternalName&$filter=startswith(InternalName,'Gt')`
     const res = await spHttpClient.get(fieldsUrl, SPHttpClient.configurations.v1)
 
     if (res.ok) {
       const data = await res.json()
       const fields = data.value?.map((field: any) => field.InternalName) || []
 
-      sitePagesFieldsCache.set(siteUrl, fields)
+      sitePagesFieldsCache.set(fieldsUrl, fields)
       return fields
     }
   } catch (error) {
     console.warn('Error fetching SitePages fields:', error)
   }
 
-  sitePagesFieldsCache.set(siteUrl, defaultFields)
-  return defaultFields
+  return ['GtSiteId', 'GtHubSiteId']
 }
 
 /**
- * Sets the "Original Source Site Id" field for a Site Page item.
+ * Ties a news page to its project: sets the "Original Source Site Id" field (`GtSiteId`) and the
+ * hub's ID on the page's item, gives the page the title from the dialog (the copy has the
+ * template's), and copies the project's values for the `Gt` fields that both the page library
+ * and the hub's project list have.
  * @param siteUrl URL of the SharePoint site where the page is stored
  * @param spHttpClient SPHttpClient instance to use for making the request
  * @param sitePagesServerRelativeUrl Server-relative URL of the SitePages library
  * @param itemId ID of the list item representing the page
  * @param siteId The ID of the source site to set in the OriginalSourceSiteId field
- * @returns Promise that resolves when the field has been set
+ * @param hubSiteId The ID of the hub site the project belongs to
+ * @param title The title of the news article, as written in the dialog
+ * @returns Promise that resolves when the fields have been set
  */
 export async function setOriginalSourceSiteId(
   siteUrl: string,
@@ -304,36 +356,50 @@ export async function setOriginalSourceSiteId(
     throw new Error('Site ID is required to set GtSiteId')
   }
 
-  let fields: string[]
-  fields = await getSitePagesFields(siteUrl, spHttpClient, 'Områdesider')
-  if (fields.length === 0) {
-    fields = await getSitePagesFields(siteUrl, spHttpClient, 'Site Pages')
-  }
+  const fields = await getSitePagesFields(siteUrl, spHttpClient)
 
-  const projectFields = fields.filter((field) => !['GtSiteId', 'GtHubSiteId'].includes(field))
-
-  const [projectData] = await SPDataAdapter.portalDataService.web.lists
-    .getByTitle(resource.Lists_Projects_Title)
-    .items.select(...projectFields)
-    .filter(`GtSiteId eq '${siteId}'`)
-    .top(1)()
+  const projectsList = SPDataAdapter.portalDataService.web.lists.getByTitle(
+    resource.Lists_Projects_Title
+  )
+  const pageFields = fields.filter((field) => !['GtSiteId', 'GtHubSiteId'].includes(field))
+  // The page library can have Gt fields the project list lacks (a test hub's GtHubUrl), and
+  // selecting one of them fails the whole query with a 400: copy only what both lists have.
+  const projectListFields: { InternalName: string }[] =
+    pageFields.length > 0
+      ? await projectsList.fields.select('InternalName').filter("startswith(InternalName,'Gt')")()
+      : []
+  const projectFields = pageFields.filter((field) =>
+    projectListFields.some(({ InternalName }) => InternalName === field)
+  )
 
   const updateBody: any = {
     GtSiteId: siteId,
     GtHubSiteId: hubSiteId
   }
-
-  if (projectData) {
-    for (const field of projectFields) {
-      if (projectData[field] !== undefined && projectData[field] !== null) {
-        updateBody[field] = projectData[field]
-      }
-    }
-  } else {
-    console.warn(`No project data found for site ID: ${siteId}`)
+  // The longest value a single line of text holds.
+  const pageTitle = (title ?? '').trim().slice(0, 255)
+  if (pageTitle) {
+    updateBody.Title = pageTitle
   }
 
-  const updateUrl = `${siteUrl}/_api/web/GetListUsingPath(DecodedUrl='${sitePagesServerRelativeUrl}')/items(${itemId})`
+  if (projectFields.length > 0) {
+    const [projectData] = await projectsList.items
+      .select(...projectFields)
+      .filter(`GtSiteId eq '${siteId}'`)
+      .top(1)()
+
+    if (projectData) {
+      for (const field of projectFields) {
+        if (projectData[field] !== undefined && projectData[field] !== null) {
+          updateBody[field] = projectData[field]
+        }
+      }
+    } else {
+      console.warn(`No project data found for site ID: ${siteId}`)
+    }
+  }
+
+  const updateUrl = `${siteUrl}/_api/web/GetListUsingPath(DecodedUrl=${toODataString(sitePagesServerRelativeUrl)})/items(${itemId})`
   const updateRes = await spHttpClient.post(updateUrl, SPHttpClient.configurations.v1, {
     headers: {
       Accept: 'application/json',
@@ -345,7 +411,7 @@ export async function setOriginalSourceSiteId(
   })
 
   if (!updateRes.ok) {
-    const error = await updateRes.json()
-    throw new Error(error?.error?.message?.value || updateRes.statusText)
+    const error = await updateRes.json().catch(() => ({}))
+    throw new Error(getRestErrorMessage(error) || updateRes.statusText)
   }
 }

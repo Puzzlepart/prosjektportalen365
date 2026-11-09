@@ -3,6 +3,7 @@ import React, { useCallback } from 'react'
 import { FieldContainer } from '../../../FieldContainer'
 import { useCustomEditPanelContext } from '../../context'
 import { FieldElementComponent } from './types'
+import { TERM_PICKER_PROPS } from './termPickerProps'
 import { Term, useInitialTaxonomyValues } from './useInitialTaxonomyValues'
 
 export const TaxonomyFieldTypeMulti: FieldElementComponent = ({ field }) => {
@@ -39,6 +40,7 @@ export const TaxonomyFieldTypeMulti: FieldElementComponent = ({ field }) => {
         allowMultipleSelections
         label=''
         termSetId={field.getProperty('TermSetId')}
+        termPickerProps={TERM_PICKER_PROPS}
         onChange={handleChange}
       />
     </FieldContainer>

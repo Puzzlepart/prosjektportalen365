@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { useAnnounce } from '@fluentui/react-components'
+import { format } from 'pp365-shared-library'
 import strings from 'ProjectWebPartsStrings'
 import {
   ensureProjectNewsFolder,
@@ -10,9 +11,12 @@ import {
   copyTemplatePage,
   getNewsEditUrl,
   setOriginalSourceSiteId,
-  getSitePageItemIdByFileName,
-  doesSitePageExist
+  getSitePageItemId,
+  doesSitePageExist,
+  recycleSitePage,
+  validateSharePointFileName
 } from '../util'
+import { getRestErrorMessage } from '../rest'
 import { TemplateFile } from '../types'
 import { ProjectNewsContext } from '../context'
 import { useNewsForm } from './useNewsForm'
@@ -52,14 +56,33 @@ export const useNewsDialog = () => {
       if (!newsForm.validateForm()) {
         return
       }
+      const newPageName = getNewsPageName(newsForm.title)
+      // The page's name leaves out what a file name cannot have; a title with nothing else, or
+      // one that is a reserved name, is refused here, before anything is made.
+      const pageNameError = validateSharePointFileName(newPageName.replace(/\.aspx$/, ''))
+      if (pageNameError !== true) {
+        newsForm.setFormErrorMessage(pageNameError)
+        return
+      }
 
       setSpinnerMode('creating')
       announce(strings.CreatingNewArticleStatus, { polite: true })
       newsForm.setFormErrorMessage('')
 
+      /**
+       * Shows why the article was not created, after `note` when there is one, and gives the
+       * form back so the user can try again.
+       */
+      const showError = (error: any, note?: string) => {
+        newsForm.setFormErrorMessage(
+          [strings.NewsCreateError, getRestErrorMessage(error), note].filter(Boolean).join(' ')
+        )
+        console.error('Error creating news article:', error)
+        setSpinnerMode('idle')
+      }
+
       try {
         await ensureProjectNewsFolder(context.props.siteUrl, context.props.spHttpClient, folderName)
-        const newPageName = getNewsPageName(newsForm.title)
         const exists = await doesSitePageExist(
           context.props.siteUrl,
           context.props.spHttpClient,
@@ -83,12 +106,16 @@ export const useNewsDialog = () => {
           newsForm.selectedTemplate,
           newPageServerRelativeUrl
         )
-        const { itemId, sitePagesServerRelativeUrl } = await getSitePageItemIdByFileName(
-          context.props.siteUrl,
-          context.props.spHttpClient,
-          newPageName
-        )
-        if (itemId) {
+        if (!res.ok) {
+          showError(await res.json())
+          return
+        }
+        try {
+          const { itemId, sitePagesServerRelativeUrl } = await getSitePageItemId(
+            context.props.siteUrl,
+            context.props.spHttpClient,
+            newPageServerRelativeUrl
+          )
           await new Promise((resolve) => setTimeout(resolve, 500))
           await setOriginalSourceSiteId(
             context.props.siteUrl,
@@ -99,33 +126,37 @@ export const useNewsDialog = () => {
             context.props.pageContext.legacyPageContext.hubSiteId,
             newsForm.title
           )
-        }
-        if (res.ok) {
-          setSpinnerMode('success')
-          announce(strings.NewsCreatedSuccessfully, { polite: true })
-          setTimeout(() => {
-            context.setState({ isDialogOpen: false })
-            setSpinnerMode('idle')
-            newsForm.resetForm()
-            const editUrl = getNewsEditUrl(context.props.siteUrl, folderName, newPageName)
-            window.open(editUrl, '_blank')
-          }, 1100)
-        } else {
-          const error = await res.json()
-          newsForm.setFormErrorMessage(
-            `${strings.NewsCreateError} ${
-              error.error?.message || error.error?.message?.value || error.message
-            }`
+        } catch (error) {
+          // The page is copied but not tied to the project (its item not found, or not updated).
+          // Left behind, it is a draft with the template's title that the project's news never
+          // lists, and it blocks a new try under the same title.
+          const removed = await recycleSitePage(
+            context.props.siteUrl,
+            context.props.spHttpClient,
+            newPageServerRelativeUrl
+          ).then(
+            () => true,
+            () => false
           )
+          showError(
+            error,
+            removed
+              ? undefined
+              : format(strings.NewsCreateLeftoverPageError, newPageName, folderName)
+          )
+          return
         }
+        setSpinnerMode('success')
+        announce(strings.NewsCreatedSuccessfully, { polite: true })
+        setTimeout(() => {
+          context.setState({ isDialogOpen: false })
+          setSpinnerMode('idle')
+          newsForm.resetForm()
+          const editUrl = getNewsEditUrl(context.props.siteUrl, folderName, newPageName)
+          window.open(editUrl, '_blank')
+        }, 1100)
       } catch (err: any) {
-        newsForm.setFormErrorMessage(
-          `${strings.NewsCreateError} ${
-            err?.error?.message || err?.error?.message?.value || err?.message
-          }`
-        )
-        console.error('Error creating news article:', err)
-        setSpinnerMode('idle')
+        showError(err)
       }
     },
     [

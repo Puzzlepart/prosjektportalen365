@@ -132,6 +132,7 @@ declare interface IProjectWebPartsStrings {
   HookUrlFieldLabel: string
   ListNameFieldLabel: string
   ListSectionDataErrorMessage: string
+  ListSectionListNotFoundMessage: string
   ListSectionElementIdPrefix: string
   LoadingText: string
   LookAndFeelGroupName: string
@@ -347,6 +348,8 @@ declare interface IProjectWebPartsStrings {
   LoadingLabel: string
   GenericErrorMessage: string
   NewsCreateDuplicateFileError: string
+  NewsCreateLeftoverPageError: string
+  NewsPageItemNotFoundError: string
   PreviewLabel: string
   NoPreviewAvailable: string
   ShowCommentText: string

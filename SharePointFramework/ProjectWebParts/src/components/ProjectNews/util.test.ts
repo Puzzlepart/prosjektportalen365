@@ -1,18 +1,88 @@
-// util pulls the data adapter in for the page operations; it is not under test here, so it is a
-// stand-in, registered before the imports because Heft runs Jest on CommonJS output without Babel.
-jest.mock('data', () => ({ __esModule: true, default: {} }))
+// util reaches the hub's project list through the data adapter, which is a stand-in registered
+// before the imports because Heft runs Jest on CommonJS output without Babel: `hub.fields` are
+// the project list's fields, `hub.rows` its rows, and `hub.selected` what a query selected.
+const hub: { fields: string[]; rows: any[]; selected?: string[] } = { fields: [], rows: [] }
+jest.mock('data', () => ({
+  __esModule: true,
+  default: {
+    portalDataService: {
+      web: {
+        lists: {
+          getByTitle: () => ({
+            fields: {
+              select: () => ({
+                filter: () => () =>
+                  Promise.resolve(hub.fields.map((InternalName) => ({ InternalName })))
+              })
+            },
+            items: {
+              select: (...fields: string[]) => {
+                hub.selected = fields
+                return { filter: () => ({ top: () => () => Promise.resolve(hub.rows) }) }
+              }
+            }
+          })
+        }
+      }
+    }
+  }
+}))
 
+import { format } from 'pp365-shared-library'
 import strings from 'ProjectWebPartsStrings'
 import {
+  copyTemplatePage,
+  doesSitePageExist,
   getNewsEditUrl,
   getNewsPageName,
   getServerRelativeUrl,
+  getSitePageItemId,
+  recycleSitePage,
+  setOriginalSourceSiteId,
   validateSharePointFileName
 } from './util'
 
+/** A response from SharePoint's REST API, with `body` as its JSON. */
+const response = (ok: boolean, body: any = {}, statusText = ok ? 'OK' : 'Error') => ({
+  ok,
+  status: ok ? 200 : 500,
+  statusText,
+  json: () => Promise.resolve(body)
+})
+
 /**
- * The news helpers: the page name a title becomes, the URLs a page lives at, and SharePoint's
- * rules for a file name.
+ * A stand-in for SPHttpClient in front of a hub, recording every URL asked for in `urls`. A GET
+ * answers with the page library's `Gt` fields, but on an English hub, whose page library is
+ * called Site Pages, a lookup of the library by the title Områdesider gets SharePoint's 404. A
+ * POST answers with `post`.
+ */
+function httpClient(pageFields: string[], { post = response(true), english = false } = {}) {
+  const urls: string[] = []
+  return {
+    urls,
+    get: jest.fn((url: string) => {
+      urls.push(url)
+      if (english && url.includes("getByTitle('Områdesider')")) {
+        return Promise.resolve(response(false, { error: { message: 'Listen finnes ikke.' } }))
+      }
+      return Promise.resolve(
+        response(true, { value: pageFields.map((InternalName) => ({ InternalName })) })
+      )
+    }),
+    post: jest.fn((url: string, _configuration?: any, _options?: any) => {
+      urls.push(url)
+      return Promise.resolve(post)
+    })
+  }
+}
+
+/** The body of the update that ties a page to its project, the last POST `client` made. */
+const updateBody = (client: ReturnType<typeof httpClient>) =>
+  JSON.parse(client.post.mock.calls[client.post.mock.calls.length - 1][2].body)
+
+/**
+ * The news helpers: the page name a title becomes, the URLs a page lives at, SharePoint's rules
+ * for a file name, finding a page's item, and tying a page to its project.
  */
 describe('ProjectNews util', () => {
   it('turns a title into a page name and an edit URL', () => {
@@ -37,5 +107,232 @@ describe('ProjectNews util', () => {
     expect(validateSharePointFileName('a/b')).toBe(strings.FileNameInvalid)
     expect(validateSharePointFileName('.skjult')).toBe(strings.FileNameNoLeadingTrailingSpaces)
     expect(validateSharePointFileName('CON')).toBe(strings.FileNameReserved)
+  })
+
+  it('names a page without what a file name cannot have, so # and % never reach a REST URL', () => {
+    // The name kept them, and a title with # cut the URLs short.
+    expect(getNewsPageName('Sak #12: 100% klar?')).toBe('Sak-12-100-klar.aspx')
+    for (const title of [
+      'Sak #12: 100% klar?',
+      'Hva nå? / Del 2',
+      '"Stor" <dag> | 1*2;3',
+      ' .Ny. '
+    ]) {
+      expect(validateSharePointFileName(getNewsPageName(title).replace(/\.aspx$/, ''))).toBe(true)
+    }
+    expect(getNewsPageName('x'.repeat(150))).toBe(`${'x'.repeat(100)}.aspx`)
+    // A title of nothing but such characters leaves no name, which the dialog refuses.
+    expect(validateSharePointFileName(getNewsPageName('?#%').replace(/\.aspx$/, ''))).toBe(
+      strings.FileNameRequired
+    )
+  })
+
+  it("doubles a ' in every REST literal, so a page named after «Prosjektets 'kick-off'» can be made", async () => {
+    // The ' ended the literal early: the copy, the lookup and the recycling failed.
+    const site = 'https://contoso.sharepoint.com/sites/hub-c'
+    const name = getNewsPageName("Prosjektets 'kick-off'")
+    expect(name).toBe("Prosjektets-'kick-off'.aspx")
+    expect(validateSharePointFileName(name.replace(/\.aspx$/, ''))).toBe(true)
+    const page = getServerRelativeUrl(site, 'SitePages', 'Prosjektnyheter', name)
+    const urls: string[] = []
+    const client = {
+      get: jest.fn((url: string) => {
+        urls.push(url)
+        return Promise.resolve(response(true, { Id: 14 }))
+      }),
+      post: jest.fn((url: string) => {
+        urls.push(url)
+        return Promise.resolve(response(true))
+      })
+    }
+    await doesSitePageExist(site, client as any, 'Prosjektnyheter', name)
+    await copyTemplatePage(site, client as any, '/sites/hub-c/SitePages/Maler/Nyhet.aspx', page)
+    await getSitePageItemId(site, client as any, page)
+    await recycleSitePage(site, client as any, page)
+    const literal = "'/sites/hub-c/SitePages/Prosjektnyheter/Prosjektets-''kick-off''.aspx'"
+    expect(urls).toEqual([
+      `${site}/_api/web/GetFileByServerRelativeUrl(${literal})`,
+      `${site}/_api/web/GetFileByServerRelativeUrl('/sites/hub-c/SitePages/Maler/Nyhet.aspx')/copyTo(strNewUrl=${literal},bOverWrite=false)`,
+      `${site}/_api/web/GetFileByServerRelativeUrl(${literal})/ListItemAllFields?$select=Id`,
+      `${site}/_api/web/GetFileByServerRelativeUrl(${literal})/recycle`
+    ])
+  })
+
+  it("finds a page's item through the page itself, and asks again when SharePoint does not answer", async () => {
+    const site = 'https://contoso.sharepoint.com/sites/hub-e'
+    const page = '/sites/hub-e/SitePages/Prosjektnyheter/Ny-bane.aspx'
+    const get = jest
+      .fn()
+      .mockResolvedValueOnce(response(false, {}, 'Service Unavailable'))
+      .mockResolvedValueOnce(response(true, { Id: 12 }))
+    expect(await getSitePageItemId(site, { get } as any, page, 3, 0)).toEqual({
+      itemId: 12,
+      sitePagesServerRelativeUrl: '/sites/hub-e/SitePages'
+    })
+    expect(get).toHaveBeenCalledTimes(2)
+    expect(get.mock.calls[0][0]).toBe(
+      `${site}/_api/web/GetFileByServerRelativeUrl('${page}')/ListItemAllFields?$select=Id`
+    )
+  })
+
+  it("fails when a page's item cannot be found, with SharePoint's message when it gave one", async () => {
+    // A filter on the file name came back empty when its request failed, and the page was left
+    // without its project link.
+    const site = 'https://contoso.sharepoint.com/sites/hub-e'
+    const page = '/sites/hub-e/SitePages/Prosjektnyheter/Ny-bane.aspx'
+    const failing = jest
+      .fn()
+      .mockResolvedValue(
+        response(false, { error: { message: 'Terskelen for listevisningen er overskredet.' } })
+      )
+    await expect(getSitePageItemId(site, { get: failing } as any, page, 3, 0)).rejects.toThrow(
+      'Terskelen for listevisningen er overskredet.'
+    )
+    expect(failing).toHaveBeenCalledTimes(3)
+    const withoutItem = jest.fn().mockResolvedValue(response(true, {}))
+    await expect(getSitePageItemId(site, { get: withoutItem } as any, page, 2, 0)).rejects.toThrow(
+      format(strings.NewsPageItemNotFoundError, 'Ny-bane.aspx')
+    )
+  })
+
+  it("copies only the project's fields that the page library and the project list both have", async () => {
+    // The test hub's page library has GtHubUrl, which the project list lacks: selecting it failed
+    // the query (400) after the page was copied.
+    hub.fields = ['GtSiteId', 'GtProjectPhase', 'GtProjectNumber']
+    hub.rows = [{ GtProjectPhase: 'Gjennomføring', GtSiteId: 'site-1' }]
+    const client = httpClient(['GtSiteId', 'GtHubSiteId', 'GtHubUrl', 'GtProjectPhase'])
+    await setOriginalSourceSiteId(
+      'https://contoso.sharepoint.com/sites/hub-a',
+      client as any,
+      '/sites/hub-a/SitePages',
+      7,
+      'site-1',
+      'hub-1',
+      'Ny bane'
+    )
+    expect(hub.selected).toEqual(['GtProjectPhase'])
+    const [url] = client.post.mock.calls[0] as any[]
+    expect(url).toBe(
+      "https://contoso.sharepoint.com/sites/hub-a/_api/web/GetListUsingPath(DecodedUrl='/sites/hub-a/SitePages')/items(7)"
+    )
+    expect(updateBody(client)).toEqual({
+      GtSiteId: 'site-1',
+      GtHubSiteId: 'hub-1',
+      Title: 'Ny bane',
+      GtProjectPhase: 'Gjennomføring'
+    })
+  })
+
+  it('ties the page to the project without reading the project list when there is nothing to copy', async () => {
+    hub.selected = undefined
+    const client = httpClient(['GtSiteId', 'GtHubSiteId'])
+    await setOriginalSourceSiteId(
+      'https://contoso.sharepoint.com/sites/hub-b',
+      client as any,
+      '/sites/hub-b/SitePages',
+      8,
+      'site-2',
+      'hub-1',
+      'Åpning'
+    )
+    expect(hub.selected).toBeUndefined()
+    expect(updateBody(client)).toEqual({
+      GtSiteId: 'site-2',
+      GtHubSiteId: 'hub-1',
+      Title: 'Åpning'
+    })
+  })
+
+  it('gives the page the title written in the dialog, in the update that ties it to the project', async () => {
+    // The page kept the template's title (TestMal123 on the test hub).
+    const client = httpClient(['GtSiteId', 'GtHubSiteId'])
+    const tie = (itemId: number, title: string) =>
+      setOriginalSourceSiteId(
+        'https://contoso.sharepoint.com/sites/hub-d',
+        client as any,
+        '/sites/hub-d/SitePages',
+        itemId,
+        'site-3',
+        'hub-1',
+        title
+      )
+    await tie(9, "  Prosjektets 'kick-off'  ")
+    expect(updateBody(client).Title).toBe("Prosjektets 'kick-off'")
+    // No longer than a single line of text holds.
+    await tie(10, 'x'.repeat(300))
+    expect(updateBody(client).Title).toBe('x'.repeat(255))
+  })
+
+  it("finds the page library's fields on an English hub, where the library is not called Områdesider", async () => {
+    // Looked up by title, an English hub's fields were never found, and no project field copied.
+    hub.fields = ['GtSiteId', 'GtProjectPhase']
+    hub.rows = [{ GtProjectPhase: 'Konsept' }]
+    const client = httpClient(['GtSiteId', 'GtHubSiteId', 'GtProjectPhase'], { english: true })
+    await setOriginalSourceSiteId(
+      'https://contoso.sharepoint.com/sites/hub-en',
+      client as any,
+      '/sites/hub-en/SitePages',
+      11,
+      'site-4',
+      'hub-1',
+      'New track'
+    )
+    expect(updateBody(client)).toEqual({
+      GtSiteId: 'site-4',
+      GtHubSiteId: 'hub-1',
+      Title: 'New track',
+      GtProjectPhase: 'Konsept'
+    })
+  })
+
+  it("asks again for the page library's fields after a request for them failed", async () => {
+    // A failed request was kept for the page's lifetime, as if the library had only the link.
+    hub.fields = ['GtSiteId', 'GtProjectPhase']
+    hub.rows = [{ GtProjectPhase: 'Avslutning' }]
+    const site = 'https://contoso.sharepoint.com/sites/hub-f'
+    const client = httpClient(['GtSiteId', 'GtHubSiteId', 'GtProjectPhase'])
+    client.get.mockImplementationOnce(() => Promise.resolve(response(false)))
+    const tie = (itemId: number) =>
+      setOriginalSourceSiteId(
+        site,
+        client as any,
+        '/sites/hub-f/SitePages',
+        itemId,
+        'site-5',
+        'hub-1',
+        'Sak'
+      )
+    await tie(12)
+    expect(updateBody(client).GtProjectPhase).toBeUndefined()
+    await tie(13)
+    expect(updateBody(client).GtProjectPhase).toBe('Avslutning')
+  })
+
+  it("moves a page to the recycle bin, and fails with SharePoint's message when it does not", async () => {
+    const client = httpClient([])
+    await recycleSitePage(
+      'https://contoso.sharepoint.com/sites/hub-a',
+      client as any,
+      '/sites/hub-a/SitePages/Nyheter/Ny-bane.aspx'
+    )
+    expect((client.post.mock.calls[0] as any[])[0]).toBe(
+      "https://contoso.sharepoint.com/sites/hub-a/_api/web/GetFileByServerRelativeUrl('/sites/hub-a/SitePages/Nyheter/Ny-bane.aspx')/recycle"
+    )
+    await expect(
+      recycleSitePage(
+        'https://contoso.sharepoint.com/sites/hub-a',
+        httpClient([], {
+          post: response(false, { error: { message: 'Tilgang nektet.' } }, 'Forbidden')
+        }) as any,
+        '/sites/hub-a/SitePages/Nyheter/Ny-bane.aspx'
+      )
+    ).rejects.toThrow('Tilgang nektet.')
+    await expect(
+      recycleSitePage(
+        'https://contoso.sharepoint.com/sites/hub-a',
+        httpClient([], { post: response(false, {}, 'Forbidden') }) as any,
+        '/sites/hub-a/SitePages/Nyheter/Ny-bane.aspx'
+      )
+    ).rejects.toThrow('Forbidden')
   })
 })

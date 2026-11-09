@@ -4,12 +4,14 @@ import { useContext, useEffect, useState } from 'react'
 import { useProjectStatusContext } from '../../../ProjectStatus/context'
 import { PERSIST_SECTION_DATA } from '../../reducer'
 import { SectionContext } from '../context'
+import { getSectionDataErrorMessage } from './sectionDataError'
 import { IListSectionData, IListSectionState, ISummation } from './types'
 import { useFetchListData } from './useFetchListData'
 
 /**
  * Component logic hook for `ListSection`. Fetches list data
- * from SharePoint, handles state and dispatches actions to the reducer.
+ * from SharePoint, handles state and dispatches actions to the reducer,
+ * and gives the message to show when the data could not be fetched.
  */
 export function useListSection() {
   const context = useProjectStatusContext()
@@ -55,6 +57,7 @@ export function useListSection() {
 
   return {
     state,
+    errorMessage: state.error ? getSectionDataErrorMessage(state.error) : undefined,
     items: get<any[]>(state, 'data.items', []),
     columns: get<IListColumn[]>(state, 'data.columns', []),
     summation: get<ISummation>(state, 'data.summation', {}),

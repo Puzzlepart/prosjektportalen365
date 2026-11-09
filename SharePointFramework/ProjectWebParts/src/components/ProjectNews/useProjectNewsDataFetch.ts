@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { SPHttpClient } from '@microsoft/sp-http'
 import { INewsItem, IProjectNewsProps, IProjectNewsState } from './types'
+import { toODataString } from './rest'
 import { getNewsImageUrl, getServerRelativeUrl } from './util'
 import strings from 'ProjectWebPartsStrings'
 
@@ -28,8 +29,9 @@ export function useProjectNewsDataFetch(
         const currentSiteId = props.context.pageContext.site.id.toString()
         const url =
           `${props.siteUrl}/_api/web/GetListUsingPath(DecodedUrl=@a1)/items` +
-          `?@a1='${sitePagesServerRelativeUrl}'` +
-          `&$filter=FileDirRef eq '${folderServerRelativeUrl}' and GtSiteId eq '${currentSiteId}'` +
+          `?@a1=${toODataString(sitePagesServerRelativeUrl)}` +
+          `&$filter=FileDirRef eq ${toODataString(folderServerRelativeUrl)}` +
+          ` and GtSiteId eq ${toODataString(currentSiteId)}` +
           '&$select=Id,PromotedState,Title,FileLeafRef,BannerImageUrl,Description,GtSiteId,Author/Title,Editor/Title,Modified,File/ServerRelativeUrl,File/Name,File/TimeLastModified' +
           '&$expand=Author,Editor,File'
 

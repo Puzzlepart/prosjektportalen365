@@ -49,6 +49,7 @@ function standInWeb() {
 
 function renderToolbar(state: Record<string, any>, props: Record<string, any> = {}) {
   const stand = standInWeb()
+  const setState = jest.fn()
   const value: IDynamicListContext = {
     props: { listName: 'Dokumenter', ...props } as any,
     state: {
@@ -56,7 +57,7 @@ function renderToolbar(state: Record<string, any>, props: Record<string, any> = 
       data: { listItems: [], listColumns: [] },
       ...state
     } as any,
-    setState: jest.fn(),
+    setState,
     web: stand.web,
     toasterId: TOASTER
   }
@@ -67,7 +68,7 @@ function renderToolbar(state: Record<string, any>, props: Record<string, any> = 
       </DynamicListContext.Provider>
     </AriaLiveAnnouncer>
   )
-  return stand
+  return { ...stand, setState }
 }
 
 const item = (items: any[], text: string) => items.find((i) => i.text === text)
@@ -136,6 +137,27 @@ describe('useToolbarItems', () => {
     })
     const name = format(strings.DynamicList.ExportSelectedMultiple, 3)
     expect(screen.getByRole('button', { name })).toHaveTextContent('3')
+  })
+
+  it('lets any view be chosen in the view menu, and fetches the list again for the one chosen', async () => {
+    // Every view was disabled in the menu from 1.13.0, so the list could not change view. The
+    // menu is read from the hook: an open Fluent menu costs tens of seconds under jsdom.
+    const views = [
+      { id: 'view-1', title: 'Alle elementer', isDefault: true },
+      { id: 'view-2', title: 'Mine elementer', isDefault: false }
+    ]
+    const { setState } = renderToolbar({ views, currentView: views[0] }, { showViewSelector: true })
+    const menu = item(hook.toolbar.farMenuItems, 'Alle elementer')
+    expect(menu.checkedValues.views).toEqual(['view-1'])
+    expect(menu.items.map((view: any) => [view.text, !!view.disabled])).toEqual([
+      [`Alle elementer${strings.DynamicList.Default}`, false],
+      ['Mine elementer', false]
+    ])
+    act(() => item(menu.items, 'Mine elementer').onClick(undefined))
+    // The list is fetched again, for the view's columns, once the view is set.
+    await act(() => new Promise((resolve) => setTimeout(resolve, 10)))
+    expect(setState).toHaveBeenCalledWith(expect.objectContaining({ currentView: views[1] }))
+    expect(setState).toHaveBeenCalledWith({ refetch: expect.any(Number) })
   })
 
   it('names the spinner of a custom action while it runs (WCAG 4.1.2)', async () => {

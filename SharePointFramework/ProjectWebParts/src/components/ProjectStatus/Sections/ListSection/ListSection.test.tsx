@@ -9,11 +9,13 @@ jest.mock('../../StatusElement', () => ({
 }))
 
 import { render, screen, waitFor } from '@testing-library/react'
+import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import * as strings from 'ProjectWebPartsStrings'
 import { ProjectStatusContext } from '../../context'
 import { SectionContext } from '../context'
 import { ListSection } from './ListSection'
+import { toSectionDataError } from './sectionDataError'
 
 /**
  * A status report section that lists items from a SharePoint list: its columns and rows once the
@@ -97,5 +99,17 @@ describe('ListSection', () => {
     mockFetchListData.mockRejectedValue(new Error('403'))
     renderSection()
     expect(await screen.findByText(strings.ListSectionDataErrorMessage)).toBeInTheDocument()
+  })
+
+  it("names the list when the site does not have it, as is often so for a sub-project series' own list", async () => {
+    const notFound = Object.assign(new Error('List does not exist'), { status: 404 })
+    mockFetchListData.mockRejectedValue(toSectionDataError(notFound, 'Prosjektleveranser DP1'))
+    renderSection()
+    expect(
+      await screen.findByText(
+        format(strings.ListSectionListNotFoundMessage, 'Prosjektleveranser DP1')
+      )
+    ).toBeInTheDocument()
+    expect(screen.queryByText(strings.ListSectionDataErrorMessage)).toBeNull()
   })
 })
