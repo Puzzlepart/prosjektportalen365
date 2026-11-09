@@ -35,4 +35,5 @@
       <pnp:DataValue FieldName="GtLinkLevel">{resource:Lists_Links_LinkLevel_Member}</pnp:DataValue>
     </pnp:DataRow>
   </pnp:DataRows>
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/MinimumReadSecurity.xml" />
 </pnp:ListInstance>
