@@ -79,6 +79,20 @@ describe('SetupProjectInformation', () => {
     expect(warnings(onProgress)).toEqual([])
   })
 
+  it('keeps the list content earlier runs added in the record when the setup runs again', async () => {
+    const createNewEntity = jest.fn(() => Promise.resolve({}))
+    const params = taskParams(createNewEntity)
+    await new SetupProjectInformation(
+      setupData({
+        addedListContent: 'Fasesjekkpunkter',
+        selectedContentConfig: [{ text: 'Planneroppgaver' }, { text: 'Fasesjekkpunkter' }]
+      })
+    ).execute(params, jest.fn())
+    expect(params.items.add).toHaveBeenCalledWith(
+      expect.objectContaining({ GtProjectListContent: 'Fasesjekkpunkter, Planneroppgaver' })
+    )
+  })
+
   it('stores the project properties but writes nothing to the hub without write access to it', async () => {
     const createNewEntity = jest.fn(() => Promise.resolve({}))
     const params = taskParams(createNewEntity)

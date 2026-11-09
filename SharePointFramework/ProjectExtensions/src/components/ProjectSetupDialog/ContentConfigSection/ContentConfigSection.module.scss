@@ -34,4 +34,11 @@
       white-space: nowrap;
     }
   }
+
+  // Why the content the project has already is not selected.
+  .addedInfo {
+    margin: 0 2px;
+    font-size: var(--fontSizeBase200);
+    color: var(--colorNeutralForeground2);
+  }
 }

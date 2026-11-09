@@ -1,8 +1,9 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
 // Babel, so mocks are not hoisted. The customizer reads DEBUG when its module loads. Everything it
 // talks to is a stand-in: the site's PnPjs instance (`site.sp`, from `fakeSite`), the hub's portal
-// data service and adapter, Microsoft Graph, the tasks (`run.tasks`) and the dialogs, which record
-// the props they were last rendered with in `dialogs`.
+// data service and adapter, Microsoft Graph, the tasks (`run.tasks`, made from the setup's data,
+// which `run.data` keeps) and the dialogs, which record the props they were last rendered with in
+// `dialogs`.
 ;(globalThis as any).DEBUG = false
 /** The project site's PnPjs instance, and the menu URLs SharePoint refuses (their target is gone). */
 const site: { sp?: any; refusedUrls: string[] } = { refusedUrls: [] }
@@ -67,8 +68,13 @@ jest.mock('msgraph-helper', () => ({
   __esModule: true,
   default: { Init: () => Promise.resolve(), Get: () => Promise.resolve(graph.members) }
 }))
-const run: { tasks: any[] } = { tasks: [] }
-jest.mock('./tasks', () => ({ getTasks: () => run.tasks }))
+const run: { tasks: any[]; data?: any } = { tasks: [] }
+jest.mock('./tasks', () => ({
+  getTasks: (data: any) => {
+    run.data = data
+    return run.tasks
+  }
+}))
 const removal = { deleteCustomizer: jest.fn(() => Promise.resolve()) }
 jest.mock('./deleteCustomizer', () => ({ deleteCustomizer: () => removal.deleteCustomizer() }))
 const dialogs: Record<string, any> = {}
@@ -134,6 +140,8 @@ function fakeSite(web: Record<string, any> = {}, quickLaunch: IFakeNode[] = []) 
     AllProperties: {},
     WelcomePage: 'SitePages/Home.aspx',
     GtProjectTemplate: '',
+    // Not there on a project set up before 1.13
+    GtProjectListContent: undefined as string,
     ...web
   }
   const calls = {
@@ -150,7 +158,9 @@ function fakeSite(web: Record<string, any> = {}, quickLaunch: IFakeNode[] = []) 
     return invocable
   }
   const items = Object.assign(
-    query(() => [{ GtProjectTemplate: info.GtProjectTemplate }]),
+    query(() => [
+      { GtProjectTemplate: info.GtProjectTemplate, GtProjectListContent: info.GtProjectListContent }
+    ]),
     {
       getById: () => ({
         update: (properties: any) => {
@@ -450,6 +460,37 @@ describe('ProjectSetup', () => {
   it('tells whether the project already has a template', async () => {
     await projectSetup({ web: { GtProjectTemplate: 'Standardmal' } })
     expect(dialogs.setup.data.hasExistingTemplate).toBe(true)
+  })
+
+  it('tells the list content earlier runs added to the project', async () => {
+    await projectSetup({
+      web: { GtProjectTemplate: 'Standardmal', GtProjectListContent: 'Fasesjekkpunkter' }
+    })
+    expect(dialogs.setup.data.addedListContent).toBe('Fasesjekkpunkter')
+  })
+
+  it('tells no list content for a project whose properties do not record it (set up before 1.13)', async () => {
+    await projectSetup({ web: { GtProjectTemplate: 'Standardmal' } })
+    expect(dialogs.setup.data.addedListContent).toBe('')
+  })
+
+  it('leaves out of a forced template the list content the project has from an earlier run', async () => {
+    hub.templates[1] = { ...hub.templates[1], extensions: [], contentConfig: [10, 11] }
+    hub.lists[resource.Lists_ListContent_Title] = [
+      { id: 10, text: 'Fasesjekkpunkter' },
+      { id: 11, text: 'Planneroppgaver' },
+      { id: 12, text: 'Tidslinjeelementer' }
+    ]
+    await projectSetup({
+      web: {
+        WelcomePage: 'SitePages/Prosjektforside.aspx',
+        GtProjectTemplate: 'Standardmal',
+        GtProjectListContent: 'Fasesjekkpunkter'
+      },
+      properties: { forceTemplate: 'Byggeprosjekt' }
+    })
+    expect(dialogs.setup).toBeUndefined()
+    expect(run.data.selectedContentConfig.map(({ text }) => text)).toEqual(['Planneroppgaver'])
   })
 
   it('says so when the data for the setup cannot be read from the hub', async () => {

@@ -3,6 +3,7 @@ import { ContentConfig, ProjectExtension, ProjectTemplate } from 'pp365-shared-l
 import { first, uniq } from 'underscore'
 import { IProjectSetupData } from '../../extensions/projectSetup/types'
 import { createNoTemplateOption } from '../../extensions/projectSetup/noTemplate'
+import { isAddedBefore } from '../../extensions/projectSetup/listContentRecord'
 import { IProjectSetupDialogState, IResolvedCloudTemplate } from './types'
 
 export const INIT = createAction('INIT')
@@ -24,6 +25,20 @@ export const initialState: IProjectSetupDialogState = {
 }
 
 /**
+ * The list content `template` selects to begin with: its own and the content that is default for
+ * every template, but what the project has from an earlier run of the setup (`isAddedBefore`),
+ * which is added once more only when it is chosen.
+ *
+ * @param data Data for the project setup
+ * @param template The template chosen
+ */
+function defaultContentConfig(data: IProjectSetupData, template: ProjectTemplate): ContentConfig[] {
+  return (template?.getContentConfig(data.contentConfig) ?? []).filter(
+    (contentConfig) => !isAddedBefore(data.addedListContent, template, contentConfig)
+  )
+}
+
+/**
  * Create reducer for `ProjectSetupDialog`. Handlers that pass `state.selectedTemplate` to a
  * method type `state` as the plain state: immer's `Draft` drops `ProjectTemplate`'s private
  * members, so the draft is not accepted where a `ProjectTemplate` is expected.
@@ -41,7 +56,7 @@ export default (data: IProjectSetupData) =>
           if (!template) template = first(data.templates)
         }
         state.selectedTemplate = template
-        state.selectedContentConfig = template?.getContentConfig(data.contentConfig) ?? []
+        state.selectedContentConfig = defaultContentConfig(data, template)
         state.selectedExtensions = template?.getExtensions(data.extensions) ?? []
       })
       .addCase(ON_LIST_CONTENT_CONFIG_CHANGED, (state: IProjectSetupDialogState, { payload }) => {
@@ -50,8 +65,11 @@ export default (data: IProjectSetupData) =>
         const available = state.selectedTemplate?.isCloudTemplate
           ? (state.resolvedCloudTemplate?.contentConfig ?? [])
           : data.contentConfig
-        const mandatoryContentConfig = available.filter((contentConfig) =>
-          contentConfig.isMandatoryForTemplate(state.selectedTemplate)
+        // What the project has already is not forced on it again, locked or not.
+        const mandatoryContentConfig = available.filter(
+          (contentConfig) =>
+            contentConfig.isMandatoryForTemplate(state.selectedTemplate) &&
+            !isAddedBefore(data.addedListContent, state.selectedTemplate, contentConfig)
         )
         state.selectedContentConfig = uniq(
           [...mandatoryContentConfig, ...payload],
@@ -79,7 +97,7 @@ export default (data: IProjectSetupData) =>
           state.selectedContentConfig = []
           state.selectedExtensions = []
         } else {
-          state.selectedContentConfig = template?.getContentConfig(data.contentConfig) || []
+          state.selectedContentConfig = defaultContentConfig(data, template)
           state.selectedExtensions = template?.getExtensions(data.extensions) || []
         }
       })

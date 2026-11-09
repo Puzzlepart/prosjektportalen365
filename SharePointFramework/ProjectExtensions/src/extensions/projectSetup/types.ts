@@ -115,6 +115,13 @@ export interface IProjectSetupData extends IProjectSetupDialogState {
   hasExistingTemplate?: boolean
 
   /**
+   * The list content earlier runs of the setup added to the project, as its properties record it
+   * (`GtProjectListContent`): the titles, separated by `, `. Empty on a new project. A run again
+   * leaves the hub's list content it names out unless it is chosen (see `listContentRecord.ts`).
+   */
+  addedListContent?: string
+
+  /**
    * Whether the current user can add items to the project list on the hub. When `false`,
    * the setup writes nothing to the hub and the project is not registered in the portfolio.
    * `undefined` when the check could not be made, in which case the setup writes as usual.

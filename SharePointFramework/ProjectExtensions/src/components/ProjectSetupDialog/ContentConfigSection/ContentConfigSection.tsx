@@ -17,7 +17,8 @@ export const ContentConfigSection: ProjectSetupDialogSectionComponent = () => {
     onSelectionChange,
     searchTerm,
     onSearch,
-    selectedCountText
+    selectedCountText,
+    hasAddedItems
   } = useContentConfigSection()
 
   return (
@@ -41,6 +42,7 @@ export const ContentConfigSection: ProjectSetupDialogSectionComponent = () => {
           {selectedCountText}
         </span>
       </div>
+      {hasAddedItems && <p className={styles.addedInfo}>{strings.ContentConfigAddedInfoText}</p>}
       <DataGridList
         items={items}
         columns={columns}

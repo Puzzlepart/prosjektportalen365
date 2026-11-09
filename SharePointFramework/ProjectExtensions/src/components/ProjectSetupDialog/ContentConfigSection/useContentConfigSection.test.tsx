@@ -54,6 +54,42 @@ describe('useContentConfigSection', () => {
     expect(screen.getByTestId('items')).toHaveTextContent('Alfa|Mike|Bravo|Sierra|Echo|Zulu')
   })
 
+  it('marks the list content the project has from an earlier run, and neither locks nor forces it', () => {
+    const dispatch = jest.fn()
+    const Picker: React.FC = () => {
+      const { hasAddedItems, onSelectionChange } = useContentConfigSection()
+      return (
+        <button onClick={() => onSelectionChange([])}>
+          {hasAddedItems ? 'Noe er lagt til' : 'Ingenting er lagt til'}
+        </button>
+      )
+    }
+    render(
+      <ProjectSetupDialogContext.Provider
+        value={
+          {
+            props: {
+              data: {
+                contentConfig: [
+                  item('m1', 'Fasesjekkpunkter', true),
+                  item('m2', 'Planneroppgaver', true)
+                ],
+                addedListContent: 'Fasesjekkpunkter'
+              }
+            },
+            state: { selectedTemplate: {}, selectedContentConfig: [] },
+            dispatch
+          } as any
+        }
+      >
+        <Picker />
+      </ProjectSetupDialogContext.Provider>
+    )
+    // Leaving everything out keeps only the mandatory content the project does not have.
+    fireEvent.click(screen.getByText('Noe er lagt til'))
+    expect(dispatch.mock.calls[0][0].payload.map(({ text }) => text)).toEqual(['Planneroppgaver'])
+  })
+
   it('leaves out hidden items', () => {
     renderProbe([item('a', 'Alfa'), { ...item('h', 'Skjult'), hidden: true }], [])
     expect(screen.getByTestId('items')).toHaveTextContent('Alfa')

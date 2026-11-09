@@ -206,6 +206,8 @@ declare interface IProjectExtensionsStrings {
   ConfigTabSelectedLabel: string
   ExtensionsSectionSearchLabel: string
   ContentConfigSectionSearchLabel: string
+  ContentConfigAddedText: string
+  ContentConfigAddedInfoText: string
   SearchResultsCount: string
   CloudTemplateResolved: string
   ProgressStepAnnouncement: string

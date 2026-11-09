@@ -5,6 +5,7 @@ import { axeComponent } from 'pp365-jest-config/lib/axe'
 import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import { ProgressDialog } from '.'
+import { ApplyTemplateTaskError } from '../../extensions/projectSetup/tasks/ApplyTemplate/types'
 import { ITaskProgress } from './types'
 import { announced } from 'pp365-jest-config/lib/announce'
 
@@ -99,6 +100,37 @@ describe('ProgressDialog', () => {
     expect(screen.getByText('Oppsettet feilet')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: strings.CloseModalText }))
     expect(onDismiss).toHaveBeenCalled()
+  })
+
+  it('shows what a step failed with in words, not as «[object Object]»', () => {
+    // sp-js-provisioning 1.5.0's error for a failed JSOM request (the content types): its message
+    // is `String(cause)`, and what went wrong is in the cause, `{ sender, args }`.
+    const error = new ApplyTemplateTaskError(
+      Object.assign(new Error('[object Object]'), {
+        name: 'ProvisioningError',
+        handler: 'ContentTypes',
+        cause: { sender: {}, args: { get_message: () => 'Innholdstypen finnes allerede.' } }
+      })
+    )
+    render(
+      <ProgressDialog
+        progressIndicator={INDICATOR}
+        taskProgress={tasks()}
+        currentStep={2}
+        totalSteps={3}
+        error={error}
+        onDismiss={jest.fn()}
+      />
+    )
+    expect(
+      screen.getByText(
+        `${format(strings.ApplyTemplateErrorMessage, 'ContentTypes')}: Innholdstypen finnes allerede.`
+      )
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText('ProvisioningError: Innholdstypen finnes allerede.')
+    ).toBeInTheDocument()
+    expect(screen.queryByText(/\[object Object\]/)).toBeNull()
   })
 
   it('goes on to the project at once when setup completes with the log closed', () => {

@@ -97,6 +97,55 @@ describe('ProjectSetupDialog reducer', () => {
     expect(texts(state.selectedExtensions)).toEqual(['Låst'])
   })
 
+  it('leaves out of a run again the list content the project has, unless it is chosen', () => {
+    const reducer = createReducer(
+      setupData({ hasExistingTemplate: true, addedListContent: 'Fasesjekkliste' })
+    )
+    let state = reducer(initialState, INIT())
+    expect(state.selectedContentConfig).toEqual([])
+    state = reducer(state, ON_TEMPLATE_CHANGED(setupData().templates[1]))
+    expect(texts(state.selectedContentConfig)).toEqual(['Planner'])
+    state = reducer(state, ON_LIST_CONTENT_CONFIG_CHANGED(CONTENT_CONFIG))
+    expect(texts(state.selectedContentConfig)).toEqual(['Fasesjekkliste', 'Planner'])
+  })
+
+  it('does not force on a run again the mandatory list content the project has', () => {
+    const mandatoryContent = contentConfig(12, 'Påkrevd innhold', { mandatoryFor: [2] })
+    const reducer = createReducer(
+      setupData({
+        hasExistingTemplate: true,
+        addedListContent: 'Påkrevd innhold',
+        contentConfig: [...CONTENT_CONFIG, mandatoryContent]
+      })
+    )
+    let state = reducer(
+      reducer(initialState, INIT()),
+      ON_TEMPLATE_CHANGED(template(2, 'Byggeprosjekt', { contentConfig: [10, 12] }))
+    )
+    expect(texts(state.selectedContentConfig)).toEqual(['Fasesjekkliste'])
+    state = reducer(state, ON_LIST_CONTENT_CONFIG_CHANGED([]))
+    expect(state.selectedContentConfig).toEqual([])
+  })
+
+  it("keeps a cloud template's list content the project has, which the rows' KeyColumn matches", () => {
+    const cloud = template(3, 'Skymal', { isCloudTemplate: true })
+    const mandatoryContent = contentConfig(15, 'Skyinnhold', { mandatoryFor: [3] })
+    const reducer = createReducer(setupData({ addedListContent: 'Skyinnhold' }))
+    let state = reducer(reducer(initialState, INIT()), ON_TEMPLATE_CHANGED(cloud))
+    state = reducer(
+      state,
+      ON_CLOUD_TEMPLATE_RESOLVED({
+        templateId: 3,
+        package: {} as any,
+        extensions: [],
+        contentConfig: [mandatoryContent]
+      })
+    )
+    expect(texts(state.selectedContentConfig)).toEqual(['Skyinnhold'])
+    state = reducer(state, ON_LIST_CONTENT_CONFIG_CHANGED([]))
+    expect(texts(state.selectedContentConfig)).toEqual(['Skyinnhold'])
+  })
+
   it('stops resolving and keeps the message when a cloud template fails', () => {
     const reducer = createReducer(setupData())
     let state = reducer(initialState, ON_CLOUD_TEMPLATE_RESOLVING())

@@ -4,6 +4,7 @@ import { format, isUnauthorizedError, ProjectPropertiesMapType } from 'pp365-sha
 import * as strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'extensions/projectSetup'
 import { NO_TEMPLATE_ID } from '../../constants'
+import { recordListContent } from '../../listContentRecord'
 import resource from 'SharedResources'
 import { SPDataAdapter } from '../../../../data'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
@@ -158,6 +159,8 @@ export class SetupProjectInformation extends BaseTask {
    * - `GtInstalledVersion`: The installed version
    * - `GtCurrentVersion`: The current version (same as installed version initially)
    * - `GtProjectTemplate`: The selected project template name
+   * - `GtProjectListContent`: The list content earlier runs of the setup added, then the selected
+   *   (see `recordListContent`), which a run again leaves out unless it is chosen
    *
    * @param params Params
    * @param additionalProperties Additional properties
@@ -173,7 +176,10 @@ export class SetupProjectInformation extends BaseTask {
       GtIsParentProject: this.data.selectedTemplate.isParentProject,
       GtProjectTemplate: this.data.selectedTemplate.text,
       GtProjectExtensions: (this.data.selectedExtensions ?? []).map((e) => e.text).join(', '),
-      GtProjectListContent: (this.data.selectedContentConfig ?? []).map((c) => c.text).join(', '),
+      GtProjectListContent: recordListContent(
+        this.data.addedListContent,
+        this.data.selectedContentConfig ?? []
+      ),
       ...additionalProperties
     }
     if (!isNoTemplate) {

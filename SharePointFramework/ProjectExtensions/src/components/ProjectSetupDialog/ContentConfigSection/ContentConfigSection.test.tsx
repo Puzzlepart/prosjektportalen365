@@ -1,20 +1,23 @@
 // The section's hook reads the setup dialog's context and data, so it is mocked before the
-// component is imported; the test controls the items and the selection. The columns are the real
-// ones, so a column that stops rendering its text fails here.
+// component is imported; the test controls the items, the selection and, in `mockAdded`, the items
+// the project has from an earlier run. The columns are the real ones, so a column that stops
+// rendering its text fails here.
 const mockOnSelectionChange = jest.fn()
 const mockOnSearch = jest.fn()
+const mockAdded = { keys: new Set<string>() }
 jest.mock('./useContentConfigSection', () => ({
   useContentConfigSection: () => ({
     items: [
       { key: 'a', text: 'Alfa', subText: 'Beskrivelse av Alfa' },
       { key: 'b', text: 'Bravo', subText: 'Beskrivelse av Bravo' }
     ],
-    columns: jest.requireActual('./useColumns').useColumns(new Set(['a'])),
+    columns: jest.requireActual('./useColumns').useColumns(new Set(['a']), mockAdded.keys),
     selectedRowIds: new Set(['a']),
     onSelectionChange: mockOnSelectionChange,
     searchTerm: '',
     onSearch: mockOnSearch,
-    selectedCountText: '1 valgte elementer'
+    selectedCountText: '1 valgte elementer',
+    hasAddedItems: mockAdded.keys.size > 0
   })
 }))
 
@@ -30,10 +33,24 @@ import { ContentConfigSection } from './ContentConfigSection'
  * ones checked, a new pick reported as the ids now selected, and the search box wired to the hook.
  */
 describe('ContentConfigSection', () => {
+  beforeEach(() => {
+    mockAdded.keys = new Set()
+  })
+
   it('lists the items with their descriptions', () => {
     render(<ContentConfigSection />)
     expect(screen.getByText('Alfa')).toBeInTheDocument()
     expect(screen.getByText('Beskrivelse av Bravo')).toBeInTheDocument()
+    expect(screen.queryByText(strings.ContentConfigAddedText)).toBeNull()
+    expect(screen.queryByText(strings.ContentConfigAddedInfoText)).toBeNull()
+  })
+
+  it('marks the item the project has already, says why it is not selected, and breaks no rule axe can check', async () => {
+    mockAdded.keys = new Set(['b'])
+    const { container } = render(<ContentConfigSection />)
+    expect(screen.getAllByText(strings.ContentConfigAddedText)).toHaveLength(1)
+    expect(screen.getByText(strings.ContentConfigAddedInfoText)).toBeInTheDocument()
+    expect(await axeComponent(container)).toHaveNoViolations()
   })
 
   it('shows the picked item as checked and reports a new pick by id', async () => {

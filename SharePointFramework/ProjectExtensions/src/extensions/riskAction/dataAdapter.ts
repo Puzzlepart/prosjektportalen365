@@ -21,6 +21,11 @@ export class DataAdapter extends SPDataAdapterBase {
   private readonly hiddenDataFieldName = 'RiskActionData'
   private readonly hiddenUpdateFieldName = 'RiskActionUpdated'
 
+  /**
+   * The bucket lookups under way, by plan ID, which a call made meanwhile waits for.
+   */
+  private readonly _bucketLookups = new Map<string, Promise<string>>()
+
   constructor(private readonly _context: FieldCustomizerContext) {
     super()
     this.graph = graphfi().using(graphSPFx(this._context))
@@ -65,14 +70,31 @@ export class DataAdapter extends SPDataAdapterBase {
   }
 
   /**
-   * Ensures that a bucket with the specified name exists in the specified plan.
-   * If the bucket already exists, returns its ID. Otherwise, creates a new bucket and returns its ID.
+   * Ensures that the bucket named in the global setting `RiskActionPlannerBucketName` exists in the
+   * plan, and returns its ID. A call made while a lookup for the plan is under way waits for that
+   * lookup rather than adding the bucket a second time.
    *
    * @param planId The ID of the plan to add the bucket to.
    *
    * @returns The ID of the bucket.
    */
-  private async _ensureBucket(planId: string): Promise<string> {
+  private _ensureBucket(planId: string): Promise<string> {
+    let lookup = this._bucketLookups.get(planId)
+    if (!lookup) {
+      // Forgotten once settled, so a bucket deleted later is added again by the next call.
+      lookup = this._findOrAddBucket(planId).finally(() => this._bucketLookups.delete(planId))
+      this._bucketLookups.set(planId, lookup)
+    }
+    return lookup
+  }
+
+  /**
+   * Finds the bucket named in the global setting `RiskActionPlannerBucketName` in the plan, or adds
+   * it when the plan has none by that name, and returns its ID.
+   *
+   * @param planId The ID of the plan
+   */
+  private async _findOrAddBucket(planId: string): Promise<string> {
     const bucketName = this.globalSettings.get('RiskActionPlannerBucketName')
     const buckets = await this.graph.planner.plans.getById(planId).buckets()
     const bucket = buckets.find(({ name }) => name === bucketName)
@@ -86,7 +108,19 @@ export class DataAdapter extends SPDataAdapterBase {
   }
 
   /**
-   * Adds multiple tasks to the specified Risk Action item context.
+   * The plan and the bucket new tasks go to: the group's default plan and the bucket for risk
+   * actions in it, added when the plan lacks it.
+   */
+  private async _getTaskTarget(): Promise<{ planId: string; bucketId: string }> {
+    const defaultPlan = await this._getDefaultGroupPlan()
+    const bucketId = await this._ensureBucket(defaultPlan.id)
+    return { planId: defaultPlan.id, bucketId }
+  }
+
+  /**
+   * Adds multiple tasks to the specified Risk Action item context. The plan and the bucket are
+   * looked up once, before the tasks are added in parallel: each add ensuring the bucket itself
+   * gave the actions of a risk, migrated together, a bucket each.
    *
    * @param tasks An array of strings representing the titles of the tasks to add.
    * @param itemContext The Risk Action item context to add the tasks to.
@@ -94,9 +128,12 @@ export class DataAdapter extends SPDataAdapterBase {
    * @returns A Promise that resolves with an array of the newly added tasks.
    */
   public async addTasks(tasks: string[], itemContext: RiskActionItemContext) {
+    const target = await this._getTaskTarget()
     const newTasks = _.flatten(
       await Promise.all(
-        tasks.map(async (title) => await this.addTask(new Map([['title', title]]), itemContext))
+        tasks.map(
+          async (title) => await this.addTask(new Map([['title', title]]), itemContext, target)
+        )
       )
     )
     return newTasks
@@ -107,10 +144,12 @@ export class DataAdapter extends SPDataAdapterBase {
    *
    * @param model Model for the task (Map<string, any>)
    * @param itemContext Item context for the current risk action item
+   * @param target The plan and the bucket to add the task to, when the caller has looked them up
    */
   public async addTask(
     model: Map<string, any>,
-    itemContext: RiskActionItemContext
+    itemContext: RiskActionItemContext,
+    target?: { planId: string; bucketId: string }
   ): Promise<PlannerTask> {
     try {
       let assignments = null
@@ -123,10 +162,9 @@ export class DataAdapter extends SPDataAdapterBase {
           }
         }
       }
-      const defaultPlan = await this._getDefaultGroupPlan()
-      const bucketId = await this._ensureBucket(defaultPlan.id)
+      const { planId, bucketId } = target ?? (await this._getTaskTarget())
       const createdTask = await this.graph.planner.tasks.add({
-        planId: defaultPlan.id,
+        planId,
         title: model.get('title'),
         bucketId
       })

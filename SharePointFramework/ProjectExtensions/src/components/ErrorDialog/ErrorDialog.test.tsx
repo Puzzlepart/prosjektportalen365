@@ -29,11 +29,26 @@ describe('ErrorDialog', () => {
     )
     expect(screen.getByText(strings.NoHubSiteErrorMessage)).toBeInTheDocument()
     expect(screen.getByText(strings.NoHubSiteErrorStack, { selector: 'p' })).toBeVisible()
+    // Plain text: `<br/>` and the backticks of Markdown showed as they were.
+    expect(
+      screen.getByText(strings.NoHubSiteErrorStack, { selector: 'p' }).textContent
+    ).not.toMatch(/<\/?[a-z]+\s*\/?>|`|\*\*/i)
     // Once: a message bar hidden beside it would still be announced.
     expect(screen.getAllByText(strings.NoHubSiteErrorStack)).toHaveLength(1)
     // By text: the title's close button carries the same name, as an aria-label.
     fireEvent.click(screen.getByText(strings.CloseModalText))
     expect(onDismiss).toHaveBeenCalled()
+  })
+
+  it.each([
+    'NoHubSiteErrorStack',
+    'NotSiteAdminErrorStack',
+    'NoGroupIdErrorStack',
+    'InvalidLanguageErrorStack',
+    'IsHubSiteErrorStack',
+    'ProjectAlreadySetupStack'
+  ])('has no markup in %s, which the checks before the setup show as plain text', (key) => {
+    expect(strings[key]).not.toMatch(/<\/?[a-z]+\s*\/?>|`|\*\*/i)
   })
 
   it('shows the explanation as a message when it is not the subtitle', () => {

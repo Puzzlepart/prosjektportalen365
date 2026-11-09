@@ -37,6 +37,7 @@ import { ITaskProgress } from '../../components/ProgressDialog/types'
 import { ProjectSetupError } from './ProjectSetupError'
 import { NAVIGATION_NODES_STORAGE_KEY } from './constants'
 import { deleteCustomizer } from './deleteCustomizer'
+import { isAddedBefore } from './listContentRecord'
 import { TemplateQuickLaunch } from './templateQuickLaunch'
 import * as Tasks from './tasks'
 import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
@@ -451,6 +452,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    * and sets the state accordingly. If not found, returns null.
    * The force/auto template can either be set in property
    * `forceTemplate` or as a property on the template item itself.
+   * The template's list content leaves out what the project has from an
+   * earlier run of the setup (`isAddedBefore`), as the dialog does.
    *
    * To be able to use the force/auto template, the user must be a owner.
    *
@@ -465,8 +468,10 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     return {
       selectedTemplate: autoTemplate,
       selectedExtensions: data.extensions.filter((ext) => autoTemplate.extensions.includes(ext.id)),
-      selectedContentConfig: data.contentConfig.filter((content) =>
-        autoTemplate.contentConfig.includes(content.id)
+      selectedContentConfig: data.contentConfig.filter(
+        (content) =>
+          autoTemplate.contentConfig.includes(content.id) &&
+          !isAddedBefore(data.addedListContent, autoTemplate, content)
       )
     }
   }
@@ -809,12 +814,15 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       })
 
       let hasExistingTemplate = false
+      let addedListContent = ''
       try {
+        // Every field, not a select: a project set up before 1.13 can lack `GtProjectListContent`,
+        // and SharePoint refuses a select of a column the list does not have.
         const [propertyItem] = await this.sp.web.lists
           .getByTitle(resource.Lists_ProjectProperties_Title)
-          .items.select('GtProjectTemplate')
-          .top(1)()
+          .items.top(1)()
         hasExistingTemplate = !!propertyItem && !stringIsNullOrEmpty(propertyItem.GtProjectTemplate)
+        addedListContent = propertyItem?.GtProjectListContent ?? ''
       } catch {
         // List may not exist for new projects
       }
@@ -826,6 +834,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         templates,
         projectData,
         hasExistingTemplate,
+        addedListContent,
         hasHubWriteAccess
       } as IProjectSetupData
     } catch (error) {

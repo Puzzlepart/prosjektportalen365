@@ -2,13 +2,16 @@ import { TableRowId } from '@fluentui/react-components'
 import strings from 'ProjectExtensionsStrings'
 import { format } from 'pp365-shared-library'
 import { useState } from 'react'
+import { isAddedBefore } from '../../../extensions/projectSetup/listContentRecord'
 import { useProjectSetupDialogContext } from '../context'
 import { ON_LIST_CONTENT_CONFIG_CHANGED } from '../reducer'
 import { useSearchAnnouncement } from '../useSearchAnnouncement'
 import { useColumns } from './useColumns'
 
 /**
- * Component logic hook for `ContentConfigSection`
+ * Component logic hook for `ContentConfigSection`. Content the project has from an earlier run of
+ * the setup is marked as added, and neither selected to begin with nor locked: chosen, it is added
+ * once more.
  */
 export function useContentConfigSection() {
   const context = useProjectSetupDialogContext()
@@ -21,9 +24,21 @@ export function useContentConfigSection() {
     (contentConfig) => !contentConfig.hidden
   )
 
+  const addedKeys = new Set(
+    allItems
+      .filter((item) =>
+        isAddedBefore(context.props.data.addedListContent, context.state.selectedTemplate, item)
+      )
+      .map((item) => String(item.key))
+  )
+
   const mandatoryKeys = new Set(
     allItems
-      .filter((item) => item.isMandatoryForTemplate(context.state.selectedTemplate))
+      .filter(
+        (item) =>
+          item.isMandatoryForTemplate(context.state.selectedTemplate) &&
+          !addedKeys.has(String(item.key))
+      )
       .map((item) => String(item.key))
   )
 
@@ -55,7 +70,7 @@ export function useContentConfigSection() {
     context.dispatch(ON_LIST_CONTENT_CONFIG_CHANGED(selectedItems))
   }
 
-  const columns = useColumns(mandatoryKeys)
+  const columns = useColumns(mandatoryKeys, addedKeys)
 
   // Hidden selections are applied but never listed, so they are not counted.
   const visibleSelectedCount = context.state.selectedContentConfig.filter(
@@ -73,6 +88,7 @@ export function useContentConfigSection() {
     onSelectionChange,
     searchTerm,
     onSearch: setSearchTerm,
-    selectedCountText
+    selectedCountText,
+    hasAddedItems: addedKeys.size > 0
   }
 }

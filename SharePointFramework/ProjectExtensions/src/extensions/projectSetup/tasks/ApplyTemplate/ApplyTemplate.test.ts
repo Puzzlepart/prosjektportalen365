@@ -12,6 +12,7 @@ import strings from 'ProjectExtensionsStrings'
 import { format } from 'pp365-shared-library'
 import { ApplyTemplate } from '.'
 import { NO_TEMPLATE_ID } from '../../constants'
+import { HooksTaskError } from '../Hooks/HooksTaskError'
 
 const QUICK_LAUNCH = [{ Title: 'Hjem', Url: 'SitePages/ProjectHome.aspx' }]
 const TOP_NAVIGATION_BAR = [{ Title: 'Portefølje', Url: '{hosturl}/sites/pp' }]
@@ -191,5 +192,42 @@ describe('ApplyTemplate', () => {
     ).rejects.toMatchObject({
       message: `${format(strings.ApplyTemplateErrorMessage, 'Navigation')}: ${engine.fail.message}`
     })
+  })
+
+  it('fails with what the engine failed with in words when its error has no message of its own', async () => {
+    // sp-js-provisioning 1.5.0 makes the message of its error `String(cause)`, and a failed JSOM
+    // request (the content types) rejects with `{ sender, args }`: the setup said «[object Object]».
+    engine.fail = Object.assign(new Error('[object Object]'), {
+      name: 'ProvisioningError',
+      cause: { sender: {}, args: { get_message: () => 'Innholdstypen finnes allerede.' } }
+    })
+    await expect(
+      applyTemplate().execute(taskParams({ ContentTypes: [] }), jest.fn())
+    ).rejects.toMatchObject({
+      message: `${format(strings.ApplyTemplateErrorMessage, 'Navigation')}: Innholdstypen finnes allerede.`,
+      stack: 'ProvisioningError: Innholdstypen finnes allerede.'
+    })
+  })
+})
+
+// The hooks' step fails with the same message as the template's, from its own error class.
+describe('HooksTaskError', () => {
+  it('says which handler failed and what with, in words', () => {
+    const error = new HooksTaskError(
+      Object.assign(new Error('[object Object]'), {
+        name: 'ProvisioningError',
+        handler: 'Hooks',
+        cause: { error: { code: '500', message: { lang: 'nb-NO', value: 'Kroken svarte 500' } } }
+      })
+    )
+    expect(error.message).toBe(
+      `${format(strings.ApplyTemplateErrorMessage, 'Hooks')}: Kroken svarte 500`
+    )
+    expect(error.stack).toBe('ProvisioningError: Kroken svarte 500')
+  })
+
+  it('says only which handler failed when nothing can be read of what it failed with', () => {
+    const error = new HooksTaskError(Object.assign(new Error(''), { handler: 'Hooks' }))
+    expect(error.message).toBe(format(strings.ApplyTemplateErrorMessage, 'Hooks'))
   })
 })
