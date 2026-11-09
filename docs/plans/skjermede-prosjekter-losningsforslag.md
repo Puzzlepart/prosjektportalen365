@@ -21,7 +21,7 @@ Løsningen er generisk. Den virker på en eksisterende hub med både vanlige og 
 | Tilgang på huben for prosjektdeltakere | Minimumsgruppen fra #1805 er nok når webdelene kjører. Den som oppretter prosjektet, må være leser eller medlem på huben, fordi oppsettet leser lister som minimumsgruppen ikke dekker. |
 | Innsynsgruppe | Konfigureres i Tillatelseskonfigurasjon med en ny kolonne, `GtPermissionScope`. Standardraden bruker gruppen Porteføljeinnsyn. Medlemmene kopieres når prosjektet opprettes, som i dagens SitePermissions. |
 | Hva innsynsgruppen ser | Bare data i portefølje og program, inkludert informasjonspanelet. Prosjektets sider kan ikke åpnes. |
-| Logg | Skrives til huben som i dag. For brukere som bare har minimumsgruppen, feiler skrivingen stille. |
+| Logg | Skrives til huben som i dag. Siden #1805 kan også brukere med bare minimumsgruppen skrive til Logg, og hver bruker ser bare egne oppføringer (`LogSecurity.xml`). |
 | Porteføljesiden | Leser skjermede data via søk. Endringer vises etter noen få minutter. |
 | Statuskolonnen | Felt som ikke finnes i Prosjektkolonner, vises ikke for skjermede prosjekter. |
 | Malspesifikke innholdstyper | Støttes for status, som for andre prosjekter. De må arve fra `0x010022252E35737A413FB56A1BA53862F6D5`. |
@@ -63,6 +63,7 @@ Hub                                                   Skjermet prosjektområde
 - `getStatusReports` returnerer `[]` når huben er utilgjengelig. For et skjermet prosjekt er det feil, fordi dataene ligger lokalt.
 - Prosjektstatus, Prosjekttidslinje og Prosjektnyheter viser «ingen tilgang» ved 403 fra huben. Disse kodestiene rutes på nytt for skjermede prosjekter.
 - Release notes for #1805 ber administratorer gi minimumsgruppen tilgang til Prosjektstatus, Prosjektstatusvedlegg og Tidslinjeinnhold for å låse opp status. Det gjelder ikke skjermede prosjekter, og det må stå i release notes for skjerming.
+- Logg får egne tilganger (`LogSecurity.xml`): minimumsgruppen kan skrive, og hver bruker leser bare egne oppføringer. Arkiveringslogg er lesbar for alle med tilgang, og minimumsgruppen har ingen rolle der. Det er enda en grunn til at skjermede prosjekter har sin egen Arkiveringslogg.
 - **Ikke verifisert:** at minimumsgruppen kan lese hubens innholdstyper og felt. Skjermet prosjektstatus leser derfor statusfeltene fra den lokale innholdstypen.
 
 **PR #1794 (oppsett og synkronisering uten skrivetilgang til huben)**
