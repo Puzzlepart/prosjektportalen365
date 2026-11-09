@@ -1,7 +1,7 @@
 import strings from 'ProjectWebPartsStrings'
 import { format } from 'pp365-shared-library'
 import resource from 'SharedResources'
-import { getHubSyncErrorReason } from './hubSyncError'
+import { getArchiveLogErrorReason, getHubSyncErrorReason } from './hubSyncError'
 
 describe('getHubSyncErrorReason', () => {
   it('says in words that the user cannot write to the hub when the hub refuses', () => {
@@ -14,5 +14,18 @@ describe('getHubSyncErrorReason', () => {
   it("gives any other error's own message", () => {
     expect(getHubSyncErrorReason(new Error('Serverfeil'))).toBe('Serverfeil')
     expect(getHubSyncErrorReason('Tidsavbrudd')).toBe('Tidsavbrudd')
+  })
+})
+
+describe('getArchiveLogErrorReason', () => {
+  it('names the archive log when the hub refuses the entry', () => {
+    const denied = Object.assign(new Error('Access is denied.'), { status: 403 })
+    expect(getArchiveLogErrorReason(denied)).toBe(
+      format(strings.ArchiveLogNoWriteAccessReason, resource.Lists_ArchiveLog_Title)
+    )
+  })
+
+  it("gives any other error's own message", () => {
+    expect(getArchiveLogErrorReason(new Error('Serverfeil'))).toBe('Serverfeil')
   })
 })

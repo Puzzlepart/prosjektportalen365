@@ -1,7 +1,11 @@
 // util reaches the hub's project list through the data adapter, which is a stand-in registered
 // before the imports because Heft runs Jest on CommonJS output without Babel: `hub.fields` are
-// the project list's fields, `hub.rows` its rows, and `hub.selected` what a query selected.
-const hub: { fields: string[]; rows: any[]; selected?: string[] } = { fields: [], rows: [] }
+// the project list's fields, `hub.rows` its rows, `hub.selected` what a query selected, and
+// `hub.denied` whether the list refuses the user, as it does a member of «Minimum lesetilganger på hub».
+const hub: { fields: string[]; rows: any[]; selected?: string[]; denied?: boolean } = {
+  fields: [],
+  rows: []
+}
 jest.mock('data', () => ({
   __esModule: true,
   default: {
@@ -12,7 +16,9 @@ jest.mock('data', () => ({
             fields: {
               select: () => ({
                 filter: () => () =>
-                  Promise.resolve(hub.fields.map((InternalName) => ({ InternalName })))
+                  hub.denied
+                    ? Promise.reject(Object.assign(new Error('403 FORBIDDEN'), { status: 403 }))
+                    : Promise.resolve(hub.fields.map((InternalName) => ({ InternalName })))
               })
             },
             items: {
@@ -28,7 +34,7 @@ jest.mock('data', () => ({
   }
 }))
 
-import { format } from 'pp365-shared-library'
+import { format, isUnauthorizedError } from 'pp365-shared-library'
 import strings from 'ProjectWebPartsStrings'
 import {
   copyTemplatePage,
@@ -39,6 +45,8 @@ import {
   getServerRelativeUrl,
   getSitePageItemId,
   getTemplates,
+  isNewsAccessDenied,
+  newsNoAccessError,
   recycleSitePage,
   setOriginalSourceSiteId,
   validateSharePointFileName
@@ -119,6 +127,26 @@ describe('ProjectNews util', () => {
     expect(
       getServerRelativeUrl('https://contoso.sharepoint.com/sites/alfa/', 'SitePages', 'Nyheter')
     ).toBe('/sites/alfa/SitePages/Nyheter')
+  })
+
+  it('tells a refused news site from other answers', () => {
+    expect(isNewsAccessDenied({ status: 403 } as any)).toBe(true)
+    expect(isNewsAccessDenied({ status: 401 } as any)).toBe(true)
+    expect(isNewsAccessDenied({ status: 404 } as any)).toBe(false)
+    const error = newsNoAccessError()
+    expect(error.message).toBe(strings.NewsNoAccessErrorText)
+    expect(isUnauthorizedError(error)).toBe(true)
+  })
+
+  it('says access is missing when the news site refuses the folder', async () => {
+    const spHttpClient = { get: jest.fn(() => Promise.resolve({ ok: false, status: 403 })) }
+    await expect(
+      ensureProjectNewsFolder(
+        'https://contoso.sharepoint.com/sites/portefolje',
+        spHttpClient as any,
+        'Prosjektnyheter'
+      )
+    ).rejects.toThrow(strings.NewsNoAccessErrorText)
   })
 
   it('validates a file name the way SharePoint does', () => {
@@ -342,6 +370,30 @@ describe('ProjectNews util', () => {
       GtHubSiteId: 'hub-1',
       Title: 'Åpning'
     })
+  })
+
+  it('ties the page to the project with the site and hub ids when the project list refuses the user', async () => {
+    // The page was made, then the news article failed on reading `Prosjekter` (403).
+    hub.denied = true
+    try {
+      const client = httpClient(['GtSiteId', 'GtHubSiteId', 'GtProjectPhase'])
+      await setOriginalSourceSiteId(
+        'https://contoso.sharepoint.com/sites/hub-g',
+        client as any,
+        '/sites/hub-g/SitePages',
+        14,
+        'site-6',
+        'hub-1',
+        'Ekstern sak'
+      )
+      expect(updateBody(client)).toEqual({
+        GtSiteId: 'site-6',
+        GtHubSiteId: 'hub-1',
+        Title: 'Ekstern sak'
+      })
+    } finally {
+      hub.denied = false
+    }
   })
 
   it('gives the page the title written in the dialog, in the update that ties it to the project', async () => {

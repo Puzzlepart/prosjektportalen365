@@ -8,6 +8,24 @@ import SPDataAdapter from 'data'
 import resource from 'SharedResources'
 import { getRestErrorMessage, toODataString, toUrlPath } from './rest'
 
+/**
+ * The error for a news site the user may not read or write (401, 403), with the status, so
+ * `isUnauthorizedError` knows it. The news site is the hub unless `ProjectNewsHubUrl` says
+ * otherwise, and a member of «Minimum lesetilganger på hub» does not read the hub's pages.
+ */
+export function newsNoAccessError(): Error {
+  return Object.assign(new Error(strings.NewsNoAccessErrorText), { status: 403 })
+}
+
+/**
+ * Whether a response from the news site refused the user.
+ *
+ * @param response Response
+ */
+export function isNewsAccessDenied(response: SPHttpClientResponse): boolean {
+  return response.status === 401 || response.status === 403
+}
+
 // --- SharePoint file name validation constants ---
 const invalidChars = /["*:<>?/\\|#%;]/
 const reservedNames = /^(con|prn|aux|nul|com[0-9]|lpt[0-9]|\.lock|desktop\.ini|_vti_|~\$|forms)$/i
@@ -67,6 +85,7 @@ export async function ensureProjectNewsFolder(
   const createFolderUrl = `${siteUrl}/_api/web/folders/addUsingPath(DecodedUrl=${folderPath},overwrite=false)`
 
   const res = await spHttpClient.get(folderUrl, SPHttpClient.configurations.v1)
+  if (isNewsAccessDenied(res)) throw newsNoAccessError()
   // A path API can answer for a folder that is not there with its Exists false, not with a 404.
   if (res.ok && (await res.json().catch(() => ({})))?.Exists === true) return
   if (!res.ok && res.status !== 404) {
@@ -76,6 +95,7 @@ export async function ensureProjectNewsFolder(
   const createRes = await spHttpClient.post(createFolderUrl, SPHttpClient.configurations.v1, {
     headers: { Accept: 'application/json' }
   })
+  if (isNewsAccessDenied(createRes)) throw newsNoAccessError()
   if (!createRes.ok) {
     const error = await createRes.json().catch(() => ({}))
     throw new Error(strings.NewsFolderError + (getRestErrorMessage(error) || createRes.statusText))
@@ -355,20 +375,6 @@ export async function setOriginalSourceSiteId(
 
   const fields = await getSitePagesFields(siteUrl, spHttpClient)
 
-  const projectsList = SPDataAdapter.portalDataService.web.lists.getByTitle(
-    resource.Lists_Projects_Title
-  )
-  const pageFields = fields.filter((field) => !['GtSiteId', 'GtHubSiteId'].includes(field))
-  // The page library can have Gt fields the project list lacks (a test hub's GtHubUrl), and
-  // selecting one of them fails the whole query with a 400: copy only what both lists have.
-  const projectListFields: { InternalName: string }[] =
-    pageFields.length > 0
-      ? await projectsList.fields.select('InternalName').filter("startswith(InternalName,'Gt')")()
-      : []
-  const projectFields = pageFields.filter((field) =>
-    projectListFields.some(({ InternalName }) => InternalName === field)
-  )
-
   const updateBody: any = {
     GtSiteId: siteId,
     GtHubSiteId: hubSiteId
@@ -379,21 +385,41 @@ export async function setOriginalSourceSiteId(
     updateBody.Title = pageTitle
   }
 
-  if (projectFields.length > 0) {
-    const [projectData] = await projectsList.items
-      .select(...projectFields)
-      .filter(`GtSiteId eq '${siteId}'`)
-      .top(1)()
+  const pageFields = fields.filter((field) => !['GtSiteId', 'GtHubSiteId'].includes(field))
+  // The page is made by now: a hub that does not let the user read `Prosjekter` (a member of
+  // «Minimum lesetilganger på hub») leaves it with the site and hub ids, rather than failing it.
+  try {
+    const projectsList = SPDataAdapter.portalDataService.web.lists.getByTitle(
+      resource.Lists_Projects_Title
+    )
+    // The page library can have Gt fields the project list lacks (a test hub's GtHubUrl), and
+    // selecting one of them fails the whole query with a 400: copy only what both lists have.
+    const projectListFields: { InternalName: string }[] =
+      pageFields.length > 0
+        ? await projectsList.fields.select('InternalName').filter("startswith(InternalName,'Gt')")()
+        : []
+    const projectFields = pageFields.filter((field) =>
+      projectListFields.some(({ InternalName }) => InternalName === field)
+    )
 
-    if (projectData) {
-      for (const field of projectFields) {
-        if (projectData[field] !== undefined && projectData[field] !== null) {
-          updateBody[field] = projectData[field]
+    if (projectFields.length > 0) {
+      const [projectData] = await projectsList.items
+        .select(...projectFields)
+        .filter(`GtSiteId eq '${siteId}'`)
+        .top(1)()
+
+      if (projectData) {
+        for (const field of projectFields) {
+          if (projectData[field] !== undefined && projectData[field] !== null) {
+            updateBody[field] = projectData[field]
+          }
         }
+      } else {
+        console.warn(`No project data found for site ID: ${siteId}`)
       }
-    } else {
-      console.warn(`No project data found for site ID: ${siteId}`)
     }
+  } catch (error) {
+    console.warn('Could not read the project from the hub for the news article:', error)
   }
 
   const updateUrl = `${siteUrl}/_api/web/GetListUsingPath(DecodedUrl=${toODataString(sitePagesServerRelativeUrl)})/items(${itemId})`

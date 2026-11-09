@@ -247,7 +247,7 @@ define([], function () {
     ProjectStatusNoHubAccessErrorText:
       'Project status cannot be loaded without access to the hub site. If you believe you should have this access, ask an administrator to grant you access to the hub site.',
     ProjectPhasesChangePhaseError: 'An error occured while changing the phase. Please try again or contact an administrator',
-    ProjectPhasesFetchDataError: 'You do not have access to view this web part.<br/><br/>You must either have access to the portfolio site, or the project must be exempt from the portfolio site.',
+    ProjectPhasesFetchDataError: 'The phases could not be loaded. Reload the page, or contact an administrator if the error persists.',
     ProjectStatusDataErrorText:
       'The status reports could not be loaded. Reload the page, or contact an administrator if the error persists.',
     ProjectStatusGroupName: 'Project Status',
@@ -300,6 +300,9 @@ define([], function () {
     SyncProjectPropertiesValuesProgressLabel: 'Syncing properties',
     HubSyncWarningTitle: 'The portfolio site was not updated',
     HubSyncNoWriteAccessReason: 'You do not have write access to the list "{0}" on the portfolio site. Ask an administrator for access, or ask someone with access to save the project information.',
+    ArchiveLogWarningTitle: 'The archive log was not updated',
+    ArchiveLogNotWrittenText: 'The phase is changed, but the archiving was not written to the archive log. {0} The archive status of the documents and lists is therefore not shown.',
+    ArchiveLogNoWriteAccessReason: 'You do not have write access to the list "{0}" on the portfolio site. Ask an administrator for access.',
     HubSyncHubUnavailableReason: 'The portfolio site is not available to you.',
     ProjectPropertiesNotSyncedToHubText: 'The changes are saved on the project site, but were not synchronized to the portfolio site. {0}',
     PhaseNotSyncedToHubText: 'The phase is changed on the project site, but not on the portfolio site. {0} Reload the page to see the new phase in the other web parts.',
@@ -384,6 +387,7 @@ define([], function () {
     FileNameNoLeadingTrailingSpaces: 'File name cannot have leading or trailing spaces.',
     FileNameReserved: 'File name is reserved.',
     NewsFolderError: "Failed to check or create news folder: ",
+    NewsNoAccessErrorText: 'The project news are on a site you do not have access to. Ask an administrator for access if you are to see or create news.',
     LoadingLabel: 'Loading news articles...',
     GenericErrorMessage: 'Something went wrong. Please try again later or contact support.',
     NewsCreateDuplicateFileError: 'A news article with the same title already exists. Please choose a different title.',

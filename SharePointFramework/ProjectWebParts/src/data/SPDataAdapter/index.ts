@@ -306,11 +306,17 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       return []
     }
     try {
-      const { ServerRelativeUrl } = await this.portalDataService.web.rootFolder
-        .select('ServerRelativeUrl')
-        .using(DefaultCaching)<{
-        ServerRelativeUrl: string
-      }>()
+      // From the hub's URL, since a member of «Minimum lesetilganger på hub» reads the folder but
+      // not the hub itself. The root folder is read only when the URL is missing.
+      const ServerRelativeUrl = this.portalDataService.url
+        ? decodeURIComponent(new URL(this.portalDataService.url).pathname).replace(/\/$/, '')
+        : (
+            await this.portalDataService.web.rootFolder
+              .select('ServerRelativeUrl')
+              .using(DefaultCaching)<{
+              ServerRelativeUrl: string
+            }>()
+          ).ServerRelativeUrl
       const folderRelativeUrl = `${ServerRelativeUrl}/${strings.SiteAssetsConfigurationFolder}/${folderPath}`
       const folder = this.portalDataService.web.getFolderByServerRelativePath(folderRelativeUrl)
       const files = await folder.files
@@ -417,6 +423,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param scope Scope or context of the log entry (Document, List)
    * @param webUrl URL of the web/project being archived
    * @param reference Reference to the item/object being archived
+   *
+   * @returns The error when the entry was not written (also when the hub is out of reach), or
+   * `null` when it was
    */
   public async writeToArchiveLog(
     title: string,
@@ -426,14 +435,14 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     scope: string,
     webUrl: string,
     reference?: string
-  ): Promise<void> {
+  ): Promise<Error | null> {
     if (!this.portalDataService?.web) {
       Logger.log({
         message: `(${this._name}) (writeToArchiveLog) Skipping archive log entry because portal data service is unavailable.`,
         data: { title, webUrl, operation },
         level: LogLevel.Warning
       })
-      return
+      return new Error(strings.HubSyncHubUnavailableReason)
     }
     try {
       const archiveLogList = this.portalDataService.web.lists.getByTitle(
@@ -457,12 +466,14 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         data: { logItem },
         level: LogLevel.Info
       })
+      return null
     } catch (error) {
       Logger.log({
         message: `(${this._name}) (writeToArchiveLog) Failed to write archive log entry: ${error.message}`,
         data: { title, webUrl, message, operation, reference, status, error },
         level: LogLevel.Error
       })
+      return error
     }
   }
 
@@ -475,6 +486,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param status Status of the archiving operation
    * @param errorMessage Optional error message if status is ERROR
    * @param message Optional custom message for the log entry
+   *
+   * @returns As `writeToArchiveLog`
    */
   public async logDocumentArchive(
     documentTitle: string,
@@ -483,11 +496,11 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     documentUrl: string,
     projectWebUrl: string,
     errorMessage?: string
-  ): Promise<void> {
+  ): Promise<Error | null> {
     const logMessage =
       status === strings.ArchiveLogStatusError && errorMessage ? errorMessage : message || ''
 
-    await this.writeToArchiveLog(
+    return await this.writeToArchiveLog(
       documentTitle,
       status,
       strings.ArchiveLogOperationPhaseTransition,
@@ -507,6 +520,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param status Status of the archiving operation
    * @param errorMessage Optional error message if status is ERROR
    * @param message Optional custom message for the log entry
+   *
+   * @returns As `writeToArchiveLog`
    */
   public async logListArchive(
     listTitle: string,
@@ -515,13 +530,13 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     listUrl: string,
     projectWebUrl: string,
     errorMessage?: string
-  ): Promise<void> {
+  ): Promise<Error | null> {
     const logMessage =
       status === strings.ArchiveLogStatusError && errorMessage
         ? format(strings.ErrorArchiving, errorMessage)
         : message || ''
 
-    await this.writeToArchiveLog(
+    return await this.writeToArchiveLog(
       listTitle,
       status,
       strings.ArchiveLogOperationPhaseTransition,
