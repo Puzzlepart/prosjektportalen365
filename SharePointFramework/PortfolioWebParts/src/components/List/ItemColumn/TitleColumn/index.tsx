@@ -70,10 +70,12 @@ export const TitleColumn: FC<ITitleColumnProps> = (props) => {
 
   if (!url) {
     if (renderProjectInformationPanel && showPanelButtonWithoutUrl) {
+      // A shielded project is read from its own site, which has no entry in the hub.
       return renderPanel(
         <Text size={200} className={styles.title} title={props.item.Title}>
           {props.item.Title}
-        </Text>
+        </Text>,
+        props.item?.ProjectWebUrl
       )
     }
     return (

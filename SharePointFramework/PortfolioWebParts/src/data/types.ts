@@ -37,6 +37,12 @@ export interface IFetchDataForViewItemResult extends ISearchResult {
    * `undefined` for the default series row.
    */
   ScopeKey?: string
+
+  /**
+   * The site of a shielded project, for the information panel of a user who may read the
+   * project's data but not open its site.
+   */
+  ProjectWebUrl?: string
   [key: string]: any
 }
 

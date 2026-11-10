@@ -71,6 +71,30 @@ import {
 } from './types'
 
 /**
+ * The content type of the projects' entries in the hub, and of a shielded project's properties
+ * item on its own site.
+ */
+const PROJECT_CONTENT_TYPE_ID = '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C'
+
+/**
+ * The site of a shielded project, whose properties item search found on the project site itself
+ * rather than in the hub: the information panel reads the project from there for those who may
+ * read its lists for project data but not open the site.
+ *
+ * @param project The project's search result
+ * @param siteIdProperty The managed property with the project's site ID
+ */
+function getShieldedProjectWebUrl(
+  project: Record<string, any>,
+  siteIdProperty: string
+): string | undefined {
+  const normalize = (id: unknown) => `${id ?? ''}`.replace(/[{}]/g, '').toLowerCase()
+  const isOnProjectSite =
+    !!project.SiteId && normalize(project.SiteId) === normalize(project[siteIdProperty])
+  return isOnProjectSite ? project.SPWebUrl : undefined
+}
+
+/**
  * Data adapter for Portfolio Web Parts.
  */
 export class DataAdapter implements IPortfolioWebPartsDataAdapter {
@@ -316,6 +340,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
             ...project,
             Path: site?.Path,
             SPWebUrl: site?.SPWebUrl,
+            ProjectWebUrl: getShieldedProjectWebUrl(project, siteIdProperty),
             SiteId: project[siteIdProperty]
           }),
           series,
@@ -384,7 +409,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     let [{ results: projects, managedProperties }, sites, statusReports] = await Promise.all([
       this._fetchItemsForView(view, [
         ...configuration.columns.map((f) => f.fieldName),
-        siteIdProperty
+        siteIdProperty,
+        'SiteId'
       ]),
       this._fetchItems(`DepartmentId:{${siteId}} contentclass:STS_Site`, [
         'Path',
@@ -625,6 +651,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
     const getUserFromField = (item: any, field?: string) => {
       if (!field) return undefined
+      // A shielded project's people are read from its own site, not the hub's users.
+      if (item.__users?.[field]) return item.__users[field]
       const value = item[`${field}Id`] ?? item[field]
       const userId = Array.isArray(value) ? _.first(_.sortBy(value, (num) => num)) : value
       return getUserById(userId)
@@ -693,6 +721,114 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     return getOrFetchProjectsCache('items', `${siteId}_${fieldsHash}`, () =>
       getAllItems(list.items.select(...selectFields))
     )
+  }
+
+  /**
+   * The project items of the hub's projects and of shielded projects, which have no entry in the
+   * hub's list.
+   *
+   * @param siteId The hub's site ID
+   * @param fields Fields to read
+   */
+  private async _fetchAllProjectItems(
+    siteId: string,
+    fields?: IEnrichedProjectsFields
+  ): Promise<any[]> {
+    const [hubItems, shieldedItems] = await Promise.all([
+      this._fetchProjectItems(siteId, fields),
+      this._fetchShieldedProjectItems(siteId, fields)
+    ])
+    return [...hubItems, ...shieldedItems]
+  }
+
+  /**
+   * The properties items of shielded projects: found by search, so only the projects the user
+   * may read, and read from each project site. A shielded project's properties item has the
+   * project content type, which the hub's own entries have too; those are left out by site.
+   *
+   * @param siteId The hub's site ID
+   * @param fields Fields to read
+   */
+  private async _fetchShieldedProjectItems(
+    siteId: string,
+    fields?: IEnrichedProjectsFields
+  ): Promise<any[]> {
+    const selectFields = this._buildProjectItemsSelectFields(fields)
+    const fieldsHash = getHashCode(selectFields.slice().sort().join(','))
+    return getOrFetchProjectsCache('items', `${siteId}_shielded_${fieldsHash}`, async () => {
+      const webUrls = await this._findShieldedProjects(siteId)
+      const items = await Promise.all(
+        webUrls.map((webUrl) => this._fetchShieldedProjectItem(webUrl, selectFields, fields))
+      )
+      return items.filter(Boolean)
+    })
+  }
+
+  /**
+   * The sites of the shielded projects the user may read, found by their properties items, which
+   * have the project content type. The hub's own entries have it too, and are left out by site.
+   *
+   * @param siteId The hub's site ID
+   */
+  private async _findShieldedProjects(siteId: string): Promise<string[]> {
+    try {
+      const results = await this._fetchItems(
+        `DepartmentId:{${siteId}} ContentTypeId:${PROJECT_CONTENT_TYPE_ID}* -SiteId:${siteId}`,
+        ['SiteId']
+      )
+      return _.uniq(results.map((result) => result.SPWebUrl).filter(Boolean))
+    } catch (error) {
+      Logger.log({
+        message: `(DataAdapter) (_findShieldedProjects) Could not search for shielded projects: ${error?.message}`,
+        level: LogLevel.Warning
+      })
+      return []
+    }
+  }
+
+  /**
+   * The properties item of a shielded project, read from its site, with the people in the persona
+   * fields (`__users`), since their IDs are the project site's. A field the item does not have
+   * makes SharePoint reject the query, so it is retried with fewer fields.
+   *
+   * @param webUrl The project site
+   * @param selectFields Fields to read
+   * @param fields Persona fields
+   */
+  private async _fetchShieldedProjectItem(
+    webUrl: string,
+    selectFields: string[],
+    fields?: IEnrichedProjectsFields
+  ): Promise<any> {
+    const items = spfi(webUrl)
+      .using(SPFx(this._spfxContext))
+      .web.lists.getByTitle(resource.Lists_ProjectProperties_Title).items
+    const userFields = [fields?.primaryUserField, fields?.secondaryUserField].filter(Boolean)
+    const plainFields = selectFields.filter((field) => !userFields.some((u) => field === `${u}Id`))
+    const attempts = [
+      () =>
+        items
+          .select(...plainFields, ...userFields.flatMap((u) => [`${u}/Title`, `${u}/EMail`]))
+          .expand(...userFields)
+          .top(1)(),
+      () => items.select(...plainFields).top(1)(),
+      () => items.top(1)()
+    ]
+    for (const attempt of attempts) {
+      try {
+        const [item] = await attempt()
+        if (!item) return null
+        item.__users = userFields.reduce((users, field) => {
+          const user = Array.isArray(item[field]) ? item[field][0] : item[field]
+          if (user?.Title) users[field] = { Title: user.Title, Email: user.EMail }
+          return users
+        }, {})
+        return item
+      } catch {
+        continue
+      }
+    }
+    return null
   }
 
   private async _fetchProjectSites(siteId: string): Promise<ISearchResult[]> {
@@ -799,7 +935,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
     const [templateMap, items, sites, memberOfGroups, users] = await Promise.all([
       this._fetchTemplateMap(),
-      this._fetchProjectItems(siteId, fields),
+      this._fetchAllProjectItems(siteId, fields),
       this._fetchProjectSites(siteId),
       this._fetchProjectMemberOfGroups(siteId),
       this._fetchProjectSiteUsers(siteId)
@@ -834,7 +970,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
     const [templateMap, items] = await Promise.all([
       this._fetchTemplateMap(),
-      this._fetchProjectItems(siteId, fields)
+      this._fetchAllProjectItems(siteId, fields)
     ])
 
     const result: IProjectsData = { items, sites: [], memberOfGroups: [], users: [] }
@@ -879,7 +1015,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       )
     }
 
-    const [items, sites, memberOfGroups, users] = await localStore.getOrPut(
+    const [hubItems, sites, memberOfGroups, users] = await localStore.getOrPut(
       cacheKey,
       async () =>
         await Promise.all([
@@ -898,6 +1034,12 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       }
     })
 
+    // A shielded project has no entry in the hub: its properties item is read from its site.
+    let items = hubItems
+    if (items.length === 0 && sites[0]?.SPWebUrl) {
+      const item = await this._fetchShieldedProjectItem(sites[0].SPWebUrl, selectFields)
+      items = item ? [item] : []
+    }
     const result: IProjectsData = {
       items,
       sites,
@@ -939,9 +1081,29 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     if (!odataQuery || dataSource?.includes(`(${strings.ProjectLevel})`)) {
       return undefined
     }
-    return await this._sp.web.lists
-      .getByTitle(resource.Lists_Projects_Title)
-      .items.filter(`${odataQuery}`)<any[]>()
+    const siteId = this._spfxContext.pageContext.site.id.toString()
+    const [hubProjects, shieldedWebUrls] = await Promise.all([
+      this._sp.web.lists.getByTitle(resource.Lists_Projects_Title).items.filter(`${odataQuery}`)<
+        any[]
+      >(),
+      this._findShieldedProjects(siteId)
+    ])
+    // A shielded project's properties item has the fields of the hub's entries, so the data
+    // source's filter is run against it on the project site.
+    const shieldedProjects = await Promise.all(
+      shieldedWebUrls.map(async (webUrl) => {
+        try {
+          return await spfi(webUrl)
+            .using(SPFx(this._spfxContext))
+            .web.lists.getByTitle(resource.Lists_ProjectProperties_Title)
+            .items.filter(`${odataQuery}`)
+            .top(1)<any[]>()
+        } catch {
+          return []
+        }
+      })
+    )
+    return [...hubProjects, ..._.flatten(shieldedProjects)]
   }
 
   public async isUserInGroup(groupName: string): Promise<boolean> {
