@@ -263,6 +263,44 @@ describe('PortalDataService', () => {
     })
   })
 
+  describe('the check of hub access when configured', () => {
+    /** A service configured against `url`, its probe run as `configure` runs it. */
+    async function probed(url: string, answers: Record<string, Answer>) {
+      const { service, queries } = portal(answers)
+      service.url = url
+      await (service as any)._probeHubAccess()
+      return { service, queries }
+    }
+
+    it('asks the hub once per page load, without the cache the settings use', async () => {
+      const url = 'https://contoso.sharepoint.com/sites/probe-once'
+      const first = await probed(url, { [LISTS.GLOBAL_SETTINGS]: () => [{ Id: 1 }] })
+      const second = await probed(url, { [LISTS.GLOBAL_SETTINGS]: () => [{ Id: 1 }] })
+      expect(first.service.isAvailable).toBe(true)
+      expect(second.service.isAvailable).toBe(true)
+      expect(first.queries[0].calls).toEqual([
+        ['select', 'Id'],
+        ['top', 1]
+      ])
+      // The second instance on the page takes the first one's answer.
+      expect(second.queries).toHaveLength(0)
+    })
+
+    it('takes the hub as out of reach when `Globale innstillinger` is denied', async () => {
+      const { service } = await probed('https://contoso.sharepoint.com/sites/probe-denied', {
+        [LISTS.GLOBAL_SETTINGS]: () => forbidden()
+      })
+      expect(service.isAvailable).toBe(false)
+    })
+
+    it('keeps the hub after an error that is not about access', async () => {
+      const { service } = await probed('https://contoso.sharepoint.com/sites/probe-error', {
+        [LISTS.GLOBAL_SETTINGS]: () => new Error('500 Server Error')
+      })
+      expect(service.isAvailable).toBe(true)
+    })
+  })
+
   describe('a user without access to the hub', () => {
     it('takes the hub as out of reach when `Globale innstillinger` is denied', async () => {
       const { service, queries } = portal({

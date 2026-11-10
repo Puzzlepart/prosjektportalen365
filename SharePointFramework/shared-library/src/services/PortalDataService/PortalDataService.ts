@@ -64,6 +64,13 @@ export interface IItemUpdateResultData {
   etag: string
 }
 
+/**
+ * The answer to `_probeHubAccess` per hub URL for this page load: whether the user may read
+ * `Globale innstillinger`. Shared by the instances the web parts configure, so the hub is asked
+ * once per page load, and asked again on the next one, after access may have been taken away.
+ */
+const hubAccessProbes = new Map<string, Promise<boolean>>()
+
 export class PortalDataService extends DataService<IPortalDataServiceConfiguration> {
   private _sp: SPFI
   private _spPortal: SPFI
@@ -93,6 +100,33 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    */
   public isListAvailable(list: PortalDataServiceList): boolean {
     return this.isAvailable && !this._deniedLists.has(list)
+  }
+
+  /**
+   * Settles `isAvailable` before the first list a web part asks for: a user without access to the
+   * hub is denied `Globale innstillinger`, a member of «Minimum lesetilganger på hub» is not. Not
+   * cached across page loads like the settings themselves (`getGlobalSettings`), which would leave
+   * a user whose access was taken away taken as having it for as long as the cache lasts.
+   */
+  private async _probeHubAccess(): Promise<void> {
+    let probe = hubAccessProbes.get(this.url)
+    if (!probe) {
+      probe = this._getList('GLOBAL_SETTINGS')
+        .items.select('Id')
+        .top(1)()
+        .then(
+          () => true,
+          // Only denied access takes the hub out of reach; another error leaves it to the lists.
+          (error) => !isUnauthorizedError(error)
+        )
+      hubAccessProbes.set(this.url, probe)
+    }
+    if (await probe) return
+    Logger.write(
+      '(PortalDataService) (_probeHubAccess) Hub access denied. Marking portal as unavailable.',
+      LogLevel.Warning
+    )
+    this.isAvailable = false
   }
 
   /**
@@ -141,10 +175,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     super.onConfigureStart(merge({ ...PortalDataServiceDefaultConfiguration }, configuration))
     this._sp = createSpfiInstance(this._configuration.spfxContext)
     await this.onInit(configuration?.url)
-    // Settles `isAvailable` before the first list a web part asks for: a user without access to
-    // the hub is denied `Globale innstillinger`, a member of «Minimum lesetilganger på hub» is
-    // not. Cached with `DefaultCaching`, so later calls send no request.
-    if (this.isAvailable) await this.getGlobalSettings()
+    if (this.isAvailable) await this._probeHubAccess()
     return super.onConfigured()
   }
 

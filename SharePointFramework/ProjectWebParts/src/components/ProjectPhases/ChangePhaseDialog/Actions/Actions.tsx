@@ -8,59 +8,7 @@ import { View } from '../Views'
 import { ChangePhaseDialogContext } from '../context'
 import { SET_VIEW } from '../reducer'
 import { Button, DialogActions } from '@fluentui/react-components'
-import SPDataAdapter from '../../../../data'
-import { IArchiveConfiguration } from '../Views/ArchiveView/types'
-import { format } from 'pp365-shared-library'
-
-/**
- * Log archive operations to the Archive Log list. Stops at the first entry the hub does not take,
- * since the rest would fail the same way.
- *
- * @returns The error from the hub, or `null` when every entry was written
- */
-const logArchiveOperations = async (
-  archiveConfiguration: IArchiveConfiguration,
-  webUrl: string,
-  currentPhase?: string,
-  targetPhase?: string
-): Promise<Error | null> => {
-  try {
-    const phaseTransitionMessage =
-      currentPhase && targetPhase
-        ? format(strings.ArchivePhaseTransition, currentPhase, targetPhase)
-        : undefined
-
-    if (archiveConfiguration.documents && archiveConfiguration.documents.length > 0) {
-      for (const doc of archiveConfiguration.documents) {
-        const error = await SPDataAdapter.logDocumentArchive(
-          doc.title,
-          strings.ArchiveLogStatusInProgress,
-          phaseTransitionMessage,
-          doc.url || '',
-          webUrl
-        )
-        if (error) return error
-      }
-    }
-
-    if (archiveConfiguration.lists && archiveConfiguration.lists.length > 0) {
-      for (const list of archiveConfiguration.lists) {
-        const error = await SPDataAdapter.logListArchive(
-          list.title,
-          strings.ArchiveLogStatusInProgress,
-          phaseTransitionMessage,
-          list.url || '',
-          webUrl
-        )
-        if (error) return error
-      }
-    }
-    return null
-  } catch (error) {
-    console.error('Error logging archive operations:', error)
-    return error
-  }
-}
+import { logArchiveOperations } from './logArchiveOperations'
 
 export const Actions: FC = () => {
   const context = useContext(ProjectPhasesContext)
