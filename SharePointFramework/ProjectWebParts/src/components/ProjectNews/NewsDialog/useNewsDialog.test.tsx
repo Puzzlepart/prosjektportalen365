@@ -30,7 +30,7 @@ jest.mock('./useNewsForm', () => ({
 }))
 
 import { AriaLiveAnnouncer } from '@fluentui/react-components'
-import { act, render } from '@testing-library/react'
+import { act, render, waitFor } from '@testing-library/react'
 import { format } from 'pp365-shared-library'
 import strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
@@ -89,33 +89,42 @@ describe('useNewsDialog', () => {
 
   it('tells a screen reader that the news is being made, and that it is made (WCAG 4.1.3)', async () => {
     const open = jest.spyOn(window, 'open').mockImplementation(() => null)
-    const dialog = renderDialog()
-    await act(async () => {
-      const creating = dialog.current.handleCreate({ preventDefault: () => undefined } as any)
-      // Read while the page is made: the announcer replaces it with the next message.
-      await new Promise((resolve) => setTimeout(resolve, 50))
-      expect(announced()).toContain(strings.CreatingNewArticleStatus)
-      await creating
-    })
-    await act(() => new Promise((resolve) => setTimeout(resolve, 50)))
-    expect(announced()).toContain(strings.NewsCreatedSuccessfully)
-    // The page is tied to its project, and named, with the dialog's title.
-    expect(setOriginalSourceSiteId).toHaveBeenCalledWith(
-      SITE,
-      {},
-      '/sites/alfa/SitePages',
-      7,
-      'site-1',
-      'hub-1',
-      'Ny bane'
-    )
-    // The dialog closes and the new page opens for editing, as before.
-    await act(() => new Promise((resolve) => setTimeout(resolve, 1200)))
-    expect(open).toHaveBeenCalledWith(
-      '/sites/alfa/SitePages/Nyheter/Ny-bane.aspx?Mode=Edit',
-      '_blank'
-    )
-    open.mockRestore()
+    try {
+      const dialog = renderDialog()
+      await act(async () => {
+        const creating = dialog.current.handleCreate({ preventDefault: () => undefined } as any)
+        // Read while the page is made: the announcer replaces it with the next message.
+        await new Promise((resolve) => setTimeout(resolve, 50))
+        expect(announced()).toContain(strings.CreatingNewArticleStatus)
+        await creating
+      })
+      // Waits for what is asserted, not a fixed time: in a full build the projects' tests run side
+      // by side, and the announcer and the dialog's timers took longer than 50 ms.
+      await waitFor(() => expect(announced()).toContain(strings.NewsCreatedSuccessfully), {
+        timeout: 5000
+      })
+      // The page is tied to its project, and named, with the dialog's title.
+      expect(setOriginalSourceSiteId).toHaveBeenCalledWith(
+        SITE,
+        {},
+        '/sites/alfa/SitePages',
+        7,
+        'site-1',
+        'hub-1',
+        'Ny bane'
+      )
+      // The dialog closes and the new page opens for editing, as before.
+      await waitFor(
+        () =>
+          expect(open).toHaveBeenCalledWith(
+            '/sites/alfa/SitePages/Nyheter/Ny-bane.aspx?Mode=Edit',
+            '_blank'
+          ),
+        { timeout: 5000 }
+      )
+    } finally {
+      open.mockRestore()
+    }
   })
 
   describe('when the article cannot be made', () => {
@@ -130,19 +139,23 @@ describe('useNewsDialog', () => {
       // A hub whose page library has a Gt field the project list lacks failed here, and left a
       // draft with the template's title behind.
       const open = jest.spyOn(window, 'open').mockImplementation(() => null)
-      ;(setOriginalSourceSiteId as jest.Mock).mockRejectedValueOnce(
-        new Error('Feltet eller egenskapen GtHubUrl finnes ikke.')
-      )
-      const dialog = renderDialog()
-      await create(dialog)
-      expect(recycleSitePage).toHaveBeenCalledWith(SITE, {}, PAGE)
-      expect(form.setFormErrorMessage).toHaveBeenLastCalledWith(
-        `${strings.NewsCreateError} Feltet eller egenskapen GtHubUrl finnes ikke.`
-      )
-      expect(dialog.current.spinnerMode).toBe('idle')
-      await act(() => new Promise((resolve) => setTimeout(resolve, 1200)))
-      expect(open).not.toHaveBeenCalled()
-      open.mockRestore()
+      try {
+        ;(setOriginalSourceSiteId as jest.Mock).mockRejectedValueOnce(
+          new Error('Feltet eller egenskapen GtHubUrl finnes ikke.')
+        )
+        const dialog = renderDialog()
+        await create(dialog)
+        expect(recycleSitePage).toHaveBeenCalledWith(SITE, {}, PAGE)
+        expect(form.setFormErrorMessage).toHaveBeenLastCalledWith(
+          `${strings.NewsCreateError} Feltet eller egenskapen GtHubUrl finnes ikke.`
+        )
+        expect(dialog.current.spinnerMode).toBe('idle')
+        // Longer than the 1100 ms after which a made article opens: nothing opens.
+        await act(() => new Promise((resolve) => setTimeout(resolve, 1200)))
+        expect(open).not.toHaveBeenCalled()
+      } finally {
+        open.mockRestore()
+      }
     })
 
     it('names the page it left behind when the page could not be removed either', async () => {
