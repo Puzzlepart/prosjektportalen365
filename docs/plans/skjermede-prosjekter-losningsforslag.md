@@ -77,32 +77,29 @@ Hub                                                   Skjermet prosjektområde
 
 ## 6. Prosjekttillegget «Skjerming»
 
-Tillegget er en sp-js-provisioning-fil i hubbiblioteket Prosjekttillegg. Det leveres som standardinnhold fra `Templates/Content/Portfolio_content.<språk>/`, på samme måte som prosjektmalene lastes opp til Prosjektmaler. Det er i dag ingen standardtillegg i repoet, så leveransen er ny.
+Tillegget er en sp-js-provisioning-fil i hubbiblioteket Prosjekttillegg (`Skjerming.txt` / `Shielding.txt`). Det leveres som standardinnhold fra `Templates/Content/Portfolio_content.<språk>/ProjectExtensions/`, med `GtShieldsProjectData = 1`, på samme måte som prosjektmalene lastes opp til Prosjektmaler.
 
-**Innhold:**
-- **`SiteFields`:** feltene i statusinnholdstypen (`Templates/Portfolio/Objects/SiteFields/ProjectStatus/*.xml`, samt `GtSiteId` og `GtModerationStatus`). De ligger i porteføljegruppen og kopieres derfor ikke av ProvisionSiteFields.
-- **`ContentTypes`:** Prosjektstatus med ID `0x010022252E35737A413FB56A1BA53862F6D5`, og prosjektegenskaper med en ID som arver fra `0x0100805E9E4FEAAB4F0EABAB2600D30DB70C`.
-- **`Lists`:** Prosjektstatus, Prosjektstatusvedlegg (dokumentbibliotek) og Arkiveringslogg, med samme titler som på huben. Da kan `PortalDataService` bruke de eksisterende listenøklene.
-- **`Security`** på de tre listene og på Prosjektegenskaper:
-  - `BreakRoleInheritance` med kopiering, slik at områdets eier-, medlems- og besøksgruppe beholder tilgangen.
-  - Porteføljeinnsyn får Les. Gruppene kommer fra radene med omfanget *Skjermede lister* i Tillatelseskonfigurasjon.
-- **Beskrivelse** (vises i oppsettsveiviseren): sier at eksisterende data på huben ikke flyttes, og at skjerming ikke kan fjernes.
+**Endret under implementasjonen:** Filen er et tomt skjema. Lister, innholdstyper, felt og tilganger lages av oppsettsoppgaven `ShieldProjectData` (7) med `ShieldedProjectService` i shared-library, ikke av statiske `SiteFields`, `ContentTypes`, `Lists` og `Security` i tillegget. Grunnene:
+- Innholdstypene og feltene kopieres fra huben, så malens egne innholdstyper og egne felt støttes uten at tillegget må vedlikeholdes ved siden av hubens innholdstyper.
+- Listetitlene kommer fra ressursene, så samme kode virker på begge språk.
+- Oppsettet kan kjøres på nytt («Kjør oppsettveiviser») og tar da med nye felt, som `syncList` gjør for prosjektegenskaper.
+- Arbeidsantakelse 3 og 4 (13) gjelder dermed ikke sp-js-provisioning.
 
 **Prosjekttillegg-listen** får en ny ja/nei-kolonne, `GtShieldsProjectData`. Den markerer at tillegget skjermer, slik at oppsettet vet det før oppgavene kjører.
 
 ## 7. Prosjektoppsett (ProjectExtensions)
 
-**Skjermet oppsett** er avgjort av at et av de valgte tilleggene har `GtShieldsProjectData`.
+**Skjermet oppsett** er avgjort av at et av de valgte tilleggene har `GtShieldsProjectData`, eller at prosjektet er skjermet fra før (skjerming kan ikke fjernes).
 
 | Oppgave | Endring ved skjermet oppsett |
 |---|---|
 | PreTask | Ingen endring. Entitetstjenesten trengs for å lese hubens felt. |
-| SitePermissions | Leser den nye kolonnen `GtPermissionScope`. *Område* er dagens oppførsel. *Skjermede lister* oppretter gruppen og legger inn medlemmene, men gir ingen tilgang på området. Tillegget gir tilgangen. Rader med *Skjermede lister* hoppes over for vanlige prosjekter. |
-| SetupProjectInformation | Hopper over `_addEntryToHub` og `updateIdeaData`, som ved `hasHubWriteAccess === false`. Hubloggen skrives. |
-| ApplyTemplate | Tillegget brukes. Lister, innholdstyper og tilganger opprettes. |
-| **Ny: ShieldProjectData** (rett etter ApplyTemplate) | 1. Binder innholdstypen for prosjektegenskaper til Prosjektegenskaper, gir elementet den og setter `GtSiteId`. 2. Oppretter malens statusinnholdstype lokalt hvis malen har en egen, og kopierer felt som mangler. 3. Skriver `ShieldedProject: true` i `TemplateParameters`. Det må gjøres her fordi «Kjør prosjektoppsett på nytt» setter `skipUpdateTemplateParameters`. |
+| SitePermissions | Leser den nye kolonnen `GtPermissionScope`. *Område* er dagens oppførsel. *Skjermede lister* oppretter gruppen og legger inn medlemmene, men gir ingen tilgang på området; navnene sendes videre til `ShieldProjectData`. Rader med *Skjermede lister* hoppes over for vanlige prosjekter. |
+| SetupProjectInformation | Hopper over `_addEntryToHub` og `updateIdeaData`. Hubloggen skrives. |
+| ApplyTemplate | Tillegget brukes (tomt skjema). |
+| **Ny: ShieldProjectData** (rett etter ApplyTemplate) | 1. Prosjektegenskaper: malens prosjektinnholdstype opprettes lokalt med samme ID (og innholdstypene den bygger på), bindes til listen og gis elementet, med `GtSiteId`, `GtSiteUrl` og `GtGroupId`. 2. Arkiveringslogg og Prosjektstatusvedlegg opprettes. 3. Prosjektstatus opprettes **sist**, med malens statusinnholdstype og feltene fra huben, fordi listen avgjør at prosjektet er skjermet. 4. Alle fire listene bryter arven med kopi og gir gruppene fra SitePermissions lesetilgang. 5. `ShieldedProject: true` skrives i `TemplateParameters` (til informasjon). |
 | TimelineConfiguration | Hoppes over. |
-| `_ensureParentProjectPatch` | Setter `GtIsParentProject` lokalt. |
+| `_ensureParentProjectPatch` | Hoppes over; `GtIsParentProject` settes lokalt som før. |
 | Fullføringsdialogen | Viser ikke advarselen om at prosjektet ikke er registrert på huben. |
 
 ## 8. Datalaget (shared-library)
@@ -174,7 +171,7 @@ Tillegget er en sp-js-provisioning-fil i hubbiblioteket Prosjekttillegg. Det lev
 |---|---|
 | Skjermet program | `GtChildProjects` lagres bare lokalt. `updateProjectInHub` hoppes over. `fetchChildProjects` leser det lokale egenskapselementet, som allerede har samme JSON. |
 | Skjermet underprosjekt | `_updateChildProjectParents` skriver ikke `GtParentProjects`. Underprosjektet har ingen huboppføring, og programadministratoren har normalt ikke skrivetilgang på området. |
-| Finne overordnede prosjekter | `getParentProjects` spør i dag hubens Prosjekter med `Contains(GtChildProjects, webUrl)`. For skjermede programmer suppleres dette med søk. Det er usikkert om `GtChildProjectsOWSMTXT:"{siteId}"` er søkbar, så vi bygger med et eget felt med underprosjektenes site-ID-er, skrevet sammen med `GtChildProjects` og koblet til en administrert egenskap. Søket i JSON-feltet testes først, og feltet fjernes hvis det virker. |
+| Finne overordnede prosjekter | `getParentProjects` spør i dag hubens Prosjekter med `Contains(GtChildProjects, webUrl)`. For skjermede programmer suppleres dette med søk. Implementert som søk på `GtChildProjectsOWSMTXT` (site-ID eller URL), der treff på hubens egne oppføringer filtreres bort. Virker ikke søket i testtenanten, legges et eget felt med underprosjektenes site-ID-er til, skrevet sammen med `GtChildProjects` og koblet til en administrert egenskap (13, punkt 5). |
 | Kandidater i programadministrasjonen | Søket etter prosjekter (`hubSiteProjects`) viser skjermede prosjekter bare for dem med tilgang. Programadministratoren må derfor være i innsynsgruppen. |
 | Programoversikt | Som porteføljen. Data om underprosjekter filtreres etter tilgang. |
 | Usikkerhetsmatrisen på overordnede prosjekter | Virker når listen over underprosjekter leses lokalt. Risikoene hentes via søk. |
@@ -198,9 +195,9 @@ Tillegget er en sp-js-provisioning-fil i hubbiblioteket Prosjekttillegg. Det lev
 |---|---|---|
 | 1 | Skjulte lister på et prosjektområde koblet til huben blir gjennomsøkt med hubens `DepartmentId`. | Portefølje og program finner ikke skjermede data. Krever endrede spørringer. |
 | 2 | `ContentTypeId:0x0100805E…*` treffer en lokal innholdstype som arver fra prosjektinnholdstypen, og listefelt gir de samme `*OWS*`-egenskapene. | Porteføljeoversikten trenger endringer for skjermede prosjekter. |
-| 3 | Tillegget kan opprette innholdstyper med fast ID og felt fra `SiteFields` i samme kjøring. | Endres i sp-js-provisioning. |
-| 4 | `Security` kan gi tilgang til en gruppe som SitePermissions opprettet tidligere i samme oppsett. Bekreftet i koden for sp-js-provisioning 1.5.0. | Endres i sp-js-provisioning. |
-| 5 | Usikkert om `GtChildProjectsOWSMTXT:"{siteId}"` er søkbar. | Vi bygger med eget felt for site-ID-er (11). |
+| 3 | Innholdstyper kan opprettes med fast ID på prosjektområdet (`web.contentTypes.add`), og felt kan legges til listens innholdstype med JSOM. | Gjøres nå i `ShieldedProjectService`, ikke i sp-js-provisioning (6). |
+| 4 | Lesetilgang på listene gis til gruppene SitePermissions opprettet i samme oppsett. | Gjøres nå i `ShieldedProjectService.grantRead` (6). |
+| 5 | Usikkert om `GtChildProjectsOWSMTXT:"{siteId}"` er søkbar. | Implementert med søk i JSON-feltet. Eget felt for site-ID-er lages bare hvis søket ikke virker i testtenanten (11). |
 | 6 | Gjennomsøkingsforsinkelsen er noen få minutter. | Akseptert. |
 
 ## 14. Ikke omfattet

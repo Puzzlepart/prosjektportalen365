@@ -6,6 +6,8 @@ Sjekk ut [release notes](./releasenotes/1.15.0.md) for høydepunkter og mer deta
 
 ### Ny funksjonalitet
 
+- **Skjermede prosjekter.** Nytt prosjekttillegg, `Skjerming`, som kobles til malene som skal være skjermet. Et skjermet prosjekt lagrer statusrapporter (også utkast), øyeblikksbilder, prosjektegenskaper og arkiveringslogg på prosjektområdet i stedet for på porteføljeområdet, og får ingen rad i listen `Prosjekter`. Bare prosjektets medlemmer og en innsynsgruppe (standard `Porteføljeinnsyn`, med det nye omfanget «Skjermede lister» i `Tillatelseskonfigurasjon`) ser dataene, og porteføljen og programmene viser dem via søk. Eksisterende data flyttes ikke, skjerming kan ikke fjernes, og tidslinjeelementer kan ikke registreres på skjermede prosjekter. Se releasenotes for 1.16.0 for detaljer [#1806](https://github.com/Puzzlepart/prosjektportalen365/issues/1806)
+
 ### Forbedringer
 
 ### Feilrettinger
