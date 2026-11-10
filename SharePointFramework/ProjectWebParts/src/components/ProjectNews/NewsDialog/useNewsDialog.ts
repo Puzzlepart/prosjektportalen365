@@ -16,7 +16,7 @@ import {
   recycleSitePage,
   validateSharePointFileName
 } from '../util'
-import { getRestErrorMessage } from '../rest'
+import { getRestErrorMessage, toUrlPath } from '../rest'
 import { TemplateFile } from '../types'
 import { ProjectNewsContext } from '../context'
 import { useNewsForm } from './useNewsForm'
@@ -41,7 +41,7 @@ export const useNewsDialog = () => {
     (t: TemplateFile) => t.ServerRelativeUrl === newsForm.selectedTemplate
   )
   const origin = window.location.origin
-  const previewUrl = selected ? `${origin}${selected.ServerRelativeUrl}?Mode=Read` : null
+  const previewUrl = selected ? `${origin}${toUrlPath(selected.ServerRelativeUrl)}?Mode=Read` : null
 
   useEffect(() => {
     if (context.state.isDialogOpen) {

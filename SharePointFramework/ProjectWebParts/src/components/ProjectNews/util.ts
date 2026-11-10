@@ -6,7 +6,7 @@ import * as strings from 'ProjectWebPartsStrings'
 import { TemplateFile } from './types'
 import SPDataAdapter from 'data'
 import resource from 'SharedResources'
-import { getRestErrorMessage, toODataString } from './rest'
+import { getRestErrorMessage, toODataString, toUrlPath } from './rest'
 
 // --- SharePoint file name validation constants ---
 const invalidChars = /["*:<>?/\\|#%;]/
@@ -49,7 +49,8 @@ export function getServerRelativeUrl(siteUrl: string, ...parts: string[]): strin
 }
 
 /**
- * Ensures the existence of the specified news folder in the SitePages library.
+ * Ensures the existence of the specified news folder in the SitePages library. The folder is
+ * looked up and made through the path APIs, which take a name with `#` or `%`.
  *
  * @param siteUrl URL of the site to check/create the folder in
  * @param spHttpClient SPHttpClient to use for the operation
@@ -61,31 +62,23 @@ export async function ensureProjectNewsFolder(
   spHttpClient: SPHttpClient,
   folderName: string
 ) {
-  const folderServerRelativeUrl = getServerRelativeUrl(siteUrl, 'SitePages', folderName)
-  const folderUrl = `${siteUrl}/_api/web/GetFolderByServerRelativeUrl(${toODataString(folderServerRelativeUrl)})`
-  const createFolderUrl = `${siteUrl}/_api/web/folders`
+  const folderPath = toODataString(getServerRelativeUrl(siteUrl, 'SitePages', folderName))
+  const folderUrl = `${siteUrl}/_api/web/GetFolderByServerRelativePath(decodedurl=${folderPath})?$select=Exists`
+  const createFolderUrl = `${siteUrl}/_api/web/folders/addUsingPath(DecodedUrl=${folderPath},overwrite=false)`
 
   const res = await spHttpClient.get(folderUrl, SPHttpClient.configurations.v1)
-  if (res.ok) return
-
-  if (res.status === 404) {
-    const createRes = await spHttpClient.post(createFolderUrl, SPHttpClient.configurations.v1, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        ServerRelativeUrl: folderServerRelativeUrl
-      })
-    })
-    if (!createRes.ok) {
-      const error = await createRes.json()
-      throw new Error(
-        strings.NewsFolderError + (getRestErrorMessage(error) || createRes.statusText)
-      )
-    }
-  } else {
+  // A path API can answer for a folder that is not there with its Exists false, not with a 404.
+  if (res.ok && (await res.json().catch(() => ({})))?.Exists === true) return
+  if (!res.ok && res.status !== 404) {
     throw new Error(strings.NewsFolderError)
+  }
+
+  const createRes = await spHttpClient.post(createFolderUrl, SPHttpClient.configurations.v1, {
+    headers: { Accept: 'application/json' }
+  })
+  if (!createRes.ok) {
+    const error = await createRes.json().catch(() => ({}))
+    throw new Error(strings.NewsFolderError + (getRestErrorMessage(error) || createRes.statusText))
   }
 }
 
@@ -119,7 +112,7 @@ export function getNewsPageName(title: string): string {
 export function getNewsEditUrl(siteUrl: string, folderName: string, pageName: string): string {
   const serverRelative = getServerRelativeUrl(siteUrl, 'SitePages', folderName, pageName)
   const origin = new URL(siteUrl).origin
-  return `${origin}${serverRelative}?Mode=Edit`
+  return `${origin}${toUrlPath(serverRelative)}?Mode=Edit`
 }
 
 /**
@@ -133,8 +126,10 @@ export async function getTemplates(
   siteUrl: string,
   spHttpClient: SPHttpClient
 ): Promise<TemplateFile[]> {
+  const filesIn = (folderName: string) =>
+    `${siteUrl}/_api/web/GetFolderByServerRelativePath(decodedurl=${toODataString(getServerRelativeUrl(siteUrl, 'SitePages', folderName))})/Files?$select=Name,Title,ServerRelativeUrl`
   // Try Norwegian standard first (Maler)
-  const url = `${siteUrl}/_api/web/GetFolderByServerRelativeUrl('SitePages/Maler')/Files?$select=Name,Title,ServerRelativeUrl`
+  const url = filesIn('Maler')
   try {
     const res = await spHttpClient.get(url, SPHttpClient.configurations.v1)
     if (res.ok) {
@@ -154,7 +149,7 @@ export async function getTemplates(
   }
 
   // Fallback to English standard (Templates)
-  const templatesUrl = `${siteUrl}/_api/web/GetFolderByServerRelativeUrl('SitePages/Templates')/Files?$select=Name,Title,ServerRelativeUrl`
+  const templatesUrl = filesIn('Templates')
   try {
     const res = await spHttpClient.get(templatesUrl, SPHttpClient.configurations.v1)
     const data = await res.json()
@@ -189,7 +184,7 @@ export function getNewsImageUrl(item: any): string | undefined {
 }
 
 /**
- * Checks if a SharePoint site page exists.
+ * Checks if a SharePoint site page exists, through the path API.
  *
  * @param siteUrl URL of the SharePoint site
  * @param spHttpClient SPHttpClient instance to perform the HTTP request
@@ -204,9 +199,10 @@ export async function doesSitePageExist(
   fileName: string
 ): Promise<boolean> {
   const serverRelativeUrl = getServerRelativeUrl(siteUrl, 'SitePages', folderName, fileName)
-  const url = `${siteUrl}/_api/web/GetFileByServerRelativeUrl(${toODataString(serverRelativeUrl)})`
+  const url = `${siteUrl}/_api/web/GetFileByServerRelativePath(decodedurl=${toODataString(serverRelativeUrl)})?$select=Exists`
   const res = await spHttpClient.get(url, SPHttpClient.configurations.v1)
-  return res.ok
+  if (!res.ok) return false
+  return (await res.json().catch(() => ({})))?.Exists === true
 }
 
 /**
@@ -231,7 +227,7 @@ export async function getSitePageItemId(
   delay = 500
 ): Promise<{ itemId: number; sitePagesServerRelativeUrl: string }> {
   const sitePagesServerRelativeUrl = getServerRelativeUrl(siteUrl, 'SitePages')
-  const itemUrl = `${siteUrl}/_api/web/GetFileByServerRelativeUrl(${toODataString(pageServerRelativeUrl)})/ListItemAllFields?$select=Id`
+  const itemUrl = `${siteUrl}/_api/web/GetFileByServerRelativePath(decodedurl=${toODataString(pageServerRelativeUrl)})/ListItemAllFields?$select=Id`
   let errorMessage: string | undefined
   for (let attempt = 1; attempt <= attempts; attempt++) {
     if (attempt > 1) await new Promise((resolve) => setTimeout(resolve, delay))
@@ -245,7 +241,8 @@ export async function getSitePageItemId(
 }
 
 /**
- * Copies a template page to a new server-relative URL.
+ * Copies a template page to a new server-relative URL, through the path APIs, which take a
+ * template or folder name with `#` or `%`.
  *
  * @param siteUrl URL of the SharePoint site
  * @param spHttpClient SPHttpClient instance to use for making the request
@@ -259,7 +256,7 @@ export async function copyTemplatePage(
   selectedTemplate: string,
   newPageServerRelativeUrl: string
 ): Promise<SPHttpClientResponse> {
-  const copyUrl = `${siteUrl}/_api/web/GetFileByServerRelativeUrl(${toODataString(selectedTemplate)})/copyTo(strNewUrl=${toODataString(newPageServerRelativeUrl)},bOverWrite=false)`
+  const copyUrl = `${siteUrl}/_api/web/GetFileByServerRelativePath(decodedurl=${toODataString(selectedTemplate)})/copyToUsingPath(DecodedUrl=${toODataString(newPageServerRelativeUrl)},bOverWrite=false)`
   return await spHttpClient.post(copyUrl, SPHttpClient.configurations.v1, {
     headers: { Accept: 'application/json;odata=nometadata' }
   })
@@ -279,7 +276,7 @@ export async function recycleSitePage(
   spHttpClient: SPHttpClient,
   serverRelativeUrl: string
 ): Promise<void> {
-  const recycleUrl = `${siteUrl}/_api/web/GetFileByServerRelativeUrl(${toODataString(serverRelativeUrl)})/recycle`
+  const recycleUrl = `${siteUrl}/_api/web/GetFileByServerRelativePath(decodedurl=${toODataString(serverRelativeUrl)})/recycle`
   const res = await spHttpClient.post(recycleUrl, SPHttpClient.configurations.v1, {
     headers: { Accept: 'application/json;odata=nometadata' }
   })

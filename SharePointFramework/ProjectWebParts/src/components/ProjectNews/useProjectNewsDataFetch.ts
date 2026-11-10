@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { SPHttpClient } from '@microsoft/sp-http'
 import { INewsItem, IProjectNewsProps, IProjectNewsState } from './types'
-import { toODataString } from './rest'
+import { toODataString, toUrlPath } from './rest'
 import { getNewsImageUrl, getServerRelativeUrl } from './util'
 import strings from 'ProjectWebPartsStrings'
 
@@ -42,7 +42,7 @@ export function useProjectNewsDataFetch(
             id: item.Id,
             promotedState: item.PromotedState || 0,
             name: item.File?.Name || item.Title,
-            url: item.File?.ServerRelativeUrl || '#',
+            url: item.File?.ServerRelativeUrl ? toUrlPath(item.File.ServerRelativeUrl) : '#',
             authorName: item.Editor?.Title || item.Author?.Title,
             modifiedDate: item.File?.TimeLastModified || item.Modified,
             imageUrl: getNewsImageUrl(item),

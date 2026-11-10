@@ -17,11 +17,12 @@ jest.mock('../util', () => ({
   recycleSitePage: jest.fn(() => Promise.resolve()),
   validateSharePointFileName: jest.fn(() => true)
 }))
-const form = { setFormErrorMessage: jest.fn(), resetForm: jest.fn() }
+const TEMPLATE = '/sites/alfa/SitePages/Maler/Nyhet.aspx'
+const form = { selectedTemplate: TEMPLATE, setFormErrorMessage: jest.fn(), resetForm: jest.fn() }
 jest.mock('./useNewsForm', () => ({
   useNewsForm: () => ({
     title: 'Ny bane',
-    selectedTemplate: '/sites/alfa/SitePages/Maler/Nyhet.aspx',
+    selectedTemplate: form.selectedTemplate,
     isFormValid: true,
     validateForm: () => true,
     setFormErrorMessage: form.setFormErrorMessage,
@@ -39,6 +40,7 @@ import {
   copyTemplatePage,
   ensureProjectNewsFolder,
   getSitePageItemId,
+  getTemplates,
   recycleSitePage,
   setOriginalSourceSiteId,
   validateSharePointFileName
@@ -49,8 +51,11 @@ import { announced } from 'pp365-jest-config/lib/announce'
 const SITE = 'https://contoso.sharepoint.com/sites/alfa'
 const PAGE = '/sites/alfa/SitePages/Nyheter/Ny-bane.aspx'
 
-/** Renders the dialog's hook; `dialog.current` is what it returned last. */
-function renderDialog() {
+/**
+ * Renders the dialog's hook, closed unless `isDialogOpen`; `dialog.current` is what it returned
+ * last.
+ */
+function renderDialog(isDialogOpen = false) {
   const dialog: { current?: ReturnType<typeof useNewsDialog> } = {}
   const Probe: React.FC = () => {
     dialog.current = useNewsDialog()
@@ -68,7 +73,7 @@ function renderDialog() {
               context: { pageContext: { site: { id: 'site-1' } } },
               pageContext: { legacyPageContext: { hubSiteId: 'hub-1' } }
             },
-            state: { isDialogOpen: false },
+            state: { isDialogOpen },
             setState: jest.fn()
           } as any
         }
@@ -211,6 +216,27 @@ describe('useNewsDialog', () => {
       expect(open).not.toHaveBeenCalled()
       open.mockRestore()
     })
+  })
+
+  it('previews a template with # or % in its name', async () => {
+    // The preview's address ended at the #.
+    const template = '/sites/alfa/SitePages/Maler/Mal #2 100%.aspx'
+    form.selectedTemplate = template
+    ;(getTemplates as jest.Mock).mockResolvedValueOnce([
+      { Name: 'Mal #2 100%.aspx', Title: 'Mal #2 100%', ServerRelativeUrl: template }
+    ])
+    try {
+      const dialog = renderDialog(true)
+      await waitFor(
+        () =>
+          expect(dialog.current.previewUrl).toBe(
+            `${window.location.origin}/sites/alfa/SitePages/Maler/Mal%20%232%20100%25.aspx?Mode=Read`
+          ),
+        { timeout: 5000 }
+      )
+    } finally {
+      form.selectedTemplate = TEMPLATE
+    }
   })
 
   it('refuses a title that leaves no valid page name, before anything is made', async () => {

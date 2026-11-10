@@ -53,7 +53,9 @@ Rules 1, 2, 5, 6, 8 and the tooltip handling are adapted from Microsoft's
    `labelProps.id` and `htmlFor` on its `Label`). A control that ignores the field gets
    `useFieldControlProps_unstable(props, { supportsLabelFor: true })`, as `DateField` does.
    `PeoplePicker` takes the field's label inside a `Field`, else `aria-label`. PnP's
-   `ModernTaxonomyPicker` takes no input props, so its label stays apart. A placeholder is no label.
+   `ModernTaxonomyPicker` takes its input's props as `termPickerProps.inputProps`, which replace
+   PnP's own name and placeholder (both its placeholder text): the edit panel's taxonomy fields name
+   the input after the field (`FieldElements/termPickerProps.ts`). A placeholder is no label.
 4. **What can be clicked is a button**: Fluent's `Button` or a `<button>`, never a `div` or `span`
    with `onClick` (found: `FilterPanel/Filter`, `DocumentTemplateItem`'s header). An expand toggle
    has `aria-expanded`, and `aria-controls` when the content is elsewhere. What goes somewhere is
@@ -382,6 +384,10 @@ checked by hand and with which reader and browser: axe finds only part of what W
   such findings belong to SharePoint's page and are noted, not fixed in our code.
 - Under jsdom contrast cannot be measured, and Fluent's menus and popovers are slow
   (pp365-testing): test names and roles there, contrast and focus in the browser.
+- A Fluent v8 picker (PnP's `ModernTaxonomyPicker`) left without a choice keeps the typed text,
+  completed to the first suggestion; it is not saved. Do not clear it as the field is left: its
+  `Autofill.clear()` sets the selection, and in Safari the focus follows a selection set in the
+  input's blur (WebKit bug 224425, closed as intended), which traps the keyboard in the field.
 
 ## Do not
 

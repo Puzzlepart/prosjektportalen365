@@ -33,10 +33,12 @@ import strings from 'ProjectWebPartsStrings'
 import {
   copyTemplatePage,
   doesSitePageExist,
+  ensureProjectNewsFolder,
   getNewsEditUrl,
   getNewsPageName,
   getServerRelativeUrl,
   getSitePageItemId,
+  getTemplates,
   recycleSitePage,
   setOriginalSourceSiteId,
   validateSharePointFileName
@@ -71,6 +73,25 @@ function httpClient(pageFields: string[], { post = response(true), english = fal
     }),
     post: jest.fn((url: string, _configuration?: any, _options?: any) => {
       urls.push(url)
+      return Promise.resolve(post)
+    })
+  }
+}
+
+/**
+ * A stand-in for SPHttpClient that answers every GET with `get` and every POST with `post`, and
+ * records each URL asked for, with its method, in `calls`.
+ */
+function recordingClient(get = response(true), post = response(true)) {
+  const calls: string[] = []
+  return {
+    calls,
+    get: jest.fn((url: string) => {
+      calls.push(`GET ${url}`)
+      return Promise.resolve(get)
+    }),
+    post: jest.fn((url: string) => {
+      calls.push(`POST ${url}`)
       return Promise.resolve(post)
     })
   }
@@ -149,13 +170,93 @@ describe('ProjectNews util', () => {
     await copyTemplatePage(site, client as any, '/sites/hub-c/SitePages/Maler/Nyhet.aspx', page)
     await getSitePageItemId(site, client as any, page)
     await recycleSitePage(site, client as any, page)
-    const literal = "'/sites/hub-c/SitePages/Prosjektnyheter/Prosjektets-''kick-off''.aspx'"
+    const literal =
+      "'%2Fsites%2Fhub-c%2FSitePages%2FProsjektnyheter%2FProsjektets-''kick-off''.aspx'"
     expect(urls).toEqual([
-      `${site}/_api/web/GetFileByServerRelativeUrl(${literal})`,
-      `${site}/_api/web/GetFileByServerRelativeUrl('/sites/hub-c/SitePages/Maler/Nyhet.aspx')/copyTo(strNewUrl=${literal},bOverWrite=false)`,
-      `${site}/_api/web/GetFileByServerRelativeUrl(${literal})/ListItemAllFields?$select=Id`,
-      `${site}/_api/web/GetFileByServerRelativeUrl(${literal})/recycle`
+      `${site}/_api/web/GetFileByServerRelativePath(decodedurl=${literal})?$select=Exists`,
+      `${site}/_api/web/GetFileByServerRelativePath(decodedurl='%2Fsites%2Fhub-c%2FSitePages%2FMaler%2FNyhet.aspx')/copyToUsingPath(DecodedUrl=${literal},bOverWrite=false)`,
+      `${site}/_api/web/GetFileByServerRelativePath(decodedurl=${literal})/ListItemAllFields?$select=Id`,
+      `${site}/_api/web/GetFileByServerRelativePath(decodedurl=${literal})/recycle`
     ])
+  })
+
+  it('reaches a news folder and a template with # or % in their names, through the path APIs', async () => {
+    // The URL-based calls cut such a name short at the # and read the % as an escape.
+    const site = 'https://contoso.sharepoint.com/sites/hub-g'
+    const folder = 'Nyheter #1 100%'
+    const page = getServerRelativeUrl(site, 'SitePages', folder, 'Ny-bane.aspx')
+    const template = '/sites/hub-g/SitePages/Maler/Mal #2.aspx'
+    const client = recordingClient(response(true, { Exists: false, Id: 15 }))
+    await ensureProjectNewsFolder(site, client as any, folder)
+    await doesSitePageExist(site, client as any, folder, 'Ny-bane.aspx')
+    await copyTemplatePage(site, client as any, template, page)
+    await getSitePageItemId(site, client as any, page)
+    await recycleSitePage(site, client as any, page)
+    const folderLiteral = "'%2Fsites%2Fhub-g%2FSitePages%2FNyheter%20%231%20100%25'"
+    const pageLiteral = "'%2Fsites%2Fhub-g%2FSitePages%2FNyheter%20%231%20100%25%2FNy-bane.aspx'"
+    const api = `${site}/_api/web`
+    expect(client.calls).toEqual([
+      `GET ${api}/GetFolderByServerRelativePath(decodedurl=${folderLiteral})?$select=Exists`,
+      `POST ${api}/folders/addUsingPath(DecodedUrl=${folderLiteral},overwrite=false)`,
+      `GET ${api}/GetFileByServerRelativePath(decodedurl=${pageLiteral})?$select=Exists`,
+      `POST ${api}/GetFileByServerRelativePath(decodedurl='%2Fsites%2Fhub-g%2FSitePages%2FMaler%2FMal%20%232.aspx')/copyToUsingPath(DecodedUrl=${pageLiteral},bOverWrite=false)`,
+      `GET ${api}/GetFileByServerRelativePath(decodedurl=${pageLiteral})/ListItemAllFields?$select=Id`,
+      `POST ${api}/GetFileByServerRelativePath(decodedurl=${pageLiteral})/recycle`
+    ])
+    expect(getNewsEditUrl(site, folder, 'Ny-bane.aspx')).toBe(
+      'https://contoso.sharepoint.com/sites/hub-g/SitePages/Nyheter%20%231%20100%25/Ny-bane.aspx?Mode=Edit'
+    )
+  })
+
+  it('makes the news folder only when SharePoint says it is not there', async () => {
+    const site = 'https://contoso.sharepoint.com/sites/hub-h'
+    const posts = async (get: ReturnType<typeof response>, post = response(true)) => {
+      const client = recordingClient(get, post)
+      await ensureProjectNewsFolder(site, client as any, 'Prosjektnyheter')
+      return client.post.mock.calls.length
+    }
+    expect(await posts(response(true, { Exists: true }))).toBe(0)
+    expect(await posts(response(true, { Exists: false }))).toBe(1)
+    expect(await posts({ ...response(false), status: 404 })).toBe(1)
+    await expect(posts(response(false))).rejects.toThrow(strings.NewsFolderError)
+    await expect(
+      posts(
+        response(true, { Exists: false }),
+        response(false, { error: { message: 'Tilgang nektet.' } })
+      )
+    ).rejects.toThrow(`${strings.NewsFolderError}Tilgang nektet.`)
+  })
+
+  it('finds a page only when SharePoint says it exists', async () => {
+    const site = 'https://contoso.sharepoint.com/sites/hub-h'
+    const exists = (get: ReturnType<typeof response>) =>
+      doesSitePageExist(site, recordingClient(get) as any, 'Prosjektnyheter', 'Ny-bane.aspx')
+    expect(await exists(response(true, { Exists: true }))).toBe(true)
+    expect(await exists(response(true, { Exists: false }))).toBe(false)
+    expect(await exists({ ...response(false), status: 404 })).toBe(false)
+  })
+
+  it('lists the templates through the path API, from Maler or else Templates', async () => {
+    const site = 'https://contoso.sharepoint.com/sites/hub-i'
+    const template = {
+      Name: 'Nyhet.aspx',
+      Title: '',
+      ServerRelativeUrl: '/sites/hub-i/SitePages/Templates/Nyhet.aspx'
+    }
+    const client = recordingClient()
+    client.get
+      .mockImplementationOnce((url: string) => {
+        client.calls.push(`GET ${url}`)
+        return Promise.resolve(response(true, { value: [] }))
+      })
+      .mockImplementationOnce((url: string) => {
+        client.calls.push(`GET ${url}`)
+        return Promise.resolve(response(true, { value: [template] }))
+      })
+    expect(await getTemplates(site, client as any)).toEqual([{ ...template, Title: 'Nyhet' }])
+    const files = (folder: string) =>
+      `GET ${site}/_api/web/GetFolderByServerRelativePath(decodedurl='%2Fsites%2Fhub-i%2FSitePages%2F${folder}')/Files?$select=Name,Title,ServerRelativeUrl`
+    expect(client.calls).toEqual([files('Maler'), files('Templates')])
   })
 
   it("finds a page's item through the page itself, and asks again when SharePoint does not answer", async () => {
@@ -171,7 +272,7 @@ describe('ProjectNews util', () => {
     })
     expect(get).toHaveBeenCalledTimes(2)
     expect(get.mock.calls[0][0]).toBe(
-      `${site}/_api/web/GetFileByServerRelativeUrl('${page}')/ListItemAllFields?$select=Id`
+      `${site}/_api/web/GetFileByServerRelativePath(decodedurl='%2Fsites%2Fhub-e%2FSitePages%2FProsjektnyheter%2FNy-bane.aspx')/ListItemAllFields?$select=Id`
     )
   })
 
@@ -213,7 +314,7 @@ describe('ProjectNews util', () => {
     expect(hub.selected).toEqual(['GtProjectPhase'])
     const [url] = client.post.mock.calls[0] as any[]
     expect(url).toBe(
-      "https://contoso.sharepoint.com/sites/hub-a/_api/web/GetListUsingPath(DecodedUrl='/sites/hub-a/SitePages')/items(7)"
+      "https://contoso.sharepoint.com/sites/hub-a/_api/web/GetListUsingPath(DecodedUrl='%2Fsites%2Fhub-a%2FSitePages')/items(7)"
     )
     expect(updateBody(client)).toEqual({
       GtSiteId: 'site-1',
@@ -316,7 +417,7 @@ describe('ProjectNews util', () => {
       '/sites/hub-a/SitePages/Nyheter/Ny-bane.aspx'
     )
     expect((client.post.mock.calls[0] as any[])[0]).toBe(
-      "https://contoso.sharepoint.com/sites/hub-a/_api/web/GetFileByServerRelativeUrl('/sites/hub-a/SitePages/Nyheter/Ny-bane.aspx')/recycle"
+      "https://contoso.sharepoint.com/sites/hub-a/_api/web/GetFileByServerRelativePath(decodedurl='%2Fsites%2Fhub-a%2FSitePages%2FNyheter%2FNy-bane.aspx')/recycle"
     )
     await expect(
       recycleSitePage(
