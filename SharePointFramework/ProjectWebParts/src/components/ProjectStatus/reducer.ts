@@ -117,6 +117,21 @@ export const initialState: IProjectStatusState = {
 }
 
 /**
+ * The state of the report beside the web part's title: published and when, or a draft and when it
+ * was last changed. Nothing without a report: a series with no report read «Kladd, sist endret ».
+ *
+ * @param report The report the page shows, if any
+ */
+function getReportStatus(
+  report?: Pick<StatusReport, 'published' | 'publishedDate' | 'modified'>
+): string | undefined {
+  if (!report) return undefined
+  return report.published
+    ? format(strings.PublishedStatusReport, formatDate(report.publishedDate))
+    : format(strings.NotPublishedStatusReport, formatDate(report.modified))
+}
+
+/**
  * Creates a reducer for the project status component.
  *
  * @param state - The current state of the project status.
@@ -134,18 +149,7 @@ const createProjectStatusReducer = createReducer(initialState, (builder) =>
       state.mostRecentReportId = _.first(payload.data.reports)?.id ?? 0
       state.userHasAdminPermission = payload.data.userHasAdminPermission
       state.isDataLoaded = true
-
-      if (payload.initialSelectedReport?.published) {
-        state.reportStatus = format(
-          strings.PublishedStatusReport,
-          formatDate(payload.initialSelectedReport?.publishedDate)
-        )
-      } else {
-        state.reportStatus = format(
-          strings.NotPublishedStatusReport,
-          formatDate(payload.initialSelectedReport?.modified)
-        )
-      }
+      state.reportStatus = getReportStatus(payload.initialSelectedReport)
     })
     .addCase(REPORT_PUBLISHING, (state) => {
       state.isPublishing = true
@@ -171,10 +175,7 @@ const createProjectStatusReducer = createReducer(initialState, (builder) =>
       state.sourceUrl = decodeURIComponent(getUrlParam('Source') ?? '')
       state.mostRecentReportId = state.selectedReport?.id ?? 0
       state.refetch = new Date().getTime()
-      state.reportStatus = format(
-        strings.PublishedStatusReport,
-        formatDate(state.selectedReport?.publishedDate)
-      )
+      state.reportStatus = getReportStatus(state.selectedReport)
     })
     .addCase(REPORT_DELETE_ERROR, (state, { payload }) => {
       // A message above the report: `state.error` would replace the whole page.
@@ -190,18 +191,7 @@ const createProjectStatusReducer = createReducer(initialState, (builder) =>
       )
       state.selectedReport = payload.report
       state.isDataLoaded = true
-
-      if (payload.report.published) {
-        state.reportStatus = format(
-          strings.PublishedStatusReport,
-          formatDate(payload.report?.publishedDate)
-        )
-      } else {
-        state.reportStatus = format(
-          strings.NotPublishedStatusReport,
-          formatDate(payload.report?.modified)
-        )
-      }
+      state.reportStatus = getReportStatus(payload.report)
     })
     .addCase(SELECT_SCOPE, (state, { payload }) => {
       state.selectedScope = payload.scopeKey

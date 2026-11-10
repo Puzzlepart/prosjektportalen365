@@ -65,6 +65,11 @@ describe('ProjectStatus reducer', () => {
     )
   })
 
+  it('names no status when the series has no report to open', () => {
+    // It read «Kladd, sist endret » with no date, beside «Ingen rapporter funnet».
+    expect(init(undefined).reportStatus).toBeUndefined()
+  })
+
   it('selects another report and replaces it in the list', () => {
     const updated = report({ GtStatusTime: 'Rød' }, { id: 2 })
     const state = reducer(init(draft), SELECT_REPORT({ report: updated }))
@@ -132,6 +137,14 @@ describe('ProjectStatus reducer', () => {
     expect(state.data.reports.map((r) => r.id)).toEqual([2])
     expect(state.selectedReport).toBe(published)
     expect(state.mostRecentReportId).toBe(2)
+    expect(state.reportStatus).toBe(
+      format(strings.PublishedStatusReport, formatDate(published.publishedDate))
+    )
+    // The draft that is next is named a draft, and the last report leaves no status.
+    expect(reducer(init(published), REPORT_DELETED()).reportStatus).toBe(
+      format(strings.NotPublishedStatusReport, formatDate(draft.modified))
+    )
+    expect(reducer(state, REPORT_DELETED()).reportStatus).toBeUndefined()
   })
 
   it('a failed delete shows why in a message above the report, and keeps the report', () => {
