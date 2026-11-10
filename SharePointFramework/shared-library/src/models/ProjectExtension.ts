@@ -12,6 +12,7 @@ export interface IProjectExtensionSPItem {
   GtExtensionDefault?: boolean
   GtExtensionHidden?: boolean
   GtExtensionLocked?: boolean
+  GtShieldsProjectData?: boolean
   File?: { UniqueId: string; Name: string; Title: string; ServerRelativeUrl: string }
 }
 
@@ -20,6 +21,12 @@ export interface IProjectExtensionSPItem {
  */
 export class ProjectExtension extends UserSelectableObject {
   public serverRelativeUrl: string
+
+  /**
+   * Whether the extension shields the project's data (`GtShieldsProjectData`): the project keeps
+   * it on its own site instead of on the hub.
+   */
+  public shieldsProjectData: boolean
 
   constructor(
     spItem: IProjectExtensionSPItem,
@@ -34,6 +41,7 @@ export class ProjectExtension extends UserSelectableObject {
       spItem.GtExtensionHidden
     )
     this.serverRelativeUrl = spItem.File.ServerRelativeUrl
+    this.shieldsProjectData = !!spItem.GtShieldsProjectData
   }
 
   /**

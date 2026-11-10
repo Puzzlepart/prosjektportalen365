@@ -8,6 +8,7 @@ import { Site, spfi, SPFI } from '@pnp/sp/presets/all'
 import { PermissionKind } from '@pnp/sp/security'
 import { IWeb, Web } from '@pnp/sp/webs'
 import { merge } from 'lodash'
+import resource from 'SharedResources'
 import strings from 'SharedLibraryStrings'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
 import _ from 'underscore'
@@ -58,6 +59,11 @@ import {
   NoAccessToPortfolioError,
   PortalDataServiceDefaultConfiguration,
   PortalDataServiceList,
+  SHIELDED_PROJECT_DATA_LISTS,
+  SHIELDED_PROJECT_HUB_ONLY_LISTS,
+  ShieldedProjectHubListError,
+  ShieldedProjectState,
+  ShieldedProjectUnresolvedError,
   SyncListParams
 } from './types'
 import { countFlagged, readItemCount, readNewestInstallation, readSiteFlags } from './usageQueries'
@@ -133,9 +139,29 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   private _deniedLists = new Set<PortalDataServiceList>()
 
   /**
-   * Whether the hub list can be read: the hub is available and the list has not denied access.
+   * Where the current site keeps its project data. Settled by `configure` on a project site; a
+   * shielded project reads and writes its status reports on its own site, never on the hub.
+   */
+  public shieldedProjectState: ShieldedProjectState = 'none'
+
+  /**
+   * Whether the current site is a shielded project, or might be one because the check failed.
+   * Either way, nothing about the project is written to the hub.
+   */
+  public get isShieldedProject(): boolean {
+    return this.shieldedProjectState !== 'none'
+  }
+
+  /**
+   * Whether the list can be read. A list with project data is read on the project site for a
+   * shielded project, and not at all while that is unresolved; any other list is read on the hub
+   * when the hub is available and the list has not denied access.
    */
   public isListAvailable(list: PortalDataServiceList): boolean {
+    if (SHIELDED_PROJECT_DATA_LISTS.includes(list)) {
+      if (this.shieldedProjectState === 'shielded') return true
+      if (this.shieldedProjectState === 'unresolved') return false
+    }
     return this.isAvailable && !this._deniedLists.has(list)
   }
 
@@ -190,6 +216,14 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   }
 
   /**
+   * The web that holds the project's data: the project site for a shielded project, otherwise the
+   * hub. Throws while it is unresolved whether the project is shielded.
+   */
+  public getProjectDataWeb(): IWeb {
+    return this._webFor('PROJECT_STATUS')
+  }
+
+  /**
    * Handles a denied access to the hub. A denied `Globale innstillinger` (or a call that names
    * no list) makes the hub unavailable; another list is only marked as denied, so the hub's other
    * lists are still read.
@@ -199,6 +233,8 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    */
   private _handleAvailabilityError(error: any, source: string, list?: PortalDataServiceList): void {
     if (!isUnauthorizedError(error)) return
+    // The list is on the project site, so its denial says nothing about the hub.
+    if (list && this._isRoutedToProject(list)) return
     if (list && list !== 'GLOBAL_SETTINGS') {
       if (this._deniedLists.has(list)) return
       Logger.write(
@@ -232,8 +268,36 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     super.onConfigureStart(merge({ ...PortalDataServiceDefaultConfiguration }, configuration))
     this._sp = createSpfiInstance(this._configuration.spfxContext)
     await this.onInit(configuration?.url)
+    await this._resolveShieldedProject()
     await this._settleHubAccess()
     return super.onConfigured()
+  }
+
+  /**
+   * Settles `shieldedProjectState` for the current site. A project site is shielded when it has its
+   * own list for status reports, which the extension «Skjerming» adds. The hub itself, a configured
+   * `url` and a site outside any hub keep `none`. A failed check gives `unresolved`, so a shielded
+   * project is never taken for one that writes to the hub.
+   */
+  private async _resolveShieldedProject(): Promise<void> {
+    const legacyPageContext = this._configuration.spfxContext?.pageContext?.legacyPageContext
+    const siteId: string = legacyPageContext?.siteId ?? ''
+    const hubSiteId: string = legacyPageContext?.hubSiteId ?? ''
+    if (this._configuration.url || stringIsNullOrEmpty(hubSiteId)) return
+    if (siteId.toLowerCase().indexOf(hubSiteId.toLowerCase()) !== -1) return
+    const title = this._configuration.listNames.PROJECT_STATUS.replace(/'/g, "''")
+    try {
+      const lists = await this._sp.web.lists.filter(`Title eq '${title}'`).select('Id')()
+      this.shieldedProjectState = lists.length > 0 ? 'shielded' : 'none'
+    } catch (error) {
+      Logger.write(
+        `(PortalDataService) (_resolveShieldedProject) Could not determine whether the project is shielded. Project data is neither read nor written. Error: ${
+          error?.message ?? error
+        }`,
+        LogLevel.Warning
+      )
+      this.shieldedProjectState = 'unresolved'
+    }
   }
 
   /**
@@ -344,7 +408,8 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     webUrl: string,
     constructor: new (item: any, web: IWeb) => T
   ): Promise<T[]> {
-    if (!this.isListAvailable('PROJECTS')) return []
+    const shieldedParents = await this._getShieldedParentProjects(webUrl, constructor)
+    if (!this.isListAvailable('PROJECTS')) return shieldedParents
     try {
       const childProjectItems = await this.getItems(
         this._configuration.listNames.PROJECTS,
@@ -373,6 +438,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         .select('Id', 'GtParentProjects')()
 
       const uniqueProjects = new Map<string, T>()
+      shieldedParents.forEach((p) => uniqueProjects.set(p['url'], p))
 
       childProjectItems
         .filter((p) => (p['childProjects'] ? p['childProjects'].includes(webUrl) : true))
@@ -426,6 +492,61 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
 
       return Array.from(uniqueProjects.values())
     } catch (error) {
+      return shieldedParents
+    }
+  }
+
+  /**
+   * Shielded programs and parent projects that have the project as a child: they keep
+   * `GtChildProjects` on their own site, so search finds them, trimmed to what the user may read.
+   * Their properties item is on the project site itself, which tells them from the hub's entries.
+   *
+   * @param webUrl Web URL of the project
+   * @param constructor Constructor / model class
+   */
+  private async _getShieldedParentProjects<T>(
+    webUrl: string,
+    constructor: new (item: any, web: IWeb) => T
+  ): Promise<T[]> {
+    try {
+      const siteId = this._configuration.spfxContext.pageContext.site.id.toString()
+      const { PrimarySearchResults } = await this._sp.search({
+        Querytext: `ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* (GtChildProjectsOWSMTXT:"${siteId}" OR GtChildProjectsOWSMTXT:"${webUrl}")`,
+        RowLimit: 50,
+        TrimDuplicates: false,
+        SelectProperties: [
+          'Title',
+          'SPWebUrl',
+          'SiteId',
+          'GtSiteIdOWSTEXT',
+          'GtChildProjectsOWSMTXT',
+          'GtIsParentProjectOWSBOOL'
+        ]
+      })
+      const normalize = (id: unknown) => `${id ?? ''}`.replace(/[{}]/g, '').toLowerCase()
+      return (PrimarySearchResults as Record<string, any>[])
+        .filter(
+          (result) =>
+            normalize(result.SiteId) === normalize(result.GtSiteIdOWSTEXT) &&
+            `${result.GtChildProjectsOWSMTXT ?? ''}`.includes(siteId)
+        )
+        .map(
+          (result) =>
+            new constructor(
+              {
+                Title: result.Title,
+                GtSiteUrl: result.SPWebUrl,
+                GtChildProjects: result.GtChildProjectsOWSMTXT,
+                GtIsParentProject: true
+              },
+              this._sp.web
+            )
+        )
+    } catch (error) {
+      Logger.write(
+        `(PortalDataService) (getParentProjects) Could not search for shielded parent projects: ${error?.message}`,
+        LogLevel.Info
+      )
       return []
     }
   }
@@ -439,10 +560,17 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     constructor: new (item: any, web: IWeb) => T
   ): Promise<T[]> {
     try {
-      const list = this._getList('PROJECTS')
-      const [currentProject] = await list.items
-        .filter(`GtSiteUrl eq '${webUrl}'`)
-        .select('Id', 'GtChildProjects')()
+      if (this.shieldedProjectState === 'unresolved') return []
+      // A shielded program keeps its children on its own site; it has no entry in the hub.
+      const [currentProject] =
+        this.shieldedProjectState === 'shielded'
+          ? await this._sp.web.lists
+              .getByTitle(resource.Lists_ProjectProperties_Title)
+              .items.select('Id', 'GtChildProjects')
+              .top(1)()
+          : await this._getList('PROJECTS')
+              .items.filter(`GtSiteUrl eq '${webUrl}'`)
+              .select('Id', 'GtChildProjects')()
 
       if (!currentProject?.GtChildProjects) {
         return []
@@ -1031,6 +1159,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     list: PortalDataServiceList,
     properties: Record<string, any>
   ): Promise<T> {
+    this._assertWritable(list)
     try {
       const itemAddResult = await this._getList(list).items.add(properties)
       return itemAddResult as T
@@ -1047,6 +1176,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     itemId: number,
     properties: Record<string, any>
   ): Promise<T> {
+    this._assertWritable(list)
     try {
       const itemUpdateResult = await this._getList(list).items.getById(itemId).update(properties)
       return itemUpdateResult as unknown as T
@@ -1063,6 +1193,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * @returns `true` when the item was moved to the recycle bin, `false` when it could not be
    */
   public async deleteItemFromList(list: PortalDataServiceList, itemId: number): Promise<boolean> {
+    this._assertWritable(list)
     try {
       await this._getList(list).items.getById(itemId).recycle()
       return true
@@ -1188,8 +1319,19 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * attachment object.
    */
   public async getStatusReportAttachments(report: StatusReport): Promise<StatusReport> {
-    const attachmentsFolder = await this.ensureAttachmentsFolder(report)
-    const attachmentFiles = await attachmentsFolder.files.using(DefaultCaching)()
+    const web = this._webFor('PROJECT_STATUS_ATTACHMENTS')
+    let attachmentFiles: { Name: string; ServerRelativeUrl: string }[] = []
+    try {
+      // Read only: a report without attachments has no folder, and a reader may not create one.
+      attachmentFiles = await this._getList('PROJECT_STATUS_ATTACHMENTS')
+        .rootFolder.folders.getByUrl(report.id.toString())
+        .files.using(DefaultCaching)()
+    } catch (error) {
+      Logger.write(
+        `(PortalDataService) (getStatusReportAttachments) No attachments read for report ${report.id}: ${error?.message}`,
+        LogLevel.Info
+      )
+    }
     const attachmentFilesContent = await Promise.all(
       attachmentFiles.map(async ({ Name: name, ServerRelativeUrl: url }) => {
         const attachment: StatusReportAttachment = {
@@ -1197,7 +1339,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
           url
         }
         if (url.indexOf('.txt') !== -1 || url.indexOf('.json') !== -1) {
-          attachment.content = await this.web.getFileByServerRelativePath(url).getText()
+          attachment.content = await web.getFileByServerRelativePath(url).getText()
         }
         return attachment
       })
@@ -1223,13 +1365,16 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   /**
    * Get list fields
    *
-   * @param web Web (default: `this.web`)
+   * @param web Web (default: the web that holds the list)
    */
   public async getListFields(
     list: PortalDataServiceList | string,
     filter?: string,
-    web: IWeb = this.web
+    web?: IWeb
   ): Promise<SPField[]> {
+    web =
+      web ??
+      (this._configuration.listNames[list] ? this._webFor(list as PortalDataServiceList) : this.web)
     let fields = web.lists
       .getByTitle(this._configuration.listNames[list] || list)
       .fields.select(...getClassProperties(SPField))
@@ -1249,7 +1394,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     contentTypeId: string,
     web: IWeb = this.web
   ): Promise<SPField[]> {
-    const { Fields } = await this.web.contentTypes
+    const { Fields } = await web.contentTypes
       .getById(contentTypeId)
       .select(
         getClassProperties(SPField)
@@ -1384,7 +1529,8 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * `null` is returned.
    */
   public async getProjectDetails(): Promise<IProjectDetails> {
-    if (!this.isListAvailable('PROJECTS')) return null
+    if (this.shieldedProjectState === 'shielded') return this._getShieldedProjectDetails()
+    if (this.isShieldedProject || !this.isListAvailable('PROJECTS')) return null
     try {
       const siteId = this._configuration.spfxContext.pageContext.site.id
       const [project] = await this._getList('PROJECTS').items.filter(`GtSiteId eq '${siteId}'`)()
@@ -1396,6 +1542,31 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       } as IProjectDetails
     } catch (error) {
       this._handleAvailabilityError(error, 'getProjectDetails', 'PROJECTS')
+      return null
+    }
+  }
+
+  /**
+   * Project details of a shielded project, from its properties item on the project site: it has
+   * no entry in the hub.
+   */
+  private async _getShieldedProjectDetails(): Promise<IProjectDetails> {
+    try {
+      const [item] = await this._sp.web.lists
+        .getByTitle(resource.Lists_ProjectProperties_Title)
+        .items.select('Id', 'Title', 'GtIsParentProject', 'GtIsProgram')
+        .top(1)()
+      if (!item) return null
+      return {
+        id: item.Id,
+        title: item.Title,
+        isParentProject: item.GtIsParentProject || item.GtIsProgram
+      }
+    } catch (error) {
+      Logger.write(
+        `(PortalDataService) (getProjectDetails) Could not read the shielded project's properties: ${error?.message}`,
+        LogLevel.Warning
+      )
       return null
     }
   }
@@ -1478,10 +1649,49 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   }
 
   /**
-   * Resolves a logical hub-list key to its configured SharePoint list.
+   * Resolves a logical list key to its configured SharePoint list on the web that holds it.
    */
   private _getList(list: PortalDataServiceList): IList {
-    return this.web.lists.getByTitle(this._configuration.listNames[list])
+    return this._webFor(list).lists.getByTitle(this._configuration.listNames[list])
+  }
+
+  /**
+   * Whether the list is read and written on the project site rather than on the hub.
+   *
+   * @param list List
+   */
+  private _isRoutedToProject(list: PortalDataServiceList): boolean {
+    return SHIELDED_PROJECT_DATA_LISTS.includes(list) && this.shieldedProjectState !== 'none'
+  }
+
+  /**
+   * The web that holds the list. A shielded project keeps its project data on its own site; while
+   * that is unresolved, its project data lists are not reached at all. Every other list is on the
+   * hub.
+   *
+   * @param list List
+   */
+  private _webFor(list: PortalDataServiceList): IWeb {
+    if (!SHIELDED_PROJECT_DATA_LISTS.includes(list)) return this.web
+    switch (this.shieldedProjectState) {
+      case 'shielded':
+        return this._sp.web
+      case 'unresolved':
+        throw ShieldedProjectUnresolvedError()
+      default:
+        return this.web
+    }
+  }
+
+  /**
+   * Throws when a shielded project would write to a hub list with data about every project.
+   *
+   * @param list List
+   */
+  private _assertWritable(list: PortalDataServiceList): void {
+    if (this.isShieldedProject && SHIELDED_PROJECT_HUB_ONLY_LISTS.includes(list)) {
+      throw ShieldedProjectHubListError(this._configuration.listNames[list])
+    }
   }
 
   /**

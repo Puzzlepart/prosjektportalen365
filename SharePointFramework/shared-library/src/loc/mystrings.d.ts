@@ -154,6 +154,9 @@ declare interface ISharedLibraryStrings {
   DataGridSelectRowLabel: string
   DataGridSelectNamedRowLabel: string
   ProjectPropertiesNotFoundErrorText: string
+  ShieldedProjectUnresolvedErrorTitle: string
+  ShieldedProjectUnresolvedErrorText: string
+  ShieldedProjectHubListErrorText: string
 }
 
 declare module 'SharedLibraryStrings' {
