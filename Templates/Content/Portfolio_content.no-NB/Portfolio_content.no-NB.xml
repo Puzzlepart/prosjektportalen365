@@ -154,6 +154,13 @@
                         <pnp:Property Key="GtProjectPhase" Value="Planlegge|cda4f1e1-3488-4e57-8a04-6973df239689" />
                     </pnp:Properties>
                 </pnp:File>                
+                <pnp:File Src="ProjectExtensions/Skjerming.txt" Folder="Prosjekttillegg" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Skjerming" />
+                        <pnp:Property Key="GtDescription" Value="Lagrer statusrapporter, øyeblikksbilder, prosjektegenskaper og arkiveringslogg på prosjektområdet, slik at bare prosjektets medlemmer og innsynsgruppen ser dem. Eksisterende data på porteføljeområdet flyttes ikke, og skjerming kan ikke fjernes. Tidslinjeelementer kan ikke registreres på skjermede prosjekter. Blir overskrevet ved en oppgradering." />
+                        <pnp:Property Key="GtShieldsProjectData" Value="1" />
+                    </pnp:Properties>
+                </pnp:File>
             </pnp:Files>
             <pnp:Lists>
                 <pnp:ListInstance Title="Fasesjekkliste" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/FasesjekklisteV6" EnableVersioning="true" DraftVersionVisibility="0" ContentTypesEnabled="true" EnableFolderCreation="false" EnableAttachments="false">

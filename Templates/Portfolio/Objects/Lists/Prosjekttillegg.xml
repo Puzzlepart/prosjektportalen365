@@ -16,6 +16,7 @@
                 <FieldRef Name="GtExtensionDefault" />
                 <FieldRef Name="GtExtensionHidden" />
                 <FieldRef Name="GtExtensionLocked" />
+                <FieldRef Name="GtShieldsProjectData" />
             </ViewFields>
             <RowLimit Paged="TRUE">30</RowLimit>
             <Aggregations Value="Off" />
@@ -27,6 +28,7 @@
         <pnp:FieldRef ID="7ec0bc7a-f644-4ddb-86e0-5c8d70e3c16a" Name="GtExtensionDefault" DisplayName="{resource:SiteFields_GtExtensionDefault_DisplayName}" />
         <pnp:FieldRef ID="6ba9eb00-1971-4e9d-953d-2367fa017cda" Name="GtExtensionHidden" DisplayName="{resource:SiteFields_GtExtensionHidden_DisplayName}" />
         <pnp:FieldRef ID="065b9b97-ad41-4bec-8df1-63ccfe7da071" Name="GtExtensionLocked" DisplayName="{resource:SiteFields_GtExtensionLocked_DisplayName}" />
+        <pnp:FieldRef ID="93d6ab56-65fc-4efc-8579-824ba08ca056" Name="GtShieldsProjectData" DisplayName="{resource:SiteFields_GtShieldsProjectData_DisplayName}" />
     </pnp:FieldRefs>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

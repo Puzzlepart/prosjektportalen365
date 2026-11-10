@@ -1,0 +1,7 @@
+<Field Type="Choice" DisplayName="{resource:SiteFields_GtPermissionScope_DisplayName}" Description="{resource:SiteFields_GtPermissionScope_Description}" Format="Dropdown" Group="{resource:SiteFields_Portfolio_Group}" ID="{22050909-cbc4-46d9-bdff-a5cf9be9fbf5}" StaticName="GtPermissionScope" Name="GtPermissionScope">
+    <Default>{resource:Choice_GtPermissionScope_Site}</Default>
+    <CHOICES>
+        <CHOICE>{resource:Choice_GtPermissionScope_Site}</CHOICE>
+        <CHOICE>{resource:Choice_GtPermissionScope_ShieldedLists}</CHOICE>
+    </CHOICES>
+</Field>

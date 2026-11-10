@@ -41,6 +41,13 @@
                         <pnp:Property Key="Title" Value="Standard 5x5 matrix" />
                     </pnp:Properties>
                 </pnp:File>
+                <pnp:File Src="ProjectExtensions/Shielding.txt" Folder="ProjectExtensions" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Shielding" />
+                        <pnp:Property Key="GtDescription" Value="Stores status reports, snapshots, project properties and the archive log on the project site, so only the project&apos;s members and the insight group see them. Existing data on the portfolio site is not moved, and shielding cannot be removed. Timeline items cannot be registered on shielded projects. Will be overwritten during an upgrade." />
+                        <pnp:Property Key="GtShieldsProjectData" Value="1" />
+                    </pnp:Properties>
+                </pnp:File>
             </pnp:Files>
             <pnp:Lists>
                 <pnp:ListInstance Title="Phase Checklist" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/PhaseChecklistV6" EnableVersioning="true" DraftVersionVisibility="0" ContentTypesEnabled="true" EnableFolderCreation="false" EnableAttachments="false">
