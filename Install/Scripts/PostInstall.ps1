@@ -109,9 +109,9 @@ $ProjectColumnsItems = Get-PnPListItem -List (Get-Resource -Name "Lists_ProjectC
 $ColumnConfigList = Get-Resource -Name "Lists_ProjectColumnConfiguration_Title"
 $ColumnConfigItems = Get-PnPListItem -List $ColumnConfigList
 $StatusColumnConfig = @(
-    @{ Field = "GtStatusOpportunities"; Choice = "Choice_GtStatusOpportunities_Low"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusOpportunities_Low_Title"; Color = "#2da748" },
+    @{ Field = "GtStatusOpportunities"; Choice = "Choice_GtStatusOpportunities_Low"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusOpportunities_Low_Title"; Color = "#ea5c73" },
     @{ Field = "GtStatusOpportunities"; Choice = "Choice_GtStatusOpportunities_Medium"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusOpportunities_Medium_Title"; Color = "#e9b359" },
-    @{ Field = "GtStatusOpportunities"; Choice = "Choice_GtStatusOpportunities_High"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusOpportunities_High_Title"; Color = "#ea5c73" },
+    @{ Field = "GtStatusOpportunities"; Choice = "Choice_GtStatusOpportunities_High"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusOpportunities_High_Title"; Color = "#2da748" },
     @{ Field = "GtStatusScope"; Choice = "Choice_GtStatusScope_AsPlanned"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusScope_AsPlanned_Title"; Color = "#2da748" },
     @{ Field = "GtStatusScope"; Choice = "Choice_GtStatusScope_MinorChanges"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusScope_MinorChanges_Title"; Color = "#e9b359" },
     @{ Field = "GtStatusScope"; Choice = "Choice_GtStatusScope_MajorChanges"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusScope_MajorChanges_Title"; Color = "#ea5c73" },
@@ -137,6 +137,22 @@ foreach ($Config in $StatusColumnConfig) {
             "GtPortfolioColumnIconName"  = "CircleFill"
         } | Out-Null
         Write-Host "[SUCCESS] Added column configuration [$Value] for [$($Config.Field)] (column id $($Column.Id))" -ForegroundColor Green
+    }
+}
+
+# 'Status muligheter' fikk risikoens farger (Lav grønn, Høy rød) fra malen i 1.8.0-1.15.0, men
+# høye muligheter er bra: Høy er nå grønn og Lav rød. Fargene ble ikke vist før 1.15.0 (radene
+# pekte på feil kolonne), så radene som fortsatt har begge de gamle standardfargene, får de nye.
+# Er en av de to fargene endret, røres ingen av radene.
+$OpportunitiesColumn = $ProjectColumnsItems | Where-Object { $_["GtInternalName"] -eq "GtStatusOpportunities" } | Select-Object -First 1
+if ($null -ne $OpportunitiesColumn) {
+    $OpportunityRows = @(Get-PnPListItem -List $ColumnConfigList | Where-Object { $null -ne $_["GtPortfolioColumn"] -and $_["GtPortfolioColumn"].LookupId -eq $OpportunitiesColumn.Id })
+    $LowRow = $OpportunityRows | Where-Object { $_["GtPortfolioColumnValue"] -eq (Get-Resource -Name "Choice_GtStatusOpportunities_Low") } | Select-Object -First 1
+    $HighRow = $OpportunityRows | Where-Object { $_["GtPortfolioColumnValue"] -eq (Get-Resource -Name "Choice_GtStatusOpportunities_High") } | Select-Object -First 1
+    if ($null -ne $LowRow -and $null -ne $HighRow -and $LowRow["GtPortfolioColumnColor"] -eq "#2da748" -and $HighRow["GtPortfolioColumnColor"] -eq "#ea5c73") {
+        Set-PnPListItem -List $ColumnConfigList -Identity $LowRow.Id -Values @{ "GtPortfolioColumnColor" = "#ea5c73" } | Out-Null
+        Set-PnPListItem -List $ColumnConfigList -Identity $HighRow.Id -Values @{ "GtPortfolioColumnColor" = "#2da748" } | Out-Null
+        Write-Host "[SUCCESS] Status muligheter: high is green and low is red now (column id $($OpportunitiesColumn.Id))" -ForegroundColor Green
     }
 }
 

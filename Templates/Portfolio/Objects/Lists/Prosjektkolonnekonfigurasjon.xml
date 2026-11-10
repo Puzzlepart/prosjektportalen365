@@ -54,7 +54,7 @@
             <pnp:DataValue FieldName="Title">{resource:Lists_ProjectColumnConfiguration_GtStatusOpportunities_Low_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">36</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">{resource:Choice_GtStatusOpportunities_Low}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioColumnColor">#2da748</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnColor">#ea5c73</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
@@ -68,7 +68,7 @@
             <pnp:DataValue FieldName="Title">{resource:Lists_ProjectColumnConfiguration_GtStatusOpportunities_High_Title}</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">36</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">{resource:Choice_GtStatusOpportunities_High}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtPortfolioColumnColor">#ea5c73</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnColor">#2da748</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
