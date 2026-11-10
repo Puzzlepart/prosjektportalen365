@@ -277,4 +277,138 @@ describe('PortalDataService', () => {
       expect(queries.map(({ list }) => list)).toEqual([LISTS.GLOBAL_SETTINGS])
     })
   })
+
+  describe('a shielded project', () => {
+    /**
+     * A project site that keeps its project data in its own lists, beside the hub: `local` answers
+     * for the project site, `hub` for the hub.
+     */
+    function shielded(
+      state: 'shielded' | 'unresolved',
+      local: Record<string, Answer>,
+      hub: Record<string, Answer> = {}
+    ) {
+      const project = hubWeb(local)
+      const { service, queries } = portal(hub)
+      ;(service as any)._sp = { web: project.web }
+      service.shieldedProjectState = state
+      return { service, hubQueries: queries, projectQueries: project.queries }
+    }
+
+    it('reads its status reports on the project site, also when the hub is out of reach', async () => {
+      const { service, hubQueries, projectQueries } = shielded('shielded', {
+        [LISTS.PROJECT_STATUS]: () => [{ Id: 7, GtSiteId: 'site-1', FieldValuesAsText: {} }]
+      })
+      service.isAvailable = false
+      const reports = await service.getStatusReports({})
+      expect(reports.map(({ id }) => id)).toEqual([7])
+      expect(projectQueries.map(({ list }) => list)).toEqual([LISTS.PROJECT_STATUS])
+      expect(hubQueries).toHaveLength(0)
+    })
+
+    it('keeps the hub available when its own list denies access', async () => {
+      const { service } = shielded('shielded', { [LISTS.PROJECT_STATUS]: () => forbidden() })
+      expect(await service.getStatusReports({})).toEqual([])
+      expect(service.isAvailable).toBe(true)
+      expect(service.isListAvailable('PROJECT_STATUS')).toBe(true)
+    })
+
+    it('reads the configuration on the hub', async () => {
+      const { service, projectQueries } = shielded(
+        'shielded',
+        {},
+        { [LISTS.PROJECT_COLUMNS]: () => [{ Id: 1, GtInternalName: 'GtProjectManager' }] }
+      )
+      expect((await service.getProjectColumns()).map((column) => column.internalName)).toEqual([
+        'GtProjectManager'
+      ])
+      expect(projectQueries).toHaveLength(0)
+    })
+
+    it('never writes to the hub lists with data about every project', async () => {
+      const { service } = shielded('shielded', {})
+      await expect(service.addItemToList('PROJECTS', { Title: 'Prosjekt' })).rejects.toThrow(
+        LISTS.PROJECTS
+      )
+      await expect(service.updateItemInList('TIMELINE_CONTENT', 1, {})).rejects.toThrow(
+        LISTS.TIMELINE_CONTENT
+      )
+      await expect(service.deleteItemFromList('TIMELINE_CONTENT', 1)).rejects.toThrow(
+        LISTS.TIMELINE_CONTENT
+      )
+    })
+
+    it('neither reads nor writes project data while it is unresolved', async () => {
+      const { service, hubQueries, projectQueries } = shielded('unresolved', {
+        [LISTS.PROJECT_STATUS]: () => [{ Id: 7, FieldValuesAsText: {} }]
+      })
+      expect(service.isShieldedProject).toBe(true)
+      expect(service.isListAvailable('PROJECT_STATUS')).toBe(false)
+      expect(await service.getStatusReports({})).toEqual([])
+      await expect(service.deleteStatusReport(7)).rejects.toThrow()
+      expect(() => service.getProjectDataWeb()).toThrow()
+      expect(hubQueries).toHaveLength(0)
+      expect(projectQueries).toHaveLength(0)
+    })
+  })
+
+  describe('whether the project is shielded', () => {
+    /**
+     * Settles the state for a site with the given hub, whose lists answer `lists`.
+     */
+    async function resolve(
+      legacyPageContext: { siteId?: string; hubSiteId?: string },
+      lists: () => any[] | Error,
+      url?: string
+    ) {
+      const service = new PortalDataService()
+      const filters: string[] = []
+      ;(service as any)._configuration = {
+        ...PortalDataServiceDefaultConfiguration,
+        url,
+        spfxContext: { pageContext: { legacyPageContext } }
+      }
+      ;(service as any)._sp = {
+        web: {
+          lists: {
+            filter: (filter: string) => {
+              filters.push(filter)
+              return {
+                select: () => () => {
+                  const result = lists()
+                  return result instanceof Error ? Promise.reject(result) : Promise.resolve(result)
+                }
+              }
+            }
+          }
+        }
+      }
+      await (service as any)._resolveShieldedProject()
+      return { state: service.shieldedProjectState, filters }
+    }
+    const PROJECT = { siteId: '{11111111-aaaa}', hubSiteId: '22222222-bbbb' }
+
+    it('is shielded when the project site has its own list for status reports', async () => {
+      const { state, filters } = await resolve(PROJECT, () => [{ Id: 'list-1' }])
+      expect(state).toBe('shielded')
+      expect(filters).toEqual([`Title eq '${LISTS.PROJECT_STATUS}'`])
+    })
+
+    it('is not shielded without that list', async () => {
+      expect((await resolve(PROJECT, () => [])).state).toBe('none')
+    })
+
+    it('is unresolved when the lists cannot be read', async () => {
+      expect((await resolve(PROJECT, () => new Error('500'))).state).toBe('unresolved')
+    })
+
+    it('is never shielded on the hub, outside a hub, or for another portfolio', async () => {
+      const hub = { siteId: '{22222222-BBBB}', hubSiteId: '22222222-bbbb' }
+      expect((await resolve(hub, () => [{ Id: 'list-1' }])).state).toBe('none')
+      expect((await resolve({ siteId: '{1}' }, () => [{ Id: 'list-1' }])).state).toBe('none')
+      expect(
+        (await resolve(PROJECT, () => [{ Id: 'list-1' }], 'https://contoso/sites/pp')).state
+      ).toBe('none')
+    })
+  })
 })

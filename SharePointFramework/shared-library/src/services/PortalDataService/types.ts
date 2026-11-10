@@ -233,6 +233,51 @@ export interface IProjectDetails {
 }
 
 /**
+ * Where the current site keeps its project data:
+ * - `none`: on the hub, as before (also every site that is not a project).
+ * - `shielded`: on the project site. The project has the extension «Skjerming», which adds the
+ *   project data lists to the site.
+ * - `unresolved`: unknown, because the check failed. Project data is neither read nor written.
+ */
+export type ShieldedProjectState = 'none' | 'shielded' | 'unresolved'
+
+/**
+ * Hub lists whose project data a shielded project keeps on its own site, in lists with the same
+ * titles.
+ */
+export const SHIELDED_PROJECT_DATA_LISTS: PortalDataServiceList[] = [
+  'PROJECT_STATUS',
+  'PROJECT_STATUS_ATTACHMENTS'
+]
+
+/**
+ * Hub lists a shielded project never writes to: they hold data about every project, and a
+ * shielded project has no entity in the hub.
+ */
+export const SHIELDED_PROJECT_HUB_ONLY_LISTS: PortalDataServiceList[] = [
+  'PROJECTS',
+  'TIMELINE_CONTENT'
+]
+
+/**
+ * Generates an error for when it could not be determined whether the project is shielded.
+ */
+export const ShieldedProjectUnresolvedError = (): ErrorWithIntent =>
+  new ErrorWithIntent(
+    strings.ShieldedProjectUnresolvedErrorText,
+    'warning',
+    strings.ShieldedProjectUnresolvedErrorTitle
+  )
+
+/**
+ * Generates an error for when a shielded project would write to a hub list with project data.
+ *
+ * @param listName Title of the hub list
+ */
+export const ShieldedProjectHubListError = (listName: string): Error =>
+  new Error(format(strings.ShieldedProjectHubListErrorText, listName))
+
+/**
  * Generates an error for when the user does not have access to the portfolio.
  *
  * @param url The URL of the portfolio

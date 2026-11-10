@@ -150,6 +150,11 @@ define([], function () {
     MeasurementSheetName: 'Measurements',
     DataGridSelectAllLabel: 'Select all',
     DataGridSelectRowLabel: 'Select row',
-    ProjectPropertiesNotFoundErrorText: 'The project properties were not found in the list "{0}".'
+    ProjectPropertiesNotFoundErrorText: 'The project properties were not found in the list "{0}".',
+    ShieldedProjectUnresolvedErrorTitle: 'Project data is not available',
+    ShieldedProjectUnresolvedErrorText:
+      'Could not determine whether the project is shielded. Project data is not shown or saved until this is resolved. Reload the page, or contact an administrator.',
+    ShieldedProjectHubListErrorText:
+      'The project is shielded, and its data is not stored in the list "{0}" on the portfolio site.'
   }
 })

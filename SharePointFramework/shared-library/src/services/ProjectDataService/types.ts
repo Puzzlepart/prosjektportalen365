@@ -77,6 +77,12 @@ export interface IProjectDataServiceParams {
   entityService: SpEntityPortalService
 
   /**
+   * Whether the project is shielded (or might be, see `PortalDataService.isShieldedProject`). A
+   * shielded project has no entity in the hub: it is neither read nor written.
+   */
+  isShieldedProject?: boolean
+
+  /**
    * List name for project properties
    */
   propertiesListName: string

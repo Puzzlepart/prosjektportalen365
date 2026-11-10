@@ -73,6 +73,14 @@ export class SPDataAdapterBase<
   public globalSettings: Map<string, string> = new Map()
 
   /**
+   * Whether the current site is a shielded project, or might be one (see
+   * `PortalDataService.isShieldedProject`). Nothing about a shielded project is written to the hub.
+   */
+  public get isShieldedProject(): boolean {
+    return !!this.portalDataService?.isShieldedProject
+  }
+
+  /**
    * Initialize storage
    */
   private _initStorage() {

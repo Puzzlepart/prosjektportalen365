@@ -250,7 +250,7 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
         propertiesListId: item.propertiesListId,
         templateParameters
       }
-    } else if (this._params.entityService) {
+    } else if (this._params.entityService && !this._params.isShieldedProject) {
       this._logInfo(
         'Local property item not found. Retrieving data from portal site.',
         'getPropertiesData'
@@ -316,7 +316,7 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
     }
     const propertyItemContext = await this._getLocalProjectInformationItemContext()
     if (propertyItemContext) await propertyItemContext.item.update(properties)
-    if (syncToHub && this._params.entityService) {
+    if (syncToHub && this._params.entityService && !this._params.isShieldedProject) {
       await this._params.entityService.updateEntityItem(this._params.siteId, properties)
     }
     return properties

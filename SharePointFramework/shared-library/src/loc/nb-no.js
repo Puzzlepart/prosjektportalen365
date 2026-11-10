@@ -149,6 +149,11 @@ define([], function () {
     MeasurementSheetName: 'Målinger',
     DataGridSelectAllLabel: 'Velg alle',
     DataGridSelectRowLabel: 'Velg rad',
-    ProjectPropertiesNotFoundErrorText: 'Fant ikke prosjektegenskapene i listen "{0}".'
+    ProjectPropertiesNotFoundErrorText: 'Fant ikke prosjektegenskapene i listen "{0}".',
+    ShieldedProjectUnresolvedErrorTitle: 'Prosjektdata er ikke tilgjengelig',
+    ShieldedProjectUnresolvedErrorText:
+      'Kunne ikke avgjøre om prosjektet er skjermet. Prosjektdata vises og lagres ikke før dette er avklart. Last inn siden på nytt, eller ta kontakt med en administrator.',
+    ShieldedProjectHubListErrorText:
+      'Prosjektet er skjermet, og data fra prosjektet lagres ikke i listen "{0}" på porteføljeområdet.'
   }
 })
