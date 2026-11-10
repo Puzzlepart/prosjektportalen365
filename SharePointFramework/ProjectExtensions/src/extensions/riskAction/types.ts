@@ -1,9 +1,24 @@
-import { PlannerExternalReferences } from '@microsoft/microsoft-graph-types'
+import { PlannerExternalReferences, PlannerTask } from '@microsoft/microsoft-graph-types'
 import { IFieldCustomizerCellEventParameters } from '@microsoft/sp-listview-extensibility'
 import { PageContext } from '@microsoft/sp-page-context'
 import strings from 'ProjectExtensionsStrings'
 import _ from 'lodash'
 import { DataAdapter } from './dataAdapter'
+
+/**
+ * The lines of a risk's action field that are not the title of one of `tasks`: actions written in
+ * the field that are no Planner tasks, such as one whose task Planner refused when the field was
+ * migrated. Blank lines are left out.
+ *
+ * @param fieldValue The value of the action field
+ * @param tasks The tasks whose titles are not counted
+ */
+export function textBesidesTasks(fieldValue: string, tasks: Array<{ title: string }>): string[] {
+  const titles = new Set(tasks.map(({ title }) => (title ?? '').trim()))
+  return (fieldValue ?? '')
+    .split(/\r?\n/)
+    .filter((line) => line.trim() !== '' && !titles.has(line.trim()))
+}
 
 /**
  * Represents the context object passed to the field customizer for a risk action item.
@@ -63,21 +78,42 @@ export class RiskActionItemContext {
   }
 
   /**
-   * Updates the current RiskActionItemContext with the provided tasks.
+   * Updates the current RiskActionItemContext with the provided tasks: the action field gets their
+   * titles, then the text to keep.
    *
    * @param tasks An array of RiskActionPlannerTaskReference objects to update the context with.
+   * @param keep The text the action field keeps after the titles. By default, when the risk has
+   * Planner tasks, the lines that are not the title of a task it had or gets (see
+   * `textBesidesTasks`), so a synchronisation or a new task does not drop an action Planner refused
+   * at the migration. Without tasks, nothing: the first task replaces the actions written by hand,
+   * as the popover says.
    *
    * @returns The updated RiskActionItemContext object.
    */
-  public update(tasks: RiskActionPlannerTaskReference[]): RiskActionItemContext {
+  public update(
+    tasks: RiskActionPlannerTaskReference[],
+    keep: string[] = this._textBesides(tasks)
+  ): RiskActionItemContext {
     const newContext = new RiskActionItemContext(this._event, this._pageContext)
-    newContext.fieldValue = tasks.map((task) => task.title).join('\n')
+    newContext.fieldValue = [...tasks.map((task) => task.title), ...keep].join('\n')
     newContext.hiddenFieldValues = {
       ...this.hiddenFieldValues,
       data: RiskActionPlannerTaskReference.toString(tasks),
       tasks
     }
     return newContext
+  }
+
+  /**
+   * The lines of the action field that are not the title of a task the risk has or `tasks`, and
+   * none when the risk has no Planner tasks.
+   *
+   * @param tasks The tasks the risk gets
+   */
+  private _textBesides(tasks: RiskActionPlannerTaskReference[]): string[] {
+    const current = this.hiddenFieldValues?.tasks ?? []
+    if (current.length === 0) return []
+    return textBesidesTasks(this.fieldValue, [...current, ...tasks])
   }
 
   /**
@@ -321,4 +357,13 @@ export type RiskActionHiddenFieldValues = {
   data: string
   tasks: RiskActionPlannerTaskReference[]
   updated: Date | string
+}
+
+/**
+ * What adding the tasks of several actions at once did: the tasks Planner added, in the order of
+ * the actions, and the actions whose task Planner refused, each with what Planner said.
+ */
+export type RiskActionTasksResult = {
+  added: PlannerTask[]
+  refused: Array<{ title: string; reason: string }>
 }

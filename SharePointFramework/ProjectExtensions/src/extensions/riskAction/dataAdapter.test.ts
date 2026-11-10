@@ -12,6 +12,15 @@ interface IFakeTask {
   bucketId: string
   percentComplete?: number
 }
+
+/** What PnPjs 4 fails with when Graph refuses a request: Graph's error body after `::>`. */
+const graphError = (message: string) =>
+  new Error(
+    `Error making HttpClient request in queryable [403] Forbidden ::> ${JSON.stringify({
+      error: { code: 'Forbidden', message }
+    })}`
+  )
+
 const planner = {
   buckets: [] as Array<{ id: string; name: string; planId: string }>,
   addedBuckets: [] as string[],
@@ -19,7 +28,9 @@ const planner = {
   taskUpdates: [] as any[],
   detailUpdates: [] as any[],
   failBuckets: false,
-  refusedTitles: [] as string[]
+  /** The titles of the tasks Planner refuses, and what it refuses them with */
+  refusedTitles: [] as string[],
+  refusal: graphError('Du har ikke tilgang til planen.')
 }
 const list = {
   items: [] as any[],
@@ -77,7 +88,7 @@ const graph = {
     tasks: {
       add: ({ planId, title, bucketId }: { planId: string; title: string; bucketId: string }) =>
         later(() => {
-          if (planner.refusedTitles.includes(title)) throw new Error('Forbidden')
+          if (planner.refusedTitles.includes(title)) throw planner.refusal
           const task = { id: `task-${planner.tasks.length + 1}`, title, planId, bucketId }
           planner.tasks.push(task)
           return { ...task, '@odata.etag': 'W/"1"' }
@@ -180,12 +191,18 @@ function dataAdapter() {
   return adapter
 }
 
-/** The risk with `ID` 7 as the customizer reads it, with its tasks in Planner. */
-function riskWithTasks(tasks: Array<{ id: string; title: string; isCompleted: string }>) {
+/**
+ * The risk with `ID` 7 as the customizer reads it, with its tasks in Planner and its action field,
+ * by default the tasks' titles.
+ */
+function riskWithTasks(
+  tasks: Array<{ id: string; title: string; isCompleted: string }>,
+  fieldValue = tasks.map(({ title }) => title).join('\n')
+) {
   const values: Record<string, unknown> = { ID: 7, Title: 'Leverandøren går konkurs' }
   return RiskActionItemContext.create(
     {
-      fieldValue: tasks.map(({ title }) => title).join('\n'),
+      fieldValue,
       listItem: { getValueByName: (name: string) => values[name] }
     } as any,
     { list: { serverRelativeUrl: '/sites/frisbee/Lists/Usikkerhet' } } as any,
@@ -201,6 +218,7 @@ beforeEach(() => {
   planner.detailUpdates = []
   planner.failBuckets = false
   planner.refusedTitles = []
+  planner.refusal = graphError('Du har ikke tilgang til planen.')
   list.items = []
   list.failItems = false
   list.itemUpdates = []
@@ -210,16 +228,17 @@ beforeEach(() => {
 
 describe('DataAdapter (risk actions in Planner)', () => {
   it('adds the bucket once when the actions of a risk are migrated together, and puts every task in it', async () => {
-    const tasks = await dataAdapter().addTasks(
+    const { added, refused } = await dataAdapter().addTasks(
       ['Finn en reserveleverandør', 'Inngå rammeavtale', 'Følg opp leveransene'],
       RISK
     )
     expect(planner.addedBuckets).toEqual(['Tiltak'])
-    expect(tasks.map(({ title }) => title)).toEqual([
+    expect(added.map(({ title }) => title)).toEqual([
       'Finn en reserveleverandør',
       'Inngå rammeavtale',
       'Følg opp leveransene'
     ])
+    expect(refused).toEqual([])
     expect(planner.tasks.map(({ bucketId }) => bucketId)).toEqual([
       'bucket-1',
       'bucket-1',
@@ -300,13 +319,70 @@ describe('DataAdapter (risk actions in Planner)', () => {
     ])
   })
 
-  it('gives no task for one Planner refuses, and adds the others', async () => {
+  it('names each action Planner refuses with what Planner said, and adds the others', async () => {
     planner.refusedTitles = ['Inngå rammeavtale']
-    const tasks = await dataAdapter().addTasks(
-      ['Finn en reserveleverandør', 'Inngå rammeavtale'],
+    const { added, refused } = await dataAdapter().addTasks(
+      ['Finn en reserveleverandør', 'Inngå rammeavtale', 'Følg opp leveransene'],
       RISK
     )
-    expect(tasks.map((task) => task?.title ?? null)).toEqual(['Finn en reserveleverandør', null])
+    expect(added.map(({ title }) => title)).toEqual([
+      'Finn en reserveleverandør',
+      'Følg opp leveransene'
+    ])
+    expect(refused).toEqual([
+      { title: 'Inngå rammeavtale', reason: 'Du har ikke tilgang til planen.' }
+    ])
+  })
+
+  it('fails a task Planner refuses with what Planner said, for the new-action panel to show', async () => {
+    planner.refusedTitles = ['Inngå rammeavtale']
+    const task = new Map([['title', 'Inngå rammeavtale']])
+    await expect(dataAdapter().addTask(task, RISK)).rejects.toMatchObject({
+      message: 'Du har ikke tilgang til planen.'
+    })
+    // Not Graph's error body: the message as it is.
+    planner.refusal = new Error('Nettverket svarte ikke')
+    await expect(dataAdapter().addTask(task, RISK)).rejects.toMatchObject({
+      message: 'Nettverket svarte ikke'
+    })
+  })
+
+  it("keeps the actions Planner refused at the migration written after the tasks' titles, with no task stored for them", async () => {
+    const updated = await dataAdapter().updateItem(
+      [
+        { id: 'task-1', title: 'Finn en reserveleverandør' },
+        { id: 'task-2', title: 'Følg opp leveransene' }
+      ],
+      riskWithTasks([], 'Finn en reserveleverandør\nInngå rammeavtale\nFølg opp leveransene'),
+      ['Inngå rammeavtale']
+    )
+    expect(updated.fieldValue).toBe(
+      'Finn en reserveleverandør\nFølg opp leveransene\nInngå rammeavtale'
+    )
+    expect(list.itemUpdates).toEqual([
+      [
+        7,
+        {
+          GtRiskAction: 'Finn en reserveleverandør\nFølg opp leveransene\nInngå rammeavtale',
+          RiskActionData:
+            'task-1,Finn%20en%20reserveleverand%C3%B8r,0|task-2,F%C3%B8lg%20opp%20leveransene,0'
+        }
+      ]
+    ])
+  })
+
+  it('keeps the text written besides the tasks when a task is added, until an action of it is a task', async () => {
+    const risk = riskWithTasks(
+      [{ id: 'task-1', title: 'Finn en reserveleverandør', isCompleted: '0' }],
+      'Finn en reserveleverandør\nInngå rammeavtale'
+    )
+    const adapter = dataAdapter()
+    expect(
+      (await adapter.updateItem([{ id: 'task-2', title: 'Følg opp leveransene' }], risk)).fieldValue
+    ).toBe('Finn en reserveleverandør\nFølg opp leveransene\nInngå rammeavtale')
+    expect(
+      (await adapter.updateItem([{ id: 'task-3', title: 'Inngå rammeavtale' }], risk)).fieldValue
+    ).toBe('Finn en reserveleverandør\nInngå rammeavtale')
   })
 
   it('stores the new tasks after the ones the risk had', async () => {
@@ -360,6 +436,28 @@ describe('DataAdapter (risk actions in Planner)', () => {
         }
       ]
     ])
+  })
+
+  it('keeps, as it synchronises, the text written besides the tasks, such as an action Planner refused', async () => {
+    planner.tasks = [
+      {
+        id: 'task-1',
+        title: 'Finn to reserveleverandører',
+        planId: 'plan-1',
+        bucketId: 'bucket-1',
+        percentComplete: 0
+      }
+    ]
+    planner.buckets = [{ id: 'bucket-1', name: 'Tiltak', planId: 'plan-1' }]
+    await dataAdapter().syncTasks(
+      riskWithTasks(
+        [{ id: 'task-1', title: 'Finn en reserveleverandør', isCompleted: '0' }],
+        'Finn en reserveleverandør\nInngå rammeavtale'
+      )
+    )
+    expect(list.itemUpdates[0][1].GtRiskAction).toBe(
+      'Finn to reserveleverandører\nInngå rammeavtale'
+    )
   })
 
   it('reads a task with its description, dates, progress and the people assigned', async () => {

@@ -235,6 +235,9 @@ define([], function () {
     NewRiskActionSaved: 'The action «{0}» was added to Planner',
     NewRiskActionSaveFailed: 'The action was not added',
     MigrateRiskActionsDone: '{0} tasks were created in Planner',
-    MigrateRiskActionsFailed: 'The tasks were not created'
+    MigrateRiskActionsFailed: 'The tasks were not created',
+    MigrateRiskActionsPartlyDone: '{0} of {1} actions were created in Planner',
+    MigrateRiskActionsRefusedText: 'These actions were not created in Planner, and are still written as text in the action field:',
+    MigrateRiskActionsRefusedAction: '"{0}": {1}'
   }
 })

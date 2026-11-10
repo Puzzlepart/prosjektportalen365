@@ -231,6 +231,9 @@ declare interface IProjectExtensionsStrings {
   NewRiskActionSaveFailed: string
   MigrateRiskActionsDone: string
   MigrateRiskActionsFailed: string
+  MigrateRiskActionsPartlyDone: string
+  MigrateRiskActionsRefusedText: string
+  MigrateRiskActionsRefusedAction: string
 }
 
 declare module 'ProjectExtensionsStrings' {

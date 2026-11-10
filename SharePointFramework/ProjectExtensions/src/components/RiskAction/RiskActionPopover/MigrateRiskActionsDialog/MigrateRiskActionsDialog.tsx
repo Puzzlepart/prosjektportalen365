@@ -24,7 +24,9 @@ import { getFluentIcon, format } from 'pp365-shared-library'
 /**
  * Migrate risk actions dialog. This dialog is used to migrate risk actions to planner tasks. Its
  * buttons stay while the tasks are made, unusable but focusable (`disabledFocusable`), so the
- * button pressed keeps the focus (WCAG 2.4.3); the bar meanwhile is named by its text.
+ * button pressed keeps the focus (WCAG 2.4.3); the bar meanwhile is named by its text. When
+ * Planner refuses an action's task, it says which and why; once some actions are tasks, only the
+ * close button is left, since migrating the field again would add them twice.
  */
 export const MigrateRiskActionsDialog: FC<{ children?: ReactNode }> = (props) => {
   const {
@@ -35,6 +37,9 @@ export const MigrateRiskActionsDialog: FC<{ children?: ReactNode }> = (props) =>
     setOpen,
     isMigrating,
     migrateError,
+    refusal,
+    isMigrated,
+    closeButtonRef,
     progressTextId,
     separator,
     setSeparator
@@ -63,29 +68,33 @@ export const MigrateRiskActionsDialog: FC<{ children?: ReactNode }> = (props) =>
             <MessageBar intent='info' className={styles.infoText}>
               <MessageBarBody>{strings.MigrateRiskActionsDialogInfoText}</MessageBarBody>
             </MessageBar>
-            <Field label={strings.MigrateRiskActionsDialogSeparatorLabel}>
-              <Dropdown
-                disabled={isMigrating}
-                defaultValue={separator}
-                defaultSelectedOptions={[separator]}
-                onOptionSelect={(_, data) => setSeparator(data.optionText)}
-              >
-                <Option value={strings.MigrateRiskActionsDialogSeparatorOptionLinebreak}>
-                  {strings.MigrateRiskActionsDialogSeparatorOptionLinebreak}
-                </Option>
-                <Option value={strings.MigrateRiskActionsDialogSeparatorOptionComma}>
-                  {strings.MigrateRiskActionsDialogSeparatorOptionComma}
-                </Option>
-                <Option value={strings.MigrateRiskActionsDialogSeparatorOptionCommaNoSpaces}>
-                  {strings.MigrateRiskActionsDialogSeparatorOptionCommaNoSpaces}
-                </Option>
-              </Dropdown>
-            </Field>
-            <ol>
-              {tasks.map((t, index) => (
-                <li key={index}>{t}</li>
-              ))}
-            </ol>
+            {!isMigrated && (
+              <>
+                <Field label={strings.MigrateRiskActionsDialogSeparatorLabel}>
+                  <Dropdown
+                    disabled={isMigrating}
+                    defaultValue={separator}
+                    defaultSelectedOptions={[separator]}
+                    onOptionSelect={(_, data) => setSeparator(data.optionText)}
+                  >
+                    <Option value={strings.MigrateRiskActionsDialogSeparatorOptionLinebreak}>
+                      {strings.MigrateRiskActionsDialogSeparatorOptionLinebreak}
+                    </Option>
+                    <Option value={strings.MigrateRiskActionsDialogSeparatorOptionComma}>
+                      {strings.MigrateRiskActionsDialogSeparatorOptionComma}
+                    </Option>
+                    <Option value={strings.MigrateRiskActionsDialogSeparatorOptionCommaNoSpaces}>
+                      {strings.MigrateRiskActionsDialogSeparatorOptionCommaNoSpaces}
+                    </Option>
+                  </Dropdown>
+                </Field>
+                <ol>
+                  {tasks.map((t, index) => (
+                    <li key={index}>{t}</li>
+                  ))}
+                </ol>
+              </>
+            )}
             {/* Named by the text under it, once: as a field's message the text was its
                 description too, and read twice. */}
             {isMigrating && (
@@ -104,18 +113,33 @@ export const MigrateRiskActionsDialog: FC<{ children?: ReactNode }> = (props) =>
                 </MessageBarBody>
               </MessageBar>
             )}
+            {refusal && (
+              <MessageBar intent={refusal.intent} className={styles.refusal}>
+                <MessageBarBody>
+                  <MessageBarTitle>{refusal.title}</MessageBarTitle>
+                  {strings.MigrateRiskActionsRefusedText}
+                  <ul>
+                    {refusal.actions.map((action, index) => (
+                      <li key={index}>{action}</li>
+                    ))}
+                  </ul>
+                </MessageBarBody>
+              </MessageBar>
+            )}
           </DialogContent>
           <DialogActions>
-            <Button
-              appearance='primary'
-              onClick={onMigrate}
-              disabled={tasks.length === 0}
-              disabledFocusable={isMigrating}
-            >
-              {format(strings.MigrateRiskActionsDialogCreatePlannerTasks, tasks.length)}
-            </Button>
+            {!isMigrated && (
+              <Button
+                appearance='primary'
+                onClick={onMigrate}
+                disabled={tasks.length === 0}
+                disabledFocusable={isMigrating}
+              >
+                {format(strings.MigrateRiskActionsDialogCreatePlannerTasks, tasks.length)}
+              </Button>
+            )}
             <DialogTrigger action='close' disableButtonEnhancement>
-              <Button appearance='secondary' disabledFocusable={isMigrating}>
+              <Button appearance='secondary' disabledFocusable={isMigrating} ref={closeButtonRef}>
                 {strings.MigrateRiskActionsDialogCancel}
               </Button>
             </DialogTrigger>

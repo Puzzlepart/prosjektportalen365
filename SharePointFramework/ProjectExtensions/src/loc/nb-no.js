@@ -235,6 +235,9 @@ define([], function () {
     NewRiskActionSaved: 'Tiltaket «{0}» er lagt til i Planner',
     NewRiskActionSaveFailed: 'Tiltaket ble ikke lagt til',
     MigrateRiskActionsDone: '{0} oppgaver er opprettet i Planner',
-    MigrateRiskActionsFailed: 'Oppgavene ble ikke opprettet'
+    MigrateRiskActionsFailed: 'Oppgavene ble ikke opprettet',
+    MigrateRiskActionsPartlyDone: '{0} av {1} tiltak er opprettet i Planner',
+    MigrateRiskActionsRefusedText: 'Disse tiltakene ble ikke opprettet i Planner, og står fortsatt som tekst i tiltaksfeltet:',
+    MigrateRiskActionsRefusedAction: '«{0}»: {1}'
   }
 })

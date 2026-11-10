@@ -26,7 +26,7 @@ const RISK_ACTION_FIELD_VALUE_DEFAULT_PROPS: Partial<IRiskActionFieldValueProps>
 export const RiskActionFieldValue: FC<IRiskActionFieldValueProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, RISK_ACTION_FIELD_VALUE_DEFAULT_PROPS)
   const context = useRiskActionFieldCustomizerContext()
-  const { isFieldValueSet, isHiddenFieldValueSet, tasks, horizontalLayout, gap } =
+  const { isFieldValueSet, isHiddenFieldValueSet, tasks, textBesidesTasks, horizontalLayout, gap } =
     useRiskActionFieldValue()
   let element: ReactElement = null
   if (isHiddenFieldValueSet) {
@@ -42,6 +42,7 @@ export const RiskActionFieldValue: FC<IRiskActionFieldValueProps> = (incomingPro
             <PlannerTaskItem key={index} task={task} />
           ))}
         </div>
+        {textBesidesTasks && <div className={styles.fieldValue}>{textBesidesTasks}</div>}
         <PopoverTrigger disableButtonEnhancement>
           <Button {...props.adminButton} className={styles.adminButton}>
             {strings.RiskActionFieldValueAdminButtonText}

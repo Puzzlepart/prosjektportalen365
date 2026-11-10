@@ -106,9 +106,12 @@ const adapter = {
   syncTasks: jest.fn(),
   addTask: jest.fn(() => Promise.resolve({ id: 'task-9', title: 'Ny oppgave', isCompleted: '0' })),
   addTasks: jest.fn((titles: string[]) =>
-    Promise.resolve(titles.map((title, index) => ({ id: `new-${index}`, title, isCompleted: '0' })))
+    Promise.resolve({
+      added: titles.map((title, index) => ({ id: `new-${index}`, title, isCompleted: '0' })),
+      refused: [] as Array<{ title: string; reason: string }>
+    })
   ),
-  updateItem: jest.fn((tasks: any[], itemContext: any) =>
+  updateItem: jest.fn((tasks: any[], itemContext: any, _keep?: string[]) =>
     Promise.resolve({
       ...itemContext,
       hiddenFieldValues: { data: 'oppdatert', tasks, updated: '2026-10-02T10:00:00Z' }
@@ -376,7 +379,7 @@ describe('RiskAction', () => {
   })
 
   it('keeps the focus and names the progress while the actions are migrated, and says when they are (WCAG 2.4.3, 4.1.2, 4.1.3)', async () => {
-    let finish: (tasks: any[]) => void
+    let finish: (result: any) => void
     adapter.addTasks.mockImplementationOnce(() => new Promise((resolve) => (finish = resolve)))
     renderRiskAction('Ring leverandøren')
     fireEvent.click(screen.getByText('Ring leverandøren'))
@@ -394,8 +397,97 @@ describe('RiskAction', () => {
     expect(
       screen.getByRole('progressbar', { name: strings.MigrateRiskActionsDialogProgressText })
     ).not.toHaveAccessibleDescription()
-    await act(async () => finish([{ id: 'new-0', title: 'Ring leverandøren', isCompleted: '0' }]))
+    await act(async () =>
+      finish({
+        added: [{ id: 'new-0', title: 'Ring leverandøren', isCompleted: '0' }],
+        refused: []
+      })
+    )
     await waitFor(() => expect(announced()).toContain(format(strings.MigrateRiskActionsDone, 1)))
+  })
+
+  it('migrates the actions Planner takes, keeps the one it refuses written on the risk, and says which and why', async () => {
+    const added = [
+      { id: 'new-0', title: 'Ring leverandøren', isCompleted: '0' },
+      { id: 'new-2', title: 'Følg opp kontrakten', isCompleted: '0' }
+    ]
+    adapter.addTasks.mockImplementationOnce(() =>
+      Promise.resolve({
+        added,
+        refused: [{ title: 'Avtal en reserve', reason: 'Du har ikke tilgang til planen.' }]
+      })
+    )
+    const itemContext = renderRiskAction('Ring leverandøren\nAvtal en reserve\nFølg opp kontrakten')
+    fireEvent.click(screen.getByText(/Avtal en reserve/))
+    fireEvent.click(screen.getByText(strings.NewRiskActionPanelMigrateRiskActions))
+    fireEvent.click(
+      await screen.findByText(format(strings.MigrateRiskActionsDialogCreatePlannerTasks, 3))
+    )
+    expect(
+      await screen.findByText(format(strings.MigrateRiskActionsPartlyDone, 2, 3))
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        format(
+          strings.MigrateRiskActionsRefusedAction,
+          'Avtal en reserve',
+          'Du har ikke tilgang til planen.'
+        )
+      )
+    ).toBeInTheDocument()
+    expect(adapter.updateItem).toHaveBeenCalledWith(added, itemContext, ['Avtal en reserve'])
+    // Only the way out is left, and has the focus: migrating the field again would add the two
+    // tasks a second time.
+    expect(
+      screen.queryByText(format(strings.MigrateRiskActionsDialogCreatePlannerTasks, 3))
+    ).toBeNull()
+    await waitFor(() =>
+      expect(
+        screen.getByText(strings.MigrateRiskActionsDialogCancel).closest('button')
+      ).toHaveFocus()
+    )
+    // Under the two tasks, the action Planner refused, as it is written on the risk.
+    fireEvent.click(screen.getByText(strings.MigrateRiskActionsDialogCancel))
+    await waitFor(() =>
+      expect(screen.queryByText(format(strings.MigrateRiskActionsDialogTitle, RISK))).toBeNull()
+    )
+    const list = screen.getByRole('list', { name: strings.RiskActionTasksLabel })
+    expect(within(list).getAllByRole('listitem')).toHaveLength(2)
+    expect(screen.getByText('Avtal en reserve')).toBeInTheDocument()
+  })
+
+  it('writes nothing to the risk when Planner refuses all its actions, says why, and lets them be migrated again', async () => {
+    adapter.addTasks.mockImplementationOnce(() =>
+      Promise.resolve({
+        added: [],
+        refused: [{ title: 'Ring leverandøren', reason: 'Planen finnes ikke.' }]
+      })
+    )
+    renderRiskAction('Ring leverandøren')
+    fireEvent.click(screen.getByText('Ring leverandøren'))
+    fireEvent.click(screen.getByText(strings.NewRiskActionPanelMigrateRiskActions))
+    fireEvent.click(
+      await screen.findByText(format(strings.MigrateRiskActionsDialogCreatePlannerTasks, 1))
+    )
+    expect(await screen.findByText(strings.MigrateRiskActionsFailed)).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        format(strings.MigrateRiskActionsRefusedAction, 'Ring leverandøren', 'Planen finnes ikke.')
+      )
+    ).toBeInTheDocument()
+    expect(adapter.updateItem).not.toHaveBeenCalled()
+    expect(
+      screen
+        .getByText(format(strings.MigrateRiskActionsDialogCreatePlannerTasks, 1))
+        .closest('button')
+    ).toBeEnabled()
+  })
+
+  it('shows what is written in the field besides the Planner tasks under them', () => {
+    renderRiskAction('Ring leverandøren\nAvtal en reserve', [PLANNER_TASKS[0]])
+    const list = screen.getByRole('list', { name: strings.RiskActionTasksLabel })
+    expect(within(list).getAllByRole('listitem')).toHaveLength(1)
+    expect(screen.getByText('Avtal en reserve')).toBeInTheDocument()
   })
 
   it('adds a new action to Planner with its title, days and responsible, and closes', async () => {
@@ -479,6 +571,8 @@ describe('RiskAction', () => {
       ['Ring leverandøren', 'Avtal en reserve'],
       itemContext
     )
+    // Planner took every action: nothing is kept besides the tasks.
+    expect(adapter.updateItem.mock.calls[0][2]).toEqual([])
     await waitFor(() =>
       expect(screen.queryByText(format(strings.MigrateRiskActionsDialogTitle, RISK))).toBeNull()
     )

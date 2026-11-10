@@ -21,6 +21,12 @@
         }
       }
 
+      // The actions Planner refused, under the message's text.
+      .refusal ul {
+        margin: 4px 0 0 0;
+        padding-left: 20px;
+      }
+
       .progress {
         margin: 12px 0 0 0;
 
