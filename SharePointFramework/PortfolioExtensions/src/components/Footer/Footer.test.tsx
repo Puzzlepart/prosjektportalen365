@@ -281,6 +281,27 @@ describe('Footer', () => {
     await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Alfa' })).toHaveFocus())
   })
 
+  it('leaves Escape to the open useful links when the pointer comes back to the button (WCAG 2.1.1)', async () => {
+    // The menu, as it is placed, passes over the button under a resting pointer. The tooltip the
+    // pointer showed then, not drawn beside the open menu, took the first Escape (run 42790371312).
+    render(
+      <Footer
+        {...footerProps({
+          loadLinks: jest.fn(() =>
+            Promise.resolve([{ Url: 'https://alfa.example', Description: 'Alfa' }])
+          )
+        })}
+      />
+    )
+    const button = screen.getByText(strings.LinksListLabel, { selector: 'button' })
+    fireEvent.click(button)
+    const link = await screen.findByRole('menuitem', { name: 'Alfa' })
+    fireEvent.pointerEnter(button)
+    // Past the tooltip's delay of 250 ms.
+    await act(() => new Promise((resolve) => setTimeout(resolve, 400)))
+    expect(fireEvent.keyDown(link, { key: 'Escape' })).toBe(true)
+  })
+
   it('shows the installed version and, opened, the installation and the latest release', async () => {
     const loadGitHubReleases = jest.fn(() => Promise.resolve([release('v1.15.2')]))
     render(<Footer {...footerProps({ loadGitHubReleases })} />)

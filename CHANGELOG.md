@@ -194,6 +194,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Rettet en feil hvor alle taksonomifeltene i redigeringspanelene (blant annet `Rediger prosjektinformasjon`) hadde navnet «Skriv inn termen som skal merkes» for skjermlesere i stedet for feltets navn
 - Rettet en feil i `Risikotiltak` hvor migreringen av tiltak til Planner feilet med «Cannot read properties of null (reading 'id')» når Planner avviste oppgaven for ett av tiltakene. Oppgavene Planner hadde opprettet for de andre tiltakene, ble da ikke koblet til risikoen, og ble opprettet på nytt ved neste forsøk. Nå blir tiltakene Planner tar imot, oppgaver som før, et tiltak Planner avviser blir stående som tekst på risikoen (vist under oppgavene, og beholdt når oppgavene synkroniseres eller et nytt tiltak legges til), og dialogen sier hvilke tiltak som ikke ble migrert og hva Planner svarte. «Nytt tiltak» viser også hva Planner svarte når oppgaven avvises
 - Rettet en feil hvor `Status muligheter` brukte fargene for risiko, slik at «Høy» ble vist rødt. Høy vises nå grønt, Medium gult og Lav rødt, både på nye installasjoner og på huber som oppgraderes, så lenge fargene ikke er endret
+- Rettet en feil hvor «Nyttige lenker» i bunnteksten og hurtigmenyen for prosjekt i `Prosjektutlisting` og `Prosjektkort` ikke lukket seg på første Escape når pekeren sto på knappen som åpnet menyen. Verktøytipset til knappen, som ikke vises mens menyen er åpen, tok imot tasten
 
 ---
 

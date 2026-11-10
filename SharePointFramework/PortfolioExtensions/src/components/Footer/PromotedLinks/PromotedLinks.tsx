@@ -18,14 +18,20 @@ import resource from 'SharedResources'
 import { usePromotedLinks } from './usePromotedLinks'
 
 export const PromotedLinks: FC = () => {
-  const { context, fluentProviderId, popoverId, open, onOpenChange, isLoaded } = usePromotedLinks()
+  const { context, fluentProviderId, popoverId, open, onOpenChange, isLoaded, tooltip } =
+    usePromotedLinks()
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>
         <Menu open={open} onOpenChange={onOpenChange}>
           <MenuTrigger disableButtonEnhancement>
             {/* Text only: a link in a tooltip is out of the keyboard's reach (WCAG 2.1.1). */}
-            <Tooltip relationship='description' withArrow content={strings.LinksListDescription}>
+            <Tooltip
+              {...tooltip}
+              relationship='description'
+              withArrow
+              content={strings.LinksListDescription}
+            >
               <MenuButton size='small' appearance='subtle' icon={getFluentIcon('Link')}>
                 {strings.LinksListLabel}
               </MenuButton>

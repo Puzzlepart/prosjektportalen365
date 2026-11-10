@@ -1,4 +1,5 @@
 import { MenuProps, useId } from '@fluentui/react-components'
+import { useMenuTriggerTooltip } from 'pp365-shared-library'
 import { useContext, useEffect, useState } from 'react'
 import { FooterContext } from '../context'
 
@@ -6,7 +7,8 @@ import { FooterContext } from '../context'
  * Logic of the useful links menu: it loads the links the first time it opens, and moves the
  * focus to the first of them once they are there. The menu opens on a spinner, with nothing in
  * it to take the focus, so the focus stayed on the button, outside the menu: the arrow keys did
- * not reach the links, and Escape left the menu open (WCAG 2.1.1).
+ * not reach the links, and Escape left the menu open (WCAG 2.1.1). The button's tooltip stays
+ * hidden while the menu is open, where it took the first Escape (`useMenuTriggerTooltip`).
  */
 export function usePromotedLinks() {
   const context = useContext(FooterContext)
@@ -14,6 +16,7 @@ export function usePromotedLinks() {
   const popoverId = useId('promoted-links')
   const [open, setOpen] = useState(false)
   const isLoaded = context.areLinksLoaded && !context.isLinksLoading
+  const tooltip = useMenuTriggerTooltip(open)
 
   const onOpenChange: MenuProps['onOpenChange'] = (_, data) => {
     setOpen(data.open)
@@ -27,5 +30,5 @@ export function usePromotedLinks() {
     popover.querySelector<HTMLElement>('[role="menuitem"]')?.focus()
   }, [open, isLoaded])
 
-  return { context, fluentProviderId, popoverId, open, onOpenChange, isLoaded } as const
+  return { context, fluentProviderId, popoverId, open, onOpenChange, isLoaded, tooltip } as const
 }

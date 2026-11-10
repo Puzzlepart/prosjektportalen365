@@ -249,6 +249,13 @@ checked by hand and with which reader and browser: axe finds only part of what W
   `SiteSettings`).
 - A button with a `title` and a `Tooltip` of the same text as its description is read twice:
   give the tooltip `relationship='label'` and drop the title (the project card's panel button).
+- A `Tooltip` on a menu's trigger took the first Escape from the open menu, which stayed open.
+  Fluent draws no tooltip beside its open menu, but a tooltip the pointer shows then still
+  listens for Escape and cancels it, and the menu ignores a cancelled Escape. The pointer shows it
+  without moving when the menu, as it is placed, passes over the button under it (the footer's
+  useful links, run 42790371312). Spread `useMenuTriggerTooltip(open)` (shared-library) on the
+  tooltip, with the menu's `open` in state (`PromotedLinks`, `ProjectMenu`). A popover's surface
+  closes on a cancelled Escape too.
 - Fluent's `Avatar` is an `img` named by its `name`, so beside the same name in text a screen
   reader reads the name twice: `aria-hidden` there; alone, it keeps its name. Fluent's `Persona`
   does not hide its own: pass `avatar={{ 'aria-hidden': true, … }}` (`ProjectProperty`,

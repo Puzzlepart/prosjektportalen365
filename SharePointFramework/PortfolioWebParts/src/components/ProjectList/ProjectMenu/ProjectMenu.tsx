@@ -13,6 +13,7 @@ import strings from 'PortfolioWebPartsStrings'
 import * as React from 'react'
 import { FC } from 'react'
 import { IProjectMenu } from './types'
+import { useProjectMenu } from './useProjectMenu'
 const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular)
 
 const useStyles = makeStyles({
@@ -26,11 +27,17 @@ const useStyles = makeStyles({
 
 export const ProjectMenu: FC<IProjectMenu> = (props) => {
   const styles = useStyles()
+  const { open, onOpenChange, tooltip } = useProjectMenu()
 
   return (
-    <Menu>
+    <Menu open={open} onOpenChange={onOpenChange}>
       <MenuTrigger disableButtonEnhancement>
-        <Tooltip content={strings.ProjectListQuickLaunch} relationship='label' withArrow>
+        <Tooltip
+          {...tooltip}
+          content={strings.ProjectListQuickLaunch}
+          relationship='label'
+          withArrow
+        >
           <MenuButton
             className={props.appearance === 'subtle' ? styles.menuButton : ''}
             appearance={props.appearance}
