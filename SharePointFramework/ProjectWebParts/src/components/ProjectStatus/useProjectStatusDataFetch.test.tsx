@@ -1,8 +1,14 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
 // Babel, so mocks are not hoisted. The data adapter answers the first call of the fetch with what
-// `adapter.fail` holds, or reads the project when it holds nothing, and its hub is `adapter.hub`.
-const adapter: { fail: unknown; hub: { isAvailable: boolean; unavailableStatus?: number } } = {
+// `adapter.fail` holds, or reads the project when it holds nothing; its hub is `adapter.hub`, and
+// `adapter.shielded` says whether the project is shielded.
+const adapter: {
+  fail: unknown
+  shielded: string
+  hub: { isAvailable: boolean; unavailableStatus?: number }
+} = {
   fail: undefined,
+  shielded: 'none',
   hub: { isAvailable: true }
 }
 jest.mock('../../data', () => ({
@@ -10,7 +16,7 @@ jest.mock('../../data', () => ({
   default: {
     isConfigured: true,
     get portalDataService() {
-      return adapter.hub
+      return { ...adapter.hub, shieldedProjectState: adapter.shielded }
     },
     project: {
       getProjectInformationData: () =>
@@ -36,8 +42,9 @@ import { useProjectStatusDataFetch } from './useProjectStatusDataFetch'
  * The failure is counted once, for the status web part, by the code of the error SharePoint gave:
  * the page shows a generic text, and the fetch keeps the original error as that text's cause.
  */
-async function errorMessageFor(failure: unknown) {
+async function errorMessageFor(failure: unknown, shielded = 'none') {
   adapter.fail = failure
+  adapter.shielded = shielded
   const dispatch = jest.fn()
   /** Runs the status fetch so the test can inspect its dispatched failure. */
   const Probe: React.FC = () => {
@@ -106,5 +113,10 @@ describe('useProjectStatusDataFetch', () => {
     const store = JSON.stringify(telemetryStore())
     expect(store).not.toContain('Prosjektstatus')
     expect(store).not.toContain(strings.ProjectStatusDataErrorText)
+  })
+
+  it('says why when it could not be determined whether the project is shielded', async () => {
+    const unresolved = new Error('Kunne ikke avgjøre om prosjektet er skjermet.')
+    expect(await errorMessageFor(unresolved, 'unresolved')).toBe(unresolved.message)
   })
 })

@@ -71,6 +71,18 @@ export async function fetchTimelineData(
     })
     .filter(Boolean)
 
+  // A shielded project has no timeline items: they live on the hub, linked to the project's entry
+  // there. Its own deliveries are still shown.
+  if (SPDataAdapter.isShieldedProject) {
+    return {
+      timelineContentItems: projectDeliveries,
+      timelineListItems: [],
+      timelineContentEditableFields: [],
+      columns: [] as IListColumn[],
+      timelineConfig
+    }
+  }
+
   let timelineContentFields: SPField[]
   let effectiveContentTypeId: string | undefined
   if (timelineContentTypeId) {

@@ -27,7 +27,11 @@ import { FetchDataResult, IProjectStatusProps } from './types'
  * Builds editable report fields from the supplied or default status-report content type.
  */
 async function getReportFields(contentTypeId = '0x010022252E35737A413FB56A1BA53862F6D5') {
-  const fields = await SPDataAdapter.portalDataService.getContentTypeFields(contentTypeId)
+  // Read where the reports are: a shielded project has the content type on its own site.
+  const fields = await SPDataAdapter.portalDataService.getContentTypeFields(
+    contentTypeId,
+    SPDataAdapter.portalDataService.getProjectDataWeb()
+  )
   const reportFields = fields.map((field) => new EditableSPField(field))
   return reportFields
 }
@@ -252,6 +256,10 @@ async function fetchData(
       selectedScope,
       error
     })
+    // Unresolved whether the project is shielded: the error says so, not that the hub is out of reach.
+    if (SPDataAdapter.portalDataService?.shieldedProjectState === 'unresolved') {
+      throw error
+    }
     // The cause lets the hook count the failure by the status SharePoint answered with.
     if (isNoHubError(error)) {
       throw errorWithCause(strings.ProjectStatusNoHubAccessErrorText, error)
