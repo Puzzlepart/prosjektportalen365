@@ -438,7 +438,11 @@ describe('ProjectSetup', () => {
       dialogs.setup.onDismiss()
       return new Promise((resolve) => setTimeout(resolve, 0))
     })
+    // A title and a message that differ, shown as information: closing the wizard is no error.
     expect(dialogs.error.error.message).toBe(strings.SetupAbortedText)
+    expect(dialogs.error.error.stack).toBe(strings.SetupAbortedMessage)
+    expect(strings.SetupAbortedMessage).not.toBe(strings.SetupAbortedText)
+    expect(dialogs.error.intent).toBe('info')
     expect(run.tasks[0].execute).not.toHaveBeenCalled()
   })
 

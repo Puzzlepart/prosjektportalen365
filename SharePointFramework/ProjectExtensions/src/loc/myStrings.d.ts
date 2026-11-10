@@ -150,6 +150,7 @@ declare interface IProjectExtensionsStrings {
   RemoveAlternativeLanguagesProgressText: string
   SetTaxonomyFieldsErrorMessage: string
   SetupAbortedText: string
+  SetupAbortedMessage: string
   SetupCompletedWithErrorsTitle: string
   SetupCompletedWithErrorsMessage: string
   SetupProjectInformationErrorMessage: string
@@ -193,6 +194,7 @@ declare interface IProjectExtensionsStrings {
   CancelButtonLabel: string
   NoTemplateSelectedText: string
   SelectedCountLabel: string
+  SelectedCountOneLabel: string
   MandatoryItemTooltipText: string
   ProgressAdvancedLogLabel: string
   ProgressTaskPendingText: string

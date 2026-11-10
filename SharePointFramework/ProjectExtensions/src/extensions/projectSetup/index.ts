@@ -500,10 +500,12 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           onDismiss: () => {
             this._unmount(placeholder)
             reject(
+              // The user closed the wizard: information, not an error.
               new ProjectSetupError(
                 '_getProvisioningInfo',
                 strings.SetupAbortedText,
-                strings.SetupAbortedText
+                strings.SetupAbortedMessage,
+                'info'
               )
             )
           },

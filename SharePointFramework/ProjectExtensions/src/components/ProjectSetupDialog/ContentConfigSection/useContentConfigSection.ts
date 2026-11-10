@@ -1,10 +1,9 @@
 import { TableRowId } from '@fluentui/react-components'
-import strings from 'ProjectExtensionsStrings'
-import { format } from 'pp365-shared-library'
 import { useState } from 'react'
 import { isAddedBefore } from '../../../extensions/projectSetup/listContentRecord'
 import { useProjectSetupDialogContext } from '../context'
 import { ON_LIST_CONTENT_CONFIG_CHANGED } from '../reducer'
+import { getSelectedCountText } from '../selectedCountText'
 import { useSearchAnnouncement } from '../useSearchAnnouncement'
 import { useColumns } from './useColumns'
 
@@ -78,7 +77,7 @@ export function useContentConfigSection() {
   ).length
 
   // A status, not a button: the count changes as items are picked, and is read out then.
-  const selectedCountText = format(strings.SelectedCountLabel, visibleSelectedCount)
+  const selectedCountText = getSelectedCountText(visibleSelectedCount)
   useSearchAnnouncement(searchTerm, items.length, allItems.length)
 
   return {

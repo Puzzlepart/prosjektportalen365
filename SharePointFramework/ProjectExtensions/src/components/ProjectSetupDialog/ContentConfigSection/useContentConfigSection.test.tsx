@@ -16,8 +16,13 @@ const item = (key: string, text: string, mandatory = false) =>
   ({ key, text, subText: '', hidden: false, isMandatoryForTemplate: () => mandatory }) as any
 
 const Probe: React.FC = () => {
-  const { items } = useContentConfigSection()
-  return <div data-testid='items'>{items.map((i) => i.text).join('|')}</div>
+  const { items, selectedCountText } = useContentConfigSection()
+  return (
+    <>
+      <div data-testid='items'>{items.map((i) => i.text).join('|')}</div>
+      <div data-testid='count'>{selectedCountText}</div>
+    </>
+  )
 }
 
 function renderProbe(all: any[], selected: any[]) {
@@ -52,6 +57,7 @@ describe('useContentConfigSection', () => {
       [sierra, bravo]
     )
     expect(screen.getByTestId('items')).toHaveTextContent('Alfa|Mike|Bravo|Sierra|Echo|Zulu')
+    expect(screen.getByTestId('count')).toHaveTextContent('2 valgte elementer')
   })
 
   it('marks the list content the project has from an earlier run, and neither locks nor forces it', () => {
@@ -88,6 +94,13 @@ describe('useContentConfigSection', () => {
     // Leaving everything out keeps only the mandatory content the project does not have.
     fireEvent.click(screen.getByText('Noe er lagt til'))
     expect(dispatch.mock.calls[0][0].payload.map(({ text }) => text)).toEqual(['Planneroppgaver'])
+  })
+
+  it('counts one selected item in the singular, and not the hidden ones', () => {
+    const alfa = item('a', 'Alfa')
+    const hidden = { ...item('h', 'Skjult'), hidden: true }
+    renderProbe([alfa, item('b', 'Bravo'), hidden], [alfa, hidden])
+    expect(screen.getByTestId('count')).toHaveTextContent('1 valgt element')
   })
 
   it('leaves out hidden items', () => {

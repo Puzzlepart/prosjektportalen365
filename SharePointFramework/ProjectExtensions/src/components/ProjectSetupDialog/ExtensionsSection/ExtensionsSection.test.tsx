@@ -14,7 +14,7 @@ jest.mock('./useExtensionsSection', () => ({
     onSelectionChange: mockOnSelectionChange,
     searchTerm: '',
     onSearch: mockOnSearch,
-    selectedCountText: '1 valgte elementer'
+    selectedCountText: '1 valgt element'
   })
 }))
 
@@ -59,8 +59,8 @@ describe('ExtensionsSection', () => {
 
   it('tells how many are selected as a status, not as a button (WCAG 4.1.2, 4.1.3)', async () => {
     const { container } = render(<ExtensionsSection />)
-    expect(screen.getByRole('status')).toHaveTextContent('1 valgte elementer')
-    expect(screen.queryByRole('button', { name: '1 valgte elementer' })).toBeNull()
+    expect(screen.getByRole('status')).toHaveTextContent('1 valgt element')
+    expect(screen.queryByRole('button', { name: '1 valgt element' })).toBeNull()
     expect(await axeComponent(container)).toHaveNoViolations()
   })
 

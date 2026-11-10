@@ -197,6 +197,8 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Rettet en feil hvor «Nyttige lenker» i bunnteksten og hurtigmenyen for prosjekt i `Prosjektutlisting` og `Prosjektkort` ikke lukket seg på første Escape når pekeren sto på knappen som åpnet menyen. Verktøytipset til knappen, som ikke vises mens menyen er åpen, tok imot tasten
 - Rettet en feil i `Prosjektkort` hvor kortet ikke fant prosjektet på et prosjektområde, fordi det lette etter listene `Prosjekter` og `Maloppsett` der i stedet for på porteføljeområdet; kortet viste «Prosjektet kunne ikke hentes» (og var tomt før 1.15). På et prosjektområde viser kortet nå prosjektet det står på når `Område ID` ikke er fylt ut
 - Rettet en feil i `Prosjektstatus` hvor det sto «Kladd, sist endret» uten dato ved tittelen når rapporteringen ikke hadde noen statusrapport
+- Rettet en feil i oppsettveiviseren hvor dialogen som vises når veiviseren lukkes uten at området settes opp, sa «Installasjon avbrutt av bruker» både som tittel og som feilmelding. Den sier nå «Oppsettet ble avbrutt» og at ingenting er lagt til på området, som en opplysning
+- Rettet en feil i oppsettveiviseren hvor telleren ved `Prosjekttillegg` og `Standardinnhold` sa «1 valgte elementer». Den sier nå «1 valgt element»
 
 ---
 
