@@ -7,6 +7,7 @@ import { PreTask } from './PreTask'
 import { ProvisionSiteFields } from './ProvisionSiteFields'
 import { SetTaxonomyFields } from './SetTaxonomyFields'
 import { SetupProjectInformation } from './SetupProjectInformation'
+import { ShieldProjectData } from './ShieldProjectData'
 import { SitePermissions } from './SitePermissions'
 import { Hooks } from './Hooks'
 
@@ -16,6 +17,7 @@ const tasks: (new (data: IProjectSetupData) => IBaseTask)[] = [
   SetupProjectInformation,
   ProvisionSiteFields,
   ApplyTemplate,
+  ShieldProjectData,
   SetTaxonomyFields,
   CopyListData,
   CustomActions,

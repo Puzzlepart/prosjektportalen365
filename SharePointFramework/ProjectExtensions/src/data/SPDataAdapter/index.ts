@@ -23,6 +23,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       ...this.settings,
       spfxContext,
       entityService: this.entityService,
+      isShieldedProject: this.isShieldedProject,
       propertiesListName: resource.Lists_ProjectProperties_Title
     } as IProjectDataServiceParams)
   }
