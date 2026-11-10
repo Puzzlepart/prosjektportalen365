@@ -4501,4 +4501,22 @@
   <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
     <value>Useful Links</value>
   </data>
+  <data name="Choice_GtPermissionScope_Site" xml:space="preserve">
+    <value>Site</value>
+  </data>
+  <data name="Choice_GtPermissionScope_ShieldedLists" xml:space="preserve">
+    <value>Shielded lists</value>
+  </data>
+  <data name="SiteFields_GtPermissionScope_DisplayName" xml:space="preserve">
+    <value>Scope</value>
+  </data>
+  <data name="SiteFields_GtPermissionScope_Description" xml:space="preserve">
+    <value>Where the group gets access. «Site» gives the permission level on the whole project site. «Shielded lists» gives read access only to the lists a shielded project stores project data in (status, status attachments, project properties and archive log), and applies only to projects with an extension that shields project data.</value>
+  </data>
+  <data name="SiteFields_GtShieldsProjectData_DisplayName" xml:space="preserve">
+    <value>Shields project data</value>
+  </data>
+  <data name="SiteFields_GtShieldsProjectData_Description" xml:space="preserve">
+    <value>Projects with this extension store status reports, project properties and the archive log on the project site instead of on the portfolio site. Shielding cannot be removed from a project.</value>
+  </data>
 </root>

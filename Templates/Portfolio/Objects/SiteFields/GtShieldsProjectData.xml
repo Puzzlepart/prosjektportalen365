@@ -1,0 +1,3 @@
+<Field Description="{resource:SiteFields_GtShieldsProjectData_Description}" DisplayName="{resource:SiteFields_GtShieldsProjectData_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{93d6ab56-65fc-4efc-8579-824ba08ca056}" Name="GtShieldsProjectData" StaticName="GtShieldsProjectData" Type="Boolean">
+    <Default>0</Default>
+</Field>

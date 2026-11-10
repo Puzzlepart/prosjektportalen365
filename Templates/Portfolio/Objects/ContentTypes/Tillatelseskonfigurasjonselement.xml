@@ -3,5 +3,6 @@
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" UpdateChildren="true" />
         <pnp:FieldRef ID="d307d83e-7cce-4076-b74e-4a725407fbea" Name="GtSPGroupName" Required="true" UpdateChildren="true" />
         <pnp:FieldRef ID="80cdca83-d0da-4f8f-abcd-5695763556e9" Name="GtPermissionLevel" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="22050909-cbc4-46d9-bdff-a5cf9be9fbf5" Name="GtPermissionScope" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>

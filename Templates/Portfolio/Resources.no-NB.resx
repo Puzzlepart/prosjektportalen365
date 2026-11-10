@@ -4501,4 +4501,22 @@
   <data name="WebParts_UsefulLinks_Title" xml:space="preserve">
     <value>Nyttige lenker</value>
   </data>
+  <data name="Choice_GtPermissionScope_Site" xml:space="preserve">
+    <value>Område</value>
+  </data>
+  <data name="Choice_GtPermissionScope_ShieldedLists" xml:space="preserve">
+    <value>Skjermede lister</value>
+  </data>
+  <data name="SiteFields_GtPermissionScope_DisplayName" xml:space="preserve">
+    <value>Omfang</value>
+  </data>
+  <data name="SiteFields_GtPermissionScope_Description" xml:space="preserve">
+    <value>Hvor gruppen får tilgang. «Område» gir tilgangsnivået på hele prosjektområdet. «Skjermede lister» gir bare lesetilgang til listene et skjermet prosjekt lagrer prosjektdata i (status, statusvedlegg, prosjektegenskaper og arkiveringslogg), og gjelder bare prosjekter med et tillegg som skjermer prosjektdata.</value>
+  </data>
+  <data name="SiteFields_GtShieldsProjectData_DisplayName" xml:space="preserve">
+    <value>Skjermer prosjektdata</value>
+  </data>
+  <data name="SiteFields_GtShieldsProjectData_Description" xml:space="preserve">
+    <value>Prosjekter med dette tillegget lagrer statusrapporter, prosjektegenskaper og arkiveringslogg på prosjektområdet i stedet for på porteføljeområdet. Skjerming kan ikke fjernes fra et prosjekt.</value>
+  </data>
 </root>

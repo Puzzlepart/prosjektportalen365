@@ -287,3 +287,31 @@ try {
 catch {
     Write-Host "[WARNING] Failed to set the item-level permissions of the log list: $($_.Exception.Message)" -ForegroundColor Yellow
 }
+
+
+Write-Host "[INFO] Post-install action: Ensuring the insight group for shielded projects"
+# Projects with an extension that shields project data («Skjerming») give the groups in the rows of
+# Tillatelseskonfigurasjon with the scope «Skjermede lister» read access to their lists for project
+# data. The default row uses Porteføljeinnsyn. Added here, and only when the group has no row: the
+# list's data rows are keyed on the group name and overwritten on upgrade, which would change the
+# scope of a row a customer has for the same group. Idempotent.
+try {
+    $PermissionConfigList = Get-Resource -Name "Lists_Permission_Configuration_Title"
+    $InsightGroupTitle = Get-Resource -Name "Security_SiteGroup_PortfolioInsight_Title"
+    $PermissionConfigItems = Get-PnPListItem -List $PermissionConfigList
+    $HasInsightRow = $PermissionConfigItems | Where-Object { $_["GtSPGroupName"] -eq $InsightGroupTitle } | Select-Object -First 1
+    if ($null -ne $HasInsightRow) {
+        Write-Host "[INFO] [$PermissionConfigList] already has a row for [$InsightGroupTitle]"
+    }
+    else {
+        Add-PnPListItem -List $PermissionConfigList -Values @{
+            "GtSPGroupName"     = $InsightGroupTitle;
+            "GtPermissionLevel" = (Get-Resource -Name "Choice_GtPermissionLevel_Read");
+            "GtPermissionScope" = (Get-Resource -Name "Choice_GtPermissionScope_ShieldedLists")
+        } | Out-Null
+        Write-Host "[SUCCESS] Added [$InsightGroupTitle] with read access to the lists of shielded projects" -ForegroundColor Green
+    }
+}
+catch {
+    Write-Host "[WARNING] Failed to ensure the insight group for shielded projects: $($_.Exception.Message)" -ForegroundColor Yellow
+}
