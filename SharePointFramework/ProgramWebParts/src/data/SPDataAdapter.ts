@@ -106,6 +106,7 @@ export class SPDataAdapter
       ...this.settings,
       spfxContext,
       entityService: this.entityService,
+      isShieldedProject: this.isShieldedProject,
       propertiesListName: resource.Lists_ProjectProperties_Title
     } as IProjectDataServiceParams)
     this._propertyList = this.sp.web.lists.getByTitle(resource.Lists_ProjectProperties_Title)
@@ -991,6 +992,8 @@ export class SPDataAdapter
     properties: Record<string, any>,
     hubSiteId?: string
   ): Promise<void> {
+    // A shielded program has no entry in the hub; its properties item is updated on its own site.
+    if (this.isShieldedProject) return
     try {
       const siteId = this.spfxContext.pageContext.site.id.toString()
       const web =
@@ -1020,6 +1023,9 @@ export class SPDataAdapter
     operation: ParentProjectOperation,
     parentHubSiteUrl?: string
   ): Promise<void> {
+    // A shielded program is not named in its children's entries in the hub: they find it by
+    // searching for themselves in its `GtChildProjects` (`PortalDataService.getParentProjects`).
+    if (this.isShieldedProject) return
     try {
       const currentSiteId = this.spfxContext.pageContext.site.id.toString()
       const currentSiteTitle = this.spfxContext.pageContext.web.title

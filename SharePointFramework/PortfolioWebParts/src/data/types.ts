@@ -53,6 +53,18 @@ export interface IFetchDataForViewItemResult extends ISearchResult {
    * property cannot overwrite it; `undefined` when the series has no published report.
    */
   StatusReportId?: number
+
+  /**
+   * The site whose status report list holds `StatusReportId` when that is not the hub's: a
+   * shielded project keeps its reports on its own site. `undefined` for a report in the hub's list.
+   */
+  StatusReportWebUrl?: string
+
+  /**
+   * The site of a shielded project, for the information panel of a user who may read the
+   * project's data but not open its site.
+   */
+  ProjectWebUrl?: string
   [key: string]: any
 }
 

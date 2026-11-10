@@ -63,8 +63,8 @@ const COUNT_TEXTS: Record<StatusCountKind, [string, string]> = {
   green: [strings.StatusCountGreenOne, strings.StatusCountGreenOther]
 }
 
-/** Each column's reports by id, indexed once per data object: a cell looks its report up by key. */
-const reportsById = new WeakMap<IStatusReportColumnData, Map<number, IStatusReport>>()
+/** Each column's reports by key, indexed once per data object: a cell looks its report up by key. */
+const reportsByKey = new WeakMap<IStatusReportColumnData, Map<string, IStatusReport>>()
 
 /** How the details show: not at all, as a preview while the pointer rests, or as a dialog. */
 export type StatusReportSurfaceMode = 'closed' | 'preview' | 'pinned'
@@ -81,23 +81,40 @@ function isPinnedElsewhere(id: string): boolean {
   return !!open && open.pinned && open.id !== id
 }
 
-/** The data's reports by id, indexed the first time a cell asks for one. */
-function getReportsById(data: IStatusReportColumnData): Map<number, IStatusReport> {
-  if (!reportsById.has(data)) {
-    reportsById.set(data, new Map(data.reports.map((report) => [report.id, report] as const)))
+/**
+ * A report's key: its id in the list that holds it, the hub's or, for a shielded project, the one
+ * on the project's site, since the ids of two lists can be the same.
+ *
+ * @param webUrl The shielded project's site; none for the hub's list
+ * @param id The report's list item id
+ */
+function getReportKey(webUrl: string | undefined, id: number): string {
+  return `${(webUrl ?? '').toLowerCase()}#${id}`
+}
+
+/** The data's reports by key, indexed the first time a cell asks for one. */
+function getReportsByKey(data: IStatusReportColumnData): Map<string, IStatusReport> {
+  if (!reportsByKey.has(data)) {
+    const byKey = new Map<string, IStatusReport>()
+    for (const report of data.reports) {
+      byKey.set(getReportKey(report.webUrl, report.id), report)
+    }
+    reportsByKey.set(data, byKey)
   }
-  return reportsById.get(data)
+  return reportsByKey.get(data)
 }
 
 /**
- * The row's report: the one its `StatusReportId` names, if it is the report of the row's project
- * (the site ids compared in any case) and of the row's report series ("delprosjekt").
+ * The row's report: the one its `StatusReportId` names in the list its `StatusReportWebUrl` names
+ * (the hub's where it names none), if it is the report of the row's project (the site ids
+ * compared in any case) and of the row's report series ("delprosjekt").
  */
 function findReport(
   data: IStatusReportColumnData | undefined,
   item: Record<string, any>
 ): IStatusReport | undefined {
-  const report = data && getReportsById(data).get(Number(item.StatusReportId))
+  const key = getReportKey(item.StatusReportWebUrl, Number(item.StatusReportId))
+  const report = data && getReportsByKey(data).get(key)
   if (!report) return undefined
   const sameSite = report.siteId.toLowerCase() === String(item.SiteId ?? '').toLowerCase()
   const sameSeries = getScopeSeriesKey(report.scopeKey) === getScopeSeriesKey(item.ScopeKey)

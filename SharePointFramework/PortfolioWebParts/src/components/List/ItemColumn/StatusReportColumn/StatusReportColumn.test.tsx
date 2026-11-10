@@ -71,6 +71,21 @@ jest.mock('@fluentui/react-components', () => {
   return { __esModule: true, ...actual, Popover, PopoverTrigger, PopoverSurface }
 })
 
+// A shielded project's report list is on its own site, which `fetchData` opens with
+// `Web([hub, url])`: here the stand-in for that site's web, by address. Every other export stays
+// the harness's stand-in for PnPjs.
+const projectWebs: Record<string, any> = {}
+/** Opens a shielded project's site as `Web([hub, url])` does: the stand-in for its web. */
+function openProjectWeb([, url]: [unknown, string]) {
+  return projectWebs[url]
+}
+jest.mock('@pnp/sp/webs', () => {
+  const actual = jest.requireActual('@pnp/sp/webs')
+  return new Proxy(actual, {
+    get: (target, prop) => (prop === 'Web' ? openProjectWeb : target[prop])
+  })
+})
+
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import { axeComponent } from 'pp365-jest-config/lib/axe'
 import strings from 'PortfolioWebPartsStrings'
@@ -406,6 +421,26 @@ describe('StatusReportColumn', () => {
     cleanup()
     // The program's views and the aggregations, where the column has no data.
     const { container } = render(<StatusReportColumn item={P4} column={column()} />)
+    expect(container).toBeEmptyDOMElement()
+  })
+
+  it("finds a shielded project's report by its id in the list on the project's site, though the hub's list has a report with that id", () => {
+    const siteUrl = 'https://contoso.sharepoint.com/sites/skjermet'
+    const green = SECTIONS.map((): SectionValue => ['På plan', GREEN])
+    // Report 101 of the shielded project's own list, beside the hub's report 101 (P1's).
+    const shielded = { ...report(101, P4_SITE, P5_DATE, undefined, green), webUrl: siteUrl }
+    const data = { ...DATA, reports: [...DATA.reports, shielded] }
+    const shieldedRow = { ...P4, StatusReportId: 101, StatusReportWebUrl: siteUrl }
+    render(<StatusReportColumn item={shieldedRow} column={column(data)} />)
+    expect(getStrip(P5_DATE, '8 grønne')).toBeInTheDocument()
+    cleanup()
+    // The hub's row keeps the hub's report 101.
+    render(<StatusReportColumn item={P1} column={column(data)} />)
+    expect(getStrip(P1_DATE, P1_COUNTS)).toBeInTheDocument()
+    cleanup()
+    // A report another site holds is not the hub's report with that id.
+    const elsewhere = { ...P1, StatusReportWebUrl: 'https://contoso.sharepoint.com/sites/annet' }
+    const { container } = render(<StatusReportColumn item={elsewhere} column={column(data)} />)
     expect(container).toBeEmptyDOMElement()
   })
 
@@ -849,5 +884,43 @@ describe('fetchData', () => {
     expect(older).toMatchObject({ siteId: P5_SITE, scopeKey: 'DP1', publishedDate: P5_DATE })
     expect(older.overallStatus).toBeUndefined()
     expect(older.sections[1]).toMatchObject({ value: undefined, shape: { shape: 'empty' } })
+  })
+
+  it("reads a shielded project's report by id from the list on its own site, each site once and on its own, so one that fails leaves the others' reports in", async () => {
+    const siteA = 'https://contoso.sharepoint.com/sites/skjermet-a'
+    const siteB = 'https://contoso.sharepoint.com/sites/skjermet-b'
+    const hubQueries: Queries = {}
+    const siteQueries: Queries = {}
+    projectWebs[siteA] = standInWeb(
+      {
+        [resource.Lists_ProjectStatus_Title]: [
+          { Id: 7, GtSiteId: P4_SITE, Created: P5_DATE, GtStatusTime: 'På plan' }
+        ]
+      },
+      siteQueries
+    )
+    // A site whose list cannot be read.
+    projectWebs[siteB] = standInWeb({}, {})
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => undefined)
+    const rows = [
+      { StatusReportId: 7 },
+      { StatusReportId: 7, StatusReportWebUrl: siteA },
+      { StatusReportId: 7, StatusReportWebUrl: siteA },
+      { StatusReportId: 3, StatusReportWebUrl: siteB }
+    ]
+    const data = await fetchData(standInWeb(LISTS, hubQueries) as any, undefined, rows)
+    warn.mockRestore()
+    const filters = (queries: Queries) =>
+      queries[resource.Lists_ProjectStatus_Title].map(({ filter }) => filter[0])
+    expect(filters(hubQueries)).toEqual(['Id eq 7'])
+    expect(filters(siteQueries)).toEqual(['Id eq 7'])
+    expect(data.reports.map(({ id, webUrl, siteId }) => [id, webUrl, siteId])).toEqual([
+      [7, undefined, P1_SITE],
+      [7, siteA, P4_SITE]
+    ])
+    // The hub's report carries no site of its own.
+    expect('webUrl' in data.reports[0]).toBe(false)
+    expect(warn).toHaveBeenCalledTimes(1)
+    expect(warn.mock.calls[0][1]).toMatchObject({ webUrl: siteB })
   })
 })

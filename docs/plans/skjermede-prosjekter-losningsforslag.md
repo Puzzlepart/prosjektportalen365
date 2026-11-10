@@ -23,7 +23,7 @@ Løsningen er generisk. Den virker på en eksisterende hub med både vanlige og 
 | Hva innsynsgruppen ser | Bare data i portefølje og program, inkludert informasjonspanelet. Prosjektets sider kan ikke åpnes. |
 | Logg | Skrives til huben som i dag. Siden #1805 kan også brukere med bare minimumsgruppen skrive til Logg, og hver bruker ser bare egne oppføringer (`LogSecurity.xml`). |
 | Porteføljesiden | Leser skjermede data via søk. Endringer vises etter noen få minutter. |
-| Statuskolonnen | Felt som ikke finnes i Prosjektkolonner, vises ikke for skjermede prosjekter. |
+| Statuskolonnen | Søket finner siste publiserte rapport. Selve rapporten leses fra listen på prosjektområdet, med alle seksjoner og kommentarer. |
 | Malspesifikke innholdstyper | Støttes for status, som for andre prosjekter. De må arve fra `0x010022252E35737A413FB56A1BA53862F6D5`. |
 | Migrering | **Ikke inkludert.** Beskrivelsen av tillegget sier at eksisterende prosjekter ikke flyttes automatisk. |
 | Fjerne skjerming | Ikke støttet. Skjerming går én vei. |
@@ -158,7 +158,7 @@ Tillegget er en sp-js-provisioning-fil i hubbiblioteket Prosjekttillegg (`Skjerm
 |---|---|
 | Porteføljeoversikt, ledervisning og refinere | Ingen kodeendring. Lagrede spørringer finner skjermede prosjekter og status via innholdstype og `DepartmentId`. Duplikatsjekken (nøyaktig ett prosjekttreff per område) holder, fordi skjermede prosjekter ikke har huboppføring. |
 | Sammenslått visning over flere huber (`mergedViewData`) | Sjekk at sammenslåingen per hub (`_hubId`) håndterer prosjekter uten huboppføring. |
-| **Statuskolonnen** | Bruker statusfeltene som allerede finnes i søkeresultatet for raden, i stedet for egen REST-lesing av hublisten (topp 500). Feltene kobles via Prosjektkolonner. |
+| **Statuskolonnen** | Søket etter publiserte rapporter finner også rapportene på skjermede prosjektområder. Raden får rapportens id (`StatusReportId`) og, når rapporten ligger utenfor huben, prosjektområdets adresse (`StatusReportWebUrl`). Kolonnen leser rapporten etter id fra listen på det området, med samme navn og felt som hublisten. |
 | **Prosjektliste og prosjektkort** | Leser hubelementer med REST som før, og supplerer med søk etter skjermede prosjekter (`ContentTypeId:0x0100805E…* -SiteId:{hub}`). Personer bygges fra `RefinableString50/51`, siden bruker-ID fra huben ikke finnes. |
 | **PortfolioAggregation `fetchProjectsByDataSource`** | OData-filteret kan ikke oversettes automatisk. Skjermede prosjekter hentes med datakildens KQL (`GtSearchQuery`) når den er fylt ut. Begrensningen dokumenteres. |
 | **Informasjonspanelet** (tittelkolonnen) | Leser prosjektinformasjonen fra prosjektområdets Prosjektegenskaper, som innsynsgruppen kan lese. |

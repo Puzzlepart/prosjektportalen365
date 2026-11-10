@@ -61,6 +61,13 @@ export interface IStatusReport {
   /** The report's list item id. */
   id: number
 
+  /**
+   * The shielded project's site whose status report list holds the report, as the row names it
+   * (`StatusReportWebUrl`); none for a report in the hub's list. The ids of different lists can
+   * be the same, so a row finds its report by both.
+   */
+  webUrl?: string
+
   /** The project's site id, from `GtSiteId`. */
   siteId: string
 
@@ -85,6 +92,9 @@ export interface IStatusReportColumnData {
   /** The title of the overall status section in `Statusseksjoner`, its heading in the details. */
   overallStatusName?: string
 
-  /** The reports the configured hub's rows point to (`StatusReportId`). */
+  /**
+   * The reports the configured hub's rows point to (`StatusReportId`), and those of shielded
+   * projects, from their own sites (`StatusReportWebUrl`).
+   */
   reports: IStatusReport[]
 }
