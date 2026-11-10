@@ -63,12 +63,17 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (incomingProps) => {
                   isGroupByEnabled
                 />
               )}
-              {props.showTimelineList && <TimelineList />}
+              {props.showTimelineList &&
+                (state.data?.isShieldedProject ? (
+                  <UserMessage text={strings.ProjectTimelineShieldedProjectText} intent='info' />
+                ) : (
+                  <TimelineList />
+                ))}
             </div>
           )}
         </div>
       </div>
-      {state.panel && SPDataAdapter.portalDataService?.web && (
+      {state.panel && SPDataAdapter.portalDataService?.web && !SPDataAdapter.isShieldedProject && (
         <CustomEditPanel
           open={true}
           fields={state.data?.fields}

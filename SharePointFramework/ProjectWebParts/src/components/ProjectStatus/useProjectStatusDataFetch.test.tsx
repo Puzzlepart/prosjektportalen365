@@ -1,12 +1,17 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
 // Babel, so mocks are not hoisted. The data adapter answers the first call of the fetch with what
-// `adapter.fail` holds.
-const adapter: { fail: unknown } = { fail: undefined }
+// `adapter.fail` holds, and says whether the project is shielded with `adapter.shielded`.
+const adapter: { fail: unknown; shielded: string } = { fail: undefined, shielded: 'none' }
 jest.mock('../../data', () => ({
   __esModule: true,
   default: {
     isConfigured: true,
-    portalDataService: { isAvailable: true },
+    portalDataService: {
+      isAvailable: true,
+      get shieldedProjectState() {
+        return adapter.shielded
+      }
+    },
     project: { getProjectInformationData: () => Promise.reject(adapter.fail) }
   }
 }))
@@ -20,8 +25,9 @@ import { useProjectStatusDataFetch } from './useProjectStatusDataFetch'
  * What the status page tells the user when its data cannot be fetched: that access to the hub is
  * missing when SharePoint says so (401/403), and that the reports could not be loaded otherwise.
  */
-async function errorMessageFor(failure: unknown) {
+async function errorMessageFor(failure: unknown, shielded = 'none') {
   adapter.fail = failure
+  adapter.shielded = shielded
   const dispatch = jest.fn()
   const Probe: React.FC = () => {
     useProjectStatusDataFetch({ siteId: 'site-1' } as any, 1, undefined, dispatch)
@@ -48,5 +54,10 @@ describe('useProjectStatusDataFetch', () => {
     expect(await errorMessageFor({ status: 403, message: 'Forbidden' })).toBe(
       strings.ProjectStatusNoHubAccessErrorText
     )
+  })
+
+  it('says why when it could not be determined whether the project is shielded', async () => {
+    const unresolved = new Error('Kunne ikke avgjøre om prosjektet er skjermet.')
+    expect(await errorMessageFor(unresolved, 'unresolved')).toBe(unresolved.message)
   })
 })

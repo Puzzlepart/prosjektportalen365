@@ -1,4 +1,4 @@
-import { PortalDataService } from 'pp365-shared-library/lib/services'
+import SPDataAdapter from '../../../data'
 import { useProjectStatusContext } from '../context'
 import { CLEAR_USER_MESSAGE, REPORT_DELETED, REPORT_DELETE_ERROR } from '../reducer'
 
@@ -12,11 +12,9 @@ import { CLEAR_USER_MESSAGE, REPORT_DELETED, REPORT_DELETE_ERROR } from '../redu
 export function useDeleteReport() {
   const context = useProjectStatusContext()
   return async () => {
-    const portalDataService = await new PortalDataService().configure({
-      spfxContext: context.props.spfxContext
-    })
     try {
-      await portalDataService.deleteStatusReport(context.state.selectedReport.id)
+      // The web part's own service: it knows where the project keeps its reports.
+      await SPDataAdapter.portalDataService.deleteStatusReport(context.state.selectedReport.id)
       context.dispatch(REPORT_DELETED())
     } catch (error) {
       context.dispatch(REPORT_DELETE_ERROR({ error }))

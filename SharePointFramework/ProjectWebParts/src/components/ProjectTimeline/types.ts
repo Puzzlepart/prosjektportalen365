@@ -120,6 +120,12 @@ export interface ITimelineData {
    * Timeline content type ID from template parameters
    */
   timelineContentTypeId?: string
+
+  /**
+   * Whether the project is shielded: it has no timeline items of its own, so the list of them
+   * is not shown.
+   */
+  isShieldedProject?: boolean
 }
 
 export enum TimelineGroupType {

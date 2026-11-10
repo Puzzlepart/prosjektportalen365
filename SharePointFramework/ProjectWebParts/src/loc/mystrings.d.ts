@@ -216,6 +216,7 @@ declare interface IProjectWebPartsStrings {
   ProjectStatusProjectPropertiesGroupName: string
   ProjectTimelineErrorFetchText: string
   ProjectTimelineNoHubAccessErrorText: string
+  ProjectTimelineShieldedProjectText: string
   ProjectTimelineErrorTransformItemText: string
   ProjecttimelineGroupName: string
   ProjectTimelineItemInfo: string

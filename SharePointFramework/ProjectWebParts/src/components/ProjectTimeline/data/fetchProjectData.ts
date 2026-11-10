@@ -17,11 +17,17 @@ export async function fetchProjectData(
   timelineConfig: TimelineConfigurationModel[]
 ) {
   try {
-    const [projectData] = await SPDataAdapter.portalDataService.web.lists
-      .getByTitle(resource.Lists_Projects_Title)
-      .items.select('Id', 'GtStartDate', 'GtEndDate')
-      .filter(`GtSiteId eq '${props.siteId}'`)
-      .top(1)()
+    // A shielded project has no entry in the hub: the dates are on its properties item.
+    const [projectData] = SPDataAdapter.isShieldedProject
+      ? await SPDataAdapter.sp.web.lists
+          .getByTitle(resource.Lists_ProjectProperties_Title)
+          .items.select('Id', 'GtStartDate', 'GtEndDate')
+          .top(1)()
+      : await SPDataAdapter.portalDataService.web.lists
+          .getByTitle(resource.Lists_Projects_Title)
+          .items.select('Id', 'GtStartDate', 'GtEndDate')
+          .filter(`GtSiteId eq '${props.siteId}'`)
+          .top(1)()
 
     const config = _.find(
       timelineConfig,
@@ -35,7 +41,9 @@ export async function fetchProjectData(
       projectData?.GtStartDate,
       projectData?.GtEndDate
     ).usingConfig(config)
-    return { project, projectId: projectData.Id }
+    // The ID links new timeline items to the project's entry in the hub, which a shielded
+    // project does not have.
+    return { project, projectId: SPDataAdapter.isShieldedProject ? undefined : projectData?.Id }
   } catch (error) {
     // Denied access is not a fault in the project's row: `fetchData` tells the user so.
     if (isUnauthorizedError(error)) throw error

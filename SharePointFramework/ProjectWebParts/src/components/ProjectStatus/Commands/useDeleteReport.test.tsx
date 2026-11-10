@@ -1,11 +1,7 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
 // Babel, so mocks are not hoisted. The portal data service reaches SharePoint; `service` stands in.
 const service = { deleteStatusReport: jest.fn() }
-jest.mock('pp365-shared-library/lib/services', () => ({
-  PortalDataService: function PortalDataService() {
-    return { configure: () => Promise.resolve(service) }
-  }
-}))
+jest.mock('../../../data', () => ({ __esModule: true, default: { portalDataService: service } }))
 
 import { render } from '@testing-library/react'
 import * as React from 'react'

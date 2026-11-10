@@ -335,11 +335,17 @@ export async function setOriginalSourceSiteId(
   // the site and hub ids only, rather than failing the news article.
   let projectData: Record<string, any> | undefined
   try {
-    ;[projectData] = await SPDataAdapter.portalDataService.web.lists
-      .getByTitle(resource.Lists_Projects_Title)
-      .items.select(...projectFields)
-      .filter(`GtSiteId eq '${siteId}'`)
-      .top(1)()
+    // A shielded project has no entry in the hub: its properties item on the project site holds
+    // the values, read in full, since it need not have every field the news pages have.
+    ;[projectData] = SPDataAdapter.isShieldedProject
+      ? await SPDataAdapter.sp.web.lists
+          .getByTitle(resource.Lists_ProjectProperties_Title)
+          .items.top(1)()
+      : await SPDataAdapter.portalDataService.web.lists
+          .getByTitle(resource.Lists_Projects_Title)
+          .items.select(...projectFields)
+          .filter(`GtSiteId eq '${siteId}'`)
+          .top(1)()
   } catch (error) {
     console.warn('Could not read the project from the hub for the news article:', error)
   }

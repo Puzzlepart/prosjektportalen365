@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { PortalDataService } from 'pp365-shared-library/lib/services'
+import SPDataAdapter from '../../../data'
 import { useProjectStatusContext } from '../context'
 import { getScopeLabel, parseSubProjects } from '../parseSubProjects'
 import {
@@ -25,9 +25,8 @@ export function usePublishReport() {
   const context = useProjectStatusContext()
   const captureReportSnapshot = useCaptureReportSnapshot()
   return async (): Promise<void> => {
-    const portalDataService = await new PortalDataService().configure({
-      spfxContext: context.props.spfxContext
-    })
+    // The web part's own service: it knows where the project keeps its reports.
+    const portalDataService = SPDataAdapter.portalDataService
     if (!context.state.isPublishing) {
       try {
         context.dispatch(REPORT_PUBLISHING())

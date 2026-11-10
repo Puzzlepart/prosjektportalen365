@@ -252,6 +252,8 @@ define([], function () {
     ProjectStatusProjectPropertiesGroupName: 'Project properties (Status Sections)',
     ProjectTimelineErrorFetchText:
       'Error when retrieving the projects data.<br><br>Check that the following SiteId is correct with what is in the "Projects" list. <br><br>- SiteId: {0} <br> - Title: {1} <br><br>Error message: {2}',
+    ProjectTimelineShieldedProjectText:
+      'The project is shielded. Timeline items cannot be registered on shielded projects yet. The timeline shows the project period and any deliveries.',
     ProjectTimelineNoHubAccessErrorText:
       'Project timeline cannot be loaded without access to the hub site. If you believe you should have this access, ask an administrator to grant you access to the hub site.',
     ProjectTimelineErrorTransformItemText:

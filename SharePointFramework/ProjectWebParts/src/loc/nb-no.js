@@ -256,6 +256,8 @@ define([], function () {
     ProjectStatusProjectPropertiesGroupName: 'Prosjektegenskaper (Statusseksjoner)',
     ProjectTimelineErrorFetchText:
       'Feil ved henting av prosjektets data.<br><br>Sjekk at følgende SiteId er riktig med hva som ligger i "Prosjekter" listen. <br><br>- SiteId: {0} <br> - Tittel: {1} <br><br>Feilmelding: {2}',
+    ProjectTimelineShieldedProjectText:
+      'Prosjektet er skjermet. Tidslinjeelementer kan ikke registreres på skjermede prosjekter ennå. Tidslinjen viser prosjektperioden og eventuelle leveranser.',
     ProjectTimelineNoHubAccessErrorText:
       'Prosjekttidslinje kan ikke lastes uten tilgang på hubområdet. Hvis du mener at du skal ha denne tilgangen, kan du be en administrator gi deg tilgang på hubområdet.',
     ProjectTimelineErrorTransformItemText:

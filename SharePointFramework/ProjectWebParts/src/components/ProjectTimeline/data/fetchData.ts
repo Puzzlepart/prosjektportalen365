@@ -54,7 +54,8 @@ export async function fetchData(
         listItems: timelineData?.timelineListItems ?? [],
         listColumns: timelineData?.columns ?? [],
         fields: timelineData?.timelineContentEditableFields ?? [],
-        timelineContentTypeId: properties.templateParameters?.TimelineContentTypeId
+        timelineContentTypeId: properties.templateParameters?.TimelineContentTypeId,
+        isShieldedProject: SPDataAdapter.isShieldedProject
       },
       timelineConfig,
       timelineContentTypeId: properties.templateParameters?.TimelineContentTypeId,

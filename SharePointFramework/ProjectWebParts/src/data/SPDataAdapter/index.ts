@@ -58,6 +58,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       ...this.settings,
       spfxContext,
       entityService: this.entityService,
+      isShieldedProject: this.isShieldedProject,
       propertiesListName: resource.Lists_ProjectProperties_Title
     } as IProjectDataServiceParams)
   }
@@ -185,6 +186,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     templateParameters: Record<string, any>,
     progressFunc: (props: IProgressProps) => void
   ): Promise<void> {
+    // A shielded project keeps its properties on its own site only.
+    if (this.isShieldedProject) return
     if (!this.entityService) {
       throw new Error(strings.HubSyncHubUnavailableReason)
     }
@@ -232,6 +235,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     phaseField: IPhaseField
   ): Promise<Error | null> {
     const phaseProperties = await this.project.updateProjectPhase(phase, phaseField, false)
+    // A shielded project has no entity in the hub, and must not get one from a phase change.
+    if (this.isShieldedProject) return null
     if (!this.entityService) return new Error(strings.HubSyncHubUnavailableReason)
     try {
       await syncPhaseToHub(this.entityService, this.settings.siteId, phaseProperties, async () => {
@@ -445,9 +450,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       return new Error(strings.HubSyncHubUnavailableReason)
     }
     try {
-      const archiveLogList = this.portalDataService.web.lists.getByTitle(
-        resource.Lists_ArchiveLog_Title
-      )
+      // A shielded project keeps its archive log on its own site.
+      const archiveLogList = this.portalDataService
+        .getProjectDataWeb()
+        .lists.getByTitle(resource.Lists_ArchiveLog_Title)
 
       const logItem: IArchiveLogEntry = {
         Title: title,
@@ -562,9 +568,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       return null
     }
     try {
-      const archiveLogList = this.portalDataService.web.lists.getByTitle(
-        resource.Lists_ArchiveLog_Title
-      )
+      // A shielded project keeps its archive log on its own site.
+      const archiveLogList = this.portalDataService
+        .getProjectDataWeb()
+        .lists.getByTitle(resource.Lists_ArchiveLog_Title)
 
       const sanitizedUrl = (projectWebUrl ?? '').replace(/'/g, "''")
       const items = await archiveLogList.items
