@@ -129,6 +129,7 @@ define([], function () {
     CatalogActionImport: 'Kopier til min installasjon',
     CatalogActionPublishCentral: 'Tilgjengeliggjør som skymal',
     CatalogActionUpdate: 'Oppdater til v{0}',
+    CatalogActionUpdateCentral: 'Oppdater skymal til v{0}',
     CatalogActionReinstall: 'Installer på nytt',
     CatalogActionRemove: 'Fjern',
     CatalogActionRemoveImport: 'Fjern installasjon',
@@ -171,6 +172,11 @@ define([], function () {
     CatalogPublishErrorsText:
       '{0} {1} feil ble logget under provisjoneringen av hub-avhengighetene, og det som feilet, ble ikke provisjonert:',
     CatalogPublishErrorsLabel: 'Feil logget under provisjoneringen av hub-avhengighetene',
+    CatalogUpdateCentralSuccessText: 'Skymalen er oppdatert til v{0}.',
+    CatalogUpdateCentralErrorText: 'Kunne ikke oppdatere skymalen.',
+    CatalogUpdateCentralTaxonomySkippedText:
+      'Skymalen ble oppdatert til v{0}, men taksonomi ble hoppet over (feature flag av).',
+    CatalogUpdateCentralCancelledText: 'Oppdateringen av skymalen ble avbrutt.',
     CatalogRemoveSuccessText: 'Malen ble fjernet.',
     CatalogRemoveSuccessTextExtension: 'Tillegget ble fjernet.',
     CatalogRemoveErrorText: 'Kunne ikke fjerne malen.',
@@ -213,6 +219,8 @@ define([], function () {
     CatalogActionRemoveTooltip: 'Fjern denne malpakken fra Maloppsett',
     CatalogActionRemoveCentralTooltip: 'Fjern skymal-registreringen fra Maloppsett',
     CatalogActionPublishCentralAlreadyTooltip: 'Allerede tilgjengeliggjort som skymal',
+    CatalogActionUpdateCentralTooltip:
+      'Oppdater skymalen til nyeste versjon. Hub-avhengigheter (kolonner, innholdstyper, taksonomi) provisjoneres nå, og registreringen i Maloppsett forblir en skymal.',
     CatalogActionRemoveTooltipExtension: 'Fjern dette tillegget fra Prosjekttillegg-biblioteket',
     CatalogRemoveConfirmTitle: 'Fjerne malen?',
     CatalogRemoveConfirmText:

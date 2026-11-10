@@ -129,6 +129,7 @@ define([], function () {
     CatalogActionImport: 'Copy to my installation',
     CatalogActionPublishCentral: 'Make available as cloud template',
     CatalogActionUpdate: 'Update to v{0}',
+    CatalogActionUpdateCentral: 'Update cloud template to v{0}',
     CatalogActionReinstall: 'Reinstall',
     CatalogActionRemove: 'Remove',
     CatalogActionRemoveImport: 'Remove installation',
@@ -171,6 +172,11 @@ define([], function () {
     CatalogPublishErrorsText:
       '{0} {1} error(s) were logged while provisioning the hub dependencies, and what failed was not provisioned:',
     CatalogPublishErrorsLabel: 'Errors logged while provisioning the hub dependencies',
+    CatalogUpdateCentralSuccessText: 'The cloud template is updated to v{0}.',
+    CatalogUpdateCentralErrorText: 'Could not update the cloud template.',
+    CatalogUpdateCentralTaxonomySkippedText:
+      'The cloud template was updated to v{0}, but taxonomy was skipped (feature flag off).',
+    CatalogUpdateCentralCancelledText: 'Updating the cloud template was cancelled.',
     CatalogRemoveSuccessText: 'The template was removed.',
     CatalogRemoveSuccessTextExtension: 'The extension was removed.',
     CatalogRemoveErrorText: 'Could not remove the template.',
@@ -214,6 +220,8 @@ define([], function () {
     CatalogActionRemoveCentralTooltip:
       'Remove the cloud-template registration from Template Options',
     CatalogActionPublishCentralAlreadyTooltip: 'Already made available as a cloud template',
+    CatalogActionUpdateCentralTooltip:
+      'Update the cloud template to the latest version. Hub dependencies (fields, content types, taxonomy) are provisioned now, and the registration in Template Options stays a cloud template.',
     CatalogActionRemoveTooltipExtension:
       'Remove this extension from the Project Extensions library',
     CatalogRemoveConfirmTitle: 'Remove the template?',

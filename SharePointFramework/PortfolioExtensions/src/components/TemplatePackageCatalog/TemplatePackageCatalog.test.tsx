@@ -87,6 +87,7 @@ function context(overrides: Record<string, any> = {}, state: Record<string, any>
     closeDetail: jest.fn(),
     importPackage: jest.fn(),
     publishCentral: jest.fn(),
+    updateCentral: jest.fn(),
     removePackage: jest.fn(),
     resolveCompatibility: jest.fn(),
     ...overrides
@@ -277,6 +278,35 @@ describe('TemplatePackageCatalog, its behaviour', () => {
     fireEvent.click(button(strings.CatalogActionRemoveCentral))
     fireEvent.click(button(strings.CatalogRemoveConfirmButton))
     expect(value.removePackage).toHaveBeenCalled()
+  })
+
+  it('updates a cloud template with a newer version as a cloud template, and copies it to the installation beside it', () => {
+    // The main action read «Oppdater til v…», and wrote a local install over the cloud template.
+    const value = details({}, { packageType: PpPkgType.Sentral, updateAvailable: true })
+    const update = button(format(strings.CatalogActionUpdateCentral, '1.0.0'))
+    expect(update).not.toHaveAttribute('aria-disabled', 'true')
+    expect(update).toHaveAccessibleDescription(strings.CatalogActionUpdateCentralTooltip)
+    fireEvent.click(update)
+    expect(value.updateCentral).toHaveBeenCalledWith(value.selectedPackage)
+    expect(value.publishCentral).not.toHaveBeenCalled()
+    const copy = button(strings.CatalogActionImport)
+    expect(copy).toHaveAccessibleDescription(strings.CatalogActionImportTooltip)
+    fireEvent.click(copy)
+    expect(value.importPackage).toHaveBeenCalledWith(value.selectedPackage)
+    expect(
+      screen.queryByRole('button', { name: format(strings.CatalogActionUpdate, '1.0.0') })
+    ).toBeNull()
+    expect(button(strings.CatalogActionRemoveCentral)).toBeInTheDocument()
+  })
+
+  it('keeps a cloud template from being updated to a version that cannot be one, saying why', () => {
+    details(
+      { cloudCompatible: false, cloudCompatibleReason: 'Krever innhold på hub-området' },
+      { packageType: PpPkgType.Sentral, updateAvailable: true }
+    )
+    const update = button(format(strings.CatalogActionUpdateCentral, '1.0.0'))
+    expect(update).toHaveAttribute('aria-disabled', 'true')
+    expect(update).toHaveAccessibleDescription('Krever innhold på hub-området')
   })
 
   it('keeps the actions focusable while one runs', () => {

@@ -127,6 +127,7 @@ declare interface IPortfolioExtensionsStrings {
   CatalogActionImport: string
   CatalogActionPublishCentral: string
   CatalogActionUpdate: string
+  CatalogActionUpdateCentral: string
   CatalogActionReinstall: string
   CatalogActionRemove: string
   CatalogActionRemoveImport: string
@@ -166,6 +167,10 @@ declare interface IPortfolioExtensionsStrings {
   CatalogPublishCancelledText: string
   CatalogPublishErrorsText: string
   CatalogPublishErrorsLabel: string
+  CatalogUpdateCentralSuccessText: string
+  CatalogUpdateCentralErrorText: string
+  CatalogUpdateCentralTaxonomySkippedText: string
+  CatalogUpdateCentralCancelledText: string
   CatalogRemoveSuccessText: string
   CatalogRemoveSuccessTextExtension: string
   CatalogRemoveErrorText: string
@@ -204,6 +209,7 @@ declare interface IPortfolioExtensionsStrings {
   CatalogActionRemoveTooltip: string
   CatalogActionRemoveCentralTooltip: string
   CatalogActionPublishCentralAlreadyTooltip: string
+  CatalogActionUpdateCentralTooltip: string
   CatalogActionRemoveTooltipExtension: string
   CatalogRemoveConfirmTitle: string
   CatalogRemoveConfirmText: string

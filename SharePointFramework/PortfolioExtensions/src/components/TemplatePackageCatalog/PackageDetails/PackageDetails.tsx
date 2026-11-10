@@ -41,6 +41,7 @@ export const PackageDetails: FC = () => {
     isSupported,
     importPackage,
     publishCentral,
+    updateCentral,
     removePackage,
     closeDetail,
     imageError,
@@ -65,7 +66,11 @@ export const PackageDetails: FC = () => {
   const pkg = selectedPackage
   const ref = crossRefFor(pkg.id)
   const isCentral = ref?.packageType === PpPkgType.Sentral
-  const updateAvailable = !!ref?.updateAvailable
+  // A newer version updates the registration it is available for: a local install from the main
+  // action, a cloud template from its own action, so that it stays one. Copying a cloud template
+  // locally adds an install beside it.
+  const updateInstall = !!ref?.updateAvailable && !isCentral
+  const updateCloudTemplate = !!ref?.updateAvailable && isCentral
   // Extensions go into the Prosjekttillegg library, not Maloppsett, so they
   // cannot be published as a cloud template and get their own action/info copy.
   const isExtension = pkg.type === 'extension'
@@ -87,7 +92,7 @@ export const PackageDetails: FC = () => {
   // reflects that the package is already in place. (`Sentral` refs keep the
   // plain import label — copying locally is a separate action from publishing
   // as a cloud template.)
-  const isUpToDate = ref?.packageType === PpPkgType.Importert && !isUnmanaged && !updateAvailable
+  const isUpToDate = ref?.packageType === PpPkgType.Importert && !isUnmanaged && !updateInstall
   // What the remove buttons can act on: the single cross-referenced
   // registration is either a local install (Importert) or a cloud registration
   // (Sentral) — each remove button enables only for its own kind. Unmanaged
@@ -96,6 +101,7 @@ export const PackageDetails: FC = () => {
     ? !!ref && !isUnmanaged
     : ref?.packageType === PpPkgType.Importert
   const onPrimaryAction = () => (isUnmanaged ? setConfirmReplace(true) : importPackage(pkg))
+  const onCloudAction = () => (updateCloudTemplate ? updateCentral(pkg) : publishCentral(pkg))
 
   const meta = [
     pkg.version ? `v${pkg.version}` : undefined,
@@ -185,7 +191,7 @@ export const PackageDetails: FC = () => {
             (isExtension
               ? isUnmanaged
                 ? strings.CatalogBadgeLocalTooltip
-                : updateAvailable
+                : updateInstall
                   ? strings.CatalogActionUpdateTooltip
                   : isUpToDate
                     ? format(
@@ -193,7 +199,7 @@ export const PackageDetails: FC = () => {
                         ref?.installedVersion || pkg.version
                       )
                     : strings.CatalogActionAddExtensionTooltip
-              : updateAvailable
+              : updateInstall
                 ? strings.CatalogActionUpdateTooltip
                 : isUpToDate
                   ? format(
@@ -216,12 +222,12 @@ export const PackageDetails: FC = () => {
             {isExtension
               ? isUnmanaged
                 ? strings.CatalogActionReplaceExtension
-                : updateAvailable
+                : updateInstall
                   ? format(strings.CatalogActionUpdateExtension, pkg.version)
                   : isUpToDate
                     ? strings.CatalogActionReinstallExtension
                     : strings.CatalogActionAddExtension
-              : updateAvailable
+              : updateInstall
                 ? format(strings.CatalogActionUpdate, pkg.version)
                 : isUpToDate
                   ? strings.CatalogActionReinstall
@@ -251,29 +257,36 @@ export const PackageDetails: FC = () => {
           </Tooltip>
         )}
 
-        {/* Row 2 — cloud template (templates only): publish + its remove (only
-            when registered as a cloud template). */}
+        {/* Row 2 — cloud template (templates only): publish, or update the
+            registration to a newer version, + its remove (only when registered
+            as a cloud template). */}
         {!isExtension && (
           <>
             <Tooltip
               content={
-                isCentral
+                isCentral && !updateCloudTemplate
                   ? strings.CatalogActionPublishCentralAlreadyTooltip
                   : notCloudCompatible
                     ? (pkg.cloudCompatibleReason ??
                       strings.CatalogActionPublishCentralIncompatibleTooltip)
-                    : strings.CatalogActionPublishCentralTooltip
+                    : updateCloudTemplate
+                      ? strings.CatalogActionUpdateCentralTooltip
+                      : strings.CatalogActionPublishCentralTooltip
               }
               relationship='description'
             >
               <Button
                 className={styles.mainAction}
                 appearance='secondary'
-                disabledFocusable={!!state.busyAction || notCloudCompatible || isCentral}
+                disabledFocusable={
+                  !!state.busyAction || notCloudCompatible || (isCentral && !updateCloudTemplate)
+                }
                 icon={state.busyAction === 'publish' ? <Spinner size='tiny' /> : <Cloud24Regular />}
-                onClick={() => publishCentral(pkg)}
+                onClick={onCloudAction}
               >
-                {strings.CatalogActionPublishCentral}
+                {updateCloudTemplate
+                  ? format(strings.CatalogActionUpdateCentral, pkg.version)
+                  : strings.CatalogActionPublishCentral}
               </Button>
             </Tooltip>
             {isCentral && (

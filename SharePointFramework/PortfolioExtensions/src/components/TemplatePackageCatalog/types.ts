@@ -95,8 +95,8 @@ export interface ITemplatePackageCatalogState {
   compatibilityReport?: ICompatibilityReport
   notification?: ICatalogNotification
   /**
-   * A long-running detail-pane action in progress (publish-as-cloud template downloads
-   * and provisions to the hub; remove deletes the Maloppsett item). Drives the
+   * A long-running detail-pane action in progress (publishing or updating a cloud template
+   * downloads and provisions to the hub; remove deletes the Maloppsett item). Drives the
    * spinner + disabled state on the action buttons so the user gets feedback and
    * can't double-submit. (Import uses {@link installProgress} instead.)
    */
@@ -155,6 +155,11 @@ export interface ITemplatePackageCatalogContext {
   closeDetail: () => void
   importPackage: (pkg: ICatalogPackage) => Promise<void>
   publishCentral: (pkg: ICatalogPackage) => Promise<void>
+  /**
+   * Update the package's cloud template registration (`Sentral`) to the catalog version in place:
+   * its hub dependencies are provisioned again and the Maloppsett item stays a cloud template.
+   */
+  updateCentral: (pkg: ICatalogPackage) => Promise<void>
   removePackage: (pkg: ICatalogPackage) => Promise<void>
   /**
    * Resolve the pending compatibility-conflict prompt: `true` continues the
