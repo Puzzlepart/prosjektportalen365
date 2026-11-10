@@ -2213,7 +2213,7 @@ Flere regler og eksempler står i `pp365-templates`, «Writing upgrade steps».
 
 ## ➤ Prosjektmaler (JSON)
 
-Nye prosjektområder settes opp av oppsettveiviseren, `ProjectSetup`-utvidelsen i `ProjectExtensions`. Site scriptet `002000 - Setup extension.txt` knytter den til området (se [Site design og site scripts](site-design-og-site-scripts.md)). Veiviseren legger på en JSON-mal med motoren [sp-js-provisioning](https://github.com/Puzzlepart/sp-js-provisioning), som er låst til versjon `1.5.0` i `ProjectExtensions` og `PortfolioExtensions`.
+Nye prosjektområder settes opp av oppsettveiviseren, `ProjectSetup`-utvidelsen i `ProjectExtensions`. Site scriptet `002000 - Setup extension.txt` knytter den til området (se [Site design og site scripts](site-design-og-site-scripts.md)). Veiviseren legger på en JSON-mal med motoren [sp-js-provisioning](https://github.com/Puzzlepart/sp-js-provisioning), som er låst til versjon `1.5.1` i `ProjectExtensions` og `PortfolioExtensions`.
 
 ### Kildene og de genererte malene
 
