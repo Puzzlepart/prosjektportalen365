@@ -132,6 +132,11 @@ declare interface IProjectExtensionsStrings {
   NoHubWriteAccessTitle: string
   NoHubWriteAccessMessage: string
   HubWriteSkippedLogText: string
+  ShieldedProjectHubWriteSkippedLogText: string
+  ShieldProjectDataText: string
+  ShieldProjectDataSubText: string
+  ShieldProjectDataFieldText: string
+  ShieldProjectDataErrorMessage: string
   HubWriteDeniedLogText: string
   ProjectNotRegisteredInHubTitle: string
   ProjectNotRegisteredInHubMessage: string

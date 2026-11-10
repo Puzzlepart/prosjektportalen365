@@ -42,6 +42,12 @@ define([], function () {
     NoHubWriteAccessTitle: 'You do not have write access to the portfolio site',
     NoHubWriteAccessMessage: 'You cannot add items to the list "{0}" on the portfolio site. The project site will be set up, but nothing is written to the portfolio site. The project is registered in the portfolio the first time someone with write access to the list saves changes in "Project information" or changes the phase on the project\'s front page, and does not appear in the portfolio overview until then. Ask an administrator for write access to the list before you continue if the project should be registered right away.',
     HubWriteSkippedLogText: 'No write access to the portfolio site. The project will not be registered in the portfolio.',
+    ShieldedProjectHubWriteSkippedLogText:
+      "The project is shielded. Project data is stored on the project site, and the project is not registered in the portfolio site's lists.",
+    ShieldProjectDataText: 'Shielding project data',
+    ShieldProjectDataSubText: 'Creating the lists for project data on the project site',
+    ShieldProjectDataFieldText: 'Adding the field {0}',
+    ShieldProjectDataErrorMessage: 'Could not set up the lists for project data on the project site.',
     HubWriteDeniedLogText: 'The portfolio site rejected the registration of the project ({0}). The setup continues without writing to the portfolio site.',
     ProjectNotRegisteredInHubTitle: 'The project is not registered in the portfolio',
     ProjectNotRegisteredInHubMessage: 'The project site has been set up, but the project was not added to the list "{0}" on the portfolio site because you do not have write access there. The project is registered in the portfolio the first time someone with write access to the list saves changes in "Project information" or changes the phase on the project\'s front page. Until then it does not appear in the portfolio overview.',

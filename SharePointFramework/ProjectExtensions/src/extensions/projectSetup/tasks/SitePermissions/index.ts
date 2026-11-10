@@ -40,16 +40,21 @@ export class SitePermissions extends BaseTask {
         this._getPermissionConfiguration(),
         this._getRoleDefinitions(params.web)
       ])
+      this.data.shieldedListGroupNames = []
 
       for (let i = 0; i < permConfig.length; i++) {
         try {
-          const { groupName, permissionLevel } = permConfig[i]
+          const { groupName, permissionLevel, scope } = permConfig[i]
+          // A group for shielded lists gets read access to them from `ShieldProjectData`, and
+          // nothing on the site; a project that is not shielded has no such lists.
+          const forShieldedLists = scope === resource.Choice_GtPermissionScope_ShieldedLists
+          if (forShieldedLists && !this.data.isShieldedProject) continue
           const siteGroup = await this._getSiteGroupByName(groupName)
 
           const users = siteGroup || []
           if (isEmpty(users)) continue
           const roleDefId = roleDefinitions[permissionLevel]
-          if (roleDefId) {
+          if (roleDefId || forShieldedLists) {
             // Reuse groups on reruns; SharePoint returns 500 for duplicate names.
             let group
             let groupId: number
@@ -69,10 +74,12 @@ export class SitePermissions extends BaseTask {
               groupId = added.Id
             }
             // An existing role assignment must not abort the user-add loop.
-            try {
-              await params.web.roleAssignments.add(groupId, roleDefId)
-            } catch (error) {
-              this.logInformation(`Role assignment for ${groupName} already present. ${error}`)
+            if (!forShieldedLists) {
+              try {
+                await params.web.roleAssignments.add(groupId, roleDefId)
+              } catch (error) {
+                this.logInformation(`Role assignment for ${groupName} already present. ${error}`)
+              }
             }
             for (let j = 0; j < users.length; j++) {
               this.logInformation(`Adding user ${users[j]} to group ${groupName}...`)
@@ -83,6 +90,7 @@ export class SitePermissions extends BaseTask {
                 this.logError(`Failed to add user ${users[j]} to group ${groupName}.`)
               }
             }
+            if (forShieldedLists) this.data.shieldedListGroupNames.push(groupName)
           }
         } catch (error) {
           this.logError(`Failed to create group ${permConfig[i].groupName}. ${error}`)
@@ -140,7 +148,8 @@ export class SitePermissions extends BaseTask {
       (item: any) =>
         ({
           groupName: item.GtSPGroupName,
-          permissionLevel: item.GtPermissionLevel
+          permissionLevel: item.GtPermissionLevel,
+          scope: item.GtPermissionScope
         }) as IPermissionConfiguration
     )
   }

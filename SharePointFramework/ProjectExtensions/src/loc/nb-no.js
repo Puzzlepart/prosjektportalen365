@@ -132,6 +132,12 @@ define([], function () {
     NoHubWriteAccessTitle: 'Du mangler skrivetilgang til porteføljeområdet',
     NoHubWriteAccessMessage: 'Du kan ikke legge til elementer i listen «{0}» på porteføljeområdet. Prosjektområdet blir satt opp, men ingenting skrives til porteføljeområdet. Prosjektet registreres i porteføljen første gang noen med skrivetilgang til listen lagrer endringer i «Prosjektinformasjon» eller endrer fase på prosjektets forside, og vises ikke i porteføljeoversikten før det. Be en administrator om skrivetilgang til listen før du fortsetter hvis prosjektet skal registreres med en gang.',
     HubWriteSkippedLogText: 'Mangler skrivetilgang til porteføljeområdet. Prosjektet registreres ikke i porteføljen.',
+    ShieldedProjectHubWriteSkippedLogText:
+      'Prosjektet er skjermet. Prosjektdata lagres på prosjektområdet, og prosjektet registreres ikke i porteføljeområdets lister.',
+    ShieldProjectDataText: 'Skjerming av prosjektdata',
+    ShieldProjectDataSubText: 'Oppretter listene for prosjektdata på prosjektområdet',
+    ShieldProjectDataFieldText: 'Legger til feltet {0}',
+    ShieldProjectDataErrorMessage: 'Kunne ikke sette opp listene for prosjektdata på prosjektområdet.',
     HubWriteDeniedLogText: 'Porteføljeområdet avviste registreringen av prosjektet ({0}). Oppsettet fortsetter uten å skrive til porteføljeområdet.',
     ProjectNotRegisteredInHubTitle: 'Prosjektet er ikke registrert i porteføljen',
     ProjectNotRegisteredInHubMessage: 'Prosjektområdet er satt opp, men prosjektet ble ikke lagt til i listen «{0}» på porteføljeområdet fordi du mangler skrivetilgang der. Prosjektet registreres i porteføljen første gang noen med skrivetilgang til listen lagrer endringer i «Prosjektinformasjon» eller endrer fase på prosjektets forside. Til da vises det ikke i porteføljeoversikten.',

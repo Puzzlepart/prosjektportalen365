@@ -37,12 +37,25 @@ export class SetupProjectInformation extends BaseTask {
     try {
       this._templateParameters = params.templateSchema.Parameters
       await this._syncPropertiesList()
-      if (this.data.hasHubWriteAccess === false) {
+      if (this.data.isShieldedProject) {
+        // Not a warning: a shielded project is kept out of the hub on purpose.
+        this.logInformation(strings.ShieldedProjectHubWriteSkippedLogText)
+        this.onProgress(
+          strings.SetupProjectInformationText,
+          strings.ShieldedProjectHubWriteSkippedLogText,
+          'AlignCenter',
+          { message: strings.ShieldedProjectHubWriteSkippedLogText, level: 'info' }
+        )
+      } else if (this.data.hasHubWriteAccess === false) {
         this._logHubWriteSkipped(strings.HubWriteSkippedLogText)
       } else {
         await this._addEntryToHub()
       }
-      if (this.data.projectData && this.data.hasHubWriteAccess !== false) {
+      if (
+        this.data.projectData &&
+        this.data.hasHubWriteAccess !== false &&
+        !this.data.isShieldedProject
+      ) {
         await SPDataAdapter.portalDataService.updateIdeaData(
           this.data.projectData,
           strings.IdeaDecisionStatusApprovedAndSynced

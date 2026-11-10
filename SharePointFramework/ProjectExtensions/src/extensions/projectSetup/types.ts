@@ -123,6 +123,20 @@ export interface IProjectSetupData extends IProjectSetupDialogState {
    * 403 although the check passed, so the remaining tasks skip their hub writes too.
    */
   hasHubWriteAccess?: boolean
+
+  /**
+   * Whether the project is shielded: a selected extension shields project data
+   * (`GtShieldsProjectData`), or the project was shielded already, or it could not be determined.
+   * A shielded project keeps its project data on its own site and writes nothing about itself to
+   * the hub's lists with data about every project.
+   */
+  isShieldedProject?: boolean
+
+  /**
+   * The project site's groups that get read access to a shielded project's lists for project
+   * data, from the rows in `Tillatelseskonfigurasjon` for shielded lists. Set by `SitePermissions`.
+   */
+  shieldedListGroupNames?: string[]
 }
 
 export enum ProjectSetupValidation {

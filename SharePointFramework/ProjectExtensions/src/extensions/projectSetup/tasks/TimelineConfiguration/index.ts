@@ -124,6 +124,12 @@ export class TimelineConfiguration extends BaseTask {
       return params
     }
 
+    // A shielded project has no timeline items: they live on the hub, with the project's entry.
+    if (this.data.isShieldedProject) {
+      this.logInformation('Skipping timeline configuration: The project is shielded')
+      return params
+    }
+
     // Timeline items live on the hub and reference the project's hub entry.
     if (this.data.hasHubWriteAccess === false) {
       this.logWarning('Skipping timeline configuration: No write access to the hub')

@@ -199,6 +199,10 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
       const provisioningInfo = await this._getSetupInfo(data)
       data = { ...data, ...provisioningInfo }
+      // Shielding cannot be removed: a project that is shielded already stays shielded.
+      data.isShieldedProject =
+        SPDataAdapter.isShieldedProject ||
+        (data.selectedExtensions ?? []).some((extension) => extension.shieldsProjectData)
       this._renderProgressDialog({
         progressIndicator: {
           label: strings.ProgressDialogLabel,
@@ -223,7 +227,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           .getByTitle(resource.Lists_ProjectProperties_Title)
           .items.getById(1)
           .update({ GtIsParentProject: true, GtChildProjects: JSON.stringify([]) })
-        if (data.hasHubWriteAccess !== false) {
+        if (data.hasHubWriteAccess !== false && !data.isShieldedProject) {
           await this._ensureParentProjectPatch()
         }
       }
@@ -282,8 +286,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    * @param data Project setup data
    */
   private _getCompletionWarning(data: IProjectSetupData): IProgressDialogProps['warning'] {
+    // A shielded project is not registered in the hub on purpose.
     const notRegistered =
-      data.hasHubWriteAccess === false
+      data.hasHubWriteAccess === false && !data.isShieldedProject
         ? {
             title: strings.ProjectNotRegisteredInHubTitle,
             text: format(strings.ProjectNotRegisteredInHubMessage, resource.Lists_Projects_Title)

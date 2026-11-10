@@ -94,6 +94,27 @@ describe('SetupProjectInformation', () => {
     expect(warnings(onProgress)).toEqual([strings.HubWriteSkippedLogText])
   })
 
+  it('stores the project properties but registers nothing on the hub for a shielded project', async () => {
+    const createNewEntity = jest.fn(() => Promise.resolve({}))
+    const params = taskParams(createNewEntity)
+    const onProgress = jest.fn()
+    await new SetupProjectInformation(setupData({ isShieldedProject: true })).execute(
+      params,
+      onProgress
+    )
+    expect(params.items.add).toHaveBeenCalled()
+    expect(params.entityService.getEntityItem).not.toHaveBeenCalled()
+    expect(createNewEntity).not.toHaveBeenCalled()
+    expect(hub.ideaUpdates).toEqual([])
+    expect(warnings(onProgress)).toEqual([])
+    expect(onProgress).toHaveBeenCalledWith(
+      expect.anything(),
+      strings.ShieldedProjectHubWriteSkippedLogText,
+      expect.anything(),
+      expect.objectContaining({ level: 'info' })
+    )
+  })
+
   it('goes on without the hub, and tells the other tasks, when the hub rejects the project entry', async () => {
     const denied = Object.assign(new Error('Access is denied.'), { status: 403 })
     const createNewEntity = jest.fn(() => Promise.reject(denied))
