@@ -5,7 +5,7 @@ jest.mock('pp365-shared-library/lib/components/ItemColumn/ColumnDataTypeField', 
   ColumnDataTypeField: () => null
 }))
 
-import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectContentColumn, format } from 'pp365-shared-library'
 import * as React from 'react'
@@ -14,9 +14,10 @@ import { ColumnFormPanel } from './ColumnFormPanel'
 
 /**
  * The aggregated overview's column form with its own hook: the fields show the values of the column
- * the form has, which arrives after the form opens; a save keeps what the form does not edit; a
- * locked column cannot be deleted; and a new column cannot take a managed property another column
- * of the category shows already, the locked project column too.
+ * the form has, which arrives after the form opens; a save keeps what the form does not edit and
+ * writes no minimum width the user did not give; a locked column cannot be deleted, and a delete
+ * the list refused is told; and a new column cannot take a managed property another column of the
+ * category shows already, the locked project column too.
  */
 const column = (Id: number, Title: string, fieldName: string, extra: Record<string, any> = {}) =>
   new ProjectContentColumn({
@@ -42,9 +43,10 @@ const status = () => column(40, 'Status', 'GtDeliveryStatusOWSCHCS', { GtIsGroup
 const phase = () => column(42, 'Fase', 'GtDeliveryPhaseOWSCHCS', { GtIsGroupable: true })
 const deleted = () => column(41, 'Gammel kolonne', 'GtOldOWSTEXT')
 
-function renderForm(columnForm: Record<string, any>) {
+function renderForm(columnForm: Record<string, any>, isDeleted = true) {
   const dispatch = jest.fn()
   const updateProjectContentColumn = jest.fn().mockResolvedValue({})
+  const deleteItemFromList = jest.fn().mockResolvedValue(isDeleted)
   const ui = (form: Record<string, any>) => (
     <PortfolioAggregationContext.Provider
       value={
@@ -59,7 +61,7 @@ function renderForm(columnForm: Record<string, any>) {
           props: {
             dataSourceCategory: 'Leveranser',
             configuration: { columns: [title(), project(), status(), deleted()] },
-            dataAdapter: { portalDataService: { updateProjectContentColumn } }
+            dataAdapter: { portalDataService: { updateProjectContentColumn, deleteItemFromList } }
           },
           dispatch
         } as any
@@ -72,12 +74,20 @@ function renderForm(columnForm: Record<string, any>) {
   return {
     open: (form: Record<string, any>) => rerender(ui(form)),
     dispatch,
-    updateProjectContentColumn
+    updateProjectContentColumn,
+    deleteItemFromList
   }
 }
 
 const field = (label: string) => screen.getByLabelText(label, { exact: false })
 const button = (text: string) => screen.getByText(text).closest('button')
+
+/** Saves the form, and waits for the column it saved. */
+async function save(dispatch: jest.Mock) {
+  const saves = dispatch.mock.calls.length
+  fireEvent.click(button(strings.SaveButtonLabel))
+  await waitFor(() => expect(dispatch.mock.calls.length).toBeGreaterThan(saves))
+}
 
 /** What React and Fluent said about inputs switching between controlled and uncontrolled. */
 const controlWarnings = (consoleError: jest.SpyInstance) =>
@@ -139,6 +149,35 @@ describe('ColumnFormPanel (aggregated overview) with its own hook', () => {
     expect(saved.data.isLocked).toBe(true)
     expect(saved.isGroupable).toBe(true)
     expect(saved.data.isGroupable).toBe(true)
+  })
+
+  it('leaves a minimum width the column did not have out of a save, and sends one the user gave', async () => {
+    // The form showed the model's 100 and saved it, where the list had none.
+    const { dispatch, updateProjectContentColumn } = renderForm({
+      isOpen: true,
+      column: column(43, 'Ansvarlig', 'GtDeliveryOwnerOWSUSER', { GtColMinWidth: null })
+    })
+    expect(field(strings.MinWidthLabel)).toHaveValue(100)
+    await save(dispatch)
+    expect(updateProjectContentColumn.mock.calls[0][1].GtColMinWidth).toBeUndefined()
+    fireEvent.change(field(strings.MinWidthLabel), { target: { value: '150' } })
+    await save(dispatch)
+    expect(updateProjectContentColumn.mock.calls[1][1].GtColMinWidth).toBe(150)
+  })
+
+  it('says so when the list refused to delete the column (WCAG 3.3.1)', async () => {
+    // The form did nothing: the column stayed, without a word of why.
+    const { dispatch, deleteItemFromList } = renderForm({ isOpen: true, column: status() }, false)
+    fireEvent.click(button(strings.DeleteButtonLabel))
+    const question = await screen.findByText(strings.ConfirmDeleteProjectContentColumnSubText)
+    fireEvent.click(
+      within(question.closest('[role="dialog"]') as HTMLElement).getByText(
+        strings.ConfirmDeleteResponseConfirm
+      )
+    )
+    expect(await screen.findByText(strings.ColumnDeleteErrorText)).toBeInTheDocument()
+    expect(deleteItemFromList).toHaveBeenCalledWith('PROJECT_CONTENT_COLUMNS', 40)
+    expect(dispatch).not.toHaveBeenCalledWith(expect.objectContaining({ type: 'COLUMN_DELETED' }))
   })
 
   it('keeps a locked column and the title column from being deleted, saying why (WCAG 3.3.2)', () => {

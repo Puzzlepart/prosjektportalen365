@@ -33,6 +33,8 @@ export const ColumnFormPanel: FC = () => {
     setColumnData,
     isEditing,
     isSaveDisabled,
+    isDeleteDisabled,
+    deleteDisabledReason,
     propertyInUseMessage,
     visibility,
     visibilityText,
@@ -58,6 +60,8 @@ export const ColumnFormPanel: FC = () => {
           isEditing={isEditing}
           isSaveDisabled={isSaveDisabled}
           saveDisabledReason={propertyInUseMessage}
+          isDeleteDisabled={isDeleteDisabled}
+          deleteDisabledReason={deleteDisabledReason}
         />
       }
       onClose={onDismiss}
@@ -147,21 +151,8 @@ export const ColumnFormPanel: FC = () => {
               placeholder={strings.Placeholder.TextField}
             />
           </FieldContainer>
-          <FieldContainer
-            iconName='NumberSymbolSquare'
-            label={strings.MaxWidthLabel}
-            description={strings.MaxWidthDescription}
-          >
-            <Input
-              value={column.get('maxWidth')?.toString() ?? ''}
-              type='number'
-              min={column.get('minWidth') ?? 40}
-              max={400}
-              step={2}
-              onChange={(_, data) => setColumn('maxWidth', parseInt(data.value))}
-              placeholder={strings.Placeholder.TextField}
-            />
-          </FieldContainer>
+          {/* No max width: the overview's list sizes a column by its minimum width alone, so the
+              field had no effect. */}
           <ColumnDataTypeField
             label={strings.ColumnRenderLabel}
             description={strings.PortfolioOverviewColumnRenderDescription}

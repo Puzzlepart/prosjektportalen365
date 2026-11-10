@@ -311,6 +311,7 @@ define([], function () {
     TitleLabel: 'Tittel',
     TitleColumnDeleteDisabledReason: 'Tittelkolonnen kan ikke slettes',
     LockedColumnDeleteDisabledReason: 'Kolonnen er låst og kan ikke slettes',
+    ColumnDeleteErrorText: 'Kolonnen kunne ikke slettes. Prøv igjen, eller sjekk at du har tilgang til å endre kolonnene.',
     ViewFormSaveDisabledReason: 'Fyll ut tittel, med minst to tegn, og søkespørring, med minst 51 tegn, for å lagre',
     TitleDescription: 'Tittel for visningen.',
     ToggleColumnFormPanelLabel: 'Legg til kolonne',

@@ -90,11 +90,15 @@ export function useColumnFormPanel() {
     if (colummData.dataTypeProperties) {
       columnItem.GtFieldDataTypeProperties = JSON.stringify(colummData.dataTypeProperties, null, 2)
     }
+    // A column without a minimum width of its own shows the model's 100: sent back untouched, it
+    // stored 100 where the list had none.
+    const isMinWidthUnchanged =
+      isEditing && column.get('minWidth') === context.state.columnForm.column.minWidth
     try {
       if (isEditing) {
         await context.props.dataAdapter.portalDataService.updateProjectContentColumn(
           'PROJECT_CONTENT_COLUMNS',
-          columnItem,
+          isMinWidthUnchanged ? { ...columnItem, GtColMinWidth: undefined } : columnItem,
           persistRenderGlobally
         )
       } else {
@@ -118,7 +122,8 @@ export function useColumnFormPanel() {
   /**
    * Deletes the column from the content columns list. Deletes the column using
    * `deleteItemFromList` from the data adapter. If the column is deleted
-   * successfully, it will dispatch the `COLUMN_DELETED` action to the reducer.
+   * successfully, it will dispatch the `COLUMN_DELETED` action to the reducer;
+   * if the list refused, the form says so.
    */
   const onDeleteColumn = async () => {
     if (isDeleteDisabled) return
@@ -133,13 +138,15 @@ export function useColumnFormPanel() {
       setSaveError(error)
       return
     }
-    if (isDeleted) {
-      context.dispatch(
-        COLUMN_DELETED({
-          columnId: context.state.columnForm.column.id
-        })
-      )
+    if (!isDeleted) {
+      setSaveError(new Error(strings.ColumnDeleteErrorText))
+      return
     }
+    context.dispatch(
+      COLUMN_DELETED({
+        columnId: context.state.columnForm.column.id
+      })
+    )
   }
 
   /**

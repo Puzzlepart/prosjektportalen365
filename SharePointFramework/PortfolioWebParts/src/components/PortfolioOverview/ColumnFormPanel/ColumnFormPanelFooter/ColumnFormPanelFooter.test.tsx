@@ -78,6 +78,17 @@ describe('ColumnFormPanelFooter', () => {
     expect(screen.getByRole('button', { name: 'Lagre' })).toHaveAccessibleDescription(reason)
   })
 
+  it('keeps a column that cannot be deleted from being deleted, and lets the keyboard reach why (WCAG 2.1.1, 3.3.2)', () => {
+    renderFooter({
+      isEditing: true,
+      isDeleteDisabled: true,
+      deleteDisabledReason: strings.TitleColumnDeleteDisabledReason
+    })
+    const remove = screen.getByRole('button', { name: 'Slett' })
+    expect(remove).toHaveAttribute('aria-disabled', 'true')
+    expect(remove).toHaveAccessibleDescription(strings.TitleColumnDeleteDisabledReason)
+  })
+
   it('closes the panel on cancel without saving', async () => {
     const { dispatch, onSave, user } = renderFooter()
     await user.click(screen.getByRole('button', { name: 'Avbryt' }))

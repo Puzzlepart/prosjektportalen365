@@ -275,6 +275,7 @@ define([], function () {
     TitleLabel: 'Title',
     TitleColumnDeleteDisabledReason: 'The title column cannot be deleted',
     LockedColumnDeleteDisabledReason: 'The column is locked and cannot be deleted',
+    ColumnDeleteErrorText: 'The column could not be deleted. Try again, or check that you have access to change the columns.',
     ViewFormSaveDisabledReason: 'Fill in the title, at least two characters, and the search query, at least 51 characters, to save',
     ToggleColumnFormPanelLabel: 'Add column',
     UseChangesButtonText: 'Use',

@@ -72,6 +72,16 @@ export function useColumnFormPanel() {
   const isRefinable = !!column.get('isRefinable')
 
   /**
+   * Why the column cannot be deleted, when it cannot: the title column, which the overview's
+   * list depends on.
+   */
+  const deleteDisabledReason =
+    context?.state.columnForm?.column?.fieldName === 'Title'
+      ? strings.TitleColumnDeleteDisabledReason
+      : undefined
+  const isDeleteDisabled = !!deleteDisabledReason
+
+  /**
    * Dismisses the form panel by dispatching the `TOGGLE_COLUMN_FORM_PANEL` action.
    */
   const onDismiss = () => {
@@ -101,7 +111,6 @@ export function useColumnFormPanel() {
       GtManagedProperty: column.get('fieldName'),
       GtFieldDataType: colummData.renderAs ?? 'Text',
       GtColMinWidth: column.get('minWidth'),
-      GtColMaxWidth: column.get('maxWidth'),
       GtShowFieldFrontpage: colummData.visibility.includes('Frontpage'),
       GtShowFieldPortfolio: colummData.visibility.includes('Portfolio'),
       GtShowFieldProjectStatus: colummData.visibility.includes('ProjectStatus'),
@@ -111,12 +120,21 @@ export function useColumnFormPanel() {
     if (colummData.dataTypeProperties) {
       columnItem.GtFieldDataTypeProperties = JSON.stringify(colummData.dataTypeProperties, null, 2)
     }
+    // A column without a minimum width of its own shows the model's 100: sent back untouched, it
+    // stored 100 where the list had none.
+    const isMinWidthUnchanged =
+      isEditing && column.get('minWidth') === context.state.columnForm.column.minWidth
     try {
       if (isEditing) {
         await context.props.dataAdapter.portalDataService.updateItemInList(
           'PROJECT_COLUMNS',
           context.state.columnForm.column.id,
-          _.omit(columnItem, ['Id', 'GtInternalName', 'GtManagedProperty'])
+          _.omit(columnItem, [
+            'Id',
+            'GtInternalName',
+            'GtManagedProperty',
+            ...(isMinWidthUnchanged ? ['GtColMinWidth'] : [])
+          ])
         )
       } else {
         // The id comes back from the list, so the column in the state can be edited and deleted
@@ -141,9 +159,11 @@ export function useColumnFormPanel() {
   /**
    * Deletes the column from the columns list. Deletes the column using
    * `deleteItemFromList` from the data adapter. If the column is deleted
-   * successfully, it will dispatch the `COLUMN_DELETED` action to the reducer.
+   * successfully, it will dispatch the `COLUMN_DELETED` action to the reducer;
+   * if the list refused, the form says so.
    */
   const onDeleteColumn = async () => {
+    if (isDeleteDisabled) return
     setSaveError(null)
     let isDeleted: boolean
     try {
@@ -155,13 +175,15 @@ export function useColumnFormPanel() {
       setSaveError(error)
       return
     }
-    if (isDeleted) {
-      context.dispatch(
-        COLUMN_DELETED({
-          columnId: context.state.columnForm.column.id
-        })
-      )
+    if (!isDeleted) {
+      setSaveError(new Error(strings.ColumnDeleteErrorText))
+      return
     }
+    context.dispatch(
+      COLUMN_DELETED({
+        columnId: context.state.columnForm.column.id
+      })
+    )
   }
 
   /**
@@ -228,6 +250,8 @@ export function useColumnFormPanel() {
     setColumnData,
     isEditing,
     isSaveDisabled,
+    isDeleteDisabled,
+    deleteDisabledReason,
     propertyInUseMessage,
     visibility,
     visibilityText,

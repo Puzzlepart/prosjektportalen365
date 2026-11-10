@@ -18,6 +18,8 @@ export const ColumnFormPanelFooter: FC<IColumnFormPanelFooterProps> = ({
   onDeleteColumn,
   isSaveDisabled,
   saveDisabledReason,
+  isDeleteDisabled,
+  deleteDisabledReason,
   isEditing
 }) => {
   const fluentProviderId = useId('fp-column-form-panel-footer')
@@ -64,6 +66,12 @@ export const ColumnFormPanelFooter: FC<IColumnFormPanelFooterProps> = ({
               })
               if (response) void onDeleteColumn()
             }}
+            disabledFocusable={isDeleteDisabled}
+            title={
+              isDeleteDisabled
+                ? (deleteDisabledReason ?? strings.TitleColumnDeleteDisabledReason)
+                : undefined
+            }
           >
             {strings.DeleteButtonLabel}
           </Button>

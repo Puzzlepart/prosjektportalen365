@@ -445,12 +445,14 @@ export function useTemplatePackageCatalog(
     setState({ notification: undefined, busyAction: 'remove' })
     try {
       // An extension's cross-ref itemId points at the Prosjekttillegg library,
-      // not Maloppsett — route the delete to the right list.
-      if (pkg.type === 'extension') {
-        await ProjectExtensionsService.remove(ref.itemId)
-      } else {
-        await TemplateOptionsService.remove(ref.itemId)
-      }
+      // not Maloppsett — route the delete to the right list. Maloppsett answers
+      // false when it refused the removal, where the library throws: the refusal
+      // was told and tracked as a success.
+      const removed =
+        pkg.type === 'extension'
+          ? await ProjectExtensionsService.remove(ref.itemId).then(() => true)
+          : await TemplateOptionsService.remove(ref.itemId)
+      if (!removed) throw new Error(strings.CatalogRemoveErrorText)
       await refreshCrossRef()
       void TelemetryService.track(props, {
         action: 'remove',

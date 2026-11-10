@@ -309,6 +309,7 @@ declare interface IPortfolioWebPartsStrings {
   TitleLabel: string
   TitleColumnDeleteDisabledReason: string
   LockedColumnDeleteDisabledReason: string
+  ColumnDeleteErrorText: string
   ViewFormSaveDisabledReason: string
   TitleDescription: string
   ToggleColumnFormPanelLabel: string

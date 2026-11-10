@@ -247,6 +247,8 @@ export class TemplateOptionsService {
   /**
    * Remove a catalog-linked Maloppsett item (never touches provisioned site
    * content).
+   *
+   * @returns `true` when the item was removed, `false` when the list refused
    */
   public static async remove(itemId: number): Promise<boolean> {
     return SPDataAdapter.portalDataService.deleteItemFromList(

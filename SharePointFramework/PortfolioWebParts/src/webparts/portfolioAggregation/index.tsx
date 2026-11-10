@@ -34,7 +34,6 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
     }
     if (!this._configuration) {
       // The base web part unmounts the element in onDispose.
-      // eslint-disable-next-line @rushstack/pair-react-dom-render-unmount
       renderReact(
         createElement(UserMessage, {
           title: this._configurationError?.name ?? strings.ErrorTitle,
