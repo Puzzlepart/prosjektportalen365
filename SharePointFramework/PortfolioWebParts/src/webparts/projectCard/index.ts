@@ -19,7 +19,7 @@ import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls/lib/Proper
 import { PropertyFieldToggleWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldToggleWithCallout'
 import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHeader'
 import { createElement } from 'react'
-import { PortalDataService, ProjectColumn } from 'pp365-shared-library'
+import { isHubSite, PortalDataService, ProjectColumn } from 'pp365-shared-library'
 import { IHubContext } from '../../data/types'
 import { spfi, SPFx } from '@pnp/sp'
 import '@pnp/sp/webs'
@@ -42,11 +42,12 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
     await super.onInit()
 
     this._projectSiteId = await this.getProjectSiteId()
-    this._hubContext = this.createHubContext()
 
     this._portalDataService = await new PortalDataService().configure({
       spfxContext: this.context
     })
+    // After the portal data service, which knows the hub of the site the page is on.
+    this._hubContext = this.createHubContext()
 
     this._columns = await this._portalDataService.getProjectColumns()
 
@@ -67,11 +68,18 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
     this.renderComponent<IProjectCardProps>(ProjectCard, {
       ...this.properties,
       projectColumns: this._columns,
-      projectSiteId: this._projectSiteId || this.properties.projectSiteId,
+      projectSiteId:
+        this._projectSiteId || this.properties.projectSiteId || this.getOwnProjectSiteId(),
       hubContext: this._hubContext
     })
   }
 
+  /**
+   * The hub the project is read from, when that is not the site the page is on: the hub the
+   * page's news item names, else the hub of the project site the page is on. `Prosjekter` and
+   * `Maloppsett` are lists of the hub, and a card on a project site asked the project site for
+   * them and showed «Prosjektet kunne ikke hentes».
+   */
   private createHubContext(): IHubContext | undefined {
     if (this._hubSiteId && this._hubSiteUrl) {
       return {
@@ -80,7 +88,28 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
         spfxContext: this.context
       }
     }
+    if (this.isOnProjectSite()) {
+      return {
+        hubSiteId: this.context.pageContext.legacyPageContext.hubSiteId,
+        hubSiteUrl: this._portalDataService.url,
+        spfxContext: this.context
+      }
+    }
     return undefined
+  }
+
+  /** Whether the page is on a site of the hub other than the hub itself, with the hub in reach. */
+  private isOnProjectSite(): boolean {
+    const portal = this._portalDataService
+    return !!portal?.url && portal.isAvailable !== false && !isHubSite(this.context.pageContext)
+  }
+
+  /**
+   * The project a card on a project site shows when neither its page nor its pane names one: the
+   * site it is on.
+   */
+  private getOwnProjectSiteId(): string | undefined {
+    return this.isOnProjectSite() ? this.context.pageContext.site.id.toString() : undefined
   }
 
   protected async getProjectSiteId(): Promise<string> {
