@@ -103,6 +103,28 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   }
 
   /**
+   * Whether the page is on the hub itself.
+   */
+  private get _isOnHubSite(): boolean {
+    const pageContext = this._configuration?.spfxContext?.pageContext
+    return (
+      !!pageContext?.legacyPageContext?.siteId &&
+      !stringIsNullOrEmpty(pageContext.legacyPageContext.hubSiteId) &&
+      isHubSite(pageContext)
+    )
+  }
+
+  /**
+   * Settles `isAvailable` for a page on another site than the hub (`_probeHubAccess`). On the hub
+   * itself the user reads the hub: a list a group there may not read, such as `Globale
+   * innstillinger` for a customer's own group, is only marked as denied when it is asked for.
+   */
+  private async _settleHubAccess(): Promise<void> {
+    if (!this.isAvailable || this._isOnHubSite) return
+    await this._probeHubAccess()
+  }
+
+  /**
    * Settles `isAvailable` before the first list a web part asks for: a user without access to the
    * hub is denied `Globale innstillinger`, a member of «Minimum lesetilganger på hub» is not. Not
    * cached across page loads like the settings themselves (`getGlobalSettings`), which would leave
@@ -175,7 +197,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     super.onConfigureStart(merge({ ...PortalDataServiceDefaultConfiguration }, configuration))
     this._sp = createSpfiInstance(this._configuration.spfxContext)
     await this.onInit(configuration?.url)
-    if (this.isAvailable) await this._probeHubAccess()
+    await this._settleHubAccess()
     return super.onConfigured()
   }
 
@@ -237,10 +259,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         resolveHubUrl({
           webUrl: pageContext.web.absoluteUrl,
           hubSiteId: this.hubSiteId,
-          isHubSite:
-            !!pageContext?.legacyPageContext?.siteId &&
-            !stringIsNullOrEmpty(this.hubSiteId) &&
-            isHubSite(pageContext),
+          isHubSite: this._isOnHubSite,
           fetch: (input, init) => fetch(input, init),
           search: async (hubSiteId) => {
             const { PrimarySearchResults } = await this._sp.search({

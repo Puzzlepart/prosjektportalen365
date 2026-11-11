@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http'
 import { stringIsNullOrEmpty } from '@pnp/core'
-import { format } from 'pp365-shared-library'
+import { format, isUnauthorizedError } from 'pp365-shared-library'
 import * as strings from 'ProjectWebPartsStrings'
 import { TemplateFile } from './types'
 import SPDataAdapter from 'data'
@@ -15,6 +15,23 @@ import { getRestErrorMessage, toODataString, toUrlPath } from './rest'
  */
 export function newsNoAccessError(): Error {
   return Object.assign(new Error(strings.NewsNoAccessErrorText), { status: 403 })
+}
+
+/**
+ * The site the project's news are on: the one the web part names, else the hub's setting
+ * `ProjectNewsHubUrl`, else the hub itself, which is the setting's value on a new installation.
+ * Empty only when the hub is out of reach, which the news tell as missing access.
+ *
+ * @param webPartUrl The site the web part names (`siteUrl`)
+ * @param settingUrl The hub's setting `ProjectNewsHubUrl`, when it is enabled
+ * @param hub Whether the hub is in reach, and its URL
+ */
+export function getNewsSiteUrl(
+  webPartUrl: string | undefined,
+  settingUrl: string | undefined,
+  hub: { isAvailable: boolean; url?: string }
+): string {
+  return webPartUrl || settingUrl || (hub.isAvailable ? (hub.url ?? '') : '')
 }
 
 /**
@@ -419,6 +436,9 @@ export async function setOriginalSourceSiteId(
       }
     }
   } catch (error) {
+    // Only a refusal is passed over. Another failure would leave the article without the
+    // project's values: the dialog then removes the page and says why.
+    if (!isUnauthorizedError(error)) throw error
     console.warn('Could not read the project from the hub for the news article:', error)
   }
 
@@ -435,6 +455,9 @@ export async function setOriginalSourceSiteId(
 
   if (!updateRes.ok) {
     const error = await updateRes.json().catch(() => ({}))
-    throw new Error(getRestErrorMessage(error) || updateRes.statusText)
+    // With the status, a refused update says access is missing.
+    throw Object.assign(new Error(getRestErrorMessage(error) || updateRes.statusText), {
+      status: updateRes.status
+    })
   }
 }

@@ -111,7 +111,8 @@ export const useNewsDialog = () => {
           newPageServerRelativeUrl
         )
         if (!res.ok) {
-          showError(await res.json())
+          // SharePoint's error body has no status: with it, a refused copy says access is missing.
+          showError({ ...(await res.json()), status: res.status })
           return
         }
         try {

@@ -312,7 +312,7 @@ define([], function () {
     HubSyncWarningTitle: 'Porteføljeområdet ble ikke oppdatert',
     HubSyncNoWriteAccessReason: 'Du mangler skrivetilgang til listen «{0}» på porteføljeområdet. Be en administrator om tilgang, eller be noen med tilgang om å lagre prosjektinformasjonen.',
     ArchiveLogWarningTitle: 'Arkiveringsloggen ble ikke oppdatert',
-    ArchiveLogNotWrittenText: 'Fasen er endret, men arkiveringen ble ikke ført i arkiveringsloggen. {0} Arkivstatusen for dokumentene og listene vises derfor ikke.',
+    ArchiveLogNotWrittenText: 'Fasen er endret, men ikke alt i arkiveringen ble ført i arkiveringsloggen. {0} Arkivstatusen for dokumentene og listene som mangler der, vises derfor ikke. Last inn siden på nytt for å se den nye fasen i de andre webdelene.',
     ArchiveLogNoWriteAccessReason: 'Du mangler skrivetilgang til listen «{0}» på porteføljeområdet. Be en administrator om tilgang.',
     HubSyncHubUnavailableReason: 'Porteføljeområdet er ikke tilgjengelig for deg.',
     ProjectPropertiesNotSyncedToHubText: 'Endringene er lagret på prosjektområdet, men ble ikke synkronisert til porteføljeområdet. {0}',

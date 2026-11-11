@@ -301,7 +301,7 @@ define([], function () {
     HubSyncWarningTitle: 'The portfolio site was not updated',
     HubSyncNoWriteAccessReason: 'You do not have write access to the list "{0}" on the portfolio site. Ask an administrator for access, or ask someone with access to save the project information.',
     ArchiveLogWarningTitle: 'The archive log was not updated',
-    ArchiveLogNotWrittenText: 'The phase is changed, but the archiving was not written to the archive log. {0} The archive status of the documents and lists is therefore not shown.',
+    ArchiveLogNotWrittenText: 'The phase is changed, but not all of the archiving was written to the archive log. {0} The archive status of the documents and lists missing from it is therefore not shown. Reload the page to see the new phase in the other web parts.',
     ArchiveLogNoWriteAccessReason: 'You do not have write access to the list "{0}" on the portfolio site. Ask an administrator for access.',
     HubSyncHubUnavailableReason: 'The portfolio site is not available to you.',
     ProjectPropertiesNotSyncedToHubText: 'The changes are saved on the project site, but were not synchronized to the portfolio site. {0}',

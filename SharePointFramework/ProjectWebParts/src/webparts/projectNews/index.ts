@@ -2,6 +2,7 @@ import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp
 
 import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
 import { IProjectNewsProps, ProjectNews } from 'components/ProjectNews'
+import { getNewsSiteUrl } from 'components/ProjectNews/util'
 import * as strings from 'ProjectWebPartsStrings'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
 
@@ -18,8 +19,12 @@ export default class ProjectNewsWebPart extends BaseProjectWebPart<IProjectNewsP
     this._globalSettings = await this._portalDataService.getGlobalSettings()
     this._projectNewsFolderName =
       this._globalSettings.get('ProjectNewsFolderName') || strings.NewsFolderNameDefault
-    this._projectNewsHubUrl =
-      this._globalSettings.get('ProjectNewsHubUrl') || this.properties.siteUrl
+    // Without the setting the news are on the hub, as on a new installation, not missing.
+    this._projectNewsHubUrl = getNewsSiteUrl(
+      this.properties.siteUrl,
+      this._globalSettings.get('ProjectNewsHubUrl'),
+      this._portalDataService
+    )
 
     if (!this.properties.newsFolderName) {
       this.properties.newsFolderName = this._projectNewsFolderName

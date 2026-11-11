@@ -299,6 +299,41 @@ describe('PortalDataService', () => {
       })
       expect(service.isAvailable).toBe(true)
     })
+
+    /** A service on the site `siteId` of the hub `hubSiteId`, settling its access as `configure` does. */
+    async function settled(url: string, siteId: string, hubSiteId: string) {
+      const { service, queries } = portal({ [LISTS.GLOBAL_SETTINGS]: () => forbidden() })
+      service.url = url
+      ;(service as any)._configuration.spfxContext.pageContext.legacyPageContext = {
+        siteId,
+        hubSiteId
+      }
+      await (service as any)._settleHubAccess()
+      return { service, queries }
+    }
+
+    it('does not ask on the hub itself, where a group may read the hub but not the settings', async () => {
+      // A customer's own group with access to the hub kept the portfolio overview's columns in
+      // 1.14, which never read `Globale innstillinger` on the hub.
+      const hub = 'a1b2c3d4-0000-4000-8000-000000000001'
+      const { service, queries } = await settled(
+        'https://contoso.sharepoint.com/sites/probe-on-hub',
+        `{${hub}}`,
+        hub
+      )
+      expect(queries).toHaveLength(0)
+      expect(service.isAvailable).toBe(true)
+    })
+
+    it('asks from a project site of the hub', async () => {
+      const { service, queries } = await settled(
+        'https://contoso.sharepoint.com/sites/probe-from-project',
+        '{a1b2c3d4-0000-4000-8000-000000000002}',
+        'a1b2c3d4-0000-4000-8000-000000000001'
+      )
+      expect(queries.map(({ list }) => list)).toEqual([LISTS.GLOBAL_SETTINGS])
+      expect(service.isAvailable).toBe(false)
+    })
   })
 
   describe('a user without access to the hub', () => {

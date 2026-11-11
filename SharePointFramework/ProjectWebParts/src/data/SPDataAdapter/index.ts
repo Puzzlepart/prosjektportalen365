@@ -436,7 +436,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     webUrl: string,
     reference?: string
   ): Promise<Error | null> {
-    if (!this.portalDataService?.web) {
+    // `web` is the site's own web when the hub's URL is unknown: ask whether the hub is in reach.
+    if (!this.portalDataService?.isAvailable) {
       Logger.log({
         message: `(${this._name}) (writeToArchiveLog) Skipping archive log entry because portal data service is unavailable.`,
         data: { title, webUrl, operation },
