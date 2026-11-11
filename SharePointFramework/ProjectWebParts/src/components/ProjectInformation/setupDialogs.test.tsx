@@ -35,7 +35,8 @@ type MenuState = { Nodes: any[] }
 function renderDialog(
   Dialog: React.FC,
   activeDialog: string,
-  getMenuState: () => Promise<MenuState> = () => Promise.resolve({ Nodes: NODES })
+  getMenuState: () => Promise<MenuState> = () => Promise.resolve({ Nodes: NODES }),
+  language = 1044
 ) {
   const added: Array<{ action: Record<string, any>; saved: string }> = []
   const dispatch = jest.fn()
@@ -48,7 +49,7 @@ function renderDialog(
     <ProjectInformationContextProvider
       value={
         {
-          props: { sp, pageContext: { web: { language: 1044, absoluteUrl: PROJECT } } },
+          props: { sp, pageContext: { web: { language, absoluteUrl: PROJECT } } },
           state: { activeDialog: active },
           dispatch
         } as any
@@ -115,6 +116,55 @@ describe('The dialogs that run the setup on a set-up project', () => {
     expect(sessionStorage.getItem('pp_skipAlreadySetupCheck')).toBe('true')
     expect(screen.queryByText(strings.SetupMenuNotSavedTitle)).toBeNull()
   })
+
+  // The setup extension every installation has (`ProjectSetup` in channels/main.json, and in the
+  // site script that puts the setup on a new site). A site in English got the `i18n` channel's
+  // id, which no release installs, and the setup never started.
+  it.each([
+    [
+      '«Gjør om til overordnet prosjekt»',
+      1044,
+      CreateParentDialog,
+      'CreateParentDialog',
+      strings.RedoText
+    ],
+    [
+      '«Gjør om til overordnet prosjekt»',
+      1033,
+      CreateParentDialog,
+      'CreateParentDialog',
+      strings.RedoText
+    ],
+    [
+      '«Kjør oppsettveiviser»',
+      1044,
+      RunProjectSetupDialog,
+      'RunProjectSetupDialog',
+      strings.ConfirmText
+    ],
+    [
+      '«Kjør oppsettveiviser»',
+      1033,
+      RunProjectSetupDialog,
+      'RunProjectSetupDialog',
+      strings.ConfirmText
+    ]
+  ])(
+    '%s adds the setup extension the installation has, on a site with LCID %i',
+    async (
+      _name,
+      language: number,
+      Dialog: React.FC,
+      activeDialog: string,
+      primaryText: string
+    ) => {
+      const { added } = renderDialog(Dialog, activeDialog, undefined, language)
+      fireEvent.click(screen.getByRole('button', { name: primaryText }))
+      await waitFor(() => expect(added).toHaveLength(1))
+      expect(added[0].action.Location).toBe('ClientSideExtension.ApplicationCustomizer')
+      expect(added[0].action.ClientSideComponentId).toBe('ce34553d-ab47-4107-8dd1-e980d953996d')
+    }
+  )
 
   describe.each([
     [

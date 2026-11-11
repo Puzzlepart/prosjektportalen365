@@ -37,11 +37,7 @@ export const RunProjectSetupDialog: FC = () => {
    */
   async function applyCustomAction() {
     setLoading(true)
-    const lcid = context.props.pageContext.web.language
-    const customAction = createProjectSetupCustomAction(
-      strings.RunProjectSetupDialogProgressText,
-      lcid
-    )
+    const customAction = createProjectSetupCustomAction(strings.RunProjectSetupDialogProgressText)
     try {
       await context.props.sp.web.userCustomActions.add(customAction)
     } catch (error) {

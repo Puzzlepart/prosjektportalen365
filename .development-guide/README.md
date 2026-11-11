@@ -2372,7 +2372,7 @@ SPFx-manifestene, porteføljemalen og site scriptene har `main`-ID-ene, og JSON-
 
 `Scripts/UpgradeAllSitesToLatest.ps1` i pakken leser kanalen fra `.current-channel-config.json` i pakkens rot, der `Build-Release.ps1 -Channel` legger den. Uten fila oppgraderer skriptet alle områdene med `main`-ID-ene, og sier det i loggen. Fila begynner med punktum, og `actions/upload-artifact` tar ikke med slike filer uten `include-hidden-files: true`. Før 5. november 2026 manglet den i alle pakkene fra CI, så oppgraderingen av alle områdene i testhuben la `main`-kanalens bunntekst ved siden av testkanalens. Steget for bunnteksten (`EnsureFooterExtension.ps1`) fjerner nå en annen kanals bunntekst bare når pakken har kanalfila.
 
-Komponent-ID-er som står i TypeScript, byttes ikke. De to `ProjectSetupCustomAction.ts` i `SharePointFramework/ProjectWebParts/src/components/ProjectInformation/` (`RunProjectSetupDialog` og `CreateParentDialog`) bruker `main`-ID-en til `ProjectSetup` på norske områder (LCID 1044) og `i18n`-ID-en ellers.
+Komponent-ID-er som står i TypeScript, byttes ikke. `PROJECT_SETUP_COMPONENT_ID` i `SharePointFramework/ProjectWebParts/src/components/ProjectInformation/projectSetupComponentId.ts` er `main`-ID-en til `ProjectSetup`, og `Kjør oppsettveiviser` og `Gjør om til overordnet prosjekt` legger den inn som handling på områder på alle språk. På en annen kanal enn `main` starter de derfor `main`-kanalens veiviser, eller ingen når `main` ikke er installert i tenanten.
 
 ### Bygge for en kanal
 

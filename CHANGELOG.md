@@ -199,6 +199,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Rettet en feil i `Prosjektstatus` hvor det sto «Kladd, sist endret» uten dato ved tittelen når rapporteringen ikke hadde noen statusrapport
 - Rettet en feil i oppsettveiviseren hvor dialogen som vises når veiviseren lukkes uten at området settes opp, sa «Installasjon avbrutt av bruker» både som tittel og som feilmelding. Den sier nå «Oppsettet ble avbrutt» og at ingenting er lagt til på området, som en opplysning
 - Rettet en feil i oppsettveiviseren hvor telleren ved `Prosjekttillegg` og `Standardinnhold` sa «1 valgte elementer». Den sier nå «1 valgt element»
+- Rettet en feil hvor `Kjør oppsettveiviser` og `Gjør om til overordnet prosjekt` ikke startet oppsettveiviseren på områder med et annet språk enn norsk (siden 1.12.0). Handlingen som starter veiviseren, pekte der på en utvidelse som ikke følger med installasjonen
 
 ---
 
