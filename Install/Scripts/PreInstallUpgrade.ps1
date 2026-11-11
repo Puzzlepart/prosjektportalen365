@@ -420,4 +420,29 @@ if ($null -ne $LastInstall) {
             ForEach-Object { Remove-PnPCustomAction -Identity $_.Id -Scope Web -Force -ErrorAction SilentlyContinue }
         Write-Host "[SUCCESS] Duplicate Site Settings links removed" -ForegroundColor Green
     }
+
+    # Hjelpeinnhold er nøklet på Title med Overwrite. Da brukermanualens gevinstsider ble
+    # omdøpt til nytte (1.14.0), la hovedmalen til radene med de nye titlene og lot de gamle
+    # stå, med lenker til manualsider som ikke finnes lenger (404 i bunnteksten). Ryddingen
+    # styres av tilstand, ikke versjon, så den også rydder huber som alt er oppgradert.
+    # Vakt: kun radene med titlene fra tidligere versjoner av malen røres, og de legges i
+    # papirkurven.
+    $OldBenefitHelpContentTitles = @(
+        "Gevinstoversikt Portefølje Brukermanual",
+        "Gevinstoversikt Brukermanual",
+        "Gevinstoppfølging Brukermanual",
+        "Gevinstanalyse og gevinstrealiseringsplan Brukermanual",
+        "Gevinstananlyse og gevinstrealiseringsblan Brukermanual",
+        "Benefit Analysis and Realization Plan User Manual",
+        "Benefit Follow-Up User Manual"
+    )
+    $HelpContentList = Get-PnPList -Identity (Get-Resource -Name "Lists_HelpContent_Title") -ErrorAction SilentlyContinue
+    if ($null -ne $HelpContentList) {
+        Get-PnPListItem -List $HelpContentList.Id |
+            Where-Object { $OldBenefitHelpContentTitles -contains $_["Title"] } |
+            ForEach-Object {
+                Remove-PnPListItem -List $HelpContentList.Id -Identity $_.Id -Recycle -Force >$null
+                Write-Host "[SUCCESS] Recycled help content row [$($_["Title"])] for a renamed benefit page (id $($_.Id))" -ForegroundColor Green
+            }
+    }
 }

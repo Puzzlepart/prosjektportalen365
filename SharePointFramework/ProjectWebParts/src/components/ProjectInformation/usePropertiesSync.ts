@@ -1,12 +1,13 @@
-import { IProgressIndicatorProps } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import { ListLogger } from 'pp365-shared-library/lib/logging'
 import { sleep } from 'pp365-shared-library/lib/util'
 import SPDataAdapter from '../../data'
 import { IProjectInformationContext } from './context'
 import { IProjectInformationData, ProjectInformation } from './index'
-import { SET_PROGRESS } from './reducer'
+import { SET_HUB_SYNC_WARNING, SET_PROGRESS } from './reducer'
 import resource from 'SharedResources'
+import { IProgressProps, format } from 'pp365-shared-library'
+import { getHubSyncErrorReason } from '../../data/hubSyncError'
 
 interface IUsePropertiesSyncParams {
   /**
@@ -72,7 +73,7 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
    */
   const syncPropertyItemToHub = async (
     data = context.state.data,
-    progressFunc: (progress: IProgressIndicatorProps) => void = () => null
+    progressFunc: (progress: IProgressProps) => void = () => null
   ) => {
     const { fieldValues, templateParameters } = data
     await SPDataAdapter.syncPropertyItemToHub(
@@ -96,6 +97,7 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
   const onSyncProperties = async (params: IUsePropertiesSyncParams = {}): Promise<void> => {
     if (context.props.skipSyncToHub) return
     params.onProgress(strings.SyncProjectPropertiesProgressLabel)
+    context.dispatch(SET_HUB_SYNC_WARNING(null))
     try {
       params.onProgress(strings.SyncProjectPropertiesListProgressDescription)
       let created = false
@@ -113,7 +115,12 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
         window.location.reload()
       }
     } catch (error) {
-      ListLogger.log({
+      context.dispatch(
+        SET_HUB_SYNC_WARNING(
+          format(strings.ProjectPropertiesNotSyncedToHubText, getHubSyncErrorReason(error))
+        )
+      )
+      void ListLogger.log({
         message: error.message,
         level: 'Error',
         functionName: 'onSyncProperties',

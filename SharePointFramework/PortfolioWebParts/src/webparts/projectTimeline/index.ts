@@ -1,12 +1,16 @@
-import { format } from '@fluentui/react'
 import {
   IPropertyPaneConfiguration,
   PropertyPaneDropdown,
   PropertyPaneTextField
 } from '@microsoft/sp-property-pane'
 import strings from 'PortfolioWebPartsStrings'
-import { ProjectTimeline, IProjectTimelineProps } from 'pp365-shared-library/lib/components'
+import {
+  IProjectTimelineProps,
+  PROJECT_TIMELINE_DEFAULT_PROPS,
+  ProjectTimeline
+} from 'pp365-shared-library/lib/components'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
+import { format } from 'pp365-shared-library'
 
 export default class PortfolioTimelineWebPart extends BasePortfolioWebPart<IProjectTimelineProps> {
   public async onInit(): Promise<void> {
@@ -18,7 +22,7 @@ export default class PortfolioTimelineWebPart extends BasePortfolioWebPart<IProj
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    const propertiesWithDefaults = { ...ProjectTimeline.defaultProps, ...this.properties }
+    const propertiesWithDefaults = { ...PROJECT_TIMELINE_DEFAULT_PROPS, ...this.properties }
     const timeframeOptions = [
       [1, 'months'],
       [2, 'months'],

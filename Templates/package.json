@@ -1,10 +1,11 @@
 {
   "name": "pp365-templates",
-  "version": "1.14.1",
+  "version": "1.15.0",
   "main": "generateTemplate.js",
   "scripts": {
     "build": "npm run generate-project-templates && npm run generate-resx-json",
     "lint": "echo \"No linting configured\"",
+    "test": "node --test \".tasks/*.test.js\"",
     "generate-resx-json": "node ./.tasks/generate-resx-json.js",
     "generate-resx-ts": "node ./.tasks/generate-resx-ts.js",
     "generate-project-templates": "npm run generate-resx-json && npm run generate-resx-ts && node ./.tasks/generate-project-templates.js",

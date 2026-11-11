@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import strings from 'PortfolioExtensionsStrings'
-import { ICatalogPackage, ICompatibilityReport, ICrossReference } from 'models'
+import { format } from 'pp365-shared-library'
+import { ICatalogPackage, ICompatibilityReport, ICrossReference, PpPkgType } from 'models'
 import {
   CatalogService,
   featureFlags,
@@ -59,7 +60,7 @@ const normalize = (value: string): string => {
 /**
  * Orchestrates the catalog: loads the catalog + Maloppsett cross-reference,
  * derives the filtered/sorted/paginated package list, and exposes the import /
- * publish-central / remove actions.
+ * publish-central / update-central / remove actions.
  */
 export function useTemplatePackageCatalog(
   props: ITemplatePackageCatalogProps
@@ -287,11 +288,14 @@ export function useTemplatePackageCatalog(
     })
     // Snapshot BEFORE the install: refreshCrossRef() below overwrites the
     // cross-reference, and its prior presence is what discriminates a fresh
-    // install from an update (for both the installer and telemetry).
-    const priorRef = crossRefFor(pkg.id)
+    // install from an update (for both the installer and telemetry). Only a
+    // local install is overwritten: a cloud template's registration (Sentral)
+    // stays one, and the copy is added beside it.
+    const ref = crossRefFor(pkg.id)
+    const priorRef = ref?.packageType === PpPkgType.Importert ? ref : undefined
     const action = priorRef?.itemId ? ('update' as const) : ('install' as const)
     try {
-      const completed = await PackageInstaller.runImport({
+      const { completed, errors } = await PackageInstaller.runImport({
         package: pkg,
         context: props.context,
         featureFlagProvisioning: props.featureFlagProvisioning,
@@ -318,14 +322,22 @@ export function useTemplatePackageCatalog(
         previousVersion: priorRef?.installedVersion,
         ppVersion: state.installedVersion
       })
+      // Errors sp-js-provisioning logged and went on after: the progress pane's
+      // advanced log lists them.
       setState({
-        notification: {
-          intent: 'success',
-          text:
-            pkg.type === 'extension'
-              ? strings.CatalogInstallSuccessTextExtension
-              : strings.CatalogInstallSuccessText
-        }
+        notification:
+          errors.length > 0
+            ? {
+                intent: 'warning',
+                text: format(strings.CatalogInstallWarningText, errors.length)
+              }
+            : {
+                intent: 'success',
+                text:
+                  pkg.type === 'extension'
+                    ? strings.CatalogInstallSuccessTextExtension
+                    : strings.CatalogInstallSuccessText
+              }
       })
     } catch (error) {
       void TelemetryService.track(props, {
@@ -344,7 +356,28 @@ export function useTemplatePackageCatalog(
     }
   }
 
-  const publishCentral = async (pkg: ICatalogPackage): Promise<void> => {
+  /**
+   * Provisions a cloud template's hub dependencies and registers it in Maloppsett: as a new
+   * registration, or, given the package's registration (`ref`), by updating that one in place to
+   * the package's version, so it stays a cloud template.
+   */
+  const provisionCloudTemplate = async (
+    pkg: ICatalogPackage,
+    ref?: ICrossReference
+  ): Promise<void> => {
+    const texts = ref
+      ? {
+          success: format(strings.CatalogUpdateCentralSuccessText, pkg.version),
+          taxonomySkipped: format(strings.CatalogUpdateCentralTaxonomySkippedText, pkg.version),
+          cancelled: strings.CatalogUpdateCentralCancelledText,
+          error: strings.CatalogUpdateCentralErrorText
+        }
+      : {
+          success: strings.CatalogPublishSuccessText,
+          taxonomySkipped: strings.CatalogPublishTaxonomySkippedText,
+          cancelled: strings.CatalogPublishCancelledText,
+          error: strings.CatalogPublishErrorText
+        }
     setState({ notification: undefined, busyAction: 'publish' })
     try {
       // A cloud template's hub dependencies are provisioned now, in this admin
@@ -370,30 +403,42 @@ export function useTemplatePackageCatalog(
       )
       // Cancelled at the compatibility prompt — nothing was written.
       if (!result.completed) {
-        setState({ notification: { intent: 'warning', text: strings.CatalogPublishCancelledText } })
+        setState({ notification: { intent: 'warning', text: texts.cancelled } })
         return
       }
-      await TemplateOptionsService.createCentral(pkg, {
+      const options = {
         projectContentTypeId: result.manifest.provisioning?.projectContentTypeId,
         projectStatusContentTypeId: result.manifest.provisioning?.projectStatusContentTypeId,
         projectPhaseTermSetId: result.manifest.provisioning?.projectPhaseTermSetId,
         name: result.localizedName,
         description: result.localizedDescription
-      })
+      }
+      if (ref) await TemplateOptionsService.updateCentral(ref.itemId, pkg, options)
+      else await TemplateOptionsService.createCentral(pkg, options)
       await refreshCrossRef()
+      // The version updated from tells an update from a first publish.
       void TelemetryService.track(props, {
         action: 'publishCentral',
         status: 'success',
         packageId: pkg.id,
         packageVersion: pkg.version,
         packageType: pkg.type,
+        previousVersion: ref?.installedVersion,
         ppVersion: state.installedVersion,
         detail: { taxonomySkipped: result.taxonomySkipped }
       })
+      const publishedText = result.taxonomySkipped ? texts.taxonomySkipped : texts.success
+      // Publishing has no advanced log: the errors sp-js-provisioning logged and went
+      // on after are listed in the notification.
       setState({
-        notification: result.taxonomySkipped
-          ? { intent: 'warning', text: strings.CatalogPublishTaxonomySkippedText }
-          : { intent: 'success', text: strings.CatalogPublishSuccessText }
+        notification:
+          result.errors.length > 0
+            ? {
+                intent: 'warning',
+                text: format(strings.CatalogPublishErrorsText, publishedText, result.errors.length),
+                details: { label: strings.CatalogPublishErrorsLabel, lines: result.errors }
+              }
+            : { intent: result.taxonomySkipped ? 'warning' : 'success', text: publishedText }
       })
     } catch (error) {
       void TelemetryService.track(props, {
@@ -403,14 +448,22 @@ export function useTemplatePackageCatalog(
         packageId: pkg.id,
         packageVersion: pkg.version,
         packageType: pkg.type,
+        previousVersion: ref?.installedVersion,
         ppVersion: state.installedVersion
       })
-      setState({
-        notification: { intent: 'error', text: error?.message || strings.CatalogPublishErrorText }
-      })
+      setState({ notification: { intent: 'error', text: error?.message || texts.error } })
     } finally {
       setState({ busyAction: undefined })
     }
+  }
+
+  const publishCentral = (pkg: ICatalogPackage): Promise<void> => provisionCloudTemplate(pkg)
+
+  const updateCentral = async (pkg: ICatalogPackage): Promise<void> => {
+    const ref = crossRefFor(pkg.id)
+    // A local install is never turned into a cloud template here.
+    if (ref?.packageType !== PpPkgType.Sentral) return
+    await provisionCloudTemplate(pkg, ref)
   }
 
   const resolveCompatibility = (proceed: boolean): void => {
@@ -426,12 +479,14 @@ export function useTemplatePackageCatalog(
     setState({ notification: undefined, busyAction: 'remove' })
     try {
       // An extension's cross-ref itemId points at the Prosjekttillegg library,
-      // not Maloppsett — route the delete to the right list.
-      if (pkg.type === 'extension') {
-        await ProjectExtensionsService.remove(ref.itemId)
-      } else {
-        await TemplateOptionsService.remove(ref.itemId)
-      }
+      // not Maloppsett — route the delete to the right list. Maloppsett answers
+      // false when it refused the removal, where the library throws: the refusal
+      // was told and tracked as a success.
+      const removed =
+        pkg.type === 'extension'
+          ? await ProjectExtensionsService.remove(ref.itemId).then(() => true)
+          : await TemplateOptionsService.remove(ref.itemId)
+      if (!removed) throw new Error(strings.CatalogRemoveErrorText)
       await refreshCrossRef()
       void TelemetryService.track(props, {
         action: 'remove',
@@ -504,6 +559,7 @@ export function useTemplatePackageCatalog(
     closeDetail,
     importPackage,
     publishCentral,
+    updateCentral,
     removePackage,
     resolveCompatibility
   }

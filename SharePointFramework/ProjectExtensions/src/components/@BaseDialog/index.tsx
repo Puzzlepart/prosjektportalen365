@@ -13,10 +13,15 @@ import {
   useId
 } from '@fluentui/react-components'
 import { customLightTheme, getFluentIcon } from 'pp365-shared-library'
+import strings from 'ProjectExtensionsStrings'
 import React, { FC } from 'react'
 import styles from './BaseDialog.module.scss'
 import { IBaseDialogProps } from './types'
 
+/**
+ * The dialog the extension dialogs are built on: a Fluent UI v9 `Dialog` in its own
+ * providers, with a close button in the title unless `isBlocking`.
+ */
 export const BaseDialog: FC<IBaseDialogProps> = (props) => {
   const fluentProviderId = useId('base-dialog-')
 
@@ -41,7 +46,11 @@ export const BaseDialog: FC<IBaseDialogProps> = (props) => {
                 action={
                   !props.isBlocking ? (
                     <DialogTrigger action='close'>
-                      <Button appearance='subtle' icon={getFluentIcon('Dismiss')} />
+                      <Button
+                        appearance='subtle'
+                        aria-label={strings.CloseModalText}
+                        icon={getFluentIcon('Dismiss')}
+                      />
                     </DialogTrigger>
                   ) : undefined
                 }

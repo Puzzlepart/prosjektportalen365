@@ -1,9 +1,9 @@
-import { IColumn } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import { getObjectValue as get } from '../../util'
 import React, { ReactNode, createElement, useMemo } from 'react'
 import { ColumnRenderComponentRegistry, useColumnRenderComponentRegistry } from './registry'
 import { IRenderItemColumnProps } from './types'
+import { IListColumn } from '../../types'
 
 /**
  * On render item column function. First checks if the column has a custom render function,
@@ -12,7 +12,7 @@ import { IRenderItemColumnProps } from './types'
  * @param item Item to render the value for
  * @param column Column to render the value for
  */
-export function renderItemColumn(item: Record<string, any>, column: IColumn): ReactNode {
+export function renderItemColumn(item: Record<string, any>, column: IListColumn): ReactNode {
   if (!column.fieldName) return null
   if (column.onRender) return column.onRender(item, undefined, column)
   if (!stringIsNullOrEmpty(column['fieldNameDisplay'])) {
@@ -60,7 +60,7 @@ export function renderItemColumn(item: Record<string, any>, column: IColumn): Re
 export const useOnRenderItemColumn = () => {
   useColumnRenderComponentRegistry()
   return useMemo(
-    () => (item?: any, _index?: number, column?: IColumn) => renderItemColumn(item, column),
+    () => (item?: any, _index?: number, column?: IListColumn) => renderItemColumn(item, column),
     []
   )
 }

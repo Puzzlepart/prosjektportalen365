@@ -7,9 +7,8 @@ import {
   TimelineContentModel
 } from 'pp365-shared-library/lib/models'
 import { getClassProperties, isSystemSPField } from 'pp365-shared-library/lib/util'
+import { IListColumn, getAllItems } from 'pp365-shared-library'
 import { IProjectTimelineProps } from '../types'
-import '@pnp/sp/items/get-all'
-import { IColumn } from '@fluentui/react'
 import resource from 'SharedResources'
 
 // Item-list-specific extras on top of the shared `isSystemSPField` denylist.
@@ -52,7 +51,7 @@ export async function fetchTimelineData(
 
   try {
     projectDeliveries = props.showProjectDeliveries
-      ? await props.sp.web.lists.getByTitle(props.projectDeliveriesListName).items.getAll()
+      ? await getAllItems(props.sp.web.lists.getByTitle(props.projectDeliveriesListName).items)
       : []
   } catch (error) {}
 
@@ -161,27 +160,27 @@ export async function fetchTimelineData(
     filter = `${filter} and (startswith(ContentTypeId, '${timelineContentTypeId}'))`
   }
 
-  // eslint-disable-next-line prefer-const
-  let timelineContentItems = await timelineContentList.items
-    .select(
-      'Id',
-      'ContentTypeId',
-      'GtTimelineTypeLookup/Title',
-      'GtSiteIdLookupId',
-      'GtSiteIdLookup/Title',
-      'GtSiteIdLookup/GtSiteId',
-      ...defaultViewColumns.filter((col) => userFields.indexOf(col) === -1),
-      ...userFields.map((fieldName) => `${fieldName}/Id`),
-      ...userFields.map((fieldName) => `${fieldName}/Title`),
-      ...userFields.map((fieldName) => `${fieldName}/EMail`)
-    )
-    .expand('GtSiteIdLookup', 'GtTimelineTypeLookup', ...userFields)
-    .filter(filter)
-    .getAll()
+  let timelineContentItems = await getAllItems(
+    timelineContentList.items
+      .select(
+        'Id',
+        'ContentTypeId',
+        'GtTimelineTypeLookup/Title',
+        'GtSiteIdLookupId',
+        'GtSiteIdLookup/Title',
+        'GtSiteIdLookup/GtSiteId',
+        ...defaultViewColumns.filter((col) => userFields.indexOf(col) === -1),
+        ...userFields.map((fieldName) => `${fieldName}/Id`),
+        ...userFields.map((fieldName) => `${fieldName}/Title`),
+        ...userFields.map((fieldName) => `${fieldName}/EMail`)
+      )
+      .expand('GtSiteIdLookup', 'GtTimelineTypeLookup', ...userFields)
+      .filter(filter)
+  )
 
   const timelineListItems = timelineContentItems
 
-  const columns: IColumn[] = defaultViewColumns
+  const columns: IListColumn[] = defaultViewColumns
     .filter((columnName) => columnName !== 'GtSiteIdLookup')
     .map((columnName) => {
       const column = defaultViewFields.find((fld) => fld.InternalName === columnName)
@@ -191,7 +190,7 @@ export async function fetchTimelineData(
             name: column.Title,
             fieldName: column.InternalName,
             data: { type: column.TypeAsString },
-            minWidth: 100,
+            minWidth: 80,
             maxWidth: 200
           }
         : null

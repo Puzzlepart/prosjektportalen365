@@ -27,8 +27,10 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
             <LoadingSkeleton />
           ) : (
             <ProjectList
+              title={strings.ProgramAdministrationHeader}
               items={childProjects}
               defaultGroupsExpanded={true}
+              selectedItems={context.state.selectedProjects}
               onSelectionChange={onSelectionChange}
               renderLinks
               search={{

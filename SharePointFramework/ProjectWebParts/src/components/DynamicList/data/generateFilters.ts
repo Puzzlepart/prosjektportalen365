@@ -1,5 +1,4 @@
-import { IColumn } from '@fluentui/react'
-import { IFilterProps } from 'pp365-shared-library'
+import { IFilterProps, IListColumn } from 'pp365-shared-library'
 import { IDynamicListData } from '../types'
 import { get } from '@microsoft/sp-lodash-subset'
 import _ from 'lodash'
@@ -66,6 +65,14 @@ export function generateFilters(
     const allValues = _.flatten(
       data.listItems.map((item) => {
         const value = get(item, fieldName, '')
+        if (typeof value === 'string' && value.includes(';#')) {
+          // A lookup holds "id;#name" pairs (several for a multi-lookup); each pair is kept whole so
+          // the name can be read below.
+          const parts = value.split(';#')
+          const pairs: string[] = []
+          for (let i = 0; i + 1 < parts.length; i += 2) pairs.push(`${parts[i]};#${parts[i + 1]}`)
+          return pairs
+        }
         if (typeof value === 'string' && value.includes(';')) {
           return value.split(';')
         }
@@ -74,7 +81,7 @@ export function generateFilters(
     )
 
     const uniqueValues = _.uniq(allValues).filter((value) => {
-      if (value == null || value === '') return false
+      if (value === null || value === undefined || value === '') return false
       if (typeof value === 'string' && value.trim() === '') return false
       return true
     })
@@ -119,7 +126,7 @@ export function generateFilters(
           name: column.name,
           minWidth: column.minWidth,
           dataType: (column as any).dataType
-        } as IColumn,
+        } as IListColumn,
         items: filterItems
       })
     }

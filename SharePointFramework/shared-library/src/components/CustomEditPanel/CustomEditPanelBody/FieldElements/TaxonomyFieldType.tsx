@@ -1,14 +1,16 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { FieldContainer } from '../../../FieldContainer'
 import { useCustomEditPanelContext } from '../../context'
 import { FieldElementComponent } from './types'
-import { ModernTaxonomyPicker } from '@pnp/spfx-controls-react'
+import { ModernTaxonomyPicker } from '@pnp/spfx-controls-react/lib/ModernTaxonomyPicker'
+import { getTermPickerProps } from './termPickerProps'
 import { Term, useInitialTaxonomyValues } from './useInitialTaxonomyValues'
 
 export const TaxonomyFieldType: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
   const mapInitialValues = useInitialTaxonomyValues()
   const terms = context.model.get<Term[]>(field)
+  const termPickerProps = useMemo(() => getTermPickerProps(field.displayName), [field.displayName])
   type NormalizedTerm = NonNullable<ReturnType<typeof mapInitialValues>>
 
   const normalizeTerms = useCallback(
@@ -20,7 +22,7 @@ export const TaxonomyFieldType: FieldElementComponent = ({ field }) => {
   const handleChange = useCallback(
     (items?: Term[]) => {
       const normalized = normalizeTerms(items)
-      context.model.set(field, normalized)
+      void context.model.set(field, normalized)
     },
     [context.model, field, normalizeTerms]
   )
@@ -38,6 +40,7 @@ export const TaxonomyFieldType: FieldElementComponent = ({ field }) => {
         initialValues={normalizeTerms(terms)}
         label=''
         termSetId={field.getProperty('TermSetId')}
+        termPickerProps={termPickerProps}
         onChange={handleChange}
       />
     </FieldContainer>

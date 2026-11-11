@@ -1,3 +1,4 @@
+import { useId } from '@fluentui/react-components'
 import React, { useMemo, useState } from 'react'
 import { FilterItem } from '../FilterItem/FilterItem'
 import { IFilterItemProps } from '../FilterItem/types'
@@ -133,5 +134,8 @@ export function useFilter(props: IFilterProps) {
     ))
   }
 
-  return { state, onToggleSectionContent, renderItems }
+  // The section's button names the content it folds (aria-controls).
+  const contentId = useId('filter-section')
+
+  return { state, onToggleSectionContent, renderItems, contentId }
 }

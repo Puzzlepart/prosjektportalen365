@@ -1,7 +1,9 @@
-import { IDetailsHeaderProps, IRenderFunction } from '@fluentui/react'
+import { Ref } from 'react'
 import { IListProps } from '../types'
 
 export interface IListHeaderProps extends IListProps {
-  headerProps?: IDetailsHeaderProps
-  defaultRender?: IRenderFunction<IDetailsHeaderProps>
+  /**
+   * The pinned command bar; `List` measures it to pin the column headers below it.
+   */
+  commandBarRef?: Ref<HTMLDivElement>
 }

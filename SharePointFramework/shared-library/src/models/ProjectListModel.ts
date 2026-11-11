@@ -109,7 +109,10 @@ export class ProjectListModel {
    * @param title - Title
    * @param item - Item
    */
-  constructor(public title?: string, item?: any) {
+  constructor(
+    public title?: string,
+    item?: any
+  ) {
     this.siteId = item.GtSiteId
     this.groupId = item.GtGroupId
     this.url = item.GtSiteUrl

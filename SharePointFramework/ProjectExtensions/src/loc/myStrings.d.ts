@@ -26,7 +26,6 @@ declare interface IProjectExtensionsStrings {
   DueDateLabel: string
   NewRiskActionPanelTitle: string
   NewRiskActionPanelAddNewRiskAction: string
-  ResponsibleFieldNoResults: string
   ResponsibleFieldLabel: string
   ApplyExtensionHooks: string
   ApplyExtensionText: string
@@ -130,9 +129,16 @@ declare interface IProjectExtensionsStrings {
   ProjectAlreadySetupStack: string
   ProjectDataFoundTitle: string
   ProjectDataFoundMessage: string
+  NoHubWriteAccessTitle: string
+  NoHubWriteAccessMessage: string
+  HubWriteSkippedLogText: string
+  HubWriteDeniedLogText: string
+  ProjectNotRegisteredInHubTitle: string
+  ProjectNotRegisteredInHubMessage: string
   ProjectPropertiesHeader: string
   ProjectProvisioningStartLogText: string
   ProjectProvisioningSuccessLogText: string
+  ProjectProvisioningErrorsLogText: string
   ProvisionSiteFieldsErrorMessage: string
   ProvisionSiteFieldsText: string
   ProvisionSiteFieldText: string
@@ -144,6 +150,9 @@ declare interface IProjectExtensionsStrings {
   RemoveAlternativeLanguagesProgressText: string
   SetTaxonomyFieldsErrorMessage: string
   SetupAbortedText: string
+  SetupAbortedMessage: string
+  SetupCompletedWithErrorsTitle: string
+  SetupCompletedWithErrorsMessage: string
   SetupProjectInformationErrorMessage: string
   SetupProjectInformationText: string
   SitePermissionsSubText: string
@@ -156,6 +165,7 @@ declare interface IProjectExtensionsStrings {
   CloudTemplateBannerText: string
   CloudTemplateResolvingMessage: string
   CloudContentConfigDestinationListMissing: string
+  CloudContentConfigKeyColumnMissing: string
   CloudTemplateResolveErrorMessage: string
   CloudTemplateNotCompatibleWarning: string
   TemplateConfigConjunction: string
@@ -184,6 +194,7 @@ declare interface IProjectExtensionsStrings {
   CancelButtonLabel: string
   NoTemplateSelectedText: string
   SelectedCountLabel: string
+  SelectedCountOneLabel: string
   MandatoryItemTooltipText: string
   ProgressAdvancedLogLabel: string
   ProgressTaskPendingText: string
@@ -193,6 +204,38 @@ declare interface IProjectExtensionsStrings {
   ProgressTaskWarningText: string
   ProgressStepCountText: string
   ProgressAdvancedLogDescription: string
+  ProjectTemplateSelectorModeLabel: string
+  ConfigTabSelectedLabel: string
+  ExtensionsSectionSearchLabel: string
+  ContentConfigSectionSearchLabel: string
+  ContentConfigAddedText: string
+  ContentConfigAddedInfoText: string
+  SearchResultsCount: string
+  CloudTemplateResolved: string
+  ProgressStepAnnouncement: string
+  ProgressTaskStatusPending: string
+  ProgressTaskStatusRunning: string
+  ProgressTaskStatusCompleted: string
+  ProgressTaskStatusError: string
+  ProgressTaskStatusWarning: string
+  ProgressTaskLabel: string
+  ProgressTaskLabelWithEntries: string
+  ProgressLogLevelInfo: string
+  ProgressLogLevelWarning: string
+  ProgressLogLevelError: string
+  FolderNavigationLabel: string
+  CopyProgressAnnouncement: string
+  RiskActionTasksLabel: string
+  RiskActionTaskCompletedLabel: string
+  RiskActionSyncDone: string
+  RiskActionSyncFailed: string
+  NewRiskActionSaved: string
+  NewRiskActionSaveFailed: string
+  MigrateRiskActionsDone: string
+  MigrateRiskActionsFailed: string
+  MigrateRiskActionsPartlyDone: string
+  MigrateRiskActionsRefusedText: string
+  MigrateRiskActionsRefusedAction: string
 }
 
 declare module 'ProjectExtensionsStrings' {

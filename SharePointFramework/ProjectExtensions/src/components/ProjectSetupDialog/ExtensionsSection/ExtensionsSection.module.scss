@@ -19,5 +19,19 @@
         max-width: inherit;
       }
     }
+
+    // How many are picked, as text where a disabled toolbar button showed it.
+    .selectedCount {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      flex-shrink: 0;
+      min-width: 200px;
+      padding: 0 12px;
+      font-size: var(--fontSizeBase300);
+      color: var(--colorNeutralForeground2);
+      white-space: nowrap;
+    }
   }
 }

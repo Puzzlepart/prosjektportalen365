@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PlannerTask } from '@microsoft/microsoft-graph-types'
 import { FieldCustomizerContext } from '@microsoft/sp-listview-extensibility'
 import { GraphFI, SPFx as graphSPFx, graphfi } from '@pnp/graph'
@@ -11,16 +10,39 @@ import {
   RiskActionItemContext,
   RiskActionHiddenFieldValues,
   RiskActionPlannerTaskReference,
-  RiskActionPlannerTask
+  RiskActionPlannerTask,
+  RiskActionTasksResult
 } from './types'
-import _ from 'underscore'
 import { Caching } from '@pnp/queryable'
+
+/**
+ * What Planner said when it refused a request: the `message` of the error body (`{ "error": {
+ * "code", "message" } }`) that PnPjs puts after `::>` in the message of its error, else the
+ * error's message.
+ *
+ * @param error What the request failed with
+ */
+function plannerErrorMessage(error: any): string {
+  const message = String(error?.message ?? error ?? '')
+  try {
+    const reason = JSON.parse(message.split('::>')[1]).error.message
+    if (typeof reason === 'string' && reason.trim() !== '') return reason
+  } catch {
+    // Not an error body from Graph: the message as it is.
+  }
+  return message
+}
 
 export class DataAdapter extends SPDataAdapterBase {
   private readonly graph: GraphFI
   private readonly list: IList
   private readonly hiddenDataFieldName = 'RiskActionData'
   private readonly hiddenUpdateFieldName = 'RiskActionUpdated'
+
+  /**
+   * The bucket lookups under way, by plan ID, which a call made meanwhile waits for.
+   */
+  private readonly _bucketLookups = new Map<string, Promise<string>>()
 
   constructor(private readonly _context: FieldCustomizerContext) {
     super()
@@ -66,48 +88,100 @@ export class DataAdapter extends SPDataAdapterBase {
   }
 
   /**
-   * Ensures that a bucket with the specified name exists in the specified plan.
-   * If the bucket already exists, returns its ID. Otherwise, creates a new bucket and returns its ID.
+   * Ensures that the bucket named in the global setting `RiskActionPlannerBucketName` exists in the
+   * plan, and returns its ID. A call made while a lookup for the plan is under way waits for that
+   * lookup rather than adding the bucket a second time.
    *
    * @param planId The ID of the plan to add the bucket to.
    *
    * @returns The ID of the bucket.
    */
-  private async _ensureBucket(planId: string): Promise<string> {
+  private _ensureBucket(planId: string): Promise<string> {
+    let lookup = this._bucketLookups.get(planId)
+    if (!lookup) {
+      // Forgotten once settled, so a bucket deleted later is added again by the next call.
+      lookup = this._findOrAddBucket(planId).finally(() => this._bucketLookups.delete(planId))
+      this._bucketLookups.set(planId, lookup)
+    }
+    return lookup
+  }
+
+  /**
+   * Finds the bucket named in the global setting `RiskActionPlannerBucketName` in the plan, or adds
+   * it when the plan has none by that name, and returns its ID.
+   *
+   * @param planId The ID of the plan
+   */
+  private async _findOrAddBucket(planId: string): Promise<string> {
     const bucketName = this.globalSettings.get('RiskActionPlannerBucketName')
     const buckets = await this.graph.planner.plans.getById(planId).buckets()
     const bucket = buckets.find(({ name }) => name === bucketName)
     if (bucket) return bucket.id
-    const bucketAddResult = await this.graph.planner.buckets.add(bucketName, planId, ' !')
-    return bucketAddResult.data.id
+    const addedBucket = await this.graph.planner.buckets.add({
+      name: bucketName,
+      planId,
+      orderHint: ' !'
+    })
+    return addedBucket.id
   }
 
   /**
-   * Adds multiple tasks to the specified Risk Action item context.
+   * The plan and the bucket new tasks go to: the group's default plan and the bucket for risk
+   * actions in it, added when the plan lacks it.
+   */
+  private async _getTaskTarget(): Promise<{ planId: string; bucketId: string }> {
+    const defaultPlan = await this._getDefaultGroupPlan()
+    const bucketId = await this._ensureBucket(defaultPlan.id)
+    return { planId: defaultPlan.id, bucketId }
+  }
+
+  /**
+   * Adds a task for each of the actions in `titles`. The plan and the bucket are looked up once,
+   * before the tasks are added in parallel: each add ensuring the bucket itself gave the actions of
+   * a risk, migrated together, a bucket each. A task Planner refuses does not stop the others: the
+   * result names its action with Planner's reason.
    *
-   * @param tasks An array of strings representing the titles of the tasks to add.
+   * @param titles The titles of the tasks to add, one per action.
    * @param itemContext The Risk Action item context to add the tasks to.
    *
-   * @returns A Promise that resolves with an array of the newly added tasks.
+   * @returns The tasks added, and the actions whose task Planner refused.
    */
-  public async addTasks(tasks: string[], itemContext: RiskActionItemContext) {
-    const newTasks = _.flatten(
-      await Promise.all(
-        tasks.map(async (title) => await this.addTask(new Map([['title', title]]), itemContext))
+  public async addTasks(
+    titles: string[],
+    itemContext: RiskActionItemContext
+  ): Promise<RiskActionTasksResult> {
+    let target: { planId: string; bucketId: string }
+    try {
+      target = await this._getTaskTarget()
+    } catch (error) {
+      throw new Error(plannerErrorMessage(error))
+    }
+    const outcomes = await Promise.all(
+      titles.map((title) =>
+        this.addTask(new Map([['title', title]]), itemContext, target).then(
+          (task) => ({ title, task, reason: undefined as string }),
+          (error: Error) => ({ title, task: undefined as PlannerTask, reason: error.message })
+        )
       )
     )
-    return newTasks
+    return {
+      added: outcomes.filter(({ task }) => task).map(({ task }) => task),
+      refused: outcomes.filter(({ task }) => !task).map(({ title, reason }) => ({ title, reason }))
+    }
   }
 
   /**
-   * Adds a task to the current group's plan.
+   * Adds a task to the current group's plan, and fails with what Planner said when Planner refuses
+   * it.
    *
    * @param model Model for the task (Map<string, any>)
    * @param itemContext Item context for the current risk action item
+   * @param target The plan and the bucket to add the task to, when the caller has looked them up
    */
   public async addTask(
     model: Map<string, any>,
-    itemContext: RiskActionItemContext
+    itemContext: RiskActionItemContext,
+    target?: { planId: string; bucketId: string }
   ): Promise<PlannerTask> {
     try {
       let assignments = null
@@ -120,15 +194,15 @@ export class DataAdapter extends SPDataAdapterBase {
           }
         }
       }
-      const defaultPlan = await this._getDefaultGroupPlan()
-      const bucketId = await this._ensureBucket(defaultPlan.id)
-      const { task, data } = await this.graph.planner.tasks.add(
-        defaultPlan.id,
-        model.get('title'),
-        null,
+      const { planId, bucketId } = target ?? (await this._getTaskTarget())
+      const createdTask = await this.graph.planner.tasks.add({
+        planId,
+        title: model.get('title'),
         bucketId
-      )
-      let eTag = data['@odata.etag']
+      })
+      const task = this.graph.planner.tasks.getById(createdTask.id)
+      // PnPjs 4 resolves `add` to the created task payload, which carries the Planner ETag.
+      let eTag = createdTask['@odata.etag'] ?? '*'
       const taskUpdate = {
         assignments,
         startDateTime: model.get('startDate') ?? null,
@@ -150,9 +224,9 @@ export class DataAdapter extends SPDataAdapterBase {
         },
         eTag
       )
-      return data
-    } catch (e) {
-      return null
+      return createdTask
+    } catch (error) {
+      throw new Error(plannerErrorMessage(error))
     }
   }
 
@@ -216,10 +290,13 @@ export class DataAdapter extends SPDataAdapterBase {
    *
    * @param newTasks The new tasks to add to the current item
    * @param itemContext The item context for the current risk action item
+   * @param keep The text the action field keeps after the tasks' titles: the actions whose task
+   * Planner refused at a migration. By default as `RiskActionItemContext.update` keeps it.
    */
   public async updateItem(
     newTasks: PlannerTask[],
-    itemContext: RiskActionItemContext
+    itemContext: RiskActionItemContext,
+    keep?: string[]
   ): Promise<RiskActionItemContext> {
     const tasks = [
       ...(itemContext.hiddenFieldValues?.tasks ?? []),
@@ -230,7 +307,7 @@ export class DataAdapter extends SPDataAdapterBase {
       }))
     ]
     const listItem = this.list.items.getById(itemContext.id)
-    const updatedItemContext = itemContext.update(tasks)
+    const updatedItemContext = itemContext.update(tasks, keep)
     await listItem.update({
       GtRiskAction: updatedItemContext.fieldValue,
       [this.hiddenDataFieldName]: updatedItemContext.hiddenFieldValues.data

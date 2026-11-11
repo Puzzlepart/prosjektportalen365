@@ -15,7 +15,6 @@ import {
 } from '@pnp/spfx-property-controls/lib/PropertyFieldCollectionData'
 import { IDynamicListProps, DynamicListMode, WebContextMode } from 'components/DynamicList'
 import { DynamicList } from 'components/DynamicList/DynamicList'
-import '@fluentui/react/dist/css/fabric.min.css'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
 import * as strings from 'ProjectWebPartsStrings'
 import SPDataAdapter from '../../data'
@@ -176,9 +175,10 @@ export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListP
       let projectContentColumns = []
       try {
         if (SPDataAdapter.portalDataService?.isConfigured) {
-          projectContentColumns = await SPDataAdapter.portalDataService.fetchProjectContentColumns(
-            'PROJECT_CONTENT_COLUMNS'
-          )
+          projectContentColumns =
+            await SPDataAdapter.portalDataService.fetchProjectContentColumns(
+              'PROJECT_CONTENT_COLUMNS'
+            )
         }
       } catch (error) {
         console.warn('Could not fetch ProjectContentColumns configuration:', error)

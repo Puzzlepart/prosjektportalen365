@@ -1,7 +1,6 @@
-import { format } from '@fluentui/react'
 import { Tab, TabList, Badge, Button, Tooltip } from '@fluentui/react-components'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 import { BaseDialog } from '../@BaseDialog'
 import { ContentConfigSection } from './ContentConfigSection'
 import { ProjectSetupDialogContext } from './context'
@@ -10,30 +9,27 @@ import styles from './ProjectSetupDialog.module.scss'
 import { TemplateSelector } from './TemplateSelector'
 import { IProjectSetupDialogProps } from './types'
 import { useProjectSetupDialog } from './useProjectSetupDialog'
-import { getFluentIcon, UserMessage } from 'pp365-shared-library'
+import { getFluentIcon, UserMessage, format } from 'pp365-shared-library'
+import resource from 'SharedResources'
 
-type ConfigTab = 'extensions' | 'contentConfig'
-
+/**
+ * The project setup: the template, the extensions and the list content to set the project up with.
+ */
 export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
-  const { state, dispatch, onSubmit, isConfigDisabled } = useProjectSetupDialog(props)
-
-  // Hidden selections (e.g. a locked, template-bound extension) are applied but
-  // never shown, so they must not be counted in the visible badges.
-  const extensionsCount = state.selectedExtensions?.filter((e) => !e.hidden).length ?? 0
-  const contentConfigCount = state.selectedContentConfig?.filter((c) => !c.hidden).length ?? 0
-  const hasExtensions = !isConfigDisabled('extensions')
-  const hasContentConfig = !isConfigDisabled('contentConfig')
-
-  const defaultTab: ConfigTab = hasExtensions ? 'extensions' : 'contentConfig'
-  const [activeTab, setActiveTab] = useState<ConfigTab>(defaultTab)
-
-  useEffect(() => {
-    if (hasExtensions) {
-      setActiveTab('extensions')
-    } else if (hasContentConfig) {
-      setActiveTab('contentConfig')
-    }
-  }, [hasExtensions, hasContentConfig])
+  const {
+    state,
+    dispatch,
+    onSubmit,
+    extensionsCount,
+    contentConfigCount,
+    hasExtensions,
+    hasContentConfig,
+    activeTab,
+    onTabSelect,
+    tabIds,
+    tabLabel,
+    isSubmitDisabled
+  } = useProjectSetupDialog(props)
 
   const footer = (
     <>
@@ -44,16 +40,7 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
         />
       )}
       <section className={styles.actions}>
-        <Button
-          appearance='primary'
-          disabled={
-            !state.selectedTemplate ||
-            state.isResolvingCloudTemplate ||
-            // A cloud template can only be submitted once its .pppkg has resolved.
-            (state.selectedTemplate.isCloudTemplate && !state.resolvedCloudTemplate)
-          }
-          onClick={onSubmit}
-        >
+        <Button appearance='primary' disabled={isSubmitDisabled} onClick={onSubmit}>
           {strings.ProjectSetupDialogSubmitButtonText}
         </Button>
         <Button appearance='secondary' onClick={props.onDismiss} style={{ marginLeft: 4 }}>
@@ -78,13 +65,18 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
         footer={footer}
       >
         <p className={styles.subText}>{strings.ProjectSetupDialogInfoText}</p>
+        {props.data.hasHubWriteAccess === false && (
+          <div className={styles.hubAccessMessage}>
+            <UserMessage
+              title={strings.NoHubWriteAccessTitle}
+              text={format(strings.NoHubWriteAccessMessage, resource.Lists_Projects_Title)}
+              intent='warning'
+            />
+          </div>
+        )}
         <TemplateSelector />
         <div className={styles.configPane}>
-          <TabList
-            selectedValue={activeTab}
-            onTabSelect={(_, data) => setActiveTab(data.value as ConfigTab)}
-            className={styles.tabList}
-          >
+          <TabList selectedValue={activeTab} onTabSelect={onTabSelect} className={styles.tabList}>
             <Tooltip
               content={
                 hasExtensions
@@ -94,7 +86,12 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
               relationship='description'
               positioning='above'
             >
-              <Tab value='extensions' disabled={!hasExtensions} icon={getFluentIcon('PuzzlePiece')}>
+              <Tab
+                value='extensions'
+                id={tabIds.extensions}
+                aria-label={tabLabel(strings.ExtensionsSectionHeaderText, extensionsCount)}
+                icon={getFluentIcon('PuzzlePiece')}
+              >
                 <span className={styles.tabLabel}>
                   {strings.ExtensionsSectionHeaderText}
                   {hasExtensions && extensionsCount > 0 && (
@@ -121,7 +118,8 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
             >
               <Tab
                 value='contentConfig'
-                disabled={!hasContentConfig}
+                id={tabIds.contentConfig}
+                aria-label={tabLabel(strings.ContentConfigSectionHeaderText, contentConfigCount)}
                 icon={getFluentIcon('ListBar')}
               >
                 <span className={styles.tabLabel}>
@@ -141,19 +139,35 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
             </Tooltip>
           </TabList>
 
-          <div className={styles.tabContent}>
-            {activeTab === 'extensions' && hasExtensions && <ExtensionsSection />}
-            {activeTab === 'contentConfig' && hasContentConfig && <ContentConfigSection />}
+          <div className={styles.tabContent} role='tabpanel' aria-labelledby={tabIds[activeTab]}>
+            {/* A section with nothing to choose says so in its panel: its tab was disabled,
+                skipped by the keyboard, with why only in its tooltip (WCAG 2.1.1, 1.3.1). */}
+            {activeTab === 'extensions' &&
+              (hasExtensions ? (
+                <ExtensionsSection />
+              ) : (
+                <UserMessage text={strings.ExtensionsSectionDisabledTooltip} />
+              ))}
+            {activeTab === 'contentConfig' &&
+              (hasContentConfig ? (
+                <ContentConfigSection />
+              ) : (
+                <UserMessage text={strings.ContentConfigSectionDisabledTooltip} />
+              ))}
           </div>
         </div>
 
-        <div className={styles.projectDataMessage} hidden={!props.data.projectData}>
-          <UserMessage
-            title={strings.ProjectDataFoundTitle}
-            text={strings.ProjectDataFoundMessage}
-            intent='success'
-          />
-        </div>
+        {/* Rendered only with project data: a message bar announces itself when it mounts, so a
+            hidden one was read out to a screen reader on every setup. */}
+        {props.data.projectData && (
+          <div className={styles.projectDataMessage}>
+            <UserMessage
+              title={strings.ProjectDataFoundTitle}
+              text={strings.ProjectDataFoundMessage}
+              intent='success'
+            />
+          </div>
+        )}
       </BaseDialog>
     </ProjectSetupDialogContext.Provider>
   )

@@ -363,4 +363,81 @@ if ($null -ne $LastInstall) {
             }
         }
     }
+
+    if ($PreviousVersion -lt [version]"1.14.1") {
+        # Prosjektutlisting: nøklene i 'projectMetadata' ble endret i v1.11 uten migrering. Forsider
+        # satt opp med v1.10 eller eldre har fortsatt de gamle nøklene, og forsidemalen i v1.11 hadde
+        # 'PrimaryUserField' to ganger i stedet for 'PrimaryField'. Begge deler skjuler primært/sekundært
+        # felt og brukere i Prosjektutlisting (fra v1.14 også i listevisningen).
+        Write-Host "[INFO] Repairing 'projectMetadata' on 'Prosjektutlisting' web parts"
+        $ProjectListWebPartId = "54fbeb7d-e463-4dcc-8873-50a3ab2f0f68"
+        $LegacyProjectMetadataKeys = @{
+            "ProjectServiceArea" = "PrimaryField"
+            "ProjectType"        = "SecondaryField"
+            "ProjectOwner"       = "PrimaryUserField"
+            "ProjectManager"     = "SecondaryUserField"
+        }
+        $Pages = Get-PnPFolder -Url SitePages -Includes Files | Select-Object -ExpandProperty Files | Where-Object { $_.Name -like "*.aspx" }
+        foreach ($Page in $Pages) {
+            try {
+                $Components = Get-PnPPageComponent -Page $Page.Name -ErrorAction SilentlyContinue | Where-Object { $_.WebPartId -eq $ProjectListWebPartId }
+                foreach ($Component in $Components) {
+                    # Only the projectMetadata array is rewritten - round-tripping the whole properties
+                    # JSON through ConvertFrom-Json/ConvertTo-Json could alter other values (e.g. dates).
+                    $PropertiesJson = $Component.PropertiesJson
+                    $Match = [regex]::Match($PropertiesJson, '"projectMetadata"\s*:\s*(\[[^\]]*\])')
+                    if (-not $Match.Success) { continue }
+                    $CurrentKeys = @($Match.Groups[1].Value | ConvertFrom-Json)
+                    $Keys = @($CurrentKeys | ForEach-Object { if ($LegacyProjectMetadataKeys.ContainsKey($_)) { $LegacyProjectMetadataKeys[$_] } else { $_ } })
+                    # The property pane never saves duplicates, so a duplicate 'PrimaryUserField' can only be the v1.11 template default
+                    if (@($Keys | Where-Object { $_ -eq "PrimaryUserField" }).Count -gt 1 -and $Keys -notcontains "PrimaryField") {
+                        $Keys[[array]::IndexOf($Keys, "PrimaryUserField")] = "PrimaryField"
+                    }
+                    $Keys = @($Keys | Select-Object -Unique)
+                    if (($Keys -join ",") -eq ($CurrentKeys -join ",")) {
+                        Write-Host "[INFO] 'projectMetadata' on [$($Page.Name)] is already up to date, skipping"
+                        continue
+                    }
+                    $Group = $Match.Groups[1]
+                    $UpdatedJson = $PropertiesJson.Remove($Group.Index, $Group.Length).Insert($Group.Index, (ConvertTo-Json -InputObject $Keys -Compress))
+                    Set-PnPPageWebPart -Page $Page.Name -Identity $Component.InstanceId -PropertiesJson $UpdatedJson -ErrorAction Stop
+                    Set-PnPPage -Identity $Page.Name -Publish -ErrorAction Stop | Out-Null
+                    Write-Host "[INFO] Updated 'projectMetadata' on [$($Page.Name)] from [$($CurrentKeys -join ', ')] to [$($Keys -join ', ')]" -ForegroundColor Green
+                }
+            }
+            catch {
+                Write-Host "[WARNING] Failed to repair 'projectMetadata' on [$($Page.Name)]: $($_.Exception.Message)" -ForegroundColor Yellow
+            }
+        }
+    }
+
+    if ($PreviousVersion -lt [version]"1.15.0") {
+        # The template in 1.8.0-1.14.0 seeded the three 'Status muligheter' colour rows on project
+        # column 54, which on most hubs is another column or none. PostInstall.ps1 adds the rows on
+        # the right column (found by GtInternalName); the old ones are removed here once the right
+        # row for the same value is there, so they cannot colour another column's values. Rows whose
+        # title or value was changed are left alone. Recycled, so they can be restored.
+        Write-Host "[INFO] Removing the old 'Status muligheter' colour rows that point at another project column"
+        $OpportunitiesColumn = Get-PnPListItem -List (Get-Resource -Name "Lists_ProjectColumns_Title") | Where-Object { $_["GtInternalName"] -eq "GtStatusOpportunities" } | Select-Object -First 1
+        if ($null -eq $OpportunitiesColumn) {
+            Write-Host "[WARNING] Project column [GtStatusOpportunities] not found - the old colour rows are left as they are" -ForegroundColor Yellow
+        }
+        else {
+            $ColumnConfigList = Get-Resource -Name "Lists_ProjectColumnConfiguration_Title"
+            $ColumnConfigItems = Get-PnPListItem -List $ColumnConfigList
+            foreach ($Level in @("Low", "Medium", "High")) {
+                $Title = Get-Resource -Name "Lists_ProjectColumnConfiguration_GtStatusOpportunities_$($Level)_Title"
+                $Value = Get-Resource -Name "Choice_GtStatusOpportunities_$Level"
+                $Rows = @($ColumnConfigItems | Where-Object { $_["Title"] -eq $Title -and $_["GtPortfolioColumnValue"] -eq $Value })
+                $OnColumn = @($Rows | Where-Object { $null -ne $_["GtPortfolioColumn"] -and $_["GtPortfolioColumn"].LookupId -eq $OpportunitiesColumn.Id })
+                if ($OnColumn.Count -eq 0) { continue }
+                $Stale = @($Rows | Where-Object { $null -eq $_["GtPortfolioColumn"] -or $_["GtPortfolioColumn"].LookupId -ne $OpportunitiesColumn.Id })
+                foreach ($Row in $Stale) {
+                    $OldColumnId = if ($null -ne $Row["GtPortfolioColumn"]) { $Row["GtPortfolioColumn"].LookupId } else { "none" }
+                    Remove-PnPListItem -List $ColumnConfigList -Identity $Row.Id -Recycle -Force | Out-Null
+                    Write-Host "[SUCCESS] Removed the old colour row [$Value] on project column [$OldColumnId]" -ForegroundColor Green
+                }
+            }
+        }
+    }
 }

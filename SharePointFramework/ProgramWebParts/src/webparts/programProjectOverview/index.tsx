@@ -10,8 +10,7 @@ import {
   PortfolioOverview
 } from 'pp365-portfoliowebparts/lib/components/PortfolioOverview'
 import { createElement } from 'react'
-import { render } from 'react-dom'
-import { ErrorWithIntent, UserMessage } from 'pp365-shared-library'
+import { ErrorWithIntent, UserMessage, renderReact } from 'pp365-shared-library'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { IProgramProjectOverviewProps } from './types'
 import resource from 'SharedResources'
@@ -22,7 +21,7 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
 
   public render(): void {
     if (!this._configuration) {
-      render(
+      renderReact(
         createElement(UserMessage, {
           title: this._configurationError?.name ?? strings.ErrorTitle,
           text: this._configurationError?.message,
@@ -62,7 +61,6 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
    * @returns An array of dropdown options for the specified target property.
    */
   protected _getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {
-    // eslint-disable-next-line default-case
     switch (targetProperty) {
       case 'defaultViewId':
         {

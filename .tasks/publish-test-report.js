@@ -1,0 +1,882 @@
+/**
+ * @fileoverview Publishes a CI test report to the test report site: a private GitHub Pages site
+ * that shows the Playwright and integration reports in the browser, with no download.
+ *
+ * Why a site in another repository: this repository is public, so its artifacts can be downloaded
+ * by anyone signed in to GitHub, and Pages here would be public too. The reports hold snapshots of
+ * the test tenant, and Playwright's traces the test user's session cookies. Access-controlled Pages
+ * works only from a private repository on GitHub Enterprise Cloud: the site lives on a branch of
+ * one (`TEST_REPORTS_REPOSITORY`), and only people with read access to it can open it.
+ *
+ * Each test job calls this after its tests. It copies the report to `runs/<run id>-<attempt>/<suite>/`
+ * on the site branch, writes the run's metadata beside it, drops runs older than the artifacts'
+ * 7 days (and the oldest beyond the size budget), rebuilds `index.html` from what is left, and
+ * pushes the result as one commit without parents, so the branch never grows a history of old
+ * reports. The e2e and integration jobs run at once and both push: a push is conditional on the
+ * branch being where it was fetched (`--force-with-lease`), and one that loses starts over.
+ *
+ * Another repository publishes to the same site with `--project <name>`: its reports, their
+ * metadata and its own front page go to the folder `<name>/` (`<name>/runs/<run id>-<attempt>/<suite>/`,
+ * `<name>/index.html`, `<name>/project.json`), with the same 7 days and a budget of its own, and
+ * nothing outside that folder changes. prosjektportalen365's publishes (without `--project`) render
+ * the site's front page, with a line linking each folder whose `project.json` names it ("Also on
+ * this site"). Each publisher owns its paths: prosjektportalen365 `runs/`, the front page and
+ * `.nojekyll`, a project its folder. A publish that would change anything else is refused before
+ * the push, so an older or newer copy of this file cannot remove another repository's reports. The
+ * file is the same, byte for byte, in prosjektportalen365 and sp-js-provisioning
+ * (`.tasks/publish-test-report.js`, with its tests): change it in one, copy it to the other, and
+ * compare the two with `git hash-object`.
+ *
+ * Usage, from the repo root (CI):
+ *   node .tasks/publish-test-report.js --suite e2e --report e2e/playwright-report
+ *     --results e2e/test-results/results.json --outcome success
+ *   node .tasks/publish-test-report.js --suite integration --report integration/test-results --outcome failure
+ *   node .tasks/publish-test-report.js --project sp-js-provisioning --suite unit --title Unit
+ *     --report test-results/unit --outcome success
+ *
+ * The counts come from `--results` (Playwright's JSON report) when it is given, else from the
+ * summary a node:test HTML reporter embeds in the report's `index.html`.
+ *
+ * Environment: TEST_REPORTS_REPOSITORY (owner/name), TEST_REPORTS_URL (the site's address) and
+ * TEST_REPORTS_DEPLOY_KEY (an SSH deploy key with write access to that repository); COMMIT_SUBJECT;
+ * GITHUB_TOKEN (the job's, for api.github.com) and GitHub's other GITHUB_* variables. Without the
+ * three it says so and exits 0: the report is then only in the artifact. Before every push it
+ * checks that the site is private, and refuses when it is not. TEST_REPORTS_REMOTE replaces the
+ * SSH remote (and the check) with any git URL or path; the tests use a local bare repository.
+ *
+ * Without COMMIT_SUBJECT (a run started by hand) the subject comes from `git log` of GITHUB_SHA in
+ * the checkout. A publish that fails is written to the job summary too, beside the warning.
+ */
+const { execFileSync } = require('child_process')
+const fs = require('fs')
+const os = require('os')
+const path = require('path')
+
+const SUITES = {
+    e2e: { title: 'End-to-end' },
+    integration: { title: 'Integration' }
+}
+/** The page a report opens at. */
+const ENTRY = 'index.html'
+/** A project's folder, and a suite of a project. `runs` is prosjektportalen365's folder. */
+const NAME = /^[a-z0-9][a-z0-9-]*$/
+const BRANCH = 'gh-pages'
+/** As long as the artifacts are kept: the organization caps them at 7 days. */
+const RETENTION_DAYS = 7
+/** GitHub Pages publishes at most 1 GB; the rest is headroom for the next run. */
+const MAX_SITE_BYTES = 800 * 1024 * 1024
+/** A project's runs, beside prosjektportalen365's 800 MB: together still under the 1 GB. */
+const MAX_PROJECT_BYTES = 100 * 1024 * 1024
+/** git refuses files over 100 MiB. */
+const MAX_FILE_BYTES = 95 * 1024 * 1024
+const PUSH_ATTEMPTS = 5
+/** A git call that takes longer has hung; the step's own timeout is the last resort. */
+const GIT_TIMEOUT_MS = 5 * 60 * 1000
+/** What git prints when a push lost its lease: another job pushed after this one fetched. */
+const LOST_LEASE = /\(stale info\)|\[rejected\]|non-fast-forward|\(fetch first\)/
+/** What git and ssh print when GitHub refuses the deploy key or cannot be reached. */
+const UNREACHABLE =
+    /Permission denied \(publickey\)|Could not read from remote repository|Host key verification failed|Could not resolve hostname|Connection (?:timed out|refused|reset|closed)|kex_exchange_identification|remote end hung up|early EOF|unable to access/i
+
+/** A publish that would change paths its publisher does not own: trying again cannot help. */
+class RefusedError extends Error {}
+
+/** Parses `--name value` pairs. */
+function parseArgs(argv) {
+    const args = {}
+    for (let i = 0; i < argv.length; i++) {
+        if (argv[i].startsWith('--')) args[argv[i].slice(2)] = argv[i + 1]?.startsWith('--') ? 'true' : argv[++i]
+    }
+    return args
+}
+
+/** Total size of the files under `dir`, in bytes. */
+function directorySize(dir) {
+    if (!fs.existsSync(dir)) return 0
+    let size = 0
+    for (const entry of fs.readdirSync(dir, { recursive: true, withFileTypes: true })) {
+        if (entry.isFile()) size += fs.statSync(path.join(entry.parentPath, entry.name)).size
+    }
+    return size
+}
+
+/** Reads a JSON file, or `undefined` when it is missing or not JSON. */
+function readJson(file) {
+    try {
+        return JSON.parse(fs.readFileSync(file, 'utf8'))
+    } catch {
+        return undefined
+    }
+}
+
+/**
+ * The counts of a report: Playwright's `results.json` stats when it is given (e2e), else the
+ * summary a node:test HTML reporter embeds in the report's page (prosjektportalen365's
+ * `integration/src/reporters/html.ts`, sp-js-provisioning's `tests/reporters/html.ts`).
+ * `undefined` when the report has none.
+ *
+ * @param {string} reportDir The report folder
+ * @param {string} [resultsFile] Playwright's JSON report (e2e)
+ * @returns {{ passed: number, failed: number, flaky: number, skipped: number, durationMs?: number } | undefined}
+ */
+function readCounts(reportDir, resultsFile) {
+    if (resultsFile) {
+        const stats = readJson(resultsFile)?.stats
+        if (!stats) return undefined
+        return {
+            passed: stats.expected ?? 0,
+            failed: stats.unexpected ?? 0,
+            flaky: stats.flaky ?? 0,
+            skipped: stats.skipped ?? 0,
+            durationMs: stats.duration
+        }
+    }
+    const page = path.join(reportDir, ENTRY)
+    if (!fs.existsSync(page)) return undefined
+    const match = /<script type="application\/json" id="report-summary">(.*?)<\/script>/s.exec(fs.readFileSync(page, 'utf8'))
+    let summary
+    try {
+        summary = match ? JSON.parse(match[1]) : undefined
+    } catch {
+        return undefined
+    }
+    const counts = summary?.counts
+    if (!counts) return undefined
+    return {
+        passed: counts.passed ?? 0,
+        failed: (counts.failed ?? 0) + (counts.cancelled ?? 0),
+        flaky: 0,
+        skipped: (counts.skipped ?? 0) + (counts.todo ?? 0),
+        durationMs: summary.durationMs ?? undefined
+    }
+}
+
+/**
+ * What the site records about a run, from GitHub's variables.
+ *
+ * @param {NodeJS.ProcessEnv} env
+ */
+function runFromEnvironment(env) {
+    const server = env.GITHUB_SERVER_URL || 'https://github.com'
+    const repository = env.GITHUB_REPOSITORY || 'Puzzlepart/prosjektportalen365'
+    const id = env.GITHUB_RUN_ID || 'local'
+    const attempt = env.GITHUB_RUN_ATTEMPT || '1'
+    return {
+        key: `${id}-${attempt}`,
+        id,
+        attempt: Number(attempt),
+        number: env.GITHUB_RUN_NUMBER ? Number(env.GITHUB_RUN_NUMBER) : undefined,
+        url: env.GITHUB_RUN_ID ? `${server}/${repository}/actions/runs/${id}/attempts/${attempt}` : undefined,
+        branch: env.GITHUB_REF_NAME || undefined,
+        sha: env.GITHUB_SHA || undefined,
+        commitUrl: env.GITHUB_SHA ? `${server}/${repository}/commit/${env.GITHUB_SHA}` : undefined,
+        subject: env.COMMIT_SUBJECT || undefined,
+        repository
+    }
+}
+
+/**
+ * The subject of the run's commit, from the checkout: a run started by hand has no head commit
+ * message to take COMMIT_SUBJECT from. `undefined` when the commit is not there.
+ *
+ * @param {string} [sha]
+ */
+function commitSubject(sha) {
+    if (!sha) return undefined
+    try {
+        return git(['log', '-1', '--format=%s', sha], {}) || undefined
+    } catch {
+        return undefined
+    }
+}
+
+/** Removes files git would refuse from a report folder, and says which. */
+function dropOversizedFiles(dir, warn) {
+    for (const entry of fs.readdirSync(dir, { recursive: true, withFileTypes: true })) {
+        const file = path.join(entry.parentPath, entry.name)
+        if (entry.isFile() && fs.statSync(file).size > MAX_FILE_BYTES) {
+            fs.rmSync(file)
+            warn(`${path.relative(dir, file)} is over ${MAX_FILE_BYTES / 1024 / 1024} MiB and was left out of the site.`)
+        }
+    }
+}
+
+/**
+ * The tag every page of the site carries at its bottom right: the reports hold the test tenant's
+ * pages and, in the traces, the test user's session, so they are for Puzzlepart only. Styled
+ * inline, since it goes into Playwright's report and the integration report as well as the front
+ * page, white on red at 7:1, and clicks pass through it to what lies under it.
+ */
+const INTERNAL_TAG =
+    '<div data-pp365-internal role="note" style="position:fixed;right:16px;bottom:16px;z-index:2147483647;' +
+    'pointer-events:none;padding:4px 10px;border-radius:12px;background:#a4262c;color:#fff;' +
+    "font:600 12px/1.5 system-ui,-apple-system,'Segoe UI',sans-serif;box-shadow:0 1px 4px rgba(0,0,0,.3)\">" +
+    'Internal only</div>'
+
+/**
+ * Puts the internal tag into a page once: before its last closing body tag, since Playwright's
+ * report is one page of scripts where an earlier one can be inside a script, or at its end.
+ *
+ * @param {string} html
+ */
+function markInternal(html) {
+    if (html.includes('data-pp365-internal')) return html
+    const at = html.toLowerCase().lastIndexOf('</body>')
+    return at === -1 ? html + INTERNAL_TAG : html.slice(0, at) + INTERNAL_TAG + html.slice(at)
+}
+
+/** Tags every report of the site's runs (or a project's) as internal only, those published before the tag too. */
+function markReports(siteDir, project) {
+    for (const { suites } of listRuns(siteDir, project)) {
+        for (const { entry } of Object.values(suites)) {
+            const file = path.join(siteDir, entry)
+            if (!fs.existsSync(file)) continue
+            const html = fs.readFileSync(file, 'utf8')
+            const marked = markInternal(html)
+            if (marked !== html) fs.writeFileSync(file, marked)
+        }
+    }
+}
+
+/**
+ * Adds a suite's report to a checked-out site, drops what is too old or too much, and rebuilds the
+ * index. The current run is never dropped. With a project, all of it happens in the project's
+ * folder, and nothing outside it changes: the front page and `.nojekyll` are prosjektportalen365's.
+ *
+ * @param {string} siteDir The site branch's working tree
+ * @param {object} options
+ * @param {string} [options.project] The project's folder, for another repository's reports
+ * @param {string} options.suite `e2e` or `integration`; any name with a project
+ * @param {string} [options.title] The suite's column on the project's page
+ * @param {string} options.reportDir The report folder to publish
+ * @param {string} options.outcome The test step's outcome: success, failure, cancelled or skipped
+ * @param {object} [options.counts] From {@link readCounts}
+ * @param {ReturnType<typeof runFromEnvironment>} options.run
+ * @param {Date} [options.now]
+ * @param {number} [options.maxSiteBytes] Size budget of the runs on the site (or of the project's)
+ * @param {(message: string) => void} [options.warn]
+ * @returns {string} The report's path in the site, such as `runs/123-1/e2e/index.html`
+ */
+function addReport(
+    siteDir,
+    {
+        project,
+        suite,
+        title,
+        reportDir,
+        outcome,
+        counts,
+        run,
+        now = new Date(),
+        maxSiteBytes = project ? MAX_PROJECT_BYTES : MAX_SITE_BYTES,
+        warn = () => undefined
+    }
+) {
+    const base = project ? `${project}/` : ''
+    const runDir = path.join(siteDir, base, 'runs', run.key)
+    const target = path.join(runDir, suite)
+    fs.rmSync(target, { recursive: true, force: true })
+    fs.mkdirSync(runDir, { recursive: true })
+    fs.cpSync(reportDir, target, { recursive: true })
+    dropOversizedFiles(target, warn)
+    const entry = `${base}runs/${run.key}/${suite}/${ENTRY}`
+    const published = { outcome, counts, publishedAt: now.toISOString(), entry, run }
+    const meta = project ? { project, suite, title: title || suite, ...published } : { suite, ...published }
+    fs.writeFileSync(path.join(runDir, `${suite}.json`), JSON.stringify(meta, null, 2) + '\n')
+    prune(siteDir, run.key, now, maxSiteBytes, warn, project)
+    markReports(siteDir, project)
+    if (project) {
+        fs.writeFileSync(path.join(siteDir, project, 'index.html'), renderProjectIndex(project, listRuns(siteDir, project), now))
+        const about = { project, title: `${project} test reports`, repository: run.repository, updatedAt: now.toISOString() }
+        fs.writeFileSync(path.join(siteDir, project, 'project.json'), JSON.stringify(about, null, 2) + '\n')
+        return entry
+    }
+    fs.writeFileSync(path.join(siteDir, '.nojekyll'), '')
+    fs.writeFileSync(path.join(siteDir, 'index.html'), renderIndex(listRuns(siteDir), now, listProjects(siteDir)))
+    return entry
+}
+
+/**
+ * The runs on the site (or in a project's folder), newest first: each with the metadata of its
+ * suites. The site's runs have the suites in `SUITES`; a project's, any it published.
+ *
+ * @param {string} siteDir
+ * @param {string} [project]
+ */
+function listRuns(siteDir, project) {
+    const runsDir = path.join(siteDir, project ?? '', 'runs')
+    if (!fs.existsSync(runsDir)) return []
+    return fs
+        .readdirSync(runsDir, { withFileTypes: true })
+        .filter((entry) => entry.isDirectory())
+        .map((entry) => {
+            const suites = {}
+            for (const suite of project ? suitesIn(path.join(runsDir, entry.name)) : Object.keys(SUITES)) {
+                const meta = readJson(path.join(runsDir, entry.name, `${suite}.json`))
+                if (meta) suites[suite] = meta
+            }
+            const metas = Object.values(suites)
+            const publishedAt = metas.map((meta) => meta.publishedAt).sort().pop()
+            return { key: entry.name, run: metas[0]?.run, suites, publishedAt }
+        })
+        .sort((a, b) => String(b.publishedAt ?? '').localeCompare(String(a.publishedAt ?? '')))
+}
+
+/** The suites a project's run folder has metadata for. */
+function suitesIn(runDir) {
+    return fs
+        .readdirSync(runDir)
+        .filter((name) => name.endsWith('.json'))
+        .map((name) => name.slice(0, -'.json'.length))
+        .filter((name) => NAME.test(name))
+        .sort()
+}
+
+/** The projects on the site, by name: the top-level folders whose `project.json` names them. */
+function listProjects(siteDir) {
+    return fs
+        .readdirSync(siteDir, { withFileTypes: true })
+        .filter((entry) => entry.isDirectory() && entry.name !== 'runs' && NAME.test(entry.name))
+        .filter((entry) => readJson(path.join(siteDir, entry.name, 'project.json'))?.project === entry.name)
+        .map((entry) => entry.name)
+        .sort()
+}
+
+/**
+ * Drops runs older than the retention, then the oldest while the runs are over their size budget:
+ * the site's runs, or a project's, never both.
+ */
+function prune(siteDir, keep, now, maxSiteBytes, warn, project) {
+    const runsDir = path.join(siteDir, project ?? '', 'runs')
+    const oldest = now.getTime() - RETENTION_DAYS * 24 * 60 * 60 * 1000
+    const runs = listRuns(siteDir, project)
+    const remove = (key) => fs.rmSync(path.join(runsDir, key), { recursive: true, force: true })
+    for (const run of runs) {
+        if (run.key !== keep && (!run.publishedAt || Date.parse(run.publishedAt) < oldest)) remove(run.key)
+    }
+    const left = listRuns(siteDir, project)
+    let size = directorySize(runsDir)
+    while (size > maxSiteBytes) {
+        const victim = left.filter((run) => run.key !== keep).pop()
+        if (!victim) break
+        size -= directorySize(path.join(runsDir, victim.key))
+        remove(victim.key)
+        left.splice(left.indexOf(victim), 1)
+        warn(`${project ?? 'The site'} is over its size budget: dropped run ${victim.key}.`)
+    }
+}
+
+/** Escapes text for HTML content and attribute values. */
+function escapeHtml(value) {
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+}
+
+const DATE_FORMAT = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/Oslo',
+    day: '2-digit',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit'
+})
+
+function formatDuration(ms) {
+    if (typeof ms !== 'number') return ''
+    const seconds = Math.round(ms / 1000)
+    return seconds < 60 ? `${seconds} s` : `${Math.floor(seconds / 60)} min ${seconds % 60} s`
+}
+
+/**
+ * One suite's cell: its verdict, counts and the link to its report.
+ *
+ * @param {object} [meta]
+ * @param {string} [base] The folder of the page the cell is on, which the link is relative to
+ */
+function renderSuiteCell(meta, base = '') {
+    if (!meta) return '<td class="none">–</td>'
+    const verdict = { success: 'passed', failure: 'failed', cancelled: 'cancelled', skipped: 'skipped' }[meta.outcome] ?? 'unknown'
+    const counts = meta.counts
+    const parts = counts
+        ? [
+              `${counts.passed} passed`,
+              counts.failed ? `<b>${counts.failed} failed</b>` : '',
+              counts.flaky ? `${counts.flaky} flaky` : '',
+              counts.skipped ? `${counts.skipped} skipped` : '',
+              formatDuration(counts.durationMs)
+          ].filter(Boolean)
+        : []
+    const href = meta.entry.startsWith(base) ? meta.entry.slice(base.length) : meta.entry
+    return (
+        `<td><a class="verdict ${verdict}" href="${escapeHtml(href)}">${verdict}</a>` +
+        `<div class="counts">${parts.join(' · ')}</div></td>`
+    )
+}
+
+/** A run's first two cells: the run, and its commit. */
+function renderRunCells({ key, run = {}, publishedAt }) {
+    const number = run.number ? `#${run.number}` : key
+    const attempt = run.attempt > 1 ? ` <span class="muted">attempt ${run.attempt}</span>` : ''
+    const runCell = run.url ? `<a href="${escapeHtml(run.url)}">${escapeHtml(number)}</a>${attempt}` : `${escapeHtml(number)}${attempt}`
+    const sha = run.sha ? run.sha.slice(0, 7) : ''
+    const commit = run.commitUrl ? `<a href="${escapeHtml(run.commitUrl)}"><code>${escapeHtml(sha)}</code></a>` : `<code>${escapeHtml(sha)}</code>`
+    const published = publishedAt ? DATE_FORMAT.format(new Date(publishedAt)) : ''
+    return (
+        `<td class="run">${runCell}<div class="muted">${escapeHtml(published)}</div></td>` +
+        `<td><div class="branch">${escapeHtml(run.branch ?? '')}</div>${commit} ${escapeHtml(run.subject ?? '')}</td>`
+    )
+}
+
+/**
+ * The site's front page: every run on it, newest first, with each suite's verdict and a link to
+ * its report, and a line linking each project's page. Self-contained: no script, no external file.
+ *
+ * @param {ReturnType<typeof listRuns>} runs
+ * @param {Date} now
+ * @param {string[]} [projects] From {@link listProjects}
+ */
+function renderIndex(runs, now, projects = []) {
+    const rows = runs
+        .map((entry) => `<tr>${renderRunCells(entry)}${Object.keys(SUITES).map((suite) => renderSuiteCell(entry.suites[suite])).join('')}</tr>`)
+        .join('\n')
+    const head = Object.values(SUITES)
+        .map((suite) => `<th>${suite.title}</th>`)
+        .join('')
+    return renderPage({
+        title: 'PP365 test reports',
+        intro:
+            `<p>The test channel's end-to-end and integration runs of the last ${RETENTION_DAYS} days, newest first. ` +
+            `Updated ${escapeHtml(DATE_FORMAT.format(now))} (Oslo time).</p>\n${renderProjectsLine(projects)}`,
+        head,
+        rows,
+        columns: 2 + Object.keys(SUITES).length
+    })
+}
+
+/**
+ * A project's front page, in its folder: its runs, newest first, with a column for each suite it
+ * published (titled by the newest run's metadata).
+ *
+ * @param {string} project
+ * @param {ReturnType<typeof listRuns>} runs
+ * @param {Date} now
+ */
+function renderProjectIndex(project, runs, now) {
+    const titles = {}
+    for (const { suites } of runs) {
+        for (const [suite, meta] of Object.entries(suites)) titles[suite] ??= meta.title || suite
+    }
+    const suites = Object.keys(titles).sort()
+    const rows = runs
+        .map((entry) => `<tr>${renderRunCells(entry)}${suites.map((suite) => renderSuiteCell(entry.suites[suite], `${project}/`)).join('')}</tr>`)
+        .join('\n')
+    return renderPage({
+        title: `${escapeHtml(project)} test reports`,
+        intro:
+            `<p>The CI runs of the last ${RETENTION_DAYS} days, newest first. Updated ${escapeHtml(DATE_FORMAT.format(now))} ` +
+            '(Oslo time). <a href="../">All test reports</a></p>\n',
+        head: suites.map((suite) => `<th>${escapeHtml(titles[suite])}</th>`).join(''),
+        rows,
+        columns: 2 + suites.length
+    })
+}
+
+/**
+ * The front page's line linking each project's page, or nothing when there is none.
+ *
+ * @param {string[]} projects
+ */
+function renderProjectsLine(projects) {
+    if (!projects.length) return ''
+    const links = projects.map((name) => `<a href="${escapeHtml(name)}/">${escapeHtml(name)}</a>`)
+    return `<p class="projects">Also on this site: ${links.join(' · ')}</p>\n`
+}
+
+/** A page of the site: a table of runs. Self-contained: no script, no external file. */
+function renderPage({ title, intro, head, rows, columns }) {
+    return `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>${title}</title>
+<style>
+:root{color-scheme:light dark;--bg:#fff;--fg:#1f2328;--muted:#59636e;--line:#d1d9e0;--head:#f6f8fa;--passed:#1a7f37;--failed:#cf222e;--cancelled:#9a6700;--skipped:#59636e}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--line:#3d444d;--head:#151b23;--passed:#3fb950;--failed:#f85149;--cancelled:#d29922;--skipped:#9198a1}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1200px;margin:0 auto;padding:24px 16px 64px}h1{font-size:22px;margin:0 0 4px}p{color:var(--muted);margin:0 0 16px}
+.table{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:640px}th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{background:var(--head);font-weight:600}a{color:inherit}.muted,.counts,.none{color:var(--muted)}.counts{font-size:12px}.run{white-space:nowrap}
+.branch{font-size:12px;color:var(--muted)}code{font:12px ui-monospace,SFMono-Regular,Menlo,monospace}
+.verdict{display:inline-block;font-weight:600;text-transform:uppercase;font-size:12px;padding:0 8px;border-radius:10px;border:1px solid currentColor;text-decoration:none}
+.verdict.passed{color:var(--passed)}.verdict.failed{color:var(--failed)}.verdict.cancelled{color:var(--cancelled)}.verdict.skipped,.verdict.unknown{color:var(--skipped)}
+</style>
+</head>
+<body>
+<main>
+<h1>${title}</h1>
+${intro}<div class="table"><table>
+<thead><tr><th>Run</th><th>Commit</th>${head}</tr></thead>
+<tbody>
+${rows || `<tr><td colspan="${columns}" class="none">No runs yet.</td></tr>`}
+</tbody>
+</table></div>
+</main>
+${INTERNAL_TAG}
+</body>
+</html>
+`
+}
+
+/** Runs git with the given environment and returns its trimmed output; a hung call is killed. */
+function git(args, options) {
+    return execFileSync('git', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: GIT_TIMEOUT_MS, ...options }).trim()
+}
+
+/**
+ * fetch with a timeout, tried again on a network error, a 429 or a 5xx.
+ *
+ * @param {typeof fetch} fetchImpl
+ * @param {string} url
+ * @param {RequestInit} [init]
+ */
+async function fetchWithRetry(fetchImpl, url, init = {}) {
+    let lastError
+    for (let attempt = 1; attempt <= 3; attempt++) {
+        try {
+            const response = await fetchImpl(url, { ...init, signal: AbortSignal.timeout(15_000) })
+            if (response.status !== 429 && response.status < 500) return response
+            lastError = new Error(`${url} answered ${response.status}`)
+        } catch (error) {
+            lastError = error
+        }
+        if (attempt < 3) await new Promise((resolve) => setTimeout(resolve, 2000 * attempt))
+    }
+    throw lastError
+}
+
+/**
+ * Whether a URL is GitHub's sign-in, where a private Pages site sends an anonymous visitor.
+ *
+ * @param {string | undefined} url
+ */
+function isGitHubSignIn(url) {
+    try {
+        const { hostname, pathname } = new URL(url)
+        return hostname === 'github.com' && (pathname === '/login' || pathname.startsWith('/pages/auth'))
+    } catch {
+        return false
+    }
+}
+
+/** Headers for api.github.com: the job's token, when there is one, lifts the anonymous rate limit. */
+function apiHeaders(env) {
+    return { accept: 'application/vnd.github+json', ...(env.GITHUB_TOKEN ? { authorization: `Bearer ${env.GITHUB_TOKEN}` } : {}) }
+}
+
+/**
+ * Refuses to publish unless the reports can be read only after signing in to GitHub. On GitHub
+ * Enterprise Cloud a Pages site is public by default even from a private repository (every
+ * private Puzzlepart repository with Pages was public on 2026-10-14), and any admin of the
+ * repository can switch it back, so this is checked on every publish rather than trusted:
+ * the site repository is not public (this job's token sees no other private repository: 404),
+ * the repository's public Pages address serves nothing without a sign-in, and the site's own
+ * address answers an anonymous request with no content (a private site redirects to GitHub's
+ * sign-in). A private site's public address redirects to the site's own address and on to the
+ * sign-in, a page that answers 200, so where the redirects end decides, not the last status: the
+ * first private site was refused for it on 2026-10-26.
+ *
+ * @param {NodeJS.ProcessEnv} env TEST_REPORTS_REPOSITORY, TEST_REPORTS_URL, GITHUB_TOKEN
+ * @param {typeof fetch} [fetchImpl]
+ */
+async function assertSitePrivate(env, fetchImpl = fetch) {
+    const [owner, name] = env.TEST_REPORTS_REPOSITORY.split('/')
+    const refuse = (reason) => {
+        throw new Error(`${reason} Nothing was published: the reports hold the test tenant's pages and the test user's session.`)
+    }
+    const repo = await fetchWithRetry(fetchImpl, `https://api.github.com/repos/${owner}/${name}`, { headers: apiHeaders(env) })
+    if (repo.ok) refuse(`${env.TEST_REPORTS_REPOSITORY} is a public repository.`)
+    if (repo.status !== 404) refuse(`Whether ${env.TEST_REPORTS_REPOSITORY} is private could not be checked (${repo.status}).`)
+    const publicSite = `https://${owner.toLowerCase()}.github.io/${name}/`
+    const atPublicSite = await fetchWithRetry(fetchImpl, publicSite, { redirect: 'follow' })
+    if (atPublicSite.ok && !isGitHubSignIn(atPublicSite.url)) {
+        refuse(`The site is public at ${publicSite}: set its Pages visibility to Private.`)
+    }
+    const site = await fetchWithRetry(fetchImpl, env.TEST_REPORTS_URL.replace(/\/+$/, '') + '/', { redirect: 'manual' })
+    if (site.status >= 200 && site.status < 300) {
+        refuse(`${env.TEST_REPORTS_URL} answers without a GitHub sign-in: set the site's Pages visibility to Private.`)
+    }
+}
+
+/**
+ * Sets up SSH for the deploy key: the key in a file only this user can read, and GitHub's host
+ * keys from its API (over HTTPS), so the first connection is checked rather than trusted.
+ *
+ * @returns {Promise<{ sshCommand: string, cleanup: () => void }>}
+ */
+async function prepareSsh(deployKey, env, fetchImpl = fetch) {
+    const response = await fetchWithRetry(fetchImpl, 'https://api.github.com/meta', { headers: apiHeaders(env) })
+    if (!response.ok) throw new Error(`GitHub's host keys could not be read: ${response.status}`)
+    const { ssh_keys: hostKeys } = await response.json()
+    if (!Array.isArray(hostKeys) || hostKeys.length === 0) throw new Error("GitHub's API listed no SSH host keys.")
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'pp365-reports-ssh-'))
+    const cleanup = () => fs.rmSync(dir, { recursive: true, force: true })
+    try {
+        const keyFile = path.join(dir, 'key')
+        // A secret pasted from Windows can carry CRLF line ends, which OpenSSH refuses.
+        fs.writeFileSync(keyFile, deployKey.replace(/\r\n?/g, '\n').trim() + '\n', { mode: 0o600 })
+        fs.writeFileSync(path.join(dir, 'known_hosts'), hostKeys.map((key) => `github.com ${key}`).join('\n') + '\n')
+        const quote = (value) => `'${value.replace(/'/g, `'\\''`)}'`
+        return {
+            // BatchMode: never wait for a prompt; the timeouts end a connection that stalls.
+            sshCommand:
+                `ssh -i ${quote(keyFile)} -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes ` +
+                `-o UserKnownHostsFile=${quote(path.join(dir, 'known_hosts'))} ` +
+                '-o ConnectTimeout=30 -o ServerAliveInterval=15 -o ServerAliveCountMax=4',
+            cleanup
+        }
+    } catch (error) {
+        cleanup()
+        throw error
+    }
+}
+
+/**
+ * Why a git call against the site repository failed: `race` when the push lost its lease to
+ * another job's push, `unreachable` when GitHub refused the deploy key or could not be reached (in
+ * a GitHub incident on 2026-11-04 it refused a deploy key that was in order), `other` otherwise.
+ *
+ * @param {Error & { stderr?: string, code?: string }} error
+ * @returns {'race' | 'unreachable' | 'other'}
+ */
+function classifyFailure(error) {
+    const output = `${error.stderr ?? ''}\n${error.message ?? ''}`
+    if (LOST_LEASE.test(output)) return 'race'
+    if (error.code === 'ETIMEDOUT' || UNREACHABLE.test(output)) return 'unreachable'
+    return 'other'
+}
+
+/** The first line of what a failed git call printed. */
+function firstLine(error) {
+    return (String(error.stderr ?? '').trim() || String(error.message ?? '')).split('\n')[0].trim()
+}
+
+/** Why the report could not be pushed: a first line for the job's warning, then what git printed. */
+function failureMessage(error) {
+    const lead = `The report could not be pushed after ${PUSH_ATTEMPTS} attempts`
+    const output = String(error.stderr || error.message).trim()
+    switch (classifyFailure(error)) {
+        case 'unreachable':
+            return (
+                `${lead}: could not reach the site repository (${firstLine(error)}). Check https://www.githubstatus.com first; ` +
+                'if GitHub is up, check the deploy key and TEST_REPORTS_DEPLOY_KEY («Testrapportsiden» in ' +
+                `.development-guide/ci/kontinuerlig-integrasjon.md).\n${output}`
+            )
+        case 'race':
+            return `${lead}: another job pushed first every time.\n${output}`
+        default:
+            return `${lead}: ${output}`
+    }
+}
+
+/** Blocks for `ms`: the script is synchronous, and the job runs nothing else meanwhile. */
+function sleepSync(ms) {
+    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms)
+}
+
+/**
+ * The paths a publish changed that its publisher does not own: prosjektportalen365 owns `runs/`,
+ * the front page and `.nojekyll`, a project only its folder.
+ *
+ * @param {string[]} changed The paths the commit adds, changes or removes
+ * @param {string} [project]
+ * @returns {string[]}
+ */
+function foreignChanges(changed, project) {
+    const owned = project ? (file) => file.startsWith(`${project}/`) : (file) => file === 'index.html' || file === '.nojekyll' || file.startsWith('runs/')
+    return changed.filter((file) => !owned(file))
+}
+
+/**
+ * Fetches the site branch, adds the report and pushes one parentless commit, conditional on the
+ * branch not having moved; starts over when another job pushed in between, and waits longer
+ * before it starts over when the site repository could not be reached. A commit that would change
+ * paths its publisher does not own is refused, without a push and without trying again.
+ *
+ * @param {object} options
+ * @param {string} options.remote git URL or path of the site repository
+ * @param {NodeJS.ProcessEnv} [options.gitEnv] Environment for git (GIT_SSH_COMMAND)
+ * @param {Parameters<typeof addReport>[1]} options.report
+ * @param {(workDir: string) => void} [options.beforePush] For the tests: runs once the report is added, before each commit and push
+ * @param {(message: string) => void} [options.log]
+ * @param {(ms: number) => void} [options.sleep] For the tests: the wait between attempts
+ * @returns {string} The report's path in the site
+ */
+function publish({ remote, gitEnv = process.env, report, beforePush, log = console.log, sleep = sleepSync }) {
+    const env = {
+        ...gitEnv,
+        GIT_AUTHOR_NAME: 'github-actions[bot]',
+        GIT_AUTHOR_EMAIL: '41898282+github-actions[bot]@users.noreply.github.com',
+        GIT_COMMITTER_NAME: 'github-actions[bot]',
+        GIT_COMMITTER_EMAIL: '41898282+github-actions[bot]@users.noreply.github.com',
+        GIT_TERMINAL_PROMPT: '0'
+    }
+    let lastError
+    for (let attempt = 1; attempt <= PUSH_ATTEMPTS; attempt++) {
+        const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'pp365-reports-'))
+        const run = (args) => git(args, { cwd: workDir, env })
+        try {
+            run(['init', '--quiet'])
+            // The lease is the commit actually fetched: if the branch moves after this, the push fails.
+            let tip = ''
+            if (run(['ls-remote', remote, `refs/heads/${BRANCH}`])) {
+                run(['fetch', '--quiet', '--depth=1', remote, `refs/heads/${BRANCH}`])
+                tip = run(['rev-parse', 'FETCH_HEAD'])
+                run(['checkout', '--quiet', '--detach', tip])
+            }
+            const entry = addReport(workDir, { ...report, warn: report.warn ?? log })
+            beforePush?.(workDir)
+            run(['add', '--all'])
+            const changed = (tip ? run(['diff', '--cached', '--name-only', '--no-renames', '-z', tip]) : run(['ls-files', '-z']))
+                .split('\0')
+                .filter(Boolean)
+            const foreign = foreignChanges(changed, report.project)
+            if (foreign.length) {
+                const listed = foreign.slice(0, 5).join(', ') + (foreign.length > 5 ? ` and ${foreign.length - 5} more` : '')
+                throw new RefusedError(
+                    `Refused to publish: the commit would change ${listed}, which ${report.project ? `${report.project}'s` : "prosjektportalen365's"} ` +
+                        'reports do not own. Nothing was pushed.'
+                )
+            }
+            const name = report.project ? `${report.project} ${report.suite}` : report.suite
+            const message = `${name} report for run ${report.run.key}${report.run.branch ? ` (${report.run.branch})` : ''}`
+            const commit = run(['commit-tree', run(['write-tree']), '-m', message])
+            run(['push', '--quiet', `--force-with-lease=refs/heads/${BRANCH}:${tip}`, remote, `${commit}:refs/heads/${BRANCH}`])
+            return entry
+        } catch (error) {
+            if (error instanceof RefusedError) throw error
+            lastError = error
+            if (attempt < PUSH_ATTEMPTS) {
+                const failure = classifyFailure(error)
+                if (failure === 'race') {
+                    log(`Attempt ${attempt} of ${PUSH_ATTEMPTS} lost to another job's push; trying again.`)
+                    // The other job pushes within seconds; waiting a little longer each time spreads the retries.
+                    sleep(1000 * attempt)
+                } else if (failure === 'unreachable') {
+                    log(`Attempt ${attempt} of ${PUSH_ATTEMPTS} could not reach the site repository (${firstLine(error)}); trying again in ${10 * attempt} s.`)
+                    // A blip in GitHub's Git service takes longer to pass than a race.
+                    sleep(10_000 * attempt)
+                } else {
+                    log(`Attempt ${attempt} of ${PUSH_ATTEMPTS} failed (${firstLine(error)}); trying again.`)
+                    sleep(1000 * attempt)
+                }
+            }
+        } finally {
+            fs.rmSync(workDir, { recursive: true, force: true })
+        }
+    }
+    throw new Error(failureMessage(lastError))
+}
+
+/** Appends to the job summary on the run's page, when there is one. */
+function writeSummary(env, markdown) {
+    if (env.GITHUB_STEP_SUMMARY) fs.appendFileSync(env.GITHUB_STEP_SUMMARY, markdown + '\n')
+}
+
+/**
+ * @param {string[]} argv
+ * @param {NodeJS.ProcessEnv} env
+ * @param {{ log?: (message: string) => void, sleep?: (ms: number) => void }} [options] For the tests: the push's log and its wait between attempts
+ */
+async function main(argv, env, { log, sleep } = {}) {
+    const args = parseArgs(argv)
+    const { project, suite } = args
+    const known = project ? NAME.test(project) && project !== 'runs' && NAME.test(suite ?? '') : Boolean(SUITES[suite])
+    if (!known || !args.report) {
+        throw new Error(
+            'Usage: node .tasks/publish-test-report.js --suite e2e|integration --report <dir> [--results <file>] [--outcome <outcome>]\n' +
+                '       node .tasks/publish-test-report.js --project <name> --suite <name> [--title <title>] --report <dir> [--results <file>] [--outcome <outcome>]'
+        )
+    }
+    const suiteTitle = project ? args.title || suite : SUITES[suite].title
+    const title = `${suiteTitle} report`
+    const remoteOverride = env.TEST_REPORTS_REMOTE
+    if (!remoteOverride && (!env.TEST_REPORTS_REPOSITORY || !env.TEST_REPORTS_URL || !env.TEST_REPORTS_DEPLOY_KEY)) {
+        console.log(
+            `::notice title=${title}::The test report site is not set up (TEST_REPORTS_REPOSITORY, TEST_REPORTS_URL, ` +
+            'TEST_REPORTS_DEPLOY_KEY); the report is only in the artifact.'
+        )
+        return
+    }
+    const reportDir = path.resolve(args.report)
+    if (!fs.existsSync(reportDir) || fs.readdirSync(reportDir).length === 0) {
+        console.log(`::notice title=${title}::${args.report} is missing or empty: nothing to publish.`)
+        return
+    }
+    const report = {
+        project,
+        suite,
+        title: project ? suiteTitle : undefined,
+        reportDir,
+        outcome: args.outcome || 'unknown',
+        counts: readCounts(reportDir, args.results && path.resolve(args.results)),
+        run: runFromEnvironment({ ...env, COMMIT_SUBJECT: env.COMMIT_SUBJECT || commitSubject(env.GITHUB_SHA) }),
+        warn: (message) => console.log(`::warning title=${title}::${message}`)
+    }
+    try {
+        if (!remoteOverride) await assertSitePrivate(env)
+        const ssh = remoteOverride ? undefined : await prepareSsh(env.TEST_REPORTS_DEPLOY_KEY, env)
+        try {
+            const entry = publish({
+                remote: remoteOverride || `git@github.com:${env.TEST_REPORTS_REPOSITORY}.git`,
+                gitEnv: ssh ? { ...env, GIT_SSH_COMMAND: ssh.sshCommand } : env,
+                report,
+                log,
+                sleep
+            })
+            const site = env.TEST_REPORTS_URL ? env.TEST_REPORTS_URL.replace(/\/+$/, '') + '/' : undefined
+            console.log(`Published ${entry}${site ? `: ${site}${entry}` : ''} (GitHub Pages deploys it within a minute or two).`)
+            writeSummary(
+                env,
+                site
+                    ? `### ${title}\n\n[Open the report](${site}${entry}) · [all runs](${site}${project ? `${project}/` : ''}) (private site; it deploys a minute or two after this step)`
+                    : `### ${title}\n\nPublished to \`${entry}\` on the test report site (set the TEST_REPORTS_URL variable for a link).`
+            )
+        } finally {
+            ssh?.cleanup()
+        }
+    } catch (error) {
+        writeSummary(env, `### ${title}\n\nNot published to the test report site: ${firstLine(error)} The report is only in the artifact.`)
+        throw error
+    }
+}
+
+if (require.main === module) {
+    main(process.argv.slice(2), process.env).catch((error) => {
+        console.log(`::warning title=Test report site::${String(error.message).split('\n')[0]}`)
+        console.error(error)
+        process.exit(1)
+    })
+}
+
+module.exports = {
+    addReport,
+    assertSitePrivate,
+    foreignChanges,
+    listProjects,
+    listRuns,
+    main,
+    parseArgs,
+    prepareSsh,
+    publish,
+    readCounts,
+    renderIndex,
+    runFromEnvironment,
+    MAX_PROJECT_BYTES,
+    MAX_SITE_BYTES,
+    RETENTION_DAYS
+}

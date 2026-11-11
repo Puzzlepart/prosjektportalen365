@@ -27,10 +27,14 @@ export interface IResolvedCloudTemplate {
   contentConfig: CloudContentConfig[]
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface ITemplateSelectDialogSectionProps extends HTMLProps<HTMLDivElement> {}
 
 export type ProjectSetupDialogSectionComponent = FC<ITemplateSelectDialogSectionProps>
+
+/**
+ * A tab of the setup's configuration: the extensions or the list content.
+ */
+export type ProjectSetupConfigTab = 'extensions' | 'contentConfig'
 
 export interface IProjectSetupDialogProps extends IBaseDialogProps {
   /**

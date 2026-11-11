@@ -13,7 +13,6 @@ import {
   FluentProvider,
   IdPrefixProvider,
   Spinner,
-  Tooltip,
   NavCategory,
   NavCategoryItem,
   NavDrawer,
@@ -26,7 +25,13 @@ import {
   AppItemStatic,
   NavItem
 } from '@fluentui/react-components'
-import { customLightTheme, getFluentIcon, setUrlHash, UserMessage } from 'pp365-shared-library'
+import {
+  customLightTheme,
+  getFluentIcon,
+  setUrlHash,
+  UserMessage,
+  withDefaults
+} from 'pp365-shared-library'
 import {
   Board20Filled,
   Board20Regular,
@@ -46,17 +51,54 @@ const Dashboard = bundleIcon(Board20Filled, Board20Regular)
 const Lightbulb = bundleIcon(Lightbulb20Filled, Lightbulb20Regular)
 const JobPostings = bundleIcon(NotePin20Filled, NotePin20Regular)
 
-export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
+const IDEA_MODULE_DEFAULT_PROPS: Partial<IIdeaModuleProps> = {
+  dataSource: strings.Idea.RegisteredIdeasTitle,
+  dataSourceCategory: strings.Idea.ModuleTitle,
+  showCommandBar: true,
+  showExcelExportButton: true,
+  showFilters: true,
+  showViewSelector: true,
+  lockedColumns: false,
+  ideaConfigurationList: resource.Lists_Idea_Configuration_Title,
+  ideaConfiguration: 'Standard',
+  hiddenRegFields: ['Title'],
+  hiddenProcFields: [
+    'Title',
+    'GtIdeaUrl',
+    'GtRegistratedIdea',
+    'GtIdeaProjectData',
+    'GtIdeaStrategicValue',
+    'GtIdeaStrategicNumber',
+    'GtIdeaQualityBenefit',
+    'GtIdeaQualityNumber',
+    'GtIdeaEconomicBenefit',
+    'GtIdeaEconomicNumber',
+    'GtIdeaOperationalNeed',
+    'GtIdeaOperationalNumber',
+    'GtIdeaRisk',
+    'GtIdeaRiskNumber',
+    'GtIdeaManualScore',
+    'GtIdeaManualComment',
+    'GtIdeaScore',
+    'GtIdeaPriority'
+  ]
+}
+
+export const IdeaModule: FC<IIdeaModuleProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, IDEA_MODULE_DEFAULT_PROPS)
   const {
     state,
     setState,
     getSelectedIdea,
     getSelectedView,
     renderHamburger,
+    menuButtonRef,
+    contentButtonRef,
     renderStatus,
     handleToggle,
     ignoreFields,
     isOpen,
+    closeMenuOnNarrowScreen,
     openItems,
     fluentProviderId
   } = useIdeaModule(props)
@@ -90,11 +132,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                 size='small'
                 className={styles.nav}
               >
-                <NavDrawerHeader>
-                  <Tooltip content='NavigationMenu' relationship='label'>
-                    {renderHamburger()}
-                  </Tooltip>
-                </NavDrawerHeader>
+                <NavDrawerHeader>{renderHamburger(menuButtonRef)}</NavDrawerHeader>
                 <NavDrawerBody className={styles.navBody}>
                   <AppItemStatic icon={getFluentIcon('Lightbulb')}>
                     {strings.Idea.ModuleTitle}
@@ -106,6 +144,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                     onClick={() => {
                       setUrlHash({ viewId: _.first(props.configuration.views).id })
                       getSelectedView()
+                      closeMenuOnNarrowScreen()
                     }}
                   >
                     {strings.Idea.OverviewTitle}
@@ -126,6 +165,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                               onClick={() => {
                                 setUrlHash({ ideaId: idea.Id.toString() })
                                 getSelectedIdea()
+                                closeMenuOnNarrowScreen()
                               }}
                             >
                               {idea?.Title}
@@ -153,6 +193,7 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                               onClick={() => {
                                 setUrlHash({ ideaId: idea.Id.toString() })
                                 getSelectedIdea()
+                                closeMenuOnNarrowScreen()
                               }}
                             >
                               {idea?.Title}
@@ -177,7 +218,9 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
               )}
               {state.selectedView && (
                 <div className={styles.overview}>
-                  <div className={styles.hamburger}>{!isOpen && renderHamburger()}</div>
+                  <div className={styles.hamburger}>
+                    {!isOpen && renderHamburger(contentButtonRef)}
+                  </div>
                   <div className={styles.ideaList}>
                     <PortfolioAggregation
                       {...props}
@@ -193,19 +236,22 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                     {/* <Commands /> */}
                     <div className={styles.ideaHeader}>
                       <div className={styles.phasebar}>
-                        <div className={styles.hamburger}>{!isOpen && renderHamburger()}</div>
+                        <div className={styles.hamburger}>
+                          {!isOpen && renderHamburger(contentButtonRef)}
+                        </div>
                         <IdeaPhaseBar />
                       </div>
-                      <h1 className={styles.ideaTitle}>{state.selectedIdea.item.Title}</h1>
+                      {/* Below the page's title, as a web part's heading is (WCAG 1.3.1). */}
+                      <h2 className={styles.ideaTitle}>{state.selectedIdea.item.Title}</h2>
                     </div>
                     {!state.selectedIdea.item.processing && (
-                      <div className={styles.idea}>
+                      <dl className={styles.idea}>
                         {state.selectedIdea.registeredFieldValues
                           .filter((model) => !ignoreFields.includes(model.internalName))
                           .map((model, idx) => (
                             <IdeaField key={idx} model={model} />
                           ))}
-                      </div>
+                      </dl>
                     )}
                     {!state.selectedIdea.item.processing && renderStatus()}
                     {state.selectedIdea.item.processing && (
@@ -225,24 +271,24 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
                               {strings.Idea.RegisteredIdeaTitle}
                             </AccordionHeader>
                             <AccordionPanel style={{ margin: 0 }}>
-                              <div className={styles.idea}>
+                              <dl className={styles.idea}>
                                 {state.selectedIdea.registeredFieldValues.map((model, idx) => (
                                   <IdeaField key={idx} model={model} />
                                 ))}
-                              </div>
+                              </dl>
                             </AccordionPanel>
                           </AccordionItem>
                         </Accordion>
                         <Divider />
                       </>
                     )}
-                    <div className={styles.idea}>
+                    <dl className={styles.idea}>
                       {state.selectedIdea.processingFieldValues
                         ?.filter((model) => !ignoreFields.includes(model.internalName))
                         .map((model, idx) => (
                           <IdeaField key={idx} model={model} />
                         ))}
-                    </div>
+                    </dl>
                     {state.selectedIdea.item.processing && renderStatus()}
                   </>
                 </div>
@@ -256,35 +302,3 @@ export const IdeaModule: FC<IIdeaModuleProps> = (props) => {
 }
 
 IdeaModule.displayName = 'IdeaModule'
-IdeaModule.defaultProps = {
-  dataSource: strings.Idea.RegisteredIdeasTitle,
-  dataSourceCategory: strings.Idea.ModuleTitle,
-  showCommandBar: true,
-  showExcelExportButton: true,
-  showFilters: true,
-  showViewSelector: true,
-  lockedColumns: false,
-  ideaConfigurationList: resource.Lists_Idea_Configuration_Title,
-  ideaConfiguration: 'Standard',
-  hiddenRegFields: ['Title'],
-  hiddenProcFields: [
-    'Title',
-    'GtIdeaUrl',
-    'GtRegistratedIdea',
-    'GtIdeaProjectData',
-    'GtIdeaStrategicValue',
-    'GtIdeaStrategicNumber',
-    'GtIdeaQualityBenefit',
-    'GtIdeaQualityNumber',
-    'GtIdeaEconomicBenefit',
-    'GtIdeaEconomicNumber',
-    'GtIdeaOperationalNeed',
-    'GtIdeaOperationalNumber',
-    'GtIdeaRisk',
-    'GtIdeaRiskNumber',
-    'GtIdeaManualScore',
-    'GtIdeaManualComment',
-    'GtIdeaScore',
-    'GtIdeaPriority'
-  ]
-}

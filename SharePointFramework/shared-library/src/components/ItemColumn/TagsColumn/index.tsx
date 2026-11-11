@@ -1,8 +1,7 @@
-import { TextField } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'SharedLibraryStrings'
 import React from 'react'
-import { ColumnDataTypePropertyField } from '../ColumnDataTypeField'
+import { textField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'
 import { ITagsColumnProps } from './types'
 import {
@@ -14,8 +13,14 @@ import {
 } from '@fluentui/react-icons'
 import { OverflowTagMenu } from '../../OverflowTagMenu'
 import styles from './TagsColumn.module.scss'
+import { withDefaults } from '../../../util'
 
-export const TagsColumn: ColumnRenderComponent<ITagsColumnProps> = (props) => {
+const TAGS_COLUMN_DEFAULT_PROPS: Partial<ITagsColumnProps> = {
+  valueSeparator: ';'
+}
+
+export const TagsColumn: ColumnRenderComponent<ITagsColumnProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, TAGS_COLUMN_DEFAULT_PROPS)
   if (!props.columnValue) return null
 
   let icon = TagMultipleFilled
@@ -49,20 +54,16 @@ export const TagsColumn: ColumnRenderComponent<ITagsColumnProps> = (props) => {
   )
 }
 
-TagsColumn.defaultProps = {
-  valueSeparator: ';'
-}
-
 TagsColumn.key = 'tags'
 TagsColumn.id = 'Tags'
 TagsColumn.displayName = strings.ColumnRenderOptionTags
 TagsColumn.iconName = 'Tag'
 TagsColumn.getDataTypeProperties = (onChange, dataTypeProperties: Record<string, any>) => [
-  ColumnDataTypePropertyField(TextField, {
+  textField({
     label: strings.ColumnRenderOptionTagsValueSeparatorLabel,
     description: strings.ColumnRenderOptionTagsValueSeparatorDescription,
-    placeholder: TagsColumn.defaultProps.valueSeparator,
+    placeholder: TAGS_COLUMN_DEFAULT_PROPS.valueSeparator,
     value: dataTypeProperties.valueSeparator,
-    onChange: (_, value) => onChange('valueSeparator', value)
+    onChange: (value) => onChange('valueSeparator', value)
   })
 ]

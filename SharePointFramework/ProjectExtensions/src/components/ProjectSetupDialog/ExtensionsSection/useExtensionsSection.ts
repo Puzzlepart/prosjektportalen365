@@ -1,10 +1,9 @@
-import { format } from '@fluentui/react'
 import { TableRowId } from '@fluentui/react-components'
-import strings from 'ProjectExtensionsStrings'
-import { ListMenuItem, ProjectExtension } from 'pp365-shared-library'
 import { useState } from 'react'
 import { useProjectSetupDialogContext } from '../context'
 import { ON_EXTENSIONS_CHANGED } from '../reducer'
+import { getSelectedCountText } from '../selectedCountText'
+import { useSearchAnnouncement } from '../useSearchAnnouncement'
 import { useColumns } from './useColumns'
 
 /**
@@ -29,11 +28,12 @@ export function useExtensionsSection() {
 
   const selectedKeys = new Set(context.state.selectedExtensions.map((e) => String(e.key)))
 
-  const sortedItems = [...allItems].sort((a: ProjectExtension, b: ProjectExtension) => {
-    const aOrder = mandatoryKeys.has(String(a.key)) ? 0 : selectedKeys.has(String(a.key)) ? 1 : 2
-    const bOrder = mandatoryKeys.has(String(b.key)) ? 0 : selectedKeys.has(String(b.key)) ? 1 : 2
-    return aOrder - bOrder
-  })
+  // Mandatory items first, then the selected ones, then the rest, each group in title order.
+  const rank = (item: { key: string | number }) =>
+    mandatoryKeys.has(String(item.key)) ? 0 : selectedKeys.has(String(item.key)) ? 1 : 2
+  const sortedItems = [...allItems].sort(
+    (a, b) => rank(a) - rank(b) || a.text.localeCompare(b.text, 'nb')
+  )
 
   const items = searchTerm
     ? sortedItems.filter(
@@ -47,8 +47,8 @@ export function useExtensionsSection() {
     context.state.selectedExtensions.map((e) => String(e.key))
   )
 
-  const onSelectionChange = (_: any, data: { selectedItems: Set<TableRowId> }) => {
-    const newSelection = new Set(data.selectedItems)
+  const onSelectionChange = (selectedIds: (string | number)[]) => {
+    const newSelection = new Set(selectedIds.map(String))
     mandatoryKeys.forEach((key) => newSelection.add(key))
     const selectedItems = allItems.filter((item) => newSelection.has(String(item.key)))
     context.dispatch(ON_EXTENSIONS_CHANGED(selectedItems))
@@ -56,25 +56,14 @@ export function useExtensionsSection() {
 
   const columns = useColumns(mandatoryKeys)
 
-  const columnSizingOptions = {
-    text: { minWidth: 150, defaultWidth: 200 },
-    subText: { minWidth: 250, defaultWidth: 400 }
-  }
-
   // Hidden selections are applied but never listed, so they are not counted.
   const visibleSelectedCount = context.state.selectedExtensions.filter(
     (item) => !item.hidden
   ).length
 
-  const toolbarItems = [
-    new ListMenuItem(
-      format(strings.SelectedCountLabel, visibleSelectedCount),
-      format(strings.SelectedCountLabel, visibleSelectedCount)
-    )
-      .setIcon('CheckmarkCircle')
-      .setDisabled(true)
-      .setStyle({ minWidth: '200px', cursor: 'default' })
-  ]
+  // A status, not a button: the count changes as items are picked, and is read out then.
+  const selectedCountText = getSelectedCountText(visibleSelectedCount)
+  useSearchAnnouncement(searchTerm, items.length, allItems.length)
 
   return {
     items,
@@ -83,7 +72,6 @@ export function useExtensionsSection() {
     onSelectionChange,
     searchTerm,
     onSearch: setSearchTerm,
-    columnSizingOptions,
-    toolbarItems
+    selectedCountText
   }
 }

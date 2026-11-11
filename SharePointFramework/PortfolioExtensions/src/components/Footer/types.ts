@@ -28,6 +28,13 @@ export interface IFooterProps {
   pageContext: PageContext
 
   /**
+   * Path of the page the footer is on (`window.location.pathname`). The help belongs to the
+   * page, and the footer stays mounted across client-side navigations, so a new path loads it
+   * again.
+   */
+  pagePath?: string
+
+  /**
    * The URL to the portal root
    */
   portalUrl: string

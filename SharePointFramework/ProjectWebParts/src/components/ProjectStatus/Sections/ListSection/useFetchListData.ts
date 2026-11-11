@@ -1,4 +1,3 @@
-import { IColumn } from '@fluentui/react'
 import { AssignFrom } from '@pnp/core'
 import { spfi } from '@pnp/sp'
 import { ICamlQuery } from '@pnp/sp/lists'
@@ -6,33 +5,52 @@ import _ from 'lodash'
 import { SPField } from 'pp365-shared-library/lib/models'
 import { useContext } from 'react'
 import { useProjectStatusContext } from '../../context'
+import { getScopeLabel, parseSubProjects } from '../../parseSubProjects'
 import { SectionContext } from '../context'
+import { escapeXmlValue, replaceScopeTokens } from '../scopeTokens'
+import { toSectionDataError } from './sectionDataError'
 import { IListSectionData } from './types'
+import { IListColumn } from 'pp365-shared-library'
 
 const COLUMN_MAX_WIDTH: Record<string, number> = { Text: 250, Note: 250, Choice: 150, Number: 100 }
 
 type UseFetchListDataView = { ListViewXml: string; ViewFields: { Items: string[] } }
 
 /**
- * Fetch list data hook.
+ * Fetch list data hook. Section configuration values (`listTitle`,
+ * `viewQuery`, `viewName`) support the scope tokens `{scope}` and
+ * `{scopeLabel}`, which are replaced with the selected report scope
+ * ("delprosjekt") key and label — so one section configuration can serve a
+ * different list per report series.
  *
- * @returns A function used to fetch data for `ListSection` and `UncertaintySection`.
+ * @returns A function used to fetch data for `ListSection` and `UncertaintySection`. It rejects
+ * with an `ISectionDataError` that names the list it read.
  */
 export function useFetchListData() {
   const context = useProjectStatusContext()
   const { section } = useContext(SectionContext)
   return async (): Promise<IListSectionData> => {
+    const scopeKey = (context.state.selectedScope ?? '').trim()
+    const scopeLabel = getScopeLabel(parseSubProjects(context.props.subProjects), scopeKey)
     const web = spfi(context.props.webAbsoluteUrl).using(AssignFrom(context.props.sp.web)).web
-    const list = web.lists.getByTitle(section.listTitle)
+    const listTitle = replaceScopeTokens(section.listTitle, scopeKey, scopeLabel)
+    const list = web.lists.getByTitle(listTitle)
     try {
+      // The scope key/label are XML-escaped here (and only here — the list/view
+      // title lookups are URI-encoded by PnPjs) so the substituted values can
+      // never restructure the CAML query.
       let view: UseFetchListDataView = {
-        ListViewXml: `<View><Query>${section.viewQuery}</Query><RowLimit>${section.rowLimit}</RowLimit></View>`,
+        ListViewXml: `<View><Query>${replaceScopeTokens(
+          section.viewQuery,
+          escapeXmlValue(scopeKey),
+          escapeXmlValue(scopeLabel)
+        )}</Query><RowLimit>${section.rowLimit}</RowLimit></View>`,
         ViewFields: { Items: section.viewFields }
       }
       if (section.viewName) {
         try {
           view = await list.views
-            .getByTitle(section.viewName)
+            .getByTitle(replaceScopeTokens(section.viewName, scopeKey, scopeLabel))
             .select('ListViewXml', 'ViewFields')
             .expand('ViewFields')()
         } catch {}
@@ -49,7 +67,7 @@ export function useFetchListData() {
       const columns = view.ViewFields.Items.map<string>((vf) => (vf === 'LinkTitle' ? 'Title' : vf))
         .map<SPField>((vf) => fields.find((fld) => fld.InternalName === vf))
         .filter(Boolean)
-        .map<IColumn>((field) => ({
+        .map<IListColumn>((field) => ({
           key: field.InternalName,
           fieldName: field.InternalName,
           name: field.Title,
@@ -66,7 +84,7 @@ export function useFetchListData() {
         columns
       } as IListSectionData
     } catch (error) {
-      throw error
+      throw toSectionDataError(error, listTitle)
     }
   }
 }

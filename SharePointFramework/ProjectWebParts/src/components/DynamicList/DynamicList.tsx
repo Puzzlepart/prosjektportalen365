@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect, useMemo } from 'react'
+import { FC, useContext, useEffect, useMemo, useRef } from 'react'
 import * as React from 'react'
 import { DynamicListContext } from './context'
 import {
@@ -17,13 +17,16 @@ import {
   CustomEditPanel,
   Toolbar,
   UserMessage,
-  LoadingSkeleton
+  LoadingSkeleton,
+  withDefaults
 } from 'pp365-shared-library'
-import { Spinner, Skeleton, SkeletonItem } from '@fluentui/react-components'
+import { Spinner, Skeleton, SkeletonItem, useId } from '@fluentui/react-components'
 import SPDataAdapter from '../../data'
 import { useToolbarItems } from './useToolbarItems'
 import styles from './DynamicList.module.scss'
 import * as strings from 'ProjectWebPartsStrings'
+import { useRefreshAnnouncement } from './useAnnouncements'
+import { useNavigationFocus } from './useNavigationFocus'
 
 /**
  * Internal component that renders the main content of the DynamicList.
@@ -43,6 +46,7 @@ const DynamicListContent: FC<{
   const context = useContext(DynamicListContext)
   const { menuItems, farMenuItems, filterPanelProps, customActionDialog, toaster } =
     useToolbarItems(isSingleView, showNewButton)
+  useRefreshAnnouncement(!!context.state.isRefetching)
 
   if (!context.props.listName) {
     return (
@@ -68,7 +72,8 @@ const DynamicListContent: FC<{
     <>
       <div className={styles.header}>
         {context.state.isLoading ? (
-          <Skeleton className={styles.headerSkeleton}>
+          // Hidden: the list's skeleton below names the loading, which would be read twice.
+          <Skeleton className={styles.headerSkeleton} aria-hidden>
             <SkeletonItem className={styles.titleSkeleton} />
           </Skeleton>
         ) : (
@@ -81,27 +86,35 @@ const DynamicListContent: FC<{
           />
         )}
       </div>
-      {context.state.isRefetching ? (
+      {context.state.isRefetching && (
         <Spinner
           size='extra-tiny'
           label={strings.DynamicList.RefetchingData}
           style={{ padding: 10, minHeight: '20px' }}
         />
-      ) : (
-        (context.props.showCommandBar ||
-          (!context.props.showCommandBar &&
-            (context.state.isDrilledDown ||
-              (context.state.isDocumentLibrary && context.state.currentFolderPath)))) && (
-          <div className={styles.commandBar}>
-            <Toolbar items={menuItems} farItems={farMenuItems} filterPanel={filterPanelProps} />
-          </div>
-        )
+      )}
+      {/* Kept while the list is fetched again, so the refresh button keeps the focus. */}
+      {(context.props.showCommandBar ||
+        (!context.props.showCommandBar &&
+          (context.state.isDrilledDown ||
+            (context.state.isDocumentLibrary && context.state.currentFolderPath)))) && (
+        <div className={styles.commandBar}>
+          <Toolbar items={menuItems} farItems={farMenuItems} filterPanel={filterPanelProps} />
+        </div>
       )}
       {context.state.isLoading ? (
         <LoadingSkeleton />
       ) : (
         <>
-          {context.state.error && <div>Error: {context.state.error}</div>}
+          {context.state.error && (
+            <div style={{ padding: '0 32px', marginBottom: '16px' }}>
+              <UserMessage
+                title={strings.DynamicList.Error}
+                text={context.state.error}
+                intent='error'
+              />
+            </div>
+          )}
           {context.state.data?.siteIdFieldMissing && (
             <div style={{ padding: '0 32px', marginBottom: '16px' }}>
               <UserMessage
@@ -130,6 +143,28 @@ const DynamicListContent: FC<{
   )
 }
 
+const DYNAMIC_LIST_DEFAULT_PROPS: Partial<IDynamicListProps> = {
+  mode: DynamicListMode.Multi,
+  documentLibraryViewMode: DocumentLibraryViewMode.Folders,
+  useProjectContentColumnNames: true,
+  showItemTitle: true,
+  showCommandBar: true,
+  showSearchBox: true,
+  showViewSelector: false,
+  showFilters: true,
+  showNewButton: true,
+  showEditButton: true,
+  showDeleteButton: false,
+  showRefreshButton: true,
+  showExportButton: true,
+  showUploadButton: true,
+  showNewWordButton: false,
+  showNewExcelButton: false,
+  showNewPowerPointButton: false,
+  showViewModeToggle: true,
+  showCustomActions: true
+}
+
 /**
  * DynamicList web part component for displaying SharePoint list data.
  *
@@ -142,7 +177,8 @@ const DynamicListContent: FC<{
  *
  * @param props Configuration properties for the DynamicList
  */
-export const DynamicList: FC<IDynamicListProps> = (props) => {
+export const DynamicList: FC<IDynamicListProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, DYNAMIC_LIST_DEFAULT_PROPS)
   /**
    * Determines the target SharePoint web instance based on webContextMode prop.
    * This web is used for ALL operations (read and write) and points to where the list exists.
@@ -155,15 +191,19 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
   }, [props.webContextMode, props.webUrl])
 
   const { state, setState } = useDynamicList(props, targetWeb)
+  const toasterId = useId('dynamic-list-toaster')
+  const containerRef = useRef<HTMLDivElement>(null)
+  useNavigationFocus(state, containerRef)
 
   const context = useMemo(
     () => ({
       props,
       state,
       setState,
-      web: targetWeb
+      web: targetWeb,
+      toasterId
     }),
-    [props, state, targetWeb]
+    [props, state, targetWeb, toasterId]
   )
 
   const hasOnlyOneItem = state.data?.listItems?.length === 1
@@ -228,7 +268,7 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
   return (
     <div className={styles.dynamicList} style={containerStyle}>
       <DynamicListContext.Provider value={context}>
-        <div className={styles.container} style={containerStyle}>
+        <div className={styles.container} style={containerStyle} ref={containerRef}>
           <DynamicListContent
             isSingleView={isSingleView}
             showNewButton={showNewButton}
@@ -237,13 +277,13 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
         </div>
         {state.panel && (
           <CustomEditPanel
-            isOpen={true}
+            open={true}
             fields={editPanelFields}
             fieldValues={state.panel.fieldValues}
             dataAdapter={dataAdapterForEditPanel}
             targetWeb={targetWeb}
             targetListId={state.data.listId}
-            onDismiss={() => {
+            onClose={() => {
               setState({
                 selectedItems: [],
                 panel: null
@@ -255,26 +295,4 @@ export const DynamicList: FC<IDynamicListProps> = (props) => {
       </DynamicListContext.Provider>
     </div>
   )
-}
-
-DynamicList.defaultProps = {
-  mode: DynamicListMode.Multi,
-  documentLibraryViewMode: DocumentLibraryViewMode.Folders,
-  useProjectContentColumnNames: true,
-  showItemTitle: true,
-  showCommandBar: true,
-  showSearchBox: true,
-  showViewSelector: false,
-  showFilters: true,
-  showNewButton: true,
-  showEditButton: true,
-  showDeleteButton: false,
-  showRefreshButton: true,
-  showExportButton: true,
-  showUploadButton: true,
-  showNewWordButton: false,
-  showNewExcelButton: false,
-  showNewPowerPointButton: false,
-  showViewModeToggle: true,
-  showCustomActions: true
 }

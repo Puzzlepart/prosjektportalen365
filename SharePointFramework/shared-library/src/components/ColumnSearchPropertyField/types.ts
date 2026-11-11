@@ -1,6 +1,12 @@
-import { ITextFieldProps } from '@fluentui/react'
+import { InputProps } from '@fluentui/react-components'
 
-export interface IColumnSearchPropertyFieldProps extends Omit<ITextFieldProps, 'onChange'> {
+export interface IColumnSearchPropertyFieldProps extends Omit<InputProps, 'onChange'> {
+  /**
+   * Label for the field. The Fluent UI v9 `Input` has no label of its own, so
+   * it is declared here and rendered by the surrounding field.
+   */
+  label?: string
+
   /**
    * On change handler for the field
    *

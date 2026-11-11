@@ -24,12 +24,29 @@ export interface IFetchDataForViewItemResult extends ISearchResult {
   _hubId?: string
   _hubTitle?: string
   _hubUrl?: string
+
+  /**
+   * Synthetic unique row key on the format `${SiteId}_${scopeKey}`. A project
+   * with multiple report series ("delprosjekter") yields one row per series,
+   * so `SiteId` alone is not unique.
+   */
+  key?: string
+
+  /**
+   * Scope key ("delprosjekt") for the report series the row represents.
+   * `undefined` for the default series row.
+   */
+  ScopeKey?: string
   [key: string]: any
 }
 
 export type IPortfolioViewData = {
   items: IFetchDataForViewItemResult[]
   managedProperties?: string[]
+  /**
+   * The portfolios a merged view could not read, which the overview tells of.
+   */
+  failedPortfolios?: PortfolioInstance[]
 }
 
 /**
@@ -318,8 +335,13 @@ export interface IPortfolioWebPartsDataAdapter {
    *
    * @param siteId Site ID to fetch the project
    * @param hubContext Optional hub context for cross-hub data access
+   * @param fields The fields and person fields the project card shows
    */
-  fetchEnrichedProject?(siteId: string, hubContext?: IHubContext): Promise<ProjectListModel>
+  fetchEnrichedProject?(
+    siteId: string,
+    hubContext?: IHubContext,
+    fields?: IEnrichedProjectsFields
+  ): Promise<ProjectListModel>
 
   /**
    * Fetch projects from the projects list filtered by the `odataQuery`

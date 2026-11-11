@@ -15,12 +15,16 @@ export type ConflictKind =
  * How a conflict is resolved if the admin chooses to continue the import:
  *
  * - `overwrite` — the package's version replaces/updates the existing object
- *   (expected; e.g. re-import, or a bundled extension file).
- * - `skip` — the conflicting entry is stripped from the provisioning schema so
- *   the existing object is left untouched (e.g. a content type id used by a
- *   *different* content type — we never clobber it).
- * - `blocked` — provisioning that entry would hard-fail (e.g. a field id reused
- *   by a different column, or a missing field reference), so it is stripped too.
+ *   (expected; e.g. re-import, a bundled extension file, or a column type that
+ *   sp-js-provisioning widens in place, such as Text to Note).
+ * - `skip` — the existing object is left untouched. Either the conflicting entry
+ *   is stripped from the provisioning schema (a content type id used by a
+ *   *different* content type, a term set id with another name — we never clobber
+ *   them), or sp-js-provisioning leaves it alone and logs a warning or an error
+ *   (a column type change that would lose values, a field id another column has,
+ *   content types on a list it did not create).
+ * - `blocked` — provisioning that entry would hard-fail (a content type whose
+ *   field reference does not exist on the hub), so it is stripped too.
  */
 export type ConflictResolution = 'overwrite' | 'skip' | 'blocked'
 

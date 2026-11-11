@@ -8,14 +8,20 @@ export function useProjectCardHeader() {
   const [showCustomImage, setShowCustomImage] = useState(false)
 
   const imageUrl = `${context.project?.url || ''}/_api/siteiconmanager/getsitelogo?type='1'`
+  const usesImageColors = !!(context.useDynamicColors && context.project && !context.project.logo)
+  // A hook runs on every render, so turning dynamic colours on or a project arriving does not
+  // change the number of hooks; with an empty source it loads nothing.
+  const imageColors = useImageColor(usesImageColors ? imageUrl : '', {
+    cors: true,
+    colors: 2,
+    windowSize: 5
+  })
   const imageColorData =
-    context.useDynamicColors && context.project
-      ? context.project.logo || useImageColor(imageUrl, { cors: true, colors: 2, windowSize: 5 })
-      : null
+    context.useDynamicColors && context.project ? context.project.logo || imageColors : null
 
   const colors =
     context.useDynamicColors && context.showProjectLogo
-      ? imageColorData?.colors ?? ['transparent', 'transparent']
+      ? (imageColorData?.colors ?? ['transparent', 'transparent'])
       : ['transparent', 'transparent']
 
   const headerProps: HTMLProps<HTMLDivElement> = {
@@ -31,8 +37,8 @@ export function useProjectCardHeader() {
       width: context.showProjectLogo
         ? '216px'
         : context.shouldDisplay('ProjectPhase')
-        ? '178px'
-        : '216px'
+          ? '178px'
+          : '216px'
     }
   }
 

@@ -1,0 +1,92 @@
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
+import strings from 'ProjectExtensionsStrings'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
+import * as React from 'react'
+import { ProjectSetupError } from '../../extensions/projectSetup/ProjectSetupError'
+import { ErrorDialog } from '.'
+
+afterEach(async () => {
+  cleanup()
+  await act(() => new Promise((resolve) => setTimeout(resolve, 50)))
+})
+
+describe('ErrorDialog', () => {
+  it('shows what went wrong and what to do, and closes', () => {
+    const onDismiss = jest.fn()
+    render(
+      <ErrorDialog
+        error={
+          new ProjectSetupError(
+            'NoHubConnection',
+            strings.NoHubSiteErrorMessage,
+            strings.NoHubSiteErrorStack,
+            'warning'
+          )
+        }
+        showStackAsSubText
+        onDismiss={onDismiss}
+      />
+    )
+    expect(screen.getByText(strings.NoHubSiteErrorMessage)).toBeInTheDocument()
+    expect(screen.getByText(strings.NoHubSiteErrorStack, { selector: 'p' })).toBeVisible()
+    // Plain text: `<br/>` and the backticks of Markdown showed as they were.
+    expect(
+      screen.getByText(strings.NoHubSiteErrorStack, { selector: 'p' }).textContent
+    ).not.toMatch(/<\/?[a-z]+\s*\/?>|`|\*\*/i)
+    // Once: a message bar hidden beside it would still be announced.
+    expect(screen.getAllByText(strings.NoHubSiteErrorStack)).toHaveLength(1)
+    // By text: the title's close button carries the same name, as an aria-label.
+    fireEvent.click(screen.getByText(strings.CloseModalText))
+    expect(onDismiss).toHaveBeenCalled()
+  })
+
+  it.each([
+    'NoHubSiteErrorStack',
+    'NotSiteAdminErrorStack',
+    'NoGroupIdErrorStack',
+    'InvalidLanguageErrorStack',
+    'IsHubSiteErrorStack',
+    'ProjectAlreadySetupStack'
+  ])('has no markup in %s, which the checks before the setup show as plain text', (key) => {
+    expect(strings[key]).not.toMatch(/<\/?[a-z]+\s*\/?>|`|\*\*/i)
+  })
+
+  it('shows the explanation as a message when it is not the subtitle', () => {
+    const error = new Error('Uventet feil')
+    error.stack = 'Hubområdet svarte ikke'
+    render(<ErrorDialog error={error} onDismiss={jest.fn()} />)
+    expect(screen.getByText('Uventet feil')).toBeInTheDocument()
+    expect(screen.getByText('Hubområdet svarte ikke')).toBeVisible()
+    expect(screen.queryByText('Hubområdet svarte ikke', { selector: 'p' })).toBeNull()
+  })
+
+  it('breaks no rule axe can check, with its version', async () => {
+    const error = new Error('Uventet feil')
+    error.stack = 'Hubområdet svarte ikke'
+    render(<ErrorDialog error={error} version='v1.15.0' onDismiss={jest.fn()} />)
+    expect(await axeComponent(screen.getByRole('dialog'))).toHaveNoViolations()
+  })
+
+  it('offers the setup again, or the project, when the project is set up already', () => {
+    const onDismiss = jest.fn()
+    const onSetupClick = jest.fn()
+    render(
+      <ErrorDialog
+        error={
+          new ProjectSetupError(
+            'AlreadySetup',
+            strings.ProjectAlreadySetupMessage,
+            strings.ProjectAlreadySetupStack
+          )
+        }
+        onDismiss={onDismiss}
+        onSetupClick={onSetupClick}
+      />
+    )
+    fireEvent.click(screen.getByRole('button', { name: strings.ProvisionTemplateText }))
+    expect(onSetupClick).toHaveBeenCalled()
+    fireEvent.click(screen.getByRole('button', { name: strings.ContinueToProjectText }))
+    expect(onDismiss).toHaveBeenCalled()
+    expect(screen.queryByText(strings.CloseModalText)).toBeNull()
+  })
+})

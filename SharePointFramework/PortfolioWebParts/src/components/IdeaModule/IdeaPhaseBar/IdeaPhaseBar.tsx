@@ -1,61 +1,37 @@
 import React, { FC } from 'react'
 import styles from './IdeaPhaseBar.module.scss'
-import { Tab, TabList } from '@fluentui/react-components'
+import { mergeClasses } from '@fluentui/react-components'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getFluentIcon } from 'pp365-shared-library'
-import { useIdeaModuleContext } from '../context'
-import { IdeaPhase } from '../types'
+import { useIdeaPhaseBar } from './useIdeaPhaseBar'
 
+/**
+ * The phases an idea goes through, the current one marked: an ordered list, where they were tabs
+ * that did nothing, the other phases disabled and the arrows between them nameless tabs (WCAG
+ * 1.3.1, 4.1.2). The other phases are in a readable grey, not a disabled one (WCAG 1.4.3).
+ */
 export const IdeaPhaseBar: FC = () => {
-  const context = useIdeaModuleContext()
-
-  const phases = [
-    {
-      phase: IdeaPhase.Registration,
-      name: 'Registrering av idé',
-      icon: getFluentIcon('Lightbulb')
-    },
-    {
-      phase: IdeaPhase.Processing,
-      name: 'Behandling av idé',
-      icon: getFluentIcon('Edit')
-    },
-    {
-      phase: IdeaPhase.ApprovedForConcept,
-      name: 'Idé godkjent',
-      icon: getFluentIcon('CheckmarkCircle')
-    },
-    {
-      phase: IdeaPhase.Provisioned,
-      name: strings.Idea.ProvisionAreaTitle,
-      icon: getFluentIcon('BoxToolbox')
-    }
-  ]
+  const phases = useIdeaPhaseBar()
   return (
-    <>
-      <TabList className={styles.ideaPhases} selectedValue={context.state.phase}>
-        {phases.map((phase) => {
-          return (
-            <>
-              <Tab
-                key={phase.phase}
-                value={phase.phase}
-                icon={phase.icon}
-                disabled={context.state.phase !== phase.phase}
-                style={{ cursor: 'default' }}
-              >
-                {phase.name}
-              </Tab>
-              <Tab
-                icon={getFluentIcon('ChevronRight')}
-                value={null}
-                disabled
-                style={{ cursor: 'default' }}
-              />
-            </>
-          )
-        })}
-      </TabList>
-    </>
+    // An explicit role: Safari drops a list's role when its markers are hidden.
+    <ol className={styles.ideaPhases} role='list' aria-label={strings.Idea.PhasesLabel}>
+      {phases.map((phase, index) => (
+        <li
+          key={phase.phase}
+          className={styles.step}
+          aria-current={phase.isCurrent ? 'step' : undefined}
+        >
+          <span className={mergeClasses(styles.phase, phase.isCurrent && styles.current)}>
+            {getFluentIcon(phase.iconName, { size: 20 })}
+            {phase.name}
+          </span>
+          {index < phases.length - 1 && (
+            <span className={styles.separator} aria-hidden>
+              {getFluentIcon('ChevronRight', { size: 20 })}
+            </span>
+          )}
+        </li>
+      ))}
+    </ol>
   )
 }

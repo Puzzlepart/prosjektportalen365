@@ -1,6 +1,6 @@
-import { IColumn, IContextualMenuItem } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import styles from './List.module.scss'
+import { IListColumn, IMenuItem } from 'pp365-shared-library'
 
 /**
  * Hook for an add column used in a list for adding a new column and
@@ -18,7 +18,7 @@ export function useAddColumn(
   /**
    * Add column object
    */
-  const addColumn: IColumn = {
+  const addColumn: IListColumn = {
     key,
     fieldName: '',
     name: strings.ToggleColumnFormPanelLabel,
@@ -35,21 +35,21 @@ export function useAddColumn(
    *
    * @param onToggleColumnFormPanel On toggle column form panel callback
    * @param onToggleEditViewColumnsPanel On toggle edit view columns panel callback
-   * @param _isToggleColumnFormPanelDisabled Is toggle column form panel disabled
+   * @param isToggleColumnFormPanelDisabled Is toggle column form panel disabled
    * @param isToggleEditViewColumnsPanelDisabled Is toggle edit view columns panel disabled
    */
   const createContextualMenuItems = (
     onToggleColumnFormPanel: () => void,
     onToggleEditViewColumnsPanel: () => void,
-    _isToggleColumnFormPanelDisabled = true,
+    isToggleColumnFormPanelDisabled = false,
     isToggleEditViewColumnsPanelDisabled = false
-  ): IContextualMenuItem[] => [
+  ): IMenuItem[] => [
     {
       key: 'TOGGLE_COLUMN_FORM_PANEL',
       text: strings.ToggleColumnFormPanelLabel,
       iconProps: { iconName: 'Add' },
       onClick: onToggleColumnFormPanel,
-      disabled: true
+      disabled: isToggleColumnFormPanelDisabled || !permissionCheck
     },
     {
       key: 'SHOW_HIDE_COLUMNS',
@@ -68,7 +68,7 @@ export function useAddColumn(
    *
    * @param column Column to check
    */
-  const isAddColumn = (column: IColumn) => column.key === addColumn.key
+  const isAddColumn = (column: IListColumn) => column.key === addColumn.key
 
   return {
     addColumn,

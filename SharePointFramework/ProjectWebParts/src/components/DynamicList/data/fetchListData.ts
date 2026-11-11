@@ -1,14 +1,17 @@
-import { IColumn } from '@fluentui/react'
 import { IDynamicListProps, IDynamicListData } from '../types'
 import SPDataAdapter from '../../../data'
-import { EditableSPField, ProjectContentColumn } from 'pp365-shared-library'
+import {
+  EditableSPField,
+  IListColumn,
+  ProjectContentColumn,
+  getAllItems,
+  getTermStore
+} from 'pp365-shared-library'
 import type { IWeb } from '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/fields'
 import '@pnp/sp/items'
-import '@pnp/sp/items/get-all'
 import '@pnp/sp/views'
-import '@pnp/sp/taxonomy'
 import { TaxonomyTermModel } from '../models/TaxonomyTermModel'
 import { isVisibleListField, normalizeViewFieldNames } from '../utils/fieldUtils'
 
@@ -61,10 +64,10 @@ async function fetchProjectContentColumns(): Promise<ProjectContentColumn[]> {
  * @returns Array of enriched columns with merged configuration
  */
 function enrichColumnsWithConfiguration(
-  spColumns: IColumn[],
+  spColumns: IListColumn[],
   projectContentColumns: ProjectContentColumn[],
   useProjectContentColumnNames: boolean = true
-): IColumn[] {
+): IListColumn[] {
   return spColumns.map((spColumn) => {
     const configColumn = projectContentColumns.find(
       (c) => c.internalName === spColumn.fieldName || c.fieldName === spColumn.fieldName
@@ -263,10 +266,7 @@ async function fetchAllItemsChunked(
       ]
   const baseExpand = isDocumentLibrary ? ['Author', 'Editor', 'File'] : ['Author', 'Editor']
 
-  const baseItems = await list.items
-    .select(...baseSelect)
-    .expand(...baseExpand)
-    .getAll()
+  const baseItems = await getAllItems(list.items.select(...baseSelect).expand(...baseExpand))
 
   if (userExpands.length === 0) {
     return baseItems
@@ -276,11 +276,9 @@ async function fetchAllItemsChunked(
 
   const chunkResults = await Promise.all(
     chunk(userExpands, MAX_USER_FIELD_EXPANDS_PER_QUERY).map((fieldNames) =>
-      list.items
-        .select('Id', ...userFieldSelects(fieldNames))
-        .expand(...fieldNames)
-        .getAll()
-        .then((rows: any[]) => ({ fieldNames, rows }))
+      getAllItems(
+        list.items.select('Id', ...userFieldSelects(fieldNames)).expand(...fieldNames)
+      ).then((rows: any[]) => ({ fieldNames, rows }))
     )
   )
 
@@ -308,7 +306,7 @@ async function fetchAllItemsChunked(
  */
 export function transformListItem(
   item: any,
-  columns: IColumn[],
+  columns: IListColumn[],
   taxonomyTermsMap: Map<string, TaxonomyTermModel[]>
 ): Record<string, any> {
   const transformedItem: Record<string, any> = { ...item }
@@ -329,8 +327,8 @@ export function transformListItem(
               typeof v === 'object' && 'TermGuid' in v
                 ? v.TermGuid
                 : typeof v === 'string'
-                ? v
-                : null
+                  ? v
+                  : null
 
             if (termGuid) {
               const term = terms.find((t) => t.id === termGuid)
@@ -367,7 +365,7 @@ export function transformListItem(
  * @returns Promise resolving to Map of termSetId to array of TaxonomyTermModel
  */
 async function fetchTaxonomyTermsForColumns(
-  columns: IColumn[]
+  columns: IListColumn[]
 ): Promise<Map<string, TaxonomyTermModel[]>> {
   const termSetIds = columns
     .filter((col) => col.data?.termSetId)
@@ -387,9 +385,10 @@ async function fetchTaxonomyTermsForColumns(
     await Promise.all(
       termSetIds.map(async (termSetId) => {
         try {
-          const terms = await SPDataAdapter.sp.termStore.sets
-            .getById(termSetId)
-            .terms.select('*', 'localProperties')()
+          const terms = await getTermStore(SPDataAdapter.sp.web)
+            .sets.getById(termSetId)
+            .terms.select('*', 'localProperties')
+            .all()
           const taxonomyTerms = terms.map((term) => new TaxonomyTermModel(term, termSetId, lcid))
           termsMap.set(termSetId, taxonomyTerms)
         } catch (error) {
@@ -519,7 +518,7 @@ export async function fetchListData(
             .filter((fieldName) => !sourceVisibleFieldSet.has(fieldName))
         : []
 
-    let columns: IColumn[] = fields
+    let columns: IListColumn[] = fields
       .filter((field) => isVisibleListField(field, projectContentColumns))
       .map((field) => {
         const dataType = mapSharePointTypeToDataType(field.TypeAsString, field.FieldTypeKind)
@@ -633,7 +632,7 @@ export async function fetchSingleItem(
   props: IDynamicListProps,
   web: IWeb,
   itemId: number,
-  existingColumns?: IColumn[]
+  existingColumns?: IListColumn[]
 ): Promise<any> {
   try {
     if (!props.listName) {

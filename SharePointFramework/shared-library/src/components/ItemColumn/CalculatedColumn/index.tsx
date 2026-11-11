@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react'
 import { ColumnRenderComponent } from '../types'
 import { ICalculatedColumnProps, ResultType } from './types'
-import { tryParseCalculated } from '../../../util'
+import { tryParseCalculated, withDefaults } from '../../../util'
 import { NumberColumn } from '../NumberColumn'
 import { CurrencyColumn } from '../CurrencyColumn'
 import { BooleanColumn } from '../BooleanColumn'
@@ -15,16 +15,17 @@ const componentRegistry: Record<ResultType, FC<ICalculatedColumnProps>> = {
   number: NumberColumn
 }
 
-export const CalculatedColumn: ColumnRenderComponent<ICalculatedColumnProps> = (props) => {
+const CALCULATED_COLUMN_DEFAULT_PROPS: Partial<ICalculatedColumnProps> = {
+  resultType: 'number'
+}
+
+export const CalculatedColumn: ColumnRenderComponent<ICalculatedColumnProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, CALCULATED_COLUMN_DEFAULT_PROPS)
   const { columnValue, resultType } = props
   const parsedValue = useMemo(() => tryParseCalculated(columnValue, ''), [columnValue])
   const Component = componentRegistry[resultType] ?? NumberColumn
   const commonProps = { ...props, columnValue: parsedValue }
   return <Component {...commonProps} />
-}
-
-CalculatedColumn.defaultProps = {
-  resultType: 'number'
 }
 
 CalculatedColumn.key = 'calculated'

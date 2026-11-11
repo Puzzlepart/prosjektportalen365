@@ -5,13 +5,15 @@ import {
   ProjectContentColumn,
   SPField
 } from 'pp365-shared-library'
-import { MessageBarType } from '@fluentui/react'
 import { IdeaConfigurationModel } from 'models'
-import { Slot } from '@fluentui/react-components'
+import { Slot, MessageBarProps } from '@fluentui/react-components'
 import { IPortfolioAggregationProps } from 'components/PortfolioAggregation'
 
 export class IdeaModuleErrorMessage extends Error {
-  constructor(public message: string, public type: MessageBarType) {
+  constructor(
+    public message: string,
+    public type: MessageBarProps['intent']
+  ) {
     super(message)
   }
 }

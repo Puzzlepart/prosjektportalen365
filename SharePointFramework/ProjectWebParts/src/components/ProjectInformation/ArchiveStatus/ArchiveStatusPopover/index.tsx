@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
 import { isEmpty, groupBy } from 'underscore'
@@ -15,7 +14,7 @@ import {
   AccordionPanel
 } from '@fluentui/react-components'
 import { Archive24Regular } from '@fluentui/react-icons'
-import { customLightTheme, formatDate } from 'pp365-shared-library'
+import { customLightTheme, formatDate, format } from 'pp365-shared-library'
 
 export const ArchiveStatusPopover: FC<IArchiveStatusPopoverProps> = (props) => {
   const fluentProviderId = useId('fp-archive-status-popover')
@@ -55,7 +54,9 @@ export const ArchiveStatusPopover: FC<IArchiveStatusPopoverProps> = (props) => {
                             <ul className={styles.scopeList}>
                               {scopesByStatus[statusKey].map((scopeItem, index) => (
                                 <li key={`${statusKey}-${index}`}>
-                                  <Tag media={scopeItem.icon} style={{ color: scopeItem.color }}>
+                                  {/* The status is the group's heading; its colour is the
+                                      icon's alone, since the warning's orange text read 2:1. */}
+                                  <Tag media={scopeItem.icon}>
                                     {scopeItem.scope} ({scopeItem.count})
                                   </Tag>
                                 </li>

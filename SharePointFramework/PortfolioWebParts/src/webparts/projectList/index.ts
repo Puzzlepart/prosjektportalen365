@@ -1,21 +1,22 @@
-/* eslint-disable quotes */
 import { IPropertyPaneConfiguration, PropertyPaneToggle } from '@microsoft/sp-property-pane'
-import {
-  PropertyFieldDropdownWithCallout,
-  PropertyFieldMultiSelect,
-  PropertyFieldToggleWithCallout
-} from '@pnp/spfx-property-controls'
+import { PropertyFieldDropdownWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldDropdownWithCallout'
+import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls/lib/PropertyFieldMultiSelect'
+import { PropertyFieldToggleWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldToggleWithCallout'
 import {
   CustomCollectionFieldType,
   PropertyFieldCollectionData
 } from '@pnp/spfx-property-controls/lib/PropertyFieldCollectionData'
 import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHeader'
 import * as strings from 'PortfolioWebPartsStrings'
-import { IProjectListProps, ProjectList } from 'components/ProjectList'
+import {
+  IProjectListProps,
+  PROJECT_LIST_DEFAULT_PROPS,
+  ProjectList,
+  getFieldOptionKey
+} from 'components/ProjectList'
 import React from 'react'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
-import { PortalDataService, ProjectColumn } from 'pp365-shared-library'
-import { iconCatalog } from 'pp365-shared-library/lib/icons/iconCatalog'
+import { PortalDataService, ProjectColumn, getFluentIcons } from 'pp365-shared-library'
 
 function renderJsonTextarea(
   field: any,
@@ -82,9 +83,9 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    const propertiesWithDefaults = { ...ProjectList.defaultProps, ...this.properties }
+    const propertiesWithDefaults = { ...PROJECT_LIST_DEFAULT_PROPS, ...this.properties }
     const quickLaunchMenu = {
-      ...ProjectList.defaultProps.quickLaunchMenu,
+      ...PROJECT_LIST_DEFAULT_PROPS.quickLaunchMenu,
       ...this.properties.quickLaunchMenu
     }
 
@@ -193,9 +194,9 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                       title: strings.VerticalConfigIconTitle,
                       type: CustomCollectionFieldType.dropdown,
                       defaultValue: 'Cube',
-                      options: Object.keys(iconCatalog).map((key) => ({
-                        key,
-                        text: key
+                      options: getFluentIcons().map(({ name }) => ({
+                        key: name,
+                        text: name
                       }))
                     },
                     {
@@ -292,7 +293,10 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                     key: option.key,
                     text: option.text
                   })),
-                  selectedKey: this.properties.primaryField ?? 'GtProjectServiceArea',
+                  selectedKey: getFieldOptionKey(
+                    this.properties.primaryField ?? PROJECT_LIST_DEFAULT_PROPS.primaryField,
+                    this._columnFieldOptions
+                  ),
                   calloutWidth: 430,
                   calloutContent: React.createElement('p', {}, strings.RefreshRequiredDescription)
                 }),
@@ -304,7 +308,10 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                     key: option.key,
                     text: option.text
                   })),
-                  selectedKey: this.properties.secondaryField ?? 'GtProjectType',
+                  selectedKey: getFieldOptionKey(
+                    this.properties.secondaryField ?? PROJECT_LIST_DEFAULT_PROPS.secondaryField,
+                    this._columnFieldOptions
+                  ),
                   calloutWidth: 430,
                   calloutContent: React.createElement('p', {}, strings.RefreshRequiredDescription)
                 }),

@@ -1,5 +1,5 @@
 import { ProjectPhasesContext } from 'components/ProjectPhases/context'
-import { getFluentIcon } from 'pp365-shared-library'
+import { format, getFluentIcon } from 'pp365-shared-library'
 import * as strings from 'ProjectWebPartsStrings'
 import { useContext } from 'react'
 import { useBoolean } from 'usehooks-ts'
@@ -14,41 +14,43 @@ export function useActions(
   comment: string,
   onNextChecklistItem: (statusValue: string) => Promise<void>
 ) {
-  const context = useContext(ProjectPhasesContext)
-  const isCommentValid = comment?.length >= context.props.commentMinLength
+  const { commentMinLength } = useContext(ProjectPhasesContext).props
+  const isCommentValid = comment?.length >= commentMinLength
   const isDisabled = useBoolean(false)
   const actions = [
     {
       text: strings.StatusNotRelevant,
-      disabled: !isCommentValid || isDisabled.value,
+      // Focusable while unavailable, so the keyboard and a screen reader reach the reason in the
+      // title, and the focus stays on the button while the status is saved.
+      disabledFocusable: !isCommentValid || isDisabled.value,
       title: isCommentValid
         ? strings.CheckpointNotRelevantTooltip
-        : strings.CheckpointNotRelevantTooltipCommentEmpty,
+        : format(strings.CheckpointNotRelevantTooltipCommentEmpty, commentMinLength),
       onClick: () => {
         isDisabled.setTrue()
-        onNextChecklistItem(strings.StatusNotRelevant).then(isDisabled.setFalse)
+        void onNextChecklistItem(strings.StatusNotRelevant).then(isDisabled.setFalse)
       },
       icon: getFluentIcon('DismissCircle')
     },
     {
       text: strings.StatusStillOpen,
-      disabled: !isCommentValid || isDisabled.value,
+      disabledFocusable: !isCommentValid || isDisabled.value,
       title: isCommentValid
         ? strings.CheckpointStillOpenTooltip
-        : strings.CheckpointStillOpenTooltipCommentEmpty,
+        : format(strings.CheckpointStillOpenTooltipCommentEmpty, commentMinLength),
       onClick: () => {
         isDisabled.setTrue()
-        onNextChecklistItem(strings.StatusStillOpen).then(isDisabled.setFalse)
+        void onNextChecklistItem(strings.StatusStillOpen).then(isDisabled.setFalse)
       },
       icon: getFluentIcon('Circle')
     },
     {
       text: strings.StatusClosed,
-      disabled: isDisabled.value,
+      disabledFocusable: isDisabled.value,
       title: strings.CheckpointDoneTooltip,
       onClick: () => {
         isDisabled.setTrue()
-        onNextChecklistItem(strings.StatusClosed).then(isDisabled.setFalse)
+        void onNextChecklistItem(strings.StatusClosed).then(isDisabled.setFalse)
       },
       icon: getFluentIcon('CheckmarkCircle')
     }

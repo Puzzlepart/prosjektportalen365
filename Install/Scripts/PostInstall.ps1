@@ -1,4 +1,4 @@
-Write-Host "[INFO] Post-install action: Restoring Idea calculated field formulas"
+﻿Write-Host "[INFO] Post-install action: Restoring Idea calculated field formulas"
 # The 5 *Number calc fields and GtIdeaScore ship with a placeholder formula =0 because SharePoint
 # rejects formulas that reference list-level columns at FieldRef time on a freshly created list.
 # Now that the list is fully provisioned, restore the real formulas. Source field titles are read
@@ -94,17 +94,24 @@ function Disable-ListContentTypes {
     (Get-Resource -Name "Lists_PlannerTasksV6_Url")
 ) | ForEach-Object { Disable-ListContentTypes -Identity $_ }
 
-Write-Host "[INFO] Post-install action: Ensuring project column configuration for v6 status fields"
+Write-Host "[INFO] Post-install action: Ensuring project column configuration for status fields"
 # Fargekonfigurasjonen for de nye statusfeltene (område G) seedes også statisk i
 # Prosjektkolonnekonfigurasjon.xml, men med hardkodede lookup-ID-er (43/45) som kun
 # stemmer for nyinstallasjoner. GtPortfolioColumn er en lookup mot Prosjektkolonner
 # på item-ID, og ID-ene varierer mellom installasjoner. Dette steget sikrer derfor
 # radene med oppslag på GtInternalName ved kjøring, slik at oppgraderte miljøer får
 # riktige rader. Idempotent — eksisterende rader røres ikke.
+# GtStatusOpportunities er med fordi malen i 1.8.0-1.14.0 slo opp ID 54 (raden er 36 ved
+# nyinstallasjon): på eksisterende miljøer peker de tre radene på kolonnen som har ID 54,
+# eller på ingen. Miljøet får tre riktige rader i tillegg, og PostInstallUpgrade.ps1 (1.15.0)
+# fjerner de gamle når den riktige raden for samme verdi finnes.
 $ProjectColumnsItems = Get-PnPListItem -List (Get-Resource -Name "Lists_ProjectColumns_Title")
 $ColumnConfigList = Get-Resource -Name "Lists_ProjectColumnConfiguration_Title"
 $ColumnConfigItems = Get-PnPListItem -List $ColumnConfigList
-$V6StatusColumnConfig = @(
+$StatusColumnConfig = @(
+    @{ Field = "GtStatusOpportunities"; Choice = "Choice_GtStatusOpportunities_Low"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusOpportunities_Low_Title"; Color = "#ea5c73" },
+    @{ Field = "GtStatusOpportunities"; Choice = "Choice_GtStatusOpportunities_Medium"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusOpportunities_Medium_Title"; Color = "#e9b359" },
+    @{ Field = "GtStatusOpportunities"; Choice = "Choice_GtStatusOpportunities_High"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusOpportunities_High_Title"; Color = "#2da748" },
     @{ Field = "GtStatusScope"; Choice = "Choice_GtStatusScope_AsPlanned"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusScope_AsPlanned_Title"; Color = "#2da748" },
     @{ Field = "GtStatusScope"; Choice = "Choice_GtStatusScope_MinorChanges"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusScope_MinorChanges_Title"; Color = "#e9b359" },
     @{ Field = "GtStatusScope"; Choice = "Choice_GtStatusScope_MajorChanges"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusScope_MajorChanges_Title"; Color = "#ea5c73" },
@@ -113,7 +120,7 @@ $V6StatusColumnConfig = @(
     @{ Field = "GtStatusSustainability"; Choice = "Choice_GtStatusSustainability_MajorDeviation"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusSustainability_MajorDeviation_Title"; Color = "#ea5c73" },
     @{ Field = "GtStatusSustainability"; Choice = "Choice_GtStatusSustainability_NotDetermined"; TitleResource = "Lists_ProjectColumnConfiguration_GtStatusSustainability_NotDetermined_Title"; Color = "#e9b359" }
 )
-foreach ($Config in $V6StatusColumnConfig) {
+foreach ($Config in $StatusColumnConfig) {
     $Column = $ProjectColumnsItems | Where-Object { $_["GtInternalName"] -eq $Config.Field } | Select-Object -First 1
     if ($null -eq $Column) {
         Write-Host "[WARNING] Project column with internal name [$($Config.Field)] not found - skipping column configuration" -ForegroundColor Yellow
@@ -130,6 +137,22 @@ foreach ($Config in $V6StatusColumnConfig) {
             "GtPortfolioColumnIconName"  = "CircleFill"
         } | Out-Null
         Write-Host "[SUCCESS] Added column configuration [$Value] for [$($Config.Field)] (column id $($Column.Id))" -ForegroundColor Green
+    }
+}
+
+# 'Status muligheter' fikk risikoens farger (Lav grønn, Høy rød) fra malen i 1.8.0-1.15.0, men
+# høye muligheter er bra: Høy er nå grønn og Lav rød. Fargene ble ikke vist før 1.15.0 (radene
+# pekte på feil kolonne), så radene som fortsatt har begge de gamle standardfargene, får de nye.
+# Er en av de to fargene endret, røres ingen av radene.
+$OpportunitiesColumn = $ProjectColumnsItems | Where-Object { $_["GtInternalName"] -eq "GtStatusOpportunities" } | Select-Object -First 1
+if ($null -ne $OpportunitiesColumn) {
+    $OpportunityRows = @(Get-PnPListItem -List $ColumnConfigList | Where-Object { $null -ne $_["GtPortfolioColumn"] -and $_["GtPortfolioColumn"].LookupId -eq $OpportunitiesColumn.Id })
+    $LowRow = $OpportunityRows | Where-Object { $_["GtPortfolioColumnValue"] -eq (Get-Resource -Name "Choice_GtStatusOpportunities_Low") } | Select-Object -First 1
+    $HighRow = $OpportunityRows | Where-Object { $_["GtPortfolioColumnValue"] -eq (Get-Resource -Name "Choice_GtStatusOpportunities_High") } | Select-Object -First 1
+    if ($null -ne $LowRow -and $null -ne $HighRow -and $LowRow["GtPortfolioColumnColor"] -eq "#2da748" -and $HighRow["GtPortfolioColumnColor"] -eq "#ea5c73") {
+        Set-PnPListItem -List $ColumnConfigList -Identity $LowRow.Id -Values @{ "GtPortfolioColumnColor" = "#ea5c73" } | Out-Null
+        Set-PnPListItem -List $ColumnConfigList -Identity $HighRow.Id -Values @{ "GtPortfolioColumnColor" = "#2da748" } | Out-Null
+        Write-Host "[SUCCESS] Status muligheter: high is green and low is red now (column id $($OpportunitiesColumn.Id))" -ForegroundColor Green
     }
 }
 
@@ -200,4 +223,84 @@ if ($Standard) {
 }
 else {
     Write-Host "[WARNING] Failed to find Standardmal template. Please check the Maloppsett list." -ForegroundColor Yellow
+}
+
+Write-Host "[INFO] Post-install action: Giving the group for minimum hub read access read access to the matrix configurations"
+# The group «Minimum lesetilganger på hub» (Objects/Security.xml) has no role on the hub itself.
+# Its lists get Read from the template (Lists/Security/MinimumReadSecurity.xml), but the matrix
+# configurations sit in a folder of Områderessurser, which the content template creates and the
+# upgrade applies with the Files handler only. The folder keeps the roles it inherited (copied when
+# the inheritance is broken), so owners, members and visitors keep their access. Idempotent.
+try {
+    # The folder the content template writes the configurations to, per language
+    # (Templates/Content/Portfolio_content.<lng>/SiteAssets/...).
+    $ConfigurationFolderNames = @{ "no-NB" = "Konfigurasjon"; "en-US" = "Configuration" }
+    $ConfigurationFolderUrl = "SiteAssets/$($ConfigurationFolderNames[$LanguageCode])"
+    $MinimumReadGroupTitle = Get-Resource -Name "Security_SiteGroup_MinimumHubReadAccess_Title"
+    $MinimumReadGroup = Get-PnPGroup -Identity $MinimumReadGroupTitle -ErrorAction SilentlyContinue
+    $ConfigurationFolder = Get-PnPFolder -Url $ConfigurationFolderUrl -Includes ListItemAllFields -ErrorAction SilentlyContinue
+    if ($null -eq $MinimumReadGroup) {
+        Write-Host "[WARNING] Group [$MinimumReadGroupTitle] not found - skipping the read access to [$ConfigurationFolderUrl]" -ForegroundColor Yellow
+    }
+    elseif ($null -eq $ConfigurationFolder) {
+        Write-Host "[WARNING] Folder [$ConfigurationFolderUrl] not found - skipping the read access for [$MinimumReadGroupTitle]" -ForegroundColor Yellow
+    }
+    else {
+        $FolderItem = $ConfigurationFolder.ListItemAllFields
+        $HasUniqueRoles = Get-PnPProperty -ClientObject $FolderItem -Property HasUniqueRoleAssignments
+        if (-not $HasUniqueRoles) {
+            $FolderItem.BreakRoleInheritance($true, $false)
+            Invoke-PnPQuery
+        }
+        $RoleAssignments = Get-PnPProperty -ClientObject $FolderItem -Property RoleAssignments
+        $HasGroupRole = $false
+        foreach ($RoleAssignment in $RoleAssignments) {
+            $Member = Get-PnPProperty -ClientObject $RoleAssignment -Property Member
+            if ($Member.Id -eq $MinimumReadGroup.Id) { $HasGroupRole = $true }
+        }
+        if ($HasGroupRole) {
+            Write-Host "[INFO] [$MinimumReadGroupTitle] already has access to [$ConfigurationFolderUrl]"
+        }
+        else {
+            # By role type, since the role names follow the site's language (Lese, Read).
+            $ReadRole = Get-PnPRoleDefinition | Where-Object { $_.RoleTypeKind -eq [Microsoft.SharePoint.Client.RoleType]::Reader } | Select-Object -First 1
+            $Bindings = New-Object Microsoft.SharePoint.Client.RoleDefinitionBindingCollection($FolderItem.Context)
+            $Bindings.Add($ReadRole)
+            $FolderItem.RoleAssignments.Add($MinimumReadGroup, $Bindings) | Out-Null
+            Invoke-PnPQuery
+            Write-Host "[SUCCESS] Gave [$MinimumReadGroupTitle] read access to [$ConfigurationFolderUrl]" -ForegroundColor Green
+        }
+    }
+}
+catch {
+    Write-Host "[WARNING] Failed to give the group for minimum hub read access read access to the matrix configurations: $($_.Exception.Message)" -ForegroundColor Yellow
+}
+
+
+Write-Host "[INFO] Post-install action: Letting each user read and edit only their own entries in the log list"
+# Lists/Logg.xml sets ReadSecurity, WriteSecurity and NoCrawl, also on a list the hub already has;
+# this step sets them when the upgrade applies no template (-SkipTemplate). Everyone writes to the
+# log, the group «Minimum lesetilganger på hub» too (Lists/Security/LogSecurity.xml), and only
+# owners of the hub may read other users' entries. Kept out of search, which is not known to
+# respect the setting. Idempotent.
+try {
+    $LogListTitle = Get-Resource -Name "Lists_Log_Title"
+    $LogList = Get-PnPList -Identity $LogListTitle -ErrorAction SilentlyContinue
+    if ($null -eq $LogList) {
+        Write-Host "[WARNING] List [$LogListTitle] not found - skipping its item-level permissions" -ForegroundColor Yellow
+    }
+    else {
+        $null = Get-PnPProperty -ClientObject $LogList -Property "ReadSecurity", "WriteSecurity", "NoCrawl"
+        if ($LogList.ReadSecurity -eq 2 -and $LogList.WriteSecurity -eq 2 -and $LogList.NoCrawl) {
+            Write-Host "[INFO] [$LogListTitle] already lets each user read and edit only their own entries"
+        }
+        else {
+            # 2 = only the items the user created (ListReadSecurity, ListWriteSecurity).
+            Set-PnPList -Identity $LogList -ReadSecurity 2 -WriteSecurity 2 -NoCrawl:$true | Out-Null
+            Write-Host "[SUCCESS] [$LogListTitle] lets each user read and edit only their own entries, and is kept out of search" -ForegroundColor Green
+        }
+    }
+}
+catch {
+    Write-Host "[WARNING] Failed to set the item-level permissions of the log list: $($_.Exception.Message)" -ForegroundColor Yellow
 }

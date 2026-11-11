@@ -1,4 +1,3 @@
-import { IColumn } from '@fluentui/react'
 import { get } from '@microsoft/sp-lodash-subset'
 import moment from 'moment'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -6,7 +5,7 @@ import { useState } from 'react'
 import { IResourceAllocationProps, IResourceAllocationState } from './types'
 import { useFilteredData } from './useFilteredData'
 import { useResourceAllocationDataFetch } from './useResourceAllocationDataFetch'
-import { IFilterItemProps, TimelineTimeframe } from 'pp365-shared-library'
+import { IFilterItemProps, IListColumn, TimelineTimeframe } from 'pp365-shared-library'
 import { useId } from '@fluentui/react-components'
 
 /**
@@ -70,7 +69,7 @@ export const useResourceAllocation = (props: IResourceAllocationProps) => {
    * @param column Column
    * @param selectedItems Selected items
    */
-  const onFilterChange = (column: IColumn, selectedItems: IFilterItemProps[]) => {
+  const onFilterChange = (column: IListColumn, selectedItems: IFilterItemProps[]) => {
     const { activeFilters } = { ...state } as IResourceAllocationState
     if (selectedItems.length > 0) {
       activeFilters[column.fieldName] = selectedItems.map((i) => i.value)

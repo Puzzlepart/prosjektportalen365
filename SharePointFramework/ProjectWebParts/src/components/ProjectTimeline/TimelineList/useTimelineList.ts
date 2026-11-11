@@ -1,4 +1,4 @@
-import { SortDirection, TableColumnSizingOptions, useId } from '@fluentui/react-components'
+import { SortDirection, useId } from '@fluentui/react-components'
 import { useContext } from 'react'
 import { ProjectTimelineContext } from '../context'
 import { useColumns } from './useColumns'
@@ -9,21 +9,9 @@ export function useTimelineList() {
   const columns = useColumns()
   const { menuItems, farMenuItems } = useToolbarItems()
 
-  const onSelection = (_: any, data: any) => {
-    const selectedItemIds = Array.from(data.selectedItems)
-    context.setState({ selectedItems: selectedItemIds })
+  const onSelection = (selectedItems: (string | number)[]) => {
+    context.setState({ selectedItems })
   }
-
-  const columnSizingOptions: TableColumnSizingOptions = columns.reduce(
-    (options, col) => ({
-      ...options,
-      [col.columnId]: {
-        defaultWidth: col.defaultWidth,
-        minWidth: col.minWidth
-      }
-    }),
-    {}
-  )
 
   const defaultSortState = { sortColumn: 'Title', sortDirection: 'ascending' as SortDirection }
   const fluentProviderId = useId('fp-timeline-list')
@@ -32,7 +20,6 @@ export function useTimelineList() {
     columns,
     menuItems,
     farMenuItems,
-    columnSizingOptions,
     defaultSortState,
     onSelection,
     fluentProviderId

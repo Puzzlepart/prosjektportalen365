@@ -5,21 +5,28 @@ import { useProjectStatusReport } from './useProjectStatusReport'
 
 export const ProjectStatusReport: FC = () => {
   const context = useProjectInformationContext()
-  const projectStatusContext = useProjectStatusReport()
-  if (!projectStatusContext) return null
+  const projectStatusContexts = useProjectStatusReport()
+  if (projectStatusContexts.length === 0) return null
   return (
     <div>
-      <ProjectStatusContext.Provider value={projectStatusContext}>
-        <Header />
-        <SummarySection
-          transparent
-          noPadding
-          noMargin
-          iconsOnly={context.props.statusReportShowOnlyIcons}
-          iconSize={18}
-          truncateComment={context.props.statusReportTruncateComments}
-        />
-      </ProjectStatusContext.Provider>
+      {projectStatusContexts.map((projectStatusContext) => (
+        <ProjectStatusContext.Provider
+          key={projectStatusContext.state.selectedReport.id}
+          value={projectStatusContext}
+        >
+          {/* A section under the project information's own heading (WCAG 1.3.1). */}
+          <Header headingLevel={3} />
+          <SummarySection
+            transparent
+            noPadding
+            noMargin
+            iconsOnly={context.props.statusReportShowOnlyIcons}
+            // The icons' own 20 px grid: crisp, where 18 px blurred their strokes.
+            iconSize={20}
+            truncateComment={context.props.statusReportTruncateComments}
+          />
+        </ProjectStatusContext.Provider>
+      ))}
     </div>
   )
 }

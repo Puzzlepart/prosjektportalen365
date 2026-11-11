@@ -1,31 +1,15 @@
-import {
-  DataGrid,
-  DataGridBody,
-  DataGridCell,
-  DataGridHeader,
-  DataGridHeaderCell,
-  DataGridRow,
-  FluentProvider,
-  IdPrefixProvider
-} from '@fluentui/react-components'
+import { FluentProvider, IdPrefixProvider } from '@fluentui/react-components'
 import * as React from 'react'
 import { FC, useContext } from 'react'
 import styles from './TimelineList.module.scss'
 import { useTimelineList } from './useTimelineList'
 import { ProjectTimelineContext } from '../context'
-import { Toolbar, customLightTheme } from 'pp365-shared-library'
+import { DataGridList, Toolbar, customLightTheme } from 'pp365-shared-library'
 
 export const TimelineList: FC = () => {
   const context = useContext(ProjectTimelineContext)
-  const {
-    columns,
-    menuItems,
-    farMenuItems,
-    columnSizingOptions,
-    defaultSortState,
-    onSelection,
-    fluentProviderId
-  } = useTimelineList()
+  const { columns, menuItems, farMenuItems, defaultSortState, onSelection, fluentProviderId } =
+    useTimelineList()
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
@@ -38,34 +22,17 @@ export const TimelineList: FC = () => {
           </div>
         )}
         <div className={styles.scrollContainer}>
-          <DataGrid
+          <DataGridList
             items={context.state.data.listItems}
             columns={columns}
             sortable
             defaultSortState={defaultSortState}
             selectionMode='multiselect'
-            resizableColumns
-            columnSizingOptions={columnSizingOptions}
-            containerWidthOffset={0}
             selectedItems={context.state.selectedItems}
             onSelectionChange={onSelection}
             subtleSelection
-          >
-            <DataGridHeader>
-              <DataGridRow>
-                {({ renderHeaderCell }) => (
-                  <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-                )}
-              </DataGridRow>
-            </DataGridHeader>
-            <DataGridBody>
-              {({ item, rowId }) => (
-                <DataGridRow key={rowId}>
-                  {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
-                </DataGridRow>
-              )}
-            </DataGridBody>
-          </DataGrid>
+            fitColumnsToContainer
+          />
         </div>
       </FluentProvider>
     </IdPrefixProvider>

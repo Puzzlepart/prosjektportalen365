@@ -1,52 +1,32 @@
-import {
-  DataGrid,
-  DataGridBody,
-  DataGridCell,
-  DataGridHeader,
-  DataGridHeaderCell,
-  DataGridRow,
-  SearchBox
-} from '@fluentui/react-components'
-import React, { FC, useContext, useState } from 'react'
-import { ProgramAdministrationContext } from '../context'
+import { mergeClasses, SearchBox } from '@fluentui/react-components'
+import { ListGrid } from 'pp365-portfoliowebparts/lib/components/List/ListGrid'
+import { getSearchBoxDismissProps, UserMessage } from 'pp365-shared-library'
+import strings from 'ProgramWebPartsStrings'
+import React, { FC } from 'react'
+import { Commands } from '../Commands'
 import styles from './ProjectList.module.scss'
+import { ProjectListCell } from './ProjectListCell'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
-import { Commands } from '../Commands'
-import { isEmpty } from '@microsoft/sp-lodash-subset'
-import { getFluentIcon, UserMessage } from 'pp365-shared-library'
-import strings from 'ProgramWebPartsStrings'
 
+/**
+ * The program's projects, or the projects that can be added to it, on the portfolio overview's
+ * grid (`ListGrid`): a search box and the commands above, the rows sorted by a column, and a group
+ * per hub when the projects come from more than one.
+ */
 export const ProjectList: FC<IProjectListProps> = (props) => {
-  const context = useContext(ProgramAdministrationContext)
   const {
-    items,
+    rows,
+    groups,
     columns,
-    columnSizingOptions,
-    defaultSortState,
+    selectionMode,
+    selectedRows,
+    showList,
+    onSelectionChange,
+    onColumnHeaderClick,
     onSearch,
-    groupedData,
-    shouldEnableGrouping
+    searchTerm
   } = useProjectList(props)
-
-  const initialExpandedGroups =
-    props.defaultGroupsExpanded && shouldEnableGrouping
-      ? new Set(Object.keys(groupedData))
-      : new Set<string>()
-
-  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(initialExpandedGroups)
-
-  const toggleGroup = (hubName: string) => {
-    setExpandedGroups((prev) => {
-      const next = new Set(prev)
-      if (next.has(hubName)) {
-        next.delete(hubName)
-      } else {
-        next.add(hubName)
-      }
-      return next
-    })
-  }
 
   return (
     <div className={styles.projectList}>
@@ -54,6 +34,9 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         <div className={styles.search}>
           <SearchBox
             {...props.search}
+            dismiss={getSearchBoxDismissProps()}
+            // Named by what its placeholder says: a placeholder is no name (WCAG 1.3.1, 4.1.2).
+            aria-label={props.search?.['aria-label'] ?? props.search?.placeholder}
             className={styles.searchBox}
             appearance='filled-lighter'
             size='large'
@@ -65,93 +48,23 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
           <Commands />
         </div>
       </div>
-      {!isEmpty(context.state.childProjects) || context.state.loading || props.hideCommands ? (
-        shouldEnableGrouping && groupedData ? (
-          <div className={styles.groupedList}>
-            {Object.entries(groupedData).map(([hubName, groupItems]) => {
-              const isExpanded = expandedGroups.has(hubName)
-              return (
-                <div key={hubName} className={styles.group}>
-                  <div
-                    className={styles.groupHeader}
-                    onClick={() => toggleGroup(hubName)}
-                    role='button'
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault()
-                        toggleGroup(hubName)
-                      }
-                    }}
-                  >
-                    {isExpanded ? getFluentIcon('ChevronDown') : getFluentIcon('ChevronRight')}
-                    <h3>{hubName}</h3>
-                    <span className={styles.groupCount}>({groupItems.length})</span>
-                  </div>
-                  {isExpanded && (
-                    <DataGrid
-                      items={groupItems}
-                      columns={columns}
-                      sortable
-                      defaultSortState={defaultSortState}
-                      resizableColumns
-                      columnSizingOptions={columnSizingOptions}
-                      containerWidthOffset={0}
-                      selectionMode={
-                        context.state.userHasManagePermission ? 'multiselect' : undefined
-                      }
-                      onSelectionChange={props.onSelectionChange}
-                      getRowId={({ SiteId }) => SiteId}
-                    >
-                      <DataGridHeader>
-                        <DataGridRow>
-                          {({ renderHeaderCell }) => (
-                            <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-                          )}
-                        </DataGridRow>
-                      </DataGridHeader>
-                      <DataGridBody<Record<string, any>>>
-                        {({ item, rowId }) => (
-                          <DataGridRow<Record<string, any>> key={rowId}>
-                            {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
-                          </DataGridRow>
-                        )}
-                      </DataGridBody>
-                    </DataGrid>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        ) : (
-          <DataGrid
-            items={items}
-            columns={columns}
-            sortable
-            defaultSortState={defaultSortState}
-            resizableColumns
-            columnSizingOptions={columnSizingOptions}
-            containerWidthOffset={0}
-            selectionMode={context.state.userHasManagePermission ? 'multiselect' : undefined}
-            onSelectionChange={props.onSelectionChange}
-            getRowId={({ SiteId }) => SiteId}
-          >
-            <DataGridHeader>
-              <DataGridRow>
-                {({ renderHeaderCell }) => (
-                  <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-                )}
-              </DataGridRow>
-            </DataGridHeader>
-            <DataGridBody<Record<string, any>>>
-              {({ item, rowId }) => (
-                <DataGridRow<Record<string, any>> key={rowId}>
-                  {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
-                </DataGridRow>
-              )}
-            </DataGridBody>
-          </DataGrid>
-        )
+      {showList ? (
+        <ListGrid
+          className={mergeClasses(styles.grid, props.scrollRows && styles.scrollingGrid)}
+          title={props.title}
+          items={rows}
+          groups={groups}
+          columns={columns}
+          justified
+          collapseStateKey={searchTerm}
+          selectionMode={selectionMode}
+          selectedItems={selectedRows}
+          onSelectionChange={onSelectionChange}
+          onColumnHeaderClick={onColumnHeaderClick}
+          renderCell={(item, _index, column) => (
+            <ProjectListCell item={item} column={column} renderLinks={props.renderLinks} />
+          )}
+        />
       ) : (
         <UserMessage
           title={strings.ProgramAdministrationEmptyTitle}

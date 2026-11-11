@@ -1,9 +1,8 @@
-import { IPersonaProps, Link } from '@fluentui/react'
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { useProjectInformationContext } from '../../context'
 import { IProjectPropertyProps } from './types'
-import { Persona, Text } from '@fluentui/react-components'
-import { OverflowTagMenu } from 'pp365-shared-library'
+import { Link, Persona, Text } from '@fluentui/react-components'
+import { formatDay, IPersonaItem, OverflowTagMenu } from 'pp365-shared-library'
 import * as strings from 'ProjectWebPartsStrings'
 import {
   ChevronCircleRightFilled,
@@ -72,14 +71,16 @@ export function useProjectProperty(props: IProjectPropertyProps) {
     const renderMap = new Map<string, (value: any) => JSX.Element>([
       [
         'User',
-        ([user]: IPersonaProps[]) => {
+        ([user]: IPersonaItem[]) => {
           return (
             <Persona
               {...user}
               title={user.text}
               name={user.text}
               size='small'
+              // The name is beside the picture: read once, not twice (WCAG 1.1.1).
               avatar={{
+                'aria-hidden': true,
                 image: {
                   src: user.imageUrl
                 }
@@ -91,7 +92,7 @@ export function useProjectProperty(props: IProjectPropertyProps) {
       ],
       [
         'UserMulti',
-        (users: IPersonaProps[]) => {
+        (users: IPersonaItem[]) => {
           return (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {users.map((user, key) => (
@@ -102,6 +103,7 @@ export function useProjectProperty(props: IProjectPropertyProps) {
                   name={user.text}
                   size='small'
                   avatar={{
+                    'aria-hidden': true,
                     image: {
                       src: user.imageUrl
                     }
@@ -180,13 +182,14 @@ export function useProjectProperty(props: IProjectPropertyProps) {
             dangerouslySetInnerHTML={{
               __html: textValue.replace(/\n/g, '<br />')
             }}
-          ></div>
+          />
         )
       ],
       [
         'DateTime',
         (date: Date) => {
-          return <div title={date.toLocaleDateString()}>{date.toLocaleDateString()}</div>
+          const text = formatDay(date)
+          return <div title={text}>{text}</div>
         }
       ]
     ])
@@ -205,7 +208,7 @@ export function useProjectProperty(props: IProjectPropertyProps) {
       if (renderMap.has(props.model.type)) {
         return renderMap.get(props.model.type)(value)
       } else {
-        return <div title={value.toString()}>{value}</div>
+        return <div title={value.toString()}>{value as ReactNode}</div>
       }
     } catch (error) {
       console.warn(

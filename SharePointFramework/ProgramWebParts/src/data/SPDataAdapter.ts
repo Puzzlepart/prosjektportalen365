@@ -1,8 +1,5 @@
-import { format } from '@fluentui/react/lib/Utilities'
-import { flatten } from '@microsoft/sp-lodash-subset'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { PnPClientStorage, dateAdd } from '@pnp/core'
-import '@pnp/sp/items/get-all'
 import {
   ISearchResult,
   QueryPropertyValueType,
@@ -11,11 +8,14 @@ import {
 } from '@pnp/sp/search'
 import * as strings from 'ProgramWebPartsStrings'
 import * as cleanDeep from 'clean-deep'
-import { IProgramAdministrationProject } from 'components/ProgramAdministration/types'
 import MSGraph from 'msgraph-helper'
 import { IPortfolioOverviewConfiguration } from 'pp365-portfoliowebparts/lib/components'
 import { IPortfolioAggregationConfiguration } from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
-import { IPortfolioViewData, IPortfolioWebPartsDataAdapter } from 'pp365-portfoliowebparts/lib/data'
+import {
+  IFetchDataForViewItemResult,
+  IPortfolioViewData,
+  IPortfolioWebPartsDataAdapter
+} from 'pp365-portfoliowebparts/lib/data'
 import * as PortfolioWebPartsDataConfig from 'pp365-portfoliowebparts/lib/data/config'
 import {
   Benefit,
@@ -23,9 +23,14 @@ import {
   BenefitMeasurementIndicator
 } from 'pp365-portfoliowebparts/lib/models'
 import {
+  buildAggregatedSiteIdQueries,
   DataSource,
   DataSourceService,
+  expandRowsPerStatusSeries,
+  getAllItems,
   getOrFetchProjectsCache,
+  groupLatestReportBySeries,
+  parseScopedSiteId,
   IGraphGroup,
   IProjectDataServiceParams,
   ISPDataAdapterBaseConfiguration,
@@ -35,10 +40,13 @@ import {
   ProjectDataService,
   ProjectInformationChildProject,
   ProjectListModel,
+  searchAggregatedItems,
+  sortStatusReportsLatestFirst,
   SPDataAdapterBase,
   SPProjectItem,
   TimelineConfigurationModel,
-  TimelineContentModel
+  TimelineContentModel,
+  format
 } from 'pp365-shared-library'
 import { Logger, LogLevel } from '@pnp/logging'
 import _ from 'underscore'
@@ -47,6 +55,14 @@ import { IList } from '@pnp/sp/lists'
 import { IItem } from '@pnp/sp/items'
 import { PermissionKind, Web } from '@pnp/sp/presets/all'
 import resource from 'SharedResources'
+import { removeChildProjectsFromProgram } from './childProjectRemoval'
+import {
+  HUB_SITE_PROJECT_ITEM_PROPERTIES,
+  HUB_SITE_PROJECT_SITE_PROPERTIES,
+  hubSiteProjectsCacheKey,
+  toHubSiteProjects,
+  toStoredChildProject
+} from './hubSiteProjects'
 
 enum ParentProjectOperation {
   Add = 'add',
@@ -206,24 +222,30 @@ export class SPDataAdapter
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IPortfolioViewData> {
     try {
-      const { projects, sites, statusReports } = await this._fetchDataForView(
+      const { projects, sites, statusReportsBySite } = await this._fetchDataForView(
         view,
         configuration,
         siteId,
         siteIdProperty
       )
-      const items = sites.map((site) => {
-        const project = projects.find((res) => res[siteIdProperty] === site['SiteId'])
-        const statusReport = statusReports.find((res) => res[siteIdProperty] === site['SiteId'])
-        return {
-          ...(statusReport ?? {}),
-          ...(project ?? {}),
-          Title: site.Title,
-          Path: site?.Path,
-          SPWebUrl: site?.SPWebUrl,
-          SiteId: site['SiteId']
-        }
-      })
+      const items = sites.reduce<IFetchDataForViewItemResult[]>((acc, site) => {
+        const project = projects.find((res) => res[siteIdProperty] === site.SiteId)
+        const series = statusReportsBySite.get(site.SiteId)
+        return acc.concat(
+          expandRowsPerStatusSeries(
+            (statusReport) => ({
+              ...(statusReport ?? {}),
+              ...(project ?? {}),
+              Title: site.Title,
+              Path: site?.Path,
+              SPWebUrl: site?.SPWebUrl,
+              SiteId: site.SiteId
+            }),
+            series,
+            siteIdProperty
+          )
+        )
+      }, [])
 
       return { items }
     } catch (err) {
@@ -238,25 +260,29 @@ export class SPDataAdapter
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IPortfolioViewData> {
     try {
-      const { projects, sites, statusReports } = await this._fetchDataForView(
+      const { projects, sites, statusReportsBySite } = await this._fetchDataForView(
         view,
         configuration,
         siteId,
         siteIdProperty
       )
-      const items = projects.map((project) => {
-        const statusReport = statusReports.find(
-          (res) => res[siteIdProperty] === project[siteIdProperty]
+      const items = projects.reduce<IFetchDataForViewItemResult[]>((acc, project) => {
+        const site = sites.find((res) => res.SiteId === project[siteIdProperty])
+        const series = statusReportsBySite.get(project[siteIdProperty])
+        return acc.concat(
+          expandRowsPerStatusSeries(
+            (statusReport) => ({
+              ...(statusReport ?? {}),
+              ...project,
+              Path: site?.Path,
+              SPWebUrl: site?.SPWebUrl,
+              SiteId: project[siteIdProperty]
+            }),
+            series,
+            siteIdProperty
+          )
         )
-        const site = sites.find((res) => res['SiteId'] === project[siteIdProperty])
-        return {
-          ...(statusReport ?? {}),
-          ...project,
-          Path: site?.Path,
-          SPWebUrl: site?.SPWebUrl,
-          SiteId: project[siteIdProperty]
-        }
-      })
+      }, [])
 
       return { items }
     } catch (err) {
@@ -276,27 +302,12 @@ export class SPDataAdapter
     maxQueryLength: number = 2500,
     maxProjects: number = 25
   ): string[] {
-    if (!this.childProjects?.length) return []
-    const aggregatedQueries = []
-    let queryString = ''
-    if (this.childProjects.length > maxProjects) {
-      this.childProjects.forEach((childProject, index) => {
-        queryString += `${queryProperty}:${childProject.siteId} `
-        if (queryString.length > maxQueryLength) {
-          aggregatedQueries.push(queryString)
-          queryString = ''
-        }
-        if (index === this.childProjects.length - 1) {
-          aggregatedQueries.push(queryString)
-        }
-      })
-    } else {
-      this.childProjects.forEach((childProject) => {
-        queryString += `${queryProperty}:${childProject.siteId} `
-      })
-      aggregatedQueries.push(queryString)
-    }
-    return aggregatedQueries.filter(Boolean)
+    return buildAggregatedSiteIdQueries(
+      this.childProjects?.map((childProject) => childProject.siteId) ?? [],
+      queryProperty,
+      maxQueryLength,
+      maxProjects
+    )
   }
 
   public async fetchDataForViewBatch(
@@ -307,27 +318,30 @@ export class SPDataAdapter
   ): Promise<IPortfolioViewData> {
     const queryArray = this.aggregatedQueryBuilder(siteIdProperty)
     const promises = queryArray.map(async (query) => {
-      const { projects, sites, statusReports } = await this._fetchDataForView(
+      const { projects, sites, statusReportsBySite } = await this._fetchDataForView(
         view,
         configuration,
         siteId,
         siteIdProperty,
         query
       )
-      return projects.map((project) => {
-        const statusReport = statusReports.find(
-          (res) => res[siteIdProperty] === project[siteIdProperty]
+      return projects.reduce<IFetchDataForViewItemResult[]>((acc, project) => {
+        const site = sites.find((res) => res.SiteId === project[siteIdProperty])
+        const series = statusReportsBySite.get(project[siteIdProperty])
+        return acc.concat(
+          expandRowsPerStatusSeries(
+            (statusReport) => ({
+              ...(statusReport ?? {}),
+              ...project,
+              Path: site?.Path,
+              SPWebUrl: site?.SPWebUrl,
+              SiteId: project[siteIdProperty]
+            }),
+            series,
+            siteIdProperty
+          )
         )
-        const site = sites.find((res) => res['SiteId'] === project[siteIdProperty])
-
-        return {
-          ...(statusReport ?? {}),
-          ...project,
-          Path: site?.Path,
-          SPWebUrl: site?.SPWebUrl,
-          SiteId: project[siteIdProperty]
-        }
-      })
+      }, [])
     })
     const items = await Promise.all(promises).then((results) => _.flatten(results))
     return { items, managedProperties: [] }
@@ -349,6 +363,16 @@ export class SPDataAdapter
     queryArray?: string
   ) {
     const searchQuery = `${queryArray ?? ''} ${view.searchQuery}`.trim()
+
+    // Status reports for a scoped report series store
+    // `GtSiteId` as `{siteId}-{scopeKey}`, so the child project site terms need
+    // a trailing wildcard to match those reports as well. A full site GUID can
+    // never be a prefix of another site GUID, so this cannot widen the result
+    // set to other projects.
+    const statusReportQueryArray = (queryArray ?? '').replace(
+      new RegExp(`${siteIdProperty}:(\\S+)`, 'g'),
+      `${siteIdProperty}:$1*`
+    )
 
     const fetchAllResults = async (
       queryTemplate: string,
@@ -390,23 +414,27 @@ export class SPDataAdapter
         'SiteId'
       ]),
       fetchAllResults(
-        `${queryArray} DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:${resource.Choice_GtModerationStatus_Published}`,
-        [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
+        `${statusReportQueryArray} DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:${resource.Choice_GtModerationStatus_Published}`,
+        [...configuration.columns.map((f) => f.fieldName), siteIdProperty, 'ListItemId'],
         configuration.refiners.map((ref) => ref.fieldName).join(',')
       )
     ])
 
     projects = projects.map((item) => cleanDeep({ ...item }))
     sites = sites.map((item) => cleanDeep({ ...item }))
-    statusReports = statusReports.map((item) => cleanDeep({ ...item }))
-    sites = sites.filter(
-      (site) => projects.filter((res) => res[siteIdProperty] === site['SiteId']).length === 1
+    statusReports = sortStatusReportsLatestFirst(statusReports).map((item) =>
+      cleanDeep({ ...item })
     )
+    sites = sites.filter(
+      (site) => projects.filter((res) => res[siteIdProperty] === site.SiteId).length === 1
+    )
+    const statusReportsBySite = groupLatestReportBySeries(statusReports, siteIdProperty)
 
     return {
       projects,
       sites,
-      statusReports
+      statusReports,
+      statusReportsBySite
     } as const
   }
 
@@ -426,6 +454,9 @@ export class SPDataAdapter
     )
 
     const data = items
+      // Timeline rows are project-level facts — skip the extra rows a project
+      // gets per scoped report series.
+      .filter((item) => !item.ScopeKey)
       .map((item) => {
         const properties = _.reduce(
           item,
@@ -440,7 +471,7 @@ export class SPDataAdapter
         )
 
         return {
-          siteId: item?.['GtSiteIdOWSTEXT'],
+          siteId: item?.GtSiteIdOWSTEXT,
           properties
         }
       })
@@ -457,10 +488,11 @@ export class SPDataAdapter
     )
 
     const reports = statusReports
+      .filter((report) => !parseScopedSiteId(report?.GtSiteIdOWSTEXT).scopeKey)
       .map((report) => ({
-        siteId: report?.['GtSiteIdOWSTEXT'],
-        costsTotal: report?.['GtCostsTotalOWSCURR'],
-        budgetTotal: report?.['GtBudgetTotalOWSCURR']
+        siteId: parseScopedSiteId(report?.GtSiteIdOWSTEXT).siteId,
+        costsTotal: report?.GtCostsTotalOWSCURR,
+        budgetTotal: report?.GtBudgetTotalOWSCURR
       }))
       .filter(Boolean)
 
@@ -486,17 +518,19 @@ export class SPDataAdapter
 
     let timelineItems: any[]
     try {
-      timelineItems = await this.portalDataService.web.lists
-        .getByTitle(resource.Lists_TimelineContent_Title)
-        .items.select(...baseFields, 'GtTag')
-        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-        .getAll()
+      timelineItems = await getAllItems(
+        this.portalDataService.web.lists
+          .getByTitle(resource.Lists_TimelineContent_Title)
+          .items.select(...baseFields, 'GtTag')
+          .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+      )
     } catch {
-      timelineItems = await this.portalDataService.web.lists
-        .getByTitle(resource.Lists_TimelineContent_Title)
-        .items.select(...baseFields)
-        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-        .getAll()
+      timelineItems = await getAllItems(
+        this.portalDataService.web.lists
+          .getByTitle(resource.Lists_TimelineContent_Title)
+          .items.select(...baseFields)
+          .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+      )
     }
 
     return timelineItems
@@ -538,19 +572,20 @@ export class SPDataAdapter
    * @description Used in `ProjectTimeline`
    */
   public async fetchTimelineConfiguration() {
-    const timelineConfig = await this.portalDataService.web.lists
-      .getByTitle(resource.Lists_TimelineConfiguration_Title)
-      .items.select(
-        'GtSortOrder',
-        'Title',
-        'GtHexColor',
-        'GtTimelineCategory',
-        'GtElementType',
-        'GtShowElementPortfolio',
-        'GtShowElementProgram',
-        'GtTimelineFilter'
-      )
-      .getAll()
+    const timelineConfig = await getAllItems(
+      this.portalDataService.web.lists
+        .getByTitle(resource.Lists_TimelineConfiguration_Title)
+        .items.select(
+          'GtSortOrder',
+          'Title',
+          'GtHexColor',
+          'GtTimelineCategory',
+          'GtElementType',
+          'GtShowElementPortfolio',
+          'GtShowElementProgram',
+          'GtTimelineFilter'
+        )
+    )
 
     return timelineConfig.map((item) => new TimelineConfigurationModel(item)).filter((p) => p)
   }
@@ -637,7 +672,7 @@ export class SPDataAdapter
         }
       ]
     })
-    return PrimarySearchResults.filter((site) => hubSiteId !== site['SiteId'])
+    return PrimarySearchResults.filter((site) => hubSiteId !== site.SiteId)
   }
 
   /**
@@ -676,14 +711,15 @@ export class SPDataAdapter
    */
   private async _fetchProjectItems(siteId: string): Promise<SPProjectItem[]> {
     return getOrFetchProjectsCache('items', siteId, () =>
-      this.portalDataService.web.lists
-        .getByTitle(resource.Lists_Projects_Title)
-        .items.select(...Object.keys(new SPProjectItem()))
-        .filter(
-          `GtProjectLifecycleStatus ne '${resource.Choice_GtProjectLifecycleStatus_Closed}' and GtProjectLifecycleStatus ne '${strings.LifecycleStatus_Closed}'`
-        )
-        .orderBy('Title')
-        .getAll<SPProjectItem>()
+      getAllItems<SPProjectItem>(
+        this.portalDataService.web.lists
+          .getByTitle(resource.Lists_Projects_Title)
+          .items.select(...Object.keys(new SPProjectItem()))
+          .filter(
+            `GtProjectLifecycleStatus ne '${resource.Choice_GtProjectLifecycleStatus_Closed}' and GtProjectLifecycleStatus ne '${strings.LifecycleStatus_Closed}'`
+          )
+          .orderBy('Title')
+      )
     )
   }
 
@@ -692,7 +728,7 @@ export class SPDataAdapter
       MSGraph.Get<IGraphGroup[]>(
         '/me/memberOf/$/microsoft.graph.group',
         ['id', 'displayName'],
-        // eslint-disable-next-line quotes
+
         "groupTypes/any(a:a%20eq%20'unified')"
       )
     )
@@ -851,7 +887,7 @@ export class SPDataAdapter
         MeasurementAchievement: JSON.stringify({
           Achievement: firstMeasurement?.Achievement,
           AchievementDisplay: firstMeasurement?.AchievementDisplay,
-          TrendIconProps: firstMeasurement?.TrendIconProps
+          TrendIcon: firstMeasurement?.TrendIcon
         }),
         Measurements: JSON.stringify(
           measurements?.map((m) => {
@@ -863,7 +899,8 @@ export class SPDataAdapter
               Achievement: m.Achievement,
               AchievementDisplay: m.AchievementDisplay,
               DateDisplay: m.DateDisplay,
-              TrendIconProps: m.TrendIconProps
+              Date: m.Date,
+              TrendIcon: m.TrendIcon
             }
           })
         )
@@ -886,23 +923,14 @@ export class SPDataAdapter
     includeSelf: boolean = false,
     siteIdManagedProperty: string = 'SiteId'
   ) {
-    const siteId = this.spfxContext.pageContext.site.id.toString()
-    const queries = this.childProjects?.length
-      ? this.aggregatedQueryBuilder(siteIdManagedProperty)
-      : []
-    if (includeSelf) queries.unshift(`${siteIdManagedProperty}:${siteId}`)
-    if (queries.length === 0) return []
-    const promises = queries.map((q) =>
-      this.sp.search({
-        QueryTemplate: `${q} ${queryTemplate}`,
-        Querytext: '*',
-        RowLimit: 500,
-        TrimDuplicates: false,
-        SelectProperties: [...selectProperties, 'Path', 'Title', 'SiteTitle', 'SPWebURL']
-      })
-    )
-    const responses = await Promise.all(promises)
-    return flatten(responses.map((r) => r?.PrimarySearchResults ?? []))
+    return searchAggregatedItems(this.sp, {
+      siteIds: this.childProjects?.map((childProject) => childProject.siteId) ?? [],
+      queryTemplate,
+      selectProperties,
+      includeSelf,
+      selfSiteId: this.spfxContext.pageContext.site.id.toString(),
+      siteIdManagedProperty
+    })
   }
 
   /**
@@ -1072,7 +1100,8 @@ export class SPDataAdapter
    * Fetches all projects associated with the current hubsite context. This is done by querying the
    * search index for all sites with the same DepartmentId as the current hubsite and all project items with
    * the same DepartmentId as the current hubsite. The sites are then matched with the items to
-   * retrieve the SiteId and SPWebURL. The result are cached for 5 minutes.
+   * retrieve the SiteId and SPWebURL, the date the site was created and the project's phase
+   * (`toHubSiteProjects`). The result are cached for 5 minutes.
    *
    * @param hubs Optional array of program hubs with their URLs and hub site IDs
    */
@@ -1100,7 +1129,7 @@ export class SPDataAdapter
     }
 
     const hubSiteQuery = hubSiteIds.map((id) => `DepartmentId:{${id}}`).join(' OR ')
-    const cacheKey = `HubSiteProjects_${hubSiteIds.sort().join('_')}`
+    const cacheKey = hubSiteProjectsCacheKey(hubSiteIds)
 
     return new PnPClientStorage().local.getOrPut(
       cacheKey,
@@ -1110,7 +1139,7 @@ export class SPDataAdapter
           RowLimit: 500,
           StartRow: 0,
           ClientType: 'ContentSearchRegular',
-          SelectProperties: ['SPWebURL', 'Title', 'SiteId', 'Path', 'DepartmentId'],
+          SelectProperties: HUB_SITE_PROJECT_SITE_PROPERTIES,
           TrimDuplicates: false
         }
 
@@ -1127,7 +1156,7 @@ export class SPDataAdapter
           RowLimit: 500,
           StartRow: 0,
           ClientType: 'ContentSearchRegular',
-          SelectProperties: ['GtSiteIdOWSTEXT', 'Title'],
+          SelectProperties: HUB_SITE_PROJECT_ITEM_PROPERTIES,
           TrimDuplicates: false
         }
 
@@ -1139,34 +1168,7 @@ export class SPDataAdapter
           itemResults.push(...(response?.PrimarySearchResults ?? []))
         }
 
-        const [sts_sites, items] = await Promise.all([siteResults, itemResults])
-
-        return items
-          .filter(
-            (item) =>
-              item['GtSiteIdOWSTEXT'] &&
-              item['GtSiteIdOWSTEXT'] !== '00000000-0000-0000-0000-000000000000'
-          )
-          .map<IProgramAdministrationProject>((item) => {
-            const site = sts_sites.find((site) => site['SiteId'] === item['GtSiteIdOWSTEXT'])
-            const rawHubSiteId = site?.['DepartmentId']
-            const hubSiteId = rawHubSiteId
-              ? rawHubSiteId.replace(/[{}]/g, '').toLowerCase()
-              : rawHubSiteId
-            const hub = hubs?.find((h) => h.hubSiteId === hubSiteId)
-            return {
-              SiteId: item['GtSiteIdOWSTEXT'],
-              Title: site?.Title ?? item['Title'],
-              SPWebURL: site?.SPWebUrl,
-              Path: site?.Path,
-              HubSiteId: hubSiteId,
-              HubSiteUrl: hub?.url,
-              HubSiteTitle: hub?.title,
-              _site: site
-            }
-          })
-          .filter((project) => project._site)
-          .map(({ _site, ...project }) => project)
+        return toHubSiteProjects(itemResults, siteResults, hubs)
       },
       dateAdd(new Date(), 'minute', 5)
     )
@@ -1216,7 +1218,7 @@ export class SPDataAdapter
       )
       projects = []
     }
-    const updatedProjects = [...projects, ...newProjects]
+    const updatedProjects = [...projects, ...newProjects.map(toStoredChildProject)]
     const seen = new Set<string>()
     const uniqueProjects = updatedProjects.filter((project: Record<string, string>) => {
       if (seen.has(project.SiteId)) return false
@@ -1245,7 +1247,8 @@ export class SPDataAdapter
   }
 
   /**
-   * Remove child projects.
+   * Remove child projects: the hubs and the parent links first, the program's own list last
+   * (`removeChildProjectsFromProgram`).
    *
    * @param projectToRemove Projects to delete
    */
@@ -1257,39 +1260,26 @@ export class SPDataAdapter
         '(SPDataAdapter) (removeChildProjects) Property item not initialized. Call fetchChildProjects() first.'
       )
     }
-    const { GtChildProjects } = await this._propertyItem.select('GtChildProjects')()
-    let projects: Array<Record<string, string>> = []
-    try {
-      projects = GtChildProjects ? JSON.parse(GtChildProjects) : []
-    } catch (error) {
-      console.warn(
-        '(SPDataAdapter) (removeChildProjects) Failed to parse GtChildProjects. Resetting to empty array.',
-        error
-      )
-      projects = []
-    }
-    const updatedProjects = projects.filter(
-      (p) => !projectToRemove.some((el) => el.SiteId === p.SiteId)
-    )
-    const updateProperties = { GtChildProjects: JSON.stringify(updatedProjects) }
-    await this._propertyItem.update(updateProperties)
-
-    const uniqueHubIds = new Set(projectToRemove.map((p) => p.HubSiteId).filter(Boolean))
-    await Promise.all([
-      ...Array.from(uniqueHubIds).map((hubSiteId) =>
-        this.updateProjectInHub(updateProperties, hubSiteId as string)
-      ),
-      ...projectToRemove.map((project) =>
-        project.HubSiteId
-          ? this._updateChildProjectParents(
-              project.SiteId,
-              project.HubSiteId,
-              ParentProjectOperation.Remove
+    return await removeChildProjectsFromProgram(
+      {
+        readChildProjects: async () => {
+          const { GtChildProjects } = await this._propertyItem.select('GtChildProjects')()
+          try {
+            return GtChildProjects ? JSON.parse(GtChildProjects) : []
+          } catch (error) {
+            console.warn(
+              '(SPDataAdapter) (removeChildProjects) Failed to parse GtChildProjects. Resetting to empty array.',
+              error
             )
-          : Promise.resolve()
-      )
-    ])
-
-    return updatedProjects
+            return []
+          }
+        },
+        writeChildProjects: (properties) => this._propertyItem.update(properties),
+        updateHub: (properties, hubSiteId) => this.updateProjectInHub(properties, hubSiteId),
+        removeParent: (siteId, hubSiteId) =>
+          this._updateChildProjectParents(siteId, hubSiteId, ParentProjectOperation.Remove)
+      },
+      projectToRemove
+    )
   }
 }

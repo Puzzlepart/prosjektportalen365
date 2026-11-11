@@ -4,12 +4,6 @@
   gap: var(--spacingVerticalM);
   padding-bottom: 28px;
 
-  // Focused programmatically (not tab-reachable) when a package is selected, so
-  // suppress the container outline — focus moving here is conveyed by content.
-  &:focus {
-    outline: none;
-  }
-
   .backButton {
     display: none;
     align-self: flex-start;
@@ -47,8 +41,10 @@
         flex: 0 0 auto;
       }
 
+      // An h3 now, laid out as the text it was.
       .titleText {
         min-width: 0;
+        margin: 0;
         overflow-wrap: anywhere;
       }
     }

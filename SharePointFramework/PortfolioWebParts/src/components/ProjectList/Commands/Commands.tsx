@@ -1,6 +1,6 @@
 import { SearchBox } from '@fluentui/react-components'
 import _ from 'lodash'
-import { Toolbar } from 'pp365-shared-library'
+import { getSearchBoxDismissProps, Toolbar } from 'pp365-shared-library'
 import React, { FC, useContext } from 'react'
 import { ProjectListContext } from '../context'
 import styles from './Commands.module.scss'
@@ -13,6 +13,7 @@ export const Commands: FC = () => {
     <div className={styles.commands}>
       <div className={styles.search} hidden={!context.props.showSearchBox}>
         <SearchBox
+          dismiss={getSearchBoxDismissProps()}
           className={styles.searchBox}
           disabled={!context.state.isDataLoaded || _.isEmpty(context.state.projects)}
           value={context.state.searchTerm}

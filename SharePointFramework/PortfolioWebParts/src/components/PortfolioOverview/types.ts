@@ -1,4 +1,3 @@
-import { MessageBarType, Target } from '@fluentui/react'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { ProgramItem } from 'models/ProgramItem'
 import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
@@ -13,9 +12,13 @@ import { IColumnFormPanel } from './ColumnFormPanel/types'
 import { IViewFormPanel } from './ViewFormPanel/types'
 import { PortfolioInstance } from 'data/types'
 import { IWeb } from '@pnp/sp/webs'
+import { MessageBarProps } from '@fluentui/react-components'
 
 export class PortfolioOverviewErrorMessage extends Error {
-  constructor(public message: string, public type: MessageBarType) {
+  constructor(
+    public message: string,
+    public type: MessageBarProps['intent']
+  ) {
     super(message)
   }
 }
@@ -68,8 +71,7 @@ export interface IPortfolioOverviewConfiguration {
 }
 
 export interface IPortfolioOverviewProps
-  extends IBaseComponentProps,
-    Pick<IListProps<ProjectColumn>, 'isListLayoutModeJustified'> {
+  extends IBaseComponentProps, Pick<IListProps<ProjectColumn>, 'isListLayoutModeJustified'> {
   /**
    * Configuration (columns and views etc).
    */
@@ -179,8 +181,10 @@ export interface IPortfolioOverviewProps
   onSetPortfolio?: (portfolioId: string | null) => void
 }
 
-export interface IPortfolioOverviewState
-  extends Pick<IListProps<ProjectColumn>, 'items' | 'columns'> {
+export interface IPortfolioOverviewState extends Pick<
+  IListProps<ProjectColumn>,
+  'items' | 'columns'
+> {
   /**
    * Whether the component is loading
    */
@@ -227,6 +231,11 @@ export interface IPortfolioOverviewState
   activeFilters?: { [key: string]: string[] }
 
   /**
+   * The titles of the hubs the merged view could not read, told above the list.
+   */
+  mergedViewFailures?: string[]
+
+  /**
    * Error if any
    */
   error?: PortfolioOverviewErrorMessage
@@ -260,7 +269,7 @@ export interface IPortfolioOverviewState
    * Column context menu contains the `column` and `target` (mouse event target)
    * that is used to show the context menu in the correct position.
    */
-  columnContextMenu?: { column: ProjectColumn; target: Target }
+  columnContextMenu?: { column: ProjectColumn; target: HTMLElement }
 
   /**
    * Column form panel props. Consists of two properties:
@@ -268,6 +277,11 @@ export interface IPortfolioOverviewState
    * - `column` - the column to edit (if not specified, a new column will be created)
    */
   columnForm: IColumnFormPanel
+
+  /**
+   * Ids of the columns deleted since the configuration was read, which still lists them
+   */
+  deletedColumnIds?: number[]
 
   /**
    * View form panel props. Consists of two properties:

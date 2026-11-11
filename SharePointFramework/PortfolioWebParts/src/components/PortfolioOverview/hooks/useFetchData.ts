@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-import { MessageBarType } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import { ColumnRenderComponentRegistry } from '../../List'
 import _ from 'lodash'
@@ -33,22 +31,22 @@ function getCurrentView(
   if (viewIdUrlParam) {
     currentView = _.find(views, (v) => v.id.toString() === viewIdUrlParam)
     if (!currentView) {
-      throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
+      throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, 'error')
     }
   } else if (hashState.has('viewId')) {
     currentView = _.find(views, (v) => v.id === hashState.get('viewId'))
     if (!currentView) {
-      throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
+      throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, 'error')
     }
   } else if (context.props.defaultViewId) {
     currentView = _.find(views, (v) => v.id.toString() === context.props.defaultViewId.toString())
     if (!currentView) {
-      throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
+      throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, 'error')
     }
   } else {
     currentView = _.find(views, (v) => v.isDefaultView)
     if (!currentView) {
-      throw new PortfolioOverviewErrorMessage(strings.NoDefaultViewMessage, MessageBarType.error)
+      throw new PortfolioOverviewErrorMessage(strings.NoDefaultViewMessage, 'error')
     }
   }
   return currentView
@@ -86,23 +84,24 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
             context.props.configuration
           )
         : context.props.isParentProject
-        ? context.props.dataAdapter.fetchDataForViewBatch(
-            currentView,
-            context.props.configuration,
-            context.props.configuration.hubSiteId
-          )
-        : context.props.dataAdapter.fetchDataForView(
-            currentView,
-            context.props.configuration,
-            context.props.configuration.hubSiteId
-          )
+          ? context.props.dataAdapter.fetchDataForViewBatch(
+              currentView,
+              context.props.configuration,
+              context.props.configuration.hubSiteId
+            )
+          : context.props.dataAdapter.fetchDataForView(
+              currentView,
+              context.props.configuration,
+              context.props.configuration.hubSiteId
+            )
 
-      const [{ items, managedProperties }, isUserInPortfolioManagerGroup] = await Promise.all([
+      const [viewData, isUserInPortfolioManagerGroup] = await Promise.all([
         fetchViewData,
         context.props.dataAdapter.isUserInGroup?.(
           resource.Security_SiteGroup_PortfolioInsight_Title
         ) ?? Promise.resolve(false)
       ])
+      const { items, managedProperties, failedPortfolios } = viewData
 
       // `globalSettings` is only populated in program/parent context, so this stays false elsewhere.
       const showChildProjectInfoInProgram =
@@ -134,7 +133,8 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
           groupBy,
           managedProperties,
           isUserInPortfolioManagerGroup,
-          showChildProjectInfoInProgram
+          showChildProjectInfoInProgram,
+          failedPortfolios
         })
       )
     } catch (error) {
@@ -143,10 +143,10 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
   }
 
   useEffect(() => {
-    fetchInitialData()
+    void fetchInitialData()
   }, [context.state.currentView, context.state.isMergedView])
 
   useEffect(() => {
-    fetchInitialData(true)
+    void fetchInitialData(true)
   }, [context.props.selectedPortfolioId])
 }

@@ -36,9 +36,7 @@ export default class IdeaModuleWebPart extends BasePortfolioWebPart<IIdeaModuleP
     this.properties[key] = value
     switch (this.displayMode) {
       case DisplayMode.Edit:
-        {
-          this.context.propertyPane.refresh()
-        }
+        this.context.propertyPane.refresh()
         break
       case DisplayMode.Read: {
         const options: ISPHttpClientOptions = {
@@ -149,8 +147,8 @@ export default class IdeaModuleWebPart extends BasePortfolioWebPart<IIdeaModuleP
                   label: strings.DefaultDataSourceViewLabel,
                   options: this._getViewOptions(),
                   selectedKey:
-                    _.find(this._configuration.views, (v) => v.isDefault)?.id ||
-                    _.first(this._configuration.views)?.id
+                    _.find(this._configuration?.views, (v) => v.isDefault)?.id ||
+                    _.first(this._configuration?.views)?.id
                 })
               ]
             },

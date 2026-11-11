@@ -1,4 +1,3 @@
-/* eslint-disable prefer-spread */
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import _ from 'lodash'
 import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage/types'
@@ -6,7 +5,7 @@ import { SectionModel, StatusReport } from 'pp365-shared-library/lib/models'
 import { formatDate, getUrlParam } from 'pp365-shared-library/lib/util'
 import { FetchDataResult, IProjectStatusState } from './types'
 import strings from 'ProjectWebPartsStrings'
-import { format } from '@fluentui/react'
+import { format } from 'pp365-shared-library'
 
 /**
  * `INIT_DATA`: Dispatched by `useProjectStatusDataFetch` when data is loaded
@@ -39,7 +38,8 @@ export const REPORT_PUBLISH_ERROR = createAction<{
 export const REPORT_DELETED = createAction('REPORT_DELETED')
 
 /**
- * `REPORT_DELETE_ERROR`: Dispatched by `useDeleteReport` when a report fails to delete.
+ * `REPORT_DELETE_ERROR`: Dispatched by `useDeleteReport` when a report fails to delete. Shows the
+ * error's message as a user message above the report.
  */
 export const REPORT_DELETE_ERROR = createAction<{ error: any }>('REPORT_DELETE_ERROR')
 
@@ -47,6 +47,13 @@ export const REPORT_DELETE_ERROR = createAction<{ error: any }>('REPORT_DELETE_E
  * `SELECT_REPORT`: Dispatched by `useSelectReport` when a report is selected.
  */
 export const SELECT_REPORT = createAction<{ report: StatusReport }>('SELECT_REPORT')
+
+/**
+ * `SELECT_SCOPE`: Dispatched by `useScopeSelector` when a report scope
+ * ("delprosjekt") is selected. Triggers a refetch scoped to the selected
+ * report series.
+ */
+export const SELECT_SCOPE = createAction<{ scopeKey: string }>('SELECT_SCOPE')
 
 /**
  * `PERSIST_SECTION_DATA`: Dispatched by `usePersistSectionData` when section data is persisted.
@@ -70,6 +77,18 @@ export const OPEN_PANEL = createAction<IProjectStatusState['activePanel']>('OPEN
  * as there's only one panel active at a time.
  */
 export const CLOSE_PANEL = createAction('CLOSE_PANEL')
+
+/**
+ * `OPEN_SNAPSHOT`: Dispatched by `useToolbarItems` to show the selected report's snapshot
+ * in `SnapshotDialog`.
+ */
+export const OPEN_SNAPSHOT = createAction('OPEN_SNAPSHOT')
+
+/**
+ * `CLOSE_SNAPSHOT`: Dispatched by `SnapshotDialog` when it is dismissed. Unlike `CLOSE_PANEL`
+ * it doesn't refetch, as viewing the snapshot changes nothing.
+ */
+export const CLOSE_SNAPSHOT = createAction('CLOSE_SNAPSHOT')
 
 /**
  * `REFETCH_DATA`: Dispatched by ...
@@ -98,6 +117,21 @@ export const initialState: IProjectStatusState = {
 }
 
 /**
+ * The state of the report beside the web part's title: published and when, or a draft and when it
+ * was last changed. Nothing without a report: a series with no report read «Kladd, sist endret ».
+ *
+ * @param report The report the page shows, if any
+ */
+function getReportStatus(
+  report?: Pick<StatusReport, 'published' | 'publishedDate' | 'modified'>
+): string | undefined {
+  if (!report) return undefined
+  return report.published
+    ? format(strings.PublishedStatusReport, formatDate(report.publishedDate))
+    : format(strings.NotPublishedStatusReport, formatDate(report.modified))
+}
+
+/**
  * Creates a reducer for the project status component.
  *
  * @param state - The current state of the project status.
@@ -105,119 +139,100 @@ export const initialState: IProjectStatusState = {
  *
  * @returns The new state of the project status.
  */
-const createProjectStatusReducer = createReducer(initialState, {
-  [INIT_DATA.type]: (state: IProjectStatusState, { payload }: ReturnType<typeof INIT_DATA>) => {
-    state.sourceUrl = payload.sourceUrl
-    state.data = payload.data
-    state.selectedReport = payload.initialSelectedReport
-    state.mostRecentReportId = _.first(payload.data.reports)?.id ?? 0
-    state.userHasAdminPermission = payload.data.userHasAdminPermission
-    state.isDataLoaded = true
-
-    if (payload.initialSelectedReport?.published) {
-      state.reportStatus = format(
-        strings.PublishedStatusReport,
-        formatDate(payload.initialSelectedReport?.publishedDate)
-      )
-    } else {
-      state.reportStatus = format(
-        strings.NotPublishedStatusReport,
-        formatDate(payload.initialSelectedReport?.modified)
-      )
-    }
-  },
-  [REPORT_PUBLISHING.type]: (state: IProjectStatusState) => {
-    state.isPublishing = true
-  },
-  [REPORT_PUBLISHED.type]: (
-    state: IProjectStatusState,
-    { payload }: ReturnType<typeof REPORT_PUBLISHED>
-  ) => {
-    const reports = state.data.reports.map((r) => {
-      return payload.updatedReport.id === r.id ? payload.updatedReport : r
+const createProjectStatusReducer = createReducer(initialState, (builder) =>
+  builder
+    .addCase(INIT_DATA, (state, { payload }) => {
+      state.sourceUrl = payload.sourceUrl
+      state.data = payload.data
+      state.selectedReport = payload.initialSelectedReport
+      state.selectedScope = payload.resolvedScope
+      state.mostRecentReportId = _.first(payload.data.reports)?.id ?? 0
+      state.userHasAdminPermission = payload.data.userHasAdminPermission
+      state.isDataLoaded = true
+      state.reportStatus = getReportStatus(payload.initialSelectedReport)
     })
-    state.data = { ...state.data, reports }
-    state.selectedReport = payload.updatedReport
-    state.userMessage = payload.message
-    state.refetch = new Date().getTime()
-    state.isPublishing = false
-  },
-  REPORT_PUBLISH_ERROR: (
-    state: IProjectStatusState,
-    { payload }: ReturnType<typeof REPORT_PUBLISH_ERROR>
-  ) => {
-    state.isPublishing = false
-    state.userMessage = payload.message
-  },
-  [REPORT_DELETED.type]: (state: IProjectStatusState) => {
-    const reports = state.data.reports.filter((r) => r.id !== state.selectedReport.id)
-    state.data = { ...state.data, reports }
-    state.selectedReport = _.first(reports)
-    state.sourceUrl = decodeURIComponent(getUrlParam('Source') ?? '')
-    state.mostRecentReportId = state.selectedReport?.id ?? 0
-    state.refetch = new Date().getTime()
-    state.reportStatus = format(
-      strings.PublishedStatusReport,
-      formatDate(state.selectedReport?.publishedDate)
-    )
-  },
-  [REPORT_DELETE_ERROR.type]: (
-    state: IProjectStatusState,
-    { payload }: ReturnType<typeof REPORT_DELETE_ERROR>
-  ) => {
-    state.error = payload.error
-  },
-  [SELECT_REPORT.type]: (
-    state: IProjectStatusState,
-    { payload }: ReturnType<typeof SELECT_REPORT>
-  ) => {
-    state.data.reports = state.data.reports.map((r) =>
-      payload.report.id === r.id ? payload.report : r
-    )
-    state.selectedReport = payload.report
-    state.isDataLoaded = true
-
-    if (payload.report.published) {
-      state.reportStatus = format(
-        strings.PublishedStatusReport,
-        formatDate(payload.report?.publishedDate)
+    .addCase(REPORT_PUBLISHING, (state) => {
+      state.isPublishing = true
+    })
+    .addCase(REPORT_PUBLISHED, (state, { payload }) => {
+      const reports = state.data.reports.map((r) => {
+        return payload.updatedReport.id === r.id ? payload.updatedReport : r
+      })
+      state.data = { ...state.data, reports }
+      state.selectedReport = payload.updatedReport
+      state.userMessage = payload.message
+      state.refetch = new Date().getTime()
+      state.isPublishing = false
+    })
+    .addCase(REPORT_PUBLISH_ERROR, (state, { payload }) => {
+      state.isPublishing = false
+      state.userMessage = payload.message
+    })
+    .addCase(REPORT_DELETED, (state) => {
+      const reports = state.data.reports.filter((r) => r.id !== state.selectedReport.id)
+      state.data = { ...state.data, reports }
+      state.selectedReport = _.first(reports)
+      state.sourceUrl = decodeURIComponent(getUrlParam('Source') ?? '')
+      state.mostRecentReportId = state.selectedReport?.id ?? 0
+      state.refetch = new Date().getTime()
+      state.reportStatus = getReportStatus(state.selectedReport)
+    })
+    .addCase(REPORT_DELETE_ERROR, (state, { payload }) => {
+      // A message above the report: `state.error` would replace the whole page.
+      state.userMessage = {
+        title: strings.DeleteReportErrorTitle,
+        text: payload?.error?.message,
+        intent: 'error'
+      }
+    })
+    .addCase(SELECT_REPORT, (state, { payload }) => {
+      state.data.reports = state.data.reports.map((r) =>
+        payload.report.id === r.id ? payload.report : r
       )
-    } else {
-      state.reportStatus = format(
-        strings.NotPublishedStatusReport,
-        formatDate(payload.report?.modified)
-      )
-    }
-  },
-  [PERSIST_SECTION_DATA.type]: (
-    state: IProjectStatusState,
-    { payload }: ReturnType<typeof PERSIST_SECTION_DATA>
-  ) => {
-    state.persistedSectionData = {
-      ...state.persistedSectionData,
-      [payload.section.id]: payload.data
-    }
-  },
-  [CLEAR_USER_MESSAGE.type]: (state: IProjectStatusState) => {
-    state.userMessage = null
-  },
-  [OPEN_PANEL.type]: (state: IProjectStatusState, { payload }: ReturnType<typeof OPEN_PANEL>) => {
-    state.activePanel = payload
-  },
-  [CLOSE_PANEL.type]: (state: IProjectStatusState) => {
-    state.activePanel = null
-    state.refetch = new Date().getTime()
-  },
-  [REFETCH_DATA.type]: (state: IProjectStatusState) => {
-    state.refetch = new Date().getTime()
-  },
-  [FETCH_DATA_ERROR.type]: (
-    state: IProjectStatusState,
-    { payload }: ReturnType<typeof FETCH_DATA_ERROR>
-  ) => {
-    state.error = payload.error
-    state.isDataLoaded = true
-  }
-})
+      state.selectedReport = payload.report
+      state.isDataLoaded = true
+      state.reportStatus = getReportStatus(payload.report)
+    })
+    .addCase(SELECT_SCOPE, (state, { payload }) => {
+      state.selectedScope = payload.scopeKey
+      state.selectedReport = null
+      state.userMessage = null
+      state.mostRecentReportId = 0
+      // Reset persisted section data so live section data fetched for one
+      // report series never leaks into another series' published snapshot.
+      state.persistedSectionData = {}
+      state.isDataLoaded = false
+      state.refetch = new Date().getTime()
+    })
+    .addCase(PERSIST_SECTION_DATA, (state, { payload }) => {
+      state.persistedSectionData = {
+        ...state.persistedSectionData,
+        [payload.section.id]: payload.data
+      }
+    })
+    .addCase(CLEAR_USER_MESSAGE, (state) => {
+      state.userMessage = null
+    })
+    .addCase(OPEN_PANEL, (state, { payload }) => {
+      state.activePanel = payload
+    })
+    .addCase(CLOSE_PANEL, (state) => {
+      state.activePanel = null
+      state.refetch = new Date().getTime()
+    })
+    .addCase(OPEN_SNAPSHOT, (state) => {
+      state.isSnapshotOpen = true
+    })
+    .addCase(CLOSE_SNAPSHOT, (state) => {
+      state.isSnapshotOpen = false
+    })
+    .addCase(REFETCH_DATA, (state) => {
+      state.refetch = new Date().getTime()
+    })
+    .addCase(FETCH_DATA_ERROR, (state, { payload }) => {
+      state.error = payload.error
+      state.isDataLoaded = true
+    })
+)
 
 export default createProjectStatusReducer

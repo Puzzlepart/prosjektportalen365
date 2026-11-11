@@ -1,0 +1,198 @@
+import { render, screen } from '@testing-library/react'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
+import strings from 'ProjectWebPartsStrings'
+import * as React from 'react'
+import { ProjectInformationContextProvider } from '../context'
+import { ProjectProperties } from './index'
+
+/**
+ * The properties block: the visible, non-empty properties with their values rendered by type
+ * (text, user, link, date, note), the hidden ones left out unless all are asked for, and the
+ * message when nothing is left to show.
+ */
+type Property = Record<string, any>
+
+function property(
+  internalName: string,
+  displayName: string,
+  value: any,
+  type = 'Text',
+  overrides: Partial<Property> = {}
+): Property {
+  return {
+    internalName,
+    displayName,
+    type,
+    isSystemField: false,
+    isEmpty: value === null || value === undefined || value === '',
+    isVisible: () => true,
+    getParsedValue: () => value,
+    ...overrides
+  }
+}
+
+function renderProperties(properties: Property[], props: Record<string, any> = {}) {
+  return render(
+    <ProjectInformationContextProvider
+      value={
+        {
+          props: { page: 'Frontpage', showFieldExternal: {}, fallbackVisibleFields: [] },
+          state: { properties, data: { fieldValues: { get: () => '' } } },
+          dispatch: jest.fn()
+        } as any
+      }
+    >
+      <ProjectProperties {...props} />
+    </ProjectInformationContextProvider>
+  )
+}
+
+describe('ProjectProperties', () => {
+  it('shows each visible property with its label and value by type', () => {
+    renderProperties([
+      property('GtProjectGoals', 'Prosjektmål', 'Bedre flyt'),
+      property('GtProjectOwner', 'Prosjekteier', [{ text: 'Kari Nordmann', imageUrl: '' }], 'User'),
+      property(
+        'GtProjectUrl',
+        'Lenke',
+        { url: 'https://contoso.no', description: 'Contoso' },
+        'URL'
+      ),
+      property('GtStartDate', 'Startdato', new Date('2026-03-15T00:00:00'), 'DateTime'),
+      property('GtProjectDescription', 'Beskrivelse', 'Linje 1\nLinje 2', 'Note')
+    ])
+    expect(screen.getByText('Prosjektmål')).toBeInTheDocument()
+    expect(screen.getByText('Bedre flyt')).toBeInTheDocument()
+    expect(screen.getByText('Kari Nordmann')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Contoso' })).toHaveAttribute(
+      'href',
+      'https://contoso.no'
+    )
+    expect(screen.getByText(/Linje 1/).innerHTML).toContain('<br>')
+  })
+
+  it('pairs each name with its value in a description list, and reads a person once (WCAG 1.3.1)', async () => {
+    const { container } = renderProperties([
+      property('GtProjectGoals', 'Prosjektmål', 'Bedre flyt'),
+      property('GtProjectOwner', 'Prosjekteier', [{ text: 'Kari Nordmann', imageUrl: '' }], 'User')
+    ])
+    expect(screen.getAllByRole('term').map((term) => term.textContent)).toEqual([
+      'Prosjektmål',
+      'Prosjekteier'
+    ])
+    const [goals, owner] = screen.getAllByRole('definition')
+    expect(goals).toHaveTextContent('Bedre flyt')
+    // The picture beside the name is hidden from screen readers, which read the name once.
+    expect(owner).toHaveTextContent('Kari Nordmann')
+    expect(screen.queryByRole('img', { name: 'Kari Nordmann' })).toBeNull()
+    expect(await axeComponent(container)).toHaveNoViolations()
+  })
+
+  it("writes a date in SharePoint's UI language, not the browser's", () => {
+    // jsdom's browser language is en-US, where the date would read 3/15/2026.
+    ;(window as any)._spPageContextInfo = { currentUICultureName: 'nb-NO' }
+    try {
+      renderProperties([
+        property('GtStartDate', 'Startdato', new Date('2026-03-15T00:00:00'), 'DateTime')
+      ])
+      expect(screen.getByText('15.03.2026')).toHaveAttribute('title', '15.03.2026')
+    } finally {
+      delete (window as any)._spPageContextInfo
+    }
+  })
+
+  it('leaves out hidden, empty and system properties', () => {
+    renderProperties([
+      property('GtProjectGoals', 'Prosjektmål', 'Bedre flyt'),
+      property('GtHidden', 'Skjult', 'x', 'Text', { isVisible: () => false }),
+      property('GtEmpty', 'Tom', ''),
+      property('Created', 'Opprettet', 'x', 'Text', { isSystemField: true })
+    ])
+    expect(screen.getByText('Prosjektmål')).toBeInTheDocument()
+    expect(screen.queryByText('Skjult')).toBeNull()
+    expect(screen.queryByText('Tom')).toBeNull()
+    expect(screen.queryByText('Opprettet')).toBeNull()
+  })
+
+  it('shows the hidden properties too when all are asked for', () => {
+    renderProperties([property('GtHidden', 'Skjult', 'x', 'Text', { isVisible: () => false })], {
+      displayAllProperties: true
+    })
+    expect(screen.getByText('Skjult')).toBeInTheDocument()
+  })
+
+  it('renders sustainability goals as tags by default and leaves them to icon mode when enabled', () => {
+    const sustainabilityGoals = property(
+      'GtUNSustDevGoals',
+      'FNs bærekraftsmål',
+      [{ key: 'energy', name: '07. Ren energi til alle' }],
+      'TaxonomyFieldTypeMulti'
+    )
+    const view = renderProperties([sustainabilityGoals])
+    expect(screen.getByText('FNs bærekraftsmål')).toBeInTheDocument()
+    expect(screen.getByText('07. Ren energi til alle')).toBeInTheDocument()
+
+    view.rerender(
+      <ProjectInformationContextProvider
+        value={
+          {
+            props: {
+              page: 'Frontpage',
+              showFieldExternal: {},
+              fallbackVisibleFields: [],
+              showSustainabilityGoalsAsIcons: true
+            },
+            state: {
+              properties: [sustainabilityGoals],
+              data: { fieldValues: { get: () => '' } }
+            },
+            dispatch: jest.fn()
+          } as any
+        }
+      >
+        <ProjectProperties />
+      </ProjectInformationContextProvider>
+    )
+    expect(screen.queryByText('FNs bærekraftsmål')).toBeNull()
+
+    view.rerender(
+      <ProjectInformationContextProvider
+        value={
+          {
+            props: {
+              page: 'Frontpage',
+              showFieldExternal: {},
+              fallbackVisibleFields: [],
+              showSustainabilityGoalsAsIcons: true
+            },
+            state: {
+              properties: [sustainabilityGoals],
+              data: { fieldValues: { get: () => '' } }
+            },
+            dispatch: jest.fn()
+          } as any
+        }
+      >
+        <ProjectProperties displayAllProperties />
+      </ProjectInformationContextProvider>
+    )
+    expect(screen.getByText('FNs bærekraftsmål')).toBeInTheDocument()
+  })
+
+  it('tells when no property is left to show', () => {
+    renderProperties([property('GtEmpty', 'Tom', '')])
+    expect(screen.getByText(strings.NoPropertiesTitle)).toBeInTheDocument()
+  })
+
+  it('says so for a value it cannot render', () => {
+    renderProperties([
+      property('GtBroken', 'Ødelagt', null, 'Text', { isEmpty: false }),
+      property('GtThrows', 'Kaster', 'x', 'Text', {
+        getParsedValue: () => {
+          throw new Error('parse')
+        }
+      })
+    ])
+    expect(screen.getAllByText(strings.PropertyValueRenderError)).toHaveLength(2)
+  })
+})

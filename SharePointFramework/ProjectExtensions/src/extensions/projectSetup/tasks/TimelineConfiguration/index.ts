@@ -1,10 +1,9 @@
-import { format } from '@fluentui/react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'extensions/projectSetup'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../types'
 import { SPDataAdapter } from 'data'
-import { ContentConfig } from 'pp365-shared-library'
+import { ContentConfig, getAllItems, format } from 'pp365-shared-library'
 import resource from 'SharedResources'
 
 /**
@@ -17,7 +16,10 @@ export class TimelineConfiguration extends BaseTask {
    * @param data Project setup data
    * @param _contentConfig Content configuration with source timeline elements
    */
-  constructor(data: IProjectSetupData, private _contentConfig: ContentConfig) {
+  constructor(
+    data: IProjectSetupData,
+    private _contentConfig: ContentConfig
+  ) {
     super('TimelineConfiguration', data)
   }
 
@@ -30,7 +32,7 @@ export class TimelineConfiguration extends BaseTask {
         `Fetching source timeline items from ${this._contentConfig.sourceListProps.Title}`
       )
 
-      const items = await this._contentConfig.sourceList.items.getAll()
+      const items = await getAllItems(this._contentConfig.sourceList.items)
 
       this.logInformation(`Found ${items.length} source timeline items`)
       return items
@@ -119,6 +121,12 @@ export class TimelineConfiguration extends BaseTask {
       this.logWarning(
         'Skipping timeline configuration: Missing TimelineContentTypeId in template parameters'
       )
+      return params
+    }
+
+    // Timeline items live on the hub and reference the project's hub entry.
+    if (this.data.hasHubWriteAccess === false) {
+      this.logWarning('Skipping timeline configuration: No write access to the hub')
       return params
     }
 

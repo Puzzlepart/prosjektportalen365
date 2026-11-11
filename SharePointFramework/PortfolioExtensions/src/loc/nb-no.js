@@ -21,6 +21,7 @@ define([], function () {
     CreateLabel: 'Opprett',
     HelpContentAvailableDescription: 'Åpne hjelpedialog for denne siden',
     HelpContentAvailableLabel: 'Hjelp tilgjengelig',
+    HelpContentDialogTitle: 'Hjelp for denne siden',
     HelpContentUnavailableDescription: 'Denne siden har ingen hjelpeinnhold, dersom du mener det burde vært hjelpeinnhold her, vennligst kontakt din administrator',
     HelpContentUnavailableLabel: 'Hjelp utilgjengelig',
     IdeaAlreadyApproved: 'Denne ideen er allerede godkjent',
@@ -42,14 +43,16 @@ define([], function () {
     LatestGitHubReleaseLabel: 'Siste release fra GitHub',
     LatestGitHubReleaseLinkTitle: 'Se siste release-notes på GitHub',
     LatestGitHubReleaseHighlightsLabel: 'Hva er nytt i denne versjonen',
-    LinksListDescription: 'Lenker til nyttige sider. Lenkene kan konfigureres her: ',
+    LinksListDescription: 'Lenker til nyttige sider. Lenkene konfigureres i lenkelisten, nederst i menyen',
     LinksListLabel: 'Nyttige lenker',
+    LinksListOpenLabel: 'Gå til lenkelisten',
     SeeAllInstallationsLinkText: 'Se alle installasjoner',
     SetRecommendationSubtitle: 'Velg anbefaling for: {0}',
     SetRecommendationTitle: 'Sett anbefaling',
     SiteContentsLabel: 'Områdeinnhold',
     SiteSettingsDescription: 'Vis alle områdeinnstillinger for Porteføljeområdet',
     SiteSettingsLabel: 'Områdeinnstillinger',
+    SiteSettingsMoreLabel: 'Flere valg for området',
     SubmitLabel: 'Send',
     IdeaRegistrationIncludeString: 'registrering',
     IdeaProcessingCommandTitle: 'Sett anbefaling',
@@ -61,9 +64,9 @@ define([], function () {
     FavoriteProjectsNoItemsMessage: 'Du følger ingen prosjekter ennå, gå til et prosjekt og klikk på stjernen "følg" for å legge det til i favoritter',
     TemplatePackageCatalogCommandTitle: 'Malpakkekatalog',
     CatalogDrawerTitle: 'Malpakkekatalog',
+    CatalogToolbarLabel: 'Søk, filtrer og sorter malpakkene',
     CatalogSubtitle: 'Bla gjennom malpakker fra det sentrale mallageret. Kopier til din installasjon eller tilgjengeliggjør som skymal.',
     CatalogUserGuideLinkText: 'Se brukerveiledning',
-    CatalogCloseAria: 'Lukk',
     CatalogLoadingText: 'Laster katalog...',
     CatalogSearchPlaceholder: 'Søk i malpakkekatalogen',
     CatalogFilterTypeLabel: 'Type',
@@ -78,6 +81,7 @@ define([], function () {
     CatalogSortName: 'Navn (A-Å)',
     CatalogViewGrid: 'Rutenett',
     CatalogViewList: 'Liste',
+    CatalogViewLabel: 'Visning',
     CatalogTypeTemplate: 'Mal',
     CatalogTypeExtension: 'Tillegg',
     CatalogTypeContent: 'Innhold',
@@ -125,6 +129,7 @@ define([], function () {
     CatalogActionImport: 'Kopier til min installasjon',
     CatalogActionPublishCentral: 'Tilgjengeliggjør som skymal',
     CatalogActionUpdate: 'Oppdater til v{0}',
+    CatalogActionUpdateCentral: 'Oppdater skymal til v{0}',
     CatalogActionReinstall: 'Installer på nytt',
     CatalogActionRemove: 'Fjern',
     CatalogActionRemoveImport: 'Fjern installasjon',
@@ -134,6 +139,7 @@ define([], function () {
     CatalogStepValidateManifest: 'Validerer manifest',
     CatalogStepCheckVersion: 'Sjekker versjon',
     CatalogStepProvisionHub: 'Provisjonerer hub',
+    CatalogStepProvisionHubErrorsDetail: '{0} feil logget, se avansert logg',
     CatalogStepTaxonomy: 'Provisjonerer taksonomi',
     CatalogStepStoreProjectTemplate: 'Lagrer prosjektmal',
     CatalogStepExtensions: 'Legger til i Prosjekttillegg',
@@ -141,6 +147,7 @@ define([], function () {
     CatalogStepListContent: 'Legger til i Listeinnhold',
     CatalogStepListContentDetail: '{0} listeinnhold lagt til',
     CatalogAdvancedLogLabel: 'Avansert logg',
+    CatalogInstallProgressLabel: 'Installasjon av {0}',
     CatalogLogDownloaded: 'Lastet ned malpakken',
     CatalogLogManifestValidated: 'Validerte manifest for {0} v{1}',
     CatalogLogHubProvisioned: 'Provisjonerte hub-innhold (innholdstyper, kolonner, lister)',
@@ -153,12 +160,23 @@ define([], function () {
     CatalogStepSkippedFeatureFlag: 'Hoppet over (feature flag av)',
     CatalogInstallSuccessTitle: 'Malpakke importert',
     CatalogInstallSuccessText: 'Malen er nå tilgjengelig i oppsettveiviseren.',
+    CatalogInstallWarningTitle: 'Malpakke importert med feil',
+    CatalogInstallWarningText:
+      'Malen er tilgjengelig i oppsettveiviseren, men {0} feil ble logget under provisjoneringen av hub-området, og det som feilet, ble ikke provisjonert. Den avanserte loggen viser feilene.',
     CatalogInstallErrorTitle: 'Importen feilet',
     CatalogPublishSuccessText: 'Skymalen er nå tilgjengelig i oppsettveiviseren.',
     CatalogPublishErrorText: 'Kunne ikke tilgjengeliggjøre skymalen.',
     CatalogPublishTaxonomySkippedText:
       'Skymalen ble tilgjengeliggjort, men taksonomi ble hoppet over (feature flag av).',
     CatalogPublishCancelledText: 'Tilgjengeliggjøringen som skymal ble avbrutt.',
+    CatalogPublishErrorsText:
+      '{0} {1} feil ble logget under provisjoneringen av hub-avhengighetene, og det som feilet, ble ikke provisjonert:',
+    CatalogPublishErrorsLabel: 'Feil logget under provisjoneringen av hub-avhengighetene',
+    CatalogUpdateCentralSuccessText: 'Skymalen er oppdatert til v{0}.',
+    CatalogUpdateCentralErrorText: 'Kunne ikke oppdatere skymalen.',
+    CatalogUpdateCentralTaxonomySkippedText:
+      'Skymalen ble oppdatert til v{0}, men taksonomi ble hoppet over (feature flag av).',
+    CatalogUpdateCentralCancelledText: 'Oppdateringen av skymalen ble avbrutt.',
     CatalogRemoveSuccessText: 'Malen ble fjernet.',
     CatalogRemoveSuccessTextExtension: 'Tillegget ble fjernet.',
     CatalogRemoveErrorText: 'Kunne ikke fjerne malen.',
@@ -201,6 +219,8 @@ define([], function () {
     CatalogActionRemoveTooltip: 'Fjern denne malpakken fra Maloppsett',
     CatalogActionRemoveCentralTooltip: 'Fjern skymal-registreringen fra Maloppsett',
     CatalogActionPublishCentralAlreadyTooltip: 'Allerede tilgjengeliggjort som skymal',
+    CatalogActionUpdateCentralTooltip:
+      'Oppdater skymalen til nyeste versjon. Hub-avhengigheter (kolonner, innholdstyper, taksonomi) provisjoneres nå, og registreringen i Maloppsett forblir en skymal.',
     CatalogActionRemoveTooltipExtension: 'Fjern dette tillegget fra Prosjekttillegg-biblioteket',
     CatalogRemoveConfirmTitle: 'Fjerne malen?',
     CatalogRemoveConfirmText:
@@ -216,6 +236,7 @@ define([], function () {
     CatalogStepStatusError: 'Feilet',
     CatalogStepStatusSkipped: 'Hoppet over',
     CatalogStepStatusPending: 'Venter',
+    CatalogStepStatusWarning: 'Fullført med feil',
     CatalogActionAddExtension: 'Legg til som prosjekttillegg',
     CatalogActionReinstallExtension: 'Legg til på nytt',
     CatalogActionUpdateExtension: 'Oppdater tillegg til v{0}',
@@ -257,6 +278,7 @@ define([], function () {
     CatalogCompatibilityTitle: 'Kompatibilitetssjekk',
     CatalogCompatibilityIntro:
       'Følgende konflikter ble funnet mot det som allerede finnes i installasjonen. Du kan avbryte og rette opp manuelt, eller fortsette – elementer blir overskrevet eller hoppet over (når overskriving ikke er mulig).',
+    CatalogCompatibilityConflictsLabel: 'Konflikter',
     CatalogCompatibilityContinue: 'Fortsett likevel',
     CatalogResolutionOverwrite: 'Overskrives',
     CatalogResolutionSkip: 'Hoppes over',
@@ -268,13 +290,20 @@ define([], function () {
     CatalogConflictSiteField:
       'Sitekolonnen «{0}» finnes allerede med en annen ID. Egenskapene oppdateres, men ID-en beholdes.',
     CatalogConflictSiteFieldType:
-      'Sitekolonnen «{0}» finnes allerede med en annen type ({1}). Oppdatering kan feile.',
+      'Sitekolonnen «{0}» er {1} på hub-området, men pakken sier {2}. Bare en utvidende typeendring beholder verdiene, så kolonnen blir stående som den er (logges som en advarsel).',
+    CatalogConflictSiteFieldWidened:
+      'Sitekolonnen «{0}» er {1} på hub-området og endres til {2}, slik pakken sier. Verdiene beholdes.',
     CatalogConflictSiteFieldReused:
-      'Felt-ID-en til «{0}» er allerede i bruk av kolonnen «{1}». Kolonnen kan ikke legges til og hoppes over.',
+      'Felt-ID-en til «{0}» er allerede i bruk av kolonnen «{1}». Kolonnen legges ikke til (logges som en feil), og resten av pakken provisjoneres likevel.',
     CatalogConflictListField:
-      'Listekolonnen «{0}» i listen «{1}» har en ID som allerede finnes. Den ville blitt slettet og opprettet på nytt (data kan gå tapt), så den hoppes over.',
+      'Listen «{1}» har allerede en kolonne med navnet «{0}» og en annen ID. Pakkens kolonne legges ikke til, og den eksisterende blir stående som den er (logges som en advarsel).',
+    CatalogConflictListFieldType:
+      'Listekolonnen «{0}» i listen «{1}» er {2}, men pakken sier {3}. Bare en utvidende typeendring beholder verdiene, så kolonnen blir stående som den er (logges som en advarsel).',
+    CatalogConflictListFieldWidened:
+      'Listekolonnen «{0}» i listen «{1}» er {2} og endres til {3}, slik pakken sier. Verdiene beholdes.',
     CatalogConflictListView: 'Visningen «{0}» i listen «{1}» finnes allerede og blir overskrevet.',
-    CatalogConflictList: 'Listen «{0}» får eksisterende innholdstyper fjernet.',
+    CatalogConflictList:
+      'Listen «{0}» finnes allerede, så eksisterende innholdstyper beholdes. Pakken fjerner innholdstyper bare fra lister den oppretter.',
     CatalogConflictExtension: 'Prosjekttillegget «{0}» finnes allerede og blir overskrevet.',
     CatalogConflictTaxonomy:
       'Termsettet «{0}» finnes allerede i termlageret med navnet «{1}». Eksisterende beholdes.',

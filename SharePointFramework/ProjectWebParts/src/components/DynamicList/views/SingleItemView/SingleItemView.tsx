@@ -1,4 +1,4 @@
-import { FluentProvider, IdPrefixProvider, Text, useId } from '@fluentui/react-components'
+import { FluentProvider, IdPrefixProvider, useId } from '@fluentui/react-components'
 import * as React from 'react'
 import { FC, useContext } from 'react'
 import { DynamicListContext } from '../../context'
@@ -6,12 +6,15 @@ import { useColumns } from '../../useColumns'
 import styles from './SingleItemView.module.scss'
 import { customLightTheme, UserMessage } from 'pp365-shared-library'
 import * as strings from 'ProjectWebPartsStrings'
+import { NAVIGATION_FOCUS_ATTRIBUTE } from '../../useNavigationFocus'
 
 /**
  * Renders a single list item in a detailed view.
  *
  * Displays all fields from the selected item or the first item in the list
- * if no specific item is selected.
+ * if no specific item is selected. The item's title is a heading under the web part's, its
+ * fields a description list (WCAG 1.3.1); an item opened from the list takes the focus on its
+ * heading, or on its fields without one (`useNavigationFocus`).
  */
 export const SingleItemView: FC = () => {
   const context = useContext(DynamicListContext)
@@ -19,6 +22,8 @@ export const SingleItemView: FC = () => {
   const columns = useColumns()
 
   const item = context.state.selectedItem || context.state.data?.listItems?.[0]
+  const showTitle = context.props.showItemTitle === undefined || context.props.showItemTitle
+  const focusTarget = { [NAVIGATION_FOCUS_ATTRIBUTE]: true, tabIndex: -1 }
 
   if (!item) {
     return (
@@ -36,14 +41,14 @@ export const SingleItemView: FC = () => {
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>
         <div className={styles.singleItemView}>
-          {(context.props.showItemTitle === undefined || context.props.showItemTitle) && (
+          {showTitle && (
             <div className={styles.header}>
-              <h1 className={styles.title}>
+              <h3 className={styles.title} {...focusTarget}>
                 {item.Title || item?.FileLeafRef || strings.DynamicList.Untitled}
-              </h1>
+              </h3>
             </div>
           )}
-          <div className={styles.fields}>
+          <dl className={styles.fields} {...(showTitle ? {} : focusTarget)}>
             {columns.map((column) => {
               const cellContent = column.renderCell
                 ? column.renderCell(item)
@@ -51,14 +56,14 @@ export const SingleItemView: FC = () => {
 
               return (
                 <div key={column.columnId} className={styles.field}>
-                  <Text weight='semibold' size={200} block>
+                  <dt className={styles.name}>
                     {column.renderHeaderCell ? column.renderHeaderCell() : column.columnId}
-                  </Text>
-                  <Text>{cellContent}</Text>
+                  </dt>
+                  <dd className={styles.value}>{cellContent}</dd>
                 </div>
               )
             })}
-          </div>
+          </dl>
         </div>
       </FluentProvider>
     </IdPrefixProvider>

@@ -14,3 +14,19 @@ tslint.json
 
 .yo-rc.json
 .vscode
+
+# Build output that must never reach the published package.
+# gulpfile.js is gone (Heft toolchain) but the rest still applies, and the Heft build adds
+# test output plus extra module formats alongside lib/.
+lib-commonjs
+lib-dts
+lib-esm
+jest-output
+.heft
+
+# Unit tests compile into lib/ next to the code they cover; they are not part of the public API.
+*.test.js
+*.test.d.ts
+*.test.js.map
+test/
+__mocks__/

@@ -43,6 +43,38 @@ export interface IProjectStatusProps extends IBaseWebPartComponentProps {
    * File name for the snapshot attachment stored in a separate hidden library.
    */
   snapshotAttachmentFileName?: string
+
+  /**
+   * `Åpne øyeblikksbilde` shows the snapshot in `SnapshotDialog`, which fills the window and
+   * offers full screen and a link to the snapshot. `false` opens the image file in a new tab
+   * instead. Unset is `true`: pages saved before the property existed get the dialog.
+   */
+  snapshotInDialog?: boolean
+
+  /**
+   * When `true`, the project can maintain multiple report series
+   * ("multirapportering") — one per sub-project ("delprosjekt") defined in
+   * `subProjects` — selected through a scope selector in the toolbar. Each
+   * report series is identified by a scope key suffix on the `GtSiteId`
+   * value (`{siteId}-{scopeKey}`); the default series ("hovedrapportering")
+   * has no suffix and behaves exactly as before.
+   */
+  multiReporting?: boolean
+
+  /**
+   * Sub-projects ("delprosjekter") available in the scope selector — one per
+   * line on the format `key` or `key|label`. The key becomes part of the
+   * stored `GtSiteId` value and is the identity of the report series; the
+   * label is display-only and can be renamed freely.
+   */
+  subProjects?: string
+
+  /**
+   * Section names ("Statusseksjoner" item titles) to hide on the status page —
+   * one section title per line. Matching is trimmed and case-insensitive.
+   * An empty value shows all sections.
+   */
+  excludeSections?: string
 }
 
 export interface IProjectStatusState extends IBaseWebPartComponentState<IProjectStatusData> {
@@ -72,6 +104,12 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   mostRecentReportId?: number
 
   /**
+   * The currently selected report scope key ("delprosjekt"). An empty string
+   * (or `undefined`) means the default report series ("hovedrapportering").
+   */
+  selectedScope?: string
+
+  /**
    * Current user has admin permissions
    */
   userHasAdminPermission?: boolean
@@ -84,7 +122,7 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   /**
    * User message to display in the UI
    */
-  userMessage?: Pick<IUserMessageProps, 'text' | 'intent'>
+  userMessage?: Pick<IUserMessageProps, 'title' | 'text' | 'intent'>
 
   /**
    * The active panel name and optional title. Optional properties and contentID for new reports.
@@ -95,6 +133,11 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
     reportProps?: Record<string, any>
     contentId?: any
   }
+
+  /**
+   * Is the snapshot of the selected report shown in `SnapshotDialog`?
+   */
+  isSnapshotOpen?: boolean
 
   /**
    * The status for the report (currently selected)
@@ -125,6 +168,13 @@ export interface IProjectStatusData {
   reportEditFormUrl?: string
 
   /**
+   * ID of the hub `Prosjektstatus` list the reports are stored in. Used as
+   * `targetListId` for the edit panel so user/taxonomy/lookup values are
+   * resolved against the hub list.
+   */
+  reportListId?: string
+
+  /**
    * Reports
    */
   reports?: StatusReport[]
@@ -143,6 +193,13 @@ export interface IProjectStatusData {
    * Current user has admin permissions
    */
   userHasAdminPermission?: boolean
+
+  /**
+   * Distinct scope keys ("delprosjekter") found among the project's status
+   * reports (display casing, first-seen). Used by the scope selector so that
+   * series whose key is no longer in the configured vocabulary stay reachable.
+   */
+  scopeKeysWithReports?: string[]
 }
 
 /**
@@ -152,4 +209,11 @@ export type FetchDataResult = {
   data: IProjectStatusData
   initialSelectedReport: StatusReport
   sourceUrl: string
+
+  /**
+   * The report scope resolved during the fetch (explicitly selected scope,
+   * or derived from the `selectedReport`/`scope` URL parameters on first load).
+   * An empty string means the default report series.
+   */
+  resolvedScope: string
 }

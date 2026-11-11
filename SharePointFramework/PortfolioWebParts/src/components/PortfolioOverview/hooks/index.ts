@@ -1,4 +1,3 @@
-export * from './useConvertViewsToContextualMenuItems'
 export * from './useEditViewColumnsPanel'
 export * from './useFetchData'
 export * from './useFilteredData'

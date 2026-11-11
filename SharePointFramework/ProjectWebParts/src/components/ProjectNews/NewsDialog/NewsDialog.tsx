@@ -89,7 +89,6 @@ export const NewsDialog: FC<INewsDialogProps> = () => {
                       ref={inputRef}
                       type='text'
                       placeholder={strings.NewsTitlePlaceholder}
-                      id='news-title-input'
                       value={title}
                       onChange={handleTitleChange}
                       required
@@ -103,7 +102,6 @@ export const NewsDialog: FC<INewsDialogProps> = () => {
                     iconName='ChevronDown'
                   >
                     <Dropdown
-                      id='template-dropdown'
                       value={
                         templates.find((t) => t.ServerRelativeUrl === selectedTemplate)?.Title ?? ''
                       }

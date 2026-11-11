@@ -49,12 +49,7 @@ export const TemplatePackageCatalog: FC<ITemplatePackageCatalogProps> = (props) 
               <DrawerHeaderTitle
                 action={
                   <Tooltip content={strings.CatalogCloseTooltip} relationship='label'>
-                    <Button
-                      appearance='subtle'
-                      aria-label={strings.CatalogCloseAria}
-                      icon={<Dismiss24Regular />}
-                      onClick={close}
-                    />
+                    <Button appearance='subtle' icon={<Dismiss24Regular />} onClick={close} />
                   </Tooltip>
                 }
               >
@@ -66,7 +61,20 @@ export const TemplatePackageCatalog: FC<ITemplatePackageCatalogProps> = (props) 
 
               {state.notification && (
                 <div className={styles.banner}>
-                  <UserMessage intent={state.notification.intent} text={state.notification.text} />
+                  <UserMessage intent={state.notification.intent} text={state.notification.text}>
+                    {state.notification.details && (
+                      // A long list scrolls, so it takes the focus for the keyboard to scroll it.
+                      <ul
+                        className={styles.details}
+                        tabIndex={0}
+                        aria-label={state.notification.details.label}
+                      >
+                        {state.notification.details.lines.map((line, index) => (
+                          <li key={index}>{line}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </UserMessage>
                 </div>
               )}
               {state.degraded && (

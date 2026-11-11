@@ -1104,7 +1104,7 @@
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"Lookup\" DisplayName=\"{{ListFields_ProjectLogProductLookup_DisplayName}}\" List=\"{listid:{{Lists_ProjectDeliveries_Title}}}\" ShowField=\"Title\" ID=\"{022cc93f-13df-4420-bd47-55e4fdae5d18}\" Description=\"{{ListFields_ProjectLogProductLookup_Description}}\" StaticName=\"GtProjectLogProductLookup\" Name=\"GtProjectLogProductLookup\" />"
+                "<Field Type=\"Lookup\" DisplayName=\"{{ListFields_ProjectLogProductLookup_DisplayName}}\" List=\"{listid:{{Lists_ProgramDeliveries_Title}}}\" ShowField=\"Title\" ID=\"{022cc93f-13df-4420-bd47-55e4fdae5d18}\" Description=\"{{ListFields_ProjectLogProductLookup_Description}}\" StaticName=\"GtProjectLogProductLookup\" Name=\"GtProjectLogProductLookup\" />"
             ],
             "Views": [
                 {
@@ -1141,7 +1141,7 @@
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"LookupMulti\" DisplayName=\"{{ListFields_DeliveryStakeholders_DisplayName}}\" List=\"{listid:{{Lists_Stakeholders_Title}}}\" ShowField=\"Title\" ID=\"{6d90e0b6-73e6-48fb-aa1e-b897b214f934}\" Description=\"{{ListFields_DeliveryStakeholders_Description}}\" Name=\"GtDeliveryStakeholders\" StaticName=\"GtDeliveryStakeholders\" Name=\"GtDeliveryStakeholders\" Mult=\"TRUE\" />"
+                "<Field Type=\"LookupMulti\" DisplayName=\"{{ListFields_DeliveryStakeholders_DisplayName}}\" List=\"{listid:{{Lists_Stakeholders_Title}}}\" ShowField=\"Title\" ID=\"{6d90e0b6-73e6-48fb-aa1e-b897b214f934}\" Description=\"{{ListFields_DeliveryStakeholders_Description}}\" StaticName=\"GtDeliveryStakeholders\" Name=\"GtDeliveryStakeholders\" Mult=\"TRUE\" />"
             ],
             "Views": [
                 {

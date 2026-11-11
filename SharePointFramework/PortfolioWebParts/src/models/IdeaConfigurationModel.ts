@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import resource from 'SharedResources'
 
 export class SPIdeaConfigurationItem {

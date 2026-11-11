@@ -4,12 +4,15 @@ if ($global:__PreviousVersion -ge $TargetVersion) {
     return
 }
 
-$listName = "Interessentregister"
+# Names in the installation's language: an English project site has the list "Stakeholders", so
+# the Norwegian title made this step skip every English site.
+$listName = Get-Resource -Name "Lists_Stakeholders_Title"
 $newFieldId = "ba8e9bcd-d8af-41e2-a24c-d279e07f1b56"
 $termGroupName = "Prosjektportalen"
+# The term set has this one name in every language (Templates/Taxonomy/Taxonomy.xml).
 $termSetName = "Interessentgrupper"
 $termSetPath = "$termGroupName|$termSetName"
-$contentTypeName = "Interessent"
+$contentTypeName = Get-Resource -Name "ContentTypes_Stakeholder_Name"
 $oldFieldNames = @("GtStakeholderGroup", "GtBAStakeholderGroup")
 
 $list = Get-PnPList -Identity $listName -ErrorAction SilentlyContinue
@@ -27,9 +30,9 @@ if ($null -eq $existingField) {
         if ($null -eq $siteField) {
             Write-Host "`t`t`tAdding site column GtStakeholderGroups (TermSet: $termSetPath)"
             Add-PnPTaxonomyField `
-                -DisplayName "Interessentgrupper" `
+                -DisplayName (Get-Resource -Name "SiteFields_GtStakeholderGroups_DisplayName") `
                 -InternalName "GtStakeholderGroups" `
-                -Group "Kolonner for Prosjektportalen (Prosjekt)" `
+                -Group (Get-Resource -Name "SiteFields_Project_Group") `
                 -TermSetPath $termSetPath `
                 -MultiValue `
                 -Id $newFieldId | Out-Null

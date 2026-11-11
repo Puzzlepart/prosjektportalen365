@@ -1,4 +1,3 @@
-import { Selection, IGroup, IObjectWithKey } from '@fluentui/react'
 import { createAction } from '@reduxjs/toolkit'
 import { ProjectContentColumn } from 'pp365-shared-library'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
@@ -36,7 +35,8 @@ export const TOGGLE_EDIT_VIEW_COLUMNS_PANEL = createAction<{
 export const TOGGLE_FILTER_PANEL = createAction('TOGGLE_FILTER_PANEL')
 
 /**
- * `TOGGLE_COMPACT`: Toggling the compact mode.
+ * `TOGGLE_COMPACT`: Sets the compact mode to the payload (`true` compact, `false` the normal
+ * list); without a payload it flips the mode.
  */
 export const TOGGLE_COMPACT = createAction<boolean>('TOGGLE_COMPACT')
 
@@ -61,22 +61,21 @@ export const TOGGLE_COLUMN_CONTEXT_MENU = createAction<OnColumnContextMenu>(
 )
 
 /**
- * `SET_GROUP_BY`: Set group by.R
+ * `SET_GROUP_BY`: The user's choice in the column menu: groups by the column, or ends the grouping
+ * when the rows are already grouped by it.
  */
 export const SET_GROUP_BY = createAction<{ column: ProjectContentColumn }>('SET_GROUP_BY')
 
 /**
- * `SET_COLLAPSED`: Set collapsed.
+ * `SET_VIEW_GROUP_BY`: Dispatched after a fetch with the view's group column: groups by it, or ends
+ * the grouping when the view has none. Unlike `SET_GROUP_BY` it never toggles, so a view grouped
+ * by the column the rows are already grouped by stays grouped.
  */
-export const SET_COLLAPSED = createAction<{ group: IGroup }>('SET_COLLAPSED')
+export const SET_VIEW_GROUP_BY = createAction<{ column: ProjectContentColumn }>('SET_VIEW_GROUP_BY')
 
 /**
- * `SET_ALL_COLLAPSED`: Set all collapsed.
- */
-export const SET_ALL_COLLAPSED = createAction<{ isAllCollapsed: boolean }>('SET_ALL_COLLAPSED')
-
-/**
- * `SET_SORT`: Set sort.
+ * `SET_SORT`: Sorts by the column, descending (Å to A) when `isSortedDescending` is `true`; without
+ * `isSortedDescending` it flips the column's current direction.
  */
 export const SET_SORT = createAction<{ column: ProjectContentColumn; isSortedDescending: boolean }>(
   'SET_SORT'
@@ -133,6 +132,7 @@ export const SET_VIEW_FORM_PANEL = createAction<{
 }>('SET_VIEW_FORM_PANEL')
 
 /**
- * `SELECTION_CHANGED`: Action dispatched when user changes the selection in the list
+ * `SELECTION_CHANGED`: Action dispatched when user changes the selection in the list, with the
+ * selected items
  */
-export const SELECTION_CHANGED = createAction<Selection<IObjectWithKey>>('SELECTION_CHANGED')
+export const SELECTION_CHANGED = createAction<Record<string, any>[]>('SELECTION_CHANGED')

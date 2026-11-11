@@ -1,5 +1,3 @@
-@import "~@fluentui/react/dist/sass/References.scss";
-
 .root {
   width: 240px;
 
@@ -27,6 +25,10 @@
 
     .phaseBadge:hover {
       background-color: var(--colorSubtleBackgroundLightAlphaHover);
+    }
+
+    .phaseBadge:focus-visible {
+      outline: 2px solid var(--colorStrokeFocus2);
     }
   }
 

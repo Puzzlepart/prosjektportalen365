@@ -1,5 +1,4 @@
-import { format } from '@fluentui/react/lib/Utilities'
-import { formatDate, getFluentIconWithFallback } from 'pp365-shared-library'
+import { formatDate, getFluentIconWithFallback, format } from 'pp365-shared-library'
 import {
   Button,
   Caption1,
@@ -42,6 +41,7 @@ export const PackageDetails: FC = () => {
     isSupported,
     importPackage,
     publishCentral,
+    updateCentral,
     removePackage,
     closeDetail,
     imageError,
@@ -51,6 +51,7 @@ export const PackageDetails: FC = () => {
     confirmRemove,
     setConfirmRemove,
     rootRef,
+    titleRef,
     filterByTag
   } = usePackageDetails()
 
@@ -65,7 +66,11 @@ export const PackageDetails: FC = () => {
   const pkg = selectedPackage
   const ref = crossRefFor(pkg.id)
   const isCentral = ref?.packageType === PpPkgType.Sentral
-  const updateAvailable = !!ref?.updateAvailable
+  // A newer version updates the registration it is available for: a local install from the main
+  // action, a cloud template from its own action, so that it stays one. Copying a cloud template
+  // locally adds an install beside it.
+  const updateInstall = !!ref?.updateAvailable && !isCentral
+  const updateCloudTemplate = !!ref?.updateAvailable && isCentral
   // Extensions go into the Prosjekttillegg library, not Maloppsett, so they
   // cannot be published as a cloud template and get their own action/info copy.
   const isExtension = pkg.type === 'extension'
@@ -73,6 +78,12 @@ export const PackageDetails: FC = () => {
   // publish button is shown disabled with the reason in its tooltip.
   const notCloudCompatible = pkg.cloudCompatible === false
   const supported = isSupported(pkg)
+  // Why the package cannot be imported: in the message above its actions, and in the main
+  // action's description, which the keyboard reaches (WCAG 3.3.2).
+  const unsupportedReason =
+    !supported && pkg.minPPVersion
+      ? format(strings.CatalogIncompatibleText, pkg.minPPVersion, state.installedVersion ?? '?')
+      : undefined
   // Same-named extension exists locally but wasn't installed from the catalog —
   // replacing it needs an explicit confirmation.
   const isUnmanaged = !!ref?.unmanaged
@@ -81,7 +92,7 @@ export const PackageDetails: FC = () => {
   // reflects that the package is already in place. (`Sentral` refs keep the
   // plain import label — copying locally is a separate action from publishing
   // as a cloud template.)
-  const isUpToDate = ref?.packageType === PpPkgType.Importert && !isUnmanaged && !updateAvailable
+  const isUpToDate = ref?.packageType === PpPkgType.Importert && !isUnmanaged && !updateInstall
   // What the remove buttons can act on: the single cross-referenced
   // registration is either a local install (Importert) or a cloud registration
   // (Sentral) — each remove button enables only for its own kind. Unmanaged
@@ -90,6 +101,7 @@ export const PackageDetails: FC = () => {
     ? !!ref && !isUnmanaged
     : ref?.packageType === PpPkgType.Importert
   const onPrimaryAction = () => (isUnmanaged ? setConfirmReplace(true) : importPackage(pkg))
+  const onCloudAction = () => (updateCloudTemplate ? updateCentral(pkg) : publishCentral(pkg))
 
   const meta = [
     pkg.version ? `v${pkg.version}` : undefined,
@@ -102,7 +114,7 @@ export const PackageDetails: FC = () => {
     .join('  •  ')
 
   return (
-    <div className={styles.root} ref={rootRef} tabIndex={-1}>
+    <div className={styles.root} ref={rootRef}>
       <Button
         className={styles.backButton}
         appearance='subtle'
@@ -121,7 +133,15 @@ export const PackageDetails: FC = () => {
           {pkg.icon && (
             <span className={styles.titleIcon}>{getFluentIconWithFallback(pkg.icon)}</span>
           )}
-          <Text size={500} weight='semibold' className={styles.titleText}>
+          {/* The package's heading, under the catalog's, where the focus goes as it is chosen. */}
+          <Text
+            as='h3'
+            ref={titleRef}
+            tabIndex={-1}
+            size={500}
+            weight='semibold'
+            className={styles.titleText}
+          >
             {pkg.name}
           </Text>
         </div>
@@ -156,60 +176,62 @@ export const PackageDetails: FC = () => {
 
       {isExtension && <UserMessage intent='info' text={strings.CatalogExtensionInfo} />}
 
-      {!supported && pkg.minPPVersion && (
+      {unsupportedReason && (
         <UserMessage
           intent='warning'
           title={strings.CatalogIncompatibleTitle}
-          text={format(
-            strings.CatalogIncompatibleText,
-            pkg.minPPVersion,
-            state.installedVersion ?? '?'
-          )}
+          text={unsupportedReason}
         />
       )}
 
       <div className={styles.actions}>
         <Tooltip
           content={
-            isExtension
+            unsupportedReason ??
+            (isExtension
               ? isUnmanaged
                 ? strings.CatalogBadgeLocalTooltip
-                : updateAvailable
+                : updateInstall
+                  ? strings.CatalogActionUpdateTooltip
+                  : isUpToDate
+                    ? format(
+                        strings.CatalogActionReinstallExtensionTooltip,
+                        ref?.installedVersion || pkg.version
+                      )
+                    : strings.CatalogActionAddExtensionTooltip
+              : updateInstall
                 ? strings.CatalogActionUpdateTooltip
                 : isUpToDate
-                ? format(
-                    strings.CatalogActionReinstallExtensionTooltip,
-                    ref?.installedVersion || pkg.version
-                  )
-                : strings.CatalogActionAddExtensionTooltip
-              : updateAvailable
-              ? strings.CatalogActionUpdateTooltip
-              : isUpToDate
-              ? format(strings.CatalogActionReinstallTooltip, ref?.installedVersion || pkg.version)
-              : strings.CatalogActionImportTooltip
+                  ? format(
+                      strings.CatalogActionReinstallTooltip,
+                      ref?.installedVersion || pkg.version
+                    )
+                  : strings.CatalogActionImportTooltip)
           }
           relationship='description'
         >
           <Button
             className={styles.mainAction}
             appearance='primary'
-            disabled={!supported || !!state.busyAction}
+            // Focusable when it cannot run, so its reason is read, and while it runs, so the
+            // focus stays (WCAG 2.1.1, 2.4.3).
+            disabledFocusable={!supported || !!state.busyAction}
             icon={isExtension ? <PuzzlePiece24Regular /> : <ArrowDownload24Regular />}
             onClick={onPrimaryAction}
           >
             {isExtension
               ? isUnmanaged
                 ? strings.CatalogActionReplaceExtension
-                : updateAvailable
-                ? format(strings.CatalogActionUpdateExtension, pkg.version)
+                : updateInstall
+                  ? format(strings.CatalogActionUpdateExtension, pkg.version)
+                  : isUpToDate
+                    ? strings.CatalogActionReinstallExtension
+                    : strings.CatalogActionAddExtension
+              : updateInstall
+                ? format(strings.CatalogActionUpdate, pkg.version)
                 : isUpToDate
-                ? strings.CatalogActionReinstallExtension
-                : strings.CatalogActionAddExtension
-              : updateAvailable
-              ? format(strings.CatalogActionUpdate, pkg.version)
-              : isUpToDate
-              ? strings.CatalogActionReinstall
-              : strings.CatalogActionImport}
+                  ? strings.CatalogActionReinstall
+                  : strings.CatalogActionImport}
           </Button>
         </Tooltip>
         {/* Row 1's remove: the local install (or the extension file). Only
@@ -226,7 +248,7 @@ export const PackageDetails: FC = () => {
             <Button
               className={styles.removeAction}
               appearance='subtle'
-              disabled={!!state.busyAction}
+              disabledFocusable={!!state.busyAction}
               icon={state.busyAction === 'remove' ? <Spinner size='tiny' /> : <Delete24Regular />}
               onClick={() => setConfirmRemove(true)}
             >
@@ -235,30 +257,36 @@ export const PackageDetails: FC = () => {
           </Tooltip>
         )}
 
-        {/* Row 2 — cloud template (templates only): publish + its remove (only
-            when registered as a cloud template). */}
+        {/* Row 2 — cloud template (templates only): publish, or update the
+            registration to a newer version, + its remove (only when registered
+            as a cloud template). */}
         {!isExtension && (
           <>
             <Tooltip
               content={
-                isCentral
+                isCentral && !updateCloudTemplate
                   ? strings.CatalogActionPublishCentralAlreadyTooltip
                   : notCloudCompatible
-                  ? pkg.cloudCompatibleReason ??
-                    strings.CatalogActionPublishCentralIncompatibleTooltip
-                  : strings.CatalogActionPublishCentralTooltip
+                    ? (pkg.cloudCompatibleReason ??
+                      strings.CatalogActionPublishCentralIncompatibleTooltip)
+                    : updateCloudTemplate
+                      ? strings.CatalogActionUpdateCentralTooltip
+                      : strings.CatalogActionPublishCentralTooltip
               }
               relationship='description'
             >
               <Button
                 className={styles.mainAction}
                 appearance='secondary'
-                disabled={!!state.busyAction}
-                disabledFocusable={notCloudCompatible || isCentral}
+                disabledFocusable={
+                  !!state.busyAction || notCloudCompatible || (isCentral && !updateCloudTemplate)
+                }
                 icon={state.busyAction === 'publish' ? <Spinner size='tiny' /> : <Cloud24Regular />}
-                onClick={() => publishCentral(pkg)}
+                onClick={onCloudAction}
               >
-                {strings.CatalogActionPublishCentral}
+                {updateCloudTemplate
+                  ? format(strings.CatalogActionUpdateCentral, pkg.version)
+                  : strings.CatalogActionPublishCentral}
               </Button>
             </Tooltip>
             {isCentral && (
@@ -269,7 +297,7 @@ export const PackageDetails: FC = () => {
                 <Button
                   className={styles.removeAction}
                   appearance='subtle'
-                  disabled={!!state.busyAction}
+                  disabledFocusable={!!state.busyAction}
                   icon={
                     state.busyAction === 'remove' ? <Spinner size='tiny' /> : <Delete24Regular />
                   }

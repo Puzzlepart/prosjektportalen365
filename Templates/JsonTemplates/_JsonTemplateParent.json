@@ -48,6 +48,15 @@
             }
         ]
     },
+    "CustomActions": [
+        {
+            "Name": "Footer",
+            "Title": "Footer",
+            "Location": "ClientSideExtension.ApplicationCustomizer",
+            "ClientSideComponentId": "{{ControlId_Footer}}",
+            "ClientSideComponentProperties": "{}"
+        }
+    ],
     "ClientSidePages": [
         {
             "Name": "{{ClientSidePages_ParentAdmin_PageName}}",

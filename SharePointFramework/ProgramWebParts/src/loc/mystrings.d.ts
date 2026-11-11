@@ -6,7 +6,7 @@ declare interface IProgramWebPartsStrings {
     MoveUpDisabled: string
     MoveDown: string
     MoveDownDisabled: string
-  },
+  }
   Placeholder: {
     TextField: string
     Icon: string
@@ -17,12 +17,15 @@ declare interface IProgramWebPartsStrings {
   AddColumnLabel: string
   AddColumnLabel: string
   AddProjectDialogSearchBoxPlaceholder: string
+  AddProjectsDisabledReason: string
+  AddProjectsErrorTitle: string
   BooleanNo: string
   BooleanOff: string
   BooleanOn: string
   BooleanYes: string
   Cancel: string
   CancelButtonLabel: string
+  ChildrenRemoveErrorToastTitle: string
   ChildrenRemoveToastMessage: string
   ChildrenRemoveToastTitle: string
   CmdSelectionCountText: string

@@ -9,20 +9,22 @@ import { Toaster } from '@fluentui/react-components'
  * panel for the project information component.
  */
 export const EditStatusPanel: FC = () => {
-  const { headerText, isOpen, onDismiss, fields, fieldValues, submit } = useEditStatusPanel()
+  const { headerText, isOpen, onDismiss, fields, fieldValues, submit, reportListId } =
+    useEditStatusPanel()
 
   return (
     <>
       <CustomEditPanel
-        isOpen={isOpen}
+        open={isOpen}
         headerText={headerText}
         fieldValues={fieldValues}
         fields={fields}
         dataAdapter={SPDataAdapter}
+        targetWeb={SPDataAdapter.portalDataService?.web}
+        targetListId={reportListId}
         submit={submit}
         hiddenFields={['Title']}
-        onLightDismissClick={onDismiss}
-        onDismiss={onDismiss}
+        onClose={onDismiss}
       />
       <Toaster id='toaster-test' />
     </>

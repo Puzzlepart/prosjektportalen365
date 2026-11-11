@@ -1,11 +1,13 @@
+import { Logger, LogLevel } from '@pnp/logging'
 import { useEffect } from 'react'
 import { IProjectCardProps, IProjectCardState } from './types'
 
 /**
  * Component data fetch hook for `ProjectCard`. This hook is responsible for
- * fetching data and setting state.
+ * fetching data and setting state. The project is fetched with the fields and person fields the
+ * card shows, so a field chosen in the pane is there, and the people are found.
  *
- * @param props Props
+ * @param props Props, with the card's defaults
  * @param refetch Timestamp for refetch. Changes to this variable refetches the data in `useEffect`
  * @param setState Set state callback
  */
@@ -15,13 +17,21 @@ export function useProjectCardDataFetch(
   setState: (newState: Partial<IProjectCardState>) => void
 ) {
   useEffect(() => {
-    Promise.all([
-      props.dataAdapter.fetchEnrichedProject(props.projectSiteId, props.hubContext)
-    ]).then(([project]) => {
-      setState({
-        project,
-        isDataLoaded: true
+    props.dataAdapter
+      .fetchEnrichedProject(props.projectSiteId, props.hubContext, {
+        primaryField: props.primaryField,
+        secondaryField: props.secondaryField,
+        primaryUserField: props.primaryUserField,
+        secondaryUserField: props.secondaryUserField
       })
-    })
+      .then((project) => setState({ project, isDataLoaded: true, loading: false }))
+      // A failure was not caught, and the web part stayed empty: it says so now.
+      .catch((error: Error) => {
+        Logger.log({
+          message: `(ProjectCard) could not fetch the project: ${error?.message}`,
+          level: LogLevel.Error
+        })
+        setState({ error, loading: false })
+      })
   }, [refetch])
 }

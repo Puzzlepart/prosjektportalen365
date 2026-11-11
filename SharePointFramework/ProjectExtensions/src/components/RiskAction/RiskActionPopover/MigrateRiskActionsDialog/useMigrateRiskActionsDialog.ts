@@ -1,17 +1,37 @@
+import { MessageBarIntent, useAnnounce, useId } from '@fluentui/react-components'
+import { format } from 'pp365-shared-library'
 import strings from 'ProjectExtensionsStrings'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useBoolean } from 'usehooks-ts'
 import { useRiskActionFieldCustomizerContext } from '../../../../extensions/riskAction/context'
+import { RiskActionTasksResult } from '../../../../extensions/riskAction/types'
 import { useRiskActionContext } from '../../context'
 
 /**
- * Custom hook that returns the necessary properties and functions for the MigrateRiskActionsDialog component.
+ * A migration Planner refused one or more actions of: how many actions there were, and what was
+ * added and refused.
+ */
+interface IMigrationOutcome extends RiskActionTasksResult {
+  total: number
+}
+
+/**
+ * Custom hook that returns the necessary properties and functions for the MigrateRiskActionsDialog
+ * component. When Planner refuses the task of an action, the others are migrated, the refused one
+ * stays written on the risk, and the dialog stays open to say which and why.
  */
 export function useMigrateRiskActionsDialog() {
   const { dataAdapter } = useRiskActionFieldCustomizerContext()
   const { itemContext, setItemContext } = useRiskActionContext()
   const dialogState = useBoolean(false)
   const [isMigrating, setIsMigrating] = useState(false)
+  const [migrateError, setMigrateError] = useState<string>()
+  const [outcome, setOutcome] = useState<IMigrationOutcome>()
+  const { announce } = useAnnounce()
+  const progressTextId = useId('migrate-progress-text')
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+  // Some actions are tasks now: migrating the field again would add them twice.
+  const isMigrated = outcome?.added.length > 0
   const [separator, setSeparator] = useState(
     strings.MigrateRiskActionsDialogSeparatorOptionLinebreak
   )
@@ -20,21 +40,68 @@ export function useMigrateRiskActionsDialog() {
       separator === strings.MigrateRiskActionsDialogSeparatorOptionLinebreak
         ? '\n'
         : separator === strings.MigrateRiskActionsDialogSeparatorOptionCommaNoSpaces
-        ? ','
-        : ', '
+          ? ','
+          : ', '
     )
     .filter(Boolean)
 
+  // The button pressed goes with the form once some actions are tasks: the close button takes the
+  // focus (WCAG 2.4.3).
+  useEffect(() => {
+    if (isMigrated) closeButtonRef.current?.focus()
+  }, [isMigrated])
+
   /**
-   * Migrates the risk actions to Planner tasks.
+   * Migrates the risk actions to Planner tasks, and says how many were made (WCAG 4.1.3). The risk
+   * gets the tasks Planner added, and keeps the text of the actions it refused; with any refused,
+   * the dialog stays open and says which and why. A failure stays in the dialog, said in a message.
    */
   const onMigrate = async () => {
     setIsMigrating(true)
-    const newTasks = await dataAdapter.addTasks(tasks, itemContext)
-    const updatedItemContext = await dataAdapter.updateItem(newTasks, itemContext)
-    setItemContext(updatedItemContext)
-    dialogState.setFalse()
-    setIsMigrating(false)
+    setMigrateError(undefined)
+    setOutcome(undefined)
+    try {
+      const result = await dataAdapter.addTasks(tasks, itemContext)
+      if (result.added.length > 0) {
+        const kept = result.refused.map(({ title }) => title)
+        setItemContext(await dataAdapter.updateItem(result.added, itemContext, kept))
+      }
+      if (result.refused.length > 0) {
+        setOutcome({ ...result, total: tasks.length })
+      } else {
+        dialogState.setFalse()
+        announce(format(strings.MigrateRiskActionsDone, result.added.length), { polite: true })
+      }
+    } catch (error) {
+      setMigrateError(error?.message ?? '')
+    } finally {
+      setIsMigrating(false)
+    }
+  }
+
+  /**
+   * Opens or closes the dialog. Opened, it starts clean: what the last attempt said belonged to it.
+   *
+   * @param open Whether the dialog is open
+   */
+  const setOpen = (open: boolean) => {
+    if (open) {
+      setMigrateError(undefined)
+      setOutcome(undefined)
+    }
+    dialogState.setValue(open)
+  }
+
+  // What the dialog says of the actions Planner refused: a warning when the others were migrated,
+  // an error when none were, which leaves the risk as it was.
+  const refusal: { intent: MessageBarIntent; title: string; actions: string[] } = outcome && {
+    intent: isMigrated ? 'warning' : 'error',
+    title: isMigrated
+      ? format(strings.MigrateRiskActionsPartlyDone, outcome.added.length, outcome.total)
+      : strings.MigrateRiskActionsFailed,
+    actions: outcome.refused.map(({ title, reason }) =>
+      format(strings.MigrateRiskActionsRefusedAction, title, reason)
+    )
   }
 
   return {
@@ -42,8 +109,13 @@ export function useMigrateRiskActionsDialog() {
     itemContext,
     onMigrate,
     open: dialogState.value,
-    setOpen: dialogState.setValue,
+    setOpen,
     isMigrating,
+    migrateError,
+    refusal,
+    isMigrated,
+    closeButtonRef,
+    progressTextId,
     separator,
     setSeparator
   }

@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import styles from './LoadingSkeleton.module.scss'
 import { Skeleton, SkeletonItem, SkeletonProps } from '@fluentui/react-components'
 
-export const LoadingSkeleton: FC = (props: Partial<SkeletonProps>) => {
+export const LoadingSkeleton: FC<Partial<SkeletonProps>> = (props) => {
   const percentages = [80, 70, 60, 50, 40, 30, 20]
 
   const randomPercentage = (useHigh?: boolean) => {

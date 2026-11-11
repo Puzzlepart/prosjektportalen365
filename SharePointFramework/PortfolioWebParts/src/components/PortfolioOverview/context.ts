@@ -1,15 +1,20 @@
-import { IGroup } from '@fluentui/react'
-import { AnyAction } from '@reduxjs/toolkit'
+import { UnknownAction } from '@reduxjs/toolkit'
 import { createContext, useContext } from 'react'
+import { IListGroup } from '../List'
 import { IPortfolioOverviewProps, IPortfolioOverviewState } from './types'
 
 export interface IPortfolioOverviewContext {
   props: IPortfolioOverviewProps
   state: IPortfolioOverviewState
-  dispatch: React.Dispatch<AnyAction>
+  dispatch: React.Dispatch<UnknownAction>
   layerHostId: string
+
+  /**
+   * Id of the toaster that tells the user an Excel export failed.
+   */
+  toasterId: string
   items?: Record<string, any>[]
-  groups?: IGroup[]
+  groups?: IListGroup[]
 }
 
 export const PortfolioOverviewContext = createContext<IPortfolioOverviewContext>(null)

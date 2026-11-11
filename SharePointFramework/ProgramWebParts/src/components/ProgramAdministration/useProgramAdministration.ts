@@ -1,17 +1,24 @@
-import { ProjectAdminPermission } from 'pp365-shared-library/lib'
+import { ProjectAdminPermission } from 'pp365-shared-library'
 import { useEffect, useMemo, useReducer, useState } from 'react'
 import reducer, { DATA_LOADED, SET_SELECTED_TO_DELETE, initialState } from './reducer'
 import { IProgramAdministrationProps } from './types'
 import { useId } from '@fluentui/react-components'
 import { IProgramHub } from 'data'
 
+/**
+ * Component logic hook for `ProgramAdministration`: the program's hubs, from the global setting
+ * `AvailableProgramHubs` (absolute URLs, `;`-separated), or the program's own hub when the setting
+ * is empty or disabled; the child projects read from them; and the selection.
+ *
+ * @param props Props for the component
+ */
 export const useProgramAdministration = (props: IProgramAdministrationProps) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const [programHubs, setProgramHubs] = useState<IProgramHub[] | undefined>(undefined)
 
   useEffect(() => {
-    props.dataAdapter.project.getProjectInformationData().then(async (properties) => {
+    void props.dataAdapter.project.getProjectInformationData().then(async (properties) => {
       const [userHasManagePermission, availableProgramHubsRaw] = await Promise.all([
         props.dataAdapter.checkProjectAdminPermissions(
           ProjectAdminPermission.ChildProjectsAdmin,
@@ -26,6 +33,11 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
           .split(';')
           .map((s) => s.trim())
           .filter(Boolean)
+      }
+      // The program's own hub when the setting is empty or disabled: without it the list and the
+      // add dialog were empty, with no word of why.
+      if (parsedHubs.length === 0 && props.dataAdapter.portalDataService.url) {
+        parsedHubs = [props.dataAdapter.portalDataService.url]
       }
 
       let resolvedHubs: IProgramHub[] = []
@@ -72,8 +84,8 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
   /**
    * Callback function for handling selection change in the `ProjectList` component.
    */
-  const onSelectionChange = (_: any, { selectedItems }) => {
-    dispatch(SET_SELECTED_TO_DELETE(Array.from(selectedItems)))
+  const onSelectionChange = (selectedItems: (string | number)[]) => {
+    dispatch(SET_SELECTED_TO_DELETE(selectedItems as string[]))
   }
 
   const childProjects = [...state.childProjects]

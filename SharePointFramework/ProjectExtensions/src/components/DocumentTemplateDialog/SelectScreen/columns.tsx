@@ -1,11 +1,8 @@
-import { Icon, Link, IColumn } from '@fluentui/react'
-import { initializeFileTypeIcons } from '@uifabric/file-type-icons'
-import { getId } from '@uifabric/utilities'
+import { FileTypeIcon, IListColumn, getId } from 'pp365-shared-library'
 import { TemplateItem } from 'models'
 import * as ProjectExtensionsStrings from 'ProjectExtensionsStrings'
 import React from 'react'
-
-initializeFileTypeIcons()
+import { FolderLink } from '../FolderLink'
 
 export default ({ setFolder }: { setFolder: (folder: TemplateItem) => void }) =>
   [
@@ -15,7 +12,7 @@ export default ({ setFolder }: { setFolder: (folder: TemplateItem) => void }) =>
       name: null,
       minWidth: 20,
       maxWidth: 20,
-      onRender: (item: TemplateItem) => <Icon {...item.getIconProps()} />
+      onRender: (item: TemplateItem) => <FileTypeIcon {...item.getFileTypeIconOptions()} />
     },
     {
       key: getId('name'),
@@ -25,9 +22,11 @@ export default ({ setFolder }: { setFolder: (folder: TemplateItem) => void }) =>
       onRender: (item: TemplateItem) => {
         if (item.isFolder) {
           return (
-            <Link onClick={() => setFolder(item)}>
-              <span style={{ marginLeft: 4 }}>{item.name}</span>
-            </Link>
+            <FolderLink
+              name={item.name}
+              url={item.serverRelativeUrl}
+              onClick={() => setFolder(item)}
+            />
           )
         }
         return item.name
@@ -52,4 +51,4 @@ export default ({ setFolder }: { setFolder: (folder: TemplateItem) => void }) =>
       name: ProjectExtensionsStrings.ModifiedLabel,
       minWidth: 150
     }
-  ] as IColumn[]
+  ] as IListColumn[]

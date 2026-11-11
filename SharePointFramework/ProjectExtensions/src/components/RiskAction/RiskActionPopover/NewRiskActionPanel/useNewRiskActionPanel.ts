@@ -1,74 +1,102 @@
-import { IPanelProps } from '@fluentui/react'
-import { useId } from '@fluentui/react-components'
-import { useCallback, useState } from 'react'
+import { useAnnounce } from '@fluentui/react-components'
+import { IPersonaItem, format } from 'pp365-shared-library'
+import strings from 'ProjectExtensionsStrings'
+import { useCallback, useEffect, useState } from 'react'
 import { useRiskActionFieldCustomizerContext } from '../../../../extensions/riskAction/context'
 import { useRiskActionContext } from '../../context'
+import { INewRiskActionForm, INewRiskActionPanelProps } from './types'
 
 /**
- * A custom React hook that provides state and functions for the NewRiskActionPanel component.
- *
- * @param props - The props for the NewRiskActionPanel component.
- *
- * @returns An object containing the model, setModel function, onSave function, isSaving boolean, and fluentProviderId string.
+ * The form before anything is typed.
  */
-export function useNewRiskActionPanel(props: IPanelProps) {
+const EMPTY_FORM: INewRiskActionForm = {
+  title: '',
+  description: '',
+  responsible: [],
+  createMultiple: false
+}
+
+/**
+ * The task the data adapter adds, from the form: the responsible by email, which `addTask`
+ * resolves to a Planner user, and the days as the picker gave them.
+ *
+ * @param form The form
+ */
+function toTaskModel(form: INewRiskActionForm): Map<string, any> {
+  return new Map<string, any>([
+    ['title', form.title],
+    ['description', form.description],
+    ['startDate', form.startDate],
+    ['dueDate', form.dueDate],
+    ['responsible', form.responsible[0]?.secondaryText]
+  ])
+}
+
+/**
+ * Component logic hook for `NewRiskActionPanel`: the form, the people search for the responsible,
+ * and the save, which adds the task to Planner and to the risk, then closes the panel, or, with
+ * «create several» on, clears the form for the next task.
+ *
+ * @param props The panel's props
+ */
+export function useNewRiskActionPanel(props: INewRiskActionPanelProps) {
   const context = useRiskActionFieldCustomizerContext()
   const { itemContext, setItemContext } = useRiskActionContext()
+  const [form, setForm] = useState<INewRiskActionForm>(EMPTY_FORM)
   const [isSaving, setIsSaving] = useState(false)
-  const [model, $setModel] = useState(new Map<string, any>())
+  const [saveError, setSaveError] = useState<string>()
+  const { announce } = useAnnounce()
 
-  /**
-   * Sets a new value for a given key in the model state.
-   *
-   * @param key - The key to update in the model state.
-   * @param value - The new value to set for the given key.
-   */
-  const setModel = useCallback(
-    (key: string, value: any) => {
-      $setModel((_model) => {
-        const newModel = new Map(_model)
-        newModel.set(key, value)
-        return newModel
-      })
+  // A failed save is told while the panel is open. The panel stays mounted while closed, so the
+  // error is let go of as it opens again, and the opening starts clean.
+  useEffect(() => {
+    if (props.open) setSaveError(undefined)
+  }, [props.open])
+
+  const setField = useCallback(
+    <K extends keyof INewRiskActionForm>(key: K, value: INewRiskActionForm[K]) => {
+      setForm((current) => ({ ...current, [key]: value }))
     },
-    [context.itemContext, model]
+    []
   )
 
-  /**
-   * Resets the model by setting it to a new empty Map.
-   */
-  const resetModel = useCallback(() => {
-    $setModel(new Map<string, any>())
-  }, [])
+  const resolvePeople = useCallback(
+    (filter: string, selected: IPersonaItem[]) =>
+      context.dataAdapter.clientPeoplePickerSearchUser(filter, selected),
+    [context.dataAdapter]
+  )
 
-  /**
-   * Saves the new risk action to the data adapter and updates the item. If the
-   * `createMultiple` property is set to `true`, the panel will remain open. Otherwise,
-   * the panel will close after the save operation is complete and the model
-   * will be reset.
-   *
-   * @returns A Promise that resolves when the save operation is complete.
-   */
   const onSave = useCallback(async (): Promise<void> => {
-    const createMultiple = model.get('createMultiple') as boolean
     setIsSaving(true)
-    const task = await context.dataAdapter.addTask(model, itemContext)
-    const updatedItemContext = await context.dataAdapter.updateItem([task], itemContext)
-    setItemContext(updatedItemContext)
-    setIsSaving(false)
-    if (!createMultiple) {
-      resetModel()
-      props.onDismiss()
+    setSaveError(undefined)
+    try {
+      const task = await context.dataAdapter.addTask(toTaskModel(form), itemContext)
+      setItemContext(await context.dataAdapter.updateItem([task], itemContext))
+    } catch (error) {
+      // The panel stays open with the form as typed, and says why (WCAG 3.3.1).
+      setSaveError(error?.message ?? '')
+      return
+    } finally {
+      setIsSaving(false)
     }
-  }, [itemContext, model])
-
-  const fluentProviderId = useId('fp-risk-action-panel')
+    // Said either way: with «create several» the panel stays, its form cleared in silence.
+    announce(format(strings.NewRiskActionSaved, form.title), { polite: true })
+    if (form.createMultiple) {
+      setForm({ ...EMPTY_FORM, createMultiple: true })
+    } else {
+      setForm(EMPTY_FORM)
+      props.onClose?.()
+    }
+  }, [announce, context.dataAdapter, form, itemContext, props.onClose, setItemContext])
 
   return {
-    model,
-    setModel,
+    headerText: format(strings.NewRiskActionPanelTitle, context.itemContext.title),
+    form,
+    setField,
+    resolvePeople,
     onSave,
     isSaving,
-    fluentProviderId
+    saveError,
+    canSave: form.title.trim().length > 0 && !isSaving
   }
 }

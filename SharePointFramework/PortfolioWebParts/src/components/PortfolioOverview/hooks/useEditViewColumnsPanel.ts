@@ -22,14 +22,24 @@ export function useEditViewColumnsPanel(
    * Sorts columns based on `state.currentView.columnOrder` if it exists. The selected columns
    * will always be on top. The rest of the columns will be sorted based on their `sortOrder`
    * from the project columns list.
+   *
+   * The configuration is the list as the page loaded it: a column added or edited since is as it
+   * is now only among the view's columns, and one deleted since is still in it. The panel listed
+   * the deleted column, the edited one as it was, and left the added one out, so «Bruk» took the
+   * added column out of the view and put the edited one back as it was.
    */
-  const columnsWithSelectedState = useMemo(
-    () =>
-      context.props.configuration.columns.map((c) =>
-        c.setData({ isSelected: _.some(context.state.columns, (_c) => _c.id === c.id) })
-      ),
-    [context.state.columns, context.state.currentView]
-  )
+  const columnsWithSelectedState = useMemo(() => {
+    const configured = context.props.configuration.columns
+    const viewColumns = context.state.columns ?? []
+    const deletedColumnIds = context.state.deletedColumnIds ?? []
+    const current = configured.map((c) => _.find(viewColumns, (_c) => _c.id === c.id) ?? c)
+    const added = viewColumns.filter(
+      (c) => c.id != null && !configured.some((_c) => _c.id === c.id)
+    )
+    return [...current, ...added]
+      .filter((c) => !deletedColumnIds.includes(c.id))
+      .map((c) => c.setData({ isSelected: _.some(viewColumns, (_c) => _c.id === c.id) }))
+  }, [context.state.columns, context.state.currentView, context.state.deletedColumnIds])
 
   /**
    * On save view columns callback sent to `EditViewColumnsPanel`.
@@ -78,10 +88,10 @@ export function useEditViewColumnsPanel(
   }
 
   return {
-    isOpen: context.state.isEditViewColumnsPanelOpen,
+    open: context.state.isEditViewColumnsPanelOpen,
     columns: columnsWithSelectedState,
     onSave: onSaveViewColumns,
-    onDismiss: () => context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: false })),
+    onClose: () => context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: false })),
     revertOrder: {
       disabled: _.isEmpty(context.state.currentView?.columnOrder),
       onClick: onRevertViewColumnOrder

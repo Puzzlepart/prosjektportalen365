@@ -1,5 +1,5 @@
 import { Button, PopoverTrigger } from '@fluentui/react-components'
-import { Alert } from '@fluentui/react-components/unstable'
+import { InfoRegular } from '@fluentui/react-icons'
 import strings from 'ProjectExtensionsStrings'
 import React, { FC, ReactElement } from 'react'
 import { useRiskActionFieldCustomizerContext } from '../../../extensions/riskAction/context'
@@ -7,6 +7,14 @@ import { PlannerTaskItem } from './PlannerTaskItem'
 import styles from './RiskActionFieldValue.module.scss'
 import { IRiskActionFieldValueProps } from './types'
 import { useRiskActionFieldValue } from './useRiskActionFieldValue'
+import { withDefaults } from 'pp365-shared-library'
+
+const RISK_ACTION_FIELD_VALUE_DEFAULT_PROPS: Partial<IRiskActionFieldValueProps> = {
+  adminButton: {
+    appearance: 'transparent',
+    size: 'small'
+  }
+}
 
 /**
  * Renders the field value for a risk action.
@@ -15,9 +23,10 @@ import { useRiskActionFieldValue } from './useRiskActionFieldValue'
  *
  * @returns The rendered component.
  */
-export const RiskActionFieldValue: FC<IRiskActionFieldValueProps> = (props) => {
+export const RiskActionFieldValue: FC<IRiskActionFieldValueProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, RISK_ACTION_FIELD_VALUE_DEFAULT_PROPS)
   const context = useRiskActionFieldCustomizerContext()
-  const { isFieldValueSet, isHiddenFieldValueSet, tasks, horizontalLayout, gap } =
+  const { isFieldValueSet, isHiddenFieldValueSet, tasks, textBesidesTasks, horizontalLayout, gap } =
     useRiskActionFieldValue()
   let element: ReactElement = null
   if (isHiddenFieldValueSet) {
@@ -26,11 +35,14 @@ export const RiskActionFieldValue: FC<IRiskActionFieldValueProps> = (props) => {
         <div
           className={styles.linkList}
           style={{ flexDirection: horizontalLayout ? 'row' : 'column', gap }}
+          role='list'
+          aria-label={strings.RiskActionTasksLabel}
         >
           {tasks.map((task, index) => (
             <PlannerTaskItem key={index} task={task} />
           ))}
         </div>
+        {textBesidesTasks && <div className={styles.fieldValue}>{textBesidesTasks}</div>}
         <PopoverTrigger disableButtonEnhancement>
           <Button {...props.adminButton} className={styles.adminButton}>
             {strings.RiskActionFieldValueAdminButtonText}
@@ -46,11 +58,17 @@ export const RiskActionFieldValue: FC<IRiskActionFieldValueProps> = (props) => {
         </PopoverTrigger>
       )
     } else {
+      // A button with the look of an info message: a message bar announces itself as it mounts,
+      // so one in every row of the list was read out as the list loaded (WCAG 4.1.3).
       element = (
         <PopoverTrigger disableButtonEnhancement>
-          <Alert intent='info' className={styles.alert}>
+          <Button
+            className={styles.noActions}
+            appearance='transparent'
+            icon={<InfoRegular fontSize={16} />}
+          >
             {context.dataAdapter.globalSettings.get('RiskActionPlannerNoActionsText')}
-          </Alert>
+          </Button>
         </PopoverTrigger>
       )
     }
@@ -59,9 +77,3 @@ export const RiskActionFieldValue: FC<IRiskActionFieldValueProps> = (props) => {
 }
 
 RiskActionFieldValue.displayName = 'RiskActionFieldValue'
-RiskActionFieldValue.defaultProps = {
-  adminButton: {
-    appearance: 'transparent',
-    size: 'small'
-  }
-}

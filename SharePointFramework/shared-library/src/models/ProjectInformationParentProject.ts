@@ -16,7 +16,10 @@ export class ProjectInformationParentProject {
   public childProjects: any[]
   public icon: FluentIcon
 
-  constructor(spItem: Record<string, any>, public web: IWeb) {
+  constructor(
+    spItem: Record<string, any>,
+    public web: IWeb
+  ) {
     this.title = spItem.Title
     this.url = spItem.GtSiteUrl
     this.childProjects = (JSON.parse(spItem.GtChildProjects ?? []) as any[]).map((i) => i.SPWebURL)

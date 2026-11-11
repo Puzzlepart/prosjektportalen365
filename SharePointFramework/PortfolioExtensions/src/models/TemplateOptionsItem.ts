@@ -37,14 +37,20 @@ export class TemplateOptionsItem {
   public updatedDate?: string
   public latestVersion: string
 
-  constructor(item: ISPTemplateOptionsItem, public web?: IWeb, public sp?: SPFI) {
+  constructor(
+    item: ISPTemplateOptionsItem,
+    public web?: IWeb,
+    public sp?: SPFI
+  ) {
     this.id = item.Id
     this.title = item.Title
     this.packageType = (item.PpPkgType as PpPkgType) || PpPkgType.Lokal
     this.packageId = (item.PpPkgId ?? '').trim()
     this.version = item.PpPkgVersion ?? ''
     this.sourceUrl =
-      typeof item.PpPkgSourceUrl === 'string' ? item.PpPkgSourceUrl : item.PpPkgSourceUrl?.Url ?? ''
+      typeof item.PpPkgSourceUrl === 'string'
+        ? item.PpPkgSourceUrl
+        : (item.PpPkgSourceUrl?.Url ?? '')
     this.installedDate = item.PpPkgInstalledDate
     this.updatedDate = item.PpPkgUpdatedDate
     this.latestVersion = item.PpPkgLatestVersion ?? ''

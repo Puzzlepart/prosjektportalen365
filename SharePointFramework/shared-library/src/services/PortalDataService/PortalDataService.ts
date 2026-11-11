@@ -1,11 +1,10 @@
-import { format } from '@fluentui/react'
 import { find } from '@microsoft/sp-lodash-subset'
 import { AssignFrom, dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { IFolder } from '@pnp/sp/folders'
 import { ICamlQuery, IList } from '@pnp/sp/lists'
 import '@pnp/sp/presets/all'
-import { IItemUpdateResult, IItemUpdateResultData, Site, spfi, SPFI } from '@pnp/sp/presets/all'
+import { Site, spfi, SPFI } from '@pnp/sp/presets/all'
 import { PermissionKind } from '@pnp/sp/security'
 import { IWeb, Web } from '@pnp/sp/webs'
 import { merge } from 'lodash'
@@ -37,11 +36,15 @@ import {
 } from '../../models'
 import {
   getClassProperties,
+  isHubSite,
   isUnauthorizedError,
   makeUrlAbsolute,
-  transformFieldXml
+  transformFieldXml,
+  format,
+  tryParseJson
 } from '../../util'
 import { DataService } from '../DataService'
+import { resolveHubUrl } from './resolveHubUrl'
 import {
   GetStatusReportsOptions,
   IPortalDataServiceConfiguration,
@@ -53,6 +56,21 @@ import {
   SyncListParams
 } from './types'
 
+/**
+ * Result of a list item update. PnPjs 4 resolves `item.update()` to this shape directly
+ * (v3 wrapped it as `IItemUpdateResult.data`); the type itself is no longer exported.
+ */
+export interface IItemUpdateResultData {
+  etag: string
+}
+
+/**
+ * The answer to `_probeHubAccess` per hub URL for this page load: whether the user may read
+ * `Globale innstillinger`. Shared by the instances the web parts configure, so the hub is asked
+ * once per page load, and asked again on the next one, after access may have been taken away.
+ */
+const hubAccessProbes = new Map<string, Promise<boolean>>()
+
 export class PortalDataService extends DataService<IPortalDataServiceConfiguration> {
   private _sp: SPFI
   private _spPortal: SPFI
@@ -61,17 +79,99 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   public hubSiteId: string
 
   /**
-   * Whether the portal data service has access to the hub site.
-   * Set to `false` if the hub site is unreachable (e.g. for external users).
+   * Whether the portal data service has access to the hub site. Set to `false` when the hub's URL
+   * cannot be found, or when the hub denies access to `Globale innstillinger`, the list everyone
+   * with any access to the hub reads (e.g. external users outside the group «Minimum
+   * lesetilganger på hub»).
    */
   public isAvailable: boolean = true
 
   /**
-   * Mark portal access as unavailable when the current user cannot read hub resources.
+   * Hub lists that denied the current user access while the hub itself is available, such as the
+   * lists with data about all projects for a member of «Minimum lesetilganger på hub». They are not
+   * asked again.
    */
-  private _handleAvailabilityError(error: any, source: string): void {
-    if (!isUnauthorizedError(error) || !this.isAvailable) return
+  private _deniedLists = new Set<PortalDataServiceList>()
 
+  /**
+   * Whether the hub list can be read: the hub is available and the list has not denied access.
+   *
+   * @param list List
+   */
+  public isListAvailable(list: PortalDataServiceList): boolean {
+    return this.isAvailable && !this._deniedLists.has(list)
+  }
+
+  /**
+   * Whether the page is on the hub itself.
+   */
+  private get _isOnHubSite(): boolean {
+    const pageContext = this._configuration?.spfxContext?.pageContext
+    return (
+      !!pageContext?.legacyPageContext?.siteId &&
+      !stringIsNullOrEmpty(pageContext.legacyPageContext.hubSiteId) &&
+      isHubSite(pageContext)
+    )
+  }
+
+  /**
+   * Settles `isAvailable` for a page on another site than the hub (`_probeHubAccess`). On the hub
+   * itself the user reads the hub: a list a group there may not read, such as `Globale
+   * innstillinger` for a customer's own group, is only marked as denied when it is asked for.
+   */
+  private async _settleHubAccess(): Promise<void> {
+    if (!this.isAvailable || this._isOnHubSite) return
+    await this._probeHubAccess()
+  }
+
+  /**
+   * Settles `isAvailable` before the first list a web part asks for: a user without access to the
+   * hub is denied `Globale innstillinger`, a member of «Minimum lesetilganger på hub» is not. Not
+   * cached across page loads like the settings themselves (`getGlobalSettings`), which would leave
+   * a user whose access was taken away taken as having it for as long as the cache lasts.
+   */
+  private async _probeHubAccess(): Promise<void> {
+    let probe = hubAccessProbes.get(this.url)
+    if (!probe) {
+      probe = this._getList('GLOBAL_SETTINGS')
+        .items.select('Id')
+        .top(1)()
+        .then(
+          () => true,
+          // Only denied access takes the hub out of reach; another error leaves it to the lists.
+          (error) => !isUnauthorizedError(error)
+        )
+      hubAccessProbes.set(this.url, probe)
+    }
+    if (await probe) return
+    Logger.write(
+      '(PortalDataService) (_probeHubAccess) Hub access denied. Marking portal as unavailable.',
+      LogLevel.Warning
+    )
+    this.isAvailable = false
+  }
+
+  /**
+   * Handles a denied access to the hub. A denied `Globale innstillinger` (or a call that names
+   * no list) makes the hub unavailable; another list is only marked as denied, so the hub's other
+   * lists are still read.
+   *
+   * @param error Error
+   * @param source Calling method, for the log
+   * @param list The hub list the call read (optional)
+   */
+  private _handleAvailabilityError(error: any, source: string, list?: PortalDataServiceList): void {
+    if (!isUnauthorizedError(error)) return
+    if (list && list !== 'GLOBAL_SETTINGS') {
+      if (this._deniedLists.has(list)) return
+      Logger.write(
+        `(PortalDataService) (${source}) Access to the hub list ${list} denied. The list is not asked again.`,
+        LogLevel.Warning
+      )
+      this._deniedLists.add(list)
+      return
+    }
+    if (!this.isAvailable) return
     Logger.write(
       `(PortalDataService) (${source}) Hub access denied. Marking portal as unavailable.`,
       LogLevel.Warning
@@ -97,6 +197,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     super.onConfigureStart(merge({ ...PortalDataServiceDefaultConfiguration }, configuration))
     this._sp = createSpfiInstance(this._configuration.spfxContext)
     await this.onInit(configuration?.url)
+    await this._settleHubAccess()
     return super.onConfigured()
   }
 
@@ -150,56 +251,31 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       return
     }
     try {
-      this.hubSiteId =
-        this._configuration.spfxContext.pageContext?.legacyPageContext?.hubSiteId || ''
-      try {
-        this.url = await new PnPClientStorage().local.getOrPut(
-          `hubsite_${(this.hubSiteId ?? '').replace(/-/g, '')}_url`,
-          async () => {
-            const response = await fetch(
-              `${
-                this._configuration.spfxContext.pageContext.web.absoluteUrl
-              }/_api/HubSites/GetById('${encodeURIComponent(this.hubSiteId)}')`,
-              {
-                method: 'GET',
-                headers: {
-                  Accept: 'application/json;odata=nometadata'
-                },
-                credentials: 'include'
-              }
-            )
-            if (!response.ok) {
-              throw new Error(
-                `HubSites/GetById responded with ${response.status} ${response.statusText}`
-              )
-            }
-            const contentType = response.headers.get('content-type') ?? ''
-            if (!contentType.includes('application/json')) {
-              throw new Error(`HubSites/GetById returned non-JSON content-type: ${contentType}`)
-            }
-            const hubSite = await response.json()
-            return hubSite?.SiteUrl ?? ''
-          },
-          expire
-        )
-      } catch (error) {
-        Logger.write(
-          `(PortalDataService) (onInit) HubSites/GetById failed, falling back to search: ${
-            error?.message ?? error
-          }`,
-          LogLevel.Info
-        )
-        this.url = await new PnPClientStorage().local.getOrPut(
-          `hubsite_${(this.hubSiteId ?? '').replace(/-/g, '')}_url`,
-          async () => {
+      const pageContext = this._configuration.spfxContext.pageContext
+      this.hubSiteId = pageContext?.legacyPageContext?.hubSiteId || ''
+      const storage = new PnPClientStorage().local
+      const key = `hubsite_${(this.hubSiteId ?? '').replace(/-/g, '')}_url`
+      const resolve = () =>
+        resolveHubUrl({
+          webUrl: pageContext.web.absoluteUrl,
+          hubSiteId: this.hubSiteId,
+          isHubSite: this._isOnHubSite,
+          fetch: (input, init) => fetch(input, init),
+          search: async (hubSiteId) => {
             const { PrimarySearchResults } = await this._sp.search({
-              Querytext: `SiteId:${this.hubSiteId} contentclass:STS_Site`,
+              Querytext: `SiteId:${hubSiteId} contentclass:STS_Site`,
               SelectProperties: ['Path']
             })
             return PrimarySearchResults?.[0]?.Path ?? ''
           },
-          expire
-        )
+          log: (message) => Logger.write(`(PortalDataService) (onInit) ${message}`, LogLevel.Info)
+        })
+      this.url = await storage.getOrPut(key, resolve, expire)
+      // Before 1.15.0 a failed search stored an empty URL for a year, which kept the hub out of
+      // reach for that user also after they were given access: look it up again.
+      if (stringIsNullOrEmpty(this.url)) {
+        storage.delete(key)
+        this.url = await storage.getOrPut(key, resolve, expire)
       }
     } catch (err) {
       Logger.write(
@@ -236,7 +312,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     webUrl: string,
     constructor: new (item: any, web: IWeb) => T
   ): Promise<T[]> {
-    if (!this.isAvailable) return []
+    if (!this.isListAvailable('PROJECTS')) return []
     try {
       const childProjectItems = await this.getItems(
         this._configuration.listNames.PROJECTS,
@@ -427,14 +503,14 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * Optionally override the list name with the `listName` parameter.
    */
   public async getProjectColumns(): Promise<ProjectColumn[]> {
-    if (!this.isAvailable) return []
+    if (!this.isListAvailable('PROJECT_COLUMNS')) return []
     try {
       const spItems = await this._getList('PROJECT_COLUMNS')
         .items.select(...getClassProperties(SPProjectColumnItem))
         .top(500)<SPProjectColumnItem[]>()
       return spItems.map((item) => new ProjectColumn(item))
     } catch (error) {
-      this._handleAvailabilityError(error, 'getProjectColumns')
+      this._handleAvailabilityError(error, 'getProjectColumns', 'PROJECT_COLUMNS')
       return []
     }
   }
@@ -443,12 +519,12 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * Get project status sections using `DefaultCaching`.
    */
   public async getProjectStatusSections(): Promise<SectionModel[]> {
-    if (!this.isAvailable) return []
+    if (!this.isListAvailable('STATUS_SECTIONS')) return []
     try {
       const items = await this._getList('STATUS_SECTIONS').items.using(DefaultCaching)()
       return items.map((item) => new SectionModel(item))
     } catch (error) {
-      this._handleAvailabilityError(error, 'getProjectStatusSections')
+      this._handleAvailabilityError(error, 'getProjectStatusSections', 'STATUS_SECTIONS')
       return []
     }
   }
@@ -465,8 +541,8 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       await list.rootFolder.folders.getByUrl(folderName)()
       return list.rootFolder.folders.getByUrl(folderName)
     } catch (error) {
-      const { folder } = await list.rootFolder.folders.addUsingPath(folderName)
-      return folder
+      await list.rootFolder.folders.addUsingPath(folderName)
+      return list.rootFolder.folders.getByUrl(folderName)
     }
   }
 
@@ -501,9 +577,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
           })
         )
       ])
-      attachments = attachmentResults.map(({ data }) => ({
-        name: data.Name,
-        url: data.ServerRelativeUrl
+      attachments = attachmentResults.map((info) => ({
+        name: info.Name,
+        url: info.ServerRelativeUrl
       }))
       return report.initAttachments(attachments).setValues({
         GtModerationStatus: publishedString,
@@ -548,7 +624,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * Get project column configuration using `DefaultCaching`.
    */
   public async getProjectColumnConfig(): Promise<ProjectColumnConfig[]> {
-    if (!this.isAvailable) return []
+    if (!this.isListAvailable('PROJECT_COLUMN_CONFIGURATION')) return []
     try {
       const spItems = await this._getList('PROJECT_COLUMN_CONFIGURATION')
         .items.orderBy('ID', true)
@@ -562,7 +638,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         .using(DefaultCaching)<SPProjectColumnConfigItem[]>()
       return spItems.map((item) => new ProjectColumnConfig(item))
     } catch (error) {
-      this._handleAvailabilityError(error, 'getProjectColumnConfig')
+      this._handleAvailabilityError(error, 'getProjectColumnConfig', 'PROJECT_COLUMN_CONFIGURATION')
       return []
     }
   }
@@ -572,22 +648,34 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    *
    * @param properties Properties for the new column (`Id` will be omitted)
    * @param view The view to add the column to
+   * @returns The id of the new column. A failure is thrown, for the form to show.
    */
   public async addColumnToPortfolioView(
     properties: SPProjectColumnItem,
     view: PortfolioOverviewView
-  ): Promise<boolean> {
-    try {
-      const projectColumnsList = this._getList('PROJECT_COLUMNS')
-      const portfolioViewsList = this._getList('PORTFOLIO_VIEWS')
-      const column = await projectColumnsList.items.add(_.omit(properties, ['Id']))
-      portfolioViewsList.items.getById(view.id as any).update({
-        GtPortfolioColumnsId: [...view.columns.map((c) => c.id), column.data.Id]
-      })
-      return true
-    } catch (error) {
-      return false
+  ): Promise<number> {
+    const projectColumnsList = this._getList('PROJECT_COLUMNS')
+    const viewItem = this._getList('PORTFOLIO_VIEWS').items.getById(view.id as any)
+    // The view's columns and order as stored, not as `view` shows them: it leaves out the columns
+    // hidden in the portfolio, and writing those back took the hidden ones out of the view.
+    const stored = await viewItem.select('GtPortfolioColumnsId', 'GtPortfolioColumnOrder')<
+      Pick<SPPortfolioOverviewViewItem, 'GtPortfolioColumnsId' | 'GtPortfolioColumnOrder'>
+    >()
+    const columnIds = Array.isArray(stored?.GtPortfolioColumnsId)
+      ? stored.GtPortfolioColumnsId
+      : (stored?.GtPortfolioColumnsId?.results ?? [])
+    const columnOrder = tryParseJson<number[]>(stored?.GtPortfolioColumnOrder, [])
+    const column = await projectColumnsList.items.add(_.omit(properties, ['Id']))
+    const update: Record<string, any> = {
+      GtPortfolioColumnsId: [...columnIds, column.Id]
     }
+    // A view with its own column order sorts by it alone, so the new column must join it, at the
+    // end, or it would sort first on the next load.
+    if (!_.isEmpty(columnOrder)) {
+      update.GtPortfolioColumnOrder = JSON.stringify([...columnOrder, column.Id])
+    }
+    await viewItem.update(update)
+    return column.Id
   }
 
   /**
@@ -725,7 +813,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       await executeQuery(jsomContext)
     } catch {}
     if (ensureList.created && params.properties) {
-      ensureList.list.items.add(params.properties)
+      await ensureList.list.items.add(params.properties)
     }
     return { ...ensureList, fieldsAdded }
   }
@@ -835,7 +923,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     _list: PortalDataServiceList,
     columnItem: SPProjectContentColumnItem,
     persistRenderAs = false
-  ): Promise<IItemUpdateResult> {
+  ): Promise<IItemUpdateResultData> {
     try {
       const list = this._getList(_list)
       const properties: SPProjectContentColumnItem = _.pick(
@@ -868,7 +956,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     properties: SPDataSourceItem,
     dataSourceTitle: string,
     shouldReplace: boolean = false
-  ): Promise<IItemUpdateResult> {
+  ): Promise<IItemUpdateResultData> {
     try {
       const list = this._getList(_list)
       const [item] = await list.items.filter(`Title eq '${dataSourceTitle}'`)()
@@ -935,22 +1023,19 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    *
    * @param properties Properties for the new column (`Id` will be omitted)
    * @param dataSource The data source to add the column to
+   * @returns The id of the new column. A failure is thrown, for the form to show.
    */
   public async addColumnToDataSource(
     properties: SPProjectContentColumnItem,
     dataSource: DataSource
-  ): Promise<boolean> {
-    try {
-      const projectContentColumnsList = this._getList('PROJECT_CONTENT_COLUMNS')
-      const dataSourceList = this._getList('DATA_SOURCES')
-      const column = await projectContentColumnsList.items.add(_.omit(properties, ['Id']))
-      dataSourceList.items.getById(dataSource.id as any).update({
-        GtProjectContentColumnsId: [...dataSource.columns.map((c) => c.id), column.data.Id]
-      })
-      return true
-    } catch (error) {
-      return false
-    }
+  ): Promise<number> {
+    const projectContentColumnsList = this._getList('PROJECT_CONTENT_COLUMNS')
+    const dataSourceList = this._getList('DATA_SOURCES')
+    const column = await projectContentColumnsList.items.add(_.omit(properties, ['Id']))
+    await dataSourceList.items.getById(dataSource.id as any).update({
+      GtProjectContentColumnsId: [...dataSource.columns.map((c) => c.id), column.Id]
+    })
+    return column.Id
   }
 
   /**
@@ -965,7 +1050,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   ): Promise<T> {
     try {
       const itemAddResult = await this._getList(list).items.add(properties)
-      return itemAddResult.data as T
+      return itemAddResult as T
     } catch (error) {
       throw new Error(error)
     }
@@ -985,21 +1070,25 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   ): Promise<T> {
     try {
       const itemUpdateResult = await this._getList(list).items.getById(itemId).update(properties)
-      return itemUpdateResult.data as unknown as T
+      return itemUpdateResult as unknown as T
     } catch (error) {
       throw new Error(error)
     }
   }
 
   /**
-   * Deletes the item with the specified ID from the specified list.
+   * Deletes the item with the specified ID from the specified list by moving it to the site's
+   * recycle bin, from where it can be restored. Deleted for good, a column the column forms
+   * deleted by mistake could not be brought back.
    *
    * @param list List
    * @param itemId Item ID
+   *
+   * @returns `true` when the item was moved to the recycle bin, `false` when it could not be
    */
   public async deleteItemFromList(list: PortalDataServiceList, itemId: number): Promise<boolean> {
     try {
-      await this._getList(list).items.getById(itemId).delete()
+      await this._getList(list).items.getById(itemId).recycle()
       return true
     } catch {
       return false
@@ -1016,9 +1105,10 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     filter = '',
     top,
     select,
-    useCaching = true
+    useCaching = true,
+    userFields = []
   }: GetStatusReportsOptions): Promise<StatusReport[]> {
-    if (!this.isAvailable) return []
+    if (!this.isListAvailable('PROJECT_STATUS')) return []
     if (!this._configuration.spfxContext.pageContext) {
       throw new Error(
         '(PortalDataService) (getStatusReports) `pageContext` is missing from the SPFx context.'
@@ -1036,18 +1126,90 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       if (select) items = items.select(...select)
       if (useCaching) items = items.using(DefaultCaching)
       const reportItems = await items()
+      const userFieldValues = await this._getStatusReportUserFieldValues(
+        filter,
+        userFields,
+        useCaching
+      )
       const reports = reportItems.map((i) => {
         const itemFieldValues = ItemFieldValues.create({
-          fieldValues: i,
+          fieldValues: { ...i, ...(userFieldValues.get(i.Id) ?? {}) },
           fieldValuesAsText: i.FieldValuesAsText
         })
         return new StatusReport(itemFieldValues)
       })
       return reports
     } catch (error) {
-      this._handleAvailabilityError(error, 'getStatusReports')
+      Logger.write(
+        `(PortalDataService) (getStatusReports) Failed to fetch status reports using filter '${filter}': ${error?.message}`,
+        LogLevel.Error
+      )
+      // eslint-disable-next-line no-console
+      console.error('(PortalDataService) (getStatusReports) Failed to fetch status reports.', {
+        filter,
+        error
+      })
+      this._handleAvailabilityError(error, 'getStatusReports', 'PROJECT_STATUS')
       return []
     }
+  }
+
+  /**
+   * Get expanded values (`Id`, `Title`, `EMail`) for the specified user fields on
+   * the status reports matching `filter`, keyed by item ID. This is fetched in a
+   * separate query because expanding user fields requires an explicit `$select`,
+   * which does not combine with the `FieldValuesAsText`/`AttachmentFiles` expands
+   * used for the reports themselves. Failures are logged and yield an empty map —
+   * the report list must never fail because person values could not be expanded.
+   *
+   * @param filter Filter for the status reports
+   * @param userFields Internal names of the user fields to expand
+   * @param useCaching Whether to use caching
+   */
+  private async _getStatusReportUserFieldValues(
+    filter: string,
+    userFields: string[],
+    useCaching: boolean
+  ): Promise<Map<number, Record<string, any>>> {
+    const userFieldValues = new Map<number, Record<string, any>>()
+    if (userFields.length === 0) return userFieldValues
+    try {
+      let items = this._getList('PROJECT_STATUS')
+        .items.filter(filter)
+        .select(
+          'Id',
+          ...userFields.map((fieldName) => `${fieldName}/Id`),
+          ...userFields.map((fieldName) => `${fieldName}/Title`),
+          ...userFields.map((fieldName) => `${fieldName}/EMail`)
+        )
+        .expand(...userFields)
+      if (useCaching) items = items.using(DefaultCaching)
+      for (const item of await items()) {
+        userFieldValues.set(
+          item.Id,
+          userFields.reduce(
+            (values, fieldName) => {
+              if (item[fieldName]) values[fieldName] = item[fieldName]
+              return values
+            },
+            {} as Record<string, any>
+          )
+        )
+      }
+    } catch (error) {
+      Logger.write(
+        `(PortalDataService) (getStatusReports) Failed to expand user fields [${userFields.join(
+          ', '
+        )}]: ${error?.message}`,
+        LogLevel.Warning
+      )
+      // eslint-disable-next-line no-console
+      console.warn('(PortalDataService) (getStatusReports) Failed to expand user fields.', {
+        userFields,
+        error
+      })
+    }
+    return userFieldValues
   }
 
   /**
@@ -1076,15 +1238,17 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   }
 
   /**
-   * Get status report list props
+   * Get status report list props (`Id` and `DefaultEditFormUrl`). The list ID
+   * is used as `targetListId` for the edit panel, so user/taxonomy/lookup
+   * values are resolved against the hub list the reports are stored in.
    *
    * TODO: Use caching with @pnp/sp v3
    */
-  public getStatusReportListProps(): Promise<{ DefaultEditFormUrl: string }> {
+  public getStatusReportListProps(): Promise<{ Id: string; DefaultEditFormUrl: string }> {
     try {
       return this._getList('PROJECT_STATUS')
-        .select('DefaultEditFormUrl')
-        .expand('DefaultEditFormUrl')<{ DefaultEditFormUrl: string }>()
+        .select('Id', 'DefaultEditFormUrl')
+        .expand('DefaultEditFormUrl')<{ Id: string; DefaultEditFormUrl: string }>()
     } catch (error) {
       throw error
     }
@@ -1137,7 +1301,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * Get project admin roles
    */
   public async getProjectAdminRoles(): Promise<ProjectAdminRole[]> {
-    if (!this.isAvailable) return []
+    if (!this.isListAvailable('PROJECT_ADMIN_ROLES')) return []
     try {
       const spItems = await this._getList('PROJECT_ADMIN_ROLES')
         .items.select(
@@ -1152,7 +1316,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         .expand('GtProjectAdminPermissions')<SPProjectAdminRoleItem[]>()
       return spItems.map((item) => new ProjectAdminRole(item))
     } catch (error) {
-      this._handleAvailabilityError(error, 'getProjectAdminRoles')
+      this._handleAvailabilityError(error, 'getProjectAdminRoles', 'PROJECT_ADMIN_ROLES')
       return []
     }
   }
@@ -1167,7 +1331,11 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     templateName: string,
     cache = DefaultCaching
   ): Promise<ProjectTemplate> {
-    if (!this.isAvailable || stringIsNullOrEmpty(templateName)) return null
+    if (
+      !this.isListAvailable('PROJECT_TEMPLATE_CONFIGURATION') ||
+      stringIsNullOrEmpty(templateName)
+    )
+      return null
     try {
       const [spItem] = await this._getList('PROJECT_TEMPLATE_CONFIGURATION')
         .items.select('*', 'FieldValuesAsText')
@@ -1177,7 +1345,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       if (!spItem) return null
       return new ProjectTemplate(spItem)
     } catch (error) {
-      this._handleAvailabilityError(error, 'getProjectTemplate')
+      this._handleAvailabilityError(error, 'getProjectTemplate', 'PROJECT_TEMPLATE_CONFIGURATION')
       return null
     }
   }
@@ -1234,7 +1402,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    */
   public async getGlobalSettings(): Promise<Map<string, string>> {
     const intialMap = new Map<string, string>()
-    if (!this.isAvailable) return intialMap
+    if (!this.isListAvailable('GLOBAL_SETTINGS')) return intialMap
     try {
       const settingsList = this._getList('GLOBAL_SETTINGS')
       const spItems = await settingsList.items
@@ -1246,7 +1414,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         return acc
       }, intialMap)
     } catch (error) {
-      this._handleAvailabilityError(error, 'getGlobalSettings')
+      this._handleAvailabilityError(error, 'getGlobalSettings', 'GLOBAL_SETTINGS')
       return intialMap
     }
   }
@@ -1257,7 +1425,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * `null` is returned.
    */
   public async getProjectDetails(): Promise<IProjectDetails> {
-    if (!this.isAvailable) return null
+    if (!this.isListAvailable('PROJECTS')) return null
     try {
       const siteId = this._configuration.spfxContext.pageContext.site.id
       const [project] = await this._getList('PROJECTS').items.filter(`GtSiteId eq '${siteId}'`)()
@@ -1268,7 +1436,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         isParentProject: project.GtIsParentProject || project.GtIsProgram
       } as IProjectDetails
     } catch (error) {
-      this._handleAvailabilityError(error, 'getProjectDetails')
+      this._handleAvailabilityError(error, 'getProjectDetails', 'PROJECTS')
       return null
     }
   }

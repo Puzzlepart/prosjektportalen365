@@ -23,8 +23,16 @@ import {
   BotRegular,
   BotSparkleFilled,
   BotSparkleRegular,
+  BoxFilled,
+  BoxRegular,
   BoxMultipleFilled,
   BoxMultipleRegular,
+  BranchForkFilled,
+  BranchForkRegular,
+  CalendarClockFilled,
+  CalendarClockRegular,
+  CopyFilled,
+  CopyRegular,
   CubeFilled,
   CubeRegular,
   BoxToolboxFilled,
@@ -55,12 +63,16 @@ import {
   CollectionsRegular,
   ColumnTripleEditFilled,
   ColumnTripleEditRegular,
+  CommentFilled,
+  CommentRegular,
   ContentSettingsFilled,
   ContentSettingsRegular,
   ContentViewFilled,
   ContentViewRegular,
   ConvertRangeFilled,
   ConvertRangeRegular,
+  DataBarVerticalFilled,
+  DataBarVerticalRegular,
   DatabaseFilled,
   DatabaseRegular,
   DatabaseSearchFilled,
@@ -79,8 +91,16 @@ import {
   EyeRegular,
   FilterFilled,
   FilterRegular,
+  FolderFilled,
+  FolderRegular,
   FormNewFilled,
   FormNewRegular,
+  FullScreenMaximizeFilled,
+  FullScreenMaximizeRegular,
+  FullScreenMinimizeFilled,
+  FullScreenMinimizeRegular,
+  GlobeFilled,
+  GlobeRegular,
   GridFilled,
   GridRegular,
   GroupListFilled,
@@ -95,6 +115,8 @@ import {
   IconsRegular,
   ImageFilled,
   ImageRegular,
+  ImageMultipleFilled,
+  ImageMultipleRegular,
   LibraryFilled,
   LibraryRegular,
   LightbulbCircleFilled,
@@ -111,6 +133,8 @@ import {
   ListBarFilled,
   LocalLanguageFilled,
   LocalLanguageRegular,
+  LocationFilled,
+  LocationRegular,
   MoneyFilled,
   MoneyRegular,
   MultiselectLtrFilled,
@@ -119,6 +143,8 @@ import {
   NumberSymbolRegular,
   NumberSymbolSquareFilled,
   NumberSymbolSquareRegular,
+  OpenFilled,
+  OpenRegular,
   PeopleAudienceFilled,
   PeopleAudienceRegular,
   PeopleCommunityFilled,
@@ -135,6 +161,8 @@ import {
   QuestionCircleRegular,
   QuizNewFilled,
   QuizNewRegular,
+  RecordStopFilled,
+  RecordStopRegular,
   SettingsFilled,
   SettingsRegular,
   SparkleCircleFilled,
@@ -143,18 +171,30 @@ import {
   TableCellEditRegular,
   TableSettingsFilled,
   TableSettingsRegular,
+  TaskListLtrFilled,
+  TaskListLtrRegular,
   TextAlignLeftFilled,
   TextAlignLeftRegular,
   TextBulletListFilled,
   TextBulletListRegular,
+  TextBulletListTreeFilled,
+  TextBulletListTreeRegular,
   TextNumberFormatFilled,
   TextNumberFormatRegular,
   TextSortAscendingFilled,
   TextSortAscendingRegular,
   TextSortDescendingFilled,
   TextSortDescendingRegular,
+  TimelineFilled,
+  TimelineRegular,
   ToggleLeftFilled,
   ToggleLeftRegular,
+  CaretDownFilled,
+  CaretDownRegular,
+  CaretUpFilled,
+  CaretUpRegular,
+  TrophyFilled,
+  TrophyRegular,
   NewsFilled,
   NewsRegular,
   SelectAllOffFilled,
@@ -532,5 +572,85 @@ export const iconCatalog = {
   MountainTrail: {
     regular: MountainTrailRegular,
     filled: MountainTrailFilled
+  },
+  DataBarVertical: {
+    regular: DataBarVerticalRegular,
+    filled: DataBarVerticalFilled
+  },
+  CalendarClock: {
+    regular: CalendarClockRegular,
+    filled: CalendarClockFilled
+  },
+  Box: {
+    regular: BoxRegular,
+    filled: BoxFilled
+  },
+  Trophy: {
+    regular: TrophyRegular,
+    filled: TrophyFilled
+  },
+  CaretUp: {
+    regular: CaretUpRegular,
+    filled: CaretUpFilled
+  },
+  CaretDown: {
+    regular: CaretDownRegular,
+    filled: CaretDownFilled
+  },
+  BranchFork: {
+    regular: BranchForkRegular,
+    filled: BranchForkFilled
+  },
+  Globe: {
+    regular: GlobeRegular,
+    filled: GlobeFilled
+  },
+  ImageMultiple: {
+    regular: ImageMultipleRegular,
+    filled: ImageMultipleFilled
+  },
+  RecordStop: {
+    regular: RecordStopRegular,
+    filled: RecordStopFilled
+  },
+  Timeline: {
+    regular: TimelineRegular,
+    filled: TimelineFilled
+  },
+  TaskListLtr: {
+    regular: TaskListLtrRegular,
+    filled: TaskListLtrFilled
+  },
+  Comment: {
+    regular: CommentRegular,
+    filled: CommentFilled
+  },
+  Location: {
+    regular: LocationRegular,
+    filled: LocationFilled
+  },
+  Folder: {
+    regular: FolderRegular,
+    filled: FolderFilled
+  },
+  TextBulletListTree: {
+    regular: TextBulletListTreeRegular,
+    filled: TextBulletListTreeFilled
+  },
+  Copy: {
+    regular: CopyRegular,
+    filled: CopyFilled
+  },
+  FullScreenMaximize: {
+    regular: FullScreenMaximizeRegular,
+    filled: FullScreenMaximizeFilled
+  },
+  FullScreenMinimize: {
+    regular: FullScreenMinimizeRegular,
+    filled: FullScreenMinimizeFilled
+  },
+  Open: {
+    regular: OpenRegular,
+    filled: OpenFilled
   }
 }

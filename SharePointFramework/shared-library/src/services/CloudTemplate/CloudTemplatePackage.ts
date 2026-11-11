@@ -1,4 +1,4 @@
-import { Schema } from 'sp-js-provisioning'
+import { ProvisioningSchema } from '../../models/ProvisioningSchema'
 import type JSZip from 'jszip'
 import { IPackageManifest } from '../../models/IPackageManifest'
 
@@ -33,7 +33,10 @@ export interface IPackageFolder {
  * entrypoint bundle.
  */
 export class CloudTemplatePackage {
-  private constructor(private _zip: JSZip, public readonly manifest: IPackageManifest) {}
+  private constructor(
+    private _zip: JSZip,
+    public readonly manifest: IPackageManifest
+  ) {}
 
   /**
    * Download a `.pppkg` from `url`, unzip it and parse `manifest.json`.
@@ -75,17 +78,17 @@ export class CloudTemplatePackage {
    * applied to the project web. The hub content type is intentionally NOT
    * injected — the bundled template must define its own project content types.
    */
-  public async getProjectTemplateSchema(): Promise<Schema> {
+  public async getProjectTemplateSchema(): Promise<ProvisioningSchema> {
     const path = this.manifest.provisioning?.template
-    if (!path) return { Parameters: {} } as Schema
-    return this.readJson<Schema>(path)
+    if (!path) return { Parameters: {} } as ProvisioningSchema
+    return this.readJson<ProvisioningSchema>(path)
   }
 
   /**
    * The bundled schema for one extension file (`provisioning/extensions/*.json`).
    */
-  public async getExtensionSchema(file: string): Promise<Schema> {
-    return this.readJson<Schema>(file)
+  public async getExtensionSchema(file: string): Promise<ProvisioningSchema> {
+    return this.readJson<ProvisioningSchema>(file)
   }
 
   /**
@@ -117,7 +120,7 @@ export class CloudTemplatePackage {
   private async _getHubList(sourceListTitle: string): Promise<any | undefined> {
     const path = this.manifest.provisioning?.hubTemplate
     if (!path) return undefined
-    const schema = await this.readJson<Schema>(path)
+    const schema = await this.readJson<ProvisioningSchema>(path)
     return (schema.Lists ?? []).find((l: any) => l.Title === sourceListTitle)
   }
 }

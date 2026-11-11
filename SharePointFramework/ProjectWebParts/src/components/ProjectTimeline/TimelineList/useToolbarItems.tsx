@@ -1,8 +1,7 @@
-import { format } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import SPDataAdapter from 'data/SPDataAdapter'
 import _ from 'lodash'
-import { ItemFieldValues, ListMenuItem } from 'pp365-shared-library'
+import { ItemFieldValues, ListMenuItem, format } from 'pp365-shared-library'
 import { useContext, useMemo } from 'react'
 import { ProjectTimelineContext } from '../context'
 import resource from 'SharedResources'
@@ -178,7 +177,7 @@ export function useToolbarItems() {
           .setIcon('Delete')
           .setDisabled(context.state.selectedItems.length === 0)
           .setOnClick(() => {
-            deleteTimelineItem()
+            void deleteTimelineItem()
           })
       ].filter(Boolean),
     [context.props, context.state.selectedItems]

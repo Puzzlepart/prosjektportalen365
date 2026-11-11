@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react'
 import {
   Button,
   Caption1,
@@ -14,7 +13,9 @@ import {
   UserMessage,
   WebPartTitle,
   formatDate,
-  customLightTheme
+  customLightTheme,
+  format,
+  withDefaults
 } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import styles from './LatestProjects.module.scss'
@@ -22,13 +23,24 @@ import { ILatestProjectsProps } from './types'
 import { useLatestProjects } from './useLatestProjects'
 import resource from 'SharedResources'
 
+export const LATEST_PROJECTS_DEFAULT_PROPS: Partial<ILatestProjectsProps> = {
+  title: resource.WebParts_LatestProjects_Title,
+  showProjectLogo: true,
+  rowLimit: 5,
+  minRowLimit: 3,
+  maxRowLimit: 10
+}
+
 /**
  * Renders a list of the latest projects. The list is sorted by the Created date
- * by default.
+ * by default. The projects are a list named by the web part's title, each read once (the logo
+ * beside its link is hidden), and «Vis flere» says whether the rest are shown (WCAG 1.3.1,
+ * 4.1.2).
  *
  * @param props - The component props.
  */
-export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
+export const LatestProjects: FC<ILatestProjectsProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, LATEST_PROJECTS_DEFAULT_PROPS)
   const { className, loading, projects, viewAll, toggleViewAll, fluentProviderId } =
     useLatestProjects(props)
 
@@ -42,30 +54,36 @@ export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
       )
     }
     const viewCount = viewAll ? projects.length : props.rowLimit
-    return [...projects].slice(0, viewCount).map((site, idx) => {
-      const created = formatDate(site.Created, true)
-      const url = site?.Path || site?.SPWebUrl
+    return (
+      <ul className={styles.list} aria-label={props.title}>
+        {[...projects].slice(0, viewCount).map((site, idx) => {
+          const created = formatDate(site.Created, true)
+          const url = site?.Path || site?.SPWebUrl
 
-      return (
-        <div key={idx} className={className}>
-          <ProjectLogo
-            title={site.Title}
-            url={url}
-            renderMode='list'
-            size='48px'
-            hidden={!props.showProjectLogo}
-          />
-          <div className={styles.container}>
-            <div className={styles.title}>
-              <Link href={url} target='_blank' title={site.Title}>
-                {site.Title}
-              </Link>
-            </div>
-            <Caption1 title={format(strings.CreatedTooltipText, created)}>{created}</Caption1>
-          </div>
-        </div>
-      )
-    })
+          return (
+            <li key={idx} className={className}>
+              <div aria-hidden>
+                <ProjectLogo
+                  title={site.Title}
+                  url={url}
+                  renderMode='list'
+                  size='48px'
+                  hidden={!props.showProjectLogo}
+                />
+              </div>
+              <div className={styles.container}>
+                <div className={styles.title}>
+                  <Link href={url} target='_blank' title={site.Title}>
+                    {site.Title}
+                  </Link>
+                </div>
+                <Caption1 title={format(strings.CreatedTooltipText, created)}>{created}</Caption1>
+              </div>
+            </li>
+          )
+        })}
+      </ul>
+    )
   }
 
   return (
@@ -80,7 +98,7 @@ export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
                 appearance='subtle'
                 size='small'
                 icon={viewAll ? <ChevronUpFilled /> : <ChevronDownFilled />}
-                title={viewAll ? strings.ViewLessText : strings.ViewMoreText}
+                aria-expanded={viewAll}
                 onClick={toggleViewAll}
               >
                 {viewAll ? strings.ViewLessText : strings.ViewMoreText}
@@ -91,12 +109,4 @@ export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
       </FluentProvider>
     </IdPrefixProvider>
   )
-}
-
-LatestProjects.defaultProps = {
-  title: resource.WebParts_LatestProjects_Title,
-  showProjectLogo: true,
-  rowLimit: 5,
-  minRowLimit: 3,
-  maxRowLimit: 10
 }

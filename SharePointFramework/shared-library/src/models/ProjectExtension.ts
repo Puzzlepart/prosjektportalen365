@@ -1,6 +1,5 @@
-/* eslint-disable max-classes-per-file */
 import { IWeb } from '@pnp/sp/webs'
-import { Schema } from 'sp-js-provisioning'
+import { ProvisioningSchema } from './ProvisioningSchema'
 import { ProjectTemplate } from './ProjectTemplate'
 import { UserSelectableObject } from './UserSelectableObject'
 
@@ -19,7 +18,10 @@ export interface IProjectExtensionSPItem {
 export class ProjectExtension extends UserSelectableObject {
   public serverRelativeUrl: string
 
-  constructor(spItem: IProjectExtensionSPItem, public web: IWeb) {
+  constructor(
+    spItem: IProjectExtensionSPItem,
+    public web: IWeb
+  ) {
     super(
       spItem.Id,
       spItem.File.Title,
@@ -59,7 +61,7 @@ export class ProjectExtension extends UserSelectableObject {
   /**
    * Get the schema of the project extension (JSON)
    */
-  public async getSchema(): Promise<Schema> {
+  public async getSchema(): Promise<ProvisioningSchema> {
     return await this.web.getFileByServerRelativePath(this.serverRelativeUrl).getJSON()
   }
 }

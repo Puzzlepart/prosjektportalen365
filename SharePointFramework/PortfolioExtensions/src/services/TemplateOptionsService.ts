@@ -41,6 +41,51 @@ function nowIso(): string {
 }
 
 /**
+ * What a cloud template's Maloppsett item takes from the publish step besides the package: the
+ * content type and term set ids its manifest declares, its name and description in the hub's
+ * language, and a download URL to store in place of the package's.
+ */
+interface ICentralItemOptions {
+  projectContentTypeId?: string
+  projectStatusContentTypeId?: string
+  projectPhaseTermSetId?: string
+  sourceUrl?: string
+  name?: string
+  description?: string
+}
+
+/**
+ * The fields a cloud template's Maloppsett item takes from its package, as it is registered and as
+ * it is updated to a newer version.
+ */
+function centralProperties(
+  pkg: ICatalogPackage,
+  options: ICentralItemOptions
+): Record<string, any> {
+  const properties: Record<string, any> = {
+    Title: options.name ?? pkg.name,
+    GtDescription: options.description ?? pkg.description ?? '',
+    PpPkgType: PpPkgType.Sentral,
+    PpPkgVersion: pkg.version,
+    PpPkgLatestVersion: pkg.version,
+    PpPkgSourceUrl: {
+      Url: options.sourceUrl || pkg.downloadUrl,
+      Description: pkg.name
+    }
+  }
+  if (options.projectContentTypeId) {
+    properties.GtProjectContentType = options.projectContentTypeId
+  }
+  if (options.projectStatusContentTypeId) {
+    properties.GtProjectStatusContentType = options.projectStatusContentTypeId
+  }
+  if (options.projectPhaseTermSetId) {
+    properties.GtProjectPhaseTermId = options.projectPhaseTermSetId
+  }
+  return properties
+}
+
+/**
  * Reads and writes Maloppsett items and is the single owner of the
  * catalog↔Maloppsett cross-reference used to derive card/detail badges.
  */
@@ -193,42 +238,34 @@ export class TemplateOptionsService {
    */
   public static async createCentral(
     pkg: ICatalogPackage,
-    options: {
-      projectContentTypeId?: string
-      projectStatusContentTypeId?: string
-      projectPhaseTermSetId?: string
-      sourceUrl?: string
-      name?: string
-      description?: string
-    } = {}
+    options: ICentralItemOptions = {}
   ): Promise<void> {
-    const properties: Record<string, any> = {
-      Title: options.name ?? pkg.name,
+    await SPDataAdapter.portalDataService.addItemToList('PROJECT_TEMPLATE_CONFIGURATION', {
+      ...centralProperties(pkg, options),
       GtProjectTemplateId: SENTINEL_PROJECT_TEMPLATE_ID,
-      GtDescription: options.description ?? pkg.description ?? '',
       IconName: 'Cloud',
-      PpPkgType: PpPkgType.Sentral,
       PpPkgId: pkg.id,
-      PpPkgVersion: pkg.version,
-      PpPkgLatestVersion: pkg.version,
-      PpPkgSourceUrl: {
-        Url: options.sourceUrl || pkg.downloadUrl,
-        Description: pkg.name
-      },
       PpPkgInstalledDate: nowIso()
-    }
-    if (options.projectContentTypeId) {
-      properties.GtProjectContentType = options.projectContentTypeId
-    }
-    if (options.projectStatusContentTypeId) {
-      properties.GtProjectStatusContentType = options.projectStatusContentTypeId
-    }
-    if (options.projectPhaseTermSetId) {
-      properties.GtProjectPhaseTermId = options.projectPhaseTermSetId
-    }
-    await SPDataAdapter.portalDataService.addItemToList(
+    })
+  }
+
+  /**
+   * Update a cloud template's Maloppsett item to a newer version of its package, in place: it
+   * stays `Sentral` and takes the version, the download URL, the name and description and the
+   * manifest's content type and term set ids as {@link createCentral} writes them. The hub
+   * dependencies of the new version are provisioned by
+   * `PackageInstaller.provisionCloudTemplateHubDependencies` before this runs. The icon and the
+   * project template lookup are left as they are.
+   */
+  public static async updateCentral(
+    itemId: number,
+    pkg: ICatalogPackage,
+    options: ICentralItemOptions = {}
+  ): Promise<void> {
+    await SPDataAdapter.portalDataService.updateItemInList(
       'PROJECT_TEMPLATE_CONFIGURATION',
-      properties
+      itemId,
+      { ...centralProperties(pkg, options), PpPkgUpdatedDate: nowIso() }
     )
   }
 
@@ -247,6 +284,8 @@ export class TemplateOptionsService {
   /**
    * Remove a catalog-linked Maloppsett item (never touches provisioned site
    * content).
+   *
+   * @returns `true` when the item was removed, `false` when the list refused
    */
   public static async remove(itemId: number): Promise<boolean> {
     return SPDataAdapter.portalDataService.deleteItemFromList(

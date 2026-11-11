@@ -1,13 +1,19 @@
 import { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
 import { SPFI } from '@pnp/sp'
 import { IWeb } from '@pnp/sp/webs'
+import { SpEntityPortalService } from 'pp365-shared-library'
 import { PortalDataService } from 'pp365-shared-library/lib/services'
-import { SpEntityPortalService } from 'sp-entityportal-service'
 import { Schema } from 'sp-js-provisioning'
 import { ISpfxJsomContext } from 'spfx-jsom'
 import { ProjectSetupError } from '../../ProjectSetupError'
 import { IProjectSetupProperties } from '../../types'
 import { OnProgressCallbackFunction } from '../types'
+
+/**
+ * A menu of a schema's `Navigation` (`QuickLaunch` or `TopNavigationBar`), as sp-js-provisioning
+ * declares it: nodes with `Title`, `Url` and `Children`.
+ */
+export type NavigationNodes = NonNullable<NonNullable<Schema['Navigation']>['QuickLaunch']>
 
 export interface IBaseTaskParams {
   /**
@@ -54,6 +60,14 @@ export interface IBaseTaskParams {
    * Template schema
    */
   templateSchema?: Schema
+
+  /**
+   * The `Navigation.QuickLaunch` of the applied template, as its schema declares it (before
+   * `ApplyTemplate` leaves it out for an extension that declares its own), and of each selected
+   * extension. Set by `ApplyTemplate`; after a re-run the setup adds back only the saved nodes
+   * these do not declare.
+   */
+  declaredQuickLaunch?: NavigationNodes[]
 
   /**
    * Entity service

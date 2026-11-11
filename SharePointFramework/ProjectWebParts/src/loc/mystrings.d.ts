@@ -7,6 +7,11 @@ declare interface IProjectWebPartsStrings {
   EditStatusPanelText: string
   Aria: {
     CurrentPhaseText: string
+    PhaseListLabel: string
+    ChecklistStepsLabel: string
+    MoreSectionsLabel: string
+    NameValueLabel: string
+    ChangingPhaseAnnouncement: string
   }
   SaveText: string
   ErrorBoundaryFallbackDescription: string
@@ -42,8 +47,8 @@ declare interface IProjectWebPartsStrings {
   CheckpointStillOpenTooltipCommentEmpty: string
   ChildProjectAdminLabel: string
   CloseText: string
-  ColorPickerStrings: IColorPickerStrings
   CommentLabel: string
+  CommentMinLengthFieldLabel: string
   ConfigItemTitleFieldLabel: string
   ConfirmChangePhase: string
   ConsequenceFieldNameFieldLabel: string
@@ -57,8 +62,23 @@ declare interface IProjectWebPartsStrings {
   RunProjectSetupDialogTitle: string
   RunProjectSetupDialogSubText: string
   RunProjectSetupDialogProgressText: string
+  SetupMenuNotSavedTitle: string
+  SetupMenuNotSavedText: string
+  ContinueAnywayText: string
+  SetupNotStartedTitle: string
+  SetupNotStartedText: string
+  SetupNotStartedErrorText: string
   CurrentPhaseViewNameFieldLabel: string
+  DataFetchModeAutoText: string
+  DataFetchModeDataSourceText: string
+  DataFetchModeLabel: string
+  DataFetchModeListText: string
   DataGroupName: string
+  DataSourceDescription: string
+  DataSourceError: string
+  DataSourceLabel: string
+  DataSourceNotFound: string
+  FilterByShowInPortfolioLabel: string
   DefaultGroupByLabel: string
   DefaultTimeframeEndLabel: string
   DefaultTimeframeEndValue: string
@@ -69,6 +89,7 @@ declare interface IProjectWebPartsStrings {
   DeleteReportButtonLabel: string
   DeleteReportButtonDescription: string
   DeleteReportButtonDescriptionNoPermission: string
+  DeleteReportErrorTitle: string
   EditItemLabel: string
   EditProjectInformationText: string
   EditReportButtonLabel: string
@@ -82,17 +103,36 @@ declare interface IProjectWebPartsStrings {
   GeneralGroupName: string
   GetSnapshotButtonLabel: string
   GetSnapshotButtonDescription: string
+  SnapshotDialogTitle: string
+  SnapshotOpenInNewTabLabel: string
+  SnapshotEnterFullscreenLabel: string
+  SnapshotExitFullscreenLabel: string
+  SnapshotCopyLinkLabel: string
+  SnapshotCopyLinkDialogTitle: string
+  SnapshotCopyButtonLabel: string
+  SnapshotPageLinkLabel: string
+  SnapshotImageLinkLabel: string
+  SnapshotLinkCopiedText: string
+  SnapshotLinkCopyFailedText: string
+  SnapshotLinkAccessText: string
+  SnapshotGroupName: string
+  SnapshotInDialogFieldLabel: string
+  SnapshotInDialogOnText: string
+  SnapshotInDialogOffText: string
   HideActionsLabel: string
   HideAllActionsLabel: string
   HideParentProjectsLabel: string
   HideChildProjectsLabel: string
   HideStatusReportLabel: string
+  ShowSustainabilityGoalsAsIconsLabel: string
+  SustainabilityGoalIconSizeLabel: string
   HookAuthFieldDescription: string
   HookAuthFieldLabel: string
   HookUrlFieldDescription: string
   HookUrlFieldLabel: string
   ListNameFieldLabel: string
   ListSectionDataErrorMessage: string
+  ListSectionListNotFoundMessage: string
   ListSectionElementIdPrefix: string
   LoadingText: string
   LookAndFeelGroupName: string
@@ -132,6 +172,14 @@ declare interface IProjectWebPartsStrings {
   NoPropertiesMessage: string
   NoReportsFoundTitle: string
   NoStatusReportsMessage: string
+  MultiReportingGroupName: string
+  MultiReportingToggleLabel: string
+  SubProjectsFieldLabel: string
+  SubProjectsFieldDescription: string
+  DefaultScopeLabel: string
+  ExcludeSectionsFieldLabel: string
+  ExcludeSectionsFieldDescription: string
+  ScopeSelectorDescription: string
   NotPublishedStatusReport: string
   OpportunityMatrixGroupName: string
   OverrideHeadersLabel: string
@@ -192,6 +240,8 @@ declare interface IProjectWebPartsStrings {
   ShowPhaseSitePageMessageLabel: string
   ShowProjectDeliveriesLabel: string
   ShowSubTextFieldLabel: string
+  ShowTitleLabel: string
+  TitleLabel: string
   ShowTimelineLabel: string
   ShowTimelineListCommandsLabel: string
   ShowTimelineListLabel: string
@@ -210,6 +260,14 @@ declare interface IProjectWebPartsStrings {
   SyncProjectPropertiesProgressLabel: string
   SyncProjectPropertiesValuesProgressDescription: string
   SyncProjectPropertiesValuesProgressLabel: string
+  HubSyncWarningTitle: string
+  HubSyncNoWriteAccessReason: string
+  ArchiveLogWarningTitle: string
+  ArchiveLogNotWrittenText: string
+  ArchiveLogNoWriteAccessReason: string
+  HubSyncHubUnavailableReason: string
+  ProjectPropertiesNotSyncedToHubText: string
+  PhaseNotSyncedToHubText: string
   SyncPropertiesAfterPhaseChangeFieldLabel: string
   TagFieldLabel: string
   TasksLinkText: string
@@ -267,30 +325,35 @@ declare interface IProjectWebPartsStrings {
   CreateNewsLinkLabel: string
   NewsTitleRequired: string
   NewsCreateError: string
-  NewsCreateSuccess: string,
-  TemplateRequired: string,
-  TemplatePlaceholder: string,
-  TemplateLabel: string,
-  NoRecentNews: string,
-  ShowMoreNews: string,
-  ShowLessNews: string,
-  ModifiedTooltipText: string,
-  MaxVisibleNewsDescription: string,
-  MaxVisibleNewsLabel: string,
-  SiteUrlLabel: string,
-  SiteUrlDescription: string,
-  NewsFolderNameDescription: string,
-  NewsFolderNameDefault: string,
-  NewsFolderNameLabel: string,
-  FileNameRequired: string,
-  FileNameTooLong: string,
-  FileNameInvalid: string,
-  FileNameNoLeadingTrailingSpaces: string,
-  FileNameReserved: string,
-  NewsFolderError: string,
-  LoadingLabel: string,
-  GenericErrorMessage: string,
+  NewsCreateSuccess: string
+  TemplateRequired: string
+  TemplatePlaceholder: string
+  TemplateLabel: string
+  NoRecentNews: string
+  ShowMoreNews: string
+  ShowMoreChildProjectsText: string
+  ShowLessChildProjectsText: string
+  ShowLessNews: string
+  ModifiedTooltipText: string
+  MaxVisibleNewsDescription: string
+  MaxVisibleNewsLabel: string
+  SiteUrlLabel: string
+  SiteUrlDescription: string
+  NewsFolderNameDescription: string
+  NewsFolderNameDefault: string
+  NewsFolderNameLabel: string
+  FileNameRequired: string
+  FileNameTooLong: string
+  FileNameInvalid: string
+  FileNameNoLeadingTrailingSpaces: string
+  FileNameReserved: string
+  NewsFolderError: string
+  NewsNoAccessErrorText: string
+  LoadingLabel: string
+  GenericErrorMessage: string
   NewsCreateDuplicateFileError: string
+  NewsCreateLeftoverPageError: string
+  NewsPageItemNotFoundError: string
   PreviewLabel: string
   NoPreviewAvailable: string
   ShowCommentText: string
@@ -346,6 +409,9 @@ declare interface IProjectWebPartsStrings {
     SearchIn: string
     Search: string
     ExportSelected: string
+    ExportSelectedMultiple: string
+    ExportErrorTitle: string
+    ExportErrorMessage: string
     ExportToExcel: string
     FolderView: string
     FlatView: string
@@ -388,13 +454,26 @@ declare interface IProjectWebPartsStrings {
     Close: string
     NoItemsFound: string
     ListTable: string
-    GroupByColumn: string
+    SortAscending: string
+    SortDescending: string
+    ResizeColumn: string
     FolderNavigation: string
     HiddenFromView: string
+    RefreshDone: string
+    ItemsShown: string
+    FileUploaded: string
+    FilesUploaded: string
+    UploadFailed: string
+    DocumentCreated: string
+    DocumentCreateFailed: string
+    ItemDeleted: string
+    ItemsDeleted: string
+    DeleteFailed: string
+    DefaultListName: string
   }
 }
 
 declare module 'ProjectWebPartsStrings' {
   const strings: IProjectWebPartsStrings
-  export = strings;
+  export = strings
 }

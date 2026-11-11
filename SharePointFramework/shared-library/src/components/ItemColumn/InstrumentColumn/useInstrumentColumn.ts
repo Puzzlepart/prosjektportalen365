@@ -1,4 +1,7 @@
+import { useId } from '@fluentui/react-components'
+import strings from 'SharedLibraryStrings'
 import { SubArc } from 'react-gauge-component'
+import { format } from '../../../util'
 import { IInstrumentColumnProps } from './types'
 
 /**
@@ -6,14 +9,17 @@ import { IInstrumentColumnProps } from './types'
  *
  * @param props - The props for the instrument column.
  *
+ * The popover is named by the indicator (or the column), and described by the gauge, which is
+ * named by what it shows (WCAG 1.1.1), and the unit.
+ *
  * @returns An object containing the necessary props for rendering a popover for the instrument column.
  */
 export function useInstrumentColumn(props: IInstrumentColumnProps) {
-  const startValue = props.item[props.startValueField] || props.item['GtStartValueOWSNMBR']
-  const endValue = props.item[props.endValueField] || props.item['GtDesiredValueOWSNMBR']
-  const currentValue = props.item[props.currentValueField] || props.item['LastMeasurementValue']
-  const unit = props.item[props.unitField] || props.item['GtMeasurementUnitOWSCHCS']
-  const description = props.item[props.descriptionField] || props.item['MeasurementIndicator']
+  const startValue = props.item[props.startValueField] || props.item.GtStartValueOWSNMBR
+  const endValue = props.item[props.endValueField] || props.item.GtDesiredValueOWSNMBR
+  const currentValue = props.item[props.currentValueField] || props.item.LastMeasurementValue
+  const unit = props.item[props.unitField] || props.item.GtMeasurementUnitOWSCHCS
+  const description = props.item[props.descriptionField] || props.item.MeasurementIndicator
 
   let subArcs: SubArc[] = []
   let minimumValue: number
@@ -43,7 +49,21 @@ export function useInstrumentColumn(props: IInstrumentColumnProps) {
     ]
   }
 
+  const label = description || props.column?.name || strings.ColumnRenderOptionInstrument
+  const gaugeLabel = format(
+    strings.Aria.InstrumentGaugeLabel,
+    currentValue ?? '',
+    startValue ?? '',
+    endValue ?? ''
+  )
+  const gaugeId = useId('instrument-gauge')
+  const unitId = useId('instrument-unit')
+
   return {
+    label,
+    gaugeLabel,
+    gaugeId,
+    unitId,
     startValue,
     endValue,
     currentValue,

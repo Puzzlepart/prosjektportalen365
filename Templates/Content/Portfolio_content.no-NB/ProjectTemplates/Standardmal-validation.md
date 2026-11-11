@@ -1,8 +1,14 @@
-_The template was validated 9/2/2026, 3:15:56 PM_
-
 The template contains the following tokens that has not been found in the .resx files:
 
 _No tokens with missing translations or replacement values found._
+
+The template contains the following `{listid:}` tokens that name neither a list of the template nor a list every project site has:
+
+_No `{listid:}` tokens without a list found._
+
+The template contains the following navigation nodes whose `Lists/` URL names no list the template creates:
+
+_No navigation nodes without a list found._
 
 ---
 
@@ -987,7 +993,7 @@ _No tokens with missing translations or replacement values found._
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"LookupMulti\" DisplayName=\"Leveranseinteressenter\" List=\"{listid:Interessentregister}\" ShowField=\"Title\" ID=\"{6d90e0b6-73e6-48fb-aa1e-b897b214f934}\" Description=\"Leveranseinteressenter\" Name=\"GtDeliveryStakeholders\" StaticName=\"GtDeliveryStakeholders\" Name=\"GtDeliveryStakeholders\" Mult=\"TRUE\" />"
+                "<Field Type=\"LookupMulti\" DisplayName=\"Leveranseinteressenter\" List=\"{listid:Interessentregister}\" ShowField=\"Title\" ID=\"{6d90e0b6-73e6-48fb-aa1e-b897b214f934}\" Description=\"Leveranseinteressenter\" StaticName=\"GtDeliveryStakeholders\" Name=\"GtDeliveryStakeholders\" Mult=\"TRUE\" />"
             ],
             "Views": [
                 {
@@ -1518,6 +1524,6 @@ _No tokens with missing translations or replacement values found._
 ## Template Path
 
 ```txt
-/Users/remi.blom-ohlsen/code/Prosjektportalen/prosjektportalen365/Templates/Content/Portfolio_content.no-NB/ProjectTemplates/Standardmal.txt
+Content/Portfolio_content.no-NB/ProjectTemplates/Standardmal.txt
 ```
 

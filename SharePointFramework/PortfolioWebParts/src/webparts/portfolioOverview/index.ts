@@ -11,7 +11,6 @@ import {
   IPortfolioOverviewProps
 } from '../../components/PortfolioOverview'
 import { PortfolioOverview } from 'components/PortfolioOverview'
-import { render } from 'react-dom'
 import { createElement } from 'react'
 import {
   CustomCollectionFieldType,
@@ -22,7 +21,8 @@ import {
   PortalDataServiceDefaultConfiguration,
   UserMessage,
   ErrorWithIntent,
-  PropertyPaneDescription
+  PropertyPaneDescription,
+  renderReact
 } from 'pp365-shared-library'
 import { DataAdapter } from 'data/DataAdapter'
 
@@ -33,7 +33,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
 
   public render(): void {
     if (!this._configuration) {
-      render(
+      renderReact(
         createElement(UserMessage, {
           title: this._error?.name,
           text: this._error?.message,

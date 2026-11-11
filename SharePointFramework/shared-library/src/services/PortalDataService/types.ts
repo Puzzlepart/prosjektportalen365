@@ -1,12 +1,13 @@
-import { IListEnsureResult } from '@pnp/sp/lists'
+// IListEnsureResult still exists in PnPjs 4 but is no longer re-exported from the lists barrel.
+import { IListEnsureResult } from '@pnp/sp/lists/types'
 import { SPField } from '../../models'
 import { SPFxContext } from '../../types'
 import strings from 'SharedLibraryStrings'
-import { format } from '@fluentui/react'
 import { ErrorWithIntent } from '../../interfaces'
 import { LogLevel } from '@pnp/logging'
 import resource from 'SharedResources'
 
+import { format } from '../../util'
 export type PortalDataServiceList =
   | 'PROJECTS'
   | 'STATUS_SECTIONS'
@@ -171,6 +172,13 @@ export type GetStatusReportsOptions = {
   top?: number
   select?: string[]
   useCaching?: boolean
+
+  /**
+   * Internal names of `User`/`UserMulti` fields to select and expand
+   * (`Id`, `Title`, `EMail`) — needed to prefill people pickers and render
+   * person values from the report items.
+   */
+  userFields?: string[]
 }
 
 export type SyncListParams = {

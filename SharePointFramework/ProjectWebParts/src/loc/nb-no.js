@@ -18,18 +18,12 @@ define([], function () {
     ArchiveLogOperationEndClosed: 'Avsluttet/Stengt/Låst',
     Aria: {
       CurrentPhaseText:
-        'Dette er den gjeldende fasen. Det er derfor ikke mulig å endre til denne fasen.'
-    },
-    Placeholder: {
-      DatePicker: 'Angi en dato',
-      TextField: 'Angi verdi her',
-      UrlField: 'Angi en nettadresse',
-      UrlFieldAlternative: 'Alternativ tekst',
-      TaxonomyPicker: 'Skriv inn termen som skal merkes',
-      PeoplePicker: 'Angi et navn eller en e-postadresse',
-      NumberField: 'Skriv inn et tall',
-      ChoiceField: 'Velg et alternativ',
-      MultiChoiceField: 'Velg ett eller flere alternativer'
+        'Dette er den gjeldende fasen. Det er derfor ikke mulig å endre til denne fasen.',
+      PhaseListLabel: 'Prosjektets faser',
+      ChecklistStepsLabel: 'Sjekkpunkter',
+      MoreSectionsLabel: '+{0} flere seksjoner',
+      NameValueLabel: '{0}: {1}',
+      ChangingPhaseAnnouncement: '{0}. {1}'
     },
     SaveText: 'Lagre',
     ErrorBoundaryFallbackText: 'Det oppstod en feil under lasting av {0}.',
@@ -55,27 +49,22 @@ define([], function () {
     ChangePhaseText: 'Endre til denne fasen',
     ChangingPhaseDescription: 'Endrer fase til {0}',
     ChecklistCommentDescription:
-      'Kommentar er obligatorisk om sjekkpunktet skal markeres som "Ikke relevant" eller "Fortsatt åpen".',
+      'Kommentar på minst {0} tegn er obligatorisk om sjekkpunktet skal markeres som "Ikke relevant" eller "Fortsatt åpen".',
     ChecklistCommentPlaceholder: 'Skriv inn en kommentar...',
     ChecklistMandatory:
       'Sjekkpunkter for endring til denne fasen er obligatoriske og kan ikke hoppes over.',
     CheckpointDoneTooltip: 'Sjekkpunktet er utført',
     CheckpointNotRelevantTooltip: 'Sjekkpunktet er ikke relevant',
     CheckpointNotRelevantTooltipCommentEmpty:
-      "Du kan ikke sette sjekkpunktet som 'Ikke relevant' uten å legge inn en kommentar.",
+      "Du kan ikke sette sjekkpunktet som 'Ikke relevant' uten en kommentar på minst {0} tegn.",
     CheckPointsStatus: '{0} sjekkpunkt(er): **{1}**',
     CheckpointStillOpenTooltip: 'Sjekkpunktet er fortsatt åpent',
     CheckpointStillOpenTooltipCommentEmpty:
-      "Du kan ikke sette sjekkpunktet som 'Fortsatt åpen' uten å legge inn en kommentar.",
+      "Du kan ikke sette sjekkpunktet som 'Fortsatt åpen' uten en kommentar på minst {0} tegn.",
     ChildProjectAdminLabel: 'Administrer underområder',
     CloseText: 'Lukk',
-    ColorPickerStrings: {
-      blue: 'Blå',
-      green: 'Grønn',
-      hex: '',
-      red: 'Rød'
-    },
     CommentLabel: 'Kommentar',
+    CommentMinLengthFieldLabel: 'Minimum antall tegn i kommentar på sjekkpunkt (0 = ikke påkrevd)',
     ConfigItemTitleFieldLabel: 'Elementtittel (konfigurasjon)',
     ConfirmChangePhase: 'Vil du endre fase til {0}?',
     ConsequenceFieldNameFieldLabel: 'Feltnavn - Konsekvens',
@@ -91,8 +80,27 @@ define([], function () {
     RunProjectSetupDialogSubText:
       'Dette lar deg velge en mal, tillegg eller standardinnhold som skal legges til prosjektet. Dette kan brukes for feilsøking eller for å legge til ny funksjonalitet.',
     RunProjectSetupDialogProgressText: 'Kjører oppsettveiviser',
+    SetupMenuNotSavedTitle: 'Menyen kunne ikke lagres',
+    SetupMenuNotSavedText:
+      'Fortsetter du likevel, blir lenkene eierne selv har lagt til i menyen, ikke lagt tilbake etter oppsettet.',
+    ContinueAnywayText: 'Fortsett likevel',
+    SetupNotStartedTitle: 'Oppsettet kunne ikke startes',
+    SetupNotStartedText:
+      'Lukk og prøv igjen. Lykkes det ikke, kan en administrator se på feilmeldingen.',
+    SetupNotStartedErrorText: 'Feilmelding: {0}',
     CurrentPhaseViewNameFieldLabel: 'Visningsnavn for gjeldende fase',
+    DataFetchModeAutoText: 'Automatisk (datakilde for overordnede områder)',
+    DataFetchModeDataSourceText: 'Datakilde',
+    DataFetchModeLabel: 'Datainnhenting',
+    DataFetchModeListText: 'Lokal liste',
     DataGroupName: 'Data',
+    DataSourceDescription:
+      'Navn på datakilden i Datakilder-listen på porteføljeområdet. Lar du feltet stå tomt, brukes standard datakilde for underliggende prosjekter.',
+    DataSourceError:
+      'Det skjedde en feil under uthenting av data fra datakilde med navn {0}. Oppdater siden og prøv igjen.',
+    DataSourceLabel: 'Datakilde',
+    DataSourceNotFound: 'Finner ingen datakilde med navn {0}.',
+    FilterByShowInPortfolioLabel: "Vis kun underområdenes elementer flagget med 'Vis i porteføljen'",
     DefaultGroupByLabel: 'Standard gruppering',
     DefaultTimeframeEndLabel: 'Standard sluttdato',
     DefaultTimeframeEndValue: '{0} måneder frem i tid',
@@ -104,6 +112,7 @@ define([], function () {
     DeleteReportButtonDescription: 'Slett den valgte statusrapporten.',
     DeleteReportButtonDescriptionNoPermission:
       'Du har ikke tilgang til å slette denne statusrapporten.',
+    DeleteReportErrorTitle: 'Statusrapporten kunne ikke slettes',
     EditItemLabel: 'Rediger',
     EditProjectInformationText: 'Rediger {0}',
     EditReportButtonLabel: 'Rediger',
@@ -119,11 +128,30 @@ define([], function () {
     GeneralGroupName: 'Generelt',
     GetSnapshotButtonLabel: 'Åpne øyeblikksbilde',
     GetSnapshotButtonDescription: 'Åpner den valgte statusrapporten som et øyeblikksbilde.',
+    SnapshotDialogTitle: 'Øyeblikksbilde – {0}',
+    SnapshotOpenInNewTabLabel: 'Åpne bildefilen i ny fane',
+    SnapshotEnterFullscreenLabel: 'Fullskjerm',
+    SnapshotExitFullscreenLabel: 'Avslutt fullskjerm',
+    SnapshotCopyLinkLabel: 'Kopier lenke',
+    SnapshotCopyLinkDialogTitle: 'Kopier lenke til øyeblikksbilde',
+    SnapshotCopyButtonLabel: 'Kopier',
+    SnapshotPageLinkLabel: 'Lenke til øyeblikksbildet på statussiden',
+    SnapshotImageLinkLabel: 'Direkte lenke til bildefilen',
+    SnapshotLinkCopiedText: 'Lenken er kopiert.',
+    SnapshotLinkCopyFailedText: 'Lenken kunne ikke kopieres automatisk. Marker lenken og kopier den.',
+    SnapshotLinkAccessText:
+      'Lenken til statussiden åpner øyeblikksbildet i full bredde, for alle med tilgang til prosjektområdet og Prosjektportalen (porteføljeområdet). Bildefilen kan åpnes av alle med tilgang til porteføljeområdet.',
+    SnapshotGroupName: 'Øyeblikksbilde',
+    SnapshotInDialogFieldLabel: 'Åpne øyeblikksbilde i fullvindu',
+    SnapshotInDialogOnText: 'I et vindu som fyller nettleseren, med fullskjerm og lenke',
+    SnapshotInDialogOffText: 'Bildefilen i en ny fane',
     HideActionsLabel: 'Skjul knapper',
     HideAllActionsLabel: 'Skjul alle knapper',
     HideParentProjectsLabel: 'Skjul overordnede prosjekter',
     HideChildProjectsLabel: 'Skjul underordnede prosjekter',
     HideStatusReportLabel: 'Skjul siste statusrapport',
+    ShowSustainabilityGoalsAsIconsLabel: 'Vis FNs bærekraftsmål som ikoner',
+    SustainabilityGoalIconSizeLabel: 'Ikonstørrelse',
     HookAuthFieldDescription: 'Autentisering for å utføre kall ved endring av fase',
     HookAuthFieldLabel: 'Hook autentisering',
     HookUrlFieldDescription: 'URL som skal kalles ved endring av fase',
@@ -131,6 +159,8 @@ define([], function () {
     ListNameFieldLabel: 'Listenavn',
     ListSectionDataErrorMessage:
       'Det oppsto en feil under uthenting av data for seksjonen. Er den riktig konfigurert?',
+    ListSectionListNotFoundMessage:
+      'Fant ikke listen «{0}» på prosjektområdet. Seksjonen henter dataene sine fra den listen.',
     ListSectionElementIdPrefix: 'seksjon',
     LoadingText: 'Laster {0}...',
     LookAndFeelGroupName: 'Utseende og funksjonalitet',
@@ -173,6 +203,16 @@ define([], function () {
     NoPropertiesMessage:
       'Det finnes ingen informasjon om prosjektet. Trykk på _Rediger prosjektinformasjon_ for å fortsette.',
     NoReportsFoundTitle: 'Ingen rapporter funnet',
+    MultiReportingGroupName: 'Multirapportering',
+    MultiReportingToggleLabel: 'Aktiver multirapportering',
+    SubProjectsFieldLabel: 'Delprosjekter',
+    SubProjectsFieldDescription:
+      'Ett delprosjekt per linje på formatet nøkkel eller nøkkel|etikett (f.eks. DP1|Delprosjekt 1). Nøkkelen identifiserer rapportserien og bør ikke endres etter at rapportering har startet — etiketten kan endres fritt.',
+    DefaultScopeLabel: 'Hovedrapportering',
+    ExcludeSectionsFieldLabel: 'Ekskluderte seksjoner',
+    ExcludeSectionsFieldDescription:
+      'Seksjoner som ikke skal vises på statussiden — én seksjonstittel per linje (matcher Tittel i Statusseksjoner-listen). Tom verdi viser alle seksjoner.',
+    ScopeSelectorDescription: 'Velg hvilket delprosjekt du vil se og rapportere status for',
     NoStatusReportsMessage:
       'Det er ennå ikke rapportert status for prosjektet. Hvis du er eier av området, kan du rapportere status ved å klikke på _Ny statusrapport_ i menyen over.',
     NotPublishedStatusReport: 'Kladd, sist endret {0}',
@@ -210,9 +250,10 @@ define([], function () {
     ProjectPhasesChangePhaseError:
       'En feil oppsto under endring av fase. Vennligst prøv igjen eller kontakt en administrator.',
     ProjectPhasesFetchDataError:
-      'Du har ikke tilgang til å se denne webdelen.<br/><br/>Du må enten ha tilgang til porteføljeområdet, eller så må prosjektet være fristilt fra porteføljeområdet.',
+      'Fasene kunne ikke hentes. Last inn siden på nytt, eller kontakt en administrator hvis feilen vedvarer.',
     ProjectPropertiesHeader: 'Prosjektinformasjon',
-    ProjectStatusDataErrorText: 'Ingen tilgang. Du har ikke tillatelse til å se statusrapporter.',
+    ProjectStatusDataErrorText:
+      'Statusrapportene kunne ikke hentes. Last inn siden på nytt, eller kontakt en administrator hvis feilen vedvarer.',
     ProjectStatusGroupName: 'Prosjektstatus',
     ProjectStatusProjectPropertiesGroupName: 'Prosjektegenskaper (Statusseksjoner)',
     ProjectTimelineErrorFetchText:
@@ -246,6 +287,8 @@ define([], function () {
     ShowPhaseSitePageMessageLabel: 'Vis infomelding (dynamisk hjemmeside)',
     ShowProjectDeliveriesLabel: 'Vis prosjektleveranser',
     ShowSubTextFieldLabel: 'Vis fasetekst',
+    ShowTitleLabel: 'Vis tittel',
+    TitleLabel: 'Tittel',
     ShowTimelineLabel: 'Vis tidslinje',
     ShowTimelineListCommandsLabel: 'Vis kommandolinje for liste',
     ShowTimelineListLabel: 'Vis liste',
@@ -266,6 +309,14 @@ define([], function () {
     SyncProjectPropertiesProgressLabel: 'Synkroniserer prosjektegenskaper til porteføljeområdet',
     SyncProjectPropertiesValuesProgressDescription: 'Vennligst vent...',
     SyncProjectPropertiesValuesProgressLabel: 'Synkroniserer egenskaper',
+    HubSyncWarningTitle: 'Porteføljeområdet ble ikke oppdatert',
+    HubSyncNoWriteAccessReason: 'Du mangler skrivetilgang til listen «{0}» på porteføljeområdet. Be en administrator om tilgang, eller be noen med tilgang om å lagre prosjektinformasjonen.',
+    ArchiveLogWarningTitle: 'Arkiveringsloggen ble ikke oppdatert',
+    ArchiveLogNotWrittenText: 'Fasen er endret, men ikke alt i arkiveringen ble ført i arkiveringsloggen. {0} Arkivstatusen for dokumentene og listene som mangler der, vises derfor ikke. Last inn siden på nytt for å se den nye fasen i de andre webdelene.',
+    ArchiveLogNoWriteAccessReason: 'Du mangler skrivetilgang til listen «{0}» på porteføljeområdet. Be en administrator om tilgang.',
+    HubSyncHubUnavailableReason: 'Porteføljeområdet er ikke tilgjengelig for deg.',
+    ProjectPropertiesNotSyncedToHubText: 'Endringene er lagret på prosjektområdet, men ble ikke synkronisert til porteføljeområdet. {0}',
+    PhaseNotSyncedToHubText: 'Fasen er endret på prosjektområdet, men ikke på porteføljeområdet. {0} Last inn siden på nytt for å se den nye fasen i de andre webdelene.',
     SyncPropertiesAfterPhaseChangeFieldLabel: 'Synkroniser prosjektegenskaper etter faseendring',
     TagFieldLabel: 'Etikett',
     TasksLinkText: 'Gå til oppgaver',
@@ -308,7 +359,7 @@ define([], function () {
     HookArchiveAuthFieldDescription: 'Autentiseringstoken eller API-nøkkel for arkiv webhook endpoint',
     ViewsGroupName: 'Visninger',
     ViewVersionHistoryText: 'Vis versjonshistorikk',
-    ViewXmlFieldLabel: 'Vis XML spørring',
+    ViewXmlFieldLabel: 'CAML-spørring (View XML)',
     WebPartNoAccessMessage:
       'Du har ikke tilgang til å se denne webdelen.<br/><br/>Du må enten ha tilgang til porteføljeområdet, eller så må prosjektet være fristilt fra porteføljeområdet.',
     WidthFieldLabel: 'Bredde (piksler)',
@@ -332,6 +383,8 @@ define([], function () {
     TemplateLabel: 'Mal',
     NoRecentNews: 'Her kan du opprette nyhetsartikler for prosjektet. Det er for øyeblikket ingen nyhetsartikler.',
     ShowMoreNews: 'Vis flere',
+    ShowMoreChildProjectsText: 'Vis flere',
+    ShowLessChildProjectsText: 'Vis mindre',
     ShowLessNews: 'Vis færre',
     ModifiedTooltipText: 'Redigert {0}',
     MaxVisibleNewsDescription:
@@ -348,9 +401,12 @@ define([], function () {
     FileNameNoLeadingTrailingSpaces: 'Filnavn kan ikke ha ledende eller etterfølgende mellomrom.',
     FileNameReserved: 'Filnavn er reservert.',
     NewsFolderError: 'Feil ved oppretting av nyhetsmappe: ',
+    NewsNoAccessErrorText: 'Prosjektnyhetene ligger på et område du ikke har tilgang til. Be en administrator om tilgang hvis du skal se eller lage nyheter.',
     LoadingLabel: 'Laster nyheter...',
     GenericErrorMessage: 'Noe gikk galt. Vennligst prøv igjen senere eller kontakt brukerstøtte.',
     NewsCreateDuplicateFileError: 'En nyhetsartikkel med samme navn finnes allerede. Vennligst velg et annet navn.',
+    NewsCreateLeftoverPageError: 'Siden «{0}» ble likevel opprettet i mappen «{1}», men er ikke knyttet til prosjektet og kunne ikke fjernes. Slett den i Områdesider før du prøver igjen.',
+    NewsPageItemNotFoundError: 'Fant ikke siden «{0}» i Områdesider etter at den ble opprettet.',
     PreviewLabel: 'Forhåndsvis valgt mal',
     NoPreviewAvailable: 'Ingen forhåndsvisning tilgjengelig.',
     NewsCreateSuccess: 'Nyhetsartikkel opprettet',
@@ -397,7 +453,10 @@ define([], function () {
       EditSelectedItem: 'Rediger valgt element',
       SearchIn: 'Søk i {0}...',
       Search: 'Søk',
-      ExportSelected: 'Eksporter {0} valgt{1} element{2} til Excel',
+      ExportSelected: 'Eksporter {0} valgt element til Excel',
+      ExportSelectedMultiple: 'Eksporter {0} valgte elementer til Excel',
+      ExportErrorTitle: 'Eksporten til Excel mislyktes',
+      ExportErrorMessage: 'Filen ble ikke laget. Prøv igjen, og kontakt administrator hvis det ikke lykkes.',
       ExportToExcel: 'Eksporter til Excel',
       FolderView: 'Mappevisning',
       FlatView: 'Flat visning',
@@ -440,9 +499,22 @@ define([], function () {
       Close: 'Lukk',
       NoItemsFound: 'Ingen elementer funnet',
       ListTable: 'Listetabell',
-      GroupByColumn: 'Grupper etter {0}',
+      SortAscending: 'Sorter stigende',
+      SortDescending: 'Sorter synkende',
+      ResizeColumn: 'Endre kolonnebredde',
       FolderNavigation: 'Mappenavigasjon',
-      HiddenFromView: 'Skjult fra visning'
+      HiddenFromView: 'Skjult fra visning',
+      RefreshDone: 'Listen er oppdatert',
+      ItemsShown: 'Viser {0} av {1} elementer',
+      FileUploaded: '{0} er lastet opp',
+      FilesUploaded: '{0} filer er lastet opp',
+      UploadFailed: 'Opplastingen feilet',
+      DocumentCreated: '{0} er opprettet',
+      DocumentCreateFailed: 'Dokumentet ble ikke opprettet',
+      ItemDeleted: 'Elementet er slettet',
+      ItemsDeleted: '{0} elementer er slettet',
+      DeleteFailed: 'Slettingen feilet',
+      DefaultListName: 'liste'
     }
   }
 })

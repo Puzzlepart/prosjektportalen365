@@ -1,7 +1,8 @@
-import { format } from '@uifabric/utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import { ProvisioningError, Schema } from 'sp-js-provisioning'
 import { BaseTaskError } from '../@BaseTask'
+import { format } from 'pp365-shared-library'
+import { withReason } from '../../readableError'
 
 interface IApplyTemplateStatus {
   text: string
@@ -9,8 +10,9 @@ interface IApplyTemplateStatus {
 
   /**
    * Returns one advanced log message per item the handler will apply,
-   * enumerated from the template schema. The provisioning library gives
-   * no per-item feedback, so the messages are emitted when the handler starts.
+   * enumerated from the template schema. The provisioning library reports
+   * no progress per item (only its warnings and errors, which `captureEngineLog`
+   * adds to the log), so the messages are emitted when the handler starts.
    */
   getLogMessages?: (schema: Schema) => string[]
 }
@@ -85,14 +87,15 @@ export const APPLY_TEMPLATE_STATUS_MAP = new Map<string, IApplyTemplateStatus>([
 
 export class ApplyTemplateTaskError extends BaseTaskError {
   /**
-   * Creates a new instance of `ApplyTemplateTaskError`
+   * Creates a new instance of `ApplyTemplateTaskError`: the handler that failed, and what it failed
+   * with in words (see `readableErrorMessage`).
    *
    * @param error Provisioning error from `sp-js-provisioning`
    */
   constructor(error: ProvisioningError) {
     super(
       'ApplyTemplate',
-      `${format(strings.ApplyTemplateErrorMessage, error.handler)}: ${error.message}`,
+      withReason(format(strings.ApplyTemplateErrorMessage, error?.handler), error),
       error
     )
   }

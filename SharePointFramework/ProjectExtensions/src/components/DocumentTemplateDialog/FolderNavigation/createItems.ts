@@ -1,5 +1,5 @@
-import { IBreadcrumbItem } from '@fluentui/react/lib/Breadcrumb'
-import { IFolderNavigationProps } from './types'
+import { IFolderNavigationItem, IFolderNavigationProps } from './types'
+
 /**
  * Create breadcrum items
  *
@@ -8,11 +8,11 @@ import { IFolderNavigationProps } from './types'
 export const createItems = ({
   currentFolder,
   setFolder
-}: Partial<IFolderNavigationProps>): IBreadcrumbItem[] => {
+}: Partial<IFolderNavigationProps>): IFolderNavigationItem[] => {
   if (!currentFolder) return []
   const paths = currentFolder.split('/').splice(4)
   return paths.map((f, idx) => {
-    const item: IBreadcrumbItem = {
+    const item: IFolderNavigationItem = {
       key: idx.toString(),
       text: f,
       isCurrentItem: paths.length - 1 === idx

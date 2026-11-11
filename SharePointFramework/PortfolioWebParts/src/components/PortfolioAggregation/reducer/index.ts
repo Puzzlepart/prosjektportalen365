@@ -1,4 +1,4 @@
-import { useId } from '@fluentui/react-hooks'
+import { useId } from '@fluentui/react-components'
 import { useMemo, useReducer } from 'react'
 import { IPortfolioAggregationContext } from '../context'
 import { IPortfolioAggregationProps } from '../types'
@@ -13,11 +13,12 @@ export const usePortfolioAggregationReducer = (
   props: IPortfolioAggregationProps
 ): IPortfolioAggregationContext => {
   const layerHostId = useId('layerHost')
+  const toasterId = useId('toaster')
   const initialState = useMemo(() => getInitialState(props), [props])
   const reducer = useMemo(() => createPortfolioAggregationReducer(props, initialState), [])
   const [state, dispatch] = useReducer(reducer, initialState)
   return useMemo<IPortfolioAggregationContext>(
-    () => ({ props, state, dispatch, layerHostId }),
+    () => ({ props, state, dispatch, layerHostId, toasterId }),
     [state]
   )
 }

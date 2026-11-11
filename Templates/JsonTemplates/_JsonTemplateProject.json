@@ -532,7 +532,7 @@
                         "Title": "{{Navigation_ChangeAnalysis_Title}}"
                     },
                     {
-                        "Url":"{{Navigation_BenefitsAnalysis_Url}}",
+                        "Url": "{{Lists_BenefitsAnalysis_Url}}/AllItems.aspx",
                         "Title": "{{Navigation_BenefitsAnalysis_Title}}"
                     },
                     {
@@ -976,7 +976,7 @@
                 "EnableVersioning": true
             },
             "Fields": [
-                "<Field Type=\"LookupMulti\" DisplayName=\"{{ListFields_DeliveryStakeholders_DisplayName}}\" List=\"{listid:{{Lists_Stakeholders_Title}}}\" ShowField=\"Title\" ID=\"{6d90e0b6-73e6-48fb-aa1e-b897b214f934}\" Description=\"{{ListFields_DeliveryStakeholders_Description}}\" Name=\"GtDeliveryStakeholders\" StaticName=\"GtDeliveryStakeholders\" Name=\"GtDeliveryStakeholders\" Mult=\"TRUE\" />"
+                "<Field Type=\"LookupMulti\" DisplayName=\"{{ListFields_DeliveryStakeholders_DisplayName}}\" List=\"{listid:{{Lists_Stakeholders_Title}}}\" ShowField=\"Title\" ID=\"{6d90e0b6-73e6-48fb-aa1e-b897b214f934}\" Description=\"{{ListFields_DeliveryStakeholders_Description}}\" StaticName=\"GtDeliveryStakeholders\" Name=\"GtDeliveryStakeholders\" Mult=\"TRUE\" />"
             ],
             "Views": [
                 {

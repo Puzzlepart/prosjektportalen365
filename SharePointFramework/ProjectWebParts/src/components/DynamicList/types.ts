@@ -1,10 +1,10 @@
-import { IColumn } from '@fluentui/react'
 import {
   EditableSPField,
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState,
   ICustomEditPanelProps,
-  IFilterProps
+  IFilterProps,
+  IListColumn
 } from 'pp365-shared-library'
 
 export enum DynamicListMode {
@@ -96,14 +96,6 @@ export interface ICustomAction {
    * Sort order for the action (lower numbers appear first)
    */
   order?: number
-}
-
-/**
- * Column context menu configuration.
- */
-export interface IColumnContextMenu {
-  column: any
-  target: HTMLElement
 }
 
 export interface IFileItem extends Record<string, any> {
@@ -317,7 +309,15 @@ export interface IDynamicListProps extends IBaseWebPartComponentProps {
   customActions?: ICustomAction[]
 }
 
-export interface IDynamicListState extends IBaseWebPartComponentState<IDynamicListData> {
+export interface IDynamicListState extends Omit<
+  IBaseWebPartComponentState<IDynamicListData>,
+  'error'
+> {
+  /**
+   * Message of a failed fetch, shown in place of the list
+   */
+  error?: string
+
   /**
    * Loading state
    */
@@ -404,11 +404,6 @@ export interface IDynamicListState extends IBaseWebPartComponentState<IDynamicLi
   documentLibraryViewMode?: DocumentLibraryViewMode
 
   /**
-   * Column context menu state
-   */
-  columnContextMenu?: IColumnContextMenu
-
-  /**
    * Whether Excel export is in progress
    */
   isExporting?: boolean
@@ -432,7 +427,7 @@ export interface IDynamicListData {
   /**
    * Columns configuration for the grid
    */
-  listColumns: IColumn[]
+  listColumns: IListColumn[]
 
   /**
    * Columns that should be hidden by default because they are not present

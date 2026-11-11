@@ -1,7 +1,7 @@
 import { IProjectSetupData } from 'extensions/projectSetup'
 import * as strings from 'ProjectExtensionsStrings'
 import { CloudTemplatePackage, PortalDataService } from 'pp365-shared-library/lib/services'
-import { SpEntityPortalService } from 'sp-entityportal-service'
+import { getTermStore, ITermSetInfo, SpEntityPortalService } from 'pp365-shared-library'
 import initSpfxJsom, { ExecuteJsomQuery } from 'spfx-jsom'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import _ from 'underscore'
@@ -90,9 +90,21 @@ export class PreTask extends BaseTask {
    * @param termSetIds - Term set IDs
    */
   private async validateTermSetIds(termSetIds: any) {
-    const termSet = await this.params.sp.termStore.sets.getById(termSetIds.GtProjectPhase)()
-    if (!termSet?.localizedNames[0]?.name) {
-      this.logError(`Failed to validate term set ${termSetIds.GtProjectPhase}`)
+    const termSetId = termSetIds?.GtProjectPhase
+    let termSet: ITermSetInfo
+    try {
+      termSet = await getTermStore(this.params.sp.web).sets.getById(termSetId)()
+    } catch (error) {
+      // The term store answers 404 for an unknown term set rather than an empty payload.
+      this.logError(`Failed to validate term set ${termSetId}`, error)
+      throw new BaseTaskError(
+        this.taskName,
+        strings.PreTaskTermSetIdValidationErrorMessage,
+        error?.status === 404 ? strings.TermSetDoesNotExistError : error
+      )
+    }
+    if (!termSet?.localizedNames?.[0]?.name) {
+      this.logError(`Failed to validate term set ${termSetId}`)
       throw new BaseTaskError(
         this.taskName,
         strings.PreTaskTermSetIdValidationErrorMessage,

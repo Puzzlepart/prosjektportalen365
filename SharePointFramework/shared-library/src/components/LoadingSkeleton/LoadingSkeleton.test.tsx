@@ -1,0 +1,40 @@
+import * as React from 'react'
+import { render, screen } from '@testing-library/react'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
+import strings from 'SharedLibraryStrings'
+import { LoadingSkeleton } from './LoadingSkeleton'
+
+/**
+ * First component test in the repository. Besides covering the component it proves the harness:
+ * Fluent UI v9 renders under jsdom, and `.module.scss` imports resolve to their class names.
+ */
+describe('LoadingSkeleton', () => {
+  it('renders three skeleton items sized xlarge, large and medium', () => {
+    const { container } = render(<LoadingSkeleton />)
+    const items = container.querySelectorAll('.xlarge, .large, .medium')
+    expect(items).toHaveLength(3)
+    expect(container.firstElementChild).toHaveClass('loadingSkeleton')
+  })
+
+  it('forwards Fluent Skeleton props', () => {
+    const { container } = render(<LoadingSkeleton aria-label='Laster' />)
+    expect(container.firstElementChild).toHaveAttribute('aria-label', 'Laster')
+  })
+
+  it('renders the rows it is given instead of the default three', () => {
+    const { container } = render(<LoadingSkeleton rows={['medium']} />)
+    expect(container.querySelectorAll('.xlarge, .large, .medium')).toHaveLength(1)
+    expect(container.querySelector('.medium')).toBeTruthy()
+  })
+
+  it('is named, so a screen reader says something is loading (WCAG 4.1.2)', async () => {
+    const { container } = render(<LoadingSkeleton />)
+    expect(screen.getByRole('progressbar', { name: strings.LoadingText })).toBeInTheDocument()
+    expect(await axeComponent(container)).toHaveNoViolations()
+  })
+
+  it('renders nothing but the container for an empty row list', () => {
+    const { container } = render(<LoadingSkeleton rows={[]} />)
+    expect(container.firstElementChild.children).toHaveLength(0)
+  })
+})

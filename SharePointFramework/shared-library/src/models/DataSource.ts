@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { ProjectContentColumn } from './ProjectContentColumn'
 import _ from 'lodash'
 

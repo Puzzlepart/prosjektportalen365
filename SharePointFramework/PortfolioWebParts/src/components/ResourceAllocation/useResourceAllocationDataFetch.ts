@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react/lib/Utilities'
 import sortArray from 'array-sort'
 import { IAllocationSearchResult, IEnrichedAllocationSearchResult } from 'interfaces'
 import _ from 'lodash'
@@ -14,6 +13,7 @@ import {
   ITimelineItem,
   TimelineGroupType
 } from 'pp365-shared-library/lib/interfaces'
+import { format } from 'pp365-shared-library'
 
 /**
  * Enriches search results with department information from user profiles
@@ -129,7 +129,7 @@ const transformGroups = (searchResults: IEnrichedAllocationSearchResult[]): ITim
  *
  * @returns Timeline items
  */
-const transformItems = (
+export const transformItems = (
   searchResults: IEnrichedAllocationSearchResult[],
   groups: ITimelineGroup[],
   props: IResourceAllocationProps
@@ -172,6 +172,9 @@ const transformItems = (
         itemProps: { style },
         props: res,
         data: {
+          // The fill fades with the allocation, so the bar is edged in the full colour, which the
+          // timeline darkens where it stands out too little from its rows (WCAG 1.4.11).
+          edgeColor: `rgb(${backgroundColor})`,
           project: isAbsence ? '' : res.SiteTitle,
           projectUrl: isAbsence ? '' : res.SiteName,
           type: isAbsence ? strings.ResourceAbsenceLabel : strings.ResourceLabel,
@@ -233,6 +236,6 @@ export const useResourceAllocationDataFetch = (
   fetchCallback: (data: ITimelineData) => void
 ) => {
   useEffect(() => {
-    fetchData(props).then(fetchCallback)
+    void fetchData(props).then(fetchCallback)
   }, [])
 }

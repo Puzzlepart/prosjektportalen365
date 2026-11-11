@@ -39,16 +39,23 @@ export interface IPackageCardProps {
 export const packageCardId = (packageId: string): string =>
   `pp-pkg-card-${packageId.replace(/[^a-zA-Z0-9_-]/g, '-')}`
 
+/**
+ * A package to choose: the card is a button named by the package, the chosen one marked current
+ * (WCAG 4.1.2); the list item is its cell.
+ */
 export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
-  const { isSelected, showImage, meta, select, onCardKeyDown, onImageError } = usePackageCard(pkg)
+  const { isSelected, showImage, meta, select, onCardKeyDown, onImageError, descriptionId } =
+    usePackageCard(pkg)
   const hiddenOverlayStyles = useHiddenOverlayStyles()
 
   return (
     <Card
       id={packageCardId(pkg.id)}
       className={mergeClasses(styles.card, isSelected && styles.selected)}
-      role='listitem'
-      aria-selected={isSelected}
+      role='button'
+      aria-label={pkg.name}
+      aria-current={isSelected || undefined}
+      aria-describedby={pkg.description ? descriptionId : undefined}
       tabIndex={0}
       floatingAction={<PackageStatusTag packageId={pkg.id} />}
       onClick={select}
@@ -84,7 +91,7 @@ export const PackageCard: FC<IPackageCardProps> = ({ package: pkg }) => {
         }
       />
       {pkg.description && (
-        <Text size={200} className={styles.description}>
+        <Text id={descriptionId} size={200} className={styles.description}>
           {pkg.description}
         </Text>
       )}

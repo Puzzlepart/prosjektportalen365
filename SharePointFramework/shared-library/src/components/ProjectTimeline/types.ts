@@ -5,8 +5,7 @@ import { IBaseComponentProps } from '../types'
 import { ITimelineProps } from './Timeline'
 
 export interface IProjectTimelineProps
-  extends IBaseComponentProps<any>,
-    Pick<ITimelineProps, 'infoText'> {
+  extends IBaseComponentProps<any>, Pick<ITimelineProps, 'infoText'> {
   /**
    * Default timeframe start as a comma separated string (e.g. `4,months`).
    * Interpreted as months back in time from today.

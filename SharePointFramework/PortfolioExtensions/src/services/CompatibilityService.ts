@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react/lib/Utilities'
 import { Logger, LogLevel } from '@pnp/logging'
 import '@pnp/sp/webs'
 import '@pnp/sp/lists'
@@ -6,6 +5,7 @@ import '@pnp/sp/fields'
 import '@pnp/sp/content-types'
 import '@pnp/sp/views'
 import '@pnp/sp/files'
+import { getTermStore, format } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
 import SPDataAdapter from 'data/SPDataAdapter'
 import { ICompatibilityConflict, ICompatibilityReport, IPackageManifest } from 'models'
@@ -22,6 +22,42 @@ function attr(xml: string, name: string): string | undefined {
 }
 
 /**
+ * The type a field XML declares, with `Mult="TRUE"` on a Lookup, User or taxonomy
+ * field read as the multi-value type SharePoint reports (`TypeAsString`), as
+ * sp-js-provisioning's `declaredType` reads it.
+ */
+function declaredType(xml: string): string | undefined {
+  const type = attr(xml, 'Type')
+  const multi = /^true$/i.test(attr(xml, 'Mult') ?? '')
+  if (multi && (type === 'Lookup' || type === 'User')) return `${type}Multi`
+  if (multi && type === 'TaxonomyFieldType') return 'TaxonomyFieldTypeMulti'
+  return type
+}
+
+/**
+ * The type changes sp-js-provisioning applies to an existing column in place,
+ * keeping its values. Any other type change would lose values, so it leaves the
+ * column as it is and logs a warning.
+ */
+const WIDENING: Record<string, string> = {
+  Text: 'Note',
+  Lookup: 'LookupMulti',
+  User: 'UserMulti'
+}
+
+/**
+ * How a package's field type relates to the stored one, as sp-js-provisioning's
+ * `typeChange` decides it: the same, a widening, or another change.
+ *
+ * @param stored - The existing column's `TypeAsString`
+ * @param declared - The package's type ({@link declaredType})
+ */
+function typeChange(stored?: string, declared?: string): 'same' | 'widening' | 'other' {
+  if (!stored || !declared || stored === declared) return 'same'
+  return WIDENING[stored] === declared ? 'widening' : 'other'
+}
+
+/**
  * Pre-flight compatibility check for the import (Mode A) and publish-as-cloud-
  * template (Mode B) flows: compares a package's `hub-template.json` (and, for
  * imports, its bundled extensions) against what already exists on the hub web,
@@ -33,7 +69,10 @@ function attr(xml: string, name: string): string | undefined {
  */
 export class CompatibilityService {
   /**
-   * Run the compatibility check.
+   * Run the compatibility check. Site columns and list fields are reported as
+   * sp-js-provisioning 1.5.0 handles them: an existing one is updated in place by
+   * its internal name (list fields by their id), never deleted; a widening type
+   * change is applied, any other type change leaves it as it is.
    *
    * @param zip - The opened package archive
    * @param manifest - The package manifest
@@ -164,37 +203,61 @@ export class CompatibilityService {
       const text = String(xml)
       const id = attr(text, 'ID')
       const name = attr(text, 'Name') || attr(text, 'StaticName')
-      const type = attr(text, 'Type')
       if (!name) continue
       const exByName = byName.get(name.toLowerCase())
-      const exById = id ? byId.get(normGuid(id)) : undefined
 
-      if (exByName && id && normGuid(exByName.Id) !== normGuid(id)) {
-        conflicts.push({
-          kind: 'siteField',
-          targetId: id,
-          targetName: name,
-          existingName: name,
-          resolution: 'overwrite',
-          detail: format(strings.CatalogConflictSiteField, name)
-        })
-      } else if (exByName && type && exByName.TypeAsString && exByName.TypeAsString !== type) {
-        conflicts.push({
-          kind: 'siteField',
-          targetId: id ?? name,
-          targetName: name,
-          existingName: exByName.TypeAsString,
-          resolution: 'overwrite',
-          detail: format(strings.CatalogConflictSiteFieldType, name, exByName.TypeAsString)
-        })
+      if (exByName) {
+        const type = declaredType(text)
+        const change = typeChange(exByName.TypeAsString, type)
+        if (change === 'other') {
+          // The whole column is left as it is, its id included.
+          conflicts.push({
+            kind: 'siteField',
+            targetId: id ?? name,
+            targetName: name,
+            existingName: exByName.TypeAsString,
+            resolution: 'skip',
+            detail: format(strings.CatalogConflictSiteFieldType, name, exByName.TypeAsString, type)
+          })
+          continue
+        }
+        if (id && normGuid(exByName.Id) !== normGuid(id)) {
+          conflicts.push({
+            kind: 'siteField',
+            targetId: id,
+            targetName: name,
+            existingName: name,
+            resolution: 'overwrite',
+            detail: format(strings.CatalogConflictSiteField, name)
+          })
+        }
+        if (change === 'widening') {
+          conflicts.push({
+            kind: 'siteField',
+            targetId: id ?? name,
+            targetName: name,
+            existingName: exByName.TypeAsString,
+            resolution: 'overwrite',
+            detail: format(
+              strings.CatalogConflictSiteFieldWidened,
+              name,
+              exByName.TypeAsString,
+              type
+            )
+          })
+        }
+        continue
       }
-      if (exById && (exById.InternalName ?? '').toLowerCase() !== name.toLowerCase()) {
+      // Its id under another name: sp-js-provisioning logs an error and does not
+      // create the column, but goes on with the rest of the template.
+      const exById = id ? byId.get(normGuid(id)) : undefined
+      if (exById) {
         conflicts.push({
           kind: 'siteField',
           targetId: id as string,
           targetName: name,
           existingName: exById.InternalName,
-          resolution: 'blocked',
+          resolution: 'skip',
           detail: format(strings.CatalogConflictSiteFieldReused, name, exById.InternalName)
         })
       }
@@ -214,7 +277,7 @@ export class CompatibilityService {
 
     for (const entry of lists) {
       const title: string = entry.Title ?? ''
-      const declaredFields = CompatibilityService._listFieldIds(entry)
+      const declaredFields = CompatibilityService._listFields(entry)
       const declaredViews: string[] = (entry.Views ?? []).map((v: any) => v?.Title).filter(Boolean)
       const inspects =
         declaredFields.length > 0 || declaredViews.length > 0 || !!entry.RemoveExistingContentTypes
@@ -222,20 +285,8 @@ export class CompatibilityService {
 
       const list = web.lists.getByTitle(title)
       if (declaredFields.length > 0) {
-        const listFields: any[] = await list.fields.select('Id', 'InternalName')()
-        const listFieldIds = new Set(listFields.map((f) => normGuid(f.Id)))
-        for (const df of declaredFields) {
-          if (df.id && listFieldIds.has(normGuid(df.id))) {
-            conflicts.push({
-              kind: 'listField',
-              targetId: df.id,
-              targetName: df.name ?? df.id,
-              existingName: title,
-              resolution: 'blocked',
-              detail: format(strings.CatalogConflictListField, df.name ?? df.id, title)
-            })
-          }
-        }
+        const listFields: any[] = await list.fields.select('Id', 'InternalName', 'TypeAsString')()
+        CompatibilityService._checkListFields(title, declaredFields, listFields, conflicts)
       }
       if (declaredViews.length > 0) {
         const listViews: any[] = await list.views.select('Title')()
@@ -253,29 +304,85 @@ export class CompatibilityService {
           }
         }
       }
+      // sp-js-provisioning removes content types only on a list it creates in the
+      // same run; an existing hub list keeps its own.
       if (entry.RemoveExistingContentTypes) {
         conflicts.push({
           kind: 'list',
           targetId: title,
           targetName: title,
-          resolution: 'overwrite',
+          resolution: 'skip',
           detail: format(strings.CatalogConflictList, title)
         })
       }
     }
   }
 
-  /** Collect `{ id, name }` for a list entry's declared Fields + FieldRefs. */
-  private static _listFieldIds(entry: any): Array<{ id?: string; name?: string }> {
-    const out: Array<{ id?: string; name?: string }> = []
+  /**
+   * Compares a list entry's declared `Fields` with the fields of the existing list,
+   * as sp-js-provisioning applies them: a field with the declared id is updated in
+   * place and never deleted (a widening type change is applied, any other leaves it
+   * as it is); a declared field whose name the list has under another id is not
+   * added. `FieldRefs` need no check: an existing field only gets the reference's
+   * title, `Required` and `Hidden`.
+   */
+  private static _checkListFields(
+    title: string,
+    declaredFields: Array<{ id?: string; name?: string; type?: string }>,
+    listFields: any[],
+    conflicts: ICompatibilityConflict[]
+  ): void {
+    const byId = new Map(listFields.map((f) => [normGuid(f.Id), f]))
+    const byName = new Map(listFields.map((f) => [(f.InternalName ?? '').toLowerCase(), f]))
+    for (const df of declaredFields) {
+      const name = df.name ?? df.id
+      const existing = df.id ? byId.get(normGuid(df.id)) : undefined
+      if (!existing) {
+        const sameName = df.name ? byName.get(df.name.toLowerCase()) : undefined
+        if (sameName) {
+          conflicts.push({
+            kind: 'listField',
+            targetId: df.id ?? df.name,
+            targetName: name,
+            existingName: title,
+            resolution: 'skip',
+            detail: format(strings.CatalogConflictListField, name, title)
+          })
+        }
+        continue
+      }
+      const change = typeChange(existing.TypeAsString, df.type)
+      if (change === 'same') continue
+      conflicts.push({
+        kind: 'listField',
+        targetId: df.id,
+        targetName: name,
+        existingName: title,
+        resolution: change === 'widening' ? 'overwrite' : 'skip',
+        detail: format(
+          change === 'widening'
+            ? strings.CatalogConflictListFieldWidened
+            : strings.CatalogConflictListFieldType,
+          name,
+          title,
+          existing.TypeAsString,
+          df.type
+        )
+      })
+    }
+  }
+
+  /** Collect `{ id, name, type }` for a list entry's declared `Fields`. */
+  private static _listFields(entry: any): Array<{ id?: string; name?: string; type?: string }> {
+    const out: Array<{ id?: string; name?: string; type?: string }> = []
     for (const f of entry.Fields ?? []) {
-      if (typeof f === 'string') out.push({ id: attr(f, 'ID'), name: attr(f, 'Name') })
-      else if (f) out.push({ id: f.ID ?? f.Id, name: f.Name ?? f.InternalName })
+      if (typeof f === 'string') {
+        out.push({ id: attr(f, 'ID'), name: attr(f, 'Name'), type: declaredType(f) })
+      } else if (f) {
+        out.push({ id: f.ID ?? f.Id, name: f.Name ?? f.InternalName })
+      }
     }
-    for (const ref of entry.FieldRefs ?? []) {
-      if (ref) out.push({ id: ref.ID ?? ref.Id, name: ref.Name })
-    }
-    return out.filter((f) => f.id)
+    return out.filter((f) => f.id || f.name)
   }
 
   private static async _checkTaxonomy(
@@ -283,13 +390,11 @@ export class CompatibilityService {
     conflicts: ICompatibilityConflict[]
   ): Promise<void> {
     try {
-      const sp: any = SPDataAdapter.sp
+      const termStore = getTermStore(SPDataAdapter.sp.web)
       for (const set of schema.Taxonomy?.TermSets ?? []) {
         if (!set?.Id) continue
         try {
-          const existing: any = await sp.termStore.sets
-            .getById(set.Id)
-            .select('id', 'localizedNames')()
+          const existing = await termStore.sets.getById(set.Id).select('id', 'localizedNames')()
           const existingName = existing?.localizedNames?.[0]?.name
           if (existingName && set.Name && existingName !== set.Name) {
             conflicts.push({
@@ -337,13 +442,16 @@ export class CompatibilityService {
   }
 
   /**
-   * Returns the schema with conflicting entries removed for the resolutions the
-   * user accepted (`skip`/`blocked`): whole ContentTypes / SiteFields entries,
-   * individual fields out of a `Lists[].Fields`/`FieldRefs` array, and term sets
-   * out of `Taxonomy.TermSets` (so an existing term set with the same id but a
-   * different name really is left untouched, as the conflict dialog promises).
-   * Mutates a shallow clone so the existing hub objects are left untouched on
-   * provisioning.
+   * Returns the schema with the conflicting entries that sp-js-provisioning would
+   * otherwise apply, or fail on, removed for the resolutions the user accepted
+   * (`skip`/`blocked`): whole ContentTypes entries (an id owned by another content
+   * type, or a field reference the hub lacks) and term sets out of
+   * `Taxonomy.TermSets` (so an existing term set with the same id but a different
+   * name really is left untouched, as the conflict dialog promises). Site columns
+   * and list fields stay in: sp-js-provisioning 1.5.0 updates them in place, leaves
+   * a type change that would lose values alone and logs a column it cannot create
+   * as an error, without stopping. Mutates a shallow clone so the existing hub
+   * objects are left untouched on provisioning.
    */
   public static stripConflicts(schema: any, report: ICompatibilityReport): any {
     if (!schema || !report?.conflicts?.length) return schema
@@ -372,36 +480,6 @@ export class CompatibilityService {
         (ct: any) =>
           !ctSkip.has(normCtId(ct.ID)) && !ctFieldRefBlocked.has((ct.Name ?? '').toLowerCase())
       )
-    }
-    const fieldSkipIds = new Set(
-      report.conflicts
-        .filter((c) => c.kind === 'siteField' && c.resolution === 'blocked')
-        .map((c) => normGuid(c.targetId))
-    )
-    if (Array.isArray(next.SiteFields)) {
-      next.SiteFields = next.SiteFields.filter(
-        (xml: any) => !fieldSkipIds.has(normGuid(attr(String(xml), 'ID')))
-      )
-    }
-    const listFieldSkipIds = new Set(
-      report.conflicts.filter((c) => c.kind === 'listField').map((c) => normGuid(c.targetId))
-    )
-    if (Array.isArray(next.Lists) && listFieldSkipIds.size > 0) {
-      next.Lists = next.Lists.map((entry: any) => {
-        const e = { ...entry }
-        if (Array.isArray(e.Fields)) {
-          e.Fields = e.Fields.filter((f: any) => {
-            const id = typeof f === 'string' ? attr(f, 'ID') : f?.ID ?? f?.Id
-            return !listFieldSkipIds.has(normGuid(id))
-          })
-        }
-        if (Array.isArray(e.FieldRefs)) {
-          e.FieldRefs = e.FieldRefs.filter(
-            (r: any) => !listFieldSkipIds.has(normGuid(r?.ID ?? r?.Id))
-          )
-        }
-        return e
-      })
     }
     return next
   }

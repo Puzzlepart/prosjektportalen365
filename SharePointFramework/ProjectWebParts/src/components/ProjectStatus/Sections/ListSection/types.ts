@@ -1,4 +1,4 @@
-import { IColumn } from '@fluentui/react/lib/DetailsList'
+import { IListColumn } from 'pp365-shared-library'
 
 export interface IListSectionState<T> {
   /**
@@ -18,7 +18,7 @@ export interface IListSectionState<T> {
 }
 
 export interface IListSectionData {
-  columns?: IColumn[]
+  columns?: IListColumn[]
   items?: any[]
   summation?: ISummation
 }

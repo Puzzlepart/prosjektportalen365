@@ -1,32 +1,22 @@
 {
-  "extends": "./node_modules/@microsoft/rush-stack-compiler-4.5/includes/tsconfig-web.json",
+  "extends": "./node_modules/@microsoft/spfx-web-build-rig/profiles/default/tsconfig-base.json",
   "compilerOptions": {
-    "target": "es5",
-    "forceConsistentCasingInFileNames": true,
-    "allowSyntheticDefaultImports": true,
-    "noUnusedParameters": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "jsx": "react",
-    "declaration": true,
-    "sourceMap": true,
-    "experimentalDecorators": true,
-    "skipLibCheck": true,
-    "outDir": "lib",
-    "inlineSources": false,
+    "strict": false,
+    "noImplicitAny": false,
     "strictNullChecks": false,
     "useUnknownInCatchVariables": false,
     "noUnusedLocals": false,
-    "noImplicitAny": false,
-    "typeRoots": [
-      "./node_modules/@types",
-      "./node_modules/@microsoft"
-    ],
-    "types": [
-      "webpack-env"
-    ],
+    "downlevelIteration": true,
+    "allowSyntheticDefaultImports": true,
     "lib": [
       "dom",
+      "es5",
+      "es2015.core",
+      "es2015.collection",
+      "es2015.iterable",
+      "es2015.promise",
+      "es2015.proxy",
+      "es2020",
       "es2016"
     ],
     "baseUrl": "src",
@@ -47,13 +37,5 @@
         "data"
       ]
     }
-  },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules",
-    "lib"
-  ]
+  }
 }

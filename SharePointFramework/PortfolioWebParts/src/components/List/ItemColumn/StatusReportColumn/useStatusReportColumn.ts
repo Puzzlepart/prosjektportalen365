@@ -1,10 +1,16 @@
 import { OnOpenChangeData, OpenPopoverEvents } from '@fluentui/react-components'
 import _ from 'lodash'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import strings from 'PortfolioWebPartsStrings'
+import { format, getScopeSeriesKey } from 'pp365-shared-library'
 import { IStatusColumnProps } from './types'
 
 /**
- * Hook for the status report column.
+ * Hook for the status report column. Matches the report on both site ID and
+ * report scope key ("delprosjekt"), so that a row representing a scoped
+ * report series shows that series' latest report. Rows without a `ScopeKey`
+ * (the default series) match reports without a scope suffix on `GtSiteId` —
+ * which includes all reports created before multi-reporting was supported.
  *
  * The popover open state is controlled here to add a show delay
  * (`props.openDelay`), as v9 `Popover` with `openOnHover` opens instantly on
@@ -12,11 +18,16 @@ import { IStatusColumnProps } from './types'
  * `pointerleave` — Fluent delays the close notification by `mouseLeaveDelay`,
  * so a pending open could otherwise fire after the pointer has left the cell.
  *
+ * Fluent's popover trigger makes the icons a button: it is named by each section's status, which
+ * the icons show by colour alone (WCAG 4.1.2).
+ *
  * @param props Props for the status report column
  */
 export function useStatusReportColumn(props: IStatusColumnProps) {
   const status = _.get(props.column, 'data.$', []).find(
-    ({ siteId }) => siteId === props.item.SiteId
+    ({ siteId, scopeKey }) =>
+      siteId === props.item.SiteId &&
+      getScopeSeriesKey(scopeKey) === getScopeSeriesKey(props.item.ScopeKey)
   )
 
   const [open, setOpen] = useState(false)
@@ -40,8 +51,19 @@ export function useStatusReportColumn(props: IStatusColumnProps) {
 
   useEffect(() => () => window.clearTimeout(openTimeout.current), [])
 
+  const label = status?.sections?.length
+    ? format(
+        strings.NameValueLabel,
+        strings.ColumnRenderOptionStatusReport,
+        status.sections
+          .map(({ name, value }) => format(strings.NameValueLabel, name, value))
+          .join(', ')
+      )
+    : undefined
+
   return {
     status,
+    label,
     open,
     onOpenChange,
     cancelPendingOpen

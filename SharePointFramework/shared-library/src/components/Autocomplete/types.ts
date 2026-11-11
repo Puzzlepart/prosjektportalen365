@@ -1,85 +1,145 @@
-import { ISearchBoxProps } from '@fluentui/react'
-import { ISuggestionItem } from './SuggestionItem/types'
+import { CSSProperties } from 'react'
 
-/**
- * @ignore
- */
 export type AutocompleteSelectCallback<T = any> = (item: ISuggestionItem<T>) => void
 
-/**
- * @ignore
- */
 export type AutocompleteItemIcons = {
-  style: React.CSSProperties
+  style: CSSProperties
 }
 
 /**
- * @category Autocomplete
+ * An item the autocomplete offers.
  */
-export interface IAutocompleteProps<T = any> extends ISearchBoxProps {
+export interface ISuggestionItem<T = any> {
   /**
-   * Label for the autocomplete component.
+   * Identifies the item; `defaultSelectedKey` and `selectedKey` name it by this.
+   */
+  key: string | number
+
+  /**
+   * Shown in the list, and in the input once picked.
+   */
+  text: string
+
+  /**
+   * Whether the item can be picked.
+   */
+  disabled?: boolean
+
+  /**
+   * Position of the item in `items`.
+   */
+  index?: number
+
+  /**
+   * Matched against what is typed, ignoring case.
+   */
+  searchValue: string
+
+  /**
+   * Secondary text of the item.
+   */
+  secondaryText?: string
+
+  /**
+   * Icon shown before the text when `itemIcons` is set.
+   */
+  iconName?: string
+
+  /**
+   * Type of the item, for the caller.
+   */
+  type?: string
+
+  /**
+   * Anything the caller keeps with the item.
+   */
+  tag?: any
+
+  /**
+   * Data of the item, for the caller.
+   */
+  data?: T
+
+  /**
+   * Whether the item is selected.
+   */
+  isSelected?: boolean
+}
+
+export interface IAutocompleteProps<T = any> {
+  /**
+   * Label of the field; with a label, a description or an error message the autocomplete is
+   * wrapped in a Fluent `Field`.
    */
   label?: string
 
   /**
-   * Provide the key of the selected item. This will be used to clear
-   * the selection when the provided key is `null`.
-   */
-  selectedKey?: string
-
-  /**
-   * Description for the autocomplete component.
+   * Shown under the input as a hint.
    */
   description?: string
 
   /**
-   * Icons to be displayed next to each item.
-   */
-  itemIcons?: AutocompleteItemIcons | boolean
-
-  /**
-   * Callback to be called when an item is selected.
-   */
-  onSelected: AutocompleteSelectCallback<T>
-
-  /**
-   * Items to be displayed in the autocomplete component. Either an array of
-   * `ISuggestionItem` or an array of strings.
-   */
-  items?: ISuggestionItem<T>[] | string[]
-
-  /**
-   * Text to be displayed when there are no suggestions.
-   */
-  noSuggestionsText?: string
-
-  /**
-   * Default selected key.
-   */
-  defaultSelectedKey?: string
-
-  /**
-   * Error message to be displayed.
+   * Shown under the input as an error.
    */
   errorMessage?: string
 
   /**
-   * Max height of the autocomplete component.
+   * Marks the field as required.
+   */
+  required?: boolean
+
+  /**
+   * Shown in the empty input.
+   */
+  placeholder?: string
+
+  /**
+   * Disables the input.
+   */
+  disabled?: boolean
+
+  /**
+   * Class of the input.
+   */
+  className?: string
+
+  /**
+   * Items to offer; plain strings are their own key, text and search value.
+   */
+  items?: ISuggestionItem<T>[] | string[]
+
+  /**
+   * Key of the item picked from the start.
+   */
+  defaultSelectedKey?: string
+
+  /**
+   * Set to `null` to clear the input.
+   */
+  selectedKey?: string
+
+  /**
+   * Called with the item picked.
+   */
+  onSelected: AutocompleteSelectCallback<T>
+
+  /**
+   * Called when the input is cleared.
+   */
+  onClear?: () => void
+
+  /**
+   * Shown in the list when nothing matches what is typed; without it, the list is empty.
+   */
+  noSuggestionsText?: string
+
+  /**
+   * Show the items' icons.
+   */
+  itemIcons?: AutocompleteItemIcons | boolean
+
+  /**
+   * Largest height of the list, in pixels.
    */
   maxHeight?: number
 }
-
-/**
- * @category Autocomplete
- */
-export interface IAutocompleteState<T = any> {
-  items?: ISuggestionItem<T>[]
-  suggestions?: ISuggestionItem<T>[]
-  isSuggestionDisabled?: boolean
-  value?: string
-  selectedItem?: ISuggestionItem
-  selectedIndex?: number
-}
-
-export * from './SuggestionItem/types'

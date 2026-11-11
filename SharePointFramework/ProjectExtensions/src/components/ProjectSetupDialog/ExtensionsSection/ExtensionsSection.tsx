@@ -1,14 +1,6 @@
-import {
-  DataGrid,
-  DataGridBody,
-  DataGridCell,
-  DataGridHeader,
-  DataGridHeaderCell,
-  DataGridRow,
-  SearchBox
-} from '@fluentui/react-components'
+import { SearchBox } from '@fluentui/react-components'
 import strings from 'ProjectExtensionsStrings'
-import { Toolbar } from 'pp365-shared-library'
+import { DataGridList, getFluentIcon, getSearchBoxDismissProps } from 'pp365-shared-library'
 import React from 'react'
 import { ProjectSetupDialogSectionComponent } from '../types'
 import styles from './ExtensionsSection.module.scss'
@@ -25,8 +17,7 @@ export const ExtensionsSection: ProjectSetupDialogSectionComponent = () => {
     onSelectionChange,
     searchTerm,
     onSearch,
-    columnSizingOptions,
-    toolbarItems
+    selectedCountText
   } = useExtensionsSection()
 
   return (
@@ -34,7 +25,9 @@ export const ExtensionsSection: ProjectSetupDialogSectionComponent = () => {
       <div className={styles.commands}>
         <div className={styles.search}>
           <SearchBox
+            dismiss={getSearchBoxDismissProps()}
             placeholder={strings.ExtensionsSectionSearchPlaceholder}
+            aria-label={strings.ExtensionsSectionSearchLabel}
             value={searchTerm}
             onChange={(_, { value }) => onSearch(value)}
             size='large'
@@ -43,40 +36,20 @@ export const ExtensionsSection: ProjectSetupDialogSectionComponent = () => {
             contentAfter={{ onClick: () => onSearch('') }}
           />
         </div>
-        <Toolbar farItems={toolbarItems} />
+        <span className={styles.selectedCount} role='status'>
+          {getFluentIcon('CheckmarkCircle', { size: 20 })}
+          {selectedCountText}
+        </span>
       </div>
-      <DataGrid
+      <DataGridList
         items={items}
         columns={columns}
+        getRowId={(item) => String(item.key)}
         selectionMode='multiselect'
         selectedItems={selectedRowIds}
         onSelectionChange={onSelectionChange}
-        getRowId={(item) => String(item.key)}
         sortable
-        resizableColumns
-        columnSizingOptions={columnSizingOptions}
-        resizableColumnsOptions={{ autoFitColumns: false }}
-      >
-        <DataGridHeader>
-          <DataGridRow
-            selectionCell={{ checkboxIndicator: { 'aria-label': strings.DataGridSelectAllLabel } }}
-          >
-            {({ renderHeaderCell }) => (
-              <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-            )}
-          </DataGridRow>
-        </DataGridHeader>
-        <DataGridBody>
-          {({ item, rowId }) => (
-            <DataGridRow
-              key={rowId}
-              selectionCell={{ checkboxIndicator: { 'aria-label': 'Select row' } }}
-            >
-              {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
-            </DataGridRow>
-          )}
-        </DataGridBody>
-      </DataGrid>
+      />
     </div>
   )
 }

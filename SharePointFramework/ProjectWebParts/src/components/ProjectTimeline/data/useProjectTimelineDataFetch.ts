@@ -15,6 +15,6 @@ export const useProjectTimelineDataFetch = (
   fetchCallback: (data: Partial<IProjectTimelineState>) => void
 ) => {
   useEffect(() => {
-    fetchData(props).then(fetchCallback)
+    void fetchData(props).then(fetchCallback)
   }, [refetch])
 }

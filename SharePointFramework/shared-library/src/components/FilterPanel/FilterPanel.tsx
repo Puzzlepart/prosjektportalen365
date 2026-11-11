@@ -1,11 +1,9 @@
-import { Panel, PanelType } from '@fluentui/react'
 import React, { FC, Fragment } from 'react'
 import { Filter } from './Filter/Filter'
 import { IFilterProps } from './Filter/types'
 import { IFilterPanelProps } from './types'
+import { BasePanel } from '../BasePanel'
 import styles from './FilterPanel.module.scss'
-import { useId, IdPrefixProvider, FluentProvider } from '@fluentui/react-components'
-import { customLightTheme } from '../../util'
 import { UserMessage } from '../UserMessage'
 import strings from 'SharedLibraryStrings'
 
@@ -44,42 +42,37 @@ function partitionFiltersByGroup(filters: IFilterProps[]): {
 }
 
 export const FilterPanel: FC<IFilterPanelProps> = (props) => {
-  const fluentProviderId = useId('fp-filter-panel')
   const displayableFilters = props.filters?.filter((f) => f.items.length > 1) ?? []
   const { ungrouped, groups } = partitionFiltersByGroup(displayableFilters)
 
   return (
-    <Panel {...props} type={PanelType.smallFixedFar}>
-      <IdPrefixProvider value={fluentProviderId}>
-        <FluentProvider theme={customLightTheme}>
-          <div className={styles.filterPanel}>
-            {displayableFilters.length === 0 && (
-              <UserMessage
-                title={strings.FilterPanelEmptyTitle}
-                text={strings.FilterPanelEmptyMessage}
-                intent='info'
+    <BasePanel {...props} size='small'>
+      <div className={styles.filterPanel}>
+        {displayableFilters.length === 0 && (
+          <UserMessage
+            title={strings.FilterPanelEmptyTitle}
+            text={strings.FilterPanelEmptyMessage}
+            intent='info'
+          />
+        )}
+        {ungrouped.map((f) => (
+          <Filter {...f} key={`u-${f.column.key}`} onFilterChange={props.onFilterChange} />
+        ))}
+        {groups.map((group) => (
+          <Fragment key={`g-${group.name}`}>
+            <div className={styles.groupHeader} role='heading' aria-level={3}>
+              {group.name}
+            </div>
+            {group.filters.map((f) => (
+              <Filter
+                {...f}
+                key={`g-${group.name}-${f.column.key}`}
+                onFilterChange={props.onFilterChange}
               />
-            )}
-            {ungrouped.map((f) => (
-              <Filter {...f} key={`u-${f.column.key}`} onFilterChange={props.onFilterChange} />
             ))}
-            {groups.map((group) => (
-              <Fragment key={`g-${group.name}`}>
-                <div className={styles.groupHeader} role='heading' aria-level={3}>
-                  {group.name}
-                </div>
-                {group.filters.map((f) => (
-                  <Filter
-                    {...f}
-                    key={`g-${group.name}-${f.column.key}`}
-                    onFilterChange={props.onFilterChange}
-                  />
-                ))}
-              </Fragment>
-            ))}
-          </div>
-        </FluentProvider>
-      </IdPrefixProvider>
-    </Panel>
+          </Fragment>
+        ))}
+      </div>
+    </BasePanel>
   )
 }

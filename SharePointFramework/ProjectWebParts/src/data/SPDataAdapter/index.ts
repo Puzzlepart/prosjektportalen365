@@ -1,9 +1,20 @@
-import { IProgressIndicatorProps } from '@fluentui/react/lib/ProgressIndicator'
 import { LogLevel, Logger } from '@pnp/logging'
 import * as strings from 'ProjectWebPartsStrings'
-import { ItemFieldValues } from 'pp365-shared-library'
+import {
+  DataSource,
+  ItemFieldValues,
+  ProjectInformationChildProject,
+  ProjectPhaseModel,
+  searchAggregatedItems,
+  format
+} from 'pp365-shared-library'
 import { DefaultCaching, SPDataAdapterBase } from 'pp365-shared-library/lib/data'
-import { IProjectDataServiceParams, ProjectDataService } from 'pp365-shared-library/lib/services'
+import {
+  DataSourceService,
+  IPhaseField,
+  IProjectDataServiceParams,
+  ProjectDataService
+} from 'pp365-shared-library/lib/services'
 import { SPFxContext } from 'pp365-shared-library/lib/types'
 import { IConfigurationFile } from 'types'
 import {
@@ -16,11 +27,16 @@ import {
   ISPDataAdapterConfiguration
 } from './types'
 import resource from 'SharedResources'
-import { format } from '@fluentui/react'
+import { IProgressProps } from 'pp365-shared-library'
+import { getNewEntityProperties } from './newEntityProperties'
+import { syncPhaseToHub } from './syncPhaseToHub'
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService
+  public dataSourceService: DataSourceService
   private _name = 'SPDataAdapter'
+  private _childProjects: Promise<ProjectInformationChildProject[]>
+  private _isParentProject: Promise<boolean>
 
   /**
    * Configure the SP data adapter
@@ -33,6 +49,11 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     configuration: ISPDataAdapterConfiguration
   ): Promise<void> {
     await super.configure(spfxContext, configuration)
+    this._childProjects = null
+    this._isParentProject = null
+    if (this.portalDataService?.web) {
+      this.dataSourceService = new DataSourceService(this.portalDataService.web)
+    }
     this.project = new ProjectDataService({
       ...this.settings,
       spfxContext,
@@ -42,9 +63,116 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
+   * Get child projects for the current site from the hub projects list. Lazy and
+   * memoized — the request runs the first time it's needed and is shared between
+   * consumers (e.g. both matrix web parts on the same page). Returns an empty
+   * array when the hub is unavailable.
+   */
+  public getChildProjects(): Promise<ProjectInformationChildProject[]> {
+    if (!this._childProjects) {
+      this._childProjects = this.portalDataService?.isAvailable
+        ? this.portalDataService.getChildProjects(
+            this.spfxContext.pageContext.web.absoluteUrl,
+            ProjectInformationChildProject
+          )
+        : Promise.resolve([])
+    }
+    return this._childProjects
+  }
+
+  /**
+   * Checks whether the current site is a parent project or program by reading the
+   * `GtIsParentProject` and `GtIsProgram` flags from the local properties list.
+   * Lazy and memoized — one request total per page load. Returns `false` on any
+   * failure.
+   */
+  public isParentProject(): Promise<boolean> {
+    if (!this._isParentProject) {
+      this._isParentProject = (async () => {
+        try {
+          const [item] = await this.sp.web.lists
+            .getByTitle(resource.Lists_ProjectProperties_Title)
+            .items.top(1)
+            .select('GtIsParentProject', 'GtIsProgram')()
+          return !!(item?.GtIsParentProject || item?.GtIsProgram)
+        } catch {
+          return false
+        }
+      })()
+    }
+    return this._isParentProject
+  }
+
+  /**
+   * Resolves a data source. If `name` is set the data source is fetched by title,
+   * otherwise the default is resolved by its stable `GtDataSourceId` with a
+   * fallback to the localized default title (for installs where the ID is not set).
+   *
+   * @param name Data source name from web part configuration (optional)
+   * @param defaultDataSourceId `GtDataSourceId` of the default data source
+   * @param defaultName Localized title of the default data source
+   */
+  public async resolveDataSource(
+    name: string,
+    defaultDataSourceId: string,
+    defaultName: string
+  ): Promise<DataSource> {
+    const displayName = name || defaultName
+    if (!this.dataSourceService) {
+      throw new Error(format(strings.DataSourceError, displayName))
+    }
+    const dataSource = name
+      ? await this.dataSourceService.getByName(name)
+      : ((await this.dataSourceService.getById(defaultDataSourceId)) ??
+        (await this.dataSourceService.getByName(defaultName)))
+    if (!dataSource) {
+      throw new Error(format(strings.DataSourceNotFound, displayName))
+    }
+    return dataSource
+  }
+
+  /**
+   * Fetches items for the specified data source using SharePoint search, aggregated
+   * across the current site's child projects (and the site itself when `includeSelf`
+   * is `true`). The managed properties of the data source's columns are always
+   * included in the select properties.
+   *
+   * @param dataSource Data source to fetch items for
+   * @param selectProperties Additional select properties
+   * @param includeSelf Whether to include items from the current site (default `true`)
+   */
+  public async fetchItemsFromDataSource(
+    dataSource: DataSource,
+    selectProperties: string[] = [],
+    includeSelf: boolean = true
+  ): Promise<Record<string, any>[]> {
+    try {
+      const childProjects = await this.getChildProjects()
+      return await searchAggregatedItems(this.sp, {
+        siteIds: childProjects.map((childProject) => childProject.siteId),
+        queryTemplate: dataSource.searchQuery,
+        selectProperties: [
+          ...selectProperties,
+          ...dataSource.columns.map((column) => column.fieldName).filter(Boolean)
+        ],
+        includeSelf,
+        selfSiteId: this.spfxContext.pageContext.site.id.toString()
+      })
+    } catch (error) {
+      Logger.log({
+        message: `(${this._name}) (fetchItemsFromDataSource) Failed to fetch items from data source '${dataSource.title}': ${error?.message}`,
+        level: LogLevel.Error
+      })
+      throw new Error(format(strings.DataSourceError, dataSource.title))
+    }
+  }
+
+  /**
    * Sync property item from site to associated hub. `this.getMappedProjectProperties` is used to
-   * map the properties item fields to the hub fields. `updateEntityItem` from `sp-entityportal-service`
-   * is used to update the hub entity item. If any errors occur, the original error is passed to the caller.
+   * map the properties item fields to the hub fields. `ensureEntityItem` from `SpEntityPortalService`
+   * (pp365-shared-library) is used to update the hub entity item, or to add it when the project was
+   * set up without one (by a user without write access to the hub). If any errors occur, the
+   * original error is passed to the caller.
    *
    * @param title Title of the project
    * @param fieldValues Field values for the properties item
@@ -55,12 +183,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     title: string,
     fieldValues: ItemFieldValues,
     templateParameters: Record<string, any>,
-    progressFunc: (props: IProgressIndicatorProps) => void
+    progressFunc: (props: IProgressProps) => void
   ): Promise<void> {
     if (!this.entityService) {
-      throw new Error(
-        `(${this._name}) (syncPropertyItemToHub) entityService is not initialized — portal is unavailable.`
-      )
+      throw new Error(strings.HubSyncHubUnavailableReason)
     }
     progressFunc({
       label: strings.SyncProjectPropertiesValuesProgressLabel,
@@ -70,15 +196,61 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       customSiteFieldsGroup: templateParameters.CustomSiteFields,
       projectContentTypeId: templateParameters.ProjectContentTypeId
     })
-    await this.entityService.updateEntityItem(this.settings.siteId, {
-      ...properties,
-      Title: title
-    })
+    const groupId = this.spfxContext.pageContext.legacyPageContext?.groupId
+    const added = await this.entityService.ensureEntityItem(
+      this.settings.siteId,
+      this.settings.webUrl,
+      { ...properties, Title: title },
+      getNewEntityProperties(groupId, fieldValues, templateParameters.ProjectContentTypeId),
+      // The setup's key, and the URL of a project registered by hand: an entity without the
+      // site ID is found by these and updated, not doubled.
+      { GtGroupId: groupId, GtSiteUrl: this.settings.webUrl }
+    )
     Logger.log({
-      message: `(${this._name}) (syncPropertyItemToHub) Successfully synced item to hub entity.`,
+      message: `(${this._name}) (syncPropertyItemToHub) Successfully ${
+        added ? 'added' : 'synced'
+      } item to hub entity.`,
       data: { properties },
       level: LogLevel.Info
     })
+  }
+
+  /**
+   * Change the project's phase on its properties item, then on its entity in the hub. A project
+   * without an entity in the hub is registered with all its properties (`syncPropertyItemToHub`).
+   *
+   * A failed hub update does not undo the phase change: the error is returned for the caller to
+   * report, while an error on the project's own item is thrown.
+   *
+   * @param phase Phase to change to
+   * @param phaseField Phase field
+   *
+   * @returns The error from the hub (also when it is out of reach), or `null` when it was updated
+   */
+  public async updateProjectPhase(
+    phase: ProjectPhaseModel,
+    phaseField: IPhaseField
+  ): Promise<Error | null> {
+    const phaseProperties = await this.project.updateProjectPhase(phase, phaseField, false)
+    if (!this.entityService) return new Error(strings.HubSyncHubUnavailableReason)
+    try {
+      await syncPhaseToHub(this.entityService, this.settings.siteId, phaseProperties, async () => {
+        const data = await this.project.getProjectInformationData()
+        await this.syncPropertyItemToHub(
+          this.spfxContext.pageContext.web.title,
+          data.fieldValues,
+          data.templateParameters ?? {},
+          () => null
+        )
+      })
+      return null
+    } catch (error) {
+      Logger.log({
+        message: `(${this._name}) (updateProjectPhase) The phase was not changed in the hub: ${error?.message}`,
+        level: LogLevel.Warning
+      })
+      return error
+    }
   }
 
   /**
@@ -134,11 +306,17 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       return []
     }
     try {
-      const { ServerRelativeUrl } = await this.portalDataService.web.rootFolder
-        .select('ServerRelativeUrl')
-        .using(DefaultCaching)<{
-        ServerRelativeUrl: string
-      }>()
+      // From the hub's URL, since a member of «Minimum lesetilganger på hub» reads the folder but
+      // not the hub itself. The root folder is read only when the URL is missing.
+      const ServerRelativeUrl = this.portalDataService.url
+        ? decodeURIComponent(new URL(this.portalDataService.url).pathname).replace(/\/$/, '')
+        : (
+            await this.portalDataService.web.rootFolder
+              .select('ServerRelativeUrl')
+              .using(DefaultCaching)<{
+              ServerRelativeUrl: string
+            }>()
+          ).ServerRelativeUrl
       const folderRelativeUrl = `${ServerRelativeUrl}/${strings.SiteAssetsConfigurationFolder}/${folderPath}`
       const folder = this.portalDataService.web.getFolderByServerRelativePath(folderRelativeUrl)
       const files = await folder.files
@@ -148,8 +326,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       return files.map((file) => ({
         name: file.Name,
         title:
-          file['ListItemAllFields']?.['Title'] ??
-          `${strings.UnknownConfigurationName} (${file.Name})`,
+          file['ListItemAllFields']?.Title ?? `${strings.UnknownConfigurationName} (${file.Name})`,
         url: file.ServerRelativeUrl
       }))
     } catch (error) {
@@ -175,16 +352,14 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         .filter('FSObjType eq 0')
         .using(DefaultCaching)()
 
-      return documents.map(
-        (doc): IArchiveDocumentItem => ({
-          id: doc.Id,
-          title: doc.FileLeafRef || doc.Title,
-          projectPhaseId: doc?.GtProjectPhase?.TermGuid,
-          documentTypeId: doc?.GtDocumentType?.TermGuid,
-          url: doc.FileRef,
-          type: 'file'
-        })
-      )
+      return documents.map((doc): IArchiveDocumentItem => ({
+        id: doc.Id,
+        title: doc.FileLeafRef || doc.Title,
+        projectPhaseId: doc?.GtProjectPhase?.TermGuid,
+        documentTypeId: doc?.GtDocumentType?.TermGuid,
+        url: doc.FileRef,
+        type: 'file'
+      }))
     } catch (error) {
       Logger.log({
         message: `(${this._name}) (getDocumentsForArchive) Error fetching documents: ${error.message}`,
@@ -222,15 +397,13 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
           list.Title !== 'Web Part Gallery'
       )
 
-      return filteredLists.map(
-        (list): IArchiveListItem => ({
-          id: list.Id,
-          title: list.Title,
-          url: list.DefaultViewUrl,
-          type: 'list',
-          itemCount: list.ItemCount || 0
-        })
-      )
+      return filteredLists.map((list): IArchiveListItem => ({
+        id: list.Id,
+        title: list.Title,
+        url: list.DefaultViewUrl,
+        type: 'list',
+        itemCount: list.ItemCount || 0
+      }))
     } catch (error) {
       Logger.log({
         message: `(${this._name}) (getListsForArchive) Error fetching lists: ${error.message}`,
@@ -250,6 +423,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param scope Scope or context of the log entry (Document, List)
    * @param webUrl URL of the web/project being archived
    * @param reference Reference to the item/object being archived
+   *
+   * @returns The error when the entry was not written (also when the hub is out of reach), or
+   * `null` when it was
    */
   public async writeToArchiveLog(
     title: string,
@@ -259,14 +435,15 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     scope: string,
     webUrl: string,
     reference?: string
-  ): Promise<void> {
-    if (!this.portalDataService?.web) {
+  ): Promise<Error | null> {
+    // `web` is the site's own web when the hub's URL is unknown: ask whether the hub is in reach.
+    if (!this.portalDataService?.isAvailable) {
       Logger.log({
         message: `(${this._name}) (writeToArchiveLog) Skipping archive log entry because portal data service is unavailable.`,
         data: { title, webUrl, operation },
         level: LogLevel.Warning
       })
-      return
+      return new Error(strings.HubSyncHubUnavailableReason)
     }
     try {
       const archiveLogList = this.portalDataService.web.lists.getByTitle(
@@ -290,12 +467,14 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         data: { logItem },
         level: LogLevel.Info
       })
+      return null
     } catch (error) {
       Logger.log({
         message: `(${this._name}) (writeToArchiveLog) Failed to write archive log entry: ${error.message}`,
         data: { title, webUrl, message, operation, reference, status, error },
         level: LogLevel.Error
       })
+      return error
     }
   }
 
@@ -308,6 +487,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param status Status of the archiving operation
    * @param errorMessage Optional error message if status is ERROR
    * @param message Optional custom message for the log entry
+   *
+   * @returns As `writeToArchiveLog`
    */
   public async logDocumentArchive(
     documentTitle: string,
@@ -316,11 +497,11 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     documentUrl: string,
     projectWebUrl: string,
     errorMessage?: string
-  ): Promise<void> {
+  ): Promise<Error | null> {
     const logMessage =
       status === strings.ArchiveLogStatusError && errorMessage ? errorMessage : message || ''
 
-    await this.writeToArchiveLog(
+    return await this.writeToArchiveLog(
       documentTitle,
       status,
       strings.ArchiveLogOperationPhaseTransition,
@@ -340,6 +521,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param status Status of the archiving operation
    * @param errorMessage Optional error message if status is ERROR
    * @param message Optional custom message for the log entry
+   *
+   * @returns As `writeToArchiveLog`
    */
   public async logListArchive(
     listTitle: string,
@@ -348,13 +531,13 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     listUrl: string,
     projectWebUrl: string,
     errorMessage?: string
-  ): Promise<void> {
+  ): Promise<Error | null> {
     const logMessage =
       status === strings.ArchiveLogStatusError && errorMessage
         ? format(strings.ErrorArchiving, errorMessage)
         : message || ''
 
-    await this.writeToArchiveLog(
+    return await this.writeToArchiveLog(
       listTitle,
       status,
       strings.ArchiveLogOperationPhaseTransition,

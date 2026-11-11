@@ -1,7 +1,12 @@
 import { FluentProvider, IdPrefixProvider } from '@fluentui/react-components'
 import strings from 'ProjectWebPartsStrings'
-import { Fluent, UserMessage, WebPartTitle, customLightTheme } from 'pp365-shared-library'
-import { ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
+import {
+  Fluent,
+  UserMessage,
+  WebPartTitle,
+  customLightTheme,
+  withDefaults
+} from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { Actions } from './Actions'
 import { AllPropertiesPanel } from './AllPropertiesPanel'
@@ -16,10 +21,31 @@ import { ProgressDialog } from './ProgressDialog'
 import styles from './ProjectInformation.module.scss'
 import { ProjectProperties } from './ProjectProperties'
 import { ProjectStatusReport } from './ProjectStatusReport'
+import { SustainabilityGoals } from './SustainabilityGoals'
 import { ProjectInformationContextProvider } from './context'
 import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
 import resource from 'SharedResources'
+import { format } from 'pp365-shared-library'
+
+export const PROJECT_INFORMATION_DEFAULT_PROPS: Partial<IProjectInformationProps> = {
+  title: resource.WebParts_ProjectInformation_Title,
+  page: 'Frontpage',
+  customActions: [],
+  hideActions: [],
+  showFieldExternal: {},
+  fallbackVisibleFields: [],
+  hideStatusReport: false,
+  hideArchiveStatus: true,
+  showSustainabilityGoalsAsIcons: false,
+  sustainabilityGoalIconSize: 48,
+  // Icons by default, as in 1.14: each is named by its section and status, and its mark tells
+  // the status by shape, not by colour alone (WCAG 1.4.1).
+  statusReportShowOnlyIcons: true,
+  rowLimit: 6,
+  minRowLimit: 4,
+  maxRowLimit: 100
+}
 
 /**
  * Display project information. A number of actions are available to the user,
@@ -30,7 +56,8 @@ import resource from 'SharedResources'
  * - Promote to parent project (`CreateParentDialog`)
  * - Run project setup wizard on-demand (`RunProjectSetupDialog`)
  */
-export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
+export const ProjectInformation: FC<IProjectInformationProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, PROJECT_INFORMATION_DEFAULT_PROPS)
   const { fluentProviderId, context } = useProjectInformation(props)
   const showNoHubAccessMessage = context.state.hubIsAvailable === false && !context.state.error
   if (context.state.hidden) return null
@@ -39,7 +66,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
     return (
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
-          <LoadingSkeleton />
+          <LoadingSkeleton aria-label={format(strings.LoadingText, props.title)} />
         </FluentProvider>
       </IdPrefixProvider>
     )
@@ -48,7 +75,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
   return (
     <ProjectInformationContextProvider value={context}>
       <Fluent transparent>
-        {props.title && <WebPartTitle title={props.title} />}
+        {props.title && !props.hideTitle && <WebPartTitle title={props.title} />}
         <div className={styles.container}>
           {context.state.error && (
             <UserMessage
@@ -58,11 +85,19 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
             />
           )}
           <ProjectProperties />
+          <SustainabilityGoals />
           <Actions />
           <ParentProjectsList />
           <ChildProjectsList />
           <ArchiveStatus />
           <ProjectStatusReport />
+          {context.state.hubSyncWarning && (
+            <UserMessage
+              title={strings.HubSyncWarningTitle}
+              text={context.state.hubSyncWarning}
+              intent='warning'
+            />
+          )}
           {showNoHubAccessMessage && (
             <div className={styles.noHubAccessMessage}>
               {strings.ProjectInformationNoHubAccessMessage}
@@ -75,23 +110,8 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
           <RunProjectSetupDialog />
         </div>
       </Fluent>
-      {context.state.confirmActionProps && <ConfirmDialog {...context.state.confirmActionProps} />}
     </ProjectInformationContextProvider>
   )
 }
 
 ProjectInformation.displayName = 'Project Information'
-ProjectInformation.defaultProps = {
-  title: resource.WebParts_ProjectInformation_Title,
-  page: 'Frontpage',
-  customActions: [],
-  hideActions: [],
-  showFieldExternal: {},
-  fallbackVisibleFields: [],
-  hideStatusReport: false,
-  hideArchiveStatus: true,
-  statusReportShowOnlyIcons: true,
-  rowLimit: 6,
-  minRowLimit: 4,
-  maxRowLimit: 100
-}

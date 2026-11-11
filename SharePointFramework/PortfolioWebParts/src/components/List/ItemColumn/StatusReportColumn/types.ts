@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { IRenderItemColumnProps } from 'pp365-shared-library'
-import { formatDate } from 'pp365-shared-library'
+import { formatDate, parseScopedSiteId } from 'pp365-shared-library'
 
 export interface IStatusColumnProps extends IRenderItemColumnProps {
   status?: ProjectStatusModel
@@ -29,21 +29,40 @@ class ProjectStatusSection {
     public iconName: string,
     public value: string,
     public comment: string,
-    public color: string
+    public color: string,
+    /** The status value's own icon in `Prosjektkolonnekonfigurasjon`, the shape of its mark. */
+    public statusIconName?: string
   ) {}
 }
 
 export class ProjectStatusModel {
+  /**
+   * The project's site ID (the base GUID), parsed from the potentially
+   * scoped `GtSiteId` value.
+   */
   public siteId: string
+
+  /**
+   * Scope key ("delprosjekt") for the report series the report belongs to,
+   * parsed from the `GtSiteId` suffix. An empty string means the report
+   * belongs to the project's default report series.
+   */
+  public scopeKey: string
 
   constructor(
     private item: Record<string, any>,
     private columnConfigurations: {
-      [key: string]: { name: string; iconName: string; colors: any }
+      [key: string]: {
+        name: string
+        colors: Record<string, string>
+        icons?: Record<string, string>
+      }
     },
     private statusSections: Array<IStatusSectionItem>
   ) {
-    this.siteId = this.item.GtSiteId
+    const { siteId, scopeKey } = parseScopedSiteId(this.item.GtSiteId)
+    this.siteId = siteId
+    this.scopeKey = scopeKey
   }
 
   /**
@@ -62,7 +81,8 @@ export class ProjectStatusModel {
       Object.keys(this.item),
       (key) =>
         (_.startsWith(key, 'GtStatus') || _.startsWith(key, 'GtOverallStatus')) &&
-        !_.endsWith(key, 'Comment')
+        !_.endsWith(key, 'Comment') &&
+        !_.endsWith(key, 'Id')
     )
     return statusKeys.map((key) => {
       const name = _.capitalize(this.columnConfigurations[key]?.name.split(' ')[1])
@@ -71,7 +91,8 @@ export class ProjectStatusModel {
       const value = this.item[key]
       const comment = this.item[`${key}Comment`]
       const color = this.columnConfigurations[key]?.colors[value]
-      return new ProjectStatusSection(key, name, iconName, value, comment, color)
+      const statusIconName = this.columnConfigurations[key]?.icons?.[value]
+      return new ProjectStatusSection(key, name, iconName, value, comment, color, statusIconName)
     })
   }
 }

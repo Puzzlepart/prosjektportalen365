@@ -1,23 +1,21 @@
-import { Panel } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { FC } from 'react'
 import { usePortfolioAggregationContext } from '../context'
 import styles from './ViewFormPanel.module.scss'
 import { ViewFormPanelFooter } from './ViewFormPanelFooter'
 import { useViewFormPanel } from './useViewFormPanel'
-import { FieldContainer, customLightTheme } from 'pp365-shared-library'
+import { BasePanel, FieldContainer, customLightTheme } from 'pp365-shared-library'
 import { FluentProvider, IdPrefixProvider, Input, Textarea } from '@fluentui/react-components'
 
 export const ViewFormPanel: FC = () => {
   const context = usePortfolioAggregationContext()
   const { view, setView, isEditing, onDismiss, onSave, fluentProviderId } = useViewFormPanel()
   return (
-    <Panel
-      isOpen={context.state.viewForm?.isOpen}
+    <BasePanel
+      open={context.state.viewForm?.isOpen}
       headerText={isEditing ? strings.EditViewHeaderText : strings.NewViewHeaderText}
-      onRenderFooterContent={() => <ViewFormPanelFooter onSave={onSave} />}
-      isFooterAtBottom={true}
-      onDismiss={onDismiss}
+      footer={<ViewFormPanelFooter onSave={onSave} />}
+      onClose={onDismiss}
       isLightDismiss={true}
       className={styles.root}
     >
@@ -30,7 +28,7 @@ export const ViewFormPanel: FC = () => {
             required={true}
           >
             <Input
-              value={view.get('title')}
+              value={view.get('title') ?? ''}
               onChange={(_, data) => setView('title', data.value)}
               placeholder={strings.Placeholder.TextField}
             />
@@ -39,9 +37,10 @@ export const ViewFormPanel: FC = () => {
             iconName='TextAlignLeft'
             label={strings.SearchQueryLabel}
             description={strings.PortfolioAggregationViewSearchQueryDescription}
+            required={true}
           >
             <Textarea
-              defaultValue={view.get('searchQuery')}
+              value={view.get('searchQuery') ?? ''}
               onChange={(_, data) => setView('searchQuery', data.value)}
               rows={12}
               placeholder={strings.Placeholder.TextField}
@@ -53,7 +52,7 @@ export const ViewFormPanel: FC = () => {
             description={strings.IconNameDescription}
           >
             <Input
-              value={view.get('iconName')}
+              value={view.get('iconName') ?? ''}
               onChange={(_, data) => setView('iconName', data.value)}
               placeholder={strings.Placeholder.Icon}
             />
@@ -61,20 +60,21 @@ export const ViewFormPanel: FC = () => {
           <FieldContainer
             iconName='GroupList'
             label={strings.DataSourceCategoryLabel}
-            description={strings.DataSourceCategoryDescription}
+            description={`${strings.DataSourceCategoryDescription} ${strings.ReadOnlyFromDataSourceText}`}
           >
-            <Input value={context.props.dataSourceCategory} disabled={true} />
+            {/* Read-only, not disabled: the keyboard reaches it and its value can be read. */}
+            <Input value={context.props.dataSourceCategory} readOnly />
           </FieldContainer>
           <FieldContainer
             iconName='GroupList'
             label={strings.DataSourceLevelLabel}
-            description={strings.DataSourceLevelDescription}
+            description={`${strings.DataSourceLevelDescription} ${strings.ReadOnlyFromDataSourceText}`}
           >
-            <Input value={context.props.configuration?.level} disabled={true} />
+            <Input value={context.props.configuration?.level} readOnly />
           </FieldContainer>
         </FluentProvider>
       </IdPrefixProvider>
-    </Panel>
+    </BasePanel>
   )
 }
 

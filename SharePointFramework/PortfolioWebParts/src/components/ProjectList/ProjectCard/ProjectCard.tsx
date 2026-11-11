@@ -1,7 +1,7 @@
-import { Shimmer, ShimmerElementsGroup, ShimmerElementType } from '@fluentui/react'
-import { Card, Tooltip } from '@fluentui/react-components'
+import { Card, Skeleton, SkeletonItem, Tooltip } from '@fluentui/react-components'
 import { DismissCircle20Regular } from '@fluentui/react-icons'
 import strings from 'PortfolioWebPartsStrings'
+import { format } from 'pp365-shared-library'
 import React, { FC, useContext } from 'react'
 import { ProjectCardContext } from './context'
 import styles from './ProjectCard.module.scss'
@@ -15,24 +15,20 @@ export const ProjectCard: FC = (props) => {
   const { isDataLoaded, setIsImageLoaded } = useProjectCard()
   const phase = context.project?.phase ? context.project.phase : strings.NotSet
 
-  return (
-    <Shimmer
-      className={styles.root}
-      isDataLoaded={isDataLoaded}
-      customElementsGroup={
+  if (!isDataLoaded) {
+    return (
+      <div className={styles.root}>
         <div className={styles.shimmerGroup}>
-          <ShimmerElementsGroup
-            shimmerElements={[
-              {
-                type: ShimmerElementType.line,
-                width: '100%',
-                height: 274
-              }
-            ]}
-          />
+          <Skeleton>
+            <SkeletonItem style={{ width: '100%', height: 274 }} />
+          </Skeleton>
         </div>
-      }
-    >
+      </div>
+    )
+  }
+
+  return (
+    <div className={styles.root}>
       <Card
         className={styles.card}
         {...props}
@@ -44,10 +40,17 @@ export const ProjectCard: FC = (props) => {
                   {strings.PhaseLabel}: <strong>{phase}</strong>
                 </>
               }
-              relationship='description'
+              relationship='inaccessible'
               withArrow
             >
-              <div className={styles.phaseBadge} title={phase}>
+              {/* The phase's first letter to the eye, its name to a screen reader; it takes the
+                  focus, so the tooltip with the name shows to the keyboard too (WCAG 2.1.1). */}
+              <div
+                className={styles.phaseBadge}
+                role='img'
+                tabIndex={0}
+                aria-label={format(strings.NameValueLabel, strings.PhaseLabel, phase)}
+              >
                 {phase === strings.NotSet ? <DismissCircle20Regular /> : phase.slice(0, 1)}
               </div>
             </Tooltip>
@@ -58,6 +61,6 @@ export const ProjectCard: FC = (props) => {
         <ProjectCardContent />
         <ProjectCardFooter />
       </Card>
-    </Shimmer>
+    </div>
   )
 }

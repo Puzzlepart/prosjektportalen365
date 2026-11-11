@@ -1,11 +1,10 @@
-import { IColumn } from '@fluentui/react'
 import { ProjectColumn } from '../../models'
-import { ColumnDataType } from '../../types'
+import { ColumnDataType, IListColumn } from '../../types'
 import { GetDataTypeProperties, IColumnDataTypeFieldOption } from './ColumnDataTypeField'
 import { IWeb } from '@pnp/sp/webs'
 
 export interface IRenderItemColumnProps extends React.HTMLAttributes<HTMLDivElement> {
-  column?: IColumn
+  column?: IListColumn
   item?: Record<string, any>
   columnValue?: string
   dataTypeProperties?: Map<string, any>
@@ -18,8 +17,9 @@ export type ItemColumnRenderFunction = (props: IRenderItemColumnProps) => JSX.El
  *
  * @template T - The type of the props passed to the component.
  */
-export interface ColumnRenderComponent<T extends IRenderItemColumnProps = IRenderItemColumnProps>
-  extends React.FunctionComponent<T> {
+export interface ColumnRenderComponent<
+  T extends IRenderItemColumnProps = IRenderItemColumnProps
+> extends React.FunctionComponent<T> {
   /**
    * The key of the data type for internal use. This is used to identify the data type
    * in the data type field dropdown.

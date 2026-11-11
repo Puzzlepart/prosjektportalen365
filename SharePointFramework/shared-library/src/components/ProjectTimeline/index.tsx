@@ -8,8 +8,19 @@ import { UserMessage } from '../UserMessage'
 import strings from 'SharedLibraryStrings'
 import { LoadingSkeleton } from '../LoadingSkeleton'
 import resource from 'SharedResources'
+import { withDefaults } from '../../util'
 
-export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
+/** Read by PortfolioWebParts' timeline web part too, for its property pane. */
+export const PROJECT_TIMELINE_DEFAULT_PROPS: Partial<IProjectTimelineProps> = {
+  showProjectDeliveries: false,
+  dataSourceName: resource.Lists_DataSources_Category_ProjectDeliveries_All,
+  configItemTitle: resource.TimelineConfiguration_ProjectDelivery_Title,
+  defaultTimeframeStart: '1,months',
+  defaultTimeframeEnd: '12,months'
+}
+
+export const ProjectTimeline: FC<IProjectTimelineProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, PROJECT_TIMELINE_DEFAULT_PROPS)
   const { state, onFilterChange } = useProjectTimeline(props)
   const [sAmount, sDuration] = props.defaultTimeframeStart.split(',')
   const [eAmount, eDuration] = props.defaultTimeframeEnd.split(',')
@@ -43,13 +54,6 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
 }
 
 ProjectTimeline.displayName = 'ProjectTimeline'
-ProjectTimeline.defaultProps = {
-  showProjectDeliveries: false,
-  dataSourceName: resource.Lists_DataSources_Category_ProjectDeliveries_All,
-  configItemTitle: resource.TimelineConfiguration_ProjectDelivery_Title,
-  defaultTimeframeStart: '1,months',
-  defaultTimeframeEnd: '12,months'
-}
 
 export * from './Timeline'
 export * from './types'

@@ -82,7 +82,7 @@ export function useToolbarItems(
           setShowFilterPanel(true)
         })
       ].filter(Boolean),
-    [props]
+    [props, selectedGroupBy]
   )
 
   return menuItems

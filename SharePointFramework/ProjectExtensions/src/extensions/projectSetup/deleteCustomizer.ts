@@ -16,9 +16,8 @@ import ProjectSetup from 'extensions/projectSetup'
 export async function deleteCustomizer(instance: ProjectSetup): Promise<void> {
   try {
     const web = instance.sp.web as IWeb
-    const customActions = await web.userCustomActions<
-      { Id: string; ClientSideComponentId: string }[]
-    >()
+    const customActions =
+      await web.userCustomActions<{ Id: string; ClientSideComponentId: string }[]>()
     for (let i = 0; i < customActions.length; i++) {
       const customAction = customActions[i]
       if (customAction.ClientSideComponentId === instance.componentId) {

@@ -39,7 +39,12 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
   return (
     <div className={styles.root}>
       {hasExistingTemplate && (
-        <RadioGroup value={mode} onChange={onModeChanged} layout='horizontal'>
+        <RadioGroup
+          value={mode}
+          onChange={onModeChanged}
+          layout='horizontal'
+          aria-label={strings.ProjectTemplateSelectorModeLabel}
+        >
           <Radio value='notemplate' label={strings.ProjectTemplateSelectorNoTemplateRadioLabel} />
           <Radio
             value='selecttemplate'
@@ -75,7 +80,7 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
                   <div className={styles.option}>
                     {template.iconProps?.iconName && (
                       <span className={styles.optionIcon}>
-                        {getFluentIconWithFallback(template.iconProps.iconName, true)}
+                        {getFluentIconWithFallback(template.iconProps.iconName)}
                       </span>
                     )}
                     <div className={styles.optionContent}>

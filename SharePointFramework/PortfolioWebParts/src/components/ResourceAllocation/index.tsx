@@ -4,11 +4,42 @@ import styles from './ResourceAllocation.module.scss'
 import * as strings from 'PortfolioWebPartsStrings'
 import { IResourceAllocationProps } from './types'
 import { useResourceAllocation } from './useResourceAllocation'
-import { LoadingSkeleton, Timeline, UserMessage, customLightTheme } from 'pp365-shared-library'
+import {
+  LoadingSkeleton,
+  Timeline,
+  UserMessage,
+  customLightTheme,
+  format,
+  withDefaults
+} from 'pp365-shared-library'
 import resource from 'SharedResources'
-import { format } from '@fluentui/react'
 
-export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
+export const RESOURCE_ALLOCATION_DEFAULT_PROPS: Partial<IResourceAllocationProps> = {
+  dataSource: resource.Lists_DataSources_Category_ResourceAllocation_All,
+  defaultTimeframeStart: '4,months',
+  defaultTimeframeEnd: '4,months',
+  itemColor: '51,153,51',
+  itemAbsenceColor: '26,111,179',
+  selectProperties: [
+    'Path',
+    'SPWebUrl',
+    'ContentTypeId',
+    'SiteTitle',
+    'SiteName',
+    'RefinableString71',
+    'RefinableString72',
+    'GtResourceUserOWSUSER',
+    'GtResourceLoadOWSNMBR',
+    'GtResourceAbsenceOWSCHCS',
+    'GtStartDateOWSDATE',
+    'GtEndDateOWSDATE',
+    'GtAllocationStatusOWSCHCS',
+    'GtAllocationCommentOWSMTXT'
+  ]
+}
+
+export const ResourceAllocation: FC<IResourceAllocationProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, RESOURCE_ALLOCATION_DEFAULT_PROPS)
   const { state, filters, onFilterChange, items, groups, defaultTimeframe, fluentProviderId } =
     useResourceAllocation(props)
 
@@ -44,30 +75,6 @@ export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
       </FluentProvider>
     </IdPrefixProvider>
   )
-}
-
-ResourceAllocation.defaultProps = {
-  dataSource: resource.Lists_DataSources_Category_ResourceAllocation_All,
-  defaultTimeframeStart: '4,months',
-  defaultTimeframeEnd: '4,months',
-  itemColor: '51,153,51',
-  itemAbsenceColor: '26,111,179',
-  selectProperties: [
-    'Path',
-    'SPWebUrl',
-    'ContentTypeId',
-    'SiteTitle',
-    'SiteName',
-    'RefinableString71',
-    'RefinableString72',
-    'GtResourceUserOWSUSER',
-    'GtResourceLoadOWSNMBR',
-    'GtResourceAbsenceOWSCHCS',
-    'GtStartDateOWSDATE',
-    'GtEndDateOWSDATE',
-    'GtAllocationStatusOWSCHCS',
-    'GtAllocationCommentOWSMTXT'
-  ]
 }
 
 export * from './types'

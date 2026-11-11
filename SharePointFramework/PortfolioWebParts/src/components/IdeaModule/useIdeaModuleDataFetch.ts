@@ -15,7 +15,7 @@ export function useIdeaModuleDataFetch(
   setState: (newState: Partial<IIdeaModuleState>) => void
 ) {
   useEffect(() => {
-    Promise.all([
+    void Promise.all([
       props.dataAdapter.getIdeaConfiguration(props.ideaConfigurationList, props.ideaConfiguration)
     ]).then(async ([configuration]) => {
       await props.dataAdapter.getIdeasData(configuration).then((ideas) =>

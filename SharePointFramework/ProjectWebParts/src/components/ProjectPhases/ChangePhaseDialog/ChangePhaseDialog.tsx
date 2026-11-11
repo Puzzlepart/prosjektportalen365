@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react'
 import {
   Dialog,
   DialogBody,
@@ -13,6 +12,7 @@ import {
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { ProjectPhasesContext } from '../context'
+import { DISMISS_CHANGE_PHASE_DIALOG } from '../reducer'
 import { Actions } from './Actions/Actions'
 import styles from './ChangePhaseDialog.module.scss'
 import { Content } from './Content/Content'
@@ -20,7 +20,7 @@ import { DynamicHomepageContent } from './DynamicHomepageContent/DynamicHomepage
 import { View } from './Views'
 import { ChangePhaseDialogContext } from './context'
 import { useChangePhaseDialog } from './useChangePhaseDialog'
-import { customLightTheme } from 'pp365-shared-library'
+import { customLightTheme, format } from 'pp365-shared-library'
 
 export const ChangePhaseDialog: FC = () => {
   const context = useContext(ProjectPhasesContext)
@@ -32,7 +32,16 @@ export const ChangePhaseDialog: FC = () => {
     <ChangePhaseDialogContext.Provider value={{ state, dispatch, nextChecklistItem }}>
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
-          <Dialog open>
+          {/* Escape closes the dialog as Cancel does, except while the phase is being changed. A
+              click outside it does not: it never did, and a checklist half answered or a comment
+              typed would be lost with it. */}
+          <Dialog
+            open
+            onOpenChange={(_, data) => {
+              if (data.open || data.type === 'backdropClick') return
+              if (state.view !== View.ChangingPhase) context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())
+            }}
+          >
             <DialogSurface>
               <DialogBody className={styles.changePhaseDialog}>
                 <DialogTitle>
@@ -45,15 +54,15 @@ export const ChangePhaseDialog: FC = () => {
                     {state.view === View.Archive
                       ? strings.ArchiveViewDescription
                       : context.state.phase
-                      ? format(
-                          strings.ChangePhaseDialogSubtitle,
-                          context.state.phase?.name,
-                          context.state.confirmPhase.name
-                        )
-                      : format(
-                          strings.ChangeFirstPhaseDialogSubtitle,
-                          context.state.confirmPhase.name
-                        )}
+                        ? format(
+                            strings.ChangePhaseDialogSubtitle,
+                            context.state.phase?.name,
+                            context.state.confirmPhase.name
+                          )
+                        : format(
+                            strings.ChangeFirstPhaseDialogSubtitle,
+                            context.state.confirmPhase.name
+                          )}
                   </Label>
                   {state.view === View.Confirm &&
                     format(strings.ConfirmChangePhase, context.state.confirmPhase.name)}

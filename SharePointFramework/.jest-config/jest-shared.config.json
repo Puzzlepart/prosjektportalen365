@@ -1,0 +1,69 @@
+{
+  // Shared Jest configuration for the Prosjektportalen 365 SPFx solutions. Each solution's
+  // config/jest.config.json extends this file; this file extends the SPFx rig's configuration, so
+  // the rig's jsdom environment, lib-commonjs roots, coverage and JUnit reporting stay in place.
+  //
+  // What is added on top of the rig:
+  //  - setup.js: @testing-library/jest-dom matchers and the browser APIs Fluent UI expects that
+  //    jsdom lacks (matchMedia, ResizeObserver, IntersectionObserver, scrollTo).
+  //  - resolver.js: resolves SPFx localized string modules (SharedLibraryStrings, SharedResources,
+  //    <Solution>Strings, ...) exactly as SPFx does, from config/config.json "localizedResources",
+  //    to the nb-no bundle of that solution.
+  //  - moduleNameMapper: workspace packages to their lib-commonjs output, @pnp/* to a stub.
+  //  - amdTransform.js: converts those AMD `define([], function () { ... })` string bundles to
+  //    CommonJS so Jest can require them.
+  "extends": "@microsoft/spfx-web-build-rig/profiles/default/config/jest.config.json",
+
+  "setupFilesAfterEnv": ["<configDir>/lib/setup.js"],
+
+  "resolver": "<configDir>/lib/resolver.js",
+
+  // Workspace packages publish ESM in lib/ (for webpack) and CommonJS in lib-commonjs/ (for Jest).
+  // Node's `main` points at lib/, so redirect the three cross-solution packages to lib-commonjs/.
+  // `@pnp/*` is ESM-only and cannot be required at all; see lib/pnpStub.js. `@microsoft/sp-*` need
+  // Microsoft-internal modules and are page-provided externals at runtime; see lib/spfxStub.js.
+  // The five consumer solutions compile with `baseUrl: "src"` plus `paths`, so their
+  // sources import siblings bare: `from 'data'`, `from 'models'`, `from 'components/X'`.
+  // TypeScript resolves those at compile time and emits them unchanged, so Jest has to
+  // resolve them too. Naming the compiled output directory here is the run-time
+  // equivalent of `baseUrl`: a bare specifier is looked up in node_modules first (so real
+  // packages still win) and then in lib-commonjs. shared-library has no baseUrl and is
+  // unaffected.
+  "moduleDirectories": ["node_modules", "lib-commonjs"],
+
+  "moduleNameMapper": {
+    "^(pp365-shared-library|pp365-projectwebparts|pp365-portfoliowebparts)$": "<rootDir>/node_modules/$1/lib-commonjs/index.js",
+    // The package by its `lib` folder (`pp365-shared-library/lib`), which webpack resolves to the same
+    // `lib/index.js`: without a line of its own Jest loaded that ES module build and could not parse
+    // it (the program administration's hook test, CI run 40296711292).
+    "^(pp365-shared-library|pp365-projectwebparts|pp365-portfoliowebparts)/lib$": "<rootDir>/node_modules/$1/lib-commonjs/index.js",
+    "^(pp365-shared-library|pp365-projectwebparts|pp365-portfoliowebparts)/lib/(.*)$": "<rootDir>/node_modules/$1/lib-commonjs/$2",
+    "^@pnp/.*$": "<configDir>/lib/pnpStub.js",
+    "^react-markdown$": "<configDir>/lib/reactMarkdownStub.js",
+    "^(rehype|remark)-[a-z-]+$": "<configDir>/lib/noopPluginStub.js",
+    "^@microsoft/sp-lodash-subset$": "<configDir>/lib/lodashSubset.js",
+    "^@microsoft/sp-.*$": "<configDir>/lib/spfxStub.js"
+  },
+
+  // The rig ignores everything in lib-commonjs for transformation because TypeScript already
+  // emitted CommonJS there. The localized string bundles are copied verbatim (they are hand
+  // written AMD), so they must be allowed through to the AMD transform.
+  // A test's time limit, where Jest's default is 5 s. The first render with Fluent UI v9 in a file
+  // takes seconds, and more under load: CI runs two solutions' builds at once (RUSH_PARALLELISM), and
+  // tests that took 1-2 s locally failed at random there on 5 s (2026-10-19). A test that hangs
+  // still fails, 30 s on.
+  "testTimeout": 30000,
+
+  "transformIgnorePatterns": ["[\\/]lib-commonjs[\\/](?!loc[\\/]).*\\.js$"],
+
+  // Jest matches these keys against the native path and, unlike transformIgnorePatterns, does
+  // not convert `/` to `\` on Windows, so each separator class has to name both.
+  "transform": {
+    "[\\\\/]loc[\\\\/](shared[\\\\/])?[a-z]{2}-[a-z]{2}\\.js$": "<configDir>/lib/amdTransform.js"
+  },
+
+  // Coverage is collected by the rig. The floors are set per solution (coverageThreshold in its
+  // config/jest.config.json); Heft's test phase succeeds on a missed floor, so Install/Build-Release.ps1
+  // enforces them (see .development-guide/spfx/testing.md).
+  "collectCoverage": true
+}

@@ -54,16 +54,14 @@ export const InstallVersionTooltipContent: FC = () => {
           )}
           <Divider className={styles.divider} />
           <div className={styles.footer}>
+            {/* A list, so a link (WCAG 4.1.2). */}
             <Button
+              as='a'
               className={styles.button}
               size='medium'
               appearance='subtle'
-              onClick={() =>
-                window.open(
-                  `${context.props.portalUrl}/${resource.Lists_InstallationLog_Url}`,
-                  '_blank'
-                )
-              }
+              href={`${context.props.portalUrl}/${resource.Lists_InstallationLog_Url}`}
+              target='_blank'
               icon={getFluentIcon('History')}
             >
               <span className={styles.label}>{strings.SeeAllInstallationsLinkText}</span>

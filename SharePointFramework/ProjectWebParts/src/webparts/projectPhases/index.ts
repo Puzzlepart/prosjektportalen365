@@ -8,8 +8,11 @@ import {
 import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHeader'
 import { PropertyFieldToggleWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldToggleWithCallout'
 import React from 'react'
-import { IProjectPhasesProps, ProjectPhases } from 'components/ProjectPhases'
-import '@fluentui/react/dist/css/fabric.min.css'
+import {
+  IProjectPhasesProps,
+  PROJECT_PHASES_DEFAULT_PROPS,
+  ProjectPhases
+} from 'components/ProjectPhases'
 import * as strings from 'ProjectWebPartsStrings'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
 
@@ -19,7 +22,7 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
   public async onInit() {
     await super.onInit()
     this._fields = await this.sp.web.fields
-      // eslint-disable-next-line quotes
+
       .filter("TypeAsString eq 'TaxonomyFieldType'")
       .select('Title', 'InternalName')()
   }
@@ -50,6 +53,17 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
                   step: 2,
                   showValue: true,
                   disabled: !this.properties.showSubText
+                }),
+                PropertyPaneSlider('commentMinLength', {
+                  label: strings.CommentMinLengthFieldLabel,
+                  min: 0,
+                  max: 20,
+                  step: 1,
+                  showValue: true,
+                  // Existing instances have no stored value, so show the effective default
+                  value:
+                    this.properties.commentMinLength ??
+                    PROJECT_PHASES_DEFAULT_PROPS.commentMinLength
                 }),
                 PropertyPaneToggle('useStartArrow', {
                   label: strings.PhaseUseStartArrowLabel

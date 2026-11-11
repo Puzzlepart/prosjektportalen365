@@ -1,6 +1,5 @@
-import { Panel } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
-import { FieldContainer, UserMessage, customLightTheme } from 'pp365-shared-library'
+import { BasePanel, FieldContainer, UserMessage, customLightTheme } from 'pp365-shared-library'
 import React, { FC, useContext } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import styles from './ViewFormPanel.module.scss'
@@ -20,12 +19,11 @@ export const ViewFormPanel: FC = () => {
     useViewFormPanel()
   if (!context) return null
   return (
-    <Panel
-      isOpen={context.state.viewForm.isOpen}
+    <BasePanel
+      open={context.state.viewForm.isOpen}
       headerText={isEditing ? strings.EditViewHeaderText : strings.NewViewHeaderText}
-      onRenderFooterContent={() => <ViewFormPanelFooter onSave={onSave} />}
-      isFooterAtBottom={true}
-      onDismiss={onDismiss}
+      footer={<ViewFormPanelFooter onSave={onSave} />}
+      onClose={onDismiss}
       isLightDismiss={true}
       className={styles.root}
     >
@@ -38,7 +36,7 @@ export const ViewFormPanel: FC = () => {
           >
             <Input
               type='number'
-              defaultValue={view.get('sortOrder')?.toString()}
+              value={view.get('sortOrder')?.toString() ?? ''}
               min={10}
               max={900}
               step={1}
@@ -54,7 +52,7 @@ export const ViewFormPanel: FC = () => {
             required={true}
           >
             <Input
-              value={view.get('title')}
+              value={view.get('title') ?? ''}
               onChange={(_, data) => setView('title', data.value)}
               placeholder={strings.Placeholder.TextField}
             />
@@ -63,12 +61,13 @@ export const ViewFormPanel: FC = () => {
             iconName='TextAlignLeft'
             label={strings.SearchQueryLabel}
             description={strings.PortfolioViewSearchQueryDescription}
+            required={true}
           >
             <Textarea
-              defaultValue={view.get('searchQuery')}
+              value={view.get('searchQuery') ?? ''}
               rows={12}
               placeholder={strings.Placeholder.TextField}
-              onBlur={(event) => setView('searchQuery', event.target.value)}
+              onChange={(_, data) => setView('searchQuery', data.value)}
             />
           </FieldContainer>
           <FieldContainer
@@ -77,7 +76,7 @@ export const ViewFormPanel: FC = () => {
             description={strings.IconNameDescription}
           >
             <Input
-              value={view.get('iconName')}
+              value={view.get('iconName') ?? ''}
               onChange={(_, data) => setView('iconName', data.value)}
               placeholder={strings.Placeholder.Icon}
             />
@@ -89,11 +88,12 @@ export const ViewFormPanel: FC = () => {
             hidden={view.get('isPersonalView')}
           >
             <Switch
-              defaultChecked={view.get('isDefaultView')}
+              checked={!!view.get('isDefaultView')}
               onChange={(_, data) => setView('isDefaultView', data.checked)}
               disabled={isDefaultViewSet}
             />
-            {isDefaultViewSet && (
+            {/* Only while the field shows: a message bar announces itself, hidden or not. */}
+            {isDefaultViewSet && !view.get('isPersonalView') && (
               <UserMessage
                 title={strings.DefaultViewLabel}
                 text={strings.DefaultViewSetWarningMessage}
@@ -108,13 +108,13 @@ export const ViewFormPanel: FC = () => {
             hidden={view.get('isDefaultView')}
           >
             <Switch
-              defaultChecked={view.get('isPersonalView')}
+              checked={!!view.get('isPersonalView')}
               onChange={(_, data) => setView('isPersonalView', data.checked)}
             />
           </FieldContainer>
         </FluentProvider>
       </IdPrefixProvider>
-    </Panel>
+    </BasePanel>
   )
 }
 

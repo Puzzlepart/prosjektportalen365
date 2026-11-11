@@ -1,14 +1,15 @@
-import { format, IPersonaSharedProps, ITag } from '@fluentui/react'
 import { SPUser } from '@microsoft/sp-page-context'
 import { IPnPClientStore, PnPClientStorage } from '@pnp/core'
 import { SPFI } from '@pnp/sp'
 import '@pnp/sp/presets/all'
 import { IWeb, PermissionKind } from '@pnp/sp/presets/all'
-import { SpEntityPortalService } from 'sp-entityportal-service'
 import _ from 'underscore'
 import { ItemFieldValue, ItemFieldValues, ProjectAdminRoleType, SPField } from '../../models'
+import { SpEntityPortalService } from '../../services/EntityPortalService'
 import { PortalDataService } from '../../services/PortalDataService/PortalDataService'
+import { getTermLabel, getTermStore } from '../../taxonomy'
 import { SPFxContext } from '../../types'
+import { IPersonaItem, ITagItem } from '../../types'
 import { DefaultCaching } from '../cache'
 import { createSpfiInstance } from '../createSpfiInstance'
 import {
@@ -18,6 +19,7 @@ import {
   ProjectPropertiesMapType
 } from './types'
 import resource from 'SharedResources'
+import { format } from '../../util'
 
 export class SPDataAdapterBase<
   T extends ISPDataAdapterBaseConfiguration = ISPDataAdapterBaseConfiguration
@@ -65,9 +67,10 @@ export class SPDataAdapterBase<
   }
 
   /**
-   * Global settings from the portal
+   * Global settings from the portal. Empty when they are not loaded (`loadGlobalSettings`) or the
+   * hub is out of reach, so a setting reads as unset rather than throwing.
    */
-  public globalSettings: Map<string, string>
+  public globalSettings: Map<string, string> = new Map()
 
   /**
    * Initialize storage
@@ -78,7 +81,7 @@ export class SPDataAdapterBase<
       obj[key] = format(this._storageKeys[key], this.settings.siteId.replace(/-/g, ''))
       return obj
     }, {})
-    this._storage.deleteExpired()
+    void this._storage.deleteExpired()
   }
 
   /**
@@ -131,9 +134,10 @@ export class SPDataAdapterBase<
    */
   private async getCurrentUser(user: SPUser) {
     try {
-      const { data: currentUser } = await this.sp.web.ensureUser(user.loginName ?? user.email)
+      const currentUser = await this.sp.web.ensureUser(user.loginName ?? user.email)
       return currentUser
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.warn(
         `(SPDataAdapterBase) (getCurrentUser) ensureUser failed for ${
           user?.loginName ?? user?.email ?? '<unknown>'
@@ -161,16 +165,24 @@ export class SPDataAdapterBase<
         return await this.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
       }
 
-      if (!properties) {
-        const propertiesList = this.sp.web.lists.getByTitle(resource.Lists_ProjectProperties_Title)
-        const [propertiesItem] = await propertiesList.items.top(1)()
-        if (!propertiesItem) return false
-        properties = new ItemFieldValues(propertiesItem)
-      }
+      // The properties given, or the project's own; the parameter is never reassigned across
+      // the awaits below.
+      const projectProperties =
+        properties ??
+        (await (async () => {
+          const propertiesList = this.sp.web.lists.getByTitle(
+            resource.Lists_ProjectProperties_Title
+          )
+          const [propertiesItem] = await propertiesList.items.top(1)()
+          return propertiesItem ? new ItemFieldValues(propertiesItem) : undefined
+        })())
+      if (!projectProperties) return false
 
       const permissions = await (async () => {
         const userPermissions = []
-        const rolesToCheck = properties.get('GtProjectAdminRoles').value
+        // A field the item does not have reads as no value, not as an error that would deny
+        // the permissions the other roles give.
+        const rolesToCheck: string[] = projectProperties.get('GtProjectAdminRoles')?.value ?? []
         if (!_.isArray(rolesToCheck) || _.isEmpty(rolesToCheck)) {
           const currentUserHasManageWebPermisson = await this.sp.web.currentUserHasPermissions(
             PermissionKind.ManageWeb
@@ -185,23 +197,22 @@ export class SPDataAdapterBase<
           const role = projectAdminRoles[i]
           switch (role.type) {
             case ProjectAdminRoleType.SiteAdmin:
-              {
-                try {
-                  const currentUserHasManageWebPermisson =
-                    await this.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
-                  if (currentUserHasManageWebPermisson) userPermissions.push(...role.permissions)
-                } catch (error) {
-                  console.warn(
-                    '(SPDataAdapterBase) (checkProjectAdminPermissions) SiteAdmin permission check failed:',
-                    error
-                  )
-                }
+              try {
+                const currentUserHasManageWebPermisson =
+                  await this.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
+                if (currentUserHasManageWebPermisson) userPermissions.push(...role.permissions)
+              } catch (error) {
+                // eslint-disable-next-line no-console
+                console.warn(
+                  '(SPDataAdapterBase) (checkProjectAdminPermissions) SiteAdmin permission check failed:',
+                  error
+                )
               }
               break
             case ProjectAdminRoleType.ProjectProperty:
               {
                 if (!currentUser) break
-                const projectFieldValue = properties.get(role.projectFieldName).value
+                const projectFieldValue = projectProperties.get(role.projectFieldName)?.value
                 if (
                   _.isArray(projectFieldValue) &&
                   projectFieldValue.indexOf(currentUser.Id) !== -1
@@ -233,6 +244,7 @@ export class SPDataAdapterBase<
                   )
                     userPermissions.push(...role.permissions)
                 } catch (error) {
+                  // eslint-disable-next-line no-console
                   console.warn(
                     `(SPDataAdapterBase) (checkProjectAdminPermissions) SharePointGroup membership check failed for group '${role.groupName}':`,
                     error
@@ -262,7 +274,7 @@ export class SPDataAdapterBase<
     queryString: string,
     selectedItems: any[],
     maximumEntitySuggestions = 50
-  ): Promise<IPersonaSharedProps[]> {
+  ): Promise<IPersonaItem[]> {
     const profiles = await this.sp.profiles.clientPeoplePickerSearchUser({
       QueryString: queryString,
       MaximumEntitySuggestions: maximumEntitySuggestions,
@@ -282,8 +294,13 @@ export class SPDataAdapterBase<
   }
 
   /**
-   * Get terms from term set as `ITag[]`. The result is filtered by `filter` and `selectedItems`.
-   * Specify `languageTag` to get terms in a specific language (default `nb-NO`).
+   * Get terms from term set as `ITagItem[]`. The result is filtered by `filter` and `selectedItems`.
+   * Specify `languageTag` to get terms in a specific language (default `nb-NO`). Labels are
+   * resolved with `getTermLabel`, so a term without a label in that language falls back to
+   * `nb-NO`, then `en-US`, then its first label.
+   *
+   * Reads the SharePoint term store through the shared taxonomy client, which follows server
+   * paging so term sets larger than one page are returned in full.
    *
    * @param termSetId Term set ID
    * @param filter Filter string
@@ -295,20 +312,14 @@ export class SPDataAdapterBase<
     filter: string,
     selectedItems: any[],
     languageTag = 'nb-NO'
-  ): Promise<ITag[]> {
-    const terms = await this.sp.termStore.sets.getById(termSetId).terms()
+  ): Promise<ITagItem[]> {
+    const terms = await getTermStore(this.sp.web).sets.getById(termSetId).terms.all()
     const tags = terms
       .filter((term) => !term.isDeprecated)
-      .map<ITag>((term) => {
-        const label =
-          term.labels.find((label) => label.languageTag === languageTag) ||
-          term.labels.find((label) => label.languageTag === 'en-US')
-        const name = label ? label.name : ''
-        return {
-          key: term.id,
-          name
-        }
-      })
+      .map<ITagItem>((term) => ({
+        key: term.id,
+        name: getTermLabel(term, languageTag)
+      }))
     return tags
       .filter((tag) => tag.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1)
       .filter((tag) => !selectedItems.find((item) => item.name === tag.name))
@@ -382,16 +393,12 @@ export class SPDataAdapterBase<
     let destinationWeb: IWeb = this.portalDataService.web
     switch (options.mapType) {
       case ProjectPropertiesMapType.FromPortfolioToProject:
-        {
-          sourceWeb = this.portalDataService.web
-          destinationWeb = this.sp.web
-        }
+        sourceWeb = this.portalDataService.web
+        destinationWeb = this.sp.web
         break
       case ProjectPropertiesMapType.FromPortfolioToPortfolio:
-        {
-          sourceWeb = this.portalDataService.web
-          destinationWeb = this.portalDataService.web
-        }
+        sourceWeb = this.portalDataService.web
+        destinationWeb = this.portalDataService.web
         break
     }
 
@@ -430,20 +437,18 @@ export class SPDataAdapterBase<
         switch (field.TypeAsString) {
           case 'TaxonomyFieldType':
           case 'TaxonomyFieldTypeMulti':
-            {
-              if (options.useSharePointTaxonomyHiddenFields) {
-                const textField = targetListFields.find((f) => f.Id === field.TextField)
-                if (!textField) return properties
-                properties[textField.InternalName] = fieldValues.get<string>(field.InternalName, {
-                  format: 'term_text'
-                })
-              } else {
-                const [textField] = fields.filter(
-                  (f) => f.InternalName === `${field.InternalName}Text`
-                )
-                if (!textField) return properties
-                properties[textField.InternalName] = fieldValue.valueAsText
-              }
+            if (options.useSharePointTaxonomyHiddenFields) {
+              const textField = targetListFields.find((f) => f.Id === field.TextField)
+              if (!textField) return properties
+              properties[textField.InternalName] = fieldValues.get<string>(field.InternalName, {
+                format: 'term_text'
+              })
+            } else {
+              const [textField] = fields.filter(
+                (f) => f.InternalName === `${field.InternalName}Text`
+              )
+              if (!textField) return properties
+              properties[textField.InternalName] = fieldValue.valueAsText
             }
             break
           case 'User':
@@ -462,7 +467,7 @@ export class SPDataAdapterBase<
                 return properties
               }
               const destinationUserId =
-                (await destinationWeb.ensureUser(user.LoginName))?.data?.Id ?? null
+                (await destinationWeb.ensureUser(user.LoginName))?.Id ?? null
               properties[userFieldName] = destinationUserId
             }
             break
@@ -482,7 +487,7 @@ export class SPDataAdapterBase<
                 users.map(({ LoginName }) => destinationWeb.ensureUser(LoginName))
               )
               const destinationUserIds = ensureResults.flatMap((r) =>
-                r.status === 'fulfilled' && r.value?.data?.Id ? [r.value.data.Id] : []
+                r.status === 'fulfilled' && r.value?.Id ? [r.value.Id] : []
               )
               properties[userFieldName] = options.wrapMultiValuesInResultsArray
                 ? { results: destinationUserIds }
@@ -510,12 +515,10 @@ export class SPDataAdapterBase<
             properties[field.InternalName] = fieldValue.value ?? null
             break
           case 'MultiChoice':
-            {
-              if (fieldValue.value) {
-                properties[field.InternalName] = options.wrapMultiValuesInResultsArray
-                  ? { results: fieldValue.value }
-                  : fieldValue.value
-              }
+            if (fieldValue.value) {
+              properties[field.InternalName] = options.wrapMultiValuesInResultsArray
+                ? { results: fieldValue.value }
+                : fieldValue.value
             }
             break
           default:
@@ -525,6 +528,7 @@ export class SPDataAdapterBase<
         return properties
       }, Promise.resolve({}))
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(
         '(SPDataAdapterBase) (getMappedProjectProperties) Failed to map project properties:',
         error

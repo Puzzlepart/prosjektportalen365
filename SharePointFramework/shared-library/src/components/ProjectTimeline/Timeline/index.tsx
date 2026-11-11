@@ -12,9 +12,19 @@ import { ITimelineProps } from './types'
 import { useTimeline } from './useTimeline'
 import { WebPartTitle } from '../../WebPartTitle'
 import { Toolbar } from '../../Toolbar'
-import { customLightTheme } from '../../../util'
+import { customLightTheme, withDefaults } from '../../../util'
 
-export const Timeline: FC<ITimelineProps> = (props) => {
+const TIMELINE_DEFAULT_PROPS: Partial<ITimelineProps> = {
+  defaultTimeframe: [
+    [-1, 'months'],
+    [1, 'years']
+  ],
+  title: strings.ProjectTimelineTitle,
+  infoText: strings.ProjectTimelineInfoText
+}
+
+export const Timeline: FC<ITimelineProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, TIMELINE_DEFAULT_PROPS)
   const fluentProviderId = useId('fp-timeline')
   const {
     defaultTimeStart,
@@ -24,9 +34,11 @@ export const Timeline: FC<ITimelineProps> = (props) => {
     showDetails,
     menuItems,
     setShowFilterPanel,
-    setShowDetails,
+    onDetailsDismiss,
+    scrollRef,
     itemRenderer,
-    groupRenderer
+    groupRenderer,
+    timeLapseMarkerColor
   } = useTimeline(props)
 
   return (
@@ -53,44 +65,37 @@ export const Timeline: FC<ITimelineProps> = (props) => {
             sidebarWidth={sidebarWidth}
             itemRenderer={itemRenderer}
             groupRenderer={groupRenderer}
+            scrollRef={scrollRef}
           >
             <TimelineMarkers>
               <CustomMarker date={props.timeLapseMarker}>
-                {({ styles }) => {
-                  const customStyles = {
-                    ...styles,
-                    backgroundColor: '#f35d69'
-                  }
-                  return <div style={customStyles} />
-                }}
+                {({ styles: markerStyles }) => (
+                  <div style={{ ...markerStyles, backgroundColor: timeLapseMarkerColor }} />
+                )}
               </CustomMarker>
-              <TodayMarker date={moment().toDate()} />
+              {/* Today is a line in colour; its label says what it is (WCAG 1.1.1, 1.4.1). */}
+              <TodayMarker date={moment().toDate()}>
+                {({ styles: markerStyles }) => (
+                  <div style={markerStyles}>
+                    <span className={styles.todayLabel}>{strings.TimelineTodayLabel}</span>
+                  </div>
+                )}
+              </TodayMarker>
             </TimelineMarkers>
           </ReactTimeline>
         </div>
         <FilterPanel
-          isOpen={showFilterPanel}
+          open={showFilterPanel}
           headerText={strings.FilterText}
           filters={props.filters}
           onFilterChange={props.onFilterChange}
           isLightDismiss
-          onDismiss={() => setShowFilterPanel(false)}
+          onClose={() => setShowFilterPanel(false)}
         />
-        {showDetails && (
-          <DetailsPopover timelineItem={showDetails} onDismiss={() => setShowDetails(null)} />
-        )}
+        {showDetails && <DetailsPopover timelineItem={showDetails} onDismiss={onDetailsDismiss} />}
       </FluentProvider>
     </IdPrefixProvider>
   )
-}
-
-Timeline.defaultProps = {
-  defaultTimeframe: [
-    [-1, 'months'],
-    [1, 'years']
-  ],
-  title: strings.ProjectTimelineTitle,
-  infoText: strings.ProjectTimelineInfoText
 }
 
 export * from './types'

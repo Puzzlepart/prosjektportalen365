@@ -1,0 +1,193 @@
+import { AssignFrom } from '@pnp/core'
+import '@pnp/sp/presets/all'
+import { IContentType, IList, IWeb, SPFI, spfi } from '@pnp/sp/presets/all'
+import { createSpfiInstance } from '../../data/createSpfiInstance'
+import { SPFxContext } from '../../types'
+import {
+  addEntityItem,
+  createNewEntityProperties,
+  ensureEntityItem,
+  fetchEntity,
+  getEntityFields,
+  getEntityItem,
+  updateEntityItem
+} from './operations'
+import { ISpFieldsShape, ISpListShape } from './pnpShapes'
+import { IEntity, IEntityField, ISpEntityPortalServiceParams } from './types'
+
+/**
+ * Reads and writes project entities in the portal (hub) site.
+ *
+ * Vendored from the npm package `sp-entityportal-service` v2.3.0 (MIT) and ported to PnPjs 4.
+ * See the attribution header in `types.ts` in this folder.
+ *
+ * The class only owns the PnPjs wiring. Every operation lives in `operations.ts`, typed against
+ * the structural shapes in `pnpShapes.ts`, so the behaviour is unit testable without the
+ * (ESM only) PnPjs runtime.
+ */
+export class SpEntityPortalService {
+  public sp: SPFI
+  public web: IWeb
+  private _entityList: IList
+  private _entityContentType: IContentType
+
+  /**
+   * Construct a new `SpEntityPortalService` instance.
+   *
+   * @param _spfxContext SPFx context
+   * @param _params Parameters
+   */
+  constructor(
+    private _spfxContext: SPFxContext,
+    private _params: ISpEntityPortalServiceParams
+  ) {
+    // Connected the way the library's other clients are (`createSpfiInstance`), so a factory the
+    // integration tests register reaches this client too.
+    this.sp = spfi(_params.portalUrl).using(AssignFrom(createSpfiInstance(_spfxContext).web))
+    this.web = this.sp.web
+    this._entityList = this.web.lists.getByTitle(_params.listName)
+    this._entityContentType = _params.contentTypeId
+      ? this.web.contentTypes.getById(_params.contentTypeId)
+      : null
+  }
+
+  /**
+   * Returns a new instance of the service with `params` merged into the current parameters.
+   *
+   * @param params Parameters to override
+   */
+  public usingParams(params: Partial<ISpEntityPortalServiceParams>): SpEntityPortalService {
+    return new SpEntityPortalService(this._spfxContext, { ...this._params, ...params })
+  }
+
+  /**
+   * Get the entity item, its content type fields, its URLs and its text field values.
+   *
+   * @param identity Identity of the entity
+   * @param sourceUrl Source URL used when generating the URLs
+   * @param onFieldsError Called when reading the entity content type fields fails (optional)
+   */
+  public fetchEntity(
+    identity: string,
+    sourceUrl: string,
+    onFieldsError?: (error: Error) => void
+  ): Promise<IEntity> {
+    return fetchEntity(this._list, this._contentTypeFields, {
+      identity,
+      sourceUrl,
+      onFieldsError,
+      // The page's origin, from the context rather than `window`, which Node does not have.
+      origin: new URL(this._spfxContext.pageContext.web.absoluteUrl).origin,
+      portalUrl: this._params.portalUrl,
+      listName: this._params.listName,
+      identityFieldName: this._params.identityFieldName,
+      fieldPrefix: this._params.fieldPrefix
+    })
+  }
+
+  /**
+   * Get the fields of the entity content type. Returns an empty array when the service was
+   * constructed without a `contentTypeId`.
+   *
+   * @param onError Called when the portal query fails, before the error is swallowed (optional)
+   */
+  public getEntityFields(onError?: (error: Error) => void): Promise<IEntityField[]> {
+    return getEntityFields(this._contentTypeFields, this._params.fieldPrefix, onError)
+  }
+
+  /**
+   * Get the entity item matching `identity`, or `undefined` when there is no match.
+   *
+   * @param identity Identity of the entity
+   */
+  public getEntityItem<T = any>(identity: string): Promise<T> {
+    return getEntityItem<T>(this._list, this._params.identityFieldName, identity)
+  }
+
+  /**
+   * Update the entity item matching `identity`.
+   *
+   * Resolves to whatever the endpoint returns - PnPjs 4 does not wrap responses in `{ data }`.
+   *
+   * @param identity Identity of the entity
+   * @param properties Properties to update
+   * @param eTag ETag for the `If-Match` header
+   */
+  public updateEntityItem<T = any>(
+    identity: string,
+    properties: Record<string, any>,
+    eTag = '*'
+  ): Promise<T> {
+    return updateEntityItem<T>(
+      this._list,
+      this._params.identityFieldName,
+      identity,
+      properties,
+      eTag
+    )
+  }
+
+  /**
+   * Update the entity item matching `identity`, or add it when there is none.
+   *
+   * @param identity Identity of the entity
+   * @param url Site URL of the entity, set only on a new entity
+   * @param properties Properties to update, or to add the entity with
+   * @param newEntityProperties Properties set only on a new entity
+   * @param alternateKeys Other fields that identify the entity, looked up before one is added
+   * @param eTag ETag for the `If-Match` header of an update
+   *
+   * @returns `true` when the entity was added, `false` when it was updated
+   */
+  public ensureEntityItem(
+    identity: string,
+    url: string,
+    properties: Record<string, any>,
+    newEntityProperties?: Record<string, any>,
+    alternateKeys?: Record<string, string>,
+    eTag = '*'
+  ): Promise<boolean> {
+    return ensureEntityItem(
+      this._list,
+      this._params,
+      identity,
+      url,
+      properties,
+      newEntityProperties,
+      alternateKeys,
+      eTag
+    )
+  }
+
+  /**
+   * Create a new entity item.
+   *
+   * Resolves to whatever the endpoint returns - PnPjs 4 does not wrap responses in `{ data }`.
+   *
+   * @param identity Identity of the entity
+   * @param url Site URL of the entity
+   * @param additionalProperties Additional properties for the new item
+   */
+  public createNewEntity<T = any>(
+    identity: string,
+    url: string,
+    additionalProperties?: Record<string, any>
+  ): Promise<T> {
+    const properties = createNewEntityProperties(this._params, identity, url, additionalProperties)
+    return addEntityItem<T>(this._list, properties)
+  }
+
+  /**
+   * The entity list seen through the minimal shape the operations are typed against.
+   */
+  private get _list(): ISpListShape {
+    return this._entityList
+  }
+
+  /**
+   * The fields of the entity content type, or `null` when no content type is configured.
+   */
+  private get _contentTypeFields(): ISpFieldsShape {
+    return this._entityContentType ? this._entityContentType.fields : null
+  }
+}

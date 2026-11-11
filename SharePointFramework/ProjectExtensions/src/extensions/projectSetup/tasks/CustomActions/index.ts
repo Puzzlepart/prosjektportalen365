@@ -44,9 +44,10 @@ export class CustomActions extends BaseTask {
    */
   private async _updateTemplateSelectorCustomAction(customActionTitle = 'Malvelger') {
     const templateLibraryUrl = this.data.selectedTemplate.templateLibraryUrl
-    const customActions = await this.params.web.userCustomActions<
-      { Id: string; Title: string; ClientSideComponentProperties: string }[]
-    >()
+    const customActions =
+      await this.params.web.userCustomActions<
+        { Id: string; Title: string; ClientSideComponentProperties: string }[]
+      >()
     const templateSelectorCustomAction = customActions.find(
       ({ Title }) => Title === customActionTitle
     )

@@ -1,8 +1,12 @@
 import { IPropertyPaneConfiguration, PropertyPaneDropdown } from '@microsoft/sp-property-pane'
-import { IResourceAllocationProps, ResourceAllocation } from 'components/ResourceAllocation'
+import {
+  IResourceAllocationProps,
+  RESOURCE_ALLOCATION_DEFAULT_PROPS,
+  ResourceAllocation
+} from 'components/ResourceAllocation'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 import strings from 'PortfolioWebPartsStrings'
-import { format } from '@fluentui/react'
+import { format } from 'pp365-shared-library'
 
 export default class ResourceAllocationWebPart extends BasePortfolioWebPart<IResourceAllocationProps> {
   public async onInit(): Promise<void> {
@@ -14,7 +18,7 @@ export default class ResourceAllocationWebPart extends BasePortfolioWebPart<IRes
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    const propertiesWithDefaults = { ...ResourceAllocation.defaultProps, ...this.properties }
+    const propertiesWithDefaults = { ...RESOURCE_ALLOCATION_DEFAULT_PROPS, ...this.properties }
     return {
       pages: [
         {

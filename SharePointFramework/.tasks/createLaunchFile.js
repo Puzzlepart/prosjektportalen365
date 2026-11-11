@@ -12,8 +12,11 @@ const baseConfiguration = {
     "url": "",
     "webRoot": "${workspaceRoot}",
     "sourceMaps": true,
+    // Webpack 5 names the solution's own sources webpack:///.././src/... and those of the shared
+    // library and ProjectWebParts webpack:///../../<solution>/src/...
     "sourceMapPathOverrides": {
         "webpack:///.././src/*": "${webRoot}/src/*",
+        "webpack:///../../*": "${webRoot}/../*",
         "webpack:///../../../src/*": "${webRoot}/src/*",
         "webpack:///../../../../src/*": "${webRoot}/src/*",
         "webpack:///../../../../../src/*": "${webRoot}/src/*"
@@ -26,7 +29,8 @@ const baseConfiguration = {
 
 function getLaunchConfigurations() {
     const configurations = []
-    process.env.LAUNCH_CONFIGURATIONS.split(';').forEach(configuration => {
+    // "<name>,<page url>;<name>,<page url>" in .env; without it there is no launch.json to write.
+    ;(process.env.LAUNCH_CONFIGURATIONS || '').split(';').forEach(configuration => {
         const [name, url] = configuration.split(',')
         if (!name || !url || url.indexOf('https://') !== 0) return
         configurations.push(Object.assign({}, baseConfiguration, { name, url }))

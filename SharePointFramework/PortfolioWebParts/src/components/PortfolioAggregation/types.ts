@@ -1,4 +1,3 @@
-import { IGroup, MessageBarType } from '@fluentui/react'
 import { ProjectColumn, ProjectContentColumn } from 'pp365-shared-library'
 import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
@@ -7,9 +6,13 @@ import { IBaseComponentProps } from '../types'
 import { IColumnFormPanel } from './ColumnFormPanel/types'
 import { IViewFormPanel } from './ViewFormPanel/types'
 import { ISearchResult } from '@pnp/sp/search'
+import { MessageBarProps } from '@fluentui/react-components'
 
 export class PortfolioAggregationErrorMessage extends Error {
-  constructor(public message: string, public type: MessageBarType) {
+  constructor(
+    public message: string,
+    public type: MessageBarProps['intent']
+  ) {
     super(message)
   }
 }
@@ -77,8 +80,7 @@ export interface IPortfolioAggregationConfiguration {
 }
 
 export interface IPortfolioAggregationProps<T = any>
-  extends IBaseComponentProps,
-    Pick<IListProps, 'isListLayoutModeJustified' | 'hiddenColumns'> {
+  extends IBaseComponentProps, Pick<IListProps, 'isListLayoutModeJustified' | 'hiddenColumns'> {
   /**
    * Configuration (columns and views etc)
    */
@@ -166,8 +168,10 @@ export interface IPortfolioAggregationProps<T = any>
   isParentProject?: boolean
 }
 
-export interface IPortfolioAggregationState
-  extends Pick<IPortfolioAggregationProps, 'dataSourceLevel' | 'dataSourceCategory' | 'columns'> {
+export interface IPortfolioAggregationState extends Pick<
+  IPortfolioAggregationProps,
+  'dataSourceLevel' | 'dataSourceCategory' | 'columns'
+> {
   /**
    * `true` if the component is loading data. The list will be
    * rendered with shimmer placeholders if the component is loading.
@@ -205,11 +209,6 @@ export interface IPortfolioAggregationState
    * in property `columns`.
    */
   allColumnsForCategory?: ProjectContentColumn[]
-
-  /**
-   * Groups to be rendered in the list
-   */
-  groups?: IGroup[]
 
   /**
    * Column to group by in the list
@@ -253,6 +252,11 @@ export interface IPortfolioAggregationState
    * Column deleted timestamp
    */
   columnDeleted?: number
+
+  /**
+   * Ids of the columns deleted since the configuration was read, which still lists them
+   */
+  deletedColumnIds?: number[]
 
   /**
    * Column shown/hidden timestamp

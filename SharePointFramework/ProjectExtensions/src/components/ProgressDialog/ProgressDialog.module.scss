@@ -1,5 +1,14 @@
-@import '~@fluentui/react/dist/sass/References.scss';
-
+// Colours come from the Fluent UI v9 theme the surrounding FluentProvider emits
+// (see @BaseDialog). They replace the v8 `$ms-color-*` Sass variables, which were
+// SharePoint theme tokens ("[theme:neutralSecondary, default: #605e5c]") resolved
+// at runtime by SPFx. Tokens were picked for the closest value within the right
+// family, so the dialog looks the same:
+//   neutralSecondary  #605e5c -> --colorNeutralForeground3      #616161
+//   neutralTertiary   #a19f9d -> --colorNeutralForeground4      #707070 (darker;
+//                                the nearer --colorNeutralForegroundDisabled is a
+//                                state token and wrong for a timestamp)
+//   neutralLight      #edebe9 -> --colorNeutralStroke2          #e0e0e0
+//   neutralLighterAlt #faf9f8 -> --colorNeutralBackground1Hover #f5f5f5
 .root {
   width: 850px !important;
   max-width: 850px !important;
@@ -11,7 +20,7 @@
 
 .subText {
   margin-bottom: 12px;
-  color: #605e5c;
+  color: var(--colorNeutralForeground3);
   font-size: 14px;
   font-weight: 400;
 }
@@ -22,15 +31,11 @@
   align-items: center;
 
   .icon {
+    display: flex;
     flex-shrink: 0;
+    justify-content: center;
     width: 60px;
-
-    > i {
-      font-size: 42px;
-      display: block;
-      text-align: center;
-      margin-top: 12px;
-    }
+    margin-top: 12px;
   }
 
   .indicator {
@@ -40,7 +45,7 @@
   .stepCount {
     display: block;
     margin-top: 4px;
-    color: $ms-color-neutralSecondary;
+    color: var(--colorNeutralForeground3);
   }
 }
 
@@ -55,14 +60,14 @@
   margin-bottom: 4px;
 
   .logDescription {
-    color: $ms-color-neutralSecondary;
+    color: var(--colorNeutralForeground3);
   }
 }
 
 .logContainer {
   max-height: 300px;
   overflow-y: auto;
-  border: 1px solid $ms-color-neutralLight;
+  border: 1px solid var(--colorNeutralStroke2);
   border-radius: 4px;
   padding: 4px;
   margin-top: 4px;
@@ -96,7 +101,7 @@
     padding: 1px 4px;
 
     &:hover {
-      background: $ms-color-neutralLighterAlt;
+      background: var(--colorNeutralBackground1Hover);
     }
 
     .logEntryIcon {
@@ -107,7 +112,7 @@
     }
 
     .logEntryTime {
-      color: $ms-color-neutralTertiary;
+      color: var(--colorNeutralForeground4);
       flex-shrink: 0;
       font-size: 10px;
     }
@@ -115,5 +120,11 @@
     .logEntryMessage {
       word-break: break-word;
     }
+  }
+
+  // «Venter» in the grey that reads 4.5:1, where #8a8886 read 3.5:1.
+  .pendingText {
+    color: var(--colorNeutralForeground3);
+    font-style: italic;
   }
 }

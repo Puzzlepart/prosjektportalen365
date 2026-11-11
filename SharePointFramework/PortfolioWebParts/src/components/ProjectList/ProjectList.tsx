@@ -1,3 +1,4 @@
+import { Skeleton, SkeletonItem } from '@fluentui/react-components'
 import {
   FluentProvider,
   IdPrefixProvider,
@@ -14,11 +15,16 @@ import {
   useIsOverflowItemVisible,
   useOverflowMenu
 } from '@fluentui/react-components'
-import { Shimmer, ShimmerElementType } from '@fluentui/react'
 import { MoreHorizontalRegular } from '@fluentui/react-icons'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
-import { SiteContext, UserMessage, customLightTheme } from 'pp365-shared-library'
+import {
+  SiteContext,
+  UserMessage,
+  customLightTheme,
+  format,
+  withDefaults
+} from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { find, isEmpty } from 'underscore'
 import styles from './ProjectList.module.scss'
@@ -53,7 +59,14 @@ const OverflowMenu: FC<{
   return (
     <Menu>
       <MenuTrigger disableButtonEnhancement>
-        <Tab ref={ref} role='tab' value='overflow-menu' icon={<MoreHorizontalRegular />}>
+        {/* Named by what it shows and what it holds: «+3 flere utvalg» (WCAG 2.4.6, 2.5.3). */}
+        <Tab
+          ref={ref}
+          role='tab'
+          value='overflow-menu'
+          icon={<MoreHorizontalRegular />}
+          aria-label={format(strings.MoreVerticalsLabel, overflowCount)}
+        >
           +{overflowCount}
         </Tab>
       </MenuTrigger>
@@ -68,131 +81,7 @@ const OverflowMenu: FC<{
   )
 }
 
-export const ProjectList: FC<IProjectListProps> = (props) => {
-  const context = useProjectList(props)
-  const renderProjects = useProjectListRenderer(context)
-
-  if (context.state.isDataLoaded && context.state.projects.length === 0) {
-    return (
-      <IdPrefixProvider value={context.fluentProviderId}>
-        <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
-          <section className={styles.projectList}>
-            <UserMessage
-              title={strings.NoProjectsFoundTitle}
-              text={strings.NoProjectsFoundMessage}
-            />
-          </section>
-        </FluentProvider>
-      </IdPrefixProvider>
-    )
-  }
-
-  if (context.state.error) {
-    return (
-      <IdPrefixProvider value={context.fluentProviderId}>
-        <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
-          <section className={styles.projectList}>
-            <UserMessage
-              title={strings.ErrorFetchingProjectsTitle}
-              text={context.state.error}
-              intent='error'
-            />
-          </section>
-        </FluentProvider>
-      </IdPrefixProvider>
-    )
-  }
-
-  return (
-    <ProjectListContext.Provider value={context}>
-      <IdPrefixProvider value={context.fluentProviderId}>
-        <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
-          <div className={styles.projectList}>
-            <div className={styles.tabs}>
-              {context.state.isDataLoaded ? (
-                <Overflow>
-                  <TabList
-                    className={styles.tabList}
-                    onTabSelect={(_, data: SelectTabData) => {
-                      if (data.value === 'overflow-menu') return
-                      context.setState({
-                        selectedVertical: find(context.verticals, (v) => v.key === data.value)
-                      })
-                    }}
-                    selectedValue={context.state.selectedVertical?.key}
-                  >
-                    {context.verticals
-                      .filter((vertical) => !vertical.isHidden || !vertical.isHidden(context.state))
-                      .map((vertical) => {
-                        const Icon = vertical.icon
-                        return (
-                          <OverflowItem key={vertical.key} id={String(vertical.key)}>
-                            <Tab key={vertical.key} value={vertical.value} icon={<Icon />}>
-                              {vertical.text}
-                            </Tab>
-                          </OverflowItem>
-                        )
-                      })}
-                    <OverflowMenu
-                      verticals={context.verticals.filter(
-                        (vertical) => !vertical.isHidden || !vertical.isHidden(context.state)
-                      )}
-                      onSelect={(key) =>
-                        context.setState({
-                          selectedVertical: find(context.verticals, (v) => v.key === key)
-                        })
-                      }
-                    />
-                  </TabList>
-                </Overflow>
-              ) : (
-                <div className={styles.tabListSkeleton} role='presentation' aria-busy='true'>
-                  {Array.from({
-                    length: Math.max(context.verticals.length, 3)
-                  }).map((_, i) => (
-                    <Shimmer
-                      key={`tab-skeleton-${i}`}
-                      shimmerElements={[{ type: ShimmerElementType.line, width: 140, height: 36 }]}
-                      styles={{ root: { width: 140 } }}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-            <Commands />
-            {context.state.isDataLoaded && isEmpty(context.projects) && (
-              <div className={styles.emptyMessage}>
-                <UserMessage
-                  title={strings.NoProjectsFoundTitle}
-                  text={strings.ProjectListEmptyMessage}
-                />
-              </div>
-            )}
-            <div className={styles.projects}>{renderProjects(context.projects)}</div>
-            <ProjectInformationPanel
-              {...SiteContext.create(
-                props.spfxContext,
-                context.state.showProjectInfo?.siteId,
-                context.state.showProjectInfo?.url
-              )}
-              page='Portfolio'
-              hidden={!context.state.showProjectInfo}
-              hideAllActions={true}
-              panelProps={{
-                headerText: context.state.showProjectInfo?.title,
-                onDismiss: () => {
-                  context.setState({ showProjectInfo: null })
-                }
-              }}
-            />
-          </div>
-        </FluentProvider>
-      </IdPrefixProvider>
-    </ProjectListContext.Provider>
-  )
-}
-
-ProjectList.defaultProps = {
+export const PROJECT_LIST_DEFAULT_PROPS: Partial<IProjectListProps> = {
   sortBy: 'Title',
   showSearchBox: true,
   showRenderModeSelector: true,
@@ -286,4 +175,139 @@ ProjectList.defaultProps = {
       relativeUrl: `/${resource.Navigation_Tasks_Url}`
     }
   ]
+}
+
+export const ProjectList: FC<IProjectListProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, PROJECT_LIST_DEFAULT_PROPS)
+  const context = useProjectList(props)
+  const renderProjects = useProjectListRenderer(context)
+
+  if (context.state.error) {
+    return (
+      <IdPrefixProvider value={context.fluentProviderId}>
+        <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
+          <section className={styles.projectList}>
+            <UserMessage
+              title={strings.ErrorFetchingProjectsTitle}
+              text={context.state.error}
+              intent='error'
+            />
+          </section>
+        </FluentProvider>
+      </IdPrefixProvider>
+    )
+  }
+
+  if (context.state.isDataLoaded && context.state.projects.length === 0) {
+    return (
+      <IdPrefixProvider value={context.fluentProviderId}>
+        <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
+          <section className={styles.projectList}>
+            <UserMessage
+              title={strings.NoProjectsFoundTitle}
+              text={strings.NoProjectsFoundMessage}
+            />
+          </section>
+        </FluentProvider>
+      </IdPrefixProvider>
+    )
+  }
+
+  return (
+    <ProjectListContext.Provider value={context}>
+      <IdPrefixProvider value={context.fluentProviderId}>
+        <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
+          <div className={styles.projectList}>
+            <div className={styles.tabs}>
+              {context.state.isDataLoaded ? (
+                <Overflow>
+                  <TabList
+                    className={styles.tabList}
+                    onTabSelect={(_, data: SelectTabData) => {
+                      if (data.value === 'overflow-menu') return
+                      context.setState({
+                        selectedVertical: find(context.verticals, (v) => v.key === data.value)
+                      })
+                    }}
+                    selectedValue={context.state.selectedVertical?.key}
+                  >
+                    {context.verticals
+                      .filter((vertical) => !vertical.isHidden || !vertical.isHidden(context.state))
+                      .map((vertical) => {
+                        const Icon = vertical.icon
+                        return (
+                          <OverflowItem key={vertical.key} id={String(vertical.key)}>
+                            <Tab
+                              key={vertical.key}
+                              id={context.getTabId(vertical.key)}
+                              value={vertical.value}
+                              icon={<Icon />}
+                            >
+                              {vertical.text}
+                            </Tab>
+                          </OverflowItem>
+                        )
+                      })}
+                    <OverflowMenu
+                      verticals={context.verticals.filter(
+                        (vertical) => !vertical.isHidden || !vertical.isHidden(context.state)
+                      )}
+                      onSelect={(key) =>
+                        context.setState({
+                          selectedVertical: find(context.verticals, (v) => v.key === key)
+                        })
+                      }
+                    />
+                  </TabList>
+                </Overflow>
+              ) : (
+                <div className={styles.tabListSkeleton} role='presentation' aria-busy='true'>
+                  {Array.from({
+                    length: Math.max(context.verticals.length, 3)
+                  }).map((_, i) => (
+                    <Skeleton key={`tab-skeleton-${i}`} style={{ width: 140 }}>
+                      <SkeletonItem style={{ width: 140, height: 36 }} />
+                    </Skeleton>
+                  ))}
+                </div>
+              )}
+            </div>
+            <Commands />
+            {context.state.isDataLoaded && isEmpty(context.projects) && (
+              <div className={styles.emptyMessage}>
+                <UserMessage
+                  title={strings.NoProjectsFoundTitle}
+                  text={strings.ProjectListEmptyMessage}
+                />
+              </div>
+            )}
+            {/* The projects are what the selection's tab shows (WCAG 1.3.1), once there is one. */}
+            <div
+              className={styles.projects}
+              role={context.selectedTabId ? 'tabpanel' : undefined}
+              aria-labelledby={context.selectedTabId}
+            >
+              {renderProjects(context.projects)}
+            </div>
+            <ProjectInformationPanel
+              {...SiteContext.create(
+                props.spfxContext,
+                context.state.showProjectInfo?.siteId,
+                context.state.showProjectInfo?.url
+              )}
+              page='Portfolio'
+              hidden={!context.state.showProjectInfo}
+              hideAllActions={true}
+              panelProps={{
+                headerText: context.state.showProjectInfo?.title,
+                onClose: () => {
+                  context.setState({ showProjectInfo: null })
+                }
+              }}
+            />
+          </div>
+        </FluentProvider>
+      </IdPrefixProvider>
+    </ProjectListContext.Provider>
+  )
 }

@@ -1,12 +1,27 @@
-import { Panel, PanelType } from '@fluentui/react'
-import React, { FC, useEffect } from 'react'
+import { useRestoreFocusTarget } from '@fluentui/react-components'
+import React, { cloneElement, FC, useEffect } from 'react'
 import { useBoolean } from 'usehooks-ts'
 import { ProjectInformation } from '../ProjectInformation'
 import { IProjectInformationPanelProps } from './types'
-import styles from './ProjectInformationPanel.module.scss'
+import { BasePanel, withDefaults } from 'pp365-shared-library'
 
-export const ProjectInformationPanel: FC<IProjectInformationPanelProps> = (props) => {
+const PROJECT_INFORMATION_PANEL_DEFAULT_PROPS: Partial<IProjectInformationPanelProps> = {
+  hidden: true
+}
+
+/**
+ * The project information in a side panel, named after the project in its header. The element it
+ * renders to open it is marked as the panel's restore target, so closing the panel gives it the
+ * focus back (WCAG 2.4.3): Fluent's drawer gives focus back only to such a target, and a toggle
+ * that opens it from state has none. A caller that opens the panel through `hidden` marks its
+ * own button with `useRestoreFocusTarget`. Its body is read, not worked in, so it takes the focus
+ * itself, and the keyboard can scroll it (WCAG 2.1.1).
+ */
+export const ProjectInformationPanel: FC<IProjectInformationPanelProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, PROJECT_INFORMATION_PANEL_DEFAULT_PROPS)
   const panelState = useBoolean(!props.hidden)
+  const restoreFocusTarget = useRestoreFocusTarget()
+  const toggleElement = props.onRenderToggleElement?.(panelState.toggle)
 
   useEffect(() => {
     if (!props.onRenderToggleElement) panelState.setValue(!props.hidden)
@@ -15,22 +30,21 @@ export const ProjectInformationPanel: FC<IProjectInformationPanelProps> = (props
   return (
     <>
       {props.children}
-      {props.onRenderToggleElement && props.onRenderToggleElement(panelState.toggle)}
-      <Panel
-        isOpen={panelState.value}
-        type={PanelType.medium}
+      {toggleElement && cloneElement(toggleElement, restoreFocusTarget)}
+      {/* The title goes in the drawer's header, on the close button's line, not in the body. */}
+      <BasePanel
+        open={panelState.value}
+        size={'medium'}
         isLightDismiss={true}
-        onDismiss={panelState.setFalse}
+        isBodyFocusable
+        onClose={panelState.setFalse}
+        headerText={props.title}
         {...props.panelProps}
       >
-        <ProjectInformation {...props} className={styles.projectInformation} />
-      </Panel>
+        <ProjectInformation {...props} hideTitle />
+      </BasePanel>
     </>
   )
-}
-
-ProjectInformationPanel.defaultProps = {
-  hidden: true
 }
 
 export * from './types'

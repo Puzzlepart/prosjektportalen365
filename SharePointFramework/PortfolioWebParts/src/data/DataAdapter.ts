@@ -1,11 +1,9 @@
 /* eslint-disable no-console */
 
-import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, getHashCode, PnPClientStorage } from '@pnp/core'
-import { LogLevel } from '@pnp/logging'
+import { Logger, LogLevel } from '@pnp/logging'
 import { spfi, SPFx } from '@pnp/sp'
-import '@pnp/sp/items/get-all'
 import {
   ISearchResult,
   ISiteUserInfo,
@@ -22,10 +20,14 @@ import * as strings from 'PortfolioWebPartsStrings'
 import {
   DataSource,
   DataSourceService,
+  expandRowsPerStatusSeries,
+  getAllItems,
   getClassProperties,
   getItemFieldValues,
   getOrFetchProjectsCache,
   getUserPhoto,
+  groupLatestReportBySeries,
+  parseScopedSiteId,
   IGraphGroup,
   IPortalDataServiceConfiguration,
   ItemFieldValues,
@@ -34,12 +36,14 @@ import {
   ProjectColumn,
   ProjectContentColumn,
   ProjectListModel,
+  sortStatusReportsLatestFirst,
   SPField,
   SPFxContext,
   SPProjectItem,
   SPTimelineConfigurationItem,
   TimelineConfigurationModel,
-  TimelineContentModel
+  TimelineContentModel,
+  format
 } from 'pp365-shared-library'
 import resource from 'SharedResources'
 import _ from 'underscore'
@@ -54,6 +58,7 @@ import {
   SPIdeaConfigurationItem
 } from '../models'
 import * as config from './config'
+import { fetchMergedViewData, replaceDepartmentId } from './mergedViewData'
 import {
   GetPortfolioConfigError,
   IEnrichedProjectsFields,
@@ -79,7 +84,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
    * @param _spfxContext SPFx context
    * @param _sp SPFI instance
    */
-  constructor(private _spfxContext: SPFxContext, private _sp: SPFI) {
+  constructor(
+    private _spfxContext: SPFxContext,
+    private _sp: SPFI
+  ) {
     this.portalDataService = new PortalDataService()
   }
 
@@ -222,90 +230,40 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
+  /**
+   * The merged view: the primary portfolio's rows, then each other portfolio's through an adapter
+   * of its own against that hub, with the view's search scoped to it (`mergedViewData.ts`). A
+   * portfolio that cannot be read is left out and named in `failedPortfolios`, which the overview
+   * tells. It was left out in silence, and one adapter was reused for every other portfolio, whose
+   * `configure` keeps the first hub it was given: from the third portfolio on, the rows were the
+   * second's under the third's name.
+   */
   public async fetchMergedViewData(
     view: PortfolioOverviewView,
     portfolios: PortfolioInstance[],
     primaryConfiguration: IPortfolioOverviewConfiguration
   ): Promise<IPortfolioViewData> {
-    const includedPortfolios = portfolios.filter((p) => p.includeInMergedView !== false)
-
-    if (includedPortfolios.length === 0) {
-      return { items: [], managedProperties: [] }
-    }
-
-    const primaryPortfolio = includedPortfolios[0]
-    const primaryData = await this.fetchDataForView(
-      view,
-      primaryConfiguration,
-      primaryConfiguration.hubSiteId
-    )
-
-    const primaryHubMetadata = {
-      _hubId: primaryPortfolio.uniqueId,
-      _hubTitle: primaryPortfolio.title,
-      _hubUrl: primaryPortfolio.url
-    }
-
-    const mergedResult: IPortfolioViewData = {
-      items: primaryData.items.map((item) => ({ ...item, ...primaryHubMetadata })),
-      managedProperties: [...primaryData.managedProperties]
-    }
-
-    const tempAdapter = new DataAdapter(this._spfxContext, this._sp)
-
-    for (let i = 1; i < includedPortfolios.length; i++) {
-      const portfolio = includedPortfolios[i]
-      const hubMetadata = {
-        _hubId: portfolio.uniqueId,
-        _hubTitle: portfolio.title,
-        _hubUrl: portfolio.url
-      }
-
-      try {
-        await tempAdapter.configure(null, null, portfolio)
-
-        const portfolioConfig = await tempAdapter.getPortfolioConfig()
-        const portfolioHubSiteId = portfolioConfig.hubSiteId
-
+    return fetchMergedViewData(
+      portfolios,
+      () => this.fetchDataForView(view, primaryConfiguration, primaryConfiguration.hubSiteId),
+      async (portfolio) => {
+        const adapter = await new DataAdapter(this._spfxContext, this._sp).configure(
+          null,
+          null,
+          portfolio
+        )
+        const configuration = await adapter.getPortfolioConfig()
         const portfolioView = new PortfolioOverviewView()
         Object.assign(portfolioView, view)
-        portfolioView.searchQuery = view.searchQuery.replace(
-          /DepartmentId:\{[a-f0-9-]+\}/gi,
-          `DepartmentId:{${portfolioHubSiteId}}`
-        )
-
-        const { items, managedProperties } = await tempAdapter.fetchDataForView(
-          portfolioView,
-          portfolioConfig,
-          portfolioHubSiteId
-        )
-
-        mergedResult.items.push(...items.map((item) => ({ ...item, ...hubMetadata })))
-
-        managedProperties.forEach((prop) => {
-          if (!mergedResult.managedProperties.includes(prop)) {
-            mergedResult.managedProperties.push(prop)
-          }
+        portfolioView.searchQuery = replaceDepartmentId(view.searchQuery, configuration.hubSiteId)
+        return adapter.fetchDataForView(portfolioView, configuration, configuration.hubSiteId)
+      },
+      (portfolio, error) =>
+        Logger.log({
+          message: `(DataAdapter) (fetchMergedViewData) ${portfolio.title} could not be read: ${error?.message}`,
+          level: LogLevel.Warning
         })
-      } catch (error) {
-        console.error(`Failed to fetch data from portfolio ${portfolio.title}:`, error)
-      }
-    }
-
-    const seenKeys = new Set<string>()
-    const uniqueItems = mergedResult.items.filter((item) => {
-      const key = `${item.SiteId}_${item._hubId}`
-      if (seenKeys.has(key)) {
-        return false
-      }
-      seenKeys.add(key)
-      return true
-    }) as IFetchDataForViewItemResult[]
-
-    return {
-      items: uniqueItems,
-      managedProperties: mergedResult.managedProperties
-    }
+    )
   }
 
   public async fetchDataForRegularView(
@@ -314,25 +272,27 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     siteId: string,
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IPortfolioViewData> {
-    const { projects, sites, statusReports, managedProperties } = await this._fetchDataForView(
-      view,
-      configuration,
-      siteId,
-      siteIdProperty
-    )
+    const { projects, sites, statusReportsBySite, managedProperties } =
+      await this._fetchDataForView(view, configuration, siteId, siteIdProperty)
 
-    const items = sites.map((site) => {
-      const project = projects.find((res) => res[siteIdProperty] === site['SiteId'])
-      const statusReport = statusReports.find((res) => res[siteIdProperty] === site['SiteId'])
-      return {
-        ...(statusReport ?? {}),
-        ...(project ?? {}),
-        Title: site.Title,
-        Path: site?.Path,
-        SPWebUrl: site?.SPWebUrl,
-        SiteId: site['SiteId']
-      }
-    })
+    const items = sites.reduce<IFetchDataForViewItemResult[]>((acc, site) => {
+      const project = projects.find((res) => res[siteIdProperty] === site.SiteId)
+      const series = statusReportsBySite.get(site.SiteId)
+      return acc.concat(
+        expandRowsPerStatusSeries(
+          (statusReport) => ({
+            ...(statusReport ?? {}),
+            ...(project ?? {}),
+            Title: site.Title,
+            Path: site?.Path,
+            SPWebUrl: site?.SPWebUrl,
+            SiteId: site.SiteId
+          }),
+          series,
+          siteIdProperty
+        )
+      )
+    }, [])
 
     return { items, managedProperties } as IPortfolioViewData
   }
@@ -343,26 +303,26 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     siteId: string,
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IPortfolioViewData> {
-    const { projects, sites, statusReports, managedProperties } = await this._fetchDataForView(
-      view,
-      configuration,
-      siteId,
-      siteIdProperty
-    )
+    const { projects, sites, statusReportsBySite, managedProperties } =
+      await this._fetchDataForView(view, configuration, siteId, siteIdProperty)
 
-    const items: IFetchDataForViewItemResult[] = projects.map((project) => {
-      const statusReport = statusReports.find(
-        (res) => res[siteIdProperty] === project[siteIdProperty]
+    const items = projects.reduce<IFetchDataForViewItemResult[]>((acc, project) => {
+      const site = sites.find((res) => res.SiteId === project[siteIdProperty])
+      const series = statusReportsBySite.get(project[siteIdProperty])
+      return acc.concat(
+        expandRowsPerStatusSeries(
+          (statusReport) => ({
+            ...(statusReport ?? {}),
+            ...project,
+            Path: site?.Path,
+            SPWebUrl: site?.SPWebUrl,
+            SiteId: project[siteIdProperty]
+          }),
+          series,
+          siteIdProperty
+        )
       )
-      const site = sites.find((res) => res['SiteId'] === project[siteIdProperty])
-      return {
-        ...(statusReport ?? {}),
-        ...project,
-        Path: site?.Path,
-        SPWebUrl: site?.SPWebUrl,
-        SiteId: project[siteIdProperty]
-      }
-    })
+    }, [])
 
     return { items, managedProperties } as IPortfolioViewData
   }
@@ -441,17 +401,19 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     ])
     projects = projects.map((item) => cleanDeep({ ...item }))
     sites = sites.map((item) => cleanDeep({ ...item }))
-    statusReports = statusReports
-      .sort((a, b) => b['ListItemId'] - a['ListItemId'])
-      .map((item) => cleanDeep({ ...item }))
-    sites = sites.filter(
-      (site) => projects.filter((res) => res[siteIdProperty] === site['SiteId']).length === 1
+    statusReports = sortStatusReportsLatestFirst(statusReports).map((item) =>
+      cleanDeep({ ...item })
     )
+    sites = sites.filter(
+      (site) => projects.filter((res) => res[siteIdProperty] === site.SiteId).length === 1
+    )
+    const statusReportsBySite = groupLatestReportBySeries(statusReports, siteIdProperty)
 
     return {
       projects,
       sites,
       statusReports,
+      statusReportsBySite,
       managedProperties
     } as const
   }
@@ -487,8 +449,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       })
 
       const reports = statusReports
+        .filter((report) => !parseScopedSiteId(report?.['GtSiteIdOWSTEXT']).scopeKey)
         .map((report) => ({
-          siteId: report?.['GtSiteIdOWSTEXT'],
+          siteId: parseScopedSiteId(report?.['GtSiteIdOWSTEXT']).siteId,
           costsTotal: report?.['GtCostsTotalOWSCURR'],
           budgetTotal: report?.['GtBudgetTotalOWSCURR']
         }))
@@ -520,17 +483,19 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
     let timelineItems: any[]
     try {
-      timelineItems = await this._sp.web.lists
-        .getByTitle(resource.Lists_TimelineContent_Title)
-        .items.select(...baseFields, 'GtTag')
-        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-        .getAll()
+      timelineItems = await getAllItems(
+        this._sp.web.lists
+          .getByTitle(resource.Lists_TimelineContent_Title)
+          .items.select(...baseFields, 'GtTag')
+          .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+      )
     } catch {
-      timelineItems = await this._sp.web.lists
-        .getByTitle(resource.Lists_TimelineContent_Title)
-        .items.select(...baseFields)
-        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-        .getAll()
+      timelineItems = await getAllItems(
+        this._sp.web.lists
+          .getByTitle(resource.Lists_TimelineContent_Title)
+          .items.select(...baseFields)
+          .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+      )
     }
 
     return timelineItems
@@ -637,7 +602,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         }
       ]
     })
-    return PrimarySearchResults.filter((site) => hubSiteId !== site['SiteId'])
+    return PrimarySearchResults.filter((site) => hubSiteId !== site.SiteId)
   }
 
   /**
@@ -689,7 +654,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
         const model = new ProjectListModel(group?.displayName ?? item.Title, itemWithTemplate)
         model.isUserMember = !!group
-        model.hasUserAccess = _.any(sites, (site) => site['SiteId'] === item.GtSiteId)
+        model.hasUserAccess = _.any(sites, (site) => site.SiteId === item.GtSiteId)
         model.primaryUser = createUserPersona(primaryUser, primaryUserField)
         model.secondaryUser = createUserPersona(secondaryUser, secondaryUserField)
         return model
@@ -711,6 +676,70 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   /**
+   * The types of the Projects list's `Gt` fields on the hub `sp` reaches, by internal name, read
+   * once per hub and kept beside the list's items (`getOrFetchProjectsCache`). `undefined` when
+   * they cannot be read, or none came back.
+   *
+   * @param sp The hub's SPFI instance
+   * @param hubSiteId The hub's site id
+   */
+  private async _fetchProjectListFieldTypes(
+    sp: SPFI,
+    hubSiteId: string
+  ): Promise<Record<string, string> | undefined> {
+    try {
+      const types = await getOrFetchProjectsCache('items', `${hubSiteId}_fields`, async () => {
+        const fields = await sp.web.lists
+          .getByTitle(resource.Lists_Projects_Title)
+          .fields.select('InternalName', 'TypeAsString')
+          .filter("startswith(InternalName,'Gt')")<
+          { InternalName: string; TypeAsString: string }[]
+        >()
+        return fields.reduce<Record<string, string>>(
+          (byName, { InternalName, TypeAsString }) => ({ ...byName, [InternalName]: TypeAsString }),
+          {}
+        )
+      })
+      return _.isEmpty(types) ? undefined : types
+    } catch (error) {
+      Logger.log({
+        message: `(DataAdapter) could not read the fields of the Projects list: ${error?.message}`,
+        level: LogLevel.Warning
+      })
+      return undefined
+    }
+  }
+
+  /**
+   * The fields of `selectFields` the hub's Projects list can give. The web parts' panes offer
+   * every project column, and one the list does not have (the status and budget columns), or a
+   * person column asked for by name, fails the whole query with a 400: such a field is left out,
+   * and the rest is shown. A `Gt` field is kept when the list has it and it is not a person or
+   * lookup field, a `…Id` when the list has that person or lookup field, and any other field
+   * (`Title`, `Id`) as it is. When the list's fields cannot be read, only `SPProjectItem`'s
+   * fields are selected.
+   *
+   * @param sp The hub's SPFI instance
+   * @param hubSiteId The hub's site id
+   * @param selectFields The fields to select
+   */
+  private async _selectProjectListFields(
+    sp: SPFI,
+    hubSiteId: string,
+    selectFields: string[]
+  ): Promise<string[]> {
+    const types = await this._fetchProjectListFieldTypes(sp, hubSiteId)
+    if (!types) return this._buildProjectItemsSelectFields()
+    const isLookup = (field: string) => /^(Lookup|User)(Multi)?$/.test(types[field])
+    return selectFields.filter(
+      (field) =>
+        !/^Gt/.test(field) ||
+        (field in types && !isLookup(field)) ||
+        (/Id$/.test(field) && isLookup(field.slice(0, -2)))
+    )
+  }
+
+  /**
    * Fetches the raw Projects list items. Shared across webparts on the same
    * page via `getOrFetchProjectsCache`. The cache key includes a hash of the
    * sorted select fields so callers with different field configurations
@@ -723,10 +752,14 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     fields?: IEnrichedProjectsFields
   ): Promise<any[]> {
     const list = this._sp.web.lists.getByTitle(resource.Lists_Projects_Title)
-    const selectFields = this._buildProjectItemsSelectFields(fields)
+    const selectFields = await this._selectProjectListFields(
+      this._sp,
+      siteId,
+      this._buildProjectItemsSelectFields(fields)
+    )
     const fieldsHash = getHashCode(selectFields.slice().sort().join(','))
     return getOrFetchProjectsCache('items', `${siteId}_${fieldsHash}`, () =>
-      list.items.select(...selectFields).getAll()
+      getAllItems(list.items.select(...selectFields))
     )
   }
 
@@ -887,20 +920,29 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
   public async fetchEnrichedProject(
     siteId: string,
-    hubContext?: IHubContext
+    hubContext?: IHubContext,
+    fields?: IEnrichedProjectsFields
   ): Promise<ProjectListModel> {
     const localStore = new PnPClientStorage().local
 
     // Use hub context if provided, otherwise use current context
     const spfxHubContext = hubContext?.spfxContext || this._spfxContext
     const spHub = hubContext ? spfi(hubContext.hubSiteUrl).using(SPFx(spfxHubContext)) : this._sp
-
-    const cacheKey = hubContext
-      ? `pp365_fetchenrichedproject_${siteId}_hub_${hubContext.hubSiteId}`
-      : `pp365_fetchenrichedproject_${siteId}`
+    const hubSiteId = hubContext?.hubSiteId ?? this._spfxContext.pageContext.site.id.toString()
 
     const list = spHub.web.lists.getByTitle(resource.Lists_Projects_Title)
-    const selectFields = Object.keys(new SPProjectItem())
+    const selectFields = await this._selectProjectListFields(
+      spHub,
+      hubSiteId,
+      this._buildProjectItemsSelectFields(fields)
+    )
+
+    // The fields are part of the key: a field chosen in the card's pane shows on the next load,
+    // not when the cached project expires.
+    const fieldsHash = getHashCode(selectFields.slice().sort().join(','))
+    const cacheKey = hubContext
+      ? `pp365_fetchenrichedproject_${siteId}_hub_${hubContext.hubSiteId}_${fieldsHash}`
+      : `pp365_fetchenrichedproject_${siteId}_${fieldsHash}`
 
     let templates = []
     try {
@@ -918,10 +960,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       cacheKey,
       async () =>
         await Promise.all([
-          list.items
-            .select(...selectFields)
-            .filter(`GtSiteId eq '${siteId}'`)
-            .getAll(),
+          getAllItems(list.items.select(...selectFields).filter(`GtSiteId eq '${siteId}'`)),
           this._fetchItems(`SiteId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId']),
           this.fetchMemberGroups(),
           spHub.web.siteUsers.select('Id', 'Title', 'Email')()
@@ -942,7 +981,13 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       memberOfGroups,
       users
     }
-    const projects = this._combineResultData(result, undefined, undefined, templateMap)
+    // Without the person fields no person was found: the card showed «Ikke satt» since 1.12.0.
+    const projects = this._combineResultData(
+      result,
+      fields?.primaryUserField,
+      fields?.secondaryUserField,
+      templateMap
+    )
     const project = _.first(projects)
     return project
   }
@@ -958,7 +1003,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         .Get<IGraphGroup[]>(
           '/me/memberOf/$/microsoft.graph.group',
           ['id', 'displayName'],
-          // eslint-disable-next-line quotes
+
           "groupTypes/any(a:a%20eq%20'unified')"
         )
         .then((value) => resolve(value))
@@ -1072,7 +1117,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         MeasurementAchievement: JSON.stringify({
           Achievement: firstMeasurement?.Achievement,
           AchievementDisplay: firstMeasurement?.AchievementDisplay,
-          TrendIconProps: firstMeasurement?.TrendIconProps
+          TrendIcon: firstMeasurement?.TrendIcon
         }),
         Measurements: JSON.stringify(
           measurements?.map((m) => {
@@ -1084,7 +1129,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
               Achievement: m.Achievement,
               AchievementDisplay: m.AchievementDisplay,
               DateDisplay: m.DateDisplay,
-              TrendIconProps: m.TrendIconProps
+              Date: m.Date,
+              TrendIcon: m.TrendIcon
             }
           })
         )

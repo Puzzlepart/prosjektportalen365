@@ -1,4 +1,5 @@
+// The tags take the cell's width. Kept clear of its last 28 px, a tag that fitted the cell spilled
+// past its own group, and could not end in «…» where it did not fit (`OverflowTagMenu`).
 .root {
   margin-top: 6px;
-  padding-right: 28px;
 }

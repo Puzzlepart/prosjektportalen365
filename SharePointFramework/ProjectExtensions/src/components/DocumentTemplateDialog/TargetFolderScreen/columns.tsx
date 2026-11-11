@@ -1,15 +1,8 @@
-import { Icon, Link, IColumn } from '@fluentui/react'
-import {
-  FileIconType,
-  getFileTypeIconProps,
-  initializeFileTypeIcons
-} from '@uifabric/file-type-icons'
-import { getId } from '@uifabric/utilities'
+import { FileIconType } from '@fluentui/react-file-type-icons'
 import * as ProjectExtensionsStrings from 'ProjectExtensionsStrings'
-import { SPFolder } from 'pp365-shared-library'
+import { FileTypeIcon, IListColumn, SPFolder, getId } from 'pp365-shared-library'
 import React from 'react'
-
-initializeFileTypeIcons()
+import { FolderLink } from '../FolderLink'
 
 export default ({ onFolderClick }: { onFolderClick: (folder: SPFolder) => void }) =>
   [
@@ -20,11 +13,7 @@ export default ({ onFolderClick }: { onFolderClick: (folder: SPFolder) => void }
       minWidth: 20,
       maxWidth: 20,
       onRender: (folder: SPFolder) => (
-        <Icon
-          {...getFileTypeIconProps({
-            type: folder.isLibrary ? FileIconType.list : FileIconType.folder
-          })}
-        />
+        <FileTypeIcon type={folder.isLibrary ? FileIconType.list : FileIconType.folder} />
       )
     },
     {
@@ -34,10 +23,8 @@ export default ({ onFolderClick }: { onFolderClick: (folder: SPFolder) => void }
       minWidth: 200,
       onRender: (folder: SPFolder) => {
         return (
-          <Link onClick={() => onFolderClick(folder)}>
-            <span style={{ marginLeft: 4 }}>{folder.name}</span>
-          </Link>
+          <FolderLink name={folder.name} url={folder.url} onClick={() => onFolderClick(folder)} />
         )
       }
     }
-  ] as IColumn[]
+  ] as IListColumn[]

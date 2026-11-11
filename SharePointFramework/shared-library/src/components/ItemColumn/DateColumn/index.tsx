@@ -1,17 +1,17 @@
-import { Toggle } from '@fluentui/react'
 import strings from 'SharedLibraryStrings'
-import { formatDate } from '../../../util'
+import { formatDate, withDefaults } from '../../../util'
 import React from 'react'
-import { ColumnDataTypePropertyField } from '../ColumnDataTypeField'
+import { switchField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'
 import { IDateColumnProps } from './types'
 
-export const DateColumn: ColumnRenderComponent<IDateColumnProps> = (props) => {
-  return <span>{formatDate(props.columnValue, props.includeTime)}</span>
+const DATE_COLUMN_DEFAULT_PROPS: Partial<IDateColumnProps> = {
+  includeTime: false
 }
 
-DateColumn.defaultProps = {
-  includeTime: false
+export const DateColumn: ColumnRenderComponent<IDateColumnProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, DATE_COLUMN_DEFAULT_PROPS)
+  return <span>{formatDate(props.columnValue, props.includeTime)}</span>
 }
 
 DateColumn.key = 'date'
@@ -19,9 +19,9 @@ DateColumn.id = 'Date'
 DateColumn.displayName = strings.ColumnRenderOptionDate
 DateColumn.iconName = 'Calendar'
 DateColumn.getDataTypeProperties = (onChange, dataTypeProperties: Record<string, any>) => [
-  ColumnDataTypePropertyField(Toggle, {
+  switchField({
     label: strings.ColumnRenderOptionDateIncludeTimeLabel,
     checked: dataTypeProperties.includeTime ?? false,
-    onChange: (_, checked) => onChange('includeTime', checked)
+    onChange: (checked) => onChange('includeTime', checked)
   })
 ]

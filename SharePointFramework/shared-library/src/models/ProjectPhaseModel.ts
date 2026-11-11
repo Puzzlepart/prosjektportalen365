@@ -1,7 +1,6 @@
-import { ITermInfo } from '@pnp/sp/taxonomy'
 import { ChecklistItemModel } from './ChecklistItemModel'
-import _ from 'underscore'
 import { supportedLocalesMap } from '../config'
+import { getLocalizedProperty, getLocalProperties, getTermLabel, ITermInfo } from '../taxonomy'
 
 export type ProjectPhaseChecklistData = {
   stats?: Record<string, number>
@@ -37,15 +36,11 @@ export class ProjectPhaseModel {
 
   /**
    * Phase name is the localized label of the term.
-   * It uses the `lcid` property to get the correct label.
-   * If the label is not found, it falls back to the first label.
+   * It uses the `lcid` property to get the correct label, then steps through
+   * `nb-NO` and `en-US` before falling back to the first label (see `getTermLabel`).
    */
   public get name(): string {
-    const localizedLabel = _.find(
-      this.term.labels,
-      (l) => l.languageTag.toLowerCase() === this._languageTag
-    )
-    return localizedLabel?.name ?? _.first(this.term.labels)?.name
+    return getTermLabel(this.term, this._languageTag)
   }
 
   /**
@@ -53,12 +48,7 @@ export class ProjectPhaseModel {
    * the term set ID.
    */
   public get properties(): Record<string, string> {
-    const { properties } = _.find(this.term.localProperties, (p) => p.setId === this._termSetId)
-    if (!properties) return {}
-    return properties.reduce((acc, p) => {
-      acc[p.key] = p.value
-      return acc
-    }, {})
+    return getLocalProperties(this.term, this._termSetId)
   }
 
   /**
@@ -140,11 +130,6 @@ export class ProjectPhaseModel {
   }
 
   private _getLocalizedProperty = (property: string): string => {
-    const propertyValue = this.properties[`${property}_${this._languageTag}`]
-    if (propertyValue) {
-      return propertyValue
-    }
-    const defaultPropertyValue = this.properties[property]
-    return defaultPropertyValue
+    return getLocalizedProperty(this.term, this._termSetId, property, this._languageTag)
   }
 }

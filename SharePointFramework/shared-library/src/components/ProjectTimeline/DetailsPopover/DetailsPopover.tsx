@@ -1,14 +1,20 @@
-import { Link, Popover, PopoverSurface } from '@fluentui/react-components'
+import { Link, Popover, PopoverSurface, useId } from '@fluentui/react-components'
 import * as strings from 'SharedLibraryStrings'
 import React, { FC } from 'react'
-import { formatDate, tryParseCurrency } from '../../../util'
+import { formatDate, getReadableTextColor, tryParseCurrency, withDefaults } from '../../../util'
 import styles from './DetailsPopover.module.scss'
 import { IDetailsPopoverProps } from './types'
 import resource from 'SharedResources'
 
-export const DetailsPopover: FC<IDetailsPopoverProps> = (props) => {
+const DETAILS_POPOVER_DEFAULT_PROPS: Partial<IDetailsPopoverProps> = {
+  open: true
+}
+
+export const DetailsPopover: FC<IDetailsPopoverProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, DETAILS_POPOVER_DEFAULT_PROPS)
   const { data } = props.timelineItem.item
   const { item } = props.timelineItem
+  const contentId = useId('timeline-details')
 
   const popoverContent = (): JSX.Element => {
     switch (data.type) {
@@ -176,9 +182,9 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (props) => {
     <Popover
       withArrow
       open={props.open}
-      onOpenChange={(_, data) => {
+      onOpenChange={(event, data) => {
         if (!data.open) {
-          props.onDismiss()
+          props.onDismiss(event)
         }
       }}
       trapFocus
@@ -188,38 +194,47 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (props) => {
         overflowBoundary: document.getElementsByClassName('rct-scroll')[0] as HTMLElement
       }}
     >
-      <PopoverSurface className={styles.detailsPopover}>
-        <div className={styles.calloutHeader}>
-          <div
-            hidden={!data.tag}
-            title={strings.TagFieldLabel}
-            className={styles.tag}
-            style={{
-              backgroundColor: data.bgColorHex
-            }}
-          >
-            {data.tag}
+      {/* With a tab index the surface takes the focus as it opens, link or none: the details of a
+          milestone or a phase hold no control, and the focus stayed on the item behind them. It
+          is described by what it shows, read as the focus lands (WCAG 2.4.3, 4.1.2). */}
+      <PopoverSurface
+        className={styles.detailsPopover}
+        tabIndex={-1}
+        aria-label={item.title}
+        aria-describedby={contentId}
+      >
+        <div id={contentId}>
+          <div className={styles.calloutHeader}>
+            <div
+              hidden={!data.tag}
+              title={strings.TagFieldLabel}
+              className={styles.tag}
+              // White on the configured colour unless that is under 4.5:1 (WCAG 1.4.3).
+              style={{
+                backgroundColor: data.bgColorHex,
+                color: getReadableTextColor(data.bgColorHex, '#ffffff')
+              }}
+            >
+              {data.tag}
+            </div>
           </div>
+          {popoverContent()}
+          <p hidden={!data.budgetTotal}>
+            <b>{strings.BudgetTotalLabel}:</b> <span>{tryParseCurrency(data.budgetTotal)}</span>
+          </p>
+          <p hidden={!data.costsTotal}>
+            <b>{strings.CostsTotalLabel}:</b> <span>{tryParseCurrency(data.costsTotal)}</span>
+          </p>
+          <p hidden={!data.description}>
+            <b>{strings.DescriptionFieldLabel}:</b> <span>{data.description}</span>
+          </p>
+          <p hidden={!data.type}>
+            <b>{strings.TypeLabel}:</b> <span>{data.type}</span>
+          </p>
         </div>
-        {popoverContent()}
-        <p hidden={!data.budgetTotal}>
-          <b>{strings.BudgetTotalLabel}:</b> <span>{tryParseCurrency(data.budgetTotal)}</span>
-        </p>
-        <p hidden={!data.costsTotal}>
-          <b>{strings.CostsTotalLabel}:</b> <span>{tryParseCurrency(data.costsTotal)}</span>
-        </p>
-        <p hidden={!data.description}>
-          <b>{strings.DescriptionFieldLabel}:</b> <span>{data.description}</span>
-        </p>
-        <p hidden={!data.type}>
-          <b>{strings.TypeLabel}:</b> <span>{data.type}</span>
-        </p>
       </PopoverSurface>
     </Popover>
   )
 }
 
 DetailsPopover.displayName = 'DetailsPopover'
-DetailsPopover.defaultProps = {
-  open: true
-}

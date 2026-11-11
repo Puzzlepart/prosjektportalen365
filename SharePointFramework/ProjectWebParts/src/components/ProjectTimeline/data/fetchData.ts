@@ -1,4 +1,3 @@
-import { MessageBarType } from '@fluentui/react'
 import { IProjectTimelineProps, IProjectTimelineState } from '../types'
 import { createTimelineGroups } from './createTimelineGroups'
 import { fetchProjectData } from './fetchProjectData'
@@ -8,7 +7,7 @@ import { getSelectedGroups } from './getSelectedGroups'
 import { transformItems } from './transformItems'
 import SPDataAdapter from 'data/SPDataAdapter'
 import strings from 'ProjectWebPartsStrings'
-import { CustomError } from 'pp365-shared-library'
+import { CustomError, isUnauthorizedError } from 'pp365-shared-library'
 
 /**
  * Fetch data for ProjectTimeline
@@ -63,11 +62,15 @@ export async function fetchData(
     }
   } catch (error) {
     console.error('[ProjectTimeline][fetchData] failed:', error)
+    // A hub list the user may not read, such as `Prosjekter` or `Tidslinjeinnhold` for a member
+    // of «Minimum lesetilganger på hub», gives the message about the missing access.
+    const reason = isUnauthorizedError(error)
+      ? new Error(strings.ProjectTimelineNoHubAccessErrorText)
+      : error instanceof Error
+        ? error
+        : new Error(String(error))
     return {
-      error: CustomError.createError(
-        error instanceof Error ? error : new Error(String(error)),
-        MessageBarType.warning
-      )
+      error: CustomError.createError(reason, 'warning')
     }
   }
 }

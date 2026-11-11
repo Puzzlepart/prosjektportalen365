@@ -69,12 +69,12 @@ function highlight(json: string, styles: Styles): React.ReactNode[] {
     const className = match[1]
       ? styles.key
       : match[2]
-      ? styles.string
-      : match[3]
-      ? styles.boolean
-      : match[4]
-      ? styles.null
-      : styles.number
+        ? styles.string
+        : match[3]
+          ? styles.boolean
+          : match[4]
+            ? styles.null
+            : styles.number
     nodes.push(
       <span key={key++} className={className}>
         {match[0]}
@@ -136,8 +136,12 @@ export const PackageFilePreview: FC<IPackageFilePreviewProps> = ({ title, url, o
               </div>
             )}
             {!loading && error && <Text>{strings.CatalogPreviewError}</Text>}
+            {/* The code scrolls in its own box, with nothing in it to focus: the box takes the
+              focus so the keyboard can scroll it, named as a region (WCAG 2.1.1). */}
             {!loading && !error && rendered !== null && (
-              <pre className={styles.code}>{rendered}</pre>
+              <pre className={styles.code} tabIndex={0} role='region' aria-label={title}>
+                {rendered}
+              </pre>
             )}
           </DialogContent>
           <DialogActions>

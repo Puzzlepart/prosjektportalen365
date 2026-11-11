@@ -11,6 +11,8 @@ Denne guiden forklarer de viktigste kodemønstrene vi bruker i SharePoint Framew
 - [Lokalisering (loc)](#lokalisering-loc)
 - [SCSS-moduler](#scss-moduler)
 - [Fluent UI v9](#fluent-ui-v9)
+- [Montering av React](#montering-av-react)
+- [Kommentarer](#kommentarer)
 
 ---
 
@@ -24,8 +26,7 @@ Alle komponenter følger et konsekvent mappestruktur-mønster. En komponentmappe
 KomponentNavn/
 ├── index.ts                        # Barrel-eksport (kun re-eksport)
 ├── KomponentNavn.tsx                # Selve React-komponenten
-├── KomponentNavn.module.scss        # CSS-moduler (styles)
-├── KomponentNavn.module.scss.ts     # Auto-generert type-fil for styles
+├── KomponentNavn.module.scss        # CSS-moduler (styles); typene genereres til temp/sass-ts/ av Heft
 ├── useKomponentNavn.ts              # Hook med logikk (state, handlers)
 ├── types.ts                         # Props, state og andre typer
 ├── context.ts                       # React Context (valgfritt)
@@ -91,7 +92,6 @@ ProjectSetupDialog/
 ├── index.ts                              # Barrel
 ├── ProjectSetupDialog.tsx                # Hovedkomponent
 ├── ProjectSetupDialog.module.scss        # Styles
-├── ProjectSetupDialog.module.scss.ts     # Auto-generert type-fil
 ├── useProjectSetupDialog.ts              # Hook med reducer, submit, validering
 ├── types.ts                              # IProjectSetupDialogProps, IProjectSetupDialogState
 ├── context.ts                            # ProjectSetupDialogContext
@@ -154,6 +154,25 @@ export const KomponentNavn: FC<IKomponentNavnProps> = (props) => {
 }
 ```
 
+### Standardverdier for props
+
+Ikke `KomponentNavn.defaultProps`: React 18.3 advarer om den på funksjonskomponenter, og React 19 ignorerer den, så hver standardverdi ville forsvunnet stille ved neste React-hopp. Standardverdiene ligger i en konstant over komponenten og flettes inn øverst med `withDefaults` fra `pp365-shared-library` (i biblioteket fra `util`). Den gjør det React gjorde: en prop som er `undefined` får standardverdien, mens `null`, `false`, `0` og `''` beholdes. Flettingen skjer på selve objektet, slik at hooken, konteksten og `{...props}` ser de samme verdiene:
+
+```tsx
+const KOMPONENT_NAVN_DEFAULT_PROPS: Partial<IKomponentNavnProps> = {
+  rowLimit: 6,
+  showTitle: true
+}
+
+export const KomponentNavn: FC<IKomponentNavnProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, KOMPONENT_NAVN_DEFAULT_PROPS)
+  const { value } = useKomponentNavn(props)
+  …
+}
+```
+
+Leses verdiene andre steder (webdelens egenskapsrute, en test), eksporteres konstanten; navnet har komponentens navn i seg, så barrelene ikke kolliderer. En komponent som bare leser sine egne props, kan sette standardverdiene i destruktureringen (`({ rowLimit = 6 }) =>`), men ikke når `props` sendes videre. ESLint stopper `defaultProps` fra å komme tilbake.
+
 ### Ekte eksempel: `useProjectSetupDialog`
 
 ```ts
@@ -188,12 +207,13 @@ Når en komponent har underkomponenter som trenger tilgang til felles state, bru
 
 ```ts
 // context.ts
+import { UnknownAction } from '@reduxjs/toolkit'
 import { createContext, useContext } from 'react'
 
 export interface IKomponentContext {
   props: IKomponentProps
   state: IKomponentState
-  dispatch: React.Dispatch<AnyAction>
+  dispatch: React.Dispatch<UnknownAction>
 }
 
 export const KomponentContext = createContext<IKomponentContext>(null)
@@ -253,21 +273,26 @@ export const initialState: IKomponentState = {
 }
 
 export default (data: IData) =>
-  createReducer(initialState, {
-    [SOME_ACTION.type]: (state, action) => {
-      state.someField = action.payload
-    },
-    [ANOTHER_ACTION.type]: (state) => {
-      // ... oppdater state
-    }
-  })
+  createReducer(initialState, (builder) =>
+    builder
+      .addCase(SOME_ACTION, (state, { payload }) => {
+        state.someField = payload
+      })
+      .addCase(ANOTHER_ACTION, (state) => {
+        // ... oppdater state
+      })
+  )
 ```
+
+Bruk byggeren (`builder.addCase`), som gir handlingen riktig type ut fra `createAction`. Objektnotasjonen (`{ [SOME_ACTION.type]: … }`) finnes ikke lenger i Redux Toolkit 2.
 
 Brukes i hooken:
 ```ts
 const [state, dispatch] = useReducer(createReducer(props.data), initialState)
 dispatch(SOME_ACTION(payload))
 ```
+
+Hver handler i reduceren har en test i `reducer.test.ts` ved siden av den, som `ProgramWebParts/src/components/ProgramAdministration/reducer.test.ts`.
 
 ---
 
@@ -277,14 +302,14 @@ Alle brukersynlige tekster skal lokaliseres. SPFx bruker en `loc/`-mappe med fø
 
 ```
 loc/
-├── myStrings.d.ts    # TypeScript-deklarasjon (interface med alle nøkler)
+├── mystrings.d.ts    # TypeScript-deklarasjon (interface med alle nøkler); myStrings.d.ts i utvidelsene
 ├── nb-no.js          # Norsk bokmål (standard)
 └── en-us.js          # Engelsk
 ```
 
 ### Legge til en ny tekststreng
 
-**Steg 1:** Legg til i TypeScript-deklarasjonen (`myStrings.d.ts`):
+**Steg 1:** Legg til i TypeScript-deklarasjonen (`mystrings.d.ts`, eller `myStrings.d.ts` i PortfolioExtensions og ProjectExtensions; Linux skiller på store og små bokstaver):
 ```ts
 declare interface IProjectExtensionsStrings {
   // ... eksisterende strenger
@@ -323,9 +348,9 @@ import * as strings from 'ProjectExtensionsStrings'
 
 ### Formateringsstrenger
 
-For tekster med dynamiske verdier, bruk `format` fra `@fluentui/react`:
+For tekster med dynamiske verdier, bruk `format` fra `pp365-shared-library` (inne i biblioteket selv: fra `util`):
 ```tsx
-import { format } from '@fluentui/react'
+import { format } from 'pp365-shared-library'
 
 // I loc-fil: ProgressStepCountText: 'Steg {0} av {1}'
 format(strings.ProgressStepCountText, currentStep, totalSteps)
@@ -353,9 +378,9 @@ Vi bruker CSS-moduler (`.module.scss`) for scoped styling. Klassene blir automat
 
 .subText {
   margin-bottom: 12px;
-  color: #605e5c;
-  font-size: 14px;
-  font-weight: 400;
+  color: var(--colorNeutralForeground3);
+  font-size: var(--fontSizeBase300);
+  font-weight: var(--fontWeightRegular);
 }
 ```
 
@@ -380,19 +405,19 @@ Dialoger (`ProjectSetupDialog`, `ProgressDialog`, `ErrorDialog`) bruker samme br
 
 .subText {
   margin-bottom: 12px;
-  color: #605e5c;
-  font-size: 14px;
-  font-weight: 400;
+  color: var(--colorNeutralForeground3);
+  font-size: var(--fontSizeBase300);
+  font-weight: var(--fontWeightRegular);
 }
 ```
 
-SubText rendres som en `<p className={styles.subText}>` inne i komponentens children (ikke som en prop til `BaseDialog`), slik at stylingen er konsistent på tvers av alle dialoger.
+Dialogene i ProjectExtensions bygger på `@BaseDialog`, som tar `subText` som prop og viser den under tittelen. Farger, størrelser og vekter tas fra Fluents tokens (`var(--colorNeutralForeground3)` osv.), som finnes under en `FluentProvider`; ikke hardkod farger som `#605e5c`.
 
 ---
 
 ## Fluent UI v9
 
-Vi bruker **Fluent UI v9** (`@fluentui/react-components`) for UI-komponenter. Noen eldre Fluent UI v8-importerer finnes fortsatt for spesifikke verktøy (f.eks. `format` fra `@fluentui/react`).
+Vi bruker **Fluent UI v9** (`@fluentui/react-components`) for UI-komponenter. Fluent UI v8 (`@fluentui/react`) er bare igjen i ikonfallbacken i `shared-library/src/icons/index.tsx` og inne i PnP-kontrollene; ikke ta det inn i ny kode.
 
 ### Vanlige v9-importer
 
@@ -432,8 +457,30 @@ import { ChevronDownRegular, ChevronUpRegular } from '@fluentui/react-icons'
 // Eller via shared-library helper:
 import { getFluentIcon, getFluentIconWithFallback } from 'pp365-shared-library'
 getFluentIcon('PuzzlePiece')
-getFluentIconWithFallback(iconName, true)
+getFluentIconWithFallback(iconName, { color, size })
 ```
+
+`getFluentIconWithFallback` tar et navn fra en liste (f.eks. `GtSecIcon`) og rendrer et bundlet Fluent-ikon (strek som fylles ved hover) dersom navnet finnes i ikonkatalogen, og et UI Fabric-fontikon (`<Icon iconName>`) ellers. Gamle UI Fabric-navn (`BarChart4`, `DateTime`, `CircleFill`, …) oversettes til Fluent-ikoner via `fabricIconAliases` i `shared-library/src/icons/fabricIconAliases.ts`. `resolveFluentIcon(name)` er det ene oppslaget (katalog → alias → `null`) som alle ikon-helpere bygger på — bruk den fremfor å slå opp i `iconCatalog` direkte. Trenger du en ikon*komponent* (f.eks. til `Tab` eller `MenuItem`) fremfor JSX, bruk `getIconComponentWithFallback(name)`.
+
+#### Legge til et ikon i katalogen
+
+Katalogen i `shared-library/src/icons/iconCatalog.ts` er bevisst kuratert: `pp365-shared-library` bundles inn i hvert eneste webdel-entrypoint, så `import * as Icons from '@fluentui/react-icons'` ville lagt ~3,6 MB på hver bundle (ESLint stopper dette). Slik legger du til et nytt ikon:
+
+1. Verifiser at både Regular- og Filled-varianten finnes:
+
+   ```sh
+   grep -c "\bNavnRegular: " SharePointFramework/shared-library/node_modules/@fluentui/react-icons/lib/icons/chunk-*.d.ts
+   grep -c "\bNavnFilled: " SharePointFramework/shared-library/node_modules/@fluentui/react-icons/lib/icons/chunk-*.d.ts
+   ```
+
+2. Legg til de to navngitte importene og en `Navn: { regular: NavnRegular, filled: NavnFilled }`-oppføring i `src/icons/iconCatalog.ts`. Aldri `import *`, og aldri fra `lib/sizedIcons`.
+3. Erstatter ikonet et UI Fabric-navn som ligger som standardverdi i malene (`Statusseksjoner`, `Portefoljevisninger`, `Datakilder`)? Legg da til et alias i `fabricIconAliases.ts` (eksisterende tenanter beholder de gamle radverdiene for alltid) og oppdater de fire feltbeskrivelsene i `Templates/Portfolio/Resources.*.resx` (`SiteFields_GtSecIcon_Description`, `SiteFields_GtPortfolioFabricIcon_Description`, `SiteFields_GtIconName_Description`, `SiteFields_GtPortfolioColumnIconName_Description`).
+4. Kostnad: ≈ 1,2 KB uminifisert per ikonpar per bundle-kopi — hold katalogen til ikoner som faktisk brukes.
+5. Bygg shared-library på nytt før du bruker ikonet fra en løsning: `rush rebuild -o pp365-shared-library`.
+
+### PnP-kontroller
+
+Importer PnP-kontrollene fra hver sin inngang, aldri fra pakkens rot: `import { ModernTaxonomyPicker } from '@pnp/spfx-controls-react/lib/ModernTaxonomyPicker'` og `import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls/lib/PropertyFieldMultiSelect'`. Ingen av pakkene erklærer at de er fri for sideeffekter (`sideEffects`), så webpack kan ikke ta bort kontrollene en bundle ikke bruker: en import fra roten tar med alle kontrollene og Fluent v8-koden deres (liste, personvelger, callout) i bundelen. ESLint stopper rot-importene (`no-restricted-imports` i `SharePointFramework/.eslint-config/index.js`).
 
 ### FluentProvider og IdPrefixProvider
 
@@ -449,6 +496,43 @@ import { customLightTheme } from 'pp365-shared-library'
 </IdPrefixProvider>
 ```
 
+### Render-funksjoner for slots
+
+En slot kan få en render-funksjon i stedet for innhold: `label={{ children: (Component, props) => ... }}`. Fluent kaller den med slotens elementtype og props, og i props ligger det Fluent har koblet sammen, som `id` og `for` som knytter en `Field`-etikett til kontrollen. En funksjon som overser argumentene, tegner bare sitt eget innhold, og koblingen forsvinner. `FieldContainer` gjorde det til fase 4: feltene med ikon hadde ingen etikett for skjermlesere. Send videre det slot-en trenger, slik `FieldContainer` nå gjør med etikettens `id` og `htmlFor`.
+
+---
+
+## Montering av React
+
+Webdeler, utvidelser, dialoger og felt i egenskapsruten monterer React med `renderReact` og `unmountReact` fra `pp365-shared-library`, aldri med `render` fra `react-dom` direkte. Den ene filen, `shared-library/src/util/reactRoot.ts`, gir hver beholder en React 18-root (`createRoot`) ved første tegning og beholder den til avmonteringen. Tegningen skjer etter at kallet har returnert, så en test som monterer med `renderReact`, pakker kallet i `act`.
+
+```ts
+import { renderReact, unmountReact } from 'pp365-shared-library'
+
+renderReact(createElement(Footer, footerProps), this._footerElement)
+// …og når verten fjernes:
+unmountReact(this._footerElement)
+```
+
+Det som tegner i sin egen beholder, fjerner komponenten når verten fjernes (basewebdelene gjør det i `onDispose`), og tegner på nytt i den samme beholderen i stedet for i en ny hver gang. Før 1.15 tegnet bunnteksten i en ny beholder ved hver navigering og la igjen en montert bunntekst for hver side.
+
+## Kommentarer
+
+- **JSDoc (`/** */`)** på det som eksporteres og på hooks og komponenter: én kort linje om hva det er til, og `@param`/`@returns` bare når det ikke er åpenbart.
+- **`//`-kommentarer** bare for det som ikke kan leses av koden: hvorfor noe er gjort slik (en begrensning, en felle, en omvei rundt et rammeverk), ikke hva neste linje gjør.
+- Hold dem korte. En kommentar som gjentar koden, blir feil første gang koden endres.
+
+```tsx
+/**
+ * Whether a click leaves the row's selection alone.
+ */
+function isOwnClick(event: MouseEvent<HTMLElement>) {
+  // A dialog a cell opens is portalled outside the row, yet React passes its clicks up through it.
+  if (!event.currentTarget.contains(event.target as Node)) return true
+  ...
+}
+```
+
 ---
 
 ## Oppsummering
@@ -462,4 +546,4 @@ import { customLightTheme } from 'pp365-shared-library'
 | Context | `context.ts` | Delt state mellom under-komponenter |
 | Reducer | `reducer.ts` | Kompleks state-håndtering |
 | SCSS-modul | `KomponentNavn.module.scss` | Scoped styles |
-| Lokalisering | `loc/nb-no.js`, `en-us.js`, `myStrings.d.ts` | Flerspråklige tekster |
+| Lokalisering | `loc/nb-no.js`, `en-us.js`, `mystrings.d.ts` (`myStrings.d.ts` i utvidelsene) | Flerspråklige tekster |

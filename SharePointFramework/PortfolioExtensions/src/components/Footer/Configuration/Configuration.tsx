@@ -21,15 +21,13 @@ export const Configuration: FC = () => {
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>
         <Tooltip relationship='description' withArrow content={strings.ConfigurationDescription}>
+          {/* A page, so a link, which can be opened where the user wants it (WCAG 4.1.2). */}
           <Button
+            as='a'
             size='small'
             appearance='subtle'
-            onClick={() =>
-              window.open(
-                `${context.props.portalUrl}/SitePages/${resource.ClientSidePages_Configuration_PageName}`,
-                '_blank'
-              )
-            }
+            href={`${context.props.portalUrl}/SitePages/${resource.ClientSidePages_Configuration_PageName}`}
+            target='_blank'
             icon={getFluentIcon('ContentSettings')}
           >
             {strings.ConfigurationLabel}

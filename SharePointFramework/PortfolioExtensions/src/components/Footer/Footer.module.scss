@@ -21,14 +21,35 @@
     gap: 8px;
   }
 
+  // On a narrow screen, as at 320 px, its buttons wrap rather than go past the edge, and it takes
+  // its place below the page rather than over it, where its new height would hide the end of the
+  // content (WCAG 1.4.10, 2.4.11).
+  @media (max-width: 480px) {
+    position: relative;
+    flex-wrap: wrap;
+    row-gap: 4px;
+    padding: 4px 16px;
+
+    .left,
+    .right {
+      flex-wrap: wrap;
+      min-width: 0;
+    }
+  }
+
   &.minimize {
     overflow: hidden;
     opacity: 0;
     min-height: 0px;
     height: 12px;
-    transition: opacity 0.2s ease-in-out, height 0.2s ease-in-out;
+    transition:
+      opacity 0.2s ease-in-out,
+      height 0.2s ease-in-out;
 
-    &:hover {
+    // Shown under the pointer and while the keyboard is in it: hidden, a focused control in it
+    // could not be seen (WCAG 2.4.7).
+    &:hover,
+    &:focus-within {
       min-height: 40px;
       height: auto;
       opacity: 1;
@@ -42,6 +63,11 @@
   min-height: 40px;
   opacity: 0;
   z-index: 0;
+
+  // The footer is in the page's flow there, and needs no room kept for it.
+  @media (max-width: 480px) {
+    display: none;
+  }
 
   &.minimize {
     overflow: hidden;

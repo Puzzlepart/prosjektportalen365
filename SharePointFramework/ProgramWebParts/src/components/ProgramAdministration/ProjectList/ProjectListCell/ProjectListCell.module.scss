@@ -1,0 +1,19 @@
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+
+  .logo {
+    display: inline-flex;
+    flex: none;
+  }
+
+  // The title ends in an ellipsis when the column is narrower than it.
+  .text {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

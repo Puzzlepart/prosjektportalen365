@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 export type ListLoggerEntryLevel = 'Info' | 'Warning' | 'Error'
 
 export class IListLoggerEntry {

@@ -8,13 +8,44 @@ on:
       - 'SharePointFramework/**'
       - 'Install/**'
       - 'Templates/**'
+      - 'e2e/**'
+      - 'integration/**'
+      - .tasks/publish-test-report.js
       - .github/workflows/ci-channel-test.yml
+  # Manual runs, for example to re-run the end-to-end smoke after fixing a secret or a spec.
+  workflow_dispatch:
+
+# The jobs only read the repository; the deployments sign in to the tenant with the certificate.
+permissions:
+  contents: read
+
+# One run at a time, whatever the branch: every run deploys to the same test hub and app catalog,
+# so two at once can overwrite each other mid-run (on 2026-10-06 an [apps-only] run's packages
+# landed in the middle of a full run's template step). A newer run waits for the running one.
+# GitHub keeps only the newest waiting run in a group and cancels an older waiting one: on one
+# branch the newer commit holds the older one's changes, but a cancelled full run's templates are
+# not applied, so push the commit that needs the full run last.
+concurrency:
+  group: ci-channel-test
+  cancel-in-progress: false
 
 env:
+  # Heft's TypeScript and webpack steps need more than V8's default heap (about 2 GB on a small
+  # runner): the PortfolioWebParts production build dies at 2 GB and passes at 3 GB. 8 GB matches
+  # the headroom the gulp toolchain used. RUSH_PARALLELISM bounds concurrent solution builds so
+  # the heap ceilings cannot add up past the runner's memory.
+  NODE_OPTIONS: --max-old-space-size=8192
+  RUSH_PARALLELISM: 2
   CI_CERT_BASE64: ${{ secrets.CI_CERT_BASE64 }}
   CI_TENANT: ${{ secrets.CI_TENANT }}
   CI_CLIENT_ID: ${{ secrets.CI_CLIENT_ID }}
 
+# Every job has a timeout. GitHub's default is six hours, and with one run at a time a hung job
+# holds every later run as long. Measured on 2026-10-14: build 13-15 min, full upgrade 27,
+# packages-only upgrade 3, e2e 6-7, integration tests 3.
+#
+# The upgrades pass the certificate and the ids as $env: references, which PowerShell reads at run
+# time, so the secrets are never written into the step's script on the runner.
 jobs:
   # Tags like [skip-ci] and [apps-only] must only be honored when present in the
   # commit *subject* (first line). Squash-merge commit bodies inherit the PR's
@@ -23,6 +54,7 @@ jobs:
   commit_subject:
     name: Determine commit subject
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     outputs:
       subject: ${{ steps.subject.outputs.subject }}
     steps:
@@ -35,79 +67,90 @@ jobs:
   build_release_package_test:
     needs: [commit_subject]
     name: Build release package (test channel)
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
     if: ${{ !contains(needs.commit_subject.outputs.subject, '[skip-ci]') && !contains(needs.commit_subject.outputs.subject, '[apps-only') }}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
+      - uses: actions/checkout@v7
 
-      - name: Set sha_short
-        id: vars
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
-          node-version: ${{ vars.NODE_VERSION }}
+          node-version-file: '.nvmrc'
 
       - name: Run Install/Build-Release.ps1 in CI mode for channel test
+        # The run number becomes the fourth segment of every package version, so each deployment
+        # is a new version to SharePoint and clients refetch the manifests (see .tasks/README.md).
+        env:
+          PP365_BUILD_NUMBER: ${{ github.run_number }}
         run: Install/Build-Release.ps1 -CI -SkipBundle -Channel test
         shell: pwsh
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-package-test
           path: release
-    outputs:
-      sha_short: ${{ steps.vars.outputs.sha_short }}
+          # Dotfiles too: UpgradeAllSitesToLatest.ps1 reads the channel from .current-channel-config.json.
+          include-hidden-files: true
+
+      # Build-Release.ps1 prints the last 200 lines of a failed rebuild; the whole logs are here.
+      - name: Upload the Rush logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: rush-logs-test-channel
+          path: |
+            SharePointFramework/rush-*.build.log
+            SharePointFramework/*/rush-logs/
+            Templates/rush-logs/
+            e2e/rush-logs/
+            integration/rush-logs/
+          if-no-files-found: warn
+          retention-days: 7
 
   upgrade_channel_test:
     needs: [commit_subject, build_release_package_test]
     name: Upgrade (test channel)
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
     if: ${{ !contains(needs.commit_subject.outputs.subject, '[skip-upgrade]') }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: release-package-test
           path: release
 
       - name: Upgrade
-        run: release/Install.ps1 -Url "${{ vars.SP_URL_TEST }}" -Upgrade -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }}
-        shell: powershell
+        run: release/Install.ps1 -Url "${{ vars.SP_URL_TEST }}" -Upgrade -CI -Tenant $env:CI_TENANT -CertificateBase64Encoded $env:CI_CERT_BASE64 -ClientId $env:CI_CLIENT_ID
+        shell: pwsh
 
   upgrade_all_sites_to_latest:
     needs: [commit_subject, build_release_package_test, upgrade_channel_test]
     name: Upgrade all sites to latest (test channel)
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
     if: ${{ contains(needs.commit_subject.outputs.subject, '[upgrade-all-sites-to-latest]') }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: release-package-test
           path: release
 
       - name: Run script UpgradeAllSitesToLatest.ps1 in CI mode
-        run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url ${{ vars.SP_URL_TEST }} -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }}
-        shell: powershell
+        run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url "${{ vars.SP_URL_TEST }}" -CI -Tenant $env:CI_TENANT -CertificateBase64Encoded $env:CI_CERT_BASE64 -ClientId $env:CI_CLIENT_ID
+        shell: pwsh
 
   build_release_package_test_packages_only:
     needs: [commit_subject]
     name: Build release package - packages only (test channel)
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
     if: ${{ contains(needs.commit_subject.outputs.subject, '[apps-only')}}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
+      - uses: actions/checkout@v7
 
-      - name: Set sha_short
-        id: vars
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
-          node-version: ${{ vars.NODE_VERSION }}
+          node-version-file: '.nvmrc'
 
       - name: Determine apps-only solutions
         id: appsonly
@@ -122,35 +165,203 @@ jobs:
         shell: pwsh
 
       - name: Run Install/Build-Release.ps1 in CI mode for channel test
+        # The rebuild's timeline goes to the log and the job summary. PnP.PowerShell is not
+        # installed: only the PnP templates use it, and this job skips them (proven in
+        # ci-build-debug.yml).
         env:
           SOLUTIONS: ${{ steps.appsonly.outputs.solutions }}
+          PP365_BUILD_NUMBER: ${{ github.run_number }}
         run: |
           if ([string]::IsNullOrWhiteSpace($env:SOLUTIONS)) {
-            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test
+            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test -RushTimeline -SkipPnPPowerShell
           }
           else {
-            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test -Solutions ($env:SOLUTIONS -split ',')
+            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel test -RushTimeline -SkipPnPPowerShell -Solutions ($env:SOLUTIONS -split ',')
           }
         shell: pwsh
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-package-test
           path: release
-    outputs:
-      sha_short: ${{ steps.vars.outputs.sha_short }}
+          # Dotfiles too: UpgradeAllSitesToLatest.ps1 reads the channel from .current-channel-config.json.
+          include-hidden-files: true
+
+      - name: Upload the Rush logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: rush-logs-test-channel
+          path: |
+            SharePointFramework/rush-*.build.log
+            SharePointFramework/*/rush-logs/
+            Templates/rush-logs/
+            e2e/rush-logs/
+            integration/rush-logs/
+          if-no-files-found: warn
+          retention-days: 7
 
   upgrade_channel_test_packages_only:
     needs: [commit_subject, build_release_package_test_packages_only]
     name: Upgrade packages only (test channel)
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
     if: ${{ !contains(needs.commit_subject.outputs.subject, '[skip-upgrade]') }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: release-package-test
           path: release
 
       - name: Upgrade
-        run: release/Install.ps1 -Url "${{ vars.SP_URL_TEST }}" -Upgrade -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }} -SkipTemplate
-        shell: powershell
+        run: release/Install.ps1 -Url "${{ vars.SP_URL_TEST }}" -Upgrade -CI -Tenant $env:CI_TENANT -CertificateBase64Encoded $env:CI_CERT_BASE64 -ClientId $env:CI_CLIENT_ID -SkipTemplate
+        shell: pwsh
+
+  e2e_smoke_test_channel:
+    # Two upgrade paths lead here: the full upgrade, and the packages-only upgrade used by
+    # [apps-only] commits. Exactly one of them runs; the smoke tests follow whichever succeeded.
+    needs: [commit_subject, upgrade_channel_test, upgrade_channel_test_packages_only]
+    name: End-to-end smoke (test channel)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: ${{ always() && (needs.upgrade_channel_test.result == 'success' || needs.upgrade_channel_test_packages_only.result == 'success') && !contains(needs.commit_subject.outputs.subject, '[skip-e2e]') }}
+    env:
+      E2E_BASE_URL: ${{ vars.SP_URL_TEST }}
+      E2E_PROJECT_URL: ${{ vars.E2E_PROJECT_URL }}
+      E2E_PROGRAM_URL: ${{ vars.E2E_PROGRAM_URL }}
+      E2E_USERNAME: ${{ secrets.E2E_USERNAME }}
+      E2E_PASSWORD: ${{ secrets.E2E_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Install pp365-e2e
+        run: node common/scripts/install-run-rush.js install --to pp365-e2e
+
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+        working-directory: e2e
+
+      - name: Run smoke tests against the test channel
+        id: tests
+        run: npx playwright test
+        working-directory: e2e
+        env:
+          PLAYWRIGHT_HTML_TITLE: PP365 e2e · ${{ github.ref_name }} · run ${{ github.run_number }}
+
+      # The repository is public, so any signed-in GitHub user can download this artifact: it
+      # leaves out the traces (data/*.zip, trace.zip), which hold the test user's session cookies
+      # and request headers, and the sign-in's own results, whose page snapshot shows the sign-in
+      # form (auth.setup.ts blanks the password before it is taken). The test report site below
+      # has everything.
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: playwright-report-test-channel
+          path: |
+            e2e/playwright-report
+            e2e/test-results
+            !e2e/playwright-report/data/*.zip
+            !e2e/playwright-report/trace
+            !e2e/test-results/**/trace.zip
+            !e2e/test-results/auth.setup*/**
+          # The longest this repository allows; more is cut to it.
+          retention-days: 7
+
+      # The report in the browser, traces included: a private GitHub Pages site in another
+      # repository (.tasks/publish-test-report.js says why). Without its secret and variables it
+      # only says so, and it refuses a site that answers without a GitHub sign-in. A publishing
+      # failure or hang (the step's own timeout) leaves the job's result to the tests.
+      - name: Publish the report to the test report site
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        timeout-minutes: 10
+        run: node .tasks/publish-test-report.js --suite e2e --report e2e/playwright-report --results e2e/test-results/results.json --outcome "$OUTCOME"
+        env:
+          OUTCOME: ${{ steps.tests.outcome }}
+          COMMIT_SUBJECT: ${{ needs.commit_subject.outputs.subject }}
+          TEST_REPORTS_REPOSITORY: ${{ vars.TEST_REPORTS_REPOSITORY }}
+          TEST_REPORTS_URL: ${{ vars.TEST_REPORTS_URL }}
+          TEST_REPORTS_DEPLOY_KEY: ${{ secrets.TEST_REPORTS_DEPLOY_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+
+  integration_test_channel:
+    # The shared library's data layer against the test tenant from Node, beside the smoke tests
+    # and after the same two upgrade paths (integration/README.md). It signs in as the CI app with
+    # the workflow's certificate; INTEGRATION_USER is who the library acts for where it asks for a
+    # user (ensureUser).
+    needs: [commit_subject, upgrade_channel_test, upgrade_channel_test_packages_only]
+    name: Integration tests (test channel)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: ${{ always() && (needs.upgrade_channel_test.result == 'success' || needs.upgrade_channel_test_packages_only.result == 'success') && !contains(needs.commit_subject.outputs.subject, '[skip-integration]') }}
+    env:
+      INTEGRATION_HUB_URL: ${{ vars.SP_URL_TEST }}
+      INTEGRATION_PROGRAM_URL: ${{ vars.E2E_PROGRAM_URL }}
+      INTEGRATION_PROJECT_URL: ${{ vars.INTEGRATION_PROJECT_URL }}
+      INTEGRATION_SECOND_HUB_URL: ${{ vars.INTEGRATION_SECOND_HUB_URL }}
+      INTEGRATION_USER: ${{ secrets.E2E_USERNAME }}
+      # A missing variable or secret fails the job: skipped whole, the suite would pass untested.
+      INTEGRATION_STRICT: 'true'
+      # The full upgrade applies the templates, the packages-only one ([apps-only]) does not: the
+      # tests of the templates' state run only after the former. GITHUB_SHA names the commit whose
+      # upgrade the installation log must show.
+      INTEGRATION_TEMPLATES_APPLIED: ${{ needs.upgrade_channel_test.result == 'success' }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Install pp365-integration
+        run: node common/scripts/install-run-rush.js install --to pp365-integration --to pp365-templates
+
+      # The library's shared strings (src/loc/shared) are generated from the templates' .resx files.
+      - name: Generate the shared strings
+        run: npm run generate-resx-ts
+        working-directory: Templates
+
+      # The tests load the library's CommonJS build; no Jest here (the release build ran it).
+      - name: Build the shared library
+        run: npx heft build --production
+        working-directory: SharePointFramework/shared-library
+
+      # The tests load ProjectWebParts' data adapter from its CommonJS build. TypeScript alone emits
+      # it, unchecked: the solution's bundle and type check are the release build's.
+      - name: Compile ProjectWebParts for the tests
+        run: |
+          npx tsc -p tsconfig.json --outDir lib-commonjs --module commonjs --noEmit false --noCheck --declaration false --declarationMap false --sourceMap true --incremental false
+          mkdir -p lib-commonjs/loc/shared
+          cp src/loc/*.js lib-commonjs/loc/
+          cp src/loc/shared/*.js lib-commonjs/loc/shared/
+        working-directory: SharePointFramework/ProjectWebParts
+
+      - name: Run the integration tests against the test channel
+        id: tests
+        run: npm run test:ci
+        working-directory: integration
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: integration-report-test-channel
+          path: integration/test-results
+          retention-days: 7
+
+      # The HTML report (test-results/index.html) on the test report site, as the e2e job does.
+      - name: Publish the report to the test report site
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        timeout-minutes: 10
+        run: node .tasks/publish-test-report.js --suite integration --report integration/test-results --outcome "$OUTCOME"
+        env:
+          OUTCOME: ${{ steps.tests.outcome }}
+          COMMIT_SUBJECT: ${{ needs.commit_subject.outputs.subject }}
+          TEST_REPORTS_REPOSITORY: ${{ vars.TEST_REPORTS_REPOSITORY }}
+          TEST_REPORTS_URL: ${{ vars.TEST_REPORTS_URL }}
+          TEST_REPORTS_DEPLOY_KEY: ${{ secrets.TEST_REPORTS_DEPLOY_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}

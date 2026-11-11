@@ -1,19 +1,15 @@
-import { Checkbox, TextField } from '@fluentui/react'
 import strings from 'SharedLibraryStrings'
 import React from 'react'
-import { ColumnDataTypePropertyField } from '../ColumnDataTypeField'
+import { getFluentIcon } from '../../../icons'
+import { checkboxField, textField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'
 import styles from './DialogColumn.module.scss'
 import { IDialogColumnProps } from './types'
 import { useDialogColumn } from './useDialogColumn'
 import {
-  DataGrid,
-  DataGridBody,
-  DataGridCell,
-  DataGridHeader,
-  DataGridHeaderCell,
-  DataGridRow,
+  Button,
   Dialog,
+  DialogActions,
   DialogBody,
   DialogContent,
   DialogSurface,
@@ -23,7 +19,14 @@ import {
   Text
 } from '@fluentui/react-components'
 import { stringIsNullOrEmpty } from '@pnp/core'
+import { DataGridList } from '../../DataGridList'
 import { UserMessage } from '../../UserMessage'
+import { withDefaults } from '../../../util'
+
+const DIALOG_COLUMN_DEFAULT_PROPS: Partial<IDialogColumnProps> = {
+  linkText: strings.ShowAllMeasurementsLinkText,
+  infoTextTemplate: ''
+}
 
 /**
  * A column render component that displays a link in the cell. When the link is clicked, a dialog is displayed
@@ -38,9 +41,9 @@ import { UserMessage } from '../../UserMessage'
  * @param props.infoTextTemplate - The template for the information text to display below the list of items.
  * @param props.showInfoText - Whether to show the information text.
  */
-export const DialogColumn: ColumnRenderComponent<IDialogColumnProps> = (props) => {
-  const { infoText, title, subTitle, items, columns, columnSizingOptions, shouldRenderList } =
-    useDialogColumn(props)
+export const DialogColumn: ColumnRenderComponent<IDialogColumnProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, DIALOG_COLUMN_DEFAULT_PROPS)
+  const { infoText, title, subTitle, items, columns, shouldRenderList } = useDialogColumn(props)
 
   return (
     <Dialog>
@@ -49,7 +52,20 @@ export const DialogColumn: ColumnRenderComponent<IDialogColumnProps> = (props) =
       </DialogTrigger>
       <DialogSurface>
         <DialogBody className={styles.root}>
-          <DialogTitle className={styles.title} hidden={stringIsNullOrEmpty(title)}>
+          <DialogTitle
+            className={styles.title}
+            hidden={stringIsNullOrEmpty(title)}
+            action={
+              <DialogTrigger action='close'>
+                <Button
+                  appearance='subtle'
+                  icon={getFluentIcon('Dismiss')}
+                  aria-label={strings.CloseText}
+                  title={strings.CloseText}
+                />
+              </DialogTrigger>
+            }
+          >
             {title}
             <Text size={400}>{subTitle}</Text>
           </DialogTitle>
@@ -60,27 +76,7 @@ export const DialogColumn: ColumnRenderComponent<IDialogColumnProps> = (props) =
               </Text>
             )}
             {shouldRenderList ? (
-              <DataGrid
-                items={items}
-                columns={columns}
-                resizableColumns
-                columnSizingOptions={columnSizingOptions}
-              >
-                <DataGridHeader>
-                  <DataGridRow>
-                    {({ renderHeaderCell }) => (
-                      <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-                    )}
-                  </DataGridRow>
-                </DataGridHeader>
-                <DataGridBody>
-                  {({ item, rowId }) => (
-                    <DataGridRow key={rowId}>
-                      {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
-                    </DataGridRow>
-                  )}
-                </DataGridBody>
-              </DataGrid>
+              <DataGridList items={items} columns={columns} />
             ) : (
               <UserMessage
                 title={strings.ModalColumnEmptyListTitle}
@@ -88,15 +84,15 @@ export const DialogColumn: ColumnRenderComponent<IDialogColumnProps> = (props) =
               />
             )}
           </DialogContent>
+          <DialogActions>
+            <DialogTrigger action='close'>
+              <Button appearance='secondary'>{strings.CloseText}</Button>
+            </DialogTrigger>
+          </DialogActions>
         </DialogBody>
       </DialogSurface>
     </Dialog>
   )
-}
-
-DialogColumn.defaultProps = {
-  linkText: strings.ShowAllMeasurementsLinkText,
-  infoTextTemplate: ''
 }
 DialogColumn.key = 'modal'
 DialogColumn.id = 'Modal'
@@ -104,25 +100,24 @@ DialogColumn.displayName = strings.ColumnRenderOptionDialog
 DialogColumn.iconName = 'WindowEdit'
 DialogColumn.isDisabled = true
 DialogColumn.getDataTypeProperties = (onChange, dataTypeProperties) => [
-  ColumnDataTypePropertyField(TextField, {
+  textField({
     label: strings.ColumnRenderOptionDialogLinkTextLabel,
-    placeholder: DialogColumn.defaultProps.linkText,
-    value: dataTypeProperties['linkText'],
-    onChange: (_, value) => onChange('linkText', value)
+    placeholder: DIALOG_COLUMN_DEFAULT_PROPS.linkText,
+    value: dataTypeProperties.linkText,
+    onChange: (value) => onChange('linkText', value)
   }),
-  ColumnDataTypePropertyField(Checkbox, {
+  checkboxField({
     label: strings.ColumnRenderOptionDialogShowInfoTextLabel,
-    defaultChecked: DialogColumn.defaultProps.showInfoText,
-    checked: dataTypeProperties.showInfoText,
-    onChange: (_, value) => onChange('showInfoText', value)
+    checked: dataTypeProperties.showInfoText ?? DIALOG_COLUMN_DEFAULT_PROPS.showInfoText,
+    onChange: (checked) => onChange('showInfoText', checked)
   }),
-  ColumnDataTypePropertyField(TextField, {
+  textField({
     label: strings.ColumnRenderOptionDialogInfoTextTemplateLabel,
     description: strings.ColumnRenderOptionDialogInfoTextTemplateDescription,
-    placeholder: DialogColumn.defaultProps.infoTextTemplate,
+    placeholder: DIALOG_COLUMN_DEFAULT_PROPS.infoTextTemplate,
     value: dataTypeProperties.infoTextTemplate,
     multiline: true,
     disabled: !dataTypeProperties.showInfoText,
-    onChange: (_, value) => onChange('infoTextTemplate', value)
+    onChange: (value) => onChange('infoTextTemplate', value)
   })
 ]

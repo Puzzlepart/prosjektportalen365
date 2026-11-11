@@ -1,16 +1,21 @@
 import { stringIsNullOrEmpty } from '@pnp/core'
 import { SectionModel, SectionType } from 'pp365-shared-library/lib/models'
 import { useProjectStatusContext } from '../context'
+import { sectionContainsScopeTokens } from './scopeTokens'
 
 /**
  * Component logic hook for `Sections`. Returns the sections that have
  * displayable content and are configured to show, filtering against
- * the currently selected status report and project properties.
+ * the currently selected status report and project properties. Sections
+ * whose configuration contains scope tokens (`{scope}`/`{scopeLabel}`) are
+ * scoped to a report series ("delprosjekt") and are hidden for the default
+ * series.
  */
 export function useSections() {
   const context = useProjectStatusContext()
-  const { data, isDataLoaded, selectedReport } = context.state
+  const { data, isDataLoaded, selectedReport, selectedScope } = context.state
   if (!isDataLoaded) return data.sections
+  const hasSelectedScope = !stringIsNullOrEmpty((selectedScope ?? '').trim())
 
   const sectionHasContent = (section: SectionModel): boolean => {
     const { value, comment } = selectedReport?.getStatusValue(section.fieldName) ?? {}
@@ -29,6 +34,7 @@ export function useSections() {
   }
 
   return data.sections
+    .filter((sec) => !sectionContainsScopeTokens(sec) || hasSelectedScope)
     .filter((sec) => sectionHasContent(sec))
     .filter((sec) => sec.showAsSection || sec.type === SectionType.SummarySection)
 }

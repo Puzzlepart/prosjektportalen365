@@ -1,12 +1,14 @@
-import { MessageBarType } from '@fluentui/react'
 import { LogLevel } from '@pnp/logging'
-import { AnyAction } from '@reduxjs/toolkit'
+import { UnknownAction } from '@reduxjs/toolkit'
 import strings from 'ProjectWebPartsStrings'
 import _ from 'lodash'
 import {
   CustomError,
   EditableSPField,
   ProjectAdminPermission,
+  StatusReport,
+  getAllScopesFilter,
+  getScopeSeriesKey,
   getUrlParam,
   isUnauthorizedError,
   parseUrlHash
@@ -14,7 +16,7 @@ import {
 import resource from 'SharedResources'
 import { useEffect } from 'react'
 import SPDataAdapter from '../../data'
-import { DataFetchFunction } from '../../types/DataFetchFunction'
+import { isValidScopeKey, parseSubProjects } from './parseSubProjects'
 import { FETCH_DATA_ERROR, INIT_DATA } from './reducer'
 import { FetchDataResult, IProjectStatusProps } from './types'
 
@@ -36,11 +38,94 @@ function isNoHubError(error: unknown) {
 }
 
 /**
- * Fetch data for `ProjectStatus`. Fetches project properties, status report list properties,
- * status reports, project status sections, project column config, and project status list fields.
- * If the selected report is published, the attachments for the report are also fetched.
+ * System user fields that are never edited through the status report panel and
+ * therefore never expanded.
  */
-const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async (props) => {
+const SYSTEM_USER_FIELDS = ['Author', 'Editor']
+
+/**
+ * Parses the web part's `excludeSections` property (one section name per line)
+ * into a set of normalized (trimmed, lowercase) section names.
+ *
+ * @param excludeSections Raw `excludeSections` property value
+ */
+function parseExcludedSections(excludeSections: string): Set<string> {
+  return new Set(
+    (excludeSections ?? '')
+      .split(/\r?\n/)
+      .map((line) => line.trim().toLowerCase())
+      .filter(Boolean)
+  )
+}
+
+/**
+ * Gets the report ID from the URL hash (`#selectedReport=`) or query
+ * parameter (`?selectedReport=`), hash winning. Returns `null` when neither
+ * is present.
+ */
+function getReportIdFromUrl(): number {
+  const hashState = parseUrlHash()
+  if (hashState.has('selectedReport')) {
+    return hashState.get('selectedReport') as number
+  }
+  const selectedReportUrlParam = getUrlParam('selectedReport')
+  if (selectedReportUrlParam) {
+    return parseInt(selectedReportUrlParam, 10)
+  }
+  return null
+}
+
+/**
+ * Resolves which report scope ("delprosjekt") to show. An explicitly selected
+ * scope (any refetch after the initial load) wins. On the initial load a
+ * `selectedReport` URL parameter/hash takes precedence — the report's own
+ * scope is used so deep links always land on the right series — otherwise the
+ * `scope` URL query parameter is used. The URL-supplied scope is validated
+ * with the same rules as configured sub-project keys, and is only accepted
+ * when it matches a series with existing reports, or (with multi-reporting
+ * enabled) a configured sub-project — unknown or invalid values fall back to
+ * the default report series, so a crafted URL can never activate an
+ * arbitrary scope key.
+ *
+ * @param selectedScope Explicitly selected scope from state (undefined on initial load)
+ * @param allReports All of the project's status reports (all series)
+ * @param props Component properties for `ProjectStatus`
+ */
+function resolveScope(
+  selectedScope: string,
+  allReports: StatusReport[],
+  props: IProjectStatusProps
+): string {
+  if (selectedScope !== undefined) return selectedScope
+  const reportIdFromUrl = getReportIdFromUrl()
+  const reportFromUrl =
+    reportIdFromUrl !== null
+      ? _.find(allReports, (report) => report.id === reportIdFromUrl)
+      : undefined
+  if (reportFromUrl) return reportFromUrl.scopeKey
+  const urlScope = (getUrlParam('scope') ?? '').trim()
+  if (!isValidScopeKey(urlScope)) return ''
+  const matchesUrlScope = (key: string) => getScopeSeriesKey(key) === getScopeSeriesKey(urlScope)
+  if (allReports.some((report) => matchesUrlScope(report.scopeKey))) return urlScope
+  const isConfiguredScope =
+    props.multiReporting &&
+    parseSubProjects(props.subProjects).some(({ key }) => matchesUrlScope(key))
+  return isConfiguredScope ? urlScope : ''
+}
+
+/**
+ * Fetch data for `ProjectStatus`. Fetches project properties, status report list properties,
+ * status reports (all report series in one query, then filtered to the resolved scope),
+ * project status sections, project column config, and project status list fields.
+ * If the selected report is published, the attachments for the report are also fetched.
+ *
+ * @param props Component properties for `ProjectStatus`
+ * @param selectedScope Explicitly selected scope from state (undefined on initial load)
+ */
+async function fetchData(
+  props: IProjectStatusProps,
+  selectedScope: string
+): Promise<FetchDataResult> {
   try {
     if (!SPDataAdapter.isConfigured) {
       await SPDataAdapter.configure(props.spfxContext, {
@@ -63,49 +148,76 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
       .items.select('Id')
       .top(1)()
 
-    const [reportList, reports, sections, columnConfig] = await Promise.all([
+    const reportFields = await getReportFields(
+      properties.templateParameters?.ProjectStatusContentTypeId
+    )
+    // Read-only user fields (Author/Editor and similar system fields) are never
+    // edited, so they are left out of the expand.
+    const userFieldNames = reportFields
+      .filter(
+        (field) =>
+          (field.type === 'User' || field.type === 'UserMulti') &&
+          !field.isReadOnly &&
+          !SYSTEM_USER_FIELDS.includes(field.internalName)
+      )
+      .map((field) => field.internalName)
+
+    const [reportList, allReports, sections, columnConfig] = await Promise.all([
       SPDataAdapter.portalDataService.getStatusReportListProps(),
-      SPDataAdapter.portalDataService.getStatusReports({ useCaching: false }),
+      SPDataAdapter.portalDataService.getStatusReports({
+        useCaching: false,
+        filter: getAllScopesFilter(props.siteId),
+        userFields: userFieldNames
+      }),
       SPDataAdapter.portalDataService.getProjectStatusSections(),
       SPDataAdapter.portalDataService.getProjectColumnConfig()
     ])
 
-    const reportFields = await getReportFields(
-      properties.templateParameters?.ProjectStatusContentTypeId
-    )
     const userHasAdminPermission = await SPDataAdapter.checkProjectAdminPermissions(
       ProjectAdminPermission.ProjectStatusAdmin,
       properties.fieldValues
     )
-    let sortedReports = reports.sort((a, b) => b.created.getTime() - a.created.getTime())
-    const sortedSections = sections.sort((a, b) => (a.sortOrder < b.sortOrder ? -1 : 1))
+
+    const scopeKeysWithReports = allReports.reduce<string[]>((keys, report) => {
+      const scopeKey = report.scopeKey
+      if (scopeKey && !keys.some((key) => getScopeSeriesKey(key) === getScopeSeriesKey(scopeKey))) {
+        keys.push(scopeKey)
+      }
+      return keys
+    }, [])
+
+    const resolvedScope = resolveScope(selectedScope, allReports, props)
+
+    let sortedReports = allReports
+      .filter((report) => getScopeSeriesKey(report.scopeKey) === getScopeSeriesKey(resolvedScope))
+      .sort((a, b) => b.created.getTime() - a.created.getTime())
+    const excludedSectionNames = parseExcludedSections(props.excludeSections)
+    const sortedSections = sections
+      .filter((section) => !excludedSectionNames.has((section.name ?? '').trim().toLowerCase()))
+      .sort((a, b) => (a.sortOrder < b.sortOrder ? -1 : 1))
     let [initialSelectedReport] = sortedReports
-    const hashState = parseUrlHash()
-    const selectedReportUrlParam = getUrlParam('selectedReport')
     const sourceUrl = decodeURIComponent(getUrlParam('Source') ?? '')
 
-    if (hashState.has('selectedReport')) {
-      initialSelectedReport = _.find(
-        sortedReports,
-        (report) => report.id === (hashState.get('selectedReport') as number)
-      )
-    } else if (selectedReportUrlParam) {
-      initialSelectedReport = _.find(
-        sortedReports,
-        (report) => report.id === parseInt(selectedReportUrlParam, 10)
-      )
+    // Only honor the `selectedReport` URL parameter when the report exists in
+    // the current report series — a failed lookup (report in another series,
+    // or deleted) must not clear the default selection.
+    const reportIdFromUrl = getReportIdFromUrl()
+    const reportFromUrl =
+      reportIdFromUrl !== null
+        ? _.find(sortedReports, (report) => report.id === reportIdFromUrl)
+        : undefined
+    if (reportFromUrl) {
+      initialSelectedReport = reportFromUrl
     }
 
-    if (initialSelectedReport?.published) {
-      initialSelectedReport = await SPDataAdapter.portalDataService.getStatusReportAttachments(
-        initialSelectedReport
+    // A published report is shown with its attachments, and the list carries the same instance.
+    const selectedReport = initialSelectedReport?.published
+      ? await SPDataAdapter.portalDataService.getStatusReportAttachments(initialSelectedReport)
+      : initialSelectedReport
+    if (selectedReport !== initialSelectedReport) {
+      sortedReports = sortedReports.map((report) =>
+        report.id === selectedReport.id ? selectedReport : report
       )
-      sortedReports = sortedReports.map((report) => {
-        if (report.id === initialSelectedReport.id) {
-          return initialSelectedReport
-        }
-        return report
-      })
     }
 
     return {
@@ -113,15 +225,26 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
         properties,
         reportFields,
         reportEditFormUrl: reportList.DefaultEditFormUrl,
+        reportListId: reportList.Id,
         reports: sortedReports,
         sections: sortedSections,
         columnConfig,
-        userHasAdminPermission
+        userHasAdminPermission,
+        scopeKeysWithReports
       },
-      initialSelectedReport,
-      sourceUrl
+      initialSelectedReport: selectedReport,
+      sourceUrl,
+      resolvedScope
     }
   } catch (error) {
+    // The original error is otherwise lost, since the user-facing message is
+    // generic — log it so failures can be diagnosed from the browser console.
+    // eslint-disable-next-line no-console
+    console.error('(ProjectStatus) (fetchData) Failed to fetch data.', {
+      siteId: props.siteId,
+      selectedScope,
+      error
+    })
     if (isNoHubError(error)) {
       throw new Error(strings.ProjectStatusNoHubAccessErrorText)
     }
@@ -132,26 +255,28 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
 
 /**
  * Fetch hook for `ProjectStatus`. Only fetches data on mount using
- * `useEffect` with an empty dependency array.
+ * `useEffect` with the `refetch` timestamp as dependency.
  *
  * @param props Component properties for `ProjectStatus`
  * @param refetch Timestamp for refetch. Changes to this variable refetches the data in `useEffect`
+ * @param selectedScope The currently selected report scope (undefined until the initial load resolves it)
  * @param dispatch Dispatcer
  */
 export const useProjectStatusDataFetch = (
   props: IProjectStatusProps,
   refetch: number,
-  dispatch: React.Dispatch<AnyAction>
+  selectedScope: string,
+  dispatch: React.Dispatch<UnknownAction>
 ) => {
   useEffect(() => {
-    fetchData(props)
+    fetchData(props, selectedScope)
       .then((data) => dispatch(INIT_DATA(data)))
       .catch((error) => {
         dispatch(
           FETCH_DATA_ERROR({
             error: CustomError.createError(
               error instanceof Error ? error : new Error(String(error)),
-              MessageBarType.warning
+              'warning'
             )
           })
         )

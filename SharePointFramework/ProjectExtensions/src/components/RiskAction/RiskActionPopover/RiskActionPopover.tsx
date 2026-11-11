@@ -1,9 +1,15 @@
-import { format } from '@fluentui/react'
-import { Button, Popover, PopoverSurface, mergeClasses } from '@fluentui/react-components'
-import { Alert } from '@fluentui/react-components/unstable'
+import {
+  Button,
+  MessageBar,
+  MessageBarBody,
+  MessageBarTitle,
+  Popover,
+  PopoverSurface,
+  mergeClasses
+} from '@fluentui/react-components'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'ProjectExtensionsStrings'
-import { getFluentIcon } from 'pp365-shared-library'
+import { getFluentIcon, format } from 'pp365-shared-library'
 import React, { FC, HTMLProps } from 'react'
 import { MigrateRiskActionsDialog } from './MigrateRiskActionsDialog'
 import { NewRiskActionPanel } from './NewRiskActionPanel'
@@ -13,10 +19,13 @@ import { useRiskActionPopover } from './useRiskActionPopover'
 /**
  * Risk action popover. This popover is used to handle actions for risk actions. Children
  * are rendered inside the popover, so the `PopoverTrigger` component can be used anywhere
- * within the children component(s).
+ * within the children component(s). It keeps the focus while it is open (`trapFocus`), so Tab
+ * does not leave it for the page's start, and is named by its title.
  */
 export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
   const {
+    titleId,
+    syncError,
     infoText,
     isPopoverOpen,
     onPopoverOpenChange,
@@ -34,25 +43,37 @@ export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
         withArrow
         closeOnIframeFocus
         closeOnScroll
+        trapFocus
         open={isPopoverOpen}
         onOpenChange={onPopoverOpenChange}
       >
         <div>{props.children}</div>
-        <PopoverSurface className={styles.riskActionPopover}>
-          <div className={styles.title}>
+        <PopoverSurface className={styles.riskActionPopover} aria-labelledby={titleId}>
+          <div className={styles.title} id={titleId}>
             {format(strings.RiskActionPopoverTitle, itemContext.title)}
           </div>
-          <Alert intent='info' className={mergeClasses(styles.alert, styles.infoText)}>
-            {infoText}
-          </Alert>
-          <div hidden={!lastUpdated || !showLastSyncTime}>
-            <Alert
+          <MessageBar intent='info' className={mergeClasses(styles.alert, styles.infoText)}>
+            <MessageBarBody>{infoText}</MessageBarBody>
+          </MessageBar>
+          {/* Rendered only when shown: a message bar announces itself, hidden or not. */}
+          {lastUpdated && showLastSyncTime && (
+            <MessageBar
               className={mergeClasses(styles.alert, styles.lastUpdated)}
               icon={getFluentIcon('ArrowSync', { color: 'green' })}
             >
-              {format(strings.RiskActionPopoverLastUpdated, lastUpdated)}
-            </Alert>
-          </div>
+              <MessageBarBody>
+                {format(strings.RiskActionPopoverLastUpdated, lastUpdated)}
+              </MessageBarBody>
+            </MessageBar>
+          )}
+          {syncError !== undefined && (
+            <MessageBar intent='error' className={styles.alert}>
+              <MessageBarBody>
+                <MessageBarTitle>{strings.RiskActionSyncFailed}</MessageBarTitle>
+                {syncError}
+              </MessageBarBody>
+            </MessageBar>
+          )}
           <div className={styles.actions}>
             <div>
               <Button
@@ -89,7 +110,7 @@ export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
           </div>
         </PopoverSurface>
       </Popover>
-      <NewRiskActionPanel isOpen={isPanelOpen} onDismiss={onClosePanel} />
+      <NewRiskActionPanel open={isPanelOpen} onClose={onClosePanel} />
     </>
   )
 }

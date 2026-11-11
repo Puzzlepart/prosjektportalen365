@@ -14,7 +14,7 @@ export const Percentage: FieldElementComponent = ({ field }) => {
   const handleChange = (_: any, data: any) => {
     const inputValue = data.value
     if (inputValue === '' || inputValue == null) {
-      context.model.set(field, null)
+      void context.model.set(field, null)
       return
     }
 
@@ -22,7 +22,7 @@ export const Percentage: FieldElementComponent = ({ field }) => {
     if (!isNaN(numValue)) {
       const clampedValue = Math.max(0, Math.min(100, numValue))
       const decimalValue = clampedValue / 100
-      context.model.set(field, decimalValue)
+      void context.model.set(field, decimalValue)
     }
   }
 

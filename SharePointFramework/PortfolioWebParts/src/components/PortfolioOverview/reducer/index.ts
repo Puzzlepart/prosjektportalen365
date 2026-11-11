@@ -1,13 +1,9 @@
-import { format, MessageBarType } from '@fluentui/react'
 import { createReducer } from '@reduxjs/toolkit'
 import strings from 'PortfolioWebPartsStrings'
-import {
-  ProjectColumn,
-  setUrlHash,
-  sortAlphabetically,
-  sortNumerically
-} from 'pp365-shared-library'
+import { ProjectColumn, setUrlHash, format } from 'pp365-shared-library'
 import _ from 'underscore'
+import { sortItems } from '../../List/sortItems'
+import { isSameColumn } from '../../EditViewColumnsPanel/columnIdentity'
 import { IPortfolioOverviewHashState, IPortfolioOverviewState } from '../types'
 import {
   CHANGE_VIEW,
@@ -70,14 +66,16 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
       .addCase(DATA_FETCHED, (state, { payload }) => {
         state.items = payload.items
         state.currentView = payload.currentView
+        state.groupBy = payload.groupBy
         const obj: IPortfolioOverviewHashState = {}
         if (state.currentView) obj.viewId = payload.currentView.id.toString()
         if (state.groupBy) obj.groupBy = state.groupBy.fieldName
         setUrlHash(obj)
         state.columns = payload.currentView.columns
-        state.groupBy = payload.groupBy
         state.managedProperties = payload.managedProperties ?? []
         state.isUserInPortfolioManagerGroup = payload.isUserInPortfolioManagerGroup
+        // The hubs a merged view could not read, told above the list.
+        state.mergedViewFailures = (payload.failedPortfolios ?? []).map((p) => p.title)
         state.showChildProjectInfoInProgram = payload.showChildProjectInfoInProgram
         state.loading = false
         state.error = null
@@ -95,7 +93,7 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         state.error = {
           name: payload.error?.name,
           message,
-          type: MessageBarType.error
+          type: 'error'
         }
       })
       .addCase(EXECUTE_SEARCH, (state, { payload }) => {
@@ -142,44 +140,19 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
       })
       .addCase(SET_SORT, (state, { payload }) => {
         const isCustomSort = payload.customSort
+        // Without a direction (a custom sort), an unsorted column sorts ascending and a sorted
+        // one flips.
         const isSortedDescending = Object.keys(payload).includes('isSortedDescending')
           ? payload.isSortedDescending
-          : !payload.column.isSortedDescending
-        if (isCustomSort) {
-          state.items = state.items.sort((a, b) => {
-            const $a = payload.customSort.order.indexOf(a[payload.column.fieldName])
-            const $b = payload.customSort.order.indexOf(b[payload.column.fieldName])
-            return isSortedDescending ? $a - $b : $b - $a
-          })
-        } else {
-          switch (payload.column.dataType) {
-            case 'date':
-              state.items = state.items.sort((a, b) =>
-                sortNumerically(a, b, isSortedDescending, payload.column.fieldName)
-              )
-              break
-            case 'number':
-              state.items = state.items.sort((a, b) =>
-                sortNumerically(a, b, isSortedDescending, payload.column.fieldName)
-              )
-              break
-            case 'currency':
-              state.items = state.items.sort((a, b) =>
-                sortNumerically(a, b, isSortedDescending, payload.column.fieldName, 'kr ')
-              )
-              break
-            case 'percentage':
-              state.items = state.items.sort((a, b) =>
-                sortNumerically(a, b, isSortedDescending, payload.column.fieldName, '%')
-              )
-              break
-            default:
-              state.items = state.items.sort((a, b) =>
-                sortAlphabetically(a, b, isSortedDescending, payload.column.fieldName)
-              )
-              break
-          }
-        }
+          : !!payload.column.isSorted && !payload.column.isSortedDescending
+        // The sort helpers take whether to sort ascending.
+        const ascending = !isSortedDescending
+        state.items = sortItems(
+          state.items,
+          payload.column,
+          ascending,
+          isCustomSort ? payload.customSort.order : undefined
+        )
         state.sortBy = _.pick(payload, ['column', 'customSort'])
         state.columns = state.columns.map((col) => {
           col.isSorted = col.key === payload.column.key
@@ -188,7 +161,7 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         })
       })
       .addCase(SELECTION_CHANGED, (state, { payload }) => {
-        state.selectedItems = payload.getSelection()
+        state.selectedItems = payload
       })
       .addCase(TOGGLE_COLUMN_FORM_PANEL, (state, { payload }) => {
         state.columnForm = payload
@@ -196,15 +169,21 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
       .addCase(COLUMN_FORM_PANEL_ON_SAVED, (state, { payload }) => {
         if (payload.isNew) {
           state.columns = [...state.columns, payload.column]
+          // The view's own column order, when it has one, gets the new column at the end — as the
+          // list does, and as the service saved it.
+          if (!_.isEmpty(state.currentView?.columnOrder)) {
+            state.currentView.columnOrder = [...state.currentView.columnOrder, payload.column.id]
+          }
         } else {
           state.columns = state.columns.map((col) =>
-            col.key === payload.column.key ? payload.column : col
+            isSameColumn(col, payload.column) ? payload.column : col
           )
         }
         state.columnForm = { isOpen: false }
       })
       .addCase(COLUMN_DELETED, (state, { payload }) => {
         state.columns = state.columns.filter((c) => c.id !== payload.columnId)
+        state.deletedColumnIds = [...(state.deletedColumnIds ?? []), payload.columnId]
         state.columnForm = { isOpen: false }
       })
       .addCase(TOGGLE_EDIT_VIEW_COLUMNS_PANEL, (state, { payload }) => {

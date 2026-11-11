@@ -9,8 +9,7 @@ import { ISPHttpClientOptions, SPHttpClient } from '@microsoft/sp-http'
 import * as strings from 'ProgramWebPartsStrings'
 import _ from 'lodash'
 import { createElement } from 'react'
-import { render } from 'react-dom'
-import { ErrorWithIntent, UserMessage } from 'pp365-shared-library'
+import { ErrorWithIntent, UserMessage, renderReact } from 'pp365-shared-library'
 import {
   IPortfolioAggregationConfiguration,
   IPortfolioAggregationProps,
@@ -25,7 +24,8 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
 
   public render(): void {
     if (!this._configuration) {
-      render(
+      // The base web part unmounts the element in onDispose.
+      renderReact(
         createElement(UserMessage, {
           title: this._configurationError?.name ?? strings.ErrorTitle,
           text: this._configurationError?.message,
@@ -55,9 +55,7 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
     this.properties[key] = value
     switch (this.displayMode) {
       case DisplayMode.Edit:
-        {
-          this.context.propertyPane.refresh()
-        }
+        this.context.propertyPane.refresh()
         break
       case DisplayMode.Read: {
         const options: ISPHttpClientOptions = {
@@ -128,8 +126,8 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
                   label: strings.DefaultDataSourceViewLabel,
                   options: this._getViewOptions(),
                   selectedKey:
-                    _.find(this._configuration.views, (v) => v.isDefault)?.id ||
-                    _.first(this._configuration.views)?.id
+                    _.find(this._configuration?.views, (v) => v.isDefault)?.id ||
+                    _.first(this._configuration?.views)?.id
                 })
               ]
             },

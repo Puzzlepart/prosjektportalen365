@@ -11,10 +11,11 @@ import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
 import { useMemo } from 'react'
 import SPDataAdapter from '../../../data'
 import { useProjectStatusContext } from '../context'
-import { OPEN_PANEL, SELECT_REPORT } from '../reducer'
+import { OPEN_PANEL, OPEN_SNAPSHOT, SELECT_REPORT } from '../reducer'
 import { useCreateNewStatusReport } from './useCreateNewStatusReport'
 import { useDeleteReport } from './useDeleteReport'
 import { usePublishReport } from './usePublishReport'
+import { useScopeSelector } from './useScopeSelector'
 
 /**
  * Returns an array of menu items for the toolbar in the ProjectStatus component.
@@ -22,10 +23,12 @@ import { usePublishReport } from './usePublishReport'
  * @returns An array of IListMenuItem objects representing the toolbar items.
  */
 export function useToolbarItems() {
-  const { state, dispatch } = useProjectStatusContext()
+  const { state, props, dispatch } = useProjectStatusContext()
+  const snapshotInDialog = props.snapshotInDialog !== false
   const createNewStatusReport = useCreateNewStatusReport()
   const deleteReport = useDeleteReport()
   const publishReport = usePublishReport()
+  const scopeSelector = useScopeSelector()
   const hasUnpublishedReports = state.data.reports.some((report) => !report.published)
 
   const menuItems = useMemo<ListMenuItem[]>(
@@ -47,7 +50,7 @@ export function useToolbarItems() {
           )
           .setIcon('QuizNew')
           .setOnClick(() => {
-            createNewStatusReport()
+            void createNewStatusReport()
           }),
         state.selectedReport &&
           new ListMenuItem(
@@ -79,7 +82,7 @@ export function useToolbarItems() {
             )
             .setIcon('CloudArrowUp')
             .setOnClick(() => {
-              publishReport()
+              void publishReport()
             })
       ].filter(Boolean),
     [state]
@@ -88,6 +91,7 @@ export function useToolbarItems() {
   const farMenuItems = useMemo<ListMenuItem[]>(
     () =>
       [
+        scopeSelector,
         state.sourceUrl &&
           new ListMenuItem(strings.NavigateToSourceUrlText, strings.NavigateToSourceUrlText)
             .setIcon('ArrowLeft')
@@ -100,7 +104,9 @@ export function useToolbarItems() {
             .setIcon('Image')
             .setWidth('fit-content')
             .setOnClick(() => {
-              window.open(state.selectedReport?.snapshotUrl, '_self')
+              // Without the dialog, in a new tab: the report the user is reading stays where it is.
+              if (snapshotInDialog) dispatch(OPEN_SNAPSHOT())
+              else window.open(state.selectedReport?.snapshotUrl, '_blank', 'noopener')
             }),
         new ListMenuItem(
           state.selectedReport
@@ -124,7 +130,7 @@ export function useToolbarItems() {
                   value: formatDate(report.publishedDate ?? report.modified, true)
                 })
                 .setOnClick(() => {
-                  SPDataAdapter.portalDataService
+                  void SPDataAdapter.portalDataService
                     .getStatusReportAttachments(report)
                     .then((reportWithAttachments) => {
                       dispatch(SELECT_REPORT({ report: reportWithAttachments }))
@@ -154,10 +160,10 @@ export function useToolbarItems() {
             )
             .setIcon('Delete')
             .setOnClick(() => {
-              deleteReport()
+              void deleteReport()
             })
       ].filter(Boolean),
-    [state]
+    [state, scopeSelector, snapshotInDialog]
   )
 
   return { menuItems, farMenuItems }

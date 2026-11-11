@@ -1,3 +1,4 @@
+import { useId } from '@fluentui/react-components'
 import { useContext, useEffect, useState } from 'react'
 import * as strings from 'ProjectWebPartsStrings'
 import { ProjectPhasesContext } from '../../../context'
@@ -13,6 +14,7 @@ export function useArchiveView() {
   const dialogContext = useContext(ChangePhaseDialogContext)
   const [sections, setSections] = useState<IArchiveSection[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const sectionIdPrefix = useId('archive-section')
 
   useEffect(() => {
     const initializeSections = () => {
@@ -63,6 +65,17 @@ export function useArchiveView() {
     context.state?.data?.archiveLists,
     context.state?.data?.currentPhase
   ])
+
+  // What the user has ticked, in the shape the dialog stores; read by the effect below.
+  const getArchiveConfiguration = (): IArchiveConfiguration => {
+    const documentsSection = sections.find((s) => s.key === 'documents')
+    const listsSection = sections.find((s) => s.key === 'lists')
+
+    return {
+      documents: documentsSection?.items.filter((item) => item.selected) || [],
+      lists: listsSection?.items.filter((item) => item.selected) || []
+    }
+  }
 
   useEffect(() => {
     const archiveConfiguration = getArchiveConfiguration()
@@ -116,19 +129,13 @@ export function useArchiveView() {
     }, 0)
   }
 
-  const getArchiveConfiguration = (): IArchiveConfiguration => {
-    const documentsSection = sections.find((s) => s.key === 'documents')
-    const listsSection = sections.find((s) => s.key === 'lists')
-
-    return {
-      documents: documentsSection?.items.filter((item) => item.selected) || [],
-      lists: listsSection?.items.filter((item) => item.selected) || []
-    }
-  }
+  /** The id of a section's items, which its header names as what it folds. */
+  const getSectionContentId = (key: string) => `${sectionIdPrefix}-${key}`
 
   return {
     sections,
     isLoading,
+    getSectionContentId,
     toggleSection,
     toggleItemSelection,
     toggleSectionSelectAll,

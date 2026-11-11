@@ -1,9 +1,10 @@
 import { stringIsNullOrEmpty } from '@pnp/core'
 import _ from 'lodash'
-import { ProjectPropertiesMapType } from 'pp365-shared-library'
+import { format, isUnauthorizedError, ProjectPropertiesMapType } from 'pp365-shared-library'
 import * as strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'extensions/projectSetup'
 import { NO_TEMPLATE_ID } from '../../constants'
+import { recordListContent } from '../../listContentRecord'
 import resource from 'SharedResources'
 import { SPDataAdapter } from '../../../../data'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
@@ -14,7 +15,7 @@ import { OnProgressCallbackFunction } from '../types'
  * * Sync local properties list on the current project site. If the list does not exist, it will be created
  * using `portal.syncList`. If the list exists, it will be updated with the current project information and
  * the template parameters.
- * * Add entry to hub project list
+ * * Add entry to hub project list, unless the current user lacks write access to the hub
  */
 export class SetupProjectInformation extends BaseTask {
   private _templateParameters: Record<string, any>
@@ -37,8 +38,12 @@ export class SetupProjectInformation extends BaseTask {
     try {
       this._templateParameters = params.templateSchema.Parameters
       await this._syncPropertiesList()
-      await this._addEntryToHub()
-      if (this.data.projectData) {
+      if (this.data.hasHubWriteAccess === false) {
+        this._logHubWriteSkipped(strings.HubWriteSkippedLogText)
+      } else {
+        await this._addEntryToHub()
+      }
+      if (this.data.projectData && this.data.hasHubWriteAccess !== false) {
         await SPDataAdapter.portalDataService.updateIdeaData(
           this.data.projectData,
           strings.IdeaDecisionStatusApprovedAndSynced
@@ -154,6 +159,8 @@ export class SetupProjectInformation extends BaseTask {
    * - `GtInstalledVersion`: The installed version
    * - `GtCurrentVersion`: The current version (same as installed version initially)
    * - `GtProjectTemplate`: The selected project template name
+   * - `GtProjectListContent`: The list content earlier runs of the setup added, then the selected
+   *   (see `recordListContent`), which a run again leaves out unless it is chosen
    *
    * @param params Params
    * @param additionalProperties Additional properties
@@ -169,7 +176,10 @@ export class SetupProjectInformation extends BaseTask {
       GtIsParentProject: this.data.selectedTemplate.isParentProject,
       GtProjectTemplate: this.data.selectedTemplate.text,
       GtProjectExtensions: (this.data.selectedExtensions ?? []).map((e) => e.text).join(', '),
-      GtProjectListContent: (this.data.selectedContentConfig ?? []).map((c) => c.text).join(', '),
+      GtProjectListContent: recordListContent(
+        this.data.addedListContent,
+        this.data.selectedContentConfig ?? []
+      ),
       ...additionalProperties
     }
     if (!isNoTemplate) {
@@ -217,7 +227,32 @@ export class SetupProjectInformation extends BaseTask {
       }
       await this.params.entityService.createNewEntity(groupId, webUrl, properties)
     } catch (error) {
-      throw error
+      if (!isUnauthorizedError(error)) throw error
+      // The hub can reject the entry although the access check before the setup
+      // passed (or could not be made). The project site is still usable, so the
+      // setup continues and the remaining tasks skip their hub writes.
+      this.data.hasHubWriteAccess = false
+      this._logHubWriteSkipped(
+        format(
+          strings.HubWriteDeniedLogText,
+          `${error?.status ?? 'n/a'}, SPRequestGuid: ${
+            error?.response?.headers?.get?.('sprequestguid') ?? 'n/a'
+          }`
+        )
+      )
     }
+  }
+
+  /**
+   * Report in the advanced log that the project is not registered on the hub.
+   *
+   * @param message Message for the log entry
+   */
+  private _logHubWriteSkipped(message: string) {
+    this.logWarning(message)
+    this.onProgress(strings.SetupProjectInformationText, message, 'AlignCenter', {
+      message,
+      level: 'warning'
+    })
   }
 }

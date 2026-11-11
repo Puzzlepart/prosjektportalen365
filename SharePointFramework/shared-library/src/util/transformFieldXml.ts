@@ -1,7 +1,8 @@
-import { DOMParser } from 'xmldom'
-
 /**
  * Transform field XML, adding and removing the specified attributes
+ *
+ * Parses and serializes with the browser's own `DOMParser` and `XMLSerializer` (jsdom has both in
+ * the tests). The `xmldom` package it used before is unmaintained and has open advisories.
  *
  * @param schemaXml Schema xml
  * @param attributes Attributes
@@ -12,7 +13,7 @@ export function transformFieldXml(
   attributes: Record<string, string> = {},
   removeAttributes: string[] = ['Version', 'SourceID', 'Required', 'WebId', 'List']
 ): string {
-  const { documentElement } = new DOMParser().parseFromString(schemaXml)
+  const { documentElement } = new DOMParser().parseFromString(schemaXml, 'text/xml')
   for (let i = 0; i < removeAttributes.length; i++) {
     if (documentElement.hasAttribute(removeAttributes[i]))
       documentElement.removeAttribute(removeAttributes[i])
@@ -21,5 +22,5 @@ export function transformFieldXml(
     const key = Object.keys(attributes)[i]
     documentElement.setAttribute(key, attributes[key])
   }
-  return documentElement.toString()
+  return new XMLSerializer().serializeToString(documentElement)
 }

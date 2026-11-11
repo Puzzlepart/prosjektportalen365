@@ -1,9 +1,26 @@
 .root {
   margin: 0 0 20px 0;
 
+  // A button with the look the clickable header had: the file's icon and name, the chevron at the
+  // right edge.
   .header {
     position: relative;
     cursor: pointer;
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+
+    &:focus-visible {
+      outline: var(--strokeWidthThick) solid var(--colorStrokeFocus2);
+      outline-offset: 2px;
+      border-radius: var(--borderRadiusMedium);
+    }
 
     .fileTypeIcon {
       display: inline-block;

@@ -5,13 +5,19 @@ import { UncertaintyElementModel } from '../../models'
 import { IDynamicMatrixProps } from '../DynamicMatrix'
 
 export interface IRiskMatrixProps
-  extends Omit<HTMLProps<HTMLDivElement>, 'size'>,
+  extends
+    Omit<HTMLProps<HTMLDivElement>, 'size'>,
     IBaseWebPartComponentProps,
     Pick<IDynamicMatrixProps, 'fullWidth' | 'manualConfigurationPath' | 'calloutTemplate'> {
   /**
    * The items to render in the matrix
    */
   items?: UncertaintyElementModel[]
+
+  /**
+   * Whether to render the web part title above the matrix (default `false`)
+   */
+  showTitle?: boolean
 }
 
 /**

@@ -8,7 +8,7 @@ export function useProjectListDataFetch(
   setState: (newState: Partial<IProjectListState>) => void
 ) {
   useEffect(() => {
-    Promise.all([
+    void Promise.all([
       props.dataAdapter.fetchEnrichedProjects({
         primaryUserField: props.primaryUserField,
         secondaryUserField: props.secondaryUserField,
@@ -17,12 +17,20 @@ export function useProjectListDataFetch(
         includeClosed: props.showClosedProjects
       }),
       props.dataAdapter.isUserInGroup(resource.Security_SiteGroup_PortfolioInsight_Title)
-    ]).then(([projects, isUserInPortfolioManagerGroup]) => {
-      setState({
-        projects,
-        isDataLoaded: true,
-        isUserInPortfolioManagerGroup
+    ])
+      .then(([projects, isUserInPortfolioManagerGroup]) => {
+        setState({
+          projects,
+          isDataLoaded: true,
+          isUserInPortfolioManagerGroup
+        })
       })
-    })
+      .catch((error) => {
+        setState({
+          projects: [],
+          isDataLoaded: true,
+          error: error?.message ?? String(error)
+        })
+      })
   }, [])
 }

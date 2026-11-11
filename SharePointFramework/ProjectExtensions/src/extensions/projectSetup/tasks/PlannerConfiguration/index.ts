@@ -1,7 +1,6 @@
 import { PageContext } from '@microsoft/sp-page-context'
 import { getGUID } from '@pnp/core'
 import { default as MSGraphHelper } from 'msgraph-helper'
-import { format } from '@fluentui/react/lib/Utilities'
 import { sleep, retryWithBackoff } from 'pp365-shared-library/lib/util'
 import * as strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'extensions/projectSetup'
@@ -12,6 +11,7 @@ import { SPDataAdapter } from 'data'
 import { IPlannerBucket, IPlannerConfiguration, IPlannerPlan, ITaskDetails } from './types'
 import _ from 'underscore'
 import resource from 'SharedResources'
+import { format } from 'pp365-shared-library'
 
 /**
  * @class PlannerConfiguration
@@ -105,23 +105,19 @@ export class PlannerConfiguration extends BaseTask {
     try {
       const existingGroupPlans = await this._fetchPlans(plan.owner)
       const existingPlan = _.find(existingGroupPlans, (p) => p.title === plan.title)
-      if (existingPlan) {
-        plan = existingPlan
-      } else {
-        plan = await retryWithBackoff(
-          () => MSGraphHelper.Post('planner/plans', JSON.stringify(plan)),
-          {
-            onRetry: (attempt, error, delay) =>
-              this.logWarning(
-                `Retry ${attempt} creating plan ${plan.title} after ${delay}s (${
-                  error.statusCode ?? error.message
-                })`
-              )
-          }
-        )
-      }
-      if (setupLabels) await this._setupLabels(plan, pageContext)
-      return plan
+      // The plan that exists, or the one created now; `plan` itself stays the template.
+      const ensuredPlan: IPlannerPlan =
+        existingPlan ??
+        (await retryWithBackoff(() => MSGraphHelper.Post('planner/plans', JSON.stringify(plan)), {
+          onRetry: (attempt, error, delay) =>
+            this.logWarning(
+              `Retry ${attempt} creating plan ${plan.title} after ${delay}s (${
+                error.statusCode ?? error.message
+              })`
+            )
+        }))
+      if (setupLabels) await this._setupLabels(ensuredPlan, pageContext)
+      return ensuredPlan
     } catch (error) {
       throw error
     }
@@ -139,7 +135,7 @@ export class PlannerConfiguration extends BaseTask {
     if (this._labels.length > 0) {
       this.logInformation(`Updating the plan with labels ${JSON.stringify(this._labels)}`)
 
-      if (this._labels.length > 25) {
+      if (this._labels.length > 25 && this.data.hasHubWriteAccess !== false) {
         ListLogger.init(
           SPDataAdapter.portalDataService.web.lists.getByTitle(resource.Lists_Log_Title),
           pageContext.web.absoluteUrl,
@@ -320,7 +316,10 @@ export class PlannerConfiguration extends BaseTask {
     this.logInformation(`Sleeping ${delay}s before updating task details for ${taskId}`)
     await sleep(delay)
 
-    if (taskDetails.checklist?.length > 20 || taskDetails.attachments?.length > 10) {
+    if (
+      this.data.hasHubWriteAccess !== false &&
+      (taskDetails.checklist?.length > 20 || taskDetails.attachments?.length > 10)
+    ) {
       ListLogger.init(
         SPDataAdapter.portalDataService.web.lists.getByTitle(resource.Lists_Log_Title),
         pageContext.web.absoluteUrl,

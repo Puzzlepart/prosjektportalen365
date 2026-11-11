@@ -1,7 +1,8 @@
 import React from 'react'
 import { IStatusColumnProps } from '../types'
 import styles from './TooltipContent.module.scss'
-import { getFluentIconWithFallback } from 'pp365-shared-library'
+import strings from 'PortfolioWebPartsStrings'
+import { format, getFluentIconWithFallback } from 'pp365-shared-library'
 import { Divider, Text } from '@fluentui/react-components'
 
 export const TooltipContent = (props: IStatusColumnProps): JSX.Element => {
@@ -15,7 +16,7 @@ export const TooltipContent = (props: IStatusColumnProps): JSX.Element => {
           style={{ animationDelay: `${idx * props.animation.delay}ms` }}
         >
           <div className={styles.iconContainer} style={{ color }}>
-            {getFluentIconWithFallback(iconName, true, color)}
+            {getFluentIconWithFallback(iconName, { color })}
           </div>
           <div className={styles.body}>
             <Text weight='semibold' className={styles.name}>
@@ -34,7 +35,7 @@ export const TooltipContent = (props: IStatusColumnProps): JSX.Element => {
         </div>
       ))}
       <div className={styles.footer}>
-        <Text size={200}>Status rapportert {props.status.created}</Text>
+        <Text size={200}>{format(strings.StatusReportedText, props.status.created)}</Text>
       </div>
     </div>
   )

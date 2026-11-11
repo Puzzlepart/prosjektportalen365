@@ -4,43 +4,18 @@ import { IProjectCardProps } from './types'
 import { useProjectCard } from './useProjectCard'
 import { FluentProvider, IdPrefixProvider } from '@fluentui/react-components'
 import { ProjectCard as ProjectNewsCard } from '../ProjectList/ProjectCard'
-import { customLightTheme, SiteContext } from 'pp365-shared-library'
+import {
+  customLightTheme,
+  LoadingSkeleton,
+  SiteContext,
+  UserMessage,
+  withDefaults
+} from 'pp365-shared-library'
+import strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
 import resource from 'SharedResources'
 
-export const ProjectCard: FC<IProjectCardProps> = (props) => {
-  const { state, setState, createCardContext, fluentProviderId } = useProjectCard(props)
-
-  return (
-    <IdPrefixProvider value={fluentProviderId}>
-      <FluentProvider theme={customLightTheme}>
-        {state.isDataLoaded && (
-          <ProjectCardContext.Provider value={createCardContext(state.project)}>
-            <ProjectNewsCard />
-          </ProjectCardContext.Provider>
-        )}
-        <ProjectInformationPanel
-          {...SiteContext.create(
-            props.spfxContext,
-            state.showProjectInfo?.siteId,
-            state.showProjectInfo?.url
-          )}
-          page='Portfolio'
-          hidden={!state.showProjectInfo}
-          hideAllActions={true}
-          panelProps={{
-            headerText: state.showProjectInfo?.title,
-            onDismiss: () => {
-              setState({ showProjectInfo: null })
-            }
-          }}
-        />
-      </FluentProvider>
-    </IdPrefixProvider>
-  )
-}
-
-ProjectCard.defaultProps = {
+export const PROJECT_CARD_DEFAULT_PROPS: Partial<IProjectCardProps> = {
   useDynamicColors: true,
   showProjectLogo: true,
   primaryField: 'GtProjectServiceAreaText',
@@ -76,4 +51,40 @@ ProjectCard.defaultProps = {
       relativeUrl: `/${resource.Navigation_Tasks_Url}`
     }
   ]
+}
+
+export const ProjectCard: FC<IProjectCardProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, PROJECT_CARD_DEFAULT_PROPS)
+  const { state, setState, createCardContext, fluentProviderId } = useProjectCard(props)
+
+  return (
+    <IdPrefixProvider value={fluentProviderId}>
+      <FluentProvider theme={customLightTheme}>
+        {/* It showed nothing while loading, and nothing when the fetch failed. */}
+        {state.loading && <LoadingSkeleton />}
+        {state.error && <UserMessage intent='error' text={strings.ProjectCard.LoadErrorText} />}
+        {state.isDataLoaded && (
+          <ProjectCardContext.Provider value={createCardContext(state.project)}>
+            <ProjectNewsCard />
+          </ProjectCardContext.Provider>
+        )}
+        <ProjectInformationPanel
+          {...SiteContext.create(
+            props.spfxContext,
+            state.showProjectInfo?.siteId,
+            state.showProjectInfo?.url
+          )}
+          page='Portfolio'
+          hidden={!state.showProjectInfo}
+          hideAllActions={true}
+          panelProps={{
+            headerText: state.showProjectInfo?.title,
+            onClose: () => {
+              setState({ showProjectInfo: null })
+            }
+          }}
+        />
+      </FluentProvider>
+    </IdPrefixProvider>
+  )
 }

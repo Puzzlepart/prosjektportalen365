@@ -242,7 +242,7 @@
             <pnp:DataValue FieldName="Title">{resource:Lists_HelpContent_BenefitAnalysisUserManual}</pnp:DataValue>
             <pnp:DataValue FieldName="GtHelpContentLevel">{resource:Lists_HelpContent_Level_Project};#{resource:Lists_HelpContent_Level_ParentProgram}</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">{resource:Navigation_BenefitsAnalysis_Url}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">{resource:Lists_BenefitsAnalysis_Url}/AllItems.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
             <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/5.1.2-NytteanalyseOgPlanForNyttestyring.md</pnp:DataValue>
@@ -308,5 +308,5 @@
             <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/5.4-Prosjekttidslinje.md</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/MinimumReadSecurity.xml" />
 </pnp:ListInstance>

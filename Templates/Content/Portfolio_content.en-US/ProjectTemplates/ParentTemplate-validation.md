@@ -1,8 +1,14 @@
-_The template was validated 9/2/2026, 3:15:56 PM_
-
 The template contains the following tokens that has not been found in the .resx files:
 
 _No tokens with missing translations or replacement values found._
+
+The template contains the following `{listid:}` tokens that name neither a list of the template nor a list every project site has:
+
+_No `{listid:}` tokens without a list found._
+
+The template contains the following navigation nodes whose `Lists/` URL names no list the template creates:
+
+_No navigation nodes without a list found._
 
 ---
 
@@ -59,6 +65,15 @@ _No tokens with missing translations or replacement values found._
             }
         ]
     },
+    "CustomActions": [
+        {
+            "Name": "Footer",
+            "Title": "Footer",
+            "Location": "ClientSideExtension.ApplicationCustomizer",
+            "ClientSideComponentId": "84f27cec-ffde-4e00-a4cf-25c69f691054",
+            "ClientSideComponentProperties": "{}"
+        }
+    ],
     "ClientSidePages": [
         {
             "Name": "Admin.aspx",
@@ -288,6 +303,6 @@ _No tokens with missing translations or replacement values found._
 ## Template Path
 
 ```txt
-/Users/remi.blom-ohlsen/code/Prosjektportalen/prosjektportalen365/Templates/Content/Portfolio_content.en-US/ProjectTemplates/ParentTemplate.txt
+Content/Portfolio_content.en-US/ProjectTemplates/ParentTemplate.txt
 ```
 

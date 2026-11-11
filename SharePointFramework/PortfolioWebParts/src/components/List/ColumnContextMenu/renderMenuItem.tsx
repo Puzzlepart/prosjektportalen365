@@ -1,4 +1,3 @@
-import { ContextualMenuItemType, IContextualMenuItem } from '@fluentui/react'
 import {
   Menu,
   MenuDivider,
@@ -11,6 +10,7 @@ import {
 } from '@fluentui/react-components'
 import { FluentIconName, getFluentIcon } from 'pp365-shared-library/lib/icons'
 import React from 'react'
+import { IMenuItem } from 'pp365-shared-library'
 
 /**
  * Renders a single menu item for the column context menu.
@@ -20,10 +20,10 @@ import React from 'react'
  *
  * @returns The JSX element representing the menu item.
  */
-export function renderMenuItem(item: IContextualMenuItem, onOpenChange: MenuProps['onOpenChange']) {
+export function renderMenuItem(item: IMenuItem, onOpenChange: MenuProps['onOpenChange']) {
   switch (item.itemType) {
-    case ContextualMenuItemType.Divider:
-      return <MenuDivider />
+    case 'divider':
+      return <MenuDivider key={item.key} />
     default: {
       const baseProps: MenuItemProps = {
         title: item.title,
@@ -51,10 +51,13 @@ export function renderMenuItem(item: IContextualMenuItem, onOpenChange: MenuProp
         )
       }
       if (item.subMenuProps?.items) {
+        const { onClick: _closeMenu, ...triggerProps } = baseProps
         return (
-          <Menu>
+          <Menu key={item.key}>
             <MenuTrigger disableButtonEnhancement>
-              <MenuItem {...baseProps}>{item.text}</MenuItem>
+              <MenuItem {...triggerProps} hasSubmenu>
+                {item.text}
+              </MenuItem>
             </MenuTrigger>
             <MenuPopover>
               {item.subMenuProps?.items.map((item) => renderMenuItem(item, onOpenChange))}

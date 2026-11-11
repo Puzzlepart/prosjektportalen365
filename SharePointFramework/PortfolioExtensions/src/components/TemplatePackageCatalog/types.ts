@@ -64,6 +64,11 @@ export interface ICatalogFilters {
 export interface ICatalogNotification {
   intent: 'success' | 'warning' | 'error'
   text: string
+  /**
+   * Lines listed under the text as they are, in a list named by `label`: the errors
+   * sp-js-provisioning logged while a cloud template's hub dependencies were provisioned.
+   */
+  details?: { label: string; lines: string[] }
 }
 
 export interface ITemplatePackageCatalogState {
@@ -90,12 +95,17 @@ export interface ITemplatePackageCatalogState {
   compatibilityReport?: ICompatibilityReport
   notification?: ICatalogNotification
   /**
-   * A long-running detail-pane action in progress (publish-as-cloud template downloads
-   * and provisions to the hub; remove deletes the Maloppsett item). Drives the
+   * A long-running detail-pane action in progress (publishing or updating a cloud template
+   * downloads and provisions to the hub; remove deletes the Maloppsett item). Drives the
    * spinner + disabled state on the action buttons so the user gets feedback and
    * can't double-submit. (Import uses {@link installProgress} instead.)
    */
   busyAction?: 'publish' | 'remove'
+  /**
+   * Set as an installation's progress is closed: the details it replaced take the focus back
+   * (WCAG 2.4.3), and clear it.
+   */
+  focusDetails?: boolean
   /**
    * Whether the detail pane is shown in the <720px collapsed layout.
    */
@@ -145,6 +155,11 @@ export interface ITemplatePackageCatalogContext {
   closeDetail: () => void
   importPackage: (pkg: ICatalogPackage) => Promise<void>
   publishCentral: (pkg: ICatalogPackage) => Promise<void>
+  /**
+   * Update the package's cloud template registration (`Sentral`) to the catalog version in place:
+   * its hub dependencies are provisioned again and the Maloppsett item stays a cloud template.
+   */
+  updateCentral: (pkg: ICatalogPackage) => Promise<void>
   removePackage: (pkg: ICatalogPackage) => Promise<void>
   /**
    * Resolve the pending compatibility-conflict prompt: `true` continues the

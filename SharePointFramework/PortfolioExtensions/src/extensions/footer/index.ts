@@ -11,20 +11,21 @@ import '@pnp/sp/webs'
 import resource from 'SharedResources'
 import { Footer, IFooterProps } from 'components/Footer'
 import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
-import { isHubSite, ProjectAdminPermission } from 'pp365-shared-library'
+import { isHubSite, ProjectAdminPermission, renderReact, unmountReact } from 'pp365-shared-library'
 import SPDataAdapter from '../../data/SPDataAdapter'
 import { createElement } from 'react'
-import { render } from 'react-dom'
 import {
   HelpContentModel,
   IFooterApplicationCustomizerProperties,
   IGitHubRelease,
   InstallationEntry
 } from './types'
+import { PlaceholderTrace, tracePlaceholders } from './placeholderTrace'
 import strings from 'PortfolioExtensionsStrings'
 
 export default class FooterApplicationCustomizer extends BaseApplicationCustomizer<IFooterApplicationCustomizerProperties> {
   private _bottomPlaceholder: PlaceholderContent
+  private _footerElement: HTMLDivElement
   private _installEntries: InstallationEntry[]
   private _useAssistant: boolean
   private _hasAssistantAccess: boolean
@@ -33,11 +34,15 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   private _showFooter: boolean
   private _minimizeFooter: boolean
   private _globalSettings: Map<string, string>
+  /** Writes the placeholder trace when it is on (sp-dev-docs#11070), and nothing otherwise. */
+  private _trace: PlaceholderTrace = () => undefined
 
   /**
    * Initializes the settings and data required for the visible footer.
    */
   public async onInit(): Promise<void> {
+    // First, so the trace sees what SharePoint does during the set-up below.
+    this._trace = tracePlaceholders(this, this.context)
     await super.onInit()
     await SPDataAdapter.configure(this.context, {})
     this._portalDataService = SPDataAdapter.portalDataService
@@ -70,15 +75,25 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     ])
     this._installEntries = installEntries
     this._hasAssistantAccess = hasAssistantAccess
+    this._trace('setUp')
     this.context.application.navigatedEvent.add(this, this._handleNavigatedEvent)
+    // On a list page SharePoint may define its placeholders after the footer has started, and
+    // the first navigation may have come and gone: the footer showed on few loads there. It
+    // renders now, when the placeholders change, and on each navigation.
+    this.context.placeholderProvider.changedEvent.add(this, this._render)
+    this._render()
     return Promise.resolve()
   }
 
   private async _handleNavigatedEvent(): Promise<void> {
     if (!this._portalDataService?.isAvailable) return
-
     this._hasAssistantAccess = this._useAssistant ? await this._checkAssistantAccess() : false
+    this._render()
+  }
 
+  /** Renders the footer with what the customizer knows now. */
+  private _render(): void {
+    if (!this._portalDataService?.isAvailable) return
     this._renderFooter(PlaceholderName.Bottom, {
       installEntries: this._installEntries,
       loadGitHubReleases: () => this._fetchGitHubReleases(),
@@ -86,6 +101,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       loadLinks: () => this._fetchLinks(),
       loadFavoriteProjects: () => this._fetchFavoriteProjects(),
       pageContext: this.context.pageContext,
+      pagePath: window.location.pathname,
       portalUrl: this._portalDataService.url,
       useAssistant: this._useAssistant,
       hasAssistantAccess: this._hasAssistantAccess,
@@ -174,11 +190,19 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
         `pp365_help_content_${window.location.pathname}`,
         async () => {
           const project = await this._portalDataService.getProjectDetails()
+          // A member of «Minimum lesetilganger på hub» may not read `Prosjekter`: a site of the hub
+          // other than the hub is then a project, not the portfolio.
+          const isUnreadProject =
+            !project &&
+            !this._portalDataService.isListAvailable('PROJECTS') &&
+            !isHubSite(this.context.pageContext)
           const level = project
             ? project.isParentProject
               ? resource.Lists_HelpContent_Level_ParentProgram
               : resource.Lists_HelpContent_Level_Project
-            : resource.Lists_HelpContent_Level_Portfolio
+            : isUnreadProject
+              ? resource.Lists_HelpContent_Level_Project
+              : resource.Lists_HelpContent_Level_Portfolio
           let items = await this._portalDataService.getItems(
             resource.Lists_HelpContent_Title,
             HelpContentModel,
@@ -198,7 +222,8 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
         </View>`
             }
           )
-          items = items.filter((i) => i.matchPattern(window.location.pathname)).splice(0, 3)
+          const pagePath = this._getHelpPagePath(level)
+          items = items.filter((i) => i.matchPattern(pagePath)).splice(0, 3)
           for (let i = 0; i < items.length; i++) {
             if (items[i].externalUrl) {
               await items[i].fetchExternalContent(this.properties.publicMediaBasePath)
@@ -211,6 +236,25 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     } catch (e) {
       return []
     }
+  }
+
+  /**
+   * The address the help rows are matched against: the page's own, or on the site's address the
+   * front page's. Client-side navigation to a site, by the hub's title for one, leaves the address
+   * without the front page the help rows name (`SitePages/Home.aspx` on the hub,
+   * `SitePages/ProjectHome.aspx` on a project), and the help was unavailable there.
+   *
+   * @param level Help content level of the site
+   */
+  private _getHelpPagePath(level: string): string {
+    const path = window.location.pathname
+    const sitePath = new URL(this.context.pageContext.web.absoluteUrl).pathname.replace(/\/$/, '')
+    if (decodeURIComponent(path).replace(/\/$/, '') !== decodeURIComponent(sitePath)) return path
+    const frontPage =
+      level === resource.Lists_HelpContent_Level_Portfolio
+        ? 'SitePages/Home.aspx'
+        : 'SitePages/ProjectHome.aspx'
+    return `${sitePath}/${frontPage}`
   }
 
   /**
@@ -309,9 +353,9 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   }
 
   /**
-   * Render the footer in the specified placeholder. Creates a
-   * placeholder if it doesn't exist and adds a new div element
-   * to the placeholder where the footer will be rendered.
+   * Render the footer in the specified placeholder. Creates the placeholder, and the div element
+   * in it where the footer is rendered, if they don't exist; every navigation after that renders
+   * the same footer again with its new props, so one footer is mounted.
    *
    * @param name Placeholder name
    * @param footerProps Props for the `Footer` component
@@ -319,23 +363,31 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   private _renderFooter(name: PlaceholderName, footerProps: IFooterProps): void {
     if (!this._bottomPlaceholder) {
       this._bottomPlaceholder = this.context.placeholderProvider.tryCreateContent(name, {
-        onDispose: this._onDispose
+        onDispose: () => this._onDispose()
+      })
+      // On a list page whose placeholders SharePoint never defined, the content it hands out is
+      // not in the page, and the footer rendered there is never seen (sp-dev-docs#11070).
+      this._trace('tryCreateContent', {
+        acquired: !!this._bottomPlaceholder,
+        connected: this._bottomPlaceholder?.domElement.isConnected
       })
     }
-    const footerElement: HTMLDivElement = document.createElement('div')
-    render(createElement(Footer, footerProps), footerElement)
-
-    if (this._bottomPlaceholder.domElement.hasChildNodes()) {
-      this._bottomPlaceholder.domElement.removeChild(this._bottomPlaceholder.domElement.firstChild)
+    // SharePoint has no placeholder for it yet: its changed event renders it.
+    if (!this._bottomPlaceholder) return
+    if (!this._footerElement) {
+      this._footerElement = document.createElement('div')
+      this._bottomPlaceholder.domElement.replaceChildren(this._footerElement)
     }
-
-    this._bottomPlaceholder.domElement.append(footerElement)
+    renderReact(createElement(Footer, footerProps), this._footerElement)
   }
 
   /**
-   * Dispose the bottom placeholder when the footer is disposed.
+   * Unmounts the footer when SharePoint disposes its placeholder; the next navigation creates a
+   * new placeholder and renders the footer in it.
    */
   protected _onDispose(): void {
-    this._bottomPlaceholder.dispose()
+    if (this._footerElement) unmountReact(this._footerElement)
+    this._footerElement = undefined
+    this._bottomPlaceholder = undefined
   }
 }

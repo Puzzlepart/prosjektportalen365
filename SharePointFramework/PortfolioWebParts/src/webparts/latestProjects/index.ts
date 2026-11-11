@@ -3,7 +3,11 @@ import {
   PropertyPaneSlider,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { ILatestProjectsProps, LatestProjects } from 'components/LatestProjects'
+import {
+  ILatestProjectsProps,
+  LATEST_PROJECTS_DEFAULT_PROPS,
+  LatestProjects
+} from 'components/LatestProjects'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 
@@ -29,8 +33,8 @@ export default class LatestProjectsWebPart extends BasePortfolioWebPart<ILatestP
                 }),
                 PropertyPaneSlider('rowLimit', {
                   label: strings.RowLimitLabel,
-                  min: LatestProjects.defaultProps.minRowLimit,
-                  max: LatestProjects.defaultProps.maxRowLimit,
+                  min: LATEST_PROJECTS_DEFAULT_PROPS.minRowLimit,
+                  max: LATEST_PROJECTS_DEFAULT_PROPS.maxRowLimit,
                   step: 1
                 })
               ]

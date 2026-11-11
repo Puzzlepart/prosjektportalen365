@@ -1120,6 +1120,9 @@
   <data name="Lists_BenefitsAnalysis_Title" xml:space="preserve">
     <value>Benefit analysis and benefit management plan</value>
   </data>
+  <data name="Lists_BenefitsAnalysis_Url" xml:space="preserve">
+    <value>Lists/Benefit analysis and benefit management plan</value>
+  </data>
   <data name="Lists_BenefitsFollowup_Title" xml:space="preserve">
     <value>Benefits follow-up</value>
   </data>
@@ -2443,6 +2446,12 @@
   <data name="Security_SiteGroup_IdeaProcessors_Title" xml:space="preserve">
     <value>Idea processors</value>
   </data>
+  <data name="Security_SiteGroup_MinimumHubReadAccess_Description" xml:space="preserve">
+    <value>Read access to the lists and folders projects need from the hub, without access to the hub itself. Gives no access to lists with data about all projects.</value>
+  </data>
+  <data name="Security_SiteGroup_MinimumHubReadAccess_Title" xml:space="preserve">
+    <value>Minimum read access to hub</value>
+  </data>
   <data name="Security_SiteGroup_PortfolioAdministrators_Description" xml:space="preserve">
     <value>Portfolio administrators have by default full control over all project areas through the list &lt;a href="{site}/Lists/Tillatelseskonfigurasjon"&gt;Permission Configuration&lt;/a&gt;.</value>
   </data>
@@ -2897,7 +2906,7 @@
     <value>Hub-ID</value>
   </data>
   <data name="SiteFields_GtIconName_Description" xml:space="preserve">
-    <value>Name of the icon from UI Fabric. See https://uifabricicons.azurewebsites.net/.</value>
+    <value>Name of an icon from Prosjektportalen's Fluent UI icon set (e.g. "DataBarVertical"). Where the icon is shown, it renders as an outline and fills on hover. See https://react.fluentui.dev/?path=/docs/icons-catalog--docs. UI Fabric icon names (https://uifabricicons.azurewebsites.net/) are still supported.</value>
   </data>
   <data name="SiteFields_GtIconName_DisplayName" xml:space="preserve">
     <value>Icon name</value>
@@ -3410,7 +3419,7 @@
     <value>Color</value>
   </data>
   <data name="SiteFields_GtPortfolioColumnIconName_Description" xml:space="preserve">
-    <value>Name of the icon from UI Fabric. See https://uifabricicons.azurewebsites.net/.</value>
+    <value>Name of an icon from Prosjektportalen's Fluent UI icon set (e.g. "DataBarVertical"). Where the icon is shown, it renders as an outline and fills on hover. See https://react.fluentui.dev/?path=/docs/icons-catalog--docs. UI Fabric icon names (https://uifabricicons.azurewebsites.net/) are still supported. The list view itself only renders UI Fabric names (e.g. "CircleFill").</value>
   </data>
   <data name="SiteFields_GtPortfolioColumnIconName_DisplayName" xml:space="preserve">
     <value>Icon Name</value>
@@ -3440,7 +3449,7 @@
     <value>Column Value</value>
   </data>
   <data name="SiteFields_GtPortfolioFabricIcon_Description" xml:space="preserve">
-    <value>Name of the icon from UI Fabric. See https://uifabricicons.azurewebsites.net/.</value>
+    <value>Name of an icon from Prosjektportalen's Fluent UI icon set (e.g. "DataBarVertical"). Where the icon is shown, it renders as an outline and fills on hover. See https://react.fluentui.dev/?path=/docs/icons-catalog--docs. UI Fabric icon names (https://uifabricicons.azurewebsites.net/) are still supported.</value>
   </data>
   <data name="SiteFields_GtPortfolioFabricIcon_DisplayName" xml:space="preserve">
     <value>Icon</value>
@@ -3821,7 +3830,7 @@
     <value>Field name</value>
   </data>
   <data name="SiteFields_GtSecIcon_Description" xml:space="preserve">
-    <value>Name of icon from UI Fabric. See https://uifabricicons.azurewebsites.net/.</value>
+    <value>Name of an icon from Prosjektportalen's Fluent UI icon set (e.g. "DataBarVertical"). Where the icon is shown, it renders as an outline and fills on hover. See https://react.fluentui.dev/?path=/docs/icons-catalog--docs. UI Fabric icon names (https://uifabricicons.azurewebsites.net/) are still supported.</value>
   </data>
   <data name="SiteFields_GtSecIcon_DisplayName" xml:space="preserve">
     <value>Icon</value>

@@ -7,7 +7,10 @@ export abstract class BaseTask implements IBaseTask {
   public params: IBaseTaskParams
   public onProgress: OnProgressCallbackFunction
 
-  constructor(public taskName: string, public data: IProjectSetupData) {}
+  constructor(
+    public taskName: string,
+    public data: IProjectSetupData
+  ) {}
 
   /**
    * Initialize execute setting parameters and on progress callback function
@@ -74,4 +77,5 @@ export abstract class BaseTask implements IBaseTask {
   }
 }
 
+export * from './engineLog'
 export * from './types'

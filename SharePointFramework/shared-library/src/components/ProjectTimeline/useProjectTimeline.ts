@@ -1,4 +1,3 @@
-import { IColumn } from '@fluentui/react/lib/DetailsList'
 import { get, uniq } from '@microsoft/sp-lodash-subset'
 import sortArray from 'array-sort'
 import { IFilterProps } from '../FilterPanel/Filter/types'
@@ -11,6 +10,7 @@ import { IProjectTimelineProps, IProjectTimelineState } from './types'
 import { useProjectTimelineDataFetch } from './useProjectTimelineDataFetch'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import resource from 'SharedResources'
+import { IListColumn } from '../../types'
 
 /**
  * Component logic hook for `ProjectTimeline`
@@ -42,13 +42,15 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     const activeFiltersKeys = Object.keys(activeFilters)
     data.items = sortArray(data.items, 'data.sortOrder')
 
-    const projectId = data.items.find(
+    // The group of the page's own project goes first. Its id is the item's group, not the
+    // item's own id; the two only agree while every project title is unique.
+    const projectGroupId = data.items.find(
       (i) => i.data?.projectUrl === props.pageContext.site.absoluteUrl
-    )?.id
+    )?.group
 
-    if (projectId) {
-      const topGroup = data.groups.find((i) => i.id === projectId)
-      data.groups = [topGroup, ...data.groups.filter((grp) => grp?.id !== projectId)].filter(
+    if (projectGroupId !== undefined) {
+      const topGroup = data.groups.find((i) => i.id === projectGroupId)
+      data.groups = [topGroup, ...data.groups.filter((grp) => grp?.id !== projectGroupId)].filter(
         (grp) => grp
       )
     }
@@ -112,7 +114,6 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     const hiddenItems = config.filter((item) => !item?.timelineFilter).map((item) => item.title)
     return columns.map((col) => {
       const uniqueValues = uniq(
-        // eslint-disable-next-line prefer-spread
         [].concat.apply(
           [],
           data.items
@@ -132,8 +133,8 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
               ? value === '1'
                 ? strings.BooleanYes
                 : value === '0'
-                ? strings.BooleanNo
-                : value
+                  ? strings.BooleanNo
+                  : value
               : value
           return { name: name, value, selected }
         })
@@ -155,7 +156,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
    * @param column Column
    * @param selectedItems Selected items
    */
-  const onFilterChange = (column: IColumn, selectedItems: IFilterItemProps[]) => {
+  const onFilterChange = (column: IListColumn, selectedItems: IFilterItemProps[]) => {
     const { activeFilters } = state
 
     if (selectedItems.length > 0) {

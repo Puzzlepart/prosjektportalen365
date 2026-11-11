@@ -1,4 +1,3 @@
-import '@fluentui/react/dist/css/fabric.min.css'
 import {
   IPropertyPaneConfiguration,
   PropertyPaneDropdown,
@@ -145,6 +144,41 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   max: 350,
                   step: 10,
                   value: 250
+                }),
+                PropertyPaneTextField('excludeSections', {
+                  label: strings.ExcludeSectionsFieldLabel,
+                  description: strings.ExcludeSectionsFieldDescription,
+                  multiline: true,
+                  resizable: true,
+                  rows: 4
+                })
+              ]
+            },
+            {
+              groupName: strings.SnapshotGroupName,
+              groupFields: [
+                // Unset on pages saved before the property existed, which keep the dialog.
+                PropertyPaneToggle('snapshotInDialog', {
+                  label: strings.SnapshotInDialogFieldLabel,
+                  onText: strings.SnapshotInDialogOnText,
+                  offText: strings.SnapshotInDialogOffText,
+                  checked: this.properties.snapshotInDialog !== false
+                })
+              ]
+            },
+            {
+              groupName: strings.MultiReportingGroupName,
+              groupFields: [
+                PropertyPaneToggle('multiReporting', {
+                  label: strings.MultiReportingToggleLabel
+                }),
+                PropertyPaneTextField('subProjects', {
+                  label: strings.SubProjectsFieldLabel,
+                  description: strings.SubProjectsFieldDescription,
+                  multiline: true,
+                  resizable: true,
+                  rows: 6,
+                  disabled: !this.properties.multiReporting
                 })
               ]
             }

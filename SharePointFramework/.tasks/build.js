@@ -7,7 +7,7 @@
  *   1. Generate `.generated-solution-config.json` from `channels/<name>.json`
  *   2. Spawn `modifySolutionFiles.js` to swap in the channel solution + manifest IDs
  *   3. Spawn `setBundleConfig.js` to honour `SERVE_BUNDLE_REGEX`, if set
- *   4. Run `gulp bundle --ship` and `gulp package-solution --ship`
+ *   4. Run `heft build --clean --production` and `heft package-solution --production`
  *   5. (always) Revert manifests + bundle config so the working tree is clean
  */
 const argv = require('yargs').argv
@@ -31,7 +31,10 @@ const solutionConfigFile = joinPath(process.cwd(), 'config', '.generated-solutio
 
 function run(cmd, args = []) {
   log(`${colors.cyan(cmd)} ${args.join(' ')}`, 'build')
-  const result = spawnSync(cmd, args, { stdio: 'inherit', shell: true, env: process.env })
+  // With `shell: true` Node joins the arguments with spaces and no quoting, so an absolute path
+  // with a space in it (a Windows profile folder, for one) would split in two.
+  const quoted = args.map((arg) => (/\s/.test(arg) && !/^".*"$/.test(arg) ? `"${arg}"` : arg))
+  const result = spawnSync(cmd, quoted, { stdio: 'inherit', shell: true, env: process.env })
   if (result.status !== 0) {
     throw new Error(`${cmd} ${args.join(' ')} exited with code ${result.status}`)
   }
@@ -58,8 +61,8 @@ try {
   }
   run('node', [joinPath(tasksDir, 'setBundleConfig.js')])
 
-  run('gulp', ['bundle', '--ship'])
-  run('gulp', ['package-solution', '--ship'])
+  run('heft', ['build', '--clean', '--production'])
+  run('heft', ['package-solution', '--production'])
 } catch (err) {
   log(colors.red(err.message || String(err)), 'build')
   process.exitCode = 1

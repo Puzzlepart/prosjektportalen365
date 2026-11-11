@@ -15,7 +15,9 @@ central **`prosjektportalen-hosting`** catalog. A portal administrator can:
   item that points at the hosting repo. Project-level content (template, extensions,
   list content incl. folder structures) is pulled straight from the `.pppkg` at
   project-setup time.
-- Update or remove already-imported / central templates.
+- Update or remove already-imported / central templates. A central template is updated in
+  place («Oppdater skymal til v…») and stays `Sentral`; copying it to the installation adds an
+  `Importert` item beside it.
 
 ## How it is wired
 
@@ -82,10 +84,10 @@ remove, publish-as-cloud-template — to the `telemetryUrl` endpoint
 (prosjektportalen-assist by default, admin-login protected storage).
 
 Each event contains: action + success/error (with a truncated error message),
-package id/version/type, previously registered version (updates/removals), the
-installed Prosjektportalen version, the tenant host (`*.sharepoint.com`), the hub
-site URL, the AAD tenant id, and a client timestamp. Nothing about end users or
-project content is sent.
+package id/version/type, previously registered version (updates, a cloud template's
+too, and removals), the installed Prosjektportalen version, the tenant host
+(`*.sharepoint.com`), the hub site URL, the AAD tenant id, and a client timestamp.
+Nothing about end users or project content is sent.
 
 Telemetry never blocks or fails a catalog action — failures are swallowed with an
 Info log entry (`(TelemetryService)`).

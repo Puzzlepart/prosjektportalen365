@@ -4,3 +4,11 @@
  * without applying a template.
  */
 export const NO_TEMPLATE_ID = -1
+
+/**
+ * The key in local storage of the Quick Launch that ProjectWebParts saves before the setup runs
+ * again («Kjør oppsettveiviser») or makes the project a parent project: `{ webUrl, nodes }`, the
+ * nodes as `getMenuState` returns them. The setup adds back the links the owners added, which the
+ * template's menu removed.
+ */
+export const NAVIGATION_NODES_STORAGE_KEY = 'pp_navigationNodes'

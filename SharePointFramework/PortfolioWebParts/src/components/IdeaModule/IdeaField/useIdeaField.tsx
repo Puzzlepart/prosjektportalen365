@@ -1,8 +1,13 @@
-import { IPersonaProps, ITag, Link } from '@fluentui/react'
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { IIdeaFieldProps } from './types'
-import { Persona, Tag } from '@fluentui/react-components'
-import { getFluentIcon, OverflowTagMenu } from 'pp365-shared-library'
+import { Link, Persona, Tag } from '@fluentui/react-components'
+import {
+  formatDay,
+  getFluentIcon,
+  IPersonaItem,
+  ITagItem,
+  OverflowTagMenu
+} from 'pp365-shared-library'
 import {
   ChevronCircleRightFilled,
   EarthFilled,
@@ -54,19 +59,15 @@ export function useIdeaField(props: IIdeaFieldProps) {
     const renderMap = new Map<string, (value: any) => JSX.Element>([
       [
         'User',
-        ([user]: IPersonaProps[]) => {
+        ([user]: IPersonaItem[]) => {
           if (user) {
             return (
               <Persona
-                {...user}
-                title={user.text}
                 name={user.text}
+                secondaryText={user.secondaryText}
                 size='small'
-                avatar={{
-                  image: {
-                    src: user.imageUrl
-                  }
-                }}
+                // The picture is beside the name: read once, not twice (WCAG 1.1.1).
+                avatar={{ 'aria-hidden': true, image: { src: user.imageUrl } }}
                 style={{ marginTop: 6 }}
               />
             )
@@ -77,21 +78,16 @@ export function useIdeaField(props: IIdeaFieldProps) {
       ],
       [
         'UserMulti',
-        (users: IPersonaProps[]) => {
+        (users: IPersonaItem[]) => {
           return (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {users.map((user, key) => (
                 <Persona
                   key={key}
-                  {...user}
-                  title={user.text}
                   name={user.text}
+                  secondaryText={user.secondaryText}
                   size='small'
-                  avatar={{
-                    image: {
-                      src: user.imageUrl
-                    }
-                  }}
+                  avatar={{ 'aria-hidden': true, image: { src: user.imageUrl } }}
                   style={{ marginTop: 6 }}
                 />
               ))}
@@ -101,7 +97,7 @@ export function useIdeaField(props: IIdeaFieldProps) {
       ],
       [
         'TaxonomyFieldTypeMulti',
-        (tags: ITag[]) => (
+        (tags: ITagItem[]) => (
           <div style={{ marginTop: 6 }}>
             <OverflowTagMenu
               text={props.model.displayName}
@@ -113,7 +109,7 @@ export function useIdeaField(props: IIdeaFieldProps) {
       ],
       [
         'TaxonomyFieldType',
-        ([tag]: ITag[]) => (
+        ([tag]: ITagItem[]) => (
           <div style={{ marginTop: 6 }}>
             <OverflowTagMenu text={props.model.displayName} tags={[tag.name]} icon={icon} />
           </div>
@@ -141,14 +137,15 @@ export function useIdeaField(props: IIdeaFieldProps) {
               dangerouslySetInnerHTML={{
                 __html: safeValue.replace(/\n/g, '<br />')
               }}
-            ></div>
+            />
           )
         }
       ],
       [
         'DateTime',
         (date: Date) => {
-          return <div title={date.toLocaleDateString()}>{date.toLocaleDateString()}</div>
+          const text = formatDay(date)
+          return <div title={text}>{text}</div>
         }
       ],
       [
@@ -221,7 +218,7 @@ export function useIdeaField(props: IIdeaFieldProps) {
       if (renderMap.has(props.model.type)) {
         return renderMap.get(props.model.type)(value)
       } else {
-        return <div title={value.toString()}>{value}</div>
+        return <div title={value.toString()}>{value as ReactNode}</div>
       }
     } else {
       return null

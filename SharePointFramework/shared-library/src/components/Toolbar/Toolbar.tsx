@@ -10,20 +10,31 @@ import { useToolbarItemRender } from './useToolbarItemRender'
 import styles from './Toolbar.module.scss'
 import { IToolbarProps } from './types'
 import strings from 'SharedLibraryStrings'
-import { customLightTheme } from '../../util'
+import { customLightTheme, withDefaults } from '../../util'
 
-export const Toolbar: FC<IToolbarProps> = (props) => {
+const TOOLBAR_DEFAULT_PROPS: Partial<IToolbarProps> = {
+  items: [],
+  farItems: []
+}
+
+export const Toolbar: FC<IToolbarProps> = (incomingProps) => {
+  const props = withDefaults(incomingProps, TOOLBAR_DEFAULT_PROPS)
   const fluentProviderId = useId('fp-toolbar')
   const { renderToolbarItem } = useToolbarItemRender()
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme} className={styles.root}>
         <FluentToolbar className={styles.toolbar}>
-          {props.items.map(renderToolbarItem)}
+          {props.items.map((item, index) => (
+            // A ListMenuItem has no key of its own; the toolbar's order is stable, so the index is one.
+            <React.Fragment key={index}>{renderToolbarItem(item)}</React.Fragment>
+          ))}
         </FluentToolbar>
         {props.farItems && (
           <FluentToolbar className={styles.toolbar}>
-            {props.farItems.map(renderToolbarItem)}
+            {props.farItems.map((item, index) => (
+              <React.Fragment key={index}>{renderToolbarItem(item)}</React.Fragment>
+            ))}
           </FluentToolbar>
         )}
         {props.filterPanel && (
@@ -39,7 +50,3 @@ export const Toolbar: FC<IToolbarProps> = (props) => {
 }
 
 Toolbar.displayName = 'Toolbar'
-Toolbar.defaultProps = {
-  items: [],
-  farItems: []
-}

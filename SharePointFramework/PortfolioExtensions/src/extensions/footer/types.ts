@@ -1,7 +1,5 @@
-/* eslint-disable max-classes-per-file */
 import { Version } from '@microsoft/sp-core-library'
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface IFooterApplicationCustomizerProperties {
   publicMediaBasePath: string
 }
@@ -69,6 +67,8 @@ export interface IGitHubReleaseAsset {
   id: number
   node_id: string
   name: string
+  // GitHub's API answers null for an asset without a label.
+  // eslint-disable-next-line @rushstack/no-new-null
   label: null | string
   uploader: any
   content_type: any
@@ -91,7 +91,10 @@ export class HelpContentModel {
   public externalUrl: string
   private _publicMediaBasePath: string
 
-  constructor(spItem: Record<string, any>, public web: any) {
+  constructor(
+    spItem: Record<string, any>,
+    public web: any
+  ) {
     this.title = spItem.Title
     this.iconName = spItem.GtIconName
     this.urlPattern = spItem.GtURL
@@ -122,7 +125,9 @@ export class HelpContentModel {
       md = this._removeJekyllHeader(md)
       md = this._fixImageLinks(md)
       this.markdownContent = md
-    } catch (error) {}
+    } catch {
+      // Without the external page, the help shows its own text only.
+    }
   }
 
   /**
@@ -134,33 +139,25 @@ export class HelpContentModel {
   }
 
   /**
-   * Fix media links
+   * Points the relative media links (`./media/...`) at the public media base path. Each link ends
+   * at its own closing parenthesis, so two images on one line stay two links.
    *
    * @param markdownContent Markdown content
    */
   private _fixImageLinks(markdownContent: string) {
-    let md = markdownContent
-    const regex = /\((\.\/media\/(.+))\)/gm
-    let m: RegExpExecArray
-    while ((m = regex.exec(md)) !== null) {
-      if (m.index === regex.lastIndex) {
-        regex.lastIndex++
-      }
-      const [, oldImageLink, image] = m
-      const newImageLink = `${this._publicMediaBasePath}/${image}`.replace(/ /g, '%20')
-      md = md.replace(oldImageLink, newImageLink)
-    }
-    return md
+    return markdownContent.replace(
+      /\(\.\/media\/([^)]+)\)/g,
+      (_, image: string) => `(${`${this._publicMediaBasePath}/${image}`.replace(/ /g, '%20')})`
+    )
   }
 
   /**
-   * Removed Jekyll header data using regex
-   *
-   * @see https://regex101.com/r/dvc3qc/1
+   * Removes the Jekyll front matter, the block between the two `---` lines that opens the file.
+   * A `---` further down is a horizontal rule and stays, with everything before it.
    *
    * @param md Markdown content
    */
   private _removeJekyllHeader(md: string) {
-    return md.replace(/^\-\-\-([\n\w\W\s]+)\-\-\-$/gm, '')
+    return md.replace(/^\s*---\r?\n[\s\S]*?\r?\n---[ \t]*(\r?\n|$)/, '')
   }
 }

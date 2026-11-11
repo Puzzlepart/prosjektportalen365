@@ -6,7 +6,19 @@
 
   .icon {
     display: inline-flex;
+    gap: 1px;
     font-size: 20px;
+  }
+
+  &:hover .icon,
+  &:focus-visible .icon {
+    :global(.fui-Icon-filled) {
+      display: inline;
+    }
+
+    :global(.fui-Icon-regular) {
+      display: none;
+    }
   }
 }
 

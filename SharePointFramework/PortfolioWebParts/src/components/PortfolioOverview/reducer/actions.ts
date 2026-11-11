@@ -1,4 +1,3 @@
-import { IObjectWithKey, Selection } from '@fluentui/react'
 import { createAction } from '@reduxjs/toolkit'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import {
@@ -8,6 +7,7 @@ import {
 } from 'pp365-shared-library/lib/models'
 import { OnColumnContextMenu } from '../../List'
 import { IColumnFormPanel } from '../ColumnFormPanel/types'
+import { PortfolioInstance } from 'data'
 
 /**
  * `STARTING_DATA_FETCH`: Action dispatched when data fetch is started
@@ -24,6 +24,8 @@ export const DATA_FETCHED = createAction<{
   managedProperties: string[]
   isUserInPortfolioManagerGroup: boolean
   showChildProjectInfoInProgram: boolean
+  /** The portfolios a merged view could not read. */
+  failedPortfolios?: PortfolioInstance[]
 }>('DATA_FETCHED')
 
 /**
@@ -98,9 +100,10 @@ export const SET_SORT = createAction<{
 }>('SET_SORT')
 
 /**
- * `SELECTION_CHANGED`: Action dispatched when user changes the selection in the list
+ * `SELECTION_CHANGED`: Action dispatched when user changes the selection in the list, with the
+ * selected items
  */
-export const SELECTION_CHANGED = createAction<Selection<IObjectWithKey>>('SELECTION_CHANGED')
+export const SELECTION_CHANGED = createAction<Record<string, any>[]>('SELECTION_CHANGED')
 
 /**
  * `TOGGLE_MERGED_VIEW`: Action dispatched when user toggles merged view mode

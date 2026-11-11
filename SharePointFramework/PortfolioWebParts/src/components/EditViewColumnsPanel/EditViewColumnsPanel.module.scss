@@ -1,8 +1,4 @@
-@import "~@fluentui/react/dist/sass/References.scss";
-
 .root {
-  position: inherit;
-
   .columnItem {
     display: flex;
     flex-direction: row;
@@ -10,12 +6,19 @@
     align-items: center;
     height: 20px;
     margin: 4px 0;
-    outline: 0;
     padding: 6px;
 
     &:hover {
       background-color: var(--colorBrandBackground2);
 
+      .columnItemActions {
+        display: flex;
+      }
+    }
+
+    // The row drags with the mouse only; the keyboard moves a column with the buttons, which show
+    // while the focus is in the row, the way to them without a pointer.
+    &:focus-within {
       .columnItemActions {
         display: flex;
       }
@@ -43,9 +46,12 @@
     }
   }
 
+  // In the header's flow, so the drawer centres them on the close button's line and the header
+  // grows to hold them; absolutely placed from the empty heading they sat 16px lower and reached
+  // past the header, where the divider drawn on scroll cut through them.
   .panelActions {
-    display: block;
-    position: absolute;
-    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: var(--spacingHorizontalXS);
   }
 }

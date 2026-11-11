@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 import { ProjectPropertyEdit } from './ProjectPropertyEdit'
 import { IProjectPropertyProps } from './types'
 import { useProjectProperty } from './useProjectProperty'
+import styles from './ProjectProperty.module.scss'
 
 export const ProjectProperty: FC<IProjectPropertyProps> = (props) => {
   const { displayMode, renderValueForField } = useProjectProperty(props)
@@ -12,12 +13,15 @@ export const ProjectProperty: FC<IProjectPropertyProps> = (props) => {
       return <ProjectPropertyEdit {...props} />
     }
     default: {
+      // A term and its description in the properties' description list.
       return (
         <div style={props.style}>
-          <Text title={props.model.displayName} weight='semibold' size={200} block truncate>
-            {props.model.displayName}
-          </Text>
-          <Text color='var(--colorNeutralForeground2)'>{renderValueForField()}</Text>
+          <dt>
+            <Text title={props.model.displayName} weight='semibold' size={200} block truncate>
+              {props.model.displayName}
+            </Text>
+          </dt>
+          <dd className={styles.value}>{renderValueForField()}</dd>
         </div>
       )
     }

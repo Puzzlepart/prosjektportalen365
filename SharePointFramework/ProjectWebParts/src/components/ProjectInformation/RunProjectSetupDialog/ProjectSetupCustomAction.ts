@@ -1,18 +1,17 @@
 import resource from 'SharedResources'
+import { PROJECT_SETUP_COMPONENT_ID } from '../projectSetupComponentId'
 
 /**
  * Creates a custom action for running the setup wizard.
- * Unlike the parent template, this does NOT include forceTemplate,
- * allowing the user to select which template to apply.
+ * Unlike the parent template, `forceTemplate` names no template
+ * (`__SELECT_TEMPLATE__`), so the user selects which template to apply,
+ * while the setup still knows it runs again: it skips the already set up
+ * check and adds back the links the owners had added to the menu.
  */
-export const createProjectSetupCustomAction = (
-  progressTitle: string,
-  lcid: number
-): Record<string, any> => ({
+export const createProjectSetupCustomAction = (progressTitle: string): Record<string, any> => ({
   Title: 'ProjectSetup',
   Location: 'ClientSideExtension.ApplicationCustomizer',
-  ClientSideComponentId:
-    lcid === 1044 ? 'ce34553d-ab47-4107-8dd1-e980d953996d' : 'c0c51378-2c43-4e16-a3ed-86f01c6f358e',
+  ClientSideComponentId: PROJECT_SETUP_COMPONENT_ID,
   ClientSideComponentProperties: JSON.stringify({
     templatesLibrary: resource.Lists_TemplateLibrary_Url,
     extensionsLibrary: resource.Lists_ProjectExtensions_Title,

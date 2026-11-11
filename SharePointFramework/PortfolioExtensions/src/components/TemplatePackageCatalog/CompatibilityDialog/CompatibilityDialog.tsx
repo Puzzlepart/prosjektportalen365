@@ -88,15 +88,15 @@ export const CompatibilityDialog: FC = () => {
     resolution === 'overwrite'
       ? strings.CatalogResolutionOverwrite
       : resolution === 'skip'
-      ? strings.CatalogResolutionSkip
-      : strings.CatalogResolutionBlocked
+        ? strings.CatalogResolutionSkip
+        : strings.CatalogResolutionBlocked
 
   const resolutionClass = (resolution: ConflictResolution): string =>
     resolution === 'overwrite'
       ? styles.overwriteTag
       : resolution === 'skip'
-      ? styles.skipTag
-      : styles.blockedTag
+        ? styles.skipTag
+        : styles.blockedTag
 
   const conflicts = [...(report?.conflicts ?? [])].sort(
     (a, b) => ORDER[a.resolution] - ORDER[b.resolution]
@@ -116,7 +116,14 @@ export const CompatibilityDialog: FC = () => {
             <Text block id={introId} className={styles.intro}>
               {strings.CatalogCompatibilityIntro}
             </Text>
-            <div className={styles.list} role='list'>
+            {/* The list scrolls in its own box, with nothing in it to focus: the box takes the
+              focus so the keyboard can scroll it (WCAG 2.1.1). */}
+            <div
+              className={styles.list}
+              role='list'
+              tabIndex={0}
+              aria-label={strings.CatalogCompatibilityConflictsLabel}
+            >
               {conflicts.map((conflict, index) => (
                 <div key={index} className={styles.row} role='listitem'>
                   <Tag

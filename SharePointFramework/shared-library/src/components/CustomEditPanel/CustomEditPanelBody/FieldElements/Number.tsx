@@ -61,7 +61,7 @@ export const Number: FieldElementComponent = ({ field }) => {
 
   const handleChange = (_, data) => {
     validateValue(data.value)
-    context.model.set(field, data.value || null)
+    void context.model.set(field, data.value || null)
   }
 
   useEffect(() => {

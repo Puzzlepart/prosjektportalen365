@@ -1,4 +1,5 @@
 import { stringIsNullOrEmpty } from '@pnp/core'
+import { formatShortDate } from 'pp365-shared-library'
 import React, { FC, useContext } from 'react'
 import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection/BaseSection'
@@ -22,12 +23,11 @@ export const ProjectPropertiesSection: FC = () => {
         )
         if (field && !stringIsNullOrEmpty(fieldValuesAsText[fieldName])) {
           if (field.TypeAsString === 'DateTime' || field.TypeAsString === 'Date') {
-            const date = new Date(fieldValues[fieldName])
             return (
               <StatusSectionField
                 key={fieldName}
                 label={field.Title}
-                value={date.toLocaleDateString()}
+                value={formatShortDate(fieldValues[fieldName], false, fieldValuesAsText[fieldName])}
               />
             )
           }
@@ -49,8 +49,9 @@ export const ProjectPropertiesSection: FC = () => {
   return (
     <BaseSection>
       <div className={styles.projectPropertiesSection}>
-        <StatusElement />
-        <div className={styles.fields}>{renderFields()}</div>
+        <StatusElement asHeading />
+        {/* The fields' names and values, paired as a description list (WCAG 1.3.1). */}
+        <dl className={styles.fields}>{renderFields()}</dl>
       </div>
     </BaseSection>
   )

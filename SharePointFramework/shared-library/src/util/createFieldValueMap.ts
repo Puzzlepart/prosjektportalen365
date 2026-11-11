@@ -1,6 +1,7 @@
-import { IPersonaProps } from '@fluentui/react'
 import { ISPFieldUser } from '../interfaces'
+import { IPersonaItem } from '../types'
 import { EditableSPFieldValue } from '../models/EditableSPFieldValue'
+import { readStoredDay } from './formatDate'
 import { getUserPhoto } from './getUserPhoto'
 
 /**
@@ -14,8 +15,8 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
       ({ value, $ }) => {
         try {
           if ($ && typeof $ === 'object') {
-            const url = $['Url'] ?? ''
-            const description = $['Description'] ?? url
+            const url = $.Url ?? ''
+            const description = $.Description ?? url
             return { url, description }
           }
 
@@ -69,12 +70,13 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
       }
     ],
     ['Date', ({ $ }) => new Date($)],
-    ['DateTime', ({ $ }) => new Date($)],
+    // The day SharePoint shows, read from its text, whatever the machine's time zone.
+    ['DateTime', ({ $, value }) => readStoredDay($, value)],
     ['MultiChoice', ({ value }) => value?.split(', ')],
     [
       'User',
       ({ $ }) =>
-        ([$].filter(Boolean) as ISPFieldUser[])?.map<IPersonaProps>(
+        ([$].filter(Boolean) as ISPFieldUser[])?.map<IPersonaItem>(
           ({ Id: key, Title: text, EMail: secondaryText }) => ({
             key,
             text,
@@ -86,7 +88,7 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
     [
       'UserMulti',
       ({ $ }) =>
-        ($ as ISPFieldUser[])?.map<IPersonaProps>(
+        ($ as ISPFieldUser[])?.map<IPersonaItem>(
           ({ Id: key, Title: text, EMail: secondaryText }) => ({
             key,
             text,

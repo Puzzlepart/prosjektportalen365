@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react'
 import { AssignFrom, IPnPClientStore, PnPClientStorage, dateAdd } from '@pnp/core'
 import { ConsoleListener, Logger } from '@pnp/logging'
 import { IWeb, SPFI, spfi } from '@pnp/sp/presets/all'
@@ -12,7 +11,8 @@ import {
   ProjectPhaseModel,
   SPField
 } from '../../models'
-import { getClassProperties, tryParseJson } from '../../util'
+import { getTermStore } from '../../taxonomy'
+import { getClassProperties, tryParseJson, format } from '../../util'
 import {
   ILocalProjectInformationItemContext,
   IPhaseField,
@@ -20,6 +20,7 @@ import {
   IProjectInformationData
 } from './types'
 import { DataService } from '../DataService'
+import strings from 'SharedLibraryStrings'
 import '@pnp/sp/presets/all'
 
 export class ProjectDataService extends DataService<IProjectDataServiceParams> {
@@ -102,7 +103,7 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
       obj[key] = format(this._storageKeys[key], this._params.siteId.replace(/-/g, ''))
       return obj
     }, {})
-    this._storage.deleteExpired()
+    void this._storage.deleteExpired()
   }
 
   /**
@@ -115,7 +116,8 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
   }
 
   /**
-   * Get local project information item context and cache it for 15 minutes.
+   * Get local project information item context and cache it for 15 minutes. Returns `null` when
+   * the site has no properties list, the list has no item or the list cannot be read.
    */
   private async _getLocalProjectInformationItemContext(): Promise<ILocalProjectInformationItemContext> {
     const context: Partial<ILocalProjectInformationItemContext> = await this._storage.getOrPut(
@@ -164,6 +166,7 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
       },
       dateAdd(new Date(), 'minute', 15)
     )
+    if (!context) return null
     const list = this.web.lists.getById(context.listId)
     const item = list.items.getById(context.itemId)
     return {
@@ -297,24 +300,26 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
    *
    * @param phase Phase
    * @param phaseField Phase field
+   * @param syncToHub Whether to update the project's entity in the hub too (default `true`).
+   * `false` leaves the hub to the caller, which then decides what a failed hub update means.
+   *
+   * @returns The phase properties written, for the caller to write to the hub
    */
   public async updateProjectPhase(
     phase: ProjectPhaseModel,
-    phaseField: IPhaseField
-  ): Promise<void> {
+    phaseField: IPhaseField,
+    syncToHub = true
+  ): Promise<Record<string, string>> {
     const properties = {
       [phaseField.textField]: phase.toString(),
       [`${phaseField.fieldName}Text`]: phase.name
     }
-    try {
-      const propertyItemContext = await this._getLocalProjectInformationItemContext()
-      if (propertyItemContext) await propertyItemContext.item.update(properties)
-      if (this._params.entityService) {
-        await this._params.entityService.updateEntityItem(this._params.siteId, properties)
-      }
-    } catch (error) {
-      throw error
+    const propertyItemContext = await this._getLocalProjectInformationItemContext()
+    if (propertyItemContext) await propertyItemContext.item.update(properties)
+    if (syncToHub && this._params.entityService) {
+      await this._params.entityService.updateEntityItem(this._params.siteId, properties)
     }
+    return properties
   }
 
   /**
@@ -330,7 +335,11 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
   ): Promise<IProjectInformationData | null> {
     try {
       const propertyItemContext = await this._getLocalProjectInformationItemContext()
-      if (!propertyItemContext) throw new Error('Local property item not found.')
+      if (!propertyItemContext) {
+        throw new Error(
+          format(strings.ProjectPropertiesNotFoundErrorText, this._params.propertiesListName)
+        )
+      }
       await propertyItemContext.item.update(properties)
       if (returnData) {
         return await this.getProjectInformationData()
@@ -352,10 +361,11 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
     checklistData: { [termGuid: string]: ProjectPhaseChecklistData } = {}
   ): Promise<ProjectPhaseModel[]> {
     const [terms, web] = await Promise.all([
-      this._sp.termStore.sets
-        .getById(termSetId)
+      getTermStore(this._sp.web)
+        .sets.getById(termSetId)
         .terms.select('*', 'localProperties')
-        .using(DefaultCaching)(),
+        .using(DefaultCaching)
+        .all(),
       this._sp.web.select('Language')()
     ])
     return terms.map(
@@ -370,10 +380,11 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
    */
   public async getDocumentTypes(termSetId: string): Promise<DocumentTypeModel[]> {
     const [terms, web] = await Promise.all([
-      this._sp.termStore.sets
-        .getById(termSetId)
+      getTermStore(this._sp.web)
+        .sets.getById(termSetId)
         .terms.select('*', 'localProperties')
-        .using(DefaultCaching)(),
+        .using(DefaultCaching)
+        .all(),
       this._sp.web.select('Language')()
     ])
     return terms.map((term) => new DocumentTypeModel(term, termSetId, web.Language))
@@ -448,6 +459,8 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
    * Clear cache
    */
   public clearCache(): void {
+    // Outside a page (the integration tests in Node) PnPjs keeps its cache in memory instead.
+    if (typeof sessionStorage === 'undefined') return
     Object.keys(this._storageKeys).forEach((name) => {
       const key = this.getStorageKey(name)
       Logger.write(`(ProjectDataService) Clearing key ${key} from sessionStorage.`)

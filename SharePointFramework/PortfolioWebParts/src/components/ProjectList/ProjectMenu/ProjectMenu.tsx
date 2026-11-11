@@ -1,8 +1,7 @@
 import {
-  Link,
   Menu,
   MenuButton,
-  MenuItem,
+  MenuItemLink,
   MenuList,
   MenuPopover,
   MenuTrigger,
@@ -14,6 +13,7 @@ import strings from 'PortfolioWebPartsStrings'
 import * as React from 'react'
 import { FC } from 'react'
 import { IProjectMenu } from './types'
+import { useProjectMenu } from './useProjectMenu'
 const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular)
 
 const useStyles = makeStyles({
@@ -27,11 +27,17 @@ const useStyles = makeStyles({
 
 export const ProjectMenu: FC<IProjectMenu> = (props) => {
   const styles = useStyles()
+  const { open, onOpenChange, tooltip } = useProjectMenu()
 
   return (
-    <Menu>
+    <Menu open={open} onOpenChange={onOpenChange}>
       <MenuTrigger disableButtonEnhancement>
-        <Tooltip content={strings.ProjectListQuickLaunch} relationship='label' withArrow>
+        <Tooltip
+          {...tooltip}
+          content={strings.ProjectListQuickLaunch}
+          relationship='label'
+          withArrow
+        >
           <MenuButton
             className={props.appearance === 'subtle' ? styles.menuButton : ''}
             appearance={props.appearance}
@@ -46,14 +52,14 @@ export const ProjectMenu: FC<IProjectMenu> = (props) => {
           {props.context.quickLaunchMenu
             ?.sort((a, b) => a.order - b.order)
             ?.map((quickLaunchItem, idx) => (
-              <MenuItem key={idx}>
-                <Link
-                  href={(props.project?.url || '') + quickLaunchItem.relativeUrl}
-                  title={quickLaunchItem.text}
-                >
-                  {quickLaunchItem.text}
-                </Link>
-              </MenuItem>
+              // The menu item is the link: a link inside a menu item was out of the keyboard's
+              // reach, as the item takes the focus and did nothing on Enter (WCAG 2.1.1).
+              <MenuItemLink
+                key={idx}
+                href={(props.project?.url || '') + quickLaunchItem.relativeUrl}
+              >
+                {quickLaunchItem.text}
+              </MenuItemLink>
             ))}
         </MenuList>
       </MenuPopover>

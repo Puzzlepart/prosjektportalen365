@@ -1,11 +1,16 @@
-import { Panel } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import styles from './ColumnFormPanel.module.scss'
 import { useColumnFormPanel } from './useColumnFormPanel'
 import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
-import { ColumnSearchPropertyField, FieldContainer, customLightTheme } from 'pp365-shared-library'
+import {
+  BasePanel,
+  ColumnSearchPropertyField,
+  FieldContainer,
+  UserMessage,
+  customLightTheme
+} from 'pp365-shared-library'
 import { ColumnDataTypeField } from 'pp365-shared-library/lib/components/ItemColumn/ColumnDataTypeField'
 import {
   Combobox,
@@ -15,8 +20,8 @@ import {
   Switch,
   IdPrefixProvider
 } from '@fluentui/react-components'
-import _ from 'lodash'
 import { visibilityOptions } from './types'
+import { lockedWhenEditing } from '../../List/lockedWhenEditing'
 
 export const ColumnFormPanel: FC = () => {
   const context = useContext(PortfolioOverviewContext)
@@ -28,42 +33,54 @@ export const ColumnFormPanel: FC = () => {
     setColumnData,
     isEditing,
     isSaveDisabled,
+    isDeleteDisabled,
+    deleteDisabledReason,
+    propertyInUseMessage,
+    visibility,
+    visibilityText,
+    onVisibilityChange,
+    isRefinable,
+    isGroupable,
     onDeleteColumn,
     findMatchingSearchProperty,
+    saveError,
     fluentProviderId
   } = useColumnFormPanel()
 
   if (!context) return null
 
   return (
-    <Panel
-      isOpen={context.state.columnForm.isOpen}
+    <BasePanel
+      open={context.state.columnForm.isOpen}
       headerText={isEditing ? strings.EditColumnHeaderText : strings.NewColumnHeaderText}
-      onRenderFooterContent={() => (
+      footer={
         <ColumnFormPanelFooter
           onSave={onSave}
           onDeleteColumn={onDeleteColumn}
           isEditing={isEditing}
           isSaveDisabled={isSaveDisabled}
+          saveDisabledReason={propertyInUseMessage}
+          isDeleteDisabled={isDeleteDisabled}
+          deleteDisabledReason={deleteDisabledReason}
         />
-      )}
-      isFooterAtBottom={true}
-      onDismiss={onDismiss}
+      }
+      onClose={onDismiss}
       isLightDismiss={true}
       className={styles.root}
-      styles={{ commands: { paddingBottom: 12 } }}
     >
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme} className={styles.content}>
+          {saveError && (
+            <UserMessage intent='error' title={strings.ErrorTitle} text={saveError.message} />
+          )}
           <FieldContainer
             iconName='NumberSymbolSquare'
             label={strings.SortOrderLabel}
             description={strings.SortOrderDescription}
           >
             <Input
-              value={column.get('sortOrder')?.toString()}
+              value={column.get('sortOrder')?.toString() ?? ''}
               type='number'
-              defaultValue='100'
               min={10}
               max={990}
               step={2}
@@ -74,12 +91,12 @@ export const ColumnFormPanel: FC = () => {
           <FieldContainer
             iconName='TextNumberFormat'
             label={strings.InternalNameLabel}
-            description={strings.InternalNameDescription}
+            description={lockedWhenEditing(strings.InternalNameDescription, isEditing)}
             required={true}
           >
             <Input
               value={column.get('internalName')}
-              disabled={isEditing}
+              readOnly={isEditing}
               onChange={(_, data) => setColumn('internalName', data.value)}
               placeholder={strings.Placeholder.TextField}
               onBlur={findMatchingSearchProperty}
@@ -88,14 +105,16 @@ export const ColumnFormPanel: FC = () => {
           <FieldContainer
             iconName='DatabaseSearch'
             label={strings.SearchPropertyLabel}
-            description={strings.SearchPropertyDescription}
+            description={lockedWhenEditing(strings.SearchPropertyDescription, isEditing)}
             required={true}
+            validationState={propertyInUseMessage ? 'error' : undefined}
+            validationMessage={propertyInUseMessage}
           >
             <ColumnSearchPropertyField
               placeholder={strings.SearchPropertyPlaceholder}
               value={column.get('fieldName')}
               onChange={(value) => setColumn('fieldName', value)}
-              disabled={isEditing}
+              readOnly={isEditing}
               // managedProperties={context.state.managedProperties} - AutoComplete doesn't properly when trying to create a new by just typing. Removed for now to use input instead.
             />
             {/* {columnMessages.get('fieldName') && (
@@ -123,9 +142,8 @@ export const ColumnFormPanel: FC = () => {
             description={strings.MinWidthDescription}
           >
             <Input
-              value={column.get('minWidth')?.toString()}
+              value={column.get('minWidth')?.toString() ?? ''}
               type='number'
-              defaultValue='80'
               min={40}
               max={400}
               step={2}
@@ -133,22 +151,8 @@ export const ColumnFormPanel: FC = () => {
               placeholder={strings.Placeholder.TextField}
             />
           </FieldContainer>
-          <FieldContainer
-            iconName='NumberSymbolSquare'
-            label={strings.MaxWidthLabel}
-            description={strings.MaxWidthDescription}
-          >
-            <Input
-              value={column.get('maxWidth')?.toString()}
-              type='number'
-              defaultValue='120'
-              min={column.get('minWidth') ?? 40}
-              max={400}
-              step={2}
-              onChange={(_, data) => setColumn('maxWidth', parseInt(data.value))}
-              placeholder={strings.Placeholder.TextField}
-            />
-          </FieldContainer>
+          {/* No max width: the overview's list sizes a column by its minimum width alone, so the
+              field had no effect. */}
           <ColumnDataTypeField
             label={strings.ColumnRenderLabel}
             description={strings.PortfolioOverviewColumnRenderDescription}
@@ -165,18 +169,11 @@ export const ColumnFormPanel: FC = () => {
             description={strings.ColumnVisibilityDescription}
           >
             <Combobox
-              defaultSelectedOptions={
-                column.get('data')?.visibility ? column.get('data')?.visibility : []
-              }
+              selectedOptions={visibility}
+              value={visibilityText}
               multiselect
               placeholder={strings.Placeholder.MultiChoiceField}
-              onOptionSelect={(e, data) => {
-                if (!_.isEmpty(data.selectedOptions)) {
-                  setColumnData('visibility', data.selectedOptions)
-                } else {
-                  setColumnData('visibility', [''])
-                }
-              }}
+              onOptionSelect={onVisibilityChange}
             >
               {visibilityOptions.map((choice) => (
                 <Option key={choice.text} value={choice.value}>
@@ -191,7 +188,7 @@ export const ColumnFormPanel: FC = () => {
             description={strings.IsRefinableDescription}
           >
             <Switch
-              defaultChecked={column.get('isRefinable')}
+              checked={isRefinable}
               onChange={(_, data) => setColumn('isRefinable', data.checked)}
             />
           </FieldContainer>
@@ -201,13 +198,13 @@ export const ColumnFormPanel: FC = () => {
             description={strings.IsGroupableDescription}
           >
             <Switch
-              defaultChecked={column.get('data').isGroupable}
+              checked={isGroupable}
               onChange={(_, data) => setColumn('isGroupable', data.checked)}
             />
           </FieldContainer>
         </FluentProvider>
       </IdPrefixProvider>
-    </Panel>
+    </BasePanel>
   )
 }
 

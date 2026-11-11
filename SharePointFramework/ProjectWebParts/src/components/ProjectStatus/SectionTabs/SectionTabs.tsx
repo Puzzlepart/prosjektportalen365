@@ -1,5 +1,4 @@
 import React, { FC } from 'react'
-import { Sticky, StickyPositionType } from '@fluentui/react'
 import {
   Menu,
   MenuItem,
@@ -15,10 +14,12 @@ import {
   useOverflowMenu
 } from '@fluentui/react-components'
 import { MoreHorizontalRegular } from '@fluentui/react-icons'
-import smoothscroll from 'smoothscroll-polyfill'
+import { format } from 'pp365-shared-library'
 import strings from 'ProjectWebPartsStrings'
+import smoothscroll from 'smoothscroll-polyfill'
 import styles from '../ProjectStatus.module.scss'
 import { useSections } from '../Sections/useSections'
+import { useScrollToSection } from './useScrollToSection'
 
 const OverflowMenuItem: FC<{
   section: { id: number; name: string }
@@ -42,7 +43,13 @@ const OverflowMenu: FC<{
   return (
     <Menu>
       <MenuTrigger disableButtonEnhancement>
-        <Tab ref={ref} role='tab' value='overflow-menu' icon={<MoreHorizontalRegular />}>
+        <Tab
+          ref={ref}
+          role='tab'
+          value='overflow-menu'
+          icon={<MoreHorizontalRegular />}
+          aria-label={format(strings.Aria.MoreSectionsLabel, overflowCount)}
+        >
           +{overflowCount}
         </Tab>
       </MenuTrigger>
@@ -59,33 +66,22 @@ const OverflowMenu: FC<{
 
 export const SectionTabs: FC = () => {
   smoothscroll.polyfill()
-  const sections = useSections()
+  // While the report loads, the sections are placeholders without an id; they get no tab.
+  const sections = useSections().filter(
+    (section) => section.id !== undefined && section.id !== null
+  )
 
-  const scrollIntoView = (sectionId) => {
-    const scrollablePane = document.querySelector('.ms-ScrollablePane--contentContainer')
-    const section = document.getElementById(`${strings.ListSectionElementIdPrefix}${sectionId}`)
-
-    if (scrollablePane && section) {
-      const relativeTop = section.offsetTop - scrollablePane.scrollTop
-
-      if (relativeTop !== 0) {
-        scrollablePane.scrollTo({
-          top: scrollablePane.scrollTop + relativeTop - 80,
-          behavior: 'smooth'
-        })
-      }
-    }
-  }
+  const scrollToSection = useScrollToSection()
 
   return (
-    <Sticky stickyClassName={styles.sticky} stickyPosition={StickyPositionType.Header}>
+    <div className={styles.stickyTabs}>
       <Overflow>
         <TabList
           className={styles.sectionTabs}
           defaultSelectedValue={1}
           onTabSelect={(_, data: SelectTabData) => {
             if (data.value === 'overflow-menu') return
-            scrollIntoView(data.value)
+            scrollToSection(data.value as number)
           }}
         >
           {sections.map((section) => {
@@ -97,9 +93,9 @@ export const SectionTabs: FC = () => {
               </OverflowItem>
             )
           })}
-          <OverflowMenu sections={sections} onSelect={scrollIntoView} />
+          <OverflowMenu sections={sections} onSelect={scrollToSection} />
         </TabList>
       </Overflow>
-    </Sticky>
+    </div>
   )
 }

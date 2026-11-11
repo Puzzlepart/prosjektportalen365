@@ -1,4 +1,3 @@
-import { IShimmerProps } from '@fluentui/react'
 import { IBaseComponentProps } from '../types'
 import { ProjectColumn, ProjectListModel } from 'pp365-shared-library/lib/models'
 import { TabProps } from '@fluentui/react-components'
@@ -187,7 +186,14 @@ export interface IProjectListProps extends IBaseComponentProps {
   quickLaunchMenu?: IQuickLaunch[]
 }
 
-export interface IProjectListState extends Pick<IShimmerProps, 'isDataLoaded'> {
+export interface IProjectListState {
+  /**
+   * Whether the component's data has finished loading. Named after the Fluent UI
+   * v8 `Shimmer` prop it used to be picked from; the v9 `Skeleton` has no
+   * equivalent, so it is declared here.
+   */
+  isDataLoaded?: boolean
+
   /**
    * Search term
    */

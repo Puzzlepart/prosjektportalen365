@@ -41,7 +41,7 @@ export const PackageList: FC = () => {
     <div className={styles.list}>
       <div role='list' className={layoutClass}>
         {filteredPackages.map((pkg) => (
-          <div key={pkg.id} role='presentation' className={styles.cell}>
+          <div key={pkg.id} role='listitem' className={styles.cell}>
             <PackageCard package={pkg} />
           </div>
         ))}

@@ -19,8 +19,7 @@ import {
 import styles from './ArchiveView.module.scss'
 import { useArchiveView } from './useArchiveView'
 import { IArchiveItem } from './types'
-import { format } from '@fluentui/react'
-import { getFluentIcon, UserMessage } from 'pp365-shared-library'
+import { getFluentIcon, UserMessage, format } from 'pp365-shared-library'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 
@@ -44,7 +43,8 @@ export const ArchiveView: FC = () => {
     toggleSection,
     toggleItemSelection,
     toggleSectionSelectAll,
-    getSelectedItemsCount
+    getSelectedItemsCount,
+    getSectionContentId
   } = useArchiveView()
 
   if (isLoading) {
@@ -75,17 +75,13 @@ export const ArchiveView: FC = () => {
       </UserMessage>
       {sections.map((section) => (
         <div key={section.key} className={styles.section}>
-          <div
+          {/* A button, where a div took the keys itself, naming the items it folds (WCAG 4.1.2). */}
+          <button
+            type='button'
             className={styles.sectionHeader}
             onClick={() => toggleSection(section.key)}
-            role='button'
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault()
-                toggleSection(section.key)
-              }
-            }}
+            aria-expanded={section.expanded}
+            aria-controls={getSectionContentId(section.key)}
           >
             <ChevronRight16Regular
               className={`${styles.icon} ${section.expanded ? styles.expanded : ''}`}
@@ -94,7 +90,7 @@ export const ArchiveView: FC = () => {
               {section.title} ({section.items.filter((item) => item.selected).length}/
               {section.items.length})
             </Text>
-          </div>
+          </button>
 
           {section.expanded && section.items.filter((item) => !item.disabled).length > 1 && (
             <div className={styles.selectAllButton}>
@@ -117,7 +113,7 @@ export const ArchiveView: FC = () => {
           )}
 
           {section.expanded && (
-            <div className={styles.sectionContent}>
+            <div id={getSectionContentId(section.key)} className={styles.sectionContent}>
               {section.items.map((item) => (
                 <div key={item.id} className={styles.item}>
                   <Checkbox

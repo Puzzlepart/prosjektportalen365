@@ -1,29 +1,32 @@
-import { Dropdown } from '@fluentui/react'
+import { Dropdown, Option, Switch } from '@fluentui/react-components'
 import strings from 'SharedLibraryStrings'
 import React, { FC } from 'react'
+import { getFluentIconWithFallback } from '../../../icons'
+import { FieldContainer } from '../../FieldContainer'
+import styles from './ColumnRenderField.module.scss'
 import { DataTypeFields } from './DataTypeFields'
-import { IColumnDataTypeFieldProps } from './types'
+import { IColumnDataTypeFieldOption, IColumnDataTypeFieldProps } from './types'
 import { useDataTypeDropdown } from './useDataTypeDropdown'
 import { useDataTypeProperties } from './useDataTypeProperties'
-import { FieldContainer } from '../../FieldContainer'
-import { Switch } from '@fluentui/react-components'
-import styles from './ColumnRenderField.module.scss'
 
 /**
- * Renders a dropdown field for selecting a column data type, along with additional fields
- * for configuring the selected data type. Also includes an optional checkbox for persisting
- * the render globally.
- *
- * @param props - The component props.
- * @param props.description - The description to display above the dropdown field.
- * @param props.persistRenderGloballyField - The checkbox field for persisting the render globally.
- * @param props.children - Additional child components to render.
- *
- * @returns The rendered component.
+ * An option's icon and text, as shown both in the list and on the closed dropdown.
  */
-export const ColumnDataTypeField: FC<IColumnDataTypeFieldProps> = (props) => {
-  const dataTypeDropdown = useDataTypeDropdown(props)
-  const dataTypeFields = useDataTypeProperties(props, dataTypeDropdown)
+const OptionContent: FC<{ option: IColumnDataTypeFieldOption }> = ({ option }) => (
+  <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+    {getFluentIconWithFallback(option.data?.iconProps?.iconName)}
+    <span>{option.text}</span>
+  </span>
+)
+
+/**
+ * The dropdown and the selected data type's fields. Its hooks read `defaultSelectedKey` and
+ * `dataTypeProperties` once, when it mounts.
+ */
+const ColumnDataTypeFieldContent: FC<IColumnDataTypeFieldProps> = (props) => {
+  const dropdown = useDataTypeDropdown(props)
+  const dataTypeFields = useDataTypeProperties(props, dropdown)
+  const { selectedOption } = dropdown
 
   return (
     <div className={styles.root}>
@@ -33,8 +36,24 @@ export const ColumnDataTypeField: FC<IColumnDataTypeFieldProps> = (props) => {
         label={props.label}
         description={props.description}
       >
-        {/* TODO: Use new Combobox from Fluent UI 9 */}
-        <Dropdown {...dataTypeDropdown} />
+        <Dropdown
+          value={selectedOption?.text ?? ''}
+          selectedOptions={selectedOption ? [selectedOption.key] : []}
+          onOptionSelect={dropdown.onOptionSelect}
+          disabled={dropdown.disabled}
+          button={selectedOption ? <OptionContent option={selectedOption} /> : undefined}
+        >
+          {dropdown.options.map((option) => (
+            <Option
+              key={option.key}
+              value={option.key}
+              text={option.text}
+              disabled={option.disabled}
+            >
+              <OptionContent option={option} />
+            </Option>
+          ))}
+        </Dropdown>
         {props.children}
         <DataTypeFields {...dataTypeFields} />
       </FieldContainer>
@@ -44,16 +63,30 @@ export const ColumnDataTypeField: FC<IColumnDataTypeFieldProps> = (props) => {
           label={strings.ColumnPersistRenderGloballyFieldLabel}
           description={strings.ColumnPersistRenderGloballyFieldDescription}
         >
-          <Switch
-            {...props.persistRenderGloballyField}
-            disabled={dataTypeDropdown?.selectedOption?.disabled}
-          />
+          <Switch {...props.persistRenderGloballyField} disabled={dropdown.disabled} />
         </FieldContainer>
       )}
     </div>
   )
 }
 
-ColumnDataTypeField.defaultProps = {}
+/**
+ * Renders a dropdown field for selecting a column data type, along with additional fields
+ * for configuring the selected data type. Also includes an optional switch for persisting
+ * the render globally.
+ *
+ * A new `defaultSelectedKey` starts the field over, from that data type and the
+ * `dataTypeProperties` given with it. The column forms get the column they edit after their first
+ * render: the field kept the empty start, so the dropdown showed no data type, the type's
+ * properties were lost, and saving an edited column stored it as text.
+ *
+ * @param props - The component props.
+ * @param props.description - The description to display above the dropdown field.
+ * @param props.persistRenderGloballyField - The switch field for persisting the render globally.
+ * @param props.children - Additional child components to render.
+ */
+export const ColumnDataTypeField: FC<IColumnDataTypeFieldProps> = (props) => (
+  <ColumnDataTypeFieldContent key={props.defaultSelectedKey ?? ''} {...props} />
+)
 
 export * from './types'
