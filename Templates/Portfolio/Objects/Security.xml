@@ -28,5 +28,15 @@
             AllowMembersEditMembership="false"
             OnlyAllowMembersViewMembership="true">
         </pnp:SiteGroup>
+        <!-- No role on the hub itself: the group reads only the lists that include
+             Lists/Security/MinimumReadSecurity.xml, and the folder SiteAssets/Konfigurasjon
+             (Scripts/PostInstall.ps1). Lists with data about all projects are not among them. -->
+        <pnp:SiteGroup
+            Title="{resource:Security_SiteGroup_MinimumHubReadAccess_Title}"
+            Description="{resource:Security_SiteGroup_MinimumHubReadAccess_Description}"
+            Owner="{associatedownergroupid}"
+            AllowMembersEditMembership="false"
+            OnlyAllowMembersViewMembership="true">
+        </pnp:SiteGroup>
     </pnp:SiteGroups>
 </pnp:Security>

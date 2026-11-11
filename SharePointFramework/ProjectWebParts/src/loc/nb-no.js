@@ -250,7 +250,7 @@ define([], function () {
     ProjectPhasesChangePhaseError:
       'En feil oppsto under endring av fase. Vennligst prøv igjen eller kontakt en administrator.',
     ProjectPhasesFetchDataError:
-      'Du har ikke tilgang til å se denne webdelen.<br/><br/>Du må enten ha tilgang til porteføljeområdet, eller så må prosjektet være fristilt fra porteføljeområdet.',
+      'Fasene kunne ikke hentes. Last inn siden på nytt, eller kontakt en administrator hvis feilen vedvarer.',
     ProjectPropertiesHeader: 'Prosjektinformasjon',
     ProjectStatusDataErrorText:
       'Statusrapportene kunne ikke hentes. Last inn siden på nytt, eller kontakt en administrator hvis feilen vedvarer.',
@@ -311,6 +311,9 @@ define([], function () {
     SyncProjectPropertiesValuesProgressLabel: 'Synkroniserer egenskaper',
     HubSyncWarningTitle: 'Porteføljeområdet ble ikke oppdatert',
     HubSyncNoWriteAccessReason: 'Du mangler skrivetilgang til listen «{0}» på porteføljeområdet. Be en administrator om tilgang, eller be noen med tilgang om å lagre prosjektinformasjonen.',
+    ArchiveLogWarningTitle: 'Arkiveringsloggen ble ikke oppdatert',
+    ArchiveLogNotWrittenText: 'Fasen er endret, men ikke alt i arkiveringen ble ført i arkiveringsloggen. {0} Arkivstatusen for dokumentene og listene som mangler der, vises derfor ikke. Last inn siden på nytt for å se den nye fasen i de andre webdelene.',
+    ArchiveLogNoWriteAccessReason: 'Du mangler skrivetilgang til listen «{0}» på porteføljeområdet. Be en administrator om tilgang.',
     HubSyncHubUnavailableReason: 'Porteføljeområdet er ikke tilgjengelig for deg.',
     ProjectPropertiesNotSyncedToHubText: 'Endringene er lagret på prosjektområdet, men ble ikke synkronisert til porteføljeområdet. {0}',
     PhaseNotSyncedToHubText: 'Fasen er endret på prosjektområdet, men ikke på porteføljeområdet. {0} Last inn siden på nytt for å se den nye fasen i de andre webdelene.',
@@ -398,6 +401,7 @@ define([], function () {
     FileNameNoLeadingTrailingSpaces: 'Filnavn kan ikke ha ledende eller etterfølgende mellomrom.',
     FileNameReserved: 'Filnavn er reservert.',
     NewsFolderError: 'Feil ved oppretting av nyhetsmappe: ',
+    NewsNoAccessErrorText: 'Prosjektnyhetene ligger på et område du ikke har tilgang til. Be en administrator om tilgang hvis du skal se eller lage nyheter.',
     LoadingLabel: 'Laster nyheter...',
     GenericErrorMessage: 'Noe gikk galt. Vennligst prøv igjen senere eller kontakt brukerstøtte.',
     NewsCreateDuplicateFileError: 'En nyhetsartikkel med samme navn finnes allerede. Vennligst velg et annet navn.',

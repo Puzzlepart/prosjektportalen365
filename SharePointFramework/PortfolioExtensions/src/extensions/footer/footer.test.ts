@@ -47,7 +47,8 @@ function portalDataService({
   assistantGroup = [] as any[],
   hubProjects = [] as any[],
   project = null as any,
-  helpItems = [] as any[]
+  helpItems = [] as any[],
+  deniedLists = [] as string[]
 } = {}) {
   const lists = {
     [resource.Lists_InstallationLog_Title]: {
@@ -68,6 +69,7 @@ function portalDataService({
       siteGroups: { select: () => ({ filter: () => () => Promise.resolve(assistantGroup) }) }
     },
     getProjectDetails: () => Promise.resolve(project),
+    isListAvailable: (list: string) => isAvailable && !deniedLists.includes(list),
     getItems: (_list: string, model: any, query: any) => {
       requests.helpContent = query
       return Promise.resolve(helpItems.map((item) => new model(item, undefined)))
@@ -410,6 +412,18 @@ describe('FooterApplicationCustomizer', () => {
       )
     }
   )
+
+  it('loads the help at the level of a project on a project site whose project it may not read', async () => {
+    // A member of «Minimum lesetilganger på hub» is refused `Prosjekter`, and got the hub's help.
+    window.history.replaceState({}, '', '/sites/frisbee/SitePages/ProjectHome.aspx')
+    const portal = portalDataService({ deniedLists: ['PROJECTS'] })
+    const { navigate } = await footerCustomizer(portal, { onHub: false })
+    await navigate()
+    await rendered.props.loadHelpContent()
+    expect(portal.requests.helpContent.ViewXml).toContain(
+      `<Value Type="MultiChoice">${resource.Lists_HelpContent_Level_Project}</Value>`
+    )
+  })
 
   // Client-side navigation to a site, by the hub's title for one, leaves the address without the
   // front page the help rows name, and the help was unavailable there.

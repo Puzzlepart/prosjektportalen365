@@ -67,9 +67,10 @@ export class SPDataAdapterBase<
   }
 
   /**
-   * Global settings from the portal
+   * Global settings from the portal. Empty when they are not loaded (`loadGlobalSettings`) or the
+   * hub is out of reach, so a setting reads as unset rather than throwing.
    */
-  public globalSettings: Map<string, string>
+  public globalSettings: Map<string, string> = new Map()
 
   /**
    * Initialize storage

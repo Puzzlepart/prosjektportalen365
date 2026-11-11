@@ -56,6 +56,18 @@ Startrader (`<pnp:DataRows>`) oppfører seg etter `UpdateBehavior`:
 
 Hubens sider har `Overwrite="false"`, unntatt `Idemodul.xml` og `Konfigurasjon.xml`, så andre sider som finnes, blir stående. Navigasjonen hoppes over ved oppgradering; nye noder legges til i `PostInstallUpgrade.ps1`.
 
+#### Rettigheter på hubens lister
+
+En ny liste på huben får én av disse:
+
+- **`Security/MinimumReadSecurity.xml`:** oppsett prosjektene leser (`Globale innstillinger`, `Prosjektkolonner`, `Maloppsett` og de andre listene som inkluderer filen). Eiere har full kontroll, medlemmer og besøkende kan lese, og gruppen `Minimum lesetilganger på hub` kan lese.
+- **`Security/MinimumReadCopySecurity.xml`:** oppsett prosjektene leser, på en liste som arvet hubens rettigheter før 1.15.0 (`Lenker`, `Tidslinjekonfigurasjon`). Rettighetene kopieres når arven brytes, så ingen mister tilgangen de hadde gjennom huben, heller ikke kundenes egne grupper, og gruppen kan lese.
+- **`Security/DefaultSecurity.xml`:** oppsett som bare brukes på huben (`Porteføljevisninger`, `Installasjonslogg`). Samme rettigheter som `MinimumReadSecurity.xml`, uten gruppen. `Installasjonslogg` deles ikke med gruppen, fordi radene har kommandolinjen og sporingsloggen fra installasjonen.
+- **`Security/LogSecurity.xml`** (bare `Logg`): rettighetene kopieres fra huben, og gruppen kan bidra. Listen har «bare egne elementer» for lesing og redigering (`ReadSecurity` og `WriteSecurity` lik 2) og er tatt ut av søket (`NoCrawl`). Bare de som kan administrere lister på huben (eiere, og medlemmer med redigeringstilgang), ser alle radene. `PostInstall.ps1` setter innstillingene også på huber som har listen fra før.
+- **Ingen:** lister brukerne skriver til eller som har data om alle prosjekter (`Prosjekter`, `Prosjektstatus`, `Tidslinjeinnhold`, `Arkiveringslogg`). De arver fra huben. `Arkiveringslogg` får ikke «bare egne elementer», fordi prosjektet skal se hva andre har arkivert.
+
+Gruppen har ingen rettigheter på selve huben. Den får aldri en liste med data om alle prosjekter som standard. Mappen `SiteAssets/Konfigurasjon` (matrisene) får gruppen fra `PostInstall.ps1`, fordi innholdsmalen bare legges på med `Files` ved oppgradering. En sikkerhetsfil uten kopi (`MinimumReadSecurity.xml`, `DefaultSecurity.xml`) på en liste som arver, bryter arven uten å kopiere rettighetene ved neste oppgradering, så kundenes egne tilganger på den listen faller bort. Bruk `MinimumReadCopySecurity.xml` for en slik liste. Skriv i endringsloggen under `### Merk` at listen ikke lenger arver.
+
 ### Slik når innholdet prosjektområdene
 
 Et prosjektområde får malen én gang, når oppsettveiviseren kjører: se [Prosjektmaler (JSON)](js-provisjoneringsmal.md). Malinnholdet på eksisterende prosjekter endres etterpå bare på tre måter:

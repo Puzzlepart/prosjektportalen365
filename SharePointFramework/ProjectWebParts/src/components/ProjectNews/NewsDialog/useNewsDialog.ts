@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { useAnnounce } from '@fluentui/react-components'
-import { format } from 'pp365-shared-library'
+import { format, isUnauthorizedError } from 'pp365-shared-library'
 import strings from 'ProjectWebPartsStrings'
 import {
   ensureProjectNewsFolder,
@@ -75,7 +75,11 @@ export const useNewsDialog = () => {
        */
       const showError = (error: any, note?: string) => {
         newsForm.setFormErrorMessage(
-          [strings.NewsCreateError, getRestErrorMessage(error), note].filter(Boolean).join(' ')
+          // A news site that refuses the user, such as the hub for a member of «Minimum
+          // lesetilganger på hub», says so instead of giving SharePoint's message.
+          isUnauthorizedError(error)
+            ? strings.NewsNoAccessErrorText
+            : [strings.NewsCreateError, getRestErrorMessage(error), note].filter(Boolean).join(' ')
         )
         console.error('Error creating news article:', error)
         setSpinnerMode('idle')
@@ -107,7 +111,8 @@ export const useNewsDialog = () => {
           newPageServerRelativeUrl
         )
         if (!res.ok) {
-          showError(await res.json())
+          // SharePoint's error body has no status: with it, a refused copy says access is missing.
+          showError({ ...(await res.json()), status: res.status })
           return
         }
         try {

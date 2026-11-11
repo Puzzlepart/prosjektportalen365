@@ -190,11 +190,19 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
         `pp365_help_content_${window.location.pathname}`,
         async () => {
           const project = await this._portalDataService.getProjectDetails()
+          // A member of «Minimum lesetilganger på hub» may not read `Prosjekter`: a site of the hub
+          // other than the hub is then a project, not the portfolio.
+          const isUnreadProject =
+            !project &&
+            !this._portalDataService.isListAvailable('PROJECTS') &&
+            !isHubSite(this.context.pageContext)
           const level = project
             ? project.isParentProject
               ? resource.Lists_HelpContent_Level_ParentProgram
               : resource.Lists_HelpContent_Level_Project
-            : resource.Lists_HelpContent_Level_Portfolio
+            : isUnreadProject
+              ? resource.Lists_HelpContent_Level_Project
+              : resource.Lists_HelpContent_Level_Portfolio
           let items = await this._portalDataService.getItems(
             resource.Lists_HelpContent_Title,
             HelpContentModel,

@@ -224,3 +224,83 @@ if ($Standard) {
 else {
     Write-Host "[WARNING] Failed to find Standardmal template. Please check the Maloppsett list." -ForegroundColor Yellow
 }
+
+Write-Host "[INFO] Post-install action: Giving the group for minimum hub read access read access to the matrix configurations"
+# The group «Minimum lesetilganger på hub» (Objects/Security.xml) has no role on the hub itself.
+# Its lists get Read from the template (Lists/Security/MinimumReadSecurity.xml), but the matrix
+# configurations sit in a folder of Områderessurser, which the content template creates and the
+# upgrade applies with the Files handler only. The folder keeps the roles it inherited (copied when
+# the inheritance is broken), so owners, members and visitors keep their access. Idempotent.
+try {
+    # The folder the content template writes the configurations to, per language
+    # (Templates/Content/Portfolio_content.<lng>/SiteAssets/...).
+    $ConfigurationFolderNames = @{ "no-NB" = "Konfigurasjon"; "en-US" = "Configuration" }
+    $ConfigurationFolderUrl = "SiteAssets/$($ConfigurationFolderNames[$LanguageCode])"
+    $MinimumReadGroupTitle = Get-Resource -Name "Security_SiteGroup_MinimumHubReadAccess_Title"
+    $MinimumReadGroup = Get-PnPGroup -Identity $MinimumReadGroupTitle -ErrorAction SilentlyContinue
+    $ConfigurationFolder = Get-PnPFolder -Url $ConfigurationFolderUrl -Includes ListItemAllFields -ErrorAction SilentlyContinue
+    if ($null -eq $MinimumReadGroup) {
+        Write-Host "[WARNING] Group [$MinimumReadGroupTitle] not found - skipping the read access to [$ConfigurationFolderUrl]" -ForegroundColor Yellow
+    }
+    elseif ($null -eq $ConfigurationFolder) {
+        Write-Host "[WARNING] Folder [$ConfigurationFolderUrl] not found - skipping the read access for [$MinimumReadGroupTitle]" -ForegroundColor Yellow
+    }
+    else {
+        $FolderItem = $ConfigurationFolder.ListItemAllFields
+        $HasUniqueRoles = Get-PnPProperty -ClientObject $FolderItem -Property HasUniqueRoleAssignments
+        if (-not $HasUniqueRoles) {
+            $FolderItem.BreakRoleInheritance($true, $false)
+            Invoke-PnPQuery
+        }
+        $RoleAssignments = Get-PnPProperty -ClientObject $FolderItem -Property RoleAssignments
+        $HasGroupRole = $false
+        foreach ($RoleAssignment in $RoleAssignments) {
+            $Member = Get-PnPProperty -ClientObject $RoleAssignment -Property Member
+            if ($Member.Id -eq $MinimumReadGroup.Id) { $HasGroupRole = $true }
+        }
+        if ($HasGroupRole) {
+            Write-Host "[INFO] [$MinimumReadGroupTitle] already has access to [$ConfigurationFolderUrl]"
+        }
+        else {
+            # By role type, since the role names follow the site's language (Lese, Read).
+            $ReadRole = Get-PnPRoleDefinition | Where-Object { $_.RoleTypeKind -eq [Microsoft.SharePoint.Client.RoleType]::Reader } | Select-Object -First 1
+            $Bindings = New-Object Microsoft.SharePoint.Client.RoleDefinitionBindingCollection($FolderItem.Context)
+            $Bindings.Add($ReadRole)
+            $FolderItem.RoleAssignments.Add($MinimumReadGroup, $Bindings) | Out-Null
+            Invoke-PnPQuery
+            Write-Host "[SUCCESS] Gave [$MinimumReadGroupTitle] read access to [$ConfigurationFolderUrl]" -ForegroundColor Green
+        }
+    }
+}
+catch {
+    Write-Host "[WARNING] Failed to give the group for minimum hub read access read access to the matrix configurations: $($_.Exception.Message)" -ForegroundColor Yellow
+}
+
+
+Write-Host "[INFO] Post-install action: Letting each user read and edit only their own entries in the log list"
+# Lists/Logg.xml sets ReadSecurity, WriteSecurity and NoCrawl, also on a list the hub already has;
+# this step sets them when the upgrade applies no template (-SkipTemplate). Everyone writes to the
+# log, the group «Minimum lesetilganger på hub» too (Lists/Security/LogSecurity.xml), and only
+# owners of the hub may read other users' entries. Kept out of search, which is not known to
+# respect the setting. Idempotent.
+try {
+    $LogListTitle = Get-Resource -Name "Lists_Log_Title"
+    $LogList = Get-PnPList -Identity $LogListTitle -ErrorAction SilentlyContinue
+    if ($null -eq $LogList) {
+        Write-Host "[WARNING] List [$LogListTitle] not found - skipping its item-level permissions" -ForegroundColor Yellow
+    }
+    else {
+        $null = Get-PnPProperty -ClientObject $LogList -Property "ReadSecurity", "WriteSecurity", "NoCrawl"
+        if ($LogList.ReadSecurity -eq 2 -and $LogList.WriteSecurity -eq 2 -and $LogList.NoCrawl) {
+            Write-Host "[INFO] [$LogListTitle] already lets each user read and edit only their own entries"
+        }
+        else {
+            # 2 = only the items the user created (ListReadSecurity, ListWriteSecurity).
+            Set-PnPList -Identity $LogList -ReadSecurity 2 -WriteSecurity 2 -NoCrawl:$true | Out-Null
+            Write-Host "[SUCCESS] [$LogListTitle] lets each user read and edit only their own entries, and is kept out of search" -ForegroundColor Green
+        }
+    }
+}
+catch {
+    Write-Host "[WARNING] Failed to set the item-level permissions of the log list: $($_.Exception.Message)" -ForegroundColor Yellow
+}

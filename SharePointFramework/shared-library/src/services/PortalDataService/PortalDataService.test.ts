@@ -217,12 +217,137 @@ describe('PortalDataService', () => {
       expect(reports.map(({ id }) => id)).toEqual([4])
     })
 
-    it('gives no reports, and takes the hub as out of reach, when access is denied', async () => {
+    it('gives no reports when access to the list is denied, and keeps the rest of the hub', async () => {
       const { service, queries } = portal({ [LISTS.PROJECT_STATUS]: () => forbidden() })
       expect(await service.getStatusReports({})).toEqual([])
-      expect(service.isAvailable).toBe(false)
+      expect(service.isListAvailable('PROJECT_STATUS')).toBe(false)
+      expect(service.isAvailable).toBe(true)
+      // The denied list is not asked again.
       expect(await service.getStatusReports({})).toEqual([])
       expect(queries).toHaveLength(1)
+    })
+  })
+
+  describe('a member of «Minimum lesetilganger på hub»', () => {
+    // The group reads the configuration lists, but not the lists with data about all projects.
+    const answers = {
+      [LISTS.GLOBAL_SETTINGS]: () => [{ GtSettingsKey: 'ShowFooter', GtSettingsValue: '1' }],
+      [LISTS.PROJECT_COLUMNS]: () => [{ Id: 1, GtInternalName: 'GtProjectManager' }],
+      [LISTS.PROJECT_ADMIN_ROLES]: () => [{ Id: 1, Title: 'Prosjektleder' }],
+      [LISTS.PROJECT_STATUS]: () => forbidden(),
+      [LISTS.PROJECTS]: () => forbidden()
+    }
+
+    it('reads the configuration after the lists with data about all projects were denied', async () => {
+      const { service } = portal(answers)
+      expect(await service.getStatusReports({})).toEqual([])
+      expect(await service.getProjectDetails()).toBeNull()
+      expect(service.isAvailable).toBe(true)
+      expect((await service.getGlobalSettings()).get('ShowFooter')).toBe('1')
+      expect((await service.getProjectColumns()).map((column) => column.internalName)).toEqual([
+        'GtProjectManager'
+      ])
+      expect((await service.getProjectAdminRoles()).map((role) => role.title)).toEqual([
+        'Prosjektleder'
+      ])
+    })
+
+    it('marks only the denied lists', async () => {
+      const { service } = portal(answers)
+      await service.getStatusReports({})
+      await service.getProjectDetails()
+      expect(service.isListAvailable('PROJECT_STATUS')).toBe(false)
+      expect(service.isListAvailable('PROJECTS')).toBe(false)
+      expect(service.isListAvailable('PROJECT_COLUMNS')).toBe(true)
+      expect(service.isListAvailable('GLOBAL_SETTINGS')).toBe(true)
+    })
+  })
+
+  describe('the check of hub access when configured', () => {
+    /** A service configured against `url`, its probe run as `configure` runs it. */
+    async function probed(url: string, answers: Record<string, Answer>) {
+      const { service, queries } = portal(answers)
+      service.url = url
+      await (service as any)._probeHubAccess()
+      return { service, queries }
+    }
+
+    it('asks the hub once per page load, without the cache the settings use', async () => {
+      const url = 'https://contoso.sharepoint.com/sites/probe-once'
+      const first = await probed(url, { [LISTS.GLOBAL_SETTINGS]: () => [{ Id: 1 }] })
+      const second = await probed(url, { [LISTS.GLOBAL_SETTINGS]: () => [{ Id: 1 }] })
+      expect(first.service.isAvailable).toBe(true)
+      expect(second.service.isAvailable).toBe(true)
+      expect(first.queries[0].calls).toEqual([
+        ['select', 'Id'],
+        ['top', 1]
+      ])
+      // The second instance on the page takes the first one's answer.
+      expect(second.queries).toHaveLength(0)
+    })
+
+    it('takes the hub as out of reach when `Globale innstillinger` is denied', async () => {
+      const { service } = await probed('https://contoso.sharepoint.com/sites/probe-denied', {
+        [LISTS.GLOBAL_SETTINGS]: () => forbidden()
+      })
+      expect(service.isAvailable).toBe(false)
+    })
+
+    it('keeps the hub after an error that is not about access', async () => {
+      const { service } = await probed('https://contoso.sharepoint.com/sites/probe-error', {
+        [LISTS.GLOBAL_SETTINGS]: () => new Error('500 Server Error')
+      })
+      expect(service.isAvailable).toBe(true)
+    })
+
+    /** A service on the site `siteId` of the hub `hubSiteId`, settling its access as `configure` does. */
+    async function settled(url: string, siteId: string, hubSiteId: string) {
+      const { service, queries } = portal({ [LISTS.GLOBAL_SETTINGS]: () => forbidden() })
+      service.url = url
+      ;(service as any)._configuration.spfxContext.pageContext.legacyPageContext = {
+        siteId,
+        hubSiteId
+      }
+      await (service as any)._settleHubAccess()
+      return { service, queries }
+    }
+
+    it('does not ask on the hub itself, where a group may read the hub but not the settings', async () => {
+      // A customer's own group with access to the hub kept the portfolio overview's columns in
+      // 1.14, which never read `Globale innstillinger` on the hub.
+      const hub = 'a1b2c3d4-0000-4000-8000-000000000001'
+      const { service, queries } = await settled(
+        'https://contoso.sharepoint.com/sites/probe-on-hub',
+        `{${hub}}`,
+        hub
+      )
+      expect(queries).toHaveLength(0)
+      expect(service.isAvailable).toBe(true)
+    })
+
+    it('asks from a project site of the hub', async () => {
+      const { service, queries } = await settled(
+        'https://contoso.sharepoint.com/sites/probe-from-project',
+        '{a1b2c3d4-0000-4000-8000-000000000002}',
+        'a1b2c3d4-0000-4000-8000-000000000001'
+      )
+      expect(queries.map(({ list }) => list)).toEqual([LISTS.GLOBAL_SETTINGS])
+      expect(service.isAvailable).toBe(false)
+    })
+  })
+
+  describe('a user without access to the hub', () => {
+    it('takes the hub as out of reach when `Globale innstillinger` is denied', async () => {
+      const { service, queries } = portal({
+        [LISTS.GLOBAL_SETTINGS]: () => forbidden(),
+        [LISTS.PROJECT_COLUMNS]: () => [{ Id: 1, GtInternalName: 'GtProjectManager' }]
+      })
+      await service.getGlobalSettings()
+      expect(service.isAvailable).toBe(false)
+      expect(service.isListAvailable('PROJECT_COLUMNS')).toBe(false)
+      // The other lists are not asked once the hub is out of reach.
+      expect(await service.getProjectColumns()).toEqual([])
+      expect(queries.map(({ list }) => list)).toEqual([LISTS.GLOBAL_SETTINGS])
     })
   })
 

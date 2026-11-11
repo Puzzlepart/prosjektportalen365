@@ -1,5 +1,6 @@
 import strings from 'ProjectWebPartsStrings'
 import reducer, {
+  ARCHIVE_LOG_FAILED,
   CHANGE_PHASE,
   CHANGE_PHASE_ERROR,
   CHECKLIST_ITEM_SAVED,
@@ -117,6 +118,20 @@ describe('ProjectPhases reducer', () => {
     expect(state.phase).toBe(planning)
     expect(state.hubSyncWarning).toBe('Porteføljeområdet ble ikke oppdatert')
     expect(state.error).toBeUndefined()
+  })
+
+  it('a change whose archiving was not logged keeps the new phase and shows the warning', () => {
+    const changed = reducer(reducer(loaded(), INIT_CHANGE_PHASE()), SET_PHASE({ phase: planning }))
+    const state = reducer(
+      changed,
+      ARCHIVE_LOG_FAILED({ warning: 'Arkiveringsloggen ble ikke oppdatert' })
+    )
+    expect(state.phase).toBe(planning)
+    expect(state.archiveLogWarning).toBe('Arkiveringsloggen ble ikke oppdatert')
+    expect(state.hubSyncWarning).toBeUndefined()
+    // The next change starts without it.
+    const next = reducer(reducer(state, INIT_CHANGE_PHASE()), SET_PHASE({ phase: concept }))
+    expect(next.archiveLogWarning).toBeUndefined()
   })
 
   it('a later change the hub takes clears the warning an earlier one left', () => {

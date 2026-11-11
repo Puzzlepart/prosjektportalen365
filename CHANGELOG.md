@@ -12,6 +12,7 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Ny egenskap `Ekskluderte seksjoner` i `Prosjektstatus`-webdelen — én seksjonstittel per linje for å skjule seksjoner fra statussiden
 - `Prosjektinformasjon` kan vise valgte FN-bærekraftsmål som sorterte SVG-ikoner i stedet for vanlige merkelapper. Ikonvisningen er av som standard og kan slås på med valgfri ikonstørrelse i webdelens egenskaper [#1230](https://github.com/Puzzlepart/prosjektportalen365/issues/1230)
 - Ny egenskap `Minimum antall tegn i kommentar på sjekkpunkt` i `Fasevelger`-webdelen. Styrer hvor lang kommentaren må være før et fasesjekkpunkt kan settes til `Ikke relevant` eller `Fortsatt åpen` (0–20 tegn, der 0 betyr at kommentar ikke kreves; standard 4 som før). Egenskapen kunne tidligere bare settes via prosjektmal eller skript. Hjelpeteksten under kommentarfeltet og forklaringen på `Ikke relevant` og `Fortsatt åpen` sier nå hvor mange tegn som kreves
+- **Minimum lesetilganger på hub.** Ny SharePoint-gruppe på huben, `Minimum lesetilganger på hub`, som gir lesetilgang til listene og mappene prosjektene trenger, uten tilgang til selve huben. Medlemmer, for eksempel eksterne gjester, får `Prosjektinformasjon` med samme felt og roller som interne, risiko- og mulighetsmatrisen, `Hent dokumentmal` og bunnteksten. Gruppen kan også skrive til `Logg`, så feil fra webdelene logges, men ser bare sine egne rader. Lister med data om alle prosjekter er ikke standard. Se releasenotes for 1.15.0 for detaljer
 
 ### Forbedringer
 
@@ -74,6 +75,9 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Universell utforming (#1788): i «Vis eller skjul kolonner» dras en rad nå bare med mus. Med tastaturet flyttes kolonnene med flytteknappene, som sier hvor kolonnen havnet. Raden var en knapp med avkrysningsboksen og flytteknappene inni seg, som skjermlesere ikke når. Menyen i `Idémodul` lukkes også når vinduet blir smalt etter at siden er lastet
 - Universell utforming (#1788): knapper som ikke kan brukes ennå, kan nås med tastaturet og sier hva de trenger: «Lagre» i redigeringspanelet og i kolonne- og visningsskjemaene i `Porteføljeoversikt` og `Aggregert oversikt`, «Slett» for tittelkolonnen og «Legg til» i `Administrasjon av underområder`. Felt som ikke kan endres, er skrivebeskyttet og sier hvorfor, der de var deaktivert. Søkespørringen i visningsskjemaene er merket som påkrevd. I oppsettet av et prosjekt kan en fane uten noe å velge fortsatt velges, og panelet sier hvorfor det er tomt
 - Universell utforming (#1788): kolonnetoppene i `Dynamisk liste` har en meny som åpnes med høyreklikk, Shift+F10 eller menytasten, med sortering og endring av kolonnebredden med piltastene
+- Prosjektområdet finner huben ut fra sine egne hubdata (`HubSiteData`), så brukere som bare har tilgang til enkelte lister på huben, finner den også. En tom hubadresse som tidligere ble lagret i nettleseren i ett år, slås nå opp på nytt
+- Et avslag fra én liste på huben gjør ikke lenger at hele huben regnes som utilgjengelig for webdelen. Bare `Globale innstillinger` avgjør det; en annen liste som avslår, hoppes over
+- `Fasevelger` varsler når arkiveringen ikke kunne føres i `Arkiveringslogg`, med årsaken. Før ble feilen bare logget i konsollen
 
 ### Feilrettinger
 
@@ -200,6 +204,18 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Rettet en feil i oppsettveiviseren hvor dialogen som vises når veiviseren lukkes uten at området settes opp, sa «Installasjon avbrutt av bruker» både som tittel og som feilmelding. Den sier nå «Oppsettet ble avbrutt» og at ingenting er lagt til på området, som en opplysning
 - Rettet en feil i oppsettveiviseren hvor telleren ved `Prosjekttillegg` og `Standardinnhold` sa «1 valgte elementer». Den sier nå «1 valgt element»
 - Rettet en feil hvor `Kjør oppsettveiviser` og `Gjør om til overordnet prosjekt` ikke startet oppsettveiviseren på områder med et annet språk enn norsk (siden 1.12.0). Handlingen som starter veiviseren, pekte der på en utvidelse som ikke følger med installasjonen
+- Rettet en feil i `Prosjektnyheter` hvor et nyhetsområde brukeren ikke har tilgang til, ga en tom liste uten forklaring. Nå vises en melding om manglende tilgang, også når en nyhet lages, og en ny nyhet lagres selv om prosjektets rad i `Prosjekter` ikke kan leses
+- Rettet en feil i `Prosjekttidslinje` hvor manglende tilgang til en liste på huben ga en feilmelding om `SiteId` i stedet for meldingen om manglende tilgang
+- Rettet en feil hvor tiltakskolonnen i `Usikkerhet` ikke ble vist for brukere uten tilgang til huben
+- Rettet feilmeldingen i `Fasevelger` når fasene ikke kan hentes. Den sa at prosjektet måtte være «fristilt fra porteføljeområdet»
+- Rettet en feil hvor en feilmelding med 401 eller 403 et sted i teksten, for eksempel i en ID eller en tittel, ble tatt for manglende tilgang til porteføljeområdet. Statuskoden avgjør nå når feilen har en
+- Rettet en feil hvor `Install.ps1` lagret sertifikatet fra `-CertificateBase64Encoded` i klartekst i `Installasjonslogg` på porteføljeområdet, som alle med lesetilgang der kan lese, når skriptet ble kjørt med sertifikatet i kommandolinjen. Verdien lagres nå som `***`
+
+### Merk
+
+- `Tidslinjekonfigurasjon` og `Lenker` på huben får egne rettigheter ved oppgradering, kopiert fra huben, og gruppen `Minimum lesetilganger på hub` får lesetilgang. Alle beholder tilgangen de hadde gjennom huben, men senere endringer i hubens tilganger gjelder ikke lenger disse listene
+- `Logg` på huben får egne rettigheter, kopiert fra huben, og innstillingen «bare egne elementer» for lesing og redigering, og tas ut av søket. Bare de som kan administrere lister på huben (eiere, og medlemmer med redigeringstilgang), ser alle radene; andre ser sine egne. Innstillingen settes på nytt ved hver oppgradering
+- `Arkiveringslogg` arver rettighetene fra huben på nye installasjoner, slik at medlemmer kan føre arkiveringen fra `Fasevelger`. Eksisterende huber beholder listens egne rettigheter, der medlemmer bare har lesetilgang: gi dem tilgang til å bidra i listen før arkiveringen tas i bruk
 
 ---
 

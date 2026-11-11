@@ -21,7 +21,7 @@ import { format } from 'pp365-shared-library'
 import resource from 'SharedResources'
 import * as React from 'react'
 import { ProjectPhasesContext } from './context'
-import { CHANGE_PHASE_ERROR, HUB_SYNC_FAILED, SET_PHASE } from './reducer'
+import { ARCHIVE_LOG_FAILED, CHANGE_PHASE_ERROR, HUB_SYNC_FAILED, SET_PHASE } from './reducer'
 import { useChangePhase } from './useChangePhase'
 
 /**
@@ -32,10 +32,15 @@ import { useChangePhase } from './useChangePhase'
 const PLANNING = { name: 'Planlegge' }
 const PHASE_FIELD = { fieldName: 'GtProjectPhase', textField: 'GtProjectPhaseTaxHTField' }
 
-/** Runs the change as the dialog's "yes" does, and returns what it dispatched. */
-async function changePhase() {
+/**
+ * Runs the change as the dialog's "yes" does, with the error from writing the archive log when
+ * one is given, and returns what it dispatched.
+ *
+ * @param archiveLogError The error from writing the archive log (optional)
+ */
+async function changePhase(archiveLogError?: Error) {
   const dispatch = jest.fn()
-  let change: () => Promise<void>
+  let change: (archiveLogError?: Error) => Promise<void>
   const Probe: React.FC = () => {
     change = useChangePhase()
     return null
@@ -51,7 +56,7 @@ async function changePhase() {
       <Probe />
     </ProjectPhasesContext.Provider>
   )
-  await act(() => change())
+  await act(() => change(archiveLogError))
   return dispatch.mock.calls.map(([action]) => action)
 }
 
@@ -88,6 +93,28 @@ describe('useChangePhase', () => {
           format(strings.HubSyncNoWriteAccessReason, resource.Lists_Projects_Title)
         )
       })
+    )
+    expect(jest.getTimerCount()).toBe(0)
+  })
+
+  it('keeps the new phase and warns, without a reload, when the archive log was not written', async () => {
+    // A member of an upgraded hub reads `Arkiveringslogg` but may not write to it.
+    adapter.updateProjectPhase.mockResolvedValue(null)
+    const actions = await changePhase(
+      Object.assign(new Error('Access is denied.'), { status: 403 })
+    )
+    expect(actions).toContainEqual(SET_PHASE({ phase: PLANNING as any }))
+    expect(actions).toContainEqual(
+      ARCHIVE_LOG_FAILED({
+        warning: format(
+          strings.ArchiveLogNotWrittenText,
+          format(strings.ArchiveLogNoWriteAccessReason, resource.Lists_ArchiveLog_Title)
+        )
+      })
+    )
+    // The warning tells the user to reload, since the page is not reloaded for them.
+    expect(strings.ArchiveLogNotWrittenText).toContain(
+      strings.PhaseNotSyncedToHubText.slice(strings.PhaseNotSyncedToHubText.indexOf('{0}') + 4)
     )
     expect(jest.getTimerCount()).toBe(0)
   })

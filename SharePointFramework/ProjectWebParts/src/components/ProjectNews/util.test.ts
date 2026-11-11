@@ -1,7 +1,18 @@
 // util reaches the hub's project list through the data adapter, which is a stand-in registered
 // before the imports because Heft runs Jest on CommonJS output without Babel: `hub.fields` are
-// the project list's fields, `hub.rows` its rows, and `hub.selected` what a query selected.
-const hub: { fields: string[]; rows: any[]; selected?: string[] } = { fields: [], rows: [] }
+// the project list's fields, `hub.rows` its rows, `hub.selected` what a query selected, and
+// `hub.denied` whether the list refuses the user, as it does a member of «Minimum lesetilganger på hub»,
+// and `hub.failure` another error the list fails with.
+const hub: {
+  fields: string[]
+  rows: any[]
+  selected?: string[]
+  denied?: boolean
+  failure?: Error
+} = {
+  fields: [],
+  rows: []
+}
 jest.mock('data', () => ({
   __esModule: true,
   default: {
@@ -12,7 +23,11 @@ jest.mock('data', () => ({
             fields: {
               select: () => ({
                 filter: () => () =>
-                  Promise.resolve(hub.fields.map((InternalName) => ({ InternalName })))
+                  hub.denied
+                    ? Promise.reject(Object.assign(new Error('403 FORBIDDEN'), { status: 403 }))
+                    : hub.failure
+                      ? Promise.reject(hub.failure)
+                      : Promise.resolve(hub.fields.map((InternalName) => ({ InternalName })))
               })
             },
             items: {
@@ -28,17 +43,20 @@ jest.mock('data', () => ({
   }
 }))
 
-import { format } from 'pp365-shared-library'
+import { format, isUnauthorizedError } from 'pp365-shared-library'
 import strings from 'ProjectWebPartsStrings'
 import {
   copyTemplatePage,
   doesSitePageExist,
   ensureProjectNewsFolder,
   getNewsEditUrl,
+  getNewsSiteUrl,
   getNewsPageName,
   getServerRelativeUrl,
   getSitePageItemId,
   getTemplates,
+  isNewsAccessDenied,
+  newsNoAccessError,
   recycleSitePage,
   setOriginalSourceSiteId,
   validateSharePointFileName
@@ -119,6 +137,38 @@ describe('ProjectNews util', () => {
     expect(
       getServerRelativeUrl('https://contoso.sharepoint.com/sites/alfa/', 'SitePages', 'Nyheter')
     ).toBe('/sites/alfa/SitePages/Nyheter')
+  })
+
+  it('takes the news site from the web part, then the setting, then the hub', () => {
+    const hub = { isAvailable: true, url: 'https://contoso.sharepoint.com/sites/hub' }
+    const news = 'https://contoso.sharepoint.com/sites/nyheter'
+    expect(getNewsSiteUrl('https://contoso.sharepoint.com/sites/egen', news, hub)).toBe(
+      'https://contoso.sharepoint.com/sites/egen'
+    )
+    expect(getNewsSiteUrl('', news, hub)).toBe(news)
+    // A hub whose setting is turned off or blank: its news, not a message about missing access.
+    expect(getNewsSiteUrl('', undefined, hub)).toBe(hub.url)
+    expect(getNewsSiteUrl(undefined, '', { ...hub, isAvailable: false })).toBe('')
+  })
+
+  it('tells a refused news site from other answers', () => {
+    expect(isNewsAccessDenied({ status: 403 } as any)).toBe(true)
+    expect(isNewsAccessDenied({ status: 401 } as any)).toBe(true)
+    expect(isNewsAccessDenied({ status: 404 } as any)).toBe(false)
+    const error = newsNoAccessError()
+    expect(error.message).toBe(strings.NewsNoAccessErrorText)
+    expect(isUnauthorizedError(error)).toBe(true)
+  })
+
+  it('says access is missing when the news site refuses the folder', async () => {
+    const spHttpClient = { get: jest.fn(() => Promise.resolve({ ok: false, status: 403 })) }
+    await expect(
+      ensureProjectNewsFolder(
+        'https://contoso.sharepoint.com/sites/portefolje',
+        spHttpClient as any,
+        'Prosjektnyheter'
+      )
+    ).rejects.toThrow(strings.NewsNoAccessErrorText)
   })
 
   it('validates a file name the way SharePoint does', () => {
@@ -342,6 +392,72 @@ describe('ProjectNews util', () => {
       GtHubSiteId: 'hub-1',
       Title: 'Åpning'
     })
+  })
+
+  it('ties the page to the project with the site and hub ids when the project list refuses the user', async () => {
+    // The page was made, then the news article failed on reading `Prosjekter` (403).
+    hub.denied = true
+    try {
+      const client = httpClient(['GtSiteId', 'GtHubSiteId', 'GtProjectPhase'])
+      await setOriginalSourceSiteId(
+        'https://contoso.sharepoint.com/sites/hub-g',
+        client as any,
+        '/sites/hub-g/SitePages',
+        14,
+        'site-6',
+        'hub-1',
+        'Ekstern sak'
+      )
+      expect(updateBody(client)).toEqual({
+        GtSiteId: 'site-6',
+        GtHubSiteId: 'hub-1',
+        Title: 'Ekstern sak'
+      })
+    } finally {
+      hub.denied = false
+    }
+  })
+
+  it('fails, rather than leaving the project out, when the project list fails for another reason', async () => {
+    // A full-access user's article lost the project's values on a passing hub error.
+    hub.failure = Object.assign(new Error('503 Service Unavailable'), { status: 503 })
+    try {
+      const client = httpClient(['GtSiteId', 'GtHubSiteId', 'GtProjectPhase'])
+      await expect(
+        setOriginalSourceSiteId(
+          'https://contoso.sharepoint.com/sites/hub-h',
+          client as any,
+          '/sites/hub-h/SitePages',
+          15,
+          'site-7',
+          'hub-1',
+          'Driftsmelding'
+        )
+      ).rejects.toThrow('503 Service Unavailable')
+      expect(client.post).not.toHaveBeenCalled()
+    } finally {
+      hub.failure = undefined
+    }
+  })
+
+  it('says access is missing when the news site refuses the update that ties the page to the project', async () => {
+    const refused = {
+      ...response(false, { 'odata.error': { message: { value: 'Tilgang nektet.' } } }),
+      status: 403
+    }
+    const client = httpClient([], { post: refused as any })
+    const update = setOriginalSourceSiteId(
+      'https://contoso.sharepoint.com/sites/hub-i',
+      client as any,
+      '/sites/hub-i/SitePages',
+      16,
+      'site-8',
+      'hub-1',
+      'Ekstern sak'
+    )
+    const error = await update.catch((thrown) => thrown)
+    expect(error.message).toBe('Tilgang nektet.')
+    expect(isUnauthorizedError(error)).toBe(true)
   })
 
   it('gives the page the title written in the dialog, in the update that ties it to the project', async () => {

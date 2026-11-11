@@ -197,6 +197,37 @@ describe('useNewsDialog', () => {
       expect(recycleSitePage).not.toHaveBeenCalled()
     })
 
+    it('says access is missing when the news site refuses the copy', async () => {
+      // SharePoint's body says «Tilgang nektet.» without a status: only the response has it.
+      ;(copyTemplatePage as jest.Mock).mockResolvedValueOnce({
+        ok: false,
+        status: 403,
+        json: () =>
+          Promise.resolve({
+            'odata.error': {
+              code: '-2147024891, System.UnauthorizedAccessException',
+              message: { lang: 'nb-NO', value: 'Tilgang nektet.' }
+            }
+          })
+      })
+      const dialog = renderDialog()
+      await create(dialog)
+      expect(form.setFormErrorMessage).toHaveBeenLastCalledWith(strings.NewsNoAccessErrorText)
+      expect(dialog.current.spinnerMode).toBe('idle')
+    })
+
+    it('does not take a title with 403 in it for missing access', async () => {
+      // «Rom 403» gives a page name with 403 in it, which the message about the item names.
+      ;(getSitePageItemId as jest.Mock).mockRejectedValueOnce(
+        new Error('Fant ikke elementet for /sites/alfa/SitePages/Nyheter/Rom-403.aspx')
+      )
+      const dialog = renderDialog()
+      await create(dialog)
+      expect(form.setFormErrorMessage).toHaveBeenLastCalledWith(
+        `${strings.NewsCreateError} Fant ikke elementet for /sites/alfa/SitePages/Nyheter/Rom-403.aspx`
+      )
+    })
+
     it("removes the copied page when the page's item cannot be found, and shows why", async () => {
       // The page was opened for editing without its project link, so the project's news never
       // listed it.
