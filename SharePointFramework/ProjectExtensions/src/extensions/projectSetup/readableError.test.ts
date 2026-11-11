@@ -5,7 +5,7 @@ import { readableErrorMessage, withReason } from './readableError'
 const jsomFailure = (message: string) => ({ sender: {}, args: { get_message: () => message } })
 
 /**
- * The `ProvisioningError` of sp-js-provisioning 1.5.0 for a handler that failed with `cause`: its
+ * The `ProvisioningError` of sp-js-provisioning 1.5.1 for a handler that failed with `cause`: its
  * message is `String(cause)` when the cause has no message of its own.
  */
 const provisioningError = (handler: string, cause: unknown) =>

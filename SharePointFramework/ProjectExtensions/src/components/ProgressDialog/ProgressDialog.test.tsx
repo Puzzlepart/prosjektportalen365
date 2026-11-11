@@ -103,7 +103,7 @@ describe('ProgressDialog', () => {
   })
 
   it('shows what a step failed with in words, not as «[object Object]»', () => {
-    // sp-js-provisioning 1.5.0's error for a failed JSOM request (the content types): its message
+    // sp-js-provisioning 1.5.1's error for a failed JSOM request (the content types): its message
     // is `String(cause)`, and what went wrong is in the cause, `{ sender, args }`.
     const error = new ApplyTemplateTaskError(
       Object.assign(new Error('[object Object]'), {

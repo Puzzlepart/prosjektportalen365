@@ -195,7 +195,7 @@ describe('ApplyTemplate', () => {
   })
 
   it('fails with what the engine failed with in words when its error has no message of its own', async () => {
-    // sp-js-provisioning 1.5.0 makes the message of its error `String(cause)`, and a failed JSOM
+    // sp-js-provisioning 1.5.1 makes the message of its error `String(cause)`, and a failed JSOM
     // request (the content types) rejects with `{ sender, args }`: the setup said «[object Object]».
     engine.fail = Object.assign(new Error('[object Object]'), {
       name: 'ProvisioningError',

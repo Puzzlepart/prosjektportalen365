@@ -85,7 +85,7 @@ const ID = {
   other: '{4df4ebf7-ae8e-4f6b-ae6d-444444444444}'
 }
 
-describe('CompatibilityService, site columns as sp-js-provisioning 1.5.0 applies them', () => {
+describe('CompatibilityService, site columns as sp-js-provisioning 1.5.1 applies them', () => {
   it('reports nothing for a column the hub has as the package declares it, Mult read as the multi type', async () => {
     hub({
       fields: [
@@ -195,7 +195,7 @@ describe('CompatibilityService, site columns as sp-js-provisioning 1.5.0 applies
   })
 })
 
-describe('CompatibilityService, lists as sp-js-provisioning 1.5.0 applies them', () => {
+describe('CompatibilityService, lists as sp-js-provisioning 1.5.1 applies them', () => {
   it('no longer blocks the fields and field references a hub list has: they are updated in place', async () => {
     hub({
       lists: {

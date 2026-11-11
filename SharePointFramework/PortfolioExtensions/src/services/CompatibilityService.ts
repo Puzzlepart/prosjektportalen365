@@ -70,7 +70,7 @@ function typeChange(stored?: string, declared?: string): 'same' | 'widening' | '
 export class CompatibilityService {
   /**
    * Run the compatibility check. Site columns and list fields are reported as
-   * sp-js-provisioning 1.5.0 handles them: an existing one is updated in place by
+   * sp-js-provisioning 1.5.1 handles them: an existing one is updated in place by
    * its internal name (list fields by their id), never deleted; a widening type
    * change is applied, any other type change leaves it as it is.
    *
@@ -448,7 +448,7 @@ export class CompatibilityService {
    * type, or a field reference the hub lacks) and term sets out of
    * `Taxonomy.TermSets` (so an existing term set with the same id but a different
    * name really is left untouched, as the conflict dialog promises). Site columns
-   * and list fields stay in: sp-js-provisioning 1.5.0 updates them in place, leaves
+   * and list fields stay in: sp-js-provisioning 1.5.1 updates them in place, leaves
    * a type change that would lose values alone and logs a column it cannot create
    * as an error, without stopping. Mutates a shallow clone so the existing hub
    * objects are left untouched on provisioning.
