@@ -1,0 +1,10 @@
+<pnp:Security xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
+    <!-- For a configuration list projects read that inherited the hub's roles before 1.15.0: the
+         roles are copied when the inheritance is broken, so nobody who reads or edits it through
+         the hub, customers' own groups too, loses that on an upgrade, and the group «Minimum
+         lesetilganger på hub» reads it. On a list that already has roles of its own, the group's
+         role is only added. -->
+    <pnp:BreakRoleInheritance CopyRoleAssignments="true" ClearSubscopes="false">
+        <pnp:RoleAssignment Principal="{resource:Security_SiteGroup_MinimumHubReadAccess_Title}" RoleDefinition="{resource:Choice_GtPermissionLevel_Read}" />
+    </pnp:BreakRoleInheritance>
+</pnp:Security>

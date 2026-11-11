@@ -278,10 +278,11 @@ catch {
 
 
 Write-Host "[INFO] Post-install action: Letting each user read and edit only their own entries in the log list"
-# Lists/Logg.xml sets ReadSecurity, WriteSecurity and NoCrawl, but an upgrade does not reliably
-# change them on a list the hub already has. Everyone writes to the log, the group «Minimum
-# lesetilganger på hub» too (Lists/Security/LogSecurity.xml), and only owners of the hub may read
-# other users' entries. Kept out of search, which is not known to respect the setting. Idempotent.
+# Lists/Logg.xml sets ReadSecurity, WriteSecurity and NoCrawl, also on a list the hub already has;
+# this step sets them when the upgrade applies no template (-SkipTemplate). Everyone writes to the
+# log, the group «Minimum lesetilganger på hub» too (Lists/Security/LogSecurity.xml), and only
+# owners of the hub may read other users' entries. Kept out of search, which is not known to
+# respect the setting. Idempotent.
 try {
     $LogListTitle = Get-Resource -Name "Lists_Log_Title"
     $LogList = Get-PnPList -Identity $LogListTitle -ErrorAction SilentlyContinue

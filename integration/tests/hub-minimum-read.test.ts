@@ -8,7 +8,11 @@ import { connect } from '../src/sites.ts'
 const require = createRequire(import.meta.url)
 const resources = require('SharedResources') as Record<string, string>
 
-/** The lists the group reads: those that include `Lists/Security/MinimumReadSecurity.xml`. */
+/**
+ * The lists the group reads: those that include `Lists/Security/MinimumReadSecurity.xml`, or
+ * `MinimumReadCopySecurity.xml` (`Lenker`, `Tidslinjekonfigurasjon`). `Installasjonslogg` is not one:
+ * its entries hold the install command line and trace.
+ */
 const READ_LISTS = [
   'Lists_Global_Settings_Title',
   'Lists_ProjectAdminRoles_Title',
@@ -21,7 +25,6 @@ const READ_LISTS = [
   'Lists_ProjectContentColumns_Title',
   'Lists_DataSources_Title',
   'Lists_HelpContent_Title',
-  'Lists_InstallationLog_Title',
   'Lists_Links_Title',
   'Lists_TimelineConfiguration_Title'
 ]

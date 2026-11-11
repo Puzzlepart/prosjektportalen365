@@ -666,6 +666,11 @@ elseif ($null -ne $MyInvocation.Line -and $MyInvocation.Line.Length -gt 2) {
 else {
     $MyInvocation.Line
 }
+# Everyone who reads the hub reads the installation log: the certificate is a secret, so its value
+# is not logged, however the parameter is written (in full, a shorter prefix, with a colon).
+if ($InstallCommand) {
+    $InstallCommand = $InstallCommand -replace '(?i)((?:^|\s)-Ce\w*(?::|\s+))("[^"]*"|''[^'']*''|\S+)', '$1***'
+}
 
 $InstallEntry = @{
     Title            = "PP365 {VERSION_PLACEHOLDER}"

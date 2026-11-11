@@ -204,18 +204,20 @@ Sjekk ut [release notes](./releasenotes/1.14.0.md) for høydepunkter og mer deta
 - Rettet en feil i oppsettveiviseren hvor dialogen som vises når veiviseren lukkes uten at området settes opp, sa «Installasjon avbrutt av bruker» både som tittel og som feilmelding. Den sier nå «Oppsettet ble avbrutt» og at ingenting er lagt til på området, som en opplysning
 - Rettet en feil i oppsettveiviseren hvor telleren ved `Prosjekttillegg` og `Standardinnhold` sa «1 valgte elementer». Den sier nå «1 valgt element»
 - Rettet en feil hvor `Kjør oppsettveiviser` og `Gjør om til overordnet prosjekt` ikke startet oppsettveiviseren på områder med et annet språk enn norsk (siden 1.12.0). Handlingen som starter veiviseren, pekte der på en utvidelse som ikke følger med installasjonen
-
----
 - Rettet en feil i `Prosjektnyheter` hvor et nyhetsområde brukeren ikke har tilgang til, ga en tom liste uten forklaring. Nå vises en melding om manglende tilgang, også når en nyhet lages, og en ny nyhet lagres selv om prosjektets rad i `Prosjekter` ikke kan leses
 - Rettet en feil i `Prosjekttidslinje` hvor manglende tilgang til en liste på huben ga en feilmelding om `SiteId` i stedet for meldingen om manglende tilgang
 - Rettet en feil hvor tiltakskolonnen i `Usikkerhet` ikke ble vist for brukere uten tilgang til huben
 - Rettet feilmeldingen i `Fasevelger` når fasene ikke kan hentes. Den sa at prosjektet måtte være «fristilt fra porteføljeområdet»
+- Rettet en feil hvor en feilmelding med 401 eller 403 et sted i teksten, for eksempel i en ID eller en tittel, ble tatt for manglende tilgang til porteføljeområdet. Statuskoden avgjør nå når feilen har en
+- Rettet en feil hvor `Install.ps1` lagret sertifikatet fra `-CertificateBase64Encoded` i klartekst i `Installasjonslogg` på porteføljeområdet, som alle med lesetilgang der kan lese, når skriptet ble kjørt med sertifikatet i kommandolinjen. Verdien lagres nå som `***`
 
 ### Merk
 
-- `Tidslinjekonfigurasjon`, `Idékonfigurasjon` og `Lenker` på huben får egne rettigheter ved oppgradering, som de andre konfigurasjonslistene: eiere har full kontroll, medlemmer og besøkende lesetilgang. Medlemmer av huben kan ikke lenger endre dem, og grupper som hadde tilgang gjennom arv, må gis tilgang på nytt
-- `Logg` på huben får egne rettigheter, kopiert fra huben, og innstillingen «bare egne elementer» for lesing og redigering, og tas ut av søket. Bare eiere av huben ser alle radene; medlemmer ser sine egne
+- `Tidslinjekonfigurasjon` og `Lenker` på huben får egne rettigheter ved oppgradering, kopiert fra huben, og gruppen `Minimum lesetilganger på hub` får lesetilgang. Alle beholder tilgangen de hadde gjennom huben, men senere endringer i hubens tilganger gjelder ikke lenger disse listene
+- `Logg` på huben får egne rettigheter, kopiert fra huben, og innstillingen «bare egne elementer» for lesing og redigering, og tas ut av søket. Bare de som kan administrere lister på huben (eiere, og medlemmer med redigeringstilgang), ser alle radene; andre ser sine egne. Innstillingen settes på nytt ved hver oppgradering
 - `Arkiveringslogg` arver rettighetene fra huben på nye installasjoner, slik at medlemmer kan føre arkiveringen fra `Fasevelger`. Eksisterende huber beholder listens egne rettigheter, der medlemmer bare har lesetilgang: gi dem tilgang til å bidra i listen før arkiveringen tas i bruk
+
+---
 
 ## 1.14.1 - 16.10.2026
 
