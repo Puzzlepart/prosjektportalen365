@@ -13,7 +13,7 @@ Ferdigheten [`pp365-templates`](../../.claude/skills/pp365-templates/SKILL.md) h
 | `JsonTemplates/_JsonTemplateProject.json`, `_JsonTemplateProgram.json` og `_JsonTemplateParent.json` | Prosjekt-, program- og overordnet mal for oppsettveiviseren; se [Prosjektmaler (JSON)](js-provisjoneringsmal.md) | `Content/Portfolio_content.<språk>/ProjectTemplates/*.txt` (generert) |
 | `Content/Portfolio_content.no-NB/` og `Content/Portfolio_content.en-US/` | Innholdsmalen for hvert språk: de genererte prosjektmalene, standardoppsettet for risiko- og mulighetsmatrisen under `SiteAssets/`, dokumentmalene i `Malbibliotek/` (bare norsk) og radene i v6-listene for fasesjekkpunkter og Planner-oppgaver. Filene skrives for hvert språk og bruker ikke ressurstokens | `Portfolio_content.<språk>.pnp` |
 | `Taxonomy/Taxonomy.xml` | Termgruppen og termsettene for en ny tenant | `Taxonomy.pnp` |
-| `Upgrade/<versjon>/<versjon>.xml` | Termer som eksisterende tenanter skal få (1.5.0, 1.8.1, 1.12.0 og 1.14.0) | `<versjon>.pnp` |
+| `Upgrade/<versjon>/<versjon>.xml` | Termer som eksisterende tenanter skal få (1.8.1, 1.12.0 og 1.14.0) | `<versjon>.pnp` |
 | `.tasks/` | Skriptene som genererer tekstfilene og prosjektmalene (under) | |
 
 `.pnp`-filene lages bare av `Install/Build-Release.ps1`, med `Convert-PnPFolderToSiteTemplate` fra PnP.PowerShell; se [Bygge en ny utgivelse](../utgivelse/bygge-utgivelse.md). Med `-SkipBuildPnPTemplates`, som `[apps-only]`-kjøringene i CI bruker, lages de ikke.
@@ -47,6 +47,8 @@ Kjør skriptene i `Templates/`. Alle står i [npm-skript](../spfx/npm-skript.md)
 - `Taxonomy.pnp` legges aldri på ved oppgradering. Nye termer for eksisterende tenanter går i en ny `Upgrade/<versjon>`-mal, som `PreInstallUpgrade.ps1` legger på bak en versjonssjekk.
 - Innholdsmalen legges på med bare `Files` ved oppgradering. Filene byttes ut (også prosjektmalene i `Prosjektmaler`), men radene i innholdsmalens lister legges ikke inn; eksisterende huber får nye slike rader bare fra `PostInstallUpgrade.ps1`.
 - `-SkipTemplate`, som `[apps-only]` bruker, hopper over malene. Før- og ettersteget for oppgradering kjører likevel.
+
+Oppgraderingssteg til og med versjon 1.5.0 er fjernet, siden disse versjonene ikke lenger er i bruk.
 
 Startrader (`<pnp:DataRows>`) oppfører seg etter `UpdateBehavior`:
 

@@ -596,7 +596,7 @@ omdøping, tilføyelser og konfigurasjon.
 - oppdater de to eksisterende `Listeinnhold`-radene på plass (bevar item-ID)
 
 **2. Versjonert oppgraderingsmal** — `Templates/Upgrade/1.14.0/1.14.0.xml`
-(mønster: `1.5.0`, `1.8.1`, `1.12.0`). `Install/Build-Release.ps1` pakker hver undermappe som
+(mønster: `1.8.1`, `1.12.0`). `Install/Build-Release.ps1` pakker hver undermappe som
 egen `.pnp`. ~~Nødvendig for fasetekstene siden `-Upgrade` hopper over Taxonomy~~ **Besluttet
 2026-08-25: fasetekstene distribueres IKKE ved oppgradering** — de gjelder kun nye
 installasjoner (via Taxonomy.pnp). Endringen er kun noen ord i undertekst/beskrivelse;

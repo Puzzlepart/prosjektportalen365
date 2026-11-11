@@ -36,6 +36,10 @@ Sjekk ut [release notes](./releasenotes/1.15.0.md) for høydepunkter og mer deta
 - Prosjektområdet finner huben også når brukeren bare har tilgang til enkelte lister der, og et avslag fra én liste gjør ikke lenger hele huben utilgjengelig
 - `Fasevelger` sier fra når arkiveringen ikke kunne føres i `Arkiveringslogg`
 
+### Fjernet
+
+- Fjernet utdaterte oppgraderingssteg til og med versjon 1.5.0 og den tilhørende taksonomimalen
+
 ### Feilrettinger
 
 - `UpgradeAllSitesToLatest.ps1` legger `Footer`-utvidelsen og feltet `Prosjektadministrasjonsroller` på alle prosjektområder som mangler dem, uansett hvilken versjon det oppgraderes fra, og fjerner den utgåtte `Hjelpeinnhold`-utvidelsen. Områder opprettet med `Overordnet mal` får `Footer` igjen (falt bort i 1.14.0)
