@@ -8,6 +8,7 @@ const MATRIX_HEADER_CELL_DEFAULT_PROPS: Partial<IMatrixHeaderCellProps> = {
   text: ''
 }
 
+/** Labels a matrix row or column. */
 export const MatrixHeaderCell: FC<IMatrixHeaderCellProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, MATRIX_HEADER_CELL_DEFAULT_PROPS)
   return (

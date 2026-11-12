@@ -2,14 +2,7 @@ import { SPFxContext } from 'pp365-shared-library'
 import { EditableSPField } from 'pp365-shared-library/lib/models'
 import { IProjectInformationState } from '../types'
 
-/**
- * Create properties from the `state`. Also `webPartContext` is needed to get the current locale.
- * The field configuration from the `template` is used to determine what configuration to use
- * for the `EditableSPField` objects.
- *
- * @param state State of the `ProjectInformation` component.
- * @param spfxContext SPFx context
- */
+/** Builds localized editable properties from loaded fields and template settings, ordered by column. */
 export function createProperties(state: IProjectInformationState, spfxContext: SPFxContext) {
   const currentLocale = spfxContext.pageContext.cultureInfo.currentUICultureName.toLowerCase()
 

@@ -13,6 +13,7 @@ export function renderHook<S>(
     state: undefined,
     dispatch: undefined
   }
+  /** Keeps the tested reducer hook mounted while state and dispatch are captured. */
   const Probe: React.FC = () => {
     Object.assign(captured, useHook())
     return null

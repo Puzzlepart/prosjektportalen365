@@ -15,23 +15,13 @@ import { useProjectTimelineState } from './useProjectTimelineState'
 import resource from 'SharedResources'
 import { IListColumn } from 'pp365-shared-library'
 
-/**
- * Component logic hook for `ProjectTimeline`
- *
- * @param props Props
- *
- * @returns `state`, `setState`, `onFilterChange`
- */
+/** Coordinates timeline loading, filters, grouping and item details. */
 export const useProjectTimeline = (props: IProjectTimelineProps) => {
   const { state, setState } = useProjectTimelineState()
   let defaultTimeframe: TimelineTimeframe
   let timeLapseCenter: Date
 
-  /**
-   * Get filtered data
-   * @param data Timeline data
-   * @returns `data` filtered by `state.activeFilters`
-   */
+  /** Sorts timeline items and applies active filters, omitting groups left empty. */
   const getFilteredData = (data: ITimelineData): ITimelineData => {
     const { activeFilters } = state
 
@@ -50,14 +40,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     }
   }
 
-  /**
-   * Get filters
-   *
-   * @param config Timeline configuration
-   * @param data Timeline data
-   *
-   * @returns `filters` for `FilterPanel`
-   */
+  /** Builds category, type and tag choices from items enabled for filtering. */
   const getFilters = (
     config: TimelineConfigurationModel[],
     data: ITimelineData
@@ -83,12 +66,6 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     }))
   }
 
-  /**
-   * On filter change
-   *
-   * @param column Column
-   * @param selectedItems Selected items
-   */
   const onFilterChange = (column: IListColumn, selectedItems: IFilterItemProps[]) => {
     const { activeFilters } = state
 
@@ -106,11 +83,6 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     }
   }
 
-  /**
-   * On group by change
-   *
-   * @param groupBy Group by
-   */
   const onGroupByChange = (groupBy: string) => {
     let selectedGroup: ITimelineGroup[] = []
     let updatedItems: ITimelineItem[] = []

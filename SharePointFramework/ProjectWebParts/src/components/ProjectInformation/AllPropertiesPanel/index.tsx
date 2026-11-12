@@ -10,6 +10,7 @@ const ALL_PROPERTIES_PANEL_DEFAULT_PROPS: Partial<IBasePanelProps> = {
   headerText: strings.ProjectPropertiesHeader
 }
 
+/** Shows all project properties in a read-only panel. */
 export const AllPropertiesPanel: FC<IBasePanelProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, ALL_PROPERTIES_PANEL_DEFAULT_PROPS)
   const context = useProjectInformationContext()

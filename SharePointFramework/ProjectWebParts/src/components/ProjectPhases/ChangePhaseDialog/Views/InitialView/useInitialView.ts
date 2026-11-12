@@ -5,9 +5,7 @@ import { ProjectPhasesContext } from 'components/ProjectPhases/context'
 import { ChangePhaseDialogContext } from '../../context'
 import { useActions } from './useActions'
 
-/**
- * Component logic hook for `InitialView`
- */
+/** Manages the current checkpoint comment and saves the selected status before advancing. */
 export function useInitialView() {
   const { state } = useContext(ChangePhaseDialogContext)
   const checklistItem = state.checklistItems[state.currentIdx]
@@ -18,11 +16,6 @@ export function useInitialView() {
     commentMinLength > 0 ? format(strings.ChecklistCommentDescription, commentMinLength) : undefined
   const [comment, setComment] = useState(checklistItem.comment || '')
 
-  /**
-   * On next check list item
-   *
-   * @param statusValue Status value
-   */
   const onNextChecklistItem = async (statusValue: string) => {
     await nextChecklistItem({
       GtChecklistStatus: statusValue,

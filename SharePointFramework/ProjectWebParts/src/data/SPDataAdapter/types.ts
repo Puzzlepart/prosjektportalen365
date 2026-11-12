@@ -1,10 +1,9 @@
 import { ISPDataAdapterBaseConfiguration } from 'pp365-shared-library/lib/data'
 
+/** Configuration accepted by the project web parts' SharePoint adapter. */
 export type ISPDataAdapterConfiguration = ISPDataAdapterBaseConfiguration
 
-/**
- * Interface for archive log entry data
- */
+/** Archive-log fields identifying a requested operation and its scope. */
 export interface IArchiveLogEntry {
   Title: string
   GtLogStatus: string
@@ -15,18 +14,14 @@ export interface IArchiveLogEntry {
   GtLogReference?: string
 }
 
-/**
- * Interface for archive scope status
- */
+/** Count of archived items grouped by scope and status. */
 export interface IArchiveScopeStatus {
   scope: string
   count: number
   status: string
 }
 
-/**
- * Interface for a single archive operation
- */
+/** Archive operation with its date, message and scope totals. */
 export interface IArchiveOperation {
   operation: string
   date: Date
@@ -37,17 +32,13 @@ export interface IArchiveOperation {
   scopes: IArchiveScopeStatus[]
 }
 
-/**
- * Interface for detailed archive information
- */
+/** Project archive summary with its grouped operations. */
 export interface IArchiveStatusInfo {
   lastArchiveDate: Date
   operations: IArchiveOperation[]
 }
 
-/**
- * Interface for archive document item data
- */
+/** Document metadata used to choose archive candidates. */
 export interface IArchiveDocumentItem {
   id: number
   title: string
@@ -57,9 +48,7 @@ export interface IArchiveDocumentItem {
   type: 'file'
 }
 
-/**
- * Interface for archive list item data
- */
+/** List metadata used to choose archive candidates. */
 export interface IArchiveListItem {
   id: string
   title: string

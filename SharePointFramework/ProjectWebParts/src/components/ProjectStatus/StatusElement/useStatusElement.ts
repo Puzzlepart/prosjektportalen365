@@ -6,10 +6,7 @@ import { useId } from '@fluentui/react-components'
 import { format } from 'pp365-shared-library'
 import * as strings from 'ProjectWebPartsStrings'
 
-/**
- * Component logic hook for `StatusElement`. Handles truncating of the comment
- * and the icon size.
- */
+/** Derives status icon presentation and truncates comments for the selected display mode. */
 export function useStatusElement(props: IStatusElementProps) {
   const { headerProps } = useContext(SectionContext)
   let comment = headerProps.comment?.replace(/\n/g, '<br />')

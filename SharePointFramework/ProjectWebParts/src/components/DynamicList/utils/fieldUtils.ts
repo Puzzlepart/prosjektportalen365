@@ -18,7 +18,6 @@ const VIEW_FIELD_ALIASES: Record<string, string> = {
  * (e.g. LinkTitle → Title) with the actual field InternalName.
  *
  * @param viewFieldNames - Raw field names from view.ViewFields.Items
- * @returns Normalized field names that match field.InternalName
  */
 export function normalizeViewFieldNames(viewFieldNames: string[]): string[] {
   return viewFieldNames.map((name) => VIEW_FIELD_ALIASES[name] || name)
@@ -27,10 +26,6 @@ export function normalizeViewFieldNames(viewFieldNames: string[]): string[] {
 /**
  * Determines whether a SharePoint field should be available for DynamicList column rendering.
  * Used by both the web part property pane (column options) and runtime data fetching.
- *
- * @param field - SharePoint field metadata
- * @param projectContentColumns - Configuration columns from the hub site
- * @returns Whether the field should be visible in DynamicList
  */
 export function isVisibleListField(
   field: any,

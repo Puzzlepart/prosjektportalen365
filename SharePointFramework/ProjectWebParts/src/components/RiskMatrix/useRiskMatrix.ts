@@ -5,20 +5,13 @@ import { IRiskMatrixProps } from './types'
 import { useRiskMatrixConfiguration } from './useRiskMatrixConfiguration'
 import { useId } from '@fluentui/react-components'
 
-/**
- * Component logic hook for `RiskMatrix`. Builds the matrix elements and configuration
- * for the matrix.
- *
- * @param props Props
- */
+/** Places risks at their original and optional post-action coordinates. */
 export function useRiskMatrix(props: IRiskMatrixProps) {
   const [showPostAction, setShowPostAction] = useState(false)
   const { configuration, error } = useRiskMatrixConfiguration(props)
 
   /**
    * Get the matrix elements for a given cell.
-   *
-   * @param cell Matrix cell
    */
   function getElementsForCell(cell: IMatrixCell) {
     const elements = props.items

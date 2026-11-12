@@ -7,12 +7,7 @@ import { useProjectInformationContext } from '../context'
 import { CLOSE_PANEL, UPDATE_DATA } from '../reducer'
 import { usePropertiesSync } from '../usePropertiesSync'
 
-/**
- * Returns an object containing the `onSubmit` function, `error` state, and `saveProgressText` state
- * for handling the submission of the edit properties panel form.
- *
- * @returns An object containing the `onSubmit` function, `error` state, and `saveProgressText` state.
- */
+/** Saves project properties locally, then synchronizes them to the hub and reports progress. */
 export function useEditPropertiesPanelSubmit(): ICustomEditPanelSubmitProps {
   const context = useProjectInformationContext()
   const onSyncProperties = usePropertiesSync(context)
@@ -25,10 +20,6 @@ export function useEditPropertiesPanelSubmit(): ICustomEditPanelSubmitProps {
 
   /**
    * Handles the submission of the edit properties panel form.
-   *
-   * @param properties The updated project properties.
-   *
-   * @returns void
    */
   const onSubmit = useCallback<ICustomEditPanelSubmitProps['onSubmit']>(
     async ({ properties }) => {

@@ -42,6 +42,7 @@ function projectData(values: Record<string, any>, overrides: Record<string, any>
   } as any
 }
 
+/** Runs the project information reducer with the test locale context. */
 function useReducerHook() {
   return useProjectInformationReducer(spfxContext)
 }

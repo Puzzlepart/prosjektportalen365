@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import styles from './LoadingSkeleton.module.scss'
 import { Skeleton, SkeletonItem, SkeletonProps } from '@fluentui/react-components'
 
+/** Reserves space for project information while its properties load. */
 export const LoadingSkeleton: FC<Partial<SkeletonProps>> = (props) => {
   const percentages = [80, 70, 60, 50, 40, 30, 20]
 

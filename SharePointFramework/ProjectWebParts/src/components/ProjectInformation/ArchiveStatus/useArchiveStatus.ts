@@ -16,11 +16,7 @@ export const ARCHIVE_STATUS_COLORS = {
   [strings.ArchiveLogStatusInProgress]: '#0078d4'
 }
 
-/**
- * Component logic hook for `ArchiveStatus`.
- *
- * @returns Archive status data
- */
+/** Derives archive status icons, grouped operations and popover visibility. */
 export function useArchiveStatus() {
   const context = useProjectInformationContext()
   const [open, setOpen] = useState(false)

@@ -6,6 +6,7 @@ import { useTimelineList } from './useTimelineList'
 import { ProjectTimelineContext } from '../context'
 import { DataGridList, Toolbar, customLightTheme } from 'pp365-shared-library'
 
+/** Displays timeline items in a selectable table with optional editing commands. */
 export const TimelineList: FC = () => {
   const context = useContext(ProjectTimelineContext)
   const { columns, menuItems, farMenuItems, defaultSortState, onSelection, fluentProviderId } =

@@ -11,6 +11,7 @@ import styles from './Actions.module.scss'
 import { useActions } from './useActions'
 import { customLightTheme } from 'pp365-shared-library'
 
+/** Displays the project's permitted built-in and custom actions. */
 export const Actions: FC = () => {
   const actions = useActions()
   const fluentProviderId = useId('fp-project-information-actions')

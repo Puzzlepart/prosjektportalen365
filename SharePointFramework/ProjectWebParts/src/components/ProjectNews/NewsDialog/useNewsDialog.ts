@@ -21,9 +21,7 @@ import { TemplateFile } from '../types'
 import { ProjectNewsContext } from '../context'
 import { useNewsForm } from './useNewsForm'
 
-/**
- * Component logic hook for `NewsDialog`
- */
+/** Loads page templates and creates project-linked news with progress and recoverable error feedback. */
 export const useNewsDialog = () => {
   const context = useContext(ProjectNewsContext)
   const newsForm = useNewsForm()

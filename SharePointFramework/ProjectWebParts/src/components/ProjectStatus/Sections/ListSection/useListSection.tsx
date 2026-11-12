@@ -8,11 +8,7 @@ import { getSectionDataErrorMessage } from './sectionDataError'
 import { IListSectionData, IListSectionState, ISummation } from './types'
 import { useFetchListData } from './useFetchListData'
 
-/**
- * Component logic hook for `ListSection`. Fetches list data
- * from SharePoint, handles state and dispatches actions to the reducer,
- * and gives the message to show when the data could not be fetched.
- */
+/** Loads or reuses list-section data, calculates totals and persists it for publication. */
 export function useListSection() {
   const context = useProjectStatusContext()
   const { selectedReport } = context.state

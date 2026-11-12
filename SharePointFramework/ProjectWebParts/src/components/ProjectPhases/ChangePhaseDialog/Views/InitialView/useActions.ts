@@ -4,12 +4,7 @@ import * as strings from 'ProjectWebPartsStrings'
 import { useContext } from 'react'
 import { useBoolean } from 'usehooks-ts'
 
-/**
- * Use actions hook
- *
- * @param comment Comment value
- * @param onNextChecklistItem On next checklist item callback
- */
+/** Builds checkpoint status actions and prevents duplicate saves while an update runs. */
 export function useActions(
   comment: string,
   onNextChecklistItem: (statusValue: string) => Promise<void>

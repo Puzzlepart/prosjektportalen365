@@ -9,16 +9,8 @@
  * `third-party-externals-configure-webpack` has appended its externals.
  * The return value is ignored - mutate `webpackConfig` in place.
  *
- * Two responsibilities:
- *
- *  1. Rebuild `resolve.alias` from this solution's tsconfig `compilerOptions.paths`,
- *     pointing at the compiled output folder (`lib`), exactly as the old
- *     gulpfile `build.configureWebpack.mergeConfig({ additionalConfiguration })`
- *     block did.
- *
- *  2. Decision A - keep the linked Rush workspace packages BUNDLED into this
- *     solution's bundles instead of letting Heft turn them into runtime SPFx
- *     component dependencies.
+ * Resolves tsconfig aliases, bundles linked Rush packages, restores third-party
+ * CSS and Node compatibility, and uses page reloads during development.
  *
  *     Heft externalizes a linked package when `CumulativeManifestProcessor`
  *     manages to attach a `packageName` to its discovered manifests, which it
@@ -31,9 +23,8 @@
  *     removes the runtime component dependency in one move; `linkedExternals`
  *     on its own never emits anything.
  *
- * This file is identical in all six SharePointFramework solutions: the alias
- * block derives everything from the sibling `tsconfig.json` at runtime, and the
- * externals filter is a no-op for names that are not present.
+ * Aliases derive from the sibling `tsconfig.json`; the externals filter is a
+ * no-op for workspace packages that are not present.
  */
 
 const fs = require('fs')
@@ -177,7 +168,7 @@ function withoutBundledPackages(externals) {
 }
 
 /**
- * Decision A: keep the linked workspace packages bundled.
+ * Keeps linked workspace packages bundled, including after later externals assignments.
  *
  * `externals` is left by the SPFx generator as a plain array of strings
  * (`WebpackConfigurationGenerator.js`, `externals: Array.from(externalsKeys)`),
@@ -216,10 +207,6 @@ function keepLinkedPackagesBundled(webpackConfig, log) {
   )
 }
 
-/**
- * @param {import('webpack').Configuration} webpackConfig
- * @param {{ logger: { terminal: { writeVerboseLine: (message: string) => void } } }} taskSession
- */
 /**
  * Plain stylesheets imported from node_modules are global CSS, not CSS modules.
  *
@@ -311,6 +298,12 @@ function reloadPageOnRebuild(webpackConfig, log) {
   log('dev server: hot module replacement off, the page reloads after each rebuild')
 }
 
+/**
+ * Applies this solution's compatibility settings to each webpack configuration.
+ *
+ * @param {import('webpack').Configuration} webpackConfig
+ * @param {{ logger: { terminal: { writeVerboseLine: (message: string) => void } } }} taskSession
+ */
 module.exports = function customizeWebpackConfiguration(webpackConfig, taskSession, heftConfiguration, webpack) {
   const log = (message) => {
     try {

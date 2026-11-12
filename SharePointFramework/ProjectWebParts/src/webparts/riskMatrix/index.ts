@@ -7,6 +7,7 @@ import {
 import { IRiskMatrixWebPartProps } from './types'
 import resource from 'SharedResources'
 
+/** Hosts the risk matrix with risk-specific source and configuration defaults. */
 export default class RiskMatrixWebPart extends BaseUncertaintyMatrixWebPart<IRiskMatrixWebPartProps> {
   protected get config(): IUncertaintyMatrixWebPartConfig {
     return {

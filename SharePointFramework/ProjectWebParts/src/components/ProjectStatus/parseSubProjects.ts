@@ -23,8 +23,6 @@ const MAX_KEY_LENGTH = 32
  * characters, no `'`, `|`, `?`, `&`, `#` or `%`, and not starting with `-`.
  * Used both for configured sub-project keys and for scope keys supplied
  * through the `scope` URL parameter.
- *
- * @param scopeKey Scope key
  */
 export function isValidScopeKey(scopeKey: string): boolean {
   const trimmedKey = (scopeKey ?? '').trim()
@@ -42,8 +40,6 @@ export function isValidScopeKey(scopeKey: string): boolean {
  * dropped: empty keys, keys longer than 32 characters, keys containing
  * `'`, `|`, `?`, `&`, `#` or `%`, and keys starting with `-` or whitespace.
  * Duplicate keys (case-insensitive) are deduplicated, keeping the first.
- *
- * @param subProjects Raw `subProjects` property value
  */
 export function parseSubProjects(subProjects: string): ISubProject[] {
   const parsedSubProjects: ISubProject[] = []
@@ -67,9 +63,6 @@ export function parseSubProjects(subProjects: string): ISubProject[] {
  * Returns the display label for a scope key, falling back to the key itself
  * when the key is not found in the configured sub-projects (e.g. a series
  * whose key was removed or renamed in the configuration).
- *
- * @param subProjects Parsed sub-projects (from `parseSubProjects`)
- * @param scopeKey Scope key
  */
 export function getScopeLabel(subProjects: ISubProject[], scopeKey: string): string {
   const trimmedScopeKey = (scopeKey ?? '').trim()

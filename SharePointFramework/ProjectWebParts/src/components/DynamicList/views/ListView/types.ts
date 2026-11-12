@@ -7,17 +7,11 @@ import { IListColumn } from '../../useColumns'
 export type IListViewColumn<T = any> = IListColumn
 
 /**
- * Props for the base ListView component.
+ * Table rows, typed columns, navigation callbacks and empty-state messages.
  */
 export interface IListViewProps {
-  /**
-   * Array of column definitions.
-   */
   columns: IListViewColumn[]
 
-  /**
-   * Array of items to display.
-   */
   items: any[]
 
   /**
@@ -35,7 +29,6 @@ export interface IListViewProps {
    * Callback fired when the first column is clicked.
    * Used for drill-down functionality in DynamicListView.
    *
-   * @param item - The item that was clicked
    */
   onFirstColumnClick?: (item: any) => void
 
@@ -49,8 +42,5 @@ export interface IListViewProps {
    */
   noColumnsMessage?: string
 
-  /**
-   * Additional CSS class name for styling.
-   */
   className?: string
 }

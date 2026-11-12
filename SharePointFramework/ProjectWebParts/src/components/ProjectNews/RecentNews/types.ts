@@ -1,9 +1,7 @@
 import { IProjectNewsData } from '../types'
 
 /**
- * Props for the RecentNews component, which displays a list of recent news items.
- * It extends the IProjectNewsData interface to include news data.
- * The maxVisible prop controls how many news items are displayed initially.
+ * Recent news and the initial visible-article limit.
  */
 export interface IRecentNewsProps extends IProjectNewsData {
   /**

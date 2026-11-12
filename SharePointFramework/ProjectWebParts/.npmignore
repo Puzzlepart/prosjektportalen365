@@ -1,6 +1,3 @@
-#################
-## Misc
-#################
 **/.DS_Store
 nbproject
 manifest.mf
@@ -17,24 +14,12 @@ teams
 sharepoint
 dist
 
-#################
-## Vscode
-#################
 .vscode
 
-############
-## Windows
-############
 
-# Windows image file caches
 Thumbs.db
 
-# Folder config file
 Desktop.ini
 
-############
-## Mac
-############
 
-# Mac crap
 .DS_Store

@@ -3,6 +3,7 @@ import { ChangePhaseDialogContext } from '../../context'
 import { CheckListItem } from './CheckListItem'
 import styles from './SummaryView.module.scss'
 
+/** Summarizes the phase's checkpoints before the user continues. */
 export const SummaryView: FC = () => {
   const context = useContext(ChangePhaseDialogContext)
   return (

@@ -16,6 +16,7 @@ import { BaseProjectWebPart } from '../baseProjectWebPart'
 import resource from 'SharedResources'
 import { format } from 'pp365-shared-library'
 
+/** Hosts project information and its property, relationship and report settings. */
 export default class ProjectInformationWebPart extends BaseProjectWebPart<IProjectInformationProps> {
   public async onInit() {
     await super.onInit()

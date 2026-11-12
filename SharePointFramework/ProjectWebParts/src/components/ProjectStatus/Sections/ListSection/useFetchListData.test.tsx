@@ -42,6 +42,7 @@ function failingWeb(error: any) {
 /** The section's fetch for the report series `DP1` («Delprosjekt 1»). */
 function fetchFor(listTitle: string) {
   let fetchListData: ReturnType<typeof useFetchListData>
+  /** Exposes the section data loader under the test's report and section contexts. */
   const Probe: React.FC = () => {
     fetchListData = useFetchListData()
     return null

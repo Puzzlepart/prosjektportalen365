@@ -23,6 +23,7 @@ import { useProjectStatusDataFetch } from './useProjectStatusDataFetch'
 async function errorMessageFor(failure: unknown) {
   adapter.fail = failure
   const dispatch = jest.fn()
+  /** Runs the status fetch so the test can inspect its dispatched failure. */
   const Probe: React.FC = () => {
     useProjectStatusDataFetch({ siteId: 'site-1' } as any, 1, undefined, dispatch)
     return null

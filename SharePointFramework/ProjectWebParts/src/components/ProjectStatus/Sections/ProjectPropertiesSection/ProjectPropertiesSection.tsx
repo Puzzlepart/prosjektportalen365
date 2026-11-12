@@ -8,6 +8,7 @@ import styles from './ProjectPropertiesSection.module.scss'
 import { StatusSectionField } from './StatusSectionField/StatusSectionField'
 import { useProjectPropertiesSection } from './useProjectPropertiesSection'
 
+/** Displays configured project and report field values beneath their labels. */
 export const ProjectPropertiesSection: FC = () => {
   const { section } = useContext(SectionContext)
   const { fieldValues, fieldValuesAsText, fields } = useProjectPropertiesSection()

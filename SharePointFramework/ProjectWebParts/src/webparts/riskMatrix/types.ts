@@ -5,10 +5,10 @@ import {
 } from '../baseUncertaintyMatrixWebPart/types'
 
 /**
- * Interface for the properties of the Risk Matrix web part.
- * Extends IBaseUncertaintyMatrixWebPartProps and IRiskMatrixProps interfaces.
+ * Source and presentation settings for the risk matrix web part.
  */
 export interface IRiskMatrixWebPartProps
   extends IBaseUncertaintyMatrixWebPartProps, IRiskMatrixProps {}
 
+/** Risk matrix items and property-pane metadata. */
 export type IRiskMatrixWebPartData = IUncertaintyMatrixWebPartData

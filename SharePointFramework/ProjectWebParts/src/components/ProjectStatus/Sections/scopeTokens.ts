@@ -15,8 +15,6 @@ export const SCOPE_LABEL_TOKEN = '{scopeLabel}'
 /**
  * Returns `true` if the value contains one of the scope tokens
  * (`{scope}` / `{scopeLabel}`).
- *
- * @param value Section configuration value
  */
 export function containsScopeTokens(value: string): boolean {
   return (
@@ -27,10 +25,6 @@ export function containsScopeTokens(value: string): boolean {
 /**
  * Replaces the scope tokens (`{scope}` / `{scopeLabel}`) in a section
  * configuration value with the selected report scope key and label.
- *
- * @param value Section configuration value
- * @param scopeKey Selected report scope key
- * @param scopeLabel Selected report scope label
  */
 export function replaceScopeTokens(value: string, scopeKey: string, scopeLabel: string): string {
   return (value ?? '')
@@ -44,8 +38,6 @@ export function replaceScopeTokens(value: string, scopeKey: string, scopeLabel: 
  * Escapes a value for safe interpolation into XML (CAML view queries) —
  * `&`, `<`, `>`, `"` and `'` are replaced with their entity references, so a
  * scope key or label can never restructure the query it is substituted into.
- *
- * @param value Value to escape
  */
 export function escapeXmlValue(value: string): string {
   return (value ?? '')
@@ -60,8 +52,6 @@ export function escapeXmlValue(value: string): string {
  * Returns `true` if any of the section's configuration values (`listTitle`,
  * `viewQuery`, `viewName`) contain scope tokens. Such sections are scoped to
  * a report series ("delprosjekt") and are hidden for the default series.
- *
- * @param section Section
  */
 export function sectionContainsScopeTokens(section: SectionModel): boolean {
   return (

@@ -3,6 +3,7 @@ import { useProjectStatusContext } from '../context'
 import styles from '../ProjectStatus.module.scss'
 import { CheckmarkSquare24Filled } from '@fluentui/react-icons'
 
+/** Shows the selected report's publication state beside the web part title. */
 export const PublishedStatus: FC = () => {
   const context = useProjectStatusContext()
 

@@ -6,8 +6,6 @@ import { CLEAR_USER_MESSAGE, REPORT_DELETED, REPORT_DELETE_ERROR } from '../redu
  * Hook for deletion of report. Returns a callback function
  * for deleting the selected report. A failed delete shows its
  * error as a user message, cleared after 8 seconds as after publishing.
- *
- * @returns A function callback
  */
 export function useDeleteReport() {
   const context = useProjectStatusContext()

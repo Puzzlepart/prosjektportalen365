@@ -3,6 +3,7 @@ import React, { FC } from 'react'
 import { Field, ProgressBar } from '@fluentui/react-components'
 import { useChangingPhaseView } from './useChangingPhaseView'
 
+/** Shows progress while the confirmed phase change runs. */
 export const ChangingPhaseView: FC = () => {
   const { description } = useChangingPhaseView()
   return (

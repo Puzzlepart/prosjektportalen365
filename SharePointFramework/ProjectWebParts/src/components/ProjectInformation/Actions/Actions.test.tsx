@@ -48,6 +48,7 @@ describe('Actions', () => {
     // The panels and dialogs open from state, after the click, so Fluent has no trigger of its
     // own to give the focus back to, and it was left on the page's start.
     let target: ReturnType<typeof useRestoreFocusTarget>
+    /** Exposes the focus-restoration attributes for the action button assertions. */
     const Probe: React.FC = () => {
       target = useRestoreFocusTarget()
       return null

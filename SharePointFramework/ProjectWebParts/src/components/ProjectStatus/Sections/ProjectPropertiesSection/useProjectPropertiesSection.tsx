@@ -1,5 +1,6 @@
 import { useProjectStatusContext } from '../../../ProjectStatus/context'
 
+/** Combines project and selected-report values for the properties section. */
 export function useProjectPropertiesSection() {
   const context = useProjectStatusContext()
 

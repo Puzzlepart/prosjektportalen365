@@ -13,6 +13,7 @@ import _ from 'lodash'
 import SPDataAdapter from '../../data'
 import { IProjectStatusWebPartData } from './types'
 
+/** Hosts project status reports with report-series and matrix presentation settings. */
 export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectStatusProps> {
   private _data: IProjectStatusWebPartData = {}
 
@@ -59,8 +60,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    // Ensuring valid properties for the riskMatrix and opportunityMatrix properties
-    // for backward compatibility.
+    // Older saved web parts may have no nested matrix settings.
     const riskMatrix = this.properties.riskMatrix ?? {}
     const opportunityMatrix = this.properties.opportunityMatrix ?? {}
     return {

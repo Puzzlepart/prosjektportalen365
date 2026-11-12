@@ -21,6 +21,7 @@ import { CLOSE_DIALOG } from '../reducer'
 import { saveNavigationNodes } from '../saveNavigationNodes'
 import { createProjectSetupCustomAction } from './ProjectSetupCustomAction'
 
+/** Saves navigation and restarts the project's setup wizard. */
 export const RunProjectSetupDialog: FC = () => {
   const context = useProjectInformationContext()
   const [isLoading, setLoading] = useState(false)

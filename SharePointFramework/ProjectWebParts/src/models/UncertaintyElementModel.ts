@@ -1,5 +1,6 @@
 import { IMatrixElementModel } from '../components/DynamicMatrix/MatrixCell/MatrixElement/types'
 
+/** Maps local list items or aggregated search results to uncertainty matrix coordinates. */
 export class UncertaintyElementModel implements IMatrixElementModel<Record<string, any>> {
   public id: number | string
   public title: string
@@ -38,9 +39,7 @@ export class UncertaintyElementModel implements IMatrixElementModel<Record<strin
   }
 
   /**
-   * Generates an id for items originating from cross-site search results, combining
-   * the site title initials with the list item id to visually disambiguate items
-   * with equal list item ids from different sites.
+   * Prefixes a search result's item id with the site's first two title characters for display.
    */
   private _aggregatedId(item: Record<string, any>): string {
     if (!item.ListItemID) return undefined

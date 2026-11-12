@@ -11,6 +11,7 @@ import { IProjectTimelineProps } from './types'
 import { useProjectTimeline } from './useProjectTimeline'
 import resource from 'SharedResources'
 
+/** Default timeline visibility, grouping and item-editing settings. */
 export const PROJECT_TIMELINE_DEFAULT_PROPS: Partial<IProjectTimelineProps> = {
   listName: resource.Lists_TimelineContent_Title,
   showTimeline: true,
@@ -26,6 +27,7 @@ export const PROJECT_TIMELINE_DEFAULT_PROPS: Partial<IProjectTimelineProps> = {
   defaultCategory: resource.TimelineConfiguration_Management_Category
 }
 
+/** Displays project timeline items with filtering, grouping and an optional editable list. */
 export const ProjectTimeline: FC<IProjectTimelineProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, PROJECT_TIMELINE_DEFAULT_PROPS)
   const { state, setState, onFilterChange, onGroupByChange, defaultTimeframe, timeLapseCenter } =

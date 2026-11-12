@@ -10,15 +10,7 @@ import {
 } from './util'
 import strings from 'ProjectWebPartsStrings'
 
-/**
- * Component data fetch hook for `ProjectNews`. This hook is responsible for
- * fetching data and setting state.
- *
- * @param props Props
- * @param refetch Timestamp for refetch. Changes to this variable refetches the data in `useEffect`
- * @param setState Set state callback
- * @returns void
- */
+/** Loads project-folder news from the configured site and reports access or request failures. */
 export function useProjectNewsDataFetch(
   props: IProjectNewsProps,
   refetch: number,

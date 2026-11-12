@@ -10,11 +10,8 @@ import { IProjectInformationContext } from '../context'
 import resource from 'SharedResources'
 
 /**
- * Fetch project status reports (top: 1), sections and column config  if `props.hideStatusReport` is false.
- * Catches errors and returns empty arrays to support e.g. the case where the user does not have
- * access to the hub site.
- *
- * @param context Context for `ProjectInformation`
+ * Fetches published reports across all project series, with section and column configuration.
+ * Returns empty arrays when reports are hidden or the hub data cannot be read.
  */
 export const fetchProjectStatusReportData: DataFetchFunction<
   IProjectInformationContext,

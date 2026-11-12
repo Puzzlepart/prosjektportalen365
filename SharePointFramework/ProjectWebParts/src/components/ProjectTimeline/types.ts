@@ -11,6 +11,7 @@ import {
   TimelineConfigurationModel
 } from 'pp365-shared-library'
 
+/** Configures timeline content, grouping, filters and list editing. */
 export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
   listName?: string
   showTimeline?: boolean
@@ -27,45 +28,22 @@ export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
   defaultCategory?: string
 }
 
+/** Timeline data, active filters, grouping and item-editing state. */
 export interface IProjectTimelineState extends IBaseWebPartComponentState<ITimelineData> {
-  /**
-   * Groups
-   */
   groups?: ITimelineGroups
 
-  /**
-   * Show filter panel
-   */
   showFilterPanel?: boolean
 
-  /**
-   * Filters
-   */
   filters?: IFilterProps[]
 
-  /**
-   * Active filters
-   */
   activeFilters: Record<string, string[]>
 
-  /**
-   * Filtered data
-   */
   filteredData?: ITimelineData
 
-  /**
-   * Timeline configuration
-   */
   timelineConfig?: TimelineConfigurationModel[]
 
-  /**
-   * Item to show details for
-   */
   showDetails?: { item: ITimelineItem; element: HTMLElement }
 
-  /**
-   * Selected items
-   */
   selectedItems?: any[]
 
   /**
@@ -74,9 +52,6 @@ export interface IProjectTimelineState extends IBaseWebPartComponentState<ITimel
    */
   refetch?: number
 
-  /**
-   * Panel for editing or creating new timeline content
-   */
   panel?: Partial<ICustomEditPanelProps>
 
   /**
@@ -85,30 +60,16 @@ export interface IProjectTimelineState extends IBaseWebPartComponentState<ITimel
   timelineContentTypeId?: string
 }
 
+/** Rendered timeline items and the source rows and fields used by its list. */
 export interface ITimelineData {
-  /**
-   * Items for timeline content
-   */
   items: ITimelineItem[]
 
-  /**
-   * Groups for timeline content
-   */
   groups: ITimelineGroup[]
 
-  /**
-   * List items for timeline content
-   */
   listItems?: Record<string, any>[]
 
-  /**
-   * Columns for timeline content
-   */
   listColumns?: IListColumn[]
 
-  /**
-   * Editable fields for timeline content
-   */
   fields?: EditableSPField[]
 
   /**
@@ -122,27 +83,28 @@ export interface ITimelineData {
   timelineContentTypeId?: string
 }
 
+/** Supported ways to group timeline items. */
 export enum TimelineGroupType {
   Project,
   Category,
   Type
 }
 
+/** Named timeline row belonging to a project, category or item type. */
 export interface ITimelineGroup {
   id: number
   title: string
   type?: TimelineGroupType
 }
 
+/** Available timeline groups partitioned by grouping mode. */
 export interface ITimelineGroups {
   projectGroups: ITimelineGroup[]
   categoryGroups: ITimelineGroup[]
   typeGroups: ITimelineGroup[]
 }
 
+/** Project information enriched with the project's timeline span. */
 export interface IProjectTimelineData extends IProjectInformationData {
-  /**
-   * Column configuration
-   */
   columns?: ProjectColumn[]
 }

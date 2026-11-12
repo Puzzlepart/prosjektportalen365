@@ -40,14 +40,7 @@ interface DialogState {
   error: string | null
 }
 
-/**
- * Custom hook for handling Dialog-type custom actions with polling support.
- *
- * Manages dialog state, sends selected item data to server, polls for results,
- * and displays iframe content with loading indicators.
- *
- * @returns Dialog component, open/close handlers, and toaster component
- */
+/** Posts selected items to a custom action and displays its immediate or polled iframe result. */
 export function useCustomActionDialog() {
   const context = useContext(DynamicListContext)
   const toasterId = useId('custom-action-toaster')
@@ -64,18 +57,7 @@ export function useCustomActionDialog() {
     error: null
   })
 
-  /**
-   * Polls the server for iframe content at regular intervals.
-   *
-   * Attempts up to 30 times with 2-second intervals. Handles three response statuses:
-   * - 'completed': Updates dialog with iframe content and shows success toast
-   * - 'processing': Continues polling until max attempts reached
-   * - 'failed': Throws error with server message
-   *
-   * @param pollUrl URL endpoint to poll for processing results
-   * @param actionName Name of the action being executed, used in notifications
-   * @param payload Request payload to send with each poll request
-   */
+  /** Polls for an iframe result, stopping on completion, failure or the retry limit. */
   const pollForIframeContent = useCallback(
     async (pollUrl: string, actionName: string, payload: any) => {
       const maxAttempts = 30
@@ -155,20 +137,7 @@ export function useCustomActionDialog() {
     [dispatchToast]
   )
 
-  /**
-   * Opens dialog and executes a Dialog-type custom action.
-   *
-   * Workflow:
-   * 1. Validates hookUrl configuration
-   * 2. Opens dialog with loading indicators
-   * 3. Sends POST request with selected items data to hookUrl
-   * 4. Handles two response patterns:
-   *    - Immediate: Returns iframe content directly in response
-   *    - Async: Returns pollUrl and initiates polling for results
-   * 5. Displays iframe content or error messages accordingly
-   *
-   * @param action Custom action configuration containing hookUrl and action metadata
-   */
+  /** Opens a custom action and handles either an immediate iframe result or a polling URL. */
   const openDialog = useCallback(
     async (action: ICustomAction) => {
       if (!action.hookUrl) {
@@ -266,9 +235,7 @@ export function useCustomActionDialog() {
     [context.state, context.props, pollForIframeContent, dispatchToast]
   )
 
-  /**
-   * Closes the dialog and resets all state to initial values.
-   */
+  /** Closes the custom action dialog and clears its result and error state. */
   const closeDialog = useCallback(() => {
     setDialogState({
       isOpen: false,

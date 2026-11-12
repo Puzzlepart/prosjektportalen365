@@ -12,6 +12,7 @@ import { useCreateContextValue } from '../useCreateContextValue'
 import styles from './SummarySection.module.scss'
 import { ISummarySectionProps } from './types'
 
+/** Summarizes report statuses alongside the project's information. */
 export const SummarySection: FC<ISummarySectionProps> = (props) => {
   const context = useProjectStatusContext()
   const createContextValue = useCreateContextValue({})

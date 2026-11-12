@@ -3,13 +3,11 @@ import { useProjectStatusContext } from '../context'
 import { ISectionContext } from './context'
 
 /**
- * Hook for creating context value for `SectionContext`.
+ * Combines section configuration and report values into the section header context.
  *
  * @remarks Field `GtOverallStatus` is a special case, where
  * the value is stored in the comment field. The icons are drawn on a 20 px grid, so they stay
  * crisp at a whole multiple of it: 40 px, where 30 and 50 blurred their strokes.
- *
- * @returns A callback function
  */
 export function useCreateContextValue({ iconSize = 40 }) {
   const context = useProjectStatusContext()

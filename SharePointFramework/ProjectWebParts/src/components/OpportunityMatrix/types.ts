@@ -4,6 +4,7 @@ import { UncertaintyElementModel } from '../../models'
 import { IDynamicMatrixProps } from '../DynamicMatrix'
 import { IBaseWebPartComponentProps } from 'pp365-shared-library'
 
+/** Opportunity items, coordinate fields and matrix presentation settings. */
 export interface IOpportunityMatrixProps
   extends
     Omit<HTMLProps<HTMLDivElement>, 'size'>,

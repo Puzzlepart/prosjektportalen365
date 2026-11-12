@@ -4,6 +4,7 @@ import { useProjectStatusContext } from '../context'
 import styles from './UserMessages.module.scss'
 import { LoadingSkeleton } from 'pp365-shared-library'
 
+/** Shows report-operation feedback without replacing the loaded report. */
 export const UserMessages: FC = () => {
   const context = useProjectStatusContext()
   return context.state.isDataLoaded ? (

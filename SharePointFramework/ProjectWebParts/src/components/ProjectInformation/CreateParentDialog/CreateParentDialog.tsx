@@ -21,6 +21,7 @@ import { CLOSE_DIALOG } from '../reducer'
 import { saveNavigationNodes } from '../saveNavigationNodes'
 import { createProjectSetupCustomAction } from './ProjectSetupCustomAction'
 
+/** Saves navigation and starts setup to convert the project into a parent project. */
 export const CreateParentDialog: FC = () => {
   const context = useProjectInformationContext()
   const [isLoading, setLoading] = useState(false)

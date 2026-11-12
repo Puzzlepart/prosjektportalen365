@@ -5,10 +5,7 @@ import { getScopeLabel, parseSubProjects } from '../parseSubProjects'
 import { OPEN_PANEL } from '../reducer'
 import resource from 'SharedResources'
 
-/**
- * Hook for creating new status reports. Returns a callback function
- * for creating a new status report.
- */
+/** Opens a new report initialized from the current series and editable fields. */
 export function useCreateNewStatusReport() {
   const { state, dispatch, props } = useProjectStatusContext()
   const [lastReport] = state.data.reports

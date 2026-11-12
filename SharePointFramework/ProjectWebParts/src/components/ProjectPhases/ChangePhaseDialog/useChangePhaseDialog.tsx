@@ -5,21 +5,13 @@ import { CHECKLIST_ITEM_SAVED } from '../reducer'
 import { CHECKLIST_ITEM_UPDATED, useChangePhaseDialogReducer } from './reducer'
 import resource from 'SharedResources'
 
-/**
- * Custom hook for managing the change phase dialog state and actions.
- */
+/** Connects phase-change dialog state to checkpoint saves on the project and phase selector. */
 export function useChangePhaseDialog() {
   const context = useContext(ProjectPhasesContext)
   const { state, dispatch } = useChangePhaseDialogReducer(context)
 
   /**
-   * Next checklist item
-   *
-   * Updates the current checklist item, and dispatches CHECKLIST_ITEM_UPDATED
-   * with the properties, and the saved item to the phases (CHECKLIST_ITEM_SAVED), so that the
-   * dialog opened next starts from it
-   *
-   * @param properties Properties
+   * Saves the current checkpoint and updates both the dialog and loaded phase state.
    */
   const nextChecklistItem = async (properties: Partial<Record<string, any>>): Promise<void> => {
     const currentItem = [...state.checklistItems][state.currentIdx]

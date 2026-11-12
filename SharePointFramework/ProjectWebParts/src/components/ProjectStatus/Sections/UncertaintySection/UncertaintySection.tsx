@@ -9,6 +9,7 @@ import { useProjectStatusContext } from '../../context'
 import { BaseSection } from '../BaseSection/BaseSection'
 import { useUncertaintySection } from './useUncertaintySection'
 
+/** Displays a report section's risks or opportunities in a matrix and list. */
 export const UncertaintySection: FC = () => {
   const context = useProjectStatusContext()
   const { state, errorMessage, matrixElements, items, columns, summation, shouldRenderContent } =

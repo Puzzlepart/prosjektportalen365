@@ -23,7 +23,7 @@ import { SPWeb } from '@microsoft/sp-page-context'
 import resource from 'SharedResources'
 
 /**
- * Get phase site pages.
+ * Finds project pages whose titles match configured phase names.
  */
 export const getPhaseSitePages: DataFetchFunction<
   {
@@ -52,9 +52,7 @@ export const getPhaseSitePages: DataFetchFunction<
 }
 
 /**
- * Fetch data for `ProjectPhases`.
- *
- * @param props Component properties for `ProjectPhases`
+ * Loads phases, checkpoints, change permissions and optional homepage and archive data.
  */
 const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = async (props) => {
   try {
@@ -132,10 +130,7 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
 }
 
 /**
- * Fetch hook for `ProjectPhases`
- *
- * @param props Component properties for `ProjectPhases`
- * @param dispatch Dispatcer
+ * Loads phase selector data on mount and dispatches its result or failure.
  */
 export const useProjectPhasesDataFetch = (
   props: IProjectPhasesProps,

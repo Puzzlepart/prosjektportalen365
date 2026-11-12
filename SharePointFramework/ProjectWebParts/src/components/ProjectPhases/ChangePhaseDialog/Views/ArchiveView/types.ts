@@ -1,12 +1,7 @@
+/** Selectable document or list with its archive eligibility and metadata. */
 export interface IArchiveItem {
-  /**
-   * Unique identifier for the item
-   */
   id: string | number
 
-  /**
-   * Display title of the item
-   */
   title: string
 
   /**
@@ -14,14 +9,8 @@ export interface IArchiveItem {
    */
   type: 'file' | 'list' | 'folder'
 
-  /**
-   * URL to the item
-   */
   url?: string
 
-  /**
-   * Whether the item is selected for archiving
-   */
   selected: boolean
 
   /**
@@ -45,36 +34,23 @@ export interface IArchiveItem {
   itemCount?: number
 }
 
+/** Expandable group of archive candidates. */
 export interface IArchiveSection {
-  /**
-   * Section identifier
-   */
   key: string
 
-  /**
-   * Section display title
-   */
   title: string
 
-  /**
-   * Whether the section is expanded
-   */
   expanded: boolean
 
-  /**
-   * Items in the section
-   */
   items: IArchiveItem[]
 }
 
+/** Documents and lists selected for a phase-change archive operation. */
 export interface IArchiveConfiguration {
   /**
    * Selected files from Documents library
    */
   documents: IArchiveItem[]
 
-  /**
-   * Selected lists to archive
-   */
   lists: IArchiveItem[]
 }

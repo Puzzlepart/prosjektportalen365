@@ -6,19 +6,12 @@ import {
 } from 'pp365-shared-library'
 
 /**
- * Model for a Taxonomy Term used in list columns.
+ * Localizes term labels and serializes values for taxonomy list fields.
  */
 export class TaxonomyTermModel {
   public id: string
   private _languageTag: string
 
-  /**
-   * Constructor for `TaxonomyTermModel`
-   *
-   * @param term Term info from the term store
-   * @param _termSetId Term set ID
-   * @param lcid Language code ID (default: `1044`)
-   */
   constructor(
     public term: ITermInfo,
     private _termSetId: string,

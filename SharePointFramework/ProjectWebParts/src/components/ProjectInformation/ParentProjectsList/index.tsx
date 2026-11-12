@@ -6,6 +6,7 @@ import styles from './ParentProjectsList.module.scss'
 import { WebPartTitle, customLightTheme } from 'pp365-shared-library'
 import { Button, FluentProvider, IdPrefixProvider, useId } from '@fluentui/react-components'
 
+/** Links to the project's parent projects when the section is enabled. */
 export const ParentProjectsList: FC = () => {
   const context = useProjectInformationContext()
   const projects = context.state?.data?.parentProjects || []
@@ -20,7 +21,6 @@ export const ParentProjectsList: FC = () => {
       />
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
-          {/* A list of links: each goes to a project's site (WCAG 1.3.1, 4.1.2). */}
           <ul className={styles.list} role='list'>
             {projects.map((p, idx) => {
               const Icon = p?.icon

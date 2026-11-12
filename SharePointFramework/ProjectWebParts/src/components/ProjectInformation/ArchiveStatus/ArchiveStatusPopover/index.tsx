@@ -16,6 +16,7 @@ import {
 import { Archive24Regular } from '@fluentui/react-icons'
 import { customLightTheme, formatDate, format } from 'pp365-shared-library'
 
+/** Groups archive operations and their document and list outcomes. */
 export const ArchiveStatusPopover: FC<IArchiveStatusPopoverProps> = (props) => {
   const fluentProviderId = useId('fp-archive-status-popover')
   if (!props.archiveInfo || isEmpty(props.operations)) return null

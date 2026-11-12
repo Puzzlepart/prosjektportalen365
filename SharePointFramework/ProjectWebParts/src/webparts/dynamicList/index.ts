@@ -28,6 +28,7 @@ import '@pnp/sp/lists'
 import '@pnp/sp/views'
 import '@pnp/sp/fields'
 
+/** Hosts a configurable SharePoint list and its source, view and action property controls. */
 export default class DynamicListWebPart extends BaseProjectWebPart<IDynamicListProps> {
   private _listOptions: IPropertyPaneDropdownOption[] = []
   private _listsLoading: boolean = false

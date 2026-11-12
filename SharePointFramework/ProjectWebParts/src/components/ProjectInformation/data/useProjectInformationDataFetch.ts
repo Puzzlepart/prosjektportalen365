@@ -19,29 +19,7 @@ import { IProjectInformationState } from '../types'
 import { fetchProjectStatusReportData } from './fetchProjectStatusReportData'
 
 /**
- * Fetch data for `ProjectInformation` component. This function is used in
- * `useProjectInformationDataFetch` hook. Data are fetched using the following
- * functions:
- *
- * - `SPDataAdapter.portalDataService.getProjectColumns` - fetches project columns
- * - `SPDataAdapter.project.getProjectInformationData` - fetches project properties data
- * - `SPDataAdapter.portalDataService.getParentProjects` - fetches parent projects (only on frontpage)
- * - `SPDataAdapter.portalDataService.getChildProjects` - fetches child projects (only on frontpage)
- * - `SPDataAdapter.getArchiveStatus` - fetches archive status information (only on frontpage)
- * - `fetchProjectStatusReportData` - fetches project status reports, sections and column config
- *
- * @remarks Ensures that `SPDataAdapter` is configured before fetching data.
- * Normally the `SPDataAdapter` is not configured  if the component is used in
- * a web part in a different SharePoint Framework solution like for instance
- * `PortfolioWebParts`.
- *
- * @param context Context for `ProjectInformation`
- * @param transformProperties Function for transforming the properties
- */
-/**
- * Safely execute a function, returning a fallback value if it throws.
- * Used to wrap hub-dependent calls so that external users without
- * hub access can still see local project data.
+ * Falls back when an optional data source fails, so unavailable hub data need not hide local data.
  */
 async function safeCall<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
   try {
@@ -51,6 +29,7 @@ async function safeCall<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
   }
 }
 
+/** Loads project properties and the hub data and permissions needed by the host page. */
 const fetchData: DataFetchFunction<
   IProjectInformationContext,
   Partial<IProjectInformationState>
@@ -168,11 +147,7 @@ const fetchData: DataFetchFunction<
 }
 
 /**
- * Fetch hook for ProjectInformation. Fetches data for `ProjectInformation` component
- * using `fetchData` function together with React `useEffect` hook. The data is re-fetched
- * when `context.state.propertiesLastUpdated` changes.
- *
- * @param context Context for `ProjectInformation`
+ * Configures the adapter and reloads project information after property updates.
  */
 export const useProjectInformationDataFetch = (context: IProjectInformationContext) => {
   useEffect(() => {

@@ -15,10 +15,14 @@ import { IProgressDialogProps } from './ProgressDialog/types'
 import { IArchiveStatusInfo } from '../../data/SPDataAdapter/types'
 import type { SustainabilityGoalIconSize } from './SustainabilityGoals'
 
+/** Panels available from the project information actions. */
 export type ProjectInformationPanelType = 'EditPropertiesPanel' | 'AllPropertiesPanel'
+/** Setup dialogs available from project information. */
 export type ProjectInformationDialogType = 'CreateParentDialog' | 'RunProjectSetupDialog'
+/** Host page determining which project information sections are available. */
 export type ProjectInformationPage = 'Frontpage' | 'ProjectStatus' | 'Portfolio'
 
+/** Configures project properties, related projects, reports and actions. */
 export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   /**
    * Page property is used to determine which properties to display
@@ -31,24 +35,12 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
    */
   hideTitle?: boolean
 
-  /**
-   * Hide all actions for the web part
-   */
   hideAllActions?: boolean
 
-  /**
-   * Hide specific actions for the web part
-   */
   hideActions?: string[]
 
-  /**
-   * On field external changed
-   */
   onFieldExternalChanged?: (fieldName: string, checked: boolean) => void
 
-  /**
-   * A hash object of fields to show for external users
-   */
   showFieldExternal?: Record<string, boolean>
 
   /**
@@ -57,49 +49,22 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
    */
   fallbackVisibleFields?: string[]
 
-  /**
-   * Link to the admin page
-   */
   adminPageLink?: string
 
-  /**
-   * Skip sync to hub
-   */
   skipSyncToHub?: boolean
 
-  /**
-   * Custom actions/button to add
-   */
   customActions?: ActionType[]
 
-  /**
-   * Hide parent projects section
-   */
   hideParentProjects?: boolean
 
-  /**
-   * Hide child projects section
-   */
   hideChildProjects?: boolean
 
-  /**
-   * Hide latest status report
-   */
   hideStatusReport?: boolean
 
-  /**
-   * Hide archive status section
-   */
   hideArchiveStatus?: boolean
 
-  /**
-   * Render the selected UN Sustainable Development Goals as icons instead of tags
-   */
   showSustainabilityGoalsAsIcons?: boolean
 
-  /**
-   * Size of the UN Sustainable Development Goal icons
-   */
   sustainabilityGoalIconSize?: SustainabilityGoalIconSize
 
   /**
@@ -112,19 +77,10 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
    */
   statusReportShowOnlyIcons?: boolean
 
-  /**
-   * Number of projects to show
-   */
   rowLimit?: number
 
-  /**
-   * Min number of projects to show
-   */
   minRowLimit?: number
 
-  /**
-   * Max number of projects to show
-   */
   maxRowLimit?: number
 
   /**
@@ -133,6 +89,7 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   className?: string
 }
 
+/** Project information data, permissions and active operations. */
 export interface IProjectInformationState extends IBaseWebPartComponentState<IProjectInformationData> {
   /**
    * Properties to display sorted by `column.sortOrder`. The properties
@@ -147,14 +104,8 @@ export interface IProjectInformationState extends IBaseWebPartComponentState<IPr
    */
   progressDialog?: IProgressDialogProps
 
-  /**
-   * Message to show to the user
-   */
   message?: IUserMessageProps
 
-  /**
-   * Is the project a parent project
-   */
   isParentProject?: boolean
 
   /**
@@ -185,14 +136,8 @@ export interface IProjectInformationState extends IBaseWebPartComponentState<IPr
    */
   userHasRerunSetupPermission?: boolean
 
-  /**
-   * Indicates whether the hub site was available while loading the web part.
-   */
   hubIsAvailable?: boolean
 
-  /**
-   * Properties last updated date/time
-   */
   propertiesLastUpdated?: Date
 
   /**
@@ -201,23 +146,15 @@ export interface IProjectInformationState extends IBaseWebPartComponentState<IPr
   hubSyncWarning?: string
 }
 
+/** Project properties enriched with hub configuration, reports and relationships. */
 export interface IProjectInformationData
   extends
     ProjectDataService.IProjectInformationData,
     Pick<IProjectStatusData, 'reports' | 'sections' | 'columnConfig'> {
-  /**
-   * Column configuration
-   */
   columns?: ProjectColumn[]
 
-  /**
-   * Parent projects
-   */
   parentProjects?: ProjectInformationParentProject[]
 
-  /**
-   * Child projects
-   */
   childProjects?: ProjectInformationChildProject[]
 
   /**

@@ -1,15 +1,10 @@
 import { PopoverProps } from '@fluentui/react-components'
 import { IArchiveStatusInfo, IArchiveOperation } from '../../../../data/SPDataAdapter/types'
 
+/** Archive summary and processed operations shown in the popover. */
 export interface IArchiveStatusPopoverProps extends Omit<PopoverProps, 'children'> {
-  /**
-   * Archive status info
-   */
   archiveInfo?: IArchiveStatusInfo
 
-  /**
-   * Processed operations with scope items
-   */
   operations?: Array<
     IArchiveOperation & {
       scopeItems: Array<{

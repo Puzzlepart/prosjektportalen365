@@ -14,6 +14,7 @@ import * as strings from 'ProjectWebPartsStrings'
 import resource from 'SharedResources'
 import { format } from 'pp365-shared-library'
 
+/** Hosts the project timeline and its grouping, filtering and list-view settings. */
 export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectTimelineProps> {
   public render(): void {
     this.renderComponent<IProjectTimelineProps>(ProjectTimeline)

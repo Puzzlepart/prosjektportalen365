@@ -9,8 +9,6 @@ import { getSelectedItems } from '../utils'
 
 /**
  * The export button's text: how many selected rows it exports, when any are selected.
- *
- * @param selectedCount Number of selected rows
  */
 export function getExportButtonText(selectedCount: number): string {
   if (selectedCount === 0) return strings.DynamicList.ExportToExcel
@@ -28,10 +26,6 @@ export function getExportButtonText(selectedCount: number): string {
  * Exports the selected rows, or else the rows the list shows (the search and the filters
  * applied), with the values as they are: the export service rounds and formats them. A failed
  * export is reported in a toast.
- *
- * @param toasterId Id of the toaster that reports a failed export
- *
- * @returns Callback function to trigger Excel export
  */
 export function useExcelExport(toasterId: string) {
   const context = useContext(DynamicListContext)

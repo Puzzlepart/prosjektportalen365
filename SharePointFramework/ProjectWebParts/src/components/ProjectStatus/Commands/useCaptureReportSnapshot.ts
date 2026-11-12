@@ -7,7 +7,7 @@ import { formatShortDate } from 'pp365-shared-library'
 const SNAPSHOT_SCALE = 2
 
 /**
- * Largest canvas side every current browser can draw; longer reports get a lower scale.
+ * Canvas-side limit used to reduce scaling for long reports.
  */
 const MAX_CANVAS_SIDE = 16384
 
@@ -18,8 +18,7 @@ const MAX_CANVAS_SIDE = 16384
 export const SNAPSHOT_TITLE_ANCHOR = 'data-snapshot-title-anchor'
 
 /**
- * The scale to capture a report of the given size at: `SNAPSHOT_SCALE`, lowered so that no
- * side of the canvas exceeds `MAX_CANVAS_SIDE`, and never below 1.
+ * Reduces snapshot scaling toward the canvas-side limit, but never below the page's resolution.
  *
  * @param width Width of the report in CSS pixels
  * @param height Height of the report in CSS pixels
@@ -32,9 +31,6 @@ export function getSnapshotScale(width: number, height: number): number {
 /**
  * Renders the node to a PNG blob at the given scale. dom-to-image has no scale option: it is
  * given a larger canvas, and the clone keeps its own size and is scaled up to fill it.
- *
- * @param node The node to render
- * @param scale The scale to render at
  */
 function captureScaled(node: HTMLElement, scale: number): Promise<Blob> {
   const width = node.scrollWidth
@@ -54,9 +50,6 @@ function captureScaled(node: HTMLElement, scale: number): Promise<Blob> {
 /**
  * Adds the project title as a heading above the project information in the summary section,
  * or at the top of the report when the summary section shows no project information.
- *
- * @param statusReportHtml The status report element
- * @param projectTitle The title to show
  */
 function insertProjectTitle(statusReportHtml: HTMLElement, projectTitle: string): HTMLElement {
   const heading = document.createElement('h2')
@@ -72,12 +65,9 @@ function insertProjectTitle(statusReportHtml: HTMLElement, projectTitle: string)
 
 /**
  * Adds the capture date and time below the report.
- *
- * @param statusReportHtml The status report element
  */
 function appendDateStamp(statusReportHtml: HTMLElement): HTMLElement {
   const dateStamp = document.createElement('p')
-  // When the snapshot was taken, in the language of the page it was taken on.
   dateStamp.textContent = formatShortDate(new Date(), true)
   dateStamp.style.textAlign = 'right'
   dateStamp.style.fontWeight = '600'
@@ -85,15 +75,7 @@ function appendDateStamp(statusReportHtml: HTMLElement): HTMLElement {
   return dateStamp
 }
 
-/**
- * Hook for capturing a report snapshot using `dom-to-image`. Returns a callback function
- * for capturing the selected report with the project title above it and the capture date
- * below it, at twice the page's resolution where the browser can draw it and at the page's
- * resolution otherwise. The title, date and white background are on the page only while
- * the snapshot is taken.
- *
- * @returns A callback taking the project title, returning a promise of the snapshot blob
- */
+/** Captures a scaled report PNG with a temporary project title and capture timestamp. */
 export function useCaptureReportSnapshot() {
   return async (projectTitle?: string): Promise<Blob> => {
     const statusReportHtml = document.getElementById('pp-statussection')

@@ -3,10 +3,9 @@ import { ChecklistItemModel } from 'pp365-shared-library/lib/models'
 import * as strings from 'ProjectWebPartsStrings'
 
 /**
- * Get next checklist item index.
+ * Finds the next open checkpoint from the supplied start position.
  *
- * @param checklistItems Checklist items
- * @param startIndex Start index
+ * @returns Its index in the original checklist, or `-1` when none remains
  */
 export const getNextIndex = (
   checklistItems: ChecklistItemModel[],

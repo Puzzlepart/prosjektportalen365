@@ -184,7 +184,6 @@ describe('The dialogs that run the setup on a set-up project', () => {
       expect(screen.queryByRole('button', { name: primaryText })).toBeNull()
       expect(screen.queryByRole('button', { name: strings.CancelText })).toBeNull()
 
-      // A second click, and Escape, while the menu is still being read.
       fireEvent.click(primary)
       fireEvent.keyDown(screen.getByRole('dialog'), { key: 'Escape' })
       expect(dispatch).not.toHaveBeenCalled()
@@ -220,7 +219,6 @@ describe('The dialogs that run the setup on a set-up project', () => {
       await waitFor(() => expect(added).toHaveLength(1))
       await settle()
       expect(added).toHaveLength(1)
-      // The earlier save is gone, so the setup restores nothing from another run.
       expect(added[0].saved).toBeNull()
     })
 
@@ -235,7 +233,6 @@ describe('The dialogs that run the setup on a set-up project', () => {
       expect(dispatch).toHaveBeenCalledTimes(1)
       expect(dispatch).toHaveBeenCalledWith(CLOSE_DIALOG())
       expect(added).toHaveLength(0)
-      // The failed save is forgotten: opened again, the dialog saves the menu anew.
       expect(screen.queryByText(strings.SetupMenuNotSavedTitle)).toBeNull()
       expect(screen.getByRole('button', { name: primaryText })).toBeInTheDocument()
     })
@@ -276,7 +273,6 @@ describe('The dialogs that run the setup on a set-up project', () => {
       expect(add).toHaveBeenCalledTimes(1)
       expect(added).toHaveLength(0)
 
-      // Opened again, the dialog has forgotten the failure, and starts the setup.
       setActiveDialog(null)
       setActiveDialog(activeDialog)
       expect(screen.queryByText(strings.SetupNotStartedTitle)).toBeNull()
@@ -295,7 +291,6 @@ describe('The dialogs that run the setup on a set-up project', () => {
       fireEvent.click(await screen.findByRole('button', { name: strings.ContinueAnywayText }))
       expect(await screen.findByText(strings.SetupNotStartedTitle)).toBeInTheDocument()
       await settle()
-      // A message without SharePoint's JSON is shown as it is.
       expect(
         screen.getByText(format(strings.SetupNotStartedErrorText, 'Failed to fetch'))
       ).toBeInTheDocument()

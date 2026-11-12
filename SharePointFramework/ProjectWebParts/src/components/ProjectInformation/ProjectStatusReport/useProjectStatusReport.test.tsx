@@ -19,6 +19,7 @@ const report = (id: number, scopeKey: string, published = true) =>
 
 function contexts(reports: any[], props: Record<string, any> = {}) {
   const captured: { value: any[] } = { value: [] }
+  /** Captures report-series contexts from the mounted summary hook. */
   const Probe: React.FC = () => {
     captured.value = useProjectStatusReport()
     return null

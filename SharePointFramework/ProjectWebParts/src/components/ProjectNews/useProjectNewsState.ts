@@ -1,11 +1,7 @@
 import { useState } from 'react'
 import { IProjectNewsState } from './types'
 
-/**
- * Component state hook for `ProjectNews`.
- *
- * @param props Props
- */
+/** Initializes news and dialog state with partial state updates. */
 export function useProjectNewsState() {
   const [state, $setState] = useState<IProjectNewsState>({
     loading: true,
@@ -18,8 +14,6 @@ export function useProjectNewsState() {
   /**
    * Set state like `setState` in class components where
    * the new state is merged with the current state.
-   *
-   * @param newState New state
    */
   const setState = (newState: Partial<IProjectNewsState>) =>
     $setState((currentState) => ({ ...currentState, ...newState }))

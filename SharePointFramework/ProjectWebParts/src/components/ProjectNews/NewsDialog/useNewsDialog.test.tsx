@@ -57,6 +57,7 @@ const PAGE = '/sites/alfa/SitePages/Nyheter/Ny-bane.aspx'
  */
 function renderDialog(isDialogOpen = false) {
   const dialog: { current?: ReturnType<typeof useNewsDialog> } = {}
+  /** Exposes the news dialog's current state and creation handlers. */
   const Probe: React.FC = () => {
     dialog.current = useNewsDialog()
     return null
@@ -108,7 +109,6 @@ describe('useNewsDialog', () => {
       await waitFor(() => expect(announced()).toContain(strings.NewsCreatedSuccessfully), {
         timeout: 5000
       })
-      // The page is tied to its project, and named, with the dialog's title.
       expect(setOriginalSourceSiteId).toHaveBeenCalledWith(
         SITE,
         {},
@@ -118,7 +118,6 @@ describe('useNewsDialog', () => {
         'hub-1',
         'Ny bane'
       )
-      // The dialog closes and the new page opens for editing, as before.
       await waitFor(
         () =>
           expect(open).toHaveBeenCalledWith(

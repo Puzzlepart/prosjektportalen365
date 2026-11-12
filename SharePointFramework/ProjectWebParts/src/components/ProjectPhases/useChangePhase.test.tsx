@@ -41,6 +41,7 @@ const PHASE_FIELD = { fieldName: 'GtProjectPhase', textField: 'GtProjectPhaseTax
 async function changePhase(archiveLogError?: Error) {
   const dispatch = jest.fn()
   let change: (archiveLogError?: Error) => Promise<void>
+  /** Exposes the mounted phase-change callback for exercising its async workflow. */
   const Probe: React.FC = () => {
     change = useChangePhase()
     return null

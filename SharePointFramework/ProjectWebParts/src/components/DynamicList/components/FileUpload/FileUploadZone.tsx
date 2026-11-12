@@ -5,12 +5,7 @@ import styles from './FileUploadZone.module.scss'
 import strings from 'ProjectWebPartsStrings'
 import { IFileUploadZoneProps } from './types'
 
-/**
- * FileUploadZone provides a drag-and-drop file upload interface with
- * visual feedback for drag-over states and upload progress.
- *
- * Supports both drag-and-drop and traditional file selection via click.
- */
+/** Accepts files by dropping or browsing, with upload feedback and an optional drop overlay. */
 export const FileUploadZone: FC<IFileUploadZoneProps> = ({
   onFilesSelected,
   isUploading,

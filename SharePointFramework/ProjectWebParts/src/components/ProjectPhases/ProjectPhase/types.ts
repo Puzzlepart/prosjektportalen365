@@ -1,20 +1,14 @@
 import { ProjectPhaseModel } from 'pp365-shared-library/lib/models'
 
+/** Phase model and its place in the phase selector. */
 export interface IProjectPhaseProps {
-  /**
-   * Phase
-   */
   phase: ProjectPhaseModel
 
-  /**
-   * Change phase enabled
-   */
   changePhaseEnabled?: boolean
 
   /**
    * On change phase handler
    *
-   * @param target Target
    */
   onChangePhaseHandler?: (target: HTMLSpanElement) => void
 }

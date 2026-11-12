@@ -16,6 +16,7 @@ import goal15Icon from '../../../../../../assets/icons/Un15LandLife.svg'
 import goal16Icon from '../../../../../../assets/icons/Un16Justice.svg'
 import goal17Icon from '../../../../../../assets/icons/Un17Cooperation.svg'
 
+/** A selected sustainability goal with its local icon asset. */
 export interface ISustainabilityGoal {
   id: string
   name: string

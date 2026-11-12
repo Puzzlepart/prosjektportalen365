@@ -28,6 +28,7 @@ import { useProjectInformation } from './useProjectInformation'
 import resource from 'SharedResources'
 import { format } from 'pp365-shared-library'
 
+/** Default visibility, status and synchronization settings for project information. */
 export const PROJECT_INFORMATION_DEFAULT_PROPS: Partial<IProjectInformationProps> = {
   title: resource.WebParts_ProjectInformation_Title,
   page: 'Frontpage',

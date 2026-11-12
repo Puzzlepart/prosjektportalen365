@@ -9,10 +9,6 @@ import resource from 'SharedResources'
 /**
  * Fetches the timeline configuration from the SharePoint list.
  * Optionally filters configuration items by template using GtTemplateOptions lookup by getting current template by matching TimelineContentTypeId
- *
- * @param timelineContentTypeId Optional content type ID to determine current template
- *
- * @returns A Promise that resolves to an array of `TimelineConfigurationModel` objects  based on specific template (based on GtTemplateOptions).
  */
 export async function fetchTimelineConfiguration(timelineContentTypeId?: string) {
   const configItems = await SPDataAdapter.portalDataService.web.lists

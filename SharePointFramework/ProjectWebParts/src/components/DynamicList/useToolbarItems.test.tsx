@@ -154,7 +154,6 @@ describe('useToolbarItems', () => {
       ['Mine elementer', false]
     ])
     act(() => item(menu.items, 'Mine elementer').onClick(undefined))
-    // The list is fetched again, for the view's columns, once the view is set.
     await act(() => new Promise((resolve) => setTimeout(resolve, 10)))
     expect(setState).toHaveBeenCalledWith(expect.objectContaining({ currentView: views[1] }))
     expect(setState).toHaveBeenCalledWith({ refetch: expect.any(Number) })
@@ -178,7 +177,6 @@ describe('useToolbarItems', () => {
         await screen.findByRole('progressbar', { name: strings.DynamicList.PleaseWait })
       ).toBeInTheDocument()
     } finally {
-      // Back for the tests after this one, failed or not.
       global.fetch = fetch
     }
   })

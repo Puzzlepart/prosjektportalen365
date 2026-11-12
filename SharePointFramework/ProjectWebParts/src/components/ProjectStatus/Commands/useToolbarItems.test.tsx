@@ -29,6 +29,7 @@ function toolbar(state: Record<string, any>, props: Record<string, any> = {}) {
     menuItems: [],
     farMenuItems: []
   }
+  /** Captures report toolbar commands under the test's status context. */
   const Probe: React.FC = () => {
     Object.assign(captured, useToolbarItems())
     return null
@@ -177,7 +178,6 @@ describe('useToolbarItems', () => {
       expect(dispatch).toHaveBeenCalledWith(
         expect.objectContaining({ type: 'SELECT_SCOPE', payload: { scopeKey: 'DP1' } })
       )
-      // Choosing the series already selected does nothing.
       options[0].onClick(null)
       expect(dispatch).toHaveBeenCalledTimes(1)
     })

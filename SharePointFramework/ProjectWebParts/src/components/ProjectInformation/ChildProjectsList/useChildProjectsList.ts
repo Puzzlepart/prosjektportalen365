@@ -6,8 +6,6 @@ import { isEmpty } from 'underscore'
 
 /**
  * Custom React hook for managing children projects state and collapse logic.
- *
- * @returns An object containing the children projects state, toggle function, and other utilities.
  */
 export function useChildProjectsList() {
   const context = useProjectInformationContext()

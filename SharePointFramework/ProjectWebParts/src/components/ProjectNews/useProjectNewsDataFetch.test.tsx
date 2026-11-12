@@ -21,6 +21,7 @@ function listNews(newsFolderName: string, items: any[]) {
     Promise.resolve({ ok: true, json: () => Promise.resolve({ value: items }) })
   )
   const setState = jest.fn()
+  /** Runs the news fetch against the supplied HTTP stand-in. */
   const Probe: React.FC = () => {
     useProjectNewsDataFetch(
       {

@@ -6,12 +6,7 @@ import { IProjectTimelineProps } from '../types'
 import resource from 'SharedResources'
 import { format, isUnauthorizedError } from 'pp365-shared-library'
 
-/**
- * Fetch project data
- *
- * @param props Component properties for `ProjectTimeline`
- * @param timelineConfig Timeline configuration
- */
+/** Reads the hub project row and creates the optional project-duration timeline item. */
 export async function fetchProjectData(
   props: IProjectTimelineProps,
   timelineConfig: TimelineConfigurationModel[]

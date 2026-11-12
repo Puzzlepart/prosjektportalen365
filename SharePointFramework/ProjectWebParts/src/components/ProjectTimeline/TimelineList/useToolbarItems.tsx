@@ -7,21 +7,15 @@ import { ProjectTimelineContext } from '../context'
 import resource from 'SharedResources'
 
 /**
- * Returns an array of menu items for the toolbar in the ProjectTimeline component.
+ * Builds timeline-item creation, editing and deletion commands from the current selection.
  *
  * New items: Sets ContentTypeId from template parameters if available.
  * Edit items: Preserves the original ContentTypeId to prevent accidental changes.
- *
- * @returns An array of IListMenuItem objects representing the toolbar items.
  */
 export function useToolbarItems() {
   const context = useContext(ProjectTimelineContext)
 
-  /**
-   * Delete timelineitem
-   *
-   * @param item Item
-   */
+  /** Deletes selected timeline rows and requests fresh list data. */
   const deleteTimelineItem = async () => {
     const list = SPDataAdapter.portalDataService.web.lists.getByTitle(
       resource.Lists_TimelineContent_Title
@@ -41,10 +35,7 @@ export function useToolbarItems() {
     })
   }
 
-  /**
-   * Dismisses the panel by updating the state in the context,
-   * and updates the `refetch` property to force a refetch of the data.
-   */
+  /** Closes the editor, clears selection and requests fresh timeline data. */
   const dismissPanel = () => {
     context.setState({
       selectedItems: [],

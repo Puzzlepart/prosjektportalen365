@@ -98,7 +98,6 @@ describe('ProjectStatus', () => {
         selector: 'p'
       })
     ).toBeInTheDocument()
-    // Commands: a published report can be followed by a new one, but not edited, published or deleted.
     expect(screen.getByRole('button', { name: strings.NewStatusReportLabel })).toBeEnabled()
     // Disabled, but focusable in the toolbar, so the keyboard reaches why in the description.
     for (const name of [
@@ -108,17 +107,14 @@ describe('ProjectStatus', () => {
     ]) {
       expect(screen.getByRole('button', { name })).toHaveAttribute('aria-disabled', 'true')
     }
-    // One tab per section with content; "Økonomi" has no value and is left out.
     for (const name of ['Overordnet status', 'Fremdrift', 'Prosjektinformasjon']) {
       expect(screen.getByRole('tab', { name })).toBeInTheDocument()
     }
     expect(screen.queryByRole('tab', { name: 'Økonomi' })).toBeNull()
-    // Once in the summary's status elements, once in the section itself.
     expect(screen.getAllByText('Grønn')).toHaveLength(2)
     expect(screen.getAllByText('Alle milepæler er nådd.')).toHaveLength(2)
     expect(screen.getByText('Prosjekteier')).toBeInTheDocument()
     expect(screen.getByText('Kari Nordmann')).toBeInTheDocument()
-    // The summary shows the project information beside the status.
     expect(screen.getByText('Prosjektinformasjon (mock)')).toBeInTheDocument()
   })
 

@@ -11,8 +11,6 @@ import { IStatusElementIconProps } from './types'
  * hover via the parent's SCSS) with fallback to a UI Fabric font icon
  * for names that are not in the catalog or alias map. Beside it, a mark whose shape tells the
  * status, as the colour does (`StatusMark`, WCAG 1.4.1).
- *
- * @param props Props for the component
  */
 export const StatusElementIcon: FC<IStatusElementIconProps> = (props) => {
   const { headerProps } = useContext(SectionContext)

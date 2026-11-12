@@ -15,6 +15,7 @@ import React, { FC } from 'react'
 import { useProjectInformationContext } from '../context'
 import styles from './ProgressDialog.module.scss'
 
+/** Announces progress while a project information operation must finish. */
 export const ProgressDialog: FC = () => {
   const context = useProjectInformationContext()
   const fluentProviderId = useId('fp-progress-dialog')

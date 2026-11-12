@@ -36,6 +36,7 @@ const getItemIcon = (item: IArchiveItem) => {
   }
 }
 
+/** Lets the user select documents and lists to archive during the phase change. */
 export const ArchiveView: FC = () => {
   const {
     sections,

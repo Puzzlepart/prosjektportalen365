@@ -9,17 +9,7 @@ import { useProjectInformationReducer } from './reducer'
 import { IProjectInformationProps } from './types'
 import resource from 'SharedResources'
 
-/**
- * Component logic hook for `ProjectInformation`.
- *
- * If the `SPDataAdapter` is configured, it will initialize the `ListLogger` with the `LogListName`
- * from the `strings` resource file. It handles fetching the project data and setting the `state`
- * using hooks `useProjectInformationDataFetch` and `useProjectInformationReducer`.
- *
- * @param props Props
- *
- * @returns generated context value
- */
+/** Initializes project information state, logging, data loading and its shared context. */
 export const useProjectInformation = (props: IProjectInformationProps) => {
   const { state, dispatch } = useProjectInformationReducer(props.spfxContext)
   const context = useMemo<IProjectInformationContext>(

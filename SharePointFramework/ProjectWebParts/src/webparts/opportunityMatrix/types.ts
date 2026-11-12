@@ -5,10 +5,10 @@ import {
 } from '../baseUncertaintyMatrixWebPart/types'
 
 /**
- * Interface for the properties of the Opportunity Matrix web part.
- * Extends IBaseUncertaintyMatrixWebPartProps and IOpportunityMatrixProps interfaces.
+ * Source and presentation settings for the opportunity matrix web part.
  */
 export interface IOpportunityMatrixWebPartProps
   extends IBaseUncertaintyMatrixWebPartProps, IOpportunityMatrixProps {}
 
+/** Opportunity matrix items and property-pane metadata. */
 export type IOpportunityMatrixWebPartData = IUncertaintyMatrixWebPartData

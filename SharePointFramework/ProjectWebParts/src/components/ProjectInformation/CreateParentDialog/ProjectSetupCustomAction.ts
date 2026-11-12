@@ -1,6 +1,7 @@
 import resource from 'SharedResources'
 import { PROJECT_SETUP_COMPONENT_ID } from '../projectSetupComponentId'
 
+/** Configures the setup extension to apply the parent-project template after reload. */
 export const createProjectSetupCustomAction = (progressTitle: string): Record<string, any> => ({
   Title: 'ProjectSetup',
   Location: 'ClientSideExtension.ApplicationCustomizer',

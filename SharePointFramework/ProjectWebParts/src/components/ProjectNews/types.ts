@@ -5,25 +5,14 @@ import {
   IBaseWebPartComponentState
 } from 'pp365-shared-library/lib/components/BaseWebPartComponent'
 
+/** Configures the news site, project folder and visible article count. */
 export interface IProjectNewsProps extends IBaseWebPartComponentProps {
-  /**
-   * The context of the web part, used for making SharePoint HTTP requests.
-   * This is typically provided by the SharePoint Framework.
-   */
   context: WebPartContext
   /**
-   * The URL of the SharePoint site where the news is located.
-   * This is used to fetch news items and to create new news pages.
-   * It should be in the format: https://yourtenant.sharepoint.com/sites/yoursite
+   * Absolute URL of the SharePoint site used to read and create project news.
    */
   siteUrl: string
-  /**
-   * SPHttpClient for making requests
-   */
   spHttpClient: SPHttpClient
-  /**
-   * The maximum number of news items to display
-   */
   maxVisibleNews?: number
   /**
    * The name of the folder where news items should be stored.
@@ -33,20 +22,12 @@ export interface IProjectNewsProps extends IBaseWebPartComponentProps {
   newsFolderName?: string
 }
 
+/** Loaded news and creation dialog state. */
 export interface IProjectNewsState extends IBaseWebPartComponentState<IProjectNewsData> {
-  /**
-   * Indicates whether the component is loading data.
-   */
   loading?: boolean
 
-  /**
-   * Indicates whether the news creation dialog is open.
-   */
   isDialogOpen?: boolean
 
-  /**
-   * Indicates whether the preview drawer is open.
-   */
   isDrawerOpen?: boolean
 
   /**
@@ -56,49 +37,23 @@ export interface IProjectNewsState extends IBaseWebPartComponentState<IProjectNe
   refetch?: number
 }
 
+/** News page metadata used by the recent-news cards. */
 export interface INewsItem {
-  /**
-   * Unique identifier for the news item
-   */
   id: number
-  /**
-   * The state of the news item, indicating its visibility or promotion status.
-   * 0 for draft, 1 for published, and 2 for promoted. This is the promoted state in SharePoint.
-   */
+  /** SharePoint's PromotedState value for the page. */
   promotedState: number
-  /**
-   * Display name/title for the news card
-   */
   name: string
   /**
    * Absolute URL to the news page
    */
   url: string
-  /**
-   * Display name of the author/editor
-   */
   authorName?: string
-  /**
-   * Last modified date/time (optional)
-   */
   modifiedDate?: string
-  /**
-   * Banner image URL (optional)
-   */
   imageUrl?: string
-  /**
-   * Description (optional)
-   */
   description?: string
 }
-/**
- * Interface for the project news data, which includes an array of news items.
- * This is used to pass news data to components like RecentNews.
- */
+/** News items loaded for the current project. */
 export interface IProjectNewsData {
-  /**
-   * Array of news items
-   */
   news?: INewsItem[]
 }
 
@@ -107,18 +62,9 @@ export interface IProjectNewsData {
  * Used for creating new news articles based on templates.
  */
 export interface TemplateFile {
-  /**
-   * The name of the template file, e.g., "Project-Template.aspx"
-   */
   Name: string
 
-  /**
-   * The title of the template file
-   */
   Title: string
 
-  /**
-   * The server-relative URL of the template file
-   */
   ServerRelativeUrl: string
 }

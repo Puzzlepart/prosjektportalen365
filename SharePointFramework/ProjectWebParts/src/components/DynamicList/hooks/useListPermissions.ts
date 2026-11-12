@@ -9,42 +9,16 @@ import '@pnp/sp/security'
  * Permissions state for list operations.
  */
 export interface IListPermissions {
-  /**
-   * Whether the current user can add items to the list.
-   */
   canAdd: boolean
 
-  /**
-   * Whether the current user can edit items in the list.
-   */
   canEdit: boolean
 
-  /**
-   * Whether the current user can delete items from the list.
-   */
   canDelete: boolean
 
-  /**
-   * Whether permissions are still being loaded.
-   */
   isLoading: boolean
 }
 
-/**
- * Hook to check user permissions on a SharePoint list.
- *
- * Checks the following permissions:
- * - AddListItems: Can create new items
- * - EditListItems: Can edit existing items
- * - DeleteListItems: Can delete items
- *
- * Respects webContextMode to check permissions on the correct site.
- *
- * @param listName Internal name or title of the list
- * @param webUrl Optional web URL (for CustomSite mode)
- * @param webContextMode Mode determining which web to use
- * @returns Object containing permission flags and loading state
- */
+/** Checks add, edit and delete permissions on the list in its configured target web. */
 export function useListPermissions(
   listName: string,
   webUrl?: string,

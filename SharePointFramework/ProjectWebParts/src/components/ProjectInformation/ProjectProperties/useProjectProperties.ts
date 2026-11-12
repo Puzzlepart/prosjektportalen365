@@ -3,12 +3,7 @@ import { useProjectInformationContext } from '../context'
 import { IProjectPropertiesProps } from './types'
 import { useMemo } from 'react'
 
-/**
- * Hook for getting the project properties based on `displayAllProperties`
- * property and column visibility configured in the configuration list.
- *
- * @param props Props for the `ProjectProperties` component.
- */
+/** Selects visible non-system properties for the host page or the all-properties view. */
 export function useProjectProperties(props: IProjectPropertiesProps) {
   const context = useProjectInformationContext()
   return useMemo(

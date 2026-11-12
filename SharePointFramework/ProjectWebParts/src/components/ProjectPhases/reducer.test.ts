@@ -66,7 +66,6 @@ describe('ProjectPhases reducer', () => {
     const state = reducer(reducer(loaded(), OPEN_POPOVER({ phase: planning })), CHANGE_PHASE())
     expect(state.confirmPhase).toBe(planning)
     expect(state.popover).toBeNull()
-    // Nothing changes before the user confirms.
     expect(state.phase).toBe(concept)
   })
 
@@ -129,7 +128,6 @@ describe('ProjectPhases reducer', () => {
     expect(state.phase).toBe(planning)
     expect(state.archiveLogWarning).toBe('Arkiveringsloggen ble ikke oppdatert')
     expect(state.hubSyncWarning).toBeUndefined()
-    // The next change starts without it.
     const next = reducer(reducer(state, INIT_CHANGE_PHASE()), SET_PHASE({ phase: concept }))
     expect(next.archiveLogWarning).toBeUndefined()
   })

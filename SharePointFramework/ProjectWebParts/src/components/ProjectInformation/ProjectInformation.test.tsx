@@ -140,7 +140,6 @@ describe('ProjectInformation', () => {
         name: format(strings.EditProjectInformationText, 'prosjektinformasjon')
       })
     ).toBeInTheDocument()
-    // Without the rerun permission, promoting to a parent project and rerunning the setup are hidden.
     expect(screen.queryByRole('button', { name: strings.CreateParentProjectLabel })).toBeNull()
     expect(screen.queryByRole('button', { name: strings.RunProjectSetupLabel })).toBeNull()
   })

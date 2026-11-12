@@ -1,9 +1,13 @@
 import { IMatrixCell } from './MatrixCell'
 import { IMatrixElementProps } from './MatrixCell/MatrixElement/types'
 
+/** Supported number of probability and consequence levels. */
 export type DynamicMatrixSize = '4' | '5' | '6'
+/** Matrix rows, including their header cells. */
 export type DynamicMatrixConfiguration = IMatrixCell[][]
+/** An RGB color stop at position `p` in a matrix color scale. */
 export type DynamicMatrixColorScaleConfigItem = { p: number; r: number; g: number; b: number }
+/** Color stops used to generate matrix cell backgrounds. */
 export type DynamicMatrixColorScaleConfig = DynamicMatrixColorScaleConfigItem[]
 
 /**
@@ -12,15 +16,10 @@ export type DynamicMatrixColorScaleConfig = DynamicMatrixColorScaleConfigItem[]
  */
 export const DEFAULT_MATRIX_WIDTH = 400
 
+/** Configures matrix layout, cell contents and element tooltips. */
 export interface IDynamicMatrixProps {
-  /**
-   * Matrix items/elements.
-   */
   items?: any[]
 
-  /**
-   * Matrix configuration.
-   */
   configuration?: DynamicMatrixConfiguration
 
   /**

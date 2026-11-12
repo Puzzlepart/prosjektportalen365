@@ -4,6 +4,7 @@ import { LoadingSkeleton, Toolbar } from 'pp365-shared-library'
 import { useToolbarItems } from './useToolbarItems'
 import styles from '../ProjectStatus.module.scss'
 
+/** Displays report actions, history and scope selection after report data loads. */
 export const Commands: FC = () => {
   const context = useProjectStatusContext()
   const { menuItems, farMenuItems } = useToolbarItems()

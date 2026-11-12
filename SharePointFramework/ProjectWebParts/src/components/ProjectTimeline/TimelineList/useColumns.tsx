@@ -5,6 +5,7 @@ import { get } from '@microsoft/sp-lodash-subset'
 import { tryParseCurrency } from 'pp365-shared-library/lib/util/tryParseCurrency'
 import { formatShortDate, IDataGridColumn, getUserPhoto } from 'pp365-shared-library'
 
+/** Builds sortable timeline-list columns with type-specific value renderers. */
 export const useColumns = (): IDataGridColumn[] => {
   const context = useContext(ProjectTimelineContext)
 

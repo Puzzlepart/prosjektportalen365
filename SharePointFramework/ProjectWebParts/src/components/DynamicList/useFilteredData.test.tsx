@@ -19,6 +19,7 @@ const listItems = [
 
 function filtered(state: Record<string, any>) {
   const captured: { items: any[] } = { items: [] }
+  /** Captures the rows selected by the mounted filtering hook. */
   const Probe: React.FC = () => {
     captured.items = useFilteredData()
     return null

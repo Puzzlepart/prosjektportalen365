@@ -4,10 +4,7 @@ import '@pnp/sp/files'
 import type { IDynamicListContext } from '../context'
 
 /**
- * Resolves selected items by mapping selected row indices to actual list items.
- *
- * @param context - The DynamicList context containing state with selectedItems and data
- * @returns Array of resolved items (null entries filtered out)
+ * Resolves selected row indices to existing list items, omitting stale selections.
  */
 export function getSelectedItems(context: IDynamicListContext): Record<string, any>[] {
   return (context.state.selectedItems || [])
@@ -16,12 +13,7 @@ export function getSelectedItems(context: IDynamicListContext): Record<string, a
 }
 
 /**
- * Stamps GtSiteId and GtSiteTitle on a list item when site ID filtering is enabled.
- *
- * @param list - PnPJS list instance
- * @param itemId - ID of the item to stamp
- * @param siteId - The site ID to set
- * @param siteTitle - The site title to set
+ * Stamps the supplied project identity fields on an item, logging rather than throwing failures.
  */
 export async function stampSiteIdFields(
   list: any,
@@ -42,15 +34,10 @@ export async function stampSiteIdFields(
 }
 
 /**
- * Stamps GtSiteId and GtSiteTitle on a file item when site ID filtering is enabled.
+ * Stamps the supplied project identity fields on a file, logging rather than throwing failures.
  *
  * PnPjs v4 `files.addUsingPath` resolves to the created file's `IFileInfo` (no `IFile` handle),
  * so the list item is resolved through `web.getFileByServerRelativePath(...).getItem()`.
- *
- * @param web - The web the file was added to
- * @param addedFile - The `IFileInfo` returned by `files.addUsingPath`
- * @param siteId - The site ID to set
- * @param siteTitle - The site title to set
  */
 export async function stampSiteIdFieldsOnFile(
   web: IWeb,
@@ -85,10 +72,6 @@ export function isCorsError(error: any): boolean {
 
 /**
  * Builds the standard payload for custom action POST requests.
- *
- * @param context - The DynamicList context
- * @param actionName - Name of the custom action
- * @param selectedItems - Resolved selected items
  */
 export function buildCustomActionPayload(
   context: IDynamicListContext,
@@ -117,13 +100,8 @@ export function buildCustomActionPayload(
 }
 
 /**
- * Ensures a project folder exists in the document library root.
- * Returns the folder path to use for file operations.
- *
- * @param list - PnPJS list instance
- * @param projectFolderName - Name of the project folder to ensure
- * @param currentFolderPath - Current folder path (if navigated)
- * @returns The effective folder path to use
+ * Ensures the project folder exists and returns the current folder path, or the project folder
+ * when navigation is at the library root.
  */
 export async function ensureProjectFolder(
   list: any,

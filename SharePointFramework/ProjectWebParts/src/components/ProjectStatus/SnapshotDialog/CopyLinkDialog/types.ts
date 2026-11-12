@@ -4,12 +4,9 @@
 export type CopyLinkStatus = 'copied' | 'failed'
 
 /**
- * Props for `CopyLinkDialog`.
+ * Snapshot links, clipboard outcome and copy actions shown in the confirmation dialog.
  */
 export interface ICopyLinkDialogProps {
-  /**
-   * Whether the dialog is open
-   */
   open: boolean
 
   /**
@@ -27,18 +24,9 @@ export interface ICopyLinkDialogProps {
    */
   status?: CopyLinkStatus
 
-  /**
-   * Copies the link to the status page
-   */
   onCopyPageLink: () => void
 
-  /**
-   * Copies the link to the image file
-   */
   onCopyImageLink: () => void
 
-  /**
-   * Closes the dialog
-   */
   onDismiss: () => void
 }

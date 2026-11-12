@@ -7,15 +7,7 @@ import { IProjectTimelineProps, ITimelineGroup } from '../types'
 import resource from 'SharedResources'
 import { format } from 'pp365-shared-library'
 
-/**
- * Transform items for timeline
- *
- * @param timelineItems Timeline items
- * @param timelineGroups Timeline groups
- * @param props Component properties for `ProjectTimeline`
- *
- * @returns Timeline items
- */
+/** Converts timeline content into configured bars or milestones in their selected groups. */
 export function transformItems(
   timelineItems: TimelineContentModel[],
   timelineGroups: ITimelineGroup[],

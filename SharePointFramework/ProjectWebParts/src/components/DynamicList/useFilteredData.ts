@@ -6,8 +6,6 @@ import { get } from '@microsoft/sp-lodash-subset'
  * The rows the list shows: those matching the search term in any column, narrowed by the active
  * filters, every filter having to match. Shared by the list and the Excel export, so that the
  * export holds what is shown.
- *
- * @param state State of the dynamic list
  */
 export function filterListItems(state: IDynamicListContext['state']) {
   if (!state.data?.listItems) {
@@ -46,11 +44,7 @@ export function filterListItems(state: IDynamicListContext['state']) {
   return items
 }
 
-/**
- * Hook to filter data based on search term and active filters (see `filterListItems`)
- *
- * @returns Filtered list items
- */
+/** Memoizes the rows matching the list search and every active filter. */
 export function useFilteredData() {
   const context = useContext(DynamicListContext)
 

@@ -3,10 +3,7 @@ import { ProjectPhasesContext } from '../../context'
 import { IArchiveOperation } from '../../../../data/SPDataAdapter/types'
 
 /**
- * Hook to get archive status for a specific phase from the context data
- *
- * @param phaseName Name of the phase to get archive information for
- * @returns Archive operation data and loading state
+ * Finds the latest archive operation whose message names the phase being left.
  */
 export function usePhaseArchiveStatus(phaseName?: string) {
   const context = useContext(ProjectPhasesContext)

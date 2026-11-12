@@ -1,9 +1,7 @@
 import { useState, useCallback, useRef } from 'react'
 import strings from 'ProjectWebPartsStrings'
 
-/**
- * Hook for managing news form state and validation
- */
+/** Manages the news title and template selection with validation and reset handlers. */
 export const useNewsForm = () => {
   const [title, setTitle] = useState('')
   const [selectedTemplate, setSelectedTemplate] = useState<string | undefined>(undefined)
@@ -29,7 +27,6 @@ export const useNewsForm = () => {
 
   /**
    * Validates the form and sets appropriate error messages
-   * @returns true if form is valid, false otherwise
    */
   const validateForm = useCallback((): boolean => {
     if (!title.trim()) {

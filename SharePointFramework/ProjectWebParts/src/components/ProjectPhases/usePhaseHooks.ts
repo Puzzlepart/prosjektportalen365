@@ -2,9 +2,7 @@ import { useContext } from 'react'
 import { ProjectPhasesContext } from './context'
 import { IArchiveConfiguration } from './ChangePhaseDialog/Views/ArchiveView'
 
-/**
- * Hook for running phase hooks. Returns a function that can be called to run the hook.
- */
+/** Provides configured phase-change and archive webhook callbacks. */
 export function usePhaseHooks() {
   const context = useContext(ProjectPhasesContext)
 

@@ -1,14 +1,7 @@
 import { IMatrixCell, MatrixCellType } from './MatrixCell'
 import { DynamicMatrixConfiguration } from './types'
 
-/**
- * Generate matrix configuration for `DynamicMatix` with the specified `size``
- * and headers specified `headerConfig`. `headerConfig` should contain two
- * arrays. First array is the top headers and the second is left headers.
- *
- * @param size Matrix size
- * @param headerConfig Header configuration
- */
+/** Builds matrix rows with column headers first and descending probability levels. */
 export const generateMatrixConfiguration = (
   size: number,
   headerConfig: Record<number, string[][]>

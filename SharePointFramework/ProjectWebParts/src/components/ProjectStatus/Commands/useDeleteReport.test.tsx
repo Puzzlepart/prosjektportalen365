@@ -20,6 +20,7 @@ import { useDeleteReport } from './useDeleteReport'
 function deleteReport() {
   const dispatch = jest.fn()
   let run: () => Promise<void>
+  /** Exposes the selected report's deletion callback. */
   const Probe: React.FC = () => {
     run = useDeleteReport()
     return null

@@ -19,6 +19,7 @@ import { ArchiveStatusPopover } from './ArchiveStatusPopover'
 import { useArchiveStatus } from './useArchiveStatus'
 import styles from './ArchiveStatus.module.scss'
 
+/** Shows the latest archive status with details in a popover. */
 export const ArchiveStatus: FC = () => {
   const { archiveInfo, processedOperations, open, fluentProviderId, handleOpenChange, shouldHide } =
     useArchiveStatus()

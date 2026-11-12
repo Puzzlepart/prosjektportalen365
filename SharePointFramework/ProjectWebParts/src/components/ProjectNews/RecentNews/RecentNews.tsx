@@ -34,7 +34,6 @@ export const RecentNews: FC<IRecentNewsProps> = (props) => {
                   header={
                     <Link href={item.url} target='_blank' rel='noopener noreferrer'>
                       {item.name.replace(/\.aspx$/i, '').replace(/-/g, ' ')}{' '}
-                      {/* Remove .aspx extension and replace dashes with spaces */}
                     </Link>
                   }
                   description={

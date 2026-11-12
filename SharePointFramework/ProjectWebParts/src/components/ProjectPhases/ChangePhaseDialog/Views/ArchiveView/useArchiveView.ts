@@ -6,9 +6,7 @@ import { ChangePhaseDialogContext } from '../../context'
 import { SET_ARCHIVE_CONFIGURATION } from '../../reducer'
 import { IArchiveSection, IArchiveConfiguration } from './types'
 
-/**
- * Hook for managing archive view state and actions
- */
+/** Builds archive candidate groups and synchronizes document and list selections to dialog state. */
 export function useArchiveView() {
   const context = useContext(ProjectPhasesContext)
   const dialogContext = useContext(ChangePhaseDialogContext)
@@ -66,7 +64,6 @@ export function useArchiveView() {
     context.state?.data?.currentPhase
   ])
 
-  // What the user has ticked, in the shape the dialog stores; read by the effect below.
   const getArchiveConfiguration = (): IArchiveConfiguration => {
     const documentsSection = sections.find((s) => s.key === 'documents')
     const listsSection = sections.find((s) => s.key === 'lists')

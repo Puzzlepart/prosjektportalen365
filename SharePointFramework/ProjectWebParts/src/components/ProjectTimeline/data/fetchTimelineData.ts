@@ -33,10 +33,6 @@ function isVisibleTimelineField(fld: SPField): boolean {
  * content list's first Item-derived CT), fields are ordered by the CT's
  * `FieldLinks` and any link with `Hidden=true` is excluded — so per-CT
  * hidden overrides hide a field from both the edit panel and the columns.
- *
- * @param props Component properties for `ProjectTimeline`
- * @param timelineConfig Timeline configuration
- * @param timelineContentTypeId Optional content type ID for template-specific filtering
  */
 export async function fetchTimelineData(
   props: IProjectTimelineProps,
@@ -76,7 +72,6 @@ export async function fetchTimelineData(
     .filter(Boolean)
 
   let timelineContentFields: SPField[]
-  // Resolve the effective CT. When no template-specific CT is provided.
   let effectiveContentTypeId: string | undefined
   if (timelineContentTypeId) {
     const matchingCts = await timelineContentList.contentTypes

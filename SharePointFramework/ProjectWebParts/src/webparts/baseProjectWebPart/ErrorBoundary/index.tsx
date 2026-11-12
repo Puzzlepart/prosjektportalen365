@@ -5,6 +5,7 @@ import React, { FC } from 'react'
 import { IErrorBoundaryFallbackProps } from './types'
 
 import { format } from 'pp365-shared-library'
+/** Reports a web part rendering failure and logs its original error. */
 export const ErrorBoundaryFallback: FC<IErrorBoundaryFallbackProps> = ({ title, error }) => {
   console.error(error)
   return (

@@ -10,11 +10,7 @@ import strings from 'ProjectWebPartsStrings'
 import { CustomError, isUnauthorizedError } from 'pp365-shared-library'
 
 /**
- * Fetch data for ProjectTimeline
- *
- * @param props Component properties for `ProjectTimeline`
- *
- * @returns `ProjectTimeline` state
+ * Loads project and timeline data with initial grouping, or returns a localized error state.
  */
 export async function fetchData(
   props: IProjectTimelineProps

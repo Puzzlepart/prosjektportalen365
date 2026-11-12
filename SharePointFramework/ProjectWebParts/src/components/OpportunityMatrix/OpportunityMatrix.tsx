@@ -17,6 +17,7 @@ const OPPORTUNITY_MATRIX_DEFAULT_PROPS: Partial<IOpportunityMatrixProps> = {
   <p><strong>${resource.SiteFields_GtRiskStatus_DisplayName}: </strong>{GtRiskStatus}</p>`
 }
 
+/** Displays opportunities by probability and consequence, optionally after actions. */
 export const OpportunityMatrix: FC<IOpportunityMatrixProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, OPPORTUNITY_MATRIX_DEFAULT_PROPS)
   const {

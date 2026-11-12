@@ -29,6 +29,7 @@ const Icons = {
   CheckboxArrowRight: bundleIcon(CheckboxArrowRightFilled, CheckboxArrowRightRegular)
 }
 
+/** Shows a phase's checkpoint and archive status and offers a phase change. */
 export const ProjectPhasePopover: FC<IProjectPhasePopoverProps> = (props) => {
   const context = useContext(ProjectPhasesContext)
   const fluentProviderId = useId('fp-project-phase-popover')

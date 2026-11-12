@@ -9,6 +9,7 @@ import { StatusElementIcon } from './StatusElementIcon/StatusElementIcon'
 import { IStatusElementProps } from './types'
 import { useStatusElement } from './useStatusElement'
 
+/** Displays a section's status icon, value, comment and optional total. */
 export const StatusElement: FC<IStatusElementProps> = (props) => {
   const { headerProps } = useContext(SectionContext)
   const { commentProps, iconSize, useWrapper, fluentProviderId, iconName } = useStatusElement(props)

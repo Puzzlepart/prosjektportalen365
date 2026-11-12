@@ -1,6 +1,7 @@
 import { IProjectInformationProps } from '../ProjectInformation'
 import { IBasePanelProps } from 'pp365-shared-library'
 
+/** Project information settings and the control that opens its side panel. */
 export interface IProjectInformationPanelProps extends IProjectInformationProps {
   /**
    * Keeps the panel closed; defaults to `true`. Without `onRenderToggleElement`

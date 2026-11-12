@@ -17,11 +17,7 @@ import { useDeleteReport } from './useDeleteReport'
 import { usePublishReport } from './usePublishReport'
 import { useScopeSelector } from './useScopeSelector'
 
-/**
- * Returns an array of menu items for the toolbar in the ProjectStatus component.
- *
- * @returns An array of IListMenuItem objects representing the toolbar items.
- */
+/** Builds permission-aware report commands, report history and scope selection. */
 export function useToolbarItems() {
   const { state, props, dispatch } = useProjectStatusContext()
   const snapshotInDialog = props.snapshotInDialog !== false

@@ -3,6 +3,7 @@ import { IBaseWebPartComponentProps } from 'pp365-shared-library/lib/components/
 import { IDynamicMatrixProps } from 'components/DynamicMatrix'
 import { UncertaintyElementModel } from 'models'
 
+/** Chooses local list items, aggregated search results or automatic source selection. */
 export type UncertaintyMatrixDataFetchMode = 'auto' | 'list' | 'dataSource'
 
 /**
@@ -81,6 +82,7 @@ export interface IBaseUncertaintyMatrixWebPartProps
   consequencePostActionFieldName?: string
 }
 
+/** Loaded uncertainty items and the configuration and field choices for the property pane. */
 export interface IUncertaintyMatrixWebPartData {
   /**
    * The items retrieved from the SharePoint list or data source.

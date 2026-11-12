@@ -6,6 +6,7 @@ import { Field, Label, Textarea } from '@fluentui/react-components'
 import { StatusActions } from './StatusActions/StatusActions'
 import { format } from 'pp365-shared-library'
 
+/** Collects a comment and status for the current open checkpoint. */
 export const InitialView: FC = () => {
   const { checklistItem, checklistItems, setComment, comment, commentHint, actions } =
     useInitialView()

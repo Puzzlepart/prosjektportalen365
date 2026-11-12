@@ -4,9 +4,6 @@ import { DocumentLibraryViewMode, IFileItem } from '../../types'
  * What decides which of a library's items a document library view shows.
  */
 export interface IItemsInViewOptions {
-  /**
-   * The folder view or the flat view.
-   */
   viewMode: DocumentLibraryViewMode
 
   /**
@@ -27,7 +24,6 @@ export interface IItemsInViewOptions {
  * every folder.
  *
  * @param source The items to choose from: those the search and filters leave, or all
- * @param options What decides it
  */
 export function getItemsInView(
   source: Record<string, any>[],

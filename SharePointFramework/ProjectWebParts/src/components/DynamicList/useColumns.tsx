@@ -3,32 +3,14 @@ import { useContext, useMemo } from 'react'
 import { DynamicListContext } from './context'
 import { renderItemColumn, useColumnRenderComponentRegistry } from 'pp365-shared-library'
 
-/**
- * Extended table column definition with width properties.
- *
- * Extends Fluent UI's TableColumnDefinition to include column sizing metadata
- * from ProjectContentColumns configuration.
- */
+/** Table column definition enriched with hub-configured width limits. */
 export interface IListColumn extends TableColumnDefinition<any> {
   minWidth?: number
   maxWidth?: number
   defaultWidth?: number
 }
 
-/**
- * Hook that transforms list column metadata into Fluent UI table column definitions.
- *
- * Registers column render components and maps SharePoint list columns to table columns
- * with proper sorting, rendering, and sizing configuration. Width values come from
- * ProjectContentColumns configuration enriched in fetchListData.
- *
- * Respects columnOrder from webpart properties if provided, otherwise uses the default order.
- *
- * Taxonomy field values are already transformed to semicolon-separated term names
- * by fetchListData, so no additional transformation is needed here.
- *
- * @returns Array of table column definitions with rendering and sizing metadata
- */
+/** Builds sortable typed columns using hub sizing, hidden-field settings and configured column order. */
 export function useColumns(): IListColumn[] {
   const context = useContext(DynamicListContext)
   useColumnRenderComponentRegistry()

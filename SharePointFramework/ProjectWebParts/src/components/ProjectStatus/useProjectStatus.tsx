@@ -4,9 +4,7 @@ import reducer, { initialState } from './reducer'
 import { IProjectStatusProps } from './types'
 import { useProjectStatusDataFetch } from './useProjectStatusDataFetch'
 
-/**
- * Component logic hook for `ProjectStatus`
- */
+/** Connects report reducer state and data loading to the shared status context. */
 export function useProjectStatus(props: IProjectStatusProps) {
   const [state, dispatch] = useReducer(reducer, initialState)
 

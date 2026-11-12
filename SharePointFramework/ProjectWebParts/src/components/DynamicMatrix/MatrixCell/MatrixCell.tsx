@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import styles from './MatrixCell.module.scss'
 import { IMatrixCellProps } from './types'
 
+/** Renders a colored matrix cell containing its uncertainty elements. */
 export const MatrixCell: FC<IMatrixCellProps> = (props) => {
   return (
     <div

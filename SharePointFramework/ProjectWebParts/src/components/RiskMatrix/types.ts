@@ -4,6 +4,7 @@ import { HTMLProps } from 'react'
 import { UncertaintyElementModel } from '../../models'
 import { IDynamicMatrixProps } from '../DynamicMatrix'
 
+/** Risk items, coordinate fields and matrix presentation settings. */
 export interface IRiskMatrixProps
   extends
     Omit<HTMLProps<HTMLDivElement>, 'size'>,

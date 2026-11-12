@@ -11,25 +11,14 @@ import { IProjectPhasePopoverProps } from './ProjectPhase/ProjectPhasePopover'
 import { IArchiveItem } from './ChangePhaseDialog/Views/ArchiveView/types'
 import { IArchiveStatusInfo } from '../../data/SPDataAdapter/types'
 
+/** Configures phase visibility, checkpoints, archiving and phase-change hooks. */
 export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
-  /**
-   * Field name for phase field
-   */
   phaseField: string
 
-  /**
-   * View name for current phase
-   */
   currentPhaseViewName: string
 
-  /**
-   * Show sub text
-   */
   showSubText: boolean
 
-  /**
-   * Sub text truncate length
-   */
   subTextTruncateLength: number
 
   /**
@@ -38,14 +27,8 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
    */
   syncPropertiesAfterPhaseChange: boolean
 
-  /**
-   * Use start arrow
-   */
   useStartArrow: boolean
 
-  /**
-   * Use end arrow
-   */
   useEndArrow: boolean
 
   /**
@@ -97,25 +80,14 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   commentMinLength?: number
 }
 
+/** Loaded phases and the state of phase details and pending changes. */
 export interface IProjectPhasesState extends IBaseWebPartComponentState<IProjectPhasesData> {
-  /**
-   * Phase
-   */
   phase?: ProjectPhaseModel
 
-  /**
-   * Phase to be confirmed using ChangePhaseDialog
-   */
   confirmPhase?: ProjectPhaseModel
 
-  /**
-   * Is changing phase
-   */
   isChangingPhase?: boolean
 
-  /**
-   * Popover props
-   */
   popover?: IProjectPhasePopoverProps
 
   /**
@@ -130,22 +102,15 @@ export interface IProjectPhasesState extends IBaseWebPartComponentState<IProject
   archiveLogWarning?: string
 }
 
+/** Checkpoint data keyed by phase. */
 export type ChecklistData = Record<string, ProjectPhaseChecklistData>
 
+/** Phases, current project phase, archive candidates and change permissions. */
 export interface IProjectPhasesData {
-  /**
-   * Phases
-   */
   phases?: ProjectPhaseModel[]
 
-  /**
-   * Current phase
-   */
   currentPhase?: ProjectPhaseModel
 
-  /**
-   * Check list data
-   */
   checklistData?: ChecklistData
 
   /**
@@ -159,14 +124,8 @@ export interface IProjectPhasesData {
     textField?: string
   }
 
-  /**
-   * Phase site pages
-   */
   phaseSitePages?: IPhaseSitePageModel[]
 
-  /**
-   * Welcome page of web
-   */
   welcomePage?: string
 
   /**
@@ -174,14 +133,8 @@ export interface IProjectPhasesData {
    */
   userHasChangePhasePermission?: boolean
 
-  /**
-   * Documents available for archiving
-   */
   archiveDocuments?: IArchiveItem[]
 
-  /**
-   * Lists available for archiving
-   */
   archiveLists?: IArchiveItem[]
 
   /**
@@ -195,6 +148,7 @@ export interface IProjectPhasesData {
   archiveStatus?: IArchiveStatusInfo
 }
 
+/** Project page that can become the homepage for a matching phase. */
 export interface IPhaseSitePageModel {
   /**
    * Id of phase site page

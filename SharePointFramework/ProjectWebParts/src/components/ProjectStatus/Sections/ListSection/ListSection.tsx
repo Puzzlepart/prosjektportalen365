@@ -6,6 +6,7 @@ import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection/BaseSection'
 import { useListSection } from './useListSection'
 
+/** Displays a report section's list items, totals and loading or error state. */
 export const ListSection: FC = () => {
   const { state, errorMessage, items, columns, summation, shouldRenderList } = useListSection()
   const grid = useMemo(() => createDataGridColumns(columns), [columns])

@@ -3,6 +3,7 @@ import { IStatusActionsProps } from './types'
 import styles from './StatusActions.module.scss'
 import { Button } from '@fluentui/react-components'
 
+/** Displays the available checkpoint status choices. */
 export const StatusActions: FC<IStatusActionsProps> = ({ actions }) => {
   return (
     <div className={styles.root}>

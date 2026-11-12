@@ -31,6 +31,7 @@ import { IProgressProps } from 'pp365-shared-library'
 import { getNewEntityProperties } from './newEntityProperties'
 import { syncPhaseToHub } from './syncPhaseToHub'
 
+/** Provides project data, hub synchronization, matrix sources and archive operations. */
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService
   public dataSourceService: DataSourceService
@@ -39,10 +40,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   private _isParentProject: Promise<boolean>
 
   /**
-   * Configure the SP data adapter
-   *
-   * @param spfxContext SPFx context
-   * @param configuration Configuration
+   * Configures project services and clears memoized project relationships.
    */
   public async configure(
     spfxContext: SPFxContext,
@@ -64,9 +62,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
 
   /**
    * Get child projects for the current site from the hub projects list. Lazy and
-   * memoized — the request runs the first time it's needed and is shared between
-   * consumers (e.g. both matrix web parts on the same page). Returns an empty
-   * array when the hub is unavailable.
+   * memoized until the adapter is reconfigured, so matrix consumers share the request.
+   * Returns an empty array when the hub is unavailable.
    */
   public getChildProjects(): Promise<ProjectInformationChildProject[]> {
     if (!this._childProjects) {
@@ -83,8 +80,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   /**
    * Checks whether the current site is a parent project or program by reading the
    * `GtIsParentProject` and `GtIsProgram` flags from the local properties list.
-   * Lazy and memoized — one request total per page load. Returns `false` on any
-   * failure.
+   * Memoized until the adapter is reconfigured; returns `false` on failure.
    */
   public isParentProject(): Promise<boolean> {
     if (!this._isParentProject) {
@@ -137,8 +133,6 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * is `true`). The managed properties of the data source's columns are always
    * included in the select properties.
    *
-   * @param dataSource Data source to fetch items for
-   * @param selectProperties Additional select properties
    * @param includeSelf Whether to include items from the current site (default `true`)
    */
   public async fetchItemsFromDataSource(
@@ -168,16 +162,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
-   * Sync property item from site to associated hub. `this.getMappedProjectProperties` is used to
-   * map the properties item fields to the hub fields. `ensureEntityItem` from `SpEntityPortalService`
-   * (pp365-shared-library) is used to update the hub entity item, or to add it when the project was
-   * set up without one (by a user without write access to the hub). If any errors occur, the
-   * original error is passed to the caller.
-   *
-   * @param title Title of the project
-   * @param fieldValues Field values for the properties item
-   * @param templateParameters Template parameters
-   * @param progressFunc Progress function
+   * Maps project properties to the hub and updates or creates its entity.
+   * Propagates failures so callers can distinguish a local save from a failed hub sync.
    */
   public async syncPropertyItemToHub(
     title: string,
@@ -222,9 +208,6 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * A failed hub update does not undo the phase change: the error is returned for the caller to
    * report, while an error on the project's own item is thrown.
    *
-   * @param phase Phase to change to
-   * @param phaseField Phase field
-   *
    * @returns The error from the hub (also when it is out of reach), or `null` when it was updated
    */
   public async updateProjectPhase(
@@ -254,10 +237,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
-   * Fetch term field context. Fetches the `InternalName` and `TermSetId` for the field,
-   * as well as the `InternalName` for the text field.
-   *
-   * @param fieldName Field name for phase
+   * Resolves a taxonomy field's term set and associated text-field internal name.
    */
   public async getTermFieldContext(fieldName: string) {
     const field = await this.sp.web.fields
@@ -342,7 +322,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
-   * Get documents from the Documents library for archiving
+   * Lists document archive candidates, returning no candidates if the library cannot be read.
    */
   public async getDocumentsForArchive(): Promise<IArchiveDocumentItem[]> {
     try {
@@ -370,7 +350,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
-   * Get site lists for archiving (excluding system lists)
+   * Lists visible archive candidates excluding known system lists; returns none on failure.
    */
   public async getListsForArchive(): Promise<IArchiveListItem[]> {
     try {
@@ -414,15 +394,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
-   * Write an entry to the Archive Log list on the hub
+   * Writes an archive operation to the hub log without throwing write failures.
    *
-   * @param title Title of the log entry
-   * @param status Status of the operation (Success, Error, Warning, In Progress)
-   * @param operation Type of operation being performed
-   * @param message Log message describing the operation
-   * @param scope Scope or context of the log entry (Document, List)
-   * @param webUrl URL of the web/project being archived
-   * @param reference Reference to the item/object being archived
+   * @param reference URL or identifier of the archived document or list
    *
    * @returns The error when the entry was not written (also when the hub is out of reach), or
    * `null` when it was
@@ -479,14 +453,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
-   * Convenience method to log document archiving operations
+   * Logs a phase-transition document archive request.
    *
-   * @param documentTitle Title of the document being archived
-   * @param documentUrl URL of the document
-   * @param projectWebUrl URL of the project web
-   * @param status Status of the archiving operation
-   * @param errorMessage Optional error message if status is ERROR
-   * @param message Optional custom message for the log entry
+   * @param errorMessage Overrides the message when the status is the localized error value
    *
    * @returns As `writeToArchiveLog`
    */
@@ -513,14 +482,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
-   * Convenience method to log list archiving operations
+   * Logs a phase-transition list archive request.
    *
-   * @param listTitle Title of the list being archived
-   * @param listUrl URL of the list
-   * @param projectWebUrl URL of the project web
-   * @param status Status of the archiving operation
-   * @param errorMessage Optional error message if status is ERROR
-   * @param message Optional custom message for the log entry
+   * @param errorMessage Formats the message when the status is the localized error value
    *
    * @returns As `writeToArchiveLog`
    */
@@ -549,10 +513,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
-   * Get information about all archive activity for the current project. The items are grouped by operation and created date.
+   * Summarizes a project's archive log by operation and calendar date.
    *
-   * @param projectWebUrl URL of the project web to retrieve archive status for
-   * @returns Promise<IArchiveStatusInfo | null> Archive information, or null if no archive activity or an error occurs
+   * @returns Archive information, or `null` when no activity is found or the log cannot be read
    */
   public async getArchiveStatus(projectWebUrl: string): Promise<IArchiveStatusInfo | null> {
     if (!this.portalDataService?.web) {

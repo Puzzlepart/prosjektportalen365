@@ -20,6 +20,7 @@ import { useProjectProperties } from './useProjectProperties'
 const Filter = bundleIcon(FilterFilled, FilterRegular)
 const List = bundleIcon(ListFilled, ListRegular)
 
+/** Displays project properties and their visibility controls in page edit mode. */
 export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
   const context = useProjectInformationContext()
   const [selectedTab, setSelectedTab] = useState('view')

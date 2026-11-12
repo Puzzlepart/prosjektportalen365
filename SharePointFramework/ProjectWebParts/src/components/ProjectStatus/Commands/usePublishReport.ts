@@ -18,8 +18,6 @@ import resource from 'SharedResources'
  * is used to capture the report as an image and attach it to the
  * SharePoint list item. The status of the report list item is
  * also updated to published (`GtModerationStatus: Published` from `strings`)
- *
- * @returns A function callback that returns a promise of void
  */
 export function usePublishReport() {
   const context = useProjectStatusContext()

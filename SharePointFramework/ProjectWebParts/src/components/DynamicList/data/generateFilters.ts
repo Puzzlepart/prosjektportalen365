@@ -4,33 +4,11 @@ import { get } from '@microsoft/sp-lodash-subset'
 import _ from 'lodash'
 
 /**
- * Maximum number of unique values allowed for a filter to be generated.
- * Prevents overwhelming the UI with too many filter options.
+ * Exclusive distinct-value limit, keeping generated filters small enough to use.
  */
 const MAX_FILTER_VALUES = 100
 
-/**
- * Generates filters from list data by extracting unique values from each column.
- *
- * This function creates filter configurations for columns that would benefit from filtering,
- * while skipping certain column types that don't make sense to filter (like ID, Modified,
- * Created, Author, Editor, and long text fields like Description or Notes).
- *
- * The process includes:
- * 1. Filtering to only include filterable columns (excluding metadata and long text)
- * 2. Extracting all values for each column, handling multi-value fields (Person, Choice with
- *    multiple selections) by splitting on semicolons
- * 3. Getting unique non-empty values and filtering to only those with multiple unique values
- *    (no point filtering with only 1 value) and less than 100 values (to avoid overwhelming UI)
- * 4. Sorting values alphabetically using Norwegian locale
- * 5. Formatting display values by parsing special SharePoint formats:
- *    - User fields: ID;#Name or Name|email|ID format
- *    - Lookup values: ID;#Value format
- *
- * @param data - The list data containing items and columns
- * @param nonFilterableColumns - Array of column internal names that should not be filterable
- * @returns Array of filter configurations with parsed and formatted values
- */
+/** Builds Norwegian-sorted filters for eligible columns with 2–99 distinct non-empty values. */
 export function generateFilters(
   data: IDynamicListData,
   nonFilterableColumns?: string[]

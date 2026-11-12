@@ -39,8 +39,6 @@ const DATA_PROPERTIES: string[] = [
 
 /**
  * A site id as search and the page context give it, without braces and in lower case.
- *
- * @param siteId Site id
  */
 function normalizeSiteId(siteId: unknown): string {
   return String(siteId ?? '')
@@ -102,8 +100,6 @@ export abstract class BaseUncertaintyMatrixWebPart<
   /**
    * Renders the specified matrix component with the retrieved items, or the error
    * if retrieving them failed.
-   *
-   * @param component Matrix component to render
    */
   protected renderMatrix<P>(component: FC<P>): void {
     if (this._error) {
@@ -126,8 +122,6 @@ export abstract class BaseUncertaintyMatrixWebPart<
   /**
    * Props for the matrix component: the base web part's, with the title falling back to the web
    * part's own title when the title field is emptied, as its placeholder shows.
-   *
-   * @param props Props to override the web part properties with
    */
   protected createPropsForComponent<P>(props: Partial<P>): P {
     return {
@@ -140,8 +134,6 @@ export abstract class BaseUncertaintyMatrixWebPart<
    * Fetches the items again once a property that decides them has changed in the property pane,
    * when the pane has been still for `RELOAD_DELAY`. SPFx renders the web part right after this
    * call, with the items it has; the fetch renders it again with the new ones.
-   *
-   * @param propertyPath Path of the changed property
    */
   protected onPropertyPaneFieldChanged(propertyPath: string): void {
     if (!DATA_PROPERTIES.includes(propertyPath)) return

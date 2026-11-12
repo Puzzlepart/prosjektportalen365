@@ -48,6 +48,7 @@ function exportFrom(state: Record<string, any> = {}, props: Record<string, any> 
     setState
   } as any
   let exportToExcel: () => void
+  /** Exposes the export callback from a mounted hook. */
   const Probe: React.FC = () => {
     exportToExcel = useExcelExport(TOASTER_ID)
     return null

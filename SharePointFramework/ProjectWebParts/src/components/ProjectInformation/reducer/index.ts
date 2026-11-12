@@ -16,27 +16,14 @@ import {
 } from './actions'
 import { createProperties } from './createProperties'
 
-/**
- * Initial state for the `ProjectInformation` component.
- *
- * - `isDataLoaded` is `false` by default, and it will be set to
- * `true` when the data is loaded.
- * - `properties` is an empty array by default, and it will be
- * set to the project properties when the data is loaded.
- * - `data` consists of an empty array of sections and fields by default,
- * and it will be set to the project data when the data is loaded.
- */
+/** Project information placeholders before data and editable properties are loaded. */
 const initialState: IProjectInformationState = {
   isDataLoaded: false,
   properties: [],
   data: { sections: [], fields: [] }
 }
 
-/**
- * Create project information reducer.
- *
- * @param spfxContext SPFx context
- */
+/** Handles project data, localized editable properties and active operations. */
 const createProjectInformationReducer = (spfxContext: SPFxContext) =>
   createReducer(initialState, (builder) =>
     builder
@@ -88,13 +75,7 @@ const createProjectInformationReducer = (spfxContext: SPFxContext) =>
       })
   )
 
-/**
- * Hook to use project information reducer. This hook is used to
- * manage project information state using `useReducer` hook from
- * `react`.
- *
- * @param spfxContext SPFx context
- */
+/** Initializes project information reducer state with the host's locale context. */
 export const useProjectInformationReducer = (spfxContext: SPFxContext) => {
   const reducer = useMemo(() => createProjectInformationReducer(spfxContext), [])
   const [state, dispatch] = useReducer(reducer, initialState)

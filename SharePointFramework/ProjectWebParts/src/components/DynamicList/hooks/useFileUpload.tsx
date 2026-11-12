@@ -14,8 +14,6 @@ import { useNotify } from './useNotify'
  * Uploads files to the document library's current folder, or to its root, under the project's
  * folder when the web part uses one, and tells which files were uploaded or why they were not.
  * The toolbar's upload and a drop on the library share it.
- *
- * @returns A function uploading the files given
  */
 export function useFileUpload(): (files: File[]) => Promise<void> {
   const context = useContext(DynamicListContext)

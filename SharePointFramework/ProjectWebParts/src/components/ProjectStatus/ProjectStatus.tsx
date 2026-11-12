@@ -25,6 +25,7 @@ const PROJECT_STATUS_DEFAULT_PROPS: Partial<IProjectStatusProps> = {
   description: ''
 }
 
+/** Displays the selected status report with its sections and report-management actions. */
 export const ProjectStatus: FC<IProjectStatusProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, PROJECT_STATUS_DEFAULT_PROPS)
   const { context } = useProjectStatus(props)

@@ -3,6 +3,7 @@ import { ProjectStatusContext, SummarySection, Header } from '../../ProjectStatu
 import { useProjectInformationContext } from '../context'
 import { useProjectStatusReport } from './useProjectStatusReport'
 
+/** Displays the latest status summary for each project report series. */
 export const ProjectStatusReport: FC = () => {
   const context = useProjectInformationContext()
   const projectStatusContexts = useProjectStatusReport()

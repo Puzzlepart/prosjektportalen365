@@ -72,7 +72,6 @@ describe('UncertaintySection', () => {
     })
     renderSection()
     expect(await screen.findByText('Tittel')).toBeInTheDocument()
-    // Its status element heads it (WCAG 1.3.1).
     expect(screen.getByRole('heading', { level: 3, name: 'Seksjonstittel' })).toBeInTheDocument()
     expect(screen.getByText('Sannsynlighet')).toBeInTheDocument()
     expect(screen.getByText('Forsinkelse')).toBeInTheDocument()

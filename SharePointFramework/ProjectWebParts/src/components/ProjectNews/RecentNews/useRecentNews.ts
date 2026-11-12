@@ -3,10 +3,7 @@ import { useState } from 'react'
 import { IRecentNewsProps } from './types'
 
 /**
- * Component logic hook for `RecentNews`: the news shown, the first few or all of them, and the id
- * of their list, which the button that shows more names as what it opens (WCAG 4.1.2).
- *
- * @param props Props for the component
+ * Selects initially visible or all news and supplies the expandable list's accessible target.
  */
 export function useRecentNews({ news, maxVisible = 4 }: IRecentNewsProps) {
   const [showAll, setShowAll] = useState(false)

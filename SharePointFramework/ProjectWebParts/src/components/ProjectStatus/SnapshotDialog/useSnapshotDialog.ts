@@ -15,8 +15,6 @@ export const SNAPSHOT_URL_PARAM = 'snapshot'
 /**
  * Link to this page that opens with the report selected and its snapshot shown, for the
  * report's series when it belongs to a sub-project ("delprosjekt").
- *
- * @param report The report whose snapshot the link shows
  */
 function getSnapshotPageLink(report: StatusReport): string {
   const scope = report.scopeKey ? `&scope=${encodeURIComponent(report.scopeKey)}` : ''

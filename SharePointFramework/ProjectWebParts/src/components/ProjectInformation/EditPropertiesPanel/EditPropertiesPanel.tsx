@@ -7,8 +7,7 @@ import { CLOSE_PANEL } from '../reducer'
 import { useEditPropertiesPanelSubmit } from './useEditPropertiesPanelSubmit'
 
 /**
- * Edit properties panel uses `CustomEditPanel` to render an edit
- * panel for the project information component.
+ * Edits project properties and reports save and synchronization progress.
  */
 export const EditPropertiesPanel: FC = () => {
   const context = useProjectInformationContext()

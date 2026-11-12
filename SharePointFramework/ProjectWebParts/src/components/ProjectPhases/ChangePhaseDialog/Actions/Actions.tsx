@@ -10,6 +10,7 @@ import { SET_VIEW } from '../reducer'
 import { Button, DialogActions } from '@fluentui/react-components'
 import { logArchiveOperations } from './logArchiveOperations'
 
+/** Provides navigation, archiving and confirmation actions for a phase change. */
 export const Actions: FC = () => {
   const context = useContext(ProjectPhasesContext)
   const { state, dispatch } = useContext(ChangePhaseDialogContext)

@@ -9,6 +9,7 @@ import { SectionContext } from './context'
 import { useCreateContextValue } from './useCreateContextValue'
 import { useSections } from './useSections'
 
+/** Renders visible report sections with their individual section contexts. */
 export const Sections: FC = () => {
   const context = useProjectStatusContext()
   const createContextValue = useCreateContextValue({ iconSize: 40 })

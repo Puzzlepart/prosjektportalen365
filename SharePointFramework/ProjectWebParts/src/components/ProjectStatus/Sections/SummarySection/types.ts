@@ -1,9 +1,7 @@
 import { IStatusElementProps } from '../../../ProjectStatus/StatusElement/types'
 import { IBaseSectionProps } from '../BaseSection'
 
+/** Layout and status presentation options for the report summary. */
 export interface ISummarySectionProps extends IBaseSectionProps, IStatusElementProps {
-  /**
-   * Whether or not to show the project information component.
-   */
   showProjectInformation?: boolean
 }

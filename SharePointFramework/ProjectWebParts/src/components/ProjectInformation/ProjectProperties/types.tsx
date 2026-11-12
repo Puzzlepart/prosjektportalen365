@@ -1,6 +1,4 @@
+/** Controls whether the properties view includes every project property. */
 export interface IProjectPropertiesProps {
-  /**
-   * Display all properties regardless of configuration
-   */
   displayAllProperties?: boolean
 }

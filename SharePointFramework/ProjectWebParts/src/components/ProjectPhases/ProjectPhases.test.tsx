@@ -31,6 +31,7 @@ jest.mock('@fluentui/react-components', () => {
   const actual = jest.requireActual('@fluentui/react-components')
   const React = jest.requireActual('react')
   const PopoverContext = React.createContext({ open: false, toggle: (_event: any) => undefined })
+  /** Shares phase-popover state and records focus trapping without positioning work. */
   const Popover = ({ open, onOpenChange, trapFocus, children }: any) => {
     popover.trapFocus = trapFocus
     return React.createElement(
@@ -39,10 +40,12 @@ jest.mock('@fluentui/react-components', () => {
       children
     )
   }
+  /** Toggles the phase-popover stand-in when its trigger is clicked. */
   const PopoverTrigger = ({ children }: any) => {
     const { toggle } = React.useContext(PopoverContext)
     return React.cloneElement(children, { onClick: toggle })
   }
+  /** Shows the open phase details with the configured accessible heading. */
   const PopoverSurface = ({ children, ...props }: any) => {
     const { open } = React.useContext(PopoverContext)
     return open
@@ -126,7 +129,6 @@ function renderPhases(
   )
 }
 
-// Each phase is a list item and the trigger of its popover; they are read from the list's markup.
 const phaseItems = () =>
   Array.from(screen.getByRole('list').querySelectorAll('li')).map(
     (li) => li.querySelector('span')?.textContent
@@ -144,7 +146,6 @@ describe('ProjectPhases', () => {
   it('lists the visible phases in order, marks the current one and shows the sub text', async () => {
     renderPhases(phases[0])
     expect(await screen.findByTitle('Konsept')).toBeInTheDocument()
-    // The hidden phase is left out, and the end phase until the project is near the end.
     expect(phaseItems()).toEqual(['Konsept', 'Planlegge', 'Gjennomføre'])
     expect(screen.getByTitle('Konsept').closest('li')).toHaveClass('isCurrentPhase')
     expect(screen.getByTitle('Planlegge').closest('li')).not.toHaveClass('isCurrentPhase')
@@ -161,7 +162,6 @@ describe('ProjectPhases', () => {
     renderPhases(phases[0])
     fireEvent.click(await screen.findByTitle('Planlegge'))
     expect(await screen.findByText('Planlegge', { selector: 'h2' })).toBeInTheDocument()
-    // One open and one closed checkpoint, told through the markdown stand-in.
     expect(
       screen.getByText(format(strings.CheckPointsStatus, 1, strings.StatusOpen.toLowerCase()))
     ).toBeInTheDocument()
@@ -204,7 +204,6 @@ describe('ProjectPhases', () => {
   it('opens the dialog afresh each time: a skipped checklist does not carry over to the next', async () => {
     renderPhases(phases[1])
     await openChangePhaseDialog('Gjennomføre')
-    // The checklist of the phase the project leaves, at its open checkpoint.
     expect(screen.getByText('Mandat godkjent')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: strings.Skip, hidden: true }))
     expect(
@@ -221,7 +220,6 @@ describe('ProjectPhases', () => {
     renderPhases(phases[1])
     await openChangePhaseDialog('Gjennomføre')
     fireEvent.click(screen.getByRole('button', { name: strings.StatusClosed, hidden: true }))
-    // The last open checkpoint is answered (and saved), so the summary follows.
     expect(
       await screen.findByRole('button', { name: strings.MoveOn, hidden: true })
     ).toBeInTheDocument()

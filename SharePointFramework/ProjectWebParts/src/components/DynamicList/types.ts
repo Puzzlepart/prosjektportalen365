@@ -7,40 +7,22 @@ import {
   IListColumn
 } from 'pp365-shared-library'
 
+/** Chooses between the list and detailed item views. */
 export enum DynamicListMode {
-  /**
-   * Display multiple items in a grid
-   */
   Multi = 'multi',
-  /**
-   * Display a single item with full field view
-   */
   Single = 'single'
 }
 
+/** Chooses flat files or folder navigation for a document library. */
 export enum DocumentLibraryViewMode {
-  /**
-   * Display all documents in a flat list
-   */
   Flat = 'flat',
-  /**
-   * Display documents with folder navigation
-   */
   Folders = 'folders'
 }
 
+/** Determines which site's list the web part reads and modifies. */
 export enum WebContextMode {
-  /**
-   * Use the current project site
-   */
   CurrentProject = 'current',
-  /**
-   * Use the hub site that the project is connected to
-   */
   HubSite = 'hub',
-  /**
-   * Use a custom site URL
-   */
   CustomSite = 'custom'
 }
 
@@ -67,19 +49,10 @@ export interface ICustomAction {
    */
   name: string
 
-  /**
-   * Icon name for the action button
-   */
   icon?: string
 
-  /**
-   * Description/tooltip for the action
-   */
   description?: string
 
-  /**
-   * Type of action to perform
-   */
   actionType: CustomActionType | string
 
   /**
@@ -98,6 +71,7 @@ export interface ICustomAction {
   order?: number
 }
 
+/** File and folder metadata used by the document library view. */
 export interface IFileItem extends Record<string, any> {
   Id: number
   FileRef: string
@@ -115,10 +89,8 @@ export interface IFileItem extends Record<string, any> {
   FSObjType?: number
 }
 
+/** Configures the list source, views, fields and available actions. */
 export interface IDynamicListProps extends IBaseWebPartComponentProps {
-  /**
-   * Mode for determining which site to use
-   */
   webContextMode?: WebContextMode
 
   /**
@@ -127,9 +99,6 @@ export interface IDynamicListProps extends IBaseWebPartComponentProps {
    */
   webUrl?: string
 
-  /**
-   * The name of the SharePoint list to display
-   */
   listName?: string
 
   /**
@@ -139,7 +108,7 @@ export interface IDynamicListProps extends IBaseWebPartComponentProps {
   viewName?: string
 
   /**
-   * Default view ID (the SharePoint item ID).
+   * SharePoint view GUID used for initial field selection.
    * Takes precedence over viewName if specified.
    */
   defaultViewId?: string
@@ -201,24 +170,12 @@ export interface IDynamicListProps extends IBaseWebPartComponentProps {
    */
   useProjectFolder?: boolean
 
-  /**
-   * Show search box
-   */
   showSearchBox?: boolean
 
-  /**
-   * Show view selector in toolbar
-   */
   showViewSelector?: boolean
 
-  /**
-   * Whether to show the command bar with actions
-   */
   showCommandBar?: boolean
 
-  /**
-   * Whether to show filter panel
-   */
   showFilters?: boolean
 
   /**
@@ -228,44 +185,20 @@ export interface IDynamicListProps extends IBaseWebPartComponentProps {
    */
   useProjectContentColumnNames?: boolean
 
-  /**
-   * Additional info text to display
-   */
   infoText?: string
 
-  /**
-   * Display mode: 'multi' for grid view, 'single' for detailed single-item view
-   */
   mode?: DynamicListMode
 
-  /**
-   * Document library view mode: 'folders' for folder navigation, 'flat' for all documents in one list
-   */
   documentLibraryViewMode?: DocumentLibraryViewMode
 
-  /**
-   * Show/hide the New Item button for regular lists
-   */
   showNewButton?: boolean
 
-  /**
-   * Show/hide the Edit Item button
-   */
   showEditButton?: boolean
 
-  /**
-   * Show/hide the Delete Item button
-   */
   showDeleteButton?: boolean
 
-  /**
-   * Show/hide the Refresh/Reload button
-   */
   showRefreshButton?: boolean
 
-  /**
-   * Show/hide the Excel Export button
-   */
   showExportButton?: boolean
 
   /**
@@ -293,22 +226,14 @@ export interface IDynamicListProps extends IBaseWebPartComponentProps {
    */
   showViewModeToggle?: boolean
 
-  /**
-   * Show/hide the item title in single item view
-   */
   showItemTitle?: boolean
 
-  /**
-   * Show/hide custom actions in the CommandBar
-   */
   showCustomActions?: boolean
 
-  /**
-   * Custom actions for the CommandBar
-   */
   customActions?: ICustomAction[]
 }
 
+/** Loaded list data, navigation, selection and pending operations. */
 export interface IDynamicListState extends Omit<
   IBaseWebPartComponentState<IDynamicListData>,
   'error'
@@ -318,24 +243,12 @@ export interface IDynamicListState extends Omit<
    */
   error?: string
 
-  /**
-   * Loading state
-   */
   isLoading?: boolean
 
-  /**
-   * Show filter panel
-   */
   showFilterPanel?: boolean
 
-  /**
-   * Filters
-   */
   filters?: IFilterProps[]
 
-  /**
-   * Active filters
-   */
   activeFilters: Record<string, string[]>
 
   /**
@@ -358,29 +271,14 @@ export interface IDynamicListState extends Omit<
    */
   refetch?: number
 
-  /**
-   * Search term for filtering items
-   */
   searchTerm?: string
 
-  /**
-   * Current selected view
-   */
   currentView?: { id: string; title: string; isDefault?: boolean }
 
-  /**
-   * Available views for the list
-   */
   views?: Array<{ id: string; title: string; isDefault?: boolean }>
 
-  /**
-   * Whether view is currently being changed
-   */
   isChangingView?: boolean
 
-  /**
-   * Panel for editing or creating new items
-   */
   panel?: Partial<ICustomEditPanelProps>
 
   /**
@@ -388,14 +286,8 @@ export interface IDynamicListState extends Omit<
    */
   isDrilledDown?: boolean
 
-  /**
-   * Whether the list is a document library
-   */
   isDocumentLibrary?: boolean
 
-  /**
-   * Current folder path for document library navigation
-   */
   currentFolderPath?: string
 
   /**
@@ -403,14 +295,8 @@ export interface IDynamicListState extends Omit<
    */
   documentLibraryViewMode?: DocumentLibraryViewMode
 
-  /**
-   * Whether Excel export is in progress
-   */
   isExporting?: boolean
 
-  /**
-   * User permissions for list operations
-   */
   permissions?: {
     canAdd: boolean
     canEdit: boolean
@@ -418,15 +304,10 @@ export interface IDynamicListState extends Omit<
   }
 }
 
+/** List items and metadata needed by the table, filters and edit panel. */
 export interface IDynamicListData {
-  /**
-   * List items to display in the grid
-   */
   listItems: Record<string, any>[]
 
-  /**
-   * Columns configuration for the grid
-   */
   listColumns: IListColumn[]
 
   /**
@@ -435,24 +316,12 @@ export interface IDynamicListData {
    */
   autoHiddenViewColumns?: string[]
 
-  /**
-   * Editable fields metadata
-   */
   fields?: EditableSPField[]
 
-  /**
-   * List title
-   */
   listTitle?: string
 
-  /**
-   * List ID
-   */
   listId?: string
 
-  /**
-   * Available views
-   */
   views?: Array<{ id: string; title: string; isDefault?: boolean }>
 
   /**

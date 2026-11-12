@@ -1,12 +1,7 @@
+/** Child project expansion state and the available projects. */
 export interface IChildProjectsListState {
-  /**
-   * An array of project objects.
-   */
   projects: any[]
 
-  /**
-   * A boolean indicating whether the component should shows the collapse/expand button.
-   */
   shouldShowToggle: boolean
 
   /**

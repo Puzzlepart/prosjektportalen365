@@ -5,8 +5,7 @@ import { useEditStatusPanel } from './useEditStatusPanel'
 import { Toaster } from '@fluentui/react-components'
 
 /**
- * Edit properties panel uses `CustomEditPanel` to render an edit
- * panel for the project information component.
+ * Edits or creates a status report using the configured report fields.
  */
 export const EditStatusPanel: FC = () => {
   const { headerText, isOpen, onDismiss, fields, fieldValues, submit, reportListId } =

@@ -14,22 +14,13 @@ import { IOpportunityMatrixProps } from '../OpportunityMatrix'
 import { IRiskMatrixProps } from '../RiskMatrix'
 
 /**
- * Props for the ProjectStatus component.
+ * Configures report series, visible sections, matrices and published snapshot presentation.
  */
 export interface IProjectStatusProps extends IBaseWebPartComponentProps {
-  /**
-   * Props for the RiskMatrix component.
-   */
   riskMatrix?: IRiskMatrixProps
 
-  /**
-   * Props for the OpportunityMatrix component.
-   */
   opportunityMatrix?: IOpportunityMatrixProps
 
-  /**
-   * The width of the field.
-   */
   fieldWidth?: number
 
   /**
@@ -77,15 +68,10 @@ export interface IProjectStatusProps extends IBaseWebPartComponentProps {
   excludeSections?: string
 }
 
+/** Selected report series, report-operation feedback and active editing state. */
 export interface IProjectStatusState extends IBaseWebPartComponentState<IProjectStatusData> {
-  /**
-   * Source URL
-   */
   sourceUrl?: string
 
-  /**
-   * Selected report
-   */
   selectedReport?: StatusReport
 
   /**
@@ -93,9 +79,6 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
    */
   hashState?: Map<string, string | number>
 
-  /**
-   * Is the report being published?
-   */
   isPublishing?: boolean
 
   /**
@@ -109,24 +92,12 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
    */
   selectedScope?: string
 
-  /**
-   * Current user has admin permissions
-   */
   userHasAdminPermission?: boolean
 
-  /**
-   * Persisted section list data
-   */
   persistedSectionData?: Record<string, any>
 
-  /**
-   * User message to display in the UI
-   */
   userMessage?: Pick<IUserMessageProps, 'title' | 'text' | 'intent'>
 
-  /**
-   * The active panel name and optional title. Optional properties and contentID for new reports.
-   */
   activePanel?: {
     name: string
     headerText?: string
@@ -151,15 +122,10 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   refetch?: number
 }
 
+/** Reports, sections, fields and configuration needed to display project status. */
 export interface IProjectStatusData {
-  /**
-   * Entity item
-   */
   properties?: IProjectInformationData
 
-  /**
-   * Status report fields
-   */
   reportFields?: EditableSPField[]
 
   /**
@@ -174,24 +140,12 @@ export interface IProjectStatusData {
    */
   reportListId?: string
 
-  /**
-   * Reports
-   */
   reports?: StatusReport[]
 
-  /**
-   * Sections
-   */
   sections?: SectionModel[]
 
-  /**
-   * Column configuration
-   */
   columnConfig?: ProjectColumnConfig[]
 
-  /**
-   * Current user has admin permissions
-   */
   userHasAdminPermission?: boolean
 
   /**

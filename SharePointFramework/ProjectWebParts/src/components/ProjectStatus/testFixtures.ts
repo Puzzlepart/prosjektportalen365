@@ -5,8 +5,10 @@ import { SectionModel } from 'pp365-shared-library/lib/models'
  * report shaped like `StatusReport` (what the page reads of it), so no test touches PnPjs.
  */
 export const STATUS_SECTION_CT = '0x01004CEFE616A94A3A48A27D9DEBDF5EC82802'
+/** Content type identifying project-property sections in test fixtures. */
 export const PROPERTIES_SECTION_CT = '0x01004CEFE616A94A3A48A27D9DEBDF5EC82803'
 
+/** Creates a configured report section model for tests. */
 export function section(
   Id: number,
   Title: string,
@@ -27,6 +29,7 @@ export function section(
   })
 }
 
+/** Creates a report stand-in with status and field-value accessors. */
 export function report(values: Record<string, string>, overrides: Record<string, any> = {}) {
   return {
     id: 1,

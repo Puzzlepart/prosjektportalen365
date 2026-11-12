@@ -30,8 +30,6 @@ async function fetchJsonConfiguration(path: string): Promise<DynamicMatrixConfig
  * `manualConfigurationPath` once `pageContext` is set, and again when another configuration is
  * chosen. If the configuration is not found or invalid, an error message is set; a configuration
  * read later clears it.
- *
- * @param props Props
  */
 export function useOpportunityMatrixConfiguration(props: IOpportunityMatrixProps) {
   const [configuration, setConfiguration] = useState<DynamicMatrixConfiguration>([])

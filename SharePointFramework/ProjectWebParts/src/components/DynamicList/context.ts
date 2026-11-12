@@ -2,6 +2,7 @@ import { createContext } from 'react'
 import type { IWeb } from '@pnp/sp/webs'
 import { IDynamicListProps, IDynamicListState } from './types'
 
+/** Shared list state, operations and the web containing the list. */
 export interface IDynamicListContext {
   props: IDynamicListProps
   state: IDynamicListState
@@ -18,4 +19,5 @@ export interface IDynamicListContext {
   toasterId: string
 }
 
+/** Shares list configuration and state with its views and actions. */
 export const DynamicListContext = createContext<IDynamicListContext>(null)

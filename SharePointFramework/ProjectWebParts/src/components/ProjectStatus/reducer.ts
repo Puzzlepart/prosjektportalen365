@@ -8,17 +8,17 @@ import strings from 'ProjectWebPartsStrings'
 import { format } from 'pp365-shared-library'
 
 /**
- * `INIT_DATA`: Dispatched by `useProjectStatusDataFetch` when data is loaded
+ * Initializes the report series, selected report and loaded configuration.
  */
 export const INIT_DATA = createAction<FetchDataResult>('INIT_DATA')
 
 /**
- * `REPORT_PUBLISHING`: Dispatched by `usePublishReport` when a report is being published.
+ * Marks the selected report as being published.
  */
 export const REPORT_PUBLISHING = createAction('REPORT_PUBLISHING')
 
 /**
- * `REPORT_PUBLISHED`: Dispatched by `usePublishReport` when a report is published.
+ * Applies the published report and its confirmation message.
  */
 export const REPORT_PUBLISHED = createAction<{
   updatedReport: StatusReport
@@ -26,77 +26,71 @@ export const REPORT_PUBLISHED = createAction<{
 }>('REPORT_PUBLISHED')
 
 /**
- * `REPORT_PUBLISH_ERROR`: Dispatched by `usePublishReport` when a report fails to publish.
+ * Ends publishing with a user-facing error message.
  */
 export const REPORT_PUBLISH_ERROR = createAction<{
   message: Pick<IUserMessageProps, 'text' | 'intent'>
 }>('REPORT_PUBLISH_ERROR')
 
 /**
- * `REPORT_DELETED`: Dispatched by `useDeleteReport` when a report is deleted.
+ * Removes the deleted report and selects the next available one.
  */
 export const REPORT_DELETED = createAction('REPORT_DELETED')
 
 /**
- * `REPORT_DELETE_ERROR`: Dispatched by `useDeleteReport` when a report fails to delete. Shows the
- * error's message as a user message above the report.
+ * Shows a deletion error above the report without replacing the page.
  */
 export const REPORT_DELETE_ERROR = createAction<{ error: any }>('REPORT_DELETE_ERROR')
 
 /**
- * `SELECT_REPORT`: Dispatched by `useSelectReport` when a report is selected.
+ * Selects a report and resets its section-data cache.
  */
 export const SELECT_REPORT = createAction<{ report: StatusReport }>('SELECT_REPORT')
 
 /**
- * `SELECT_SCOPE`: Dispatched by `useScopeSelector` when a report scope
- * ("delprosjekt") is selected. Triggers a refetch scoped to the selected
- * report series.
+ * Switches report series and requests data for the selected scope.
  */
 export const SELECT_SCOPE = createAction<{ scopeKey: string }>('SELECT_SCOPE')
 
 /**
- * `PERSIST_SECTION_DATA`: Dispatched by `usePersistSectionData` when section data is persisted.
+ * Caches live section data for the report's published snapshot.
  */
 export const PERSIST_SECTION_DATA = createAction<{ section: SectionModel; data: any }>(
   'PERSIST_SECTION_DATA'
 )
 
 /**
- * `PERSIST_SECTION_DATA_ERROR`: Dispatched anywhere to clear the current user message.
+ * Clears transient report-operation feedback.
  */
 export const CLEAR_USER_MESSAGE = createAction('CLEAR_USER_MESSAGE')
 
 /**
- * `OPEN_PANEL`: Dispatched anywhere to open the panel. The payload is the panel key.
+ * Opens the status report editor with its supplied field values.
  */
 export const OPEN_PANEL = createAction<IProjectStatusState['activePanel']>('OPEN_PANEL')
 
 /**
- * `CLOSE_PANEL`: Dispatched anywhere to close the panel. No payload needed for this action
- * as there's only one panel active at a time.
+ * Closes the report editor and requests fresh report data.
  */
 export const CLOSE_PANEL = createAction('CLOSE_PANEL')
 
 /**
- * `OPEN_SNAPSHOT`: Dispatched by `useToolbarItems` to show the selected report's snapshot
- * in `SnapshotDialog`.
+ * Opens the selected report's snapshot.
  */
 export const OPEN_SNAPSHOT = createAction('OPEN_SNAPSHOT')
 
 /**
- * `CLOSE_SNAPSHOT`: Dispatched by `SnapshotDialog` when it is dismissed. Unlike `CLOSE_PANEL`
- * it doesn't refetch, as viewing the snapshot changes nothing.
+ * Closes the snapshot without refetching unchanged report data.
  */
 export const CLOSE_SNAPSHOT = createAction('CLOSE_SNAPSHOT')
 
 /**
- * `REFETCH_DATA`: Dispatched by ...
+ * Requests fresh report data.
  */
 export const REFETCH_DATA = createAction('REFETCH_DATA')
 
 /**
- * `FETCH_DATA_ERROR`: Dispatched when initial data loading fails.
+ * Records a failure to load report data.
  */
 export const FETCH_DATA_ERROR = createAction<{ error: IProjectStatusState['error'] }>(
   'FETCH_DATA_ERROR'
@@ -132,12 +126,7 @@ function getReportStatus(
 }
 
 /**
- * Creates a reducer for the project status component.
- *
- * @param state - The current state of the project status.
- * @param action - The action to be performed on the project status.
- *
- * @returns The new state of the project status.
+ * Handles report selection, editing, publication and section-data caching.
  */
 const createProjectStatusReducer = createReducer(initialState, (builder) =>
   builder

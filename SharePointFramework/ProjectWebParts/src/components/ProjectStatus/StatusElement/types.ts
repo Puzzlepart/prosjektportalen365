@@ -1,5 +1,6 @@
 import { ISummation } from '../Sections/ListSection'
 
+/** Status label, value, comment and icon presentation for a report section. */
 export interface IStatusElement {
   label?: string
   value?: string
@@ -16,6 +17,7 @@ export interface IStatusElement {
   statusIconName?: string
 }
 
+/** Controls status text, comment truncation and aggregate presentation. */
 export interface IStatusElementProps extends Pick<IStatusElement, 'iconSize'> {
   /**
    * Truncate comment to the specified length and add ellipsis (...)
@@ -27,9 +29,6 @@ export interface IStatusElementProps extends Pick<IStatusElement, 'iconSize'> {
    */
   iconsOnly?: boolean
 
-  /**
-   * Summation with result and description
-   */
   summation?: ISummation
 
   /**

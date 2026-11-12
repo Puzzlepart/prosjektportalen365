@@ -2,14 +2,7 @@ import _ from 'lodash'
 import { TimelineConfigurationModel, TimelineContentModel } from 'pp365-shared-library/lib/models'
 import { ITimelineGroup, ITimelineGroups, TimelineGroupType } from '../types'
 
-/**
- * Creating groups based on projects title, categories and types.
- *
- * @param project Project
- * @param timelineConfiguration Timeline configuration
- *
- * @returns Timeline groups
- */
+/** Builds timeline groups for the project, configured categories and item types. */
 export function createTimelineGroups(
   project: TimelineContentModel,
   timelineConfiguration: TimelineConfigurationModel[]

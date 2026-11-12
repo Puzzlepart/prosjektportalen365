@@ -7,6 +7,7 @@ import { SectionContext } from '../context'
 import styles from './BaseSection.module.scss'
 import { IBaseSectionProps } from './types'
 
+/** Supplies a report section's scroll target and shared layout. */
 export const BaseSection: FC<IBaseSectionProps> = (props) => {
   const context = useProjectStatusContext()
   const { section } = useContext(SectionContext) || {}

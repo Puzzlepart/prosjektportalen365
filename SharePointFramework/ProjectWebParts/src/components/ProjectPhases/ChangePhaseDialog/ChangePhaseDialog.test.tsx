@@ -114,7 +114,6 @@ describe('ChangePhaseDialog', () => {
     expectUnavailable(screen.getByRole('button', { name: strings.StatusNotRelevant }))
     expectUnavailable(screen.getByRole('button', { name: strings.StatusStillOpen }))
     expect(screen.getByRole('button', { name: strings.StatusClosed })).toBeEnabled()
-    // Skipping the checklist is allowed when it is not mandatory.
     expect(screen.getByRole('button', { name: strings.Skip })).toBeEnabled()
 
     await user.type(screen.getByRole('textbox'), 'Ikke relevant her')
@@ -128,10 +127,8 @@ describe('ChangePhaseDialog', () => {
         GtComment: 'Ikke relevant her'
       })
     )
-    // On to the next open checkpoint; the closed one in between is skipped.
     expect(await screen.findByText('Budsjett avklart')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: strings.StatusClosed }))
-    // The last one done: the summary lists every checkpoint.
     expect(await screen.findByText('1. Mandat godkjent')).toBeInTheDocument()
     expect(screen.getByText('2. Interessenter kartlagt')).toBeInTheDocument()
     expect(screen.getByText('3. Budsjett avklart')).toBeInTheDocument()
@@ -324,7 +321,6 @@ describe('ChangePhaseDialog', () => {
     )
     const lists = screen.getByRole('button', { name: /^Lister/ })
     expect(lists).toHaveAttribute('aria-expanded', 'true')
-    // It names the items it folds.
     expect(document.getElementById(lists.getAttribute('aria-controls'))).toHaveTextContent(
       'Risikoer'
     )

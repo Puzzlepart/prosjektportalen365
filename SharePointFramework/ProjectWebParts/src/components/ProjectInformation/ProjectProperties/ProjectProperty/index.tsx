@@ -6,6 +6,7 @@ import { IProjectPropertyProps } from './types'
 import { useProjectProperty } from './useProjectProperty'
 import styles from './ProjectProperty.module.scss'
 
+/** Renders a project property's typed value or its visibility editor. */
 export const ProjectProperty: FC<IProjectPropertyProps> = (props) => {
   const { displayMode, renderValueForField } = useProjectProperty(props)
   switch (displayMode) {
@@ -13,7 +14,6 @@ export const ProjectProperty: FC<IProjectPropertyProps> = (props) => {
       return <ProjectPropertyEdit {...props} />
     }
     default: {
-      // A term and its description in the properties' description list.
       return (
         <div style={props.style}>
           <dt>

@@ -7,6 +7,7 @@ import {
 import { IOpportunityMatrixWebPartProps } from './types'
 import resource from 'SharedResources'
 
+/** Hosts the opportunity matrix with opportunity-specific source and configuration defaults. */
 export default class OpportunityMatrixWebPart extends BaseUncertaintyMatrixWebPart<IOpportunityMatrixWebPartProps> {
   protected get config(): IUncertaintyMatrixWebPartConfig {
     return {

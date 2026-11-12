@@ -4,9 +4,7 @@ import { useProjectNewsState } from './useProjectNewsState'
 import { useProjectNewsDataFetch } from './useProjectNewsDataFetch'
 import { useId, useRestoreFocusTarget } from '@fluentui/react-components'
 
-/**
- * Component logic hook for `ProjectNews`
- */
+/** Connects project news state, data loading and focus restoration for the create button. */
 export const useProjectNews = (props: IProjectNewsProps) => {
   const { state, setState } = useProjectNewsState()
   useProjectNewsDataFetch(props, state.refetch, setState)

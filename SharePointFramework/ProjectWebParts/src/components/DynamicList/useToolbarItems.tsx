@@ -57,6 +57,7 @@ const Icons = {
   ContentView: bundleIcon(ContentView24Filled, ContentView24Regular)
 }
 
+/** Builds view controls and permission-aware list, document and custom actions. */
 export function useToolbarItems(isSingleView: boolean = false, showNewButton: boolean = true) {
   const context = useContext(DynamicListContext)
   // The web part's toaster, which a drop on the library and every action tell in.
@@ -84,15 +85,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
     context.props.documentLibraryViewMode
   ])
 
-  /**
-   * Handle view selection change.
-   *
-   * Finds the selected view, updates the current view state, and triggers a data refetch
-   * with the new view's field configuration. The refetch is delayed using setTimeout to
-   * ensure state is updated before triggering the data fetch.
-   *
-   * @param viewId The ID of the view to switch to
-   */
+  /** Selects a view before scheduling its data refresh. */
   const onViewChange = useCallback(
     async (viewId: string) => {
       if (viewId === context.state.currentView?.id) return
@@ -114,12 +107,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
     [context.state, context.setState]
   )
 
-  /**
-   * Delete selected items with confirmation.
-   *
-   * Prompts the user for confirmation, then deletes all selected items from the list
-   * and removes them from state without refetching.
-   */
+  /** Confirms deletion and removes successfully deleted rows without a full refetch. */
   const deleteItems = useCallback(async () => {
     if (!context.props.listName) return
 
@@ -171,10 +159,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
     })
   }, [context.state, context.props, context.setState, notify])
 
-  /**
-   * Dismisses the edit panel and triggers a data refetch.
-   * Clears selected items, closes the panel, and refreshes the list data.
-   */
+  /** Closes the item editor, clears selection and requests fresh list data. */
   const dismissPanel = useCallback(() => {
     context.setState({
       selectedItems: [],
@@ -183,11 +168,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
     })
   }, [context.setState])
 
-  /**
-   * Dismisses the panel and adds a newly created item to the current state
-   * without triggering a full refetch. Uses fetchSingleItem to ensure the same
-   * transformation logic as fetchListData.
-   */
+  /** Closes the editor and inserts the freshly fetched item without reloading the list. */
   const dismissPanelWithNewItem = useCallback(
     async (itemId: number) => {
       try {
@@ -216,11 +197,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
     [context.props, context.state.data, context.setState, context.web, dismissPanel]
   )
 
-  /**
-   * Create a new blank document in the document library.
-   *
-   * @param documentType The type of document to create
-   */
+  /** Creates an Office document in the current or project-specific folder. */
   const createDocument = useCallback(
     async (documentType: 'word' | 'excel' | 'powerpoint') => {
       if (!context.props.listName) return
@@ -315,15 +292,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
     [context.props, context.state.currentFolderPath, context.setState, notify]
   )
 
-  /**
-   * Adds a new item or updates an existing item in the list.
-   *
-   * If itemId is null, creates a new item. Otherwise, updates the existing item
-   * with the provided ID. After saving, dismisses the panel and refreshes the data.
-   *
-   * @param itemId The ID of the item to update, or null to create a new item
-   * @param properties The properties to save on the item
-   */
+  /** Creates or updates a list item, then closes the editor and refreshes the list. */
   const saveItem = useCallback(
     async (itemId: number | null, properties: Record<string, any>) => {
       if (!context.props.listName) return
@@ -359,11 +328,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
     [context.props, dismissPanel, dismissPanelWithNewItem]
   )
 
-  /**
-   * Handle Trigger action type - POST selected items to hookUrl
-   *
-   * @param action The custom action configuration
-   */
+  /** Posts the selected items to a trigger action and reports its outcome. */
   const handleTriggerAction = useCallback(
     async (action: ICustomAction) => {
       if (!action.hookUrl) {

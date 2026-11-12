@@ -26,6 +26,7 @@ import { INewsDialogProps } from './types'
 import { ProjectNewsContext } from '../context'
 import { useNewsDialog } from './useNewsDialog'
 
+/** Collects a title and template, then creates a project news page. */
 export const NewsDialog: FC<INewsDialogProps> = () => {
   const context = useContext(ProjectNewsContext)
   const {
@@ -153,7 +154,7 @@ export const NewsDialog: FC<INewsDialogProps> = () => {
         onOpenChange={(_, { open }) => {
           context.setState({ isDrawerOpen: open })
           if (!open) {
-            //Drawer does not restore focus to the trigger on backdrop click by default
+            // The drawer can close on a backdrop click without restoring focus to its trigger.
             inputRef.current?.focus()
           }
         }}

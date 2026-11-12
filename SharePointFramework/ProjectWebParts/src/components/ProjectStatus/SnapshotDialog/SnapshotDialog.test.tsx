@@ -73,6 +73,7 @@ describe('ProjectStatus SnapshotDialog', () => {
     // target: the status toolbar's snapshot button, behind the snapshot dialog, held open in full
     // screen, unless the copy button is one.
     let target: ReturnType<typeof useRestoreFocusTarget>
+    /** Exposes focus-restoration attributes for the snapshot copy button assertions. */
     const Probe: React.FC = () => {
       target = useRestoreFocusTarget()
       return null
@@ -119,7 +120,6 @@ describe('ProjectStatus SnapshotDialog', () => {
   it('fills the icons of its buttons on hover, as the rest of Prosjektportalen does', () => {
     Object.assign(mockDialog, { isCopyLinkOpen: true, copyLinkStatus: 'copied' })
     render(<SnapshotDialog />)
-    // Full screen, copy link, new tab and close in the bar; the two copy buttons in the dialog.
     const icons = Array.from(document.querySelectorAll('.fui-Button__icon'))
     expect(icons).toHaveLength(6)
     icons.forEach((icon) => expect(icon.querySelector('.fui-Icon-filled')).not.toBeNull())
@@ -170,6 +170,7 @@ describe('useSnapshotDialog', () => {
   let fullscreenElement: Element = null
   let dialog: ReturnType<typeof useSnapshotDialog>
 
+  /** Captures snapshot dialog controls for clipboard and full-screen tests. */
   const Probe: React.FC = () => {
     dialog = useSnapshotDialog()
     return null
@@ -281,7 +282,6 @@ describe('useSnapshotDialog', () => {
     expect(dispatch).not.toHaveBeenCalled()
     rerender(page({ isDataLoaded: true, selectedReport: linked }))
     expect(dispatch).toHaveBeenCalledWith(expect.objectContaining({ type: 'OPEN_SNAPSHOT' }))
-    // A refetch after closing it does not bring it back.
     rerender(page({ isDataLoaded: false, selectedReport: linked }))
     rerender(page({ isDataLoaded: true, selectedReport: linked }))
     expect(dispatch).toHaveBeenCalledTimes(1)

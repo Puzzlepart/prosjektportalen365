@@ -6,6 +6,7 @@ import { getNewsSiteUrl } from 'components/ProjectNews/util'
 import * as strings from 'ProjectWebPartsStrings'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
 
+/** Hosts project news and resolves the news site from web part or hub settings. */
 export default class ProjectNewsWebPart extends BaseProjectWebPart<IProjectNewsProps> {
   private _portalDataService: PortalDataService
   private _globalSettings: Map<string, string>

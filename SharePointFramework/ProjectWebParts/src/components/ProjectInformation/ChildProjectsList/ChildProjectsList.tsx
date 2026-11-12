@@ -6,6 +6,7 @@ import { Button, FluentProvider, IdPrefixProvider } from '@fluentui/react-compon
 import { ChevronUpFilled, ChevronDownFilled } from '@fluentui/react-icons'
 import { useChildProjectsList } from './useChildProjectsList'
 
+/** Lists child projects with an option to expand beyond the row limit. */
 export const ChildProjectsList: FC = () => {
   const {
     projects,
@@ -27,7 +28,6 @@ export const ChildProjectsList: FC = () => {
       />
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme}>
-          {/* A list of links: each goes to a project's site (WCAG 1.3.1, 4.1.2). */}
           <ul className={styles.list} role='list'>
             {projects.map((p, idx) => {
               const Icon = p?.icon

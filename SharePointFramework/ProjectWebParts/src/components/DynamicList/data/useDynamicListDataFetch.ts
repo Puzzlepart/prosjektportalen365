@@ -4,19 +4,7 @@ import { IDynamicListProps, IDynamicListState, DocumentLibraryViewMode } from '.
 import { fetchListData } from './fetchListData'
 import { generateFilters } from './generateFilters'
 
-/**
- * Hook that manages data fetching for DynamicList.
- *
- * Fetches list data whenever the list name, web URL, or refetch timestamp changes.
- * Handles view selection by using currentView from state if available, otherwise falls
- * back to defaultViewId from props. Generates filters from fetched data and updates
- * state with results.
- *
- * @param props Component configuration properties
- * @param state Current component state
- * @param setState Function to update component state
- * @param web The SharePoint web instance to use for data fetching
- */
+/** Reloads list data and filters when its source or view changes, ignoring superseded requests. */
 export function useDynamicListDataFetch(
   props: IDynamicListProps,
   state: IDynamicListState,

@@ -8,11 +8,14 @@ jest.mock('@fluentui/react-components', () => {
   const actual = jest.requireActual('@fluentui/react-components')
   const React = jest.requireActual('react')
   const PopoverContext = React.createContext({ open: false })
+  /** Records focus trapping and shares open state without positioning the popover. */
   const Popover = ({ open, trapFocus, children }: any) => {
     popover.trapFocus = trapFocus
     return React.createElement(PopoverContext.Provider, { value: { open } }, children)
   }
+  /** Leaves the archive status trigger available to the test. */
   const PopoverTrigger = ({ children }: any) => children
+  /** Shows the open archive details with their accessible dialog name. */
   const PopoverSurface = ({ children, ...props }: any) =>
     React.useContext(PopoverContext).open
       ? React.createElement('div', { role: 'dialog', 'aria-label': props['aria-label'] }, children)

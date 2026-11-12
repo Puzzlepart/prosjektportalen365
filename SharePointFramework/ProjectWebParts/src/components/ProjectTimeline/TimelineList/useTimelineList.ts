@@ -4,6 +4,7 @@ import { ProjectTimelineContext } from '../context'
 import { useColumns } from './useColumns'
 import { useToolbarItems } from './useToolbarItems'
 
+/** Connects timeline-list columns, commands, sorting and row selection. */
 export function useTimelineList() {
   const context = useContext(ProjectTimelineContext)
   const columns = useColumns()

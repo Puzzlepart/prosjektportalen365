@@ -5,6 +5,7 @@ import React, { FC, useContext } from 'react'
 import _ from 'underscore'
 import { format } from 'pp365-shared-library'
 
+/** Explains whether the target phase has a matching project homepage. */
 export const DynamicHomepageContent: FC = () => {
   const context = useContext(ProjectPhasesContext)
   const phaseSitePages = context.state.data.phaseSitePages ?? []

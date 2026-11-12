@@ -20,9 +20,7 @@ import { OPEN_DIALOG, OPEN_PANEL } from '../reducer'
 import { ActionType } from './types'
 import { format } from 'pp365-shared-library'
 
-/**
- * Logic hook for `<Actions />` component.
- */
+/** Builds permitted project actions, applies hidden-action settings and appends custom actions. */
 export const useActions = () => {
   const context = useProjectInformationContext()
   if (context.props.hideAllActions || context.props.displayMode === DisplayMode.Edit) return []

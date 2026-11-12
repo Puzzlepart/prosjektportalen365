@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import { IStatusSectionFieldProps } from './types'
 import styles from './StatusSectionField.module.scss'
 
+/** Pairs a status-section field label with its displayed value. */
 export const StatusSectionField: FC<IStatusSectionFieldProps> = (props) => {
   return (
     <div className={styles.statusSectionField}>

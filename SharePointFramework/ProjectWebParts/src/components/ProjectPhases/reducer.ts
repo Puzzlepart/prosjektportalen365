@@ -3,19 +3,31 @@ import { ChecklistItemModel, CustomError, ProjectPhaseModel } from 'pp365-shared
 import { IProjectPhasePopoverProps } from './ProjectPhase/ProjectPhasePopover'
 import { IProjectPhasesData, IProjectPhasesState } from './types'
 
+/** Initializes phase data or records its loading error. */
 export const INIT_DATA = createAction<{ data: IProjectPhasesData; error?: Error }>('INIT_DATA')
+/** Opens details for a phase. */
 export const OPEN_POPOVER = createAction<IProjectPhasePopoverProps>('OPEN_POPOVER')
+/** Moves the phase from the open popover into the confirmation dialog. */
 export const CHANGE_PHASE = createAction('CHANGE_PHASE')
+/** Closes phase details. */
 export const DISMISS_POPOVER = createAction('DISMISS_POPOVER')
+/** Cancels the pending phase change. */
 export const DISMISS_CHANGE_PHASE_DIALOG = createAction('DISMISS_CHANGE_PHASE_DIALOG')
+/** Marks the confirmed phase change as running. */
 export const INIT_CHANGE_PHASE = createAction('INIT_CHANGE_PHASE')
+/** Ends a failed phase change with an error. */
 export const CHANGE_PHASE_ERROR = createAction<{ error: Error }>('CHANGE_PHASE_ERROR')
+/** Applies the changed phase and clears earlier synchronization warnings. */
 export const SET_PHASE = createAction<{ phase: ProjectPhaseModel }>('SET_PHASE')
+/** Shows why the hub did not receive the phase change. */
 export const HUB_SYNC_FAILED = createAction<{ warning: string }>('HUB_SYNC_FAILED')
+/** Shows why the archive operation could not be logged. */
 export const ARCHIVE_LOG_FAILED = createAction<{ warning: string }>('ARCHIVE_LOG_FAILED')
+/** Updates loaded phase checklists after a checkpoint is saved. */
 export const CHECKLIST_ITEM_SAVED = createAction<{ item: ChecklistItemModel }>(
   'CHECKLIST_ITEM_SAVED'
 )
+/** Phase selector state before its data loads. */
 export const initialState: IProjectPhasesState = {
   isDataLoaded: false,
   data: {
@@ -40,6 +52,7 @@ function withSavedChecklistItem(phase: ProjectPhaseModel, item: ChecklistItemMod
   }) as ProjectPhaseModel
 }
 
+/** Handles phase selection, checkpoint saves and phase-change feedback. */
 export default createReducer(initialState, (builder) =>
   builder
     .addCase(INIT_DATA, (state, { payload }) => {

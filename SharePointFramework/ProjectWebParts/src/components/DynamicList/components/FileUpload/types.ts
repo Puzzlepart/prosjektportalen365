@@ -1,22 +1,15 @@
 /**
- * Props for the FileUploadZone component.
+ * Configures file selection, upload feedback and the optional full-screen drop overlay.
  */
 export interface IFileUploadZoneProps {
   /**
    * Callback fired when files are selected or dropped for upload.
    *
-   * @param files - The files selected for upload
    */
   onFilesSelected: (files: File[]) => void
 
-  /**
-   * Indicates whether a file upload is currently in progress.
-   */
   isUploading?: boolean
 
-  /**
-   * Custom text to display in the upload zone.
-   */
   uploadText?: string
 
   /**

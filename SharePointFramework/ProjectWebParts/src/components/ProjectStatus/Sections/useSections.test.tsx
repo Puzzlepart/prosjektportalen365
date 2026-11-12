@@ -12,6 +12,7 @@ import { useSections } from './useSections'
  */
 function sectionsFor(state: Record<string, any>): SectionModel[] {
   const captured: { sections: SectionModel[] } = { sections: [] }
+  /** Captures visible sections for the selected report and scope. */
   const Probe: React.FC = () => {
     captured.sections = useSections()
     return null

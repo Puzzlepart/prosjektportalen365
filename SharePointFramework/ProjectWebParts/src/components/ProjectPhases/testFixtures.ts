@@ -7,6 +7,7 @@ import { ChecklistItemModel, ProjectPhaseModel } from 'pp365-shared-library/lib/
  */
 export const TERM_SET_ID = '11111111-1111-1111-1111-111111111111'
 
+/** Creates a checkpoint model with the requested status and comment for tests. */
 export function checklistItem(
   ID: number,
   Title: string,
@@ -22,6 +23,7 @@ export function checklistItem(
   })
 }
 
+/** Creates a phase model with term properties and checkpoint statistics for tests. */
 export function phase(
   id: string,
   name: string,

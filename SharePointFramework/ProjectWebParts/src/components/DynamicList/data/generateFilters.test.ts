@@ -3,7 +3,7 @@ import { generateFilters } from './generateFilters'
 /**
  * The filters a list offers: one per column worth filtering, with the distinct values of the
  * rows sorted the Norwegian way, user and lookup values shown by their names, and no filter for
- * metadata, long text, a single value or more than a hundred.
+ * metadata, long text, a single value or a hundred or more distinct values.
  */
 const column = (fieldName: string, name = fieldName) => ({
   key: fieldName,

@@ -9,9 +9,7 @@ import { useProjectPhasesDataFetch } from './useProjectPhasesDataFetch'
 import { Toast, ToastTitle, useId, useToastController } from '@fluentui/react-components'
 import resource from 'SharedResources'
 
-/**
- * Component logic hook for `ProjectPhases`
- */
+/** Connects phase loading, reducer state, logging and phase-change feedback. */
 export function useProjectPhases(props: IProjectPhasesProps) {
   const rootRef = useRef(null)
   const [state, dispatch] = useReducer(reducer, initialState)

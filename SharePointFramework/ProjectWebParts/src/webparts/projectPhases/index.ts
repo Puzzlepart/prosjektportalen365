@@ -16,6 +16,7 @@ import {
 import * as strings from 'ProjectWebPartsStrings'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
 
+/** Hosts the phase selector and configures phase changes, archiving and hooks. */
 export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPhasesProps> {
   private _fields: { Title: string; InternalName: string }[] = []
 

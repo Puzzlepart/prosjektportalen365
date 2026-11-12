@@ -4,8 +4,6 @@ import resource from 'SharedResources'
 
 /**
  * Hook for modifying the current phase view to only show documents for the current phase.
- *
- * @returns A function that can be called to modify the current phase view.
  */
 export function useModifyCurrentPhaseView() {
   const { props, state } = useContext(ProjectPhasesContext)

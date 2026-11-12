@@ -4,11 +4,7 @@ import { CLOSE_PANEL } from '../reducer'
 import { useEditStatusPanelSubmit } from './useEditStatusPanelSubmit'
 import strings from 'ProjectWebPartsStrings'
 
-/**
- * Component logic hook for `EditStatusPanel` that provides the
- * `isOpen`, `onDismiss`, `fields`, `fieldValues` and `submit` properties.
- * Hook `useEditStatusPanelSubmit` is used to provide the `submit` property.
- */
+/** Prepares report fields, initial values and submission state for the status editor. */
 export function useEditStatusPanel() {
   const context = useProjectStatusContext()
   const { selectedReport, activePanel } = context.state

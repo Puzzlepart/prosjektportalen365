@@ -4,6 +4,7 @@ import { useProjectInformationContext } from '../../context'
 import { IProjectPropertyProps } from './types'
 import { Switch, Text } from '@fluentui/react-components'
 
+/** Lets page editors control whether a project property is visible externally. */
 export const ProjectPropertyEdit: FC<IProjectPropertyProps> = (props) => {
   const context = useProjectInformationContext()
   const hasFallbackConfiguration =

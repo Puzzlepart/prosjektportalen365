@@ -28,16 +28,7 @@ import * as strings from 'ProjectWebPartsStrings'
 import { useRefreshAnnouncement } from './useAnnouncements'
 import { useNavigationFocus } from './useNavigationFocus'
 
-/**
- * Internal component that renders the main content of the DynamicList.
- *
- * Handles rendering of the web part title, toolbar, loading states, and either
- * the DynamicListView or SingleItemView based on display mode.
- *
- * @param isSingleView Whether to display in single item view mode
- * @param showNewButton Whether to show the new item button
- * @param targetWeb The SharePoint web instance to use for operations
- */
+/** Displays the list header, actions and the selected list or item view. */
 const DynamicListContent: FC<{
   isSingleView: boolean
   showNewButton: boolean
@@ -165,18 +156,7 @@ const DYNAMIC_LIST_DEFAULT_PROPS: Partial<IDynamicListProps> = {
   showCustomActions: true
 }
 
-/**
- * DynamicList web part component for displaying SharePoint list data.
- *
- * Provides a flexible list view with features including:
- * - Multi-view and single-view display modes
- * - Filtering, searching, and sorting capabilities
- * - Item selection and editing via CustomEditPanel
- * - Support for custom views and column configurations
- * - Integration with ProjectContentColumns for column metadata
- *
- * @param props Configuration properties for the DynamicList
- */
+/** Displays a configured SharePoint list with filtering, navigation and item editing. */
 export const DynamicList: FC<IDynamicListProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, DYNAMIC_LIST_DEFAULT_PROPS)
   /**

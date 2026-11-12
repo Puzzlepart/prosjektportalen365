@@ -21,11 +21,7 @@ import { FETCH_DATA_ERROR, INIT_DATA } from './reducer'
 import { FetchDataResult, IProjectStatusProps } from './types'
 
 /**
- * Get report fields for Project Status. If content type ID is not provided,
- * the ID "0x010022252E35737A413FB56A1BA53862F6D5" is used, which is the ID
- * for the default content type for Project Status.
- *
- * @param contentTypeId Content type ID for Project Status
+ * Builds editable report fields from the supplied or default status-report content type.
  */
 async function getReportFields(contentTypeId = '0x010022252E35737A413FB56A1BA53862F6D5') {
   const fields = await SPDataAdapter.portalDataService.getContentTypeFields(contentTypeId)
@@ -46,8 +42,6 @@ const SYSTEM_USER_FIELDS = ['Author', 'Editor']
 /**
  * Parses the web part's `excludeSections` property (one section name per line)
  * into a set of normalized (trimmed, lowercase) section names.
- *
- * @param excludeSections Raw `excludeSections` property value
  */
 function parseExcludedSections(excludeSections: string): Set<string> {
   return new Set(
@@ -88,8 +82,6 @@ function getReportIdFromUrl(): number {
  * arbitrary scope key.
  *
  * @param selectedScope Explicitly selected scope from state (undefined on initial load)
- * @param allReports All of the project's status reports (all series)
- * @param props Component properties for `ProjectStatus`
  */
 function resolveScope(
   selectedScope: string,
@@ -119,7 +111,6 @@ function resolveScope(
  * project status sections, project column config, and project status list fields.
  * If the selected report is published, the attachments for the report are also fetched.
  *
- * @param props Component properties for `ProjectStatus`
  * @param selectedScope Explicitly selected scope from state (undefined on initial load)
  */
 async function fetchData(
@@ -254,13 +245,7 @@ async function fetchData(
 }
 
 /**
- * Fetch hook for `ProjectStatus`. Only fetches data on mount using
- * `useEffect` with the `refetch` timestamp as dependency.
- *
- * @param props Component properties for `ProjectStatus`
- * @param refetch Timestamp for refetch. Changes to this variable refetches the data in `useEffect`
- * @param selectedScope The currently selected report scope (undefined until the initial load resolves it)
- * @param dispatch Dispatcer
+ * Loads the selected report series on mount and whenever its refresh timestamp changes.
  */
 export const useProjectStatusDataFetch = (
   props: IProjectStatusProps,

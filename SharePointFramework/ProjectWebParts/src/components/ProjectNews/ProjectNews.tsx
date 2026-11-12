@@ -23,6 +23,7 @@ const PROJECT_NEWS_DEFAULT_PROPS: Partial<IProjectNewsProps> = {
   maxVisibleNews: 4
 }
 
+/** Displays recent project news and opens the news creation dialog. */
 export const ProjectNews: FC<IProjectNewsProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, PROJECT_NEWS_DEFAULT_PROPS)
   const { context, recentNews, fluentProviderId, restoreFocusTarget } = useProjectNews(props)

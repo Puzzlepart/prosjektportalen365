@@ -4,16 +4,7 @@ import { IDynamicListProps, IDynamicListState } from './types'
 import { useDynamicListDataFetch } from './data/useDynamicListDataFetch'
 import { useListPermissions } from './hooks/useListPermissions'
 
-/**
- * Main hook for managing DynamicList state and data fetching.
- *
- * Initializes component state, provides a setState function that supports callbacks,
- * triggers data fetching through useDynamicListDataFetch, and checks user permissions.
- *
- * @param props Component configuration properties
- * @param web The SharePoint web instance to use for all operations
- * @returns Object containing state and setState function
- */
+/** Coordinates list data, permissions and partial state updates with optional completion callbacks. */
 export function useDynamicList(props: IDynamicListProps, web: IWeb) {
   const [state, _setState] = useState<IDynamicListState>({
     isLoading: true,

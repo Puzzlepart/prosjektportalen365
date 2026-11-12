@@ -17,6 +17,7 @@ const RISK_MATRIX_DEFAULT_PROPS: Partial<IRiskMatrixProps> = {
   <p><strong>${resource.SiteFields_GtRiskStatus_DisplayName}: </strong>{GtRiskStatus}</p>`
 }
 
+/** Displays risks by probability and consequence, optionally after actions. */
 export const RiskMatrix: FC<IRiskMatrixProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, RISK_MATRIX_DEFAULT_PROPS)
   const {

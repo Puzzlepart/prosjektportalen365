@@ -5,20 +5,13 @@ import { IOpportunityMatrixProps } from './types'
 import { useOpportunityMatrixConfiguration } from './useOpportunityMatrixConfiguration'
 import { useId } from '@fluentui/react-components'
 
-/**
- * Component logic hook for `OpportunityMatrix`. Builds the matrix elements and configuration
- * for the matrix.
- *
- * @param props Props
- */
+/** Places opportunities at their original and optional post-action coordinates. */
 export function useOpportunityMatrix(props: IOpportunityMatrixProps) {
   const [showPostAction, setShowPostAction] = useState(false)
   const { configuration, error } = useOpportunityMatrixConfiguration(props)
 
   /**
    * Get the matrix elements for a given cell.
-   *
-   * @param cell Matrix cell
    */
   function getElementsForCell(cell: IMatrixCell) {
     const elements = props.items

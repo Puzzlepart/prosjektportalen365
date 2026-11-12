@@ -6,6 +6,7 @@ import { getFluentIcon } from 'pp365-shared-library'
 import { Button, Text } from '@fluentui/react-components'
 import { useCheckListItem } from './useCheckListItem'
 
+/** Shows a checkpoint's saved status and expandable comment. */
 export const CheckListItem: FC<IChecklistItemProps> = ({ item }) => {
   const { commentHidden, setCommentHidden, hasComment, statusIcon, commentId } =
     useCheckListItem(item)

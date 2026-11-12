@@ -10,39 +10,20 @@ import { IProgressProps, format } from 'pp365-shared-library'
 import { getHubSyncErrorReason } from '../../data/hubSyncError'
 
 interface IUsePropertiesSyncParams {
-  /**
-   * Sync fields to the project properties list.
-   */
   syncList?: boolean
 
-  /**
-   * Sync project properties to the hub site.
-   */
   syncPropertyItemToHub?: boolean
 
-  /**
-   * Reload page after sync.
-   */
   reload?: boolean
 
-  /**
-   * Progress callback function.
-   *
-   * @param progress Progress text.
-   */
   onProgress?: (progress: string) => void
 
-  /**
-   * Data to sync.
-   */
   data?: IProjectInformationData
 }
 /**
- * Sync fields to the project properties list.
+ * Synchronizes the project's properties list with its configured content type.
  *
- * @param context Context for `ProjectInformation` component
- *
- * @returns `true` if the project properties list is created, otherwise `false`.
+ * @returns The list synchronization result, including whether the list was created
  */
 const syncList = async (context: IProjectInformationContext) => {
   return await SPDataAdapter.portalDataService.syncList({
@@ -56,20 +37,11 @@ const syncList = async (context: IProjectInformationContext) => {
 }
 
 /**
- * Hook for syncing project properties to the hub site.
- *
- * @param context Context for `ProjectInformation` component
- *
- * @returns Returns a function for syncing project properties to the hub site. The function
- * also accepts parameters for controlling e.g. the sync process, such as synchronizing fields
- * to the project properties list, and reloading the page after sync.
+ * Coordinates properties-list synchronization and hub updates, preserving a warning on failure.
  */
 export function usePropertiesSync(context: IProjectInformationContext = null) {
   /**
-   * Sync properties to the hub site.
-   *
-   * @param data Project properties data.
-   * @param progressFunc Progress callback function.
+   * Synchronizes the supplied or currently loaded project properties to the hub.
    */
   const syncPropertyItemToHub = async (
     data = context.state.data,
@@ -85,14 +57,7 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
   }
 
   /**
-   * Callback function for syncing project properties to the hub site, and fields
-   * from hub site to the project properties list.
-   *
-   * The following parameters can be used to control the sync process:
-   * - `syncList`: Sync fields to the project properties list.
-   * - `syncPropertyItemToHub`: Sync project properties to the hub site.
-   * - `reload`: Reload page after sync.
-   * - `skipProgress`: Skip progress indicator.
+   * Runs the requested sync steps, reports progress and optionally reloads after success.
    */
   const onSyncProperties = async (params: IUsePropertiesSyncParams = {}): Promise<void> => {
     if (context.props.skipSyncToHub) return

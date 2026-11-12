@@ -12,21 +12,12 @@ import {
   TagMultipleFilled
 } from '@fluentui/react-icons'
 
-/**
- * Component logic hook for the `ProjectProperty` component.
- *
- * @param props Props for the `ProjectProperty` component
- *
- * @returns a render function `renderValueForField` for the `ProjectProperty` component,
- * as well as the `displayMode` for the `ProjectProperty` component.
- */
+/** Renders typed project property values and resolves the effective display mode. */
 export function useProjectProperty(props: IProjectPropertyProps) {
   const context = useProjectInformationContext()
 
   /**
    * Renders the value for the field based on the field type.
-   *
-   * @returns JSX.Element
    */
   const renderValueForField = () => {
     let icon = TagMultipleFilled

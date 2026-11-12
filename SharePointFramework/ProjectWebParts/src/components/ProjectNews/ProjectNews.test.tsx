@@ -81,7 +81,6 @@ describe('ProjectNews', () => {
     expect(within(list).getAllByRole('listitem')).toHaveLength(2)
     const more = screen.getByRole('button', { name: strings.ShowMoreNews })
     expect(more).toHaveAttribute('aria-expanded', 'false')
-    // It names the list it opens.
     expect(more).toHaveAttribute('aria-controls', list.id)
     await user.click(more)
     expect(within(list).getAllByRole('listitem')).toHaveLength(3)
@@ -108,6 +107,7 @@ describe('ProjectNews', () => {
     // The dialog opens from state, so Fluent has no trigger of its own to give the focus back to,
     // and it was left on the page's start.
     let target: ReturnType<typeof useRestoreFocusTarget>
+    /** Exposes focus-restoration attributes for the create-news button assertions. */
     const Probe: React.FC = () => {
       target = useRestoreFocusTarget()
       return null

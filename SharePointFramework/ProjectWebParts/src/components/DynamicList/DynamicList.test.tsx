@@ -59,6 +59,7 @@ jest.mock('@fluentui/react-components', () => {
     setOpen: (_open: boolean) => undefined,
     openOnContext: false
   })
+  /** Shares the menu's open state without Fluent's positioning work. */
   const Menu = ({ openOnContext, children }: any) => {
     const [open, setOpen] = React.useState(false)
     return React.createElement(
@@ -67,6 +68,7 @@ jest.mock('@fluentui/react-components', () => {
       children
     )
   }
+  /** Opens the stand-in menu through its configured mouse or context-menu event. */
   const MenuTrigger = ({ children }: any) => {
     const { setOpen, openOnContext } = React.useContext(MenuContext)
     return React.cloneElement(
@@ -81,11 +83,14 @@ jest.mock('@fluentui/react-components', () => {
         : { onClick: () => setOpen(true) }
     )
   }
+  /** Exposes menu items only while the stand-in menu is open. */
   const MenuPopover = ({ children }: any) =>
     React.useContext(MenuContext).open
       ? React.createElement('div', { role: 'menu' }, children)
       : null
+  /** Keeps menu children together without Fluent's layout dependencies. */
   const MenuList = ({ children }: any) => React.createElement(React.Fragment, null, children)
+  /** Runs a menu action and closes the stand-in menu. */
   const MenuItem = ({ children, onClick }: any) => {
     const { setOpen } = React.useContext(MenuContext)
     return React.createElement(

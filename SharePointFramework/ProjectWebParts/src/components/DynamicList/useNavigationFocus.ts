@@ -26,7 +26,6 @@ function linkTo(root: HTMLElement, key?: string): HTMLElement | undefined {
  * the page's start. An opened item takes the focus on its heading, an opened folder on the
  * breadcrumb's current folder, and going back gives it to the link of the item or folder left.
  *
- * @param state The dynamic list's state
  * @param container The web part's container
  */
 export function useNavigationFocus(state: IDynamicListState, container: RefObject<HTMLElement>) {

@@ -9,11 +9,15 @@ import { getNextIndex } from './getNextIndex'
 import { IChangePhaseDialogState } from './types'
 import { useMemo, useReducer } from 'react'
 
+/** Starts a fresh dialog from the phase selector's current data. */
 export const INIT = createAction<{ context: IProjectPhasesContext }>('INIT')
+/** Moves to another phase-change step. */
 export const SET_VIEW = createAction<{ view: View }>('SET_VIEW')
+/** Applies a saved checkpoint and advances to the next open one or summary. */
 export const CHECKLIST_ITEM_UPDATED = createAction<{
   properties: Partial<Record<string, any>>
 }>('CHECKLIST_ITEM_UPDATED')
+/** Stores documents and lists selected for archiving. */
 export const SET_ARCHIVE_CONFIGURATION = createAction<{
   archiveConfiguration: IArchiveConfiguration
 }>('SET_ARCHIVE_CONFIGURATION')
@@ -62,13 +66,7 @@ const createChangePhaseDialogReducer = () =>
   )
 
 /**
- * Custom hook that returns the state and dispatch function for the change phase dialog reducer.
- * Given the phases' context, the state starts from it (`INIT`) as the dialog mounts, which it does
- * each time it opens.
- *
- * @param context Context of the phase selector
- *
- * @returns An object containing the state and dispatch function.
+ * Starts fresh checkpoint and archive state each time the phase-change dialog mounts.
  */
 export const useChangePhaseDialogReducer = (context?: IProjectPhasesContext) => {
   const reducer = useMemo(() => createChangePhaseDialogReducer(), [])

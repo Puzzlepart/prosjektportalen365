@@ -15,19 +15,7 @@ import '@pnp/sp/views'
 import { TaxonomyTermModel } from '../models/TaxonomyTermModel'
 import { isVisibleListField, normalizeViewFieldNames } from '../utils/fieldUtils'
 
-/**
- * Fetches column configuration from the ProjectContentColumns (Prosjektinnholdskolonner) list.
- *
- * This function retrieves column metadata from the hub site's configuration list, which provides
- * critical information for proper column rendering including dataType, dataTypeProperties,
- * minWidth, and maxWidth values. Unlike PortfolioAggregation which filters by category,
- * this fetches all columns since DynamicList displays content from various list types.
- *
- * The configuration is used by enrichColumnsWithConfiguration to merge hub settings with
- * SharePoint field definitions.
- *
- * @returns Promise resolving to array of ProjectContentColumn configurations, or empty array if unavailable
- */
+/** Reads hub column configuration for all list types, falling back to no enrichment on failure. */
 async function fetchProjectContentColumns(): Promise<ProjectContentColumn[]> {
   try {
     if (SPDataAdapter.portalDataService?.isConfigured) {
@@ -42,27 +30,7 @@ async function fetchProjectContentColumns(): Promise<ProjectContentColumn[]> {
   }
 }
 
-/**
- * Enriches SharePoint columns with configuration from ProjectContentColumns.
- *
- * This function merges hub-level column configuration with SharePoint field definitions
- * to create fully configured column objects for rendering. It performs the following:
- *
- * 1. Matches columns: Attempts to find matching ProjectContentColumn configuration by
- *    comparing internalName or fieldName
- * 2. Merges configuration: If match found, merges name, minWidth, maxWidth, dataType,
- *    and dataTypeProperties from the hub configuration
- * 3. Preserves original: If no match found, returns the SharePoint column unchanged
- *    without applying any default width values
- *
- * This ensures column widths and rendering properties come from the hub configuration
- * (Prosjektinnholdskolonner list) rather than hardcoded defaults.
- *
- * @param spColumns - Array of columns created from SharePoint field definitions
- * @param projectContentColumns - Array of column configurations from ProjectContentColumns list
- * @param useProjectContentColumnNames - Whether to use display names from ProjectContentColumns
- * @returns Array of enriched columns with merged configuration
- */
+/** Merges matching hub column names, widths and render settings into SharePoint field columns. */
 function enrichColumnsWithConfiguration(
   spColumns: IListColumn[],
   projectContentColumns: ProjectContentColumn[],
@@ -93,24 +61,7 @@ function enrichColumnsWithConfiguration(
   })
 }
 
-/**
- * Maps SharePoint field type to column data type identifier.
- *
- * This function converts SharePoint field type identifiers to simplified data type
- * strings used for column rendering. It uses a two-tier mapping strategy:
- *
- * 1. Primary mapping: Checks TypeAsString (e.g., "Boolean", "DateTime") against
- *    a predefined type mapping dictionary
- * 2. Fallback mapping: If TypeAsString doesn't match, uses FieldTypeKind numeric
- *    value to determine the type
- *
- * This ensures consistent data type classification regardless of which SharePoint
- * field property is available.
- *
- * @param typeAsString - The SharePoint field's TypeAsString property (e.g., "Text", "Number")
- * @param fieldTypeKind - The SharePoint field's FieldTypeKind numeric value
- * @returns Data type string for column configuration (e.g., "text", "number", "date")
- */
+/** Maps a SharePoint field type to a column renderer, falling back to its numeric field kind. */
 function mapSharePointTypeToDataType(typeAsString: string, fieldTypeKind: number): string {
   const typeMapping: Record<string, string> = {
     Boolean: 'boolean',
@@ -158,12 +109,7 @@ function mapSharePointTypeToDataType(typeAsString: string, fieldTypeKind: number
   }
 }
 
-/**
- * Identifies user fields and builds select/expand strings for proper data fetching.
- *
- * @param fields - Array of SharePoint field definitions
- * @returns Object containing arrays of field names to select and expand
- */
+/** Builds select and expand projections for person fields. */
 function getUserFieldsForQuery(fields: any[]): { select: string[]; expand: string[] } {
   const userFields = fields.filter(
     (field) =>
@@ -222,10 +168,6 @@ function chunk<T>(items: T[], size: number): T[][] {
  * requests of at most {@link MAX_USER_FIELD_EXPANDS_PER_QUERY} expands each,
  * selecting only `Id` + that chunk's person fields. Results are merged back onto
  * the base items by `Id`.
- *
- * @param list - The PnPjs list to query
- * @param userFieldsQuery - User-field select/expand projections from {@link getUserFieldsForQuery}
- * @param isDocumentLibrary - Whether the list is a document library (BaseTemplate 101)
  */
 async function fetchAllItemsChunked(
   list: any,
@@ -295,15 +237,7 @@ async function fetchAllItemsChunked(
   return baseItems
 }
 
-/**
- * Transforms a raw SharePoint item into a display-ready format.
- * Applies the same transformation logic as fetchListData for consistency.
- *
- * @param item - Raw SharePoint item
- * @param columns - Column definitions with taxonomy termSetId information
- * @param taxonomyTermsMap - Map of termSetId to taxonomy terms for label resolution
- * @returns Transformed item with values
- */
+/** Resolves taxonomy labels and formats field values for list display and delta updates. */
 export function transformListItem(
   item: any,
   columns: IListColumn[],
@@ -358,12 +292,7 @@ export function transformListItem(
   return transformedItem
 }
 
-/**
- * Fetches taxonomy terms for all term sets used in the columns.
- *
- * @param columns - Array of columns that may contain taxonomy fields
- * @returns Promise resolving to Map of termSetId to array of TaxonomyTermModel
- */
+/** Loads the term sets referenced by taxonomy columns for label resolution. */
 async function fetchTaxonomyTermsForColumns(
   columns: IListColumn[]
 ): Promise<Map<string, TaxonomyTermModel[]>> {
@@ -404,11 +333,7 @@ async function fetchTaxonomyTermsForColumns(
   }
 }
 
-/**
- * Fetches list data including items, columns, and field metadata
- * @param props Component properties
- * @param web The SharePoint web instance to use for operations
- */
+/** Loads list items, selected-view columns and editable field metadata from the target web. */
 export async function fetchListData(
   props: IDynamicListProps,
   web: IWeb
@@ -612,22 +537,7 @@ export async function fetchListData(
   }
 }
 
-/**
- * Fetches a single list item by ID and transforms it using the same logic as fetchListData.
- * This is useful for delta updates when creating or updating items without refetching the entire list.
- *
- * @param props Component configuration properties
- * @param itemId The ID of the item to fetch
- * @param existingColumns Optional existing column definitions to avoid refetching
- * @returns The transformed item ready for display
- */
-/**
- * Fetches a single item by ID with full field data
- * @param props Component properties
- * @param web The SharePoint web instance to use for operations
- * @param itemId The ID of the item to fetch
- * @param existingColumns Optional existing columns for field type detection
- */
+/** Loads and transforms one item for a delta update, reusing existing columns when supplied. */
 export async function fetchSingleItem(
   props: IDynamicListProps,
   web: IWeb,

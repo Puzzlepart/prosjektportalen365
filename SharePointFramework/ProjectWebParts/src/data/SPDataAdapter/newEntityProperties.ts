@@ -25,7 +25,6 @@ export const NEW_ENTITY_FLAG_FIELDS = ['GtIsProgram', 'GtIsParentProject']
  * without write access to the hub.
  *
  * @param groupId ID of the project's Microsoft 365 group
- * @param fieldValues Field values of the project's properties item
  * @param projectContentTypeId Content type of the project in the template parameters
  */
 export function getNewEntityProperties(

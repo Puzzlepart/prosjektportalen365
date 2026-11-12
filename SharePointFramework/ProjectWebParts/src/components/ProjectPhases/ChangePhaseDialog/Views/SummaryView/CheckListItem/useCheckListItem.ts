@@ -5,13 +5,7 @@ import { useState } from 'react'
 import { STATUS_COLORS } from './types'
 import { ChecklistItemModel, getFluentIcon } from 'pp365-shared-library'
 
-/**
- * Custom hook for managing a checklist item.
- *
- * @param item - The checklist item to manage.
- *
- * @returns An object containing the state and functions for managing the checklist item.
- */
+/** Derives a checkpoint status icon and controls its expandable comment. */
 export function useCheckListItem(item: ChecklistItemModel) {
   const [commentHidden, setCommentHidden] = useState(true)
   const commentId = useId('checklist-item-comment')

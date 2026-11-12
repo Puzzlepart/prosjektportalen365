@@ -9,9 +9,7 @@ import { render, screen } from '@testing-library/react'
 import { Header } from './Header'
 
 /**
- * First component test in a consumer solution. Besides the component it proves that the shared
- * library (`WebPartTitle`) and the string modules resolve from a solution's test run, and shows the
- * pattern for every component whose data comes from a hook or a data adapter: replace the hook.
+ * Checks heading levels and title descriptions using the shared WebPartTitle component.
  */
 describe('ProjectStatus Header', () => {
   it('renders the title as the heading, with an info button for the description', () => {

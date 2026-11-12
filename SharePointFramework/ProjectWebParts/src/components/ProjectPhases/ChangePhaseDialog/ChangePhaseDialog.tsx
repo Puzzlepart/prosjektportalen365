@@ -22,6 +22,7 @@ import { ChangePhaseDialogContext } from './context'
 import { useChangePhaseDialog } from './useChangePhaseDialog'
 import { customLightTheme, format } from 'pp365-shared-library'
 
+/** Guides the user through checkpoints, archiving and phase-change confirmation. */
 export const ChangePhaseDialog: FC = () => {
   const context = useContext(ProjectPhasesContext)
   const { state, dispatch, nextChecklistItem } = useChangePhaseDialog()

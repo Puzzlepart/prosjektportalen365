@@ -35,9 +35,7 @@ function phaseTextColor(backgrounds: string[]): string {
   return worst('#000000') >= worst('#ffffff') ? '#000000' : '#ffffff'
 }
 
-/**
- * Component logic hook for `ProjectPhase`.
- */
+/** Derives phase appearance, accessible text and popover behavior from phase and selector state. */
 export function useProjectPhase(props: IProjectPhaseProps) {
   const context = useContext(ProjectPhasesContext)
   const targetRef = useRef<HTMLLIElement>()

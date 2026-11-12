@@ -5,8 +5,6 @@ import { ProjectPhasesContext } from './context'
 
 /**
  * Hook for changing the welcome page for the current project.
- *
- * @returns A function that can be called to change the welcome page.
  */
 export function useChangeWelcomePage() {
   const { props, state } = useContext(ProjectPhasesContext)

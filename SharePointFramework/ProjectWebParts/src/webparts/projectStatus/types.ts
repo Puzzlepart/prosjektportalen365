@@ -1,5 +1,6 @@
 import { IConfigurationFile } from 'types'
 
+/** Matrix configuration files available to the status-report property pane. */
 export interface IProjectStatusWebPartData {
   /**
    * Risk matrix configurations retrieved from the SharePoint folder.

@@ -10,13 +10,7 @@ import { SectionContext } from '../context'
 import { IUncertaintySectionData, IUncertaintySectionState } from './types'
 import { ISummation } from '../ListSection'
 
-/**
- * Component logic hook for `UncertaintySection`. Fetches list data
- * from SharePoint, handles state and dispatches actions to the reducer,
- * as well as handling the logic for rendering the section content using
- * the `shouldRenderContent` flag, and gives the message to show when the
- * data could not be fetched.
- */
+/** Loads or reuses uncertainty items and selects their risk or opportunity matrix. */
 export function useUncertaintySection() {
   const context = useProjectStatusContext()
   const { selectedReport } = context.state

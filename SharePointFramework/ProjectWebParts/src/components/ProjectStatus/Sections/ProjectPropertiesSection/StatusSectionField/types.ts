@@ -1,11 +1,6 @@
+/** Label and displayed value for a report property. */
 export interface IStatusSectionFieldProps {
-  /**
-   * Label for the field
-   */
   label: string
 
-  /**
-   * Value for the field
-   */
   value: string
 }

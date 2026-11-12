@@ -21,6 +21,7 @@ export const PROJECT_PHASES_DEFAULT_PROPS: Partial<IProjectPhasesProps> = {
   subTextTruncateLength: 50
 }
 
+/** Displays the project's phases and guides permitted users through a phase change. */
 export const ProjectPhases: FC<IProjectPhasesProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, PROJECT_PHASES_DEFAULT_PROPS)
   const { rootRef, context, fluentProviderId, toasterId } = useProjectPhases(props)

@@ -13,6 +13,7 @@ import { SiteContext, renderReact, unmountReact } from 'pp365-shared-library'
 Logger.subscribe(ConsoleListener())
 Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
 
+/** Shares project context, data-adapter setup and React lifecycle across project web parts. */
 export abstract class BaseProjectWebPart<
   T extends IBaseWebPartComponentProps
 > extends BaseClientSideWebPart<T> {
@@ -20,9 +21,7 @@ export abstract class BaseProjectWebPart<
   public abstract render(): void
 
   /**
-   * Create props for component with default properties and the `props` parameter.
-   *
-   * @param props Partial props of `P` to override the default properties
+   * Combines saved and supplied component properties with the host's live site context.
    */
   protected createPropsForComponent<P>(props: Partial<P>): P {
     return {
@@ -36,11 +35,7 @@ export abstract class BaseProjectWebPart<
   }
 
   /**
-   * Render component with props as a combined object of `this.properties` and
-   * the `props` parameter.
-   *
-   * @param component Function component with props `P`
-   * @param props Props (`P`) (default: `{}`)
+   * Renders a project component with site context and a web-part-level error boundary.
    */
   public renderComponent<P>(component: FC<P>, props: Partial<P> = {}): void {
     const combinedProps = this.createPropsForComponent(props)
@@ -58,7 +53,7 @@ export abstract class BaseProjectWebPart<
   }
 
   /**
-   * Setup sp, data adapter, logging etc
+   * Configures PnPjs and the project data adapter with hub settings and logging.
    */
   private async _setup() {
     this.sp = createSpfiInstance(this.context)

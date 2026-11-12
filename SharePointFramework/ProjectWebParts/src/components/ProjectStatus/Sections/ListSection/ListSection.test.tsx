@@ -65,7 +65,6 @@ describe('ListSection', () => {
     mockFetchListData.mockResolvedValue(data)
     renderSection()
     expect(await screen.findByText('Tittel')).toBeInTheDocument()
-    // Its status element heads it (WCAG 1.3.1).
     expect(screen.getByRole('heading', { level: 3, name: 'Seksjonstittel' })).toBeInTheDocument()
     expect(screen.getByText('Status')).toBeInTheDocument()
     expect(screen.getByText('Leveranse A')).toBeInTheDocument()

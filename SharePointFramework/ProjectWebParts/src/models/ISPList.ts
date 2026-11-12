@@ -1,3 +1,4 @@
+/** List metadata needed to edit items and resolve taxonomy fields. */
 export interface ISPList {
   Id: string
   DefaultEditFormUrl: string

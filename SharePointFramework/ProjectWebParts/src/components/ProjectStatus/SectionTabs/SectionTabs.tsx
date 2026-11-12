@@ -21,6 +21,7 @@ import styles from '../ProjectStatus.module.scss'
 import { useSections } from '../Sections/useSections'
 import { useScrollToSection } from './useScrollToSection'
 
+/** Shows a section in the overflow menu only when its tab is hidden. */
 const OverflowMenuItem: FC<{
   section: { id: number; name: string }
   onClick: (id: number) => void
@@ -34,6 +35,7 @@ const OverflowMenuItem: FC<{
   )
 }
 
+/** Offers navigation to report sections whose tabs do not fit. */
 const OverflowMenu: FC<{
   sections: { id: number; name: string }[]
   onSelect: (id: number) => void
@@ -64,6 +66,7 @@ const OverflowMenu: FC<{
   )
 }
 
+/** Provides overflow-aware navigation to report sections. */
 export const SectionTabs: FC = () => {
   smoothscroll.polyfill()
   // While the report loads, the sections are placeholders without an id; they get no tab.
