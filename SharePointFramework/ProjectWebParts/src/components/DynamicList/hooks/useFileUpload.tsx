@@ -4,6 +4,7 @@ import '@pnp/sp/folders'
 import '@pnp/sp/lists'
 import type { IFileInfo } from '@pnp/sp/files'
 import { format } from 'pp365-shared-library'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import * as strings from 'ProjectWebPartsStrings'
 import { useCallback, useContext } from 'react'
 import { DynamicListContext } from '../context'
@@ -18,6 +19,7 @@ import { useNotify } from './useNotify'
 export function useFileUpload(): (files: File[]) => Promise<void> {
   const context = useContext(DynamicListContext)
   const notify = useNotify()
+  const telemetry = useTelemetry()
 
   return useCallback(
     async (files: File[]) => {
@@ -79,10 +81,19 @@ export function useFileUpload(): (files: File[]) => Promise<void> {
         )
         context.setState({ refetch: Date.now() })
       } catch (error) {
+        // Counted once for usage statistics, by the error's code.
+        telemetry.trackError(error)
         console.error('Error uploading files:', error)
         notify('error', strings.DynamicList.UploadFailed, error?.message)
       }
     },
-    [context.props, context.state.currentFolderPath, context.setState, context.web, notify]
+    [
+      context.props,
+      context.state.currentFolderPath,
+      context.setState,
+      context.web,
+      notify,
+      telemetry
+    ]
   )
 }

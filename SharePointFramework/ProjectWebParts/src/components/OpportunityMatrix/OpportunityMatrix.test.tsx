@@ -17,6 +17,12 @@ jest.mock('../../data', () => ({
 }))
 
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
+import {
+  countedTelemetry,
+  startTestTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
 import { generateMatrixConfiguration } from '../DynamicMatrix'
@@ -25,30 +31,61 @@ import { OpportunityMatrix } from './OpportunityMatrix'
 
 /**
  * The opportunity matrix: the same grid as the risk matrix with the opportunities placed by
- * probability and consequence.
+ * probability and consequence, and the switch that shows them after their actions, counted for
+ * the opportunity matrix web part. A configuration that cannot be read is counted once as an
+ * error.
  */
 describe('OpportunityMatrix', () => {
-  it('draws the configured matrix with the opportunities', async () => {
+  beforeEach(() => startTestTelemetry())
+
+  it('draws the configured matrix with the opportunities, and counts a turn of its switch', async () => {
+    const user = userEvent.setup()
     configurationFile.read = () =>
       Promise.resolve(generateMatrixConfiguration(5, getMatrixHeaders({} as any)))
     render(
-      <OpportunityMatrix
-        items={[
-          {
-            id: 7,
-            tooltip: 'Mulighet 7',
-            probability: 3,
-            consequence: 3,
-            item: { Title: 'Mulighet 7' }
-          } as any
-        ]}
-        pageContext={{} as any}
-        manualConfigurationPath='/sites/hub/SiteAssets/matrix.json'
-      />
+      <TelemetryProvider component='OpportunityMatrixWebPart'>
+        <OpportunityMatrix
+          items={[
+            {
+              id: 7,
+              tooltip: 'Mulighet 7',
+              probability: 3,
+              consequence: 3,
+              item: { Title: 'Mulighet 7' }
+            } as any
+          ]}
+          pageContext={{} as any}
+          manualConfigurationPath='/sites/hub/SiteAssets/matrix.json'
+        />
+      </TelemetryProvider>
     )
     expect(await screen.findByText(strings.MatrixHeader_High)).toBeInTheDocument()
     expect(screen.getAllByTitle('Mulighet 7')[0]).toHaveTextContent('7')
-    expect(screen.getByRole('switch')).toBeInTheDocument()
+    expect(countedTelemetry().usage).toEqual({})
+    await user.click(screen.getByRole('switch'))
+    expect(screen.getByText(strings.ToggleUncertaintyPostActionOnText)).toBeInTheDocument()
+    expect(countedTelemetry().usage).toEqual({ 'OpportunityMatrixWebPart postAction.toggled': 1 })
+    expect(countedTelemetry().errors).toEqual({})
+  })
+
+  it('tells when the configuration cannot be read, and counts it once by its status', async () => {
+    configurationFile.read = () =>
+      Promise.reject(Object.assign(new Error('Ingen tilgang'), { status: 403 }))
+    render(
+      <TelemetryProvider component='OpportunityMatrixWebPart'>
+        <OpportunityMatrix
+          items={[]}
+          pageContext={{} as any}
+          manualConfigurationPath='/sites/hub/SiteAssets/matrix.json'
+        />
+      </TelemetryProvider>
+    )
+    expect(
+      await screen.findByText(strings.ManualConfigurationNotFoundOrInvalid)
+    ).toBeInTheDocument()
+    expect(countedTelemetry().errors).toEqual({
+      'OpportunityMatrixWebPart permission_denied 403': 1
+    })
   })
 
   it('reads the configuration again when another is chosen, and drops the error', async () => {

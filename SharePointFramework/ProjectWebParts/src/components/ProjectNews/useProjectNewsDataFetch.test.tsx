@@ -4,6 +4,11 @@
 jest.mock('data', () => ({ __esModule: true, default: {} }))
 
 import { render, renderHook, waitFor } from '@testing-library/react'
+import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
+import {
+  countedTelemetry,
+  startTestTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
 import { useProjectNewsDataFetch } from './useProjectNewsDataFetch'
@@ -11,6 +16,11 @@ import { useProjectNewsDataFetch } from './useProjectNewsDataFetch'
 const SITE = 'https://contoso.sharepoint.com/sites/alfa'
 const NEWS_SITE = 'https://contoso.sharepoint.com/sites/portefolje'
 const context = { pageContext: { site: { id: { toString: () => 'site-1' } } } }
+
+/** The news web part around the hook, as the base web part gives it. */
+const webPart: React.FC<React.PropsWithChildren<unknown>> = ({ children }) => (
+  <TelemetryProvider component='ProjectNewsWebPart'>{children}</TelemetryProvider>
+)
 
 /**
  * Lists the project's news from the folder `newsFolderName`, with a stand-in SPHttpClient whose
@@ -35,7 +45,7 @@ function listNews(newsFolderName: string, items: any[]) {
     )
     return null
   }
-  render(<Probe />)
+  render(<Probe />, { wrapper: webPart })
   return { get, setState }
 }
 
@@ -64,9 +74,12 @@ const noAccess = expect.objectContaining({
 /**
  * The project's news list: the request for the pages in the news folder and the links to them,
  * the message about missing access for a news site the hub could not name or that refuses the
- * user, and a refetch that starts without the error an earlier one left.
+ * user, and a refetch that starts without the error an earlier one left. A fetch that fails is
+ * counted once, for the news web part, by its error code.
  */
 describe('useProjectNewsDataFetch', () => {
+  beforeEach(() => startTestTelemetry())
+
   it('lists the news of a folder with # or % in its name, and links to them', async () => {
     // The # ended the request's URL, so the folder was never read, and the links ended at it.
     const { get, setState } = listNews('Nyheter #1 100%', [
@@ -91,20 +104,39 @@ describe('useProjectNewsDataFetch', () => {
     expect(listed().data.news[0].url).toBe(
       '/sites/alfa/SitePages/Nyheter%20%231%20100%25/Ny-bane.aspx'
     )
+    expect(countedTelemetry().errors).toEqual({})
   })
 
-  it('says access is missing when the news site refuses the request', async () => {
+  it('says access is missing when the news site refuses the request, and counts it once', async () => {
     const setState = jest.fn()
-    renderHook(() => useProjectNewsDataFetch(props(NEWS_SITE, newsSite(403)), 1, setState))
+    renderHook(() => useProjectNewsDataFetch(props(NEWS_SITE, newsSite(403)), 1, setState), {
+      wrapper: webPart
+    })
     await waitFor(() => expect(setState).toHaveBeenCalledWith(noAccess))
+    expect(countedTelemetry().errors).toEqual({ 'ProjectNewsWebPart permission_denied 403': 1 })
   })
 
   it('says access is missing when no news site is known, as when the hub cannot be read', async () => {
     const setState = jest.fn()
     const spHttpClient = newsSite(200)
-    renderHook(() => useProjectNewsDataFetch(props('', spHttpClient), 1, setState))
+    renderHook(() => useProjectNewsDataFetch(props('', spHttpClient), 1, setState), {
+      wrapper: webPart
+    })
     await waitFor(() => expect(setState).toHaveBeenCalledWith(noAccess))
     expect(spHttpClient.get).not.toHaveBeenCalled()
+    // Counted as the message says it: no request was made, so the status is the error's own.
+    expect(countedTelemetry().errors).toEqual({ 'ProjectNewsWebPart permission_denied 403': 1 })
+  })
+
+  it('shows the error of a request that got no answer, and counts it without a status', async () => {
+    const setState = jest.fn()
+    const failure = new TypeError('Failed to fetch')
+    const spHttpClient = { get: jest.fn(() => Promise.reject(failure)) }
+    renderHook(() => useProjectNewsDataFetch(props(NEWS_SITE, spHttpClient), 1, setState), {
+      wrapper: webPart
+    })
+    await waitFor(() => expect(setState).toHaveBeenCalledWith({ loading: false, error: failure }))
+    expect(countedTelemetry().errors).toEqual({ 'ProjectNewsWebPart unknown': 1 })
   })
 
   it('starts a refetch without the error an earlier one left', async () => {
@@ -112,7 +144,7 @@ describe('useProjectNewsDataFetch', () => {
     const spHttpClient = newsSite(200)
     const { rerender } = renderHook(
       ({ siteUrl }) => useProjectNewsDataFetch(props(siteUrl, spHttpClient), 1, setState),
-      { initialProps: { siteUrl: '' } }
+      { initialProps: { siteUrl: '' }, wrapper: webPart }
     )
     await waitFor(() => expect(setState).toHaveBeenCalledWith(noAccess))
     setState.mockClear()

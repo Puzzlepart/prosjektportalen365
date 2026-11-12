@@ -29,7 +29,9 @@ import {
 import resource from 'SharedResources'
 import { IProgressProps } from 'pp365-shared-library'
 import { getNewEntityProperties } from './newEntityProperties'
+import { isParentSiteType, readSiteType } from './siteType'
 import { syncPhaseToHub } from './syncPhaseToHub'
+import { TelemetryResolvedSiteType } from 'pp365-shared-library/lib/telemetry'
 
 /** Provides project data, hub synchronization, matrix sources and archive operations. */
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
@@ -37,7 +39,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public dataSourceService: DataSourceService
   private _name = 'SPDataAdapter'
   private _childProjects: Promise<ProjectInformationChildProject[]>
-  private _isParentProject: Promise<boolean>
+  private _siteType: Promise<TelemetryResolvedSiteType>
 
   /**
    * Configures project services and clears memoized project relationships.
@@ -48,7 +50,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   ): Promise<void> {
     await super.configure(spfxContext, configuration)
     this._childProjects = null
-    this._isParentProject = null
+    this._siteType = null
     if (this.portalDataService?.web) {
       this.dataSourceService = new DataSourceService(this.portalDataService.web)
     }
@@ -78,25 +80,31 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
-   * Checks whether the current site is a parent project or program by reading the
-   * `GtIsParentProject` and `GtIsProgram` flags from the local properties list.
-   * Memoized until the adapter is reconfigured; returns `false` on failure.
+   * What kind of site the current site is: a program, a parent project or a project, from the
+   * `GtIsProgram` and `GtIsParentProject` flags of the local properties list (`GtIsProgram`
+   * wins), or `other` when they cannot be read. Memoized until the adapter is reconfigured: one
+   * request, shared with `isParentProject`. Usage statistics count by it, and never send the
+   * site itself.
+   */
+  public getSiteType(): Promise<TelemetryResolvedSiteType> {
+    if (!this._siteType) {
+      this._siteType = readSiteType(() =>
+        this.sp.web.lists
+          .getByTitle(resource.Lists_ProjectProperties_Title)
+          .items.top(1)
+          .select('GtIsParentProject', 'GtIsProgram')()
+      )
+    }
+    return this._siteType
+  }
+
+  /**
+   * Checks whether the current site is a parent project or program, from the site type
+   * (`getSiteType`), so the page still makes one request for the flags. Returns `false` on
+   * failure.
    */
   public isParentProject(): Promise<boolean> {
-    if (!this._isParentProject) {
-      this._isParentProject = (async () => {
-        try {
-          const [item] = await this.sp.web.lists
-            .getByTitle(resource.Lists_ProjectProperties_Title)
-            .items.top(1)
-            .select('GtIsParentProject', 'GtIsProgram')()
-          return !!(item?.GtIsParentProject || item?.GtIsProgram)
-        } catch {
-          return false
-        }
-      })()
-    }
-    return this._isParentProject
+    return this.getSiteType().then(isParentSiteType)
   }
 
   /**

@@ -7,6 +7,7 @@ import {
   customLightTheme,
   format
 } from 'pp365-shared-library'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { DocumentLibraryViewMode, CustomActionType, ICustomAction } from './types'
 import {
   FilterRegular,
@@ -68,6 +69,8 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
   const { openDialog, dialogComponent, toasterId: dialogToasterId } = useCustomActionDialog()
   const notify = useNotify()
   const uploadFiles = useFileUpload()
+  // Each failure an action shows is counted once for usage statistics, by its error code.
+  const telemetry = useTelemetry()
 
   const checkedValues = useMemo(() => {
     const viewMode =
@@ -134,6 +137,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         })
       )
     } catch (error) {
+      telemetry.trackError(error)
       console.error('[DynamicList] Error deleting items:', error)
       notify('error', strings.DynamicList.DeleteFailed, error?.message)
       return
@@ -157,7 +161,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         listItems: updatedListItems
       }
     })
-  }, [context.state, context.props, context.setState, notify])
+  }, [context.state, context.props, context.setState, notify, telemetry])
 
   /** Closes the item editor, clears selection and requests fresh list data. */
   const dismissPanel = useCallback(() => {
@@ -285,11 +289,12 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         notify('success', format(strings.DynamicList.DocumentCreated, fileName))
         context.setState({ refetch: Date.now() })
       } catch (error) {
+        telemetry.trackError(error)
         console.error('Error creating document:', error)
         notify('error', strings.DynamicList.DocumentCreateFailed, error?.message)
       }
     },
-    [context.props, context.state.currentFolderPath, context.setState, notify]
+    [context.props, context.state.currentFolderPath, context.setState, notify, telemetry]
   )
 
   /** Creates or updates a list item, then closes the editor and refreshes the list. */
@@ -321,11 +326,13 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
           await dismissPanelWithNewItem(newItemId)
         }
       } catch (error) {
+        // The panel that called shows the error: it is counted here, once.
+        telemetry.trackError(error)
         console.error('[DynamicList] Error saving item:', error)
         throw error
       }
     },
-    [context.props, dismissPanel, dismissPanelWithNewItem]
+    [context.props, dismissPanel, dismissPanelWithNewItem, telemetry]
   )
 
   /** Posts the selected items to a trigger action and reports its outcome. */
@@ -367,7 +374,10 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         })
 
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`)
+          // The status goes on the error too, so usage statistics count the failure by it.
+          throw Object.assign(new Error(`HTTP error! status: ${response.status}`), {
+            status: response.status
+          })
         }
 
         const result = await response.json().catch(() => ({ success: true }))
@@ -384,6 +394,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
 
         context.setState({ refetch: Date.now(), selectedItems: [] })
       } catch (error) {
+        telemetry.trackError(error)
         console.error('Error executing trigger action:', error)
         const errorMessage = isCorsError(error)
           ? strings.DynamicList.CorsError
@@ -398,7 +409,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
         )
       }
     },
-    [context.state, context.props, context.setState]
+    [context.state, context.props, context.setState, telemetry]
   )
 
   const menuItems = useMemo<ListMenuItem[]>(() => {

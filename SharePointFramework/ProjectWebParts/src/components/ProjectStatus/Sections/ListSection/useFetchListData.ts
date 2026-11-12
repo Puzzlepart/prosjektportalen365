@@ -3,6 +3,7 @@ import { spfi } from '@pnp/sp'
 import { ICamlQuery } from '@pnp/sp/lists'
 import _ from 'lodash'
 import { SPField } from 'pp365-shared-library/lib/models'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { useContext } from 'react'
 import { useProjectStatusContext } from '../../context'
 import { getScopeLabel, parseSubProjects } from '../../parseSubProjects'
@@ -24,11 +25,13 @@ type UseFetchListDataView = { ListViewXml: string; ViewFields: { Items: string[]
  * different list per report series.
  *
  * @returns A function used to fetch data for `ListSection` and `UncertaintySection`. It rejects
- * with an `ISectionDataError` that names the list it read.
+ * with an `ISectionDataError` that names the list it read, and counts the failure for usage
+ * statistics, by its error code: the sections that show the error count nothing themselves.
  */
 export function useFetchListData() {
   const context = useProjectStatusContext()
   const { section } = useContext(SectionContext)
+  const telemetry = useTelemetry()
   return async (): Promise<IListSectionData> => {
     const scopeKey = (context.state.selectedScope ?? '').trim()
     const scopeLabel = getScopeLabel(parseSubProjects(context.props.subProjects), scopeKey)
@@ -84,6 +87,7 @@ export function useFetchListData() {
         columns
       } as IListSectionData
     } catch (error) {
+      telemetry.trackError(error)
       throw toSectionDataError(error, listTitle)
     }
   }

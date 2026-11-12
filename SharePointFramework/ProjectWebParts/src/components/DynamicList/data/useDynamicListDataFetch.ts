@@ -1,16 +1,21 @@
 import { useEffect } from 'react'
 import type { IWeb } from '@pnp/sp/webs'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { IDynamicListProps, IDynamicListState, DocumentLibraryViewMode } from '../types'
 import { fetchListData } from './fetchListData'
 import { generateFilters } from './generateFilters'
 
-/** Reloads list data and filters when its source or view changes, ignoring superseded requests. */
+/**
+ * Reloads list data and filters when its source or view changes, ignoring superseded requests.
+ * A fetch that fails, and is shown, is counted for usage statistics, by its error code.
+ */
 export function useDynamicListDataFetch(
   props: IDynamicListProps,
   state: IDynamicListState,
   setState: (newState: Partial<IDynamicListState>) => void,
   web: IWeb
 ): void {
+  const telemetry = useTelemetry()
   useEffect(() => {
     if (!props.listName) {
       setState({
@@ -55,6 +60,7 @@ export function useDynamicListDataFetch(
       })
       .catch((error) => {
         if (cancelled) return
+        telemetry.trackError(error)
         console.error('[DynamicList] Error fetching data:', error)
         setState({
           error: error.message,

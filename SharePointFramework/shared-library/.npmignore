@@ -28,3 +28,5 @@ jest-output
 *.test.js.map
 test/
 __mocks__/
+# Test helpers and test data: they call Jest, and no consumer of the package needs them.
+__fixtures__/

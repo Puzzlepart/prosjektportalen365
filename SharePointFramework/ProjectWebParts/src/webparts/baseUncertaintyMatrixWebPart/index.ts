@@ -9,6 +9,7 @@ import {
 import * as strings from 'ProjectWebPartsStrings'
 import _ from 'lodash'
 import { mapManagedPropertiesToInternalNames, unmountReact } from 'pp365-shared-library'
+import { trackError } from 'pp365-shared-library/lib/telemetry'
 import { FC } from 'react'
 import { DEFAULT_MATRIX_WIDTH } from '../../components/DynamicMatrix/types'
 import SPDataAdapter from '../../data'
@@ -174,6 +175,9 @@ export abstract class BaseUncertaintyMatrixWebPart<
     } catch (error) {
       if (load !== this._loadCount) return false
       this._error = error
+      // Counted where the fetch fails, once, by the error's own code: `renderMatrix` draws the
+      // error on every render, and its message stays on the page.
+      trackError(this._telemetryComponent, error)
     }
     return true
   }

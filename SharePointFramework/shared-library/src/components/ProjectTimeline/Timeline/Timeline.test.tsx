@@ -109,6 +109,8 @@ import * as React from 'react'
 import resource from 'SharedResources'
 import { Timeline } from '.'
 import { ITimelineGroup, ITimelineItem, TimelineGroupType } from '../../../interfaces'
+import { TelemetryProvider } from '../../../telemetry'
+import { countedTelemetry, startTestTelemetry } from '../../../telemetry/__fixtures__/testFixtures'
 import { format, formatDate, getContrastRatio, tryParseCurrency } from '../../../util'
 
 const FRISBEE = 'https://contoso.sharepoint.com/sites/frisbee'
@@ -164,10 +166,14 @@ const PHASE = item(2, 'Forprosjekt', {
   elementType: resource.TimelineConfiguration_Triangle_ElementType
 })
 
-function renderTimeline(props: Record<string, any> = {}) {
+/**
+ * Renders the timeline, inside the web part with the alias `host` when one is given: the base web
+ * parts wrap what they render in the provider that names them to telemetry.
+ */
+function renderTimeline(props: Record<string, any> = {}, host?: string) {
   const onFilterChange = jest.fn()
   const onGroupByChange = jest.fn()
-  render(
+  const timeline = (
     <Timeline
       title='Prosjekttidslinje'
       infoText='Tidslinjen viser prosjektene'
@@ -179,6 +185,7 @@ function renderTimeline(props: Record<string, any> = {}) {
       {...props}
     />
   )
+  render(host ? <TelemetryProvider component={host}>{timeline}</TelemetryProvider> : timeline)
   return { onFilterChange, onGroupByChange }
 }
 
@@ -397,6 +404,36 @@ describe('Timeline', () => {
     expect(bar).toHaveFocus()
     fireEvent.keyDown(within(calendar()).getByRole('button', { name: 'Åpning' }), { key: ' ' })
     expect(within(details()).getByText(`${strings.MilestoneDateLabel}:`)).toBeInTheDocument()
+  })
+
+  it('counts each item opened, by click or by keyboard, for the timeline web part it is in', () => {
+    startTestTelemetry()
+    renderTimeline({}, 'ProjectTimelineWebPart')
+    expect(countedTelemetry().usage).toEqual({})
+    fireEvent.click(within(calendar()).getByText('Prosjekt: Frisbeegolfbane'))
+    fireEvent.keyDown(details(), { key: 'Escape' })
+    fireEvent.keyDown(button('Åpning'), { key: 'Enter' })
+    expect(countedTelemetry().usage).toEqual({ 'ProjectTimelineWebPart timelineItem.opened': 2 })
+    // The same timeline in the program web part counts for that one.
+    cleanup()
+    renderTimeline({}, 'ProgramTimelineWebPart')
+    fireEvent.click(within(calendar()).getByText('Prosjekt: Frisbeegolfbane'))
+    expect(countedTelemetry().usage).toEqual({
+      'ProjectTimelineWebPart timelineItem.opened': 2,
+      'ProgramTimelineWebPart timelineItem.opened': 1
+    })
+  })
+
+  it('counts no opened item where the contract has none: the resource allocation, or no web part', () => {
+    startTestTelemetry()
+    renderTimeline({}, 'ResourceAllocationWebPart')
+    fireEvent.click(within(calendar()).getByText('Prosjekt: Frisbeegolfbane'))
+    expect(details()).toBeInTheDocument()
+    cleanup()
+    renderTimeline()
+    fireEvent.click(within(calendar()).getByText('Prosjekt: Frisbeegolfbane'))
+    expect(details()).toBeInTheDocument()
+    expect(countedTelemetry().usage).toEqual({})
   })
 
   it('takes the focus into details that hold no link, named by the item and described by what they show (WCAG 2.4.3, 4.1.2)', () => {

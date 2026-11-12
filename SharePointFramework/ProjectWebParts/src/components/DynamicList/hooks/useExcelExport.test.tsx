@@ -10,6 +10,11 @@ import { FluentProvider, Toaster } from '@fluentui/react-components'
 import { act, cleanup, render, screen } from '@testing-library/react'
 import strings from 'ProjectWebPartsStrings'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
+import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
+import {
+  countedTelemetry,
+  startTestTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import * as React from 'react'
 import { DynamicListContext } from '../context'
 import { getExportButtonText, useExcelExport } from './useExcelExport'
@@ -18,7 +23,9 @@ import { getExportButtonText, useExcelExport } from './useExcelExport'
  * The dynamic list's export to Excel: the rows the list shows (searched and filtered as the list
  * does) or the selected rows, under the web part's title or else the list's, the file named after
  * the view; the values as they are, for the export to round; a failed export ends the export and
- * tells the user. And the export button's text, which counts the selected rows in Norwegian.
+ * tells the user. And the export button's text, which counts the selected rows in Norwegian. An
+ * export that returns is counted once, for the dynamic list web part, and one that fails once as
+ * an error.
  */
 const listColumns = [
   { key: 'Title', fieldName: 'Title', name: 'Tittel', minWidth: 100 },
@@ -54,12 +61,14 @@ function exportFrom(state: Record<string, any> = {}, props: Record<string, any> 
     return null
   }
   render(
-    <FluentProvider>
-      <Toaster toasterId={TOASTER_ID} />
-      <DynamicListContext.Provider value={context}>
-        <Probe />
-      </DynamicListContext.Provider>
-    </FluentProvider>
+    <TelemetryProvider component='DynamicListWebPart'>
+      <FluentProvider>
+        <Toaster toasterId={TOASTER_ID} />
+        <DynamicListContext.Provider value={context}>
+          <Probe />
+        </DynamicListContext.Provider>
+      </FluentProvider>
+    </TelemetryProvider>
   )
   act(() => exportToExcel())
   const [exported, exportedColumns, fileNamePart] =
@@ -68,6 +77,8 @@ function exportFrom(state: Record<string, any> = {}, props: Record<string, any> 
 }
 
 const titles = (rows: Record<string, any>[]) => rows.map((row) => row.Title)
+
+beforeEach(() => startTestTelemetry())
 
 afterEach(async () => {
   cleanup()
@@ -111,7 +122,15 @@ describe('useExcelExport (dynamic list)', () => {
     ])
   })
 
-  it('ends the export and tells the user when it fails', async () => {
+  it('counts each export that returns, once', () => {
+    exportFrom()
+    expect(countedTelemetry().usage).toEqual({ 'DynamicListWebPart excel.exported': 1 })
+    exportFrom({ selectedItems: [1] })
+    expect(countedTelemetry().usage).toEqual({ 'DynamicListWebPart excel.exported': 2 })
+    expect(countedTelemetry().errors).toEqual({})
+  })
+
+  it('ends the export, tells the user and counts the error once when it fails', async () => {
     ;(ExcelExportService.export as jest.Mock).mockImplementationOnce(() => {
       throw new Error('Feil i arbeidsboken')
     })
@@ -119,6 +138,9 @@ describe('useExcelExport (dynamic list)', () => {
     expect(setState).toHaveBeenLastCalledWith({ isExporting: false })
     expect(await screen.findByText(strings.DynamicList.ExportErrorTitle)).toBeInTheDocument()
     expect(screen.getByText(strings.DynamicList.ExportErrorMessage)).toBeInTheDocument()
+    expect(countedTelemetry().usage).toEqual({})
+    // The workbook is built in the browser: its errors have no HTTP status to be counted by.
+    expect(countedTelemetry().errors).toEqual({ 'DynamicListWebPart unknown': 1 })
   })
 })
 

@@ -7,8 +7,10 @@ import {
   ListLogger,
   ProjectAdminPermission,
   ProjectInformationParentProject,
-  ProjectInformationChildProject
+  ProjectInformationChildProject,
+  errorWithCause
 } from 'pp365-shared-library'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { useEffect } from 'react'
 import SPDataAdapter from '../../../data'
 import { DataFetchFunction } from '../../../types/DataFetchFunction'
@@ -142,14 +144,17 @@ const fetchData: DataFetchFunction<
       functionName: 'fetchData',
       component: ProjectInformation.displayName
     })
-    throw new Error(strings.ProjectInformationDataFetchErrorText)
+    // The cause lets the hook count the failure by the status SharePoint answered with.
+    throw errorWithCause(strings.ProjectInformationDataFetchErrorText, error)
   }
 }
 
 /**
- * Configures the adapter and reloads project information after property updates.
+ * Configures the adapter and reloads project information after property updates. A fetch that
+ * fails is counted for usage statistics, by its error code, for the web part the component is in.
  */
 export const useProjectInformationDataFetch = (context: IProjectInformationContext) => {
+  const telemetry = useTelemetry()
   useEffect(() => {
     void SPDataAdapter.configure(context.props.spfxContext, {
       siteId: context.props.siteId,
@@ -159,6 +164,7 @@ export const useProjectInformationDataFetch = (context: IProjectInformationConte
       fetchData(context)
         .then((state) => context.dispatch(INIT_DATA({ state })))
         .catch((e) => {
+          telemetry.trackError(e)
           const error = CustomError.createError(e, 'error')
           context.dispatch(FETCH_DATA_ERROR({ error }))
         })

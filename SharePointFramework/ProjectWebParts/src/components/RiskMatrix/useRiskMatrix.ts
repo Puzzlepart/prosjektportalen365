@@ -4,11 +4,13 @@ import { IMatrixCell } from '../DynamicMatrix'
 import { IRiskMatrixProps } from './types'
 import { useRiskMatrixConfiguration } from './useRiskMatrixConfiguration'
 import { useId } from '@fluentui/react-components'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 
 /** Places risks at their original and optional post-action coordinates. */
 export function useRiskMatrix(props: IRiskMatrixProps) {
   const [showPostAction, setShowPostAction] = useState(false)
   const { configuration, error } = useRiskMatrixConfiguration(props)
+  const telemetry = useTelemetry()
 
   /**
    * Get the matrix elements for a given cell.
@@ -46,13 +48,23 @@ export function useRiskMatrix(props: IRiskMatrixProps) {
     return [...elements, ...postActionElements]
   }
 
+  /**
+   * Shows the risks where their actions take them, or where they are now, as the switch says.
+   *
+   * @param checked Whether the switch is on
+   */
+  function onTogglePostAction(checked: boolean) {
+    setShowPostAction(checked)
+    telemetry.track('postAction.toggled')
+  }
+
   const fluentProviderId = useId('fp-risk-matrix')
 
   return {
     configuration,
     error,
     getElementsForCell,
-    setShowPostAction,
+    onTogglePostAction,
     showPostAction,
     fluentProviderId
   }

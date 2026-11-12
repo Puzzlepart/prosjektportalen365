@@ -1,6 +1,11 @@
 import { AriaLiveAnnouncer } from '@fluentui/react-components'
-import { act, fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { format, Toolbar } from 'pp365-shared-library'
+import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
+import {
+  countedTelemetry,
+  startTestTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
 import { DynamicListContext, IDynamicListContext } from './context'
@@ -12,7 +17,8 @@ import { useToolbarItems } from './useToolbarItems'
  * What the dynamic list's toolbar tells: a new document, an upload and a deletion are confirmed,
  * or their failure shown, in a toast (WCAG 4.1.3); the export button is named by what it does;
  * and a custom action's spinner is named while it runs. SharePoint is a stand-in web whose calls
- * succeed or fail as each test sets them.
+ * succeed or fail as each test sets them. Each failure that is shown is also counted once for
+ * usage statistics, for the dynamic list web part, by the error's code.
  */
 const TOASTER = 'dynamic-list-toaster'
 const LIBRARY = '/sites/alfa/Delte dokumenter'
@@ -35,16 +41,20 @@ const Harness = () => {
   )
 }
 
-/** A stand-in web: `addUsingPath` and `remove` are what saving a file and deleting an item do. */
+/**
+ * A stand-in web: `addUsingPath`, `remove` and `add` are what saving a file, deleting an item and
+ * adding an item do.
+ */
 function standInWeb() {
   const addUsingPath = jest.fn().mockResolvedValue({ ServerRelativeUrl: `${LIBRARY}/x` })
   const remove = jest.fn().mockResolvedValue(undefined)
+  const add = jest.fn().mockResolvedValue({ ID: 7 })
   const list = {
     select: () => ({ expand: () => async () => ({ RootFolder: { ServerRelativeUrl: LIBRARY } }) }),
     rootFolder: { files: { addUsingPath }, folders: { getByUrl: () => async () => ({}) } },
-    items: { getById: () => ({ delete: remove }) }
+    items: { getById: () => ({ delete: remove }), add }
   }
-  return { web: { lists: { getByTitle: () => list } } as any, addUsingPath, remove }
+  return { web: { lists: { getByTitle: () => list } } as any, addUsingPath, remove, add }
 }
 
 function renderToolbar(state: Record<string, any>, props: Record<string, any> = {}) {
@@ -62,19 +72,25 @@ function renderToolbar(state: Record<string, any>, props: Record<string, any> = 
     toasterId: TOASTER
   }
   render(
-    <AriaLiveAnnouncer>
-      <DynamicListContext.Provider value={value}>
-        <Harness />
-      </DynamicListContext.Provider>
-    </AriaLiveAnnouncer>
+    <TelemetryProvider component='DynamicListWebPart'>
+      <AriaLiveAnnouncer>
+        <DynamicListContext.Provider value={value}>
+          <Harness />
+        </DynamicListContext.Provider>
+      </AriaLiveAnnouncer>
+    </TelemetryProvider>
   )
   return { ...stand, setState }
 }
 
 const item = (items: any[], text: string) => items.find((i) => i.text === text)
 
+/** An error with an HTTP status, as PnPjs gives one. */
+const httpError = (message: string, status: number) => Object.assign(new Error(message), { status })
+
 describe('useToolbarItems', () => {
   beforeEach(() => {
+    startTestTelemetry()
     jest.spyOn(window, 'confirm').mockReturnValue(true)
   })
   afterEach(async () => {
@@ -94,10 +110,12 @@ describe('useToolbarItems', () => {
     expect(
       await screen.findByText(format(strings.DynamicList.DocumentCreated, fileName))
     ).toBeInTheDocument()
-    addUsingPath.mockRejectedValueOnce(new Error('Ingen tilgang'))
+    expect(countedTelemetry().errors).toEqual({})
+    addUsingPath.mockRejectedValueOnce(httpError('Ingen tilgang', 403))
     await act(() => word().onClick(undefined))
     expect(await screen.findByText(strings.DynamicList.DocumentCreateFailed)).toBeInTheDocument()
     expect(screen.getByText('Ingen tilgang')).toBeInTheDocument()
+    expect(countedTelemetry().errors).toEqual({ 'DynamicListWebPart permission_denied 403': 1 })
   })
 
   it('tells how many items were deleted, and when deleting failed (WCAG 4.1.3)', async () => {
@@ -108,10 +126,12 @@ describe('useToolbarItems', () => {
     const deleteItem = () => item(hook.toolbar.farMenuItems, strings.DynamicList.Delete)
     await act(async () => deleteItem().onClick(undefined))
     expect(await screen.findByText(format(strings.DynamicList.ItemsDeleted, 2))).toBeInTheDocument()
-    remove.mockRejectedValueOnce(new Error('Elementet er låst'))
+    expect(countedTelemetry().errors).toEqual({})
+    remove.mockRejectedValueOnce(httpError('Elementet er låst', 409))
     await act(async () => deleteItem().onClick(undefined))
     expect(await screen.findByText(strings.DynamicList.DeleteFailed)).toBeInTheDocument()
     expect(screen.getByText('Elementet er låst')).toBeInTheDocument()
+    expect(countedTelemetry().errors).toEqual({ 'DynamicListWebPart unknown 409': 1 })
   })
 
   it('tells which files were uploaded, and when the upload failed (WCAG 4.1.3)', async () => {
@@ -124,10 +144,12 @@ describe('useToolbarItems', () => {
     expect(
       await screen.findByText(format(strings.DynamicList.FilesUploaded, 2))
     ).toBeInTheDocument()
-    addUsingPath.mockRejectedValueOnce(new Error('Filen er for stor'))
+    expect(countedTelemetry().errors).toEqual({})
+    addUsingPath.mockRejectedValueOnce(httpError('Filen er for stor', 503))
     await act(() => hook.upload([new File(['x'], 'Stor.docx')]))
     expect(await screen.findByText(strings.DynamicList.UploadFailed)).toBeInTheDocument()
     expect(screen.getByText('Filen er for stor')).toBeInTheDocument()
+    expect(countedTelemetry().errors).toEqual({ 'DynamicListWebPart server_error 503': 1 })
   })
 
   it('names the export button by what it does, holding the count it shows (WCAG 2.4.6, 2.5.3)', () => {
@@ -180,4 +202,35 @@ describe('useToolbarItems', () => {
       global.fetch = fetch
     }
   })
+  it('counts an item that could not be saved, and hands the error to the panel that shows it', async () => {
+    const { add, setState } = renderToolbar({ isDocumentLibrary: false })
+    act(() => item(hook.toolbar.menuItems, strings.DynamicList.NewItem).onClick(undefined))
+    const { panel } = setState.mock.calls[setState.mock.calls.length - 1][0]
+    const refused = httpError('Ingen tilgang', 403)
+    add.mockRejectedValueOnce(refused)
+    await expect(panel.submit.onSubmit({ properties: { Title: 'Ny' } })).rejects.toBe(refused)
+    expect(countedTelemetry().errors).toEqual({ 'DynamicListWebPart permission_denied 403': 1 })
+  })
+
+  it.each([
+    [CustomActionType.Trigger, 403, 'DynamicListWebPart permission_denied 403'],
+    [CustomActionType.Dialog, 500, 'DynamicListWebPart server_error 500']
+  ])(
+    'counts a custom action (%s) whose hook answers %i, by that status',
+    async (actionType, status, counted) => {
+      const fetch = global.fetch
+      global.fetch = jest.fn().mockResolvedValue({ ok: false, status }) as any
+      try {
+        renderToolbar(
+          { selectedItems: [0], data: { listItems: [{ Id: 1 }], listColumns: [] } },
+          { customActions: [{ name: 'Send til arkiv', actionType, hookUrl: 'https://hook' }] }
+        )
+        fireEvent.click(screen.getByRole('button', { name: 'Send til arkiv' }))
+        await waitFor(() => expect(countedTelemetry().errors).toEqual({ [counted]: 1 }))
+      } finally {
+        // Back for the tests after this one, failed or not.
+        global.fetch = fetch
+      }
+    }
+  )
 })

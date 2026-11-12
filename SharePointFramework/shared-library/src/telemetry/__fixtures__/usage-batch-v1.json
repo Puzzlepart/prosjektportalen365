@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "batchId": "0f8c6a52-6b1e-4c39-9d7e-2f0a5b8e1c34",
+  "host": "contoso.sharepoint.com",
+  "tenantId": "9a5c0f3e-1b2d-4c6e-8f70-1a2b3c4d5e6f",
+  "hubUrl": "https://contoso.sharepoint.com/sites/prosjektportalen",
+  "level": 2,
+  "appVersion": "1.15.0",
+  "heartbeat": {
+    "channel": "main",
+    "templateVersion": "1.15.0",
+    "hubLanguage": "nb-NO",
+    "projects": 412,
+    "programs": 7,
+    "parentProjects": 12,
+    "catalog": true
+  },
+  "usage": [
+    { "c": "Footer", "e": "page.viewed", "s": "hub", "n": 5 },
+    { "c": "PortfolioOverviewWebPart", "e": "loaded", "s": "hub", "n": 3 },
+    { "c": "ProjectSetup", "e": "setup.completed", "s": "project", "v": "new", "n": 1 }
+  ],
+  "sites": [
+    { "h": "3f9a0c1d2e4b5a69", "s": "hub" },
+    { "h": "b07e5d2c91a4f386", "s": "project" }
+  ]
+}

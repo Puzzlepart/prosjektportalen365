@@ -1,4 +1,5 @@
 import { ICustomEditPanelSubmitProps, parseErrorStack } from 'pp365-shared-library'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { useState } from 'react'
 import SPDataAdapter from '../../../data'
 import { useProjectStatusContext } from '../context'
@@ -9,6 +10,7 @@ import { CLOSE_PANEL, SELECT_REPORT } from '../reducer'
  */
 export function useEditStatusPanelSubmit(): ICustomEditPanelSubmitProps {
   const context = useProjectStatusContext()
+  const telemetry = useTelemetry()
   const { selectedReport } = context.state
   const [state, setState] = useState<
     Pick<ICustomEditPanelSubmitProps, 'error' | 'saveProgressText'>
@@ -32,7 +34,9 @@ export function useEditStatusPanelSubmit(): ICustomEditPanelSubmitProps {
         )
         context.dispatch(SELECT_REPORT({ report: updatedReport }))
         context.dispatch(CLOSE_PANEL())
+        telemetry.track('statusReport.created')
       } catch (error) {
+        telemetry.trackError(error)
         const errorText = parseErrorStack(error.message)
         setState({ error: errorText, saveProgressText: null })
       }
@@ -45,7 +49,9 @@ export function useEditStatusPanelSubmit(): ICustomEditPanelSubmitProps {
         )
         context.dispatch(SELECT_REPORT({ report: updatedReport }))
         context.dispatch(CLOSE_PANEL())
+        telemetry.track('statusReport.edited')
       } catch (error) {
+        telemetry.trackError(error)
         const errorText = parseErrorStack(error.message)
         setState({ error: errorText, saveProgressText: null })
       }

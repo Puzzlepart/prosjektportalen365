@@ -45,11 +45,14 @@ describe('ProjectTimeline fetchData', () => {
     hub.timelineError = forbidden()
     const { error } = await fetchData({} as any)
     expect(error?.message).toBe(strings.ProjectTimelineNoHubAccessErrorText)
+    // The error that was caught stays reachable, for the hook that counts the failure by its code.
+    expect((error as any).cause).toBe(hub.timelineError)
   })
 
   it('keeps the message of another error', async () => {
     hub.timelineError = new Error('500 Server Error')
     const { error } = await fetchData({} as any)
     expect(error?.message).toBe('500 Server Error')
+    expect((error as any).cause).toBe(hub.timelineError)
   })
 })

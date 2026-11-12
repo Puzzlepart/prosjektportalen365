@@ -11,6 +11,7 @@ import { CustomError, isUnauthorizedError } from 'pp365-shared-library'
 
 /**
  * Loads project and timeline data with initial grouping, or returns a localized error state.
+ * A fetch that fails gives the error to show, with the error that was caught as its `cause`.
  */
 export async function fetchData(
   props: IProjectTimelineProps
@@ -66,7 +67,9 @@ export async function fetchData(
         ? error
         : new Error(String(error))
     return {
-      error: CustomError.createError(reason, 'warning')
+      // The timeline shows the text; the cause lets the hook count the failure by the status
+      // SharePoint answered with, which a `CustomError` does not keep.
+      error: Object.assign(CustomError.createError(reason, 'warning'), { cause: error })
     }
   }
 }

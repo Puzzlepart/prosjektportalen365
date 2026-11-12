@@ -7,12 +7,14 @@ import {
   EditableSPField,
   ProjectAdminPermission,
   StatusReport,
+  errorWithCause,
   getAllScopesFilter,
   getScopeSeriesKey,
   getUrlParam,
   isUnauthorizedError,
   parseUrlHash
 } from 'pp365-shared-library'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import resource from 'SharedResources'
 import { useEffect } from 'react'
 import SPDataAdapter from '../../data'
@@ -236,16 +238,18 @@ async function fetchData(
       selectedScope,
       error
     })
+    // The cause lets the hook count the failure by the status SharePoint answered with.
     if (isNoHubError(error)) {
-      throw new Error(strings.ProjectStatusNoHubAccessErrorText)
+      throw errorWithCause(strings.ProjectStatusNoHubAccessErrorText, error)
     }
 
-    throw new Error(strings.ProjectStatusDataErrorText)
+    throw errorWithCause(strings.ProjectStatusDataErrorText, error)
   }
 }
 
 /**
- * Loads the selected report series on mount and whenever its refresh timestamp changes.
+ * Loads the selected report series on mount and whenever its refresh timestamp changes. A fetch
+ * that fails is counted for usage statistics, by its error code, and shown as before.
  */
 export const useProjectStatusDataFetch = (
   props: IProjectStatusProps,
@@ -253,10 +257,12 @@ export const useProjectStatusDataFetch = (
   selectedScope: string,
   dispatch: React.Dispatch<UnknownAction>
 ) => {
+  const telemetry = useTelemetry()
   useEffect(() => {
     fetchData(props, selectedScope)
       .then((data) => dispatch(INIT_DATA(data)))
       .catch((error) => {
+        telemetry.trackError(error)
         dispatch(
           FETCH_DATA_ERROR({
             error: CustomError.createError(

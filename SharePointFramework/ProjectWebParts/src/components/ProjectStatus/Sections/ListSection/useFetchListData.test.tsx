@@ -12,6 +12,11 @@ jest.mock('@pnp/sp', () => {
 
 import { render } from '@testing-library/react'
 import { format } from 'pp365-shared-library'
+import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
+import {
+  countedTelemetry,
+  startTestTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import * as strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
 import { ProjectStatusContext } from '../../context'
@@ -48,30 +53,34 @@ function fetchFor(listTitle: string) {
     return null
   }
   render(
-    <ProjectStatusContext.Provider
-      value={
-        {
-          state: { selectedScope: 'DP1' },
-          props: {
-            webAbsoluteUrl: 'https://contoso.sharepoint.com/sites/alfa',
-            sp: { web: {} },
-            subProjects: 'DP1|Delprosjekt 1'
-          }
-        } as any
-      }
-    >
-      <SectionContext.Provider
-        value={{ section: { listTitle, viewQuery: '', viewFields: [], rowLimit: 10 } as any }}
+    <TelemetryProvider component='ProjectStatusWebPart'>
+      <ProjectStatusContext.Provider
+        value={
+          {
+            state: { selectedScope: 'DP1' },
+            props: {
+              webAbsoluteUrl: 'https://contoso.sharepoint.com/sites/alfa',
+              sp: { web: {} },
+              subProjects: 'DP1|Delprosjekt 1'
+            }
+          } as any
+        }
       >
-        <Probe />
-      </SectionContext.Provider>
-    </ProjectStatusContext.Provider>
+        <SectionContext.Provider
+          value={{ section: { listTitle, viewQuery: '', viewFields: [], rowLimit: 10 } as any }}
+        >
+          <Probe />
+        </SectionContext.Provider>
+      </ProjectStatusContext.Provider>
+    </TelemetryProvider>
   )
   return fetchListData().catch((error) => error)
 }
 
 describe('useFetchListData', () => {
-  it("names the report series' list when it does not exist on the site", async () => {
+  beforeEach(() => startTestTelemetry())
+
+  it("names the report series' list when it does not exist on the site, and counts it as not found", async () => {
     const lists = failingWeb(Object.assign(new Error('List does not exist'), { status: 404 }))
     const error = await fetchFor('Usikkerhet {scope}')
     expect(lists).toEqual(['Usikkerhet DP1'])
@@ -79,12 +88,15 @@ describe('useFetchListData', () => {
     expect(getSectionDataErrorMessage(error)).toBe(
       format(strings.ListSectionListNotFoundMessage, 'Usikkerhet DP1')
     )
+    // Counted once, where the fetch fails, for the status web part the section is in.
+    expect(countedTelemetry().errors).toEqual({ 'ProjectStatusWebPart not_found 404': 1 })
   })
 
-  it('asks whether the section is configured correctly on any other error', async () => {
+  it('asks whether the section is configured correctly on any other error, and counts it by its status', async () => {
     failingWeb(Object.assign(new Error('Ugyldig CAML-spørring'), { status: 400 }))
     const error = await fetchFor('Prosjektleveranser {scope}')
     expect(error).toMatchObject({ listTitle: 'Prosjektleveranser DP1', listNotFound: false })
     expect(getSectionDataErrorMessage(error)).toBe(strings.ListSectionDataErrorMessage)
+    expect(countedTelemetry().errors).toEqual({ 'ProjectStatusWebPart unknown 400': 1 })
   })
 })

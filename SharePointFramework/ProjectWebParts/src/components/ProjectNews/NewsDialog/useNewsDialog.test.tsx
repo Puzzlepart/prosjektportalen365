@@ -39,6 +39,11 @@ jest.mock('./useNewsForm', () => ({
 import { AriaLiveAnnouncer } from '@fluentui/react-components'
 import { act, render, waitFor } from '@testing-library/react'
 import { format } from 'pp365-shared-library'
+import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
+import {
+  countedTelemetry,
+  startTestTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
 import { ProjectNewsContext } from '../context'
@@ -69,25 +74,27 @@ function renderDialog(isDialogOpen = false) {
     return null
   }
   render(
-    <AriaLiveAnnouncer>
-      <ProjectNewsContext.Provider
-        value={
-          {
-            props: {
-              siteUrl: SITE,
-              spHttpClient: {},
-              newsFolderName: 'Nyheter',
-              context: { pageContext: { site: { id: 'site-1' } } },
-              pageContext: { legacyPageContext: { hubSiteId: 'hub-1' } }
-            },
-            state: { isDialogOpen },
-            setState: jest.fn()
-          } as any
-        }
-      >
-        <Probe />
-      </ProjectNewsContext.Provider>
-    </AriaLiveAnnouncer>
+    <TelemetryProvider component='ProjectNewsWebPart'>
+      <AriaLiveAnnouncer>
+        <ProjectNewsContext.Provider
+          value={
+            {
+              props: {
+                siteUrl: SITE,
+                spHttpClient: {},
+                newsFolderName: 'Nyheter',
+                context: { pageContext: { site: { id: 'site-1' } } },
+                pageContext: { legacyPageContext: { hubSiteId: 'hub-1' } }
+              },
+              state: { isDialogOpen },
+              setState: jest.fn()
+            } as any
+          }
+        >
+          <Probe />
+        </ProjectNewsContext.Provider>
+      </AriaLiveAnnouncer>
+    </TelemetryProvider>
   )
   return dialog
 }
@@ -97,7 +104,10 @@ const create = (dialog: ReturnType<typeof renderDialog>) =>
   act(() => dialog.current.handleCreate({ preventDefault: () => undefined } as any))
 
 describe('useNewsDialog', () => {
-  beforeEach(() => jest.clearAllMocks())
+  beforeEach(() => {
+    jest.clearAllMocks()
+    startTestTelemetry()
+  })
 
   it('tells a screen reader that the news is being made, and that it is made (WCAG 4.1.3)', async () => {
     const open = jest.spyOn(window, 'open').mockImplementation(() => null)
@@ -132,6 +142,9 @@ describe('useNewsDialog', () => {
           ),
         { timeout: 5000 }
       )
+      // A made article is counted once, for the news web part.
+      expect(countedTelemetry().usage).toEqual({ 'ProjectNewsWebPart news.created': 1 })
+      expect(countedTelemetry().errors).toEqual({})
     } finally {
       open.mockRestore()
     }
@@ -151,7 +164,7 @@ describe('useNewsDialog', () => {
       const open = jest.spyOn(window, 'open').mockImplementation(() => null)
       try {
         ;(setOriginalSourceSiteId as jest.Mock).mockRejectedValueOnce(
-          new Error('Feltet eller egenskapen GtHubUrl finnes ikke.')
+          Object.assign(new Error('Feltet eller egenskapen GtHubUrl finnes ikke.'), { status: 400 })
         )
         const dialog = renderDialog()
         await create(dialog)
@@ -163,6 +176,9 @@ describe('useNewsDialog', () => {
         // Longer than the 1100 ms after which a made article opens: nothing opens.
         await act(() => new Promise((resolve) => setTimeout(resolve, 1200)))
         expect(open).not.toHaveBeenCalled()
+        expect(countedTelemetry().usage).toEqual({})
+        // The failure is counted once, by its status, for the news web part.
+        expect(countedTelemetry().errors).toEqual({ 'ProjectNewsWebPart unknown 400': 1 })
       } finally {
         open.mockRestore()
       }
@@ -187,6 +203,7 @@ describe('useNewsDialog', () => {
       // The spinner stayed, and hid the error, when the copy itself failed.
       ;(copyTemplatePage as jest.Mock).mockResolvedValueOnce({
         ok: false,
+        status: 404,
         json: () =>
           Promise.resolve({
             'odata.error': { message: { lang: 'nb-NO', value: 'Filen finnes ikke.' } }
@@ -200,6 +217,8 @@ describe('useNewsDialog', () => {
       expect(dialog.current.spinnerMode).toBe('idle')
       expect(getSitePageItemId).not.toHaveBeenCalled()
       expect(recycleSitePage).not.toHaveBeenCalled()
+      expect(countedTelemetry().usage).toEqual({})
+      expect(countedTelemetry().errors).toEqual({ 'ProjectNewsWebPart not_found 404': 1 })
     })
 
     it('says access is missing when the news site refuses the copy', async () => {
@@ -219,6 +238,19 @@ describe('useNewsDialog', () => {
       await create(dialog)
       expect(form.setFormErrorMessage).toHaveBeenLastCalledWith(strings.NewsNoAccessErrorText)
       expect(dialog.current.spinnerMode).toBe('idle')
+      expect(countedTelemetry().errors).toEqual({ 'ProjectNewsWebPart permission_denied 403': 1 })
+    })
+
+    it('says access is missing when the news folder is refused, before anything is made', async () => {
+      ;(ensureProjectNewsFolder as jest.Mock).mockRejectedValueOnce(
+        Object.assign(new Error(strings.NewsNoAccessErrorText), { status: 403 })
+      )
+      const dialog = renderDialog()
+      await create(dialog)
+      expect(form.setFormErrorMessage).toHaveBeenLastCalledWith(strings.NewsNoAccessErrorText)
+      expect(copyTemplatePage).not.toHaveBeenCalled()
+      expect(dialog.current.spinnerMode).toBe('idle')
+      expect(countedTelemetry().errors).toEqual({ 'ProjectNewsWebPart permission_denied 403': 1 })
     })
 
     it('does not take a title with 403 in it for missing access', async () => {
@@ -231,6 +263,8 @@ describe('useNewsDialog', () => {
       expect(form.setFormErrorMessage).toHaveBeenLastCalledWith(
         `${strings.NewsCreateError} Fant ikke elementet for /sites/alfa/SitePages/Nyheter/Rom-403.aspx`
       )
+      // Nor is the failure counted by the digits in its text: an error without a status is unknown.
+      expect(countedTelemetry().errors).toEqual({ 'ProjectNewsWebPart unknown': 1 })
     })
 
     it("removes the copied page when the page's item cannot be found, and shows why", async () => {
@@ -284,5 +318,7 @@ describe('useNewsDialog', () => {
     expect(ensureProjectNewsFolder).not.toHaveBeenCalled()
     expect(copyTemplatePage).not.toHaveBeenCalled()
     expect(dialog.current.spinnerMode).toBe('idle')
+    // A title the form refuses is no failure: nothing is counted.
+    expect(countedTelemetry().errors).toEqual({})
   })
 })

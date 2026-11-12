@@ -9,6 +9,17 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorBoundaryFallback } from './ErrorBoundary'
 import React from 'react'
 import { SiteContext, renderReact, unmountReact } from 'pp365-shared-library'
+import {
+  attachTelemetryPortal,
+  registerSiteTypeResolver,
+  startTelemetry,
+  TelemetryEventComponent,
+  telemetryInitFromContext,
+  TelemetryProvider,
+  trackError,
+  trackTiming,
+  trackUsage
+} from 'pp365-shared-library/lib/telemetry'
 
 Logger.subscribe(ConsoleListener())
 Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
@@ -19,6 +30,15 @@ export abstract class BaseProjectWebPart<
 > extends BaseClientSideWebPart<T> {
   public sp: SPFI
   public abstract render(): void
+
+  /**
+   * The web part's alias in its manifest, which usage statistics count it by: one of the web
+   * parts the contract lets count `loaded`. An alias the contract does not know is dropped where
+   * it is counted.
+   */
+  protected get _telemetryComponent(): TelemetryEventComponent<'loaded'> {
+    return this.context.manifest.alias as TelemetryEventComponent<'loaded'>
+  }
 
   /**
    * Combines saved and supplied component properties with the host's live site context.
@@ -41,13 +61,17 @@ export abstract class BaseProjectWebPart<
     const combinedProps = this.createPropsForComponent(props)
     const element = createElement(component, combinedProps)
     renderReact(
-      <ErrorBoundary
-        fallbackRender={({ error }) => (
-          <ErrorBoundaryFallback title={combinedProps['title']} error={error} />
-        )}
-      >
-        {element}
-      </ErrorBoundary>,
+      <TelemetryProvider component={this._telemetryComponent}>
+        <ErrorBoundary
+          fallbackRender={({ error }) => (
+            <ErrorBoundaryFallback title={combinedProps['title']} error={error} />
+          )}
+          // Counted by a code: the error's message can hold names and URLs, and stays on the page.
+          onError={() => trackError(this._telemetryComponent, 'render_failed')}
+        >
+          {element}
+        </ErrorBoundary>
+      </TelemetryProvider>,
       this.domElement
     )
   }
@@ -65,9 +89,36 @@ export abstract class BaseProjectWebPart<
     })
   }
 
+  /**
+   * Starts usage statistics for the web part, once it is set up: the page it is on, the hub's
+   * settings the data adapter has read, how to tell what kind of site this is, that the web part
+   * was loaded, and how long its setup took. Counted here and never in `render`, which runs many
+   * times. The web part is set up by now, and usage statistics must not undo that: whatever goes
+   * wrong here is dropped.
+   *
+   * @param setupTime How long `_setup` took, in milliseconds
+   */
+  private _startTelemetry(setupTime: number): void {
+    try {
+      startTelemetry(telemetryInitFromContext(this.context, { isDebug: DEBUG }))
+      attachTelemetryPortal(SPDataAdapter.portalDataService, SPDataAdapter.globalSettings)
+      registerSiteTypeResolver(this.context.pageContext.site.id.toString(), () =>
+        SPDataAdapter.getSiteType()
+      )
+      trackUsage(this._telemetryComponent, 'loaded')
+      trackTiming(this._telemetryComponent, 'init', setupTime)
+    } catch {
+      // Usage statistics never break the web part.
+    }
+  }
+
   public async onInit(): Promise<void> {
     this.context.statusRenderer.clearLoadingIndicator(this.domElement)
+    const setupStart = Date.now()
     await this._setup()
+    // SharePoint may have disposed the web part while it was set up (the user moved on): it was
+    // never shown, and the page telemetry knows by now may be another one.
+    if (!this.isDisposed) this._startTelemetry(Date.now() - setupStart)
   }
 
   /**

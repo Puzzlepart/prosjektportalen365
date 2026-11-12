@@ -7,6 +7,7 @@ import { ITimelineProps } from './types'
 import { useGroupRenderer } from './useGroupRenderer'
 import { TIMELINE_ROW_BACKGROUND, useItemRenderer } from './useItemRenderer'
 import { getContrastingShade } from '../../../util'
+import { useTelemetry } from '../../../telemetry'
 import { useToolbarItems } from './ToolbarItems/useToolbarItems'
 
 /**
@@ -48,12 +49,16 @@ export function useTimeline(props: ITimelineProps) {
 
   const [showFilterPanel, setShowFilterPanel] = useState(false)
   const [selectedGroupBy, setSelectedGroupBy] = useState<string>(props.defaultGroupBy)
+  // The timeline is drawn by the project, portfolio and program timeline web parts (and the
+  // resource allocation, which the contract counts nothing for): it counts for the one it is in.
+  const telemetry = useTelemetry()
 
   /**
    * Opens an item's details, from a click or from the keyboard.
    */
   const onItemClick = (event: React.SyntheticEvent<HTMLDivElement>, item: ITimelineItem) => {
     setShowDetails({ element: event.currentTarget, item })
+    telemetry.track('timelineItem.opened')
   }
 
   /**

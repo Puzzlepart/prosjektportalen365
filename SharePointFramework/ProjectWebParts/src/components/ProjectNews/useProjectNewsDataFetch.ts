@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { SPHttpClient } from '@microsoft/sp-http'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { INewsItem, IProjectNewsProps, IProjectNewsState } from './types'
 import { toODataString, toUrlPath } from './rest'
 import {
@@ -10,12 +11,16 @@ import {
 } from './util'
 import strings from 'ProjectWebPartsStrings'
 
-/** Loads project-folder news from the configured site and reports access or request failures. */
+/**
+ * Loads project-folder news from the configured site and reports access or request failures.
+ * A fetch that fails is counted for usage statistics, by its error code.
+ */
 export function useProjectNewsDataFetch(
   props: IProjectNewsProps,
   refetch: number,
   setState: (newState: Partial<IProjectNewsState>) => void
 ): void {
+  const telemetry = useTelemetry()
   useEffect((): void => {
     // A refetch starts without the error an earlier one left, such as a news site since made readable.
     setState({ loading: true, error: null })
@@ -61,6 +66,7 @@ export function useProjectNewsDataFetch(
           data: { news }
         })
       } catch (error) {
+        telemetry.trackError(error)
         setState({ loading: false, error })
       }
     }

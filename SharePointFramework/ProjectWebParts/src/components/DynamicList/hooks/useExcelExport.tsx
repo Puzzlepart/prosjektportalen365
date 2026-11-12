@@ -1,6 +1,7 @@
 import { Toast, ToastBody, ToastTitle, useToastController } from '@fluentui/react-components'
 import { format } from 'pp365-shared-library'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { useCallback, useContext } from 'react'
 import { DynamicListContext } from '../context'
@@ -30,6 +31,7 @@ export function getExportButtonText(selectedCount: number): string {
 export function useExcelExport(toasterId: string) {
   const context = useContext(DynamicListContext)
   const { dispatchToast } = useToastController(toasterId)
+  const telemetry = useTelemetry()
 
   const exportToExcel = useCallback(() => {
     try {
@@ -47,8 +49,10 @@ export function useExcelExport(toasterId: string) {
         context.state.data?.listColumns || [],
         context.state.currentView?.title
       )
+      telemetry.track('excel.exported')
       context.setState({ isExporting: false })
     } catch (error) {
+      telemetry.trackError(error)
       // eslint-disable-next-line no-console
       console.error(error)
       context.setState({ isExporting: false })
@@ -60,7 +64,7 @@ export function useExcelExport(toasterId: string) {
         { intent: 'error' }
       )
     }
-  }, [context, dispatchToast])
+  }, [context, dispatchToast, telemetry])
 
   return exportToExcel
 }

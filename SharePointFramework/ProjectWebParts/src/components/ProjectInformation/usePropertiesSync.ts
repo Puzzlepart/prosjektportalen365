@@ -1,5 +1,6 @@
 import strings from 'ProjectWebPartsStrings'
 import { ListLogger } from 'pp365-shared-library/lib/logging'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { sleep } from 'pp365-shared-library/lib/util'
 import SPDataAdapter from '../../data'
 import { IProjectInformationContext } from './context'
@@ -38,8 +39,12 @@ const syncList = async (context: IProjectInformationContext) => {
 
 /**
  * Coordinates properties-list synchronization and hub updates, preserving a warning on failure.
+ * A sync the hub does not take is shown as a warning and counted for usage statistics, by its
+ * error code.
  */
 export function usePropertiesSync(context: IProjectInformationContext = null) {
+  const telemetry = useTelemetry()
+
   /**
    * Synchronizes the supplied or currently loaded project properties to the hub.
    */
@@ -80,6 +85,7 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
         window.location.reload()
       }
     } catch (error) {
+      telemetry.trackError(error)
       context.dispatch(
         SET_HUB_SYNC_WARNING(
           format(strings.ProjectPropertiesNotSyncedToHubText, getHubSyncErrorReason(error))

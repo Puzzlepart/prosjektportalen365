@@ -24,7 +24,7 @@ export const OpportunityMatrix: FC<IOpportunityMatrixProps> = (incomingProps) =>
     configuration,
     error,
     getElementsForCell,
-    setShowPostAction,
+    onTogglePostAction,
     showPostAction,
     fluentProviderId
   } = useOpportunityMatrix(props)
@@ -49,7 +49,7 @@ export const OpportunityMatrix: FC<IOpportunityMatrixProps> = (incomingProps) =>
                     ? strings.ToggleUncertaintyPostActionOnText
                     : strings.ToggleUncertaintyPostActionOffText
                 }
-                onChange={(_event, data) => setShowPostAction(data.checked)}
+                onChange={(_event, data) => onTogglePostAction(data.checked)}
                 disabled={!!error}
               />
             </Field>

@@ -1,6 +1,7 @@
 import { dateAdd, getHashCode } from '@pnp/core'
 import { Caching } from '@pnp/queryable'
 import strings from 'ProjectWebPartsStrings'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { useEffect, useState } from 'react'
 import SPDataAdapter from '../../data'
 import { DynamicMatrixConfiguration } from '../DynamicMatrix'
@@ -29,11 +30,13 @@ async function fetchJsonConfiguration(path: string): Promise<DynamicMatrixConfig
  * Configuration hook for `RiskMatrix`. Fetches the manual configuration from
  * `manualConfigurationPath` once `pageContext` is set, and again when another configuration is
  * chosen. If the configuration is not found or invalid, an error message is set; a configuration
- * read later clears it.
+ * read later clears it. The failure is counted for usage statistics, by its error code, for the
+ * web part the matrix is in.
  */
 export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
   const [configuration, setConfiguration] = useState<DynamicMatrixConfiguration>([])
   const [error, setError] = useState<string>()
+  const telemetry = useTelemetry()
 
   useEffect(() => {
     // Only the configuration chosen last is applied, whichever request answers first.
@@ -45,8 +48,10 @@ export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
           setConfiguration(manualConfiguration)
           setError(undefined)
         })
-        .catch(() => {
-          if (isCurrent) setError(strings.ManualConfigurationNotFoundOrInvalid)
+        .catch((error) => {
+          if (!isCurrent) return
+          telemetry.trackError(error)
+          setError(strings.ManualConfigurationNotFoundOrInvalid)
         })
     }
     return () => {

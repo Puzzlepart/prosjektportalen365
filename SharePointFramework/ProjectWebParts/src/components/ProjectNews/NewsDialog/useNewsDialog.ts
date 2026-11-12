@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { useAnnounce } from '@fluentui/react-components'
 import { format, isUnauthorizedError } from 'pp365-shared-library'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import strings from 'ProjectWebPartsStrings'
 import {
   ensureProjectNewsFolder,
@@ -25,6 +26,7 @@ import { useNewsForm } from './useNewsForm'
 export const useNewsDialog = () => {
   const context = useContext(ProjectNewsContext)
   const newsForm = useNewsForm()
+  const telemetry = useTelemetry()
   // The dialog's content gives way to a spinner and then to the result, which a screen reader is
   // told of (WCAG 4.1.3); an error shows in the title field's message, which Fluent reads out.
   const { announce } = useAnnounce()
@@ -74,9 +76,11 @@ export const useNewsDialog = () => {
 
       /**
        * Shows why the article was not created, after `note` when there is one, and gives the
-       * form back so the user can try again.
+       * form back so the user can try again. Every failure of the creation ends here, where it
+       * is counted once for usage statistics, by its error code.
        */
       const showError = (error: any, note?: string) => {
+        telemetry.trackError(error)
         newsForm.setFormErrorMessage(
           // A news site that refuses the user, such as the hub for a member of «Minimum
           // lesetilganger på hub», says so instead of giving SharePoint's message.
@@ -156,6 +160,7 @@ export const useNewsDialog = () => {
         }
         setSpinnerMode('success')
         announce(strings.NewsCreatedSuccessfully, { polite: true })
+        telemetry.track('news.created')
         setTimeout(() => {
           context.setState({ isDialogOpen: false })
           setSpinnerMode('idle')
@@ -174,7 +179,8 @@ export const useNewsDialog = () => {
       folderName,
       currentSiteId,
       context,
-      announce
+      announce,
+      telemetry
     ]
   )
 

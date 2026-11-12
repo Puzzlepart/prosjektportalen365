@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { PortalDataService } from 'pp365-shared-library/lib/services'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { useProjectStatusContext } from '../context'
 import { getScopeLabel, parseSubProjects } from '../parseSubProjects'
 import {
@@ -21,6 +22,7 @@ import resource from 'SharedResources'
  */
 export function usePublishReport() {
   const context = useProjectStatusContext()
+  const telemetry = useTelemetry()
   const captureReportSnapshot = useCaptureReportSnapshot()
   return async (): Promise<void> => {
     const portalDataService = await new PortalDataService().configure({
@@ -54,7 +56,9 @@ export function usePublishReport() {
         )
         context.dispatch(REPORT_PUBLISHED({ updatedReport, message: null }))
         context.dispatch(SELECT_REPORT({ report: updatedReport }))
+        telemetry.track('statusReport.published')
       } catch (error) {
+        telemetry.trackError(error)
         context.dispatch(
           REPORT_PUBLISH_ERROR({ message: { text: error.message, intent: 'error' } })
         )

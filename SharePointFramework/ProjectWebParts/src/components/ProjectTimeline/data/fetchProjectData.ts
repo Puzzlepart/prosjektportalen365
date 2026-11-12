@@ -4,7 +4,7 @@ import { TimelineConfigurationModel, TimelineContentModel } from 'pp365-shared-l
 import strings from 'ProjectWebPartsStrings'
 import { IProjectTimelineProps } from '../types'
 import resource from 'SharedResources'
-import { format, isUnauthorizedError } from 'pp365-shared-library'
+import { errorWithCause, format, isUnauthorizedError } from 'pp365-shared-library'
 
 /** Reads the hub project row and creates the optional project-duration timeline item. */
 export async function fetchProjectData(
@@ -34,8 +34,9 @@ export async function fetchProjectData(
   } catch (error) {
     // Denied access is not a fault in the project's row: `fetchData` tells the user so.
     if (isUnauthorizedError(error)) throw error
-    throw new Error(
-      format(strings.ProjectTimelineErrorFetchText, props.siteId, props.webTitle, error)
+    throw errorWithCause(
+      format(strings.ProjectTimelineErrorFetchText, props.siteId, props.webTitle, error),
+      error
     )
   }
 }

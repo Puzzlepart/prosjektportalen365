@@ -2,6 +2,7 @@ import strings from 'ProjectWebPartsStrings'
 import SPDataAdapter from '../../../data'
 import { IProjectInformationData } from 'pp365-shared-library'
 import { ICustomEditPanelSubmitProps } from 'pp365-shared-library/lib/components/CustomEditPanel/types'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { useCallback, useState } from 'react'
 import { useProjectInformationContext } from '../context'
 import { CLOSE_PANEL, UPDATE_DATA } from '../reducer'
@@ -10,6 +11,7 @@ import { usePropertiesSync } from '../usePropertiesSync'
 /** Saves project properties locally, then synchronizes them to the hub and reports progress. */
 export function useEditPropertiesPanelSubmit(): ICustomEditPanelSubmitProps {
   const context = useProjectInformationContext()
+  const telemetry = useTelemetry()
   const onSyncProperties = usePropertiesSync(context)
   const [state, setState] = useState<
     Pick<ICustomEditPanelSubmitProps, 'error' | 'saveProgressText'>
@@ -32,6 +34,7 @@ export function useEditPropertiesPanelSubmit(): ICustomEditPanelSubmitProps {
         properties.Title = context.props.webTitle
         data = await SPDataAdapter.project.updateProjectProperties(properties, true)
       } catch (e) {
+        telemetry.trackError(e)
         const errorDetail = e instanceof Error ? e.message : typeof e === 'string' ? e : null
         setState({
           error: errorDetail
@@ -64,6 +67,8 @@ export function useEditPropertiesPanelSubmit(): ICustomEditPanelSubmitProps {
           }
         })
       } catch (e) {
+        // A sync the hub did not take never comes here: `usePropertiesSync` warns and counts it.
+        telemetry.trackError(e)
         const errorDetail = e instanceof Error ? e.message : typeof e === 'string' ? e : null
         setState({
           error: errorDetail
@@ -82,6 +87,7 @@ export function useEditPropertiesPanelSubmit(): ICustomEditPanelSubmitProps {
       localStorage.clear()
       context.dispatch(UPDATE_DATA({ data }))
       context.dispatch(CLOSE_PANEL())
+      telemetry.track('properties.edited')
       setState((prevState) => ({
         ...prevState,
         saveProgressText: null

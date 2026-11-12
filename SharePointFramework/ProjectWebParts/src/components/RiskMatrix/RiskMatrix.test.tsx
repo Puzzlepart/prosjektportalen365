@@ -19,6 +19,11 @@ jest.mock('../../data', () => ({
 
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
+import {
+  countedTelemetry,
+  startTestTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
 import { generateMatrixConfiguration } from '../DynamicMatrix'
@@ -28,7 +33,8 @@ import { RiskMatrix } from './RiskMatrix'
 /**
  * The risk matrix: the configured matrix with the risks placed by probability and consequence,
  * the switch that shows them after their actions instead, and the error when the configuration
- * cannot be read.
+ * cannot be read. The switch is counted for the risk matrix web part, and a configuration that
+ * cannot be read once as an error, for the web part the matrix is in.
  */
 const risk = (id: number, probability: number, consequence: number, post: [number, number]) =>
   ({
@@ -42,19 +48,26 @@ const risk = (id: number, probability: number, consequence: number, post: [numbe
     item: { Title: `Risiko ${id}` }
   }) as any
 
-function renderMatrix(items: any[] = []) {
+/**
+ * Renders the matrix in the web part with the alias `host`, as the base web part does.
+ */
+function renderMatrix(items: any[] = [], host = 'RiskMatrixWebPart') {
   render(
-    <RiskMatrix
-      items={items}
-      pageContext={{} as any}
-      manualConfigurationPath='/sites/hub/SiteAssets/matrix.json'
-      showTitle
-      title='Risikomatrise'
-    />
+    <TelemetryProvider component={host}>
+      <RiskMatrix
+        items={items}
+        pageContext={{} as any}
+        manualConfigurationPath='/sites/hub/SiteAssets/matrix.json'
+        showTitle
+        title='Risikomatrise'
+      />
+    </TelemetryProvider>
   )
 }
 
 describe('RiskMatrix', () => {
+  beforeEach(() => startTestTelemetry())
+
   it('draws the configured matrix with the risks, and shows them after their actions on the switch', async () => {
     const user = userEvent.setup()
     configurationFile.read = () =>
@@ -74,15 +87,43 @@ describe('RiskMatrix', () => {
     expect(before).toHaveStyle({ opacity: '0' })
     expect(after).toHaveStyle({ opacity: '1' })
     expect(screen.getAllByRole('img', { name: '1: Risiko 1' })).toEqual([after])
+    // Each turn of the switch is counted, for the risk matrix web part.
+    expect(countedTelemetry().usage).toEqual({ 'RiskMatrixWebPart postAction.toggled': 1 })
+    await user.click(screen.getByRole('switch'))
+    expect(countedTelemetry().usage).toEqual({ 'RiskMatrixWebPart postAction.toggled': 2 })
+    expect(countedTelemetry().errors).toEqual({})
   })
 
-  it('tells when the configuration cannot be read', async () => {
-    configurationFile.read = () => Promise.reject(new Error('404'))
+  it('counts no switch in the status report, whose web part has no such event', async () => {
+    const user = userEvent.setup()
+    configurationFile.read = () =>
+      Promise.resolve(generateMatrixConfiguration(6, getMatrixHeaders({} as any)))
+    renderMatrix([risk(1, 6, 6, [2, 2])], 'ProjectStatusWebPart')
+    expect(await screen.findByText(strings.MatrixHeader_VeryHigh)).toBeInTheDocument()
+    await user.click(screen.getByRole('switch'))
+    expect(screen.getByText(strings.ToggleUncertaintyPostActionOnText)).toBeInTheDocument()
+    expect(countedTelemetry().usage).toEqual({})
+  })
+
+  it('tells when the configuration cannot be read, and counts it once by its status', async () => {
+    configurationFile.read = () =>
+      Promise.reject(Object.assign(new Error('Filen finnes ikke'), { status: 404 }))
     renderMatrix()
     expect(
       await screen.findByText(strings.ManualConfigurationNotFoundOrInvalid)
     ).toBeInTheDocument()
     await waitFor(() => expect(screen.queryByRole('switch')).toBeNull())
+    expect(countedTelemetry().errors).toEqual({ 'RiskMatrixWebPart not_found 404': 1 })
+  })
+
+  it('counts a configuration that cannot be read in a status report for the status web part', async () => {
+    // A file that is no JSON has no status: the failure is counted as unknown.
+    configurationFile.read = () => Promise.reject(new SyntaxError('Unexpected token < in JSON'))
+    renderMatrix([], 'ProjectStatusWebPart')
+    expect(
+      await screen.findByText(strings.ManualConfigurationNotFoundOrInvalid)
+    ).toBeInTheDocument()
+    expect(countedTelemetry().errors).toEqual({ 'ProjectStatusWebPart unknown': 1 })
   })
 
   it('reads the configuration again when another is chosen, and drops the error', async () => {

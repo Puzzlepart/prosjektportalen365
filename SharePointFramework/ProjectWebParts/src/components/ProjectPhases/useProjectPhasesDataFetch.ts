@@ -6,8 +6,10 @@ import {
   ListLogger,
   ProjectAdminPermission,
   ProjectPhaseModel,
-  DocumentTypeModel
+  DocumentTypeModel,
+  errorWithCause
 } from 'pp365-shared-library/lib/'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { useEffect } from 'react'
 import SPDataAdapter from '../../data'
 import {
@@ -125,20 +127,26 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
       functionName: 'fetchData',
       component: ProjectPhases.displayName
     })
-    throw new Error(strings.ProjectPhasesFetchDataError)
+    // The cause lets the hook count the failure by the status SharePoint answered with.
+    throw errorWithCause(strings.ProjectPhasesFetchDataError, error)
   }
 }
 
 /**
- * Loads phase selector data on mount and dispatches its result or failure.
+ * Loads phase selector data on mount and dispatches its result or failure. A fetch that fails
+ * is counted for usage statistics, by its error code, and shown as before.
  */
 export const useProjectPhasesDataFetch = (
   props: IProjectPhasesProps,
   dispatch: React.Dispatch<UnknownAction>
 ) => {
+  const telemetry = useTelemetry()
   useEffect(() => {
     fetchData(props)
       .then((data) => dispatch(INIT_DATA({ data })))
-      .catch((error) => dispatch(INIT_DATA({ data: null, error })))
+      .catch((error) => {
+        telemetry.trackError(error)
+        dispatch(INIT_DATA({ data: null, error }))
+      })
   }, [])
 }

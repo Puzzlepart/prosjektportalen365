@@ -62,6 +62,11 @@ jest.mock('components/OpportunityMatrix', () => ({
 }))
 
 import { act, waitFor } from '@testing-library/react'
+import {
+  clearTestTelemetry,
+  countedTelemetry,
+  telemetryStore
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import strings from 'ProjectWebPartsStrings'
 import resource from 'SharedResources'
 import OpportunityMatrixWebPart from '../opportunityMatrix'
@@ -112,6 +117,10 @@ async function initWebPart(
       web: { absoluteUrl: SITE, serverRelativeUrl: '/sites/prosjekt', title: 'Prosjekt' },
       legacyPageContext: {}
     },
+    manifest: {
+      alias: WebPart === RiskMatrixWebPart ? 'RiskMatrixWebPart' : 'OpportunityMatrixWebPart',
+      version: '1.15.0'
+    },
     statusRenderer: { clearLoadingIndicator: jest.fn() },
     propertyPane: { refresh: jest.fn(), isPropertyPaneOpen: jest.fn(() => true) }
   }
@@ -145,6 +154,7 @@ function changeProperty(webPart: any, property: string, value: any) {
 
 beforeEach(() => {
   jest.clearAllMocks()
+  clearTestTelemetry()
   rendered.props = undefined
   listItems.current = [risk(1), risk(2)]
   searchResults.current = []
@@ -212,18 +222,41 @@ describe('the matrix web parts on a project', () => {
   })
 
   it('show the error, and the matrix again once a change mends it', async () => {
-    list.getItemsByCAMLQuery.mockImplementationOnce(() =>
-      Promise.reject(new Error('Ugyldig spørring'))
-    )
+    // SharePoint answers a query it cannot read with a 400.
+    const invalidQuery = Object.assign(new Error('Ugyldig spørring'), { status: 400 })
+    list.getItemsByCAMLQuery.mockImplementationOnce(() => Promise.reject(invalidQuery))
     const webPart = await initWebPart(RiskMatrixWebPart, { viewXml: '<View>' })
     act(() => {
       webPart.render()
     })
-    expect(webPart.renderError).toHaveBeenCalledWith(new Error('Ugyldig spørring'))
+    expect(webPart.renderError).toHaveBeenCalledWith(invalidQuery)
     expect(rendered.props).toBeUndefined()
+    // The failure is counted once, by the code and status of the error the fetch failed with,
+    // however many times the error is drawn.
+    act(() => {
+      webPart.render()
+    })
+    expect(webPart.renderError).toHaveBeenCalledTimes(2)
+    expect(countedTelemetry().errors).toEqual({ 'RiskMatrixWebPart unknown 400': 1 })
+    expect(JSON.stringify(telemetryStore())).not.toContain('spørring')
     changeProperty(webPart, 'viewXml', CAML)
     await waitFor(() => expect(rendered.props?.items).toHaveLength(2), { timeout: 5000 })
     expect(webPart.clearError).toHaveBeenCalled()
+    expect(countedTelemetry().errors).toEqual({ 'RiskMatrixWebPart unknown 400': 1 })
+  })
+
+  it('count a list the user may not read as denied permission, for the web part it is in', async () => {
+    list.getItemsByCAMLQuery.mockImplementationOnce(() =>
+      Promise.reject(Object.assign(new Error('Ingen tilgang'), { status: 403 }))
+    )
+    const webPart = await initWebPart(OpportunityMatrixWebPart)
+    act(() => {
+      webPart.render()
+    })
+    expect(webPart.renderError).toHaveBeenCalledTimes(1)
+    expect(countedTelemetry().errors).toEqual({
+      'OpportunityMatrixWebPart permission_denied 403': 1
+    })
   })
 
   it('offer the fields of the local list, and their defaults', async () => {

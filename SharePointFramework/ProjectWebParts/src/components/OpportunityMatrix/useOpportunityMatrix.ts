@@ -4,11 +4,13 @@ import { IMatrixCell } from '../DynamicMatrix'
 import { IOpportunityMatrixProps } from './types'
 import { useOpportunityMatrixConfiguration } from './useOpportunityMatrixConfiguration'
 import { useId } from '@fluentui/react-components'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 
 /** Places opportunities at their original and optional post-action coordinates. */
 export function useOpportunityMatrix(props: IOpportunityMatrixProps) {
   const [showPostAction, setShowPostAction] = useState(false)
   const { configuration, error } = useOpportunityMatrixConfiguration(props)
+  const telemetry = useTelemetry()
 
   /**
    * Get the matrix elements for a given cell.
@@ -46,13 +48,24 @@ export function useOpportunityMatrix(props: IOpportunityMatrixProps) {
     return [...elements, ...postActionElements]
   }
 
+  /**
+   * Shows the opportunities where their actions take them, or where they are now, as the switch
+   * says.
+   *
+   * @param checked Whether the switch is on
+   */
+  function onTogglePostAction(checked: boolean) {
+    setShowPostAction(checked)
+    telemetry.track('postAction.toggled')
+  }
+
   const fluentProviderId = useId('fp-opportunity-matrix')
 
   return {
     configuration,
     error,
     getElementsForCell,
-    setShowPostAction,
+    onTogglePostAction,
     showPostAction,
     fluentProviderId
   }

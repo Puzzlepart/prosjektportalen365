@@ -21,6 +21,7 @@ import {
   MessageBarTitle
 } from '@fluentui/react-components'
 import { customLightTheme } from 'pp365-shared-library'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { DynamicListContext } from '../context'
 import { ICustomAction } from '../types'
 import {
@@ -46,6 +47,8 @@ export function useCustomActionDialog() {
   const toasterId = useId('custom-action-toaster')
   const fluentProviderId = useId('fp-custom-action-dialog')
   const { dispatchToast } = useToastController(toasterId)
+  // A custom action that fails is counted once for usage statistics, by its error code.
+  const telemetry = useTelemetry()
 
   const [dialogState, setDialogState] = useState<DialogState>({
     isOpen: false,
@@ -77,7 +80,10 @@ export function useCustomActionDialog() {
           })
 
           if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`)
+            // The status goes on the error too, so usage statistics count the failure by it.
+            throw Object.assign(new Error(`HTTP error! status: ${response.status}`), {
+              status: response.status
+            })
           }
 
           const result = await response.json()
@@ -110,6 +116,7 @@ export function useCustomActionDialog() {
             }
           }
         } catch (error) {
+          telemetry.trackError(error)
           console.error('Error polling for iframe content:', error)
           const errorMessage = isCorsError(error)
             ? strings.DynamicList.CorsError
@@ -134,7 +141,7 @@ export function useCustomActionDialog() {
 
       void poll()
     },
-    [dispatchToast]
+    [dispatchToast, telemetry]
   )
 
   /** Opens a custom action and handles either an immediate iframe result or a polling URL. */
@@ -185,7 +192,10 @@ export function useCustomActionDialog() {
         })
 
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`)
+          // The status goes on the error too, so usage statistics count the failure by it.
+          throw Object.assign(new Error(`HTTP error! status: ${response.status}`), {
+            status: response.status
+          })
         }
 
         const result = await response.json()
@@ -210,6 +220,7 @@ export function useCustomActionDialog() {
           throw new Error(strings.DynamicList.NoIframeContent)
         }
       } catch (error) {
+        telemetry.trackError(error)
         console.error('Error executing dialog action:', error)
         const errorMessage = isCorsError(error)
           ? strings.DynamicList.CorsError
@@ -232,7 +243,7 @@ export function useCustomActionDialog() {
         )
       }
     },
-    [context.state, context.props, pollForIframeContent, dispatchToast]
+    [context.state, context.props, pollForIframeContent, dispatchToast, telemetry]
   )
 
   /** Closes the custom action dialog and clears its result and error state. */
