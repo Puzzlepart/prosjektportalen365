@@ -3,18 +3,7 @@ import { useCatalogContext } from '../context'
 import { packageCardId } from '../PackageCard'
 
 /**
- * State, refs, effects and handlers for {@link PackageDetails} — the detail
- * pane's stateful logic, kept out of the (presentational) component:
- *
- * - broken-thumbnail tracking (reset per package),
- * - the two confirm-dialog flags (reset per package),
- * - focus management: focus the pane when a package is selected, and return
- *   focus to the originating card when the pane closes (collapsed layout),
- * - the tag-filter shortcut.
- *
- * The pure, package-derived render values (badges, meta line, action labels)
- * stay in the component since they're trivial and only valid once a package is
- * selected.
+ * Manages detail-pane focus, image fallback, confirmation dialogs and category shortcuts.
  */
 export function usePackageDetails() {
   const ctx = useCatalogContext()

@@ -107,8 +107,7 @@ export class ProjectExtensionsService {
    * Remove a catalog-installed extension: recycles the Prosjekttillegg library
    * item (and thereby its file). Recycled — not permanently deleted — so an
    * accidental removal can be restored from the site recycle bin. Maloppsett
-   * items whose `GtProjectExtensions` lookup pointed at the item simply lose
-   * that reference.
+   * item references are left to SharePoint's lookup behavior.
    */
   public static async remove(itemId: number): Promise<void> {
     await SPDataAdapter.portalDataService.web.lists
@@ -118,7 +117,7 @@ export class ProjectExtensionsService {
   }
 
   /**
-   * Read all files in the hub Prosjekttillegg library with their `PpPackage`
+   * Read up to 500 items in the hub Prosjekttillegg library with their `PpPackage`
    * stamp (when present). Shared by {@link getCrossReference} and the pre-import
    * compatibility check.
    */

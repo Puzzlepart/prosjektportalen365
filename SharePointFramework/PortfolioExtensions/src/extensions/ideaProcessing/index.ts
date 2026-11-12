@@ -19,6 +19,7 @@ import { isUserAuthorized } from '../../helpers/isUserAuthorized'
 import { themeColor } from 'pp365-shared-library'
 import resource from 'SharedResources'
 
+/** Records configured decisions and comments on selected ideas in the processing list. */
 export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   private _userAuthorized: boolean
   private _openCmd: Command
@@ -106,7 +107,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   }
 
   /**
-   * On ListView state changed, check if the user is authorized to use this command
+   * Loads the list configuration and shows the command for one selected row and an authorized user.
    */
   private _onListViewStateChanged = async (): Promise<void> => {
     const listName = this.context.pageContext.list.title
@@ -128,10 +129,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   }
 
   /**
-   * On submit and rejected
-   *
-   * @param row Selected row
-   * @param comment Comment
+   * Saves the configured rejection decision and comment, then reloads the list.
    */
   private _onSubmitRejected = async (row: RowAccessor, comment: string): Promise<void> => {
     const rowId = row.getValueByName('ID')
@@ -146,10 +144,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   }
 
   /**
-   * On submit and concideration
-   *
-   * @param row Selected row
-   * @param comment Comment
+   * Saves the configured consideration decision and comment, then reloads the list.
    */
   private _onSubmitConsideration = async (row: RowAccessor, comment: string): Promise<void> => {
     const rowId = row.getValueByName('ID')
@@ -165,10 +160,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   }
 
   /**
-   * On submit and approved
-   *
-   * @param row Selected row
-   * @param comment Comment
+   * Saves the configured approval decision and comment, then reloads the list.
    */
   private _onSubmit = async (row: RowAccessor, comment: string): Promise<void> => {
     const rowId = row.getValueByName('ID')
@@ -183,10 +175,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   }
 
   /**
-   * On submit and other
-   *
-   * @param row Selected row
-   * @param comment Comment
+   * Saves the decision for a custom choice and its comment, then reloads the list.
    */
   private _onSubmitOther = async (
     row: RowAccessor,
@@ -205,9 +194,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   }
 
   /**
-   * Returns true if the idea is already recommended
-   *
-   * @param row Selected row
+   * Checks whether the row already has the configured approval decision.
    */
   private _isIdeaRecommended = (row: RowAccessor): boolean => {
     return (

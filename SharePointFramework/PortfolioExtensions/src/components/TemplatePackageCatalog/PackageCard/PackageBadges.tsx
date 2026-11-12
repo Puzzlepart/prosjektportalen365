@@ -99,9 +99,7 @@ const useStyles = makeStyles({
 })
 
 /**
- * Brand tag indicating install status: `Importert` (installed locally) or
- * `Sentral` (added from the cloud). Rendered top-right of the card image and
- * in the details title row.
+ * Shows imported/cloud registration status, or a warning for an unmanaged local extension.
  */
 export const PackageStatusTag: FC<{ packageId: string }> = ({ packageId }) => {
   const styles = useStyles()

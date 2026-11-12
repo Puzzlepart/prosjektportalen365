@@ -7,6 +7,7 @@ import rehypeRaw from 'rehype-raw'
 import styles from './PackageDetails.module.scss'
 import { usePackageHistory } from './usePackageHistory'
 
+/** Optional changelog URL for the selected package's version history. */
 export interface IPackageHistoryProps {
   changelogUrl?: string
 }
@@ -30,6 +31,7 @@ const formatChangelogDate = (raw: string): string => {
   return raw
 }
 
+/** Displays parsed release history, a retry on failure or a fallback changelog link. */
 export const PackageHistory: FC<IPackageHistoryProps> = ({ changelogUrl }) => {
   const { entries, loading, error, retry } = usePackageHistory(changelogUrl)
 

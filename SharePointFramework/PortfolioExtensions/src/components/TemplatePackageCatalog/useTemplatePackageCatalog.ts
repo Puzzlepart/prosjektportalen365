@@ -58,9 +58,7 @@ const normalize = (value: string): string => {
 }
 
 /**
- * Orchestrates the catalog: loads the catalog + Maloppsett cross-reference,
- * derives the filtered/sorted/paginated package list, and exposes the import /
- * publish-central / update-central / remove actions.
+ * Loads catalog and installation matches, filters and sorts packages, and coordinates package actions.
  */
 export function useTemplatePackageCatalog(
   props: ITemplatePackageCatalogProps
@@ -69,11 +67,8 @@ export function useTemplatePackageCatalog(
   // Holds the resolver of the in-flight compatibility-conflict prompt, settled
   // by the CompatibilityDialog via resolveCompatibility().
   const conflictResolver = useRef<(proceed: boolean) => void>()
-  // Bumped by reloadCatalog() to re-run the load effect (degraded-state retry).
   const [reloadToken, setReloadToken] = useState(0)
   const reloadCatalog = () => setReloadToken((token) => token + 1)
-  // Drawer open/close state. close() also notifies the host command set so it
-  // can unmount the catalog.
   const [open, setOpen] = useState(true)
   const close = (): void => {
     setOpen(false)
@@ -123,11 +118,7 @@ export function useTemplatePackageCatalog(
     }
   }, [props.catalogUrl, reloadToken])
 
-  // Hidden packages stay in the catalog feed but are never surfaced in the UI
-  // (list, filters, search, selection) — used to stage not-yet-ready packages.
-  // Debug/QA can surface them via `?showHidden=true` / the PP_SHOW_HIDDEN
-  // session flag (see featureFlags); they then carry a "Skjult" tag.
-  // Memoized so the derived useMemos below get a stable dependency.
+  // Staged packages are excluded from all derived lists unless the debug flag is enabled.
   const showHidden = featureFlags.showHiddenPackages()
   const allPackages = useMemo(
     () => (state.catalog?.packages ?? []).filter((pkg) => showHidden || !pkg.hidden),
@@ -496,7 +487,6 @@ export function useTemplatePackageCatalog(
         packageType: pkg.type,
         previousVersion: ref.installedVersion,
         ppVersion: state.installedVersion,
-        // What kind of registration was removed (Importert vs Sentral).
         detail: { removedType: ref.packageType }
       })
       setState({

@@ -21,20 +21,19 @@ import styles from './Assistant.module.scss'
 import resource from 'SharedResources'
 import { useAssistant } from './useAssistant'
 
+/** Opens the assistant iframe on first use and retains it while the drawer is closed. */
 export const Assistant: FC = () => {
   const context = useContext(FooterContext)
   const fluentProviderId = useId('fp-assistant')
   const isUnavailable = false
   const { open, hasOpened, loading, close, toggle, setDrawerOpen, setLoading } = useAssistant()
-  // The drawer opens from state, with no trigger of Fluent's: the button is where the focus goes
-  // back as it closes (WCAG 2.4.3).
+  // A state-controlled drawer has no Fluent trigger to restore focus to automatically.
   const restoreFocusTarget = useRestoreFocusTarget()
   const isSiteAdmin = context.props.pageContext.legacyPageContext.isSiteAdmin
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>
-        {/* A dialog, named by its title: its role was 'panel', which is no role (WCAG 4.1.2). */}
         <OverlayDrawer
           position='end'
           className={styles.drawer}
@@ -47,9 +46,6 @@ export const Assistant: FC = () => {
               <DrawerHeaderTitle>{strings.AssistantDrawerTitle}</DrawerHeaderTitle>
             </div>
             <Toolbar className={styles.actions}>
-              {/* The settings are a list, so a link, for site admins only: a link cannot be
-                  disabled, and a disabled button said nothing of why. Both are named, where a
-                  title was all (WCAG 4.1.2). */}
               {isSiteAdmin && (
                 <ToolbarButton
                   as='a'

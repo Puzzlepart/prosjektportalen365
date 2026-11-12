@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 /**
- * Component logic hook for the `Assistant` component.
+ * Tracks drawer visibility, first opening and iframe loading without resetting on close.
  */
 export function useAssistant() {
   const [open, setOpen] = useState(false)

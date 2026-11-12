@@ -1,9 +1,11 @@
 import { Version } from '@microsoft/sp-core-library'
 
+/** Public-media base path supplied to the footer custom action. */
 export interface IFooterApplicationCustomizerProperties {
   publicMediaBasePath: string
 }
 
+/** Parses an installation log row's date, version and release channel. */
 export class InstallationEntry {
   /**
    * Install date
@@ -11,7 +13,7 @@ export class InstallationEntry {
   public installedDate: Date
 
   /**
-   * Full install version including git hash (format: `v1.2.3-abcdef`)
+   * Stored installation version including the final dot-separated build/hash suffix.
    */
   public fullInstallVersion: string
 
@@ -21,15 +23,10 @@ export class InstallationEntry {
   public installVersion: Version
 
   /**
-   * Install channel (e.g. `dev` or `beta`)
+   * Install channel (e.g. `main` or `test`).
    */
   public installChannel: string
 
-  /**
-   * Creates a new InstallationEntry object from the given entry item
-   *
-   * @param entryItem Item from the installation entry
-   */
   constructor(entryItem: Record<string, any>) {
     this.installedDate = new Date(entryItem.InstallEndTime)
     this.fullInstallVersion = entryItem.InstallVersion
@@ -40,6 +37,7 @@ export class InstallationEntry {
   }
 }
 
+/** GitHub release metadata used by the footer's version comparison and release links. */
 export interface IGitHubRelease {
   url: string
   assets_url: string
@@ -62,6 +60,7 @@ export interface IGitHubRelease {
   discussion_url?: string
 }
 
+/** Downloadable asset metadata returned by the GitHub releases API. */
 export interface IGitHubReleaseAsset {
   url: string
   id: number
@@ -80,6 +79,7 @@ export interface IGitHubReleaseAsset {
   browser_download_url: string
 }
 
+/** Maps a help-list row and optionally loads its external Markdown content. */
 export class HelpContentModel {
   public title: string
   public iconName: string
@@ -105,18 +105,15 @@ export class HelpContentModel {
   }
 
   /**
-   * Checks if the help content matches the specified URL
-   *
-   * @param url Url
+   * Checks whether the decoded URL contains this entry's configured URL fragment.
    */
   public matchPattern(url: string): boolean {
     return decodeURIComponent(url).indexOf(this.urlPattern) !== -1
   }
 
   /**
-   * Fetch external content
-   *
-   * @param publicMediaBasePath Public media base path
+   * Loads external Markdown, removes front matter and resolves relative media links.
+   * Keeps the entry's own help text if fetching or processing fails.
    */
   public async fetchExternalContent(publicMediaBasePath?: string) {
     this._publicMediaBasePath = publicMediaBasePath ?? this._getPublicMediaBasePath()
@@ -131,7 +128,7 @@ export class HelpContentModel {
   }
 
   /**
-   * Get media base path based on `externalUrl
+   * Resolves the external page's sibling media directory.
    */
   private _getPublicMediaBasePath() {
     const externalUrlParts = this.externalUrl.split('/')
@@ -141,8 +138,6 @@ export class HelpContentModel {
   /**
    * Points the relative media links (`./media/...`) at the public media base path. Each link ends
    * at its own closing parenthesis, so two images on one line stay two links.
-   *
-   * @param markdownContent Markdown content
    */
   private _fixImageLinks(markdownContent: string) {
     return markdownContent.replace(
@@ -154,8 +149,6 @@ export class HelpContentModel {
   /**
    * Removes the Jekyll front matter, the block between the two `---` lines that opens the file.
    * A `---` further down is a horizontal rule and stays, with everything before it.
-   *
-   * @param md Markdown content
    */
   private _removeJekyllHeader(md: string) {
     return md.replace(/^\s*---\r?\n[\s\S]*?\r?\n---[ \t]*(\r?\n|$)/, '')

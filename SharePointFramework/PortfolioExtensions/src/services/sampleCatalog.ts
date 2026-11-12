@@ -1,10 +1,7 @@
 import { ICatalog } from 'models'
 
 /**
- * Dev/test fixture — a copy of the real `catalog.json` from the
- * `prosjektportalen-hosting` repo (kept schema-valid). Used by
- * {@link CatalogService} when no `catalogUrl` is configured, or as the
- * fallback when the configured catalog can't be fetched (CORS/network).
+ * Bundled sample used when loading the configured or default live catalog fails.
  *
  * Exported as a typed object (rather than a `.json` import) to avoid a
  * dependency on `resolveJsonModule` in the SPFx tsconfig.

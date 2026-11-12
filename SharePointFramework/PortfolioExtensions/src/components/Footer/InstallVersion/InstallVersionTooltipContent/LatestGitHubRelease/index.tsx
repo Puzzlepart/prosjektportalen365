@@ -64,7 +64,6 @@ export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (incomingProps
         </Tooltip>
       </div>
       <span className={styles.latestGitHubReleaseLink} title={strings.LatestGitHubReleaseLinkTitle}>
-        {/* It had no address, so it was a button, and could not be opened where the user wanted. */}
         <Link href={releaseNotesUrl} target='_blank' rel='noopener noreferrer'>
           <b>{strings.LatestGitHubReleaseLinkTitle}</b>
         </Link>

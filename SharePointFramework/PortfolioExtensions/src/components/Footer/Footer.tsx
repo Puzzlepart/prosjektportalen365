@@ -13,6 +13,7 @@ import { IFooterProps } from './types'
 import { useFooter } from './useFooter'
 import { Assistant } from './Assistant'
 
+/** Displays hub navigation, assistant access, installation details and page help. */
 export const Footer: FC<IFooterProps> = (props) => {
   const fluentProviderId = useId('fp-footer')
   const footer = useFooter(props)

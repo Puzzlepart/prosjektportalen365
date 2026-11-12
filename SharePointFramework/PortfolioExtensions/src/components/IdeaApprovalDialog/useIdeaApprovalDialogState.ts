@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { IIdeaApprovalDialogState } from './types'
 
+/** Stores the selected decision and comment, merging partial form updates. */
 export const useIdeaApprovalDialogState = () => {
   const [state, $setState] = useState<IIdeaApprovalDialogState>({
     choice: '',

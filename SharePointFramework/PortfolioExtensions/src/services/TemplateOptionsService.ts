@@ -19,8 +19,8 @@ import { isNewerVersion } from './version'
  * The Maloppsett list (`PROJECT_TEMPLATE_CONFIGURATION`) requires the
  * `GtProjectTemplate` lookup. Imported/central catalog items have no local
  * project template to point at, so they reference this sentinel (the standard
- * template, id 1) and are distinguished by `PpPkgType`. The real linkage is
- * Phase 3 (setup wizard) work.
+ * template, id 1) and are distinguished by `PpPkgType`. Package-specific content
+ * types and phase term sets are stored separately on the Maloppsett item.
  */
 const SENTINEL_PROJECT_TEMPLATE_ID = 1
 
@@ -91,8 +91,8 @@ function centralProperties(
  */
 export class TemplateOptionsService {
   /**
-   * Read all Maloppsett items (from the hub web) with the package fields.
-   * Returns an empty array if the list/fields are not provisioned yet.
+   * Reads up to 500 hub Maloppsett items with their package fields.
+   * Logs read failures and returns an empty array.
    */
   public static async getItems(): Promise<TemplateOptionsItem[]> {
     try {
@@ -197,11 +197,10 @@ export class TemplateOptionsService {
       properties.GtProjectPhaseTermId = options.projectPhaseTermSetId
     }
     if (options.extensionItemIds?.length) {
-      // LookupMulti field — set by the `<InternalName>Id` array of item ids.
+      // SharePoint writes multi-value lookups through the `<InternalName>Id` property.
       properties.GtProjectExtensionsId = options.extensionItemIds
     }
     if (options.listContentItemIds?.length) {
-      // LookupMulti to the Listeinnhold list (StaticName `ListContentConfigLookup`).
       properties.ListContentConfigLookupId = options.listContentItemIds
     }
     if (existingItemId) {

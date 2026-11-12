@@ -6,6 +6,7 @@ import { getTermStore } from 'pp365-shared-library'
 import { SPDataAdapterBase } from 'pp365-shared-library/lib/data'
 import resource from 'SharedResources'
 
+/** Reads installation metadata and checks Term Store reachability for the catalog. */
 class SPDataAdapter extends SPDataAdapterBase {
   /**
    * Read the installed Prosjektportalen version from the latest Installation
@@ -32,19 +33,9 @@ class SPDataAdapter extends SPDataAdapterBase {
   }
 
   /**
-   * Best-effort Term Store reachability check, used to pre-gate the taxonomy
-   * provisioning step in Mode A import and Mode B publish-as-cloud-template.
-   * Returns `true` when the tenant Term Store can be read by the current user.
-   *
-   * This is intentionally a **read** check. A write probe via the REST term
-   * store API (`POST /_api/v2.1/termstore/groups`) is rejected on tenants with
-   * "OAuth only" / app-only enforcement (`403 — OAuth only flow is enabled and
-   * the call has not been issued from an app`) and would give false negatives,
-   * because the actual taxonomy provisioning runs over **JSOM** (a different
-   * auth path that isn't subject to that restriction). True write capability is
-   * therefore enforced by the provisioning step itself: the Taxonomy handler
-   * runs first, so a permission failure fails fast and surfaces as a retryable
-   * install error rather than a partially provisioned package.
+   * Checks Term Store read access before import or cloud-template publishing.
+   * This does not prove write access: REST write probes can fail on OAuth-only
+   * tenants even when the provisioner's JSOM authentication works.
    */
   public async hasTermStorePermission(): Promise<boolean> {
     try {

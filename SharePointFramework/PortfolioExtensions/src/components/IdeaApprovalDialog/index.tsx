@@ -28,6 +28,7 @@ import { IDeaApprovalDialogContext } from './context'
 import { useIdeaApprovalDialogState } from './useIdeaApprovalDialogState'
 import styles from './IdeaApprovalDialog.module.scss'
 
+/** Collects a configured idea decision and a required comment. */
 export const IdeaApprovalDialog: FC<IIdeaApprovalDialogProps> = (props) => {
   const fluentProviderId = useId('fp-approval-dialog')
   const context = useContext(IDeaApprovalDialogContext)
@@ -97,6 +98,7 @@ export const IdeaApprovalDialog: FC<IIdeaApprovalDialogProps> = (props) => {
   )
 }
 
+/** Hosts the recommendation form in an SPFx dialog and exposes its submitted values. */
 export default class RecommendationDialog extends BaseDialog {
   public message: string
   public selectedChoice: string

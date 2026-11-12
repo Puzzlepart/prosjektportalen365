@@ -40,8 +40,8 @@ export interface ICatalogPackage {
   type: PackageType
 
   /**
-   * Fluent UI (v8) icon name shown next to the package title and used as the
-   * Maloppsett item icon on import.
+   * Fluent or legacy UI Fabric icon name, resolved through the shared icon helpers
+   * and stored on the Maloppsett item on import.
    */
   icon?: string
 
@@ -129,8 +129,8 @@ export interface ICatalogPackage {
 
   /**
    * Hidden from the catalog UI when `true` — the package stays in `catalog.json`
-   * but is filtered out of the list, filters and search (used to stage packages
-   * that aren't ready to publish). Absent = visible.
+   * but is filtered out unless the hidden-package debug flag is enabled.
+   * Absent = visible.
    */
   hidden?: boolean
 }

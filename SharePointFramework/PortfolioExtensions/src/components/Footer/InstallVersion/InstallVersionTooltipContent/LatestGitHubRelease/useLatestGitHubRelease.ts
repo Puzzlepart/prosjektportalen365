@@ -5,11 +5,7 @@ import { FooterContext } from '../../../context'
 import { ILatestGitHubReleaseProps } from './types'
 
 /**
- * Component logic hook for the `LatestGitHubRelease` component.
- * Returns the latest GitHub release, latest GitHub version, installed
- * version and version comparison icon props.
- *
- * @param props Props for the `LatestGitHubRelease` component
+ * Compares the first GitHub release with the installed version and builds its release links.
  */
 export function useLatestGitHubRelease(props: ILatestGitHubReleaseProps) {
   const context = useContext(FooterContext)
@@ -17,11 +13,6 @@ export function useLatestGitHubRelease(props: ILatestGitHubReleaseProps) {
   const latestGitHubVersion = Version.parse(latestGitHubRelease.tag_name.substring(1))
   const installedVersion = context.props.installEntries[0].installVersion
 
-  /**
-   * Get icon props based on the comparison between the latest GitHub version and the installed version.
-   *
-   * @returns Icon props based on the comparison between the latest GitHub version and the installed version
-   */
   const getVersionComparisonIconProps = () => {
     if (latestGitHubVersion.greaterThan(installedVersion)) {
       return {

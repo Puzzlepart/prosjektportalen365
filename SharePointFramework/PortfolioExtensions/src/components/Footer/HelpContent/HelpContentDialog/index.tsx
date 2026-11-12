@@ -24,6 +24,7 @@ import { Content } from './Content'
 import { customLightTheme, getFluentIcon } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
 
+/** Loads page help on opening and presents entries as tabs in a dialog. */
 export const HelpContentDialog: FC<Omit<DialogProps, 'children'> & { children?: ReactNode }> = (
   props
 ) => {
@@ -54,7 +55,6 @@ export const HelpContentDialog: FC<Omit<DialogProps, 'children'> & { children?: 
           <DialogTrigger disableButtonEnhancement>{props.children as ReactElement}</DialogTrigger>
           <DialogSurface>
             <DialogBody>
-              {/* The dialog's name, with a button that closes it; it had neither (WCAG 4.1.2). */}
               <DialogTitle
                 action={
                   <DialogTrigger action='close'>

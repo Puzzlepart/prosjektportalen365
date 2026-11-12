@@ -42,10 +42,12 @@ const ICONS: Record<ContentIconName, JSX.Element> = {
   files: <Document20Regular />
 }
 
+/** Package whose provisioning contents are summarized. */
 export interface IPackageContentSummaryProps {
   package: ICatalogPackage
 }
 
+/** Displays package content counts and an expandable hierarchy with file previews. */
 export const PackageContentSummary: FC<IPackageContentSummaryProps> = ({ package: pkg }) => {
   const {
     contents,

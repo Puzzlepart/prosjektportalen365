@@ -18,6 +18,7 @@ import { IDeaDialogContext } from './context'
 import { customLightTheme, format, renderReact, unmountReact } from 'pp365-shared-library'
 import styles from './IdeaDialog.module.scss'
 
+/** Confirms project-data creation only for approved ideas without an existing link. */
 export const IdeaDialog: FC<IIdeaDialogProps> = (props) => {
   const fluentProviderId = useId('fp-idea-dialog')
   const context = useContext(IDeaDialogContext)
@@ -66,6 +67,7 @@ export const IdeaDialog: FC<IIdeaDialogProps> = (props) => {
   )
 }
 
+/** Hosts project-data confirmation in an SPFx dialog with a replaceable submit callback. */
 export default class ProjectDataDialog extends BaseDialog {
   public ideaTitle: string
   public dialogMessage: string

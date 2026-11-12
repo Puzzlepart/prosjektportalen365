@@ -2,16 +2,15 @@ import { useEffect, useState } from 'react'
 import { ICatalogPackage, IPackageContents } from 'models'
 import { CatalogService } from 'services'
 
+/** Optional title and raw URL identifying the file-preview dialog's current target. */
 export interface IFilePreviewTarget {
   title?: string
   url?: string
 }
 
 /**
- * Fetches a package's content summary/hierarchy for
- * {@link PackageContentSummary} and owns the show-details toggle and the
- * file-preview target. Re-fetches when the package changes or `retry()` is
- * called; distinguishes "no content" (empty) from a fetch failure (`error`).
+ * Loads package contents through the service cache and manages hierarchy expansion and file preview.
+ * Failed requests can be retried separately from an empty content result.
  */
 export function usePackageContentSummary(pkg: ICatalogPackage) {
   const [contents, setContents] = useState<IPackageContents | undefined>(undefined)

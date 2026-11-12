@@ -4,11 +4,7 @@ import { useContext, useEffect, useState } from 'react'
 import { FooterContext } from '../context'
 
 /**
- * Logic of the useful links menu: it loads the links the first time it opens, and moves the
- * focus to the first of them once they are there. The menu opens on a spinner, with nothing in
- * it to take the focus, so the focus stayed on the button, outside the menu: the arrow keys did
- * not reach the links, and Escape left the menu open (WCAG 2.1.1). The button's tooltip stays
- * hidden while the menu is open, where it took the first Escape (`useMenuTriggerTooltip`).
+ * Lazily loads useful links and manages menu focus and the trigger tooltip.
  */
 export function usePromotedLinks() {
   const context = useContext(FooterContext)
@@ -24,6 +20,7 @@ export function usePromotedLinks() {
   }
 
   useEffect(() => {
+    // The loading spinner cannot receive focus; move into the menu once its links arrive.
     if (!open || !isLoaded) return
     const popover = document.getElementById(popoverId)
     if (!popover || popover.contains(document.activeElement)) return

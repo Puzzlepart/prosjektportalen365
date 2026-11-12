@@ -14,6 +14,7 @@ import {
 import { getFluentIcon, customLightTheme } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
 
+/** Shows the installed version and opens installation details with release information. */
 export const InstallVersion: FC = () => {
   const context = useContext(FooterContext)
   const fluentProviderId = useId('fp-footer-install-version')

@@ -1,5 +1,6 @@
 import resource from 'SharedResources'
 
+/** SharePoint fields storing idea-workflow lists, messages and choice definitions. */
 export class SPIdeaConfigurationItem {
   public Title: string = ''
   public GtDescription: string = null
@@ -12,6 +13,7 @@ export class SPIdeaConfigurationItem {
   }
 }
 
+/** Parses the idea configuration's JSON messages and choices for the dialogs. */
 export class IdeaConfigurationModel {
   public title: string
   public description: { registration: string; processing: string; projectData: string }
@@ -20,11 +22,6 @@ export class IdeaConfigurationModel {
   public processing: { key: string; choice: string; recommendation?: string }[] = []
   public registration: { key: string; choice: string; recommendation?: string }[] = []
 
-  /**
-   * Creates a new instance of IdeaConfigurationModel
-   *
-   * @param item SP item
-   */
   constructor(item: SPIdeaConfigurationItem) {
     this.title = item.Title
     // A configuration may leave a text out (one made before `projectData` existed, say); the
@@ -59,6 +56,7 @@ export class IdeaConfigurationModel {
   }
 }
 
+/** Decision values shared by the idea registration and processing flows. */
 export enum Choice {
   Approve = 'approve',
   Consideration = 'consideration',

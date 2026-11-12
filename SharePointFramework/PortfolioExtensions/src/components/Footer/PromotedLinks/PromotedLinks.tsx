@@ -17,6 +17,7 @@ import { getFluentIcon, customLightTheme } from 'pp365-shared-library'
 import resource from 'SharedResources'
 import { usePromotedLinks } from './usePromotedLinks'
 
+/** Displays useful hub links, hiding administrator-only entries from other users. */
 export const PromotedLinks: FC = () => {
   const { context, fluentProviderId, popoverId, open, onOpenChange, isLoaded, tooltip } =
     usePromotedLinks()
@@ -48,7 +49,6 @@ export const PromotedLinks: FC = () => {
                     else return link.Level !== strings.AdministratorLabel
                   })
                   .map((link, idx) => (
-                    // A page elsewhere, so a link (WCAG 4.1.2).
                     <MenuItemLink
                       style={{ maxWidth: 'fit-content', minWidth: '100%' }}
                       key={idx}
@@ -59,7 +59,6 @@ export const PromotedLinks: FC = () => {
                     </MenuItemLink>
                   ))}
                 <MenuDivider />
-                {/* The list the links come from, where the tooltip had it. */}
                 <MenuItemLink
                   icon={getFluentIcon('Edit')}
                   href={`${context.props.portalUrl}/${resource.Lists_Links_Url}/AllItems.aspx`}

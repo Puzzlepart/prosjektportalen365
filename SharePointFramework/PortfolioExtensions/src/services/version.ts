@@ -1,7 +1,6 @@
 /**
- * Minimal semver comparison utility. Compares the numeric `major.minor.patch`
- * core only (pre-release/build metadata is ignored), which is sufficient for
- * the catalog's "update available" and `minPPVersion` checks.
+ * Numeric dotted-version comparison for catalog updates and minimum platform versions.
+ * Pre-release/build suffixes are ignored; additional segments are compared too.
  */
 
 import { Logger, LogLevel } from '@pnp/logging'
@@ -26,7 +25,9 @@ function parse(version: string): number[] {
 }
 
 /**
- * Returns 1 if `a > b`, -1 if `a < b`, 0 if equal.
+ * Compares numeric version segments, treating missing segments as zero.
+ *
+ * @returns 1 when `a` is newer, -1 when older, or 0 when equal.
  */
 export function compareVersions(a: string, b: string): number {
   const pa = parse(a)

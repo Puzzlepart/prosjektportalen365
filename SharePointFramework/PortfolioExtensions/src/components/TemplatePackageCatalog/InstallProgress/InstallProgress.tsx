@@ -113,6 +113,7 @@ function statusLabel(status: InstallStepStatus): string {
   }
 }
 
+/** Displays an import step's status as an icon or running spinner. */
 const StepIcon: FC<{ status: InstallStepStatus }> = ({ status }) => {
   switch (status) {
     case 'running':
@@ -141,6 +142,7 @@ const logLevelIcon = (level: IInstallLogEntry['level']) => {
   }
 }
 
+/** Displays import steps, completion state and grouped provisioning logs. */
 export const InstallProgress: FC = () => {
   const { state, setState, selectedPackage, importPackage } = useCatalogContext()
   const cls = useLogStyles()
@@ -160,7 +162,6 @@ export const InstallProgress: FC = () => {
     rootRef.current?.focus()
   }, [])
 
-  // Each step is told as it starts (WCAG 4.1.3).
   const { announce } = useAnnounce()
   const runningStep = progress?.steps.find((step) => step.status === 'running')?.key
   useEffect(() => {

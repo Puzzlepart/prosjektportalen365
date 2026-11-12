@@ -19,12 +19,14 @@ import { find } from 'underscore'
 import { themeColor } from 'pp365-shared-library'
 import resource from 'SharedResources'
 
+/** Custom-action properties for the idea-to-project-data command. */
 export interface IIdeaProjectDataCommandProperties {
   ideaId: number
 }
 
 const LOG_SOURCE: string = 'IdeaProjectDataCommand'
 
+/** Creates and links project data for an approved idea, then opens the new item's edit form. */
 export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdeaProjectDataCommandProperties> {
   private _userAuthorized: boolean
   private _openCmd: Command
@@ -92,7 +94,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
   }
 
   /**
-   * On ListView state changed, check if the user is authorized to use this command
+   * Loads the list configuration and shows the command for one selected row and an authorized user.
    */
   private _onListViewStateChanged = async (): Promise<void> => {
     Log.info(LOG_SOURCE, 'onListViewStateChanged: ListView state changed')
@@ -121,10 +123,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
   }
 
   /**
-   * On submit fields will be updated,
-   * - Creates a new item to 'ProjectData' list
-   *
-   * @param row Selected row
+   * Starts project-data creation for the selected idea.
    */
   private _onSubmit = async (row: RowAccessor) => {
     const rowId = row.getValueByName('ID')
@@ -133,10 +132,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
   }
 
   /**
-   * Create new item, update selected item and send the user to the edit form for the new item
-   *
-   * @param rowId: ID of the selected row
-   * @param rowTitle: Title of the selected row
+   * Creates project data, links it to the processing row and navigates to its edit form.
    */
   private _redirectNewItem = async (rowId: number, rowTitle: string): Promise<void> => {
     const properties: Record<string, any> = {
@@ -152,10 +148,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
   }
 
   /**
-   * Update item
-   *
-   * @param rowId: ID of the selected row
-   * @param item: Item
+   * Links the processing row to the newly created project-data item's id.
    */
   public _updateItem = async (rowId: number, item: any): Promise<any> => {
     const list = this._sp.web.lists.getByTitle(this._config.processingList)
@@ -167,9 +160,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
   }
 
   /**
-   * Add item
-   *
-   * @param properties Properties
+   * Adds an item to the hub's project-data list.
    */
   public _addItem = async (properties: Record<string, any>): Promise<any> => {
     const list = this._sp.web.lists.getByTitle(resource.Lists_ProjectData_Title)
@@ -179,9 +170,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
   }
 
   /**
-   * Edit form URL with added Source parameter generated from the item ID
-   *
-   * @param item Item
+   * Builds the project-data edit URL with the current page as its return address.
    */
   public editFormUrl = (item: any) => {
     return [

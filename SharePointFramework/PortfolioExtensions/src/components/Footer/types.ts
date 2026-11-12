@@ -1,6 +1,7 @@
 import { HelpContentModel, IGitHubRelease, InstallationEntry } from 'extensions/footer/types'
 import { PageContext } from '@microsoft/sp-page-context'
 
+/** Installation data, lazy loaders and visibility settings for the persistent footer. */
 export interface IFooterProps {
   /**
    * Installation entries from the installation log list
@@ -60,7 +61,7 @@ export interface IFooterProps {
   showFooter: boolean
 
   /**
-   * Whether or not to minimize the footer automtically
+   * Whether to use the footer's minimized layout.
    */
   minimizeFooter: boolean
 

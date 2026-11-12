@@ -6,6 +6,7 @@ import { PackageCard } from '../PackageCard'
 import { useCatalogContext } from '../context'
 import styles from './PackageList.module.scss'
 
+/** Displays every filtered package in the chosen layout, or the appropriate empty state. */
 export const PackageList: FC = () => {
   const { filteredPackages, state, hasActiveFilters, clearFilters } = useCatalogContext()
 
@@ -36,7 +37,6 @@ export const PackageList: FC = () => {
 
   const layoutClass = state.renderMode === 'grid' ? styles.grid : styles.column
 
-  // All matches render at once — the master pane scrolls (no pagination).
   return (
     <div className={styles.list}>
       <div role='list' className={layoutClass}>

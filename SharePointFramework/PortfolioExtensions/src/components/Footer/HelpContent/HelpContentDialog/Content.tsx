@@ -6,8 +6,7 @@ import { Button } from '@fluentui/react-components'
 import { HelpContentModel } from 'extensions/footer/types'
 
 /**
- * One help entry: the panel of its tab (WCAG 1.3.1), its text and, when it has one, a link to
- * more.
+ * Displays one help tab's HTML, optional Markdown and resource link.
  */
 export const Content = React.memo(
   ({ content, tabId }: { content: HelpContentModel; tabId: string }) => (
@@ -19,7 +18,6 @@ export const Content = React.memo(
         </ReactMarkdown>
       )}
       {content.resourceLink && (
-        // A page, so a link, which can be opened where the user wants it (WCAG 4.1.2).
         <Button
           as='a'
           size='medium'

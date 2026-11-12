@@ -1,10 +1,7 @@
 import { SPFI } from '@pnp/sp'
 
 /**
- * Checks if the current user has premisions to access the component
- *
- * @param {SPFI} sp SharePoint Factory Interface
- * @param {string} siteGroup SharePoint Factory Interface
+ * Checks whether the current user's email matches a member of the named SharePoint group.
  */
 export async function isUserAuthorized(
   sp: SPFI,

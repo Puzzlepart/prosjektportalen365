@@ -23,6 +23,7 @@ export interface ITemplatePackageCatalogProps {
   onDismiss: () => void
 }
 
+/** Available catalog ordering modes. */
 export type SortKey = 'newest' | 'name'
 
 /**
@@ -31,6 +32,7 @@ export type SortKey = 'newest' | 'name'
  */
 export type RenderMode = 'grid' | 'list'
 
+/** Filter value that includes every option. */
 export const ALL_FILTER = 'all'
 
 /**
@@ -40,6 +42,7 @@ export const ALL_FILTER = 'all'
  */
 export type StatusFilter = 'all' | 'Importert' | 'Sentral' | 'update'
 
+/** Search, category, language, installation-status and compatibility filters. */
 export interface ICatalogFilters {
   search: string
   type: string
@@ -61,6 +64,7 @@ export interface ICatalogFilters {
   compatibleOnly: boolean
 }
 
+/** Action outcome displayed in the catalog banner, optionally with provisioning errors. */
 export interface ICatalogNotification {
   intent: 'success' | 'warning' | 'error'
   text: string
@@ -71,6 +75,7 @@ export interface ICatalogNotification {
   details?: { label: string; lines: string[] }
 }
 
+/** Catalog data, active filters, selection and pending package operations. */
 export interface ITemplatePackageCatalogState {
   loading: boolean
   degraded: boolean
@@ -112,6 +117,7 @@ export interface ITemplatePackageCatalogState {
   detailOpen: boolean
 }
 
+/** Shared catalog state, derived package lists and package-operation callbacks. */
 export interface ITemplatePackageCatalogContext {
   props: ITemplatePackageCatalogProps
   state: ITemplatePackageCatalogState
@@ -147,7 +153,7 @@ export interface ITemplatePackageCatalogContext {
   /** Set the selected category tags (string[], so it can't go via setFilter). */
   setCategories: (categories: string[]) => void
   clearFilters: () => void
-  /** Re-load the catalog from the network (used by the degraded-state retry). */
+  /** Re-runs catalog loading, using an available cache entry before network revalidation. */
   reloadCatalog: () => void
   setSort: (sort: SortKey) => void
   setRenderMode: (renderMode: RenderMode) => void

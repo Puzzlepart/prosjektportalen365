@@ -6,12 +6,7 @@ import { ICatalogPackage } from 'models'
 import { useCatalogContext } from '../context'
 
 /**
- * Logic for a single {@link PackageCard}: selection state, the lazy image-error
- * fallback, the formatted meta line (version • published date), and the
- * click/keyboard activation handlers. Keeps PackageCard.tsx purely
- * presentational.
- *
- * @param pkg The package the card represents
+ * Derives card selection, image fallback, formatted metadata and activation handlers.
  */
 export function usePackageCard(pkg: ICatalogPackage) {
   const { state, setSelected } = useCatalogContext()

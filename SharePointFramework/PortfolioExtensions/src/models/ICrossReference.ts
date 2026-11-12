@@ -1,12 +1,11 @@
 import { PackageBadge, PpPkgType } from './enums'
 
 /**
- * Result of cross-referencing a catalog package against the Maloppsett list.
- * Produced solely by `TemplateOptionsService` and consumed read-only by the UI.
+ * Installed package match from Maloppsett or the Prosjekttillegg library.
  */
 export interface ICrossReference {
   /**
-   * Id of the matching Maloppsett item.
+   * Id of the matching Maloppsett or Prosjekttillegg item.
    */
   itemId: number
 
@@ -16,7 +15,7 @@ export interface ICrossReference {
   packageType: PpPkgType
 
   /**
-   * Version recorded on the Maloppsett item (`PpPkgVersion`).
+   * Version from `PpPkgVersion` or the extension's `PpPackage` stamp; empty if unknown.
    */
   installedVersion: string
 

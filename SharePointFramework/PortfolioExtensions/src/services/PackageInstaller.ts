@@ -25,7 +25,7 @@ import { isNewerVersion } from './version'
 
 /**
  * Folder (under the hub Template Library) where imported project-level
- * provisioning assets are stored for later use by the setup wizard (Phase 3).
+ * provisioning assets are stored for later use by the setup wizard.
  * Shared constant — the document template selector (ProjectExtensions)
  * excludes this folder from its listing.
  */
@@ -70,8 +70,6 @@ function ensureLogCaptureSubscribed(): void {
  * logs what it could not apply (a site column, a list field, a content type binding, a data
  * row) as an error and goes on, so `applyTemplate` resolves after a partial result. The lines
  * still reach an import's advanced log (`_logCapture`).
- *
- * @param apply - The provisioning to run
  */
 async function collectErrors(apply: () => Promise<unknown>): Promise<string[]> {
   ensureLogCaptureSubscribed()
@@ -85,6 +83,7 @@ async function collectErrors(apply: () => Promise<unknown>): Promise<string[]> {
   return errors
 }
 
+/** Package, host context and progress/conflict callbacks for a local import. */
 export interface IPackageInstallOptions {
   package: ICatalogPackage
   context: ListViewCommandSetContext
@@ -103,6 +102,7 @@ export interface IPackageInstallOptions {
   onConflicts?: (report: ICompatibilityReport) => Promise<boolean>
 }
 
+/** Whether an import completed and which provisioning errors were logged. */
 export interface IPackageImportResult {
   /**
    * `false` when the import stopped before writing to the hub: cancelled at the
@@ -116,6 +116,7 @@ export interface IPackageImportResult {
   errors: string[]
 }
 
+/** Taxonomy opt-out and conflict confirmation for cloud-template hub provisioning. */
 export interface ICloudPublishOptions {
   /**
    * Command-set property gating the taxonomy provisioning step — same opt-out
@@ -131,6 +132,7 @@ export interface ICloudPublishOptions {
   onConflicts?: (report: ICompatibilityReport) => Promise<boolean>
 }
 
+/** Resolved package metadata, completion state and errors from cloud-template provisioning. */
 export interface ICloudPublishResult {
   /** `false` when the admin cancelled at the compatibility prompt — nothing was written. */
   completed: boolean
@@ -168,13 +170,13 @@ export interface ICloudPublishResult {
  * - **Template/content packages**: provision the hub via the same
  *   `sp-js-provisioning` `WebProvisioner.applyTemplate` flow the template dialog
  *   uses, store the project-level assets for the wizard, and write the Maloppsett
- *   item. The taxonomy step runs by default (sp-js-provisioning 1.3.12 ships a
- *   Term Store handler) and can be disabled per environment — see
+ *   item. The provisioner's taxonomy step runs by default and can be disabled per environment — see
  *   {@link featureFlags.enableTaxonomyProvisioning}. The same flag and
  *   Term Store pre-check also gate the taxonomy step of
  *   {@link provisionCloudTemplateHubDependencies} (Mode B publish).
  */
 export class PackageInstaller {
+  /** Imports a package while reporting progress; cancellation and reachability failures return incomplete. */
   public static async runImport(options: IPackageInstallOptions): Promise<IPackageImportResult> {
     const { package: pkg, context, featureFlagProvisioning, existingItemId, onProgress } = options
     const isExtension = pkg.type === 'extension'
@@ -214,7 +216,6 @@ export class PackageInstaller {
       if (status === 'running') progress.currentStep = key
       emit()
     }
-    // Localized advanced-log group name for a curated (non-handler) line.
     const STEP_GROUP: Partial<Record<InstallStepKey, string>> = {
       [InstallStepKey.Download]: strings.CatalogStepDownload,
       [InstallStepKey.ValidateManifest]: strings.CatalogStepValidateManifest,
@@ -226,9 +227,8 @@ export class PackageInstaller {
       [InstallStepKey.StoreProjectTemplate]: strings.CatalogStepStoreProjectTemplate,
       [InstallStepKey.UpdateTemplateOptions]: strings.CatalogStepUpdateTemplateOptions
     }
-    // The group of the most recent log line — the group the UI auto-expands.
+    // Attribute a terminal error to the last active log group.
     let lastGroup: string | undefined
-    // Append a curated advanced-log line, grouped under its install phase.
     const addLog = (
       key: InstallStepKey,
       message: string,
@@ -395,8 +395,6 @@ export class PackageInstaller {
       else if (!enableTaxonomy)
         addLog(InstallStepKey.Taxonomy, strings.CatalogStepSkippedFeatureFlag)
 
-      // Add the template's bundled project extensions to the Prosjekttillegg
-      // library (if any), so they can be linked from the Maloppsett item below.
       let extensionItems: Array<{ extensionId: string; itemId: number; name: string }> = []
       setStatus(InstallStepKey.Extensions, 'running')
       if ((manifest.provisioning?.extensions?.length ?? 0) > 0) {
@@ -573,9 +571,6 @@ export class PackageInstaller {
    * Whether the package's hub template declares taxonomy content (a term group
    * and/or term sets). Used to pre-gate the import and publish flows on
    * term-store permission.
-   *
-   * @param zip - The opened package archive
-   * @param manifest - The package manifest
    */
   private static async _hasTaxonomy(zip: any, manifest: IPackageManifest): Promise<boolean> {
     const hubTemplate = manifest.provisioning?.hubTemplate
@@ -923,9 +918,7 @@ export class PackageInstaller {
   }
 
   /**
-   * Mirrors sp-js-provisioning's own (private, non-exported) OData escaping:
-   * single quotes are doubled. `Title` is package-controlled, so this is
-   * defense-in-depth rather than untrusted-input handling.
+   * Doubles single quotes in package titles embedded in OData string literals.
    */
   private static _escapeOData(value: string): string {
     return value.replace(/'/g, "''")
@@ -956,7 +949,7 @@ export class PackageInstaller {
     try {
       await web.getFolderByServerRelativePath(parentUrl).folders.addUsingPath(name)
     } catch {
-      // Folder already exists.
+      // Best-effort creation: an unusable folder is reported by the subsequent upload.
     }
   }
 }

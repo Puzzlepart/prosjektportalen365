@@ -22,6 +22,7 @@ import _ from 'underscore'
 import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
 import resource from 'SharedResources'
 
+/** Records idea recommendations and copies approved registrations into the processing list. */
 export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any> {
   private _userAuthorized: boolean
   private _openCmd: Command
@@ -147,7 +148,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
   }
 
   /**
-   * On ListView state changed, check if the user is authorized to use this command
+   * Loads the list configuration and shows the command for one selected row and an authorized user.
    */
   private _onListViewStateChanged = async (): Promise<void> => {
     const listName = this.context.pageContext.list.title
@@ -169,10 +170,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
   }
 
   /**
-   * On submit and 'Rejected', fields will be updated
-   *
-   * @param row Selected row
-   * @param comment Comment from the dialog
+   * Saves the configured rejection recommendation and comment, then reloads the list.
    */
   private _onSubmitRejected = async (row: RowAccessor, comment: string): Promise<void> => {
     const rowId = row.getValueByName('ID')
@@ -188,10 +186,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
   }
 
   /**
-   * On submit and 'Consideration', fields will be updated
-   *
-   * @param row Selected row
-   * @param comment Comment from the dialog
+   * Saves the configured consideration recommendation and comment, then reloads the list.
    */
   private _onSubmitConsideration = async (row: RowAccessor, comment: string): Promise<void> => {
     const rowId = row.getValueByName('ID')
@@ -207,12 +202,8 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
   }
 
   /**
-   * On submit and 'Approved', fields will be updated,
-   * - Creates a new item to 'Idebehandling' list
-   * - Creates a sitepage for the registration will be created
-   *
-   * @param row Selected row
-   * @param comment Comment from the dialog
+   * Saves approval and copies configured fields into a new processing item,
+   * linking it to the existing idea-module page with the registration id.
    */
   private _onSubmit = async (row: RowAccessor, comment: string): Promise<void> => {
     const contentColumns = async () => {
@@ -303,10 +294,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
   }
 
   /**
-   * On submit and 'Other', fields will be updated,
-   *
-   * @param row Selected row
-   * @param comment Comment from the dialog
+   * Saves the recommendation for a custom choice and its comment, then reloads the list.
    */
   private _onSubmitOther = async (
     row: RowAccessor,
@@ -328,10 +316,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
   }
 
   /**
-   * Update the work list with selected values of the registration list
-   *
-   * @param rowId Id of the row in the registration list
-   * @param copyData Data to copy from the registration list to processing list
+   * Adds a processing item with copied registration fields and a link to the idea module.
    */
   private _updateProcessingList = async (
     rowId: number,
@@ -346,9 +331,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
   }
 
   /**
-   * Returns true if the idea is already recommended
-   *
-   * @param row Selected row
+   * Checks whether the row already has the configured approval recommendation.
    */
   private _isIdeaRecommended = (row: RowAccessor): boolean => {
     return (

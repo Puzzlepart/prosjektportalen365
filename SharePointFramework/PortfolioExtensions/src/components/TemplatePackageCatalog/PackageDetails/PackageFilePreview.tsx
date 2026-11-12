@@ -43,7 +43,6 @@ const useStyles = makeStyles({
     justifyContent: 'center',
     padding: tokens.spacingVerticalXXL
   },
-  // JSON token colors.
   key: { color: tokens.colorPaletteBlueForeground2 },
   string: { color: tokens.colorPaletteGreenForeground1 },
   number: { color: tokens.colorPalettePurpleForeground2 },
@@ -86,6 +85,7 @@ function highlight(json: string, styles: Styles): React.ReactNode[] {
   return nodes
 }
 
+/** Raw file target and close callback for the preview dialog. */
 export interface IPackageFilePreviewProps {
   /** Title (the hierarchy node label). */
   title?: string

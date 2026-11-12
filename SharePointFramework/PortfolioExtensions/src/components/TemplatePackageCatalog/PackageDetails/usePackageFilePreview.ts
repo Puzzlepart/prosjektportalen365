@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { CatalogService } from 'services'
 
+/** Preview text and whether it can be syntax-highlighted as JSON. */
 export interface IFilePreviewContent {
   value: string
   isJson: boolean

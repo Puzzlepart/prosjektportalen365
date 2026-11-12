@@ -4,12 +4,7 @@ import { PackageListSkeleton } from './PackageList'
 import styles from './TemplatePackageCatalog.module.scss'
 
 /**
- * Full-drawer loading skeleton mirroring the loaded layout's big pieces —
- * the two toolbar rows (search + filter dropdowns, then sort/view controls),
- * the card grid in the master column and the detail pane — so nothing reflows
- * when the catalog arrives. The first package is auto-selected on load, so
- * the detail placeholder sketches a package view (thumbnail, title, meta,
- * description, action buttons); it is hidden on mobile like the real pane.
+ * Reserves the catalog toolbar, card grid and desktop detail-pane layout while data loads.
  */
 export const CatalogSkeleton: FC = () => (
   <>

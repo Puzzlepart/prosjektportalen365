@@ -20,10 +20,8 @@ function readSessionFlag(key: string): boolean {
 export const featureFlags = {
   /**
    * Whether the taxonomy/Term Store provisioning step runs during Mode A
-   * import and Mode B publish-as-cloud-template. On by default —
-   * `sp-js-provisioning` 1.3.12 ships a Term Store handler (registered in its
-   * `DefaultHandlerMap`), so packages that bundle term sets provision them as
-   * part of `applyTemplate`. Opt out per environment by setting the
+   * import and Mode B publish-as-cloud-template. On by default: the provisioner's
+   * Taxonomy handler applies bundled term sets. Opt out per environment by setting the
    * command-set property `featureFlagProvisioning` to `false`, or in-session
    * via the `PP_DISABLE_TAXONOMY` flag.
    */
@@ -42,10 +40,8 @@ export const featureFlags = {
   },
 
   /**
-   * Whether catalog install-telemetry events are sent (see `TelemetryService`).
-   * On by default; set the `PP_DISABLE_TELEMETRY` session flag to disable
-   * in-session, or set the command-set property `telemetryUrl` to an empty
-   * string to disable for the whole installation.
+   * Checks the session-level telemetry opt-out. The endpoint property and the
+   * installation-wide setting are checked separately by `TelemetryService`.
    */
   isTelemetryEnabled(): boolean {
     return !readSessionFlag(SS_DISABLE_TELEMETRY)

@@ -28,6 +28,7 @@ const useHiddenOverlayStyles = makeStyles({
   }
 })
 
+/** Catalog package represented by a selectable card. */
 export interface IPackageCardProps {
   package: ICatalogPackage
 }

@@ -74,8 +74,6 @@ export class CompatibilityService {
    * its internal name (list fields by their id), never deleted; a widening type
    * change is applied, any other type change leaves it as it is.
    *
-   * @param zip - The opened package archive
-   * @param manifest - The package manifest
    * @param featureFlagProvisioning - Taxonomy feature-flag opt-out (see `featureFlags`)
    * @param options - `schema` overrides the hub schema read from the zip — the
    * publish flow passes its already-filtered subset so only entries that will
@@ -407,11 +405,11 @@ export class CompatibilityService {
             })
           }
         } catch {
-          // Term set not found (will be created) — no conflict.
+          // A failed read cannot establish a conflict; provisioning still attempts the term set.
         }
       }
     } catch {
-      // No term store permission — taxonomy is feature-flag-gated anyway.
+      // The compatibility scan is best-effort when the Term Store cannot be queried.
     }
   }
 

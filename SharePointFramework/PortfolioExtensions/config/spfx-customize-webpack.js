@@ -1,39 +1,11 @@
 'use strict'
 
 /**
- * SPFx / Heft webpack customization for this solution.
- *
- * Invoked by the rig task `customize-configure-webpack`
- * (@microsoft/spfx-heft-plugins -> customize-spfx-webpack-configuration-plugin),
- * which taps `onConfigure` at stage Number.MAX_SAFE_INTEGER, i.e. after
- * `third-party-externals-configure-webpack` has appended its externals.
- * The return value is ignored - mutate `webpackConfig` in place.
- *
- * Two responsibilities:
- *
- *  1. Rebuild `resolve.alias` from this solution's tsconfig `compilerOptions.paths`,
- *     pointing at the compiled output folder (`lib`), exactly as the old
- *     gulpfile `build.configureWebpack.mergeConfig({ additionalConfiguration })`
- *     block did.
- *
- *  2. Decision A - keep the linked Rush workspace packages BUNDLED into this
- *     solution's bundles instead of letting Heft turn them into runtime SPFx
- *     component dependencies.
- *
- *     Heft externalizes a linked package when `CumulativeManifestProcessor`
- *     manages to attach a `packageName` to its discovered manifests, which it
- *     only does when the dependency's `dist` folder yields a single component
- *     (or a component plus its assembly). `pp365-shared-library` is exactly
- *     that case after a clean build. `ManifestPlugin` then emits a
- *     `type: "component"` entry in `loaderConfig.scriptResources` - but ONLY
- *     for requests webpack actually turned into an `ExternalModule`. Dropping
- *     the name from `webpackConfig.externals` therefore bundles the code and
- *     removes the runtime component dependency in one move; `linkedExternals`
- *     on its own never emits anything.
- *
- * This file is identical in all six SharePointFramework solutions: the alias
- * block derives everything from the sibling `tsconfig.json` at runtime, and the
- * externals filter is a no-op for names that are not present.
+ * Adjusts Heft's webpack configuration in place: resolves compiled-path aliases,
+ * bundles linked workspace packages, handles third-party CSS and Node globals,
+ * and uses page reloads rather than HMR.
+ * The rig invokes this hook after its third-party externals configuration;
+ * returning a replacement configuration has no effect.
  */
 
 const fs = require('fs')
@@ -217,10 +189,6 @@ function keepLinkedPackagesBundled(webpackConfig, log) {
 }
 
 /**
- * @param {import('webpack').Configuration} webpackConfig
- * @param {{ logger: { terminal: { writeVerboseLine: (message: string) => void } } }} taskSession
- */
-/**
  * Plain stylesheets imported from node_modules are global CSS, not CSS modules.
  *
  * The rig routes every `.css` file that is not named `*.global.css` through the CSS-modules loader
@@ -311,6 +279,12 @@ function reloadPageOnRebuild(webpackConfig, log) {
   log('dev server: hot module replacement off, the page reloads after each rebuild')
 }
 
+/**
+ * Applies the solution's overrides to each configuration supplied by Heft.
+ *
+ * @param {import('webpack').Configuration | import('webpack').Configuration[]} webpackConfig Mutated in place.
+ * @param {{ logger: { terminal: { writeVerboseLine: (message: string) => void } } }} taskSession Heft logging session.
+ */
 module.exports = function customizeWebpackConfiguration(webpackConfig, taskSession, heftConfiguration, webpack) {
   const log = (message) => {
     try {

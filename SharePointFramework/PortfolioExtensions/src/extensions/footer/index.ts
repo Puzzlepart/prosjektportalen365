@@ -23,6 +23,7 @@ import {
 import { PlaceholderTrace, tracePlaceholders } from './placeholderTrace'
 import strings from 'PortfolioExtensionsStrings'
 
+/** Mounts one persistent footer and refreshes page-dependent props on navigation. */
 export default class FooterApplicationCustomizer extends BaseApplicationCustomizer<IFooterApplicationCustomizerProperties> {
   private _bottomPlaceholder: PlaceholderContent
   private _footerElement: HTMLDivElement
@@ -129,7 +130,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
    * configured access mode (`AssistantAccessMode` global setting).
    *
    * Modes:
-   * - `group` (default): Check membership in the assistant users group (hub-level)
+   * - `group` (default): Check visibility of the assistant group's membership on the hub
    * - `role`: Check project admin roles on project sites, group check on hub
    * - `both`: User must pass both group AND role check on project sites
    */
@@ -152,11 +153,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   }
 
   /**
-   * Fetch the installation logs from the installation log list. Converts
-   * the item properties to match the `IInstallationEntry` interface.
-   *
-   * @param orderBy Property to order by
-   * @param orderAscending Order ascending or descending
+   * Reads at most one installation entry, newest by start time unless ordering is overridden.
    */
   private async _fetchInstallationLogs(
     orderBy = 'InstallStartTime',
@@ -334,7 +331,6 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
         hubProjects.map((p: { GtSiteUrl: string }) => p.GtSiteUrl?.toLowerCase()).filter(Boolean)
       )
 
-      // Filter followed sites to only those that exist in the hub's projects list
       const projects = followedSites
         .filter((site: any) => {
           const url = (site.Uri || site.Url || '').toLowerCase()
@@ -382,8 +378,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   }
 
   /**
-   * Unmounts the footer when SharePoint disposes its placeholder; the next navigation creates a
-   * new placeholder and renders the footer in it.
+   * Unmounts the disposed footer so the next render can acquire a fresh placeholder.
    */
   protected _onDispose(): void {
     if (this._footerElement) unmountReact(this._footerElement)

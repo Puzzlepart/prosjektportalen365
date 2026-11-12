@@ -28,8 +28,10 @@ const ERROR_MESSAGE_MAX_LENGTH = 500
 
 const REQUEST_TIMEOUT_MS = 10000
 
+/** Catalog operations recorded by install telemetry. */
 export type TelemetryAction = 'install' | 'update' | 'remove' | 'publishCentral'
 
+/** Package action and outcome sent to the catalog telemetry endpoint. */
 export interface ITelemetryEvent {
   action: TelemetryAction
   status: 'success' | 'error'
@@ -56,20 +58,13 @@ export interface ITelemetryEvent {
 }
 
 /**
- * Fire-and-forget install-telemetry for the template catalog: one POST per
- * completed (or failed) catalog action to the prosjektportalen-assist
- * ingestion endpoint, so Puzzlepart can see what is installed and used.
- *
- * Guarantees:
- * - Never blocks or fails the calling flow — callers `void` the promise and
- *   every failure (network, CORS, timeout) is swallowed with an Info log.
- * - No retry: a lost event is acceptable, duplicate spam is not. The client
- *   still generates an `eventId` GUID so the server can dedupe replays.
- * - Sends tenant host + hub site URL + AAD tenant id (deliberate, documented
- *   in the extension README). Opt out via the `telemetryUrl: ""` property or
- *   the `PP_DISABLE_TELEMETRY` session flag.
+ * Sends best-effort catalog-action telemetry without retries or HTTP status checks.
+ * Includes tenant host, hub URL and AAD tenant id; respects the endpoint, session
+ * and installation-wide opt-outs. Callers need not await it, and rejected requests
+ * are logged without failing their package action.
  */
 export class TelemetryService {
+  /** Sends one event when telemetry is enabled; logs failures without rejecting. */
   public static async track(
     props: { context: ListViewCommandSetContext; telemetryUrl?: string },
     event: ITelemetryEvent

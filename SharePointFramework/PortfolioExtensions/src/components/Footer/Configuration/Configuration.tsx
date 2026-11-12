@@ -11,6 +11,7 @@ import {
 import { getFluentIcon, customLightTheme } from 'pp365-shared-library'
 import resource from 'SharedResources'
 
+/** Links site administrators to the hub configuration page. */
 export const Configuration: FC = () => {
   const context = useContext(FooterContext)
   const fluentProviderId = useId('fp-footer-configuration')
@@ -21,7 +22,6 @@ export const Configuration: FC = () => {
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>
         <Tooltip relationship='description' withArrow content={strings.ConfigurationDescription}>
-          {/* A page, so a link, which can be opened where the user wants it (WCAG 4.1.2). */}
           <Button
             as='a'
             size='small'

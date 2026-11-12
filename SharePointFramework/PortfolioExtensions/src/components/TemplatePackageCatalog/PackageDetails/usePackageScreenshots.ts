@@ -12,7 +12,6 @@ export function usePackageScreenshots(screenshots?: string[]) {
 
   const count = screenshots?.length ?? 0
 
-  // Reset to the first image (and clear errors) when the package changes.
   useEffect(() => {
     setIndex(0)
     setErrored({})

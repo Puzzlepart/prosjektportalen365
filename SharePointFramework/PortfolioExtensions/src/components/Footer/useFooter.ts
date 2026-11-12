@@ -26,8 +26,7 @@ function useLazyData<T>(loader: () => Promise<T>, initialData: T, resetKey?: str
     []
   )
 
-  // The footer stays mounted across SharePoint's client-side navigations (it was mounted anew on
-  // each one until 1.15), so data that belongs to the page has to start over when the page does.
+  // The footer stays mounted across client-side navigation, so page-specific data must reset.
   // No dependency list: it runs after every render and returns at once unless the key changed.
   useEffect(() => {
     if (lastResetKey.current === resetKey) return
@@ -68,11 +67,7 @@ function useLazyData<T>(loader: () => Promise<T>, initialData: T, resetKey?: str
 }
 
 /**
- * Component logic hook for the `Footer` component. Returns the latest entry
- * from the `entries` prop (which is sorted by `InstallStartTime`) and
- * the installed version string.
- *
- * @param props Props for the `Footer` component
+ * Formats the first installation entry and lazily loads the footer's menus and help.
  */
 export function useFooter(props: IFooterProps) {
   const latestEntry = props.installEntries[0]

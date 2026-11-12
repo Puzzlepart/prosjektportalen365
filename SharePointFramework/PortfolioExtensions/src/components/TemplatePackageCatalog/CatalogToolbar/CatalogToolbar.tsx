@@ -18,6 +18,7 @@ import { ALL_FILTER, SortKey } from '../types'
 import styles from './CatalogToolbar.module.scss'
 import { format, getSearchBoxDismissProps } from 'pp365-shared-library'
 
+/** Provides debounced search, package filters, sorting and list/grid selection. */
 export const CatalogToolbar: FC = () => {
   const {
     state,

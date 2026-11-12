@@ -16,8 +16,7 @@ import {
 import resource from 'SharedResources'
 
 /**
- * Component for displaying information about the latest installation
- * of Prosjektportalen 365.
+ * Displays the latest installation entry and the latest available GitHub release.
  */
 export const InstallVersionTooltipContent: FC = () => {
   const context = useContext(FooterContext)
@@ -54,7 +53,6 @@ export const InstallVersionTooltipContent: FC = () => {
           )}
           <Divider className={styles.divider} />
           <div className={styles.footer}>
-            {/* A list, so a link (WCAG 4.1.2). */}
             <Button
               as='a'
               className={styles.button}

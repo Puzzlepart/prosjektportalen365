@@ -33,6 +33,7 @@ import { PackageScreenshots } from './PackageScreenshots'
 import styles from './PackageDetails.module.scss'
 import { usePackageDetails } from './usePackageDetails'
 
+/** Displays selected package metadata, contents and registration-specific actions. */
 export const PackageDetails: FC = () => {
   const {
     state,

@@ -46,8 +46,7 @@ export interface ICatalogResult {
 }
 
 /**
- * Loads and caches the central package catalog (`catalog.json`) and parses
- * package changelogs. Stateless — all data comes from `window.fetch`.
+ * Loads catalog and package resources, using browser storage and in-memory promise caches.
  */
 export class CatalogService {
   /**
@@ -104,10 +103,8 @@ export class CatalogService {
    * Fetch and parse a package `CHANGELOG.md` into version entries (newest
    * first, as written).
    *
-   * Returns an empty array when no `changelogUrl` is given or the file isn't
-   * found (e.g. HTTP 404 — the package simply has no published changelog).
-   * **Throws** on network/timeout failure so the caller can show a retryable
-   * error instead of an indistinguishable "no history" state.
+   * Returns an empty array without a URL or for any non-success HTTP response.
+   * Rejects on network/timeout or response-reading failures.
    */
   public static getChangelog(changelogUrl?: string): Promise<IChangelogEntry[]> {
     if (!changelogUrl) return Promise.resolve([])
@@ -300,7 +297,6 @@ export class CatalogService {
     const summary: IPackageContentSummaryEntry[] = []
     const hierarchy: IHierarchyNode[] = []
 
-    // Standard content (one entry per content item, with element counts).
     const contentChildren: IHierarchyNode[] = []
     contentItems.forEach((item, index) => {
       const data = contentData[index]
@@ -430,13 +426,11 @@ export class CatalogService {
             section.key === 'site-fields'
               ? CatalogService._fieldLabel(entry)
               : CatalogService._entryLabel(entry, section.labelKeys),
-          // Extension entries map to a single JSON file — expose it for preview.
           fileUrl: section.key === 'extensions' && entry?.file ? baseUrl + entry.file : undefined
         }))
       })
     }
 
-    // Taxonomy (term sets → terms).
     const termSets = CatalogService._asArray(hub?.Taxonomy?.TermSets)
     if (termSets.length > 0) {
       summary.push({

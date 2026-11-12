@@ -11,6 +11,7 @@ import {
 } from '@fluentui/react-components'
 import { getFluentIcon, customLightTheme } from 'pp365-shared-library'
 
+/** Opens page help and explains when no help entries are available. */
 export const HelpContent: FC = () => {
   const context = useContext(FooterContext)
   const fluentProviderId = useId('fp-footer-help-content')

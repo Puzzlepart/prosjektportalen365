@@ -26,6 +26,7 @@ import styles from './TemplatePackageCatalog.module.scss'
 import { ITemplatePackageCatalogProps } from './types'
 import { useTemplatePackageCatalog } from './useTemplatePackageCatalog'
 
+/** Hosts package browsing, details, import progress and compatibility confirmation in a drawer. */
 export const TemplatePackageCatalog: FC<ITemplatePackageCatalogProps> = (props) => {
   const fluentProviderId = useId('fp-template-package-catalog')
   const ctx = useTemplatePackageCatalog(props)

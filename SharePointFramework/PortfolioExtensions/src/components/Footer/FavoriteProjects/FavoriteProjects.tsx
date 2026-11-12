@@ -16,6 +16,7 @@ import {
 } from '@fluentui/react-components'
 import { getFluentIcon, customLightTheme, WebPartTitle } from 'pp365-shared-library'
 
+/** Lazily displays the current user's followed sites in a footer popover. */
 export const FavoriteProjects: FC = () => {
   const context = useContext(FooterContext)
   const fluentProviderId = useId('fp-footer-favorite-projects')

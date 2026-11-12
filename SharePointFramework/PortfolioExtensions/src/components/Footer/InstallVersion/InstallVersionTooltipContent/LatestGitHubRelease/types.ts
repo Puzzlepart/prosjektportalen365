@@ -1,3 +1,4 @@
+/** Icons and colors for comparing the latest GitHub release with the installed version. */
 export interface ILatestGitHubReleaseProps {
   latestGitHubReleaseIsNewerIconName?: string
   latestGitHubReleaseIsNewerIconColor?: string

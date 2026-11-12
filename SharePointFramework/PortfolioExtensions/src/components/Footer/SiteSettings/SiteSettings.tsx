@@ -17,10 +17,7 @@ import {
 import { getFluentIcon, customLightTheme } from 'pp365-shared-library'
 
 /**
- * The hub's site settings for site admins: a link to the settings, and a menu with a link to the
- * site contents. The settings and the site contents are pages, so links that can be opened where
- * the user wants them, and the menu button is named for itself: without a name of its own, Fluent
- * names it by the settings link (WCAG 4.1.2, 2.4.4).
+ * Links hub site administrators to site settings and site contents.
  */
 export const SiteSettings: FC = () => {
   const context = useContext(FooterContext)

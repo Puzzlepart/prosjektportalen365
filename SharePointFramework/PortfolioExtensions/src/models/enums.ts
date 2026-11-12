@@ -13,13 +13,12 @@ export enum PpPkgType {
 }
 
 /**
- * Badge derived for a catalog package by cross-referencing it against the
- * Maloppsett items.
+ * Badge derived from a catalog package's Maloppsett or Prosjekttillegg match.
  */
 export enum PackageBadge {
-  /** No matching Maloppsett item. */
+  /** No installed package match. */
   None = 'none',
-  /** Matching `Importert` item, same version. */
+  /** Imported package without a known newer catalog version, including unmanaged extensions. */
   Installed = 'installed',
   /** Matching `Sentral` item. */
   Central = 'central',
@@ -28,8 +27,7 @@ export enum PackageBadge {
 }
 
 /**
- * Ordered steps of the Mode A import pipeline. The UI maps each key to a
- * localized label (see {@link InstallProgress}).
+ * Available import-step identifiers; `PackageInstaller` selects and orders the steps.
  */
 export enum InstallStepKey {
   Download = 'download',

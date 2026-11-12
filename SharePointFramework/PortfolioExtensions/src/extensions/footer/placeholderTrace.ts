@@ -35,19 +35,10 @@ function placeholderNames(context: ApplicationCustomizerContext): string[] {
 }
 
 /**
- * Traces what SharePoint tells the footer about its placeholders, for SharePoint/sp-dev-docs#11070:
- * on some loads of a list page SharePoint never defines them. Started on the first line of
- * `onInit`, before the footer's own set-up and before React, it logs the placeholder names and
- * whether SharePoint's bottom placeholder element is in the page: as it starts, on every change
- * of the placeholders and every navigation, and at each step the footer reports, with the
- * milliseconds since the page began to load. Both events are sticky in SPFx: one SharePoint raised
- * before the trace started is replayed as the trace subscribes, right after its first line. Off
- * unless `PLACEHOLDER_TRACE_KEY` is set, and then it subscribes to nothing and its trace writes
- * nothing.
+ * Logs placeholder availability and navigation timing for SharePoint/sp-dev-docs#11070.
+ * Subscribes only when tracing is enabled; otherwise returns a no-op writer.
  *
  * @param observer The customizer, which SPFx's events take as the observer of a handler
- * @param context The customizer's context
- * @returns The function that writes a step of the trace
  */
 export function tracePlaceholders(
   observer: ISPEventObserver,
