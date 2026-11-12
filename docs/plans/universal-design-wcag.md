@@ -1649,3 +1649,21 @@ itself as `observer` to `add()` is disposed, as the footer does.
 - **Left.** PnP's taxonomy picker's «Tag» button has no name (PnP's; axe's `button-name` in
   `EditPropertiesPanel`). The news dialog's preview button is still `disabled` until a template is
   chosen. Hear the round in a screen reader.
+
+### Hand round 2: the status page (2026-11-12)
+
+- **Found** (Chrome, a real window at 640 px and a frame of the page from 320 to 1280 px). The
+  toolbar kept to one line down to 480 px, so from 481 to about 1024 px the report selector and
+  «Slett» went past the web part's edge, where SharePoint cut them off; under 480 px it wrapped,
+  but `.commandBar` kept its 42 px, and the second row lay under the pinned tabs and the summary.
+  The summary kept the status beside the project information down to 480 px: its columns were
+  124 px at 640 px and 54 px at 500 px, the words broken letter by letter (1.4.10, 2.4.11).
+- **Done.** A `Toolbar` with no search box and no shrinkable selector wraps as soon as its buttons
+  do not fit (`Toolbar.module.scss`); the list toolbars keep their order of giving way. The
+  command bar has a least height, not a fixed one. The summary wraps: the status goes under the
+  project information when it would get less than 400 px beside it, and under 480 px each status
+  takes a line. Measured with the CSS injected into the test hub's page: nothing past the edge or
+  under the tabs from 320 to 1280 px, the columns at least 182 px. `tests/smoke/project.spec.ts`
+  holds the status page to that at seven widths; the visual test measured 320 px only.
+- **Left.** The other toolbars that now wrap (the timelines, the idea module, the program
+  administration) were not looked at by hand at those widths.

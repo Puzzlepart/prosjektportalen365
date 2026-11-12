@@ -104,6 +104,62 @@ test.describe('project site', () => {
     await expect(page.locator('[data-sp-web-part-id]')).toHaveCount(1)
   })
 
+  /**
+   * The status page's toolbar stayed on one line down to 480 px, so from 481 to about 1024 px the
+   * report selector and «Slett» went past the web part's edge, and under 480 px its second row lay
+   * under the pinned tabs, the command bar's height being fixed. Beside the project information
+   * down to 480 px, the summary's two status columns were 124 px at 640 px and 54 px at 500 px,
+   * their words broken letter by letter (WCAG 1.4.10, 2.4.11; measured on the test hub
+   * 12.11.2026). The visual test measures only 320 px.
+   */
+  test('the status page keeps its toolbar within the web part and above the tabs, and its summary readable, as it narrows', async ({
+    page,
+    openPage,
+    resolvePage
+  }) => {
+    test.setTimeout(240_000)
+    await openPage(
+      await resolvePage(projectUrl!, ['Prosjektstatus.aspx', 'ProjectStatus.aspx', 'Status.aspx'])
+    )
+    const webPart = page.locator('[data-sp-web-part-id]').first()
+    await expect(webPart.locator('[class*="commandBar_"] .fui-Toolbar button').first()).toBeVisible(
+      { timeout: 60_000 }
+    )
+    for (const width of [1280, 1024, 800, 640, 500, 400, 320]) {
+      await page.setViewportSize({ width, height: 900 })
+      await expect
+        .poll(
+          () =>
+            webPart.evaluate((root, narrow) => {
+              const edge = root.getBoundingClientRect().right
+              // Items hidden in their box have no size.
+              const buttons = Array.from(
+                root.querySelectorAll('[class*="commandBar_"] .fui-Toolbar button')
+              )
+                .map((button) => button.getBoundingClientRect())
+                .filter((box) => box.width > 0 && box.height > 0)
+              const tabs = root.querySelector('[role="tablist"]')?.getBoundingClientRect()
+              // The status columns of the summary (not the icons-only variant), where there is one.
+              const columns = narrow
+                ? []
+                : Array.from(root.querySelectorAll('[class*="halfWidth_"]')).map(
+                    (column) => column.getBoundingClientRect().width
+                  )
+              return {
+                pastTheEdge: buttons.filter((box) => box.right > edge + 1).length,
+                underTheTabs: tabs ? buttons.filter((box) => box.bottom > tabs.top + 1).length : 0,
+                narrowColumns: columns.filter((columnWidth) => columnWidth < 160).length
+              }
+            }, width <= 480),
+          {
+            message: `the toolbar fits and the status columns are readable at ${width}px`,
+            timeout: 15_000
+          }
+        )
+        .toEqual({ pastTheEdge: 0, underTheTabs: 0, narrowColumns: 0 })
+    }
+  })
+
   test('tasks page renders the Planner board', async ({ page, openPage, resolvePage }) => {
     await openPage(await resolvePage(projectUrl!, ['Oppgaver.aspx', 'Tasks.aspx']))
     // Oppgaver.aspx hosts Microsoft's Planner web part: a board with one column heading per bucket.

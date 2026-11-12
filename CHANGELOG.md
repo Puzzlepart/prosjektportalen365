@@ -101,6 +101,7 @@ Sjekk ut [release notes](./releasenotes/1.15.0.md) for høydepunkter og mer deta
 - Rettet feil i skjemafeltene for skjermlesere og tastatur: knappen som åpner en valgliste het «Open» på engelsk, et klikk på etiketten til et taksonomifelt nådde ikke feltet, og hjelpeteksten i datofeltene ble lest to ganger [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
 - Rettet en feil i `Prosjektinformasjon` hvor skjermlesere ikke leste spørsmålet i dialogene for `Gjør om til overordnet prosjekt` og `Kjør oppsettveiviser` [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
 - Rettet en feil i `Prosjektnyheter` hvor «Opprett» i dialogen for ny nyhetsartikkel ikke kunne nås med tastaturet eller si hva som manglet, og malfeltet viste feilmelding før noe var valgt [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
+- Rettet feil i `Prosjektstatus` på smale skjermer og ved forstørrelse: verktøylinjen gikk utenfor webdelen eller lå under fanene, og statusene i sammendraget ble så smale at ordene brakk bokstav for bokstav. Verktøylinjer uten søkefelt eller visningsvelger brytes nå så snart de ikke får plass, også i tidslinjene, `Idémodul` og `Administrasjon av underområder` [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
 
 ### Merk
 

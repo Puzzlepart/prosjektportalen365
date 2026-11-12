@@ -5,31 +5,35 @@
 $gutter: 8px;
 $xl: 1366px;
 
+// The least width of the status beside the project information: two columns of about 200 px,
+// where «Overordnet status» and its value keep their words whole.
+$status-min-width: 400px;
+
 .summarySection {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 16px;
   height: fit-content;
 
-  // On a narrow screen the status goes under the project information, which left it 16 px at
-  // 320 px (WCAG 1.4.10).
-  @media (max-width: 480px) {
-    flex-direction: column;
-  }
-
+  // The status goes under the project information as soon as it would get less than
+  // $status-min-width beside it, at any width. Beside it down to 480 px, its columns were 123 px at
+  // 640 px, and its words broke letter by letter from 481 to about 800 px (WCAG 1.4.10).
   .projectInformation {
+    flex: 0 1 auto;
+    min-width: 0;
     max-width: 520px;
   }
 
   .statusElements {
     position: relative;
     box-sizing: border-box;
-    width: 100%;
+    flex: 1 1 $status-min-width;
     min-width: 0;
     padding: 0 $gutter;
 
     @media (min-width: $xl) {
-      width: 66.6667%;
+      max-width: 66.6667%;
     }
 
     .container {
@@ -59,6 +63,12 @@ $xl: 1366px;
           &.halfWidth {
             flex: 0 0 50%;
             max-width: 50%;
+
+            // One status to a line on a narrow screen: two were about 120 px each at 320 px.
+            @media (max-width: 480px) {
+              flex-basis: 100%;
+              max-width: 100%;
+            }
           }
 
           &.iconsOnly {
@@ -77,6 +87,7 @@ $xl: 1366px;
 
     @media (min-width: $xl) {
       width: 100%;
+      max-width: none;
     }
   }
 }

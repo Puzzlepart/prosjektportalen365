@@ -100,4 +100,28 @@
       min-height: 40px;
     }
   }
+
+  // A toolbar with nothing that can give way, no search box and no shrinkable selector, wraps
+  // its buttons as soon as they do not fit, at any width: the far items go to the next line, then
+  // the buttons within a toolbar. Kept on one line down to 480 px, the status page's report
+  // selector and «Slett» went past the web part's edge, where SharePoint cut them off, from 481 to
+  // about 900 px (WCAG 1.4.10).
+  &:not(:has(.search, .shrinkable)) {
+    flex-wrap: wrap;
+    row-gap: 8px;
+
+    .toolbar {
+      flex-wrap: wrap;
+      flex-shrink: 1;
+      min-width: 0;
+      max-width: 100%;
+      row-gap: 8px;
+      height: auto;
+
+      // A toolbar without items (no far items) takes no line of its own when the other wraps.
+      &:empty {
+        display: none;
+      }
+    }
+  }
 }

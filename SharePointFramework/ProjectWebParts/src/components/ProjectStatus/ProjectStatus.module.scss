@@ -43,8 +43,10 @@
     }
   }
 
+  // Grows with the toolbar when its buttons wrap: a fixed height left the second row under the
+  // pinned tabs and the summary, where a click hit them (WCAG 1.4.10, 2.4.11).
   .commandBar {
-    height: 42px;
+    min-height: 42px;
     margin: 0px auto;
     padding: 0 32px 16px 32px;
   }
