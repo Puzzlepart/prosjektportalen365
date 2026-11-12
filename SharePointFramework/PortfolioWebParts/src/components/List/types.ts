@@ -1,10 +1,22 @@
 import { SearchBoxProps } from '@fluentui/react-components'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { IFilterPanelProps, IListColumn, ListMenuItem } from 'pp365-shared-library'
+import { MouseEvent } from 'react'
+
+/**
+ * Lets the arrow keys change a column's width (Fluent's keyboard mode), started from the column
+ * menu with the event of the item chosen: a column's width could only be dragged (WCAG 2.1.1).
+ */
+export type ResizeColumn = (event: MouseEvent<HTMLElement>) => void
 
 export type OnColumnContextMenu = {
   column: any
   target: any
+  /**
+   * Lets the arrow keys change the column's width; none for a column without a handle to drag
+   * (the last one, when the list fills its width).
+   */
+  resizeColumn?: ResizeColumn
 }
 
 /**

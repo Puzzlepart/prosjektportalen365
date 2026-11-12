@@ -1,7 +1,7 @@
 import { IListColumn } from 'pp365-shared-library'
 import { RefObject, useEffect, useMemo, useRef, useState } from 'react'
 import { useOnRenderItemColumn } from './ItemColumn'
-import { IListProps } from './types'
+import { IListProps, ResizeColumn } from './types'
 import { useAddColumn } from './useAddColumn'
 
 /**
@@ -39,8 +39,12 @@ export function useList(props: IListProps<any>) {
       ),
     [props.columns, props.hiddenColumns, props.isAddColumnEnabled]
   )
-  const onColumnHeaderClick = (column: IListColumn, target: HTMLElement) => {
-    props.onColumnContextMenu?.({ column, target })
+  const onColumnHeaderClick = (
+    column: IListColumn,
+    target: HTMLElement,
+    resizeColumn?: ResizeColumn
+  ) => {
+    props.onColumnContextMenu?.({ column, target, resizeColumn })
   }
   const commandBarRef = useRef<HTMLDivElement>(null)
   const stickyTop = useElementHeight(commandBarRef)

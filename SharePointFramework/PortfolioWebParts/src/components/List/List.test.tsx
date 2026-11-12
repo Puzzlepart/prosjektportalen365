@@ -220,6 +220,8 @@ describe('List', () => {
     expect(onColumnContextMenu).toHaveBeenCalledTimes(1)
     expect(onColumnContextMenu.mock.calls[0][0].column.key).toBe('GtProjectPhase')
     expect(onColumnContextMenu.mock.calls[0][0].target).toBeInstanceOf(HTMLElement)
+    // The keyboard's way to resize the column, for the menu's «Endre kolonnebredde».
+    expect(onColumnContextMenu.mock.calls[0][0].resizeColumn).toEqual(expect.any(Function))
     fireEvent.contextMenu(screen.getByText('Tittel'))
     expect(onColumnContextMenu).toHaveBeenCalledTimes(2)
     expect(onColumnContextMenu.mock.calls[1][0].column.key).toBe('Title')

@@ -1,7 +1,7 @@
 import { useArrowNavigationGroup, useTableFeatures } from '@fluentui/react-components'
 import { IListColumn } from 'pp365-shared-library'
 import { ReactNode, RefObject } from 'react'
-import { IListGroup } from '../types'
+import { IListGroup, ResizeColumn } from '../types'
 import { useListSelection } from './useListSelection'
 
 // Fluent does not export the types of its sizing state or of Tabster's attributes; these name them
@@ -45,22 +45,31 @@ export interface IListGridProps {
   justified?: boolean
 
   /**
-   * Called on a click on a column header, with the element to place a menu by.
-   */
-  /**
    * Whether a click on a column header opens a menu (the hub's column menu), which the header
    * then says (`aria-haspopup`) and is where the focus returns when the menu or a panel it
    * opened closes. A header that sorts (the program administration's) is a plain button.
    */
   headerOpensMenu?: boolean
 
-  onColumnHeaderClick?: (column: IListColumn, target: HTMLElement) => void
+  /**
+   * Called on a click on a column header, with the element to place a menu by and a way to
+   * change the column's width from the keyboard (none for a column without a resize handle).
+   */
+  onColumnHeaderClick?: (
+    column: IListColumn,
+    target: HTMLElement,
+    resizeColumn?: ResizeColumn
+  ) => void
 
   /**
-   * Called on a right click on a column header, with the element to place a menu by; the hub opens
-   * the column menu with both. Without it a right click is the browser's.
+   * Called on a right click on a column header, as `onColumnHeaderClick`; the hub opens the column
+   * menu with both. Without it a right click is the browser's.
    */
-  onColumnHeaderContextMenu?: (column: IListColumn, target: HTMLElement) => void
+  onColumnHeaderContextMenu?: (
+    column: IListColumn,
+    target: HTMLElement,
+    resizeColumn?: ResizeColumn
+  ) => void
 
   /**
    * When it changes, the groups the user opened or closed go back to their `isCollapsed`: the
@@ -126,6 +135,19 @@ export interface IListGridState {
    * Fluent's column sizing: the widths and the resize handles.
    */
   columnSizing: TableFeaturesState['columnSizing_unstable']
+
+  /**
+   * A column header's sizing props, its resize handle named in the page's language.
+   */
+  getHeaderCellProps: (
+    column: IListColumn
+  ) => ReturnType<TableFeaturesState['columnSizing_unstable']['getTableHeaderCellProps']>
+
+  /**
+   * Lets the arrow keys change a column's width, for the column menu; none for a column without a
+   * resize handle.
+   */
+  resizeColumn: (column: IListColumn) => ResizeColumn | undefined
 
   /**
    * Whether the grid has groups.

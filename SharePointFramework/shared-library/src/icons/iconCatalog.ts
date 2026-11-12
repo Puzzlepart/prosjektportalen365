@@ -169,6 +169,8 @@ import {
   SparkleCircleRegular,
   TableCellEditFilled,
   TableCellEditRegular,
+  TableResizeColumnFilled,
+  TableResizeColumnRegular,
   TableSettingsFilled,
   TableSettingsRegular,
   TaskListLtrFilled,
@@ -400,6 +402,10 @@ export const iconCatalog = {
   TableCellEdit: {
     regular: TableCellEditRegular,
     filled: TableCellEditFilled
+  },
+  TableResizeColumn: {
+    regular: TableResizeColumnRegular,
+    filled: TableResizeColumnFilled
   },
   ArrowLeft: {
     regular: ArrowLeftRegular,

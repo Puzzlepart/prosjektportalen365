@@ -395,6 +395,13 @@ checked by hand and with which reader and browser: axe finds only part of what W
   completed to the first suggestion; it is not saved. Do not clear it as the field is left: its
   `Autofill.clear()` sets the selection, and in Safari the focus follows a selection set in the
   input's blur (WebKit bug 224425, closed as intended), which traps the keyboard in the field.
+- Fluent's column resize handle (`TableResizeHandle`, the `aside` that
+  `columnSizing.getTableHeaderCellProps` returns) is named «Resize column» and its value
+  «… pixels», in English, and read once the keyboard mode puts the focus on it: clone the `aside`
+  with `aria-label` and `aria-valuetext` from the strings (`ListGrid`'s `getHeaderCellProps`).
+  `enableKeyboardMode(id)` returns a handler that calls `preventDefault` and
+  `nativeEvent.stopPropagation` on its event: start it from a menu item with the item's own event
+  (the hub's column menus; `renderMenuItem` passed `null` until 2026-11-12).
 
 ## Do not
 

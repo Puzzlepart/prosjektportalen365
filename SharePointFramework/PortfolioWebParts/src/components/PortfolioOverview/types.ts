@@ -6,7 +6,7 @@ import {
   ProjectColumn,
   ProjectColumnCustomSort
 } from 'pp365-shared-library/lib/models'
-import { IListProps } from '../List'
+import { IListProps, ResizeColumn } from '../List'
 import { IBaseComponentProps } from '../types'
 import { IColumnFormPanel } from './ColumnFormPanel/types'
 import { IViewFormPanel } from './ViewFormPanel/types'
@@ -267,9 +267,10 @@ export interface IPortfolioOverviewState extends Pick<
 
   /**
    * Column context menu contains the `column` and `target` (mouse event target)
-   * that is used to show the context menu in the correct position.
+   * that is used to show the context menu in the correct position, and a way to
+   * change the column's width from the keyboard.
    */
-  columnContextMenu?: { column: ProjectColumn; target: HTMLElement }
+  columnContextMenu?: { column: ProjectColumn; target: HTMLElement; resizeColumn?: ResizeColumn }
 
   /**
    * Column form panel props. Consists of two properties:

@@ -1,5 +1,6 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import strings from 'PortfolioWebPartsStrings'
+import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import { ListGrid } from './ListGrid'
 import { IListGridProps } from './types'
@@ -94,7 +95,11 @@ describe('ListGrid', () => {
     const onColumnHeaderContextMenu = jest.fn()
     rerender(grid({ onColumnHeaderClick, onColumnHeaderContextMenu }))
     expect(fireEvent.contextMenu(screen.getByText('Tittel'))).toBe(false)
-    expect(onColumnHeaderContextMenu).toHaveBeenCalledWith(COLUMNS[0], expect.any(HTMLElement))
+    expect(onColumnHeaderContextMenu).toHaveBeenCalledWith(
+      COLUMNS[0],
+      expect.any(HTMLElement),
+      expect.any(Function)
+    )
     expect(onColumnHeaderClick).toHaveBeenCalledTimes(1)
   })
 
@@ -123,6 +128,25 @@ describe('ListGrid', () => {
     expect(screen.getByText('Tittel').closest('[role="button"], button')).not.toHaveAttribute(
       'aria-haspopup'
     )
+  })
+
+  it("hands the column menu the keyboard's way to resize the column, its handle named in the page's language (WCAG 2.1.1)", () => {
+    // Only a drag on the header's edge changed a column's width, and Fluent names the handle
+    // «Resize column» and its value «… pixels», in English.
+    const onColumnHeaderClick = jest.fn()
+    render(grid({ onColumnHeaderClick, headerOpensMenu: true }))
+    fireEvent.click(screen.getByText('Tittel'))
+    const resizeColumn = onColumnHeaderClick.mock.calls[0][2]
+    const handle = document.querySelector<HTMLElement>('.fui-TableResizeHandle')
+    expect(handle).toHaveAttribute('aria-label', format(strings.ColumnResizeHandleLabel, 'Tittel'))
+    expect(handle).toHaveAttribute('aria-valuetext', format(strings.ColumnWidthValueText, 100))
+    // As the menu item's click does: the focus goes to the handle, and the arrow keys resize.
+    act(() =>
+      resizeColumn({ preventDefault: jest.fn(), nativeEvent: { stopPropagation: jest.fn() } })
+    )
+    expect(handle).toHaveFocus()
+    fireEvent.keyDown(handle, { key: 'ArrowRight' })
+    expect(handle).toHaveAttribute('aria-valuetext', format(strings.ColumnWidthValueText, 120))
   })
 
   it("gives a cell's content its column's whole width, so tags behind +n come back as it widens", () => {

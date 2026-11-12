@@ -6,8 +6,9 @@ import { restGet } from './rest'
 
 /**
  * The portfolio overview's columns, shared by the deployed and the local-bundle flow: the width a
- * column starts at, and the tags it puts behind `+n` as it narrows and shows again as it widens. A
- * column's width is the grid's own state, gone on the next load, so nothing is restored.
+ * column starts at, the tags it puts behind `+n` as it narrows and shows again as it widens, and
+ * its width changed from the keyboard. A column's width is the grid's own state, gone on the next
+ * load, so nothing is restored.
  */
 const hub = baseURL.replace(/\/+$/, '')
 
@@ -158,4 +159,43 @@ export async function expectTitleAtDefaultWidth(grid: Locator): Promise<string |
   expect(width, 'the title column starts at its default width').toBeGreaterThanOrEqual(start)
   expect(width, 'the title column starts at its default width').toBeLessThanOrEqual(start + 32)
   return undefined
+}
+
+/**
+ * Changes the title column's width from the keyboard alone (WCAG 2.1.1): Enter on its header opens
+ * the column menu, «Endre kolonnebredde» puts the focus on the handle at the header's edge, named
+ * in the page's language, the arrow keys widen the column, and Escape hands the focus back to the
+ * header. Until 1.15.0 only a drag on that edge changed it.
+ */
+export async function expectKeyboardResize(grid: Locator) {
+  const page = grid.page()
+  const header = grid.getByRole('columnheader', { name: /^tittel$|^title$/i })
+  const button = header.getByRole('button').first()
+  await header.scrollIntoViewIfNeeded()
+  const before = (await header.boundingBox())!.width
+
+  await button.focus()
+  await page.keyboard.press('Enter')
+  const item = page.getByRole('menuitem', { name: /^endre kolonnebredde$|^resize column$/i })
+  await expect(item).toBeVisible()
+  await item.focus()
+  await page.keyboard.press('Enter')
+
+  const handle = page.getByRole('separator', { name: /tittel|title/i })
+  await expect(handle, "the handle at the header's edge takes the focus").toBeFocused()
+  await expect(handle).toHaveAttribute('aria-valuetext', /^\d+ (piksler|pixels)$/)
+  for (let step = 0; step < 3; step++) await page.keyboard.press('ArrowRight')
+  // Fluent widens a column by 20 px a key press.
+  await expect
+    .poll(async () => (await header.boundingBox())!.width, {
+      message: 'the arrow keys widen the column'
+    })
+    .toBeGreaterThanOrEqual(before + 55)
+
+  await page.keyboard.press('Escape')
+  await expect(button, 'Escape hands the focus back to the header').toBeFocused()
+  expect(
+    (await header.boundingBox())!.width,
+    'the column keeps its new width'
+  ).toBeGreaterThanOrEqual(before + 55)
 }

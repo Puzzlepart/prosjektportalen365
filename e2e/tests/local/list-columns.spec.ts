@@ -1,6 +1,7 @@
 import { Page } from '@playwright/test'
 import { baseURL } from '../../playwright.config'
 import {
+  expectKeyboardResize,
   expectTagsFollowTheColumn,
   expectTitleAtDefaultWidth,
   overviewGrid
@@ -46,4 +47,13 @@ test('local: a column starts at its default width from the project columns list'
   await openOverview(page, await resolvePage(hub, PAGES))
   const skip = await expectTitleAtDefaultWidth(overviewGrid(page))
   test.skip(!!skip, skip)
+})
+
+test("local: a column's width can be changed from the keyboard (WCAG 2.1.1)", async ({
+  page,
+  resolvePage
+}) => {
+  test.setTimeout(120_000)
+  await openOverview(page, await resolvePage(hub, PAGES))
+  await expectKeyboardResize(overviewGrid(page))
 })

@@ -65,17 +65,19 @@ export const ListGrid: FC<IListGridProps> = (props) => {
     toggleAllCollapsed,
     selectable,
     selection,
-    arrowNavigation
+    arrowNavigation,
+    getHeaderCellProps,
+    resizeColumn
   } = useListGrid(props)
 
   const onHeaderClick = (column: IListColumn) => (event: MouseEvent<HTMLElement>) => {
-    props.onColumnHeaderClick?.(column, event.currentTarget)
+    props.onColumnHeaderClick?.(column, event.currentTarget, resizeColumn(column))
   }
 
   const onHeaderContextMenu = (column: IListColumn) => (event: MouseEvent<HTMLElement>) => {
     if (!props.onColumnHeaderContextMenu) return
     event.preventDefault()
-    props.onColumnHeaderContextMenu(column, event.currentTarget)
+    props.onColumnHeaderContextMenu(column, event.currentTarget, resizeColumn(column))
   }
 
   return (
@@ -126,7 +128,7 @@ export const ListGrid: FC<IListGridProps> = (props) => {
             {props.columns.map((column) => (
               <TableHeaderCell
                 key={column.key}
-                {...columnSizing.getTableHeaderCellProps(column.key)}
+                {...getHeaderCellProps(column)}
                 sortDirection={sortDirection(column)}
                 className={styles.headerCell}
                 button={{

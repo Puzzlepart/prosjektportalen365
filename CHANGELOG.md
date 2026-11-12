@@ -37,6 +37,7 @@ Sjekk ut [release notes](./releasenotes/1.15.0.md) for høydepunkter og mer deta
 - Prosjektområdet finner huben også når brukeren bare har tilgang til enkelte lister der, og et avslag fra én liste gjør ikke lenger hele huben utilgjengelig
 - `Fasevelger` sier fra når arkiveringen ikke kunne føres i `Arkiveringslogg`
 - Kolonnene i `Porteføljeoversikt` starter på standardbredden fra `Prosjektkolonner`, som i `Aggregert oversikt`, i stedet for på minimumsbredden. Feltet heter nå «Standard bredde» (før «Maks bredde») og kan endres i kolonneskjemaet i begge webdelene
+- Kolonnebredden i `Porteføljeoversikt` og `Aggregert oversikt` kan endres med tastaturet: velg «Endre kolonnebredde» i kolonnemenyen og bruk piltastene [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
 
 ### Fjernet
 

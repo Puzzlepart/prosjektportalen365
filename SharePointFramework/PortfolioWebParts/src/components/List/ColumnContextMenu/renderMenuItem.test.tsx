@@ -74,6 +74,8 @@ describe('renderMenuItem', () => {
     // item never settles under jsdom.
     fireEvent.click(screen.getByRole('menuitem', { name: 'Rediger kolonne' }))
     expect(onClick).toHaveBeenCalledTimes(1)
+    // The item's own event, which «Endre kolonnebredde» hands to Fluent's keyboard mode.
+    expect(onClick.mock.calls[0][0]).toHaveProperty('type', 'click')
     expect(onClick.mock.calls[0][1].key).toBe('EDIT')
     expect(onOpenChange).toHaveBeenCalledWith(null, { open: false })
     expect(screen.queryByRole('menuitem', { name: 'Rediger kolonne' })).toBeNull()

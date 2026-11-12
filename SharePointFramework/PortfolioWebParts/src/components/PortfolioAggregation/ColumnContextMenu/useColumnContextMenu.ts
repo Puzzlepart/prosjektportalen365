@@ -49,7 +49,7 @@ export function useColumnContextMenu() {
 
   if (!context.state.columnContextMenu) return columnContextMenu
 
-  const { column, target } = context.state.columnContextMenu
+  const { column, target, resizeColumn } = context.state.columnContextMenu
   columnContextMenu.target = target
 
   const columnIndex = indexOf(
@@ -115,6 +115,15 @@ export function useColumnContextMenu() {
         key: 'DIVIDER_02',
         itemType: 'divider'
       },
+      // The keyboard's way to change the width, where only a drag on the header's edge did
+      // (WCAG 2.1.1): the arrow keys widen and narrow the column, Enter or Escape ends it.
+      resizeColumn &&
+        ({
+          key: 'RESIZE_COLUMN',
+          text: strings.ColumnResizeLabel,
+          iconProps: { iconName: 'TableResizeColumn' },
+          onClick: (event) => resizeColumn(event)
+        } as IMenuItem),
       {
         key: 'COLUMN_SETTINGS',
         text: strings.ColumnSettingsLabel,

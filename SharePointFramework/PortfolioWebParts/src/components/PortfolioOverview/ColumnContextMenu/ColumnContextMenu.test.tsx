@@ -164,6 +164,23 @@ describe('ColumnContextMenu', () => {
       dispatched(dispatch, 'SET_SORT', expect.objectContaining({ column: phase, customSort }))
     })
 
+    it("the column's width from the keyboard, where the grid can resize it (WCAG 2.1.1)", () => {
+      const phase = column('GtProjectPhase', 'Fase')
+      const resizeColumn = jest.fn()
+      const { items } = renderHook(
+        phase,
+        {},
+        { columnContextMenu: { column: phase, target: document.body, resizeColumn } }
+      )
+      const resize = byKey(items, 'RESIZE_COLUMN')
+      expect(resize.text).toBe(strings.ColumnResizeLabel)
+      const event = { type: 'click' }
+      resize.onClick(event, resize)
+      expect(resizeColumn).toHaveBeenCalledWith(event)
+      // A column the grid cannot resize (the last one, when it fills its width) offers none.
+      expect(byKey(renderHook(phase).items, 'RESIZE_COLUMN')).toBeUndefined()
+    })
+
     it('edit and add columns for a site admin or the view author, disabled for anyone else', () => {
       const title = column('Title', 'Tittel')
       const settings = (hook: ReturnType<typeof renderHook>) =>

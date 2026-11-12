@@ -28,9 +28,10 @@ export function renderMenuItem(item: IMenuItem, onOpenChange: MenuProps['onOpenC
       const baseProps: MenuItemProps = {
         title: item.title,
         disabled: item.disabled,
-        onClick: () => {
+        // With the item's own event: «Endre kolonnebredde» hands it to Fluent's keyboard mode.
+        onClick: (event) => {
           if (item.onClick) {
-            item.onClick(null, item)
+            item.onClick(event, item)
           }
           onOpenChange(null, { open: false } as any)
         }

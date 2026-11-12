@@ -1,5 +1,6 @@
 import { baseURL } from '../../playwright.config'
 import {
+  expectKeyboardResize,
   expectTagsFollowTheColumn,
   expectTitleAtDefaultWidth,
   overviewGrid
@@ -37,5 +38,16 @@ test.describe("the portfolio overview's columns", () => {
     await columnHeaders(page)
     const skip = await expectTagsFollowTheColumn(overviewGrid(page))
     test.skip(!!skip, skip)
+  })
+
+  test("a column's width can be changed from the keyboard (WCAG 2.1.1)", async ({
+    page,
+    openPage,
+    resolvePage
+  }) => {
+    test.setTimeout(120_000)
+    await openPage(await resolvePage(hub, PAGES))
+    await columnHeaders(page)
+    await expectKeyboardResize(overviewGrid(page))
   })
 })

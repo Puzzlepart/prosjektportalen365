@@ -30,7 +30,7 @@ const title = () =>
     GtColMinWidth: 100
   })
 
-function menuFor(column: ProjectContentColumn) {
+function menuFor(column: ProjectContentColumn, resizeColumn?: (event: any) => void) {
   const dispatch = jest.fn()
   let items: IMenuItem[] = []
   const Probe: React.FC = () => {
@@ -41,7 +41,7 @@ function menuFor(column: ProjectContentColumn) {
     <PortfolioAggregationContext.Provider
       value={
         {
-          state: { columns: [column], columnContextMenu: { column, target: null } },
+          state: { columns: [column], columnContextMenu: { column, target: null, resizeColumn } },
           props: { pageContext: { legacyPageContext: { isSiteAdmin: false } } },
           dispatch
         } as any
@@ -53,7 +53,7 @@ function menuFor(column: ProjectContentColumn) {
   // `SortDescLabel` reads "A til Å" and `SortAscLabel` "Å til A".
   const aToZ = items.find((i) => i.text === strings.SortDescLabel)
   const zToA = items.find((i) => i.text === strings.SortAscLabel)
-  return { aToZ, zToA, dispatch, checked: [!!aToZ.checked, !!zToA.checked] }
+  return { aToZ, zToA, dispatch, checked: [!!aToZ.checked, !!zToA.checked], items }
 }
 
 describe('useColumnContextMenu', () => {
@@ -76,5 +76,15 @@ describe('useColumnContextMenu', () => {
     expect(menuFor(column).checked).toEqual([true, false])
     column.isSortedDescending = true
     expect(menuFor(column).checked).toEqual([false, true])
+  })
+
+  it("offers the column's width from the keyboard where the grid can resize it (WCAG 2.1.1)", () => {
+    const resizeColumn = jest.fn()
+    const resize = menuFor(title(), resizeColumn).items.find((i) => i.key === 'RESIZE_COLUMN')
+    expect(resize.text).toBe(strings.ColumnResizeLabel)
+    const event = { type: 'click' }
+    resize.onClick(event)
+    expect(resizeColumn).toHaveBeenCalledWith(event)
+    expect(menuFor(title()).items.find((i) => i.key === 'RESIZE_COLUMN')).toBeUndefined()
   })
 })

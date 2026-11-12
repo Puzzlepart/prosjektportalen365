@@ -1611,3 +1611,20 @@ itself as `observer` to `add()` is disposed, as the footer does.
   last weeks go to the hand rounds. Its three questions need answers first: the list under the
   timeline or a view to switch to, a property to turn it off, and the resource allocation's
   columns.
+
+### The column widths from the keyboard (2026-11-12)
+
+- **Found.** The portfolio overview's and the aggregated overview's columns could only be resized
+  by dragging the handle at a header's edge (2.1.1). Fluent names that handle «Resize column» and
+  its value «… pixels», in English, once the keyboard is on it. The dynamic list has offered
+  «Endre kolonnebredde» in its header menu since #1788's slices, with Fluent's English names.
+- **Done.** Both overviews' column menus offer «Endre kolonnebredde» (`useColumnContextMenu`): it
+  runs Fluent's keyboard mode through the `resizeColumn` that `ListGrid` hands
+  `onColumnContextMenu`, with the menu item's own event (`renderMenuItem` passed `null`). The focus
+  goes to the handle, the arrow keys change the width by 20 px (5 px with Shift), and Enter, Space
+  or Escape hand the focus back to the header. `ListGrid` names the handle from the strings
+  (`ColumnResizeHandleLabel`, `ColumnWidthValueText`). Tests: `ListGrid.test.tsx` (the names, the
+  focus and a key press under jsdom with Fluent's own sizing), both menus' tests, and
+  `tests/flows/list-columns.spec.ts` in the browser.
+- **Left.** 2.5.7 (WCAG 2.2, should): the width still takes a drag or the keyboard, no single
+  pointer. The dynamic list's handle keeps Fluent's English names.
