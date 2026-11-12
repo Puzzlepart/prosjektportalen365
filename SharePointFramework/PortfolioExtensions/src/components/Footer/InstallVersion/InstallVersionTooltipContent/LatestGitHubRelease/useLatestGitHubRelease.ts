@@ -5,6 +5,21 @@ import { FooterContext } from '../../../context'
 import { ILatestGitHubReleaseProps } from './types'
 
 /**
+ * GitHub's alert markers (`> [!NOTE]`, `> [!WARNING]` …), which open a quote in a release's notes:
+ * outside GitHub they are plain text, and showed as «[!NOTE]» in the notes.
+ */
+const GITHUB_ALERT_MARKER = /^([ \t]*>[ \t]*)\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\][ \t]*$/gim
+
+/**
+ * A release's notes without GitHub's alert markers; the quote they open stays a quote.
+ *
+ * @param body The release's notes, in markdown
+ */
+export function stripGitHubAlertMarkers(body: string): string {
+  return (body ?? '').replace(GITHUB_ALERT_MARKER, '$1')
+}
+
+/**
  * Compares the first GitHub release with the installed version and builds its release links.
  */
 export function useLatestGitHubRelease(props: ILatestGitHubReleaseProps) {
@@ -44,6 +59,7 @@ export function useLatestGitHubRelease(props: ILatestGitHubReleaseProps) {
 
   return {
     latestGitHubRelease,
+    releaseBody: stripGitHubAlertMarkers(latestGitHubRelease.body),
     latestGitHubVersion,
     installedVersion,
     releaseNotesUrl,

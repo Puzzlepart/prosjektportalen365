@@ -39,7 +39,10 @@ $header-foreground-disabled: rgba(255, 255, 255, 0.4);
     width: auto;
     padding: 0;
 
-    button {
+    // The settings link too: Fluent's grey (#424242) on the gradient was 2.8:1 and 1.6:1, under
+    // the 3:1 an icon needs (WCAG 1.4.11). White is 3.7:1 and 6.4:1 at the gradient's ends.
+    button,
+    a {
       color: $header-foreground;
 
       svg {

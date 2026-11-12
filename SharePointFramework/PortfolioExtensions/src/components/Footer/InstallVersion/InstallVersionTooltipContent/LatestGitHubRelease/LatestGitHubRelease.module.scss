@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-width: 0;
 
   .content {
     display: flex;
@@ -22,9 +23,14 @@
     flex-direction: column;
     gap: 8px;
 
+    // Within the popover's width: a long command in the notes (`./Install.ps1 -Url …`) breaks, and
+    // a code block scrolls sideways in its own box. The notes made the content 535 px in a 400 px
+    // surface, and the rows and dividers lay outside it over the page (WCAG 1.4.10).
     .releaseBody {
+      min-width: 0;
       max-height: 300px;
       overflow-y: auto;
+      overflow-wrap: anywhere;
       padding: 8px;
       background-color: var(--colorNeutralBackground1);
       border: 1px solid var(--colorNeutralStroke1);
@@ -81,11 +87,18 @@
         font-family: monospace;
       }
 
+      blockquote {
+        margin: 8px 0;
+        padding-left: 8px;
+        border-left: 3px solid var(--colorNeutralStroke1);
+      }
+
       pre {
         background-color: var(--colorNeutralBackground3);
         padding: 8px;
         border-radius: 4px;
         overflow-x: auto;
+        overflow-wrap: normal;
 
         code {
           background-color: transparent;

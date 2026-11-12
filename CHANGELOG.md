@@ -106,6 +106,8 @@ Sjekk ut [release notes](./releasenotes/1.15.0.md) for høydepunkter og mer deta
 - Rettet en feil i Planner-tiltak hvor Enter i tiltakscellen åpnet SharePoints visningsskjema og mellomrom merket raden. «Lagre» i «Legg til nytt tiltak» kan nås med tastaturet og sier at den venter på tittel [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
 - `Risikomatrise` og `Mulighetsmatrise` sier nivået til hver celle i tekst for skjermlesere og i verktøytipset, ikke bare med farge, og fargene beholdes i kontrastmodus [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
 - Rettet en feil hvor `Hent dokumentmal`, oppsettveiviseren og dialogene for fremdrift og feil var 850 px brede også i smalere vinduer, slik at lukkeknappen og knappene nederst ble liggende utenfor. Lange mappenavn i `Hent dokumentmal` slutter nå med «…» og vises i sin helhet som verktøytips [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
+- Rettet feil i bunnteksten: den gikk utenfor siden fra 481 til om lag 950 px og brytes nå når den ikke får plass, innholdet i «Siste installasjon» gikk utenfor popoveren og viste «[!NOTE]» fra GitHub, og innstillingsikonet i assistenten hadde for svak kontrast [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
+- Paneler som lukkes med et klikk utenfor, gir fokus tilbake til knappen som åpnet dem, også prosjektinformasjonen fra prosjektkortene og porteføljelistene. «+n»-knappen for skjulte tagger åpner menyen med pil ned og heter «+1 flere elementer» [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
 
 ### Merk
 

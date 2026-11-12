@@ -29,6 +29,7 @@ export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (incomingProps
   const props = withDefaults(incomingProps, LATEST_GIT_HUB_RELEASE_DEFAULT_PROPS)
   const {
     latestGitHubRelease,
+    releaseBody,
     latestGitHubVersion,
     installedVersion,
     releaseNotesUrl,
@@ -87,7 +88,7 @@ export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (incomingProps
                   a: ({ node, ...props }) => <a {...props} rel='noopener noreferrer' />
                 }}
               >
-                {latestGitHubRelease.body}
+                {releaseBody}
               </ReactMarkdown>
             </div>
           </div>

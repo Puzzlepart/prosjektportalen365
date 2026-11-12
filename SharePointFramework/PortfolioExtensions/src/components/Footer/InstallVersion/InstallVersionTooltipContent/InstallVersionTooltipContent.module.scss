@@ -1,8 +1,10 @@
+// Within the popover's 400 px: `min-width: fit-content` let the release notes widen it to their
+// longest line, and the rows and dividers lay outside the surface (WCAG 1.4.10).
 .lastInstall {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  min-width: fit-content;
+  min-width: 0;
   box-sizing: border-box;
 
   .content {

@@ -99,6 +99,13 @@ describe('OverflowTagMenu', () => {
     expect(screen.getAllByRole('button')).toEqual([
       screen.getByRole('button', { name: format(strings.Aria.MenuOverflowCount, 1) })
     ])
+    // Named starting with what it shows, «+1» (WCAG 2.5.3), and its menu opens with ArrowDown:
+    // the tag group's arrow keys left the menu none (WCAG 2.1.1).
+    const more = screen.getByRole('button', { name: /^\+1 / })
+    expect(JSON.parse(more.getAttribute('data-tabster')).focusable.ignoreKeydown).toEqual({
+      ArrowDown: true,
+      ArrowUp: true
+    })
     expect(await axeComponent(container)).toHaveNoViolations()
   })
 })

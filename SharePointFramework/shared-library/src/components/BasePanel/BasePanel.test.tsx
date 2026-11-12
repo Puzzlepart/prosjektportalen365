@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { axeComponent } from 'pp365-jest-config/lib/axe'
 import * as React from 'react'
@@ -77,6 +77,30 @@ describe('BasePanel', () => {
     expect(close).toBeTruthy()
     await user.click(close)
     await waitFor(() => expect(onClose).toHaveBeenCalled())
+  })
+
+  it('gives the focus back to what opened it when closed by a click outside it (WCAG 2.4.3)', async () => {
+    // Fluent's drawer gives it back on Escape and from the close button, not after a click on
+    // the dimmed background: it went to the page's start.
+    const onClose = jest.fn()
+    const page = (open: boolean) => (
+      <>
+        <button>Vis prosjektinformasjon</button>
+        <BasePanel open={open} headerText='Tittel' onClose={onClose}>
+          <div>Innhold</div>
+        </BasePanel>
+      </>
+    )
+    const { rerender } = render(page(false))
+    const opener = screen.getByText('Vis prosjektinformasjon')
+    opener.focus()
+    rerender(page(true))
+    // A click on the background takes the focus from the drawer to the page's start.
+    act(() => (document.activeElement as HTMLElement)?.blur())
+    fireEvent.click(document.querySelector('[class*="__backdrop"]'))
+    expect(onClose).toHaveBeenCalled()
+    rerender(page(false))
+    await waitFor(() => expect(opener).toHaveFocus())
   })
 
   it('lets the keyboard reach and scroll a body with no control in it, as a region named by its header, when asked (WCAG 2.1.1)', () => {

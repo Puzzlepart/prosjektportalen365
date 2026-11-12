@@ -1,11 +1,17 @@
+// The footer is in the page's flow, and its buttons wrap as soon as they do not fit, at any width
+// (WCAG 1.4.10): kept on one line down to 480 px, its right part went past the edge from 481 to
+// about 950 px, out of reach. Absolute over a 40 px spacer, its new height would hide the end of
+// the content once it wraps (WCAG 2.4.11); only the minimized footer lies over the page.
 .footer {
-  position: absolute;
-  bottom: 0;
+  position: relative;
   width: 100%;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  column-gap: 8px;
+  row-gap: 4px;
   box-sizing: border-box;
   min-height: 40px;
   padding: 0 25px;
@@ -17,27 +23,24 @@
   .right {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
     gap: 8px;
+    min-width: 0;
   }
 
-  // On a narrow screen, as at 320 px, its buttons wrap rather than go past the edge, and it takes
-  // its place below the page rather than over it, where its new height would hide the end of the
-  // content (WCAG 1.4.10, 2.4.11).
-  @media (max-width: 480px) {
-    position: relative;
-    flex-wrap: wrap;
-    row-gap: 4px;
-    padding: 4px 16px;
+  // At the right also when it goes to the next line.
+  .right {
+    margin-left: auto;
+  }
 
-    .left,
-    .right {
-      flex-wrap: wrap;
-      min-width: 0;
-    }
+  @media (max-width: 480px) {
+    padding: 4px 16px;
   }
 
   &.minimize {
+    position: absolute;
+    bottom: 0;
     overflow: hidden;
     opacity: 0;
     min-height: 0px;
@@ -54,24 +57,30 @@
       height: auto;
       opacity: 1;
     }
+
+    // In the page's flow on a narrow screen, where it is several lines high when shown.
+    @media (max-width: 480px) {
+      position: relative;
+    }
   }
 }
 
+// The room the minimized footer, which lies over the page, keeps for itself.
 .space {
+  display: none;
   bottom: 0;
   width: 100%;
-  min-height: 40px;
   opacity: 0;
   z-index: 0;
 
-  // The footer is in the page's flow there, and needs no room kept for it.
-  @media (max-width: 480px) {
-    display: none;
-  }
-
   &.minimize {
+    display: block;
     overflow: hidden;
     min-height: 0px;
     height: 12px;
+
+    @media (max-width: 480px) {
+      display: none;
+    }
   }
 }

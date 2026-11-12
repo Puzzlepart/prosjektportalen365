@@ -9,7 +9,7 @@ define([], function () {
       ComboboxExpandLabel: 'Vis alternativer',
       InfoLabelTitle: 'Informasjon om {0}',
       InstrumentGaugeLabel: 'Siste måling {0}, startverdi {1}, målverdi {2}',
-      MenuOverflowCount: '{0} flere elementer',
+      MenuOverflowCount: '+{0} flere elementer',
       ProjectTitle: 'Logo for prosjekt: {0}',
       SaveTitle: 'Lagre',
       SaveDisabledTitle: 'Det er påkrevde felter som ikke er utfylt, fyll ut disse for å lagre',

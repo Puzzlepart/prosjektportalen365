@@ -40,6 +40,17 @@ const OverflowMenuItem: FC<OverflowMenuItemProps> = (props) => {
 }
 
 /**
+ * Leaves ArrowDown and ArrowUp on the `+n` button to its menu, which opens on them (WCAG 2.1.1):
+ * the tag group moves between its tags on every arrow key (Fluent's `TagGroup`, Tabster's mover,
+ * which listens before the button), and the menu never got them. Tabster reads this attribute.
+ */
+const OPENS_WITH_ARROW_KEYS = {
+  'data-tabster': JSON.stringify({
+    focusable: { ignoreKeydown: { ArrowDown: true, ArrowUp: true } }
+  })
+}
+
+/**
  * The `+n` button for the tags out of room, and the menu that lists them. An item of the tags'
  * list, so the list holds items only. The button is named by how many tags it holds, and takes the
  * menu trigger's state (`aria-haspopup`, `aria-expanded`) on itself, the element that has focus.
@@ -76,6 +87,7 @@ const OverflowMenu: FC<{
               aria-label={name}
               title={name}
               primaryText={`+${overflowCount}`}
+              {...OPENS_WITH_ARROW_KEYS}
             />
           </MenuTrigger>
           <MenuPopover style={{ maxWidth: 600 }}>

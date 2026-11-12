@@ -65,7 +65,10 @@ import { useAssistant } from './Assistant/useAssistant'
 import { FooterContext } from './context'
 import { Footer } from './Footer'
 import { LATEST_GIT_HUB_RELEASE_DEFAULT_PROPS } from './InstallVersion/InstallVersionTooltipContent/LatestGitHubRelease'
-import { useLatestGitHubRelease } from './InstallVersion/InstallVersionTooltipContent/LatestGitHubRelease/useLatestGitHubRelease'
+import {
+  stripGitHubAlertMarkers,
+  useLatestGitHubRelease
+} from './InstallVersion/InstallVersionTooltipContent/LatestGitHubRelease/useLatestGitHubRelease'
 import { IFooterProps } from './types'
 
 const HUB = 'https://contoso.sharepoint.com/sites/pp365'
@@ -535,6 +538,16 @@ describe('useLatestGitHubRelease', () => {
     for (const color of [newer, older, same]) {
       expect(getContrastRatio(color, '#ffffff')).toBeGreaterThanOrEqual(3)
     }
+  })
+
+  it("leaves GitHub's alert markers out of the notes, and keeps the quote they open", () => {
+    // They showed as «[!NOTE]» in the popover.
+    expect(
+      stripGitHubAlertMarkers(
+        'Endringer\n\n> [!NOTE]\n> Kjør `./Install.ps1 -Url …`\n\n>[!warning] '
+      )
+    ).toBe('Endringer\n\n> \n> Kjør `./Install.ps1 -Url …`\n\n>')
+    expect(stripGitHubAlertMarkers('Teksten [!NOTE] står')).toBe('Teksten [!NOTE] står')
   })
 })
 

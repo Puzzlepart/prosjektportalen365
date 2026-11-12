@@ -352,6 +352,17 @@ checked by hand and with which reader and browser: axe finds only part of what W
   `aria-describedby`, so the row drags with the mouse only, and give the keyboard move buttons.
 - What sits over the page at a fixed height (the footer, absolute over a 40 px spacer) covers
   the end of the content once it wraps on a narrow screen: put it in the flow there (2.4.11).
+  The footer is in the flow at every width now and wraps as soon as it does not fit; kept on one
+  line down to 480 px, it ran past the edge up to about 950 px. Only the minimized footer lies
+  over the page.
+- Fluent's drawer gives the focus back on Escape and from its close button, but not after a click
+  on its dimmed background (`backdropClick`): the focus went to the page's start. `BasePanel`
+  gives it back to what had it when the panel opened (`useReturnFocusOnLightDismiss`), frame by
+  frame while the drawer lets go, and only while the focus is nowhere else.
+- Fluent's `TagGroup` moves between its tags on every arrow key (Tabster's mover, which listens
+  on the window before the tag's own handlers), so a menu trigger in it never got ArrowDown.
+  Give the trigger `data-tabster` with `focusable.ignoreKeydown` for the keys it needs
+  (`OverflowTagMenu`).
 - `opacity: 0` hides nothing from a screen reader or the keyboard: the matrices drew both the
   before and after positions and faded one out, and both were read. Hide with `visibility`, and
   transition it with the opacity so the fade still runs (`MatrixElement.module.scss`). Where it

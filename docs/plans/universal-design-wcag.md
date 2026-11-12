@@ -1700,3 +1700,23 @@ itself as `observer` to `add()` is disposed, as the footer does.
   too (the other surfaces with a fixed width). `FolderLink` shrinks to its column, its name ends
   in «…», and the whole name is its `title`. Test: `TargetFolderScreen.test.tsx` (the title).
 - **Left.** The dialogs' insides were not measured at 640 px by hand after the change.
+
+### Hand round 5: the footer and the project cards (2026-11-12)
+
+- **Found.** The footer stayed on one line down to 480 px, its right part (the assistant, the
+  version, the help) past the edge from 481 to about 950 px. «Siste installasjon» grew to 535 px
+  in its 400 px surface (`min-width: fit-content` and a command in the release notes), and the
+  notes showed GitHub's «[!NOTE]». The assistant's settings icon was Fluent's grey on the header's
+  gradient (2.8:1 and 1.6:1). The project information panel closed by a click outside left the
+  focus on the page's start. ArrowDown on a card's «+n» did nothing, and its name «1 flere
+  elementer» did not start with «+1».
+- **Done.** The footer is in the flow and wraps (the minimized one still lies over the page). The
+  install popover's content keeps to its surface; long words in the notes break, code blocks
+  scroll, and `stripGitHubAlertMarkers` leaves the markers out. The settings link is white like
+  the close button. `BasePanel` gives the focus back after a click outside
+  (`useReturnFocusOnLightDismiss`), for every panel. The «+n» button leaves the arrow keys to its
+  menu (Tabster's `ignoreKeydown`), and its name is «+1 flere elementer». Tests: `BasePanel.test`
+  (the focus after a click on the background), `OverflowTagMenu.test`, `Footer.test` (the
+  markers).
+- **Left.** A more compact footer under 480 px (it is 165 px high at 320 px). The arrow keys on
+  «+n» and the panel's focus were not tried in the browser after the change.

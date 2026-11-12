@@ -9,7 +9,7 @@ define([], function () {
       ComboboxExpandLabel: 'Show options',
       InfoLabelTitle: 'Information about {0}',
       InstrumentGaugeLabel: 'Latest measurement {0}, start value {1}, target value {2}',
-      MenuOverflowCount: '{0} more items',
+      MenuOverflowCount: '+{0} more items',
       ProjectTitle: 'Logo for project: {0}',
       SaveTitle: 'Save',
       SaveDisabledTitle:

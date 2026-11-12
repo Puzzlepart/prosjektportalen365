@@ -15,6 +15,7 @@ import { getFluentIcon } from '../../icons'
 import { customLightTheme } from '../../util'
 import styles from './BasePanel.module.scss'
 import { IBasePanelProps } from './types'
+import { useReturnFocusOnLightDismiss } from './useReturnFocusOnLightDismiss'
 
 /**
  * Provides a themed modal drawer with shared header, body and footer presentation.
@@ -36,6 +37,7 @@ export const BasePanel: FC<IBasePanelProps> = ({
   className
 }) => {
   const fluentProviderId = useId('fp-base-panel')
+  const returnFocus = useReturnFocusOnLightDismiss(!!open)
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
@@ -58,7 +60,9 @@ export const BasePanel: FC<IBasePanelProps> = ({
           // a click on the dimmed background, `alert` requires an action.
           modalType={isLightDismiss ? 'modal' : 'alert'}
           onOpenChange={(_event, data) => {
-            if (!data.open) onClose?.()
+            if (data.open) return
+            onClose?.()
+            returnFocus(data.type)
           }}
         >
           <DrawerHeader hidden={hidden}>
