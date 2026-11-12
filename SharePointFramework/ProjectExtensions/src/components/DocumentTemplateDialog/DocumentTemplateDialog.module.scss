@@ -1,6 +1,8 @@
+// 850 px where there is room, never wider than the window (WCAG 1.4.10): at 640 px the close
+// button and «Velg» lay past the window's edge, and the focus started on the hidden «Lukk».
 .root {
   width: 850px !important;
-  max-width: 850px !important;
+  max-width: calc(100vw - 32px) !important;
   max-height: 90%;
 
   .container {

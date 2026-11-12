@@ -1,6 +1,8 @@
+// 850 px where there is room, never wider than the window (WCAG 1.4.10): at 850 px in a narrower
+// window the dialog's close button and actions lay past its edge, out of reach.
 .root {
   width: 850px !important;
-  max-width: 850px !important;
+  max-width: calc(100vw - 32px) !important;
 
   .content {
     min-height: auto;

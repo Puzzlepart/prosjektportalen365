@@ -1,8 +1,22 @@
 // Minimum 24px targets keep adjacent folder links operable (WCAG 2.5.8).
+// The link shrinks to its column, and a long name ends in «…» rather than being cut off: the
+// column's own ellipsis cannot shorten a button inside it (WCAG 1.4.12). Fluent's button reset
+// gives `resize: horizontal`, which draws a grip once the overflow is hidden.
 .folderLink {
   display: inline-flex;
   align-items: center;
   min-height: 24px;
   min-width: 24px;
+  max-width: calc(100% - 4px);
   margin-left: 4px;
+  overflow: hidden;
+  resize: none;
+  vertical-align: middle;
+
+  .name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }

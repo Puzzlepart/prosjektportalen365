@@ -79,6 +79,9 @@ describe('TargetFolderScreen', () => {
     const first = screen.getByText('Avtaler')
     const second = screen.getByText('Rapporter')
     expect(first.compareDocumentPosition(second) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    // A name too long for its column ends in «…», whole in the link's tooltip (WCAG 1.4.12): it
+    // was cut off mid-letter.
+    expect(screen.getByRole('button', { name: 'Avtaler' })).toHaveAttribute('title', 'Avtaler')
   })
 
   it('opens a folder and lists what is inside it, and the trail leads back to the library', async () => {

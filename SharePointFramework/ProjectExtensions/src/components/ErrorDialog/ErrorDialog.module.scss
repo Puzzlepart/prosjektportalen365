@@ -1,6 +1,7 @@
+// 850 px where there is room, never wider than the window (WCAG 1.4.10).
 .root {
   width: 850px !important;
-  max-width: 850px !important;
+  max-width: calc(100vw - 32px) !important;
 }
 
 .subText {

@@ -1,3 +1,4 @@
+// At least 550 px, but never wider than the window (WCAG 1.4.10).
 .root {
-  min-width: 550px;
+  min-width: min(550px, calc(100vw - 32px));
 }

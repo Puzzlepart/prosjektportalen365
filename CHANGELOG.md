@@ -105,6 +105,7 @@ Sjekk ut [release notes](./releasenotes/1.15.0.md) for høydepunkter og mer deta
 - Rettet feil i tidslinjene for prosjekt, portefølje og program: Tab fra tidslinjen hoppet over elementene, «I dag» ble dekket av søylene, og månedene i toppen var på engelsk [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
 - Rettet en feil i Planner-tiltak hvor Enter i tiltakscellen åpnet SharePoints visningsskjema og mellomrom merket raden. «Lagre» i «Legg til nytt tiltak» kan nås med tastaturet og sier at den venter på tittel [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
 - `Risikomatrise` og `Mulighetsmatrise` sier nivået til hver celle i tekst for skjermlesere og i verktøytipset, ikke bare med farge, og fargene beholdes i kontrastmodus [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
+- Rettet en feil hvor `Hent dokumentmal`, oppsettveiviseren og dialogene for fremdrift og feil var 850 px brede også i smalere vinduer, slik at lukkeknappen og knappene nederst ble liggende utenfor. Lange mappenavn i `Hent dokumentmal` slutter nå med «…» og vises i sin helhet som verktøytips [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
 
 ### Merk
 

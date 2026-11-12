@@ -1,6 +1,7 @@
+// 550 px where there is room, never wider than the dialog round it (WCAG 1.4.10).
 .changePhaseDialog {
   width: 550px;
-  max-width: 550px;
+  max-width: 100%;
 
   & > div[role="dialog"] {
     height: calc(100vh - 180px);

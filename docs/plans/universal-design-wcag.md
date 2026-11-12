@@ -1687,3 +1687,16 @@ itself as `observer` to `add()` is disposed, as the footer does.
   `DynamicMatrix.test.tsx`, and the Tab order in `tests/smoke/portfolio.spec.ts`.
 - **Left.** The zone is not shown in text in the cell itself, only in its tooltip and for screen
   readers; a configuration can name its zones with `cellValue`. Hear the round in a screen reader.
+
+### Hand round 4: the project's extensions' dialogs (2026-11-12)
+
+- **Found.** «Hent dokumentmal», the setup dialog, the progress dialog and the error dialog were
+  `width: 850px; max-width: 850px` whatever the window: at 640 px the close button and «Velg» lay
+  past the edge, unreachable, and the focus started on the hidden «Lukk». A long folder name was
+  cut off mid-letter with 1.4.12's text spacing: the column's ellipsis cannot shorten the link's
+  button, which had no title.
+- **Done.** The four are 850 px where there is room and at most the window less 32 px; the
+  project information's progress dialog and the change-phase dialog's body shrink with the window
+  too (the other surfaces with a fixed width). `FolderLink` shrinks to its column, its name ends
+  in «…», and the whole name is its `title`. Test: `TargetFolderScreen.test.tsx` (the title).
+- **Left.** The dialogs' insides were not measured at 640 px by hand after the change.
