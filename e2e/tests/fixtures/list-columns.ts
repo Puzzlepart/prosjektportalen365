@@ -25,12 +25,9 @@ function headerAt(grid: Locator, index: number) {
   return grid.locator('[role="row"]').first().locator(':scope > *').nth(index)
 }
 
-/**
- * The column whose cells show more than one tag in the most rows, with its place in the row, or
- * `null` when no column does.
- */
-export async function tagColumn(grid: Locator) {
-  const index = await grid.evaluate((root) => {
+/** The place in the row of the column whose cells show more than one tag in the most rows, or -1. */
+function tagColumnIndex(grid: Locator) {
+  return grid.evaluate((root) => {
     const rows = new Map<number, number>()
     for (const row of Array.from(root.querySelectorAll('[role="row"]'))) {
       Array.from(row.children).forEach((cell, i) => {
@@ -42,6 +39,21 @@ export async function tagColumn(grid: Locator) {
     const [most] = Array.from(rows.entries()).sort((a, b) => b[1] - a[1])
     return most ? most[0] : -1
   })
+}
+
+/**
+ * The column whose cells show more than one tag in the most rows, with its place in the row, or
+ * `null` when no column does. The overview first draws its columns as text and puts in their
+ * renderers, the tags among them, seconds after its rows (CI run 43197891051 looked too soon).
+ */
+export async function tagColumn(grid: Locator) {
+  const index = await expect
+    .poll(() => tagColumnIndex(grid), { timeout: 30_000 })
+    .toBeGreaterThanOrEqual(0)
+    .then(
+      () => tagColumnIndex(grid),
+      () => -1
+    )
   return index < 0 ? null : { header: headerAt(grid, index), index }
 }
 
@@ -77,10 +89,13 @@ export function tagState(grid: Locator, index: number) {
  * wide (0 for its least width), as far as the window reaches.
  */
 export async function dragColumnTo(header: Locator, width: number) {
-  await header.scrollIntoViewIfNeeded()
+  // The handle, not the header: a column wider than the window (800 px for «Tjenesteområde» on
+  // the test hub) would leave the handle at its edge out of the mouse's reach.
+  const resizeHandle = header.locator('.fui-TableResizeHandle')
+  await resizeHandle.scrollIntoViewIfNeeded()
   const page = header.page()
   const cell = await header.boundingBox()
-  const handle = await header.locator('.fui-TableResizeHandle').boundingBox()
+  const handle = await resizeHandle.boundingBox()
   if (!cell || !handle) throw new Error('The column has no handle to resize it by')
   const x = handle.x + handle.width / 2
   const y = handle.y + handle.height / 2
@@ -169,8 +184,10 @@ export async function expectTitleAtDefaultWidth(grid: Locator): Promise<string |
  */
 export async function expectKeyboardResize(grid: Locator) {
   const page = grid.page()
-  const header = grid.getByRole('columnheader', { name: /^tittel$|^title$/i })
-  const button = header.getByRole('button').first()
+  // The header by its button: once the keyboard is on the handle, the handle's name joins the
+  // header's own («Tittel Bredde på kolonnen Tittel»), and a header found by its name is gone.
+  const button = grid.getByRole('button', { name: /^tittel$|^title$/i })
+  const header = grid.getByRole('columnheader').filter({ has: button })
   await header.scrollIntoViewIfNeeded()
   const before = (await header.boundingBox())!.width
 
