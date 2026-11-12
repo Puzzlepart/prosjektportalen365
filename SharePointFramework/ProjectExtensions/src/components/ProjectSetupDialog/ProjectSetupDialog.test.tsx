@@ -1,11 +1,7 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
-// Babel, so mocks are not hoisted. The two sections have tests of their own; here they are lists
-// of what the dialog has selected. Fluent's combobox family cannot be opened under jsdom on React
-// 17 (it loops the Jest worker; see the testing guide), so the template picker is a native select
-// that keeps Fluent's contract: choosing an option calls `onOptionSelect` with its value. A cloud
-// template's package is resolved by `cloud.resolve`. Every message announced goes to `announcements`
-// as well, so a test can show that something was not said: a message is on the page for half a
-// second only.
+// Babel, so mocks are not hoisted. Native controls preserve Fluent's selection contract without
+// coupling these orchestration tests to popup mechanics. Captured announcements allow negative
+// assertions after Fluent's short-lived live-region messages have disappeared.
 ;(globalThis as any).DEBUG = false
 const cloud: { resolve: jest.Mock } = { resolve: jest.fn() }
 const announcements: string[] = []
@@ -43,6 +39,7 @@ jest.mock('./ContentConfigSection', () => {
 jest.mock('@fluentui/react-components', () => {
   const actual = jest.requireActual('@fluentui/react-components')
   const React = jest.requireActual('react')
+  /** Adapts native option changes to Fluent's selection callback. */
   const Combobox = ({ placeholder, disabled, selectedOptions, onOptionSelect, children }: any) =>
     React.createElement(
       'select',
@@ -62,8 +59,10 @@ jest.mock('@fluentui/react-components', () => {
       React.createElement('option', { value: '' }),
       children
     )
+  /** Supplies native options to the combobox stand-in. */
   const Option = ({ value, text, disabled }: any) =>
     React.createElement('option', { value, disabled }, text)
+  /** Records announcements while retaining Fluent's live-region behavior. */
   const useAnnounce = () => {
     const { announce } = actual.useAnnounce()
     return React.useMemo(

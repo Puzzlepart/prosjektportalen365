@@ -6,32 +6,33 @@ import { createNoTemplateOption } from '../../extensions/projectSetup/noTemplate
 import { isAddedBefore } from '../../extensions/projectSetup/listContentRecord'
 import { IProjectSetupDialogState, IResolvedCloudTemplate } from './types'
 
+/** Initializes selections, defaulting existing projects to setup without a template. */
 export const INIT = createAction('INIT')
+/** Updates list-content selection while retaining required additions. */
 export const ON_LIST_CONTENT_CONFIG_CHANGED = createAction<ContentConfig[]>(
   'ON_LIST_CONTENT_CONFIG_CHANGED'
 )
+/** Updates extension selection while retaining required additions. */
 export const ON_EXTENSIONS_CHANGED = createAction<ProjectExtension[]>('ON_EXTENSIONS_CHANGED')
+/** Switches templates and resets template-dependent selections and cloud state. */
 export const ON_TEMPLATE_CHANGED = createAction<ProjectTemplate>('ON_TEMPLATE_CHANGED')
+/** Marks the selected cloud package as loading. */
 export const ON_CLOUD_TEMPLATE_RESOLVING = createAction('ON_CLOUD_TEMPLATE_RESOLVING')
+/** Accepts resolved cloud artifacts if their template is still selected. */
 export const ON_CLOUD_TEMPLATE_RESOLVED = createAction<IResolvedCloudTemplate>(
   'ON_CLOUD_TEMPLATE_RESOLVED'
 )
+/** Records a cloud-package resolution failure. */
 export const ON_CLOUD_TEMPLATE_ERROR = createAction<string>('ON_CLOUD_TEMPLATE_ERROR')
 
+/** Empty selections before setup data is initialized. */
 export const initialState: IProjectSetupDialogState = {
   selectedTemplate: null,
   selectedContentConfig: [],
   selectedExtensions: []
 }
 
-/**
- * The list content `template` selects to begin with: its own and the content that is default for
- * every template, but what the project has from an earlier run of the setup (`isAddedBefore`),
- * which is added once more only when it is chosen.
- *
- * @param data Data for the project setup
- * @param template The template chosen
- */
+/** Selects template defaults without automatically re-adding previously provisioned hub content. */
 function defaultContentConfig(data: IProjectSetupData, template: ProjectTemplate): ContentConfig[] {
   return (template?.getContentConfig(data.contentConfig) ?? []).filter(
     (contentConfig) => !isAddedBefore(data.addedListContent, template, contentConfig)
@@ -39,9 +40,9 @@ function defaultContentConfig(data: IProjectSetupData, template: ProjectTemplate
 }
 
 /**
- * Create reducer for `ProjectSetupDialog`. Handlers that pass `state.selectedTemplate` to a
- * method type `state` as the plain state: immer's `Draft` drops `ProjectTemplate`'s private
- * members, so the draft is not accepted where a `ProjectTemplate` is expected.
+ * Builds setup-selection transitions for the available hub data.
+ *
+ * Handlers use the plain state type where Immer's Draft loses ProjectTemplate's private members.
  */
 export default (data: IProjectSetupData) =>
   createReducer(initialState, (builder) =>
@@ -60,8 +61,6 @@ export default (data: IProjectSetupData) =>
         state.selectedExtensions = template?.getExtensions(data.extensions) ?? []
       })
       .addCase(ON_LIST_CONTENT_CONFIG_CHANGED, (state: IProjectSetupDialogState, { payload }) => {
-        // For a cloud template the available set is the bundled (resolved) list content,
-        // not the hub `data.contentConfig`.
         const available = state.selectedTemplate?.isCloudTemplate
           ? (state.resolvedCloudTemplate?.contentConfig ?? [])
           : data.contentConfig

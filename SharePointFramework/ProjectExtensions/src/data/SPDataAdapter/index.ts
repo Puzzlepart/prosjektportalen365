@@ -9,15 +9,11 @@ import validFilename from 'valid-filename'
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
 import resource from 'SharedResources'
 
+/** SharePoint access for project setup and document-template selection. */
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService
 
-  /**
-   * Configure the SP data adapter
-   *
-   * @param spfxContext Context
-   * @param settings Settings
-   */
+  /** Initializes the adapter and the current project's data service. */
   public async configure(
     spfxContext: ApplicationCustomizerContext | ListViewCommandSetContext,
     settings: ISPDataAdapterConfiguration
@@ -32,11 +28,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
-   * Checks if the filename `name` is valid for the specified folder `folderServerRelativeUrl`.
+   * Validates a file or folder name against syntax rules and existing siblings.
    *
-   * @param folderServerRelativeUrl Folder server relative URL
-   * @param name File name
-   * @param isFolder Whether the item is a folder
+   * @returns A localized validation error, or null when the name is available.
    */
   public async isFilenameValid(
     folderServerRelativeUrl: string,
@@ -65,12 +59,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     return null
   }
 
-  /**
-   * Get document templates from the specified library on the hub site
-   *
-   * @param libraryName Library name
-   * @param viewXml View XML (CAML query)
-   */
+  /** Reads hub document templates matching a CAML view, excluding provisioning assets. */
   public async getDocumentTemplates(libraryName: string, viewXml: string) {
     const items = await this.portalDataService.getItems(
       libraryName,
@@ -88,11 +77,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     )
   }
 
-  /**
-   * Get folders in the specified folder/library
-   *
-   * @param folderRelativeUrl Folder URL
-   */
+  /** Reads non-system child folders from a folder's server-relative URL. */
   public async getFolders(folderRelativeUrl: string): Promise<any[]> {
     const folders =
       (await this.sp.web
@@ -101,9 +86,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     return folders.map((f) => new SPFolder(f)).filter((f) => !f.isSystemFolder)
   }
 
-  /**
-   * Get libraries in the current web
-   */
+  /** Lists document libraries, excluding catalogs, application lists and form templates. */
   public async getLibraries(): Promise<SPFolder[]> {
     const libraries =
       (await this.sp.web.lists
@@ -122,4 +105,5 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 }
 
+/** Configured adapter instance shared by the project extensions. */
 export default new SPDataAdapter()

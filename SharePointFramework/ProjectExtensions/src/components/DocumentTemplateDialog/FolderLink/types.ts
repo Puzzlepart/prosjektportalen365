@@ -1,16 +1,9 @@
+/** Folder link content and navigation callback. */
 export interface IFolderLinkProps {
-  /**
-   * The folder's name.
-   */
   name: string
 
-  /**
-   * The folder's server relative URL.
-   */
+  /** Server-relative URL used to restore focus. */
   url: string
 
-  /**
-   * Opens the folder.
-   */
   onClick: () => void
 }

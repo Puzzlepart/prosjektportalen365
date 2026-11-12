@@ -17,6 +17,7 @@ interface IApplyTemplateStatus {
   getLogMessages?: (schema: Schema) => string[]
 }
 
+/** User-facing progress metadata and schema-item diagnostics for provisioning handlers. */
 export const APPLY_TEMPLATE_STATUS_MAP = new Map<string, IApplyTemplateStatus>([
   ['Files', { text: strings.ApplyTemplateFiles, iconName: 'OpenFile' }],
   [
@@ -85,13 +86,8 @@ export const APPLY_TEMPLATE_STATUS_MAP = new Map<string, IApplyTemplateStatus>([
   ]
 ])
 
+/** Template-provisioning failure with the handler name and a readable underlying reason. */
 export class ApplyTemplateTaskError extends BaseTaskError {
-  /**
-   * Creates a new instance of `ApplyTemplateTaskError`: the handler that failed, and what it failed
-   * with in words (see `readableErrorMessage`).
-   *
-   * @param error Provisioning error from `sp-js-provisioning`
-   */
   constructor(error: ProvisioningError) {
     super(
       'ApplyTemplate',

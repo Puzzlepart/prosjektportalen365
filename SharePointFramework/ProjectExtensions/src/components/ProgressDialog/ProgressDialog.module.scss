@@ -1,14 +1,5 @@
-// Colours come from the Fluent UI v9 theme the surrounding FluentProvider emits
-// (see @BaseDialog). They replace the v8 `$ms-color-*` Sass variables, which were
-// SharePoint theme tokens ("[theme:neutralSecondary, default: #605e5c]") resolved
-// at runtime by SPFx. Tokens were picked for the closest value within the right
-// family, so the dialog looks the same:
-//   neutralSecondary  #605e5c -> --colorNeutralForeground3      #616161
-//   neutralTertiary   #a19f9d -> --colorNeutralForeground4      #707070 (darker;
-//                                the nearer --colorNeutralForegroundDisabled is a
-//                                state token and wrong for a timestamp)
-//   neutralLight      #edebe9 -> --colorNeutralStroke2          #e0e0e0
-//   neutralLighterAlt #faf9f8 -> --colorNeutralBackground1Hover #f5f5f5
+// Theme tokens come from BaseDialog's FluentProvider; timestamps use a readable foreground,
+// not the disabled-state colour.
 .root {
   width: 850px !important;
   max-width: 850px !important;

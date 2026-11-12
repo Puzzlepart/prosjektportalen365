@@ -7,10 +7,7 @@ import {
 import { IResolvedCloudTemplate } from './types'
 
 /**
- * Download and resolve a **cloud template** from its `.pppkg`: read the
- * manifest and build the bundled extension/list-content models that the wizard
- * (Extensions/List-content sections, and the `PreTask`/`CopyListData` tasks) use
- * to apply the cloud template to the project — without touching the hub.
+ * Downloads a cloud package and builds its selectable models without provisioning the hub.
  *
  * @param template The selected cloud template `ProjectTemplate` (must be `isCloudTemplate`)
  */

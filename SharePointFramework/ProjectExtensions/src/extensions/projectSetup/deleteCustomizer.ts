@@ -3,15 +3,13 @@ import { IWeb } from '@pnp/sp/webs'
 import ProjectSetup from 'extensions/projectSetup'
 
 /**
- * Delete customizer for the specified project setup instance.
+ * Removes the setup custom action on a best-effort basis.
  *
  * Best-effort: deleting a user custom action requires Full Control, so on sites
  * where the current user lacks that permission (e.g. a non-owner member on a
  * Teams channel site) the failure is logged and swallowed rather than surfaced
  * as an error dialog. The leftover custom action is cleaned up the next time an
  * owner visits.
- *
- * @param instance Project setup instance
  */
 export async function deleteCustomizer(instance: ProjectSetup): Promise<void> {
   try {

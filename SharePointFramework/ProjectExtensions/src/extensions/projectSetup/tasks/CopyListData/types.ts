@@ -1,3 +1,4 @@
+/** Source list columns used to construct Planner tasks and their details. */
 export interface IPlannerTaskSPItem {
   Title: string
   GtDescription: string

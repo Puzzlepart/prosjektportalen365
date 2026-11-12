@@ -6,11 +6,7 @@ import styles from './DocumentTemplateItem.module.scss'
 import { IDocumentTemplateItemProps } from './types'
 import { MAX_LENGTH, useDocumentTemplateItem } from './useDocumentTemplateItem'
 
-/**
- * One copy to name: its file type and name as a button that opens the name and title fields, and
- * says whether they are shown (WCAG 2.1.1, 4.1.2); it was a clickable `div` the keyboard could not
- * reach.
- */
+/** Expandable name and title editor for one template copy. */
 export const DocumentTemplateItem: FC<IDocumentTemplateItemProps> = (props) => {
   const {
     fieldsId,

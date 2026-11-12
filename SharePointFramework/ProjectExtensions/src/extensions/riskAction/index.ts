@@ -9,6 +9,7 @@ import { DataAdapter } from './dataAdapter'
 import { RiskActionItemContext } from './types'
 import { renderReact, unmountReact } from 'pp365-shared-library'
 
+/** Replaces risk-action cells with Planner controls when enabled in global settings. */
 export default class RiskActionFieldCustomizer extends BaseFieldCustomizer<null> {
   protected _dataAdapter: DataAdapter
   protected _hiddenFieldValues: Map<string, any> = new Map<string, any>()
@@ -34,13 +35,7 @@ export default class RiskActionFieldCustomizer extends BaseFieldCustomizer<null>
     }
   }
 
-  /**
-   * Renders the custom field cell for a risk action item.
-   *
-   * @param event - The event parameters for rendering the cell.
-   *
-   * @returns void
-   */
+  /** Renders a risk cell with its stored task references when Planner integration is enabled. */
   public onRenderCell(event: IFieldCustomizerCellEventParameters): void {
     if (!this._isPlannerEnabled) return
     const currentItemContext = RiskActionItemContext.create(

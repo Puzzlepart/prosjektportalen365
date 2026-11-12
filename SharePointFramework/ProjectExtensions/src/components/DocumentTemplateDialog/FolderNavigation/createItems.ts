@@ -1,10 +1,6 @@
 import { IFolderNavigationItem, IFolderNavigationProps } from './types'
 
-/**
- * Create breadcrum items
- *
- * @param props Folder navigation props
- */
+/** Builds breadcrumb entries for the path below a /sites/<site>/<library> prefix. */
 export const createItems = ({
   currentFolder,
   setFolder

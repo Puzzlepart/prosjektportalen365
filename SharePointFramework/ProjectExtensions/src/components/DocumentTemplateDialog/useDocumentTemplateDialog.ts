@@ -13,12 +13,7 @@ import reducer, {
 } from './reducer'
 import { DocumentTemplateDialogScreen, IDocumentTemplateDialogProps } from './types'
 
-/**
- * Component logic hook for `DocumentTemplateDialog`: the dialog's state, the copy, and the
- * footer's choices, which the dialog owns so every screen's buttons sit in the same place.
- *
- * @param props The dialog's props
- */
+/** Coordinates wizard state, sequential template copying and footer navigation. */
 export function useDocumentTemplateDialog(props: IDocumentTemplateDialogProps) {
   const selectorContext = useContext(TemplateSelectorContext)
   const [state, dispatch] = useReducer(reducer, selectorContext, initState)

@@ -14,11 +14,7 @@ import { IPlannerTaskItemProps } from './types'
 import { usePlannerTaskItem } from './usePlannerTaskItem'
 import { PlannerTaskItemProperty } from './PlannerTaskItemProperty'
 
-/**
- * A Planner task of the risk: its title, struck through and named so when done, which opens a
- * preview of the task. The preview keeps the focus while it is open (`trapFocus`) and is named by
- * the task; its properties are a description list, and its link goes to the task in Planner.
- */
+/** Opens a named, focus-trapping preview for a risk's Planner task and indicates completion. */
 export const PlannerTaskItem: FC<IPlannerTaskItemProps> = (props) => {
   const { onOpenChange, task, taskLink, titleId, isCompleted, label } = usePlannerTaskItem(props)
   return (

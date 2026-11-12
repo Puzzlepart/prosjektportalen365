@@ -16,12 +16,6 @@ import { TemplateSelectorContext } from '../../extensions/templateSelector/conte
 import { DocumentTemplateDialog } from './DocumentTemplateDialog'
 
 /**
- * The dialog as a whole: the footer it owns, with each screen's buttons in the same place, and
- * the way through the screens from picking templates to the summary. The screens' own tests cover
- * what each lists; this one covers what the buttons do and when they are offered.
- */
-
-/**
  * The dialog reads only these fields off `SPFolder` and `TemplateItem`, so stand-ins keep the test
  * away from the models' SharePoint dependencies. `update` is the model's, which takes the values
  * given and leaves a field alone for an empty one.

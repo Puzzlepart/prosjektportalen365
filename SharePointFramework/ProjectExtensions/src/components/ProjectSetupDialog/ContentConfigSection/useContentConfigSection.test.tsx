@@ -7,14 +7,11 @@ import { ProjectSetupDialogContext } from '../context'
 import { useContentConfigSection } from './useContentConfigSection'
 import { announced } from 'pp365-jest-config/lib/announce'
 
-/**
- * The order the section lists its items in: the ones the chosen template makes mandatory first,
- * then the ones already selected, then the rest, each group in title order. Read through a probe
- * component, with stand-ins for the model that carry only what the hook reads.
- */
+/** Minimal selectable content configuration with optional template requirements. */
 const item = (key: string, text: string, mandatory = false) =>
   ({ key, text, subText: '', hidden: false, isMandatoryForTemplate: () => mandatory }) as any
 
+/** Exposes the hook's sorted items and visible selection count. */
 const Probe: React.FC = () => {
   const { items, selectedCountText } = useContentConfigSection()
   return (
@@ -62,6 +59,7 @@ describe('useContentConfigSection', () => {
 
   it('marks the list content the project has from an earlier run, and neither locks nor forces it', () => {
     const dispatch = jest.fn()
+    /** Exercises clearing selection while required, previously unprovisioned content remains. */
     const Picker: React.FC = () => {
       const { hasAddedItems, onSelectionChange } = useContentConfigSection()
       return (
@@ -110,6 +108,7 @@ describe('useContentConfigSection', () => {
   })
 
   it('tells how many items a search leaves (WCAG 4.1.3)', async () => {
+    /** Triggers a search through the real hook to exercise result announcements. */
     const Search: React.FC = () => {
       const { onSearch } = useContentConfigSection()
       return <button onClick={() => onSearch('ech')}>Søk</button>

@@ -97,10 +97,7 @@ const getLogEntryColor = (level: LogLevel): string => {
   }
 }
 
-/**
- * A step's log: a `log` the keyboard can reach to scroll it (WCAG 2.1.1), named by the step, each
- * entry's level named for its icon.
- */
+/** Displays a keyboard-scrollable task log with named severity icons. */
 const TaskLogEntries: FC<{ task: ITaskProgress }> = ({ task }) => {
   const logRef = useRef<HTMLDivElement>(null)
 
@@ -142,6 +139,7 @@ const TaskLogEntries: FC<{ task: ITaskProgress }> = ({ task }) => {
   )
 }
 
+/** Shows per-task diagnostics, automatically opening running and failed tasks. */
 export const TaskLogSection: FC<ITaskLogSectionProps> = ({ tasks }) => {
   const [openItems, setOpenItems] = useState<string[]>([])
   const prevStatuses = useRef<Record<string, TaskStatus>>({})

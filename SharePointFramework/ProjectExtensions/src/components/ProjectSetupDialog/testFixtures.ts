@@ -3,6 +3,7 @@
  * `ContentConfig`) that carry only what the dialog, its reducer and its sections read.
  */
 
+/** Creates an extension stand-in with configurable template requirements. */
 export function extension(id: number, text: string, { mandatoryFor = [] as number[] } = {}) {
   return {
     id,
@@ -15,10 +16,12 @@ export function extension(id: number, text: string, { mandatoryFor = [] as numbe
   } as any
 }
 
+/** Creates a list-content stand-in using the extension selection contract. */
 export function contentConfig(id: number, text: string, { mandatoryFor = [] as number[] } = {}) {
   return { ...extension(id, text, { mandatoryFor }), key: `cc-${id}` } as any
 }
 
+/** Creates a local or cloud template stand-in with selectable additions. */
 export function template(
   id: number,
   text: string,
@@ -45,8 +48,11 @@ export function template(
   } as any
 }
 
+/** Extensions available to the default setup fixtures. */
 export const EXTENSIONS = [extension(1, 'Gevinstoversikt'), extension(2, 'Risikomatrise')]
+/** List-content options available to the default setup fixtures. */
 export const CONTENT_CONFIG = [contentConfig(10, 'Fasesjekkliste'), contentConfig(11, 'Planner')]
+/** Templates with distinct default additions for selection tests. */
 export const TEMPLATES = [
   template(1, 'Standardmal', { isDefault: true, extensions: [1], contentConfig: [10] }),
   template(2, 'Byggeprosjekt', { extensions: [2], contentConfig: [10, 11] })

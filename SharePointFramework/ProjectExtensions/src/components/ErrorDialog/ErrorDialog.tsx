@@ -6,6 +6,7 @@ import { IErrorDialogProps } from './types'
 import { Button } from '@fluentui/react-components'
 import { UserMessage } from 'pp365-shared-library'
 
+/** Shows setup errors and offers recovery actions for an already configured project. */
 export const ErrorDialog: FC<IErrorDialogProps> = ({
   error,
   version,

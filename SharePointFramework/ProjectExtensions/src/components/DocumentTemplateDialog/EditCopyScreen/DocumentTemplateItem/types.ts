@@ -1,13 +1,8 @@
 import { TemplateItem } from 'models/TemplateItem'
 
+/** Template copy and callback for validated metadata edits. */
 export interface IDocumentTemplateItemProps {
-  /**
-   * Item
-   */
   item: TemplateItem
 
-  /**
-   * On input changed
-   */
   onInputChanged: (id: string, properties: Record<string, string>, errorMessage?: string) => void
 }

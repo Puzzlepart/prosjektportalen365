@@ -1,9 +1,7 @@
 import resource from 'SharedResources'
 import type { NavigationNodes } from './tasks'
 
-/**
- * The web a menu URL is resolved against.
- */
+/** Web and site-collection URLs used to resolve navigation tokens. */
 export interface IMenuUrlBase {
   /** The web's absolute URL, `https://contoso.sharepoint.com/sites/prosjekt` */
   webUrl: string
@@ -13,20 +11,11 @@ export interface IMenuUrlBase {
 }
 
 /**
- * The Quick Launch of the en-US templates up to 1.11.1, per template and level: Norwegian titles,
- * each with the title the template has in its place now. The titles were written in Norwegian in
- * `Templates/JsonTemplates/_JsonTemplate{Project,Program,Parent}.json` (`git show
- * v1.11.0:Templates/JsonTemplates/_JsonTemplateProject.json`; every tag from 1.5.0 to 1.11.1 has
- * these titles or some of them), and the script that generated the templates
- * (`generateJsonTemplates.js`, from 1.9 `Templates/.tasks/generateProjectTemplates.js`) replaced
- * only `{{tokens}}`, so it copied them unchanged into the en-US `DefaultTemplate`,
- * `ProgramTemplate` and `ParentTemplate`. 1.12.0 made them the `{{Navigation_*_Title}}` and
- * `{{ClientSidePages_*_Title}}` tokens the templates still have. On a Norwegian project they are
- * the current titles, but for the benefit titles `renamedTemplateTitles` lists as well, so they
- * change nothing there.
+ * Maps Norwegian menu titles shipped in en-US templates through 1.11.1 to their current titles.
+ * Those templates contained literal Norwegian titles; localized tokens replaced them in 1.12.0.
+ * Repeated titles retain the successor for each template and menu level that used them.
  */
 const norwegianMenuOfEnglishTemplates = (): Array<[string, string]> => [
-  // DefaultTemplate (Standardmal), top level
   ['Hjem', resource.Navigation_Home_Title],
   ['Prosjektstatus', resource.Navigation_ProjectStatus_Title],
   ['Prosjektlogg', resource.Navigation_ProjectLog_Title],
@@ -42,21 +31,17 @@ const norwegianMenuOfEnglishTemplates = (): Array<[string, string]> => [
   ['Ressursallokering', resource.Navigation_ResourceAllocation_Title],
   ['Prosjekttidslinje', resource.Navigation_ProjectTimeline_Title],
   ['Områdeinnhold', resource.Navigation_SiteContent_Title],
-  // DefaultTemplate, under Gevinstarbeid
   ['Endringsanalyse', resource.Navigation_ChangeAnalysis_Title],
   ['Gevinstanalyse og gevinstrealiseringsplan', resource.Navigation_BenefitsAnalysis_Title],
   ['Måleindikatorer', resource.Navigation_MeasurementIndicators_Title],
   ['Gevinstoppfølging', resource.Navigation_BenefitsFollowup_Title],
   ['Gevinstoversikt', resource.Navigation_BenefitsOverview_Title],
-  // ProgramTemplate (Programmal), top level
   ['Hjem', resource.Navigation_Home_Title],
   ['Programstatus', resource.ClientSidePages_ProgramStatus_Title],
   ['Programinnhold', resource.Navigation_ProgramContent_Title],
   ['Dokumenter', resource.Navigation_Documents_Title],
   ['Programleveranser', resource.Lists_ProgramDeliveries_Title],
   ['Programtidslinje', resource.ClientSidePages_ProgramProjectTimeline_Title],
-  // ProgramTemplate, under Programinnhold (Kommunikasjonsplaner from 1.9, Ressursallokeringer
-  // from 1.10)
   ['Administrasjon', resource.ClientSidePages_ParentAdmin_Title],
   ['Oversikt', resource.ClientSidePages_ProgramOverview_Title],
   ['Gevinster', resource.ClientSidePages_ProgramBenefitOverview_Title],
@@ -65,9 +50,7 @@ const norwegianMenuOfEnglishTemplates = (): Array<[string, string]> => [
   ['Usikkerheter', resource.ClientSidePages_ProgramUncertainties_Title],
   ['Kommunikasjonsplaner', resource.ClientSidePages_ProgamCommunicationPlan_Title],
   ['Ressursallokeringer', resource.ClientSidePages_ProgramResourceAllocation_Title],
-  // ParentTemplate (Overordnet), top level
   ['Underordnet innhold', resource.Navigation_ChildContent_Title],
-  // ParentTemplate, under Underordnet innhold (as under Programinnhold)
   ['Administrasjon', resource.ClientSidePages_ParentAdmin_Title],
   ['Oversikt', resource.ClientSidePages_ParentOverview_Title],
   ['Gevinster', resource.ClientSidePages_ParentBenefitOverview_Title],
@@ -79,22 +62,11 @@ const norwegianMenuOfEnglishTemplates = (): Array<[string, string]> => [
 ]
 
 /**
- * The Quick Launch titles the PP365 templates had before a rename, with the titles that replaced
- * them (the templates' current text, from `SharedResources`). The old titles are menu titles the
- * templates had up to 1.14.1 that the template in the same language no longer has, and the old
- * titles the v6 rename renames on existing projects (`$NavRetitleMap` in
- * `Install/Scripts/UpgradeAllSitesToLatest/EnsureV6BenefitTerminology.ps1`). Most of their pages
- * and lists have other names in the templates now too, so their URLs do not tell them apart from a
- * link an owner added.
+ * Maps historical and v6-renamed menu titles to their localized successors.
+ * Renamed pages and lists also changed URLs, so URL matching alone cannot identify template links.
  *
- * Since 1.12.0 the titles are `Navigation_*_Title` and the program and parent pages'
- * `ClientSidePages_*_Title` in `Templates/Portfolio/Resources.*.resx`. Up to 1.11 the en-US
- * templates had the Norwegian ones: see {@link norwegianMenuOfEnglishTemplates}.
- *
- * A title is listed once for each template and level that had it, with that node's new title.
- * `SharedResources` is in the user's language, which is the site's, and so the template's, once the
- * setup has turned off the site's alternative languages (`_removeAlternativeLanguages` in
- * `index.ts`).
+ * SharedResources matches the site's template language after setup disables alternative languages.
+ * Legacy en-US titles are included through {@link norwegianMenuOfEnglishTemplates}.
  */
 const renamedTemplateTitles = (): Array<{ old: string[]; current: string[] }> => [
   // Gevinstarbeid until 1.11, Gevinstoversikt in 1.12 and 1.13 (and the child of either)
@@ -110,7 +82,6 @@ const renamedTemplateTitles = (): Array<{ old: string[]; current: string[] }> =>
     old: ['Gevinstoppfølging', 'Benefits Followup', 'Benefits follow-up'],
     current: [resource.Navigation_BenefitsFollowup_Title]
   },
-  // Under Programinnhold (Programmal) and Underordnet innhold (Overordnet)
   {
     old: ['Gevinster'],
     current: [
@@ -118,21 +89,15 @@ const renamedTemplateTitles = (): Array<{ old: string[]; current: string[] }> =>
       resource.ClientSidePages_ParentBenefitOverview_Title
     ]
   },
-  // 1.12.0
   { old: ['Notatbok'], current: [resource.Navigation_Notebook_Title] },
   ...norwegianMenuOfEnglishTemplates().map(([old, current]) => ({ old: [old], current: [current] }))
 ]
 
 /**
- * A menu URL in the form SharePoint stores it, for comparison only, as sp-js-provisioning compares
- * a template's URL with a stored one: the URL tokens replaced, a web-relative URL resolved against
- * the web, an absolute URL on the web's origin made server-relative, and the path decoded, without
- * a trailing slash and in lower case. A URL on another host is kept as it is. `undefined` for a URL
- * that names no page: empty, `#` (a heading, the template's `Notatblokk`) or a heading's
- * `http://linkless.header/`.
+ * Normalizes same-origin menu paths for comparison, resolving tokens and preserving query and hash.
+ * External URLs are unchanged; local paths are decoded, lowercased and stripped of trailing slashes.
  *
- * @param url The URL
- * @param base The web it is resolved against
+ * @returns Undefined for empty URLs and heading-only links.
  */
 export function normaliseMenuUrl(url: string | undefined, base: IMenuUrlBase): string | undefined {
   const { origin, pathname } = new URL(base.webUrl)
@@ -171,9 +136,7 @@ export function normaliseMenuUrl(url: string | undefined, base: IMenuUrlBase): s
 }
 
 /**
- * The Quick Launch that the template and the selected extensions declare, one level of it, for
- * the restore after the setup ran again: it tells a saved node that is the template's own from a
- * link an owner added.
+ * Identifies template-owned links at one menu level so restoration adds only owner-created links.
  */
 export class TemplateQuickLaunch {
   private constructor(
@@ -183,11 +146,10 @@ export class TemplateQuickLaunch {
   ) {}
 
   /**
-   * The top level of the menus the schemas declare.
+   * Builds a top-level matcher from the original template and extension menu declarations.
    *
    * @param menus The `Navigation.QuickLaunch` of each schema (the template's before an extension's
    * replaced it, then each extension's)
-   * @param base The web the URLs are resolved against
    */
   public static of(menus: NavigationNodes[] = [], base: IMenuUrlBase): TemplateQuickLaunch {
     const nodes = menus.filter(Array.isArray).flat()
@@ -203,13 +165,9 @@ export class TemplateQuickLaunch {
   }
 
   /**
-   * Why a saved node of this level is the template's own, or `undefined` for a link an owner added:
-   * the level declares its title, or a title that replaced it (a node of an earlier version of the
-   * template; a title several templates or levels had has one for each), or a schema declares its
-   * URL at any level.
+   * Explains template ownership by current or historical title at this level, or by URL at any level.
    *
-   * @param title The saved node's title
-   * @param url The saved node's URL
+   * @returns Undefined when no template declaration matches the saved link.
    */
   public declares(title: string, url: string): string | undefined {
     const titles = new Set(this._nodes.map((node) => node?.Title))
@@ -225,10 +183,7 @@ export class TemplateQuickLaunch {
   }
 
   /**
-   * The level under the nodes of this level with `title`: empty under a title the level does not
-   * declare. The URLs are those of the whole menu.
-   *
-   * @param title The parent's title
+   * Builds a matcher for declared children of the named parent, retaining whole-menu URL matching.
    */
   public childrenOf(title: string): TemplateQuickLaunch {
     return new TemplateQuickLaunch(

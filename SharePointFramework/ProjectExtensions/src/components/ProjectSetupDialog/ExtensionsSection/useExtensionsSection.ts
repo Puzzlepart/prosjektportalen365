@@ -6,9 +6,7 @@ import { getSelectedCountText } from '../selectedCountText'
 import { useSearchAnnouncement } from '../useSearchAnnouncement'
 import { useColumns } from './useColumns'
 
-/**
- * Component logic hook for `ExtensionsSection`
- */
+/** Filters and ranks available extensions while retaining mandatory selections. */
 export function useExtensionsSection() {
   const context = useProjectSetupDialogContext()
   const [searchTerm, setSearchTerm] = useState('')
@@ -28,7 +26,6 @@ export function useExtensionsSection() {
 
   const selectedKeys = new Set(context.state.selectedExtensions.map((e) => String(e.key)))
 
-  // Mandatory items first, then the selected ones, then the rest, each group in title order.
   const rank = (item: { key: string | number }) =>
     mandatoryKeys.has(String(item.key)) ? 0 : selectedKeys.has(String(item.key)) ? 1 : 2
   const sortedItems = [...allItems].sort(
@@ -61,7 +58,6 @@ export function useExtensionsSection() {
     (item) => !item.hidden
   ).length
 
-  // A status, not a button: the count changes as items are picked, and is read out then.
   const selectedCountText = getSelectedCountText(visibleSelectedCount)
   useSearchAnnouncement(searchTerm, items.length, allItems.length)
 

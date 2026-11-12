@@ -2,10 +2,7 @@ import { useCallback, useContext } from 'react'
 import { DocumentTemplateDialogContext } from '../context'
 import { TEMPLATE_CHANGED } from '../reducer'
 
-/**
- * Component logic hook for `EditCopyScreen`: the copies to name, and their edits, which go to the
- * dialog's state so its footer knows whether every name is valid.
- */
+/** Connects template-copy edits to dialog state and its validation-dependent footer. */
 export function useEditCopyScreen() {
   const { state, dispatch } = useContext(DocumentTemplateDialogContext)
   const onInputChanged = useCallback(

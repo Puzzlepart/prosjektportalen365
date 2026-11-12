@@ -16,16 +16,7 @@ import { resolveCloudTemplate } from '../resolveCloudTemplate'
 import { TemplateSelectorMode } from './types'
 import { format } from 'pp365-shared-library'
 
-/**
- * Manages template selection and resolves selected cloud packages for project setup.
- *
- * Cloud resolution exposes bundled artifacts without provisioning hub content.
- * Unsupported hub content is warned about and skipped instead of blocking
- * extensions and list content that can still be applied. It tells when it starts reading a
- * cloud template and when the template is read (WCAG 4.1.3): the spinner meanwhile says nothing
- * to a screen reader, and the setup button turns usable in silence; a failure is a message that
- * says itself.
- */
+/** Manages template search and selection, resolving cloud packages with status announcements. */
 export function useTemplateSelector() {
   const context = useProjectSetupDialogContext()
   const hasExistingTemplate = context.props.data.hasExistingTemplate
@@ -39,7 +30,6 @@ export function useTemplateSelector() {
     return def || context.props.data.templates[0]
   })()
 
-  // Title order, whatever order the hub's list returns them in.
   const templates = context.props.data.templates
     .filter((t) => !t.hidden)
     .sort((a, b) => a.text.localeCompare(b.text, 'nb'))

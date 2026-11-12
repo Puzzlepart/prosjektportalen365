@@ -9,14 +9,7 @@ import { IDocumentTemplateItemProps } from './types'
  */
 export const MAX_LENGTH = 255
 
-/**
- * Component logic hook for `DocumentTemplateItem`: whether the fields are shown, the lengths they
- * count, and the edits, reported once typing pauses with what SharePoint says about a name. Each
- * field has its own handler, so the inputs keep the ids their `Field` gives them and a click on a
- * label reaches its input.
- *
- * @param props The item's props
- */
+/** Manages expansion, character counts and debounced validation of template-copy edits. */
 export function useDocumentTemplateItem(props: IDocumentTemplateItemProps) {
   const { state } = useContext(DocumentTemplateDialogContext)
   const fieldsId = useId('copy-fields')
@@ -28,11 +21,9 @@ export function useDocumentTemplateItem(props: IDocumentTemplateItemProps) {
   const [titleLength, setTitleLength] = useState(props.item.title?.length || 0)
 
   /**
-   * Takes a keystroke in one of the fields: the length counts at once, the edit once typing pauses.
+   * Updates character counts immediately and reports validated edits after typing pauses.
    *
-   * @param field Which field
-   * @param data The new value
-   * @param resolveDelay How long typing pauses before the edit is reported, in milliseconds
+   * @param resolveDelay Debounce delay in milliseconds.
    */
   function onFieldChange(
     field: 'name' | 'title',

@@ -1,29 +1,13 @@
-/**
- * How long the JSON of an error without a message may be in the setup's messages.
- */
 const MAX_JSON_LENGTH = 200
 
-/**
- * How many causes in a message is looked for.
- */
 const MAX_CAUSE_DEPTH = 3
 
-/**
- * Whether `value` is a text a user can read: not empty, and not what an object turned into a text
- * reads as.
- *
- * @param value The value
- */
+/** Rejects empty messages and implicit object-to-string output. */
 function isReadable(value: unknown): value is string {
   return typeof value === 'string' && value.trim() !== '' && value !== '[object Object]'
 }
 
-/**
- * The value at `path` in `value`, or `undefined` where the path ends.
- *
- * @param value The value
- * @param path The keys to follow
- */
+/** Reads a nested value without failing when an intermediate object is absent. */
 function at(value: unknown, ...path: string[]): any {
   return path.reduce((nested, key) => (nested == null ? undefined : nested[key]), value as any)
 }
@@ -31,8 +15,6 @@ function at(value: unknown, ...path: string[]): any {
 /**
  * The message of a failed JSOM request, which rejects with `{ sender, args }`: `args` is a
  * `ClientRequestFailedEventArgs`.
- *
- * @param value What the request rejected with
  */
 function jsomMessage(value: Record<string, any>): unknown {
   const getMessage = at(value, 'args', 'get_message')
@@ -40,12 +22,7 @@ function jsomMessage(value: Record<string, any>): unknown {
 }
 
 /**
- * The first readable text in `error`: the text itself; else its `message`, SharePoint's error body
- * (`message.value`, `error.message.value`) or a failed JSOM request's `args.get_message()`; else the
- * same of its `cause`, a few causes in at most. Empty when there is none.
- *
- * @param error What failed
- * @param depth How many causes in `error` is
+ * Finds a readable message across JavaScript, SharePoint and JSOM error shapes and bounded causes.
  */
 function readableText(error: unknown, depth: number): string {
   if (error === null || error === undefined) return ''
@@ -65,10 +42,7 @@ function readableText(error: unknown, depth: number): string {
 }
 
 /**
- * A short JSON of `value`, a reference it holds twice left out, and empty for an empty object or
- * one that cannot be written as JSON.
- *
- * @param value The value
+ * Serializes bounded diagnostic JSON, omitting repeated references and empty or unreadable values.
  */
 function shortJson(value: object): string {
   const seen = new WeakSet<object>()
@@ -88,16 +62,10 @@ function shortJson(value: object): string {
 }
 
 /**
- * A readable message for what a step of the setup failed with: the first readable text in it or in
- * its causes (see `readableText`); else a short JSON of it when it is an object that is not an
- * error, or of its cause when it is an error, whose own fields say nothing. Empty when there is
- * nothing to read.
+ * Extracts a readable setup failure message, falling back to bounded JSON when no message exists.
  *
  * sp-js-provisioning's `ProvisioningError` takes its message from what the handler failed with, and
- * a failed JSOM request (the content types, among others) rejects with `{ sender, args }`, which
- * has no message: the setup said «[object Object]».
- *
- * @param error What the step failed with
+ * JSOM rejects with { sender, args }, which has no message and otherwise becomes "[object Object]".
  */
 export function readableErrorMessage(error: unknown): string {
   const text = readableText(error, 0)
@@ -108,24 +76,15 @@ export function readableErrorMessage(error: unknown): string {
     : ''
 }
 
-/**
- * `message`, then what `error` says when it says something readable: `<message>: <what it says>`.
- *
- * @param message The message
- * @param error What the step failed with
- */
+/** Appends a readable failure reason to a localized setup message when one is available. */
 export function withReason(message: string, error: unknown): string {
   const reason = readableErrorMessage(error)
   return reason ? `${message}: ${reason}` : message
 }
 
 /**
- * What a `ProjectSetupError` shows under its message for the `stack` it was given: a text as it
- * is, an error with a readable message of its own as it is (`parseErrorStack` reads SharePoint's
- * error body in it), and anything else as its name and a readable message. sp-js-provisioning's
- * `ProvisioningError` for a failed JSOM request showed as «ProvisioningError: [object Object]».
- *
- * @param stack The stack, or the error, the setup error was given
+ * Prepares raw failure details for parseErrorStack, preserving objects with readable messages.
+ * Message-less error objects become a readable name and reason instead of "[object Object]".
  */
 export function readableErrorDetails(stack: unknown): unknown {
   if (stack === null || stack === undefined) return ''

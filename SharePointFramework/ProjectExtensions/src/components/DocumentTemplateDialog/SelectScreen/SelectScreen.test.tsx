@@ -9,13 +9,6 @@ import { SELECTION_CHANGED } from '../reducer'
 import { SelectScreen } from './index'
 
 /**
- * The screen where the user picks templates: the template library's top level, folders first and
- * sorted, navigation into folders, and a selection that the dialog keeps as the templates to copy.
- * Asserted through text, roles and the dispatched selection, so it holds whichever list renders the
- * rows and whichever selection model carries the choice.
- */
-
-/**
  * The screen reads only these fields off `TemplateItem`, so a stand-in keeps the test away from the
  * model's SharePoint dependencies.
  */
@@ -47,9 +40,7 @@ function renderScreen(templates: any[]) {
       </DocumentTemplateDialogContext.Provider>
     </TemplateSelectorContext.Provider>
   )
-  /**
-   * Names of the templates the last selection change reported.
-   */
+  /** Reads the last selection action rather than grid implementation state. */
   const selectedNames = () => {
     const calls = dispatch.mock.calls.filter(([action]) => action.type === SELECTION_CHANGED.type)
     if (calls.length === 0) return []

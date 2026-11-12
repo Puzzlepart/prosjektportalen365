@@ -9,11 +9,7 @@ import { BROWSE_FOLDER, OPEN_LIBRARY, SELECT_FOLDER, SHOW_LIBRARIES } from '../r
 import { useFolderFocus } from '../useFolderFocus'
 import columns from './columns'
 
-/**
- * Component logic hook for `TargetFolderScreen`: the folders of where the dialog is browsing
- * (the library's own, a folder's from SharePoint, or the site's libraries), sorted by name, and
- * the moves, which go to the dialog's state so its footer knows what «Kopier hit» means.
- */
+/** Loads target folders and keeps navigation and selection in the dialog's shared state. */
 export function useTargetFolderScreen() {
   const context = useContext(TemplateSelectorContext)
   const { state, dispatch } = useContext(DocumentTemplateDialogContext)
@@ -51,7 +47,6 @@ export function useTargetFolderScreen() {
   const containerRef = useRef<HTMLDivElement>(null)
   useFolderFocus(browse.folder ?? '', containerRef)
 
-  // The way to the list of libraries, when the site has more than one.
   const navigationItems: IFolderNavigationItem[] | undefined =
     context.libraries?.length > 1
       ? [{ key: '_', text: strings.Library, onClick: () => dispatch(SHOW_LIBRARIES()) }]

@@ -10,23 +10,13 @@ import { ICamlQuery } from '@pnp/sp/lists'
 import { ISiteUserProps } from '@pnp/sp/site-users'
 import resource from 'SharedResources'
 
-/**
- * Sets up permissions for the SP web.
- *
- * Errors currently doesn't break the setup. Setup continues
- * gracefully on error.
- */
+/** Applies configured hub-group memberships and permission levels without aborting setup on failure. */
 export class SitePermissions extends BaseTask {
   constructor(data: IProjectSetupData) {
     super('SitePermissions', data)
   }
 
-  /**
-   * Execute SitePermissions
-   *
-   * @param params - Task parameters
-   * @param onProgress - On progress funtion
-   */
+  /** Ensures destination groups and roles, then copies the configured hub groups' users. */
   public async execute(
     params: IBaseTaskParams,
     onProgress: OnProgressCallbackFunction
@@ -95,13 +85,7 @@ export class SitePermissions extends BaseTask {
     }
   }
 
-  /**
-   * Get configurations for the selected template from list,
-   * if no template is selected the all configurations are returned.
-   *
-   * @returns Permission configurations
-   *
-   */
+  /** Reads unbound permission rules plus those matching the selected template, if any. */
   private async _getPermissionConfiguration(): Promise<IPermissionConfiguration[]> {
     const list = SPDataAdapter.portalDataService.web.lists.getByTitle(
       resource.Lists_Permission_Configuration_Title
@@ -145,9 +129,7 @@ export class SitePermissions extends BaseTask {
     )
   }
 
-  /**
-   * Get site groups with users from the portal web
-   */
+  /** Indexes hub-group members' login names by group title. */
   private async _getSiteGroups() {
     return (
       await SPDataAdapter.portalDataService.web.siteGroups
@@ -162,9 +144,7 @@ export class SitePermissions extends BaseTask {
     )
   }
 
-  /**
-   * Get site group by name with users from the portal web
-   */
+  /** Reads member login names from a named hub group. */
   private async _getSiteGroupByName(groupName: string) {
     try {
       const group = await SPDataAdapter.portalDataService.web.siteGroups
@@ -177,11 +157,7 @@ export class SitePermissions extends BaseTask {
     }
   }
 
-  /**
-   * Get role definitions for the specified web
-   *
-   * @param web Web
-   */
+  /** Indexes the destination web's permission-level IDs by name. */
   private async _getRoleDefinitions(web: any) {
     return (await web.roleDefinitions.select('Name', 'Id')()).reduce(
       (rds: { [key: string]: string }, { Name, Id }) => ({

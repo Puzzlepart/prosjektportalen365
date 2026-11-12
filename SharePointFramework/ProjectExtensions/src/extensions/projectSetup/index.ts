@@ -45,10 +45,8 @@ import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } fr
 Logger.subscribe(ConsoleListener())
 Logger.activeLogLevel = sessionStorage.DEBUG === '1' || DEBUG ? LogLevel.Info : LogLevel.Warning
 
+/** Validates the site and coordinates project provisioning, dialogs and navigation restoration. */
 export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetupProperties> {
-  /**
-   * Configured SPFI instance from `@pnp/sp`
-   */
   public sp: SPFI
   private _portalDataService: PortalDataService
   private _isSetup = true
@@ -168,11 +166,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       .update({ GtIsParentProject: true })
   }
 
-  /**
-   * Intiialize setup
-   *
-   * @param taskParams - Task params
-   */
+  /** Loads setup choices, runs provisioning and handles completion or recoverable errors. */
   private async _initializeSetup(taskParams: Tasks.IBaseTaskParams) {
     try {
       await SPDataAdapter.configure(this.context, {
@@ -187,7 +181,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         'ProjectSetup'
       )
 
-      // Check if we removed languages before the reload and log it
       const languageRemovedKey = `pp_languagesRemoved_${this.context.pageContext.site.id.toString()}`
       if (sessionStorage.getItem(languageRemovedKey) === 'true') {
         sessionStorage.removeItem(languageRemovedKey)
@@ -276,12 +269,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     }
   }
 
-  /**
-   * The warning the last dialog shows, which keeps it open: a step logged errors (it completed,
-   * but what failed is not on the site), or the project is not registered in the portfolio.
-   *
-   * @param data Project setup data
-   */
+  /** Summarizes logged task failures and missing portfolio registration before dismissal. */
   private _getCompletionWarning(data: IProjectSetupData): IProgressDialogProps['warning'] {
     const notRegistered =
       data.hasHubWriteAccess === false
@@ -299,10 +287,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     }
   }
 
-  /**
-   * The error entries in the steps' logs, from steps that completed: the engine's errors, which
-   * it logs and goes on past, and the items a step could not copy.
-   */
+  /** Collects error messages from tasks that completed with warnings. */
   private _getErrorEntries(): string[] {
     return this._taskProgress
       .filter(({ status }) => status === 'warning')
@@ -312,18 +297,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
-   * Adds back the links the owners had added to the Quick Launch, from the menu saved before the
-   * setup ran again or made the project a parent project. The `Navigation` of the template and of
-   * the extensions makes the menu match their nodes: sp-js-provisioning keeps a node they declare
-   * by its title and deletes the others, the owners' links among them.
-   *
-   * A saved node the menu lacks at its level (by title) is added after the nodes of that level,
-   * unless it is the template's own (see {@link TemplateQuickLaunch.declares}): the template or an
-   * extension declares its title at that level, or the title that replaced it, or its URL. Such a
-   * node was left out or removed on purpose, by an extension's menu or a rename, so it and its
-   * children stay out. Under a node the menu has, or one added back, the saved children are
-   * restored by the same rule. An added node gets a new id and no audiences, and a node SharePoint
-   * refuses (its target is gone) is logged and skipped.
+   * Restores saved owner-added links removed by the provisioning engine's menu replacement.
+   * Template-owned nodes stay excluded, including renamed titles and declared URLs
+   * (see {@link TemplateQuickLaunch.declares}); refused nodes are logged and skipped.
    *
    * @param declaredQuickLaunch The `Navigation.QuickLaunch` the template and the extensions declare
    */
@@ -343,9 +319,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
-   * Reads and removes the Quick Launch that ProjectWebParts saved for this web
-   * (`{ webUrl, nodes }`). Local storage is shared by every site on the tenant, so a save for
-   * another web is not used.
+   * Consumes the saved Quick Launch only if it belongs to this web.
+   * Local storage is shared by every site on the tenant.
    */
   private _takeSavedQuickLaunch(): IMenuNode[] | undefined {
     try {
@@ -374,14 +349,10 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
-   * Adds the saved nodes of one level that the level does not have by title and that are not the
-   * template's own, then goes on into the children of each saved node the level has or got.
+   * Recursively restores missing owner-added nodes beneath existing or restored parents.
    *
-   * @param saved The saved nodes of the level
-   * @param declared What the template and the extensions declare at this level
    * @param level Returns the level's nodes: a fresh queryable on every call, since `select()` sets
    * the query on the instance
-   * @param label The level, for the log
    * @param stored The level's nodes when they are known (none under a node just added)
    */
   private async _restoreQuickLaunchLevel(
@@ -448,16 +419,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
-   * Checks for auto/force template. If found, returns the template
-   * and sets the state accordingly. If not found, returns null.
-   * The force/auto template can either be set in property
-   * `forceTemplate` or as a property on the template item itself.
-   * The template's list content leaves out what the project has from an
-   * earlier run of the setup (`isAddedBefore`), as the dialog does.
+   * Builds selections for a forced or auto-configurable template, excluding previously added content.
    *
-   * To be able to use the force/auto template, the user must be a owner.
-   *
-   * @param data - Project setup data
+   * @returns Null when no matching template is available.
    */
   private _checkAutoTemplate(data: IProjectSetupData): IProjectSetupDialogState {
     const autoTemplate = _.find(
@@ -476,11 +440,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     }
   }
 
-  /**
-   * Get setup info from `TemplateSelectDialog`
-   *
-   * @param data - Data
-   */
+  /** Resolves automatic selections or opens the setup wizard, rejecting if the user dismisses it. */
   private _getSetupInfo(data: IProjectSetupData): Promise<IProjectSetupDialogState> {
     return new Promise((resolve, reject) => {
       const placeholder = this._getPlaceholder('TemplateSelectDialog')
@@ -516,12 +476,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     })
   }
 
-  /**
-   * Render `ProgressDialog` passing the `props` as well
-   * as the current version of the extension (`this.version`)
-   *
-   * @param props - Props
-   */
+  /** Renders setup progress with the current extension version. */
   private _renderProgressDialog(props: IProgressDialogProps) {
     const placeholder = this._getPlaceholder('ProgressDialog')
     const element = createElement<IProgressDialogProps>(ProgressDialog, {
@@ -531,12 +486,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     renderReact(element, placeholder)
   }
 
-  /**
-   * Render `ErrorDialog` with a dismiss ation that removes the custom action
-   * for this extension and then unmounts the dialog.
-   *
-   * @param props - Props
-   */
+  /** Replaces progress with an error dialog, allowing setup retry or conditional custom-action removal. */
   private _renderErrorDialog(props: IErrorDialogProps) {
     const progressDialog = this._getPlaceholder('ProgressDialog')
     this._unmount(progressDialog)
@@ -567,14 +517,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
-   * Start setup of the new project.
-   *
-   * Get tasks using `Tasks.getTasks` and runs through them in sequence
-   * executing the `execute` method on each task. Returns the parameters the
-   * last task returned.
-   *
-   * @param taskParams Task params
-   * @param data Data
+   * Runs the enabled tasks sequentially, tracking task logs and passing parameters between tasks.
    */
   private async _startSetup(
     taskParams: Tasks.IBaseTaskParams,
@@ -672,12 +615,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     }
   }
 
-  /**
-   * Write an entry to the log list on the hub, unless the setup must not write to the hub.
-   *
-   * @param data Project setup data
-   * @param entry Log entry
-   */
+  /** Logs setup activity on the hub unless hub writes have been disabled. */
   private async _logToHub(data: IProjectSetupData, entry: Parameters<typeof ListLogger.log>[0]) {
     if (data.hasHubWriteAccess === false) return
     await ListLogger.log(entry)
@@ -698,16 +636,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     })
   }
 
-  /**
-   * On task status updated. Called by individual tasks to report
-   * progress, including optional granular log entries.
-   *
-   * @param taskIndex - Index of the task in the progress array
-   * @param label - Progress label
-   * @param description - Progress description
-   * @param iconName - Icon name
-   * @param logEntry - Optional log entry for advanced logging
-   */
+  /** Appends task diagnostics and refreshes the progress dialog. */
   private _onTaskStatusUpdated(
     taskIndex: number,
     label: string,
@@ -730,13 +659,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     this._renderCurrentProgress(label, description, iconName)
   }
 
-  /**
-   * Get templates from portal site. Checks for locked template in property bag,
-   * and if found, returns only that template if it exists. Otherwise, returns all
-   * templates from the templates library.
-   *
-   * @param propertyBagRegex - Regex to match property bag key for locked template
-   */
+  /** Reads hub template options, restricting them to a property-bag lock unless a template is forced. */
   private async _getTemplates(propertyBagRegex = /^pp_.*_template$/): Promise<ProjectTemplate[]> {
     try {
       const webAllProperties = (
@@ -773,9 +696,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     }
   }
 
-  /**
-   * Fetch data from SharePoint.
-   */
+  /** Loads hub setup options, existing project metadata and hub-write capability. */
   private async _fetchData(): Promise<IProjectSetupData> {
     try {
       const data: IProjectSetupData = {}
@@ -869,9 +790,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     }
   }
 
-  /**
-   * Get validation
-   */
+  /** Determines setup eligibility from site type, group membership, language and hub connection. */
   private async _validateProjectSetup(): Promise<ProjectSetupValidation> {
     const { isSiteAdmin, groupId, hubSiteId, siteId } = this.context.pageContext.legacyPageContext
 
@@ -905,28 +824,16 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     return ProjectSetupValidation.Ready
   }
 
-  /**
-   * Unmount component at container
-   *
-   * @param container - HTML container elememnt
-   */
   private _unmount(container: HTMLElement): void {
     unmountReact(container)
   }
 
-  /**
-   * Get container element in `PlaceholderName.Top` placeholder
-   */
   private get _container(): HTMLDivElement {
     const topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top)
     return topPlaceholder.domElement
   }
 
-  /**
-   * Get placeholder by key
-   *
-   * @param key - Key
-   */
+  /** Reuses or creates a dialog mount point in the SharePoint top placeholder. */
   private _getPlaceholder(key: 'ErrorDialog' | 'ProgressDialog' | 'TemplateSelectDialog') {
     const id = this._placeholderIds[key]
     let placeholder = document.getElementById(id)
@@ -940,9 +847,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
-   * Check if the project is previously set up. We fetch the `WelcomePage` property
-   * from the root folder of the web. If the value is not `SitePages/CollabHome.aspx`
-   * or `SitePages/Home.aspx`, we assume that the project is set up.
+   * Infers prior setup from a welcome page other than SharePoint's two default home pages.
    */
   private async _isProjectSetup() {
     try {
@@ -954,11 +859,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
-   * Remove alternative languages from the current site before showing the setup dialog.
-   * Disables multilingual features by setting IsMultilingual to false, then reloads
-   * the page to apply changes. Shows a progress dialog during the operation and logs
-   * the action to the SharePoint Log list after reload. Only executes if the current
-   * user is a site admin and the site has multilingual features enabled.
+   * Disables multilingual features for site admins and reloads so setup uses the site's language.
+   * A session flag allows the next run to record the operation in the hub log.
    */
   private async _removeAlternativeLanguages(): Promise<void> {
     try {

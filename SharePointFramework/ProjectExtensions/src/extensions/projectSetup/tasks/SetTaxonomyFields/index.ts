@@ -5,18 +5,13 @@ import { NO_TEMPLATE_ID } from '../../constants'
 import { ExecuteJsomQuery } from 'spfx-jsom'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 
+/** Binds configured taxonomy columns to the default term store and their term sets. */
 export class SetTaxonomyFields extends BaseTask {
   constructor(data: IProjectSetupData) {
     super('SetTaxonomyFields', data)
   }
 
-  /**
-   * Execute CopyListData
-   *
-   * @param params Task parameters
-   * @param onProgress On progress function
-   */
-
+  /** Pushes term-store bindings through JSOM, skipping setup without a template. */
   public async execute(params: IBaseTaskParams): Promise<IBaseTaskParams> {
     if (this.data.selectedTemplate?.id === NO_TEMPLATE_ID) {
       this.logInformation('Skipping taxonomy field configuration (no template selected)')

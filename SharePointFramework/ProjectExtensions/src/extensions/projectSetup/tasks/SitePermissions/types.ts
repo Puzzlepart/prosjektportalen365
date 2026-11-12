@@ -1,11 +1,6 @@
+/** Hub group and permission level to reproduce on the project site. */
 export interface IPermissionConfiguration {
-  /**
-   * SharePoint group name
-   */
   groupName: string
 
-  /**
-   * Defines the SharePoint permission level for the project site.
-   */
   permissionLevel: string
 }

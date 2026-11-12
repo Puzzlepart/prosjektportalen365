@@ -27,17 +27,14 @@ interface IExtensionSchema {
   schema: Schema
 }
 
+/** Applies the selected template and extensions while collecting engine diagnostics. */
 export class ApplyTemplate extends BaseTask {
   constructor(data: IProjectSetupData) {
     super('ApplyTemplate', data)
   }
 
   /**
-   * Execute ApplyTemplate. The engine's warnings and errors are added to the step's log as they
-   * are logged.
-   *
-   * @param params Task parameters
-   * @param onProgress On progress function
+   * Provisions non-hook schemas, letting extensions replace any menus they declare.
    */
   public async execute(
     params: IBaseTaskParams,
@@ -51,7 +48,6 @@ export class ApplyTemplate extends BaseTask {
           activeLogLevel: engineLogLevel()
         }
       })
-      // What the step shows while the engine runs; its warnings and errors are logged under it.
       let progress: [string, string, string] = ['', '', '']
       const logEngineEntry = (entry: ILogEntry) => onProgress(...progress, entry)
       const extensions: IExtensionSchema[] = []
@@ -126,15 +122,8 @@ export class ApplyTemplate extends BaseTask {
   }
 
   /**
-   * The template without each menu of its `Navigation` that a selected extension declares too.
-   * Each `applyTemplate` makes a menu it declares match its own nodes, so on every run the template
-   * added the nodes the extension then deleted, and the template's step failed before the
-   * extension ran when the target of one of those nodes had been deleted. The extensions are
-   * applied after the template, so their menu is the one the project gets, as before.
-   *
-   * @param schema The template's schema
-   * @param extensions The selected extensions with their schemas
-   * @param log Adds a line to the step's log
+   * Omits template menus replaced by extensions, avoiding creation of links those extensions delete.
+   * Otherwise a deleted link target can fail template provisioning before the extension runs.
    */
   private _omitNavigationOfExtensions(
     schema: Schema,

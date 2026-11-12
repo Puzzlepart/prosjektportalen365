@@ -9,14 +9,8 @@ export type INewRiskActionPanelProps = IBasePanelProps
  * What the user fills in for a new task.
  */
 export interface INewRiskActionForm {
-  /**
-   * The task's title, required.
-   */
   title: string
 
-  /**
-   * The task's description.
-   */
   description: string
 
   /**

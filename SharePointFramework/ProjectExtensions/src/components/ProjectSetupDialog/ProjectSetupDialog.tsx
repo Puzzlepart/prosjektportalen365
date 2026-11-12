@@ -140,8 +140,7 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
           </TabList>
 
           <div className={styles.tabContent} role='tabpanel' aria-labelledby={tabIds[activeTab]}>
-            {/* A section with nothing to choose says so in its panel: its tab was disabled,
-                skipped by the keyboard, with why only in its tooltip (WCAG 2.1.1, 1.3.1). */}
+            {/* Keep empty sections keyboard-reachable so their explanation is not tooltip-only. */}
             {activeTab === 'extensions' &&
               (hasExtensions ? (
                 <ExtensionsSection />
@@ -157,8 +156,7 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
           </div>
         </div>
 
-        {/* Rendered only with project data: a message bar announces itself when it mounts, so a
-            hidden one was read out to a screen reader on every setup. */}
+        {/* A hidden message bar still announces itself, so mount it only when applicable. */}
         {props.data.projectData && (
           <div className={styles.projectDataMessage}>
             <UserMessage

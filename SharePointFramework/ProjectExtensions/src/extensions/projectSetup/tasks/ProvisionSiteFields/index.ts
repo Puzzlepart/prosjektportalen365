@@ -7,17 +7,13 @@ import { SPField } from 'pp365-shared-library/lib/models/SPField'
 import { transformFieldXml } from 'pp365-shared-library/lib/util/transformFieldXml'
 import { format } from 'pp365-shared-library'
 
+/** Copies missing non-calculated site columns from the configured hub field group. */
 export class ProvisionSiteFields extends BaseTask {
   constructor(data: IProjectSetupData) {
     super('ProvisionSiteFields', data)
   }
 
-  /**
-   * Execute ProvisionSiteFields
-   *
-   * @param params Task parameters
-   * @param onProgress On progress function
-   */
+  /** Creates transformed hub field schemas unless a field with the same internal name exists. */
   public async execute(
     params: IBaseTaskParams,
     onProgress: OnProgressCallbackFunction

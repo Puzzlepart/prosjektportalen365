@@ -3,11 +3,7 @@ import { useRiskActionContext } from '../context'
 import { useRiskActionFieldCustomizerContext } from '../../../extensions/riskAction/context'
 import { textBesidesTasks } from '../../../extensions/riskAction/types'
 
-/**
- * Custom hook that returns the field value and hidden field value for a risk action item, and the
- * text written in the field besides the Planner tasks (an action whose task Planner refused at the
- * migration), shown under them.
- */
+/** Derives displayed tasks, retained action text and layout settings for a risk cell. */
 export function useRiskActionFieldValue() {
   const { dataAdapter } = useRiskActionFieldCustomizerContext()
   const { itemContext } = useRiskActionContext()

@@ -10,11 +10,8 @@ interface ILine {
 }
 
 /**
- * `@pnp/logging` with a working `Logger` and `FunctionListener`, for
- * `jest.mock('@pnp/logging', () => jest.requireActual('../testFixtures').fakeLogging())`. Every
- * `@pnp/*` maps to one stub, so the stub is wrapped, not replaced, and `others` replaces more of
- * its values (`createBatch` of `@pnp/sp/batching`). The level filter is the real one: a line below
- * `activeLogLevel` reaches no listener.
+ * Adds working log listeners and level filtering to the shared PnP stub.
+ * All @pnp imports share that stub, so a proxy preserves its other exports.
  *
  * @param others Other values of the `@pnp/*` modules to replace
  */
@@ -50,14 +47,7 @@ export interface IEngineRecord {
 }
 
 /**
- * sp-js-provisioning with a `WebProvisioner` that records `setup` and each schema it applies in
- * `record`, reports each of the schema's keys to the progress callback as a handler, and logs the
- * lines of the schema's `log` and of `record.log` (`[level, message]`, the prefix it was set up
- * with put first) through the `Logger` of `@pnp/logging`, as the engine logs a failure it goes on
- * past. For
- * `jest.mock('sp-js-provisioning', () => jest.requireActual('../testFixtures').fakeEngine(record))`.
- *
- * @param record Where the stand-in records what it does
+ * Builds a provisioning-engine stand-in that records schemas, reports handlers and emits PnP logs.
  */
 export function fakeEngine(record: IEngineRecord) {
   class WebProvisioner {

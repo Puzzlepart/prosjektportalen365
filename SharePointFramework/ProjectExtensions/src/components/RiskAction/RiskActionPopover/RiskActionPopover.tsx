@@ -17,10 +17,8 @@ import styles from './RiskActionPopover.module.scss'
 import { useRiskActionPopover } from './useRiskActionPopover'
 
 /**
- * Risk action popover. This popover is used to handle actions for risk actions. Children
- * are rendered inside the popover, so the `PopoverTrigger` component can be used anywhere
- * within the children component(s). It keeps the focus while it is open (`trapFocus`), so Tab
- * does not leave it for the page's start, and is named by its title.
+ * Provides task-management actions in a named, focus-trapping popover.
+ * Children share its popover context so they can supply the trigger.
  */
 export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
   const {

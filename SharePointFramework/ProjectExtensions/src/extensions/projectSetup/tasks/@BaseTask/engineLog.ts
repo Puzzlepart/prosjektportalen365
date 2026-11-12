@@ -1,31 +1,20 @@
 import { FunctionListener, ILogEntry as IPnPLogEntry, LogLevel, Logger } from '@pnp/logging'
 import { ILogEntry } from '../types'
 
-/**
- * Receives the page's log lines while `captureEngineLog` runs, and is `undefined` the rest of the
- * time.
- */
 let capture: ((entry: IPnPLogEntry) => void) | undefined
 let subscribed = false
 
-/**
- * The log level to set up sp-js-provisioning with. `WebProvisioner.setup` sets it on the
- * `Logger` the setup shares with the engine: warnings and errors, and information when debugging.
- */
+/** Chooses warning-level engine logging, or informational logging while debugging. */
 export function engineLogLevel(): LogLevel {
   return sessionStorage.DEBUG === '1' || DEBUG ? LogLevel.Info : LogLevel.Warning
 }
 
 /**
- * Runs `apply`, an `applyTemplate` of sp-js-provisioning, and sends each Warning and Error line
- * logged meanwhile to `forward` as it is logged. Since 1.5.0 the engine logs many failures and goes
- * on (a site column, list field, view field or content type binding SharePoint refuses, a data row),
- * so a step can succeed with its errors only in the log. `@pnp/logging` cannot unsubscribe a
- * listener, so one is subscribed once and does nothing outside a capture, as in `PackageInstaller`
- * (PortfolioExtensions).
+ * Forwards engine warnings and errors while a provisioning operation runs.
  *
- * @param apply Applies the template
- * @param forward Receives each Warning and Error line
+ * The engine can log failures without rejecting. PnP logging cannot unsubscribe a listener,
+ * so a single persistent listener forwards only during capture.
+ *
  * @param prefix The prefix the engine was set up with, left out of the lines `forward` receives
  */
 export async function captureEngineLog<T>(

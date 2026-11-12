@@ -21,6 +21,7 @@ import {
 } from 'pp365-shared-library'
 import resource from 'SharedResources'
 
+/** Opens the document-template wizard for the current library and folder. */
 export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITemplateSelectorCommandProperties> {
   private _openCmd: Command
   private _ctxValue: ITemplateSelectorContext = {}
@@ -77,9 +78,8 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
           new URLSearchParams(window.location.search).get('id') ||
           new URLSearchParams(window.location.search).get('RootFolder') ||
           undefined
-        // Run from SharePoint's "Mer" menu, a dialog rendered while the menu closes is hidden from
-        // screen readers by SharePoint (WCAG 4.1.2): it opens once the menu has, and the focus goes
-        // back to what had it then, the command's button, as it closes (WCAG 2.4.3).
+        // SharePoint hides a new dialog from assistive technology while its overflow menu closes.
+        // Wait before opening and capturing the element that should regain focus on dismissal.
         await whenHostMenuHasClosed()
         this._onOpenTemplateSelector(document.activeElement as HTMLElement | null)
         break

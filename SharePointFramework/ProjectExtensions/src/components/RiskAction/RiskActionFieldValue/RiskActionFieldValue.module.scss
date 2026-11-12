@@ -3,7 +3,6 @@
   display: block;
   height: 100%;
 
-  // The look of the info message bar it replaces: a light box with an icon, the cell's small text.
   .noActions {
     display: flex;
     justify-content: flex-start;
@@ -44,9 +43,7 @@
       flex-wrap: wrap;
     }
 
-    // Shown under the pointer and when the keyboard reaches it; at 0.2 its text read 1.3:1, and
-    // it stayed faint while it had the focus (WCAG 1.4.3, 2.4.7). Without a pointer that hovers
-    // (a touch screen) it shows always.
+    // Keep the control readable on keyboard focus and always visible on non-hover devices.
     .adminButton {
       margin: 10px 0 0 0;
       padding: 0;

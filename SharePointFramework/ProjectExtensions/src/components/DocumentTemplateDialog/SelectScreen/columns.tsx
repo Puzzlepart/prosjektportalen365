@@ -4,6 +4,7 @@ import * as ProjectExtensionsStrings from 'ProjectExtensionsStrings'
 import React from 'react'
 import { FolderLink } from '../FolderLink'
 
+/** Creates template metadata columns with links for navigating folders. */
 export default ({ setFolder }: { setFolder: (folder: TemplateItem) => void }) =>
   [
     {

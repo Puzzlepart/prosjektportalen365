@@ -20,7 +20,6 @@
       }
     }
 
-    // How many are picked, as text where a disabled toolbar button showed it.
     .selectedCount {
       display: inline-flex;
       align-items: center;
@@ -35,7 +34,6 @@
     }
   }
 
-  // Why the content the project has already is not selected.
   .addedInfo {
     margin: 0 2px;
     font-size: var(--fontSizeBase200);

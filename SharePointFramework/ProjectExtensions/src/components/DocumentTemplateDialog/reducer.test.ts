@@ -15,12 +15,6 @@ import reducer, {
 } from './reducer'
 import { DocumentTemplateDialogScreen, IDocumentTemplateDialogState } from './types'
 
-/**
- * The document template dialog's state: which screen the user is on (pick templates, pick a
- * folder, name the copies, watch the copy, read the summary), the templates picked, the folder
- * they go to, the copy's progress, and the files it uploaded. `locked` keeps the dialog from
- * being closed while files are being copied; `uploaded` is what the summary counts.
- */
 type Template = IDocumentTemplateDialogState['selected'][number]
 type UploadedFile = IDocumentTemplateDialogState['uploaded'][number]
 type Library = IDocumentTemplateDialogState['browse']['library']

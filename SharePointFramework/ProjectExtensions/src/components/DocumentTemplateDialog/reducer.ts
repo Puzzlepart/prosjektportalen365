@@ -6,11 +6,17 @@ import strings from 'ProjectExtensionsStrings'
 import { ITemplateSelectorContext } from '../../extensions/templateSelector/context'
 import { DocumentTemplateDialogScreen, IDocumentTemplateDialogState } from './types'
 
+/** Replaces the templates selected for copying. */
 export const SELECTION_CHANGED = createAction<{ selected: TemplateItem[] }>('SELECTION_CHANGED')
+/** Locks the wizard on its copy-progress screen. */
 export const START_COPY = createAction('START_COPY')
+/** Updates progress for the template currently being copied. */
 export const COPY_PROGRESS = createAction<any>('COPY_PROGRESS')
+/** Records copied files and unlocks the wizard on its summary screen. */
 export const COPY_DONE = createAction<{ files: IFileInfo[] }>('COPY_DONE')
+/** Changes the wizard step, clearing selection when returning to template selection. */
 export const SET_SCREEN = createAction<{ screen: DocumentTemplateDialogScreen }>('SET_SCREEN')
+/** Sets the destination used when copying starts. */
 export const SET_TARGET = createAction<{ folder: string }>('SET_TARGET')
 /** Lists a library's folders: its row clicked on the target folder screen. */
 export const OPEN_LIBRARY = createAction<{ library: SPFolder }>('OPEN_LIBRARY')
@@ -27,12 +33,7 @@ export const TEMPLATE_CHANGED = createAction<{
   errorMessage?: string
 }>('TEMPLATE_CHANGED')
 
-/**
- * The state before anything happened: the select screen, and the target folder screen in the
- * library the command was run in, at the folder it was run in.
- *
- * @param context Where the command was run, when the dialog has it
- */
+/** Initializes the wizard at template selection, retaining the command's destination context. */
 export const initState = (
   context?: Pick<ITemplateSelectorContext, 'currentLibrary' | 'currentFolderUrl'>
 ): IDocumentTemplateDialogState => ({
@@ -78,6 +79,7 @@ function isDuplicateNameError(errorMessage: string | undefined): boolean {
   )
 }
 
+/** Handles wizard navigation, copy progress and cross-template name validation. */
 export default createReducer(initState(), (builder) =>
   builder
     .addCase(SELECTION_CHANGED, (state, { payload }) => {
@@ -129,8 +131,6 @@ export default createReducer(initState(), (builder) =>
       if (!changed) return
       changed.update(payload.properties)
       if (payload.properties.newName) {
-        // A new name is checked against the other copies first, then against what SharePoint
-        // said; the others' duplicate errors follow the names as they change.
         for (const template of templates) {
           const duplicate = duplicateNameError(templates, template)
           if (template.id === payload.id) template.errorMessage = duplicate || payload.errorMessage

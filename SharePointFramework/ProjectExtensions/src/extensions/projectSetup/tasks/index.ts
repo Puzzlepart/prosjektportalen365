@@ -22,11 +22,7 @@ const tasks: (new (data: IProjectSetupData) => IBaseTask)[] = [
   Hooks
 ]
 
-/**
- * Get tasks to run for project setup.
- *
- * @param data Data to initialize tasks with.
- */
+/** Creates setup tasks in dependency order, sharing the selected setup data. */
 export function getTasks(data: IProjectSetupData) {
   return tasks.map((ctor) => new ctor(data))
 }

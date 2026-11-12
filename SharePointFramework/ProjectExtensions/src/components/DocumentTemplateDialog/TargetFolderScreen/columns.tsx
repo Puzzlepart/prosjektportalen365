@@ -4,6 +4,7 @@ import { FileTypeIcon, IListColumn, SPFolder, getId } from 'pp365-shared-library
 import React from 'react'
 import { FolderLink } from '../FolderLink'
 
+/** Creates library and folder columns with navigation links. */
 export default ({ onFolderClick }: { onFolderClick: (folder: SPFolder) => void }) =>
   [
     {

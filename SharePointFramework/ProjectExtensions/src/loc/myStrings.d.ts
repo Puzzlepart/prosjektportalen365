@@ -1,3 +1,4 @@
+/** Localized strings exposed by the ProjectExtensions SPFx bundle. */
 declare interface IProjectExtensionsStrings {
   PlannerTaskNotStarted: string
   PlannerTaskInProgress: string

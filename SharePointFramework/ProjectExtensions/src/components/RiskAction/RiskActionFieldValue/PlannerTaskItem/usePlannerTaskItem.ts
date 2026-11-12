@@ -6,14 +6,7 @@ import { useRiskActionFieldCustomizerContext } from '../../../../extensions/risk
 import { RiskActionPlannerTask } from '../../../../extensions/riskAction/types'
 import { IPlannerTaskItemProps } from './types'
 
-/**
- * Custom hook for retrieving and managing a planner task item.
- *
- * @param props - The props for the planner task item.
- *
- * @returns The preview's handlers and task, whether the task is done, and its name when it is:
- *   struck through to the eye, said in words to a screen reader (WCAG 1.3.1).
- */
+/** Loads task details when its preview opens and derives its Planner link and completion label. */
 export function usePlannerTaskItem(props: IPlannerTaskItemProps) {
   const context = useRiskActionFieldCustomizerContext()
   const [task, setTask] = useState<RiskActionPlannerTask>(new RiskActionPlannerTask())

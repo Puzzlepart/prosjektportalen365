@@ -3,111 +3,58 @@ import { TemplateItem } from 'models/TemplateItem'
 import { SPFolder } from 'pp365-shared-library'
 import { ICopyProgressScreenProps } from './CopyProgressScreen/types'
 
+/** Indicates whether closing the dialog should refresh the document library. */
 export interface IDocumentTemplateDialogDismissProps {
   reload?: boolean
 }
 
+/** Title and dismissal handling for the document-template wizard. */
 export interface IDocumentTemplateDialogProps {
-  /**
-   * Title
-   */
   title: string
 
-  /**
-   * On dismiss callback
-   */
   onDismiss: (props: IDocumentTemplateDialogDismissProps) => void
 }
 
-/**
- * Where the target folder screen is: the library browsed, the folder open in it, and a folder
- * picked by its row. The dialog keeps it, so its footer knows what «Kopier hit» means, and the
- * screen shows the same place when the user comes back to it.
- */
+/** Target-folder navigation and row selection, retained when switching screens. */
 export interface IDocumentTemplateDialogBrowse {
-  /**
-   * The library whose folders are listed.
-   */
   library?: SPFolder
 
-  /**
-   * The folder open in the library: its server relative URL, or an empty string for the
-   * library's root.
-   */
+  /** Server-relative folder URL, or an empty string for the library root. */
   folder: string
 
-  /**
-   * Whether the site's libraries are listed instead of the library's folders, which the screen
-   * offers when the site has more than one.
-   */
   libraries: boolean
 
-  /**
-   * A folder picked by selecting its row, without entering it.
-   */
+  /** Row selection is separate from the folder currently open. */
   selectedFolder?: string
 }
 
+/** Wizard navigation, template selection, copy progress and results. */
 export interface IDocumentTemplateDialogState {
-  /**
-   * Screen
-   */
   screen: DocumentTemplateDialogScreen
 
-  /**
-   * Selected templates
-   */
   selected: TemplateItem[]
 
-  /**
-   * Progress
-   */
   progress?: ICopyProgressScreenProps
 
-  /**
-   * Dialog is blocked and can not be closed
-   */
+  /** Suppresses the close button and backdrop dismissal while copying. */
   locked?: boolean
 
-  /**
-   * Target folder selected in TargetFolderScreen
-   */
   targetFolder?: string
 
-  /**
-   * Uploaded files
-   */
   uploaded?: IFileInfo[]
 
-  /**
-   * Where the target folder screen is browsing.
-   */
   browse: IDocumentTemplateDialogBrowse
 }
 
+/** Steps of the document-template copy wizard. */
 export enum DocumentTemplateDialogScreen {
-  /**
-   * Select screen
-   */
   Select,
 
-  /**
-   * Target folder screen
-   */
   TargetFolder,
 
-  /**
-   * Edit copy screen
-   */
   EditCopy,
 
-  /**
-   * Copy progess screen
-   */
   CopyProgress,
 
-  /**
-   * Summary scren
-   */
   Summary
 }

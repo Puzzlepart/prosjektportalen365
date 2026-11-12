@@ -6,56 +6,33 @@ import {
   ItemFieldValues
 } from 'pp365-shared-library'
 
+/** Extension settings controlling project setup and reruns. */
 export interface IProjectSetupProperties {
   /**
-   * Templates library. Use value from
-   * the converted .resx file instead of
-   * the hardcoded string.
-   *
-   * @deprecated
+   * @deprecated Use the localized library name from SharedResources.
    */
   templatesLibrary: string
 
   /**
-   * Exensions library. Use value from
-   * the converted .resx file instead of
-   * the hardcoded string.
-   *
-   * @deprecated
+   * @deprecated Use SharedResources.Lists_ProjectExtensions_Title.
    */
   extensionsLibrary: string
 
   /**
-   * Projects list. Use value from
-   * the converted .resx file instead of
-   * the hardcoded string.
-   *
-   * @deprecated
+   * @deprecated Use SharedResources.Lists_Projects_Title.
    */
   projectsList: string
 
   /**
-   * List content config list. Use value from
-   * the converted .resx file instead of
-   * the hardcoded string.
-   *
-   * @deprecated
+   * @deprecated Use SharedResources.Lists_ListContent_Title.
    */
   contentConfigList: string
 
-  /**
-   * Term set IDs
-   */
   termSetIds: { [key: string]: string }
 
-  /**
-   * Tasks
-   */
+  /** Task-name allowlist; PreTask always runs. */
   tasks: string[]
 
-  /**
-   * Skip reload after setup
-   */
   skipReload?: boolean
 
   /**
@@ -64,48 +41,27 @@ export interface IProjectSetupProperties {
    */
   forceTemplate?: string
 
-  /**
-   * Progress dialog title override.
-   */
   progressDialogTitle?: string
 
-  /**
-   * Progress dialog subtitle override.
-   */
   progressDialogSubText?: string
 
-  /**
-   * Skip updating template parameters fields on the project list item.
-   */
+  /** Leaves stored local TemplateParameters unchanged when synchronizing properties. */
   skipUpdateTemplateParameters?: boolean
 
   /**
-   * Skip the 'already setup' check when re-running the setup wizard.
-   * When `true`, the setup will go directly to the project setup dialog
-   * instead of showing the error dialog asking the user to confirm.
+   * Bypasses confirmation before running setup on a previously configured site.
    */
   skipAlreadySetupCheck?: boolean
 }
 
+/** Available setup models, prior provisioning state and hub-write capability. */
 export interface IProjectSetupData extends IProjectSetupDialogState {
-  /**
-   * Templates
-   */
   templates?: ProjectTemplate[]
 
-  /**
-   * Extensions
-   */
   extensions?: ProjectExtension[]
 
-  /**
-   * Content config
-   */
   contentConfig?: ContentConfig[]
 
-  /**
-   * Project data field values
-   */
   projectData?: ItemFieldValues
 
   /**
@@ -115,9 +71,7 @@ export interface IProjectSetupData extends IProjectSetupDialogState {
   hasExistingTemplate?: boolean
 
   /**
-   * The list content earlier runs of the setup added to the project, as its properties record it
-   * (`GtProjectListContent`): the titles, separated by `, `. Empty on a new project. A run again
-   * leaves the hub's list content it names out unless it is chosen (see `listContentRecord.ts`).
+   * Comma-separated GtProjectListContent titles used to avoid automatically re-adding hub rows.
    */
   addedListContent?: string
 
@@ -132,60 +86,31 @@ export interface IProjectSetupData extends IProjectSetupDialogState {
   hasHubWriteAccess?: boolean
 }
 
+/** Eligibility and warning states detected before project setup starts. */
 export enum ProjectSetupValidation {
-  /**
-   * The site has invalid web language
-   */
   InvalidWebLanguage,
 
-  /**
-   * The site is not connected to a hub
-   */
   NoHubConnection,
 
-  /**
-   * The site has invalid UI culture settings
-   */
   InvalidCulture,
 
-  /**
-   * The site is ready for setup/configuration
-   */
   Ready,
 
-  /**
-   * The site is already finished setup
-   */
   AlreadySetup,
 
-  /**
-   * The site is hubsite
-   */
   IsHubSite,
 
-  /**
-   * The site is not connected to a group
-   */
   NoGroupId,
 
-  /**
-   * The current user is not site admin
-   */
   NotSiteAdmin,
 
   /**
-   * The current user is not a member of the Microsoft
-   * 365 group. This will cause issues
-   * provisioning Planner resources.
+   * Group membership is required to provision Planner resources.
    */
   UserNotGroupMember,
 
   /**
-   * The site is a Teams private/shared channel site (web template
-   * `TEAMCHANNEL`). Channel sites are hub-associated and inherit the project
-   * site design, but are not projects and have no M365 group. The setup
-   * customizer is removed silently (best-effort; see `deleteCustomizer`)
-   * without involving the user.
+   * Teams channel sites inherit the site design but are not projects; remove setup silently.
    */
   IsTeamChannel
 }

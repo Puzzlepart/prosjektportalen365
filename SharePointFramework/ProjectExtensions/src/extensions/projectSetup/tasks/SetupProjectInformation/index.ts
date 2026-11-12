@@ -11,11 +11,7 @@ import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../types'
 
 /**
- * Setup project information task handles the following tasks:
- * * Sync local properties list on the current project site. If the list does not exist, it will be created
- * using `portal.syncList`. If the list exists, it will be updated with the current project information and
- * the template parameters.
- * * Add entry to hub project list, unless the current user lacks write access to the hub
+ * Synchronizes local project properties and registers the project on the hub when permitted.
  */
 export class SetupProjectInformation extends BaseTask {
   private _templateParameters: Record<string, any>
@@ -24,12 +20,7 @@ export class SetupProjectInformation extends BaseTask {
     super('SetupProjectInformation', data)
   }
 
-  /**
-   * Executes the `SetupProjectInformation` task
-   *
-   * @param params Task parameters
-   * @param onProgress On progress funtion
-   */
+  /** Writes local metadata, ensures hub registration and marks source idea data as synchronized. */
   public async execute(
     params: IBaseTaskParams,
     onProgress: OnProgressCallbackFunction
@@ -56,22 +47,8 @@ export class SetupProjectInformation extends BaseTask {
   }
 
   /**
-   * Sync local properties list on the current project site. If the list does not exist, it will be created
-   * using `portalDataService.syncList`. If the list exists, it will be updated with the current project information and
-   * the template parameters.
-   *
-   * The following properties are set for the property item initially:
-   * - `Title`: The current web title
-   * - `TemplateParameters`: The template parameters as JSON string
-   * - `IsProgram`: `true` if the current project is a program, `false` otherwise
-   * - `IsParentProject`: `true` if the current project is a parent project, `false` otherwise
-   * - `GtInstalledVersion`: The installed version
-   * - `GtCurrentVersion`: The current version (same as installed version initially)
-   * - `GtProjectTemplate`: The selected project template name
-   *
-   * Also properties from the project data are mapped to the property item. The mapping is done using the
-   * `SPDataAdapter.getMappedProjectProperties` method with the mapping type
-   * `ProjectPropertiesMapType.FromPortfolioToProject`.
+   * Ensures the local properties schema and writes mapped project and template metadata.
+   * Setup without a template uses the existing list without synchronizing content-type fields.
    */
   private async _syncPropertiesList() {
     try {
@@ -83,7 +60,6 @@ export class SetupProjectInformation extends BaseTask {
       const isNoTemplate = this.data.selectedTemplate?.id === NO_TEMPLATE_ID
 
       if (isNoTemplate) {
-        // For 'no template', skip syncing content type fields. Only update the existing property item
         this.onProgress(
           strings.SetupProjectInformationText,
           strings.CreatingLocalProjectPropertiesListItemText,
@@ -127,12 +103,9 @@ export class SetupProjectInformation extends BaseTask {
   }
 
   /**
-   * Get mapped project data properties for the current project.
+   * Maps source project data to local or portfolio properties using the selected content type.
    *
-   * @param mapType The map type (default: `ProjectPropertiesMapType.FromPortfolioToProject`)
-   * @param useSharePointTaxonomyHiddenFields If `true`, the SharePoint taxonomy hidden fields will be used (default: `true`)
-   *
-   * @returns The mapped project data properties
+   * @param useSharePointTaxonomyHiddenFields Whether taxonomy is serialized through hidden text fields.
    */
   private async _getProjectDataProperties(
     mapType = ProjectPropertiesMapType.FromPortfolioToProject,
@@ -152,18 +125,7 @@ export class SetupProjectInformation extends BaseTask {
   }
 
   /**
-   * Create property item with the following properties:
-   * - `Title`: The current web title
-   * - `IsProgram`: `true` if the current project is a program, `false` otherwise
-   * - `IsParentProject`: `true` if the current project is a parent project, `false` otherwise
-   * - `GtInstalledVersion`: The installed version
-   * - `GtCurrentVersion`: The current version (same as installed version initially)
-   * - `GtProjectTemplate`: The selected project template name
-   * - `GtProjectListContent`: The list content earlier runs of the setup added, then the selected
-   *   (see `recordListContent`), which a run again leaves out unless it is chosen
-   *
-   * @param params Params
-   * @param additionalProperties Additional properties
+   * Builds project metadata, preserving earlier list-content records and omitting versions without a template.
    */
   private _createPropertiesItem(
     params: IBaseTaskParams,
@@ -190,17 +152,8 @@ export class SetupProjectInformation extends BaseTask {
   }
 
   /**
-   * Add entry to hub project list
-   *
-   * Stores the project with
-   * * `Title`: The current web title
-   * * `GtSiteId`: The current site ID
-   * * `GtProjectTemplate`: The selected project template name
-   * * `ContentTypeId` (if custom content type is specified in template parameters)
-   *
-   * Also properties from the project data are mapped to the property item. The mapping is done using the
-   * `SPDataAdapter.getMappedProjectProperties` method with the mapping type
-   * `ProjectPropertiesMapType.FromPortfolioToPortfolio`.
+   * Creates the hub entry if the group is not registered, mapping portfolio properties when applicable.
+   * Permission failures disable subsequent hub writes without aborting local setup.
    */
   private async _addEntryToHub() {
     try {
@@ -243,11 +196,7 @@ export class SetupProjectInformation extends BaseTask {
     }
   }
 
-  /**
-   * Report in the advanced log that the project is not registered on the hub.
-   *
-   * @param message Message for the log entry
-   */
+  /** Reports skipped hub registration through task logging and the advanced progress log. */
   private _logHubWriteSkipped(message: string) {
     this.logWarning(message)
     this.onProgress(strings.SetupProjectInformationText, message, 'AlignCenter', {

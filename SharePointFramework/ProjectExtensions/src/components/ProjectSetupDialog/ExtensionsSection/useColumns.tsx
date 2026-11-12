@@ -4,9 +4,7 @@ import strings from 'ProjectExtensionsStrings'
 import { ProjectExtension, IDataGridColumn } from 'pp365-shared-library'
 import React from 'react'
 
-/**
- * Columns hook for `ExtensionsSection`
- */
+/** Builds extension columns, marking additions that the selected template requires. */
 export function useColumns(mandatoryKeys: Set<string>): IDataGridColumn<ProjectExtension>[] {
   return [
     {

@@ -28,10 +28,6 @@ import strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
 import { ContentConfigSection } from './ContentConfigSection'
 
-/**
- * The project setup section that lists what can be picked: rows with a description, the picked
- * ones checked, a new pick reported as the ids now selected, and the search box wired to the hook.
- */
 describe('ContentConfigSection', () => {
   beforeEach(() => {
     mockAdded.keys = new Set()

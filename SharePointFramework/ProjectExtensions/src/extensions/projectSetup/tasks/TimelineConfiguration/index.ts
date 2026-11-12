@@ -6,16 +6,8 @@ import { SPDataAdapter } from 'data'
 import { ContentConfig, getAllItems, format } from 'pp365-shared-library'
 import resource from 'SharedResources'
 
-/**
- * @class TimelineConfiguration
- */
+/** Copies configured timeline rows to the hub, linked to the project's portfolio entry. */
 export class TimelineConfiguration extends BaseTask {
-  /**
-   * Constructor
-   *
-   * @param data Project setup data
-   * @param _contentConfig Content configuration with source timeline elements
-   */
   constructor(
     data: IProjectSetupData,
     private _contentConfig: ContentConfig
@@ -23,9 +15,7 @@ export class TimelineConfiguration extends BaseTask {
     super('TimelineConfiguration', data)
   }
 
-  /**
-   * Fetch source timeline items from the content config source list
-   */
+  /** Reads all timeline rows from the configured source list. */
   private async _fetchSourceItems() {
     try {
       this.logInformation(
@@ -41,13 +31,7 @@ export class TimelineConfiguration extends BaseTask {
     }
   }
 
-  /**
-   * Create timeline items in the hub Tidslinjeinnhold list
-   *
-   * @param timelineContentTypeId Content type ID for timeline items
-   * @param siteId Site ID for the project
-   * @param onProgress On progress function
-   */
+  /** Adds mapped timeline items, linking the hub project and continuing past individual failures. */
   private async _createTimelineItems(
     timelineContentTypeId: string,
     siteId: string,
@@ -103,12 +87,7 @@ export class TimelineConfiguration extends BaseTask {
     }
   }
 
-  /**
-   * Execute TimelineConfiguration
-   *
-   * @param params Task parameters
-   * @param onProgress On progress function
-   */
+  /** Provisions timeline content when a content type and hub-write capability are available. */
   public async execute(
     params: IBaseTaskParams,
     onProgress: OnProgressCallbackFunction

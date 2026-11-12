@@ -16,11 +16,7 @@ import {
 import { Caching } from '@pnp/queryable'
 
 /**
- * What Planner said when it refused a request: the `message` of the error body (`{ "error": {
- * "code", "message" } }`) that PnPjs puts after `::>` in the message of its error, else the
- * error's message.
- *
- * @param error What the request failed with
+ * Extracts Graph's refusal reason from PnPjs's serialized error body, falling back to its message.
  */
 function plannerErrorMessage(error: any): string {
   const message = String(error?.message ?? error ?? '')
@@ -33,6 +29,7 @@ function plannerErrorMessage(error: any): string {
   return message
 }
 
+/** Coordinates Planner tasks and the risk list's visible and hidden task fields. */
 export class DataAdapter extends SPDataAdapterBase {
   private readonly graph: GraphFI
   private readonly list: IList
@@ -51,23 +48,14 @@ export class DataAdapter extends SPDataAdapterBase {
     this.list = this.sp.web.lists.getById(this._context.pageContext.list.id.toString())
   }
 
-  /**
-   * Gets the ID of the user with the provided `mail`.
-   *
-   * @param mail Mail of the user to get the ID for
-   */
+  /** Resolves a selected person's email to a Graph user ID. */
   private async _getUserId(mail: string): Promise<any> {
     const [user] = await this.graph.users.filter(`mail eq '${mail}'`)()
     return user?.id
   }
 
   /**
-   * Retrieves `displayName` and `mail` for the user with the provided `userId`. The result
-   * is cached for 60 minutes in the local storage.
-   *
-   * @param userId The ID of the user.
-   *
-   * @returns A Promise that resolves to the user information.
+   * Reads an assignee's display name and mail using the shared cache policy.
    */
   private async _getUserInfo(userId: string): Promise<{ displayName: string; mail: string }> {
     return await this.graph.users
@@ -76,11 +64,7 @@ export class DataAdapter extends SPDataAdapterBase {
       .using(DefaultCaching)()
   }
 
-  /**
-   * Gets the default plan for the current group.
-   *
-   * @returns A Promise that resolves to the default plan for the current group.
-   */
+  /** Takes the first Planner plan returned for the site's Microsoft 365 group. */
   private async _getDefaultGroupPlan() {
     const group = this.graph.groups.getById(this._context.pageContext.legacyPageContext.groupId)
     const [plan] = await group.plans()
@@ -88,13 +72,7 @@ export class DataAdapter extends SPDataAdapterBase {
   }
 
   /**
-   * Ensures that the bucket named in the global setting `RiskActionPlannerBucketName` exists in the
-   * plan, and returns its ID. A call made while a lookup for the plan is under way waits for that
-   * lookup rather than adding the bucket a second time.
-   *
-   * @param planId The ID of the plan to add the bucket to.
-   *
-   * @returns The ID of the bucket.
+   * Ensures the configured risk-action bucket, sharing in-flight lookups to prevent duplicates.
    */
   private _ensureBucket(planId: string): Promise<string> {
     let lookup = this._bucketLookups.get(planId)
@@ -107,10 +85,7 @@ export class DataAdapter extends SPDataAdapterBase {
   }
 
   /**
-   * Finds the bucket named in the global setting `RiskActionPlannerBucketName` in the plan, or adds
-   * it when the plan has none by that name, and returns its ID.
-   *
-   * @param planId The ID of the plan
+   * Finds or creates the bucket named by RiskActionPlannerBucketName and returns its ID.
    */
   private async _findOrAddBucket(planId: string): Promise<string> {
     const bucketName = this.globalSettings.get('RiskActionPlannerBucketName')
@@ -136,13 +111,7 @@ export class DataAdapter extends SPDataAdapterBase {
   }
 
   /**
-   * Adds a task for each of the actions in `titles`. The plan and the bucket are looked up once,
-   * before the tasks are added in parallel: each add ensuring the bucket itself gave the actions of
-   * a risk, migrated together, a bucket each. A task Planner refuses does not stop the others: the
-   * result names its action with Planner's reason.
-   *
-   * @param titles The titles of the tasks to add, one per action.
-   * @param itemContext The Risk Action item context to add the tasks to.
+   * Creates action tasks in parallel after resolving a shared plan and bucket.
    *
    * @returns The tasks added, and the actions whose task Planner refused.
    */
@@ -171,11 +140,8 @@ export class DataAdapter extends SPDataAdapterBase {
   }
 
   /**
-   * Adds a task to the current group's plan, and fails with what Planner said when Planner refuses
-   * it.
+   * Creates a task with assignments, dates, description and a reference back to the risk.
    *
-   * @param model Model for the task (Map<string, any>)
-   * @param itemContext Item context for the current risk action item
    * @param target The plan and the bucket to add the task to, when the caller has looked them up
    */
   public async addTask(
@@ -230,13 +196,7 @@ export class DataAdapter extends SPDataAdapterBase {
     }
   }
 
-  /**
-   * Synchronizes the tasks associated with a risk action item with the corresponding tasks in Planner.
-   *
-   * @param itemContext - The item context for the current risk action item.
-   *
-   * @returns A Promise that resolves when the synchronization is complete.
-   */
+  /** Persists current Planner titles and completion states, removes deleted tasks and returns updated context. */
   public async syncTasks(itemContext: RiskActionItemContext): Promise<RiskActionItemContext> {
     const defaultPlan = await this._getDefaultGroupPlan()
     const bucketId = await this._ensureBucket(defaultPlan.id)
@@ -266,10 +226,7 @@ export class DataAdapter extends SPDataAdapterBase {
   }
 
   /**
-   * Retrieves a task by its ID cached for 60 seconds in session storage
-   * with key `risk-action-get-task-${taskId}`.
-   *
-   * @param taskId The ID of the task to retrieve.
+   * Reads parsed task-preview details, caching the Graph response in session storage for 60 seconds.
    */
   public async getTask(taskId: string): Promise<any> {
     const task = await this.graph.planner.tasks
@@ -286,10 +243,8 @@ export class DataAdapter extends SPDataAdapterBase {
   }
 
   /**
-   * Update the current item with the new task's ID and title.
+   * Appends new task references to the risk item and returns its updated context.
    *
-   * @param newTasks The new tasks to add to the current item
-   * @param itemContext The item context for the current risk action item
    * @param keep The text the action field keeps after the tasks' titles: the actions whose task
    * Planner refused at a migration. By default as `RiskActionItemContext.update` keeps it.
    */
@@ -315,9 +270,7 @@ export class DataAdapter extends SPDataAdapterBase {
     return updatedItemContext
   }
 
-  /**
-   * Ensures the hidden fields exists on the current list.
-   */
+  /** Ensures hidden fields for serialized task references and the last synchronization timestamp. */
   public async ensureHiddenFields(): Promise<void> {
     const listFields = this.list.fields
     if (
@@ -341,9 +294,7 @@ export class DataAdapter extends SPDataAdapterBase {
   }
 
   /**
-   * Gets the hidden field values for the current list as a Map in the format
-   * `Map<string, RiskActionHiddenFieldValues>` where the key is the ID of the list item
-   * and the value is the hidden field values for that item.
+   * Reads hidden task fields and indexes parsed references by the risk item's string ID.
    */
   public async getHiddenFieldValues(): Promise<Map<string, RiskActionHiddenFieldValues>> {
     try {

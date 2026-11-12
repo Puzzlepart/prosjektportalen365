@@ -13,18 +13,8 @@ import _ from 'underscore'
 import resource from 'SharedResources'
 import { format } from 'pp365-shared-library'
 
-/**
- * @class PlannerConfiguration
- */
+/** Ensures a group plan, buckets and tasks from configured source content. */
 export class PlannerConfiguration extends BaseTask {
-  /**
-   * Constructor
-   *
-   * @param planTitle Plan title
-   * @param data Project setup data
-   * @param _configuration Planner configuration object
-   * @param _labels Planner labels
-   */
   constructor(
     public planTitle: string,
     data: IProjectSetupData,
@@ -37,13 +27,9 @@ export class PlannerConfiguration extends BaseTask {
   private _categoryDescriptions: { [key: string]: string } = {}
 
   /**
-   * Replacing site tokens. For now it supports `{site}` which is replaced
-   * with the site absolute URL. Encodes URL, replacing %, . and :
+   * Replaces the first {site} token with the site-collection URL encoded for Planner references.
    *
    * @see https://docs.microsoft.com/en-gb/graph/api/resources/plannerexternalreferences?view=graph-rest-1.0
-   *
-   * @param str - String
-   * @param pageContext - Page context
    */
   private replaceUrlTokens(str: string, pageContext: PageContext) {
     const siteAbsoluteUrl = pageContext.site.absoluteUrl
@@ -56,12 +42,7 @@ export class PlannerConfiguration extends BaseTask {
     return str.replace('{site}', siteAbsoluteUrl)
   }
 
-  /**
-   * Create plans
-   *
-   * @param pageContext - Page context
-   * @param onProgress On progress function
-   */
+  /** Ensures the plan and its configured buckets and tasks. */
   private async _createPlan(
     pageContext: PageContext,
     onProgress: OnProgressCallbackFunction
@@ -91,12 +72,7 @@ export class PlannerConfiguration extends BaseTask {
     }
   }
 
-  /**
-   * Ensure plan
-   *
-   * @param plan Plan object
-   * @param setupLabels Setup labels for the plan
-   */
+  /** Reuses a group plan by title or creates it, optionally configuring its labels. */
   public async ensurePlan(
     plan: IPlannerPlan,
     pageContext: PageContext,
@@ -105,7 +81,6 @@ export class PlannerConfiguration extends BaseTask {
     try {
       const existingGroupPlans = await this._fetchPlans(plan.owner)
       const existingPlan = _.find(existingGroupPlans, (p) => p.title === plan.title)
-      // The plan that exists, or the one created now; `plan` itself stays the template.
       const ensuredPlan: IPlannerPlan =
         existingPlan ??
         (await retryWithBackoff(() => MSGraphHelper.Post('planner/plans', JSON.stringify(plan)), {
@@ -124,9 +99,8 @@ export class PlannerConfiguration extends BaseTask {
   }
 
   /**
-   * Sets up labels for the plan
+   * Applies up to 25 labels and logs a warning if the configuration exceeds Planner's limit.
    *
-   * @param plan Plan
    * @param delay Delay in seconds before updating the plan to ensure it's created properly
    */
   private async _setupLabels(plan: IPlannerPlan, pageContext: PageContext, delay: number = 8) {
@@ -175,13 +149,7 @@ export class PlannerConfiguration extends BaseTask {
     }
   }
 
-  /**
-   * Ensure bucket
-   *
-   * @param name Bucket name
-   * @param existingBuckets Existing buckets
-   * @param planId Plan Id
-   */
+  /** Reuses a bucket by name or creates it with retry handling. */
   private async _ensureBucket(name: string, existingBuckets: IPlannerBucket[], planId: string) {
     let [bucket] = existingBuckets.filter((p) => p.name === name)
     if (!bucket) {
@@ -209,12 +177,8 @@ export class PlannerConfiguration extends BaseTask {
   }
 
   /**
-   * Create tasks for the bucket in the specified plan
+   * Adds tasks missing from the bucket by title, continuing past individual task failures.
    *
-   * @param planId Plan Id
-   * @param bucket Bucket
-   * @param pageContext SP page context
-   * @param appliedCategories Categories to apply to the task
    * @param delay Delay in seconds before updating the task details to ensure it's created properly
    */
   private async _createTasks(
@@ -290,11 +254,8 @@ export class PlannerConfiguration extends BaseTask {
   }
 
   /**
-   * Update task details
+   * Updates task details within Planner's limits using a fresh ETag and retry handling.
    *
-   * @param taskId Task ID
-   * @param taskDetails Task details
-   * @param pageContext SP page context
    * @param delay Delay in seconds before updating the task details to ensure it's created properly
    */
   private async _updateTaskDetails(
@@ -396,20 +357,11 @@ export class PlannerConfiguration extends BaseTask {
     )
   }
 
-  /**
-   * Create task
-   *
-   * @param task Task JSON
-   */
   private async _createTask(task: Record<string, any>) {
     return await MSGraphHelper.Post('planner/tasks', JSON.stringify(task))
   }
 
-  /**
-   * Fetch plans for a specific group with request configuration
-   *
-   * @param groupId Group identifier
-   */
+  /** Reads the group's plan IDs and titles with retry handling. */
   public _fetchPlans(groupId: string) {
     return retryWithBackoff(
       () => MSGraphHelper.Get<IPlannerPlan[]>(`groups/${groupId}/planner/plans`, ['id', 'title']),
@@ -424,11 +376,7 @@ export class PlannerConfiguration extends BaseTask {
     )
   }
 
-  /**
-   * Fetch buckets
-   *
-   * @param planId Plan Id
-   */
+  /** Reads the plan's buckets with retry handling. */
   private _fetchBuckets(planId: string) {
     return retryWithBackoff(
       () =>
@@ -448,11 +396,7 @@ export class PlannerConfiguration extends BaseTask {
     )
   }
 
-  /**
-   * Fetch existing tasks for a specific bucket
-   *
-   * @param bucketId Bucket Id
-   */
+  /** Reads existing bucket tasks to avoid creating duplicate titles. */
   private _fetchBucketTasks(bucketId: string) {
     return retryWithBackoff(
       () =>
@@ -471,13 +415,7 @@ export class PlannerConfiguration extends BaseTask {
     )
   }
 
-  /**
-   * Execute PlannerConfiguration
-   *
-   * @param params Task parameters
-   * @param params Task parameters
-   * @param onProgress On progress function
-   */
+  /** Provisions the configured plan and passes its ID to subsequent template processing. */
   public async execute(
     params: IBaseTaskParams,
     onProgress: OnProgressCallbackFunction

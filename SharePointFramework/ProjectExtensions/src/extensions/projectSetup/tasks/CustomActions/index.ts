@@ -4,17 +4,13 @@ import { NO_TEMPLATE_ID } from '../../constants'
 import { BaseTask, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../types'
 
+/** Points the document-template command at the library selected by the project template. */
 export class CustomActions extends BaseTask {
   constructor(data: IProjectSetupData) {
     super('CustomActions', data)
   }
 
-  /**
-   * Execute CustomActions
-   *
-   * @param params Task parameters
-   * @param onProgress On progress function
-   */
+  /** Updates the template selector's custom action on a best-effort basis when applying a template. */
   public async execute(
     params: IBaseTaskParams,
     onProgress: OnProgressCallbackFunction
@@ -35,12 +31,10 @@ export class CustomActions extends BaseTask {
   }
 
   /**
-   * Update custom action for library template selector based on value set for the selected template.
+   * Sets the document-template library on the selector's custom action.
    *
    * The custom actions are fetched fresh here, as the template selector custom action
    * may have been added by the `CustomActions` handler during the `ApplyTemplate` task.
-   *
-   * @param customActionTitle Custom action title for the library template selector.
    */
   private async _updateTemplateSelectorCustomAction(customActionTitle = 'Malvelger') {
     const templateLibraryUrl = this.data.selectedTemplate.templateLibraryUrl

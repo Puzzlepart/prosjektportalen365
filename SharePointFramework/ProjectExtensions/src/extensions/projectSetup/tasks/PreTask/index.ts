@@ -9,16 +9,13 @@ import resource from 'SharedResources'
 import SPDataAdapter from 'data/SPDataAdapter'
 import { NO_TEMPLATE_ID } from '../../constants'
 
+/** Prepares template schemas, validates hub dependencies and initializes provisioning services. */
 export class PreTask extends BaseTask {
   constructor(data: IProjectSetupData) {
     super('PreTask', data)
   }
 
-  /**
-   * Execute PreTask
-   *
-   * @param params Task parameters
-   */
+  /** Loads the selected schema and prepares JSOM, entity and portal services for later tasks. */
   public async execute(params: IBaseTaskParams): Promise<IBaseTaskParams> {
     super.initExecute(params)
 
@@ -69,11 +66,7 @@ export class PreTask extends BaseTask {
     }
   }
 
-  /**
-   * Checks that the parameters are valid
-   *
-   * @param params - Task params
-   */
+  /** Validates the phase term set and content-type IDs declared in template parameters. */
   private async validateParameters(params: IBaseTaskParams): Promise<void> {
     const parametersToValidate: string[] = _.toArray(params.templateSchema.Parameters) as string[]
     const [termSetIds] = parametersToValidate.filter((param) => _.isObject(param))
@@ -84,11 +77,7 @@ export class PreTask extends BaseTask {
     await this.validateContentTypes(contentTypesToValidate)
   }
 
-  /**
-   * Checks that the term set IDs are valid
-   *
-   * @param termSetIds - Term set IDs
-   */
+  /** Verifies that the configured GtProjectPhase term set exists and has a name. */
   private async validateTermSetIds(termSetIds: any) {
     const termSetId = termSetIds?.GtProjectPhase
     let termSet: ITermSetInfo
@@ -113,11 +102,7 @@ export class PreTask extends BaseTask {
     }
   }
 
-  /**
-   * Checks that the content types are valid and exist in the hub
-   *
-   * @param contentTypes - Content types to validate
-   */
+  /** Verifies that each configured content type can be read from the hub. */
   private async validateContentTypes(contentTypes: string[]): Promise<void> {
     await Promise.all(
       contentTypes.map(async (contentTypeId) => {

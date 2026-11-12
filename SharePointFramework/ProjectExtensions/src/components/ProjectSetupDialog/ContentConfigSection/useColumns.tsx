@@ -10,13 +10,7 @@ import strings from 'ProjectExtensionsStrings'
 import { ContentConfig, IDataGridColumn } from 'pp365-shared-library'
 import React from 'react'
 
-/**
- * Columns hook for `ContentConfigSection`: the title, with a lock on what cannot be left out and a
- * mark on what the project has already, and the description.
- *
- * @param mandatoryKeys The keys of the items that cannot be left out
- * @param addedKeys The keys of the items the project has from an earlier run of the setup
- */
+/** Builds list-content columns, marking mandatory and previously added configurations. */
 export function useColumns(
   mandatoryKeys: Set<string>,
   addedKeys: Set<string> = new Set()

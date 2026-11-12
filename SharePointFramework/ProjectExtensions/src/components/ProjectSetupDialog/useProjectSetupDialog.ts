@@ -6,12 +6,7 @@ import createReducer, { INIT, initialState } from './reducer'
 import { IProjectSetupDialogProps, ProjectSetupConfigTab } from './types'
 import _ from 'underscore'
 
-/**
- * Component logic for the `ProjectSetupDialog` component: the setup's state, the configuration
- * tab shown and its count, and whether the setup can be submitted.
- *
- * @param props Props for the `ProjectSetupDialog` component.
- */
+/** Coordinates setup selections, configuration tabs and submission readiness. */
 export function useProjectSetupDialog(props: IProjectSetupDialogProps) {
   const [state, dispatch] = useReducer(createReducer(props.data), initialState)
 
@@ -19,21 +14,12 @@ export function useProjectSetupDialog(props: IProjectSetupDialogProps) {
     dispatch(INIT())
   }, [])
 
-  /**
-   * On submit the selected user configuration.
-   */
   const onSubmit = () => {
     props.onSubmit(state)
   }
 
   /**
-   * Checks if the configuration should be disabled. Configuration
-   * tab is disabled if there is no configuration available or if there is
-   * no selected template.
-   *
-   * @param type Type of configuration to check.
-   *
-   * @returns `true` if the configuration is disabled.
+   * Disables configuration when no template or no visible configuration items are available.
    */
   const isConfigDisabled = (type: ProjectSetupConfigTab) => {
     if (!state.selectedTemplate) return true
@@ -72,11 +58,7 @@ export function useProjectSetupDialog(props: IProjectSetupDialogProps) {
   }, [hasExtensions, hasContentConfig])
 
   /**
-   * The name of a tab with a count, which says what the count is: «Prosjekttillegg, 2 valgt»
-   * (WCAG 1.1.1). A tab without one is named by its text.
-   *
-   * @param header The tab's text
-   * @param count How many are chosen
+   * Names nonzero tab counts as selections rather than unexplained numbers.
    */
   const tabLabel = (header: string, count: number) =>
     count > 0 ? format(strings.ConfigTabSelectedLabel, header, count) : undefined

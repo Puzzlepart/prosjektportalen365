@@ -22,11 +22,8 @@ import { useMigrateRiskActionsDialog } from './useMigrateRiskActionsDialog'
 import { getFluentIcon, format } from 'pp365-shared-library'
 
 /**
- * Migrate risk actions dialog. This dialog is used to migrate risk actions to planner tasks. Its
- * buttons stay while the tasks are made, unusable but focusable (`disabledFocusable`), so the
- * button pressed keeps the focus (WCAG 2.4.3); the bar meanwhile is named by its text. When
- * Planner refuses an action's task, it says which and why; once some actions are tasks, only the
- * close button is left, since migrating the field again would add them twice.
+ * Converts written risk actions to Planner tasks and reports any refused actions.
+ * After partial migration, only closing is offered to prevent duplicate tasks.
  */
 export const MigrateRiskActionsDialog: FC<{ children?: ReactNode }> = (props) => {
   const {

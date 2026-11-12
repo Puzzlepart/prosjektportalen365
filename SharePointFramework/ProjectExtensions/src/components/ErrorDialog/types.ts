@@ -1,24 +1,14 @@
 import { MessageBarIntent } from '@fluentui/react-components'
 import { IBaseDialogProps } from '../@BaseDialog/types'
 
+/** Error details and recovery actions shown in an extension dialog. */
 export interface IErrorDialogProps extends IBaseDialogProps {
-  /**
-   * Error object
-   */
   error: Error
 
-  /**
-   * Intent of the message
-   */
   intent?: MessageBarIntent
 
-  /**
-   * On setup click
-   */
   onSetupClick?(): void
 
-  /**
-   * Show stack as sub text in the dialog
-   */
+  /** Renders the stack as plain text instead of an announcing message bar. */
   showStackAsSubText?: boolean
 }

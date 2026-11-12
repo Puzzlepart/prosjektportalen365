@@ -6,9 +6,6 @@ import { useRiskActionFieldCustomizerContext } from '../../../../extensions/risk
 import { useRiskActionContext } from '../../context'
 import { INewRiskActionForm, INewRiskActionPanelProps } from './types'
 
-/**
- * The form before anything is typed.
- */
 const EMPTY_FORM: INewRiskActionForm = {
   title: '',
   description: '',
@@ -19,8 +16,6 @@ const EMPTY_FORM: INewRiskActionForm = {
 /**
  * The task the data adapter adds, from the form: the responsible by email, which `addTask`
  * resolves to a Planner user, and the days as the picker gave them.
- *
- * @param form The form
  */
 function toTaskModel(form: INewRiskActionForm): Map<string, any> {
   return new Map<string, any>([
@@ -32,13 +27,7 @@ function toTaskModel(form: INewRiskActionForm): Map<string, any> {
   ])
 }
 
-/**
- * Component logic hook for `NewRiskActionPanel`: the form, the people search for the responsible,
- * and the save, which adds the task to Planner and to the risk, then closes the panel, or, with
- * «create several» on, clears the form for the next task.
- *
- * @param props The panel's props
- */
+/** Manages new-task form fields, people search and saving, including consecutive task creation. */
 export function useNewRiskActionPanel(props: INewRiskActionPanelProps) {
   const context = useRiskActionFieldCustomizerContext()
   const { itemContext, setItemContext } = useRiskActionContext()
@@ -47,8 +36,7 @@ export function useNewRiskActionPanel(props: INewRiskActionPanelProps) {
   const [saveError, setSaveError] = useState<string>()
   const { announce } = useAnnounce()
 
-  // A failed save is told while the panel is open. The panel stays mounted while closed, so the
-  // error is let go of as it opens again, and the opening starts clean.
+  // The panel stays mounted while closed; a new opening must not show the previous save error.
   useEffect(() => {
     if (props.open) setSaveError(undefined)
   }, [props.open])
@@ -73,7 +61,6 @@ export function useNewRiskActionPanel(props: INewRiskActionPanelProps) {
       const task = await context.dataAdapter.addTask(toTaskModel(form), itemContext)
       setItemContext(await context.dataAdapter.updateItem([task], itemContext))
     } catch (error) {
-      // The panel stays open with the form as typed, and says why (WCAG 3.3.1).
       setSaveError(error?.message ?? '')
       return
     } finally {

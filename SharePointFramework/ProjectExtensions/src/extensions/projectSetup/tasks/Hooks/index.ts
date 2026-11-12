@@ -7,17 +7,13 @@ import { BaseTask, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../types'
 import { HooksTaskError } from './HooksTaskError'
 
+/** Runs template and extension hooks after the other setup tasks. */
 export class Hooks extends BaseTask {
   constructor(data: IProjectSetupData) {
     super('Hooks', data)
   }
 
-  /**
-   * Execute Hooks
-   *
-   * @param params Task parameters
-   * @param onProgress On progress function
-   */
+  /** Applies only the Hooks handler from the template and selected extension schemas. */
   public async execute(
     params: IBaseTaskParams,
     onProgress: OnProgressCallbackFunction

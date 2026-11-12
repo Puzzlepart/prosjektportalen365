@@ -1,39 +1,11 @@
 'use strict'
 
 /**
- * SPFx / Heft webpack customization for this solution.
+ * Heft webpack customization: compiled-path aliases, bundled workspace dependencies,
+ * third-party CSS and Node compatibility, and live reload.
  *
- * Invoked by the rig task `customize-configure-webpack`
- * (@microsoft/spfx-heft-plugins -> customize-spfx-webpack-configuration-plugin),
- * which taps `onConfigure` at stage Number.MAX_SAFE_INTEGER, i.e. after
- * `third-party-externals-configure-webpack` has appended its externals.
- * The return value is ignored - mutate `webpackConfig` in place.
- *
- * Two responsibilities:
- *
- *  1. Rebuild `resolve.alias` from this solution's tsconfig `compilerOptions.paths`,
- *     pointing at the compiled output folder (`lib`), exactly as the old
- *     gulpfile `build.configureWebpack.mergeConfig({ additionalConfiguration })`
- *     block did.
- *
- *  2. Decision A - keep the linked Rush workspace packages BUNDLED into this
- *     solution's bundles instead of letting Heft turn them into runtime SPFx
- *     component dependencies.
- *
- *     Heft externalizes a linked package when `CumulativeManifestProcessor`
- *     manages to attach a `packageName` to its discovered manifests, which it
- *     only does when the dependency's `dist` folder yields a single component
- *     (or a component plus its assembly). `pp365-shared-library` is exactly
- *     that case after a clean build. `ManifestPlugin` then emits a
- *     `type: "component"` entry in `loaderConfig.scriptResources` - but ONLY
- *     for requests webpack actually turned into an `ExternalModule`. Dropping
- *     the name from `webpackConfig.externals` therefore bundles the code and
- *     removes the runtime component dependency in one move; `linkedExternals`
- *     on its own never emits anything.
- *
- * This file is identical in all six SharePointFramework solutions: the alias
- * block derives everything from the sibling `tsconfig.json` at runtime, and the
- * externals filter is a no-op for names that are not present.
+ * The rig invokes this after its externals configuration. Its return value is ignored,
+ * so configuration changes must be made in place.
  */
 
 const fs = require('fs')
@@ -82,7 +54,7 @@ function resolveExtends(specifier, fromFile) {
     try {
       return requireFrom.resolve(candidate)
     } catch (e) {
-      /* try the next form */
+      // Package exports may expose either the specifier or its tsconfig.json entry.
     }
   }
   return undefined
@@ -177,16 +149,8 @@ function withoutBundledPackages(externals) {
 }
 
 /**
- * Decision A: keep the linked workspace packages bundled.
- *
- * `externals` is left by the SPFx generator as a plain array of strings
- * (`WebpackConfigurationGenerator.js`, `externals: Array.from(externalsKeys)`),
- * and `third-party-externals-plugin` later reassigns it with its own entries
- * appended. This hook is registered after that one and therefore normally sees
- * the final array - but rather than depend on the rig's task declaration order,
- * install the filter as a property setter so that ANY later assignment is
- * filtered too. Falls back to a one-shot filter if the property cannot be
- * redefined.
+ * Keeps workspace packages bundled rather than emitted as runtime SPFx component dependencies.
+ * A setter also filters later rig assignments; nonconfigurable properties get a one-shot filter.
  */
 function keepLinkedPackagesBundled(webpackConfig, log) {
   const removed = Array.isArray(webpackConfig.externals)
@@ -217,30 +181,14 @@ function keepLinkedPackagesBundled(webpackConfig, log) {
 }
 
 /**
- * @param {import('webpack').Configuration} webpackConfig
- * @param {{ logger: { terminal: { writeVerboseLine: (message: string) => void } } }} taskSession
- */
-/**
- * Plain stylesheets imported from node_modules are global CSS, not CSS modules.
- *
- * The rig routes every `.css` file that is not named `*.global.css` through the CSS-modules loader
- * (`CSS_MODULE_RULE_TEST` in spfx-heft-plugins' WebpackConfigurationGenerator), which hashes the
- * class names. That is right for our own `.module.scss`, but wrong for third-party stylesheets
- * such as `react-calendar-timeline/lib/Timeline.css`:
- * the library's DOM uses the plain class names, so the hashed rules never match and the timeline
- * collapsed into an unclickable overlay after the Heft migration. The gulp toolchain treated
- * node_modules CSS as global; this restores that by excluding node_modules from the module rule
- * and adding a node_modules-only rule that reuses the rig's global-CSS loader chain.
+ * Routes plain third-party CSS through the rig's global loader.
+ * The default CSS-module rule hashes library class names that their DOM expects unchanged.
  */
 function treatNodeModulesCssAsGlobal(webpackConfig, log) {
   const rules = webpackConfig?.module?.rules
   if (!Array.isArray(rules)) return
   const NODE_MODULES = /[\\/]node_modules[\\/]/
-  // Workspace packages (pp365-shared-library and the two published web part packages) are bundled
-  // from node_modules too, but their `*.module.scss.css` files ARE CSS modules; compiling them as
-  // global stylesheets leaves `styles` undefined at runtime ("Cannot read properties of undefined
-  // (reading 'accordionChevron')" took down every shared component on the test tenant). Only
-  // plain third-party stylesheets qualify as global.
+  // Bundled workspace packages still need CSS-module exports; treating them as global loses styles.
   const WORKSPACE_PACKAGE = /[\\/]node_modules[\\/]pp365-[^\\/]+[\\/]/
   const CSS_MODULE_FILE = /\.module\.(?:s[ac]ss|css)(?:\.css)?$/i
   const isThirdPartyGlobalCss = (resourcePath) =>
@@ -270,14 +218,8 @@ function treatNodeModulesCssAsGlobal(webpackConfig, log) {
 }
 
 /**
- * Provides the Node `Buffer` global to third-party code that still references it.
- *
- * webpack 4 (the gulp toolchain) injected polyfills for Node globals automatically; webpack 5 does
- * not. `xml-js`, which sp-js-provisioning uses to serialize field and view XML, evaluates
- * `json instanceof Buffer`, so the first list provisioned from the template package catalog failed
- * with "Buffer is not defined". Solutions that bundle such code declare the `buffer` package as a
- * devDependency; when it resolves, webpack's ProvidePlugin binds the free identifier to it. Other
- * solutions are left untouched, so the polyfill is only paid for where it is needed.
+ * Provides Buffer for dependencies such as xml-js when this solution declares the polyfill.
+ * Webpack 5 no longer injects Node globals automatically.
  */
 function provideNodeGlobals(webpackConfig, webpack, log) {
   const bufferRoot = resolvePackageRoot('buffer')
@@ -294,15 +236,7 @@ function provideNodeGlobals(webpackConfig, webpack, log) {
 }
 
 /**
- * The dev server (`npm run watch`) reloads the page after a rebuild instead of hot-swapping modules.
- *
- * SPFx turns hot module replacement on (`devServer.hot: true` in spfx-heft-plugins'
- * `updateServeConfigAsync`, set in serve mode only, at the default `onConfigure` stage, so before
- * this hook). On a SharePoint page every web part and extension bundle carries its own webpack
- * runtime and dev-server client, and the update fails ("Loading hot update chunk ... failed",
- * "Cannot set properties of undefined"); webpack/hot/dev-server then only logs "[HMR] Update
- * failed" and never reloads, so a saved change showed only after F5. With HMR off, the dev-server
- * client falls back to live reload and reloads the page once the rebuild is done.
+ * Uses page reloads because independent SPFx webpack runtimes cannot reliably share HMR updates.
  */
 function reloadPageOnRebuild(webpackConfig, log) {
   if (!webpackConfig.devServer) return
@@ -311,6 +245,7 @@ function reloadPageOnRebuild(webpackConfig, log) {
   log('dev server: hot module replacement off, the page reloads after each rebuild')
 }
 
+/** Applies solution-specific compatibility rules to each configuration supplied by Heft. */
 module.exports = function customizeWebpackConfiguration(webpackConfig, taskSession, heftConfiguration, webpack) {
   const log = (message) => {
     try {

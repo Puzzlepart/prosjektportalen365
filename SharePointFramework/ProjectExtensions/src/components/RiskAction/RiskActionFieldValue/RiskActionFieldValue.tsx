@@ -16,13 +16,7 @@ const RISK_ACTION_FIELD_VALUE_DEFAULT_PROPS: Partial<IRiskActionFieldValueProps>
   }
 }
 
-/**
- * Renders the field value for a risk action.
- *
- * @param props - The component props.
- *
- * @returns The rendered component.
- */
+/** Displays linked Planner tasks, retained action text and the task-management trigger. */
 export const RiskActionFieldValue: FC<IRiskActionFieldValueProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, RISK_ACTION_FIELD_VALUE_DEFAULT_PROPS)
   const context = useRiskActionFieldCustomizerContext()

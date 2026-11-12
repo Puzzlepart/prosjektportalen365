@@ -2,14 +2,12 @@ import { parseErrorStack } from 'pp365-shared-library/lib/util/parseErrorStack'
 import { MessageBarProps } from '@fluentui/react-components'
 import { readableErrorDetails } from './readableError'
 
+/** Setup failure with readable details and a dialog message intent. */
 export class ProjectSetupError extends Error {
   /**
-   * Creates a new instance of ProjectSetupError
+   * Builds a dialog-ready error from raw setup failure details.
    *
-   * @param name - Name
-   * @param message - Message
    * @param stack - Stack: a text, or the error the setup failed with
-   * @param messageType - Message type
    */
   constructor(
     name: string,

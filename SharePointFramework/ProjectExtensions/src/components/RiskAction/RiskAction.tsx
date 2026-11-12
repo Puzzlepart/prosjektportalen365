@@ -7,6 +7,7 @@ import { RiskActionPopover } from './RiskActionPopover'
 import { RiskActionContext } from './context'
 import { useRiskAction } from './useRiskAction'
 
+/** Displays a risk's Planner tasks and the controls for managing them. */
 export const RiskAction: FC = () => {
   const { fluentProviderId, contextValue } = useRiskAction()
   return (

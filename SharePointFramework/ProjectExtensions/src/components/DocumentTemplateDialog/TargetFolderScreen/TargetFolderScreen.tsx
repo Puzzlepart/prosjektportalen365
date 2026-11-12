@@ -36,7 +36,6 @@ export const TargetFolderScreen: FC = () => {
         {isEmptyFolder ? (
           <UserMessage text={strings.NoFoldersAvailableText} intent='info' />
         ) : (
-          // Selecting a row picks that folder as the target; clicking its name enters it instead.
           <DataGridList<SPFolder>
             items={folders}
             columns={columns}

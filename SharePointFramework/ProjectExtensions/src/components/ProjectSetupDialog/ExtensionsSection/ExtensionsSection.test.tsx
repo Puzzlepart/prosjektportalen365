@@ -25,10 +25,6 @@ import strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
 import { ExtensionsSection } from './ExtensionsSection'
 
-/**
- * The project setup section that lists what can be picked: rows with a description, the picked
- * ones checked, a new pick reported as the ids now selected, and the search box wired to the hook.
- */
 describe('ExtensionsSection', () => {
   it('lists the items with their descriptions', () => {
     render(<ExtensionsSection />)

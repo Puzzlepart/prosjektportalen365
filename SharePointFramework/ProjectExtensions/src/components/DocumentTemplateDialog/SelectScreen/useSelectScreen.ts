@@ -7,11 +7,7 @@ import { SELECTION_CHANGED } from '../reducer'
 import { useFolderFocus } from '../useFolderFocus'
 import columns from './columns'
 
-/**
- * Component logic hook for `SelectScreen`: the folder of the template library open, the
- * templates in it (folders first, each sorted by name), and the selection, which the dialog
- * keeps as the templates to copy.
- */
+/** Manages template-folder navigation, sorted rows and the dialog's template selection. */
 export function useSelectScreen() {
   const context = useContext(TemplateSelectorContext)
   const { state, dispatch } = useContext(DocumentTemplateDialogContext)
@@ -38,7 +34,6 @@ export function useSelectScreen() {
 
   useFolderFocus(folder, containerRef)
 
-  // Opening another folder starts the selection over, as the v8 list did when its key changed.
   const isFirstRender = useRef(true)
   useEffect(() => {
     if (isFirstRender.current) {

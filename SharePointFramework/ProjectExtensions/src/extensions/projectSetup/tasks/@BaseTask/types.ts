@@ -15,90 +15,47 @@ import { OnProgressCallbackFunction } from '../types'
  */
 export type NavigationNodes = NonNullable<NonNullable<Schema['Navigation']>['QuickLaunch']>
 
+/** Provisioning context enriched and passed between sequential setup tasks. */
 export interface IBaseTaskParams {
-  /**
-   * Configured SP instance from `@pnp/sp`
-   */
   sp?: SPFI
 
-  /**
-   * Web instance
-   */
   web: IWeb
 
-  /**
-   * Web absolute URL
-   */
   webAbsoluteUrl: string
 
-  /**
-   * Template parameters
-   */
   templateParameters?: { [key: string]: string }
 
-  /**
-   * Template exclude handlers
-   */
   templateExcludeHandlers: string[]
 
-  /**
-   * Context for the Application Customizer
-   */
   context: ApplicationCustomizerContext
 
-  /**
-   * Properties
-   */
   properties: IProjectSetupProperties
 
-  /**
-   * SPFx JSOM context
-   */
   spfxJsomContext?: ISpfxJsomContext
 
-  /**
-   * Template schema
-   */
   templateSchema?: Schema
 
   /**
-   * The `Navigation.QuickLaunch` of the applied template, as its schema declares it (before
-   * `ApplyTemplate` leaves it out for an extension that declares its own), and of each selected
-   * extension. Set by `ApplyTemplate`; after a re-run the setup adds back only the saved nodes
-   * these do not declare.
+   * Original template and extension menus used to distinguish owner-added links on restoration.
    */
   declaredQuickLaunch?: NavigationNodes[]
 
-  /**
-   * Entity service
-   */
   entityService?: SpEntityPortalService
 
-  /**
-   * Portal data service
-   */
   portalDataService?: PortalDataService
 
-  /**
-   * Miscellaneous data
-   */
   data?: Record<string, any>
 }
 
+/** Contract for a named task in the project-setup pipeline. */
 export interface IBaseTask {
   params: IBaseTaskParams
   taskName: string
   execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams>
 }
 
+/** Setup error attributed to a provisioning task. */
 export class BaseTaskError extends ProjectSetupError {
-  /**
-   * Creates a new instance of BaseTaskError
-   *
-   * @param taskName Task name
-   * @param message Message
-   * @param stack Stack
-   */
   constructor(taskName: string, message: string, stack: any) {
     super(taskName, message, stack)
   }

@@ -3,11 +3,7 @@ import * as React from 'react'
 import { ProjectSetupDialogContext } from '../context'
 import { useTemplateSelector } from './useTemplateSelector'
 
-/**
- * The templates the selector offers: in title order whatever order the hub's list returns them in,
- * without the hidden ones, and narrowed by the search. Read through a probe component, since the
- * combobox that shows them only renders its options when opened.
- */
+/** Minimal template model for selector filtering and ordering tests. */
 const template = (id: number, text: string, extra: Record<string, any> = {}) =>
   ({
     id,
@@ -20,6 +16,7 @@ const template = (id: number, text: string, extra: Record<string, any> = {}) =>
     ...extra
   }) as any
 
+/** Exposes matching templates without depending on the combobox's popup rendering. */
 const Probe: React.FC = () => {
   const { matchingTemplates } = useTemplateSelector()
   return <div data-testid='templates'>{matchingTemplates.map((t) => t.text).join('|')}</div>

@@ -1,63 +1,44 @@
 import { IBaseDialogProps } from '../@BaseDialog/types'
 import { IProgressProps } from 'pp365-shared-library'
 
+/** Lifecycle state shown for a setup task. */
 export type TaskStatus = 'pending' | 'running' | 'completed' | 'error' | 'warning'
+/** Severity of a setup log entry. */
 export type LogLevel = 'info' | 'warning' | 'error'
 
+/** Timestamped diagnostic message from a setup task. */
 export interface ILogEntry {
   timestamp: Date
   message: string
   level: LogLevel
 }
 
+/** Status and diagnostic entries collected for a setup task. */
 export interface ITaskProgress {
   name: string
   status: TaskStatus
   entries: ILogEntry[]
 }
 
+/** Setup progress, diagnostics and completion notices shown in the dialog. */
 export interface IProgressDialogProps extends IBaseDialogProps {
-  /**
-   * Icon name
-   */
   iconName?: string
 
-  /**
-   * Progress indicator props
-   */
   progressIndicator: IProgressProps
 
-  /**
-   * Detailed task progress for the advanced log
-   */
   taskProgress?: ITaskProgress[]
 
-  /**
-   * Current step index (0-based)
-   */
+  /** Zero-based step index. */
   currentStep?: number
 
-  /**
-   * Total number of steps
-   */
   totalSteps?: number
 
-  /**
-   * Whether to setup is complete. When `true` and the log is expanded,
-   * a close button is shown instead of auto-closing/redirecting.
-   */
+  /** Completion keeps a user-expanded log or a warning open for acknowledgement. */
   isComplete?: boolean
 
-  /**
-   * Error that occurred during setup. When set, the advanced log is
-   * expanded and the error is shown beneath it, with a close button
-   * in the footer.
-   */
+  /** Forces the advanced log open and displays the error below it. */
   error?: Error
 
-  /**
-   * Warning to show when the setup completed with a limitation the user must know
-   * about. Keeps the dialog open on completion instead of continuing to the project.
-   */
+  /** Keeps the completed dialog open until the user acknowledges the limitation. */
   warning?: { title: string; text: string }
 }

@@ -1,11 +1,7 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
-// Babel, so mocks are not hoisted. Stand-ins keep Fluent's contracts where jsdom cannot run the
-// real controls (see the testing guide): the popovers toggle through `onOpenChange` and show their
-// surface while open, a dialog named as it is told when the popover traps the focus; the responsible is the harness's TagPicker stand-in (a combobox for the
-// search, an option per person found); the separator (`Dropdown`) is a native select, whose choice
-// calls `onOptionSelect` with the option's value and text; the date pickers are inputs that write a
-// day through `formatDate` and read a typed one through `parseDateFromString`, as `allowTextInput`
-// does.
+// Babel, so mocks are not hoisted. Stand-ins preserve Fluent's event and naming contracts while
+// keeping these workflow tests independent of popup layout; date inputs use the real formatter
+// and parser supplied by the field.
 jest.mock('@fluentui/react-components', () => {
   const base = jest.requireActual('pp365-jest-config/lib/tagPickerStandIn').withTagPickerStandIn()
   const React = jest.requireActual('react')
@@ -14,6 +10,7 @@ jest.mock('@fluentui/react-components', () => {
     trapFocus: false,
     toggle: (_event: any) => undefined
   })
+  /** Shares controlled or internal popover state with trigger and surface stand-ins. */
   const Popover = ({ open: controlled, onOpenChange, trapFocus, children }: any) => {
     const [uncontrolled, setUncontrolled] = React.useState(false)
     const open = controlled ?? uncontrolled
@@ -27,8 +24,10 @@ jest.mock('@fluentui/react-components', () => {
       children
     )
   }
+  /** Routes trigger clicks through the popover's state callback. */
   const PopoverTrigger = ({ children }: any) =>
     React.createElement('span', { onClick: React.useContext(PopoverContext).toggle }, children)
+  /** Exposes open content with Fluent's dialog naming contract, without simulating focus trapping. */
   const PopoverSurface = ({ children, ...props }: any) => {
     const { open, trapFocus } = React.useContext(PopoverContext)
     return open
@@ -46,6 +45,7 @@ jest.mock('@fluentui/react-components', () => {
     const option = event.target.options[event.target.selectedIndex]
     onOptionSelect?.(event, { optionValue: option.value, optionText: option.textContent })
   }
+  /** Adapts native selection changes to the separator dropdown's option callback. */
   const Dropdown = ({ disabled, defaultSelectedOptions, onOptionSelect, children }: any) =>
     React.createElement(
       'select',
@@ -57,12 +57,14 @@ jest.mock('@fluentui/react-components', () => {
       },
       children
     )
+  /** Supplies native options to the dropdown stand-in. */
   const Option = ({ value, text, children }: any) =>
     React.createElement('option', { value: value ?? '' }, text || children)
   return { ...base, Popover, PopoverTrigger, PopoverSurface, Dropdown, Option }
 })
 jest.mock('@fluentui/react-datepicker-compat', () => {
   const React = jest.requireActual('react')
+  /** Exercises the field's day formatter and parser through a native input. */
   const DatePicker = ({
     id,
     value,

@@ -7,9 +7,7 @@ import { useBoolean } from 'usehooks-ts'
 import { useRiskActionFieldCustomizerContext } from '../../../extensions/riskAction/context'
 import { useRiskActionContext } from '../context'
 
-/**
- * Custom hook for the `RiskActionPopover` component.
- */
+/** Manages task synchronization, popover visibility and the new-task panel. */
 export function useRiskActionPopover() {
   const context = useRiskActionFieldCustomizerContext()
   const { itemContext, setItemContext } = useRiskActionContext()
@@ -30,11 +28,7 @@ export function useRiskActionPopover() {
     panelState.setTrue()
   }
 
-  /**
-   * Syncs the tasks in the item context by syncing with the data adapter, sets the updated item
-   * context, closes the popover and says so (WCAG 4.1.3); a failure stays in the popover, said in
-   * a message.
-   */
+  /** Refreshes stored task references, announcing success or retaining an in-popover error. */
   const onSyncTasks = async () => {
     setSyncError(undefined)
     try {

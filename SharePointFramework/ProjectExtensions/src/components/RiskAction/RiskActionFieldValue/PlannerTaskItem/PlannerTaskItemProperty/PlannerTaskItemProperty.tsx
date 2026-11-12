@@ -3,11 +3,7 @@ import styles from './PlannerTaskItemProperty.module.scss'
 import { IPlannerTaskItemPropertyProps } from './types'
 import _ from 'lodash'
 
-/**
- * A property of a Planner task in its preview: its name as a term and its value, or the people
- * given, as the description, within the preview's description list (WCAG 1.3.1). Hidden while it
- * has neither.
- */
+/** Renders a nonempty task property as a term and description in the preview's definition list. */
 export const PlannerTaskItemProperty: FC<IPlannerTaskItemPropertyProps> = (props) => {
   const hidden = !props.value && (!props.children || _.isEmpty(props.children))
   return (

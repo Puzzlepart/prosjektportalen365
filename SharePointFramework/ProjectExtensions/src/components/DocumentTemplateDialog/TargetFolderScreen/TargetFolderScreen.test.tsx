@@ -14,14 +14,6 @@ import reducer, { initState } from '../reducer'
 import { TargetFolderScreen } from './index'
 
 /**
- * The screen where the user browses to where the copied templates go: the current library's
- * folders, navigation into them, the other libraries, and the row that picks a folder. Its
- * buttons are the dialog's footer, tested with the dialog. Asserted through text and roles, so it
- * holds whichever Fluent UI list renders the folders, and run on the dialog's own reducer, which
- * is where the browsing lives.
- */
-
-/**
  * The screen reads only these fields off `SPFolder`, so a stand-in keeps the test away from the
  * model's SharePoint dependencies.
  */

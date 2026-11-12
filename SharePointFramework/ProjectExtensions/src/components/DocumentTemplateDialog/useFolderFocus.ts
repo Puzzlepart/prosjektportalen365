@@ -3,20 +3,14 @@ import { RefObject, useEffect, useRef } from 'react'
 /** Marks a folder's link in a list of folders with the folder's server relative URL. */
 export const FOLDER_URL_ATTRIBUTE = 'data-folder-url'
 
-/** How often, and how many times, the link of the folder left is looked for as the list fills. */
+// Rows arrive asynchronously, so focus restoration retries for a bounded interval.
 const RETRY_DELAY = 100
 const RETRIES = 100
 
 /**
- * Keeps the focus where the user is as a screen moves between folders (WCAG 2.4.3): the link
- * that opened a folder leaves the page with the list, which drops the focus to the page's start.
- * A folder opened gives the focus to the trail's current folder; going up gives it to the link of
- * the folder left, once the list shows it: the list draws its rows after the screen, and the
- * target screen reads its folders from SharePoint. The focus is not taken from wherever the user
- * has moved it meanwhile.
+ * Restores focus after folder navigation without overriding a subsequent user focus change.
  *
  * @param folder The open folder's server relative URL, or an empty string for the root
- * @param container The screen's element
  */
 export function useFolderFocus(folder: string, container: RefObject<HTMLElement>): void {
   const previous = useRef(folder)
@@ -31,7 +25,7 @@ export function useFolderFocus(folder: string, container: RefObject<HTMLElement>
       root.querySelector<HTMLElement>('nav [aria-current="page"]')?.focus()
       return
     }
-    // The focus is where the move left it: on the page's start, or on the trail's step clicked.
+    // Do not steal focus if the user has moved from the breadcrumb to another control.
     const isUnmoved = () =>
       document.activeElement === document.body ||
       !!root.querySelector('nav')?.contains(document.activeElement)

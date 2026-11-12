@@ -2,11 +2,7 @@ import { useId } from '@fluentui/react-components'
 import { useMemo, useState } from 'react'
 import { useRiskActionFieldCustomizerContext } from '../../extensions/riskAction/context'
 
-/**
- * Custom hook for managing risk action functionality.
- *
- * @returns An object containing the fluentProviderId and contextValue.
- */
+/** Creates the cell's provider ID and shared, editable risk-item context. */
 export function useRiskAction() {
   const fluentProviderId = useId('fp-risk-action')
   const context = useRiskActionFieldCustomizerContext()

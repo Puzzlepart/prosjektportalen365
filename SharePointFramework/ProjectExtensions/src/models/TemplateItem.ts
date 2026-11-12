@@ -5,6 +5,7 @@ import { IWeb } from '@pnp/sp/webs'
 import { FileIconType, IFileTypeIconOptions } from '@fluentui/react-file-type-icons'
 import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
 
+/** SharePoint file or folder metadata used to construct a document template. */
 export interface ITemplateSPItem {
   Folder?: {
     UniqueId: string
@@ -23,58 +24,26 @@ export interface ITemplateSPItem {
   FieldValuesAsText?: Record<string, string>
 }
 
-/**
- * @model TemplateItem
- */
+/** Document template with editable copy metadata and recursive folder-copy support. */
 export class TemplateItem {
-  /**
-   * Item id
-   */
   public id: string
 
-  /**
-   * Name
-   */
   public name: string
 
-  /**
-   * Title
-   */
   public title: string
 
-  /**
-   * The template description
-   */
   public description: string
 
-  /**
-   * The project phase
-   */
   public phase: string
 
-  /**
-   * The new name
-   */
   public newName: string
 
-  /**
-   * The new title
-   */
   public newTitle: string
 
-  /**
-   * Server relative URL for the template file
-   */
   public serverRelativeUrl: string
 
-  /**
-   * Modified time
-   */
   public modified: string
 
-  /**
-   * Error message for the input field for name
-   */
   public errorMessage: string
 
   constructor(
@@ -93,12 +62,9 @@ export class TemplateItem {
   }
 
   /**
-   * Copy item to folder
+   * Copies under the edited name, recursively for folders; file copies also use the edited title.
    *
-   * @param folder Folder
-   * @param shouldOverwrite Should overwrite
-   *
-   * @returns {true} if the operation is successful
+   * @returns The copied file, or the first directly contained file for a folder; null if none.
    */
   public async copyTo(folder: IFolder, shouldOverwrite: boolean = true): Promise<IFileInfo> {
     if (this.isFolder) {
@@ -115,12 +81,9 @@ export class TemplateItem {
   }
 
   /**
-   * Copy folder with all its contents recursively
+   * Copies a folder and its descendants, skipping failed children.
    *
-   * @param targetFolder Target folder
-   * @param shouldOverwrite Should overwrite
-   *
-   * @returns File add result for the first file copied (or null if no files)
+   * @returns The first file copied directly into the new folder, or null if none.
    */
   private async copyFolderWithContents(
     targetFolder: IFolder,
@@ -150,7 +113,7 @@ export class TemplateItem {
           await this.setFileTitle(newFolder, fileInfo, file.Title)
         }
       } catch {
-        // Continue with next file if one fails
+        // A failed child must not prevent copying its siblings.
       }
     }
 
@@ -161,20 +124,14 @@ export class TemplateItem {
       try {
         await this.copySubFolder(subFolder.ServerRelativeUrl, newFolder, shouldOverwrite)
       } catch {
-        // Continue with next folder if one fails
+        // A failed child must not prevent copying its siblings.
       }
     }
 
     return firstFileResult
   }
 
-  /**
-   * Copy a subfolder recursively
-   *
-   * @param sourceFolderUrl Source folder server relative URL
-   * @param targetFolder Target folder
-   * @param shouldOverwrite Should overwrite
-   */
+  /** Copies a child folder recursively, preserving its name and its files' titles. */
   private async copySubFolder(
     sourceFolderUrl: string,
     targetFolder: IFolder,
@@ -200,7 +157,7 @@ export class TemplateItem {
           await this.setFileTitle(newFolder, fileInfo, file.Title)
         }
       } catch {
-        // Continue with next file if one fails
+        // A failed child must not prevent copying its siblings.
       }
     }
 
@@ -211,81 +168,52 @@ export class TemplateItem {
       try {
         await this.copySubFolder(subFolder.ServerRelativeUrl, newFolder, shouldOverwrite)
       } catch {
-        // Continue with next folder if one fails
+        // A failed child must not prevent copying its siblings.
       }
     }
   }
 
   /**
-   * Sets the `Title` of the list item behind a file that was just added.
+   * Updates the copied file's list-item title in the destination web.
    *
    * PnPjs 4 resolves `files.addUsingPath` to the file payload only, so the file is
    * re-addressed from `folder` (the web it was added to) rather than from `this.web`,
    * which is the web the template was read from.
-   *
-   * @param folder Folder the file was added to
-   * @param fileInfo File payload returned by `addUsingPath`
-   * @param title Title to set
    */
   private async setFileTitle(folder: IFolder, fileInfo: IFileInfo, title: string): Promise<void> {
     const item = await fileFromServerRelativePath(folder, fileInfo.ServerRelativeUrl).getItem()
     await item.update({ Title: title })
   }
 
-  /**
-   * On input changed
-   *
-   * @param properties Updated properties
-   */
+  /** Applies non-empty edits without clearing existing metadata. */
   public update(properties: Record<string, string>) {
     Object.keys(properties).forEach((prop) => {
       if (!stringIsNullOrEmpty(properties[prop])) this[prop] = properties[prop]
     })
   }
 
-  /**
-   * Name without extension
-   */
   public get nameWithoutExtension() {
     return this.name.substring(0, this.name.lastIndexOf('.'))
   }
 
-  /**
-   * File extension
-   */
   public get fileExtension() {
     return this.name.substring(this.name.lastIndexOf('.') + 1)
   }
 
-  /**
-   * Parent folder URL
-   */
   public get parentFolderUrl() {
     return this.serverRelativeUrl.replace(`/${this.name}`, '')
   }
 
-  /**
-   * Is folder
-   */
   public get isFolder() {
     return !!this._item.Folder
   }
 
-  /**
-   * Folder level
-   *
-   * Root level returns 1 etc
-   */
+  /** Path depth below the library root for /sites/<site>/<library> URLs. */
   public get level(): number {
     return this.serverRelativeUrl.split('/').length - 4
   }
 
-  /**
-   * Options for the template's file type glyph (`FileTypeIcon`): the folder's for a folder, else
-   * its extension's.
-   *
-   * @param options Options to start from, such as the size
-   */
+  /** Chooses a folder or file-extension glyph, retaining the supplied display options. */
   public getFileTypeIconOptions(options: IFileTypeIconOptions = {}): IFileTypeIconOptions {
     if (this.isFolder) return { ...options, type: FileIconType.folder }
     return { ...options, extension: this.fileExtension }

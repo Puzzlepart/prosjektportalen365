@@ -15,11 +15,7 @@ interface IMigrationOutcome extends RiskActionTasksResult {
   total: number
 }
 
-/**
- * Custom hook that returns the necessary properties and functions for the MigrateRiskActionsDialog
- * component. When Planner refuses the task of an action, the others are migrated, the refused one
- * stays written on the risk, and the dialog stays open to say which and why.
- */
+/** Migrates action text to tasks, retaining refused actions and managing partial-success feedback. */
 export function useMigrateRiskActionsDialog() {
   const { dataAdapter } = useRiskActionFieldCustomizerContext()
   const { itemContext, setItemContext } = useRiskActionContext()
@@ -52,9 +48,7 @@ export function useMigrateRiskActionsDialog() {
   }, [isMigrated])
 
   /**
-   * Migrates the risk actions to Planner tasks, and says how many were made (WCAG 4.1.3). The risk
-   * gets the tasks Planner added, and keeps the text of the actions it refused; with any refused,
-   * the dialog stays open and says which and why. A failure stays in the dialog, said in a message.
+   * Saves successful task references while keeping refused actions as text on the risk.
    */
   const onMigrate = async () => {
     setIsMigrating(true)
@@ -79,11 +73,6 @@ export function useMigrateRiskActionsDialog() {
     }
   }
 
-  /**
-   * Opens or closes the dialog. Opened, it starts clean: what the last attempt said belonged to it.
-   *
-   * @param open Whether the dialog is open
-   */
   const setOpen = (open: boolean) => {
     if (open) {
       setMigrateError(undefined)
@@ -92,8 +81,6 @@ export function useMigrateRiskActionsDialog() {
     dialogState.setValue(open)
   }
 
-  // What the dialog says of the actions Planner refused: a warning when the others were migrated,
-  // an error when none were, which leaves the risk as it was.
   const refusal: { intent: MessageBarIntent; title: string; actions: string[] } = outcome && {
     intent: isMigrated ? 'warning' : 'error',
     title: isMigrated

@@ -7,11 +7,7 @@ import { getSelectedCountText } from '../selectedCountText'
 import { useSearchAnnouncement } from '../useSearchAnnouncement'
 import { useColumns } from './useColumns'
 
-/**
- * Component logic hook for `ContentConfigSection`. Content the project has from an earlier run of
- * the setup is marked as added, and neither selected to begin with nor locked: chosen, it is added
- * once more.
- */
+/** Filters list content and manages mandatory selections, allowing existing content to be re-added. */
 export function useContentConfigSection() {
   const context = useProjectSetupDialogContext()
   const [searchTerm, setSearchTerm] = useState('')
@@ -43,7 +39,6 @@ export function useContentConfigSection() {
 
   const selectedKeys = new Set(context.state.selectedContentConfig.map((e) => String(e.key)))
 
-  // Mandatory items first, then the selected ones, then the rest, each group in title order.
   const rank = (item: { key: string | number }) =>
     mandatoryKeys.has(String(item.key)) ? 0 : selectedKeys.has(String(item.key)) ? 1 : 2
   const sortedItems = [...allItems].sort(
@@ -76,7 +71,6 @@ export function useContentConfigSection() {
     (item) => !item.hidden
   ).length
 
-  // A status, not a button: the count changes as items are picked, and is read out then.
   const selectedCountText = getSelectedCountText(visibleSelectedCount)
   useSearchAnnouncement(searchTerm, items.length, allItems.length)
 

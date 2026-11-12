@@ -42,24 +42,14 @@ import { IPlannerTaskSPItem } from './types'
  */
 const CLOUD_LOG_PREFIX = '(ProjectSetup) (CopyListData) (Cloud)'
 
+/** Provisions selected list, document, Planner and timeline content from hub or cloud sources. */
 export class CopyListData extends BaseTask {
   constructor(data: IProjectSetupData) {
     super('CopyListData', data)
   }
 
   /**
-   * Execute `CopyListData`.
-   *
-   * Creates a Planner plan for the Microsoft 365 group, then loops
-   * through all list data configurations. For each configuration,
-   * it will either create a Planner plan or copy list items based
-   * on the configuration type.
-   *
-   * If there's no Planner configuration, it will create a default
-   * one.
-   *
-   * @param params Task parameters
-   * @param onProgress On progress function
+   * Ensures a default plan when needed and dispatches each selected content configuration by type.
    */
   public async execute(
     params: IBaseTaskParams,
@@ -74,7 +64,6 @@ export class CopyListData extends BaseTask {
           message: `Processing content config: ${contentConfig.text} (${contentConfig.type})`,
           level: 'info'
         })
-        // Cloud rows come from the package; Planner rows still use PlannerConfiguration.
         if (contentConfig instanceof CloudContentConfig) {
           if (contentConfig.type === ContentConfigType.Planner) {
             await this._applyCloudPlannerConfig(contentConfig, params, onProgress)
@@ -100,7 +89,7 @@ export class CopyListData extends BaseTask {
                   'GtPlannerPreviewType'
                 ])
               )
-                // Group by category, then ascending GtSortOrder within each category.
+                // Configuration key order drives bucket and task creation order in Planner.
                 .sort((a, b) =>
                   a.GtCategory === b.GtCategory
                     ? a.GtSortOrder - b.GtSortOrder
@@ -147,16 +136,7 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Apply a **cloud template** Planner config: read the bundled task rows from
-   * the `.pppkg` and create the Planner plan/buckets/tasks via
-   * {@link PlannerConfiguration} — the same path the hub flow's Planner-type
-   * Listeinnhold configs take, with the hub list swapped for the bundled
-   * `DataRows`. Nothing is read from the hub.
-   *
-   * @param config Cloud content config (type `Planner`, from a manifest entry
-   * carrying `plannerTitle`)
-   * @param params Task parameters
-   * @param onProgress On progress function
+   * Builds Planner configuration from bundled task rows without reading a hub list.
    */
   private async _applyCloudPlannerConfig(
     config: CloudContentConfig,
@@ -165,8 +145,7 @@ export class CopyListData extends BaseTask {
   ): Promise<void> {
     const dataRows = await config.getCloudDataRows()
     const items = ((dataRows?.Rows ?? []) as IPlannerTaskSPItem[])
-      // Group by category, then ascending GtSortOrder within each category —
-      // mirrors the hub flow's sorting of the source items.
+      // Package rows must produce the same Planner creation order as hub rows.
       .sort((a, b) =>
         a.GtCategory === b.GtCategory
           ? a.GtSortOrder - b.GtSortOrder
@@ -193,21 +172,8 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Apply a **cloud template** list-content config: read the bundled rows and
-   * folder hierarchy from the `.pppkg`, project the rows to the config's
-   * `fields` subset (with the rows' KeyColumn, which the engine matches existing
-   * items by, when the destination list has that column), and write them into
-   * the project's destination list via the sp-js-provisioning
-   * `DataRows`/`Folders` handlers (run on the project
-   * web, after `SetTaxonomyFields` so the `GtProjectPhase` term field is
-   * already bound). Folder structures (e.g. «Standarddokumenter») come from
-   * the bundled list's `Folders` block. Nothing is read from the hub. The
-   * engine's warnings and errors (a row SharePoint refuses, an unresolved
-   * lookup) are added to the step's log, and so is a KeyColumn the destination
-   * list does not have.
-   *
-   * @param config Cloud content config
-   * @param params Task parameters
+   * Applies bundled rows and folders to an existing project list, preserving its settings.
+   * Engine diagnostics and unavailable matching columns are forwarded to the step log.
    */
   private async _applyCloudContentConfig(
     config: CloudContentConfig,
@@ -223,8 +189,6 @@ export class CopyListData extends BaseTask {
       this.logInformation(`No bundled rows or folders for cloud content config ${config.text}`)
       return
     }
-    // Recursive count so a folders-only config reports the whole tree, not just
-    // the top level.
     const countFolders = (items: Array<{ Folders?: any[] }>): number =>
       items.reduce((sum, folder) => sum + 1 + countFolders(folder.Folders ?? []), 0)
     const progressText = hasRows
@@ -291,18 +255,8 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * The `DataRows` of a cloud template's list content for the engine: the bundled rows projected
-   * to the config's `fields`, matched by the rows' KeyColumn (`Title` when the bundle names none)
-   * when the project's list has that column. The engine finds a row's item by filtering the list
-   * on the KeyColumn, and SharePoint refuses a filter on a column the list does not have (one only
-   * the hub's list has, such as `GtDataRowUniqueKey`), so every row would fail. Then the rows go
-   * without the KeyColumn, and without its values, which the list has no column for: they are
-   * added, as before 1.15, and `log` gets a warning that a re-run may add them again.
-   *
-   * @param config Cloud content config
-   * @param dataRows The bundled rows
-   * @param web The project web
-   * @param log Receives the warning for the step's log
+   * Projects bundled rows to configured fields while retaining a usable matching column.
+   * If that column is missing, omit it and warn that repeated runs can add duplicates.
    */
   private async _getCloudDataRows(
     config: CloudContentConfig,
@@ -348,13 +302,7 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Whether the project's list `listTitle` has the column `columnName`. `Title` is on every list
-   * and is not read. When the list's columns cannot be read, the column is taken to be there, as
-   * it was before this check, and the failure is logged.
-   *
-   * @param web The project web
-   * @param listTitle The list's title
-   * @param columnName The column's internal name
+   * Checks for a matching column, assuming it exists if metadata cannot be read.
    */
   private async _listHasColumn(web: IWeb, listTitle: string, columnName: string): Promise<boolean> {
     if (columnName === 'Title') return true
@@ -376,9 +324,7 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Parses Planner configuration from Planner task items.
-   *
-   * @param items Planner task items
+   * Groups source rows by category and task title, parsing checklist, label and attachment values.
    */
   private parsePlannerConfiguration(items: IPlannerTaskSPItem[]) {
     return items.reduce((obj, item) => {
@@ -417,13 +363,7 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Creates a default Planner plan if there's no Planner configuration. This
-   * makes sure we have a Planner web part that doesn't throw errors.
-   *
-   * When upgrading to a parent project, this method will skip creating a new
-   * default plan if the group already has existing plans to preserve them.
-   *
-   * @param params Task parameters
+   * Creates a default plan only when neither Planner content nor an existing group plan is available.
    */
   private async createDefaultPlannerPlan(params: IBaseTaskParams) {
     if (!_.any(this.data.selectedContentConfig, (c) => c.type === ContentConfigType.Planner)) {
@@ -453,12 +393,7 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Get all items from the `config.sourceList`. First it will try to get
-   * all items with the `TaxCatchAll` field, if that fails it will try to
-   * get all items without the `TaxCatchAll` field.
-   *
-   * @param config List content config
-   * @param fields Fields
+   * Reads source rows with taxonomy labels, retrying without TaxCatchAll if unavailable.
    */
   private async _getSourceItems<T = any>(config: ContentConfig, fields?: string[]): Promise<T[]> {
     try {
@@ -476,11 +411,7 @@ export class CopyListData extends BaseTask {
     }
   }
 
-  /**
-   * Get fields from the `config.sourceList` list.
-   *
-   * @param config Content config
-   */
+  /** Reads source-field metadata needed to map taxonomy values. */
   private async _getSourceFields(config: ContentConfig): Promise<SPField[]> {
     try {
       return await config.sourceList.fields.select(...Object.keys(new SPField()))<SPField[]>()
@@ -490,11 +421,7 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Process list items in batches the size of the `batchChunkSize` parameter.
-   * This is to prevent throttling, and to increase performance.
-   *
-   * @param config Content config
-   * @param batchChunkSize Batch chunk size (defaults to `25`)
+   * Copies mapped rows in bounded batches to limit throttling and report per-item failures.
    */
   private async _processListItems(config: ContentConfig, batchChunkSize = 25) {
     try {
@@ -568,12 +495,7 @@ export class CopyListData extends BaseTask {
     }
   }
 
-  /**
-   * Get file contents for the specified files.
-   *
-   * @param web Web
-   * @param files Files to get content for
-   */
+  /** Attaches downloaded blobs to source-file metadata before copying. */
   private async _getFileContents(web: IWeb, files: any[]): Promise<any[]> {
     try {
       const fileContents = await Promise.all(
@@ -588,13 +510,7 @@ export class CopyListData extends BaseTask {
     }
   }
 
-  /**
-   * Create folder hierarchy
-   *
-   * @param config Content config
-   * @param folders An array of folders to provision
-   * @param progressText Progress text
-   */
+  /** Recreates source folders sequentially beneath the destination library root. */
   private async _provisionFolderHierarchy(
     config: ContentConfig,
     folders: string[],
@@ -622,11 +538,7 @@ export class CopyListData extends BaseTask {
     }
   }
 
-  /**
-   * Process files in the source library inlcuding files and folders and copy them to the destination list.
-   *
-   * @param config Content config
-   */
+  /** Copies library folders and files, overwriting existing files and continuing past failed uploads. */
   private async _processFiles(config: ContentConfig) {
     try {
       this.logInformation('Processing files and folders', { listConfig: config })
@@ -683,15 +595,8 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Get item properties from the source items. This is used to create the destination items
-   * with the properties specified in the config list. For the taxonomy fields, the text field
-   * name for the term is also retrieved and added to the destination item. The term field is
-   * storing internal names longer than 32 characters, which is not allowed for field names so
-   * we need to substring the name to 32 characters.
-   *
-   * @param fields Fields
-   * @param sourceItem Source item
-   * @param sourceFields Source fields
+   * Maps configured source values to destination properties, serializing taxonomy via hidden fields.
+   * Single-value taxonomy text-field names are truncated to SharePoint's 32-character limit.
    */
   private _getProperties(
     fields: string[],
