@@ -61,11 +61,22 @@ cd e2e && npx playwright test tests/local/timeline-list.spec.ts          # with 
 The browser is launched with the self-signed dev certificate accepted and Chromium's local-network
 check disabled, which is what makes a public SharePoint page able to load scripts from localhost.
 
+For the compact command bars, serve `PortfolioWebParts` instead and run
+`npx playwright test tests/local/overview-command-bar.spec.ts`. This read-only spec checks the
+portfolio overview, aggregated overview, benefit overview on both the hub and the project,
+portfolio timeline and resource allocation at 1440, 1024, 768 and 320 px. It checks the same 8 px
+top spacing as the portfolio overview, proves that each uses its local bundle and scans the
+command bars with axe. To check the project timeline, serve `ProjectWebParts` and run
+`npx playwright test tests/local/project-command-bar.spec.ts`.
+The same layout assertions run against deployed pages in `tests/flows/list-layout.spec.ts`,
+including the program overviews and the project and program timelines.
+
 The dev build must carry the component ids of the channel the page uses (the test tenant's hub
 and program pages are on the test channel), or the page never asks the dev server for a bundle:
-`npm run watch` applies them through `pre-watch`, and a bare `npx heft start` needs
-`node ../.tasks/modifySolutionFiles.js --force` first (and `--revert` after), with `SERVE_CHANNEL=test`
-in the solution's `.env`. Setting the variables in the `.env` files works in every shell; a
+`npm run watch` applies them through `prewatch`. Before a bare `npx heft start`, run
+`npm run prewatch` first, and `npm run postwatch` after stopping it, with `SERVE_CHANNEL=test`
+in the solution's `.env`. This also generates the solution configuration the channel swap needs.
+Setting the variables in the `.env` files works in every shell; a
 `VAR=value command` prefix works only in bash and zsh.
 
 ## Measuring the footer's placeholders on list pages

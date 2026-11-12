@@ -45,11 +45,11 @@ export const Timeline: FC<ITimelineProps> = (incomingProps) => {
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider id={fluentProviderId} className={styles.root} theme={customLightTheme}>
         <div className={styles.header}>
-          <WebPartTitle title={props.title} description={props.infoText} />
           <div className={styles.commandBar}>
-            <div>
-              <Toolbar items={menuItems} />
+            <div className={styles.title}>
+              <WebPartTitle title={props.title} description={props.infoText} />
             </div>
+            <Toolbar items={menuItems} />
           </div>
         </div>
 

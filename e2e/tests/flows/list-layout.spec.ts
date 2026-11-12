@@ -2,11 +2,13 @@ import { baseURL } from '../../playwright.config'
 import { scanAccessibility, SURFACES } from '../fixtures/a11y'
 import { addButton, openAdministration } from '../fixtures/program-administration'
 import {
+  expectCompactCommandBar,
   expectListTypography,
   measureListTypography,
   scrollContainerOf,
   scrollUnderHeader
 } from '../fixtures/lists'
+import { A11Y_PAGES } from '../fixtures/pages'
 import { configuredUrl, expect, test, WEB_PART } from '../fixtures/pp365'
 
 /**
@@ -133,6 +135,60 @@ test.describe('toolbar of the hub lists', () => {
           .map((control) => control.getAttribute('aria-label') || control.textContent)
       })
       expect(outside, 'at 320px the toolbar wraps rather than go past the web part').toEqual([])
+    })
+  }
+})
+
+test.describe('compact overview headers', () => {
+  for (const entry of A11Y_PAGES.filter((page) =>
+    [
+      'portfolio overview',
+      'aggregated overview',
+      'benefit overview',
+      'project benefit overview',
+      'program overview',
+      'program aggregation'
+    ].includes(page.name)
+  )) {
+    test(`the ${entry.name}'s title shares the command bar with the search box`, async ({
+      page,
+      openPage,
+      resolvePage
+    }) => {
+      test.setTimeout(180_000)
+      const site = entry.site()
+      test.skip(!site, `the site of the ${entry.name} is not configured`)
+      await openPage(await resolvePage(site!, entry.pages))
+      const overview = page
+        .locator(WEB_PART)
+        .filter({ has: page.locator('[class*="commandBar_"]') })
+        .first()
+      await expect(overview.locator('.fui-SearchBox')).toBeVisible()
+      await expectCompactCommandBar(overview)
+    })
+  }
+})
+
+test.describe('compact timeline headers', () => {
+  for (const entry of A11Y_PAGES.filter((page) =>
+    ['portfolio timeline', 'resource allocation', 'project timeline', 'program timeline'].includes(
+      page.name
+    )
+  )) {
+    test(`the ${entry.name}'s title shares the command bar with its actions`, async ({
+      page,
+      openPage,
+      resolvePage
+    }) => {
+      test.setTimeout(180_000)
+      const site = entry.site()
+      test.skip(!site, `the site of the ${entry.name} is not configured`)
+      await openPage(await resolvePage(site!, entry.pages))
+      const timeline = page
+        .locator(WEB_PART)
+        .filter({ has: page.locator('.rct-outer') })
+        .first()
+      await expectCompactCommandBar(timeline)
     })
   }
 })

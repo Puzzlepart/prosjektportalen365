@@ -81,19 +81,21 @@ const reported = (onSelectionChange: jest.Mock) =>
 const setupUser = () => userEvent.setup({ pointerEventsCheck: 0 })
 
 describe('List', () => {
-  it('renders the title, the search box and the toolbar above the column headers', () => {
+  it('keeps one heading to the left of the search box inside the pinned command bar', () => {
     renderList({
       title: 'Porteføljeoversikt',
       searchBox: { placeholder: 'Søk i Alle prosjekter' },
       menuItems: [new ListMenuItem('Eksporter til Excel')]
     })
-    // WebPartTitle renders one <h2> with the title in a span; the span holds the text alone.
-    const heading = screen.getByText('Porteføljeoversikt', { selector: 'span' })
+    const heading = screen.getByRole('heading', { level: 2, name: 'Porteføljeoversikt' })
     const search = screen.getByPlaceholderText('Søk i Alle prosjekter')
     const toolbar = screen.getByRole('button', { name: 'Eksporter til Excel' })
     const firstHeader = screen.getAllByRole('columnheader')[0]
-    // In this order on the page; the search box, the toolbar and the column headers are what stay
-    // pinned when the list scrolls (CSS, which jsdom does not apply).
+    const commandBar = heading.closest('[class*="commandBar"]')
+    expect(commandBar).not.toBeNull()
+    expect(commandBar).toContainElement(search)
+    expect(commandBar).toContainElement(toolbar)
+    expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(1)
     const follows = (a: Node, b: Node) =>
       !!(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING)
     expect(follows(heading, search)).toBe(true)
@@ -113,15 +115,35 @@ describe('List', () => {
 
   it('shows the error in place of the search box and the toolbar', () => {
     renderList({
+      title: 'Porteføljeoversikt',
       error: { message: 'Kilden svarte ikke' } as Error,
       searchBox: { placeholder: 'Søk' },
       menuItems: [new ListMenuItem('Eksporter til Excel')]
     })
     expect(screen.getByText(strings.ErrorTitle)).toBeInTheDocument()
     expect(screen.getByText('Kilden svarte ikke')).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Porteføljeoversikt' })
+    ).toBeInTheDocument()
     expect(screen.queryByPlaceholderText('Søk')).toBeNull()
     expect(screen.queryByRole('button', { name: 'Eksporter til Excel' })).toBeNull()
   })
+
+  it.each([undefined, { hidden: true }])(
+    'keeps the title and commands when the search box is not shown (%j)',
+    (searchBox) => {
+      renderList({
+        title: 'Porteføljeoversikt',
+        searchBox,
+        menuItems: [new ListMenuItem('Eksporter til Excel')]
+      })
+      const heading = screen.getByRole('heading', { level: 2, name: 'Porteføljeoversikt' })
+      expect(heading.closest('[class*="commandBar"]')).toContainElement(
+        screen.getByRole('button', { name: 'Eksporter til Excel' })
+      )
+      expect(screen.queryByRole('searchbox')).toBeNull()
+    }
+  )
 
   it('renders one row per item, the title as a link to the project and the other cells as text', () => {
     renderList({

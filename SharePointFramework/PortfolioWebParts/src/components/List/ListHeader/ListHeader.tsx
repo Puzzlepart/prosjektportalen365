@@ -8,24 +8,25 @@ import { Toolbar } from 'pp365-shared-library'
 import { ListContext } from '../context'
 
 /**
- * Header for `List`: the title, which scrolls away with the rows, and the command bar with the
- * search box and the toolbar (or the error), which stays pinned at the top while they scroll.
+ * The pinned command bar of `List`: its title, search box and toolbar, or the fetch error.
  */
 export const ListHeader: FC<IListHeaderProps> = (props) => {
   const context = useContext(ListContext)
   const hasError = !!props.error
   return (
-    <>
-      <div className={styles.header}>
-        <WebPartTitle title={props.title} />
-      </div>
-      <div ref={props.commandBarRef} className={styles.commandBar}>
+    <div ref={props.commandBarRef} className={styles.commandBar}>
+      <div className={styles.commands}>
+        {props.title && (
+          <div className={styles.header}>
+            <WebPartTitle title={props.title} />
+          </div>
+        )}
         {hasError ? (
           <div className={styles.errorContainer}>
             <UserMessage title={strings.ErrorTitle} text={props.error.message} intent='error' />
           </div>
         ) : (
-          <div className={styles.commands}>
+          <>
             <div
               className={styles.search}
               hidden={!props.searchBox || props?.searchBox?.hidden || hasError}
@@ -45,9 +46,9 @@ export const ListHeader: FC<IListHeaderProps> = (props) => {
               items={context?.props?.menuItems}
               filterPanel={context?.props?.filterPanelProps}
             />
-          </div>
+          </>
         )}
       </div>
-    </>
+    </div>
   )
 }

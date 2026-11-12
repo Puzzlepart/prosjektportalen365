@@ -1,19 +1,35 @@
 .root {
   .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 32px 32px 20px 32px;
-
-    // Only on a narrow screen, as at 320 px, does the toolbar go under the title rather than
-    // past the edge (WCAG 1.4.10).
-    @media (max-width: 480px) {
-      flex-wrap: wrap;
-      gap: 8px 16px;
-    }
+    padding: 8px 32px;
 
     .commandBar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 42px;
+      gap: 15px;
       margin: 0;
+
+      .title {
+        flex: 0 1 auto;
+        min-width: 0;
+        max-width: 40%;
+
+        h2 {
+          margin: 0;
+          overflow-wrap: anywhere;
+        }
+      }
+
+      @media (max-width: 480px) {
+        flex-wrap: wrap;
+        row-gap: 8px;
+
+        .title {
+          flex-basis: 100%;
+          max-width: 100%;
+        }
+      }
     }
   }
 

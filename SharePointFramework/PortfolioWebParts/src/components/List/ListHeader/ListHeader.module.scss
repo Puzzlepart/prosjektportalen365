@@ -1,11 +1,3 @@
-// The list scrolls sideways in its own container when its columns do not fit; `left: 0` keeps the
-// header where it is while the rows move.
-.header {
-  position: sticky;
-  left: 0;
-  padding: 32px 32px 20px 32px;
-}
-
 .commandBar {
   position: sticky;
   top: 0;
@@ -17,21 +9,32 @@
   .commands {
     display: flex;
     flex-direction: row;
+    align-items: center;
     max-width: 100%;
     min-height: 42px;
     padding: 0 32px;
     gap: 15px;
 
-    // The search box is the flexible part, as in the library's toolbar: it gives way as the list
-    // narrows, and nothing else shrinks or wraps.
+    .header {
+      flex: 0 1 auto;
+      min-width: 0;
+      max-width: 40%;
+
+      h2 {
+        margin: 0;
+        overflow-wrap: anywhere;
+      }
+    }
+
+    // The title and search share the available width; command buttons keep their own width.
     .search {
-      width: 100%;
+      flex: 1 1 180px;
       min-width: 0;
       max-width: 100%;
 
       .searchBox {
         box-shadow: var(--shadow2);
-        width: inherit;
+        width: 100%;
         min-width: 0;
         max-width: inherit;
       }
@@ -42,10 +45,45 @@
     @media (max-width: 480px) {
       flex-wrap: wrap;
       row-gap: 8px;
+
+      .header {
+        flex-basis: 100%;
+        max-width: 100%;
+      }
+
+      .search {
+        flex-basis: 100%;
+      }
+
+      > :global(.fui-FluentProvider) {
+        min-width: 0;
+        max-width: 100%;
+
+        :global(.fui-Toolbar) > * {
+          min-width: 0;
+          max-width: 100%;
+        }
+
+        button {
+          height: auto;
+          min-height: 40px;
+          // Menu items set an inline min-width; long view names must still fit a narrow header.
+          min-width: 40px !important;
+          max-width: 100%;
+          white-space: normal;
+          overflow-wrap: anywhere;
+
+          > span {
+            min-width: 0;
+          }
+        }
+      }
     }
   }
 
   .errorContainer {
-    padding: 15px 32px;
+    flex: 1;
+    min-width: 0;
+    padding: 15px 0;
   }
 }

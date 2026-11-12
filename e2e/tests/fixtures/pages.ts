@@ -67,6 +67,11 @@ export const A11Y_PAGES: IA11yPage[] = [
     pages: ['Prosjektstatus.aspx', 'ProjectStatus.aspx', 'Status.aspx']
   },
   {
+    name: 'project benefit overview',
+    site: () => project,
+    pages: ['Nytteoversikt.aspx', 'Gevinstoversikt.aspx', 'BenefitOverview.aspx']
+  },
+  {
     name: 'project timeline',
     site: () => project,
     pages: ['Prosjekttidslinje.aspx', 'ProjectTimeline.aspx', 'Tidslinje.aspx']

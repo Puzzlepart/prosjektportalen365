@@ -99,7 +99,7 @@ import * as React from 'react'
 import resource from 'SharedResources'
 import { Timeline } from '.'
 import { ITimelineGroup, ITimelineItem, TimelineGroupType } from '../../../interfaces'
-import { formatDate, getContrastRatio, tryParseCurrency } from '../../../util'
+import { format, formatDate, getContrastRatio, tryParseCurrency } from '../../../util'
 
 const FRISBEE = 'https://contoso.sharepoint.com/sites/frisbee'
 
@@ -185,6 +185,21 @@ afterEach(async () => {
 })
 
 describe('Timeline', () => {
+  it.each(['Prosjekttidslinje', 'Programtidslinje', 'Ressursallokering'])(
+    'keeps one heading and its description inside the command bar for %s',
+    (title) => {
+      renderTimeline({ title })
+      const heading = screen.getByRole('heading', { level: 2, name: title })
+      const commandBar = heading.closest('[class*="commandBar"]')
+      expect(commandBar).not.toBeNull()
+      expect(commandBar).toContainElement(screen.getByRole('button', { name: strings.FilterText }))
+      expect(commandBar).toContainElement(
+        screen.getByRole('button', { name: format(strings.Aria.InfoLabelTitle, title) })
+      )
+      expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(1)
+    }
+  )
+
   it('shows its title and links each project group to its timeline page', () => {
     renderTimeline()
     expect(screen.getByText('Prosjekttidslinje', { selector: 'span' })).toBeInTheDocument()

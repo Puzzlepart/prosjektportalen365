@@ -94,6 +94,55 @@ export function expectListTypography(typography: ListTypography) {
 
 type Box = { x: number; y: number; width: number; height: number }
 
+/** Checks a compact title/command row at desktop widths and its reflow at 320 px. */
+export async function expectCompactCommandBar(scope: Locator): Promise<void> {
+  const commandBar = scope.locator('[class*="commandBar_"]').first()
+  await expect(scope.getByRole('heading', { level: 2 })).toHaveCount(1, { timeout: 60_000 })
+  await expect(commandBar.getByRole('heading', { level: 2 })).toBeVisible()
+  await expect(commandBar.locator('.fui-Toolbar button').first()).toBeVisible()
+  for (const width of [1440, 1024, 768, 320]) {
+    await scope.page().setViewportSize({ width, height: 900 })
+    await expect
+      .poll(
+        () =>
+          commandBar.evaluate((root) => {
+            const title = root.querySelector('h2')!
+            const titleBox = title.getBoundingClientRect()
+            const control = (
+              root.querySelector('.fui-SearchBox') ?? root.querySelector('.fui-Toolbar button')!
+            ).getBoundingClientRect()
+            const bar = root.getBoundingClientRect()
+            const firstRow = (
+              root.querySelector('[class*="commands_"]') ?? root
+            ).getBoundingClientRect()
+            const webPart = root.closest('[data-sp-web-part-id]')!.getBoundingClientRect()
+            const controls = Array.from(root.querySelectorAll('h2, .fui-SearchBox, button'))
+              .map((element) => element.getBoundingClientRect())
+              .filter((box) => box.width > 0 && box.height > 0)
+            return {
+              titleOnLeft: titleBox.right <= control.left + 1,
+              sameLine:
+                Math.abs(titleBox.top + titleBox.height / 2 - control.top - control.height / 2) <=
+                4,
+              titleAboveControl: titleBox.bottom <= control.top,
+              fits: controls.every((box) => box.left >= bar.left - 1 && box.right <= bar.right + 1),
+              compact: bar.height <= 64,
+              topGap: Math.round(firstRow.top - webPart.top),
+              titleNotClipped: title.scrollWidth <= title.clientWidth + 1
+            }
+          }),
+        { message: `the title and controls fit the command bar at ${width}px` }
+      )
+      .toMatchObject({
+        fits: true,
+        topGap: 8,
+        titleNotClipped: true,
+        ...(width > 480 ? { titleOnLeft: true, sameLine: true } : { titleAboveControl: true }),
+        ...(width >= 1024 ? { compact: true } : {})
+      })
+  }
+}
+
 /** The header row of a list and its scroll container, after scrolling the container by `by`. */
 export async function scrollUnderHeader(
   header: Locator,
