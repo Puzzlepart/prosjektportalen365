@@ -184,10 +184,13 @@ export async function expectTitleAtDefaultWidth(grid: Locator): Promise<string |
  */
 export async function expectKeyboardResize(grid: Locator) {
   const page = grid.page()
+  const name = /^tittel$|^title$/i
   // The header by its button: once the keyboard is on the handle, the handle's name joins the
   // header's own («Tittel Bredde på kolonnen Tittel»), and a header found by its name is gone.
-  const button = grid.getByRole('button', { name: /^tittel$|^title$/i })
-  const header = grid.getByRole('columnheader').filter({ has: button })
+  // A `has` locator is searched for inside the header, so it starts from the page, not the grid
+  // (one from the grid never matched: CI run 43205011756).
+  const header = grid.getByRole('columnheader').filter({ has: page.getByRole('button', { name }) })
+  const button = header.getByRole('button', { name })
   await header.scrollIntoViewIfNeeded()
   const before = (await header.boundingBox())!.width
 
