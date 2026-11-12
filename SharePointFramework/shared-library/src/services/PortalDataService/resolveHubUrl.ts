@@ -38,8 +38,6 @@ const JSON_HEADERS = { Accept: 'application/json;odata=nometadata' }
 
 /**
  * Reads the JSON body of a REST response, or throws when the response is not JSON.
- *
- * @param response Response
  */
 async function readJson(response: Response): Promise<any> {
   if (!response.ok) {
@@ -56,8 +54,6 @@ async function readJson(response: Response): Promise<any> {
  * The hub's URL from the data the current site holds about its hub (`HubSiteData`), the data
  * SharePoint draws the hub navigation from. Everyone who can read the site can read it, also
  * without access to the hub itself.
- *
- * @param params Parameters
  */
 async function fromHubSiteData({ webUrl, fetch }: IResolveHubUrlParams): Promise<string> {
   const body = await readJson(
@@ -74,8 +70,6 @@ async function fromHubSiteData({ webUrl, fetch }: IResolveHubUrlParams): Promise
 
 /**
  * The hub's URL from `HubSites/GetById`, which answers only users who can read the hub.
- *
- * @param params Parameters
  */
 async function fromHubSitesById({ webUrl, hubSiteId, fetch }: IResolveHubUrlParams) {
   const hubSite = await readJson(
@@ -92,8 +86,6 @@ async function fromHubSitesById({ webUrl, hubSiteId, fetch }: IResolveHubUrlPara
  * Finds the URL of the hub the current site is associated with. A site that is not itself the
  * hub reads its own hub data first, so a user with access to some of the hub's lists only (the
  * group «Minimum lesetilganger på hub») finds the hub too. Then `HubSites/GetById`, then search.
- *
- * @param params Parameters
  *
  * @returns The hub's absolute URL
  *

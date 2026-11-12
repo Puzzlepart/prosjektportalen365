@@ -34,7 +34,6 @@ describe('FieldContainer', () => {
         </FieldContainer>
       </>
     )
-    // A required field's label ends with an asterisk.
     expect(screen.getByLabelText((content) => content.startsWith('Tittel'))).toHaveAttribute(
       'required'
     )

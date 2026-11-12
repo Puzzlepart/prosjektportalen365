@@ -2,7 +2,7 @@ import _ from 'underscore'
 import { IOverflowTagMenuProps } from './types'
 
 /**
- * Component logic hook for `OverflowTagMenu`
+ * Maps tag labels to overflow items while preserving their configured icon.
  */
 export function useOverflowTagMenu(props: IOverflowTagMenuProps) {
   return {

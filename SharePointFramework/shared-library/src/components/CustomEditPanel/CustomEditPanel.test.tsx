@@ -144,7 +144,6 @@ const save = () => screen.getByText(strings.SaveText).closest('button')
  * (WCAG 2.1.1, 3.3.2). A disabled button was skipped, and why was only in its `title`.
  */
 const expectSaveOff = () => expect(save()).toHaveAttribute('aria-disabled', 'true')
-// A required field's label ends with an asterisk.
 const input = (label: string) => screen.getByLabelText((content) => content.startsWith(label))
 const settle = () => new Promise((resolve) => setTimeout(resolve, 0))
 /** Runs a user action and lets the model's asynchronous writes finish. */

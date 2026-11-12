@@ -1,5 +1,8 @@
 import { InputProps } from '@fluentui/react-components'
 
+/**
+ * Configures selection or free entry of a managed property.
+ */
 export interface IColumnSearchPropertyFieldProps extends Omit<InputProps, 'onChange'> {
   /**
    * Label for the field. The Fluent UI v9 `Input` has no label of its own, so
@@ -9,8 +12,6 @@ export interface IColumnSearchPropertyFieldProps extends Omit<InputProps, 'onCha
 
   /**
    * On change handler for the field
-   *
-   * @param value The new value of the field
    */
   onChange: (value: string) => void
 

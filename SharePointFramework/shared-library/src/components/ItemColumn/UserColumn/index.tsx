@@ -6,6 +6,9 @@ import styles from './UserColumn.module.scss'
 import { getUserPhoto } from '../../../util'
 import { SearchValueType } from '../../../types'
 
+/**
+ * Displays people values with avatars and readable names.
+ */
 export const UserColumn: ColumnRenderComponent = ({ columnValue, column }) => {
   const isMultiUser = columnValue?.indexOf(';') !== -1
   if (isMultiUser) {

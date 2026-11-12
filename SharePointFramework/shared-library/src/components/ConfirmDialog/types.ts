@@ -9,10 +9,10 @@ export type ConfirmDialogResponseValue = boolean | string
  */
 export type ConfirmDialogResponse = [string, ConfirmDialogResponseValue?, boolean?]
 
+/**
+ * Defines a confirmation prompt and its available responses.
+ */
 export interface IConfirmDialogProps {
-  /**
-   * Title of the dialog.
-   */
   title?: string
 
   /**

@@ -12,7 +12,6 @@ import { toSiteWallTime } from './siteTimeZone'
  * UTC is on the day before; reading the date in UTC would export that day, and reading it in the
  * browser's time zone exported the day before on a machine west of the site.
  *
- * @param value - The date value as a string or Date object.
  * @param includeTime - Whether to include the time (default: false).
  */
 export function getDateForExcelExport(

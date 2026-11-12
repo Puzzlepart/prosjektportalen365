@@ -21,6 +21,9 @@ import { IOverflowTagMenuProps, OverflowMenuItemProps } from './types'
 import { useOverflowTagMenu } from './useOverflowTagMenu'
 import { format, withDefaults } from '../../util'
 
+/**
+ * Renders a tag in the overflow menu only when it is hidden from the visible list.
+ */
 const OverflowMenuItem: FC<OverflowMenuItemProps> = (props) => {
   const { tag } = props
   const isVisible = useIsOverflowItemVisible(tag?.value ?? '')

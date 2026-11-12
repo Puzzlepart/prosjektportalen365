@@ -13,8 +13,6 @@ const WHITE = '#ffffff'
  * Reads a CSS colour given as hex (`#rgb`, `#rgba`, `#rrggbb` or `#rrggbbaa`) or as `rgb()` or
  * `rgba()`. A transparent colour is blended over white, the background of the timeline and the
  * page. Anything else (a colour name, `transparent`, a gradient) gives `undefined`.
- *
- * @param color The colour
  */
 export function parseColor(color: string): RgbColor | undefined {
   const value = color?.trim().toLowerCase() ?? ''
@@ -46,8 +44,6 @@ export function parseColor(color: string): RgbColor | undefined {
 
 /**
  * The relative luminance of a colour, as WCAG 2.1 defines it.
- *
- * @param color The colour
  */
 function relativeLuminance(color: RgbColor): number {
   const [r, g, b] = color.map((channel) => {
@@ -60,9 +56,6 @@ function relativeLuminance(color: RgbColor): number {
 /**
  * The contrast ratio of two colours, from 1 to 21, or `undefined` when either cannot be read
  * (see `parseColor`).
- *
- * @param first One colour
- * @param second The other colour
  */
 export function getContrastRatio(first: string, second: string): number | undefined {
   const a = parseColor(first)
@@ -77,7 +70,6 @@ export function getContrastRatio(first: string, second: string): number | undefi
  * against the background, otherwise black or white, whichever contrasts more. A background that
  * cannot be read keeps the preferred colour.
  *
- * @param background The background colour
  * @param preferred The colour the text is configured to have
  * @param minimum The least contrast ratio, 4.5 for text of normal size (WCAG 1.4.3)
  */
@@ -95,8 +87,6 @@ export function getReadableTextColor(
 
 /**
  * A colour as hex (`#rrggbb`), each channel rounded and held between 0 and 255.
- *
- * @param color The colour
  */
 function toHex(color: RgbColor): string {
   return (
@@ -115,7 +105,6 @@ function toHex(color: RgbColor): string {
  * A light tone of a colour: the share of it laid over white, such as the timeline's bars in a
  * tone of their configured colour. `undefined` when the colour cannot be read (see `parseColor`).
  *
- * @param color The colour
  * @param share How much of the colour to keep, from 0 (white) to 1 (the colour itself)
  */
 export function getTint(color: string, share = 0.4): string | undefined {
@@ -132,7 +121,6 @@ export function getTint(color: string, share = 0.4): string | undefined {
  * frames even where the fill would stand out by itself. `undefined` when either colour cannot be
  * read (see `parseColor`).
  *
- * @param color The colour
  * @param background The background it must stand out against
  * @param minimum The least contrast ratio, 3 for graphics (WCAG 1.4.11)
  * @param start How much of the colour to keep before measuring, from 0 to 1

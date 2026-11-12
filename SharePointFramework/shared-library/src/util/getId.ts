@@ -12,7 +12,7 @@ const DEFAULT_ID_PREFIX = 'id__'
 let fallbackId = 0
 
 /**
- * Returns a process-unique id with the given prefix, for DOM ids, list column
+ * Returns a page-unique id with the given prefix, for DOM ids, list column
  * keys and SPFx placeholder ids.
  *
  * This replaces `getId` from Fluent UI v8, which has no Fluent UI v9
@@ -20,8 +20,6 @@ let fallbackId = 0
  * module scope, a class field or a plain function, which is where the remaining
  * call sites are. Inside a component or hook, use `useId` from
  * `@fluentui/react-components` instead of this.
- *
- * @param prefix - Prefix for the id
  */
 export function getId(prefix: string = DEFAULT_ID_PREFIX): string {
   const global: Record<string, number> = typeof window === 'undefined' ? undefined : (window as any)

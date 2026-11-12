@@ -5,6 +5,9 @@ import { FieldContainer } from '../../../FieldContainer'
 import { useCustomEditPanelContext } from '../../context'
 import { FieldElementComponent } from './types'
 
+/**
+ * Edits a single-choice field through the shared edit-panel model.
+ */
 export const Choice: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
   return (

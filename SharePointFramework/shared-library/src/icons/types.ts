@@ -11,9 +11,6 @@ export type FluentIconName = keyof typeof iconCatalog
  * UI Fabric alias) to a canonical catalog entry.
  */
 export type ResolvedFluentIcon = {
-  /**
-   * The canonical catalog name of the icon.
-   */
   name: FluentIconName
 
   /**
@@ -33,33 +30,21 @@ export type FabricIconAlias = FluentIconName | { name: FluentIconName; filled?: 
  */
 export type GetFluentIconOptions = {
   /**
-   * Whether to bundle the icon or not.
+   * Uses a cached filled/regular bundle by default; false selects one variant directly.
    */
   bundle?: boolean
 
-  /**
-   * The color of the icon.
-   */
   color?: string
 
-  /**
-   * The size of the icon.
-   */
   size?: string | number
 
-  /**
-   * Whether the icon should be filled or not.
-   */
   filled?: boolean
 
   /**
-   * Whether to return the icon as a JSX element or not.
+   * Returns an element by default; false returns the icon component instead.
    */
   jsx?: boolean
 
-  /**
-   * Class name to apply to the rendered icon element.
-   */
   className?: string
 }
 

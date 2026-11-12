@@ -1,7 +1,13 @@
 import { CSSProperties } from 'react'
 
+/**
+ * Handles a selected autocomplete suggestion.
+ */
 export type AutocompleteSelectCallback<T = any> = (item: ISuggestionItem<T>) => void
 
+/**
+ * Styles the icons shown beside autocomplete suggestions.
+ */
 export type AutocompleteItemIcons = {
   style: CSSProperties
 }
@@ -20,9 +26,6 @@ export interface ISuggestionItem<T = any> {
    */
   text: string
 
-  /**
-   * Whether the item can be picked.
-   */
   disabled?: boolean
 
   /**
@@ -35,9 +38,6 @@ export interface ISuggestionItem<T = any> {
    */
   searchValue: string
 
-  /**
-   * Secondary text of the item.
-   */
   secondaryText?: string
 
   /**
@@ -45,9 +45,6 @@ export interface ISuggestionItem<T = any> {
    */
   iconName?: string
 
-  /**
-   * Type of the item, for the caller.
-   */
   type?: string
 
   /**
@@ -55,17 +52,14 @@ export interface ISuggestionItem<T = any> {
    */
   tag?: any
 
-  /**
-   * Data of the item, for the caller.
-   */
   data?: T
 
-  /**
-   * Whether the item is selected.
-   */
   isSelected?: boolean
 }
 
+/**
+ * Configures autocomplete suggestions, selection and field feedback.
+ */
 export interface IAutocompleteProps<T = any> {
   /**
    * Label of the field; with a label, a description or an error message the autocomplete is
@@ -83,9 +77,6 @@ export interface IAutocompleteProps<T = any> {
    */
   errorMessage?: string
 
-  /**
-   * Marks the field as required.
-   */
   required?: boolean
 
   /**
@@ -93,14 +84,8 @@ export interface IAutocompleteProps<T = any> {
    */
   placeholder?: string
 
-  /**
-   * Disables the input.
-   */
   disabled?: boolean
 
-  /**
-   * Class of the input.
-   */
   className?: string
 
   /**
@@ -133,9 +118,6 @@ export interface IAutocompleteProps<T = any> {
    */
   noSuggestionsText?: string
 
-  /**
-   * Show the items' icons.
-   */
   itemIcons?: AutocompleteItemIcons | boolean
 
   /**

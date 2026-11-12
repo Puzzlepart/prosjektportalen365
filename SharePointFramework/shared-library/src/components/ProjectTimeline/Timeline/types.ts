@@ -3,15 +3,18 @@ import moment from 'moment'
 import { IFilterItemProps, IFilterProps } from '../../FilterPanel'
 import { IListColumn } from '../../../types'
 
+/**
+ * Defines the relative start and end offsets of the initial timeline window.
+ */
 export type TimelineTimeframe = [
   [number, moment.unitOfTime.DurationConstructor],
   [number, moment.unitOfTime.DurationConstructor]
 ]
 
+/**
+ * Configures timeline data, its initial window and filtering controls.
+ */
 export interface ITimelineProps {
-  /**
-   * Timeline default timeframe
-   */
   defaultTimeframe?: TimelineTimeframe
 
   /**
@@ -36,32 +39,18 @@ export interface ITimelineProps {
 
   /**
    * Callback function for when the filter changes.
-   *
-   * @param column Column
-   * @param selectedItems Selected items
    */
   onFilterChange: (column: IListColumn, selectedItems: IFilterItemProps[]) => void
 
   /**
    * On Group change
-   *
-   * @param groupBy Group by
    */
   onGroupByChange?: (groupBy: string) => void
 
-  /**
-   * Is group by enabled
-   */
   isGroupByEnabled?: boolean
 
-  /**
-   * Default group by
-   */
   defaultGroupBy?: string
 
-  /**
-   * Title of the timeline
-   */
   title?: string
 
   /**
@@ -69,8 +58,5 @@ export interface ITimelineProps {
    */
   hideSidebar?: boolean
 
-  /**
-   * Information text
-   */
   infoText?: string
 }

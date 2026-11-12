@@ -79,11 +79,6 @@ const ColumnDataTypeFieldContent: FC<IColumnDataTypeFieldProps> = (props) => {
  * `dataTypeProperties` given with it. The column forms get the column they edit after their first
  * render: the field kept the empty start, so the dropdown showed no data type, the type's
  * properties were lost, and saving an edited column stored it as text.
- *
- * @param props - The component props.
- * @param props.description - The description to display above the dropdown field.
- * @param props.persistRenderGloballyField - The switch field for persisting the render globally.
- * @param props.children - Additional child components to render.
  */
 export const ColumnDataTypeField: FC<IColumnDataTypeFieldProps> = (props) => (
   <ColumnDataTypeFieldContent key={props.defaultSelectedKey ?? ''} {...props} />

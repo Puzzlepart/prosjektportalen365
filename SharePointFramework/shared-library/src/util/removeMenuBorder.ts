@@ -1,7 +1,5 @@
 /**
- * Remove border from contextual menu items
- *
- * @param items Menu items
+ * Removes each menu item's inline border in place and returns the mapped array.
  */
 export function removeMenuBorder<P = any>(items: P[]): P[] {
   return items.map((item) => {

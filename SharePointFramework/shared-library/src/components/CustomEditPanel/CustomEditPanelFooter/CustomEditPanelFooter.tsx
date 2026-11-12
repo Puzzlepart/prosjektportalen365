@@ -15,21 +15,13 @@ import { customLightTheme } from '../../../util'
 import { ICustomEditPanelFooterProps } from './types'
 
 /**
- * Renders the footer for the `CustomEditPanel` with a `<PrimaryButton />` for saving the changes,
- * and a `<ClosePanelButton />` for closing the panel. Also shows a `<ProgressBar />` when submitting
- * with text based on the `saveProgressText` property from `props.submit`.
- *
- * @param props - The props for the component.
+ * Provides edit-panel save and close actions with submission progress and error feedback.
  */
 export const CustomEditPanelFooter: FC<ICustomEditPanelFooterProps> = ({ isSaveDisabled }) => {
   const context = useCustomEditPanelContext()
   const fluentProviderId = useId('fp-custom-edit-panel-footer')
   const [isSaving, setIsSaving] = useState(false)
 
-  /**
-   * Handles the form submission by calling the `onSubmit` function passed in through props
-   * and updating the `isSaving` state accordingly.
-   */
   const handleOnSubmit = async () => {
     setIsSaving(true)
     await context.props.submit.onSubmit(context.model)

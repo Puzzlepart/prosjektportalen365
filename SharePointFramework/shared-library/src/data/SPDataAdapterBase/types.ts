@@ -1,25 +1,16 @@
 import { LogLevel } from '@pnp/logging'
 import { SiteContext } from '../../models'
 
+/**
+ * Configures SharePoint context, logging and global settings for an adapter.
+ */
 export interface ISPDataAdapterBaseConfiguration extends SiteContext {
-  /**
-   * Web URL
-   */
   webUrl?: string
 
-  /**
-   * Site ID (GUID)
-   */
   siteId?: string
 
-  /**
-   * Log level
-   */
   logLevel?: LogLevel
 
-  /**
-   * Load global settings
-   */
   loadGlobalSettings?: boolean
 }
 
@@ -37,12 +28,18 @@ export enum ProjectAdminPermission {
   AssistantAccess = '7f3a8b2c-4d5e-6f70-8192-a3b4c5d6e7f8'
 }
 
+/**
+ * Identifies the source and destination of project-property synchronization.
+ */
 export enum ProjectPropertiesMapType {
   FromPortfolioToProject,
   FromProjectToPortfolio,
   FromPortfolioToPortfolio
 }
 
+/**
+ * Controls field selection and value conversion during project-property synchronization.
+ */
 export type GetMappedProjectPropertiesOptions = {
   /**
    * Wrap multi values in results array.

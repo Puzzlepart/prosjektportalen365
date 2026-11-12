@@ -17,24 +17,7 @@ import { Number } from './Number'
 import { Percentage } from './Percentage'
 
 /**
- * Hook for field elements of `CustomEditPanel` component. This hook is used to render field elements
- * based on field type. Supported field types are:
- *
- * - `Boolean`
- * - `URL`
- * - `Text`
- * - `Note`
- * - `DateTime`
- * - `Choice`
- * - `MultiChoice`
- * - `User`
- * - `UserMulti`
- * - `TaxonomyFieldType`
- * - `TaxonomyFieldTypeMulti`
- * - `Lookup`
- * - `Currency`
- * - `Number`
- * - `Percentage` (Number fields with percentage format)
+ * Selects the edit control for each SharePoint field, including percentage-formatted numbers.
  */
 export function useFieldElements() {
   const fieldElements: Record<string, (field: EditableSPField) => JSX.Element> = {
@@ -54,11 +37,6 @@ export function useFieldElements() {
     Number: (field) => <Number field={field} />
   }
 
-  /**
-   * Get element to render for the specified field.
-   *
-   * @param field Field to get element for
-   */
   return (field: EditableSPField) => {
     if (field.type === 'Number' && field.isPercentage) {
       return <Percentage field={field} />

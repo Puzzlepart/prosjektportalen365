@@ -3,6 +3,9 @@ import _ from 'lodash'
 import { isTrueBooleanValue } from '../../../util/isTrueBooleanValue'
 import { IFilterItemProps } from './types'
 
+/**
+ * Resolves a filter label, including configured Boolean display values.
+ */
 export function useFilterItem(props: IFilterItemProps) {
   switch (props.column.data?.renderAs) {
     case 'boolean': {

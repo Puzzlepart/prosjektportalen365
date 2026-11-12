@@ -17,6 +17,9 @@ export const OSLO_TIME_ZONE: ISiteTimeZone = {
   StandardDate: { Year: 0, Month: 10, DayOfWeek: 0, Day: 5, Hour: 3, Minute: 0 }
 }
 
+/**
+ * Models New York's recurring daylight-saving rules for date tests.
+ */
 export const NEW_YORK_TIME_ZONE: ISiteTimeZone = {
   Id: 10,
   Bias: 300,
@@ -25,6 +28,9 @@ export const NEW_YORK_TIME_ZONE: ISiteTimeZone = {
   StandardDate: { Year: 0, Month: 11, DayOfWeek: 0, Day: 1, Hour: 2, Minute: 0 }
 }
 
+/**
+ * Models Tokyo's fixed UTC offset for date tests.
+ */
 export const TOKYO_TIME_ZONE: ISiteTimeZone = {
   Id: 20,
   Bias: -540,
@@ -33,6 +39,9 @@ export const TOKYO_TIME_ZONE: ISiteTimeZone = {
   StandardDate: { Year: 0, Month: 0, DayOfWeek: 0, Day: 0, Hour: 0, Minute: 0 }
 }
 
+/**
+ * Models Sydney's southern-hemisphere daylight-saving rules for date tests.
+ */
 export const SYDNEY_TIME_ZONE: ISiteTimeZone = {
   Id: 76,
   Bias: -600,

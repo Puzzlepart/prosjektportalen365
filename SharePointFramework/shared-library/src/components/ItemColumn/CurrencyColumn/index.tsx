@@ -11,6 +11,9 @@ const CURRENCY_COLUMN_DEFAULT_PROPS: Partial<ICurrencyColumnProps> = {
   maximumFractionDigits: 0
 }
 
+/**
+ * Formats a currency column with its configured prefix and decimal precision.
+ */
 export const CurrencyColumn: ColumnRenderComponent<ICurrencyColumnProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, CURRENCY_COLUMN_DEFAULT_PROPS)
   return (

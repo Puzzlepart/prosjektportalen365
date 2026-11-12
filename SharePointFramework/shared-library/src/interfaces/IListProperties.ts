@@ -1,3 +1,6 @@
+/**
+ * Describes list metadata returned by SharePoint.
+ */
 export interface IListProperties {
   Title?: string
   ListItemEntityTypeFullName?: string

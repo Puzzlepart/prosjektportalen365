@@ -1,12 +1,11 @@
 /**
- * Calculate the sum or average of the values in the sum field based on the sumType.
+ * Sums or averages numeric text according to a configured field tuple.
  * @param sumField - An array containing the sum field information. The array should have the following structure:
  *   - sumField[0]: The internal name of the field to calculate the sum from.
  *   - sumField[1]: The type of sum to calculate. Valid values are 'Add' for sum and 'Avg' for average.
  *   - sumField[2]: The description of the sum field.
  *   - sumField[3] (optional): The type to render the result as. Defaults to 'number'. Can be 'currency' or 'percentage'.
- * @param items - An array of items to calculate the sum from.
- * @returns An object containing the summation result, description of the sum field, and the render type.
+ * @returns The result, description and render type, or null for empty input or a NaN result.
  */
 export const calculateValues = (sumField: any, items: any) => {
   if (sumField.length === 0 || items.length === 0) return null

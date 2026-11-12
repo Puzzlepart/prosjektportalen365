@@ -1,7 +1,5 @@
 /**
- * Checks if a object is null or undefined
- *
- * @param obj Object to check
+ * Checks for null or undefined without treating other falsy values as absent.
  */
 export function isNull(obj: any) {
   return obj === null || obj === undefined

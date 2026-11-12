@@ -106,7 +106,6 @@ describe('Autocomplete', () => {
     })
     expect(input()).toHaveValue('Fase')
     fireEvent.change(input(), { target: { value: 'gtproject' } })
-    // The search value is matched, the text shown, and a disabled item cannot be picked.
     expect(offered()).toEqual(['Fase', 'Eier'])
     expect(screen.getByRole('option', { name: 'Eier' })).toHaveAttribute('aria-disabled', 'true')
   })

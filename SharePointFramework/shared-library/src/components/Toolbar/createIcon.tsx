@@ -9,8 +9,6 @@ import { getFluentIconWithFallback } from '../../icons'
  * UI Fabric font icon for unknown names; `null` for an empty string). If the
  * `icon` property is a component, it will be rendered as is.
  *
- * @param item - The list menu item to create the icon for.
- *
  * @returns The icon component.
  */
 export function createIcon(item: ListMenuItem) {

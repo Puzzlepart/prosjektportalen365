@@ -1,3 +1,6 @@
+/**
+ * Identifies a supported list-cell renderer.
+ */
 export type ColumnDataType =
   | 'user'
   | 'date'

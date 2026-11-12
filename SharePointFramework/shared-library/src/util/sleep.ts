@@ -1,7 +1,5 @@
 /**
- * Sleep for the specified amount of seconds
- *
- * @param seconds Seconds to sleep
+ * Resolves after the specified number of seconds using the browser's timer.
  */
 export function sleep(seconds: number): Promise<void> {
   return new Promise((resolve) => {

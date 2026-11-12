@@ -27,8 +27,6 @@ const ROW_BACKGROUND = '#f2f2f2'
  * The edge round a trend icon whose colour stands out from the row by less than 3:1 (WCAG 1.4.11),
  * as the trophy's gold does: a shade of the colour that does, so the colour itself is kept.
  * `undefined` when the colour stands out by itself, or cannot be read.
- *
- * @param color The icon's colour
  */
 function getEdgeColor(color: string): string | undefined {
   const ratio = getContrastRatio(color, ROW_BACKGROUND)
@@ -47,14 +45,7 @@ const TREND_NAMES: Record<ITrendIcon['iconName'], string> = {
 }
 
 /**
- * Renders a column that displays a trend icon and an achievement display value. The icon is named
- * by the trend it shows.
- *
- * @param props - The component props.
- * @param props.columnValue - The value of the column.
- * @param props.showTrendIcon - Whether to show the trend icon or not.
- *
- * @returns The rendered component.
+ * Displays achievement text with an optional, accessibly named trend icon.
  */
 export const TrendColumn: ColumnRenderComponent<ITrendColumnProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, TREND_COLUMN_DEFAULT_PROPS)

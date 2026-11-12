@@ -41,6 +41,9 @@ function partitionFiltersByGroup(filters: IFilterProps[]): {
   }
 }
 
+/**
+ * Displays available column filters in a grouped drawer.
+ */
 export const FilterPanel: FC<IFilterPanelProps> = (props) => {
   const displayableFilters = props.filters?.filter((f) => f.items.length > 1) ?? []
   const { ungrouped, groups } = partitionFiltersByGroup(displayableFilters)

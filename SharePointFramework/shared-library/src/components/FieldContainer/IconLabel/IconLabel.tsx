@@ -4,6 +4,9 @@ import { getFluentIcon } from '../../../icons'
 import { IFieldContainerProps } from '../types'
 import styles from './IconLabel.module.scss'
 
+/**
+ * Combines field presentation with Fluent's label-to-control wiring.
+ */
 export interface IIconLabelProps extends IFieldContainerProps {
   /**
    * The props Fluent's `Field` gives its label. Only the id and `for` are used, which tie the label
@@ -12,6 +15,9 @@ export interface IIconLabelProps extends IFieldContainerProps {
   labelProps?: LabelProps
 }
 
+/**
+ * Renders a field icon and text within the control's associated label.
+ */
 export const IconLabel: FC<IIconLabelProps> = ({ labelProps, ...props }) => {
   return (
     // The icon is inside the label, so a click on it, as on the text, goes to the field.

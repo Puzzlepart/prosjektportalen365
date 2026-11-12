@@ -1,5 +1,11 @@
+/**
+ * Defines the severities stored in the SharePoint log list.
+ */
 export type ListLoggerEntryLevel = 'Info' | 'Warning' | 'Error'
 
+/**
+ * Describes a log entry before mapping it to SharePoint fields.
+ */
 export class IListLoggerEntry {
   webUrl?: string
   scope?: string
@@ -9,6 +15,9 @@ export class IListLoggerEntry {
   component?: string
 }
 
+/**
+ * Maps log-entry members to destination SharePoint field names.
+ */
 export class IListLoggerMemberMap {
   webUrl?: string
   scope?: string
@@ -19,6 +28,9 @@ export class IListLoggerMemberMap {
   context?: string
 }
 
+/**
+ * Maps standard log-entry members to the provisioned log-list fields.
+ */
 export const defaultListLoggerMemberMap: Record<string, string> = {
   webUrl: 'GtLogWebUrl',
   scope: 'GtLogScope',

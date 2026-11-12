@@ -6,6 +6,9 @@ import { FieldContainer } from '../../../FieldContainer'
 import { useCustomEditPanelContext } from '../../context'
 import { FieldElementComponent } from './types'
 
+/**
+ * Edits the selected values of a multiple-choice field.
+ */
 export const MultiChoice: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
   return (

@@ -5,14 +5,7 @@ import { format } from '../../../util'
 import { IInstrumentColumnProps } from './types'
 
 /**
- * Hook that returns the necessary props for rendering an instrument column.
- *
- * @param props - The props for the instrument column.
- *
- * The popover is named by the indicator (or the column), and described by the gauge, which is
- * named by what it shows (WCAG 1.1.1), and the unit.
- *
- * @returns An object containing the necessary props for rendering a popover for the instrument column.
+ * Derives gauge bounds, tick ranges and accessible descriptions from measurement fields.
  */
 export function useInstrumentColumn(props: IInstrumentColumnProps) {
   const startValue = props.item[props.startValueField] || props.item.GtStartValueOWSNMBR

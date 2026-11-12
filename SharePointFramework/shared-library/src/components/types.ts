@@ -2,30 +2,23 @@ import { DisplayMode } from '@microsoft/sp-core-library'
 import { PageContext } from '@microsoft/sp-page-context'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 
+/**
+ * Provides shared web part metadata, contexts and a data adapter.
+ */
 export interface IBaseComponentProps<T> {
-  /**
-   * Component title.
-   */
   title?: string
 
-  /**
-   * SPFx web part context
-   */
   webPartContext?: WebPartContext
 
   /**
-   * Page context. It might be neccessary to pass `this.context.pageContext as any` due to
-   * mismatch in version of `@microsoft/sp-page-context`.
+   * SharePoint context for the page hosting the component.
    */
   pageContext?: PageContext
 
   /**
-   * An instance of a Data Adapter inheriting `IDataAdapter`.
+   * The solution-specific data adapter used by the component.
    */
   dataAdapter?: T
 
-  /**
-   * Display mode of the component.
-   */
   displayMode?: DisplayMode
 }

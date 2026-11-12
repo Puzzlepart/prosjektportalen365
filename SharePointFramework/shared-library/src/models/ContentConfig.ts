@@ -6,6 +6,9 @@ import { IListProperties } from '../interfaces/IListProperties'
 import { ProjectTemplate } from './ProjectTemplate'
 import { UserSelectableObject } from './UserSelectableObject'
 
+/**
+ * Describes a stored content configuration and its source and destination lists.
+ */
 export interface IContentConfigSPItem {
   ContentTypeId: string
   Id: number
@@ -20,6 +23,9 @@ export interface IContentConfigSPItem {
   GtPlannerName: string
 }
 
+/**
+ * Identifies list, Planner and timeline content configurations.
+ */
 export enum ContentConfigType {
   List,
   Planner,
@@ -27,7 +33,7 @@ export enum ContentConfigType {
 }
 
 /**
- * @model ContentConfig
+ * Resolves selectable list, Planner or timeline content and its source and destination lists.
  */
 export class ContentConfig extends UserSelectableObject {
   public sourceListProps: IListProperties = {}
@@ -59,8 +65,6 @@ export class ContentConfig extends UserSelectableObject {
    * locked and default for the template (default on the content configuration element
    * itself, or connected to the template), or it's connected to the template and
    * `isDefaultContentConfigLocked` is set to true on the template.
-   *
-   * @param template Project template
    */
   public isMandatoryForTemplate(template: ProjectTemplate): boolean {
     return (
@@ -72,8 +76,6 @@ export class ContentConfig extends UserSelectableObject {
   /**
    * Checks if the content config is default for the specified template. It's either
    * default on the content configuration element itself, or it's connected to the template.
-   *
-   * @param template Project template
    */
   public isDefaultForTemplate(template?: ProjectTemplate): boolean {
     return this.isDefault || template?.contentConfig.includes(this.id)

@@ -1,27 +1,13 @@
 /**
- * @category ProjectLogo
+ * Configures a project logo, its initials fallback and card or list presentation.
  */
 export interface IProjectLogoProps {
-  /**
-   * Project title
-   *
-   */
   title: string
 
-  /**
-   * Project URL
-   *
-   */
   url: string
 
-  /**
-   * Size of the project logo
-   */
   size?: string
 
-  /**
-   * Render mode of the project logo (card or list)
-   */
   renderMode?: 'card' | 'list'
 
   /**
@@ -29,9 +15,6 @@ export interface IProjectLogoProps {
    */
   onImageLoad?: (showCustomImage?: boolean) => void
 
-  /**
-   * Hide content
-   */
   hidden?: boolean
 
   /**

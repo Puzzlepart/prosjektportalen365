@@ -1,7 +1,7 @@
 import { MessageBarProps } from '@fluentui/react-components'
 
 /**
- * @category UserMessage
+ * Configures a message bar with optional markdown and HTML content.
  */
 export interface IUserMessageProps extends MessageBarProps {
   /**
@@ -16,14 +16,8 @@ export interface IUserMessageProps extends MessageBarProps {
    */
   text?: string
 
-  /**
-   * On click handler for the message
-   */
   onClick?: (event: React.MouseEvent<any>) => void
 
-  /**
-   * Container style
-   */
   containerStyle?: React.CSSProperties
 
   /**
@@ -36,8 +30,5 @@ export interface IUserMessageProps extends MessageBarProps {
    */
   isCompact?: boolean
 
-  /**
-   * Link target for markdown links
-   */
   linkTarget?: string
 }

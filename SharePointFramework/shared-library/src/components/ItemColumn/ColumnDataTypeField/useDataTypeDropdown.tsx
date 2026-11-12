@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react'
 import { ColumnRenderComponentRegistry } from '../registry'
 import { IColumnDataTypeFieldOption, IColumnDataTypeFieldProps } from './types'
 
+/**
+ * Exposes the selected renderer, available choices and dropdown handler.
+ */
 export interface IUseDataTypeDropdown {
-  /**
-   * The option currently selected, if any.
-   */
   selectedOption: IColumnDataTypeFieldOption
 
   /**
@@ -35,8 +35,6 @@ export interface IUseDataTypeDropdown {
  * are built on `@fluentui/react-combobox`, which opens fine in the browser, looped under Jest on
  * React 17 and takes tens of seconds to open there on React 18, so the tests cover everything but
  * opening it; that is checked by hand.
- *
- * @param props Props for the column data type field.
  */
 export function useDataTypeDropdown(props: IColumnDataTypeFieldProps): IUseDataTypeDropdown {
   const [selectedOption, setSelectedOption] = useState<IColumnDataTypeFieldOption>(

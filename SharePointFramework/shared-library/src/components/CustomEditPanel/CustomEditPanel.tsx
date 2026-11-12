@@ -14,7 +14,7 @@ const CUSTOM_EDIT_PANEL_DEFAULT_PROPS: Partial<ICustomEditPanelProps> = {
   fields: [],
   submit: {
     onSubmit: async () => {
-      // Default empty submit handler.
+      // Callers may omit submission; the default must still satisfy the asynchronous contract.
     }
   }
 }

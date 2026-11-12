@@ -7,7 +7,6 @@ import { useState } from 'react'
  * Escape, and the menu stayed open (WCAG 2.1.1). The pointer shows it without moving when the
  * menu, as it is placed, passes over the button under it.
  *
- * @param open Whether the menu is open
  * @returns `visible` and `onVisibleChange` for the trigger's `Tooltip`
  */
 export function useMenuTriggerTooltip(

@@ -1,7 +1,5 @@
 /**
- * Set URL hash
- *
- * @param hashObject Hash object
+ * Writes object entries to the page fragment without URL encoding.
  */
 export function setUrlHash(hashObject: Record<string, any>): void {
   let hash = '#'

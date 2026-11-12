@@ -4,19 +4,16 @@ import { createStyle } from './createStyle'
 import { createIcon } from './createIcon'
 import { ListMenuItem } from './types'
 
+/**
+ * Renders toolbar buttons with accessible names and focus restoration.
+ */
 export function useToolbarButtonRender() {
   // Where the focus goes back to when a panel or dialog the button opened closes: Fluent marks
   // only its own triggers so, and the filter panel, for one, opens from state (WCAG 2.4.3).
   const restoreFocusTarget = useRestoreFocusTarget()
 
   /**
-   * Renders a toolbar button based on the provided list menu item.
-   *
-   * @param item The list menu item to render the toolbar button for.
-   * @param buttonStyle The style to apply to the toolbar button.
-   * @param labelStyle The style to apply to the toolbar button label.
-   *
-   * @returns The rendered toolbar button component.
+   * Renders a command button with its configured icon, label and styles.
    */
   function renderToolbarButton(
     item: ListMenuItem,

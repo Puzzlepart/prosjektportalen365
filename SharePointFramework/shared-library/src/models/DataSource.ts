@@ -1,6 +1,9 @@
 import { ProjectContentColumn } from './ProjectContentColumn'
 import _ from 'lodash'
 
+/**
+ * Represents a stored data-source definition and its column lookups.
+ */
 export class SPDataSourceItem {
   public Id?: number = -1
   public Title?: string = ''
@@ -18,6 +21,9 @@ export class SPDataSourceItem {
   public GtDataSourceConfig?: string = ''
 }
 
+/**
+ * Resolves a stored data source's columns, refiners and grouping column.
+ */
 export class DataSource {
   public id: number
   public title: string
@@ -37,12 +43,6 @@ export class DataSource {
   public dataSourceId: string
   public config: string
 
-  /**
-   * Constructor for DataSource
-   *
-   * @param item Item
-   * @param columns Project content columns
-   */
   constructor(item: SPDataSourceItem, columns: ProjectContentColumn[] = []) {
     this.id = item.Id
     this.title = item.Title
@@ -62,12 +62,7 @@ export class DataSource {
   }
 
   /**
-   * Updates the DataSource instance with the provided `SPDataSourceItem` instance.
-   * Sets the `title`, `iconName`, and `searchQuery` properties of the `DataSource` instance.
-   *
-   * @param item The `SPDataSourceItem` instance to update the `DataSource` instance with.
-   *
-   * @returns The updated `DataSource` instance.
+   * Updates this data source's title, icon and search query in place.
    */
   public update(item: SPDataSourceItem): DataSource {
     this.title = item.Title
@@ -77,13 +72,7 @@ export class DataSource {
   }
 
   /**
-   * Configures the DataSource instance with the provided project content columns.
-   * Filters the provided columns to match the columns specified in the SPDataSourceItem instance.
-   * Sets the columns, refiners, and groupBy properties of the DataSource instance.
-   *
-   * @param columns The project content columns to filter and configure the DataSource instance with.
-   *
-   * @returns The configured DataSource instance.
+   * Resolves column and refiner IDs and the grouping lookup against available content columns.
    */
   public configure(columns: ProjectContentColumn[] = []) {
     this.columns = columns.filter((col) => _.includes(this.columnIds, col.id))

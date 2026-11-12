@@ -29,17 +29,7 @@ const DIALOG_COLUMN_DEFAULT_PROPS: Partial<IDialogColumnProps> = {
 }
 
 /**
- * A column render component that displays a link in the cell. When the link is clicked, a dialog is displayed
- * that shows a list of items with columns. The columns can be customized using the `columns` prop. The link text can
- * be customized using the `linkText` prop. The component also supports showing an information text below the list of items
- * using the `infoTextTemplate` prop. The information text can be customized using placeholders such as `{{Title}}` and
- * `{{Count}}`. The `{{Title}}` placeholder will be replaced with the title of the column.
- *
- * @param props - The props for the component.
- * @param props.linkText - The text to display in the link.
- * @param props.selectionMode - The selection mode for the list of items.
- * @param props.infoTextTemplate - The template for the information text to display below the list of items.
- * @param props.showInfoText - Whether to show the information text.
+ * Opens measurement history from a cell link, with configurable headings and information text.
  */
 export const DialogColumn: ColumnRenderComponent<IDialogColumnProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, DIALOG_COLUMN_DEFAULT_PROPS)

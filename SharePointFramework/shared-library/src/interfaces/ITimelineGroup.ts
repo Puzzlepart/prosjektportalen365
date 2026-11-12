@@ -1,3 +1,6 @@
+/**
+ * Identifies the grouping dimension represented by a timeline row.
+ */
 export enum TimelineGroupType {
   Project,
   Category,
@@ -6,6 +9,9 @@ export enum TimelineGroupType {
   Role
 }
 
+/**
+ * Defines a timeline row and its optional project identity.
+ */
 export interface ITimelineGroup {
   id: number
   title: string
@@ -15,6 +21,9 @@ export interface ITimelineGroup {
   isProgram?: boolean
 }
 
+/**
+ * Collects timeline rows by project, category and item type.
+ */
 export interface ITimelineGroups {
   projectGroup: ITimelineGroup[]
   categoryGroup: ITimelineGroup[]

@@ -7,6 +7,9 @@ const BREAKPOINTS = {
   xxxl: [1920, 4000]
 }
 
+/**
+ * Returns the configured responsive breakpoint containing the current viewport width.
+ */
 export function getBreakpoint(): string {
   const windowWidth = window.innerWidth
   const [breakpoint] = Object.keys(BREAKPOINTS).filter((key) => {

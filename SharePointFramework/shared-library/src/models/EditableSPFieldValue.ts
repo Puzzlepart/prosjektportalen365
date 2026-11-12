@@ -2,6 +2,9 @@ import { stringIsNullOrEmpty } from '@pnp/core'
 import { ItemFieldValue, ItemFieldValues } from './ItemFieldValues'
 import { EditableSPField } from './EditableSPField'
 
+/**
+ * Pairs a field's editable text with its underlying SharePoint value.
+ */
 export class EditableSPFieldValue {
   /**
    * `true` if the value is set. Checks text value with
@@ -33,7 +36,6 @@ export class EditableSPFieldValue {
    * returns a new `EditableSPFieldValue` instance.
    *
    * @param fieldValues Field values from `IProjectInformationData`
-   * @param field Field instance
    * @param currentValue Current value for the field if it's being edited
    */
   public static parse(fieldValues: ItemFieldValues, field: EditableSPField, currentValue = null) {

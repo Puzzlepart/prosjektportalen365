@@ -1,3 +1,6 @@
+/**
+ * Represents a stored column-value presentation rule and its lookups.
+ */
 export class SPProjectColumnConfigItem {
   public Id: number = 0
   public GtPortfolioColumn: { Title: string; GtInternalName: string }

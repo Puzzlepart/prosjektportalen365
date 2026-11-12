@@ -68,7 +68,7 @@ function getDataType(column: IListColumn): string {
 }
 
 /**
- * The value of `column` in `item` as the list shows it: a date on the day the browser shows, a
+ * The value of `column` in `item` as the list shows it: a date on the site's calendar day, a
  * Yes/No as `true`/`false` (a missing one as `false`, as the list shows it), numbers rounded to two
  * decimals (percentages to two decimals of a per cent), a person as the name. `false`, `0` and
  * `''` are values; only a missing value leaves the cell empty.
@@ -177,8 +177,6 @@ class ExcelExportService {
 
   /**
    * Configures the `ExcelExportService` with the provided configuration options.
-   *
-   * @param configuration - The configuration options to apply.
    */
   public configure(configuration: IExcelExportServiceConfiguration) {
     this.configuration = { ...ExcelExportServiceDefaultConfiguration, ...configuration }
@@ -192,8 +190,6 @@ class ExcelExportService {
    * - Skips properties with object values.
    * Returns an empty array if parsing fails.
    *
-   * @param item The object containing the field.
-   * @param column The field name to parse.
    * @returns Array of transformed objects or empty array.
    */
   private parseMeasurementsColumn(
@@ -251,8 +247,6 @@ class ExcelExportService {
    *   made dashes.
    * - The file extension is hardcoded to `.xlsx`.
    *
-   * @param items Items
-   * @param columns Columns
    * @param fileNamePart Optional file name part to add after the name and before the date
    * @param sheetNamePrefix Optional prefix for the sheet name
    */

@@ -2,14 +2,8 @@ import { SwitchProps } from '@fluentui/react-components'
 import { ReactNode } from 'react'
 
 interface IColumnDataTypePropertyFieldBase {
-  /**
-   * Label shown for the field.
-   */
   label: string
 
-  /**
-   * Help text shown under the field.
-   */
   description?: string
 
   /**
@@ -88,6 +82,9 @@ export function numberField(field: FieldInput<INumberPropertyField>): INumberPro
   return { kind: 'number', ...field }
 }
 
+/**
+ * Builds editable property definitions for a column renderer.
+ */
 export type GetDataTypeProperties = (
   onChange: (key: string, value: any) => void,
   dataTypeProperties: Record<string, any>
@@ -108,9 +105,6 @@ export interface IColumnDataTypeFieldOption {
    */
   id: string
 
-  /**
-   * Text shown for the option.
-   */
   text: string
 
   /**
@@ -126,14 +120,14 @@ export interface IColumnDataTypeFieldOption {
 
     /**
      * Get properties for the data type.
-     *
-     * @param onChange On change handler for the property field
-     * @param dataTypeProperties Current data type properties for the data type
      */
     getDataTypeProperties?: GetDataTypeProperties
   }
 }
 
+/**
+ * Configures a column's renderer choice and renderer-specific properties.
+ */
 export interface IColumnDataTypeFieldProps {
   label: string
   description: string
@@ -151,8 +145,6 @@ export interface IColumnDataTypeFieldProps {
 
   /**
    * Change event handler for the data type field.
-   *
-   * @param value New value for the data type property
    */
   onChange: (value: string) => void
 
@@ -163,13 +155,11 @@ export interface IColumnDataTypeFieldProps {
 
   /**
    * On data type properties change handler.
-   *
-   * @param properties Properties for the data type
    */
   onDataTypePropertiesChange?: (properties: Record<string, any>) => void
 
   /**
-   * Checkbox field for persisting render globally
+   * Configures the switch for persisting the renderer choice globally.
    */
   persistRenderGloballyField?: SwitchProps
 }

@@ -2,6 +2,9 @@ import { ItemFieldValues } from './ItemFieldValues'
 import resource from 'SharedResources'
 import { parseScopedSiteId } from '../util/statusReportScope'
 
+/**
+ * Describes a status-report attachment to upload or link.
+ */
 export type StatusReportAttachment = {
   name?: string
   url: string
@@ -22,8 +25,6 @@ export class StatusReport {
 
   /**
    * Creates a new instance of `StatusReport` from a item field values object.
-   *
-   * @param fieldValues - SP item field values
    */
   constructor(public fieldValues: ItemFieldValues = new ItemFieldValues()) {
     this.id = fieldValues.id
@@ -34,8 +35,6 @@ export class StatusReport {
 
   /**
    * Initialize attachments for the report and returns the report.
-   *
-   * @param attachments Attachments
    */
   public initAttachments(attachments: StatusReportAttachment[]): StatusReport {
     this._attachments = attachments
@@ -73,8 +72,6 @@ export class StatusReport {
    * Get url for the report page. Reports in a scoped report series get a
    * `scope` query parameter so the status page opens with the right series
    * selected.
-   *
-   * @param urlSourceParam - URL source param
    */
   public url(urlSourceParam: string) {
     const scopeParam = this.scopeKey ? `&scope=${encodeURIComponent(this.scopeKey)}` : ''
@@ -103,7 +100,7 @@ export class StatusReport {
   }
 
   /**
-   * Get status values from item. All fields with a field name starting with `Gt` and ending with `Status`
+   * Reads text values of fields matching the Gt...Status prefix, including suffixed status fields.
    */
   public get statusValues(): Record<string, string> {
     return this.fieldValues.keys
@@ -125,17 +122,14 @@ export class StatusReport {
   }
 
   /**
-   * Returns `true` if the report is published. The moderation status must
-   * be `GtModerationStatus: Published` from the `SharedLibraryStrings`
+   * Checks whether moderation status matches the published choice from SharedResources.
    */
   public get published(): boolean {
     return this.moderationStatus === resource.Choice_GtModerationStatus_Published
   }
 
   /**
-   * Get status values from item. If the values are not defined, an empty string is returned.
-   *
-   * @param fieldName - Field name
+   * Reads a status value and its companion Comment field, defaulting each missing value to empty text.
    */
   public getStatusValue(fieldName: string) {
     const commentFieldName = `${fieldName}Comment`
@@ -151,8 +145,6 @@ export class StatusReport {
 
   /**
    * Updates the field values of the current `StatusReport` instance with the specified properties.
-   *
-   * @param properties - An object containing key-value pairs representing the field names and values to update.
    */
   public setValues(properties: Record<string, string>) {
     this.fieldValues.update(properties)

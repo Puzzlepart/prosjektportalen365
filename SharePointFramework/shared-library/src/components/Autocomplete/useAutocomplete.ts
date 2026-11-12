@@ -22,7 +22,6 @@ export function useAutocomplete(props: IAutocompleteProps) {
   const [value, setValue] = useState(defaultItem?.text ?? '')
   const [selectedKey, setSelectedKey] = useState(defaultItem ? String(defaultItem.key) : undefined)
 
-  // Another default, or other items, start over from the default.
   useEffect(() => {
     setValue(defaultItem?.text ?? '')
     setSelectedKey(defaultItem ? String(defaultItem.key) : undefined)
@@ -45,7 +44,6 @@ export function useAutocomplete(props: IAutocompleteProps) {
   const onOptionSelect: ComboboxProps['onOptionSelect'] = (_event, data) => {
     const item = items.find((candidate) => String(candidate.key) === data.optionValue)
     if (!item) {
-      // The clear button picks nothing.
       setValue('')
       setSelectedKey(undefined)
       props.onClear?.()

@@ -15,7 +15,6 @@ const SHORT_DATE: Intl.DateTimeFormatOptions = { day: '2-digit', month: '2-digit
  * on a machine west of the site (London, New York).
  *
  * @param date Date string or object, an instant
- * @param includeTime Include hours and minutes
  * @param fallback Returned when `date` is empty
  * @param locale Locale, by default SharePoint's UI language (`getUILocale`)
  */
@@ -91,7 +90,6 @@ export function formatDay(date: Date | undefined, locale: string = getUILocale()
  * ("18.11.2022" in Norwegian, "11/18/2022" in American English), a two-digit year as this
  * century, a four-digit year first as an ISO date. Anything else is left to `Date.parse`.
  *
- * @param text The typed text
  * @param locale Locale, by default SharePoint's UI language (`getUILocale`)
  *
  * @returns the date at local midnight, or `undefined` when the text is not a date
@@ -130,8 +128,6 @@ export function parseShortDate(text: string, locale: string = getUILocale()): Da
  * time zone, as its own forms store a date. Sent as an instant instead (the picker's local
  * midnight, in UTC), the day became the day before for a machine east of the site's time zone:
  * "03.04.2026" typed in Helsinki or Tokyo was stored as 2 April on an Oslo site.
- *
- * @param date The picked date
  *
  * @returns the day, or `null` for no date
  */

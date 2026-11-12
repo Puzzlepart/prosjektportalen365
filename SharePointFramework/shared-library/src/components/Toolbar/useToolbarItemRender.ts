@@ -3,16 +3,15 @@ import { ListMenuItem } from './types'
 import { useToolbarMenuRender } from './useToolbarMenuRender'
 import { useToolbarSearchRender } from './useToolbarSearchRender'
 
+/**
+ * Selects button, menu or search rendering for each toolbar command.
+ */
 export function useToolbarItemRender() {
   const { renderMenu } = useToolbarMenuRender()
   const { renderToolbarButton } = useToolbarButtonRender()
   const { renderToolbarSearch } = useToolbarSearchRender()
   /**
-   * Renders a toolbar item.
-   *
-   * @param item - The item to render.
-   *
-   * @returns The rendered toolbar item.
+   * Chooses search, menu or button presentation for a command.
    */
   function renderToolbarItem(item: ListMenuItem) {
     if (item.searchBox) return renderToolbarSearch(item)

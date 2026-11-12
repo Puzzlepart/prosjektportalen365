@@ -5,6 +5,9 @@ import { useCustomEditPanelContext } from '../../../context'
 import { FieldElementComponent } from '../types'
 import { useLookup } from './useLookup'
 
+/**
+ * Edits a lookup field using the permitted items from its source list.
+ */
 export const Lookup: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
   const { options, value } = useLookup(field)

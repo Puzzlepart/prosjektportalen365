@@ -14,11 +14,6 @@ class ListLogger {
 
   /**
    * Initialize `ListLogger`
-   *
-   * @param list List
-   * @param webUrl Web URL
-   * @param scope scope
-   * @param memberMap Member map
    */
   public init(
     list: any,
@@ -38,7 +33,6 @@ class ListLogger {
    * Will fail silently: a rejected write is reported to the console and the
    * promise resolves to `undefined`, so callers can safely `await` it.
    *
-   * @param entry Entry
    * @returns The created list item as returned by SharePoint (PnPjs 4 resolves `items.add`
    * to the item payload itself; `IItemAddResult` is gone), or `undefined` when the write failed
    */
@@ -65,8 +59,6 @@ class ListLogger {
    *
    * Will fail silently.
    *
-   * @param message Message
-   * @param functionName Function name
    * @param level Level (defaults to Info)
    */
   public write(
@@ -84,8 +76,6 @@ class ListLogger {
 
   /**
    * Get SP item properties for entry
-   *
-   * @param entry Entry
    */
   private _getSpItem(entry: IListLoggerEntry): Record<string, any> {
     let item: Record<string, any> = {}

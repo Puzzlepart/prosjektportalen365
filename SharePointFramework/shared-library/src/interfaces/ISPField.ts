@@ -1,3 +1,6 @@
+/**
+ * Describes the SharePoint field metadata needed for value mapping.
+ */
 export interface ISPField {
   Id: string
   TextField: string

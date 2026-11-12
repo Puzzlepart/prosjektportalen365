@@ -2,11 +2,7 @@ import { useState, useEffect } from 'react'
 import { IProjectLogoProps } from './types'
 
 /**
- * Custom React hook for and managing project logo.
- *
- * @param props - The props for the ProjectLogo component.
- *
- * @returns An object containing the conditional styling based on project logo render mode.
+ * Loads a custom site logo or template fallback, otherwise showing initials with mode-specific styling.
  */
 export function useProjectLogo(props: IProjectLogoProps) {
   const [showCustomImage, setShowCustomImage] = useState(false)
@@ -16,20 +12,13 @@ export function useProjectLogo(props: IProjectLogoProps) {
   const [isLoading, setIsLoading] = useState(true)
 
   /**
-   * Checks if the image is a custom image.
-   *
-   * @param image - The image to check.
-   *
-   * @returns A boolean indicating if the image is a custom image.
+   * Distinguishes custom images from SharePoint's default logo heights of 96, 648 and 1024 pixels.
    */
   const shouldUseCustomImage = (image: React.SyntheticEvent<HTMLImageElement, Event>) => {
     const height = (image.target as HTMLImageElement).naturalHeight
     return height !== 648 && height !== 96 && height !== 1024
   }
 
-  /**
-   * Preload the initial image to determine whether to show custom image or initials
-   */
   useEffect(() => {
     setIsLoading(true)
     const img = new Image()
@@ -72,18 +61,12 @@ export function useProjectLogo(props: IProjectLogoProps) {
     img.src = initialUrl
   }, [props.url, props.fallbackImageUrl])
 
-  /**
-   * Handle image load for the visible image element
-   */
   const handleImageLoad = (image: React.SyntheticEvent<HTMLImageElement, Event>) => {
     if (props.onImageLoad && showCustomImage) {
       props.onImageLoad(true)
     }
   }
 
-  /**
-   * Handle image error for the visible image element
-   */
   const handleImageError = () => {
     setShowCustomImage(false)
   }

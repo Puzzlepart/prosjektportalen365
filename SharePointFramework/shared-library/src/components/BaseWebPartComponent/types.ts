@@ -3,28 +3,22 @@ import { SPFI } from '@pnp/sp'
 import { DOMAttributes } from 'react'
 import { CustomError, SiteContext } from '../../models'
 
+/**
+ * Provides web part metadata and SharePoint context to class components.
+ */
 export interface IBaseWebPartComponentProps extends DOMAttributes<HTMLDivElement>, SiteContext {
-  /**
-   * Title of the web part
-   */
   title?: string
 
-  /**
-   * Description of the web part
-   */
   description?: string
 
-  /**
-   * Display mode
-   */
   displayMode?: DisplayMode
 
-  /**
-   * Configured SPFI instance
-   */
   sp?: SPFI
 }
 
+/**
+ * Tracks a class web part component's data, loading and error state.
+ */
 export interface IBaseWebPartComponentState<T> {
   /**
    * Whether the component's data has finished loading. Named after the Fluent UI
@@ -33,18 +27,9 @@ export interface IBaseWebPartComponentState<T> {
    */
   isDataLoaded?: boolean
 
-  /**
-   * Data for the component
-   */
   data?: T
 
-  /**
-   * Error object
-   */
   error?: CustomError
 
-  /**
-   * Is the component hidden
-   */
   hidden?: boolean
 }

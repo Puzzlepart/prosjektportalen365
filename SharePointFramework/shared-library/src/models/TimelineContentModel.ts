@@ -1,25 +1,11 @@
 import { TimelineConfigurationModel } from './TimelineConfigurationModel'
 
+/**
+ * Combines timeline content with optional type-specific display configuration.
+ */
 export class TimelineContentModel {
   private _config: TimelineConfigurationModel
 
-  /**
-   * Creates a new instance of TimelineContentModel
-   *
-   * @param siteId Site id
-   * @param title Title
-   * @param itemTitle Item title
-   * @param type Item type
-   * @param startDate Start Date
-   * @param endDate End Date
-   * @param description Description
-   * @param tag Tag
-   * @param budgetTotal Budget total
-   * @param costsTotal Costs total
-   * @param url Url
-   * @param phase Phase
-   * @param properties Properties
-   */
   constructor(
     public siteId: string,
     public title: string,
@@ -38,8 +24,6 @@ export class TimelineContentModel {
 
   /**
    * Returns the `TimelineContentModel` using the specified `config`.
-   *
-   * @param config Timeline configuration
    */
   public usingConfig(config: TimelineConfigurationModel) {
     this._config = config
@@ -48,9 +32,6 @@ export class TimelineContentModel {
 
   /**
    * Get configuration entry by key
-   *
-   * @param key Configuration key
-   * @param fallbackValue Fallback value
    */
   public getConfig<T = string>(key: keyof TimelineConfigurationModel, fallbackValue: T = null) {
     if (!this._config) {

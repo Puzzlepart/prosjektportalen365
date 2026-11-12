@@ -71,6 +71,9 @@ export interface IItemUpdateResultData {
  */
 const hubAccessProbes = new Map<string, Promise<boolean>>()
 
+/**
+ * Reads and updates hub configuration and project data with access-aware fallbacks.
+ */
 export class PortalDataService extends DataService<IPortalDataServiceConfiguration> {
   private _sp: SPFI
   private _spPortal: SPFI
@@ -95,8 +98,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
 
   /**
    * Whether the hub list can be read: the hub is available and the list has not denied access.
-   *
-   * @param list List
    */
   public isListAvailable(list: PortalDataServiceList): boolean {
     return this.isAvailable && !this._deniedLists.has(list)
@@ -156,7 +157,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * no list) makes the hub unavailable; another list is only marked as denied, so the hub's other
    * lists are still read.
    *
-   * @param error Error
    * @param source Calling method, for the log
    * @param list The hub list the call read (optional)
    */
@@ -181,8 +181,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
 
   /**
    * Configure PortalDataService
-   *
-   * @param configuration Configuration for PortalDataService
    */
   public async configure(
     configuration: IPortalDataServiceConfiguration
@@ -304,9 +302,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    *
    * @note Your model class specified in the constructor param should include
    * properties `childProjects` and `parentProjects` (arrays of strings which are web/project URLs).
-   *
-   * @param webUrl Web URL
-   * @param constructor Constructor / model class
    */
   public async getParentProjects<T>(
     webUrl: string,
@@ -401,9 +396,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   /**
    * Get child projects for a project. Gets the GtChildProjects field
    * from project properties and transforms SharePoint data.
-   *
-   * @param webUrl Web URL of the current project
-   * @param constructor Constructor / model class
    */
   public async getChildProjects<T>(
     webUrl: string,
@@ -467,8 +459,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
 
   /**
    * Get programs from the projects list in the portfolio site.
-   *
-   * @param constructor Constructor / model class
    */
   public async getPrograms<T>(constructor: new (item: any, web: IWeb) => T): Promise<T[]> {
     try {
@@ -499,8 +489,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   }
 
   /**
-   * Get project columns from the project columns list in the portfolio site.
-   * Optionally override the list name with the `listName` parameter.
+   * Reads configured hub project columns, returning none when the list is unavailable.
    */
   public async getProjectColumns(): Promise<ProjectColumn[]> {
     if (!this.isListAvailable('PROJECT_COLUMNS')) return []
@@ -531,8 +520,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
 
   /**
    * Ensures a folder in the attachments library for the status report.
-   *
-   * @param report Status report
    */
   private async ensureAttachmentsFolder(report: StatusReport): Promise<IFolder> {
     const folderName = report.id.toString()
@@ -547,13 +534,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   }
 
   /**
-   * Publish status report. Sets `GtModerationStatus` to `publishedString` and
-   * `GtLastReportDate` to `reportDate`. Then uploads the persisted section data
-   * and snapshot to the attachments folder (in a separate hidden library).
+   * Publishes a status report and uploads its attachments to the hidden report library.
+   * SharePoint receives the current time; the returned model uses `reportDate`.
    *
-   * @param report Status report
-   * @param reportDate Status report date
-   * @param snapshotContent Snapshot content
    * @param attachments Attachments to upload in the attachments folder (in a separate hidden library)
    * @param publishedString String value for published state
    */
@@ -591,12 +574,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   }
 
   /**
-   * Publish status report. Sets `GtModerationStatus` to `publishedString` and
-   * `GtLastReportDate` to `reportDate`. Then uploads the persisted section data
-   * and snapshot to the attachments folder (in a separate hidden library).
-   *
-   * @param report Status report
-   * @param properties Properties to update
+   * Updates a status report in SharePoint and applies the same values to its model.
    */
   public async updateStatusReport(
     report: StatusReport,
@@ -613,8 +591,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
 
   /**
    * Delete status report by ID
-   *
-   * @param id Id
    */
   public async deleteStatusReport(id: number): Promise<void> {
     await this._getList('PROJECT_STATUS').items.getById(id).delete()
@@ -647,7 +623,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * Adds a new column to the project columns list and adds the column to the specified view.
    *
    * @param properties Properties for the new column (`Id` will be omitted)
-   * @param view The view to add the column to
    * @returns The id of the new column. A failure is thrown, for the form to show.
    */
   public async addColumnToPortfolioView(
@@ -694,8 +669,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
 
   /**
    * Get list form urls
-   *
-   * @param list List key
    */
   public async getListFormUrls(
     list: PortalDataServiceList
@@ -715,9 +688,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   /**
    * Checks if the current user has the specified permissions to the
    * specified list.
-   *
-   * @param list List key
-   * @param permissionKind Permission kind to check
    */
   public async currentUserHasPermissionsToList(
     list: PortalDataServiceList,
@@ -730,8 +700,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * Sync list with project properties from hub site.
    *
    * Skips fields that has `ShowInEditForm` set to `FALSE`
-   *
-   * @param params Sync list parameters
    */
   public async syncList(params: SyncListParams): Promise<ISyncListReturnType> {
     const fieldsAdded: SPField[] = []
@@ -820,8 +788,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
 
   /**
    * Get content type by ID from the portal site. Expands `Fields` and `FieldLinks`.
-   *
-   * @param contentTypeId Content type ID
    */
   private async _getContentType(contentTypeId: string): Promise<ISPContentType> {
     const contentType = await this.web.contentTypes
@@ -852,9 +818,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
 
   /**
    * Get files using `DefaultCaching` and maps them to the specified constructor.
-   *
-   * @param listName List name
-   * @param constructor Constructor
    */
   public async getFiles<T>(
     listName: string,
@@ -867,8 +830,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   /**
    * Get items and maps them to the specified constructor.
    *
-   * @param listName List name
-   * @param constructor Constructor function
    * @param query Caml query if `getItemsByCAMLQuery` should be used
    * @param expands Expands for `getItemsByCAMLQuery`
    */
@@ -893,9 +854,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   /**
    * Add status report with the specified `properties` and `contentTypeId`. A new
    * `StatusReport` instance is returned.
-   *
-   * @param properties Properties to add for the new item
-   * @param contentTypeId Content type ID
    */
   public async addStatusReport(
     properties: Record<string, any>,
@@ -915,9 +873,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * Update project content column with new values for properties `GtColMinWidth` and `GtColMaxWidth`,
    * as well as the `GtFieldDataType` property if parameter `persistRenderAs` is true.
    *
-   * @param _list List
-   * @param column Project content column
-   * @param persistRenderAs Persist render as property
+   * @param columnItem Project content column
    */
   public async updateProjectContentColumn(
     _list: PortalDataServiceList,
@@ -946,9 +902,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   /**
    * Update the data source item with title `dataSourceTitle` with the properties in `properties`.
    *
-   * @param _list List
-   * @param properties Properties
-   * @param dataSourceTitle Data source title
    * @param shouldReplace Should replace the existing columns
    */
   public async updateDataSourceItem(
@@ -983,8 +936,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    *
    * If the `dataSourceCategory` is null or empty, all columns are returned.
    *
-   * @param _list List
-   * @param category Category for data source (optional - returns all columns if not specified)
+   * @param dataSourceCategory Category for data source (optional - returns all columns if not specified)
    * @param level Level for data source
    */
   public async fetchProjectContentColumns(
@@ -998,12 +950,10 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         .select(...Object.keys(new SPProjectContentColumnItem()))
         .top(500)()
 
-      // If no category specified, return all columns
       if (stringIsNullOrEmpty(dataSourceCategory)) {
         return columnItems.map((item) => new ProjectContentColumn(item))
       }
 
-      // Filter by category and level
       const filteredColumnItems = columnItems.filter(
         (col) =>
           col.GtDataSourceCategory === dataSourceCategory ||
@@ -1022,7 +972,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * Adds a new column to the project content columns list and adds the column to the specified data source.
    *
    * @param properties Properties for the new column (`Id` will be omitted)
-   * @param dataSource The data source to add the column to
    * @returns The id of the new column. A failure is thrown, for the form to show.
    */
   public async addColumnToDataSource(
@@ -1040,9 +989,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
 
   /**
    * Add item to a list
-   *
-   * @param list List
-   * @param properties Properties
    */
   public async addItemToList<T = any>(
     list: PortalDataServiceList,
@@ -1058,10 +1004,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
 
   /**
    * Update item in a list
-   *
-   * @param list List
-   * @param itemId Item ID
-   * @param properties Properties
    */
   public async updateItemInList<T = IItemUpdateResultData>(
     list: PortalDataServiceList,
@@ -1081,9 +1023,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * recycle bin, from where it can be restored. Deleted for good, a column the column forms
    * deleted by mistake could not be brought back.
    *
-   * @param list List
-   * @param itemId Item ID
-   *
    * @returns `true` when the item was moved to the recycle bin, `false` when it could not be
    */
   public async deleteItemFromList(list: PortalDataServiceList, itemId: number): Promise<boolean> {
@@ -1098,8 +1037,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   /**
    * Get status reports using caching by default. Can be turned off by setting
    * `useCaching` to `false`.
-   *
-   * @param options Options for getting status reports
    */
   public async getStatusReports({
     filter = '',
@@ -1161,10 +1098,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * which does not combine with the `FieldValuesAsText`/`AttachmentFiles` expands
    * used for the reports themselves. Failures are logged and yield an empty map —
    * the report list must never fail because person values could not be expanded.
-   *
-   * @param filter Filter for the status reports
-   * @param userFields Internal names of the user fields to expand
-   * @param useCaching Whether to use caching
    */
   private async _getStatusReportUserFieldValues(
     filter: string,
@@ -1216,8 +1149,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * Get attachments for the specified status report. If the attachment filename
    * contains `.txt` or `.json` the content will be fetched and added to the
    * attachment object.
-   *
-   * @param report Status report
    */
   public async getStatusReportAttachments(report: StatusReport): Promise<StatusReport> {
     const attachmentsFolder = await this.ensureAttachmentsFolder(report)
@@ -1241,8 +1172,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * Get status report list props (`Id` and `DefaultEditFormUrl`). The list ID
    * is used as `targetListId` for the edit panel, so user/taxonomy/lookup
    * values are resolved against the hub list the reports are stored in.
-   *
-   * TODO: Use caching with @pnp/sp v3
    */
   public getStatusReportListProps(): Promise<{ Id: string; DefaultEditFormUrl: string }> {
     try {
@@ -1257,8 +1186,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   /**
    * Get list fields
    *
-   * @param list List
-   * @param filter Filter
    * @param web Web (default: `this.web`)
    */
   public async getListFields(
@@ -1277,9 +1204,8 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   }
 
   /**
-   * Get fiels for the specified content type.
+   * Gets fields for the specified content type.
    *
-   * @param contentTypeId Content type ID
    * @param web Web (default: `this.web`)
    */
   public async getContentTypeFields(
@@ -1324,7 +1250,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   /**
    * Get project template by name. Using `DefaultCaching` by default.
    *
-   * @param templateName Template name
    * @param cache Cache configuration to use (default: `DefaultCaching`)
    */
   public async getProjectTemplate(
@@ -1371,9 +1296,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * Update idea data for the current site URL. Updates the element in the idea
    * process list with a new idea decision. Normally it's set to approved and
    * synced when idea project data is synced to the project.
-   *
-   * @param fieldValues Item field values
-   * @param ideaDecision New idea decision
    */
   public async updateIdeaData(
     fieldValues: ItemFieldValues,
@@ -1442,9 +1364,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   }
 
   /**
-   * Get list by `PortalDataServiceList` enum
-   *
-   * @param list List to get items from
+   * Resolves a logical hub-list key to its configured SharePoint list.
    */
   private _getList(list: PortalDataServiceList): IList {
     return this.web.lists.getByTitle(this._configuration.listNames[list])

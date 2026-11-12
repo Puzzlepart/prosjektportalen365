@@ -6,11 +6,7 @@ import { IRenderItemColumnProps } from './types'
 import { IListColumn } from '../../types'
 
 /**
- * On render item column function. First checks if the column has a custom render function,
- * if not it will use the default render function based on the dataType.
- *
- * @param item Item to render the value for
- * @param column Column to render the value for
+ * Renders a field-backed column using its custom renderer, display field or registered data type.
  */
 export function renderItemColumn(item: Record<string, any>, column: IListColumn): ReactNode {
   if (!column.fieldName) return null
@@ -21,7 +17,6 @@ export function renderItemColumn(item: Record<string, any>, column: IListColumn)
   const columnValue = item[column.fieldName]
   const dataTypeProperties: Record<string, any> = column.data?.dataTypeProperties ?? {}
 
-  // Handle fallback value
   if (!columnValue && column.fieldName !== '-' && dataTypeProperties?.fallbackValue) {
     return dataTypeProperties.fallbackValue
   }
@@ -33,7 +28,6 @@ export function renderItemColumn(item: Record<string, any>, column: IListColumn)
     ...dataTypeProperties
   }
 
-  // Get the data type from column
   const dataType = column['dataType'] || column.data?.type || column.data?.renderAs
 
   const renderFunction = ColumnRenderComponentRegistry.getComponent(dataType as string)
@@ -42,7 +36,6 @@ export function renderItemColumn(item: Record<string, any>, column: IListColumn)
     return createElement(renderFunction, columnRenderProps)
   }
 
-  // Default rendering for unknown types
   if (columnValue === null || columnValue === undefined) {
     return <>-</>
   }
@@ -51,11 +44,7 @@ export function renderItemColumn(item: Record<string, any>, column: IListColumn)
 }
 
 /**
- * Hook for handling the `onRenderItemColumn` function.
- * Returns an instance of the function `onRenderItemColumn`,
- * that only changes when the `props` changes. Also  registers
- * column render options for data types that doesn't have a custom
- * render component.
+ * Registers shared renderers and supplies a stable list-cell rendering callback.
  */
 export const useOnRenderItemColumn = () => {
   useColumnRenderComponentRegistry()

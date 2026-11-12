@@ -1,8 +1,5 @@
 /**
- * Extracts the value from SharePoint calculated column format (e.g., 'float;#2.5' -> '2.5')
- * @param str The raw calculated column value
- * @param fallback The fallback value to return if extraction fails
- * @returns The extracted value or the fallback value if extraction fails
+ * Extracts a calculated-column value after ;#, preserving plain text and using the fallback for absent input.
  */
 export function tryParseCalculated(str: string | null | undefined, fallback: string): string {
   if (typeof str !== 'string' || !str) return fallback

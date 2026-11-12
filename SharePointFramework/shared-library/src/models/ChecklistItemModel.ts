@@ -1,3 +1,6 @@
+/**
+ * Represents a SharePoint phase-checklist item.
+ */
 export class ChecklistSPItem {
   public ID: number = 0
   public Title: string = ''
@@ -8,6 +11,9 @@ export class ChecklistSPItem {
   } = {}
 }
 
+/**
+ * Exposes checklist text, status and phase identity from a SharePoint item.
+ */
 export class ChecklistItemModel {
   public id: number
   public title: string
@@ -15,11 +21,6 @@ export class ChecklistItemModel {
   public status: string
   public termGuid: string
 
-  /**
-   * Constructor
-   *
-   * @param _item Checklist SP item
-   */
   constructor(private _item: ChecklistSPItem) {
     this.id = _item.ID
     this.title = _item.Title
@@ -29,10 +30,7 @@ export class ChecklistItemModel {
   }
 
   /**
-   * Updates the properties of the current `ChecklistItemModel` instance
-   * and returns a new instance with the updated properties.
-   *
-   * @param properties The properties to update.
+   * Creates a new model from the original SharePoint item merged with the supplied properties.
    */
   public update(properties: Partial<ChecklistItemModel>) {
     return new ChecklistItemModel({ ...this._item, ...properties })

@@ -7,6 +7,9 @@ import { IListColumn } from '../../../types'
  */
 export const TAXONOMY_PATH_DELIMITER = ':'
 
+/**
+ * Represents a taxonomy path segment and its selectable descendants.
+ */
 export interface ITaxonomyTreeNode {
   /**
    * Label for this level — the segment between two delimiters
@@ -33,9 +36,6 @@ export interface ITaxonomyTreeNode {
    */
   item?: IFilterItemProps
 
-  /**
-   * Child nodes (next level of the hierarchy).
-   */
   children: ITaxonomyTreeNode[]
 }
 
@@ -46,8 +46,6 @@ export interface ITaxonomyTreeNode {
  * covers both managed-metadata fields and plain text fields (single/multi) that
  * are configured with data type `Tags` in the column configuration list
  * (`Prosjektkolonner`).
- *
- * @param column Column for the filter
  */
 export function isTaxonomyColumn(column?: IListColumn): boolean {
   if (!column) return false
@@ -59,9 +57,6 @@ export function isTaxonomyColumn(column?: IListColumn): boolean {
  * `true` when the column is a taxonomy field and at least one of its values is
  * a delimited term path (`Parent:Child`). Only then is it worth rendering the
  * values as a hierarchy instead of a flat list.
- *
- * @param column Column for the filter
- * @param items Flat filter items
  */
 export function shouldRenderAsHierarchy(column: IListColumn, items: IFilterItemProps[]): boolean {
   if (!isTaxonomyColumn(column)) return false
@@ -74,8 +69,6 @@ export function shouldRenderAsHierarchy(column: IListColumn, items: IFilterItemP
  * still become selectable nodes so the whole branch can be filtered. The
  * `byPath` map allows callers to resolve a node from its path (e.g. when
  * translating selected paths back into filter items).
- *
- * @param items Flat filter items
  */
 export function buildTaxonomyTree(items: IFilterItemProps[]): {
   roots: ITaxonomyTreeNode[]
@@ -116,9 +109,6 @@ export function buildTaxonomyTree(items: IFilterItemProps[]): {
 /**
  * `true` when any descendant of `node` has its path in `selectedPaths`. Used to
  * render a parent as indeterminate when one of its children is selected.
- *
- * @param node Tree node
- * @param selectedPaths Set of currently selected paths
  */
 export function hasSelectedDescendant(
   node: ITaxonomyTreeNode,
@@ -132,8 +122,6 @@ export function hasSelectedDescendant(
 /**
  * Collects the paths of every node that has children. Used to expand the whole
  * tree by default so no values are hidden when the panel first opens.
- *
- * @param nodes Tree nodes
  */
 export function collectExpandablePaths(nodes: ITaxonomyTreeNode[]): Set<string> {
   const paths = new Set<string>()

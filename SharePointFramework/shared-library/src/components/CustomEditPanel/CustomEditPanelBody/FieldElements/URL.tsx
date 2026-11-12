@@ -5,6 +5,9 @@ import { FieldContainer } from '../../../FieldContainer'
 import { useCustomEditPanelContext } from '../../context'
 import { FieldElementComponent } from './types'
 
+/**
+ * Edits a link's HTTP(S) address and description with URL validation.
+ */
 export const URL: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
   const [validationMessage, setValidationMessage] = useState<string>(null)

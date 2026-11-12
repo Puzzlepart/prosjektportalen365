@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * SPFx / Heft webpack customization for this solution.
+ * Configures compiled-path aliases, bundled workspace dependencies and Heft compatibility fixes.
  *
  * Invoked by the rig task `customize-configure-webpack`
  * (@microsoft/spfx-heft-plugins -> customize-spfx-webpack-configuration-plugin),
@@ -9,31 +9,10 @@
  * `third-party-externals-configure-webpack` has appended its externals.
  * The return value is ignored - mutate `webpackConfig` in place.
  *
- * Two responsibilities:
- *
- *  1. Rebuild `resolve.alias` from this solution's tsconfig `compilerOptions.paths`,
- *     pointing at the compiled output folder (`lib`), exactly as the old
- *     gulpfile `build.configureWebpack.mergeConfig({ additionalConfiguration })`
- *     block did.
- *
- *  2. Decision A - keep the linked Rush workspace packages BUNDLED into this
- *     solution's bundles instead of letting Heft turn them into runtime SPFx
- *     component dependencies.
- *
- *     Heft externalizes a linked package when `CumulativeManifestProcessor`
- *     manages to attach a `packageName` to its discovered manifests, which it
- *     only does when the dependency's `dist` folder yields a single component
- *     (or a component plus its assembly). `pp365-shared-library` is exactly
- *     that case after a clean build. `ManifestPlugin` then emits a
- *     `type: "component"` entry in `loaderConfig.scriptResources` - but ONLY
- *     for requests webpack actually turned into an `ExternalModule`. Dropping
- *     the name from `webpackConfig.externals` therefore bundles the code and
- *     removes the runtime component dependency in one move; `linkedExternals`
- *     on its own never emits anything.
- *
- * This file is identical in all six SharePointFramework solutions: the alias
- * block derives everything from the sibling `tsconfig.json` at runtime, and the
- * externals filter is a no-op for names that are not present.
+ * Heft may externalize a linked package with one discovered component, turning it
+ * into an SPFx runtime dependency. Removing its webpack external bundles the code
+ * and prevents ManifestPlugin from emitting that component dependency;
+ * linkedExternals alone does not emit a script resource.
  */
 
 const fs = require('fs')
@@ -82,7 +61,6 @@ function resolveExtends(specifier, fromFile) {
     try {
       return requireFrom.resolve(candidate)
     } catch (e) {
-      /* try the next form */
     }
   }
   return undefined
@@ -139,7 +117,7 @@ function resolvePackageRoot(packageName) {
   }
 }
 
-/** tsconfig `compilerOptions.paths` -> webpack `resolve.alias`, rooted at `outDir`, plus compat aliases. */
+/** Mirrors TypeScript path aliases in webpack's compiled output and scopes the sax stream fallback. */
 function applyTsconfigAliases(webpackConfig, log) {
   const { paths, outDir } = readTsconfig(path.join(PROJECT_FOLDER, 'tsconfig.json'), new Set())
   const outDirPath = outDir || path.join(PROJECT_FOLDER, DEFAULT_OUT_DIR)
@@ -177,7 +155,7 @@ function withoutBundledPackages(externals) {
 }
 
 /**
- * Decision A: keep the linked workspace packages bundled.
+ * Keeps linked workspace packages bundled rather than loaded as SPFx dependencies.
  *
  * `externals` is left by the SPFx generator as a plain array of strings
  * (`WebpackConfigurationGenerator.js`, `externals: Array.from(externalsKeys)`),
@@ -216,10 +194,6 @@ function keepLinkedPackagesBundled(webpackConfig, log) {
   )
 }
 
-/**
- * @param {import('webpack').Configuration} webpackConfig
- * @param {{ logger: { terminal: { writeVerboseLine: (message: string) => void } } }} taskSession
- */
 /**
  * Plain stylesheets imported from node_modules are global CSS, not CSS modules.
  *
@@ -311,6 +285,9 @@ function reloadPageOnRebuild(webpackConfig, log) {
   log('dev server: hot module replacement off, the page reloads after each rebuild')
 }
 
+/**
+ * Applies solution aliases and compatibility fixes to each Heft webpack configuration in place.
+ */
 module.exports = function customizeWebpackConfiguration(webpackConfig, taskSession, heftConfiguration, webpack) {
   const log = (message) => {
     try {

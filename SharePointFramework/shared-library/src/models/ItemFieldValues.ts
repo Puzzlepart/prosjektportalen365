@@ -1,14 +1,11 @@
 import _ from 'lodash'
 
+/**
+ * Pairs a raw SharePoint field value with its text representation.
+ */
 export type ItemFieldValue = {
-  /**
-   * The value of the field.
-   */
   value?: any
 
-  /**
-   * The value of the field as text.
-   */
   valueAsText?: string
 }
 
@@ -33,6 +30,9 @@ type ItemFieldValuesData = {
   fieldValuesAsText: Record<string, string>
 }
 
+/**
+ * Exposes item fields as raw, text or SharePoint update values.
+ */
 export class ItemFieldValues {
   protected _values: Map<string, ItemFieldValue>
 
@@ -59,8 +59,6 @@ export class ItemFieldValues {
 
   /**
    * Check if the given key should be omitted from the field values.
-   *
-   * @param key Key to check
    */
   protected _shouldOmitKey(key: string): boolean {
     return key.toLowerCase().startsWith('odata')
@@ -83,8 +81,6 @@ export class ItemFieldValues {
   /**
    * Get field value in the specified format.
    *
-   * @param fieldValue Field value
-   * @param format Format to return the value in
    * @param defaultValue Default value to return if the field value is not set
    */
   private _getValueInFormat<T = any>(
@@ -124,7 +120,6 @@ export class ItemFieldValues {
    * Get field value for the given field name. Optionally return in the
    * specified format.
    *
-   * @param fieldName Field name
    * @param options Options (`format`, `defaultValue`)
    */
   public get<T = any>(fieldName: string, options: GetFieldValueOptions<T> = {}): T {
@@ -140,8 +135,6 @@ export class ItemFieldValues {
 
   /**
    * Updates the field values of the item with the provided properties.
-   *
-   * @param properties - The properties to update the field values with.
    */
   public update(properties: Record<string, any>) {
     this._fieldValues = { ...this._fieldValues, ...properties }
@@ -153,8 +146,6 @@ export class ItemFieldValues {
    * Create an instance of `ItemFieldValues`.
    *
    * @param data Data to create the instance from (`fieldValues`, `fieldValuesAsText`)
-   *
-   * @returns an instance of `ItemFieldValues`
    */
   public static create(data: ItemFieldValuesData) {
     return new ItemFieldValues(data.fieldValues, data.fieldValuesAsText)

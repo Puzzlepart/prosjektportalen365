@@ -2,6 +2,9 @@ import { ChecklistItemModel } from './ChecklistItemModel'
 import { supportedLocalesMap } from '../config'
 import { getLocalizedProperty, getLocalProperties, getTermLabel, ITermInfo } from '../taxonomy'
 
+/**
+ * Collects checklist items and status counts for a project phase.
+ */
 export type ProjectPhaseChecklistData = {
   stats?: Record<string, number>
   items?: ChecklistItemModel[]
@@ -18,9 +21,6 @@ export class ProjectPhaseModel {
   /**
    * Constructor for `ProjectPhaseModel`
    *
-   * @param term Term info
-   * @param _termSetId Term set ID
-   * @param checklistData Checklist data for the phase term
    * @param lcid Language code ID (default: `1044`)
    */
   constructor(
@@ -122,8 +122,6 @@ export class ProjectPhaseModel {
 
   /**
    * Get filtered phase checklist view url for the phase.
-   *
-   * @param baseUrl base URL
    */
   public getFilteredPhaseChecklistViewUrl = (baseUrl: string): string => {
     return `${baseUrl}?FilterField1=GtProjectPhase&FilterValue1=${this.name}`

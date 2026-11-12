@@ -17,8 +17,14 @@ interface IModernTaxonomyTerm {
   labels: ITermLabel[]
 }
 
+/**
+ * Accepts either stored taxonomy tags or modern picker terms.
+ */
 export type Term = ITagTerm | IModernTaxonomyTerm
 
+/**
+ * Normalizes taxonomy values and supplies labels for the picker's supported languages.
+ */
 export const useInitialTaxonomyValues = () => {
   const context = useCustomEditPanelContext()
   const currentLocale =

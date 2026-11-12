@@ -1,3 +1,6 @@
+/**
+ * Provides the persisted project fields used by list queries.
+ */
 export class SPProjectItem {
   public GtGroupId: string = '00000000-0000-0000-0000-000000000000'
   public GtSiteId: string = '00000000-0000-0000-0000-000000000000'

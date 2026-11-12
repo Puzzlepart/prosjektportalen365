@@ -4,12 +4,6 @@ import { tryParseFloat } from './tryParseFloat'
 /**
  * Try parse as currency format, the amount grouped in SharePoint's UI language ("kr 1 234 567" in
  * Norwegian, "kr 1,234,567" in English), not the browser's.
- *
- * @param str String to parse
- * @param fallback  Fallback value
- * @param currencyPrefix Currency prefix
- * @param minimumFractionDigits Minimum fraction digits
- * @param maximumFractionDigits Maximum fraction digits
  */
 export function tryParseCurrency(
   str: string,

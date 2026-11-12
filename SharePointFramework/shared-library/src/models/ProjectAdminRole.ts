@@ -1,5 +1,8 @@
 import { isArray } from 'underscore'
 
+/**
+ * Represents a stored project-administration role.
+ */
 export class SPProjectAdminRoleItem {
   public ContentTypeId?: string = ''
   public Id?: number = -1
@@ -10,26 +13,26 @@ export class SPProjectAdminRoleItem {
   public GtProjectAdminPermissions?: string = ''
 }
 
+/**
+ * Identifies how an administration role determines membership.
+ */
 export enum ProjectAdminRoleType {
   ProjectProperty,
   SharePointGroup,
   SiteAdmin
 }
 
+/**
+ * Resolves role membership settings and granted project permissions.
+ */
 export class ProjectAdminRole {
   /**
-   * The unique identifier of the role (GUID)
+   * SharePoint list item ID of the role.
    */
   public id: number
 
-  /**
-   * The title of the role.
-   */
   public title: string
 
-  /**
-   * The name of the SharePoint group.
-   */
   public groupName: string
 
   /**
@@ -43,16 +46,8 @@ export class ProjectAdminRole {
    */
   public projectFieldName: string
 
-  /**
-   * The permissions the role has.
-   */
   public permissions: string[] = []
 
-  /**
-   * Constructor for `ProjectAdminRole`
-   *
-   * @param _item Item
-   */
   constructor(private _item: SPProjectAdminRoleItem) {
     this.id = _item.Id
     this.title = _item.Title

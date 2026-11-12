@@ -139,8 +139,6 @@ export function TermStore(base: SPInit, path?: string): ITermStore {
 
 /**
  * Creates a term set collection queryable.
- *
- * @param base The term store the sets belong to
  */
 export function TermSets(base: SPInit): ITermSets {
   const sets = SPCollection(base, TERM_SETS_PATH) as unknown as ITermSets
@@ -159,8 +157,6 @@ export function TermSet(base: SPInit, path?: string): ITermSet {
 
 /**
  * Creates a term collection queryable.
- *
- * @param base The term set the terms belong to
  */
 export function Terms(base: SPInit): ITerms {
   const terms = SPCollection(base, TERMS_PATH) as unknown as ITerms

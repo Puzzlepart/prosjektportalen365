@@ -13,14 +13,7 @@ const BOOLEAN_COLUMN_DEFAULT_PROPS: Partial<IBooleanColumnProps> = {
 }
 
 /**
- * Renders a boolean column that displays a custom string value for true and false values.
- *
- * @param props - The props for the component.
- * @param props.columnValue - The value of the column.
- * @param props.valueIfTrue - The string value to display if the column value is true.
- * @param props.valueIfFalse - The string value to display if the column value is false.
- *
- * @returns The rendered component.
+ * Displays a Boolean value using its configured true and false labels.
  */
 export const BooleanColumn: ColumnRenderComponent<IBooleanColumnProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, BOOLEAN_COLUMN_DEFAULT_PROPS)

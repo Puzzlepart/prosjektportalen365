@@ -7,6 +7,9 @@ import React from 'react'
 import { IDataGridColumn } from '../components/DataGridList/types'
 import { IListColumn } from '../types'
 
+/**
+ * Pairs grid column definitions with their sizing options.
+ */
 export interface IDataGridColumns<TItem> {
   /**
    * Column definitions for `DataGrid`, carrying their widths for `DataGridList` to size them by.
@@ -20,15 +23,8 @@ export interface IDataGridColumns<TItem> {
 }
 
 /**
- * Turns the solutions' own column descriptions into what the Fluent UI v9 `DataGrid` takes.
- *
- * `IListColumn` is the shape the data adapters, the column forms and the v8 list hub share. Lists
- * that need none of the hub's grouping, sticky header or marquee selection render with `DataGrid`
- * instead, and this is the one place that maps a column onto it: `name` becomes the header, a
- * column's own `onRender` its cell, `fieldName` the cell's text otherwise, `minWidth` and `maxWidth`
- * its sizing, and `isMultiline` whether the cell may wrap.
- *
- * @param columns The columns, in display order
+ * Maps list columns to grid headers, cell renderers and sizing options.
+ * A column's maxWidth supplies its starting width, not an upper resizing limit.
  */
 export function createDataGridColumns<TItem extends Record<string, any>>(
   columns: IListColumn<TItem>[]

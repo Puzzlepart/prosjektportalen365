@@ -3,6 +3,9 @@ import { ProvisioningSchema } from './ProvisioningSchema'
 import { ProjectTemplate } from './ProjectTemplate'
 import { UserSelectableObject } from './UserSelectableObject'
 
+/**
+ * Describes a stored project extension and its template file.
+ */
 export interface IProjectExtensionSPItem {
   Id: number
   FieldValuesAsText?: Record<string, string>
@@ -13,7 +16,7 @@ export interface IProjectExtensionSPItem {
 }
 
 /**
- * @model ProjectExtension
+ * Represents a selectable project extension and loads its provisioning schema.
  */
 export class ProjectExtension extends UserSelectableObject {
   public serverRelativeUrl: string
@@ -38,8 +41,6 @@ export class ProjectExtension extends UserSelectableObject {
    * locked and default for the template (default on the project extension element itself,
    * or connected to the template), or it's connected to the template and
    * `isDefaultExtensionsLocked` is set to true on the template.
-   *
-   * @param template Project template
    */
   public isMandatoryForTemplate(template: ProjectTemplate): boolean {
     return (
@@ -51,8 +52,6 @@ export class ProjectExtension extends UserSelectableObject {
   /**
    * Checks if the project extension is default for the specified template. It's either
    * default on the project extension element itself, or it's connected to the template.
-   *
-   * @param template Project template
    */
   public isDefaultForTemplate(template?: ProjectTemplate): boolean {
     return this.isDefault || template?.extensions.includes(this.id)

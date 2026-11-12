@@ -11,8 +11,6 @@ export class DocumentTypeModel {
   /**
    * Constructor for `DocumentTypeModel`
    *
-   * @param term Term info
-   * @param _termSetId Term set ID
    * @param lcid Language code ID (default: `1044`)
    */
   constructor(
@@ -65,8 +63,6 @@ export class DocumentTypeModel {
 
   /**
    * Get localized property value with fallback
-   *
-   * @param property Property name
    */
   private _getLocalizedProperty = (property: string): string => {
     return getLocalizedProperty(this.term, this._termSetId, property, this._languageTag)

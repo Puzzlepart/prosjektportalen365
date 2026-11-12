@@ -1,7 +1,7 @@
 /**
- * Parse URL hash from `hash` in `window.location`.
+ * Reads ampersand-separated fragment entries into a map with base-10 integer values.
  *
- * @param lowerCase Lower case hash (default: `false`)
+ * @param lowerCase Lowercases the entire fragment before parsing, including its values.
  */
 export function parseUrlHash(lowerCase: boolean = false) {
   let hash = document.location.hash.substring(1)

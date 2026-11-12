@@ -4,6 +4,9 @@ import { FieldContainer } from '../../../FieldContainer'
 import { useCustomEditPanelContext } from '../../context'
 import { FieldElementComponent } from './types'
 
+/**
+ * Edits a Boolean field through the shared edit-panel model.
+ */
 export const Boolean: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
   return (

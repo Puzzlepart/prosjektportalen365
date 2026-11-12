@@ -2,6 +2,9 @@ import strings from 'SharedLibraryStrings'
 import React from 'react'
 import { ColumnRenderComponent } from '../types'
 
+/**
+ * Displays a note value as text with HTML tags removed.
+ */
 export const NoteColumn: ColumnRenderComponent = (props) => {
   const value =
     props.columnValue && typeof props.columnValue === 'string'

@@ -102,7 +102,6 @@ export function readNextLink(json: unknown): string | undefined {
  * only body are all answered with an empty page rather than a `SyntaxError` out of
  * `JSON.parse`. The term store returns exactly that for a term set with no terms.
  *
- * @param response Fetch response for the page
  * @returns The page values plus the link to the next page, if any
  */
 export async function parsePagedResponse<T>(response: IPageResponse): Promise<IPagedResult<T>> {

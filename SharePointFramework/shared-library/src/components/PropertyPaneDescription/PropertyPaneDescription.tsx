@@ -59,9 +59,6 @@ class PropertyPaneDescriptionBuilder implements IPropertyPaneField<IPropertyPane
  * method exists because some property pane controls do not support the
  * description property. This also supports markdown, unlike the default
  * description property for property pane controls.
- *
- * @param description The description to show
- * @param condition Condition to show the description
  */
 export function PropertyPaneDescription(
   description: string,

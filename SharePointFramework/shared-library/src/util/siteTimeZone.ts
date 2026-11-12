@@ -24,9 +24,6 @@ function transitionUtc(year: number, rule: ISystemTime, offsetMinutes: number): 
  * The minutes to add to UTC for the site's wall time at `instant`, by SharePoint's own rules:
  * standard time is `-(Bias + StandardBias)`, daylight time `-(Bias + DaylightBias)` between the
  * daylight and standard transitions (around the new year south of the equator).
- *
- * @param instant The instant
- * @param zone The site's time zone
  */
 export function siteOffsetMinutes(instant: Date, zone: ISiteTimeZone): number {
   const standard = -(zone.Bias + (zone.StandardBias ?? 0))
@@ -48,7 +45,6 @@ export function siteOffsetMinutes(instant: Date, zone: ISiteTimeZone): number {
  * The one hour a year the machine's own zone skips cannot be held in such a date; a value in it is
  * shown an hour off, which no date-only field reaches.
  *
- * @param instant The instant
  * @param zone The site's time zone, by default the page's (`getSiteTimeZone`)
  */
 export function toSiteWallTime(

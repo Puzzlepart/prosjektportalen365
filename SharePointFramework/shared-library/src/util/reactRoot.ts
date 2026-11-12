@@ -17,9 +17,6 @@ const roots = new WeakMap<Element, Root>()
  * Each root gets Fluent's `AriaLiveAnnouncer`, which keeps a live region for screen readers while
  * the root is mounted: without one, Fluent's `useAnnounce` does nothing, so a `MessageBar` (our
  * `UserMessage`) and every status message we announce went unheard (WCAG 4.1.3, #1788).
- *
- * @param element Element to render
- * @param container DOM element to render it into
  */
 export function renderReact(element: ReactElement, container: Element): void {
   let root = roots.get(container)
@@ -33,8 +30,6 @@ export function renderReact(element: ReactElement, container: Element): void {
 /**
  * Unmounts what `renderReact` rendered into `container`, running its clean-up; does nothing when
  * nothing is rendered there.
- *
- * @param container DOM element rendered into
  */
 export function unmountReact(container: Element): void {
   const root = roots.get(container)

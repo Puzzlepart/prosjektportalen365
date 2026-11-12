@@ -16,9 +16,6 @@ const fabricIcons = new Map<string, FluentIcon>()
 /**
  * Own-property check for the plain object literals used as lookup tables, so
  * list values such as `constructor` or `toString` never resolve as a hit.
- *
- * @param obj - The lookup table.
- * @param key - The key to check.
  */
 function has(obj: object, key: string) {
   return Object.prototype.hasOwnProperty.call(obj, key)
@@ -28,8 +25,6 @@ function has(obj: object, key: string) {
  * Returns a cached bundled icon for the specified name. `bundleIcon` creates
  * a new component type on every call, which would make React remount the icon
  * (restarting any CSS animations) on each render.
- *
- * @param name - The name of the icon to retrieve.
  */
 function getBundledIcon(name: FluentIconName) {
   if (!bundledIcons.has(name)) {
@@ -44,8 +39,6 @@ function getBundledIcon(name: FluentIconName) {
  * specified name, typed as a `FluentIcon` so it can be used wherever a
  * bundled Fluent icon component is expected. Cached so component identity is
  * stable across renders.
- *
- * @param name - The UI Fabric icon name.
  */
 function getFabricIcon(name: string) {
   if (!fabricIcons.has(name)) {
@@ -76,7 +69,6 @@ export function resolveFluentIcon(name: string): ResolvedFluentIcon | null {
 /**
  * Returns the Fluent icon with the specified name.
  *
- * @param name - The name of the icon to retrieve.
  * @param options - The options to use when retrieving the icon. When `bundle`
  * is `false`, `filled` selects the filled or regular variant directly.
  *
@@ -111,9 +103,7 @@ export function getFluentIcon<T = JSX.Element>(
 }
 
 /**
- * Returns an array of strings representing the names of all available Fluent icons.
- *
- * @returns An array of strings representing the names of all available Fluent icons.
+ * Lists catalog icon names with a flag indicating whether each has a filled variant.
  */
 export function getFluentIcons() {
   return Object.keys(iconCatalog).map((key) => ({
@@ -129,9 +119,6 @@ export function getFluentIcons() {
  * branch and `fontSize` on the UI Fabric branch, so callers do not need to
  * know which one rendered.
  *
- * @param name - The name of the icon to retrieve.
- * @param options - Rendering options.
- *
  * @returns A Fluent UI icon element, a UI Fabric icon element for unknown
  * names, or `null` for an empty name.
  */
@@ -146,7 +133,6 @@ export function getFluentIconWithFallback(
  * @deprecated Use the options object form instead:
  * `getFluentIconWithFallback(name, { bundle, color })`.
  *
- * @param name - The name of the icon to retrieve.
  * @param bundleWithFilled - Whether to bundle the icon with the filled version. Defaults to true.
  * @param color - The color of the icon.
  */
@@ -192,8 +178,6 @@ export function getFluentIconWithFallback(
  *
  * @param name - The icon name (catalog key, UI Fabric alias or UI Fabric name).
  * @param defaultName - Catalog name to use when `name` is empty. Defaults to `Cube`.
- *
- * @returns A Fluent icon component.
  */
 export function getIconComponentWithFallback(
   name: string,
@@ -208,8 +192,6 @@ export function getIconComponentWithFallback(
 /**
  * Checks if an icon with the given name resolves to an entry in the icon
  * catalog, either directly or through a legacy UI Fabric alias.
- *
- * @param name - The name of the icon to check.
  *
  * @returns True if the icon is available, false otherwise.
  */

@@ -7,6 +7,9 @@ import styles from './LoadingSkeleton.module.scss'
 /** Widths available for a skeleton row, as defined in the stylesheet. */
 export type LoadingSkeletonRow = 'small' | 'medium' | 'large' | 'xlarge' | 'xxlarge'
 
+/**
+ * Configures placeholder rows and the underlying Fluent skeleton.
+ */
 export interface ILoadingSkeletonProps extends Partial<SkeletonProps> {
   /**
    * The rows to render, top to bottom, as width steps. Defaults to the three

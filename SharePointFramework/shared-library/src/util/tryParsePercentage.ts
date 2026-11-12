@@ -1,10 +1,7 @@
 import { tryParseFloat } from './'
 
 /**
- *
- * @param str The string to parse
- * @param addPostfix Add postfix (%)
- * @param fallback Fallback if parse fails
+ * Converts a parsed share of one to a percentage, optionally adding %, or returns the supplied fallback.
  */
 export function tryParsePercentage(
   str: string,

@@ -3,6 +3,9 @@ import { ColumnDataType, IListColumn } from '../../types'
 import { GetDataTypeProperties, IColumnDataTypeFieldOption } from './ColumnDataTypeField'
 import { IWeb } from '@pnp/sp/webs'
 
+/**
+ * Supplies an item, column definition and value to a cell renderer.
+ */
 export interface IRenderItemColumnProps extends React.HTMLAttributes<HTMLDivElement> {
   column?: IListColumn
   item?: Record<string, any>
@@ -10,6 +13,9 @@ export interface IRenderItemColumnProps extends React.HTMLAttributes<HTMLDivElem
   dataTypeProperties?: Map<string, any>
 }
 
+/**
+ * Renders an item's value using its column configuration.
+ */
 export type ItemColumnRenderFunction = (props: IRenderItemColumnProps) => JSX.Element
 
 /**
@@ -64,9 +70,6 @@ export interface ColumnRenderComponent<
   /**
    * Optional data fetch function that will be called if a column using the
    * component is used.
-   *
-   * @param web The web instance to fetch data from.
-   * @param column The column to fetch data for.
    */
   fetchData?: (web?: IWeb, column?: ProjectColumn) => Promise<any>
 }

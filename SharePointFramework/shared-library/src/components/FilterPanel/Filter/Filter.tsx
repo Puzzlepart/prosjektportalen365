@@ -4,6 +4,9 @@ import { IFilterProps } from './types'
 import { useFilter } from './useFilter'
 import { getFluentIcon } from '../../../icons'
 
+/**
+ * Renders a collapsible set of values for a filterable column.
+ */
 export const Filter: FC<IFilterProps> = (props) => {
   const { state, onToggleSectionContent, renderItems, contentId } = useFilter(props)
 

@@ -6,8 +6,8 @@
  * without pulling in `sites`/`memberOf`/`users` they don't need.
  *
  * Tiering:
- * - **L1 — in-memory singleton.** Module-scoped `Map`. Shared across webparts
- *   mounted on the same page. Zero serialization, zero main-thread blocking.
+ * - **L1 — in-memory singleton.** Module-scoped `Map`, shared by clients of the
+ *   same library bundle; separately bundled solutions keep their own instance.
  * - **L2 — sessionStorage.** Optional, size-guarded per entry. Used only for
  *   small datasets (`sites`, `memberOf`, `users`). The `items` dataset is **not**
  *   persisted to sessionStorage because it can grow large (1000+ projects ×
@@ -21,7 +21,7 @@ export type ProjectsCacheSource =
   'items' | 'sites' | 'memberOf' | 'users' | 'templates' | 'refiners'
 
 const DEFAULT_TTL_MINUTES = 30
-const SESSION_SIZE_LIMIT_BYTES = 1_000_000 // 1 MB per entry
+const SESSION_SIZE_LIMIT_BYTES = 1_000_000
 const SESSION_STORAGE_PREFIX = 'pp365_projects_'
 
 /**
@@ -110,8 +110,7 @@ function writeCache<T>(
 
 /**
  * Get a cached value or populate it by calling `fetcher`. L1 → L2 → fetch.
- * Concurrent calls for the same key share the in-flight Promise so the network
- * is only hit once per page.
+ * Concurrent cache misses for the same key share one in-flight request.
  *
  * @param source Data source identifier (used for L2 filtering).
  * @param siteId Site id the data is scoped to.
@@ -163,7 +162,7 @@ export function invalidateProjectsCache(source: ProjectsCacheSource, siteId: str
     try {
       sessionStorage.removeItem(key)
     } catch {
-      /* swallow storage errors */
+      // Blocked session storage must not make cache invalidation fail.
     }
   }
 }
@@ -183,6 +182,6 @@ export function clearProjectsCache(): void {
     }
     keysToRemove.forEach((key) => sessionStorage.removeItem(key))
   } catch {
-    // ignore
+    // Blocked session storage must not prevent clearing the in-memory cache.
   }
 }

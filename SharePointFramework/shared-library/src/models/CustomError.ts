@@ -1,5 +1,8 @@
 import { MessageBarProps } from '@fluentui/react-components'
 
+/**
+ * Preserves an underlying error with a message intent and optional user-facing text.
+ */
 export class CustomError extends Error {
   public constructor(
     error: Error,
@@ -12,12 +15,7 @@ export class CustomError extends Error {
   }
 
   /**
-   * Creates a `CustomError` object from an `Error` object. A custom message can
-   * also be specified as the third parameter.
-   *
-   * @param error Error object
-   * @param type Severity, rendered as the `intent` of a Fluent UI v9 `MessageBar`
-   * @param message Custom message for the error (optional)
+   * Wraps an error with a message-bar intent and optional user-facing message.
    */
   public static createError(
     error: Error,

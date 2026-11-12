@@ -6,9 +6,7 @@ interface IODataError {
 }
 
 /**
- * Parse odata error
- *
- * @param str Error string
+ * Extracts an OData message from a serialized error suffix, returning null when parsing fails.
  */
 function parseODataError(str: any): string {
   try {
@@ -20,9 +18,7 @@ function parseODataError(str: any): string {
 }
 
 /**
- * Parse error stack which might contain e.g. odata.error object
- *
- * @param stack Stack to parse
+ * Extracts an embedded OData error message, otherwise returning the supplied stack as text.
  */
 export function parseErrorStack(stack: any): string {
   if (stack.toString) {

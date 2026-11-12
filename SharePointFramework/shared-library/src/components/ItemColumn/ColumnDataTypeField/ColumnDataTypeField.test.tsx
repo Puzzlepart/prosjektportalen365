@@ -93,7 +93,6 @@ describe('ColumnDataTypeField', () => {
   it('shows the properties of the selected data type', async () => {
     const user = setupUser()
     render(<Harness defaultSelectedKey='url' />)
-    // The properties start collapsed; the toggle button reveals them.
     await user.click(
       await screen.findByRole('button', { name: strings.ShowDataTypePropertiesLabel })
     )

@@ -22,81 +22,37 @@ const DEFAULT_EXTERNAL_HIDDEN_FIELDS = new Set([
  * An editable field for the `CustomEditPanel`.
  */
 export class EditableSPField extends SPField {
-  /**
-   * The ID of the field.
-   */
   public id: string
 
-  /**
-   * The internal name of the field.
-   */
   public internalName: string
 
-  /**
-   * The display name of the field.
-   */
   public displayName: string
 
-  /**
-   * The description of the field.
-   */
   public description: string
 
-  /**
-   * The type of the field.
-   */
   public type: string
 
-  /**
-   * The column of the field.
-   */
   public column: ProjectColumn
 
-  /**
-   * Whether the field is required or not.
-   */
   public required: boolean
 
-  /**
-   * The number of lines for the field.
-   */
   public numberOfLines?: number
 
-  /**
-   * Whether the field is read-only.
-   */
   public isReadOnly: boolean
 
-  /**
-   * Whether the field is external.
-   */
   private _isExternal: boolean
 
-  /**
-   * The value of the field.
-   */
   private _fieldValue: EditableSPFieldValue
 
-  /**
-   * The map of field values.
-   */
   private _fieldValueMap: ReturnType<typeof createFieldValueMap>
 
-  /**
-   * The current locale.
-   */
   private _currentLocale: string
 
-  /**
-   * The configuration name.
-   */
   private _configurationName: string
 
   /**
    * Constructs a new `EditableSPField` instance from either
    * a `SPField` or `IEntityField`.
-   *
-   * @param _field Field information
    */
   constructor(private _field: SPField) {
     super(_field)
@@ -113,10 +69,6 @@ export class EditableSPField extends SPField {
 
   /**
    * Initializes the field with the columns from `ProjectDataService`.
-   *
-   * @param columns Columns from `ProjectDataService`
-   * @param currentLocale Current locale
-   * @param configurationName Configuration name
    */
   public init(
     columns: (ProjectColumn | ProjectContentColumn)[],
@@ -190,9 +142,7 @@ export class EditableSPField extends SPField {
   /**
    * Get a property for the field by property name.
    *
-   * E.g. `getPropery('ShowInEditForm')` or `getProperty('ShowInDisplayFom')`
-   *
-   * @param propertyName Property name
+   * E.g. `getProperty('ShowInEditForm')` or `getProperty('ShowInDisplayForm')`.
    */
   public getProperty(propertyName: string): string {
     return this._field[propertyName]
@@ -235,7 +185,6 @@ export class EditableSPField extends SPField {
    * the field should be visible for external users with no access to
    * portfolio level.
    *
-   * @param displayMode Display mode to check for
    * @param page Page name to check for, e.g. `Frontpage`, `ProjectStatus`, `Portfolio`
    * @param showFieldExternal Object with field internal name as key and boolean as value
    */

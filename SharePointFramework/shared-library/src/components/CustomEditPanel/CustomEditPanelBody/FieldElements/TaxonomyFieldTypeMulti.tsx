@@ -6,6 +6,9 @@ import { FieldElementComponent } from './types'
 import { getTermPickerProps } from './termPickerProps'
 import { Term, useInitialTaxonomyValues } from './useInitialTaxonomyValues'
 
+/**
+ * Edits multiple taxonomy terms with normalized picker values.
+ */
 export const TaxonomyFieldTypeMulti: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
   const mapInitialValues = useInitialTaxonomyValues()
@@ -35,7 +38,7 @@ export const TaxonomyFieldTypeMulti: FieldElementComponent = ({ field }) => {
       required={field.required}
     >
       <ModernTaxonomyPicker
-        context={context.props.dataAdapter.spfxContext as any} // Newest version of the control requires this cast for now, as context type is incompatibale with other types of SPFxContext
+        context={context.props.dataAdapter.spfxContext as any} // PnP's context type does not accept every host in our SPFxContext union.
         panelTitle={field.description || field.displayName}
         initialValues={normalizeTerms(terms)}
         allowMultipleSelections

@@ -15,6 +15,9 @@ import { useToolbarItems } from './ToolbarItems/useToolbarItems'
  */
 const TIME_LAPSE_MARKER_COLOR = getContrastingShade('#f35d69', TIMELINE_ROW_BACKGROUND) ?? '#f35d69'
 
+/**
+ * Manages timeline details, grouping, filters and calendar renderers.
+ */
 export function useTimeline(props: ITimelineProps) {
   const [showDetails, setShowDetails] = useState<{
     item: ITimelineItem
@@ -26,9 +29,6 @@ export function useTimeline(props: ITimelineProps) {
 
   /**
    * Opens an item's details, from a click or from the keyboard.
-   *
-   * @param event Event
-   * @param item Item
    */
   const onItemClick = (event: React.SyntheticEvent<HTMLDivElement>, item: ITimelineItem) => {
     setShowDetails({ element: event.currentTarget, item })

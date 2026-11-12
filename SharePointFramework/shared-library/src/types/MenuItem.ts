@@ -7,19 +7,10 @@
  * pulling in the full v8 surface.
  */
 export interface IMenuItem<TData = any> {
-  /**
-   * Unique key for the item.
-   */
   key: string
 
-  /**
-   * Text shown for the item.
-   */
   text?: string
 
-  /**
-   * Tooltip for the item.
-   */
   title?: string
 
   /**
@@ -33,9 +24,6 @@ export interface IMenuItem<TData = any> {
    */
   iconProps?: { iconName?: string }
 
-  /**
-   * Invoked when the item is selected.
-   */
   onClick?: (event?: any, item?: IMenuItem<TData>) => void
 
   /**
@@ -48,9 +36,6 @@ export interface IMenuItem<TData = any> {
    */
   canCheck?: boolean
 
-  /**
-   * Checked state for a checkbox entry.
-   */
   checked?: boolean
 
   /**
@@ -63,8 +48,5 @@ export interface IMenuItem<TData = any> {
    */
   target?: string
 
-  /**
-   * Nested entries, rendered as a submenu.
-   */
   subMenuProps?: { items: IMenuItem<TData>[] }
 }

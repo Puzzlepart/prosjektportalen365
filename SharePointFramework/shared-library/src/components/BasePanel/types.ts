@@ -1,26 +1,21 @@
 import React from 'react'
 
 /**
- * Size of the panel. Kept as the two values the repository actually used from
- * the Fluent UI v8 `PanelType`, mapped onto the Fluent UI v9 drawer sizes.
+ * Supported widths of the shared drawer.
  */
 export type BasePanelSize = 'small' | 'medium' | 'large' | 'full'
 
+/**
+ * Configures a shared drawer and its header, body and dismissal behavior.
+ */
 export interface IBasePanelProps<T extends string = string> {
-  /**
-   * Class name applied to the drawer.
-   */
   className?: string
 
   /**
-   * The type of the panel. Used for deciding if the
-   * panel should be open or not.
+   * Caller-side panel discriminator; the drawer's visibility is controlled only by open.
    */
   $type?: T
 
-  /**
-   * Whether the panel is open.
-   */
   open?: boolean
 
   /**
@@ -29,9 +24,6 @@ export interface IBasePanelProps<T extends string = string> {
    */
   onClose?: () => void
 
-  /**
-   * Text shown in the panel header.
-   */
   headerText?: string
 
   /**
@@ -51,9 +43,6 @@ export interface IBasePanelProps<T extends string = string> {
    */
   isLightDismiss?: boolean
 
-  /**
-   * Accessible name for the close button.
-   */
   closeButtonAriaLabel?: string
 
   /**

@@ -15,11 +15,7 @@ import resource from 'SharedResources'
 import { format } from '../../util'
 
 /**
- * Creating groups based on projects title
- *
- * @param projects Projects
- *
- * @returns Timeline groups
+ * Creates sorted timeline rows, grouping projects with the same title together.
  */
 const createProjectGroups = (projects: ProjectListModel[]): ITimelineGroup[] => {
   const mappedProjects = _.uniq(projects.map((project) => project.title)).map((title) => {
@@ -47,11 +43,7 @@ const createProjectGroups = (projects: ProjectListModel[]): ITimelineGroup[] => 
 }
 
 /**
- * Transform items for timeline
- *
- * @param timelineItems Timeline items
- * @param groups Groups
- * @returns Timeline items
+ * Maps configured timeline content to its project row, dates and rendering metadata.
  */
 const transformItems = (
   timelineItems: TimelineContentModel[],
@@ -128,11 +120,7 @@ const transformItems = (
 }
 
 /**
- * Fetch data for ProjectTimeline
- *
- * @param props Component properties for `ProjectTimeline`
- *
- * @returns `ProjectTimeline` state
+ * Loads project timelines and configuration, returning shaped data or a request error.
  */
 const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProjectTimelineState>> => {
   try {
@@ -211,10 +199,7 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
 }
 
 /**
- * Fetch hook for ProjectTimeline
- *
- * @param props Component properties for `ProjectTimeline`
- * @param fetchCallback Fetch callback
+ * Loads timeline data once on mount and reports the resulting state.
  */
 export const useProjectTimelineDataFetch = (
   props: IProjectTimelineProps,

@@ -5,11 +5,12 @@ import { IBasePanelProps } from '../BasePanel'
 import { UseModelReturnType } from './useModel'
 import { IWeb } from '@pnp/sp/webs'
 
+/**
+ * Defines edit-panel submission and its progress and error messages.
+ */
 export interface ICustomEditPanelSubmitProps extends Pick<ButtonProps, 'disabled'> {
   /**
    * Callback function to execute when the submit button is clicked.
-   *
-   * @param model The model to submit.
    */
   onSubmit: (model: UseModelReturnType) => Promise<void>
 
@@ -30,15 +31,12 @@ export interface ICustomEditPanelSubmitProps extends Pick<ButtonProps, 'disabled
   error?: string
 }
 
+/**
+ * Configures SharePoint fields, values and submission for an edit drawer.
+ */
 export interface ICustomEditPanelProps extends IBasePanelProps {
-  /**
-   * The fields to edit in the panel.
-   */
   fields: EditableSPField[]
 
-  /**
-   * Field values for the list item
-   */
   fieldValues: ItemFieldValues
 
   /**
@@ -47,9 +45,6 @@ export interface ICustomEditPanelProps extends IBasePanelProps {
    */
   dataAdapter: SPDataAdapterBase
 
-  /**
-   * The fields to be hidden in the panel.
-   */
   hiddenFields?: string[]
 
   /**
@@ -70,13 +65,7 @@ export interface ICustomEditPanelProps extends IBasePanelProps {
    */
   allowedLookupValues?: Record<string, string[]>
 
-  /**
-   * The submit button props.
-   */
   submit?: ICustomEditPanelSubmitProps
 
-  /**
-   * Render the panel in debug mode.
-   */
   debug?: boolean
 }

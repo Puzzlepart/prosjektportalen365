@@ -2,17 +2,13 @@ import { Logger, LogLevel } from '@pnp/logging'
 import React from 'react'
 import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from './types'
 
+/**
+ * Legacy class-component base providing scoped PnP logging.
+ */
 export class BaseWebPartComponent<
   T1 extends IBaseWebPartComponentProps,
   T2 extends IBaseWebPartComponentState<any>
 > extends React.Component<T1, T2> {
-  /**
-   * Constructor
-   *
-   * @param _name Component name
-   * @param props Props
-   * @param state Initial state
-   */
   constructor(
     private _name: string,
     props: T1,
@@ -23,33 +19,21 @@ export class BaseWebPartComponent<
   }
 
   /**
-   * Logs a info message
-   *
-   * @param message Message to log
-   * @param scope Scope (normally the function calling the function)
-   * @param data Data
+   * Logs an informational message with the component name and calling scope.
    */
   public logInfo(message: string, scope: string, data?: any) {
     Logger.log({ message: `(${this._name}) (${scope}) ${message}`, data, level: LogLevel.Info })
   }
 
   /**
-   * Logs a warning message
-   *
-   * @param message Message to log
-   * @param scope Scope (normally the function calling the function)
-   * @param data Data
+   * Logs a warning with the component name and calling scope.
    */
   public logWarning(message: string, scope: string, data?: any) {
     Logger.log({ message: `(${this._name}) (${scope}) ${message}`, data, level: LogLevel.Warning })
   }
 
   /**
-   * Logs a warning message
-   *
-   * @param message Message to log
-   * @param scope Scope (normally the function calling the function)
-   * @param data Data
+   * Logs an error with the component name and calling scope.
    */
   public logError(message: string, scope: string, data?: any) {
     Logger.log({ message: `(${this._name}) (${scope}) ${message}`, data, level: LogLevel.Error })

@@ -3,6 +3,9 @@ import { FluentIconName } from '../../icons/types'
 import type { IDatePickerLocalization } from '../../util/getDatePickerLocalization'
 import { IFieldContainerProps } from '../FieldContainer'
 
+/**
+ * Configures a localized calendar-day field and its validation feedback.
+ */
 export interface IDateFieldProps extends Pick<
   IFieldContainerProps,
   'label' | 'description' | 'required' | 'hidden' | 'validationState' | 'validationMessage'
@@ -29,9 +32,6 @@ export interface IDateFieldProps extends Pick<
    */
   placeholder?: string
 
-  /**
-   * Whether the picker is disabled.
-   */
   disabled?: boolean
 }
 
@@ -44,9 +44,6 @@ export interface IDateFieldState {
    */
   popupRef?: HTMLDivElement
 
-  /**
-   * Takes the popup element's ref.
-   */
   setPopupRef: RefCallback<HTMLDivElement>
 
   /**

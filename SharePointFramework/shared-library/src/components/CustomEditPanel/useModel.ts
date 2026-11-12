@@ -7,11 +7,7 @@ import { toCalendarDate } from '../../util/formatDate'
 import { ICustomEditPanelProps } from './types'
 
 /**
- * Hook for the `CustomEditPanel` model. This hook is used to get and set the values for
- * the fields in the `CustomEditPanel`, as well as to transform the values to the correct type
- * for the `property` object that can be sent as a request body to the API.
- *
- * @param props - The `CustomEditPanel` props.
+ * Tracks edited field values and serializes pending changes into a SharePoint update payload.
  */
 export function useModel(props: ICustomEditPanelProps) {
   const [model, setModel] = useState(new Map<string, any>())
@@ -20,7 +16,6 @@ export function useModel(props: ICustomEditPanelProps) {
   /**
    * Get value for field.
    *
-   * @param field Field to get value for
    * @param fallbackValue Value to return if the field has no value
    */
   function get<T>(field: EditableSPField, fallbackValue: T = null): T {
@@ -34,9 +29,6 @@ export function useModel(props: ICustomEditPanelProps) {
 
   /**
    * Transform value for the field returning the internal name of the field and the transformed value.
-   *
-   * @param value Value to be transformed
-   * @param field Field to transform the value for
    *
    * @returns The transformed value and the internal name of the field (might be different from the field's internal name)
    */
@@ -128,7 +120,6 @@ export function useModel(props: ICustomEditPanelProps) {
   /**
    * Set value for field.
    *
-   * @param field Field to set value for
    * @param value Value to set (will be transformed to the correct type for the field)
    */
   const set = async <T>(field: EditableSPField, value: T) => {
@@ -167,4 +158,7 @@ export function useModel(props: ICustomEditPanelProps) {
   return { model, set, get, properties, isChanged, reset }
 }
 
+/**
+ * Exposes read/write access to the edit model and its pending SharePoint updates.
+ */
 export type UseModelReturnType = ReturnType<typeof useModel>

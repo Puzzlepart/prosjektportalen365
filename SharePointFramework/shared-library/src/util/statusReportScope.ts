@@ -69,8 +69,6 @@ export function parseScopedSiteId(value: string): IScopedSiteId {
  * Normalizes a scope key for comparisons and map keys. `null`, `undefined`
  * and empty values all normalize to an empty string, which represents the
  * default report series. Scope keys are compared case-insensitively.
- *
- * @param scopeKey Scope key
  */
 export function getScopeSeriesKey(scopeKey?: string): string {
   return (scopeKey ?? '').trim().toLowerCase()
@@ -144,8 +142,6 @@ function getListItemId(report: Record<string, any>): number {
 /**
  * Sorts status report search results latest-first by numeric `ListItemId`
  * (hub list item IDs are creation-ordered). Returns a new array.
- *
- * @param reports Status report search results
  */
 export function sortStatusReportsLatestFirst<T extends Record<string, any>>(reports: T[]): T[] {
   return [...reports].sort((a, b) => getListItemId(b) - getListItemId(a))

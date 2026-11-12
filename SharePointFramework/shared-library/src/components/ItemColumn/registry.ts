@@ -21,14 +21,7 @@ import { CalculatedColumn } from './CalculatedColumn'
 import { ColumnRenderComponent } from './types'
 
 /**
- * A registry for column render components and column data type field options.
- *
- * @method register Registers a new column render component to the registry.
- * @method registerMultiple Registers multiple column render components to the registry.
- * @method registerColumnRenderOption Registers a new column data type field option to the registry without a corresponding column render component.
- * @method getComponents Returns an array of all registered column render components.
- * @method getOptions Returns an array of column data type field dropdown options for all registered column render components.
- * @method getOption Returns a column data type field dropdown option for a specific column render component.
+ * Registers cell renderers and the configuration choices shown by the column editor.
  */
 export class ColumnRenderComponentRegistry {
   private static components: Map<string, ColumnRenderComponent<any> | IColumnDataTypeFieldOption> =
@@ -36,15 +29,7 @@ export class ColumnRenderComponentRegistry {
   private static options: IColumnDataTypeFieldOption[] = []
 
   /**
-   * Creates a new column data type field option object.
-   *
-   * @param key The unique key for the column data type field option.
-   * @param id The unique ID for the column data type field option.
-   * @param text The display text for the column data type field option.
-   * @param iconName The name of the icon to display for the column data type field option.
-   * @param data Optional data to attach to the column data type field option.
-   *
-   * @returns A new column data type field option object.
+   * Builds a renderer choice with its stored ID, display text and icon.
    */
   private static createOption(
     key: string,
@@ -65,12 +50,7 @@ export class ColumnRenderComponentRegistry {
   }
 
   /**
-   * Creates a new column data type field option object from a column render component.
-   *
-   * @param component The column render component to create the option from.
-   * @param getDataTypeProperties A function that returns an array of data type properties for the component.
-   *
-   * @returns A new column data type field option object.
+   * Builds a renderer choice, returning null when the component has no display name.
    */
   private static createOptionFromComponent(
     component: ColumnRenderComponent<any>,
@@ -92,19 +72,14 @@ export class ColumnRenderComponentRegistry {
   }
 
   /**
-   * Registers multiple column render components to the registry.
-   *
-   * @param components An array of column render components to register.
+   * Registers each supplied renderer, leaving existing keys unchanged.
    */
   public static registerMultiple(...components: ColumnRenderComponent<any>[]) {
     components.forEach((component) => ColumnRenderComponentRegistry.register(component))
   }
 
   /**
-   * Registers a new column render component to the registry.
-   *
-   * @param component The column render component to register.
-   * @param getDataTypeProperties A function that returns an array of data type properties for the component.
+   * Registers a renderer with a key, stored ID and icon; duplicate keys are ignored.
    */
   public static register(component: ColumnRenderComponent<any>) {
     if (ColumnRenderComponentRegistry.components.has(component.key)) {
@@ -137,12 +112,7 @@ export class ColumnRenderComponentRegistry {
   }
 
   /**
-   * Registers a new column data type field option to the registry without a corresponding column render component.
-   *
-   * @param key The unique key for the column data type field option.
-   * @param id The unique ID for the column data type field option.
-   * @param text The display text for the column data type field option.
-   * @param iconName The name of the icon to display for the column data type field option.
+   * Registers an editor choice without a corresponding cell renderer.
    */
   public static registerColumnRenderOption(
     key: string,
@@ -160,9 +130,7 @@ export class ColumnRenderComponentRegistry {
   }
 
   /**
-   * Returns an array of all registered column render components.
-   *
-   * @returns An array of all registered column render components.
+   * Returns registered cell-rendering components, excluding standalone editor choices.
    */
   public static getComponents() {
     return Array.from(ColumnRenderComponentRegistry.components.values()).filter(
@@ -171,11 +139,7 @@ export class ColumnRenderComponentRegistry {
   }
 
   /**
-   * Returns an array of column data type field dropdown options for all registered column render components
-   * and column data type field options without a corresponding column render component.
-   *
-   * @returns An array of column data type field dropdown options for all registered column render components
-   * and column data type field options without a corresponding column render component.
+   * Builds and caches editor choices from the registered renderers and standalone options.
    */
   public static getOptions(): IColumnDataTypeFieldOption[] {
     if (!_.isEmpty(ColumnRenderComponentRegistry.options)) {
@@ -195,11 +159,7 @@ export class ColumnRenderComponentRegistry {
   }
 
   /**
-   * Returns the column data type field option with the specified key.
-   *
-   * @param key The unique key of the column data type field option to retrieve.
-   *
-   * @returns The column data type field option with the specified key.
+   * Finds an editor choice by its registry key.
    */
   static getOption(key: string): IColumnDataTypeFieldOption {
     if (!_.isEmpty(ColumnRenderComponentRegistry.options)) {
@@ -209,11 +169,7 @@ export class ColumnRenderComponentRegistry {
   }
 
   /**
-   * Returns the column render component with the specified key.
-   *
-   * @param key The unique key of the column render component to retrieve.
-   *
-   * @returns The column render component with the specified key.
+   * Finds a cell renderer by key, returning null for missing or standalone choices.
    */
   static getComponent(key: string) {
     const component = ColumnRenderComponentRegistry.components.get(key)
@@ -225,9 +181,7 @@ export class ColumnRenderComponentRegistry {
 }
 
 /**
- * A hook that provides access to the column render component registry.
- *
- * @returns An object containing methods to interact with the column render component registry.
+ * Registers built-in cell renderers and text/note editor choices after mount.
  */
 export function useColumnRenderComponentRegistry() {
   useEffect(() => {

@@ -11,6 +11,9 @@ import {
 } from './taxonomyHierarchy'
 import { IFilterProps, IFilterState } from './types'
 
+/**
+ * Manages flat or hierarchical filter selection and section expansion.
+ */
 export function useFilter(props: IFilterProps) {
   const isHierarchy = useMemo(
     () => shouldRenderAsHierarchy(props.column, props.items),
@@ -38,9 +41,6 @@ export function useFilter(props: IFilterProps) {
 
   /**
    * On change filter item
-   *
-   * @param item Item that was changed
-   * @param checked Item checked
    */
   const onChange = (item: IFilterItemProps, checked: boolean) => {
     const items = state.items.map((i) => {
@@ -61,8 +61,6 @@ export function useFilter(props: IFilterProps) {
    * indeterminate (a parent is only checked solid when explicitly selected). The
    * selected paths are emitted as filter values — the portfolio substring filter
    * then matches the whole branch when a parent path is selected.
-   *
-   * @param node Node that was toggled
    */
   const onToggleSelect = (node: ITaxonomyTreeNode) => {
     const nextSelected = new Set(selectedPaths)
@@ -86,8 +84,6 @@ export function useFilter(props: IFilterProps) {
 
   /**
    * On toggle the expanded state of a hierarchy node.
-   *
-   * @param node Node that was toggled
    */
   const onToggleExpand = (node: ITaxonomyTreeNode) => {
     setExpandedPaths((prevPaths) => {
@@ -134,7 +130,6 @@ export function useFilter(props: IFilterProps) {
     ))
   }
 
-  // The section's button names the content it folds (aria-controls).
   const contentId = useId('filter-section')
 
   return { state, onToggleSectionContent, renderItems, contentId }

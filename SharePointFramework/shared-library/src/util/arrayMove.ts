@@ -1,9 +1,5 @@
 /**
- * Moves an element in the array to a new index.
- *
- * @param arr Array to be moved
- * @param old_index Old index of the array
- * @param new_index New index of the array
+ * Returns a reordered copy of an array, padding with undefined when the new index exceeds its length.
  */
 export function arrayMove(arr: any[], old_index: number, new_index: number) {
   const _arr = [...arr]

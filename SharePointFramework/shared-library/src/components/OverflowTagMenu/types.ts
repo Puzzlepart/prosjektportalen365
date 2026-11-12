@@ -1,10 +1,16 @@
 import { InteractionTagProps } from '@fluentui/react-components'
 import { FluentIcon } from '@fluentui/react-icons/lib/utils/createFluentIcon'
 
+/**
+ * Supplies the tag represented by an overflow menu item.
+ */
 export type OverflowMenuItemProps = {
   tag: InteractionTagProps
 }
 
+/**
+ * Configures visible tags and their overflow menu.
+ */
 export interface IOverflowTagMenuProps {
   /**
    * The name of the tags' list, read by screen readers: what the tags are, such as the field's
@@ -12,14 +18,8 @@ export interface IOverflowTagMenuProps {
    */
   text?: string
 
-  /**
-   * Whether the tags are hidden or not.
-   */
   hidden?: boolean
 
-  /**
-   * The tags to display
-   */
   tags: string[]
 
   /**
@@ -27,9 +27,6 @@ export interface IOverflowTagMenuProps {
    */
   minimumVisibleTags?: number
 
-  /**
-   * The icon to display
-   */
   icon?: FluentIcon
 
   /**

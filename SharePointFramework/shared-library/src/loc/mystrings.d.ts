@@ -1,3 +1,6 @@
+/**
+ * Declares the localized strings exposed by the shared library's SPFx resource module.
+ */
 declare interface ISharedLibraryStrings {
   NoAccessToPortfolioErrorTitle: string
   NoAccessToPortfolioErrorText: string

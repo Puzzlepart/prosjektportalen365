@@ -1,7 +1,5 @@
 /**
- * Converts string to array buffer
- *
- * @param str String
+ * Copies each string code unit's low byte to an ArrayBuffer; this is not UTF-8 encoding.
  */
 export function stringToArrayBuffer(str: string) {
   const buf = new ArrayBuffer(str.length)

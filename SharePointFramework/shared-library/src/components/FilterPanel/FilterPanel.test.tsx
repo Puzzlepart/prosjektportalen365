@@ -123,13 +123,11 @@ describe('FilterPanel', () => {
     const onFilterChange = renderPanel([
       filter(TAGS, ['Helse:Sykehjem', 'Helse:Legevakt', 'Skole'])
     ])
-    // Every branch is open from the start.
     expect(checkbox('Sykehjem')).toBeInTheDocument()
     fireEvent.click(checkbox('Sykehjem'))
     expect(onFilterChange).toHaveBeenLastCalledWith(TAGS, [
       expect.objectContaining({ name: 'Sykehjem', value: 'Helse:Sykehjem', selected: true })
     ])
-    // A parent with a selected child shows as partly selected.
     expect(checkbox('Helse')).toBePartiallyChecked()
     fireEvent.click(checkbox('Helse'))
     expect(onFilterChange.mock.calls[1][1].map(({ value }) => value)).toEqual([

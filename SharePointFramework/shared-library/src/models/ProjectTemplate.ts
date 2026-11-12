@@ -6,6 +6,9 @@ import { UserSelectableObject } from './UserSelectableObject'
 import { IWeb } from '@pnp/sp/webs'
 import { PP_PKG_TYPE } from './PpPkg'
 
+/**
+ * Describes a stored project template, its configuration and package metadata.
+ */
 export interface IProjectTemplateSPItem {
   Id?: number
   IsDefaultTemplate?: boolean
@@ -42,7 +45,7 @@ export interface IProjectTemplateSPItem {
 }
 
 /**
- * @model ProjectTemplate
+ * Resolves a project template's provisioning schema, content types and selectable content.
  */
 export class ProjectTemplate extends UserSelectableObject {
   public iconProps: { iconName: string }
@@ -73,7 +76,6 @@ export class ProjectTemplate extends UserSelectableObject {
   /**
    * Constructs a new `ProjectTemplate` instance
    *
-   * @param spItem SharePoint list item
    * @param web The `Web` instance (from `@pnp/sp`) to use when loading the template schema.
    * Does not need to be specified if the schema doesn't need to be loaded.
    */
@@ -158,8 +160,6 @@ export class ProjectTemplate extends UserSelectableObject {
 
   /**
    * Get content configurations for the template
-   *
-   * @param contentConfig Available content configurations
    */
   public getContentConfig(contentConfig: ContentConfig[]) {
     return contentConfig.filter(
@@ -169,8 +169,6 @@ export class ProjectTemplate extends UserSelectableObject {
 
   /**
    * Get extensions for the template
-   *
-   * @param extensions Available extensions
    */
   public getExtensions(extensions: ProjectExtension[]) {
     return extensions.filter(

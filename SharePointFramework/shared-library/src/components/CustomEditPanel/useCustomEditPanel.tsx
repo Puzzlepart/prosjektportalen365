@@ -6,14 +6,7 @@ import { useEditableFields } from './useEditableFields'
 import { useModel } from './useModel'
 
 /**
- * Hook for `CustomEditPanel` component. Generates fields and field elements
- * using hooks and provides them to the component. Also handles submitting the
- * form and syncing the property list fields.
- *
- * @returns The following properties:
- * - `fields` - the fields to render
- * - `getFieldElement` - a function that returns the field element for a given field
- * - `model` - the model for the form
+ * Combines editable fields, their renderers and the model with save validation.
  */
 export function useCustomEditPanel(props: ICustomEditPanelProps) {
   const fields = useEditableFields(props)

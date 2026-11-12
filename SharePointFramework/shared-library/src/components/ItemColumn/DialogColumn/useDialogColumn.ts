@@ -5,11 +5,7 @@ import _ from 'lodash'
 import { useColumns } from './useColumns'
 
 /**
- * Hook that returns the necessary props for rendering a dialog with a list of items.
- *
- * @param props - The props for the dialog column.
- *
- * @returns An object containing the necessary props for rendering a dialog column.
+ * Parses measurement history and supplies its dialog headings, information text and columns.
  */
 export function useDialogColumn(props: IDialogColumnProps) {
   const infoText = useInfoText(props)

@@ -1,6 +1,9 @@
 import { IUserMessageProps } from './types'
 import { CSSProperties } from 'react'
 
+/**
+ * Computes legacy centering and compact spacing styles for user messages.
+ */
 export function useUserMessage(props: IUserMessageProps): { styles: CSSProperties } {
   let styles: CSSProperties = {}
 

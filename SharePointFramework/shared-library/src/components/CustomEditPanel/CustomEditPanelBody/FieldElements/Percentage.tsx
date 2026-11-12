@@ -5,6 +5,9 @@ import { FieldContainer } from '../../../FieldContainer'
 import { useCustomEditPanelContext } from '../../context'
 import { FieldElementComponent } from './types'
 
+/**
+ * Edits a percentage from 0 to 100 while storing its fractional value.
+ */
 export const Percentage: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
 

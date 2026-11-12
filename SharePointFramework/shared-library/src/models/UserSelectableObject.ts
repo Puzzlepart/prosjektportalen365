@@ -1,3 +1,6 @@
+/**
+ * Provides selection metadata while hiding locked, non-default choices.
+ */
 export class UserSelectableObject {
   /**
    * The `key` is the same as the `id` and corresponds to the item ID

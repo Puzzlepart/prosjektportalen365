@@ -11,6 +11,9 @@ const FILE_NAME_COLUMN_DEFAULT_PROPS: Partial<IFileNameColumnProps> = {
   showFileExtensionIcon: true
 }
 
+/**
+ * Displays a file name with an optional type icon and document-opening link.
+ */
 export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, FILE_NAME_COLUMN_DEFAULT_PROPS)
   const contentTypeId = props.item.ContentTypeId || ''

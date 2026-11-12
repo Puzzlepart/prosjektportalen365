@@ -12,6 +12,9 @@ const URL_COLUMN_DEFAULT_PROPS: Partial<IUrlColumnProps> = {
   description: null
 }
 
+/**
+ * Displays a link with configured text, then its own description or address as fallback.
+ */
 export const UrlColumn: ColumnRenderComponent<IUrlColumnProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, URL_COLUMN_DEFAULT_PROPS)
   if (!props.columnValue) {

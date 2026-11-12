@@ -9,30 +9,18 @@ import { hasSelectedDescendant, ITaxonomyTreeNode } from './taxonomyHierarchy'
  */
 const INDENT_PER_LEVEL = 16
 
+/**
+ * Supplies taxonomy nodes, selection and expansion controls to the filter tree.
+ */
 export interface ITaxonomyFilterTreeProps {
-  /**
-   * Nodes to render at this level.
-   */
   nodes: ITaxonomyTreeNode[]
 
-  /**
-   * Paths that are explicitly selected.
-   */
   selectedPaths: Set<string>
 
-  /**
-   * Paths of nodes that are expanded.
-   */
   expandedPaths: Set<string>
 
-  /**
-   * Toggle the selected state of a node.
-   */
   onToggleSelect: (node: ITaxonomyTreeNode) => void
 
-  /**
-   * Toggle the expanded state of a node.
-   */
   onToggleExpand: (node: ITaxonomyTreeNode) => void
 }
 

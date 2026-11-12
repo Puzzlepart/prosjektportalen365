@@ -10,7 +10,7 @@ interface ISPFolderData {
 }
 
 /**
- * @model SPFolder
+ * Maps a document library or folder and its descendants, excluding the Forms system folder.
  */
 export class SPFolder {
   public id: string
@@ -18,11 +18,6 @@ export class SPFolder {
   public url: string
   public folders: SPFolder[]
 
-  /**
-   * Constructor
-   *
-   * @param _data Data
-   */
   constructor(private _data: ISPFolderData) {
     this.id = _data?.Id || _data?.UniqueId
     this.name = _data?.Title || _data?.Name
@@ -33,18 +28,14 @@ export class SPFolder {
   }
 
   /**
-   * Is system folder
-   *
-   * Returns true if the folder name is Forms
+   * Identifies SharePoint's Forms system folder.
    */
   public get isSystemFolder(): boolean {
     return this.name === 'Forms'
   }
 
   /**
-   * Checks if the folder is root level meaning it's a library.
-   *
-   * Checks if BaseTemplate is 101
+   * Identifies document libraries by SharePoint base template 101.
    */
   public get isLibrary() {
     return this._data.BaseTemplate === 101

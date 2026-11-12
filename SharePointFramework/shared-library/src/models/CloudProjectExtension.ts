@@ -16,7 +16,6 @@ export class CloudProjectExtension extends ProjectExtension {
   /**
    * Build a `CloudProjectExtension` from a manifest extension entry.
    *
-   * @param ext Manifest extension entry
    * @param pkg Resolved cloud template package (source of the bundled schema)
    * @param id Synthetic, unique id within the cloud extension set
    */

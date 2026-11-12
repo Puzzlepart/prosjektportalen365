@@ -17,6 +17,9 @@ const TOOLBAR_DEFAULT_PROPS: Partial<IToolbarProps> = {
   farItems: []
 }
 
+/**
+ * Renders shared commands, menus and search fields with an optional filter drawer.
+ */
 export const Toolbar: FC<IToolbarProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, TOOLBAR_DEFAULT_PROPS)
   const fluentProviderId = useId('fp-toolbar')

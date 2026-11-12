@@ -10,7 +10,6 @@ const MANAGED_PROPERTY_SUFFIX = /OWS(NMBR|CHCS|BOOL|TEXT|DATE|MTXT|MJSN|USER)$/
  * `fieldName` -> `internalName`) takes precedence; stripping a well-known
  * managed property suffix is the fallback. Existing keys are never overwritten.
  *
- * @param searchResult Search result to map
  * @param fieldNameMap Map of managed property names to internal names
  */
 export function mapManagedPropertiesToInternalNames(

@@ -1,6 +1,9 @@
 import { IFilterItemProps } from '../FilterItem/types'
 import { IListColumn } from '../../../types'
 
+/**
+ * Defines a column's filter values, grouping and change callback.
+ */
 export interface IFilterProps {
   column: IListColumn
   items: IFilterItemProps[]
@@ -14,6 +17,9 @@ export interface IFilterProps {
   onFilterChange?: (column: IListColumn, selectedItems: IFilterItemProps[]) => void
 }
 
+/**
+ * Tracks a filter section's collapse state and selectable values.
+ */
 export interface IFilterState {
   isCollapsed: boolean
   items: IFilterItemProps[]

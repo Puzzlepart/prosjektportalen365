@@ -1,7 +1,6 @@
 // Matches a `{0}` style token. Deliberately only digits, as in Fluent UI v8.
 const FORMAT_REGEX = /\{\d+\}/g
 
-// Strips the braces off a matched token so it can be used as a lookup key.
 const FORMAT_BRACES_REGEX = /[{}]/g
 
 /**

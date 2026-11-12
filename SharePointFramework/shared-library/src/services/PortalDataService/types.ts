@@ -8,6 +8,9 @@ import { LogLevel } from '@pnp/logging'
 import resource from 'SharedResources'
 
 import { format } from '../../util'
+/**
+ * Identifies a provisioned hub list used by the portal data service.
+ */
 export type PortalDataServiceList =
   | 'PROJECTS'
   | 'STATUS_SECTIONS'
@@ -25,10 +28,10 @@ export type PortalDataServiceList =
   | 'GLOBAL_SETTINGS'
   | 'TIMELINE_CONTENT'
 
+/**
+ * Configures the hub client, localized list names and logging.
+ */
 export interface IPortalDataServiceConfiguration extends Object {
-  /**
-   * The SPFx context to use for the data service.
-   */
   spfxContext?: SPFxContext
 
   /**
@@ -57,93 +60,45 @@ export interface IPortalDataServiceConfiguration extends Object {
    * get intellisense for the list names for the different languages.
    */
   listNames?: {
-    /**
-     * The name of the list for status sections.
-     */
     STATUS_SECTIONS?: string
 
-    /**
-     * The name of the list for project columns.
-     */
     PROJECT_COLUMNS?: string
 
-    /**
-     * The name of the list for project column configuration.
-     */
     PROJECT_COLUMN_CONFIGURATION?: string
 
-    /**
-     * The name of the list for projects.
-     */
     PROJECTS?: string
 
-    /**
-     * The name of the list for project status.
-     */
     PROJECT_STATUS?: string
 
-    /**
-     * The name of the list for project status attachments.
-     */
     PROJECT_STATUS_ATTACHMENTS?: string
 
-    /**
-     * The name of the list for portfolio views.
-     */
     PORTFOLIO_VIEWS?: string
 
-    /**
-     * The name of the list for project content columns.
-     */
     PROJECT_CONTENT_COLUMNS?: string
 
-    /**
-     * The name of the list for data sources.
-     */
     DATA_SOURCES?: string
 
-    /**
-     * The name of the list for project admin roles.
-     */
     PROJECT_ADMIN_ROLES?: string
 
-    /**
-     * The name of the list for project template configuration.
-     */
     PROJECT_TEMPLATE_CONFIGURATION?: string
 
-    /**
-     * The name of the list for project data.
-     */
     PROJECT_DATA?: string
 
-    /**
-     * The name of the list for idea processing.
-     */
     IDEA_PROCESSING?: string
 
-    /**
-     * The name of the list for global settings.
-     */
     GLOBAL_SETTINGS?: string
 
-    /**
-     * The name of the list for timeline content.
-     */
     TIMELINE_CONTENT?: string
   }
 
-  /**
-   * The XML for the template parameters field.
-   */
   templateParametersFieldXml?: string
 
-  /**
-   * The active log level for the data service.
-   */
   activeLogLevel?: LogLevel
 }
 
+/**
+ * Uses provisioned hub list names, template-field XML and disabled logging by default.
+ */
 export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceConfiguration> = {
   listNames: {
     STATUS_SECTIONS: resource.Lists_StatusSections_Title,
@@ -167,6 +122,9 @@ export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceCo
   activeLogLevel: LogLevel.Off
 }
 
+/**
+ * Controls status-report filtering, selected fields, paging and caching.
+ */
 export type GetStatusReportsOptions = {
   filter?: string
   top?: number
@@ -181,48 +139,37 @@ export type GetStatusReportsOptions = {
   userFields?: string[]
 }
 
+/**
+ * Configures a destination list's content-type and field synchronization.
+ */
 export type SyncListParams = {
-  /**
-   * The URL of the SharePoint site.
-   */
   url: string
 
-  /**
-   * The name of the list to sync.
-   */
   listName: string
 
-  /**
-   * The content type ID to use for the list.
-   */
   contentTypeId: string
 
-  /**
-   * The properties to set on the list item.
-   */
   properties?: Record<string, string>
 
   /**
    * Progress function to call during the sync process.
-   *
-   * @param progress The progress text to display.
    */
   progressFunc?: (progress: string) => void
 }
 
+/**
+ * Returns the ensured list and the fields added during synchronization.
+ */
 export interface ISyncListReturnType extends IListEnsureResult {
   fieldsAdded: SPField[]
 }
 
+/**
+ * Summarizes a project's identity and parent or program status.
+ */
 export interface IProjectDetails {
-  /**
-   * The item ID of the project.
-   */
   id: number
 
-  /**
-   * The title of the project.
-   */
   title: string
 
   /**
@@ -234,8 +181,6 @@ export interface IProjectDetails {
 
 /**
  * Generates an error for when the user does not have access to the portfolio.
- *
- * @param url The URL of the portfolio
  */
 export const NoAccessToPortfolioError = (url: string): ErrorWithIntent => {
   const error = new ErrorWithIntent(

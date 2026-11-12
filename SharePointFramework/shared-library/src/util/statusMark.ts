@@ -26,8 +26,6 @@ export interface IStatusMark {
 
 /**
  * The hue (0 to 360) and saturation (0 to 1) of a colour, as HSL has them.
- *
- * @param color The colour
  */
 function getHueAndSaturation([red, green, blue]: RgbColor): [number, number] {
   const [r, g, b] = [red / 255, green / 255, blue / 255]
@@ -47,8 +45,6 @@ function getHueAndSaturation([red, green, blue]: RgbColor): [number, number] {
 /**
  * The shape a status colour stands for: a check for green, a warning for yellow and orange, a
  * cross for red. Grey, blue and other colours say nothing of how a status is, so they have none.
- *
- * @param color The status colour
  */
 function getShapeForColor(color: string): string | null {
   const parsed = parseColor(color)
@@ -66,9 +62,6 @@ function getShapeForColor(color: string): string | null {
  * shape is the status value's own icon (`GtPortfolioColumnIconName` in
  * `Prosjektkolonnekonfigurasjon`) where it has one, otherwise the shape its colour stands for.
  * `null` when there is neither.
- *
- * @param color The status colour
- * @param iconName The status value's own icon
  */
 export function getStatusMark(color?: string, iconName?: string): IStatusMark | null {
   const ownIcon = iconName?.trim() ?? ''

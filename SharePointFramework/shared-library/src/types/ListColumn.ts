@@ -1,22 +1,9 @@
 import { MouseEvent, ReactNode } from 'react'
 
 /**
- * A column in a list, as the solutions describe one.
- *
- * Replaces `IColumn` from Fluent UI v8 everywhere except inside the one shared v8 list (Decision A).
- * `IProjectColumn` and `IProjectContentColumn` used to extend `IColumn`, which pulled the whole v8
- * column surface into every file that touched a column. This declares the members the repository
- * actually reads and writes — measured on 2026-09-28 — and nothing else.
- *
- * It is deliberately a structural subset of the v8 `IColumn`, with the same names and types, so a
- * value of this type can be handed straight to the v8 list without a cast, and a v8 column can be
- * read as one of these. That is what lets the hub keep v8 inside while everything around it stops
- * depending on it.
+ * Describes a list column's value source, renderer, sizing and header interactions.
  */
 export interface IListColumn<TItem = any> {
-  /**
-   * Unique key for the column.
-   */
   key: string
 
   /**
@@ -35,23 +22,14 @@ export interface IListColumn<TItem = any> {
   minWidth: number
 
   /**
-   * Widest the column may become, in pixels.
+   * Preferred starting width in pixels; the shared grid adapters map it to defaultWidth.
    */
   maxWidth?: number
 
-  /**
-   * Whether the user may resize the column.
-   */
   isResizable?: boolean
 
-  /**
-   * Whether the list is currently sorted on this column.
-   */
   isSorted?: boolean
 
-  /**
-   * Sort direction, when sorted on this column.
-   */
   isSortedDescending?: boolean
 
   /**
@@ -59,14 +37,8 @@ export interface IListColumn<TItem = any> {
    */
   isMultiline?: boolean
 
-  /**
-   * Icon shown in the header, by name.
-   */
   iconName?: string
 
-  /**
-   * Class applied to the header icon.
-   */
   iconClassName?: string
 
   /**

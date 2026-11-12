@@ -23,34 +23,23 @@ import { DataService } from '../DataService'
 import strings from 'SharedLibraryStrings'
 import '@pnp/sp/presets/all'
 
+/**
+ * Reads and updates project-site information, phases and checklist data.
+ */
 export class ProjectDataService extends DataService<IProjectDataServiceParams> {
-  /**
-   * Storage instance
-   */
   private _storage: IPnPClientStore
 
-  /**
-   * Storage keys for the different functions
-   */
   private _storageKeys: Record<string, string> = {
     _getLocalProjectInformationItemContext: '{0}_local_project_information_item_context'
   }
 
-  /**
-   * Instance of `SPFI` from `@pnp/sp/presets/all`
-   */
   private _sp: SPFI
 
-  /**
-   * Instance of the current web from `@pnp/sp/presets/all`
-   */
   public web: IWeb
 
   /**
    * Creates a new instance of `ProjectDataService`. Initialize the storage and logger,
    * as well as configuring the SPFx context and setting the web from `params.webUrl`.
-   *
-   * @param _params - Parameters
    */
   constructor(private _params: IProjectDataServiceParams) {
     super(true)
@@ -66,7 +55,6 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
   /**
    * Retrieves items from a SharePoint list.
    *
-   * @param listName - The name of the SharePoint list.
    * @param constructor - Optional constructor function for creating instances of a custom class.
    * @param mapConstructor - Optional constructor function for mapping the retrieved items to a custom class.
    * @param filterFunc - Optional filter function for filtering the retrieved items with properties that
@@ -108,8 +96,6 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
 
   /**
    * Get storage key for function
-   *
-   * @param func Function name
    */
   public getStorageKey(func: string) {
     return this._storageKeys[func]
@@ -177,17 +163,8 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
   }
 
   /**
-   * Get project information from the local project information item
-   * in the properties list.
-   *
-   * Returns the following properties:
-   * - `fieldValuesText`: Field values in text format
-   * - `fieldValues`: Field values in object format
-   * - `fields`: All fields in the list
-   * - `versionHistoryUrl`: Version history URL
-   * - `propertiesListId`: List ID of the properties list
-   *
-   * Returns null if no properties are found.
+   * Reads local project fields, their raw and text values, and the item context.
+   * Returns `null` when the properties item is missing or cannot be read.
    *
    * @remarks The queries `ctx.item.fieldValuesAsText()` and `ctx.item()` needs to be run
    * separately, as expanding `ctx.item()` with `FieldValuesAsText` will result in
@@ -225,16 +202,8 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
   }
 
   /**
-   * Get project information data from the local project information item, with fallback
-   * to the item in the portal site.
-   *
-   * Returns the following properties:
-   * - `fieldValuesText`: Field values in text format
-   * - `fieldValues`: Field values in object format
-   * - `fields`: All fields in the list
-   * - `versionHistoryUrl`: Version history URL
-   * - `propertiesListId`: List ID of the properties list
-   * - `templateParameters`: Template parameters
+   * Reads local project information with a hub-entity fallback.
+   * Returns empty values when neither a local item nor an entity service is available.
    */
   public async getProjectInformationData(): Promise<IProjectInformationData> {
     let data: IProjectInformationData = null
@@ -284,7 +253,7 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
   /**
    * Get last updated time in seconds since now.
    *
-   * @param data Data from `getPropertiesData`
+   * @param data Local item context from `getProjectInformationData`; requires a properties list ID.
    */
   public async getPropertiesLastUpdated(data: IProjectInformationData): Promise<number> {
     const { Modified } = await this.web.lists
@@ -298,8 +267,6 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
    * Update phase to the specified `phase` for the project. Updates the local property item, with
    * fallback to updating the entity item if the local property item is not found.
    *
-   * @param phase Phase
-   * @param phaseField Phase field
    * @param syncToHub Whether to update the project's entity in the hub too (default `true`).
    * `false` leaves the hub to the caller, which then decides what a failed hub update means.
    *
@@ -325,9 +292,6 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
   /**
    * Update properties for the project using the local property list. If `returnData` is true,
    * the updated data from `this.getProjectInformationData` will be returned.
-   *
-   * @param properties Properties to update
-   * @param returnData Return data after update
    */
   public async updateProjectProperties(
     properties: { [key: string]: string },
@@ -352,9 +316,6 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
 
   /**
    * Get phases for the project.
-   *
-   * @param termSetId Term set ID
-   * @param checklistData Checklist data
    */
   public async getPhases(
     termSetId: string,
@@ -375,8 +336,6 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
 
   /**
    * Get document types for the project.
-   *
-   * @param termSetId Term set ID
    */
   public async getDocumentTypes(termSetId: string): Promise<DocumentTypeModel[]> {
     const [terms, web] = await Promise.all([
@@ -392,8 +351,6 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
 
   /**
    * Get current phase name for the project.
-   *
-   * @param phaseField Phase field name
    */
   public async getCurrentPhaseName(phaseField: string): Promise<string> {
     try {
@@ -408,8 +365,6 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
    * Get checklist data from the specified list as an object. Returns an object
    * with term GUID as the key, and the items for the term GUID and the stats
    * for the different statuses as the value.
-   *
-   * @param listName List name
    *
    * @returns An object with term GUID as the key, and the items for the term GUID
    * as the value.
@@ -446,10 +401,6 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
 
   /**
    * Update checklist item
-   *
-   * @param listName List name
-   * @param id Id
-   * @param properties Properties
    */
   public async updateChecklistItem(listName: string, id: number, properties: Record<string, any>) {
     return await this.web.lists.getByTitle(listName).items.getById(id).update(properties)

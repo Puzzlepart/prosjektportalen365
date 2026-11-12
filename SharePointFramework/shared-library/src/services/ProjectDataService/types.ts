@@ -9,29 +9,14 @@ import { SPFxContext } from '../../types'
  * Project information data.
  */
 export interface IProjectInformationData {
-  /**
-   * Version history url
-   */
   versionHistoryUrl?: string
 
-  /**
-   * Field values for the list item
-   */
   fieldValues?: ItemFieldValues
 
-  /**
-   * Fields for the list
-   */
   fields?: SPField[]
 
-  /**
-   * Properties list ID
-   */
   propertiesListId?: string
 
-  /**
-   * Template parameters
-   */
   templateParameters?: Record<string, any>
 }
 
@@ -39,9 +24,6 @@ export interface IProjectInformationData {
  * Local project information item context.
  */
 export interface ILocalProjectInformationItemContext {
-  /**
-   * Item ID
-   */
   itemId?: number
 
   /**
@@ -60,38 +42,26 @@ export interface ILocalProjectInformationItemContext {
   item?: IItem
 }
 
+/**
+ * Configures project-site clients, property-list access and logging.
+ */
 export interface IProjectDataServiceParams {
-  /**
-   * Web URL
-   */
   webUrl: string
 
-  /**
-   * Site ID
-   */
   siteId: string
 
-  /**
-   * Entity service
-   */
   entityService: SpEntityPortalService
 
-  /**
-   * List name for project properties
-   */
   propertiesListName: string
 
-  /**
-   * SPFx context
-   */
   spfxContext: SPFxContext
 
-  /**
-   * Log level
-   */
   logLevel?: LogLevel
 }
 
+/**
+ * Identifies a phase taxonomy field, its term set and hidden text field.
+ */
 export interface IPhaseField {
   fieldName?: string
   termSetId?: string

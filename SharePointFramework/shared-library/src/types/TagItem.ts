@@ -5,13 +5,7 @@
  * shape the data adapter's term search returned and the idea fields rendered.
  */
 export interface ITagItem {
-  /**
-   * The term id.
-   */
   key: string
 
-  /**
-   * The term's label.
-   */
   name: string
 }

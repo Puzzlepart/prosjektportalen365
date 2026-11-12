@@ -18,10 +18,10 @@ export interface IDataGridColumn<TItem = any> extends TableColumnDefinition<TIte
   defaultWidth?: number
 }
 
+/**
+ * Configures shared list rendering, sorting, sizing and controlled selection.
+ */
 export interface IDataGridListProps<TItem = any> {
-  /**
-   * Rows to show.
-   */
   items: TItem[]
 
   /**
@@ -79,9 +79,6 @@ export interface IDataGridListProps<TItem = any> {
    */
   onRowDoubleClick?: (item: TItem) => void
 
-  /**
-   * Class applied to the grid.
-   */
   className?: string
 
   /**

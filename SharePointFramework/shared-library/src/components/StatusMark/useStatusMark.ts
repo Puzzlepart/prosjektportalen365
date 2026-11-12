@@ -7,8 +7,6 @@ const MIN_MARK_SIZE = 12
 /**
  * Component logic hook for `StatusMark`: the mark's shape and colour, and its size beside the
  * icon. `mark` is `null` when the status has no shape to show.
- *
- * @param props Props for the component
  */
 export function useStatusMark(props: IStatusMarkProps) {
   const mark = useMemo(

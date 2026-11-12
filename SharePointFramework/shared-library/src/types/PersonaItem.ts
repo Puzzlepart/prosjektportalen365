@@ -21,9 +21,6 @@ export interface IPersonaItem {
    */
   id?: string
 
-  /**
-   * Display name.
-   */
   text?: string
 
   /**
@@ -31,18 +28,9 @@ export interface IPersonaItem {
    */
   secondaryText?: string
 
-  /**
-   * Job title.
-   */
   tertiaryText?: string
 
-  /**
-   * Department.
-   */
   optionalText?: string
 
-  /**
-   * Profile photo URL.
-   */
   imageUrl?: string
 }

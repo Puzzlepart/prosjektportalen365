@@ -7,9 +7,8 @@ interface RetryOptions {
 }
 
 /**
- * Determines if an error is transient and should be retried.
- * Retries on 429 (throttling), 5xx (server errors), and network errors.
- * Does not retry on 4xx client errors (400, 401, 403, 404) as they won't self-resolve.
+ * Retries throttling, server errors and Error objects without a status.
+ * Other client errors are final because retrying cannot resolve them.
  */
 function isTransientError(error: any): boolean {
   const statusCode = error?.statusCode ?? error?.status ?? error?.response?.status
@@ -20,8 +19,7 @@ function isTransientError(error: any): boolean {
 }
 
 /**
- * Extracts Retry-After delay from a 429 response, if present.
- * Returns the delay in seconds, or `null` if not found.
+ * Reads a positive numeric Retry-After delay in seconds; HTTP-date values are not supported.
  */
 function getRetryAfterSeconds(error: any): number | null {
   const retryAfter =
@@ -36,12 +34,9 @@ function getRetryAfterSeconds(error: any): number | null {
 }
 
 /**
- * Wraps an async function with retry logic using exponential backoff.
- * Only retries on transient errors (429, 5xx, network errors).
- * Respects `Retry-After` headers on 429 responses.
+ * Retries throttling, server errors and Error objects without a status using exponential backoff.
+ * A positive numeric Retry-After value overrides the computed delay.
  *
- * @param fn - Async function to retry
- * @param options - Retry options
  * @param options.maxRetries - Maximum number of retries (default: 3)
  * @param options.initialDelaySeconds - Initial delay in seconds, doubles each retry (default: 2)
  * @param options.onRetry - Callback invoked before each retry attempt

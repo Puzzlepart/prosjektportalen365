@@ -18,26 +18,17 @@ export interface IToolbarProps {
   farItems?: ListMenuItem[]
 
   /**
-   * Props for the FilterPanel component. If specfied, the FilterPanel
-   * will be rendered in the toolbar.
+   * Optional filter drawer rendered alongside the command bars.
    */
   filterPanel?: IFilterPanelProps
 }
 
 /**
- * Represents a menu item in the `ListMenuItem` component. Supports
- * the Fluent API pattern using e.g. `new ListMenuItem().setIcon(...)`,
- * `new ListMenuItem().setOnClick(...)`, etc.
+ * Builds chainable toolbar commands, menus, checkable choices and search fields.
  */
 export class ListMenuItem {
-  /**
-   * The text to display in the menu item.
-   */
   text?: string
 
-  /**
-   * The name of the menu item.
-   */
   name?: string
 
   /**
@@ -46,7 +37,7 @@ export class ListMenuItem {
   value?: string
 
   /**
-   * The text to in the tooltip for the menu item.
+   * Tooltip text; also names icon-only commands when ariaLabel is absent.
    */
   description?: string
 
@@ -59,26 +50,14 @@ export class ListMenuItem {
   ariaLabel?: string
 
   /**
-   * The icon to display in the menu item. Could either be a
-   * `FluentIcon` or a string representing the icon name. Then
-   * the `<Icon />` component from `@fluentui/react`
-   * will be used.
+   * An icon component or a name resolved through the catalog, legacy aliases and Fabric fallback.
    */
   icon?: FluentIcon | string
 
-  /**
-   * On click event handler.
-   */
   onClick?: MouseEventHandler<any>
 
-  /**
-   * Disabled state.
-   */
   disabled?: boolean
 
-  /**
-   * Hidden state.
-   */
   hidden?: boolean
 
   /**
@@ -86,14 +65,8 @@ export class ListMenuItem {
    */
   checkedValues?: Record<string, string[]>
 
-  /**
-   * The type of the menu item.
-   */
   type?: 'divider' | 'header' | 'default'
 
-  /**
-   * Custom width of the menu item.
-   */
   width?: string | number
 
   /**
@@ -101,19 +74,10 @@ export class ListMenuItem {
    */
   shrinkable?: boolean
 
-  /**
-   * Custom style of the menu item.
-   */
   style?: CSSProperties
 
-  /**
-   * Items to render in a sub menu.
-   */
   items?: ListMenuItem[]
 
-  /**
-   * Search box for the toolbar search item.
-   */
   searchBox: SearchBoxProps
 
   /**
@@ -131,10 +95,6 @@ export class ListMenuItem {
   /**
    * Sets the accessible name of the `ListMenuItem`, for an item whose text alone does not say
    * what it does. The name must hold the text.
-   *
-   * @param ariaLabel The name
-   *
-   * @returns The updated `ListMenuItem` instance.
    */
   public setAriaLabel(ariaLabel: ListMenuItem['ariaLabel']) {
     this.ariaLabel = ariaLabel
@@ -142,11 +102,7 @@ export class ListMenuItem {
   }
 
   /**
-   * Sets the icon for the `ListMenuItem`.
-   *
-   * @param icon The FluentIcon or string representing the icon to set.
-   *
-   * @returns The updated `ListMenuItem` instance.
+   * Sets a catalog or legacy icon name, or an icon component.
    */
   public setIcon(icon: ListMenuItem['icon']) {
     this.icon = icon
@@ -154,11 +110,7 @@ export class ListMenuItem {
   }
 
   /**
-   * Sets the on click event handler for the `ListMenuItem`.
-   *
-   * @param onClick The on click event handler to set.
-   *
-   * @returns The updated `ListMenuItem` instance.
+   * Sets the command's click handler.
    */
   public setOnClick(onClick: ListMenuItem['onClick']) {
     this.onClick = onClick
@@ -166,11 +118,7 @@ export class ListMenuItem {
   }
 
   /**
-   * Sets the disabled state for the `ListMenuItem`.
-   *
-   * @param disabled The disabled state to set.
-   *
-   * @returns The updated `ListMenuItem` instance.
+   * Controls whether the command is disabled.
    */
   public setDisabled(disabled: ListMenuItem['disabled']) {
     this.disabled = disabled
@@ -178,11 +126,7 @@ export class ListMenuItem {
   }
 
   /**
-   * Sets the hidden state for the `ListMenuItem`.
-   *
-   * @param hidden The hidden state to set.
-   *
-   * @returns The updated `ListMenuItem` instance.
+   * Controls whether the command is hidden.
    */
   public setHidden(hidden: ListMenuItem['hidden']) {
     this.hidden = hidden
@@ -190,11 +134,7 @@ export class ListMenuItem {
   }
 
   /**
-   * Sets the type for the `ListMenuItem`.
-   *
-   * @param type The type to set.
-   *
-   * @returns The updated `ListMenuItem` instance.
+   * Selects normal, divider or header presentation.
    */
   public setType(type: ListMenuItem['type']) {
     this.type = type
@@ -202,12 +142,7 @@ export class ListMenuItem {
   }
 
   /**
-   * Makes the ListMenuItem checkable.
-   *
-   * @param name The name of the checkable item.
-   * @param value The value of the checkable item.
-   *
-   * @returns The updated `ListMenuItem` instance.
+   * Assigns the checked-value group and value used by a menu checkbox.
    */
   public makeCheckable({ name, value }: Pick<ListMenuItem, 'name' | 'value'>) {
     this.name = name
@@ -216,11 +151,7 @@ export class ListMenuItem {
   }
 
   /**
-   * Sets the style of the list menu item.
-   *
-   * @param style The style to set for the list menu item.
-   *
-   * @returns The updated ListMenuItem instance.
+   * Overrides the command's inline presentation.
    */
   public setStyle(style: ListMenuItem['style']) {
     this.style = style
@@ -228,11 +159,7 @@ export class ListMenuItem {
   }
 
   /**
-   * Sets the width for the `ListMenuItem`.
-   *
-   * @param width The width to set.
-   *
-   * @returns The updated `ListMenuItem` instance.
+   * Sets a fixed command width; use makeShrinkable for responsive selectors.
    */
   public setWidth(width: ListMenuItem['width']) {
     this.width = width
@@ -246,8 +173,6 @@ export class ListMenuItem {
    * For a selector whose label shows the current choice, such as a view selector. It replaces
    * `setWidth`, which would hold the button at its full width; the whole label stays in the
    * button's name.
-   *
-   * @returns The updated `ListMenuItem` instance.
    */
   public makeShrinkable() {
     this.shrinkable = true
@@ -255,13 +180,7 @@ export class ListMenuItem {
   }
 
   /**
-   * Sets the items and checked values of the `ListMenuItem`. Removes
-   * any falsy items from the items array before setting it.
-   *
-   * @param items The new items to set.
-   * @param checkedValues The new checked values to set.
-   *
-   * @returns The updated `ListMenuItem` instance.
+   * Sets child commands, dropping falsy entries, and optionally their checked values.
    */
   public setItems(items: ListMenuItem['items'], checkedValues?: ListMenuItem['checkedValues']) {
     this.items = items.filter(Boolean)
@@ -270,11 +189,7 @@ export class ListMenuItem {
   }
 
   /**
-   * Sets the search box for the `ListMenuItem`.
-   *
-   * @param searchBox The search box to set.
-   *
-   * @returns The updated `ListMenuItem` instance.
+   * Configures a toolbar search field instead of a command button.
    */
   public setSearchBox(searchBox: ListMenuItem['searchBox']) {
     this.searchBox = searchBox
@@ -288,8 +203,6 @@ export class ListMenuItem {
    *
    * @remarks Ensure this method is called last in the chain, as it will return
    * `null` if the condition is false.
-   *
-   * @param condition The condition to set.
    */
   public makeConditional(condition: boolean) {
     if (condition) return this
@@ -303,10 +216,6 @@ export class ListMenuItem {
 export const ListMenuItemDivider = new ListMenuItem().setType('divider')
 
 /**
- * Creates a new ListMenuItem with the specified text as a header and sets its style to have a font size of 12.
- *
- * @param text The text to display in the header.
- *
- * @returns A new ListMenuItem with the specified text as a header and a font size of 12.
+ * Creates a non-interactive header entry for a toolbar menu.
  */
 export const ListMenuItemHeader = (text: string) => new ListMenuItem(text).setType('header')

@@ -32,21 +32,10 @@ export class PortfolioOverviewView {
    */
   public id: string | number
 
-  /**
-   * Title of the view.
-   */
   public title: string
 
-  /**
-   * Sort order for the view. This property is set when the view is
-   * configured with a sort order.
-   */
   public sortOrder: number
 
-  /**
-   * Search query for the view. This property is set when the view is
-   * configured with a search query.
-   */
   public searchQuery: string
 
   /**
@@ -56,64 +45,28 @@ export class PortfolioOverviewView {
    */
   public searchQueries: string[]
 
-  /**
-   * `true` if the view is the default view, `false` otherwise.
-   */
   public isDefaultView: boolean
 
-  /**
-   * Icon name for the view.
-   */
   public iconName?: string
 
-  /**
-   * `true` if the view is a personal view, `false` otherwise.
-   */
   public isPersonal: boolean
 
-  /**
-   * Columns for the view.
-   */
   public columns: ProjectColumn[]
 
-  /**
-   * Refiners for the view.
-   */
   public refiners: ProjectColumn[]
 
-  /**
-   * Column to group by.
-   */
   public groupBy?: ProjectColumn
 
-  /**
-   * Scope of the view (not sure of the current usage of this property).
-   */
   public scope?: string
 
-  /**
-   * Custom column order for the view.
-   */
   public columnOrder: number[]
 
-  /**
-   * Column IDs for the view.
-   */
   public columnIds: number[]
 
-  /**
-   * Refiner IDs for the view.
-   */
   public refinerIds: number[]
 
-  /**
-   * Group by ID for the view.
-   */
   public groupById: number
 
-  /**
-   * Author of the view.
-   */
   public author: string
 
   /**
@@ -124,11 +77,6 @@ export class PortfolioOverviewView {
 
   public data: Record<string, any> = {}
 
-  /**
-   * Constructor for the `PortfolioOverviewView` class.
-   *
-   * @param item SP list item to create the view from
-   */
   constructor(item?: SPPortfolioOverviewViewItem) {
     this.id = item?.Id
     this.title = item?.Title
@@ -149,8 +97,6 @@ export class PortfolioOverviewView {
    * Create a default view. The search query will be based on the
    * specified view if provided. Otherwise it will be an empty string.
    *
-   * @param title Title of the view
-   * @param view View to create the default view from
    * @param sortOrder Sort order for the view if no view is provided
    * @param isPersonal `true` if the view is a personal view, `false` otherwise (default is `true`)
    */
@@ -185,8 +131,6 @@ export class PortfolioOverviewView {
    *
    * Filters out columns that are not configured to be visible in Portfolio
    * (GtShowFieldPortfolio = false) even if they are in the view's columnIds.
-   *
-   * @param columns Columns to configure the view with
    */
   public configure(columns: ProjectColumn[] = []): PortfolioOverviewView {
     this.columns = this.columnIds
@@ -232,8 +176,6 @@ export class PortfolioOverviewView {
   /**
    * Append the specified `queryText` to the view's search query. Returns
    * the view with the updated search query.
-   *
-   * @param queryText Query text to append to the view's search query
    */
   public appendToQuery(queryText: string): PortfolioOverviewView {
     this.searchQuery = `${this.searchQuery} ${queryText}`
@@ -243,8 +185,6 @@ export class PortfolioOverviewView {
   /**
    * Configure the view from another view (copies the columns, refiners,
    * groupBy, scope and searchQuery properties).
-   *
-   * @param view View to configure from
    */
   public configureFrom(view: PortfolioOverviewView): PortfolioOverviewView {
     this.columns = view.columns

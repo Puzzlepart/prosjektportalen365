@@ -19,6 +19,9 @@ export const PROJECT_TIMELINE_DEFAULT_PROPS: Partial<IProjectTimelineProps> = {
   defaultTimeframeEnd: '12,months'
 }
 
+/**
+ * Loads and displays portfolio project timelines with configured date offsets.
+ */
 export const ProjectTimeline: FC<IProjectTimelineProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, PROJECT_TIMELINE_DEFAULT_PROPS)
   const { state, onFilterChange } = useProjectTimeline(props)

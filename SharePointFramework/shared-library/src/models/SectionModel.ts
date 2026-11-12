@@ -1,3 +1,6 @@
+/**
+ * Identifies the supported project-status section kinds.
+ */
 export enum SectionType {
   SummarySection,
   StatusSection,
@@ -6,6 +9,9 @@ export enum SectionType {
   ListSection
 }
 
+/**
+ * Resolves a stored status section's content and display configuration.
+ */
 export class SectionModel {
   public id: number
   public name: string
@@ -29,11 +35,6 @@ export class SectionModel {
   public sumField?: string[]
   public statusProperties?: any
 
-  /**
-   * Constructor
-   *
-   * @param _item Section SP item
-   */
   constructor(private _item: Record<string, any>) {
     this.id = _item.Id
     this.name = _item.Title

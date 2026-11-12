@@ -7,13 +7,7 @@
  * icon, and carries the colour separately instead of as a style object.
  */
 export interface ITrendIcon {
-  /**
-   * Name of the icon in the shared catalog.
-   */
   iconName: 'Trophy' | 'CaretUp' | 'CaretDown'
 
-  /**
-   * CSS colour the icon is drawn in.
-   */
   color: string
 }

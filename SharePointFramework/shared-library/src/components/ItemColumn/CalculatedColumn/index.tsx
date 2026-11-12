@@ -19,6 +19,9 @@ const CALCULATED_COLUMN_DEFAULT_PROPS: Partial<ICalculatedColumnProps> = {
   resultType: 'number'
 }
 
+/**
+ * Renders a calculated value using the renderer for its result type.
+ */
 export const CalculatedColumn: ColumnRenderComponent<ICalculatedColumnProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, CALCULATED_COLUMN_DEFAULT_PROPS)
   const { columnValue, resultType } = props

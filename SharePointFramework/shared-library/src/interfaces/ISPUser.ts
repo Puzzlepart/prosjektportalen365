@@ -1,3 +1,6 @@
+/**
+ * Describes a SharePoint site user returned by the REST API.
+ */
 export interface ISPUser {
   'odata.type': string
   'odata.id': string

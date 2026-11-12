@@ -11,6 +11,9 @@ import { buildAggregatedSiteIdQueries } from '../util/buildAggregatedSiteIdQueri
  */
 const BY_DOCUMENT_ID: ISort = { Property: 'docid', Direction: 0 }
 
+/**
+ * Configures an aggregated search across chunked project site IDs.
+ */
 export interface ISearchAggregatedItemsOptions {
   /**
    * Site IDs to aggregate items from (typically child projects)
@@ -53,9 +56,6 @@ export interface ISearchAggregatedItemsOptions {
  * Fans out one search request per site ID chunk (see `buildAggregatedSiteIdQueries`)
  * and returns the flattened primary search results. Returns an empty array when
  * there are no queries to run.
- *
- * @param sp SPFI instance to search with
- * @param options Options for the aggregated search
  */
 export async function searchAggregatedItems(
   sp: SPFI,

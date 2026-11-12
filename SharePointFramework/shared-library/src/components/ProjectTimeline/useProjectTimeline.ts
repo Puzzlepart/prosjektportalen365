@@ -13,11 +13,7 @@ import resource from 'SharedResources'
 import { IListColumn } from '../../types'
 
 /**
- * Component logic hook for `ProjectTimeline`
- *
- * @param props Props
- *
- * @returns `state`, `setState`, `onFilterChange`
+ * Manages timeline data, available filters and the items matching active selections.
  */
 export const useProjectTimeline = (props: IProjectTimelineProps) => {
   const [state, $setState] = useState<IProjectTimelineState>({
@@ -31,8 +27,6 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
 
   /**
    * Get filtered data
-   *
-   * @param data Timeline data
    *
    * @returns `data` filtered by `state.activeFilters`
    */
@@ -73,9 +67,6 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
 
   /**
    * Get filters
-   *
-   * @param config Timeline configuration
-   * @param data Timeline data
    *
    * @returns `filters` for `FilterPanel`
    */
@@ -152,9 +143,6 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
 
   /**
    * On filter change
-   *
-   * @param column Column
-   * @param selectedItems Selected items
    */
   const onFilterChange = (column: IListColumn, selectedItems: IFilterItemProps[]) => {
     const { activeFilters } = state

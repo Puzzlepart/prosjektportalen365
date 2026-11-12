@@ -1,5 +1,8 @@
 import { SPBaseItem } from './SPBaseItem'
 
+/**
+ * Represents a stored timeline type's appearance and visibility settings.
+ */
 export class SPTimelineConfigurationItem extends SPBaseItem {
   public GtSortOrder: number = 99
   public GtHexColor: string = null
@@ -11,6 +14,9 @@ export class SPTimelineConfigurationItem extends SPBaseItem {
   public GtTimelineFilter: boolean = false
 }
 
+/**
+ * Maps a timeline configuration item to its rendering settings.
+ */
 export class TimelineConfigurationModel {
   public sortOrder: number
   public title: string
@@ -22,11 +28,6 @@ export class TimelineConfigurationModel {
   public showElementProgram: any
   public timelineFilter: any
 
-  /**
-   * Creates a new instance of TimelineConfigurationModel
-   *
-   * @param item SP item
-   */
   constructor(item: SPTimelineConfigurationItem) {
     this.sortOrder = item.GtSortOrder
     this.title = item.Title

@@ -28,11 +28,6 @@ export class SPField {
   public NumberOfLines?: number = 3
   public ShowAsPercentage?: boolean = false
 
-  /**
-   * Constructs a new `SPField` instance.
-   *
-   * @param field The field to initialize the instance with (optional).
-   */
   constructor(field?: SPField) {
     if (field) {
       Object.assign(this, field)

@@ -26,12 +26,6 @@ function asNumber(value: unknown): number | undefined {
 /**
  * Sort numerically: numbers, and numbers in text, by their value; amounts and percentages once
  * `symbol` is removed; empty values first ascending and last descending; any other value as it is.
- *
- * @param a Object a
- * @param b Object b
- * @param ascending Sort ascending
- * @param property Property
- * @param symbol Symbol to remove from string
  */
 export function sortNumerically<T>(
   a: T,

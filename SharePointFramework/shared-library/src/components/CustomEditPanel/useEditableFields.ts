@@ -3,11 +3,7 @@ import { useMemo } from 'react'
 import { ICustomEditPanelProps } from './types'
 
 /**
- * Hook for the `CustomEditPanel` fields.
- *
- * @param props - The `CustomEditPanel` props.
- *
- * @returns Fields to be used in the `CustomEditPanel`.
+ * Selects fields visible in edit mode, excluding caller-hidden fields.
  */
 export function useEditableFields(props: ICustomEditPanelProps) {
   return useMemo(() => {

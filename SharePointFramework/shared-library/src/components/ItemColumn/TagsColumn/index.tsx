@@ -19,6 +19,9 @@ const TAGS_COLUMN_DEFAULT_PROPS: Partial<ITagsColumnProps> = {
   valueSeparator: ';'
 }
 
+/**
+ * Displays separated column values as tags with an overflow menu.
+ */
 export const TagsColumn: ColumnRenderComponent<ITagsColumnProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, TAGS_COLUMN_DEFAULT_PROPS)
   if (!props.columnValue) return null

@@ -1,5 +1,8 @@
 import { SPField } from '../models'
 
+/**
+ * Provides data-service configuration state and SharePoint field visibility mapping.
+ */
 export class DataService<T> {
   protected _configuration: T
   public isConfigured: boolean = false
@@ -10,8 +13,6 @@ export class DataService<T> {
 
   /**
    * Sets the configuration for the DataService.
-   *
-   * @param configuration - The configuration object to set.
    */
   protected onConfigureStart(configuration: T) {
     this._configuration = configuration
@@ -19,8 +20,6 @@ export class DataService<T> {
 
   /**
    * Marks the DataService as configured.
-   *
-   * @returns The DataService instance.
    */
   protected onConfigured() {
     this.isConfigured = true
@@ -30,8 +29,6 @@ export class DataService<T> {
   /**
    * Mapping fields to include `ShowInEditForm`, `ShowInNewForm` and `ShowInDisplayForm`
    * which is only present in `SchemaXml`, not as separate properties.
-   *
-   * @param fields Fields to map
    */
   protected _mapFields(fields: SPField[]): SPField[] {
     return fields.map<SPField>((fld) => ({

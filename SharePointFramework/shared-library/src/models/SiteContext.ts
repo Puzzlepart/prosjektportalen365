@@ -14,8 +14,6 @@ export class SiteContext {
 
   /**
    * Creates an instance of `SiteContext`.
-   *
-   * @param spfxContext SPFx context
    */
   constructor(public spfxContext?: SPFxContext) {
     this.pageContext = spfxContext?.pageContext
@@ -30,7 +28,6 @@ export class SiteContext {
    * Creates an instance of `SiteContext` from the provided SPFx context. Optionally, you
    * can provide the site ID and web absolute URL.
    *
-   * @param spfxContext SPFx context
    * @param siteId Site ID (if not provided, it will be taken from the SPFx context)
    * @param webAbsoluteUrl Web absolute URL (if not provided, it will be taken from the SPFx context)
    */

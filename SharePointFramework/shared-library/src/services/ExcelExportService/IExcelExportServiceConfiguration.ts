@@ -1,3 +1,6 @@
+/**
+ * Configures workbook output and measurement-sheet field mapping.
+ */
 export interface IExcelExportServiceConfiguration {
   name?: string
   options?: {

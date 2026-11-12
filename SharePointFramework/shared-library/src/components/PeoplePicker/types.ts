@@ -2,6 +2,9 @@ import { TagPickerProps } from '@fluentui/react-components'
 import { ChangeEvent } from 'react'
 import { IPersonaItem } from '../../types'
 
+/**
+ * Configures people selection with caller-provided suggestion resolution.
+ */
 export interface IPeoplePickerProps {
   /**
    * The people currently picked.
@@ -32,9 +35,6 @@ export interface IPeoplePickerProps {
    */
   placeholder?: string
 
-  /**
-   * Whether the picker is disabled.
-   */
   disabled?: boolean
 
   /**

@@ -1,3 +1,6 @@
+/**
+ * Configures the non-color status marker beside a status icon.
+ */
 export interface IStatusMarkProps {
   /**
    * The status colour, which gives the shape where the status value has no icon of its own.

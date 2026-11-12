@@ -1,3 +1,6 @@
+/**
+ * Combines project-field metadata with its displayed value.
+ */
 export class ProjectPropertyModel {
   public internalName: string
   public displayName: string

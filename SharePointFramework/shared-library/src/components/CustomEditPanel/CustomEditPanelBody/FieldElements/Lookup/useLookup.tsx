@@ -6,6 +6,9 @@ import { useCustomEditPanelContext } from '../../../context'
 import { get } from 'lodash'
 import resource from 'SharedResources'
 
+/**
+ * Loads permitted lookup options and resolves the model's current selection.
+ */
 export function useLookup(field: EditableSPField) {
   const context = useCustomEditPanelContext()
   const [options, setOptions] = useState<OptionProps[]>([])
@@ -21,7 +24,7 @@ export function useLookup(field: EditableSPField) {
             text: item[field.LookupField]
           }))
           .filter((item) => {
-            // Always filter out reserved timeline types
+            // Project and delivery types are reserved for generated timeline entries.
             if (field.InternalName === 'GtTimelineTypeLookup') {
               if (
                 item.text === resource.TimelineConfiguration_Project_Title ||

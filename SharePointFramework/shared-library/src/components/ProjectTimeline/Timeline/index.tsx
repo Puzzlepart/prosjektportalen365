@@ -23,6 +23,9 @@ const TIMELINE_DEFAULT_PROPS: Partial<ITimelineProps> = {
   infoText: strings.ProjectTimelineInfoText
 }
 
+/**
+ * Displays timeline groups and items with filtering, navigation and details.
+ */
 export const Timeline: FC<ITimelineProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, TIMELINE_DEFAULT_PROPS)
   const fluentProviderId = useId('fp-timeline')

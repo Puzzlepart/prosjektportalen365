@@ -1,5 +1,8 @@
 import * as moment from 'moment'
 
+/**
+ * Carries project, display and resource details for a timeline item.
+ */
 export interface ITimelineItemData {
   project: string
   projectUrl?: string
@@ -32,6 +35,9 @@ export interface ITimelineItemData {
   properties?: any
 }
 
+/**
+ * Defines a timeline interval, its group and rendering metadata.
+ */
 export interface ITimelineItem {
   id: number
   title: string

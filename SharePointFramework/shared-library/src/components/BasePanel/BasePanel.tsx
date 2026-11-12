@@ -17,13 +17,7 @@ import styles from './BasePanel.module.scss'
 import { IBasePanelProps } from './types'
 
 /**
- * The panel every side panel in the solutions is built on, rendering a Fluent
- * UI v9 `OverlayDrawer`.
- *
- * The v8 `Panel` prop names were kept during the conversion so that call sites
- * did not have to move at the same time as the implementation; they have since
- * been brought in line with v9 and with React (`open`, `onClose`, and `header`,
- * `footer` and `children` as content rather than render props).
+ * Provides a themed modal drawer with shared header, body and footer presentation.
  */
 export const BasePanel: FC<IBasePanelProps> = ({
   $type,

@@ -2,6 +2,9 @@ import { tryParseJson } from '../util'
 import { IProjectContentColumn } from '../interfaces/IProjectContentColumn'
 import { ColumnDataType } from '../types'
 
+/**
+ * Represents a stored project-content column definition.
+ */
 export class SPProjectContentColumnItem {
   public Id?: number = 0
   public Title?: string = ''
@@ -19,6 +22,9 @@ export class SPProjectContentColumnItem {
   public GtIdeaCopyToProcess?: boolean = false
 }
 
+/**
+ * Carries renderer, grouping and locking settings for a content column.
+ */
 export type ProjectContentColumnData = {
   isGroupable?: boolean
   dataTypeProperties?: Record<string, any>
@@ -27,6 +33,9 @@ export type ProjectContentColumnData = {
   isLocked?: boolean
 }
 
+/**
+ * Maps a stored content column to list rendering and grouping settings.
+ */
 export class ProjectContentColumn implements IProjectContentColumn {
   public key: string
   public fieldName: string
@@ -75,8 +84,6 @@ export class ProjectContentColumn implements IProjectContentColumn {
    * `isGroupable`, `dataTypeProperties`, etc.
    *
    * If `renderAs` is specified, the property `dataType` will be set to the same value.
-   *
-   * @param data Data to set
    */
   public setData?(data: ProjectContentColumnData = {}): ProjectContentColumn {
     this.data = { ...this.data, ...data }
@@ -87,12 +94,7 @@ export class ProjectContentColumn implements IProjectContentColumn {
   }
 
   /**
-   * Merges the properties of the given `ProjectContentColumn` into this instance.
-   * If a property is not defined in the given column, the current value of the property is retained.
-   *
-   * @param column The `ProjectContentColumn` to merge into this instance.
-   *
-   * @returns This instance with the merged properties.
+   * Merges renderer data and applies non-nullish display-name and width overrides.
    */
   public merge(column: ProjectContentColumn): ProjectContentColumn {
     this.name = column.name ?? this.name

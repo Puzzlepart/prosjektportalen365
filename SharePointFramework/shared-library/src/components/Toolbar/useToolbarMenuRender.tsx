@@ -17,6 +17,9 @@ import { createStyle } from './createStyle'
 import styles from './Toolbar.module.scss'
 import { ListMenuItem } from './types'
 
+/**
+ * Renders toolbar menus and submenus with checked state and focus restoration.
+ */
 export function useToolbarMenuRender() {
   // Where the focus goes back to when a panel or dialog a menu item opened closes: the panel opens
   // from state after the menu has closed, so Fluent has no trigger to return it to (WCAG 2.4.3).
@@ -26,10 +29,6 @@ export function useToolbarMenuRender() {
    * Renders a menu's toolbar button based on the provided list menu item. It is the menu
    * trigger's child itself, so the trigger's `aria-haspopup` and `aria-expanded` are the
    * button's (WCAG 4.1.2).
-   *
-   * @param item The list menu item to render the toolbar button for.
-   * @param buttonStyle The style to apply to the toolbar button.
-   * @param labelStyle The style to apply to the toolbar button label.
    *
    * @returns The rendered toolbar button component.
    */
@@ -66,9 +65,6 @@ export function useToolbarMenuRender() {
    * If the `IListMenuItem` has a `value` property, it will render a `MenuItemCheckbox`.
    * If the `IListMenuItem` has an `items` property, it will render a submenu opened by a menu item.
    * Otherwise, it will render a regular `MenuItem`.
-   *
-   * @param item - The `IListMenuItem` to render.
-   * @param closeMenu - A function that closes the menu.
    *
    * @returns The rendered `MenuItem`, `MenuItemCheckbox`, or submenu (if `item` has `items`).
    */
@@ -116,11 +112,7 @@ export function useToolbarMenuRender() {
   }
 
   /**
-   * Renders a menu for a list item.
-   *
-   * @param item - The list item to render the menu for.
-   *
-   * @returns The rendered menu.
+   * Renders a toolbar command as a menu trigger and menu contents.
    */
   function renderMenu(item: ListMenuItem) {
     return (

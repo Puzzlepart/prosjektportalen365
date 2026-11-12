@@ -11,9 +11,7 @@ const PROJECT_LOGO_DEFAULT_PROPS: Partial<IProjectLogoProps> = {
 }
 
 /**
- * A component that renders an avatar or a logo for a project. The avatar is rendered if the project does not have a custom logo.
- *
- * @category ProjectLogo
+ * Displays the custom project logo, then the template image, falling back to project initials.
  */
 export const ProjectLogo: FC<IProjectLogoProps> = (incomingProps: IProjectLogoProps) => {
   const props = withDefaults(incomingProps, PROJECT_LOGO_DEFAULT_PROPS)

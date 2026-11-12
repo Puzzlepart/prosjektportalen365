@@ -9,6 +9,9 @@ const DATE_COLUMN_DEFAULT_PROPS: Partial<IDateColumnProps> = {
   includeTime: false
 }
 
+/**
+ * Formats a date column in the site's time zone and UI language.
+ */
 export const DateColumn: ColumnRenderComponent<IDateColumnProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, DATE_COLUMN_DEFAULT_PROPS)
   return <span>{formatDate(props.columnValue, props.includeTime)}</span>

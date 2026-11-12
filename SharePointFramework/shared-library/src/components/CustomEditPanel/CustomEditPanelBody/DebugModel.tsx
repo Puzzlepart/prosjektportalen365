@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { useCustomEditPanelContext } from '../context'
 
 /**
- * Shows `model.properties` in a `pre` tag.
+ * Displays the edit model's pending update payload for diagnostics.
  */
 export const DebugModel: FC = () => {
   const context = useCustomEditPanelContext()

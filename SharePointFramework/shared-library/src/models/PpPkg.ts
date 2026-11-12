@@ -16,4 +16,7 @@ export const PP_PKG_TYPE = {
   Sentral: 'Sentral'
 } as const
 
+/**
+ * Identifies a supported template-package category.
+ */
 export type PpPkgTypeValue = (typeof PP_PKG_TYPE)[keyof typeof PP_PKG_TYPE]

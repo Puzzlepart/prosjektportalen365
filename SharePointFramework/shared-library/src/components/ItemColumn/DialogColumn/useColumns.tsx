@@ -7,6 +7,9 @@ import { TREND_ICON_SIZE } from '../TrendColumn'
 
 import { IDataGridColumn } from '../../DataGridList/types'
 
+/**
+ * Defines the value, comment, trend and date columns of measurement history.
+ */
 export const useColumns = (): IDataGridColumn[] => {
   return [
     {

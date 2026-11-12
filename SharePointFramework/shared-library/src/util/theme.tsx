@@ -35,6 +35,15 @@ const brandVariants: BrandVariants = {
   160: pSBC(0.8, primaryColor)
 }
 
+/**
+ * Provides a light Fluent theme using the site's primary color.
+ */
 export const customLightTheme = createLightTheme(brandVariants)
+/**
+ * Provides a dark Fluent theme using the site's primary color.
+ */
 export const customDarkTheme = createDarkTheme(brandVariants)
+/**
+ * Exposes the primary site color captured when the theme module loads.
+ */
 export const themeColor = primaryColor

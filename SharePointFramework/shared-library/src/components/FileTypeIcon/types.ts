@@ -1,10 +1,10 @@
 import { IFileTypeIconOptions } from '@fluentui/react-file-type-icons'
 import { CSSProperties } from 'react'
 
+/**
+ * Configures an Office file-type image and its presentation.
+ */
 export interface IFileTypeIconProps extends IFileTypeIconOptions {
-  /**
-   * Class of the image.
-   */
   className?: string
 
   /**

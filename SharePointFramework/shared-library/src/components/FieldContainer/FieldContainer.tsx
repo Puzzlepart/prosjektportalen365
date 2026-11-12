@@ -4,6 +4,9 @@ import { IFieldContainerProps } from './types'
 import { Field, LabelProps } from '@fluentui/react-components'
 import { IconLabel } from './IconLabel'
 
+/**
+ * Wraps a form control with its accessible label, hint and validation feedback.
+ */
 export const FieldContainer: FC<IFieldContainerProps> = (props) => {
   let label = props.label
   if (props.iconName) {

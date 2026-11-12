@@ -5,6 +5,9 @@ import { PeoplePicker } from '../../../PeoplePicker'
 import { useCustomEditPanelContext } from '../../context'
 import { FieldElementComponent } from './types'
 
+/**
+ * Edits a multiple-person field using SharePoint people search.
+ */
 export const UserMulti: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
   return (

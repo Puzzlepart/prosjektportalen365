@@ -6,6 +6,9 @@ import { SearchValueType } from '../types/SearchValueType'
 import { tryParseJson } from '../util'
 import { ProjectColumnConfig, ProjectColumnConfigDictionary } from './ProjectColumnConfig'
 
+/**
+ * Represents a persisted project-column definition.
+ */
 export class SPProjectColumnItem {
   public Id?: number = 0
   public Title: string = ''
@@ -25,18 +28,27 @@ export class SPProjectColumnItem {
   public GtIsGroupable?: boolean = false
 }
 
+/**
+ * Defines a named value order with an optional menu icon.
+ */
 export type ProjectColumnCustomSort = {
   name: string
   order: string[]
   iconName?: string
 }
 
+/**
+ * Overrides a project field's label, description or editability.
+ */
 export type ProjectColumnFieldOverride = {
   displayName?: string
   description?: string
   isReadOnly?: boolean
 }
 
+/**
+ * Carries a project column's renderer, visibility and value configuration.
+ */
 export type ProjectColumnData = {
   isGroupable?: boolean
   visibility?: string[]
@@ -49,6 +61,9 @@ export type ProjectColumnData = {
   fieldOverrides?: Record<string, Record<string, ProjectColumnFieldOverride>>
 }
 
+/**
+ * Maps a stored project column to list rendering, sorting and filtering settings.
+ */
 export class ProjectColumn implements IProjectColumn {
   public key: string
   public fieldName: string
@@ -109,8 +124,6 @@ export class ProjectColumn implements IProjectColumn {
    * found in the field, an empty array is returned.
    *
    * **Example:** "Status:Active,On hold,Completed;Priority:High,Medium,Low"
-   *
-   * @param value Value for custom sort
    */
   private _getCustomSorts(value: string): ProjectColumnCustomSort[] {
     if (stringIsNullOrEmpty(value)) return []
@@ -130,8 +143,6 @@ export class ProjectColumn implements IProjectColumn {
 
   /**
    * Checks if the column is visible on the given page.
-   *
-   * @param page Page to check
    */
   public isVisible(page: 'Frontpage' | 'ProjectStatus' | 'Portfolio') {
     return this.data?.visibility?.includes(page)
@@ -140,8 +151,6 @@ export class ProjectColumn implements IProjectColumn {
   /**
    * Configures the column with the given configuration and returns
    * the configured column.
-   *
-   * @param config Column configuration
    */
   public configure(config: ProjectColumnConfig[]): ProjectColumn {
     this.data.config = config
@@ -178,8 +187,6 @@ export class ProjectColumn implements IProjectColumn {
   /**
    * Set arbitrary data on the column. Such as `renderAs` or
    * `isGroupable`.
-   *
-   * @param data Data to set
    */
   public setData(data: ProjectColumnData): ProjectColumn {
     this.data = { ...this.data, ...data }

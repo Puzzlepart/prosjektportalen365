@@ -3,10 +3,6 @@
  *
  * Parses and serializes with the browser's own `DOMParser` and `XMLSerializer` (jsdom has both in
  * the tests). The `xmldom` package it used before is unmaintained and has open advisories.
- *
- * @param schemaXml Schema xml
- * @param attributes Attributes
- * @param removeAttributes Attributes to remove
  */
 export function transformFieldXml(
   schemaXml: string,

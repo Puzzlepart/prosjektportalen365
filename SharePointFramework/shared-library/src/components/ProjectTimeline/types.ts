@@ -4,89 +4,51 @@ import { ProjectColumn, ProjectListModel, TimelineConfigurationModel } from '../
 import { IBaseComponentProps } from '../types'
 import { ITimelineProps } from './Timeline'
 
+/**
+ * Configures the project timeline's data source and initial date window.
+ */
 export interface IProjectTimelineProps
   extends IBaseComponentProps<any>, Pick<ITimelineProps, 'infoText'> {
   /**
-   * Default timeframe start as a comma separated string (e.g. `4,months`).
-   * Interpreted as months back in time from today.
+   * Amount and Moment duration unit to move backward from today, e.g. `4,months`.
    */
   defaultTimeframeStart?: string
 
   /**
-   * Default timeframe end as a comma separated string (e.g. `4,months`).
-   * Interpreted as months forward in time from today.
+   * Amount and Moment duration unit to move forward from today, e.g. `4,months`.
    */
   defaultTimeframeEnd?: string
 
-  /**
-   * Information text
-   */
   infoText?: string
 
-  /**
-   *  Show Project deliveries
-   */
   showProjectDeliveries?: boolean
 
-  /**
-   * DataSource name
-   */
   dataSourceName?: string
 
-  /**
-   * Timeline configuration item title
-   */
   configItemTitle?: string
 }
 
+/**
+ * Tracks loaded timeline data, active filters and request feedback.
+ */
 export interface IProjectTimelineState {
-  /**
-   * Filters
-   */
   filters?: IFilterProps[]
 
-  /**
-   * Active filters
-   */
   activeFilters?: { [key: string]: string[] }
 
-  /**
-   * Projects
-   */
   projects?: ProjectListModel[]
 
-  /**
-   * Columns
-   */
   columns?: ProjectColumn[]
 
-  /**
-   * Data
-   */
   data?: ITimelineData
 
-  /**
-   * Filtered data
-   */
   filteredData?: ITimelineData
 
-  /**
-   * Timeline configuration
-   */
   timelineConfig?: TimelineConfigurationModel[]
 
-  /**
-   * Error
-   */
   error?: Error
 
-  /**
-   * Loading
-   */
   loading?: boolean
 
-  /**
-   * Item to show details for
-   */
   showDetails?: { item: ITimelineItem; element: HTMLElement }
 }

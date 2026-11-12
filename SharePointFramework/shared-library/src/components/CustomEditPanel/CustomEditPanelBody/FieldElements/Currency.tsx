@@ -5,6 +5,9 @@ import { FieldContainer } from '../../../FieldContainer'
 import { useCustomEditPanelContext } from '../../context'
 import { FieldElementComponent } from './types'
 
+/**
+ * Edits a currency field with configured minimum and maximum validation.
+ */
 export const Currency: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
   const [validationMessage, setValidationMessage] = useState<string>(null)

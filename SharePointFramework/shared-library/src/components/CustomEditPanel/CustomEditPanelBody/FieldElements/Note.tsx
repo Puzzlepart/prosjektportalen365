@@ -5,6 +5,9 @@ import { FieldContainer } from '../../../FieldContainer'
 import { useCustomEditPanelContext } from '../../context'
 import { FieldElementComponent } from './types'
 
+/**
+ * Edits multiline text using the field's configured line count.
+ */
 export const Note: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
 

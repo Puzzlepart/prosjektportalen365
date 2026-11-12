@@ -1,9 +1,7 @@
 /**
- * Replace tokens
+ * Replaces matching single-brace tokens with top-level object values, blanking falsy values.
  *
- * @param str The string
- * @param obj Object containing misc values (no deep support)
- * @param regex Regex
+ * @param regex Matches complete tokens, including the outer character stripped from each end.
  */
 export function replaceTokens(
   str: string,

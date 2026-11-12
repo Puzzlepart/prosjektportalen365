@@ -1,7 +1,7 @@
 import { IProjectTemplateSPItem } from './ProjectTemplate'
 
 /**
- * @model ProjectTemplateFile
+ * Exposes the template item's ID and its provisioning file's name and URL.
  */
 export class ProjectTemplateFile {
   public id: number

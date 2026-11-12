@@ -4,9 +4,6 @@ import { ListMenuItem } from './types'
 /**
  * Creates a `CSSProperties` object based on the provided `IListMenuItem`.
  *
- * @param item - The `IListMenuItem` to create the `CSSProperties` object from.
- * @param additionalStyle - Additional styles to apply to the `CSSProperties` object.
- *
  * @returns A `CSSProperties` object.
  */
 export function createStyle(item: ListMenuItem, additionalStyle?: CSSProperties) {

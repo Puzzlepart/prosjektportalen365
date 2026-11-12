@@ -47,7 +47,6 @@ export class CloudContentConfig extends ContentConfig {
   /**
    * Build a `CloudContentConfig` from a manifest list-content entry.
    *
-   * @param entry Manifest list-content entry
    * @param pkg Resolved cloud template package (source of the bundled rows)
    * @param id Synthetic, unique id within the cloud content-config set
    */

@@ -6,13 +6,7 @@ import strings from 'SharedLibraryStrings'
 import { customLightTheme, format } from '../../util'
 
 /**
- * Renders a web part title with an optional tooltip.
- *
- * @param props - The component props.
- * @param props.title - The title to display.
- * @param props.description - The description to display when clicking the InfoLabel.
- *
- * @returns The rendered component.
+ * Displays a web part or section heading with an optional HTML information description.
  */
 export const WebPartTitle: FC<IWebPartTitleProps> = (props) => {
   const fluentProviderId = useId('fp-webpart-title')

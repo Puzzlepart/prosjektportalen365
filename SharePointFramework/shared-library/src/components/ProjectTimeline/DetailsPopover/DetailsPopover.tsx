@@ -10,6 +10,9 @@ const DETAILS_POPOVER_DEFAULT_PROPS: Partial<IDetailsPopoverProps> = {
   open: true
 }
 
+/**
+ * Displays the details of a selected timeline item.
+ */
 export const DetailsPopover: FC<IDetailsPopoverProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, DETAILS_POPOVER_DEFAULT_PROPS)
   const { data } = props.timelineItem.item

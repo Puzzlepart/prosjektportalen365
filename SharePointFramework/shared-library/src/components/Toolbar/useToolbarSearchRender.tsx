@@ -4,13 +4,12 @@ import { ListMenuItem } from './types'
 import styles from './Toolbar.module.scss'
 import { getSearchBoxDismissProps } from '../../util'
 
+/**
+ * Renders a command's search box with localized dismissal controls.
+ */
 export function useToolbarSearchRender() {
   /**
-   * Renders a search box in the toolbar.
-   *
-   * @param item The list menu item containing search configuration.
-   *
-   * @returns The rendered search box component.
+   * Renders a command's search box, returning nothing when none is configured.
    */
   function renderToolbarSearch(item: ListMenuItem) {
     if (!item.searchBox) return null

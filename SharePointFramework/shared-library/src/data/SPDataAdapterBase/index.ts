@@ -21,47 +21,26 @@ import {
 import resource from 'SharedResources'
 import { format } from '../../util'
 
+/**
+ * Provides shared SharePoint clients, permissions and project-field mapping.
+ */
 export class SPDataAdapterBase<
   T extends ISPDataAdapterBaseConfiguration = ISPDataAdapterBaseConfiguration
 > {
-  /**
-   * Settings for the data adapter
-   */
   public settings: T
 
-  /**
-   * An instance of `PortalDataService`
-   */
   public portalDataService: PortalDataService
 
-  /**
-   * An instance of `SpEntityPortalService`
-   */
   public entityService: SpEntityPortalService
 
-  /**
-   * SPFI instance
-   */
   public sp: SPFI
 
-  /**
-   * Whether the data adapter is configured
-   */
   public isConfigured: boolean = false
 
-  /**
-   * SPF context
-   */
   public spfxContext: SPFxContext
 
-  /**
-   * Instance of `IPnPClientStore`
-   */
   private _storage: IPnPClientStore
 
-  /**
-   * Storage keys definitions
-   */
   private _storageKeys: Record<string, string> = {
     getProjectAdminPermissions: '{0}_project_admin_permissions'
   }
@@ -86,8 +65,6 @@ export class SPDataAdapterBase<
 
   /**
    * Get storage key for function
-   *
-   * @param func Function name
    */
   public getStorageKey(func: string) {
     return this._storageKeys[func]
@@ -96,9 +73,6 @@ export class SPDataAdapterBase<
   /**
    * Configure the SP data adapter with the given SPFx context
    * and settings.
-   *
-   * @param spfxContext SPFx context
-   * @param settings Settings for the data adapter
    *
    * @returns The configured SP data adapter
    */
@@ -129,8 +103,6 @@ export class SPDataAdapterBase<
 
   /**
    * Ensure current user and return it.
-   *
-   * @param user User
    */
   private async getCurrentUser(user: SPUser) {
     try {
@@ -151,7 +123,6 @@ export class SPDataAdapterBase<
   /**
    * Check project admin permissions.
    *
-   * @param permission Permission to check
    * @param properties Project properties (if not provided, tries to load from the project properties list)
    */
   public async checkProjectAdminPermissions(
@@ -266,9 +237,7 @@ export class SPDataAdapterBase<
   /**
    * Search for users using `sp.profiles.clientPeoplePickerSearchUser`.
    *
-   * @param queryString Query string
    * @param selectedItems Selected items that should be excluded from the result
-   * @param maximumEntitySuggestions Maximum entity suggestions
    */
   public async clientPeoplePickerSearchUser(
     queryString: string,
@@ -302,8 +271,6 @@ export class SPDataAdapterBase<
    * Reads the SharePoint term store through the shared taxonomy client, which follows server
    * paging so term sets larger than one page are returned in full.
    *
-   * @param termSetId Term set ID
-   * @param filter Filter string
    * @param selectedItems Selected items that should be excluded from the result
    * @param languageTag Language tag (default `nb-NO`)
    */
@@ -326,12 +293,9 @@ export class SPDataAdapterBase<
   }
 
   /**
-   * Filters a list of fields to include only those with the `Gt` prefix,
-   * those in a custom group, or those specified in the forcedFields array.
+   * Selects visible editable project fields, always including title and child projects.
    *
-   * @param fields Fields
-   * @param customSiteFieldsGroupName Custom site fields group name
-   * @param forcedFields Array of field names to include regardless of the `ShowInEditForm` attribute value
+   * @param forcedFields Extra field names eligible for selection; hidden and non-editable fields remain excluded.
    *
    * @returns Fields to sync
    */
@@ -376,12 +340,11 @@ export class SPDataAdapterBase<
   }
 
   /**
-   * Get mapped project properties from `fieldValues` and `fieldValuesText`.
+   * Maps project field values to the destination web's update payload.
    *
-   * Site users needs to be fetched from the source web, so that they can be ensured for the destination web.
+   * Source users are resolved and ensured on the destination web before their IDs are written.
    *
-   * @param fieldValues - Field values for the properties item
-   * @param options Options for the mapping process (default `{}`
+   * @param options Controls mapping direction, field selection and taxonomy serialization.
    *
    * @returns Mapped project properties for the destination web (default `{}`)
    */

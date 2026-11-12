@@ -26,6 +26,9 @@ function useTextValue(stored: string, onChange: (value: string) => void) {
   }
 }
 
+/**
+ * Edits a single-line or multiline renderer property with local typing state.
+ */
 const TextPropertyInput: FC<{ field: ITextPropertyField }> = ({ field }) => {
   const text = useTextValue(field.value ?? '', field.onChange)
   return field.multiline ? (
@@ -45,6 +48,9 @@ const TextPropertyInput: FC<{ field: ITextPropertyField }> = ({ field }) => {
   )
 }
 
+/**
+ * Edits an integer renderer property, reporting undefined when cleared.
+ */
 const NumberPropertyInput: FC<{ field: INumberPropertyField }> = ({ field }) => {
   const stored = field.value === undefined || field.value === null ? '' : String(field.value)
   // An emptied field reports `undefined`, which the caller drops from the stored properties,
@@ -93,12 +99,7 @@ function renderField(field: IColumnDataTypePropertyField): ReactNode {
 }
 
 /**
- * Renders the properties of the selected data type as a collapsible list of fields.
- *
- * @param fields - The list of fields to render.
- * @param dataTypeProperties - The data type properties to use for rendering the fields.
- * @param toggleIsFieldsVisible - A function to toggle the visibility of the fields.
- * @param isFieldsVisible - A boolean indicating whether the fields are visible or not.
+ * Renders configurable column-renderer properties in a collapsible field list.
  */
 export const DataTypeFields: FC<IDataTypeFieldsProps> = (props) => {
   const { fields, dataTypeProperties, toggleIsFieldsVisible, isFieldsVisible } = props

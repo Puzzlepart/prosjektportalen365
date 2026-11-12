@@ -1,19 +1,13 @@
 import { AvatarProps } from '@fluentui/react-components'
 
+/**
+ * Maps a project-list item to project-card and navigation metadata.
+ */
 export class ProjectListModel {
-  /**
-   * Site ID of the project site.
-   */
   public siteId?: string
 
-  /**
-   * Group ID of the project site.
-   */
   public groupId?: string
 
-  /**
-   * URL of the project site.
-   */
   public url?: string
 
   /**
@@ -26,44 +20,20 @@ export class ProjectListModel {
    */
   public lifecycleStatus?: string
 
-  /**
-   * The project types. Can have multiple values.
-   */
   public type?: string[]
 
-  /**
-   * The project service areas. Can have multiple values.
-   */
   public serviceArea?: string[]
 
-  /**
-   * The project phase.
-   */
   public phase?: string
 
-  /**
-   * Start date of the project as a string.
-   */
   public startDate?: string
 
-  /**
-   * End date of the project as a string.
-   */
   public endDate?: string
 
-  /**
-   * The project primary user properties.
-   */
   public primaryUser: AvatarProps
 
-  /**
-   * The project secondary user properties.
-   */
   public secondaryUser: AvatarProps
 
-  /**
-   * The project logo URL.
-   */
   public logo?: string
 
   /**
@@ -78,24 +48,12 @@ export class ProjectListModel {
    */
   public hasUserAccess?: boolean
 
-  /**
-   * Project data
-   */
   public data?: any[]
 
-  /**
-   * The project is a parent project.
-   */
   public isParent?: boolean
 
-  /**
-   * The project is a program project.
-   */
   public isProgram?: boolean
 
-  /**
-   * Template used for provisioning the project
-   */
   public template?: string
 
   /**
@@ -103,12 +61,6 @@ export class ProjectListModel {
    */
   public templateImageUrl?: string
 
-  /**
-   * Creates a new instance of ProjectListModel
-   *
-   * @param title - Title
-   * @param item - Item
-   */
   constructor(
     public title?: string,
     item?: any

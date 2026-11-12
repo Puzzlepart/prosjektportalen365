@@ -3,6 +3,9 @@ import { ProjectContentColumn } from '../../models'
 import { IList } from '@pnp/sp/lists'
 import { IWeb } from '@pnp/sp/webs'
 import resource from 'SharedResources'
+/**
+ * Reads stored data sources and resolves their configured content columns.
+ */
 export class DataSourceService {
   private _dataSourcesList: IList
   private _columnsList: IList
@@ -10,7 +13,6 @@ export class DataSourceService {
   /**
    * Creates a new instance of `DataSourceService`
    *
-   * @param web Web
    * @param dataSourcesListName List name is default set to `{resource.Lists_DataSources_Title}` but can be overridden (not recommended)
    * @param columnsListName Columns list name is default set to `{resource.Lists_ProjectContentColumns_Title}` but can be overridden (not recommended)
    */
@@ -53,11 +55,7 @@ export class DataSourceService {
   }
 
   /**
-   * Get data sources by name.
-   *
-   * @param name The name of the data source
-   *
-   * @returns Data source
+   * Finds one data source by title, returning null when absent or unreadable.
    */
   public async getByName(name: string): Promise<DataSource> {
     return this._getSingle(`Title eq '${name}'`)

@@ -11,6 +11,9 @@ const LIST_COLUMN_DEFAULT_PROPS: Partial<IListColumnProps> = {
   padding: 0
 }
 
+/**
+ * Displays a separated string as a styled list.
+ */
 export const ListColumn: ColumnRenderComponent<IListColumnProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, LIST_COLUMN_DEFAULT_PROPS)
   const values: string[] = props.columnValue ? props.columnValue.split(props.valueSeparator) : []

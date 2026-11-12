@@ -1,9 +1,5 @@
 /**
- * Inject styles
- *
- * @param css CSS
- *
- * @returns {HTMLStyleElement} The style element
+ * Appends a stylesheet to the document head and returns its style element.
  */
 export function injectStyles(css: string): HTMLStyleElement {
   const head = document.head || document.getElementsByTagName('head')[0]
