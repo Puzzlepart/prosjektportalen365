@@ -37,6 +37,7 @@ Kjør aldri `npm version` inne i en løsning; se [NPM](npm.md).
 
 - Opprett en PR fra `releases/x.y` til `main` med tittelen `v<versjon>`, labelen `release-pr` og milepælen for versjonen. For 1.14.0 var det #1769, slått sammen med «Squash and merge».
 - Push til `main` starter `build-release.yml` («Build release (main)») når den endrer noe under `SharePointFramework/`, `Install/` eller `Templates/`, som versjonscommiten gjør. Den laster opp artefaktene `release-package` (hovedkanalen) og `release-package-test` (testkanalen), og `release-package-kurs` når emnelinjen har `[build-kurs]`. Den ruller ikke ut noe.
+- Samme push starter `ci-releases.yml` og `ci-channel-test.yml`, som ruller squash-commiten ut til utviklingshuben og testtenanten og kjører e2e- og integrasjonstestene mot den. Vent til de er grønne før GitHub-utgivelsen.
 - Arbeidsflyten leser bare emnelinjen, som de andre arbeidsflytene. Skal kurs-pakken bygges, legg `[build-kurs]` bakerst i emnelinjen i merge-dialogen. Til 14. oktober 2026 leste den hele meldingen, også punktlisten en squash-merge lager av alle commitene i versjonen.
 - Artefaktene slettes etter 7 dager, som er det lengste repoet tillater.
 - Testpakken fra `main` har versjonen `x.y.z.0`. Testtenanten har allerede fått `x.y.z.<kjørenummer>` fra `ci-channel-test.yml`.
@@ -50,7 +51,7 @@ Kjør aldri `npm version` inne i en løsning; se [NPM](npm.md).
 
 ### 5. Neste versjon
 
-- Opprett `releases/<neste>` og skriv branchnavnet inn i `on.push.branches` i `ci-releases.yml`, `ci-channel-test.yml` og `ci-build-debug.yml`, og der guiden nevner den gjeldende release-branchen: [Kom i gang](../kom-i-gang.md), [Kontinuerlig integrasjon](../ci/kontinuerlig-integrasjon.md) og [testing.md](../spfx/testing.md).
+- Opprett `releases/<neste>` og skriv branchnavnet inn i `on.push.branches` i `ci-releases.yml`, `ci-channel-test.yml` og `ci-build-debug.yml` i stedet for den forrige release-branchen (`main` blir stående), og der guiden nevner den gjeldende release-branchen: [Kom i gang](../kom-i-gang.md), [Kontinuerlig integrasjon](../ci/kontinuerlig-integrasjon.md) og [testing.md](../spfx/testing.md).
 - Opprett milepælen for neste versjon om den mangler, og legg `## <neste> - TBA` øverst i `CHANGELOG.md`.
 
 ### Patch-versjoner

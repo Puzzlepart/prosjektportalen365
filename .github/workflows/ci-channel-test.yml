@@ -2,8 +2,12 @@ name: CI (channels/test)
 
 on:
   push:
+    # main too, so what reaches it (a release's squash, a change made there) is deployed and tested
+    # as on the release branch. Both share the test hub: the release branch's next push puts its
+    # build back.
     branches:
       - releases/1.15
+      - main
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'

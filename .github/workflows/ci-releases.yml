@@ -2,8 +2,11 @@ name: CI (releases/*)
 
 on:
   push:
+    # main too, as in ci-channel-test.yml: both share the dev hub, and the release branch's next
+    # push puts its build back.
     branches:
       - releases/1.15
+      - main
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'

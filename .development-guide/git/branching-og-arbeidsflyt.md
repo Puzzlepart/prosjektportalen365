@@ -9,7 +9,7 @@
 
 Nye funksjoner og feilrettinger går mot gjeldende release-branch. Versjonene følger [Semantic Versioning](https://semver.org/spec/v2.0.0.html). En minor får sin egen branch. Hvilken branch en patch lages fra, avtales i teamet; se [Opprettelse av en ny versjon](../utgivelse/opprette-ny-versjon.md).
 
-En push til `releases/1.15` bygger og ruller ut til utviklingsmiljøet og testtenanten; se [Kontinuerlig integrasjon](../ci/kontinuerlig-integrasjon.md).
+En push til `releases/1.15` eller `main` bygger og ruller ut til utviklingsmiljøet og testtenanten; se [Kontinuerlig integrasjon](../ci/kontinuerlig-integrasjon.md).
 
 ### Din branch
 

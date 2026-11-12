@@ -451,7 +451,9 @@ describe('RiskAction', () => {
     await waitFor(() =>
       expect(screen.queryByText(format(strings.MigrateRiskActionsDialogTitle, RISK))).toBeNull()
     )
-    const list = screen.getByRole('list', { name: strings.RiskActionTasksLabel })
+    // The title goes before Fluent lifts aria-hidden from the field, so a slow runner found no list
+    // (main's release build, run 43036264643): wait until it is accessible again.
+    const list = await screen.findByRole('list', { name: strings.RiskActionTasksLabel })
     expect(within(list).getAllByRole('listitem')).toHaveLength(2)
     expect(screen.getByText('Avtal en reserve')).toBeInTheDocument()
   })
