@@ -15,6 +15,28 @@ import { useToolbarItems } from './ToolbarItems/useToolbarItems'
  */
 const TIME_LAPSE_MARKER_COLOR = getContrastingShade('#f35d69', TIMELINE_ROW_BACKGROUND) ?? '#f35d69'
 
+/** What Tab can stop at, before the checks of `getNextTabStop`. */
+const TAB_STOPS = 'a[href], button, input, select, textarea, [tabindex]'
+
+/**
+ * The first element after `container` in the page that Tab stops at: shown, enabled, with no
+ * negative tab index, and not one of Tabster's focus guards.
+ *
+ * @param container The element to go past
+ */
+function getNextTabStop(container: HTMLElement): HTMLElement | undefined {
+  return Array.from(container.ownerDocument.querySelectorAll<HTMLElement>(TAB_STOPS)).find(
+    (element) =>
+      !container.contains(element) &&
+      container.compareDocumentPosition(element) & Node.DOCUMENT_POSITION_FOLLOWING &&
+      element.tabIndex >= 0 &&
+      !element.matches(':disabled, [data-tabster-dummy]') &&
+      !element.closest('[hidden], [inert], [aria-hidden="true"]') &&
+      element.getClientRects().length > 0 &&
+      getComputedStyle(element).visibility !== 'hidden'
+  )
+}
+
 /**
  * Manages timeline details, grouping, filters and calendar renderers.
  */
@@ -44,6 +66,35 @@ export function useTimeline(props: ITimelineProps) {
     const element = showDetails?.element
     setShowDetails(null)
     if (event?.type === 'keydown') element?.focus()
+  }
+
+  /**
+   * Moves the focus with Tab from the scroll area to the items and between them, in the order the
+   * calendar draws them, from the last item on to what follows the timeline, and with Shift+Tab
+   * back to the scroll area (WCAG 2.1.1, 2.4.3). SharePoint moves the focus on Tab itself (its own
+   * Tabster, on the page): from the scroll area it went past the items, and from the last item and
+   * with Shift+Tab from the first it went round them. Shift+Tab from the scroll area is the page's.
+   *
+   * @param event The key pressed inside the timeline
+   */
+  const onTimelineKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
+    if (event.key !== 'Tab' || event.altKey || event.ctrlKey || event.metaKey) return
+    const timeline = event.currentTarget
+    const scroll = timeline.querySelector<HTMLElement>('.rct-scroll')
+    if (!scroll) return
+    const stops = [
+      scroll,
+      ...Array.from(scroll.querySelectorAll<HTMLElement>('.rc-item[tabindex="0"]'))
+    ]
+    const index = stops.indexOf(event.target as HTMLElement)
+    if (index < 0) return
+    const next = event.shiftKey
+      ? stops[index - 1]
+      : (stops[index + 1] ?? (index > 0 ? getNextTabStop(timeline) : undefined))
+    if (!next) return
+    event.preventDefault()
+    event.stopPropagation()
+    next.focus()
   }
 
   /**
@@ -86,6 +137,7 @@ export function useTimeline(props: ITimelineProps) {
     setShowDetails,
     onItemClick,
     onDetailsDismiss,
+    onTimelineKeyDown,
     scrollRef,
     itemRenderer,
     groupRenderer,

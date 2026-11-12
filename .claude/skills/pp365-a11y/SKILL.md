@@ -373,7 +373,25 @@ checked by hand and with which reader and browser: axe finds only part of what W
 - `react-calendar-timeline` 0.28 has no keyboard handling and no roles, but it draws each item
   with our `itemRenderer` and hands its scroll area (`.rct-scroll`) to `scrollRef`: that is where
   roles, names and keys go (`ProjectTimeline/Timeline/useItemRenderer.tsx`, `useTimeline.ts`).
-  Its scroll area scrolls with the arrow keys once it can take focus.
+  Its scroll area scrolls with the arrow keys once it can take focus. Its header writes moment's
+  global language, English: give `DateHeader` a `labelFormat` (`formatHeaderLabel`, `Intl` in
+  SharePoint's UI language) rather than setting moment's language for the page. Its markers lie
+  under the items (z-index 80): a marker's label takes a z-index above them.
+- SharePoint's pages run a Tabster of their own (in `sp-pages-assembly`) that moves the focus on
+  Tab itself, from a listener on its root, above ours. In the timeline it went from the scroll
+  area past the items and from the last item round to the first (traced with the focus's stack
+  on 2026-11-12). Where its order goes wrong, take Tab in a React handler on our own element, and
+  `preventDefault` and `stopPropagation` (React's handler runs at our root, before SharePoint's):
+  `useTimeline`'s `onTimelineKeyDown`, which also finds the next stop after the timeline. Jest has
+  no SharePoint: the browser suite checks the order (`tests/smoke/portfolio.spec.ts`).
+- A field customizer's controls lie in SharePoint's list row, which acts on the keys that reach
+  it: Enter on a button in the cell opened the item's form, and Space selected the row. Stop Enter
+  and Space (keydown and keyup) at the cell's own element; the button still acts on them
+  (`RiskActionFieldValue`'s `stopRowKeys`).
+- A colour that carries meaning (a matrix cell's zone) gives way to the theme's background in
+  Windows contrast themes: `forced-color-adjust: none` keeps it, and the meaning goes in text as
+  well (`DynamicMatrix`'s `getMatrixZones`: the configured name, else «Nivå 2 av 4» by the
+  colours' rank).
 - A Fluent `Popover` positioned on an element, with no `PopoverTrigger`, gives focus back to
   nothing when it closes: return it on Escape yourself (`useTimeline`'s `onDetailsDismiss`).
 - A Fluent `Dialog` or drawer opened from state, with no `DialogTrigger`, gives focus back to

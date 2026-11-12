@@ -20,8 +20,16 @@ const RISK_ACTION_FIELD_VALUE_DEFAULT_PROPS: Partial<IRiskActionFieldValueProps>
 export const RiskActionFieldValue: FC<IRiskActionFieldValueProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, RISK_ACTION_FIELD_VALUE_DEFAULT_PROPS)
   const context = useRiskActionFieldCustomizerContext()
-  const { isFieldValueSet, isHiddenFieldValueSet, tasks, textBesidesTasks, horizontalLayout, gap } =
-    useRiskActionFieldValue()
+  const {
+    isFieldValueSet,
+    isHiddenFieldValueSet,
+    tasks,
+    textBesidesTasks,
+    horizontalLayout,
+    gap,
+    onKeyDown,
+    onKeyUp
+  } = useRiskActionFieldValue()
   let element: ReactElement = null
   if (isHiddenFieldValueSet) {
     element = (
@@ -67,7 +75,12 @@ export const RiskActionFieldValue: FC<IRiskActionFieldValueProps> = (incomingPro
       )
     }
   }
-  return <div className={styles.riskActionFieldValue}>{element}</div>
+  return (
+    // Enter and Space stay in the cell, not the list's row (see `stopRowKeys`).
+    <div className={styles.riskActionFieldValue} onKeyDown={onKeyDown} onKeyUp={onKeyUp}>
+      {element}
+    </div>
+  )
 }
 
 RiskActionFieldValue.displayName = 'RiskActionFieldValue'

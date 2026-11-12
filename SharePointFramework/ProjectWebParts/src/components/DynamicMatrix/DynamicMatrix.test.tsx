@@ -1,8 +1,11 @@
 import { render, screen, within } from '@testing-library/react'
 import { axeComponent } from 'pp365-jest-config/lib/axe'
+import { format } from 'pp365-shared-library/lib/util'
+import strings from 'ProjectWebPartsStrings'
 import * as React from 'react'
 import { DynamicMatrix } from './DynamicMatrix'
 import { generateMatrixConfiguration } from './generateMatrixConfiguration'
+import { getMatrixZones } from './getMatrixZones'
 import { MatrixCellType } from './MatrixCell'
 
 /**
@@ -38,7 +41,56 @@ describe('generateMatrixConfiguration', () => {
   })
 })
 
+/**
+ * A 3 by 3 matrix coloured as the template's are: green where probability times consequence is
+ * low, yellow, then red; the colours are any the configuration gives.
+ */
+function colouredConfiguration(zone?: string) {
+  const configuration = generateMatrixConfiguration(3, {
+    3: [
+      [undefined, 'Lav', 'Moderat', 'Alvorlig'],
+      ['Stor', 'Middels', 'Liten']
+    ]
+  })
+  const colour = (score: number) => (score <= 2 ? '#7ABD7E' : score <= 4 ? '#F8D66D' : '#FF6961')
+  for (const row of configuration.slice(1)) {
+    for (const cell of row.slice(1)) cell.backgroundColor = colour(cell.x * cell.y)
+  }
+  if (zone) configuration[1][3].cellValue = zone
+  return configuration
+}
+
+describe('getMatrixZones', () => {
+  it("names each cell's zone by the rank of its colour, from the lowest probability times consequence", () => {
+    const zones = getMatrixZones(colouredConfiguration())
+    expect(zones.get('1,1')).toBe(format(strings.Aria.MatrixZoneLabel, 1, 3))
+    expect(zones.get('2,2')).toBe(format(strings.Aria.MatrixZoneLabel, 2, 3))
+    expect(zones.get('3,3')).toBe(format(strings.Aria.MatrixZoneLabel, 3, 3))
+  })
+
+  it('takes the name the configuration gives a cell', () => {
+    expect(getMatrixZones(colouredConfiguration('Kritisk')).get('3,3')).toBe('Kritisk')
+  })
+})
+
 describe('DynamicMatrix', () => {
+  it("tells each cell's zone in text as well as by its colour (WCAG 1.4.1)", () => {
+    render(
+      <DynamicMatrix
+        title='Risikomatrise'
+        configuration={colouredConfiguration()}
+        width='100%'
+        getElementsForCell={() => []}
+      />
+    )
+    const cells = screen.getAllByRole('cell')
+    expect(cells).toHaveLength(9)
+    // The top right cell: the greatest probability and consequence.
+    expect(cells[2]).toHaveTextContent(format(strings.Aria.MatrixZoneLabel, 3, 3))
+    expect(cells[2]).toHaveAttribute('title', format(strings.Aria.MatrixZoneLabel, 3, 3))
+    expect(cells[6]).toHaveTextContent(format(strings.Aria.MatrixZoneLabel, 1, 3))
+  })
+
   it('draws the headers and places the elements in their cells', () => {
     const configuration = generateMatrixConfiguration(4, headers)
     const items = [

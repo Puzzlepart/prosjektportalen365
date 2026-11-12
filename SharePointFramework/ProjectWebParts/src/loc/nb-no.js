@@ -23,6 +23,7 @@ define([], function () {
       ChecklistStepsLabel: 'Sjekkpunkter',
       MoreSectionsLabel: '+{0} flere seksjoner',
       NameValueLabel: '{0}: {1}',
+      MatrixZoneLabel: 'Nivå {0} av {1}',
       ChangingPhaseAnnouncement: '{0}. {1}'
     },
     SaveText: 'Lagre',

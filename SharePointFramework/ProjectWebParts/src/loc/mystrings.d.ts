@@ -11,6 +11,7 @@ declare interface IProjectWebPartsStrings {
     ChecklistStepsLabel: string
     MoreSectionsLabel: string
     NameValueLabel: string
+    MatrixZoneLabel: string
     ChangingPhaseAnnouncement: string
   }
   SaveText: string

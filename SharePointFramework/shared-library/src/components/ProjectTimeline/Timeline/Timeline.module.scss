@@ -38,9 +38,13 @@
     padding: 0 32px 0 32px;
     font-size: 12px !important;
 
-    // Today's label, at the top of its line, readable over the bars it may lie on.
+    // Today's label, at the top of its line, readable over the bars it may lie on. Over them, too:
+    // the calendar draws its markers under the items (z-index 80, 82 when selected), and the bar
+    // of a project that spans today hid the label. The line itself stays under the items, and the
+    // label lets the pointer through to them.
     .todayLabel {
       position: absolute;
+      z-index: 85;
       top: 2px;
       left: 4px;
       padding: 0 4px;

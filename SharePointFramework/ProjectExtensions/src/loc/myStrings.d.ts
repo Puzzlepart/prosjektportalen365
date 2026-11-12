@@ -232,6 +232,7 @@ declare interface IProjectExtensionsStrings {
   RiskActionSyncFailed: string
   NewRiskActionSaved: string
   NewRiskActionSaveFailed: string
+  NewRiskActionSaveNeedsTitle: string
   MigrateRiskActionsDone: string
   MigrateRiskActionsFailed: string
   MigrateRiskActionsPartlyDone: string

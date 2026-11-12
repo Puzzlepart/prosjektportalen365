@@ -292,6 +292,30 @@ describe('RiskAction', () => {
     expect(screen.getByText(strings.RiskActionPopoverInfoText)).toBeInTheDocument()
   })
 
+  it("keeps Enter and Space on the cell's button from the list's row, and still opens the actions (WCAG 2.1.1)", () => {
+    // SharePoint opened the item's form on Enter, and selected the row on Space.
+    const row = jest.fn()
+    document.body.addEventListener('keydown', row)
+    document.body.addEventListener('keyup', row)
+    try {
+      renderRiskAction('', PLANNER_TASKS)
+      const admin = button(strings.RiskActionFieldValueAdminButtonText)
+      fireEvent.keyDown(admin, { key: 'Enter' })
+      fireEvent.keyDown(admin, { key: ' ' })
+      fireEvent.keyUp(admin, { key: ' ' })
+      expect(row).not.toHaveBeenCalled()
+      // Other keys, such as Tab, go on as before.
+      fireEvent.keyDown(admin, { key: 'Tab' })
+      expect(row).toHaveBeenCalledTimes(1)
+      // The browser turns Enter and Space on a button into a click, which opens the actions.
+      fireEvent.click(admin)
+      expect(screen.getByText(format(strings.RiskActionPopoverTitle, RISK))).toBeInTheDocument()
+    } finally {
+      document.body.removeEventListener('keydown', row)
+      document.body.removeEventListener('keyup', row)
+    }
+  })
+
   it('lists the Planner tasks, a done one named so, and keeps the focus in the actions, named by their risk (WCAG 1.3.1, 2.4.3)', () => {
     renderRiskAction('', PLANNER_TASKS)
     const list = screen.getByRole('list', { name: strings.RiskActionTasksLabel })
@@ -504,10 +528,17 @@ describe('RiskAction', () => {
     expect(
       within(panel).getByText(format(strings.NewRiskActionPanelTitle, RISK))
     ).toBeInTheDocument()
-    expect(button(strings.SaveButtonLabel)).toBeDisabled()
+    // Focusable while it waits for the title, and says so: it was disabled, skipped by Tab and
+    // silent (WCAG 2.1.1, 3.3.2).
+    expect(button(strings.SaveButtonLabel)).toHaveAttribute('aria-disabled', 'true')
+    expect(button(strings.SaveButtonLabel)).not.toHaveAttribute('disabled')
+    expect(button(strings.SaveButtonLabel)).toHaveAccessibleDescription(
+      strings.NewRiskActionSaveNeedsTitle
+    )
     fireEvent.change(within(panel).getAllByRole('textbox')[0], {
       target: { value: 'Avtal en reserveleverandør' }
     })
+    expect(button(strings.SaveButtonLabel)).not.toHaveAttribute('aria-disabled')
     // The days as the picker writes them in the UI language, Norwegian.
     fireEvent.change(within(panel).getByLabelText(strings.StartDateLabel), {
       target: { value: '15.03.2026' }

@@ -20,4 +20,9 @@ export interface IMatrixCell {
 /** Supplies a configured cell to the matrix renderer. */
 export interface IMatrixCellProps extends HTMLProps<HTMLDivElement> {
   cell?: IMatrixCell
+
+  /**
+   * The cell's zone as text (`getMatrixZones`), read and shown on hover besides its colour.
+   */
+  zone?: string
 }

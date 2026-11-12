@@ -1667,3 +1667,23 @@ itself as `observer` to `add()` is disposed, as the footer does.
   holds the status page to that at seven widths; the visual test measured 320 px only.
 - **Left.** The other toolbars that now wrap (the timelines, the idea module, the program
   administration) were not looked at by hand at those widths.
+
+### Hand round 3: the timeline, the matrices and the Planner actions (2026-11-12)
+
+- **Found.** Tab from the timeline's scroll area went past its items, and Shift+Tab went round
+  them; the trace shows SharePoint's own Tabster moving the focus. «I dag» lay under the bar of a
+  project that spans today. The header's months were English. On the list, Enter on the action
+  cell's button opened SharePoint's display form and Space selected the row. «Lagre» in «Legg til
+  nytt tiltak» was `disabled`. The matrix cells told their zone by colour alone, and all turned
+  white in a contrast theme.
+- **Done.** `useTimeline`'s `onTimelineKeyDown` takes Tab and Shift+Tab between the scroll area
+  and the items, and from the last item on to the next stop after the timeline (tried injected
+  into the test hub's page: scroll area, items, «Nytt element», and back). `.todayLabel` lies
+  over the items. `formatHeaderLabel` writes the header in SharePoint's UI language. The cell's
+  `stopRowKeys` keeps Enter and Space from the row. «Lagre» is `disabledFocusable` with what it
+  waits for. `getMatrixZones` names each cell's zone, read by screen readers and shown in the
+  cell's tooltip, and the cells keep their colours in contrast themes. Tests: `Timeline.test.tsx`
+  (the Tab order, the header), `formatHeaderLabel.test.ts`, `RiskAction.test.tsx`,
+  `DynamicMatrix.test.tsx`, and the Tab order in `tests/smoke/portfolio.spec.ts`.
+- **Left.** The zone is not shown in text in the cell itself, only in its tooltip and for screen
+  readers; a configuration can name its zones with `cellValue`. Hear the round in a screen reader.

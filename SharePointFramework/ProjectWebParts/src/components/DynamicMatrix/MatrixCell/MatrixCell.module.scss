@@ -1,6 +1,9 @@
 .matrixCell {
   border-right: 1px solid var(--colorNeutralBackground2);
   border-bottom: 1px solid var(--colorNeutralBackground2);
+  // The zone's colour carries meaning, so a contrast theme keeps it (WCAG 1.4.1): it turned every
+  // cell white. The elements in the cell keep their look with it, readable as without the theme.
+  forced-color-adjust: none;
 
   &:hover {
     filter: brightness(1.1);
@@ -9,5 +12,18 @@
   .cell {
     padding: 10px;
     box-sizing: border-box;
+
+    // The zone in text, for screen readers; the cell's tooltip shows it.
+    .zone {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+      border: 0;
+    }
   }
 }

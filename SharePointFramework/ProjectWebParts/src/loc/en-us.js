@@ -67,6 +67,7 @@ define([], function () {
       ChecklistStepsLabel: 'Checkpoints',
       MoreSectionsLabel: '+{0} more sections',
       NameValueLabel: '{0}: {1}',
+      MatrixZoneLabel: 'Level {0} of {1}',
       ChangingPhaseAnnouncement: '{0}. {1}',
     },
     SaveText: 'Save',

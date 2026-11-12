@@ -236,6 +236,7 @@ define([], function () {
     RiskActionSyncFailed: 'Oppgavestatusen ble ikke oppdatert',
     NewRiskActionSaved: 'Tiltaket «{0}» er lagt til i Planner',
     NewRiskActionSaveFailed: 'Tiltaket ble ikke lagt til',
+    NewRiskActionSaveNeedsTitle: 'Skriv inn en tittel for å lagre tiltaket',
     MigrateRiskActionsDone: '{0} oppgaver er opprettet i Planner',
     MigrateRiskActionsFailed: 'Oppgavene ble ikke opprettet',
     MigrateRiskActionsPartlyDone: '{0} av {1} tiltak er opprettet i Planner',

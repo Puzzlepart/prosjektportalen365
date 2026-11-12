@@ -17,8 +17,16 @@ import { useNewRiskActionPanel } from './useNewRiskActionPanel'
  * renders, with the fields the other forms use and save and cancel in the footer.
  */
 export const NewRiskActionPanel: FC<INewRiskActionPanelProps> = (props) => {
-  const { headerText, form, setField, resolvePeople, onSave, canSave, saveError } =
-    useNewRiskActionPanel(props)
+  const {
+    headerText,
+    form,
+    setField,
+    resolvePeople,
+    onSave,
+    canSave,
+    saveDisabledReason,
+    saveError
+  } = useNewRiskActionPanel(props)
   return (
     <BasePanel
       {...props}
@@ -26,7 +34,14 @@ export const NewRiskActionPanel: FC<INewRiskActionPanelProps> = (props) => {
       headerText={headerText}
       footer={
         <>
-          <Button appearance='primary' onClick={onSave} disabled={!canSave}>
+          <Button
+            appearance='primary'
+            onClick={onSave}
+            // Focusable while it cannot save, with what it waits for: a disabled button is
+            // skipped by the keyboard (WCAG 2.1.1, 3.3.2).
+            disabledFocusable={!canSave}
+            title={saveDisabledReason}
+          >
             {strings.SaveButtonLabel}
           </Button>
           <Button appearance='secondary' onClick={props.onClose}>

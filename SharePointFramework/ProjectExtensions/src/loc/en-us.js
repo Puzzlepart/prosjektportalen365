@@ -236,6 +236,7 @@ define([], function () {
     RiskActionSyncFailed: 'The task status was not updated',
     NewRiskActionSaved: 'The action «{0}» was added to Planner',
     NewRiskActionSaveFailed: 'The action was not added',
+    NewRiskActionSaveNeedsTitle: 'Enter a title to save the action',
     MigrateRiskActionsDone: '{0} tasks were created in Planner',
     MigrateRiskActionsFailed: 'The tasks were not created',
     MigrateRiskActionsPartlyDone: '{0} of {1} actions were created in Planner',

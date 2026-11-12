@@ -225,6 +225,13 @@ test.describe('portfolio hub', () => {
     await page.keyboard.press('Escape')
     await expect(details).toBeHidden()
     await expect(item).toBeFocused()
+    // Tab goes from the scroll area to the first item, and Shift+Tab from it back: SharePoint's
+    // own Tab handling went from the scroll area past the items, and round them (#1788).
+    await scrollArea.focus()
+    await page.keyboard.press('Tab')
+    await expect(item, 'Tab from the scroll area reaches the first item').toBeFocused()
+    await page.keyboard.press('Shift+Tab')
+    await expect(scrollArea, 'Shift+Tab from the first item reaches the scroll area').toBeFocused()
   })
 
   test('the merged view, where the overview offers it, reads every hub (#1788)', async ({

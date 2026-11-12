@@ -102,6 +102,9 @@ Sjekk ut [release notes](./releasenotes/1.15.0.md) for høydepunkter og mer deta
 - Rettet en feil i `Prosjektinformasjon` hvor skjermlesere ikke leste spørsmålet i dialogene for `Gjør om til overordnet prosjekt` og `Kjør oppsettveiviser` [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
 - Rettet en feil i `Prosjektnyheter` hvor «Opprett» i dialogen for ny nyhetsartikkel ikke kunne nås med tastaturet eller si hva som manglet, og malfeltet viste feilmelding før noe var valgt [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
 - Rettet feil i `Prosjektstatus` på smale skjermer og ved forstørrelse: verktøylinjen gikk utenfor webdelen eller lå under fanene, og statusene i sammendraget ble så smale at ordene brakk bokstav for bokstav. Verktøylinjer uten søkefelt eller visningsvelger brytes nå så snart de ikke får plass, også i tidslinjene, `Idémodul` og `Administrasjon av underområder` [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
+- Rettet feil i tidslinjene for prosjekt, portefølje og program: Tab fra tidslinjen hoppet over elementene, «I dag» ble dekket av søylene, og månedene i toppen var på engelsk [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
+- Rettet en feil i Planner-tiltak hvor Enter i tiltakscellen åpnet SharePoints visningsskjema og mellomrom merket raden. «Lagre» i «Legg til nytt tiltak» kan nås med tastaturet og sier at den venter på tittel [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
+- `Risikomatrise` og `Mulighetsmatrise` sier nivået til hver celle i tekst for skjermlesere og i verktøytipset, ikke bare med farge, og fargene beholdes i kontrastmodus [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
 
 ### Merk
 

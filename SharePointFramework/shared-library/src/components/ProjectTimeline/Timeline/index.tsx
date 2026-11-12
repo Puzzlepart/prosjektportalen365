@@ -3,10 +3,17 @@ import { ITimelineItem } from '../../../interfaces/ITimelineItem'
 import moment from 'moment'
 import * as strings from 'SharedLibraryStrings'
 import React, { FC } from 'react'
-import ReactTimeline, { CustomMarker, TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
+import ReactTimeline, {
+  CustomMarker,
+  DateHeader,
+  TimelineHeaders,
+  TimelineMarkers,
+  TodayMarker
+} from 'react-calendar-timeline'
 import 'react-calendar-timeline/lib/Timeline.css'
 import { FilterPanel } from '../../FilterPanel'
 import { DetailsPopover } from '../DetailsPopover'
+import { formatHeaderLabel } from './formatHeaderLabel'
 import styles from './Timeline.module.scss'
 import { ITimelineProps } from './types'
 import { useTimeline } from './useTimeline'
@@ -38,6 +45,7 @@ export const Timeline: FC<ITimelineProps> = (incomingProps) => {
     menuItems,
     setShowFilterPanel,
     onDetailsDismiss,
+    onTimelineKeyDown,
     scrollRef,
     itemRenderer,
     groupRenderer,
@@ -56,7 +64,9 @@ export const Timeline: FC<ITimelineProps> = (incomingProps) => {
           </div>
         </div>
 
-        <div className={styles.timeline}>
+        {/* The scroll area and the items take Tab from each other here: SharePoint's own Tab
+            handling skipped the items (WCAG 2.1.1, 2.4.3). */}
+        <div className={styles.timeline} onKeyDown={onTimelineKeyDown}>
           <ReactTimeline<ITimelineItem>
             defaultTimeStart={defaultTimeStart}
             defaultTimeEnd={defaultTimeEnd}
@@ -70,6 +80,11 @@ export const Timeline: FC<ITimelineProps> = (incomingProps) => {
             groupRenderer={groupRenderer}
             scrollRef={scrollRef}
           >
+            {/* The calendar's own headers, with the months and days in SharePoint's language. */}
+            <TimelineHeaders>
+              <DateHeader unit='primaryHeader' labelFormat={formatHeaderLabel} />
+              <DateHeader labelFormat={formatHeaderLabel} />
+            </TimelineHeaders>
             <TimelineMarkers>
               <CustomMarker date={props.timeLapseMarker}>
                 {({ styles: markerStyles }) => (

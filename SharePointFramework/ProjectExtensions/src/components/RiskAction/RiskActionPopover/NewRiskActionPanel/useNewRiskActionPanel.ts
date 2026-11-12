@@ -84,6 +84,9 @@ export function useNewRiskActionPanel(props: INewRiskActionPanelProps) {
     onSave,
     isSaving,
     saveError,
-    canSave: form.title.trim().length > 0 && !isSaving
+    canSave: form.title.trim().length > 0 && !isSaving,
+    // What «Lagre» waits for, in its description while it cannot be used (WCAG 3.3.2).
+    saveDisabledReason:
+      form.title.trim().length > 0 ? undefined : strings.NewRiskActionSaveNeedsTitle
   }
 }

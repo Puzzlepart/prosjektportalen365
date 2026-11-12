@@ -45,9 +45,19 @@ jest.mock('react-calendar-timeline', () => {
       children
         ? children({ styles: { position: 'absolute', left, width: '2px' }, date })
         : React.createElement('div', { 'data-testid': 'bare-marker' })
+  // A date header writes the label of July 2026 as the calendar asks for one with room to spare.
+  const moment = jest.requireActual('moment')
+  const DateHeader = ({ labelFormat, unit }: any) =>
+    React.createElement(
+      'span',
+      { 'data-testid': `header-${unit ?? 'secondary'}` },
+      labelFormat([moment('2026-07-15'), moment('2026-08-01')], 'month', 160)
+    )
   return {
     __esModule: true,
     default: Calendar,
+    TimelineHeaders: ({ children }: any) => React.createElement('div', null, children),
+    DateHeader,
     TimelineMarkers: ({ children }: any) => React.createElement(React.Fragment, null, children),
     CustomMarker: marker(10),
     TodayMarker: marker(20)
@@ -414,6 +424,51 @@ describe('Timeline', () => {
     expect(scroll).toHaveClass('rct-scroll')
     expect(scroll).toHaveAttribute('tabindex', '0')
     expect(await axeComponent(calendar())).toHaveNoViolations()
+  })
+
+  it('moves with Tab from the scroll area through the items and on past them, and back with Shift+Tab (WCAG 2.1.1, 2.4.3)', () => {
+    // SharePoint's own Tab handling went from the scroll area past the items, and round them.
+    render(
+      <>
+        <Timeline
+          title='Prosjekttidslinje'
+          groups={GROUPS}
+          items={[BAR, MILESTONE]}
+          filters={[]}
+          onFilterChange={jest.fn()}
+          onGroupByChange={jest.fn()}
+        />
+        <button>Nytt element</button>
+      </>
+    )
+    const after = screen.getByText('Nytt element')
+    // jsdom lays nothing out; in the browser a shown element has a box.
+    jest.spyOn(after, 'getClientRects').mockReturnValue([{}] as unknown as DOMRectList)
+    const scroll = screen.getByRole('group', { name: strings.Aria.TimelineScrollLabel })
+    const bar = button('Prosjekt: Frisbeegolfbane')
+    const milestone = button('Åpning')
+    const tab = (shiftKey = false) =>
+      fireEvent.keyDown(document.activeElement, { key: 'Tab', shiftKey })
+    scroll.focus()
+    tab()
+    expect(bar).toHaveFocus()
+    tab()
+    expect(milestone).toHaveFocus()
+    tab()
+    expect(after).toHaveFocus()
+    milestone.focus()
+    tab(true)
+    expect(bar).toHaveFocus()
+    tab(true)
+    expect(scroll).toHaveFocus()
+    // Shift+Tab from the scroll area is the page's.
+    expect(tab(true)).toBe(true)
+  })
+
+  it("writes the months in SharePoint's language, not moment's English (WCAG 3.1.2)", () => {
+    renderTimeline()
+    expect(screen.getByTestId('header-primaryHeader')).toHaveTextContent('juli 2026')
+    expect(screen.getByTestId('header-secondary')).toHaveTextContent('juli 2026')
   })
 
   it('draws a bar of the timeline configuration in a light tone of its colour, edged in the colour, in black (WCAG 1.4.3, 1.4.11)', () => {
