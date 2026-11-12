@@ -70,12 +70,7 @@ enum ParentProjectOperation {
 }
 
 /**
- * `SPDataAdapter` is a class that extends the `SPDataAdapterBase` class and implements the `IPortfolioWebPartsDataAdapter` interface.
- * It provides methods to configure the SP data adapter with the SPFx context and the configuration, and to get the portfolio configuration and the aggregated list configuration.
- *
- * @extends SPDataAdapterBase (from package `pp365-shared`)
- *
- * @implements IPortfolioWebPartsDataAdapter (from package `pp365-portfoliowebparts`)
+ * Loads program views, aggregated content and timelines, and maintains child-project links.
  */
 
 export class SPDataAdapter
@@ -91,10 +86,7 @@ export class SPDataAdapter
   private _hubWebs: Map<string, any>
 
   /**
-   * Configure the SP data adapter with the SPFx context and the configuration.
-   *
-   * @param spfxContext SPFx WebPart context
-   * @param configuration Configuration for the data adapter
+   * Configures program properties, hub access and the data-source service for this web part.
    */
   public async configure(
     spfxContext: WebPartContext,
@@ -119,9 +111,7 @@ export class SPDataAdapter
   }
 
   /**
-   * Initialize hub web instances.
-   *
-   * @param hubs Program hubs configuration
+   * Replaces the hub-web map with entries having both a hub id and URL.
    */
   public initializeHubWebs(hubs: IProgramHub[]): void {
     this._hubWebs.clear()
@@ -132,6 +122,7 @@ export class SPDataAdapter
     })
   }
 
+  /** Loads hub columns, refiners, views and view-editing permissions for the project overview. */
   public async getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {
     // eslint-disable-next-line prefer-const
     let [columnConfig, columns, views, viewsUrls, columnUrls, userCanAddViews] = await Promise.all([
@@ -160,6 +151,7 @@ export class SPDataAdapter
     } as IPortfolioOverviewConfiguration
   }
 
+  /** Loads content columns, data sources and project refiners for an aggregation category. */
   public async getAggregatedListConfig(
     category: string,
     level: string = resource.Lists_DataSources_Level_ParentProgram
@@ -199,6 +191,7 @@ export class SPDataAdapter
     }
   }
 
+  /** Selects manager or regular view loading using the current department and group visibility. */
   public async fetchDataForView(
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
@@ -215,6 +208,7 @@ export class SPDataAdapter
     }
   }
 
+  /** Builds view rows from accessible project sites, expanding each latest status-report series. */
   public async fetchDataForRegularView(
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
@@ -253,6 +247,7 @@ export class SPDataAdapter
     }
   }
 
+  /** Builds view rows from project items, retaining rows even when their sites are not accessible. */
   public async fetchDataForManagerView(
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
@@ -291,11 +286,9 @@ export class SPDataAdapter
   }
 
   /**
-   * Create queries if number of projects exceeds threshold to avoid 4096 character limitation by SharePoint
+   * Builds batched child-project site filters to stay within SharePoint query limits.
    *
-   * @param queryProperty Dependant on whether it is aggregated portfolio or portfolio overview
-   * @param maxQueryLength Maximum length of query before pushing to array (default: 2500)
-   * @param maxProjects Maximum projects required before creating strings  (default: 25)
+   * @param queryProperty Managed property containing the child project's site id.
    */
   public aggregatedQueryBuilder(
     queryProperty: string,
@@ -310,6 +303,7 @@ export class SPDataAdapter
     )
   }
 
+  /** Loads and combines project-item view rows for batched child-project site filters. */
   public async fetchDataForViewBatch(
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
@@ -348,12 +342,7 @@ export class SPDataAdapter
   }
 
   /**
-   * Fetches data for the specified view.
-   *
-   * @param view View configuration
-   * @param configuration Configuration
-   * @param siteId Site ID
-   * @param siteIdProperty Site ID property
+   * Joins view project items with department sites and latest published status-report series.
    */
   private async _fetchDataForView(
     view: PortfolioOverviewView,
@@ -439,9 +428,7 @@ export class SPDataAdapter
   }
 
   /**
-   * Fetches data for the Projecttimeline project.
-   *
-   * @param timelineConfig Timeline configuration
+   * Loads child-project timeline properties and unscoped published budget/cost reports.
    */
   public async fetchTimelineProjectData(timelineConfig: TimelineConfigurationModel[]) {
     const configuration = await this.getPortfolioConfig()
@@ -503,6 +490,7 @@ export class SPDataAdapter
     return { data, reports, configElement, columns: configuration.refiners }
   }
 
+  /** Loads hub timeline items linked to program/child sites and enabled for program display. */
   public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
     const baseFields = [
       'Title',
@@ -567,9 +555,7 @@ export class SPDataAdapter
   }
 
   /**
-   * Fetches configuration data for the `ProjectTimeline`
-   *
-   * @description Used in `ProjectTimeline`
+   * Loads hub timeline definitions, including program visibility and filtering settings.
    */
   public async fetchTimelineConfiguration() {
     const timelineConfig = await getAllItems(
@@ -590,6 +576,7 @@ export class SPDataAdapter
     return timelineConfig.map((item) => new TimelineConfigurationModel(item)).filter((p) => p)
   }
 
+  /** Builds timeline entries from dated deliveries when their configuration allows program display. */
   public async fetchTimelineAggregatedContent(
     configItemTitle: string,
     dataSourceName: string,
@@ -645,6 +632,7 @@ export class SPDataAdapter
     }
   }
 
+  /** Searches the current hub's sites, excluding the hub itself, with the requested limit and sort. */
   public async fetchProjectSites(
     rowLimit: number,
     sortProperty: 'Created' | 'Title',
@@ -676,9 +664,7 @@ export class SPDataAdapter
   }
 
   /**
-   * Combine the result data (items, sites, users, groups) to a list of `ProjectListModel`.@
-   *
-   * @param param0 Deconstructed object containing the result data
+   * Builds program-scoped project models and marks the current user's Microsoft 365 group membership.
    */
   private _combineResultData({ items, memberOfGroups }: IProjectsData): ProjectListModel[] {
     let projects = items
@@ -706,8 +692,7 @@ export class SPDataAdapter
   }
 
   /**
-   * Fetches the raw Projects list items for the current program site. Shared
-   * via `getOrFetchProjectsCache`, keyed by siteId.
+   * Reads non-closed projects from the hub list, caching them under the supplied program site id.
    */
   private async _fetchProjectItems(siteId: string): Promise<SPProjectItem[]> {
     return getOrFetchProjectsCache('items', siteId, () =>
@@ -734,6 +719,7 @@ export class SPDataAdapter
     )
   }
 
+  /** Loads program-scoped project models enriched with the current user's group memberships. */
   public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
     await MSGraph.Init(this.spfxContext.msGraphClientFactory)
     const siteId = this.spfxContext.pageContext.site.id.toString()
@@ -800,6 +786,7 @@ export class SPDataAdapter
     return map
   }
 
+  /** Applies a data source's OData project filter; undefined means no project-list filtering. */
   public async fetchProjectsByDataSource(
     configuration?: IPortfolioAggregationConfiguration,
     dataSource?: string
@@ -819,6 +806,7 @@ export class SPDataAdapter
       .items.filter(`${odataQuery}`)<any[]>()
   }
 
+  /** Checks whether the named group's membership is visible; returns false when querying fails. */
   public async isUserInGroup(groupName: string): Promise<boolean> {
     try {
       const [siteGroup] = await this.sp.web.siteGroups
@@ -830,6 +818,7 @@ export class SPDataAdapter
     }
   }
 
+  /** Combines program benefit indicators with their benefits and measurement history. */
   public async fetchBenefitItemsWithSource(
     dataSource: DataSource,
     selectProperties: string[]
@@ -912,10 +901,7 @@ export class SPDataAdapter
   }
 
   /**
-   * Fetch items using the specified `queryTemplate` and `selectProperties`
-   *
-   * @param queryTemplate Query template
-   * @param selectProperties Select properties
+   * Searches child-project content, optionally including the program site itself.
    */
   private async _fetchItems(
     queryTemplate: string,
@@ -934,13 +920,7 @@ export class SPDataAdapter
   }
 
   /**
-   * Fetch items with data source name. If the data source is a benefit overview,
-   * the items are fetched using `fetchBenefitItemsWithSource`.
-   *
-   * The properties 'FileExtension' and 'ServerRedirectedURL' is always added to the select properties.
-   *
-   * @param dataSourceName Data source name
-   * @param selectProperties Select properties
+   * Loads content for a named data source, combining benefits and measurements for benefit views.
    */
   public async fetchItemsWithSource(
     dataSourceName: string,
@@ -973,6 +953,7 @@ export class SPDataAdapter
     }
   }
 
+  /** Reads data sources for a category and optional level, configured with the supplied columns. */
   public fetchDataSources(
     category: string,
     level?: string,
@@ -989,9 +970,9 @@ export class SPDataAdapter
   }
 
   /**
-   * Update project item/entity in hub site (portfolio)
+   * Best-effort update of this program's project-list row in the selected or default hub.
+   * Missing rows are ignored; write failures are logged without rejecting.
    *
-   * @param properties Properties to update
    * @param hubSiteId Hub site ID to update the project in
    */
   public async updateProjectInHub(
@@ -1016,12 +997,10 @@ export class SPDataAdapter
 
   /**
    * Update a child project's GtParentProjects field in its hub's Projects list.
-   * Adds or removes the current program site from the child project's parent projects array.
+   * Adds or removes the current program site; logs failures without rejecting.
    *
    * @param childSiteId The SiteId of the child project to update
    * @param hubSiteId The hub site ID where the child project's entry exists
-   * @param operation 'add' to add current site as parent, 'remove' to remove it
-   * @param parentHubSiteUrl The hub site URL where the parent program resides
    */
   private async _updateChildProjectParents(
     childSiteId: string,
@@ -1097,13 +1076,8 @@ export class SPDataAdapter
   }
 
   /**
-   * Fetches all projects associated with the current hubsite context. This is done by querying the
-   * search index for all sites with the same DepartmentId as the current hubsite and all project items with
-   * the same DepartmentId as the current hubsite. The sites are then matched with the items to
-   * retrieve the SiteId and SPWebURL, the date the site was created and the project's phase
-   * (`toHubSiteProjects`). The result are cached for 5 minutes.
-   *
-   * @param hubs Optional array of program hubs with their URLs and hub site IDs
+   * Searches and joins project sites/items across the supplied hubs, caching results for five minutes.
+   * At least one resolvable hub is required.
    */
   public async getHubSiteProjects(hubs: IProgramHub[]) {
     if (!hubs || hubs.length === 0) {
@@ -1193,9 +1167,9 @@ export class SPDataAdapter
   }
 
   /**
-   * Add child projects.
+   * Stores deduplicated child-project links locally, then attempts hub and parent-link updates.
+   * Requires `fetchChildProjects` to initialize the program property item first.
    *
-   * @param newProjects New projects to add
    * @param parentHubSiteUrl The hub site URL where the parent program resides
    */
   public async addChildProjects(

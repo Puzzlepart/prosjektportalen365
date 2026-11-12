@@ -7,6 +7,7 @@ import strings from 'ProgramWebPartsStrings'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
 import resource from 'SharedResources'
 
+/** Hosts the shared project timeline with the program-scoped adapter and delivery settings. */
 export default class ProgramTimelineWebPart extends BaseProgramWebPart<IProjectTimelineProps> {
   public render(): void {
     this.renderComponent<IProjectTimelineProps>(ProjectTimeline)

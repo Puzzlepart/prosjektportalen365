@@ -37,8 +37,6 @@ const COLUMNS: IListColumn[] = [
 
 /**
  * The columns, the one the rows are sorted by marked with its direction.
- *
- * @param sort The column the rows are sorted by
  */
 export function createColumns(sort: IProjectListSort): IListColumn[] {
   return COLUMNS.map((column) => {

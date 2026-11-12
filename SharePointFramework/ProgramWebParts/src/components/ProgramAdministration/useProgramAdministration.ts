@@ -6,11 +6,8 @@ import { useId } from '@fluentui/react-components'
 import { IProgramHub } from 'data'
 
 /**
- * Component logic hook for `ProgramAdministration`: the program's hubs, from the global setting
- * `AvailableProgramHubs` (absolute URLs, `;`-separated), or the program's own hub when the setting
- * is empty or disabled; the child projects read from them; and the selection.
- *
- * @param props Props for the component
+ * Resolves configured program hubs, loads child projects and manages administration state.
+ * Falls back to the program's own hub when `AvailableProgramHubs` is empty.
  */
 export const useProgramAdministration = (props: IProgramAdministrationProps) => {
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -81,9 +78,6 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
     [props, state, programHubs]
   )
 
-  /**
-   * Callback function for handling selection change in the `ProjectList` component.
-   */
   const onSelectionChange = (selectedItems: (string | number)[]) => {
     dispatch(SET_SELECTED_TO_DELETE(selectedItems as string[]))
   }

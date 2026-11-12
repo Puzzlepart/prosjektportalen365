@@ -8,12 +8,7 @@ import { createProjectRows, IProjectListSort } from './projectRows'
 import { IProjectListProps } from './types'
 
 /**
- * Component logic hook for `ProjectList`: the search, the sort, the rows and their hub groups
- * (`createProjectRows`), the columns, and the selection, kept by the caller as site ids and handed
- * to the grid as its rows. A row a search hides stays selected, so projects chosen in several
- * searches are all added (or removed); the grid's report covers only the rows it shows.
- *
- * @param props The list's props
+ * Derives grid rows, hub groups and columns while preserving controlled selection across searches.
  */
 export function useProjectList(props: IProjectListProps) {
   const context = useContext(ProgramAdministrationContext)
@@ -40,6 +35,7 @@ export function useProjectList(props: IProjectListProps) {
   )
 
   const onSelectionChange = (selected: Record<string, any>[]) => {
+    // The grid reports only visible rows; keep selections hidden by the current search.
     const shown = new Set(rows.map(({ SiteId }) => SiteId))
     const hidden = Array.from(selectedIds).filter((id) => !shown.has(id))
     props.onSelectionChange([...hidden, ...selected.map(({ SiteId }) => SiteId)])

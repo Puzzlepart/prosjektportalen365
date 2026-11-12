@@ -3,6 +3,7 @@ import { ProgramAdministration } from 'components/ProgramAdministration/ProgramA
 import { IProgramAdministrationProps } from 'components/ProgramAdministration/types'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
 
+/** Hosts child-project administration with the current SPFx context and program data adapter. */
 export default class ProgramAdministrationWebPart extends BaseProgramWebPart<IProgramAdministrationProps> {
   public render(): void {
     this.renderComponent<IProgramAdministrationProps>(ProgramAdministration, {

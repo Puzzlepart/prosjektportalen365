@@ -18,6 +18,7 @@ import styles from './AddProjectDialog.module.scss'
 import { useAddProjectDialog } from './useAddProjectDialog'
 import { customLightTheme, UserMessage } from 'pp365-shared-library'
 
+/** Lets administrators choose available projects and add them to the current program. */
 export const AddProjectDialog: FC = () => {
   const context = useContext(ProgramAdministrationContext)
   const { availableProjects, onAddChildProjects, error, fluentProviderId } = useAddProjectDialog()
@@ -36,7 +37,6 @@ export const AddProjectDialog: FC = () => {
           }}
         >
           <DialogSurface>
-            {/* The title is a heading itself: a heading inside it nested one in another. */}
             <DialogTitle>{strings.ProgramAdministrationAddChildsButtonLabel}</DialogTitle>
             <DialogContent className={styles.content}>
               {error && (

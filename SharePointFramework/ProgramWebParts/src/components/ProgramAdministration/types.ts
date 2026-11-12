@@ -2,6 +2,7 @@ import { TableRowId } from '@fluentui/react-components'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { SPDataAdapter } from 'data/SPDataAdapter'
 
+/** Search-backed project row with its hub and display-only creation date and phase. */
 export interface IProgramAdministrationProject extends Record<string, any> {
   SiteId: string
   Title: string
@@ -23,11 +24,13 @@ export interface IProgramAdministrationProject extends Record<string, any> {
   Phase?: string
 }
 
+/** SPFx context and program data adapter supplied by the administration web part. */
 export interface IProgramAdministrationProps {
   context: WebPartContext
   dataAdapter: SPDataAdapter
 }
 
+/** Child-project lists, dialog selection, permissions and operation status. */
 export interface IProgramAdministrationState {
   /**
    * Loading state

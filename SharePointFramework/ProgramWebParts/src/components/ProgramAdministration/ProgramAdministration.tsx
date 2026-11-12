@@ -9,6 +9,7 @@ import { ProgramAdministrationContext } from './context'
 import { IProgramAdministrationProps } from './types'
 import { useProgramAdministration } from './useProgramAdministration'
 
+/** Displays the program's child projects and the dialog for adding more projects. */
 export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) => {
   const { context, childProjects, onSelectionChange, fluentProviderId } =
     useProgramAdministration(props)

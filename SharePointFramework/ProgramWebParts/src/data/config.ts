@@ -1,3 +1,4 @@
+/** Managed properties describing benefits, indicators and measurements. */
 export const GAINS_DEFAULT_SELECT_PROPERTIES = [
   'Path',
   'SPWebURL',

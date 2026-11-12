@@ -1,6 +1,7 @@
 import { ISearchQuery, ISearchResult, QueryPropertyValueType, SortDirection } from '@pnp/sp/search'
 import { IGraphGroup, SPProjectItem } from 'pp365-shared-library'
 
+/** Shared paged-search defaults, preserving duplicates and sorting by latest modification. */
 export const DEFAULT_SEARCH_SETTINGS: ISearchQuery = {
   Querytext: '*',
   RowLimit: 500,
@@ -17,20 +18,21 @@ export const DEFAULT_SEARCH_SETTINGS: ISearchQuery = {
   SortList: [{ Property: 'LastModifiedTime', Direction: SortDirection.Descending }]
 }
 
+/** Search-backed program overview row identified by its project site. */
 export interface IFetchDataForViewItemResult extends ISearchResult {
   SiteId: string
   [key: string]: any
 }
 
 /**
- * Project data fetched in `fetchEnrichedProjects` method, and
- * used as parameter in the `_combineResultData` method.
+ * Project-list items and group memberships combined into program project models.
  */
 export interface IProjectsData {
   items: SPProjectItem[]
   memberOfGroups: IGraphGroup[]
 }
 
+/** Configured hub URL with optionally resolved SharePoint id and display title. */
 export interface IProgramHub {
   url: string
   hubSiteId?: string

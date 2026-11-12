@@ -3,6 +3,7 @@ import { ProgramAdministrationContext } from '../context'
 import { ADD_CHILD_PROJECTS, DATA_LOADED } from '../reducer'
 import { useId } from '@fluentui/react-components'
 
+/** Loads addable projects and submits selected links, retaining failures in the open dialog. */
 export const useAddProjectDialog = () => {
   const context = useContext(ProgramAdministrationContext)
   const [error, setError] = useState<Error>(null)
@@ -36,10 +37,6 @@ export const useAddProjectDialog = () => {
       SiteId !== context.props.context.pageContext.site.id.toString()
   )
 
-  /**
-   * Adds projects to the parent project. This function is called when the user clicks the "Add" button in the
-   * `<AddProjectDialog />` component.
-   */
   const onAddChildProjects = async () => {
     const projects = availableProjects.filter(({ SiteId }) =>
       context.state.addProjectDialog?.selectedProjects.includes(SiteId)
@@ -51,8 +48,6 @@ export const useAddProjectDialog = () => {
     )
     const parentHubSiteUrl = parentHub?.url
 
-    // A failure was not caught: nothing was added, and nothing said so. The dialog stays open
-    // with the error (WCAG 3.3.1, 4.1.3).
     try {
       setError(null)
       await context.props.dataAdapter.addChildProjects(projects, parentHubSiteUrl)

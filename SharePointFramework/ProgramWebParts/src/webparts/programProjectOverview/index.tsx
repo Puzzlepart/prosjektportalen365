@@ -15,6 +15,7 @@ import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { IProgramProjectOverviewProps } from './types'
 import resource from 'SharedResources'
 
+/** Hosts the portfolio overview in program mode with hub-configured views and columns. */
 export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramProjectOverviewProps> {
   private _configuration: IPortfolioOverviewConfiguration
   private _configurationError: ErrorWithIntent
@@ -38,10 +39,7 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
   }
 
   /**
-   * Initializes the web part. This method is called when the web part is first loaded on the page.
-   * It calls the base `onInit` method and then retrieves the portfolio configuration from the data adapter.
-   *
-   * @returns A promise that resolves when the initialization is complete.
+   * Loads overview configuration and the localized title, retaining failures for rendering.
    */
   public async onInit(): Promise<void> {
     try {
@@ -54,11 +52,7 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
   }
 
   /**
-   * Returns an array of dropdown options for the specified target property.
-   *
-   * @param targetProperty The target property for which to retrieve dropdown options.
-   *
-   * @returns An array of dropdown options for the specified target property.
+   * Returns configured views for `defaultViewId`, or no options for another property.
    */
   protected _getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {
     switch (targetProperty) {

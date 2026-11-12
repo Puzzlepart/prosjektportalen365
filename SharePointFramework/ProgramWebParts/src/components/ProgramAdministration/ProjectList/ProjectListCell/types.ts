@@ -1,5 +1,6 @@
 import { IListColumn } from 'pp365-shared-library'
 
+/** Project row, column definition and optional title-link rendering for a grid cell. */
 export interface IProjectListCellProps {
   /**
    * The project the row shows.

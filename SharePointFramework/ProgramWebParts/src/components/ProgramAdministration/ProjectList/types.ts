@@ -1,6 +1,7 @@
 import { SearchBoxProps } from '@fluentui/react-components'
 import { IProgramHub } from 'data/types'
 
+/** Project rows, controlled site-id selection and layout settings for the administration grid. */
 export interface IProjectListProps {
   /**
    * Names the list for screen readers.

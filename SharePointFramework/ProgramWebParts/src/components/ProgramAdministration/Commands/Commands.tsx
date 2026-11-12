@@ -13,6 +13,7 @@ import {
   useToastController
 } from '@fluentui/react-components'
 
+/** Provides permission-gated add/remove actions and reports removal outcomes through toasts. */
 export const Commands: FC = () => {
   const context = useContext(ProgramAdministrationContext)
   const toasterId = useId('toaster')

@@ -18,13 +18,13 @@ import {
 import { IProgramAggregationWebPartProps } from './types'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
 
+/** Hosts portfolio aggregation scoped to the program and reports configuration-loading failures. */
 export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgramAggregationWebPartProps> {
   private _configuration: IPortfolioAggregationConfiguration
   private _configurationError: ErrorWithIntent
 
   public render(): void {
     if (!this._configuration) {
-      // The base web part unmounts the element in onDispose.
       renderReact(
         createElement(UserMessage, {
           title: this._configurationError?.name ?? strings.ErrorTitle,
@@ -44,12 +44,7 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
   }
 
   /**
-   * On update property. For `DisplayMode.Edit` it refreshes the property pane,
-   * for `DisplayMode.Read` it updates the page using the `_api/SitePages/Pages/UpdateAppPage`
-   * endpoint.
-   *
-   * @param key Key
-   * @param value Value
+   * Updates a property, refreshing the editor or persisting app-page properties in read mode.
    */
   private async _onUpdateProperty(key: string, value: any) {
     this.properties[key] = value
@@ -80,6 +75,7 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
     }
   }
 
+  /** Initializes the adapter and loads aggregation configuration, retaining any error for rendering. */
   public async onInit(): Promise<void> {
     try {
       await super.onInit()
@@ -93,9 +89,7 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
   }
 
   /**
-   * Get view options for the property pane dropdown field `defaultViewId`.
-   *
-   * @param configuration Configuration
+   * Builds default-view dropdown options from the loaded aggregation configuration.
    */
   protected _getViewOptions(): IPropertyPaneDropdownOption[] {
     if (!this._configuration) return []

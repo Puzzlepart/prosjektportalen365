@@ -37,10 +37,7 @@ export const initialState: IProgramAdministrationState = {
 }
 
 /**
- * Append keys to all items in the array
- *
- * @param items Items
- * @param keyProperty Key property
+ * Derives row keys from the supplied property, preserving any key already present.
  */
 function appendKey(items: any[], keyProperty: string) {
   return items.map((i) => ({
@@ -49,6 +46,7 @@ function appendKey(items: any[], keyProperty: string) {
   }))
 }
 
+/** Applies loaded data, dialog visibility, project-link changes and controlled selection updates. */
 export default createReducer(initialState, (builder) =>
   builder
     .addCase(DATA_LOADED, (state, { payload }) => {

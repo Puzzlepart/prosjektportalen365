@@ -20,6 +20,7 @@ export interface IProjectListSort {
   ascending: boolean
 }
 
+/** Search, sorting, hub labels and initial group-expansion settings for project rows. */
 export interface IProjectRowsOptions {
   /**
    * Shows only the projects whose title contains it, ignoring case.
@@ -61,15 +62,8 @@ function hubName(project: Record<string, any>, programHubs: IProgramHub[] = []) 
 }
 
 /**
- * The rows of the program administration's lists: the projects whose title contains the search
- * term, sorted by the chosen column (`sortItems`, the portfolio overview's sort). When the projects
- * come from more than one hub (all of them, so a search with hits in one hub keeps its group), the
- * rows are gathered per hub, the hubs ordered by name and each hub's rows kept in the sorted order,
- * with a group per hub as the portfolio overview's grid takes them. A group of fewer than
- * `AUTO_EXPAND_BELOW` projects starts expanded, as do all of them when asked or while searching.
- *
- * @param projects The projects
- * @param options Search, sort, hubs and expansion
+ * Filters and sorts project rows, grouping by hub when the unfiltered list spans multiple hubs.
+ * Groups expand during search, when requested, or below `AUTO_EXPAND_BELOW`.
  */
 export function createProjectRows(
   projects: Record<string, any>[],

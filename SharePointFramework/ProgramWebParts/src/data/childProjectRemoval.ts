@@ -16,13 +16,11 @@ export interface IChildProjectRemoval {
 /**
  * Removes child projects from a program and returns those that remain.
  *
- * The hubs and the child projects' parent links are updated first and the program's own list
- * last, so a hub that cannot be updated leaves the program listing them, as the administration
- * still shows them after the error, and a second try finishes the job. Every step sets the same
- * end state again, so a step that went through before is safe to repeat.
+ * Awaits hub and parent-link callbacks before writing the program's own list.
+ * A rejected callback prevents that final write; failures a callback suppresses do not.
+ * Repeating the operation computes the same remaining links.
  *
  * @param program The program's and the hubs' operations
- * @param projectsToRemove Child projects to remove
  */
 export async function removeChildProjectsFromProgram(
   program: IChildProjectRemoval,

@@ -8,6 +8,7 @@ import { IHubSite } from 'pp365-shared-library/lib/interfaces'
 import { ComponentClass, FC, ReactElement, createElement } from 'react'
 import { IBaseProgramWebPartProps } from './types'
 
+/** Configures the program data adapter and owns the React root shared by program web parts. */
 export abstract class BaseProgramWebPart<
   T extends IBaseProgramWebPartProps
 > extends BaseClientSideWebPart<T> {
@@ -33,26 +34,11 @@ export abstract class BaseProgramWebPart<
    */
   public siteIds: string[]
 
-  /**
-   * Abstract method to render the web part.É
-   */
   public abstract render(): void
 
   /**
-   * Renders a React component with the combined properties of the web part and the provided props.
-   *
-   * Includes `this.properties`, the provided `props`, and the following additional props:
-   * - `sp`: The SPFI instance.
-   * - `spfxContext`: The SPFx context.
-   * - `pageContext`: The SPFx page context.
-   * - `dataAdapter`: The SPDataAdapter instance.
-   * - `displayMode`: The current display mode.
-   * - `title`: The web part title.
-   *
-   * @param component The React component to render.
-   * @param props Optional props to merge with the web part properties.
-   *
-   * @returns void
+   * Renders merged web-part/component props, overriding context, adapter, display mode and title
+   * with this host's values.
    */
   public renderComponent<T = any>(component: ComponentClass<T> | FC<T>, props?: T): void {
     const combinedProps = {
@@ -69,6 +55,7 @@ export abstract class BaseProgramWebPart<
     renderReact(element, this.domElement)
   }
 
+  /** Initializes SharePoint access, global settings and the program's child-project scope. */
   public async onInit(): Promise<void> {
     await super.onInit()
     this._sp = createSpfiInstance(this.context)
@@ -87,11 +74,7 @@ export abstract class BaseProgramWebPart<
   }
 
   /**
-   * Unmount the React tree when the webpart is disposed (e.g. on SPA
-   * navigation). Without this, React keeps the fiber tree alive after
-   * SharePoint has detached the DOM, which lets stale async callbacks
-   * fire on a half-mounted tree and surface as `Cannot read properties
-   * of null (reading 'props')`.
+   * Unmounts React before the host element is discarded, releasing effects and async subscriptions.
    */
   protected onDispose(): void {
     if (this.domElement) {
