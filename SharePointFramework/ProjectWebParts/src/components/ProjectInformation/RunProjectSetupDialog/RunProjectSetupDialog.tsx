@@ -88,6 +88,7 @@ export const RunProjectSetupDialog: FC = () => {
   }
 
   const fluentProviderId = useId('fp-run-project-setup-dialog')
+  const contentId = useId('run-project-setup-dialog-content')
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
@@ -98,10 +99,12 @@ export const RunProjectSetupDialog: FC = () => {
             if (!data.open) close()
           }}
         >
-          <DialogSurface>
+          {/* Described by its text, so a screen reader reads the question as the dialog opens,
+              not only its title and the button that takes focus. */}
+          <DialogSurface aria-describedby={contentId}>
             <DialogBody>
               <DialogTitle>{strings.RunProjectSetupDialogTitle}</DialogTitle>
-              <DialogContent>
+              <DialogContent id={contentId}>
                 {strings.RunProjectSetupDialogSubText}
                 {isNotStarted ? (
                   // SharePoint's reason as plain text: the message's `text` renders HTML.

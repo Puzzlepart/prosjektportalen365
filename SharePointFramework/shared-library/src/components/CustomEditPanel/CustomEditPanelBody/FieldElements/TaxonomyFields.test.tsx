@@ -112,6 +112,14 @@ describe.each([
     expect(input).toHaveAttribute('placeholder', strings.Placeholder.TaxonomyPicker)
   })
 
+  it("gives its input the field's id, so a click on the label reaches it (WCAG 1.3.1)", () => {
+    // PnP's input took an id of its own (`combobox-id__12`), and the label's `for` pointed at
+    // nothing.
+    const { input } = renderField(Component)
+    expect(input.id).not.toBe('')
+    expect(screen.getByText(FIELD.displayName).closest('label')).toHaveAttribute('for', input.id)
+  })
+
   it('moves on with Tab without adding the suggestion', () => {
     // Tab added the first suggestion, as Enter does.
     const { set, input } = renderField(Component)

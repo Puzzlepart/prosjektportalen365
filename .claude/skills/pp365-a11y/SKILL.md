@@ -50,12 +50,16 @@ Rules 1, 2, 5, 6, 8 and the tooltip handling are adapted from Microsoft's
    names it and a click on the label reaches it; check `for` against `id` in the browser. A slot
    render function passes on what Fluent wired (kodemonster.md, «Render-funksjoner for slots»:
    `FieldContainer/IconLabel/IconLabel.tsx` puts
-   `labelProps.id` and `htmlFor` on its `Label`). A control that ignores the field gets
-   `useFieldControlProps_unstable(props, { supportsLabelFor: true })`, as `DateField` does.
-   `PeoplePicker` takes the field's label inside a `Field`, else `aria-label`. PnP's
+   `labelProps.id` and `htmlFor` on its `Label`). A control that ignores the field takes the
+   field's id from `useFieldControlProps_unstable({ id }, { supportsLabelFor: true })`, and only
+   the id where a Fluent control inside it reads the field itself: `DateField`'s picker got all of
+   the field's props, and its own `Input` added the hint again (`aria-describedby="…__hint
+   …__hint"`). `PeoplePicker` takes the field's label inside a `Field`, else `aria-label`. PnP's
    `ModernTaxonomyPicker` takes its input's props as `termPickerProps.inputProps`, which replace
    PnP's own name and placeholder (both its placeholder text): the edit panel's taxonomy fields name
-   the input after the field (`FieldElements/termPickerProps.ts`). A placeholder is no label.
+   the input after the field and give it the field's id (`FieldElements/FieldTaxonomyPicker.tsx`,
+   `termPickerProps.ts`); with PnP's own id (`combobox-id__12`) a click on the label reached
+   nothing. A placeholder is no label.
 4. **What can be clicked is a button**: Fluent's `Button` or a `<button>`, never a `div` or `span`
    with `onClick` (found: `FilterPanel/Filter`, `DocumentTemplateItem`'s header). An expand toggle
    has `aria-expanded`, and `aria-controls` when the content is elsewhere. What goes somewhere is
@@ -302,7 +306,8 @@ checked by hand and with which reader and browser: axe finds only part of what W
   Fluent `Tab` cannot be `disabledFocusable`: keep the tab and let its panel say why it is empty
   (`ProjectSetupDialog`). A save that waits for required fields names what it waits for in its
   description, and the fields it waits for are marked required (the view forms' search query
-  was not).
+  was not). A required field shows its error once it has been left empty, not as the form opens
+  (the news dialog's «Mal», `useNewsForm`, which also says what «Opprett» waits for).
 - A status message in Jest: the announcer writes each message as `innerText` on a new span, which
   jsdom keeps as a property, not as text, and clears the region through `innerText` too, which
   jsdom ignores: the newest message is the last span's `innerText`, and a second message read
@@ -333,7 +338,10 @@ checked by hand and with which reader and browser: axe finds only part of what W
 - Fluent's `TagPicker` draws a button that opens the list unless `expandIcon` is null, and names
   it after the input, in English («Open …»); where there is no input (`PeoplePicker`'s field for
   one that holds one) it has no name. Give it `expandIcon={{ 'aria-label': …, children: <icon> }}`
-  from the strings, or null where it has nothing to show.
+  from the strings, or null where it has nothing to show. Fluent's `Combobox` names its own
+  «Open», in English, and in a `Field` adds nothing of the field: every combobox takes
+  `expandIcon={getComboboxExpandIconProps()}` from `pp365-shared-library` («Vis alternativer»).
+  A `Dropdown`'s chevron is inside its button and needs nothing.
 - Fluent's `Overflow` measures its container's whole width, padding too: padding on a `TabList`
   kept that many pixels of tabs past the edge (`SectionTabs`). Put the padding on a wrapper.
 - A submenu's trigger inside a `MenuList` is a `MenuItem`; a button there makes the menu one

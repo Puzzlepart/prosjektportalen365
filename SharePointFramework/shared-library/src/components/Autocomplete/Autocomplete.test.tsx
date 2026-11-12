@@ -3,7 +3,8 @@
 // moment it opened, and takes tens of seconds to open under jsdom on React 18 (see the testing
 // guide); the stand-in keeps the contract the autocomplete uses: the input shows `value` and
 // reports typing through `onChange`, the clear button and each option report a pick through
-// `onOptionSelect`, a clear with no option value.
+// `onOptionSelect`, a clear with no option value, and the button that opens the list takes its
+// `expandIcon` props.
 jest.mock('@fluentui/react-components', () => {
   const actual = jest.requireActual('@fluentui/react-components')
   const React = jest.requireActual('react')
@@ -28,6 +29,10 @@ jest.mock('@fluentui/react-components', () => {
           },
           'Tøm'
         ),
+      React.createElement('span', {
+        role: 'button',
+        'aria-label': props.expandIcon?.['aria-label'] ?? 'Open'
+      }),
       React.createElement('ul', { role: 'listbox' }, props.children)
     )
   const Option = (props: any) => {
@@ -53,6 +58,7 @@ jest.mock('@fluentui/react-components', () => {
 
 import { fireEvent, render, screen } from '@testing-library/react'
 import * as React from 'react'
+import strings from 'SharedLibraryStrings'
 import { Autocomplete } from '.'
 
 /**
@@ -79,6 +85,13 @@ function renderAutocomplete(props: Record<string, any> = {}) {
 }
 
 describe('Autocomplete', () => {
+  it('names the button that opens the list from the strings, not «Open» (WCAG 3.1.2, 4.1.2)', () => {
+    renderAutocomplete()
+    expect(
+      screen.getByRole('button', { name: strings.Aria.ComboboxExpandLabel })
+    ).toBeInTheDocument()
+  })
+
   it('offers every item until something is typed, then the ones that match, ignoring case', () => {
     renderAutocomplete()
     expect(offered()).toEqual(PROPERTIES)

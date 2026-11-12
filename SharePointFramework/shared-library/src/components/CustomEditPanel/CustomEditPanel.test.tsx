@@ -2,31 +2,43 @@
 // Babel, so mocks are not hoisted. Fluent's combobox family cannot be opened under jsdom on React
 // 17 (see the testing guide), so the choice, multi-choice and lookup fields get a native select
 // that keeps Fluent's contract: a choice calls `onOptionSelect` with the option's value, text and
-// the selected options. The taxonomy picker comes from `@pnp/spfx-controls-react`, which maps to
+// the selected options, and the button that opens the list takes its `expandIcon` props. The
+// taxonomy picker comes from `@pnp/spfx-controls-react`, which maps to
 // the one PnP stub like every `@pnp/*` import; the stub is kept, and only the picker replaced by
 // one that shows its terms and picks "Idrett".
 jest.mock('@fluentui/react-components', () => {
   const actual = jest.requireActual('@fluentui/react-components')
   const React = jest.requireActual('react')
-  const Combobox = ({ placeholder, multiselect, onOptionSelect, children }: any) =>
+  const Combobox = ({ placeholder, multiselect, onOptionSelect, expandIcon, children }: any) =>
     React.createElement(
-      'select',
-      {
-        'aria-label': placeholder ?? 'Oppslag',
-        multiple: !!multiselect,
-        defaultValue: multiselect ? [] : '',
-        onChange: (event: any) => {
-          const selected = Array.from(event.target.options).filter((option: any) => option.selected)
-          const [option] = selected as any[]
-          onOptionSelect?.(event, {
-            optionValue: option?.value,
-            optionText: option?.textContent,
-            selectedOptions: selected.map((o: any) => o.value)
-          })
-        }
-      },
-      multiselect ? null : React.createElement('option', { value: '' }),
-      children
+      React.Fragment,
+      null,
+      React.createElement(
+        'select',
+        {
+          'aria-label': placeholder ?? 'Oppslag',
+          multiple: !!multiselect,
+          defaultValue: multiselect ? [] : '',
+          onChange: (event: any) => {
+            const selected = Array.from(event.target.options).filter(
+              (option: any) => option.selected
+            )
+            const [option] = selected as any[]
+            onOptionSelect?.(event, {
+              optionValue: option?.value,
+              optionText: option?.textContent,
+              selectedOptions: selected.map((o: any) => o.value)
+            })
+          }
+        },
+        multiselect ? null : React.createElement('option', { value: '' }),
+        children
+      ),
+      React.createElement('span', {
+        role: 'button',
+        className: 'expandIcon',
+        'aria-label': expandIcon?.['aria-label'] ?? 'Open'
+      })
     )
   const Option = ({ value, children }: any) =>
     React.createElement('option', { value: value ?? children }, children)
@@ -183,6 +195,14 @@ describe('CustomEditPanel', () => {
     expect(input('Tittel')).toHaveValue('Frisbeegolfbane')
   })
 
+  it('names the buttons that open the lists of choices from the strings, not «Open» (WCAG 3.1.2, 4.1.2)', () => {
+    renderPanel()
+    const names = Array.from(document.querySelectorAll('.expandIcon')).map((button) =>
+      button.getAttribute('aria-label')
+    )
+    expect(names).toEqual([strings.Aria.ComboboxExpandLabel, strings.Aria.ComboboxExpandLabel])
+  })
+
   it('breaks no rule axe can check, every field labelled', async () => {
     renderPanel()
     expect(await axeComponent(document.body)).toHaveNoViolations()
@@ -308,6 +328,10 @@ describe('CustomEditPanel', () => {
       fireEvent.change(screen.getByLabelText('Oppslag'), { target: { value: '3' } })
     })
     expect(properties().GtTimelineTypeLookupId).toBe('3')
+    expect(document.querySelector('.expandIcon')).toHaveAttribute(
+      'aria-label',
+      strings.Aria.ComboboxExpandLabel
+    )
   })
 
   it("shows a term field's terms, and sends the terms picked through its text field", async () => {
@@ -330,8 +354,11 @@ describe('CustomEditPanel', () => {
     await waitFor(() => expect(properties()['tags-textText']).toBe('-1;#Idrett|term-9'))
   })
 
-  it('shows a date in the date picker', async () => {
-    const start = field('GtStartDate', 'DateTime', { Title: 'Startdato' })
+  it('shows a date in the date picker, described by its hint once', async () => {
+    const start = field('GtStartDate', 'DateTime', {
+      Title: 'Startdato',
+      Description: 'Når prosjektet starter'
+    })
     renderPanel({
       fields: [start],
       fieldValues: new ItemFieldValues(
@@ -344,6 +371,11 @@ describe('CustomEditPanel', () => {
     expect(date).toHaveValue('01.03.2026')
     // The label is tied to the date's input, not to an id nothing has.
     expect(screen.getByLabelText(/Startdato/)).toBe(date)
+    // The field's hint describes it once: the picker's own input reads the field, and the hint
+    // handed to the picker as well was listed twice (`…__hint …__hint`).
+    const describedBy = date.getAttribute('aria-describedby').split(' ')
+    expect(describedBy).toEqual([...new Set(describedBy)])
+    expect(date).toHaveAccessibleDescription('Når prosjektet starter')
     expect(await axeComponent(document.body)).toHaveNoViolations()
   })
 

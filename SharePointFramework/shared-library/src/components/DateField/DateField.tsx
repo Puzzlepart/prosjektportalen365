@@ -9,11 +9,14 @@ import { useDateField } from './useDateField'
 
 /**
  * The date picker with the id of the field it is in. It takes an id of its own otherwise, so the
- * field's label pointed at nothing: a click on it did not reach the date.
+ * field's label pointed at nothing: a click on it did not reach the date. Only the id: the picker's
+ * own input reads the field for the rest, and given the field's hint here as well it was described
+ * by the hint twice (`aria-describedby="…__hint …__hint"`).
  */
-const FieldDatePicker: FC<DatePickerProps> = (props) => (
-  <DatePicker {...useFieldControlProps_unstable(props, { supportsLabelFor: true })} />
-)
+const FieldDatePicker: FC<DatePickerProps> = (props) => {
+  const { id } = useFieldControlProps_unstable({ id: props.id }, { supportsLabelFor: true })
+  return <DatePicker {...props} id={id} />
+}
 
 /**
  * A day in a `FieldContainer`: Fluent's `DatePicker` in SharePoint's UI language, with week

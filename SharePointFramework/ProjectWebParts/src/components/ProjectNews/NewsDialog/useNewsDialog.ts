@@ -47,6 +47,11 @@ export const useNewsDialog = () => {
     }
   }, [context.state.isDialogOpen, context.props.siteUrl, context.props.spHttpClient])
 
+  const { resetValidation } = newsForm
+  useEffect(() => {
+    if (context.state.isDialogOpen) resetValidation()
+  }, [context.state.isDialogOpen, resetValidation])
+
   const handleCreate = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault()
@@ -182,8 +187,11 @@ export const useNewsDialog = () => {
     selectedTemplate: newsForm.selectedTemplate,
     handleTitleChange: newsForm.handleTitleChange,
     handleTemplateChange: newsForm.handleTemplateChange,
+    handleTemplateBlur: newsForm.handleTemplateBlur,
     handleCreate,
     canCreate,
+    createDisabledReason: newsForm.createDisabledReason,
+    showTemplateError: newsForm.showTemplateError,
     inputRef: newsForm.inputRef,
     previewUrl,
     isTemplateValid: newsForm.isTemplateValid,

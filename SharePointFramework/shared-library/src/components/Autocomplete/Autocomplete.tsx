@@ -1,6 +1,7 @@
 import { Combobox, Field, Option } from '@fluentui/react-components'
 import React, { FC } from 'react'
 import { getFluentIconWithFallback } from '../../icons'
+import { getComboboxExpandIconProps } from '../../util/getComboboxExpandIconProps'
 import { IAutocompleteProps } from './types'
 import { useAutocomplete } from './useAutocomplete'
 
@@ -19,6 +20,7 @@ export const Autocomplete: FC<IAutocompleteProps> = (props) => {
       className={props.className}
       placeholder={props.placeholder}
       disabled={props.disabled}
+      expandIcon={getComboboxExpandIconProps()}
       value={value}
       selectedOptions={selectedKey ? [selectedKey] : []}
       onChange={onChange}

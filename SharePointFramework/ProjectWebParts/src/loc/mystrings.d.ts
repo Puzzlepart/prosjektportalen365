@@ -321,6 +321,10 @@ declare interface IProjectWebPartsStrings {
   NewsTitleLabel: string
   NewsTitlePlaceholder: string
   CreateButtonLabel: string
+  CreateButtonNeedsTitleAndTemplate: string
+  CreateButtonNeedsTitle: string
+  CreateButtonNeedsTemplate: string
+  CreateButtonNeedsChange: string
   ProjectNewsWebPartTitle: string
   CreateNewsLinkLabel: string
   NewsTitleRequired: string

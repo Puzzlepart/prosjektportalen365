@@ -33,15 +33,17 @@ export const NewsDialog: FC<INewsDialogProps> = () => {
     spinnerMode,
     title,
     errorMessage,
-    isTemplateValid,
+    showTemplateError,
     templates,
     selected,
     selectedTemplate,
     previewUrl,
     canCreate,
+    createDisabledReason,
     inputRef,
     handleTitleChange,
     handleTemplateChange,
+    handleTemplateBlur,
     handleCreate
   } = useNewsDialog()
 
@@ -98,14 +100,15 @@ export const NewsDialog: FC<INewsDialogProps> = () => {
                   <FieldContainer
                     label={strings.TemplateLabel}
                     required
-                    validationState={!isTemplateValid ? 'error' : undefined}
-                    validationMessage={!isTemplateValid ? strings.TemplateRequired : undefined}
+                    validationState={showTemplateError ? 'error' : undefined}
+                    validationMessage={showTemplateError ? strings.TemplateRequired : undefined}
                     iconName='ChevronDown'
                   >
                     <Dropdown
                       value={
                         templates.find((t) => t.ServerRelativeUrl === selectedTemplate)?.Title ?? ''
                       }
+                      onBlur={handleTemplateBlur}
                       onOptionSelect={(_, data) => {
                         const selected = templates.find((t) => t.Title === data.optionValue)
                         if (selected) {
@@ -139,7 +142,14 @@ export const NewsDialog: FC<INewsDialogProps> = () => {
                 <Button onClick={() => context.setState({ isDialogOpen: false })} type='button'>
                   {strings.CancelText}
                 </Button>
-                <Button appearance='primary' onClick={handleCreate} disabled={!canCreate}>
+                <Button
+                  appearance='primary'
+                  onClick={handleCreate}
+                  // Focusable while it cannot create, with what it waits for: a disabled button
+                  // is skipped by the keyboard (WCAG 2.1.1, 3.3.2).
+                  disabledFocusable={!canCreate}
+                  title={canCreate ? undefined : createDisabledReason}
+                >
                   {strings.CreateButtonLabel}
                 </Button>
               </DialogActions>

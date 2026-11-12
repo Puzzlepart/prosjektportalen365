@@ -98,6 +98,9 @@ Sjekk ut [release notes](./releasenotes/1.15.0.md) for høydepunkter og mer deta
 - Rettet en feil hvor lukkeknappen i flere dialoger manglet navn for skjermlesere [#1319](https://github.com/Puzzlepart/prosjektportalen365/issues/1319)
 - Rettet lokal bygging fra kildekoden: kanalbyggene feilet med mellomrom i stien, `generate-channel-config` laget nye id-er fra Git Bash, og `Build-Release.ps1` fra en fersk klone hoppet over kanalskriptene
 - Rettet en feil i `Porteføljeoversikt`, `Aggregert oversikt`, `Prosjektliste` og `Dynamisk liste` hvor tagger skjult bak +n ikke ble synlige igjen når kolonnen ble gjort bredere
+- Rettet feil i skjemafeltene for skjermlesere og tastatur: knappen som åpner en valgliste het «Open» på engelsk, et klikk på etiketten til et taksonomifelt nådde ikke feltet, og hjelpeteksten i datofeltene ble lest to ganger [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
+- Rettet en feil i `Prosjektinformasjon` hvor skjermlesere ikke leste spørsmålet i dialogene for `Gjør om til overordnet prosjekt` og `Kjør oppsettveiviser` [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
+- Rettet en feil i `Prosjektnyheter` hvor «Opprett» i dialogen for ny nyhetsartikkel ikke kunne nås med tastaturet eller si hva som manglet, og malfeltet viste feilmelding før noe var valgt [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
 
 ### Merk
 

@@ -7,7 +7,7 @@ jest.mock('pp365-shared-library/lib/components/ItemColumn/ColumnDataTypeField', 
 
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import strings from 'PortfolioWebPartsStrings'
-import { ProjectColumn, format } from 'pp365-shared-library'
+import { ProjectColumn, format, getComboboxExpandIconProps } from 'pp365-shared-library'
 import * as React from 'react'
 import { PortfolioOverviewContext } from '../context'
 import { ColumnFormPanel } from './index'
@@ -124,6 +124,13 @@ describe('ColumnFormPanel (portfolio overview) with its own hook', () => {
     )
     expect(field(strings.IsRefinableLabel)).toBeChecked()
     expect(field(strings.IsGroupableLabel)).toBeChecked()
+    // The button that opens the pages is named from the strings, not Fluent's «Open»
+    // (WCAG 3.1.2, 4.1.2).
+    const expandButtons = Array.from(document.querySelectorAll('.fui-Combobox__expandIcon'))
+    expect(expandButtons.length).toBeGreaterThan(0)
+    for (const expandButton of expandButtons) {
+      expect(expandButton).toHaveAttribute('aria-label', getComboboxExpandIconProps()['aria-label'])
+    }
   })
 
   it('shows the numbers the column has, the width the list starts it at among them', () => {

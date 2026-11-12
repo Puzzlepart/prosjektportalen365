@@ -1,5 +1,6 @@
 import { Combobox, Option } from '@fluentui/react-components'
 import React from 'react'
+import { getComboboxExpandIconProps } from '../../../../../util/getComboboxExpandIconProps'
 import { FieldContainer } from '../../../../FieldContainer'
 import { useCustomEditPanelContext } from '../../../context'
 import { FieldElementComponent } from '../types'
@@ -21,6 +22,7 @@ export const Lookup: FieldElementComponent = ({ field }) => {
       <Combobox
         value={value?.text}
         selectedOptions={[value?.value]}
+        expandIcon={getComboboxExpandIconProps()}
         onOptionSelect={(_, data) => context.model.set(field, data.optionValue)}
       >
         {options.map((option) => (

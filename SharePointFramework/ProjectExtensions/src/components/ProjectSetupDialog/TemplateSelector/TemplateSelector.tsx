@@ -9,7 +9,12 @@ import {
 } from '@fluentui/react-components'
 import { Cloud16Regular, Cloud24Regular } from '@fluentui/react-icons'
 import strings from 'ProjectExtensionsStrings'
-import { FieldContainer, getFluentIconWithFallback, UserMessage } from 'pp365-shared-library'
+import {
+  FieldContainer,
+  getComboboxExpandIconProps,
+  getFluentIconWithFallback,
+  UserMessage
+} from 'pp365-shared-library'
 import React from 'react'
 import { ProjectSetupDialogSectionComponent } from '../types'
 import styles from './TemplateSelector.module.scss'
@@ -62,6 +67,7 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
             freeform
             placeholder={strings.ProjectTemplateSelectorSearchPlaceholder}
             disabled={isSingleTemplate}
+            expandIcon={getComboboxExpandIconProps()}
             value={query || (selectedTemplate?.text ?? '')}
             selectedOptions={selectedTemplate ? [String(selectedTemplate.id)] : []}
             onOptionSelect={onTemplateSelect}

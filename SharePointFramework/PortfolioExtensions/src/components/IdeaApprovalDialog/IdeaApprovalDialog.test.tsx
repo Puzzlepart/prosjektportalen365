@@ -2,27 +2,36 @@
 // Babel, so mocks are not hoisted. Fluent's combobox family looped the Jest worker on React 17 and
 // takes tens of seconds to open under jsdom on React 18 (see the testing guide), so the dialog's
 // combobox is a native select that keeps Fluent's contract: choosing an option calls
-// `onOptionSelect` with the option's value and text.
+// `onOptionSelect` with the option's value and text, and the button that opens the list takes its
+// `expandIcon` props.
 jest.mock('@fluentui/react-components', () => {
   const actual = jest.requireActual('@fluentui/react-components')
   const React = jest.requireActual('react')
-  const Combobox = ({ placeholder, onOptionSelect, children }: any) =>
+  const Combobox = ({ placeholder, onOptionSelect, expandIcon, children }: any) =>
     React.createElement(
-      'select',
-      {
-        'aria-label': placeholder,
-        defaultValue: '',
-        onChange: (event: any) => {
-          const option = event.target.options[event.target.selectedIndex]
-          onOptionSelect?.(event, {
-            optionValue: option.value,
-            optionText: option.textContent,
-            selectedOptions: [option.value]
-          })
-        }
-      },
-      React.createElement('option', { value: '', disabled: true }, placeholder),
-      children
+      React.Fragment,
+      null,
+      React.createElement(
+        'select',
+        {
+          'aria-label': placeholder,
+          defaultValue: '',
+          onChange: (event: any) => {
+            const option = event.target.options[event.target.selectedIndex]
+            onOptionSelect?.(event, {
+              optionValue: option.value,
+              optionText: option.textContent,
+              selectedOptions: [option.value]
+            })
+          }
+        },
+        React.createElement('option', { value: '', disabled: true }, placeholder),
+        children
+      ),
+      React.createElement('span', {
+        role: 'button',
+        'aria-label': expandIcon?.['aria-label'] ?? 'Open'
+      })
     )
   const Option = ({ value, children }: any) => React.createElement('option', { value }, children)
   return { __esModule: true, ...actual, Combobox, Option }
@@ -30,7 +39,7 @@ jest.mock('@fluentui/react-components', () => {
 
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import strings from 'PortfolioExtensionsStrings'
-import { format } from 'pp365-shared-library'
+import { format, getComboboxExpandIconProps } from 'pp365-shared-library'
 import * as React from 'react'
 import RecommendationDialog, { IdeaApprovalDialog } from '.'
 
@@ -74,6 +83,11 @@ describe('IdeaApprovalDialog', () => {
     expect(screen.getByText('Velg hva som skal skje med ideen.')).toBeInTheDocument()
     expect(screen.getByRole('option', { name: 'Godkjenn' })).toBeInTheDocument()
     expect(screen.getByRole('option', { name: 'Avvis' })).toBeInTheDocument()
+    // The button that opens the choices is named from the strings, not Fluent's «Open»
+    // (WCAG 3.1.2, 4.1.2).
+    expect(
+      screen.getByRole('button', { name: getComboboxExpandIconProps()['aria-label'] })
+    ).toBeInTheDocument()
   })
 
   it('sends the choice and the comment once both are given', () => {

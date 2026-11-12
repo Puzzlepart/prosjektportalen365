@@ -6,6 +6,7 @@ define([], function () {
     SaveText: 'Lagre',
     CloseText: 'Lukk',
     Aria: {
+      ComboboxExpandLabel: 'Vis alternativer',
       InfoLabelTitle: 'Informasjon om {0}',
       InstrumentGaugeLabel: 'Siste måling {0}, startverdi {1}, målverdi {2}',
       MenuOverflowCount: '{0} flere elementer',

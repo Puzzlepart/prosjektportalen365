@@ -175,6 +175,16 @@ describe('The dialogs that run the setup on a set-up project', () => {
     ],
     ['«Kjør oppsettveiviser»', RunProjectSetupDialog, 'RunProjectSetupDialog', strings.ConfirmText]
   ])('%s', (_name, Dialog: React.FC, activeDialog: string, primaryText: string) => {
+    it('is described by its question, which a screen reader reads as it opens (WCAG 1.3.1, 4.1.2)', () => {
+      // The focus lands on «Avbryt»: named by its title alone, the dialog's question went unread.
+      renderDialog(Dialog, activeDialog)
+      const subText =
+        Dialog === CreateParentDialog
+          ? strings.CreateParentModalSubText
+          : strings.RunProjectSetupDialogSubText
+      expect(screen.getByRole('dialog')).toHaveAccessibleDescription(subText)
+    })
+
     it('shows the spinner from the click, before the menu is read, and starts the setup once', async () => {
       const menu = pendingMenu()
       const { added, dispatch } = renderDialog(Dialog, activeDialog, menu.getMenuState)

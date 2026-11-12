@@ -2,6 +2,7 @@ import { Combobox, Option } from '@fluentui/react-components'
 import strings from 'SharedLibraryStrings'
 import React from 'react'
 import _ from 'underscore'
+import { getComboboxExpandIconProps } from '../../../../util/getComboboxExpandIconProps'
 import { FieldContainer } from '../../../FieldContainer'
 import { useCustomEditPanelContext } from '../../context'
 import { FieldElementComponent } from './types'
@@ -27,6 +28,7 @@ export const MultiChoice: FieldElementComponent = ({ field }) => {
         }
         multiselect
         placeholder={strings.Placeholder.MultiChoiceField}
+        expandIcon={getComboboxExpandIconProps()}
         onOptionSelect={(_e, data) => {
           if (!_.isEmpty(data.selectedOptions)) {
             void context.model.set<string[]>(field, data.selectedOptions)

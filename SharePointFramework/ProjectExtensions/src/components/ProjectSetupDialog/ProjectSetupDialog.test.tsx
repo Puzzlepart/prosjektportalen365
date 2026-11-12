@@ -39,25 +39,43 @@ jest.mock('./ContentConfigSection', () => {
 jest.mock('@fluentui/react-components', () => {
   const actual = jest.requireActual('@fluentui/react-components')
   const React = jest.requireActual('react')
-  /** Adapts native option changes to Fluent's selection callback. */
-  const Combobox = ({ placeholder, disabled, selectedOptions, onOptionSelect, children }: any) =>
+  /**
+   * Adapts native option changes to Fluent's selection callback; the button that opens the list
+   * takes its `expandIcon` props.
+   */
+  const Combobox = ({
+    placeholder,
+    disabled,
+    selectedOptions,
+    onOptionSelect,
+    expandIcon,
+    children
+  }: any) =>
     React.createElement(
-      'select',
-      {
-        'aria-label': placeholder,
-        disabled,
-        value: selectedOptions?.[0] ?? '',
-        onChange: (event: any) => {
-          const option = event.target.options[event.target.selectedIndex]
-          onOptionSelect?.(event, {
-            optionValue: option.value,
-            optionText: option.textContent,
-            selectedOptions: [option.value]
-          })
-        }
-      },
-      React.createElement('option', { value: '' }),
-      children
+      React.Fragment,
+      null,
+      React.createElement(
+        'select',
+        {
+          'aria-label': placeholder,
+          disabled,
+          value: selectedOptions?.[0] ?? '',
+          onChange: (event: any) => {
+            const option = event.target.options[event.target.selectedIndex]
+            onOptionSelect?.(event, {
+              optionValue: option.value,
+              optionText: option.textContent,
+              selectedOptions: [option.value]
+            })
+          }
+        },
+        React.createElement('option', { value: '' }),
+        children
+      ),
+      React.createElement('span', {
+        role: 'button',
+        'aria-label': expandIcon?.['aria-label'] ?? 'Open'
+      })
     )
   /** Supplies native options to the combobox stand-in. */
   const Option = ({ value, text, disabled }: any) =>
@@ -82,7 +100,7 @@ import { AriaLiveAnnouncer } from '@fluentui/react-components'
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import strings from 'ProjectExtensionsStrings'
 import { axeComponent } from 'pp365-jest-config/lib/axe'
-import { format } from 'pp365-shared-library'
+import { format, getComboboxExpandIconProps } from 'pp365-shared-library'
 import * as React from 'react'
 import { ProjectSetupValidation } from '../../extensions/projectSetup/types'
 import { ProjectSetupDialog } from './ProjectSetupDialog'
@@ -167,6 +185,13 @@ describe('ProjectSetupDialog', () => {
     )
     fireEvent.click(screen.getByLabelText(strings.ProjectTemplateSelectorSelectTemplateRadioLabel))
     expect(picker()).toHaveValue('1')
+  })
+
+  it('names the button that opens the templates from the strings, not «Open» (WCAG 3.1.2, 4.1.2)', () => {
+    renderDialog()
+    expect(
+      screen.getByLabelText(getComboboxExpandIconProps()['aria-label'], { selector: 'span' })
+    ).toBeInTheDocument()
   })
 
   it('names its choice of whether to use a template (WCAG 1.3.1, 4.1.2)', () => {

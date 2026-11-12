@@ -1,9 +1,8 @@
-import { ModernTaxonomyPicker } from '@pnp/spfx-controls-react/lib/ModernTaxonomyPicker'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback } from 'react'
 import { FieldContainer } from '../../../FieldContainer'
 import { useCustomEditPanelContext } from '../../context'
 import { FieldElementComponent } from './types'
-import { getTermPickerProps } from './termPickerProps'
+import { FieldTaxonomyPicker } from './FieldTaxonomyPicker'
 import { Term, useInitialTaxonomyValues } from './useInitialTaxonomyValues'
 
 /**
@@ -13,7 +12,6 @@ export const TaxonomyFieldTypeMulti: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
   const mapInitialValues = useInitialTaxonomyValues()
   const terms = context.model.get<Term[]>(field)
-  const termPickerProps = useMemo(() => getTermPickerProps(field.displayName), [field.displayName])
   type NormalizedTerm = NonNullable<ReturnType<typeof mapInitialValues>>
 
   const normalizeTerms = useCallback(
@@ -37,14 +35,13 @@ export const TaxonomyFieldTypeMulti: FieldElementComponent = ({ field }) => {
       description={field.description}
       required={field.required}
     >
-      <ModernTaxonomyPicker
+      <FieldTaxonomyPicker
         context={context.props.dataAdapter.spfxContext as any} // PnP's context type does not accept every host in our SPFxContext union.
         panelTitle={field.description || field.displayName}
         initialValues={normalizeTerms(terms)}
         allowMultipleSelections
-        label=''
+        fieldLabel={field.displayName}
         termSetId={field.getProperty('TermSetId')}
-        termPickerProps={termPickerProps}
         onChange={handleChange}
       />
     </FieldContainer>

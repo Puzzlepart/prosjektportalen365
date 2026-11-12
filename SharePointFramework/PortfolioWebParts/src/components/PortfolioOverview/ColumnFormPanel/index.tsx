@@ -9,7 +9,8 @@ import {
   ColumnSearchPropertyField,
   FieldContainer,
   UserMessage,
-  customLightTheme
+  customLightTheme,
+  getComboboxExpandIconProps
 } from 'pp365-shared-library'
 import { ColumnDataTypeField } from 'pp365-shared-library/lib/components/ItemColumn/ColumnDataTypeField'
 import {
@@ -180,6 +181,7 @@ export const ColumnFormPanel: FC = () => {
               value={visibilityText}
               multiselect
               placeholder={strings.Placeholder.MultiChoiceField}
+              expandIcon={getComboboxExpandIconProps()}
               onOptionSelect={onVisibilityChange}
             >
               {visibilityOptions.map((choice) => (

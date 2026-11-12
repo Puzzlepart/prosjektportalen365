@@ -18,7 +18,12 @@ jest.mock('../util', () => ({
   validateSharePointFileName: jest.fn(() => true)
 }))
 const TEMPLATE = '/sites/alfa/SitePages/Maler/Nyhet.aspx'
-const form = { selectedTemplate: TEMPLATE, setFormErrorMessage: jest.fn(), resetForm: jest.fn() }
+const form = {
+  selectedTemplate: TEMPLATE,
+  setFormErrorMessage: jest.fn(),
+  resetForm: jest.fn(),
+  resetValidation: jest.fn()
+}
 jest.mock('./useNewsForm', () => ({
   useNewsForm: () => ({
     title: 'Ny bane',
@@ -26,7 +31,8 @@ jest.mock('./useNewsForm', () => ({
     isFormValid: true,
     validateForm: () => true,
     setFormErrorMessage: form.setFormErrorMessage,
-    resetForm: form.resetForm
+    resetForm: form.resetForm,
+    resetValidation: form.resetValidation
   })
 }))
 

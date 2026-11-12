@@ -1628,3 +1628,24 @@ itself as `observer` to `add()` is disposed, as the footer does.
   `tests/flows/list-columns.spec.ts` in the browser.
 - **Left.** 2.5.7 (WCAG 2.2, should): the width still takes a drag or the keyboard, no single
   pointer. The dynamic list's handle keeps Fluent's English names.
+
+### Hand round 1: the project home (2026-11-12)
+
+- **Found** (Chrome, the accessibility tree, no screen reader yet). Fluent's `Combobox` named the
+  button that opens its list «Open», in English, in all seven of ours. A click on a taxonomy
+  field's label reached nothing: PnP's input kept its own id. The date fields were described by
+  their hint twice. «Overordnet prosjekt» and «Kjør oppsettveiviser på nytt» were not described by
+  their question. «Opprett» in the news dialog was `disabled` and silent about what it waited for,
+  and its «Mal» showed its error from the start.
+- **Done.** `getComboboxExpandIconProps()` (shared-library) names the button «Vis alternativer»,
+  on every `Combobox`. `FieldTaxonomyPicker` gives PnP's input the field's id. `DateField` hands
+  its picker the field's id only; the picker's `Input` reads the rest of the field. Both setup
+  dialogs point `aria-describedby` at their content, as `useConfirmationDialog` does. «Opprett»
+  is `disabledFocusable` with what it waits for as its description, and «Mal» shows its error
+  once it has been left empty (`useNewsForm`). Tests: `getComboboxExpandIconProps.test.tsx` (the
+  real `Combobox`), the stand-ins of every call site, `TaxonomyFields.test.tsx`,
+  `CustomEditPanel.test.tsx` (the real date picker's description), `setupDialogs.test.tsx`,
+  `NewsDialog.test.tsx`.
+- **Left.** PnP's taxonomy picker's «Tag» button has no name (PnP's; axe's `button-name` in
+  `EditPropertiesPanel`). The news dialog's preview button is still `disabled` until a template is
+  chosen. Hear the round in a screen reader.

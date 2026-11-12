@@ -5,6 +5,7 @@ import {
   UserMessage,
   customLightTheme,
   format,
+  getComboboxExpandIconProps,
   renderReact,
   unmountReact
 } from 'pp365-shared-library'
@@ -60,6 +61,7 @@ export const IdeaApprovalDialog: FC<IIdeaApprovalDialogProps> = (props) => {
                 <Combobox
                   onOptionSelect={handleOptionSelect}
                   placeholder={strings.ActionLabelPlaceholder}
+                  expandIcon={getComboboxExpandIconProps()}
                 >
                   {props.choices?.map((choice) => (
                     <Option key={choice.key} value={choice.choice}>
