@@ -1,3 +1,4 @@
+/** Column save/delete actions and explanations for unavailable operations. */
 export interface IColumnFormPanelFooterProps {
   onSave: () => Promise<void>
   onDeleteColumn: () => Promise<void>

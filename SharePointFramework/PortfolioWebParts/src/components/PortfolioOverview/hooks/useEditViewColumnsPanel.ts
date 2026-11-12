@@ -11,17 +11,12 @@ import { TOGGLE_EDIT_VIEW_COLUMNS_PANEL } from '../reducer'
 
 /**
  * Creates props for `EditViewColumnsPanel` component based on the context (`IPortfolioOverviewContext`)
- *
- * @param context Context for `PortfolioOverview` component
  */
 export function useEditViewColumnsPanel(
   context: IPortfolioOverviewContext
 ): IEditViewColumnsPanelProps {
   /**
-   * Add `isSelected` property to `props.configuration.columns` based on `state.columns`.
-   * Sorts columns based on `state.currentView.columnOrder` if it exists. The selected columns
-   * will always be on top. The rest of the columns will be sorted based on their `sortOrder`
-   * from the project columns list.
+   * Merge configuration and current view columns and mark selection; the panel sorts them.
    *
    * The configuration is the list as the page loaded it: a column added or edited since is as it
    * is now only among the view's columns, and one deleted since is still in it. The panel listed
@@ -43,9 +38,6 @@ export function useEditViewColumnsPanel(
 
   /**
    * On save view columns callback sent to `EditViewColumnsPanel`.
-   *
-   * @param columns Selected columns
-   * @param columnIds Selected column IDs
    */
   const onSaveViewColumns = async (columns: ProjectColumn[], columnIds: number[]) => {
     const properties: Record<string, any> = {
@@ -65,7 +57,7 @@ export function useEditViewColumnsPanel(
   /**
    * On revert view column order callback sent to `EditViewColumnsPanel`.
    *
-   * @param selectedColumns Selected columns
+   * @param selectedColumns All selectable columns, including unselected ones.
    */
   const onRevertViewColumnOrder = async (selectedColumns: ProjectColumn[]) => {
     const columns = selectedColumns

@@ -20,8 +20,6 @@ import { IStatusColumnProps } from './types'
  *
  * Fluent's popover trigger makes the icons a button: it is named by each section's status, which
  * the icons show by colour alone (WCAG 4.1.2).
- *
- * @param props Props for the status report column
  */
 export function useStatusReportColumn(props: IStatusColumnProps) {
   const status = _.get(props.column, 'data.$', []).find(

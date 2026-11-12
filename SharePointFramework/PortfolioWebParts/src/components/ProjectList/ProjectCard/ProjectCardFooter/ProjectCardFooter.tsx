@@ -19,6 +19,7 @@ import styles from './ProjectCardFooter.module.scss'
 import { useProjectCardFooter } from './useProjectCardFooter'
 const PanelRight = bundleIcon(PanelRightContractFilled, PanelRightContractRegular)
 
+/** Show project personas, template identity, quick links and information actions. */
 export const ProjectCardFooter: FC = () => {
   const context = useContext(ProjectCardContext)
   const { primaryUser, secondaryUser, ProjectTypeIcon, projectTypeText } = useProjectCardFooter()

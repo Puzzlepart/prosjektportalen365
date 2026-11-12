@@ -31,9 +31,7 @@ import {
 import { IPortfolioOverviewReducerParams } from './types'
 
 /**
- * Get initial state for `<PortfolioOverview />` based on `params` provided.
- *
- * @param params Parameters for reducer state initialization
+ * Initialize the overview with cached placeholder columns and closed editing panels.
  */
 export const getInitialState = (
   params: IPortfolioOverviewReducerParams
@@ -52,10 +50,7 @@ export const getInitialState = (
 })
 
 /**
- * Create reducer for `<PortfolioOverview />`. Using `ActionReducerMapBuilder`
- * from `@reduxjs/toolkit` to create a reducer with a "fluent" API.
- *
- * @param params Parameters for reducer initialization
+ * Create the overview reducer for data, selection, sorting and editing actions.
  */
 const $createReducer = (params: IPortfolioOverviewReducerParams) =>
   createReducer(getInitialState(params), (builder) => {
@@ -74,7 +69,6 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         state.columns = payload.currentView.columns
         state.managedProperties = payload.managedProperties ?? []
         state.isUserInPortfolioManagerGroup = payload.isUserInPortfolioManagerGroup
-        // The hubs a merged view could not read, told above the list.
         state.mergedViewFailures = (payload.failedPortfolios ?? []).map((p) => p.title)
         state.showChildProjectInfoInProgram = payload.showChildProjectInfoInProgram
         state.loading = false
@@ -132,7 +126,7 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         }
       })
       .addCase(TOGGLE_COLUMN_CONTEXT_MENU, (state, { payload }) => {
-        // Need to cast to any because of a bug in the typings
+        // The menu anchor is a DOM element, not an Immer draft.
         state.columnContextMenu = payload as any
       })
       .addCase(SET_GROUP_BY, (state, { payload }) => {
@@ -145,7 +139,6 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         const isSortedDescending = Object.keys(payload).includes('isSortedDescending')
           ? payload.isSortedDescending
           : !!payload.column.isSorted && !payload.column.isSortedDescending
-        // The sort helpers take whether to sort ascending.
         const ascending = !isSortedDescending
         state.items = sortItems(
           state.items,

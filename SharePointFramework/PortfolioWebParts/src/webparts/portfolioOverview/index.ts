@@ -26,6 +26,7 @@ import {
 } from 'pp365-shared-library'
 import { DataAdapter } from 'data/DataAdapter'
 
+/** Host portfolio projects and reconfigure data services when the selected hub changes. */
 export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPortfolioOverviewProps> {
   private _configuration: IPortfolioOverviewConfiguration
   private _error: ErrorWithIntent
@@ -102,8 +103,6 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
   /**
    * Get dropdown options for the specified `targetProperty`. For now it only
    * handles the `defaultViewId` and `portfolios` properties.
-   *
-   * @param targetProperty Target property
    */
   protected _getOptions(
     targetProperty: keyof IPortfolioOverviewProps

@@ -19,6 +19,7 @@ const PORTFOLIO_AGGREGATION_DEFAULT_PROPS: Partial<IPortfolioAggregationProps> =
   lockedColumns: false
 }
 
+/** Show a filterable, grouped data-source overview with column and view editors. */
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, PORTFOLIO_AGGREGATION_DEFAULT_PROPS)
   const {

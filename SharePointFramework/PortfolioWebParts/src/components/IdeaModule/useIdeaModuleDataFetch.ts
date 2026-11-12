@@ -2,12 +2,9 @@ import { useEffect } from 'react'
 import { IIdeaModuleProps, IIdeaModuleState } from './types'
 
 /**
- * Component data fetch hook for `IdeaModule`. This hook is responsible for
- * fetching data and setting state.
+ * Load idea configuration and workflow data when the refetch timestamp changes.
  *
- * @param props Props
  * @param refetch Timestamp for refetch. Changes to this variable refetches the data in `useEffect`
- * @param setState Set state callback
  */
 export function useIdeaModuleDataFetch(
   props: IIdeaModuleProps,

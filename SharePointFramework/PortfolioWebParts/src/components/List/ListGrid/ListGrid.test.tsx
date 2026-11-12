@@ -37,7 +37,6 @@ describe('ListGrid', () => {
     expect(screen.getByRole('grid')).not.toHaveAttribute('aria-multiselectable')
     fireEvent.click(screen.getByText('Bravo'))
     expect(onSelectionChange).not.toHaveBeenCalled()
-    // The groups still open and close.
     expect(screen.getByText('Hub 1')).toBeInTheDocument()
     expect(screen.getByText('Charlie')).toBeInTheDocument()
   })
@@ -75,10 +74,9 @@ describe('ListGrid', () => {
     const { rerender } = render(grid({ groups: GROUPS }))
     fireEvent.click(screen.getByText('Hub 1'))
     expect(screen.queryByText('Alfa')).not.toBeInTheDocument()
-    // The same key keeps the user's choice.
     rerender(grid({ groups: GROUPS }))
     expect(screen.queryByText('Alfa')).not.toBeInTheDocument()
-    // A new key (the program administration passes its search) opens it again.
+    // The program administration changes this key when its search should reopen groups.
     rerender(grid({ groups: GROUPS, collapseStateKey: 'alfa' }))
     expect(screen.getByText('Alfa')).toBeInTheDocument()
   })

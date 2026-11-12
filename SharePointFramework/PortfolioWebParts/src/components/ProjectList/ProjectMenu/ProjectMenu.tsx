@@ -25,6 +25,7 @@ const useStyles = makeStyles({
   }
 })
 
+/** Open a project's configured quick-launch destinations from an icon menu. */
 export const ProjectMenu: FC<IProjectMenu> = (props) => {
   const styles = useStyles()
   const { open, onOpenChange, tooltip } = useProjectMenu()

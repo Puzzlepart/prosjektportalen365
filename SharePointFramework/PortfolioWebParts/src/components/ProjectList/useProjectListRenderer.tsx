@@ -59,6 +59,7 @@ const ProjectRow: FC<ListChildComponentProps<IProjectRowData>> = ({ index, style
   )
 }
 
+/** Render projects as stable virtualized card rows or a list, with loading placeholders. */
 export function useProjectListRenderer({
   props,
   state,
@@ -67,8 +68,6 @@ export function useProjectListRenderer({
 }: IProjectListContext) {
   /**
    * Render projects based on `state.renderMode`.
-   *
-   * @param projects - Projects to render
    */
   const renderProjects = (projects: ProjectListModel[]) => {
     switch (state.renderMode) {

@@ -21,10 +21,6 @@ import { isSameColumn } from './columnIdentity'
  * Moves and the places told are counted among the selected columns, the order the view saves:
  * the list shows the selected columns first only as it opens, and a column selected afterwards
  * keeps its place below columns that are not.
- *
- * @param props The properties for the component.
- *
- * @returns An object containing the necessary functions and state for the component.
  */
 export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
   const { selectableColumns, selectedColumns, selectColumn, moveColumn, moveSelectedColumn } =
@@ -34,8 +30,6 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
 
   /**
    * The place of a column among the selected columns, counted from 1, or 0 when it is not selected.
-   *
-   * @param column The column
    */
   const positionOf = (column: IListColumn) =>
     selectedColumns.findIndex((c) => isSameColumn(c, column)) + 1
@@ -43,9 +37,6 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
   /**
    * The place among the selected columns that the column at `fromIndex` in the list takes when it
    * is moved to `toIndex` in the list, counted from 1.
-   *
-   * @param fromIndex Index of the column in the list
-   * @param toIndex Index in the list it is moved to
    */
   const positionAfterMove = (fromIndex: number, toIndex: number) => {
     const column = selectableColumns[fromIndex]
@@ -55,9 +46,6 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
 
   /**
    * Whether a column can move one step up (`-1`) or down (`1`) among the selected columns.
-   *
-   * @param column The column
-   * @param step `-1` for up, `1` for down
    */
   const canMoveColumn = (column: IListColumn, step: -1 | 1) => {
     const position = positionOf(column)
@@ -65,7 +53,7 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
   }
 
   /**
-   * On save event handler.
+   * Save selected columns and their IDs in view order.
    */
   const onSave = () => {
     props.onSave(
@@ -75,10 +63,7 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
   }
 
   /**
-   * On change event handler.
-   *
-   * @param col Column item
-   * @param isSelected Selected state
+   * Update a column's selection without changing its position.
    */
   const onChange = (col: IListColumn, isSelected: boolean) => {
     selectColumn(col, isSelected)
@@ -108,10 +93,7 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
   }
 
   /**
-   * On drag end event handler: the column moved where it was dropped, or back where it was.
-   *
-   * @param result Drag and drop result
-   * @param provided What the library gives to announce with
+   * Commit a drop or announce cancellation without moving the column.
    */
   const onDragEnd: OnDragEndResponder = (result, provided) => {
     if (!result.destination) {
@@ -132,9 +114,6 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
   /**
    * Moves a selected column one step up or down among the selected columns, and tells where it
    * went.
-   *
-   * @param column The column to move
-   * @param step `-1` to move it up, `1` to move it down
    */
   const moveColumnOneStep = (column: IListColumn, step: -1 | 1) => {
     if (!canMoveColumn(column, step)) return
@@ -149,8 +128,6 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
    * The row's drag handle props for the mouse only. As a handle for the keyboard too, the row was
    * a button holding the checkbox and the move buttons, which a screen reader cannot reach inside
    * (axe's nested-interactive). The keyboard moves a column with the move buttons instead.
-   *
-   * @param dragHandleProps What the library hands the row to drag it by
    */
   const mouseDragHandleProps = (dragHandleProps: DraggableProvidedDragHandleProps | null) =>
     dragHandleProps && _.omit(dragHandleProps, 'role', 'tabIndex', 'aria-describedby')

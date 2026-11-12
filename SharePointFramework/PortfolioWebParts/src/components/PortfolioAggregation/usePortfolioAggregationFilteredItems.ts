@@ -48,7 +48,6 @@ const filterItems = (
  * The items the list shows: `state.items` filtered by the active filters, then by the search term.
  * Shared by the list and the Excel export, so that the export holds what is shown.
  *
- * @param state State of the Portfolio Aggregation component
  */
 export function getFilteredItems(state: IPortfolioAggregationContext['state']) {
   const filteredItems = filterItems(state.items, state.activeFilters, state.filters ?? [])
@@ -56,10 +55,8 @@ export function getFilteredItems(state: IPortfolioAggregationContext['state']) {
 }
 
 /**
- * Returns the list items and columns for the Portfolio Aggregation component filtered
+ * Return the list items for the Portfolio Aggregation component filtered
  * by the active filters and search term (see `getFilteredItems`).
- *
- * @param context Context for the Portfolio Aggregation component
  */
 export function usePortfolioAggregationFilteredItems({ state }: IPortfolioAggregationContext) {
   return useMemo(

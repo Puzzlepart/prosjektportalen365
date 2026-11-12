@@ -23,6 +23,7 @@ import {
 import { visibilityOptions } from './types'
 import { lockedWhenEditing } from '../../List/lockedWhenEditing'
 
+/** Edit or create a portfolio column, including display settings and visibility. */
 export const ColumnFormPanel: FC = () => {
   const context = useContext(PortfolioOverviewContext)
   const {
@@ -115,14 +116,7 @@ export const ColumnFormPanel: FC = () => {
               value={column.get('fieldName')}
               onChange={(value) => setColumn('fieldName', value)}
               readOnly={isEditing}
-              // managedProperties={context.state.managedProperties} - AutoComplete doesn't properly when trying to create a new by just typing. Removed for now to use input instead.
             />
-            {/* {columnMessages.get('fieldName') && (
-              <UserMessage
-                title={strings.SearchPropertyFoundTitle}
-                text={columnMessages.get('fieldName')}
-              />
-            )} */}
           </FieldContainer>
           <FieldContainer
             iconName='TextNumberFormat'

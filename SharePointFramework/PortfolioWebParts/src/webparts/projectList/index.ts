@@ -18,6 +18,7 @@ import React from 'react'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 import { PortalDataService, ProjectColumn, getFluentIcons } from 'pp365-shared-library'
 
+/** Edit a vertical's JSON filter field, committing its value when focus leaves. */
 function renderJsonTextarea(
   field: any,
   value: string,
@@ -47,6 +48,7 @@ function renderJsonTextarea(
   )
 }
 
+/** Host the project browser and configure its selection tabs, metadata and quick links. */
 export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectListProps> {
   private _portalDataService: PortalDataService
   private _columns: ProjectColumn[]
@@ -96,12 +98,6 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
-                // TODO: Implement sorting configuration in property pane and remove disabled state from sortBy field
-                // PropertyPaneTextField('sortBy', {
-                //   label: strings.SortByFieldLabel,
-                //   description: strings.SortByFieldDescription,
-                //   disabled: true
-                // }),
                 PropertyFieldToggleWithCallout('showSearchBox', {
                   calloutTrigger: CalloutTriggers.Hover,
                   key: 'showSearchBoxFieldId',

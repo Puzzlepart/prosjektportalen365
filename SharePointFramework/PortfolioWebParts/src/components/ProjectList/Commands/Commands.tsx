@@ -6,6 +6,7 @@ import { ProjectListContext } from '../context'
 import styles from './Commands.module.scss'
 import { useCommands } from './useCommands'
 
+/** Project search, presentation selection and card-sorting controls. */
 export const Commands: FC = () => {
   const context = useContext(ProjectListContext)
   const { toolbarItems, searchBoxPlaceholder } = useCommands()

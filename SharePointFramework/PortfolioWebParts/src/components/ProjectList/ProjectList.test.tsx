@@ -29,9 +29,7 @@ import { ProjectList } from './ProjectList'
 import { announced } from 'pp365-jest-config/lib/announce'
 
 /**
- * The project list web part as a whole: a tab per vertical the user may see, the default
- * vertical's projects, switching vertical, the search, and the empty and error states. The list
- * view is used, since its rows are plain links; the card view is the cards' own concern.
+ * Create a project fixture with access, phase and persona data for list and card views.
  */
 function project(title: string, overrides: Record<string, any> = {}) {
   return {

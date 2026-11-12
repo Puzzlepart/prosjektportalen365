@@ -11,7 +11,7 @@ export interface IVerticalFilterConfig {
   requiresAccess?: boolean
 }
 
-/** Safely parses a JSON string. Returns `{}` on failure. */
+/** Parse filter JSON, using an empty object for missing or invalid JSON. */
 function parseConfig(configJson: string): Record<string, any> {
   if (!configJson) return {}
   try {
@@ -73,30 +73,24 @@ function buildFilterFunction(
   }
 
   return (project: ProjectListModel, state: IProjectListState): boolean => {
-    // 1. Check visibility-rule conditions against state (acts as a gate)
     if (hasVisibilityRule) {
       for (const [key, expected] of Object.entries(config.visibilityRule)) {
         if ((state as any)[key] !== expected) return false
       }
     }
 
-    // 2. Check field-filter conditions against raw SP item data.
-    //    Values are either a plain value (equality) or an operator object
-    //    (`$ne` / `$in` / `$nin`) — see `matchesFieldCondition`.
     if (hasFieldFilter && project.data) {
       for (const [key, expected] of Object.entries(config.fieldFilter)) {
         if (!matchesFieldCondition((project.data as any)[key], expected)) return false
       }
     }
 
-    // 3. Check client-filter conditions against computed model properties
     if (hasClientFilter) {
       for (const [key, expected] of Object.entries(config.clientFilter)) {
         if ((project as any)[key] !== expected) return false
       }
     }
 
-    // 4. requiresAccess: portfolio manager OR user has access
     if (hasRequiresAccess) {
       if (!state.isUserInPortfolioManagerGroup && !project.hasUserAccess) {
         return false

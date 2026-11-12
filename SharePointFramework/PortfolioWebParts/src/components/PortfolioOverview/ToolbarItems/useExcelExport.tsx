@@ -12,10 +12,6 @@ import { EXCEL_EXPORT_ERROR, EXCEL_EXPORT_SUCCESS, START_EXCEL_EXPORT } from '..
  * Exports the selected rows, or else the rows the list shows (the search and the filters
  * applied), with the values as they are: the export service rounds and formats them. A failed
  * export is reported in a toast.
- *
- * @param context - The context object that contains the state and dispatch functions.
- *
- * @returns The callback that runs the export.
  */
 export function useExcelExport(context: IPortfolioOverviewContext) {
   const { dispatchToast } = useToastController(context.toasterId)

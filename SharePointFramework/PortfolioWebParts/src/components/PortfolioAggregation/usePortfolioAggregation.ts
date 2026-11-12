@@ -21,11 +21,7 @@ import { useToolbarItems } from './ToolbarItems/useToolbarItems'
 import { createGroups } from './createGroups'
 
 /**
- * Component logic hook for the Portfolio Aggregation component. This
- * hook is responsible for fetching data, managing state and dispatching
- * actions to the reducer.
- *
- * @param props Props for the Portfolio Aggregation component
+ * Coordinate aggregation loading, selection, search, grouping, filters and editing commands.
  */
 export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
   const context = usePortfolioAggregationReducer(props)

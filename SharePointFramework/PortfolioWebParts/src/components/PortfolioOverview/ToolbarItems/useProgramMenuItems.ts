@@ -3,11 +3,7 @@ import { IPortfolioOverviewContext } from '../context'
 import { CHANGE_VIEW } from '../reducer'
 
 /**
- * Returns an array of list menu items for each program in the configuration.
- *
- * @param context - The IPortfolioOverviewContext object containing the configuration and dispatch function.
- *
- * @returns An array of IListMenuItem objects, each representing a program in the configuration.
+ * Build program choices that scope the default view's queries to child projects.
  */
 export function useProgramMenuItems(context: IPortfolioOverviewContext) {
   if (!context.props.configuration.programs) return []

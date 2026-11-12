@@ -19,6 +19,7 @@ import { Idea } from 'components/IdeaModule'
 import { IdeaConfigurationModel } from 'models'
 import strings from 'PortfolioWebPartsStrings'
 
+/** A portfolio row identified by project, report series and optional source hub. */
 export interface IFetchDataForViewItemResult extends ISearchResult {
   SiteId: string
   _hubId?: string
@@ -40,6 +41,7 @@ export interface IFetchDataForViewItemResult extends ISearchResult {
   [key: string]: any
 }
 
+/** View rows, available managed properties and any unreadable merged portfolios. */
 export type IPortfolioViewData = {
   items: IFetchDataForViewItemResult[]
   managedProperties?: string[]
@@ -75,8 +77,7 @@ export interface IEnrichedProjectsFields {
   secondaryUserField?: string
 
   /**
-   * Include projects with a closed lifecycle status (`Avsluttet` / `Closed`,
-   * depending on hub language).
+   * Include projects with a completed or closed lifecycle status in the current UI language.
    * Defaults to `false`, which is the long-standing behaviour — closed projects
    * are dropped after fetching. Opting in leaves them in the result so callers
    * (e.g. the `ProjectList` verticals) can decide per view whether to show them.
@@ -97,6 +98,7 @@ export interface IEnrichedProjectsFields {
   secondaryField?: string
 }
 
+/** Data operations available to portfolio web parts and their shared components. */
 export interface IPortfolioWebPartsDataAdapter {
   /**
    * Configuring the `DataAdapter` enabling use of the `DataSourceService` and `PortalDataService`
@@ -104,8 +106,8 @@ export interface IPortfolioWebPartsDataAdapter {
    * The `dataSourceService` is dependent on the `portalDataService` being configured, as it needs
    * `portalDataService.web` to be passed as a parameter to its constructor.
    *
-   * @param _spfxContext SPFx context (not used)
-   * @param _configuration Configuration (not used)
+   * @param spfxContext Retained for adapter compatibility; the portfolio adapter uses its constructor context.
+   * @param configuration Retained for adapter compatibility; unused by the portfolio adapter.
    * @param portfolio Optionally the portfolio instance to configure the data adapter for
    */
   configure(
@@ -131,10 +133,6 @@ export interface IPortfolioWebPartsDataAdapter {
 
   /**
    * Fetch data sources by category and optional level.
-   *
-   * @param category Data source category
-   * @param level Level for data source
-   * @param columns Columns available for the data source category
    */
   fetchDataSources?(
     dataSourceCategory: string,
@@ -143,8 +141,7 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<DataSource[]>
 
   /**
-   * Get portfolio configuration from SharePoint lists. Optionally from
-   * a specific portfolio instance.
+   * Get configuration from the adapter's configured portfolio.
    *
    * This includes:
    * - `columns` - Project columns
@@ -161,14 +158,11 @@ export interface IPortfolioWebPartsDataAdapter {
    * Fetches data from multiple portfolio instances and merges them into a single view.
    *
    * Approach:
-   * 1. Configure and fetch data from the primary (first) included portfolio - this gives us the base configuration
-   * 2. Loop through the remaining included portfolios (after filtering by `includeInMergedView`) starting after the primary
-   *    portfolio, and merge their data into the result
+   * Read the primary portfolio with its existing configuration, then each other
+   * included portfolio with a separate adapter. Secondary failures are reported in the result.
    *
    * @param view View configuration from the primary (first included) portfolio
    * @param portfolios Array of portfolio instances to fetch data from; portfolios with includeInMergedView === false are ignored
-   * @param primaryConfiguration Configuration from the primary portfolio
-   * @returns Merged portfolio view data with items from all included hubs
    */
   fetchMergedViewData?(
     view: PortfolioOverviewView,
@@ -179,21 +173,12 @@ export interface IPortfolioWebPartsDataAdapter {
   /**
    * Get aggregated list config for the given category.
    *
-   * Returns `views`, `viewsUrls`, `columnUrls` and `level`.
-   *
-   * @param category Category for data source
-   * @param level Level for data source
+   * Includes views, columns, refiners, form URLs and available levels.
    */
   getAggregatedListConfig?(category: string): Promise<IPortfolioAggregationConfiguration>
 
   /**
-   * Do a dynamic amount of `sp.search` calls based on the amount of projects
-   * to avoid 4096 character limitation by SharePoint. Uses `this.aggregatedQueryBuilder`
-   * to create queries and `Promise.all` to execute them and flatten the results.
-   *
-   * @param view View configuration
-   * @param configuration PortfolioOverviewConfiguration
-   * @param siteId Site ID
+   * Optional batched-view operation; the portfolio DataAdapter does not implement it.
    */
   fetchDataForViewBatch?(
     view: PortfolioOverviewView,
@@ -202,11 +187,7 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<IPortfolioViewData>
 
   /**
-   * Fetch data for view. Items and managed properties are returned.
-   *
-   * @param view View configuration
-   * @param configuration PortfolioOverviewConfiguration
-   * @param siteId Site ID
+   * Fetch view rows and managed properties, choosing the regular or manager path.
    */
   fetchDataForView?(
     view: PortfolioOverviewView,
@@ -215,11 +196,8 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<IPortfolioViewData>
 
   /**
-   * Fetch data for regular view
+   * Build report-series rows from accessible project sites.
    *
-   * @param view View configuration
-   * @param configuration PortfolioOverviewConfiguration
-   * @param siteId Site ID
    * @param siteIdProperty Site ID property (defaults to **GtSiteIdOWSTEXT**)
    */
   fetchDataForRegularView(
@@ -230,11 +208,8 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<IPortfolioViewData>
 
   /**
-   * Fetch data for manager view.
+   * Build report-series rows from project items, even without an accessible site result.
    *
-   * @param view View
-   * @param configuration Configuration
-   * @param siteId Site ID
    * @param siteIdProperty Site ID property (defaults to **GtSiteIdOWSTEXT**)
    */
   fetchDataForManagerView(
@@ -245,9 +220,7 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<IPortfolioViewData>
 
   /**
-   * Checks if the current user is in the specified SharePoint group.
-   *
-   * @param groupName Group name
+   * Check whether the current user can view the named SharePoint group's membership.
    */
   isUserInGroup?(groupName: string): Promise<boolean>
 
@@ -260,32 +233,19 @@ export interface IPortfolioWebPartsDataAdapter {
   globalSettings?: Map<string, string>
 
   /**
-   * Fetches data for the Projecttimeline project.
-   *
-   * @param timelineConfig Timeline configuration
+   * Fetch project filter values and budget reports for the timeline.
    */
   fetchTimelineProjectData?(
     timelineConfig: any[]
   ): Promise<{ reports: any[]; configElement: TimelineConfigurationModel }>
 
   /**
-   *  Fetches items from timeline content list and maps them to `TimelineContentListModel`.
-   *
-   * * Fetching list items
-   * * Maps the items to `TimelineContentListModel`
-   *
-   * @param timelineConfig Timeline configuration
-   * @description Used in `ProjectTimeline`
+   * Map portfolio-visible timeline-list items to configured timeline content.
    */
   fetchTimelineContentItems?(timelineConfig: any[]): Promise<TimelineContentModel[]>
 
   /**
-   * Fetches configuration data for the Project Timeline and
-   * maps them to `TimelineContentModel`.
-   *
-   * @param configItemTitle Configuration item title
-   * @param dataSourceName Data source name
-   * @param timelineConfig Timeline configuration
+   * Map dated deliveries from a data source to configured timeline content.
    */
   fetchTimelineAggregatedContent?(
     configItemTitle: string,
@@ -302,9 +262,7 @@ export interface IPortfolioWebPartsDataAdapter {
   /**
    * Fetches fully enriched projects (Projects list + site access + group
    * membership + users). Results go through the tiered projects cache.
-   * Closed/completed projects are excluded and the list is sorted by title.
-   *
-   * @param fields Additional fields to include in the query
+   * Closed/completed projects are excluded unless requested; results are sorted by title.
    */
   fetchEnrichedProjects?(fields?: IEnrichedProjectsFields): Promise<ProjectListModel[]>
 
@@ -312,9 +270,7 @@ export interface IPortfolioWebPartsDataAdapter {
    * Lightweight projects fetch — only reads the Projects list items, skipping
    * the site / membership / user lookups. Shares the items cache with
    * {@link fetchEnrichedProjects}, so co-located webparts reuse the network
-   * call. Persona, membership and access fields are left undefined.
-   *
-   * @param fields Additional fields to include in the query
+   * call. Membership and access are false; personas have no user data.
    */
   fetchProjects?(fields?: IEnrichedProjectsFields): Promise<ProjectListModel[]>
 
@@ -323,8 +279,6 @@ export interface IPortfolioWebPartsDataAdapter {
    * components that render child items (PortfolioAggregation on risks /
    * benefits etc.) and need to join each item to its parent project's filter
    * values. Same data path as `ProjectTimeline`.
-   *
-   * @param refiners Project columns whose values should be returned
    */
   fetchProjectRefinerValues?(refiners: any[]): Promise<Map<string, Record<string, any>>>
 
@@ -333,9 +287,7 @@ export interface IPortfolioWebPartsDataAdapter {
    * Graph Groups and site users. The result are cached in `localStorage`
    * for 30 minutes.
    *
-   * @param siteId Site ID to fetch the project
    * @param hubContext Optional hub context for cross-hub data access
-   * @param fields The fields and person fields the project card shows
    */
   fetchEnrichedProject?(
     siteId: string,
@@ -346,9 +298,7 @@ export interface IPortfolioWebPartsDataAdapter {
   /**
    * Fetch projects from the projects list filtered by the `odataQuery`
    * property from the specified data source view.
-   *
-   * @param configuration Configuration
-   * @param dataSource Data source
+   * Return undefined when no project-level filter applies.
    */
   fetchProjectsByDataSource?(
     configuration?: IPortfolioAggregationConfiguration,
@@ -357,10 +307,6 @@ export interface IPortfolioWebPartsDataAdapter {
 
   /**
    * Fetch project sites using search.
-   *
-   * @param rowLimit Row limit
-   * @param sortProperty Sort property
-   * @param sortDirection Sort direction
    */
   fetchProjectSites(
     rowLimit: number,
@@ -372,10 +318,7 @@ export interface IPortfolioWebPartsDataAdapter {
    * Fetch items with data source name. If the data source is a benefit overview,
    * the items are fetched using `fetchBenefitItemsWithSource`.
    *
-   * The properties 'FileExtension' and 'ServerRedirectedURL' is always added to the select properties.
-   *
-   * @param dataSourceName Data source name
-   * @param selectProperties Select properties
+   * FileExtension and ServerRedirectedURL are selected for non-benefit data sources.
    */
   fetchItemsWithSource?(
     dataSourceName: string,
@@ -387,9 +330,6 @@ export interface IPortfolioWebPartsDataAdapter {
    * Fetch benefit items with the specified `dataSource` and `selectProperties`. The result
    * is transformed into `Benefit`, `BenefitMeasurement` and `BenefitMeasurementIndicator` objects
    * which is the main difference from `_fetchItems`.
-   *
-   * @param dataSource Data source
-   * @param selectProperties Select properties
    */
   fetchBenefitItemsWithSource?(
     dataSource: DataSource,
@@ -398,9 +338,7 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<any[]>
 
   /**
-   * Retrieves the configuration from the "Idékonfigurasjon" list
-   *
-   * @returns A Promise that resolves to an array containing the configuration.
+   * Read the named idea configuration, falling back to the first item or null.
    */
   getIdeaConfiguration?(
     listName: string,
@@ -408,13 +346,12 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<IdeaConfigurationModel>
 
   /**
-   * Retrieves the data for the ideas from the "Idéregistrering" list
-   *
-   * @returns A Promise that resolves to an object containing the data for the ideas.
+   * Read registered and processing ideas with their editable fields and columns.
    */
   getIdeasData?(configuration: IdeaConfigurationModel): Promise<Idea>
 }
 
+/** Hub identity, list names and merged-view participation for a portfolio. */
 export type PortfolioInstance = {
   uniqueId: string
   title: string
@@ -430,9 +367,7 @@ export type PortfolioInstance = {
 }
 
 /**
- * Generates an error for when the user does not have access to the portfolio.
- *
- * @param error The error that occurred
+ * Wrap a portfolio-configuration failure in a localized warning, preserving its stack.
  */
 export const GetPortfolioConfigError = (error: Error): ErrorWithIntent => {
   const e = new ErrorWithIntent(
@@ -444,6 +379,7 @@ export const GetPortfolioConfigError = (error: Error): ErrorWithIntent => {
   return e
 }
 
+/** Hub identity and optional SPFx context for cross-hub project-card reads. */
 export interface IHubContext {
   /**
    * Hub site ID (GUID)

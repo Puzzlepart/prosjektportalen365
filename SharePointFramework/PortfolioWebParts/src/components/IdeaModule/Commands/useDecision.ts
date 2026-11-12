@@ -1,10 +1,8 @@
 /**
- * Hook for setting the decision for ideas. Returns a callback function for setting the decision.
- *
- * @returns A function callback that returns a promise of void
+ * Return the placeholder decision callback; it currently performs no action.
  */
 export const useDecision = () => {
   return async (): Promise<void> => {
-    // TODO: Implement the useDecision hook
+    // TODO: Persist the decision before enabling the command surface.
   }
 }

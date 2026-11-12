@@ -16,14 +16,8 @@ import {
 import { format } from 'pp365-shared-library'
 
 /**
- * Enriches search results with department information from user profiles
- * Get unique UPNs from GtResourceUserOWSUSER. Format: email | display name | ...
- * The search result source 'b09a7990-05ea-4af9-81ef-edfab16c4e31' is the generic people vertical
- *
- * @param searchResults Search results
- * @param props Component properties for `ResourceAllocation`
- *
- * @returns Enriched search results with department information
+ * Enrich allocations with departments from a batched people search.
+ * GtResourceUserOWSUSER starts with the user's UPN; the fixed SourceId selects people.
  */
 const enrichWithDepartmentInfo = async (
   searchResults: IAllocationSearchResult[],
@@ -89,13 +83,7 @@ const enrichWithDepartmentInfo = async (
 }
 
 /**
- * Creating groups based on user property (`RefinableString71`) on the search result,
- * with fallback to role (`RefinableString72`)
- * For user groups, append department in parentheses if available
- *
- * @param searchResults Enriched search results
- *
- * @returns Timeline groups
+ * Group allocations by resource name, falling back to role, then sort by type and title.
  */
 const transformGroups = (searchResults: IEnrichedAllocationSearchResult[]): ITimelineGroup[] => {
   const groupNames = _.uniq(
@@ -121,13 +109,7 @@ const transformGroups = (searchResults: IEnrichedAllocationSearchResult[]): ITim
 }
 
 /**
- * Transform items.
- *
- * @param searchResults Enriched search results
- * @param groups Groups
- * @param props Component properties for `ResourceAllocation`
- *
- * @returns Timeline items
+ * Map allocations and absences to dated timeline bars with filter and detail data.
  */
 export const transformItems = (
   searchResults: IEnrichedAllocationSearchResult[],
@@ -195,11 +177,7 @@ export const transformItems = (
 }
 
 /**
- * Fetch data
- *
- * @param props Component properties for `ResourceAllocation`
- *
- * @returns Timeline data
+ * Read the allocation source, enrich departments and build timeline groups and items.
  */
 const fetchData = async (props: IResourceAllocationProps): Promise<ITimelineData> => {
   const dataSource = await new DataSourceService(props.sp.web).getByName(props.dataSource)
@@ -226,10 +204,7 @@ const fetchData = async (props: IResourceAllocationProps): Promise<ITimelineData
 }
 
 /**
- * Fetch hook for `<ResourceAllocation />`
- *
- * @param props Component properties for `ResourceAllocation`
- * @param fetchCallback Fetch callback
+ * Fetch allocation timeline data once on mount and pass it to the caller.
  */
 export const useResourceAllocationDataFetch = (
   props: IResourceAllocationProps,

@@ -2,7 +2,7 @@ import { IBenefitsSearchResult } from 'interfaces'
 import { BenefitBase } from './'
 
 /**
- * @class Benefit
+ * A project's benefit and its ownership and realization details.
  */
 export class Benefit extends BenefitBase {
   public Type: string
@@ -11,9 +11,6 @@ export class Benefit extends BenefitBase {
   public Owner: string
   public RealizationTime: Date
 
-  /**
-   *
-   */
   constructor(result: IBenefitsSearchResult) {
     super(result)
     this.Type = result.GtGainsTypeOWSCHCS

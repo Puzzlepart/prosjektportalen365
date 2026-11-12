@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 import { IErrorBoundaryFallbackProps } from './types'
 import { format } from 'pp365-shared-library'
 
+/** Announce a web-part render failure with its title and error details. */
 export const ErrorBoundaryFallback: FC<IErrorBoundaryFallbackProps> = (props) => {
   return (
     <div role='alert' className={styles.root}>

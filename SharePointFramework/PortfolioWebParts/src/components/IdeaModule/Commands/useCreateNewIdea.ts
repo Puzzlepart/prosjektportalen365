@@ -1,7 +1,6 @@
 /**
- * Hook for creating new ideas. Returns a callback function
- * for creating a new idea
+ * Placeholder for idea creation; no callback is implemented yet.
  */
 export const useCreateNewIdea = () => {
-  // TODO: Implement the useCreateNewIdea hook
+  // TODO: Wire idea creation before enabling the command surface.
 }

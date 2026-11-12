@@ -1,24 +1,22 @@
 import { IBaseComponentProps } from '../types'
 
+/** Project-count limits and logo visibility for the latest-projects list. */
 export interface ILatestProjectsProps extends IBaseComponentProps {
   /**
-   * Number of projects to show
+   * Projects shown before the list is expanded.
    */
   rowLimit: number
 
   /**
-   * Min number of projects to show
+   * Lower bound used by the web part's row-limit slider.
    */
   minRowLimit?: number
 
   /**
-   * Max number of projects to show
+   * Maximum sites fetched and upper bound of the row-limit slider.
    */
   maxRowLimit: number
 
-  /**
-   * Show project logo for each project
-   */
   showProjectLogo?: boolean
 }
 
@@ -26,18 +24,12 @@ export interface ILatestProjectsProps extends IBaseComponentProps {
  * Represents the state of the LatestProjects component.
  */
 export interface ILatestProjectsState {
-  /**
-   * An array of project objects.
-   */
   projects: any[]
 
-  /**
-   * A boolean indicating whether the component is currently loading data.
-   */
   loading: boolean
 
   /**
-   * A boolean indicating whether to display all projects or just a subset (`props.rowLimit`)
+   * Display all fetched projects instead of the initial `rowLimit`.
    */
   viewAll: boolean
 }

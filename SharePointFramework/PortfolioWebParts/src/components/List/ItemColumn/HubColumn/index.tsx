@@ -4,11 +4,7 @@ import { ColumnRenderComponent } from 'pp365-shared-library'
 import { IHubColumnProps } from './types'
 
 /**
- * HubColumn - Displays the hub title for items in merged view.
- * Shows the source hub title from the _hubTitle metadata field added during merged view data fetching.
- *
- * @param props - Column render props containing the item data
- * @returns The hub title as a span element, or empty string if not available
+ * Show the source hub title from a merged portfolio row, or an empty span.
  */
 export const HubColumn: ColumnRenderComponent<IHubColumnProps> = (props) => {
   const hubTitle = props.item?._hubTitle || ''

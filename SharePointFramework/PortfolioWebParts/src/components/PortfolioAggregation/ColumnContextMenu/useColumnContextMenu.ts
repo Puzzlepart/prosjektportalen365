@@ -14,8 +14,8 @@ import { MenuProps, useId } from '@fluentui/react-components'
 import { IMenuItem, format } from 'pp365-shared-library'
 
 /**
- * Component logic hook for `ColumnContextMenu`. Handles state and dispatches actions to the reducer.
- **/
+ * Build aggregation column commands, permission-based editing options and checked state.
+ */
 export function useColumnContextMenu() {
   const context = usePortfolioAggregationContext()
   const [open, setOpen] = useState(false)

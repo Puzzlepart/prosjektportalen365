@@ -11,6 +11,7 @@ import {
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 
+/** Host the latest-projects list and configure its count and logo display. */
 export default class LatestProjectsWebPart extends BasePortfolioWebPart<ILatestProjectsProps> {
   public render(): void {
     this.renderComponent<ILatestProjectsProps>(LatestProjects)

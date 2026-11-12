@@ -1,5 +1,6 @@
 import { ISearchResult } from '@pnp/sp/search'
 
+/** Search fields used to build a resource allocation. */
 export interface IAllocationSearchResult extends ISearchResult {
   RefinableString71: string
   RefinableString72: string
@@ -13,6 +14,7 @@ export interface IAllocationSearchResult extends ISearchResult {
   GtResourceUserOWSUSER: string
 }
 
+/** Allocation search fields enriched with the resource's department. */
 export interface IEnrichedAllocationSearchResult extends IAllocationSearchResult {
   userDepartment?: string
 }

@@ -1,11 +1,8 @@
 /**
- * Hook for deletion of idea. Returns a callback function
- * for deleting the selected report.
- *
- * @returns A function callback
+ * Return the placeholder idea-deletion callback; it currently performs no action.
  */
 export const useDelete = () => {
   return async (): Promise<void> => {
-    // TODO: Implement the useDelete hook
+    // TODO: Wire idea deletion before enabling the command surface.
   }
 }

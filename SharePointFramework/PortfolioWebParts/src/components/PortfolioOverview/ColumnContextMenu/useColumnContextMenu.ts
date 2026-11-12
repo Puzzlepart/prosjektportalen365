@@ -14,8 +14,7 @@ import { MenuProps, useId } from '@fluentui/react-components'
 import { IMenuItem, format } from 'pp365-shared-library'
 
 /**
- * Hook for the column header context menu. Handles the logic for the context menu. Creates a context menu
- * for the column header.
+ * Build column-menu commands, permission-based editing options and checked state.
  */
 export function useColumnContextMenu() {
   const context = useContext(PortfolioOverviewContext)

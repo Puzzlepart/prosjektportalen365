@@ -84,6 +84,7 @@ const IDEA_MODULE_DEFAULT_PROPS: Partial<IIdeaModuleProps> = {
   ]
 }
 
+/** Browse idea overviews and show a selected idea's registration, processing and phase. */
 export const IdeaModule: FC<IIdeaModuleProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, IDEA_MODULE_DEFAULT_PROPS)
   const {
@@ -233,7 +234,6 @@ export const IdeaModule: FC<IIdeaModuleProps> = (incomingProps) => {
               {state.selectedIdea && (
                 <div className={styles.content}>
                   <>
-                    {/* <Commands /> */}
                     <div className={styles.ideaHeader}>
                       <div className={styles.phasebar}>
                         <div className={styles.hamburger}>

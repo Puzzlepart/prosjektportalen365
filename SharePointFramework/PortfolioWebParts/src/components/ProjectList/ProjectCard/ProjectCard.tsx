@@ -10,6 +10,7 @@ import { ProjectCardFooter } from './ProjectCardFooter'
 import { ProjectCardHeader } from './ProjectCardHeader'
 import { useProjectCard } from './useProjectCard'
 
+/** Show a project's phase, logo, metadata and actions, or its loading placeholder. */
 export const ProjectCard: FC = (props) => {
   const context = useContext(ProjectCardContext)
   const { isDataLoaded, setIsImageLoaded } = useProjectCard()

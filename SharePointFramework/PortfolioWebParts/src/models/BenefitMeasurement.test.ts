@@ -2,9 +2,7 @@ import { parseColor } from 'pp365-shared-library'
 import { BenefitMeasurement } from './BenefitMeasurement'
 
 /**
- * A benefit measurement from search: its date shown in SharePoint's UI language (the Excel export
- * uses the date itself), its value, how far it has come towards the indicator's goal, and the
- * trend against the previous measurement.
+ * Create a search-backed measurement fixture with configurable value and date.
  */
 function measurement(value: string, date = '2026-03-15T00:00:00') {
   return new BenefitMeasurement({

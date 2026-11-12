@@ -27,8 +27,7 @@ function isNarrowScreen() {
 }
 
 /**
- * Component logic hook for `IdeaModule` component.
- *
+ * Coordinate idea selection, URL state, responsive navigation and status rendering.
  */
 export function useIdeaModule(props: IIdeaModuleProps) {
   const { state, setState } = useIdeaModuleState(props)

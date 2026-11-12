@@ -1,3 +1,4 @@
+/** Search fields shared by benefits, indicators and measurements. */
 export interface IBenefitsSearchResult {
   SPWebURL: string
   Path: string

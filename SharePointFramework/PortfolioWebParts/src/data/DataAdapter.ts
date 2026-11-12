@@ -78,12 +78,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   public dataSourceService: DataSourceService
   public sp: SPFI = this._sp
 
-  /**
-   * Constructs the `DataAdapter` class
-   *
-   * @param _spfxContext SPFx context
-   * @param _sp SPFI instance
-   */
   constructor(
     private _spfxContext: SPFxContext,
     private _sp: SPFI
@@ -91,6 +85,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     this.portalDataService = new PortalDataService()
   }
 
+  /** Initialize hub services; an already configured adapter retains its hub. */
   public async configure(
     _spfxContext?: WebPartContext,
     _configuration?: any,
@@ -124,6 +119,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     return this
   }
 
+  /** Load portfolio columns, views, programs and view-editing permissions. */
   public async getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {
     try {
       const [columnConfig, columns, views, programs, viewsUrls, columnUrls, userCanAddViews] =
@@ -156,6 +152,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
+  /** Load aggregation views and columns for a category and resolved site level. */
   public async getAggregatedListConfig(
     category: string,
     level?: string
@@ -214,6 +211,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
+  /** Choose site-based or project-item-based rows using insight-group membership visibility. */
   public async fetchDataForView(
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
@@ -266,6 +264,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     )
   }
 
+  /** Build one row per report series for each accessible project site. */
   public async fetchDataForRegularView(
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
@@ -297,6 +296,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     return { items, managedProperties } as IPortfolioViewData
   }
 
+  /** Build rows from project items, including projects without an accessible site result. */
   public async fetchDataForManagerView(
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
@@ -331,9 +331,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
    * Fetch items for the specified view. If the `view` has specified `searchQueries` it will use
    * `Promise.all` to fetch all queries in parallel. Otherwise it will use a single query. The
    * support for `searchQueries` is added to support program views in the portfolio overview.
-   *
-   * @param view View configuration
-   * @param selectProperties Select properties
    */
   private async _fetchItemsForView(view: PortfolioOverviewView, selectProperties: string[] = []) {
     if (_.isArray(view.searchQueries)) {
@@ -366,13 +363,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
   /**
    * Internal method for fetching data for a view. Used by `this.fetchDataForRegularView`
-   * and `this.fetchDataForManagerView`. Uses `this._fetchItems` to fetch data from search
-   * supporting more than 500 items using batching.
-   *
-   * @param view View
-   * @param configuration Configuration
-   * @param siteId Site ID
-   * @param siteIdProperty Site ID property (defaults to **GtSiteIdOWSTEXT**)
+   * and `this.fetchDataForManagerView`. Sites and published reports are paged;
+   * project rows use the view's queries and their configured row limit.
    */
   private async _fetchDataForView(
     view: PortfolioOverviewView,
@@ -418,6 +410,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     } as const
   }
 
+  /** Load project filter values and budget reports for the timeline, or empty data on failure. */
   public async fetchTimelineProjectData(timelineConfig: TimelineConfigurationModel[]) {
     try {
       const configuration = await this.getPortfolioConfig()
@@ -468,6 +461,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
+  /** Map configured portfolio-visible timeline items, tolerating lists without GtTag. */
   public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
     const baseFields = [
       'Title',
@@ -520,6 +514,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       .filter(Boolean)
   }
 
+  /** Read timeline element configurations from the current web. */
   public async fetchTimelineConfiguration() {
     const timelineConfig = await this._sp.web.lists
       .getByTitle(resource.Lists_TimelineConfiguration_Title)
@@ -527,6 +522,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     return timelineConfig.map((item) => new TimelineConfigurationModel(item)).filter(Boolean)
   }
 
+  /** Map dated deliveries from a data source when their timeline type is portfolio-visible. */
   public async fetchTimelineAggregatedContent(
     configItemTitle: string,
     dataSourceName: string,
@@ -575,6 +571,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     } else return []
   }
 
+  /** Search for hub-associated sites in the requested order, excluding the hub itself. */
   public async fetchProjectSites(
     rowLimit: number,
     sortProperty: 'Created' | 'Title',
@@ -606,14 +603,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   /**
-   * Combines project data from multiple sources (items, sites, member groups, users) into a unified ProjectListModel array.
-   *
-   * @param data - Object containing project items, sites, member groups, and users data
-   * @param primaryUserField - Optional field name to extract primary user information from project items
-   * @param secondaryUserField - Optional field name to extract secondary user information from project items
-   * @param templateMap - Optional map of template names to template image URLs
-   * @returns Array of ProjectListModel instances with combined data including user personas, membership status, and access permissions
-   *
+   * Combine project items with personas, group membership, site access and template images.
    */
   private _combineResultData(
     { items, sites, memberOfGroups, users }: IProjectsData,
@@ -679,9 +669,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
    * The types of the Projects list's `Gt` fields on the hub `sp` reaches, by internal name, read
    * once per hub and kept beside the list's items (`getOrFetchProjectsCache`). `undefined` when
    * they cannot be read, or none came back.
-   *
-   * @param sp The hub's SPFI instance
-   * @param hubSiteId The hub's site id
    */
   private async _fetchProjectListFieldTypes(
     sp: SPFI,
@@ -718,10 +705,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
    * lookup field, a `…Id` when the list has that person or lookup field, and any other field
    * (`Title`, `Id`) as it is. When the list's fields cannot be read, only `SPProjectItem`'s
    * fields are selected.
-   *
-   * @param sp The hub's SPFI instance
-   * @param hubSiteId The hub's site id
-   * @param selectFields The fields to select
    */
   private async _selectProjectListFields(
     sp: SPFI,
@@ -784,7 +767,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
    * dropped — SP search silently returns null for _all_ requested properties
    * if any `SelectProperties` entry is invalid.
    *
-   * @param refiners Project columns whose values should be returned
    * @returns Map from `GtSiteIdOWSTEXT` to a record keyed by `internalName`
    */
   public async fetchProjectRefinerValues(
@@ -860,6 +842,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     return templateMap
   }
 
+  /** Load title-sorted projects with personas, membership and access; exclude closed unless requested. */
   public async fetchEnrichedProjects(
     fields?: IEnrichedProjectsFields
   ): Promise<ProjectListModel[]> {
@@ -894,8 +877,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   /**
    * Lightweight projects fetch for callers that only need Projects list data
    * (e.g. ProjectTimeline). Shares the items cache with
-   * {@link fetchEnrichedProjects}; persona/membership/access fields are left
-   * undefined since those datasets aren't fetched.
+   * {@link fetchEnrichedProjects}; membership and access are false and personas
+   * have no user data because those datasets are not fetched.
    */
   public async fetchProjects(fields?: IEnrichedProjectsFields): Promise<ProjectListModel[]> {
     const siteId = this._spfxContext.pageContext.site.id.toString()
@@ -918,6 +901,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     return projects
   }
 
+  /** Load a single project's card data, caching its hub-specific fields for 30 minutes. */
   public async fetchEnrichedProject(
     siteId: string,
     hubContext?: IHubContext,
@@ -925,7 +909,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   ): Promise<ProjectListModel> {
     const localStore = new PnPClientStorage().local
 
-    // Use hub context if provided, otherwise use current context
     const spfxHubContext = hubContext?.spfxContext || this._spfxContext
     const spHub = hubContext ? spfi(hubContext.hubSiteUrl).using(SPFx(spfxHubContext)) : this._sp
     const hubSiteId = hubContext?.hubSiteId ?? this._spfxContext.pageContext.site.id.toString()
@@ -1011,6 +994,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     })
   }
 
+  /** Apply a view's OData project filter, or return undefined when no project filter applies. */
   public async fetchProjectsByDataSource(
     configuration?: IPortfolioAggregationConfiguration,
     dataSource?: string
@@ -1027,6 +1011,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       .items.filter(`${odataQuery}`)<any[]>()
   }
 
+  /** Check whether the current user can view the named group's membership. */
   public async isUserInGroup(groupName: string): Promise<boolean> {
     try {
       const [siteGroup] = await this._sp.web.siteGroups
@@ -1039,13 +1024,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   /**
-   * Fetch items with `this._sp.search` using the specified `{queryTemplate}` and `{selectProperties}`.
-   * Uses a `while` loop to fetch all items in batches of `{batchSize}`.
-   *
-   * @param queryTemplate Query template
-   * @param selectProperties Select properties
-   * @param batchSize Batch size (default: 500)
-   * @param additionalQuery Additional query parameters
+   * Page through all search results, adding the source URL and identity fields.
    */
   private async _fetchItems(
     queryTemplate: string,
@@ -1070,6 +1049,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     return results
   }
 
+  /** Join benefits, indicators and newest-first measurements into indicator rows. */
   public async fetchBenefitItemsWithSource(
     dataSource: DataSource,
     selectProperties: string[]
@@ -1141,6 +1121,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     return items
   }
 
+  /** Read a named data source, using benefit joins for benefit-overview categories. */
   public async fetchItemsWithSource(
     dataSourceName: string,
     selectProperties: string[]
@@ -1173,6 +1154,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
+  /** Read data sources for a category and optional level. */
   public async fetchDataSources(
     category: string,
     level?: string,
@@ -1188,6 +1170,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
+  /** Read the named idea configuration, falling back to the first item or null. */
   public async getIdeaConfiguration(
     listName: string = resource.Lists_Idea_Configuration_Title,
     configurationName: string = 'Standard'
@@ -1211,6 +1194,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
+  /** Join registered ideas with processing items, editable fields and display columns. */
   public async getIdeasData(configuration: IdeaConfigurationModel): Promise<Idea> {
     if (!configuration) {
       throw new Error('(DataAdapter) (getIdeasData) Idea configuration is missing.')
@@ -1279,14 +1263,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
       return { ...registered, processing }
     })
-
-    // const fieldValues = registrationData.fieldValues.map((values) => {
-    //   const processingFieldValues = processingData.fieldValues.find(
-    //     (processingFieldValues) => processingFieldValues.id === values.id
-    //   )
-
-    //   return { ...values, ...processingFieldValues }
-    // })
 
     return {
       data: {

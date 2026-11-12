@@ -3,7 +3,7 @@ import { IResourceAllocationState } from './types'
 import { ITimelineData } from 'pp365-shared-library/lib/interfaces'
 
 /**
- * Get filtered data
+ * Apply all active allocation filters and retain only groups with matching items.
  */
 export const useFilteredData = (state: IResourceAllocationState): ITimelineData => {
   const { activeFilters, data } = { ...state } as IResourceAllocationState

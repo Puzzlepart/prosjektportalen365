@@ -6,14 +6,14 @@ import { useId } from '@fluentui/react-components'
 import { usePortfolioOverviewContext } from '../context'
 
 /**
- * Component logic hook for `ViewFormPanel`.
+ * Validate and save portfolio views and manage the view editor's dismissal.
  */
 export function useViewFormPanel() {
   const context = usePortfolioOverviewContext()
   const { view, setView, isEditing } = useEditableView()
 
   /**
-   * Dismisses the form panel by dispatching the `TOGGLE_VIEW_FORM_PANEL` action.
+   * Close the view editor.
    */
   const onDismiss = () => {
     context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: false }))
@@ -22,7 +22,7 @@ export function useViewFormPanel() {
   /**
    * Saves the changes made to the view. If the view is being edited, the changes are updated in the
    * `PORTFOLIO_VIEWS` list. If the view is new, a new item is added to the `PORTFOLIO_VIEWS` list.
-   * Dismisses the form panel by dispatching the `TOGGLE_VIEW_FORM_PANEL` action.
+   * Close the editor after switching to the saved view.
    *
    * If the view is being edited, the `Title`, `GtSortOrder`, `GtSearchQuery`, `GtPortfolioIsPersonalView`,
    * `GtPortfolioIsDefaultView`, and `GtPortfolioFabricIcon` properties are updated.

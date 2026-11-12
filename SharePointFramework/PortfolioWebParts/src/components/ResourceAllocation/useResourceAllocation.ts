@@ -9,13 +9,7 @@ import { IFilterItemProps, IListColumn, TimelineTimeframe } from 'pp365-shared-l
 import { useId } from '@fluentui/react-components'
 
 /**
- * Component logic hook for `ResourceAllocation`. Handles
- * state, command bar, filters and data fetching using the
- * `useResourceAllocationDataFetch` and `useFilteredData` hooks.
- *
- * @param props Props for the `ResourceAllocation` component
- *
- * @returns `state`, `setState`, `filters`, `onFilterChange`, `items`, `groups` and `defaultTimeframe`
+ * Manage allocation data, filter choices and the initial timeline range.
  */
 export const useResourceAllocation = (props: IResourceAllocationProps) => {
   const [state, setState] = useState<IResourceAllocationState>({
@@ -64,10 +58,7 @@ export const useResourceAllocation = (props: IResourceAllocationProps) => {
   }))
 
   /**
-   * On filter change
-   *
-   * @param column Column
-   * @param selectedItems Selected items
+   * Replace a column's selected values or remove its empty filter.
    */
   const onFilterChange = (column: IListColumn, selectedItems: IFilterItemProps[]) => {
     const { activeFilters } = { ...state } as IResourceAllocationState

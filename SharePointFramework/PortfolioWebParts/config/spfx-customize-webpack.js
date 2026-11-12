@@ -82,7 +82,6 @@ function resolveExtends(specifier, fromFile) {
     try {
       return requireFrom.resolve(candidate)
     } catch (e) {
-      /* try the next form */
     }
   }
   return undefined
@@ -217,10 +216,6 @@ function keepLinkedPackagesBundled(webpackConfig, log) {
 }
 
 /**
- * @param {import('webpack').Configuration} webpackConfig
- * @param {{ logger: { terminal: { writeVerboseLine: (message: string) => void } } }} taskSession
- */
-/**
  * Plain stylesheets imported from node_modules are global CSS, not CSS modules.
  *
  * The rig routes every `.css` file that is not named `*.global.css` through the CSS-modules loader
@@ -311,6 +306,9 @@ function reloadPageOnRebuild(webpackConfig, log) {
   log('dev server: hot module replacement off, the page reloads after each rebuild')
 }
 
+/**
+ * Apply solution aliases, workspace bundling and browser compatibility fixes in place.
+ */
 module.exports = function customizeWebpackConfiguration(webpackConfig, taskSession, heftConfiguration, webpack) {
   const log = (message) => {
     try {

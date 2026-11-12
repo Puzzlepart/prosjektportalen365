@@ -12,9 +12,6 @@ import {
 } from '@fluentui/react-icons'
 import { Button, Link } from '@fluentui/react-components'
 
-/**
- * Object containing icons used in the component.
- */
 const Icons = {
   PanelRight: bundleIcon(PanelRightContractFilled, PanelRightContractRegular)
 }
@@ -23,6 +20,7 @@ const PROJECT_INFORMATION_COLUMN_DEFAULT_PROPS: Partial<IProjectInformationColum
   page: 'Portfolio'
 }
 
+/** Show a project link beside a button opening its information panel. */
 export const ProjectInformationColumn: ColumnRenderComponent<IProjectInformationColumnProps> = (
   incomingProps
 ) => {
@@ -30,7 +28,6 @@ export const ProjectInformationColumn: ColumnRenderComponent<IProjectInformation
   const context = useContext(ListContext)
   const url = props.item?.Path || props.item?.SPWebUrl
 
-  // The value gives way to the button, as the title column's does.
   return (
     <div className={styles.root}>
       <ProjectInformationPanel

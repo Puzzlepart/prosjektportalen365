@@ -17,11 +17,6 @@ export interface ISortableColumn {
  * run and keeps this order within it.
  *
  * @param items Rows, sorted in place
- * @param column Column to sort by
- * @param ascending Whether to sort ascending (A to Å)
- * @param customOrder The column's values in the order to sort them in, if configured
- *
- * @returns `items`, sorted
  */
 export function sortItems<T extends Record<string, any>>(
   items: T[],

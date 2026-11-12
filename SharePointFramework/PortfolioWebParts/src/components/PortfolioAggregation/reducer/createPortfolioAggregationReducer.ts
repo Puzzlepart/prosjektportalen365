@@ -47,7 +47,6 @@ import { isSameColumn } from '../../EditViewColumnsPanel/columnIdentity'
  * Sorts the rows by the sort column as the list sorts (`sortItems`), or by project name when there
  * is none.
  *
- * @param state State of the reducer, for its sort column
  * @param items Rows, sorted in place
  */
 function sortBySortColumn(state: IPortfolioAggregationState, items: Record<string, any>[]) {
@@ -62,9 +61,6 @@ function sortBySortColumn(state: IPortfolioAggregationState, items: Record<strin
  * Groups the rows by `column`, sorted so that each group is one run of rows (`createGroups` makes
  * the groups from the rows the list shows), or without a column ends the grouping and sorts the
  * rows by the sort column (the project name when there is none).
- *
- * @param state Draft state of the reducer
- * @param column Column to group by, or none
  */
 function applyGroupBy(state: IPortfolioAggregationState, column?: ProjectContentColumn) {
   if (column) {
@@ -77,10 +73,7 @@ function applyGroupBy(state: IPortfolioAggregationState, column?: ProjectContent
 }
 
 /**
- * Create reducer for `<PortfolioAggregation />` using `createReducer` from `@reduxjs/toolkit`.
- *
- * @param props Props for `<PortfolioAggregation />` component
- * @param initialState Initial state for reducer
+ * Create the reducer for aggregation data, grouping, filtering and column/view changes.
  */
 export const createPortfolioAggregationReducer = (
   props: IPortfolioAggregationProps,
@@ -246,7 +239,6 @@ export const createPortfolioAggregationReducer = (
         const isSortedDescending = Object.keys(payload).includes('isSortedDescending')
           ? payload.isSortedDescending
           : !payload.column.isSortedDescending
-        // The sort helpers take whether to sort ascending.
         const ascending = !isSortedDescending
         state.sortBy = payload.column
         state.items = sortItems(state.items, payload.column, ascending)

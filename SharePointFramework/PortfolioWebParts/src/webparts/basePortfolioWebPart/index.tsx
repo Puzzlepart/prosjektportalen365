@@ -11,6 +11,7 @@ import { ErrorBoundaryFallback } from './ErrorBoundary'
 
 type ComponentType<P> = FC<P> | ComponentClass<P>
 
+/** Share portfolio web-part services, context props, React mounting and error handling. */
 export abstract class BasePortfolioWebPart<
   T extends IBaseComponentProps
 > extends BaseClientSideWebPart<T> {
@@ -39,18 +40,7 @@ export abstract class BasePortfolioWebPart<
   }
 
   /**
-   * Render component specified in `component` parameter, with the props
-   * specified in `props` parameter. The props will be merged with the
-   * web part properties and the following props:
-   *
-   * - `webPartContext` (from `this.context`)
-   * - `pageContext` (from `this.context.pageContext`)
-   * - `dataAdapter` (configured in `onInit`)
-   * - `displayMode` (from `this.displayMode`)
-   * - `sp` (from `this.sp`)
-   *
-   * @param component Component to render
-   * @param props Props to pass to the component
+   * Mount a component inside the shared error boundary with web-part, service and site-context props.
    */
   public renderComponent<P = any>(component: ComponentType<P>, props?: Partial<P>): void {
     const combinedProps = this.createPropsForComponent(props)
@@ -69,15 +59,14 @@ export abstract class BasePortfolioWebPart<
   }
 
   /**
-   * Setup the web part initializing the SPFI instance and the data adapter,
-   * as well as the logger.
+   * Initialize the SPFI client and logging, and read the hosting page's title when available.
    */
   private async _setup() {
     this.sp = createSpfiInstance(this.context)
     Logger.subscribe(ConsoleListener())
     Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
 
-    // Only try to get page title if we're in a list context (not in Teams)
+    // Hosts such as Teams may not provide a page list item from which to read the title.
     if (this.context.pageContext.list?.id && this.context.pageContext.listItem?.id) {
       const sitePagesLibrary = this.sp.web.lists.getById(
         this.context.pageContext.list.id.toString()
@@ -113,8 +102,6 @@ export abstract class BasePortfolioWebPart<
    * Get the property pane configuration. This method is overridden by
    * the web part class extending this class. If not overridden, it will
    * return an empty configuration with no pages.
-   *
-   * @returns Empty property pane configuration
    */
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return { pages: [] }

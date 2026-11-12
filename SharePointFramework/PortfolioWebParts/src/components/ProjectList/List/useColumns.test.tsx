@@ -1,6 +1,5 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
-// Babel, so mocks are not hoisted. The row menu needs the data adapter and the whole web part
-// context, as in List.test.tsx.
+// Babel, so mocks are not hoisted. The quick-launch menu has its own tests.
 jest.mock('../ProjectMenu', () => ({ ProjectMenu: () => null }))
 
 import { Link } from '@fluentui/react-components'
@@ -166,7 +165,6 @@ describe('the project list columns', () => {
       tags: ['Kultur', 'Idrett'],
       hidden: false
     })
-    // An empty or non-text value falls back to the field's text.
     expect(
       cell('primaryField', { GtProjectServiceArea: '', GtProjectServiceAreaText: 'Kultur' })
     ).toEqual({
@@ -180,7 +178,6 @@ describe('the project list columns', () => {
       }
     )
     expect(cell('secondaryField', { GtProjectType: 42 })).toEqual({ tags: [], hidden: true })
-    // No field configured, or a project without data: no tags.
     expect(tagsOf(columnsWith()('primaryField').renderCell(project()) as any)).toEqual({
       tags: [],
       hidden: true

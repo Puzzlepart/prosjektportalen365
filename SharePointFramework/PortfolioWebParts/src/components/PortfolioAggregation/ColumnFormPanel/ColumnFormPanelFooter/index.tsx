@@ -13,6 +13,7 @@ import {
 } from '@fluentui/react-components'
 import { customLightTheme, useConfirmationDialog } from 'pp365-shared-library'
 
+/** Save, cancel or confirm deletion while explaining disabled column actions. */
 export const ColumnFormPanelFooter: FC<ColumnFormPanelFooterProps> = (props) => {
   const fluentProviderId = useId('fp-column-form-panel-footer')
   const context = usePortfolioAggregationContext()

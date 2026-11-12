@@ -5,23 +5,20 @@ interface IRevertOrderButtonProps extends Omit<ButtonProps, 'onClick'> {
   /**
    * Callback to call when the user clicks the revert order button.
    *
-   * @param columns The selected columns
+   * @param columns All selectable columns in their current order.
    */
   onClick(columns: IListColumn[]): void
 }
 
+/** Column selection, ordering and save callbacks for the view editor. */
 export interface IEditViewColumnsPanelProps extends IBasePanelProps {
   /**
-   * Title shown above the column list. Previously inherited from the Fluent UI
-   * v8 `IPanelProps`.
+   * Title shown above the column list.
    */
   title?: string
 
   /**
    * Callback to call when the user clicks the save button.
-   *
-   * @param columns The selected columns
-   * @param columnIds The selected column IDs
    */
   onSave(columns: IListColumn[], columnIds?: number[]): void
 
@@ -50,13 +47,14 @@ export interface IEditViewColumnsPanelProps extends IBasePanelProps {
   /**
    * Sort mode for the columns.
    *
-   * - `SelectedOnTop`: Selected columns will be on top, the rest will be based on the columns order in the provided
-   * `columns` property.
-   * - `CustomSelectedOnTop`: Selected columns will be on top, the rest will be based on `sortOrder` and `customColumnOrder`.
+   * Selected columns come first in either mode, with `customColumnOrder` taking
+   * precedence within each selection group. `CustomSelectedOnTop` also uses
+   * `sortOrder` for columns absent from the custom order.
    */
   sortMode: EditViewColumnsPanelSortMode
 }
 
+/** Fallback ordering for columns outside the custom order. */
 export enum EditViewColumnsPanelSortMode {
   SelectedOnTop = 'selectedOnTop',
   CustomSelectedOnTop = 'customSelectedOnTop'

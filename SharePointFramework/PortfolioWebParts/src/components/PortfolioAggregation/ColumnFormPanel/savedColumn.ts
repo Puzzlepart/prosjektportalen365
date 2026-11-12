@@ -7,7 +7,6 @@ import { ProjectContentColumn, SPProjectContentColumnItem } from 'pp365-shared-l
  * idea copies it to processing, and whether it can be grouped by when the switch was not used)
  * until the page was loaded again.
  *
- * @param columnItem The fields saved to the list
  * @param original The column the form edited, for an edited column
  */
 export function savedColumn(

@@ -9,6 +9,7 @@ import { IdeaConfigurationModel } from 'models'
 import { Slot, MessageBarProps } from '@fluentui/react-components'
 import { IPortfolioAggregationProps } from 'components/PortfolioAggregation'
 
+/** An idea-module error carrying its intended message-bar severity. */
 export class IdeaModuleErrorMessage extends Error {
   constructor(
     public message: string,
@@ -18,6 +19,7 @@ export class IdeaModuleErrorMessage extends Error {
   }
 }
 
+/** Idea configuration, field visibility and inherited overview options. */
 export interface IIdeaModuleProps extends IPortfolioAggregationProps {
   ideaConfigurationList: string
   ideaConfiguration: string
@@ -31,6 +33,7 @@ export interface IIdeaModuleProps extends IPortfolioAggregationProps {
   hiddenProcFields?: string[]
 }
 
+/** Loaded ideas, navigation selection and presentation state. */
 export interface IIdeaModuleState {
   loading?: boolean
   refetch?: number
@@ -47,13 +50,16 @@ export interface IIdeaModuleState {
   sort?: { fieldName: string; isSortedDescending: boolean }
 }
 
+/** Supported idea-list presentation modes. */
 export type IdeaListRenderMode = 'tiles' | 'list' | 'compactList'
 
+/** Idea or overview selection stored in the URL fragment. */
 export interface IIdeaModuleHashState {
   viewId?: string
   ideaId?: string
 }
 
+/** A selected idea and its editable registration and processing fields. */
 export interface IIdea {
   /**
    * The item
@@ -71,18 +77,20 @@ export interface IIdea {
   processingFieldValues?: EditableSPField[]
 }
 
+/** Container for the idea module's joined list data. */
 export class Idea {
   data: IIdeasData
 }
 
+/** Joined idea items, field metadata and editable values from both workflow lists. */
 export interface IIdeasData {
   /**
-   * The items from the lists containing the field values
+   * Registered items with their matching processing item.
    */
   items: any[]
 
   /**
-   * The items from the lists containing the field values
+   * Editable values read separately from each workflow list.
    */
   fieldValues?: {
     registered: ItemFieldValues[]
@@ -103,12 +111,14 @@ export interface IIdeasData {
   columns: ProjectContentColumn[]
 }
 
+/** An idea phase with its display name and optional icon slot. */
 export interface IIdeaPhase {
   phase: IdeaPhase
   name: string
   icon?: Slot<'span'>
 }
 
+/** Stages of the idea-to-project workflow. */
 export enum IdeaPhase {
   Registration,
   Processing,

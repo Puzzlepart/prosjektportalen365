@@ -69,7 +69,6 @@ describe('useFilteredData', () => {
       ['Fase: Konsept', 0, 1],
       ['Fase: Planlegge', 1, 2]
     ])
-    // The groups start open.
     expect(result.groups.every((g) => !g.isCollapsed)).toBe(true)
   })
 
@@ -94,7 +93,6 @@ describe('useFilteredData', () => {
         sortBy: { column: { ...columns[0], isSortedDescending: true } }
       })
     )
-    // The groups keep their order; the rows within them turn.
     expect(shown(descending)).toEqual(['Alfa', 'Charlie', 'Bravo'])
   })
 

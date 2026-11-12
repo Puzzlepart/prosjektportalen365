@@ -9,8 +9,6 @@ import { useMemo } from 'react'
 
 /**
  * Creates props for `EditViewColumnsPanel` component based on the context.
- *
- * @param context Context for `PortfolioAggregation` component
  */
 export function useEditViewColumnsPanel(
   context: IPortfolioAggregationContext
@@ -19,8 +17,6 @@ export function useEditViewColumnsPanel(
 
   /**
    * On save view columns callback sent to `EditViewColumnsPanel`.
-   *
-   * @param columns Selected columns
    */
   const onSaveViewColumns = async (columns: ProjectContentColumn[]) => {
     const properties: SPDataSourceItem = {

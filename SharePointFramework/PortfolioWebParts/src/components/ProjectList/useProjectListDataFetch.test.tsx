@@ -3,11 +3,11 @@ import * as React from 'react'
 import { useProjectListDataFetch } from './useProjectListDataFetch'
 
 /**
- * The project list's data fetch: the projects and the user's portfolio manager membership when
- * the adapter answers, and the error (with an empty list) when it does not.
+ * Render the fetch hook with an adapter stand-in and record partial state updates.
  */
 function fetchWith(dataAdapter: Record<string, any>) {
   const setState = jest.fn()
+  /** Run the fetch effect with the supplied adapter and state-update recorder. */
   const Probe: React.FC = () => {
     useProjectListDataFetch({ dataAdapter } as any, setState)
     return null

@@ -12,6 +12,7 @@ import {
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 import { format } from 'pp365-shared-library'
 
+/** Host the portfolio timeline with configurable range and delivery source. */
 export default class PortfolioTimelineWebPart extends BasePortfolioWebPart<IProjectTimelineProps> {
   public async onInit(): Promise<void> {
     await super.onInit()

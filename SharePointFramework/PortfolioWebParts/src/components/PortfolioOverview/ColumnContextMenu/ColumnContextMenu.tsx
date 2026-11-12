@@ -10,6 +10,7 @@ import { useColumnContextMenu } from './useColumnContextMenu'
 import { renderMenuItem } from '../../../components/List'
 import { customLightTheme } from 'pp365-shared-library'
 
+/** Open the selected column's sorting, grouping, resizing and editing menu. */
 export const ColumnContextMenu: FC = () => {
   const {
     target,

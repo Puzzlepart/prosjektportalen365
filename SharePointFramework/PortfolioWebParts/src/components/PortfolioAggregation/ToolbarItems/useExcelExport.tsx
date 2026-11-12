@@ -20,10 +20,6 @@ function getColumnName(context: IPortfolioAggregationContext, internalName: stri
  * Exports the selected rows, or else the rows the list shows (filtered and searched as the list
  * does), with trend values as their achievement and the other values as they are: the export
  * service rounds and formats them. A failed export is reported in a toast.
- *
- * @param context - The context object that contains the state and dispatch functions.
- *
- * @returns An object holding the callback that runs the export.
  */
 export function useExcelExport(context: IPortfolioAggregationContext) {
   const { dispatchToast } = useToastController(context.toasterId)

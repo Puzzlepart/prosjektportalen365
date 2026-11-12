@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { ProjectCardContext } from '../context'
 
 /**
- * Component logic hook for `ProjectCardContent`
+ * Read configured metadata tags, falling back to companion text fields.
  */
 export function useProjectCardContent() {
   const context = useContext(ProjectCardContext)

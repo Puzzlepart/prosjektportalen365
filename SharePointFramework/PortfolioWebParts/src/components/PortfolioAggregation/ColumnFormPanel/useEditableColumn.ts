@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { usePortfolioAggregationContext } from '../context'
 
 /**
- * Intial column with default values.
+ * Initial column with default values.
  */
 const initialColumn = new Map<string, any>([
   ['name', ''],
@@ -31,6 +31,7 @@ const convertToMap = (column: ProjectContentColumn) => {
   ])
 }
 
+/** Initialize editable content-column fields and update top-level or nested settings. */
 export function useEditableColumn() {
   const context = usePortfolioAggregationContext()
   const [column, $setColumn] = useState<Map<string, any>>(initialColumn)
@@ -46,9 +47,6 @@ export function useEditableColumn() {
 
   /**
    * Sets a property of the column.
-   *
-   * @param key Key of the column to update
-   * @param value Value to update the column with
    */
   const setColumn = (key: string, value: any) => {
     $setColumn((prev) => {
@@ -60,9 +58,6 @@ export function useEditableColumn() {
 
   /**
    * Set the data object of the column.
-   *
-   * @param key Key of the data object to update
-   * @param value Value to update the data object with
    */
   const setColumnData = (key: string, value: any) => {
     $setColumn((prev) => {

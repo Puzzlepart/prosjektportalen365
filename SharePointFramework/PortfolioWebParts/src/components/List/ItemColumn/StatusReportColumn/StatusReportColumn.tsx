@@ -28,6 +28,7 @@ export const STATUS_REPORT_COLUMN_DEFAULT_PROPS: Partial<IStatusColumnProps> = {
   }
 }
 
+/** Show a report series' status marks and a delayed detail popover. */
 export const StatusReportColumn: ColumnRenderComponent<IStatusColumnProps> = (
   incomingProps
 ): JSX.Element => {

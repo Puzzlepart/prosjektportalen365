@@ -2,9 +2,7 @@ import { useState } from 'react'
 import { IIdeaModuleProps, IIdeaModuleState } from './types'
 
 /**
- * Component state hook for `IIdeaModule`.
- *
- * @param props Props
+ * Initialize idea-module state and expose partial state updates.
  */
 export function useIdeaModuleState(props: IIdeaModuleProps) {
   const defaultSort = { fieldName: props.sortBy, isSortedDescending: true }
@@ -23,8 +21,6 @@ export function useIdeaModuleState(props: IIdeaModuleProps) {
   /**
    * Set state like `setState` in class components where
    * the new state is merged with the current state.
-   *
-   * @param newState New state
    */
   const setState = (newState: Partial<IIdeaModuleState>) =>
     $setState((currentState) => ({ ...currentState, ...newState }))

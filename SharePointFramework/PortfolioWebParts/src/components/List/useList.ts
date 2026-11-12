@@ -25,8 +25,6 @@ function useElementHeight(ref: RefObject<HTMLElement>): number {
  * Component logic hook for `List`: the columns to show (the add column last, hidden ones left
  * out), the cell renderer, the column header click, and the height of the pinned command bar,
  * under which the column headers are pinned.
- *
- * @param props - The props for the list.
  */
 export function useList(props: IListProps<any>) {
   const { addColumn } = useAddColumn(props.isAddColumnEnabled)

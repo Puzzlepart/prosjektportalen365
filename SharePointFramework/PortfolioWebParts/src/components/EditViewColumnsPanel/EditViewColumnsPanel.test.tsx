@@ -10,8 +10,7 @@ import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
 import { announced } from 'pp365-jest-config/lib/announce'
 
 /**
- * The show/hide columns panel: the selected columns first, in the view's order, then the rest;
- * choosing, unchoosing and moving columns; and what "use" hands back.
+ * Create a column fixture with selection state and optional display metadata.
  */
 const column = (
   id: number,
@@ -81,6 +80,7 @@ function renderPanelHook(columnList: any[]) {
     sortMode: EditViewColumnsPanelSortMode.CustomSelectedOnTop,
     columns: columnList
   } as any
+  /** Capture the panel's drag handlers without requiring jsdom to perform a drag. */
   const Probe: React.FC = () => {
     result.panel = useEditViewColumnsPanel(props)
     return null
@@ -234,6 +234,7 @@ describe('EditViewColumnsPanel', () => {
       sortMode: EditViewColumnsPanelSortMode.CustomSelectedOnTop,
       columns: columns()
     } as any
+    /** Capture drag-announcement handlers under React's hook lifecycle. */
     const Probe: React.FC = () => {
       panel = useEditViewColumnsPanel(props)
       return null
@@ -283,7 +284,6 @@ describe('EditViewColumnsPanel', () => {
     expect(announce).toHaveBeenLastCalledWith(
       format(strings.ColumnLiftedAnnouncement, 'Startdato', 2)
     )
-    // Tittel dropped below every row is the last of the two chosen columns.
     act(() =>
       result.panel.onDragUpdate(
         { source: { index: 0 }, destination: { index: 3 }, draggableId: 'Tittel' } as any,
@@ -316,6 +316,7 @@ describe('EditViewColumnsPanel', () => {
       sortMode: EditViewColumnsPanelSortMode.CustomSelectedOnTop,
       columns: columns()
     } as any
+    /** Capture the drop handler and its resulting column order. */
     const Probe: React.FC = () => {
       panel = useEditViewColumnsPanel(props)
       return null

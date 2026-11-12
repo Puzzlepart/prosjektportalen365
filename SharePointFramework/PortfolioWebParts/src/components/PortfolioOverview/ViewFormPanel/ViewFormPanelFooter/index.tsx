@@ -7,6 +7,7 @@ import { SET_VIEW_FORM_PANEL } from '../../reducer'
 import styles from './ViewFormPanelFooter.module.scss'
 import { IViewFormPanelFooterProps } from './types'
 
+/** Save or cancel view edits, explaining why saving may be unavailable. */
 export const ViewFormPanelFooter: FC<IViewFormPanelFooterProps> = ({ onSave }) => {
   const fluentProviderId = useId('fp-view-form-panel-footer')
   const context = usePortfolioOverviewContext()

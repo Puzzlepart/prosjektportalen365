@@ -9,6 +9,7 @@ const CONFIG_COLUMN_DEFAULT_PROPS: Partial<IConfigColumnProps> = {
   tooltipColumnPropertyName: null
 }
 
+/** Render a configured value with its icon, color and optional tooltip field. */
 export const ConfigColumn: FC<IConfigColumnProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, CONFIG_COLUMN_DEFAULT_PROPS)
   const element = (

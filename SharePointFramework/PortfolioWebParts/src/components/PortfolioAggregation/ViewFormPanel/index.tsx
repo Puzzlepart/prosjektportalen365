@@ -7,6 +7,7 @@ import { useViewFormPanel } from './useViewFormPanel'
 import { BasePanel, FieldContainer, customLightTheme } from 'pp365-shared-library'
 import { FluentProvider, IdPrefixProvider, Input, Textarea } from '@fluentui/react-components'
 
+/** Create or edit a data-source view while showing its fixed category and level. */
 export const ViewFormPanel: FC = () => {
   const context = usePortfolioAggregationContext()
   const { view, setView, isEditing, onDismiss, onSave, fluentProviderId } = useViewFormPanel()

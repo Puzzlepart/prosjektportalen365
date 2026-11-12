@@ -18,14 +18,13 @@ import {
 } from '../../components/PortfolioAggregation'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 
+/** Load a data-source category and host its aggregated overview or configuration error. */
 export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IPortfolioAggregationProps> {
   private _configuration: IPortfolioAggregationConfiguration
   private _configurationError: ErrorWithIntent
 
   public render(): void {
     if (!this.properties.dataSource) {
-      // The sibling branch below already renders a UserMessage; use it here too
-      // rather than the v8 MessageBar. `info` matches the v8 default appearance.
       this.renderComponent<IUserMessageProps>(UserMessage, {
         text: strings.PortfolioAggregationNotConfiguredMessage,
         intent: 'info'
@@ -33,7 +32,6 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
       return
     }
     if (!this._configuration) {
-      // The base web part unmounts the element in onDispose.
       renderReact(
         createElement(UserMessage, {
           title: this._configurationError?.name ?? strings.ErrorTitle,
@@ -55,9 +53,6 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
    * On update property. For `DisplayMode.Edit` it refreshes the property pane,
    * for `DisplayMode.Read` it updates the page using the `_api/SitePages/Pages/UpdateAppPage`
    * endpoint.
-   *
-   * @param key Key
-   * @param value Value
    */
   private async _onUpdateProperty(key: string, value: any) {
     this.properties[key] = value
@@ -102,8 +97,6 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
 
   /**
    * Get view options for the property pane dropdown field `defaultViewId`.
-   *
-   * @param configuration Configuration
    */
   protected _getViewOptions(): IPropertyPaneDropdownOption[] {
     if (!this._configuration) return []

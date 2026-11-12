@@ -99,6 +99,7 @@ function exportFrom(state: Record<string, any> = {}) {
     toasterId: TOASTER_ID
   } as unknown as IPortfolioAggregationContext
   let exportToExcel: () => void
+  /** Capture the export callback under React's toast-controller context. */
   const Probe: React.FC = () => {
     exportToExcel = useExcelExport(context).exportToExcel
     return null

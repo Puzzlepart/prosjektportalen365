@@ -6,6 +6,7 @@ import styles from './List.module.scss'
 import { ListContext } from './context'
 import { useList } from './useList'
 
+/** Render configured project metadata in the shared sortable data grid. */
 export const List = () => {
   const context = useContext(ListContext)
   const { columns, defaultSortState } = useList()

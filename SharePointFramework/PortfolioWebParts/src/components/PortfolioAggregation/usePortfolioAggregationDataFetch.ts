@@ -16,9 +16,10 @@ import {
  * data source, runs the item search, loads project-level refiner values, and
  * joins each item to its parent project's refiner values via `SiteId`.
  *
- * Project-column `fieldName`s are also added to the item `selectProperties`
+ * By default, project-column `fieldName`s are added to the item `selectProperties`
  * so the reducer's search-based fallback works for DataSource refiners that
- * don't have an `internalName` match in the refiner-values map.
+ * don't have an `internalName` match in the refiner-values map. Explicit
+ * `props.selectProperties` replaces this default selection.
  */
 async function fetchData(context: IPortfolioAggregationContext) {
   const columns = context.props.configuration?.columns ?? []
@@ -82,7 +83,6 @@ async function fetchData(context: IPortfolioAggregationContext) {
  * This hook is called when the component is mounted and when one of the
  * specified dependencies changes.
  *
- * @param context Context for the Portfolio Aggregation component
  * @param deps Dependencies that should trigger a new fetch
  */
 export function usePortfolioAggregationDataFetch(context: IPortfolioAggregationContext, deps = []) {

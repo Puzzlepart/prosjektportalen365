@@ -393,11 +393,9 @@ describe('PortfolioAggregation reducer', () => {
     expect(reducer(open, TOGGLE_FILTER_PANEL()).isFilterPanelOpen).toBe(false)
     const compact = reducer(state, TOGGLE_COMPACT(true))
     expect(compact.isCompact).toBe(true)
-    // Choosing the mode already on keeps it.
     expect(reducer(compact, TOGGLE_COMPACT(true)).isCompact).toBe(true)
     expect(reducer(compact, TOGGLE_COMPACT(false)).isCompact).toBe(false)
     expect(reducer(state, TOGGLE_COMPACT(false)).isCompact).toBe(false)
-    // Without a payload it flips.
     expect(reducer(compact, TOGGLE_COMPACT()).isCompact).toBe(false)
   })
 
@@ -771,7 +769,6 @@ describe('PortfolioAggregation reducer', () => {
       // A number column sorts by its numbers within each group, not as text.
       const byBudget = reducer(grouped, SET_SORT({ column: budget, isSortedDescending: false }))
       expect(rowsOf(byBudget)).toEqual(['Konsept:C', 'Konsept:A', 'Realisere:D', 'Realisere:B'])
-      // And so does ungrouping, which sorts all rows by it again.
       const ungroupedByBudget = reducer(byBudget, SET_GROUP_BY({ column: phase }))
       expect(field(ungroupedByBudget, 'Title')).toEqual(['C', 'D', 'A', 'B'])
     })
@@ -868,7 +865,7 @@ describe('PortfolioAggregation reducer', () => {
         const { reducer, state } = setup(props)
         const next = reducer(state, SET_CURRENT_VIEW())
         expect(next.currentView).toBeUndefined()
-        // `PortfolioAggregationErrorMessage` compiled to ES5 yields a plain `Error` carrying `type`.
+        // Assert the error's public shape rather than subclass identity after transpilation.
         expect(next.error).toBeInstanceOf(Error)
         expect((next.error as any).type).toBe('error')
         return next.error.message

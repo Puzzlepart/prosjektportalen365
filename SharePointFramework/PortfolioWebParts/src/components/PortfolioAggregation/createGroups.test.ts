@@ -25,8 +25,7 @@ describe('createGroups', () => {
   })
 
   it('groups the items the list shows, not all of them', () => {
-    // A search for "a" leaves Bravo out of the four items above: Charlie is the only Planlegge
-    // left, at index 1 of what is shown.
+    // After filtering, group offsets must refer to the displayed rows, not the original array.
     const shown = [item('Alfa', 'Konsept'), item('Charlie', 'Planlegge')]
     expect(createGroups(shown, PHASE)).toEqual([
       { key: 'Group_0', name: 'Fase: Konsept', startIndex: 0, count: 1 },

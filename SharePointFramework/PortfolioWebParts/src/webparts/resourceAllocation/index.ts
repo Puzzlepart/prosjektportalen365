@@ -8,6 +8,7 @@ import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 import strings from 'PortfolioWebPartsStrings'
 import { format } from 'pp365-shared-library'
 
+/** Host the resource-allocation timeline and configure its initial time range. */
 export default class ResourceAllocationWebPart extends BasePortfolioWebPart<IResourceAllocationProps> {
   public async onInit(): Promise<void> {
     await super.onInit()

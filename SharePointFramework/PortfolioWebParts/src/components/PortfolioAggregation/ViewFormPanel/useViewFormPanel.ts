@@ -5,9 +5,7 @@ import { useEditableView } from './useEditableView'
 import { useId } from '@fluentui/react-components'
 
 /**
- * Hook for managing the logic of the `ViewFormPanel` component for the `PortfolioAggregation` component.
- *
- * @returns An object containing functions and state variables for the `ViewFormPanel` component.
+ * Validate and save aggregation data-source views and manage editor dismissal.
  */
 export function useViewFormPanel() {
   const context = usePortfolioAggregationContext()
@@ -21,14 +19,7 @@ export function useViewFormPanel() {
   }
 
   /**
-   * Saves the column to the list. If the column is new, it will
-   * also add the column to the current view. If the column is
-   * being edited, it will update the column in the list.
-   *
-   * If the column is being edited, it will update the column in the list
-   * using `updateItemInList` from the `dataAdapter`. If the column is new,
-   * it will add the column to the list using `addItemToList` from
-   * the `dataAdapter`.
+   * Save the data-source view, copying columns, refiners and grouping for a new view.
    */
   const onSave = async () => {
     const { currentView } = context.state

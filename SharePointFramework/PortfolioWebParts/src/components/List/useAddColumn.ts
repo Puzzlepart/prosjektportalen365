@@ -15,9 +15,6 @@ export function useAddColumn(
   permissionCheck: boolean = true,
   key = 'ADD_COLUMN'
 ) {
-  /**
-   * Add column object
-   */
   const addColumn: IListColumn = {
     key,
     fieldName: '',
@@ -32,11 +29,6 @@ export function useAddColumn(
 
   /**
    * Create contextual menu items for the add column.
-   *
-   * @param onToggleColumnFormPanel On toggle column form panel callback
-   * @param onToggleEditViewColumnsPanel On toggle edit view columns panel callback
-   * @param isToggleColumnFormPanelDisabled Is toggle column form panel disabled
-   * @param isToggleEditViewColumnsPanelDisabled Is toggle edit view columns panel disabled
    */
   const createContextualMenuItems = (
     onToggleColumnFormPanel: () => void,
@@ -61,12 +53,7 @@ export function useAddColumn(
   ]
 
   /**
-   * Returns `true` if the column is the add column. This is typically
-   * used to check if the column is the add column before adding the
-   * contextual menu items created by `createContextualMenuItems` to
-   * the list of contextual menu items.
-   *
-   * @param column Column to check
+   * Identify the synthetic column that opens creation and ordering commands.
    */
   const isAddColumn = (column: IListColumn) => column.key === addColumn.key
 

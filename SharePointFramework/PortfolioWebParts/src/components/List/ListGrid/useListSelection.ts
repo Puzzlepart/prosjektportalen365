@@ -28,10 +28,7 @@ function groupItems(items: Item[], group: IListGroup): Item[] {
  * Given `selectedItems`, the caller keeps the selection: the hook reads it from there, and a toggle
  * reports the next selection without keeping it, so the rows show what the caller passes.
  *
- * @param items The list's items
  * @param visibleItems The items on the screen, in display order
- * @param onSelectionChange Called with the selected items whenever the selection changes
- * @param selectedItems The selection, when the caller keeps it
  */
 export function useListSelection(
   items: Item[],
@@ -53,8 +50,6 @@ export function useListSelection(
   const latest = useRef({ items, onSelectionChange, selected })
   latest.current = { items, onSelectionChange, selected }
 
-  // Applies a change: to the grid's own selection, or, kept by the caller, as a report of the
-  // next selection.
   const setSelected = useCallback(
     (next: (previous: ReadonlySet<Item>) => ReadonlySet<Item>) => {
       if (!isControlled) {

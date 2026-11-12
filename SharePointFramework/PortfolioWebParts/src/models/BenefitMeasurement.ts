@@ -2,6 +2,7 @@ import { BenefitBase, BenefitMeasurementIndicator } from './'
 import { IBenefitsSearchResult } from 'interfaces'
 import { formatShortDate, ITrendIcon } from 'pp365-shared-library'
 
+/** A measured value with formatted display, achievement and trend details. */
 export class BenefitMeasurement extends BenefitBase {
   public Date: Date
   public DateDisplay: string
@@ -15,10 +16,9 @@ export class BenefitMeasurement extends BenefitBase {
   public Indicator: BenefitMeasurementIndicator
 
   /**
-   * Creates a new instance of BenefitMeasurement
+   * Read a measurement from search.
    *
-   * @param result Search result
-   * @param fractionDigits Fraction digits for valueDisplay
+   * @param fractionDigits Decimal places in the displayed measurement value.
    */
   constructor(result: IBenefitsSearchResult, fractionDigits: number = 2) {
     super(result)
@@ -36,10 +36,9 @@ export class BenefitMeasurement extends BenefitBase {
   }
 
   /**
-   * Calculate achievement
+   * Calculate progress from the indicator's start value towards its desired value.
    *
-   * @param indicator Indicator
-   * @param fractionDigits Fraction digits used for achievementDisplay
+   * @param fractionDigits Decimal places in the displayed percentage.
    */
   public calculcateAchievement(
     indicator: BenefitMeasurementIndicator,
@@ -56,9 +55,7 @@ export class BenefitMeasurement extends BenefitBase {
   }
 
   /**
-   * Set trend icon props
-   *
-   * @param prevMeasurement Previous measurement
+   * Mark a reached goal or improvement or decline against the previous measurement.
    */
   public setTrendIcon(prevMeasurement: BenefitMeasurement): BenefitMeasurement {
     const shouldIncrease = this.Indicator.DesiredValue > this.Indicator.StartValue

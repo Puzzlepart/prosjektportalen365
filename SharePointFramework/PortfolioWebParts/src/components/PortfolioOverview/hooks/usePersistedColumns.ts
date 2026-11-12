@@ -8,9 +8,6 @@ import _ from 'underscore'
  * properties specified in `properties` are persisted to `localStorage` to ensure
  * that the persisted value is not too large for the browser.
  *
- * @param props Props of `<PortfolioOverview />`
- * @param useViewId If `true` the persisted columns are stored per view
- * @param defaultValue Default value for columns if no persisted value is found
  * @param properties Properties to persist (default: `['fieldName', 'key', 'name', 'minWidth', 'maxWidth', 'sortOrder']`;
  * the placeholder columns start at the widths the columns will have)
  *
@@ -29,8 +26,6 @@ export function usePersistedColumns(
    * Sets the columns to persist in `localStorage` using `PnPClientStorage`.
    *
    * The columns are persisted for 7 days.
-   *
-   * @param columns Columns to persist
    */
   const set = (columns: ProjectColumn[]) => {
     try {
@@ -42,8 +37,6 @@ export function usePersistedColumns(
   /**
    * Gets the persisted columns from `localStorage` using `PnPClientStorage`,
    * or the default value if no persisted value is found.
-   *
-   * @returns The persisted columns or the default value if no persisted value is found
    */
   const get = () => localStore.get(localKey) ?? defaultValue
 

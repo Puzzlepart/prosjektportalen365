@@ -59,6 +59,7 @@ function renderFetch() {
   } as unknown as IPortfolioAggregationProps
   const reducer = createPortfolioAggregationReducer(props, getInitialState(props))
   const latest: { state?: IPortfolioAggregationState; dispatch?: React.Dispatch<any> } = {}
+  /** Run the fetch hook against the real reducer and expose its latest state. */
   const Probe: React.FC = () => {
     const [state, dispatch] = React.useReducer(reducer, getInitialState(props))
     Object.assign(latest, { state, dispatch })

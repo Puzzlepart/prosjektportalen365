@@ -9,8 +9,6 @@ import { IListGroup } from '../List'
  * Handles user fields (pipe-separated), lookup fields (`;#`-separated),
  * calculated/number fields (e.g. `#10.0000000000000` or `2.00000000000000`),
  * and returns the value as-is for other types.
- *
- * @param value Raw field value
  */
 export function parseDisplayValue(value: string): string {
   if (!value) return value

@@ -1,56 +1,40 @@
 import { IBaseComponentProps } from '../types'
 import { ITimelineData } from 'pp365-shared-library/lib/interfaces'
 
+/** Allocation source, search fields, colors and initial timeline range. */
 export interface IResourceAllocationProps extends IBaseComponentProps {
-  /**
-   * Data source
-   */
   dataSource: string
 
   /**
-   * Background color for item
+   * Comma-separated RGB channels for allocation bars.
    */
   itemColor?: string
 
   /**
-   * Background color for absence items
+   * Comma-separated RGB channels for absence bars.
    */
   itemAbsenceColor?: string
 
-  /**
-   * Select properties
-   */
   selectProperties?: string[]
 
   /**
-   * Default timeframe start
+   * Initial lookback as an amount and Moment unit, for example `4,months`.
    */
   defaultTimeframeStart?: string
 
   /**
-   * Default timeframe end
+   * Initial lookahead as an amount and Moment unit, for example `4,months`.
    */
   defaultTimeframeEnd?: string
 }
 
+/** Loaded timeline data and active allocation filters. */
 export interface IResourceAllocationState {
-  /**
-   * Active filters
-   */
   activeFilters: { [key: string]: string[] }
 
-  /**
-   * Data
-   */
   data?: ITimelineData
 
-  /**
-   * Error
-   */
   error?: string
 
-  /**
-   * Loading
-   */
   loading?: boolean
 }

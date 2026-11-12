@@ -1,5 +1,4 @@
-// The row menu needs the data adapter and the whole web part context, so it is mocked before the
-// component is imported.
+// The quick-launch menu is tested separately; mock it before imports because Jest does not hoist mocks.
 jest.mock('../ProjectMenu', () => ({ ProjectMenu: () => null }))
 
 import { render, screen } from '@testing-library/react'

@@ -12,8 +12,6 @@ export interface IHubMetadata {
 
 /**
  * The hub a portfolio's rows carry.
- *
- * @param portfolio The portfolio
  */
 export function hubMetadata(portfolio: PortfolioInstance): IHubMetadata {
   return { _hubId: portfolio.uniqueId, _hubTitle: portfolio.title, _hubUrl: portfolio.url }
@@ -21,11 +19,8 @@ export function hubMetadata(portfolio: PortfolioInstance): IHubMetadata {
 
 /**
  * A view's search query scoped to another hub: every `DepartmentId:{…}` in it is that hub's. A
- * query without one is left as it is; the sites and the status reports a view reads are scoped
- * to the hub by `fetchDataForView` itself, so the rows are that hub's either way.
- *
- * @param searchQuery The view's search query
- * @param hubSiteId The hub's site id
+ * query without a matching clause is unchanged; its project-result scoping remains the caller's
+ * responsibility.
  */
 export function replaceDepartmentId(searchQuery: string, hubSiteId: string): string {
   return searchQuery.replace(/DepartmentId:\{[a-f0-9-]+\}/gi, `DepartmentId:{${hubSiteId}}`)

@@ -10,9 +10,6 @@ import { renderModes } from './renderModes'
  * The name the sort button gives the field the cards are sorted by: the title by the name the list
  * view gives it («Tittel»), another field by its project column's. It gave the internal name,
  * «Sorter flisene etter: Title», since 1.9.0.
- *
- * @param sortBy The field the cards are sorted by
- * @param projectColumns The hub's project columns
  */
 function getSortFieldName(sortBy: string, projectColumns?: ProjectColumn[]): string {
   if (sortBy?.toLowerCase() === 'title') return strings.TitleLabel
@@ -20,8 +17,7 @@ function getSortFieldName(sortBy: string, projectColumns?: ProjectColumn[]): str
 }
 
 /**
- * Component logic hook for `Commands`. This hook is responsible for
- * rendering the toolbar and handling its actions.
+ * Build presentation and sort commands and the selected tab's search placeholder.
  */
 export function useCommands() {
   const context = useContext(ProjectListContext)

@@ -13,6 +13,7 @@ import { IPortfolioAggregationConfiguration } from 'components'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { ISPHttpClientOptions, SPHttpClient } from '@microsoft/sp-http'
 
+/** Load idea overview configuration and host the idea workflow browser. */
 export default class IdeaModuleWebPart extends BasePortfolioWebPart<IIdeaModuleProps> {
   private _configuration: IPortfolioAggregationConfiguration
 
@@ -28,9 +29,6 @@ export default class IdeaModuleWebPart extends BasePortfolioWebPart<IIdeaModuleP
    * On update property. For `DisplayMode.Edit` it refreshes the property pane,
    * for `DisplayMode.Read` it updates the page using the `_api/SitePages/Pages/UpdateAppPage`
    * endpoint.
-   *
-   * @param key Key
-   * @param value Value
    */
   private async _onUpdateProperty(key: string, value: any) {
     this.properties[key] = value
@@ -75,8 +73,6 @@ export default class IdeaModuleWebPart extends BasePortfolioWebPart<IIdeaModuleP
 
   /**
    * Get view options for the property pane dropdown field `defaultViewId`.
-   *
-   * @param configuration Configuration
    */
   protected _getViewOptions(): IPropertyPaneDropdownOption[] {
     if (!this._configuration) return []

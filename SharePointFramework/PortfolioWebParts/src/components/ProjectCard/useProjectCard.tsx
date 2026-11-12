@@ -8,8 +8,7 @@ import { IProjectCardContext } from './context'
 import { ProjectListModel } from 'pp365-shared-library'
 
 /**
- * Component logic hook for `ProjectCard` component.
- *
+ * Load a project and build its card context and information-panel action.
  */
 export function useProjectCard(props: IProjectCardProps) {
   const { state, setState } = useProjectCardState()
@@ -19,8 +18,6 @@ export function useProjectCard(props: IProjectCardProps) {
 
   /**
    * Get card actions. For now only `showProjectInfo` is handled.
-   *
-   * @param project - Project
    */
   function getCardActions(project: ProjectListModel): ButtonProps[] {
     return [
@@ -34,9 +31,6 @@ export function useProjectCard(props: IProjectCardProps) {
 
   /**
    * On execute card action. For now only `showProjectInfo` is handled.
-   *
-   * @param event - Event
-   * @param project - Project
    */
   function onExecuteCardAction(event: React.MouseEvent<any>, project: ProjectListModel) {
     event.preventDefault()
@@ -50,8 +44,6 @@ export function useProjectCard(props: IProjectCardProps) {
 
   /**
    * Create card context for the provided project.
-   *
-   * @param project Project to create context for
    */
   function createCardContext(project: ProjectListModel): IProjectCardContext {
     const shouldDisplay = (key: string) => _.contains(props.projectMetadata, key)

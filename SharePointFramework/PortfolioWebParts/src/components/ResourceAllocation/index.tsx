@@ -14,6 +14,7 @@ import {
 } from 'pp365-shared-library'
 import resource from 'SharedResources'
 
+/** Default data source, time range, bar colors and allocation search fields. */
 export const RESOURCE_ALLOCATION_DEFAULT_PROPS: Partial<IResourceAllocationProps> = {
   dataSource: resource.Lists_DataSources_Category_ResourceAllocation_All,
   defaultTimeframeStart: '4,months',
@@ -38,6 +39,7 @@ export const RESOURCE_ALLOCATION_DEFAULT_PROPS: Partial<IResourceAllocationProps
   ]
 }
 
+/** Show resource allocations and absences on a filterable timeline. */
 export const ResourceAllocation: FC<IResourceAllocationProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, RESOURCE_ALLOCATION_DEFAULT_PROPS)
   const { state, filters, onFilterChange, items, groups, defaultTimeframe, fluentProviderId } =

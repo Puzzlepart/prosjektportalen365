@@ -16,6 +16,7 @@ import { useToolbarItems } from './useToolbarItems'
 function toolbar(state: Record<string, any>) {
   const dispatch = jest.fn()
   let items: ListMenuItem[] = []
+  /** Capture toolbar commands and the actions their callbacks dispatch. */
   const Probe: React.FC = () => {
     items = useToolbarItems({
       state: { views: [], ...state },

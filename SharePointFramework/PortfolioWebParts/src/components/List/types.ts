@@ -9,6 +9,7 @@ import { MouseEvent } from 'react'
  */
 export type ResizeColumn = (event: MouseEvent<HTMLElement>) => void
 
+/** Column-menu anchor and optional keyboard-resize action. */
 export type OnColumnContextMenu = {
   column: any
   target: any
@@ -50,6 +51,7 @@ export interface IListGroup {
   isCollapsed?: boolean
 }
 
+/** Rows, columns, grouping, commands and interactions for the hub list. */
 export interface IListProps<T extends IListColumn = IListColumn> {
   /**
    * Title to display in the list header

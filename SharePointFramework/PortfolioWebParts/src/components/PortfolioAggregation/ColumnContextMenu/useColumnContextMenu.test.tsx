@@ -33,6 +33,7 @@ const title = () =>
 function menuFor(column: ProjectContentColumn, resizeColumn?: (event: any) => void) {
   const dispatch = jest.fn()
   let items: IMenuItem[] = []
+  /** Capture column commands without opening a slow Fluent menu under jsdom. */
   const Probe: React.FC = () => {
     items = useColumnContextMenu().items
     return null

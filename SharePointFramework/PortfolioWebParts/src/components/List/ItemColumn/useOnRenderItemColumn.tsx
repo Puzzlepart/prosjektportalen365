@@ -19,9 +19,6 @@ import { HubColumn } from './HubColumn'
  * if not it will use the default render function. Also the `Title` column has a custom render
  * function by default that will be used as long as the `dataType` has not be changed to
  * something else than `text`.
- *
- * @param item Item to render the value for
- * @param column Column to render the value for
  */
 function renderItemColumn(item: Record<string, any>, column: IListColumn): ReactNode {
   if (!column.fieldName) return null
@@ -35,7 +32,6 @@ function renderItemColumn(item: Record<string, any>, column: IListColumn): React
     return dataTypeProperties.fallbackValue
   }
 
-  // Special handling for Title column
   if (column.fieldName === 'Title' && column['dataType'] === 'text') {
     return <TitleColumn item={item} />
   }
@@ -64,11 +60,7 @@ function renderItemColumn(item: Record<string, any>, column: IListColumn): React
 }
 
 /**
- * Hook for handling the `onRenderItemColumn` function.
- * Returns an instance of the function `onRenderItemColumn`,
- * that only changes when the `props` changes. Also  registers
- * column render options for data types that doesn't have a custom
- * render component.
+ * Register portfolio-specific cell types and return a stable renderer for list cells.
  */
 export const useOnRenderItemColumn = () => {
   useColumnRenderComponentRegistry()

@@ -2,7 +2,7 @@ import resource from 'SharedResources'
 import { useEffect } from 'react'
 import { IProjectListProps, IProjectListState } from './types'
 
-/** Fetches enriched projects and group membership for `ProjectList`. */
+/** Fetch enriched projects and the portfolio insight-group visibility flag. */
 export function useProjectListDataFetch(
   props: IProjectListProps,
   setState: (newState: Partial<IProjectListState>) => void

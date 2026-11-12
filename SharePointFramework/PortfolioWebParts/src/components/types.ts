@@ -3,6 +3,7 @@ import { SPFI } from '@pnp/sp'
 import { IPortfolioWebPartsDataAdapter } from 'data/types'
 import { SiteContext } from 'pp365-shared-library'
 
+/** Site context and services passed from portfolio web parts to their components. */
 export interface IBaseComponentProps extends SiteContext {
   /**
    * Component title. Often rendered as a header.

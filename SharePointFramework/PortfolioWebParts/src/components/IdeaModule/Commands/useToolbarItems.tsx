@@ -7,17 +7,13 @@ import { useDelete } from './useDelete'
 import { useDecision } from './useDecision'
 
 /**
- * Returns an array of menu items for the toolbar in the ProjectStatus component.
- *
- * @returns An array of IListMenuItem objects representing the toolbar items.
+ * Build the idea toolbar's primary and secondary commands; actions are not implemented yet.
  */
 export function useToolbarItems() {
   const context = useIdeaModuleContext()
   const createNewStatusReport = useCreateNewIdea()
   const deleteIdea = useDelete()
   const decideIdea = useDecision()
-
-  // TODO: Finish the implementation of the useToolbarItems hook
 
   const menuItems = useMemo<ListMenuItem[]>(
     () =>
@@ -30,7 +26,7 @@ export function useToolbarItems() {
         new ListMenuItem(strings.Idea.EditButtonText, strings.Idea.EditButtonDescription)
           .setIcon('Edit')
           .setOnClick(() => {
-            // Implement the edit functionality
+            // Editing remains unavailable until the idea editor is wired in.
           }),
         new ListMenuItem(strings.Idea.ApproveButtonText, strings.Idea.ApproveButtonDescription)
           .setIcon('CloudArrowUp')

@@ -3,6 +3,7 @@ import { IPortfolioAggregationProps } from 'components/PortfolioAggregation'
 import { ProjectColumn, ProjectListModel } from 'pp365-shared-library'
 import { IHubContext } from '../../data/types'
 
+/** Project identity, card metadata, personas and cross-hub data options. */
 export interface IProjectCardProps extends IPortfolioAggregationProps {
   /**
    * Actions to display in the footer of the card
@@ -10,7 +11,7 @@ export interface IProjectCardProps extends IPortfolioAggregationProps {
   actions?: ButtonProps[]
 
   /**
-   * Controls when the shimmer is swapped with actual data through an animated transition
+   * Whether card data is ready to display.
    */
   isDataLoaded?: boolean
 
@@ -75,11 +76,10 @@ export interface IProjectCardProps extends IPortfolioAggregationProps {
   hubContext?: IHubContext
 }
 
+/** Single-project loading, error and information-panel state. */
 export interface IProjectCardState {
   /**
-   * Whether the component's data has finished loading. Named after the Fluent UI
-   * v8 `Shimmer` prop it used to be picked from; the v9 `Skeleton` has no
-   * equivalent, so it is declared here.
+   * Whether the component's data has finished loading.
    */
   isDataLoaded?: boolean
 
@@ -105,6 +105,7 @@ export interface IProjectCardState {
   showProjectInfo?: ProjectListModel
 }
 
+/** Ordered relative destination in a project's quick-launch menu. */
 export interface IQuickLaunch {
   /**
    * Order of the menu item

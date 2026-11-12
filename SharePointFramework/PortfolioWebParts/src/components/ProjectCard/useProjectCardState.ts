@@ -2,9 +2,7 @@ import { useState } from 'react'
 import { IProjectCardState } from './types'
 
 /**
- * Component state hook for `IProjectCard`.
- *
- * @param props Props
+ * Initialize single-card loading state and expose partial state updates.
  */
 export function useProjectCardState() {
   const [state, $setState] = useState<IProjectCardState>({
@@ -14,8 +12,6 @@ export function useProjectCardState() {
   /**
    * Set state like `setState` in class components where
    * the new state is merged with the current state.
-   *
-   * @param newState New state
    */
   const setState = (newState: Partial<IProjectCardState>) =>
     $setState((currentState) => ({ ...currentState, ...newState }))

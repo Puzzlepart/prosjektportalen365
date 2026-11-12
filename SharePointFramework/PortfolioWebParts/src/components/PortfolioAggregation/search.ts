@@ -6,10 +6,6 @@ import { IListColumn } from 'pp365-shared-library'
  * as well as the SiteTitle property (name of the project). Uses `JSON.stringify`
  * to create a string representation of the item, which is then matched against
  * the search term.
- *
- * @param item Item
- * @param searchTerm Search term
- * @param columns Columns
  */
 export const searchItem = (item: any, searchTerm: string, columns: IListColumn[]) => {
   try {

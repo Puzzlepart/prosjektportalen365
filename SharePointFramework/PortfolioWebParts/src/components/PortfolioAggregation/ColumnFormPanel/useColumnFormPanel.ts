@@ -56,21 +56,12 @@ export function useColumnFormPanel() {
         : undefined
   const isDeleteDisabled = !!deleteDisabledReason
 
-  /**
-   * Saves the column to the list. If the column is new, it will
-   * also add the column to the current data source. If the column is
-   * being edited, it will update the column in the list.
-   *
-   * If the column is being edited, it will update the column in the list
-   * using `updateProjectContentColumn` from the `dataAdapter`. If the column is new,
-   * it will add the column to the list using `addColumnToDataSource` from
-   * the `dataAdapter`.
-   */
   // A save or delete writes to the portal site in the hub, where SharePoint enforces the
   // permission. A user whose menu was enabled but who lacks that permission gets a rejection here,
   // and must be told rather than left looking at a panel that did nothing.
   const [saveError, setSaveError] = useState<Error>(null)
 
+  /** Save column changes, adding new columns to the data source and reporting write failures. */
   const onSave = async () => {
     if (columnUsingProperty) return
     setSaveError(null)
@@ -158,8 +149,8 @@ export function useColumnFormPanel() {
   }
 
   /**
-   * Save is disabled if the column name or field name is less than 2 characters, or if another
-   * column shows the managed property already.
+   * Require internal name, managed property and display name of at least two characters,
+   * and prevent duplicate managed properties for new columns.
    */
   const isSaveDisabled =
     column.get('internalName').length < 2 ||

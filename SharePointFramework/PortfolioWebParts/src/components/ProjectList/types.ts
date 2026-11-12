@@ -3,6 +3,7 @@ import { ProjectColumn, ProjectListModel } from 'pp365-shared-library/lib/models
 import { TabProps } from '@fluentui/react-components'
 import { FluentIcon } from '@fluentui/react-icons/lib/utils/createFluentIcon'
 
+/** A project-selection tab with filtering, visibility and search text. */
 export interface IProjectListVertical extends Omit<TabProps, 'icon'> {
   /**
    * Text to display for the tab
@@ -21,20 +22,16 @@ export interface IProjectListVertical extends Omit<TabProps, 'icon'> {
 
   /**
    * Filter function for projects. If not provided, all projects are shown.
-   *
-   * @param project Project list model
-   * @param state State of the component
    */
   filter?: (project: ProjectListModel, state: IProjectListState) => boolean
 
   /**
    * Function to determine if the vertical should be hidden. If not provided, the vertical is not hidden.
-   *
-   * @param state State of the component
    */
   isHidden?: (state: IProjectListState) => boolean
 }
 
+/** Value, label and icon for a project-list presentation mode. */
 export interface IRenderMode {
   /**
    * Value of the render mode
@@ -47,11 +44,12 @@ export interface IRenderMode {
   text?: string
 
   /**
-   * Icon to display for therender mode
+   * Icon to display for the render mode.
    */
   icon?: FluentIcon
 }
 
+/** Ordered relative destination in a project's quick-launch menu. */
 export interface IQuickLaunch {
   /**
    * Order of the menu item
@@ -69,6 +67,7 @@ export interface IQuickLaunch {
   relativeUrl?: string
 }
 
+/** Supported card and table presentations of projects. */
 export type ProjectListRenderMode = 'tiles' | 'list' | 'compactList'
 
 /**
@@ -98,20 +97,15 @@ export interface IVerticalConfig {
   searchBoxPlaceholder: string
 }
 
+/** Project-list tabs, sorting, card metadata and quick-launch configuration. */
 export interface IProjectListProps extends IBaseComponentProps {
-  /**
-   * Sort by property
-   */
   sortBy?: string
 
-  /**
-   * Show search box
-   */
   showSearchBox?: boolean
 
   /**
-   * Include projects whose lifecycle status is the closed choice — `Avsluttet`
-   * on a Norwegian hub, `Closed` on an English one. These are excluded by
+   * Include projects with completed or closed lifecycle status in the current UI language.
+   * These are excluded by
    * default. When enabled they are loaded into state and it is up to each
    * vertical's filters to decide whether to show them, e.g.
    * `{"GtProjectLifecycleStatus": {"$nin": ["Avsluttet", "Closed"]}}` to keep a
@@ -119,19 +113,10 @@ export interface IProjectListProps extends IBaseComponentProps {
    */
   showClosedProjects?: boolean
 
-  /**
-   * Show render mode selector
-   */
   showRenderModeSelector?: boolean
 
-  /**
-   * Show sort by button
-   */
   showSortBy?: boolean
 
-  /**
-   * Show Project Logo on the project card
-   */
   showProjectLogo?: boolean
 
   /**
@@ -186,27 +171,17 @@ export interface IProjectListProps extends IBaseComponentProps {
   quickLaunchMenu?: IQuickLaunch[]
 }
 
+/** Loaded projects, active selection, search, sorting and information-panel state. */
 export interface IProjectListState {
   /**
-   * Whether the component's data has finished loading. Named after the Fluent UI
-   * v8 `Shimmer` prop it used to be picked from; the v9 `Skeleton` has no
-   * equivalent, so it is declared here.
+   * Whether the component's data has finished loading.
    */
   isDataLoaded?: boolean
 
-  /**
-   * Search term
-   */
   searchTerm: string
 
-  /**
-   * Projects
-   */
   projects?: ProjectListModel[]
 
-  /**
-   * Error
-   */
   error?: any
 
   /**
@@ -230,18 +205,12 @@ export interface IProjectListState {
    */
   verticals?: IProjectListVertical[]
 
-  /**
-   * Current selected vertical
-   */
   selectedVertical?: IProjectListVertical
 
   /**
-   * Is the current user in the `PortfolioManagerGroup`?
+   * Whether the current user can view the portfolio insight group's membership.
    */
   isUserInPortfolioManagerGroup?: boolean
 
-  /**
-   * Current sort
-   */
   sort?: { fieldName: string; isSortedDescending: boolean }
 }

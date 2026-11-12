@@ -22,15 +22,7 @@ import { usePersistedColumns } from './usePersistedColumns'
 import { usePortfolioOverviewFilters } from './usePortfolioOverviewFilters'
 
 /**
- * Component logic hook for `PortfolioOverview` component.
- *
- * - Handles state using `useReducer` and our custom `reducer` function
- * - Keeps the selected items, which the Excel export takes instead of all rows
- * - Fetches initial data using `useFetchInitialData`
- * - Gives the context the id of the toaster that reports a failed Excel export
- * - Handles column header click using `useColumnHeaderClick`
- * - Handles column header context menu using `useColumnHeaderContextMenu`
- * - Handles column persistence using `usePersistedColumns`
+ * Coordinate overview state, data loading, filtering, selection, commands and column editors.
  */
 export function usePortfolioOverview(props: IPortfolioOverviewProps) {
   const [placeholderColumns] = usePersistedColumns(props)

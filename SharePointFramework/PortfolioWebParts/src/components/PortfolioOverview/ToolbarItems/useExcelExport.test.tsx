@@ -52,6 +52,7 @@ function exportFrom(state: Record<string, any> = {}, props: Record<string, any> 
     toasterId: TOASTER_ID
   } as unknown as IPortfolioOverviewContext
   let exportToExcel: () => void
+  /** Capture the export callback under React's toast-controller context. */
   const Probe: React.FC = () => {
     exportToExcel = useExcelExport(context)
     return null

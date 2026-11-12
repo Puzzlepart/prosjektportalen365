@@ -2,9 +2,7 @@ import { useEffect, useState } from 'react'
 import { usePortfolioAggregationContext } from '../context'
 
 /**
- * Hook that provides an editable view object and a function to update it.
- *
- * @returns An object containing the view, a function to update the view, and a boolean indicating whether the view is being edited.
+ * Edit an existing data-source view or initialize a new one with the current query.
  */
 export function useEditableView() {
   const context = usePortfolioAggregationContext()
@@ -39,9 +37,6 @@ export function useEditableView() {
 
   /**
    * Sets a view property in the `view` state variable.
-   *
-   * @param key Key of the view property to set
-   * @param value Value of the view property to set
    */
   const setView = (key: 'title' | 'iconName' | 'searchQuery', value: any) => {
     $setView((prev) => {

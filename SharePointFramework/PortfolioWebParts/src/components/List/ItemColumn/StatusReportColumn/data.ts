@@ -6,10 +6,7 @@ import { STATUS_REPORT_COLUMN_DEFAULT_PROPS } from './StatusReportColumn'
 import resource from 'SharedResources'
 
 /**
- * Fetches data for the `StatusReportColumn` component.
- *
- * @param web Web instance
- * @param column Column instance
+ * Load published reports and their configured status labels, colors and icons.
  */
 export const fetchData = async (web: IWeb, column?: ProjectColumn) => {
   // A fresh object: `_.merge` writes into its first argument, which must not be the defaults.

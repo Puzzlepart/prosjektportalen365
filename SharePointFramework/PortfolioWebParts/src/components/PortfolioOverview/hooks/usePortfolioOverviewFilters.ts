@@ -7,11 +7,7 @@ import { IPortfolioOverviewContext } from '../context'
 import { getBooleanDisplayValue, isBooleanColumn } from './booleanColumn'
 
 /**
- * Returns an array of filters for the portfolio overview based on the current view and items.
- *
- * @param context - The context object containing the current view and items.
- *
- * @returns An array of filters, each containing a column and an array of filter items.
+ * Build the current view's refiner choices and mark active selections.
  */
 export function usePortfolioOverviewFilters(context: IPortfolioOverviewContext) {
   if (!context.state.currentView) return []
@@ -24,7 +20,6 @@ export function usePortfolioOverviewFilters(context: IPortfolioOverviewContext) 
     // the results, which would otherwise leave the filter with a single item -
     // and `FilterPanel` hides filters with less than two items.
     if (isBooleanColumn(column)) {
-      // Sorted by value to match the ordering the generic path below produces.
       const items: IFilterItemProps[] = ['0', '1'].map((value) => ({
         name: getBooleanDisplayValue(column, value),
         value

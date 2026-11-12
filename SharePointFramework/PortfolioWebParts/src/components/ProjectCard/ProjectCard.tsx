@@ -15,6 +15,7 @@ import strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
 import resource from 'SharedResources'
 
+/** Default card metadata, personas, colors and quick-launch destinations. */
 export const PROJECT_CARD_DEFAULT_PROPS: Partial<IProjectCardProps> = {
   useDynamicColors: true,
   showProjectLogo: true,
@@ -53,6 +54,7 @@ export const PROJECT_CARD_DEFAULT_PROPS: Partial<IProjectCardProps> = {
   ]
 }
 
+/** Load and display one project card with its project-information panel. */
 export const ProjectCard: FC<IProjectCardProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, PROJECT_CARD_DEFAULT_PROPS)
   const { state, setState, createCardContext, fluentProviderId } = useProjectCard(props)

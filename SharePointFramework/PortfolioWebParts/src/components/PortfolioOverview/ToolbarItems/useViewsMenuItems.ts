@@ -3,12 +3,7 @@ import { IPortfolioOverviewContext } from '../context'
 import { CHANGE_VIEW } from '../reducer'
 
 /**
- * Returns an array of menu items for the views menu based on the provided filter function.
- *
- * @param context - The IPortfolioOverviewContext object.
- * @param filterFunc - The function used to filter the views.
- *
- * @returns An array of IListMenuItem objects.
+ * Build checkable view choices matching the supplied filter.
  */
 export function useViewsMenuItems(
   context: IPortfolioOverviewContext,

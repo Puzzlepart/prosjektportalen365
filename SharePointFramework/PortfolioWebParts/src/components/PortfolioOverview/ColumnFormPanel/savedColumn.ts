@@ -7,7 +7,6 @@ import { ProjectColumn, SPProjectColumnItem } from 'pp365-shared-library'
  * and icons, custom sorts, field overrides and sort state, and whether it can be grouped by when
  * the switch was not used) until the page was loaded again.
  *
- * @param columnItem The fields saved to the list
  * @param original The column the form edited, for an edited column
  */
 export function savedColumn(

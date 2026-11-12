@@ -9,7 +9,7 @@ import {
 } from '@fluentui/react-icons'
 
 /**
- * Object containing icons used in the toolbar.
+ * Stable bundled icon components for aggregation view commands.
  */
 export const Icons = {
   ContentView: bundleIcon(ContentView24Filled, ContentView24Regular),

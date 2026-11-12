@@ -28,6 +28,7 @@ import '@pnp/sp/items'
 import '@pnp/sp/files'
 import '@pnp/sp/hubsites'
 
+/** Resolve a page's project and hub and host its configurable project card. */
 export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCardProps> {
   private _portalDataService: PortalDataService
   private _columns: ProjectColumn[]
@@ -112,6 +113,7 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
     return this.isOnProjectSite() ? this.context.pageContext.site.id.toString() : undefined
   }
 
+  /** Read the page's referenced project ID and resolve a different source hub when specified. */
   protected async getProjectSiteId(): Promise<string> {
     if (!this._projectSiteId) {
       try {
@@ -161,7 +163,7 @@ export default class ProjectCardWebPart extends BasePortfolioWebPart<IProjectCar
                 this._projectSiteId = gtSiteId
               }
             } catch {
-              // The hub cannot be read; the site keeps its own id.
+              // Keep the referenced project ID even when its source hub cannot be resolved.
               this._projectSiteId = gtSiteId
             }
           } else {

@@ -8,6 +8,7 @@ interface IProgramSPItem {
   [key: string]: any
 }
 
+/** Program identity and search-query scoping to its child projects. */
 export class ProgramItem {
   public id: string
   public name: string
@@ -23,12 +24,11 @@ export class ProgramItem {
   }
 
   /**
-   * Create queries if number of projects exceeds threshold to avoid 4096 character limitation by SharePoint
+   * Scope a query to child projects, splitting larger programs to limit query length.
    *
-   * @param queryTemplate Query template to be used as the base
-   * @param maxQueryLength Maximum length of query before pushing to array
-   * @param maxProjects Maximum projects required before creating strings
-   * @param fieldName Name of the field to search for
+   * @param maxQueryLength Child-project clause length after which a batch is emitted;
+   * the query template and the final appended project can make the full query longer.
+   * @param maxProjects Split only when the program has more than this many projects.
    */
   public buildQueries(
     queryTemplate: string,

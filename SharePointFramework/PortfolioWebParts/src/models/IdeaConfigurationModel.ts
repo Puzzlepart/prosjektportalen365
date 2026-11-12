@@ -1,5 +1,6 @@
 import resource from 'SharedResources'
 
+/** SharePoint fields and defaults for an idea-module configuration item. */
 export class SPIdeaConfigurationItem {
   public Title: string = ''
   public GtDescription: string = null
@@ -12,6 +13,7 @@ export class SPIdeaConfigurationItem {
   }
 }
 
+/** Parsed list names, descriptions and choices for the idea workflow. */
 export class IdeaConfigurationModel {
   public title: string
   public description: { registration: string; processing: string; projectData: string }
@@ -21,9 +23,7 @@ export class IdeaConfigurationModel {
   public registration: { key: string; choice: string; recommendation?: string }[] = []
 
   /**
-   * Creates a new instance of TimelineConfigurationModel
-   *
-   * @param item SP item
+   * Parse an idea configuration item's JSON fields.
    */
   constructor(item: SPIdeaConfigurationItem) {
     this.title = item.Title
@@ -56,6 +56,7 @@ export class IdeaConfigurationModel {
   }
 }
 
+/** Outcomes available when evaluating an idea. */
 export enum Choice {
   Approve = 'approve',
   Consideration = 'consideration',

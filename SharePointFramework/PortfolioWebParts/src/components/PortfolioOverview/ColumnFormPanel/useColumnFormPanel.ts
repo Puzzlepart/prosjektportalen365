@@ -90,14 +90,7 @@ export function useColumnFormPanel() {
   }
 
   /**
-   * Saves the column to the list. If the column is new, it will
-   * also add the column to the current view. If the column is
-   * being edited, it will update the column in the list.
-   *
-   * If the column is being edited, it will update the column in the list
-   * using `updateItemInList` from the `dataAdapter`. If the column is new,
-   * it will add the column to the list using `addColumnToPortfolioView` from
-   * the shared `dataAdapter`.
+   * Save column fields, adding new columns to the current view and reporting write failures.
    */
   const onSave = async () => {
     if (columnUsingProperty) return
@@ -191,8 +184,8 @@ export function useColumnFormPanel() {
   }
 
   /**
-   * Save is disabled if the column name or field name is less than 2 characters, or if another
-   * column shows the managed property already.
+   * Require internal name, managed property and display name of at least two characters,
+   * and prevent duplicate managed properties for new columns.
    */
   const isSaveDisabled =
     column.get('internalName').length < 2 ||
@@ -203,8 +196,6 @@ export function useColumnFormPanel() {
   /**
    * Set column message for a specific column for a specific duration (default 5 seconds)
    *
-   * @param key Key of the column to set the message for
-   * @param message Message to set
    * @param durationSeconds Duration in seconds to show the message
    */
   const setColumnMessage = (key: string, message: string, durationSeconds = 5) => {
@@ -227,7 +218,7 @@ export function useColumnFormPanel() {
    * is found in `context.state.managedProperties` and the column field name is empty,
    * it will set the column field name to the search property.
    *
-   * A message wil shown under the field name input if a search property is found.
+   * Also store a temporary match message; the form does not currently render it.
    */
   const findMatchingSearchProperty = () => {
     const internalName = (column.get('internalName') ?? '') as string

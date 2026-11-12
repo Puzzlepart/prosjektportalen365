@@ -13,6 +13,7 @@ import {
   Textarea
 } from '@fluentui/react-components'
 
+/** Edit or create a portfolio view's query, title, icon and sharing/default settings. */
 export const ViewFormPanel: FC = () => {
   const context = useContext(PortfolioOverviewContext)
   const { view, setView, isEditing, onDismiss, isDefaultViewSet, onSave, fluentProviderId } =

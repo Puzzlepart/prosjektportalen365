@@ -15,14 +15,12 @@ import {
   PanelRightContractRegular
 } from '@fluentui/react-icons'
 
-/**
- * Object containing icons used in the component.
- */
 const Icons = {
   EyeOff: bundleIcon(EyeOffFilled, EyeOffRegular),
   PanelRight: bundleIcon(PanelRightContractFilled, PanelRightContractRegular)
 }
 
+/** Render a project title with a link, information-panel action or unavailable-data indicator. */
 export const TitleColumn: FC<ITitleColumnProps> = (props) => {
   const context = useContext(ListContext)
   const portfolioOverviewContext = usePortfolioOverviewContext()
@@ -39,7 +37,6 @@ export const TitleColumn: FC<ITitleColumnProps> = (props) => {
   /**
    * Renders the title wrapped in a `ProjectInformationPanel` with a toggle button.
    *
-   * @param children Title element shown in the cell, beside the toggle button
    * @param webAbsoluteUrl Project web URL. Omitted for projects the user has no access to,
    * in which case the panel falls back to the current (hub) web context — so for those
    * projects it surfaces hub-side data only, not the project's own web data.

@@ -23,6 +23,7 @@ import { ILatestProjectsProps } from './types'
 import { useLatestProjects } from './useLatestProjects'
 import resource from 'SharedResources'
 
+/** Default title, logo visibility and project-count limits. */
 export const LATEST_PROJECTS_DEFAULT_PROPS: Partial<ILatestProjectsProps> = {
   title: resource.WebParts_LatestProjects_Title,
   showProjectLogo: true,
@@ -36,8 +37,6 @@ export const LATEST_PROJECTS_DEFAULT_PROPS: Partial<ILatestProjectsProps> = {
  * by default. The projects are a list named by the web part's title, each read once (the logo
  * beside its link is hidden), and «Vis flere» says whether the rest are shown (WCAG 1.3.1,
  * 4.1.2).
- *
- * @param props - The component props.
  */
 export const LatestProjects: FC<ILatestProjectsProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, LATEST_PROJECTS_DEFAULT_PROPS)
@@ -45,7 +44,7 @@ export const LatestProjects: FC<ILatestProjectsProps> = (incomingProps) => {
     useLatestProjects(props)
 
   /**
-   * Function to render the latest projects.
+   * Render project links or the empty-state message.
    */
   function renderLatestProjects(): JSX.Element[] | JSX.Element {
     if (!loading && projects.length === 0) {

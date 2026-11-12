@@ -18,12 +18,7 @@ import {
 import { useIdeaModuleContext } from '../context'
 
 /**
- * Component logic hook for the `IdeaField` component.
- *
- * @param props Props for the `IdeaField` component
- *
- * @returns a render function `renderValueForField` for the `IdeaField` component,
- * as well as the `displayMode` for the `IdeaField` component.
+ * Render an idea field by type, including personas, taxonomy and configured decision tags.
  */
 export function useIdeaField(props: IIdeaFieldProps) {
   const context = useIdeaModuleContext()

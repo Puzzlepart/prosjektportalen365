@@ -5,9 +5,7 @@ import { ProjectContentColumn } from 'pp365-shared-library'
 import resource from 'SharedResources'
 
 /**
- * Get default columns that should be included in the list view.
- *
- * @param context Context for the Portfolio Aggregation component
+ * Keep selected or locked columns, omitting project title for project-level and idea views.
  */
 export function useDefaultColumns(context: IPortfolioAggregationContext) {
   let selectedColumns: ProjectContentColumn[] = useMemo(

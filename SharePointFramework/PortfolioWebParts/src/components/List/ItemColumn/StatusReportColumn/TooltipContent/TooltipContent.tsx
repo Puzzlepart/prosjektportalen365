@@ -5,6 +5,7 @@ import strings from 'PortfolioWebPartsStrings'
 import { format, getFluentIconWithFallback } from 'pp365-shared-library'
 import { Divider, Text } from '@fluentui/react-components'
 
+/** Show report section values, comments and reporting date inside the status popover. */
 export const TooltipContent = (props: IStatusColumnProps): JSX.Element => {
   if (!props?.status?.sections?.length) return null
   return (

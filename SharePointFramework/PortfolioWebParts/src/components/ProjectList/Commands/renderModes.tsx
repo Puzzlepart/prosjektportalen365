@@ -3,6 +3,7 @@ import { getFluentIcon } from 'pp365-shared-library'
 import { IRenderMode } from '../types'
 import { FluentIcon } from '@fluentui/react-icons'
 
+/** Localized labels and icons for the project-list presentation modes. */
 export const renderModes: IRenderMode[] = [
   {
     value: 'tiles',

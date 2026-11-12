@@ -7,9 +7,7 @@ import { IProjectCardProps, IProjectCardState } from './types'
  * fetching data and setting state. The project is fetched with the fields and person fields the
  * card shows, so a field chosen in the pane is there, and the people are found.
  *
- * @param props Props, with the card's defaults
  * @param refetch Timestamp for refetch. Changes to this variable refetches the data in `useEffect`
- * @param setState Set state callback
  */
 export function useProjectCardDataFetch(
   props: IProjectCardProps,

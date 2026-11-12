@@ -26,6 +26,7 @@ const PORTFOLIO_OVERVIEW_DEFAULT_PROPS: Partial<IPortfolioOverviewProps> = {
   showMergedViewInViewSelector: false
 }
 
+/** Display portfolio projects with view selection, filters and column/view editors. */
 export const PortfolioOverview: FC<IPortfolioOverviewProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, PORTFOLIO_OVERVIEW_DEFAULT_PROPS)
   const {

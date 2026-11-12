@@ -36,6 +36,7 @@ import { Commands } from './Commands'
 import resource from 'SharedResources'
 import { IProjectListVertical } from './types'
 
+/** Show a vertical in the overflow menu only when its tab no longer fits. */
 const OverflowMenuItem: FC<{
   vertical: IProjectListVertical
   onClick: (key: string) => void
@@ -50,6 +51,7 @@ const OverflowMenuItem: FC<{
   )
 }
 
+/** Offer project-selection tabs that overflow the available width. */
 const OverflowMenu: FC<{
   verticals: IProjectListVertical[]
   onSelect: (key: string) => void
@@ -81,6 +83,7 @@ const OverflowMenu: FC<{
   )
 }
 
+/** Default selection tabs, card metadata, display mode and quick-launch destinations. */
 export const PROJECT_LIST_DEFAULT_PROPS: Partial<IProjectListProps> = {
   sortBy: 'Title',
   showSearchBox: true,
@@ -177,6 +180,7 @@ export const PROJECT_LIST_DEFAULT_PROPS: Partial<IProjectListProps> = {
   ]
 }
 
+/** Browse configurable project selections as cards or a searchable table. */
 export const ProjectList: FC<IProjectListProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, PROJECT_LIST_DEFAULT_PROPS)
   const context = useProjectList(props)

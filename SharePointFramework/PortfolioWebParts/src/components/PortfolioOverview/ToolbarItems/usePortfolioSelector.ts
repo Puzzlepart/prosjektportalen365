@@ -6,9 +6,7 @@ import { TOGGLE_MERGED_VIEW } from '../reducer'
 import _ from 'lodash'
 
 /**
- * Hook for generating the portfolio selector menu item.
- *
- * @param context - The `IPortfolioOverviewContext` object containing the necessary data for generating the view selector menu item.
+ * Build the portfolio selector with individual hubs and the optional merged view.
  */
 export function usePortfolioSelector(context: IPortfolioOverviewContext) {
   const [selectedPortfolioId, setSelectedPortfolioId] = useState(context.props.selectedPortfolioId)

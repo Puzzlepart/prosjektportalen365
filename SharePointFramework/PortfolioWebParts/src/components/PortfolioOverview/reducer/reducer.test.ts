@@ -431,7 +431,6 @@ describe('PortfolioOverview reducer', () => {
       } as any)
     )
     expect(next.mergedViewFailures).toEqual(['Hub B', 'Hub C'])
-    // A fetch that read every hub clears them.
     const read = reducer(next, DATA_FETCHED({ items: [], currentView: view() } as any))
     expect(read.mergedViewFailures).toEqual([])
   })

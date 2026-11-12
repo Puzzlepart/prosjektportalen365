@@ -15,6 +15,7 @@ import { FluentProvider, IdPrefixProvider, Input, Switch } from '@fluentui/react
 import { ColumnDataTypeField } from 'pp365-shared-library/lib/components/ItemColumn/ColumnDataTypeField'
 import { lockedWhenEditing } from '../../List/lockedWhenEditing'
 
+/** Create or edit an aggregation column's fields, rendering and grouping settings. */
 export const ColumnFormPanel: FC = () => {
   const context = usePortfolioAggregationContext()
   const {

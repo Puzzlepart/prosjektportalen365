@@ -14,6 +14,7 @@ import { ColumnFormPanelFooter } from './index'
 describe('ColumnFormPanelFooter (aggregated overview)', () => {
   it('gives the focus back to delete as its confirmation closes, not to the column header behind the panel (WCAG 2.4.3)', () => {
     let target: ReturnType<typeof useRestoreFocusTarget>
+    /** Capture Fluent's expected focus-restoration attributes for comparison. */
     const Probe: React.FC = () => {
       target = useRestoreFocusTarget()
       return null

@@ -3,6 +3,7 @@ import useImageColor from 'use-image-color'
 import { ProjectCardContext } from '../context'
 import styles from './ProjectCardHeader.module.scss'
 
+/** Derive logo visibility, image colors and layout for a project-card header. */
 export function useProjectCardHeader() {
   const context = useContext(ProjectCardContext)
   const [showCustomImage, setShowCustomImage] = useState(false)

@@ -3,12 +3,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { usePortfolioOverviewContext } from '../context'
 
 /**
- * Hook that provides an editable view object and a function to update it.
- * The view object is derived from the current view in the context.
- * If the user is editing a view, the view object is set to the current view.
- * If the user is not editing a view, the view object is set to a default view object.
- *
- * @returns An object containing the view object, a function to update the view object, and a boolean indicating whether the user is editing a view.
+ * Edit the selected form view or initialize a new view from the current view's defaults.
  */
 export function useEditableView() {
   const context = usePortfolioOverviewContext()
@@ -28,9 +23,6 @@ export function useEditableView() {
 
   /**
    * Sets a view property.
-   *
-   * @param key Key of the view property to set
-   * @param value Value of the view property to set
    */
   const setView = (key: string, value: any) => {
     $setView((prev) => {

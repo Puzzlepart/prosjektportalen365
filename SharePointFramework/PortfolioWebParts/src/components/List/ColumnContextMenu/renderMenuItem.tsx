@@ -13,12 +13,7 @@ import React from 'react'
 import { IMenuItem } from 'pp365-shared-library'
 
 /**
- * Renders a single menu item for the column context menu.
- *
- * @param item The menu item to render.
- * @param onOpenChange A callback for when the open state of the menu changes.
- *
- * @returns The JSX element representing the menu item.
+ * Render a column-menu command, checkable item, divider or nested submenu.
  */
 export function renderMenuItem(item: IMenuItem, onOpenChange: MenuProps['onOpenChange']) {
   switch (item.itemType) {

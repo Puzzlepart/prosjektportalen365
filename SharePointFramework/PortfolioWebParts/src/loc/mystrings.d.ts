@@ -1,3 +1,4 @@
+/** Localized texts supplied by the PortfolioWebPartsStrings runtime module. */
 declare interface IPortfolioWebPartsStrings {
   ResultsCountLabel: string
   FilterPanelGroupProjectInformation: string

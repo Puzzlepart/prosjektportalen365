@@ -7,13 +7,11 @@ import { IProjectCardHeaderProps } from './types'
 import { ProjectLogo } from 'pp365-shared-library'
 import strings from 'PortfolioWebPartsStrings'
 
+/** Render project title and logo links with optional image-derived header colors. */
 export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
   const context = useContext(ProjectCardContext)
   const { showCustomImage, setShowCustomImage, colors, headerProps } = useProjectCardHeader()
 
-  /**
-   * Callback function to set the showCustomImage state.
-   */
   const customImageCallback = useCallback(
     (value: boolean) => {
       setShowCustomImage(value)

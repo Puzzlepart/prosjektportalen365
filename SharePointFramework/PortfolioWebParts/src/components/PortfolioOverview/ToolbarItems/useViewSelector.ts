@@ -9,9 +9,7 @@ import { useViewsMenuItems } from './useViewsMenuItems'
 import resource from 'SharedResources'
 
 /**
- * Hook for generating the view selector menu item.
- *
- * @param context - The `IPortfolioOverviewContext` object containing the necessary data for generating the view selector menu item.
+ * Build view, layout, program and permitted view-editing choices.
  */
 export function useViewSelector(context: IPortfolioOverviewContext) {
   const userCanManageViews = context.props.configuration.userCanAddViews

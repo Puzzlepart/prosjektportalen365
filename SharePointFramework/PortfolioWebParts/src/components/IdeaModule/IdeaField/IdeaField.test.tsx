@@ -5,8 +5,7 @@ import { IdeaModuleContext } from '../context'
 import { IdeaField } from './IdeaField'
 
 /**
- * A field of an idea: its name and its value as a pair in the idea's description list, a person
- * shown by picture and name and read by the name.
+ * Create an idea field model with a fixed parsed value.
  */
 const field = (type: string, value: any) =>
   ({

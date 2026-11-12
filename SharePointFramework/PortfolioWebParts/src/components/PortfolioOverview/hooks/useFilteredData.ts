@@ -15,16 +15,7 @@ import { applyActiveFilters } from './applyActiveFilters'
 import { getBooleanDisplayValue, isBooleanColumn, normalizeBooleanValue } from './booleanColumn'
 
 /**
- * Generates a display name for a group based on the column and its value.
- *
- * Temporary function until we have a better way to handle this. It would be
- * nice to have _one_ place to do custom rendering of different column data
- * types.
- *
- * @param column - The column used for grouping.
- * @param value - The value of the column for the group.
- *
- * @returns The display name for the group.
+ * Label a group using boolean display settings or numeric/currency formatting.
  */
 function getGroupDisplayName(column: ProjectColumn, value: string) {
   let displayValue = value
@@ -44,9 +35,6 @@ function getGroupDisplayName(column: ProjectColumn, value: string) {
 
 /**
  * Create groups based on `items`, `columns` and `groupBy` field.
- *
- * @param items Items
- * @param state State of `<PortfolioOverview />`
  */
 function createGroups(items: any[], state: IPortfolioOverviewState) {
   if (!state.groupBy) return { items, columns: state.columns, groups: null }
@@ -95,8 +83,6 @@ function createGroups(items: any[], state: IPortfolioOverviewState) {
 /**
  * The items the overview shows: those matching the search term in any column, narrowed by the
  * active filters. Shared by the list and the Excel export, so that the export holds what is shown.
- *
- * @param context Context of `<PortfolioOverview />`
  */
 export function filterItems(context: IPortfolioOverviewContext) {
   const items = context.state.items.filter((item) => {
@@ -113,8 +99,6 @@ export function filterItems(context: IPortfolioOverviewContext) {
 /**
  * Filter data based on `searchTerm` and `activeFilters` (see `filterItems`). Also, create groups
  * based on `groupBy` field using `createGroups` function.
- *
- * @param context Context of `<PortfolioOverview />`
  */
 export function useFilteredData(context: IPortfolioOverviewContext) {
   return createGroups(filterItems(context), context.state)

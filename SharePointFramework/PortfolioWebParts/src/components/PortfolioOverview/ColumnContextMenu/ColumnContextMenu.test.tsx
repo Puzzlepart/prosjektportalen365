@@ -75,6 +75,7 @@ function renderHook(
 ): { items: IMenuItem[]; dispatch: jest.Mock } {
   const dispatch = jest.fn()
   const captured: { items: IMenuItem[] } = { items: [] }
+  /** Capture menu commands without opening nested Fluent menus under jsdom. */
   const Probe: React.FC = () => {
     captured.items = useColumnContextMenu().items
     return null

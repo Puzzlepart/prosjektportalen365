@@ -6,7 +6,7 @@ import { OnColumnContextMenu } from '../../List'
 import { IColumnFormPanel } from '../ColumnFormPanel/types'
 
 /**
- * `DATA_FETCHED`: Action is called after all data has been fetched.
+ * Apply fetched rows and reconcile the view's selected and available columns.
  */
 export const DATA_FETCHED = createAction<{
   items: any[]
@@ -17,12 +17,12 @@ export const DATA_FETCHED = createAction<{
 }>('DATA_FETCHED')
 
 /**
- * `TOGGLE_COLUMN_FORM_PANEL`: Toggling the column form panel.
+ * Set column-editor visibility and the optional column to edit.
  */
 export const TOGGLE_COLUMN_FORM_PANEL = createAction<IColumnFormPanel>('TOGGLE_COLUMN_FORM_PANEL')
 
 /**
- * `TOGGLE_EDIT_VIEW_COLUMNS_PANEL`: Toggling the show/hide column panel.
+ * Set column-selection panel visibility and apply saved columns when supplied.
  */
 export const TOGGLE_EDIT_VIEW_COLUMNS_PANEL = createAction<{
   isOpen: boolean
@@ -30,7 +30,7 @@ export const TOGGLE_EDIT_VIEW_COLUMNS_PANEL = createAction<{
 }>('TOGGLE_EDIT_VIEW_COLUMNS_PANEL')
 
 /**
- * `TOGGLE_FILTER_PANEL`: Toggling the filter panel.
+ * Open or close the filter panel.
  */
 export const TOGGLE_FILTER_PANEL = createAction('TOGGLE_FILTER_PANEL')
 
@@ -41,7 +41,7 @@ export const TOGGLE_FILTER_PANEL = createAction('TOGGLE_FILTER_PANEL')
 export const TOGGLE_COMPACT = createAction<boolean>('TOGGLE_COMPACT')
 
 /**
- * `COLUMN_FORM_PANEL_ON_SAVED`: Column form panel on saved.
+ * Insert or replace a saved column and persist the selected columns.
  */
 export const COLUMN_FORM_PANEL_ON_SAVED = createAction<{
   column: ProjectContentColumn
@@ -49,12 +49,12 @@ export const COLUMN_FORM_PANEL_ON_SAVED = createAction<{
 }>('COLUMN_FORM_PANEL_ON_SAVED')
 
 /**
- * `COLUMN_DELETED`: Column deleted - updates the `columns` and `columnForm` state
+ * Remove a deleted column from available and selected columns and persist the selection.
  */
 export const COLUMN_DELETED = createAction<{ columnId: any }>('COLUMN_DELETED')
 
 /**
- * `TOGGLE_COLUMN_CONTEXT_MENU`: Column header context menu.
+ * Set or clear the selected column and its menu anchor.
  */
 export const TOGGLE_COLUMN_CONTEXT_MENU = createAction<OnColumnContextMenu>(
   'TOGGLE_COLUMN_CONTEXT_MENU'
@@ -82,22 +82,22 @@ export const SET_SORT = createAction<{ column: ProjectContentColumn; isSortedDes
 )
 
 /**
- * `SET_CURRENT_VIEW`: Set current view.
+ * Resolve the current view from URL, web-part properties or configured defaults.
  */
 export const SET_CURRENT_VIEW = createAction('SET_CURRENT_VIEW')
 
 /**
- * `SET_DATA_SOURCE`: Set data source.
+ * Select a different data-source view and clear active filters.
  */
 export const SET_DATA_SOURCE = createAction<{ dataSource: DataSource }>('SET_DATA_SOURCE')
 
 /**
- * `START_FETCH`: Start fetching data from the data source.
+ * Mark the aggregation as loading.
  */
 export const START_FETCH = createAction('START_FETCH')
 
 /**
- * `EXECUTE_SEARCH`: Executes a search.
+ * Store the search term for client-side filtering.
  */
 export const EXECUTE_SEARCH = createAction<string>('EXECUTE_SEARCH')
 
@@ -110,7 +110,7 @@ export const GET_FILTERS = createAction<{
 }>('GET_FILTERS')
 
 /**
- * `ON_FILTER_CHANGE`: Filter change.
+ * Replace a column's active filter values and synchronize filter-panel selection.
  */
 export const ON_FILTER_CHANGE = createAction<{
   column: ProjectContentColumn
@@ -118,12 +118,12 @@ export const ON_FILTER_CHANGE = createAction<{
 }>('ON_FILTER_CHANGE')
 
 /**
- * `DATA_FETCH_ERROR`: Error fetching data from the data source.
+ * Stop loading and view switching and store the fetch failure.
  */
 export const DATA_FETCH_ERROR = createAction<{ error: Error }>('DATA_FETCH_ERROR')
 
 /**
- * `SET_VIEW_FORM_PANEL`: Set view form panel.
+ * Set view-editor state or apply an added/edited data-source view and close the editor.
  */
 export const SET_VIEW_FORM_PANEL = createAction<{
   isOpen: boolean
@@ -132,7 +132,6 @@ export const SET_VIEW_FORM_PANEL = createAction<{
 }>('SET_VIEW_FORM_PANEL')
 
 /**
- * `SELECTION_CHANGED`: Action dispatched when user changes the selection in the list, with the
- * selected items
+ * Store selected rows for export.
  */
 export const SELECTION_CHANGED = createAction<Record<string, any>[]>('SELECTION_CHANGED')

@@ -12,9 +12,6 @@ export type ColumnIdentity = {
  * Whether two columns are the same column: by id when both have one, otherwise by key (or field
  * name). Two columns of a list may show the same managed property, so matched by it alone, the
  * first of them stood in for the other, which was then edited and deleted in its stead.
- *
- * @param a A column
- * @param b Another column
  */
 export function isSameColumn(a: ColumnIdentity, b: ColumnIdentity): boolean {
   if (!a || !b) return false
@@ -28,8 +25,6 @@ export function isSameColumn(a: ColumnIdentity, b: ColumnIdentity): boolean {
  * when none does. Case is ignored, as search ignores it in a managed property's name, and so are
  * spaces around the name.
  *
- * @param fieldName Managed property of a new column
- * @param columns The columns of the list
  * @param deletedColumnIds Ids of columns deleted since the columns were read
  */
 export function findColumnUsingProperty<T extends ColumnIdentity>(

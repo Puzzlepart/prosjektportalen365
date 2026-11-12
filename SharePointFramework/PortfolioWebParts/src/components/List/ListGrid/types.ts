@@ -8,6 +8,7 @@ import { useListSelection } from './useListSelection'
 // through the functions that return them.
 type TableFeaturesState = ReturnType<typeof useTableFeatures>
 
+/** Grid rows, sizing, grouping and controlled or internal selection options. */
 export interface IListGridProps {
   /**
    * Names the grid for screen readers.

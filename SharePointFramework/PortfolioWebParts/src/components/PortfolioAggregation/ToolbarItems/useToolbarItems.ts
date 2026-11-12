@@ -14,11 +14,7 @@ import { Icons } from './icons'
 import resource from 'SharedResources'
 
 /**
- * Returns an array of toolbar items for the PortfolioAggregation component.
- *
- * @param context - The IPortfolioAggregationContext object containing the current state and props of the component.
- *
- * @returns An array of IListMenuItem objects representing the toolbar items.
+ * Build export, view, layout, view-editing and filter commands for the aggregation.
  */
 export function useToolbarItems(context: IPortfolioAggregationContext) {
   const checkedValues = useMemo(

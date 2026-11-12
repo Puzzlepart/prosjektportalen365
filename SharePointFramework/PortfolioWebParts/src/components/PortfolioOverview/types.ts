@@ -14,6 +14,7 @@ import { PortfolioInstance } from 'data/types'
 import { IWeb } from '@pnp/sp/webs'
 import { MessageBarProps } from '@fluentui/react-components'
 
+/** An overview failure with its intended message-bar severity. */
 export class PortfolioOverviewErrorMessage extends Error {
   constructor(
     public message: string,
@@ -23,25 +24,14 @@ export class PortfolioOverviewErrorMessage extends Error {
   }
 }
 
+/** Portfolio columns, views, programs, form URLs and editing permissions. */
 export interface IPortfolioOverviewConfiguration {
-  /**
-   * The web instance
-   */
   web: IWeb
 
-  /**
-   * Available columns
-   */
   columns: ProjectColumn[]
 
-  /**
-   * Available refiners
-   */
   refiners: ProjectColumn[]
 
-  /**
-   * Available views
-   */
   views: PortfolioOverviewView[]
 
   /**
@@ -64,17 +54,12 @@ export interface IPortfolioOverviewConfiguration {
    */
   userCanAddViews?: boolean
 
-  /**
-   * Hub site ID
-   */
   hubSiteId?: string
 }
 
+/** Portfolio data source, display controls and multi-hub selection options. */
 export interface IPortfolioOverviewProps
   extends IBaseComponentProps, Pick<IListProps<ProjectColumn>, 'isListLayoutModeJustified'> {
-  /**
-   * Configuration (columns and views etc).
-   */
   configuration: IPortfolioOverviewConfiguration
 
   /**
@@ -97,29 +82,14 @@ export interface IPortfolioOverviewProps
    */
   statusReportsCount?: number
 
-  /**
-   * Show Excel export button
-   */
   showExcelExportButton?: boolean
 
-  /**
-   * Include view name in Excel export filename
-   */
   includeViewNameInExcelExportFilename?: boolean
 
-  /**
-   * Show command bar
-   */
   showCommandBar?: boolean
 
-  /**
-   * Show search box
-   */
   showSearchBox?: boolean
 
-  /**
-   * Show filters
-   */
   showFilters?: boolean
 
   /**
@@ -181,18 +151,13 @@ export interface IPortfolioOverviewProps
   onSetPortfolio?: (portfolioId: string | null) => void
 }
 
+/** View data, filtering, sorting, selection and editing-panel state. */
 export interface IPortfolioOverviewState extends Pick<
   IListProps<ProjectColumn>,
   'items' | 'columns'
 > {
-  /**
-   * Whether the component is loading
-   */
   loading?: boolean
 
-  /**
-   * Is exporting
-   */
   isExporting?: boolean
 
   /**
@@ -200,24 +165,12 @@ export interface IPortfolioOverviewState extends Pick<
    */
   isMergedView?: boolean
 
-  /**
-   * Is changing view
-   */
   isChangingView?: boolean
 
-  /**
-   * Selected items in the list
-   */
   selectedItems?: Record<string, any>[]
 
-  /**
-   * Search term
-   */
   searchTerm?: string
 
-  /**
-   * Filters
-   */
   filters?: IFilterProps[]
 
   /**
@@ -235,19 +188,10 @@ export interface IPortfolioOverviewState extends Pick<
    */
   mergedViewFailures?: string[]
 
-  /**
-   * Error if any
-   */
   error?: PortfolioOverviewErrorMessage
 
-  /**
-   * Is filter panel open
-   */
   isFilterPanelOpen?: boolean
 
-  /**
-   * Column to group by
-   */
   groupBy?: ProjectColumn
 
   /**
@@ -255,9 +199,6 @@ export interface IPortfolioOverviewState extends Pick<
    */
   sortBy?: { column: ProjectColumn; customSort?: ProjectColumnCustomSort }
 
-  /**
-   * List should be rendered in compact mode
-   */
   isCompact?: boolean
 
   /**
@@ -291,9 +232,6 @@ export interface IPortfolioOverviewState extends Pick<
    */
   viewForm: IViewFormPanel
 
-  /**
-   * Is edit view columns panel open
-   */
   isEditViewColumnsPanelOpen?: boolean
 
   /**
@@ -302,7 +240,7 @@ export interface IPortfolioOverviewState extends Pick<
   managedProperties?: string[]
 
   /**
-   * Whether the current user is a member of the Portfolio Insight site group.
+   * Whether the current user can view the Portfolio Insight site group's membership.
    * When true, the project information panel button is shown in `TitleColumn`
    * even for projects where the user has no site access.
    */
@@ -317,14 +255,9 @@ export interface IPortfolioOverviewState extends Pick<
   showChildProjectInfoInProgram?: boolean
 }
 
+/** View and grouping selection persisted in the URL fragment. */
 export interface IPortfolioOverviewHashState {
-  /**
-   * viewId found in hash (document.location.hash)
-   */
   viewId?: string
 
-  /**
-   * groupBy found in hash (document.location.hash)
-   */
   groupBy?: string
 }

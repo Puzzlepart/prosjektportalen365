@@ -13,10 +13,7 @@ import { usePersistedColumns } from './usePersistedColumns'
 /**
  * Get current view from state - otherwise fallback to URL parameter or default view.
  *
- * @param hashState Hash state map
- * @param context `PortfolioOverview` context - needs to be passed as a prop to the function
- * as it is not available yet using `useContext` in the function.
- * @param reset Reset flag
+ * @param reset Ignore the currently selected view and resolve it again from URL/default settings.
  */
 function getCurrentView(
   hashState: Map<string, string | number>,
@@ -58,9 +55,6 @@ function getCurrentView(
  * The columns are persisted in local storage using `set` from the hook `usePersistedColumns`.
  * This is done to use placeholders for the columns while the data is being fetched on the first
  * render.
- *
- * @param context `PortfolioOverview` context needs to be passed as a prop to the hook
- * as it is not available yet using `useContext` in the hook.
  */
 export const useFetchData = (context: IPortfolioOverviewContext) => {
   const [, set] = usePersistedColumns(context.props)
@@ -116,7 +110,7 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
       }
 
       if (!context.props.isParentProject) {
-        // TODO: Fix this for parent projects as well
+        // Parent projects use a different adapter; per-column auxiliary data is not loaded there.
         for (const column of currentView.columns) {
           const fetchData = ColumnRenderComponentRegistry.getComponent(column.dataType)?.fetchData
           if (typeof fetchData === 'function') {

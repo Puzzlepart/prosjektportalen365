@@ -12,9 +12,6 @@ import { isBooleanColumn, normalizeBooleanValue } from './booleanColumn'
  * Boolean columns are compared on the normalized value, so that items where
  * search returned no value match the false option - the same way they're
  * rendered as the false label in the list.
- *
- * @param items Items to filter
- * @param context Context of `<PortfolioOverview />`
  */
 export function applyActiveFilters(items: any[], context: IPortfolioOverviewContext) {
   const activeFilters = context.state.activeFilters ?? {}

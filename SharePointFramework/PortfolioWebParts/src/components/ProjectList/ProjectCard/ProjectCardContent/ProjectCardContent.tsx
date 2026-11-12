@@ -4,6 +4,7 @@ import { GlobeLocationFilled, TagMultipleFilled } from '@fluentui/react-icons'
 import { OverflowTagMenu } from 'pp365-shared-library'
 import { useProjectCardContent } from './useProjectCardContent'
 
+/** Display the card's configured primary and secondary metadata as overflow tags. */
 export const ProjectCardContent: FC = () => {
   const { primaryField, secondaryField, shouldDisplay } = useProjectCardContent()
 

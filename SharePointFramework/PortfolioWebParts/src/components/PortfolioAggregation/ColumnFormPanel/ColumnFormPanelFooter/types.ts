@@ -1,5 +1,6 @@
 import { useColumnFormPanel } from '../useColumnFormPanel'
 
+/** Column save/delete actions and explanations for unavailable operations. */
 export type ColumnFormPanelFooterProps = Pick<
   ReturnType<typeof useColumnFormPanel>,
   'onSave' | 'onDeleteColumn' | 'isEditing' | 'isSaveDisabled' | 'isDeleteDisabled'
@@ -10,7 +11,7 @@ export type ColumnFormPanelFooterProps = Pick<
   saveDisabledReason?: string
 
   /**
-   * Why delete is disabled, when it is not the title column.
+   * Why the column cannot be deleted.
    */
   deleteDisabledReason?: string
 }

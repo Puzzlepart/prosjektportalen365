@@ -3,6 +3,7 @@ import { ProjectColumn, ProjectListModel } from 'pp365-shared-library/lib/models
 import { createContext } from 'react'
 import { IProjectListProps } from '../types'
 
+/** A project's model, loading state and card-specific metadata and actions. */
 export interface IProjectCardContext extends IProjectListProps {
   /**
    * Project model
@@ -15,7 +16,7 @@ export interface IProjectCardContext extends IProjectListProps {
   actions?: ButtonProps[]
 
   /**
-   * Controls when the shimmer is swapped with actual data through an animated transition
+   * Whether project data is ready; the card also waits for its image-loading state.
    */
   isDataLoaded?: boolean
 
@@ -50,4 +51,5 @@ export interface IProjectCardContext extends IProjectListProps {
   secondaryUserField?: string
 }
 
+/** Project and display options shared by a card's header, content and footer. */
 export const ProjectCardContext = createContext<IProjectCardContext>(null)

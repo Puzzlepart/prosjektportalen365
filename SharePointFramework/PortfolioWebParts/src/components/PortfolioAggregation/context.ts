@@ -26,11 +26,10 @@ export interface IPortfolioAggregationContext extends Pick<
   groups?: IListGroup[]
 }
 
+/** Aggregation state and actions shared with commands, menus and editing panels. */
 export const PortfolioAggregationContext = createContext<IPortfolioAggregationContext>(null)
 
 /**
- * A hook that returns the current value of the PortfolioAggregationContext.
- *
- * @returns The current value of the PortfolioAggregationContext.
+ * Read the aggregation's shared state and actions.
  */
 export const usePortfolioAggregationContext = () => useContext(PortfolioAggregationContext)

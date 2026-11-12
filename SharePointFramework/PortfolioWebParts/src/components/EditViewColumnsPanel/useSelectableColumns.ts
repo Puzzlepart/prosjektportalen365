@@ -4,11 +4,7 @@ import { isSameColumn } from './columnIdentity'
 import { EditViewColumnsPanelSortMode, IEditViewColumnsPanelProps } from './types'
 
 /**
- * Sorts columns based on `props.customColumnOrder` if set. The selected columns
- * will always be on top. The rest of the columns will be sorted based on their `sortOrder`
- * set in the corresponding list.
- *
- * @param props Props for `EditViewColumnsPanel` component
+ * Keep portfolio-visible columns, selected first, using custom order and the sort-mode fallback.
  */
 function sortColumns({ columns, customColumnOrder, sortMode }: IEditViewColumnsPanelProps) {
   return [...columns]
@@ -35,12 +31,7 @@ function sortColumns({ columns, customColumnOrder, sortMode }: IEditViewColumnsP
 }
 
 /**
- * Hook that returns selectable columns and selected columns based on the props.
- *
- * @param props Props for `EditViewColumnsPanel` component
- *
- * @returns An object containing the initial columns, selectable columns, selected columns,
- * and functions to update the selectable columns and moving them around.
+ * Manage column selection and ordering while preserving column class methods.
  */
 export function useSelectableColumns(props: IEditViewColumnsPanelProps) {
   const initialColumns = useMemo(() => [...sortColumns(props)], [props.columns])
@@ -61,9 +52,6 @@ export function useSelectableColumns(props: IEditViewColumnsPanelProps) {
 
   /**
    * Updates the `isSelected` property of a column in the `selectableColumns` state.
-   *
-   * @param col The column to update.
-   * @param isSelected The new value for the `isSelected` property.
    */
   function selectColumn(col: IListColumn, isSelected: boolean) {
     setSelectableColumns((_selectableColumns) =>
@@ -83,9 +71,6 @@ export function useSelectableColumns(props: IEditViewColumnsPanelProps) {
 
   /**
    * Moves a column from one index to another in the `selectableColumns` state.
-   *
-   * @param fromIndex The index of the column to move.
-   * @param toIndex The index to move the column to.
    */
   function moveColumn(fromIndex: number, toIndex: number) {
     if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0) return
@@ -96,9 +81,6 @@ export function useSelectableColumns(props: IEditViewColumnsPanelProps) {
    * Moves a selected column one step up or down among the selected columns, the order the view
    * saves, to the place of the selected column next to it. The columns that are not selected keep
    * their order.
-   *
-   * @param col The column to move.
-   * @param step `-1` to move it up, `1` to move it down.
    */
   function moveSelectedColumn(col: IListColumn, step: -1 | 1) {
     setSelectableColumns((_selectableColumns) => {

@@ -6,9 +6,7 @@ import * as React from 'react'
 import { LatestProjects } from './LatestProjects'
 
 /**
- * The latest projects web part: the newest sites from the data adapter, listed up to the row
- * limit with a link each, the rest behind "view more", and a message when there are none or the
- * fetch fails.
+ * Create a project-site search result for the latest-projects list.
  */
 const site = (title: string) => ({
   Title: title,

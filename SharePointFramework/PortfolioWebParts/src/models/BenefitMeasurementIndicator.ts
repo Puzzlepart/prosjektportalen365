@@ -1,6 +1,7 @@
 import { IBenefitsSearchResult } from 'interfaces'
 import { BenefitBase, Benefit, BenefitMeasurement } from './'
 
+/** A benefit's target values and the measurements linked to them. */
 export class BenefitMeasurementIndicator extends BenefitBase {
   public Indicator: string
   public StartValue: number
@@ -13,10 +14,9 @@ export class BenefitMeasurementIndicator extends BenefitBase {
   public Benefit: Benefit
 
   /**
-   * Creates a new instance of BenefitMeasurementIndicator
+   * Read an indicator and its numeric targets from search.
    *
-   * @param result Search result
-   * @param fractionDigits Fraction digits for valueDisplay
+   * @param fractionDigits Decimal places in displayed start and desired values.
    */
   constructor(result: IBenefitsSearchResult, fractionDigits: number = 2) {
     super(result)
@@ -38,9 +38,9 @@ export class BenefitMeasurementIndicator extends BenefitBase {
   }
 
   /**
-   * Set measurements
+   * Attach matching measurements and calculate achievement and trends in input order.
    *
-   * @param measurements Measurements
+   * @param measurements Measurements ordered newest first for comparison with the next entry.
    */
   public setMeasurements(measurements: BenefitMeasurement[]): BenefitMeasurementIndicator {
     measurements = measurements.filter((m) => m.IndicatorId === this.Id && m.SiteId === this.SiteId)
@@ -51,9 +51,7 @@ export class BenefitMeasurementIndicator extends BenefitBase {
   }
 
   /**
-   * Set benefit
-   *
-   * @param benefits Benefits
+   * Attach the benefit with the matching item and site IDs.
    */
   public setBenefit(benefits: Benefit[]): BenefitMeasurementIndicator {
     this.Benefit = benefits.filter(

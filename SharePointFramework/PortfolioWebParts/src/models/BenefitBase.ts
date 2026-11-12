@@ -1,5 +1,6 @@
 import { IBenefitsSearchResult } from 'interfaces'
 
+/** Common identity and source fields for benefit-related search results. */
 export class BenefitBase {
   public SiteTitle: string
   public SPWebURL: string

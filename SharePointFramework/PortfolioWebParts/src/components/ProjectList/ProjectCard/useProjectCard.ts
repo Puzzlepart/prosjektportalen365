@@ -5,7 +5,7 @@ import styles from './ProjectCard.module.scss'
 import { CardProps } from '@fluentui/react-components'
 
 /**
- * Component logic hook for `ProjectCard`
+ * Track image readiness and derive card link and access styling.
  */
 export function useProjectCard() {
   const context = useContext(ProjectCardContext)

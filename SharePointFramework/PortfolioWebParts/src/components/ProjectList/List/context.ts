@@ -22,4 +22,5 @@ export interface IListContext extends IProjectListProps {
   shouldDisplay?: (key: string) => boolean
 }
 
+/** Projects and display settings shared by the table and its column renderers. */
 export const ListContext = createContext<IListContext>(null)

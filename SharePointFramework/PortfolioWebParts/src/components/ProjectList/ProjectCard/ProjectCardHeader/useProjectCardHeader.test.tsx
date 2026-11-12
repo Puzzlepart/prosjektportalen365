@@ -26,6 +26,7 @@ const project = { url: 'https://contoso.sharepoint.com/sites/frisbee' } as any
 
 function renderHeader(context: Record<string, any>) {
   const result: { colors?: string[] } = {}
+  /** Capture header colors while exercising the hook across rerenders. */
   const Probe: React.FC = () => {
     result.colors = useProjectCardHeader().colors
     return null

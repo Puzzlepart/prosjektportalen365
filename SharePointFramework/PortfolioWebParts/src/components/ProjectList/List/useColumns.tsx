@@ -14,14 +14,13 @@ import { IListColumn } from './types'
  * A person's picture beside the name the cell shows: hidden, or the name is read twice, and
  * without the `role` the data adapter gives the person (the field's internal name), which was
  * spread onto the picture as its ARIA role (axe's critical `aria-roles`).
- *
- * @param user The person, as the data adapter gives it
  */
 function person(user: AvatarProps | undefined): AvatarProps {
   const { role: _field, ...avatar } = user ?? {}
   return { ...avatar, 'aria-hidden': true }
 }
 
+/** Build sortable project columns and hide metadata disabled by the caller. */
 export const useColumns = (): IListColumn[] => {
   const context = useContext(ListContext)
 

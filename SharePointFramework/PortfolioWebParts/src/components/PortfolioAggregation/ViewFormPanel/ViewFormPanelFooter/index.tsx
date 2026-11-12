@@ -7,6 +7,7 @@ import { IViewFormPanelFooterProps } from './types'
 import { Button, FluentProvider, IdPrefixProvider, useId } from '@fluentui/react-components'
 import { customLightTheme } from 'pp365-shared-library'
 
+/** Save or cancel data-source view edits and explain unavailable saving. */
 export const ViewFormPanelFooter: FC<IViewFormPanelFooterProps> = ({ onSave }) => {
   const fluentProviderId = useId('fp-view-form-panel-footer')
   const context = usePortfolioAggregationContext()

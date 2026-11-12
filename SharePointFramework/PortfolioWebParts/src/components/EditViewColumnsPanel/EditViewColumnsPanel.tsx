@@ -15,6 +15,7 @@ import {
 } from 'pp365-shared-library'
 import { getItemStyle } from './getItemStyle'
 
+/** Default text and empty column selection for the view editor. */
 export const EDIT_VIEW_COLUMNS_PANEL_DEFAULT_PROPS: Partial<IEditViewColumnsPanelProps> = {
   title: strings.EditViewColumnsPanelHeaderText,
   helpText: strings.EditViewColumnsPanelHelpText,
@@ -22,6 +23,7 @@ export const EDIT_VIEW_COLUMNS_PANEL_DEFAULT_PROPS: Partial<IEditViewColumnsPane
   customColumnOrder: []
 }
 
+/** Select and reorder a view's columns with drag and keyboard controls. */
 export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, EDIT_VIEW_COLUMNS_PANEL_DEFAULT_PROPS)
   const {

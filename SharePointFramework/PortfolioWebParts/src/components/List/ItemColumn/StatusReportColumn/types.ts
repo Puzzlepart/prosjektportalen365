@@ -2,6 +2,7 @@ import _ from 'lodash'
 import { IRenderItemColumnProps } from 'pp365-shared-library'
 import { formatDate, parseScopedSiteId } from 'pp365-shared-library'
 
+/** Report-cell data, source-list names and popover timing options. */
 export interface IStatusColumnProps extends IRenderItemColumnProps {
   status?: ProjectStatusModel
   statusReportListName?: string
@@ -35,6 +36,7 @@ class ProjectStatusSection {
   ) {}
 }
 
+/** A report's project and series identity with configured display sections. */
 export class ProjectStatusModel {
   /**
    * The project's site ID (the base GUID), parsed from the potentially
