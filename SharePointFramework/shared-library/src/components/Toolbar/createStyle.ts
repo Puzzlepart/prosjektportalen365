@@ -14,7 +14,8 @@ export function createStyle(item: ListMenuItem, additionalStyle?: CSSProperties)
     ...(item.style ?? {}),
     ...additionalStyle
   }
-  if (item.width) {
+  // A shrinkable item has no width of its own: one would hold it at its full width.
+  if (item.width && !item.shrinkable) {
     style.width = item.width
     style.minWidth = item.width
   }

@@ -3,8 +3,9 @@
   justify-content: space-between;
   gap: 15px;
 
-  // The search box is the flexible part: as the toolbar narrows it gives way, and nothing else
-  // shrinks or wraps. Only the toolbar that holds it may shrink, and in it only the search box.
+  // As the toolbar narrows, a shrinkable selector (ListMenuItem.makeShrinkable) gives way first,
+  // down to its icon, and then the search box; nothing else shrinks or wraps. Only a toolbar that
+  // holds one of them shrinks, and within it only they do.
   .toolbar {
     gap: 15px;
     height: 40px;
@@ -16,8 +17,18 @@
       min-width: 0;
     }
 
+    // Flexbox shares a shortfall by flex-shrink times size, so this factor leaves the search box a
+    // sliver of a pixel while the selector can still shrink, in its own toolbar or the other one.
+    &:has(> .shrinkable) {
+      flex-shrink: 1000;
+    }
+
     > * {
       flex-shrink: 0;
+    }
+
+    > .shrinkable {
+      flex-shrink: 1000;
     }
 
     .search {
@@ -42,6 +53,30 @@
       min-width: 40px;
       padding: 5px var(--spacingHorizontalM) !important;
       box-shadow: var(--shadow2);
+    }
+
+    // The selector's label shortens with an ellipsis until only the icon is left. As a grid whose
+    // label track starts at 0, the button's least width is its icon, so the boxes around it can
+    // shrink that far and no further, while its natural width still holds the whole label.
+    .shrinkable button {
+      display: inline-grid;
+      grid-auto-flow: column;
+      grid-template-columns: auto minmax(0, max-content);
+      align-items: center;
+      max-width: 100%;
+
+      // The space after the icon is the label's, so the icon alone sits in the middle.
+      > :global(.fui-Button__icon) {
+        margin-right: 0;
+      }
+
+      .label {
+        min-width: 0;
+        padding-left: var(--spacingHorizontalSNudge);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
     }
 
     button:hover {

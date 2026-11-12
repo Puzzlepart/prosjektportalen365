@@ -700,8 +700,7 @@ export function useToolbarItems(isSingleView: boolean = false, showNewButton: bo
           strings.DynamicList.SelectViewTooltip
         )
           .setIcon(Icons.ContentView)
-          .setWidth('fit-content')
-          .setStyle({ minWidth: '145px' })
+          .makeShrinkable()
           .setDisabled(context.state.isChangingView)
           .setItems(viewMenuItems, checkedValues)
       )

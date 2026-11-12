@@ -97,7 +97,9 @@ type Box = { x: number; y: number; width: number; height: number }
 /** Checks a compact title/command row at desktop widths and its reflow at 320 px. */
 export async function expectCompactCommandBar(scope: Locator): Promise<void> {
   const commandBar = scope.locator('[class*="commandBar_"]').first()
-  await expect(scope.getByRole('heading', { level: 2 })).toHaveCount(1, { timeout: 60_000 })
+  // A throttled search holds the data, and with it the title, for as long as SharePoint's
+  // Retry-After says, which PnPjs waits out: 60 s for the program timeline in CI run 43175388784.
+  await expect(scope.getByRole('heading', { level: 2 })).toHaveCount(1, { timeout: 120_000 })
   await expect(commandBar.getByRole('heading', { level: 2 })).toBeVisible()
   await expect(commandBar.locator('.fui-Toolbar button').first()).toBeVisible()
   for (const width of [1440, 1024, 768, 320]) {

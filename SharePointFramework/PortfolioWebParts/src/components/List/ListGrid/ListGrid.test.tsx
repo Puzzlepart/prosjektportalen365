@@ -124,4 +124,12 @@ describe('ListGrid', () => {
       'aria-haspopup'
     )
   })
+
+  it("gives a cell's content its column's whole width, so tags behind +n come back as it widens", () => {
+    // Fluent sizes a cell's content by what it shows, and the tags' Overflow measures that box.
+    render(grid())
+    expect(screen.getByText('Bravo').closest('.fui-TableCellLayout__content').className).toMatch(
+      /cellContent/
+    )
+  })
 })

@@ -79,6 +79,12 @@ describe('useViewSelector', () => {
     ).toEqual({ views: ['merged'], renderMode: ['compactList'] })
   })
 
+  it('gives way before the title and search box beside it, held at no width of its own', () => {
+    const selector = selectorFor(contextWith())
+    expect(selector.shrinkable).toBe(true)
+    expect(selector.width).toBeUndefined()
+  })
+
   it('is named by what it chooses as well as the view it shows (WCAG 2.4.6)', () => {
     expect(selectorFor(contextWith()).ariaLabel).toBe(
       format(strings.SelectorButtonLabel, VIEW.title, resource.Lists_PortfolioViews_Title)

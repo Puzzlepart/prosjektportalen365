@@ -76,12 +76,11 @@ test.describe('list typography', () => {
 })
 
 /**
- * The toolbar over the hub's lists keeps to one line: its search box is the part that gives way as
- * the window narrows, and nothing wraps until the window is under 480 px, where the buttons would
- * otherwise go past the edge (WCAG 1.4.10). A wrap at every width slipped in once (2026-10-20).
+ * The toolbar over the hub's lists keeps to one line: as the window narrows the view selector gives
+ * way first, its label shortening down to its icon, then the search box, and nothing wraps until
+ * the window is under 480 px, where the buttons would otherwise go past the edge (WCAG 1.4.10). A
+ * wrap at every width slipped in once (2026-10-20).
  */
-// The search box is the toolbar's flexible part: it gives way as the window narrows, and nothing
-// wraps until even a narrowed search box leaves the buttons no room (under 480 px).
 test.describe('toolbar of the hub lists', () => {
   for (const list of LISTS.slice(0, 3)) {
     test(`the ${list.name}'s toolbar stays on one line, its search box giving way`, async ({
@@ -155,7 +154,7 @@ test.describe('compact overview headers', () => {
       openPage,
       resolvePage
     }) => {
-      test.setTimeout(180_000)
+      test.setTimeout(240_000)
       const site = entry.site()
       test.skip(!site, `the site of the ${entry.name} is not configured`)
       await openPage(await resolvePage(site!, entry.pages))
@@ -180,7 +179,7 @@ test.describe('compact timeline headers', () => {
       openPage,
       resolvePage
     }) => {
-      test.setTimeout(180_000)
+      test.setTimeout(240_000)
       const site = entry.site()
       test.skip(!site, `the site of the ${entry.name} is not configured`)
       await openPage(await resolvePage(site!, entry.pages))

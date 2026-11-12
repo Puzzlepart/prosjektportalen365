@@ -97,6 +97,11 @@ export class ListMenuItem {
   width?: string | number
 
   /**
+   * Whether a menu's button gives way when the toolbar runs short of room (`makeShrinkable`).
+   */
+  shrinkable?: boolean
+
+  /**
    * Custom style of the menu item.
    */
   style?: CSSProperties
@@ -231,6 +236,21 @@ export class ListMenuItem {
    */
   public setWidth(width: ListMenuItem['width']) {
     this.width = width
+    return this
+  }
+
+  /**
+   * Lets a menu's button give way first when the toolbar runs short of room: its label shortens
+   * with an ellipsis until only the icon is left, before the search box or the title beside the
+   * toolbar shrink (`Toolbar.module.scss`, and the host's own stylesheet, as `List/ListHeader`).
+   * For a selector whose label shows the current choice, such as a view selector. It replaces
+   * `setWidth`, which would hold the button at its full width; the whole label stays in the
+   * button's name.
+   *
+   * @returns The updated `ListMenuItem` instance.
+   */
+  public makeShrinkable() {
+    this.shrinkable = true
     return this
   }
 

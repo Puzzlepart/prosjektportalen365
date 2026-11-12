@@ -16,7 +16,7 @@ Sjekk ut [release notes](./releasenotes/1.15.0.md) for høydepunkter og mer deta
 
 ### Forbedringer
 
-- Tittelen i `Porteføljeoversikt` og `Aggregert oversikt`, også programvariantene, vises nå i kommandolinjen til venstre for søkefeltet for å spare vertikal plass. `Prosjekttidslinje`, `Programtidslinje` og `Ressursallokering` har tilsvarende kompakt tittel sammen med handlingene sine.
+- Tittelen i `Porteføljeoversikt` og `Aggregert oversikt`, også programvariantene, vises nå i kommandolinjen til venstre for søkefeltet for å spare vertikal plass. `Prosjekttidslinje`, `Programtidslinje` og `Ressursallokering` har tilsvarende kompakt tittel sammen med handlingene sine. Når plassen blir trang, gir visningsvelgeren plass først: teksten forkortes til bare ikonet står igjen, før tittel og søkefelt brytes. Det gjelder også `Dynamisk liste` og visningsmodusen i `Prosjektliste`
 - **Modernisert teknisk grunnmur (ingen funksjonell endring tilsiktet).** SPFx 1.24 med Heft, Node 26, PnPjs 4.21, React 18, Fluent UI v9 og automatiske tester i hvert bygg og mot testmiljøet. Bygging fra kildekode krever Node 26. Se releasenotes for 1.15.0 for detaljer
 - **Tryggere ny kjøring av oppsettveiviseren og import av malpakker.** Med `sp-js-provisioning` 1.5.1 tømmes ikke lenger kolonner, det administratorer har satt, beholdes, og en kolonne SharePoint avviser, stopper ikke lenger oppsettet eller importen. Se releasenotes for 1.15.0 for detaljer
 - **Universell utforming.** Webdelene og utvidelsene er gjennomgått mot WCAG 2.1 AA og kan brukes med tastatur og skjermleser. Synlige endringer: tidslinjesøyler i lys tone med kant, nye farger i fasevelgeren og et formmerke ved statusikonene. Se releasenotes for 1.15.0 for detaljer [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
@@ -95,6 +95,7 @@ Sjekk ut [release notes](./releasenotes/1.15.0.md) for høydepunkter og mer deta
 - Rettet en feil hvor `Opprett prosjektdata` krasjet for en godkjent idé når idékonfigurasjonen manglet tekst for prosjektdata
 - Rettet en feil hvor lukkeknappen i flere dialoger manglet navn for skjermlesere [#1319](https://github.com/Puzzlepart/prosjektportalen365/issues/1319)
 - Rettet lokal bygging fra kildekoden: kanalbyggene feilet med mellomrom i stien, `generate-channel-config` laget nye id-er fra Git Bash, og `Build-Release.ps1` fra en fersk klone hoppet over kanalskriptene
+- Rettet en feil i `Porteføljeoversikt`, `Aggregert oversikt`, `Prosjektliste` og `Dynamisk liste` hvor tagger skjult bak +n ikke ble synlige igjen når kolonnen ble gjort bredere
 
 ### Merk
 

@@ -189,6 +189,10 @@ describe('the project list columns', () => {
       tags: [],
       hidden: true
     })
+    // The tags take the cell's whole width, so those behind +n come back when the column widens.
+    for (const id of ['primaryField', 'secondaryField']) {
+      expect((column(id).renderCell(project()) as any).props.content.className).toMatch(/tagCell/)
+    }
   })
 
   it('titles a person cell with the role and the person, or the role and "not set"', () => {

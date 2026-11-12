@@ -41,8 +41,7 @@ export function useCommands() {
       .setAriaLabel(format(strings.RenderModeButtonLabel, selectedRenderMode?.text))
       .setHidden(!context.props.showRenderModeSelector)
       .setIcon(selectedRenderMode?.icon)
-      .setWidth('fit-content')
-      .setStyle({ minWidth: '145px' })
+      .makeShrinkable()
       .setItems(
         renderModes.map(({ value, text, icon }) =>
           new ListMenuItem(text, null)

@@ -26,7 +26,17 @@
       }
     }
 
-    // The title and search share the available width; command buttons keep their own width.
+    // The toolbar starts from its least width, its icons once the view selector has given way
+    // (Toolbar.module.scss), and takes the free space up to its full width before the search box
+    // does. So the title and search box keep their own width until the selector shows only its
+    // icon, and only then share what is left.
+    > :global(.fui-FluentProvider) {
+      flex: 1000 0 auto;
+      width: min-content;
+      max-width: max-content;
+    }
+
+    // The title and search share what the toolbar leaves them.
     .search {
       flex: 1 1 180px;
       min-width: 0;
@@ -56,6 +66,8 @@
       }
 
       > :global(.fui-FluentProvider) {
+        flex: 0 1 auto;
+        width: auto;
         min-width: 0;
         max-width: 100%;
 

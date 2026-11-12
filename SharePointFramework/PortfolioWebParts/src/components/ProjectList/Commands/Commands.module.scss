@@ -4,9 +4,11 @@
   max-width: 1024px;
   gap: 15px;
 
-  // The flexible part: the search box gives way as the commands narrow, and nothing wraps.
+  // The search box takes what the toolbar leaves it. The toolbar starts from its least width, its
+  // icons once the render mode selector has given way (Toolbar.module.scss), and grows to its full
+  // width first, so the search box gives way only after the selector shows only its icon.
   .search {
-    width: 100%;
+    flex: 1 1 180px;
     min-width: 0;
     max-width: 100%;
 
@@ -18,11 +20,27 @@
     }
   }
 
+  > :global(.fui-FluentProvider) {
+    flex: 1000 0 auto;
+    width: min-content;
+    max-width: max-content;
+  }
+
   // Only where even a narrowed search box leaves the buttons no room, as at 320 px, does the
   // toolbar go under it rather than past the edge (WCAG 1.4.10).
   @media (max-width: 480px) {
     flex-wrap: wrap;
     row-gap: 8px;
+
+    .search {
+      flex-basis: 100%;
+    }
+
+    > :global(.fui-FluentProvider) {
+      flex: 0 1 auto;
+      width: auto;
+      max-width: 100%;
+    }
   }
 
   .sortBy {

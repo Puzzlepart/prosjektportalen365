@@ -60,8 +60,7 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
           )
         )
         .setIcon(Icons.ContentView)
-        .setWidth('fit-content')
-        .setStyle({ minWidth: '145px' })
+        .makeShrinkable()
         .setDisabled(context.state.isChangingView || context.state.loading)
         .setHidden(!context.props.showViewSelector)
         .setItems(

@@ -177,6 +177,10 @@ describe('DynamicList', () => {
         .filter(Boolean)
     ).toEqual(['Tittel', 'Status'])
     expect(screen.getByText('Ferdig')).toBeInTheDocument()
+    // A cell's content takes the column's whole width, so tags behind +n come back as it widens.
+    expect(screen.getByText('Ferdig').closest('.fui-TableCellLayout__content').className).toMatch(
+      /cellContent/
+    )
   })
 
   it('opens a menu on a column header from the keyboard, as on a right click, to sort or resize the column (WCAG 2.1.1)', async () => {

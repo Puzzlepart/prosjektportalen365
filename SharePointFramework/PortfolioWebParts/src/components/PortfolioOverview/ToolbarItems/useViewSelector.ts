@@ -37,8 +37,7 @@ export function useViewSelector(context: IPortfolioOverviewContext) {
           )
         )
         .setIcon('ContentView')
-        .setWidth('fit-content')
-        .setStyle({ minWidth: '145px' })
+        .makeShrinkable()
         .setHidden(!context.props.showViewSelector)
         .setDisabled(context.state.isChangingView)
         .setItems(

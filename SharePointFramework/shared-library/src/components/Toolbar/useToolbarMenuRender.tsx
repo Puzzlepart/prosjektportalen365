@@ -14,6 +14,7 @@ import {
 import React, { CSSProperties, useState } from 'react'
 import { createIcon } from './createIcon'
 import { createStyle } from './createStyle'
+import styles from './Toolbar.module.scss'
 import { ListMenuItem } from './types'
 
 export function useToolbarMenuRender() {
@@ -51,7 +52,11 @@ export function useToolbarMenuRender() {
         // the description that says why it cannot be used (WCAG 2.1.1).
         disabledFocusable={item.disabled}
       >
-        {item.text && <span style={labelStyle}>{item.text}</span>}
+        {item.text && (
+          <span style={labelStyle} className={item.shrinkable ? styles.label : undefined}>
+            {item.text}
+          </span>
+        )}
       </ToolbarButton>
     )
   }
@@ -155,7 +160,7 @@ function MenuComponent({
 
   // The box that hides the item is outside the trigger, whose child must be the button.
   return (
-    <div hidden={item.hidden}>
+    <div hidden={item.hidden} className={item.shrinkable ? styles.shrinkable : undefined}>
       <Menu open={open} onOpenChange={onOpenChange} closeOnScroll positioning={{ autoSize: true }}>
         <MenuTrigger disableButtonEnhancement>
           {renderMenuButton(

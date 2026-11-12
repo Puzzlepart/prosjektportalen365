@@ -231,7 +231,7 @@ export const ListGrid: FC<IListGridProps> = (props) => {
                         role='gridcell'
                         {...columnSizing.getTableCellProps(column.key)}
                       >
-                        <TableCellLayout truncate>
+                        <TableCellLayout truncate content={{ className: styles.cellContent }}>
                           {props.renderCell(entry.item, entry.index, column)}
                         </TableCellLayout>
                       </TableCell>

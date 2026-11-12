@@ -24,6 +24,13 @@
     }
   }
 
+  // A cell's content is as wide as its column, as in the hub's `ListGrid`: Fluent sizes it by
+  // what it shows, so tags behind `+n` stayed there when the column was widened.
+  .cellContent {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
   :global(.fui-TableHeaderCell) {
     flex: 0 1 auto;
     overflow: hidden;

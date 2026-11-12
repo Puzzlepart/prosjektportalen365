@@ -6,6 +6,7 @@ import React, { useContext } from 'react'
 import _ from 'underscore'
 import { getFieldOptionKey } from '../getFieldOptionKey'
 import { ProjectMenu } from '../ProjectMenu'
+import styles from './List.module.scss'
 import { ListContext } from './context'
 import { IListColumn } from './types'
 
@@ -139,7 +140,7 @@ export const useColumns = (): IListColumn[] => {
       renderCell: (item) => {
         const tags = getField(item, context.primaryField)
         return (
-          <TableCellLayout truncate>
+          <TableCellLayout truncate content={{ className: styles.tagCell }}>
             <OverflowTagMenu
               text={primaryField}
               tags={tags}
@@ -163,7 +164,7 @@ export const useColumns = (): IListColumn[] => {
       renderCell: (item) => {
         const tags = getField(item, context.secondaryField)
         return (
-          <TableCellLayout truncate>
+          <TableCellLayout truncate content={{ className: styles.tagCell }}>
             <OverflowTagMenu
               text={secondaryField}
               tags={tags}

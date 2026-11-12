@@ -93,6 +93,12 @@ describe('ListMenuItem', () => {
       minWidth: 140
     })
   })
+
+  it('is made shrinkable, and is then held at no width, which would keep its button at its full width', () => {
+    const item = new ListMenuItem('Alle prosjekter').setWidth('fit-content').makeShrinkable()
+    expect(item.shrinkable).toBe(true)
+    expect(createStyle(item, { margin: 0 })).toEqual({ margin: 0 })
+  })
 })
 
 describe('Toolbar', () => {
@@ -271,6 +277,30 @@ describe('Toolbar', () => {
     fireEvent.click(screen.getByText('Program A'))
     expect(onProgram).toHaveBeenCalled()
     expect(screen.queryByText('Program A')).toBeNull()
+  })
+
+  it("lets a shrinkable selector's label give way, the whole label staying its name (WCAG 2.5.3)", () => {
+    // The giving way is CSS, which jsdom does not apply: the box the toolbar shrinks and the label
+    // that shortens carry the classes Toolbar.module.scss sizes them by, and no width holds them.
+    render(
+      <Toolbar
+        items={[
+          new ListMenuItem('Alle leveranser for underområder', 'Porteføljevisninger')
+            .setIcon('ContentView')
+            .makeShrinkable()
+            .setItems([new ListMenuItem('Alle')]),
+          new ListMenuItem('Visning').setItems([new ListMenuItem('Alle')])
+        ]}
+      />
+    )
+    const selector = screen.getByRole('button', { name: 'Alle leveranser for underområder' })
+    expect(selector.parentElement.className).toMatch(/shrinkable/)
+    expect(screen.getByText('Alle leveranser for underområder').className).toMatch(/label/)
+    expect(selector.style.width).toBe('')
+    expect(selector.style.minWidth).toBe('')
+    expect(screen.getByRole('button', { name: 'Visning' }).parentElement.className).not.toMatch(
+      /shrinkable/
+    )
   })
 
   it('opens the filter panel it is given', () => {

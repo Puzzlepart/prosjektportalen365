@@ -97,6 +97,11 @@ const OVERFLOW_TAG_MENU_DEFAULT_PROPS: Partial<IOverflowTagMenuProps> = {
  * Tags as a list of labels; those that do not fit go behind a `+n` button that opens a menu of
  * them. The tags are text, not buttons, since they do nothing when clicked, and the list is named
  * by `text` when it has one (WCAG 4.1.2).
+ *
+ * Fluent's `Overflow` measures the box the tags are in, so the host gives that box the width the
+ * tags may take, not the width of the tags shown: a Fluent `TableCellLayout`'s content is as wide
+ * as what it shows unless it is made to fill the cell (`ListGrid`'s `cellContent`). Otherwise the
+ * tags behind `+n` never come back when the column grows.
  */
 export const OverflowTagMenu: FC<IOverflowTagMenuProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, OVERFLOW_TAG_MENU_DEFAULT_PROPS)

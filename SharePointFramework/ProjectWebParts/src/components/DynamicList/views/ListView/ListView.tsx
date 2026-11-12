@@ -283,7 +283,7 @@ export const ListView: FC<IListViewProps> = ({
                         {...columnSizingState.getTableCellProps(column.columnId)}
                       >
                         {isFirstColumn && onFirstColumnClick ? (
-                          <TableCellLayout>
+                          <TableCellLayout content={{ className: styles.cellContent }}>
                             {isFile && fileUrl ? (
                               <Link
                                 href={fileUrl}
@@ -306,7 +306,9 @@ export const ListView: FC<IListViewProps> = ({
                             )}
                           </TableCellLayout>
                         ) : (
-                          <TableCellLayout>{cellContent}</TableCellLayout>
+                          <TableCellLayout content={{ className: styles.cellContent }}>
+                            {cellContent}
+                          </TableCellLayout>
                         )}
                       </TableCell>
                     )

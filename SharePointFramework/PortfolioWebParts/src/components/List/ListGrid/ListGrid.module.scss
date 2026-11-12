@@ -65,6 +65,14 @@
       :global(.fui-Link) {
         font-size: inherit;
       }
+
+      // A cell's content is as wide as its column. Fluent sizes it by what it shows
+      // (`flex: 0 1 auto`), so the tags' `Overflow`, which measures the box the tags are in, never
+      // saw a column grow: tags it had put behind `+n` stayed there when the column was widened.
+      .cellContent {
+        flex: 1 1 auto;
+        min-width: 0;
+      }
     }
 
     .expanderCell {
