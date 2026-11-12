@@ -32,6 +32,7 @@ const projectNumber = () =>
     GtIsRefinable: true,
     GtIsGroupable: true,
     GtColMinWidth: 120,
+    GtColMaxWidth: 200,
     GtFieldCustomSort: 'Etter serie:A,B,C',
     GtFieldOverrides: '{"Programmal":{"Prosjektnummer":{"displayName":"Programnummer"}}}'
   }).setData({ config: { A: { color: '#00ff00' } } as any })
@@ -125,14 +126,14 @@ describe('ColumnFormPanel (portfolio overview) with its own hook', () => {
     expect(field(strings.IsGroupableLabel)).toBeChecked()
   })
 
-  it('shows the numbers the column has, and no max width, which the overview does not use', () => {
-    // The max width showed 120, a default the form neither had from the column nor saved, and the
-    // overview's list sizes a column by its minimum width alone.
+  it('shows the numbers the column has, the width the list starts it at among them', () => {
+    // The overview's list starts a column at its default width since 1.15.0, so the form shows it
+    // again: the column's own, never a default of the form's (it once showed 120 for every column).
     const consoleError = jest.spyOn(console, 'error')
     renderForm({ isOpen: true, column: projectNumber() })
     expect(field(strings.SortOrderLabel)).toHaveValue(30)
     expect(field(strings.MinWidthLabel)).toHaveValue(120)
-    expect(screen.queryByLabelText(strings.MaxWidthLabel, { exact: false })).toBeNull()
+    expect(field(strings.MaxWidthLabel)).toHaveValue(200)
     expect(controlWarnings(consoleError)).toEqual([])
     consoleError.mockRestore()
   })
@@ -147,6 +148,20 @@ describe('ColumnFormPanel (portfolio overview) with its own hook', () => {
     fireEvent.change(field(strings.MinWidthLabel), { target: { value: '150' } })
     await save(dispatch)
     expect(updateItemInList.mock.calls[1][2].GtColMinWidth).toBe(150)
+  })
+
+  it('leaves a default width the column did not have out of a save, and starts the column at one the user gave', async () => {
+    const { dispatch, updateItemInList } = renderForm({ isOpen: true, column: phase() })
+    expect(field(strings.MaxWidthLabel)).toHaveValue(null)
+    await save(dispatch)
+    expect(updateItemInList.mock.calls[0][2]).not.toHaveProperty('GtColMaxWidth')
+    fireEvent.change(field(strings.MaxWidthLabel), { target: { value: '300' } })
+    await save(dispatch)
+    expect(updateItemInList.mock.calls[1][2].GtColMaxWidth).toBe(300)
+    const saved = dispatch.mock.calls
+      .filter(([action]) => action.type === 'COLUMN_FORM_PANEL_ON_SAVED')
+      .pop()[0].payload.column
+    expect(saved.maxWidth).toBe(300)
   })
 
   it('keeps the title column from being deleted, saying why (WCAG 3.3.2)', () => {
@@ -195,6 +210,7 @@ describe('ColumnFormPanel (portfolio overview) with its own hook', () => {
     expect(column).toBeInstanceOf(ProjectColumn)
     expect(column.id).toBe(7)
     expect(column.name).toBe('Nummer')
+    expect(column.maxWidth).toBe(200)
     expect(column.data.isGroupable).toBe(true)
     expect(column.data.customSorts).toEqual(projectNumber().data.customSorts)
     expect(column.data.config).toEqual({ A: { color: '#00ff00' } })

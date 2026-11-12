@@ -11,14 +11,15 @@ import _ from 'underscore'
  * @param props Props of `<PortfolioOverview />`
  * @param useViewId If `true` the persisted columns are stored per view
  * @param defaultValue Default value for columns if no persisted value is found
- * @param properties Properties to persist (default: `['fieldName', 'key', 'name', 'minWidth', 'sortOrder']`)
+ * @param properties Properties to persist (default: `['fieldName', 'key', 'name', 'minWidth', 'maxWidth', 'sortOrder']`;
+ * the placeholder columns start at the widths the columns will have)
  *
  * @returns `[columns, set]` tuple where `columns` is the persisted columns and `set` is a function to set the persisted columns
  */
 export function usePersistedColumns(
   props: IPortfolioOverviewProps,
   defaultValue: ProjectColumn[] = [],
-  properties: any[] = ['fieldName', 'key', 'name', 'minWidth', 'sortOrder'],
+  properties: any[] = ['fieldName', 'key', 'name', 'minWidth', 'maxWidth', 'sortOrder'],
   localKeyPrefix = 'portfolio-overview-persisted-columns'
 ) {
   const localStore = new PnPClientStorage().local

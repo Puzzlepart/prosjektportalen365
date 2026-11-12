@@ -28,6 +28,7 @@ const convertToMap = (column: ProjectColumn): EditableColumn => {
     ['fieldName', column.fieldName],
     ['name', column.name],
     ['minWidth', column.minWidth],
+    ['maxWidth', column.maxWidth],
     ['sortOrder', column.sortOrder],
     ['internalName', column.internalName],
     ['iconName', column.iconName],

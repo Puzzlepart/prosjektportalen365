@@ -1,11 +1,15 @@
 import { expect, Locator, Page } from '@playwright/test'
+import { baseURL } from '../../playwright.config'
+import { findColumnsList } from './portfolio-overview-column'
 import { webPart } from './pp365'
+import { restGet } from './rest'
 
 /**
- * The portfolio overview's columns, shared by the deployed and the local-bundle flow: the tags a
- * column puts behind `+n` as it narrows and shows again as it widens. A column's width is the
- * grid's own state, gone on the next load, so nothing is restored.
+ * The portfolio overview's columns, shared by the deployed and the local-bundle flow: the width a
+ * column starts at, and the tags it puts behind `+n` as it narrows and shows again as it widens. A
+ * column's width is the grid's own state, gone on the next load, so nothing is restored.
  */
+const hub = baseURL.replace(/\/+$/, '')
 
 /** The portfolio overview's grid. */
 export function overviewGrid(page: Page) {
@@ -123,5 +127,35 @@ export async function expectTagsFollowTheColumn(grid: Locator): Promise<string |
   await expect
     .poll(hidden, { message: 'the tags go behind +n again as the column narrows' })
     .toBeGreaterThan(0)
+  return undefined
+}
+
+/**
+ * The title column starts at its default width (`GtColMaxWidth` in the project columns list,
+ * «Standard bredde»), not at its least: until 1.15.0 the overview started every column at its
+ * least. Returns why it could not run, when the list gives the title no default width clearly
+ * wider than its least.
+ */
+export async function expectTitleAtDefaultWidth(grid: Locator): Promise<string | undefined> {
+  const page = grid.page()
+  const list = await findColumnsList(page)
+  const filter = encodeURIComponent("GtManagedProperty eq 'Title'")
+  const response = await restGet(
+    page,
+    `${hub}/_api/web/lists(guid'${list.Id}')/items?$select=GtColMinWidth,GtColMaxWidth&$filter=${filter}`
+  )
+  const [title] = (
+    (await response.json()) as { value: { GtColMinWidth: number; GtColMaxWidth: number }[] }
+  ).value
+  const least = title?.GtColMinWidth ?? 100
+  const start = title?.GtColMaxWidth
+  if (!start || start - least < 32) {
+    return 'the title column has no default width clearly wider than its least'
+  }
+  const header = grid.getByRole('columnheader', { name: /^tittel$|^title$/i })
+  const width = (await header.boundingBox())!.width
+  // The header holds the column's width and Fluent's 16 px of padding.
+  expect(width, 'the title column starts at its default width').toBeGreaterThanOrEqual(start)
+  expect(width, 'the title column starts at its default width').toBeLessThanOrEqual(start + 32)
   return undefined
 }

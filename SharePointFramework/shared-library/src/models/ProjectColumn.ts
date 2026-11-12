@@ -54,6 +54,11 @@ export class ProjectColumn implements IProjectColumn {
   public fieldName: string
   public name: string
   public minWidth: number
+  /**
+   * The width the lists start the column at (`GtColMaxWidth`, «Standard bredde»), as
+   * `ProjectContentColumn` has it; none when the list gives none.
+   */
+  public maxWidth?: number
   public id?: number
   public sortOrder?: number
   public internalName?: string
@@ -80,6 +85,8 @@ export class ProjectColumn implements IProjectColumn {
     this.isResizable = true
     this.isMultiline = this.dataType === 'note' || this.dataType === 'tags'
     this.minWidth = item?.GtColMinWidth ?? 100
+    // SharePoint gives an empty number as null.
+    this.maxWidth = item?.GtColMaxWidth || undefined
     this.data = {
       isGroupable: item?.GtIsGroupable,
       visibility: [

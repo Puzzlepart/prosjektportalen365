@@ -20,6 +20,7 @@ export function savedColumn(
     name: saved.name,
     sortOrder: saved.sortOrder,
     minWidth: saved.minWidth,
+    maxWidth: saved.maxWidth,
     dataType: saved.dataType,
     isMultiline: saved.isMultiline,
     isRefinable: saved.isRefinable

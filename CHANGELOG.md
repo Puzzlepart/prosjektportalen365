@@ -36,6 +36,7 @@ Sjekk ut [release notes](./releasenotes/1.15.0.md) for høydepunkter og mer deta
 - Planner-tiltakene og `Hent dokumentmal` bruker samme meldinger, datovelger, personvelger og knapperad som resten av løsningen [#1319](https://github.com/Puzzlepart/prosjektportalen365/issues/1319)
 - Prosjektområdet finner huben også når brukeren bare har tilgang til enkelte lister der, og et avslag fra én liste gjør ikke lenger hele huben utilgjengelig
 - `Fasevelger` sier fra når arkiveringen ikke kunne føres i `Arkiveringslogg`
+- Kolonnene i `Porteføljeoversikt` starter på standardbredden fra `Prosjektkolonner`, som i `Aggregert oversikt`, i stedet for på minimumsbredden. Feltet heter nå «Standard bredde» (før «Maks bredde») og kan endres i kolonneskjemaet i begge webdelene
 
 ### Fjernet
 

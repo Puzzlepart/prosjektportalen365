@@ -151,8 +151,21 @@ export const ColumnFormPanel: FC = () => {
               placeholder={strings.Placeholder.TextField}
             />
           </FieldContainer>
-          {/* No max width: the overview's list sizes a column by its minimum width alone, so the
-              field had no effect. */}
+          <FieldContainer
+            iconName='NumberSymbolSquare'
+            label={strings.MaxWidthLabel}
+            description={strings.MaxWidthDescription}
+          >
+            <Input
+              value={column.get('maxWidth')?.toString() ?? ''}
+              type='number'
+              min={column.get('minWidth') ?? 40}
+              max={1000}
+              step={2}
+              onChange={(_, data) => setColumn('maxWidth', parseInt(data.value))}
+              placeholder={strings.Placeholder.TextField}
+            />
+          </FieldContainer>
           <ColumnDataTypeField
             label={strings.ColumnRenderLabel}
             description={strings.PortfolioOverviewColumnRenderDescription}

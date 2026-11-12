@@ -111,6 +111,7 @@ export function useColumnFormPanel() {
       GtManagedProperty: column.get('fieldName'),
       GtFieldDataType: colummData.renderAs ?? 'Text',
       GtColMinWidth: column.get('minWidth'),
+      GtColMaxWidth: column.get('maxWidth'),
       GtShowFieldFrontpage: colummData.visibility.includes('Frontpage'),
       GtShowFieldPortfolio: colummData.visibility.includes('Portfolio'),
       GtShowFieldProjectStatus: colummData.visibility.includes('ProjectStatus'),
@@ -121,9 +122,11 @@ export function useColumnFormPanel() {
       columnItem.GtFieldDataTypeProperties = JSON.stringify(colummData.dataTypeProperties, null, 2)
     }
     // A column without a minimum width of its own shows the model's 100: sent back untouched, it
-    // stored 100 where the list had none.
+    // stored 100 where the list had none. A width the user did not change is not sent.
     const isMinWidthUnchanged =
       isEditing && column.get('minWidth') === context.state.columnForm.column.minWidth
+    const isMaxWidthUnchanged =
+      isEditing && column.get('maxWidth') === context.state.columnForm.column.maxWidth
     try {
       if (isEditing) {
         await context.props.dataAdapter.portalDataService.updateItemInList(
@@ -133,7 +136,8 @@ export function useColumnFormPanel() {
             'Id',
             'GtInternalName',
             'GtManagedProperty',
-            ...(isMinWidthUnchanged ? ['GtColMinWidth'] : [])
+            ...(isMinWidthUnchanged ? ['GtColMinWidth'] : []),
+            ...(isMaxWidthUnchanged ? ['GtColMaxWidth'] : [])
           ])
         )
       } else {

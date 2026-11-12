@@ -1,6 +1,10 @@
 import { Page } from '@playwright/test'
 import { baseURL } from '../../playwright.config'
-import { expectTagsFollowTheColumn, overviewGrid } from '../fixtures/list-columns'
+import {
+  expectTagsFollowTheColumn,
+  expectTitleAtDefaultWidth,
+  overviewGrid
+} from '../fixtures/list-columns'
 import { localBundleUse, localBundles, openWithLocalBundle } from '../fixtures/local-bundle'
 import { columnHeaders } from '../fixtures/portfolio-overview-column'
 import { expect, test } from '../fixtures/pp365'
@@ -31,5 +35,15 @@ test('local: the tags a column put behind +n come back as it widens', async ({
   test.setTimeout(180_000)
   await openOverview(page, await resolvePage(hub, PAGES))
   const skip = await expectTagsFollowTheColumn(overviewGrid(page))
+  test.skip(!!skip, skip)
+})
+
+test('local: a column starts at its default width from the project columns list', async ({
+  page,
+  resolvePage
+}) => {
+  test.setTimeout(120_000)
+  await openOverview(page, await resolvePage(hub, PAGES))
+  const skip = await expectTitleAtDefaultWidth(overviewGrid(page))
   test.skip(!!skip, skip)
 })
