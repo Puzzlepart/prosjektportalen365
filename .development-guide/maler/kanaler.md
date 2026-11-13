@@ -9,7 +9,7 @@ En installasjonskanal gir løsningene og komponentene egne ID-er, slik at flere 
 | `kurs.json` | Bygges på `main` når commit-meldingen har `[build-kurs]` |
 | `i18n.json` | Ingen arbeidsflyt bygger den; `Build-Release.ps1 -Channel i18n` eller `npm run build:i18n` i en løsning bygger den lokalt |
 
-Hver fil gir hver SPFx-løsning egen `id`, `name` og `zippedPackage` (f.eks. `solution/pp-portfolio-web-parts-test.sppkg`) og hver komponent egen ID, oppslått på komponentens alias. Formatet står i `channels/$schema.json`.
+Hver fil gir hver SPFx-løsning egen `id`, `name` og `zippedPackage` (f.eks. `solution/pp-portfolio-web-parts-test.sppkg`) og hver komponent egen ID, oppslått på komponentens alias. Formatet står i `channels/$schema.json`, et JSON Schema i draft-07. `Build-Release.ps1 -Channel` sjekker kanalfila mot det med `Test-Json` og skriver en advarsel med årsaken når den ikke passer, men bygger videre. Til 13.11.2026 var skjemaet i draft-04, som `Test-Json` fra PowerShell 7.4 ikke kan lese, så hver kanalbygging advarte uten grunn.
 
 ### Hvor ID-ene byttes
 

@@ -24,7 +24,7 @@ Read first (Norwegian):
 | Site design `Prosjektområde` / `Project Site` | `SiteScripts/src/NNNNNN - <Title>.txt` (`Install.ps1` cuts the 9-character prefix off the title) | site scripts and design |
 | Managed property mappings | `Install/SearchConfiguration.xml` | `Set-PnPSearchConfiguration -Scope Subscription` |
 
-`Install/Build-Release.ps1` packs `Templates/Portfolio`, every folder under `Templates/Content/` (after `npm run generate-project-templates`) and `Templates/Upgrade/`, and `Templates/Taxonomy` with `Convert-PnPFolderToSiteTemplate`.
+`Install/Build-Release.ps1` packs `Templates/Portfolio`, every folder under `Templates/Content/` (after `npm run generate-project-templates`) and `Templates/Upgrade/`, and `Templates/Taxonomy` with `Convert-PnPFolderToSiteTemplate`. A failed `generate-project-templates`, or a channel build's `generate-pnp-templates`, ends the build with the script's output (pp365-release, «After the run»).
 
 ## How content reaches sites
 

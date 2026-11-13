@@ -88,6 +88,21 @@ function EndAction() {
 }
 
 <#
+Runs an npm script that writes part of what the release packs. On failure it prints the last 50 lines
+of the script's output and ends the build; on success the output stays out of the log. Run silenced
+and unchecked, a failed generator let the templates be packed without the JSON project templates or
+a channel's Portfolio template, and the build stayed green.
+#>
+function Invoke-NpmGenerator($ScriptName) {
+    $Output = npm run $ScriptName 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "[ERROR] npm run $ScriptName failed with exit code $LASTEXITCODE. Last 50 lines of its output:" -ForegroundColor Red
+        $Output | Select-Object -Last 50 | ForEach-Object { Write-Host "$_" }
+        exit 1
+    }
+}
+
+<#
 Checks if parameter $CHANNEL_CONFIG_PATH is set and if so, loads the channel config,
 stores it as JSON in the root of the project and sets the $CHANNEL_CONFIG variable
 #>
@@ -100,13 +115,13 @@ if ($USE_CHANNEL_CONFIG) {
     }
     $CHANNEL_CONFIG_SCHEMA = Get-Content "$PSScriptRoot/../channels/`$schema.json" -Raw
     $CHANNEL_CONFIG_JSON = Get-Content $CHANNEL_CONFIG_PATH -Raw
-    $VALID_CONFIG_JSON = Test-Json -Json $CHANNEL_CONFIG_JSON -Schema $CHANNEL_CONFIG_SCHEMA -ErrorAction SilentlyContinue
+    $VALID_CONFIG_JSON = Test-Json -Json $CHANNEL_CONFIG_JSON -Schema $CHANNEL_CONFIG_SCHEMA -ErrorAction SilentlyContinue -ErrorVariable CHANNEL_CONFIG_ERRORS
     $CHANNEL_CONFIG = $CHANNEL_CONFIG_JSON | ConvertFrom-Json
     $CHANNEL_CONFIG_NAME = $CHANNEL_CONFIG.name
     $CHANNEL_CONFIG_JSON | Out-File -Path "$PSScriptRoot/../.current-channel-config.json" -Encoding UTF8 -Force
     EndAction
     if (-not $VALID_CONFIG_JSON) {
-        Write-Host "Channel configuration might not be valid (the JSON does not match the schema). Manually check schema, build continues..." -ForegroundColor Yellow
+        Write-Host "Channel configuration might not be valid (the JSON does not match the schema: $($CHANNEL_CONFIG_ERRORS | Select-Object -First 1)). Manually check schema, build continues..." -ForegroundColor Yellow
     }
 }
 
@@ -320,7 +335,7 @@ if (-not $SkipBuildPnPTemplates.IsPresent) {
     Set-Location $PSScriptRoot
     StartAction("Building Portfolio PnP template")
     if ($USE_CHANNEL_CONFIG) {
-        npm run generate-pnp-templates >$null 2>&1
+        Invoke-NpmGenerator "generate-pnp-templates"
         Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Portfolio.pnp" -Folder "$PNP_TEMPLATES_DIST_BASEPATH/Portfolio" -Force
     }
     else {
@@ -334,7 +349,7 @@ if (-not $SkipBuildPnPTemplates.IsPresent) {
     # Templates is a Rush project, so the rush install/update above has installed its packages.
     # Running npm here broke that: `npm install` rewrote the pnpm links in Templates/node_modules
     # to targets that do not exist, and `npm ci` failed silently on the missing package-lock.json.
-    npm run generate-project-templates >$null 2>&1
+    Invoke-NpmGenerator "generate-project-templates"
 
     Get-ChildItem "./Content" -Directory | ForEach-Object {
         Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force
