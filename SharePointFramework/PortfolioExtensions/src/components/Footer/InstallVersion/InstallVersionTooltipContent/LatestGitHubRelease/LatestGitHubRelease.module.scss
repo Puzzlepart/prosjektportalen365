@@ -23,9 +23,9 @@
     flex-direction: column;
     gap: 8px;
 
-    // Within the popover's width: a long command in the notes (`./Install.ps1 -Url …`) breaks, and
-    // a code block scrolls sideways in its own box. The notes made the content 535 px in a 400 px
-    // surface, and the rows and dividers lay outside it over the page (WCAG 1.4.10).
+    // Within the popover's width: a long command in the notes (`./Install.ps1 -Url …`) breaks, in
+    // a code block as well. The notes made the content 535 px in a 400 px surface, and the rows and
+    // dividers lay outside it over the page (WCAG 1.4.10).
     .releaseBody {
       min-width: 0;
       max-height: 300px;
@@ -93,12 +93,15 @@
         border-left: 3px solid var(--colorNeutralStroke1);
       }
 
+      // A code block wraps its lines rather than scroll sideways: kept to the popover's width, the
+      // block scrolled, and the keyboard could not reach it to scroll (axe:
+      // scrollable-region-focusable, serious, in the browser suite 2026-11-13).
       pre {
         background-color: var(--colorNeutralBackground3);
         padding: 8px;
         border-radius: 4px;
-        overflow-x: auto;
-        overflow-wrap: normal;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
 
         code {
           background-color: transparent;

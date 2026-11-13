@@ -1712,7 +1712,9 @@ itself as `observer` to `add()` is disposed, as the footer does.
   elementer» did not start with «+1».
 - **Done.** The footer is in the flow and wraps (the minimized one still lies over the page). The
   install popover's content keeps to its surface; long words in the notes break, code blocks
-  scroll, and `stripGitHubAlertMarkers` leaves the markers out. The settings link is white like
+  wrap (they scrolled at first, where the keyboard could not reach them: axe's
+  scrollable-region-focusable in the browser suite, 2026-11-13), and `stripGitHubAlertMarkers`
+  leaves the markers out. The settings link is white like
   the close button. `BasePanel` gives the focus back after a click outside
   (`useReturnFocusOnLightDismiss`), for every panel. The «+n» button leaves the arrow keys to its
   menu (Tabster's `ignoreKeydown`), and its name is «+1 flere elementer». Tests: `BasePanel.test`

@@ -297,6 +297,9 @@ checked by hand and with which reader and browser: axe finds only part of what W
   frame, the catalog's file preview and conflict list, the setup's task log). axe in Jest never
   sees one (jsdom lays nothing out), and the browser suite only where the box overflows at its
   viewport: the panel of all properties was found by the hand round at 200 % zoom (2026-10-26).
+  Keeping a box to its width can make a child scroll that did not: the install popover's release
+  notes, once kept to the surface, let a long command's `pre` scroll sideways (2026-11-13). Where
+  the content is text, wrap it (`white-space: pre-wrap`) rather than scroll it.
 - Every restore target changes where the focus goes for each dialog opened from state after it:
   Tabster gives the focus to the latest target. A dialog opened from state inside a dialog or a
   panel then sends it out, behind what is still open (the status snapshot's copy dialog, held in
