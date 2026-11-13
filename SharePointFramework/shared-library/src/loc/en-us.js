@@ -6,6 +6,8 @@ define([], function () {
     SaveText: 'Save',
     CloseText: 'Close',
     Aria: {
+      ColumnResizeHandleLabel: 'Width of the column {0}',
+      ColumnWidthValueText: '{0} pixels',
       ComboboxExpandLabel: 'Show options',
       InfoLabelTitle: 'Information about {0}',
       InstrumentGaugeLabel: 'Latest measurement {0}, start value {1}, target value {2}',

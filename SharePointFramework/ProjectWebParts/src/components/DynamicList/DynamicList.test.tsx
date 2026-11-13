@@ -182,6 +182,15 @@ describe('DynamicList', () => {
         .filter(Boolean)
     ).toEqual(['Tittel', 'Status'])
     expect(screen.getByText('Ferdig')).toBeInTheDocument()
+    // The resize handle at a header's edge is named in the page's language, as the hub's lists
+    // name theirs (SharedLibraryStrings' Aria.ColumnResizeHandleLabel and ColumnWidthValueText):
+    // Fluent named it «Resize column» and its value «160 pixels» (WCAG 3.1.2, 4.1.2).
+    const handle = screen
+      .getByText('Tittel', { selector: '[role="columnheader"] *' })
+      .closest('[role="columnheader"]')
+      .querySelector('.fui-TableResizeHandle')
+    expect(handle).toHaveAttribute('aria-label', 'Bredde på kolonnen Tittel')
+    expect(handle.getAttribute('aria-valuetext')).toMatch(/^\d+ piksler$/)
     // A cell's content takes the column's whole width, so tags behind +n come back as it widens.
     expect(screen.getByText('Ferdig').closest('.fui-TableCellLayout__content').className).toMatch(
       /cellContent/

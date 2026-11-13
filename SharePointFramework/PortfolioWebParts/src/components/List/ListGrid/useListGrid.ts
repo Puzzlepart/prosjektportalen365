@@ -6,18 +6,9 @@ import {
   useTableColumnSizing_unstable,
   useTableFeatures
 } from '@fluentui/react-components'
-import strings from 'PortfolioWebPartsStrings'
-import { fitColumnWidths, format, IListColumn } from 'pp365-shared-library'
+import { fitColumnWidths, IListColumn, nameColumnResizeHandle } from 'pp365-shared-library'
 import { useContainerWidth } from 'pp365-shared-library/lib/components/DataGridList/useContainerWidth'
-import {
-  cloneElement,
-  isValidElement,
-  ReactElement,
-  useCallback,
-  useMemo,
-  useRef,
-  useState
-} from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { IListGroup, ResizeColumn } from '../types'
 import { IListGridProps, IListGridState, ListGridEntry } from './types'
 import { useListSelection } from './useListSelection'
@@ -181,18 +172,14 @@ export function useListGrid(props: IListGridProps): IListGridState {
 
   // The handle at a header's edge, named in the page's language: Fluent names it «Resize column»
   // and its value «… pixels», in English. A screen reader reads them once «Endre kolonnebredde»
-  // in the column menu has put the focus on the handle.
+  // in the column menu has put the focus on the handle. Shared with the dynamic list's table.
   const getHeaderCellProps = (column: IListColumn) => {
-    const { aside, ...cellProps } = columnSizing.getTableHeaderCellProps(column.key)
-    if (!isValidElement(aside)) return cellProps
     const width = columnSizing.getColumnWidths().find((c) => c.columnId === column.key)?.width ?? 0
-    return {
-      ...cellProps,
-      aside: cloneElement(aside as ReactElement<Record<string, unknown>>, {
-        'aria-label': format(strings.ColumnResizeHandleLabel, column.name),
-        'aria-valuetext': format(strings.ColumnWidthValueText, Math.round(width))
-      })
-    }
+    return nameColumnResizeHandle(
+      columnSizing.getTableHeaderCellProps(column.key),
+      column.name,
+      width
+    )
   }
 
   // For the column menu: the arrow keys then change the column's width, as a drag on its header's

@@ -1,6 +1,5 @@
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import strings from 'PortfolioWebPartsStrings'
-import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import { ListGrid } from './ListGrid'
 import { IListGridProps } from './types'
@@ -136,15 +135,17 @@ describe('ListGrid', () => {
     fireEvent.click(screen.getByText('Tittel'))
     const resizeColumn = onColumnHeaderClick.mock.calls[0][2]
     const handle = document.querySelector<HTMLElement>('.fui-TableResizeHandle')
-    expect(handle).toHaveAttribute('aria-label', format(strings.ColumnResizeHandleLabel, 'Tittel'))
-    expect(handle).toHaveAttribute('aria-valuetext', format(strings.ColumnWidthValueText, 100))
+    // SharedLibraryStrings' Aria.ColumnResizeHandleLabel and Aria.ColumnWidthValueText, shared
+    // with the dynamic list's table (nameColumnResizeHandle).
+    expect(handle).toHaveAttribute('aria-label', 'Bredde på kolonnen Tittel')
+    expect(handle).toHaveAttribute('aria-valuetext', '100 piksler')
     // As the menu item's click does: the focus goes to the handle, and the arrow keys resize.
     act(() =>
       resizeColumn({ preventDefault: jest.fn(), nativeEvent: { stopPropagation: jest.fn() } })
     )
     expect(handle).toHaveFocus()
     fireEvent.keyDown(handle, { key: 'ArrowRight' })
-    expect(handle).toHaveAttribute('aria-valuetext', format(strings.ColumnWidthValueText, 120))
+    expect(handle).toHaveAttribute('aria-valuetext', '120 piksler')
   })
 
   it("gives a cell's content its column's whole width, so tags behind +n come back as it widens", () => {

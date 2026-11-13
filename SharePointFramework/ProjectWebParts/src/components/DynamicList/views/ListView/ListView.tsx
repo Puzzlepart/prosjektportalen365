@@ -26,7 +26,7 @@ import {
 import * as React from 'react'
 import { FC, useContext, useMemo, useCallback } from 'react'
 import { DynamicListContext } from '../../context'
-import { customLightTheme, UserMessage } from 'pp365-shared-library'
+import { customLightTheme, nameColumnResizeHandle, UserMessage } from 'pp365-shared-library'
 import styles from './ListView.module.scss'
 import { IListViewProps } from './types'
 import * as strings from 'ProjectWebPartsStrings'
@@ -135,6 +135,18 @@ export const ListView: FC<IListViewProps> = ({
     ]
   )
 
+  /**
+   * A column's header cell props, its resize handle named in the page's language, as the hub's
+   * lists name theirs: Fluent named it «Resize column» and its value «160 pixels», read once
+   * «Endre kolonnebredde» puts the focus on it (WCAG 3.1.2, 4.1.2).
+   */
+  const getHeaderCellProps = (column: IListViewProps['columns'][number]) =>
+    nameColumnResizeHandle(
+      columnSizingState.getTableHeaderCellProps(column.columnId),
+      String(column.renderHeaderCell?.() ?? column.columnId),
+      columnSizingState.getColumnWidths().find((c) => c.columnId === column.columnId)?.width ?? 0
+    )
+
   const rows = useMemo(() => {
     const baseRows = getRows((row) => {
       const selected = isRowSelected(row.rowId)
@@ -225,7 +237,7 @@ export const ListView: FC<IListViewProps> = ({
                   <Menu key={column.columnId} openOnContext>
                     <MenuTrigger disableButtonEnhancement>
                       <TableHeaderCell
-                        {...columnSizingState.getTableHeaderCellProps(column.columnId)}
+                        {...getHeaderCellProps(column)}
                         sortDirection={getSortDirection(column.columnId)}
                         onClick={(e) => toggleColumnSort(e, column.columnId)}
                       >

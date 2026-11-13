@@ -9,6 +9,8 @@ declare interface ISharedLibraryStrings {
   SaveText: string
   CloseText: string
   Aria: {
+    ColumnResizeHandleLabel: string
+    ColumnWidthValueText: string
     ComboboxExpandLabel: string
     InfoLabelTitle: string
     InstrumentGaugeLabel: string

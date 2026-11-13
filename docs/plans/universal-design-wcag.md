@@ -1753,3 +1753,13 @@ itself as `observer` to `add()` is disposed, as the footer does.
   the fields' columns are at most its width (`min(450px, 100%)`), and a long title breaks. CSS
   only; jsdom has no layout, and the visual browser test measures 320 px.
 - **Left.** Neither was measured in the browser after the change.
+
+### Hand round 10: the dynamic list (2026-11-12)
+
+- **Found.** The dynamic list's resize handle, once «Endre kolonnebredde» put the focus on it, was
+  named «Resize column» and its value «160 pixels»: Fluent's English. The hub's lists named
+  theirs in `ListGrid`, with strings of PortfolioWebParts the dynamic list cannot reach.
+- **Done.** `nameColumnResizeHandle` (shared-library) names the handle, with the strings moved to
+  `SharedLibraryStrings` (`Aria.ColumnResizeHandleLabel`, `Aria.ColumnWidthValueText`); `ListGrid`
+  and the dynamic list's `ListView` use it. Tests: `ListGrid.test`, `DynamicList.test`.
+- **Left.** The dynamic list's handle was not heard in a screen reader.

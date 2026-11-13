@@ -110,6 +110,7 @@ Sjekk ut [release notes](./releasenotes/1.15.0.md) for høydepunkter og mer deta
 - Paneler som lukkes med et klikk utenfor, gir fokus tilbake til knappen som åpnet dem, også prosjektinformasjonen fra prosjektkortene og porteføljelistene. «+n»-knappen for skjulte tagger åpner menyen med pil ned og heter «+1 flere elementer» [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
 - Rettet feil i `Porteføljeoversikt` og `Aggregert oversikt` for skjermlesere og tastatur: søkefeltet het bare «Søk...» og tømmeknappen «clear», «Vis eller skjul kolonner» het «BrukTilbakestill rekkefølge», fokus forlot panelet når en kolonne ble flyttet, navnene til flere personer i en celle viste seg ikke i verktøytipset, og «Slett» i bekreftelsen hadde fokus fra start. Hjelpeteksten for `Oppdater visningsmodus globalt` er rettet [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
 - Rettet feil på smale skjermer: listen i `Malpakkekatalog` krympet til nesten ingenting under 720 px, og en idé i `Idémodul` ble bredere enn skjermen ved 320 px [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
+- Kanten for kolonnebredde i `Dynamisk liste` heter nå «Bredde på kolonnen …» med verdien «… piksler» for skjermlesere, som i porteføljelistene; den het «Resize column» på engelsk [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
 
 ### Merk
 

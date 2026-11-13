@@ -6,6 +6,8 @@ define([], function () {
     SaveText: 'Lagre',
     CloseText: 'Lukk',
     Aria: {
+      ColumnResizeHandleLabel: 'Bredde på kolonnen {0}',
+      ColumnWidthValueText: '{0} piksler',
       ComboboxExpandLabel: 'Vis alternativer',
       InfoLabelTitle: 'Informasjon om {0}',
       InstrumentGaugeLabel: 'Siste måling {0}, startverdi {1}, målverdi {2}',

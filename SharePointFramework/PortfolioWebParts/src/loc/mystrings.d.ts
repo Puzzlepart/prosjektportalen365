@@ -105,13 +105,11 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderDataTypePropertiesHeaderText: string
   ColumnRenderDescription: string
   ColumnRenderLabel: string
-  ColumnResizeHandleLabel: string
   ColumnResizeLabel: string
   ColumnSettingsDisabledTooltip: string
   ColumnSettingsLabel: string
   ColumnVisibilityDescription: string
   ColumnVisibilityLabel: string
-  ColumnWidthValueText: string
   CommandBarGroupName: string
   CompactViewText: string
   ConfigItemTitleFieldDescription: string
