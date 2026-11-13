@@ -4,16 +4,28 @@
   // The zone's colour carries meaning, so a contrast theme keeps it (WCAG 1.4.1): it turned every
   // cell white. The elements in the cell keep their look with it, readable as without the theme.
   forced-color-adjust: none;
+  position: relative;
 
   &:hover {
     filter: brightness(1.1);
+  }
+
+  // The zone's level, small in the top right corner, so the colour does not tell it alone.
+  .mark {
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    font-size: var(--fontSizeBase100);
+    line-height: var(--lineHeightBase100);
+    font-weight: var(--fontWeightSemibold);
+    pointer-events: none;
   }
 
   .cell {
     padding: 10px;
     box-sizing: border-box;
 
-    // The zone in text, for screen readers; the cell's tooltip shows it.
+    // The zone's name, for screen readers; the cell's tooltip shows it, and its corner the level.
     .zone {
       position: absolute;
       width: 1px;

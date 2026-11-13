@@ -1772,3 +1772,7 @@ itself as `observer` to `add()` is disposed, as the footer does.
   window, and the texts hyphenate (`hyphens: auto`). The repo's first `@container` rule; Sass and
   the SPFx build take it as it is. Measured with the CSS injected into the test hub's page: 424 px
   at 560, two columns of 282 px at 700 and 283 px beside the project information at 1280.
+- **The matrices' zones** (round 3): the level was in hidden text and the cell's tooltip only, so
+  the colour still told it alone to the eye, and the cells take no focus. Each cell shows its
+  level in its top right corner («3», or the configured name), in black or white as reads on its
+  colour (`getReadableTextColor`), hidden from screen readers, which read the name.

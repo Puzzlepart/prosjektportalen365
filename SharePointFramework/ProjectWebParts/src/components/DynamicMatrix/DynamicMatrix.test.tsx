@@ -63,13 +63,25 @@ function colouredConfiguration(zone?: string) {
 describe('getMatrixZones', () => {
   it("names each cell's zone by the rank of its colour, from the lowest probability times consequence", () => {
     const zones = getMatrixZones(colouredConfiguration())
-    expect(zones.get('1,1')).toBe(format(strings.Aria.MatrixZoneLabel, 1, 3))
-    expect(zones.get('2,2')).toBe(format(strings.Aria.MatrixZoneLabel, 2, 3))
-    expect(zones.get('3,3')).toBe(format(strings.Aria.MatrixZoneLabel, 3, 3))
+    expect(zones.get('1,1')).toEqual({
+      name: format(strings.Aria.MatrixZoneLabel, 1, 3),
+      mark: '1'
+    })
+    expect(zones.get('2,2')).toEqual({
+      name: format(strings.Aria.MatrixZoneLabel, 2, 3),
+      mark: '2'
+    })
+    expect(zones.get('3,3')).toEqual({
+      name: format(strings.Aria.MatrixZoneLabel, 3, 3),
+      mark: '3'
+    })
   })
 
-  it('takes the name the configuration gives a cell', () => {
-    expect(getMatrixZones(colouredConfiguration('Kritisk')).get('3,3')).toBe('Kritisk')
+  it('takes the name the configuration gives a cell, and shows it', () => {
+    expect(getMatrixZones(colouredConfiguration('Kritisk')).get('3,3')).toEqual({
+      name: 'Kritisk',
+      mark: 'Kritisk'
+    })
   })
 })
 
@@ -89,6 +101,11 @@ describe('DynamicMatrix', () => {
     expect(cells[2]).toHaveTextContent(format(strings.Aria.MatrixZoneLabel, 3, 3))
     expect(cells[2]).toHaveAttribute('title', format(strings.Aria.MatrixZoneLabel, 3, 3))
     expect(cells[6]).toHaveTextContent(format(strings.Aria.MatrixZoneLabel, 1, 3))
+    // The level is shown too, in a corner, in black or white as reads on the colour; a screen
+    // reader reads the name instead (WCAG 1.4.1).
+    const mark = cells[2].querySelector('[aria-hidden="true"]')
+    expect(mark).toHaveTextContent(/^3$/)
+    expect(mark).toHaveStyle({ color: '#242424' })
   })
 
   it('draws the headers and places the elements in their cells', () => {
