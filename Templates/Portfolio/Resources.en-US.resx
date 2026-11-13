@@ -1303,6 +1303,9 @@
   <data name="Lists_Global_Settings_Category_General_ShowFooter_Title" xml:space="preserve">
     <value>Show/hide footer in Project Portal</value>
   </data>
+  <data name="Lists_Global_Settings_Category_General_UsageStatisticsLevel_Title" xml:space="preserve">
+    <value>Usage statistics sent to the Prosjektportalen team (0 = off, 1 = basic, 2 = standard, 3 = extended)</value>
+  </data>
   <data name="Lists_Global_Settings_Category_OpportunityMatrix" xml:space="preserve">
     <value>Opportunity Matrix</value>
   </data>

@@ -210,6 +210,14 @@
       <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
       <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_Assistant}</pnp:DataValue>
     </pnp:DataRow>
+    <pnp:DataRow>
+      <pnp:DataValue FieldName="GtSettingsId">{b4d62fcd-26ac-4bc3-aeb8-c7d5e4503248}</pnp:DataValue>
+      <pnp:DataValue FieldName="Title">{resource:Lists_Global_Settings_Category_General_UsageStatisticsLevel_Title}</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsKey">UsageStatisticsLevel</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsValue">2</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+      <pnp:DataValue FieldName="GtSettingsCategory">{resource:Lists_Global_Settings_Category_General}</pnp:DataValue>
+    </pnp:DataRow>
   </pnp:DataRows>
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/MinimumReadSecurity.xml" />
 </pnp:ListInstance>

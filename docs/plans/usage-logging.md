@@ -2586,3 +2586,72 @@ _Each slice adds its entry below._
     opens again. A message bar can be scrolled out of view in a low window, but is announced.
   - The new texts were not proofread with the other 1.15.0 texts, and nothing was checked in a
     browser or with a screen reader.
+
+### Slice 3: setting, install and upgrade (2026-11-13)
+
+- Done:
+  - The level row in `Globale innstillinger.xml`, appended after `AssistantAccessMode`: key
+    `UsageStatisticsLevel`, seeded `2`, category General, `GtSettingsId`
+    `{b4d62fcd-26ac-4bc3-aeb8-c7d5e4503248}`, generated once with `[guid]::NewGuid()`. The id is
+    `$UsageStatisticsLevelSettingId` in `Install/Scripts/SharedFunctions.ps1` and
+    `USAGE_STATISTICS_LEVEL_SETTING_ID` in `integration/tests/template.test.ts`.
+  - The title key `Lists_Global_Settings_Category_General_UsageStatisticsLevel_Title`, on line
+    1306 of both resx files, after `..._General_ShowFooter_Title`, with the plan's texts.
+  - `SharedFunctions.ps1`, in a region of its own:
+    - pure: `Convert-UsageStatisticsLevel`, `Test-SameGuid`, `Test-TelemetryUrlOptOut`,
+      `Resolve-InitialUsageStatisticsLevel` (P7), `Get-EffectiveUsageStatisticsLevel` (mirrors
+      `resolveTelemetryGate`: enabled rows by their exact key, the row read last, trimmed values)
+      and `Format-UsageStatisticsSummary`;
+    - on the hub: `Test-CatalogTelemetryUrlDisabled`, `Get-UsageStatisticsRows`,
+      `Get-LastInstalledVersion`, `Initialize-UsageStatisticsSetting`, `Set-UsageStatisticsLevel`,
+      `Write-ExplicitUsageStatisticsLevel` and `Write-UsageStatisticsSummary`.
+  - `PreInstallUpgrade.ps1` ends with the step, outside the version block: on every upgrade,
+    `-SkipTemplate` included, with no try/catch.
+  - `Install.ps1`:
+    - `-UsageStatisticsLevel` (`Off`, `Basic`, `Standard`, `Extended`), and
+      `$UsageStatisticsLevelGiven` before any dot-sourcing;
+    - the banner line and the wiki link;
+    - the step before the Portfolio template on runs without `-Upgrade`;
+    - the explicit write right after the Portfolio template in both branches, and in the
+      template's place under `-SkipTemplate`;
+    - the summary region after PostInstallUpgrade.
+    `-SkipPingback`'s help names the other switch, and the pingback is unchanged.
+  - `.tasks/usage-statistics-level.test.js` with `.tasks/fixtures/usage-statistics-level.json`:
+    49 scenarios over the pure functions in one pwsh process, skipped where pwsh is missing.
+  - `integration/tests/template.test.ts` reads the row: the template's id and a value from 0 to
+    3. It is not gated on the templates, as the step runs under `-SkipTemplate` too.
+  - A line under `### Ny funksjonalitet` in `CHANGELOG.md`, and the pp365-templates skill: the
+    step before the template, and the pwsh test.
+- Differs from the plan:
+  - `Set-UsageStatisticsLevel` writes the last row with the key when no row has the template's
+    id, rather than adding a second row with the key: the browsers read the last one.
+  - Rule 5's version is one constant, `$UsageStatisticsLevelSinceVersion`, set to 1.15.0 (Found).
+  - The summary's pingback line says "sent at the end of this run": the summary comes first.
+  - `Get-Help ./Install/Install.ps1` lists the parameter in the syntax. `Get-Help -Parameter`
+    finds none of the script's parameters, as it has no comment-based help, as before.
+- Verified:
+  - `npm run test:tasks`: 96 tests, 0 failures, 49 of them new.
+  - The three scripts parse (`[Parser]::ParseFile`); the parameter has the four values.
+  - `cd Templates && npm run build && npm run validate-loc`: 1481 shared keys, none missing from
+    either bundle, and `pnp-missing-resource-tokens-report.json` empty. The six `-validation.md`
+    files changed only their version line (1.14.0 to 1.15.0, from the root package), and were put
+    back.
+  - `tsc --noEmit` in `integration`, Prettier with the repository's settings, and
+    `npm run check-skills`.
+- Found:
+  - Main was bumped to 1.15.0 before this feature was merged, so the dev and test hubs log 1.15.0
+    without ever having had the row. Rule 5 gives them 0 on their first upgrade with this code,
+    and "Builds log 1.14.0 until the bump" (P7) no longer holds. Customer hubs on 1.14.x get 2 if
+    usage statistics ship in 1.15.0. If they ship in a later release,
+    `$UsageStatisticsLevelSinceVersion` must be that release, or every hub upgraded to 1.15.0
+    starts at 0.
+- Left:
+  - Nothing ran against a tenant: that `Get-PnPList` returns nothing for a missing list (assumed,
+    as the plan does), that `Get-PnPCustomAction -Scope Web` loads
+    `ClientSideComponentProperties`, the add, the write and the summary. Slice 13 runs the paths
+    on a hub.
+  - `ParseVersionString` asks on the console when the newest installation log entry has no valid
+    version, and runs without `-Upgrade` over an existing hub now read the log too.
+  - The wiki page Bruksstatistikk that the banner and the summary link to does not exist yet, and
+    the changelog line has no release notes section (slice 12).
+  - No workflow passes the parameter, as planned.

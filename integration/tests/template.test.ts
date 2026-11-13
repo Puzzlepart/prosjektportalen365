@@ -22,6 +22,12 @@ const MATRIX_DATA_SOURCES = {
 const PROJECT_LOG_PRODUCT = 'GtProjectLogProductLookup'
 
 /**
+ * The `GtSettingsId` of the usage statistics level row in Globale innstillinger, as the Portfolio
+ * template seeds it and `Install/Scripts/SharedFunctions.ps1` adds it.
+ */
+const USAGE_STATISTICS_LEVEL_SETTING_ID = 'b4d62fcd-26ac-4bc3-aeb8-c7d5e4503248'
+
+/**
  * The list a lookup's schema XML points at, as a bare lower-case id, or the attribute as it is.
  *
  * @param schemaXml The field's schema XML
@@ -80,6 +86,30 @@ describe("the upgrade's result", { skip: skipReason('hubUrl', 'projectUrl') }, (
       `the newest stamped installation is ${entry.InstallVersion}, not this run's commit ${env.commit.slice(0, 7)}`
     )
     assert.equal(entry.InstallChannel, 'test')
+  })
+
+  it('gives the hub its usage statistics level row, with the template id and a level from 0 to 3', async () => {
+    // Every upgrade adds a missing row before the template, `-SkipTemplate` included, so this holds
+    // after an upgrade of the apps only too. The value is the hub's own: no run writes it.
+    const rows = await hub.sp.web.lists
+      .getByTitle(resources.Lists_Global_Settings_Title)
+      .items.select('Id', 'GtSettingsId', 'GtSettingsKey', 'GtSettingsValue')
+      .filter("GtSettingsKey eq 'UsageStatisticsLevel'")<
+      Array<{ GtSettingsId: string; GtSettingsKey: string; GtSettingsValue: string }>
+    >()
+    const row = rows.find(
+      (candidate) =>
+        candidate.GtSettingsId?.replace(/[{}]/g, '').toLowerCase() ===
+        USAGE_STATISTICS_LEVEL_SETTING_ID
+    )
+    assert.ok(
+      row,
+      `no UsageStatisticsLevel row with the id ${USAGE_STATISTICS_LEVEL_SETTING_ID}: ${rows.map((r) => r.GtSettingsId).join(', ') || 'none'}`
+    )
+    assert.ok(
+      ['0', '1', '2', '3'].includes(row.GtSettingsValue?.trim()),
+      `UsageStatisticsLevel is '${row.GtSettingsValue}', not 0, 1, 2 or 3`
+    )
   })
 
   it(

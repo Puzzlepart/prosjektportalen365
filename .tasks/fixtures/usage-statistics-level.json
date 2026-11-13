@@ -1,0 +1,326 @@
+{
+    "resolve": [
+        {
+            "name": "an explicit level wins over every opt-out",
+            "explicitLevel": "Extended",
+            "telemetryUrlDisabled": true,
+            "catalogRows": [{ "key": "CatalogTelemetryEnabled", "value": "0", "enabled": true }],
+            "previousVersion": "1.15.0",
+            "expected": { "value": 3, "reason": "explicit" }
+        },
+        {
+            "name": "an explicit Off gives 0",
+            "explicitLevel": "Off",
+            "telemetryUrlDisabled": false,
+            "catalogRows": [{ "key": "CatalogTelemetryEnabled", "value": "1", "enabled": true }],
+            "previousVersion": "1.14.0",
+            "expected": { "value": 0, "reason": "explicit" }
+        },
+        {
+            "name": "the catalog's empty telemetryUrl is carried over as 0",
+            "explicitLevel": null,
+            "telemetryUrlDisabled": true,
+            "catalogRows": [{ "key": "CatalogTelemetryEnabled", "value": "1", "enabled": true }],
+            "previousVersion": "1.14.0",
+            "expected": { "value": 0, "reason": "telemetry-url-opt-out" }
+        },
+        {
+            "name": "an unticked CatalogTelemetryEnabled row is carried over as 0",
+            "explicitLevel": null,
+            "telemetryUrlDisabled": false,
+            "catalogRows": [{ "key": "CatalogTelemetryEnabled", "value": "1", "enabled": false }],
+            "previousVersion": "1.14.0",
+            "expected": { "value": 0, "reason": "catalog-opt-out" }
+        },
+        {
+            "name": "CatalogTelemetryEnabled set to 0 is carried over as 0",
+            "explicitLevel": null,
+            "telemetryUrlDisabled": false,
+            "catalogRows": [{ "key": "CatalogTelemetryEnabled", "value": "0", "enabled": true }],
+            "previousVersion": "1.14.0",
+            "expected": { "value": 0, "reason": "catalog-opt-out" }
+        },
+        {
+            "name": "any CatalogTelemetryEnabled value but exactly 1 shows intent, and gives 0",
+            "explicitLevel": null,
+            "telemetryUrlDisabled": false,
+            "catalogRows": [{ "key": "CatalogTelemetryEnabled", "value": "nei", "enabled": true }],
+            "previousVersion": "1.14.0",
+            "expected": { "value": 0, "reason": "catalog-opt-out" }
+        },
+        {
+            "name": "one CatalogTelemetryEnabled row turned off among others gives 0",
+            "explicitLevel": null,
+            "telemetryUrlDisabled": false,
+            "catalogRows": [
+                { "key": "CatalogTelemetryEnabled", "value": "1", "enabled": true },
+                { "key": "CatalogTelemetryEnabled", "value": "1", "enabled": false }
+            ],
+            "previousVersion": "1.14.0",
+            "expected": { "value": 0, "reason": "catalog-opt-out" }
+        },
+        {
+            "name": "CatalogTelemetryEnabled 1 with whitespace around it is the default",
+            "explicitLevel": null,
+            "telemetryUrlDisabled": false,
+            "catalogRows": [{ "key": "CatalogTelemetryEnabled", "value": " 1 ", "enabled": true }],
+            "previousVersion": "1.14.0",
+            "expected": { "value": 2, "reason": "default" }
+        },
+        {
+            "name": "no CatalogTelemetryEnabled row on a hub at 1.14.0 means it was deleted, and gives 0",
+            "explicitLevel": null,
+            "telemetryUrlDisabled": false,
+            "catalogRows": [],
+            "previousVersion": "1.14.0",
+            "expected": { "value": 0, "reason": "catalog-deleted" }
+        },
+        {
+            "name": "no CatalogTelemetryEnabled row on a hub before 1.14.0 is the default",
+            "explicitLevel": null,
+            "telemetryUrlDisabled": false,
+            "catalogRows": [],
+            "previousVersion": "1.13.2",
+            "expected": { "value": 2, "reason": "default" }
+        },
+        {
+            "name": "no CatalogTelemetryEnabled row and no known version is the default",
+            "explicitLevel": null,
+            "telemetryUrlDisabled": false,
+            "catalogRows": [],
+            "previousVersion": null,
+            "expected": { "value": 2, "reason": "default" }
+        },
+        {
+            "name": "a hub at 1.15.0 without the level row had it deleted, and gets 0",
+            "explicitLevel": null,
+            "telemetryUrlDisabled": false,
+            "catalogRows": [{ "key": "CatalogTelemetryEnabled", "value": "1", "enabled": true }],
+            "previousVersion": "1.15.0",
+            "expected": { "value": 0, "reason": "level-deleted" }
+        },
+        {
+            "name": "a later version, with the build's fourth part, counts as 1.15.0 or later",
+            "explicitLevel": null,
+            "telemetryUrlDisabled": false,
+            "catalogRows": [{ "key": "CatalogTelemetryEnabled", "value": "1", "enabled": true }],
+            "previousVersion": "1.16.1.42",
+            "expected": { "value": 0, "reason": "level-deleted" }
+        },
+        {
+            "name": "a hub at 1.14.0 with the catalog on gets the default, as the test hubs do until the bump",
+            "explicitLevel": null,
+            "telemetryUrlDisabled": false,
+            "catalogRows": [{ "key": "CatalogTelemetryEnabled", "value": "1", "enabled": true }],
+            "previousVersion": "1.14.0",
+            "expected": { "value": 2, "reason": "default" }
+        }
+    ],
+    "effective": [
+        {
+            "name": "the level row as set, with the catalog on",
+            "rows": [
+                { "key": "CatalogTelemetryEnabled", "value": "1", "enabled": true },
+                { "key": "UsageStatisticsLevel", "value": "2", "enabled": true }
+            ],
+            "expected": { "level": 2, "reason": "setting", "catalog": true, "assistant": false }
+        },
+        {
+            "name": "a value with whitespace around it, as the browsers trim it",
+            "rows": [
+                { "key": "CatalogTelemetryEnabled", "value": "1", "enabled": true },
+                { "key": "UsageStatisticsLevel", "value": " 3 ", "enabled": true }
+            ],
+            "expected": { "level": 3, "reason": "setting", "catalog": true, "assistant": false }
+        },
+        {
+            "name": "level 1 sends no catalog events",
+            "rows": [
+                { "key": "CatalogTelemetryEnabled", "value": "1", "enabled": true },
+                { "key": "UsageStatisticsLevel", "value": "1", "enabled": true }
+            ],
+            "expected": { "level": 1, "reason": "setting", "catalog": false, "assistant": false }
+        },
+        {
+            "name": "CatalogTelemetryEnabled 0 stops everything",
+            "rows": [
+                { "key": "CatalogTelemetryEnabled", "value": "0", "enabled": true },
+                { "key": "UsageStatisticsLevel", "value": "2", "enabled": true }
+            ],
+            "expected": { "level": 0, "reason": "catalog-opt-out", "catalog": false, "assistant": false }
+        },
+        {
+            "name": "a disabled CatalogTelemetryEnabled row is not read: the level stands, without catalog events",
+            "rows": [
+                { "key": "CatalogTelemetryEnabled", "value": "0", "enabled": false },
+                { "key": "UsageStatisticsLevel", "value": "2", "enabled": true }
+            ],
+            "expected": { "level": 2, "reason": "setting", "catalog": false, "assistant": false }
+        },
+        {
+            "name": "only exactly 0 stops everything: another catalog value only stops catalog events",
+            "rows": [
+                { "key": "CatalogTelemetryEnabled", "value": "nei", "enabled": true },
+                { "key": "UsageStatisticsLevel", "value": "2", "enabled": true }
+            ],
+            "expected": { "level": 2, "reason": "setting", "catalog": false, "assistant": false }
+        },
+        {
+            "name": "no level row gives 0",
+            "rows": [{ "key": "CatalogTelemetryEnabled", "value": "1", "enabled": true }],
+            "expected": { "level": 0, "reason": "level-missing", "catalog": false, "assistant": false }
+        },
+        {
+            "name": "a disabled level row gives 0",
+            "rows": [
+                { "key": "CatalogTelemetryEnabled", "value": "1", "enabled": true },
+                { "key": "UsageStatisticsLevel", "value": "2", "enabled": false }
+            ],
+            "expected": { "level": 0, "reason": "level-disabled", "catalog": false, "assistant": false }
+        },
+        {
+            "name": "a level written as a name is not recognised, and gives 0",
+            "rows": [{ "key": "UsageStatisticsLevel", "value": "Standard", "enabled": true }],
+            "expected": { "level": 0, "reason": "invalid-level", "catalog": false, "assistant": false }
+        },
+        {
+            "name": "an empty level is not recognised, and gives 0",
+            "rows": [{ "key": "UsageStatisticsLevel", "value": "", "enabled": true }],
+            "expected": { "level": 0, "reason": "invalid-level", "catalog": false, "assistant": false }
+        },
+        {
+            "name": "a key in another case is another key to the browsers, so the level row is missing",
+            "rows": [{ "key": "usagestatisticslevel", "value": "2", "enabled": true }],
+            "expected": { "level": 0, "reason": "level-missing", "catalog": false, "assistant": false }
+        },
+        {
+            "name": "a duplicated key takes the row read last",
+            "rows": [
+                { "key": "UsageStatisticsLevel", "value": "3", "enabled": true },
+                { "key": "UsageStatisticsLevel", "value": "0", "enabled": true }
+            ],
+            "expected": { "level": 0, "reason": "setting", "catalog": false, "assistant": false }
+        },
+        {
+            "name": "a disabled duplicate read last is not read",
+            "rows": [
+                { "key": "UsageStatisticsLevel", "value": "0", "enabled": true },
+                { "key": "UsageStatisticsLevel", "value": "3", "enabled": false }
+            ],
+            "expected": { "level": 0, "reason": "setting", "catalog": false, "assistant": false }
+        },
+        {
+            "name": "UseAssistant 1 is told",
+            "rows": [
+                { "key": "UsageStatisticsLevel", "value": "2", "enabled": true },
+                { "key": "UseAssistant", "value": "1", "enabled": true }
+            ],
+            "expected": { "level": 2, "reason": "setting", "catalog": false, "assistant": true }
+        }
+    ],
+    "telemetryUrl": [
+        { "name": "no properties", "properties": "", "expected": false },
+        { "name": "the catalog's defaults", "properties": "{}", "expected": false },
+        { "name": "an empty telemetryUrl", "properties": "{\"telemetryUrl\":\"\"}", "expected": true },
+        { "name": "an empty telemetryUrl among other properties", "properties": "{\"catalogUrl\": \"https://example.org/catalog.json\", \"telemetryUrl\": \"\"}", "expected": true },
+        { "name": "a telemetryUrl of its own", "properties": "{\"telemetryUrl\":\"https://example.org/api/telemetry\"}", "expected": false },
+        { "name": "a telemetryUrl of null", "properties": "{\"telemetryUrl\":null}", "expected": false },
+        { "name": "another property in another case", "properties": "{\"TelemetryUrl\":\"\"}", "expected": false },
+        { "name": "properties that are not JSON, searched as text", "properties": "{\"telemetryUrl\": \"\", ", "expected": true }
+    ],
+    "convert": [
+        { "name": "Off", "level": "Off", "expected": 0 },
+        { "name": "a name in another case", "level": "extended", "expected": 3 },
+        { "name": "a value as a text", "level": "2", "expected": "Standard" },
+        { "name": "a value as a number", "level": 1, "expected": "Basic" },
+        { "name": "neither", "level": "Maximal", "expected": "error" }
+    ],
+    "summary": [
+        {
+            "name": "Standard, with catalog events and the pingback",
+            "rows": [
+                { "key": "CatalogTelemetryEnabled", "value": "1", "enabled": true },
+                { "key": "UsageStatisticsLevel", "value": "2", "enabled": true }
+            ],
+            "pingbackSent": true,
+            "includes": [
+                "[INFO] Usage statistics (bruksstatistikk): Standard (2)",
+                "as counts per day.",
+                "[INFO]   Never sent: users, names, e-mail addresses, content, or the addresses of project sites.",
+                "[INFO]   Change it in 'Globale innstillinger' on the hub: UsageStatisticsLevel (0 = off, 1 = basic,",
+                "[INFO]   Template catalog events (CatalogTelemetryEnabled): on",
+                "[INFO] Installation pingback (a separate flow): sent at the end of this run"
+            ],
+            "excludes": ["error codes", "PP Assistenten", "[WARNING]"]
+        },
+        {
+            "name": "Extended tells of error codes and load times",
+            "rows": [{ "key": "UsageStatisticsLevel", "value": "3", "enabled": true }],
+            "pingbackSent": true,
+            "includes": [
+                "[INFO] Usage statistics (bruksstatistikk): Extended (3)",
+                "plus error codes and load times for troubleshooting.",
+                "[INFO]   Template catalog events (CatalogTelemetryEnabled): off"
+            ],
+            "excludes": []
+        },
+        {
+            "name": "Basic tells of the heartbeat only",
+            "rows": [{ "key": "UsageStatisticsLevel", "value": "1", "enabled": true }],
+            "pingbackSent": false,
+            "includes": [
+                "[INFO] Usage statistics (bruksstatistikk): Basic (1)",
+                "sent when a hub owner",
+                "[INFO] Installation pingback (a separate flow): not sent (-SkipPingback)"
+            ],
+            "excludes": ["counts per day", "error codes"]
+        },
+        {
+            "name": "Off by the catalog stop says why, and how to use the level",
+            "rows": [
+                { "key": "CatalogTelemetryEnabled", "value": "0", "enabled": true },
+                { "key": "UsageStatisticsLevel", "value": "2", "enabled": true }
+            ],
+            "pingbackSent": true,
+            "includes": [
+                "Off (0): no usage statistics are sent to the Prosjektportalen team (CatalogTelemetryEnabled is 0, which turns all usage statistics off; set it to 1 to use the level)"
+            ],
+            "excludes": ["Never sent", "Standard (2)"]
+        },
+        {
+            "name": "Off without a level row says so",
+            "rows": [],
+            "pingbackSent": true,
+            "includes": ["Off (0): no usage statistics are sent to the Prosjektportalen team (there is no UsageStatisticsLevel row)"],
+            "excludes": []
+        },
+        {
+            "name": "a level not recognised is quoted",
+            "rows": [{ "key": "UsageStatisticsLevel", "value": "Standard", "enabled": true }],
+            "pingbackSent": true,
+            "includes": ["(UsageStatisticsLevel is 'Standard', which is not 0, 1, 2 or 3)"],
+            "excludes": []
+        },
+        {
+            "name": "UseAssistant on points to the assistant's own telemetry",
+            "rows": [
+                { "key": "UsageStatisticsLevel", "value": "2", "enabled": true },
+                { "key": "UseAssistant", "value": "1", "enabled": true }
+            ],
+            "pingbackSent": true,
+            "includes": ["[INFO]   PP Assistenten has its own telemetry; see Sikkerhet i PP Assistenten."],
+            "excludes": []
+        },
+        {
+            "name": "rows it could not read: it names the list, and tells no level",
+            "unread": true,
+            "readError": "Access denied",
+            "pingbackSent": true,
+            "includes": [
+                "[WARNING] Usage statistics (bruksstatistikk): could not read 'Globale innstillinger' on the hub, so the level is not known here: Access denied",
+                "[INFO] Installation pingback (a separate flow): sent at the end of this run"
+            ],
+            "excludes": ["Off (0)", "Standard (2)", "Template catalog events"]
+        }
+    ]
+}

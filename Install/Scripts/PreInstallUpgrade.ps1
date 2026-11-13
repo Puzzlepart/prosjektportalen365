@@ -425,3 +425,19 @@ if ($null -ne $LastInstall) {
             }
     }
 }
+
+# Usage statistics (bruksstatistikk): a hub without the UsageStatisticsLevel row gets it here, before
+# the apps and the template, with an earlier opt-out carried over as 0 (P7 in
+# docs/plans/usage-logging.md). Only a step before the template can tell an opt-out from a default:
+# the template's Skip re-adds a deleted CatalogTelemetryEnabled row as 1, and would add this row as 2.
+# It runs on every upgrade, -SkipTemplate included, and never changes an existing row. Nothing is
+# caught: an error ends the upgrade before the apps and the template, and never opts a hub in.
+$UsageStatisticsSetting = Initialize-UsageStatisticsSetting `
+    -ExplicitLevel $(if ($UsageStatisticsLevelGiven) { $UsageStatisticsLevel } else { '' }) `
+    -PreviousVersion $PreviousVersion
+if ($UsageStatisticsSetting.Outcome -eq 'Added') {
+    Write-Host "[INFO] Usage statistics: added UsageStatisticsLevel = $($UsageStatisticsSetting.Value) ($($UsageStatisticsSetting.Text))"
+}
+elseif ($UsageStatisticsSetting.Outcome -eq 'NoList') {
+    Write-Host "[INFO] Usage statistics: '$(Get-Resource -Name "Lists_Global_Settings_Title")' does not exist yet; the template creates it with UsageStatisticsLevel = 2"
+}

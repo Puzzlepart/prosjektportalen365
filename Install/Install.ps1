@@ -45,9 +45,15 @@ Param(
     [string]$CertificateBase64Encoded,
     [Parameter(Mandatory = $false, HelpMessage = "Which handlers to exclude when performing an upgrade")]
     [string[]]$UpgradeExcludeHandlers = @("Navigation", "SupportedUILanguages", "Files"),
-    [Parameter(Mandatory = $false, HelpMessage = "Do not send the installation pingback (URL, version, channel, time and parameter names) to the Prosjektportalen team")]
-    [switch]$SkipPingback
+    [Parameter(Mandatory = $false, HelpMessage = "Do not send the installation pingback (URL, version, channel, time and parameter names) to the Prosjektportalen team. Usage statistics have their own switch, -UsageStatisticsLevel")]
+    [switch]$SkipPingback,
+    [Parameter(Mandatory = $false, HelpMessage = "Usage statistics sent to the Prosjektportalen team: Off, Basic, Standard or Extended. Writes UsageStatisticsLevel in Globale innstillinger. Without it, a new installation gets Standard and an upgrade keeps the hub's level")]
+    [ValidateSet('Off', 'Basic', 'Standard', 'Extended')]
+    [string]$UsageStatisticsLevel
 )
+
+# Before any dot-sourcing: the scripts read it to tell an explicit level from none.
+$UsageStatisticsLevelGiven = $PSBoundParameters.ContainsKey('UsageStatisticsLevel')
 
 . "$PSScriptRoot/Scripts/SharedFunctions.ps1"
 
@@ -112,7 +118,18 @@ if ($Language -ne "Norwegian") {
 if ($CI.IsPresent) {
     Write-Host "### Running in Continuous Integration mode ####" -ForegroundColor Cyan
 }
+$UsageStatisticsBanner = if ($UsageStatisticsLevelGiven) {
+    "$UsageStatisticsLevel ($(Convert-UsageStatisticsLevel -Level $UsageStatisticsLevel)) (from -UsageStatisticsLevel)"
+}
+elseif ($Upgrade.IsPresent) {
+    "kept as set on the hub"
+}
+else {
+    "Standard (2)"
+}
+Write-Host "### Usage statistics: $UsageStatisticsBanner ####" -ForegroundColor Cyan
 Write-Host "########################################################" -ForegroundColor Cyan
+Write-Host "[INFO] What is sent, and how to turn it off: https://github.com/Puzzlepart/prosjektportalen365/wiki/Bruksstatistikk"
 
 
 if ($CI.IsPresent -and $null -eq (Get-Module -Name PnP.PowerShell)) {
@@ -516,6 +533,11 @@ if (-not $SkipTemplate.IsPresent) {
             }
             EndAction
 
+            # An explicit level is written once the template has run, and nothing else writes it.
+            if ($UsageStatisticsLevelGiven) {
+                Write-ExplicitUsageStatisticsLevel -Level $UsageStatisticsLevel
+            }
+
             # Ved oppgradering kjøres innholdsmalen kun med Files-handleren, slik at
             # virksomhetens listedata ikke røres. DataRows i innholdsmalen provisjoneres
             # dermed IKKE her — nye lister som skal fylles ved oppgradering (f.eks. v6-hub-
@@ -531,6 +553,17 @@ if (-not $SkipTemplate.IsPresent) {
             }
         }
         else {
+            # Usage statistics: on an existing hub, a missing UsageStatisticsLevel row is added before
+            # the template's Skip re-adds a deleted CatalogTelemetryEnabled row as 1 and seeds the
+            # level row as 2, so an earlier opt-out is carried over (P7). A new hub has no list yet,
+            # and the template creates it with the row at 2.
+            $UsageStatisticsSetting = Initialize-UsageStatisticsSetting `
+                -ExplicitLevel $(if ($UsageStatisticsLevelGiven) { $UsageStatisticsLevel } else { '' }) `
+                -PreviousVersion (Get-LastInstalledVersion)
+            if ($UsageStatisticsSetting.Outcome -eq 'Added') {
+                Write-Host "[INFO] Usage statistics: added UsageStatisticsLevel = $($UsageStatisticsSetting.Value) ($($UsageStatisticsSetting.Text))"
+            }
+
             StartAction -Action "Applying PnP template Portfolio to $($Uri.AbsoluteUri)"
             $Instance = Read-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp"
             if ($null -ne $Instance.SupportedUILanguages -and $Instance.SupportedUILanguages.Count -gt 0) {
@@ -560,6 +593,11 @@ if (-not $SkipTemplate.IsPresent) {
             }
             EndAction
 
+            # An explicit level is written once the template has run, and nothing else writes it.
+            if ($UsageStatisticsLevelGiven) {
+                Write-ExplicitUsageStatisticsLevel -Level $UsageStatisticsLevel
+            }
+
             if (Test-Path "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp") {
                 $null = Invoke-SiteTemplateSafely `
                     -TemplatePath "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" `
@@ -583,6 +621,11 @@ if (-not $SkipTemplate.IsPresent) {
             Write-ErrorDetails $_
         }
     }
+}
+elseif ($UsageStatisticsLevelGiven) {
+    # Without the template an explicit level is written all the same, in the template step's place.
+    Connect-SharePoint -Url $Uri.AbsoluteUri -ConnectionInfo $ConnectionInfo
+    Write-ExplicitUsageStatisticsLevel -Level $UsageStatisticsLevel
 }
 #endregion
 
@@ -635,7 +678,21 @@ if ($Upgrade.IsPresent) {
         Write-ErrorDetails $_
     }
 }
+#endregion
 
+#region Usage statistics summary
+# Writes nothing: it reads the hub's rows and tells the level they give, never one it has not read.
+try {
+    Connect-SharePoint -Url $Uri.AbsoluteUri -ConnectionInfo $ConnectionInfo
+    Write-UsageStatisticsSummary -PingbackSent (-not $SkipPingback.IsPresent)
+}
+catch {
+    Write-Host "[WARNING] Failed to write the usage statistics summary: $($_.Exception.Message)" -ForegroundColor Yellow
+    Write-ErrorDetails $_
+}
+#endregion
+
+#region Completion
 $sw.Stop()
 Stop-PnPTraceLog -StopFileLogging
 
