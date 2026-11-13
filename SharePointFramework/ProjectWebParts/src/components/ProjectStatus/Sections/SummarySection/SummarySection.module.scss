@@ -31,6 +31,8 @@ $status-min-width: 400px;
     flex: 1 1 $status-min-width;
     min-width: 0;
     padding: 0 $gutter;
+    // Its own width decides how many statuses go to a line (the @container rule below).
+    container-type: inline-size;
 
     @media (min-width: $xl) {
       max-width: 66.6667%;
@@ -63,12 +65,6 @@ $status-min-width: 400px;
           &.halfWidth {
             flex: 0 0 50%;
             max-width: 50%;
-
-            // One status to a line on a narrow screen: two were about 120 px each at 320 px.
-            @media (max-width: 480px) {
-              flex-basis: 100%;
-              max-width: 100%;
-            }
           }
 
           &.iconsOnly {
@@ -89,5 +85,17 @@ $status-min-width: 400px;
       width: 100%;
       max-width: none;
     }
+  }
+}
+
+// One status to a line where the status has 520 px or less, whatever the window: two columns of
+// about 205 px broke long words mid-word («overskridels-er», «Nytteoppnæl-se») at 560 px and 800
+// px, and of about 120 px at 320 px (WCAG 1.4.10). Two columns stay from about 260 px each, as
+// beside the project information at 1280 px (283 px). The selector matches the nested rule it
+// overrides.
+@container (max-width: 520px) {
+  .summarySection .statusElements .container .row .statusElement.halfWidth {
+    flex-basis: 100%;
+    max-width: 100%;
   }
 }

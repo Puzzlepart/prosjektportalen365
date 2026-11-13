@@ -3,6 +3,9 @@
   flex-direction: column;
   gap: 4px;
   min-width: 0;
+  // A word too long for its line breaks at a syllable, with a hyphen, in the page's language
+  // (SharePoint sets `lang` on the page), before `overflow-wrap` breaks it anywhere.
+  hyphens: auto;
 
   .header {
     display: flex;

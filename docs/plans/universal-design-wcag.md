@@ -1763,3 +1763,12 @@ itself as `observer` to `add()` is disposed, as the footer does.
   `SharedLibraryStrings` (`Aria.ColumnResizeHandleLabel`, `Aria.ColumnWidthValueText`); `ListGrid`
   and the dynamic list's `ListView` use it. Tests: `ListGrid.test`, `DynamicList.test`.
 - **Left.** The dynamic list's handle was not heard in a screen reader.
+
+### Follow-ups from the browser check (2026-11-13)
+
+- **The status page's summary** (round 2): stacked, but at about 560 px the statuses still sat in
+  two 205 px columns, and long words broke mid-word. The status part is a size container now
+  (`container-type: inline-size`): at 520 px or less each status takes a line, whatever the
+  window, and the texts hyphenate (`hyphens: auto`). The repo's first `@container` rule; Sass and
+  the SPFx build take it as it is. Measured with the CSS injected into the test hub's page: 424 px
+  at 560, two columns of 282 px at 700 and 283 px beside the project information at 1280.
