@@ -24,6 +24,8 @@
 
 [[load:.development-guide/spfx/utviklingsmiljo.md]]
 
+[[load:.development-guide/spfx/testarkitektur.md]]
+
 [[load:.development-guide/spfx/testing.md]]
 
 [[load:.development-guide/spfx/testoversikt.md]]

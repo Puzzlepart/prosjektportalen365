@@ -81,7 +81,7 @@ Detaljer og ekte eksempler står i [kodemonster.md](spfx/kodemonster.md), og et 
 
 ### 5. Tester
 
-Les [testing.md](spfx/testing.md) før du skriver din første test. Avsnittet «Hvilken test skal jeg skrive?» der forklarer forskjellen på Jest, integrasjon og E2E.
+Start med [Testarkitektur](spfx/testarkitektur.md) for oversikten over testlagene, CI og UU. Les deretter [Testregime](spfx/testing.md) før du skriver din første test; avsnittet «Hvilken test skal jeg skrive?» forklarer hvilket lag endringen trenger.
 
 - **Jest i bygget.** `src/**/*.test.ts(x)` kjører i `heft test`, altså i `npm test`, `npm run build`, `rush build`/`rebuild` og CI, og en test som feiler, stopper bygget. `npm run watch` og kanalbyggene (`npm run build:<kanal>`) kjører ingen tester. Testen ligger ved siden av koden.
 - **Kjør** `npm test` i en løsning (bygger først). Én fil: `npx heft test --test-path-pattern Header` (et regulært uttrykk over stien til testfilen). `shared-library` må være bygget først.

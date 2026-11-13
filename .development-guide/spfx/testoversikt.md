@@ -2,6 +2,8 @@
 
 Hvilke automatiske tester som dekker hver komponent, lag for lag, med noen ord om hva de sjekker. Hvordan testene skrives og kjøres, og hva vi gjør når en feiler, står i [Testregime](testing.md). Tallene er telt 2026-10-13. Legger du til eller fjerner en testfil, oppdaterer du raden for komponenten.
 
+Den overordnede sammenhengen mellom testlagene, CI og UU står i [Testarkitektur](testarkitektur.md). Tallene her er et datert øyeblikksbilde; rapporten fra en testkjøring viser hva som faktisk kjørte og utfallet.
+
 ### Lagene
 
 | Lag | Hvor | Kjører | Fanger |

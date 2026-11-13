@@ -2,6 +2,8 @@
 
 Dette kapittelet beskriver hvordan Prosjektportalen testes automatisk, hva som kjører når, hvordan du skriver tester, og hva vi gjør når en test feiler. Målet er at den manuelle smoke-testen før hver utgivelse over tid erstattes av tester som kjører i hvert bygg og etter hver utrulling til testkanalen.
 
+Les [Testarkitektur](testarkitektur.md) først for den tekniske oversikten over testlag, CI, UU-gater, rapporter og agent-skills.
+
 ### Lagene
 
 | Lag | Hva testes | Verktøy | Kjører når | Trenger tenant? |
