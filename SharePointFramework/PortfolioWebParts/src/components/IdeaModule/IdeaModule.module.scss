@@ -23,12 +23,17 @@
     }
   }
 
+  // One column no wider than the content area: its implicit `auto` column grew to the widest
+  // content's least width, the fields' 450 px columns, and at 320 px the phase bar, the title and
+  // the text ran 514 px wide in a 305 px area that scrolled sideways (WCAG 1.4.10).
   .content,
   .error {
     flex: 1;
+    min-width: 0;
     padding: 32px;
     gap: 16px;
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     align-items: flex-start;
     height: auto;
     overflow-y: auto;
@@ -51,6 +56,7 @@
         line-height: normal;
         min-height: 32px;
         margin: 0;
+        overflow-wrap: anywhere;
       }
     }
 
@@ -66,7 +72,7 @@
 
     .idea {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(450px, 100%), 1fr));
       grid-gap: 16px;
       margin: 0 0 16px;
 

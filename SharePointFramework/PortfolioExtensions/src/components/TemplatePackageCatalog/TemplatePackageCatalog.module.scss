@@ -32,6 +32,13 @@
           grid-template-columns: 1fr clamp(300px, 38%, 360px);
         }
 
+        // One column on a narrow screen: the list, then a chosen package's details. Here, with the
+        // grid's own specificity: a rule at the top level lost to the nested columns, and the list
+        // shrank to 75 px at 560 px beside the details' 420 px, to 15 px at 500 px (WCAG 1.4.10).
+        @media (max-width: 720px) {
+          grid-template-columns: minmax(0, 1fr);
+        }
+
         .master {
           min-height: 0;
           overflow-y: auto;
@@ -42,6 +49,11 @@
           overflow-y: auto;
           border-left: 1px solid var(--colorNeutralStroke2);
           padding-left: var(--spacingHorizontalL);
+
+          @media (max-width: 720px) {
+            border-left: none;
+            padding-left: 0;
+          }
         }
       }
 
@@ -140,16 +152,8 @@
   }
 }
 
+// The grid's one column and the details' edge on a narrow screen are set in `.grid` above.
 @media (max-width: 720px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  .detail {
-    border-left: none;
-    padding-left: 0;
-  }
-
   .collapsedHidden {
     display: none;
   }

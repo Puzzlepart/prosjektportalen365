@@ -1741,3 +1741,15 @@ itself as `observer` to `add()` is disposed, as the footer does.
   `EditViewColumnsPanel.test` (the heading, the focus after a move), `useConfirmationDialog.test`;
   `tests/flows/edit-view-columns-header.spec.ts` pins the new header.
 - **Left.** The tooltip in a person cell was not tried in the browser after the change.
+
+### Hand round 8: the template catalog and the idea module (2026-11-12)
+
+- **Found.** The catalog's narrow rule (one column under 720 px) sat at the top level, where its
+  one class lost to the nested grid's columns, while the details were hidden: the package list
+  was 75 px at 560 px and 15 px at 500 px beside an empty 420 px column. The idea's content was a
+  grid with an implicit `auto` column, which grew to the fields' 450 px least width: at 320 px the
+  idea ran 514 px wide in a 305 px area that scrolled sideways.
+- **Done.** The narrow rule is in `.grid` itself. The idea's grid has one `minmax(0, 1fr)` column,
+  the fields' columns are at most its width (`min(450px, 100%)`), and a long title breaks. CSS
+  only; jsdom has no layout, and the visual browser test measures 320 px.
+- **Left.** Neither was measured in the browser after the change.
