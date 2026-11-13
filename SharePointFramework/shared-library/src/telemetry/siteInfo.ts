@@ -13,7 +13,8 @@ function ignore(): void {
 
 /**
  * Asks the site's resolver for its type, once, and keeps the answer in memory. A resolver that
- * fails leaves the site without a type, and its usage is never sent.
+ * fails leaves the site without a type, and its usage is never sent. An answer that comes after
+ * the type was set by code that knows it (`setSiteType`) is dropped.
  */
 function requestSiteType(store: ITelemetryStore, siteId: string): void {
   const resolver = store.siteTypeResolvers[siteId]
@@ -23,7 +24,8 @@ function requestSiteType(store: ITelemetryStore, siteId: string): void {
   Promise.resolve()
     .then(resolver)
     .then((siteType) => {
-      if (isTelemetrySiteType(siteType) && siteType !== 'hub') store.siteTypes[siteId] = siteType
+      if (store.siteTypes[siteId] || !isTelemetrySiteType(siteType) || siteType === 'hub') return
+      store.siteTypes[siteId] = siteType
     }, ignore)
 }
 

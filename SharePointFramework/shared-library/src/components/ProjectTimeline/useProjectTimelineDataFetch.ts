@@ -12,6 +12,7 @@ import {
 import { ProjectListModel, TimelineContentModel } from '../../models'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
 import resource from 'SharedResources'
+import { useTelemetry } from '../../telemetry'
 import { format } from '../../util'
 
 /**
@@ -199,13 +200,19 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
 }
 
 /**
- * Loads timeline data once on mount and reports the resulting state.
+ * Loads timeline data once on mount and reports the resulting state. A fetch that fails is counted
+ * for usage statistics, once and by the error's own code, for the web part the timeline is in (the
+ * portfolio's or the program's), and shown as before.
  */
 export const useProjectTimelineDataFetch = (
   props: IProjectTimelineProps,
   fetchCallback: (data: Partial<IProjectTimelineState>) => void
 ) => {
+  const telemetry = useTelemetry()
   useEffect(() => {
-    void fetchData(props).then(fetchCallback)
+    void fetchData(props).then((data) => {
+      if (data.error) telemetry.trackError(data.error)
+      fetchCallback(data)
+    })
   }, [])
 }

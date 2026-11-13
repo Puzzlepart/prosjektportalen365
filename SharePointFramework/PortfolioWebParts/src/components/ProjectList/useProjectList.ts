@@ -2,6 +2,7 @@ import { ButtonProps, useAnnounce, useId } from '@fluentui/react-components'
 import strings from 'PortfolioWebPartsStrings'
 import { format } from 'pp365-shared-library'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { sortAlphabetically } from 'pp365-shared-library/lib/util/sortAlphabetically'
 import { Key, useEffect, useRef } from 'react'
 import _ from 'underscore'
@@ -18,7 +19,8 @@ const SEARCH_ANNOUNCE_DELAY = 500
 /**
  * Component logic hook for `ProjectList`. Handles data fetching,
  * sorting, filtering and card actions. A search tells how many of the selection's projects it
- * shows, once the user stops typing (WCAG 4.1.3).
+ * shows, once the user stops typing (WCAG 4.1.3). A selection picked from the tabs is counted for
+ * usage statistics.
  *
  * Verticals are built synchronously from `props.verticalConfigs`
  * in `useProjectListState`.
@@ -26,6 +28,7 @@ const SEARCH_ANNOUNCE_DELAY = 500
 export const useProjectList = (props: IProjectListProps) => {
   const fluentProviderId = useId('fp-project-list')
   const { state, setState } = useProjectListState(props)
+  const telemetry = useTelemetry()
   useProjectListDataFetch(props, setState)
 
   const verticals = state.verticals ?? []
@@ -117,6 +120,17 @@ export const useProjectList = (props: IProjectListProps) => {
     }
   }
 
+  /**
+   * Shows the projects of the selection picked from the tabs or their overflow menu, and counts
+   * the pick for usage statistics.
+   *
+   * @param key The key of the selection's vertical
+   */
+  function selectVertical(key: unknown) {
+    setState({ selectedVertical: _.find(verticals, (v) => v.key === key) })
+    telemetry.track('tab.switched')
+  }
+
   /** The id of a selection's tab, which names the projects' panel while it is selected. */
   const getTabId = (key: Key) => `${fluentProviderId}-tab-${String(key)}`
   // While the list loads the tabs are skeletons: the panel would name itself by a tab not there.
@@ -131,6 +145,7 @@ export const useProjectList = (props: IProjectListProps) => {
     verticals,
     createCardContext,
     shouldDisplay,
+    selectVertical,
     fluentProviderId,
     getTabId,
     selectedTabId

@@ -43,6 +43,11 @@ import {
   format,
   tryParseJson
 } from '../../util'
+import { httpStatusOf } from '../../telemetry/errorCode'
+import { toUsageSnapshot } from '../../telemetry/heartbeat'
+import { TelemetryResolvedSiteType } from '../../telemetry/siteInfo'
+import { readSiteType } from '../../telemetry/siteType'
+import { normalizeGuid, TelemetryUsageSnapshot } from '../../telemetry/validate'
 import { DataService } from '../DataService'
 import { resolveHubUrl } from './resolveHubUrl'
 import {
@@ -55,6 +60,7 @@ import {
   PortalDataServiceList,
   SyncListParams
 } from './types'
+import { countFlagged, readItemCount, readNewestInstallation, readSiteFlags } from './usageQueries'
 
 /**
  * Result of a list item update. PnPjs 4 resolves `item.update()` to this shape directly
@@ -64,12 +70,20 @@ export interface IItemUpdateResultData {
   etag: string
 }
 
+/** What the hub answered `_probeHubAccess`. */
+interface IHubAccessProbe {
+  /** Whether the user may read `Globale innstillinger` */
+  hasAccess: boolean
+  /** The HTTP status of the refusal, when the hub refused with one */
+  status?: number
+}
+
 /**
  * The answer to `_probeHubAccess` per hub URL for this page load: whether the user may read
  * `Globale innstillinger`. Shared by the instances the web parts configure, so the hub is asked
  * once per page load, and asked again on the next one, after access may have been taken away.
  */
-const hubAccessProbes = new Map<string, Promise<boolean>>()
+const hubAccessProbes = new Map<string, Promise<IHubAccessProbe>>()
 
 /**
  * Reads and updates hub configuration and project data with access-aware fallbacks.
@@ -88,6 +102,28 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
    * lesetilganger på hub»).
    */
   public isAvailable: boolean = true
+
+  /**
+   * The HTTP status of the answer that took the hub out of reach: 401 or 403 when the hub denied
+   * access to `Globale innstillinger`, or the status of a lookup of the hub that failed. It is
+   * `undefined` while the hub is available, and when nothing answered with a status (the hub's
+   * URL was not found).
+   *
+   * The service swallows that answer, so a consumer that throws its own error for a hub out of
+   * reach has nothing to tell why. Given this status (`errorWithStatus`), the error is counted by
+   * usage statistics as what it was, denied permission, and the user sees the same text.
+   */
+  public unavailableStatus?: number
+
+  /**
+   * Takes the hub as out of reach, and keeps the HTTP status of the answer that says so.
+   *
+   * @param status The HTTP status of that answer, when it had one
+   */
+  private _markUnavailable(status?: number): void {
+    this.isAvailable = false
+    this.unavailableStatus = status
+  }
 
   /**
    * Hub lists that denied the current user access while the hub itself is available, such as the
@@ -138,18 +174,19 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         .items.select('Id')
         .top(1)()
         .then(
-          () => true,
+          () => ({ hasAccess: true }),
           // Only denied access takes the hub out of reach; another error leaves it to the lists.
-          (error) => !isUnauthorizedError(error)
+          (error) => ({ hasAccess: !isUnauthorizedError(error), status: httpStatusOf(error) })
         )
       hubAccessProbes.set(this.url, probe)
     }
-    if (await probe) return
+    const { hasAccess, status } = await probe
+    if (hasAccess) return
     Logger.write(
       '(PortalDataService) (_probeHubAccess) Hub access denied. Marking portal as unavailable.',
       LogLevel.Warning
     )
-    this.isAvailable = false
+    this._markUnavailable(status)
   }
 
   /**
@@ -176,7 +213,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       `(PortalDataService) (${source}) Hub access denied. Marking portal as unavailable.`,
       LogLevel.Warning
     )
-    this.isAvailable = false
+    this._markUnavailable(httpStatusOf(error))
   }
 
   /**
@@ -244,7 +281,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
           }. Marking portal as unavailable. Error: ${error?.message ?? error}`,
           LogLevel.Warning
         )
-        this.isAvailable = false
+        this._markUnavailable(httpStatusOf(error))
       }
       return
     }
@@ -282,7 +319,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         }`,
         LogLevel.Warning
       )
-      this.isAvailable = false
+      this._markUnavailable(httpStatusOf(err))
       return
     }
     if (stringIsNullOrEmpty(this.url)) {
@@ -290,7 +327,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         '(PortalDataService) (onInit) Hub site URL is empty. Marking portal as unavailable.',
         LogLevel.Warning
       )
-      this.isAvailable = false
+      this._markUnavailable()
       return
     }
     this._spPortal = spfi(this.url).using(AssignFrom(this._sp.web))
@@ -1361,6 +1398,83 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       this._handleAvailabilityError(error, 'getProjectDetails', 'PROJECTS')
       return null
     }
+  }
+
+  /**
+   * The hub's installation facts for the heartbeat of usage statistics: the channel and the
+   * version of the newest installation, and how many projects, programs and parent projects the
+   * hub has. `null` when the hub is out of reach.
+   *
+   * Nothing here is cached: no read uses `.using(...)`, so nothing lands in the browser's
+   * storage. Each read has its own catch, and one that fails leaves its value out: a hub beyond
+   * the list view threshold still gets its channel and version. From Installasjonslogg only
+   * `InstallVersion` and `InstallChannel` are selected, and the version is cut to its three parts.
+   * Usage statistics call it through the portal of the page's own hub, for a user who may manage
+   * the hub, and only when the level allows a heartbeat (`requestHeartbeat`).
+   */
+  public async getUsageSnapshot(): Promise<TelemetryUsageSnapshot | null> {
+    if (!this.isAvailable) return null
+    const [installations, projects, programs, parentProjects] = await Promise.all([
+      this._readForUsage('INSTALLATION_LOG', readNewestInstallation),
+      this._readForUsage('PROJECTS', readItemCount),
+      this._readForUsage('PROJECTS', (list) => countFlagged(list, 'GtIsProgram')),
+      this._readForUsage('PROJECTS', (list) => countFlagged(list, 'GtIsParentProject'))
+    ])
+    return toUsageSnapshot({
+      channel: installations?.[0]?.InstallChannel,
+      templateVersion: installations?.[0]?.InstallVersion,
+      projects,
+      programs,
+      parentProjects
+    })
+  }
+
+  /**
+   * One read of `getUsageSnapshot`, in its own catch: a read that fails, or a list that has
+   * denied the user access, gives `undefined` and stops no other read.
+   *
+   * @param list The hub list to read
+   * @param read The read, given the list
+   */
+  private async _readForUsage<T>(
+    list: PortalDataServiceList,
+    read: (list: IList) => Promise<T>
+  ): Promise<T | undefined> {
+    if (!this.isListAvailable(list)) return undefined
+    try {
+      return await read(this._getList(list))
+    } catch {
+      return undefined
+    }
+  }
+
+  /**
+   * What kind of site a site of the hub is, for usage statistics: a program, a parent project or
+   * a project, from the flags of the site's row in `Prosjekter` (found by `GtSiteId`, as
+   * `getProjectDetails` finds it), with the mapping every site type resolver uses
+   * (`readSiteType`). A site without a row, a list the user may not read and a read that fails
+   * all give `other`.
+   *
+   * For a bundle that holds no flags of the site itself: the Footer, and the extensions on
+   * project sites. Register it as the site's resolver
+   * (`registerSiteTypeResolver(siteId, () => portal.getSiteKind(siteId))`), so it runs once per
+   * site and only at a level that counts usage. Not cached, as `getUsageSnapshot` is not.
+   *
+   * @param siteId The site's id
+   */
+  public getSiteKind(siteId: string): Promise<TelemetryResolvedSiteType> {
+    const id = normalizeGuid(siteId)
+    if (!id || !this.isListAvailable('PROJECTS')) {
+      return Promise.resolve<TelemetryResolvedSiteType>('other')
+    }
+    return readSiteType(
+      () =>
+        readSiteFlags(this._getList('PROJECTS'), id).catch((error) => {
+          this._handleAvailabilityError(error, 'getSiteKind', 'PROJECTS')
+          throw error
+        }),
+      'other'
+    )
   }
 
   /**

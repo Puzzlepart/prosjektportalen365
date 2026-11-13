@@ -1,3 +1,6 @@
+import * as fs from 'fs'
+import * as path from 'path'
+import { spfxTestContext } from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import resource from 'SharedResources'
 
 /**
@@ -5,6 +8,18 @@ import resource from 'SharedResources'
  * `pnpShapes.ts`: the PnPjs chains the command sets call, a list view row, the SPFx context and
  * an idea configuration. Real PnPjs and SPFx objects satisfy the same shapes.
  */
+
+/**
+ * The alias in an extension's manifest, read from `src` (the compiled tests run in
+ * `lib-commonjs/extensions`). Usage statistics count an extension by it: a test that expects a
+ * count under this name also proves that the extension counts by its manifest's alias.
+ *
+ * @param folder The extension's folder under `src/extensions`
+ */
+export function manifestAlias(folder: string): string {
+  const file = path.resolve(__dirname, '../../src/extensions', folder, 'manifest.json')
+  return JSON.parse(fs.readFileSync(file, 'utf8')).alias
+}
 
 export const HUB = 'https://contoso.sharepoint.com/sites/pp365'
 export const PROCESSING_LIST = resource.Lists_IdeaProcessing_Title
@@ -78,22 +93,31 @@ export function row(
  * The SPFx context of a list view command set on the list `listTitle`, with `selectedRows`
  * selected. `changed` raises the list view's state changed event, as SPFx does when the selection
  * changes, and waits for the handlers.
+ *
+ * With `telemetry` the context also has what usage statistics read of a page on the hub (or on
+ * a project of it): the site and hub ids, the tenant and the manifest. Without it nothing is
+ * counted, as on a context whose ids are no GUIDs.
  */
 export function commandSetContext({
   listTitle,
   selectedRows = [] as any[],
-  serverRelativeUrl = `/sites/pp365/Lists/${listTitle}`
+  serverRelativeUrl = `/sites/pp365/Lists/${listTitle}`,
+  telemetry
 }: {
   listTitle: string
   selectedRows?: any[]
   serverRelativeUrl?: string
+  telemetry?: { alias: string; page?: 'hub' | 'project' }
 }) {
   const handlers: (() => unknown)[] = []
+  const page = telemetry ? spfxTestContext(telemetry) : undefined
   const context = {
+    ...page,
     pageContext: {
+      ...page?.pageContext,
       list: { title: listTitle, serverRelativeUrl },
       user: { email: USER },
-      site: { absoluteUrl: HUB, id: { toString: () => 'site-1' } },
+      site: { absoluteUrl: HUB, id: page?.pageContext.site.id ?? { toString: () => 'site-1' } },
       web: { absoluteUrl: HUB }
     },
     listView: {

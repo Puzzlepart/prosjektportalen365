@@ -1,12 +1,17 @@
 import {
   clearTestTelemetry,
   countedTelemetry,
+  HUB_SNAPSHOT,
   hubPage,
+  hubPortal,
+  navigateTestPage,
+  PROJECT_SITE_ID,
   projectPage,
+  settingsMap,
   startTestTelemetry,
   telemetryTestBed
 } from './__fixtures__/testFixtures'
-import { startTelemetry, trackError, trackTiming, trackUsage } from './track'
+import { startTelemetry, trackError, trackPageView, trackTiming, trackUsage } from './track'
 
 /**
  * The fixtures every solution's telemetry tests count through, and the test bed that takes over
@@ -32,6 +37,43 @@ describe('the telemetry test fixtures', () => {
       errors: { 'Footer render_failed': 2 },
       timings: { 'ProjectStatusWebPart init': 2 }
     })
+  })
+
+  it('give a portal that answers the reads a bundle makes through the hub', async () => {
+    const portal = hubPortal(settingsMap('3'))
+    expect((await portal.getGlobalSettings()).get('UsageStatisticsLevel')).toBe('3')
+    expect(await portal.getUsageSnapshot()).toEqual(HUB_SNAPSHOT)
+    expect(await portal.getSiteKind(PROJECT_SITE_ID)).toBe('project')
+    // Each portal answers with a snapshot of its own: a test may change one.
+    expect(await portal.getUsageSnapshot()).not.toBe(HUB_SNAPSHOT)
+
+    const program = hubPortal(undefined, { getSiteKind: jest.fn(() => Promise.resolve('program')) })
+    expect(await program.getSiteKind(PROJECT_SITE_ID)).toBe('program')
+    expect(program.getUsageSnapshot).not.toHaveBeenCalled()
+  })
+
+  it('count a page view once per page, and move between pages without loading one', () => {
+    const path = window.location.pathname
+    startTestTelemetry(hubPage())
+    trackPageView('Footer')
+    trackPageView('Footer')
+    navigateTestPage('/sites/prosjektportalen/SitePages/Portefoljeoversikt.aspx')
+    expect(window.location.pathname).toBe(
+      '/sites/prosjektportalen/SitePages/Portefoljeoversikt.aspx'
+    )
+    trackPageView('Footer')
+    expect(countedTelemetry().usage).toEqual({ 'Footer page.viewed': 2 })
+    navigateTestPage(path)
+    expect(window.location.pathname).toBe(path)
+  })
+
+  it('put the address back when the test bed is restored', () => {
+    const address = window.location.href
+    const bed = telemetryTestBed()
+    bed.navigate('/sites/frisbee/SitePages/ProjectHome.aspx?debug=1#ideaId=3')
+    expect(window.location.pathname).toBe('/sites/frisbee/SitePages/ProjectHome.aspx')
+    bed.restore()
+    expect(window.location.href).toBe(address)
   })
 
   it("register a listener with its options, and take only telemetry's own away again", () => {

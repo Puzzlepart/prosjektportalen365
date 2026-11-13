@@ -5,7 +5,8 @@ import '@pnp/graph/presets/all'
 import { SPFx as spSPFx, spfi } from '@pnp/sp'
 import '@pnp/sp/presets/all'
 import { IList } from '@pnp/sp/presets/all'
-import { DefaultCaching, SPDataAdapterBase } from 'pp365-shared-library'
+import { DefaultCaching, SPDataAdapterBase, errorWithCause } from 'pp365-shared-library'
+import { trackError } from 'pp365-shared-library/lib/telemetry'
 import {
   RiskActionItemContext,
   RiskActionHiddenFieldValues,
@@ -27,6 +28,16 @@ function plannerErrorMessage(error: any): string {
     // Not an error body from Graph: the message as it is.
   }
   return message
+}
+
+/**
+ * The error a failed Planner request is told with: what Planner said, with what the request
+ * failed with kept as its cause, so usage statistics still reach its HTTP status.
+ *
+ * @param error What the request failed with
+ */
+function plannerError(error: unknown): Error {
+  return errorWithCause(plannerErrorMessage(error), error)
 }
 
 /** Coordinates Planner tasks and the risk list's visible and hidden task fields. */
@@ -123,13 +134,17 @@ export class DataAdapter extends SPDataAdapterBase {
     try {
       target = await this._getTaskTarget()
     } catch (error) {
-      throw new Error(plannerErrorMessage(error))
+      throw plannerError(error)
     }
     const outcomes = await Promise.all(
       titles.map((title) =>
         this.addTask(new Map([['title', title]]), itemContext, target).then(
           (task) => ({ title, task, reason: undefined as string }),
-          (error: Error) => ({ title, task: undefined as PlannerTask, reason: error.message })
+          (error: Error) => {
+            // Counted here, where the error still is: the result keeps only what Planner said.
+            trackError('RiskActionPlanner', error)
+            return { title, task: undefined as PlannerTask, reason: error.message }
+          }
         )
       )
     )
@@ -192,7 +207,7 @@ export class DataAdapter extends SPDataAdapterBase {
       )
       return createdTask
     } catch (error) {
-      throw new Error(plannerErrorMessage(error))
+      throw plannerError(error)
     }
   }
 

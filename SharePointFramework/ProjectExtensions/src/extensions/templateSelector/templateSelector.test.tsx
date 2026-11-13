@@ -1,11 +1,14 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
 // Babel, so mocks are not hoisted. The data adapter is `adapter`; the document template dialog
-// (tested on its own) records the context and props it was opened with, and closes on a click.
+// (tested on its own) records the context and props it was opened with, and closes on a click of
+// its title. Its two other buttons do what the dialog does after a copy: count the copy, and
+// close asking for the page to be reloaded. Usage statistics are the real ones, counting in the
+// window's memory, but for their flush, which `leaving` records with the reload that follows it.
 ;(globalThis as any).DEBUG = false
 const HUB = 'https://contoso.sharepoint.com/sites/pp365'
 const adapter = {
   configure: jest.fn(() => Promise.resolve()),
-  portalDataService: { url: HUB, isAvailable: true },
+  portalDataService: { url: HUB, isAvailable: true } as any,
   getDocumentTemplates: jest.fn(() => Promise.resolve([{ name: 'Prosjektplan.docx' }])),
   getLibraries: jest.fn(() =>
     Promise.resolve([
@@ -15,40 +18,84 @@ const adapter = {
   )
 }
 jest.mock('data', () => ({ SPDataAdapter: adapter }))
+/** What the page did as the dialog closed, in order: usage statistics' flush, then the reload. */
+const leaving: string[] = []
+jest.mock('pp365-shared-library/lib/telemetry', () => ({
+  ...jest.requireActual('pp365-shared-library/lib/telemetry'),
+  flushTelemetry: (options?: { urgent?: boolean }) =>
+    leaving.push(options?.urgent ? 'urgent flush' : 'flush')
+}))
+const COPY = 'Kopier malene'
+const CLOSE_AFTER_COPY = 'Lukk etter kopiering'
 const opened: { context?: any; props?: any } = {}
 jest.mock('components', () => {
   const React = jest.requireActual('react')
   const { TemplateSelectorContext } = jest.requireActual('./context')
+  const { useTelemetry } = jest.requireActual('pp365-shared-library/lib/telemetry')
   return {
     DocumentTemplateDialog: (props: any) => {
       opened.context = React.useContext(TemplateSelectorContext)
       opened.props = props
+      const telemetry = useTelemetry()
       return React.createElement(
-        'button',
-        { onClick: () => props.onDismiss({ reload: false }) },
-        props.title
+        React.Fragment,
+        null,
+        React.createElement(
+          'button',
+          { onClick: () => props.onDismiss({ reload: false }) },
+          props.title
+        ),
+        React.createElement(
+          'button',
+          { onClick: () => telemetry.track('documentTemplates.copied') },
+          COPY
+        ),
+        React.createElement(
+          'button',
+          { onClick: () => props.onDismiss({ reload: true }) },
+          CLOSE_AFTER_COPY
+        )
       )
     }
   }
 })
 
 import { act, fireEvent, screen } from '@testing-library/react'
+import * as fs from 'fs'
+import * as path from 'path'
+import { getTelemetryGate } from 'pp365-shared-library/lib/telemetry'
+import {
+  clearTestTelemetry,
+  countedTelemetry,
+  HUB_SITE_ID,
+  hubPortal,
+  PROJECT_SITE_ID,
+  settingsMap,
+  settle,
+  spfxTestContext,
+  telemetryStore
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import strings from 'ProjectExtensionsStrings'
 import resource from 'SharedResources'
 import TemplateSelectorCommand from '.'
 
 const OPEN = 'OPEN_TEMPLATE_SELECTOR'
 
-/** The command set in the library with id `lib-1`, initialised. */
+/** The command set's alias in its manifest, which usage statistics count it by. */
+const { alias: ALIAS } = JSON.parse(
+  fs.readFileSync(
+    path.resolve(__dirname, '../../../src/extensions/templateSelector/manifest.json'),
+    'utf8'
+  )
+)
+
+/** The command set in the library with id `lib-1` of a project site of the hub, initialised. */
 async function selectorCommand(properties: Record<string, any> = {}) {
   const command = new TemplateSelectorCommand()
+  const { pageContext, manifest } = spfxTestContext({ page: 'project', alias: ALIAS })
   ;(command as any).context = {
-    manifest: { version: '1.15.0' },
-    pageContext: {
-      site: { id: { toString: () => 'site-1' } },
-      web: { absoluteUrl: 'https://contoso.sharepoint.com/sites/frisbee' },
-      list: { id: { toString: () => 'lib-1' } }
-    }
+    manifest,
+    pageContext: { ...pageContext, list: { id: { toString: () => 'lib-1' } } }
   }
   ;(command as any).properties = properties
   const raiseOnChange = jest.spyOn(command, 'raiseOnChange')
@@ -59,16 +106,32 @@ async function selectorCommand(properties: Record<string, any> = {}) {
 const execute = (command: TemplateSelectorCommand) =>
   act(() => command.onExecute({ itemId: OPEN } as any))
 
+let consoleError: jest.SpyInstance
+
 beforeEach(() => {
   adapter.configure.mockImplementation(() => Promise.resolve())
   adapter.configure.mockClear()
   adapter.getDocumentTemplates.mockClear()
-  adapter.portalDataService.isAvailable = true
+  adapter.portalDataService = { url: HUB, isAvailable: true }
   opened.context = undefined
   window.history.replaceState({}, '', '/sites/frisbee/Delte%20dokumenter/Forms/AllItems.aspx')
+  clearTestTelemetry()
+  leaving.length = 0
+  // jsdom cannot navigate: the reload after a copy is told as an error, which is noted here.
+  // Every other error still reaches the test output.
+  // eslint-disable-next-line no-console
+  const original = console.error
+  consoleError = jest.spyOn(console, 'error').mockImplementation((...args: any[]) => {
+    if (String(args[0]?.message ?? args[0]).includes('Not implemented: navigation')) {
+      leaving.push('reload')
+      return
+    }
+    original(...args)
+  })
 })
 
 afterEach(() => {
+  consoleError.mockRestore()
   // The dialog is rendered into a placeholder of its own on the page; the tests close what they
   // open, and the empty placeholders go here.
   document.body.querySelectorAll(':scope > div').forEach((placeholder) => placeholder.remove())
@@ -188,6 +251,8 @@ describe('TemplateSelectorCommand', () => {
     expect(raiseOnChange).toHaveBeenCalled()
     command.onListViewUpdated()
     expect(open.title).toBe(strings.TemplateSelectorCommandDisabledTitle)
+    // No error to count: nothing failed here, and a hub out of reach closes usage statistics.
+    expect(countedTelemetry()).toEqual({ usage: {}, errors: {}, timings: {} })
   })
 
   it('tries again after a failed load', async () => {
@@ -199,6 +264,70 @@ describe('TemplateSelectorCommand', () => {
     expect(open.title).toBe(strings.TemplateSelectorCommandDisabledTitle)
     await execute(command)
     expect(opened.context.templates).toEqual([{ name: 'Prosjektplan.docx' }])
+    fireEvent.click(screen.getByText(strings.TemplateLibrarySelectModalTitle))
+  })
+})
+
+/**
+ * The command set and usage statistics: they start with the page, get the hub once the command
+ * has loaded its data, count what the dialog does for the command, and are sent before the page
+ * reloads after a copy.
+ */
+describe('TemplateSelectorCommand and usage statistics', () => {
+  it('starts usage statistics for the page, and gives them the hub when the command first loads its data', async () => {
+    adapter.portalDataService = hubPortal(settingsMap('2'))
+    const { command } = await selectorCommand()
+    expect(telemetryStore().page).toMatchObject({
+      host: 'contoso.sharepoint.com',
+      siteId: PROJECT_SITE_ID,
+      hubSiteId: HUB_SITE_ID,
+      isHubPage: false,
+      appVersion: '1.15.0',
+      isDebug: false
+    })
+    expect(telemetryStore().anchor).toBeUndefined()
+    await execute(command)
+    await settle()
+    expect(telemetryStore().anchor.portal).toBe(adapter.portalDataService)
+    // The adapter has read no settings, so the level comes from the hub's own, cached read.
+    expect(adapter.portalDataService.getGlobalSettings).toHaveBeenCalledTimes(1)
+    expect(getTelemetryGate().level).toBe(2)
+    // The hub is asked once what kind of site this is.
+    expect(adapter.portalDataService.getSiteKind.mock.calls).toEqual([[PROJECT_SITE_ID]])
+    expect(countedTelemetry()).toEqual({ usage: {}, errors: {}, timings: {} })
+    fireEvent.click(screen.getByText(strings.TemplateLibrarySelectModalTitle))
+  })
+
+  it('counts what the dialog does for the command, under the alias of its manifest, and reloads nothing when it only closes', async () => {
+    const { command } = await selectorCommand()
+    await execute(command)
+    fireEvent.click(screen.getByText(COPY))
+    expect(countedTelemetry().usage).toEqual({ [`${ALIAS} documentTemplates.copied`]: 1 })
+    fireEvent.click(screen.getByText(strings.TemplateLibrarySelectModalTitle))
+    expect(leaving).toEqual([])
+  })
+
+  it('sends what it has counted before it reloads the page after a copy', async () => {
+    const { command } = await selectorCommand()
+    await execute(command)
+    fireEvent.click(screen.getByText(COPY))
+    fireEvent.click(screen.getByText(CLOSE_AFTER_COPY))
+    expect(screen.queryByText(strings.TemplateLibrarySelectModalTitle)).toBeNull()
+    expect(leaving).toEqual(['urgent flush', 'reload'])
+  })
+
+  it('counts a load that fails by the status it failed with, once', async () => {
+    adapter.configure.mockImplementationOnce(() =>
+      Promise.reject(Object.assign(new Error('Tjenesten er ikke tilgjengelig'), { status: 503 }))
+    )
+    const { command } = await selectorCommand()
+    await execute(command)
+    expect(opened.context).toBeUndefined()
+    const failed = { usage: {}, errors: { [`${ALIAS} server_error 503`]: 1 }, timings: {} }
+    expect(countedTelemetry()).toEqual(failed)
+    // The next try loads: the failure is not counted again.
+    await execute(command)
+    expect(countedTelemetry()).toEqual(failed)
     fireEvent.click(screen.getByText(strings.TemplateLibrarySelectModalTitle))
   })
 })

@@ -1,5 +1,6 @@
 import { useAnnounce } from '@fluentui/react-components'
 import { IPersonaItem, format } from 'pp365-shared-library'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import strings from 'ProjectExtensionsStrings'
 import { useCallback, useEffect, useState } from 'react'
 import { useRiskActionFieldCustomizerContext } from '../../../../extensions/riskAction/context'
@@ -27,7 +28,10 @@ function toTaskModel(form: INewRiskActionForm): Map<string, any> {
   ])
 }
 
-/** Manages new-task form fields, people search and saving, including consecutive task creation. */
+/**
+ * Manages new-task form fields, people search and saving, including consecutive task creation.
+ * Usage statistics count each task that was added, and a save that failed by its error's code.
+ */
 export function useNewRiskActionPanel(props: INewRiskActionPanelProps) {
   const context = useRiskActionFieldCustomizerContext()
   const { itemContext, setItemContext } = useRiskActionContext()
@@ -35,6 +39,7 @@ export function useNewRiskActionPanel(props: INewRiskActionPanelProps) {
   const [isSaving, setIsSaving] = useState(false)
   const [saveError, setSaveError] = useState<string>()
   const { announce } = useAnnounce()
+  const telemetry = useTelemetry()
 
   // The panel stays mounted while closed; a new opening must not show the previous save error.
   useEffect(() => {
@@ -61,11 +66,13 @@ export function useNewRiskActionPanel(props: INewRiskActionPanelProps) {
       const task = await context.dataAdapter.addTask(toTaskModel(form), itemContext)
       setItemContext(await context.dataAdapter.updateItem([task], itemContext))
     } catch (error) {
+      telemetry.trackError(error)
       setSaveError(error?.message ?? '')
       return
     } finally {
       setIsSaving(false)
     }
+    telemetry.track('riskAction.created')
     // Said either way: with «create several» the panel stays, its form cleared in silence.
     announce(format(strings.NewRiskActionSaved, form.title), { polite: true })
     if (form.createMultiple) {
@@ -74,7 +81,7 @@ export function useNewRiskActionPanel(props: INewRiskActionPanelProps) {
       setForm(EMPTY_FORM)
       props.onClose?.()
     }
-  }, [announce, context.dataAdapter, form, itemContext, props.onClose, setItemContext])
+  }, [announce, context.dataAdapter, form, itemContext, props.onClose, setItemContext, telemetry])
 
   return {
     headerText: format(strings.NewRiskActionPanelTitle, context.itemContext.title),

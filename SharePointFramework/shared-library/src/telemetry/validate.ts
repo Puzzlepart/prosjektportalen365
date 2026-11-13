@@ -25,6 +25,12 @@ const EMPTY_GUID = '00000000-0000-0000-0000-000000000000'
 /** A heartbeat as a caller queues it: the gate's catalog flag is added when it is sent. */
 export type TelemetryHeartbeatInput = Omit<ITelemetryHeartbeat, 'catalog'>
 
+/**
+ * The hub's installation facts as `PortalDataService.getUsageSnapshot` reads them: a heartbeat
+ * without the hub's language, which the page knows and the hub's lists do not.
+ */
+export type TelemetryUsageSnapshot = Omit<TelemetryHeartbeatInput, 'hubLanguage'>
+
 /** An event's row in the contract, read without its literal types. */
 interface ITelemetryEventDefinition {
   components: readonly string[]

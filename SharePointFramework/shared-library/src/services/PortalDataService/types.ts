@@ -27,6 +27,7 @@ export type PortalDataServiceList =
   | 'IDEA_PROCESSING'
   | 'GLOBAL_SETTINGS'
   | 'TIMELINE_CONTENT'
+  | 'INSTALLATION_LOG'
 
 /**
  * Configures the hub client, localized list names and logging.
@@ -89,6 +90,11 @@ export interface IPortalDataServiceConfiguration extends Object {
     GLOBAL_SETTINGS?: string
 
     TIMELINE_CONTENT?: string
+
+    /**
+     * The name of the list for the installation log.
+     */
+    INSTALLATION_LOG?: string
   }
 
   templateParametersFieldXml?: string
@@ -115,7 +121,8 @@ export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceCo
     PROJECT_DATA: resource.Lists_ProjectData_Title,
     IDEA_PROCESSING: resource.Lists_IdeaProcessing_Title,
     GLOBAL_SETTINGS: resource.Lists_Global_Settings_Title,
-    TIMELINE_CONTENT: resource.Lists_TimelineContent_Title
+    TIMELINE_CONTENT: resource.Lists_TimelineContent_Title,
+    INSTALLATION_LOG: resource.Lists_InstallationLog_Title
   },
   templateParametersFieldXml:
     '<Field Type="Note" DisplayName="TemplateParameters" ID="{b8854944-7141-471f-b8df-53d93a4395ba}" StaticName="TemplateParameters" Name="TemplateParameters" UnlimitedLengthInDocumentLibrary="TRUE" Hidden="TRUE" />',

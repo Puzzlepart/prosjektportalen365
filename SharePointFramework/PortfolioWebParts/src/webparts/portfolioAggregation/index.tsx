@@ -11,6 +11,7 @@ import * as strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import { createElement } from 'react'
 import { ErrorWithIntent, IUserMessageProps, UserMessage, renderReact } from 'pp365-shared-library'
+import { trackError } from 'pp365-shared-library/lib/telemetry'
 import {
   IPortfolioAggregationConfiguration,
   IPortfolioAggregationProps,
@@ -92,6 +93,9 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
       )
     } catch (error) {
       this._configurationError = error as ErrorWithIntent
+      // Counted where the configuration fails to load, once, by the error's own code: `render`
+      // shows the error every time it runs, and its message stays on the page.
+      trackError(this._telemetryComponent, error)
     }
   }
 

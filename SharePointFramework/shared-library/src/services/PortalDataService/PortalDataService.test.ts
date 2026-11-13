@@ -1,10 +1,14 @@
 import { PortfolioOverviewView, ProjectColumn } from '../../models'
+import { errorCodeFrom } from '../../telemetry/errorCode'
+import { TelemetryHeartbeatInput } from '../../telemetry/validate'
+import { errorWithStatus } from '../../util/errorWithStatus'
 import { PortalDataService } from './PortalDataService'
 import { PortalDataServiceDefaultConfiguration } from './types'
 
 /**
- * The hub's lists through a structural stand-in for `web.lists.getByTitle(...).items`: each
- * query records its calls and answers with `answer(calls)`, or fails with the error it returns.
+ * The hub's lists through a structural stand-in for `web.lists.getByTitle(...).items`, and for
+ * the list itself (`getByTitle(...).select(...)`): each query records its calls and answers with
+ * `answer(calls)`, or fails with the error it returns.
  */
 type Answer = (calls: any[][]) => any
 function hubWeb(answers: Record<string, Answer>) {
@@ -29,7 +33,8 @@ function hubWeb(answers: Record<string, Answer>) {
       getByTitle: (title: string) => ({
         get items() {
           return query(title)
-        }
+        },
+        select: (...fields: string[]) => query(title).select(...fields)
       })
     }
   }
@@ -348,6 +353,335 @@ describe('PortalDataService', () => {
       // The other lists are not asked once the hub is out of reach.
       expect(await service.getProjectColumns()).toEqual([])
       expect(queries.map(({ list }) => list)).toEqual([LISTS.GLOBAL_SETTINGS])
+    })
+  })
+
+  describe('the status that took the hub out of reach', () => {
+    it('has none while the hub is in reach', async () => {
+      const { service } = portal({
+        [LISTS.GLOBAL_SETTINGS]: () => [{ GtSettingsKey: 'ShowFooter', GtSettingsValue: '1' }],
+        [LISTS.PROJECT_STATUS]: () => forbidden()
+      })
+      await service.getGlobalSettings()
+      // A list that denies access is not the hub: the hub stays in reach, and has no status.
+      await service.getStatusReports({})
+      expect(service.isAvailable).toBe(true)
+      expect(service.unavailableStatus).toBeUndefined()
+    })
+
+    it.each([[401], [403]])(
+      'keeps the %i `Globale innstillinger` was denied with, for the error a web part throws',
+      async (status) => {
+        const denied = Object.assign(new Error(`[${status}]`), { status })
+        const { service } = portal({ [LISTS.GLOBAL_SETTINGS]: () => denied })
+        await service.getGlobalSettings()
+        expect(service.isAvailable).toBe(false)
+        expect(service.unavailableStatus).toBe(status)
+        // What a web part makes of it: its own text, counted as the denied permission it was.
+        const error = errorWithStatus(
+          'Du har ikke tilgang til porteføljen.',
+          service.unavailableStatus
+        )
+        expect(errorCodeFrom(error)).toBe('permission_denied')
+      }
+    )
+
+    it('keeps the status the check of hub access was denied with, for every instance on the page', async () => {
+      const url = 'https://contoso.sharepoint.com/sites/probe-status'
+      const first = portal({ [LISTS.GLOBAL_SETTINGS]: () => forbidden() })
+      const second = portal({ [LISTS.GLOBAL_SETTINGS]: () => [{ Id: 1 }] })
+      for (const { service } of [first, second]) {
+        service.url = url
+        await (service as any)._probeHubAccess()
+        expect(service.isAvailable).toBe(false)
+        expect(service.unavailableStatus).toBe(403)
+      }
+      // The second instance took the first one's answer, status included.
+      expect(second.queries).toHaveLength(0)
+    })
+
+    it('has none when the refusal came without a status, or nothing refused at all', async () => {
+      // SharePoint's own words for a refusal, in an error that carries no status.
+      const { service } = portal({
+        [LISTS.GLOBAL_SETTINGS]: () => new Error('Attempted to perform an unauthorized operation.')
+      })
+      await service.getGlobalSettings()
+      expect(service.isAvailable).toBe(false)
+      expect(service.unavailableStatus).toBeUndefined()
+      expect(
+        errorCodeFrom(errorWithStatus('Du har ikke tilgang.', service.unavailableStatus))
+      ).toBe('unknown')
+
+      // A hub whose URL was never found: no request was refused.
+      const unresolved = portal({}).service
+      ;(unresolved as any)._markUnavailable()
+      expect(unresolved.isAvailable).toBe(false)
+      expect(unresolved.unavailableStatus).toBeUndefined()
+    })
+
+    it('keeps the first status: a hub out of reach is not asked again', async () => {
+      const { service, queries } = portal({ [LISTS.GLOBAL_SETTINGS]: () => forbidden() })
+      await service.getGlobalSettings()
+      await service.getGlobalSettings()
+      await service.getProjectColumns()
+      expect(service.unavailableStatus).toBe(403)
+      expect(queries).toHaveLength(1)
+    })
+  })
+
+  describe('the reads of usage statistics', () => {
+    const INSTALLATION = { InstallVersion: '1.15.0.a1b2c3d', InstallChannel: 'test' }
+
+    /** How Prosjekter answers each read of the snapshot, or the read of a site's flags. */
+    function projects(
+      answers: { count?: any; programs?: any; parentProjects?: any; flags?: any } = {}
+    ): Answer {
+      const { count = { ItemCount: 412 }, programs = [{ Id: 3 }, { Id: 8 }, { Id: 21 }] } = answers
+      const { parentProjects = [{ Id: 5 }, { Id: 13 }], flags = [] } = answers
+      return (calls) => {
+        const filter: string = calls.find(([name]) => name === 'filter')?.[1] ?? ''
+        if (filter.startsWith('GtIsProgram')) return programs
+        if (filter.startsWith('GtIsParentProject')) return parentProjects
+        return filter.startsWith('GtSiteId') ? flags : count
+      }
+    }
+
+    describe('getUsageSnapshot', () => {
+      it("reads the newest installation's channel and version and the hub's counts, and nothing else", async () => {
+        const { service, queries } = portal({
+          [LISTS.INSTALLATION_LOG]: () => [INSTALLATION],
+          [LISTS.PROJECTS]: projects()
+        })
+        expect(await service.getUsageSnapshot()).toEqual({
+          channel: 'test',
+          templateVersion: '1.15.0',
+          projects: 412,
+          programs: 3,
+          parentProjects: 2
+        })
+        expect(queries).toEqual([
+          {
+            list: LISTS.INSTALLATION_LOG,
+            calls: [
+              ['select', 'InstallVersion', 'InstallChannel'],
+              ['orderBy', 'InstallStartTime', false],
+              ['top', 1]
+            ]
+          },
+          { list: LISTS.PROJECTS, calls: [['select', 'ItemCount']] },
+          {
+            list: LISTS.PROJECTS,
+            calls: [
+              ['select', 'Id'],
+              ['filter', 'GtIsProgram eq 1'],
+              ['top', 5000]
+            ]
+          },
+          {
+            list: LISTS.PROJECTS,
+            calls: [
+              ['select', 'Id'],
+              ['filter', 'GtIsParentProject eq 1'],
+              ['top', 5000]
+            ]
+          }
+        ])
+      })
+
+      it('is not cached: no read uses a cache, and each call reads the hub again', async () => {
+        const { service, queries } = portal({
+          [LISTS.INSTALLATION_LOG]: () => [INSTALLATION],
+          [LISTS.PROJECTS]: projects()
+        })
+        await service.getUsageSnapshot()
+        await service.getUsageSnapshot()
+        expect(queries).toHaveLength(8)
+        const called = queries.flatMap(({ calls }) => calls.map(([name]) => name))
+        expect(called).not.toContain('using')
+      })
+
+      it('fits a heartbeat as it is, with the language of the hub the page knows', async () => {
+        const { service } = portal({
+          [LISTS.INSTALLATION_LOG]: () => [{ InstallVersion: '1.15.0', InstallChannel: 'main' }],
+          [LISTS.PROJECTS]: projects()
+        })
+        // The compiler checks the shape: the Footer could queue it with nothing but the language.
+        const heartbeat: TelemetryHeartbeatInput = {
+          ...(await service.getUsageSnapshot()),
+          hubLanguage: 'nb-NO'
+        }
+        expect(Object.keys(heartbeat).sort()).toEqual([
+          'channel',
+          'hubLanguage',
+          'parentProjects',
+          'programs',
+          'projects',
+          'templateVersion'
+        ])
+      })
+
+      it('leaves out what a read could not get, and still gives the rest', async () => {
+        // A hub beyond the list view threshold: the count of programs fails, the others answer.
+        const threshold = Object.assign(new Error('[500] exceeds the list view threshold'), {
+          status: 500
+        })
+        const { service } = portal({
+          [LISTS.INSTALLATION_LOG]: () => [INSTALLATION],
+          [LISTS.PROJECTS]: projects({ programs: threshold })
+        })
+        expect(await service.getUsageSnapshot()).toEqual({
+          channel: 'test',
+          templateVersion: '1.15.0',
+          projects: 412,
+          parentProjects: 2
+        })
+
+        const notFound = Object.assign(new Error('[404] List does not exist'), { status: 404 })
+        const withoutLog = portal({
+          [LISTS.INSTALLATION_LOG]: () => notFound,
+          [LISTS.PROJECTS]: projects({ count: forbidden(), parentProjects: [] })
+        })
+        expect(await withoutLog.service.getUsageSnapshot()).toEqual({
+          channel: 'unknown',
+          programs: 3,
+          parentProjects: 0
+        })
+        // A read for usage statistics marks nothing: the app's own reads still ask the lists.
+        expect(withoutLog.service.isAvailable).toBe(true)
+        expect(withoutLog.service.isListAvailable('PROJECTS')).toBe(true)
+        expect(withoutLog.service.isListAvailable('INSTALLATION_LOG')).toBe(true)
+      })
+
+      it('takes a hub without an installation row, or with values it does not know, as it is', async () => {
+        const { service } = portal({
+          [LISTS.INSTALLATION_LOG]: () => [],
+          [LISTS.PROJECTS]: projects({ count: {}, programs: [], parentProjects: [] })
+        })
+        expect(await service.getUsageSnapshot()).toEqual({
+          channel: 'unknown',
+          programs: 0,
+          parentProjects: 0
+        })
+
+        const odd = portal({
+          [LISTS.INSTALLATION_LOG]: () => [{ InstallVersion: 'dev', InstallChannel: 'kunde-x' }],
+          [LISTS.PROJECTS]: projects({ count: { ItemCount: 100001 } })
+        })
+        expect(await odd.service.getUsageSnapshot()).toEqual({
+          channel: 'unknown',
+          programs: 3,
+          parentProjects: 2
+        })
+      })
+
+      it('gives nothing, and asks nothing, when the hub is out of reach', async () => {
+        const { service, queries } = portal({ [LISTS.GLOBAL_SETTINGS]: () => forbidden() })
+        await service.getGlobalSettings()
+        expect(await service.getUsageSnapshot()).toBeNull()
+        expect(queries.map(({ list }) => list)).toEqual([LISTS.GLOBAL_SETTINGS])
+      })
+
+      it('does not ask a list that has denied the user access', async () => {
+        const { service, queries } = portal({
+          [LISTS.INSTALLATION_LOG]: () => [INSTALLATION],
+          [LISTS.PROJECTS]: () => forbidden()
+        })
+        expect(await service.getProjectDetails()).toBeNull()
+        expect(await service.getUsageSnapshot()).toEqual({
+          channel: 'test',
+          templateVersion: '1.15.0'
+        })
+        expect(queries.map(({ list }) => list)).toEqual([LISTS.PROJECTS, LISTS.INSTALLATION_LOG])
+      })
+    })
+
+    describe('getSiteKind', () => {
+      const SITE_ID = 'a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d'
+
+      it.each([
+        [{ GtIsProgram: true, GtIsParentProject: true }, 'program'],
+        [{ GtIsProgram: true, GtIsParentProject: false }, 'program'],
+        [{ GtIsProgram: false, GtIsParentProject: true }, 'parent'],
+        [{ GtIsProgram: false, GtIsParentProject: false }, 'project'],
+        [{ GtIsProgram: null, GtIsParentProject: null }, 'project']
+      ])("reads the site's row in Prosjekter: %p is a %s", async (flags, siteType) => {
+        const { service, queries } = portal({ [LISTS.PROJECTS]: projects({ flags: [flags] }) })
+        expect(await service.getSiteKind(SITE_ID)).toBe(siteType)
+        expect(queries).toEqual([
+          {
+            list: LISTS.PROJECTS,
+            calls: [
+              ['select', 'GtIsProgram', 'GtIsParentProject'],
+              ['filter', `GtSiteId eq '${SITE_ID}'`],
+              ['top', 1]
+            ]
+          }
+        ])
+      })
+
+      it('takes a site without a row for something else than a project of the hub', async () => {
+        const { service } = portal({ [LISTS.PROJECTS]: projects({ flags: [] }) })
+        expect(await service.getSiteKind(SITE_ID)).toBe('other')
+      })
+
+      it('finds the row by the id as SharePoint stores it, and asks nothing for a value that is no id', async () => {
+        const { service, queries } = portal({
+          [LISTS.PROJECTS]: projects({ flags: [{ GtIsProgram: true }] })
+        })
+        expect(await service.getSiteKind(`{${SITE_ID.toUpperCase()}}`)).toBe('program')
+        expect(queries[0].calls).toContainEqual(['filter', `GtSiteId eq '${SITE_ID}'`])
+
+        for (const value of ["x' or GtSiteId ne '", 'site-1', '', undefined, null]) {
+          expect(await service.getSiteKind(value)).toBe('other')
+        }
+        expect(queries).toHaveLength(1)
+      })
+
+      it('is not cached: it uses no cache, and reads the hub each time it is asked', async () => {
+        const { service, queries } = portal({ [LISTS.PROJECTS]: projects({ flags: [{}] }) })
+        await service.getSiteKind(SITE_ID)
+        await service.getSiteKind(SITE_ID)
+        expect(queries).toHaveLength(2)
+        expect(queries.flatMap(({ calls }) => calls.map(([name]) => name))).not.toContain('using')
+      })
+
+      it('answers other when the row cannot be read, and keeps the list', async () => {
+        const { service, queries } = portal({
+          [LISTS.PROJECTS]: () => Object.assign(new Error('[503]'), { status: 503 })
+        })
+        expect(await service.getSiteKind(SITE_ID)).toBe('other')
+        expect(service.isListAvailable('PROJECTS')).toBe(true)
+        expect(await service.getSiteKind(SITE_ID)).toBe('other')
+        expect(queries).toHaveLength(2)
+      })
+
+      it('answers other when the list is denied, and does not ask it again', async () => {
+        // A member of «Minimum lesetilganger på hub» may not read the list of all projects.
+        const { service, queries } = portal({ [LISTS.PROJECTS]: () => forbidden() })
+        expect(await service.getSiteKind(SITE_ID)).toBe('other')
+        expect(service.isListAvailable('PROJECTS')).toBe(false)
+        expect(service.isAvailable).toBe(true)
+        expect(await service.getSiteKind(SITE_ID)).toBe('other')
+        expect(await service.getProjectDetails()).toBeNull()
+        expect(queries).toHaveLength(1)
+      })
+
+      it('answers other, and asks nothing, when the hub is out of reach', async () => {
+        const { service, queries } = portal({
+          [LISTS.GLOBAL_SETTINGS]: () => forbidden(),
+          [LISTS.PROJECTS]: projects({ flags: [{ GtIsProgram: true }] })
+        })
+        await service.getGlobalSettings()
+        expect(await service.getSiteKind(SITE_ID)).toBe('other')
+        expect(queries.map(({ list }) => list)).toEqual([LISTS.GLOBAL_SETTINGS])
+      })
+
+      it('answers other when the hub web cannot be asked at all', async () => {
+        const { service } = portal({})
+        service.web = undefined
+        expect(await service.getSiteKind(SITE_ID)).toBe('other')
+        expect(await service.getUsageSnapshot()).toEqual({ channel: 'unknown' })
+      })
     })
   })
 

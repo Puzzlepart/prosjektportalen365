@@ -1,6 +1,7 @@
 import { AppsListRegular, TextBulletListLtrRegular } from '@fluentui/react-icons'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ListMenuItem, ListMenuItemDivider, format } from 'pp365-shared-library'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { useMemo } from 'react'
 import { IPortfolioAggregationContext } from '../context'
 import {
@@ -14,9 +15,12 @@ import { Icons } from './icons'
 import resource from 'SharedResources'
 
 /**
- * Build export, view, layout, view-editing and filter commands for the aggregation.
+ * Build export, view, layout, view-editing and filter commands for the aggregation. A data source
+ * and a list layout picked from the view selector are counted for usage statistics, for the web
+ * part the overview is in.
  */
 export function useToolbarItems(context: IPortfolioAggregationContext) {
+  const telemetry = useTelemetry()
   const checkedValues = useMemo(
     () => ({
       views: [context.state.currentView?.id.toString()],
@@ -35,6 +39,7 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
       })
       .setOnClick(() => {
         context.dispatch(SET_DATA_SOURCE({ dataSource }))
+        telemetry.track('dataSource.switched')
       })
   )
 
@@ -69,6 +74,7 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
               })
               .setOnClick(() => {
                 context.dispatch(TOGGLE_COMPACT(false))
+                telemetry.track('layout.toggled')
               }),
             new ListMenuItem(strings.CompactViewText)
               .setIcon(TextBulletListLtrRegular)
@@ -78,6 +84,7 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
               })
               .setOnClick(() => {
                 context.dispatch(TOGGLE_COMPACT(true))
+                telemetry.track('layout.toggled')
               }),
             ListMenuItemDivider,
             ...views,

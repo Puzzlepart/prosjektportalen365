@@ -29,9 +29,9 @@ import {
 import resource from 'SharedResources'
 import { IProgressProps } from 'pp365-shared-library'
 import { getNewEntityProperties } from './newEntityProperties'
-import { isParentSiteType, readSiteType } from './siteType'
+import { isParentSiteType } from './siteType'
 import { syncPhaseToHub } from './syncPhaseToHub'
-import { TelemetryResolvedSiteType } from 'pp365-shared-library/lib/telemetry'
+import { readSiteType, TelemetryResolvedSiteType } from 'pp365-shared-library/lib/telemetry'
 
 /** Provides project data, hub synchronization, matrix sources and archive operations. */
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {

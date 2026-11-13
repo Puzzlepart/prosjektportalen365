@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { IChangelogEntry } from 'models'
 import { CatalogService } from 'services'
 
@@ -11,6 +12,8 @@ export function usePackageHistory(changelogUrl?: string) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
   const [reloadToken, setReloadToken] = useState(0)
+  // A failed load the admin is told about is counted for usage statistics, by its error code.
+  const telemetry = useTelemetry()
 
   useEffect(() => {
     let cancelled = false
@@ -27,8 +30,9 @@ export function usePackageHistory(changelogUrl?: string) {
         setEntries(result)
         setLoading(false)
       })
-      .catch(() => {
+      .catch((error) => {
         if (cancelled) return
+        telemetry.trackError(error)
         setError(true)
         setLoading(false)
       })

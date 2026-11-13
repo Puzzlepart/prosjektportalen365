@@ -10,7 +10,7 @@ import {
   TelemetryVariant
 } from './contract'
 import { ITelemetryGate } from './gate'
-import { TelemetryHeartbeatInput } from './validate'
+import { TelemetryHeartbeatInput, TelemetryUsageSnapshot } from './validate'
 
 /**
  * The name of the store on `window`. The shared library is copied into every bundle, so a module
@@ -21,13 +21,16 @@ export const TELEMETRY_STORE_KEY = '__pp365UsageV1'
 
 /**
  * The hub's data service as telemetry needs it: `PortalDataService` fits. Telemetry reads the
- * settings only through `getGlobalSettings`, which the app itself caches.
+ * settings only through `getGlobalSettings`, which the app itself caches, and the hub's
+ * installation facts for a heartbeat only through `getUsageSnapshot`.
  */
 export interface ITelemetryPortal {
   isAvailable: boolean
   hubSiteId?: string
   url?: string
   getGlobalSettings(): Promise<Map<string, string>>
+  /** The hub's installation facts, or `null` when the hub is out of reach. Read for a heartbeat. */
+  getUsageSnapshot?(): Promise<TelemetryUsageSnapshot | null>
 }
 
 /** The page telemetry runs on, normalised: a value that is not valid is an empty text. */
@@ -97,6 +100,17 @@ export interface ITelemetryStore {
   heartbeat?: TelemetryHeartbeatInput
   /** A hub's heartbeat goes at most once per page load. */
   heartbeatQueued: boolean
+  /**
+   * The hub's language of a heartbeat the Footer has asked for (`requestHeartbeat`), while it
+   * waits for the gate: the hub's installation facts are read only once the level allows them.
+   */
+  heartbeatRequest?: TelemetryHeartbeatInput['hubLanguage']
+  /**
+   * The page whose view was counted last (`trackPageView`): the site's id and a hash of the
+   * page's path, never the path itself. It keeps two Footer bundles on one page from counting the
+   * same view twice. Like the site ids it stays in memory, and it is never part of a batch.
+   */
+  lastPageViewKey?: string
   anchor?: ITelemetryAnchor
   decision?: ITelemetryDecision
   /** A lower answer from a settings map that came before the anchor's own answer. */
@@ -167,9 +181,15 @@ export function isTelemetryLevelClosed(store: ITelemetryStore, level: TelemetryL
   return !!store.decision && store.decision.level < level
 }
 
-/** Drops what was collected above a level: usage below 2, errors and timings below 3. */
+/**
+ * Drops what was collected above a level: the heartbeat, and one that was asked for, below 1,
+ * usage below 2, errors and timings below 3.
+ */
 export function pruneTelemetryStore(store: ITelemetryStore, level: TelemetryLevel): void {
-  if (level < 1) store.heartbeat = undefined
+  if (level < 1) {
+    store.heartbeat = undefined
+    store.heartbeatRequest = undefined
+  }
   if (level < 2) store.usage = {}
   if (level < 3) {
     store.errors = {}

@@ -4,7 +4,7 @@
 // stand-in for Microsoft Graph's Planner that answers a turn of the event loop later, as Graph
 // does, and `spfi()` hand out `sp`, the risk list. `planner` and `list` record what they hold and
 // what was written to them. The adapter's base class is a stand-in too: the test sets the global
-// settings.
+// settings. Usage statistics are the real ones, counting in the window's memory.
 interface IFakeTask {
   id: string
   title: string
@@ -13,12 +13,18 @@ interface IFakeTask {
   percentComplete?: number
 }
 
-/** What PnPjs 4 fails with when Graph refuses a request: Graph's error body after `::>`. */
+/**
+ * What PnPjs 4 fails with when Graph refuses a request: Graph's error body after `::>`, and the
+ * response's status.
+ */
 const graphError = (message: string) =>
-  new Error(
-    `Error making HttpClient request in queryable [403] Forbidden ::> ${JSON.stringify({
-      error: { code: 'Forbidden', message }
-    })}`
+  Object.assign(
+    new Error(
+      `Error making HttpClient request in queryable [403] Forbidden ::> ${JSON.stringify({
+        error: { code: 'Forbidden', message }
+      })}`
+    ),
+    { status: 403 }
   )
 
 const planner = {
@@ -30,7 +36,7 @@ const planner = {
   failBuckets: false,
   /** The titles of the tasks Planner refuses, and what it refuses them with */
   refusedTitles: [] as string[],
-  refusal: graphError('Du har ikke tilgang til planen.')
+  refusal: graphError('Du har ikke tilgang til planen.') as Error
 }
 const list = {
   items: [] as any[],
@@ -169,10 +175,16 @@ jest.mock('pp365-shared-library', () => ({
   DefaultCaching: {},
   SPDataAdapterBase: class {
     public globalSettings = new Map<string, string>()
-  }
+  },
+  errorWithCause: jest.requireActual('pp365-shared-library/lib/util/errorWithCause').errorWithCause
 }))
 
 import strings from 'ProjectExtensionsStrings'
+import { errorCodeFrom } from 'pp365-shared-library/lib/telemetry'
+import {
+  countedTelemetry,
+  startTestTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import { DataAdapter } from './dataAdapter'
 import { RiskActionItemContext } from './types'
 
@@ -224,6 +236,7 @@ beforeEach(() => {
   list.itemUpdates = []
   list.fields = []
   list.addedFields = []
+  startTestTelemetry()
 })
 
 describe('DataAdapter (risk actions in Planner)', () => {
@@ -332,6 +345,35 @@ describe('DataAdapter (risk actions in Planner)', () => {
     expect(refused).toEqual([
       { title: 'Inngå rammeavtale', reason: 'Du har ikke tilgang til planen.' }
     ])
+  })
+
+  it('counts each action Planner refuses at a migration for the field, by the status Planner answered with', async () => {
+    planner.refusedTitles = ['Inngå rammeavtale', 'Følg opp leveransene']
+    await dataAdapter().addTasks(
+      ['Finn en reserveleverandør', 'Inngå rammeavtale', 'Følg opp leveransene'],
+      RISK
+    )
+    expect(countedTelemetry()).toEqual({
+      usage: {},
+      errors: { 'RiskActionPlanner permission_denied 403': 2 },
+      timings: {}
+    })
+  })
+
+  it('keeps what Planner failed with as the cause of the error it tells, and leaves the count to the panel and the dialog that show it', async () => {
+    planner.refusedTitles = ['Inngå rammeavtale']
+    const refused = await dataAdapter()
+      .addTask(new Map([['title', 'Inngå rammeavtale']]), RISK)
+      .catch((error) => error)
+    expect(refused.message).toBe('Du har ikke tilgang til planen.')
+    expect(refused.cause).toBe(planner.refusal)
+    expect(errorCodeFrom(refused)).toBe('permission_denied')
+    planner.failBuckets = true
+    const failed = await dataAdapter()
+      .addTasks(['Finn en reserveleverandør'], RISK)
+      .catch((error) => error)
+    expect(failed.cause).toMatchObject({ message: 'Planner svarte ikke' })
+    expect(countedTelemetry().errors).toEqual({})
   })
 
   it('fails a task Planner refuses with what Planner said, for the new-action panel to show', async () => {

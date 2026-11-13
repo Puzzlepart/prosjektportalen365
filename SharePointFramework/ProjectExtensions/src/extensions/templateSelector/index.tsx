@@ -19,6 +19,15 @@ import {
   unmountReact,
   whenHostMenuHasClosed
 } from 'pp365-shared-library'
+import {
+  attachTelemetryPortal,
+  flushTelemetry,
+  registerSiteTypeResolver,
+  startTelemetry,
+  telemetryInitFromContext,
+  TelemetryProvider,
+  trackError
+} from 'pp365-shared-library/lib/telemetry'
 import resource from 'SharedResources'
 
 /** Opens the document-template wizard for the current library and folder. */
@@ -39,6 +48,8 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
     })
     Logger.subscribe(ConsoleListener())
     Logger.activeLogLevel = sessionStorage.DEBUG === '1' || DEBUG ? LogLevel.Info : LogLevel.Warning
+    // The page is known here; the hub's data service follows when the command is first run.
+    startTelemetry(telemetryInitFromContext(this.context, { isDebug: DEBUG }))
     this._openCmd = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR')
     if (!this._openCmd) return
 
@@ -96,10 +107,15 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
 
   private async _loadData(): Promise<boolean> {
     try {
+      const siteId = this.context.pageContext.site.id.toString()
       await SPDataAdapter.configure(this.context, {
-        siteId: this.context.pageContext.site.id.toString(),
+        siteId,
         webUrl: this.context.pageContext.web.absoluteUrl
       })
+      // The hub is known now: usage statistics read the level through it, and ask it what kind
+      // of site this is. The adapter has not read the settings, so none are handed over.
+      attachTelemetryPortal(SPDataAdapter.portalDataService)
+      registerSiteTypeResolver(siteId, () => SPDataAdapter.portalDataService.getSiteKind(siteId))
 
       const templateLib = this.properties.templateLibrary || resource.Lists_TemplateLibrary_Title
       this._ctxValue.templateLibrary = {
@@ -126,7 +142,9 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
         level: LogLevel.Info
       })
       return true
-    } catch {
+    } catch (error) {
+      // The command tells the failure in its title; usage statistics count it by its code.
+      trackError('TemplateSelectorCommand', error)
       this._loadDataPromise = null
       this._hasAccessToTemplateLibrary = false
       this.raiseOnChange()
@@ -140,16 +158,23 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
 
   private _onOpenTemplateSelector(opener?: HTMLElement | null) {
     const placeholder = this._getPlaceholder()
+    // The dialog is a React root of its own, so it gets the command's alias for usage statistics.
     const element = (
-      <TemplateSelectorContext.Provider value={this._ctxValue}>
-        <DocumentTemplateDialog
-          title={strings.TemplateLibrarySelectModalTitle}
-          onDismiss={(props) => {
-            this._unmount(placeholder, opener)
-            if (props.reload) document.location.reload()
-          }}
-        />
-      </TemplateSelectorContext.Provider>
+      <TelemetryProvider component='TemplateSelectorCommand'>
+        <TemplateSelectorContext.Provider value={this._ctxValue}>
+          <DocumentTemplateDialog
+            title={strings.TemplateLibrarySelectModalTitle}
+            onDismiss={(props) => {
+              this._unmount(placeholder, opener)
+              if (props.reload) {
+                // What the copy counted is sent before the page goes: a reload may give no time.
+                flushTelemetry({ urgent: true })
+                document.location.reload()
+              }
+            }}
+          />
+        </TemplateSelectorContext.Provider>
+      </TelemetryProvider>
     )
     renderReact(element, placeholder)
   }

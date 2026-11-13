@@ -11,6 +11,7 @@ import {
 } from 'pp365-portfoliowebparts/lib/components/PortfolioOverview'
 import { createElement } from 'react'
 import { ErrorWithIntent, UserMessage, renderReact } from 'pp365-shared-library'
+import { trackError } from 'pp365-shared-library/lib/telemetry'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { IProgramProjectOverviewProps } from './types'
 import resource from 'SharedResources'
@@ -48,6 +49,9 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
       this.properties.title = resource.WebParts_ProgramProjectOverview_Title
     } catch (error) {
       this._configurationError = error as ErrorWithIntent
+      // Counted where the configuration fails to load, once, by the error's own code: `render`
+      // shows the error every time it runs, and its message stays on the page.
+      trackError(this._telemetryComponent, error)
     }
   }
 

@@ -8,6 +8,11 @@ jest.mock('pp365-shared-library/lib/components/ItemColumn/ColumnDataTypeField', 
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectColumn, format, getComboboxExpandIconProps } from 'pp365-shared-library'
+import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
+import {
+  countedTelemetry,
+  startTestTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import * as React from 'react'
 import { PortfolioOverviewContext } from '../context'
 import { ColumnFormPanel } from './index'
@@ -15,9 +20,9 @@ import { ColumnFormPanel } from './index'
 /**
  * The portfolio overview's column form with its own hook: an existing column's values show once it
  * has arrived, which the form reads after it opens; a save keeps what the form does not edit and
- * writes no value the user did not give; the title column cannot be deleted, and a delete the list
- * refused is told; and a new column cannot take a managed property another column of the list
- * shows already.
+ * writes no value the user did not give; the title column cannot be deleted, and a save or a
+ * delete the list refused is told, and counted once by its error code; and a new column cannot
+ * take a managed property another column of the list shows already.
  */
 const projectNumber = () =>
   new ProjectColumn({
@@ -74,20 +79,22 @@ function renderForm(columnForm: Record<string, any>, isDeleted = true) {
   const updateItemInList = jest.fn().mockResolvedValue({})
   const deleteItemFromList = jest.fn().mockResolvedValue(isDeleted)
   render(
-    <PortfolioOverviewContext.Provider
-      value={
-        {
-          state: { columnForm, columns: [], managedProperties: [], deletedColumnIds: [9] },
-          props: {
-            configuration: { columns: [projectNumber(), deletedColumn()] },
-            dataAdapter: { portalDataService: { updateItemInList, deleteItemFromList } }
-          },
-          dispatch
-        } as any
-      }
-    >
-      <ColumnFormPanel />
-    </PortfolioOverviewContext.Provider>
+    <TelemetryProvider component='PortfolioOverviewWebPart'>
+      <PortfolioOverviewContext.Provider
+        value={
+          {
+            state: { columnForm, columns: [], managedProperties: [], deletedColumnIds: [9] },
+            props: {
+              configuration: { columns: [projectNumber(), deletedColumn()] },
+              dataAdapter: { portalDataService: { updateItemInList, deleteItemFromList } }
+            },
+            dispatch
+          } as any
+        }
+      >
+        <ColumnFormPanel />
+      </PortfolioOverviewContext.Provider>
+    </TelemetryProvider>
   )
   return { dispatch, updateItemInList, deleteItemFromList }
 }
@@ -109,6 +116,8 @@ async function save(dispatch: jest.Mock) {
   fireEvent.click(button(strings.SaveButtonLabel))
   await waitFor(() => expect(dispatch.mock.calls.length).toBeGreaterThan(saves))
 }
+
+beforeEach(() => startTestTelemetry())
 
 afterEach(async () => {
   cleanup()
@@ -196,6 +205,28 @@ describe('ColumnFormPanel (portfolio overview) with its own hook', () => {
     expect(await screen.findByText(strings.ColumnDeleteErrorText)).toBeInTheDocument()
     expect(deleteItemFromList).toHaveBeenCalledWith('PROJECT_COLUMNS', 7)
     expect(dispatch).not.toHaveBeenCalledWith(expect.objectContaining({ type: 'COLUMN_DELETED' }))
+    // The data service keeps no answer from the list: the refusal has no status to be counted by.
+    expect(countedTelemetry().errors).toEqual({ 'PortfolioOverviewWebPart unknown': 1 })
+  })
+
+  it('says so when the list refuses a save, and counts the refusal once by its code', async () => {
+    const { dispatch, updateItemInList } = renderForm({ isOpen: true, column: projectNumber() })
+    updateItemInList.mockRejectedValueOnce(
+      Object.assign(new Error('Du har ikke tilgang til listen'), { status: 403 })
+    )
+    fireEvent.click(button(strings.SaveButtonLabel))
+    expect(await screen.findByText('Du har ikke tilgang til listen')).toBeInTheDocument()
+    expect(dispatch).not.toHaveBeenCalled()
+    expect(countedTelemetry().errors).toEqual({
+      'PortfolioOverviewWebPart permission_denied 403': 1
+    })
+
+    // A save the list takes clears the message, and counts nothing more.
+    await save(dispatch)
+    expect(screen.queryByText('Du har ikke tilgang til listen')).toBeNull()
+    expect(countedTelemetry().errors).toEqual({
+      'PortfolioOverviewWebPart permission_denied 403': 1
+    })
   })
 
   it('keeps what the form does not edit in the column it saves', async () => {

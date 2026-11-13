@@ -101,6 +101,10 @@ import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testi
 import strings from 'ProjectExtensionsStrings'
 import { axeComponent } from 'pp365-jest-config/lib/axe'
 import { format, getComboboxExpandIconProps } from 'pp365-shared-library'
+import {
+  countedTelemetry,
+  startTestTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import * as React from 'react'
 import { ProjectSetupValidation } from '../../extensions/projectSetup/types'
 import { ProjectSetupDialog } from './ProjectSetupDialog'
@@ -349,11 +353,24 @@ describe('ProjectSetupDialog', () => {
     ).toBeInTheDocument()
   })
 
-  it('says so when a cloud template cannot be read', async () => {
-    cloud.resolve.mockImplementation(() => Promise.reject(new Error('404')))
+  it('says so when a cloud template cannot be read, and counts the failure for the setup', async () => {
+    // Usage statistics are the real ones, counting in the window's memory from nothing.
+    startTestTelemetry()
+    // As the package loader fails: its error has the status on it, and the text is not read.
+    cloud.resolve.mockImplementation(() =>
+      Promise.reject(
+        Object.assign(new Error('Failed to download package (HTTP 404 Not Found)'), { status: 404 })
+      )
+    )
     renderDialog({ data: setupData({ templates: [...TEMPLATES, CLOUD] }) })
     fireEvent.change(picker(), { target: { value: '3' } })
     expect(await screen.findByText(strings.CloudTemplateResolveErrorMessage)).toBeInTheDocument()
     expect(submit()).toBeDisabled()
+    // The wizard is a React root of its own: it counts under the setup's alias without a provider.
+    expect(countedTelemetry()).toEqual({
+      usage: {},
+      errors: { 'ProjectSetup not_found 404': 1 },
+      timings: {}
+    })
   })
 })

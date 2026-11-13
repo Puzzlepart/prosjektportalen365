@@ -24,6 +24,7 @@ import {
   PropertyPaneDescription,
   renderReact
 } from 'pp365-shared-library'
+import { TelemetryEventComponent, trackError, trackUsage } from 'pp365-shared-library/lib/telemetry'
 import { DataAdapter } from 'data/DataAdapter'
 
 /** Host portfolio projects and reconfigure data services when the selected hub changes. */
@@ -55,7 +56,8 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
   }
 
   /**
-   * Callback function to set the portfolio to display in the web part.
+   * Callback function to set the portfolio to display in the web part. A switch that got the
+   * portfolio's configuration is counted for usage statistics, once, before it is shown.
    *
    * @param portfolioId Unique ID of the portfolio, or null for merged view
    */
@@ -83,6 +85,10 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
       )
       this._configuration = await this.dataAdapter.getPortfolioConfig()
     }
+    trackUsage(
+      this._telemetryComponent as TelemetryEventComponent<'portfolio.switched'>,
+      'portfolio.switched'
+    )
     this.render()
   }
 
@@ -97,6 +103,9 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
       this._configuration = await this.dataAdapter.getPortfolioConfig()
     } catch (error) {
       this._error = error as ErrorWithIntent
+      // Counted where the configuration fails to load, once, by the error's own code: `render`
+      // shows the error every time it runs, and its message stays on the page.
+      trackError(this._telemetryComponent, error)
     }
   }
 

@@ -1,6 +1,14 @@
+import type { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
+import type {
+  FieldCustomizerContext,
+  FormCustomizerContext,
+  ListViewCommandSetContext
+} from '@microsoft/sp-listview-extensibility'
+import type { WebPartContext } from '@microsoft/sp-webpart-base'
 import { errorWithCause } from '../util/errorWithCause'
 import { MAX_ENTRY_COUNT } from './contract'
 import { attachTelemetryPortal, flushTelemetry, getTelemetryGate } from './flush'
+import { hubLanguageFromLcid } from './heartbeat'
 import {
   HOST,
   HUB_SITE_ID,
@@ -9,19 +17,25 @@ import {
   hubPortal,
   ITelemetryTestBed,
   PROJECT_SITE_ID,
+  PROJECT_URL,
   projectPage,
   settingsMap,
   settle,
+  spfxTestContext,
   telemetryStore,
   telemetryTestBed,
   TENANT_ID
 } from './__fixtures__/testFixtures'
 import {
+  ITelemetryInit,
   queueHeartbeat,
   registerSiteTypeResolver,
+  requestHeartbeat,
+  setSiteType,
   startTelemetry,
   telemetryInitFromContext,
   trackError,
+  trackPageView,
   trackTiming,
   trackUsage
 } from './track'
@@ -122,7 +136,10 @@ describe('startTelemetry', () => {
     expect(() => trackError(undefined, undefined)).not.toThrow()
     expect(() => trackTiming(undefined, undefined, undefined)).not.toThrow()
     expect(() => queueHeartbeat(undefined)).not.toThrow()
+    expect(() => requestHeartbeat(undefined)).not.toThrow()
     expect(() => registerSiteTypeResolver(undefined, undefined)).not.toThrow()
+    expect(() => setSiteType(undefined, undefined)).not.toThrow()
+    expect(() => trackPageView(undefined)).not.toThrow()
     expect(() => flushTelemetry()).not.toThrow()
   })
 
@@ -137,7 +154,10 @@ describe('startTelemetry', () => {
       trackError('Footer', 'render_failed')
       trackTiming('PortfolioOverviewWebPart', 'init', 10)
       queueHeartbeat({ channel: 'main', hubLanguage: 'nb-NO' })
+      requestHeartbeat('nb-NO')
       registerSiteTypeResolver(PROJECT_SITE_ID, () => Promise.resolve('project'))
+      setSiteType(PROJECT_SITE_ID, 'project')
+      trackPageView('Footer')
     }).not.toThrow()
   })
 
@@ -191,6 +211,38 @@ describe('startTelemetry', () => {
     const noUrl = context(HUB_SITE_ID)
     noUrl.pageContext.web.absoluteUrl = undefined
     expect(telemetryInitFromContext(noUrl, { isDebug: false }).host).toBe('')
+  })
+
+  it('takes the context of a web part and of every kind of extension: the compiler checks that each fits', () => {
+    // Type imports only, erased when compiled: no test loads SPFx.
+    type AnyContext =
+      | WebPartContext
+      | ApplicationCustomizerContext
+      | ListViewCommandSetContext
+      | FieldCustomizerContext
+      | FormCustomizerContext
+    const fromContext: (
+      context: AnyContext,
+      options: Pick<ITelemetryInit, 'isDebug' | 'canManageHub'>
+    ) => ITelemetryInit = telemetryInitFromContext
+    expect(fromContext).toBe(telemetryInitFromContext)
+  })
+
+  it("reads a page of the hub and of a project off the fixtures' context, for the tests of the solutions", () => {
+    const hub = spfxTestContext()
+    expect(telemetryInitFromContext(hub, { isDebug: false })).toEqual(hubPage())
+    expect(hub.manifest.alias).toBe('Footer')
+    // What the Footer reads beside them: the hub's language, and whether the user manages the web.
+    expect(hubLanguageFromLcid(hub.pageContext.web.language)).toBe('nb-NO')
+    expect(hub.pageContext.web.permissions.hasPermission()).toBe(false)
+    expect(
+      spfxTestContext({ canManageWeb: true }).pageContext.web.permissions.hasPermission()
+    ).toBe(true)
+
+    const project = spfxTestContext({ page: 'project', alias: 'RiskActionPlanner' })
+    expect(telemetryInitFromContext(project, { isDebug: false })).toEqual(projectPage())
+    expect(project.manifest.alias).toBe('RiskActionPlanner')
+    expect(project.pageContext.site.absoluteUrl).toBe(PROJECT_URL)
   })
 
   it('never throws on a context it cannot read, and gives a page that nothing is sent from', async () => {
@@ -585,5 +637,82 @@ describe('registerSiteTypeResolver', () => {
     const december = flushed().sites[0].h
     expect(december).toMatch(/^[0-9a-f]{16}$/)
     expect(december).not.toBe(november)
+  })
+})
+
+describe('setSiteType', () => {
+  it('gives the site its type at once, so what is counted on it goes in the next flush', async () => {
+    await start('2', projectPage())
+    trackUsage('ProjectSetup', 'setup.completed', 'new')
+    expect(flushed()).toBeUndefined()
+
+    setSiteType(`{${PROJECT_SITE_ID.toUpperCase()}}`, 'program')
+    expect(telemetryStore().siteTypes).toEqual({ [PROJECT_SITE_ID]: 'program' })
+    expect(flushed().usage).toEqual([
+      { c: 'ProjectSetup', e: 'setup.completed', s: 'program', v: 'new', n: 1 }
+    ])
+  })
+
+  it('replaces what a resolver answered before the setup changed the site', async () => {
+    const resolver = jest.fn(() => Promise.resolve('project' as const))
+    await start('2', projectPage())
+    registerSiteTypeResolver(PROJECT_SITE_ID, resolver)
+    trackUsage('ProjectStatusWebPart', 'loaded')
+    await settle()
+    expect(telemetryStore().siteTypes[PROJECT_SITE_ID]).toBe('project')
+
+    // The site is made a parent project: the template says what it is now.
+    setSiteType(PROJECT_SITE_ID, 'parent')
+    trackUsage('ProjectSetup', 'setup.completed', 'parent')
+    expect(flushed().usage).toEqual([
+      { c: 'ProjectSetup', e: 'setup.completed', s: 'parent', v: 'parent', n: 1 },
+      { c: 'ProjectStatusWebPart', e: 'loaded', s: 'parent', n: 1 }
+    ])
+    expect(resolver).toHaveBeenCalledTimes(1)
+  })
+
+  it('stands when a resolver that was already asked answers after it', async () => {
+    let answer: (siteType: 'project') => void
+    const resolver = jest.fn(() => new Promise<'project'>((resolve) => (answer = resolve)))
+    await start('2', projectPage())
+    registerSiteTypeResolver(PROJECT_SITE_ID, resolver)
+    await settle()
+    expect(resolver).toHaveBeenCalledTimes(1)
+
+    setSiteType(PROJECT_SITE_ID, 'program')
+    answer('project')
+    await settle()
+    expect(telemetryStore().siteTypes[PROJECT_SITE_ID]).toBe('program')
+  })
+
+  it('leaves a resolver that is registered and not yet asked unasked', async () => {
+    const resolver = jest.fn(() => Promise.resolve('project' as const))
+    startTelemetry(projectPage())
+    registerSiteTypeResolver(PROJECT_SITE_ID, resolver)
+    setSiteType(PROJECT_SITE_ID, 'parent')
+    attachTelemetryPortal(hubPortal(), settingsMap('2'))
+    registerSiteTypeResolver(PROJECT_SITE_ID, resolver)
+    trackUsage('ProjectStatusWebPart', 'loaded')
+    await settle()
+    expect(resolver).not.toHaveBeenCalled()
+    expect(flushed().usage[0].s).toBe('parent')
+  })
+
+  it('keeps a hub a hub, and takes only the site types a site other than the hub can have', async () => {
+    await start('2')
+    setSiteType(HUB_SITE_ID, 'project')
+    expect(telemetryStore().siteTypes).toEqual({ [HUB_SITE_ID]: 'hub' })
+
+    setSiteType(PROJECT_SITE_ID, 'hub' as never)
+    setSiteType(PROJECT_SITE_ID, 'Prosjekt A' as never)
+    setSiteType(PROJECT_SITE_ID, undefined)
+    setSiteType('prosjekt-a', 'project')
+    setSiteType(undefined, 'project')
+    expect(telemetryStore().siteTypes).toEqual({ [HUB_SITE_ID]: 'hub' })
+  })
+
+  it('does nothing before telemetry is started', () => {
+    setSiteType(PROJECT_SITE_ID, 'project')
+    expect(telemetryStore()).toBeUndefined()
   })
 })

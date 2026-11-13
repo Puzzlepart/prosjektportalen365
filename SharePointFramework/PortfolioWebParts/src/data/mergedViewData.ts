@@ -63,8 +63,9 @@ export function mergePortfolioViewData(results: IPortfolioViewResult[]): IPortfo
 /**
  * The merged view's rows: the primary portfolio's, then each other portfolio's that is included,
  * read one by one. A portfolio that cannot be read is left out and named in `failedPortfolios`,
- * so the view can say so (WCAG 3.3.1); the primary's failure is the view's. Nothing is read when
- * no portfolio is included.
+ * so the view can say so (WCAG 3.3.1), with what it failed with in `failedPortfolioErrors`, for
+ * usage statistics to count; the primary's failure is the view's. Nothing is read when no
+ * portfolio is included.
  *
  * @param portfolios The portfolios configured, the primary first
  * @param fetchPrimary Reads the primary portfolio's rows
@@ -84,13 +85,15 @@ export async function fetchMergedViewData(
     { portfolio: primary, data: await fetchPrimary(primary) }
   ]
   const failedPortfolios: PortfolioInstance[] = []
+  const failedPortfolioErrors: unknown[] = []
   for (const portfolio of others) {
     try {
       results.push({ portfolio, data: await fetchOther(portfolio) })
     } catch (error) {
       failedPortfolios.push(portfolio)
+      failedPortfolioErrors.push(error)
       onError?.(portfolio, error)
     }
   }
-  return { ...mergePortfolioViewData(results), failedPortfolios }
+  return { ...mergePortfolioViewData(results), failedPortfolios, failedPortfolioErrors }
 }

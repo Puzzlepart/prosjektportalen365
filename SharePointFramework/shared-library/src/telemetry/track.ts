@@ -5,11 +5,19 @@ import {
   TelemetryComponent,
   TelemetryEvent,
   TelemetryEventComponent,
+  TelemetryHubLanguage,
+  TelemetrySiteType,
   TelemetryTimingMetric,
   TelemetryVariant
 } from './contract'
 import { errorCodeFrom, errorHttpStatusFrom } from './errorCode'
-import { flushTelemetry, installTelemetryListeners, refreshTelemetryGate } from './flush'
+import {
+  flushTelemetry,
+  flushTelemetryNow,
+  installTelemetryListeners,
+  refreshTelemetryGate
+} from './flush'
+import { ensureTelemetryHeartbeat } from './heartbeat'
 import { ensureTelemetrySiteInfo, TelemetryResolvedSiteType } from './siteInfo'
 import {
   getTelemetryStore,
@@ -21,6 +29,7 @@ import {
 import {
   isTelemetryComponent,
   isTelemetryErrorCode,
+  isTelemetrySiteType,
   isTelemetryTimingMetric,
   isTelemetryUsage,
   normalizeGuid,
@@ -196,6 +205,50 @@ export function trackUsage<E extends TelemetryEvent>(
 }
 
 /**
+ * A short, one-way stand-in for a text (FNV-1a, 32 bits): enough to tell one page's path from the
+ * next one's, without the path being kept.
+ */
+function hashOf(text: string): string {
+  let hash = 0x811c9dc5
+  for (let index = 0; index < text.length; index++) {
+    hash = Math.imul(hash ^ text.charCodeAt(index), 0x01000193)
+  }
+  return (hash >>> 0).toString(16)
+}
+
+/**
+ * The key of the page a view is counted for: the site's id and a hash of the path of the page's
+ * address, in lowercase and without a trailing slash. The query and the fragment are left out, so
+ * a view that is switched or a folder that is opened in a list is still the same page.
+ */
+function pageViewKey(siteId: string): string {
+  const path = window.location.pathname.toLowerCase().replace(/\/+$/, '')
+  return `${siteId}|${hashOf(path)}`
+}
+
+/**
+ * Counts a page view (`page.viewed`, level 2 and up) for the Footer, once per page. A site can
+ * carry the footers of two channels, and both bundles report the same page to the window's one
+ * store: the second call for a page counts nothing. An SPA navigation to another page counts
+ * again, also back to a page seen before. Call it after `startTelemetry` has been given the page.
+ *
+ * The store remembers the page counted last by its key (`pageViewKey`): the site's id and a hash
+ * of the page's path, never the path itself. The key stays in memory and is in no batch.
+ *
+ * @param component The Footer's alias (`manifest.alias`)
+ */
+export function trackPageView(component: TelemetryEventComponent<'page.viewed'>): void {
+  withStore((store) => {
+    const { siteId } = store.page
+    if (!siteId || !isTelemetryUsage(component, 'page.viewed')) return
+    const key = pageViewKey(siteId)
+    if (store.lastPageViewKey === key) return
+    store.lastPageViewKey = key
+    trackUsage(component, 'page.viewed')
+  })
+}
+
+/**
  * Counts an error (level 3) for a component. Only a code from the contract is counted: one the
  * caller passes (`render_failed`, `provisioning_failed`), or the code and HTTP status
  * `errorCodeFrom` reads off the error. The error's message is never read.
@@ -264,6 +317,26 @@ export function queueHeartbeat(heartbeat: TelemetryHeartbeatInput): void {
 }
 
 /**
+ * Asks for the hub's heartbeat (level 1 and up), from the Footer: the hub's installation facts
+ * are read through the anchor (`PortalDataService.getUsageSnapshot`), joined with the hub's
+ * language and sent at once. Nothing is read before the gate has resolved at level 1 or higher:
+ * the call is safe while the gate is pending, and a hub at level 0 pays for no read. Like
+ * `queueHeartbeat` it takes a heartbeat only on a hub page from a user who may manage the hub,
+ * and once per page load.
+ *
+ * @param hubLanguage The hub web's language (`hubLanguageFromLcid`)
+ */
+export function requestHeartbeat(hubLanguage: TelemetryHubLanguage): void {
+  withStore((store) => {
+    const { isHubPage, canManageHub } = store.page
+    if (isTelemetryLevelClosed(store, 1) || !isHubPage || !canManageHub) return
+    if (store.heartbeatQueued || !hubLanguage) return
+    store.heartbeatRequest = hubLanguage
+    ensureTelemetryHeartbeat(store, Date.now(), flushTelemetryNow)
+  })
+}
+
+/**
  * Registers how to find out what kind of site a site is: a project, a program, a parent project
  * or something else. A hub page needs none. The resolver is called lazily, once per site, and only
  * after the gate has resolved at level 2 or 3, so a hub at a lower level pays for no read. Usage
@@ -281,6 +354,29 @@ export function registerSiteTypeResolver(
     if (!id || typeof resolver !== 'function') return
     if (store.siteTypes[id] || store.siteTypeRequested[id] || store.siteTypeResolvers[id]) return
     store.siteTypeResolvers[id] = resolver
+    afterTracking(store)
+  })
+}
+
+/**
+ * Tells telemetry what kind of site a site is, from code that knows: the project setup, from the
+ * template it has set the site up with (`siteTypeFromTemplate`). It replaces what a resolver
+ * answered, which may have read the site before the setup changed it, and no resolver is asked
+ * for the site afterwards. The type is known at once, so usage counted on the site can go in the
+ * next flush. A hub page stays a hub.
+ *
+ * @param siteId The site's id
+ * @param siteType The site's type
+ */
+export function setSiteType(siteId: string, siteType: TelemetryResolvedSiteType): void {
+  withStore((store) => {
+    const id = normalizeGuid(siteId)
+    // The types rule `hub` out; a caller that cast them away is held to it here.
+    const type = siteType as TelemetrySiteType
+    if (!id || !isTelemetrySiteType(type) || type === 'hub') return
+    if (store.siteTypes[id] === 'hub') return
+    store.siteTypes[id] = type
+    delete store.siteTypeResolvers[id]
     afterTracking(store)
   })
 }

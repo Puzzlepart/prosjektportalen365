@@ -18,6 +18,9 @@ const portal = {
   url: 'https://contoso.sharepoint.com/sites/prosjektportalen',
   getGlobalSettings: () => {
     throw new Error('Telemetry must not read the settings without a window')
+  },
+  getUsageSnapshot: () => {
+    throw new Error('Telemetry must not read the hub without a window')
   }
 }
 
@@ -42,7 +45,10 @@ test('every telemetry call is a no-op without a window', async (t) => {
   telemetry.attachTelemetryPortal(portal)
   telemetry.attachTelemetryPortal(portal, new Map([['UsageStatisticsLevel', '3']]))
   telemetry.registerSiteTypeResolver(SITE_ID, () => Promise.reject(new Error('not called')))
+  telemetry.setSiteType(SITE_ID, 'project')
   telemetry.queueHeartbeat({ channel: 'main', hubLanguage: 'nb-NO' })
+  telemetry.requestHeartbeat('nb-NO')
+  telemetry.trackPageView('Footer')
   telemetry.trackUsage('Footer', 'page.viewed')
   telemetry.trackError('Footer', new Error('boom'))
   telemetry.trackTiming('PortfolioOverviewWebPart', 'init', 120)
@@ -55,9 +61,15 @@ test('every telemetry call is a no-op without a window', async (t) => {
   assert.equal(fetchMock.mock.callCount(), 0)
 })
 
-test('the pure helpers work as they do in the browser', () => {
+test('the pure helpers work as they do in the browser', async () => {
   assert.equal(telemetry.errorCodeFrom({ status: 403 }), 'permission_denied')
   assert.equal(telemetry.setupVariantFrom('__SELECT_TEMPLATE__'), 'rerun')
+  assert.equal(telemetry.hubLanguageFromLcid(1044), 'nb-NO')
+  assert.equal(
+    await telemetry.readSiteType(() => Promise.resolve([{ GtIsProgram: true }])),
+    'program'
+  )
+  assert.equal(await telemetry.readSiteType(() => Promise.resolve([]), 'other'), 'other')
   assert.deepEqual(
     telemetry.resolveTelemetryGate({
       hasAnchor: true,

@@ -12,11 +12,13 @@ import '@pnp/sp/items'
 import '@pnp/sp/lists'
 import '@pnp/sp/site-groups/web'
 import IdeaDialog from 'components/IdeaDialog'
+import { startCommandSetTelemetryWithOwnPortal } from '../../helpers/commandSetTelemetry'
 import { isUserAuthorized } from '../../helpers/isUserAuthorized'
 import strings from 'PortfolioExtensionsStrings'
 import { Choice, IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
 import { find } from 'underscore'
 import { themeColor } from 'pp365-shared-library'
+import { flushTelemetry, trackUsage } from 'pp365-shared-library/lib/telemetry'
 import resource from 'SharedResources'
 
 /** Custom-action properties for the idea-to-project-data command. */
@@ -25,6 +27,9 @@ export interface IIdeaProjectDataCommandProperties {
 }
 
 const LOG_SOURCE: string = 'IdeaProjectDataCommand'
+
+/** The command set's alias in its manifest, which usage statistics count it by. */
+const TELEMETRY_COMPONENT = 'IdeaProjectData'
 
 /** Creates and links project data for an approved idea, then opens the new item's edit form. */
 export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdeaProjectDataCommandProperties> {
@@ -37,6 +42,8 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
   public async onInit(): Promise<void> {
     Log.info(LOG_SOURCE, 'onInit: Initializing...')
     this._sp = spfi().using(SPFx(this.context))
+    // In the background: the command set holds no hub data service, and waits for none.
+    void startCommandSetTelemetryWithOwnPortal(this.context)
     this._openCmd = this.tryGetCommand('OPEN_IDEA_PROJECTDATA_DIALOG')
 
     this._openCmd.title = strings.IdeaProjectDataCommandTitle
@@ -143,6 +150,9 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
     Log.info(LOG_SOURCE, '_redirectNewItem: Created new item')
     const item = await this._addItem(properties)
     await this._updateItem(rowId, item)
+    // Counted for usage statistics and sent at once: the page is left for the edit form below.
+    trackUsage(TELEMETRY_COMPONENT, 'idea.projectDataCreated')
+    flushTelemetry({ urgent: true })
     document.location.hash = ''
     document.location.href = this.editFormUrl(item)
   }

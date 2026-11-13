@@ -7,7 +7,7 @@ import { getSelectedGroups } from './getSelectedGroups'
 import { transformItems } from './transformItems'
 import SPDataAdapter from 'data/SPDataAdapter'
 import strings from 'ProjectWebPartsStrings'
-import { CustomError, isUnauthorizedError } from 'pp365-shared-library'
+import { CustomError, errorWithStatus, isUnauthorizedError } from 'pp365-shared-library'
 
 /**
  * Loads project and timeline data with initial grouping, or returns a localized error state.
@@ -20,7 +20,12 @@ export async function fetchData(
     const properties = await SPDataAdapter.project.getProjectInformationData()
 
     if (SPDataAdapter.portalDataService?.isAvailable === false) {
-      throw new Error(strings.ProjectTimelineNoHubAccessErrorText)
+      // `PortalDataService` swallowed the refusal that took the hub out of reach: with the status
+      // it kept, the failure is counted as the denied permission it was. The text is the same.
+      throw errorWithStatus(
+        strings.ProjectTimelineNoHubAccessErrorText,
+        SPDataAdapter.portalDataService.unavailableStatus
+      )
     }
 
     const timelineConfig = await fetchTimelineConfiguration(

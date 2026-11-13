@@ -1,5 +1,5 @@
-import { GATE_MAX_AGE_MS } from './contract'
-import { attachTelemetryPortal, flushTelemetry } from './flush'
+import { GATE_MAX_AGE_MS, MIN_SEND_INTERVAL_MS } from './contract'
+import { attachTelemetryPortal, flushTelemetry, getTelemetryGate } from './flush'
 import { DISABLE_TELEMETRY_FLAG } from './gate'
 import {
   hubPage,
@@ -14,8 +14,11 @@ import {
 import {
   queueHeartbeat,
   registerSiteTypeResolver,
+  requestHeartbeat,
+  setSiteType,
   startTelemetry,
   trackError,
+  trackPageView,
   trackTiming,
   trackUsage
 } from './track'
@@ -48,26 +51,35 @@ describe('telemetry and the browser', () => {
     attachTelemetryPortal(portal)
     attachTelemetryPortal(hubPortal(), settingsMap('3'))
     await settle()
+    // The Footer: the page view, and the heartbeat, which is read through the anchor and sent.
+    trackPageView('Footer')
+    trackPageView('Footer')
+    requestHeartbeat('nb-NO')
     queueHeartbeat({ channel: 'main', hubLanguage: 'nb-NO', projects: 4 })
-    trackUsage('Footer', 'page.viewed')
+    await settle()
+    expect(portal.getUsageSnapshot).toHaveBeenCalledTimes(1)
+    trackUsage('Footer', 'help.opened')
     trackError('Footer', { status: 404 })
     trackTiming('PortfolioOverviewWebPart', 'init', 900)
+    bed.advance(MIN_SEND_INTERVAL_MS)
     bed.hide()
     bed.show()
 
     startTelemetry(projectPage())
     registerSiteTypeResolver(PROJECT_SITE_ID, () => Promise.resolve('project'))
+    setSiteType(PROJECT_SITE_ID, 'project')
     trackUsage('ProjectStatusWebPart', 'loaded')
     await settle()
     flushTelemetry({ urgent: true })
 
-    // A decision that has grown old is read again.
+    // A decision that has grown old is read again, also by a sender that only asks the gate.
     bed.advance(GATE_MAX_AGE_MS + 1)
+    getTelemetryGate()
     trackUsage('ProjectStatusWebPart', 'statusReport.created')
     await settle()
     bed.leave()
     expect(portal.getGlobalSettings).toHaveBeenCalledTimes(2)
-    expect(bed.fetch).toHaveBeenCalledTimes(3)
+    expect(bed.fetch).toHaveBeenCalledTimes(4)
   }
 
   it('writes to no storage, cookie, database or cache while it starts, counts and sends', async () => {

@@ -2,6 +2,7 @@ import { Toast, ToastBody, ToastTitle, useToastController } from '@fluentui/reac
 import _ from 'lodash'
 import strings from 'PortfolioWebPartsStrings'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import React, { useCallback } from 'react'
 import { IPortfolioAggregationContext } from '../context'
 import { getFilteredItems } from '../usePortfolioAggregationFilteredItems'
@@ -19,10 +20,13 @@ function getColumnName(context: IPortfolioAggregationContext, internalName: stri
  *
  * Exports the selected rows, or else the rows the list shows (filtered and searched as the list
  * does), with trend values as their achievement and the other values as they are: the export
- * service rounds and formats them. A failed export is reported in a toast.
+ * service rounds and formats them. A failed export is reported in a toast. An export that returns
+ * is counted for usage statistics, and one that fails by its error code, for the web part the
+ * overview is in.
  */
 export function useExcelExport(context: IPortfolioAggregationContext) {
   const { dispatchToast } = useToastController(context.toasterId)
+  const telemetry = useTelemetry()
 
   const exportToExcel = useCallback(() => {
     try {
@@ -63,7 +67,9 @@ export function useExcelExport(context: IPortfolioAggregationContext) {
           : undefined
       })
       ExcelExportService.export(exportedItems, context.state.columns)
+      telemetry.track('excel.exported')
     } catch (error) {
+      telemetry.trackError(error)
       // eslint-disable-next-line no-console
       console.error(error)
       dispatchToast(
@@ -74,7 +80,7 @@ export function useExcelExport(context: IPortfolioAggregationContext) {
         { intent: 'error' }
       )
     }
-  }, [context.state, context.props, dispatchToast])
+  }, [context.state, context.props, dispatchToast, telemetry])
 
   return { exportToExcel }
 }

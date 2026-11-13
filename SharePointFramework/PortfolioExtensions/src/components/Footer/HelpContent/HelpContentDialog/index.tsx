@@ -22,6 +22,7 @@ import {
 } from '@fluentui/react-components'
 import { Content } from './Content'
 import { customLightTheme, getFluentIcon } from 'pp365-shared-library'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import strings from 'PortfolioExtensionsStrings'
 
 /** Loads page help on opening and presents entries as tabs in a dialog. */
@@ -31,6 +32,7 @@ export const HelpContentDialog: FC<Omit<DialogProps, 'children'> & { children?: 
   const fluentProviderId = useId('fp-help-dialog')
   const tabsId = useId('help-tab')
   const context = useContext(FooterContext)
+  const telemetry = useTelemetry()
   const [selectedValue, setSelectedValue] = React.useState<TabValue>()
   // A tab chosen on another page is not among this page's help: the dialog stays mounted with
   // the footer across navigations.
@@ -49,7 +51,11 @@ export const HelpContentDialog: FC<Omit<DialogProps, 'children'> & { children?: 
           open={props.open}
           onOpenChange={(event, data) => {
             props.onOpenChange?.(event, data)
-            if (data.open) context.loadHelpContent()
+            if (data.open) {
+              context.loadHelpContent()
+              // Only that the help was opened is counted, not which page or entry.
+              telemetry.track('help.opened')
+            }
           }}
         >
           <DialogTrigger disableButtonEnhancement>{props.children as ReactElement}</DialogTrigger>

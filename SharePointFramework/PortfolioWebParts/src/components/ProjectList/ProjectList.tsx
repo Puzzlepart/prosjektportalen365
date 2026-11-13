@@ -26,7 +26,7 @@ import {
   withDefaults
 } from 'pp365-shared-library'
 import React, { FC } from 'react'
-import { find, isEmpty } from 'underscore'
+import { isEmpty } from 'underscore'
 import styles from './ProjectList.module.scss'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
@@ -229,9 +229,7 @@ export const ProjectList: FC<IProjectListProps> = (incomingProps) => {
                     className={styles.tabList}
                     onTabSelect={(_, data: SelectTabData) => {
                       if (data.value === 'overflow-menu') return
-                      context.setState({
-                        selectedVertical: find(context.verticals, (v) => v.key === data.value)
-                      })
+                      context.selectVertical(data.value)
                     }}
                     selectedValue={context.state.selectedVertical?.key}
                   >
@@ -256,11 +254,7 @@ export const ProjectList: FC<IProjectListProps> = (incomingProps) => {
                       verticals={context.verticals.filter(
                         (vertical) => !vertical.isHidden || !vertical.isHidden(context.state)
                       )}
-                      onSelect={(key) =>
-                        context.setState({
-                          selectedVertical: find(context.verticals, (v) => v.key === key)
-                        })
-                      }
+                      onSelect={context.selectVertical}
                     />
                   </TabList>
                 </Overflow>

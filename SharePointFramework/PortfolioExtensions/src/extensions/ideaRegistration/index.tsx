@@ -13,6 +13,8 @@ import '@pnp/sp/lists'
 import '@pnp/sp/folders/list'
 import '@pnp/sp/site-groups/web'
 import '@pnp/sp/clientside-pages/web'
+import { startCommandSetTelemetry } from '../../helpers/commandSetTelemetry'
+import { ideaChoiceVariant } from '../../helpers/ideaChoiceVariant'
 import { isUserAuthorized } from '../../helpers/isUserAuthorized'
 import strings from 'PortfolioExtensionsStrings'
 import { Choice, IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
@@ -20,7 +22,11 @@ import { find } from 'underscore'
 import { ProjectContentColumn, SPProjectContentColumnItem, themeColor } from 'pp365-shared-library'
 import _ from 'underscore'
 import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
+import { flushTelemetry, trackError, trackUsage } from 'pp365-shared-library/lib/telemetry'
 import resource from 'SharedResources'
+
+/** The command set's alias in its manifest, which usage statistics count it by. */
+const TELEMETRY_COMPONENT = 'IdeaRegistration'
 
 /** Records idea recommendations and copies approved registrations into the processing list. */
 export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any> {
@@ -37,6 +43,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     this._portalDataService = await new PortalDataService().configure({
       spfxContext: this.context
     })
+    startCommandSetTelemetry(this.context, this._portalDataService)
     this._openCmd = this.tryGetCommand('OPEN_IDEA_REGISTRATION_DIALOG')
 
     this._openCmd.title = strings.IdeaRegistrationCommandTitle
@@ -114,6 +121,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
           const ideaProcessingUrl = await this._getIdeaProcessingList()
           window.open(ideaProcessingUrl, '_blank')
         } catch (error) {
+          trackError(TELEMETRY_COMPONENT, error)
           alert(strings.IdeaProcessingListErrorMessage)
           throw new Error(error)
         }
@@ -122,6 +130,19 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
       default:
         throw new Error('Unknown command, unable to execute')
     }
+  }
+
+  /**
+   * Reloads the page once a recommendation is saved. The recommendation is counted for usage
+   * statistics first, and sent at once: a count left in memory is lost when the page reloads.
+   *
+   * @param choiceKey The chosen choice's key in the idea configuration; none for a choice the
+   * customer has added, which counts as `other`
+   */
+  private _reloadAfterRecommendation(choiceKey?: string): void {
+    trackUsage(TELEMETRY_COMPONENT, 'idea.recommended', ideaChoiceVariant(choiceKey))
+    flushTelemetry({ urgent: true })
+    window.location.reload()
   }
 
   /**
@@ -182,7 +203,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
           ?.recommendation,
         GtIdeaRecommendationComment: comment
       })
-    window.location.reload()
+    this._reloadAfterRecommendation(Choice.Reject)
   }
 
   /**
@@ -198,7 +219,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
           ?.recommendation,
         GtIdeaRecommendationComment: comment
       })
-    window.location.reload()
+    this._reloadAfterRecommendation(Choice.Consideration)
   }
 
   /**
@@ -290,7 +311,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     const ideaModuleUrl = `${this.context.pageContext.site.absoluteUrl}/SitePages/${resource.ClientSidePages_IdeaModule_PageName}#ideaId=${rowId}`
 
     await this._updateProcessingList(rowId, copyData, ideaModuleUrl)
-    window.location.reload()
+    this._reloadAfterRecommendation(Choice.Approve)
   }
 
   /**
@@ -312,7 +333,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
         GtIdeaRecommendationComment: comment
       })
 
-    window.location.reload()
+    this._reloadAfterRecommendation()
   }
 
   /**

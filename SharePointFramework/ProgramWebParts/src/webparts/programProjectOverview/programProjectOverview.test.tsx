@@ -18,9 +18,14 @@ jest.mock('pp365-portfoliowebparts/lib/components/PortfolioOverview', () => ({
 
 import { act } from '@testing-library/react'
 import strings from 'ProgramWebPartsStrings'
+import {
+  clearTestTelemetry,
+  countedTelemetry,
+  telemetryStore
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import resource from 'SharedResources'
 import ProgramProjectOverview from '.'
-import { initWebPart, propertyPaneFields } from '../testFixtures'
+import { initWebPart, manifestAlias, propertyPaneFields, telemetryContext } from '../testFixtures'
 
 const CONFIGURATION = {
   views: [
@@ -32,6 +37,7 @@ const CONFIGURATION = {
 beforeEach(() => {
   rendered.props = undefined
   adapter.getPortfolioConfig.mockImplementation(() => Promise.resolve(CONFIGURATION))
+  clearTestTelemetry()
 })
 
 describe('ProgramProjectOverview', () => {
@@ -83,5 +89,40 @@ describe('ProgramProjectOverview', () => {
     adapter.getPortfolioConfig.mockImplementation(() => Promise.reject(new Error('Nei')))
     const webPart = await initWebPart(ProgramProjectOverview)
     expect(propertyPaneFields(webPart).defaultViewId.options).toEqual([])
+  })
+
+  describe('and usage statistics', () => {
+    const alias = manifestAlias('programProjectOverview')
+
+    it('is counted as loaded under the alias of its manifest, and counts no error for a configuration it can read', async () => {
+      await initWebPart(ProgramProjectOverview, {}, 1, telemetryContext(alias))
+      expect(countedTelemetry()).toEqual({
+        usage: { 'ProgramProjectOverviewWebPart loaded': 1 },
+        errors: {},
+        timings: { 'ProgramProjectOverviewWebPart init': 1 }
+      })
+    })
+
+    it('counts a configuration it cannot read once, by the status SharePoint answered with, however many times it renders', async () => {
+      const denied = Object.assign(new Error('Ingen tilgang til Porteføljevisninger'), {
+        status: 403
+      })
+      adapter.getPortfolioConfig.mockImplementation(() => Promise.reject(denied))
+      const webPart = await initWebPart(ProgramProjectOverview, {}, 1, telemetryContext(alias))
+      act(() => {
+        webPart.render()
+      })
+      act(() => {
+        webPart.render()
+      })
+      // The page shows the message to the user; telemetry keeps only the code and the status.
+      expect(webPart.domElement).toHaveTextContent('Ingen tilgang til Porteføljevisninger')
+      expect(countedTelemetry()).toEqual({
+        usage: { 'ProgramProjectOverviewWebPart loaded': 1 },
+        errors: { 'ProgramProjectOverviewWebPart permission_denied 403': 1 },
+        timings: { 'ProgramProjectOverviewWebPart init': 1 }
+      })
+      expect(JSON.stringify(telemetryStore())).not.toContain('tilgang')
+    })
   })
 })

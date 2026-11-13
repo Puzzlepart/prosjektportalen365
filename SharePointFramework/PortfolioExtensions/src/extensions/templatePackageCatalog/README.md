@@ -44,13 +44,14 @@ central **`prosjektportalen-hosting`** catalog. A portal administrator can:
 ```
 
 - `catalogUrl` — defaults to the hosting `main` `catalog.json`. Falls back to the
-  committed `services/sampleCatalog.ts` fixture on CORS/network failure.
+  committed `services/sampleCatalog.ts` fixture on CORS/network failure. With a
+  catalog of the customer's own, no catalog events are sent (see *Telemetry*).
 - `userGuideUrl` — target of the "Se brukerveiledning" footer link.
 - `featureFlagProvisioning` — see below.
-- `telemetryUrl` — install-telemetry ingestion endpoint. Defaults to
+- `telemetryUrl` — ingestion endpoint for the catalog's events. Defaults to
   `https://assist.prosjektportalen.no/api/telemetry/catalog` when omitted; set to
-  an **empty string** to disable telemetry for the installation. See *Telemetry*
-  below.
+  an **empty string** to stop the catalog's events for the installation. See
+  *Telemetry* below.
 
 ## Feature flag — taxonomy provisioning
 
@@ -78,28 +79,56 @@ during a controlled pilot.
 
 ## Telemetry
 
-To give Puzzlepart insight into what is installed and used, the catalog sends one
-fire-and-forget event per completed (or failed) catalog action — install, update,
-remove, publish-as-cloud-template — to the `telemetryUrl` endpoint
-(prosjektportalen-assist by default, admin-login protected storage).
+To give Puzzlepart insight into which packages of the public catalog are installed
+and used, the catalog sends one fire-and-forget event per completed (or failed)
+catalog action — install, update, remove, publish-as-cloud-template — to the
+`telemetryUrl` endpoint (prosjektportalen-assist by default, admin-login protected
+storage).
 
-Each event contains: action + success/error (with a truncated error message),
-package id/version/type, previously registered version (updates, a cloud template's
-too, and removals), the installed Prosjektportalen version, the tenant host
-(`*.sharepoint.com`), the hub site URL, the AAD tenant id, and a client timestamp.
-Nothing about end users or project content is sent.
+Events are sent only when all of this holds (`services/TelemetryService.ts`, which
+asks the gate every sender of usage statistics asks, `getTelemetryGate` in
+`pp365-shared-library`):
 
-Telemetry never blocks or fails a catalog action — failures are swallowed with an
+- the hub's *Globale innstillinger* list has an enabled **`UsageStatisticsLevel`**
+  row with the value `2` (Standard) or `3` (Utvidet);
+- it has an enabled **`CatalogTelemetryEnabled`** row with exactly the value `1`
+  (the template seeds it so);
+- the catalog in use is the default one. A customer's own catalog (`catalogUrl`)
+  names its packages itself, and those names stay in the tenant.
+
+A missing or disabled row, a value that is not valid, a hub that cannot be read and
+a level that is not read yet all send nothing: the gate fails closed. From 1.15.0 a
+missing `CatalogTelemetryEnabled` row no longer counts as on.
+
+Each event contains: action + success/error, package id/version/type, previously
+registered version (updates, a cloud template's too, and removals), the installed
+Prosjektportalen version, the tenant host (`*.sharepoint.com`), the hub site URL,
+the AAD tenant id and the level (`2` or `3`). A failed action carries an error code
+(such as `permission_denied` or `not_found`) at level `3` only. `detail` holds
+nothing but `taxonomySkipped` (true or false) or `removedType` (the kind of
+registration removed). No error message and no client timestamp is sent (both were,
+in 1.14), and nothing about end users or project content. The request is sent
+without cookies and without the page's address (`credentials: 'omit'`,
+`referrerPolicy: 'no-referrer'`).
+
+The events never block or fail a catalog action — failures are swallowed with an
 Info log entry (`(TelemetryService)`).
 
-Opt out via any of:
+Stop them via any of:
 
-- the **`CatalogTelemetryEnabled`** row in the hub's *Globale innstillinger*
-  list — seeded as `1` (on); a portal admin sets the value to `0` to stop all
-  catalog telemetry for the installation. A missing row (installs provisioned
-  before the setting existed) counts as on, matching the seeded default.
-- `telemetryUrl: ""` on the CustomAction properties (whole installation), or
-- `sessionStorage.setItem('PP_DISABLE_TELEMETRY', '1')` for the current session.
+- the **`UsageStatisticsLevel`** row: `0` (off) or `1` (Grunnleggende) sends no
+  catalog events;
+- the **`CatalogTelemetryEnabled`** row: any value but `1` stops the catalog's
+  events. The value `0` stops all of Prosjektportalen's browser telemetry, usage
+  statistics included, whatever the level;
+- `telemetryUrl: ""` on the CustomAction properties (the catalog's events, whole
+  installation);
+- `sessionStorage.setItem('PP_DISABLE_TELEMETRY', '1')` for the current tab, which
+  stops all of Prosjektportalen's telemetry from it; or
+- the browser's Global Privacy Control or Do Not Track.
+
+A changed row applies within two hours: the hub's settings are cached for an hour,
+and a decision is used for up to an hour.
 
 ## Dev / test
 

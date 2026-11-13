@@ -2,6 +2,7 @@ import strings from 'PortfolioWebPartsStrings'
 import { ColumnRenderComponentRegistry } from '../../List'
 import _ from 'lodash'
 import { PortfolioOverviewView } from 'pp365-shared-library/lib/models'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { parseUrlHash } from 'pp365-shared-library/lib/util/parseUrlHash'
 import { useEffect } from 'react'
 import resource from 'SharedResources'
@@ -55,9 +56,13 @@ function getCurrentView(
  * The columns are persisted in local storage using `set` from the hook `usePersistedColumns`.
  * This is done to use placeholders for the columns while the data is being fetched on the first
  * render.
+ *
+ * A fetch that fails is counted for usage statistics, once, by its error code, for the web part
+ * the overview is in; so is each hub a merged view could not read.
  */
 export const useFetchData = (context: IPortfolioOverviewContext) => {
   const [, set] = usePersistedColumns(context.props)
+  const telemetry = useTelemetry()
 
   const fetchInitialData = async (reset = false) => {
     let currentView: PortfolioOverviewView = null
@@ -95,7 +100,9 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
           resource.Security_SiteGroup_PortfolioInsight_Title
         ) ?? Promise.resolve(false)
       ])
-      const { items, managedProperties, failedPortfolios } = viewData
+      const { items, managedProperties, failedPortfolios, failedPortfolioErrors } = viewData
+      // The view is shown without those hubs and says so; each is counted by what it failed with.
+      failedPortfolioErrors?.forEach((error) => telemetry.trackError(error))
 
       // `globalSettings` is only populated in program/parent context, so this stays false elsewhere.
       const showChildProjectInfoInProgram =
@@ -132,6 +139,7 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
         })
       )
     } catch (error) {
+      telemetry.trackError(error)
       context.dispatch(DATA_FETCH_ERROR({ error, view: currentView }))
     }
   }

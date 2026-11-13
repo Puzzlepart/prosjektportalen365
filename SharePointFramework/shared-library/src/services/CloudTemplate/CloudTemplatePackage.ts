@@ -1,6 +1,7 @@
 import { ProvisioningSchema } from '../../models/ProvisioningSchema'
 import type JSZip from 'jszip'
 import { IPackageManifest } from '../../models/IPackageManifest'
+import { errorWithStatus } from '../../util/errorWithStatus'
 
 /**
  * Shape of a `Lists[].DataRows` block in a (hub) provisioning schema. Mirrors
@@ -48,7 +49,11 @@ export class CloudTemplatePackage {
     if (!url) throw new Error('Cloud template package URL is missing')
     const response = await fetch(url, { method: 'GET' })
     if (!response.ok) {
-      throw new Error(`Failed to download package (HTTP ${response.status} ${response.statusText})`)
+      // The status goes on the error too, so usage statistics count the failure by it.
+      throw errorWithStatus(
+        `Failed to download package (HTTP ${response.status} ${response.statusText})`,
+        response.status
+      )
     }
     const buffer = await response.arrayBuffer()
     const JSZipModule = (await import('jszip')).default

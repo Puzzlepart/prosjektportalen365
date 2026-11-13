@@ -2268,3 +2268,246 @@ _Each slice adds its entry below._
     the new calls do nothing there.
   - Seen, not changed: `webparts/dynamicList/index.ts` holds hard-coded Norwegian text (an
     `alert` and `'Alle felt'`), against the loc rule.
+
+### Groundwork for slices 5 and 7 in shared-library (2026-11-12)
+
+- Done:
+  - The shared Jest setup defines `DEBUG` as `false` when a test has not set it, so every bundle
+    can pass it to `startTelemetry` under Jest.
+  - `PortalDataService`:
+    - `INSTALLATION_LOG` is a list of the service, named by `Lists_InstallationLog_Title`.
+    - `getUsageSnapshot()` reads the hub's installation facts for the heartbeat, as designed:
+      not cached, each read in its own catch, `null` when the hub is out of reach. The result
+      holds contract values only.
+    - `getSiteKind(siteId)` gives a site's type from its row in Prosjekter (`GtSiteId`), for a
+      bundle that holds no flags of the site itself. No row, a denied list and a failed read all
+      give `other`.
+    - The queries are in `usageQueries.ts`, and a runtime test checks their OData URLs against
+      the real PnPjs.
+    - `unavailableStatus` keeps the HTTP status of the answer that took the hub out of reach.
+  - `errorWithStatus(message, status?)` (`shared-library/src/util`). ProjectStatus and
+    ProjectTimeline throw their no-hub error with `unavailableStatus`, so a hub out of reach
+    counts as `permission_denied` with 403 where the service kept a status, and as `unknown`
+    where it kept none. The text the user sees is unchanged.
+  - `readSiteType` moved from ProjectWebParts to `telemetry/siteType.ts`, with the answer for a
+    missing item as a parameter: `project` for the site's own properties item, `other` for the
+    hub's list.
+  - `getTelemetryGate()` renews a decision older than `GATE_MAX_AGE_MS` in the background, as a
+    tracking call does.
+  - `trackPageView(component)` counts `page.viewed` once per page, however many Footer bundles
+    report it. The store keeps `lastPageViewKey`: the site id and a hash of the path, never the
+    path, and never in a batch. The query and the fragment are left out of the key.
+  - `requestHeartbeat(hubLanguage)` and `hubLanguageFromLcid(lcid)`. The core reads the snapshot
+    through the anchor, only on a hub page for a user who may manage the hub, once per page
+    load, and only once the gate has resolved at level 1 or higher. A request made while the
+    gate is pending waits for the decision.
+  - `setSiteType(siteId, siteType)` sets a site's type at once and replaces a resolver's answer.
+    It is for ProjectSetup, which knows the type from the template.
+  - `attachTelemetryPortal` takes an empty settings map as no map. An adapter that never read
+    the settings would otherwise close the gate for every bundle on the page.
+  - The shared `ProjectTimeline` counts its handled load failure in
+    `useProjectTimelineDataFetch`, for the web part it sits in.
+  - Test fixtures: `spfxTestContext`, `hubPortal()` with `getUsageSnapshot` and `getSiteKind`,
+    `navigateTestPage` and `bed.navigate`.
+- Verified:
+  - `npm test` in shared-library gives 938 Jest tests in 103 files and 15 runtime tests, with
+    0 failures. Coverage is 81.77 / 86.58 / 70.1 / 81.77.
+  - `npx heft test` in ProjectWebParts gives 460 tests in 73 files with 0 failures. Coverage is
+    70.54 / 75.21 / 68.79 / 70.54.
+  - No lint errors in either build. `contract.ts` is unchanged.
+- Found:
+  - `requestHeartbeat` replaces the Footer reading the snapshot itself. Only the core can read
+    through the anchor, and a Footer that attaches second often meets a pending gate and would
+    lose the heartbeat. `queueHeartbeat` is unchanged.
+  - The store got two optional fields (`heartbeatRequest`, `lastPageViewKey`) under the same
+    global name, `__pp365UsageV1`. Nothing has shipped, so no reader of the old shape exists.
+  - `getUsageSnapshot()` returns `null`, as designed, which gives two `@rushstack/no-new-null`
+    warnings.
+- Left:
+  - The first `getTelemetryGate()` after a decision has gone stale still answers closed, so
+    that one catalog event is dropped. A tracking call before it, such as `catalog.opened`,
+    renews the decision earlier.
+  - `getSiteKind` gives `other` for a user who may not read Prosjekter (a member of «Minimum
+    lesetilganger på hub»), so their usage on a project site counts under `other` unless a web
+    part of ProjectWebParts answered first.
+  - A page reached again through an SPA navigation to the same path is not counted again. A
+    full reload is.
+  - The two `onInit` catches that set `unavailableStatus` have no unit test: `onInit` cannot
+    run under the PnP stub.
+  - `getUsageSnapshot` and `getSiteKind` are not verified against a tenant. `integration/` is
+    untouched.
+
+### Slice 5: catalog events under the gate (2026-11-12)
+
+- Done:
+  - `TelemetryService` asks the shared gate (`getTelemetryGate().catalog`) in place of
+    `_isEnabledInGlobalSettings`. The command set attaches `SPDataAdapter.portalDataService`
+    without a map as it starts, and the service attaches it again before it asks.
+  - The payload gains `level`, and `errorCode` at level 3 for `status: 'error'`. It loses
+    `errorMessage` and `clientTs`. `detail` is cut to `{ taxonomySkipped: boolean }` or
+    `{ removedType: Lokal | Importert | Sentral }`.
+  - Nothing is sent unless the catalog URL in effect is exactly `DEFAULT_CATALOG_URL`, which
+    moved to `services/catalogUrl.ts` with `resolveCatalogUrl()`.
+  - `fetch` adds `credentials: 'omit'` and `referrerPolicy: 'no-referrer'`. The endpoint, the
+    JSON body and `siteUrl` are unchanged.
+  - The JSDoc of `TelemetryService`, `featureFlags.isTelemetryEnabled` and the two `types.ts`,
+    and the Telemetry section of the command set's README, describe the gate.
+- Verified: the PortfolioExtensions run under slice 7 below. `TelemetryService.test.ts` (42
+  tests) shows no event for a missing, disabled, empty or non-`1` catalog row, at level 0 or 1,
+  without a level row, with the hub out of reach or for another catalog URL; `errorCode` only at
+  level 3 for an error; never `errorMessage` or `clientTs`; and the exact fetch options.
+- Found:
+  - The local coverage summary was 70.58 before any edit, not below the floor as the risk table
+    feared.
+  - An event that finds the decision pending or older than an hour is dropped, and the next one
+    is sent. Opening the catalog renews an old decision.
+- Left:
+  - Assist must accept `level`, `errorCode` and the three `removedType` values (slice 2).
+  - A DEBUG build still sends catalog events, as before: P14 speaks of usage batches only. The
+    gate does not say whether the window is a DEBUG build.
+  - A custom, non-empty `telemetryUrl` is still honoured, under the same gate.
+
+### Slice 7: emitters in the other four solutions (2026-11-12 and 2026-11-13)
+
+- Done, PortfolioWebParts:
+  - `BasePortfolioWebPart.onInit` starts telemetry once the adapter is configured, unless the
+    web part was disposed: the page, `loaded` and the `init` timing. `renderComponent` wraps the
+    element in `TelemetryProvider`, and the ErrorBoundary's `onError` counts `render_failed`.
+  - A web part set up with a portfolio attaches no portal and registers no site type resolver
+    (P4). Without one it attaches the adapter's portal with no settings map, and the resolver is
+    `PortalDataService.getSiteKind`.
+  - Events, each counted once in a handler or hook: `view.switched` (views and programs),
+    `view.saved`, `portfolio.switched` (in the web part's `setPortfolio`, after the
+    configuration is read), `excel.exported` (both overviews), `dataSource.switched`,
+    `layout.toggled`, `viewAll.toggled` and `tab.switched`.
+  - Handled failures, once each by the error's own code: the configuration load of the
+    overview, the aggregation and the idea module; the data fetch of the overview, the
+    aggregation, the latest projects, the project list and the project card; each hub a merged
+    view could not read; a refused column save or delete, a refused aggregation view save and a
+    failed Excel export.
+  - `GetPortfolioConfigError` keeps the original error as its `cause`, `fetchItemsWithSource`
+    and `fetchDataSources` rethrow with `errorWithCause`, and `fetchMergedViewData` returns
+    `failedPortfolioErrors`.
+- Done, ProgramWebParts:
+  - `BaseProgramWebPart.onInit` starts telemetry once the adapter is configured and the child
+    projects are read, unless the web part was disposed: the page, the adapter's portal with
+    its global settings, `getSiteKind` as the site type resolver, `loaded` and the `init`
+    timing. `renderComponent` wraps the element in `TelemetryProvider` and in an error boundary
+    whose `onError` counts `render_failed`.
+  - The base had no error boundary. `baseProgramWebPart/ErrorBoundary` is a small class of the
+    solution's own, since `react-error-boundary` is not among its dependencies. It shows the
+    error in a `UserMessage` under the existing `ErrorTitle`; before, React emptied the web
+    part.
+  - `childProjects.added` (`useAddProjectDialog`) and `childProjects.removed` (`Commands`) are
+    counted once per add or removal that went through, however many projects it held.
+  - Handled failures, by the error's own code: the aggregation's and the overview's
+    configuration; in the administration a hub that cannot be resolved, child projects that
+    cannot be read, the hubs' projects for the dialog, a failed add and a failed removal.
+  - `SPDataAdapter` keeps the cause where it rethrows a generic text, and gives its three
+    hub-out-of-reach errors the service's `unavailableStatus`.
+- Done, PortfolioExtensions:
+  - The Footer starts usage statistics between the isAvailable return and the ShowFooter
+    return: the page, the portal with the settings it just read, `getSiteKind` as the site type
+    resolver, `page.viewed` and the heartbeat request. Its own `navigatedEvent` subscription
+    repeats that on every navigation, without the settings map, and is removed in `onDispose`.
+  - `assistant.opened` and `help.opened` are counted through `TelemetryProvider`.
+  - `idea.recommended` and `idea.decided` are counted with the variant from the choice's key in
+    the idea configuration (`helpers/ideaChoiceVariant.ts`), never from its display text.
+    `idea.projectDataCreated` is counted. Each has an urgent flush before the reload or
+    redirect.
+  - The three idea command sets and the catalog start through `helpers/commandSetTelemetry.ts`.
+    IdeaProcessing and IdeaProjectData get a `PortalDataService` made in the background.
+  - The catalog counts `catalog.opened` and renders under `TelemetryProvider`.
+  - Handled failures, by code: the Footer's installation log, help, links and favourites; the
+    catalog's load, import, publish, update, remove, package history, contents and file
+    preview, and its failed set-up; IdeaRegistration's processing-list link. Fetch errors in
+    `CatalogService` and `PackageInstaller._download` carry their HTTP status.
+  - A refusal to read Prosjekter for the favourites is not counted: a member of «Minimum
+    lesetilganger på hub» is denied that list by design.
+- Done, ProjectExtensions:
+  - ProjectSetup starts telemetry itself in `onInit`, attaches the hub's data service where its
+    check first configures it, and registers `getSiteKind` as the site type resolver. A run is
+    counted once: `setup.completed` with its variant after the last step that can fail, with the
+    site type set from the template first (`setSiteType`); `setup.aborted` or `setup.failed` in
+    the catch, told apart by `_setupAborted`. The completion dialog flushes urgently before it
+    navigates.
+  - The conditional rules are in `projectSetup/setupTelemetry.ts`, so the extension file gained
+    no branch: `siteTypeAfterSetup`, `trackSetupStopped`, `trackSetupCheckFailure`.
+  - A failed setup counts one error: the failure's own code and HTTP status when it or its
+    cause has one, else `provisioning_failed`. `ProjectSetupError` keeps what it was made from
+    as its `cause`.
+  - A read that fails before the setup starts, and a cloud template that cannot be read, are
+    counted for `ProjectSetup` by their code. The answers of the setup's own checks are not.
+  - RiskActionPlanner starts telemetry once per list view in `onInit`, with the settings its
+    adapter has read, and gives each cell's root the alias. `riskAction.created` is counted per
+    task added from the panel. A failed save, sync and migration are counted in their hooks.
+  - TemplateSelectorCommand starts telemetry in `onInit` and attaches the hub when the command
+    first loads its data. `documentTemplates.copied` is counted once per copy in which at least
+    one template went through; each template that fails, and a failed load, by its code. The
+    dialog flushes urgently before the reload.
+- Done, shared-library, after the solutions asked for it:
+  - `CloudTemplatePackage.fromUrl` throws with the HTTP status on the error
+    (`errorWithStatus`), so a cloud template that cannot be read counts by it.
+  - The test bed's `batches()` reads only what went to the usage endpoint, so it can be used
+    where the component under test calls `fetch` itself.
+- Verified, by the main agent's own runs after the last edit, all with 0 failures and no lint
+  errors:
+  - shared-library (`npm test`): 938 Jest tests in 103 files and 15
+    runtime tests. Coverage 81.78 / 86.58 / 70.1 / 81.78.
+  - ProjectWebParts: 460 tests in 73 files. Coverage 70.54 / 75.21 / 68.79 / 70.54.
+  - PortfolioWebParts: 431 tests in 67 files. Coverage 81.15 / 81.35 / 73.25 / 81.15
+    (76.06 / 80.49 / 69.04 / 76.06 before).
+  - ProgramWebParts: 114 tests in 14 files. Coverage 51.94 / 84.31 / 82.66 / 51.94
+    (48.9 / 80.57 / 71.01 / 48.9 before).
+  - PortfolioExtensions: 320 tests in 20 files. Coverage
+    73.2 / 84.96 / 86.99 / 73.2 (70.58 / 83.76 / 84.87 / 70.58 before).
+  - ProjectExtensions: 331 tests in 35 files. Coverage 82.17 / 85.85 / 83.13 / 82.17
+    (81.83 / 85.39 / 82.77 / 81.83 before).
+  - One copy of the shared library per bundle. After `npx heft build` (not production) in
+    ProgramWebParts, each of its four bundles holds each telemetry module once, with one
+    definition of `__pp365UsageV1` and one `TelemetryContext`; the base web part,
+    PortfolioWebParts' hooks and the shared timeline require the same module. No alias prop is
+    needed. Tests load the real `PortfolioOverview`, `PortfolioAggregation` and
+    `ProjectTimeline` under the program aliases.
+- Found:
+  - The web parts' configuration errors are counted where the load fails, by the error's own
+    code, not as `render_failed` in `render`, which runs many times (as the matrices in slice
+    6).
+  - On a navigation the Footer must not hand its settings map over again: an old map lowers a
+    level the hub has raised since.
+  - The hub's parent template has no `GtIsParentProject`; the setup sets the flag itself, so
+    `siteTypeAfterSetup` adds it for the `parent` variant.
+  - ProjectExtensions compiles to ES5, where `instanceof ProjectSetupError` is never true. A
+    setup error is recognised by its `messageType`.
+  - Counted right after `_startSetup`, a run whose later step threw would be both completed and
+    failed. It is counted after `deleteCustomizer`.
+  - A migration of risk actions moves existing actions and is not `riskAction.created`.
+  - The contract drops the aggregation's events under `IdeaModuleWebPart` and
+    `timelineItem.opened` under `ResourceAllocationWebPart`. The project information panel
+    from ProjectWebParts sits under PortfolioWebParts' provider with all actions hidden, so
+    only its load failure is counted.
+  - `countedTelemetry()` names usage without the site type; tests read the type from the
+    store.
+- Left:
+  - The portfolio overview fetches twice as it mounts (`useFetchData` has two effects), so one
+    failed load counts two errors, in the program overview too.
+  - A pick of the entry already shown counts as a switch (`view.switched`,
+    `dataSource.switched`, `layout.toggled`, `tab.switched`).
+  - Not counted, because the rejection has no catch and nothing is shown either: the overview's
+    view save, the saves of "edit view columns", `setPortfolio`, the fetches of
+    ResourceAllocation and IdeaModule, the idea saves, the program administration's first
+    read, and in ProjectExtensions the Planner task preview, the folder list and the libraries
+    of the template dialog.
+  - A refused column delete counts as `unknown`: `PortalDataService.deleteItemFromList`
+    swallows the answer. Setup tasks that rethrow without the original error count as
+    `provisioning_failed`.
+  - A setup that completes with errors in its log, or without registering the project on the
+    hub, counts as completed. With `skipReload` the count waits for `pagehide`.
+  - A hub whose URL cannot be resolved makes the program timeline fail with a TypeError, which
+    counts as `unknown`.
+  - A render failure in a program web part now shows a message where the web part was empty
+    before. The user has not confirmed that change.
+  - The floors of the four solutions are unchanged. Raise them from CI's figures before the
+    merge.
+  - The production bundle was not inspected, and nothing was checked in a browser or with a
+    local DEBUG watch.

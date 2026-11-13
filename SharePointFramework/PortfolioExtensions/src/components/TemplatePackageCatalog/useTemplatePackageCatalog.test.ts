@@ -24,14 +24,22 @@ jest.mock('data/SPDataAdapter', () => ({ __esModule: true, default: mockAdapter 
 import { act, renderHook, waitFor } from '@testing-library/react'
 import strings from 'PortfolioExtensionsStrings'
 import { format } from 'pp365-shared-library'
+import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
+import {
+  countedTelemetry,
+  startTestTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
+import * as React from 'react'
 import { ALL_FILTER } from './types'
 import { useTemplatePackageCatalog } from './useTemplatePackageCatalog'
 
 /**
  * The template package catalog's logic: loading the catalog with what the hub has installed,
  * finding a package, copying one to the installation, publishing and updating a cloud template,
- * and removing a package, each told as it went and tracked as what it was.
+ * and removing a package, each told as it went and tracked as what it was. A failure that is
+ * told is also counted once for usage statistics, for the command set, by the error's code.
  */
+const ALIAS = 'TemplatePackageCatalog'
 const CATALOG_URL = 'https://katalog.example/catalog.json'
 const TEMPLATE = {
   id: 'Byggprosjekt',
@@ -120,7 +128,11 @@ async function renderCatalog(setUp?: () => void) {
   answerHub()
   setUp?.()
   const props = { catalogUrl: CATALOG_URL, onDismiss: jest.fn() } as any
-  const { result } = renderHook(() => useTemplatePackageCatalog(props))
+  // Under the command set's alias, as the command set renders the catalog.
+  const { result } = renderHook(() => useTemplatePackageCatalog(props), {
+    wrapper: ({ children }: React.PropsWithChildren) =>
+      React.createElement(TelemetryProvider, { component: ALIAS }, children)
+  })
   await waitFor(() => expect(result.current.state.loading).toBe(false))
   return result
 }
@@ -134,7 +146,10 @@ const tracked = (action: string) =>
 /** The statuses the removals were tracked with. */
 const trackedStatuses = () => tracked('remove').map((event) => event.status)
 
-beforeEach(() => jest.clearAllMocks())
+beforeEach(() => {
+  jest.clearAllMocks()
+  startTestTelemetry()
+})
 
 describe('useTemplatePackageCatalog, loading the catalog', () => {
   it("loads the catalog with both lists' installs and the installed version, and chooses the first template", async () => {
@@ -184,6 +199,30 @@ describe('useTemplatePackageCatalog, loading the catalog', () => {
     expect(result.current.state).toMatchObject({ degraded: false, error: undefined })
     expect(result.current.state.installedVersion).toBeUndefined()
     expect(services.CatalogService.revalidateCatalog).toHaveBeenCalledWith(CATALOG_URL)
+  })
+
+  it('counts a catalog that could not be loaded once per failed load, by its error code', async () => {
+    const degraded = {
+      catalog: CATALOG,
+      degraded: true,
+      error: 'Katalogen svarte 404',
+      cause: Object.assign(new Error('Katalogen svarte 404'), { status: 404 }),
+      fromCache: false
+    }
+    const result = await renderCatalog(() =>
+      services.CatalogService.getCatalog.mockResolvedValue(degraded)
+    )
+    expect(result.current.state).toMatchObject({ degraded: true, error: 'Katalogen svarte 404' })
+    expect(countedTelemetry().errors).toEqual({ [`${ALIAS} not_found 404`]: 1 })
+    // A retry that fails is another failure; one that succeeds counts nothing.
+    act(() => result.current.reloadCatalog())
+    await waitFor(() => expect(result.current.state.loading).toBe(false))
+    expect(countedTelemetry().errors).toEqual({ [`${ALIAS} not_found 404`]: 2 })
+    services.CatalogService.getCatalog.mockResolvedValue({ ...degraded, degraded: false })
+    act(() => result.current.reloadCatalog())
+    await waitFor(() => expect(result.current.state.loading).toBe(false))
+    expect(result.current.state.degraded).toBe(false)
+    expect(countedTelemetry().errors).toEqual({ [`${ALIAS} not_found 404`]: 2 })
   })
 
   it('loads the catalog again on retry, and keeps a cached one that cannot be refreshed', async () => {
@@ -356,22 +395,31 @@ describe('useTemplatePackageCatalog, copying a package to the installation', () 
     expect(services.TelemetryService.track).not.toHaveBeenCalled()
   })
 
-  it('tells and tracks an import that failed', async () => {
+  it('tells, tracks and counts an import that failed', async () => {
     const result = await renderCatalog()
-    services.PackageInstaller.runImport.mockRejectedValue(new Error('Nedlastingen feilet'))
+    const notFound = Object.assign(new Error('Nedlastingen feilet'), { status: 404 })
+    services.PackageInstaller.runImport.mockRejectedValue(notFound)
     await act(() => result.current.importPackage(TEMPLATE as any))
     expect(result.current.state.notification).toEqual({
       intent: 'error',
       text: 'Nedlastingen feilet'
     })
+    // The event gets the error itself, which only a code is read off: its message is told in the
+    // notification and goes no further.
     expect(tracked('update')).toEqual([
-      expect.objectContaining({ status: 'error', errorMessage: 'Nedlastingen feilet' })
+      expect.objectContaining({ status: 'error', error: notFound })
     ])
+    expect(tracked('update')[0]).not.toHaveProperty('errorMessage')
+    expect(countedTelemetry().errors).toEqual({ [`${ALIAS} not_found 404`]: 1 })
     services.PackageInstaller.runImport.mockRejectedValue(new Error(''))
     await act(() => result.current.importPackage(TEMPLATE as any))
     expect(result.current.state.notification).toEqual({
       intent: 'error',
       text: strings.CatalogInstallErrorTitle
+    })
+    expect(countedTelemetry().errors).toEqual({
+      [`${ALIAS} not_found 404`]: 1,
+      [`${ALIAS} unknown`]: 1
     })
   })
 })
@@ -502,7 +550,7 @@ describe('useTemplatePackageCatalog, cloud templates', () => {
     expect(services.TelemetryService.track).not.toHaveBeenCalled()
   })
 
-  it('tells and tracks a publish or an update that failed', async () => {
+  it('tells, tracks and counts a publish or an update that failed', async () => {
     services.PackageInstaller.provisionCloudTemplateHubDependencies.mockRejectedValue(new Error(''))
     const result = await renderCatalog()
     await act(() => result.current.updateCentral(CLOUD_TEMPLATE as any))
@@ -510,9 +558,8 @@ describe('useTemplatePackageCatalog, cloud templates', () => {
       intent: 'error',
       text: strings.CatalogUpdateCentralErrorText
     })
-    services.PackageInstaller.provisionCloudTemplateHubDependencies.mockRejectedValue(
-      new Error('Ingen tilgang til termlageret')
-    )
+    const denied = Object.assign(new Error('Ingen tilgang til termlageret'), { status: 403 })
+    services.PackageInstaller.provisionCloudTemplateHubDependencies.mockRejectedValue(denied)
     await act(() => result.current.publishCentral(TEMPLATE as any))
     expect(result.current.state.notification).toEqual({
       intent: 'error',
@@ -520,8 +567,13 @@ describe('useTemplatePackageCatalog, cloud templates', () => {
     })
     expect(tracked('publishCentral')).toEqual([
       expect.objectContaining({ status: 'error', previousVersion: '1.0.1' }),
-      expect.objectContaining({ status: 'error', errorMessage: 'Ingen tilgang til termlageret' })
+      expect.objectContaining({ status: 'error', error: denied })
     ])
+    expect(tracked('publishCentral')[1]).not.toHaveProperty('errorMessage')
+    expect(countedTelemetry().errors).toEqual({
+      [`${ALIAS} unknown`]: 1,
+      [`${ALIAS} permission_denied 403`]: 1
+    })
   })
 })
 
@@ -538,9 +590,10 @@ describe('useTemplatePackageCatalog, removing a package', () => {
       text: strings.CatalogRemoveErrorText
     })
     expect(trackedStatuses()).toEqual(['error'])
+    expect(countedTelemetry().errors).toEqual({ [`${ALIAS} unknown`]: 1 })
   })
 
-  it('tells and tracks a template that was removed as done', async () => {
+  it('tells and tracks a template that was removed as done, and counts no failure', async () => {
     services.TemplateOptionsService.remove.mockResolvedValue(true)
     const result = await renderCatalog()
     await act(() => result.current.removePackage(TEMPLATE as any))
@@ -549,6 +602,7 @@ describe('useTemplatePackageCatalog, removing a package', () => {
       text: strings.CatalogRemoveSuccessText
     })
     expect(trackedStatuses()).toEqual(['success'])
+    expect(countedTelemetry().errors).toEqual({})
   })
 
   it('tells and tracks an extension the library refused to remove as a failure', async () => {

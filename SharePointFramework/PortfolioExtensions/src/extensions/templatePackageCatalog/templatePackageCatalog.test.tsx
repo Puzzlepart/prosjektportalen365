@@ -1,17 +1,25 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
 // Babel, so mocks are not hoisted. The catalog itself is out of scope here: it is a stand-in that
-// shows the props it got and closes through `onDismiss`. The services module is cut down to the
-// feature flags, so the installer and its provisioning engine stay out of the test.
+// shows the props it got, and the alias its hooks would count for, and closes through
+// `onDismiss`. The services module is cut down to the feature flags, so the installer and its
+// provisioning engine stay out of the test. The adapter's portal data service is the hub usage
+// statistics read their level through, once a test sets it.
 const adapter = {
   configure: jest.fn(() => Promise.resolve()),
-  sp: { web: { currentUserHasPermissions: jest.fn(() => Promise.resolve(true)) } }
+  sp: { web: { currentUserHasPermissions: jest.fn(() => Promise.resolve(true)) } },
+  portalDataService: undefined as any
 }
 jest.mock('../../data/SPDataAdapter', () => ({ __esModule: true, default: adapter }))
 jest.mock('components/TemplatePackageCatalog', () => {
   const React = jest.requireActual('react')
+  const { TelemetryContext } = jest.requireActual('pp365-shared-library/lib/telemetry')
   return {
     TemplatePackageCatalog: ({ catalogUrl, onDismiss }: any) =>
-      React.createElement('button', { onClick: onDismiss }, `Katalog fra ${catalogUrl}`)
+      React.createElement(
+        'button',
+        { onClick: onDismiss, 'data-telemetry': React.useContext(TelemetryContext) },
+        `Katalog fra ${catalogUrl}`
+      )
   }
 })
 jest.mock('services', () => ({
@@ -20,19 +28,36 @@ jest.mock('services', () => ({
 
 import { act, fireEvent, screen } from '@testing-library/react'
 import strings from 'PortfolioExtensionsStrings'
+import { getTelemetryGate } from 'pp365-shared-library/lib/telemetry'
+import {
+  countedTelemetry,
+  hubPortal,
+  ITelemetryTestBed,
+  settingsMap,
+  settle,
+  telemetryTestBed
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import resource from 'SharedResources'
 import TemplatePackageCatalogCommandSet from '.'
-import { HUB, commandSetContext, execute } from '../testFixtures'
+import { HUB, commandSetContext, execute, manifestAlias } from '../testFixtures'
 
 const OPEN = 'OPEN_TEMPLATE_PACKAGE_CATALOG'
 const TEMPLATE_OPTIONS = `/sites/pp365/${resource.Lists_TemplateOptions_Url}`
+const ALIAS = manifestAlias('templatePackageCatalog')
 
 // SPFx's build replaces DEBUG; under Jest it is a plain global.
 ;(globalThis as any).DEBUG = false
 
-/** The command set on the list at `serverRelativeUrl`, initialised. */
-async function catalogCommand(serverRelativeUrl = TEMPLATE_OPTIONS) {
-  const { context, changed } = commandSetContext({ listTitle: 'Maloppsett', serverRelativeUrl })
+/**
+ * The command set on the list at `serverRelativeUrl`, initialised. With `telemetry` its context
+ * is a page on the hub as usage statistics read it.
+ */
+async function catalogCommand(serverRelativeUrl = TEMPLATE_OPTIONS, telemetry = false) {
+  const { context, changed } = commandSetContext({
+    listTitle: 'Maloppsett',
+    serverRelativeUrl,
+    telemetry: telemetry ? { alias: ALIAS } : undefined
+  })
   const command = new TemplatePackageCatalogCommandSet()
   ;(command as any).context = context
   ;(command as any).properties = { catalogUrl: 'https://katalog.example/catalog.json' }
@@ -50,6 +75,7 @@ afterEach(() => {
 beforeEach(() => {
   adapter.configure.mockImplementation(() => Promise.resolve())
   adapter.sp.web.currentUserHasPermissions.mockImplementation(() => Promise.resolve(true))
+  adapter.portalDataService = undefined
   sessionStorage.clear()
 })
 
@@ -183,5 +209,69 @@ describe('TemplatePackageCatalogCommandSet', () => {
     adapter.configure.mockClear()
     await command.onInit()
     expect(adapter.configure).not.toHaveBeenCalled()
+  })
+})
+
+/**
+ * What the command set does for usage statistics, on the hub: it starts them with the hub's
+ * level read through the adapter's data service (which the catalog's own events ask the gate
+ * through), counts that the catalog was opened, and counts a set-up that failed by its code.
+ */
+describe('TemplatePackageCatalogCommandSet, usage statistics', () => {
+  let bed: ITelemetryTestBed
+
+  beforeEach(() => {
+    bed = telemetryTestBed()
+  })
+
+  afterEach(() => bed.restore())
+
+  it("starts usage statistics with the hub's level, read through the adapter's data service", async () => {
+    adapter.portalDataService = hubPortal(settingsMap('2'))
+    await catalogCommand(TEMPLATE_OPTIONS, true)
+    await settle()
+    // The gate the catalog's events ask: open for them at Standard with the catalog row at 1.
+    expect(getTelemetryGate()).toEqual({ level: 2, catalog: true, reason: 'setting' })
+    expect(adapter.portalDataService.getGlobalSettings).toHaveBeenCalledTimes(1)
+  })
+
+  it('counts that the catalog was opened, and lets its components count for the command set', async () => {
+    adapter.portalDataService = hubPortal(settingsMap('2'))
+    const { command } = await catalogCommand(TEMPLATE_OPTIONS, true)
+    await settle()
+    await act(() => command.onExecute(execute(OPEN)))
+    expect(countedTelemetry().usage).toEqual({ [`${ALIAS} catalog.opened`]: 1 })
+    const catalog = screen.getByText(/Katalog fra/)
+    expect(catalog).toHaveAttribute('data-telemetry', ALIAS)
+    act(() => {
+      fireEvent.click(catalog)
+    })
+    // Another command set's command opens nothing, and counts nothing.
+    await act(() => command.onExecute(execute('ANNEN')))
+    expect(countedTelemetry().usage).toEqual({ [`${ALIAS} catalog.opened`]: 1 })
+  })
+
+  it('counts a set-up that failed by its error code, and stays hidden', async () => {
+    adapter.portalDataService = hubPortal(settingsMap('3'))
+    adapter.sp.web.currentUserHasPermissions.mockImplementation(() =>
+      Promise.reject(Object.assign(new Error('Ingen tilgang'), { status: 403 }))
+    )
+    const { open } = await catalogCommand(TEMPLATE_OPTIONS, true)
+    await settle()
+    expect(open.visible).toBe(false)
+    expect(countedTelemetry().errors).toEqual({ [`${ALIAS} permission_denied 403`]: 1 })
+  })
+
+  it('sends nothing from a hub with usage statistics off', async () => {
+    adapter.portalDataService = hubPortal(settingsMap('0'))
+    const { command } = await catalogCommand(TEMPLATE_OPTIONS, true)
+    await settle()
+    await act(() => command.onExecute(execute(OPEN)))
+    act(() => {
+      fireEvent.click(screen.getByText(/Katalog fra/))
+    })
+    bed.leave()
+    expect(countedTelemetry().usage).toEqual({})
+    expect(bed.fetch).not.toHaveBeenCalled()
   })
 })

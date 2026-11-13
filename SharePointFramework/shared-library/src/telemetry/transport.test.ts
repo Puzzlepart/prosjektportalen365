@@ -653,6 +653,49 @@ describe('the anchor portal', () => {
     expect(getTelemetryGate()).toEqual({ level: 1, catalog: false, reason: 'setting' })
   })
 
+  it('takes an empty map as no map: a bundle that never read the settings decides nothing', async () => {
+    // A data adapter's map is empty until it has read the settings (`loadGlobalSettings`).
+    startTelemetry(hubPage())
+    const anchor = hubPortal(settingsMap('2'))
+    attachTelemetryPortal(anchor, new Map())
+    // Nothing is decided from the empty map: the anchor is read, as without a map.
+    expect(getTelemetryGate().reason).toBe('pending')
+    await settle()
+    expect(anchor.getGlobalSettings).toHaveBeenCalledTimes(1)
+    expect(getTelemetryGate()).toEqual({ level: 2, catalog: true, reason: 'setting' })
+
+    // From a later bundle it lowers nothing, where a map that was read does.
+    trackUsage('Footer', 'page.viewed')
+    attachTelemetryPortal(hubPortal(), new Map())
+    expect(getTelemetryGate().level).toBe(2)
+    expect(Object.keys(telemetryStore().usage)).toHaveLength(1)
+    attachTelemetryPortal(hubPortal(), settingsMap(undefined))
+    expect(getTelemetryGate()).toEqual({ level: 0, catalog: false, reason: 'no-level' })
+    expect(telemetryStore().usage).toEqual({})
+  })
+
+  it("sends nothing for a hub whose settings are empty or out of reach: the anchor's own answer says so", async () => {
+    startTelemetry(hubPage())
+    attachTelemetryPortal(hubPortal(new Map()), new Map())
+    await settle()
+    expect(getTelemetryGate()).toEqual({ level: 0, catalog: false, reason: 'no-level' })
+
+    bed.restore()
+    bed = telemetryTestBed()
+    startTelemetry(hubPage())
+    // As a data adapter is when the hub is out of reach: no settings, and a portal that says so.
+    attachTelemetryPortal(hubPortal(new Map(), { isAvailable: false }), new Map())
+    await settle()
+    expect(getTelemetryGate()).toEqual({
+      level: 0,
+      catalog: false,
+      reason: 'anchor-unavailable'
+    })
+    trackUsage('Footer', 'page.viewed')
+    bed.leave()
+    expect(bed.fetch).not.toHaveBeenCalled()
+  })
+
   it('shares one store between two copies of the module, as two bundles on a page do', async () => {
     type Copy = typeof import('./track') & typeof import('./flush')
     const load = (): Copy => {
@@ -787,16 +830,18 @@ describe('the anchor portal', () => {
     bed.advance(GATE_MAX_AGE_MS)
     expect(getTelemetryGate().level).toBe(2)
     bed.advance(1)
-    expect(getTelemetryGate()).toEqual({ level: 0, catalog: false, reason: 'pending' })
     bed.hide()
     flushTelemetry({ urgent: true })
+    await settle()
     expect(bed.fetch).not.toHaveBeenCalled()
     // A flush reads nothing: it works from memory.
     expect(anchor.getGlobalSettings).toHaveBeenCalledTimes(1)
 
-    // The tab comes back: the settings are read again, in the background.
+    // The tab comes back: the settings are read again, in the background, and until the answer
+    // is in the gate is closed.
     bed.show()
     bed.show()
+    expect(getTelemetryGate()).toEqual({ level: 0, catalog: false, reason: 'pending' })
     await settle()
     expect(anchor.getGlobalSettings).toHaveBeenCalledTimes(2)
     expect(later.getGlobalSettings).not.toHaveBeenCalled()
@@ -804,6 +849,56 @@ describe('the anchor portal', () => {
     flushTelemetry({ urgent: true })
     expect(bed.batches()).toHaveLength(1)
     expect(bed.batches()[0].usage).toEqual([{ c: 'Footer', e: 'page.viewed', s: 'hub', n: 1 }])
+  })
+
+  it('reads an old decision again from a gate lookup, which answers closed until the answer is in', async () => {
+    // A sender that only asks the gate, as the catalog's does: no tracking call renews it for it.
+    startTelemetry(hubPage())
+    const anchor = hubPortal(settingsMap('2'))
+    attachTelemetryPortal(anchor)
+    await settle()
+    expect(getTelemetryGate()).toEqual({ level: 2, catalog: true, reason: 'setting' })
+
+    // A lookup reads nothing while the decision is good.
+    bed.advance(GATE_MAX_AGE_MS)
+    expect(getTelemetryGate().level).toBe(2)
+    await settle()
+    expect(anchor.getGlobalSettings).toHaveBeenCalledTimes(1)
+
+    anchor.getGlobalSettings.mockResolvedValue(settingsMap('3'))
+    bed.advance(1)
+    // The lookup is synchronous: it starts the read and does not wait for it.
+    expect(getTelemetryGate()).toEqual({ level: 0, catalog: false, reason: 'pending' })
+    expect(getTelemetryGate()).toEqual({ level: 0, catalog: false, reason: 'pending' })
+    expect(anchor.getGlobalSettings).toHaveBeenCalledTimes(1)
+    await settle()
+    // One read, however many lookups asked while it was on its way.
+    expect(anchor.getGlobalSettings).toHaveBeenCalledTimes(2)
+    expect(getTelemetryGate()).toEqual({ level: 3, catalog: true, reason: 'setting' })
+  })
+
+  it('closes the gate for a lookup when the settings can no longer be read', async () => {
+    startTelemetry(hubPage())
+    const anchor = hubPortal(settingsMap('2'))
+    attachTelemetryPortal(anchor)
+    await settle()
+    anchor.getGlobalSettings.mockRejectedValue(Object.assign(new Error('[403]'), { status: 403 }))
+    bed.advance(GATE_MAX_AGE_MS + 1)
+    expect(getTelemetryGate().reason).toBe('pending')
+    await settle()
+    expect(getTelemetryGate()).toEqual({ level: 0, catalog: false, reason: 'no-level' })
+  })
+
+  it('reads nothing from a gate lookup without an anchor, or while the first read is on its way', async () => {
+    startTelemetry(hubPage())
+    expect(getTelemetryGate()).toEqual({ level: 0, catalog: false, reason: 'pending' })
+    const anchor = hubPortal(settingsMap('2'))
+    attachTelemetryPortal(anchor)
+    expect(getTelemetryGate().reason).toBe('pending')
+    expect(getTelemetryGate().reason).toBe('pending')
+    await settle()
+    expect(anchor.getGlobalSettings).toHaveBeenCalledTimes(1)
+    expect(getTelemetryGate().level).toBe(2)
   })
 
   it('applies a level that was lowered when the old decision is read again', async () => {

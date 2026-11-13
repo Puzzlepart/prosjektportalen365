@@ -2,6 +2,7 @@ import { PopoverProps, useAnnounce, useId } from '@fluentui/react-components'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'ProjectExtensionsStrings'
 import { formatShortDate } from 'pp365-shared-library'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { useState } from 'react'
 import { useBoolean } from 'usehooks-ts'
 import { useRiskActionFieldCustomizerContext } from '../../../extensions/riskAction/context'
@@ -16,6 +17,7 @@ export function useRiskActionPopover() {
   const titleId = useId('risk-action-title')
   const [syncError, setSyncError] = useState<string>()
   const { announce } = useAnnounce()
+  const telemetry = useTelemetry()
 
   const onPopoverOpenChange: PopoverProps['onOpenChange'] = (_ev, { open }) => {
     popoverState.setValue(open)
@@ -28,7 +30,10 @@ export function useRiskActionPopover() {
     panelState.setTrue()
   }
 
-  /** Refreshes stored task references, announcing success or retaining an in-popover error. */
+  /**
+   * Refreshes stored task references, announcing success or retaining an in-popover error, which
+   * usage statistics count by its error's code.
+   */
   const onSyncTasks = async () => {
     setSyncError(undefined)
     try {
@@ -37,6 +42,7 @@ export function useRiskActionPopover() {
       setItemContext(updatedItemContext)
       announce(strings.RiskActionSyncDone, { polite: true })
     } catch (error) {
+      telemetry.trackError(error)
       setSyncError(error?.message ?? '')
     }
   }

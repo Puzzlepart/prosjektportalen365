@@ -20,6 +20,7 @@ import * as strings from 'PortfolioWebPartsStrings'
 import {
   DataSource,
   DataSourceService,
+  errorWithCause,
   expandRowsPerStatusSeries,
   getAllItems,
   getClassProperties,
@@ -1150,7 +1151,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       }
       return items
     } catch (error) {
-      throw new Error(`${format(strings.DataSourceError, dataSourceName)}  ${error}`)
+      // The cause keeps what SharePoint answered, for usage statistics to count the failure by.
+      throw errorWithCause(`${format(strings.DataSourceError, dataSourceName)}  ${error}`, error)
     }
   }
 
@@ -1166,7 +1168,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       }
       return await this.dataSourceService.getByCategory(category, level, columns)
     } catch (error) {
-      throw new Error(format(strings.DataSourceCategoryError, category))
+      throw errorWithCause(format(strings.DataSourceCategoryError, category), error)
     }
   }
 

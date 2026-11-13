@@ -49,6 +49,11 @@ export type IPortfolioViewData = {
    * The portfolios a merged view could not read, which the overview tells of.
    */
   failedPortfolios?: PortfolioInstance[]
+  /**
+   * What each of `failedPortfolios` failed with, in the same order. Usage statistics count each
+   * by its error code; the errors are shown nowhere.
+   */
+  failedPortfolioErrors?: unknown[]
 }
 
 /**
@@ -367,7 +372,10 @@ export type PortfolioInstance = {
 }
 
 /**
- * Wrap a portfolio-configuration failure in a localized warning, preserving its stack.
+ * Wrap a portfolio-configuration failure in a localized warning, preserving its stack. The error
+ * it was made from is kept as its `cause`, as `errorWithCause` keeps one: the user sees the
+ * generic text, and usage statistics count the failure by the HTTP status of what the hub
+ * answered.
  */
 export const GetPortfolioConfigError = (error: Error): ErrorWithIntent => {
   const e = new ErrorWithIntent(
@@ -376,6 +384,13 @@ export const GetPortfolioConfigError = (error: Error): ErrorWithIntent => {
     strings.GetPortfolioConfigErrorTitle
   )
   e.stack = error.stack
+  // Not enumerable, as the native `cause` is not: it follows the error into no spread.
+  Object.defineProperty(e, 'cause', {
+    value: error,
+    writable: true,
+    configurable: true,
+    enumerable: false
+  })
   return e
 }
 

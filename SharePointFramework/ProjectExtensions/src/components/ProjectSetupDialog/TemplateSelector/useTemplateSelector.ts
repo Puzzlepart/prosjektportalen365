@@ -15,6 +15,7 @@ import { createNoTemplateOption } from '../../../extensions/projectSetup/noTempl
 import { resolveCloudTemplate } from '../resolveCloudTemplate'
 import { TemplateSelectorMode } from './types'
 import { format } from 'pp365-shared-library'
+import { trackError } from 'pp365-shared-library/lib/telemetry'
 
 /** Manages template search and selection, resolving cloud packages with status announcements. */
 export function useTemplateSelector() {
@@ -116,6 +117,9 @@ export function useTemplateSelector() {
           level: LogLevel.Error
         })
         if (!cancelled) {
+          // The wizard is a React root of its own, so the setup's alias is given here. Counted
+          // with the message it is told in: a template the user has left is told nowhere.
+          trackError('ProjectSetup', error)
           context.dispatch(ON_CLOUD_TEMPLATE_ERROR(strings.CloudTemplateResolveErrorMessage))
         }
       }

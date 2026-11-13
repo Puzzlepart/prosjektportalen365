@@ -74,18 +74,22 @@ describe('fetchMergedViewData', () => {
     expect(fetchOther.mock.calls.map(([p]) => p)).toEqual([b, c])
     expect(data.items.map((item) => item._hubTitle)).toEqual(['Hub A', 'Hub B', 'Hub C'])
     expect(data.failedPortfolios).toEqual([])
+    expect(data.failedPortfolioErrors).toEqual([])
   })
 
   it('leaves a hub that cannot be read out, names it, and tells of it; the others are shown', async () => {
     const onError = jest.fn()
+    const refusal = new Error('403')
     const data = await fetchMergedViewData(
       [a, b, c],
       () => Promise.resolve({ items: [row('1')] }),
-      (p) => (p === b ? Promise.reject(new Error('403')) : Promise.resolve({ items: [row('3')] })),
+      (p) => (p === b ? Promise.reject(refusal) : Promise.resolve({ items: [row('3')] })),
       onError
     )
     expect(data.items.map((item) => item._hubTitle)).toEqual(['Hub A', 'Hub C'])
     expect(data.failedPortfolios).toEqual([b])
+    // What the hub failed with goes with it, for usage statistics to count by its code.
+    expect(data.failedPortfolioErrors).toEqual([refusal])
     expect(onError).toHaveBeenCalledWith(b, expect.objectContaining({ message: '403' }))
   })
 

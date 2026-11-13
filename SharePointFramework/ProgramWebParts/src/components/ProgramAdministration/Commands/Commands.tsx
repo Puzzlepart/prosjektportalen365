@@ -1,6 +1,7 @@
 import * as strings from 'ProgramWebPartsStrings'
 import _ from 'lodash'
 import { ListMenuItem, Toolbar } from 'pp365-shared-library'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import React, { FC, useContext } from 'react'
 import { ProgramAdministrationContext } from '../context'
 import { REMOVE_CHILD_PROJECTS, SET_IS_DELETING, TOGGLE_ADD_PROJECT_DIALOG } from '../reducer'
@@ -13,11 +14,16 @@ import {
   useToastController
 } from '@fluentui/react-components'
 
-/** Provides permission-gated add/remove actions and reports removal outcomes through toasts. */
+/**
+ * Provides permission-gated add/remove actions and reports removal outcomes through toasts. For
+ * usage statistics a removal that went through is counted once, however many projects it removed,
+ * and one that failed by the error's own code, for the web part.
+ */
 export const Commands: FC = () => {
   const context = useContext(ProgramAdministrationContext)
   const toasterId = useId('toaster')
   const { dispatchToast } = useToastController(toasterId)
+  const telemetry = useTelemetry()
 
   const items = [
     new ListMenuItem(
@@ -52,6 +58,8 @@ export const Commands: FC = () => {
           .then(() => {
             const siteIdsToRemove = projects.map((p) => p.SiteId)
             context.dispatch(REMOVE_CHILD_PROJECTS({ siteIdsToRemove }))
+            // Counted here and not in the reducer, once per removal that went through.
+            telemetry.track('childProjects.removed')
             dispatchToast(
               <Toast>
                 <ToastTitle>{strings.ChildrenRemoveToastTitle}</ToastTitle>
@@ -61,6 +69,7 @@ export const Commands: FC = () => {
             )
           })
           .catch((error) => {
+            telemetry.trackError(error)
             context.dispatch(SET_IS_DELETING(false))
             dispatchToast(
               <Toast>

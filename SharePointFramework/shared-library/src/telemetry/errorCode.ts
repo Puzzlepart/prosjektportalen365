@@ -16,9 +16,12 @@ const MAX_CAUSE_DEPTH = 3
 
 /**
  * The HTTP status of an error, where it has one: PnPjs' errors carry `status`, and the errors the
- * solutions make from a response carry it as `statusCode` or under `response` or `data`.
+ * solutions make from a response carry it as `statusCode` or under `response` or `data`. It is
+ * the error's own status, whatever it is: no cause is followed, and no status is left out.
+ *
+ * @param error The caught value, of any shape
  */
-function statusOf(error: unknown): number | undefined {
+export function httpStatusOf(error: unknown): number | undefined {
   const err = (error ?? {}) as Record<string, any>
   const status = [err.status, err.statusCode, err.response?.status, err.data?.status].filter(
     (value) => typeof value === 'number' && isFinite(value)
@@ -40,7 +43,7 @@ function isTimeoutError(error: unknown): boolean {
 function tellingErrorOf(error: unknown): unknown {
   let current = error
   for (let depth = 0; depth <= MAX_CAUSE_DEPTH; depth++) {
-    if (statusOf(current) !== undefined || isTimeoutError(current)) return current
+    if (httpStatusOf(current) !== undefined || isTimeoutError(current)) return current
     const cause = ((current ?? {}) as Record<string, any>).cause
     if (typeof cause !== 'object' || cause === null) break
     current = cause
@@ -58,7 +61,7 @@ function tellingErrorOf(error: unknown): unknown {
  */
 export function errorCodeFrom(error: unknown): TelemetryErrorCode {
   const telling = tellingErrorOf(error)
-  const status = statusOf(telling)
+  const status = httpStatusOf(telling)
   if (status === 401 || status === 403) return 'permission_denied'
   if (status === 404) return 'not_found'
   if (status === 429) return 'throttled'
@@ -75,5 +78,5 @@ export function errorCodeFrom(error: unknown): TelemetryErrorCode {
  * @param error The caught value, of any shape
  */
 export function errorHttpStatusFrom(error: unknown): TelemetryHttpStatus | undefined {
-  return telemetryHttpStatus(statusOf(tellingErrorOf(error)))
+  return telemetryHttpStatus(httpStatusOf(tellingErrorOf(error)))
 }

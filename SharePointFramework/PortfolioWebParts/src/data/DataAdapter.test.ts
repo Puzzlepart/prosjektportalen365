@@ -23,7 +23,9 @@ jest.mock('@pnp/core', () => {
   })
 })
 
-import { clearProjectsCache } from 'pp365-shared-library'
+import strings from 'PortfolioWebPartsStrings'
+import { clearProjectsCache, format } from 'pp365-shared-library'
+import { errorCodeFrom, errorHttpStatusFrom } from 'pp365-shared-library/lib/telemetry'
 import resource from 'SharedResources'
 import { DataAdapter } from './DataAdapter'
 
@@ -230,5 +232,121 @@ describe('fetchEnrichedProjects, for the project list', () => {
     expect(projects.map((project) => project.title)).toEqual(['Alfa'])
     expect(projects[0].primaryUser).toMatchObject({ name: 'Kari Nordmann' })
     expect(selected(requests)).not.toContain('GtProjectNumber')
+  })
+})
+
+describe('a read that fails, as the user is told of it and as usage statistics count it', () => {
+  /** An error as PnPjs gives one for a response: its HTTP status. */
+  const httpError = (status: number) => Object.assign(new Error('SharePoint svarte'), { status })
+
+  /** The hub's data service as the portfolio's configuration reads it, with what a test changes. */
+  const portal = (overrides: Record<string, any> = {}): any => ({
+    hubSiteId: 'hub-1',
+    getProjectColumnConfig: () => Promise.resolve([]),
+    getProjectColumns: () => Promise.resolve([]),
+    getPortfolioOverviewViews: () => Promise.resolve([]),
+    getPrograms: () => Promise.resolve([]),
+    getListFormUrls: () => Promise.resolve({ defaultNewFormUrl: '/NewForm.aspx' }),
+    currentUserHasPermissionsToList: () => Promise.resolve(true),
+    ...overrides
+  })
+
+  it("reads a portfolio's configuration from the hub", async () => {
+    const { adapter } = adapterOnHub()
+    adapter.portalDataService = portal()
+    expect(await adapter.getPortfolioConfig()).toMatchObject({
+      columns: [],
+      views: [],
+      refiners: [],
+      userCanAddViews: true,
+      hubSiteId: 'hub-1'
+    })
+  })
+
+  it("tells of a portfolio's configuration that cannot be read in general words, and keeps what the hub answered as the cause", async () => {
+    const { adapter } = adapterOnHub()
+    adapter.portalDataService = portal({
+      getPortfolioOverviewViews: () => Promise.reject(httpError(403))
+    })
+    const error = await adapter.getPortfolioConfig().catch((e) => e)
+    expect(error).toMatchObject({
+      name: strings.GetPortfolioConfigErrorTitle,
+      message: strings.GetPortfolioConfigErrorText,
+      intent: 'warning'
+    })
+    // The cause follows the error into no spread, and gives usage statistics its code.
+    expect(Object.keys(error)).not.toContain('cause')
+    expect(errorCodeFrom(error)).toBe('permission_denied')
+    expect(errorHttpStatusFrom(error)).toBe(403)
+  })
+
+  it("searches a data source's items with its own columns beside the ones asked for", async () => {
+    const { adapter } = adapterOnHub()
+    const search = jest.fn((..._args: any[]) =>
+      Promise.resolve({ PrimarySearchResults: [{ Title: 'Ny bane' }], TotalRows: 1 })
+    )
+    ;(adapter as any)._sp.search = search
+    adapter.dataSourceService = {
+      getByName: () =>
+        Promise.resolve({
+          category: 'Leveranser',
+          searchQuery: 'ContentTypeId:0x0100D7B74DE815F946D3B0F99D19F9B36B68*',
+          columns: [{ fieldName: 'GtDeliveryStatusOWSCHCS' }]
+        })
+    } as any
+    expect(await adapter.fetchItemsWithSource('Leveranser', ['Title'])).toEqual([
+      { Title: 'Ny bane' }
+    ])
+    expect(search).toHaveBeenCalledTimes(1)
+    expect(search.mock.calls[0][0]).toMatchObject({
+      QueryTemplate: 'ContentTypeId:0x0100D7B74DE815F946D3B0F99D19F9B36B68*',
+      SelectProperties: expect.arrayContaining([
+        'Title',
+        'GtDeliveryStatusOWSCHCS',
+        'FileExtension',
+        'ServerRedirectedURL'
+      ])
+    })
+  })
+
+  it('keeps what SharePoint answered as the cause of a data source that cannot be read', async () => {
+    const { adapter } = adapterOnHub()
+    adapter.dataSourceService = { getByName: () => Promise.reject(httpError(429)) } as any
+    const error = await adapter.fetchItemsWithSource('Leveranser', []).catch((e) => e)
+    expect(error.message).toContain(format(strings.DataSourceError, 'Leveranser'))
+    expect(errorCodeFrom(error)).toBe('throttled')
+    expect(errorHttpStatusFrom(error)).toBe(429)
+  })
+
+  it('has no status to count a data source that is not there by', async () => {
+    const { adapter } = adapterOnHub()
+    adapter.dataSourceService = { getByName: () => Promise.resolve(null) } as any
+    const missing = await adapter.fetchItemsWithSource('Leveranser', []).catch((e) => e)
+    expect(missing.message).toContain(format(strings.DataSourceNotFound, 'Leveranser'))
+    expect(errorCodeFrom(missing)).toBe('unknown')
+    // A hub out of reach leaves the adapter without a data source service.
+    adapter.dataSourceService = undefined
+    const unreachable = await adapter.fetchItemsWithSource('Leveranser', []).catch((e) => e)
+    expect(unreachable.message).toContain(format(strings.DataSourceError, 'Leveranser'))
+    expect(errorCodeFrom(unreachable)).toBe('unknown')
+  })
+
+  it("reads a category's data sources, and keeps what SharePoint answered as the cause when it cannot", async () => {
+    const { adapter } = adapterOnHub()
+    const getByCategory = jest.fn((..._args: unknown[]) => Promise.resolve([{ id: 1 }]))
+    adapter.dataSourceService = { getByCategory } as any
+    expect(await adapter.fetchDataSources('Leveranser', 'Portefølje')).toEqual([{ id: 1 }])
+    expect(getByCategory).toHaveBeenCalledWith('Leveranser', 'Portefølje', undefined)
+
+    getByCategory.mockImplementationOnce(() => Promise.reject(httpError(404)))
+    const error = await adapter.fetchDataSources('Leveranser').catch((e) => e)
+    expect(error.message).toBe(format(strings.DataSourceCategoryError, 'Leveranser'))
+    expect(errorCodeFrom(error)).toBe('not_found')
+    expect(errorHttpStatusFrom(error)).toBe(404)
+
+    adapter.dataSourceService = undefined
+    const unreachable = await adapter.fetchDataSources('Leveranser').catch((e) => e)
+    expect(unreachable.message).toBe(format(strings.DataSourceCategoryError, 'Leveranser'))
+    expect(errorCodeFrom(unreachable)).toBe('unknown')
   })
 })

@@ -15,6 +15,13 @@ import strings from 'SharedLibraryStrings'
 import * as React from 'react'
 import { ProjectTimeline } from '.'
 import { TimelineConfigurationModel, TimelineContentModel } from '../../models'
+import { TelemetryProvider } from '../../telemetry'
+import {
+  clearTestTelemetry,
+  countedTelemetry,
+  startTestTelemetry,
+  telemetryStore
+} from '../../telemetry/__fixtures__/testFixtures'
 import { format } from '../../util'
 
 const FRISBEE = 'https://contoso.sharepoint.com/sites/frisbee'
@@ -109,18 +116,21 @@ function dataAdapter(overrides: Record<string, any> = {}) {
   }
 }
 
+/** Renders the timeline as the program's timeline web part does, which usage is counted for. */
 function renderTimeline(
   adapter = dataAdapter(),
   siteUrl = 'https://contoso.sharepoint.com/sites/program'
 ) {
   render(
-    <ProjectTimeline
-      title='Programtidslinje'
-      dataAdapter={adapter as any}
-      pageContext={{ site: { absoluteUrl: siteUrl } } as any}
-      defaultTimeframeStart='2,months'
-      defaultTimeframeEnd='6,months'
-    />
+    <TelemetryProvider component='ProgramTimelineWebPart'>
+      <ProjectTimeline
+        title='Programtidslinje'
+        dataAdapter={adapter as any}
+        pageContext={{ site: { absoluteUrl: siteUrl } } as any}
+        defaultTimeframeStart='2,months'
+        defaultTimeframeEnd='6,months'
+      />
+    </TelemetryProvider>
   )
   return adapter
 }
@@ -131,6 +141,7 @@ const values = (fieldName: string) => filter(fieldName).items.map(({ name }) => 
 
 beforeEach(() => {
   shown.props = undefined
+  startTestTelemetry()
 })
 
 afterEach(async () => {
@@ -256,5 +267,60 @@ describe('ProjectTimeline', () => {
       dataAdapter({ fetchTimelineContentItems: jest.fn(() => Promise.resolve([broken])) })
     )
     expect(await screen.findByText(/Uten område \(Svømmehall\)/)).toBeInTheDocument()
+  })
+
+  describe('and usage statistics', () => {
+    afterEach(() => clearTestTelemetry())
+
+    it('counts no error for a timeline that gets its data', async () => {
+      renderTimeline()
+      await waitFor(() => expect(shown.props).toBeDefined())
+      expect(countedTelemetry()).toEqual({ usage: {}, errors: {}, timings: {} })
+    })
+
+    it('counts a fetch that fails once, for the web part it is in, by the status SharePoint answered with', async () => {
+      const denied = Object.assign(
+        new Error('Error making HttpClient request in queryable [403] ::> Tidslinjekonfigurasjon'),
+        { status: 403 }
+      )
+      renderTimeline(
+        dataAdapter({ fetchTimelineConfiguration: jest.fn(() => Promise.reject(denied)) })
+      )
+      // The message is shown as before; of the error, only its code and status are kept.
+      expect(await screen.findByText(/Tidslinjekonfigurasjon/)).toBeInTheDocument()
+      expect(countedTelemetry()).toEqual({
+        usage: {},
+        errors: { 'ProgramTimelineWebPart permission_denied 403': 1 },
+        timings: {}
+      })
+      expect(JSON.stringify(telemetryStore())).not.toContain('Tidslinjekonfigurasjon')
+    })
+
+    it('counts a failure without a status, such as an element it could not place, as unknown', async () => {
+      const broken = new TimelineContentModel(null, 'Svømmehall', 'Uten område', 'Milepæl')
+      renderTimeline(
+        dataAdapter({ fetchTimelineContentItems: jest.fn(() => Promise.resolve([broken])) })
+      )
+      expect(await screen.findByText(/Uten område \(Svømmehall\)/)).toBeInTheDocument()
+      expect(countedTelemetry().errors).toEqual({ 'ProgramTimelineWebPart unknown': 1 })
+    })
+
+    it('shows the failure all the same where no web part is named for usage statistics', async () => {
+      render(
+        <ProjectTimeline
+          title='Tidslinje'
+          dataAdapter={
+            dataAdapter({
+              fetchTimelineConfiguration: jest.fn(() => Promise.reject(new Error('Ingen tilgang')))
+            }) as any
+          }
+          pageContext={{ site: { absoluteUrl: FRISBEE } } as any}
+          defaultTimeframeStart='2,months'
+          defaultTimeframeEnd='6,months'
+        />
+      )
+      expect(await screen.findByText('Ingen tilgang')).toBeInTheDocument()
+      expect(countedTelemetry().errors).toEqual({})
+    })
   })
 })

@@ -8,6 +8,11 @@
  */
 require('@testing-library/jest-dom')
 
+// SPFx replaces `DEBUG` with true or false when it builds a bundle; under Jest it is a plain
+// global, and reading it undefined throws. Every bundle passes it to `startTelemetry`, so it is
+// defined here as in a production build. A test that sets it itself keeps its own value.
+if (typeof globalThis.DEBUG === 'undefined') globalThis.DEBUG = false
+
 if (typeof window !== 'undefined') {
   // SharePoint pages expose the site theme on window.__themeState__; shared-library/src/util/theme.tsx
   // reads it at module load to derive the Fluent v9 brand ramp. Provide the default SharePoint

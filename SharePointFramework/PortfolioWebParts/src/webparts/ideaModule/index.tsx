@@ -12,6 +12,7 @@ import _ from 'lodash'
 import { IPortfolioAggregationConfiguration } from 'components'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { ISPHttpClientOptions, SPHttpClient } from '@microsoft/sp-http'
+import { trackError } from 'pp365-shared-library/lib/telemetry'
 
 /** Load idea overview configuration and host the idea workflow browser. */
 export default class IdeaModuleWebPart extends BasePortfolioWebPart<IIdeaModuleProps> {
@@ -66,8 +67,11 @@ export default class IdeaModuleWebPart extends BasePortfolioWebPart<IIdeaModuleP
         this.properties.dataSourceCategory,
         this.properties.dataSourceLevel
       )
-    } catch {
+    } catch (error) {
       this._configuration = null
+      // The module is shown without a configuration, and the failure is counted where it
+      // happens, once, by the error's own code.
+      trackError(this._telemetryComponent, error)
     }
   }
 

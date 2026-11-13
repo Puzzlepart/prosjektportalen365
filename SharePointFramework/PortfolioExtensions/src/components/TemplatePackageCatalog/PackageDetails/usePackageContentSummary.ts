@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { ICatalogPackage, IPackageContents } from 'models'
 import { CatalogService } from 'services'
 
@@ -19,6 +20,8 @@ export function usePackageContentSummary(pkg: ICatalogPackage) {
   const [reloadToken, setReloadToken] = useState(0)
   const [showDetails, setShowDetails] = useState(false)
   const [preview, setPreview] = useState<IFilePreviewTarget>({})
+  // A failed load the admin is told about is counted for usage statistics, by its error code.
+  const telemetry = useTelemetry()
 
   useEffect(() => {
     let cancelled = false
@@ -32,8 +35,9 @@ export function usePackageContentSummary(pkg: ICatalogPackage) {
         setContents(result)
         setLoading(false)
       })
-      .catch(() => {
+      .catch((error) => {
         if (cancelled) return
+        telemetry.trackError(error)
         setError(true)
         setLoading(false)
       })

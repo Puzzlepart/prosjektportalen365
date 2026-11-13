@@ -3,7 +3,8 @@
 // talks to is a stand-in: the site's PnPjs instance (`site.sp`, from `fakeSite`), the hub's portal
 // data service and adapter, Microsoft Graph, the tasks (`run.tasks`, made from the setup's data,
 // which `run.data` keeps) and the dialogs, which record the props they were last rendered with in
-// `dialogs`.
+// `dialogs`. Usage statistics are the real ones, counting in the window's memory, but for their
+// flush, which `leaving` records with the navigation that follows it.
 ;(globalThis as any).DEBUG = false
 /** The project site's PnPjs instance, and the menu URLs SharePoint refuses (their target is gone). */
 const site: { sp?: any; refusedUrls: string[] } = { refusedUrls: [] }
@@ -11,18 +12,29 @@ const hub = {
   templates: [] as any[],
   lists: {} as Record<string, any[]>,
   failFetch: false,
+  /** What the hub's lists fail with when `failFetch` is set */
+  fetchError: new Error('Listen finnes ikke'),
   language: 1044,
   updates: [] as any[],
   /** Whether the user can add to the hub's project list; `undefined` makes the check fail. */
-  canWrite: true as boolean | undefined
+  canWrite: true as boolean | undefined,
+  /** What usage statistics read of the hub's data service (`hubPortal`); nothing by default */
+  portal: {} as Record<string, any>
 }
+/** What the page did as the setup ended, in order: usage statistics' flush, then the navigation. */
+const leaving: string[] = []
+jest.mock('pp365-shared-library/lib/telemetry', () => ({
+  ...jest.requireActual('pp365-shared-library/lib/telemetry'),
+  flushTelemetry: (options?: { urgent?: boolean }) =>
+    leaving.push(options?.urgent ? 'urgent flush' : 'flush')
+}))
 class FakePortalDataService {
   public web = { select: () => () => Promise.resolve({ Language: hub.language }) }
   public configure() {
-    return Promise.resolve(this)
+    return Promise.resolve(Object.assign(this, hub.portal))
   }
   public getItems(list: string) {
-    if (hub.failFetch) return Promise.reject(new Error('Listen finnes ikke'))
+    if (hub.failFetch) return Promise.reject(hub.fetchError)
     return Promise.resolve(hub.lists[list] ?? [])
   }
   public getProjectData() {
@@ -63,10 +75,14 @@ jest.mock('data', () => ({
     }
   }
 }))
-const graph = { members: [] as { mail: string }[] }
+/** The group's members, or what Microsoft Graph fails with when asked for them. */
+const graph = { members: [] as { mail: string }[], error: undefined as Error }
 jest.mock('msgraph-helper', () => ({
   __esModule: true,
-  default: { Init: () => Promise.resolve(), Get: () => Promise.resolve(graph.members) }
+  default: {
+    Init: () => Promise.resolve(),
+    Get: () => (graph.error ? Promise.reject(graph.error) : Promise.resolve(graph.members))
+  }
 }))
 const run: { tasks: any[]; data?: any } = { tasks: [] }
 jest.mock('./tasks', () => ({
@@ -91,10 +107,23 @@ jest.mock('../../components', () => {
 })
 
 import { act } from '@testing-library/react'
+import * as fs from 'fs'
+import * as path from 'path'
 import strings from 'ProjectExtensionsStrings'
 import { format } from 'pp365-shared-library'
+import {
+  clearTestTelemetry,
+  countedTelemetry,
+  HUB_SITE_ID,
+  hubPortal,
+  PROJECT_SITE_ID,
+  settingsMap,
+  telemetryStore,
+  TENANT_ID
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import resource from 'SharedResources'
 import ProjectSetup from '.'
+import { ProjectSetupError } from './ProjectSetupError'
 import { ProjectSetupValidation } from './types'
 
 const PROJECT = 'https://contoso.sharepoint.com/sites/frisbee'
@@ -270,19 +299,45 @@ const saveMenu = (nodes: any[], webUrl = PROJECT) =>
 /** Lets the setup run as far as it can on its own: to a dialog, or to its end. */
 const settle = () => act(() => new Promise((resolve) => setTimeout(resolve, 0)))
 
+/**
+ * The page of a project site whose ids are GUIDs, which usage statistics need to count anything:
+ * the ids of the other tests' site and hub are not, and nothing is counted in them.
+ */
+const COUNTED = {
+  siteId: PROJECT_SITE_ID,
+  legacy: { aadTenantId: TENANT_ID, hubSiteId: HUB_SITE_ID, siteId: `{${PROJECT_SITE_ID}}` }
+}
+
+/** The customizer's alias in its manifest, which usage statistics count it by. */
+const { alias: ALIAS } = JSON.parse(
+  fs.readFileSync(
+    path.resolve(__dirname, '../../../src/extensions/projectSetup/manifest.json'),
+    'utf8'
+  )
+)
+
+/** Everything usage statistics have counted, and that nothing else was. */
+const counted = (usage: Record<string, number>, errors: Record<string, number> = {}) => ({
+  usage,
+  errors,
+  timings: {}
+})
+
 /** The customizer on the project site, initialised; `context` overrides the page context. */
 async function projectSetup({
   web = {},
   legacy = {},
   language = 1044,
   properties = {},
-  quickLaunch = []
+  quickLaunch = [],
+  siteId = 'site-2'
 }: {
   web?: Record<string, any>
   legacy?: Record<string, any>
   language?: number
   properties?: Record<string, any>
   quickLaunch?: IFakeNode[]
+  siteId?: string
 } = {}) {
   const calls = fakeSite(web, quickLaunch)
   const top = document.body.appendChild(document.createElement('div'))
@@ -290,6 +345,7 @@ async function projectSetup({
   ;(customizer as any).context = {
     msGraphClientFactory: {},
     placeholderProvider: { tryCreateContent: () => ({ domElement: top }) },
+    manifest: { alias: 'ProjectSetup', version: '1.15.0' },
     pageContext: {
       legacyPageContext: {
         isSiteAdmin: true,
@@ -299,7 +355,7 @@ async function projectSetup({
         ...legacy
       },
       web: { absoluteUrl: PROJECT, language, title: 'Frisbeegolfbane' },
-      site: { id: { toString: () => 'site-2' } },
+      site: { id: { toString: () => siteId } },
       user: { email: USER }
     }
   }
@@ -311,7 +367,7 @@ async function projectSetup({
 }
 
 /** Picks `template` in the setup dialog and lets the setup run. */
-async function setUpWith(template = TEMPLATES[0]) {
+async function setUpWith(template: Record<string, any> = TEMPLATES[0]) {
   act(() => {
     dialogs.setup.onSubmit({
       selectedTemplate: template,
@@ -329,22 +385,30 @@ beforeEach(() => {
   hub.templates = TEMPLATES.map((template) => ({ ...template }))
   hub.lists = { [resource.Lists_TemplateOptions_Title]: hub.templates }
   hub.failFetch = false
+  hub.fetchError = new Error('Listen finnes ikke')
   hub.language = 1044
   hub.updates = []
   hub.canWrite = true
+  hub.portal = {}
   site.refusedUrls = []
   graph.members = [{ mail: USER }]
+  graph.error = undefined
   run.tasks = [task('PreTask'), task('SitePermissions'), task('ApplyTemplate')]
   removal.deleteCustomizer.mockClear()
   listLogger.log.mockClear()
   sessionStorage.clear()
   localStorage.clear()
+  clearTestTelemetry()
+  leaving.length = 0
   // jsdom cannot navigate; the setup reloads the page or goes to the project at the end.
   // Every other error still reaches the test output.
   // eslint-disable-next-line no-console
   const original = console.error
   consoleError = jest.spyOn(console, 'error').mockImplementation((...args: any[]) => {
-    if (String(args[0]?.message ?? args[0]).includes('Not implemented: navigation')) return
+    if (String(args[0]?.message ?? args[0]).includes('Not implemented: navigation')) {
+      leaving.push('navigation')
+      return
+    }
     original(...args)
   })
 })
@@ -941,5 +1005,132 @@ describe('ProjectSetup', () => {
       expect.objectContaining({ functionName: '_removeAlternativeLanguages' })
     )
     expect(sessionStorage.getItem('pp_languagesRemoved_site-2')).toBeNull()
+  })
+})
+
+/**
+ * What the setup counts for usage statistics: each run once, as completed, aborted or failed, on
+ * the kind of site it leaves; a failure also by its error's code. The hub's data service is
+ * `hubPortal`, whose settings open the gate, on a page with GUIDs for ids (`COUNTED`).
+ */
+describe('ProjectSetup and usage statistics', () => {
+  it('starts usage statistics itself, for the page of the site being set up', async () => {
+    await projectSetup(COUNTED)
+    expect(telemetryStore().page).toMatchObject({
+      host: 'contoso.sharepoint.com',
+      tenantId: TENANT_ID,
+      siteId: PROJECT_SITE_ID,
+      hubSiteId: HUB_SITE_ID,
+      isHubPage: false,
+      appVersion: '1.15.0',
+      isDebug: false
+    })
+    expect(countedTelemetry()).toEqual(counted({}))
+  })
+
+  it('counts a completed setup of a new site once, as the kind of site the template makes it, and sends it before it leaves', async () => {
+    hub.portal = hubPortal(settingsMap('3'), {
+      getSiteKind: jest.fn(() => Promise.resolve('other'))
+    })
+    await projectSetup(COUNTED)
+    // The hub is asked once what the site is: none of its sites yet.
+    expect(hub.portal.getSiteKind.mock.calls).toEqual([[PROJECT_SITE_ID]])
+    expect(telemetryStore().siteTypes[PROJECT_SITE_ID]).toBe('other')
+    await setUpWith()
+    expect(countedTelemetry()).toEqual(counted({ [`${ALIAS} setup.completed new`]: 1 }))
+    expect(telemetryStore().siteTypes[PROJECT_SITE_ID]).toBe('project')
+    expect(leaving).toEqual([])
+    dialogs.progress.onDismiss()
+    expect(leaving).toEqual(['urgent flush', 'navigation'])
+  })
+
+  it('counts a setup run again from «Kjør oppsettveiviser» as a rerun, on the kind of site the template chosen now makes it', async () => {
+    hub.portal = hubPortal(settingsMap('2'))
+    await projectSetup({
+      ...COUNTED,
+      web: { WelcomePage: 'SitePages/Prosjektforside.aspx' },
+      properties: { forceTemplate: '__SELECT_TEMPLATE__', skipAlreadySetupCheck: true }
+    })
+    // The hub knows the site as a project.
+    expect(telemetryStore().siteTypes[PROJECT_SITE_ID]).toBe('project')
+    await setUpWith({ ...TEMPLATES[1], isProgram: true })
+    expect(countedTelemetry()).toEqual(counted({ 'ProjectSetup setup.completed rerun': 1 }))
+    expect(telemetryStore().siteTypes[PROJECT_SITE_ID]).toBe('program')
+  })
+
+  it('counts a project made a parent project as that, on a parent project, though the template has no flag for it', async () => {
+    hub.portal = hubPortal(settingsMap('2'))
+    await projectSetup({
+      ...COUNTED,
+      web: { WelcomePage: 'SitePages/Prosjektforside.aspx' },
+      properties: { forceTemplate: 'Byggeprosjekt' }
+    })
+    expect(dialogs.progress.isComplete).toBe(true)
+    expect(countedTelemetry()).toEqual(counted({ 'ProjectSetup setup.completed parent': 1 }))
+    expect(telemetryStore().siteTypes[PROJECT_SITE_ID]).toBe('parent')
+  })
+
+  it('counts a wizard the user closes as an aborted setup, and nothing else', async () => {
+    hub.portal = hubPortal(settingsMap('3'))
+    await projectSetup(COUNTED)
+    await act(() => {
+      dialogs.setup.onDismiss()
+      return new Promise((resolve) => setTimeout(resolve, 0))
+    })
+    expect(dialogs.error.intent).toBe('info')
+    expect(countedTelemetry()).toEqual(counted({ 'ProjectSetup setup.aborted': 1 }))
+    expect(leaving).toEqual([])
+  })
+
+  it.each([
+    [
+      'a step that fails without a status as a failed provisioning',
+      new Error('Mangler tilgang til gruppen'),
+      'ProjectSetup provisioning_failed'
+    ],
+    [
+      'a step SharePoint refused by the status it answered with',
+      new ProjectSetupError(
+        'SitePermissions',
+        'Kunne ikke sette tillatelser',
+        Object.assign(new Error('[403] Forbidden'), { status: 403 })
+      ),
+      'ProjectSetup permission_denied 403'
+    ]
+  ])('counts %s, and the setup as failed', async (_, failure, error) => {
+    hub.portal = hubPortal(settingsMap('3'))
+    run.tasks[1] = task('SitePermissions', failure)
+    await projectSetup(COUNTED)
+    await setUpWith()
+    expect(dialogs.progress.error).toBe(failure)
+    expect(countedTelemetry()).toEqual(counted({ 'ProjectSetup setup.failed': 1 }, { [error]: 1 }))
+  })
+
+  it('counts setup data the hub refuses as a failed setup, by the status the hub answered with', async () => {
+    hub.portal = hubPortal(settingsMap('3'))
+    hub.failFetch = true
+    hub.fetchError = Object.assign(new Error('Listen finnes ikke'), { status: 404 })
+    await projectSetup(COUNTED)
+    expect(dialogs.error.error.message).toBe(strings.GetSetupDataErrorMessage)
+    expect(countedTelemetry()).toEqual(
+      counted({ 'ProjectSetup setup.failed': 1 }, { 'ProjectSetup not_found 404': 1 })
+    )
+  })
+
+  it('counts a read that fails before the setup starts by its status, and no setup', async () => {
+    hub.portal = hubPortal(settingsMap('3'))
+    // Microsoft Graph's error carries its status as `statusCode`.
+    graph.error = Object.assign(new Error('Forbidden'), { statusCode: 403 })
+    await projectSetup(COUNTED)
+    expect(dialogs.error.error).toBe(graph.error)
+    expect(dialogs.setup).toBeUndefined()
+    expect(countedTelemetry()).toEqual(counted({}, { 'ProjectSetup permission_denied 403': 1 }))
+  })
+
+  it("counts none of the answers of the setup's own checks", async () => {
+    hub.portal = hubPortal(settingsMap('3'))
+    await projectSetup({ ...COUNTED, legacy: { ...COUNTED.legacy, isSiteAdmin: false } })
+    expect(dialogs.error.error.message).toBe(strings.NotSiteAdminErrorMessage)
+    expect(countedTelemetry()).toEqual(counted({}))
   })
 })

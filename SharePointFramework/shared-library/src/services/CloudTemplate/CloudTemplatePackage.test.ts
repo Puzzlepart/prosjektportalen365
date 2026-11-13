@@ -81,9 +81,10 @@ describe('CloudTemplatePackage', () => {
   it('refuses a missing address, a failed download and a package without a usable manifest', async () => {
     await expect(CloudTemplatePackage.fromUrl('')).rejects.toThrow('URL is missing')
     await serve({}, { ok: false, status: 404, statusText: 'Not Found' })
-    await expect(
-      CloudTemplatePackage.fromUrl('https://katalog.example/borte.pppkg')
-    ).rejects.toThrow('HTTP 404 Not Found')
+    const refused = CloudTemplatePackage.fromUrl('https://katalog.example/borte.pppkg')
+    await expect(refused).rejects.toThrow('HTTP 404 Not Found')
+    // The status is on the error as well as in its text: usage statistics count by it.
+    await expect(refused).rejects.toMatchObject({ status: 404 })
     await serve({ 'readme.txt': 'Ingen manifest' })
     await expect(CloudTemplatePackage.fromUrl('https://katalog.example/x.pppkg')).rejects.toThrow(
       'manifest.json not found in package'

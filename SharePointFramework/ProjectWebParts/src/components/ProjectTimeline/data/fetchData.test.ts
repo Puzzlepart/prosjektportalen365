@@ -1,11 +1,15 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
 // Babel, so mocks are not hoisted. The data adapter and the hub reads are stand-ins.
-const hub = { isAvailable: true, timelineError: null as Error | null }
+const hub = {
+  isAvailable: true,
+  unavailableStatus: undefined as number | undefined,
+  timelineError: null as Error | null
+}
 jest.mock('data/SPDataAdapter', () => ({
   __esModule: true,
   default: {
     get portalDataService() {
-      return { isAvailable: hub.isAvailable }
+      return { isAvailable: hub.isAvailable, unavailableStatus: hub.unavailableStatus }
     },
     project: {
       getProjectInformationData: () => Promise.resolve({ templateParameters: {} })
@@ -28,6 +32,7 @@ const forbidden = () => Object.assign(new Error('403 FORBIDDEN'), { status: 403 
 
 beforeEach(() => {
   hub.isAvailable = true
+  hub.unavailableStatus = undefined
   hub.timelineError = null
   jest.spyOn(console, 'error').mockImplementation(() => undefined)
 })
@@ -39,6 +44,20 @@ describe('ProjectTimeline fetchData', () => {
     hub.isAvailable = false
     const { error } = await fetchData({} as any)
     expect(error?.message).toBe(strings.ProjectTimelineNoHubAccessErrorText)
+    // Nothing refused with a status: the error has none to be counted by.
+    expect((error as any).cause.message).toBe(strings.ProjectTimelineNoHubAccessErrorText)
+    expect('status' in (error as any).cause).toBe(false)
+  })
+
+  it('says the same, and keeps the status the hub refused with, when the hub denied access', async () => {
+    hub.isAvailable = false
+    hub.unavailableStatus = 403
+    const { error } = await fetchData({} as any)
+    expect(error?.message).toBe(strings.ProjectTimelineNoHubAccessErrorText)
+    expect((error as any).type).toBe('warning')
+    // The status is on the error that was caught, for the hook that counts the failure.
+    expect((error as any).cause.status).toBe(403)
+    expect((error as any).status).toBeUndefined()
   })
 
   it('says access is missing when a hub list is denied, as for «Minimum lesetilganger på hub»', async () => {

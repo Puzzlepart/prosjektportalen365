@@ -19,10 +19,28 @@ jest.mock('components/ProgramAdministration/ProgramAdministration', () => {
 })
 
 import { act } from '@testing-library/react'
+import {
+  clearTestTelemetry,
+  countedTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import ProgramAdministrationWebPart from '.'
-import { SITE, initWebPart } from '../testFixtures'
+import { SITE, initWebPart, manifestAlias, telemetryContext } from '../testFixtures'
+
+beforeEach(() => clearTestTelemetry())
 
 describe('ProgramAdministrationWebPart', () => {
+  it('is counted as loaded under the alias of its manifest, with the time its setup took', async () => {
+    // The alias is spelled with a small p, in the manifest and in the contract alike.
+    const alias = manifestAlias('programAdministration')
+    expect(alias).toBe('ProgramAdministrationWebpart')
+    await initWebPart(ProgramAdministrationWebPart, {}, 1, telemetryContext(alias))
+    expect(countedTelemetry()).toEqual({
+      usage: { 'ProgramAdministrationWebpart loaded': 1 },
+      errors: {},
+      timings: { 'ProgramAdministrationWebpart init': 1 }
+    })
+  })
+
   it('configures the data adapter for the site, with the global settings, and finds the child projects', async () => {
     const webPart = await initWebPart(ProgramAdministrationWebPart)
     expect(adapter.configure).toHaveBeenCalledWith(webPart.context, {

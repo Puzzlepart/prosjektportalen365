@@ -21,8 +21,24 @@ jest.mock('components/IdeaDialog', () => ({
     }
   }
 }))
+// The hub data service the command set has made for usage statistics: none, so that nothing is
+// counted, until a test of what is counted sets the telemetry fixtures' stand-in.
+const mockPortal: { current: any } = { current: undefined }
+jest.mock('pp365-shared-library/lib/services/PortalDataService', () => ({
+  PortalDataService: class {
+    public configure() {
+      return Promise.resolve(mockPortal.current)
+    }
+  }
+}))
 
 import strings from 'PortfolioExtensionsStrings'
+import {
+  hubPortal,
+  ITelemetryTestBed,
+  settingsMap,
+  telemetryTestBed
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import resource from 'SharedResources'
 import IdeaProjectDataCommand from '.'
 import {
@@ -34,28 +50,41 @@ import {
   fakeSp,
   ideaConfiguration,
   ignoreNavigation,
-  row
+  manifestAlias,
+  row,
+  settle
 } from '../testFixtures'
 
 const OPEN = 'OPEN_IDEA_PROJECTDATA_DIALOG'
 const IDEA = row({ ID: 7, Title: 'Ny bysykkel', GtIdeaDecision: 'Godkjent' })
+const ALIAS = manifestAlias('ideaProjectData')
 
-/** The command set on `listTitle`, initialised and told the list view changed. */
+/**
+ * The command set on `listTitle`, initialised and told the list view changed. With `telemetry`
+ * its context is a page on the hub as usage statistics read it.
+ */
 async function projectDataCommand({
   listTitle = PROCESSING_LIST,
   selectedRows = [IDEA],
-  processors = [{ Email: USER }]
+  processors = [{ Email: USER }],
+  telemetry = false
 } = {}) {
   const fake = fakeSp(
     { [resource.Lists_Idea_Configuration_Title]: [ideaConfiguration()] },
     { [resource.Security_SiteGroup_IdeaProcessors_Title]: processors }
   )
   mockSp.current = fake.sp
-  const { context, changed } = commandSetContext({ listTitle, selectedRows })
+  const { context, changed } = commandSetContext({
+    listTitle,
+    selectedRows,
+    telemetry: telemetry ? { alias: ALIAS } : undefined
+  })
   const command = new IdeaProjectDataCommand()
   ;(command as any).context = context
   await command.onInit()
   await changed()
+  // The hub's level is read in the background, as the command set starts.
+  await settle()
   return { command, fake, open: command.tryGetCommand(OPEN) }
 }
 
@@ -133,5 +162,63 @@ describe('IdeaProjectDataCommand', () => {
   it('refuses a command it does not know', async () => {
     const { command } = await projectDataCommand()
     expect(() => command.onExecute(execute('ANNEN'))).toThrow('Unknown command')
+  })
+})
+
+/**
+ * What the command set counts for usage statistics, on the hub: that project data was created
+ * for an idea, sent before the page is left for the edit form. The window's `fetch` is the test
+ * bed's, and records the batches.
+ */
+describe('IdeaProjectDataCommand, usage statistics', () => {
+  let bed: ITelemetryTestBed
+
+  /** The usage entries sent so far. */
+  const usageSent = () => bed.batches().flatMap((batch) => batch.usage ?? [])
+
+  beforeEach(() => {
+    bed = telemetryTestBed()
+    mockPortal.current = hubPortal(settingsMap('2'))
+  })
+
+  afterEach(() => {
+    mockPortal.current = undefined
+    bed.restore()
+  })
+
+  it('counts the project data it created, and sends the count before it leaves the page', async () => {
+    const { command, fake } = await projectDataCommand({ telemetry: true })
+    command.onExecute(execute(OPEN, IDEA))
+    await dialog.shown.submit()
+    expect(fake.adds).toHaveLength(1)
+    expect(usageSent()).toEqual([{ c: ALIAS, e: 'idea.projectDataCreated', s: 'hub', n: 1 }])
+    // Leaving for the edit form is what jsdom reports as navigation; the batch went out first.
+    expect(navigation).toHaveBeenCalled()
+    expect(bed.fetch.mock.invocationCallOrder[0]).toBeLessThan(
+      navigation.mock.invocationCallOrder[0]
+    )
+    // The idea's title stays on the page.
+    expect(JSON.stringify(bed.batches())).not.toContain('bysykkel')
+  })
+
+  it('counts nothing while the dialog is only shown', async () => {
+    const { command } = await projectDataCommand({ telemetry: true })
+    command.onExecute(execute(OPEN, IDEA))
+    bed.leave()
+    expect(usageSent()).toEqual([])
+  })
+
+  it('counts nothing when the project data could not be created', async () => {
+    const { command, fake } = await projectDataCommand({ telemetry: true })
+    const getByTitle = fake.sp.web.lists.getByTitle
+    fake.sp.web.lists.getByTitle = (title: string) =>
+      title === resource.Lists_ProjectData_Title
+        ? { items: { add: () => Promise.reject(new Error('Listen finnes ikke')) } }
+        : getByTitle(title)
+    command.onExecute(execute(OPEN, IDEA))
+    await expect(dialog.shown.submit()).rejects.toThrow('Listen finnes ikke')
+    bed.leave()
+    expect(usageSent()).toEqual([])
+    expect(navigation).not.toHaveBeenCalled()
   })
 })

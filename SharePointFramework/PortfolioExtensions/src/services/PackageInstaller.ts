@@ -5,7 +5,7 @@ import '@pnp/sp/lists'
 import '@pnp/sp/folders'
 import '@pnp/sp/files'
 import '@pnp/sp/items'
-import { TEMPLATE_PACKAGE_STORE_FOLDER, format } from 'pp365-shared-library'
+import { TEMPLATE_PACKAGE_STORE_FOLDER, errorWithStatus, format } from 'pp365-shared-library'
 import strings from 'PortfolioExtensionsStrings'
 import resource from 'SharedResources'
 import SPDataAdapter from 'data/SPDataAdapter'
@@ -477,8 +477,10 @@ export class PackageInstaller {
   private static async _download(url: string): Promise<ArrayBuffer> {
     const response = await fetch(url, { method: 'GET' })
     if (!response.ok) {
-      throw new Error(
-        format(strings.CatalogDownloadError, `${response.status} ${response.statusText}`)
+      // With the status on it, so that usage statistics count the failed install by its code.
+      throw errorWithStatus(
+        format(strings.CatalogDownloadError, `${response.status} ${response.statusText}`),
+        response.status
       )
     }
     return response.arrayBuffer()

@@ -59,6 +59,11 @@ import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testi
 import { HelpContentModel, IGitHubRelease, InstallationEntry } from 'extensions/footer/types'
 import strings from 'PortfolioExtensionsStrings'
 import { formatDate, getContrastRatio } from 'pp365-shared-library'
+import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
+import {
+  countedTelemetry,
+  startTestTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import * as React from 'react'
 import resource from 'SharedResources'
 import { useAssistant } from './Assistant/useAssistant'
@@ -402,6 +407,23 @@ describe('Footer', () => {
     expect(button).not.toHaveAttribute('disabled')
   })
 
+  it('counts that the help was opened, for the footer, and not that it was closed', async () => {
+    startTestTelemetry()
+    const loadHelpContent = jest.fn(() => Promise.resolve([help('Kom i gang', 'Velkommen')]))
+    // The footer extension renders the footer under its alias, as here.
+    render(
+      <TelemetryProvider component='Footer'>
+        <Footer {...footerProps({ loadHelpContent })} />
+      </TelemetryProvider>
+    )
+    expect(countedTelemetry().usage).toEqual({})
+    fireEvent.click(screen.getByText(strings.HelpContentAvailableLabel))
+    expect(await screen.findByText('Velkommen')).toBeInTheDocument()
+    expect(countedTelemetry().usage).toEqual({ 'Footer help.opened': 1 })
+    fireEvent.click(screen.getByRole('button', { name: strings.CloseLabel }))
+    expect(countedTelemetry().usage).toEqual({ 'Footer help.opened': 1 })
+  })
+
   it('loads the help of the next page, which a client-side navigation keeps it mounted on', async () => {
     const loadHelpContent = jest
       .fn()
@@ -568,5 +590,33 @@ describe('useAssistant', () => {
     expect(assistant.loading).toBe(true)
     act(() => assistant.setLoading(false))
     expect(assistant.loading).toBe(false)
+  })
+
+  it('counts each time the assistant is opened, for the footer it is rendered in', () => {
+    startTestTelemetry()
+    let assistant: ReturnType<typeof useAssistant>
+    const Probe: React.FC = () => {
+      assistant = useAssistant()
+      return null
+    }
+    // The footer extension renders the footer under its alias; without one nothing is counted.
+    const { unmount } = render(<Probe />)
+    act(() => assistant.toggle())
+    expect(countedTelemetry().usage).toEqual({})
+    unmount()
+
+    render(
+      <TelemetryProvider component='Footer'>
+        <Probe />
+      </TelemetryProvider>
+    )
+    act(() => assistant.toggle())
+    expect(countedTelemetry().usage).toEqual({ 'Footer assistant.opened': 1 })
+    // An open drawer that is told to stay open was not opened again, and closing counts nothing.
+    act(() => assistant.setDrawerOpen(true))
+    act(() => assistant.close())
+    expect(countedTelemetry().usage).toEqual({ 'Footer assistant.opened': 1 })
+    act(() => assistant.toggle())
+    expect(countedTelemetry().usage).toEqual({ 'Footer assistant.opened': 2 })
   })
 })

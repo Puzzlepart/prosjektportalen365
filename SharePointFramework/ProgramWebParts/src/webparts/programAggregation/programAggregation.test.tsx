@@ -18,8 +18,20 @@ jest.mock('pp365-portfoliowebparts/lib/components/PortfolioAggregation', () => (
 
 import { SPHttpClient } from '@microsoft/sp-http'
 import { act } from '@testing-library/react'
+import { errorWithCause } from 'pp365-shared-library'
+import {
+  clearTestTelemetry,
+  countedTelemetry,
+  telemetryStore
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import ProgramAggregationWebPart from '.'
-import { SITE, initWebPart, propertyPaneFields } from '../testFixtures'
+import {
+  SITE,
+  initWebPart,
+  manifestAlias,
+  propertyPaneFields,
+  telemetryContext
+} from '../testFixtures'
 
 const CONFIGURATION = {
   level: 'Program',
@@ -33,6 +45,7 @@ const PROPERTIES = { dataSourceCategory: 'Leveranser', dataSourceLevel: 'Program
 beforeEach(() => {
   rendered.props = undefined
   adapter.getAggregatedListConfig.mockImplementation(() => Promise.resolve(CONFIGURATION))
+  clearTestTelemetry()
 })
 
 describe('ProgramAggregationWebPart', () => {
@@ -133,5 +146,62 @@ describe('ProgramAggregationWebPart', () => {
       'searchBoxPlaceholderText'
     ])
     expect(fields.defaultViewId.options).toEqual([])
+  })
+
+  describe('and usage statistics', () => {
+    const alias = manifestAlias('programAggregation')
+
+    it('is counted as loaded under the alias of its manifest, and counts no error for a data source it can read', async () => {
+      await initWebPart(ProgramAggregationWebPart, PROPERTIES, 1, telemetryContext(alias))
+      expect(countedTelemetry()).toEqual({
+        usage: { 'ProgramAggregationWebPart loaded': 1 },
+        errors: {},
+        timings: { 'ProgramAggregationWebPart init': 1 }
+      })
+    })
+
+    it('counts a data source it cannot read once, by the status SharePoint answered with, however many times it renders', async () => {
+      // The adapter shows a general text and keeps what the hub answered as the error's cause.
+      const denied = Object.assign(new Error('Ingen tilgang til Datakilder'), { status: 403 })
+      adapter.getAggregatedListConfig.mockImplementation(() =>
+        Promise.reject(errorWithCause('Kunne ikke hente datakilden.', denied))
+      )
+      const webPart = await initWebPart(
+        ProgramAggregationWebPart,
+        PROPERTIES,
+        1,
+        telemetryContext(alias)
+      )
+      act(() => {
+        webPart.render()
+      })
+      act(() => {
+        webPart.render()
+      })
+      // The page shows the message to the user; telemetry keeps only the code and the status.
+      expect(webPart.domElement).toHaveTextContent('Kunne ikke hente datakilden.')
+      expect(countedTelemetry()).toEqual({
+        usage: { 'ProgramAggregationWebPart loaded': 1 },
+        errors: { 'ProgramAggregationWebPart permission_denied 403': 1 },
+        timings: { 'ProgramAggregationWebPart init': 1 }
+      })
+      expect(JSON.stringify(telemetryStore())).not.toMatch(/tilgang|datakilde/i)
+    })
+
+    it('says what went wrong all the same when the data adapter cannot be set up, and counts nothing on a page it knows nothing of', async () => {
+      adapter.configure.mockImplementationOnce(() => Promise.reject(new Error('Ingen hub')))
+      const webPart = await initWebPart(
+        ProgramAggregationWebPart,
+        PROPERTIES,
+        1,
+        telemetryContext(alias)
+      )
+      act(() => {
+        webPart.render()
+      })
+      expect(webPart.domElement).toHaveTextContent('Ingen hub')
+      // Telemetry starts once the adapter is set up: no bundle has told it of the page yet.
+      expect(telemetryStore()).toBeUndefined()
+    })
   })
 })

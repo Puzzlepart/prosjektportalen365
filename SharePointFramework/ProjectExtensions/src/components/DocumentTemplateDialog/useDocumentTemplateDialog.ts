@@ -1,5 +1,6 @@
 import { IFileInfo } from '@pnp/sp/files'
 import { SPDataAdapter } from 'data'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { useCallback, useContext, useReducer } from 'react'
 import { TemplateSelectorContext } from '../../extensions/templateSelector/context'
 import reducer, {
@@ -17,15 +18,19 @@ import { DocumentTemplateDialogScreen, IDocumentTemplateDialogProps } from './ty
 export function useDocumentTemplateDialog(props: IDocumentTemplateDialogProps) {
   const selectorContext = useContext(TemplateSelectorContext)
   const [state, dispatch] = useReducer(reducer, selectorContext, initState)
+  const telemetry = useTelemetry()
 
   /**
    * Copies the templates picked, as named, to the target folder, one at a time with progress.
+   * Usage statistics count the copy once, however many templates it took, and each template that
+   * could not be copied by its error's code.
    */
   const onStartCopy = useCallback(async (): Promise<void> => {
     const templates = state.selected
     dispatch(START_COPY())
     const folder = SPDataAdapter.sp.web.getFolderByServerRelativePath(state.targetFolder)
     const filesAdded: IFileInfo[] = []
+    let copied = 0
     for (let i = 0; i < templates.length; i++) {
       const template = templates[i]
       dispatch(
@@ -37,16 +42,21 @@ export function useDocumentTemplateDialog(props: IDocumentTemplateDialogProps) {
       )
       try {
         const result = await template.copyTo(folder)
+        copied++
         if (result) {
           filesAdded.push(result)
         }
-      } catch {
+      } catch (error) {
         // A template that cannot be copied is left out; the others are still copied.
+        telemetry.trackError(error)
       }
     }
+    // A copy of a folder without files adds no file and is a copy all the same, so the templates
+    // that went through are what tells a copy from one where every template failed.
+    if (copied > 0) telemetry.track('documentTemplates.copied')
     dispatch(SELECTION_CHANGED({ selected: [] }))
     dispatch(COPY_DONE({ files: filesAdded }))
-  }, [state.selected, state.targetFolder])
+  }, [state.selected, state.targetFolder, telemetry])
 
   const goTo = useCallback(
     (screen: DocumentTemplateDialogScreen) => dispatch(SET_SCREEN({ screen })),

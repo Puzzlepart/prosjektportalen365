@@ -5,7 +5,8 @@
 export interface ITemplatePackageCatalogCommandProperties {
   /**
    * URL to the catalog.json. Defaults to the hosting repo's catalog when
-   * empty (or the committed sample fixture in DEBUG).
+   * empty (or the committed sample fixture in DEBUG). With a catalog of the
+   * customer's own, no catalog events are sent (see `services/TelemetryService.ts`).
    */
   catalogUrl?: string
 
@@ -22,10 +23,11 @@ export interface ITemplatePackageCatalogCommandProperties {
   featureFlagProvisioning?: boolean
 
   /**
-   * Ingestion endpoint for install-telemetry events (see
+   * Ingestion endpoint for the catalog's events (see
    * `services/TelemetryService.ts`). Defaults to the prosjektportalen-assist
-   * endpoint when omitted; an empty string disables telemetry for the
-   * installation.
+   * endpoint when omitted; an empty string stops the catalog's events for the
+   * installation. The events also need the hub's usage statistics at Standard
+   * or Utvidet (`UsageStatisticsLevel` 2 or 3) and `CatalogTelemetryEnabled` 1.
    */
   telemetryUrl?: string
 }

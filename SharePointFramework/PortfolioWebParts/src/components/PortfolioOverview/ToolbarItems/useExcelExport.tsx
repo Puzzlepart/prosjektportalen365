@@ -1,6 +1,7 @@
 import { Toast, ToastBody, ToastTitle, useToastController } from '@fluentui/react-components'
 import strings from 'PortfolioWebPartsStrings'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import React, { useCallback } from 'react'
 import { IPortfolioOverviewContext } from '../context'
 import { filterItems } from '../hooks/useFilteredData'
@@ -11,10 +12,12 @@ import { EXCEL_EXPORT_ERROR, EXCEL_EXPORT_SUCCESS, START_EXCEL_EXPORT } from '..
  *
  * Exports the selected rows, or else the rows the list shows (the search and the filters
  * applied), with the values as they are: the export service rounds and formats them. A failed
- * export is reported in a toast.
+ * export is reported in a toast. An export that returns is counted for usage statistics, and one
+ * that fails by its error code, for the web part the overview is in.
  */
 export function useExcelExport(context: IPortfolioOverviewContext) {
   const { dispatchToast } = useToastController(context.toasterId)
+  const telemetry = useTelemetry()
 
   const exportToExcel = useCallback(() => {
     context.dispatch(START_EXCEL_EXPORT())
@@ -27,8 +30,10 @@ export function useExcelExport(context: IPortfolioOverviewContext) {
       // The service is shared by every web part on the page, so it is configured as it runs.
       ExcelExportService.configure({ name: context.props.title })
       ExcelExportService.export(items, columns, fileNamePart)
+      telemetry.track('excel.exported')
       context.dispatch(EXCEL_EXPORT_SUCCESS())
     } catch (error) {
+      telemetry.trackError(error)
       // eslint-disable-next-line no-console
       console.error(error)
       context.dispatch(EXCEL_EXPORT_ERROR(error))
@@ -40,7 +45,7 @@ export function useExcelExport(context: IPortfolioOverviewContext) {
         { intent: 'error' }
       )
     }
-  }, [context.state, context.props, dispatchToast])
+  }, [context.state, context.props, dispatchToast, telemetry])
 
   return exportToExcel
 }

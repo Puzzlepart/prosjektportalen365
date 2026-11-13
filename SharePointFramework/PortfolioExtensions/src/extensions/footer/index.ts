@@ -3,6 +3,7 @@ import {
   PlaceholderContent,
   PlaceholderName
 } from '@microsoft/sp-application-base'
+import { SPPermission } from '@microsoft/sp-page-context'
 import { PnPClientStorage } from '@pnp/core/storage'
 import { dateAdd } from '@pnp/core/util'
 import '@pnp/sp/items'
@@ -12,6 +13,18 @@ import resource from 'SharedResources'
 import { Footer, IFooterProps } from 'components/Footer'
 import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
 import { isHubSite, ProjectAdminPermission, renderReact, unmountReact } from 'pp365-shared-library'
+import {
+  attachTelemetryPortal,
+  errorCodeFrom,
+  hubLanguageFromLcid,
+  registerSiteTypeResolver,
+  requestHeartbeat,
+  startTelemetry,
+  telemetryInitFromContext,
+  TelemetryProvider,
+  trackError,
+  trackPageView
+} from 'pp365-shared-library/lib/telemetry'
 import SPDataAdapter from '../../data/SPDataAdapter'
 import { createElement } from 'react'
 import {
@@ -23,7 +36,13 @@ import {
 import { PlaceholderTrace, tracePlaceholders } from './placeholderTrace'
 import strings from 'PortfolioExtensionsStrings'
 
-/** Mounts one persistent footer and refreshes page-dependent props on navigation. */
+/** The footer's alias in its manifest, which usage statistics count it by. */
+const TELEMETRY_COMPONENT = 'Footer'
+
+/**
+ * Mounts one persistent footer and refreshes page-dependent props on navigation. Starts usage
+ * statistics for the page and counts each page view.
+ */
 export default class FooterApplicationCustomizer extends BaseApplicationCustomizer<IFooterApplicationCustomizerProperties> {
   private _bottomPlaceholder: PlaceholderContent
   private _footerElement: HTMLDivElement
@@ -39,7 +58,9 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   private _trace: PlaceholderTrace = () => undefined
 
   /**
-   * Initializes the settings and data required for the visible footer.
+   * Initializes the settings and data required for the visible footer. Usage statistics start
+   * as soon as the hub's settings are read, whether or not the footer shows; with the hub out of
+   * reach nothing starts.
    */
   public async onInit(): Promise<void> {
     // First, so the trace sees what SharePoint does during the set-up below.
@@ -58,6 +79,11 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       this._minimizeFooter = false
       return Promise.resolve()
     }
+
+    // Before the footer's own setting is looked at: a hub that hides the footer still counts its
+    // pages. The settings were read a moment ago, so the level is decided from them at once.
+    this._trackPage(this._globalSettings)
+    this.context.application.navigatedEvent.add(this, this._trackNavigation)
 
     this._useAssistant = this._globalSettings.get('UseAssistant') === '1'
     this._showFooter = this._globalSettings.get('ShowFooter') === '1'
@@ -90,6 +116,53 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     if (!this._portalDataService?.isAvailable) return
     this._hasAssistantAccess = this._useAssistant ? await this._checkAssistantAccess() : false
     this._render()
+  }
+
+  /**
+   * Tells usage statistics which page this is, and counts it: the page (its site and hub ids),
+   * the hub's data service, how to tell what kind of site a project page is on, the page view,
+   * and the hub's heartbeat. The core counts a page once however many footers report it, and
+   * takes the heartbeat only on a hub page from a user who may manage the hub, once per page
+   * load. The footer must work without usage statistics: whatever goes wrong here is dropped.
+   *
+   * @param settings The hub's global settings, only when they were read just now. On a
+   * navigation they are left out: the map from `onInit` may be hours old by then, and an old map
+   * would lower a level the hub has raised since.
+   */
+  private _trackPage(settings?: Map<string, string>): void {
+    try {
+      const { pageContext } = this.context
+      const siteId = pageContext.site.id.toString()
+      startTelemetry(
+        telemetryInitFromContext(this.context, {
+          isDebug: DEBUG,
+          canManageHub: pageContext.web.permissions.hasPermission(SPPermission.manageWeb)
+        })
+      )
+      attachTelemetryPortal(this._portalDataService, settings)
+      registerSiteTypeResolver(siteId, () => this._portalDataService.getSiteKind(siteId))
+      trackPageView(TELEMETRY_COMPONENT)
+      requestHeartbeat(hubLanguageFromLcid(pageContext.web.language))
+    } catch {
+      // Usage statistics never break the footer.
+    }
+  }
+
+  /**
+   * Counts the page SharePoint has navigated to without loading it anew. Subscribed once, in
+   * `onInit`, apart from the footer's own navigation handler, which runs only when the footer
+   * shows.
+   */
+  private _trackNavigation(): void {
+    this._trackPage()
+  }
+
+  /**
+   * Stops counting page views when SharePoint disposes the customizer. SharePoint removes a
+   * disposed observer's subscriptions itself; removing it here does not depend on that.
+   */
+  protected onDispose(): void {
+    this.context.application.navigatedEvent.remove(this, this._trackNavigation)
   }
 
   /** Renders the footer with what the customizer knows now. */
@@ -170,6 +243,8 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
         .top(1)()
       return installationLogItems.map((item) => new InstallationEntry(item))
     } catch (error) {
+      // Counted by the error's code for usage statistics, as each failed read below is.
+      trackError(TELEMETRY_COMPONENT, error)
       return []
     }
   }
@@ -230,7 +305,8 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
         },
         dateAdd(new Date(), 'hour', 4)
       )
-    } catch (e) {
+    } catch (error) {
+      trackError(TELEMETRY_COMPONENT, error)
       return []
     }
   }
@@ -271,6 +347,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
         }
       })
     } catch (error) {
+      trackError(TELEMETRY_COMPONENT, error)
       return []
     }
   }
@@ -344,6 +421,10 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       return projects
     } catch (error) {
       console.warn('Could not fetch favorite projects:', error)
+      // A member of «Minimum lesetilganger på hub» may not read `Prosjekter`, by design: that
+      // refusal is no failure, and counted it would fill the error figures each time the
+      // favourites open. Any other failure is counted.
+      if (errorCodeFrom(error) !== 'permission_denied') trackError(TELEMETRY_COMPONENT, error)
       return []
     }
   }
@@ -374,7 +455,15 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       this._footerElement = document.createElement('div')
       this._bottomPlaceholder.domElement.replaceChildren(this._footerElement)
     }
-    renderReact(createElement(Footer, footerProps), this._footerElement)
+    // The footer's own React root: its components count for the footer through this provider.
+    renderReact(
+      createElement(
+        TelemetryProvider,
+        { component: TELEMETRY_COMPONENT },
+        createElement(Footer, footerProps)
+      ),
+      this._footerElement
+    )
   }
 
   /**

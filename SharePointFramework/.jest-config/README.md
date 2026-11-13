@@ -6,7 +6,9 @@ Shared Jest configuration for the SPFx solutions, consumed through each solution
 Heft runs Jest as part of every build (`heft test`), against the CommonJS output in
 `lib-commonjs`. This package adds what SPFx component tests need on top of the rig defaults:
 jest-dom matchers, jsdom polyfills for Fluent UI, resolution of SPFx localized string modules,
-and an AMD to CommonJS transform for those string bundles.
+and an AMD to CommonJS transform for those string bundles. `lib/setup.js` also defines the
+`DEBUG` global as `false` when a test has not set it: SPFx replaces it at build time, and every
+bundle passes it to `startTelemetry`.
 
 See `.development-guide/spfx/testing.md` for the testing regime and how to write tests.
 

@@ -40,8 +40,11 @@ export const featureFlags = {
   },
 
   /**
-   * Checks the session-level telemetry opt-out. The endpoint property and the
-   * installation-wide setting are checked separately by `TelemetryService`.
+   * Checks the session-level telemetry opt-out: `false` once the `PP_DISABLE_TELEMETRY` session
+   * flag is `1`. The flag stops usage statistics and catalog events alike from that tab: the gate
+   * every sender asks (`getTelemetryGate` in `pp365-shared-library`) reads the same flag. It
+   * turns nothing on; the hub's settings and the endpoint property are checked by the gate and
+   * by `TelemetryService`.
    */
   isTelemetryEnabled(): boolean {
     return !readSessionFlag(SS_DISABLE_TELEMETRY)

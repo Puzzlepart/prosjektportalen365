@@ -35,10 +35,19 @@ jest.mock('components/IdeaModule', () => ({
 }))
 
 import { act } from '@testing-library/react'
+import {
+  clearTestTelemetry,
+  countedTelemetry,
+  spfxTestContext
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import IdeaModuleWebPart from '.'
 
-/** The web part on the hub, in edit mode, initialised. */
-async function webPartOnHub() {
+/**
+ * The web part on the hub, in edit mode, initialised.
+ *
+ * @param context Parts of the context that differ: the page as usage statistics read it
+ */
+async function webPartOnHub(context: Record<string, any> = {}) {
   const webPart: any = new IdeaModuleWebPart()
   webPart.context = {
     pageContext: {
@@ -47,7 +56,8 @@ async function webPartOnHub() {
       legacyPageContext: { isSiteAdmin: true }
     },
     statusRenderer: { clearLoadingIndicator: jest.fn() },
-    propertyPane: { refresh: jest.fn() }
+    propertyPane: { refresh: jest.fn() },
+    ...context
   }
   webPart.manifest = { id: 'manifest-1' }
   webPart.properties = { dataSource: 'Leveranser', dataSourceCategory: 'Leveranser' }
@@ -98,5 +108,25 @@ describe('IdeaModuleWebPart', () => {
     const fields = propertyPaneFields(webPart)
     expect(fields.defaultViewId.options).toEqual([])
     expect(fields.defaultViewId.selectedKey).toBeUndefined()
+  })
+
+  it('shows the module without a configuration that cannot be read, and counts the failure once by its error code', async () => {
+    clearTestTelemetry()
+    hub.adapter.getAggregatedListConfig.mockImplementationOnce(() =>
+      Promise.reject(Object.assign(new Error('Tjenesten svarte ikke'), { status: 503 }))
+    )
+    const webPart = await webPartOnHub(spfxTestContext({ alias: 'IdeaModuleWebPart' }))
+    act(() => {
+      webPart.render()
+    })
+    act(() => {
+      webPart.render()
+    })
+    expect(rendered.props.configuration).toBeNull()
+    expect(countedTelemetry()).toEqual({
+      usage: { 'IdeaModuleWebPart loaded': 1 },
+      errors: { 'IdeaModuleWebPart server_error 503': 1 },
+      timings: { 'IdeaModuleWebPart init': 1 }
+    })
   })
 })

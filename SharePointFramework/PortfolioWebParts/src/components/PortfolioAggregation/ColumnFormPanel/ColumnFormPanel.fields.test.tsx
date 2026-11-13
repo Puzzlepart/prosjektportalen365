@@ -8,6 +8,11 @@ jest.mock('pp365-shared-library/lib/components/ItemColumn/ColumnDataTypeField', 
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectContentColumn, format } from 'pp365-shared-library'
+import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
+import {
+  countedTelemetry,
+  startTestTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import * as React from 'react'
 import { PortfolioAggregationContext } from '../context'
 import { ColumnFormPanel } from './ColumnFormPanel'
@@ -15,9 +20,10 @@ import { ColumnFormPanel } from './ColumnFormPanel'
 /**
  * The aggregated overview's column form with its own hook: the fields show the values of the column
  * the form has, which arrives after the form opens; a save keeps what the form does not edit and
- * writes no minimum width the user did not give; a locked column cannot be deleted, and a delete
- * the list refused is told; and a new column cannot take a managed property another column of the
- * category shows already, the locked project column too.
+ * writes no minimum width the user did not give; a locked column cannot be deleted, and a save or
+ * a delete the list refused is told, and counted once by its error code; and a new column cannot
+ * take a managed property another column of the category shows already, the locked project column
+ * too.
  */
 const column = (Id: number, Title: string, fieldName: string, extra: Record<string, any> = {}) =>
   new ProjectContentColumn({
@@ -48,27 +54,29 @@ function renderForm(columnForm: Record<string, any>, isDeleted = true) {
   const updateProjectContentColumn = jest.fn().mockResolvedValue({})
   const deleteItemFromList = jest.fn().mockResolvedValue(isDeleted)
   const ui = (form: Record<string, any>) => (
-    <PortfolioAggregationContext.Provider
-      value={
-        {
-          // A project-level data source leaves the project column out of the category's columns.
-          state: {
-            columnForm: form,
-            columns: [title(), status()],
-            allColumnsForCategory: [title(), status()],
-            deletedColumnIds: [41]
-          },
-          props: {
-            dataSourceCategory: 'Leveranser',
-            configuration: { columns: [title(), project(), status(), deleted()] },
-            dataAdapter: { portalDataService: { updateProjectContentColumn, deleteItemFromList } }
-          },
-          dispatch
-        } as any
-      }
-    >
-      <ColumnFormPanel />
-    </PortfolioAggregationContext.Provider>
+    <TelemetryProvider component='PortfolioAggregationWebPart'>
+      <PortfolioAggregationContext.Provider
+        value={
+          {
+            // A project-level data source leaves the project column out of the category's columns.
+            state: {
+              columnForm: form,
+              columns: [title(), status()],
+              allColumnsForCategory: [title(), status()],
+              deletedColumnIds: [41]
+            },
+            props: {
+              dataSourceCategory: 'Leveranser',
+              configuration: { columns: [title(), project(), status(), deleted()] },
+              dataAdapter: { portalDataService: { updateProjectContentColumn, deleteItemFromList } }
+            },
+            dispatch
+          } as any
+        }
+      >
+        <ColumnFormPanel />
+      </PortfolioAggregationContext.Provider>
+    </TelemetryProvider>
   )
   const { rerender } = render(ui(columnForm))
   return {
@@ -96,6 +104,8 @@ const controlWarnings = (consoleError: jest.SpyInstance) =>
     .filter((text) =>
       /either controlled or uncontrolled|is changing an? (un)?controlled/.test(text)
     )
+
+beforeEach(() => startTestTelemetry())
 
 afterEach(async () => {
   cleanup()
@@ -178,6 +188,41 @@ describe('ColumnFormPanel (aggregated overview) with its own hook', () => {
     expect(await screen.findByText(strings.ColumnDeleteErrorText)).toBeInTheDocument()
     expect(deleteItemFromList).toHaveBeenCalledWith('PROJECT_CONTENT_COLUMNS', 40)
     expect(dispatch).not.toHaveBeenCalledWith(expect.objectContaining({ type: 'COLUMN_DELETED' }))
+    // The data service keeps no answer from the list: the refusal has no status to be counted by.
+    expect(countedTelemetry().errors).toEqual({ 'PortfolioAggregationWebPart unknown': 1 })
+  })
+
+  it('says so when the list refuses a save or throws at a delete, and counts each once by its code', async () => {
+    const { dispatch, updateProjectContentColumn, deleteItemFromList } = renderForm({
+      isOpen: true,
+      column: status()
+    })
+    updateProjectContentColumn.mockRejectedValueOnce(
+      Object.assign(new Error('Du har ikke tilgang til listen'), { status: 403 })
+    )
+    fireEvent.click(button(strings.SaveButtonLabel))
+    expect(await screen.findByText('Du har ikke tilgang til listen')).toBeInTheDocument()
+    expect(dispatch).not.toHaveBeenCalled()
+    expect(countedTelemetry().errors).toEqual({
+      'PortfolioAggregationWebPart permission_denied 403': 1
+    })
+
+    deleteItemFromList.mockRejectedValueOnce(
+      Object.assign(new Error('Tjenesten svarte ikke'), { status: 503 })
+    )
+    fireEvent.click(button(strings.DeleteButtonLabel))
+    const question = await screen.findByText(strings.ConfirmDeleteProjectContentColumnSubText)
+    fireEvent.click(
+      within(question.closest('[role="dialog"]') as HTMLElement).getByText(
+        strings.ConfirmDeleteResponseConfirm
+      )
+    )
+    expect(await screen.findByText('Tjenesten svarte ikke')).toBeInTheDocument()
+    expect(dispatch).not.toHaveBeenCalled()
+    expect(countedTelemetry().errors).toEqual({
+      'PortfolioAggregationWebPart permission_denied 403': 1,
+      'PortfolioAggregationWebPart server_error 503': 1
+    })
   })
 
   it('keeps a locked column and the title column from being deleted, saying why (WCAG 3.3.2)', () => {

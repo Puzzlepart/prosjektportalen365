@@ -1,4 +1,9 @@
 import { render, waitFor } from '@testing-library/react'
+import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
+import {
+  countedTelemetry,
+  startTestTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import * as React from 'react'
 import { useProjectListDataFetch } from './useProjectListDataFetch'
 
@@ -12,12 +17,18 @@ function fetchWith(dataAdapter: Record<string, any>) {
     useProjectListDataFetch({ dataAdapter } as any, setState)
     return null
   }
-  render(<Probe />)
+  render(
+    <TelemetryProvider component='ProjectListWebPart'>
+      <Probe />
+    </TelemetryProvider>
+  )
   return setState
 }
 
+beforeEach(() => startTestTelemetry())
+
 describe('useProjectListDataFetch', () => {
-  it('hands over the projects and the membership', async () => {
+  it('hands over the projects and the membership, and counts nothing', async () => {
     const setState = fetchWith({
       fetchEnrichedProjects: () => Promise.resolve([{ title: 'Alfa' }]),
       isUserInGroup: () => Promise.resolve(true)
@@ -28,11 +39,13 @@ describe('useProjectListDataFetch', () => {
       isDataLoaded: true,
       isUserInPortfolioManagerGroup: true
     })
+    expect(countedTelemetry()).toEqual({ usage: {}, errors: {}, timings: {} })
   })
 
-  it('hands over the error, with no projects, when the fetch fails', async () => {
+  it('hands over the error, with no projects, when the fetch fails, and counts it once by its code', async () => {
     const setState = fetchWith({
-      fetchEnrichedProjects: () => Promise.reject(new Error('Søket svarte ikke')),
+      fetchEnrichedProjects: () =>
+        Promise.reject(Object.assign(new Error('Søket svarte ikke'), { status: 429 })),
       isUserInGroup: () => Promise.resolve(false)
     })
     await waitFor(() => expect(setState).toHaveBeenCalled())
@@ -41,5 +54,11 @@ describe('useProjectListDataFetch', () => {
       isDataLoaded: true,
       error: 'Søket svarte ikke'
     })
+    expect(countedTelemetry()).toEqual({
+      usage: {},
+      errors: { 'ProjectListWebPart throttled 429': 1 },
+      timings: {}
+    })
+    expect(JSON.stringify(countedTelemetry())).not.toContain('Søket')
   })
 })

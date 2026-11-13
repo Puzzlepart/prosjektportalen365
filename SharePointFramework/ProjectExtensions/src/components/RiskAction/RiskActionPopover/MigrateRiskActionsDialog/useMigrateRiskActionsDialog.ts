@@ -1,5 +1,6 @@
 import { MessageBarIntent, useAnnounce, useId } from '@fluentui/react-components'
 import { format } from 'pp365-shared-library'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import strings from 'ProjectExtensionsStrings'
 import { useEffect, useRef, useState } from 'react'
 import { useBoolean } from 'usehooks-ts'
@@ -24,6 +25,7 @@ export function useMigrateRiskActionsDialog() {
   const [migrateError, setMigrateError] = useState<string>()
   const [outcome, setOutcome] = useState<IMigrationOutcome>()
   const { announce } = useAnnounce()
+  const telemetry = useTelemetry()
   const progressTextId = useId('migrate-progress-text')
   const closeButtonRef = useRef<HTMLButtonElement>(null)
   // Some actions are tasks now: migrating the field again would add them twice.
@@ -48,7 +50,9 @@ export function useMigrateRiskActionsDialog() {
   }, [isMigrated])
 
   /**
-   * Saves successful task references while keeping refused actions as text on the risk.
+   * Saves successful task references while keeping refused actions as text on the risk. A failure
+   * stays in the dialog, and usage statistics count it by its error's code; an action Planner
+   * refused is counted where it is refused, by the data adapter.
    */
   const onMigrate = async () => {
     setIsMigrating(true)
@@ -67,6 +71,7 @@ export function useMigrateRiskActionsDialog() {
         announce(format(strings.MigrateRiskActionsDone, result.added.length), { polite: true })
       }
     } catch (error) {
+      telemetry.trackError(error)
       setMigrateError(error?.message ?? '')
     } finally {
       setIsMigrating(false)

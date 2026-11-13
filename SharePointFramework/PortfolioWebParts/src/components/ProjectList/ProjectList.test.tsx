@@ -24,6 +24,11 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import strings from 'PortfolioWebPartsStrings'
 import { format } from 'pp365-shared-library'
+import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
+import {
+  countedTelemetry,
+  startTestTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import * as React from 'react'
 import { ProjectList } from './ProjectList'
 import { announced } from 'pp365-jest-config/lib/announce'
@@ -61,14 +66,16 @@ function renderList(
 ) {
   fetched.state = { isDataLoaded: true, isUserInPortfolioManagerGroup: false, ...state }
   render(
-    <AriaLiveAnnouncer>
-      <ProjectList
-        dataAdapter={{} as any}
-        spfxContext={spfxContext}
-        defaultRenderMode={defaultRenderMode}
-        {...props}
-      />
-    </AriaLiveAnnouncer>
+    <TelemetryProvider component='ProjectListWebPart'>
+      <AriaLiveAnnouncer>
+        <ProjectList
+          dataAdapter={{} as any}
+          spfxContext={spfxContext}
+          defaultRenderMode={defaultRenderMode}
+          {...props}
+        />
+      </AriaLiveAnnouncer>
+    </TelemetryProvider>
   )
 }
 
@@ -92,6 +99,8 @@ const projects = () => [
 const linkNames = () => screen.getAllByRole('link').map((link) => link.textContent)
 const setupUser = () => userEvent.setup({ pointerEventsCheck: 0 })
 
+beforeEach(() => startTestTelemetry())
+
 describe('ProjectList', () => {
   it("shows a tab per vertical the user may see, and the default vertical's projects", async () => {
     renderList({ projects: projects() })
@@ -109,13 +118,23 @@ describe('ProjectList', () => {
     expect(linkNames()).toEqual(['Alfa'])
   })
 
-  it('switches vertical on a tab click', async () => {
+  it('switches vertical on a tab click, and counts each switch once', async () => {
     const user = setupUser()
     renderList({ projects: projects() })
     await screen.findByRole('link', { name: 'Alfa' })
+    // The selection the list opens with is no switch.
+    expect(countedTelemetry().usage).toEqual({})
     await user.click(screen.getByRole('tab', { name: strings.ProjectsAccessHeaderText }))
     expect(linkNames()).toEqual(['Alfa', 'Bravo'])
     expect(screen.queryByText('Charlie')).toBeNull()
+    expect(countedTelemetry().usage).toEqual({ 'ProjectListWebPart tab.switched': 1 })
+    await user.click(screen.getByRole('tab', { name: strings.MyProjectsHeaderText }))
+    expect(linkNames()).toEqual(['Alfa'])
+    expect(countedTelemetry()).toEqual({
+      usage: { 'ProjectListWebPart tab.switched': 2 },
+      errors: {},
+      timings: {}
+    })
   })
 
   it('shows every project, linked or not, to a portfolio manager in the all-projects vertical', async () => {

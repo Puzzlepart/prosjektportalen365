@@ -10,6 +10,11 @@ import { FluentProvider, Toaster } from '@fluentui/react-components'
 import { act, cleanup, render, screen } from '@testing-library/react'
 import strings from 'PortfolioWebPartsStrings'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
+import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
+import {
+  countedTelemetry,
+  startTestTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import * as React from 'react'
 import { IPortfolioAggregationContext } from '../context'
 import { useExcelExport } from './useExcelExport'
@@ -19,7 +24,9 @@ import { useExcelExport } from './useExcelExport'
  * projects): the rows the list shows, filtered as the list filters them (project refiners
  * included) and searched, or the selected rows; trend values as their achievement; the other
  * values as they are, for the export to round; the measurements sheet named after the category's
- * columns, its date from the measurement's date; and a failed export tells the user.
+ * columns, its date from the measurement's date; and a failed export tells the user. An export
+ * that returns is counted once, for the web part the overview is in (the hub's or a program's),
+ * and one that fails once as an error.
  */
 const column = (fieldName: string, name: string, extra: Record<string, any> = {}) => ({
   key: fieldName,
@@ -83,7 +90,7 @@ const allColumnsForCategory = [
 
 const TOASTER_ID = 'excel-export-toaster'
 
-function exportFrom(state: Record<string, any> = {}) {
+function exportFrom(state: Record<string, any> = {}, alias = 'PortfolioAggregationWebPart') {
   const context = {
     props: { title: 'Leveranseoversikt' },
     state: {
@@ -105,10 +112,12 @@ function exportFrom(state: Record<string, any> = {}) {
     return null
   }
   render(
-    <FluentProvider>
-      <Toaster toasterId={TOASTER_ID} />
-      <Probe />
-    </FluentProvider>
+    <TelemetryProvider component={alias}>
+      <FluentProvider>
+        <Toaster toasterId={TOASTER_ID} />
+        <Probe />
+      </FluentProvider>
+    </TelemetryProvider>
   )
   act(() => exportToExcel())
   const [exported, exportedColumns] =
@@ -117,6 +126,8 @@ function exportFrom(state: Record<string, any> = {}) {
 }
 
 const titles = (rows: Record<string, any>[]) => rows.map((row) => row.Title)
+
+beforeEach(() => startTestTelemetry())
 
 afterEach(async () => {
   cleanup()
@@ -165,12 +176,37 @@ describe('useExcelExport (aggregated overview)', () => {
     })
   })
 
-  it('tells the user when the export fails', async () => {
+  it('counts each export that returns, once, for the web part the overview is in', () => {
+    exportFrom()
+    expect(countedTelemetry().usage).toEqual({ 'PortfolioAggregationWebPart excel.exported': 1 })
+    exportFrom({ selectedItems: [items[2]] })
+    exportFrom({}, 'ProgramAggregationWebPart')
+    expect(countedTelemetry()).toEqual({
+      usage: {
+        'PortfolioAggregationWebPart excel.exported': 2,
+        'ProgramAggregationWebPart excel.exported': 1
+      },
+      errors: {},
+      timings: {}
+    })
+  })
+
+  it('counts no export for a web part the contract gives none, such as the idea module', () => {
+    // The idea module shows its ideas in an aggregated overview of its own.
+    const { exported } = exportFrom({}, 'IdeaModuleWebPart')
+    expect(exported).toHaveLength(3)
+    expect(countedTelemetry().usage).toEqual({})
+  })
+
+  it('tells the user and counts the error once when the export fails', async () => {
     ;(ExcelExportService.export as jest.Mock).mockImplementationOnce(() => {
       throw new Error('Feil i arbeidsboken')
     })
     exportFrom()
     expect(await screen.findByText(strings.ExcelExportErrorTitle)).toBeInTheDocument()
     expect(screen.getByText(strings.ExcelExportErrorMessage)).toBeInTheDocument()
+    expect(countedTelemetry().usage).toEqual({})
+    // The workbook is built in the browser: its errors have no HTTP status to be counted by.
+    expect(countedTelemetry().errors).toEqual({ 'PortfolioAggregationWebPart unknown': 1 })
   })
 })

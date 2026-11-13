@@ -24,9 +24,25 @@ jest.mock('components/IdeaApprovalDialog', () => ({
     }
   }
 }))
+// The hub data service the command set has made for usage statistics: none, so that nothing is
+// counted, until a test of what is counted sets the telemetry fixtures' stand-in.
+const mockPortal: { current: any } = { current: undefined }
+jest.mock('pp365-shared-library/lib/services/PortalDataService', () => ({
+  PortalDataService: class {
+    public configure() {
+      return Promise.resolve(mockPortal.current)
+    }
+  }
+}))
 
 import { Dialog } from '@microsoft/sp-dialog'
 import strings from 'PortfolioExtensionsStrings'
+import {
+  hubPortal,
+  ITelemetryTestBed,
+  settingsMap,
+  telemetryTestBed
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import resource from 'SharedResources'
 import IdeaProcessCommand from '.'
 import {
@@ -37,30 +53,43 @@ import {
   fakeSp,
   ideaConfiguration,
   ignoreNavigation,
+  manifestAlias,
   row,
   settle
 } from '../testFixtures'
 
 const OPEN = 'OPEN_IDEA_PROCESSING_DIALOG'
 const IDEA = row({ ID: 7, Title: 'Ny bysykkel' })
+const ALIAS = manifestAlias('ideaProcessing')
 
-/** The command set on `listTitle`, initialised and told the list view changed. */
+/**
+ * The command set on `listTitle`, initialised and told the list view changed. With `telemetry`
+ * its context is a page on the hub as usage statistics read it.
+ */
 async function processingCommand({
   listTitle = PROCESSING_LIST,
   selectedRows = [IDEA],
-  processors = [{ Email: USER }]
+  processors = [{ Email: USER }],
+  configuration = ideaConfiguration(),
+  telemetry = false
 } = {}) {
   const fake = fakeSp(
-    { [resource.Lists_Idea_Configuration_Title]: [ideaConfiguration()] },
+    { [resource.Lists_Idea_Configuration_Title]: [configuration] },
     { [resource.Security_SiteGroup_IdeaProcessors_Title]: processors }
   )
   mockSp.current = fake.sp
-  const { context, changed } = commandSetContext({ listTitle, selectedRows })
+  const { context, changed } = commandSetContext({
+    listTitle,
+    selectedRows,
+    telemetry: telemetry ? { alias: ALIAS } : undefined
+  })
   const command = new IdeaProcessCommand()
   ;(command as any).context = context
   const raiseOnChange = jest.spyOn(command, 'raiseOnChange')
   await command.onInit()
   await changed()
+  // The hub's level is read in the background, as the command set starts.
+  await settle()
   return { command, fake, raiseOnChange, open: command.tryGetCommand(OPEN) }
 }
 
@@ -154,5 +183,90 @@ describe('IdeaProcessCommand', () => {
   it('refuses a command it does not know', async () => {
     const { command } = await processingCommand()
     await expect(command.onExecute(execute('ANNEN'))).rejects.toThrow('Unknown command')
+  })
+})
+
+/**
+ * What the command set counts for usage statistics, on a hub at Standard: a decision, by the kind
+ * of choice, sent before the page reloads. The window's `fetch` is the test bed's, and records
+ * the batches.
+ */
+describe('IdeaProcessCommand, usage statistics', () => {
+  let bed: ITelemetryTestBed
+
+  /** The usage entries sent so far. */
+  const usageSent = () => bed.batches().flatMap((batch) => batch.usage ?? [])
+
+  beforeEach(() => {
+    bed = telemetryTestBed()
+    mockPortal.current = hubPortal(settingsMap('2'))
+  })
+
+  afterEach(() => {
+    mockPortal.current = undefined
+    bed.restore()
+  })
+
+  it.each([
+    ['Godkjenn', 'approve'],
+    ['Vurder', 'consider'],
+    ['Avvis', 'reject'],
+    ['Prøv ut', 'other']
+  ])('counts the decision "%s" as %s, and sends it before the page reloads', async (choice, v) => {
+    const { command, fake } = await processingCommand({ telemetry: true })
+    dialog.answer = { choice, comment: 'Vurdert i porteføljerådet' }
+    await command.onExecute(execute(OPEN, IDEA))
+    await settle()
+    expect(fake.updates).toHaveLength(1)
+    expect(usageSent()).toEqual([{ c: ALIAS, e: 'idea.decided', s: 'hub', v, n: 1 }])
+    // The reload is what jsdom reports as navigation; the batch went out before it.
+    expect(navigation).toHaveBeenCalled()
+    expect(bed.fetch.mock.invocationCallOrder[0]).toBeLessThan(
+      navigation.mock.invocationCallOrder[0]
+    )
+  })
+
+  it('counts by the key of the choice in the configuration, whatever the choice is called', async () => {
+    const configuration = ideaConfiguration({
+      GtIdeaProcessingChoices: JSON.stringify({
+        approve: { choice: 'Vi kjører på', recommendation: 'Klarsignal' },
+        reject: { choice: 'Approve', recommendation: 'Nei' }
+      })
+    })
+    const { command } = await processingCommand({ telemetry: true, configuration })
+    dialog.answer = { choice: 'Vi kjører på', comment: 'Ja' }
+    await command.onExecute(execute(OPEN, IDEA))
+    dialog.answer = { choice: 'Approve', comment: 'Nei' }
+    await command.onExecute(execute(OPEN, IDEA))
+    await settle()
+    expect(usageSent().map(({ v }) => v)).toEqual(['approve', 'reject'])
+    // The names of the choices and what was written about the idea stay on the page.
+    expect(JSON.stringify(bed.batches())).not.toMatch(/kjører|Klarsignal|bysykkel/)
+  })
+
+  it('counts nothing when no decision is recorded', async () => {
+    const { command, fake } = await processingCommand({ telemetry: true })
+    // No comment, a choice the configuration does not have, and an idea that is already approved.
+    dialog.answer = { choice: 'Godkjenn' }
+    await command.onExecute(execute(OPEN, IDEA))
+    dialog.answer = { choice: 'Ukjent', comment: 'Hva nå?' }
+    await command.onExecute(execute(OPEN, IDEA))
+    dialog.answer = { choice: 'Avvis', comment: 'Likevel ikke' }
+    await command.onExecute(execute(OPEN, row({ ID: 7, Title: 'X', GtIdeaDecision: 'Godkjent' })))
+    await settle()
+    bed.leave()
+    expect(fake.updates).toEqual([])
+    expect(usageSent()).toEqual([])
+  })
+
+  it('sends nothing from a hub with usage statistics off', async () => {
+    mockPortal.current = hubPortal(settingsMap('0'))
+    const { command, fake } = await processingCommand({ telemetry: true })
+    dialog.answer = { choice: 'Godkjenn', comment: 'Ja' }
+    await command.onExecute(execute(OPEN, IDEA))
+    await settle()
+    bed.leave()
+    expect(fake.updates).toHaveLength(1)
+    expect(bed.fetch).not.toHaveBeenCalled()
   })
 })

@@ -1,13 +1,21 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
 // Babel, so mocks are not hoisted. The data adapter answers the first call of the fetch with what
-// `adapter.fail` holds.
-const adapter: { fail: unknown } = { fail: undefined }
+// `adapter.fail` holds, or reads the project when it holds nothing, and its hub is `adapter.hub`.
+const adapter: { fail: unknown; hub: { isAvailable: boolean; unavailableStatus?: number } } = {
+  fail: undefined,
+  hub: { isAvailable: true }
+}
 jest.mock('../../data', () => ({
   __esModule: true,
   default: {
     isConfigured: true,
-    portalDataService: { isAvailable: true },
-    project: { getProjectInformationData: () => Promise.reject(adapter.fail) }
+    get portalDataService() {
+      return adapter.hub
+    },
+    project: {
+      getProjectInformationData: () =>
+        adapter.fail === undefined ? Promise.resolve({}) : Promise.reject(adapter.fail)
+    }
   }
 }))
 
@@ -52,7 +60,10 @@ async function errorMessageFor(failure: unknown) {
 }
 
 describe('useProjectStatusDataFetch', () => {
-  beforeEach(() => startTestTelemetry())
+  beforeEach(() => {
+    adapter.hub = { isAvailable: true }
+    startTestTelemetry()
+  })
 
   it('says that the reports could not be loaded when the request fails', async () => {
     expect(await errorMessageFor(new TypeError('Failed to fetch'))).toBe(
@@ -67,6 +78,20 @@ describe('useProjectStatusDataFetch', () => {
       strings.ProjectStatusNoHubAccessErrorText
     )
     expect(countedTelemetry().errors).toEqual({ 'ProjectStatusWebPart permission_denied 403': 1 })
+  })
+
+  it('says that access to the hub is missing when the hub is out of reach, and counts it by the status the hub refused with', async () => {
+    // The hub's data service met the refusal when it was configured, and kept its status.
+    adapter.hub = { isAvailable: false, unavailableStatus: 403 }
+    expect(await errorMessageFor(undefined)).toBe(strings.ProjectStatusNoHubAccessErrorText)
+    expect(countedTelemetry().errors).toEqual({ 'ProjectStatusWebPart permission_denied 403': 1 })
+  })
+
+  it('counts a hub that is out of reach without a status as unknown: nothing was refused', async () => {
+    // The hub's URL was never found, so no request was refused with a status.
+    adapter.hub = { isAvailable: false }
+    expect(await errorMessageFor(undefined)).toBe(strings.ProjectStatusNoHubAccessErrorText)
+    expect(countedTelemetry().errors).toEqual({ 'ProjectStatusWebPart unknown': 1 })
   })
 
   it('counts the failure by the status SharePoint answered with, not by the text it shows', async () => {

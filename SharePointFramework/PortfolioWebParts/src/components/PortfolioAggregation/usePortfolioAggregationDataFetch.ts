@@ -1,5 +1,6 @@
 import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { isTaxonomyManagedProperty, parseTaxonomyValue } from 'pp365-shared-library/lib/util'
 import { useEffect } from 'react'
 import { IPortfolioAggregationContext } from './context'
@@ -81,11 +82,13 @@ async function fetchData(context: IPortfolioAggregationContext) {
  * Hook that fetches data for the Portfolio Aggregation component using `fetchData`.
  *
  * This hook is called when the component is mounted and when one of the
- * specified dependencies changes.
+ * specified dependencies changes. A fetch that fails is counted for usage statistics, once, by
+ * its error code, for the web part the overview is in.
  *
  * @param deps Dependencies that should trigger a new fetch
  */
 export function usePortfolioAggregationDataFetch(context: IPortfolioAggregationContext, deps = []) {
+  const telemetry = useTelemetry()
   useEffect(() => {
     context.dispatch(START_FETCH())
     if (!context.state.currentView && context.props.dataSourceCategory) return
@@ -110,6 +113,9 @@ export function usePortfolioAggregationDataFetch(context: IPortfolioAggregationC
         context.dispatch(GET_FILTERS({ filters: [...dataSourceFilters, ...projectFilters] }))
         context.dispatch(SET_VIEW_GROUP_BY({ column: data.dataSource.groupBy }))
       })
-      .catch((error) => context.dispatch(DATA_FETCH_ERROR({ error })))
+      .catch((error) => {
+        telemetry.trackError(error)
+        context.dispatch(DATA_FETCH_ERROR({ error }))
+      })
   }, [...deps])
 }

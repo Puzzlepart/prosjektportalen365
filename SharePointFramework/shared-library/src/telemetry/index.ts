@@ -40,8 +40,10 @@ export {
   resolveTelemetryGate,
   TelemetryGateReason
 } from './gate'
+export { hubLanguageFromLcid } from './heartbeat'
 export { setupOutcomeEvent, setupVariantFrom, siteTypeFromTemplate } from './setup'
 export { TelemetryResolvedSiteType } from './siteInfo'
+export { ISiteTypeFlags, readSiteType } from './siteType'
 export { ITelemetryPortal } from './store'
 export {
   ITelemetryTracker,
@@ -54,10 +56,13 @@ export {
   ITelemetrySpfxContext,
   queueHeartbeat,
   registerSiteTypeResolver,
+  requestHeartbeat,
+  setSiteType,
   startTelemetry,
   telemetryInitFromContext,
   trackError,
+  trackPageView,
   trackTiming,
   trackUsage
 } from './track'
-export { isTelemetryComponent, TelemetryHeartbeatInput } from './validate'
+export { isTelemetryComponent, TelemetryHeartbeatInput, TelemetryUsageSnapshot } from './validate'

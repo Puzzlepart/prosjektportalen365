@@ -8,6 +8,7 @@ import {
   ProjectAdminPermission,
   StatusReport,
   errorWithCause,
+  errorWithStatus,
   getAllScopesFilter,
   getScopeSeriesKey,
   getUrlParam,
@@ -33,6 +34,19 @@ async function getReportFields(contentTypeId = '0x010022252E35737A413FB56A1BA538
 
 function isNoHubError(error: unknown) {
   return SPDataAdapter.portalDataService?.isAvailable === false || isUnauthorizedError(error)
+}
+
+/**
+ * The error for a hub that is out of reach: the text the user is shown, with the HTTP status the
+ * hub refused with where `PortalDataService` kept one. The service has swallowed the refusal, so
+ * without the status the failure would be counted for usage statistics as unknown, not as the
+ * denied permission it was.
+ */
+function noHubAccessError(): Error {
+  return errorWithStatus(
+    strings.ProjectStatusNoHubAccessErrorText,
+    SPDataAdapter.portalDataService?.unavailableStatus
+  )
 }
 
 /**
@@ -131,7 +145,7 @@ async function fetchData(
     const properties = await SPDataAdapter.project.getProjectInformationData()
 
     if (SPDataAdapter.portalDataService?.isAvailable === false) {
-      throw new Error(strings.ProjectStatusNoHubAccessErrorText)
+      throw noHubAccessError()
     }
 
     // Force an explicit hub list access check so no-hub users do not fall through to

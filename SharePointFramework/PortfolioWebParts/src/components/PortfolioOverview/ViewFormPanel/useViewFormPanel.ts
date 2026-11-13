@@ -1,16 +1,19 @@
 import _ from 'lodash'
 import { PortfolioOverviewView, SPPortfolioOverviewViewItem } from 'pp365-shared-library'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { CHANGE_VIEW, SET_VIEW_FORM_PANEL } from '../reducer'
 import { useEditableView } from './useEditableView'
 import { useId } from '@fluentui/react-components'
 import { usePortfolioOverviewContext } from '../context'
 
 /**
- * Validate and save portfolio views and manage the view editor's dismissal.
+ * Validate and save portfolio views and manage the view editor's dismissal. A view the list has
+ * taken, new or edited, is counted for usage statistics, for the web part the overview is in.
  */
 export function useViewFormPanel() {
   const context = usePortfolioOverviewContext()
   const { view, setView, isEditing } = useEditableView()
+  const telemetry = useTelemetry()
 
   /**
    * Close the view editor.
@@ -82,6 +85,8 @@ export function useViewFormPanel() {
       context.props.configuration.views.push(newView)
       context.dispatch(CHANGE_VIEW(newView))
     }
+    // The list has taken the view by now: a save it refused never gets here.
+    telemetry.track('view.saved')
     context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: false }))
   }
 

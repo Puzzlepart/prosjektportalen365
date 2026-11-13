@@ -1,5 +1,10 @@
 import { act, render, waitFor } from '@testing-library/react'
-import { DataSource, ProjectContentColumn } from 'pp365-shared-library'
+import { DataSource, ProjectContentColumn, errorWithCause } from 'pp365-shared-library'
+import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
+import {
+  countedTelemetry,
+  startTestTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import * as React from 'react'
 import { SET_DATA_SOURCE } from './reducer/actions'
 import { createPortfolioAggregationReducer } from './reducer/createPortfolioAggregationReducer'
@@ -9,7 +14,9 @@ import { usePortfolioAggregationDataFetch } from './usePortfolioAggregationDataF
 
 /**
  * The aggregated overview's fetch run against its real reducer, as the web part runs it: each
- * view the user picks is fetched, and its rows are grouped by the view's group column.
+ * view the user picks is fetched, and its rows are grouped by the view's group column. A fetch
+ * that fails is shown by the list and counted once, by its error code, for the web part the
+ * overview is in.
  */
 const column = (Id: number, Title: string, fieldName: string, extra: Record<string, any> = {}) =>
   new ProjectContentColumn({
@@ -40,8 +47,8 @@ const allDeliveries = view(1, 'Alle leveranser', 3)
 const myDeliveries = view(2, 'Mine leveranser', 3)
 const ungroupedDeliveries = view(3, 'Leveranser uten gruppering')
 
-function renderFetch() {
-  const fetchItemsWithSource = jest.fn(() =>
+function renderFetch(alias = 'PortfolioAggregationWebPart') {
+  const fetchItemsWithSource = jest.fn((..._args: unknown[]) =>
     Promise.resolve([
       { SiteTitle: 'Bravo', Title: 'B', GtProjectPhase: 'Realisere' },
       { SiteTitle: 'Alfa', Title: 'A', GtProjectPhase: 'Konsept' }
@@ -66,8 +73,12 @@ function renderFetch() {
     usePortfolioAggregationDataFetch({ props, state, dispatch } as any, [state.currentView])
     return null
   }
-  render(<Probe />)
-  /** Picks a view, as the view selector does, and waits for its rows. */
+  render(
+    <TelemetryProvider component={alias}>
+      <Probe />
+    </TelemetryProvider>
+  )
+  /** Picks a view, as the view selector does, and waits for its rows, or for its error. */
   const pickView = async (dataSource: DataSource) => {
     const calls = fetchItemsWithSource.mock.calls.length
     act(() => latest.dispatch(SET_DATA_SOURCE({ dataSource })))
@@ -75,12 +86,38 @@ function renderFetch() {
     await waitFor(() => expect(latest.state.loading).toBe(false))
     return latest.state
   }
-  return { pickView }
+  return { pickView, fetchItemsWithSource }
 }
 
 describe('usePortfolioAggregationDataFetch', () => {
   beforeEach(() => {
     window.history.replaceState(null, '', '/')
+    startTestTelemetry()
+  })
+
+  it('shows a fetch that fails, and counts it once by the code of what SharePoint answered', async () => {
+    const { pickView, fetchItemsWithSource } = renderFetch('ProgramAggregationWebPart')
+    // The adapter tells of the failure in general words, and keeps the answer as the cause.
+    const error = errorWithCause(
+      'Kunne ikke hente data fra datakilden',
+      Object.assign(new Error('https://contoso.sharepoint.com/sites/hemmelig'), { status: 403 })
+    )
+    fetchItemsWithSource.mockImplementationOnce(() => Promise.reject(error))
+    const failed = await pickView(allDeliveries)
+    expect(failed.error).toBe(error)
+    expect(countedTelemetry()).toEqual({
+      usage: {},
+      errors: { 'ProgramAggregationWebPart permission_denied 403': 1 },
+      timings: {}
+    })
+    expect(JSON.stringify(countedTelemetry())).not.toContain('hemmelig')
+
+    // The next view is fetched as usual, and counts nothing.
+    const state = await pickView(myDeliveries)
+    expect(state.items).toHaveLength(2)
+    expect(countedTelemetry().errors).toEqual({
+      'ProgramAggregationWebPart permission_denied 403': 1
+    })
   })
 
   it("groups a view's rows by its group column", async () => {

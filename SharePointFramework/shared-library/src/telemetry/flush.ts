@@ -7,6 +7,7 @@ import {
   USAGE_TELEMETRY_URL
 } from './contract'
 import { ITelemetryGate, readTelemetrySignals, resolveTelemetryGate } from './gate'
+import { ensureTelemetryHeartbeat } from './heartbeat'
 import { ensureTelemetrySiteInfo } from './siteInfo'
 import {
   currentTelemetryDecision,
@@ -29,6 +30,16 @@ function isSettingsMap(settings: unknown): settings is Map<string, string> {
   return !!map && typeof map.has === 'function' && typeof map.get === 'function'
 }
 
+/**
+ * Whether a caller handed over settings it has read. An empty map tells nothing: a data adapter's
+ * map is empty when the hub gave no settings, and also when the adapter never read them
+ * (`loadGlobalSettings`). Taken as the hub's answer, the second would close the gate for every
+ * bundle on the page. It is taken as no map, and the anchor's own read decides.
+ */
+function hasReadSettings(settings: unknown): settings is Map<string, string> {
+  return isSettingsMap(settings) && settings.size > 0
+}
+
 /** The gate's answer for the anchor and a settings map, with the browser's signals as they are. */
 function gateFor(anchor: ITelemetryAnchor, settings: Map<string, string> | undefined) {
   return resolveTelemetryGate({
@@ -47,8 +58,9 @@ function lowerOf(gate: ITelemetryGate, other: ITelemetryGate): ITelemetryGate {
 
 /**
  * Makes the anchor's answer the store's decision, unless the page has moved to another hub since
- * the answer was asked for. What was collected above the level is dropped, and at level 2 and up
- * the lookups of the sites in memory start.
+ * the answer was asked for. What was collected above the level is dropped, at level 2 and up the
+ * lookups of the sites in memory start, and at level 1 and up a heartbeat that was asked for
+ * while the gate was pending is read and sent.
  */
 function decide(store: ITelemetryStore, anchor: ITelemetryAnchor, gate: ITelemetryGate): void {
   if (store.anchor !== anchor) return
@@ -58,6 +70,7 @@ function decide(store: ITelemetryStore, anchor: ITelemetryAnchor, gate: ITelemet
   store.decision = { level, catalog, reason, at: now, hubSiteId: anchor.hubSiteId }
   pruneTelemetryStore(store, level)
   ensureTelemetrySiteInfo(store, now)
+  ensureTelemetryHeartbeat(store, now, flushTelemetryNow)
 }
 
 /**
@@ -131,7 +144,8 @@ function closeOnSignals(store: ITelemetryStore): void {
  * the anchor: the only portal telemetry reads through, and the source of the hub URL. With
  * `settings` (the map the caller already read with `getGlobalSettings`) the gate is decided at
  * once, otherwise after the anchor's own cached read. A map that comes with a later portal may
- * only lower the decision, never raise it.
+ * only lower the decision, never raise it. An empty map counts as none (`hasReadSettings`): pass
+ * the map only when the bundle has read the settings, and leave it out otherwise.
  *
  * @param portal The bundle's `PortalDataService`
  * @param settings The global settings the caller already holds
@@ -146,12 +160,12 @@ export function attachTelemetryPortal(
     const hubSiteId = normalizeGuid(portal.hubSiteId)
     if (!hubSiteId || hubSiteId !== store.page.hubSiteId) return
     if (store.anchor) {
-      if (isSettingsMap(settings)) lowerGate(store, store.anchor, settings)
+      if (hasReadSettings(settings)) lowerGate(store, store.anchor, settings)
       return
     }
     const anchor: ITelemetryAnchor = { portal, hubSiteId }
     store.anchor = anchor
-    if (isSettingsMap(settings)) decide(store, anchor, gateFor(anchor, settings))
+    if (hasReadSettings(settings)) decide(store, anchor, gateFor(anchor, settings))
     else readGate(store, anchor)
   } catch {
     // Telemetry never breaks the code that reports to it.
@@ -163,11 +177,16 @@ export function attachTelemetryPortal(
  * anchor's settings are read, when the decision is older than `GATE_MAX_AGE_MS`, on a page of
  * another hub than the decision was made for, and from the moment the tester flag or a privacy
  * signal of the browser is set.
+ *
+ * The lookup is synchronous and never waits. One that finds the decision too old starts the
+ * settings read in the background, as a tracking call does, and answers closed: a sender that
+ * only asks the gate, like the catalog's, gets the new answer the next time it asks.
  */
 export function getTelemetryGate(): ITelemetryGate {
   try {
     const store = getTelemetryStore()
     if (store) closeOnSignals(store)
+    refreshTelemetryGate()
     const decision = store && currentTelemetryDecision(store, Date.now())
     if (decision) {
       return { level: decision.level, catalog: decision.catalog, reason: decision.reason }
@@ -267,6 +286,11 @@ export function flushTelemetry(options?: { urgent?: boolean }): void {
   }
 }
 
+/** Sends what is in memory at once, whatever the time since the last send. */
+export function flushTelemetryNow(): void {
+  flushTelemetry({ urgent: true })
+}
+
 /** A hidden tab may be closed without another event: send, if the last send is old enough. */
 function onVisibilityChange(): void {
   if (document.visibilityState === 'hidden') flushTelemetry()
@@ -275,7 +299,7 @@ function onVisibilityChange(): void {
 
 /** The page is going away: send what is in memory. */
 function onPageHide(): void {
-  flushTelemetry({ urgent: true })
+  flushTelemetryNow()
 }
 
 /**

@@ -10,15 +10,9 @@ import {
   IPackageContentSummaryEntry,
   IPackageManifest
 } from 'models'
+import { resolveCatalogUrl } from './catalogUrl'
 import { sampleCatalog } from './sampleCatalog'
-import { format } from 'pp365-shared-library'
-
-/**
- * Default location of the central catalog (hosting repo, `main` branch). Can
- * be overridden by the `catalogUrl` command-set property.
- */
-export const DEFAULT_CATALOG_URL =
-  'https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-hosting/main/catalog.json'
+import { errorWithStatus, format } from 'pp365-shared-library'
 
 const CACHE_PREFIX = 'pp_template_catalog_'
 const CACHE_HOURS = 24
@@ -38,6 +32,11 @@ export interface ICatalogResult {
    */
   error?: string
   /**
+   * The caught error when {@link degraded} is true. Usage statistics count the failed load by
+   * its code (`errorCodeFrom`); its message is never read for that.
+   */
+  cause?: unknown
+  /**
    * True when the catalog was served from the local cache. Lets the caller
    * revalidate in the background (stale-while-revalidate) via
    * {@link CatalogService.revalidateCatalog}.
@@ -50,14 +49,14 @@ export interface ICatalogResult {
  */
 export class CatalogService {
   /**
-   * Load the catalog from `catalogUrl` (or {@link DEFAULT_CATALOG_URL}).
+   * Load the catalog from `catalogUrl` (or the default, see {@link resolveCatalogUrl}).
    *
    * - Served from a 24h `localStorage` cache keyed by the URL when available.
    * - Falls back to the committed {@link sampleCatalog} (with
    *   `degraded: true`) on CORS/network/parse errors.
    */
   public static async getCatalog(catalogUrl?: string): Promise<ICatalogResult> {
-    const url = (catalogUrl && catalogUrl.trim()) || DEFAULT_CATALOG_URL
+    const url = resolveCatalogUrl(catalogUrl)
     const cacheKey = `${CACHE_PREFIX}${getHashCode(url.toLowerCase())}`
     const store = new PnPClientStorage().local
     const cached = store.get(cacheKey) as ICatalog
@@ -73,7 +72,13 @@ export class CatalogService {
         message: `(CatalogService) getCatalog: falling back to sample catalog - ${error?.message}`,
         level: LogLevel.Warning
       })
-      return { catalog: sampleCatalog, degraded: true, error: error?.message, fromCache: false }
+      return {
+        catalog: sampleCatalog,
+        degraded: true,
+        error: error?.message,
+        cause: error,
+        fromCache: false
+      }
     }
   }
 
@@ -84,7 +89,7 @@ export class CatalogService {
    * the cached catalog immediately and update once this resolves.
    */
   public static async revalidateCatalog(catalogUrl?: string): Promise<ICatalog | undefined> {
-    const url = (catalogUrl && catalogUrl.trim()) || DEFAULT_CATALOG_URL
+    const url = resolveCatalogUrl(catalogUrl)
     const cacheKey = `${CACHE_PREFIX}${getHashCode(url.toLowerCase())}`
     try {
       const catalog = await CatalogService._fetchCatalog(url)
@@ -217,9 +222,20 @@ export class CatalogService {
     throw lastError
   }
 
+  /**
+   * The error for a response that is not ok: the text the user sees, with the response's HTTP
+   * status on it, so that usage statistics count the failure by its code (`errorCodeFrom`).
+   */
+  private static _resourceFetchError(response: Response): Error {
+    return errorWithStatus(
+      format(strings.CatalogResourceFetchError, response.status),
+      response.status
+    )
+  }
+
   private static async _fetchJson<T>(url: string): Promise<T> {
     const response = await CatalogService._fetchWithTimeout(url)
-    if (!response.ok) throw new Error(format(strings.CatalogResourceFetchError, response.status))
+    if (!response.ok) throw CatalogService._resourceFetchError(response)
     return (await response.json()) as T
   }
 
@@ -240,7 +256,7 @@ export class CatalogService {
 
   private static async _fetchFileText(url: string): Promise<string> {
     const response = await CatalogService._fetchWithTimeout(url)
-    if (!response.ok) throw new Error(format(strings.CatalogResourceFetchError, response.status))
+    if (!response.ok) throw CatalogService._resourceFetchError(response)
     return response.text()
   }
 
@@ -464,8 +480,10 @@ export class CatalogService {
   private static async _fetchCatalog(url: string): Promise<ICatalog> {
     const response = await CatalogService._fetchWithTimeout(url)
     if (!response.ok) {
-      throw new Error(
-        format(strings.CatalogFetchError, `${response.status} ${response.statusText}`)
+      // With the status on it, so that usage statistics count the failed load by its code.
+      throw errorWithStatus(
+        format(strings.CatalogFetchError, `${response.status} ${response.statusText}`),
+        response.status
       )
     }
     let json: ICatalog

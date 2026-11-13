@@ -4,6 +4,7 @@
 // stand-ins.
 const hub = {
   isAvailable: true,
+  unavailableStatus: undefined as number | undefined,
   configurationError: null as unknown,
   projectError: null as unknown
 }
@@ -16,7 +17,11 @@ jest.mock('data/SPDataAdapter', () => ({
           ? Promise.reject(hub.projectError)
           : Promise.resolve([{ Id: 1, GtStartDate: '2026-01-05', GtEndDate: '2026-12-18' }])
       const items = { select: () => ({ filter: () => ({ top: () => readProject }) }) }
-      return { isAvailable: hub.isAvailable, web: { lists: { getByTitle: () => ({ items }) } } }
+      return {
+        isAvailable: hub.isAvailable,
+        unavailableStatus: hub.unavailableStatus,
+        web: { lists: { getByTitle: () => ({ items }) } }
+      }
     },
     project: {
       getProjectInformationData: () => Promise.resolve({ templateParameters: {} })
@@ -70,6 +75,7 @@ async function fetchTimeline() {
 describe('useProjectTimelineDataFetch', () => {
   beforeEach(() => {
     hub.isAvailable = true
+    hub.unavailableStatus = undefined
     hub.configurationError = null
     hub.projectError = null
     startTestTelemetry()
@@ -119,7 +125,20 @@ describe('useProjectTimelineDataFetch', () => {
     })
   })
 
-  it('counts a hub that is out of reach without a status: no request was refused here', async () => {
+  it('counts a hub that is out of reach by the status the hub refused with, as denied permission', async () => {
+    // The hub's data service met the refusal when it was configured, and kept its status.
+    hub.isAvailable = false
+    hub.unavailableStatus = 403
+    const { error } = await fetchTimeline()
+    expect(error.message).toBe(strings.ProjectTimelineNoHubAccessErrorText)
+    expect(error.type).toBe('warning')
+    expect(countedTelemetry().errors).toEqual({
+      'ProjectTimelineWebPart permission_denied 403': 1
+    })
+  })
+
+  it('counts a hub that is out of reach without a status as unknown: nothing was refused', async () => {
+    // The hub's URL was never found, so no request was refused with a status.
     hub.isAvailable = false
     const { error } = await fetchTimeline()
     expect(error.message).toBe(strings.ProjectTimelineNoHubAccessErrorText)

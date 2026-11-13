@@ -7,12 +7,17 @@ jest.mock('pp365-projectwebparts/lib/components/ProjectInformationPanel', () => 
 import { render, screen } from '@testing-library/react'
 import strings from 'PortfolioWebPartsStrings'
 import { format } from 'pp365-shared-library'
+import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
+import {
+  countedTelemetry,
+  startTestTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import * as React from 'react'
 import { ProjectCard } from './ProjectCard'
 
 /**
  * The single project card web part: fetches the one project through the adapter and shows its
- * card with title, phase and people.
+ * card with title, phase and people. A fetch that fails is told, and counted once by its code.
  */
 const spfxContext = {
   pageContext: {
@@ -96,20 +101,30 @@ describe('ProjectCard', () => {
     expect(screen.getByRole('progressbar', { name: 'Laster...' })).toBeInTheDocument()
   })
 
-  it('says so when the project cannot be fetched (WCAG 3.3.1, 4.1.3)', async () => {
+  it('says so when the project cannot be fetched (WCAG 3.3.1, 4.1.3), and counts the failure once by its error code', async () => {
     // The failure was not caught, and the web part stayed empty.
     const dataAdapter = {
-      fetchEnrichedProject: jest.fn().mockRejectedValue(new Error('Tilgang nektet'))
+      fetchEnrichedProject: jest
+        .fn()
+        .mockRejectedValue(Object.assign(new Error('Tilgang nektet'), { status: 403 }))
     }
+    startTestTelemetry()
     render(
-      <ProjectCard
-        dataAdapter={dataAdapter as any}
-        projectSiteId='site-1'
-        spfxContext={spfxContext}
-      />
+      <TelemetryProvider component='ProjectCardWebPart'>
+        <ProjectCard
+          dataAdapter={dataAdapter as any}
+          projectSiteId='site-1'
+          spfxContext={spfxContext}
+        />
+      </TelemetryProvider>
     )
     expect(await screen.findByText(strings.ProjectCard.LoadErrorText)).toBeInTheDocument()
     expect(screen.queryByRole('progressbar')).toBeNull()
+    expect(countedTelemetry()).toEqual({
+      usage: {},
+      errors: { 'ProjectCardWebPart permission_denied 403': 1 },
+      timings: {}
+    })
   })
 
   it('marks the button that opens the project information as where the panel gives the focus back (WCAG 2.4.3)', async () => {

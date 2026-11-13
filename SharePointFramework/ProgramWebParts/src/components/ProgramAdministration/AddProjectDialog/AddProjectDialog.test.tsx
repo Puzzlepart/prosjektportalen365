@@ -4,6 +4,13 @@ jest.mock('../ProjectList', () => ({ ProjectList: (): null => null }))
 
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import strings from 'ProgramWebPartsStrings'
+import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
+import {
+  clearTestTelemetry,
+  countedTelemetry,
+  startTestTelemetry,
+  telemetryStore
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import * as React from 'react'
 import { ProgramAdministrationContext } from '../context'
 import { ADD_CHILD_PROJECTS, DATA_LOADED, TOGGLE_ADD_PROJECT_DIALOG } from '../reducer'
@@ -257,5 +264,113 @@ describe('AddProjectDialog', () => {
     const add = screen.getByRole('button', { name: strings.Add })
     expect(add).toHaveAttribute('aria-disabled', 'true')
     expect(add).toHaveAccessibleDescription(strings.AddProjectsDisabledReason)
+  })
+
+  describe('and usage statistics', () => {
+    const ALFA = { SiteId: 'a', Title: 'Alfa' }
+    const BRAVO = { SiteId: 'b', Title: 'Bravo' }
+
+    /**
+     * Renders the dialog, with Alfa and Bravo chosen, as the program administration web part
+     * does, which usage is counted for, or outside every web part.
+     */
+    function renderDialog(dataAdapter: Record<string, jest.Mock>, inWebPart = true) {
+      const dispatch = jest.fn()
+      const dialog = (
+        <ProgramAdministrationContext.Provider
+          value={
+            {
+              props: {
+                context: {
+                  pageContext: { site: { id: 'site' }, legacyPageContext: { hubSiteId: 'hub-1' } }
+                },
+                dataAdapter
+              },
+              state: {
+                addProjectDialog: { open: true, selectedProjects: ['a', 'b'] },
+                availableProjects: [ALFA, BRAVO],
+                childProjects: []
+              },
+              programHubs: [{ url: 'https://t.sharepoint.com/sites/hub1', hubSiteId: 'hub-1' }],
+              dispatch
+            } as any
+          }
+        >
+          <AddProjectDialog />
+        </ProgramAdministrationContext.Provider>
+      )
+      render(
+        inWebPart ? (
+          <TelemetryProvider component='ProgramAdministrationWebpart'>{dialog}</TelemetryProvider>
+        ) : (
+          dialog
+        )
+      )
+      return dispatch
+    }
+
+    const fetched = () => jest.fn(() => Promise.resolve([ALFA, BRAVO]))
+    const denied = (message: string) => Object.assign(new Error(message), { status: 403 })
+
+    beforeEach(() => startTestTelemetry())
+    afterEach(() => clearTestTelemetry())
+
+    it('counts an add that went through once, however many projects it added', async () => {
+      const dispatch = renderDialog({
+        addChildProjects: jest.fn(() => Promise.resolve()),
+        getHubSiteProjects: fetched()
+      })
+      fireEvent.click(screen.getByRole('button', { name: strings.Add }))
+      await waitFor(() => expect(dispatch).toHaveBeenCalledWith(ADD_CHILD_PROJECTS([ALFA, BRAVO])))
+      // Cancelling and closing count nothing.
+      fireEvent.click(screen.getByRole('button', { name: strings.Cancel }))
+      expect(countedTelemetry()).toEqual({
+        usage: { 'ProgramAdministrationWebpart childProjects.added': 1 },
+        errors: {},
+        timings: {}
+      })
+    })
+
+    it('counts a failed add once, by the status SharePoint answered with, and not as an add', async () => {
+      renderDialog({
+        addChildProjects: jest.fn(() => Promise.reject(denied('Ingen tilgang til huben'))),
+        getHubSiteProjects: fetched()
+      })
+      fireEvent.click(screen.getByRole('button', { name: strings.Add }))
+      // The message is shown as before; of the error, only its code and status are kept.
+      expect(await screen.findByText('Ingen tilgang til huben')).toBeInTheDocument()
+      expect(countedTelemetry()).toEqual({
+        usage: {},
+        errors: { 'ProgramAdministrationWebpart permission_denied 403': 1 },
+        timings: {}
+      })
+      expect(JSON.stringify(telemetryStore())).not.toContain('Ingen tilgang')
+    })
+
+    it("counts the hubs' projects that could not be fetched once, by the error's code", async () => {
+      const dispatch = renderDialog({
+        getHubSiteProjects: jest.fn(() => Promise.reject(denied('Ingen tilgang til søk')))
+      })
+      await waitFor(() =>
+        expect(dispatch).toHaveBeenCalledWith(
+          DATA_LOADED({ data: { availableProjects: [] }, scope: 'AddProjectDialog' })
+        )
+      )
+      expect(countedTelemetry()).toEqual({
+        usage: {},
+        errors: { 'ProgramAdministrationWebpart permission_denied 403': 1 },
+        timings: {}
+      })
+    })
+
+    it('adds all the same where no web part is named for usage statistics, and counts nothing', async () => {
+      const dispatch = renderDialog(
+        { addChildProjects: jest.fn(() => Promise.resolve()), getHubSiteProjects: fetched() },
+        false
+      )
+      fireEvent.click(screen.getByRole('button', { name: strings.Add }))
+      await waitFor(() => expect(dispatch).toHaveBeenCalledWith(ADD_CHILD_PROJECTS([ALFA, BRAVO])))
+      expect(countedTelemetry()).toEqual({ usage: {}, errors: {}, timings: {} })
+    })
   })
 })

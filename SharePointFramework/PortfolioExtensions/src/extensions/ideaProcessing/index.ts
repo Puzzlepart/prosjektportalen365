@@ -15,9 +15,15 @@ import DialogPrompt from 'components/IdeaApprovalDialog'
 import { Choice, IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
 import strings from 'PortfolioExtensionsStrings'
 import { find } from 'underscore'
+import { startCommandSetTelemetryWithOwnPortal } from '../../helpers/commandSetTelemetry'
+import { ideaChoiceVariant } from '../../helpers/ideaChoiceVariant'
 import { isUserAuthorized } from '../../helpers/isUserAuthorized'
 import { themeColor } from 'pp365-shared-library'
+import { flushTelemetry, trackUsage } from 'pp365-shared-library/lib/telemetry'
 import resource from 'SharedResources'
+
+/** The command set's alias in its manifest, which usage statistics count it by. */
+const TELEMETRY_COMPONENT = 'IdeaProcessing'
 
 /** Records configured decisions and comments on selected ideas in the processing list. */
 export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
@@ -29,6 +35,8 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   @override
   public async onInit(): Promise<void> {
     this._sp = spfi().using(SPFx(this.context))
+    // In the background: the command set holds no hub data service, and waits for none.
+    void startCommandSetTelemetryWithOwnPortal(this.context)
     this._openCmd = this.tryGetCommand('OPEN_IDEA_PROCESSING_DIALOG')
 
     this._openCmd.title = strings.IdeaProcessingCommandTitle
@@ -95,6 +103,19 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   }
 
   /**
+   * Reloads the page once a decision is saved. The decision is counted for usage statistics
+   * first, and sent at once: a count left in memory is lost when the page reloads.
+   *
+   * @param choiceKey The chosen choice's key in the idea configuration; none for a choice the
+   * customer has added, which counts as `other`
+   */
+  private _reloadAfterDecision(choiceKey?: string): void {
+    trackUsage(TELEMETRY_COMPONENT, 'idea.decided', ideaChoiceVariant(choiceKey))
+    flushTelemetry({ urgent: true })
+    window.location.reload()
+  }
+
+  /**
    * Get the idea configuration from the IdeaConfiguration list
    */
   private _getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
@@ -140,7 +161,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
         GtIdeaDecision: find(this._config.processing, { key: Choice.Reject })?.recommendation,
         GtIdeaDecisionComment: comment
       })
-    window.location.reload()
+    this._reloadAfterDecision(Choice.Reject)
   }
 
   /**
@@ -156,7 +177,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
           ?.recommendation,
         GtIdeaDecisionComment: comment
       })
-    window.location.reload()
+    this._reloadAfterDecision(Choice.Consideration)
   }
 
   /**
@@ -171,7 +192,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
         GtIdeaDecision: find(this._config.processing, { key: Choice.Approve })?.recommendation,
         GtIdeaDecisionComment: comment
       })
-    window.location.reload()
+    this._reloadAfterDecision(Choice.Approve)
   }
 
   /**
@@ -190,7 +211,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
         GtIdeaDecision: find(this._config.processing, { choice: selectedChoice })?.recommendation,
         GtIdeaDecisionComment: comment
       })
-    window.location.reload()
+    this._reloadAfterDecision()
   }
 
   /**

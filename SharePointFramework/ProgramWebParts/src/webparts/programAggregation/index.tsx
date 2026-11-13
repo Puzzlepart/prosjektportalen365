@@ -15,6 +15,7 @@ import {
   IPortfolioAggregationProps,
   PortfolioAggregation
 } from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
+import { trackError } from 'pp365-shared-library/lib/telemetry'
 import { IProgramAggregationWebPartProps } from './types'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
 
@@ -85,6 +86,9 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
       )
     } catch (error) {
       this._configurationError = error as ErrorWithIntent
+      // Counted where the configuration fails to load, once, by the error's own code: `render`
+      // shows the error every time it runs, and its message stays on the page.
+      trackError(this._telemetryComponent, error)
     }
   }
 

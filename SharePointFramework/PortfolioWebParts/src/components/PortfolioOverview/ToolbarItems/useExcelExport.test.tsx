@@ -10,6 +10,11 @@ import { FluentProvider, Toaster } from '@fluentui/react-components'
 import { act, cleanup, render, screen } from '@testing-library/react'
 import strings from 'PortfolioWebPartsStrings'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
+import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
+import {
+  countedTelemetry,
+  startTestTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import * as React from 'react'
 import { IPortfolioOverviewContext } from '../context'
 import { EXCEL_EXPORT_ERROR, EXCEL_EXPORT_SUCCESS, START_EXCEL_EXPORT } from '../reducer'
@@ -19,6 +24,8 @@ import { useExcelExport } from './useExcelExport'
  * The portfolio overview's export to Excel: the rows the list shows (the search and the filters
  * applied) or the selected rows, under the web part's name and, when asked, the view's; the values
  * as they are, for the export to round; and a failed export ends the export and tells the user.
+ * An export that returns is counted once, for the web part the overview is in (the hub's or a
+ * program's), and one that fails once as an error.
  */
 const column = (fieldName: string, name: string, extra: Record<string, any> = {}) => ({
   key: fieldName,
@@ -43,7 +50,11 @@ const items = [
 
 const TOASTER_ID = 'excel-export-toaster'
 
-function exportFrom(state: Record<string, any> = {}, props: Record<string, any> = {}) {
+function exportFrom(
+  state: Record<string, any> = {},
+  props: Record<string, any> = {},
+  alias = 'PortfolioOverviewWebPart'
+) {
   const dispatch = jest.fn()
   const context = {
     props: { title: 'Porteføljeoversikt', configuration: { refiners: [] }, ...props },
@@ -58,10 +69,12 @@ function exportFrom(state: Record<string, any> = {}, props: Record<string, any> 
     return null
   }
   render(
-    <FluentProvider>
-      <Toaster toasterId={TOASTER_ID} />
-      <Probe />
-    </FluentProvider>
+    <TelemetryProvider component={alias}>
+      <FluentProvider>
+        <Toaster toasterId={TOASTER_ID} />
+        <Probe />
+      </FluentProvider>
+    </TelemetryProvider>
   )
   act(() => exportToExcel())
   const [exported, exportedColumns, fileNamePart] =
@@ -75,6 +88,8 @@ function exportFrom(state: Record<string, any> = {}, props: Record<string, any> 
 }
 
 const titles = (rows: Record<string, any>[]) => rows.map((row) => row.Title)
+
+beforeEach(() => startTestTelemetry())
 
 afterEach(async () => {
   cleanup()
@@ -119,12 +134,30 @@ describe('useExcelExport (portfolio overview)', () => {
     expect(exportFrom().actions).toEqual([START_EXCEL_EXPORT.type, EXCEL_EXPORT_SUCCESS.type])
   })
 
-  it('ends the export and tells the user when it fails', async () => {
+  it('counts each export that returns, once, for the web part the overview is in', () => {
+    exportFrom()
+    expect(countedTelemetry().usage).toEqual({ 'PortfolioOverviewWebPart excel.exported': 1 })
+    exportFrom({ selectedItems: [items[1]] })
+    exportFrom({}, {}, 'ProgramProjectOverviewWebPart')
+    expect(countedTelemetry()).toEqual({
+      usage: {
+        'PortfolioOverviewWebPart excel.exported': 2,
+        'ProgramProjectOverviewWebPart excel.exported': 1
+      },
+      errors: {},
+      timings: {}
+    })
+  })
+
+  it('ends the export, tells the user and counts the error once when it fails', async () => {
     ;(ExcelExportService.export as jest.Mock).mockImplementationOnce(() => {
       throw new Error('Feil i arbeidsboken')
     })
     expect(exportFrom().actions).toEqual([START_EXCEL_EXPORT.type, EXCEL_EXPORT_ERROR.type])
     expect(await screen.findByText(strings.ExcelExportErrorTitle)).toBeInTheDocument()
     expect(screen.getByText(strings.ExcelExportErrorMessage)).toBeInTheDocument()
+    expect(countedTelemetry().usage).toEqual({})
+    // The workbook is built in the browser: its errors have no HTTP status to be counted by.
+    expect(countedTelemetry().errors).toEqual({ 'PortfolioOverviewWebPart unknown': 1 })
   })
 })

@@ -12,11 +12,15 @@ import {
  */
 export interface ITemplatePackageCatalogProps {
   context: ListViewCommandSetContext
+  /**
+   * The catalog to load; the default when empty. Catalog events are sent for the default
+   * catalog only (see `services/TelemetryService.ts`).
+   */
   catalogUrl?: string
   userGuideUrl?: string
   featureFlagProvisioning?: boolean
   /**
-   * Install-telemetry ingestion endpoint; defaults to prosjektportalen-assist,
+   * Ingestion endpoint for the catalog's events; defaults to prosjektportalen-assist,
    * empty string disables (see `services/TelemetryService.ts`).
    */
   telemetryUrl?: string

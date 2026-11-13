@@ -1,6 +1,6 @@
 import { errorWithCause } from '../util/errorWithCause'
 import { TELEMETRY_ERROR_CODES, TELEMETRY_HTTP_STATUSES } from './contract'
-import { errorCodeFrom, errorHttpStatusFrom } from './errorCode'
+import { errorCodeFrom, errorHttpStatusFrom, httpStatusOf } from './errorCode'
 
 /** An error with an HTTP status, as PnPjs gives one: the response body is in the message. */
 const httpError = (status: number, body: string = '{}') =>
@@ -196,5 +196,26 @@ describe('errorHttpStatusFrom', () => {
     })
     expect(errorHttpStatusFrom(aborted)).toBeUndefined()
     expect(errorHttpStatusFrom(errorWithCause(GENERIC_TEXT, '403'))).toBeUndefined()
+  })
+})
+
+describe('httpStatusOf', () => {
+  it("gives the error's own status, wherever the solutions put it and whatever it is", () => {
+    expect(httpStatusOf(httpError(403))).toBe(403)
+    expect(httpStatusOf({ statusCode: 401 })).toBe(401)
+    expect(httpStatusOf({ response: { status: 404 } })).toBe(404)
+    expect(httpStatusOf({ data: { status: 500 } })).toBe(500)
+    // A status the contract leaves out of an error entry is still the error's status.
+    expect(httpStatusOf(httpError(418))).toBe(418)
+  })
+
+  it('follows no cause, and takes only a number for a status', () => {
+    expect(httpStatusOf(errorWithCause(GENERIC_TEXT, httpError(403)))).toBeUndefined()
+    expect(httpStatusOf({ status: '403' })).toBeUndefined()
+    expect(httpStatusOf({ status: NaN })).toBeUndefined()
+    expect(httpStatusOf(new Error('[403] Forbidden'))).toBeUndefined()
+    expect(httpStatusOf('403')).toBeUndefined()
+    expect(httpStatusOf(undefined)).toBeUndefined()
+    expect(httpStatusOf(null)).toBeUndefined()
   })
 })

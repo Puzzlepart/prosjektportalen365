@@ -17,11 +17,22 @@ import {
   ProjectTemplate,
   ProjectTemplateFile,
   createSpfiInstance,
+  errorWithCause,
   format,
   getId,
   renderReact,
   unmountReact
 } from 'pp365-shared-library'
+import {
+  attachTelemetryPortal,
+  flushTelemetry,
+  registerSiteTypeResolver,
+  setSiteType,
+  setupVariantFrom,
+  startTelemetry,
+  telemetryInitFromContext,
+  trackUsage
+} from 'pp365-shared-library/lib/telemetry'
 import { createElement } from 'react'
 import _ from 'underscore'
 import {
@@ -38,6 +49,7 @@ import { ProjectSetupError } from './ProjectSetupError'
 import { NAVIGATION_NODES_STORAGE_KEY } from './constants'
 import { deleteCustomizer } from './deleteCustomizer'
 import { isAddedBefore } from './listContentRecord'
+import { siteTypeAfterSetup, trackSetupCheckFailure, trackSetupStopped } from './setupTelemetry'
 import { TemplateQuickLaunch } from './templateQuickLaunch'
 import * as Tasks from './tasks'
 import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
@@ -60,8 +72,16 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   private _currentTaskIndex: number = 0
   private _totalTasks: number = 0
 
+  /**
+   * Whether the user closed the wizard in this run of the setup. Closing it rejects into the same
+   * catch as a failure, and usage statistics count the two apart.
+   */
+  private _setupAborted = false
+
   @override
   public async onInit(): Promise<void> {
+    // The Footer is not on a site that is being set up: the setup starts usage statistics itself.
+    startTelemetry(telemetryInitFromContext(this.context, { isDebug: DEBUG }))
     this.sp = createSpfiInstance(this.context)
     await msgraph.Init(this.context.msGraphClientFactory)
     try {
@@ -150,8 +170,21 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         properties: this.properties
       })
     } catch (error) {
+      trackSetupCheckFailure(error)
       this._renderErrorDialog({ error, showStackAsSubText: true })
     }
+  }
+
+  /**
+   * Gives usage statistics the hub, once its data service is configured: the hub's level is read
+   * through it, and it is asked what kind of site this is. A new site is none of the hub's yet; a
+   * completed setup says what the site has become. Every way into the setup passes the check that
+   * calls this.
+   */
+  private _attachTelemetry(): void {
+    const siteId = this.context.pageContext.site.id.toString()
+    attachTelemetryPortal(this._portalDataService)
+    registerSiteTypeResolver(siteId, () => this._portalDataService.getSiteKind(siteId))
   }
 
   private async _ensureParentProjectPatch(): Promise<void> {
@@ -168,6 +201,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
   /** Loads setup choices, runs provisioning and handles completion or recoverable errors. */
   private async _initializeSetup(taskParams: Tasks.IBaseTaskParams) {
+    this._setupAborted = false
     try {
       await SPDataAdapter.configure(this.context, {
         siteId: this.context.pageContext.site.id.toString(),
@@ -223,6 +257,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       }
 
       await deleteCustomizer(this)
+      // Counted after the last step that can fail, so a run is completed or failed, never both.
+      // From here on the site is what the setup made it, whatever the hub said of it before.
+      const variant = setupVariantFrom(this.properties.forceTemplate)
+      setSiteType(
+        this.context.pageContext.site.id.toString(),
+        siteTypeAfterSetup(data.selectedTemplate, variant)
+      )
+      trackUsage('ProjectSetup', 'setup.completed', variant)
       if (!this.properties.skipReload) {
         this._renderProgressDialog({
           progressIndicator: {
@@ -238,11 +280,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           isComplete: true,
           warning: this._getCompletionWarning(data),
           onDismiss: () => {
+            // What the setup counted is sent before the page goes: leaving may give no time.
+            flushTelemetry({ urgent: true })
             window.location.href = this.context.pageContext.web.absoluteUrl
           }
         })
       }
     } catch (error) {
+      trackSetupStopped(this._setupAborted, error)
       if (this._taskProgress?.some((task) => task.status === 'error')) {
         this._renderProgressDialog({
           progressIndicator: {
@@ -458,6 +503,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             resolve(state)
           },
           onDismiss: () => {
+            this._setupAborted = true
             this._unmount(placeholder)
             reject(
               // The user closed the wizard: information, not an error.
@@ -692,7 +738,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       }
       return templates
     } catch (error) {
-      throw new Error(`Error getting templates: ${error.message}`)
+      throw errorWithCause(`Error getting templates: ${error.message}`, error)
     }
   }
 
@@ -764,7 +810,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       throw new ProjectSetupError(
         '_fetchData',
         strings.GetSetupDataErrorMessage,
-        strings.GetSetupDataErrorStack + error.message
+        strings.GetSetupDataErrorStack + error.message,
+        'error',
+        error
       )
     }
   }
@@ -805,6 +853,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     this._portalDataService = await new PortalDataService().configure({
       spfxContext: this.context
     })
+    this._attachTelemetry()
 
     const members = await msgraph.Get<any[]>(`groups/${groupId}/members`)
     if (!members.some(({ mail }) => mail === this.context.pageContext.user.email)) {

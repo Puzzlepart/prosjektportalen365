@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { CatalogService } from 'services'
 
 /** Preview text and whether it can be syntax-highlighted as JSON. */
@@ -25,6 +26,8 @@ export function usePackageFilePreview(url?: string) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
   const [copied, setCopied] = useState(false)
+  // A failed load the admin is told about is counted for usage statistics, by its error code.
+  const telemetry = useTelemetry()
 
   useEffect(() => {
     let cancelled = false
@@ -39,8 +42,9 @@ export function usePackageFilePreview(url?: string) {
         setContent(formatJson(text))
         setLoading(false)
       })
-      .catch(() => {
+      .catch((error) => {
         if (cancelled) return
+        telemetry.trackError(error)
         setError(true)
         setLoading(false)
       })

@@ -1,8 +1,9 @@
 import { createHash } from 'crypto'
-import { ITelemetryBatch } from '../contract'
+import { ITelemetryBatch, USAGE_TELEMETRY_URL } from '../contract'
 import { CATALOG_TELEMETRY_KEY, USAGE_STATISTICS_LEVEL_KEY } from '../gate'
 import { getTelemetryStore, ITelemetryPortal, ITelemetryStore, TELEMETRY_STORE_KEY } from '../store'
 import { ITelemetryInit, startTelemetry } from '../track'
+import { TelemetryUsageSnapshot } from '../validate'
 
 /**
  * What the telemetry tests share: a page on a hub and on a project of it, a stand-in for the hub's
@@ -11,8 +12,10 @@ import { ITelemetryInit, startTelemetry } from '../track'
  *
  * The solutions' tests of what a component counts use it too, by path
  * (`pp365-shared-library/lib/telemetry/__fixtures__/testFixtures`): `startTestTelemetry` before
- * each test (or `clearTestTelemetry`, for a web part that starts telemetry itself), and
- * `countedTelemetry` to read back what was counted.
+ * each test (or `clearTestTelemetry`, for a web part or an extension that starts telemetry
+ * itself, on a context with the parts `spfxTestContext` gives), and `countedTelemetry` to read back
+ * what was counted. A test of what is sent (the Footer's heartbeat) takes the test bed, and reads
+ * its `batches`.
  *
  * It calls Jest, so it lives in `__fixtures__`: the folder is left out of the coverage figures and
  * of the published package (`.npmignore`).
@@ -22,6 +25,7 @@ export const TENANT_ID = '9a5c0f3e-1b2d-4c6e-8f70-1a2b3c4d5e6f'
 export const HUB_URL = 'https://contoso.sharepoint.com/sites/prosjektportalen'
 export const HUB_SITE_ID = '5c7d2f6a-3b1e-4d8c-9a0f-6e2b1c4d7f80'
 export const PROJECT_SITE_ID = 'a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d'
+export const PROJECT_URL = 'https://contoso.sharepoint.com/sites/frisbee'
 export const OTHER_HUB_SITE_ID = 'd4e5f6a7-b8c9-4d0e-9f1a-2b3c4d5e6f70'
 export const OTHER_HUB_URL = 'https://contoso.sharepoint.com/sites/annenportal'
 
@@ -61,18 +65,76 @@ export function settingsMap(level?: string, catalog: string | false = '1'): Map<
   return settings
 }
 
-/** A stand-in for the hub's `PortalDataService`, whose `getGlobalSettings` resolves to the map. */
+/** The hub's installation facts the stand-in portal's `getUsageSnapshot` resolves to. */
+export const HUB_SNAPSHOT: TelemetryUsageSnapshot = {
+  channel: 'main',
+  templateVersion: '1.15.0',
+  projects: 12,
+  programs: 2,
+  parentProjects: 3
+}
+
+/**
+ * The stand-in for the hub's `PortalDataService`: the reads telemetry makes through it, as mocks
+ * a test may give any answer.
+ */
+export type HubPortalStandIn = Pick<ITelemetryPortal, 'isAvailable' | 'hubSiteId' | 'url'> & {
+  getGlobalSettings: jest.Mock
+  getUsageSnapshot: jest.Mock
+  /** Not read by telemetry itself: a bundle registers it as a site type resolver. */
+  getSiteKind: jest.Mock
+}
+
+/**
+ * A stand-in for the hub's `PortalDataService`: `getGlobalSettings` resolves to the map,
+ * `getUsageSnapshot` to `HUB_SNAPSHOT` and `getSiteKind` to `project`.
+ */
 export function hubPortal(
   settings: Map<string, string> = settingsMap('2'),
-  overrides: Partial<ITelemetryPortal> = {}
-): ITelemetryPortal & { getGlobalSettings: jest.Mock } {
+  overrides: Partial<HubPortalStandIn> = {}
+): HubPortalStandIn {
   return {
     isAvailable: true,
     hubSiteId: HUB_SITE_ID,
     url: HUB_URL,
     getGlobalSettings: jest.fn(() => Promise.resolve(settings)),
+    getUsageSnapshot: jest.fn(() => Promise.resolve({ ...HUB_SNAPSHOT })),
+    getSiteKind: jest.fn(() => Promise.resolve('project')),
     ...overrides
-  } as ITelemetryPortal & { getGlobalSettings: jest.Mock }
+  } as HubPortalStandIn
+}
+
+/** The page an SPFx component's context is made for in a test. */
+export interface ISpfxTestContextOptions {
+  /** Which site the page is on: the hub (the default) or a project of it */
+  page?: 'hub' | 'project'
+  /** The component's alias in its manifest; the Footer's by default */
+  alias?: string
+  /** Whether the user has the permission the component asks the web for, such as managing it */
+  canManageWeb?: boolean
+}
+
+/**
+ * The parts of an SPFx component's context that telemetry reads (`telemetryInitFromContext`), for
+ * a page on the hub or on a project of it, with what the Footer reads beside them: the web's
+ * language (Norwegian Bokmål) and the user's permissions on the web. A test of a web part or an
+ * extension that starts telemetry in its own `onInit` spreads them into the context its fixtures
+ * build: on a context without a site id and a hub id that are GUIDs, nothing is counted.
+ *
+ * @param options The page, the component's alias and the user's permission
+ */
+export function spfxTestContext(options: ISpfxTestContextOptions = {}) {
+  const { page = 'hub', alias = 'Footer', canManageWeb = false } = options
+  const siteId = page === 'hub' ? HUB_SITE_ID : PROJECT_SITE_ID
+  const absoluteUrl = page === 'hub' ? HUB_URL : PROJECT_URL
+  return {
+    pageContext: {
+      web: { absoluteUrl, language: 1044, permissions: { hasPermission: () => canManageWeb } },
+      site: { absoluteUrl, id: { toString: () => siteId } },
+      legacyPageContext: { aadTenantId: TENANT_ID, siteId: `{${siteId}}`, hubSiteId: HUB_SITE_ID }
+    },
+    manifest: { alias, version: '1.15.0' }
+  }
 }
 
 /** Lets the promises telemetry started (the settings read, a site type, a site hash) settle. */
@@ -192,6 +254,8 @@ export interface ITelemetryTestBed {
   show(): void
   /** Leaves the page: `pagehide`. */
   leave(): void
+  /** Moves the window to another page, as `navigateTestPage` does, until the test ends. */
+  navigate(path: string): void
   /** Replaces the digest and the batch ids of the window's `crypto`. */
   stubCrypto(stub: { digest?: (text: string) => number[]; randomUUID?: () => string }): void
   /** Removes `crypto.subtle`, as on a page that is not served over https. */
@@ -200,13 +264,25 @@ export interface ITelemetryTestBed {
   setNavigator(name: string, value: unknown): void
   /**
    * Puts the window back as it was: no store, none of telemetry's listeners, the real clock and
-   * `crypto`. Listeners other code registered meanwhile are left alone.
+   * `crypto`, and the address it had. Listeners other code registered meanwhile are left alone.
    */
   restore(): void
 }
 
 /** The third argument of `addEventListener` and `removeEventListener`. */
 type ListenerOptions = boolean | AddEventListenerOptions | undefined
+
+/**
+ * Moves the window to another address of its origin without loading anything, as SharePoint's
+ * navigation between pages does. Telemetry tells one page from the next by the path of the
+ * address (`trackPageView`). A test that navigates without the test bed puts the address back
+ * itself.
+ *
+ * @param path The path of the page, such as `/sites/frisbee/SitePages/Home.aspx`
+ */
+export function navigateTestPage(path: string): void {
+  window.history.pushState({}, '', path)
+}
 
 /**
  * Gives a test an empty window and control of its clock, `fetch`, `crypto` and events. Call it in
@@ -221,6 +297,7 @@ export function telemetryTestBed(): ITelemetryTestBed {
     [EventTarget, string, EventListenerOrEventListenerObject, ListenerOptions]
   > = []
   const cryptoDescriptor = Object.getOwnPropertyDescriptor(scope, 'crypto')
+  const { pathname, search, hash } = window.location
   const navigatorNames: string[] = []
   let digest = fakeDigest
   const crypto = {
@@ -267,7 +344,11 @@ export function telemetryTestBed(): ITelemetryTestBed {
 
   return {
     fetch,
-    batches: () => fetch.mock.calls.map(([, options]) => JSON.parse(options.body as string)),
+    // Only what went to the usage endpoint: a component under test may call `fetch` itself.
+    batches: () =>
+      fetch.mock.calls
+        .filter(([url]) => url === USAGE_TELEMETRY_URL)
+        .map(([, options]) => JSON.parse(options.body as string)),
     advance: (milliseconds) => {
       now += milliseconds
     },
@@ -276,6 +357,7 @@ export function telemetryTestBed(): ITelemetryTestBed {
     leave: () => {
       window.dispatchEvent(new Event('pagehide'))
     },
+    navigate: navigateTestPage,
     stubCrypto: (stub) => {
       if (stub.digest) digest = stub.digest
       if (stub.randomUUID) crypto.randomUUID.mockImplementation(stub.randomUUID)
@@ -297,6 +379,7 @@ export function telemetryTestBed(): ITelemetryTestBed {
       delete scope.crypto
       if (cryptoDescriptor) Object.defineProperty(scope, 'crypto', cryptoDescriptor)
       delete scope[TELEMETRY_STORE_KEY]
+      navigateTestPage(`${pathname}${search}${hash}`)
       jest.restoreAllMocks()
       window.sessionStorage.clear()
     }

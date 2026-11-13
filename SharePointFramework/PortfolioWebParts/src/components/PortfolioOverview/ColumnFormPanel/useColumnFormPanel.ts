@@ -2,6 +2,7 @@ import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import { SPProjectColumnItem, format } from 'pp365-shared-library'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { useContext, useState } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import { COLUMN_DELETED, COLUMN_FORM_PANEL_ON_SAVED, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
@@ -23,6 +24,18 @@ export function useColumnFormPanel() {
   // permission. A user whose menu was enabled but who lacks that permission gets a rejection here,
   // and must be told rather than left looking at a panel that did nothing.
   const [saveError, setSaveError] = useState<Error>(null)
+  const telemetry = useTelemetry()
+
+  /**
+   * Tells the user that the list refused a save or a delete, and counts the refusal for usage
+   * statistics, once, by the error's code.
+   *
+   * @param error What the list answered, or the error made for a delete it refused
+   */
+  const onSaveFailed = (error: Error) => {
+    telemetry.trackError(error)
+    setSaveError(error)
+  }
 
   /**
    * The column of the list that already shows the managed property given for a new column. Two
@@ -142,7 +155,7 @@ export function useColumnFormPanel() {
         )
       }
     } catch (error) {
-      setSaveError(error)
+      onSaveFailed(error)
       return
     }
     context.dispatch(
@@ -169,11 +182,11 @@ export function useColumnFormPanel() {
         context.state.columnForm.column.id
       )
     } catch (error) {
-      setSaveError(error)
+      onSaveFailed(error)
       return
     }
     if (!isDeleted) {
-      setSaveError(new Error(strings.ColumnDeleteErrorText))
+      onSaveFailed(new Error(strings.ColumnDeleteErrorText))
       return
     }
     context.dispatch(

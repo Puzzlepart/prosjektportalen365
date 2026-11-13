@@ -89,6 +89,11 @@ import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testi
 import userEvent from '@testing-library/user-event'
 import strings from 'ProjectExtensionsStrings'
 import { format } from 'pp365-shared-library'
+import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
+import {
+  countedTelemetry,
+  startTestTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import * as React from 'react'
 import { RiskActionFieldCustomizerContext } from '../../extensions/riskAction/context'
 import { RiskAction } from './RiskAction'
@@ -124,7 +129,13 @@ const adapter = {
   )
 }
 
-/** The risk action cell of the risk with `fieldValue` and, when it uses Planner, its tasks. */
+/** What Planner or SharePoint fails with when it answers with `status`. */
+const httpError = (message: string, status: number) => Object.assign(new Error(message), { status })
+
+/**
+ * The risk action cell of the risk with `fieldValue` and, when it uses Planner, its tasks, under
+ * the field customizer's alias for usage statistics, as the customizer renders it.
+ */
 function renderRiskAction(
   fieldValue: string,
   plannerTasks?: any[],
@@ -142,13 +153,15 @@ function renderRiskAction(
       : undefined
   }
   render(
-    <AriaLiveAnnouncer>
-      <RiskActionFieldCustomizerContext.Provider
-        value={{ dataAdapter: adapter as any, itemContext: itemContext as any }}
-      >
-        <RiskAction />
-      </RiskActionFieldCustomizerContext.Provider>
-    </AriaLiveAnnouncer>
+    <TelemetryProvider component='RiskActionPlanner'>
+      <AriaLiveAnnouncer>
+        <RiskActionFieldCustomizerContext.Provider
+          value={{ dataAdapter: adapter as any, itemContext: itemContext as any }}
+        >
+          <RiskAction />
+        </RiskActionFieldCustomizerContext.Provider>
+      </AriaLiveAnnouncer>
+    </TelemetryProvider>
   )
   return itemContext
 }
@@ -189,6 +202,8 @@ async function searchResponsible(panel: HTMLElement, name: string) {
 beforeEach(() => {
   jest.clearAllMocks()
   adapter.clientPeoplePickerSearchUser.mockImplementation(() => Promise.resolve([]))
+  // Usage statistics are the real ones, counting in the window's memory from nothing.
+  startTestTelemetry()
 })
 
 afterEach(async () => {
@@ -356,10 +371,14 @@ describe('RiskAction', () => {
 
   it('says when the tasks are synchronised, and when they could not be (WCAG 4.1.3)', async () => {
     const itemContext = renderRiskAction('', PLANNER_TASKS)
-    adapter.syncTasks.mockImplementationOnce(() => Promise.reject(new Error('Planner svarte ikke')))
+    adapter.syncTasks.mockImplementationOnce(() =>
+      Promise.reject(httpError('Planner svarte ikke', 503))
+    )
     fireEvent.click(screen.getByText(strings.RiskActionFieldValueAdminButtonText))
     fireEvent.click(screen.getByText(strings.NewRiskActionPanelUpdateTaskStatus))
     expect(await screen.findByText(strings.RiskActionSyncFailed)).toBeInTheDocument()
+    // Counted once, by the status Planner answered with; the text stays on the page.
+    expect(countedTelemetry().errors).toEqual({ 'RiskActionPlanner server_error 503': 1 })
     // Closed and opened again, the popover starts clean: the failure belonged to that attempt.
     fireEvent.click(screen.getByText(strings.RiskActionFieldValueAdminButtonText))
     await waitFor(() => expect(screen.queryByText(strings.RiskActionSyncFailed)).toBeNull())
@@ -368,6 +387,7 @@ describe('RiskAction', () => {
     adapter.syncTasks.mockImplementationOnce(() => Promise.resolve({ ...itemContext }))
     fireEvent.click(screen.getByText(strings.NewRiskActionPanelUpdateTaskStatus))
     await waitFor(() => expect(announced()).toContain(strings.RiskActionSyncDone))
+    expect(countedTelemetry().errors).toEqual({ 'RiskActionPlanner server_error 503': 1 })
   })
 
   it('says when an action is added, and shows why when it is not (WCAG 3.3.1, 4.1.3)', async () => {
@@ -377,12 +397,23 @@ describe('RiskAction', () => {
     const title = within(panel).getAllByRole('textbox')[0]
     fireEvent.change(title, { target: { value: 'Første' } })
     fireEvent.click(within(panel).getByRole('switch'))
-    adapter.addTask.mockImplementationOnce(() => Promise.reject(new Error('Ingen tilgang')))
+    adapter.addTask.mockImplementationOnce(() => Promise.reject(httpError('Ingen tilgang', 403)))
     fireEvent.click(button(strings.SaveButtonLabel))
     expect(await within(panel).findByText(strings.NewRiskActionSaveFailed)).toBeInTheDocument()
     expect(within(panel).getByText('Ingen tilgang')).toBeInTheDocument()
+    // The save that failed is counted by its status, and no action is counted as added.
+    expect(countedTelemetry()).toEqual({
+      usage: {},
+      errors: { 'RiskActionPlanner permission_denied 403': 1 },
+      timings: {}
+    })
     fireEvent.click(button(strings.SaveButtonLabel))
     await waitFor(() => expect(announced()).toContain(format(strings.NewRiskActionSaved, 'Første')))
+    expect(countedTelemetry()).toEqual({
+      usage: { 'RiskActionPlanner riskAction.created': 1 },
+      errors: { 'RiskActionPlanner permission_denied 403': 1 },
+      timings: {}
+    })
   })
 
   it('starts clean when the panel is opened again after a failed save', async () => {
@@ -560,6 +591,11 @@ describe('RiskAction', () => {
     await waitFor(() =>
       expect(screen.queryByText(format(strings.NewRiskActionPanelTitle, RISK))).toBeNull()
     )
+    expect(countedTelemetry()).toEqual({
+      usage: { 'RiskActionPlanner riskAction.created': 1 },
+      errors: {},
+      timings: {}
+    })
   })
 
   it('says, as the shared people picker does, when no one matches the responsible typed', async () => {
@@ -611,6 +647,35 @@ describe('RiskAction', () => {
     await waitFor(() =>
       expect(screen.queryByText(format(strings.MigrateRiskActionsDialogTitle, RISK))).toBeNull()
     )
+    // Actions that were there already are moved, not added: no new action is counted.
+    expect(countedTelemetry()).toEqual({ usage: {}, errors: {}, timings: {} })
+  })
+
+  it('says in the dialog when the migration fails, with a reason or without, leaves the risk as it was, and counts each failure by its code', async () => {
+    adapter.addTasks
+      .mockImplementationOnce(() => Promise.reject(httpError('Planner svarte ikke', 504)))
+      // Without a reason, as a request that was cut off may fail.
+      .mockImplementationOnce(() => Promise.reject(undefined))
+    renderRiskAction('Ring leverandøren')
+    fireEvent.click(screen.getByText('Ring leverandøren'))
+    fireEvent.click(screen.getByText(strings.NewRiskActionPanelMigrateRiskActions))
+    const create = await screen.findByText(
+      format(strings.MigrateRiskActionsDialogCreatePlannerTasks, 1)
+    )
+    fireEvent.click(create)
+    expect(await screen.findByText(strings.MigrateRiskActionsFailed)).toBeInTheDocument()
+    expect(screen.getByText('Planner svarte ikke')).toBeInTheDocument()
+    // Tried again, the dialog starts clean, and says that it failed though it has no reason to give.
+    fireEvent.click(create)
+    await waitFor(() => expect(screen.queryByText('Planner svarte ikke')).toBeNull())
+    expect(await screen.findByText(strings.MigrateRiskActionsFailed)).toBeInTheDocument()
+    expect(adapter.addTasks).toHaveBeenCalledTimes(2)
+    expect(adapter.updateItem).not.toHaveBeenCalled()
+    expect(countedTelemetry()).toEqual({
+      usage: {},
+      errors: { 'RiskActionPlanner server_error 504': 1, 'RiskActionPlanner unknown': 1 },
+      timings: {}
+    })
   })
 
   it("names the migrate dialog's close button for screen readers, as the other dialogs do", async () => {

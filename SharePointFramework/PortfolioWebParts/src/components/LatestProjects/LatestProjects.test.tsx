@@ -2,6 +2,11 @@ import { render, screen, within } from '@testing-library/react'
 import { axeComponent } from 'pp365-jest-config/lib/axe'
 import userEvent from '@testing-library/user-event'
 import strings from 'PortfolioWebPartsStrings'
+import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
+import {
+  countedTelemetry,
+  startTestTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import * as React from 'react'
 import { LatestProjects } from './LatestProjects'
 
@@ -21,16 +26,20 @@ function renderLatest(result: any[] | Error, props: Record<string, any> = {}) {
     )
   }
   render(
-    <LatestProjects
-      title='Siste prosjekter'
-      dataAdapter={dataAdapter as any}
-      rowLimit={2}
-      maxRowLimit={10}
-      {...props}
-    />
+    <TelemetryProvider component='LatestProjectsWebPart'>
+      <LatestProjects
+        title='Siste prosjekter'
+        dataAdapter={dataAdapter as any}
+        rowLimit={2}
+        maxRowLimit={10}
+        {...props}
+      />
+    </TelemetryProvider>
   )
   return dataAdapter
 }
+
+beforeEach(() => startTestTelemetry())
 
 describe('LatestProjects', () => {
   it('asks the adapter for the newest sites and lists them up to the row limit, each as a link', async () => {
@@ -54,6 +63,21 @@ describe('LatestProjects', () => {
     expect(screen.queryByRole('link', { name: 'Charlie' })).toBeNull()
   })
 
+  it('counts each press of "view more" and "view less" as a toggle, and nothing for the list itself', async () => {
+    const user = userEvent.setup()
+    renderLatest([site('Alfa'), site('Bravo'), site('Charlie')])
+    await screen.findByRole('link', { name: 'Alfa' })
+    expect(countedTelemetry()).toEqual({ usage: {}, errors: {}, timings: {} })
+    await user.click(screen.getByRole('button', { name: strings.ViewMoreText }))
+    expect(countedTelemetry().usage).toEqual({ 'LatestProjectsWebPart viewAll.toggled': 1 })
+    await user.click(screen.getByRole('button', { name: strings.ViewLessText }))
+    expect(countedTelemetry()).toEqual({
+      usage: { 'LatestProjectsWebPart viewAll.toggled': 2 },
+      errors: {},
+      timings: {}
+    })
+  })
+
   it('has no "view more" when the projects fit the limit', async () => {
     renderLatest([site('Alfa')])
     await screen.findByRole('link', { name: 'Alfa' })
@@ -65,9 +89,14 @@ describe('LatestProjects', () => {
     expect(await screen.findByText(strings.NoProjectsFoundTitle)).toBeInTheDocument()
   })
 
-  it('tells the same when the fetch fails', async () => {
-    renderLatest(new Error('Søket feilet'))
+  it('tells the same when the fetch fails, and counts the failure once by its error code', async () => {
+    renderLatest(Object.assign(new Error('Søket feilet'), { status: 500 }))
     expect(await screen.findByText(strings.NoProjectsFoundTitle)).toBeInTheDocument()
+    expect(countedTelemetry()).toEqual({
+      usage: {},
+      errors: { 'LatestProjectsWebPart server_error 500': 1 },
+      timings: {}
+    })
   })
 
   it('lists the projects, each read once, and says whether more are shown (WCAG 1.3.1, 4.1.2)', async () => {

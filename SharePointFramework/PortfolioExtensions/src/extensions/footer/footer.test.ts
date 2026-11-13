@@ -1,18 +1,21 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
 // Babel, so mocks are not hoisted. The data adapter hands out the test's portal data service, and
-// the footer component (tested on its own) records the props the customizer renders it with and
-// how many footers are mounted (in a layout effect, which runs as react-dom's `render` returns).
+// the footer component (tested on its own) records the props the customizer renders it with, the
+// alias its components would count for in usage statistics, and how many footers are mounted (in
+// a layout effect, which runs as react-dom's `render` returns).
 const adapter = {
   configure: jest.fn(() => Promise.resolve()),
   portalDataService: undefined as any,
   checkProjectAdminPermissions: jest.fn(() => Promise.resolve(true))
 }
 jest.mock('../../data/SPDataAdapter', () => ({ __esModule: true, default: adapter }))
-const rendered: { props?: any; mounted: number } = { mounted: 0 }
+const rendered: { props?: any; alias?: string; mounted: number } = { mounted: 0 }
 jest.mock('components/Footer', () => ({
   Footer: (props: any) => {
-    const { useLayoutEffect } = jest.requireActual('react')
+    const { useContext, useLayoutEffect } = jest.requireActual('react')
+    const { TelemetryContext } = jest.requireActual('pp365-shared-library/lib/telemetry')
     rendered.props = props
+    rendered.alias = useContext(TelemetryContext)
     useLayoutEffect(() => {
       rendered.mounted++
       return () => {
@@ -26,8 +29,20 @@ jest.mock('components/Footer', () => ({
 import { PlaceholderName } from '@microsoft/sp-application-base'
 import { act } from '@testing-library/react'
 import { ProjectAdminPermission } from 'pp365-shared-library'
+import {
+  countedTelemetry,
+  HUB_SITE_ID,
+  hubPortal,
+  ITelemetryTestBed,
+  PROJECT_SITE_ID,
+  settle,
+  spfxTestContext,
+  telemetryStore,
+  telemetryTestBed
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import resource from 'SharedResources'
 import FooterApplicationCustomizer from '.'
+import { manifestAlias } from '../testFixtures'
 import { HelpContentModel, InstallationEntry } from './types'
 import { PLACEHOLDER_TRACE_KEY, PLACEHOLDER_TRACE_PREFIX } from './placeholderTrace'
 
@@ -39,7 +54,14 @@ const INSTALL = {
   InstallChannel: 'test'
 }
 
-/** A portal data service stand-in with the lists and calls the customizer reads. */
+/** Answers a read with `data`, or rejects it with `error` when the test gave one. */
+const answer = <T>(data: T, error?: unknown): Promise<T> =>
+  error ? Promise.reject(error) : Promise.resolve(data)
+
+/**
+ * A portal data service stand-in with the lists and calls the customizer reads. A read named in
+ * `failing` rejects with that error.
+ */
 function portalDataService({
   isAvailable = true,
   settings = { ShowFooter: '1' } as Record<string, string>,
@@ -48,15 +70,16 @@ function portalDataService({
   hubProjects = [] as any[],
   project = null as any,
   helpItems = [] as any[],
-  deniedLists = [] as string[]
+  deniedLists = [] as string[],
+  failing = {} as { installationLog?: any; links?: any; projects?: any; helpContent?: any }
 } = {}) {
   const lists = {
     [resource.Lists_InstallationLog_Title]: {
-      items: { orderBy: () => ({ top: () => () => Promise.resolve([INSTALL]) }) }
+      items: { orderBy: () => ({ top: () => () => answer([INSTALL], failing.installationLog) }) }
     },
-    [resource.Lists_Links_Title]: { items: () => Promise.resolve(links) },
+    [resource.Lists_Links_Title]: { items: () => answer(links, failing.links) },
     [resource.Lists_Projects_Title]: {
-      items: { select: () => ({ top: () => () => Promise.resolve(hubProjects) }) }
+      items: { select: () => ({ top: () => () => answer(hubProjects, failing.projects) }) }
     }
   }
   const requests: { helpContent?: any } = {}
@@ -72,7 +95,10 @@ function portalDataService({
     isListAvailable: (list: string) => isAvailable && !deniedLists.includes(list),
     getItems: (_list: string, model: any, query: any) => {
       requests.helpContent = query
-      return Promise.resolve(helpItems.map((item) => new model(item, undefined)))
+      return answer(
+        helpItems.map((item) => new model(item, undefined)),
+        failing.helpContent
+      )
     },
     requests
   }
@@ -80,28 +106,45 @@ function portalDataService({
 
 /**
  * The customizer on the hub (or a project site), initialised with `portal`. The placeholder's
- * element is in the document only when `attached`.
+ * element is in the document only when `attached`. With `telemetry` the context is a page as
+ * usage statistics read it, for a user who may manage the web or may not.
  */
 async function footerCustomizer(
   portal = portalDataService(),
-  { onHub = true, attached = false } = {}
+  {
+    onHub = true,
+    attached = false,
+    telemetry = undefined as { canManageWeb?: boolean } | undefined
+  } = {}
 ) {
   adapter.portalDataService = portal
   const navigated: (() => Promise<void>)[] = []
+  // Each subscription as it was added: the observer and the handler, unbound.
+  const subscriptions: [unknown, () => unknown][] = []
   const placeholder = { domElement: document.createElement('div'), dispose: jest.fn() }
   if (attached) document.body.appendChild(placeholder.domElement)
+  const page = telemetry
+    ? spfxTestContext({ page: onHub ? 'hub' : 'project', ...telemetry })
+    : undefined
   const context = {
+    ...page,
     pageContext: {
       web: { absoluteUrl: onHub ? HUB : PROJECT },
+      ...page?.pageContext,
       legacyPageContext: {
         siteId: onHub ? '{hub-1}' : '{site-2}',
         hubSiteId: 'hub-1',
+        ...page?.pageContext.legacyPageContext,
         isSiteAdmin: true
       }
     },
     application: {
       navigatedEvent: {
-        add: (observer: any, handler: () => Promise<void>) => navigated.push(handler.bind(observer))
+        add: (observer: any, handler: () => Promise<void>) => {
+          subscriptions.push([observer, handler])
+          navigated.push(handler.bind(observer))
+        },
+        remove: jest.fn()
       }
     },
     placeholderProvider: {
@@ -124,7 +167,7 @@ async function footerCustomizer(
       for (const handler of navigated) await handler()
     })
   }
-  return { context, placeholder, navigate }
+  return { context, placeholder, navigate, customizer, subscriptions }
 }
 
 /** Answers `fetch` with `body` (as JSON or text), or with a failed response. */
@@ -142,6 +185,7 @@ const originalFetch = global.fetch
 
 beforeEach(() => {
   rendered.props = undefined
+  rendered.alias = undefined
   rendered.mounted = 0
   adapter.checkProjectAdminPermissions.mockImplementation(() => Promise.resolve(true))
 })
@@ -457,6 +501,230 @@ describe('FooterApplicationCustomizer', () => {
       expect(help.map(({ title }) => title)).toEqual(['Forsiden'])
     }
   )
+})
+
+/**
+ * What the footer does for usage statistics: it starts them on every page of a hub it can reach,
+ * whether or not it shows; counts each page once; sends the hub's heartbeat for a user who may
+ * manage the hub; and counts the reads it fails. The window's `fetch` is the test bed's, and
+ * records the batches that are sent.
+ */
+describe('FooterApplicationCustomizer, usage statistics', () => {
+  const ALIAS = manifestAlias('footer')
+  const PAGE_VIEW = `${ALIAS} page.viewed`
+  let bed: ITelemetryTestBed
+
+  /**
+   * The hub as usage statistics read it: the footer's stand-in with the hub's id and URL, its
+   * installation facts and what kind of site a site is, from the telemetry fixtures. The footer
+   * shows and the catalog row is `1` unless `settings` say otherwise.
+   */
+  function hubWith(
+    settings: Record<string, string>,
+    options: Parameters<typeof portalDataService>[0] = {}
+  ) {
+    const { hubSiteId, url, getUsageSnapshot, getSiteKind } = hubPortal()
+    const portal = portalDataService({
+      settings: { ShowFooter: '1', CatalogTelemetryEnabled: '1', ...settings },
+      ...options
+    })
+    return { ...portal, hubSiteId, url, getUsageSnapshot, getSiteKind }
+  }
+
+  /** The usage entries sent so far. */
+  const usageSent = () => bed.batches().flatMap((batch) => batch.usage ?? [])
+
+  beforeEach(() => {
+    bed = telemetryTestBed()
+  })
+
+  afterEach(() => bed.restore())
+
+  it.each([
+    ['hidden', '0'],
+    ['showing', '1']
+  ])(
+    'counts the page with the footer %s, once per page, and again on each page it navigates to',
+    async (_, ShowFooter) => {
+      const { navigate } = await footerCustomizer(
+        hubWith({ ShowFooter, UsageStatisticsLevel: '2' }),
+        { telemetry: {} }
+      )
+      expect(Boolean(rendered.props)).toBe(ShowFooter === '1')
+      // A footer that shows is rendered under its alias, so its components count for it.
+      expect(rendered.alias).toBe(ShowFooter === '1' ? ALIAS : undefined)
+      expect(countedTelemetry().usage).toEqual({ [PAGE_VIEW]: 1 })
+      // SharePoint's navigation event for the page it is already on counts nothing more.
+      await navigate()
+      expect(countedTelemetry().usage).toEqual({ [PAGE_VIEW]: 1 })
+      bed.navigate('/sites/prosjektportalen/SitePages/Prosjekter.aspx')
+      await navigate()
+      expect(countedTelemetry().usage).toEqual({ [PAGE_VIEW]: 2 })
+    }
+  )
+
+  it.each([
+    ['hidden', '0', 1],
+    ['showing', '1', 2]
+  ])(
+    'follows the navigation with one subscription of its own with the footer %s, and removes it when it is disposed',
+    async (_, ShowFooter, count) => {
+      const { customizer, subscriptions, context } = await footerCustomizer(
+        hubWith({ ShowFooter, UsageStatisticsLevel: '2' }),
+        { telemetry: {} }
+      )
+      // Its own, and the footer's when it shows: no handler is added twice.
+      expect(subscriptions).toHaveLength(count)
+      expect(new Set(subscriptions.map(([, handler]) => handler)).size).toBe(count)
+      const [observer, handler] = subscriptions[0]
+      expect(observer).toBe(customizer)
+      ;(customizer as any).onDispose()
+      expect(context.application.navigatedEvent.remove).toHaveBeenCalledTimes(1)
+      expect(context.application.navigatedEvent.remove).toHaveBeenCalledWith(customizer, handler)
+    }
+  )
+
+  it.each([
+    ['for a user who may manage the hub, on the hub', true, true, 1],
+    ['not for a user who may not manage the hub', true, false, 0],
+    ['not on a project, for a user who may manage the project', false, true, 0]
+  ])("sends the hub's heartbeat %s", async (_, onHub, canManageWeb, heartbeats) => {
+    const portal = hubWith({ UsageStatisticsLevel: '2' })
+    const { navigate } = await footerCustomizer(portal, { onHub, telemetry: { canManageWeb } })
+    await settle()
+    // Once per page load: a navigation asks for no other.
+    bed.navigate('/sites/prosjektportalen/SitePages/Prosjekter.aspx')
+    await navigate()
+    await settle()
+    bed.leave()
+    expect(bed.batches().filter((batch) => batch.heartbeat)).toHaveLength(heartbeats)
+    expect(portal.getUsageSnapshot).toHaveBeenCalledTimes(heartbeats)
+  })
+
+  it("sends the heartbeat at once, with the hub's facts and language, and alone at Grunnleggende", async () => {
+    await footerCustomizer(hubWith({ UsageStatisticsLevel: '1' }), {
+      telemetry: { canManageWeb: true }
+    })
+    await settle()
+    expect(bed.batches()).toEqual([
+      expect.objectContaining({
+        level: 1,
+        heartbeat: {
+          channel: 'main',
+          templateVersion: '1.15.0',
+          hubLanguage: 'nb-NO',
+          projects: 12,
+          programs: 2,
+          parentProjects: 3,
+          catalog: false
+        }
+      })
+    ])
+    // No page view at this level, and no site.
+    expect(bed.batches()[0]).not.toHaveProperty('usage')
+    expect(bed.batches()[0]).not.toHaveProperty('sites')
+  })
+
+  it.each([
+    ['usage statistics are off', { UsageStatisticsLevel: '0' }],
+    ['the hub has no level row', {}],
+    ['the catalog row is 0', { UsageStatisticsLevel: '3', CatalogTelemetryEnabled: '0' }]
+  ])('counts nothing and sends nothing when %s', async (_, settings) => {
+    const portal = hubWith(settings)
+    const { navigate } = await footerCustomizer(portal, { telemetry: { canManageWeb: true } })
+    await settle()
+    await navigate()
+    bed.leave()
+    expect(countedTelemetry().usage).toEqual({})
+    expect(portal.getUsageSnapshot).not.toHaveBeenCalled()
+    expect(bed.fetch).not.toHaveBeenCalled()
+  })
+
+  it('starts nothing and sends nothing when the hub is out of reach', async () => {
+    const portal = hubWith({ UsageStatisticsLevel: '3' }, { isAvailable: false })
+    const { navigate, subscriptions } = await footerCustomizer(portal, {
+      telemetry: { canManageWeb: true }
+    })
+    await settle()
+    await navigate()
+    bed.leave()
+    expect(telemetryStore()).toBeUndefined()
+    expect(subscriptions).toEqual([])
+    expect(portal.getUsageSnapshot).not.toHaveBeenCalled()
+    expect(bed.fetch).not.toHaveBeenCalled()
+  })
+
+  it('asks the hub what kind of site a project page is on, and sends the page view as that', async () => {
+    const portal = hubWith({ UsageStatisticsLevel: '2' })
+    await footerCustomizer(portal, { onHub: false, telemetry: {} })
+    await settle()
+    await settle()
+    expect(portal.getSiteKind).toHaveBeenCalledTimes(1)
+    expect(portal.getSiteKind).toHaveBeenCalledWith(PROJECT_SITE_ID)
+    bed.leave()
+    expect(usageSent()).toEqual([{ c: ALIAS, e: 'page.viewed', s: 'project', n: 1 }])
+    // The ids of the site and the hub stay in the browser.
+    expect(JSON.stringify(bed.batches())).not.toContain(PROJECT_SITE_ID)
+    expect(JSON.stringify(bed.batches())).not.toContain(HUB_SITE_ID)
+  })
+
+  it('follows a level the hub has raised since it started, also after a navigation', async () => {
+    const portal = hubWith({ ShowFooter: '0', UsageStatisticsLevel: '1' })
+    const { navigate } = await footerCustomizer(portal, { telemetry: {} })
+    expect(countedTelemetry().usage).toEqual({})
+    // An hour later the hub is at Standard, and the level is read anew through the hub's service.
+    portal.getGlobalSettings = () =>
+      Promise.resolve(new Map([['UsageStatisticsLevel', '2']]) as Map<string, string>)
+    bed.advance(61 * 60 * 1000)
+    bed.navigate('/sites/prosjektportalen/SitePages/Prosjekter.aspx')
+    await navigate()
+    await settle()
+    // The settings the footer read as it started say 1: handed over again, they would lower it.
+    bed.navigate('/sites/prosjektportalen/SitePages/Ressurser.aspx')
+    await navigate()
+    bed.navigate('/sites/prosjektportalen/SitePages/Gevinster.aspx')
+    await navigate()
+    expect(countedTelemetry().usage).toEqual({ [PAGE_VIEW]: 2 })
+  })
+
+  const denied = Object.assign(new Error('Ingen tilgang'), { status: 403 })
+  const missing = Object.assign(new Error('Listen finnes ikke'), { status: 404 })
+  const failed = Object.assign(new Error('Serverfeil'), { status: 500 })
+
+  it.each([
+    ['the links', { links: denied }, 'loadLinks', 'permission_denied 403'],
+    ['the help of the page', { helpContent: missing }, 'loadHelpContent', 'not_found 404'],
+    ['the favourite projects', { projects: failed }, 'loadFavoriteProjects', 'server_error 500']
+  ])('counts a failed read of %s once, by its error code', async (_, failing, load, error) => {
+    jest.spyOn(console, 'warn').mockImplementation(() => undefined)
+    window.history.replaceState({}, '', `/sites/prosjektportalen/SitePages/${load}.aspx`)
+    await footerCustomizer(hubWith({ UsageStatisticsLevel: '3' }, { failing }), {
+      telemetry: {}
+    })
+    expect(countedTelemetry().errors).toEqual({})
+    expect(await rendered.props[load]()).toEqual([])
+    expect(countedTelemetry().errors).toEqual({ [`${ALIAS} ${error}`]: 1 })
+  })
+
+  it('does not count favourites a user may not read: the hub denies Prosjekter by design', async () => {
+    jest.spyOn(console, 'warn').mockImplementation(() => undefined)
+    const failing = { projects: denied }
+    await footerCustomizer(hubWith({ UsageStatisticsLevel: '3' }, { failing }), { telemetry: {} })
+    expect(await rendered.props.loadFavoriteProjects()).toEqual([])
+    expect(countedTelemetry().errors).toEqual({})
+  })
+
+  it('counts a failed read of the installation as the footer starts, at Utvidet only', async () => {
+    const failing = { installationLog: denied }
+    await footerCustomizer(hubWith({ UsageStatisticsLevel: '3' }, { failing }), { telemetry: {} })
+    expect(rendered.props.installEntries).toEqual([])
+    expect(countedTelemetry().errors).toEqual({ [`${ALIAS} permission_denied 403`]: 1 })
+
+    bed.restore()
+    bed = telemetryTestBed()
+    await footerCustomizer(hubWith({ UsageStatisticsLevel: '2' }, { failing }), { telemetry: {} })
+    expect(countedTelemetry().errors).toEqual({})
+  })
 })
 
 describe('InstallationEntry', () => {

@@ -26,6 +26,8 @@ import {
   buildAggregatedSiteIdQueries,
   DataSource,
   DataSourceService,
+  errorWithCause,
+  errorWithStatus,
   expandRowsPerStatusSeries,
   getAllItems,
   getOrFetchProjectsCache,
@@ -158,8 +160,11 @@ export class SPDataAdapter
   ): Promise<IPortfolioAggregationConfiguration> {
     try {
       if (!this.portalDataService?.web) {
-        throw new Error(
-          '(SPDataAdapter) (getAggregatedListConfig) Portal data service is not initialized (hub site unreachable).'
+        // With the status of the answer that took the hub out of reach, where the service kept
+        // one: usage statistics count the failure by it, as denied permission for a 401 or 403.
+        throw errorWithStatus(
+          '(SPDataAdapter) (getAggregatedListConfig) Portal data service is not initialized (hub site unreachable).',
+          this.portalDataService?.unavailableStatus
         )
       }
       const columns = await this.portalDataService.fetchProjectContentColumns(
@@ -929,7 +934,10 @@ export class SPDataAdapter
   ): Promise<any[]> {
     let items: any[]
     if (!this.dataSourceService) {
-      throw new Error(format(strings.DataSourceError, dataSourceName))
+      throw errorWithStatus(
+        format(strings.DataSourceError, dataSourceName),
+        this.portalDataService?.unavailableStatus
+      )
     }
     const dataSrc = await this.dataSourceService.getByName(dataSourceName)
     if (!dataSrc) throw new Error(format(strings.DataSourceNotFound, dataSourceName))
@@ -949,7 +957,8 @@ export class SPDataAdapter
       }
       return items
     } catch (error) {
-      throw new Error(format(strings.DataSourceError, dataSourceName))
+      // The cause keeps what SharePoint answered, for usage statistics to count the failure by.
+      throw errorWithCause(format(strings.DataSourceError, dataSourceName), error)
     }
   }
 
@@ -961,11 +970,14 @@ export class SPDataAdapter
   ): Promise<DataSource[]> {
     try {
       if (!this.dataSourceService) {
-        throw new Error(format(strings.DataSourceCategoryError, category))
+        throw errorWithStatus(
+          format(strings.DataSourceCategoryError, category),
+          this.portalDataService?.unavailableStatus
+        )
       }
       return this.dataSourceService.getByCategory(category, level, columns)
     } catch (error) {
-      throw new Error(format(strings.DataSourceCategoryError, category))
+      throw errorWithCause(format(strings.DataSourceCategoryError, category), error)
     }
   }
 

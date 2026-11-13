@@ -1,15 +1,18 @@
 import { DataSource, SPDataSourceItem } from 'pp365-shared-library'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { usePortfolioAggregationContext } from '../context'
 import { SET_VIEW_FORM_PANEL } from '../reducer'
 import { useEditableView } from './useEditableView'
 import { useId } from '@fluentui/react-components'
 
 /**
- * Validate and save aggregation data-source views and manage editor dismissal.
+ * Validate and save aggregation data-source views and manage editor dismissal. A save the list
+ * refuses is counted for usage statistics, once, by its error code.
  */
 export function useViewFormPanel() {
   const context = usePortfolioAggregationContext()
   const { view, setView, isEditing } = useEditableView()
+  const telemetry = useTelemetry()
 
   /**
    * Dismisses the form panel by dispatching the `SET_VIEW_FORM_PANEL` action.
@@ -71,6 +74,8 @@ export function useViewFormPanel() {
         )
       }
     } catch (error) {
+      // Counted by what the list answered: the error thrown on keeps only its text.
+      telemetry.trackError(error)
       throw new Error(error)
     }
   }

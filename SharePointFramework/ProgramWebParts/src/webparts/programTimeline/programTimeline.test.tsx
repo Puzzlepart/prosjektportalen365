@@ -16,11 +16,27 @@ jest.mock('pp365-shared-library/lib/components/ProjectTimeline', () => ({
 }))
 
 import { act } from '@testing-library/react'
+import {
+  clearTestTelemetry,
+  countedTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import resource from 'SharedResources'
 import ProgramTimelineWebPart from '.'
-import { initWebPart, propertyPaneFields } from '../testFixtures'
+import { initWebPart, manifestAlias, propertyPaneFields, telemetryContext } from '../testFixtures'
+
+beforeEach(() => clearTestTelemetry())
 
 describe('ProgramTimelineWebPart', () => {
+  it('is counted as loaded under the alias of its manifest, with the time its setup took', async () => {
+    const alias = manifestAlias('programTimeline')
+    await initWebPart(ProgramTimelineWebPart, {}, 1, telemetryContext(alias))
+    expect(countedTelemetry()).toEqual({
+      usage: { 'ProgramTimelineWebPart loaded': 1 },
+      errors: {},
+      timings: { 'ProgramTimelineWebPart init': 1 }
+    })
+  })
+
   it('renders the timeline of the program with its properties and the data adapter', async () => {
     const webPart = await initWebPart(ProgramTimelineWebPart, {
       dataSourceName: 'Alle prosjektleveranser'

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import strings from 'PortfolioExtensionsStrings'
 import { format } from 'pp365-shared-library'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { ICatalogPackage, ICompatibilityReport, ICrossReference, PpPkgType } from 'models'
 import {
   CatalogService,
@@ -64,6 +65,9 @@ export function useTemplatePackageCatalog(
   props: ITemplatePackageCatalogProps
 ): ITemplatePackageCatalogContext {
   const { state, setState } = useTemplatePackageCatalogState()
+  // Each failure the catalog tells the admin about is counted once for usage statistics, by its
+  // error code. The catalog's own events (`TelemetryService`) are a separate flow.
+  const telemetry = useTelemetry()
   // Holds the resolver of the in-flight compatibility-conflict prompt, settled
   // by the CompatibilityDialog via resolveCompatibility().
   const conflictResolver = useRef<(proceed: boolean) => void>()
@@ -81,7 +85,7 @@ export function useTemplatePackageCatalog(
       // On a manual retry, drop back to the loading state and clear the old
       // degraded banner while the fetch runs.
       if (reloadToken > 0) setState({ loading: true, degraded: false, error: undefined })
-      const { catalog, degraded, error, fromCache } = await CatalogService.getCatalog(
+      const { catalog, degraded, error, cause, fromCache } = await CatalogService.getCatalog(
         props.catalogUrl
       )
       let crossRef = new Map<string, ICrossReference>()
@@ -104,6 +108,8 @@ export function useTemplatePackageCatalog(
         // Installed version is best-effort — packages stay compatible if unknown.
       }
       if (cancelled) return
+      // The catalog could not be loaded, and the sample is shown with a message saying so.
+      if (degraded) telemetry.trackError(cause)
       setState({ loading: false, catalog, degraded, error, crossRef, installedVersion })
 
       // Stale-while-revalidate: a cached catalog was shown immediately above;
@@ -331,10 +337,12 @@ export function useTemplatePackageCatalog(
               }
       })
     } catch (error) {
+      telemetry.trackError(error)
+      // The error goes along for its code alone; its message stays here, in the notification.
       void TelemetryService.track(props, {
         action,
         status: 'error',
-        errorMessage: error?.message,
+        error,
         packageId: pkg.id,
         packageVersion: pkg.version,
         packageType: pkg.type,
@@ -432,10 +440,11 @@ export function useTemplatePackageCatalog(
             : { intent: result.taxonomySkipped ? 'warning' : 'success', text: publishedText }
       })
     } catch (error) {
+      telemetry.trackError(error)
       void TelemetryService.track(props, {
         action: 'publishCentral',
         status: 'error',
-        errorMessage: error?.message,
+        error,
         packageId: pkg.id,
         packageVersion: pkg.version,
         packageType: pkg.type,
@@ -499,10 +508,11 @@ export function useTemplatePackageCatalog(
         }
       })
     } catch (error) {
+      telemetry.trackError(error)
       void TelemetryService.track(props, {
         action: 'remove',
         status: 'error',
-        errorMessage: error?.message,
+        error,
         packageId: pkg.id,
         packageVersion: pkg.version,
         packageType: pkg.type,

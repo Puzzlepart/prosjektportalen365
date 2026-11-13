@@ -13,17 +13,22 @@ import {
   unmountReact,
   whenHostMenuHasClosed
 } from 'pp365-shared-library'
+import { TelemetryProvider, trackError, trackUsage } from 'pp365-shared-library/lib/telemetry'
 import strings from 'PortfolioExtensionsStrings'
 import React from 'react'
 import resource from 'SharedResources'
 import { TemplatePackageCatalog } from 'components/TemplatePackageCatalog'
 import { featureFlags } from 'services'
 import SPDataAdapter from '../../data/SPDataAdapter'
+import { startCommandSetTelemetry } from '../../helpers/commandSetTelemetry'
 import { ITemplatePackageCatalogCommandProperties } from './types'
 
 declare const DEBUG: boolean
 
 const OPEN_COMMAND = 'OPEN_TEMPLATE_PACKAGE_CATALOG'
+
+/** The command set's alias in its manifest, which usage statistics count it by. */
+const TELEMETRY_COMPONENT = 'TemplatePackageCatalog'
 
 /**
  * ListView Command Set on the Maloppsett list that opens the
@@ -59,11 +64,15 @@ export default class TemplatePackageCatalogCommandSet extends BaseListViewComman
         siteId: this.context.pageContext.site.id.toString(),
         webUrl: this.context.pageContext.web.absoluteUrl
       })
+      // Usage statistics, and with them the gate the catalog's own events ask (`TelemetryService`):
+      // the hub's level is read through the adapter's data service, long before an action ends.
+      startCommandSetTelemetry(this.context, SPDataAdapter.portalDataService)
       this._userAuthorized = await SPDataAdapter.sp.web.currentUserHasPermissions(
         PermissionKind.ManageWeb
       )
       this._isConfigured = true
     } catch (error) {
+      trackError(TELEMETRY_COMPONENT, error)
       Logger.log({
         message: `(TemplatePackageCatalogCommandSet) onInit: failed to configure - ${error?.message}`,
         level: LogLevel.Warning
@@ -108,17 +117,23 @@ export default class TemplatePackageCatalogCommandSet extends BaseListViewComman
     // of Fluent's to give the focus back to: it goes back to the button as it closes (WCAG 2.4.3).
     const opener = document.activeElement as HTMLElement | null
     const placeholder = this._getPlaceholder()
+    // The catalog's own React root: its hooks count for the command set through this provider.
     renderReact(
-      React.createElement(TemplatePackageCatalog, {
-        context: this.context,
-        catalogUrl: this.properties.catalogUrl,
-        userGuideUrl: this.properties.userGuideUrl,
-        featureFlagProvisioning: this.properties.featureFlagProvisioning,
-        telemetryUrl: this.properties.telemetryUrl,
-        onDismiss: () => this._unmount(placeholder, opener)
-      }),
+      React.createElement(
+        TelemetryProvider,
+        { component: TELEMETRY_COMPONENT },
+        React.createElement(TemplatePackageCatalog, {
+          context: this.context,
+          catalogUrl: this.properties.catalogUrl,
+          userGuideUrl: this.properties.userGuideUrl,
+          featureFlagProvisioning: this.properties.featureFlagProvisioning,
+          telemetryUrl: this.properties.telemetryUrl,
+          onDismiss: () => this._unmount(placeholder, opener)
+        })
+      ),
       placeholder
     )
+    trackUsage(TELEMETRY_COMPONENT, 'catalog.opened')
   }
 
   private _getPlaceholder(): HTMLElement {
