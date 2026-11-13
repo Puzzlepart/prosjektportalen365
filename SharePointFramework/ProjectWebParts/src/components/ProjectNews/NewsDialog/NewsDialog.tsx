@@ -21,7 +21,12 @@ import {
 } from '@fluentui/react-components'
 import * as strings from 'ProjectWebPartsStrings'
 import styles from './NewsDialog.module.scss'
-import { getFluentIcon, FieldContainer, UserMessage } from 'pp365-shared-library'
+import {
+  getDropdownClearButtonProps,
+  getFluentIcon,
+  FieldContainer,
+  UserMessage
+} from 'pp365-shared-library'
 import { INewsDialogProps } from './types'
 import { ProjectNewsContext } from '../context'
 import { useNewsDialog } from './useNewsDialog'
@@ -105,6 +110,7 @@ export const NewsDialog: FC<INewsDialogProps> = () => {
                     iconName='ChevronDown'
                   >
                     <Dropdown
+                      clearButton={getDropdownClearButtonProps()}
                       value={
                         templates.find((t) => t.ServerRelativeUrl === selectedTemplate)?.Title ?? ''
                       }

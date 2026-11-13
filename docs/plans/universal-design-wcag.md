@@ -1803,3 +1803,14 @@ itself as `observer` to `add()` is disposed, as the footer does.
   `useTaxonomyPickerAria.test.tsx` (the real v8 picker), `TaxonomyFields.test.tsx`,
   `FieldContainer.test.tsx`, `ChangePhaseDialog.test.tsx`, `ProjectPhases.test.tsx`; the contrast
   theme in `tests/smoke/project.spec.ts`.
+
+### Hand round 6, point 7: the column form's dropdown (2026-11-13)
+
+- **Found** (Puzzlepart/prosjektportalen365-testing#123, in Chrome on the test channel
+  v1.15.0.5b9be04): «Visningsmodus» in «Rediger kolonne», in the portfolio overview and
+  the aggregated overview, held Fluent's clear button named «Clear selection», in English. Fluent
+  renders it in every single-select `Dropdown`, hidden unless `clearable`.
+- **Done.** `getDropdownClearButtonProps()` (shared-library) names it «Fjern valget», on all eight of our
+  dropdowns. A `Combobox`'s clear icon is `aria-hidden`, so `Autocomplete` and the setup's
+  `TemplateSelector`, the two `clearable` ones, had nothing to name. Tests:
+  `getDropdownClearButtonProps.test.tsx` (the real `Dropdown`), `ColumnDataTypeField.test.tsx`.

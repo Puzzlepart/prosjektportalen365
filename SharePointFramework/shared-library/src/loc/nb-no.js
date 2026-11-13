@@ -9,6 +9,7 @@ define([], function () {
       ColumnResizeHandleLabel: 'Bredde på kolonnen {0}',
       ColumnWidthValueText: '{0} piksler',
       ComboboxExpandLabel: 'Vis alternativer',
+      DropdownClearLabel: 'Fjern valget',
       InfoLabelTitle: 'Informasjon om {0}',
       InstrumentGaugeLabel: 'Siste måling {0}, startverdi {1}, målverdi {2}',
       MenuOverflowCount: '+{0} flere elementer',

@@ -9,6 +9,7 @@ define([], function () {
       ColumnResizeHandleLabel: 'Width of the column {0}',
       ColumnWidthValueText: '{0} pixels',
       ComboboxExpandLabel: 'Show options',
+      DropdownClearLabel: 'Clear selection',
       InfoLabelTitle: 'Information about {0}',
       InstrumentGaugeLabel: 'Latest measurement {0}, start value {1}, target value {2}',
       MenuOverflowCount: '+{0} more items',

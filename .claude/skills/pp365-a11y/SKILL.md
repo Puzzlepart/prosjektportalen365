@@ -355,7 +355,10 @@ checked by hand and with which reader and browser: axe finds only part of what W
   from the strings, or null where it has nothing to show. Fluent's `Combobox` names its own
   «Open», in English, and in a `Field` adds nothing of the field: every combobox takes
   `expandIcon={getComboboxExpandIconProps()}` from `pp365-shared-library` («Vis alternativer»).
-  A `Dropdown`'s chevron is inside its button and needs nothing.
+  A `Dropdown`'s chevron is inside its button and needs nothing, but every single-select
+  `Dropdown` renders a clear button named «Clear selection», in English, hidden unless
+  `clearable`: every dropdown takes `clearButton={getDropdownClearButtonProps()}` («Fjern
+  valget»). A `Combobox`'s clear icon is `aria-hidden` and needs nothing.
 - Fluent's `Overflow` measures its container's whole width, padding too: padding on a `TabList`
   kept that many pixels of tabs past the edge (`SectionTabs`). Put the padding on a wrapper.
 - A submenu's trigger inside a `MenuList` is a `MenuItem`; a button there makes the menu one

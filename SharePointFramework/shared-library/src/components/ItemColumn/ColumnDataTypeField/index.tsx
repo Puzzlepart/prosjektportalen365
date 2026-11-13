@@ -2,6 +2,7 @@ import { Dropdown, Option, Switch } from '@fluentui/react-components'
 import strings from 'SharedLibraryStrings'
 import React, { FC } from 'react'
 import { getFluentIconWithFallback } from '../../../icons'
+import { getDropdownClearButtonProps } from '../../../util/getDropdownClearButtonProps'
 import { FieldContainer } from '../../FieldContainer'
 import styles from './ColumnRenderField.module.scss'
 import { DataTypeFields } from './DataTypeFields'
@@ -42,6 +43,7 @@ const ColumnDataTypeFieldContent: FC<IColumnDataTypeFieldProps> = (props) => {
           onOptionSelect={dropdown.onOptionSelect}
           disabled={dropdown.disabled}
           button={selectedOption ? <OptionContent option={selectedOption} /> : undefined}
+          clearButton={getDropdownClearButtonProps()}
         >
           {dropdown.options.map((option) => (
             <Option

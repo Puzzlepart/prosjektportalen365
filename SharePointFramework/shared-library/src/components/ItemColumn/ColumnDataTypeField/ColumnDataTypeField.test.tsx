@@ -40,6 +40,16 @@ describe('ColumnDataTypeField', () => {
     expect(screen.getByText('Hvordan kolonnen vises')).toBeInTheDocument()
   })
 
+  it("names Fluent's clear button in the page's language, not «Clear selection» (Puzzlepart/prosjektportalen365-testing#123)", async () => {
+    render(<Harness defaultSelectedKey='url' />)
+    await screen.findByRole('combobox')
+    // Fluent renders it in every single-select dropdown, hidden while the dropdown is not
+    // clearable, as here.
+    const clearButton = document.querySelector('.fui-Dropdown__clearButton')
+    expect(clearButton).toHaveAttribute('aria-label', strings.Aria.DropdownClearLabel)
+    expect(clearButton).toHaveAttribute('aria-label', 'Fjern valget')
+  })
+
   it('shows the data type selected by default', async () => {
     render(<Harness defaultSelectedKey='url' />)
     expect(await screen.findByRole('combobox')).toHaveTextContent(strings.ColumnRenderOptionUrl)

@@ -16,7 +16,7 @@ import { useCatalogContext } from '../context'
 import { languageLabel } from '../language'
 import { ALL_FILTER, SortKey } from '../types'
 import styles from './CatalogToolbar.module.scss'
-import { format, getSearchBoxDismissProps } from 'pp365-shared-library'
+import { format, getDropdownClearButtonProps, getSearchBoxDismissProps } from 'pp365-shared-library'
 
 /** Provides debounced search, package filters, sorting and list/grid selection. */
 export const CatalogToolbar: FC = () => {
@@ -108,6 +108,7 @@ export const CatalogToolbar: FC = () => {
         <Tooltip content={strings.CatalogFilterTypeTooltip} relationship='description'>
           <Dropdown
             className={styles.dropdown}
+            clearButton={getDropdownClearButtonProps()}
             aria-label={strings.CatalogFilterTypeLabel}
             value={typeValue}
             button={{ children: <span>{typeValue}</span> }}
@@ -125,6 +126,7 @@ export const CatalogToolbar: FC = () => {
         <Tooltip content={strings.CatalogFilterCategoryTooltip} relationship='description'>
           <Dropdown
             className={styles.dropdown}
+            clearButton={getDropdownClearButtonProps()}
             multiselect
             aria-label={strings.CatalogFilterCategoryLabel}
             placeholder={strings.CatalogFilterCategoryLabel}
@@ -151,6 +153,7 @@ export const CatalogToolbar: FC = () => {
         <Tooltip content={strings.CatalogFilterStatusTooltip} relationship='description'>
           <Dropdown
             className={styles.dropdown}
+            clearButton={getDropdownClearButtonProps()}
             aria-label={strings.CatalogFilterStatusLabel}
             value={statusValue}
             button={{ children: <span>{statusValue}</span> }}
@@ -169,6 +172,7 @@ export const CatalogToolbar: FC = () => {
           <Tooltip content={strings.CatalogFilterLanguageTooltip} relationship='description'>
             <Dropdown
               className={styles.dropdown}
+              clearButton={getDropdownClearButtonProps()}
               aria-label={strings.CatalogFilterLanguageLabel}
               value={languageValue}
               button={{ children: <span>{languageValue}</span> }}
@@ -190,6 +194,7 @@ export const CatalogToolbar: FC = () => {
         <Tooltip content={strings.CatalogSortTooltip} relationship='description'>
           <Dropdown
             className={styles.dropdown}
+            clearButton={getDropdownClearButtonProps()}
             aria-label={strings.CatalogSortLabel}
             value={sortValue}
             button={{ children: <span>{sortValue}</span> }}

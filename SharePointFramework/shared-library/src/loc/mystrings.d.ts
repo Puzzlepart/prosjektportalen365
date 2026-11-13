@@ -12,6 +12,7 @@ declare interface ISharedLibraryStrings {
     ColumnResizeHandleLabel: string
     ColumnWidthValueText: string
     ComboboxExpandLabel: string
+    DropdownClearLabel: string
     InfoLabelTitle: string
     InstrumentGaugeLabel: string
     MenuOverflowCount: string

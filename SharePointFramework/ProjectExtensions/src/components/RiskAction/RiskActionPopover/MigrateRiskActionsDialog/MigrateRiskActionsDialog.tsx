@@ -19,7 +19,7 @@ import strings from 'ProjectExtensionsStrings'
 import React, { FC, ReactElement, ReactNode } from 'react'
 import styles from './MigrateRiskActionsDialog.module.scss'
 import { useMigrateRiskActionsDialog } from './useMigrateRiskActionsDialog'
-import { getFluentIcon, format } from 'pp365-shared-library'
+import { getFluentIcon, format, getDropdownClearButtonProps } from 'pp365-shared-library'
 
 /**
  * Converts written risk actions to Planner tasks and reports any refused actions.
@@ -70,6 +70,7 @@ export const MigrateRiskActionsDialog: FC<{ children?: ReactNode }> = (props) =>
                 <Field label={strings.MigrateRiskActionsDialogSeparatorLabel}>
                   <Dropdown
                     disabled={isMigrating}
+                    clearButton={getDropdownClearButtonProps()}
                     defaultValue={separator}
                     defaultSelectedOptions={[separator]}
                     onOptionSelect={(_, data) => setSeparator(data.optionText)}
