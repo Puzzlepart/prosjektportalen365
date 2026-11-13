@@ -53,6 +53,104 @@ export async function siteId(page: Page, siteUrl: string) {
   return ((await response.json()) as { Id: string }).Id
 }
 
+/** A list of a site, as `listWithField` finds it. */
+export interface IList {
+  id: string
+  title: string
+  url: string
+}
+
+/**
+ * The first list of a site that has a field, preferring the titles given: how a project's risk
+ * list and the hub's settings list are found, whatever a tenant named them. The settings list is
+ * hidden (the template hides it from the site contents), so hidden lists are searched when asked
+ * for.
+ */
+export async function listWithField(
+  page: Page,
+  siteUrl: string,
+  internalName: string,
+  preferred: RegExp,
+  includeHidden = false
+): Promise<IList | undefined> {
+  const filter = includeHidden ? 'BaseTemplate eq 100' : 'BaseTemplate eq 100 and Hidden eq false'
+  const response = await restGet(
+    page,
+    `${siteUrl}/_api/web/lists?$filter=${filter}&$select=Id,Title,DefaultViewUrl&$top=200`
+  )
+  if (!response.ok())
+    throw new Error(`Could not list the lists of ${siteUrl}: HTTP ${response.status()}`)
+  const lists = ((await response.json()) as { value: Record<string, string>[] }).value
+  lists.sort((a, b) => Number(preferred.test(b.Title)) - Number(preferred.test(a.Title)))
+  for (const list of lists) {
+    if (await hasField(page, siteUrl, list.Id, internalName)) {
+      return {
+        id: list.Id,
+        title: list.Title,
+        url: `${new URL(siteUrl).origin}${list.DefaultViewUrl}`
+      }
+    }
+  }
+  return undefined
+}
+
+/** Whether a list has a field, by internal name. */
+export async function hasField(
+  page: Page,
+  siteUrl: string,
+  listId: string,
+  internalName: string
+): Promise<boolean> {
+  const response = await restGet(
+    page,
+    `${siteUrl}/_api/web/lists(guid'${listId}')/fields?$filter=InternalName eq '${internalName}'&$select=InternalName`
+  )
+  return response.ok() && ((await response.json()) as { value: unknown[] }).value.length > 0
+}
+
+/**
+ * The hub's global settings as PP365's code reads them (`PortalDataService.getGlobalSettings`):
+ * the enabled rows, by their exact key, a key on two rows taking the one read last. The rows are
+ * read in full and matched here: a `$filter` on the key would also return disabled rows, which the
+ * code never reads. Empty when the hub has no settings list.
+ *
+ * @param page The test's page
+ * @param hubUrl The hub's URL
+ */
+export async function hubSettings(page: Page, hubUrl: string): Promise<Map<string, string>> {
+  const settings = new Map<string, string>()
+  const list = await listWithField(page, hubUrl, 'GtSettingsKey', /innstillinger|settings/i, true)
+  if (!list) return settings
+  const response = await restGet(
+    page,
+    `${hubUrl}/_api/web/lists(guid'${list.id}')/items?$select=Id,GtSettingsKey,GtSettingsValue,GtSettingsEnabled&$orderby=Id&$top=500`
+  )
+  if (!response.ok())
+    throw new Error(`Could not read the hub's settings (${list.title}): HTTP ${response.status()}`)
+  const rows = (
+    (await response.json()) as {
+      value: { GtSettingsKey: string; GtSettingsValue: string; GtSettingsEnabled: boolean }[]
+    }
+  ).value
+  for (const row of rows) {
+    if (row.GtSettingsEnabled && row.GtSettingsKey)
+      settings.set(row.GtSettingsKey, row.GtSettingsValue)
+  }
+  return settings
+}
+
+/**
+ * The value of a setting in the hub's global settings, as PP365's code reads it (`hubSettings`),
+ * or `undefined` when no enabled row has the key.
+ */
+export async function hubSetting(
+  page: Page,
+  hubUrl: string,
+  key: string
+): Promise<string | undefined> {
+  return (await hubSettings(page, hubUrl)).get(key)
+}
+
 /** The headers of a delete: the digest, and the method SharePoint reads from a POST. */
 async function deleteHeaders(page: Page, siteUrl: string) {
   return {

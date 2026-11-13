@@ -1,6 +1,45 @@
-import { APIResponse, expect, test as base, Page } from '@playwright/test'
+import { APIResponse, BrowserContext, expect, test as base, Page } from '@playwright/test'
 import * as fs from 'fs'
 import * as path from 'path'
+
+/**
+ * Where PP365 sends usage statistics and template catalog events: Prosjektportalen Assist
+ * (`shared-library/src/telemetry/contract.ts`, `PortfolioExtensions/src/services/TelemetryService.ts`).
+ */
+export const TELEMETRY_ROUTE = 'https://assist.prosjektportalen.no/api/telemetry/**'
+
+/** The session storage flag that turns all of PP365's telemetry off in a tab, when it is `1`. */
+export const TELEMETRY_FLAG = 'PP_DISABLE_TELEMETRY'
+
+/**
+ * The headers of an answer in Assist's place: the requests are cross-origin, and an answer the
+ * browser cannot read would put a CORS error in every test's browser log.
+ */
+export const TELEMETRY_ANSWER_HEADERS = {
+  'access-control-allow-origin': '*',
+  'access-control-allow-methods': 'POST',
+  'access-control-allow-headers': 'content-type'
+}
+
+/**
+ * Keeps a browser context's pages from sending usage statistics or catalog events to Assist: every
+ * page starts with the tester flag set, which closes the gate, and a request that goes out all the
+ * same is answered here with 204 and never reaches Assist. A test run is no customer's usage.
+ *
+ * @param context The browser context, before its first page loads
+ */
+export async function guardTelemetry(context: BrowserContext): Promise<void> {
+  await context.addInitScript((flag) => {
+    try {
+      window.sessionStorage.setItem(flag, '1')
+    } catch {
+      // A storage the browser refuses leaves the flag unset; the route below still holds.
+    }
+  }, TELEMETRY_FLAG)
+  await context.route(TELEMETRY_ROUTE, (route) =>
+    route.fulfill({ status: 204, headers: TELEMETRY_ANSWER_HEADERS })
+  )
+}
 
 /**
  * Browser-side failures that mean the deployed bundles are broken, not the page content.
@@ -30,6 +69,14 @@ export interface Pp365Fixtures {
    * exist when none of the candidates is found, so a differently provisioned tenant reports itself.
    */
   resolvePage: (siteUrl: string, candidates: string[]) => Promise<string>
+}
+
+export interface Pp365Options {
+  /**
+   * Whether the test's browser context keeps usage statistics and catalog events from leaving
+   * the browser (`guardTelemetry`). On for every test but the one spec that captures them.
+   */
+  telemetryGuard: boolean
 }
 
 /** Placeholder values copied from .env.example must not be treated as configuration. */
@@ -207,7 +254,12 @@ export async function listSitePages(page: Page, siteUrl: string): Promise<string
   return pages
 }
 
-export const test = base.extend<Pp365Fixtures>({
+export const test = base.extend<Pp365Fixtures & Pp365Options>({
+  telemetryGuard: [true, { option: true }],
+  context: async ({ context, telemetryGuard }, use) => {
+    if (telemetryGuard) await guardTelemetry(context)
+    await use(context)
+  },
   consoleGuard: async ({ page }, use) => {
     const errors: string[] = []
     page.on('console', (message) => {

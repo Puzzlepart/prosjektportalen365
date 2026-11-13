@@ -1,10 +1,9 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import { Page } from '@playwright/test'
 import { baseURL } from '../../playwright.config'
 import { scanAccessibility, SURFACES } from '../fixtures/a11y'
 import { configuredUrl, expect, onListPage, test } from '../fixtures/pp365'
-import { restGet } from '../fixtures/rest'
+import { hasField, hubSetting, listWithField, restGet } from '../fixtures/rest'
 
 /**
  * Read-only smoke of the risk actions: the Planner field customizer on `GtRiskAction`. The
@@ -29,72 +28,6 @@ const hubUrl = baseURL.replace(/\/+$/, '')
 const pointsAtHub = !!projectUrl && projectUrl.toLowerCase() === hubUrl.toLowerCase()
 const CHANNEL = process.env.E2E_CHANNEL || 'test'
 const MOUNT_TIMEOUT = { timeout: 60_000 }
-
-interface IList {
-  id: string
-  title: string
-  url: string
-}
-
-/**
- * The first list of a site that has a field, preferring the titles given: how the risk list and
- * the hub's settings list are found, whatever a tenant named them. The settings list is hidden
- * (the template hides it from the site contents), so hidden lists are searched when asked for.
- */
-async function listWithField(
-  page: Page,
-  siteUrl: string,
-  internalName: string,
-  preferred: RegExp,
-  includeHidden = false
-): Promise<IList | undefined> {
-  const filter = includeHidden ? 'BaseTemplate eq 100' : 'BaseTemplate eq 100 and Hidden eq false'
-  const response = await restGet(
-    page,
-    `${siteUrl}/_api/web/lists?$filter=${filter}&$select=Id,Title,DefaultViewUrl&$top=200`
-  )
-  if (!response.ok())
-    throw new Error(`Could not list the lists of ${siteUrl}: HTTP ${response.status()}`)
-  const lists = ((await response.json()) as { value: Record<string, string>[] }).value
-  lists.sort((a, b) => Number(preferred.test(b.Title)) - Number(preferred.test(a.Title)))
-  for (const list of lists) {
-    if (await hasField(page, siteUrl, list.Id, internalName)) {
-      return {
-        id: list.Id,
-        title: list.Title,
-        url: `${new URL(siteUrl).origin}${list.DefaultViewUrl}`
-      }
-    }
-  }
-  return undefined
-}
-
-/** Whether a list has a field, by internal name. */
-async function hasField(
-  page: Page,
-  siteUrl: string,
-  listId: string,
-  internalName: string
-): Promise<boolean> {
-  const response = await restGet(
-    page,
-    `${siteUrl}/_api/web/lists(guid'${listId}')/fields?$filter=InternalName eq '${internalName}'&$select=InternalName`
-  )
-  return response.ok() && ((await response.json()) as { value: unknown[] }).value.length > 0
-}
-
-/** The value of a setting in the hub's global settings list, or `undefined` when there is none. */
-async function hubSetting(page: Page, key: string): Promise<string | undefined> {
-  const list = await listWithField(page, hubUrl, 'GtSettingsKey', /innstillinger|settings/i, true)
-  if (!list) return undefined
-  const response = await restGet(
-    page,
-    `${hubUrl}/_api/web/lists(guid'${list.id}')/items?$filter=GtSettingsKey eq '${key}'&$select=GtSettingsValue&$top=1`
-  )
-  if (!response.ok()) return undefined
-  return ((await response.json()) as { value: { GtSettingsValue: string }[] }).value[0]
-    ?.GtSettingsValue
-}
 
 /** The component id the test channel's package gives the customizer (`channels/<channel>.json`). */
 function channelCustomizerId(): string | undefined {
@@ -122,7 +55,7 @@ test.describe('risk actions', () => {
     // Room for a second load of the list, when SharePoint's React fault struck the first.
     test.setTimeout(300_000)
     expect(
-      await hubSetting(page, 'RiskActionPlannerEnabled'),
+      await hubSetting(page, hubUrl, 'RiskActionPlannerEnabled'),
       'RiskActionPlannerEnabled must be 1 on the hub for the customizer to render'
     ).toBe('1')
 

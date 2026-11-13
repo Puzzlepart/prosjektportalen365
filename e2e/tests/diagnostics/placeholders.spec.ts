@@ -3,7 +3,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { baseURL, STORAGE_STATE } from '../../playwright.config'
 import { documentLibrary } from '../fixtures/document-template-dialog'
-import { configuredUrl, SIGN_IN_PATH, withNetworkRetry } from '../fixtures/pp365'
+import { configuredUrl, guardTelemetry, SIGN_IN_PATH, withNetworkRetry } from '../fixtures/pp365'
 import { restGet } from '../fixtures/rest'
 
 /**
@@ -163,6 +163,8 @@ async function newContext(browser: Browser): Promise<BrowserContext> {
       // A storage the browser refuses leaves the trace off; the load then has none.
     }
   }, TRACE_KEY)
+  // Its own contexts miss the suite's fixture: the loads measured here are no customer's usage.
+  await guardTelemetry(context)
   return context
 }
 

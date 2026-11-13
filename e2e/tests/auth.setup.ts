@@ -1,6 +1,12 @@
 import { expect, type Locator, type Page, test as setup } from '@playwright/test'
 import { STORAGE_STATE, baseURL } from '../playwright.config'
-import { withNetworkRetry } from './fixtures/pp365'
+import { guardTelemetry, withNetworkRetry } from './fixtures/pp365'
+
+// The sign-in ends on the hub, whose footer would count a page view: a test run is no customer's
+// usage. The flag lives in session storage, which the saved state leaves out.
+setup.beforeEach(async ({ context }) => {
+  await guardTelemetry(context)
+})
 
 /**
  * Types a secret into a field without it reaching the report. `fill()` titles its step

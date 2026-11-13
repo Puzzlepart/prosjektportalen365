@@ -1,6 +1,11 @@
 import { expect, test as setup } from '@playwright/test'
 import { baseURL } from '../playwright.config'
-import { configuredUrl } from './fixtures/pp365'
+import { configuredUrl, guardTelemetry } from './fixtures/pp365'
+
+// The hub and the project home are loaded again and again here: none of it is usage.
+setup.beforeEach(async ({ context }) => {
+  await guardTelemetry(context)
+})
 
 /**
  * Waits until the tenant serves the apps the run just upgraded. For a few minutes after an

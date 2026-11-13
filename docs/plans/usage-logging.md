@@ -2655,3 +2655,53 @@ _Each slice adds its entry below._
   - The wiki page Bruksstatistikk that the banner and the summary link to does not exist yet, and
     the changelog line has no release notes section (slice 12).
   - No workflow passes the parameter, as planned.
+
+### Slice 8: e2e guard and usage spec (2026-11-13)
+
+- Done:
+  - `e2e/tests/fixtures/pp365.ts`: `guardTelemetry(context)` sets the session flag
+    `PP_DISABLE_TELEMETRY` to `1` in every page (`addInitScript`), and answers
+    `https://assist.prosjektportalen.no/api/telemetry/**` with 204 and CORS headers in Assist's
+    place (a context route). The suite's `test` overrides `context` with it, behind the option
+    `telemetryGuard`, on by default: every spec that takes `test` from the fixture is guarded,
+    the local and diagnostic ones included.
+  - `auth.setup.ts` and `deployment.setup.ts` call it in a `beforeEach`, and
+    `diagnostics/placeholders.spec.ts` on the contexts it makes. The flag lives in session
+    storage, which the saved sign-in state leaves out.
+  - `fixtures/rest.ts` takes `listWithField` and `hasField` from `risk-action.spec.ts`, and gains
+    `hubSettings` and `hubSetting`, which read the hub's settings as `getGlobalSettings` does: the
+    enabled rows, by their exact key, the row read last. `risk-action.spec.ts` uses them; its
+    `$filter` on the key also returned disabled rows.
+  - `smoke/usage-statistics.spec.ts`, with the guard off and its own capture route:
+    - the hub's home, at the level the hub's settings give as the gate reads them: at 0 nothing is
+      sent, at 1 only heartbeats. At 2 and 3 every request goes to the usage route as
+      `text/plain`, without a cookie or a referrer, with only the allowed fields (the spec's own
+      copy of `TELEMETRY_FIELDS`), the hub's host, URL and level, the channel in a heartbeat,
+      16-character site hashes that are no site's id, and no test user, `@`, page title or other
+      URL; and the Footer counts the hub's page view;
+    - a project's home counts its web parts loaded on a project, from level 2;
+    - two fresh contexts load the hub's home, with usage statistics on and off, and the first may
+      keep no storage key the second lacks. Keys are compared without ids and numbers, and the
+      second load waits longer.
+  - `e2e/README.md` and the pp365-testing skill.
+- Verified:
+  - `tsc --noEmit` in `e2e`; `playwright test --list` finds 124 tests in 29 files, the three new
+    among them; Prettier with the repository's settings; `npm run check-skills`.
+  - An offline probe in Chromium, outside the repository, with pages served by routes: the guard
+    sets the flag and answers the usage POST and the catalog's preflighted JSON POST without a
+    CORS error. A capture sees the `text/plain` body without a cookie or a referrer when it is sent
+    as the core sends it, and sees both when it is sent with credentials and the default referrer
+    policy, so the spec's header checks can fail. The suite's `test` guards its page by default,
+    and not with `telemetryGuard: false`.
+- Found:
+  - Nothing ran against the tenant: the test channel's bundles hold this branch's code only once
+    it is merged. The test hub's level is 0 after its first upgrade with slice 3 (rule 5), so the
+    hub test then checks only that nothing is sent, and the project test skips.
+  - The channel is checked only in a heartbeat, which only a user who manages the hub sends.
+- Left:
+  - Green on the test channel, after the merge. The payload checks run once the test hub's level is
+    2 or 3: set by hand, or by a flow that sets the row and restores it (not built).
+  - The storage comparison has not met SharePoint's own storage keys: a key SharePoint writes in
+    one load and not in the other would fail it falsely.
+  - The guide's test overview (`.development-guide/spfx/testoversikt.md`) has no row for usage
+    statistics yet (slice 11).

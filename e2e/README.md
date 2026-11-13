@@ -15,6 +15,17 @@ every bundle from the app catalog. Right after an upgrade SharePoint can still h
 component's previous manifest, whose bundle the upgrade has removed; without the wait, the first
 tests after a deployment fail on "Could not load ... in require".
 
+No test sends usage statistics or catalog events to Prosjektportalen Assist: a test run is no
+customer's usage. The `test` of `tests/fixtures/pp365.ts` gives every browser context the guard
+(`guardTelemetry`): each page starts with the session flag `PP_DISABLE_TELEMETRY` set to `1`, and a
+request to `assist.prosjektportalen.no/api/telemetry/**` that goes out all the same is answered with
+204 in Assist's place. The two setup steps and the contexts a test makes itself
+(`browser.newContext`) need it called by hand. Only `tests/smoke/usage-statistics.spec.ts` turns it
+off (`test.use({ telemetryGuard: false })`): it captures what the hub and a project send, answers
+with 204 itself, and checks the batch against the contract and the never-list at the hub's level,
+and that a page with usage statistics on keeps nothing in the browser's storage that one with them
+off lacks.
+
 Local run:
 
 ```bash
