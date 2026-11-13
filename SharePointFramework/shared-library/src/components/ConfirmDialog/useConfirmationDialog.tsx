@@ -10,7 +10,7 @@ import {
   IdPrefixProvider,
   useId
 } from '@fluentui/react-components'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { customLightTheme } from '../../util'
 import { ConfirmDialogResponseValue, IConfirmDialogProps, UseConfirmationDialog } from './types'
 
@@ -56,6 +56,20 @@ export function useConfirmationDialog(): UseConfirmationDialog {
     [state]
   )
 
+  // The first answer whose value is falsy (`false`, `''`, none): the one that confirms nothing.
+  const cancelIndex = (state?.props.responses ?? []).findIndex(([, value]) => !value)
+  const cancelRef = useRef<HTMLButtonElement>(null)
+
+  // The focus starts on the answer that does nothing («Avbryt»), not on the first, which
+  // confirms («Slett»): Enter as the dialog opened deleted (WCAG 3.3.4). Fluent's dialog gives
+  // its first control the focus as it opens, whatever `autoFocus` says, so the focus moves on in
+  // the frame after.
+  useEffect(() => {
+    if (!state) return
+    const frame = requestAnimationFrame(() => cancelRef.current?.focus())
+    return () => cancelAnimationFrame(frame)
+  }, [state])
+
   const element = (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={customLightTheme}>
@@ -82,6 +96,7 @@ export function useConfirmationDialog(): UseConfirmationDialog {
                     key={index}
                     appearance={isPrimary ? 'primary' : 'secondary'}
                     onClick={() => respond(value)}
+                    ref={index === cancelIndex ? cancelRef : undefined}
                   >
                     {label}
                   </Button>

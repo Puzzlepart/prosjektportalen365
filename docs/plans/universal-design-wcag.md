@@ -1720,3 +1720,24 @@ itself as `observer` to `add()` is disposed, as the footer does.
   markers).
 - **Left.** A more compact footer under 480 px (it is 165 px high at 320 px). The arrow keys on
   «+n» and the panel's focus were not tried in the browser after the change.
+
+### Hand round 6: the portfolio overview (2026-11-12)
+
+- **Found.** The compact list header's search box was named «Søk...» while it showed «Søk i Alle
+  prosjekter...», and its clear button «clear». «Vis eller skjul kolonner» had its buttons in
+  `DrawerHeaderTitle`, so the panel was named «BrukTilbakestill rekkefølge» and its title was a
+  second `h2` in the body. A move button lost the focus as its row moved, and the next Enter
+  opened the list's column menu behind the panel. Several people's names in a cell never showed:
+  Fluent hid the tooltip as escaped from the cell, which clips its content. The column form's
+  delete confirmation started on «Slett». The render mode's hint said «globaly» and «huk av
+  sjekkboksen» for a switch.
+- **Done.** `ListHeader` names the search box by its placeholder and gives it
+  `getSearchBoxDismissProps()`. `BasePanel` has `headerActions`, under the title and outside the
+  heading; the panel is headed by its title and its help is text in the body. The moved row's
+  button keeps the focus (`useEditViewColumnsPanel`), and the move buttons are faded out rather
+  than `display: none`, so they can take it. `UserColumn` places a person's tooltip against a
+  virtual element, which has no clipping ancestors. `useConfirmationDialog` starts on the first
+  answer whose value is falsy. Tests: `PortfolioOverview.test` (the search box),
+  `EditViewColumnsPanel.test` (the heading, the focus after a move), `useConfirmationDialog.test`;
+  `tests/flows/edit-view-columns-header.spec.ts` pins the new header.
+- **Left.** The tooltip in a person cell was not tried in the browser after the change.

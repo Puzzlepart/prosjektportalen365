@@ -1,5 +1,5 @@
 import { AriaLiveAnnouncer } from '@fluentui/react-components'
-import { act, render, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import strings from 'PortfolioWebPartsStrings'
 import { PortfolioOverviewView, ProjectColumn, format } from 'pp365-shared-library'
@@ -210,6 +210,30 @@ describe('EditViewColumnsPanel', () => {
     await waitFor(() =>
       expect(announced()).toContain(format(strings.ColumnMovedAnnouncement, 'Tittel', 2, 2))
     )
+  })
+
+  it("keeps the focus on the moved column's buttons, the other one where it can move no further (WCAG 2.4.3)", async () => {
+    // The row moved in the page as it was drawn again, and the focus went behind the panel.
+    renderPanel()
+    const move = (direction: string, name = 'Tittel') =>
+      screen.getByRole('button', { name: format(direction, name) })
+    move(strings.MoveColumnDown).focus()
+    fireEvent.click(move(strings.MoveColumnDown))
+    // Second of two chosen columns: down can go no further, so up has the focus.
+    await waitFor(() => expect(move(strings.MoveColumnUp)).toHaveFocus())
+    fireEvent.click(move(strings.MoveColumnUp))
+    await waitFor(() => expect(move(strings.MoveColumnDown)).toHaveFocus())
+  })
+
+  it('is named by its title, its actions under the heading and not in it (WCAG 1.3.1, 4.1.2)', () => {
+    // The heading held the buttons, and named the panel «BrukTilbakestill rekkefølge».
+    renderPanel()
+    const heading = screen.getByRole('heading', { name: strings.EditViewColumnsPanelHeaderText })
+    expect(heading.querySelector('button:not([aria-label])')).toBeNull()
+    expect(
+      screen.getByRole('dialog', { name: strings.EditViewColumnsPanelHeaderText })
+    ).toBeInTheDocument()
+    expect(screen.getAllByRole('heading')).toHaveLength(1)
   })
 
   it('is dragged with the mouse only: a row is no button around its checkbox and move buttons (WCAG 4.1.2)', () => {

@@ -30,6 +30,7 @@ export const BasePanel: FC<IBasePanelProps> = ({
   isLightDismiss = true,
   closeButtonAriaLabel = strings.CloseText,
   header,
+  headerActions,
   hidden,
   footer,
   isBodyFocusable,
@@ -78,6 +79,8 @@ export const BasePanel: FC<IBasePanelProps> = ({
             >
               {header ?? headerText}
             </DrawerHeaderTitle>
+            {/* Under the title, outside the heading that names the panel. */}
+            {headerActions && <div className={styles.headerActions}>{headerActions}</div>}
           </DrawerHeader>
           {/* A body read rather than worked in takes the focus, so the keyboard can scroll it. */}
           <DrawerBody

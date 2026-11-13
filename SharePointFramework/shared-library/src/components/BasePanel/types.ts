@@ -55,8 +55,15 @@ export interface IBasePanelProps<T extends string = string> {
   hidden?: boolean
 
   /**
-   * Header content shown in place of `headerText`, for panels whose header
-   * carries actions rather than a title.
+   * Actions shown in the header under the title, outside the heading: in `header` they were
+   * inside the `h2` that names the panel, which was then named by its buttons («BrukTilbakestill
+   * rekkefølge»), and the real title was a second heading in the body (WCAG 1.3.1, 4.1.2).
+   */
+  headerActions?: React.ReactNode
+
+  /**
+   * Header content shown in place of `headerText`. It is the panel's heading and name: actions
+   * go in `headerActions`.
    */
   header?: React.ReactNode
 

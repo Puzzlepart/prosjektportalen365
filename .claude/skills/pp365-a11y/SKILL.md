@@ -265,13 +265,24 @@ checked by hand and with which reader and browser: axe finds only part of what W
   does not hide its own: pass `avatar={{ 'aria-hidden': true, … }}` (`ProjectProperty`,
   `TimelineList`).
 - `DialogTitle` and `DrawerHeaderTitle` render a heading (`h2`): put the text in them, not a
-  heading of your own, or one heading sits inside another (the program's add dialog). A
+  heading of your own, or one heading sits inside another (the program's add dialog). Nor
+  buttons: the heading names the drawer, which «Vis eller skjul kolonner» did as «BrukTilbakestill
+  rekkefølge». A panel's actions go in `BasePanel`'s `headerActions`, under the title.
+- A Fluent `Tooltip` hides itself when its surface has «escaped» the target's clipping context: a
+  tooltip on something in a cell that clips its content (`TableCellLayout`) never showed. Place it
+  against a virtual element, which has no clipping ancestors: `positioning={{ target: {
+  getBoundingClientRect } }}` (`UserColumn`'s `PersonInitials`).
+- A row that moves in the page (a reordered list) loses the focus of the button in it: give the
+  focus back after the render, to an element that can take it; `display: none` cannot, so fade
+  such controls out instead (`EditViewColumnsPanel`). A
   `SearchBox` with only a `placeholder` has no name: give it an `aria-label`. Its clear button
   is named «clear», in English: give every search box `dismiss={getSearchBoxDismissProps()}`
   from `pp365-shared-library`, which names it «Tøm søket».
 - A Fluent `Dialog` is named by its `DialogTitle`, described by nothing, and opens with focus on
   its first button: a dialog whose text is the point (a confirmation) points `aria-describedby`
-  on `DialogSurface` at its `DialogContent` (`useConfirmationDialog`).
+  on `DialogSurface` at its `DialogContent` (`useConfirmationDialog`), and a confirmation starts
+  on the answer that does nothing, not on «Slett». Fluent gives the first control the focus as
+  the dialog opens whatever `autoFocus` says (`useFocusFirstElement`): move it in the next frame.
 - Fluent's `PopoverTrigger` makes its child a button (`useARIAButtonProps`) even with
   `disableButtonEnhancement`: on an `li` that takes the item's role, and the list has none (axe's
   `list`). Put a `<button>` in the `li` (`ProjectPhases/ProjectPhase`). Round a `div` of icons it

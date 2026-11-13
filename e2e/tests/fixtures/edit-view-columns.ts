@@ -11,11 +11,15 @@ export interface ColumnDrag {
   underPointer: boolean
 }
 
-/** The panel header's own box, its close button's, and those of the actions beside it. */
+/**
+ * The panel header's own box, its close button's, its heading's (the title, which names the
+ * panel), and those of the actions under it, each with whether it lies inside the heading.
+ */
 export interface PanelHeaderLayout {
   header: Box
   close: Box
-  actions: Array<Box & { text: string }>
+  heading: Box & { text: string }
+  actions: Array<Box & { text: string; inHeading: boolean }>
 }
 
 /**
@@ -39,12 +43,19 @@ export async function scrolledHeaderLayout(page: Page): Promise<PanelHeaderLayou
       /^(lukk|close)$/i.test(button.getAttribute('aria-label') ?? '')
     )
     if (!close) throw new Error('the panel header has no close button')
+    const heading = header.querySelector('h1, h2, h3, [role="heading"]')
+    if (!heading) throw new Error('the panel header has no heading')
     return {
       header: box(header),
       close: box(close),
+      heading: { text: heading.textContent?.trim() ?? '', ...box(heading) },
       actions: buttons
         .filter((button) => button !== close)
-        .map((button) => ({ text: button.textContent?.trim() ?? '', ...box(button) }))
+        .map((button) => ({
+          text: button.textContent?.trim() ?? '',
+          inHeading: heading.contains(button),
+          ...box(button)
+        }))
     }
   })
 }
@@ -61,7 +72,10 @@ export async function openShowHideColumns(overview: Locator): Promise<boolean> {
   await overview.getByRole('columnheader').first().waitFor({ timeout: 60_000 })
   if (!(await addColumnHeader.isVisible().catch(() => false))) return false
   await addColumnHeader.click()
-  await page.getByRole('menuitem', { name: /vis eller skjul kolonner|show or hide columns/i }).first().click()
+  await page
+    .getByRole('menuitem', { name: /vis eller skjul kolonner|show or hide columns/i })
+    .first()
+    .click()
   await movableColumns(page).first().waitFor({ timeout: 30_000 })
   return true
 }

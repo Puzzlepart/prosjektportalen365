@@ -12,20 +12,23 @@
       background-color: var(--colorBrandBackground2);
 
       .columnItemActions {
-        display: flex;
+        opacity: 1;
       }
     }
 
     // The row drags with the mouse only; the keyboard moves a column with the buttons, which show
-    // while the focus is in the row, the way to them without a pointer.
+    // while the focus is in the row, the way to them without a pointer. Faded out, not taken out
+    // of the layout, so a move button can be given the focus back after its row is moved: a
+    // button with `display: none` takes no focus.
     &:focus-within {
       .columnItemActions {
-        display: flex;
+        opacity: 1;
       }
     }
 
     .columnItemActions {
-      display: none;
+      display: flex;
+      opacity: 0;
       flex-direction: row;
       left: 3px;
       position: relative;
@@ -46,9 +49,14 @@
     }
   }
 
-  // In the header's flow, so the drawer centres them on the close button's line and the header
-  // grows to hold them; absolutely placed from the empty heading they sat 16px lower and reached
-  // past the header, where the divider drawn on scroll cut through them.
+  .helpText {
+    margin: 0;
+    color: var(--colorNeutralForeground2);
+  }
+
+  // In the header's flow, under the title (BasePanel's `headerActions`), so the header grows to
+  // hold them; absolutely placed from an empty heading they sat 16px lower and reached past the
+  // header, where the divider drawn on scroll cut through them.
   .panelActions {
     display: flex;
     align-items: center;

@@ -19,7 +19,7 @@ jest.mock('pp365-projectwebparts/lib/components/ProjectInformation', () => ({
 
 import { render, screen } from '@testing-library/react'
 import strings from 'PortfolioWebPartsStrings'
-import { ProjectColumn, format } from 'pp365-shared-library'
+import { ProjectColumn, format, getSearchBoxDismissProps } from 'pp365-shared-library'
 import * as React from 'react'
 import resource from 'SharedResources'
 import { PortfolioOverview } from './PortfolioOverview'
@@ -99,9 +99,18 @@ describe('PortfolioOverview', () => {
         .filter(Boolean)
     ).toEqual(['Tittel', 'Fase', strings.ToggleColumnFormPanelLabel])
     expect(screen.getByText('Porteføljeoversikt', { selector: 'span' })).toBeInTheDocument()
+    const search = screen.getByPlaceholderText(
+      format(strings.SearchBoxPlaceholderText, 'Alle prosjekter')
+    )
+    // Named by what it searches, as it shows, not by «Søk...» (WCAG 2.5.3), and its clear button
+    // in Norwegian, where Fluent named it «clear» (WCAG 3.1.2).
+    expect(search).toHaveAttribute(
+      'aria-label',
+      format(strings.SearchBoxPlaceholderText, 'Alle prosjekter')
+    )
     expect(
-      screen.getByPlaceholderText(format(strings.SearchBoxPlaceholderText, 'Alle prosjekter'))
-    ).toBeInTheDocument()
+      search.closest('.fui-SearchBox').querySelector('.fui-SearchBox__dismiss')
+    ).toHaveAttribute('aria-label', getSearchBoxDismissProps()['aria-label'])
     // The view selector names the view and what it selects (WCAG 2.5.3: the shown text first).
     expect(
       screen.getByRole('button', {

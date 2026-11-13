@@ -51,6 +51,12 @@ describe('useConfirmationDialog', () => {
     await expect(answer()).resolves.toBe(false)
   })
 
+  it('starts the focus on the answer that confirms nothing, not on «Slett» (WCAG 3.3.4)', async () => {
+    // Enter as the dialog opened deleted the column.
+    openDialog(DELETE)
+    await waitFor(() => expect(screen.getByText('Avbryt').closest('button')).toHaveFocus())
+  })
+
   it('takes Escape as no answer, not as the first response', async () => {
     const answer = openDialog(DELETE)
     fireEvent.keyDown(screen.getByText('Slette visningen?'), { key: 'Escape' })

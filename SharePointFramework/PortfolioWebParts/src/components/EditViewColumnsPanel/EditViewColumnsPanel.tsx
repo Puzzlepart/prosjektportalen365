@@ -3,16 +3,13 @@ import React, { FC } from 'react'
 import { DragDropContext, Draggable, DraggableProvided, Droppable } from '@hello-pangea/dnd'
 import styles from './EditViewColumnsPanel.module.scss'
 import { IEditViewColumnsPanelProps } from './types'
-import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
-import { Button, Checkbox, Portal } from '@fluentui/react-components'
 import {
-  BasePanel,
-  IListColumn,
-  WebPartTitle,
-  format,
-  getFluentIcon,
-  withDefaults
-} from 'pp365-shared-library'
+  MOVE_COLUMN_ATTRIBUTE,
+  MOVE_STEP_ATTRIBUTE,
+  useEditViewColumnsPanel
+} from './useEditViewColumnsPanel'
+import { Button, Checkbox, Portal } from '@fluentui/react-components'
+import { BasePanel, IListColumn, format, getFluentIcon, withDefaults } from 'pp365-shared-library'
 import { getItemStyle } from './getItemStyle'
 
 /** Default text and empty column selection for the view editor. */
@@ -66,6 +63,7 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (incomingPro
             size='medium'
             icon={getFluentIcon('ChevronUp')}
             aria-label={format(strings.MoveColumnUp, col.name)}
+            {...{ [MOVE_COLUMN_ATTRIBUTE]: col.name, [MOVE_STEP_ATTRIBUTE]: -1 }}
             title={
               canMoveUp
                 ? undefined
@@ -81,6 +79,7 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (incomingPro
             size='medium'
             icon={getFluentIcon('ChevronDown')}
             aria-label={format(strings.MoveColumnDown, col.name)}
+            {...{ [MOVE_COLUMN_ATTRIBUTE]: col.name, [MOVE_STEP_ATTRIBUTE]: 1 }}
             title={
               canMoveDown
                 ? undefined
@@ -100,7 +99,11 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (incomingPro
     <BasePanel
       open={props.open}
       size={'medium'}
-      header={
+      // The title is the panel's heading and name; the actions go under it, outside the heading:
+      // in it, they named the panel «BrukTilbakestill rekkefølge», and the title was a second h2
+      // in the body (WCAG 1.3.1, 4.1.2).
+      headerText={props.title}
+      headerActions={
         <div className={styles.panelActions}>
           <Button
             appearance='subtle'
@@ -130,7 +133,7 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (incomingPro
       isLightDismiss={true}
       className={styles.root}
     >
-      <WebPartTitle title={props.title} description={props.helpText} />
+      <p className={styles.helpText}>{props.helpText}</p>
       <DragDropContext onDragStart={onDragStart} onDragUpdate={onDragUpdate} onDragEnd={onDragEnd}>
         <Droppable
           droppableId='droppable'

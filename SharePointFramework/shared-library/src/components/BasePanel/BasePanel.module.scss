@@ -19,3 +19,11 @@
   display: flex;
   gap: 8px;
 }
+
+// The header's actions, in a row under the title.
+.headerActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacingHorizontalXS);
+}

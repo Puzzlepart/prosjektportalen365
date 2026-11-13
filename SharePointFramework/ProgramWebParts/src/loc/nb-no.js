@@ -33,7 +33,7 @@ define([], function () {
     CmdSelectionCountTooltipText: 'Følgende prosjekter er valgt:',
     ColumnCategoryDescription: 'Angi en kategori for kolonnen. Kolonnen vil dukke opp i alle visninger som bruker denne kategorien. Om du ønsker å endre kategorien for alle webdeler og visninger, kan du endre kategorien i listen Prosjektkolonner.',
     ColumnCategoryLabel: 'Kategori for kolonnen',
-    ColumnPersistRenderGloballyFieldDescription: 'Om du ønsker å endre visningsmodus for kolonnen globaly, for alle webdeler og visninger, huk av sjekkboksen over. (Dette gjelder kun visningsmodus)',
+    ColumnPersistRenderGloballyFieldDescription: 'Om du ønsker å endre visningsmodus for kolonnen globalt, for alle webdeler og visninger, slå på bryteren over. (Dette gjelder kun visningsmodus)',
     ColumnPersistRenderGloballyFieldLabel: 'Oppdater visningsmodus globalt',
     ColumnRenderDataTypePropertiesHeaderText: 'Egenskaper for visningsmodus',
     ColumnRenderDescription: 'Velg hvordan kolonnen skal vises. Om det er tekstfelt som skal vises over flere linjer, velg Notat.',

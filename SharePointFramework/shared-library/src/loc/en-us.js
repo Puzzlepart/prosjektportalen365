@@ -99,7 +99,7 @@ define([], function () {
     BooleanNo: 'No',
     ColumnPersistRenderGloballyFieldLabel: 'Update globally',
     ColumnPersistRenderGloballyFieldDescription:
-      'If you want to change the display mode for the columns as for all web parts and views, tick the check box above.',
+      'If you want to change the display mode for the column globally, for all web parts and views, turn on the switch above. (This applies only to the display mode)',
     ColumnRenderOptionText: 'Text',
     ColumnRenderOptionNote: 'Note',
     ColumnRenderOptionBoolean: 'Yes/no',

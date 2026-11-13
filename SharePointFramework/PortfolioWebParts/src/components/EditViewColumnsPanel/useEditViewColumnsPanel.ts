@@ -11,6 +11,13 @@ import { useSelectableColumns } from './useSelectableColumns'
 import _ from 'lodash'
 import { IListColumn, arrayMove, format } from 'pp365-shared-library'
 import { isSameColumn } from './columnIdentity'
+import { useEffect, useRef } from 'react'
+
+/** The attribute a move button carries its column's name in, to find it again after a move. */
+export const MOVE_COLUMN_ATTRIBUTE = 'data-move-column'
+
+/** The attribute a move button carries its step in: -1 up, 1 down. */
+export const MOVE_STEP_ATTRIBUTE = 'data-move-step'
 
 /**
  * Hook that provides functionality for editing and selecting columns in a view, including
@@ -111,18 +118,40 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
     provided?.announce(format(strings.ColumnMovedAnnouncement, result.draggableId, position, count))
   }
 
+  // The move button to give the focus back to once the moved row is drawn again.
+  const movedFrom = useRef<{ name: string; step: -1 | 1 }>(null)
+
   /**
    * Moves a selected column one step up or down among the selected columns, and tells where it
    * went.
    */
   const moveColumnOneStep = (column: IListColumn, step: -1 | 1) => {
     if (!canMoveColumn(column, step)) return
+    movedFrom.current = { name: column.name, step }
     moveSelectedColumn(column, step)
     announce(
       format(strings.ColumnMovedAnnouncement, column.name, positionOf(column) + step, count),
       { polite: true }
     )
   }
+
+  // The moved row's button keeps the focus, or its other one where it can move no further (WCAG
+  // 2.4.3): the row is moved in the page as it is drawn again, which took the focus from it, and
+  // the focus went behind the panel, to the list's «Legg til kolonne», where the next Enter
+  // opened the list's column menu.
+  useEffect(() => {
+    const moved = movedFrom.current
+    if (!moved) return
+    movedFrom.current = null
+    const buttons = Array.from(
+      document.querySelectorAll<HTMLElement>(`[${MOVE_COLUMN_ATTRIBUTE}]`)
+    ).filter((button) => button.getAttribute(MOVE_COLUMN_ATTRIBUTE) === moved.name)
+    const button = (step: number) =>
+      buttons.find((candidate) => candidate.getAttribute(MOVE_STEP_ATTRIBUTE) === String(step))
+    const same = button(moved.step)
+    const target = same?.getAttribute('aria-disabled') === 'true' ? button(-moved.step) : same
+    target?.focus()
+  }, [selectableColumns])
 
   /**
    * The row's drag handle props for the mouse only. As a handle for the keyboard too, the row was

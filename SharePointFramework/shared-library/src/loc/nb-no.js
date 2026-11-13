@@ -98,7 +98,7 @@ define([], function () {
     BooleanNo: 'Nei',
     ColumnPersistRenderGloballyFieldLabel: 'Oppdater visningsmodus globalt',
     ColumnPersistRenderGloballyFieldDescription:
-      'Om du ønsker å endre visningsmodus for kolonnen globaly, for alle webdeler og visninger, huk av sjekkboksen over. (Dette gjelder kun visningsmodus)',
+      'Om du ønsker å endre visningsmodus for kolonnen globalt, for alle webdeler og visninger, slå på bryteren over. (Dette gjelder kun visningsmodus)',
     ColumnRenderOptionText: 'Tekst',
     ColumnRenderOptionNote: 'Notat',
     ColumnRenderOptionBoolean: 'Ja/nei',

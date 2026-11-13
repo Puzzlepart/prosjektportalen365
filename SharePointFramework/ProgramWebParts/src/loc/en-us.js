@@ -69,7 +69,7 @@ define([], function () {
     ChildrenRemoveToastTitle: 'Subareas removed',
     ColumnCategoryDescription: 'Specify a category for the column. The column will appear in all views using this category. To change the category for all web parts and views, modify the category in the Project Columns list.',
     ColumnCategoryLabel: 'Column category',
-    ColumnPersistRenderGloballyFieldDescription: 'If you want to change the display mode for the column globally, for all web parts and views, check the box above. (This applies only to display mode)',
+    ColumnPersistRenderGloballyFieldDescription: 'If you want to change the display mode for the column globally, for all web parts and views, turn on the switch above. (This applies only to the display mode)',
     ColumnPersistRenderGloballyFieldLabel: 'Update display mode globally',
     ColumnRenderDataTypePropertiesHeaderText: 'Display mode properties',
     ColumnRenderDescription: 'Choose how the column should be displayed. If it is a text field to be displayed over multiple lines, select Note.',

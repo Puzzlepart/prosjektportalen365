@@ -1,10 +1,37 @@
-import { Avatar, Text, Tooltip } from '@fluentui/react-components'
+import { Avatar, PositioningVirtualElement, Text, Tooltip } from '@fluentui/react-components'
 import strings from 'SharedLibraryStrings'
-import React from 'react'
+import React, { FC, useMemo, useState } from 'react'
 import { ColumnRenderComponent } from '../types'
 import styles from './UserColumn.module.scss'
 import { getUserPhoto } from '../../../util'
 import { SearchValueType } from '../../../types'
+
+/**
+ * One of several people in a cell, by their initials, the name in a tooltip that shows under the
+ * pointer and on focus (WCAG 2.1.1). The tooltip is placed against a stand-in for the initials
+ * with no clipping of its own: placed against the initials, Fluent hid it as escaped from the
+ * cell, which clips its content, and the name never showed in the hub's lists.
+ */
+const PersonInitials: FC<{ name: string }> = ({ name }) => {
+  const [avatar, setAvatar] = useState<HTMLElement | null>(null)
+  const target = useMemo<PositioningVirtualElement | undefined>(
+    () => (avatar ? { getBoundingClientRect: () => avatar.getBoundingClientRect() } : undefined),
+    [avatar]
+  )
+  return (
+    <Tooltip content={name} relationship='label' withArrow positioning={{ target }}>
+      <Avatar
+        ref={setAvatar}
+        name={name}
+        tabIndex={0}
+        className={styles.person}
+        size={28}
+        color='colorful'
+        style={{ marginRight: 4 }}
+      />
+    </Tooltip>
+  )
+}
 
 /**
  * Displays people values with avatars and readable names.
@@ -17,16 +44,7 @@ export const UserColumn: ColumnRenderComponent = ({ columnValue, column }) => {
         {columnValue?.split(';').map((value, key) => (
           <span key={key}>
             {/* The names are only in the tooltips, which show on focus too (WCAG 2.1.1). */}
-            <Tooltip content={value} relationship='label' withArrow>
-              <Avatar
-                name={value}
-                tabIndex={0}
-                className={styles.person}
-                size={28}
-                color='colorful'
-                style={{ marginRight: 4 }}
-              />
-            </Tooltip>
+            <PersonInitials name={value} />
           </span>
         ))}
       </span>
