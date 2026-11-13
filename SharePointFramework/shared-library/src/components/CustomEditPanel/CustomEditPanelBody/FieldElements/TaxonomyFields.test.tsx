@@ -6,7 +6,9 @@
 // BasePicker (tried for real in termPickerProps.test.tsx): a suggestion shows once something is
 // typed; the input hands a key to `inputProps.onKeyDown` before the picker's own handler, which
 // chooses the suggestion with Tab or Enter; a click chooses it; and leaving the field dismisses the
-// suggestions, which adds the first one unless `termPickerProps.onDismiss` answers false.
+// suggestions, which adds the first one unless `termPickerProps.onDismiss` answers false. As PnP's,
+// the input is a combobox whose `aria-describedby` the picker sets after `inputProps` (to nothing
+// with no term picked), and beside it is PnP's «Tag» button, an icon with no name.
 jest.mock('@pnp/spfx-controls-react/lib/ModernTaxonomyPicker', () => {
   const stub = jest.requireActual('@pnp/spfx-controls-react/lib/ModernTaxonomyPicker')
   const React = jest.requireActual('react')
@@ -32,6 +34,8 @@ jest.mock('@pnp/spfx-controls-react/lib/ModernTaxonomyPicker', () => {
       },
       React.createElement('input', {
         ...inputProps,
+        role: 'combobox',
+        'aria-describedby': undefined,
         value: text,
         onChange: (event: any) => setText(event.target.value),
         onKeyDown: (event: any) => inputProps.onKeyDown?.(event),
@@ -39,7 +43,12 @@ jest.mock('@pnp/spfx-controls-react/lib/ModernTaxonomyPicker', () => {
           if (suggestion && termPickerProps?.onDismiss?.(event, suggestion) !== false) add()
         }
       }),
-      suggestion && React.createElement('button', { onClick: add }, 'Administrasjon')
+      suggestion && React.createElement('button', { onClick: add }, 'Administrasjon'),
+      React.createElement(
+        'button',
+        { type: 'button' },
+        React.createElement('i', { 'data-icon-name': 'Tag', 'aria-hidden': true })
+      )
     )
   }
   return new Proxy(stub, {
@@ -51,6 +60,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import * as React from 'react'
 import strings from 'SharedLibraryStrings'
 import { EditableSPField } from '../../../../models'
+import { format } from '../../../../util/format'
 import { CustomEditPanelContext, ICustomEditPanelContext } from '../../context'
 import { TaxonomyFieldType } from './TaxonomyFieldType'
 import { TaxonomyFieldTypeMulti } from './TaxonomyFieldTypeMulti'
@@ -84,7 +94,7 @@ function renderField(Component: typeof TaxonomyFieldType | typeof TaxonomyFieldT
       <Component field={FIELD} />
     </CustomEditPanelContext.Provider>
   )
-  const input = screen.getByRole('textbox')
+  const input = screen.getByRole('combobox')
   fireEvent.change(input, { target: { value: 'a' } })
   return { set, input }
 }
@@ -118,6 +128,18 @@ describe.each([
     const { input } = renderField(Component)
     expect(input.id).not.toBe('')
     expect(screen.getByText(FIELD.displayName).closest('label')).toHaveAttribute('for', input.id)
+  })
+
+  it("names PnP's «Tag» button after the field, and has the field's hint describe the input (Puzzlepart/prosjektportalen365-testing#126)", () => {
+    // The button had no name (axe button-name, critical), and the input was described only by the
+    // list of the terms picked, not by the hint.
+    const { input } = renderField(Component)
+    expect(
+      screen.getByRole('button', {
+        name: format(strings.Aria.TaxonomyPickerButtonLabel, FIELD.displayName)
+      })
+    ).toBeInTheDocument()
+    expect(input).toHaveAccessibleDescription(FIELD.description)
   })
 
   it('moves on with Tab without adding the suggestion', () => {

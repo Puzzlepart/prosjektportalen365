@@ -292,3 +292,33 @@ $project-phase-padding: 0.25em;
     font-weight: inherit;
   }
 }
+
+// Contrast themes (Windows' high contrast, `forced-colors`). The arrows are drawn with borders the
+// phase's colour shows through, and the theme gave every border its text colour: each phase had a
+// white or black block beside it, no edge of its own, and the current phase stood out only by its
+// larger text. In a contrast theme each phase is a box edged in the theme's text colour, the
+// arrows are left out, and the current phase takes the theme's selection colours. The focus ring
+// takes the text's colour, as above, so it reads on both. `!important`, since the colour rules
+// above for a phase's level and the pointer are more specific. Outside a contrast theme nothing
+// changes (WCAG 1.4.1, 1.4.11).
+@media (forced-colors: active) {
+  .projectPhase {
+    background: Canvas !important;
+    color: CanvasText !important;
+    border: 1px solid CanvasText !important;
+    filter: none !important;
+
+    &::before,
+    &::after {
+      display: none !important;
+    }
+
+    &.isCurrentPhase {
+      // The theme's own selection colours, used as they are.
+      forced-color-adjust: none;
+      background: Highlight !important;
+      color: HighlightText !important;
+      border: 2px solid CanvasText !important;
+    }
+  }
+}

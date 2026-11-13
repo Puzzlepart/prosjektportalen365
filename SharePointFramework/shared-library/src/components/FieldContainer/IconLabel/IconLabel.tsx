@@ -10,7 +10,8 @@ import styles from './IconLabel.module.scss'
 export interface IIconLabelProps extends IFieldContainerProps {
   /**
    * The props Fluent's `Field` gives its label. Only the id and `for` are used, which tie the label
-   * to the field's control; the field's own label styles are left out, so the look stays.
+   * to the field's control, and the click handler `FieldContainer` adds; the field's own label
+   * styles are left out, so the look stays.
    */
   labelProps?: LabelProps
 }
@@ -24,6 +25,7 @@ export const IconLabel: FC<IIconLabelProps> = ({ labelProps, ...props }) => {
     <Label
       id={labelProps?.id}
       htmlFor={labelProps?.htmlFor}
+      onClick={labelProps?.onClick}
       size='small'
       weight='semibold'
       required={props.required}

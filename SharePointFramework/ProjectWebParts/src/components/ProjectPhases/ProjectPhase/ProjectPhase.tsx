@@ -8,7 +8,8 @@ import styles from './ProjectPhase.module.scss'
 /**
  * A phase in the phase selector: an item of the phases' list, holding the button that opens the
  * phase in a popover. The current phase is marked as the current step, and the popover is a
- * dialog named by the phase that keeps the focus until it is closed.
+ * dialog named by the phase and described by its description, that keeps the focus until it is
+ * closed.
  */
 export const ProjectPhase: FC<IProjectPhaseProps> = (props) => {
   const {
@@ -22,7 +23,8 @@ export const ProjectPhase: FC<IProjectPhaseProps> = (props) => {
     altPadding,
     customPhaseColor,
     isCurrentPhase,
-    titleId
+    titleId,
+    descriptionId
   } = useProjectPhase(props)
 
   return (
@@ -44,8 +46,15 @@ export const ProjectPhase: FC<IProjectPhaseProps> = (props) => {
             <span {...subTextProps} />
           </button>
         </PopoverTrigger>
-        <PopoverSurface aria-labelledby={titleId}>
-          <ProjectPhasePopover {...(context.state.popover || {})} titleId={titleId} />
+        <PopoverSurface
+          aria-labelledby={titleId}
+          aria-describedby={props.phase.description ? descriptionId : undefined}
+        >
+          <ProjectPhasePopover
+            {...(context.state.popover || {})}
+            titleId={titleId}
+            descriptionId={descriptionId}
+          />
         </PopoverSurface>
       </Popover>
     </li>

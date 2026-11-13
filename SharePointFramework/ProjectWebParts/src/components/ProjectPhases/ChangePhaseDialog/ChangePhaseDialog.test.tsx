@@ -169,6 +169,23 @@ describe('ChangePhaseDialog', () => {
     )
   })
 
+  it('is described by its subtitle, and in the confirmation by its question as well (Puzzlepart/prosjektportalen365-testing#126)', () => {
+    // Only the title named the dialog; what it would do was read only by moving through it.
+    const subtitle = format(strings.ChangePhaseDialogSubtitle, 'Konsept', 'Planlegge')
+    renderDialog(phase('p1', 'Konsept', {}, [checklistItem(1, 'Mandat godkjent')]), planning)
+    expect(screen.getByRole('dialog')).toHaveAccessibleDescription(subtitle)
+  })
+
+  it('is described in the confirmation by its subtitle and its question', () => {
+    renderDialog(phase('p1', 'Konsept'), planning)
+    expect(screen.getByRole('dialog')).toHaveAccessibleDescription(
+      `${format(strings.ChangePhaseDialogSubtitle, 'Konsept', 'Planlegge')} ${format(
+        strings.ConfirmChangePhase,
+        'Planlegge'
+      )}`
+    )
+  })
+
   it('tells the first phase from a change between phases', () => {
     renderDialog(undefined, planning)
     expect(

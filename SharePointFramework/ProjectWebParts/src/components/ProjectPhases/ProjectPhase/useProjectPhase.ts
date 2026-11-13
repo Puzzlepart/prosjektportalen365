@@ -40,6 +40,7 @@ export function useProjectPhase(props: IProjectPhaseProps) {
   const context = useContext(ProjectPhasesContext)
   const targetRef = useRef<HTMLLIElement>()
   const titleId = useId('project-phase-title')
+  const descriptionId = useId('project-phase-description')
   const classNames = [styles.projectPhase]
   const isCurrentPhase = props.phase.id === context.state.phase?.id
   const [open, setOpen] = useState(false)
@@ -126,6 +127,7 @@ export function useProjectPhase(props: IProjectPhaseProps) {
     isCurrentPhase,
     altPadding,
     customPhaseColor,
-    titleId
+    titleId,
+    descriptionId
   } as const
 }

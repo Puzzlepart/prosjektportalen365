@@ -48,7 +48,7 @@ export const ProjectPhasePopover: FC<IProjectPhasePopoverProps> = (props) => {
           </h2>
           <div className={styles.body}>
             <p className={styles.subText}>{phase.subText}</p>
-            <p>{phase.description}</p>
+            <p id={props.descriptionId}>{phase.description}</p>
             <div hidden={isEmpty(stats)}>
               {stats.map((status, idx) => (
                 <div key={idx}>

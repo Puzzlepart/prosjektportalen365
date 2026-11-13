@@ -78,6 +78,17 @@ export interface IPeoplePickerState {
   atLimit: boolean
 
   /**
+   * The name of the list of the people picked: the field's name with «valgte personer».
+   */
+  selectedLabel: string
+
+  /**
+   * The ids of the field's hint and message, which describe the list where the field holds its one
+   * person and has no input they could describe.
+   */
+  selectedDescribedBy?: string
+
+  /**
    * Takes the text typed.
    */
   onQueryChange: (event: ChangeEvent<HTMLInputElement>) => void

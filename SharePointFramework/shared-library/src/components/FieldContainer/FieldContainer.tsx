@@ -3,18 +3,21 @@ import styles from './FieldContainer.module.scss'
 import { IFieldContainerProps } from './types'
 import { Field, LabelProps } from '@fluentui/react-components'
 import { IconLabel } from './IconLabel'
+import { focusWithoutOpening, withFocusWithoutOpening } from './focusWithoutOpening'
 
 /**
- * Wraps a form control with its accessible label, hint and validation feedback.
+ * Wraps a form control with its accessible label, hint and validation feedback. A click on the
+ * label of a date or choice field focuses the field without opening its popup
+ * (`focusWithoutOpening`).
  */
 export const FieldContainer: FC<IFieldContainerProps> = (props) => {
-  let label = props.label
+  let label = withFocusWithoutOpening(props.label)
   if (props.iconName) {
     // Fluent hands the render function the label's props; the id and `for` in them are what tie
     // the label to the field's control (and give the control its accessible name).
     label = {
       children: (_: unknown, labelProps: LabelProps) => (
-        <IconLabel {...props} labelProps={labelProps} />
+        <IconLabel {...props} labelProps={{ ...labelProps, onClick: focusWithoutOpening }} />
       )
     }
   }

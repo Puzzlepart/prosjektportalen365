@@ -25,7 +25,7 @@ import { customLightTheme, format } from 'pp365-shared-library'
 /** Guides the user through checkpoints, archiving and phase-change confirmation. */
 export const ChangePhaseDialog: FC = () => {
   const context = useContext(ProjectPhasesContext)
-  const { state, dispatch, nextChecklistItem } = useChangePhaseDialog()
+  const { state, dispatch, nextChecklistItem, subtitleId, confirmTextId } = useChangePhaseDialog()
   const fluentProviderId = useId('fp-change-phase-dialog')
   if (!context.state.confirmPhase) return null
 
@@ -43,7 +43,13 @@ export const ChangePhaseDialog: FC = () => {
               if (state.view !== View.ChangingPhase) context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())
             }}
           >
-            <DialogSurface>
+            {/* Described by the subtitle, and in the confirmation by its question as well, which a
+                screen reader read only by moving through the dialog (WCAG 4.1.2). */}
+            <DialogSurface
+              aria-describedby={
+                state.view === View.Confirm ? `${subtitleId} ${confirmTextId}` : subtitleId
+              }
+            >
               <DialogBody className={styles.changePhaseDialog}>
                 <DialogTitle>
                   {state.view === View.Archive
@@ -51,7 +57,7 @@ export const ChangePhaseDialog: FC = () => {
                     : format(strings.ChangePhaseDialogTitle, context.state.confirmPhase.name)}
                 </DialogTitle>
                 <DialogContent className={styles.dialogContent}>
-                  <Label weight='semibold'>
+                  <Label id={subtitleId} weight='semibold'>
                     {state.view === View.Archive
                       ? strings.ArchiveViewDescription
                       : context.state.phase
@@ -65,8 +71,11 @@ export const ChangePhaseDialog: FC = () => {
                             context.state.confirmPhase.name
                           )}
                   </Label>
-                  {state.view === View.Confirm &&
-                    format(strings.ConfirmChangePhase, context.state.confirmPhase.name)}
+                  {state.view === View.Confirm && (
+                    <span id={confirmTextId}>
+                      {format(strings.ConfirmChangePhase, context.state.confirmPhase.name)}
+                    </span>
+                  )}
                   {state.view === View.Confirm &&
                     context.props.useDynamicHomepage &&
                     context.props.showPhaseSitePageMessage && <DynamicHomepageContent />}

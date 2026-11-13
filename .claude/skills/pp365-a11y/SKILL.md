@@ -451,6 +451,25 @@ checked by hand and with which reader and browser: axe finds only part of what W
   `enableKeyboardMode(id)` returns a handler that calls `preventDefault` and
   `nativeEvent.stopPropagation` on its event: start it from a menu item with the item's own event
   (the hub's column menus; `renderMenuItem` passed `null` until 2026-11-12).
+- A `title` equal to the visible text is read twice by NVDA («Prosjektinformasjon overskrift
+  Prosjektinformasjon»): keep `title` for text cut short with «…» (`WebPartTitle` dropped its
+  own, 2026-11-13).
+- PnP's `ModernTaxonomyPicker` takes neither a name for its «Tag» button (an icon button, axe
+  `button-name`, critical) nor a description for its input: Fluent v8's BasePicker sets the
+  input's `aria-describedby` after `inputProps`, to the list of the terms picked or to nothing.
+  Set both in the DOM after PnP renders, and again when it renders them anew
+  (`useTaxonomyPickerAria`, a `MutationObserver` that sets an attribute only when it differs).
+- A click on a label is a click on its control: a date or choice field (a `combobox`) opened its
+  calendar or list from its label, and the calendar took the focus. `FieldContainer`'s label calls
+  `preventDefault` and focuses such a control (`focusWithoutOpening`); a checkbox or a switch
+  still toggles. A `Field` of Fluent's own, outside `FieldContainer`, does not do this.
+- Where a picker for one holds its one value, it has no input, and the field's label and hint
+  belong to nothing: name the list of the values after the field and describe it by the hint
+  (`PeoplePicker`, «Nytteeier, valgte personer», from `useFieldContext_unstable`).
+- Shapes drawn with coloured borders (the phases' arrows) turn into blocks of the text colour in a
+  contrast theme. In `@media (forced-colors: active)` leave them out, edge each item in
+  `CanvasText`, and mark the current one with `Highlight`/`HighlightText` (`ProjectPhase`; the
+  smoke test reads it under `page.emulateMedia({ forcedColors: 'active' })`).
 
 ## Do not
 

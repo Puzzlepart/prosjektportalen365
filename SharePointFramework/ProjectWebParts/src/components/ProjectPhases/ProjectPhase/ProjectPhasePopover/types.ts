@@ -11,4 +11,9 @@ export interface IProjectPhasePopoverProps extends Omit<PopoverProps, 'children'
    * Id of the phase's title, which names the popover
    */
   titleId?: string
+
+  /**
+   * Id of the phase's description, which describes the popover
+   */
+  descriptionId?: string
 }

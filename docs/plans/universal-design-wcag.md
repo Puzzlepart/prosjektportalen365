@@ -1776,3 +1776,28 @@ itself as `observer` to `add()` is disposed, as the footer does.
   the colour still told it alone to the eye, and the cells take no focus. Each cell shows its
   level in its top right corner («3», or the configured name), in black or white as reads on its
   colour (`getReadableTextColor`), hidden from screen readers, which read the name.
+
+### Hand round 1 with NVDA: the project home (2026-11-13)
+
+- **Found** (another tester, Windows with NVDA and Accessibility Insights' FastPass, checked by
+  hand on the test channel v1.15.0.decc7c4; Puzzlepart/prosjektportalen365-testing#126). Points 1,
+  3 and 5 were fixed by round 1. `WebPartTitle`'s heading had a `title` equal to its text, read
+  twice. The list of the people picked was named «Valgte personer» only, and in a field for one
+  that holds one, the label and the hint belonged to nothing. PnP's «Tag» button in a taxonomy
+  field had no name (button-name, critical), and the input was described by the list of the terms
+  picked, not by the hint. The phases turned into blocks in a contrast theme, with no edge and the
+  current phase told only by its larger text. The change-phase dialog and the phase's popover
+  were named but not described. A click on the label of a date or choice field opened its popup.
+- **Done.** `WebPartTitle` has no `title` (the heading wraps, never cut short). `PeoplePicker`
+  names the list «{field}, valgte personer» and, with no input, describes it by the field's hint
+  (`useFieldContext_unstable`). `useTaxonomyPickerAria` names PnP's button «Velg termer for
+  {field}» and puts the hint before the list in the input's `aria-describedby`, in the DOM after
+  PnP renders, kept by a `MutationObserver`: a way round PnP. `ProjectPhase` has
+  `forced-colors` rules: an edge in `CanvasText`, no arrows, the current phase in
+  `Highlight`/`HighlightText`. The change-phase dialog is described by its subtitle (and its
+  question in the confirmation), the phase's popover by the phase's description.
+  `FieldContainer`'s label focuses a `combobox` without opening it (`focusWithoutOpening`); a
+  checkbox or switch still toggles. Tests: `WebPartTitle.test.tsx`, `PeoplePicker.test.tsx`,
+  `useTaxonomyPickerAria.test.tsx` (the real v8 picker), `TaxonomyFields.test.tsx`,
+  `FieldContainer.test.tsx`, `ChangePhaseDialog.test.tsx`, `ProjectPhases.test.tsx`; the contrast
+  theme in `tests/smoke/project.spec.ts`.

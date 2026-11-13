@@ -18,7 +18,9 @@ export const WebPartTitle: FC<IWebPartTitleProps> = (props) => {
   return (
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider id={fluentProviderId} className={styles.root} theme={customLightTheme}>
-        <Heading className={styles.heading} title={props?.title} hidden={!props?.title}>
+        {/* No `title`: the heading wraps, it is never cut short, and NVDA read the name twice
+            («Prosjektinformasjon overskrift Prosjektinformasjon»). */}
+        <Heading className={styles.heading} hidden={!props?.title}>
           <span className={styles.title}>{props?.title}</span>
         </Heading>
         {props?.description && (

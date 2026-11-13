@@ -47,8 +47,17 @@ const PersonAvatar: FC<{ person: IPersonaItem; shape?: 'circular' | 'square' }> 
  * field's label.
  */
 export const PeoplePicker: FC<IPeoplePickerProps> = (props) => {
-  const { selected, query, suggestions, searching, atLimit, onQueryChange, onOptionSelect } =
-    usePeoplePicker(props)
+  const {
+    selected,
+    query,
+    suggestions,
+    searching,
+    atLimit,
+    selectedLabel,
+    selectedDescribedBy,
+    onQueryChange,
+    onOptionSelect
+  } = usePeoplePicker(props)
 
   return (
     <TagPicker
@@ -67,7 +76,7 @@ export const PeoplePicker: FC<IPeoplePickerProps> = (props) => {
             : { 'aria-label': strings.PeoplePickerExpandLabel, children: <ChevronDownRegular /> }
         }
       >
-        <TagPickerGroup aria-label={strings.PeoplePickerSelectedLabel}>
+        <TagPickerGroup aria-label={selectedLabel} aria-describedby={selectedDescribedBy}>
           {selected.map((person) => (
             <Tag
               key={personKey(person)}

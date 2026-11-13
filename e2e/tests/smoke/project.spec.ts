@@ -94,6 +94,54 @@ test.describe('project site', () => {
     await expect(phase).toBeFocused()
   })
 
+  /**
+   * In a contrast theme (Windows' high contrast) the arrows, drawn with coloured borders, turned
+   * into white or black blocks beside each phase, the phases had no edge, and the current phase
+   * stood out only by its larger text (WCAG 1.4.1, 1.4.11; Puzzlepart/prosjektportalen365-testing#126).
+   * CSS, which no unit test applies, so it is read from the browser.
+   */
+  test('the phases keep their edges and show the current phase in a contrast theme', async ({
+    page,
+    openPage,
+    resolvePage
+  }) => {
+    await openPage(await resolvePage(projectUrl!, ['ProjectHome.aspx', 'Hjem.aspx', 'Home.aspx']))
+    const list = webPartByAlias(page, 'ProjectPhases').getByRole('list', {
+      name: /prosjektets faser|the project's phases/i
+    })
+    await expect(list.locator('li > button[aria-current="step"]')).toHaveCount(1, MOUNT_TIMEOUT)
+    await page.emulateMedia({ forcedColors: 'active' })
+    try {
+      const phases = await list.evaluate((element) => {
+        // The theme's selection colour, as the browser resolves it.
+        const probe = document.createElement('div')
+        probe.style.cssText = 'forced-color-adjust: none; background: Highlight'
+        document.body.appendChild(probe)
+        const highlight = getComputedStyle(probe).backgroundColor
+        probe.remove()
+        return [...element.querySelectorAll(':scope > li')].map((item) => ({
+          current: !!item.querySelector(':scope > button[aria-current="step"]'),
+          arrows: [
+            getComputedStyle(item, '::before').display,
+            getComputedStyle(item, '::after').display
+          ],
+          edge: getComputedStyle(item).borderTopStyle,
+          selected: getComputedStyle(item).backgroundColor === highlight
+        }))
+      })
+      expect(phases.length).toBeGreaterThan(0)
+      for (const phase of phases) {
+        expect(phase.arrows, 'an arrow drawn as a block').toEqual(['none', 'none'])
+        expect(phase.edge, 'a phase without an edge').toBe('solid')
+        expect(phase.selected, 'only the current phase in the selection colour').toBe(
+          phase.current
+        )
+      }
+    } finally {
+      await page.emulateMedia({ forcedColors: 'none' })
+    }
+  })
+
   test('project status page mounts its web part', async ({ page, openPage, resolvePage }) => {
     // Prosjektstatus.aspx is a single web part app page: SharePoint sets no data-sp-feature-tag
     // there, so the mount is asserted through the generic web part container (openPage does that).

@@ -45,13 +45,17 @@ jest.mock('@fluentui/react-components', () => {
     const { toggle } = React.useContext(PopoverContext)
     return React.cloneElement(children, { onClick: toggle })
   }
-  /** Shows the open phase details with the configured accessible heading. */
+  /** Shows the open phase details with the configured accessible heading and description. */
   const PopoverSurface = ({ children, ...props }: any) => {
     const { open } = React.useContext(PopoverContext)
     return open
       ? React.createElement(
           'div',
-          { role: 'dialog', 'aria-labelledby': props['aria-labelledby'] },
+          {
+            role: 'dialog',
+            'aria-labelledby': props['aria-labelledby'],
+            'aria-describedby': props['aria-describedby']
+          },
           children
         )
       : null
@@ -79,7 +83,7 @@ import { checklistItem, phase } from './testFixtures'
  */
 const phases = [
   phase('p1', 'Konsept', { PhaseSubText: 'Ideen vurderes' }),
-  phase('p2', 'Planlegge', {}, [
+  phase('p2', 'Planlegge', { PhaseDescription: 'Prosjektet planlegges' }, [
     checklistItem(1, 'Mandat godkjent'),
     checklistItem(2, 'Plan laget', strings.StatusClosed)
   ]),
@@ -162,6 +166,11 @@ describe('ProjectPhases', () => {
     renderPhases(phases[0])
     fireEvent.click(await screen.findByTitle('Planlegge'))
     expect(await screen.findByText('Planlegge', { selector: 'h2' })).toBeInTheDocument()
+    // Named by the phase and described by its description, which was read only by moving
+    // through the popover (Puzzlepart/prosjektportalen365-testing#126).
+    expect(screen.getByRole('dialog', { name: 'Planlegge' })).toHaveAccessibleDescription(
+      'Prosjektet planlegges'
+    )
     expect(
       screen.getByText(format(strings.CheckPointsStatus, 1, strings.StatusOpen.toLowerCase()))
     ).toBeInTheDocument()

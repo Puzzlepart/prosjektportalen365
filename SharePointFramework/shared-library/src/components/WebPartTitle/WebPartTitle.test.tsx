@@ -17,7 +17,11 @@ describe('WebPartTitle', () => {
     )
     // One heading: the h2 held a span with role="heading" as well, read as a second heading.
     expect(screen.getAllByRole('heading')).toHaveLength(1)
-    expect(screen.getByRole('heading', { level: 2, name: 'Prosjektstatus' })).toBeInTheDocument()
+    // No title on it: the heading wraps and is never cut short, and with a title equal to its text
+    // NVDA read the name twice (Puzzlepart/prosjektportalen365-testing#126).
+    expect(screen.getByRole('heading', { level: 2, name: 'Prosjektstatus' })).not.toHaveAttribute(
+      'title'
+    )
     // The info button is named in the site's language after the web part, where Fluent's own
     // name for it is "information", and the tooltip names the web part, not the description's HTML.
     const infoName = format(strings.Aria.InfoLabelTitle, 'Prosjektstatus')

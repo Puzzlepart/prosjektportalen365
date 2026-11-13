@@ -17,6 +17,7 @@ define([], function () {
       SaveDisabledTitle:
         'There are required fields that are not filled out, fill these out to save',
       SearchBoxClearLabel: 'Clear the search',
+      TaxonomyPickerButtonLabel: 'Choose terms for {0}',
       TimelineScrollLabel: 'The timeline. Scroll in time with the arrow keys',
       TrendBetter: 'Better than the previous measurement',
       TrendTargetReached: 'Target reached',
@@ -71,6 +72,7 @@ define([], function () {
     PeoplePickerExpandLabel: 'Show suggestions',
     PeoplePickerNoResults: 'No people found',
     PeoplePickerSelectedLabel: 'Selected people',
+    PeoplePickerSelectedFieldLabel: '{0}, selected people',
     FilterPanelEmptyMessage:
       'There are no filters to display. Filters are only shown for columns that have more than one unique value across the current data set. This means there is either no data loaded, or all columns contain the same value for every item.',
     FilterPanelGroupProjectInformation: 'Project information',

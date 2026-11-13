@@ -1,5 +1,7 @@
-import { TagPickerProps } from '@fluentui/react-components'
+import { TagPickerProps, useFieldContext_unstable } from '@fluentui/react-components'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
+import strings from 'SharedLibraryStrings'
+import { format } from '../../util/format'
 import { IPersonaItem } from '../../types'
 import { IPeoplePickerProps, IPeoplePickerState } from './types'
 
@@ -26,6 +28,10 @@ export function personKey(person: IPersonaItem): string {
  * picked. The search runs a moment after typing pauses and is told who is picked already; an answer
  * that arrives after a newer search has started is dropped. A field for one person takes no more
  * input while it holds one, as v8's picker at its item limit did.
+ *
+ * The list of the people picked is named after the field («Nytteeier, valgte personer»). Where the
+ * field holds its one person, there is no input for the field's label and hint to belong to, so the
+ * list is described by the hint (and by the field's message, when it has one) instead.
  */
 export function usePeoplePicker(props: IPeoplePickerProps): IPeoplePickerState {
   const selected = props.selected ?? []
@@ -63,6 +69,14 @@ export function usePeoplePicker(props: IPeoplePickerProps): IPeoplePickerState {
   }, [query])
 
   const atLimit = !props.multi && selected.length > 0
+  const field = useFieldContext_unstable()
+  const fieldName = props['aria-label']
+  const selectedLabel = fieldName
+    ? format(strings.PeoplePickerSelectedFieldLabel, fieldName)
+    : strings.PeoplePickerSelectedLabel
+  const selectedDescribedBy = atLimit
+    ? [field?.validationMessageId, field?.hintId].filter(Boolean).join(' ') || undefined
+    : undefined
 
   const onQueryChange = (event: ChangeEvent<HTMLInputElement>) => setQuery(event.target.value)
 
@@ -82,6 +96,8 @@ export function usePeoplePicker(props: IPeoplePickerProps): IPeoplePickerState {
     suggestions,
     searching,
     atLimit,
+    selectedLabel,
+    selectedDescribedBy,
     onQueryChange,
     onOptionSelect
   }

@@ -6,11 +6,13 @@ jest.mock('@fluentui/react-components', () =>
   jest.requireActual('pp365-jest-config/lib/tagPickerStandIn').withTagPickerStandIn()
 )
 
+import { Field } from '@fluentui/react-components'
 import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import strings from 'SharedLibraryStrings'
 import * as React from 'react'
 import { PeoplePicker } from '.'
 import { PEOPLE_SEARCH_DELAY } from './usePeoplePicker'
+import { format } from '../../util/format'
 
 /**
  * The picker's own contract: the people picked as tags, removed by a click or Backspace; the search
@@ -180,6 +182,38 @@ describe('PeoplePicker', () => {
     })
     expect(screen.queryByRole('option', { name: /Kari Nordmann/ })).toBeNull()
     expect(screen.getByRole('option', { name: /Ola Nordmann/ })).toBeInTheDocument()
+  })
+
+  it("names the people picked after the field, and in a field for one that holds one, has the field's hint describe them (Puzzlepart/prosjektportalen365-testing#126)", () => {
+    const { rerender } = render(
+      <Field label='Nytteeier' hint='Hvem er gevinstansvarlig for prosjektet?'>
+        <PeoplePicker
+          aria-label='Nytteeier'
+          onChange={jest.fn()}
+          onResolveSuggestions={jest.fn()}
+        />
+      </Field>
+    )
+    const name = format(strings.PeoplePickerSelectedFieldLabel, 'Nytteeier')
+    expect(name).toBe('Nytteeier, valgte personer')
+    // With an input, the input is what the label and the hint belong to (Fluent's own input reads
+    // the field), and the list is not described by the hint as well.
+    expect(screen.getByRole('group', { name })).not.toHaveAttribute('aria-describedby')
+    rerender(
+      <Field label='Nytteeier' hint='Hvem er gevinstansvarlig for prosjektet?'>
+        <PeoplePicker
+          aria-label='Nytteeier'
+          selected={[KARI]}
+          onChange={jest.fn()}
+          onResolveSuggestions={jest.fn()}
+        />
+      </Field>
+    )
+    // Holding its one person, the field has no input: the list of the people picked carries them.
+    expect(screen.queryByRole('combobox')).toBeNull()
+    expect(screen.getByRole('group', { name })).toHaveAccessibleDescription(
+      'Hvem er gevinstansvarlig for prosjektet?'
+    )
   })
 
   it('can be disabled', () => {

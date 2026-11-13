@@ -19,6 +19,7 @@ declare interface ISharedLibraryStrings {
     SaveTitle: string
     SaveDisabledTitle: string
     SearchBoxClearLabel: string
+    TaxonomyPickerButtonLabel: string
     TimelineScrollLabel: string
     TrendBetter: string
     TrendTargetReached: string
@@ -73,6 +74,7 @@ declare interface ISharedLibraryStrings {
   PeoplePickerExpandLabel: string
   PeoplePickerNoResults: string
   PeoplePickerSelectedLabel: string
+  PeoplePickerSelectedFieldLabel: string
   FilterPanelEmptyMessage: string
   FilterPanelGroupProjectInformation: string
   GroupByLabel: string

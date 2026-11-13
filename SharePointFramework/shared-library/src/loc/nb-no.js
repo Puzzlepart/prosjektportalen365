@@ -16,6 +16,7 @@ define([], function () {
       SaveTitle: 'Lagre',
       SaveDisabledTitle: 'Det er påkrevde felter som ikke er utfylt, fyll ut disse for å lagre',
       SearchBoxClearLabel: 'Tøm søket',
+      TaxonomyPickerButtonLabel: 'Velg termer for {0}',
       TimelineScrollLabel: 'Tidslinjen. Rull i tid med piltastene',
       TrendBetter: 'Bedre enn forrige måling',
       TrendTargetReached: 'Målet er nådd',
@@ -70,6 +71,7 @@ define([], function () {
     PeoplePickerExpandLabel: 'Vis forslag',
     PeoplePickerNoResults: 'Fant ingen personer',
     PeoplePickerSelectedLabel: 'Valgte personer',
+    PeoplePickerSelectedFieldLabel: '{0}, valgte personer',
     FilterPanelEmptyMessage:
       'Det er ingen filtre å vise. Filtre vises kun for kolonner som har mer enn én unik verdi i gjeldende datasett. Det betyr at det enten ikke er lastet inn data, eller at alle kolonner har samme verdi for hvert element.',
     FilterPanelGroupProjectInformation: 'Prosjektinformasjon',
