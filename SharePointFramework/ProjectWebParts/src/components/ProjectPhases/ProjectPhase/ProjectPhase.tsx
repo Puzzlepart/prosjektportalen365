@@ -40,9 +40,8 @@ export const ProjectPhase: FC<IProjectPhaseProps> = (props) => {
             className={styles.trigger}
             aria-current={isCurrentPhase ? 'step' : undefined}
           >
-            <span className={styles.name} title={props.phase.name}>
-              {props.phase.name}
-            </span>
+            {/* No `title`: the name is never cut short, and one equal to it was read twice. */}
+            <span className={styles.name}>{props.phase.name}</span>
             <span {...subTextProps} />
           </button>
         </PopoverTrigger>

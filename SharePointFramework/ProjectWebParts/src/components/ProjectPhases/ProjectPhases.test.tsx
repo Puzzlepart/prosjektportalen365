@@ -138,6 +138,14 @@ const phaseItems = () =>
     (li) => li.querySelector('span')?.textContent
   )
 
+/**
+ * A phase's name in its button in the selector. Found by its text: the name has no `title`, which
+ * repeated it (Puzzlepart/prosjektportalen365-testing#126).
+ */
+const PHASE_NAME = 'li button > span'
+const phaseName = (name: string) => screen.getByText(name, { selector: PHASE_NAME })
+const findPhaseName = (name: string) => screen.findByText(name, { selector: PHASE_NAME })
+
 describe('ProjectPhases', () => {
   // The change-phase dialog keeps working asynchronously after it opens; a test that leaves it open
   // must unmount it and let that work finish, or the work fires after the environment is torn down
@@ -149,22 +157,44 @@ describe('ProjectPhases', () => {
 
   it('lists the visible phases in order, marks the current one and shows the sub text', async () => {
     renderPhases(phases[0])
-    expect(await screen.findByTitle('Konsept')).toBeInTheDocument()
+    expect(await findPhaseName('Konsept')).toBeInTheDocument()
     expect(phaseItems()).toEqual(['Konsept', 'Planlegge', 'Gjennomføre'])
-    expect(screen.getByTitle('Konsept').closest('li')).toHaveClass('isCurrentPhase')
-    expect(screen.getByTitle('Planlegge').closest('li')).not.toHaveClass('isCurrentPhase')
+    expect(phaseName('Konsept').closest('li')).toHaveClass('isCurrentPhase')
+    expect(phaseName('Planlegge').closest('li')).not.toHaveClass('isCurrentPhase')
     expect(screen.getByText('Ideen vurderes')).toBeInTheDocument()
+  })
+
+  it('reads each name once, and titles a sub text only when it is cut short, with the whole of it (Puzzlepart/prosjektportalen365-testing#126)', async () => {
+    const long = 'Prosjektet gjennomføres etter planen, med <b>ukentlige</b> statusmøter'
+    renderPhases(phases[0], {
+      phases: [
+        phase('p1', 'Konsept', { PhaseSubText: 'Ideen vurderes' }),
+        phase('p2', 'Gjennomføre', { PhaseSubText: long })
+      ]
+    })
+    // A title equal to the text shown was read twice by NVDA («Konsept Konsept»).
+    expect(await findPhaseName('Konsept')).not.toHaveAttribute('title')
+    expect(phaseName('Gjennomføre')).not.toHaveAttribute('title')
+    expect(screen.getByText('Ideen vurderes')).not.toHaveAttribute('title')
+    // Cut short at 50 characters («…»), the sub text's title holds the whole of it, as text: the
+    // sub text is HTML, and its markup stays out of the title.
+    const cut = phaseName('Gjennomføre').nextElementSibling
+    expect(cut.textContent).toMatch(/…$/)
+    expect(cut).toHaveAttribute(
+      'title',
+      'Prosjektet gjennomføres etter planen, med ukentlige statusmøter'
+    )
   })
 
   it('shows the end phase once the current phase is one of the last two', async () => {
     renderPhases(phases[2])
-    await screen.findByTitle('Konsept')
+    await findPhaseName('Konsept')
     expect(phaseItems()).toEqual(['Konsept', 'Planlegge', 'Gjennomføre', 'Avslutte'])
   })
 
   it('opens a phase in a popover with its checklist status and the change-phase action', async () => {
     renderPhases(phases[0])
-    fireEvent.click(await screen.findByTitle('Planlegge'))
+    fireEvent.click(await findPhaseName('Planlegge'))
     expect(await screen.findByText('Planlegge', { selector: 'h2' })).toBeInTheDocument()
     // Named by the phase and described by its description, which was read only by moving
     // through the popover (Puzzlepart/prosjektportalen365-testing#126).
@@ -188,7 +218,7 @@ describe('ProjectPhases', () => {
 
   it('does not offer to change to the phase the project is in, and lets the keyboard reach why', async () => {
     renderPhases(phases[0])
-    fireEvent.click(await screen.findByTitle('Konsept'))
+    fireEvent.click(await findPhaseName('Konsept'))
     expect(await screen.findByText('Konsept', { selector: 'h2' })).toBeInTheDocument()
     // Disabled but focusable, so the keyboard and a screen reader reach the reason in its title.
     const change = screen.getByTitle(strings.Aria.CurrentPhaseText)
@@ -205,7 +235,7 @@ describe('ProjectPhases', () => {
    * land between two queries.
    */
   async function openChangePhaseDialog(name: string) {
-    fireEvent.click(await screen.findByTitle(name))
+    fireEvent.click(await findPhaseName(name))
     fireEvent.click(await screen.findByTitle(strings.ChangePhaseText))
     return screen.findByText(format(strings.ChangePhaseDialogTitle, name))
   }
@@ -245,7 +275,7 @@ describe('ProjectPhases', () => {
 
   it('offers no change-phase action without the permission', async () => {
     renderPhases(phases[0], { userHasChangePhasePermission: false })
-    fireEvent.click(await screen.findByTitle('Planlegge'))
+    fireEvent.click(await findPhaseName('Planlegge'))
     expect(await screen.findByText('Planlegge', { selector: 'h2' })).toBeInTheDocument()
     expect(screen.queryByTitle(strings.ChangePhaseText)).toBeNull()
   })
@@ -267,7 +297,7 @@ describe('ProjectPhases', () => {
 
   it('opens a phase as a dialog named by the phase, holding the focus (WCAG 2.4.3)', async () => {
     renderPhases(phases[0])
-    fireEvent.click(await screen.findByTitle('Planlegge'))
+    fireEvent.click(await findPhaseName('Planlegge'))
     const dialog = await screen.findByRole('dialog')
     expect(dialog).toHaveAccessibleName('Planlegge')
     expect(popover.trapFocus).toBe(true)
@@ -283,9 +313,9 @@ describe('ProjectPhases', () => {
         phase('p4', 'Portefølje', { PhaseLevel: 'Portfolio' })
       ]
     })
-    const style = (name: string) => screen.getByTitle(name).closest('li').style
+    const style = (name: string) => phaseName(name).closest('li').style
     const fontColor = (name: string) => style(name).getPropertyValue('--font-color')
-    expect(await screen.findByTitle('Konsept')).toBeInTheDocument()
+    expect(await findPhaseName('Konsept')).toBeInTheDocument()
     // The default phases are light with black text, at rest and under the pointer (7.7:1 or
     // more); the current phase is dark with white text (6:1 or more), where white on the old
     // colours read 1.7 to 2.7:1 and black on the current phase under the pointer 4.2:1.
@@ -302,7 +332,7 @@ describe('ProjectPhases', () => {
 
   it('tells when a phase change did not reach the hub, in words under the phases and to a screen reader (WCAG 4.1.3)', async () => {
     renderPhases(phases[0])
-    await screen.findByTitle('Konsept')
+    await findPhaseName('Konsept')
     const warning = format(
       strings.PhaseNotSyncedToHubText,
       format(strings.HubSyncNoWriteAccessReason, 'Prosjekter')
@@ -316,7 +346,7 @@ describe('ProjectPhases', () => {
       '.fui-MessageBar'
     )
     expect(message).toHaveTextContent(warning)
-    expect(screen.getByTitle('Planlegge').closest('li')).toHaveClass('isCurrentPhase')
+    expect(phaseName('Planlegge').closest('li')).toHaveClass('isCurrentPhase')
     await waitFor(() => expect(announced()).toContain(warning))
     expect(await axeComponent(message as HTMLElement)).toHaveNoViolations()
   })

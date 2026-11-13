@@ -459,7 +459,8 @@ checked by hand and with which reader and browser: axe finds only part of what W
   (the hub's column menus; `renderMenuItem` passed `null` until 2026-11-12).
 - A `title` equal to the visible text is read twice by NVDA («Prosjektinformasjon overskrift
   Prosjektinformasjon»): keep `title` for text cut short with «…» (`WebPartTitle` dropped its
-  own, 2026-11-13).
+  own, 2026-11-13), and then give it the whole text, as text: a phase's sub text, which is HTML,
+  has a `title` only when `truncateString` shortened it (`useProjectPhase`).
 - PnP's `ModernTaxonomyPicker` takes neither a name for its «Tag» button (an icon button, axe
   `button-name`, critical) nor a description for its input: Fluent v8's BasePicker sets the
   input's `aria-describedby` after `inputProps`, to the list of the terms picked or to nothing.

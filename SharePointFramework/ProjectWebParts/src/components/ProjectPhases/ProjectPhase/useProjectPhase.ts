@@ -35,6 +35,17 @@ function phaseTextColor(backgrounds: string[]): string {
   return worst('#000000') >= worst('#ffffff') ? '#000000' : '#ffffff'
 }
 
+/**
+ * The text of a phase's sub text, which is HTML (the selector sets it as such), for its `title`:
+ * the markup and entities left out. Parsed in an inert document, which runs no script and loads no
+ * image.
+ *
+ * @param html The sub text
+ */
+function textOfHtml(html: string): string {
+  return new DOMParser().parseFromString(html, 'text/html').body.textContent?.trim() ?? ''
+}
+
 /** Derives phase appearance, accessible text and popover behavior from phase and selector state. */
 export function useProjectPhase(props: IProjectPhaseProps) {
   const context = useContext(ProjectPhasesContext)
@@ -57,13 +68,15 @@ export function useProjectPhase(props: IProjectPhaseProps) {
     classNames.push(styles[className])
   }
 
+  const subText = props.phase.subText ?? ''
+  const shownSubText = truncateString(subText, context.props.subTextTruncateLength ?? 50)
+  // A title only where the sub text is cut short («…»), with the whole of it: one equal to the
+  // text shown was read twice by NVDA (Puzzlepart/prosjektportalen365-testing#126).
   const subTextProps: HTMLProps<HTMLSpanElement> = {
     hidden: !context.props.showSubText,
     className: styles.subText,
-    title: props.phase.subText,
-    dangerouslySetInnerHTML: {
-      __html: truncateString(props.phase.subText ?? '', context.props.subTextTruncateLength ?? 50)
-    }
+    title: shownSubText !== subText ? textOfHtml(subText) : undefined,
+    dangerouslySetInnerHTML: { __html: shownSubText }
   }
 
   const handleOpenChange: PopoverProps['onOpenChange'] = (e, data) => {

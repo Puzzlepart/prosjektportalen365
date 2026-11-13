@@ -1803,6 +1803,10 @@ itself as `observer` to `add()` is disposed, as the footer does.
   `useTaxonomyPickerAria.test.tsx` (the real v8 picker), `TaxonomyFields.test.tsx`,
   `FieldContainer.test.tsx`, `ChangePhaseDialog.test.tsx`, `ProjectPhases.test.tsx`; the contrast
   theme in `tests/smoke/project.spec.ts`.
+- **Follow-up to point 2** (same day): each phase's name had a `title` equal to it, and its sub
+  text a `title` equal to the text shown unless cut short. The name has none (it is never cut
+  short), and the sub text has one only when `truncateString` shortened it, with the whole text
+  without its markup (the sub text is HTML). Test: `ProjectPhases.test.tsx`.
 
 ### Hand round 6, point 7: the column form's dropdown (2026-11-13)
 
