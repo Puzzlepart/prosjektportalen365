@@ -2705,3 +2705,42 @@ _Each slice adds its entry below._
     one load and not in the other would fail it falsely.
   - The guide's test overview (`.development-guide/spfx/testoversikt.md`) has no row for usage
     statistics yet (slice 11).
+
+### On main before the rest (2026-11-13)
+
+- Decided by the user on 2026-11-13: the five commits went to `main` before Assist, the texts and
+  the legal checks, against P25 ("everything before the merge"). They were pushed to origin as a
+  fast-forward (`decc7c48a..4dd1338d0`); GitHub let the account bypass the branch protection
+  (changes through a pull request, the status check «task-list-completed»).
+- So 1.15.0 carries usage statistics unless they are taken out before the release. Hubs upgraded
+  from 1.14.x start at 2 and send to Assist, whose route does not exist yet: the requests fail
+  quietly in the browsers, and nothing is stored. The dev and test hubs start at 0 (rule 5, slice
+  3).
+- The push's subject carried `[skip-ci] [build-debug]`: `build-release.yml` built the packages,
+  and nothing was deployed. The next push to `main` that deploys brings the code to the dev and
+  test hubs.
+- Slice 2 (Assist's ingest) runs in a session of its own in prosjektportalen-assist, beside slice
+  11 here.
+
+### Slice 11: developer guidance (2026-11-13)
+
+- Done:
+  - `.development-guide/spfx/bruksstatistikk.md` (new, in Norwegian): the levels and the setting,
+    the contract and its copies, the gate, starting telemetry, counting an event and an error, a
+    checklist for a new event, storage and privacy in the code, testing, and install and upgrade.
+    It is loaded in `.development-guide/.README` after the accessibility chapters, and the guide's
+    `README.md` was generated again (`@appnest/readme`, from the npx cache), which also brought in
+    chapter changes made on `main` since its last generation.
+  - Pointers in the pp365-ui (counting in a component), pp365-templates (the setting row),
+    pp365-testing (the Jest helpers) and pp365-release (a contract change goes with Assist's copy,
+    the fixture and the wiki, Assist first) skills.
+  - Gotcha 9 in `AGENTS.md`: the contract's two copies, the fixture and the wiki page change
+    together; every sender goes through the one gate; no browser storage, no error message.
+  - `.development-guide/spfx/testoversikt.md`: a row for the telemetry core (16 files, 258 tests,
+    the integration test and the e2e spec), and `.tasks/usage-statistics-level.test.js` among the
+    tests outside the components.
+- Verified: `npm run check-skills`; the function names and signatures the chapter gives against
+  `shared-library/src/telemetry/index.ts` and `track.ts`.
+- Left: the chapter names Assist's `src/lib/pp-usage-contract.ts` and
+  `scripts/sync-pp-usage-contract.mjs`, which slice 2 is building; and the wiki page Bruksstatistikk
+  (slice 12).
