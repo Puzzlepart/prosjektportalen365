@@ -367,7 +367,7 @@ function Get-PPInstallationInfo() {
 #region Usage statistics (bruksstatistikk)
 # The setting UsageStatisticsLevel in Globale innstillinger decides how much usage statistics the
 # browsers send to the Prosjektportalen team (docs/plans/usage-logging.md, P3, P7 and P10). The
-# Portfolio template seeds the row as 2. An upgrade adds a missing row before the template, carrying
+# Portfolio template seeds the row as 3. An upgrade adds a missing row before the template, carrying
 # an earlier opt-out over as 0, and -UsageStatisticsLevel writes an explicit level after it.
 
 # The GtSettingsId the Portfolio template seeds the level row with (Objects/Lists/Globale
@@ -488,7 +488,7 @@ matches gives the value:
 3. a CatalogTelemetryEnabled row that is disabled, or whose value is not exactly 1, gives 0;
 4. no CatalogTelemetryEnabled row, on a hub at 1.14.0 or later, gives 0;
 5. a hub at $UsageStatisticsLevelSinceVersion or later, which had the level row and lost it, gives 0;
-6. otherwise Standard, 2.
+6. otherwise Extended, 3.
 
 .PARAMETER ExplicitLevel
 -UsageStatisticsLevel, or empty when it was not given
@@ -538,7 +538,7 @@ function Resolve-InitialUsageStatisticsLevel {
     if ($null -ne $Version -and $Version -ge $UsageStatisticsLevelSinceVersion) {
         return [PSCustomObject]@{ Value = 0; Reason = 'level-deleted'; Text = 'UsageStatisticsLevel was deleted' }
     }
-    return [PSCustomObject]@{ Value = 2; Reason = 'default'; Text = 'the default, Standard' }
+    return [PSCustomObject]@{ Value = 3; Reason = 'default'; Text = 'the default, Extended' }
 }
 
 <#

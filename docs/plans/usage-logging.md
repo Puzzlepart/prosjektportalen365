@@ -3,6 +3,8 @@
 Status: proposed 2026-11-05, decided 2026-11-12. The user has taken decisions D1 to D9, and on
 2026-11-12 went through P1 to P25 one by one. All stand as written except P4, P10 and P25, which
 are rewritten below; P8, P9, P12 and P19 had already been rewritten to follow D6, D7 and D9.
+On 2026-11-13 the user made Extended (3) the default level instead of Standard (2); D1, D7 and
+P10 follow it.
 Branches: 1.15.0 is merged to `main` in prosjektportalen365, so the work runs on a branch cut from
 `main`, in the worktree `.claude/worktrees/logging` (branch `worktree-logging`, which the user may
 rename). The old `feat/logging` branch there holds only this plan, on the pre-squash history. In
@@ -346,7 +348,7 @@ Texts and promises:
 
 ### Taken
 
-- **D1. Consent model.** On by default at level Standard. The customer can lower the level or turn
+- **D1. Consent model.** On by default at level Extended (Standard until 2026-11-13). The customer can lower the level or turn
   it off in the hub's Globale innstillinger. Install.ps1 gets a parameter to choose the level up
   front. This is the same model as `CatalogTelemetryEnabled` ("på som standard, kan slås av").
 - **D2. Levels.** One setting with four levels:
@@ -371,7 +373,7 @@ Texts and promises:
   in use per day and per month. Assist keeps only the counts; the hashes are deleted after 90 days.
   P12 says how the hash is built.
 - **D7. `-SkipPingback` and the level are independent.** `-SkipPingback` governs only the
-  installation message. Without `-UsageStatisticsLevel`, a new installation gets Standard whether
+  installation message. Without `-UsageStatisticsLevel`, a new installation gets Extended whether
   or not `-SkipPingback` is given.
 - **D8. Unknown hosts are shown, never created.** Data from a host that has no tenant row in Assist
   appears under "Ukoblede verter" on Logging › Prosjektportalen, and an admin links it to a
@@ -460,7 +462,7 @@ asks the user to confirm a reading (P9, P11, P23), the user confirmed it.
     be read gives an empty map. All three end in rule 6. The catalog flag is true only when the
     level is 2 or 3 and `CatalogTelemetryEnabled` is exactly `1` after trimming (P5).
 
-    The default Standard comes only from the row, which the template seeds as `2` (P10) or
+    The default Extended comes only from the row, which the template seeds as `3` (P10) or
     PreInstallUpgrade adds (P7). The browser code never assumes a default. A DEBUG build never
     sends (P14).
   - Reason: D4. The catalog's current rule turns an unticked Aktivert, a deleted row and a failed
@@ -615,7 +617,7 @@ asks the user to confirm a reading (P9, P11, P23), the user confirmed it.
     Av would then stop everything, but the installs dashboard would lose level-0 hubs.
 - **P10. Setting key, values, category and id.**
   - Recommendation:
-    - Key `UsageStatisticsLevel`, with values `0` to `3` as text, seeded `2` (Standard, D1).
+    - Key `UsageStatisticsLevel`, with values `0` to `3` as text, seeded `3` (Extended, D1; `2` until 2026-11-13).
     - Install.ps1 writes the row only when `-UsageStatisticsLevel` is given, right after the
       Portfolio template has run. Without the parameter no script writes a starting value: the
       template's row is the default.
@@ -632,13 +634,13 @@ asks the user to confirm a reading (P9, P11, P23), the user confirmed it.
       the same General group.
     - Install.ps1's values are `Off`, `Basic`, `Standard` and `Extended`.
   - Reason: the smallest change to frozen templates, and the two switches already share a group in
-    the view. Skip never rewrites titles, so the wording is final at release. A seeded `2` makes
+    the view. Skip never rewrites titles, so the wording is final at release. A seeded `3` makes
     the default a fact of the template (D1): every hub that gets its row from the template runs at
-    Standard, and a run that stops half-way leaves the same value as a completed one. Install.ps1
+    Extended, and a run that stops half-way leaves the same value as a completed one. Install.ps1
     then needs no step that writes a starting value at the end of a run, and no rule for the rerun
     of an install that never completed.
   - Cost: the apps are deployed tenant-wide before the template adds the row and the Footer. A new
-    hub installed with `-UsageStatisticsLevel Off` or `Basic` therefore runs at Standard from the
+    hub installed with `-UsageStatisticsLevel Off` or `Basic` therefore runs at Extended from the
     moment the template adds the row until Install.ps1 writes the explicit level right after the
     Portfolio template. A browser that opens the hub in that window follows the explicit level
     within two hours (P4). The window is short, and it is accepted.
@@ -1266,10 +1268,10 @@ The JSDoc of `featureFlags.isTelemetryEnabled` says the flag now stops all PP365
 </pnp:DataRow>
 ```
 
-The seed is `2` (P10), so the default is a fact of the template and no script writes a starting
+The seed is `3` (P10), so the default is a fact of the template and no script writes a starting
 value. The apps are already deployed tenant-wide when the template adds the row and the Footer in
 the same run. A new hub installed with an explicit `-UsageStatisticsLevel` therefore runs at
-Standard from the template's row until Install.ps1 writes the explicit level right after the
+Extended from the template's row until Install.ps1 writes the explicit level right after the
 Portfolio template, and a browser that read the settings in that window follows the explicit
 level within two hours (P4). The window is short, and it is accepted. On an existing hub, the
 step before the template has already added a missing row, as `0` when P7 finds an opt-out, and
@@ -1333,13 +1335,13 @@ the upgrade through Install.ps1's handler, before the apps and the template. The
   `[ValidateSet('Off','Basic','Standard','Extended')][string]$UsageStatisticsLevel`, with the
   HelpMessage "Usage statistics sent to the Prosjektportalen team: Off, Basic, Standard or
   Extended. Writes UsageStatisticsLevel in Globale innstillinger. Without it, a new installation
-  gets Standard and an upgrade keeps the hub's level".
+  gets Extended and an upgrade keeps the hub's level".
 - `-SkipPingback`'s HelpMessage gains: "Usage statistics have their own switch,
   -UsageStatisticsLevel" (D7).
 - Right after `Param`, before any dot-sourcing:
   `$UsageStatisticsLevelGiven = $PSBoundParameters.ContainsKey('UsageStatisticsLevel')`. Whether a
   dot-sourced script can change `$PSBoundParameters` is not verified.
-- Banner (`:104-115`): one line, `### Usage statistics: Standard (2) ####` on a fresh install,
+- Banner (`:104-115`): one line, `### Usage statistics: Extended (3) ####` on a fresh install,
   `<Name> (from -UsageStatisticsLevel)`, or on an upgrade `kept as set on the hub ####`. It is followed by
   `[INFO] What is sent, and how to turn it off: https://github.com/Puzzlepart/prosjektportalen365/wiki/Bruksstatistikk`.
   There is no new prompt, which would break unattended installs.
@@ -1347,9 +1349,9 @@ the upgrade through Install.ps1's handler, before the apps and the template. The
   before the first `Invoke-PnPSiteTemplate` (`:533-534`), call `Initialize-UsageStatisticsSetting`.
   On an existing hub, it adds a missing row with the resolver before the template's Skip re-adds a
   deleted `CatalogTelemetryEnabled` row as `1` (`Globale innstillinger.xml:31`, `:144-151`) and
-  seeds the level row as `2`. `$PreviousVersion` is read the way PreInstallUpgrade reads it when
+  seeds the level row as `3`. `$PreviousVersion` is read the way PreInstallUpgrade reads it when
   it is not already set. On a new hub the list does not exist yet, and the template creates it
-  with the row at `2`.
+  with the row at `3`.
 - Right after the Portfolio template, in both template branches (after the Portfolio template's
   `EndAction`, before the content template): when the level was given, call
   `Set-UsageStatisticsLevel` and print `old -> new`. Nothing else in Install.ps1 writes the row,
@@ -1403,7 +1405,7 @@ the upgrade through Install.ps1's handler, before the apps and the template. The
 - Fresh install, and any other run without `-Upgrade`:
   1. Apps.
   2. Before the template: when the list exists, the same add-if-missing step with the resolver.
-  3. The template seeds `2` on a new hub, which runs at Standard from then on. On an existing hub
+  3. The template seeds `3` on a new hub, which runs at Extended from then on. On an existing hub
      Skip leaves the row alone.
   4. Right after the Portfolio template: an explicit `-UsageStatisticsLevel` is written.
   5. PostInstall.
@@ -1964,7 +1966,7 @@ with the personvernombud, named by the user.
       after the run, since the test hub is shared.
     - The matrix. A changed row reaches a browser only when its cached settings expire (P4), so
       every case that changes a row is checked in a new private window, or after an hour:
-      - the row is created as `2`;
+      - the row is created as `3`;
       - levels 1 (owner heartbeat only; Assist shows a week and writes no daily row), 2 and 3,
         each in the network tab and in Assist with `?internal=vis&test=vis`;
       - level 0 sends nothing, catalog included;
@@ -1991,7 +1993,7 @@ with the personvernombud, named by the user.
         where no web part runs, still sends its page view with a site type;
       - the Vercel log settings (L3);
       - Skip leaves an existing row alone;
-      - the level is restored to `2`.
+      - the level is restored to `3`.
     - Done when: the signed checklist is in the slice log.
     - Effort: M (1½ days, plus about 45 minutes per CI run).
 14. **Release gate and first week.**
@@ -2063,7 +2065,7 @@ What runs in parallel:
 - Install and upgrade steps are idempotent. The step before the template (in PreInstallUpgrade, or
   in Install.ps1 without `-Upgrade`) lets errors propagate. Only an explicit
   `-UsageStatisticsLevel` changes an existing level row, and no script writes a starting value:
-  the template seeds `2` (P10). Never compare SharePoint's times with the installer's clock.
+  the template seeds `3` (P10). Never compare SharePoint's times with the installer's clock.
 - Use no real customer names in fixtures or examples (`contoso`).
 - End each slice with its log entry below: what was done, what was found, what was left.
 
@@ -2082,8 +2084,8 @@ What runs in parallel:
 | Daily counts in a tiny tenant reflect one person, or a small project's site hash shows its activity within a month | Day granularity, no user ids, a site hash that changes every month and is deleted after 90 days, the dashboard showing counts only, no user language, heartbeats stored by ISO week and never by day, admin-only access, a DPIA risk row, it can be turned off | User, Legal |
 | Owner-only heartbeats show when named hub owners work | Assist keeps heartbeats as current state with the ISO week, plus the last one of each month; a level-1 batch writes no daily row; the texts say so | Assist owner |
 | Catalog events carry names from a customer's own catalog, or error text from 1.14 hubs | Catalog events only for the default catalog URL; Assist keeps only package ids from the public `catalog.json` and stores no error text or client time from any client | Agent, Assist owner |
-| A failed upgrade or install check lets the seeded `2` override an opt-out | The step before the template lets errors propagate, so Install.ps1 exits 1 before the template can seed the row; the catalog `'0'` runtime stop; the resolver's scenario table in `npm run test:tasks` | Agent |
-| A new hub installed with an explicit level runs at Standard until that level is written | Accepted (P10). Install.ps1 writes the explicit level right after the Portfolio template, so the window is short; a browser that read the settings in it follows within two hours; a slice 13 case | User |
+| A failed upgrade or install check lets the seeded `3` override an opt-out | The step before the template lets errors propagate, so Install.ps1 exits 1 before the template can seed the row; the catalog `'0'` runtime stop; the resolver's scenario table in `npm run test:tasks` | Agent |
+| A new hub installed with an explicit level runs at Extended until that level is written | Accepted (P10). Install.ps1 writes the explicit level right after the Portfolio template, so the window is short; a browser that read the settings in it follows within two hours; a slice 13 case | User |
 | A lowered or disabled level keeps sending until the cached settings expire | Accepted (P4). The app's 60-minute settings cache and `GATE_MAX_AGE_MS` bound the delay at two hours; every text says a change applies within two hours; Puzzlepart can block a host at ingest (P20) | User |
 | Counters on a site where no bundle registered a site type resolver never get a type, and are never sent | Every bundle that counts on a site other than the hub registers a resolver: ProjectWebParts from the site's own flags (slice 6), the others in slice 7, with `getSiteKind()` where a bundle holds none; `siteType.test.ts`; the slice 13 case on a project list page | Agent |
 | Existing customers are switched on without noticing | A release-notes highlight, a CHANGELOG "Merk" line, the banner and the summary, the wiki live before release, opt-outs carried over | User |
@@ -2744,3 +2746,24 @@ _Each slice adds its entry below._
 - Left: the chapter names Assist's `src/lib/pp-usage-contract.ts` and
   `scripts/sync-pp-usage-contract.mjs`, which slice 2 is building; and the wiki page Bruksstatistikk
   (slice 12).
+
+### Default level 3 (2026-11-13)
+
+- Decided: the user made Extended (3) the default instead of Standard (2), on a new hub and on an
+  upgraded hub without the row. An earlier opt-out still gives 0, and a row that exists is never
+  changed. D1, D7 and P10 follow it. Level 2 keeps its name, Standard (`-UsageStatisticsLevel
+  Standard`, the summary, the setting's title «2 = standard»), though it is no longer the default.
+- Done:
+  - The template seeds `3` (`Globale innstillinger.xml`), and rule 6 of
+    `Resolve-InitialUsageStatisticsLevel` gives 3 (`the default, Extended`).
+  - `Install.ps1`: the banner of a run without `-Upgrade` reads `Extended (3)`, and the
+    HelpMessage says a new installation gets Extended. `PreInstallUpgrade.ps1` says the template
+    creates the row at 3.
+  - The four default scenarios in `.tasks/fixtures/usage-statistics-level.json`.
+  - The guide (`bruksstatistikk.md` and the README generated from it), the CHANGELOG line and the
+    pp365-templates skill.
+- Verified: `npm run test:tasks` (96 tests, the four default scenarios at 3); the three install
+  scripts parse in pwsh; the guide's README equals the generator's output; `npm run check-skills`.
+  Not run against a tenant: the dev and test hubs keep their row at 0, which no run changes.
+- Left: the legal checks (L2, L4, L6) and the customer texts must say that error codes and load
+  times are sent by default, and that Standard (2) is not the default.

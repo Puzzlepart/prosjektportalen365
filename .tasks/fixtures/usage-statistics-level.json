@@ -65,7 +65,7 @@
             "telemetryUrlDisabled": false,
             "catalogRows": [{ "key": "CatalogTelemetryEnabled", "value": " 1 ", "enabled": true }],
             "previousVersion": "1.14.0",
-            "expected": { "value": 2, "reason": "default" }
+            "expected": { "value": 3, "reason": "default" }
         },
         {
             "name": "no CatalogTelemetryEnabled row on a hub at 1.14.0 means it was deleted, and gives 0",
@@ -81,7 +81,7 @@
             "telemetryUrlDisabled": false,
             "catalogRows": [],
             "previousVersion": "1.13.2",
-            "expected": { "value": 2, "reason": "default" }
+            "expected": { "value": 3, "reason": "default" }
         },
         {
             "name": "no CatalogTelemetryEnabled row and no known version is the default",
@@ -89,7 +89,7 @@
             "telemetryUrlDisabled": false,
             "catalogRows": [],
             "previousVersion": null,
-            "expected": { "value": 2, "reason": "default" }
+            "expected": { "value": 3, "reason": "default" }
         },
         {
             "name": "a hub at 1.15.0 without the level row had it deleted, and gets 0",
@@ -113,7 +113,7 @@
             "telemetryUrlDisabled": false,
             "catalogRows": [{ "key": "CatalogTelemetryEnabled", "value": "1", "enabled": true }],
             "previousVersion": "1.14.0",
-            "expected": { "value": 2, "reason": "default" }
+            "expected": { "value": 3, "reason": "default" }
         }
     ],
     "effective": [

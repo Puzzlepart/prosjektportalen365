@@ -4,7 +4,7 @@ Prosjektportalen teller fra 1.15.0 hvilke deler av løsningen som brukes, og sen
 
 ### Nivåene og innstillingen
 
-Hubens rad `UsageStatisticsLevel` i listen Globale innstillinger bestemmer hva nettleserne sender. Malen legger inn raden med verdien `2`.
+Hubens rad `UsageStatisticsLevel` i listen Globale innstillinger bestemmer hva nettleserne sender. Malen legger inn raden med verdien `3`.
 
 | Nivå | Sendes |
 |---|---|
@@ -79,8 +79,8 @@ Et nytt felt i batchen er en større endring. Det må inn i begge kontraktene, g
 
 ### Installasjon og oppgradering
 
-- Malen legger inn raden med verdien 2 (`Objects/Lists/Globale innstillinger.xml`, `GtSettingsId` `{b4d62fcd-26ac-4bc3-aeb8-c7d5e4503248}`).
-- En oppgradering legger inn en manglende rad før appene og malen (`Initialize-UsageStatisticsSetting` til slutt i `PreInstallUpgrade.ps1`), også med `-SkipTemplate`. Et tidligere avslag på katalogstatistikken følger med som 0, og en rad som finnes, endres aldri.
+- Malen legger inn raden med verdien 3 (`Objects/Lists/Globale innstillinger.xml`, `GtSettingsId` `{b4d62fcd-26ac-4bc3-aeb8-c7d5e4503248}`).
+- En oppgradering legger inn en manglende rad før appene og malen (`Initialize-UsageStatisticsSetting` til slutt i `PreInstallUpgrade.ps1`), også med `-SkipTemplate`. Et tidligere avslag på katalogstatistikken følger med som 0, ellers får huben 3, og en rad som finnes, endres aldri.
 - `Install.ps1 -UsageStatisticsLevel Off|Basic|Standard|Extended` skriver et valgt nivå rett etter Portfolio-malen. Uten parameteren skriver ingen kjøring nivået. Til slutt skriver skriptet en oppsummering av nivået huben faktisk har.
 - `$UsageStatisticsLevelSinceVersion` i `SharedFunctions.ps1` må være versjonen som først gir raden: en hub på den versjonen eller nyere som mangler raden, regnes som at raden er slettet, og får 0.
 - Installasjonsmeldingen er en egen flyt med sin egen bryter, `-SkipPingback`, og nivået påvirker den ikke.

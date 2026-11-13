@@ -47,7 +47,7 @@ Param(
     [string[]]$UpgradeExcludeHandlers = @("Navigation", "SupportedUILanguages", "Files"),
     [Parameter(Mandatory = $false, HelpMessage = "Do not send the installation pingback (URL, version, channel, time and parameter names) to the Prosjektportalen team. Usage statistics have their own switch, -UsageStatisticsLevel")]
     [switch]$SkipPingback,
-    [Parameter(Mandatory = $false, HelpMessage = "Usage statistics sent to the Prosjektportalen team: Off, Basic, Standard or Extended. Writes UsageStatisticsLevel in Globale innstillinger. Without it, a new installation gets Standard and an upgrade keeps the hub's level")]
+    [Parameter(Mandatory = $false, HelpMessage = "Usage statistics sent to the Prosjektportalen team: Off, Basic, Standard or Extended. Writes UsageStatisticsLevel in Globale innstillinger. Without it, a new installation gets Extended and an upgrade keeps the hub's level")]
     [ValidateSet('Off', 'Basic', 'Standard', 'Extended')]
     [string]$UsageStatisticsLevel
 )
@@ -125,7 +125,7 @@ elseif ($Upgrade.IsPresent) {
     "kept as set on the hub"
 }
 else {
-    "Standard (2)"
+    "Extended (3)"
 }
 Write-Host "### Usage statistics: $UsageStatisticsBanner ####" -ForegroundColor Cyan
 Write-Host "########################################################" -ForegroundColor Cyan
