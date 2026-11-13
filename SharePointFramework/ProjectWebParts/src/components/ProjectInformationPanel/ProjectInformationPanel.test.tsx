@@ -52,7 +52,9 @@ describe('ProjectInformationPanel', () => {
     expect(screen.getByText('Alfa')).toBeInTheDocument()
     expect(screen.queryByText('Prosjektinformasjon (panel)')).toBeNull()
     await user.click(screen.getByRole('button', { name: 'Åpne' }))
-    expect(screen.getByText('Prosjektinformasjon (panel)')).toBeInTheDocument()
+    expect(
+      await screen.findByText('Prosjektinformasjon (panel)', undefined, { timeout: 10_000 })
+    ).toBeInTheDocument()
   })
 
   it('lets the keyboard reach and scroll the project information, which has no control of its own (WCAG 2.1.1)', () => {
@@ -78,8 +80,12 @@ describe('ProjectInformationPanel', () => {
     )
     const open = screen.getByRole('button', { name: 'Åpne' })
     await user.click(open)
-    expect(screen.getByRole('dialog', { name: 'Alfa' })).toBeInTheDocument()
-    expect(open).not.toHaveFocus()
+    // The drawer's portal mounts a render after the click: under CI's load it was not there yet
+    // when the click's promise resolved (the release build of 6a934fcc8).
+    expect(
+      await screen.findByRole('dialog', { name: 'Alfa' }, { timeout: 10_000 })
+    ).toBeInTheDocument()
+    await waitFor(() => expect(open).not.toHaveFocus())
     await user.keyboard('{Escape}')
     await waitFor(() => expect(open).toHaveFocus())
   })
