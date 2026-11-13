@@ -1,5 +1,6 @@
 import { override } from '@microsoft/decorators'
 import { Log } from '@microsoft/sp-core-library'
+import { Dialog } from '@microsoft/sp-dialog'
 import {
   BaseListViewCommandSet,
   Command,
@@ -18,7 +19,7 @@ import strings from 'PortfolioExtensionsStrings'
 import { Choice, IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
 import { find } from 'underscore'
 import { themeColor } from 'pp365-shared-library'
-import { flushTelemetry, trackUsage } from 'pp365-shared-library/lib/telemetry'
+import { flushTelemetry, trackError, trackUsage } from 'pp365-shared-library/lib/telemetry'
 import resource from 'SharedResources'
 
 /** Custom-action properties for the idea-to-project-data command. */
@@ -81,7 +82,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
           row.getValueByName('GtIdeaDecision') === strings.ApprovedSyncText
         dialog.isBlocked = !!row.getValueByName('GtIdeaProjectData')
         void dialog.show()
-        dialog.submit = this._onSubmit.bind(this, row)
+        dialog.submit = this._onSubmit.bind(this, row, dialog)
         break
       default:
         throw new Error('Unknown command, unable to execute')
@@ -130,16 +131,37 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
   }
 
   /**
-   * Starts project-data creation for the selected idea.
+   * Creates project data for the selected idea, and tells the user when that fails: as an error
+   * in the dialog, which is still open and stays so for another try, or in an alert when the user
+   * has closed it meanwhile. The failure is counted for usage statistics by the error's code. The
+   * creation is counted and the page left as the last step, so a failed one does neither.
+   *
+   * @param row The selected idea
+   * @param dialog The dialog the creation was started from
    */
-  private _onSubmit = async (row: RowAccessor) => {
-    const rowId = row.getValueByName('ID')
-    const rowTitle = row.getValueByName('Title')
-    await this._redirectNewItem(rowId, rowTitle)
+  private _onSubmit = async (row: RowAccessor, dialog: IdeaDialog): Promise<void> => {
+    // An earlier try's error goes first: when this one fails too, the message is read out again.
+    dialog.setErrorMessage()
+    try {
+      const rowId = row.getValueByName('ID')
+      const rowTitle = row.getValueByName('Title')
+      await this._redirectNewItem(rowId, rowTitle)
+    } catch (error) {
+      trackError(TELEMETRY_COMPONENT, error)
+      if (dialog.isOpen) dialog.setErrorMessage(strings.IdeaProjectDataSaveErrorMessage)
+      else await Dialog.alert(strings.IdeaProjectDataSaveErrorMessage)
+    }
   }
 
   /**
-   * Creates project data, links it to the processing row and navigates to its edit form.
+   * Project data created for an idea whose processing row could not be linked to it, by the row's
+   * id. Kept while the page is open, so that another try links it rather than creating a second.
+   */
+  private _unlinkedProjectData = new Map<number, any>()
+
+  /**
+   * Creates project data, links it to the processing row and navigates to its edit form. Project
+   * data an earlier try created but could not link is linked now, and not created again.
    */
   private _redirectNewItem = async (rowId: number, rowTitle: string): Promise<void> => {
     const properties: Record<string, any> = {
@@ -147,9 +169,14 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
       GtProjectFinanceName: rowTitle
     }
 
-    Log.info(LOG_SOURCE, '_redirectNewItem: Created new item')
-    const item = await this._addItem(properties)
+    let item = this._unlinkedProjectData.get(rowId)
+    if (!item) {
+      item = await this._addItem(properties)
+      Log.info(LOG_SOURCE, '_redirectNewItem: Created new item')
+      this._unlinkedProjectData.set(rowId, item)
+    }
     await this._updateItem(rowId, item)
+    this._unlinkedProjectData.delete(rowId)
     // Counted for usage statistics and sent at once: the page is left for the edit form below.
     trackUsage(TELEMETRY_COMPONENT, 'idea.projectDataCreated')
     flushTelemetry({ urgent: true })

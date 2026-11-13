@@ -4,13 +4,14 @@ import { usePortfolioAggregationContext } from '../context'
 import styles from './ViewFormPanel.module.scss'
 import { ViewFormPanelFooter } from './ViewFormPanelFooter'
 import { useViewFormPanel } from './useViewFormPanel'
-import { BasePanel, FieldContainer, customLightTheme } from 'pp365-shared-library'
+import { BasePanel, FieldContainer, UserMessage, customLightTheme } from 'pp365-shared-library'
 import { FluentProvider, IdPrefixProvider, Input, Textarea } from '@fluentui/react-components'
 
 /** Create or edit a data-source view while showing its fixed category and level. */
 export const ViewFormPanel: FC = () => {
   const context = usePortfolioAggregationContext()
-  const { view, setView, isEditing, onDismiss, onSave, fluentProviderId } = useViewFormPanel()
+  const { view, setView, isEditing, onDismiss, onSave, saveError, fluentProviderId } =
+    useViewFormPanel()
   return (
     <BasePanel
       open={context.state.viewForm?.isOpen}
@@ -22,6 +23,8 @@ export const ViewFormPanel: FC = () => {
     >
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme} className={styles.content}>
+          {/* Only once a save is refused: a message bar announces itself as it mounts. */}
+          {saveError && <UserMessage intent='error' title={strings.ErrorTitle} text={saveError} />}
           <FieldContainer
             iconName='TextNumberFormat'
             label={strings.TitleLabel}

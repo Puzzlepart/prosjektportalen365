@@ -1,5 +1,6 @@
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import strings from 'PortfolioExtensionsStrings'
+import { announced } from 'pp365-jest-config/lib/announce'
 import { format } from 'pp365-shared-library'
 import * as React from 'react'
 import ProjectDataDialog, { IdeaDialog } from '.'
@@ -75,5 +76,34 @@ describe('ProjectDataDialog', () => {
     // The close unmounts a microtask later; React 18 wants that inside act.
     await act(() => dialog.close())
     expect(screen.queryByText(strings.IdeaProjectDataDialogTitle)).toBeNull()
+  })
+
+  it('says in the open dialog why the project data was not created, and reads it out', async () => {
+    const dialog = new ProjectDataDialog()
+    dialog.isApproved = true
+    void dialog.show()
+    const create = await screen.findByRole('button', { name: strings.CreateLabel })
+    expect(screen.queryByText(strings.IdeaProjectDataSaveErrorMessage)).toBeNull()
+    act(() => dialog.setErrorMessage(strings.IdeaProjectDataSaveErrorMessage))
+    expect(screen.getByText(strings.IdeaProjectDataSaveErrorMessage)).toBeInTheDocument()
+    // The message bar reads itself out through the announcer every root gets (WCAG 4.1.3).
+    await waitFor(() => expect(announced()).toContain(strings.IdeaProjectDataSaveErrorMessage))
+    // The dialog is still there for another try, which takes the error away as it starts.
+    expect(create).toBeEnabled()
+    act(() => dialog.setErrorMessage())
+    expect(screen.queryByText(strings.IdeaProjectDataSaveErrorMessage)).toBeNull()
+    expect(screen.getByText(strings.IdeaProjectDataDialogTitle)).toBeInTheDocument()
+    await act(() => dialog.close())
+  })
+
+  it('renders nothing once it is closed, and only keeps the message', async () => {
+    const dialog = new ProjectDataDialog()
+    void dialog.show()
+    await screen.findByText(strings.IdeaProjectDataDialogTitle)
+    await act(() => dialog.close())
+    const rendered = jest.spyOn(dialog, 'render')
+    dialog.setErrorMessage(strings.IdeaProjectDataSaveErrorMessage)
+    expect(rendered).not.toHaveBeenCalled()
+    expect(dialog.errorMessage).toBe(strings.IdeaProjectDataSaveErrorMessage)
   })
 })

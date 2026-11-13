@@ -3,15 +3,18 @@ import { ListMenuItem, ListMenuItemDivider, ListMenuItemHeader, format } from 'p
 import { useMemo } from 'react'
 import _ from 'underscore'
 import { IPortfolioOverviewContext } from '../context'
-import { SET_VIEW_FORM_PANEL, TOGGLE_COMPACT, TOGGLE_MERGED_VIEW } from '../reducer'
+import { SET_VIEW_FORM_PANEL, TOGGLE_COMPACT } from '../reducer'
 import { useProgramMenuItems } from './useProgramMenuItems'
+import { useSwitchPortfolio } from './useSwitchPortfolio'
 import { useViewsMenuItems } from './useViewsMenuItems'
 import resource from 'SharedResources'
 
 /**
- * Build view, layout, program and permitted view-editing choices.
+ * Build view, layout, program and permitted view-editing choices. The merged view is a switch of
+ * portfolio: one the web part could not make is told, and the overview stays as it was.
  */
 export function useViewSelector(context: IPortfolioOverviewContext) {
+  const switchPortfolio = useSwitchPortfolio(context)
   const userCanManageViews = context.props.configuration.userCanAddViews
   const userCanEditGlobalViews = userCanManageViews && context.props.isSiteAdmin
   const userEmail = context.props.pageContext.user.email ?? context.props.pageContext.user.loginName
@@ -70,10 +73,7 @@ export function useViewSelector(context: IPortfolioOverviewContext) {
                       value: 'merged'
                     })
                     .setOnClick(() => {
-                      context.dispatch(TOGGLE_MERGED_VIEW(true))
-                      if (context.props.onSetPortfolio) {
-                        context.props.onSetPortfolio(null)
-                      }
+                      void switchPortfolio(null)
                     })
                 ]
               : []),

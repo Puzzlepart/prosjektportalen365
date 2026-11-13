@@ -6,4 +6,6 @@ export interface IIdeaDialogProps {
   dialogMessage?: string
   isBlocked?: boolean
   isApproved?: boolean
+  /** Why the project data was not created, shown as an error while the dialog stays open */
+  errorMessage?: string
 }

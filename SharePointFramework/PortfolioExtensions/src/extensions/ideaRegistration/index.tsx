@@ -99,16 +99,20 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
             } else {
               switch (selectedChoice) {
                 case Choice.Approve:
-                  void this._onSubmit(row, dialog.comment)
+                  void this._saveRecommendation(() => this._onSubmit(row, dialog.comment))
                   break
                 case Choice.Consideration:
-                  void this._onSubmitConsideration(row, dialog.comment)
+                  void this._saveRecommendation(() =>
+                    this._onSubmitConsideration(row, dialog.comment)
+                  )
                   break
                 case Choice.Reject:
-                  void this._onSubmitRejected(row, dialog.comment)
+                  void this._saveRecommendation(() => this._onSubmitRejected(row, dialog.comment))
                   break
                 default:
-                  void this._onSubmitOther(row, dialog.comment, dialog.selectedChoice)
+                  void this._saveRecommendation(() =>
+                    this._onSubmitOther(row, dialog.comment, dialog.selectedChoice)
+                  )
                   break
               }
             }
@@ -129,6 +133,23 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
 
       default:
         throw new Error('Unknown command, unable to execute')
+    }
+  }
+
+  /**
+   * Runs the save of the recommendation the dialog was closed with, and tells the user when it
+   * fails: the dialog is gone by then, and nothing else on the page says that the recommendation
+   * was not saved. The failure is counted for usage statistics by the error's code. A save counts
+   * its recommendation and reloads the page as its last step, so a failed one does neither.
+   *
+   * @param save The save to run
+   */
+  private async _saveRecommendation(save: () => Promise<void>): Promise<void> {
+    try {
+      await save()
+    } catch (error) {
+      trackError(TELEMETRY_COMPONENT, error)
+      await Dialog.alert(strings.IdeaRecommendationSaveErrorMessage)
     }
   }
 
@@ -227,28 +248,26 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    * linking it to the existing idea-module page with the registration id.
    */
   private _onSubmit = async (row: RowAccessor, comment: string): Promise<void> => {
+    // A failed read rejects with SharePoint's own error: its HTTP status is what the failure is
+    // counted by for usage statistics.
     const contentColumns = async () => {
-      try {
-        const list = this._sp.web.lists.getByTitle(resource.Lists_ProjectContentColumns_Title)
+      const list = this._sp.web.lists.getByTitle(resource.Lists_ProjectContentColumns_Title)
 
-        const columnItems = await list.items.select(
-          ...Object.keys(new SPProjectContentColumnItem())
-        )()
+      const columnItems = await list.items.select(
+        ...Object.keys(new SPProjectContentColumnItem())
+      )()
 
-        const filteredColumnItems = columnItems.filter(
-          (col) =>
-            col.GtDataSourceCategory === resource.Lists_DataSources_Category_IdeaModule ||
-            (!col.GtDataSourceCategory && !col.GtDataSourceLevel) ||
-            (!col.GtDataSourceCategory &&
-              _.contains(col.GtDataSourceLevel, resource.Lists_DataSources_Level_Portfolio))
-        )
+      const filteredColumnItems = columnItems.filter(
+        (col) =>
+          col.GtDataSourceCategory === resource.Lists_DataSources_Category_IdeaModule ||
+          (!col.GtDataSourceCategory && !col.GtDataSourceLevel) ||
+          (!col.GtDataSourceCategory &&
+            _.contains(col.GtDataSourceLevel, resource.Lists_DataSources_Level_Portfolio))
+      )
 
-        return filteredColumnItems
-          .filter((col) => col.GtIdeaCopyToProcess)
-          .map((item) => new ProjectContentColumn(item))
-      } catch (error) {
-        throw new Error(error)
-      }
+      return filteredColumnItems
+        .filter((col) => col.GtIdeaCopyToProcess)
+        .map((item) => new ProjectContentColumn(item))
     }
 
     const columns = await contentColumns()

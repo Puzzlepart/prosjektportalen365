@@ -17,8 +17,8 @@ import { useFetchData } from './useFetchData'
  * with what the user may see. A fetch that fails is shown by the list and counted once by its
  * error code, never by its message; so is each hub a merged view could not read.
  *
- * The overview fetches twice as it mounts (once for the view, once for the portfolio), so every
- * count here is per fetch.
+ * The overview fetches twice as it mounts (once for the view, once for the portfolio); what
+ * failed is still counted once, and again only for another view or after a fetch got through.
  */
 const QUERY = 'DepartmentId:{5c7d2f6a-3b1e-4d8c-9a0f-6e2b1c4d7f80} contentclass:STS_Site'
 
@@ -77,11 +77,17 @@ function fetchWith(
     useFetchData(context)
     return null
   }
-  render(
+  const tree = () => (
     <TelemetryProvider component={alias}>
       <Probe />
     </TelemetryProvider>
   )
+  const rendered = render(tree())
+  /** Renders again with the overview's state changed, as a picked view changes it. */
+  const withState = (next: Record<string, any>) => {
+    context.state = { ...context.state, ...next }
+    rendered.rerender(tree())
+  }
   /** The actions of one type dispatched so far. */
   const actions = (type: string) =>
     context.dispatch.mock.calls.map(([action]) => action).filter((action) => action.type === type)
@@ -90,7 +96,7 @@ function fetchWith(
     await waitFor(() => expect(actions(type)).toHaveLength(2))
     return actions(type)
   }
-  return { context, dataAdapter, actions, fetched }
+  return { context, dataAdapter, actions, fetched, withState }
 }
 
 beforeEach(() => {
@@ -206,8 +212,10 @@ describe('useFetchData (portfolio overview)', () => {
     const failures = await fetched(DATA_FETCH_ERROR.type)
     // The list shows the error with the view it was for; the reducer writes the text.
     expect(failures[0].payload).toEqual({ error, view: all })
+    // Both fetches of the mount failed, and the failure is counted once.
+    expect(failures).toHaveLength(2)
     expect(countedTelemetry().errors).toEqual({
-      'ProgramProjectOverviewWebPart permission_denied 403': failures.length
+      'ProgramProjectOverviewWebPart permission_denied 403': 1
     })
     expect(JSON.stringify(countedTelemetry())).not.toContain('hemmelig')
   })
@@ -217,9 +225,29 @@ describe('useFetchData (portfolio overview)', () => {
     const failures = await fetched(DATA_FETCH_ERROR.type)
     expect(failures[0].payload.error.message).toBe(strings.ViewNotFoundMessage)
     expect(dataAdapter.fetchDataForView).not.toHaveBeenCalled()
-    expect(countedTelemetry().errors).toEqual({
-      'PortfolioOverviewWebPart unknown': failures.length
-    })
+    expect(countedTelemetry().errors).toEqual({ 'PortfolioOverviewWebPart unknown': 1 })
+  })
+
+  it('counts the failure of another view too, and of the same view again once a fetch got through', async () => {
+    const fetchDataForView = jest.fn<Promise<any>, unknown[]>(() => Promise.reject(httpError(403)))
+    const { actions, withState } = fetchWith({ dataAdapter: { fetchDataForView } })
+    const counted = () =>
+      countedTelemetry().errors['PortfolioOverviewWebPart permission_denied 403']
+    await waitFor(() => expect(actions(DATA_FETCH_ERROR.type)).toHaveLength(2))
+    expect(counted()).toBe(1)
+
+    // Another view is picked, and fails too.
+    withState({ currentView: active })
+    await waitFor(() => expect(actions(DATA_FETCH_ERROR.type)).toHaveLength(3))
+    expect(counted()).toBe(2)
+
+    // The first view gets through; after that the other view's failure counts again.
+    fetchDataForView.mockImplementationOnce(() => Promise.resolve(ROWS))
+    withState({ currentView: all })
+    await waitFor(() => expect(actions(DATA_FETCHED.type)).toHaveLength(1))
+    withState({ currentView: active })
+    await waitFor(() => expect(actions(DATA_FETCH_ERROR.type)).toHaveLength(4))
+    expect(counted()).toBe(3)
   })
 
   it('shows a merged view without the hubs it could not read, names them, and counts each by what it failed with', async () => {
@@ -243,8 +271,10 @@ describe('useFetchData (portfolio overview)', () => {
     )
     expect(dataAdapter.fetchDataForView).not.toHaveBeenCalled()
     expect(shown[0].payload).toMatchObject({ items: ROWS.items, failedPortfolios: [HUB_BYGG] })
+    // Both fetches of the mount came back without the hub, and it is counted once.
+    expect(shown).toHaveLength(2)
     expect(countedTelemetry().errors).toEqual({
-      'PortfolioOverviewWebPart permission_denied 403': shown.length
+      'PortfolioOverviewWebPart permission_denied 403': 1
     })
   })
 })

@@ -16,7 +16,8 @@ export function useEditViewColumnsPanel(
   const onClose = () => context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: false }))
 
   /**
-   * On save view columns callback sent to `EditViewColumnsPanel`.
+   * On save view columns callback sent to `EditViewColumnsPanel`. A save the list refuses rejects
+   * and leaves the panel open: the panel tells the user and counts the refusal.
    */
   const onSaveViewColumns = async (columns: ProjectContentColumn[]) => {
     const properties: SPDataSourceItem = {

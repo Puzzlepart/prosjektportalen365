@@ -110,6 +110,12 @@ export const SELECTION_CHANGED = createAction<Record<string, any>[]>('SELECTION_
 export const TOGGLE_MERGED_VIEW = createAction<boolean>('TOGGLE_MERGED_VIEW')
 
 /**
+ * Put the merged-view mode back as it was before a switch of portfolio that failed, and end the
+ * change of view the switch started.
+ */
+export const PORTFOLIO_SWITCH_FAILED = createAction<boolean>('PORTFOLIO_SWITCH_FAILED')
+
+/**
  * Set column-editor visibility and the optional column to edit.
  */
 export const TOGGLE_COLUMN_FORM_PANEL = createAction<IColumnFormPanel>('TOGGLE_COLUMN_FORM_PANEL')

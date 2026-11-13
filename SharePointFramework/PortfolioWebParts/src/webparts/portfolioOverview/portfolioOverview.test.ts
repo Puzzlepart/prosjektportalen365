@@ -35,8 +35,10 @@ import PortfolioOverviewWebPart from '.'
  * The portfolio overview web part: it shows the hub the page is on, or the portfolio it is set to
  * show, and lets the user switch between its portfolios. Usage statistics get the hub's own data
  * service only when the web part is set up without a portfolio; a switch of portfolio is counted
- * once it has the portfolio's configuration; and a configuration that cannot be read is told on
- * the page and counted once by its error code, however many times the web part renders.
+ * once it has the portfolio's configuration, and one that cannot get it leaves the portfolio shown
+ * as it was, tells the caller and is counted once by its error code; and a configuration that
+ * cannot be read as the web part starts is told on the page and counted once by its error code,
+ * however many times the web part renders.
  */
 const HELSE = { uniqueId: 'a', title: 'Helse', url: 'https://contoso.sharepoint.com/sites/helse' }
 const BYGG = { uniqueId: 'b', title: 'Bygg', url: 'https://contoso.sharepoint.com/sites/bygg' }
@@ -201,17 +203,88 @@ describe('PortfolioOverviewWebPart', () => {
     expect(telemetryStore().anchor).toBeUndefined()
   })
 
-  it('counts no switch to a portfolio whose configuration cannot be read', async () => {
+  it('counts no switch to the portfolio it shows already, and shows it all the same', async () => {
     const webPart = await webPartOnHub({ portfolios: [HELSE, BYGG] })
     render(webPart)
-    const refusal = GetPortfolioConfigError(
-      Object.assign(new Error('Ingen tilgang'), { status: 403 })
+    // No portfolio is saved, so the first one is shown.
+    await act(() => rendered.props.onSetPortfolio(HELSE.uniqueId))
+    expect(configure).toHaveBeenLastCalledWith(webPart.context, null, HELSE)
+    expect(rendered.props.selectedPortfolioId).toBe(HELSE.uniqueId)
+    await act(() => rendered.props.onSetPortfolio(BYGG.uniqueId))
+    await act(() => rendered.props.onSetPortfolio(BYGG.uniqueId))
+    await act(() => rendered.props.onSetPortfolio(null))
+    await act(() => rendered.props.onSetPortfolio(null))
+    expect(countedTelemetry().usage).toEqual({
+      'PortfolioOverviewWebPart loaded': 1,
+      'PortfolioOverviewWebPart portfolio.switched': 2
+    })
+  })
+
+  it('keeps the portfolio it shows when the configuration of the one picked cannot be read, tells the caller, and counts the failure once and no switch', async () => {
+    // The rejection reached no one, and the web part was left half switched: the id of the
+    // portfolio picked and its data adapter, with the configuration of the one shown.
+    const webPart = await webPartOnHub({ portfolios: [HELSE, BYGG], selectedPortfolioId: 'a' })
+    render(webPart)
+    const shown = rendered.props.configuration
+    const refused = {
+      getPortfolioConfig: jest.fn(() =>
+        Promise.reject(
+          GetPortfolioConfigError(
+            Object.assign(new Error('https://contoso.sharepoint.com/sites/bygg'), { status: 403 })
+          )
+        )
+      )
+    }
+    configure.mockImplementationOnce(() => Promise.resolve(refused as any))
+    let isShown: boolean
+    await act(async () => {
+      isShown = await rendered.props.onSetPortfolio('b')
+    })
+    expect(isShown).toBe(false)
+    expect(configure).toHaveBeenLastCalledWith(webPart.context, null, BYGG)
+    expect(refused.getPortfolioConfig).toHaveBeenCalledTimes(1)
+    expect(countedTelemetry()).toMatchObject({
+      usage: { 'PortfolioOverviewWebPart loaded': 1 },
+      errors: { 'PortfolioOverviewWebPart permission_denied 403': 1 }
+    })
+    expect(JSON.stringify(countedTelemetry())).not.toContain('bygg')
+
+    // Whatever makes SharePoint render the web part again, it shows what it showed.
+    rendered.props = undefined
+    render(webPart)
+    expect(rendered.props.selectedPortfolioId).toBe('a')
+    expect(rendered.props.configuration).toBe(shown)
+    expect(rendered.props.dataAdapter).toBe(hub.adapter)
+
+    // The merged view fails the same way when the first portfolio cannot be set up at all.
+    configure.mockImplementationOnce(() =>
+      Promise.reject(Object.assign(new Error('Finnes ikke'), { status: 404 }))
     )
-    hub.adapter.getPortfolioConfig.mockImplementationOnce(() => Promise.reject(refusal))
-    let thrown: unknown
-    await act(() => rendered.props.onSetPortfolio('b').catch((error: unknown) => (thrown = error)))
-    expect(thrown).toBe(refusal)
-    expect(countedTelemetry().usage).toEqual({ 'PortfolioOverviewWebPart loaded': 1 })
+    await act(async () => {
+      isShown = await rendered.props.onSetPortfolio(null)
+    })
+    expect(isShown).toBe(false)
+    render(webPart)
+    expect(rendered.props.selectedPortfolioId).toBe('a')
+
+    // The user can pick again, and a switch that gets its configuration is shown and counted.
+    const bygg = { ...CONFIGURATION, hubSiteId: 'bygg' }
+    hub.adapter.getPortfolioConfig.mockImplementationOnce(() => Promise.resolve(bygg))
+    await act(async () => {
+      isShown = await rendered.props.onSetPortfolio('b')
+    })
+    expect(isShown).toBe(true)
+    expect(rendered.props).toMatchObject({ configuration: bygg, selectedPortfolioId: 'b' })
+    expect(countedTelemetry()).toMatchObject({
+      usage: {
+        'PortfolioOverviewWebPart loaded': 1,
+        'PortfolioOverviewWebPart portfolio.switched': 1
+      },
+      errors: {
+        'PortfolioOverviewWebPart permission_denied 403': 1,
+        'PortfolioOverviewWebPart not_found 404': 1
+      }
+    })
   })
 
   it('tells why its configuration could not be read, and counts the failure once by its error code', async () => {

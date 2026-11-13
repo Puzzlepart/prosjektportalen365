@@ -69,8 +69,9 @@ const DATA_SOURCE = { id: 2, title: 'Alle leveranser', iconName: 'Box' }
  */
 const Shared: FC = () => {
   const dispatch = (): void => undefined
+  // The overview shows no view yet, so the view picked is a switch.
   const [view] = useViewsMenuItems(
-    { props: { configuration: { views: [VIEW] } }, dispatch } as any,
+    { props: { configuration: { views: [VIEW] } }, state: {}, dispatch } as any,
     () => true
   )
   const toolbar = useToolbarItems({

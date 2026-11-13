@@ -175,13 +175,13 @@ describe('ProgramProjectOverviewWebPart with the portfolio overview of Portfolio
     await load(ProgramProjectOverview, 'programProjectOverview')
     // The overview shows the message; of the error, only its code and status are kept.
     expect(await screen.findByText(/Ingen tilgang til søk/)).toBeInTheDocument()
-    // The overview reads as many times as PortfolioWebParts lets it as it mounts (once for the
-    // view, once for the portfolio): each read that fails is counted once.
-    const reads = adapter.fetchDataForViewBatch.mock.calls.length
+    // The overview reads more than once as it mounts (once for the view, once for the portfolio),
+    // and the failure is counted once.
+    expect(adapter.fetchDataForViewBatch.mock.calls.length).toBeGreaterThan(1)
     await waitFor(() =>
       expect(countedTelemetry()).toEqual({
         usage: { 'ProgramProjectOverviewWebPart loaded': 1 },
-        errors: { 'ProgramProjectOverviewWebPart permission_denied 403': reads },
+        errors: { 'ProgramProjectOverviewWebPart permission_denied 403': 1 },
         timings: { 'ProgramProjectOverviewWebPart init': 1 }
       })
     )

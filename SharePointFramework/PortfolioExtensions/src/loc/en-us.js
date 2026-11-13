@@ -38,6 +38,8 @@ define([], function () {
     IdeaAlreadyApproved: 'This idea has already been approved',
     IdeaProjectDataDialogBlockedMessage: 'Project data for this idea has already been created and associated.',
     IdeaProjectDataDialogTitle: 'Create project data for the idea',
+    IdeaProjectDataSaveErrorMessage: 'Could not create and associate project data for the idea. Try again, or contact the administrator if the error persists.',
+    IdeaRecommendationSaveErrorMessage: 'Could not save the recommendation for the idea. Try again, or contact the administrator if the error persists.',
     InstallChannelLabel: 'Installation channel',
     InstalledDateLabel: 'Installation date',
     InstallVersionLabel: 'Version',

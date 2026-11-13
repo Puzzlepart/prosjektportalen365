@@ -1,6 +1,13 @@
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { AriaLiveAnnouncer } from '@fluentui/react-components'
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import strings from 'PortfolioWebPartsStrings'
+import { announced } from 'pp365-jest-config/lib/announce'
 import { PortfolioOverviewView } from 'pp365-shared-library'
+import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
+import {
+  countedTelemetry,
+  startTestTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import * as React from 'react'
 import { PortfolioOverviewContext } from '../context'
 import { ViewFormPanel } from './ViewFormPanel'
@@ -8,7 +15,8 @@ import { ViewFormPanel } from './ViewFormPanel'
 /**
  * The portfolio view form with its own hook: the fields show the view being edited, which arrives
  * after the form opens, not the new view the form starts from (its sort order one past the current
- * view's), and they follow what is typed.
+ * view's), and they follow what is typed. A save the list refuses is told in the form, which stays
+ * open with what was typed, and counted once by its error code.
  */
 const QUERY_CURRENT = 'ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* GtIsProgramOWSBOOL:0'
 const QUERY_EDITED =
@@ -39,6 +47,8 @@ function renderForm() {
 }
 
 const field = (label: string) => screen.getByLabelText(label, { exact: false })
+
+beforeEach(() => startTestTelemetry())
 
 afterEach(async () => {
   cleanup()
@@ -90,5 +100,63 @@ describe('ViewFormPanel (portfolio overview) with its own hook', () => {
       'aria-disabled',
       'true'
     )
+  })
+
+  it('says that the view could not be saved when the list refuses it, and keeps what was typed (WCAG 3.3.1, 4.1.3)', async () => {
+    // The form did nothing: the refusal went to the save button's click, unhandled.
+    const edited = view(3, 'Overordnede prosjekter', 11, QUERY_EDITED)
+    const dispatch = jest.fn()
+    const updateItemInList = jest
+      .fn()
+      .mockRejectedValueOnce(Object.assign(new Error('Ingen tilgang'), { status: 403 }))
+      .mockResolvedValue(undefined)
+    render(
+      <AriaLiveAnnouncer>
+        <TelemetryProvider component='PortfolioOverviewWebPart'>
+          <PortfolioOverviewContext.Provider
+            value={
+              {
+                state: { viewForm: { isOpen: true, view: edited }, currentView: edited },
+                props: {
+                  configuration: { views: [edited] },
+                  dataAdapter: { portalDataService: { updateItemInList } }
+                },
+                dispatch
+              } as any
+            }
+          >
+            <ViewFormPanel />
+          </PortfolioOverviewContext.Provider>
+        </TelemetryProvider>
+      </AriaLiveAnnouncer>
+    )
+    const save = () => fireEvent.click(screen.getByText(strings.SaveButtonLabel).closest('button'))
+    fireEvent.change(field(strings.TitleLabel), { target: { value: 'Overordnede' } })
+    save()
+    expect(await screen.findByText(strings.ViewSaveErrorText)).toBeInTheDocument()
+    expect(screen.getByText(strings.ErrorTitle)).toBeInTheDocument()
+    await waitFor(() => expect(announced()).toContain(strings.ViewSaveErrorText))
+    expect(field(strings.TitleLabel)).toHaveValue('Overordnede')
+    expect(dispatch).not.toHaveBeenCalled()
+    expect(countedTelemetry()).toEqual({
+      usage: {},
+      errors: { 'PortfolioOverviewWebPart permission_denied 403': 1 },
+      timings: {}
+    })
+
+    // A save the list takes clears the message, counts the view as saved and closes the form.
+    save()
+    await waitFor(() => expect(dispatch).toHaveBeenCalledTimes(2))
+    expect(screen.queryByText(strings.ViewSaveErrorText)).toBeNull()
+    expect(updateItemInList).toHaveBeenLastCalledWith(
+      'PORTFOLIO_VIEWS',
+      3,
+      expect.objectContaining({ Title: 'Overordnede' })
+    )
+    expect(countedTelemetry()).toEqual({
+      usage: { 'PortfolioOverviewWebPart view.saved': 1 },
+      errors: { 'PortfolioOverviewWebPart permission_denied 403': 1 },
+      timings: {}
+    })
   })
 })

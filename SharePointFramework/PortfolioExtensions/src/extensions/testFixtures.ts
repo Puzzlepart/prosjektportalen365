@@ -39,10 +39,26 @@ export interface IRecordedAdd {
   properties: Record<string, any>
 }
 
+/** What a command set does to a list's items through {@link fakeSp}. */
+export type FakeSpOperation = 'read' | 'update' | 'add'
+
+/**
+ * An error as PnPjs gives for a response that is not OK (its `HttpRequestError`): the response's
+ * status beside a message. Usage statistics count a failure by the status; the message, which a
+ * test fills with what must stay on the page, is never read for them.
+ */
+export function httpError(status: number, message: string): Error {
+  return Object.assign(new Error(message), { status })
+}
+
 /**
  * A PnPjs `SPFI` stand-in that answers list reads from `lists` (by list title) and group members
  * from `groups` (by group name), and records every item update and add. Added items get the ids
  * 101, 102 and so on.
+ *
+ * `fail` makes an operation on a list's items reject with an error from then on, as a request
+ * SharePoint refuses, and `fail` without an error makes it work again. A write that rejects is
+ * not recorded: `updates` and `adds` hold what SharePoint would have stored.
  */
 export function fakeSp(
   lists: Record<string, any[]> = {},
@@ -50,19 +66,31 @@ export function fakeSp(
 ) {
   const updates: IRecordedUpdate[] = []
   const adds: IRecordedAdd[] = []
+  const failures = new Map<string, unknown>()
+  const fail = (listTitle: string, operation: FakeSpOperation, error?: unknown) => {
+    if (error === undefined) failures.delete(`${operation} ${listTitle}`)
+    else failures.set(`${operation} ${listTitle}`, error)
+  }
+  /** Runs `request` for the list, or rejects with the error the operation was set to fail with. */
+  const answer = <T>(title: string, operation: FakeSpOperation, request: () => T): Promise<T> => {
+    const key = `${operation} ${title}`
+    return failures.has(key) ? Promise.reject(failures.get(key)) : Promise.resolve(request())
+  }
   const getByTitle = (title: string) => {
-    const items: any = () => Promise.resolve(lists[title] ?? [])
+    const items: any = () => answer(title, 'read', () => lists[title] ?? [])
     items.select = () => items
     items.getById = (id: number) => ({
-      update: (properties: Record<string, any>) => {
-        updates.push({ list: title, id, properties })
-        return Promise.resolve(properties)
-      }
+      update: (properties: Record<string, any>) =>
+        answer(title, 'update', () => {
+          updates.push({ list: title, id, properties })
+          return properties
+        })
     })
-    items.add = (properties: Record<string, any>) => {
-      adds.push({ list: title, properties })
-      return Promise.resolve({ Id: 100 + adds.length, ...properties })
-    }
+    items.add = (properties: Record<string, any>) =>
+      answer(title, 'add', () => {
+        adds.push({ list: title, properties })
+        return { Id: 100 + adds.length, ...properties }
+      })
     const list: any = {
       items,
       select: () => list,
@@ -78,7 +106,7 @@ export function fakeSp(
       }
     }
   }
-  return { sp, updates, adds }
+  return { sp, updates, adds, fail }
 }
 
 /** A list view row stand-in (`RowAccessor`): values by internal name, and the list's fields. */

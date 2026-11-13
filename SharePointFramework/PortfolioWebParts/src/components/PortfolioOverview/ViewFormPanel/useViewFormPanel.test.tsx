@@ -1,4 +1,5 @@
 import { act, renderHook } from '@testing-library/react'
+import strings from 'PortfolioWebPartsStrings'
 import { PortfolioOverviewView } from 'pp365-shared-library'
 import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
 import {
@@ -14,7 +15,8 @@ import { useViewFormPanel } from './useViewFormPanel'
  * Saving a view of the portfolio overview: a new view is added to the views list with the
  * columns of the view it was made from, an edited one is updated; either is shown and the form
  * closes. A view the list has taken is counted as saved, once, for the web part the overview is
- * in; one the list refuses is not, and the form stays open.
+ * in; one the list refuses is not: the form stays open with what was typed and says so, and the
+ * refusal is counted once by its error code.
  */
 const QUERY = 'DepartmentId:{5c7d2f6a-3b1e-4d8c-9a0f-6e2b1c4d7f80} contentclass:STS_Site'
 
@@ -113,16 +115,50 @@ describe('useViewFormPanel (portfolio overview)', () => {
     expect(countedTelemetry().usage).toEqual({ 'ProgramProjectOverviewWebPart view.saved': 1 })
   })
 
-  it('counts no view as saved when the list refuses it, and leaves the form open', async () => {
+  it('tells of a save the list refuses and counts it once by its code, with the form left open and no view counted as saved', async () => {
+    // The refusal was thrown on to the save button's click, which shows no one anything.
     const { result, context, portalDataService } = formHook(true)
     portalDataService.updateItemInList.mockImplementationOnce(() =>
       Promise.reject(Object.assign(new Error('Ingen tilgang'), { status: 403 }))
     )
-    let refusal: unknown
-    await act(() => result.current.onSave().catch((error) => (refusal = error)))
-    expect(refusal).toMatchObject({ status: 403 })
+    act(() => result.current.setView('title', 'Alle prosjekter i porteføljen'))
+    await act(() => result.current.onSave())
+    expect(result.current.saveError).toBe(strings.ViewSaveErrorText)
+    expect(result.current.view.get('title')).toBe('Alle prosjekter i porteføljen')
     expect(context.dispatch).not.toHaveBeenCalled()
-    expect(countedTelemetry().usage).toEqual({})
+    expect(context.props.configuration.views.map((v) => v.title)).toEqual(['Alle prosjekter'])
+    expect(countedTelemetry()).toEqual({
+      usage: {},
+      errors: { 'PortfolioOverviewWebPart permission_denied 403': 1 },
+      timings: {}
+    })
+
+    // A save the list takes clears the message, counts the view and nothing more as failed.
+    await act(() => result.current.onSave())
+    expect(result.current.saveError).toBeUndefined()
+    expect(dispatched(context)).toEqual([CHANGE_VIEW.type, SET_VIEW_FORM_PANEL.type])
+    expect(countedTelemetry()).toEqual({
+      usage: { 'PortfolioOverviewWebPart view.saved': 1 },
+      errors: { 'PortfolioOverviewWebPart permission_denied 403': 1 },
+      timings: {}
+    })
+  })
+
+  it('tells of a new view the list refuses in the same way', async () => {
+    const { result, context, portalDataService } = formHook(false)
+    portalDataService.addItemToList.mockImplementationOnce(() =>
+      Promise.reject(Object.assign(new Error('Tjenesten svarer ikke'), { status: 503 }))
+    )
+    act(() => result.current.setView('title', 'Mine prosjekter'))
+    await act(() => result.current.onSave())
+    expect(result.current.saveError).toBe(strings.ViewSaveErrorText)
+    expect(context.dispatch).not.toHaveBeenCalled()
+    expect(context.props.configuration.views).toHaveLength(1)
+    expect(countedTelemetry()).toEqual({
+      usage: {},
+      errors: { 'PortfolioOverviewWebPart server_error 503': 1 },
+      timings: {}
+    })
   })
 
   it('closes the form when it is dismissed', () => {

@@ -16,8 +16,16 @@ import {
 /** Edit or create a portfolio view's query, title, icon and sharing/default settings. */
 export const ViewFormPanel: FC = () => {
   const context = useContext(PortfolioOverviewContext)
-  const { view, setView, isEditing, onDismiss, isDefaultViewSet, onSave, fluentProviderId } =
-    useViewFormPanel()
+  const {
+    view,
+    setView,
+    isEditing,
+    onDismiss,
+    isDefaultViewSet,
+    onSave,
+    saveError,
+    fluentProviderId
+  } = useViewFormPanel()
   if (!context) return null
   return (
     <BasePanel
@@ -30,6 +38,8 @@ export const ViewFormPanel: FC = () => {
     >
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={customLightTheme} className={styles.content}>
+          {/* Only once a save is refused: a message bar announces itself as it mounts. */}
+          {saveError && <UserMessage intent='error' title={strings.ErrorTitle} text={saveError} />}
           <FieldContainer
             iconName='NumberSymbolSquare'
             label={strings.SortOrderLabel}

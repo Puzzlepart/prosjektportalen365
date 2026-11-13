@@ -122,13 +122,14 @@ export const useProjectList = (props: IProjectListProps) => {
 
   /**
    * Shows the projects of the selection picked from the tabs or their overflow menu, and counts
-   * the pick for usage statistics.
+   * the pick for usage statistics, unless it is the selection shown already.
    *
    * @param key The key of the selection's vertical
    */
   function selectVertical(key: unknown) {
+    const isSwitch = state.selectedVertical?.key !== key
     setState({ selectedVertical: _.find(verticals, (v) => v.key === key) })
-    telemetry.track('tab.switched')
+    if (isSwitch) telemetry.track('tab.switched')
   }
 
   /** The id of a selection's tab, which names the projects' panel while it is selected. */

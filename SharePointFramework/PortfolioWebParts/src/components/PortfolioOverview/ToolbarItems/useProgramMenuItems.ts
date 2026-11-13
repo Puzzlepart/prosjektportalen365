@@ -5,7 +5,8 @@ import { CHANGE_VIEW } from '../reducer'
 
 /**
  * Build program choices that scope the default view's queries to child projects. A program picked
- * from the menu is a switch of view, and is counted as one for usage statistics.
+ * from the menu is a switch of view, and is counted as one for usage statistics, unless it is the
+ * program the overview shows already.
  */
 export function useProgramMenuItems(context: IPortfolioOverviewContext) {
   const telemetry = useTelemetry()
@@ -24,8 +25,9 @@ export function useProgramMenuItems(context: IPortfolioOverviewContext) {
           title: p.name
         })
         view.searchQueries = p.buildQueries(defaultView.searchQuery)
+        const isSwitch = context.state.currentView?.id !== view.id
         context.dispatch(CHANGE_VIEW(view))
-        telemetry.track('view.switched')
+        if (isSwitch) telemetry.track('view.switched')
       })
   )
 }

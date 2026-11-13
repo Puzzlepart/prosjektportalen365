@@ -37,7 +37,8 @@ export function useEditViewColumnsPanel(
   }, [context.state.columns, context.state.currentView, context.state.deletedColumnIds])
 
   /**
-   * On save view columns callback sent to `EditViewColumnsPanel`.
+   * On save view columns callback sent to `EditViewColumnsPanel`. A save the list refuses rejects
+   * and leaves the panel open: the panel tells the user and counts the refusal.
    */
   const onSaveViewColumns = async (columns: ProjectColumn[], columnIds: number[]) => {
     const properties: Record<string, any> = {
@@ -55,7 +56,8 @@ export function useEditViewColumnsPanel(
   }
 
   /**
-   * On revert view column order callback sent to `EditViewColumnsPanel`.
+   * On revert view column order callback sent to `EditViewColumnsPanel`. A save the list refuses
+   * rejects, as `onSaveViewColumns` does.
    *
    * @param selectedColumns All selectable columns, including unselected ones.
    */

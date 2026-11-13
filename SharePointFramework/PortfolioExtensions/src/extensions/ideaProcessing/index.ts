@@ -19,7 +19,7 @@ import { startCommandSetTelemetryWithOwnPortal } from '../../helpers/commandSetT
 import { ideaChoiceVariant } from '../../helpers/ideaChoiceVariant'
 import { isUserAuthorized } from '../../helpers/isUserAuthorized'
 import { themeColor } from 'pp365-shared-library'
-import { flushTelemetry, trackUsage } from 'pp365-shared-library/lib/telemetry'
+import { flushTelemetry, trackError, trackUsage } from 'pp365-shared-library/lib/telemetry'
 import resource from 'SharedResources'
 
 /** The command set's alias in its manifest, which usage statistics count it by. */
@@ -81,16 +81,18 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
             } else {
               switch (selectedChoice) {
                 case Choice.Approve:
-                  void this._onSubmit(row, dialog.comment)
+                  void this._saveDecision(() => this._onSubmit(row, dialog.comment))
                   break
                 case Choice.Consideration:
-                  void this._onSubmitConsideration(row, dialog.comment)
+                  void this._saveDecision(() => this._onSubmitConsideration(row, dialog.comment))
                   break
                 case Choice.Reject:
-                  void this._onSubmitRejected(row, dialog.comment)
+                  void this._saveDecision(() => this._onSubmitRejected(row, dialog.comment))
                   break
                 default:
-                  void this._onSubmitOther(row, dialog.comment, dialog.selectedChoice)
+                  void this._saveDecision(() =>
+                    this._onSubmitOther(row, dialog.comment, dialog.selectedChoice)
+                  )
                   break
               }
             }
@@ -99,6 +101,23 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
         break
       default:
         throw new Error('Unknown command, unable to execute')
+    }
+  }
+
+  /**
+   * Runs the save of the decision the dialog was closed with, and tells the user when it fails:
+   * the dialog is gone by then, and nothing else on the page says that the decision was not
+   * saved. The failure is counted for usage statistics by the error's code. A save counts its
+   * decision and reloads the page as its last step, so a failed one does neither.
+   *
+   * @param save The save to run
+   */
+  private async _saveDecision(save: () => Promise<void>): Promise<void> {
+    try {
+      await save()
+    } catch (error) {
+      trackError(TELEMETRY_COMPONENT, error)
+      await Dialog.alert(strings.IdeaRecommendationSaveErrorMessage)
     }
   }
 

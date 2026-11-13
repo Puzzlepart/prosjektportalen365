@@ -1,5 +1,7 @@
+import strings from 'PortfolioWebPartsStrings'
 import { DataSource, SPDataSourceItem } from 'pp365-shared-library'
 import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
+import { useEffect, useState } from 'react'
 import { usePortfolioAggregationContext } from '../context'
 import { SET_VIEW_FORM_PANEL } from '../reducer'
 import { useEditableView } from './useEditableView'
@@ -7,12 +9,21 @@ import { useId } from '@fluentui/react-components'
 
 /**
  * Validate and save aggregation data-source views and manage editor dismissal. A save the list
- * refuses is counted for usage statistics, once, by its error code.
+ * refuses is told in the form, which stays open with what was typed, and counted for usage
+ * statistics, once, by its error code.
  */
 export function useViewFormPanel() {
   const context = usePortfolioAggregationContext()
   const { view, setView, isEditing } = useEditableView()
   const telemetry = useTelemetry()
+  // A save writes to the data sources list in the hub, where SharePoint enforces the permission.
+  // A user the menu let in but the list refuses must be told, not left with a form that did
+  // nothing: the error was thrown on to a button's click handler, which shows no one anything.
+  const [saveError, setSaveError] = useState<string>()
+
+  // The form stays mounted while it is closed, and its cancel button closes it past `onDismiss`:
+  // a refusal it told of is gone whenever it closes or opens again.
+  useEffect(() => setSaveError(undefined), [context.state.viewForm])
 
   /**
    * Dismisses the form panel by dispatching the `SET_VIEW_FORM_PANEL` action.
@@ -22,9 +33,11 @@ export function useViewFormPanel() {
   }
 
   /**
-   * Save the data-source view, copying columns, refiners and grouping for a new view.
+   * Save the data-source view, copying columns, refiners and grouping for a new view. A save the
+   * list refuses leaves the form open and says so in it.
    */
   const onSave = async () => {
+    setSaveError(undefined)
     const { currentView } = context.state
     let properties: SPDataSourceItem = {
       Title: view.get('title'),
@@ -74,9 +87,8 @@ export function useViewFormPanel() {
         )
       }
     } catch (error) {
-      // Counted by what the list answered: the error thrown on keeps only its text.
       telemetry.trackError(error)
-      throw new Error(error)
+      setSaveError(strings.ViewSaveErrorText)
     }
   }
 
@@ -96,6 +108,7 @@ export function useViewFormPanel() {
     onDismiss,
     view,
     setView,
+    saveError,
     fluentProviderId
   } as const
 }

@@ -38,6 +38,7 @@ jest.mock('pp365-shared-library/lib/services/PortalDataService', () => ({
 import { Dialog } from '@microsoft/sp-dialog'
 import strings from 'PortfolioExtensionsStrings'
 import {
+  countedTelemetry,
   hubPortal,
   ITelemetryTestBed,
   settingsMap,
@@ -51,6 +52,7 @@ import {
   commandSetContext,
   execute,
   fakeSp,
+  httpError,
   ideaConfiguration,
   ignoreNavigation,
   manifestAlias,
@@ -213,10 +215,12 @@ describe('IdeaProcessCommand, usage statistics', () => {
     ['Avvis', 'reject'],
     ['Prøv ut', 'other']
   ])('counts the decision "%s" as %s, and sends it before the page reloads', async (choice, v) => {
+    const alert = jest.spyOn(Dialog, 'alert')
     const { command, fake } = await processingCommand({ telemetry: true })
     dialog.answer = { choice, comment: 'Vurdert i porteføljerådet' }
     await command.onExecute(execute(OPEN, IDEA))
     await settle()
+    expect(alert).not.toHaveBeenCalled()
     expect(fake.updates).toHaveLength(1)
     expect(usageSent()).toEqual([{ c: ALIAS, e: 'idea.decided', s: 'hub', v, n: 1 }])
     // The reload is what jsdom reports as navigation; the batch went out before it.
@@ -268,5 +272,82 @@ describe('IdeaProcessCommand, usage statistics', () => {
     bed.leave()
     expect(fake.updates).toHaveLength(1)
     expect(bed.fetch).not.toHaveBeenCalled()
+  })
+})
+
+/**
+ * A decision that is not saved, on a hub at Utvidet, where failures are counted. The dialog is
+ * closed by the time the save runs, so the user is told in an alert; the failure is counted once,
+ * by the error's code; and nothing is counted as decided, nor is the page reloaded.
+ */
+describe('IdeaProcessCommand, a decision that is not saved', () => {
+  let bed: ITelemetryTestBed
+  let alert: jest.SpyInstance
+
+  /** The usage and error entries sent so far. */
+  const sent = () => ({
+    usage: bed.batches().flatMap((batch) => batch.usage ?? []),
+    errors: bed.batches().flatMap((batch) => batch.errors ?? [])
+  })
+
+  beforeEach(() => {
+    bed = telemetryTestBed()
+    mockPortal.current = hubPortal(settingsMap('3'))
+    alert = jest.spyOn(Dialog, 'alert')
+  })
+
+  afterEach(() => {
+    mockPortal.current = undefined
+    bed.restore()
+  })
+
+  it.each([['Godkjenn'], ['Vurder'], ['Avvis'], ['Prøv ut']])(
+    'tells the user that the decision "%s" was not saved, and counts the failure by its code',
+    async (choice) => {
+      const { command, fake } = await processingCommand({ telemetry: true })
+      fake.fail(PROCESSING_LIST, 'update', httpError(403, 'Ingen tilgang til «Ny bysykkel»'))
+      dialog.answer = { choice, comment: 'Vurdert i porteføljerådet' }
+      await command.onExecute(execute(OPEN, IDEA))
+      await settle()
+      expect(alert.mock.calls).toEqual([[strings.IdeaRecommendationSaveErrorMessage]])
+      expect(fake.updates).toEqual([])
+      expect(countedTelemetry().errors).toEqual({ [`${ALIAS} permission_denied 403`]: 1 })
+      expect(countedTelemetry().usage).toEqual({})
+      expect(navigation).not.toHaveBeenCalled()
+      // What leaves the page with the user: the code and the status, never the error's message.
+      bed.leave()
+      expect(sent()).toEqual({
+        usage: [],
+        errors: [{ c: ALIAS, code: 'permission_denied', http: 403, n: 1 }]
+      })
+      expect(JSON.stringify(bed.batches())).not.toMatch(/tilgang|bysykkel|porteføljerådet/)
+    }
+  )
+
+  it('counts a failure without a status as unknown, whatever its message says', async () => {
+    const { command, fake } = await processingCommand({ telemetry: true })
+    fake.fail(PROCESSING_LIST, 'update', new Error('404 Not Found: «Ny bysykkel»'))
+    dialog.answer = { choice: 'Godkjenn', comment: 'Vurdert i porteføljerådet' }
+    await command.onExecute(execute(OPEN, IDEA))
+    await settle()
+    expect(alert.mock.calls).toEqual([[strings.IdeaRecommendationSaveErrorMessage]])
+    expect(countedTelemetry().errors).toEqual({ [`${ALIAS} unknown`]: 1 })
+    expect(countedTelemetry().usage).toEqual({})
+    expect(navigation).not.toHaveBeenCalled()
+  })
+
+  it('records the decision when the user sends it once more after a failure', async () => {
+    const { command, fake } = await processingCommand({ telemetry: true })
+    fake.fail(PROCESSING_LIST, 'update', httpError(503, 'Tjenesten er opptatt'))
+    dialog.answer = { choice: 'Avvis', comment: 'For dyrt' }
+    await command.onExecute(execute(OPEN, IDEA))
+    await settle()
+    fake.fail(PROCESSING_LIST, 'update')
+    await command.onExecute(execute(OPEN, IDEA))
+    await settle()
+    expect(alert).toHaveBeenCalledTimes(1)
+    expect(fake.updates).toHaveLength(1)
+    expect(sent().usage).toEqual([{ c: ALIAS, e: 'idea.decided', s: 'hub', v: 'reject', n: 1 }])
+    expect(navigation).toHaveBeenCalled()
   })
 })

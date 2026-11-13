@@ -130,6 +130,8 @@ describe('ProjectList', () => {
     expect(countedTelemetry().usage).toEqual({ 'ProjectListWebPart tab.switched': 1 })
     await user.click(screen.getByRole('tab', { name: strings.MyProjectsHeaderText }))
     expect(linkNames()).toEqual(['Alfa'])
+    // The tab shown already is no switch.
+    await user.click(screen.getByRole('tab', { name: strings.MyProjectsHeaderText }))
     expect(countedTelemetry()).toEqual({
       usage: { 'ProjectListWebPart tab.switched': 2 },
       errors: {},

@@ -18,7 +18,7 @@ import { useToolbarItems } from './useToolbarItems'
 /**
  * The aggregated overview's toolbar: the list and compact choices and the data sources in the
  * view selector. A data source and a layout picked there are counted, once per pick, for the web
- * part the overview is in: the hub's or a program's.
+ * part the overview is in: the hub's or a program's. A pick of what is shown already is not.
  */
 const DELIVERIES = { id: 1, title: 'Alle leveranser', iconName: 'Box' }
 const LATE = { id: 2, title: 'Forsinkede leveranser', iconName: 'Clock' }
@@ -90,14 +90,17 @@ describe('useToolbarItems', () => {
   })
 
   it('counts each data source and each layout picked, once, for the web part the overview is in', () => {
-    const { list, compact, dataSources } = toolbar({ views: [DELIVERIES, LATE] })
+    const shown = { views: [DELIVERIES, LATE], currentView: DELIVERIES }
+    const { compact, dataSources } = toolbar(shown)
     dataSources[1].onClick(null)
     expect(countedTelemetry().usage).toEqual({
       'PortfolioAggregationWebPart dataSource.switched': 1
     })
     compact.onClick(null)
-    list.onClick(null)
-    dataSources[0].onClick(null)
+    // The late deliveries are shown in the compact list now, and each pick is taken back.
+    const taken = toolbar({ ...shown, currentView: LATE, isCompact: true })
+    taken.list.onClick(null)
+    taken.dataSources[0].onClick(null)
     expect(countedTelemetry().usage).toEqual({
       'PortfolioAggregationWebPart dataSource.switched': 2,
       'PortfolioAggregationWebPart layout.toggled': 2
@@ -117,6 +120,22 @@ describe('useToolbarItems', () => {
       errors: {},
       timings: {}
     })
+  })
+
+  it('counts nothing for the data source and the layout shown already, and sets them all the same', () => {
+    const { list, dataSources, dispatch } = toolbar({
+      views: [DELIVERIES, LATE],
+      currentView: DELIVERIES
+    })
+    dataSources[0].onClick(null)
+    list.onClick(null)
+    expect(dispatch.mock.calls).toEqual([
+      [SET_DATA_SOURCE({ dataSource: DELIVERIES as any })],
+      [TOGGLE_COMPACT(false)]
+    ])
+    const compact = toolbar({ views: [DELIVERIES], currentView: DELIVERIES, isCompact: true })
+    compact.compact.onClick(null)
+    expect(countedTelemetry().usage).toEqual({})
   })
 
   it('counts neither for a web part the contract gives none, such as the idea module', () => {

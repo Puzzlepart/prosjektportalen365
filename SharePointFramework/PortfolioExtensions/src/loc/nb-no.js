@@ -31,6 +31,8 @@ define([], function () {
     IdeaProjectDataDialogNotApprovedMessage: 'Denne ideen er ikke godkjent, du kan dermed ikke opprette prosjektdata for ideen. Vent til ideen er godkjent før du oppretter prosjektdata.',
     IdeaProjectDataDialogInfoTitle: 'Tilknytning av prosjektdata',
     IdeaProjectDataDialogTitle: 'Opprett prosjektdata for ideen',
+    IdeaProjectDataSaveErrorMessage: 'Kunne ikke opprette og tilknytte prosjektdata for ideen. Prøv igjen, eller kontakt administrator hvis feilen vedvarer.',
+    IdeaRecommendationSaveErrorMessage: 'Kunne ikke lagre anbefalingen for ideen. Prøv igjen, eller kontakt administrator hvis feilen vedvarer.',
     InstallChannelLabel: 'Installasjonskanal',
     InstalledDateLabel: 'Installasjonsdato',
     InstallVersionLabel: 'Versjon',

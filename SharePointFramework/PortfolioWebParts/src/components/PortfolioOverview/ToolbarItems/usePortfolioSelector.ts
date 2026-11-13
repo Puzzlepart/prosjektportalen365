@@ -2,15 +2,28 @@ import strings from 'PortfolioWebPartsStrings'
 import { ListMenuItem, ListMenuItemDivider, format } from 'pp365-shared-library'
 import { useMemo, useState } from 'react'
 import { IPortfolioOverviewContext } from '../context'
-import { TOGGLE_MERGED_VIEW } from '../reducer'
 import _ from 'lodash'
+import { useSwitchPortfolio } from './useSwitchPortfolio'
 
 /**
- * Build the portfolio selector with individual hubs and the optional merged view.
+ * Build the portfolio selector with individual hubs and the optional merged view. A pick the web
+ * part could not switch to leaves the selector on the portfolio it showed.
  */
 export function usePortfolioSelector(context: IPortfolioOverviewContext) {
   const [selectedPortfolioId, setSelectedPortfolioId] = useState(context.props.selectedPortfolioId)
   const isMergedView = context.state.isMergedView
+  const switchPortfolio = useSwitchPortfolio(context)
+
+  /**
+   * Shows the pick in the selector at once, and the portfolio shown before again when the web
+   * part could not switch to the pick.
+   *
+   * @param portfolioId The picked portfolio's id, or `null` for the merged view
+   */
+  const pickPortfolio = async (portfolioId: string | null) => {
+    setSelectedPortfolioId(portfolioId)
+    if (!(await switchPortfolio(portfolioId))) setSelectedPortfolioId(selectedPortfolioId)
+  }
 
   const selectedPortfolio = useMemo(
     () =>
@@ -31,6 +44,8 @@ export function usePortfolioSelector(context: IPortfolioOverviewContext) {
     )
   }, [isMergedView, selectedPortfolio, context.props.portfolios])
 
+  // Made again when the selection changes: an item puts back the selection it was made with when
+  // its switch fails.
   const portfolioMenuItems = useMemo(() => {
     const items: ListMenuItem[] = []
 
@@ -44,9 +59,7 @@ export function usePortfolioSelector(context: IPortfolioOverviewContext) {
               value: portfolio.uniqueId.toString()
             })
             .setOnClick(() => {
-              setSelectedPortfolioId(portfolio.uniqueId)
-              context.dispatch(TOGGLE_MERGED_VIEW(false))
-              context.props.onSetPortfolio(portfolio.uniqueId)
+              void pickPortfolio(portfolio.uniqueId)
             })
         )
       )
@@ -66,15 +79,13 @@ export function usePortfolioSelector(context: IPortfolioOverviewContext) {
             value: 'merged'
           })
           .setOnClick(() => {
-            setSelectedPortfolioId(null)
-            context.dispatch(TOGGLE_MERGED_VIEW(true))
-            context.props.onSetPortfolio(null)
+            void pickPortfolio(null)
           })
       )
     }
 
     return items
-  }, [context.props.portfolios, context.props.showMergedView])
+  }, [context.props.portfolios, context.props.showMergedView, selectedPortfolioId])
 
   const checkedValues = useMemo(() => {
     if (isMergedView) {

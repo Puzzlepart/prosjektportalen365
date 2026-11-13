@@ -9,7 +9,14 @@ import {
   useEditViewColumnsPanel
 } from './useEditViewColumnsPanel'
 import { Button, Checkbox, Portal } from '@fluentui/react-components'
-import { BasePanel, IListColumn, format, getFluentIcon, withDefaults } from 'pp365-shared-library'
+import {
+  BasePanel,
+  IListColumn,
+  UserMessage,
+  format,
+  getFluentIcon,
+  withDefaults
+} from 'pp365-shared-library'
 import { getItemStyle } from './getItemStyle'
 
 /** Default text and empty column selection for the view editor. */
@@ -31,6 +38,8 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (incomingPro
     selectableColumns,
     onChange,
     onSave,
+    onRevertOrder,
+    saveError,
     moveColumn,
     canMoveColumn
   } = useEditViewColumnsPanel(props)
@@ -120,9 +129,7 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (incomingPro
               icon={getFluentIcon('ArrowUndo')}
               title={strings.RevertCustomOrderButtonTooltip}
               disabled={props.revertOrder.disabled}
-              onClick={() => {
-                props.revertOrder.onClick(selectableColumns)
-              }}
+              onClick={onRevertOrder}
             >
               {strings.RevertCustomOrderButtonText}
             </Button>
@@ -133,6 +140,8 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (incomingPro
       isLightDismiss={true}
       className={styles.root}
     >
+      {/* Only once a save is refused: a message bar announces itself as it mounts. */}
+      {saveError && <UserMessage intent='error' title={strings.ErrorTitle} text={saveError} />}
       <p className={styles.helpText}>{props.helpText}</p>
       <DragDropContext onDragStart={onDragStart} onDragUpdate={onDragUpdate} onDragEnd={onDragEnd}>
         <Droppable

@@ -1,7 +1,8 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
 // Babel, so mocks are not hoisted. Every `@pnp/*` import maps to the one PnP stub, so this mock is
 // all of them in this file: it keeps the stub and only lets `spfi()` hand out the test's
-// stand-in. The project data dialog has its own test; here it records what it was shown with.
+// stand-in. The project data dialog has its own test; here it records what it was shown with,
+// and every error message it was given or had taken away (`errors`), and stays open once shown.
 const mockSp: { current: any } = { current: undefined }
 jest.mock('@pnp/sp', () => {
   const stub = jest.requireActual('@pnp/sp')
@@ -15,9 +16,15 @@ jest.mock('components/IdeaDialog', () => ({
   __esModule: true,
   default: class {
     public submit = () => undefined
+    public isOpen = false
+    public errors: (string | undefined)[] = []
     public show() {
       dialog.shown = this
+      this.isOpen = true
       return Promise.resolve()
+    }
+    public setErrorMessage(message?: string) {
+      this.errors.push(message)
     }
   }
 }))
@@ -32,8 +39,10 @@ jest.mock('pp365-shared-library/lib/services/PortalDataService', () => ({
   }
 }))
 
+import { Dialog } from '@microsoft/sp-dialog'
 import strings from 'PortfolioExtensionsStrings'
 import {
+  countedTelemetry,
   hubPortal,
   ITelemetryTestBed,
   settingsMap,
@@ -48,6 +57,7 @@ import {
   commandSetContext,
   execute,
   fakeSp,
+  httpError,
   ideaConfiguration,
   ignoreNavigation,
   manifestAlias,
@@ -148,6 +158,7 @@ describe('IdeaProjectDataCommand', () => {
       { list: PROCESSING_LIST, id: 7, properties: { GtIdeaProjectDataId: 101 } }
     ])
     expect(navigation).toHaveBeenCalled()
+    expect(dialog.shown.errors).toEqual([undefined])
   })
 
   it('opens the edit form with a way back to the list', async () => {
@@ -210,15 +221,126 @@ describe('IdeaProjectDataCommand, usage statistics', () => {
 
   it('counts nothing when the project data could not be created', async () => {
     const { command, fake } = await projectDataCommand({ telemetry: true })
-    const getByTitle = fake.sp.web.lists.getByTitle
-    fake.sp.web.lists.getByTitle = (title: string) =>
-      title === resource.Lists_ProjectData_Title
-        ? { items: { add: () => Promise.reject(new Error('Listen finnes ikke')) } }
-        : getByTitle(title)
+    fake.fail(resource.Lists_ProjectData_Title, 'add', new Error('Listen finnes ikke'))
     command.onExecute(execute(OPEN, IDEA))
-    await expect(dialog.shown.submit()).rejects.toThrow('Listen finnes ikke')
+    await dialog.shown.submit()
     bed.leave()
     expect(usageSent()).toEqual([])
+    expect(navigation).not.toHaveBeenCalled()
+  })
+})
+
+/**
+ * Project data that is not created, on a hub at Utvidet, where failures are counted. The dialog
+ * is still open, so the user is told there and may try again; the failure is counted once, by the
+ * error's code; and nothing is counted as created, nor is the page left for the edit form.
+ */
+describe('IdeaProjectDataCommand, project data that is not created', () => {
+  let bed: ITelemetryTestBed
+  let alert: jest.SpyInstance
+
+  /** The usage and error entries sent so far. */
+  const sent = () => ({
+    usage: bed.batches().flatMap((batch) => batch.usage ?? []),
+    errors: bed.batches().flatMap((batch) => batch.errors ?? [])
+  })
+
+  beforeEach(() => {
+    bed = telemetryTestBed()
+    mockPortal.current = hubPortal(settingsMap('3'))
+    alert = jest.spyOn(Dialog, 'alert')
+  })
+
+  afterEach(() => {
+    mockPortal.current = undefined
+    bed.restore()
+  })
+
+  it('tells the user in the open dialog, and counts the failure by its code', async () => {
+    const { command, fake } = await projectDataCommand({ telemetry: true })
+    fake.fail(
+      resource.Lists_ProjectData_Title,
+      'add',
+      httpError(403, 'Ingen tilgang til «Ny bysykkel»')
+    )
+    command.onExecute(execute(OPEN, IDEA))
+    await dialog.shown.submit()
+    expect(dialog.shown.errors).toEqual([undefined, strings.IdeaProjectDataSaveErrorMessage])
+    expect(dialog.shown.isOpen).toBe(true)
+    expect(alert).not.toHaveBeenCalled()
+    expect(fake.adds).toEqual([])
+    expect(fake.updates).toEqual([])
+    expect(countedTelemetry().errors).toEqual({ [`${ALIAS} permission_denied 403`]: 1 })
+    expect(countedTelemetry().usage).toEqual({})
+    expect(navigation).not.toHaveBeenCalled()
+    // What leaves the page with the user: the code and the status, never the error's message.
+    bed.leave()
+    expect(sent()).toEqual({
+      usage: [],
+      errors: [{ c: ALIAS, code: 'permission_denied', http: 403, n: 1 }]
+    })
+    expect(JSON.stringify(bed.batches())).not.toMatch(/tilgang|bysykkel/)
+  })
+
+  it('does not report project data as created when the idea could not be linked to it', async () => {
+    const { command, fake } = await projectDataCommand({ telemetry: true })
+    fake.fail(PROCESSING_LIST, 'update', httpError(500, 'Kunne ikke lagre «Ny bysykkel»'))
+    command.onExecute(execute(OPEN, IDEA))
+    await dialog.shown.submit()
+    // Left behind, as nothing is rolled back: the project data, which no idea points to.
+    expect(fake.adds).toHaveLength(1)
+    expect(fake.updates).toEqual([])
+    expect(dialog.shown.errors).toEqual([undefined, strings.IdeaProjectDataSaveErrorMessage])
+    expect(countedTelemetry().errors).toEqual({ [`${ALIAS} server_error 500`]: 1 })
+    expect(countedTelemetry().usage).toEqual({})
+    expect(navigation).not.toHaveBeenCalled()
+  })
+
+  it('links the project data it created when the user tries again, and creates no second', async () => {
+    const { command, fake } = await projectDataCommand({ telemetry: true })
+    fake.fail(PROCESSING_LIST, 'update', httpError(500, 'Kunne ikke lagre «Ny bysykkel»'))
+    command.onExecute(execute(OPEN, IDEA))
+    await dialog.shown.submit()
+    fake.fail(PROCESSING_LIST, 'update')
+    await dialog.shown.submit()
+    expect(fake.adds).toHaveLength(1)
+    expect(fake.updates).toEqual([
+      { list: PROCESSING_LIST, id: 7, properties: { GtIdeaProjectDataId: 101 } }
+    ])
+    expect(sent()).toEqual({
+      usage: [{ c: ALIAS, e: 'idea.projectDataCreated', s: 'hub', n: 1 }],
+      errors: [{ c: ALIAS, code: 'server_error', http: 500, n: 1 }]
+    })
+    expect(navigation).toHaveBeenCalled()
+  })
+
+  it('takes the error away and creates the project data when the user tries again', async () => {
+    const { command, fake } = await projectDataCommand({ telemetry: true })
+    fake.fail(resource.Lists_ProjectData_Title, 'add', httpError(503, 'Tjenesten er opptatt'))
+    command.onExecute(execute(OPEN, IDEA))
+    await dialog.shown.submit()
+    fake.fail(resource.Lists_ProjectData_Title, 'add')
+    await dialog.shown.submit()
+    expect(dialog.shown.errors).toEqual([
+      undefined,
+      strings.IdeaProjectDataSaveErrorMessage,
+      undefined
+    ])
+    expect(fake.adds).toHaveLength(1)
+    expect(sent().usage).toEqual([{ c: ALIAS, e: 'idea.projectDataCreated', s: 'hub', n: 1 }])
+    expect(navigation).toHaveBeenCalled()
+  })
+
+  it('tells the user in an alert when the dialog was closed while the project data was created', async () => {
+    const { command, fake } = await projectDataCommand({ telemetry: true })
+    fake.fail(resource.Lists_ProjectData_Title, 'add', httpError(403, 'Ingen tilgang'))
+    command.onExecute(execute(OPEN, IDEA))
+    const created = dialog.shown.submit()
+    dialog.shown.isOpen = false
+    await created
+    expect(alert.mock.calls).toEqual([[strings.IdeaProjectDataSaveErrorMessage]])
+    expect(dialog.shown.errors).toEqual([undefined])
+    expect(countedTelemetry().errors).toEqual({ [`${ALIAS} permission_denied 403`]: 1 })
     expect(navigation).not.toHaveBeenCalled()
   })
 })

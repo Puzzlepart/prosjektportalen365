@@ -8,5 +8,11 @@
   .dialogBody {
     max-width: 420px;
     padding: 24px;
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
   }
 }

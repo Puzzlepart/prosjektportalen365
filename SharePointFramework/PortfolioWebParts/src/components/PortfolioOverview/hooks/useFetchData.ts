@@ -4,7 +4,7 @@ import _ from 'lodash'
 import { PortfolioOverviewView } from 'pp365-shared-library/lib/models'
 import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { parseUrlHash } from 'pp365-shared-library/lib/util/parseUrlHash'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import resource from 'SharedResources'
 import { IPortfolioOverviewContext } from '../context'
 import { DATA_FETCH_ERROR, DATA_FETCHED, STARTING_DATA_FETCH } from '../reducer'
@@ -58,11 +58,29 @@ function getCurrentView(
  * render.
  *
  * A fetch that fails is counted for usage statistics, once, by its error code, for the web part
- * the overview is in; so is each hub a merged view could not read.
+ * the overview is in; so is each hub a merged view could not read. The overview fetches a view
+ * more than once as it mounts, so what failed is counted once per view and portfolio, and again
+ * only after a fetch got through or another view was fetched.
  */
 export const useFetchData = (context: IPortfolioOverviewContext) => {
   const [, set] = usePersistedColumns(context.props)
   const telemetry = useTelemetry()
+  const countedFor = useRef<string>()
+
+  /**
+   * Counts what a fetch of `view` failed with, unless the same view and portfolio is counted
+   * already. A fetch with nothing failed lets the next failure count again.
+   */
+  const countFailures = (view: PortfolioOverviewView, errors: unknown[] = []) => {
+    if (errors.length === 0) {
+      countedFor.current = undefined
+      return
+    }
+    const key = [view?.id, context.state.isMergedView, context.props.selectedPortfolioId].join('|')
+    if (countedFor.current === key) return
+    countedFor.current = key
+    errors.forEach((error) => telemetry.trackError(error))
+  }
 
   const fetchInitialData = async (reset = false) => {
     let currentView: PortfolioOverviewView = null
@@ -102,7 +120,7 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
       ])
       const { items, managedProperties, failedPortfolios, failedPortfolioErrors } = viewData
       // The view is shown without those hubs and says so; each is counted by what it failed with.
-      failedPortfolioErrors?.forEach((error) => telemetry.trackError(error))
+      countFailures(currentView, failedPortfolioErrors)
 
       // `globalSettings` is only populated in program/parent context, so this stays false elsewhere.
       const showChildProjectInfoInProgram =
@@ -139,7 +157,7 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
         })
       )
     } catch (error) {
-      telemetry.trackError(error)
+      countFailures(currentView, [error])
       context.dispatch(DATA_FETCH_ERROR({ error, view: currentView }))
     }
   }

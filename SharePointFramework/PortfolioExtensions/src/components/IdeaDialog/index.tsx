@@ -29,7 +29,7 @@ export const IdeaDialog: FC<IIdeaDialogProps> = (props) => {
         <FluentProvider theme={customLightTheme} className={styles.ideaDialog}>
           <DialogBody className={styles.dialogBody}>
             <DialogTitle>{strings.IdeaProjectDataDialogTitle}</DialogTitle>
-            <DialogContent>
+            <DialogContent className={styles.content}>
               <UserMessage
                 title={
                   props.isBlocked
@@ -46,6 +46,8 @@ export const IdeaDialog: FC<IIdeaDialogProps> = (props) => {
                 )}
                 intent={props.isBlocked || !props.isApproved ? 'warning' : 'info'}
               />
+              {/* Rendered only on a failure: a message bar reads itself out as it mounts. */}
+              {props.errorMessage && <UserMessage text={props.errorMessage} intent='error' />}
             </DialogContent>
             <DialogActions>
               <Button title={strings.CancelLabel} onClick={props.onClose}>
@@ -73,6 +75,7 @@ export default class ProjectDataDialog extends BaseDialog {
   public dialogMessage: string
   public isBlocked: boolean
   public isApproved: boolean
+  public errorMessage: string
 
   public render(): void {
     renderReact(
@@ -83,6 +86,7 @@ export default class ProjectDataDialog extends BaseDialog {
         dialogMessage={this.dialogMessage}
         isBlocked={this.isBlocked}
         isApproved={this.isApproved}
+        errorMessage={this.errorMessage}
       />,
       this.domElement
     )
@@ -101,5 +105,16 @@ export default class ProjectDataDialog extends BaseDialog {
 
   public submit = () => {
     return
+  }
+
+  /**
+   * Shows why the project data was not created, as an error in the dialog, which stays open; with
+   * no message the error is taken away. A closed dialog only keeps the message.
+   *
+   * @param message The text to show, or none to take the error away
+   */
+  public setErrorMessage(message?: string): void {
+    this.errorMessage = message
+    if (this.isOpen) this.render()
   }
 }

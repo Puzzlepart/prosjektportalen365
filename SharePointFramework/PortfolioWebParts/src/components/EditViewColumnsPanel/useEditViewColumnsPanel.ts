@@ -10,8 +10,9 @@ import { IEditViewColumnsPanelProps } from './types'
 import { useSelectableColumns } from './useSelectableColumns'
 import _ from 'lodash'
 import { IListColumn, arrayMove, format } from 'pp365-shared-library'
+import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
+import { useEffect, useRef, useState } from 'react'
 import { isSameColumn } from './columnIdentity'
-import { useEffect, useRef } from 'react'
 
 /** The attribute a move button carries its column's name in, to find it again after a move. */
 export const MOVE_COLUMN_ATTRIBUTE = 'data-move-column'
@@ -28,12 +29,40 @@ export const MOVE_STEP_ATTRIBUTE = 'data-move-step'
  * Moves and the places told are counted among the selected columns, the order the view saves:
  * the list shows the selected columns first only as it opens, and a column selected afterwards
  * keeps its place below columns that are not.
+ *
+ * A save the view's list refuses, of the columns or of their order put back, leaves the panel
+ * open with the columns as chosen and is told above them; it is counted for usage statistics,
+ * once, by its error code, for the web part the panel is in.
  */
 export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
   const { selectableColumns, selectedColumns, selectColumn, moveColumn, moveSelectedColumn } =
     useSelectableColumns(props)
   const { announce } = useAnnounce()
+  const telemetry = useTelemetry()
   const count = selectedColumns.length
+  // A save writes to the views list in the hub, where SharePoint enforces the permission. A user
+  // the menu let in but the list refuses must be told, not left with a panel that did nothing.
+  const [saveError, setSaveError] = useState<string>()
+
+  // The panel stays mounted while it is closed: a refusal it told of is gone whenever it closes
+  // or opens again.
+  useEffect(() => setSaveError(undefined), [props.open])
+
+  /**
+   * Runs a save of the view, which the panel's owner makes and closes the panel after. One that
+   * is refused is told in the panel and counted here, where both overviews' saves end up.
+   *
+   * @param save The owner's save, with the columns it is to save
+   */
+  const saveView = async (save: () => void | Promise<void>) => {
+    setSaveError(undefined)
+    try {
+      await save()
+    } catch (error) {
+      telemetry.trackError(error)
+      setSaveError(strings.ViewSaveErrorText)
+    }
+  }
 
   /**
    * The place of a column among the selected columns, counted from 1, or 0 when it is not selected.
@@ -62,12 +91,18 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
   /**
    * Save selected columns and their IDs in view order.
    */
-  const onSave = () => {
-    props.onSave(
-      selectedColumns,
-      selectedColumns.map((c) => _.get(c, 'id'))
+  const onSave = () =>
+    saveView(() =>
+      props.onSave(
+        selectedColumns,
+        selectedColumns.map((c) => _.get(c, 'id'))
+      )
     )
-  }
+
+  /**
+   * Put the view's columns back in the columns' own order, where the owner offers it.
+   */
+  const onRevertOrder = () => saveView(() => props.revertOrder?.onClick(selectableColumns))
 
   /**
    * Update a column's selection without changing its position.
@@ -169,6 +204,8 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
     selectableColumns,
     onChange,
     onSave,
+    onRevertOrder,
+    saveError,
     moveColumn: moveColumnOneStep,
     canMoveColumn,
     selectedColumns

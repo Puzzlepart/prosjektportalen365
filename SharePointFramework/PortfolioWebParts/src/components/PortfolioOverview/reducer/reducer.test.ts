@@ -10,6 +10,7 @@ import createReducer, {
   EXCEL_EXPORT_SUCCESS,
   EXECUTE_SEARCH,
   ON_FILTER_CHANGED,
+  PORTFOLIO_SWITCH_FAILED,
   SELECTION_CHANGED,
   SET_GROUP_BY,
   SET_SORT,
@@ -346,6 +347,21 @@ describe('PortfolioOverview reducer', () => {
     const separate = reducer({ ...merged, isChangingView: false }, TOGGLE_MERGED_VIEW(false))
     expect(separate.isMergedView).toBe(false)
     expect(separate.isChangingView).toBe(true)
+  })
+
+  it('puts the merged view back as it was after a switch of portfolio that failed, and ends the change of view', () => {
+    // Only a fetch ended a change of view, and none follows a switch that changed nothing: the
+    // selectors stayed disabled.
+    const { reducer, state } = setup({ isMergedView: true })
+    const failed = reducer(reducer(state, TOGGLE_MERGED_VIEW(false)), PORTFOLIO_SWITCH_FAILED(true))
+    expect(failed.isMergedView).toBe(true)
+    expect(failed.isChangingView).toBe(false)
+    const between = reducer(
+      reducer({ ...state, isMergedView: false }, TOGGLE_MERGED_VIEW(false)),
+      PORTFOLIO_SWITCH_FAILED(false)
+    )
+    expect(between.isMergedView).toBe(false)
+    expect(between.isChangingView).toBe(false)
   })
 
   it('opens the column form for a new column or the chosen one, and closes it', () => {

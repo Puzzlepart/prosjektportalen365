@@ -56,40 +56,60 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
   }
 
   /**
+   * The id of the portfolio the web part shows: the one picked, or the first one while the id
+   * names none. `null` is the merged view.
+   */
+  private get _shownPortfolioId(): string | null {
+    if (this._selectedPortfolioId === null) return null
+    const portfolios = this.properties.portfolios ?? []
+    const picked = portfolios.find(({ uniqueId }) => uniqueId === this._selectedPortfolioId)
+    return (picked ?? portfolios[0])?.uniqueId
+  }
+
+  /**
    * Callback function to set the portfolio to display in the web part. A switch that got the
-   * portfolio's configuration is counted for usage statistics, once, before it is shown.
+   * portfolio's configuration is counted for usage statistics, once, before it is shown; a pick
+   * of the portfolio shown already is no switch.
+   *
+   * Nothing of the web part changes until the picked portfolio's configuration is read. When it
+   * cannot be read, the portfolio shown stays shown, with its id, its data adapter and its
+   * configuration, the failure is counted once by its error code, and the caller, which tells
+   * the user, gets `false`.
    *
    * @param portfolioId Unique ID of the portfolio, or null for merged view
+   * @returns Whether the web part now shows the portfolio picked
    */
-  private async setPortfolio(portfolioId: string | null): Promise<void> {
-    this._selectedPortfolioId = portfolioId
-
-    if (portfolioId === null) {
-      const primaryPortfolio = this.properties.portfolios?.[0]
-      if (primaryPortfolio) {
-        this.dataAdapter = await new DataAdapter(this.context, this.sp).configure(
+  private async setPortfolio(portfolioId: string | null): Promise<boolean> {
+    const isSwitch = portfolioId !== this._shownPortfolioId
+    try {
+      // The merged view is read through the first portfolio, and left as it is without one.
+      const portfolio =
+        portfolioId === null
+          ? this.properties.portfolios?.[0]
+          : this.properties.portfolios.find(({ uniqueId }) => uniqueId === portfolioId)
+      if (portfolioId !== null || portfolio) {
+        const dataAdapter = await new DataAdapter(this.context, this.sp).configure(
           this.context,
           null,
-          primaryPortfolio
+          portfolio
         )
-        this._configuration = await this.dataAdapter.getPortfolioConfig()
+        const configuration = await dataAdapter.getPortfolioConfig()
+        this.dataAdapter = dataAdapter
+        this._configuration = configuration
       }
-    } else {
-      const portfolio = this.properties.portfolios.find(
-        ({ uniqueId }) => uniqueId === this._selectedPortfolioId
-      )
-      this.dataAdapter = await new DataAdapter(this.context, this.sp).configure(
-        this.context,
-        null,
-        portfolio
-      )
-      this._configuration = await this.dataAdapter.getPortfolioConfig()
+    } catch (error) {
+      trackError(this._telemetryComponent, error)
+      return false
     }
-    trackUsage(
-      this._telemetryComponent as TelemetryEventComponent<'portfolio.switched'>,
-      'portfolio.switched'
-    )
+    this._selectedPortfolioId = portfolioId
+    if (isSwitch) {
+      trackUsage(
+        this._telemetryComponent as TelemetryEventComponent<'portfolio.switched'>,
+        'portfolio.switched'
+      )
+    }
     this.render()
+    return true
   }
 
   public async onInit(): Promise<void> {

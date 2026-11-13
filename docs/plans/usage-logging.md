@@ -2511,3 +2511,78 @@ _Each slice adds its entry below._
     merge.
   - The production bundle was not inspected, and nothing was checked in a browser or with a
     local DEBUG watch.
+
+### Rebase on main and three counting fixes (2026-11-13)
+
+- Decided by the user on 2026-11-13:
+  - The error boundary in `BaseProgramWebPart` stays (slice 7, Left): a program web part that
+    fails to render shows the error under `ErrorTitle`, and counts `render_failed`.
+  - A DEBUG build keeps sending catalog events, as before (slice 5, Left). Only usage batches are
+    held back from a DEBUG build (P14).
+  - Three weaknesses left by slice 7 are fixed, below: one failed load of the portfolio overview
+    counted twice, a pick of what is shown counted as a switch, and saves with no error handling.
+- Done:
+  - The branch was rebased on `main` twice. At `6a934fcc8`, 16 newer commits, among them the
+    comment audit of all six packages: 47 files conflicted, each in JSDoc or an import line, and
+    main's wording was kept with the sentence on usage statistics added to it. At `decc7c48a`,
+    6 more UU fixes: one conflict, in `EditViewColumnsPanel.tsx`, where main had replaced the
+    panel's title with a help text, and the save error's message bar sits above it; and the
+    merge left a second `react` import in `useEditViewColumnsPanel.ts`, which TypeScript caught.
+    Nothing is pushed.
+  - `useFetchData` counts what a fetch failed with once per view, merged state and portfolio. The
+    two fetches as the overview mounts count one error, and the same view counts again only after
+    a fetch got through. Each hub a merged view could not read is counted the same way. The
+    program overview uses the same hook.
+  - A pick of what is shown already is no switch: `view.switched` (views and programs),
+    `dataSource.switched`, `layout.toggled`, `tab.switched` and `portfolio.switched` count only a
+    pick that changes what is shown.
+  - Saves that had no error handling now tell the user and count the failure once, by its code,
+    in the catch that handles it. A save that failed counts no usage.
+    - PortfolioWebParts. The view form of the portfolio overview and of the aggregation, and the
+      panel that edits a view's columns (its save, and its revert of the order, in both
+      overviews), show `ViewSaveErrorText` under `ErrorTitle` and stay open with what was chosen.
+      The aggregation's form threw its error on to a click handler, which showed it to no one.
+    - A switch of portfolio changes nothing in the web part until the picked portfolio's
+      configuration is read. When it cannot be, the portfolio shown stays shown, the selectors
+      are put back and can be used again (`PORTFOLIO_SWITCH_FAILED`), and a toast tells which
+      switch failed (`PortfolioSwitchErrorTitle`, `PortfolioSwitchErrorText`). `onSetPortfolio`
+      now resolves to whether the pick is shown.
+    - PortfolioExtensions, the idea saves. IdeaRegistration and IdeaProcessing tell the user in an
+      alert (`IdeaRecommendationSaveErrorMessage`), as their dialog is closed when the save runs,
+      and reload nothing. IdeaProjectData shows the error in its dialog, which stays open for
+      another try (`IdeaProjectDataSaveErrorMessage`), or in an alert when it was closed, and
+      leaves no page. The read of the content columns no longer rewraps its error, which lost the
+      HTTP status.
+    - Project data that was created but could not be linked to the idea is linked by the next
+      try, while the page is open, and not created again.
+  - ProgramWebParts' tests follow the overview: its failed read is counted once for the program
+    web part, and the stand-in context of the view menu has a `state`, as the overview's has.
+- Verified by the main agent's own runs on `decc7c48a`, after the last edit, all with 0 failures
+  and no lint errors:
+  - shared-library (`npm test`): 956 Jest tests in 106 files and 15
+    runtime tests. Coverage 81.46 / 86.63 / 70.37 / 81.46.
+  - ProjectWebParts: 468 tests in 74 files. Coverage 71.03 / 75.13 / 68.69 / 71.03.
+  - ProjectExtensions: 333 tests in 35 files. Coverage 82.72 / 85.9 / 83.18 / 82.72.
+  - PortfolioWebParts: 457 tests in 68 files. Coverage 81.13 / 81.64 / 75 / 81.13.
+  - PortfolioExtensions: 341 tests in 20 files. Coverage
+    73.32 / 85.15 / 87.25 / 73.32.
+  - ProgramWebParts: 114 tests in 14 files. Coverage 51.71 / 84.36 / 82.66 / 51.71.
+  - `validate-loc` in PortfolioWebParts (348 keys) and PortfolioExtensions (291 keys): no key
+    missing from either bundle.
+- Left:
+  - Loads that have no catch are still neither shown nor counted: the fetches of ResourceAllocation
+    and IdeaModule, the program administration's first read, and in ProjectExtensions the Planner
+    task preview, the folder list and the libraries of the template dialog.
+  - An approval in IdeaRegistration can fail half-way: the idea keeps «Godkjent» and the comment
+    with no processing item, and once the list refreshes the command answers «allerede godkjent».
+    Project data that could not be linked is left without an idea once the page is reloaded.
+  - As before: «Opprett» in the project data dialog has no busy state, so a double click creates
+    two; the recommendation dialog loses the typed comment when the save fails; a rejected
+    `Dialog.alert` is unhandled; the link command rethrows `new Error(error)`.
+  - Read from the code, not reproduced: a pick of the portfolio or the view shown already starts
+    a change of view that no fetch ends, so the selectors would stay disabled and the list in
+    its loading state. It was so before this branch, and such a pick is not counted.
+  - As before: a column form closed with its cancel button still shows its save error when it
+    opens again. A message bar can be scrolled out of view in a low window, but is announced.
+  - The new texts were not proofread with the other 1.15.0 texts, and nothing was checked in a
+    browser or with a screen reader.

@@ -3,7 +3,14 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import strings from 'PortfolioWebPartsStrings'
 import { PortfolioOverviewView, ProjectColumn, format } from 'pp365-shared-library'
+import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
+import {
+  countedTelemetry,
+  startTestTelemetry
+} from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import * as React from 'react'
+import { useEditViewColumnsPanel as useAggregationPanelProps } from '../PortfolioAggregation/useEditViewColumnsPanel'
+import { useEditViewColumnsPanel as useOverviewPanelProps } from '../PortfolioOverview/hooks/useEditViewColumnsPanel'
 import { EDIT_VIEW_COLUMNS_PANEL_DEFAULT_PROPS, EditViewColumnsPanel } from './EditViewColumnsPanel'
 import { EditViewColumnsPanelSortMode } from './types'
 import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
@@ -39,18 +46,46 @@ function renderPanel(props: Record<string, any> = {}) {
   const onSave = jest.fn()
   render(
     <AriaLiveAnnouncer>
-      <EditViewColumnsPanel
-        open
-        onClose={jest.fn()}
-        onSave={onSave}
-        sortMode={EditViewColumnsPanelSortMode.CustomSelectedOnTop}
-        columns={columns()}
-        {...props}
-      />
+      <TelemetryProvider component='PortfolioOverviewWebPart'>
+        <EditViewColumnsPanel
+          open
+          onClose={jest.fn()}
+          onSave={onSave}
+          sortMode={EditViewColumnsPanelSortMode.CustomSelectedOnTop}
+          columns={columns()}
+          {...props}
+        />
+      </TelemetryProvider>
     </AriaLiveAnnouncer>
   )
   return onSave
 }
+
+/** What a list answers a user it does not let change it. */
+const refusal = () => Object.assign(new Error('Ingen tilgang'), { status: 403 })
+
+/**
+ * The panel as an overview gives it its props, in the web part the overview is in.
+ *
+ * @param usePanelProps The overview's hook for the panel's props, on the test's context
+ * @param alias The alias of the web part
+ */
+function renderOwnedPanel(usePanelProps: () => any, alias: string) {
+  /** The panel with the props its owner's hook makes on every render. */
+  const OwnedPanel: React.FC = () => <EditViewColumnsPanel {...usePanelProps()} />
+  render(
+    <AriaLiveAnnouncer>
+      <TelemetryProvider component={alias}>
+        <OwnedPanel />
+      </TelemetryProvider>
+    </AriaLiveAnnouncer>
+  )
+}
+
+/** «Bruk», which saves the view with the columns chosen. */
+const applyButton = () => screen.getByRole('button', { name: strings.UseChangesButtonText })
+
+beforeEach(() => startTestTelemetry())
 
 /**
  * One chosen column above three that are not, in sort order: a column chosen in the panel keeps its
@@ -361,5 +396,152 @@ describe('EditViewColumnsPanel', () => {
     await user.click(screen.getByRole('button', { name: strings.RevertCustomOrderButtonText }))
     expect(onClick).toHaveBeenCalledTimes(1)
     expect(onClick.mock.calls[0][0]).toHaveLength(3)
+  })
+
+  it('says that the view could not be saved when the save is refused, keeps the columns as chosen, and counts the refusal once (WCAG 3.3.1, 4.1.3)', async () => {
+    // The panel did nothing: the refusal went to the button's click, unhandled and uncounted.
+    const user = setupUser()
+    const onSave = jest.fn().mockRejectedValueOnce(refusal()).mockResolvedValue(undefined)
+    renderPanel({ onSave })
+    await user.click(screen.getByRole('checkbox', { name: 'Budsjett' }))
+    await user.click(applyButton())
+    expect(await screen.findByText(strings.ViewSaveErrorText)).toBeInTheDocument()
+    expect(screen.getByText(strings.ErrorTitle)).toBeInTheDocument()
+    await waitFor(() => expect(announced()).toContain(strings.ViewSaveErrorText))
+    expect(screen.getByRole('checkbox', { name: 'Budsjett' })).toBeChecked()
+    expect(countedTelemetry()).toEqual({
+      usage: {},
+      errors: { 'PortfolioOverviewWebPart permission_denied 403': 1 },
+      timings: {}
+    })
+
+    // A save that is taken clears the message, and counts nothing: no event is a view's columns.
+    await user.click(applyButton())
+    await waitFor(() => expect(screen.queryByText(strings.ViewSaveErrorText)).toBeNull())
+    expect(onSave).toHaveBeenCalledTimes(2)
+    expect(onSave.mock.calls[1][1]).toEqual([1, 2, 3])
+    expect(countedTelemetry()).toEqual({
+      usage: {},
+      errors: { 'PortfolioOverviewWebPart permission_denied 403': 1 },
+      timings: {}
+    })
+  })
+
+  it("tells of the portfolio overview's save of a view's columns that its list refuses, and of its order put back", async () => {
+    const user = setupUser()
+    const projectColumn = (Id: number, Title: string) =>
+      new ProjectColumn({
+        Id,
+        Title,
+        GtManagedProperty: `Kolonne${Id}`,
+        GtSortOrder: Id * 10,
+        GtShowFieldPortfolio: true
+      })
+    const [title, phase, budget] = [
+      projectColumn(1, 'Tittel'),
+      projectColumn(2, 'Fase'),
+      projectColumn(3, 'Budsjett')
+    ]
+    const updateItemInList = jest.fn().mockRejectedValueOnce(refusal()).mockResolvedValue(undefined)
+    const context = {
+      props: {
+        configuration: { columns: [title, phase, budget] },
+        dataAdapter: { portalDataService: { updateItemInList } }
+      },
+      state: {
+        isEditViewColumnsPanelOpen: true,
+        columns: [title, phase],
+        currentView: { id: 7, columnOrder: [2, 1] },
+        deletedColumnIds: []
+      },
+      dispatch: jest.fn()
+    } as any
+    renderOwnedPanel(() => useOverviewPanelProps(context), 'ProgramProjectOverviewWebPart')
+    await user.click(applyButton())
+    expect(await screen.findByText(strings.ViewSaveErrorText)).toBeInTheDocument()
+    expect(updateItemInList).toHaveBeenCalledWith('PORTFOLIO_VIEWS', 7, {
+      GtPortfolioColumnsId: [2, 1],
+      GtPortfolioColumnOrder: '[2,1]'
+    })
+    // The view keeps its columns and the panel stays open: nothing reached the overview's state.
+    expect(context.dispatch).not.toHaveBeenCalled()
+    expect(countedTelemetry().errors).toEqual({
+      'ProgramProjectOverviewWebPart permission_denied 403': 1
+    })
+
+    // The list takes the next save: the overview gets the columns and closes the panel.
+    await user.click(applyButton())
+    await waitFor(() => expect(context.dispatch).toHaveBeenCalledTimes(1))
+    expect(context.dispatch.mock.calls[0][0].payload).toMatchObject({ isOpen: false })
+    expect(context.dispatch.mock.calls[0][0].payload.columns.map((c: any) => c.id)).toEqual([2, 1])
+    expect(screen.queryByText(strings.ViewSaveErrorText)).toBeNull()
+
+    // Putting the order back is a save of the view too.
+    updateItemInList.mockRejectedValueOnce(Object.assign(new Error('Borte'), { status: 404 }))
+    await user.click(screen.getByRole('button', { name: strings.RevertCustomOrderButtonText }))
+    expect(await screen.findByText(strings.ViewSaveErrorText)).toBeInTheDocument()
+    expect(updateItemInList).toHaveBeenLastCalledWith('PORTFOLIO_VIEWS', 7, {
+      GtPortfolioColumnOrder: null
+    })
+    expect(context.dispatch).toHaveBeenCalledTimes(1)
+    expect(countedTelemetry()).toEqual({
+      usage: {},
+      errors: {
+        'ProgramProjectOverviewWebPart permission_denied 403': 1,
+        'ProgramProjectOverviewWebPart not_found 404': 1
+      },
+      timings: {}
+    })
+  })
+
+  it("tells of the aggregated overview's save of a view's columns that its list refuses", async () => {
+    const user = setupUser()
+    const updateDataSourceItem = jest
+      .fn()
+      .mockRejectedValueOnce(refusal())
+      .mockResolvedValue(undefined)
+    const [title, phase] = [
+      column(1, 'Title', 'Tittel', true, { isLocked: true }),
+      column(2, 'GtProjectPhase', 'Fase', true)
+    ]
+    const context = {
+      props: { dataAdapter: { portalDataService: { updateDataSourceItem } } },
+      state: {
+        isEditViewColumnsPanelOpen: true,
+        allColumnsForCategory: [title, phase, column(3, 'GtBudgetTotal', 'Budsjett', false)],
+        columns: [title, phase],
+        currentView: { title: 'Alle leveranser' }
+      },
+      dispatch: jest.fn()
+    } as any
+    renderOwnedPanel(() => useAggregationPanelProps(context), 'PortfolioAggregationWebPart')
+    await user.click(screen.getByRole('checkbox', { name: 'Budsjett' }))
+    await user.click(applyButton())
+    expect(await screen.findByText(strings.ViewSaveErrorText)).toBeInTheDocument()
+    await waitFor(() => expect(announced()).toContain(strings.ViewSaveErrorText))
+    expect(updateDataSourceItem).toHaveBeenCalledWith(
+      'DATA_SOURCES',
+      { GtProjectContentColumnsId: [1, 2, 3] },
+      'Alle leveranser',
+      true
+    )
+    expect(screen.getByRole('checkbox', { name: 'Budsjett' })).toBeChecked()
+    expect(context.dispatch).not.toHaveBeenCalled()
+    expect(countedTelemetry()).toEqual({
+      usage: {},
+      errors: { 'PortfolioAggregationWebPart permission_denied 403': 1 },
+      timings: {}
+    })
+
+    // The list takes the next save: the overview gets the columns and closes the panel.
+    await user.click(applyButton())
+    await waitFor(() => expect(context.dispatch).toHaveBeenCalled())
+    expect(context.dispatch.mock.calls[0][0].payload.columns.map((c: any) => c.id)).toEqual([
+      1, 2, 3
+    ])
+    expect(screen.queryByText(strings.ViewSaveErrorText)).toBeNull()
+    expect(countedTelemetry().errors).toEqual({
+      'PortfolioAggregationWebPart permission_denied 403': 1
+    })
   })
 })

@@ -15,6 +15,7 @@ import {
   EXCEL_EXPORT_SUCCESS,
   EXECUTE_SEARCH,
   ON_FILTER_CHANGED,
+  PORTFOLIO_SWITCH_FAILED,
   SELECTION_CHANGED,
   SET_GROUP_BY,
   SET_SORT,
@@ -195,6 +196,12 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
       .addCase(TOGGLE_MERGED_VIEW, (state, { payload }) => {
         state.isMergedView = payload
         state.isChangingView = true
+      })
+      .addCase(PORTFOLIO_SWITCH_FAILED, (state, { payload }) => {
+        state.isMergedView = payload
+        // No fetch follows a switch that changed nothing, and only a fetch ends a change of view:
+        // the selectors would stay disabled.
+        state.isChangingView = false
       })
   })
 

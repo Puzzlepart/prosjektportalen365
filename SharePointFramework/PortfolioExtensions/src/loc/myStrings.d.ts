@@ -30,6 +30,8 @@ declare interface IPortfolioExtensionsStrings {
   IdeaProjectDataDialogNotApprovedMessage: string
   IdeaProjectDataDialogInfoTitle: string
   IdeaProjectDataDialogTitle: string
+  IdeaProjectDataSaveErrorMessage: string
+  IdeaRecommendationSaveErrorMessage: string
   InstallChannelLabel: string
   InstalledDateLabel: string
   InstallVersionLabel: string

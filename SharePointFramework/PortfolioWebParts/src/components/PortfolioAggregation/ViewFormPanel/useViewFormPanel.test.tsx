@@ -1,4 +1,5 @@
 import { act, renderHook } from '@testing-library/react'
+import strings from 'PortfolioWebPartsStrings'
 import { DataSource } from 'pp365-shared-library'
 import { TelemetryProvider } from 'pp365-shared-library/lib/telemetry'
 import {
@@ -13,8 +14,9 @@ import { useViewFormPanel } from './useViewFormPanel'
 /**
  * Saving a view (a data source) of the aggregated overview: a new one is added to the data sources
  * with the columns of the view it was made from, an edited one is updated, and the form closes
- * with the view. A save the list refuses is thrown on, and counted once by what the list answered.
- * The contract gives the aggregated overview no event for a saved view, so a save counts none.
+ * with the view. A save the list refuses leaves the form open with what was typed and is told in
+ * it, and counted once by what the list answered. The contract gives the aggregated overview no
+ * event for a saved view, so a save counts none.
  */
 const QUERY = 'ContentTypeId:0x010088578E7470CC4AA68D5663464831070209* GtDeliveryStatusOWSCHCS:*'
 
@@ -109,19 +111,45 @@ describe('useViewFormPanel (aggregated overview)', () => {
     expect(countedTelemetry()).toEqual({ usage: {}, errors: {}, timings: {} })
   })
 
-  it('throws a save the list refuses on, and counts it once by what the list answered', async () => {
+  it('tells of a save the list refuses and counts it once by what the list answered, with the form left open', async () => {
+    // The refusal was thrown on to the save button's click, which shows no one anything.
     const { result, context, portalDataService } = formHook(true)
     portalDataService.updateItemInList.mockImplementationOnce(() =>
       Promise.reject(Object.assign(new Error('Ingen tilgang'), { status: 403 }))
     )
-    let thrown: Error
-    await act(() => result.current.onSave().catch((error) => (thrown = error)))
-    // The error thrown on keeps the text of the answer, and not its status.
-    expect(thrown.message).toContain('Ingen tilgang')
-    expect(thrown).not.toHaveProperty('status')
+    act(() => result.current.setView('title', 'Alle leveranser i porteføljen'))
+    await act(() => result.current.onSave())
+    expect(result.current.saveError).toBe(strings.ViewSaveErrorText)
+    expect(result.current.view.get('title')).toBe('Alle leveranser i porteføljen')
     expect(context.dispatch).not.toHaveBeenCalled()
+    expect(countedTelemetry()).toEqual({
+      usage: {},
+      errors: { 'PortfolioAggregationWebPart permission_denied 403': 1 },
+      timings: {}
+    })
+
+    // A save the list takes clears the message, and counts nothing more.
+    await act(() => result.current.onSave())
+    expect(result.current.saveError).toBeUndefined()
+    expect(context.dispatch).toHaveBeenCalledTimes(1)
     expect(countedTelemetry().errors).toEqual({
       'PortfolioAggregationWebPart permission_denied 403': 1
+    })
+  })
+
+  it('tells of a new view the list refuses in the same way', async () => {
+    const { result, context, portalDataService } = formHook(false)
+    portalDataService.addItemToList.mockImplementationOnce(() =>
+      Promise.reject(Object.assign(new Error('Tjenesten svarer ikke'), { status: 503 }))
+    )
+    act(() => result.current.setView('title', 'Mine leveranser'))
+    await act(() => result.current.onSave())
+    expect(result.current.saveError).toBe(strings.ViewSaveErrorText)
+    expect(context.dispatch).not.toHaveBeenCalled()
+    expect(countedTelemetry()).toEqual({
+      usage: {},
+      errors: { 'PortfolioAggregationWebPart server_error 503': 1 },
+      timings: {}
     })
   })
 

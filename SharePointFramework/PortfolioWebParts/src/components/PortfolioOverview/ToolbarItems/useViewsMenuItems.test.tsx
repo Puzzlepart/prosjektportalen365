@@ -14,7 +14,7 @@ import { useViewsMenuItems } from './useViewsMenuItems'
  * The views and the programs of the portfolio overview's view selector: each view the filter lets
  * through and each program is a menu item that shows it, a program as the default view scoped to
  * it. A pick is counted as a switch of view, once, for the web part the overview is in: the hub's
- * overview or a program's.
+ * overview or a program's. A pick of what the overview shows already is no switch.
  */
 const QUERY = 'DepartmentId:{5c7d2f6a-3b1e-4d8c-9a0f-6e2b1c4d7f80} contentclass:STS_Site'
 
@@ -31,10 +31,10 @@ const program = {
   buildQueries: jest.fn((query: string) => [`${query} program-1`])
 }
 
-function contextWith(configuration: Record<string, any> = {}) {
+function contextWith(configuration: Record<string, any> = {}, currentView: any = all) {
   return {
     props: { configuration: { views: [all, active, mine], programs: [program], ...configuration } },
-    state: { currentView: all },
+    state: { currentView },
     dispatch: jest.fn()
   } as any
 }
@@ -83,7 +83,8 @@ describe('useViewsMenuItems', () => {
     const items = viewItems(contextWith())
     items[1].onClick(undefined)
     expect(countedTelemetry().usage).toEqual({ 'PortfolioOverviewWebPart view.switched': 1 })
-    items[0].onClick(undefined)
+    // The overview shows «Aktive prosjekter» now, and «Alle prosjekter» is picked again.
+    viewItems(contextWith({}, active))[0].onClick(undefined)
     expect(countedTelemetry().usage).toEqual({ 'PortfolioOverviewWebPart view.switched': 2 })
 
     // A program reuses the overview under its own web part.
@@ -92,6 +93,13 @@ describe('useViewsMenuItems', () => {
       'PortfolioOverviewWebPart view.switched': 2,
       'ProgramProjectOverviewWebPart view.switched': 1
     })
+  })
+
+  it('counts no switch for the view the overview shows already, and shows it all the same', () => {
+    const context = contextWith()
+    viewItems(context)[0].onClick(undefined)
+    expect(context.dispatch).toHaveBeenCalledWith(CHANGE_VIEW(all))
+    expect(countedTelemetry().usage).toEqual({})
   })
 
   it('shows the view all the same outside a web part, or in one the contract gives no views, and counts nothing', () => {
@@ -122,6 +130,13 @@ describe('useProgramMenuItems', () => {
       searchQueries: [`${QUERY} program-1`]
     })
     expect(countedTelemetry().usage).toEqual({ 'PortfolioOverviewWebPart view.switched': 1 })
+  })
+
+  it('counts no switch for the program the overview shows already', () => {
+    const context = contextWith({}, { id: program.id })
+    programItems(context)[0].onClick(undefined)
+    expect(context.dispatch).toHaveBeenCalledTimes(1)
+    expect(countedTelemetry().usage).toEqual({})
   })
 
   it('shows nothing without a default view to scope, and counts nothing', () => {

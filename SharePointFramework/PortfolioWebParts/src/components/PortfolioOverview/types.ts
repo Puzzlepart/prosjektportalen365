@@ -144,11 +144,13 @@ export interface IPortfolioOverviewProps
   showMergedViewInViewSelector?: boolean
 
   /**
-   * Callback to set the selected portfolio.
+   * Callback to set the selected portfolio. It resolves to `false` when the portfolio could not
+   * be shown and the one shown before stays: the overview then tells the user and puts its
+   * selectors back. The web part counts the failure; the overview does not.
    *
    * @param portfolioId The unique ID of the selected portfolio, or null for merged view.
    */
-  onSetPortfolio?: (portfolioId: string | null) => void
+  onSetPortfolio?: (portfolioId: string | null) => Promise<boolean>
 }
 
 /** View data, filtering, sorting, selection and editing-panel state. */

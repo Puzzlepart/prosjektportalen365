@@ -58,6 +58,7 @@ import {
   commandSetContext,
   execute,
   fakeSp,
+  httpError,
   ideaConfiguration,
   ignoreNavigation,
   manifestAlias,
@@ -307,10 +308,12 @@ describe('IdeaRegistrationCommand, usage statistics', () => {
   ])(
     'counts the recommendation "%s" as %s, and sends it before the page reloads',
     async (choice, v, sentOn) => {
+      const alert = jest.spyOn(Dialog, 'alert')
       const { command, fake } = await registrationCommand({ telemetry: true })
       dialog.answer = { choice, comment: 'Passer med strategien' }
       await command.onExecute(execute(OPEN, IDEA))
       await settle()
+      expect(alert).not.toHaveBeenCalled()
       expect(fake.updates).toHaveLength(1)
       // Only an approved idea is sent on to processing, and it is counted once that is done.
       expect(fake.adds).toHaveLength(sentOn)
@@ -363,4 +366,106 @@ describe('IdeaRegistrationCommand, usage statistics', () => {
       expect(countedTelemetry().errors).toEqual(errors)
     }
   )
+})
+
+/**
+ * A recommendation that is not saved, on a hub at Utvidet, where failures are counted. The dialog
+ * is closed by the time the save runs, so the user is told in an alert; the failure is counted
+ * once, by the error's code; and nothing is counted as recommended, nor is the page reloaded.
+ */
+describe('IdeaRegistrationCommand, a recommendation that is not saved', () => {
+  let bed: ITelemetryTestBed
+  let alert: jest.SpyInstance
+
+  /** The usage and error entries sent so far. */
+  const sent = () => ({
+    usage: bed.batches().flatMap((batch) => batch.usage ?? []),
+    errors: bed.batches().flatMap((batch) => batch.errors ?? [])
+  })
+
+  beforeEach(() => {
+    bed = telemetryTestBed()
+    portal.hub = hubPortal(settingsMap('3'))
+    alert = jest.spyOn(Dialog, 'alert')
+  })
+
+  afterEach(() => {
+    portal.hub = undefined
+    bed.restore()
+  })
+
+  it.each([['Godkjenn'], ['Vurder'], ['Avvis'], ['Prøv ut']])(
+    'tells the user that the recommendation "%s" was not saved, and counts the failure by its code',
+    async (choice) => {
+      const { command, fake } = await registrationCommand({ telemetry: true })
+      fake.fail(REGISTRATION_LIST, 'update', httpError(403, 'Ingen tilgang til «Ny bysykkel»'))
+      dialog.answer = { choice, comment: 'Passer med strategien' }
+      await command.onExecute(execute(OPEN, IDEA))
+      await settle()
+      expect(alert.mock.calls).toEqual([[strings.IdeaRecommendationSaveErrorMessage]])
+      expect(fake.updates).toEqual([])
+      expect(fake.adds).toEqual([])
+      expect(countedTelemetry().errors).toEqual({ [`${ALIAS} permission_denied 403`]: 1 })
+      expect(countedTelemetry().usage).toEqual({})
+      expect(navigation).not.toHaveBeenCalled()
+      // What leaves the page with the user: the code and the status, never the error's message.
+      bed.leave()
+      expect(sent()).toEqual({
+        usage: [],
+        errors: [{ c: ALIAS, code: 'permission_denied', http: 403, n: 1 }]
+      })
+      expect(JSON.stringify(bed.batches())).not.toMatch(/tilgang|bysykkel|strategien/)
+    }
+  )
+
+  it('does not report an approved idea as saved when it could not be sent on to processing', async () => {
+    const { command, fake } = await registrationCommand({ telemetry: true })
+    fake.fail(PROCESSING_LIST, 'add', httpError(500, 'Kunne ikke lagre «Ny bysykkel»'))
+    dialog.answer = { choice: 'Godkjenn', comment: 'Passer med strategien' }
+    await command.onExecute(execute(OPEN, IDEA))
+    await settle()
+    // Left behind, as nothing is rolled back: the recommendation on the idea, with no item in
+    // the processing list.
+    expect(fake.updates).toHaveLength(1)
+    expect(fake.adds).toEqual([])
+    expect(alert.mock.calls).toEqual([[strings.IdeaRecommendationSaveErrorMessage]])
+    expect(countedTelemetry().errors).toEqual({ [`${ALIAS} server_error 500`]: 1 })
+    expect(countedTelemetry().usage).toEqual({})
+    expect(navigation).not.toHaveBeenCalled()
+  })
+
+  it('counts the content columns it could not read by the status SharePoint gave, and writes nothing', async () => {
+    const { command, fake } = await registrationCommand({ telemetry: true })
+    fake.fail(
+      resource.Lists_ProjectContentColumns_Title,
+      'read',
+      httpError(404, 'Listen «Prosjektinnholdskolonner» finnes ikke')
+    )
+    dialog.answer = { choice: 'Godkjenn', comment: 'Passer med strategien' }
+    await command.onExecute(execute(OPEN, IDEA))
+    await settle()
+    expect(fake.updates).toEqual([])
+    expect(fake.adds).toEqual([])
+    expect(alert.mock.calls).toEqual([[strings.IdeaRecommendationSaveErrorMessage]])
+    expect(countedTelemetry().errors).toEqual({ [`${ALIAS} not_found 404`]: 1 })
+    expect(countedTelemetry().usage).toEqual({})
+    expect(navigation).not.toHaveBeenCalled()
+  })
+
+  it('records the recommendation when the user sends it once more after a failure', async () => {
+    const { command, fake } = await registrationCommand({ telemetry: true })
+    fake.fail(REGISTRATION_LIST, 'update', httpError(503, 'Tjenesten er opptatt'))
+    dialog.answer = { choice: 'Vurder', comment: 'Trenger mer underlag' }
+    await command.onExecute(execute(OPEN, IDEA))
+    await settle()
+    fake.fail(REGISTRATION_LIST, 'update')
+    await command.onExecute(execute(OPEN, IDEA))
+    await settle()
+    expect(alert).toHaveBeenCalledTimes(1)
+    expect(fake.updates).toHaveLength(1)
+    expect(sent().usage).toEqual([
+      { c: ALIAS, e: 'idea.recommended', s: 'hub', v: 'consider', n: 1 }
+    ])
+    expect(navigation).toHaveBeenCalled()
+  })
 })

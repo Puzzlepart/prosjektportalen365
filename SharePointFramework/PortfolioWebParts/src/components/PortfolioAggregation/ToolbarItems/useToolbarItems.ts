@@ -17,7 +17,7 @@ import resource from 'SharedResources'
 /**
  * Build export, view, layout, view-editing and filter commands for the aggregation. A data source
  * and a list layout picked from the view selector are counted for usage statistics, for the web
- * part the overview is in.
+ * part the overview is in, unless the pick is what the overview shows already.
  */
 export function useToolbarItems(context: IPortfolioAggregationContext) {
   const telemetry = useTelemetry()
@@ -38,10 +38,18 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
         value: dataSource.id.toString()
       })
       .setOnClick(() => {
+        const isSwitch = context.state.currentView?.id !== dataSource.id
         context.dispatch(SET_DATA_SOURCE({ dataSource }))
-        telemetry.track('dataSource.switched')
+        if (isSwitch) telemetry.track('dataSource.switched')
       })
   )
+
+  /** Shows the list in the layout picked, and counts the pick when it changes the layout. */
+  const setCompact = (isCompact: boolean) => {
+    const isToggle = !!context.state.isCompact !== isCompact
+    context.dispatch(TOGGLE_COMPACT(isCompact))
+    if (isToggle) telemetry.track('layout.toggled')
+  }
 
   const menuItems = useMemo<ListMenuItem[]>(
     () => [
@@ -72,20 +80,14 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
                 name: 'renderMode',
                 value: 'list'
               })
-              .setOnClick(() => {
-                context.dispatch(TOGGLE_COMPACT(false))
-                telemetry.track('layout.toggled')
-              }),
+              .setOnClick(() => setCompact(false)),
             new ListMenuItem(strings.CompactViewText)
               .setIcon(TextBulletListLtrRegular)
               .makeCheckable({
                 name: 'renderMode',
                 value: 'compactList'
               })
-              .setOnClick(() => {
-                context.dispatch(TOGGLE_COMPACT(true))
-                telemetry.track('layout.toggled')
-              }),
+              .setOnClick(() => setCompact(true)),
             ListMenuItemDivider,
             ...views,
             ListMenuItemDivider,

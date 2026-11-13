@@ -1,6 +1,8 @@
+import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import { PortfolioOverviewView, SPPortfolioOverviewViewItem } from 'pp365-shared-library'
 import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
+import { useEffect, useState } from 'react'
 import { CHANGE_VIEW, SET_VIEW_FORM_PANEL } from '../reducer'
 import { useEditableView } from './useEditableView'
 import { useId } from '@fluentui/react-components'
@@ -8,12 +10,21 @@ import { usePortfolioOverviewContext } from '../context'
 
 /**
  * Validate and save portfolio views and manage the view editor's dismissal. A view the list has
- * taken, new or edited, is counted for usage statistics, for the web part the overview is in.
+ * taken, new or edited, is counted for usage statistics, for the web part the overview is in. A
+ * save the list refuses is told in the form, which stays open with what was typed, and counted
+ * once by its error code.
  */
 export function useViewFormPanel() {
   const context = usePortfolioOverviewContext()
   const { view, setView, isEditing } = useEditableView()
   const telemetry = useTelemetry()
+  // A save writes to the views list in the hub, where SharePoint enforces the permission. A user
+  // the menu let in but the list refuses must be told, not left with a form that did nothing.
+  const [saveError, setSaveError] = useState<string>()
+
+  // The form stays mounted while it is closed, and its cancel button closes it past `onDismiss`:
+  // a refusal it told of is gone whenever it closes or opens again.
+  useEffect(() => setSaveError(undefined), [context?.state.viewForm])
 
   /**
    * Close the view editor.
@@ -32,8 +43,12 @@ export function useViewFormPanel() {
    *
    * If the view is new, the `GtPortfolioColumnsId`, `GtPortfolioRefinersId`, `GtPortfolioGroupById`,
    * and `GtPortfolioColumnOrder` properties are set in addition to the properties mentioned above.
+   *
+   * A save the list refuses leaves the form open and says so in it; the refusal is counted for
+   * usage statistics, once, by its error code.
    */
   const onSave = async () => {
+    setSaveError(undefined)
     const { currentView } = context.state
     let properties: SPPortfolioOverviewViewItem = {
       Title: view.get('title'),
@@ -43,47 +58,55 @@ export function useViewFormPanel() {
       GtPortfolioIsDefaultView: view.get('isDefaultView'),
       GtPortfolioFabricIcon: view.get('iconName')
     }
-    if (isEditing) {
-      await context.props.dataAdapter.portalDataService.updateItemInList(
-        'PORTFOLIO_VIEWS',
-        currentView.id as number,
-        properties
-      )
-      const updatedView = new PortfolioOverviewView({
-        ...properties,
-        Id: currentView.id as number,
-        GtPortfolioColumnsId: currentView.columnIds,
-        GtPortfolioRefinersId: currentView.refinerIds,
-        GtPortfolioGroupById: currentView.groupById,
-        GtPortfolioColumnOrder: JSON.stringify(currentView.columnOrder)
-      }).configure(currentView.columns)
+    try {
+      if (isEditing) {
+        await context.props.dataAdapter.portalDataService.updateItemInList(
+          'PORTFOLIO_VIEWS',
+          currentView.id as number,
+          properties
+        )
+        const updatedView = new PortfolioOverviewView({
+          ...properties,
+          Id: currentView.id as number,
+          GtPortfolioColumnsId: currentView.columnIds,
+          GtPortfolioRefinersId: currentView.refinerIds,
+          GtPortfolioGroupById: currentView.groupById,
+          GtPortfolioColumnOrder: JSON.stringify(currentView.columnOrder)
+        }).configure(currentView.columns)
 
-      const viewIndex = context.props.configuration.views.findIndex((v) => v.id === currentView.id)
-      if (viewIndex !== -1) {
-        context.props.configuration.views[viewIndex] = updatedView
+        const viewIndex = context.props.configuration.views.findIndex(
+          (v) => v.id === currentView.id
+        )
+        if (viewIndex !== -1) {
+          context.props.configuration.views[viewIndex] = updatedView
+        }
+
+        context.dispatch(CHANGE_VIEW(updatedView))
+      } else {
+        properties = {
+          ...properties,
+          GtPortfolioColumnsId: currentView.columnIds,
+          GtPortfolioRefinersId: currentView.refinerIds,
+          GtPortfolioGroupById: currentView.groupById,
+          GtPortfolioColumnOrder: JSON.stringify(currentView.columnOrder)
+        }
+        const view = await context.props.dataAdapter.portalDataService.addItemToList(
+          'PORTFOLIO_VIEWS',
+          properties
+        )
+
+        const newView = new PortfolioOverviewView({
+          ...properties,
+          Id: view.Id
+        }).configure(currentView.columns)
+
+        context.props.configuration.views.push(newView)
+        context.dispatch(CHANGE_VIEW(newView))
       }
-
-      context.dispatch(CHANGE_VIEW(updatedView))
-    } else {
-      properties = {
-        ...properties,
-        GtPortfolioColumnsId: currentView.columnIds,
-        GtPortfolioRefinersId: currentView.refinerIds,
-        GtPortfolioGroupById: currentView.groupById,
-        GtPortfolioColumnOrder: JSON.stringify(currentView.columnOrder)
-      }
-      const view = await context.props.dataAdapter.portalDataService.addItemToList(
-        'PORTFOLIO_VIEWS',
-        properties
-      )
-
-      const newView = new PortfolioOverviewView({
-        ...properties,
-        Id: view.Id
-      }).configure(currentView.columns)
-
-      context.props.configuration.views.push(newView)
-      context.dispatch(CHANGE_VIEW(newView))
+    } catch (error) {
+      telemetry.trackError(error)
+      setSaveError(strings.ViewSaveErrorText)
+      return
     }
     // The list has taken the view by now: a save it refused never gets here.
     telemetry.track('view.saved')
@@ -114,6 +137,7 @@ export function useViewFormPanel() {
     view,
     setView,
     isDefaultViewSet,
+    saveError,
     fluentProviderId
   } as const
 }
