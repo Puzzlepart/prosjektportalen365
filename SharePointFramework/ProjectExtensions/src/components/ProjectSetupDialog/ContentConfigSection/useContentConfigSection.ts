@@ -82,6 +82,8 @@ export function useContentConfigSection() {
     searchTerm,
     onSearch: setSearchTerm,
     selectedCountText,
+    // What the template requires stays selected; Tab into the list starts after it.
+    lockedKeys: mandatoryKeys,
     hasAddedItems: addedKeys.size > 0
   }
 }

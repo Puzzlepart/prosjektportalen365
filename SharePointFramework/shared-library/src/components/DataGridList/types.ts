@@ -60,6 +60,12 @@ export interface IDataGridListProps<TItem = any> {
   onSelectionChange?: (selectedItems: (string | number)[]) => void
 
   /**
+   * Ids of the rows that stay selected and cannot be changed, such as what a template requires.
+   * Tab into the grid starts at the first row not among them.
+   */
+  lockedItems?: Iterable<string | number>
+
+  /**
    * Whether the selection indicator stays subtle until hovered.
    */
   subtleSelection?: boolean

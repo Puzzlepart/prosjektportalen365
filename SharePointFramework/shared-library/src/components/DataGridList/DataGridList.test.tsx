@@ -2,11 +2,12 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { createTableColumn } from '@fluentui/react-components'
 import { axeComponent } from 'pp365-jest-config/lib/axe'
+import { layOutForTabster } from 'pp365-jest-config/lib/tabsterLayout'
 import * as React from 'react'
 import { IListColumn } from '../../types'
 import { createDataGridColumns } from '../../util/createDataGridColumns'
 import { DataGridList } from './DataGridList'
-import { IDataGridColumn } from './types'
+import { IDataGridColumn, IDataGridListProps } from './types'
 
 /**
  * The shared v9 list: rows under headers, sorting by header click, selection, row double-click and
@@ -179,6 +180,63 @@ describe('DataGridList', () => {
     render(<DataGridList items={items} columns={fromList} getRowId={(item) => item.id} />)
     expect(screen.getByText('Navn')).toBeInTheDocument()
     expect(rowNames()).toEqual(['Bravo', 'Alfa', 'Charlie'])
+  })
+
+  describe('from the keyboard (Puzzlepart/prosjektportalen365-testing#130)', () => {
+    let restore: () => void
+    beforeEach(() => {
+      restore = layOutForTabster()
+    })
+    afterEach(() => restore())
+
+    /** The grid between a search box and a button, as the project setup's sections have it. */
+    const renderBetween = (props: Partial<IDataGridListProps<Row>> = {}) =>
+      render(
+        <>
+          <input type='search' aria-label='Søk' />
+          <DataGridList
+            items={items}
+            columns={columns}
+            getRowId={(item) => item.id}
+            selectionMode='multiselect'
+            {...props}
+          />
+          <button>Etter</button>
+        </>
+      )
+
+    it('enters the grid with Tab at the first row, not at «Velg alle», and leaves it with the next Tab', async () => {
+      // Tab from the search box landed on the header's «Velg alle», the next Tab left the grid, and
+      // the rows were reached only with the arrows, down through the column headers.
+      const user = setupUser()
+      renderBetween()
+      screen.getByRole('searchbox', { name: 'Søk' }).focus()
+      await user.tab()
+      expect(document.activeElement).toHaveAttribute('role', 'gridcell')
+      expect(document.activeElement).toHaveTextContent('Bravo')
+      await user.tab()
+      expect(screen.getByRole('button', { name: 'Etter' })).toHaveFocus()
+    })
+
+    it('passes over the rows that stay selected, selects with Space, moves between the rows with the arrows, and comes back where it left', async () => {
+      const user = setupUser()
+      const onSelectionChange = jest.fn()
+      renderBetween({ selectedItems: ['b'], lockedItems: ['b'], onSelectionChange })
+      screen.getByRole('searchbox', { name: 'Søk' }).focus()
+      await user.tab()
+      // Bravo stays selected (a template requires it): the first row to change is Alfa.
+      expect(document.activeElement).toHaveTextContent('Alfa')
+      await user.keyboard(' ')
+      expect(onSelectionChange).toHaveBeenLastCalledWith(['b', 'a'])
+      await user.keyboard('{ArrowDown}')
+      expect(document.activeElement).toHaveTextContent('Charlie')
+      await user.keyboard('{ArrowUp}{ArrowUp}')
+      expect(document.activeElement).toHaveTextContent('Bravo')
+      await user.tab()
+      expect(screen.getByRole('button', { name: 'Etter' })).toHaveFocus()
+      await user.tab({ shift: true })
+      expect(document.activeElement).toHaveTextContent('Bravo')
+    })
   })
 
   it('breaks no rule axe can check, sortable and with every row selectable', async () => {

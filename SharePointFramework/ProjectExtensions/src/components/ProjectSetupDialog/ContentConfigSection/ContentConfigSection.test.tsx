@@ -17,6 +17,7 @@ jest.mock('./useContentConfigSection', () => ({
     searchTerm: '',
     onSearch: mockOnSearch,
     selectedCountText: '1 valgt element',
+    lockedKeys: new Set(['a']),
     hasAddedItems: mockAdded.keys.size > 0
   })
 }))
@@ -24,6 +25,7 @@ jest.mock('./useContentConfigSection', () => ({
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { axeComponent } from 'pp365-jest-config/lib/axe'
+import { layOutForTabster } from 'pp365-jest-config/lib/tabsterLayout'
 import strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
 import { ContentConfigSection } from './ContentConfigSection'
@@ -75,6 +77,29 @@ describe('ContentConfigSection', () => {
     expect(screen.getByRole('status')).toHaveTextContent('1 valgt element')
     expect(screen.queryByRole('button', { name: '1 valgt element' })).toBeNull()
     expect(await axeComponent(container)).toHaveNoViolations()
+  })
+
+  it('takes Tab from the search box to the first item that can be changed, and the arrows on between the items (Puzzlepart/prosjektportalen365-testing#130)', async () => {
+    // Tab landed on «Velg alle» in the list's header, the next Tab left the list, and the items
+    // were reached only with the arrows. Alfa is required by the template, so the list starts at
+    // Bravo, the first item the user can change.
+    const restore = layOutForTabster()
+    try {
+      const user = userEvent.setup({ pointerEventsCheck: 0 })
+      render(<ContentConfigSection />)
+      screen.getByRole('searchbox').focus()
+      await user.tab()
+      expect(document.activeElement).toHaveAttribute('role', 'gridcell')
+      expect(document.activeElement).toHaveTextContent('Bravo')
+      await user.keyboard(' ')
+      expect(mockOnSelectionChange).toHaveBeenLastCalledWith(['a', 'b'])
+      await user.keyboard('{ArrowUp}')
+      expect(document.activeElement).toHaveTextContent('Alfa')
+      await user.keyboard('{ArrowDown}')
+      expect(document.activeElement).toHaveTextContent('Bravo')
+    } finally {
+      restore()
+    }
   })
 
   it('passes what is typed to the search', async () => {

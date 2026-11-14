@@ -20,6 +20,12 @@ import { useContainerWidth } from './useContainerWidth'
 const TABLE_SELECTION_CELL_WIDTH = 44
 
 /**
+ * Tabster's mark for the element its arrow-key group (the grid) is entered at with Tab, until the
+ * user has moved in it; then the grid is entered where the user left it.
+ */
+const ENTERED_HERE = { 'data-tabster': JSON.stringify({ focusable: { isDefault: true } }) }
+
+/**
  * Sizing options for the grid, from each column's widths.
  */
 function createColumnSizingOptions(columns: IDataGridColumn[]): TableColumnSizingOptions {
@@ -56,6 +62,7 @@ export function DataGridList<TItem = any>(props: IDataGridListProps<TItem>) {
     selectionMode,
     selectedItems,
     onSelectionChange,
+    lockedItems,
     subtleSelection,
     resizableColumns = true,
     size,
@@ -93,6 +100,18 @@ export function DataGridList<TItem = any>(props: IDataGridListProps<TItem>) {
       onSelectionChange([])
     }
   }
+
+  // Tab into the grid starts at the first cell of the first row the user can change, not at the
+  // header's «Velg alle»: from there Tab left the grid, and the rows were reached only with the
+  // arrows, down through the column headers (Puzzlepart/prosjektportalen365-testing#130). Rows
+  // that stay selected (what a template requires) come first in the project setup, and are
+  // passed over. The arrows move from there between the rows and the cells, as before.
+  const lockedSet = new Set<string | number>(lockedItems ?? [])
+  const rowIdOf = (item: TItem, index: number) => (getRowId ? getRowId(item) : index)
+  const entryIndex = items.findIndex((item, index) => !lockedSet.has(rowIdOf(item, index)))
+  const entryRowId =
+    items.length > 0 ? rowIdOf(items[Math.max(entryIndex, 0)], Math.max(entryIndex, 0)) : undefined
+  const firstColumnId = columns[0]?.columnId
 
   if (emptyContent !== undefined && items.length === 0) return <>{emptyContent}</>
 
@@ -155,8 +174,13 @@ export function DataGridList<TItem = any>(props: IDataGridListProps<TItem>) {
             }
             onDoubleClick={onRowDoubleClick && (() => onRowDoubleClick(item))}
           >
-            {({ renderCell }) => (
-              <DataGridCell className={styles.cell}>{renderCell(item)}</DataGridCell>
+            {({ renderCell, columnId }) => (
+              <DataGridCell
+                className={styles.cell}
+                {...(rowId === entryRowId && columnId === firstColumnId ? ENTERED_HERE : {})}
+              >
+                {renderCell(item)}
+              </DataGridCell>
             )}
           </DataGridRow>
         )}

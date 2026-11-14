@@ -68,6 +68,8 @@ export function useExtensionsSection() {
     onSelectionChange,
     searchTerm,
     onSearch: setSearchTerm,
-    selectedCountText
+    selectedCountText,
+    // What the template requires stays selected; Tab into the list starts after it.
+    lockedKeys: mandatoryKeys
   }
 }

@@ -1828,3 +1828,18 @@ itself as `observer` to `add()` is disposed, as the footer does.
 - **Done.** `useDateField` gives the `contentAfter` slot «Velg dato for {field}» and no
   `aria-labelledby`, and the `popupSurface` «Kalender». `DateField` is the only user of the picker.
   Tests: `DateField.calendarButton.test.tsx` (the real picker), `CustomEditPanel.test.tsx`.
+
+### Testers' rounds: Tab into the setup's lists (Puzzlepart/prosjektportalen365-testing#130, 2026-11-14)
+
+- **Found** (NVDA, the project setup's «Standardinnhold»: Tab did not reach the items; it took Tab,
+  an arrow, Tab and an arrow). In Jest with the real `DataGridList` and user-event, Tabster given
+  a layout (`pp365-jest-config/lib/tabsterLayout`: jsdom's `offsetParent` is always null, and
+  Tabster took every element for hidden): Tab from the search box entered the grid at the
+  header's «Velg alle», the next Tab left it, and the rows were reached only with the arrows. Both
+  sections alike; in «Standardinnhold» the template's required items come first.
+- **Done.** `DataGridList` marks the first cell of the first row that can be changed as where Tab
+  enters (Tabster's `focusable.isDefault`), passing over `lockedItems`; once the user has moved
+  in it, Tab comes back where the user left. Both sections pass the required items. Tests:
+  `DataGridList.test.tsx`, `ContentConfigSection.test.tsx`, `ExtensionsSection.test.tsx`. Only
+  in Jest: the setup needs a new site.
+

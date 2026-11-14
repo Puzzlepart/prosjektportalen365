@@ -17,7 +17,8 @@ export const ExtensionsSection: ProjectSetupDialogSectionComponent = () => {
     onSelectionChange,
     searchTerm,
     onSearch,
-    selectedCountText
+    selectedCountText,
+    lockedKeys
   } = useExtensionsSection()
 
   return (
@@ -48,6 +49,7 @@ export const ExtensionsSection: ProjectSetupDialogSectionComponent = () => {
         selectionMode='multiselect'
         selectedItems={selectedRowIds}
         onSelectionChange={onSelectionChange}
+        lockedItems={lockedKeys}
         sortable
       />
     </div>

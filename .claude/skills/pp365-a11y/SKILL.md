@@ -473,6 +473,12 @@ checked by hand and with which reader and browser: axe finds only part of what W
 - Where a picker for one holds its one value, it has no input, and the field's label and hint
   belong to nothing: name the list of the values after the field and describe it by the hint
   (`PeoplePicker`, «Nytteeier, valgte personer», from `useFieldContext_unstable`).
+- Tab into a Fluent `DataGrid` lands on the first focusable in it, the header's «Velg alle», and the
+  next Tab leaves it: the rows were reached only with the arrows. `DataGridList` marks where Tab
+  enters (`data-tabster` `focusable.isDefault` on the first cell of the first row not in
+  `lockedItems`). To press Tab and the arrows in Jest, give Tabster a layout first
+  (`pp365-jest-config/lib/tabsterLayout`): jsdom's `offsetParent` is always null, and Tabster
+  takes every element for hidden, so the focus fell to the page.
 - Shapes drawn with coloured borders (the phases' arrows) turn into blocks of the text colour in a
   contrast theme. In `@media (forced-colors: active)` leave them out, edge each item in
   `CanvasText`, and mark the current one with `Highlight`/`HighlightText` (`ProjectPhase`; the

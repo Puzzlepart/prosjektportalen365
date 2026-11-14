@@ -18,6 +18,7 @@ export const ContentConfigSection: ProjectSetupDialogSectionComponent = () => {
     searchTerm,
     onSearch,
     selectedCountText,
+    lockedKeys,
     hasAddedItems
   } = useContentConfigSection()
 
@@ -50,6 +51,7 @@ export const ContentConfigSection: ProjectSetupDialogSectionComponent = () => {
         selectionMode='multiselect'
         selectedItems={selectedRowIds}
         onSelectionChange={onSelectionChange}
+        lockedItems={lockedKeys}
         sortable
       />
     </div>
