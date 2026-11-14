@@ -46,7 +46,7 @@
     "@fluentui/react-icons": "~2.0.341",
     "react-gauge-component": "~1.2.61",
     "jszip": "3.10.1",
-    "sp-js-provisioning": "1.5.1"
+    "sp-js-provisioning": "1.6.0"
   },
   "devDependencies": {
     "@microsoft/sp-module-interfaces": "1.24.1",

@@ -168,8 +168,8 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1
       sp-js-provisioning:
-        specifier: 1.5.1
-        version: 1.5.1(@pnp/core@4.21.0)(@pnp/logging@4.21.0)(@pnp/queryable@4.21.0)(@pnp/sp@4.21.0)(@types/node@22.20.3)(@types/react-dom@18.2.25)(@types/react@18.2.79)
+        specifier: 1.6.0
+        version: 1.6.0(@pnp/core@4.21.0)(@pnp/logging@4.21.0)(@pnp/queryable@4.21.0)(@pnp/sp@4.21.0)
       tslib:
         specifier: 2.8.1
         version: 2.8.1
@@ -693,8 +693,8 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1
       sp-js-provisioning:
-        specifier: 1.5.1
-        version: 1.5.1(@pnp/core@4.21.0)(@pnp/logging@4.21.0)(@pnp/queryable@4.21.0)(@pnp/sp@4.21.0)(@types/node@22.20.3)(@types/react-dom@18.2.25)(@types/react@18.2.79)
+        specifier: 1.6.0
+        version: 1.6.0(@pnp/core@4.21.0)(@pnp/logging@4.21.0)(@pnp/queryable@4.21.0)(@pnp/sp@4.21.0)
       spfx-jsom:
         specifier: 0.6.6
         version: 0.6.6(@types/node@22.20.3)(@types/react-dom@18.2.25)(@types/react@18.2.79)
@@ -8452,8 +8452,8 @@ packages:
     resolution: {integrity: sha512-i5uvt8C3ikiWeNZSVZNWcfZPItFQOsYTUAOkcUPGd8DqDy1uOUikjt5dG+uRlwyvR108Fb9DOd4GvXfT0N2/uQ==}
     engines: {node: '>= 12'}
 
-  sp-js-provisioning@1.5.1:
-    resolution: {integrity: sha512-ZLKN0FpbpTDRF9ZXhfBGGuF/Ip8lLqsEUeqMBH5F8vPwq4n+zGWbTFTktFuwGxflI3nypAbFyNMzsbCeqaNvww==}
+  sp-js-provisioning@1.6.0:
+    resolution: {integrity: sha512-kW0WkJ2TxyRxW6hXiRPOpOJJLLwQvMBMx9il2tKTDeljuUJjk2BZ9O/nJ+46BibwA5bpV/v8AeHyefPWSAw2uw==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
       '@pnp/core': ^4.21.0
@@ -22515,19 +22515,13 @@ snapshots:
 
   source-map@0.7.6: {}
 
-  sp-js-provisioning@1.5.1(@pnp/core@4.21.0)(@pnp/logging@4.21.0)(@pnp/queryable@4.21.0)(@pnp/sp@4.21.0)(@types/node@22.20.3)(@types/react-dom@18.2.25)(@types/react@18.2.79):
+  sp-js-provisioning@1.6.0(@pnp/core@4.21.0)(@pnp/logging@4.21.0)(@pnp/queryable@4.21.0)(@pnp/sp@4.21.0):
     dependencies:
       '@pnp/core': 4.21.0
       '@pnp/logging': 4.21.0
       '@pnp/queryable': 4.21.0
       '@pnp/sp': 4.21.0
-      spfx-jsom: 0.6.6(@types/node@22.20.3)(@types/react-dom@18.2.25)(@types/react@18.2.79)
       xml-js: 1.6.11
-    transitivePeerDependencies:
-      - '@types/node'
-      - '@types/react'
-      - '@types/react-dom'
-      - supports-color
 
   space-separated-tokens@2.0.2: {}
 

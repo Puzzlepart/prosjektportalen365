@@ -2,7 +2,7 @@
 
 **Project:** Prosjektportalen 365<br>
 **Version:** 1.15.0<br>
-**Generated:** 2026-11-10T11:16:57.469Z<br>
+**Generated:** 2026-11-14T11:12:21.724Z<br>
 **Format:** CycloneDX-inspired Markdown
 
 ## Overview
@@ -154,7 +154,7 @@ This section lists all unique dependencies across all projects.
 | resx-json-typescript-converter | ^1.0.1 | pp365-templates |
 | shade-blend-color | ~1.0.0 | pp365-shared-library, pp365-projectwebparts |
 | smoothscroll-polyfill | ~0.4.4 | pp365-projectwebparts |
-| sp-js-provisioning | 1.5.1 | pp365-portfolioextensions, pp365-projectextensions |
+| sp-js-provisioning | 1.6.0 | pp365-portfolioextensions, pp365-projectextensions |
 | spfx-jsom | 0.6.6 | pp365-shared-library, pp365-projectextensions, pp365-projectwebparts |
 | ts-morph | 25.0.1 | pp365-spfx-tasks |
 | tslib | 2.8.1 | pp365-shared-library, pp365-portfolioextensions, pp365-portfoliowebparts, +3 more |
@@ -327,7 +327,7 @@ This section provides a detailed view of dependencies for each project.
 | react-gauge-component | ~1.2.61 |
 | react-markdown | ^8.0.3 |
 | rehype-raw | ^6.1.1 |
-| sp-js-provisioning | 1.5.1 |
+| sp-js-provisioning | 1.6.0 |
 | tslib | 2.8.1 |
 | underscore | ~1.13.6 |
 
@@ -534,7 +534,7 @@ This section provides a detailed view of dependencies for each project.
 | react-gauge-component | ~1.2.61 |
 | react-markdown | ^8.0.3 |
 | rehype-raw | ^6.1.1 |
-| sp-js-provisioning | 1.5.1 |
+| sp-js-provisioning | 1.6.0 |
 | spfx-jsom | 0.6.6 |
 | tslib | 2.8.1 |
 | underscore | ~1.13.6 |
