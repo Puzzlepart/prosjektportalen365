@@ -37,7 +37,10 @@ define([], function () {
       TodayDate: "Today's date {0}",
       MonthPickerHeader: '{0}, change year',
       YearPickerHeader: '{0}, change month',
-      DayMarked: 'marked'
+      DayMarked: 'marked',
+      Calendar: 'Calendar',
+      OpenCalendar: 'Choose a date',
+      OpenCalendarFor: 'Choose a date for {0}'
     },
     Placeholder: {
       DatePicker: 'Enter a date',

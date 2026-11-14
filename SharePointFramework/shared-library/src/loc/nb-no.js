@@ -36,7 +36,10 @@ define([], function () {
       TodayDate: 'Dagens dato {0}',
       MonthPickerHeader: '{0}, bytt år',
       YearPickerHeader: '{0}, bytt måned',
-      DayMarked: 'merket'
+      DayMarked: 'merket',
+      Calendar: 'Kalender',
+      OpenCalendar: 'Velg dato',
+      OpenCalendarFor: 'Velg dato for {0}'
     },
     Placeholder: {
       DatePicker: 'Angi en dato',

@@ -25,7 +25,8 @@ const FieldDatePicker: FC<DatePickerProps> = (props) => {
  * do not place or clip it. The shared form fields and the forms outside them render this one.
  */
 export const DateField: FC<IDateFieldProps> = (props) => {
-  const { popupRef, setPopupRef, localization } = useDateField()
+  const { popupRef, setPopupRef, localization, calendarButtonProps, calendarProps } =
+    useDateField(props)
 
   return (
     <FieldContainer
@@ -53,6 +54,8 @@ export const DateField: FC<IDateFieldProps> = (props) => {
           allowTextInput
           showMonthPickerAsOverlay={false}
           mountNode={popupRef}
+          contentAfter={calendarButtonProps}
+          popupSurface={calendarProps}
         />
       )}
       <div

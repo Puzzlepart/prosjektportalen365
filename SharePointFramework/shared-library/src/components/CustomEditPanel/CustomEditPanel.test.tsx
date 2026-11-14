@@ -72,6 +72,7 @@ import * as React from 'react'
 import resource from 'SharedResources'
 import { CustomEditPanel } from '.'
 import { EditableSPField, ItemFieldValues } from '../../models'
+import { format } from '../../util/format'
 
 const field = (InternalName: string, TypeAsString: string, extra: Record<string, any> = {}) =>
   new EditableSPField({ InternalName, Title: InternalName, TypeAsString, ...extra } as any)
@@ -369,8 +370,12 @@ describe('CustomEditPanel', () => {
     const date = await screen.findByPlaceholderText(strings.Placeholder.DatePicker)
     // In SharePoint's UI language (Norwegian when the page names none), not the browser's.
     expect(date).toHaveValue('01.03.2026')
-    // The label is tied to the date's input, not to an id nothing has.
-    expect(screen.getByLabelText(/Startdato/)).toBe(date)
+    // The label is tied to the date's input, not to an id nothing has; the button that opens the
+    // calendar has a name of its own for the field (testing#129).
+    expect(screen.getByLabelText(/^Startdato/)).toBe(date)
+    expect(
+      screen.getByLabelText(format(strings.DatePicker.OpenCalendarFor, 'Startdato'))
+    ).toHaveAttribute('role', 'button')
     // The field's hint describes it once: the picker's own input reads the field, and the hint
     // handed to the picker as well was listed twice (`…__hint …__hint`).
     const describedBy = date.getAttribute('aria-describedby').split(' ')

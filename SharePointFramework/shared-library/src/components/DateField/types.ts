@@ -50,4 +50,15 @@ export interface IDateFieldState {
    * The picker's names, texts, date format and week rule in SharePoint's UI language.
    */
   localization: IDatePickerLocalization
+
+  /**
+   * Props for the button that opens the calendar (the picker's `contentAfter` slot): its own name,
+   * for the field, in place of Fluent's pointer at the input.
+   */
+  calendarButtonProps: { 'aria-label': string; 'aria-labelledby': undefined }
+
+  /**
+   * Props for the calendar (the picker's `popupSurface` slot): its name in the page's language.
+   */
+  calendarProps: { 'aria-label': string }
 }

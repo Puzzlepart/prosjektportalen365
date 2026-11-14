@@ -1818,3 +1818,13 @@ itself as `observer` to `add()` is disposed, as the footer does.
   dropdowns. A `Combobox`'s clear icon is `aria-hidden`, so `Autocomplete` and the setup's
   `TemplateSelector`, the two `clearable` ones, had nothing to name. Tests:
   `getDropdownClearButtonProps.test.tsx` (the real `Dropdown`), `ColumnDataTypeField.test.tsx`.
+
+### Testers' rounds: the calendar button (Puzzlepart/prosjektportalen365-testing#129, 2026-11-14)
+
+- **Found** (NVDA, «Pilknapp har ikke navn» in «Rediger egenskaper», a title only; checked on the
+  test channel v1.15.0.747469d). The chevrons were named; the date fields' calendar button was
+  not: Fluent's `DatePicker` points it at the input (`aria-labelledby`), so it read as the day shown
+  and had no name in an empty field. The calendar was «Calendar», in English.
+- **Done.** `useDateField` gives the `contentAfter` slot «Velg dato for {field}» and no
+  `aria-labelledby`, and the `popupSurface` «Kalender». `DateField` is the only user of the picker.
+  Tests: `DateField.calendarButton.test.tsx` (the real picker), `CustomEditPanel.test.tsx`.

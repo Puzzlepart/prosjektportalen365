@@ -40,6 +40,9 @@ declare interface ISharedLibraryStrings {
     MonthPickerHeader: string
     YearPickerHeader: string
     DayMarked: string
+    Calendar: string
+    OpenCalendar: string
+    OpenCalendarFor: string
   }
   Placeholder: {
     DatePicker: string
