@@ -220,7 +220,7 @@ describe('TemplatePackageCatalog', () => {
     expect(code).toHaveTextContent('"Title": "Prosjektstatus"')
   })
 
-  it('lets the keyboard scroll the conflicts of a compatibility check: the list takes the focus, named (WCAG 2.1.1)', () => {
+  it('lets the keyboard scroll the conflicts of a compatibility check: the list takes the focus, named (WCAG 2.1.1)', async () => {
     const conflicts = [
       { resolution: 'overwrite', detail: 'Feltet GtProjectPhase finnes' },
       { resolution: 'blocked', detail: 'Listen Prosjektstatus finnes' }
@@ -231,6 +231,9 @@ describe('TemplatePackageCatalog', () => {
     )
     const list = screen.getByRole('list', { name: strings.CatalogCompatibilityConflictsLabel })
     expect(list).toHaveAttribute('tabindex', '0')
+    // The dialog opens with the focus on itself, described by its introduction, not on «Avbryt»
+    // (Puzzlepart/prosjektportalen365-testing#132).
+    await waitFor(() => expect(screen.getByRole('dialog')).toHaveFocus())
     // The blocked conflict first.
     expect(within(list).getAllByRole('listitem')[0]).toHaveTextContent(
       strings.CatalogResolutionBlocked

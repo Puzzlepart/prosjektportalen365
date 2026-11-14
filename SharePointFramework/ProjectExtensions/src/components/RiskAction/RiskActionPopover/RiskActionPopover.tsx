@@ -22,6 +22,7 @@ import { useRiskActionPopover } from './useRiskActionPopover'
  */
 export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
   const {
+    focusContent,
     titleId,
     syncError,
     infoText,
@@ -46,7 +47,11 @@ export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
         onOpenChange={onPopoverOpenChange}
       >
         <div>{props.children}</div>
-        <PopoverSurface className={styles.riskActionPopover} aria-labelledby={titleId}>
+        <PopoverSurface
+          tabIndex={focusContent.tabIndex}
+          className={mergeClasses(styles.riskActionPopover, focusContent.className)}
+          aria-labelledby={titleId}
+        >
           <div className={styles.title} id={titleId}>
             {format(strings.RiskActionPopoverTitle, itemContext.title)}
           </div>

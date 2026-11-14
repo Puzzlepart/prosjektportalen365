@@ -25,7 +25,8 @@ import { customLightTheme, format } from 'pp365-shared-library'
 /** Guides the user through checkpoints, archiving and phase-change confirmation. */
 export const ChangePhaseDialog: FC = () => {
   const context = useContext(ProjectPhasesContext)
-  const { state, dispatch, nextChecklistItem, subtitleId, confirmTextId } = useChangePhaseDialog()
+  const { state, dispatch, nextChecklistItem, subtitleId, confirmTextId, focusContent } =
+    useChangePhaseDialog()
   const fluentProviderId = useId('fp-change-phase-dialog')
   if (!context.state.confirmPhase) return null
 
@@ -46,6 +47,7 @@ export const ChangePhaseDialog: FC = () => {
             {/* Described by the subtitle, and in the confirmation by its question as well, which a
                 screen reader read only by moving through the dialog (WCAG 4.1.2). */}
             <DialogSurface
+              {...focusContent}
               aria-describedby={
                 state.view === View.Confirm ? `${subtitleId} ${confirmTextId}` : subtitleId
               }

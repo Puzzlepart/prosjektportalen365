@@ -1,5 +1,5 @@
 import { truncateString } from 'pp365-shared-library/lib/util/truncateString'
-import { getContrastRatio } from 'pp365-shared-library'
+import { getContrastRatio, useFocusContentProps } from 'pp365-shared-library'
 import { HTMLProps, useContext, useEffect, useRef, useState } from 'react'
 import { ProjectPhasesContext } from '../context'
 import { OPEN_POPOVER } from '../reducer'
@@ -52,6 +52,9 @@ export function useProjectPhase(props: IProjectPhaseProps) {
   const targetRef = useRef<HTMLLIElement>()
   const titleId = useId('project-phase-title')
   const descriptionId = useId('project-phase-description')
+  // The popover starts with the phase's name and texts: it opens with the focus on its content,
+  // not on its first link (Puzzlepart/prosjektportalen365-testing#132).
+  const focusContent = useFocusContentProps()
   const classNames = [styles.projectPhase]
   const isCurrentPhase = props.phase.id === context.state.phase?.id
   const [open, setOpen] = useState(false)
@@ -141,6 +144,7 @@ export function useProjectPhase(props: IProjectPhaseProps) {
     altPadding,
     customPhaseColor,
     titleId,
-    descriptionId
+    descriptionId,
+    focusContent
   } as const
 }

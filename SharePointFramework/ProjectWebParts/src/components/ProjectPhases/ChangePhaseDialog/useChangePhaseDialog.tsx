@@ -1,4 +1,5 @@
 import { useId } from '@fluentui/react-components'
+import { useFocusContentOnOpen } from 'pp365-shared-library'
 import { useContext } from 'react'
 import SPDataAdapter from '../../../data'
 import { ProjectPhasesContext } from '../context'
@@ -16,6 +17,10 @@ export function useChangePhaseDialog() {
   const { state, dispatch } = useChangePhaseDialogReducer(context)
   const subtitleId = useId('change-phase-subtitle')
   const confirmTextId = useId('change-phase-confirm')
+  // It opens with the focus on itself, described by its subtitle: a screen reader reads the title
+  // and what the change does first, and Tab goes on to the checkpoint or the answers
+  // (Puzzlepart/prosjektportalen365-testing#132).
+  const focusContent = useFocusContentOnOpen(!!context.state.confirmPhase)
 
   /**
    * Saves the current checkpoint and updates both the dialog and loaded phase state.
@@ -31,5 +36,5 @@ export function useChangePhaseDialog() {
     context.dispatch(CHECKLIST_ITEM_SAVED({ item: currentItem.update(properties) }))
   }
 
-  return { state, dispatch, nextChecklistItem, subtitleId, confirmTextId }
+  return { state, dispatch, nextChecklistItem, subtitleId, confirmTextId, focusContent }
 }

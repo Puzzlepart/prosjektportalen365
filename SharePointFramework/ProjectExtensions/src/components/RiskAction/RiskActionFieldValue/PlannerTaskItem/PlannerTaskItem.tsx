@@ -16,7 +16,8 @@ import { PlannerTaskItemProperty } from './PlannerTaskItemProperty'
 
 /** Opens a named, focus-trapping preview for a risk's Planner task and indicates completion. */
 export const PlannerTaskItem: FC<IPlannerTaskItemProps> = (props) => {
-  const { onOpenChange, task, taskLink, titleId, isCompleted, label } = usePlannerTaskItem(props)
+  const { onOpenChange, task, taskLink, titleId, isCompleted, label, focusContent } =
+    usePlannerTaskItem(props)
   return (
     <div className={styles.plannerTaskItem} role='listitem'>
       <Popover onOpenChange={onOpenChange} trapFocus>
@@ -29,7 +30,7 @@ export const PlannerTaskItem: FC<IPlannerTaskItemProps> = (props) => {
             {props.task.title}
           </div>
         </PopoverTrigger>
-        <PopoverSurface aria-labelledby={titleId}>
+        <PopoverSurface {...focusContent} aria-labelledby={titleId}>
           <div className={styles.plannerTaskPreview}>
             <div className={styles.title} id={titleId}>
               {props.task.title}

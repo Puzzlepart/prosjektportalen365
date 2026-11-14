@@ -35,7 +35,8 @@ jest.mock('@fluentui/react-components', () => {
           'div',
           {
             role: trapFocus ? 'dialog' : undefined,
-            'aria-labelledby': props['aria-labelledby']
+            'aria-labelledby': props['aria-labelledby'],
+            tabIndex: props.tabIndex
           },
           children
         )
@@ -340,9 +341,11 @@ describe('RiskAction', () => {
       format(strings.RiskActionTaskCompletedLabel, 'Avtal en reserve')
     )
     fireEvent.click(screen.getByText(strings.RiskActionFieldValueAdminButtonText))
+    // With a tab index Fluent's popover gives the surface the focus as it opens, not the first
+    // action: a screen reader reads its title and texts first (Puzzlepart/prosjektportalen365-testing#132).
     expect(
       screen.getByRole('dialog', { name: format(strings.RiskActionPopoverTitle, RISK) })
-    ).toBeInTheDocument()
+    ).toHaveAttribute('tabindex', '-1')
     // The time of the last synchronisation is not shown, so not there to be announced.
     expect(
       screen.queryByText(format(strings.RiskActionPopoverLastUpdated, '01.10.2026, 10:00'))
@@ -364,6 +367,8 @@ describe('RiskAction', () => {
     fireEvent.click(screen.getByText('Ring leverandøren'))
     const preview = await screen.findByRole('dialog', { name: 'Ring leverandøren' })
     await within(preview).findByText('Ring før fredag')
+    // Opens with the focus on its content, the link to Planner at its end (testing#132).
+    expect(preview).toHaveAttribute('tabindex', '-1')
     expect(within(preview).getByText(strings.StartDateLabel).closest('dt')).not.toBeNull()
     expect(within(preview).getByText('21.09.2026').closest('dd')).not.toBeNull()
     expect(preview.querySelector('.fui-Avatar')).toHaveAttribute('aria-hidden', 'true')

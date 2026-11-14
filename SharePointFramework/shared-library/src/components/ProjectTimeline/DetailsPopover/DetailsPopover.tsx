@@ -1,7 +1,8 @@
-import { Link, Popover, PopoverSurface, useId } from '@fluentui/react-components'
+import { Link, mergeClasses, Popover, PopoverSurface, useId } from '@fluentui/react-components'
 import * as strings from 'SharedLibraryStrings'
 import React, { FC } from 'react'
 import { formatDate, getReadableTextColor, tryParseCurrency, withDefaults } from '../../../util'
+import { useFocusContentProps } from '../../../util/useFocusContentOnOpen'
 import styles from './DetailsPopover.module.scss'
 import { IDetailsPopoverProps } from './types'
 import resource from 'SharedResources'
@@ -18,6 +19,7 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (incomingProps) => {
   const { data } = props.timelineItem.item
   const { item } = props.timelineItem
   const contentId = useId('timeline-details')
+  const focusContent = useFocusContentProps()
 
   const popoverContent = (): JSX.Element => {
     switch (data.type) {
@@ -201,8 +203,8 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (incomingProps) => {
           milestone or a phase hold no control, and the focus stayed on the item behind them. It
           is described by what it shows, read as the focus lands (WCAG 2.4.3, 4.1.2). */}
       <PopoverSurface
-        className={styles.detailsPopover}
-        tabIndex={-1}
+        className={mergeClasses(styles.detailsPopover, focusContent.className)}
+        tabIndex={focusContent.tabIndex}
         aria-label={item.title}
         aria-describedby={contentId}
       >

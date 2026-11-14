@@ -116,6 +116,7 @@ Sjekk ut [release notes](./releasenotes/1.15.0.md) for høydepunkter og mer deta
 - Rettet feil i skjemafeltene for skjermlesere og tastatur: knappen som åpner kalenderen i et datofelt, ble lest som datoen i feltet og hadde ikke navn i et tomt felt, et klikk på etiketten til et dato- eller valgfelt åpnet kalenderen eller listen i stedet for å gi feltet fokus, taksonomifeltets knapp for å velge termer hadde ikke navn, og hjelpeteksten var ikke knyttet til taksonomifeltet eller til et personfelt med valgt person [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
 - Rettet feil i `Fasevelger`: i Windows kontrasttema ble pilene til svarte eller hvite blokker og gjeldende fase skilte seg bare ut med større tekst, og skjermlesere leste ikke hva faseskiftet gjør eller fasens beskrivelse. Webdeltitler og fasenavnene leses ikke lenger to ganger av NVDA [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
 - Rettet en feil i oppsettet av prosjekt hvor Tab inn i listene for prosjekttillegg og standardinnhold landet på «Velg alle», og elementene bare kunne nås med piltastene; nå går Tab til første element som kan velges [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
+- Bekreftelsesdialoger og popovere med tekst før første handling, som fasens popover, «Gjør om til overordnet prosjekt», faseskiftet og Planner-tiltakene, åpner med fokus på innholdet, ikke på første knapp, så skjermlesere leser dem ovenfra [#1788](https://github.com/Puzzlepart/prosjektportalen365/issues/1788)
 
 ### Merk
 

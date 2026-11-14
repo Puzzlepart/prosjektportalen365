@@ -1,5 +1,5 @@
 import { PopoverProps, useId } from '@fluentui/react-components'
-import { format } from 'pp365-shared-library'
+import { format, useFocusContentProps } from 'pp365-shared-library'
 import strings from 'ProjectExtensionsStrings'
 import { useState } from 'react'
 import { useRiskActionFieldCustomizerContext } from '../../../../extensions/riskAction/context'
@@ -28,5 +28,9 @@ export function usePlannerTaskItem(props: IPlannerTaskItemProps) {
     ? format(strings.RiskActionTaskCompletedLabel, props.task.title)
     : undefined
 
-  return { onOpenChange, task, taskLink, titleId, isCompleted, label }
+  // The preview starts with the task's title and texts: it opens with the focus on its content,
+  // not on the link at its end (Puzzlepart/prosjektportalen365-testing#132).
+  const focusContent = useFocusContentProps()
+
+  return { onOpenChange, task, taskLink, titleId, isCompleted, label, focusContent }
 }

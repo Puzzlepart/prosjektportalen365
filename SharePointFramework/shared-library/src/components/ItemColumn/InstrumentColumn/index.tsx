@@ -24,7 +24,8 @@ export const InstrumentColumn: ColumnRenderComponent<IInstrumentColumnProps> = (
     description,
     subArcs,
     minimumValue,
-    maximumValue
+    maximumValue,
+    focusContent
   } = useInstrumentColumn(props)
 
   return (
@@ -34,7 +35,11 @@ export const InstrumentColumn: ColumnRenderComponent<IInstrumentColumnProps> = (
       </PopoverTrigger>
       {/* It holds no control: with a tab index the surface itself takes the focus as it opens, so a
           screen reader hears it, and the trap keeps the focus there until Escape (WCAG 2.4.3). */}
-      <PopoverSurface tabIndex={-1} aria-label={label} aria-describedby={`${gaugeId} ${unitId}`}>
+      <PopoverSurface
+        {...focusContent}
+        aria-label={label}
+        aria-describedby={`${gaugeId} ${unitId}`}
+      >
         <div>
           <div className={styles.gauge} style={{ width: '100%', alignItems: 'center' }}>
             {/* The text both names the drawing and describes the popover: a referenced

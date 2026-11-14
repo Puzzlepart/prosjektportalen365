@@ -14,6 +14,7 @@ import {
   useId
 } from '@fluentui/react-components'
 import strings from 'PortfolioExtensionsStrings'
+import { useFocusContentOnOpen } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { ConflictResolution } from 'models'
 import { useCatalogContext } from '../context'
@@ -83,6 +84,10 @@ export const CompatibilityDialog: FC = () => {
   const { state, resolveCompatibility } = useCatalogContext()
   const report = state.compatibilityReport
   const introId = useId('compatibility-intro')
+  // It opens with the focus on itself, described by its introduction: a screen reader reads the
+  // title and what was found first, and Tab goes on to the buttons
+  // (Puzzlepart/prosjektportalen365-testing#132).
+  const focusContent = useFocusContentOnOpen(Boolean(report))
 
   const resolutionLabel = (resolution: ConflictResolution): string =>
     resolution === 'overwrite'
@@ -109,7 +114,12 @@ export const CompatibilityDialog: FC = () => {
         if (!data.open) resolveCompatibility(false)
       }}
     >
-      <DialogSurface className={styles.surface} aria-describedby={introId}>
+      <DialogSurface
+        ref={focusContent.ref}
+        tabIndex={focusContent.tabIndex}
+        className={mergeClasses(styles.surface, focusContent.className)}
+        aria-describedby={introId}
+      >
         <DialogBody>
           <DialogTitle>{strings.CatalogCompatibilityTitle}</DialogTitle>
           <DialogContent>

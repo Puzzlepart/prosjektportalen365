@@ -54,7 +54,8 @@ jest.mock('@fluentui/react-components', () => {
           {
             role: 'dialog',
             'aria-labelledby': props['aria-labelledby'],
-            'aria-describedby': props['aria-describedby']
+            'aria-describedby': props['aria-describedby'],
+            tabIndex: props.tabIndex
           },
           children
         )
@@ -201,6 +202,9 @@ describe('ProjectPhases', () => {
     expect(screen.getByRole('dialog', { name: 'Planlegge' })).toHaveAccessibleDescription(
       'Prosjektet planlegges'
     )
+    // With a tab index Fluent's popover gives the surface the focus as it opens, not its first
+    // link: a screen reader reads it from the phase's name (Puzzlepart/prosjektportalen365-testing#132).
+    expect(screen.getByRole('dialog', { name: 'Planlegge' })).toHaveAttribute('tabindex', '-1')
     expect(
       screen.getByText(format(strings.CheckPointsStatus, 1, strings.StatusOpen.toLowerCase()))
     ).toBeInTheDocument()

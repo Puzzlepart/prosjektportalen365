@@ -33,6 +33,11 @@ interface IOpenSurface {
   exclude?: string[]
   /** What should have the focus once the surface is closed; null when nothing in particular. */
   focusBack: Locator | null
+  /**
+   * Whether the surface opens with the focus on itself, its content read from the top, rather
+   * than on its first action (Puzzlepart/prosjektportalen365-testing#132).
+   */
+  startsAtContent?: boolean
 }
 
 /**
@@ -61,9 +66,17 @@ async function focusAgainst(surface: Locator) {
  * @param page The page
  * @param open The surface
  */
-async function scanAndClose(page: Page, { component, surface, exclude, focusBack }: IOpenSurface) {
+async function scanAndClose(
+  page: Page,
+  { component, surface, exclude, focusBack, startsAtContent }: IOpenSurface
+) {
   const opened = page.locator(surface).last()
   await expect(opened, `${component} opens`).toBeVisible({ timeout: 30_000 })
+  if (startsAtContent) {
+    await expect
+      .soft(opened, `${component} opens with the focus on its content, not on its first action`)
+      .toBeFocused()
+  }
   await waitForContent(page, [surface], 15_000)
   await scanAccessibility(page, { component, include: [surface], exclude })
   const focus = await focusAgainst(opened)
@@ -209,7 +222,8 @@ test.describe('the portfolio overview', () => {
       await scanAndClose(page, {
         component: 'ConfirmDialog',
         surface: SURFACES.dialog,
-        focusBack: remove
+        focusBack: remove,
+        startsAtContent: true
       })
     }
     await page.keyboard.press('Escape')
@@ -493,6 +507,9 @@ test.describe('the project home', () => {
     await phase.click()
     const popover = page.locator(SURFACES.popover).last()
     await expect(popover).toBeVisible()
+    // Its name, texts and checkpoints come before its actions: it opens with the focus on itself
+    // (Puzzlepart/prosjektportalen365-testing#132).
+    await expect.soft(popover, 'the phase opens with the focus on its content').toBeFocused()
     await scanAccessibility(page, { component: 'ProjectPhasePopover', include: [SURFACES.popover] })
     const change = popover.getByRole('button', {
       name: /^endre til denne fasen$|^change to this phase$/i
@@ -506,7 +523,8 @@ test.describe('the project home', () => {
     await scanAndClose(page, {
       component: 'ChangePhaseDialog',
       surface: SURFACES.dialog,
-      focusBack: phase
+      focusBack: phase,
+      startsAtContent: true
     })
   })
 

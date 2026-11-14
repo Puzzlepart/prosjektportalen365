@@ -1,4 +1,4 @@
-import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { axeComponent } from 'pp365-jest-config/lib/axe'
 import * as React from 'react'
 import { ConfirmDialogResponseValue, IConfirmDialogProps, useConfirmationDialog } from '.'
@@ -51,10 +51,23 @@ describe('useConfirmationDialog', () => {
     await expect(answer()).resolves.toBe(false)
   })
 
-  it('starts the focus on the answer that confirms nothing, not on «Slett» (WCAG 3.3.4)', async () => {
-    // Enter as the dialog opened deleted the column.
-    openDialog(DELETE)
-    await waitFor(() => expect(screen.getByText('Avbryt').closest('button')).toHaveFocus())
+  it('opens with the focus on the dialog, read from its title and question, not on an answer (Puzzlepart/prosjektportalen365-testing#132)', async () => {
+    // On the first answer a screen reader read «Slett, button» first, and the question only by
+    // reading backwards (VoiceOver); Enter as the dialog opened deleted the column (WCAG 3.3.4).
+    const answer = openDialog(DELETE)
+    const dialog = screen.getByRole('dialog')
+    await waitFor(() => expect(dialog).toHaveFocus())
+    expect(dialog).toHaveAccessibleName('Slette visningen?')
+    expect(dialog).toHaveAccessibleDescription('Visningen kan ikke gjenopprettes.')
+    // Out of the tab order, with the answers after it, where Tab goes next.
+    expect(dialog).toHaveAttribute('tabindex', '-1')
+    const [first] = within(dialog).getAllByRole('button')
+    expect(first).toHaveTextContent('Slett')
+    expect(dialog.compareDocumentPosition(first) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    fireEvent.keyDown(dialog, { key: 'Enter' })
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
+    fireEvent.keyDown(dialog, { key: 'Escape' })
+    await expect(answer()).resolves.toBeUndefined()
   })
 
   it('takes Escape as no answer, not as the first response', async () => {

@@ -280,9 +280,10 @@ checked by hand and with which reader and browser: axe finds only part of what W
   from `pp365-shared-library`, which names it «Tøm søket».
 - A Fluent `Dialog` is named by its `DialogTitle`, described by nothing, and opens with focus on
   its first button: a dialog whose text is the point (a confirmation) points `aria-describedby`
-  on `DialogSurface` at its `DialogContent` (`useConfirmationDialog`), and a confirmation starts
-  on the answer that does nothing, not on «Slett». Fluent gives the first control the focus as
-  the dialog opens whatever `autoFocus` says (`useFocusFirstElement`): move it in the next frame.
+  on `DialogSurface` at its `DialogContent` (`useConfirmationDialog`), and a confirmation opens
+  with the focus on its surface, not on an answer (`useFocusContentOnOpen`, below): Enter there
+  answers nothing, where on «Slett» it deleted. Fluent gives the first control the focus as the
+  dialog opens whatever `autoFocus` says (`useFocusFirstElement`): move it in the next frame.
 - Fluent's `PopoverTrigger` makes its child a button (`useARIAButtonProps`) even with
   `disableButtonEnhancement`: on an `li` that takes the item's role, and the list has none (axe's
   `list`). Put a `<button>` in the `li` (`ProjectPhases/ProjectPhase`). Round a `div` of icons it
@@ -479,6 +480,13 @@ checked by hand and with which reader and browser: axe finds only part of what W
   `lockedItems`). To press Tab and the arrows in Jest, give Tabster a layout first
   (`pp365-jest-config/lib/tabsterLayout`): jsdom's `offsetParent` is always null, and Tabster
   takes every element for hidden, so the focus fell to the page.
+- A dialog or popover with text before its first action opens with the focus on its surface, not on
+  that action, or a screen reader reads the action first and the text only backwards (VoiceOver,
+  testing#132). A `DialogSurface` takes `{...useFocusContentOnOpen(open)}` (Fluent focuses the
+  first control as it opens; this moves the focus in the frame after); a `PopoverSurface` takes
+  `useFocusContentProps()`, whose tab index makes Fluent focus the surface. Not for panels and
+  forms that start with a heading and a close button or a field. Not `modalType="alert"` for a
+  confirmation: Fluent then ignores Escape.
 - Shapes drawn with coloured borders (the phases' arrows) turn into blocks of the text colour in a
   contrast theme. In `@media (forced-colors: active)` leave them out, edge each item in
   `CanvasText`, and mark the current one with `Highlight`/`HighlightText` (`ProjectPhase`; the

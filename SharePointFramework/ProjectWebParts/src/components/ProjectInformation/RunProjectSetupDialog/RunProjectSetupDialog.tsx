@@ -11,7 +11,13 @@ import {
   Spinner,
   useId
 } from '@fluentui/react-components'
-import { customLightTheme, format, parseErrorStack, UserMessage } from 'pp365-shared-library'
+import {
+  customLightTheme,
+  format,
+  parseErrorStack,
+  useFocusContentOnOpen,
+  UserMessage
+} from 'pp365-shared-library'
 import { ListLogger } from 'pp365-shared-library/lib/logging'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC, useState } from 'react'
@@ -88,6 +94,7 @@ export const RunProjectSetupDialog: FC = () => {
   }
 
   const fluentProviderId = useId('fp-run-project-setup-dialog')
+  const focusContent = useFocusContentOnOpen(context.state.activeDialog === 'RunProjectSetupDialog')
   const contentId = useId('run-project-setup-dialog-content')
 
   return (
@@ -99,9 +106,10 @@ export const RunProjectSetupDialog: FC = () => {
             if (!data.open) close()
           }}
         >
-          {/* Described by its text, so a screen reader reads the question as the dialog opens,
-              not only its title and the button that takes focus. */}
-          <DialogSurface aria-describedby={contentId}>
+          {/* It opens with the focus on itself, described by its text: a screen reader reads
+              the title and the question first, and Tab goes on to the buttons
+              (Puzzlepart/prosjektportalen365-testing#132). */}
+          <DialogSurface aria-describedby={contentId} {...focusContent}>
             <DialogBody>
               <DialogTitle>{strings.RunProjectSetupDialogTitle}</DialogTitle>
               <DialogContent id={contentId}>

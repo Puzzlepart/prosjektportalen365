@@ -24,7 +24,8 @@ export const ProjectPhase: FC<IProjectPhaseProps> = (props) => {
     customPhaseColor,
     isCurrentPhase,
     titleId,
-    descriptionId
+    descriptionId,
+    focusContent
   } = useProjectPhase(props)
 
   return (
@@ -46,6 +47,7 @@ export const ProjectPhase: FC<IProjectPhaseProps> = (props) => {
           </button>
         </PopoverTrigger>
         <PopoverSurface
+          {...focusContent}
           aria-labelledby={titleId}
           aria-describedby={props.phase.description ? descriptionId : undefined}
         >

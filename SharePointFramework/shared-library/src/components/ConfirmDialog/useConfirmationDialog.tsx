@@ -10,8 +10,9 @@ import {
   IdPrefixProvider,
   useId
 } from '@fluentui/react-components'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { customLightTheme } from '../../util'
+import { useFocusContentOnOpen } from '../../util/useFocusContentOnOpen'
 import { ConfirmDialogResponseValue, IConfirmDialogProps, UseConfirmationDialog } from './types'
 
 /**
@@ -56,19 +57,11 @@ export function useConfirmationDialog(): UseConfirmationDialog {
     [state]
   )
 
-  // The first answer whose value is falsy (`false`, `''`, none): the one that confirms nothing.
-  const cancelIndex = (state?.props.responses ?? []).findIndex(([, value]) => !value)
-  const cancelRef = useRef<HTMLButtonElement>(null)
-
-  // The focus starts on the answer that does nothing («Avbryt»), not on the first, which
-  // confirms («Slett»): Enter as the dialog opened deleted (WCAG 3.3.4). Fluent's dialog gives
-  // its first control the focus as it opens, whatever `autoFocus` says, so the focus moves on in
-  // the frame after.
-  useEffect(() => {
-    if (!state) return
-    const frame = requestAnimationFrame(() => cancelRef.current?.focus())
-    return () => cancelAnimationFrame(frame)
-  }, [state])
+  // The focus starts on the dialog, not on an answer: a screen reader reads its title and its
+  // question first, and Tab goes on to the answers (Puzzlepart/prosjektportalen365-testing#132).
+  // Enter as it opens answers nothing; on the first answer, which confirms («Slett»), it deleted
+  // (WCAG 3.3.4).
+  const focusContent = useFocusContentOnOpen(!!state)
 
   const element = (
     <IdPrefixProvider value={fluentProviderId}>
@@ -81,9 +74,9 @@ export function useConfirmationDialog(): UseConfirmationDialog {
             if (!data.open) respond(undefined)
           }}
         >
-          {/* Described by its text, so a screen reader reads the question as the dialog opens,
-              not only its title and the button that takes focus. */}
-          <DialogSurface aria-describedby={contentId}>
+          {/* Described by its text, so a screen reader reads the question with the title as the
+              dialog opens and takes the focus. */}
+          <DialogSurface aria-describedby={contentId} {...focusContent}>
             <DialogBody>
               {state?.props.title && <DialogTitle>{state.props.title}</DialogTitle>}
               <DialogContent id={contentId}>
@@ -96,7 +89,6 @@ export function useConfirmationDialog(): UseConfirmationDialog {
                     key={index}
                     appearance={isPrimary ? 'primary' : 'secondary'}
                     onClick={() => respond(value)}
-                    ref={index === cancelIndex ? cancelRef : undefined}
                   >
                     {label}
                   </Button>

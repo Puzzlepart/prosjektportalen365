@@ -175,14 +175,19 @@ describe('The dialogs that run the setup on a set-up project', () => {
     ],
     ['«Kjør oppsettveiviser»', RunProjectSetupDialog, 'RunProjectSetupDialog', strings.ConfirmText]
   ])('%s', (_name, Dialog: React.FC, activeDialog: string, primaryText: string) => {
-    it('is described by its question, which a screen reader reads as it opens (WCAG 1.3.1, 4.1.2)', () => {
-      // The focus lands on «Avbryt»: named by its title alone, the dialog's question went unread.
+    it('opens with the focus on itself, described by its question, which a screen reader reads first (WCAG 1.3.1, 4.1.2)', async () => {
+      // Named by its title alone, the dialog's question went unread; with the focus on «Avbryt»,
+      // VoiceOver read «Avbryt, button» first and the question only by reading backwards
+      // (Puzzlepart/prosjektportalen365-testing#132).
       renderDialog(Dialog, activeDialog)
       const subText =
         Dialog === CreateParentDialog
           ? strings.CreateParentModalSubText
           : strings.RunProjectSetupDialogSubText
-      expect(screen.getByRole('dialog')).toHaveAccessibleDescription(subText)
+      const dialog = screen.getByRole('dialog')
+      expect(dialog).toHaveAccessibleDescription(subText)
+      await waitFor(() => expect(dialog).toHaveFocus())
+      expect(dialog).toHaveAttribute('tabindex', '-1')
     })
 
     it('shows the spinner from the click, before the menu is read, and starts the setup once', async () => {

@@ -2,6 +2,7 @@ import { useId } from '@fluentui/react-components'
 import strings from 'SharedLibraryStrings'
 import { SubArc } from 'react-gauge-component'
 import { format } from '../../../util'
+import { useFocusContentProps } from '../../../util/useFocusContentOnOpen'
 import { IInstrumentColumnProps } from './types'
 
 /**
@@ -52,7 +53,10 @@ export function useInstrumentColumn(props: IInstrumentColumnProps) {
   const gaugeId = useId('instrument-gauge')
   const unitId = useId('instrument-unit')
 
+  // It holds no control: the surface itself takes the focus as it opens, with a focus ring.
+  const focusContent = useFocusContentProps()
   return {
+    focusContent,
     label,
     gaugeLabel,
     gaugeId,

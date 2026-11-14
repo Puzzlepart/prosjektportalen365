@@ -1843,3 +1843,26 @@ itself as `observer` to `add()` is disposed, as the footer does.
   `DataGridList.test.tsx`, `ContentConfigSection.test.tsx`, `ExtensionsSection.test.tsx`. Only
   in Jest: the setup needs a new site.
 
+### Testers' rounds: the focus as a dialog or popover opens (Puzzlepart/prosjektportalen365-testing#132, 2026-11-14)
+
+- **Found** (VoiceOver on a Mac). Dialogs and popovers put the focus on their first action, so the
+  content before it was read only backwards: «Overordnet prosjekt, dialog, with 4 items, Avbryt,
+  button»; the phase: «Konsept, dialog, with 6 items, link, Gå til fasesjekklisten».
+- **Done.** A dialog or popover with text before its first action opens with the focus on its
+  surface (`tabIndex={-1}`, a focus ring while the keyboard put it there), read from its name and
+  description, and Tab goes on to the first action; Escape and the focus given back are Fluent's.
+  `useFocusContentOnOpen(open)` (shared-library) focuses a `DialogSurface` in the frame after
+  Fluent's own focus; `useFocusContentProps()` gives a `PopoverSurface` the tab index, which makes
+  Fluent's popover focus it. Changed: `useConfirmationDialog` (its focus on «Avbryt» from
+  2026-11-12 gives way: Enter on the surface answers nothing), «Gjør om til overordnet prosjekt»,
+  «Kjør oppsettveiviser», the change-phase dialog, the template catalog's compatibility check, the
+  phase popover, the risk action popover, the Planner task's preview; the timeline's details and
+  the instrument popover had the tab index and got the ring. Left: panels, forms and dialogs that
+  start with a heading and a close button or with a field (the news dialog, the column and view
+  forms, the help, the package details and previews, the risk action migration, the copy-link
+  dialog, the measurements dialog, the setup dialogs), the custom action dialog (its content is
+  status messages, announced as they come), the archive status popover (it starts with its first
+  operation's header), and the footer's installation and favourite projects popovers (the info
+  button after the heading that names them comes first, and all content follows it). Tests: the
+  Jest tests of each, and `a11y-surfaces.spec.ts` and `project.spec.ts` in the browser.
+

@@ -75,6 +75,9 @@ test.describe('project site', () => {
     await page.keyboard.press('Enter')
     const details = page.locator('.fui-PopoverSurface[role="dialog"]')
     await expect(details).toBeVisible()
+    // It opens with the focus on its content, read from the phase's name, not on its first link
+    // (Puzzlepart/prosjektportalen365-testing#132).
+    await expect(details).toBeFocused()
     // Tab used to leave the open phase for the top of the page, leaving it open behind. It stays
     // in the phase now, or leaves the page for the browser's own controls, never for the page.
     for (let i = 0; i < 4; i++) {

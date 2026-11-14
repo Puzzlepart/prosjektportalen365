@@ -176,8 +176,10 @@ describe('ChangePhaseDialog', () => {
     expect(screen.getByRole('dialog')).toHaveAccessibleDescription(subtitle)
   })
 
-  it('is described in the confirmation by its subtitle and its question', () => {
+  it('is described in the confirmation by its subtitle and its question, and opens with the focus on itself (Puzzlepart/prosjektportalen365-testing#132)', async () => {
     renderDialog(phase('p1', 'Konsept'), planning)
+    // On «Ja», a screen reader read the answer first and what it would do only by reading back.
+    await waitFor(() => expect(screen.getByRole('dialog')).toHaveFocus())
     expect(screen.getByRole('dialog')).toHaveAccessibleDescription(
       `${format(strings.ChangePhaseDialogSubtitle, 'Konsept', 'Planlegge')} ${format(
         strings.ConfirmChangePhase,

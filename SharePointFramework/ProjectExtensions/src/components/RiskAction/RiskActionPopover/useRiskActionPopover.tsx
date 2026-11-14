@@ -1,7 +1,7 @@
 import { PopoverProps, useAnnounce, useId } from '@fluentui/react-components'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'ProjectExtensionsStrings'
-import { formatShortDate } from 'pp365-shared-library'
+import { formatShortDate, useFocusContentProps } from 'pp365-shared-library'
 import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import { useState } from 'react'
 import { useBoolean } from 'usehooks-ts'
@@ -57,7 +57,12 @@ export function useRiskActionPopover() {
 
   const lastUpdated = formatShortDate(itemContext.hiddenFieldValues?.updated, true)
 
+  // It starts with its title and texts: it opens with the focus on its content, not on its first
+  // action (Puzzlepart/prosjektportalen365-testing#132).
+  const focusContent = useFocusContentProps()
+
   return {
+    focusContent,
     titleId,
     syncError,
     infoText,
