@@ -716,6 +716,29 @@ function Get-UsageStatisticsRows {
 
 <#
 .SYNOPSIS
+A list of the current site by its title or site-relative URL, or nothing when the site has none
+
+.DESCRIPTION
+Get-PnPList -Identity writes an error for a list that does not exist (PnP.PowerShell 3), which
+-ErrorAction Stop turns into a throw: a fresh install stopped there, on a new hub with no lists yet.
+This reads the site's lists and picks the one, so a missing list is nothing, and any other failure
+(throttling, access) still stops. Errors are not caught.
+
+.PARAMETER Identity
+The list's title, or its URL relative to the site, such as Lists/Globale innstillinger
+#>
+function Find-SiteList {
+    Param(
+        [Parameter(Mandatory = $true)][string]$Identity
+    )
+    $UrlSuffix = "/$($Identity.Trim('/'))"
+    Get-PnPList -ErrorAction Stop | Where-Object {
+        $_.Title -eq $Identity -or "$($_.RootFolder.ServerRelativeUrl)".TrimEnd('/').EndsWith($UrlSuffix, [System.StringComparison]::OrdinalIgnoreCase)
+    } | Select-Object -First 1
+}
+
+<#
+.SYNOPSIS
 The version the site was last installed or upgraded with
 
 .DESCRIPTION
@@ -723,7 +746,7 @@ Reads the newest entry of the installation log, as PreInstallUpgrade.ps1 does. N
 site has no installation log, as a new hub has none, or the log is empty. Errors are not caught.
 #>
 function Get-LastInstalledVersion {
-    $List = Get-PnPList -Identity (Get-Resource -Name "Lists_InstallationLog_Title") -ErrorAction Stop
+    $List = Find-SiteList -Identity (Get-Resource -Name "Lists_InstallationLog_Title")
     if ($null -eq $List) {
         return $null
     }
@@ -741,7 +764,7 @@ Add a missing UsageStatisticsLevel row before the Portfolio template
 .DESCRIPTION
 The step before the template, for upgrades (PreInstallUpgrade.ps1) and for runs without -Upgrade on
 a hub that has the list. It finds Globale innstillinger by its URL, as the template does, and:
-- reports NoList when the list does not exist: the template then creates it with the row at 2;
+- reports NoList when the list does not exist: the template then creates it with the row at 3;
 - reports Exists when a row has the key UsageStatisticsLevel or the template's id, and changes it
   not;
 - otherwise adds the row, with the template's id and the value Resolve-InitialUsageStatisticsLevel
@@ -763,7 +786,7 @@ function Initialize-UsageStatisticsSetting {
         [AllowNull()][AllowEmptyString()][string]$ExplicitLevel,
         [AllowNull()][object]$PreviousVersion
     )
-    $List = Get-PnPList -Identity (Get-Resource -Name "Lists_Global_Settings_Url") -ErrorAction Stop
+    $List = Find-SiteList -Identity (Get-Resource -Name "Lists_Global_Settings_Url")
     if ($null -eq $List) {
         return [PSCustomObject]@{ Outcome = 'NoList' }
     }

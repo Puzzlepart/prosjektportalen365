@@ -191,6 +191,7 @@ For hver rad i feilloggen:
 
 | # | Scenario | Tid | Steg / handler | Melding (ordrett) | Kilde | Repro i Node | Klasse | Alvor | Tiltak / status |
 |---|---|---|---|---|---|---|---|---|---|
+| 1 | Miljø: fersk hub (`[fresh-install]`, `1699d4e18`) | 2026-11-15 17:08 | `Install.ps1` før Portfolio-malen: `Get-LastInstalledVersion` (`Get-PnPList -Identity … -ErrorAction Stop`) | «[ERROR] Failed to apply PnP templates to https://puzzlepart.sharepoint.com/sites/pp365_1699d4e: Listen Installasjonslogg finnes ikke på området med URL-adressen https://puzzlepart.sharepoint.com/sites/pp365_1699d4e.» | CI, jobben Install i CI (releases/*) 43734174745 | Ikke motoren; offline mot en stand-in for `Get-PnPList` | C | Blokkerer: enhver fersk installasjon siden `dc1d20acf` (13.11), også releasepakken fra `c719766fd`. `Initialize-UsageStatisticsSetting` hadde samme oppslag for `Globale innstillinger` | Rettet: `Find-SiteList` i `SharedFunctions.ps1` leser områdets lister, så en manglende liste gir ingenting og andre feil stopper fortsatt; 6 nye tester i `.tasks/usage-statistics-level.test.js`. Ny `[fresh-install]` |
 
 ## Testdata
 

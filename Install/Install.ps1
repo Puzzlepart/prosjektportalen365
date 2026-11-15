@@ -555,8 +555,8 @@ if (-not $SkipTemplate.IsPresent) {
         else {
             # Usage statistics: on an existing hub, a missing UsageStatisticsLevel row is added before
             # the template's Skip re-adds a deleted CatalogTelemetryEnabled row as 1 and seeds the
-            # level row as 2, so an earlier opt-out is carried over (P7). A new hub has no list yet,
-            # and the template creates it with the row at 2.
+            # level row as 3, so an earlier opt-out is carried over (P7). A new hub has no list yet,
+            # and the template creates it with the row at 3.
             $UsageStatisticsSetting = Initialize-UsageStatisticsSetting `
                 -ExplicitLevel $(if ($UsageStatisticsLevelGiven) { $UsageStatisticsLevel } else { '' }) `
                 -PreviousVersion (Get-LastInstalledVersion)

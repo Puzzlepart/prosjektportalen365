@@ -235,6 +235,51 @@
         { "name": "a value as a number", "level": 1, "expected": "Basic" },
         { "name": "neither", "level": "Maximal", "expected": "error" }
     ],
+    "findList": [
+        {
+            "name": "a new hub has no installation log: nothing, no error",
+            "identity": "Installasjonslogg",
+            "lists": [
+                { "title": "Dokumenter", "url": "/sites/pp365_new/Delte dokumenter" },
+                { "title": "Områdesider", "url": "/sites/pp365_new/SitePages" }
+            ],
+            "expected": null
+        },
+        {
+            "name": "a new hub has no Globale innstillinger: nothing, no error",
+            "identity": "Lists/Globale innstillinger",
+            "lists": [{ "title": "Dokumenter", "url": "/sites/pp365_new/Delte dokumenter" }],
+            "expected": null
+        },
+        {
+            "name": "a list found by its title",
+            "identity": "Installasjonslogg",
+            "lists": [
+                { "title": "Dokumenter", "url": "/sites/pp365/Delte dokumenter" },
+                { "title": "Installasjonslogg", "url": "/sites/pp365/Lists/Installasjonslogg" }
+            ],
+            "expected": "Installasjonslogg"
+        },
+        {
+            "name": "a list found by its URL, in another case and with slashes around it",
+            "identity": "/lists/globale INNSTILLINGER/",
+            "lists": [{ "title": "Global settings", "url": "/sites/pp365/Lists/Globale innstillinger/" }],
+            "expected": "Global settings"
+        },
+        {
+            "name": "the start of a URL is no match",
+            "identity": "Lists/Globale",
+            "lists": [{ "title": "Globale innstillinger", "url": "/sites/pp365/Lists/Globale innstillinger" }],
+            "expected": null
+        },
+        {
+            "name": "a failure to read the lists still stops",
+            "identity": "Installasjonslogg",
+            "lists": [],
+            "error": "(429) Too Many Requests",
+            "expected": "error: (429) Too Many Requests"
+        }
+    ],
     "summary": [
         {
             "name": "Standard, with catalog events and the pingback",

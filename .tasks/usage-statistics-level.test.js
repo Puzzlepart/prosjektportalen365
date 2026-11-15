@@ -2,7 +2,8 @@
  * Tests for the usage statistics functions of Install/Scripts/SharedFunctions.ps1, which Install.ps1
  * and PreInstallUpgrade.ps1 use: the level a hub without the UsageStatisticsLevel row starts at (P7
  * in docs/plans/usage-logging.md), the level the hub's rows give as the browsers' gate reads them
- * (P3), the template catalog's telemetryUrl opt-out, and the summary at the end of a run. The
+ * (P3), the template catalog's telemetryUrl opt-out, the summary at the end of a run, and the list
+ * lookup before the template (`Find-SiteList`, over a stand-in for `Get-PnPList`). The other
  * functions are pure, so pwsh runs them over fixtures/usage-statistics-level.json without
  * SharePoint. Run with `npm run test:tasks`; skipped with a notice where pwsh is missing.
  */
@@ -45,6 +46,27 @@ $Convert = foreach ($S in @($Scenarios.convert)) {
     try { $Out = Convert-UsageStatisticsLevel -Level "$($S.level)" } catch { $Out = 'error' }
     [ordered]@{ name = $S.name; result = $Out }
 }
+# A stand-in for PnP.PowerShell 3's Get-PnPList: with -Identity it fails for every list, as the cmdlet
+# does for a missing one, so only a lookup over the site's lists passes. Find-SiteList is the lookup
+# before the template, where a new hub has no lists yet (a fresh install stopped there until 1.15.0).
+$script:SiteLists = @()
+$script:SiteListsError = ''
+function Get-PnPList {
+    param([string]$Identity, [object]$ErrorAction)
+    if ($Identity) { throw "Get-PnPList -Identity $Identity" }
+    if ($script:SiteListsError) { throw $script:SiteListsError }
+    return @($script:SiteLists | ForEach-Object { [PSCustomObject]@{ Title = $_.title; RootFolder = [PSCustomObject]@{ ServerRelativeUrl = $_.url } } })
+}
+$FindList = foreach ($S in @($Scenarios.findList)) {
+    $script:SiteLists = @($S.lists)
+    $script:SiteListsError = "$($S.error)"
+    try {
+        $Found = Find-SiteList -Identity $S.identity
+        $Out = if ($null -eq $Found) { $null } else { $Found.Title }
+    }
+    catch { $Out = "error: $($_.Exception.Message)" }
+    [ordered]@{ name = $S.name; result = $Out }
+}
 $Summary = foreach ($S in @($Scenarios.summary)) {
     $E = if ($S.unread) { $null } else { Get-EffectiveUsageStatisticsLevel -Rows (ConvertTo-Rows $S.rows) }
     $Lines = Format-UsageStatisticsSummary -Effective $E -ListTitle 'Globale innstillinger' -PingbackSent ([bool]$S.pingbackSent) -ReadError "$($S.readError)"
@@ -55,6 +77,7 @@ $Summary = foreach ($S in @($Scenarios.summary)) {
     effective    = @($Effective)
     telemetryUrl = @($TelemetryUrl)
     convert      = @($Convert)
+    findList     = @($FindList)
     summary      = @($Summary)
 } | ConvertTo-Json -Depth 8 -Compress
 `
@@ -122,6 +145,12 @@ for (const scenario of scenarios.telemetryUrl) {
 for (const scenario of scenarios.convert) {
     test(`level name and value: ${scenario.name}`, { skip }, () => {
         assert.equal(resultOf('convert', scenario.name).result, scenario.expected)
+    })
+}
+
+for (const scenario of scenarios.findList) {
+    test(`list lookup before the template: ${scenario.name}`, { skip }, () => {
+        assert.equal(resultOf('findList', scenario.name).result, scenario.expected)
     })
 }
 
