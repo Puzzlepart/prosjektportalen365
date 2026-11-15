@@ -2767,3 +2767,35 @@ _Each slice adds its entry below._
   Not run against a tenant: the dev and test hubs keep their row at 0, which no run changes.
 - Left: the legal checks (L2, L4, L6) and the customer texts must say that error codes and load
   times are sent by default, and that Standard (2) is not the default.
+
+### Slice 12: the wiki page's draft (2026-11-15)
+
+- Done: a draft of the wiki page Bruksstatistikk in `docs/plans/usage-logging-wiki/Bruksstatistikk.md`,
+  after item 8 and the wording principles under «Transparency and texts», with level 3 as the
+  default. Bracketed for legal: the purposes (L5), the provider's log time and region (L3), the site
+  code in very small projects (L2), the retention (L4), roles and legal basis (L1, L2, L6), the
+  installation messages' region and the contact address for deletion on request.
+- Verified: the draft names every field, component, event, variant, error code, HTTP status,
+  channel, language, site type and timing metric in `contract.ts`, and neither «anonym»,
+  «samtykke» nor «opt-in»; the catalog event's fields and actions against `TelemetryService.ts`; the
+  hour a decision lives against `GATE_MAX_AGE_MS`.
+- Left: the legal review; publishing in the wiki (a GitHub write), which the installer's link needs
+  before the release; the other texts of slice 12, which copy its level table and never-list.
+
+### Slice 12: the texts in prosjektportalen365 (2026-11-15)
+
+- Done:
+  - `readme/2-Installering.md`: a paragraph on usage statistics after the one on the installation
+    message, and the root `README.md` generated from it.
+  - `CHANGELOG.md`: the feature line links the release notes and the wiki page; a fix line for the
+    catalog's statistics (sent with its row disabled, missing or unreadable, with error text, and
+    from customers' own catalogs); a Merk line on level 3 after the upgrade and how to choose.
+  - `releasenotes/1.15.0.md`: a highlight, and the section Bruksstatistikk before «Andre
+    forbedringer verdt å nevne» with the upgrade, `-UsageStatisticsLevel`, and the level table and
+    never-list copied from the wiki draft by script (its note for legal left out).
+  - The catalog README's Telemetry section links the wiki page.
+  - `privacyUrl` in the six `package-solution.json` files points to the wiki page (P24).
+- Verified: the six files parse as JSON; the root README equals the generator's output.
+- Left: the manual (item 11), «Grunnlag for DPIA og ROS» and the other wiki pages (items 9 and
+  10), and Assist's texts (items 12 and 13). The release notes' level table and never-list follow
+  the wiki page if legal changes it.

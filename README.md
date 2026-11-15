@@ -64,6 +64,8 @@ Prosjektportalen kan lastes ned fra [releases](https://github.com/Puzzlepart/pro
 
 Installasjonsskriptet sender én melding til Prosjektportalen-teamet når installasjonen er ferdig, slik at teamet ser hvilke versjoner som er i bruk: adressen til porteføljeområdet, versjon, kanal, tidspunkt og navnene på parameterne som ble brukt. Fra versjon 1.15 inneholder meldingen ikke brukernavn eller parameterverdier, og den kan slås av med `-SkipPingback`. Se [Grunnlag for DPIA og ROS](https://github.com/Puzzlepart/prosjektportalen365/wiki/Grunnlag-for-DPIA-og-ROS) for hva som sendes ut av tenanten.
 
+Fra versjon 1.15 sender Prosjektportalen også bruksstatistikk til Prosjektportalen-teamet, slik at vi ser hvilke versjoner som er i bruk, hvilke deler av løsningen som brukes, og hvor mye. Vi teller bruk, ikke personer: ingenting om brukerne, innholdet eller adressene til prosjektområdene sendes, og ingenting lagres i nettleseren. Bruksstatistikk er på som standard (nivå 3, Utvidet) og kan senkes eller slås av i listen Globale innstillinger på porteføljeområdet (`UsageStatisticsLevel`: 0 = av, 1 = grunnleggende, 2 = standard, 3 = utvidet), eller velges ved installasjonen med `-UsageStatisticsLevel`. En endring gjelder innen to timer. Installasjonsmeldingen og bruksstatistikken slås av hver for seg. Se [Bruksstatistikk](https://github.com/Puzzlepart/prosjektportalen365/wiki/Bruksstatistikk) for hva som sendes, felt for felt.
+
 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#kontakt)

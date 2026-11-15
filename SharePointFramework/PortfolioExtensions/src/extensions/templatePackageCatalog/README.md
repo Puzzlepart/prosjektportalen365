@@ -130,6 +130,9 @@ Stop them via any of:
 A changed row applies within two hours: the hub's settings are cached for an hour,
 and a decision is used for up to an hour.
 
+What usage statistics send, field by field, and every way to turn them off: the wiki page
+[Bruksstatistikk](https://github.com/Puzzlepart/prosjektportalen365/wiki/Bruksstatistikk).
+
 ## Dev / test
 
 - **Hidden packages**: packages marked `hidden` in `catalog.json` are staged and
