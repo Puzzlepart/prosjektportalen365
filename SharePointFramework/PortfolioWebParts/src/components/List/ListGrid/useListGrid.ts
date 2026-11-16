@@ -8,7 +8,7 @@ import {
 } from '@fluentui/react-components'
 import { fitColumnWidths, IListColumn, nameColumnResizeHandle } from 'pp365-shared-library'
 import { useContainerWidth } from 'pp365-shared-library/lib/components/DataGridList/useContainerWidth'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { ReactNode, useCallback, useMemo, useRef, useState } from 'react'
 import { IListGroup, ResizeColumn } from '../types'
 import { IListGridProps, IListGridState, ListGridEntry } from './types'
 import { useListSelection } from './useListSelection'
@@ -32,17 +32,29 @@ function groupId(group: IListGroup) {
 }
 
 /**
+ * The larger of two widths, leaving out one that is not a number; undefined when neither is.
+ */
+function widerOf(width: number | undefined, other: number | undefined): number | undefined {
+  if (!Number.isFinite(other)) return width
+  if (!Number.isFinite(width)) return other
+  return Math.max(width, other)
+}
+
+/**
  * Sizing options from the columns: each starts at its preferred width (`maxWidth`, else
- * `minWidth`) as in v8's fixed layout, or, justified, at its share of the grid's width.
+ * `minWidth`) as in v8's fixed layout, or, justified, at its share of the grid's width, and is
+ * never narrower than its least width (`leastWidths`, in the columns' order).
  */
 function createColumnSizingOptions(
   columns: IListColumn[],
+  leastWidths: Array<number | undefined>,
   justifiedWidth?: number
 ): TableColumnSizingOptions {
-  const sized = columns.map((column) => ({
+  const sized = columns.map((column, index) => ({
     ...createTableColumn({ columnId: column.key }),
-    minWidth: column.minWidth,
-    defaultWidth: column.maxWidth ?? column.minWidth
+    minWidth: leastWidths[index],
+    // Not below the minimum: Fluent takes a new ideal width as is for a column it already sizes.
+    defaultWidth: widerOf(column.maxWidth ?? column.minWidth, leastWidths[index])
   }))
   if (justifiedWidth !== undefined) return fitColumnWidths(sized, justifiedWidth)
   return sized.reduce<TableColumnSizingOptions>(
@@ -59,7 +71,8 @@ function createColumnSizingOptions(
 }
 
 /**
- * Component logic hook for `ListGrid`: the column sizing, the groups with their collapse state, the
+ * Component logic hook for `ListGrid`: the column sizing, with the least widths the columns' data
+ * needs, what a column's header shows under its name, the groups with their collapse state, the
  * rows to show and the selection.
  *
  * The groups' collapse state is the grid's own, started from each group's `isCollapsed`; the
@@ -75,10 +88,23 @@ export function useListGrid(props: IListGridProps): IListGridState {
   const containerWidth = useContainerWidth(containerRef, justified)
   const fixedCellsWidth =
     (selectable ? SELECTION_CELL_WIDTH : 0) + (isGrouped ? EXPANDER_CELL_WIDTH : 0)
+  // Each column's least width: its `minWidth`, raised to what its data needs where that is more
+  // (the status report column's strip). The overview puts a column's data on the column object and
+  // keeps the columns array, so the options are keyed on these widths, as text. Never on a
+  // function made anew on each render: every new options object makes Fluent size the columns
+  // and render again, and puts back the widths the user dragged.
+  const leastWidths = columns.map((column) =>
+    widerOf(column.minWidth, props.getColumnMinWidth?.(column))
+  )
+  const leastWidthsKey = leastWidths.join(',')
   const columnSizingOptions = useMemo(
     () =>
-      createColumnSizingOptions(columns, justified ? containerWidth - fixedCellsWidth : undefined),
-    [columns, justified, containerWidth, fixedCellsWidth]
+      createColumnSizingOptions(
+        columns,
+        leastWidths,
+        justified ? containerWidth - fixedCellsWidth : undefined
+      ),
+    [columns, leastWidthsKey, justified, containerWidth, fixedCellsWidth]
   )
   const tableColumns = useMemo(
     () => columns.map((column) => createTableColumn({ columnId: column.key })),
@@ -182,6 +208,13 @@ export function useListGrid(props: IListGridProps): IListGridState {
     )
   }
 
+  // What renders nothing is undefined here, so a header without an addon keeps its markup and
+  // styles exactly.
+  const getHeaderAddon = (column: IListColumn): ReactNode => {
+    const addon = props.renderHeaderAddon?.(column)
+    return addon == null || typeof addon === 'boolean' ? undefined : addon
+  }
+
   // For the column menu: the arrow keys then change the column's width, as a drag on its header's
   // edge does, and Enter or Escape hands the focus back to the header (WCAG 2.1.1). A column
   // without a handle (the last one, when the grid fills its width) cannot be resized at all.
@@ -196,6 +229,7 @@ export function useListGrid(props: IListGridProps): IListGridState {
     tableRef,
     columnSizing,
     getHeaderCellProps,
+    getHeaderAddon,
     resizeColumn,
     isGrouped,
     entries,

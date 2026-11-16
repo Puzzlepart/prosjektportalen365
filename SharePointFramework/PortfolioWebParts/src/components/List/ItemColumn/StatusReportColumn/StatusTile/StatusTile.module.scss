@@ -1,0 +1,34 @@
+// A status value as a 20 px tile: the fill and the ink come from the value's colour
+// (`getStatusTile`), as custom properties the tile is given.
+.root {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background-color: var(--fill);
+  color: var(--ink);
+
+  // A value with no colour to give: none configured, or one that cannot be read.
+  &.neutral {
+    background-color: var(--colorNeutralBackground3);
+    color: var(--colorNeutralForeground3);
+  }
+
+  // No value: no fill, a dashed edge and a dash, so the section keeps its place in the strip.
+  &.empty {
+    border: 1px dashed var(--colorNeutralStrokeAccessible);
+    background-color: transparent;
+    color: var(--colorNeutralStrokeAccessible);
+  }
+}
+
+// Contrast themes give every tile the canvas and every edge the text colour, so each tile stands
+// as a frame with its shape in it; an empty one takes the colour of what cannot be used.
+@media (forced-colors: active) {
+  .root.empty {
+    border-color: GrayText;
+  }
+}

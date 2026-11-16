@@ -7,6 +7,12 @@ const TIME: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' }
 /** The date as numbers: "18.11.2022" in Norwegian, "11/18/2022" in American English. */
 const SHORT_DATE: Intl.DateTimeFormatOptions = { day: '2-digit', month: '2-digit', year: 'numeric' }
 
+/** The day and the month's short name: "3. nov." in Norwegian, "Nov 3" in American English. */
+const DAY_MONTH: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short' }
+
+/** The day, the month's short name and the year: "12. mai 2025", "May 12, 2025". */
+const DAY_MONTH_YEAR: Intl.DateTimeFormatOptions = { ...DAY_MONTH, year: 'numeric' }
+
 /**
  * Formats a date in the long form with the weekday ("fredag 18. nov. 2022"), in SharePoint's UI
  * language unless `locale` is given, and in the site's time zone where the page gave one
@@ -65,6 +71,34 @@ export function formatShortDate(
     locale,
     includeTime ? { ...SHORT_DATE, ...TIME } : SHORT_DATE
   )
+}
+
+/**
+ * A day and month in the site's time zone and the UI language ("3. nov."), with the year when
+ * `includeYear` is set or the year is not the current one ("12. mai 2025"). The year is compared
+ * in the site's time zone too, as the day is shown, so a date on New Year's Eve gets the year of
+ * the day SharePoint's lists show. For a date that stands beside other text, where `formatDate`'s
+ * weekday is too long and `formatShortDate`'s numbers too bare: when a status report was published.
+ *
+ * @param date Date string or object, an instant
+ * @param includeYear Include the year in the current year too ("3. nov. 2026")
+ * @param fallback Returned when `date` is empty or not a date
+ * @param locale Locale, by default SharePoint's UI language (`getUILocale`)
+ * @param now The time the current year is read from, by default the time of the call
+ */
+export function formatDayMonth(
+  date: string | Date,
+  includeYear: boolean = false,
+  fallback: string = '',
+  locale: string = getUILocale(),
+  now: Date = new Date()
+): string {
+  if (!date) return fallback
+  const value = typeof date === 'string' ? new Date(date) : date
+  if (isNaN(value.getTime())) return fallback
+  const wallTime = toSiteWallTime(value)
+  const showYear = includeYear || wallTime.getFullYear() !== toSiteWallTime(now).getFullYear()
+  return wallTime.toLocaleString(locale, showYear ? DAY_MONTH_YEAR : DAY_MONTH)
 }
 
 /**

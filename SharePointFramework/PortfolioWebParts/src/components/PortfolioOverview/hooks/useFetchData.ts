@@ -55,12 +55,14 @@ function getCurrentView(
  * when the `context.state.currentView` changes. The data is then dispatched to the reducer.
  * The columns are persisted in local storage using `set` from the hook `usePersistedColumns`.
  * This is done to use placeholders for the columns while the data is being fetched on the first
- * render.
+ * render. A column whose renderer reads data for its cells (`fetchData`) is given the view's rows,
+ * and one that cannot read it leaves its cells empty rather than fail the view.
  *
  * A fetch that fails is counted for usage statistics, once, by its error code, for the web part
- * the overview is in; so is each hub a merged view could not read. The overview fetches a view
- * more than once as it mounts, so what failed is counted once per view and portfolio, and again
- * only after a fetch got through or another view was fetched.
+ * the overview is in; so is each hub a merged view could not read, and each column that could not
+ * read its data. The overview fetches a view more than once as it mounts, so what failed is
+ * counted once per view and portfolio, and again only after a fetch got through or another view
+ * was fetched.
  */
 export const useFetchData = (context: IPortfolioOverviewContext) => {
   const [, set] = usePersistedColumns(context.props)
@@ -119,8 +121,6 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
         ) ?? Promise.resolve(false)
       ])
       const { items, managedProperties, failedPortfolios, failedPortfolioErrors } = viewData
-      // The view is shown without those hubs and says so; each is counted by what it failed with.
-      countFailures(currentView, failedPortfolioErrors)
 
       // `globalSettings` is only populated in program/parent context, so this stays false elsewhere.
       const showChildProjectInfoInProgram =
@@ -134,15 +134,26 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
         )
       }
 
+      const columnErrors: unknown[] = []
       if (!context.props.isParentProject) {
         // Parent projects use a different adapter; per-column auxiliary data is not loaded there.
         for (const column of currentView.columns) {
           const fetchData = ColumnRenderComponentRegistry.getComponent(column.dataType)?.fetchData
           if (typeof fetchData === 'function') {
-            _.set(column, 'data.$', await fetchData(context.props.configuration.web, column))
+            try {
+              const data = await fetchData(context.props.configuration.web, column, items)
+              _.set(column, 'data.$', data)
+            } catch (error) {
+              // Views share the column: left as it is, its cells would show the last data read.
+              _.set(column, 'data.$', undefined)
+              columnErrors.push(error)
+            }
           }
         }
       }
+      // The view is shown without the hubs it could not read, and says so, and with empty cells in
+      // a column that could not read its data; each is counted by what it failed with.
+      countFailures(currentView, [...(failedPortfolioErrors ?? []), ...columnErrors])
 
       set(currentView.columns)
       context.dispatch(

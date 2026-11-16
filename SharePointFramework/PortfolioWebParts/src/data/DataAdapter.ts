@@ -286,7 +286,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
             Title: site.Title,
             Path: site?.Path,
             SPWebUrl: site?.SPWebUrl,
-            SiteId: site.SiteId
+            SiteId: site.SiteId,
+            // After the spreads, so the project's own properties cannot overwrite the report's id.
+            StatusReportId: parseInt(statusReport?.ListItemId, 10) || undefined
           }),
           series,
           siteIdProperty
@@ -317,7 +319,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
             ...project,
             Path: site?.Path,
             SPWebUrl: site?.SPWebUrl,
-            SiteId: project[siteIdProperty]
+            SiteId: project[siteIdProperty],
+            // After the spreads, so the project's own properties cannot overwrite the report's id.
+            StatusReportId: parseInt(statusReport?.ListItemId, 10) || undefined
           }),
           series,
           siteIdProperty

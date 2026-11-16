@@ -1,7 +1,7 @@
 import { Locator, Page } from '@playwright/test'
 import { settleWebParts, waitForContent } from '../fixtures/a11y'
 import { A11Y_PAGES } from '../fixtures/pages'
-import { channelWebPartsOnPage, test } from '../fixtures/pp365'
+import { channelWebPartsOnPage, expect, test, WEB_PART } from '../fixtures/pp365'
 
 /**
  * Visual checks of the pages for universal design (#1788, docs/plans/universal-design-wcag.md),
@@ -16,7 +16,9 @@ import { channelWebPartsOnPage, test } from '../fixtures/pp365'
  *   spacing 0.16 (the criterion's values, applied as its bookmarklet does), the text that is cut
  *   off and was not before.
  * - Forced colours (Windows contrast themes): a picture only; whether borders, focus and states
- *   still show is judged by eye.
+ *   still show is judged by eye. The portfolio overview's status report column gets pictures of
+ *   its own, a cell and the column's header: its tiles lose their fill there, and their shapes
+ *   and frames must carry the status.
  */
 
 /** The criterion's text spacing, as the WCAG text spacing bookmarklet applies it. */
@@ -30,6 +32,9 @@ const REFLOW_EXEMPT =
 
 /** Picture settings: small enough for the report site, sharp enough to judge. */
 const PICTURE = { type: 'jpeg', quality: 70, animations: 'disabled' } as const
+
+/** The status report column's strip in a row's cell: «Statusrapport 3. nov. 2026: 1 rød, …». */
+const STATUS_REPORT_STRIP = /^(statusrapport|status report) .+:/i
 
 /** What in a web part reaches past its right edge at the current width. */
 async function measureReflow(webPart: Locator) {
@@ -102,7 +107,7 @@ async function clippedText(
   })
 }
 
-/** Attaches a picture of the web part as it is now. */
+/** Attaches a picture of a web part, or of a part of one, as it is now. */
 async function picture(webPart: Locator, name: string) {
   const body = await webPart
     .first()
@@ -211,4 +216,40 @@ test.describe('visual checks of the pages', () => {
       }
     })
   }
+
+  // The status report column's tiles carry the status by their shapes, which a contrast theme
+  // must keep. A picture of a whole web part rarely shows the column, so a cell and its header
+  // get pictures of their own.
+  test('the status report column in forced colours', async ({ page, openPage, resolvePage }) => {
+    test.setTimeout(180_000)
+    const overviewPage = A11Y_PAGES.find((entry) => entry.name === 'portfolio overview')
+    const site = overviewPage?.site()
+    test.skip(!overviewPage || !site, 'the portfolio overview is not configured')
+    await page.setViewportSize({ width: 1280, height: 900 })
+    await openPage(await resolvePage(site!, overviewPage!.pages))
+    const list = page.locator(WEB_PART).first()
+    // Once the list has its data ("Viser 0 av 0" until then); the column's reports come after.
+    await expect(list.locator('[class*="resultsCount"]').first())
+      .toHaveText(/viser [1-9]\d* av \d+|showing [1-9]\d* of \d+/i, { timeout: 60_000 })
+      .catch(() => undefined)
+    const cell = list
+      .getByRole('gridcell')
+      .filter({ has: page.getByRole('button', { name: STATUS_REPORT_STRIP }) })
+      .first()
+    await cell.waitFor({ timeout: 30_000 }).catch(() => undefined)
+    test.skip(!(await cell.isVisible()), 'the view has no status report column, or no reports')
+    // By its name, which an icon from the column's configuration may come before.
+    const header = list
+      .getByRole('columnheader', { name: /^\W*(statusrapport|status report)\b/i })
+      .first()
+    await cell.scrollIntoViewIfNeeded()
+    await page.emulateMedia({ forcedColors: 'active' })
+    try {
+      await page.waitForTimeout(1_000)
+      await picture(cell, 'forced-colors-StatusReportColumn.jpg')
+      await picture(header, 'forced-colors-StatusReportColumnHeader.jpg')
+    } finally {
+      await page.emulateMedia({ forcedColors: 'none' })
+    }
+  })
 })

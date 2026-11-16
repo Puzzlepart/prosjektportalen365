@@ -1,100 +1,87 @@
-import _ from 'lodash'
-import { IRenderItemColumnProps } from 'pp365-shared-library'
-import { formatDate, parseScopedSiteId } from 'pp365-shared-library'
+import { IRenderItemColumnProps, IStatusShape } from 'pp365-shared-library'
 
-/** Report-cell data, source-list names and popover timing options. */
+/**
+ * The status report cell's settings: the hub lists it reads, and whether the pointer resting on
+ * the strip shows the details.
+ */
 export interface IStatusColumnProps extends IRenderItemColumnProps {
-  status?: ProjectStatusModel
   statusReportListName?: string
   columnConfigListName?: string
   statusSectionsListName?: string
-  openDelay?: number
-  animation?: {
-    delay?: number
-    transitionDuration?: number
-  }
-  tooltip?: {
-    animation: IStatusColumnProps['animation']
-  }
-}
-
-interface IStatusSectionItem {
-  GtSecFieldName: string
-  GtSecIcon: string
-}
-
-class ProjectStatusSection {
-  constructor(
-    public fieldName: string,
-    public name: string,
-    public iconName: string,
-    public value: string,
-    public comment: string,
-    public color: string,
-    /** The status value's own icon in `Prosjektkolonnekonfigurasjon`, the shape of its mark. */
-    public statusIconName?: string
-  ) {}
-}
-
-/** A report's project and series identity with configured display sections. */
-export class ProjectStatusModel {
-  /**
-   * The project's site ID (the base GUID), parsed from the potentially
-   * scoped `GtSiteId` value.
-   */
-  public siteId: string
 
   /**
-   * Scope key ("delprosjekt") for the report series the report belongs to,
-   * parsed from the `GtSiteId` suffix. An empty string means the report
-   * belongs to the project's default report series.
+   * Show the details when the pointer rests on the strip for half a second (on by default). A
+   * click, Enter or Space shows them as a dialog either way.
    */
-  public scopeKey: string
+  openOnHover?: boolean
+}
 
-  constructor(
-    private item: Record<string, any>,
-    private columnConfigurations: {
-      [key: string]: {
-        name: string
-        colors: Record<string, string>
-        icons?: Record<string, string>
-      }
-    },
-    private statusSections: Array<IStatusSectionItem>
-  ) {
-    const { siteId, scopeKey } = parseScopedSiteId(this.item.GtSiteId)
-    this.siteId = siteId
-    this.scopeKey = scopeKey
-  }
+/**
+ * A status section of the hub (`Statusseksjoner`) that becomes a tile, with the colour and the
+ * shape of each of its values.
+ */
+export interface IStatusSectionDefinition {
+  /** The report's field, a `GtStatus*` field. */
+  fieldName: string
 
-  /**
-   * Get the SharePoint item for the project status
-   */
-  public getItem(): Record<string, any> {
-    return this.item
-  }
+  /** The section's title in `Statusseksjoner`. */
+  name: string
 
-  public get created(): string {
-    return formatDate(this.item.Created)
-  }
+  /** The section's icon (`GtSecIcon`). */
+  iconName?: string
 
-  public get sections(): Array<ProjectStatusSection> {
-    const statusKeys = _.filter(
-      Object.keys(this.item),
-      (key) =>
-        (_.startsWith(key, 'GtStatus') || _.startsWith(key, 'GtOverallStatus')) &&
-        !_.endsWith(key, 'Comment') &&
-        !_.endsWith(key, 'Id')
-    )
-    return statusKeys.map((key) => {
-      const name = _.capitalize(this.columnConfigurations[key]?.name.split(' ')[1])
-      const iconName = (_.find(this.statusSections, (s) => s.GtSecFieldName === key) || {})
-        .GtSecIcon
-      const value = this.item[key]
-      const comment = this.item[`${key}Comment`]
-      const color = this.columnConfigurations[key]?.colors[value]
-      const statusIconName = this.columnConfigurations[key]?.icons?.[value]
-      return new ProjectStatusSection(key, name, iconName, value, comment, color, statusIconName)
-    })
-  }
+  /** Each value's colour in `Prosjektkolonnekonfigurasjon`. */
+  colors: Record<string, string>
+
+  /** Each value's shape, given out per section so no two colours share one (`getStatusShapes`). */
+  shapes: Record<string, IStatusShape>
+}
+
+/** A section of one report: its value, its comment, and the colour and shape it is shown with. */
+export interface IStatusReportSection {
+  fieldName: string
+  name: string
+  iconName?: string
+
+  /** `undefined` when the section has no value. */
+  value?: string
+
+  comment?: string
+  color?: string
+
+  /** `empty` without a value, `unknown` for a value the configuration does not know. */
+  shape: IStatusShape
+}
+
+/** A published status report, the latest of its report series. */
+export interface IStatusReport {
+  /** The report's list item id. */
+  id: number
+
+  /** The project's site id, from `GtSiteId`. */
+  siteId: string
+
+  /** The report series' scope key, from `GtSiteId`; empty for the project's default series. */
+  scopeKey: string
+
+  /** When the report was published (`GtLastReportDate`, else `Created`), as REST gives it. */
+  publishedDate: string
+
+  /** The overall status, a text, shown in the details only. */
+  overallStatus?: string
+
+  /** The sections in the hub's order (`GtSortOrder`). */
+  sections: IStatusReportSection[]
+}
+
+/** What the column's `fetchData` gives the cells (`column.data.$`). */
+export interface IStatusReportColumnData {
+  /** The sections that become tiles, in the hub's order. */
+  sections: IStatusSectionDefinition[]
+
+  /** The title of the overall status section in `Statusseksjoner`, its heading in the details. */
+  overallStatusName?: string
+
+  /** The reports the rows point to (`StatusReportId`). */
+  reports: IStatusReport[]
 }

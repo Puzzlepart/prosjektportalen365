@@ -1,34 +1,100 @@
+// The status report cell: the strip of tiles, one for each status section, and the report's date
+// beside it where the column has room for it.
 .root {
   display: flex;
-  cursor: pointer;
-  gap: 4px;
   align-items: center;
+  column-gap: 8px;
+  min-width: 0;
+  // The date shows only where the cell is wide enough for it (the @container rule below).
+  container-type: inline-size;
 
-  .icon {
-    display: inline-flex;
-    gap: 1px;
-    font-size: 20px;
+  // A button as wide as its tiles: 20 px each and 2 px apart, so a section has its place in every
+  // row, under its letters in the column's header.
+  .strip {
+    display: inline-grid;
+    grid-auto-flow: column;
+    grid-template-columns: repeat(var(--n), 20px);
+    column-gap: 2px;
+    flex: 0 0 auto;
+    margin: 2px;
+    padding: 1px;
+    border: 1px solid transparent;
+    border-radius: var(--borderRadiusMedium);
+    background: transparent;
+    cursor: pointer;
+    // Clear of the pinned header row, legend and all, when the arrow keys bring it into view
+    // (WCAG 2.4.11).
+    scroll-margin-top: calc(var(--pp-list-sticky-top, 0px) + 48px);
+
+    &:hover {
+      border-color: var(--colorNeutralStroke1Hover);
+    }
+
+    &:active {
+      border-color: var(--colorNeutralStroke1Pressed);
+    }
+
+    &[data-pinned] {
+      border-color: var(--colorNeutralStrokeAccessible);
+    }
+
+    // Inside the 2 px margin, where the cell's overflow does not cut it off (WCAG 2.4.7).
+    &:focus-visible {
+      outline: 2px solid var(--colorStrokeFocus2);
+      outline-offset: 0;
+    }
   }
 
-  &:hover .icon,
-  &:focus-visible .icon {
-    :global(.fui-Icon-filled) {
-      display: inline;
-    }
-
-    :global(.fui-Icon-regular) {
-      display: none;
-    }
+  // In the darker grey, not the rows' own: 4.5:1 on a selected row too (WCAG 1.4.3).
+  .date {
+    display: none;
+    font-size: var(--fontSizeBase200);
+    line-height: var(--lineHeightBase200);
+    color: var(--colorNeutralForeground2);
+    white-space: nowrap;
   }
 }
 
+.none {
+  font-size: var(--fontSizeBase200);
+  line-height: var(--lineHeightBase200);
+  color: var(--colorNeutralForeground2);
+}
+
 .popoverSurface {
-  min-width: 280px;
-  max-width: 400px;
+  box-sizing: border-box;
+  width: min(400px, calc(100vw - 16px));
+  min-width: min(320px, calc(100vw - 16px));
+  max-height: min(60vh, 480px);
+  overflow-y: auto;
   padding: 16px;
 
-  // Hidden until Fluent's async positioning stamps data-popper-placement
+  // Fluent places the surface after it has rendered and stamps data-popper-placement on it then;
+  // until then it lies at the page's top left. Hidden with opacity, not visibility: a surface
+  // hidden with visibility cannot take the focus Fluent gives it as it opens (WCAG 2.4.3).
   &:not([data-popper-placement]) {
-    visibility: hidden;
+    opacity: 0 !important;
+  }
+}
+
+// The date beside the strip where the cell has room for both: 182 px of strip for eight sections,
+// 8 px of gap and the date.
+@container (min-width: 290px) {
+  .root .date {
+    display: inline;
+  }
+}
+
+// Contrast themes: each tile is a frame with its shape in it (StatusTile), and the pinned strip and
+// the focus ring take the theme's highlight colour.
+@media (forced-colors: active) {
+  .root .strip {
+    &[data-pinned] {
+      border-color: Highlight;
+    }
+
+    &:focus-visible {
+      outline-color: Highlight;
+    }
   }
 }

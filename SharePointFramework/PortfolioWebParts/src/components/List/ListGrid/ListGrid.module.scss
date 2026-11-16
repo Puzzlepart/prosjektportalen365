@@ -46,6 +46,25 @@
         margin-right: 4px;
         vertical-align: middle;
       }
+
+      // A header with something under the column's name (`renderHeaderAddon`, the status report
+      // column's section legend): the button on top, at least 24px high, and the addon under it.
+      // Nested under `.header` to outrank Fluent's row, and its button's full height and 32px.
+      .headerCellStacked {
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: center;
+
+        .headerButton {
+          flex: 0 0 auto;
+          height: auto;
+          min-height: 24px;
+        }
+
+        .headerAddon {
+          flex: 0 0 auto;
+        }
+      }
     }
 
     .row {

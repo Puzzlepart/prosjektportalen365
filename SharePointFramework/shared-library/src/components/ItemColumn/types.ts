@@ -69,7 +69,17 @@ export interface ColumnRenderComponent<
 
   /**
    * Optional data fetch function that will be called if a column using the
-   * component is used.
+   * component is used. `items` are the view's rows, for a column that fetches what its cells show
+   * by row (the status report column reads the rows' reports by id).
    */
-  fetchData?: (web?: IWeb, column?: ProjectColumn) => Promise<any>
+  fetchData?: (web?: IWeb, column?: ProjectColumn, items?: Record<string, any>[]) => Promise<any>
+
+  /**
+   * Decorative content under the column's name in its header, outside the header button; null
+   * when there is nothing.
+   */
+  renderHeaderAddon?: (column: IListColumn) => React.ReactNode
+
+  /** The least content-box width the column needs for its data, or undefined. */
+  getMinWidth?: (column: IListColumn) => number | undefined
 }

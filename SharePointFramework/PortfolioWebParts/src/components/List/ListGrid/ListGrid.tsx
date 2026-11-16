@@ -50,7 +50,8 @@ function sortDirection(column: IListColumn) {
  * selection by check or by a click on the row (as v8's list and v9's DataGrid select), with
  * shift-click ranges and a select-all, or none (`selectionMode`); the selection is the grid's own,
  * or kept by the caller (`selectedItems`). The column headers stay pinned under the list's command
- * bar while the rows scroll (`--pp-list-sticky-top`, set by `List`).
+ * bar while the rows scroll (`--pp-list-sticky-top`, set by `List`); a header can show decoration
+ * under the column's name, beside its button (`renderHeaderAddon`).
  */
 export const ListGrid: FC<IListGridProps> = (props) => {
   const {
@@ -67,6 +68,7 @@ export const ListGrid: FC<IListGridProps> = (props) => {
     selection,
     arrowNavigation,
     getHeaderCellProps,
+    getHeaderAddon,
     resizeColumn
   } = useListGrid(props)
 
@@ -125,29 +127,45 @@ export const ListGrid: FC<IListGridProps> = (props) => {
                 </Tooltip>
               </TableCell>
             )}
-            {props.columns.map((column) => (
-              <TableHeaderCell
-                key={column.key}
-                {...getHeaderCellProps(column)}
-                sortDirection={sortDirection(column)}
-                className={styles.headerCell}
-                button={{
-                  onClick: onHeaderClick(column),
-                  onContextMenu: onHeaderContextMenu(column),
-                  className: styles.headerButton,
-                  ...headerMenuProps
-                }}
-              >
-                {column.iconName && (
-                  <span className={column.iconClassName ?? styles.headerIcon}>
-                    {getFluentIconWithFallback(column.iconName, { size: 16 })}
+            {props.columns.map((column) => {
+              const addon = getHeaderAddon(column)
+              const hasAddon = addon !== undefined
+              return (
+                <TableHeaderCell
+                  key={column.key}
+                  {...getHeaderCellProps(column)}
+                  sortDirection={sortDirection(column)}
+                  className={mergeClasses(styles.headerCell, hasAddon && styles.headerCellStacked)}
+                  button={{
+                    onClick: onHeaderClick(column),
+                    onContextMenu: onHeaderContextMenu(column),
+                    className: styles.headerButton,
+                    ...headerMenuProps,
+                    // Beside the button, not in it: there the addon would be part of the header's
+                    // name, cut off with the name, and a click on it would open the column menu.
+                    ...(hasAddon && {
+                      children: (Component, buttonProps) => (
+                        <>
+                          <Component {...buttonProps} />
+                          <div className={styles.headerAddon} aria-hidden>
+                            {addon}
+                          </div>
+                        </>
+                      )
+                    })
+                  }}
+                >
+                  {column.iconName && (
+                    <span className={column.iconClassName ?? styles.headerIcon}>
+                      {getFluentIconWithFallback(column.iconName, { size: 16 })}
+                    </span>
+                  )}
+                  <span className={styles.headerName} title={column.name}>
+                    {column.name}
                   </span>
-                )}
-                <span className={styles.headerName} title={column.name}>
-                  {column.name}
-                </span>
-              </TableHeaderCell>
-            ))}
+                </TableHeaderCell>
+              )
+            })}
           </TableRow>
         </TableHeader>
         <TableBody>

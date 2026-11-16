@@ -1,6 +1,7 @@
 import {
   formatDate,
   formatDay,
+  formatDayMonth,
   formatShortDate,
   parseShortDate,
   readStoredDay,
@@ -127,6 +128,48 @@ describe('formatDate', () => {
     expect(formatDate(DATE)).toBe('Friday, Nov 18, 2022')
     ;(window as any)._spPageContextInfo = { currentUICultureName: 'nb-NO' }
     expect(formatDate(DATE)).toBe('fredag 18. nov. 2022')
+  })
+})
+
+describe('formatDayMonth', () => {
+  /** Monday 16 November 2026, noon on an Oslo site: today, in these tests. */
+  const NOW = new Date('2026-11-16T11:00:00Z')
+
+  /** The day and month in SharePoint's UI language, as the status report column shows them. */
+  const dayMonth = (date: string | Date, includeYear = false) =>
+    plain(formatDayMonth(date, includeYear, '', undefined, NOW))
+
+  beforeEach(() => {
+    setPageContextInfo({ currentUICultureName: 'nb-NO', webTimeZoneData: OSLO_TIME_ZONE })
+  })
+
+  it('writes the day and the short name of the month, without the year in this year', () => {
+    expect(dayMonth('2026-11-03T10:00:00Z')).toBe('3. nov.')
+    expect(dayMonth(new Date('2026-11-03T10:00:00Z'))).toBe('3. nov.')
+  })
+
+  it('adds the year for a date in another year, and when asked for it', () => {
+    expect(dayMonth('2025-05-12T10:00:00Z')).toBe('12. mai 2025')
+    expect(dayMonth('2026-11-03T10:00:00Z', true)).toBe('3. nov. 2026')
+  })
+
+  it("takes the day and the year in the site's time zone", () => {
+    // 23:30 UTC on New Year's Eve is 1 January on an Oslo site, still 31 December in Hawaii.
+    const newYear = '2025-12-31T23:30:00Z'
+    expect(dayMonth(newYear)).toBe('1. jan.')
+    setPageContextInfo({ currentUICultureName: 'nb-NO', webTimeZoneData: HONOLULU_TIME_ZONE })
+    expect(dayMonth(newYear)).toBe('31. des. 2025')
+  })
+
+  it('writes the language it is given', () => {
+    expect(formatDayMonth('2026-11-03T10:00:00Z', false, '', 'en-US', NOW)).toBe('Nov 3')
+    expect(formatDayMonth('2026-11-03T10:00:00Z', true, '', 'en-US', NOW)).toBe('Nov 3, 2026')
+  })
+
+  it('returns the fallback for no date and for text that is not a date', () => {
+    expect(formatDayMonth(undefined, false, 'Ikke publisert')).toBe('Ikke publisert')
+    expect(formatDayMonth('', false, 'Ikke publisert')).toBe('Ikke publisert')
+    expect(formatDayMonth('ikke en dato', false, 'Ikke publisert')).toBe('Ikke publisert')
   })
 })
 

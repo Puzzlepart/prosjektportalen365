@@ -1,5 +1,7 @@
-import { act, fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import strings from 'PortfolioWebPartsStrings'
+import { axeComponent } from 'pp365-jest-config/lib/axe'
+import { IListColumn } from 'pp365-shared-library'
 import * as React from 'react'
 import { ListGrid } from './ListGrid'
 import { IListGridProps } from './types'
@@ -7,7 +9,9 @@ import { IListGridProps } from './types'
 /**
  * The hub's grid as other lists use it (the program administration's): without a selection for a
  * user who may only look, and with a selection its owner keeps, which the grid shows and reports
- * changes to without keeping one of its own. The hub's own use is covered by `List.test.tsx`.
+ * changes to without keeping one of its own. Also what the hub's list hands it from a column's
+ * data type: something to show under the column's name, and the least width the column's data
+ * needs. The hub's own use is covered by `List.test.tsx`.
  */
 
 const ITEMS = [{ Title: 'Alfa' }, { Title: 'Bravo' }, { Title: 'Charlie' }]
@@ -15,6 +19,16 @@ const ITEMS = [{ Title: 'Alfa' }, { Title: 'Bravo' }, { Title: 'Charlie' }]
 const COLUMNS: IListGridProps['columns'] = [
   { key: 'Title', fieldName: 'Title', name: 'Tittel', minWidth: 100 }
 ]
+
+const TWO_COLUMNS: IListGridProps['columns'] = [
+  ...COLUMNS,
+  { key: 'Phase', fieldName: 'Phase', name: 'Fase', minWidth: 100 }
+]
+
+/** Something under the phase column's name only, as a data type adds to its own columns. */
+function phaseAddon(column: IListColumn) {
+  return column.key === 'Phase' ? <span>Fr Øk Kv</span> : null
+}
 
 const GROUPS = [
   { key: 'hub1', name: 'Hub 1', startIndex: 0, count: 2 },
@@ -154,5 +168,60 @@ describe('ListGrid', () => {
     expect(screen.getByText('Bravo').closest('.fui-TableCellLayout__content').className).toMatch(
       /cellContent/
     )
+  })
+
+  it("shows what a column adds under its name beside the header's button, hidden from assistive technology and outside the button's name and click (WCAG 2.5.3, 4.1.2)", async () => {
+    const onColumnHeaderClick = jest.fn()
+    render(grid({ columns: TWO_COLUMNS, onColumnHeaderClick, renderHeaderAddon: phaseAddon }))
+    const header = screen.getByRole('columnheader', { name: 'Fase' })
+    const button = within(header).getByRole('button', { name: 'Fase' })
+    const addon = screen.getByText('Fr Øk Kv')
+    // In the header cell beside its button, so not part of the button's name, ellipsis or click.
+    expect(addon.closest('[aria-hidden="true"]').parentElement).toBe(header)
+    expect(button).not.toContainElement(addon)
+    expect(header.className).toMatch(/headerCellStacked/)
+    fireEvent.click(addon)
+    expect(onColumnHeaderClick).not.toHaveBeenCalled()
+    fireEvent.click(button)
+    expect(onColumnHeaderClick).toHaveBeenCalledWith(TWO_COLUMNS[1], button, expect.any(Function))
+    // The header beside it, with nothing to add, is as it was: its button and its resize handle.
+    const title = screen.getByRole('columnheader', { name: 'Tittel' })
+    expect(title.className).not.toMatch(/headerCellStacked/)
+    expect(title.children).toHaveLength(2)
+    expect(await axeComponent(header)).toHaveNoViolations()
+  })
+
+  it('leaves every header as it was when no column adds anything', () => {
+    // false renders nothing, as `hasData && <Legend />` gives without data.
+    const { container } = render(grid({ columns: TWO_COLUMNS, renderHeaderAddon: () => false }))
+    expect(container.querySelector('[class*="headerCellStacked"]')).toBeNull()
+    expect(container.querySelector('[class*="headerAddon"]')).toBeNull()
+    expect(screen.getByRole('columnheader', { name: 'Fase' }).children).toHaveLength(2)
+  })
+
+  it('keeps a column at least as wide as its data needs, also when the data comes later to the same columns', () => {
+    // The overview puts a column's data on the column object and keeps the columns array, so the
+    // width the data needs changes while the columns and the function stay the same.
+    const columns: IListGridProps['columns'] = [{ ...COLUMNS[0], maxWidth: 180 }]
+    let needed: number | undefined
+    const getColumnMinWidth = () => needed
+    const onColumnHeaderClick = jest.fn()
+    const props = { columns, getColumnMinWidth, onColumnHeaderClick }
+    const { rerender } = render(grid(props))
+    const handle = () => document.querySelector<HTMLElement>('.fui-TableResizeHandle')
+    expect(handle()).toHaveAttribute('aria-valuetext', '180 piksler')
+
+    needed = 226
+    rerender(grid(props))
+    // Not its preferred 180, which Fluent would take as is for a column it already sizes.
+    expect(handle()).toHaveAttribute('aria-valuetext', '226 piksler')
+    // Nor narrower from the keyboard, through the column menu.
+    fireEvent.click(screen.getByText('Tittel'))
+    const resizeColumn = onColumnHeaderClick.mock.calls[0][2]
+    act(() =>
+      resizeColumn({ preventDefault: jest.fn(), nativeEvent: { stopPropagation: jest.fn() } })
+    )
+    fireEvent.keyDown(handle(), { key: 'ArrowLeft' })
+    expect(handle()).toHaveAttribute('aria-valuetext', '226 piksler')
   })
 })

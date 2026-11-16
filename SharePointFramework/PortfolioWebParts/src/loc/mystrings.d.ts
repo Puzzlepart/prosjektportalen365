@@ -345,6 +345,22 @@ declare interface IPortfolioWebPartsStrings {
   ListExpandAllGroupsLabel: string
   NameValueLabel: string
   StatusReportedText: string
+  StatusReportButtonLabel: string
+  StatusCountRedOne: string
+  StatusCountRedOther: string
+  StatusCountYellowOne: string
+  StatusCountYellowOther: string
+  StatusCountGreenOne: string
+  StatusCountGreenOther: string
+  StatusCountOther: string
+  StatusCountEmpty: string
+  StatusSectionSentence: string
+  StatusSectionNoValue: string
+  StatusSectionNoValueLabel: string
+  StatusReportNone: string
+  StatusReportOpenLink: string
+  StatusReportOpenOnHoverLabel: string
+  CloseText: string
   ProjectTypeIconLabel: string
   MoreVerticalsLabel: string
   ProjectsShownAnnouncement: string

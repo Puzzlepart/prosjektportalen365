@@ -101,7 +101,11 @@ Rules 1, 2, 5, 6, 8 and the tooltip handling are adapted from Microsoft's
    non-text that carries meaning (borders of inputs, focus, status icons). Colour is never alone:
    a matrix cell or a status shows its value or its text as well, and a status icon shown without
    its text has a `StatusMark` beside it (a check, a warning or a cross from its colour's hue, or
-   the status value's own `GtPortfolioColumnIconName`). Colours from configuration
+   the status value's own `GtPortfolioColumnIconName`). A status shown as a shape alone, on a
+   tile of its colour (the status report column), takes a shape of its own for every value of a
+   section (`getStatusShapes`: the value's own icon, a check, a warning or a cross by the hue,
+   neutral shapes for other colours, «?» without configuration), in an ink at 4.5:1 on its tile
+   (`getStatusTile`), whatever the row's state and the site's theme. Colours from configuration
    (the timeline's) go through `util/contrast.ts`: `getReadableTextColor` keeps the configured
    text colour where it reads 4.5:1 and puts black or white in its place where it does not;
    `getContrastingShade` darkens a configured colour just until it reaches 3:1 against the
@@ -287,8 +291,11 @@ checked by hand and with which reader and browser: axe finds only part of what W
 - Fluent's `PopoverTrigger` makes its child a button (`useARIAButtonProps`) even with
   `disableButtonEnhancement`: on an `li` that takes the item's role, and the list has none (axe's
   `list`). Put a `<button>` in the `li` (`ProjectPhases/ProjectPhase`). Round a `div` of icons it
-  makes a button with no name, one per row of a list (`StatusReportColumn`, axe's
-  `aria-command-name`): name it, and render nothing where there is nothing to show.
+  made a button with no name, one per row of a list (the status report column's icons, axe's
+  `aria-command-name`): give it a native `<button>` named from the strings (the column's strip,
+  «Statusrapport 3. nov. 2026: 1 rød, 4 gule, 3 grønne», described by every section), and render
+  no button where there is nothing to open («Ingen publisert rapport» is text). The trigger sets
+  `aria-expanded` only: a trigger that opens a dialog sets `aria-haspopup='dialog'` itself.
 - A panel's body scrolls (`BasePanel`'s `DrawerBody`); with nothing focusable in it the keyboard
   cannot scroll it (axe's `scrollable-region-focusable`). A panel read rather than worked in sets
   `isBodyFocusable`, which makes the body a region named by the header that takes the focus (the
@@ -385,7 +392,11 @@ checked by hand and with which reader and browser: axe finds only part of what W
   before and after positions and faded one out, and both were read. Hide with `visibility`, and
   transition it with the opacity so the fade still runs (`MatrixElement.module.scss`). Where it
   is shown on `:hover`, show it on `:focus-within` too, or the keyboard works in the dark (the
-  minimized footer).
+  minimized footer). The exception is a surface about to take the focus: Fluent focuses a
+  `PopoverSurface` as it opens, before positioning has stamped `data-popper-placement`, and an
+  element hidden by `visibility` cannot take it, so the focus would stay behind. Keep it
+  transparent for that moment instead, `&:not([data-popper-placement]) { opacity: 0 !important }`
+  (`!important` over Fluent's fade-in; the status report column's `StatusColumn.module.scss`).
 - A grid whose rows and columns mean something is a table: `role="table"` named by its title,
   `row`, `columnheader`, `rowheader` and `cell` on the divs (`DynamicMatrix`), so a screen reader
   tells where an element sits. Its look stays the grid's.

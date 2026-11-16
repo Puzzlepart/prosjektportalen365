@@ -1,65 +1,82 @@
+import { Popover, PopoverSurface, PopoverTrigger } from '@fluentui/react-components'
 import strings from 'PortfolioWebPartsStrings'
+import { ColumnRenderComponent, withDefaults } from 'pp365-shared-library'
+import { switchField } from 'pp365-shared-library/lib/components/ItemColumn/ColumnDataTypeField'
 import React from 'react'
+import { fetchData, getStatusReportColumnData } from './data'
+import { STATUS_REPORT_COLUMN_DEFAULT_PROPS } from './defaults'
 import styles from './StatusColumn.module.scss'
+import { StatusReportDetails } from './StatusReportDetails'
+import { StatusReportLegend } from './StatusReportLegend'
+import { StatusTile } from './StatusTile'
 import { IStatusColumnProps } from './types'
 import { useStatusReportColumn } from './useStatusReportColumn'
-import { fetchData } from './data'
-import resource from 'SharedResources'
-import {
-  ColumnRenderComponent,
-  getFluentIconWithFallback,
-  StatusMark,
-  withDefaults
-} from 'pp365-shared-library'
-import { Popover, PopoverSurface, PopoverTrigger } from '@fluentui/react-components'
-import { TooltipContent } from './TooltipContent'
 
-/** Read by `fetchData` too, which merges the column's own settings over them. */
-export const STATUS_REPORT_COLUMN_DEFAULT_PROPS: Partial<IStatusColumnProps> = {
-  statusReportListName: resource.Lists_ProjectStatus_Title,
-  columnConfigListName: resource.Lists_ProjectColumnConfiguration_Title,
-  statusSectionsListName: resource.Lists_StatusSections_Title,
-  openDelay: 500,
-  tooltip: {
-    animation: {
-      delay: 50,
-      transitionDuration: 200
-    }
-  }
-}
+/** A tile's 20 px track and the 2 px gap after it. */
+const TILE_PITCH = 22
 
-/** Show a report series' status marks and a delayed detail popover. */
-export const StatusReportColumn: ColumnRenderComponent<IStatusColumnProps> = (
-  incomingProps
-): JSX.Element => {
+/** The strip's margin, border and padding on both sides (8 px), less the last tile's gap. */
+const STRIP_EDGES = 6
+
+/**
+ * The row's latest status report as a strip of tiles, one for each status section in the hub's
+ * order, each with its value's shape on a light tone of its colour, and the date beside it where
+ * the column has room. The strip is a button named by the date and a count of each colour, and
+ * described by every section's value; it opens the report's details. «Ingen publisert rapport»
+ * where the hub's data is in and the project has no published report; nothing where the data is
+ * not (the program's views, another hub's rows, a failed fetch).
+ */
+export const StatusReportColumn: ColumnRenderComponent<IStatusColumnProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, STATUS_REPORT_COLUMN_DEFAULT_PROPS)
-  const { status, label, open, onOpenChange, cancelPendingOpen } = useStatusReportColumn(props)
-  // No report, nothing to show: the trigger was an empty button.
-  if (!label) return null
+  const {
+    report,
+    noReport,
+    name,
+    description,
+    date,
+    descriptionId,
+    triggerRef,
+    pinned,
+    stripStyle,
+    cancelPendingOpen,
+    popover,
+    surface,
+    details
+  } = useStatusReportColumn(props)
+  if (noReport) return <span className={styles.none}>{strings.StatusReportNone}</span>
+  if (!report) return null
 
   return (
-    <Popover
-      withArrow
-      positioning='below'
-      mouseLeaveDelay={200}
-      openOnHover
-      open={open}
-      onOpenChange={onOpenChange}
-    >
-      <PopoverTrigger disableButtonEnhancement>
-        <div className={styles.root} aria-label={label} onPointerLeave={cancelPendingOpen}>
-          {status?.sections?.map(({ fieldName, iconName, color, statusIconName }) => (
-            <span key={fieldName} className={styles.icon} style={{ color }}>
-              {getFluentIconWithFallback(iconName, { color })}
-              <StatusMark color={color} iconName={statusIconName} />
-            </span>
-          ))}
-        </div>
-      </PopoverTrigger>
-      <PopoverSurface className={styles.popoverSurface}>
-        <TooltipContent status={status} animation={props.tooltip.animation} />
-      </PopoverSurface>
-    </Popover>
+    <div className={styles.root}>
+      <Popover {...popover}>
+        <PopoverTrigger disableButtonEnhancement>
+          <button
+            ref={triggerRef}
+            type='button'
+            className={styles.strip}
+            style={stripStyle}
+            aria-label={name}
+            aria-describedby={descriptionId}
+            aria-haspopup='dialog'
+            data-pinned={pinned || undefined}
+            onPointerLeave={cancelPendingOpen}
+          >
+            {report.sections.map((section) => (
+              <StatusTile key={section.fieldName} shape={section.shape} color={section.color} />
+            ))}
+          </button>
+        </PopoverTrigger>
+        <PopoverSurface {...surface}>
+          <StatusReportDetails {...details} />
+        </PopoverSurface>
+      </Popover>
+      <span className={styles.date} aria-hidden>
+        {date}
+      </span>
+      <span id={descriptionId} hidden>
+        {description}
+      </span>
+    </div>
   )
 }
 StatusReportColumn.key = 'statusreport'
@@ -67,3 +84,18 @@ StatusReportColumn.id = 'StatusReport'
 StatusReportColumn.displayName = strings.ColumnRenderOptionStatusReport
 StatusReportColumn.iconName = 'Page'
 StatusReportColumn.fetchData = fetchData
+StatusReportColumn.getDataTypeProperties = (onChange, dataTypeProperties) => [
+  switchField({
+    label: strings.StatusReportOpenOnHoverLabel,
+    checked: dataTypeProperties?.openOnHover ?? true,
+    onChange: (checked) => onChange('openOnHover', checked)
+  })
+]
+StatusReportColumn.getMinWidth = (column) => {
+  const count = getStatusReportColumnData(column)?.sections.length
+  return count ? STRIP_EDGES + TILE_PITCH * count : undefined
+}
+StatusReportColumn.renderHeaderAddon = (column) => {
+  const sections = getStatusReportColumnData(column)?.sections
+  return sections?.length ? <StatusReportLegend sections={sections} /> : null
+}

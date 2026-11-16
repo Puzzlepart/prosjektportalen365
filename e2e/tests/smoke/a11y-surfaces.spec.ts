@@ -99,20 +99,28 @@ async function scanAndClose(
 }
 
 /**
- * The button of a list's first column header other than the title and "add column", whose
- * column form offers everything, "Slett" included.
+ * Waits until a list has its data: until then the portfolio overview draws placeholder rows from
+ * the columns it kept in local storage, and reads "Viser 0 av 0" (as `columnHeaders` waits).
  *
  * @param list The list's web part
  */
-async function columnHeaderButton(list: Locator) {
-  // Once the list has its data: until then the portfolio overview draws placeholder rows from
-  // the columns it kept in local storage, and reads "Viser 0 av 0" (as `columnHeaders` waits).
+async function waitForListData(list: Locator) {
   const counter = list.locator('[class*="resultsCount"]').first()
   if ((await counter.count()) > 0) {
     await expect(counter).toHaveText(/viser [1-9]\d* av \d+|showing [1-9]\d* of \d+/i, MOUNT)
   } else {
     await expect(list.locator('.fui-TableBody .fui-TableCell').first()).toBeVisible(MOUNT)
   }
+}
+
+/**
+ * The button of a list's first column header other than the title and "add column", whose
+ * column form offers everything, "Slett" included.
+ *
+ * @param list The list's web part
+ */
+async function columnHeaderButton(list: Locator) {
+  await waitForListData(list)
   await expect(list.getByRole('columnheader', { name: /^tittel$|^title$/i })).toBeVisible(MOUNT)
   const headers = list.getByRole('columnheader')
   const texts = await headers.allInnerTexts()
@@ -257,16 +265,47 @@ test.describe('the portfolio overview', () => {
 
   test("a project's status report", async ({ page, openPage, resolvePage }) => {
     const overview = await openOverview(page, openPage, resolvePage)
+    await waitForListData(overview)
+    // The strip in a row's cell, «Statusrapport 3. nov. 2026: 1 rød, …». Searched in the cells
+    // only: the column's header button is named «Statusrapport» too.
     const status = overview
-      .getByRole('button', { name: /^statusrapport:|^status report:/i })
+      .getByRole('gridcell')
+      .getByRole('button', { name: /^(statusrapport|status report) .+:/i })
       .first()
+    // The column's reports come a moment after the rows.
+    await status.waitFor({ timeout: 30_000 }).catch(() => undefined)
     if (!(await status.isVisible())) {
       return notOffered(
         'StatusReportPopover',
         'the view has no status report column, or no reports'
       )
     }
-    await status.click()
+    // Enter opens the details at once, as a dialog that takes the focus; the pointer would open
+    // a preview that leaves the focus alone.
+    await status.focus()
+    await page.keyboard.press('Enter')
+    const surface = page.locator(SURFACES.popover).last()
+    // Transparent until it is placed, not hidden, so it can take the focus as it opens.
+    await expect(surface).toHaveAttribute('data-popper-placement', /\S/, { timeout: 30_000 })
+    await expect
+      .soft(
+        page.getByRole('dialog', { name: /^.+ (status rapportert|status reported) /i }),
+        'the status report opens as a dialog named by its project and date, with the focus'
+      )
+      .toBeFocused()
+    // «Lukk» in its header, the link to the report last, and Tab kept inside (trapFocus).
+    const close = surface.getByRole('button', { name: /^lukk$|^close$/i })
+    const link = surface.getByRole('link', {
+      name: /^åpne statusrapporten$|^open the status report$/i
+    })
+    await page.keyboard.press('Tab')
+    await expect.soft(close, 'Tab from the status report goes to «Lukk»').toBeFocused()
+    if ((await link.count()) > 0) {
+      await page.keyboard.press('Tab')
+      await expect.soft(link, 'the next Tab goes to the link to the report').toBeFocused()
+    }
+    await page.keyboard.press('Tab')
+    await expect.soft(close, 'Tab stays in the status report, back on «Lukk»').toBeFocused()
     await scanAndClose(page, {
       component: 'StatusReportPopover',
       surface: SURFACES.popover,

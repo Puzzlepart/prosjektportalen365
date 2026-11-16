@@ -1,0 +1,24 @@
+// The tracks of the strips below: 20 px each and 2 px apart. The 4 px margin and the header cell's
+// 8 px padding put the first letters 12 px from the cell's edge, as the cells' margin, border and
+// padding put the first tiles.
+.root {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: repeat(var(--n), 20px);
+  column-gap: 2px;
+  margin: 0 4px;
+  font-size: var(--fontSizeBase100);
+  line-height: var(--lineHeightBase100);
+  font-weight: var(--fontWeightSemibold);
+  color: var(--colorNeutralForeground2);
+  text-align: center;
+  white-space: nowrap;
+  // Two letters with the wider spacing of WCAG 1.4.12 run a little past their track.
+  overflow: visible;
+}
+
+@media (forced-colors: active) {
+  .root {
+    color: CanvasText;
+  }
+}

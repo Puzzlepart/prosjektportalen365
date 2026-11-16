@@ -24,8 +24,15 @@ const LIST_DEFAULT_PROPS: Partial<IListProps<any>> = {
 export const List: FC<IListProps<any>> = (incomingProps) => {
   const props = withDefaults(incomingProps, LIST_DEFAULT_PROPS)
   const fluentProviderId = useId('fp-list')
-  const { columns, onRenderItemColumn, onColumnHeaderClick, commandBarRef, stickyTop } =
-    useList(props)
+  const {
+    columns,
+    onRenderItemColumn,
+    onColumnHeaderClick,
+    renderHeaderAddon,
+    getColumnMinWidth,
+    commandBarRef,
+    stickyTop
+  } = useList(props)
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
@@ -50,6 +57,8 @@ export const List: FC<IListProps<any>> = (incomingProps) => {
                 headerOpensMenu
                 onSelectionChange={props.onSelectionChange}
                 renderCell={onRenderItemColumn}
+                renderHeaderAddon={renderHeaderAddon}
+                getColumnMinWidth={getColumnMinWidth}
               />
             )}
           </div>

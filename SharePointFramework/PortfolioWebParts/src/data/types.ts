@@ -38,6 +38,13 @@ export interface IFetchDataForViewItemResult extends ISearchResult {
    * `undefined` for the default series row.
    */
   ScopeKey?: string
+
+  /**
+   * The list item id of the latest published status report in the row's series, from search: the
+   * status report column reads the report by it. Set after the row's spreads, so a project
+   * property cannot overwrite it; `undefined` when the series has no published report.
+   */
+  StatusReportId?: number
   [key: string]: any
 }
 

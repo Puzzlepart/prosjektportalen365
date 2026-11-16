@@ -1,0 +1,65 @@
+// A status value's shape, 12 by 12 px, in the text colour of what holds it (a status tile's ink).
+// The shapes drawn here are borders in `currentColor`, never backgrounds: a Windows contrast theme
+// (`forced-colors`) gives every background the canvas colour and every border and text the
+// theme's text colour, so the shapes still show there, as Fluent's icons do.
+.statusGlyph {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 12px;
+  height: 12px;
+  // For text in it: the «?», and a UI Fabric font icon where a value's own icon is not Fluent's.
+  line-height: 12px;
+
+  .dot,
+  .square,
+  .diamond,
+  .ring,
+  .empty {
+    box-sizing: border-box;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border: 4px solid currentColor;
+    border-radius: 50%;
+  }
+
+  .square {
+    width: 8px;
+    height: 8px;
+    border: 4px solid currentColor;
+  }
+
+  // 7 px a side, so the diamond (10 px corner to corner) weighs about what the dot and the square
+  // do. Drawn in whole-pixel borders (4 + 3): a 3.5 px border is rounded down on a 1x screen and
+  // leaves a hole in the middle.
+  .diamond {
+    width: 7px;
+    height: 7px;
+    border-style: solid;
+    border-color: currentColor;
+    border-width: 4px 3px 3px 4px;
+    transform: rotate(45deg);
+  }
+
+  .ring {
+    width: 10px;
+    height: 10px;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+  }
+
+  .empty {
+    width: 8px;
+    height: 2px;
+    border-top: 2px solid currentColor;
+  }
+
+  .unknown {
+    font-size: 12px;
+    font-weight: var(--fontWeightSemibold, 600);
+    line-height: 12px;
+  }
+}

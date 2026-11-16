@@ -15,7 +15,8 @@ import { useFetchData } from './useFetchData'
  * The portfolio overview's fetch: the rows of the view it shows (the default view at first), read
  * as the site reads them (a hub, a parent project, or several hubs merged), handed to the reducer
  * with what the user may see. A fetch that fails is shown by the list and counted once by its
- * error code, never by its message; so is each hub a merged view could not read.
+ * error code, never by its message; so is each hub a merged view could not read, and each column
+ * that could not read what its cells show, whose cells are then empty while the view is shown.
  *
  * The overview fetches twice as it mounts (once for the view, once for the portfolio); what
  * failed is still counted once, and again only for another view or after a fetch got through.
@@ -48,7 +49,16 @@ const STATUS_COLUMN: any = Object.assign(() => null, {
   iconName: 'Info',
   fetchData: jest.fn(() => Promise.resolve([{ siteId: 'site-1' }]))
 })
-ColumnRenderComponentRegistry.registerMultiple(STATUS_COLUMN)
+
+/** A column renderer whose data cannot be read, as when the list it reads is not on the hub. */
+const UNREADABLE_COLUMN: any = Object.assign(() => null, {
+  key: 'testunreadable',
+  id: 'testunreadable',
+  displayName: 'Uleselig',
+  iconName: 'Info',
+  fetchData: jest.fn(() => Promise.reject(httpError(404)))
+})
+ColumnRenderComponentRegistry.registerMultiple(STATUS_COLUMN, UNREADABLE_COLUMN)
 
 function fetchWith(
   props: Record<string, any> = {},
@@ -193,13 +203,42 @@ describe('useFetchData (portfolio overview)', () => {
     ] as any
     const configuration = { views: [status], columns: [], hubSiteId: HUB_SITE_ID, web: {} }
     const [{ payload }] = await fetchWith({ configuration }).fetched(DATA_FETCHED.type)
-    expect(STATUS_COLUMN.fetchData).toHaveBeenCalledWith(configuration.web, status.columns[1])
+    // The column gets the view's rows, so it reads only what they need.
+    expect(STATUS_COLUMN.fetchData).toHaveBeenCalledWith(
+      configuration.web,
+      status.columns[1],
+      ROWS.items
+    )
     expect(payload.currentView.columns[1].data.$).toEqual([{ siteId: 'site-1' }])
     expect(payload.currentView.columns[0]).not.toHaveProperty('data')
 
     STATUS_COLUMN.fetchData.mockClear()
     await fetchWith({ configuration, isParentProject: true }).fetched(DATA_FETCHED.type)
     expect(STATUS_COLUMN.fetchData).not.toHaveBeenCalled()
+  })
+
+  it('shows the view when a column cannot read its data, with that column empty, and counts it once', async () => {
+    const status = view(4, 'Status', { GtPortfolioIsDefaultView: true })
+    status.columns = [
+      { fieldName: 'GtOverallStatus', dataType: STATUS_COLUMN.key },
+      // Read by an earlier fetch: every view shares the column.
+      { fieldName: 'GtStatusRisk', dataType: UNREADABLE_COLUMN.key, data: { $: ['earlier'] } }
+    ] as any
+    const configuration = { views: [status], columns: [], hubSiteId: HUB_SITE_ID, web: {} }
+    const { actions, fetched } = fetchWith({ configuration })
+    const [{ payload }] = await fetched(DATA_FETCHED.type)
+    expect(actions(DATA_FETCH_ERROR.type)).toHaveLength(0)
+    expect(UNREADABLE_COLUMN.fetchData).toHaveBeenCalledWith(
+      configuration.web,
+      status.columns[1],
+      ROWS.items
+    )
+    // The other column shows what it read; this one nothing, not what the earlier fetch read.
+    expect(payload.currentView.columns[0].data.$).toEqual([{ siteId: 'site-1' }])
+    expect(payload.currentView.columns[1].data.$).toBeUndefined()
+    // Both fetches of the mount failed to read it, and the failure is counted once.
+    expect(UNREADABLE_COLUMN.fetchData).toHaveBeenCalledTimes(2)
+    expect(countedTelemetry().errors).toEqual({ 'PortfolioOverviewWebPart not_found 404': 1 })
   })
 
   it('counts a fetch that fails once by its error code, for the web part the overview is in', async () => {

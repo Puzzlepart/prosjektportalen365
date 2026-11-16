@@ -104,6 +104,20 @@ export interface IListGridProps {
    * Renders a cell.
    */
   renderCell: (item: Record<string, any>, index: number, column: IListColumn) => ReactNode
+
+  /**
+   * What a column shows under its name in its header (the status report column's section legend),
+   * or null. It is decoration: the grid puts it beside the header's button, outside the button's
+   * name and click, and hides it from assistive technology. A header without one stays as it was.
+   */
+  renderHeaderAddon?: (column: IListColumn) => ReactNode
+
+  /**
+   * The least width a column's data needs, in pixels without the cell's padding (as `minWidth`),
+   * or undefined. The column is never narrower than this nor than its own `minWidth`. Read on
+   * every render, since a column's data can arrive on the column object itself.
+   */
+  getColumnMinWidth?: (column: IListColumn) => number | undefined
 }
 
 /**
@@ -143,6 +157,12 @@ export interface IListGridState {
   getHeaderCellProps: (
     column: IListColumn
   ) => ReturnType<TableFeaturesState['columnSizing_unstable']['getTableHeaderCellProps']>
+
+  /**
+   * What a column's header shows under the column's name (`renderHeaderAddon`), or undefined when
+   * it shows nothing there.
+   */
+  getHeaderAddon: (column: IListColumn) => ReactNode
 
   /**
    * Lets the arrow keys change a column's width, for the column menu; none for a column without a

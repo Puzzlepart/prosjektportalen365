@@ -1866,3 +1866,69 @@ itself as `observer` to `add()` is disposed, as the footer does.
   button after the heading that names them comes first, and all content follows it). Tests: the
   Jest tests of each, and `a11y-surfaces.spec.ts` and `project.spec.ts` in the browser.
 
+### The status report column: a strip of sections with a legend (2026-11-16)
+
+- **Found** (the design round's reading of the code, 2026-11-16). The cell drew a section icon for
+  every status field and a `StatusMark` beside the green, yellow and red ones: 17 glyphs and some
+  60–70 nodes a row, 316 px wide in a column the template makes 200 to 300 px, so the last
+  sections were cut off without a sign (1.4.10). Blue, grey and purple values, and values without
+  configuration, had no mark, their status told by colour alone (1.4.1); the marks, darkened to
+  3:1 against `#f2f2f2`, fell to 2.4–2.6:1 on a selected row (`colorBrandBackground2`, 1.4.11).
+  «Overordnet status» became a ninth section with no name, the order was the REST response's
+  rather than `GtSortOrder`, and the names came from the column titles («Economy» and «Benefit»
+  in English). Enter and a click waited the hover's 500 ms; the surface took no focus and was a
+  nameless `group` (2.4.3, 4.1.2), closed with Escape only from its trigger or itself (1.4.13),
+  and was hidden with `visibility: hidden` until placed, which would keep it from taking the
+  focus. The focus showed only as the icons turning filled (2.4.7), and the date shown was
+  `Created`, with a weekday. The column read the hub's 500 newest published reports, so a project
+  with an older one showed nothing, and a failing column fetch stopped the whole view. In the
+  browser the step was «not offered»: the test hub's view has no status column or reports.
+- **Done.**
+  - **The strip.** Each section of «Statusseksjoner» shown in the status section, in
+    `GtSortOrder`, is a 20 px tile, all of them in one native `<button>` per row with
+    `aria-haspopup='dialog'`, named by the date and the counts («Statusrapport 3. nov. 2026: 1
+    rød, 4 gule, 3 grønne», `StatusReportButtonLabel` and `StatusCount*`) and described by every
+    section and its value (`StatusSectionSentence`). «Overordnet status» shows in the details only.
+  - **The shapes.** `getStatusShapes` (`util/statusMark.ts`) gives each value of a section a
+    shape: the value's own icon first, then a check, a warning or a cross by the hue, neutral
+    shapes for other hues and greys, and different shapes for two colours in one section; «?» for
+    a value without configuration, a dashed tile with a dash for no value. `StatusGlyph` (new in
+    the library) draws it at 12 px in `currentColor`, in a dark ink of the colour on a light fill
+    of it, the ink at 4.5:1 or more on the fill (`getStatusTile`), whatever the row's state and
+    the site's theme. `StatusMark` and `getStatusMark` are unchanged: the status page and the
+    project information keep their marks.
+  - **The legend.** Two-letter abbreviations of the sections' names (`getSectionAbbreviations`)
+    under the column's name, outside the header button and `aria-hidden` (`renderHeaderAddon` on
+    the column's renderer, passed through `List` to `ListGrid`). The column's least width grows
+    with the sections (`getMinWidth`: 6 + 22 px a section).
+  - **The details.** A click, Enter or Space pins them as a `trapFocus` dialog that takes the
+    focus (`useFocusContentProps`), named by the project and «Status rapportert …», described by
+    the overall status, with the sections and their comments as a description list, «Lukk»
+    (`CloseText`, new in PortfolioWebParts' strings) and «Åpne statusrapporten»
+    (`?selectedReport=`). Resting 500 ms, the pointer opens a preview that leaves the focus alone
+    and closes on scroll, and on Escape wherever the focus is (a `document` listener while it is
+    open); a click on the strip while previewing pins it. The column's setting «Vis detaljer når
+    pekeren hviler på stripen» turns the preview off. One surface is open at a time
+    (`previewStore.ts`), and the surface is transparent (`opacity: 0 !important`), not hidden,
+    until it is placed. The focus ring lies in the strip's 2 px margin, inside the cell, and
+    `scroll-margin-top` keeps the strip clear of the sticky header.
+  - **The data.** The data adapter puts the latest published report of each row's series on the
+    row (`StatusReportId`, from search), and the column reads those reports by id, 50 to a
+    request. «Ingen publisert rapport» shows only where the column's data was read and the row is
+    the configured hub's; elsewhere the cell is empty. A column whose fetch fails leaves its cells
+    empty and no longer stops the view. The date is the publishing date (`GtLastReportDate`, else
+    `Created`) in the site's time zone (`formatDayMonth`, new in the library), shown in the cell
+    from 290 px.
+  - **Tests:** `StatusReportColumn.test.tsx` (rewritten), `getSectionAbbreviations.test.ts`,
+    `ListGrid.test.tsx` and `useFetchData.test.tsx`; in the library `statusMark.test.ts`,
+    `formatDate.test.ts` and `StatusGlyph.test.tsx`; in the browser `a11y-surfaces.spec.ts`
+    (Enter, the dialog's focus and Tab order, the focus back after Escape) and
+    `a11y-visual.spec.ts` (a cell and the header in forced colours).
+- **Left.** Rounds with NVDA and VoiceOver; the focus back to the strip in Safari; whether
+  SharePoint's own Tabster lets Tab out of the trapped dialog; the header's height with the
+  legend, measured in the browser (`scroll-margin-top` assumes 48 px); published reports on the
+  test hub, so the browser steps are offered; `StatusReportPopover` into `A11Y_BLOCKING` after a
+  clean run; the title cell as a `rowheader`, for every column; the new shapes on the status page
+  and in the project information; the changelog and the release notes, once the version is
+  chosen; #1788's box.
+
