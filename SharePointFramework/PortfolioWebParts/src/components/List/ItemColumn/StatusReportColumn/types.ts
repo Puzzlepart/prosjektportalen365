@@ -33,7 +33,10 @@ export interface IStatusSectionDefinition {
   /** Each value's colour in `Prosjektkolonnekonfigurasjon`. */
   colors: Record<string, string>
 
-  /** Each value's shape, given out per section so no two colours share one (`getStatusShapes`). */
+  /**
+   * Each value's shape, given out per section (`getStatusShapes`) so that colours differ in shape
+   * while a shape is free.
+   */
   shapes: Record<string, IStatusShape>
 }
 
@@ -82,6 +85,6 @@ export interface IStatusReportColumnData {
   /** The title of the overall status section in `Statusseksjoner`, its heading in the details. */
   overallStatusName?: string
 
-  /** The reports the rows point to (`StatusReportId`). */
+  /** The reports the configured hub's rows point to (`StatusReportId`). */
   reports: IStatusReport[]
 }

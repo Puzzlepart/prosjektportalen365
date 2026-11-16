@@ -38,6 +38,8 @@ export interface IPortfolioViewResult {
  * The rows of several portfolios as one view: each row with its hub, the managed properties of
  * them all, and no row twice. A row is the same row as another when it has the same site, the same
  * report series (`ScopeKey`) and the same hub; the same project read from two hubs is two rows.
+ * The primary's rows, read as the configured hub's, are marked `_isPrimaryHub`: the status report
+ * column reads their reports from the configured hub's list, which holds no other hub's.
  *
  * @param results Each portfolio's rows, the primary first
  */
@@ -45,12 +47,14 @@ export function mergePortfolioViewData(results: IPortfolioViewResult[]): IPortfo
   const managedProperties: string[] = []
   const seen = new Set<string>()
   const items: IFetchDataForViewItemResult[] = []
-  for (const { portfolio, data } of results) {
+  for (const result of results) {
+    const { portfolio, data } = result
+    const primaryHub = result === results[0] ? { _isPrimaryHub: true } : {}
     for (const property of data.managedProperties ?? []) {
       if (!managedProperties.includes(property)) managedProperties.push(property)
     }
     for (const item of data.items) {
-      const row = { ...item, ...hubMetadata(portfolio) }
+      const row = { ...item, ...hubMetadata(portfolio), ...primaryHub }
       const key = `${row.SiteId}_${row.ScopeKey ?? ''}_${row._hubId}`
       if (seen.has(key)) continue
       seen.add(key)

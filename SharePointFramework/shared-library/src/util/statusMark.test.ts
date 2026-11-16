@@ -178,7 +178,7 @@ describe('getStatusShapes', () => {
     expect(shapesOf(budget)).toEqual(['check', 'check', 'warning', 'warning', 'cross'])
   })
 
-  it("draws a value's own icon, which takes no shape from the other values", () => {
+  it("draws a value's own icon, and one like no shape takes none from the other values", () => {
     const shapes = getStatusShapes([
       status('Foran plan', '#107c10', ' Flag '),
       status('På plan', GREEN),
@@ -187,6 +187,70 @@ describe('getStatusShapes', () => {
     expect(shapes['Foran plan']).toEqual({ shape: 'icon', iconName: 'Flag' })
     expect(shapes['På plan']).toEqual({ shape: 'check' })
     expect(shapes['Forsinket']).toEqual({ shape: 'cross' })
+  })
+
+  it('keeps the shape an own icon looks like from the colours', () => {
+    const time = [status('Forsinket', RED, 'Warning'), status('Mindre forsinkelser', YELLOW)]
+    expect(getStatusShapes(time)).toEqual({
+      Forsinket: { shape: 'icon', iconName: 'Warning' },
+      'Mindre forsinkelser': { shape: 'errorCircle' }
+    })
+  })
+
+  it('takes a UI Fabric name for the icon it is drawn as: Asterisk keeps the warning', () => {
+    const time = [status('Forsinket', RED, 'Asterisk'), status('Mindre forsinkelser', YELLOW)]
+    expect(getStatusShapes(time)).toEqual({
+      Forsinket: { shape: 'icon', iconName: 'Asterisk' },
+      'Mindre forsinkelser': { shape: 'errorCircle' }
+    })
+    // An alias is looked up by its exact name, as when the icon is drawn: in lower case it is none.
+    const lower = [status('Forsinket', RED, 'asterisk'), status('Mindre forsinkelser', YELLOW)]
+    expect(shapesOf(lower)).toEqual(['icon', 'warning'])
+  })
+
+  it('keeps an own icon for the colour first given with it, and draws the others by their hue', () => {
+    const shapes = getStatusShapes([
+      status('Foran plan', GREEN, 'Flag'),
+      status('På plan', GREEN, 'Flag'),
+      status('Mindre forsinkelser', YELLOW, 'Flag'),
+      status('Forsinket', RED, 'Flag')
+    ])
+    expect(shapes).toEqual({
+      'Foran plan': { shape: 'icon', iconName: 'Flag' },
+      'På plan': { shape: 'icon', iconName: 'Flag' },
+      'Mindre forsinkelser': { shape: 'warning' },
+      Forsinket: { shape: 'cross' }
+    })
+  })
+
+  it('reserves the shape for an own icon named with its variant, before the colours are read', () => {
+    const risk = [
+      status('Lav', GREEN),
+      status('Medium', YELLOW),
+      status('Høy', RED, 'WarningFilled')
+    ]
+    expect(shapesOf(risk)).toEqual(['check', 'errorCircle', 'icon'])
+  })
+
+  it('reserves each shape drawn with an icon for an own icon of that name', () => {
+    const icons = [
+      'Checkmark',
+      'Warning',
+      'Dismiss',
+      'CheckmarkCircle',
+      'ErrorCircle',
+      'Prohibited',
+      'Triangle'
+    ]
+    const shapes = shapesOf([
+      ...icons.map((iconName) => status(iconName, BLUE, iconName)),
+      status('På plan', GREEN),
+      status('Mindre forsinkelser', YELLOW),
+      status('Forsinket', RED),
+      status('Pause', '#8764b8')
+    ])
+    // The own icons hold every shape drawn with an icon, so the colours get the neutral ones.
+    expect(shapes).toEqual([...icons.map(() => 'icon'), 'dot', 'square', 'diamond', 'ring'])
   })
 
   it('marks a value without a colour it can read as unknown', () => {

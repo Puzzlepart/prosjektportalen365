@@ -60,9 +60,10 @@ export function fieldInput(panel: import('@playwright/test').Locator, label: Reg
 }
 
 /**
- * The overview's column headers, in order, without the "add column" header the list ends with and
- * without the blank selection header. Waits until the overview's data has arrived: until then it
- * shows the columns it persisted in local storage as placeholders, which can be a stale set.
+ * The overview's column names as their header buttons show them, in order, without the "add
+ * column" header the list ends with and without the blank selection header. Waits until the
+ * overview's data has arrived: until then it shows the columns it persisted in local storage as
+ * placeholders, which can be a stale set.
  */
 export async function columnHeaders(page: Page) {
   const overview = webPart(page, /porteføljeoversikt|portfolio overview/i).first()
@@ -75,7 +76,13 @@ export async function columnHeaders(page: Page) {
   await expect(overview.getByRole('columnheader', { name: /^tittel$|^title$/i })).toBeVisible({
     timeout: 60_000
   })
-  const headers = await overview.getByRole('columnheader').allInnerTexts()
+  // The buttons' texts, not the headers': beside its button a header can show what comes with the
+  // column's data (the status report column's legend), which one load can have and the next not.
+  const headers = await overview
+    .getByRole('columnheader')
+    .evaluateAll((cells: HTMLElement[]) =>
+      cells.map((cell) => (cell.querySelector<HTMLElement>('[role="button"]') ?? cell).innerText)
+    )
   return headers.map((h) => h.trim()).filter((h) => h && !/legg til kolonne|add column/i.test(h))
 }
 

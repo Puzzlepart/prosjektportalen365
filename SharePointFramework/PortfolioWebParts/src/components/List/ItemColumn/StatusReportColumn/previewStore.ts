@@ -11,9 +11,9 @@ let openSurface: IOpenSurface | undefined
 const listeners = new Set<() => void>()
 
 /**
- * Calls `listener` whenever the open surface changes (`useSyncExternalStore`). A module store and
- * a selector per cell rather than a context, so the hub's thousands of cells are not rendered
- * again when one opens.
+ * Calls `listener` whenever the open surface changes (`useSyncExternalStore`). A module store
+ * rather than a context, and a selector per cell whose answer changes only for a cell that is
+ * open, so the hub's thousands of cells are not rendered again when one opens.
  *
  * @returns The function that stops it
  */

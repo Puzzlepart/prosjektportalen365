@@ -24,7 +24,7 @@ jest.mock('@pnp/core', () => {
 })
 
 import strings from 'PortfolioWebPartsStrings'
-import { clearProjectsCache, format } from 'pp365-shared-library'
+import { clearProjectsCache, format, groupLatestReportBySeries } from 'pp365-shared-library'
 import { errorCodeFrom, errorHttpStatusFrom } from 'pp365-shared-library/lib/telemetry'
 import resource from 'SharedResources'
 import { DataAdapter } from './DataAdapter'
@@ -348,5 +348,73 @@ describe('a read that fails, as the user is told of it and as usage statistics c
     const unreachable = await adapter.fetchDataSources('Leveranser').catch((e) => e)
     expect(unreachable.message).toBe(format(strings.DataSourceCategoryError, 'Leveranser'))
     expect(errorCodeFrom(unreachable)).toBe('unknown')
+  })
+})
+
+/**
+ * The overview's two row builders: from the project sites the user can open, or, for the portfolio
+ * insight group, from every project.
+ */
+const ROW_BUILDERS = ['fetchDataForRegularView', 'fetchDataForManagerView'] as const
+
+// The status report column reads each row's report by its `StatusReportId`: wrong here, every row
+// of the hub would claim «Ingen publisert rapport», and no other unit test would fail.
+describe.each(ROW_BUILDERS)('%s, for the status report column', (builder) => {
+  const ALFA = 'aaaaaaaa-0000-0000-0000-000000000001'
+  const BETA = 'bbbbbbbb-0000-0000-0000-000000000002'
+  const GAMMA = 'cccccccc-0000-0000-0000-000000000003'
+
+  /** Three projects as the view's search finds them, each on a site of its own. */
+  const PROJECTS = [
+    { GtSiteIdOWSTEXT: ALFA, Title: 'Alfa' },
+    { GtSiteIdOWSTEXT: BETA, Title: 'Beta' },
+    { GtSiteIdOWSTEXT: GAMMA, Title: 'Gamma' }
+  ]
+
+  /**
+   * The latest published report of each series, as search finds it: Alfa's own and its
+   * delprosjekt DP1's, and Beta's, whose item id is no number. Gamma has no report.
+   */
+  const REPORTS = [
+    { GtSiteIdOWSTEXT: ALFA, ListItemId: '12' },
+    { GtSiteIdOWSTEXT: `${ALFA}-DP1`, ListItemId: '17' },
+    { GtSiteIdOWSTEXT: BETA, ListItemId: 'abc' }
+  ]
+
+  /**
+   * Each row's title and report id, as the builder makes the rows of these projects and reports.
+   * `_fetchDataForView` is stubbed with what it would give: it searches, and the `clean-deep` it
+   * calls is a namespace import, which is no function in the CommonJS build Jest runs.
+   */
+  const rowsOf = async (projects: Record<string, any>[], reports: Record<string, any>[]) => {
+    const { adapter } = adapterOnHub()
+    jest.spyOn(adapter as any, '_fetchDataForView').mockResolvedValue({
+      projects,
+      sites: projects.map(({ GtSiteIdOWSTEXT, Title }) => ({ SiteId: GtSiteIdOWSTEXT, Title })),
+      statusReportsBySite: groupLatestReportBySeries(reports),
+      managedProperties: []
+    })
+    const { items } = await adapter[builder]({} as any, {} as any, 'hub-1')
+    return items.map((item) => [item.Title, item.StatusReportId])
+  }
+
+  it("gives each row the item id of its series' latest published report, and none without a readable one", async () => {
+    expect(await rowsOf(PROJECTS, REPORTS)).toEqual([
+      ['Alfa', 12],
+      ['Alfa – DP1', 17],
+      ['Beta', undefined],
+      ['Gamma', undefined]
+    ])
+  })
+
+  it("keeps the report's id over a project property of the same name", async () => {
+    // The id is set after the row's spreads, so the project can neither overwrite it nor give one.
+    const projects = PROJECTS.map((project) => ({ ...project, StatusReportId: 99 }))
+    expect(await rowsOf(projects, REPORTS)).toEqual([
+      ['Alfa', 12],
+      ['Alfa – DP1', 17],
+      ['Beta', undefined],
+      ['Gamma', undefined]
+    ])
   })
 })

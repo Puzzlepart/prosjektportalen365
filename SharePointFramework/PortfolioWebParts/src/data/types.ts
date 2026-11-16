@@ -27,6 +27,14 @@ export interface IFetchDataForViewItemResult extends ISearchResult {
   _hubUrl?: string
 
   /**
+   * `true` on the configured hub's rows in a merged view, the primary portfolio's: only their
+   * `StatusReportId` points into the configured hub's status report list, which the status report
+   * column reads. `undefined` on the other hubs' rows, and outside merged views, where no row has
+   * a `_hubId`: a row is the configured hub's when it has no `_hubId` or has this flag.
+   */
+  _isPrimaryHub?: boolean
+
+  /**
    * Synthetic unique row key on the format `${SiteId}_${scopeKey}`. A project
    * with multiple report series ("delprosjekter") yields one row per series,
    * so `SiteId` alone is not unique.

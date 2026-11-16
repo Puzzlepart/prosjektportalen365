@@ -1,3 +1,4 @@
+import { WarningFilled, WarningRegular } from '@fluentui/react-icons'
 import { render } from '@testing-library/react'
 import { axeComponent } from 'pp365-jest-config/lib/axe'
 import * as React from 'react'
@@ -31,6 +32,11 @@ const glyphs = (shapes: StatusShape[]) =>
 /** The glyph drawn for a shape. */
 const glyphOf = (container: HTMLElement, shape: StatusShape) =>
   container.querySelector(`[data-status-glyph="${shape}"]`)
+
+/** The path data an icon is drawn with. */
+function pathsOf(element: Element): string[] {
+  return Array.from(element.querySelectorAll('path'), (path) => path.getAttribute('d'))
+}
 
 /**
  * The shape a status value is drawn with in the status report column's tiles, so a status is not
@@ -71,12 +77,17 @@ describe('StatusGlyph', () => {
     }
   })
 
-  it("draws the value's own icon at 12 px, filled in the text colour", () => {
+  it("draws the value's own icon at 12 px in the text colour, the catalog's filled one alone", () => {
     const { container } = render(<StatusGlyph shape='icon' iconName='Warning' />)
-    const svg = glyphOf(container, 'icon').querySelector('svg')
-    expect(svg).toHaveStyle({ width: '12px', height: '12px' })
-    expect(svg).toHaveAttribute('fill', 'currentColor')
-    expect(svg.style.color).toBe('')
+    const svgs = glyphOf(container, 'icon').querySelectorAll('svg')
+    // A bundle would draw the regular icon beside the filled one, hidden by a class.
+    expect(svgs).toHaveLength(1)
+    expect(svgs[0]).toHaveStyle({ width: '12px', height: '12px' })
+    expect(svgs[0]).toHaveAttribute('fill', 'currentColor')
+    expect(svgs[0].style.color).toBe('')
+    // `Warning` is a catalog name, so the icon is the catalog's `WarningFilled`.
+    expect(pathsOf(svgs[0])).toEqual(pathsOf(render(<WarningFilled />).container))
+    expect(pathsOf(svgs[0])).not.toEqual(pathsOf(render(<WarningRegular />).container))
   })
 
   it('draws a question mark for a value the configuration does not know', () => {

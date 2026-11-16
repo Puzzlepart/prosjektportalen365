@@ -21,10 +21,12 @@ const STRIP_EDGES = 6
 /**
  * The row's latest status report as a strip of tiles, one for each status section in the hub's
  * order, each with its value's shape on a light tone of its colour, and the date beside it where
- * the column has room. The strip is a button named by the date and a count of each colour, and
- * described by every section's value; it opens the report's details. «Ingen publisert rapport»
- * where the hub's data is in and the project has no published report; nothing where the data is
- * not (the program's views, another hub's rows, a failed fetch).
+ * the room beside the strip fits it. The strip is a button named by the date and a count of each
+ * colour, and described by every section's value; it opens the report's details, as a preview
+ * while the pointer rests on it and as a dialog on a click or a key, and is expanded only while
+ * the dialog it announces is open. «Ingen publisert rapport» where the hub's data is in and the
+ * row is the configured hub's (in a merged view too) with no published report; nothing where the
+ * data is not (the program's views, a failed fetch) or the row is another hub's.
  */
 export const StatusReportColumn: ColumnRenderComponent<IStatusColumnProps> = (incomingProps) => {
   const props = withDefaults(incomingProps, STATUS_REPORT_COLUMN_DEFAULT_PROPS)
@@ -58,6 +60,7 @@ export const StatusReportColumn: ColumnRenderComponent<IStatusColumnProps> = (in
             aria-label={name}
             aria-describedby={descriptionId}
             aria-haspopup='dialog'
+            aria-expanded={pinned}
             data-pinned={pinned || undefined}
             onPointerLeave={cancelPendingOpen}
           >
@@ -70,8 +73,8 @@ export const StatusReportColumn: ColumnRenderComponent<IStatusColumnProps> = (in
           <StatusReportDetails {...details} />
         </PopoverSurface>
       </Popover>
-      <span className={styles.date} aria-hidden>
-        {date}
+      <span className={styles.dateBox} aria-hidden>
+        <span className={styles.date}>{date}</span>
       </span>
       <span id={descriptionId} hidden>
         {description}

@@ -171,7 +171,7 @@ export const KomponentNavn: FC<IKomponentNavnProps> = (incomingProps) => {
 }
 ```
 
-Leses verdiene andre steder (webdelens egenskapsrute, en test), eksporteres konstanten; navnet har komponentens navn i seg, så barrelene ikke kolliderer. En komponent som bare leser sine egne props, kan sette standardverdiene i destruktureringen (`({ rowLimit = 6 }) =>`), men ikke når `props` sendes videre. ESLint stopper `defaultProps` fra å komme tilbake.
+Leses verdiene andre steder (webdelens egenskapsrute, en test), eksporteres konstanten; navnet har komponentens navn i seg, så barrelene ikke kolliderer. Trenger en modul som komponenten selv importerer, verdiene (som `fetchData` i statusrapportkolonnens `data.ts`), ligger konstanten i en egen `defaults.ts` i mappen, så de to modulene ikke importerer hverandre. En komponent som bare leser sine egne props, kan sette standardverdiene i destruktureringen (`({ rowLimit = 6 }) =>`), men ikke når `props` sendes videre. ESLint stopper `defaultProps` fra å komme tilbake.
 
 ### Ekte eksempel: `useProjectSetupDialog`
 

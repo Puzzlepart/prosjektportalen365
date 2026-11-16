@@ -1,27 +1,32 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
 // Babel, so mocks are not hoisted. Fluent positions an open popover against its trigger, which
 // under jsdom took seconds a test. The popover is stood in for by one that keeps the part of
-// Fluent's contract the cell relies on: the trigger gets `aria-expanded`, toggles through
-// `onOpenChange` on a click (a `click` with its target, as Fluent's trigger toggles), and reports
-// the pointer coming and going where `openOnHover` is set, after the trigger's own handlers; the
-// surface shows while open, a dialog with `aria-modal` when it traps the focus and a group when
-// not, with the props it is given. The browser suite presses the keys in Fluent's own.
+// Fluent's contract the cell relies on. The trigger gets `aria-expanded` unless its child sets its
+// own (Fluent spreads the child's props after its own), toggles through `onOpenChange` on a click
+// (a `click` with its target, as Fluent's trigger toggles), and reports the pointer coming and
+// going where `openOnHover` is set, after the trigger's own handlers. The surface shows while
+// open, a dialog with `aria-modal` when it traps the focus and a group when not, with the props
+// it is given and a mark where it closes on scroll. As it opens it takes the focus as Fluent's
+// does, unless `unstable_disableAutoFocus` is set: itself where it has a tab index, else its first
+// link or button. The browser suite presses the keys in Fluent's own.
 jest.mock('@fluentui/react-components', () => {
   const actual = jest.requireActual('@fluentui/react-components')
   const React = jest.requireActual('react')
   const PopoverContext = React.createContext({})
-  /** Shares the popover's state and its `onOpenChange` with the trigger and the surface. */
-  const Popover = (props: any) => {
-    const { open, trapFocus, openOnHover, onOpenChange, children } = props
-    const value = { open: !!open, trapFocus, openOnHover, onOpenChange }
+  /** Shares the popover's props, its state, focus settings and `onOpenChange`, with its parts. */
+  const Popover = ({ children, open, ...props }: any) => {
+    const value = { ...props, open: !!open }
     return React.createElement(PopoverContext.Provider, { value }, children)
   }
-  /** Toggles on a click and reports the pointer, after the trigger's own handlers. */
+  /**
+   * Toggles on a click and reports the pointer, after the trigger's own handlers. The child's own
+   * `aria-expanded` wins, as in Fluent's, which spreads the child's props after its own.
+   */
   const PopoverTrigger = ({ children }: any) => {
     const { open, openOnHover, onOpenChange } = React.useContext(PopoverContext)
     const own = children.props
     return React.cloneElement(children, {
-      'aria-expanded': `${open}`,
+      'aria-expanded': own['aria-expanded'] ?? `${open}`,
       onClick: (event: any) => {
         own.onClick?.(event)
         onOpenChange({ type: 'click', target: event.target }, { open: !open })
@@ -36,13 +41,32 @@ jest.mock('@fluentui/react-components', () => {
       }
     })
   }
-  /** Shows the details while open: a dialog when it traps the focus, a group when not. */
+  /**
+   * Shows the details while open: a dialog when it traps the focus, a group when not, marked when
+   * it closes on scroll. As it opens it takes the focus as Fluent's does, unless told not to:
+   * itself where it has a tab index, else its first link or button.
+   */
   const PopoverSurface = ({ children, ...props }: any) => {
-    const { open, trapFocus } = React.useContext(PopoverContext)
+    const context = React.useContext(PopoverContext)
+    const { open, trapFocus, closeOnScroll, unstable_disableAutoFocus: noAutoFocus } = context
+    const ref = React.useRef(null)
+    React.useEffect(() => {
+      const surface = ref.current
+      if (!open || noAutoFocus || !surface) return
+      const first = surface.hasAttribute('tabindex')
+        ? surface
+        : surface.querySelector('a[href], button')
+      first?.focus()
+    }, [open, noAutoFocus])
     if (!open) return null
     const role = trapFocus ? 'dialog' : 'group'
     const modal = trapFocus ? true : undefined
-    return React.createElement('div', { role, 'aria-modal': modal, ...props }, children)
+    const scroll = closeOnScroll || undefined
+    return React.createElement(
+      'div',
+      { ref, role, 'aria-modal': modal, 'data-close-on-scroll': scroll, ...props },
+      children
+    )
   }
   return { __esModule: true, ...actual, Popover, PopoverTrigger, PopoverSurface }
 })
@@ -55,7 +79,7 @@ import { OSLO_TIME_ZONE } from 'pp365-shared-library/lib/util/testFixtures'
 import * as React from 'react'
 import resource from 'SharedResources'
 import { fetchData } from './data'
-import { resetOpenSurface } from './previewStore'
+import { getOpenSurface, resetOpenSurface } from './previewStore'
 import { StatusReportColumn } from './StatusReportColumn'
 import { IStatusReport, IStatusReportColumnData, IStatusSectionDefinition } from './types'
 
@@ -133,6 +157,9 @@ const P6_DATE = '2026-10-02T10:00:00Z'
 const P7_DATE = '2026-09-15T10:00:00Z'
 const P1_OVERALL = 'I rute, med unntak av grunnarbeidene.'
 const P1_COUNTS = '1 rød, 4 gule, 3 grønne'
+const P5_COUNTS = '1 gul, 2 i annen farge, 5 grønne'
+const P6_COUNTS = '2 gule, 2 uten verdi, 4 grønne'
+const P7_COUNTS = '1 i annen farge, 7 grønne'
 
 /**
  * «Ny barneskole Østbyen»: one red, four yellow and three green, with comments and an overall
@@ -235,6 +262,12 @@ function glyphs(element: Element): string[] {
   return found.map((glyph) => glyph.getAttribute('data-status-glyph'))
 }
 
+/** The fill and the ink the tile holding a shape is given, as its stylesheet reads them. */
+function tones(glyph: Element): string[] {
+  const { style } = glyph.parentElement
+  return [style.getPropertyValue('--fill'), style.getPropertyValue('--ink')]
+}
+
 /** Rests the pointer on a strip for half a second, on fake timers. */
 function hover(strip: HTMLElement): void {
   fireEvent.mouseEnter(strip)
@@ -247,7 +280,7 @@ function hover(strip: HTMLElement): void {
  * The status report cell: a strip of tiles, one for each status section of the row's latest
  * published report, which is a button named by the report's date and a count of each colour and
  * described by every section's value; the report's details as a preview while the pointer rests
- * on it and as a dialog on a click; «Ingen publisert rapport» where the project has none.
+ * on it and as a dialog on a click; «Ingen publisert rapport» where the hub's own project has none.
  */
 describe('StatusReportColumn', () => {
   beforeEach(() => {
@@ -258,10 +291,13 @@ describe('StatusReportColumn', () => {
   afterEach(async () => {
     // Real timers first: on fake ones the wait below would never end.
     jest.useRealTimers()
+    cleanup()
+    // Each cell gives its surface up as it unmounts; the reset keeps a failure to its own test.
+    const leftOpen = getOpenSurface()
     resetOpenSurface()
     setPageContextInfo(undefined)
-    cleanup()
     await act(() => new Promise<void>((resolve) => setTimeout(resolve, 50)))
+    expect(leftOpen).toBeUndefined()
   })
 
   it("names the strip by the report's date and a count of each colour, and describes it by every section's value (WCAG 1.1.1, 4.1.2)", () => {
@@ -293,7 +329,7 @@ describe('StatusReportColumn', () => {
 
   it('shows a section without a value as a dashed tile with a dash, and says it has none', () => {
     renderCell(P6)
-    const strip = getStrip(P6_DATE, '2 gule, 2 uten verdi, 4 grønne')
+    const strip = getStrip(P6_DATE, P6_COUNTS)
     expect(glyphs(strip).slice(6)).toEqual(['empty', 'empty'])
     expect(strip.querySelector('[data-status-glyph="empty"]').parentElement).toHaveClass('empty')
     const description = [
@@ -311,35 +347,73 @@ describe('StatusReportColumn', () => {
 
   it('draws blue and grey with neutral shapes of their own, and «?» for a value the hub has no colour for', () => {
     renderCell(P5)
-    const strip = getStrip(P5_DATE, '1 gul, 2 i annen farge, 5 grønne')
+    const strip = getStrip(P5_DATE, P5_COUNTS)
     expect(glyphs(strip).slice(6)).toEqual(['dot', 'ring'])
     cleanup()
     renderCell(P7)
-    const other = getStrip(P7_DATE, '1 i annen farge, 7 grønne')
+    const other = getStrip(P7_DATE, P7_COUNTS)
     const unknown = other.querySelector('[data-status-glyph="unknown"]')
     expect(unknown).toHaveTextContent('?')
     expect(unknown.parentElement).toHaveClass('neutral')
   })
 
-  it('says «Ingen publisert rapport» where the hub has its data and the project no report, and nothing where it has not', () => {
+  it("gives a tile a light and a dark tone of its value's colour, and a neutral or an empty tile neither (WCAG 1.4.11)", () => {
+    renderCell(P1)
+    const cross = getStrip(P1_DATE, P1_COUNTS).querySelector('[data-status-glyph="cross"]')
+    // The red's tones as `getStatusTile` gives them: the fill behind the shape, and its ink.
+    expect(tones(cross)).toEqual(['#fad6dc', '#a54151'])
+    cleanup()
+    renderCell(P7)
+    const unknown = getStrip(P7_DATE, P7_COUNTS).querySelector('[data-status-glyph="unknown"]')
+    expect(tones(unknown)).toEqual(['', ''])
+    cleanup()
+    renderCell(P6)
+    const empty = getStrip(P6_DATE, P6_COUNTS).querySelector('[data-status-glyph="empty"]')
+    expect(tones(empty)).toEqual(['', ''])
+  })
+
+  it('shows nothing for a report where the hub shows no status section, rather than an empty button (WCAG 2.5.8)', () => {
+    const data: IStatusReportColumnData = {
+      ...DATA,
+      sections: [],
+      reports: DATA.reports.map((published) => ({ ...published, sections: [] }))
+    }
+    const { container } = render(<StatusReportColumn item={P1} column={column(data)} />)
+    expect(container).toBeEmptyDOMElement()
+    expect(StatusReportColumn.getMinWidth(column(data))).toBeUndefined()
+    expect(StatusReportColumn.renderHeaderAddon(column(data))).toBeNull()
+  })
+
+  it("says «Ingen publisert rapport» where the hub has its data and its own row no report, in a merged view too, and nothing where it has not, the row is another hub's or the report not the row's", () => {
     renderCell(P4)
     expect(screen.getByText(strings.StatusReportNone)).toBeInTheDocument()
     expect(screen.queryByRole('button')).toBeNull()
     cleanup()
-    // A merged view's row, which may be another hub's, and a report the hub did not return.
+    // A merged view's row of the configured hub, the primary one.
+    renderCell({ ...P4, _hubId: 'hub-1', _isPrimaryHub: true })
+    expect(screen.getByText(strings.StatusReportNone)).toBeInTheDocument()
+    cleanup()
+    // A merged view's row of another hub, whose reports are not read here, and a report the hub
+    // did not return.
     expect(renderCell({ ...P4, _hubId: 'hub-2' }).container).toBeEmptyDOMElement()
     cleanup()
     expect(renderCell({ ...P1, StatusReportId: 999 }).container).toBeEmptyDOMElement()
+    cleanup()
+    // A report of another project, and of another report series of the row's project.
+    expect(renderCell({ ...P4, StatusReportId: 101 }).container).toBeEmptyDOMElement()
+    cleanup()
+    expect(renderCell({ ...P1, ScopeKey: 'DP1' }).container).toBeEmptyDOMElement()
     cleanup()
     // The program's views and the aggregations, where the column has no data.
     const { container } = render(<StatusReportColumn item={P4} column={column()} />)
     expect(container).toBeEmptyDOMElement()
   })
 
-  it('shows a preview that leaves the focus alone once the pointer has rested on the strip for half a second (WCAG 1.4.13)', () => {
+  it('shows a preview, which leaves the focus where it is and closes on scroll, once the pointer has rested on the strip for half a second (WCAG 1.4.13)', () => {
     jest.useFakeTimers()
     renderCell(P1)
     const strip = getStrip(P1_DATE, P1_COUNTS)
+    strip.focus()
     fireEvent.mouseEnter(strip)
     act(() => {
       jest.advanceTimersByTime(499)
@@ -349,10 +423,15 @@ describe('StatusReportColumn', () => {
       jest.advanceTimersByTime(1)
     })
     const preview = screen.getByRole('group', { name: P1.Title })
+    // Told nothing, Fluent would give the focus to the link in it, its first control.
+    expect(within(preview).getByRole('link', { name: strings.StatusReportOpenLink })).toBeTruthy()
+    expect(strip).toHaveFocus()
+    expect(preview).toHaveAttribute('data-close-on-scroll', 'true')
     expect(preview).not.toHaveAttribute('tabindex')
     expect(preview).not.toHaveAttribute('aria-modal')
     expect(within(preview).queryByRole('button', { name: strings.CloseText })).toBeNull()
-    expect(strip).toHaveAttribute('aria-expanded', 'true')
+    // The strip announces a dialog, which the preview is not.
+    expect(strip).toHaveAttribute('aria-expanded', 'false')
     expect(strip).not.toHaveAttribute('data-pinned')
   })
 
@@ -369,7 +448,7 @@ describe('StatusReportColumn', () => {
     expect(screen.queryByRole('group')).toBeNull()
   })
 
-  it('pins the details on a click as a dialog that takes the focus, named by the project and the date (WCAG 2.4.3, 4.1.2)', () => {
+  it('pins the details on a click as a dialog that takes the focus, named by the project and the date, until «Lukk» closes it (WCAG 2.4.3, 4.1.2)', () => {
     renderCell(P1)
     const strip = getStrip(P1_DATE, P1_COUNTS)
     fireEvent.click(strip)
@@ -377,10 +456,13 @@ describe('StatusReportColumn', () => {
     expect(dialog).toHaveAttribute('aria-modal', 'true')
     // With a tab index Fluent focuses the surface itself as it opens.
     expect(dialog).toHaveAttribute('tabindex', '-1')
+    expect(dialog).toHaveFocus()
+    expect(dialog).not.toHaveAttribute('data-close-on-scroll')
     const reported = format(strings.StatusReportedText, formatDayMonth(P1_DATE, true))
     expect(reported).toBe('Status rapportert 3. nov. 2026')
     expect(dialog).toHaveAccessibleName(`${P1.Title} ${reported}`)
     expect(dialog).toHaveAccessibleDescription(P1_OVERALL)
+    expect(strip).toHaveAttribute('aria-expanded', 'true')
     expect(strip).toHaveAttribute('data-pinned', 'true')
     expect(within(dialog).getByRole('heading', { level: 2, name: P1.Title })).toBeInTheDocument()
     expect(within(dialog).getByText('Modulleveransen er tre uker forsinket.')).toBeInTheDocument()
@@ -394,7 +476,7 @@ describe('StatusReportColumn', () => {
     expect(strip).toHaveAttribute('aria-expanded', 'false')
   })
 
-  it("pins a preview on a click, which Fluent's trigger sends as a close", () => {
+  it("pins a preview on a click, which Fluent's trigger sends as a close, as a dialog that takes the focus", () => {
     jest.useFakeTimers()
     renderCell(P1)
     const strip = getStrip(P1_DATE, P1_COUNTS)
@@ -402,8 +484,49 @@ describe('StatusReportColumn', () => {
     expect(screen.getByRole('group')).toBeInTheDocument()
     fireEvent.click(strip)
     expect(screen.queryByRole('group')).toBeNull()
-    expect(screen.getByRole('dialog')).toHaveAttribute('tabindex', '-1')
+    const dialog = screen.getByRole('dialog')
+    expect(dialog).toHaveAttribute('tabindex', '-1')
+    expect(dialog).toHaveFocus()
     expect(strip).toHaveAttribute('data-pinned', 'true')
+  })
+
+  it('closes the preview once the pointer has left the strip (WCAG 1.4.13)', () => {
+    jest.useFakeTimers()
+    renderCell(P1)
+    const strip = getStrip(P1_DATE, P1_COUNTS)
+    hover(strip)
+    expect(screen.getByRole('group')).toBeInTheDocument()
+    fireEvent.mouseLeave(strip)
+    expect(screen.queryByRole('group')).toBeNull()
+  })
+
+  it('keeps the pinned details open when the pointer leaves the strip', () => {
+    jest.useFakeTimers()
+    renderCell(P1)
+    const strip = getStrip(P1_DATE, P1_COUNTS)
+    fireEvent.click(strip)
+    fireEvent.mouseLeave(strip)
+    act(() => {
+      jest.advanceTimersByTime(500)
+    })
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
+    expect(strip).toHaveAttribute('data-pinned', 'true')
+  })
+
+  it('opens no preview when the pointer leaves the strip before half a second has passed', () => {
+    jest.useFakeTimers()
+    renderCell(P1)
+    const strip = getStrip(P1_DATE, P1_COUNTS)
+    fireEvent.mouseEnter(strip)
+    act(() => {
+      jest.advanceTimersByTime(300)
+    })
+    // The strip's own handler: Fluent reports the pointer leaving only after its delay.
+    fireEvent.pointerLeave(strip)
+    act(() => {
+      jest.advanceTimersByTime(300)
+    })
+    expect(screen.queryByRole('group')).toBeNull()
   })
 
   it("opens no preview where the column's setting turns it off, and still pins on a click", () => {
@@ -424,7 +547,7 @@ describe('StatusReportColumn', () => {
         <StatusReportColumn item={P5} column={column(DATA)} />
       </>
     )
-    const second = getStrip(P5_DATE, '1 gul, 2 i annen farge, 5 grønne')
+    const second = getStrip(P5_DATE, P5_COUNTS)
     fireEvent.click(getStrip(P1_DATE, P1_COUNTS))
     hover(second)
     expect(screen.queryByRole('group')).toBeNull()
@@ -435,6 +558,40 @@ describe('StatusReportColumn', () => {
     const link = within(dialogs[0]).getByRole('link', { name: strings.StatusReportOpenLink })
     const href = `${P5.SPWebUrl}/${resource.Navigation_ProjectStatus_Url}?selectedReport=105`
     expect(link).toHaveAttribute('href', href)
+  })
+
+  it("renders no closed cell again when another cell's details open, are pinned or close", () => {
+    jest.useFakeTimers()
+    const onRender = jest.fn()
+    render(
+      <>
+        <StatusReportColumn item={P1} column={column(DATA)} />
+        <React.Profiler id='closed' onRender={onRender}>
+          <StatusReportColumn item={P5} column={column(DATA)} />
+        </React.Profiler>
+      </>
+    )
+    onRender.mockClear()
+    const strip = getStrip(P1_DATE, P1_COUNTS)
+    hover(strip)
+    expect(screen.getByRole('group')).toBeInTheDocument()
+    fireEvent.click(strip)
+    const dialog = screen.getByRole('dialog')
+    fireEvent.click(within(dialog).getByRole('button', { name: strings.CloseText }))
+    expect(screen.queryByRole('dialog')).toBeNull()
+    expect(onRender).not.toHaveBeenCalled()
+  })
+
+  it("gives the surface up as a pinned cell goes, so another cell's preview opens", () => {
+    jest.useFakeTimers()
+    const { unmount } = renderCell(P1)
+    fireEvent.click(getStrip(P1_DATE, P1_COUNTS))
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
+    unmount()
+    expect(getOpenSurface()).toBeUndefined()
+    renderCell(P5)
+    hover(getStrip(P5_DATE, P5_COUNTS))
+    expect(screen.getByRole('group', { name: P5.Title })).toBeInTheDocument()
   })
 
   it('offers a setting that turns the preview off, on by default', () => {
@@ -493,13 +650,16 @@ function sectionItem(order: number, fieldName: string, title: string, shown = tr
   }
 }
 
-/** A row of `Prosjektkolonnekonfigurasjon`: a status field's value and its colour. */
-function configItem(fieldName: string, value: string, color: string) {
+/**
+ * A row of `Prosjektkolonnekonfigurasjon`: a status field's value, its colour, and its icon, the
+ * template's circle (no icon of its own) unless another is given.
+ */
+function configItem(fieldName: string, value: string, color: string, iconName = 'CircleFill') {
   return {
     GtPortfolioColumn: { Title: fieldName, GtInternalName: fieldName },
     GtPortfolioColumnValue: value,
     GtPortfolioColumnColor: color,
-    GtPortfolioColumnIconName: 'CircleFill'
+    GtPortfolioColumnIconName: iconName
   }
 }
 
@@ -517,7 +677,7 @@ const LISTS: Record<string, Array<Record<string, any>>> = {
     configItem('GtStatusTime', 'Mindre forsinkelser', YELLOW),
     configItem('GtStatusTime', 'Store forsinkelser', RED),
     configItem('GtStatusBudget', 'På budsjett', GREEN),
-    configItem('GtStatusBudget', 'Over budsjett', RED)
+    configItem('GtStatusBudget', 'Over budsjett', RED, 'Flag')
   ],
   [resource.Lists_ProjectStatus_Title]: [
     {
@@ -589,7 +749,7 @@ function standInWeb(lists: Record<string, Array<Record<string, any>>>, queries: 
 
 /**
  * What the status report cells show, read from the hub: the sections in the hub's order, each
- * value's colour and shape, and the reports the rows point to, by id.
+ * value's colour and shape, and the reports the configured hub's rows point to, by id.
  */
 describe('fetchData', () => {
   it('reads the reports the rows point to by id, 50 to a request, and no report where no row has one', async () => {
@@ -611,7 +771,24 @@ describe('fetchData', () => {
     expect(noIds[resource.Lists_ProjectStatus_Title]).toBeUndefined()
   })
 
-  it("reads the sections in the hub's order, only the status fields its status section shows, and the overall status section's title", async () => {
+  it("reads only the reports of the configured hub's rows, in a merged view the primary hub's", async () => {
+    const queries: Queries = {}
+    const rows = [
+      { _hubId: 'hub-1', _isPrimaryHub: true, StatusReportId: 7 },
+      { _hubId: 'hub-1', _isPrimaryHub: true, StatusReportId: 52 },
+      // Another hub's row names an item of that hub's report list.
+      { _hubId: 'hub-2', StatusReportId: 60 }
+    ]
+    const data = await fetchData(standInWeb(LISTS, queries) as any, undefined, rows)
+    const [reportQuery] = queries[resource.Lists_ProjectStatus_Title]
+    expect(reportQuery.filter).toEqual(['Id eq 7 or Id eq 52'])
+    expect(data.reports.map(({ id }) => id)).toEqual([7, 52])
+    const otherHub: Queries = {}
+    await fetchData(standInWeb(LISTS, otherHub) as any, undefined, [rows[2]])
+    expect(otherHub[resource.Lists_ProjectStatus_Title]).toBeUndefined()
+  })
+
+  it("reads the sections in the hub's order, only the status fields its status section shows, the overall status section's title, and each value's colour and icon", async () => {
     const queries: Queries = {}
     const data = await fetchData(standInWeb(LISTS, queries) as any, undefined, [])
     expect(data.sections.map(({ name }) => name)).toEqual(['Fremdrift', 'Økonomi'])
@@ -622,12 +799,14 @@ describe('fetchData', () => {
     const [configQuery] = queries[resource.Lists_ProjectColumnConfiguration_Title]
     expect(configQuery.filter).toEqual(["startswith(GtPortfolioColumn/GtInternalName,'GtStatus')"])
     expect(configQuery.orderBy).toEqual(['ID', true])
+    expect(configQuery.select).toContain('GtPortfolioColumnColor')
+    expect(configQuery.select).toContain('GtPortfolioColumnIconName')
   })
 
-  it('gives each value its colour and shape, and dates a report by when it was published, else made', async () => {
+  it('gives each value its colour and shape, its own icon where it has one, and dates a report by when it was published, else made', async () => {
     const rows = [{ StatusReportId: 7 }, { StatusReportId: 52 }]
     const data = await fetchData(standInWeb(LISTS, {}) as any, undefined, rows)
-    const [time] = data.sections
+    const [time, budget] = data.sections
     expect(time.colors).toEqual({
       'På plan': GREEN,
       'Mindre forsinkelser': YELLOW,
@@ -638,6 +817,7 @@ describe('fetchData', () => {
       'Mindre forsinkelser': { shape: 'warning' },
       'Store forsinkelser': { shape: 'cross' }
     })
+    expect(budget.shapes['Over budsjett']).toEqual({ shape: 'icon', iconName: 'Flag' })
     const [published, older] = data.reports
     expect(published).toMatchObject({
       id: 7,

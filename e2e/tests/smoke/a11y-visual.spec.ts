@@ -228,7 +228,9 @@ test.describe('visual checks of the pages', () => {
     await page.setViewportSize({ width: 1280, height: 900 })
     await openPage(await resolvePage(site!, overviewPage!.pages))
     const list = page.locator(WEB_PART).first()
-    // Once the list has its data ("Viser 0 av 0" until then); the column's reports come after.
+    // Once the list has its data ("Viser 0 av 0" until then). The column's reports come with its
+    // rows, but the overview reads the view more than once as it mounts, with placeholder rows
+    // while it reads and the counter still at the last count: the cell is waited for below.
     await expect(list.locator('[class*="resultsCount"]').first())
       .toHaveText(/viser [1-9]\d* av \d+|showing [1-9]\d* of \d+/i, { timeout: 60_000 })
       .catch(() => undefined)

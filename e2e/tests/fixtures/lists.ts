@@ -57,8 +57,9 @@ export async function measureListTypography(scope: Locator): Promise<ListTypogra
       })
       .filter(Boolean) as Array<{ text: string; fontSize: string; fontWeight: number }>
     // The rows of items: a group's row holds the button that opens and closes it, in its own type.
+    // The status report column's strip is expanded too, but opens a dialog: its row is an item's.
     const cells = Array.from(root.querySelectorAll('.fui-TableBody .fui-TableRow'))
-      .filter((row) => !row.querySelector('button[aria-expanded]'))
+      .filter((row) => !row.querySelector('button[aria-expanded]:not([aria-haspopup="dialog"])'))
       .flatMap((row) => Array.from(row.querySelectorAll('.fui-TableCell')))
       .slice(0, 120)
     const cellFontSizes: Record<string, string> = {}

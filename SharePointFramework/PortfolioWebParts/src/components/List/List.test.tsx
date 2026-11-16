@@ -11,7 +11,13 @@ jest.mock('pp365-projectwebparts/lib/components/ProjectInformation', () => ({
 import { fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import strings from 'PortfolioWebPartsStrings'
-import { ColumnRenderComponentRegistry, format, ListMenuItem } from 'pp365-shared-library'
+import {
+  ColumnDataType,
+  ColumnRenderComponent,
+  ColumnRenderComponentRegistry,
+  format,
+  ListMenuItem
+} from 'pp365-shared-library'
 import * as React from 'react'
 import { createPortal } from 'react-dom'
 import { HubColumn } from './ItemColumn/HubColumn'
@@ -21,10 +27,10 @@ import { IListProps } from './types'
 /**
  * The hub's list as the portfolio overview and the aggregated overview drive it: the header with
  * title, search box and toolbar above the column headers, one row per item with the cells rendered
- * through the column's own rules, hidden columns and the add column, the header click that opens
- * the column menu, groups that open and close, and the selection: by check, by shift-click range,
- * by group and all at once. Asserted through roles and text, so it holds whatever renders the
- * rows.
+ * through the column's own rules, what a column's data type adds under the column's name and the
+ * width its data needs, hidden columns and the add column, the header click that opens the column
+ * menu, groups that open and close, and the selection: by check, by shift-click range, by group
+ * and all at once. Asserted through roles and text, so it holds whatever renders the rows.
  */
 
 type Column = Record<string, any>
@@ -45,6 +51,19 @@ const GROUPS = [
   { key: 'g1', name: 'Fase: Planlegge', startIndex: 1, count: 2 },
   { key: 'g2', name: 'Fase: Gjennomføre', startIndex: 3, count: 1 }
 ]
+
+/**
+ * A data type of the test's own, doing what the status report column's does: a legend under its
+ * column's name, and the least width its strip needs. Its key is no real one, hence the cast: the
+ * list registers the real renderers as it mounts, and the registry keeps the first for a key.
+ */
+const StripColumn: ColumnRenderComponent = () => null
+StripColumn.key = 'teststrip' as ColumnDataType
+StripColumn.id = 'TestStrip'
+StripColumn.displayName = 'Stripe'
+StripColumn.iconName = 'Info'
+StripColumn.renderHeaderAddon = () => <span>Fr Øk</span>
+StripColumn.getMinWidth = () => 226
 
 function renderList(props: Partial<IListProps<any>> = {}) {
   return render(
@@ -192,6 +211,25 @@ describe('List', () => {
     const phase = screen.getByText('Konsept')
     expect(phase.parentElement?.querySelector('svg, i')).not.toBeNull()
     expect(screen.getByText('Hub Nord')).toBeInTheDocument()
+  })
+
+  it("shows what a column's data type adds under the column's name, and gives the column the width its data needs", () => {
+    ColumnRenderComponentRegistry.registerMultiple(StripColumn)
+    renderList({
+      columns: [
+        column('Title', 'Tittel'),
+        column('GtStatusReport', 'Statusrapport', { dataType: 'teststrip' })
+      ]
+    })
+    // Found by the column's name alone: the legend sits beside the button, outside the name.
+    const header = screen.getByRole('columnheader', { name: 'Statusrapport' })
+    const button = within(header).getByRole('button', { name: 'Statusrapport' })
+    const addon = screen.getByText('Fr Øk')
+    expect(header).toContainElement(addon)
+    expect(button).not.toContainElement(addon)
+    // Not the column's own 100: the least width its data needs.
+    const handle = header.querySelector<HTMLElement>('.fui-TableResizeHandle')
+    expect(handle).toHaveAttribute('aria-valuetext', '226 piksler')
   })
 
   it('leaves out hidden columns, and the add column when it is disabled', () => {

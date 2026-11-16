@@ -1,12 +1,10 @@
 // The status report cell: the strip of tiles, one for each status section, and the report's date
-// beside it where the column has room for it.
+// beside it where there is room for it.
 .root {
   display: flex;
   align-items: center;
   column-gap: 8px;
   min-width: 0;
-  // The date shows only where the cell is wide enough for it (the @container rule below).
-  container-type: inline-size;
 
   // A button as wide as its tiles: 20 px each and 2 px apart, so a section has its place in every
   // row, under its letters in the column's header.
@@ -45,13 +43,30 @@
     }
   }
 
-  // In the darker grey, not the rows' own: 4.5:1 on a selected row too (WCAG 1.4.3).
-  .date {
-    display: none;
+  // The room beside the strip, however many sections it has, one line high. The date shows only
+  // where it fits whole: a date too wide for the room breaks to the hidden second line, in any
+  // font, language and spacing (WCAG 1.4.12). A fixed width did not hold: with the wider spacing
+  // «28. sep. 2025» takes 92 px in Segoe UI, «28. Sept. 2025» 98.
+  .dateBox {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 1lh;
+    overflow: hidden;
     font-size: var(--fontSizeBase200);
     line-height: var(--lineHeightBase200);
-    color: var(--colorNeutralForeground2);
-    white-space: nowrap;
+
+    // An empty inline block first: the line may break between it and the date.
+    &::before {
+      content: '';
+      display: inline-block;
+    }
+
+    // In the darker grey, not the rows' own: 4.5:1 on a selected row too (WCAG 1.4.3).
+    .date {
+      display: inline-block;
+      color: var(--colorNeutralForeground2);
+      white-space: nowrap;
+    }
   }
 }
 
@@ -74,14 +89,6 @@
   // hidden with visibility cannot take the focus Fluent gives it as it opens (WCAG 2.4.3).
   &:not([data-popper-placement]) {
     opacity: 0 !important;
-  }
-}
-
-// The date beside the strip where the cell has room for both: 182 px of strip for eight sections,
-// 8 px of gap and the date.
-@container (min-width: 290px) {
-  .root .date {
-    display: inline;
   }
 }
 

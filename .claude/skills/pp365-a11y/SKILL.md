@@ -102,10 +102,14 @@ Rules 1, 2, 5, 6, 8 and the tooltip handling are adapted from Microsoft's
    a matrix cell or a status shows its value or its text as well, and a status icon shown without
    its text has a `StatusMark` beside it (a check, a warning or a cross from its colour's hue, or
    the status value's own `GtPortfolioColumnIconName`). A status shown as a shape alone, on a
-   tile of its colour (the status report column), takes a shape of its own for every value of a
-   section (`getStatusShapes`: the value's own icon, a check, a warning or a cross by the hue,
-   neutral shapes for other colours, «?» without configuration), in an ink at 4.5:1 on its tile
-   (`getStatusTile`), whatever the row's state and the site's theme. Colours from configuration
+   tile of its colour (the status report column), takes a shape of its own for every colour of a
+   section while one is free (`getStatusShapes`: own icons first, each kept for one colour and
+   reserving the built-in shape it is drawn as, then a check, a warning or a cross by the hue,
+   then neutral shapes; «?» for a value without configuration or a colour it cannot read), in an
+   ink at 4.5:1 on its tile (`getStatusTile`), whatever the row's state and the site's theme. An
+   own icon is told by its name, a UI Fabric alias by the icon it is drawn as (`Asterisk` is
+   `Warning`); an icon of the UI Fabric font that only looks like a shape (`Cancel`, `Accept`)
+   reserves nothing. Colours from configuration
    (the timeline's) go through `util/contrast.ts`: `getReadableTextColor` keeps the configured
    text colour where it reads 4.5:1 and puts black or white in its place where it does not;
    `getContrastingShade` darkens a configured colour just until it reaches 3:1 against the
@@ -294,8 +298,20 @@ checked by hand and with which reader and browser: axe finds only part of what W
   made a button with no name, one per row of a list (the status report column's icons, axe's
   `aria-command-name`): give it a native `<button>` named from the strings (the column's strip,
   «Statusrapport 3. nov. 2026: 1 rød, 4 gule, 3 grønne», described by every section), and render
-  no button where there is nothing to open («Ingen publisert rapport» is text). The trigger sets
-  `aria-expanded` only: a trigger that opens a dialog sets `aria-haspopup='dialog'` itself.
+  no button where there is nothing to open: «Ingen publisert rapport» is text, and a report with
+  no section to show renders nothing (its empty strip was a 4 px target, 2.5.8). The trigger sets
+  `aria-expanded` from `open` and no `aria-haspopup`, and spreads its child's props after its
+  own, so the child's `aria-expanded` wins. A trigger that opens a dialog sets
+  `aria-haspopup='dialog'` itself; where the same popover also shows a preview that is no dialog,
+  its `aria-expanded` says whether the dialog is open (the strip's `aria-expanded={pinned}`), or
+  it tells a screen reader the dialog is expanded while only the preview shows.
+- A text shown only where it fits (the status report column's date beside its strip) must not
+  hang on a fixed width: the font, the UI language («28. Sept. 2025») and 1.4.12's spacing change
+  it, and a container query from 88 px cut «28. sep. 2025» off, 92 px wide with the spacing in
+  Segoe UI (measured in Chromium, 2026-11-16). Make its box one line high (`height: 1lh;
+  overflow: hidden`) with an empty `inline-block` before the text and the text an `inline-block`
+  that does not wrap: a text too wide for the room breaks to the hidden second line, so it shows
+  whole or not at all (`StatusColumn.module.scss`).
 - A panel's body scrolls (`BasePanel`'s `DrawerBody`); with nothing focusable in it the keyboard
   cannot scroll it (axe's `scrollable-region-focusable`). A panel read rather than worked in sets
   `isBodyFocusable`, which makes the body a region named by the header that takes the focus (the

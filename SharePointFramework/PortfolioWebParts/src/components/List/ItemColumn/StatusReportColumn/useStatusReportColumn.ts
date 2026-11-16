@@ -22,7 +22,7 @@ import {
   useState,
   useSyncExternalStore
 } from 'react'
-import { getStatusReportColumnData } from './data'
+import { getStatusReportColumnData, isConfiguredHubRow } from './data'
 import { getOpenSurface, setOpenSurface, subscribe } from './previewStore'
 import styles from './StatusColumn.module.scss'
 import {
@@ -63,6 +63,9 @@ const COUNT_TEXTS: Record<StatusCountKind, [string, string]> = {
   green: [strings.StatusCountGreenOne, strings.StatusCountGreenOther]
 }
 
+/** Each column's reports by id, indexed once per data object: a cell looks its report up by key. */
+const reportsById = new WeakMap<IStatusReportColumnData, Map<number, IStatusReport>>()
+
 /** How the details show: not at all, as a preview while the pointer rests, or as a dialog. */
 export type StatusReportSurfaceMode = 'closed' | 'preview' | 'pinned'
 
@@ -78,6 +81,14 @@ function isPinnedElsewhere(id: string): boolean {
   return !!open && open.pinned && open.id !== id
 }
 
+/** The data's reports by id, indexed the first time a cell asks for one. */
+function getReportsById(data: IStatusReportColumnData): Map<number, IStatusReport> {
+  if (!reportsById.has(data)) {
+    reportsById.set(data, new Map(data.reports.map((report) => [report.id, report] as const)))
+  }
+  return reportsById.get(data)
+}
+
 /**
  * The row's report: the one its `StatusReportId` names, if it is the report of the row's project
  * (the site ids compared in any case) and of the row's report series ("delprosjekt").
@@ -86,14 +97,11 @@ function findReport(
   data: IStatusReportColumnData | undefined,
   item: Record<string, any>
 ): IStatusReport | undefined {
-  const siteId = String(item.SiteId ?? '').toLowerCase()
-  const seriesKey = getScopeSeriesKey(item.ScopeKey)
-  return data?.reports.find(
-    (report) =>
-      report.id === Number(item.StatusReportId) &&
-      report.siteId.toLowerCase() === siteId &&
-      getScopeSeriesKey(report.scopeKey) === seriesKey
-  )
+  const report = data && getReportsById(data).get(Number(item.StatusReportId))
+  if (!report) return undefined
+  const sameSite = report.siteId.toLowerCase() === String(item.SiteId ?? '').toLowerCase()
+  const sameSeries = getScopeSeriesKey(report.scopeKey) === getScopeSeriesKey(item.ScopeKey)
+  return sameSite && sameSeries ? report : undefined
 }
 
 /** The sections counted by colour, in `COUNT_ORDER`: «1 rød, 4 gule, 3 grønne». */
@@ -136,20 +144,24 @@ function getReportTexts(report: IStatusReport, item: Record<string, any>) {
 }
 
 /**
- * Component logic hook for `StatusReportColumn`: the row's report, the strip's name and
- * description, and the details in two modes. The pointer resting on the strip for half a second
- * shows a preview that leaves the focus where it is (where the column's setting allows it). A
- * click, Enter or Space pins the details as a dialog that takes the focus and keeps it until
- * Escape, «Lukk» or a click outside. A click on the strip while the preview shows comes as a
- * close: it pins the details by closing them and opening them again, so Fluent focuses the dialog
- * and makes it modal. One surface is open at a time across the cells (`previewStore`).
+ * Component logic hook for `StatusReportColumn`: the row's report, or that the configured hub's
+ * row has none (`noReport`), the strip's name and description, and the details in two modes. The
+ * pointer resting on the strip for half a second shows a preview that leaves the focus where it is
+ * (where the column's setting allows it). A click, Enter or Space pins the details as a dialog
+ * that takes the focus and keeps it until Escape, «Lukk» or a click outside. A click on the strip
+ * while the preview shows comes as a close: it pins the details by closing them and opening them
+ * again, so Fluent focuses the dialog and makes it modal. One surface is open at a time across the
+ * cells (`previewStore`).
  *
  * @param props The cell's props, the column's defaults merged in
  */
 export function useStatusReportColumn(props: IStatusColumnProps) {
   const item: Record<string, any> = props.item ?? {}
   const data = getStatusReportColumnData(props.column)
-  const report = findReport(data, item)
+  const found = findReport(data, item)
+  // A report with no section to show would be an empty button in every row (WCAG 2.5.8): the
+  // cell is left empty, as where there is no data.
+  const report = found?.sections.length ? found : undefined
   const openOnHover = props.openOnHover !== false
   const [mode, setMode] = useState<StatusReportSurfaceMode>('closed')
   const [pendingPin, setPendingPin] = useState(false)
@@ -161,7 +173,12 @@ export function useStatusReportColumn(props: IStatusColumnProps) {
   const subtitleId = useId('status-report-subtitle')
   const overallId = useId('status-report-overall')
   const focusContent = useFocusContentProps()
-  const openElsewhere = useSyncExternalStore(subscribe, () => isOpenElsewhere(surfaceId))
+  // Only an open cell has to hear that another opened: a closed cell's answer is always false, so
+  // an opening or a closing renders none of the closed cells again (thousands on a large hub).
+  const openElsewhere = useSyncExternalStore(
+    subscribe,
+    () => mode !== 'closed' && isOpenElsewhere(surfaceId)
+  )
 
   const onOpenChange = useCallback(
     (event: OpenPopoverEvents, { open }: OnOpenChangeData) => {
@@ -227,10 +244,12 @@ export function useStatusReportColumn(props: IStatusColumnProps) {
     }
   }, [mode, surfaceId])
 
-  // Another cell's surface has opened: this one closes.
+  // Another cell's surface has opened: this one closes. The store is read again here, since the
+  // render that opened this cell saw the other one still open, and the effect above has since
+  // made this cell's the open one.
   useEffect(() => {
-    if (openElsewhere) setMode('closed')
-  }, [openElsewhere])
+    if (openElsewhere && isOpenElsewhere(surfaceId)) setMode('closed')
+  }, [openElsewhere, surfaceId])
 
   useEffect(() => {
     return () => {
@@ -247,7 +266,7 @@ export function useStatusReportColumn(props: IStatusColumnProps) {
 
   return {
     report,
-    noReport: !!data && !item._hubId && !item.StatusReportId,
+    noReport: !!data && isConfiguredHubRow(item) && !item.StatusReportId,
     name: texts?.name,
     description: texts?.description,
     date: texts?.date,

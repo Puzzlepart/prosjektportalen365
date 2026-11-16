@@ -1,3 +1,4 @@
+import { fabricIconAliases } from '../icons/fabricIconAliases'
 import { getContrastingShade, getTint, parseColor, RgbColor } from './contrast'
 
 /**
@@ -156,6 +157,24 @@ const SHAPE_VARIANTS: Record<BaseShape, StatusShape[]> = {
 const NEUTRAL_SHAPES: StatusShape[] = ['dot', 'square', 'diamond', 'triangle', 'ring']
 
 /**
+ * The shapes `StatusGlyph` draws with an icon, by the icon's name as `getIconKey` keys it (its
+ * Fluent name without size and variant). An own icon of one of these names looks like the shape,
+ * so it reserves the shape in its section.
+ */
+const LOOKALIKE_SHAPES = new Map<string, StatusShape>([
+  ['checkmark', 'check'],
+  ['warning', 'warning'],
+  ['dismiss', 'cross'],
+  ['checkmarkcircle', 'checkCircle'],
+  ['errorcircle', 'errorCircle'],
+  ['prohibited', 'prohibited'],
+  ['triangle', 'triangle']
+])
+
+/** The variant at the end of an icon's name in lower case: `warningfilled` is a `warning`. */
+const ICON_VARIANT = /(?:filled|regular|solid)$/
+
+/**
  * The traffic-light class of a colour by its hue, within the bounds `getShapeForColor` uses: grey
  * and the hues that say nothing of a status (blue, purple) are `'other'`.
  */
@@ -172,6 +191,71 @@ function getHueClass(color: RgbColor): StatusColorClass {
 function getBaseShape(color: RgbColor): BaseShape {
   const [, saturation] = getHueAndSaturation(color)
   return saturation < MIN_SATURATION ? 'ring' : BASE_SHAPES[getHueClass(color)]
+}
+
+/**
+ * An icon's name as a key: the catalog name a UI Fabric name is drawn with (`fabricIconAliases`,
+ * looked up as `resolveFluentIcon` does), in lower case and without its variant, so
+ * `WarningFilled`, `warning`, `WarningSolid` and `Asterisk` are one icon.
+ */
+function getIconKey(iconName: string): string {
+  const alias = Object.prototype.hasOwnProperty.call(fabricIconAliases, iconName)
+    ? fabricIconAliases[iconName]
+    : undefined
+  const drawnName = typeof alias === 'object' ? alias.name : alias || iconName
+  return drawnName.toLowerCase().replace(ICON_VARIANT, '')
+}
+
+/**
+ * The values of a section that keep their own icon, and the shape each is drawn with. An icon is
+ * kept for one colour only, that of the first value given with it: a value of another colour with
+ * the same icon is drawn by its colour. The shape an own icon looks like (`LOOKALIKE_SHAPES`) is
+ * added to `taken`, so no colour is drawn with it while another shape is free.
+ *
+ * @param values The section's values, in configuration order
+ * @param taken The shapes no colour in the section may take
+ */
+function getOwnIconShapes(
+  values: IStatusValueConfig[],
+  taken: Set<StatusShape>
+): Map<IStatusValueConfig, IStatusShape> {
+  const ownIconShapes = new Map<IStatusValueConfig, IStatusShape>()
+  const colorByIcon = new Map<string, string>()
+  for (const config of values) {
+    const ownIcon = config.iconName?.trim() ?? ''
+    if (NO_OWN_ICON.includes(ownIcon.toLowerCase())) continue
+    const iconKey = getIconKey(ownIcon)
+    const colorKey = config.color?.trim().toLowerCase() ?? ''
+    if (colorByIcon.has(iconKey) && colorByIcon.get(iconKey) !== colorKey) continue
+    colorByIcon.set(iconKey, colorKey)
+    ownIconShapes.set(config, { shape: 'icon', iconName: ownIcon })
+    const lookalike = LOOKALIKE_SHAPES.get(iconKey)
+    if (lookalike) taken.add(lookalike)
+  }
+  return ownIconShapes
+}
+
+/**
+ * The shape a value without an own icon is drawn with, by its colour: the shape an equal colour
+ * in the section took, else the first of its hue's shapes and then the neutral ones that is not
+ * `taken`, else its hue's own. `'unknown'` for a colour that cannot be read. A new colour's shape
+ * is recorded in `shapeByColor` and `taken`.
+ */
+function takeColorShape(
+  color: string | undefined,
+  shapeByColor: Map<string, StatusShape>,
+  taken: Set<StatusShape>
+): IStatusShape {
+  const key = color?.trim().toLowerCase() ?? ''
+  const parsed = parseColor(key)
+  if (!parsed) return { shape: 'unknown' }
+  if (!shapeByColor.has(key)) {
+    const base = getBaseShape(parsed)
+    const free = [...SHAPE_VARIANTS[base], ...NEUTRAL_SHAPES].find((shape) => !taken.has(shape))
+    shapeByColor.set(key, free ?? base)
+    taken.add(free ?? base)
+  }
+  return { shape: shapeByColor.get(key) }
 }
 
 /**
@@ -203,47 +287,40 @@ export function getStatusColorClass(color?: string): StatusColorClass {
 
 /**
  * The shape each value of a status section is drawn with, by value text, so the section's
- * statuses are told apart by more than their colour (WCAG 1.4.1). The values are read in the
- * order given, the configuration's:
+ * statuses are told apart by more than their colour (WCAG 1.4.1). It holds to this:
  *
+ * - Two colours it can read get different shapes while a shape is free. Values of one colour
+ *   share a shape, unless one has an own icon.
  * - A value's own icon (`GtPortfolioColumnIconName`; the template's circle counts as none) is its
- *   shape, `'icon'` with the icon's name. It takes no shape from the other values.
- * - A value whose colour cannot be read is `'unknown'`.
- * - Otherwise its colour's hue gives the shape, as for `getStatusMark`: a check for green, a
- *   warning for yellow and orange, a cross for red, a dot for a saturated colour of another hue
- *   (blue, purple) and a ring for grey. Values of one colour share a shape.
- * - A colour whose shape an earlier colour in the section took gets the next free variant (a check
- *   in a circle, an error circle, a prohibited sign), then the next free of the dot, square,
- *   diamond, triangle and ring. Only when every one is taken does it share its shape.
+ *   shape, `'icon'` with the icon's name, for one colour only, that of the first value given with
+ *   the icon. A value of another colour with the same icon is drawn by its colour instead. An
+ *   icon is told by its name, in any case and with or without `Filled`, `Regular` or `Solid`.
+ * - An own icon named as an icon the shapes are drawn with (`Checkmark`, `Warning`, `Dismiss`,
+ *   `CheckmarkCircle`, `ErrorCircle`, `Prohibited`, `Triangle`), or with a UI Fabric name drawn
+ *   as one of them (`Asterisk` as `Warning`), reserves that shape: no colour is drawn with it
+ *   while another shape is free. Another icon that looks like a shape (a UI Fabric font icon such
+ *   as `Cancel` or `Accept`) reserves nothing.
+ * - A value drawn by its colour is `'unknown'` when the colour cannot be read.
  *
- * Empty values are left out.
+ * Own icons go first. The other values are then read in the order given, the configuration's.
+ * A colour's hue gives its shape, as for `getStatusMark`: a check for green, a warning for yellow
+ * and orange, a cross for red, a dot for a saturated colour of another hue (blue, purple) and a
+ * ring for grey. A colour whose shape is taken, by an earlier colour or an own icon, gets the next
+ * free variant (a check in a circle, an error circle, a prohibited sign), then the next free of
+ * the dot, square, diamond, triangle and ring. Only when every one is taken does it share its
+ * hue's shape. Empty values are left out.
  *
  * @param values The section's values, in configuration order
  */
 export function getStatusShapes(values: IStatusValueConfig[]): Record<string, IStatusShape> {
-  const shapes: Record<string, IStatusShape> = {}
-  const shapeByColor = new Map<string, StatusShape>()
+  const nonEmpty = (values ?? []).filter(({ value }) => value?.trim())
   const taken = new Set<StatusShape>()
-  for (const { value, color, iconName } of values ?? []) {
-    if (!value?.trim()) continue
-    const ownIcon = iconName?.trim() ?? ''
-    if (!NO_OWN_ICON.includes(ownIcon.toLowerCase())) {
-      shapes[value] = { shape: 'icon', iconName: ownIcon }
-      continue
-    }
-    const key = color?.trim().toLowerCase() ?? ''
-    const parsed = parseColor(key)
-    if (!parsed) {
-      shapes[value] = { shape: 'unknown' }
-      continue
-    }
-    if (!shapeByColor.has(key)) {
-      const base = getBaseShape(parsed)
-      const free = [...SHAPE_VARIANTS[base], ...NEUTRAL_SHAPES].find((shape) => !taken.has(shape))
-      shapeByColor.set(key, free ?? base)
-      taken.add(free ?? base)
-    }
-    shapes[value] = { shape: shapeByColor.get(key) }
+  const ownIconShapes = getOwnIconShapes(nonEmpty, taken)
+  const shapeByColor = new Map<string, StatusShape>()
+  const shapes: Record<string, IStatusShape> = {}
+  for (const config of nonEmpty) {
+    const ownIconShape = ownIconShapes.get(config)
+    shapes[config.value] = ownIconShape ?? takeColorShape(config.color, shapeByColor, taken)
   }
   return shapes
 }

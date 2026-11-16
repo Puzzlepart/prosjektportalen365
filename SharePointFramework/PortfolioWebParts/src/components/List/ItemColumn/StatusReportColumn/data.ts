@@ -33,11 +33,20 @@ interface IStatusFieldConfig {
 }
 
 /**
- * The report ids the rows carry (`StatusReportId`, the latest published report of the row's
- * series, as search found it), each once, and only whole numbers above zero.
+ * Whether a row is the configured hub's, whose `StatusReportId` names an item of that hub's
+ * report list: every row outside a merged view (no `_hubId`), and the primary hub's rows in one
+ * (`_isPrimaryHub`). Another hub's row names an item of its own hub's list.
+ */
+export function isConfiguredHubRow(item: Record<string, any>): boolean {
+  return !item?._hubId || !!item?._isPrimaryHub
+}
+
+/**
+ * The report ids the configured hub's rows carry (`StatusReportId`, the latest published report
+ * of the row's series, as search found it), each once, and only whole numbers above zero.
  */
 function getReportIds(items: Record<string, any>[]): number[] {
-  const ids = items.map((item) => Number(item?.StatusReportId))
+  const ids = items.filter(isConfiguredHubRow).map((item) => Number(item?.StatusReportId))
   return _.uniq(ids.filter((id) => Number.isInteger(id) && id > 0))
 }
 
@@ -138,9 +147,10 @@ function toStatusReport(
 /**
  * Reads what the status report cells show: the sections that become tiles, in the hub's order,
  * with the colour and the shape of each value, the title of the overall status section, and the
- * reports the rows point to (`StatusReportId`). Search found each series' latest published report
- * already, so the reports are read by id, 50 to a request; with no report id among the rows, no
- * report is read.
+ * reports the configured hub's rows point to (`StatusReportId`; in a merged view another hub's
+ * rows name items of that hub's list, which is not read here). Search found each series' latest
+ * published report already, so the reports are read by id, 50 to a request; with no report id
+ * among those rows, no report is read.
  *
  * @param web The hub's web
  * @param column The column, whose settings may name other lists

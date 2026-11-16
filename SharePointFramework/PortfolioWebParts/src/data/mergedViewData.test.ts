@@ -49,6 +49,16 @@ describe('mergePortfolioViewData', () => {
     expect(items[0]).toMatchObject({ _hubId: 'a', _hubUrl: a.url })
   })
 
+  it("marks the primary portfolio's rows as the configured hub's, and leaves the other hubs' rows as they were", () => {
+    const { items } = mergePortfolioViewData([
+      { portfolio: portfolio('a'), data: { items: [row('1'), row('1', { ScopeKey: 'DP1' })] } },
+      { portfolio: portfolio('b'), data: { items: [row('1')] } }
+    ])
+    // Only the configured hub's report list is read for the status report column.
+    expect(items.map((item) => item._isPrimaryHub)).toEqual([true, true, undefined])
+    expect(items[2]).not.toHaveProperty('_isPrimaryHub')
+  })
+
   it('unites the managed properties, each once', () => {
     const { managedProperties } = mergePortfolioViewData([
       { portfolio: portfolio('a'), data: { items: [], managedProperties: ['Title', 'Phase'] } },
@@ -73,6 +83,7 @@ describe('fetchMergedViewData', () => {
     expect(fetchPrimary).toHaveBeenCalledWith(a)
     expect(fetchOther.mock.calls.map(([p]) => p)).toEqual([b, c])
     expect(data.items.map((item) => item._hubTitle)).toEqual(['Hub A', 'Hub B', 'Hub C'])
+    expect(data.items.map((item) => item._isPrimaryHub)).toEqual([true, undefined, undefined])
     expect(data.failedPortfolios).toEqual([])
     expect(data.failedPortfolioErrors).toEqual([])
   })

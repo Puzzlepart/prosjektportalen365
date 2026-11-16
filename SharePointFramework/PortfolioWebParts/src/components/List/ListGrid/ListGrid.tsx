@@ -141,18 +141,21 @@ export const ListGrid: FC<IListGridProps> = (props) => {
                     onContextMenu: onHeaderContextMenu(column),
                     className: styles.headerButton,
                     ...headerMenuProps,
-                    // Beside the button, not in it: there the addon would be part of the header's
-                    // name, cut off with the name, and a click on it would open the column menu.
-                    ...(hasAddon && {
-                      children: (Component, buttonProps) => (
-                        <>
-                          <Component {...buttonProps} />
+                    // The addon goes beside the button, not in it: there it would be part of the
+                    // header's name, cut off with the name, and a click on it would open the column
+                    // menu. Every header gets the function: Fluent renders a slot that has one in a
+                    // fragment, so one given only with an addon would remount the button, and lose
+                    // the focus on it, when the column's data comes or goes.
+                    children: (Component, buttonProps) => (
+                      <>
+                        <Component {...buttonProps} />
+                        {hasAddon && (
                           <div className={styles.headerAddon} aria-hidden>
                             {addon}
                           </div>
-                        </>
-                      )
-                    })
+                        )}
+                      </>
+                    )
                   }}
                 >
                   {column.iconName && (

@@ -10,8 +10,9 @@ import { IListGridProps } from './types'
  * The hub's grid as other lists use it (the program administration's): without a selection for a
  * user who may only look, and with a selection its owner keeps, which the grid shows and reports
  * changes to without keeping one of its own. Also what the hub's list hands it from a column's
- * data type: something to show under the column's name, and the least width the column's data
- * needs. The hub's own use is covered by `List.test.tsx`.
+ * data type: something to show under the column's name, which comes and goes with the column's
+ * data while the header keeps its button, and the least width the column's data needs. The hub's
+ * own use is covered by `List.test.tsx`.
  */
 
 const ITEMS = [{ Title: 'Alfa' }, { Title: 'Bravo' }, { Title: 'Charlie' }]
@@ -197,6 +198,30 @@ describe('ListGrid', () => {
     expect(container.querySelector('[class*="headerCellStacked"]')).toBeNull()
     expect(container.querySelector('[class*="headerAddon"]')).toBeNull()
     expect(screen.getByRole('columnheader', { name: 'Fase' }).children).toHaveLength(2)
+  })
+
+  it("keeps a header's button, and the focus on it, when the column's addon comes or goes", () => {
+    // The overview's data reaches a column after the first render, under the same key, and a
+    // failed fetch takes it away again; a header the user is on must stay the same element.
+    let legend: React.ReactNode = null
+    const renderHeaderAddon = (column: IListColumn) => (column.key === 'Phase' ? legend : null)
+    const props = { columns: TWO_COLUMNS, renderHeaderAddon }
+    const { rerender } = render(grid(props))
+    const button = screen.getByRole('button', { name: 'Fase' })
+    act(() => button.focus())
+    expect(button).toHaveFocus()
+
+    legend = <span>Fr Øk Kv</span>
+    rerender(grid(props))
+    expect(screen.getByText('Fr Øk Kv')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Fase' })).toBe(button)
+    expect(button).toHaveFocus()
+
+    legend = null
+    rerender(grid(props))
+    expect(screen.queryByText('Fr Øk Kv')).toBeNull()
+    expect(screen.getByRole('button', { name: 'Fase' })).toBe(button)
+    expect(button).toHaveFocus()
   })
 
   it('keeps a column at least as wide as its data needs, also when the data comes later to the same columns', () => {

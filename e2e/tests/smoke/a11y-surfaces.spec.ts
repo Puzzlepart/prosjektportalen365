@@ -272,7 +272,8 @@ test.describe('the portfolio overview', () => {
       .getByRole('gridcell')
       .getByRole('button', { name: /^(statusrapport|status report) .+:/i })
       .first()
-    // The column's reports come a moment after the rows.
+    // The column's reports come with its rows, but the overview reads the view more than once as
+    // it mounts, with placeholder rows while it reads and the counter still at the last count.
     await status.waitFor({ timeout: 30_000 }).catch(() => undefined)
     if (!(await status.isVisible())) {
       return notOffered(
@@ -287,9 +288,10 @@ test.describe('the portfolio overview', () => {
     const surface = page.locator(SURFACES.popover).last()
     // Transparent until it is placed, not hidden, so it can take the focus as it opens.
     await expect(surface).toHaveAttribute('data-popper-placement', /\S/, { timeout: 30_000 })
+    const dialog = page.getByRole('dialog', { name: /^.+ (status rapportert|status reported) /i })
     await expect
       .soft(
-        page.getByRole('dialog', { name: /^.+ (status rapportert|status reported) /i }),
+        dialog,
         'the status report opens as a dialog named by its project and date, with the focus'
       )
       .toBeFocused()
@@ -298,9 +300,10 @@ test.describe('the portfolio overview', () => {
     const link = surface.getByRole('link', {
       name: /^åpne statusrapporten$|^open the status report$/i
     })
+    const hasLink = (await link.count()) > 0
     await page.keyboard.press('Tab')
     await expect.soft(close, 'Tab from the status report goes to «Lukk»').toBeFocused()
-    if ((await link.count()) > 0) {
+    if (hasLink) {
       await page.keyboard.press('Tab')
       await expect.soft(link, 'the next Tab goes to the link to the report').toBeFocused()
     }
@@ -311,6 +314,41 @@ test.describe('the portfolio overview', () => {
       surface: SURFACES.popover,
       focusBack: status
     })
+    // Opened again: Shift+Tab from it goes round to its last control, and «Lukk» gives the focus
+    // back to the strip as Escape does, through Tabster as the dialog unmounts with the focus in
+    // it: only a browser shows that.
+    await status.press('Enter')
+    await expect(surface).toHaveAttribute('data-popper-placement', /\S/, { timeout: 30_000 })
+    await expect.soft(dialog, 'the status report opens again with the focus').toBeFocused()
+    const last = hasLink ? link : close
+    await page.keyboard.press('Shift+Tab')
+    await expect
+      .soft(last, 'Shift+Tab from the status report goes round to its last control')
+      .toBeFocused()
+    // Should Shift+Tab have let the dialog go, it is opened again for «Lukk».
+    if (!(await surface.isVisible())) {
+      await status.press('Enter')
+      await expect(surface).toHaveAttribute('data-popper-placement', /\S/, { timeout: 30_000 })
+    }
+    await close.focus()
+    await page.keyboard.press('Enter')
+    await expect(surface, '«Lukk» closes the status report').toBeHidden({ timeout: 10_000 })
+    await expect.soft(status, '«Lukk» gives the focus back to the strip').toBeFocused()
+    // The pointer resting on the strip shows a preview instead (unless the column's «Vis detaljer
+    // når pekeren hviler på stripen» is off). It leaves the focus alone, here on the page itself
+    // rather than on the strip, which would take the Escape itself, and Escape closes it wherever
+    // the focus is (WCAG 1.4.13).
+    await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur())
+    await status.hover()
+    const preview = page.locator(`${SURFACES.popover}[role="group"][data-popper-placement]`).last()
+    await preview.waitFor({ timeout: 2_000 }).catch(() => undefined)
+    const previewed = await preview.isVisible()
+    expect.soft(previewed, 'the pointer resting on the strip shows a preview').toBe(true)
+    if (!previewed) return
+    const focus = await focusAgainst(preview)
+    expect.soft(focus, 'the preview leaves the focus where it was').toBe('on the page itself')
+    await page.keyboard.press('Escape')
+    await expect.soft(preview, 'Escape closes the preview').toBeHidden({ timeout: 10_000 })
   })
 })
 
