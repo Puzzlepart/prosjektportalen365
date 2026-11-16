@@ -340,8 +340,9 @@ export class PackageInstaller {
         featureFlagProvisioning
       })
 
-      // A package that ships taxonomy is provisioned over JSOM by the Taxonomy
-      // handler (which runs first in `applyTemplate` below). Pre-gate only on
+      // A package that ships taxonomy is provisioned over CSOM (ProcessQuery, not
+      // JSOM since sp-js-provisioning 1.6.0) by the Taxonomy handler (which runs
+      // first in `applyTemplate` below). Pre-gate only on
       // Term Store *reachability* here — true write capability can't be probed
       // up front (the REST term-store write API is blocked on OAuth-only
       // tenants; see SPDataAdapter.hasTermStorePermission). A genuine permission
@@ -613,9 +614,11 @@ export class PackageInstaller {
       delete schema.Taxonomy
     }
     // Strip the content types and term sets the admin chose to skip (an id owned
-    // by a different object, or a field reference the hub lacks, which would abort
-    // applyTemplate), so those hub objects are left untouched and the rest still
-    // provisions. Site columns and list fields stay: sp-js-provisioning updates
+    // by a different object, or a field reference the hub lacks), so those hub
+    // objects are left untouched and the rest still provisions. Since
+    // sp-js-provisioning 1.6.0 a field reference the hub lacks no longer aborts
+    // applyTemplate: the engine leaves that link out with an error and links the
+    // rest. Site columns and list fields stay: sp-js-provisioning updates
     // them in place and logs what it leaves alone (see CompatibilityService).
     if (report?.hasConflicts) {
       schema = CompatibilityService.stripConflicts(schema, report)

@@ -445,10 +445,13 @@ export class CompatibilityService {
    * (`skip`/`blocked`): whole ContentTypes entries (an id owned by another content
    * type, or a field reference the hub lacks) and term sets out of
    * `Taxonomy.TermSets` (so an existing term set with the same id but a different
-   * name really is left untouched, as the conflict dialog promises). Site columns
-   * and list fields stay in: sp-js-provisioning 1.5.1 updates them in place, leaves
-   * a type change that would lose values alone and logs a column it cannot create
-   * as an error, without stopping. Mutates a shallow clone so the existing hub
+   * name really is left untouched, as the conflict dialog promises). Since
+   * sp-js-provisioning 1.6.0 a field reference the hub lacks no longer fails the
+   * content type (the engine leaves that link out with an error), but the entry is
+   * still removed when the admin chose to skip it. Site columns and list fields stay
+   * in: sp-js-provisioning 1.5.1 and later update them in place, leave a type change
+   * that would lose values alone and log a column they cannot create as an error,
+   * without stopping. Mutates a shallow clone so the existing hub
    * objects are left untouched on provisioning.
    */
   public static stripConflicts(schema: any, report: ICompatibilityReport): any {
