@@ -34,6 +34,11 @@ const hub = baseURL.replace(/\/+$/, '')
 const project = configuredUrl(process.env.E2E_PROJECT_URL)
 const CHANNEL = process.env.E2E_CHANNEL || 'test'
 const HOME_PAGES = ['Home.aspx', 'Hjem.aspx']
+/**
+ * A project's own home first, as project.spec.ts: a project site also holds SharePoint's
+ * `Home.aspx`, whose first web part (an empty News) is hidden, so the canvas check failed there.
+ */
+const PROJECT_HOME_PAGES = ['ProjectHome.aspx', 'Hjem.aspx', 'Home.aspx']
 
 /** Where a batch of usage statistics goes (`shared-library/src/telemetry/contract.ts`). */
 const USAGE_URL = 'https://assist.prosjektportalen.no/api/telemetry/usage'
@@ -270,7 +275,7 @@ test.describe('usage statistics', () => {
     const level = levelOf(await hubSettings(page, hub))
     test.skip(level < 2, `the hub's level is ${level}: web parts are counted from level 2`)
     const siteIds = [await siteId(page, hub), await siteId(page, project!)]
-    const home = await resolvePage(project!, HOME_PAGES)
+    const home = await resolvePage(project!, PROJECT_HOME_PAGES)
     const sent = await capture(page)
     await openPage(home)
     await sendUntilSent(page, sent)

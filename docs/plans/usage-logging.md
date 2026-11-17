@@ -2834,3 +2834,17 @@ _Each slice adds its entry below._
 - Left: the e2e usage spec's level 3 path on a test-channel run (run 44070091853's e2e started at
   11:58:25 UTC, just before the change; the report's «usage statistics level» annotation tells
   which level a run tested), and the rest of the slice 13 matrix.
+
+### Slice 8: the usage spec's first run at level 3 (2026-11-17)
+
+- Found: run 44070091853 failed both tests of `usage-statistics.spec.ts`, its first at level 3.
+  - The project test opened SharePoint's `Home.aspx` on the test project, whose first web part (an
+    empty News) is hidden, so the canvas check failed before anything was counted.
+  - The hub test saw «no batch was sent»: `getGlobalSettings()` caches in localStorage for 60
+    minutes (`LocalCaching(60)`), and the sign-in setup's storage state carried level 0 into every
+    test, while the spec read `3` by REST.
+- Done: the project test tries `ProjectHome.aspx`, `Hjem.aspx` and `Home.aspx`, as project.spec.ts
+  does. The hub test is left as it is, by the user's choice: it fails only when the level changes
+  during a run, as it may while slice 13's matrix is run.
+- Verified: the e2e project typechecks and the spec is formatted; the run itself needs the test
+  channel.
