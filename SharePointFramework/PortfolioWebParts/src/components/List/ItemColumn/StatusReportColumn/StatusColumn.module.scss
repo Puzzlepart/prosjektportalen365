@@ -54,6 +54,9 @@
     overflow: hidden;
     font-size: var(--fontSizeBase200);
     line-height: var(--lineHeightBase200);
+    // Fluent's TableCellLayout passes `nowrap` down, which leaves no break before the date: it
+    // stayed on the first line and was cut off.
+    white-space: normal;
 
     // An empty inline block first: the line may break between it and the date.
     &::before {

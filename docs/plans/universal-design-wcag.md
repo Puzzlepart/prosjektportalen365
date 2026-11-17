@@ -1970,14 +1970,25 @@ itself as `observer` to `add()` is disposed, as the footer does.
   column follows search, and it reads colours as hex or `rgb()` only), the release notes
   («Synlige endringer») and the WCAG overview's 1.4.1, 1.4.12, 1.4.13 and 2.5.8 lines describe
   it. The overview's «Dette gjenstår» says those lines rest on the code, the component tests and
-  the date's page in Chromium, since the hand rounds of 12–15.11 came before the strip.
-- **Left.** Rounds with NVDA and VoiceOver, and a hand round of the strip once the test hub has
-  published reports; colour names in `Prosjektkolonnekonfigurasjon`, which the old cell drew in
-  their colour and the strip draws as a grey «?» tile (`parseColor` reads hex and `rgb()` only,
-  by design); the focus back to the strip in Safari; whether
-  SharePoint's own Tabster lets Tab out of the trapped dialog; the header's height with the
-  legend, measured in the browser (`scroll-margin-top` assumes 48 px); published reports on the
-  test hub, so the browser steps are offered; `StatusReportPopover` into `A11Y_BLOCKING` after a
+  the check on the dev hub below, since the hand rounds of 12–15.11 came before the strip.
+- **Checked on the dev hub** (2026-11-17, Chromium, `v1.15.0.6bdbbc8 (main)`, the view
+  «Porteføljestatus» with 44 reports). The legend's letters sit centred over their tiles and give
+  the sections' names in `title`; the strip is 24 px high; the header with the legend is 39 px,
+  under the 48 px of `scroll-margin-top`, and a strip focused from out of view lands well clear
+  of it. The preview opens on a resting pointer, leaves the focus and `aria-expanded="false"`
+  alone, and closes on Escape. A click or Enter opens the dialog (`aria-modal`), which takes the
+  focus and keeps Tab and Shift+Tab inside it with SharePoint's own Tabster on the page; Escape
+  and «Lukk» give the focus back to the strip, its ring whole inside the cell. With the 1.4.12
+  spacing every date still fitted. One fault: a date too wide for its room was cut off, not
+  hidden. Fluent's `TableCellLayout` sets `white-space: nowrap`, which the box inherited, so the
+  line could not break before the date; the replica page of 16.11 had no such ancestor. Fixed by
+  `white-space: normal` on the box: narrowed to 60 px, it cut no date off and hid the wider
+  ones, with and without the spacing.
+- **Left.** Rounds with NVDA and VoiceOver, and a full hand round of the strip (zoom, reflow,
+  forced colours) once the test hub has published reports; colour names in
+  `Prosjektkolonnekonfigurasjon`, which the old cell drew in their colour and the strip draws as
+  a grey «?» tile (`parseColor` reads hex and `rgb()` only, by design); the focus back to the
+  strip in Safari; published reports on the test hub, so the browser steps are offered; `StatusReportPopover` into `A11Y_BLOCKING` after a
   clean run; the title cell as a `rowheader`, for every column; the new shapes on the status page
   and in the project information; own icons told by name, so an icon of the UI Fabric font that
   looks like a shape (`Cancel`, `Accept`) reserves nothing; whether «Ingen publisert rapport»

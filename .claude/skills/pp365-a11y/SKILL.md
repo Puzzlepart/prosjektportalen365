@@ -311,7 +311,10 @@ checked by hand and with which reader and browser: axe finds only part of what W
   Segoe UI (measured in Chromium, 2026-11-16). Make its box one line high (`height: 1lh;
   overflow: hidden`) with an empty `inline-block` before the text and the text an `inline-block`
   that does not wrap: a text too wide for the room breaks to the hidden second line, so it shows
-  whole or not at all (`StatusColumn.module.scss`).
+  whole or not at all (`StatusColumn.module.scss`). Give the box `white-space: normal`: a Fluent
+  `TableCellLayout` sets `nowrap` on its content, and with it inherited the line cannot break
+  before the text, which stays on the first line, cut off. A test page without that ancestor
+  passed; the dev hub's list showed it (2026-11-17).
 - A panel's body scrolls (`BasePanel`'s `DrawerBody`); with nothing focusable in it the keyboard
   cannot scroll it (axe's `scrollable-region-focusable`). A panel read rather than worked in sets
   `isBodyFocusable`, which makes the body a region named by the header that takes the focus (the

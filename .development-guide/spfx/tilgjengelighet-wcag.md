@@ -22,7 +22,7 @@ Denne oversikten viser hvordan Prosjektportalen 365 versjon 1.15.0 står mot hve
   - Skjermleser: NVDA med Edge eller Chrome, og VoiceOver med Safari. Disse rundene pågår, og det de har funnet til nå, er rettet i 1.15.0.
   - Windows kontrasttemaer, også fokusrammen der.
   - Det som ikke kunne testes for hånd i testmiljøet: oppsett av prosjekt, som bare vises på et nytt område, og det som skriver til tenanten, som kopiering av dokumentmaler, installasjon av malpakker og opplasting i Dynamisk liste. Dette er dekket av komponenttestene.
-  - Statusrapportkolonnen i porteføljeoversikten, som ble bygd om 16.–17.11.2026, etter håndrundene. Det som står om den under 1.4.1, 1.4.12, 1.4.13 og 2.5.8, bygger på koden, komponenttestene og en prøve av datoen i Chromium. Den er ikke testet for hånd, og nettlesertestene åpner den først når testmiljøet har publiserte statusrapporter.
+  - Statusrapportkolonnen i porteføljeoversikten, som ble bygd om 16.–17.11.2026, etter håndrundene. Det som står om den under 1.4.1, 1.4.12, 1.4.13 og 2.5.8, bygger på koden, komponenttestene og en kontroll i Chromium på dev-huben 17.11.2026 av tastatur og fokus, forhåndsvisningen, tekstavstanden og målstørrelsen. Den har ikke hatt en full håndrunde eller en skjermleserrunde, og nettlesertestene åpner den først når testmiljøet har publiserte statusrapporter.
   - Til dette er gjort, er «Støttes» for kriteriene som må bekreftes med skjermleser, som 1.3.1, 4.1.2 og 4.1.3, en vurdering ut fra testene, koden og tilgjengelighetstreet. Statusen kan endre seg.
 - **Statusene:**
   - **Støttes:** kriteriet er oppfylt i det PP365 selv viser.
@@ -106,7 +106,7 @@ Denne oversikten viser hvordan Prosjektportalen 365 versjon 1.15.0 står mot hve
 
 | Kriterium | Nivå | Status | Merknad |
 |---|---|---|---|
-| 2.4.11 Fokus ikke skjult (minimum) | AA | Støttes | Det som får fokus under de festede fanene på statussiden, holdes fritt. |
+| 2.4.11 Fokus ikke skjult (minimum) | AA | Støttes | Det som får fokus under de festede fanene på statussiden, holdes fritt, og det gjør også stripen i statusrapportkolonnen under den festede kolonnetoppen i porteføljeoversikten. |
 | 2.5.7 Drabevegelser | AA | Støttes | Kolonner flyttes også med knapper og tastatur. |
 | 2.5.8 Målstørrelse (minimum) | AA | Støttes | Foreløpig. Mappenavnene i «Hent dokumentmal» ble gjort minst 24 px høye. Stripen i statusrapportkolonnen er minst 24 × 24 px, og en rapport uten seksjoner å vise gir ingen knapp. Resten er ikke målt ennå. |
 | 3.3.7 Overflødig inntasting | A | Støttes | Ingen skjemaer ber om det samme to ganger. |
