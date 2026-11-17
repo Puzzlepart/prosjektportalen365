@@ -16,7 +16,7 @@
  *   does for the last tag;
  * - a tag and an option show their `media` (a picture) before their text, so a test sees what a
  *   screen reader would read in them;
- * - the list of the tags picked keeps the name and description it is given;
+ * - the list of the tags picked keeps the name and description it is given, and so does a tag;
  * - the control draws the button that opens the list unless its `expandIcon` is null. Fluent
  *   names it from the input, in English, and not at all where there is no input; the stand-in
  *   names it only by the `aria-label` it is given.
@@ -52,12 +52,13 @@ function withTagPickerStandIn() {
       { role: 'group', 'aria-label': props['aria-label'], 'aria-describedby': props['aria-describedby'] },
       props.children
     )
-  const Tag = ({ value, media, children }) => {
+  const Tag = ({ value, media, children, 'aria-describedby': describedBy }) => {
     const context = React.useContext(Picker)
     return h(
       'button',
       {
         type: 'button',
+        'aria-describedby': describedBy,
         onClick: (event) =>
           select(context, event, value, context.selectedOptions.filter((option) => option !== value))
       },
