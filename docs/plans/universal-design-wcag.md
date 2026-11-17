@@ -1964,7 +1964,17 @@ itself as `observer` to `add()` is disposed, as the footer does.
   changed: the date as above, measured on a page of its own in Chromium, shown whole or not at
   all, with and without the spacing; the alias by `getIconKey`; the e2e by passing over a
   button that opens a dialog.
-- **Left.** Rounds with NVDA and VoiceOver; the focus back to the strip in Safari; whether
+- **Shipped** (2026-11-17). Pushed to `main` as `8e1a9ae84` and `6bdbbc8a3`, so the strip is in
+  1.15.0. The changelog (an improvement; a fix for the old cell, which read only the hub's 500
+  newest published reports and stopped the view when the read failed; and two «Merk» lines: the
+  column follows search, and it reads colours as hex or `rgb()` only), the release notes
+  («Synlige endringer») and the WCAG overview's 1.4.1, 1.4.12, 1.4.13 and 2.5.8 lines describe
+  it. The overview's «Dette gjenstår» says those lines rest on the code, the component tests and
+  the date's page in Chromium, since the hand rounds of 12–15.11 came before the strip.
+- **Left.** Rounds with NVDA and VoiceOver, and a hand round of the strip once the test hub has
+  published reports; colour names in `Prosjektkolonnekonfigurasjon`, which the old cell drew in
+  their colour and the strip draws as a grey «?» tile (`parseColor` reads hex and `rgb()` only,
+  by design); the focus back to the strip in Safari; whether
   SharePoint's own Tabster lets Tab out of the trapped dialog; the header's height with the
   legend, measured in the browser (`scroll-margin-top` assumes 48 px); published reports on the
   test hub, so the browser steps are offered; `StatusReportPopover` into `A11Y_BLOCKING` after a
@@ -1978,8 +1988,5 @@ itself as `observer` to `add()` is disposed, as the footer does.
   `GtFieldDataTypeProperties` (`Prosjektkolonner.xml`), which nothing reads now, with no
   `openOnHover` beside them (the code's default is on): to drop there (pp365-templates), not in
   this change, since a change under `Templates/` takes CI's full path; existing hubs keep theirs,
-  unread; the WCAG overview's version and basis (`tilgjengelighet-wcag.md` speaks
-  for 1.15.0 on hand rounds to 15.11.2026: its 1.4.1 line still describes the column's marks
-  before this change, and its 1.4.13 line leaves the preview out); the changelog and the release
-  notes, once the version is chosen, saying the column follows search; #1788's box.
+  unread; #1788's box; a picture of the strip for the release notes.
 
