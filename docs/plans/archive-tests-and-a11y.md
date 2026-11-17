@@ -1,7 +1,7 @@
 # The archive: tests, end to end and universal design, as the rest of PP365
 
 Status: proposed 2026-11-16, for the user's decisions (D1 to D6; D3 taken 2026-11-17); slice 0
-under way on `feat/archive` (the slice log). Branches: `feat/archive` (18 commits on `origin/main` 9ca538a0c,
+done on `feat/archive` but for the dashboard's share (the slice log). Branches: `feat/archive` (18 commits on `origin/main` 9ca538a0c,
 tip 2fbf493c3) and `feat/archive-dashboard` (15 commits on top of it, tip 016ed0941), rebased and
 pushed 2026-11-16 (`--force-with-lease` over the old tips bec84468b and 3f0485c97). Target: 1.16
 (D1). The plan belongs on `feat/archive`; slices branch off it, or are committed on it, as the
@@ -344,8 +344,15 @@ Both branches pushed first, each with `--force-with-lease` against its old tip. 
   project sites under the hub were not upgraded (no `[upgrade-all-sites-to-latest]`). A project
   shows the archive only once «Bruk arkivfunksjonalitet» (`useArchive`, off in both manifests and
   set by no template) is on in Prosjektinformasjon and in Prosjektfaser (F8).
-- **Not done.** The test channel's dispatch (after 19.11), and the dashboard's share of the slice
-  (after its rebase on this).
+- **Test channel (2026-11-17).** At the user's word, dispatched on `feat/archive` (`3101a38a2`)
+  once the channel's queue was empty, so no waiting run of `main` was cancelled: run
+  44075698809. The build took 16 min and the full upgrade of the test hub 36; the integration
+  tests were green. E2E: 121 passed, 1 skipped, 2 flaky (`a11y-baseline`'s benefit overview,
+  `a11y-visual`'s program home at 320 px) and 1 failed: `usage-statistics.spec.ts:263` (a
+  project's home counts its web parts), where the page's first web part is SharePoint's News,
+  hidden, so `expectCanvasRendered` times out. `main`'s run 44070091853 fails that test the same
+  way, so it is not the archive's. The test hub runs `feat/archive` until `main`'s next run there.
+- **Not done.** The dashboard's share of the slice (after its rebase on this).
 - **Found.** F8 and F9. On `main`, `Templates/Portfolio/Objects/Lists/@.xml` includes
   `FasesjekklisteV6.xml` and `PlanneroppgaverV6.xml`, where the files are `Fasesjekklistev6.xml`
   and `Planneroppgaverv6.xml`; `main`'s Linux builds pass with them. Left for `main`.
