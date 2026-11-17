@@ -2,9 +2,9 @@ import * as strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
 import { Text } from '@fluentui/react-components'
 import { DocumentMultiple16Regular, ListBar16Regular } from '@fluentui/react-icons'
-import { format } from '@fluentui/react'
-import { FileTypeIcon } from 'pp365-shared-library'
+import { FileTypeIcon, format } from 'pp365-shared-library'
 import styles from './ArchiveSelection.module.scss'
+import { getFileExtension } from './getFileExtension'
 import { IArchiveItem } from './types'
 
 export interface ISelectionSummaryProps {
@@ -72,7 +72,7 @@ export const SelectionSummary: FC<ISelectionSummaryProps> = ({
                     <ListBar16Regular className={styles.summaryItemIcon} />
                   ) : (
                     <FileTypeIcon
-                      extension={item.title}
+                      extension={getFileExtension(item.title)}
                       size={16}
                       className={styles.summaryItemIcon}
                     />

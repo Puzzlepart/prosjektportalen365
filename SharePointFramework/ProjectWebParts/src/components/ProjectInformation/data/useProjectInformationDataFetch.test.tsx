@@ -55,12 +55,14 @@ import { useProjectInformationDataFetch } from './useProjectInformationDataFetch
  * keeps as its cause.
  *
  * @param page The page the web part is on (`Frontpage` reads the hub for more)
+ * @param useArchive Whether the web part shows the archive, whose status the front page reads
  */
-async function fetchInformation(page = 'ProjectPage') {
+async function fetchInformation(page = 'ProjectPage', useArchive = true) {
   const dispatch = jest.fn()
   const context = {
     props: {
       page,
+      useArchive,
       hideStatusReport: true,
       siteId: 'site-1',
       webAbsoluteUrl: 'https://contoso.sharepoint.com/sites/frisbee',
@@ -119,6 +121,12 @@ describe('useProjectInformationDataFetch', () => {
     })
     expect(adapter.checkProjectAdminPermissions).toHaveBeenCalledTimes(2)
     expect(countedTelemetry().errors).toEqual({})
+  })
+
+  it('reads no archive status when the web part does not show the archive', async () => {
+    const action = await fetchInformation('Frontpage', false)
+    expect(action.type).toBe(INIT_DATA.type)
+    expect(action.payload.state.data.archiveStatus).toBeNull()
   })
 
   it("takes the site's own permissions when the hub is out of reach, which is no error", async () => {

@@ -19,9 +19,7 @@ import type { SustainabilityGoalIconSize } from './SustainabilityGoals'
 export type ProjectInformationPanelType = 'EditPropertiesPanel' | 'AllPropertiesPanel'
 /** Setup dialogs available from project information. */
 export type ProjectInformationDialogType =
-  | 'CreateParentDialog'
-  | 'RunProjectSetupDialog'
-  | 'ArchiveDialog'
+  'CreateParentDialog' | 'RunProjectSetupDialog' | 'ArchiveDialog'
 /** Host page determining which project information sections are available. */
 export type ProjectInformationPage = 'Frontpage' | 'ProjectStatus' | 'Portfolio'
 

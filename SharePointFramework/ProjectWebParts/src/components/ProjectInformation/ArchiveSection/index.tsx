@@ -21,6 +21,7 @@ export const ArchiveSection: FC = () => {
       <WebPartTitle
         title={strings.ArchiveSectionTitle}
         description={strings.ArchiveSectionDescription}
+        headingLevel={3}
       />
       <Button
         appearance='subtle'

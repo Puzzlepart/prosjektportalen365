@@ -78,7 +78,8 @@ export function useArchiveDialogData(webUrl: string, enabled: boolean): IArchive
             phaseName: phaseNameById.get(doc.projectPhaseId),
             documentTypeName: docTypeNameById.get(doc.documentTypeId),
             selected: false,
-            disabled: archiveableTypeIds.size > 0 ? !archiveableTypeIds.has(doc.documentTypeId) : false
+            disabled:
+              archiveableTypeIds.size > 0 ? !archiveableTypeIds.has(doc.documentTypeId) : false
           }))
         )
         setLists(

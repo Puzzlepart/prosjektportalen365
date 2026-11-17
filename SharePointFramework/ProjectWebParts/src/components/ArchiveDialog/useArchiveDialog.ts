@@ -130,8 +130,8 @@ export function useArchiveDialog({ open, webUrl, onDismiss, onArchived }: IArchi
     view === 'archiving'
       ? strings.ArchiveProgressTitle
       : view === 'completed'
-      ? strings.ArchiveCompletedTitle
-      : strings.ArchiveViewTitle
+        ? strings.ArchiveCompletedTitle
+        : strings.ArchiveViewTitle
 
   return {
     fluentProviderId,

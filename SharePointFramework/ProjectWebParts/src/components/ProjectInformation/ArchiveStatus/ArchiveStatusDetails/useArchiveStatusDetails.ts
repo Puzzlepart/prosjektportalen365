@@ -12,6 +12,18 @@ import { IArchiveOperation } from '../../../../data/SPDataAdapter/types'
 export type StatusFilter = 'all' | 'success' | 'pending' | 'failed'
 
 /**
+ * The colour of each archive status's icon. Each stands out from the row its tag sits in by at
+ * least 3:1 (WCAG 1.4.11): the warning is Fluent's orange (4.6:1), where CSS orange had 1.8:1. The
+ * tag's text keeps its own colour, since the status colours read under 4.5:1 as text (1.4.3).
+ */
+export const ARCHIVE_STATUS_COLORS: Record<string, string> = {
+  [strings.ArchiveLogStatusSuccess]: '#107c10',
+  [strings.ArchiveLogStatusError]: '#d13438',
+  [strings.ArchiveLogStatusWarning]: '#bc4b09',
+  [strings.ArchiveLogStatusInProgress]: '#0078d4'
+}
+
+/**
  * Highest-severity status across an operation's scopes
  * (error > warning > in-progress > success).
  *

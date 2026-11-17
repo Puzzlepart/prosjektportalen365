@@ -10,21 +10,7 @@ jest.mock('../../../data', () => ({
   }
 }))
 jest.mock('../useChangePhase', () => ({ useChangePhase: () => mockChangePhase }))
-jest.mock('../usePhaseHooks', () => ({ usePhaseHooks: () => [jest.fn(), jest.fn()] }))
-// The archive step lists the site's documents and lists, which it reads from SharePoint; the test
-// hands it its sections.
-const archive: { sections: any[] } = { sections: [] }
-jest.mock('./Views/ArchiveView/useArchiveView', () => ({
-  useArchiveView: () => ({
-    sections: archive.sections,
-    isLoading: false,
-    toggleSection: jest.fn(),
-    toggleItemSelection: jest.fn(),
-    toggleSectionSelectAll: jest.fn(),
-    getSelectedItemsCount: () => 0,
-    getSectionContentId: (key: string) => `archive-section-${key}`
-  })
-}))
+jest.mock('../usePhaseHooks', () => ({ usePhaseHooks: () => jest.fn() }))
 
 import { AriaLiveAnnouncer } from '@fluentui/react-components'
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
@@ -43,9 +29,15 @@ import { announced } from 'pp365-jest-config/lib/announce'
  * The change-phase dialog: the open checkpoints one by one with a comment and a status, the
  * summary of them, the confirmation, and the buttons that move between the steps or cancel. It is
  * rendered under an `AriaLiveAnnouncer`, as every root of ours is (`renderReact`), so what it
- * announces can be read from the announcer's live region.
+ * announces can be read from the announcer's live region. The archive step takes the documents
+ * and lists the phases' data fetch read (`data`).
  */
-function renderDialog(current: any, next: any, props: Record<string, any> = {}) {
+function renderDialog(
+  current: any,
+  next: any,
+  props: Record<string, any> = {},
+  data: Record<string, any> = {}
+) {
   const dispatch = jest.fn()
   render(
     <AriaLiveAnnouncer>
@@ -55,7 +47,7 @@ function renderDialog(current: any, next: any, props: Record<string, any> = {}) 
             state: {
               phase: current,
               confirmPhase: next,
-              data: { phases: [current, next].filter(Boolean), phaseSitePages: [] }
+              data: { phases: [current, next].filter(Boolean), phaseSitePages: [], ...data }
             },
             props: {
               useArchive: false,
@@ -318,30 +310,24 @@ describe('ChangePhaseDialog', () => {
     expect(await axeComponent(screen.getByRole('dialog'))).toHaveNoViolations()
   })
 
-  it('says whether each archive section is open (WCAG 4.1.2)', () => {
-    archive.sections = [
+  it("names each of the archive step's tables by its section, and says which items are chosen (WCAG 4.1.2)", () => {
+    // The sections no longer fold: each is a table, named by its section, with a check per item.
+    renderDialog(
+      phase('p1', 'Konsept'),
+      planning,
+      { useArchive: true },
       {
-        key: 'documents',
-        title: 'Dokumenter',
-        expanded: false,
-        items: [{ id: 1, title: 'Plan.docx', type: 'file', selected: false }]
-      },
-      {
-        key: 'lists',
-        title: 'Lister',
-        expanded: true,
-        items: [{ id: 2, title: 'Risikoer', type: 'list', selected: true, itemCount: 3 }]
+        archiveDocuments: [{ id: 1, title: 'Plan.docx', type: 'file', selected: false }],
+        archiveLists: [{ id: 2, title: 'Risikoer', type: 'list', selected: false, itemCount: 3 }]
       }
-    ]
-    renderDialog(phase('p1', 'Konsept'), planning, { useArchive: true })
-    expect(screen.getByRole('button', { name: /^Dokumenter/ })).toHaveAttribute(
-      'aria-expanded',
-      'false'
     )
-    const lists = screen.getByRole('button', { name: /^Lister/ })
-    expect(lists).toHaveAttribute('aria-expanded', 'true')
-    expect(document.getElementById(lists.getAttribute('aria-controls'))).toHaveTextContent(
-      'Risikoer'
-    )
+    const documents = screen.getByRole('table', { name: strings.ArchiveDocumentsSection })
+    expect(within(documents).getByText('Plan.docx')).toBeInTheDocument()
+    const lists = screen.getByRole('table', { name: strings.ArchiveListsSection })
+    expect(within(lists).getByText('Risikoer')).toBeInTheDocument()
+    const [, risks] = within(lists).getAllByRole('checkbox')
+    expect(risks).not.toBeChecked()
+    fireEvent.click(risks)
+    expect(risks).toBeChecked()
   })
 })

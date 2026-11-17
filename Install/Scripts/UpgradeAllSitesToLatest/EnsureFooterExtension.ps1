@@ -19,7 +19,8 @@ $ChannelFooterIds = @(
   "84f27cec-ffde-4e00-a4cf-25c69f691054", # main
   "65d27710-49a9-4492-a4ec-3ac4f1e798d2", # test
   "75d27710-49a9-4492-a4ec-3ac4f1e798d3", # i18n
-  "230f9162-35d0-499c-a849-4b69175ee7fe"  # kurs
+  "230f9162-35d0-499c-a849-4b69175ee7fe", # kurs
+  "3dfa7ce1-1918-4815-8692-6119b1c62c2d"  # arkiv
 )
 
 # Only a package that names its channel (.current-channel-config.json) knows which footer is the

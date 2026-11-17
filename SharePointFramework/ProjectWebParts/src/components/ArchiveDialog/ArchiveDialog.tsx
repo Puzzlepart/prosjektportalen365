@@ -21,9 +21,8 @@ import {
   CheckmarkCircle24Filled,
   Dismiss24Regular
 } from '@fluentui/react-icons'
-import { format } from '@fluentui/react'
 import * as strings from 'ProjectWebPartsStrings'
-import { customLightTheme, UserMessage } from 'pp365-shared-library'
+import { customLightTheme, format, UserMessage } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { ArchiveProgress } from './ArchiveProgress'
 import { ArchiveSelection } from './ArchiveSelection/ArchiveSelection'

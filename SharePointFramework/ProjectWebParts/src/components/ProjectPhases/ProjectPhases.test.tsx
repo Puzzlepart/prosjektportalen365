@@ -64,7 +64,7 @@ jest.mock('@fluentui/react-components', () => {
   return { __esModule: true, ...actual, Popover, PopoverTrigger, PopoverSurface }
 })
 jest.mock('./useChangePhase', () => ({ useChangePhase: () => jest.fn() }))
-jest.mock('./usePhaseHooks', () => ({ usePhaseHooks: () => [jest.fn(), jest.fn()] }))
+jest.mock('./usePhaseHooks', () => ({ usePhaseHooks: () => jest.fn() }))
 
 import { AriaLiveAnnouncer } from '@fluentui/react-components'
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
@@ -122,8 +122,6 @@ function renderPhases(
       hookUrl=''
       hookAuth=''
       useArchive={false}
-      hookArchiveUrl=''
-      hookArchiveAuth=''
       commentMinLength={4}
       webAbsoluteUrl='https://contoso.sharepoint.com/sites/alfa'
       {...props}

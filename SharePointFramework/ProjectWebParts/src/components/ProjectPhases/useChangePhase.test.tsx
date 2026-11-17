@@ -8,7 +8,7 @@ jest.mock('.', () => ({ ProjectPhases: { displayName: 'Project Phases' } }))
 jest.mock('pp365-shared-library/lib/logging', () => ({
   ListLogger: { log: jest.fn(() => Promise.resolve()) }
 }))
-jest.mock('./usePhaseHooks', () => ({ usePhaseHooks: () => [jest.fn()] }))
+jest.mock('./usePhaseHooks', () => ({ usePhaseHooks: () => jest.fn() }))
 jest.mock('./useChangeWelcomePage', () => ({
   useChangeWelcomePage: () => jest.fn(() => Promise.resolve())
 }))

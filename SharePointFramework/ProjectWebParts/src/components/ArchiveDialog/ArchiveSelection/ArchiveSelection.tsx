@@ -3,7 +3,6 @@ import React, { FC, ReactNode, useState } from 'react'
 import {
   Badge,
   makeStyles,
-  mergeClasses,
   SearchBoxProps,
   Skeleton,
   SkeletonItem,
@@ -34,9 +33,10 @@ import styles from './ArchiveSelection.module.scss'
 import { useArchiveSelection } from './useArchiveSelection'
 import { useArchiveTable } from './useArchiveTable'
 import { IArchiveItem, IArchiveSection, IArchiveSelectionProps } from './types'
-import { format } from '@fluentui/react'
+import { getFileExtension } from './getFileExtension'
 import {
   FileTypeIcon,
+  format,
   formatDate,
   ListMenuItem,
   ListMenuItemDivider,
@@ -47,7 +47,6 @@ import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 
 const Info = bundleIcon(Info20Filled, Info20Regular)
-
 
 const useSelectionStyles = makeStyles({
   /** Green info indicator for archivable documents. */
@@ -453,7 +452,11 @@ const NameCell: FC<{ item: IArchiveItem; showFileMeta: boolean }> = ({ item, sho
   if (!showFileMeta) return text
   return (
     <div className={styles.nameCell}>
-      <FileTypeIcon extension={item.title} size={16} className={styles.itemIcon} />
+      <FileTypeIcon
+        extension={getFileExtension(item.title)}
+        size={16}
+        className={styles.itemIcon}
+      />
       {text}
     </div>
   )

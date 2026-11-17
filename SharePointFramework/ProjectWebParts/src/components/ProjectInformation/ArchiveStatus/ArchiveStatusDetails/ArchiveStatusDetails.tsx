@@ -23,7 +23,11 @@ import * as strings from 'ProjectWebPartsStrings'
 import { formatDate } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { IArchiveOperation } from '../../../../data/SPDataAdapter/types'
-import { primaryStatusOf, useArchiveStatusDetails } from './useArchiveStatusDetails'
+import {
+  ARCHIVE_STATUS_COLORS,
+  primaryStatusOf,
+  useArchiveStatusDetails
+} from './useArchiveStatusDetails'
 import styles from './ArchiveStatusDetails.module.scss'
 
 /**
@@ -40,13 +44,15 @@ export interface IArchiveStatusDetailsProps {
   onRefresh?: () => void
 }
 
+/** A status as a tag: its icon in the status's colour, its text in the tag's own (WCAG 1.4.3). */
 const StatusTag: FC<{ status: string }> = ({ status }) => {
+  const iconStyle = { color: ARCHIVE_STATUS_COLORS[status] }
   if (status === strings.ArchiveLogStatusSuccess) {
     return (
       <Tag
         appearance='outline'
         size='small'
-        icon={<CheckmarkCircle16Filled />}
+        icon={<CheckmarkCircle16Filled style={iconStyle} />}
         className={`${styles.statusTag} ${styles.success}`}
       >
         {status}
@@ -58,7 +64,7 @@ const StatusTag: FC<{ status: string }> = ({ status }) => {
       <Tag
         appearance='outline'
         size='small'
-        icon={<HourglassHalf16Regular />}
+        icon={<HourglassHalf16Regular style={iconStyle} />}
         className={`${styles.statusTag} ${styles.pending}`}
       >
         {status}
@@ -70,7 +76,7 @@ const StatusTag: FC<{ status: string }> = ({ status }) => {
       <Tag
         appearance='outline'
         size='small'
-        icon={<Warning16Filled />}
+        icon={<Warning16Filled style={iconStyle} />}
         className={`${styles.statusTag} ${styles.warning}`}
       >
         {status}
@@ -82,7 +88,7 @@ const StatusTag: FC<{ status: string }> = ({ status }) => {
       <Tag
         appearance='outline'
         size='small'
-        icon={<DismissCircle16Filled />}
+        icon={<DismissCircle16Filled style={iconStyle} />}
         className={`${styles.statusTag} ${styles.error}`}
       >
         {status}
@@ -120,6 +126,21 @@ const SegmentedProgressBar: FC<{
     </div>
   )
 }
+
+/** A status filter for the operations table, with its count. */
+const FilterChip: FC<{
+  active: boolean
+  count?: number
+  onClick: () => void
+  children: string
+}> = ({ active, count, onClick, children }) => (
+  <Tooltip content={children} relationship='label' withArrow>
+    <Button appearance={active ? 'primary' : 'outline'} size='small' onClick={onClick}>
+      {children}
+      {typeof count === 'number' && <span style={{ marginLeft: 6, opacity: 0.75 }}>({count})</span>}
+    </Button>
+  </Tooltip>
+)
 
 /**
  * Expanded archive history for a project: a summary strip with a segmented
@@ -253,17 +274,3 @@ export const ArchiveStatusDetails: FC<IArchiveStatusDetailsProps> = ({
     </div>
   )
 }
-
-const FilterChip: FC<{
-  active: boolean
-  count?: number
-  onClick: () => void
-  children: string
-}> = ({ active, count, onClick, children }) => (
-  <Tooltip content={children} relationship='label' withArrow>
-    <Button appearance={active ? 'primary' : 'outline'} size='small' onClick={onClick}>
-      {children}
-      {typeof count === 'number' && <span style={{ marginLeft: 6, opacity: 0.75 }}>({count})</span>}
-    </Button>
-  </Tooltip>
-)

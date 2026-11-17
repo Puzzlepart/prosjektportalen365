@@ -1,7 +1,11 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
 // Babel, so mocks are not hoisted. The data adapter reads the phase field, the phases, the project
-// and what can be archived; the phase field fails with what `adapter.fail` holds.
+// and what can be archived, and when each item was archived before; the phase field fails with
+// what `adapter.fail` holds.
 const adapter: { fail: unknown } = { fail: undefined }
+const archiveHistory = new Map([
+  ['doc-1', { date: new Date(2026, 9, 1), status: 'Arkivert', operation: 'Fasebytte' }]
+])
 jest.mock('../../data', () => ({
   __esModule: true,
   default: {
@@ -22,6 +26,7 @@ jest.mock('../../data', () => ({
         { title: 'Endringsanalyse', itemCount: 0 }
       ]),
     getArchiveStatus: () => Promise.resolve({ lastArchiveDate: '2026-11-01' }),
+    getArchiveHistoryForItems: () => Promise.resolve(archiveHistory),
     project: {
       getChecklistData: () => Promise.resolve({}),
       getWelcomePage: () => Promise.resolve('SitePages/Home.aspx'),
@@ -30,8 +35,8 @@ jest.mock('../../data', () => ({
       getCurrentPhaseName: () => Promise.resolve('Planlegge'),
       getDocumentTypes: () =>
         Promise.resolve([
-          { id: 'mandat', isArchiveable: true },
-          { id: 'notat', isArchiveable: false }
+          { id: 'mandat', name: 'Prosjektmandat', isArchiveable: true },
+          { id: 'notat', name: 'Notat', isArchiveable: false }
         ])
     }
   }
@@ -106,6 +111,7 @@ describe('useProjectPhasesDataFetch', () => {
     expect(data.userHasChangePhasePermission).toBe(true)
     expect(data.phaseSitePages).toEqual([])
     expect(data).not.toHaveProperty('archiveDocuments')
+    expect(data).not.toHaveProperty('archiveHistory')
     expect(error).toBeUndefined()
     expect(countedTelemetry().errors).toEqual({})
   })
@@ -122,17 +128,22 @@ describe('useProjectPhasesDataFetch', () => {
     expect(data.phaseSitePages).toEqual([
       { id: 3, title: 'Planlegge', fileLeafRef: 'Planlegge.aspx' }
     ])
-    // A document can be chosen when its type can be archived, and a list when it has items.
-    expect(data.documentTypes).toEqual([{ id: 'mandat', isArchiveable: true }])
+    // A document can be chosen when its type can be archived, and a list when it has items. Each
+    // document carries its type's name, which the archive step shows and filters on.
+    expect(data.documentTypes).toEqual([
+      { id: 'mandat', name: 'Prosjektmandat', isArchiveable: true }
+    ])
     expect(data.archiveDocuments).toMatchObject([
-      { id: 1, selected: false, disabled: false },
-      { id: 2, selected: false, disabled: true }
+      { id: 1, selected: false, disabled: false, documentTypeName: 'Prosjektmandat' },
+      { id: 2, selected: false, disabled: true, documentTypeName: 'Notat' }
     ])
     expect(data.archiveLists).toMatchObject([
       { title: 'Usikkerhet', selected: false, disabled: false },
       { title: 'Endringsanalyse', selected: false, disabled: true }
     ])
     expect(data.archiveStatus).toEqual({ lastArchiveDate: '2026-11-01' })
+    // What was archived before, for the archive step to say so beside each item.
+    expect(data.archiveHistory).toBe(archiveHistory)
     expect(countedTelemetry().errors).toEqual({})
   })
 

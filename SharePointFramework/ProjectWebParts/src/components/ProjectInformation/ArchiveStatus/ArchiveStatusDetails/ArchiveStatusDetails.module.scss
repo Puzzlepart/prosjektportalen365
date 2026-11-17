@@ -145,24 +145,21 @@
       color: var(--colorNeutralForeground2);
     }
 
+    // The status's colour is its icon's (`ARCHIVE_STATUS_COLORS`); the text keeps the tag's own.
     .statusTag {
       &.success {
-        color: #107c10;
         border-color: rgba(16, 124, 16, 0.4);
       }
 
       &.pending {
-        color: #0078d4;
         border-color: rgba(0, 120, 212, 0.4);
       }
 
       &.warning {
-        color: #b27a00;
         border-color: rgba(178, 122, 0, 0.4);
       }
 
       &.error {
-        color: #d13438;
         border-color: rgba(209, 52, 56, 0.4);
       }
     }
