@@ -1,5 +1,11 @@
 name: CI (channels/arkiv)
 
+# The archive's release channel (channels/arkiv.json) on a hub of its own, so feat/archive can be
+# tried on the tenant without the shared test hub, which the 1.15 release holds until 19 November
+# 2026. It builds and upgrades as ci-channel-test.yml does and runs no end-to-end or integration
+# tests: they need the test hub's project and program sites, so they run on the test channel
+# (gh workflow run ci-channel-test.yml --ref feat/archive). The file belongs to the branch: the
+# pull request's last commit deletes it.
 on:
   push:
     branches:
@@ -9,99 +15,203 @@ on:
       - 'Install/**'
       - 'Templates/**'
       - .github/workflows/ci-channel-arkiv.yml
+  # Manual runs: gh workflow run ci-channel-arkiv.yml --ref feat/archive. The Actions tab's "Run
+  # workflow" reads main's copy of a workflow, and this one is not on main.
+  workflow_dispatch:
+
+# The jobs only read the repository; the deployments sign in to the tenant with the certificate.
+permissions:
+  contents: read
+
+# One run at a time: every run upgrades the same hub and app catalog, so two at once can overwrite
+# each other mid-run. A newer run waits for the running one. GitHub keeps only the newest waiting
+# run in a group and cancels an older waiting one, and a cancelled full run's templates are not
+# applied: push the commit that needs the full run last.
+concurrency:
+  group: ci-channel-arkiv
+  cancel-in-progress: false
 
 env:
+  # Heft's production build needs more than V8's default heap on a small runner, and
+  # RUSH_PARALLELISM bounds the concurrent solution builds (ci-channel-test.yml says more).
+  NODE_OPTIONS: --max-old-space-size=8192
+  RUSH_PARALLELISM: 2
   CI_CERT_BASE64: ${{ secrets.CI_CERT_BASE64 }}
   CI_TENANT: ${{ secrets.CI_TENANT }}
   CI_CLIENT_ID: ${{ secrets.CI_CLIENT_ID }}
   SP_URL_ARKIV: https://puzzlepart.sharepoint.com/sites/pp365-arkiv
 
+# Every job has a timeout. GitHub's default is six hours, and with one run at a time a hung job
+# holds every later run as long. Measured on macos-latest in September 2026: build 10-17 min, full
+# upgrade 36-62, packages-only upgrade 4-5; so the full upgrade gets 90 rather than the test
+# channel's 60.
+#
+# The upgrades pass the certificate and the ids as $env: references, which PowerShell reads at run
+# time, so the secrets are never written into the step's script on the runner.
 jobs:
-  build_release_package_arkiv:
-    name: Build release package (arkiv channel)
-    runs-on: macos-latest
-    if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') && !contains(github.event.head_commit.message, '[apps-only]') }}
+  # Tags like [skip-ci] and [apps-only] count only in the commit's subject (first line), as in
+  # every workflow on main: a squash's body holds the pull request's commit subjects.
+  commit_subject:
+    name: Determine commit subject
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      subject: ${{ steps.subject.outputs.subject }}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
+      - name: Extract first line of commit message
+        id: subject
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        run: echo "subject=${COMMIT_MESSAGE%%$'\n'*}" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/setup-node@v4
+  build_release_package_arkiv:
+    needs: [commit_subject]
+    name: Build release package (arkiv channel)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    if: ${{ !contains(needs.commit_subject.outputs.subject, '[skip-ci]') && !contains(needs.commit_subject.outputs.subject, '[apps-only') }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
         with:
-          node-version: ${{ vars.NODE_VERSION }}
+          node-version-file: '.nvmrc'
 
       - name: Run Install/Build-Release.ps1 in CI mode for channel arkiv
+        # The run number becomes the fourth segment of every package version, so each deployment
+        # is a new version to SharePoint and clients refetch the manifests (SharePointFramework/.tasks/README.md).
+        env:
+          PP365_BUILD_NUMBER: ${{ github.run_number }}
         run: Install/Build-Release.ps1 -CI -SkipBundle -Channel arkiv
         shell: pwsh
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-package-arkiv
           path: release
+          # Dotfiles too: UpgradeAllSitesToLatest.ps1 reads the channel from .current-channel-config.json.
+          include-hidden-files: true
+
+      # Build-Release.ps1 prints the last 200 lines of a failed rebuild; the whole logs are here.
+      - name: Upload the Rush logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: rush-logs-arkiv-channel
+          path: |
+            SharePointFramework/rush-*.build.log
+            SharePointFramework/*/rush-logs/
+            Templates/rush-logs/
+            e2e/rush-logs/
+            integration/rush-logs/
+          if-no-files-found: warn
+          retention-days: 7
 
   upgrade_channel_arkiv:
-    needs: [build_release_package_arkiv]
+    needs: [commit_subject, build_release_package_arkiv]
     name: Upgrade (arkiv channel)
-    runs-on: macos-latest
-    if: ${{ !contains(github.event.head_commit.message, '[skip-upgrade]') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    if: ${{ !contains(needs.commit_subject.outputs.subject, '[skip-upgrade]') }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: release-package-arkiv
           path: release
 
       - name: Upgrade
-        run: release/Install.ps1 -Url "${{ env.SP_URL_ARKIV }}" -Upgrade -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }}
-        shell: powershell
+        run: release/Install.ps1 -Url "$env:SP_URL_ARKIV" -Upgrade -CI -Tenant $env:CI_TENANT -CertificateBase64Encoded $env:CI_CERT_BASE64 -ClientId $env:CI_CLIENT_ID
+        shell: pwsh
 
   upgrade_all_sites_to_latest:
-    needs: [build_release_package_arkiv, upgrade_channel_arkiv]
+    needs: [commit_subject, build_release_package_arkiv, upgrade_channel_arkiv]
     name: Upgrade all sites to latest (arkiv channel)
-    runs-on: macos-latest
-    if: ${{ contains(github.event.head_commit.message, '[upgrade-all-sites-to-latest]') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    if: ${{ contains(needs.commit_subject.outputs.subject, '[upgrade-all-sites-to-latest]') }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: release-package-arkiv
           path: release
 
       - name: Run script UpgradeAllSitesToLatest.ps1 in CI mode
-        run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url ${{ env.SP_URL_ARKIV }} -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }}
-        shell: powershell
-
-  build_release_package_arkiv_packages_only:
-    name: Build release package - packages only (arkiv channel)
-    runs-on: macos-latest
-    if: ${{ contains(github.event.head_commit.message, '[apps-only]') }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ vars.NODE_VERSION }}
-
-      - name: Run Install/Build-Release.ps1 in CI mode for channel arkiv
-        run: Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel arkiv
+        run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url "$env:SP_URL_ARKIV" -CI -Tenant $env:CI_TENANT -CertificateBase64Encoded $env:CI_CERT_BASE64 -ClientId $env:CI_CLIENT_ID
         shell: pwsh
 
-      - uses: actions/upload-artifact@v4
+  build_release_package_arkiv_packages_only:
+    needs: [commit_subject]
+    name: Build release package - packages only (arkiv channel)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    if: ${{ contains(needs.commit_subject.outputs.subject, '[apps-only') }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Determine apps-only solutions
+        id: appsonly
+        env:
+          COMMIT_MSG: ${{ needs.commit_subject.outputs.subject }}
+        run: |
+          $solutions = ''
+          if ($env:COMMIT_MSG -match '\[apps-only:([^\]]+)\]') {
+            $solutions = (($matches[1] -split ',') | ForEach-Object { $_.Trim() } | Where-Object { $_ }) -join ','
+          }
+          "solutions=$solutions" >> $env:GITHUB_OUTPUT
+        shell: pwsh
+
+      - name: Run Install/Build-Release.ps1 in CI mode for channel arkiv
+        # The rebuild's timeline goes to the log and the job summary. PnP.PowerShell is not
+        # installed: only the PnP templates use it, and this job skips them.
+        env:
+          SOLUTIONS: ${{ steps.appsonly.outputs.solutions }}
+          PP365_BUILD_NUMBER: ${{ github.run_number }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:SOLUTIONS)) {
+            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel arkiv -RushTimeline -SkipPnPPowerShell
+          }
+          else {
+            Install/Build-Release.ps1 -CI -SkipBundle -SkipBuildPnPTemplates -Channel arkiv -RushTimeline -SkipPnPPowerShell -Solutions ($env:SOLUTIONS -split ',')
+          }
+        shell: pwsh
+
+      - uses: actions/upload-artifact@v7
         with:
           name: release-package-arkiv
           path: release
+          # Dotfiles too: UpgradeAllSitesToLatest.ps1 reads the channel from .current-channel-config.json.
+          include-hidden-files: true
+
+      - name: Upload the Rush logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: rush-logs-arkiv-channel
+          path: |
+            SharePointFramework/rush-*.build.log
+            SharePointFramework/*/rush-logs/
+            Templates/rush-logs/
+            e2e/rush-logs/
+            integration/rush-logs/
+          if-no-files-found: warn
+          retention-days: 7
 
   upgrade_channel_arkiv_packages_only:
-    needs: [build_release_package_arkiv_packages_only]
+    needs: [commit_subject, build_release_package_arkiv_packages_only]
     name: Upgrade packages only (arkiv channel)
-    runs-on: macos-latest
-    if: ${{ !contains(github.event.head_commit.message, '[skip-upgrade]') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: ${{ !contains(needs.commit_subject.outputs.subject, '[skip-upgrade]') }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: release-package-arkiv
           path: release
 
       - name: Upgrade
-        run: release/Install.ps1 -Url "${{ env.SP_URL_ARKIV }}" -Upgrade -CI -Tenant ${{ env.CI_TENANT }} -CertificateBase64Encoded ${{ env.CI_CERT_BASE64 }} -ClientId ${{ env.CI_CLIENT_ID }} -SkipTemplate
-        shell: powershell
+        run: release/Install.ps1 -Url "$env:SP_URL_ARKIV" -Upgrade -CI -Tenant $env:CI_TENANT -CertificateBase64Encoded $env:CI_CERT_BASE64 -ClientId $env:CI_CLIENT_ID -SkipTemplate
+        shell: pwsh
