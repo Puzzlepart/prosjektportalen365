@@ -2848,3 +2848,6 @@ _Each slice adds its entry below._
   during a run, as it may while slice 13's matrix is run.
 - Verified: the e2e project typechecks and the spec is formatted; the run itself needs the test
   channel.
+- Found next, in a local run on the right page: the test project has projects under it, so its web
+  parts are counted with `s: 'parent'`, and the project test asked for `'project'` only. It takes
+  either now. Run locally against the test channel at level 3: the three tests pass.

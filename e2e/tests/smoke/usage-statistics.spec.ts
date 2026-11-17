@@ -281,8 +281,11 @@ test.describe('usage statistics', () => {
     await sendUntilSent(page, sent)
     const title = await page.title()
     const batches = sent.map((request) => checkBatch(request, { level, title, siteIds }))
+    // A project with projects under it is counted as a parent project, as the test channel's is.
     expect(
-      usageOf(batches).filter((entry) => entry.e === 'loaded' && entry.s === 'project'),
+      usageOf(batches).filter(
+        (entry) => entry.e === 'loaded' && (entry.s === 'project' || entry.s === 'parent')
+      ),
       'the web parts on the project home are counted as loaded on a project'
     ).not.toEqual([])
   })
