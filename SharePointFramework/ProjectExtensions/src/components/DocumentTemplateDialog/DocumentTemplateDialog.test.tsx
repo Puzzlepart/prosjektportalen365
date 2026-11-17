@@ -197,6 +197,21 @@ describe('DocumentTemplateDialog', () => {
     expect(onDismiss).not.toHaveBeenCalled()
   })
 
+  it('gives the focus to the content on the names and the copy, and keeps it there through the summary (WCAG 2.4.3, 4.1.3)', async () => {
+    // The focus fell to the page as the footer's button went, and then to «Lukk» just as the
+    // summary was announced: VoiceOver read «Lukk», not the summary.
+    const user = setupUser()
+    renderDialog({ templates: [template('Mal A.docx')] })
+    await pickATemplate(user)
+    await user.click(button(strings.CopyHereText))
+    const names = await screen.findByText(strings.DocumentTemplateDialogScreenEditCopyInfoTitle)
+    await waitFor(() => expect(document.activeElement).toContainElement(names))
+    await waitFor(() => expect(button(strings.OnStartCopyText)).toBeEnabled())
+    await user.click(button(strings.OnStartCopyText))
+    const summary = await screen.findByText(strings.SummaryTitle)
+    await waitFor(() => expect(document.activeElement).toContainElement(summary))
+  })
+
   it('closes from the summary asking the page to reload, since files were added', async () => {
     const user = setupUser()
     const { onDismiss } = renderDialog({ templates: [template('Mal A.docx')] })

@@ -1,7 +1,7 @@
 import { IFileInfo } from '@pnp/sp/files'
 import { SPDataAdapter } from 'data'
 import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
-import { useCallback, useContext, useReducer } from 'react'
+import { useCallback, useContext, useEffect, useReducer, useRef } from 'react'
 import { TemplateSelectorContext } from '../../extensions/templateSelector/context'
 import reducer, {
   COPY_DONE,
@@ -14,11 +14,33 @@ import reducer, {
 } from './reducer'
 import { DocumentTemplateDialogScreen, IDocumentTemplateDialogProps } from './types'
 
+/** The screens that take the focus to the dialog's content as they open. */
+const SCREENS_FOCUSING_CONTENT = [
+  DocumentTemplateDialogScreen.EditCopy,
+  DocumentTemplateDialogScreen.CopyProgress,
+  DocumentTemplateDialogScreen.Summary
+]
+
 /** Coordinates wizard state, sequential template copying and footer navigation. */
 export function useDocumentTemplateDialog(props: IDocumentTemplateDialogProps) {
   const selectorContext = useContext(TemplateSelectorContext)
   const [state, dispatch] = useReducer(reducer, selectorContext, initState)
   const telemetry = useTelemetry()
+  const contentRef = useRef<HTMLDivElement>(null)
+
+  // The names' screen, the copy and its summary replace the screen whose footer button had the
+  // focus (WCAG 2.4.3): «Start kopiering» comes disabled while a name is checked, and the copy shows
+  // no control, so the focus fell to the page, and then to «Lukk» as the summary drew it, just as
+  // the summary was announced. A screen reader read «Lukk» and not the summary. The content takes
+  // the focus, unless it has it already, and keeps it through the summary, which is then heard.
+  useEffect(() => {
+    if (!SCREENS_FOCUSING_CONTENT.includes(state.screen)) return
+    const frame = requestAnimationFrame(() => {
+      const content = contentRef.current
+      if (content && !content.contains(document.activeElement)) content.focus()
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [state.screen])
 
   /**
    * Copies the templates picked, as named, to the target folder, one at a time with progress.
@@ -81,6 +103,7 @@ export function useDocumentTemplateDialog(props: IDocumentTemplateDialogProps) {
   return {
     state,
     dispatch,
+    contentRef,
     onStartCopy,
     goTo,
     copyHere,

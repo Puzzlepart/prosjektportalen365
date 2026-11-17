@@ -55,6 +55,7 @@ export const PeoplePicker: FC<IPeoplePickerProps> = (props) => {
     atLimit,
     selectedLabel,
     selectedDescribedBy,
+    selectedPersonDescribedBy,
     onQueryChange,
     onOptionSelect
   } = usePeoplePicker(props)
@@ -83,6 +84,7 @@ export const PeoplePicker: FC<IPeoplePickerProps> = (props) => {
               value={personKey(person)}
               shape='rounded'
               media={<PersonAvatar person={person} />}
+              aria-describedby={selectedPersonDescribedBy}
             >
               {person.text}
             </Tag>

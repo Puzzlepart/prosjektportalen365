@@ -40,7 +40,13 @@ export const UserMessage: FC<IUserMessageProps> = (incomingProps: IUserMessagePr
       >
         <MessageBar {...messageProps} className={styles.message} intent={props.intent}>
           <MessageBarBody>
-            {props.title && <MessageBarTitle>{props.title}</MessageBarTitle>}
+            {/* The message is announced as the body's text: without the space the title ran into
+                the text («Sammendrag av kopiering1 element(er) …»). */}
+            {props.title && (
+              <>
+                <MessageBarTitle>{props.title}</MessageBarTitle>{' '}
+              </>
+            )}
             {props.text && (
               <ReactMarkdown linkTarget={props.linkTarget} rehypePlugins={[rehypeRaw]}>
                 {props.text}

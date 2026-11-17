@@ -21,6 +21,7 @@ export const DocumentTemplateDialog: FC<IDocumentTemplateDialogProps> = (props) 
   const {
     state,
     dispatch,
+    contentRef,
     onStartCopy,
     goTo,
     copyHere,
@@ -95,7 +96,9 @@ export const DocumentTemplateDialog: FC<IDocumentTemplateDialogProps> = (props) 
         onDismiss={onClose}
         footer={footer}
       >
-        <div className={styles.container}>{content ?? null}</div>
+        <div ref={contentRef} tabIndex={-1} className={styles.container}>
+          {content ?? null}
+        </div>
       </BaseDialog>
     </DocumentTemplateDialogContext.Provider>
   )

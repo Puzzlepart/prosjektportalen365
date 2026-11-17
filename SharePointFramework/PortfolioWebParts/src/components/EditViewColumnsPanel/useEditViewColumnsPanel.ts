@@ -17,14 +17,21 @@ import { isSameColumn } from './columnIdentity'
 /** The attribute a move button carries its column's name in, to find it again after a move. */
 export const MOVE_COLUMN_ATTRIBUTE = 'data-move-column'
 
+/** What the drag-and-drop library hands its responders to tell a drag's step with. */
+type DragAnnouncer = { announce: (message: string) => void }
+
+/** The batch a drag's announcements share, so a step not yet read gives way to the next. */
+const DRAG_ANNOUNCEMENTS = 'edit-view-columns-drag'
+
 /** The attribute a move button carries its step in: -1 up, 1 down. */
 export const MOVE_STEP_ATTRIBUTE = 'data-move-step'
 
 /**
  * Hook that provides functionality for editing and selecting columns in a view, including
  * drag-and-drop reordering and saving the selected columns. A move, by the buttons or by a drag,
- * is told in Norwegian as it happens (WCAG 3.1.2, 4.1.3): the drag-and-drop library's own
- * announcements are English.
+ * is told in Norwegian as it happens (WCAG 3.1.2, 4.1.3), through the page's announcer: the
+ * drag-and-drop library's own announcements are English, and its live region sits in the page's
+ * body, outside the modal panel, where VoiceOver did not read it.
  *
  * Moves and the places told are counted among the selected columns, the order the view saves:
  * the list shows the selected columns first only as it opens, and a column selected afterwards
@@ -111,9 +118,19 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
     selectColumn(col, isSelected)
   }
 
+  /**
+   * Tells a step of a drag through the page's announcer, the newest in place of one not yet read.
+   * The library gets an empty message: one it is not given, it makes up in English.
+   */
+  const tellDrag = (provided: DragAnnouncer | undefined, message: string) => {
+    provided?.announce('')
+    announce(message, { polite: true, batchId: DRAG_ANNOUNCEMENTS })
+  }
+
   /** A column lifted for a drag: where it was. */
   const onDragStart: OnDragStartResponder = (start, provided) => {
-    provided.announce(
+    tellDrag(
+      provided,
       format(
         strings.ColumnLiftedAnnouncement,
         start.draggableId,
@@ -125,7 +142,8 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
   /** A column moved as it is dragged: where it would land. */
   const onDragUpdate: OnDragUpdateResponder = (update, provided) => {
     if (!update.destination) return
-    provided.announce(
+    tellDrag(
+      provided,
       format(
         strings.ColumnDragPositionAnnouncement,
         positionAfterMove(update.source.index, update.destination.index),
@@ -139,7 +157,8 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
    */
   const onDragEnd: OnDragEndResponder = (result, provided) => {
     if (!result.destination) {
-      provided?.announce(
+      tellDrag(
+        provided,
         format(
           strings.ColumnDropCancelledAnnouncement,
           result.draggableId,
@@ -150,7 +169,7 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
     }
     const position = positionAfterMove(result.source.index, result.destination.index)
     moveColumn(result.source.index, result.destination.index)
-    provided?.announce(format(strings.ColumnMovedAnnouncement, result.draggableId, position, count))
+    tellDrag(provided, format(strings.ColumnMovedAnnouncement, result.draggableId, position, count))
   }
 
   // The move button to give the focus back to once the moved row is drawn again.

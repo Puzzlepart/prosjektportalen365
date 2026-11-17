@@ -28,6 +28,7 @@ export function useStatusElement(props: IStatusElementProps) {
   const useWrapper = !!props.truncateComment || props.iconsOnly
 
   const fluentProviderId = useId('fp-status-element')
+  const commentId = useId('status-element-comment')
 
   // The name of the icon shown alone: the section and its status, which the icon shows by its
   // colour only (WCAG 1.1.1).
@@ -40,6 +41,8 @@ export function useStatusElement(props: IStatusElementProps) {
     iconSize: props.iconSize ?? headerProps.iconSize,
     useWrapper,
     fluentProviderId,
-    iconName
+    iconName,
+    commentId,
+    hasComment: !!comment
   } as const
 }

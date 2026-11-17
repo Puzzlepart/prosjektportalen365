@@ -214,6 +214,28 @@ describe('PeoplePicker', () => {
     expect(screen.getByRole('group', { name })).toHaveAccessibleDescription(
       'Hvem er gevinstansvarlig for prosjektet?'
     )
+    // Tab lands on the person, and VoiceOver read the person alone, not the list around it
+    // (Puzzlepart/prosjektportalen365-testing#137): the person carries the field's label and hint.
+    expect(screen.getByRole('button', { name: 'Kari Nordmann' })).toHaveAccessibleDescription(
+      'Nytteeier Hvem er gevinstansvarlig for prosjektet?'
+    )
+  })
+
+  it('leaves a person undescribed in a field that still takes input, where the input has the label', () => {
+    render(
+      <Field label='Prosjektstøtte' hint='Hvem er prosjektstøtte?'>
+        <PeoplePicker
+          aria-label='Prosjektstøtte'
+          selected={[KARI]}
+          multi
+          onChange={jest.fn()}
+          onResolveSuggestions={jest.fn()}
+        />
+      </Field>
+    )
+    expect(screen.getByRole('button', { name: 'Kari Nordmann' })).not.toHaveAttribute(
+      'aria-describedby'
+    )
   })
 
   it('can be disabled', () => {

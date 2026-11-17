@@ -120,7 +120,11 @@ function renderPanelHook(columnList: any[]) {
     result.panel = useEditViewColumnsPanel(props)
     return null
   }
-  render(<Probe />)
+  render(
+    <AriaLiveAnnouncer>
+      <Probe />
+    </AriaLiveAnnouncer>
+  )
   return result
 }
 
@@ -282,55 +286,51 @@ describe('EditViewColumnsPanel', () => {
     expect(row).not.toHaveAttribute('aria-describedby')
   })
 
-  it('tells in Norwegian where a dragged column is as it goes (WCAG 3.1.2, 4.1.3)', () => {
-    // The drag-and-drop library's own announcements are English.
-    let panel: ReturnType<typeof useEditViewColumnsPanel>
-    const props = {
-      ...EDIT_VIEW_COLUMNS_PANEL_DEFAULT_PROPS,
-      open: true,
-      onClose: jest.fn(),
-      onSave: jest.fn(),
-      sortMode: EditViewColumnsPanelSortMode.CustomSelectedOnTop,
-      columns: columns()
-    } as any
-    /** Capture drag-announcement handlers under React's hook lifecycle. */
-    const Probe: React.FC = () => {
-      panel = useEditViewColumnsPanel(props)
-      return null
-    }
-    render(<Probe />)
+  it("tells in Norwegian where a dragged column is as it goes, through the page's announcer (WCAG 3.1.2, 4.1.3)", async () => {
+    // The drag-and-drop library's own announcements are English, and its live region sits in the
+    // page's body, outside the modal panel, where VoiceOver did not read it. It gets an empty
+    // message, or it makes up its own.
+    const result = renderPanelHook(columns())
     const announce = jest.fn()
     act(() =>
-      panel.onDragStart({ source: { index: 0 }, draggableId: 'Tittel' } as any, { announce })
+      result.panel.onDragStart({ source: { index: 0 }, draggableId: 'Tittel' } as any, { announce })
     )
-    expect(announce).toHaveBeenLastCalledWith(format(strings.ColumnLiftedAnnouncement, 'Tittel', 1))
+    expect(announce).toHaveBeenLastCalledWith('')
+    await waitFor(() =>
+      expect(announced()).toContain(format(strings.ColumnLiftedAnnouncement, 'Tittel', 1))
+    )
     act(() =>
-      panel.onDragUpdate(
+      result.panel.onDragUpdate(
         { source: { index: 0 }, destination: { index: 1 }, draggableId: 'Tittel' } as any,
         { announce }
       )
     )
-    expect(announce).toHaveBeenLastCalledWith(format(strings.ColumnDragPositionAnnouncement, 2, 2))
-    act(() =>
-      panel.onDragEnd({ source: { index: 0 }, destination: null, draggableId: 'Tittel' } as any, {
-        announce
-      })
-    )
-    expect(announce).toHaveBeenLastCalledWith(
-      format(strings.ColumnDropCancelledAnnouncement, 'Tittel', 1)
+    await waitFor(() =>
+      expect(announced()).toContain(format(strings.ColumnDragPositionAnnouncement, 2, 2))
     )
     act(() =>
-      panel.onDragEnd(
+      result.panel.onDragEnd(
+        { source: { index: 0 }, destination: null, draggableId: 'Tittel' } as any,
+        { announce }
+      )
+    )
+    await waitFor(() =>
+      expect(announced()).toContain(format(strings.ColumnDropCancelledAnnouncement, 'Tittel', 1))
+    )
+    act(() =>
+      result.panel.onDragEnd(
         { source: { index: 0 }, destination: { index: 1 }, draggableId: 'Tittel' } as any,
         { announce }
       )
     )
-    expect(announce).toHaveBeenLastCalledWith(
-      format(strings.ColumnMovedAnnouncement, 'Tittel', 2, 2)
+    await waitFor(() =>
+      expect(announced()).toContain(format(strings.ColumnMovedAnnouncement, 'Tittel', 2, 2))
     )
+    expect(announce).toHaveBeenCalledTimes(4)
+    expect(announce.mock.calls.every(([message]) => message === '')).toBe(true)
   })
 
-  it('tells the place of a dragged column among the chosen columns, not among all the rows', () => {
+  it('tells the place of a dragged column among the chosen columns, not among all the rows', async () => {
     const result = renderPanelHook(columnsWithUnchosen())
     act(() => result.panel.onChange(result.panel.selectableColumns[3], true))
     const announce = jest.fn()
@@ -340,8 +340,8 @@ describe('EditViewColumnsPanel', () => {
         announce
       })
     )
-    expect(announce).toHaveBeenLastCalledWith(
-      format(strings.ColumnLiftedAnnouncement, 'Startdato', 2)
+    await waitFor(() =>
+      expect(announced()).toContain(format(strings.ColumnLiftedAnnouncement, 'Startdato', 2))
     )
     act(() =>
       result.panel.onDragUpdate(
@@ -349,15 +349,17 @@ describe('EditViewColumnsPanel', () => {
         { announce }
       )
     )
-    expect(announce).toHaveBeenLastCalledWith(format(strings.ColumnDragPositionAnnouncement, 2, 2))
+    await waitFor(() =>
+      expect(announced()).toContain(format(strings.ColumnDragPositionAnnouncement, 2, 2))
+    )
     act(() =>
       result.panel.onDragEnd(
         { source: { index: 0 }, destination: { index: 3 }, draggableId: 'Tittel' } as any,
         { announce }
       )
     )
-    expect(announce).toHaveBeenLastCalledWith(
-      format(strings.ColumnMovedAnnouncement, 'Tittel', 2, 2)
+    await waitFor(() =>
+      expect(announced()).toContain(format(strings.ColumnMovedAnnouncement, 'Tittel', 2, 2))
     )
     expect(result.panel.selectedColumns.map((c) => c.name)).toEqual(['Startdato', 'Tittel'])
   })

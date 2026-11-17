@@ -20,6 +20,14 @@ describe('UserMessage', () => {
     expect(screen.getByText('Les mer')).toHaveAttribute('href', '/hjelp')
   })
 
+  it('keeps a space between its title and its text, which are announced as one text (WCAG 4.1.3)', () => {
+    // The copy summary was announced «Sammendrag av kopiering1 element(er) …».
+    render(<UserMessage title='Sammendrag av kopiering' text='1 element(er) ble kopiert.' />)
+    expect(screen.getByText('Sammendrag av kopiering').parentElement).toHaveTextContent(
+      'Sammendrag av kopiering 1 element(er) ble kopiert.'
+    )
+  })
+
   it('leaves out the title and the text it does not have', () => {
     render(<UserMessage />)
     expect(screen.queryByTestId('react-markdown')).toBeNull()

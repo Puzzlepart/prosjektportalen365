@@ -83,6 +83,8 @@ export const ColumnFormPanel: FC = () => {
             <Input
               value={column.get('sortOrder')?.toString() ?? ''}
               type='number'
+              // As text: with a min and a max, VoiceOver read the place in the range («58,3 %»).
+              aria-valuetext={column.get('sortOrder')?.toString()}
               min={10}
               max={990}
               step={2}
@@ -139,6 +141,7 @@ export const ColumnFormPanel: FC = () => {
             <Input
               value={column.get('minWidth')?.toString() ?? ''}
               type='number'
+              aria-valuetext={column.get('minWidth')?.toString()}
               min={40}
               max={400}
               step={2}
@@ -154,6 +157,7 @@ export const ColumnFormPanel: FC = () => {
             <Input
               value={column.get('maxWidth')?.toString() ?? ''}
               type='number'
+              aria-valuetext={column.get('maxWidth')?.toString()}
               min={column.get('minWidth') ?? 40}
               max={1000}
               step={2}

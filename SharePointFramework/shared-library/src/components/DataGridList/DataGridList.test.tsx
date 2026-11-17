@@ -239,6 +239,21 @@ describe('DataGridList', () => {
     })
   })
 
+  it("makes a grouped column's cells a group, entered with Enter, so a link in them does not hold the arrow keys (WCAG 2.1.1)", () => {
+    // In the project list the title's cell held its link, and the right arrow stayed there.
+    render(
+      <DataGridList
+        items={items}
+        columns={columns}
+        getRowId={(item) => item.id}
+        groupedColumns={['amount']}
+      />
+    )
+    const cells = screen.getAllByRole('row')[1].querySelectorAll('[role=gridcell]')
+    expect(JSON.parse(cells[1].getAttribute('data-tabster') ?? '{}')).toHaveProperty('groupper')
+    expect(cells[0].getAttribute('data-tabster') ?? '').not.toContain('groupper')
+  })
+
   it('breaks no rule axe can check, sortable and with every row selectable', async () => {
     const { container } = render(
       <DataGridList

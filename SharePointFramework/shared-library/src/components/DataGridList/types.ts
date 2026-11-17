@@ -1,4 +1,9 @@
-import { DataGridProps, SortDirection, TableColumnDefinition } from '@fluentui/react-components'
+import {
+  DataGridProps,
+  SortDirection,
+  TableColumnDefinition,
+  TableColumnId
+} from '@fluentui/react-components'
 import { ReactNode } from 'react'
 
 /**
@@ -64,6 +69,14 @@ export interface IDataGridListProps<TItem = any> {
    * Tab into the grid starts at the first row not among them.
    */
   lockedItems?: Iterable<string | number>
+
+  /**
+   * Ids of the columns whose cells hold a control, such as a link to the item. Such a cell is a
+   * group: the arrow keys pass it as a cell, Enter takes the focus to the control in it, and
+   * Escape back. As a plain cell, a link at its start kept the arrow keys there (WCAG 2.1.1). Not
+   * the first column: Tab enters the grid at its cell, which takes Tabster's attribute for that.
+   */
+  groupedColumns?: TableColumnId[]
 
   /**
    * Whether the selection indicator stays subtle until hovered.

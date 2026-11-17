@@ -63,6 +63,7 @@ export function DataGridList<TItem = any>(props: IDataGridListProps<TItem>) {
     selectedItems,
     onSelectionChange,
     lockedItems,
+    groupedColumns,
     subtleSelection,
     resizableColumns = true,
     size,
@@ -177,6 +178,7 @@ export function DataGridList<TItem = any>(props: IDataGridListProps<TItem>) {
             {({ renderCell, columnId }) => (
               <DataGridCell
                 className={styles.cell}
+                focusMode={groupedColumns?.includes(columnId) ? 'group' : undefined}
                 {...(rowId === entryRowId && columnId === firstColumnId ? ENTERED_HERE : {})}
               >
                 {renderCell(item)}

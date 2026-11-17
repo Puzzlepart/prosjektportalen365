@@ -31,7 +31,9 @@ export function personKey(person: IPersonaItem): string {
  *
  * The list of the people picked is named after the field («Nytteeier, valgte personer»). Where the
  * field holds its one person, there is no input for the field's label and hint to belong to, so the
- * list is described by the hint (and by the field's message, when it has one) instead.
+ * list is described by the hint (and by the field's message, when it has one) instead, and the
+ * person by the label as well: Tab lands on the person, and VoiceOver read «Lottah Powah markert
+ * (1 av 1)», not the list around it.
  */
 export function usePeoplePicker(props: IPeoplePickerProps): IPeoplePickerState {
   const selected = props.selected ?? []
@@ -77,6 +79,10 @@ export function usePeoplePicker(props: IPeoplePickerProps): IPeoplePickerState {
   const selectedDescribedBy = atLimit
     ? [field?.validationMessageId, field?.hintId].filter(Boolean).join(' ') || undefined
     : undefined
+  const selectedPersonDescribedBy = atLimit
+    ? [field?.labelId, field?.validationMessageId, field?.hintId].filter(Boolean).join(' ') ||
+      undefined
+    : undefined
 
   const onQueryChange = (event: ChangeEvent<HTMLInputElement>) => setQuery(event.target.value)
 
@@ -98,6 +104,7 @@ export function usePeoplePicker(props: IPeoplePickerProps): IPeoplePickerState {
     atLimit,
     selectedLabel,
     selectedDescribedBy,
+    selectedPersonDescribedBy,
     onQueryChange,
     onOptionSelect
   }

@@ -5,6 +5,15 @@
     width: 216px;
   }
 
+  // Fluent marks a focused link by a double underline and takes its outline away, but the title's
+  // link has no text decoration and the logo's holds a block, so the card's link showed no focus
+  // at all, in a contrast theme neither (WCAG 2.4.7). Drawn inside: the card clips what is outside.
+  .link:focus-visible,
+  .link[data-fui-focus-visible] {
+    outline: 2px solid var(--colorStrokeFocus2);
+    outline-offset: -2px;
+  }
+
   .header {
     z-index: 1;
     height: 1.5em !important;

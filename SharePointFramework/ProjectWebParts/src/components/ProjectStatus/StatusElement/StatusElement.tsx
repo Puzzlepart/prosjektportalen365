@@ -12,7 +12,8 @@ import { useStatusElement } from './useStatusElement'
 /** Displays a section's status icon, value, comment and optional total. */
 export const StatusElement: FC<IStatusElementProps> = (props) => {
   const { headerProps } = useContext(SectionContext)
-  const { commentProps, iconSize, useWrapper, fluentProviderId, iconName } = useStatusElement(props)
+  const { commentProps, iconSize, useWrapper, fluentProviderId, iconName, commentId, hasComment } =
+    useStatusElement(props)
   const Label = props.asHeading ? 'h3' : 'div'
   return (
     <IdPrefixProvider value={fluentProviderId}>
@@ -20,9 +21,12 @@ export const StatusElement: FC<IStatusElementProps> = (props) => {
         <ConditionalWrapper
           condition={useWrapper}
           wrapper={(children: ReactNode) => (
+            // An icon shown alone is named by its section and status, and described by the comment
+            // alone: as the tooltip's description it was read «Fremdrift: Foran plan Fremdrift
+            // Foran plan», the name twice.
             <Tooltip
               withArrow
-              relationship='description'
+              relationship={props.iconsOnly ? 'inaccessible' : 'description'}
               content={
                 <div className={styles.tooltipContent}>
                   <StatusElement />
@@ -31,9 +35,17 @@ export const StatusElement: FC<IStatusElementProps> = (props) => {
             >
               <span
                 className={styles.tooltipHost}
-                {...(props.iconsOnly ? { tabIndex: 0, role: 'img', 'aria-label': iconName } : {})}
+                {...(props.iconsOnly
+                  ? {
+                      tabIndex: 0,
+                      role: 'img',
+                      'aria-label': iconName,
+                      'aria-describedby': hasComment ? commentId : undefined
+                    }
+                  : {})}
               >
                 {children}
+                {props.iconsOnly && hasComment && <span id={commentId} hidden {...commentProps} />}
               </span>
             </Tooltip>
           )}

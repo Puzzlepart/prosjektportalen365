@@ -24,7 +24,8 @@ export const ViewFormPanel: FC = () => {
     isDefaultViewSet,
     onSave,
     saveError,
-    fluentProviderId
+    fluentProviderId,
+    defaultViewWarningId
   } = useViewFormPanel()
   if (!context) return null
   return (
@@ -48,6 +49,8 @@ export const ViewFormPanel: FC = () => {
             <Input
               type='number'
               value={view.get('sortOrder')?.toString() ?? ''}
+              // As text: with a min and a max, VoiceOver read the place in the range («58,3 %»).
+              aria-valuetext={view.get('sortOrder')?.toString()}
               min={10}
               max={900}
               step={1}
@@ -98,18 +101,25 @@ export const ViewFormPanel: FC = () => {
             description={strings.DefaultViewDescription}
             hidden={view.get('isPersonalView')}
           >
+            {/* Focusable while it cannot be changed, and described by why (WCAG 2.1.1, 3.3.2): a
+                disabled switch was skipped by Tab, and the warning read apart from it. */}
             <Switch
               checked={!!view.get('isDefaultView')}
-              onChange={(_, data) => setView('isDefaultView', data.checked)}
-              disabled={isDefaultViewSet}
+              onChange={(_, data) => {
+                if (!isDefaultViewSet) setView('isDefaultView', data.checked)
+              }}
+              aria-disabled={isDefaultViewSet || undefined}
+              aria-describedby={isDefaultViewSet ? defaultViewWarningId : undefined}
             />
             {/* Only while the field shows: a message bar announces itself, hidden or not. */}
             {isDefaultViewSet && !view.get('isPersonalView') && (
-              <UserMessage
-                title={strings.DefaultViewLabel}
-                text={strings.DefaultViewSetWarningMessage}
-                intent='warning'
-              />
+              <div id={defaultViewWarningId}>
+                <UserMessage
+                  title={strings.DefaultViewLabel}
+                  text={strings.DefaultViewSetWarningMessage}
+                  intent='warning'
+                />
+              </div>
             )}
           </FieldContainer>
           <FieldContainer

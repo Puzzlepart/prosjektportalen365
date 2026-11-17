@@ -89,6 +89,12 @@ export interface IPeoplePickerState {
   selectedDescribedBy?: string
 
   /**
+   * The ids of the field's label, message and hint, which describe the person where the field holds
+   * its one person: Tab lands on the person, and a screen reader reads it without the list around.
+   */
+  selectedPersonDescribedBy?: string
+
+  /**
    * Takes the text typed.
    */
   onQueryChange: (event: ChangeEvent<HTMLInputElement>) => void

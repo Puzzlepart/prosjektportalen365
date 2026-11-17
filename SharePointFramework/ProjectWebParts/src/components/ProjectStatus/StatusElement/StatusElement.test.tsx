@@ -52,6 +52,21 @@ describe('StatusElement', () => {
     expect(host.querySelector('.icon')).not.toBeNull()
   })
 
+  it('describes an icon shown alone by its comment only, not by its name again (WCAG 4.1.2)', () => {
+    // As the tooltip's description it was read «Fremdrift: Foran plan Fremdrift Foran plan».
+    renderElement({ iconsOnly: true })
+    expect(screen.getByRole('img', { name: 'Fremdrift: Grønn' })).toHaveAccessibleDescription(
+      /^Alle milepæler er nådd\.\s?Neste fase starter i mars\.$/
+    )
+  })
+
+  it('leaves an icon shown alone without a description when its section has no comment', () => {
+    renderElement({ iconsOnly: true }, { ...headerProps, comment: '' })
+    expect(screen.getByRole('img', { name: 'Fremdrift: Grønn' })).not.toHaveAttribute(
+      'aria-describedby'
+    )
+  })
+
   it('shows a summation beside the value when the section has one', () => {
     renderElement({
       summation: { description: 'Sum budsjett', result: '1200', renderAs: 'currency' }

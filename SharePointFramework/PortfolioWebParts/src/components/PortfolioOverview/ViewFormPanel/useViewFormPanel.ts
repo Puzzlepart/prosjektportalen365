@@ -129,6 +129,7 @@ export function useViewFormPanel() {
   )
 
   const fluentProviderId = useId('fp-view-form-panel')
+  const defaultViewWarningId = useId('default-view-warning')
 
   return {
     onSave: !isSaveDisabled ? onSave : undefined,
@@ -138,6 +139,7 @@ export function useViewFormPanel() {
     setView,
     isDefaultViewSet,
     saveError,
-    fluentProviderId
+    fluentProviderId,
+    defaultViewWarningId
   } as const
 }
