@@ -2799,3 +2799,38 @@ _Each slice adds its entry below._
 - Left: the manual (item 11), «Grunnlag for DPIA og ROS» and the other wiki pages (items 9 and
   10), and Assist's texts (items 12 and 13). The release notes' level table and never-list follow
   the wiki page if legal changes it.
+
+### Slice 12: the wiki page published (2026-11-15)
+
+- Done: the page is live as wiki/Bruksstatistikk (wiki commit `3ec04df`, at the user's word), with
+  a link under «Personvern og sikkerhet» in `_Sidebar`. It went out without the draft banner, the
+  notes for legal and the section on roles and legal basis; deletion on request goes to
+  kontakt@prosjektportalen.no.
+- Verified: the page answers 200, its raw text equals the approved text, and the menu has the link.
+- Left: the section on roles and legal basis, and the bracketed sentences, once L1 to L6 are signed
+  off; the draft in `docs/plans/usage-logging-wiki/Bruksstatistikk.md` keeps them.
+
+### Fresh install broken by slice 3, and fixed (2026-11-15)
+
+- Found by the user's stress test of sp-js-provisioning 1.6.0: since `dc1d20acf` (slice 3)
+  Install.ps1 read the installation log (`Get-LastInstalledVersion`) and Globale innstillinger
+  (`Initialize-UsageStatisticsSetting`) before the Portfolio template with
+  `Get-PnPList -Identity -ErrorAction Stop`, and PnP.PowerShell 3 writes an error for a missing
+  list instead of returning nothing, so every fresh install stopped there. The tests of the pure
+  functions could not see it, and slice 13's scratch fresh install had not run.
+- Fixed by the user in `adfa4afb6`: `Find-SiteList` reads the site's lists and picks one by title
+  or URL, so a missing list is nothing and any other failure still stops; six scenarios over a
+  stand-in for `Get-PnPList`; two comments that still named the seeded level as 2.
+- Verified: the `[fresh-install]` run on `adfa4afb6` (43751739552) is green, and the new hub got
+  level 3 (banner and summary «Extended (3)»); the dev hub's upgrade kept its 0.
+- Left: the trap is in the stress test plan, not in the pp365-templates skill.
+
+### Slice 13: the test hub at level 3 (2026-11-17)
+
+- Done: the test hub's `UsageStatisticsLevel` row (item 23) set from `0` to `3` at the user's word,
+  in the list's edit form, and read back as `3`, enabled, at 11:59:55 UTC. `CatalogTelemetryEnabled`
+  is `1`, so catalog events are sent too. Testers' browsers on the test hub now send to Assist in
+  prod; the e2e guard keeps every other spec's batches in the browser.
+- Left: the e2e usage spec's level 3 path on a test-channel run (run 44070091853's e2e started at
+  11:58:25 UTC, just before the change; the report's «usage statistics level» annotation tells
+  which level a run tested), and the rest of the slice 13 matrix.
