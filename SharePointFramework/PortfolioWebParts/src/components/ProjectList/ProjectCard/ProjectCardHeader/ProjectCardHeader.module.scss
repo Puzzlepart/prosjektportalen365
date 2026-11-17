@@ -7,9 +7,20 @@
 
   // Fluent marks a focused link by a double underline and takes its outline away, but the title's
   // link has no text decoration and the logo's holds a block, so the card's link showed no focus
-  // at all, in a contrast theme neither (WCAG 2.4.7). Drawn inside: the card clips what is outside.
-  .link:focus-visible,
-  .link[data-fui-focus-visible] {
+  // at all, in a contrast theme neither (WCAG 2.4.7). Drawn inside, as the card clips what is
+  // outside, and on a layer over the link: the logo's avatar is positioned, and covered an outline
+  // of the link itself.
+  .link {
+    position: relative;
+  }
+
+  .link:focus-visible::after,
+  .link[data-fui-focus-visible]::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
     outline: 2px solid var(--colorStrokeFocus2);
     outline-offset: -2px;
   }
