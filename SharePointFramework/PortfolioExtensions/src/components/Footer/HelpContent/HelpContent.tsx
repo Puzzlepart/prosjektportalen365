@@ -16,6 +16,13 @@ export const HelpContent: FC = () => {
   const context = useContext(FooterContext)
   const fluentProviderId = useId('fp-footer-help-content')
   const isUnavailable = context.isHelpContentLoaded && context.helpContent.length === 0
+  // Until the help is loaded the button cannot know whether the page has any: «Hjelp tilgjengelig»
+  // opened a dialog that said there was none (Puzzlepart/prosjektportalen365-testing#137).
+  const label = isUnavailable
+    ? strings.HelpContentUnavailableLabel
+    : context.isHelpContentLoaded
+      ? strings.HelpContentAvailableLabel
+      : strings.HelpContentLabel
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
@@ -37,9 +44,7 @@ export const HelpContent: FC = () => {
               disabledFocusable={isUnavailable}
               icon={getFluentIcon('QuestionCircle')}
             >
-              {isUnavailable
-                ? strings.HelpContentUnavailableLabel
-                : strings.HelpContentAvailableLabel}
+              {label}
             </Button>
           </Tooltip>
         </HelpContentDialog>

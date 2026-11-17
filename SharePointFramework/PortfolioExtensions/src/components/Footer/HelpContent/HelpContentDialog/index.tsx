@@ -76,7 +76,7 @@ export const HelpContentDialog: FC<Omit<DialogProps, 'children'> & { children?: 
               </DialogTitle>
               <DialogContent className={styles.content}>
                 {!context.isHelpContentLoaded || context.isHelpContentLoading ? (
-                  <Spinner size='tiny' label={strings.HelpContentAvailableLabel} />
+                  <Spinner size='tiny' label={strings.HelpContentLoadingLabel} />
                 ) : context.helpContent.length === 0 ? (
                   <div>{strings.HelpContentUnavailableDescription}</div>
                 ) : (

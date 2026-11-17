@@ -140,8 +140,9 @@ export const useColumns = (): IListColumn[] => {
         const tags = getField(item, context.primaryField)
         return (
           <TableCellLayout truncate content={{ className: styles.tagCell }}>
+            {/* Unnamed: the column's header names the tags, and a cell is read by the name of a
+                list in it, «Prosjekttype» instead of «Anlegg» (prosjektportalen365-testing#137). */}
             <OverflowTagMenu
-              text={primaryField}
               tags={tags}
               icon={GlobeLocationFilled}
               hidden={!tags.length}
@@ -165,7 +166,6 @@ export const useColumns = (): IListColumn[] => {
         return (
           <TableCellLayout truncate content={{ className: styles.tagCell }}>
             <OverflowTagMenu
-              text={secondaryField}
               tags={tags}
               icon={TagMultipleFilled}
               hidden={!tags.length}

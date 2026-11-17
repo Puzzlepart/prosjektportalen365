@@ -427,6 +427,7 @@ define([], function () {
       DefaultTitle: 'Dynamisk liste',
       SelectAll: 'Velg alle',
       SelectRow: 'Velg rad',
+      SelectNamedRow: 'Velg {0}',
       NoListSelected: 'Ingen liste valgt',
       NoListSelectedMessage: 'Vennligst velg en liste i webdel-egenskapene for å vise innhold.',
       RefetchingData: 'Oppdaterer og henter data på nytt...',

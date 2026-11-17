@@ -99,13 +99,19 @@ describe('DynamicMatrix', () => {
     expect(cells).toHaveLength(9)
     // The top right cell: the greatest probability and consequence.
     expect(cells[2]).toHaveTextContent(format(strings.Aria.MatrixZoneLabel, 3, 3))
-    expect(cells[2]).toHaveAttribute('title', format(strings.Aria.MatrixZoneLabel, 3, 3))
+    // Read once: as the cell's title too, it was read again as its description (#137).
+    expect(cells[2]).not.toHaveAttribute('title')
+    expect(cells[2]).not.toHaveAccessibleDescription(
+      expect.stringContaining(format(strings.Aria.MatrixZoneLabel, 3, 3))
+    )
     expect(cells[6]).toHaveTextContent(format(strings.Aria.MatrixZoneLabel, 1, 3))
     // The level is shown too, in a corner, in black or white as reads on the colour; a screen
     // reader reads the name instead (WCAG 1.4.1).
     const mark = cells[2].querySelector('[aria-hidden="true"]')
     expect(mark).toHaveTextContent(/^3$/)
     expect(mark).toHaveStyle({ color: '#242424' })
+    // The mouse gets the name in the mark's tooltip.
+    expect(mark).toHaveAttribute('title', format(strings.Aria.MatrixZoneLabel, 3, 3))
   })
 
   it('draws the headers and places the elements in their cells', () => {

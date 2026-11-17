@@ -416,6 +416,7 @@ define([], function () {
       DefaultTitle: 'Dynamic List',
       SelectAll: 'Select all',
       SelectRow: 'Select row',
+      SelectNamedRow: 'Select {0}',
       NoListSelected: 'No list selected',
       NoListSelectedMessage: 'Please select a list in the web part properties to display content.',
       RefetchingData: 'Refreshing and fetching data...',

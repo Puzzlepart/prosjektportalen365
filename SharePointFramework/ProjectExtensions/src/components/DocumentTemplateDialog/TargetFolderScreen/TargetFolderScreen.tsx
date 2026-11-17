@@ -40,6 +40,7 @@ export const TargetFolderScreen: FC = () => {
             items={folders}
             columns={columns}
             getRowId={(item) => item.url}
+            getRowName={(item) => item.name}
             selectionMode='single'
             selectedItems={browse.selectedFolder ? [browse.selectedFolder] : []}
             onSelectionChange={onSelectionChange}

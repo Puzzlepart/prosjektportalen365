@@ -159,6 +159,7 @@ define([], function () {
     MeasurementSheetName: 'Measurements',
     DataGridSelectAllLabel: 'Select all',
     DataGridSelectRowLabel: 'Select row',
+    DataGridSelectNamedRowLabel: 'Select {0}',
     ProjectPropertiesNotFoundErrorText: 'The project properties were not found in the list "{0}".'
   }
 })

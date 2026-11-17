@@ -9,6 +9,7 @@ import {
 } from '@fluentui/react-components'
 import React, { useMemo, useRef } from 'react'
 import strings from 'SharedLibraryStrings'
+import { format } from '../../util/format'
 import styles from './DataGridList.module.scss'
 import { fitColumnWidths } from './fitColumnWidths'
 import { IDataGridColumn, IDataGridListProps } from './types'
@@ -64,6 +65,7 @@ export function DataGridList<TItem = any>(props: IDataGridListProps<TItem>) {
     onSelectionChange,
     lockedItems,
     groupedColumns,
+    getRowName,
     subtleSelection,
     resizableColumns = true,
     size,
@@ -125,12 +127,16 @@ export function DataGridList<TItem = any>(props: IDataGridListProps<TItem>) {
         radioIndicator: { 'aria-label': strings.DataGridSelectAllLabel }
       }
     : undefined
-  const selectRowCell = selectionMode
-    ? {
-        checkboxIndicator: { 'aria-label': strings.DataGridSelectRowLabel },
-        radioIndicator: { 'aria-label': strings.DataGridSelectRowLabel }
-      }
-    : undefined
+  // A row's check is named by the row where the caller names it («Velg Agder 2025»): as «Velg rad»
+  // alone, every row's check read the same, and the down arrow in that column told nothing.
+  const selectRowCell = (item: TItem) => {
+    if (!selectionMode) return undefined
+    const name = getRowName?.(item)?.trim()
+    const label = name
+      ? format(strings.DataGridSelectNamedRowLabel, name)
+      : strings.DataGridSelectRowLabel
+    return { checkboxIndicator: { 'aria-label': label }, radioIndicator: { 'aria-label': label } }
+  }
 
   const grid = (
     <DataGrid
@@ -164,7 +170,7 @@ export function DataGridList<TItem = any>(props: IDataGridListProps<TItem>) {
         {({ item, rowId }) => (
           <DataGridRow<TItem>
             key={rowId}
-            selectionCell={selectRowCell}
+            selectionCell={selectRowCell(item)}
             onClick={selectionMode === 'single' ? () => clearIfReselected(rowId) : undefined}
             onKeyDown={
               selectionMode === 'single'

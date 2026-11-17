@@ -341,6 +341,7 @@ define([], function () {
     MeasurementSheetTitleKey: 'Measurement',
     ListSelectAllLabel: 'Select all rows',
     ListSelectRowLabel: 'Select row',
+    ListSelectNamedRowLabel: 'Select {0}',
     ListSelectGroupLabel: 'Select all in {0}',
     ListCollapseAllGroupsLabel: 'Collapse all groups',
     ListExpandAllGroupsLabel: 'Expand all groups',

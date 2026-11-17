@@ -51,7 +51,7 @@ const project = (overrides: Record<string, any> = {}) =>
 /** The tags a field cell shows: its tag menu's tags, and whether the menu is hidden. */
 function tagsOf(cell: React.ReactElement) {
   const menu = (cell.props as any).children
-  return { tags: menu.props.tags, hidden: menu.props.hidden }
+  return { tags: menu.props.tags, hidden: menu.props.hidden, text: menu.props.text }
 }
 
 describe('the project list columns', () => {
@@ -187,8 +187,11 @@ describe('the project list columns', () => {
       hidden: true
     })
     // The tags take the cell's whole width, so those behind +n come back when the column widens.
+    // Their list has no name of its own: the header names them, and a cell was read by the list's
+    // name, «Prosjekttype» instead of «Anlegg» (Puzzlepart/prosjektportalen365-testing#137).
     for (const id of ['primaryField', 'secondaryField']) {
       expect((column(id).renderCell(project()) as any).props.content.className).toMatch(/tagCell/)
+      expect(tagsOf(column(id).renderCell(project()) as any).text).toBeUndefined()
     }
   })
 

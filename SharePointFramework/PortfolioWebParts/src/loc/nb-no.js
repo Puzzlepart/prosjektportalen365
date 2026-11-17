@@ -341,6 +341,7 @@ define([], function () {
     MeasurementSheetTitleKey: 'Måling',
     ListSelectAllLabel: 'Velg alle rader',
     ListSelectRowLabel: 'Velg rad',
+    ListSelectNamedRowLabel: 'Velg {0}',
     ListSelectGroupLabel: 'Velg alle i {0}',
     ListCollapseAllGroupsLabel: 'Skjul alle grupper',
     ListExpandAllGroupsLabel: 'Vis alle grupper',

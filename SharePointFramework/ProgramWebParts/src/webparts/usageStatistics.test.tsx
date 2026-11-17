@@ -309,7 +309,10 @@ describe('ProgramAdministrationWebpart with the program administration', () => {
   // Hidden elements too: under jsdom Fluent marks the open dialog `aria-hidden` a moment after it
   // opens, although the focus is in it.
   const rowChecks = (container: HTMLElement) =>
-    within(container).getAllByRole('checkbox', { name: 'Velg rad', hidden: true })
+    within(container).getAllByRole('checkbox', {
+      name: /^Velg (Alfa|Bravo|Charlie)$/,
+      hidden: true
+    })
 
   beforeEach(() => {
     Object.assign(adapter, {

@@ -26,12 +26,24 @@ import {
 import * as React from 'react'
 import { FC, useContext, useMemo, useCallback } from 'react'
 import { DynamicListContext } from '../../context'
-import { customLightTheme, nameColumnResizeHandle, UserMessage } from 'pp365-shared-library'
+import { customLightTheme, format, nameColumnResizeHandle, UserMessage } from 'pp365-shared-library'
 import styles from './ListView.module.scss'
 import { IListViewProps } from './types'
 import * as strings from 'ProjectWebPartsStrings'
 import { useResultsAnnouncement } from '../../useAnnouncements'
 import { NAVIGATION_KEY_ATTRIBUTE } from '../../useNavigationFocus'
+
+/**
+ * The name of the check that selects an item: «Velg» and its file name in a library, or its title
+ * in a list. As «Velg rad» alone, every row's check read the same
+ * (Puzzlepart/prosjektportalen365-testing#137).
+ */
+function selectRowLabel(item: Record<string, any>, isDocumentLibrary: boolean): string {
+  const name = String((isDocumentLibrary ? item?.FileLeafRef : item?.Title) ?? item?.Title ?? '')
+  return name.trim()
+    ? format(strings.DynamicList.SelectNamedRow, name.trim())
+    : strings.DynamicList.SelectRow
+}
 
 /**
  * Base ListView component that provides common table rendering functionality
@@ -272,7 +284,9 @@ export const ListView: FC<IListViewProps> = ({
                 >
                   <TableSelectionCell
                     checked={selected}
-                    checkboxIndicator={{ 'aria-label': strings.DynamicList.SelectRow }}
+                    checkboxIndicator={{
+                      'aria-label': selectRowLabel(item as Record<string, any>, !!isDocumentLibrary)
+                    }}
                   />
                   {columns.map((column, colIndex) => {
                     const isFirstColumn = colIndex === 0

@@ -5,6 +5,8 @@ define([], function () {
     HelpContentAvailableDescription: 'Open help dialog for this page',
     HelpContentAvailableLabel: 'Help available',
     HelpContentDialogTitle: 'Help for this page',
+    HelpContentLabel: 'Help',
+    HelpContentLoadingLabel: 'Loading help …',
     HelpContentUnavailableDescription: 'This page has no help content, if you think there should be help content here, please contact your administrator',
     HelpContentUnavailableLabel: 'Help unavailable',
     IdeaProcessingListErrorMessage: 'Could not find an idea processing list, please check the idea configuration or contact the administrator.',

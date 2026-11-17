@@ -6,7 +6,8 @@ import {
   useTableColumnSizing_unstable,
   useTableFeatures
 } from '@fluentui/react-components'
-import { fitColumnWidths, IListColumn, nameColumnResizeHandle } from 'pp365-shared-library'
+import strings from 'PortfolioWebPartsStrings'
+import { fitColumnWidths, format, IListColumn, nameColumnResizeHandle } from 'pp365-shared-library'
 import { useContainerWidth } from 'pp365-shared-library/lib/components/DataGridList/useContainerWidth'
 import { ReactNode, useCallback, useMemo, useRef, useState } from 'react'
 import { IListGroup, ResizeColumn } from '../types'
@@ -223,6 +224,13 @@ export function useListGrid(props: IListGridProps): IListGridState {
       ? (event) => columnSizing.enableKeyboardMode(column.key)(event)
       : undefined
 
+  // As «Velg rad» alone, every row's check read the same, and the down arrow in that column told
+  // nothing (Puzzlepart/prosjektportalen365-testing#137).
+  const selectRowLabel = (item: Record<string, any>) => {
+    const name = String((props.getRowName ? props.getRowName(item) : item?.Title) ?? '').trim()
+    return name ? format(strings.ListSelectNamedRowLabel, name) : strings.ListSelectRowLabel
+  }
+
   return {
     headerMenuProps,
     containerRef,
@@ -238,6 +246,7 @@ export function useListGrid(props: IListGridProps): IListGridState {
     toggleAllCollapsed,
     selectable,
     selection,
+    selectRowLabel,
     arrowNavigation
   }
 }

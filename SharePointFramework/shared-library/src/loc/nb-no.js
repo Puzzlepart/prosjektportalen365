@@ -158,6 +158,7 @@ define([], function () {
     MeasurementSheetName: 'Målinger',
     DataGridSelectAllLabel: 'Velg alle',
     DataGridSelectRowLabel: 'Velg rad',
+    DataGridSelectNamedRowLabel: 'Velg {0}',
     ProjectPropertiesNotFoundErrorText: 'Fant ikke prosjektegenskapene i listen "{0}".'
   }
 })

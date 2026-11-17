@@ -28,6 +28,7 @@ export const TimelineList: FC = () => {
             columns={columns}
             sortable
             defaultSortState={defaultSortState}
+            getRowName={(item) => item.Title}
             selectionMode='multiselect'
             selectedItems={context.state.selectedItems}
             onSelectionChange={onSelection}

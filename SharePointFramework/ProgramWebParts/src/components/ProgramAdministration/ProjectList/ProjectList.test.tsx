@@ -18,7 +18,7 @@ import { IProjectListProps } from './types'
  * the phase and the creation date, a selection reported as site ids when the user may manage the
  * program, and, when the projects come from more than one hub, one grid with a header row per hub,
  * as the portfolio overview groups. Asserted through roles and text; the row checks are named
- * "Velg rad", the group checks "Velg alle i <hub>" (PortfolioWebPartsStrings).
+ * by their row ("Velg Alfa"), the group checks "Velg alle i <hub>" (PortfolioWebPartsStrings).
  */
 const HUBS = [
   { url: 'https://t.sharepoint.com/sites/hub1', hubSiteId: 'hub-1', title: 'Hub 1' },
@@ -67,7 +67,7 @@ function renderList({
   return { onSelectionChange }
 }
 
-const rowChecks = () => screen.queryAllByRole('checkbox', { name: 'Velg rad' })
+const rowChecks = () => screen.queryAllByRole('checkbox', { name: /^Velg (Alfa|Bravo|Charlie)$/ })
 const checked = () => rowChecks().map((check) => (check as HTMLInputElement).checked)
 const search = (value: string) =>
   fireEvent.change(screen.getByPlaceholderText('Søk'), { target: { value } })

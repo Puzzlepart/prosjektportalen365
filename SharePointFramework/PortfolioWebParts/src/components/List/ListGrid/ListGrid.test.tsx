@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import strings from 'PortfolioWebPartsStrings'
 import { axeComponent } from 'pp365-jest-config/lib/axe'
-import { IListColumn } from 'pp365-shared-library'
+import { format, IListColumn } from 'pp365-shared-library'
 import * as React from 'react'
 import { ListGrid } from './ListGrid'
 import { IListGridProps } from './types'
@@ -40,10 +40,26 @@ function grid(props: Partial<IListGridProps> = {}) {
   return <ListGrid items={ITEMS} columns={COLUMNS} renderCell={(item) => item.Title} {...props} />
 }
 
-const rowChecks = () => screen.queryAllByRole('checkbox', { name: strings.ListSelectRowLabel })
+/** Each row's check is named by its row (#137): «Velg Alfa», «Velg Bravo» and «Velg Charlie». */
+const ROW_CHECK_NAMES = ITEMS.map((item) => format(strings.ListSelectNamedRowLabel, item.Title))
+const rowChecks = () =>
+  screen.queryAllByRole('checkbox', { name: (name) => ROW_CHECK_NAMES.includes(name) })
 const checked = () => rowChecks().map((check) => (check as HTMLInputElement).checked)
 
 describe('ListGrid', () => {
+  it("names each row's check by the row, by its title or as the caller names it, and «Velg rad» where it has none (Puzzlepart/prosjektportalen365-testing#137)", () => {
+    // As «Velg rad» alone, every row's check read the same, and the down arrow told nothing.
+    const { rerender } = render(grid({ items: [...ITEMS, { Path: '/uten-tittel' }] }))
+    expect(rowChecks()).toHaveLength(3)
+    expect(screen.getByRole('checkbox', { name: strings.ListSelectRowLabel })).toBeInTheDocument()
+    rerender(grid({ getRowName: (item) => item.Title && `${item.Title} (prosjekt)` }))
+    expect(
+      screen.getByRole('checkbox', {
+        name: format(strings.ListSelectNamedRowLabel, 'Alfa (prosjekt)')
+      })
+    ).toBeInTheDocument()
+  })
+
   it('offers no selection when selectionMode is none: no checks, and a click on a row selects nothing', () => {
     const onSelectionChange = jest.fn()
     render(grid({ selectionMode: 'none', groups: GROUPS, onSelectionChange }))

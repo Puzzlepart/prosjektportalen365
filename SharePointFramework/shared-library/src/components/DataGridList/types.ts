@@ -79,6 +79,12 @@ export interface IDataGridListProps<TItem = any> {
   groupedColumns?: TableColumnId[]
 
   /**
+   * The name of a row, such as its title, for the check that selects it: «Velg Agder 2025». A row
+   * it gives no name keeps «Velg rad».
+   */
+  getRowName?: (item: TItem) => string | undefined
+
+  /**
    * Whether the selection indicator stays subtle until hovered.
    */
   subtleSelection?: boolean

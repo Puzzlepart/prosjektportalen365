@@ -152,6 +152,7 @@ declare interface ISharedLibraryStrings {
   MeasurementSheetName: string
   DataGridSelectAllLabel: string
   DataGridSelectRowLabel: string
+  DataGridSelectNamedRowLabel: string
   ProjectPropertiesNotFoundErrorText: string
 }
 

@@ -340,6 +340,7 @@ declare interface IPortfolioWebPartsStrings {
   MeasurementSheetTitleKey: string
   ListSelectAllLabel: string
   ListSelectRowLabel: string
+  ListSelectNamedRowLabel: string
   ListSelectGroupLabel: string
   ListCollapseAllGroupsLabel: string
   ListExpandAllGroupsLabel: string

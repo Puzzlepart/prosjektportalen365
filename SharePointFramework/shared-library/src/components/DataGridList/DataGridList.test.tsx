@@ -4,7 +4,9 @@ import { createTableColumn } from '@fluentui/react-components'
 import { axeComponent } from 'pp365-jest-config/lib/axe'
 import { layOutForTabster } from 'pp365-jest-config/lib/tabsterLayout'
 import * as React from 'react'
+import strings from 'SharedLibraryStrings'
 import { IListColumn } from '../../types'
+import { format } from '../../util/format'
 import { createDataGridColumns } from '../../util/createDataGridColumns'
 import { DataGridList } from './DataGridList'
 import { IDataGridColumn, IDataGridListProps } from './types'
@@ -110,6 +112,25 @@ describe('DataGridList', () => {
     expect(onSelectionChange).toHaveBeenLastCalledWith(['a'])
     await user.click(checkboxes[1])
     expect(onSelectionChange).toHaveBeenLastCalledWith(['a', 'b'])
+  })
+
+  it("names each row's check by the row as the caller names it, and «Velg rad» where it gives no name (Puzzlepart/prosjektportalen365-testing#137)", () => {
+    // As «Velg rad» alone, every row's check read the same, and the down arrow told nothing.
+    render(
+      <DataGridList
+        items={items}
+        columns={columns}
+        getRowId={(item) => item.id}
+        selectionMode='multiselect'
+        getRowName={(item) => (item.id === 'c' ? undefined : item.name)}
+      />
+    )
+    const named = (name: string) => format(strings.DataGridSelectNamedRowLabel, name)
+    expect(screen.getByRole('checkbox', { name: named('Bravo') })).toBeInTheDocument()
+    expect(screen.getByRole('checkbox', { name: named('Alfa') })).toBeInTheDocument()
+    expect(
+      screen.getByRole('checkbox', { name: strings.DataGridSelectRowLabel })
+    ).toBeInTheDocument()
   })
 
   it('shows the rows given as selected', () => {

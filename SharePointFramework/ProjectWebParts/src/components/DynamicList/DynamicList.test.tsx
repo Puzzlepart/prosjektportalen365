@@ -252,6 +252,26 @@ describe('DynamicList', () => {
     expect(screen.getByRole('button', { name: 'Design av bane' })).toHaveFocus()
   })
 
+  it("names each row's check by its title, in a library by its name (Puzzlepart/prosjektportalen365-testing#137)", async () => {
+    // As «Velg rad» alone, every row's check read the same, and the down arrow told nothing.
+    const { unmount } = renderList({ data: { listItems, listColumns, listTitle: 'Leveranser' } })
+    expect(
+      await screen.findByRole('checkbox', {
+        name: format(strings.DynamicList.SelectNamedRow, 'Design av bane')
+      })
+    ).toBeInTheDocument()
+    unmount()
+    renderList({
+      isDocumentLibrary: true,
+      data: { listItems: libraryItems, listColumns: libraryColumns, listTitle: 'Dokumenter' }
+    })
+    expect(
+      await screen.findByRole('checkbox', {
+        name: format(strings.DynamicList.SelectNamedRow, 'Kontrakter')
+      })
+    ).toBeInTheDocument()
+  })
+
   it('puts focus on the folder opened, and back on its link when going back (WCAG 2.4.3)', async () => {
     renderList({
       isDocumentLibrary: true,

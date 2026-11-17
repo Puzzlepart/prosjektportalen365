@@ -21,6 +21,8 @@ declare interface IPortfolioExtensionsStrings {
   HelpContentAvailableDescription: string
   HelpContentAvailableLabel: string
   HelpContentDialogTitle: string
+  HelpContentLabel: string
+  HelpContentLoadingLabel: string
   HelpContentUnavailableDescription: string
   HelpContentUnavailableLabel: string
   IdeaAlreadyApproved: string

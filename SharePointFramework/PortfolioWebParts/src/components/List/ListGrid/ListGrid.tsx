@@ -69,7 +69,8 @@ export const ListGrid: FC<IListGridProps> = (props) => {
     arrowNavigation,
     getHeaderCellProps,
     getHeaderAddon,
-    resizeColumn
+    resizeColumn,
+    selectRowLabel
   } = useListGrid(props)
 
   const onHeaderClick = (column: IListColumn) => (event: MouseEvent<HTMLElement>) => {
@@ -244,7 +245,7 @@ export const ListGrid: FC<IListGridProps> = (props) => {
                           event.stopPropagation()
                           selection.toggleRow(entry.item, event.shiftKey)
                         }}
-                        checkboxIndicator={{ 'aria-label': strings.ListSelectRowLabel }}
+                        checkboxIndicator={{ 'aria-label': selectRowLabel(entry.item) }}
                       />
                     )}
                     {isGrouped && <TableCell role='gridcell' className={styles.expanderCell} />}

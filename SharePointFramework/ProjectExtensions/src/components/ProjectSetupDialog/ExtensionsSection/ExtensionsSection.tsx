@@ -46,6 +46,7 @@ export const ExtensionsSection: ProjectSetupDialogSectionComponent = () => {
         items={items}
         columns={columns}
         getRowId={(item) => String(item.key)}
+        getRowName={(item) => item.text}
         selectionMode='multiselect'
         selectedItems={selectedRowIds}
         onSelectionChange={onSelectionChange}

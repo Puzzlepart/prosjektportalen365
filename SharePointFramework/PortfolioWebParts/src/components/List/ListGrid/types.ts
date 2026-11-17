@@ -96,6 +96,12 @@ export interface IListGridProps {
   selectedItems?: Record<string, any>[]
 
   /**
+   * The name of a row for the check that selects it: «Velg Agder 2025». Defaults to the row's
+   * `Title`; a row without one keeps «Velg rad».
+   */
+  getRowName?: (item: Record<string, any>) => string | undefined
+
+  /**
    * Class name for the grid's container.
    */
   className?: string
@@ -204,6 +210,11 @@ export interface IListGridState {
    * The selection.
    */
   selection: ReturnType<typeof useListSelection>
+
+  /**
+   * The name of the check that selects a row: «Velg» and the row's name, or «Velg rad».
+   */
+  selectRowLabel: (item: Record<string, any>) => string
 
   /**
    * Tabster's arrow key navigation across the grid.

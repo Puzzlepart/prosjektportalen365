@@ -82,14 +82,23 @@ const columnHeaders = () =>
     .map((h) => h.textContent?.trim())
     .filter(Boolean)
 
+/**
+ * Whether a check is a row's own: named «Velg» and the row's title (#137), not «Velg alle rader»
+ * or a group's «Velg alle i …».
+ */
+const isRowCheckName = (name: string) =>
+  name.startsWith(format(strings.ListSelectNamedRowLabel, '')) &&
+  !name.startsWith(strings.ListSelectAllLabel) &&
+  !name.startsWith(format(strings.ListSelectGroupLabel, ''))
+
 /** The rows of items, in display order: the rows with a check of their own. */
 const itemRows = () =>
   screen
     .getAllByRole('row')
-    .filter((row) => within(row).queryByRole('checkbox', { name: strings.ListSelectRowLabel }))
+    .filter((row) => within(row).queryByRole('checkbox', { name: isRowCheckName }))
 
 const rowCheck = (index: number) =>
-  within(itemRows()[index]).getByRole('checkbox', { name: strings.ListSelectRowLabel })
+  within(itemRows()[index]).getByRole('checkbox', { name: isRowCheckName })
 
 /** The titles of the items the last selection change reported. */
 const reported = (onSelectionChange: jest.Mock) =>

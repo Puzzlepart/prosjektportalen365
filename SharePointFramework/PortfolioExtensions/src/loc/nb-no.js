@@ -22,6 +22,8 @@ define([], function () {
     HelpContentAvailableDescription: 'Åpne hjelpedialog for denne siden',
     HelpContentAvailableLabel: 'Hjelp tilgjengelig',
     HelpContentDialogTitle: 'Hjelp for denne siden',
+    HelpContentLabel: 'Hjelp',
+    HelpContentLoadingLabel: 'Laster hjelp …',
     HelpContentUnavailableDescription: 'Denne siden har ingen hjelpeinnhold, dersom du mener det burde vært hjelpeinnhold her, vennligst kontakt din administrator',
     HelpContentUnavailableLabel: 'Hjelp utilgjengelig',
     IdeaAlreadyApproved: 'Denne ideen er allerede godkjent',

@@ -363,6 +363,21 @@ describe('Footer', () => {
     expect(screen.getByText(strings.SeeAllInstallationsLinkText)).toBeInTheDocument()
   })
 
+  it('calls the help «Hjelp» until it is loaded, says it is loading, and «Hjelp tilgjengelig» once there is some (Puzzlepart/prosjektportalen365-testing#137)', async () => {
+    // «Hjelp tilgjengelig» before the help was loaded opened a dialog that could say there was none.
+    let answer: (items: HelpContentModel[]) => void
+    const loadHelpContent = jest.fn(
+      () => new Promise<HelpContentModel[]>((resolve) => (answer = resolve))
+    )
+    render(<Footer {...footerProps({ loadHelpContent })} />)
+    expect(screen.queryByText(strings.HelpContentAvailableLabel)).toBeNull()
+    fireEvent.click(screen.getByText(strings.HelpContentLabel))
+    expect(await screen.findByText(strings.HelpContentLoadingLabel)).toBeInTheDocument()
+    await act(async () => answer([help('Kom i gang', 'Velkommen')]))
+    expect(await screen.findByText('Velkommen')).toBeInTheDocument()
+    expect(screen.getByText(strings.HelpContentAvailableLabel)).toBeInTheDocument()
+  })
+
   it('opens the help for the page, one tab per entry', async () => {
     const loadHelpContent = jest.fn(() =>
       Promise.resolve([
@@ -374,7 +389,7 @@ describe('Footer', () => {
       ])
     )
     render(<Footer {...footerProps({ loadHelpContent })} />)
-    fireEvent.click(screen.getByText(strings.HelpContentAvailableLabel))
+    fireEvent.click(screen.getByText(strings.HelpContentLabel))
     expect(await screen.findByText('Velkommen')).toBeInTheDocument()
     // Named by its title, with a button that closes it; it had neither (WCAG 4.1.2).
     expect(screen.getByRole('dialog', { name: strings.HelpContentDialogTitle })).toBeInTheDocument()
@@ -395,7 +410,7 @@ describe('Footer', () => {
 
   it('says that the page has no help once none was found', async () => {
     render(<Footer {...footerProps()} />)
-    fireEvent.click(screen.getByText(strings.HelpContentAvailableLabel))
+    fireEvent.click(screen.getByText(strings.HelpContentLabel))
     // The help button's tooltip says the same, so the text is looked for in the dialog.
     const dialog = await screen.findByRole('dialog')
     expect(
@@ -417,7 +432,7 @@ describe('Footer', () => {
       </TelemetryProvider>
     )
     expect(countedTelemetry().usage).toEqual({})
-    fireEvent.click(screen.getByText(strings.HelpContentAvailableLabel))
+    fireEvent.click(screen.getByText(strings.HelpContentLabel))
     expect(await screen.findByText('Velkommen')).toBeInTheDocument()
     expect(countedTelemetry().usage).toEqual({ 'Footer help.opened': 1 })
     fireEvent.click(screen.getByRole('button', { name: strings.CloseLabel }))
@@ -434,7 +449,7 @@ describe('Footer', () => {
       .mockResolvedValueOnce([help('Porteføljeoversikt', 'Om porteføljeoversikten')])
     const props = footerProps({ loadHelpContent, pagePath: '/sites/pp365/SitePages/Home.aspx' })
     const { rerender } = render(<Footer {...props} />)
-    fireEvent.click(screen.getByText(strings.HelpContentAvailableLabel))
+    fireEvent.click(screen.getByText(strings.HelpContentLabel))
     expect(await screen.findByText('Om porteføljen')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('tab', { name: 'Opprett prosjekt' }))
 
@@ -457,7 +472,7 @@ describe('Footer', () => {
     const { rerender } = render(<Footer {...props} />)
     rerender(<Footer {...props} pagePath='/sites/pp365/SitePages/Portef%C3%B8ljeoversikt.aspx' />)
     expect(loadHelpContent).not.toHaveBeenCalled()
-    fireEvent.click(screen.getByText(strings.HelpContentAvailableLabel))
+    fireEvent.click(screen.getByText(strings.HelpContentLabel))
     expect(await screen.findByText('Om porteføljeoversikten')).toBeInTheDocument()
     expect(loadHelpContent).toHaveBeenCalledTimes(1)
   })
@@ -475,7 +490,7 @@ describe('Footer', () => {
       .mockResolvedValueOnce([help('Porteføljeoversikt', 'Om porteføljeoversikten')])
     const props = footerProps({ loadHelpContent, pagePath: '/sites/pp365/SitePages/Home.aspx' })
     const { rerender } = render(<Footer {...props} />)
-    fireEvent.click(screen.getByText(strings.HelpContentAvailableLabel))
+    fireEvent.click(screen.getByText(strings.HelpContentLabel))
     rerender(<Footer {...props} pagePath='/sites/pp365/SitePages/Portef%C3%B8ljeoversikt.aspx' />)
     expect(await screen.findByText('Om porteføljeoversikten')).toBeInTheDocument()
     await act(async () => answerFirst([help('Porteføljenivå', 'Om porteføljen')]))

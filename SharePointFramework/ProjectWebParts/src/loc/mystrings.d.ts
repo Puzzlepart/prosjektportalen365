@@ -382,6 +382,7 @@ declare interface IProjectWebPartsStrings {
     DefaultTitle: string
     SelectAll: string
     SelectRow: string
+    SelectNamedRow: string
     NoListSelected: string
     NoListSelectedMessage: string
     RefetchingData: string

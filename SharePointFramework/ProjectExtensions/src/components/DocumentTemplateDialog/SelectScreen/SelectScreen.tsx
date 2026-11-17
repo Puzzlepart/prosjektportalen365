@@ -35,6 +35,7 @@ export const SelectScreen: FC = () => {
         items={templates}
         columns={columns}
         getRowId={(item) => item.id}
+        getRowName={(item) => item.name}
         selectionMode='multiselect'
         selectedItems={selectedIds}
         onSelectionChange={onSelectionChange}
