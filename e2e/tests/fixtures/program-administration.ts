@@ -32,10 +32,11 @@ export const addButton = (admin: Locator) =>
   admin.getByRole('button', { name: /legg til underområder|add child/i }).first()
 
 /**
- * A project row's check, as opposed to a hub group's ("Velg alle i ...") and the select-all
- * ("Velg alle rader"): the lists are the portfolio overview's grid (`ListGrid`).
+ * A project row's check, named by its row ("Velg Alfa", or "Velg rad" for a row without a title;
+ * Puzzlepart/prosjektportalen365-testing#137), as opposed to a hub group's ("Velg alle i ...") and
+ * the select-all ("Velg alle rader"): the lists are the portfolio overview's grid (`ListGrid`).
  */
-export const ROW_CHECK = /^(velg rad|select row)$/i
+export const ROW_CHECK = /^(velg|select) (?!alle rader$|alle i |all rows$|all in ).+/i
 
 /** The checks of the project rows in `container`, in display order. */
 export const rowChecks = (container: Locator) =>
