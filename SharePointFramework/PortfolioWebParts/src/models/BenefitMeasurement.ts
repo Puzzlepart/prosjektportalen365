@@ -60,7 +60,7 @@ export class BenefitMeasurement extends BenefitBase {
   public setTrendIcon(prevMeasurement: BenefitMeasurement): BenefitMeasurement {
     const shouldIncrease = this.Indicator.DesiredValue > this.Indicator.StartValue
     if (this.Achievement >= 100) {
-      // As hex, which the trend cell can measure to frame it (gold stands out too little).
+      // Gold stands out too little from the rows, so the trend cell frames it.
       this.TrendIcon = { iconName: 'Trophy', color: '#ffd700' }
       return this
     }

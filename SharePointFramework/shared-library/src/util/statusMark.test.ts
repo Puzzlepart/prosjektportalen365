@@ -36,7 +36,7 @@ describe('getStatusMark', () => {
     expect(getStatusMark('#0078d4')).toBeNull()
     expect(getStatusMark(undefined)).toBeNull()
     expect(getStatusMark('')).toBeNull()
-    expect(getStatusMark('green')).toBeNull()
+    expect(getStatusMark('grønn')).toBeNull()
   })
 
   it("uses the status value's own icon where it has one, whatever its colour", () => {
@@ -87,11 +87,17 @@ describe('getStatusTile', () => {
     expect(getStatusTile(undefined)).toBeUndefined()
     expect(getStatusTile('')).toBeUndefined()
     expect(getStatusTile('transparent')).toBeUndefined()
-    expect(getStatusTile('green')).toBeUndefined()
+    expect(getStatusTile('grønn')).toBeUndefined()
   })
 
   it('works a colour out once, however it is written', () => {
     expect(getStatusTile(' #2DA748 ')).toBe(getStatusTile(GREEN))
+  })
+
+  it('reads a colour name as the colour it names', () => {
+    expect(getStatusTile('Green')).toEqual(getStatusTile('#008000'))
+    expect(getStatusMark('red')).toEqual(getStatusMark('#ff0000'))
+    expect(getStatusColorClass('green')).toBe('green')
   })
 })
 
@@ -106,7 +112,7 @@ describe('getStatusColorClass', () => {
   })
 
   it('puts blue, purple, grey and a colour it cannot read in a class of their own', () => {
-    for (const color of [BLUE, '#8764b8', GREY, '#444', 'gold', '', undefined]) {
+    for (const color of [BLUE, '#8764b8', GREY, '#444', 'grønn', '', undefined]) {
       expect(getStatusColorClass(color)).toBe('other')
     }
   })
@@ -254,8 +260,17 @@ describe('getStatusShapes', () => {
   })
 
   it('marks a value without a colour it can read as unknown', () => {
-    const odd = [status('Gull', 'gold'), status('Uten farge'), status('På plan', GREEN)]
+    const odd = [status('Gull', 'gull'), status('Uten farge'), status('På plan', GREEN)]
     expect(shapesOf(odd)).toEqual(['unknown', 'unknown', 'check'])
+  })
+
+  it('gives a value configured with a colour name the shape of its hue', () => {
+    expect(shapesOf([status('Bra', 'green'), status('Ille', 'Red')])).toEqual(['check', 'cross'])
+  })
+
+  it('takes a colour as one however it is written: a name, hex or rgb()', () => {
+    const greens = [status('Bra', 'green'), status('Ja', '#008000'), status('Ok', 'rgb(0,128,0)')]
+    expect(shapesOf(greens)).toEqual(['check', 'check', 'check'])
   })
 
   it('leaves out empty values', () => {

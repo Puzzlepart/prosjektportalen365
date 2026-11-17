@@ -2,6 +2,7 @@
  * Colour contrast as WCAG 2.1 defines it (1.4.3 for text, 1.4.11 for graphics), for colours that
  * come from configuration rather than from the theme, such as the timeline's.
  */
+import { NAMED_COLORS } from './namedColors'
 
 /** An sRGB colour, each channel from 0 to 255. */
 export type RgbColor = [number, number, number]
@@ -10,12 +11,17 @@ const BLACK = '#000000'
 const WHITE = '#ffffff'
 
 /**
- * Reads a CSS colour given as hex (`#rgb`, `#rgba`, `#rrggbb` or `#rrggbbaa`) or as `rgb()` or
- * `rgba()`. A transparent colour is blended over white, the background of the timeline and the
- * page. Anything else (a colour name, `transparent`, a gradient) gives `undefined`.
+ * Reads a CSS colour given as hex (`#rgb`, `#rgba`, `#rrggbb` or `#rrggbbaa`), as `rgb()` or
+ * `rgba()`, or as one of CSS's colour names in any case (`green`), as configuration may hold it.
+ * A transparent colour is blended over white, the background of the timeline and the page.
+ * Anything else (`transparent`, a system colour, a gradient, a word that names no colour) gives
+ * `undefined`.
  */
 export function parseColor(color: string): RgbColor | undefined {
   const value = color?.trim().toLowerCase() ?? ''
+  if (Object.prototype.hasOwnProperty.call(NAMED_COLORS, value)) {
+    return parseColor(NAMED_COLORS[value])
+  }
   let channels: number[]
   let alpha = 1
   const hex = /^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/.exec(value)

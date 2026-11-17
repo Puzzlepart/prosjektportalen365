@@ -32,12 +32,22 @@ describe('contrast', () => {
     expect(parseColor('#33993300')).toEqual([255, 255, 255])
   })
 
+  it("reads CSS's colour names, in any case, as the colours they name", () => {
+    expect(parseColor('gold')).toEqual([255, 215, 0])
+    expect(parseColor(' Green ')).toEqual([0, 128, 0])
+    expect(parseColor('grey')).toEqual(parseColor('gray'))
+    expect(parseColor('rebeccapurple')).toEqual([102, 51, 153])
+    expect(getContrastRatio('gold', '#ffffff')).toBeCloseTo(1.4, 1)
+    expect(getReadableTextColor('gold', '#ffffff')).toBe('#000000')
+  })
+
   it('reads nothing else', () => {
-    for (const color of ['gold', 'transparent', '', 'linear-gradient(red, blue)', '#12345']) {
+    const words = ['grønn', 'transparent', 'currentcolor', 'constructor', '']
+    for (const color of [...words, 'linear-gradient(red, blue)', '#12345']) {
       expect(parseColor(color)).toBeUndefined()
     }
     expect(parseColor(undefined)).toBeUndefined()
-    expect(getContrastRatio('gold', '#ffffff')).toBeUndefined()
+    expect(getContrastRatio('grønn', '#ffffff')).toBeUndefined()
   })
 
   it('keeps a readable text colour, and puts black or white in place of a faint one', () => {
@@ -49,7 +59,7 @@ describe('contrast', () => {
   })
 
   it('keeps the text colour on a background it cannot read', () => {
-    expect(getReadableTextColor('gold', '#ffffff')).toBe('#ffffff')
+    expect(getReadableTextColor('grønn', '#ffffff')).toBe('#ffffff')
     expect(getReadableTextColor('transparent')).toBeUndefined()
   })
 
@@ -82,7 +92,7 @@ describe('contrast', () => {
   })
 
   it('makes no shade of a colour it cannot read', () => {
-    expect(getContrastingShade('gold', GREY_ROW)).toBeUndefined()
+    expect(getContrastingShade('grønn', GREY_ROW)).toBeUndefined()
     expect(getContrastingShade('#ffc800', 'transparent')).toBeUndefined()
   })
 })

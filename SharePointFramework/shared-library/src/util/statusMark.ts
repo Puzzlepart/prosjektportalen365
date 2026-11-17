@@ -207,6 +207,16 @@ function getIconKey(iconName: string): string {
 }
 
 /**
+ * A colour as the shapes tell colours apart: its channels where it can be read, so `green`,
+ * `#008000` and `rgb(0, 128, 0)` are one colour, else its text.
+ */
+function getColorKey(color?: string): string {
+  const parsed = parseColor(color)
+  if (parsed) return parsed.map(Math.round).join(',')
+  return color?.trim().toLowerCase() ?? ''
+}
+
+/**
  * The values of a section that keep their own icon, and the shape each is drawn with. An icon is
  * kept for one colour only, that of the first value given with it: a value of another colour with
  * the same icon is drawn by its colour. The shape an own icon looks like (`LOOKALIKE_SHAPES`) is
@@ -225,7 +235,7 @@ function getOwnIconShapes(
     const ownIcon = config.iconName?.trim() ?? ''
     if (NO_OWN_ICON.includes(ownIcon.toLowerCase())) continue
     const iconKey = getIconKey(ownIcon)
-    const colorKey = config.color?.trim().toLowerCase() ?? ''
+    const colorKey = getColorKey(config.color)
     if (colorByIcon.has(iconKey) && colorByIcon.get(iconKey) !== colorKey) continue
     colorByIcon.set(iconKey, colorKey)
     ownIconShapes.set(config, { shape: 'icon', iconName: ownIcon })
@@ -246,9 +256,9 @@ function takeColorShape(
   shapeByColor: Map<string, StatusShape>,
   taken: Set<StatusShape>
 ): IStatusShape {
-  const key = color?.trim().toLowerCase() ?? ''
-  const parsed = parseColor(key)
+  const parsed = parseColor(color)
   if (!parsed) return { shape: 'unknown' }
+  const key = getColorKey(color)
   if (!shapeByColor.has(key)) {
     const base = getBaseShape(parsed)
     const free = [...SHAPE_VARIANTS[base], ...NEUTRAL_SHAPES].find((shape) => !taken.has(shape))
@@ -262,8 +272,8 @@ function takeColorShape(
  * A light fill and a dark ink of a status colour, for the tile a status value is drawn on: the
  * fill a quarter of the colour over white, the ink the colour darkened just until it reads 4.5:1
  * against the fill (WCAG 1.4.3, 1.4.11), so the shape on the tile reads whatever colour the
- * customer configured. `undefined` for a colour that cannot be read (none, a colour name,
- * `transparent`). Worked out once per colour.
+ * customer configured. `undefined` for a colour that cannot be read (none, a word that names no
+ * colour, `transparent`). Worked out once per colour.
  */
 export function getStatusTile(color?: string): IStatusTile | undefined {
   const key = color?.trim().toLowerCase() ?? ''

@@ -129,7 +129,6 @@ Sjekk ut [release notes](./releasenotes/1.15.0.md) for høydepunkter og mer deta
 - Er `Install.ps1` tidligere kjørt med `-CertificateBase64Encoded`, står sertifikatet fortsatt i klartekst i de eldre radene i `Installasjonslogg`. Slett verdien fra radene, og vurder å bytte sertifikatet
 - Bruksstatistikk er på etter oppgraderingen (nivå 3, Utvidet), med mindre statistikken for `Malpakkekatalog` var slått av. Velg nivået med `-UsageStatisticsLevel` når dere oppgraderer, eller endre `UsageStatisticsLevel` i `Globale innstillinger` etterpå. Se [Bruksstatistikk](https://github.com/Puzzlepart/prosjektportalen365/wiki/Bruksstatistikk)
 - Kolonnen `Statusrapport` i `Porteføljeoversikt` finner siste statusrapport for hvert prosjekt gjennom SharePoint-søket. En rapport som nettopp er publisert, også et prosjekts første, vises først etter neste indeksering. Til da viser cellen forrige rapport eller «Ingen publisert rapport»
-- Kolonnen `Statusrapport` i `Porteføljeoversikt` leser fargene i `Prosjektkolonnekonfigurasjon` som hex-koder, slik malen har dem, eller som `rgb()`. En statusverdi med et fargenavn, som `green`, vises som en grå flis med «?». Bytt eventuelle fargenavn til hex-koder
 
 ---
 

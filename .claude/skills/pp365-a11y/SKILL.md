@@ -117,8 +117,9 @@ Rules 1, 2, 5, 6, 8 and the tooltip handling are adapted from Microsoft's
    light tone a bar is filled with. A configured colour is the customer's choice: draw it so it
    holds whatever it is, rather than changing it. An icon is framed the same way: its regular
    variant, the filled one's outline, drawn over it in the shade (`TrendColumn`, where gold and
-   green were under 3:1). `parseColor` reads hex and `rgb()`, not names: a colour from code is
-   hex (the benefit model's trophy was `'gold'`). A timeline bar whose fill fades (the resource
+   green were under 3:1). `parseColor` reads hex, `rgb()` and CSS's colour names (`namedColors.ts`;
+   until 2026-11-17 it read no names, so a status value configured as «green» drew a grey «?»
+   tile in the status report column). A timeline bar whose fill fades (the resource
    allocation's) names its full colour as `data.edgeColor`, and the timeline edges it in that,
    darkened the same way.
 10. **Headings**: `WebPartTitle` is the web part's `h2`; a section inside is an `h3`

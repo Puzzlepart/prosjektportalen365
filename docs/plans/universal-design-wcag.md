@@ -845,7 +845,7 @@ like the overview's: labelled, required fields marked, a save error a message ba
     is framed: the regular icon, which is the filled one's outline, is drawn over it in
     `getContrastingShade` of its colour (`#a38a00`, `#24a058`), so the colour stays; red reaches
     3.4:1 and is drawn as before. `BenefitMeasurement` gave the gold as `'gold'`, which
-    `parseColor` cannot read; it is `#ffd700`.
+    `parseColor` could not read then (it reads names since 2026-11-17); it is `#ffd700`.
   - `UserColumn` with several people showed their names only in tooltips on hover. Each picture
     takes the focus (an arrow stop in the hub's grid, whose Tabster grid navigation keeps them off
     the Tab sequence), so its tooltip shows to the keyboard; the `title` beside the tooltip, a
@@ -986,8 +986,8 @@ trap, and calling a trigger's render function as Fluent does.
   to its panel (`tabpanel`, `aria-labelledby`). The help button, unavailable with no help, is
   `disabledFocusable`, so its description says why.
 - **GitHub's version comparison**: the older-version icon was CSS orange, 2:1 against the
-  popover; the icons are Fluent's green, warning orange and foreground, hex (`parseColor` reads no
-  names). The release's highlights scroll and are a stop for the keyboard; they are a named
+  popover; the icons are Fluent's green, warning orange and foreground, hex (`parseColor` read no
+  names then). The release's highlights scroll and are a stop for the keyboard; they are a named
   region.
 
 Tests first: eight tests in `Footer.test.tsx` and the new colour test failed on the old code
@@ -1900,8 +1900,9 @@ itself as `observer` to `add()` is disposed, as the footer does.
     values, in configuration order, take a check, a warning or a cross by the hue, a dot for
     other hues or a ring for grey, else the next free variant and then neutral shape, so two
     colours it can read differ in shape while one of those is free; values of one colour share
-    theirs. «?» for a value without configuration, or drawn by a colour it cannot read (a name
-    rather than hex or `rgb()`), a dashed tile with a dash for no value. `StatusGlyph` (new in
+    theirs. «?» for a value without configuration, or drawn by a colour it cannot read (neither
+    hex, `rgb()` nor a CSS colour name; until 2026-11-17 a name too, see **Colour names**), a
+    dashed tile with a dash for no value. `StatusGlyph` (new in
     the library) draws it at 12 px in `currentColor`, an own icon filled, in a dark ink of the
     colour on a light fill of it, the ink at 4.5:1 or more on the fill (`getStatusTile`),
     whatever the row's state and the site's theme. `StatusMark` and `getStatusMark` are
@@ -1984,12 +1985,23 @@ itself as `observer` to `add()` is disposed, as the footer does.
   line could not break before the date; the replica page of 16.11 had no such ancestor. Fixed by
   `white-space: normal` on the box: narrowed to 60 px, it cut no date off and hid the wider
   ones, with and without the spacing.
+- **Colour names** (2026-11-17). The strip drew a value whose colour is configured as a CSS name
+  («green») as a grey «?» tile, where the old cell drew its icon in that colour: `parseColor`
+  read hex and `rgb()` only. It reads CSS's 148 colour names now (`namedColors.ts`, the values
+  checked in Chromium), so such a value gets its tone and the shape of its hue; the timeline and
+  its details, the matrix, the trend column, the phase selector and the status marks read names
+  too. The shapes tell colours apart by their channels (`getColorKey`), so `green`, `#008000`
+  and `rgb(0, 128, 0)` in one section share a shape. Where `contrast.test.ts` and
+  `statusMark.test.ts` meant a colour that cannot be read, they use a word that names none
+  («grønn», «gull»). The changelog's second «Merk» line (hex or `rgb()` only) is gone, and the
+  release notes, the WCAG overview's 1.4.1, Tilgjengelighet, Testoversikt and pp365-a11y say
+  names are read. Other forms, such as `hsl()`, still give «?».
+- **Test data** (2026-11-17). The test hub's default view «Alle prosjekter» (`viewId=1`) has the
+  column now, after «Prosjektstatus»: 13 of its rows have a report, so the browser steps run
+  instead of reporting «not offered». «Vis eller skjul kolonner» takes it out again.
 - **Left.** Rounds with NVDA and VoiceOver, and a full hand round of the strip (zoom, reflow,
-  forced colours) once the test hub has published reports; colour names in
-  `Prosjektkolonnekonfigurasjon`, which the old cell drew in their colour and the strip draws as
-  a grey «?» tile (`parseColor` reads hex and `rgb()` only, by design); the focus back to the
-  strip in Safari; published reports on the test hub, so the browser steps are offered; `StatusReportPopover` into `A11Y_BLOCKING` after a
-  clean run; the title cell as a `rowheader`, for every column; the new shapes on the status page
+  forced colours); the focus back to the strip in Safari; `StatusReportPopover` into
+  `A11Y_BLOCKING` after a clean run; the title cell as a `rowheader`, for every column; the new shapes on the status page
   and in the project information; own icons told by name, so an icon of the UI Fabric font that
   looks like a shape (`Cancel`, `Accept`) reserves nothing; whether «Ingen publisert rapport»
   must hold before the crawl (a read of the report list for the rows without a report id); the
