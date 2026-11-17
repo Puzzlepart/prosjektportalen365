@@ -338,8 +338,14 @@ Both branches pushed first, each with `--force-with-lease` against its old tip. 
   the 51 TypeScript files the branch changes resolve their 168 relative and `baseUrl` imports
   with the exact case, and the templates' 421 file references do too, but for two on `main`
   (below).
-- **Not done.** The new workflow's first run (on the user's push), the test channel's dispatch
-  (after 19.11), and the dashboard's share of the slice (after its rebase on this).
+- **First run (2026-11-17).** Pushed as `2c130c006`, `69f823422` and `6233df574`. Run
+  44044750128 was green on `ubuntu-latest`: the build took 15 min (every solution 1.15.0.15, six
+  `*-arkiv.sppkg`), the full upgrade of `sites/pp365-arkiv` 33 min ("Channel: arkiv"). The
+  project sites under the hub were not upgraded (no `[upgrade-all-sites-to-latest]`). A project
+  shows the archive only once «Bruk arkivfunksjonalitet» (`useArchive`, off in both manifests and
+  set by no template) is on in Prosjektinformasjon and in Prosjektfaser (F8).
+- **Not done.** The test channel's dispatch (after 19.11), and the dashboard's share of the slice
+  (after its rebase on this).
 - **Found.** F8 and F9. On `main`, `Templates/Portfolio/Objects/Lists/@.xml` includes
   `FasesjekklisteV6.xml` and `PlanneroppgaverV6.xml`, where the files are `Fasesjekklistev6.xml`
   and `Planneroppgaverv6.xml`; `main`'s Linux builds pass with them. Left for `main`.
