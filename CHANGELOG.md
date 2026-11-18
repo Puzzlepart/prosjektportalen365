@@ -59,6 +59,9 @@ Sjekk ut [release notes](./releasenotes/1.15.0.md) for høydepunkter og mer deta
 - Rettet en feil hvor et prosjektoppsett som stoppet underveis, for eksempel fordi SharePoint strupet kallene, ikke kunne fullføres med `Kjør oppsettveiviser`: menyen ble avvist fordi en side oppsettet hadde laget, ikke var publisert. Siden publiseres nå ved neste kjøring
 - Rettet en feil hvor prosjektoppsett som ble startet samtidig, kunne stoppe med `[406]` rett etter at en side var publisert
 - Rettet en feil hvor radene i listeinnholdet mistet termen i en taksonomikolonne når kolonnen fulgte med en innholdstype med et annet termsett enn malen angir, for eksempel fasen i alle radene i `Fasesjekkliste Vei` ved import av malpakken Veiprosjekt. En term SharePoint ikke lagrer, står nå som feil i loggen
+- Rettet en feil hvor et prosjekt fra en importert malpakke bare fikk Standardmal: pakkens egen prosjektmal ble aldri lagt på. Den legges nå oppå Standardmal, som pakkene er skrevet for
+- Rettet en feil hvor en skymal la pakkens prosjektmal på alene, uten Standardmal, så listene manglet innholdstypene de binder (med Enkel prosjektmal 90 feil og en tom fasesjekkliste). Standardmal legges nå på først og pakkens mal oppå
+- Rettet en feil hvor `Kjør oppsettveiviser` med «Ikke legg på mal på området» ga prosjektet malen «Ingen mal» og bare de nye tilleggene, og gjorde et program eller overordnet prosjekt til et vanlig prosjekt. Prosjektet beholder nå malen og statusen sin, og de nye tilleggene legges til
 - Rettet en feil hvor `Kjør oppsettveiviser` og `Gjør om til overordnet prosjekt` ikke startet på områder med et annet språk enn norsk (siden 1.12.0)
 - Rettet en feil i den engelske prosjektmalen hvor oppsettet stoppet ved menyen (siden 1.14.0)
 - Rettet feil i meldingene fra oppsettveiviseren: feil fra provisjoneringen ble vist som «[object Object]», forklaringen om hubtilkobling viste HTML-koder, og avbrudd og telleren hadde feil tekst

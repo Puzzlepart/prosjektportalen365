@@ -31,12 +31,16 @@ function applyTemplate(extensions: any[] = [], id = 1) {
   } as any)
 }
 
-/** Task parameters with the main template's schema. */
-const taskParams = (templateSchema: Record<string, any>) =>
+/** Task parameters with the main template's schema, and a catalog template's own if given. */
+const taskParams = (
+  templateSchema: Record<string, any>,
+  packageTemplateSchema?: Record<string, any>
+) =>
   ({
     web: {},
     context: {},
     templateSchema,
+    packageTemplateSchema,
     templateExcludeHandlers: ['Hooks']
   }) as any
 
@@ -180,6 +184,60 @@ describe('ApplyTemplate', () => {
   it('applies only the extensions when no template is selected', async () => {
     await applyTemplate([extension('Kommunikasjon', { Lists: [] })], NO_TEMPLATE_ID).execute(
       taskParams({ Lists: [{ Title: 'Prosjektlogg' }] }),
+      jest.fn()
+    )
+    expect(engine.applied).toEqual([{ Lists: [] }])
+  })
+
+  it("applies a catalog template's own template after the template and before the extensions", async () => {
+    const onProgress = jest.fn()
+    await applyTemplate([extension('Enkel venstremeny', { Lists: [] })]).execute(
+      taskParams(
+        { Lists: [{ Title: 'Fasesjekkliste' }], Hooks: [{}] },
+        { Lists: [{ Title: 'Usikkerhet' }], Hooks: [{}] }
+      ),
+      onProgress
+    )
+    expect(engine.applied).toEqual([
+      { Lists: [{ Title: 'Fasesjekkliste' }] },
+      { Lists: [{ Title: 'Usikkerhet' }] },
+      { Lists: [] }
+    ])
+    expect(entries(onProgress, 'info')).toContain(
+      'Applying the package template on top of the template'
+    )
+  })
+
+  it("leaves the template's menu out for the package template's, and the package's for an extension's", async () => {
+    const onProgress = jest.fn()
+    const packageQuickLaunch = [{ Title: 'Usikkerhet', Url: 'Lists/Usikkerhet/AllItems.aspx' }]
+    const params = await applyTemplate([
+      extension('Toppmeny', { Navigation: { TopNavigationBar: [] } })
+    ]).execute(
+      taskParams(
+        { Navigation: { QuickLaunch: QUICK_LAUNCH, TopNavigationBar: TOP_NAVIGATION_BAR } },
+        { Navigation: { QuickLaunch: packageQuickLaunch, TopNavigationBar: TOP_NAVIGATION_BAR } }
+      ),
+      onProgress
+    )
+    expect(engine.applied).toEqual([
+      {},
+      { Navigation: { QuickLaunch: packageQuickLaunch } },
+      { Navigation: { TopNavigationBar: [] } }
+    ])
+    expect(entries(onProgress, 'info')).toEqual(
+      expect.arrayContaining([
+        "Skipping the template's Navigation QuickLaunch: the package's own template declares it",
+        "Skipping the template's Navigation TopNavigationBar: the package's own template and the extension Toppmeny declare it",
+        "Skipping the package template's Navigation TopNavigationBar: the extension Toppmeny declares it"
+      ])
+    )
+    expect(params.declaredQuickLaunch).toEqual([QUICK_LAUNCH, packageQuickLaunch])
+  })
+
+  it('applies no package template when no template is selected', async () => {
+    await applyTemplate([extension('Kommunikasjon', { Lists: [] })], NO_TEMPLATE_ID).execute(
+      taskParams({ Lists: [] }, { Lists: [{ Title: 'Usikkerhet' }] }),
       jest.fn()
     )
     expect(engine.applied).toEqual([{ Lists: [] }])

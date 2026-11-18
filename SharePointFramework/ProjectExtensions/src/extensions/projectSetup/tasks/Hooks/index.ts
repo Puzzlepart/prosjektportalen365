@@ -40,6 +40,14 @@ export class Hooks extends BaseTask {
         })
         await provisioner.applyTemplate(templateHooksSchema, null)
       }
+      const packageHooksSchema = _.pick(params.packageTemplateSchema ?? {}, 'Hooks')
+      if (packageHooksSchema.Hooks) {
+        onProgress(strings.RunHooksText, strings.ApplyTemplateHooks, 'ProcessingRun', {
+          message: 'Applying the package template hooks',
+          level: 'info'
+        })
+        await provisioner.applyTemplate(packageHooksSchema, null)
+      }
 
       this.logInformation('Applying extensions with hooks to site', {
         parameters: params.templateParameters

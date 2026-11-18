@@ -36,6 +36,12 @@ export interface IBaseTaskParams {
   templateSchema?: Schema
 
   /**
+   * A catalog template's own project template, applied on top of `templateSchema` (Standardmal),
+   * with the same parameters. Set only for a catalog template whose package has one.
+   */
+  packageTemplateSchema?: Schema
+
+  /**
    * Original template and extension menus used to distinguish owner-added links on restoration.
    */
   declaredQuickLaunch?: NavigationNodes[]

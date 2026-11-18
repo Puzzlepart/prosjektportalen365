@@ -7,7 +7,9 @@ import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import _ from 'underscore'
 import resource from 'SharedResources'
 import SPDataAdapter from 'data/SPDataAdapter'
+import { Schema } from 'sp-js-provisioning'
 import { NO_TEMPLATE_ID } from '../../constants'
+import { getImportedPackageTemplate, layerPackageTemplate } from '../../packageTemplate'
 
 /** Prepares template schemas, validates hub dependencies and initializes provisioning services. */
 export class PreTask extends BaseTask {
@@ -20,25 +22,18 @@ export class PreTask extends BaseTask {
     super.initExecute(params)
 
     if (this.data.selectedTemplate && this.data.selectedTemplate.id !== NO_TEMPLATE_ID) {
-      if (this.data.selectedTemplate.isCloudTemplate) {
-        // Forced/auto setup can bypass dialog resolution, so download on demand.
-        // Hub-bound validation remains disabled because cloud publication provisions
-        // dependencies; thin packages fall back to the standard schema below.
-        const cloudPackage =
-          this.data.resolvedCloudTemplate?.package ??
-          (await CloudTemplatePackage.fromUrl(this.data.selectedTemplate.cloudSourceUrl))
-        const bundled = await cloudPackage.getProjectTemplateSchema()
-        // Thin packages omit Parameters and rely on the standard template for base
-        // schema. This only reads the hub; later tasks apply bundled artifacts.
-        params.templateSchema =
-          bundled.Parameters && Object.keys(bundled.Parameters).length > 0
-            ? bundled
-            : await this.data.selectedTemplate.getSchema()
-      } else {
-        params.templateSchema = await this.data.selectedTemplate.getSchema()
-        if (!params.properties.forceTemplate) {
-          await this.validateParameters(params)
-        }
+      // A catalog template's row points at the standard template, and its package's own project
+      // template goes on top of it, as the packages are written.
+      const { templateSchema, packageTemplateSchema } = layerPackageTemplate(
+        await this.data.selectedTemplate.getSchema(),
+        await this._getPackageTemplate()
+      )
+      params.templateSchema = templateSchema
+      params.packageTemplateSchema = packageTemplateSchema
+      // Publishing a cloud template provisions its hub dependencies, so only the others are
+      // validated against the hub.
+      if (!this.data.selectedTemplate.isCloudTemplate && !params.properties.forceTemplate) {
+        await this.validateParameters(params)
       }
     } else {
       params.templateSchema = { Parameters: {} }
@@ -61,6 +56,31 @@ export class PreTask extends BaseTask {
       params.spfxJsomContext.jsomContext.web.update()
       await ExecuteJsomQuery(params.spfxJsomContext.jsomContext)
       return params
+    } catch (error) {
+      throw new BaseTaskError(this.taskName, strings.PreTaskErrorMessage, error)
+    }
+  }
+
+  /**
+   * Reads the selected catalog template's own project template: a cloud template's from its
+   * package (downloaded here when a forced setup skipped the dialog), an imported one's from the
+   * hub's Template Library. Other templates have none.
+   */
+  private async _getPackageTemplate(): Promise<Schema | undefined> {
+    const template = this.data.selectedTemplate
+    if (template.isCloudTemplate) {
+      const cloudPackage =
+        this.data.resolvedCloudTemplate?.package ??
+        (await CloudTemplatePackage.fromUrl(template.cloudSourceUrl))
+      return (await cloudPackage.getProjectTemplateSchema()) as Schema
+    }
+    if (!template.isImportedTemplate || !template.packageId) return undefined
+    try {
+      return await getImportedPackageTemplate(
+        SPDataAdapter.portalDataService.web,
+        resource.Lists_TemplateLibrary_Title,
+        template.packageId
+      )
     } catch (error) {
       throw new BaseTaskError(this.taskName, strings.PreTaskErrorMessage, error)
     }

@@ -128,6 +128,15 @@ export class ProjectTemplate extends UserSelectableObject {
     return this._ppPkgType === PP_PKG_TYPE.Sentral
   }
 
+  /**
+   * `true` when this template was imported from the template package catalog, `PpPkgType` =
+   * `Importert`. Its row points at the standard template, and the package's own project template
+   * is stored under the hub's Template Library, for the setup to apply on top of it.
+   */
+  public get isImportedTemplate(): boolean {
+    return this._ppPkgType === PP_PKG_TYPE.Importert
+  }
+
   /** URL to the cloud template's `.pppkg` (from `PpPkgSourceUrl`), used to resolve it. */
   public get cloudSourceUrl(): string {
     return this._cloudSourceUrl

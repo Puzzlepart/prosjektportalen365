@@ -240,6 +240,8 @@ reproduseres med lokalkjøreren før endringen i motoren. Rad 5, 13 og 17 er gje
 forklart (2026-11-17); rad 11 får en enhetstest med simulert 429 når rettelsen skrives.
 Avklaringene 2026-11-17 er tatt med under.
 
+Status 2026-11-18: punktene for sp-js-provisioning (rad 13, 11, 5, 6 og 17) er løst i 1.6.1, som PP365 1.15.0 tar inn. Rad 11 er løst i motoren bare for 406: 429, 503 og 504 prøves igjen av PnPjs' `SPFx`-oppførsel, som før. I prosjektportalen365 er rad 22, 27 og 19 rettet for 1.15.0 (`packageTemplate.ts` og `templateRecord.ts` i `ProjectExtensions`). De andre punktene er ikke lagt til noen versjon ennå.
+
 ### sp-js-provisioning (1.6.1)
 
 - **Blokkerer, rad 13:** `ClientSidePages` publiserer en side som finnes, men ikke har noen publisert

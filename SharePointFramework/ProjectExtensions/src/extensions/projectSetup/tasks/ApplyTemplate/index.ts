@@ -60,40 +60,76 @@ export class ApplyTemplate extends BaseTask {
       const schema = isTemplateApplied
         ? (_.omit(params.templateSchema, params.templateExcludeHandlers) as Schema)
         : undefined
-      // Before the template's menu is left out for an extension: the setup adds back only the
-      // saved nodes that none of these declare.
-      params.declaredQuickLaunch = [schema, ...extensions.map((extension) => extension.schema)]
+      const packageSchema =
+        isTemplateApplied && params.packageTemplateSchema
+          ? (_.omit(params.packageTemplateSchema, params.templateExcludeHandlers) as Schema)
+          : undefined
+      // Before a menu is left out for a later layer: the setup adds back only the saved nodes
+      // that none of these declare.
+      params.declaredQuickLaunch = [
+        schema,
+        packageSchema,
+        ...extensions.map((extension) => extension.schema)
+      ]
         .map((declaring) => declaring?.Navigation?.QuickLaunch)
         .filter(Array.isArray)
 
       if (isTemplateApplied) {
         this.logInformation('Applying template to site', { parameters: params.templateParameters })
         const templateText = format(strings.ApplyTemplateText, this.data.selectedTemplate.text)
-        const templateSchema = this._omitNavigationOfExtensions(schema, extensions, (message) =>
+        const logNavigation = (message: string) =>
           onProgress(templateText, strings.ApplyTemplateNavigation, 'MiniLink', {
             message,
             level: 'info'
           })
-        )
-        progress = [templateText, '', 'Page']
-        await captureEngineLog(
-          () =>
-            provisioner.applyTemplate(templateSchema, null, (handler) => {
-              if (APPLY_TEMPLATE_STATUS_MAP.has(handler)) {
-                const { text, iconName, getLogMessages } = APPLY_TEMPLATE_STATUS_MAP.get(handler)!
-                progress = [templateText, text, iconName]
-                onProgress(templateText, text, iconName, {
-                  message: `Applying handler: ${handler} - ${text}`,
-                  level: 'info'
-                })
-                getLogMessages?.(templateSchema).forEach((message) => {
-                  onProgress(templateText, text, iconName, { message, level: 'info' })
-                })
-              }
-            }),
-          logEngineEntry,
-          LOG_PREFIX
-        )
+        // The template first, then a catalog template's own on top of it. Each leaves out the
+        // menus a later layer declares, as the engine would make them match that layer's.
+        const layers = [
+          this._omitNavigationDeclaredBy(
+            schema,
+            "the template's",
+            { packageSchema, extensions },
+            logNavigation
+          )
+        ]
+        if (packageSchema) {
+          layers.push(
+            this._omitNavigationDeclaredBy(
+              packageSchema,
+              "the package template's",
+              { extensions },
+              logNavigation
+            )
+          )
+        }
+        for (const [index, layer] of layers.entries()) {
+          if (index > 0) {
+            this.logInformation('Applying the package template on top of the template')
+            onProgress(templateText, '', 'Page', {
+              message: 'Applying the package template on top of the template',
+              level: 'info'
+            })
+          }
+          progress = [templateText, '', 'Page']
+          await captureEngineLog(
+            () =>
+              provisioner.applyTemplate(layer, null, (handler) => {
+                if (APPLY_TEMPLATE_STATUS_MAP.has(handler)) {
+                  const { text, iconName, getLogMessages } = APPLY_TEMPLATE_STATUS_MAP.get(handler)!
+                  progress = [templateText, text, iconName]
+                  onProgress(templateText, text, iconName, {
+                    message: `Applying handler: ${handler} - ${text}`,
+                    level: 'info'
+                  })
+                  getLogMessages?.(layer).forEach((message) => {
+                    onProgress(templateText, text, iconName, { message, level: 'info' })
+                  })
+                }
+              }),
+            logEngineEntry,
+            LOG_PREFIX
+          )
+        }
       } else {
         this.logInformation('Skipping template application (no template selected)')
       }
@@ -122,25 +158,42 @@ export class ApplyTemplate extends BaseTask {
   }
 
   /**
-   * Omits template menus replaced by extensions, avoiding creation of links those extensions delete.
-   * Otherwise a deleted link target can fail template provisioning before the extension runs.
+   * Omits the menus a later layer replaces (a package's own template, an extension), avoiding
+   * links that layer deletes. Otherwise a deleted link target can fail the template before the
+   * later layer runs.
+   *
+   * @param schema The schema to leave the menus out of
+   * @param whose Whose menu it is, for the log line (`the template's`)
+   * @param declaring The later layers
+   * @param log Adds a line to the step's log
    */
-  private _omitNavigationOfExtensions(
+  private _omitNavigationDeclaredBy(
     schema: Schema,
-    extensions: IExtensionSchema[],
+    whose: string,
+    declaring: { packageSchema?: Schema; extensions: IExtensionSchema[] },
     log: (message: string) => void
   ): Schema {
     if (!schema.Navigation) return schema
     const navigation = { ...schema.Navigation }
     for (const collection of NAVIGATION_COLLECTIONS) {
-      const declaring = extensions.filter(({ schema: extensionSchema }) =>
+      if (navigation[collection] === undefined) continue
+      const declarers: string[] = []
+      if (Array.isArray(declaring.packageSchema?.Navigation?.[collection])) {
+        declarers.push("the package's own template")
+      }
+      const extensions = declaring.extensions.filter(({ schema: extensionSchema }) =>
         Array.isArray(extensionSchema.Navigation?.[collection])
       )
-      if (navigation[collection] === undefined || declaring.length === 0) continue
+      if (extensions.length > 0) {
+        declarers.push(
+          `the extension ${extensions.map(({ extension }) => extension.text).join(', ')}`
+        )
+      }
+      if (declarers.length === 0) continue
       delete navigation[collection]
-      const message = `Skipping the template's Navigation ${collection}: the extension ${declaring
-        .map(({ extension }) => extension.text)
-        .join(', ')} declares it`
+      const message = `Skipping ${whose} Navigation ${collection}: ${declarers.join(' and ')} ${
+        declarers.length > 1 ? 'declare' : 'declares'
+      } it`
       this.logInformation(message)
       log(message)
     }

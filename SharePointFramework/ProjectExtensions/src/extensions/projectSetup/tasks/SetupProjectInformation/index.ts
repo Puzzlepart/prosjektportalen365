@@ -5,6 +5,7 @@ import * as strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'extensions/projectSetup'
 import { NO_TEMPLATE_ID } from '../../constants'
 import { recordListContent } from '../../listContentRecord'
+import { ITemplateRecord, recordTemplate } from '../../templateRecord'
 import resource from 'SharedResources'
 import { SPDataAdapter } from '../../../../data'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
@@ -15,6 +16,11 @@ import { OnProgressCallbackFunction } from '../types'
  */
 export class SetupProjectInformation extends BaseTask {
   private _templateParameters: Record<string, any>
+
+  /**
+   * The project's properties as they were, read before a setup without a template writes them.
+   */
+  private _storedProperties?: ITemplateRecord
 
   constructor(data: IProjectSetupData) {
     super('SetupProjectInformation', data)
@@ -66,8 +72,9 @@ export class SetupProjectInformation extends BaseTask {
           'AlignCenter'
         )
         const list = this.params.web.lists.getByTitle(resource.Lists_ProjectProperties_Title)
-        const properties = this._createPropertiesItem(this.params)
         const propertyItems = await list.items()
+        this._storedProperties = propertyItems[0]
+        const properties = this._createPropertiesItem(this.params)
         if (propertyItems.length > 0) {
           await list.items.getById(1).update(properties)
         } else {
@@ -125,7 +132,9 @@ export class SetupProjectInformation extends BaseTask {
   }
 
   /**
-   * Builds project metadata, preserving earlier list-content records and omitting versions without a template.
+   * Builds project metadata, preserving earlier list-content records and omitting versions without
+   * a template. Without a template the project keeps its template and program or parent status,
+   * and the new extensions are added to its own.
    */
   private _createPropertiesItem(
     params: IBaseTaskParams,
@@ -134,10 +143,11 @@ export class SetupProjectInformation extends BaseTask {
     const isNoTemplate = this.data.selectedTemplate?.id === NO_TEMPLATE_ID
     const properties: Record<string, string | boolean | number> = {
       Title: params.context.pageContext.web.title,
-      GtIsProgram: this.data.selectedTemplate.isProgram,
-      GtIsParentProject: this.data.selectedTemplate.isParentProject,
-      GtProjectTemplate: this.data.selectedTemplate.text,
-      GtProjectExtensions: (this.data.selectedExtensions ?? []).map((e) => e.text).join(', '),
+      ...recordTemplate(
+        this.data.selectedTemplate,
+        this.data.selectedExtensions ?? [],
+        isNoTemplate ? this._storedProperties : undefined
+      ),
       GtProjectListContent: recordListContent(
         this.data.addedListContent,
         this.data.selectedContentConfig ?? []
