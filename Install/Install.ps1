@@ -49,13 +49,47 @@ Param(
     [switch]$SkipPingback,
     [Parameter(Mandatory = $false, HelpMessage = "Usage statistics sent to the Prosjektportalen team: Off, Basic, Standard or Extended. Writes UsageStatisticsLevel in Globale innstillinger. Without it, a new installation gets Extended and an upgrade keeps the hub's level")]
     [ValidateSet('Off', 'Basic', 'Standard', 'Extended')]
-    [string]$UsageStatisticsLevel
+    [string]$UsageStatisticsLevel,
+    [Parameter(Mandatory = $false, HelpMessage = "Never wait for keyboard input (countdowns and prompts are skipped). Implied by -CI.")]
+    [switch]$NonInteractive
 )
+
+# This block must stay parseable by Windows PowerShell 5.1 so users get guidance instead of a syntax error.
+# Keep PowerShell 7-only syntax out of this file; the dot-sourced scripts are only loaded after the check.
+if ($PSVersionTable.PSVersion -lt [version]"7.4") {
+    Write-Host "[ERROR] Prosjektportalen 365 must be installed with PowerShell 7.4 or newer. You are running PowerShell $($PSVersionTable.PSVersion) ($($PSVersionTable.PSEdition))." -ForegroundColor Red
+    Write-Host "        Install PowerShell 7 in one of these ways, then open a new PowerShell 7 window (pwsh) and run the script again:" -ForegroundColor Red
+    Write-Host "          - winget install --id Microsoft.PowerShell --source winget" -ForegroundColor Red
+    Write-Host "          - Download the MSI from https://aka.ms/powershell-release?tag=lts" -ForegroundColor Red
+    Write-Host "          - Install 'PowerShell' from the Microsoft Store (no administrator rights needed)" -ForegroundColor Red
+    Write-Host "        Tip: double-click Start-Install.cmd in the release folder; it checks your environment and guides you." -ForegroundColor Red
+    exit 1
+}
+if ($ExecutionContext.SessionState.LanguageMode -ne "FullLanguage") {
+    Write-Host "[ERROR] PowerShell is running in $($ExecutionContext.SessionState.LanguageMode) mode, usually enforced by AppLocker or WDAC. The installation requires FullLanguage mode. Contact your IT department." -ForegroundColor Red
+    exit 1
+}
 
 # Before any dot-sourcing: the scripts read it to tell an explicit level from none.
 $UsageStatisticsLevelGiven = $PSBoundParameters.ContainsKey('UsageStatisticsLevel')
 
 . "$PSScriptRoot/Scripts/SharedFunctions.ps1"
+
+$global:PP365NonInteractive = $NonInteractive.IsPresent -or $CI.IsPresent
+$global:PP365Issues = [System.Collections.Generic.List[string]]::new()
+$global:PP365StepIndex = 0
+$RunTimestamp = [datetime]::Now.ToString("yy-MM-ddTHH-mm-ss")
+
+# The transcript header contains the full command line, which can include the certificate,
+# also when it is passed without -CI, and the transcript is attached to the installation log.
+$TranscriptPath = $null
+if (-not $CI.IsPresent -and [string]::IsNullOrEmpty($CertificateBase64Encoded)) {
+    $TranscriptPath = Start-InstallTranscript -Path "$PSScriptRoot/Install_Transcript_$RunTimestamp.txt"
+}
+trap {
+    Stop-InstallTranscript
+    break
+}
 
 $ConnectionInfo = [PSCustomObject]@{
     ClientId                 = $ClientId
@@ -63,7 +97,6 @@ $ConnectionInfo = [PSCustomObject]@{
     Tenant                   = $Tenant
     CertificateBase64Encoded = $CertificateBase64Encoded
 }
-$RequiredPnPVersion = Get-PnPVersion
 
 #region Handling installation language and culture
 $LanguageIds = @{
@@ -108,7 +141,8 @@ $global:sw_action = $null
 $InstallStartTime = (Get-Date -Format o)
 
 Write-Host "########################################################" -ForegroundColor Cyan
-Write-Host "### $($Upgrade.IsPresent ? "Upgrading" : "Installing") Prosjektportalen 365 v{VERSION_PLACEHOLDER} ####" -ForegroundColor Cyan
+$Operation = if ($Upgrade.IsPresent) { "Upgrading" } else { "Installing" }
+Write-Host "### $Operation Prosjektportalen 365 v{VERSION_PLACEHOLDER} ####" -ForegroundColor Cyan
 if ($Channel -ne "main") {
     Write-Host "### Channel: $Channel ####" -ForegroundColor Cyan
 }
@@ -132,51 +166,24 @@ Write-Host "########################################################" -Foregroun
 Write-Host "[INFO] What is sent, and how to turn it off: https://github.com/Puzzlepart/prosjektportalen365/wiki/Bruksstatistikk"
 
 
-if ($CI.IsPresent -and $null -eq (Get-Module -Name PnP.PowerShell)) {
-    Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
-    Install-ModuleWithRetry -Name PnP.PowerShell -RequiredVersion $RequiredPnPVersion
-    $PnPVersion = (Get-Command Connect-PnPOnline -ErrorAction SilentlyContinue).Version
-    Write-Host "[INFO] Installed module PnP.PowerShell v$($PnPVersion) from PowerShell Gallery"
-}
-else {
-    if (-not $SkipLoadingBundle.IsPresent) {
-        $PnPVersion = LoadBundle -Version $RequiredPnPVersion
-        if ($null -eq $PnPVersion) {
-            Write-Host "[ERROR] Failed to load bundled PnP.PowerShell v$RequiredPnPVersion from '$PSScriptRoot/PnP.PowerShell/$RequiredPnPVersion'." -ForegroundColor Red
-            Write-Host "[ERROR] Make sure the release archive was extracted with the PnP.PowerShell folder intact, or install PnP.PowerShell manually and rerun with -SkipLoadingBundle:" -ForegroundColor Red
-            Write-Host "        Install-Module -Name PnP.PowerShell -Scope CurrentUser -RequiredVersion $RequiredPnPVersion" -ForegroundColor Red
-            exit 1
-        }
-        Write-Host "[INFO] Loaded module PnP.PowerShell v$($PnPVersion) from bundle"
-    }
-    else {
-        $PnPVersion = (Get-Command Connect-PnPOnline -ErrorAction SilentlyContinue).Version
-        if ($null -eq $PnPVersion) {
-            Write-Host "[ERROR] -SkipLoadingBundle was specified but PnP.PowerShell is not available in this session. Install it with:" -ForegroundColor Red
-            Write-Host "        Install-Module -Name PnP.PowerShell -Scope CurrentUser -RequiredVersion $RequiredPnPVersion" -ForegroundColor Red
-            exit 1
-        }
-        Write-Host "[INFO] Loaded PnP.PowerShell v$($PnPVersion) from your environment"
-    }
-    if ($PnPVersion -lt $RequiredPnPVersion) {
-        Write-Host "[ERROR] PnP.PowerShell v$PnPVersion is too old. v$RequiredPnPVersion or newer is required." -ForegroundColor Red
-        exit 1
-    }
-    Write-Host "[INFO] As part of the authentication process with Microsoft 365, this script will open a browser window to authenticate."
-    Write-Host "[INFO] Make sure you use the correct browser profile. You can copy the authentication URL and open it in the correct browser."
-    Show-Countdown -Seconds 10
-}
 #region Setting variables based on input from user
-[System.Uri]$Uri = $Url.TrimEnd('/')
-if ($Uri.Segments.Count -lt 3) {
-    Write-Host "[ERROR] Invalid -Url '$Url'. Expected format: https://tenant.sharepoint.com/sites/<alias>" -ForegroundColor Red
-    exit 1
+# Validated before loading modules and signing in, so a typo is reported immediately
+$UrlError = Get-PortfolioUrlError -Url $Url
+if ($null -ne $UrlError) {
+    Exit-InstallWithError -Message $UrlError
 }
-$ManagedPath = $Uri.Segments[1]
+[System.Uri]$Uri = $Url.Trim().TrimEnd('/')
 $Alias = $Uri.Segments[2]
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
 $TemplatesBasePath = "$PSScriptRoot/Templates"
 #endregion
+
+$PnPVersion = Initialize-PnPModule -CI:$CI -SkipLoadingBundle:$SkipLoadingBundle
+if (-not $CI.IsPresent) {
+    Write-Host "[INFO] As part of the authentication process with Microsoft 365, this script will open a browser window to authenticate."
+    Write-Host "[INFO] Make sure you use the correct browser profile. You can copy the authentication URL and open it in the correct browser."
+    Show-Countdown -Seconds 10
+}
 
 #region Print installation user
 Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
@@ -185,27 +192,17 @@ if ($null -ne $CurrentUser -and $CurrentUser.LoginName) {
     Write-Host "[INFO] Installing with user [$($CurrentUser.LoginName)]"
 }
 else {
-    Write-Host "[WARNING] Failed to get current user. Assuming installation is done with an app or service principal without e-mail." -ForegroundColor Yellow
-}
-#endregion
-
-
-#region Check if URL specified is root site or admin site or invalid managed path
-if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath) -or $Uri.Authority.Contains("-admin")) {
-    Write-Host "[ERROR] It looks like you're trying to install to a root site or an invalid site. This is not supported." -ForegroundColor Red
-    exit 1
+    Write-InstallWarning "Failed to get current user. Assuming installation is done with an app or service principal without e-mail."
 }
 #endregion
 
 #region Ensure site collection admin access before upgrade checks
-if ($Upgrade.IsPresent -and $null -ne $CurrentUser -and $CurrentUser.LoginName) {
+if ($Upgrade.IsPresent) {
     try {
-        Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
-        Set-PnPTenantSite -Url $Url -Owners $CurrentUser.LoginName -ErrorAction SilentlyContinue
+        $null = Set-CurrentUserAsSiteAdmin -Url $Url -CurrentUser $CurrentUser -AdminSiteUrl $AdminSiteUrl -ConnectionInfo $ConnectionInfo
     }
     catch {
-        Write-Host "[WARNING] Failed to ensure site collection administrator access before upgrade checks: $($_.Exception.Message)" -ForegroundColor Yellow
-        Write-ErrorDetails $_
+        Write-InstallWarning "Failed to ensure site collection administrator access before upgrade checks: $($_.Exception.Message)" -ErrorRecord $_
     }
 }
 #endregion
@@ -214,35 +211,29 @@ if ($Upgrade.IsPresent -and $null -ne $CurrentUser -and $CurrentUser.LoginName) 
 Connect-SharePoint -Url $Uri.AbsoluteUri -ConnectionInfo $ConnectionInfo
 $ExistingSite = Get-PnPSite -ErrorAction SilentlyContinue
 if ($Upgrade.IsPresent -and $null -eq $ExistingSite) {
-    Write-Host "[ERROR] You specified -Upgrade, but no existing site was found at $($Uri.AbsoluteUri). Cannot upgrade a site that does not exist." -ForegroundColor Red
-    exit 1
+    Exit-InstallWithError "You specified -Upgrade, but no existing site was found at $($Uri.AbsoluteUri). Cannot upgrade a site that does not exist."
 }
 if ($Upgrade.IsPresent -and $null -ne $ExistingSite) {
     $InstallInfo = Get-PPInstallationInfo
     if ($InstallInfo.LanguageId -ne $LanguageId) {
-        Write-Host "[ERROR] The site you're trying to install to is already installed using language '$($InstallInfo.LanguageId)'. You are now trying to install using language '$LanguageId'. This is not supported." -ForegroundColor Red
-        exit 1
+        Exit-InstallWithError "The site you're trying to install to is already installed using language '$($InstallInfo.LanguageId)'. You are now trying to install using language '$LanguageId'. This is not supported."
     }
     if ($null -eq $InstallInfo -or $null -eq $InstallInfo.Latest) {
-        Write-Host "[ERROR] Could not determine existing installation version. This is a critical error. Exiting script." -ForegroundColor Red
-        exit 1
+        Exit-InstallWithError "Could not determine existing installation version. This is a critical error. Exiting script."
     }
     if ($null -ne $InstallInfo.Channel -and "" -ne $InstallInfo.Channel -and $InstallInfo.Channel -ne $Channel) {
-        Write-Host "[ERROR] The site you're trying to install to is already installed using channel '$($InstallInfo.Channel)'. You are now trying to install using channel '$Channel'. This is not supported." -ForegroundColor Red
-        exit 1
+        Exit-InstallWithError "The site you're trying to install to is already installed using channel '$($InstallInfo.Channel)'. You are now trying to install using channel '$Channel'. This is not supported."
     }
 }
 else {
     if ($null -ne $ExistingSite) {
-        Write-Host "[WARNING] The site you're trying to install to already exists. If you want to upgrade the site, use the -Upgrade switch. If you know what you're doing you can allow the script to continue" -ForegroundColor Yellow
-        if (-not $CI.IsPresent) {
-            Show-Countdown -Seconds 10
-        }
+        Write-InstallWarning "The site you're trying to install to already exists. If you want to upgrade the site, use the -Upgrade switch. If you know what you're doing you can allow the script to continue"
+        Show-Countdown -Seconds 10
     }
 }
 #endregion
 
-$LogFilePath = "$PSScriptRoot/Install_Log_$([datetime]::Now.ToString("yy-MM-ddThh-mm-ss")).txt"
+$LogFilePath = "$PSScriptRoot/Install_Log_$RunTimestamp.txt"
 Start-PnPTraceLog -Path $LogFilePath -Level Debug
 
 #region Create site
@@ -267,9 +258,7 @@ if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
         }
     }
     Catch {
-        Write-Host "[ERROR] Failed to create site: $($_.Exception.Message)" -ForegroundColor Red
-        Write-ErrorDetails $_
-        exit 1
+        Exit-InstallWithError "Failed to create site: $($_.Exception.Message)" -ErrorRecord $_
     }
 }
 #endregion
@@ -283,9 +272,7 @@ if (-not $Upgrade.IsPresent) {
         EndAction
     }
     Catch {
-        Write-Host "[ERROR] Failed to promote site to hub site: $($_.Exception.Message)" -ForegroundColor Red
-        Write-ErrorDetails $_
-        exit 1
+        Exit-InstallWithError "Failed to promote site to hub site: $($_.Exception.Message)" -ErrorRecord $_
     }
 }
 #endregion
@@ -304,8 +291,7 @@ if (-not $Upgrade.IsPresent) {
         EndAction
     }
     Catch {
-        Write-Host "[ERROR] Failed to set permissions for associated member group: $($_.Exception.Message)" -ForegroundColor Red
-        Write-ErrorDetails $_
+        Write-InstallWarning "Failed to set permissions for associated member group: $($_.Exception.Message)" -ErrorRecord $_
     }
 }
 #endregion
@@ -333,27 +319,25 @@ if (-not $SkipSiteDesign.IsPresent) {
         $SiteScripts = Get-PnPSiteScript
         $SiteScriptSrc = Get-ChildItem "$PSScriptRoot/SiteScripts/*.txt"
         foreach ($s in $SiteScriptSrc) {
-            $Title = $s.BaseName.Substring(9)
+            $SiteScriptTitle = $s.BaseName.Substring(9)
             # Add channel to name for the site script if channel is specified and not main
             if ($Channel -ne "main") {
-                $Title += " - $Channel"
+                $SiteScriptTitle += " - $Channel"
             }
             $Content = (Get-Content -Path $s.FullName -Raw | Out-String)
-            $SiteScript = $SiteScripts | Where-Object { $_.Title -eq $Title }
+            $SiteScript = $SiteScripts | Where-Object { $_.Title -eq $SiteScriptTitle }
             if ($null -ne $SiteScript) {
                 $SiteScriptOutput = Set-PnPSiteScript -Identity $SiteScript -Content $Content -ErrorAction SilentlyContinue
             }
             else {
-                $SiteScript = Add-PnPSiteScript -Title $Title -Content $Content
+                $SiteScript = Add-PnPSiteScript -Title $SiteScriptTitle -Content $Content
             }
             $SiteScriptIds += $SiteScript.Id.Guid
         }
         EndAction
     }
     Catch {
-        Write-Host "[ERROR] Failed to create/update site scripts: $($_.Exception.Message)" -ForegroundColor Red
-        Write-ErrorDetails $_
-        exit 1
+        Exit-InstallWithError "Failed to create/update site scripts: $($_.Exception.Message)" -ErrorRecord $_
     }
 
     Try {
@@ -377,9 +361,7 @@ if (-not $SkipSiteDesign.IsPresent) {
         EndAction
     }
     Catch {
-        Write-Host "[ERROR] Failed to create/update site design: $($_.Exception.Message)" -ForegroundColor Red
-        Write-ErrorDetails $_
-        exit 1
+        Exit-InstallWithError "Failed to create/update site design: $($_.Exception.Message)" -ErrorRecord $_
     }
 }
 if (-not $SkipDefaultSiteDesignAssociation.IsPresent) {
@@ -391,25 +373,19 @@ if (-not $SkipDefaultSiteDesignAssociation.IsPresent) {
     }
     catch {
         Write-Host ""
-        Write-Host "[WARNING] Failed to set default site design: $($_.Exception.Message)" -ForegroundColor Yellow
-        Write-ErrorDetails $_
+        Write-InstallWarning "Failed to set default site design: $($_.Exception.Message)" -ErrorRecord $_
     }
     EndAction
 }
 
 try {
     StartAction("Ensuring site collection administrator access to $Url")
-    if ($null -ne $CurrentUser -and $CurrentUser.LoginName) {
-        Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
-        Set-PnPTenantSite -Url $Url -Owners $CurrentUser.LoginName -ErrorAction SilentlyContinue
-    }
-    else {
-        Write-Host "[WARNING] Current user not available. Skipping owner assignment." -ForegroundColor Yellow
+    if (-not (Set-CurrentUserAsSiteAdmin -Url $Url -CurrentUser $CurrentUser -AdminSiteUrl $AdminSiteUrl -ConnectionInfo $ConnectionInfo)) {
+        Write-InstallWarning "Current user not available. Skipping owner assignment."
     }
 }
 catch {
-    Write-Host "[WARNING] Failed to ensure site collection administrator access: $($_.Exception.Message)" -ForegroundColor Yellow
-    Write-ErrorDetails $_
+    Write-InstallWarning "Failed to ensure site collection administrator access: $($_.Exception.Message)" -ErrorRecord $_
 }
 finally {
     EndAction
@@ -425,9 +401,7 @@ if ($Upgrade.IsPresent) {
         ."$PSScriptRoot/Scripts/PreInstallUpgrade.ps1"
     }
     catch {
-        Write-Host "[ERROR] Failed to run pre-install upgrade steps: $($_.Exception.Message)" -ForegroundColor Red
-        Write-ErrorDetails $_
-        exit 1
+        Exit-InstallWithError "Failed to run pre-install upgrade steps: $($_.Exception.Message)" -ErrorRecord $_
     }
 }
 #endregion
@@ -438,16 +412,12 @@ if (-not $SkipAppPackages.IsPresent) {
         if (-not $TenantAppCatalogUrl) {
             Connect-SharePoint -Url $AdminSiteUrl -ConnectionInfo $ConnectionInfo
             $TenantAppCatalogUrl = Get-PnPTenantAppCatalogUrl -ErrorAction SilentlyContinue
-            if ($null -ne $CurrentUser -and $CurrentUser.LoginName) {
-                Set-PnPTenantSite -Url $TenantAppCatalogUrl -Owners $CurrentUser.LoginName -ErrorAction SilentlyContinue
-            }
+            $null = Set-CurrentUserAsSiteAdmin -Url $TenantAppCatalogUrl -CurrentUser $CurrentUser -AdminSiteUrl $AdminSiteUrl -ConnectionInfo $ConnectionInfo
         }
         Connect-SharePoint -Url $TenantAppCatalogUrl -ConnectionInfo $ConnectionInfo
     }
     Catch {
-        Write-Host "[ERROR] Failed to connect to Tenant App Catalog. Do you have a Tenant App Catalog in your tenant?" -ForegroundColor Red
-        Write-ErrorDetails $_
-        exit 1 
+        Exit-InstallWithError "Failed to connect to Tenant App Catalog. Do you have a Tenant App Catalog in your tenant?" -ErrorRecord $_
     }
     Try {
         StartAction("Installing SharePoint Framework app packages to $TenantAppCatalogUrl")
@@ -465,9 +435,7 @@ if (-not $SkipAppPackages.IsPresent) {
         EndAction
     }
     Catch {
-        Write-Host "[ERROR] Failed to install app packages to $($TenantAppCatalogUrl): $($_.Exception.Message)" -ForegroundColor Red
-        Write-ErrorDetails $_
-        exit 1
+        Exit-InstallWithError "Failed to install app packages to $($TenantAppCatalogUrl): $($_.Exception.Message)" -ErrorRecord $_
     }
 }
 #endregion
@@ -479,8 +447,7 @@ if (-not $Upgrade.IsPresent) {
         Remove-PnPClientSidePage -Identity Home.aspx -Force
     }
     Catch {
-        Write-Host "[WARNING] Failed to delete page Home.aspx. Please delete it manually." -ForegroundColor Yellow
-        Write-ErrorDetails $_
+        Write-InstallWarning "Failed to delete page Home.aspx. Please delete it manually." -ErrorRecord $_
     }
 }
 #endregion
@@ -507,29 +474,11 @@ if (-not $SkipTemplate.IsPresent) {
             EndAction
         }
 
-        # Shared retry configuration
-        $MaxRetries = 3
-
         Write-Host "[INFO] The next step applies the PnP site template. This takes several minutes..." -ForegroundColor Yellow
         if ($Upgrade.IsPresent) {
             StartAction -Action "Applying PnP template Portfolio to $($Uri.AbsoluteUri)"
-            $Retry = 0
-            while ($Retry -lt $MaxRetries) {
-                try {
-                    Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers $UpgradeExcludeHandlers -ErrorAction Stop -WarningAction SilentlyContinue
-                    break
-                }
-                catch {
-                    $Retry++
-                    $RemainingAttempts = $MaxRetries - $Retry
-                    if ($Retry -eq $MaxRetries) {
-                        Write-Host "[ERROR] Failed to apply PnP Portfolio template after $MaxRetries attempts" -ForegroundColor Red
-                        Write-ErrorDetails $_
-                        throw
-                    }
-                    Write-Host "`t[WARNING] Failed to apply PnP Portfolio template. $RemainingAttempts attempt(s) remaining..." -ForegroundColor Yellow
-                    Write-ErrorDetails $_
-                }
+            Invoke-WithRetry -Description "apply PnP Portfolio template" -ScriptBlock {
+                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers $UpgradeExcludeHandlers -ErrorAction Stop -WarningAction SilentlyContinue
             }
             EndAction
 
@@ -549,7 +498,7 @@ if (-not $SkipTemplate.IsPresent) {
                     -Handlers Files
             }
             else {
-                Write-Host "[WARNING] No content template found for language $LanguageCode. Skipping content template." -ForegroundColor Yellow
+                Write-InstallWarning "No content template found for language $LanguageCode. Skipping content template."
             }
         }
         else {
@@ -571,25 +520,10 @@ if (-not $SkipTemplate.IsPresent) {
                 Invoke-PnPSiteTemplate -InputInstance $Instance -Handlers SupportedUILanguages
             }
             else {
-                Write-Host "[WARNING] Template has no SupportedUILanguages entries; skipping LCID override." -ForegroundColor Yellow
+                Write-InstallWarning "Template has no SupportedUILanguages entries; skipping LCID override."
             }
-            $Retry = 0
-            while ($Retry -lt $MaxRetries) {
-                try {                
-                    Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
-                    break
-                }
-                catch {
-                    $Retry++
-                    $RemainingAttempts = $MaxRetries - $Retry
-                    if ($Retry -eq $MaxRetries) {
-                        Write-Host "[ERROR] Failed to apply PnP Portfolio template after $MaxRetries attempts" -ForegroundColor Red
-                        Write-ErrorDetails $_
-                        throw
-                    }
-                    Write-Host "`t[WARNING] Failed to apply PnP Portfolio template. $RemainingAttempts attempt(s) remaining..." -ForegroundColor Yellow
-                    Write-ErrorDetails $_
-                }
+            Invoke-WithRetry -Description "apply PnP Portfolio template" -ScriptBlock {
+                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
             }
             EndAction
 
@@ -606,9 +540,7 @@ if (-not $SkipTemplate.IsPresent) {
         }
     }
     Catch {
-        Write-Host "[ERROR] Failed to apply PnP templates to $($Uri.AbsoluteUri): $($_.Exception.Message)" -ForegroundColor Red
-        Write-ErrorDetails $_
-        exit 1
+        Exit-InstallWithError "Failed to apply PnP templates to $($Uri.AbsoluteUri): $($_.Exception.Message)" -ErrorRecord $_
     }
     Finally {
         # Ensure NoScriptSite is re-enabled even if errors occur
@@ -617,8 +549,7 @@ if (-not $SkipTemplate.IsPresent) {
             $NoScriptOutput = Set-PnPTenantSite -NoScriptSite:$true -Url $Uri.AbsoluteUri -ErrorAction SilentlyContinue
         }
         Catch {
-            Write-Host "[WARNING] Failed to re-enable NoScriptSite protection: $($_.Exception.Message)" -ForegroundColor Yellow
-            Write-ErrorDetails $_
+            Write-InstallWarning "Failed to re-enable NoScriptSite protection: $($_.Exception.Message)" -ErrorRecord $_
         }
     }
 }
@@ -637,8 +568,7 @@ Try {
     EndAction
 }
 Catch {
-    Write-Host "[WARNING] Failed to clear QuickLaunch: $($_.Exception.Message)" -ForegroundColor Yellow
-    Write-ErrorDetails $_
+    Write-InstallWarning "Failed to clear QuickLaunch: $($_.Exception.Message)" -ErrorRecord $_
 }
 #endregion
 
@@ -651,8 +581,7 @@ if (-not $SkipSearchConfiguration.IsPresent) {
         EndAction
     }
     Catch {
-        Write-Host "[WARNING] Failed to import Search Configuration: $($_.Exception.Message)" -ForegroundColor Yellow
-        Write-ErrorDetails $_
+        Write-InstallWarning "Failed to import Search Configuration: $($_.Exception.Message)" -ErrorRecord $_
     }
 }
 #endregion
@@ -664,8 +593,7 @@ try {
     ."$PSScriptRoot/Scripts/PostInstall.ps1"
 }
 catch {
-    Write-Host "[WARNING] Failed to run post-install steps: $($_.Exception.Message)" -ForegroundColor Yellow
-    Write-ErrorDetails $_
+    Write-InstallWarning "Failed to run post-install steps: $($_.Exception.Message)" -ErrorRecord $_
 }
 
 if ($Upgrade.IsPresent) {
@@ -674,8 +602,7 @@ if ($Upgrade.IsPresent) {
         ."$PSScriptRoot/Scripts/PostInstallUpgrade.ps1"
     }
     catch {
-        Write-Host "[WARNING] Failed to run post-install upgrade steps: $($_.Exception.Message)" -ForegroundColor Yellow
-        Write-ErrorDetails $_
+        Write-InstallWarning "Failed to run post-install upgrade steps: $($_.Exception.Message)" -ErrorRecord $_
     }
 }
 #endregion
@@ -706,22 +633,21 @@ else {
     }
     Write-Host "[SUCCESS] Installation completed in $($sw.Elapsed.ToString('hh\:mm\:ss'))" -ForegroundColor Green
 }
-Write-Host "[INFO] Consider running .\Install\Scripts\UpgradeAllSitesToLatest.ps1 to upgrade all sites to the latest version of Prosjektportalen 365."
+Write-Host "[INFO] Consider running ./Scripts/UpgradeAllSitesToLatest.ps1 -Url $($Uri.AbsoluteUri) (or Start-Install.cmd) to upgrade all sites to the latest version of Prosjektportalen 365."
 Write-Host "[INFO] This is required if upgrading from a version earlier than 1.10.0."
+Write-InstallSummary
 #endregion
 
 #region Log installation and send pingback to Azure Function
 Write-Host "[INFO] Logging installation entry" 
 $InstallEndTime = (Get-Date -Format o)
 
+# Built from the bound parameters so the entry is the same whether the script was started directly or via Start-Install.cmd
 $InstallCommand = if ($CI.IsPresent) {
     "GitHub CI"
 }
-elseif ($null -ne $MyInvocation.Line -and $MyInvocation.Line.Length -gt 2) {
-    $MyInvocation.Line.Substring(2)
-}
 else {
-    $MyInvocation.Line
+    Format-ScriptCommand -ScriptName "Install.ps1" -Parameters $PSBoundParameters
 }
 # Everyone who reads the hub reads the installation log: the certificate is a secret, so its value
 # is not logged, however the parameter is written (in full, a shorter prefix, with a colon).
@@ -748,18 +674,24 @@ try {
     ## Logging installation to SharePoint list
     $InstallationEntry = Add-PnPListItem -List $InstallationEntriesList.Id -Values $InstallEntry -ErrorAction Continue
 
-    ## Attempting to attach the log file to installation entry
+    ## Attempting to attach the log files to installation entry
     if ($null -ne $InstallationEntry) {
-        $File = Get-Item -Path $LogFilePath
-        if ($null -ne $File -and $File.Length -gt 0) {
-            Write-Host "[INFO] Attaching installation log file to installation entry"
-            $AttachmentOutput = Add-PnPListItemAttachment -List $InstallationEntriesList.Id -Identity $InstallationEntry.Id -Path $LogFilePath -ErrorAction Continue
-        }    
+        # The transcript is locked while it is running
+        Stop-InstallTranscript
+        foreach ($AttachmentPath in @($LogFilePath, $TranscriptPath)) {
+            if ([string]::IsNullOrEmpty($AttachmentPath) -or -not (Test-Path $AttachmentPath)) {
+                continue
+            }
+            $File = Get-Item -Path $AttachmentPath
+            if ($File.Length -gt 0) {
+                Write-Host "[INFO] Attaching $($File.Name) to installation entry"
+                $AttachmentOutput = Add-PnPListItemAttachment -List $InstallationEntriesList.Id -Identity $InstallationEntry.Id -Path $AttachmentPath -ErrorAction Continue
+            }
+        }
     }
 }
 catch {
-    Write-Host "[WARNING] Installation log list not found. Skipping logging installation entry." -ForegroundColor Yellow
-    Write-ErrorDetails $_
+    Write-InstallWarning "Installation log list not found. Skipping logging installation entry." -ErrorRecord $_
 }
 
 Disconnect-PnPOnline
@@ -789,3 +721,5 @@ if (-not $SkipPingback.IsPresent) {
     catch {}
 }
 #endregion
+
+Stop-InstallTranscript
