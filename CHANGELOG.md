@@ -8,7 +8,17 @@ Sjekk ut [release notes](./releasenotes/1.15.0.md) for høydepunkter og mer deta
 
 ### Forbedringer
 
+- **Enklere og mer robust installasjon.** Ny `Start-Install.cmd` i releasepakken, som kan dobbeltklikkes: den sjekker at zip-filen er pakket ut, at PowerShell 7.4 eller nyere finnes (med veiledning hvis ikke), fjerner «lastet ned fra Internett»-merkingen på filene og forklarer det hvis gruppepolicy krever signerte skript. Deretter starter en veiviser som spør etter valgene, viser tilsvarende PowerShell-kommando og kjører installasjon, oppgradering eller `UpgradeAllSitesToLatest.ps1`. `Install.ps1` fungerer som før og kan fortsatt kjøres direkte med parametere
+- `Install.ps1` og `UpgradeAllSitesToLatest.ps1` gir nå en tydelig melding med veiledning når de startes med Windows PowerShell 5.1 eller en for gammel PowerShell 7, i stedet for en syntaksfeil
+- Ny parameter `-NonInteractive` på `Install.ps1` hopper over nedtellinger og spørsmål (settes automatisk med `-CI` og når stdin er omdirigert)
+- `Install.ps1` skriver en oppsummering av alle advarsler til slutt, og lagrer et transkript av hele kjøringen (`Install_Transcript_*.txt`) som legges ved installasjonsloggen sammen med sporingsloggen
+
 ### Feilrettinger
+
+- URL-en til porteføljeområdet valideres nå før innlogging, slik at feil som rotområde eller admin-URL rapporteres umiddelbart
+- `UpgradeAllSitesToLatest.ps1` avslutter nå med feilkode når PnP.PowerShell mangler, sjekker minimumsversjonen og installerer riktig PnP.PowerShell-versjon i CI
+- Loggfilen fra installasjonen brukte 12-timersklokke i filnavnet, slik at kjøringer før og etter kl. 12 kunne få samme navn
+- Hintet om `UpgradeAllSitesToLatest.ps1` på slutten av installasjonen pekte på en sti som ikke finnes i releasepakken
 
 ---
 
