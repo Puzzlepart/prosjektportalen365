@@ -148,7 +148,7 @@ Tillegget er en sp-js-provisioning-fil i hubbiblioteket Prosjekttillegg (`Skjerm
 - Knappen for å legge til elementer skjules, og en kort melding forklarer at elementer ikke støttes på skjermede prosjekter.
 - **Garanti:** ingen kode skriver til hublisten Tidslinjeinnhold for et skjermet prosjekt.
 
-**Prosjektnyheter** leser prosjektfeltene fra det lokale elementet. Siden #1805 tåler den også at Prosjekter-oppføringen mangler.
+**Prosjektnyheter** kopierer ingen prosjektfelt til nyhetssiden for et skjermet prosjekt. Siden ligger på nyhetsområdet (huben som standard), der flere kan lese den, så bare område- og hub-ID knytter den til prosjektet. Siden #1805 tåler den også at Prosjekter-oppføringen mangler.
 
 **Footer** (PortfolioExtensions): `getProjectDetails` leser lokalt på skjermede prosjekter.
 

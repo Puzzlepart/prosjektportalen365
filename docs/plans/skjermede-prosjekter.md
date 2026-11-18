@@ -118,7 +118,7 @@ Følgende er **konfigurasjon** og kan bli liggende på huben: Statusseksjoner, P
 |---|---|---|
 | Reservekilde i ProjectInformation | `ProjectDataService.ts:253-268` | Slås av for skjermede prosjekter |
 | Prosjekttidslinje (datoer og ID) | `ProjectTimeline/data/fetchProjectData.ts:20-24` | Lokalt element |
-| Prosjektnyheter | `ProjectNews/util.ts:315-331` | Lokalt element |
+| Prosjektnyheter | `ProjectNews/util.ts` (`setOriginalSourceSiteId`) | Ingen prosjektfelt: nyhetssiden ligger på huben |
 | Footer (hjelpenivå og fulgte prosjekter) | `footer/index.ts:176, 276-279` | Lokalt, og søk for listen over fulgte prosjekter |
 | Prosjektliste | `PortfolioWebParts/src/data/DataAdapter.ts:735-745` | Søk. I dag lastes *alle* hubelementer til nettleseren, og `hasUserAccess` er bare visuelt |
 | Prosjektkort | `DataAdapter.ts:902-959` | Søk eller lokalt |

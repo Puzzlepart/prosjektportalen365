@@ -2,13 +2,15 @@
 // before the imports because Heft runs Jest on CommonJS output without Babel: `hub.fields` are
 // the project list's fields, `hub.rows` its rows, `hub.selected` what a query selected, and
 // `hub.denied` whether the list refuses the user, as it does a member of «Minimum lesetilganger på hub»,
-// and `hub.failure` another error the list fails with.
+// and `hub.failure` another error the list fails with. `hub.shielded` says whether the project is
+// shielded.
 const hub: {
   fields: string[]
   rows: any[]
   selected?: string[]
   denied?: boolean
   failure?: Error
+  shielded?: boolean
 } = {
   fields: [],
   rows: []
@@ -16,6 +18,9 @@ const hub: {
 jest.mock('data', () => ({
   __esModule: true,
   default: {
+    get isShieldedProject() {
+      return !!hub.shielded
+    },
     portalDataService: {
       web: {
         lists: {
@@ -391,6 +396,33 @@ describe('ProjectNews util', () => {
       GtSiteId: 'site-2',
       GtHubSiteId: 'hub-1',
       Title: 'Åpning'
+    })
+  })
+
+  it("ties a shielded project's page to it by the site and hub ids only, and copies none of its values to the news site", async () => {
+    // The page is on the news site, the hub by default, which more people may read.
+    hub.fields = ['GtSiteId', 'GtProjectPhase']
+    hub.selected = undefined
+    hub.shielded = true
+    const client = httpClient(['GtSiteId', 'GtHubSiteId', 'GtProjectPhase'])
+    try {
+      await setOriginalSourceSiteId(
+        'https://contoso.sharepoint.com/sites/hub-shielded',
+        client as any,
+        '/sites/hub-shielded/SitePages',
+        9,
+        'site-3',
+        'hub-1',
+        'Oppstart'
+      )
+    } finally {
+      hub.shielded = false
+    }
+    expect(hub.selected).toBeUndefined()
+    expect(updateBody(client)).toEqual({
+      GtSiteId: 'site-3',
+      GtHubSiteId: 'hub-1',
+      Title: 'Oppstart'
     })
   })
 

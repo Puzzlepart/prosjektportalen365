@@ -349,15 +349,18 @@ export async function setOriginalSourceSiteId(
     updateBody.Title = pageTitle
   }
 
-  const pageFields = fields.filter((field) => !['GtSiteId', 'GtHubSiteId'].includes(field))
+  // A shielded project's values stay on its own site: the page is on the news site, the hub by
+  // default, where everyone who may read it would see them. Its site and hub ids tie it to the
+  // project, as for any project.
+  const pageFields = SPDataAdapter.isShieldedProject
+    ? []
+    : fields.filter((field) => !['GtSiteId', 'GtHubSiteId'].includes(field))
   // The page is made by now: a hub that does not let the user read `Prosjekter` (a member of
   // «Minimum lesetilganger på hub») leaves it with the site and hub ids, rather than failing it.
   try {
-    // A shielded project has no entry in the hub: its properties item on the project site holds
-    // the values.
-    const projectsList = SPDataAdapter.isShieldedProject
-      ? SPDataAdapter.sp.web.lists.getByTitle(resource.Lists_ProjectProperties_Title)
-      : SPDataAdapter.portalDataService.web.lists.getByTitle(resource.Lists_Projects_Title)
+    const projectsList = SPDataAdapter.portalDataService.web.lists.getByTitle(
+      resource.Lists_Projects_Title
+    )
     // The page library can have Gt fields the project list lacks (a test hub's GtHubUrl), and
     // selecting one of them fails the whole query with a 400: copy only what both lists have.
     const projectListFields: { InternalName: string }[] =
@@ -369,10 +372,10 @@ export async function setOriginalSourceSiteId(
     )
 
     if (projectFields.length > 0) {
-      const query = SPDataAdapter.isShieldedProject
-        ? projectsList.items.select(...projectFields)
-        : projectsList.items.select(...projectFields).filter(`GtSiteId eq '${siteId}'`)
-      const [projectData] = await query.top(1)()
+      const [projectData] = await projectsList.items
+        .select(...projectFields)
+        .filter(`GtSiteId eq '${siteId}'`)
+        .top(1)()
 
       if (projectData) {
         for (const field of projectFields) {
