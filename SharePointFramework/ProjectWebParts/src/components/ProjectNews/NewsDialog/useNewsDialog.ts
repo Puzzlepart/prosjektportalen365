@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { useAnnounce } from '@fluentui/react-components'
-import { format, isUnauthorizedError } from 'pp365-shared-library'
+import { format, isUnauthorizedError, useFocusContentOnOpen } from 'pp365-shared-library'
 import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
 import strings from 'ProjectWebPartsStrings'
 import {
@@ -184,7 +184,14 @@ export const useNewsDialog = () => {
     ]
   )
 
+  // The dialog opens with the focus on its content, not in the title field: the screen reader then
+  // reads the dialog's title and its two messages first, in order. With the focus in the field
+  // they were passed over, and VoiceOver's cursor went back to the messages and stayed between them
+  // (Puzzlepart/prosjektportalen365-testing#133).
+  const focusContent = useFocusContentOnOpen(context.state.isDialogOpen)
+
   return {
+    focusContent,
     spinnerMode,
     title: newsForm.title,
     errorMessage: newsForm.errorMessage,

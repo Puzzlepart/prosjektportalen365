@@ -35,6 +35,7 @@ import { useNewsDialog } from './useNewsDialog'
 export const NewsDialog: FC<INewsDialogProps> = () => {
   const context = useContext(ProjectNewsContext)
   const {
+    focusContent,
     spinnerMode,
     title,
     errorMessage,
@@ -61,7 +62,7 @@ export const NewsDialog: FC<INewsDialogProps> = () => {
         open={context.state.isDialogOpen}
         onOpenChange={(_, { open }) => context.setState({ isDialogOpen: open })}
       >
-        <DialogSurface>
+        <DialogSurface {...focusContent}>
           <DialogBody className={styles.dialogBody}>
             <DialogTitle style={{ textAlign: 'center' }}>{strings.DialogTitle}</DialogTitle>
             <DialogContent>
@@ -109,7 +110,10 @@ export const NewsDialog: FC<INewsDialogProps> = () => {
                     validationMessage={showTemplateError ? strings.TemplateRequired : undefined}
                     iconName='ChevronDown'
                   >
+                    {/* Its list inside the dialog: in a portal outside it, VoiceOver did not read the
+                        options, as the dialog is modal (prosjektportalen365-testing#133). */}
                     <Dropdown
+                      inlinePopup
                       clearButton={getDropdownClearButtonProps()}
                       value={
                         templates.find((t) => t.ServerRelativeUrl === selectedTemplate)?.Title ?? ''

@@ -3,10 +3,13 @@ import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'ProjectExtensionsStrings'
 import { formatShortDate, useFocusContentProps } from 'pp365-shared-library'
 import { useTelemetry } from 'pp365-shared-library/lib/telemetry'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useBoolean } from 'usehooks-ts'
 import { useRiskActionFieldCustomizerContext } from '../../../extensions/riskAction/context'
 import { useRiskActionContext } from '../context'
+
+/** How long after the popover has closed the sync is told: time for the focus to reach its link. */
+export const SYNC_DONE_DELAY = 300
 
 /** Manages task synchronization, popover visibility and the new-task panel. */
 export function useRiskActionPopover() {
@@ -18,6 +21,19 @@ export function useRiskActionPopover() {
   const [syncError, setSyncError] = useState<string>()
   const { announce } = useAnnounce()
   const telemetry = useTelemetry()
+  const [syncDone, setSyncDone] = useState(false)
+
+  // Told once the popover has closed and given the focus back to its link: told as it closed, the
+  // screen reader began «Oppgavestatusen er oppdatert» and broke off to read the link
+  // (Puzzlepart/prosjektportalen365-testing#136). A polite message then waits for the link.
+  useEffect(() => {
+    if (!syncDone || popoverState.value) return undefined
+    const timer = window.setTimeout(() => {
+      announce(strings.RiskActionSyncDone, { polite: true })
+      setSyncDone(false)
+    }, SYNC_DONE_DELAY)
+    return () => window.clearTimeout(timer)
+  }, [syncDone, popoverState.value])
 
   const onPopoverOpenChange: PopoverProps['onOpenChange'] = (_ev, { open }) => {
     popoverState.setValue(open)
@@ -40,7 +56,7 @@ export function useRiskActionPopover() {
       const updatedItemContext = await context.dataAdapter.syncTasks(itemContext)
       popoverState.setFalse()
       setItemContext(updatedItemContext)
-      announce(strings.RiskActionSyncDone, { polite: true })
+      setSyncDone(true)
     } catch (error) {
       telemetry.trackError(error)
       setSyncError(error?.message ?? '')

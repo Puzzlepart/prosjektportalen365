@@ -65,6 +65,16 @@ afterEach(async () => {
  * so from the moment the dialog opened.
  */
 describe('NewsDialog', () => {
+  it('opens with the focus on its content, before the title and the messages (Puzzlepart/prosjektportalen365-testing#133)', async () => {
+    // With the focus in the title field the dialog's title and messages were passed over. The
+    // template list inside the dialog (`inlinePopup`) is checked in the browser: Fluent's combobox
+    // takes tens of seconds to open under jsdom.
+    await renderOpenDialog()
+    await act(() => new Promise((resolve) => requestAnimationFrame(() => resolve(undefined))))
+    expect(screen.getByRole('dialog')).toHaveFocus()
+    expect(screen.getByPlaceholderText(strings.NewsTitlePlaceholder)).not.toHaveFocus()
+  })
+
   it('keeps «Opprett» focusable while it waits, and says it waits for a title and a template', async () => {
     await renderOpenDialog()
     expect(createButton()).toHaveAttribute('aria-disabled', 'true')
