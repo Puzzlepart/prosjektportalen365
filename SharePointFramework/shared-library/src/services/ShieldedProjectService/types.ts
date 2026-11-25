@@ -18,6 +18,12 @@ export type EnsureProjectDataListParams = {
   contentTypeId?: string
 
   /**
+   * Whether the list also gets the fields the hub list has outside its content type: columns of
+   * the list itself, such as those PP-assistenten writes its analysis of a status report to.
+   */
+  includeHubListFields?: boolean
+
+  /**
    * Names of the project site's groups that get read access to the list, such as the group for
    * insight into shielded projects.
    */

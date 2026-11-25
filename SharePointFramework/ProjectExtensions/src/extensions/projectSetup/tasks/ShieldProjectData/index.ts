@@ -95,6 +95,9 @@ export class ShieldProjectData extends BaseTask {
         listName: resource.Lists_ProjectStatus_Title,
         template: 100,
         contentTypeId: parameters.ProjectStatusContentTypeId || STATUS_REPORT_CONTENT_TYPE_ID,
+        // The hub's list has columns outside the content type, which PP-assistenten writes its
+        // analysis of a report to.
+        includeHubListFields: true,
         readerGroupNames,
         progressFunc
       })

@@ -2,10 +2,11 @@ import { Logger, LogLevel } from '@pnp/logging'
 import { IList } from '@pnp/sp/lists'
 import '@pnp/sp/presets/all'
 import { IWeb } from '@pnp/sp/webs'
-import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
+import initJsom, { ExecuteJsomQuery as executeQuery, JsomContext } from 'spfx-jsom'
 import { ISPContentType } from '../../interfaces'
 import { transformFieldXml } from '../../util'
 import { getContentTypeLineage, isListContentTypeOf } from './contentTypeLineage'
+import { getMissingListFields, IListFieldSchema } from './listFields'
 import { EnsureProjectDataListParams, EnsureProjectDataListResult } from './types'
 
 /**
@@ -57,6 +58,9 @@ export class ShieldedProjectService {
         listContentTypeId,
         params.progressFunc
       )
+    }
+    if (params.includeHubListFields) {
+      await this._ensureListFields(params.listName, params.progressFunc)
     }
     if (params.readerGroupNames?.length > 0) {
       await this.grantRead(list, params.readerGroupNames)
@@ -233,22 +237,7 @@ export class ShieldedProjectService {
       try {
         progressFunc?.(field.Title)
         if (!inList.has(field.InternalName)) {
-          if (onSite.has(field.InternalName)) {
-            spList
-              .get_fields()
-              .add(jsomContext.web.get_fields().getByInternalNameOrTitle(field.InternalName))
-          } else {
-            const created = spList
-              .get_fields()
-              .addFieldAsXml(
-                transformFieldXml(field.SchemaXml, { DisplayName: field.InternalName }),
-                false,
-                SP.AddFieldOptions.addFieldInternalNameHint
-              )
-            created.set_title(field.Title)
-            created.update()
-          }
-          await executeQuery(jsomContext)
+          await this._addListField(jsomContext, spList, field, onSite)
         }
         const link = new SP.FieldLinkCreationInformation()
         link.set_field(spList.get_fields().getByInternalNameOrTitle(field.InternalName))
@@ -262,5 +251,85 @@ export class ShieldedProjectService {
         )
       }
     }
+  }
+
+  /**
+   * Adds the fields the hub list has outside its content type to the list: columns of the list
+   * itself, which the list's content type does not get, as on the hub. The setup goes on without
+   * them when the hub list's fields cannot be read, or one of them cannot be added; running it
+   * again adds what is missing.
+   *
+   * @param listName Title of the list, on the hub and on the project site
+   * @param progressFunc Progress function
+   */
+  private async _ensureListFields(
+    listName: string,
+    progressFunc?: (progress: string) => void
+  ): Promise<void> {
+    try {
+      const [hubFields, siteFields, listFields, { jsomContext }] = await Promise.all([
+        this._hubWeb.lists
+          .getByTitle(listName)
+          .fields.filter('Hidden eq false and FromBaseType eq false')
+          .select('InternalName', 'Title', 'SchemaXml', 'TypeAsString')<IListFieldSchema[]>(),
+        this._projectWeb.fields.select('InternalName')<{ InternalName: string }[]>(),
+        this._projectWeb.lists.getByTitle(listName).fields.select('InternalName')<
+          { InternalName: string }[]
+        >(),
+        initJsom(this._projectUrl, { loadTaxonomy: true })
+      ])
+      const spList = jsomContext.web.get_lists().getByTitle(listName)
+      const onSite = new Set(siteFields.map(({ InternalName }) => InternalName))
+      const inList = listFields.map(({ InternalName }) => InternalName)
+      for (const field of getMissingListFields(hubFields, inList)) {
+        try {
+          progressFunc?.(field.Title)
+          await this._addListField(jsomContext, spList, field, onSite)
+        } catch (error) {
+          Logger.write(
+            `(ShieldedProjectService) (_ensureListFields) Could not add the field [${field.InternalName}] to [${listName}]: ${error?.message}`,
+            LogLevel.Warning
+          )
+        }
+      }
+    } catch (error) {
+      Logger.write(
+        `(ShieldedProjectService) (_ensureListFields) Could not read the fields of [${listName}] on the hub, so its own columns are not added to the project site's list: ${error?.message}`,
+        LogLevel.Warning
+      )
+    }
+  }
+
+  /**
+   * Adds a hub field to the list: the project site's own site field where it has one of that
+   * name, else a field made from the hub field's schema, with its title.
+   *
+   * @param jsomContext The project site's JSOM context
+   * @param spList The list
+   * @param field The field on the hub
+   * @param siteFieldNames Internal names of the project site's site fields
+   */
+  private async _addListField(
+    jsomContext: JsomContext,
+    spList: SP.List,
+    field: Pick<IListFieldSchema, 'SchemaXml'> & { InternalName?: string; Title?: string },
+    siteFieldNames: Set<string>
+  ): Promise<void> {
+    if (siteFieldNames.has(field.InternalName)) {
+      spList
+        .get_fields()
+        .add(jsomContext.web.get_fields().getByInternalNameOrTitle(field.InternalName))
+    } else {
+      const created = spList
+        .get_fields()
+        .addFieldAsXml(
+          transformFieldXml(field.SchemaXml, { DisplayName: field.InternalName }),
+          false,
+          SP.AddFieldOptions.addFieldInternalNameHint
+        )
+      created.set_title(field.Title)
+      created.update()
+    }
+    await executeQuery(jsomContext)
   }
 }
