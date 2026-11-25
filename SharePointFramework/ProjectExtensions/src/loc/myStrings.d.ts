@@ -138,6 +138,13 @@ declare interface IProjectExtensionsStrings {
   ShieldProjectDataSubText: string
   ShieldProjectDataFieldText: string
   ShieldProjectDataErrorMessage: string
+  ShieldingExistingProjectTitle: string
+  ShieldingExistingProjectIntroText: string
+  ShieldingExistingProjectEntryText: string
+  ShieldingExistingProjectReportsText: string
+  ShieldingExistingProjectTimelineText: string
+  ShieldingExistingProjectArchiveLogText: string
+  ShieldingExistingProjectOutroText: string
   HubWriteDeniedLogText: string
   ProjectNotRegisteredInHubTitle: string
   ProjectNotRegisteredInHubMessage: string

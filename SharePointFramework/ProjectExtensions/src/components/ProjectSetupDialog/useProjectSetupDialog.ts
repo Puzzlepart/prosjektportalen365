@@ -66,6 +66,14 @@ export function useProjectSetupDialog(props: IProjectSetupDialogProps) {
   const onTabSelect = (_event: unknown, data: SelectTabData) =>
     setActiveTab(data.value as ProjectSetupConfigTab)
 
+  // A project that is set up already keeps what it has on the hub when it is shielded: told
+  // while an extension that shields is among those chosen, so the user can leave it or close.
+  const shieldingNotice = state.selectedExtensions?.some(
+    (extension) => extension.shieldsProjectData
+  )
+    ? props.data.shieldingNotice
+    : undefined
+
   const isSubmitDisabled =
     !state.selectedTemplate ||
     state.isResolvingCloudTemplate ||
@@ -85,6 +93,7 @@ export function useProjectSetupDialog(props: IProjectSetupDialogProps) {
     onTabSelect,
     tabIds,
     tabLabel,
-    isSubmitDisabled
+    isSubmitDisabled,
+    shieldingNotice
   }
 }

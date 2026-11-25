@@ -5,6 +5,7 @@ import {
   ContentConfig,
   ItemFieldValues
 } from 'pp365-shared-library'
+import { ISetupNotice } from './shieldingNotice'
 
 /** Extension settings controlling project setup and reruns. */
 export interface IProjectSetupProperties {
@@ -98,6 +99,13 @@ export interface IProjectSetupData extends IProjectSetupDialogState {
    * data, from the rows in `Tillatelseskonfigurasjon` for shielded lists. Set by `SitePermissions`.
    */
   shieldedListGroupNames?: string[]
+
+  /**
+   * What the project keeps on the hub if this setup shields it: set for a project that is set up
+   * already and not shielded, when an extension that shields can be chosen. The setup moves and
+   * removes nothing, so it tells where the extension is chosen, and again when it is done.
+   */
+  shieldingNotice?: ISetupNotice
 }
 
 /** Eligibility and warning states detected before project setup starts. */

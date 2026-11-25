@@ -28,7 +28,8 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
     onTabSelect,
     tabIds,
     tabLabel,
-    isSubmitDisabled
+    isSubmitDisabled,
+    shieldingNotice
   } = useProjectSetupDialog(props)
 
   const footer = (
@@ -157,6 +158,15 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
         </div>
 
         {/* A hidden message bar still announces itself, so mount it only when applicable. */}
+        {shieldingNotice && (
+          <div className={styles.shieldingNotice}>
+            <UserMessage
+              title={shieldingNotice.title}
+              text={shieldingNotice.text}
+              intent='warning'
+            />
+          </div>
+        )}
         {props.data.projectData && (
           <div className={styles.projectDataMessage}>
             <UserMessage

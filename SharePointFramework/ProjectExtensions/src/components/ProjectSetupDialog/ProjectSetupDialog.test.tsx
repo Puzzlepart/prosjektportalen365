@@ -307,6 +307,36 @@ describe('ProjectSetupDialog', () => {
     expect(await axeComponent(dialog)).toHaveNoViolations()
   })
 
+  it('tells what the project keeps on the hub while an extension that shields is among those chosen, and not before', () => {
+    const notice = { title: 'Prosjektet har data på porteføljeområdet', text: 'De flyttes ikke.' }
+    const shields = { ...extension(1, 'Skjerming'), shieldsProjectData: true }
+    renderDialog({
+      data: setupData({
+        hasExistingTemplate: true,
+        shieldingNotice: notice,
+        extensions: [shields, extension(2, 'Risikomatrise')]
+      })
+    })
+    // A project that has a template starts without one chosen, so with no extension.
+    expect(screen.queryByText(notice.title)).toBeNull()
+    fireEvent.click(screen.getByLabelText(strings.ProjectTemplateSelectorSelectTemplateRadioLabel))
+    // Standardmal comes with extension 1, which shields.
+    expect(listed('Valgte prosjekttillegg')).toEqual(['Skjerming'])
+    expect(screen.getByText(notice.title)).toBeInTheDocument()
+    expect(screen.getByText(notice.text)).toBeInTheDocument()
+    expect(submit()).toBeEnabled()
+    // Byggeprosjekt comes with extension 2, which does not.
+    fireEvent.change(picker(), { target: { value: '2' } })
+    expect(screen.queryByText(notice.title)).toBeNull()
+  })
+
+  it('tells nothing of the hub where the setup has nothing to tell: a new project that is shielded', () => {
+    const shields = { ...extension(1, 'Skjerming'), shieldsProjectData: true }
+    renderDialog({ data: setupData({ extensions: [shields] }) })
+    expect(listed('Valgte prosjekttillegg')).toEqual(['Skjerming'])
+    expect(screen.queryByText(strings.ShieldingExistingProjectTitle)).toBeNull()
+  })
+
   it('warns that Planner needs membership of the group', () => {
     renderDialog({ validation: ProjectSetupValidation.UserNotGroupMember })
     expect(screen.getByText(strings.PlannerMemberWarningMessage)).toBeInTheDocument()

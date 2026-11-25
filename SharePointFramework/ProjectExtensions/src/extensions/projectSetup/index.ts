@@ -50,6 +50,7 @@ import { NAVIGATION_NODES_STORAGE_KEY } from './constants'
 import { deleteCustomizer } from './deleteCustomizer'
 import { isAddedBefore } from './listContentRecord'
 import { siteTypeAfterSetup, trackSetupCheckFailure, trackSetupStopped } from './setupTelemetry'
+import { getShieldingNotice } from './shieldingNotice'
 import { TemplateQuickLaunch } from './templateQuickLaunch'
 import * as Tasks from './tasks'
 import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
@@ -318,7 +319,10 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     }
   }
 
-  /** Summarizes logged task failures and missing portfolio registration before dismissal. */
+  /**
+   * Summarizes logged task failures, missing portfolio registration, and what a project that was
+   * shielded in this run keeps on the hub, before dismissal.
+   */
   private _getCompletionWarning(data: IProjectSetupData): IProgressDialogProps['warning'] {
     // A shielded project is not registered in the hub on purpose.
     const notRegistered =
@@ -328,12 +332,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             text: format(strings.ProjectNotRegisteredInHubMessage, resource.Lists_Projects_Title)
           }
         : undefined
+    // At most one of the two: the first is for a project that is not shielded.
+    const notice = data.isShieldedProject ? data.shieldingNotice : notRegistered
     const errorCount = this._getErrorEntries().length
-    if (errorCount === 0) return notRegistered
+    if (errorCount === 0) return notice
     const text = format(strings.SetupCompletedWithErrorsMessage, errorCount)
     return {
       title: strings.SetupCompletedWithErrorsTitle,
-      text: notRegistered ? `${text}\n\n**${notRegistered.title}.** ${notRegistered.text}` : text
+      text: notice ? `${text}\n\n**${notice.title}.** ${notice.text}` : text
     }
   }
 
@@ -801,6 +807,18 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         // List may not exist for new projects
       }
 
+      // A project that is set up already keeps what it has on the hub if it is shielded now. The
+      // setup removes nothing: it tells what stays, where the extension is chosen and when done.
+      const shieldingNotice =
+        hasExistingTemplate &&
+        !this._portalDataService.isShieldedProject &&
+        extensions.some((extension) => extension.shieldsProjectData)
+          ? getShieldingNotice(
+              this._portalDataService.url,
+              this.context.pageContext.site.id.toString()
+            )
+          : undefined
+
       return {
         ...data,
         extensions,
@@ -809,7 +827,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         projectData,
         hasExistingTemplate,
         addedListContent,
-        hasHubWriteAccess
+        hasHubWriteAccess,
+        shieldingNotice
       } as IProjectSetupData
     } catch (error) {
       throw new ProjectSetupError(

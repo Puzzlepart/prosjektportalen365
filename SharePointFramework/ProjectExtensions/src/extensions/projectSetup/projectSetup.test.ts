@@ -530,6 +530,58 @@ describe('ProjectSetup', () => {
     expect(dialogs.setup.data.hasExistingTemplate).toBe(true)
   })
 
+  it('tells what a project that is set up already keeps on the hub, when an extension that shields can be chosen', async () => {
+    hub.lists[resource.Lists_ProjectExtensions_Title] = [
+      { text: 'Skjerming', shieldsProjectData: true }
+    ]
+    hub.portal = { url: 'https://contoso.sharepoint.com/sites/portefolje' }
+    await projectSetup({ web: { GtProjectTemplate: 'Standardmal' } })
+    const notice = dialogs.setup.data.shieldingNotice
+    expect(notice.title).toBe(strings.ShieldingExistingProjectTitle)
+    // The project's entry in the hub, found by the project's site ID.
+    expect(notice.text).toContain(
+      `https://contoso.sharepoint.com/sites/portefolje/${resource.Lists_Projects_Url}/AllItems.aspx?FilterField1=GtSiteId&FilterValue1=site-2&`
+    )
+  })
+
+  it('has nothing to tell of the hub for a new project, one that is shielded already, or when no extension shields', async () => {
+    const shields = { text: 'Skjerming', shieldsProjectData: true }
+    hub.lists[resource.Lists_ProjectExtensions_Title] = [shields]
+    await projectSetup()
+    expect(dialogs.setup.data.shieldingNotice).toBeUndefined()
+    delete dialogs.setup
+    hub.portal = { isShieldedProject: true }
+    await projectSetup({ web: { GtProjectTemplate: 'Standardmal' } })
+    expect(dialogs.setup.data.shieldingNotice).toBeUndefined()
+    delete dialogs.setup
+    hub.portal = {}
+    hub.lists[resource.Lists_ProjectExtensions_Title] = [{ text: 'Gevinstoversikt' }]
+    await projectSetup({ web: { GtProjectTemplate: 'Standardmal' } })
+    expect(dialogs.setup.data.shieldingNotice).toBeUndefined()
+  })
+
+  it('tells it again when the setup is done, if the project was shielded in it, and not if the extension was left out', async () => {
+    const shields = { text: 'Skjerming', shieldsProjectData: true }
+    hub.lists[resource.Lists_ProjectExtensions_Title] = [shields]
+    await projectSetup({ web: { GtProjectTemplate: 'Standardmal' } })
+    const notice = dialogs.setup.data.shieldingNotice
+    act(() => {
+      dialogs.setup.onSubmit({
+        selectedTemplate: TEMPLATES[0],
+        selectedExtensions: [shields],
+        selectedContentConfig: []
+      })
+    })
+    await settle()
+    expect(dialogs.progress.isComplete).toBe(true)
+    expect(dialogs.progress.warning).toEqual(notice)
+    delete dialogs.progress
+    await projectSetup({ web: { GtProjectTemplate: 'Standardmal' } })
+    await setUpWith()
+    expect(dialogs.progress.isComplete).toBe(true)
+    expect(dialogs.progress.warning).toBeUndefined()
+  })
+
   it('tells the list content earlier runs added to the project', async () => {
     await projectSetup({
       web: { GtProjectTemplate: 'Standardmal', GtProjectListContent: 'Fasesjekkpunkter' }
