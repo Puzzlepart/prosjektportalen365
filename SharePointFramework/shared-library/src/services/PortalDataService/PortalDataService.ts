@@ -50,6 +50,10 @@ import { TelemetryResolvedSiteType } from '../../telemetry/siteInfo'
 import { readSiteType } from '../../telemetry/siteType'
 import { normalizeGuid, TelemetryUsageSnapshot } from '../../telemetry/validate'
 import { DataService } from '../DataService'
+import {
+  isBuiltOnContentType,
+  isListContentTypeOf
+} from '../ShieldedProjectService/contentTypeLineage'
 import { resolveHubUrl } from './resolveHubUrl'
 import {
   GetStatusReportsOptions,
@@ -1388,13 +1392,13 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   /**
    * Gets fields for the specified content type.
    *
-   * @param web Web (default: `this.web`)
+   * @param parent The web or the list that has the content type (default: `this.web`)
    */
   public async getContentTypeFields(
     contentTypeId: string,
-    web: IWeb = this.web
+    parent: Pick<IWeb, 'contentTypes'> = this.web
   ): Promise<SPField[]> {
-    const { Fields } = await web.contentTypes
+    const { Fields } = await parent.contentTypes
       .getById(contentTypeId)
       .select(
         getClassProperties(SPField)
@@ -1403,6 +1407,36 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       )
       .expand('Fields')<ISPContentType>()
     return this._mapFields(Fields)
+  }
+
+  /**
+   * The fields a status report is edited by: those of the status report content type, read where
+   * the reports are. A shielded project has them on its own list for status reports, in the list's
+   * copy of the content type: the content type on the project site itself is created without
+   * fields, and the fields are added to the list (`ShieldedProjectService`). A list set up with a
+   * template's own content type has a copy of that one, which is built on the one asked for.
+   * Other projects read the hub's content type. Throws while it is unresolved whether the project
+   * is shielded.
+   *
+   * @param contentTypeId ID of the status report content type
+   */
+  public async getStatusReportFields(contentTypeId: string): Promise<SPField[]> {
+    if (!this._isRoutedToProject('PROJECT_STATUS')) return this.getContentTypeFields(contentTypeId)
+    const list = this._getList('PROJECT_STATUS')
+    const ids = (await list.contentTypes.select('StringId')<{ StringId: string }[]>()).map(
+      ({ StringId }) => StringId
+    )
+    const listContentTypeId =
+      ids.find((id) => isListContentTypeOf(id, contentTypeId)) ??
+      ids.find((id) => isBuiltOnContentType(id, contentTypeId))
+    if (!listContentTypeId) {
+      Logger.write(
+        `(PortalDataService) (getStatusReportFields) The project's list for status reports has no content type built on ${contentTypeId}, so a report has no fields to edit.`,
+        LogLevel.Warning
+      )
+      return []
+    }
+    return this.getContentTypeFields(listContentTypeId, list)
   }
 
   /**

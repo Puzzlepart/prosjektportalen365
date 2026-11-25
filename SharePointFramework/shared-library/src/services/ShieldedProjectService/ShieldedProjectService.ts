@@ -5,7 +5,7 @@ import { IWeb } from '@pnp/sp/webs'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
 import { ISPContentType } from '../../interfaces'
 import { transformFieldXml } from '../../util'
-import { getContentTypeLineage } from './contentTypeLineage'
+import { getContentTypeLineage, isListContentTypeOf } from './contentTypeLineage'
 import { EnsureProjectDataListParams, EnsureProjectDataListResult } from './types'
 
 /**
@@ -163,9 +163,7 @@ export class ShieldedProjectService {
     removeOthers: boolean
   ): Promise<string> {
     await list.update({ ContentTypesEnabled: true })
-    const isOwn = (id: string) =>
-      id.length === contentTypeId.length + 34 &&
-      id.toLowerCase().startsWith(contentTypeId.toLowerCase())
+    const isOwn = (id: string) => isListContentTypeOf(id, contentTypeId)
     const getIds = async () =>
       (await list.contentTypes.select('StringId')<{ StringId: string }[]>()).map(
         ({ StringId }) => StringId

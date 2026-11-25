@@ -19,3 +19,29 @@ export function getContentTypeLineage(contentTypeId: string): string[] {
   }
   return lineage
 }
+
+/**
+ * Whether a content type on a list is the list's own copy of a site content type. A list keeps a
+ * child of each content type added to it: the site content type's ID followed by `00` and a GUID.
+ *
+ * @param listContentTypeId ID of a content type on a list
+ * @param contentTypeId ID of the site content type
+ */
+export function isListContentTypeOf(listContentTypeId: string, contentTypeId: string): boolean {
+  const listId = (listContentTypeId ?? '').toLowerCase()
+  const siteId = (contentTypeId ?? '').toLowerCase()
+  return siteId.length > 0 && listId.length === siteId.length + 34 && listId.startsWith(siteId)
+}
+
+/**
+ * Whether a content type is built on another, however many content types lie between them: its
+ * ID starts with the other's, which ends where a new part of the ID begins.
+ *
+ * @param contentTypeId ID of the content type
+ * @param ancestorId ID of the content type it may be built on
+ */
+export function isBuiltOnContentType(contentTypeId: string, ancestorId: string): boolean {
+  const id = (contentTypeId ?? '').toLowerCase()
+  const ancestor = (ancestorId ?? '').toLowerCase()
+  return ancestor.length > 0 && id.length > ancestor.length && id.startsWith(ancestor)
+}

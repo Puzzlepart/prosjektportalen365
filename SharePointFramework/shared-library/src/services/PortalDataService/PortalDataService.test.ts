@@ -8,7 +8,9 @@ import { PortalDataServiceDefaultConfiguration } from './types'
 /**
  * The hub's lists through a structural stand-in for `web.lists.getByTitle(...).items`, and for
  * the list itself (`getByTitle(...).select(...)`): each query records its calls and answers with
- * `answer(calls)`, or fails with the error it returns.
+ * `answer(calls)`, or fails with the error it returns. A list's own content types answer under
+ * `<title>/contentTypes`, one of them under `<title>/contentTypes/<id>`, and a content type of
+ * the site under `contentTypes/<id>`.
  */
 type Answer = (calls: any[][]) => any
 function hubWeb(answers: Record<string, Answer>) {
@@ -34,9 +36,14 @@ function hubWeb(answers: Record<string, Answer>) {
         get items() {
           return query(title)
         },
+        contentTypes: {
+          select: (...fields: string[]) => query(`${title}/contentTypes`).select(...fields),
+          getById: (id: string) => query(`${title}/contentTypes/${id}`)
+        },
         select: (...fields: string[]) => query(title).select(...fields)
       })
-    }
+    },
+    contentTypes: { getById: (id: string) => query(`contentTypes/${id}`) }
   }
   return { web, queries }
 }
@@ -771,6 +778,66 @@ describe('PortalDataService', () => {
       expect(projectQueries).toHaveLength(0)
     })
 
+    const STATUS = '0x010022252E35737A413FB56A1BA53862F6D5'
+    const LIST_COPY = `${STATUS}00A1B2C3D4E5F60718293A4B5C6D7E8F90`
+    const STATUS_CONTENT_TYPES = `${LISTS.PROJECT_STATUS}/contentTypes`
+    /** A field as SharePoint gives it: the forms it shows in are told by its schema only. */
+    const field = (InternalName: string, attributes = '') => ({
+      InternalName,
+      SchemaXml: `<Field Name="${InternalName}" ${attributes}/>`
+    })
+    const names = (fields: { InternalName?: string }[]) =>
+      fields.map(({ InternalName }) => InternalName)
+
+    it("reads a report's fields from its own list's copy of the content type, not from the content type on the site, which has none", async () => {
+      const { service, hubQueries, projectQueries } = shielded('shielded', {
+        [STATUS_CONTENT_TYPES]: () => [
+          // A folder, which the list may keep beside the reports' content type.
+          { StringId: '0x012000F1E2D3C4B5A60718293A4B5C6D7E8F90' },
+          { StringId: LIST_COPY }
+        ],
+        [`${STATUS_CONTENT_TYPES}/${LIST_COPY}`]: () => ({
+          Fields: [field('GtStatusTime'), field('GtSiteId', 'ShowInEditForm="FALSE" ')]
+        }),
+        [`contentTypes/${STATUS}`]: () => ({ Fields: [field('Title')] })
+      })
+      const fields = await service.getStatusReportFields(STATUS)
+      expect(names(fields)).toEqual(['GtStatusTime', 'GtSiteId'])
+      expect(fields.map(({ ShowInEditForm }) => ShowInEditForm)).toEqual([true, false])
+      expect(projectQueries.map(({ list }) => list)).toEqual([
+        STATUS_CONTENT_TYPES,
+        `${STATUS_CONTENT_TYPES}/${LIST_COPY}`
+      ])
+      expect(hubQueries).toHaveLength(0)
+    })
+
+    it("reads them from the copy of a template's own content type, which is built on the one asked for", async () => {
+      const templateCopy = `${LIST_COPY}00B1B2C3D4E5F60718293A4B5C6D7E8F91`
+      const { service } = shielded('shielded', {
+        [STATUS_CONTENT_TYPES]: () => [{ StringId: templateCopy }],
+        [`${STATUS_CONTENT_TYPES}/${templateCopy}`]: () => ({ Fields: [field('GtStatusOwn')] })
+      })
+      expect(names(await service.getStatusReportFields(STATUS))).toEqual(['GtStatusOwn'])
+    })
+
+    it('has no fields to edit a report by when its list has no content type built on the one asked for', async () => {
+      const { service, projectQueries } = shielded('shielded', {
+        [STATUS_CONTENT_TYPES]: () => [
+          { StringId: '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C00A1B2C3D4E5F60718293A4B5C6D7E8F90' }
+        ]
+      })
+      expect(await service.getStatusReportFields(STATUS)).toEqual([])
+      expect(projectQueries.map(({ list }) => list)).toEqual([STATUS_CONTENT_TYPES])
+    })
+
+    it("leaves every other project reading the hub's content type", async () => {
+      const { service, queries } = portal({
+        [`contentTypes/${STATUS}`]: () => ({ Fields: [field('GtStatusTime')] })
+      })
+      expect(names(await service.getStatusReportFields(STATUS))).toEqual(['GtStatusTime'])
+      expect(queries.map(({ list }) => list)).toEqual([`contentTypes/${STATUS}`])
+    })
+
     it('never writes to the hub lists with data about every project', async () => {
       const { service } = shielded('shielded', {})
       await expect(service.addItemToList('PROJECTS', { Title: 'Prosjekt' })).rejects.toThrow(
@@ -792,6 +859,7 @@ describe('PortalDataService', () => {
       expect(service.isListAvailable('PROJECT_STATUS')).toBe(false)
       expect(await service.getStatusReports({})).toEqual([])
       await expect(service.deleteStatusReport(7)).rejects.toThrow()
+      await expect(service.getStatusReportFields(STATUS)).rejects.toThrow()
       expect(() => service.getProjectDataWeb()).toThrow()
       expect(hubQueries).toHaveLength(0)
       expect(projectQueries).toHaveLength(0)

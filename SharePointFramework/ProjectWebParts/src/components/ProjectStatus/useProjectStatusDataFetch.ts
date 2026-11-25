@@ -27,11 +27,8 @@ import { FetchDataResult, IProjectStatusProps } from './types'
  * Builds editable report fields from the supplied or default status-report content type.
  */
 async function getReportFields(contentTypeId = '0x010022252E35737A413FB56A1BA53862F6D5') {
-  // Read where the reports are: a shielded project has the content type on its own site.
-  const fields = await SPDataAdapter.portalDataService.getContentTypeFields(
-    contentTypeId,
-    SPDataAdapter.portalDataService.getProjectDataWeb()
-  )
+  // Read where the reports are: a shielded project has the fields on its own status report list.
+  const fields = await SPDataAdapter.portalDataService.getStatusReportFields(contentTypeId)
   const reportFields = fields.map((field) => new EditableSPField(field))
   return reportFields
 }
