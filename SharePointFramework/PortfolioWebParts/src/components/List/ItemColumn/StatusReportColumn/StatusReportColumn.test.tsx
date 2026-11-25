@@ -412,6 +412,10 @@ describe('StatusReportColumn', () => {
     // did not return.
     expect(renderCell({ ...P4, _hubId: 'hub-2' }).container).toBeEmptyDOMElement()
     cleanup()
+    // Nor is the report of another hub's shielded project, which lies on the project's own site.
+    const shielded = { StatusReportId: 101, StatusReportWebUrl: 'https://contoso.sharepoint.com' }
+    expect(renderCell({ ...P4, _hubId: 'hub-2', ...shielded }).container).toBeEmptyDOMElement()
+    cleanup()
     expect(renderCell({ ...P1, StatusReportId: 999 }).container).toBeEmptyDOMElement()
     cleanup()
     // A report of another project, and of another report series of the row's project.
@@ -923,5 +927,27 @@ describe('fetchData', () => {
     expect(warn.mock.calls[0][1]).toMatchObject({ webUrl: siteB })
     // Last: restoring the spy clears the calls it recorded.
     warn.mockRestore()
+  })
+
+  it("reads a shielded project's report for the configured hub's rows only: in a merged view another hub's shielded project shows no report, as that hub's other rows", async () => {
+    const own = 'https://contoso.sharepoint.com/sites/skjermet-i-hovedhuben'
+    const other = 'https://contoso.sharepoint.com/sites/skjermet-i-annen-hub'
+    const list = {
+      [resource.Lists_ProjectStatus_Title]: [
+        { Id: 7, GtSiteId: P4_SITE, Created: P5_DATE, GtStatusTime: 'På plan' }
+      ]
+    }
+    const ownQueries: Queries = {}
+    const otherQueries: Queries = {}
+    projectWebs[own] = standInWeb(list, ownQueries)
+    projectWebs[other] = standInWeb(list, otherQueries)
+    const rows = [
+      { _hubId: 'hub-1', _isPrimaryHub: true, StatusReportId: 7, StatusReportWebUrl: own },
+      { _hubId: 'hub-2', StatusReportId: 7, StatusReportWebUrl: other }
+    ]
+    const data = await fetchData(standInWeb(LISTS, {}) as any, undefined, rows)
+    expect(data.reports.map(({ id, webUrl }) => [id, webUrl])).toEqual([[7, own]])
+    expect(ownQueries[resource.Lists_ProjectStatus_Title]).toHaveLength(1)
+    expect(otherQueries[resource.Lists_ProjectStatus_Title]).toBeUndefined()
   })
 })

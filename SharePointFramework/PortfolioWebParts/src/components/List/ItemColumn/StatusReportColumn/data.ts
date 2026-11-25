@@ -59,13 +59,14 @@ function getReportIds(items: Record<string, any>[]): number[] {
 }
 
 /**
- * The report ids of the rows whose report is on a shielded project's own site, by that site
- * (`StatusReportWebUrl`), each once. The site's address names the list, so the rows of every hub
- * in a merged view count.
+ * The report ids of the configured hub's rows whose report is on a shielded project's own site,
+ * by that site (`StatusReportWebUrl`), each once. Another hub's rows show no report in a merged
+ * view, shielded or not: a report is drawn with the configured hub's sections, which may not be
+ * the other hub's.
  */
 function getShieldedReportIds(items: Record<string, any>[]): Map<string, number[]> {
   const idsByWeb = new Map<string, number[]>()
-  for (const item of items) {
+  for (const item of items.filter(isConfiguredHubRow)) {
     const webUrl: string = item?.StatusReportWebUrl
     const id = Number(item?.StatusReportId)
     if (!webUrl || !isItemId(id)) continue
@@ -214,8 +215,9 @@ function toStatusReport(
  * reports the configured hub's rows point to (`StatusReportId`; in a merged view another hub's
  * rows name items of that hub's list, which is not read here). Search found each series' latest
  * published report already, so the reports are read by id, 50 to a request; with no report id
- * among those rows, no report is read. A shielded project's report is read from the list on its
- * own site (`StatusReportWebUrl`), with the sections and their configuration still the hub's.
+ * among those rows, no report is read. The report of a shielded project among those rows is read
+ * from the list on its own site (`StatusReportWebUrl`), with the sections and their configuration
+ * still the hub's.
  *
  * @param web The hub's web
  * @param column The column, whose settings may name other lists

@@ -93,8 +93,8 @@ export interface IStatusReportColumnData {
   overallStatusName?: string
 
   /**
-   * The reports the configured hub's rows point to (`StatusReportId`), and those of shielded
-   * projects, from their own sites (`StatusReportWebUrl`).
+   * The reports the configured hub's rows point to (`StatusReportId`): those in the hub's list,
+   * and those of shielded projects, read from their own sites (`StatusReportWebUrl`).
    */
   reports: IStatusReport[]
 }
