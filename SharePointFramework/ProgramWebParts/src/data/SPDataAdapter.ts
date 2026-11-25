@@ -1,5 +1,5 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { PnPClientStorage, dateAdd } from '@pnp/core'
+import { PnPClientStorage, dateAdd, getHashCode } from '@pnp/core'
 import {
   ISearchResult,
   QueryPropertyValueType,
@@ -65,6 +65,7 @@ import {
   toHubSiteProjects,
   toStoredChildProject
 } from './hubSiteProjects'
+import { fetchShieldedProjectItems } from './shieldedChildProjects'
 
 enum ParentProjectOperation {
   Add = 'add',
@@ -698,9 +699,23 @@ export class SPDataAdapter
   }
 
   /**
-   * Reads non-closed projects from the hub list, caching them under the supplied program site id.
+   * The non-closed projects the program's lists are built from: the hub's entries, and the
+   * program's shielded projects, which have no entry in the hub.
    */
   private async _fetchProjectItems(siteId: string): Promise<SPProjectItem[]> {
+    const hubItems = await this._fetchHubProjectItems(siteId)
+    const shieldedItems = await this._fetchShieldedProjectItems(siteId, hubItems)
+    const closed = [resource.Choice_GtProjectLifecycleStatus_Closed, strings.LifecycleStatus_Closed]
+    return [
+      ...hubItems,
+      ...shieldedItems.filter((item) => !closed.includes(item.GtProjectLifecycleStatus))
+    ]
+  }
+
+  /**
+   * Reads non-closed projects from the hub list, caching them under the supplied program site id.
+   */
+  private async _fetchHubProjectItems(siteId: string): Promise<SPProjectItem[]> {
     return getOrFetchProjectsCache('items', siteId, () =>
       getAllItems<SPProjectItem>(
         this.portalDataService.web.lists
@@ -711,6 +726,37 @@ export class SPDataAdapter
           )
           .orderBy('Title')
       )
+    )
+  }
+
+  /**
+   * The properties items of the program's shielded projects, closed ones too, read from each
+   * project's own site (`shieldedChildProjects.ts`): its child projects, and the program itself
+   * when it is shielded. Cached beside the hub's items, for the projects the program has now: a
+   * child project added since is read at once.
+   *
+   * @param siteId The program's site ID
+   * @param hubItems The projects read from the hub
+   */
+  private async _fetchShieldedProjectItems(
+    siteId: string,
+    hubItems: SPProjectItem[]
+  ): Promise<SPProjectItem[]> {
+    const sites = [
+      ...(this.childProjects ?? []),
+      { siteId, url: this.spfxContext.pageContext.web.absoluteUrl }
+    ]
+    const siteIds = sites.map((site) => `${site.siteId}`.toLowerCase()).sort()
+    return getOrFetchProjectsCache(
+      'items',
+      `${siteId}_shielded_${getHashCode(siteIds.join())}`,
+      () =>
+        fetchShieldedProjectItems<SPProjectItem>(sites, hubItems, async (url) => {
+          const [item] = await Web([this.sp.web, url])
+            .lists.getByTitle(resource.Lists_ProjectProperties_Title)
+            .items.top(1)()
+          return item
+        })
     )
   }
 
@@ -807,9 +853,40 @@ export class SPDataAdapter
     if (!this.portalDataService?.web) {
       return undefined
     }
-    return await this.portalDataService.web.lists
-      .getByTitle(resource.Lists_Projects_Title)
-      .items.filter(`${odataQuery}`)<any[]>()
+    const siteId = this.spfxContext.pageContext.site.id.toString()
+    const [hubProjects, shieldedProjects] = await Promise.all([
+      this.portalDataService.web.lists
+        .getByTitle(resource.Lists_Projects_Title)
+        .items.filter(`${odataQuery}`)<any[]>(),
+      this._fetchShieldedProjectsByFilter(siteId, odataQuery)
+    ])
+    return [...hubProjects, ...shieldedProjects]
+  }
+
+  /**
+   * The program's shielded projects that a data source's filter lets through. A shielded
+   * project's properties item has the fields of the hub's entries, so the filter is run against
+   * it on the project's own site; a site that fails gives none.
+   *
+   * @param siteId The program's site ID
+   * @param odataQuery The data source's filter on projects
+   */
+  private async _fetchShieldedProjectsByFilter(siteId: string, odataQuery: string): Promise<any[]> {
+    const hubItems = await this._fetchHubProjectItems(siteId)
+    const shieldedItems = await this._fetchShieldedProjectItems(siteId, hubItems)
+    const matches = await Promise.all(
+      shieldedItems.map(async (item) => {
+        try {
+          return await Web([this.sp.web, item.GtSiteUrl])
+            .lists.getByTitle(resource.Lists_ProjectProperties_Title)
+            .items.filter(`${odataQuery}`)
+            .top(1)<any[]>()
+        } catch {
+          return []
+        }
+      })
+    )
+    return _.flatten(matches)
   }
 
   /** Checks whether the named group's membership is visible; returns false when querying fails. */
