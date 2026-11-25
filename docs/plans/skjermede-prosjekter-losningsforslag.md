@@ -1,6 +1,6 @@
 # Skjermede prosjekter – løsningsforslag
 
-**Status:** vedtatt plan for 1.15, 9. november 2026. Forslaget bygger på kartleggingen i `skjermede-prosjekter.md`, på `releases/1.15` og på PR #1805 («Minimum lesetilganger på hub»), som merges før arbeidet starter.
+**Status:** vedtatt plan, 9. november 2026. Den ble lagt for 1.15 og gjelder nå 1.16.0. Avgjørelsene fra gjennomgangen 25. november 2026 står i avsnitt 17 og går foran det som ellers står her. Forslaget bygger på kartleggingen i `skjermede-prosjekter.md`, på `releases/1.15` og på PR #1805 («Minimum lesetilganger på hub»), som merges før arbeidet starter.
 
 ## 1. Hva vi lager
 
@@ -16,7 +16,7 @@ Løsningen er generisk. Den virker på en eksisterende hub med både vanlige og 
 | Leveranse | Lister, innholdstyper og tilganger leveres av Prosjekttillegget «Skjerming». Standardmalene endres ikke. |
 | Huboppføring | Et skjermet prosjekt får **ingen** oppføring i hublisten Prosjekter, og den må aldri opprettes senere. |
 | Hva som skjermes | Statusrapporter (også utkast), Prosjektstatusvedlegg (øyeblikksbilde og persistert seksjonsdata), prosjektinformasjon og Arkiveringslogg. |
-| Tidslinje | Tidslinjeelementer på prosjektnivå er **ikke med** i 1.15. Prosjekttidslinjen viser prosjektperioden og leveransene, men det går ikke å legge til elementer. |
+| Tidslinje | Tidslinjeelementer på prosjektnivå er **ikke med** i 1.16.0. Prosjekttidslinjen viser prosjektperioden og leveransene, men det går ikke å legge til elementer. |
 | Program | Full støtte. Både programmer og underprosjekter kan være skjermet. Et program som ikke er skjermet, lagrer fortsatt tittel og URL for skjermede underprosjekter i `GtChildProjects`. Det er akseptert. |
 | Tilgang på huben for prosjektdeltakere | Minimumsgruppen fra #1805 er nok når webdelene kjører. Den som oppretter prosjektet, må være leser eller medlem på huben, fordi oppsettet leser lister som minimumsgruppen ikke dekker. |
 | Innsynsgruppe | Konfigureres i Tillatelseskonfigurasjon med en ny kolonne, `GtPermissionScope`. Standardraden bruker gruppen Porteføljeinnsyn. Medlemmene kopieres når prosjektet opprettes, som i dagens SitePermissions. |
@@ -129,7 +129,7 @@ Tillegget er en sp-js-provisioning-fil i hubbiblioteket Prosjekttillegg (`Skjerm
 
 **Prosjektstatus**
 - Lister og vedlegg rutes via `_webFor`. `snapshotUrl` og lenkene i SnapshotDialog peker da automatisk til prosjektområdet.
-- Statusfeltene leses fra den lokale innholdstypen, ikke fra hubens.
+- Statusfeltene leses fra den lokale innholdstypen, ikke fra hubens: fra statuslistens egen kopi av den, siden innholdstypen på prosjektområdet opprettes uten felt (17, punkt 11).
 - Sjekkene for hubtilgang (`useProjectStatusDataFetch`, prøvelesing av Statusseksjoner) skal ikke stoppe et skjermet prosjekt. Statusseksjoner og kolonnekonfigurasjon leses fortsatt fra huben.
 - Redigeringspanelet sender ikke `targetWeb`, så `ensureUser` kjører allerede mot prosjektområdet. Det blir riktig med skjerming.
 
@@ -157,7 +157,7 @@ Tillegget er en sp-js-provisioning-fil i hubbiblioteket Prosjekttillegg (`Skjerm
 | Leser | Endring |
 |---|---|
 | Porteføljeoversikt, ledervisning og refinere | Ingen kodeendring. Lagrede spørringer finner skjermede prosjekter og status via innholdstype og `DepartmentId`. Duplikatsjekken (nøyaktig ett prosjekttreff per område) holder, fordi skjermede prosjekter ikke har huboppføring. |
-| Sammenslått visning over flere huber (`mergedViewData`) | Sjekk at sammenslåingen per hub (`_hubId`) håndterer prosjekter uten huboppføring. |
+| Sammenslått visning over flere huber (`mergedViewData`) | Hver hub leses med visningens søk rettet mot den, så et skjermet prosjekt får rad og hub fra søket. Rader fra andre huber enn webdelens egen viser ikke status, heller ikke for skjermede prosjekter (17, punkt 1). |
 | **Statuskolonnen** | Søket etter publiserte rapporter finner også rapportene på skjermede prosjektområder. Raden får rapportens id (`StatusReportId`) og, når rapporten ligger utenfor huben, prosjektområdets adresse (`StatusReportWebUrl`). Kolonnen leser rapporten etter id fra listen på det området, med samme navn og felt som hublisten. |
 | **Prosjektliste og prosjektkort** | Leser hubelementer med REST som før, og supplerer med søk etter skjermede prosjekter (`ContentTypeId:0x0100805E…* -SiteId:{hub}`). Personer bygges fra `RefinableString50/51`, siden bruker-ID fra huben ikke finnes. |
 | **PortfolioAggregation `fetchProjectsByDataSource`** | OData-filteret kan ikke oversettes automatisk. Skjermede prosjekter hentes med datakildens KQL (`GtSearchQuery`) når den er fylt ut. Begrensningen dokumenteres. |
@@ -183,9 +183,9 @@ Tillegget er en sp-js-provisioning-fil i hubbiblioteket Prosjekttillegg (`Skjerm
   - Standardraden for Porteføljeinnsyn med omfanget *Skjermede lister* legges inn **bare hvis den mangler**. DataRows i Tillatelseskonfigurasjon bruker `GtSPGroupName` som nøkkel med `Overwrite`. En kunde som allerede har en rad for Porteføljeinnsyn, ville ellers fått den overskrevet. Bruk mønsteret i `PostInstallUpgrade.ps1`.
   - Tillegget «Skjerming» lastes opp til Prosjekttillegg.
   - Søkekonfigurasjonen får koblingen for site-ID-ene til underprosjektene (11).
-- **Oppgradering av skjermede områder:** Endringer i statusinnholdstypen i senere versjoner må også inn i tillegget og i et delskript under `UpgradeAllSitesToLatest/` som bare kjører på skjermede områder. Følg strukturen fra 1.15.
+- **Oppgradering av skjermede områder:** 1.16.0 har ingen skjermede områder å oppgradere og får ikke noe delskript. Listene bygges fra hubens innholdstyper når prosjektet settes opp, og «Kjør oppsettveiviser» legger til det som har kommet til siden. En senere versjon som endrer innholdstypene for status, arkivlogg eller prosjekt, må ta med hvordan skjermede områder får endringen (17, punkt 2).
 - **Innsynsgruppen** er et øyeblikksbilde fra oppsettet. SitePermissions hopper over grupper som er tomme på huben, så Porteføljeinnsyn må ha medlemmer når prosjektet opprettes.
-- **PP-assistenten** skriver `GtAi*`-feltene i Prosjektstatus. Den oppdateres til å skrive til prosjektområdet for skjermede prosjekter og avgjør skjerming på samme måte som i 8.
+- **PP-assistenten** skriver `GtAi*`-feltene i Prosjektstatus. Den oppdateres til å skrive til prosjektområdet for skjermede prosjekter og avgjør skjerming på samme måte som i 8. Feltene ligger på hubens liste, utenfor statusinnholdstypen, så oppsettet legger hublistens egne kolonner på den lokale statuslisten (17, punkt 4).
 - **Lokalisering:** nye meldinger og kolonnenavn legges i alle tre lokaliseringsfilene og i resx-filene for malene.
 - **Dokumentasjon:** release notes, CHANGELOG, `.development-guide` og wikitekst. Release notes skal si at migrering ikke er inkludert, at skjerming ikke kan fjernes, og at tilgangene i #1805 til Prosjektstatus, Prosjektstatusvedlegg og Tidslinjeinnhold ikke trengs for skjermede prosjekter.
 
@@ -230,3 +230,25 @@ Tillegget er en sp-js-provisioning-fil i hubbiblioteket Prosjekttillegg (`Skjerm
 5. Prosjekttidslinjen på et skjermet prosjekt viser prosjektperioden uten feil, og det går ikke å legge til elementer.
 6. Vanlige prosjekter på samme hub oppfører seg som før.
 7. Kan ikke skjermingen avgjøres, skrives ingen prosjektdata, og brukeren får en melding.
+
+## 17. Avgjørelser fra gjennomgangen 25. november 2026
+
+Gjennomgangen tok de åpne punktene i saken og funnene fra kartleggingen av grenen. Punktene har samme nummer som i gjennomgangen.
+
+| # | Tema | Avgjørelse |
+|---|---|---|
+| 1 | Sammenslått visning over flere huber | Et skjermet prosjekt fra en annen hub viser ikke status, som de andre radene fra den huben. Statuskolonnen tegner en rapport med seksjonene til huben webdelen står på, og de er ikke nødvendigvis den andre hubens. |
+| 2 | Oppgradering av skjermede områder | Ikke noe delskript i 1.16.0. «Kjør oppsettveiviser» dokumenteres som måten å oppdatere et skjermet prosjekt på. Selvreparering i statuswebdelen er foreslått som egen sak, og er ikke avgjort. |
+| 3 | Søkekonfigurasjon for `GtChildProjects` | Venter på prøving i tenant: et skjermet program med ett underprosjekt. Svikter søket, letes det først etter en løsning uten nytt felt. |
+| 4 | PP-assistenten | Støtten for skjermede prosjekter tas i denne runden, ikke som egen sak: assistenten skal kunne brukes i et skjermet prosjekt og finne informasjon om dem. Den leser med brukerens egne rettigheter. Oppsettet legger hublistens egne kolonner, `GtAi*`, på den lokale statuslisten. |
+| 5 | Utviklerguide og wikitekst | Skrives etter rettelsene og prøvingen i tenant. |
+| 6 | Integrasjonstest | Før merge: struktur og tilganger, ingen hubrader, datalaget og søk, mot et skjermet testprosjekt reservert for testen. |
+| 7 | e2e | Før merge: statusutkast, prosjektinformasjon, prosjekttidslinje og porteføljen, mot et eget skjermet testprosjekt. Hvem som ikke ser prosjektet, og oppsettet av et skjermet prosjekt, prøves for hånd. |
+| 8 | Program | Programmets prosjektliste, tidslinje og aggregeringer tar med skjermede prosjekter, lest fra prosjektets eget område. Det gjelder også programmets egen rad når programmet er skjermet. |
+| 9 | Et eksisterende prosjekt som får tillegget | Oppsettet flytter og sletter ingenting. Det forteller hva som blir liggende på huben, med lenker til listene og følgen av å la det ligge: der tillegget velges, og igjen når oppsettet er ferdig. Oppføringen i Prosjekter må fjernes for at porteføljen skal vise prosjektet riktig. Porteføljen får ingen egen regel for dette, og det lages ingen nye felt. |
+| 10 | Enhetstester | Etter risiko: reglene som verner selve skjermingen. Feltkopieringen og søkespørringene festes av integrasjonstesten. |
+| 11 | Statusfeltene på et skjermet prosjekt | Leses fra statuslistens egen kopi av innholdstypen. Innholdstypen på prosjektområdet opprettes uten felt, så redigeringspanelet fikk bare tittelen. Funnet er lest fra koden og må bekreftes i tenant. |
+
+**Nye felt:** Løsninger uten nye felt foretrekkes. Skjerming avgjøres fortsatt av at prosjektområdet har sin egen statusliste, og `ShieldedProject` i `TemplateParameters` er bare til informasjon.
+
+**Ikke prøvd ennå:** Ingenting av løsningen er kjørt i en tenant per 25. november 2026. Arbeidsantakelsene i avsnitt 13 og akseptansekriteriene i avsnitt 16 står derfor ubekreftet.
