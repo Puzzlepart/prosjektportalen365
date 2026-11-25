@@ -407,6 +407,44 @@ describe.each(ROW_BUILDERS)('%s, for the status report column', (builder) => {
     ])
   })
 
+  it("names the project's own site for a shielded project and for its report, which search finds outside the hub, and none for what lies in the hub", async () => {
+    const hubUrl = 'https://contoso.sharepoint.com/sites/portefolje'
+    const shieldedUrl = 'https://contoso.sharepoint.com/sites/skjermet'
+    // Alfa has an entry and a report in the hub's lists. Beta is shielded: its properties item
+    // and its report are on its own site, whose ID search gives in another form than the item.
+    const projects = [
+      { GtSiteIdOWSTEXT: ALFA, Title: 'Alfa', SiteId: 'hub-1', SPWebUrl: hubUrl },
+      {
+        GtSiteIdOWSTEXT: BETA,
+        Title: 'Beta',
+        SiteId: `{${BETA.toUpperCase()}}`,
+        SPWebUrl: shieldedUrl
+      }
+    ]
+    const reports = [
+      { GtSiteIdOWSTEXT: ALFA, ListItemId: '12', SiteId: '{HUB-1}', SPWebUrl: hubUrl },
+      { GtSiteIdOWSTEXT: BETA, ListItemId: '3', SiteId: BETA, SPWebUrl: shieldedUrl }
+    ]
+    const { adapter } = adapterOnHub()
+    jest.spyOn(adapter as any, '_fetchDataForView').mockResolvedValue({
+      projects,
+      sites: projects.map(({ GtSiteIdOWSTEXT, Title }) => ({ SiteId: GtSiteIdOWSTEXT, Title })),
+      statusReportsBySite: groupLatestReportBySeries(reports),
+      managedProperties: []
+    })
+    const { items } = await adapter[builder]({} as any, {} as any, 'hub-1')
+    expect(items.map((item) => [item.Title, item.StatusReportId, item.StatusReportWebUrl])).toEqual(
+      [
+        ['Alfa', 12, undefined],
+        ['Beta', 3, shieldedUrl]
+      ]
+    )
+    // The insight group's rows also name where the information panel reads the project from.
+    if (builder === 'fetchDataForManagerView') {
+      expect(items.map((item) => item.ProjectWebUrl)).toEqual([undefined, shieldedUrl])
+    }
+  })
+
   it("keeps the report's id over a project property of the same name", async () => {
     // The id is set after the row's spreads, so the project can neither overwrite it nor give one.
     const projects = PROJECTS.map((project) => ({ ...project, StatusReportId: 99 }))
