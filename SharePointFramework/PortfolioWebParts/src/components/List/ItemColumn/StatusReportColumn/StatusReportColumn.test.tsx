@@ -909,7 +909,6 @@ describe('fetchData', () => {
       { StatusReportId: 3, StatusReportWebUrl: siteB }
     ]
     const data = await fetchData(standInWeb(LISTS, hubQueries) as any, undefined, rows)
-    warn.mockRestore()
     const filters = (queries: Queries) =>
       queries[resource.Lists_ProjectStatus_Title].map(({ filter }) => filter[0])
     expect(filters(hubQueries)).toEqual(['Id eq 7'])
@@ -922,5 +921,7 @@ describe('fetchData', () => {
     expect('webUrl' in data.reports[0]).toBe(false)
     expect(warn).toHaveBeenCalledTimes(1)
     expect(warn.mock.calls[0][1]).toMatchObject({ webUrl: siteB })
+    // Last: restoring the spy clears the calls it recorded.
+    warn.mockRestore()
   })
 })
