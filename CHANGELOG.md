@@ -11,6 +11,8 @@ Sjekk ut [release notes](./releasenotes/1.15.0.md) for høydepunkter og mer deta
 ### Feilrettinger
 
 - Rettet en feil i oppsettveiviseren hvor oppsettet av et nytt prosjektområde noen ganger stoppet med at listen «Project Extensions» ikke finnes på huben. Feilen kom når siden ble vist på et annet språk enn områdets. Oppsettet sjekker nå språket før det starter, laster siden på nytt én gang om nødvendig, og sier fra med en egen melding hvis siden fortsatt er på et annet språk [#1808](https://github.com/Puzzlepart/prosjektportalen365/pull/1808)
+- Rettet en feil i oppsettveiviseren hvor et norsk område knyttet til en engelsk hub ikke ble avvist, og oppsettet stoppet med at listen «Prosjekttillegg» ikke finnes på huben. Området får nå meldingen om at språket må være det samme som på hubområdet, og meldingen sier ikke lenger at området må være norsk [#1808](https://github.com/Puzzlepart/prosjektportalen365/pull/1808)
+- Rettet en feil hvor `Gå til maloppsett` i dialogen «Prosjektet er allerede satt opp» startet oppsettet uten å fjerne alternative språk og uten språksjekken, slik at oppsettet kunne stoppe med at en liste ikke finnes på huben [#1808](https://github.com/Puzzlepart/prosjektportalen365/pull/1808)
 
 ---
 

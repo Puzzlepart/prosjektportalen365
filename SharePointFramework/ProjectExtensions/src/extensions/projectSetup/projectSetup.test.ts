@@ -18,6 +18,8 @@ const hub = {
   /** What the hub's lists fail with when `failFetch` is set */
   fetchError: new Error('Listen finnes ikke'),
   language: 1044,
+  /** What the hub fails a read of its language with, when it is to fail */
+  languageError: undefined as Error,
   updates: [] as any[],
   /** Whether the user can add to the hub's project list; `undefined` makes the check fail. */
   canWrite: true as boolean | undefined,
@@ -32,7 +34,13 @@ jest.mock('pp365-shared-library/lib/telemetry', () => ({
     leaving.push(options?.urgent ? 'urgent flush' : 'flush')
 }))
 class FakePortalDataService {
-  public web = { select: () => () => Promise.resolve({ Language: hub.language }) }
+  public isAvailable = true
+  public web = {
+    select: () => () =>
+      hub.languageError
+        ? Promise.reject(hub.languageError)
+        : Promise.resolve({ Language: hub.language })
+  }
   public configure() {
     return Promise.resolve(Object.assign(this, hub.portal))
   }
@@ -388,6 +396,16 @@ async function setUpWith(template: Record<string, any> = TEMPLATES[0]) {
   await settle()
 }
 
+/** Asks for the setup in the dialog of a project that is set up already, and lets it run. */
+async function setUpAgain() {
+  // What the click starts renders a few microtasks later: one act around both, or React 18 sees
+  // the render outside it.
+  await act(() => {
+    dialogs.error.onSetupClick()
+    return new Promise((resolve) => setTimeout(resolve, 0))
+  })
+}
+
 let consoleError: jest.SpyInstance
 
 beforeEach(() => {
@@ -397,6 +415,7 @@ beforeEach(() => {
   hub.failFetch = false
   hub.fetchError = new Error('Listen finnes ikke')
   hub.language = 1044
+  hub.languageError = undefined
   hub.updates = []
   hub.canWrite = true
   hub.portal = {}
@@ -606,6 +625,40 @@ describe('ProjectSetup', () => {
     expect(removal.deleteCustomizer).toHaveBeenCalledTimes(removed ? 1 : 0)
   })
 
+  it('refuses a Norwegian site on an English hub, as it does the reverse', async () => {
+    hub.language = 1033
+    await projectSetup()
+    expect(dialogs.error.error.message).toBe(strings.InvalidLanguageErrorMessage)
+    // The hub decides the language: the text names none.
+    expect(dialogs.error.error.stack).not.toMatch(/norsk|norwegian/i)
+    expect(dialogs.setup).toBeUndefined()
+    expect(removal.deleteCustomizer).toHaveBeenCalledTimes(1)
+  })
+
+  it.each([
+    [
+      'cannot be read',
+      () => {
+        hub.languageError = new Error('Access denied')
+      }
+    ],
+    [
+      'is that of a hub out of reach',
+      () => {
+        hub.portal = { isAvailable: false }
+      }
+    ]
+  ])(
+    'compares no language, and sets up as usual, when the language of the hub %s',
+    async (_, arrange) => {
+      hub.language = 1033
+      arrange()
+      await projectSetup()
+      expect(dialogs.error).toBeUndefined()
+      expect(dialogs.setup.validation).toBe(ProjectSetupValidation.Ready)
+    }
+  )
+
   it('warns, rather than fails, about a missing hub', async () => {
     await projectSetup({ legacy: { hubSiteId: '' } })
     expect(dialogs.error.intent).toBe('warning')
@@ -627,11 +680,51 @@ describe('ProjectSetup', () => {
   it('offers the setup again, or the project, on a project that is set up already', async () => {
     await projectSetup({ web: { WelcomePage: 'SitePages/Prosjektforside.aspx' } })
     expect(dialogs.error.error.name).toBe('AlreadySetup')
-    await act(() => {
-      dialogs.error.onSetupClick()
-    })
-    await settle()
+    await setUpAgain()
     expect(dialogs.setup).toBeDefined()
+    // No page follows this one: the session keeps nothing of the choice.
+    expect(sessionStorage.getItem('pp_skipAlreadySetupCheck')).toBeNull()
+  })
+
+  it("carries a setup asked for on a project that is set up already over the reloads into the site's language", async () => {
+    const project = { WelcomePage: 'SitePages/Prosjektforside.aspx' }
+    const { calls } = await projectSetup({
+      web: { ...project, IsMultilingual: true },
+      uiCulture: 'en-US'
+    })
+    await setUpAgain()
+    // The alternative languages go first, and the setup starts on no page that leaves.
+    expect(calls.webUpdates).toEqual([{ IsMultilingual: false }])
+    expect(leaving).toEqual(['navigation'])
+    expect(dialogs.setup).toBeUndefined()
+    expect(sessionStorage.getItem('pp_skipAlreadySetupCheck')).toBe('true')
+    // The page that comes back is still in the other language: it reloads, and asks nothing again.
+    delete dialogs.error
+    await projectSetup({ web: project, uiCulture: 'en-US' })
+    expect(leaving).toEqual(['navigation', 'navigation'])
+    expect(dialogs.error).toBeUndefined()
+    expect(dialogs.setup).toBeUndefined()
+    expect(sessionStorage.getItem('pp_skipAlreadySetupCheck')).toBe('true')
+    // In the site's language the setup starts, and the session keeps nothing of the choice.
+    await projectSetup({ web: project })
+    expect(dialogs.error).toBeUndefined()
+    expect(dialogs.setup.data.templates).toHaveLength(TEMPLATES.length)
+    expect(sessionStorage.getItem('pp_skipAlreadySetupCheck')).toBeNull()
+  })
+
+  it('says why a setup asked for on a project that is set up already cannot start on a page in another language', async () => {
+    // The one reload into the site's language is spent.
+    sessionStorage.setItem('pp_languageReload_site-2', 'true')
+    await projectSetup({
+      web: { WelcomePage: 'SitePages/Prosjektforside.aspx' },
+      uiCulture: 'en-US'
+    })
+    expect(dialogs.error.error.name).toBe('AlreadySetup')
+    await setUpAgain()
+    expect(dialogs.error.error.message).toBe(strings.InvalidPageLanguageErrorMessage)
+    expect(leaving).toEqual([])
+    expect(dialogs.setup).toBeUndefined()
+    expect(sessionStorage.getItem('pp_skipAlreadySetupCheck')).toBeNull()
   })
 
   it('removes itself when the user goes on to a project that is set up already', async () => {

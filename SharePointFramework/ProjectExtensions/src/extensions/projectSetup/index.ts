@@ -47,7 +47,7 @@ import {
 } from '../../components'
 import { ITaskProgress } from '../../components/ProgressDialog/types'
 import { ProjectSetupError } from './ProjectSetupError'
-import { NAVIGATION_NODES_STORAGE_KEY } from './constants'
+import { NAVIGATION_NODES_STORAGE_KEY, SKIP_ALREADY_SETUP_KEY } from './constants'
 import { deleteCustomizer } from './deleteCustomizer'
 import { isAddedBefore } from './listContentRecord'
 import { siteTypeAfterSetup, trackSetupCheckFailure, trackSetupStopped } from './setupTelemetry'
@@ -88,6 +88,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     try {
       this._isSetup = await this._isProjectSetup()
       this._validation = await this._validateProjectSetup()
+      // Whether the session says the user asked for the setup of a project that is set up already.
+      let setUpAgain = false
 
       switch (this._validation) {
         case ProjectSetupValidation.NotSiteAdmin: {
@@ -138,9 +140,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           )
         }
         case ProjectSetupValidation.AlreadySetup: {
-          const skipViaSession = sessionStorage.getItem('pp_skipAlreadySetupCheck') === 'true'
+          const skipViaSession = sessionStorage.getItem(SKIP_ALREADY_SETUP_KEY) === 'true'
           if (skipViaSession) {
-            sessionStorage.removeItem('pp_skipAlreadySetupCheck')
+            sessionStorage.removeItem(SKIP_ALREADY_SETUP_KEY)
           }
           Logger.write(
             `(ProjectSetup) AlreadySetup check: forceTemplate='${this.properties.forceTemplate}', skipAlreadySetupCheck=${this.properties.skipAlreadySetupCheck}, skipViaSession=${skipViaSession}`,
@@ -157,25 +159,44 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
               strings.ProjectAlreadySetupStack
             )
           }
+          setUpAgain = skipViaSession
         }
       }
 
-      // A reload is under way: the setup starts on the page that comes back.
-      if (await this._removeAlternativeLanguages()) return
-      if (this._reloadIntoSiteLanguage()) return
-
-      void this._initializeSetup({
-        sp: this.sp,
-        web: this.sp.web,
-        webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
-        templateExcludeHandlers: ['Hooks'],
-        context: this.context,
-        properties: this.properties
-      })
+      await this._startInSiteLanguage(setUpAgain)
     } catch (error) {
       trackSetupCheckFailure(error)
       this._renderErrorDialog({ error, showStackAsSubText: true })
     }
+  }
+
+  /**
+   * Starts the setup on a page whose strings are in the site's language. A page that is not
+   * there yet reloads instead (the alternative languages are removed first, when the site has
+   * them), and the setup starts on the page that comes back.
+   *
+   * @param setUpAgain Whether the user asked for the setup of a project that is set up already,
+   * on this page or on the one that reloaded into it. The session tells the page a reload comes
+   * back to, which would ask again, and keeps nothing of it when no page follows.
+   */
+  private async _startInSiteLanguage(setUpAgain = false): Promise<void> {
+    if (setUpAgain) sessionStorage.setItem(SKIP_ALREADY_SETUP_KEY, 'true')
+    let isReloading = false
+    try {
+      isReloading = (await this._removeAlternativeLanguages()) || this._reloadIntoSiteLanguage()
+    } finally {
+      if (setUpAgain && !isReloading) sessionStorage.removeItem(SKIP_ALREADY_SETUP_KEY)
+    }
+    if (isReloading) return
+
+    void this._initializeSetup({
+      sp: this.sp,
+      web: this.sp.web,
+      webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
+      templateExcludeHandlers: ['Hooks'],
+      context: this.context,
+      properties: this.properties
+    })
   }
 
   /**
@@ -551,15 +572,11 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       },
       intent: props.error['messageType'],
       onSetupClick: () => {
-        void this._initializeSetup({
-          sp: this.sp,
-          web: this.sp.web,
-          webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
-          templateExcludeHandlers: ['Hooks'],
-          context: this.context,
-          properties: this.properties
-        })
         this._unmount(placeholder)
+        // The way `onInit` starts it, and with what stops it shown the same way.
+        void this._startInSiteLanguage(true).catch((error) =>
+          this._renderErrorDialog({ error, showStackAsSubText: true })
+        )
       }
     })
     renderReact(element, placeholder)
@@ -864,16 +881,36 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     }
     if (!isSiteAdmin) return ProjectSetupValidation.NotSiteAdmin
     if (!groupId) return ProjectSetupValidation.NoGroupId
-    if (this.context.pageContext.web.language !== 1044) {
-      const { Language } = await this._portalDataService.web.select('Language')()
-      if (Language !== this.context.pageContext.web.language) {
-        return ProjectSetupValidation.InvalidWebLanguage
-      }
+    const hubLanguage = await this._getHubLanguage()
+    if (hubLanguage !== undefined && hubLanguage !== this.context.pageContext.web.language) {
+      return ProjectSetupValidation.InvalidWebLanguage
     }
     if (!hubSiteId) return ProjectSetupValidation.NoHubConnection
     if (siteId.includes(hubSiteId)) return ProjectSetupValidation.IsHubSite
     if (this._isSetup) return ProjectSetupValidation.AlreadySetup
     return ProjectSetupValidation.Ready
+  }
+
+  /**
+   * Reads the language of the hub, which the site must share whatever the language is: the setup
+   * finds the hub's lists by their titles in the language of the site.
+   *
+   * @returns `undefined` when the hub is out of reach or does not answer, so the setup compares
+   * nothing and goes on
+   */
+  private async _getHubLanguage(): Promise<number | undefined> {
+    // Out of reach, the service's web is the site's own.
+    if (!this._portalDataService.isAvailable) return undefined
+    try {
+      const { Language } = await this._portalDataService.web.select('Language')()
+      return Language
+    } catch (error) {
+      Logger.write(
+        `(ProjectSetup) Could not read the language of the hub: ${error?.message}`,
+        LogLevel.Warning
+      )
+      return undefined
+    }
   }
 
   private _unmount(container: HTMLElement): void {
