@@ -6,8 +6,11 @@
 // `dialogs`. Usage statistics are the real ones, counting in the window's memory, but for their
 // flush, which `leaving` records with the navigation that follows it.
 ;(globalThis as any).DEBUG = false
-/** The project site's PnPjs instance, and the menu URLs SharePoint refuses (their target is gone). */
-const site: { sp?: any; refusedUrls: string[] } = { refusedUrls: [] }
+/**
+ * The project site's PnPjs instance, the menu URLs SharePoint refuses (their target is gone), and
+ * what SharePoint fails an update of the site with, when it is to fail.
+ */
+const site: { sp?: any; refusedUrls: string[]; updateError?: Error } = { refusedUrls: [] }
 const hub = {
   templates: [] as any[],
   lists: {} as Record<string, any[]>,
@@ -233,7 +236,7 @@ function fakeSite(web: Record<string, any> = {}, quickLaunch: IFakeNode[] = []) 
       rootFolder: { select: () => query(() => ({ WelcomePage: info.WelcomePage })) },
       update: (properties: any) => {
         calls.webUpdates.push(properties)
-        return Promise.resolve()
+        return site.updateError ? Promise.reject(site.updateError) : Promise.resolve()
       },
       lists: { getByTitle: () => ({ items }) },
       navigation: { quicklaunch }
@@ -308,6 +311,9 @@ const COUNTED = {
   legacy: { aadTenantId: TENANT_ID, hubSiteId: HUB_SITE_ID, siteId: `{${PROJECT_SITE_ID}}` }
 }
 
+/** The UI culture SharePoint shows a site of each language in, once it has no other languages. */
+const UI_CULTURES: Record<number, string> = { 1033: 'en-US', 1044: 'nb-NO' }
+
 /** The customizer's alias in its manifest, which usage statistics count it by. */
 const { alias: ALIAS } = JSON.parse(
   fs.readFileSync(
@@ -336,7 +342,7 @@ async function projectSetup({
   web?: Record<string, any>
   legacy?: Record<string, any>
   language?: number
-  /** The page's UI culture, which SPFx loads the strings for; none says nothing, as before */
+  /** The page's UI culture, which SPFx loads the strings for; the site's own unless given */
   uiCulture?: string
   properties?: Record<string, any>
   quickLaunch?: IFakeNode[]
@@ -360,7 +366,7 @@ async function projectSetup({
       web: { absoluteUrl: PROJECT, language, title: 'Frisbeegolfbane' },
       site: { id: { toString: () => siteId } },
       user: { email: USER },
-      cultureInfo: uiCulture ? { currentUICultureName: uiCulture } : undefined
+      cultureInfo: { currentUICultureName: uiCulture ?? UI_CULTURES[language] }
     }
   }
   ;(customizer as any).properties = properties
@@ -395,6 +401,7 @@ beforeEach(() => {
   hub.canWrite = true
   hub.portal = {}
   site.refusedUrls = []
+  site.updateError = undefined
   graph.members = [{ mail: USER }]
   graph.error = undefined
   run.tasks = [task('PreTask'), task('SitePermissions'), task('ApplyTemplate')]
@@ -1023,6 +1030,33 @@ describe('ProjectSetup', () => {
     await projectSetup({ uiCulture: 'nb-NO' })
     expect(dialogs.setup.data.templates).toHaveLength(TEMPLATES.length)
     expect(sessionStorage.getItem('pp_languageReload_site-2')).toBeNull()
+  })
+
+  it('sets up an English site on a page in a language the solution has no strings for, where SPFx loads the English ones', async () => {
+    hub.language = 1033
+    await projectSetup({ language: 1033, uiCulture: 'sv-SE' })
+    expect(leaving).toEqual([])
+    expect(dialogs.error).toBeUndefined()
+    expect(dialogs.setup.data.templates).toHaveLength(TEMPLATES.length)
+  })
+
+  it('reloads a Norwegian site on a page in a language the solution has no strings for', async () => {
+    hub.failFetch = true
+    await projectSetup({ uiCulture: 'sv-SE' })
+    expect(leaving).toEqual(['navigation'])
+    expect(dialogs.error).toBeUndefined()
+    expect(dialogs.setup).toBeUndefined()
+  })
+
+  it('reloads, and starts no setup, when the alternative languages cannot be removed and the page is in one of them', async () => {
+    hub.failFetch = true
+    site.updateError = new Error('Access denied')
+    const { calls } = await projectSetup({ web: { IsMultilingual: true }, uiCulture: 'en-US' })
+    expect(calls.webUpdates).toEqual([{ IsMultilingual: false }])
+    expect(sessionStorage.getItem('pp_languagesRemoved_site-2')).toBeNull()
+    expect(leaving).toEqual(['navigation'])
+    expect(dialogs.error).toBeUndefined()
+    expect(dialogs.setup).toBeUndefined()
   })
 
   it('logs the language change on the first load after it', async () => {

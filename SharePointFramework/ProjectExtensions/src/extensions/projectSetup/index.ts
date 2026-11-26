@@ -918,6 +918,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    * languages are removed), and the hub then answers that «Project Extensions» does not exist.
    * One reload is tried; a page still in another language gets an error that says so.
    *
+   * The language of the strings is compared, not the page's: for a UI language the solution has
+   * no strings for, SPFx loads the English ones, and an English site sets up with those.
+   *
    * @returns Whether the page is reloading, and the setup must not start
    */
   private _reloadIntoSiteLanguage(): boolean {
@@ -925,12 +928,16 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     const reloadedKey = `pp_languageReload_${site.id.toString()}`
     const siteLocale = supportedLocalesMap.get(web.language)
     const pageLocale = cultureInfo?.currentUICultureName?.toLowerCase()
-    if (!siteLocale || !pageLocale || pageLocale === siteLocale) {
+    // The manifest's `defaultPath` is the English file: SPFx takes it for every other language.
+    const stringsLocale = Array.from(supportedLocalesMap.values()).includes(pageLocale)
+      ? pageLocale
+      : 'en-us'
+    if (!siteLocale || !pageLocale || stringsLocale === siteLocale) {
       sessionStorage.removeItem(reloadedKey)
       return false
     }
     Logger.write(
-      `(ProjectSetup) The page is in ${pageLocale}, the site in ${siteLocale}.`,
+      `(ProjectSetup) The page is in ${pageLocale} with strings in ${stringsLocale}, the site in ${siteLocale}.`,
       LogLevel.Warning
     )
     if (sessionStorage.getItem(reloadedKey) === 'true') {
