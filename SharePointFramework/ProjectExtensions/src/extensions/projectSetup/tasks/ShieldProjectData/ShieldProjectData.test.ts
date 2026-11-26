@@ -117,6 +117,9 @@ describe('ShieldProjectData', () => {
       [resource.Lists_ProjectStatusAttachments_Title, 101],
       [resource.Lists_ProjectStatus_Title, 100]
     ])
+    // Search leaves hidden lists out, and the portfolio finds the properties and the status
+    // reports by search: those two are visible, the other two hidden, as on the hub.
+    expect(service.lists.map(({ hidden }) => hidden ?? true)).toEqual([false, true, true, false])
     // The template's own content types, the hub's for the archive log, none for the library.
     expect(service.lists.map(({ contentTypeId }) => contentTypeId)).toEqual([
       TEMPLATE_PROJECT,

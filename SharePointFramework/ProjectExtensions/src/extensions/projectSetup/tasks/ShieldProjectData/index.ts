@@ -103,10 +103,13 @@ export class ShieldProjectData extends BaseTask {
     readerGroupNames: string[],
     progressFunc: (field: string) => void
   ): Promise<void> {
+    // The portfolio finds a shielded project's properties and status reports by search, which
+    // leaves hidden lists out: those two lists are visible, as the hub's lists for them are.
     const properties = await service.ensureList({
       listName: resource.Lists_ProjectProperties_Title,
       template: 100,
       contentTypeId: parameters.ProjectContentTypeId,
+      hidden: false,
       readerGroupNames,
       progressFunc
     })
@@ -136,6 +139,7 @@ export class ShieldProjectData extends BaseTask {
       listName: resource.Lists_ProjectStatus_Title,
       template: 100,
       contentTypeId: parameters.ProjectStatusContentTypeId || STATUS_REPORT_CONTENT_TYPE_ID,
+      hidden: false,
       // The hub's list has columns outside the content type, which PP-assistenten writes its
       // analysis of a report to.
       includeHubListFields: true,

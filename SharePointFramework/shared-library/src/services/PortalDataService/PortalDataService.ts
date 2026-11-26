@@ -54,6 +54,7 @@ import {
   isBuiltOnContentType,
   isListContentTypeOf
 } from '../ShieldedProjectService/contentTypeLineage'
+import { getProjectPropertiesListSettings } from './projectPropertiesList'
 import { resolveHubUrl } from './resolveHubUrl'
 import {
   GetStatusReportsOptions,
@@ -874,14 +875,13 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     const fieldsAdded: SPField[] = []
     const web = spfi(params.url).using(AssignFrom(this._sp.web)).web
     const { jsomContext } = await initJsom(params.url, { loadTaxonomy: true })
+    const { enableContentTypes, settings } = getProjectPropertiesListSettings(
+      this.isShieldedProject
+    )
     const [hubContentType, targetSiteFields, ensureList] = await Promise.all([
       this._getContentType(params.contentTypeId),
       this._getSiteFields(web),
-      web.lists.ensure(params.listName, '', 100, false, {
-        Hidden: true,
-        EnableAttachments: false,
-        EnableVersioning: true
-      })
+      web.lists.ensure(params.listName, '', 100, enableContentTypes, settings)
     ])
     const listFields = await this.getListFields(params.listName, undefined, web)
     const spList = jsomContext.web.get_lists().getByTitle(params.listName)

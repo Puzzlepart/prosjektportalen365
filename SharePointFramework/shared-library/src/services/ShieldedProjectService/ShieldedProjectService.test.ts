@@ -243,6 +243,14 @@ describe('ShieldedProjectService', () => {
       expect(result.listContentTypeId).toBeUndefined()
     })
 
+    it('leaves a list the portfolio searches visible, since search leaves hidden lists out, and hides it again for no one', async () => {
+      const { service, did } = sites({ created: false })
+      await service.ensureList({ listName: 'Prosjektstatusvedlegg', template: 101, hidden: false })
+      expect(did.ensured).toEqual([
+        ['Prosjektstatusvedlegg', '', 101, false, { Hidden: false, EnableVersioning: true }]
+      ])
+    })
+
     it('leaves the access of a list alone when no group is to read it', async () => {
       const { service, did } = sites()
       await service.ensureList({ listName: 'Prosjektstatusvedlegg', template: 101 })

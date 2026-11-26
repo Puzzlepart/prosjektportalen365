@@ -18,6 +18,14 @@ export type EnsureProjectDataListParams = {
   contentTypeId?: string
 
   /**
+   * Whether the list is hidden: by default it is, as the hub's lists for the archive log and the
+   * status reports' attachments are. Search leaves the items of a hidden list out, so the lists
+   * the portfolio finds a shielded project's data in by search are not hidden: the project
+   * properties and the status reports, as the hub's lists for them are not.
+   */
+  hidden?: boolean
+
+  /**
    * Whether the list also gets the fields the hub list has outside its content type: columns of
    * the list itself, such as those PP-assistenten writes its analysis of a status report to.
    */

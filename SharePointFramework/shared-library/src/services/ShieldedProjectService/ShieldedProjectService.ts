@@ -62,7 +62,7 @@ export class ShieldedProjectService {
       params.template,
       !!params.contentTypeId,
       {
-        Hidden: true,
+        Hidden: params.hidden ?? true,
         EnableVersioning: true,
         ...(params.template === 100 ? { EnableAttachments: false } : {})
       }
