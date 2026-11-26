@@ -1,13 +1,17 @@
 // jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
 // Babel, so mocks are not hoisted. The service that builds the lists is a stand-in that records
-// what it is asked for, in order, and fails on the list named in `service.failOn`; the hub is the
-// web the data adapter hands it.
+// what it is asked for, in order, fails on the list named in `service.failOn`, and logs
+// `service.warning` as the real one logs what it goes on without; the hub is the web the data
+// adapter hands it. `@pnp/logging` gets a working `Logger`, which the service and the setup share
+// on a page.
+jest.mock('@pnp/logging', () => jest.requireActual('../testFixtures').fakeLogging())
 const HUB_WEB = { hub: true }
 const service = {
   made: [] as any[][],
   lists: [] as Record<string, any>[],
   itemsContentType: [] as any[][],
-  failOn: undefined as string | undefined
+  failOn: undefined as string | undefined,
+  warning: undefined as string | undefined
 }
 class FakeShieldedProjectService {
   constructor(...args: any[]) {
@@ -15,6 +19,7 @@ class FakeShieldedProjectService {
   }
   public ensureList(params: Record<string, any>) {
     if (params.listName === service.failOn) return Promise.reject(new Error('Tilgang nektet'))
+    if (service.warning) jest.requireMock('@pnp/logging').Logger.write(service.warning, 2)
     service.lists.push(params)
     return Promise.resolve({
       list: {},
@@ -86,6 +91,7 @@ beforeEach(() => {
   service.lists = []
   service.itemsContentType = []
   service.failOn = undefined
+  service.warning = undefined
 })
 
 describe('ShieldProjectData', () => {
@@ -205,5 +211,26 @@ describe('ShieldProjectData', () => {
       expect.stringContaining('Fremdrift'),
       'LockClosed'
     )
+  })
+
+  it("puts what the service goes on without in the advanced log, without the service's prefix", async () => {
+    const { params } = taskParams()
+    const onProgress = jest.fn()
+    service.warning =
+      '(ShieldedProjectService) (_ensureFields) Could not add the field [GtStatusTime] to [Prosjektstatus]: Feltet finnes ikke'
+    await new ShieldProjectData(shielded()).execute(params, onProgress)
+    const logged = onProgress.mock.calls.filter(([, , , entry]) => entry)
+    // Once per list: the stand-in warns of the same field each time it is asked for a list.
+    expect(logged).toHaveLength(4)
+    expect(logged[0]).toEqual([
+      strings.ShieldProjectDataText,
+      strings.ShieldProjectDataSubText,
+      'LockClosed',
+      {
+        message:
+          '(_ensureFields) Could not add the field [GtStatusTime] to [Prosjektstatus]: Feltet finnes ikke',
+        level: 'warning'
+      }
+    ])
   })
 })

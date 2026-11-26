@@ -3,8 +3,8 @@ import * as strings from 'ProjectExtensionsStrings'
 import resource from 'SharedResources'
 import SPDataAdapter from 'data/SPDataAdapter'
 import { IProjectSetupData } from 'extensions/projectSetup'
-import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
-import { OnProgressCallbackFunction } from '../types'
+import { BaseTask, BaseTaskError, IBaseTaskParams, captureEngineLog } from '../@BaseTask'
+import { ILogEntry, OnProgressCallbackFunction } from '../types'
 
 /**
  * The content types of the hub's status reports and archive log entries, when the template names
@@ -12,6 +12,9 @@ import { OnProgressCallbackFunction } from '../types'
  */
 const STATUS_REPORT_CONTENT_TYPE_ID = '0x010022252E35737A413FB56A1BA53862F6D5'
 const ARCHIVE_LOG_CONTENT_TYPE_ID = '0x0100D9254F0E5237494285C0BB7BEA0A754A'
+
+/** The prefix of the service's log lines, left out of the lines in the advanced log. */
+const LOG_PREFIX = '(ShieldedProjectService)'
 
 /**
  * Sets up a shielded project: the lists it keeps its project data in on its own site, instead of
@@ -51,61 +54,94 @@ export class ShieldProjectData extends BaseTask {
         params.web,
         params.webAbsoluteUrl
       )
-      const progressFunc = (field: string) =>
-        this.onProgress(
+      let progress: [string, string, string] = [
+        strings.ShieldProjectDataText,
+        strings.ShieldProjectDataSubText,
+        'LockClosed'
+      ]
+      const progressFunc = (field: string) => {
+        progress = [
           strings.ShieldProjectDataText,
           format(strings.ShieldProjectDataFieldText, field),
           'LockClosed'
-        )
-      this.onProgress(strings.ShieldProjectDataText, strings.ShieldProjectDataSubText, 'LockClosed')
+        ]
+        this.onProgress(...progress)
+      }
+      this.onProgress(...progress)
       this.logInformation('Setting up the lists for project data on the project site', {
         readerGroupNames
       })
 
-      const properties = await service.ensureList({
-        listName: resource.Lists_ProjectProperties_Title,
-        template: 100,
-        contentTypeId: parameters.ProjectContentTypeId,
-        readerGroupNames,
-        progressFunc
-      })
-      if (properties.listContentTypeId) {
-        await service.setItemsContentType(
-          resource.Lists_ProjectProperties_Title,
-          properties.listContentTypeId,
-          {
-            GtSiteId: params.context.pageContext.site.id.toString(),
-            GtSiteUrl: params.webAbsoluteUrl,
-            GtGroupId: params.context.pageContext.legacyPageContext.groupId
-          }
-        )
-      }
-      await service.ensureList({
-        listName: resource.Lists_ArchiveLog_Title,
-        template: 100,
-        contentTypeId: ARCHIVE_LOG_CONTENT_TYPE_ID,
-        readerGroupNames
-      })
-      await service.ensureList({
-        listName: resource.Lists_ProjectStatusAttachments_Title,
-        template: 101,
-        readerGroupNames
-      })
-      await service.ensureList({
-        listName: resource.Lists_ProjectStatus_Title,
-        template: 100,
-        contentTypeId: parameters.ProjectStatusContentTypeId || STATUS_REPORT_CONTENT_TYPE_ID,
-        // The hub's list has columns outside the content type, which PP-assistenten writes its
-        // analysis of a report to.
-        includeHubListFields: true,
-        readerGroupNames,
-        progressFunc
-      })
+      // The service goes on without a field or a group it cannot add, and logs a warning: the
+      // advanced log then says what the lists did not get.
+      await captureEngineLog(
+        () => this._ensureLists(service, params, parameters, readerGroupNames, progressFunc),
+        (entry: ILogEntry) => this.onProgress(...progress, entry),
+        LOG_PREFIX
+      )
       await this._markTemplateParameters(params)
       return params
     } catch (error) {
       throw new BaseTaskError(this.taskName, strings.ShieldProjectDataErrorMessage, error)
     }
+  }
+
+  /**
+   * Ensures the four lists, the status report list last, and gives the properties item the
+   * project content type with the site's ID, URL and group.
+   *
+   * @param service The service that builds the lists
+   * @param params Task parameters
+   * @param parameters The template's parameters
+   * @param readerGroupNames The groups for insight into shielded projects
+   * @param progressFunc Tells of each field as it is added
+   */
+  private async _ensureLists(
+    service: ShieldedProjectService,
+    params: IBaseTaskParams,
+    parameters: Record<string, string>,
+    readerGroupNames: string[],
+    progressFunc: (field: string) => void
+  ): Promise<void> {
+    const properties = await service.ensureList({
+      listName: resource.Lists_ProjectProperties_Title,
+      template: 100,
+      contentTypeId: parameters.ProjectContentTypeId,
+      readerGroupNames,
+      progressFunc
+    })
+    if (properties.listContentTypeId) {
+      await service.setItemsContentType(
+        resource.Lists_ProjectProperties_Title,
+        properties.listContentTypeId,
+        {
+          GtSiteId: params.context.pageContext.site.id.toString(),
+          GtSiteUrl: params.webAbsoluteUrl,
+          GtGroupId: params.context.pageContext.legacyPageContext.groupId
+        }
+      )
+    }
+    await service.ensureList({
+      listName: resource.Lists_ArchiveLog_Title,
+      template: 100,
+      contentTypeId: ARCHIVE_LOG_CONTENT_TYPE_ID,
+      readerGroupNames
+    })
+    await service.ensureList({
+      listName: resource.Lists_ProjectStatusAttachments_Title,
+      template: 101,
+      readerGroupNames
+    })
+    await service.ensureList({
+      listName: resource.Lists_ProjectStatus_Title,
+      template: 100,
+      contentTypeId: parameters.ProjectStatusContentTypeId || STATUS_REPORT_CONTENT_TYPE_ID,
+      // The hub's list has columns outside the content type, which PP-assistenten writes its
+      // analysis of a report to.
+      includeHubListFields: true,
+      readerGroupNames,
+      progressFunc
+    })
   }
 
   /**
