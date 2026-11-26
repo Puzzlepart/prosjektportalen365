@@ -1,6 +1,6 @@
 # Skjermede prosjekter – løsningsforslag
 
-**Status:** vedtatt plan, 9. november 2026. Den ble lagt for 1.15 og gjelder nå 1.16.0. Avgjørelsene fra gjennomgangen 25. november 2026 står i avsnitt 17 og går foran det som ellers står her. Forslaget bygger på kartleggingen i `skjermede-prosjekter.md`, på `releases/1.15` og på PR #1805 («Minimum lesetilganger på hub»), som merges før arbeidet starter.
+**Status:** vedtatt plan, 9. november 2026. Den ble lagt for 1.15 og gjelder nå 1.16.0. Avgjørelsene fra gjennomgangen 25. november 2026 står i avsnitt 17 og går foran det som ellers står her. Det første oppsettet i en tenant, 26. november 2026, står i avsnitt 18. Forslaget bygger på kartleggingen i `skjermede-prosjekter.md`, på `releases/1.15` og på PR #1805 («Minimum lesetilganger på hub»), som merges før arbeidet starter.
 
 ## 1. Hva vi lager
 
@@ -97,7 +97,7 @@ Tillegget er en sp-js-provisioning-fil i hubbiblioteket Prosjekttillegg (`Skjerm
 | SitePermissions | Leser den nye kolonnen `GtPermissionScope`. *Område* er dagens oppførsel. *Skjermede lister* oppretter gruppen og legger inn medlemmene, men gir ingen tilgang på området; navnene sendes videre til `ShieldProjectData`. Rader med *Skjermede lister* hoppes over for vanlige prosjekter. |
 | SetupProjectInformation | Hopper over `_addEntryToHub` og `updateIdeaData`. Hubloggen skrives. |
 | ApplyTemplate | Tillegget brukes (tomt skjema). |
-| **Ny: ShieldProjectData** (rett etter ApplyTemplate) | 1. Prosjektegenskaper: malens prosjektinnholdstype opprettes lokalt med samme ID (og innholdstypene den bygger på), bindes til listen og gis elementet, med `GtSiteId`, `GtSiteUrl` og `GtGroupId`. 2. Arkiveringslogg og Prosjektstatusvedlegg opprettes. 3. Prosjektstatus opprettes **sist**, med malens statusinnholdstype og feltene fra huben, fordi listen avgjør at prosjektet er skjermet. 4. Alle fire listene bryter arven med kopi og gir gruppene fra SitePermissions lesetilgang. 5. `ShieldedProject: true` skrives i `TemplateParameters` (til informasjon). |
+| **Ny: ShieldProjectData** (rett etter ApplyTemplate) | 1. Prosjektegenskaper: malens prosjektinnholdstype opprettes lokalt med samme ID (og innholdstypene den bygger på), bindes til listen og gis elementet, med `GtSiteId`, `GtSiteUrl` og `GtGroupId`. Innholdstypen opprettes med JSOM, siden REST-API-et gir den en egen ID (18). 2. Arkiveringslogg og Prosjektstatusvedlegg opprettes. 3. Prosjektstatus opprettes **sist**, med malens statusinnholdstype og feltene fra huben, fordi listen avgjør at prosjektet er skjermet. 4. Alle fire listene bryter arven med kopi og gir gruppene fra SitePermissions lesetilgang. 5. `ShieldedProject: true` skrives i `TemplateParameters` (til informasjon). Prosjektegenskaper og Prosjektstatus er synlige lister, fordi søket ikke tar med skjulte; de to andre er skjulte, som på huben (18). Det tjenesten går videre uten, står som advarsel i veiviserens avanserte logg. |
 | TimelineConfiguration | Hoppes over. |
 | `_ensureParentProjectPatch` | Hoppes over; `GtIsParentProject` settes lokalt som før. |
 | Fullføringsdialogen | Viser ikke advarselen om at prosjektet ikke er registrert på huben. |
@@ -193,9 +193,9 @@ Tillegget er en sp-js-provisioning-fil i hubbiblioteket Prosjekttillegg (`Skjerm
 
 | # | Antakelse | Konsekvens hvis den ikke holder |
 |---|---|---|
-| 1 | Skjulte lister på et prosjektområde koblet til huben blir gjennomsøkt med hubens `DepartmentId`. | Portefølje og program finner ikke skjermede data. Krever endrede spørringer. |
-| 2 | `ContentTypeId:0x0100805E…*` treffer en lokal innholdstype som arver fra prosjektinnholdstypen, og listefelt gir de samme `*OWS*`-egenskapene. | Porteføljeoversikten trenger endringer for skjermede prosjekter. |
-| 3 | Innholdstyper kan opprettes med fast ID på prosjektområdet (`web.contentTypes.add`), og felt kan legges til listens innholdstype med JSOM. | Gjøres nå i `ShieldedProjectService`, ikke i sp-js-provisioning (6). |
+| 1 | Skjulte lister på et prosjektområde koblet til huben blir gjennomsøkt med hubens `DepartmentId`. | **Holder ikke** (18): søket tar ikke med elementer i skjulte lister. Synlige lister på prosjektområder er indeksert med hubens `DepartmentId`, så Prosjektegenskaper og Prosjektstatus er synlige på et skjermet prosjekt. |
+| 2 | `ContentTypeId:0x0100805E…*` treffer en lokal innholdstype som arver fra prosjektinnholdstypen, og listefelt gir de samme `*OWS*`-egenskapene. | **Ikke avklart** (18): nesten alle feltene blir kolonner på listen, ikke områdekolonner. Får ikke `*OWS*`-egenskapene verdier fra dem, må feltene opprettes som områdekolonner på prosjektområdet først. |
+| 3 | Innholdstyper kan opprettes med fast ID på prosjektområdet (`web.contentTypes.add`), og felt kan legges til listens innholdstype med JSOM. | **Holder ikke for REST** (18): `web.contentTypes.add` gir innholdstypen en egen ID under Element. Den opprettes med JSOM (`SP.ContentTypeCreationInformation.set_id`), som sp-js-provisioning gjør med CSOM. Feltlenkene er ikke prøvd ennå. |
 | 4 | Lesetilgang på listene gis til gruppene SitePermissions opprettet i samme oppsett. | Gjøres nå i `ShieldedProjectService.grantRead` (6). |
 | 5 | Usikkert om `GtChildProjectsOWSMTXT:"{siteId}"` er søkbar. | Implementert med søk i JSON-feltet. Eget felt for site-ID-er lages bare hvis søket ikke virker i testtenanten (11). |
 | 6 | Gjennomsøkingsforsinkelsen er noen få minutter. | Akseptert. |
@@ -252,3 +252,18 @@ Gjennomgangen tok de åpne punktene i saken og funnene fra kartleggingen av gren
 **Nye felt:** Løsninger uten nye felt foretrekkes. Skjerming avgjøres fortsatt av at prosjektområdet har sin egen statusliste, og `ShieldedProject` i `TemplateParameters` er bare til informasjon.
 
 **Ikke prøvd ennå:** Ingenting av løsningen er kjørt i en tenant per 25. november 2026. Arbeidsantakelsene i avsnitt 13 og akseptansekriteriene i avsnitt 16 står derfor ubekreftet.
+
+## 18. Første oppsett i tenant, 26. november 2026
+
+Et nytt prosjektområde på testhuben ble satt opp med Standardmal og tillegget «Skjerming», med testkanalens bygg av `fc5be371f`. Oppsettet stoppet i `ShieldProjectData`, før noen av de fire listene var ferdige. Det som står under, er målt i tenanten samme dag.
+
+| Funn | Følge |
+|---|---|
+| Oppsettet stoppet med «Finner ikke innholdstype». REST-API-et hadde gitt prosjektinnholdstypen en egen ID under Element, så listen kunne ikke få den under hubens ID. | Innholdstypen opprettes med JSOM. Lagrer SharePoint den likevel under en annen ID, stopper oppsettet med begge ID-ene i meldingen. |
+| Søket tar ikke med skjulte lister. På fire prosjektområder og huben hadde hver skjulte liste 0 elementer i søk og hver synlige liste alle, også Arkiveringslogg og Prosjektstatusvedlegg på huben. | Prosjektegenskaper og Prosjektstatus er synlige lister på et skjermet prosjekt, og synkroniseringen av prosjektegenskaper (`syncList`) skjuler ikke listen igjen. Prosjektstatusvedlegg og Arkiveringslogg er skjulte, som på huben. |
+| Feltene blir kolonner på listen, ikke områdekolonner: 32 av 43 prosjektfelt og alle 27 statusfelt mangler som områdekolonner på prosjektområdet etter `ProvisionSiteFields`. Områdekolonner på prosjektområder gir `*OWS*`-verdier i søk; kolonner som bare finnes på en liste, ga ingen for navn uten områdekolonne i tenanten. | Ikke avklart om en listekolonne med samme navn som en områdekolonne på huben fyller den kolonnens `*OWS*`-egenskap (13, punkt 2). Det prøves på testområdet før feltkopieringen endres. |
+| Et oppsett som stopper i `ShieldProjectData`, etterlater et prosjekt som ikke er skjermet og ikke står på huben. Lagres prosjektinformasjon der, opprettes huboppføringen. | Ikke avgjort. |
+
+**Det som virket:** Området ble koblet til huben og fikk testkanalens veiviser. `SitePermissions` laget gruppen Porteføljeinnsyn med medlemmet fra huben, uten tilgang på området. Huben fikk ingen rad i Prosjekter, Prosjektstatus eller Tidslinjeinnhold, og hubloggen ble skrevet.
+
+**Innsynsgruppen må ha medlemmer:** Porteføljeinnsyn var tom på testhuben. Da hopper `SitePermissions` over gruppen, og listene får ikke egne tilganger (12).
