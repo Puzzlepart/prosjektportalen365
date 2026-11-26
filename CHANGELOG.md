@@ -10,6 +10,8 @@ Sjekk ut [release notes](./releasenotes/1.15.0.md) for høydepunkter og mer deta
 
 ### Feilrettinger
 
+- Rettet en feil i oppsettveiviseren hvor oppsettet av et nytt prosjektområde noen ganger stoppet med at listen «Project Extensions» ikke finnes på huben. Feilen kom når siden ble vist på et annet språk enn områdets. Oppsettet sjekker nå språket før det starter, laster siden på nytt én gang om nødvendig, og sier fra med en egen melding hvis siden fortsatt er på et annet språk [#1808](https://github.com/Puzzlepart/prosjektportalen365/pull/1808)
+
 ---
 
 ## 1.15.0 - 19.11.2026
