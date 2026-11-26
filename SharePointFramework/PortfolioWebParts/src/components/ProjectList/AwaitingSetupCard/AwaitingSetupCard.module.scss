@@ -1,0 +1,27 @@
+.root {
+  width: 240px;
+
+  .card {
+    // As tall as a project's card beside it, with the button at its foot.
+    min-height: 274px;
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+
+      .description {
+        color: var(--colorNeutralForeground3);
+      }
+    }
+
+    .footer {
+      margin-top: auto;
+    }
+  }
+
+  .card:hover {
+    box-shadow: var(--shadow8);
+  }
+}

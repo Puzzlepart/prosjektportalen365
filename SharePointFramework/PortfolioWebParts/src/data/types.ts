@@ -287,6 +287,19 @@ export interface IPortfolioWebPartsDataAdapter {
   fetchEnrichedProjects?(fields?: IEnrichedProjectsFields): Promise<ProjectListModel[]>
 
   /**
+   * The sites created for a project, in groups the current user owns, that the setup has not
+   * been run on: associated with this hub, still carrying the setup extension and with no item
+   * in the Projects list. Resolves none when the lookup fails, and never rejects.
+   *
+   * @param maxAgeDays How old a group can be, in days; none are looked up for 0
+   * @param fields The fields `fetchEnrichedProjects` is called with, to share its cached items
+   */
+  fetchProjectsAwaitingSetup?(
+    maxAgeDays: number,
+    fields?: IEnrichedProjectsFields
+  ): Promise<ProjectListModel[]>
+
+  /**
    * Lightweight projects fetch — only reads the Projects list items, skipping
    * the site / membership / user lookups. Shares the items cache with
    * {@link fetchEnrichedProjects}, so co-located webparts reuse the network

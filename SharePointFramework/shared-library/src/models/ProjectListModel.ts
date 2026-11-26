@@ -61,6 +61,12 @@ export class ProjectListModel {
    */
   public templateImageUrl?: string
 
+  /**
+   * The site was created for a project, but the setup has not been run on it: it has no item in
+   * the Projects list, and only its title, group, site and URL are known.
+   */
+  public isAwaitingSetup?: boolean
+
   constructor(
     public title?: string,
     item?: any

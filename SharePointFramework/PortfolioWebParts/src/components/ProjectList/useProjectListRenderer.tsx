@@ -3,6 +3,7 @@ import { ProjectListModel } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeList, ListChildComponentProps } from 'react-window'
+import { AwaitingSetupCard } from './AwaitingSetupCard'
 import { List, ListContext } from './List'
 import { ProjectCard, ProjectCardContext } from './ProjectCard'
 import styles from './ProjectList.module.scss'
@@ -52,7 +53,7 @@ const ProjectRow: FC<ListChildComponentProps<IProjectRowData>> = ({ index, style
             key={project.siteId ?? project.url ?? first + idx}
             value={createCardContext(project)}
           >
-            <ProjectCard />
+            {project.isAwaitingSetup ? <AwaitingSetupCard /> : <ProjectCard />}
           </ProjectCardContext.Provider>
         ))}
     </div>

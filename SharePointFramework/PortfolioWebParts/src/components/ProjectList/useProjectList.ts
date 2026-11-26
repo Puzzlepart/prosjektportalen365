@@ -52,15 +52,27 @@ export const useProjectList = (props: IProjectListProps) => {
     }
   }
 
-  /** The projects of the selected vertical, before the search. */
+  /**
+   * The projects of the selected vertical, before the search. A site that awaits the setup is in
+   * the verticals that show those, whatever their filters.
+   */
   function inVertical(projects: ProjectListModel[]) {
-    return projects.filter((project) =>
-      state.selectedVertical?.filter ? state.selectedVertical.filter(project, state) : true
-    )
+    return projects.filter((project) => {
+      if (project.isAwaitingSetup) return !!state.selectedVertical?.showsAwaitingSetup
+      return state.selectedVertical?.filter ? state.selectedVertical.filter(project, state) : true
+    })
+  }
+
+  /** The sites that await the setup first, each part in the order it has. */
+  function awaitingSetupFirst(projects: ProjectListModel[]) {
+    return [
+      ...projects.filter((project) => project.isAwaitingSetup),
+      ...projects.filter((project) => !project.isAwaitingSetup)
+    ]
   }
 
   function filterProjects(projects: ProjectListModel[]) {
-    return inVertical(projects)
+    const shown = inVertical(projects)
       .filter((project) =>
         _.any(Object.keys(project), (key) => {
           let value = null
@@ -87,9 +99,11 @@ export const useProjectList = (props: IProjectListProps) => {
           state?.sort?.fieldName
         )
       )
+    return awaitingSetupFirst(shown)
   }
 
-  const projects = state.isDataLoaded ? filterProjects(state.projects) : state.projects
+  const allProjects = [...(state.awaitingSetup ?? []), ...(state.projects ?? [])]
+  const projects = state.isDataLoaded ? filterProjects(allProjects) : state.projects
 
   const { announce } = useAnnounce()
   const isFirstSearch = useRef(true)
@@ -100,7 +114,7 @@ export const useProjectList = (props: IProjectListProps) => {
     }
     if (!state.isDataLoaded) return
     const shown = projects.length
-    const total = inVertical(state.projects).length
+    const total = inVertical(allProjects).length
     const timer = setTimeout(
       () => announce(format(strings.ProjectsShownAnnouncement, shown, total), { polite: true }),
       SEARCH_ANNOUNCE_DELAY

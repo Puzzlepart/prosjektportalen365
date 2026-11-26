@@ -1,4 +1,9 @@
-import { IPropertyPaneConfiguration, PropertyPaneToggle } from '@microsoft/sp-property-pane'
+import {
+  IPropertyPaneConfiguration,
+  PropertyPaneLabel,
+  PropertyPaneSlider,
+  PropertyPaneToggle
+} from '@microsoft/sp-property-pane'
 import { PropertyFieldDropdownWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldDropdownWithCallout'
 import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls/lib/PropertyFieldMultiSelect'
 import { PropertyFieldToggleWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldToggleWithCallout'
@@ -121,6 +126,16 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   offText: strings.BooleanOff,
                   calloutWidth: 430,
                   checked: propertiesWithDefaults.showClosedProjects
+                }),
+                PropertyPaneSlider('awaitingSetupMaxAgeDays', {
+                  label: strings.AwaitingSetupMaxAgeDaysLabel,
+                  min: 0,
+                  max: 365,
+                  step: 5,
+                  value: propertiesWithDefaults.awaitingSetupMaxAgeDays
+                }),
+                PropertyPaneLabel('awaitingSetupMaxAgeDaysDescription', {
+                  text: strings.AwaitingSetupMaxAgeDaysDescription
                 }),
                 PropertyFieldToggleWithCallout('showRenderModeSelector', {
                   calloutTrigger: CalloutTriggers.Hover,

@@ -90,6 +90,7 @@ export const PROJECT_LIST_DEFAULT_PROPS: Partial<IProjectListProps> = {
   showRenderModeSelector: true,
   showSortBy: true,
   showClosedProjects: false,
+  awaitingSetupMaxAgeDays: 60,
   defaultRenderMode: 'tiles',
   verticalConfigs: [
     {
@@ -202,7 +203,11 @@ export const ProjectList: FC<IProjectListProps> = (incomingProps) => {
     )
   }
 
-  if (context.state.isDataLoaded && context.state.projects.length === 0) {
+  if (
+    context.state.isDataLoaded &&
+    context.state.projects.length === 0 &&
+    isEmpty(context.state.awaitingSetup)
+  ) {
     return (
       <IdPrefixProvider value={context.fluentProviderId}>
         <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>

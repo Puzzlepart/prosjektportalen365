@@ -143,6 +143,10 @@ export function convertConfigsToVerticals(configs: IVerticalConfig[]): IProjectL
       vertical.isHidden = isHidden
     }
 
+    if (config.clientFilter?.isUserMember === true) {
+      vertical.showsAwaitingSetup = true
+    }
+
     return vertical
   })
 }

@@ -292,6 +292,12 @@ declare interface IPortfolioWebPartsStrings {
   ShowRenderModeSelectorLabel: string
   ShowSearchBoxDescription: string
   ShowSearchBoxLabel: string
+  AwaitingSetupLabel: string
+  AwaitingSetupDescription: string
+  CompleteSetupLabel: string
+  CompleteSetupAriaLabel: string
+  AwaitingSetupMaxAgeDaysLabel: string
+  AwaitingSetupMaxAgeDaysDescription: string
   ShowClosedProjectsLabel: string
   ShowClosedProjectsDescription: string
   ShowSortByDescription: string

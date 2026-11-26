@@ -29,6 +29,12 @@ export interface IProjectListVertical extends Omit<TabProps, 'icon'> {
    * Function to determine if the vertical should be hidden. If not provided, the vertical is not hidden.
    */
   isHidden?: (state: IProjectListState) => boolean
+
+  /**
+   * Whether the vertical shows the user's projects that await the setup, ahead of its own. Set
+   * for a vertical of the projects the user is a member of (`{"isUserMember": true}`).
+   */
+  showsAwaitingSetup?: boolean
 }
 
 /** Value, label and icon for a project-list presentation mode. */
@@ -115,6 +121,12 @@ export interface IProjectListProps extends IBaseComponentProps {
 
   showRenderModeSelector?: boolean
 
+  /**
+   * How many days back the sites the user owns that await the project setup are looked for, and
+   * shown first among the user's own projects. 0 turns the lookup off.
+   */
+  awaitingSetupMaxAgeDays?: number
+
   showSortBy?: boolean
 
   showProjectLogo?: boolean
@@ -181,6 +193,12 @@ export interface IProjectListState {
   searchTerm: string
 
   projects?: ProjectListModel[]
+
+  /**
+   * The sites the user owns that the project setup has not been run on. They arrive after the
+   * projects, and are in no vertical but the ones marked `showsAwaitingSetup`.
+   */
+  awaitingSetup?: ProjectListModel[]
 
   error?: any
 

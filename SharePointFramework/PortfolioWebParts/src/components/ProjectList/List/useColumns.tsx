@@ -121,8 +121,11 @@ export const useColumns = (): IListColumn[] => {
       },
       renderCell: (item) => {
         return (
-          <TableCellLayout truncate title={item.phase}>
-            {item.phase || ''}
+          <TableCellLayout
+            truncate
+            title={item.isAwaitingSetup ? strings.AwaitingSetupLabel : item.phase}
+          >
+            {item.isAwaitingSetup ? strings.AwaitingSetupLabel : item.phase || ''}
           </TableCellLayout>
         )
       }
@@ -228,6 +231,8 @@ export const useColumns = (): IListColumn[] => {
         return null
       },
       renderCell: (item) => {
+        // The quick links lead to pages the setup has not made yet.
+        if (item.isAwaitingSetup) return null
         return (
           <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
             <ProjectMenu
