@@ -21,6 +21,7 @@ import {
   format,
   getId,
   renderReact,
+  supportedLocalesMap,
   unmountReact
 } from 'pp365-shared-library'
 import {
@@ -159,7 +160,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         }
       }
 
-      await this._removeAlternativeLanguages()
+      // A reload is under way: the setup starts on the page that comes back.
+      if (await this._removeAlternativeLanguages()) return
+      if (this._reloadIntoSiteLanguage()) return
 
       void this._initializeSetup({
         sp: this.sp,
@@ -908,17 +911,55 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
+   * Makes sure the page's strings are in the site's language before the setup reads the hub. The
+   * setup finds the hub's lists by their titles from `SharedResources`, which SPFx loads in the
+   * page's UI language, and the hub has them in the language the site must have. A page of a new
+   * site can come in another UI language than the site's (seen right after the alternative
+   * languages are removed), and the hub then answers that «Project Extensions» does not exist.
+   * One reload is tried; a page still in another language gets an error that says so.
+   *
+   * @returns Whether the page is reloading, and the setup must not start
+   */
+  private _reloadIntoSiteLanguage(): boolean {
+    const { web, site, cultureInfo } = this.context.pageContext
+    const reloadedKey = `pp_languageReload_${site.id.toString()}`
+    const siteLocale = supportedLocalesMap.get(web.language)
+    const pageLocale = cultureInfo?.currentUICultureName?.toLowerCase()
+    if (!siteLocale || !pageLocale || pageLocale === siteLocale) {
+      sessionStorage.removeItem(reloadedKey)
+      return false
+    }
+    Logger.write(
+      `(ProjectSetup) The page is in ${pageLocale}, the site in ${siteLocale}.`,
+      LogLevel.Warning
+    )
+    if (sessionStorage.getItem(reloadedKey) === 'true') {
+      sessionStorage.removeItem(reloadedKey)
+      throw new ProjectSetupError(
+        'InvalidPageLanguage',
+        strings.InvalidPageLanguageErrorMessage,
+        strings.InvalidPageLanguageErrorStack
+      )
+    }
+    sessionStorage.setItem(reloadedKey, 'true')
+    window.location.reload()
+    return true
+  }
+
+  /**
    * Disables multilingual features for site admins and reloads so setup uses the site's language.
    * A session flag allows the next run to record the operation in the hub log.
+   *
+   * @returns Whether the page is reloading, and the setup must not start
    */
-  private async _removeAlternativeLanguages(): Promise<void> {
+  private async _removeAlternativeLanguages(): Promise<boolean> {
     try {
       if (!this.context.pageContext.legacyPageContext.isSiteAdmin) {
         Logger.write(
           '(ProjectSetup) User is not a site admin, skipping alternative language removal.',
           LogLevel.Info
         )
-        return
+        return false
       }
 
       const webInfo = await this.sp.web.select('Language', 'IsMultilingual')()
@@ -933,7 +974,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           '(ProjectSetup) Site is not configured as multilingual, no alternative languages to remove.',
           LogLevel.Info
         )
-        return
+        return false
       }
 
       this._renderProgressDialog({
@@ -969,6 +1010,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         LogLevel.Info
       )
       window.location.reload()
+      return true
     } catch (error) {
       Logger.write(
         `(ProjectSetup) Failed to remove alternative languages: ${error.message}`,
@@ -977,6 +1019,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
       const progressDialog = this._getPlaceholder('ProgressDialog')
       this._unmount(progressDialog)
+      return false
     }
   }
 

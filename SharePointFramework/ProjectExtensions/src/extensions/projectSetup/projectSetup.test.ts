@@ -328,6 +328,7 @@ async function projectSetup({
   web = {},
   legacy = {},
   language = 1044,
+  uiCulture,
   properties = {},
   quickLaunch = [],
   siteId = 'site-2'
@@ -335,6 +336,8 @@ async function projectSetup({
   web?: Record<string, any>
   legacy?: Record<string, any>
   language?: number
+  /** The page's UI culture, which SPFx loads the strings for; none says nothing, as before */
+  uiCulture?: string
   properties?: Record<string, any>
   quickLaunch?: IFakeNode[]
   siteId?: string
@@ -356,7 +359,8 @@ async function projectSetup({
       },
       web: { absoluteUrl: PROJECT, language, title: 'Frisbeegolfbane' },
       site: { id: { toString: () => siteId } },
-      user: { email: USER }
+      user: { email: USER },
+      cultureInfo: uiCulture ? { currentUICultureName: uiCulture } : undefined
     }
   }
   ;(customizer as any).properties = properties
@@ -988,14 +992,37 @@ describe('ProjectSetup', () => {
   })
 
   it('switches a multilingual site to one language and reloads before the setup', async () => {
-    // In the browser the reload ends this run; under jsdom the run goes on and reads the flag
-    // back at once, so the flag is checked as it is written.
-    const setItem = jest.spyOn(Storage.prototype, 'setItem')
     const { calls } = await projectSetup({ web: { IsMultilingual: true } })
     expect(calls.webUpdates).toEqual([{ IsMultilingual: false }])
-    expect(setItem).toHaveBeenCalledWith('pp_languagesRemoved_site-2', 'true')
-    expect(consoleError).toHaveBeenCalled()
-    setItem.mockRestore()
+    expect(sessionStorage.getItem('pp_languagesRemoved_site-2')).toBe('true')
+    expect(leaving).toEqual(['navigation'])
+    // The reload does not end the run at once: the setup must not start on the page that leaves.
+    expect(dialogs.setup).toBeUndefined()
+    expect(dialogs.error).toBeUndefined()
+  })
+
+  it('reloads once, without reading the hub, when the page is in another language than the site', async () => {
+    hub.failFetch = true
+    await projectSetup({ uiCulture: 'en-US' })
+    expect(leaving).toEqual(['navigation'])
+    expect(dialogs.error).toBeUndefined()
+    expect(dialogs.setup).toBeUndefined()
+  })
+
+  it('says so when the page is still in another language after the reload', async () => {
+    await projectSetup({ uiCulture: 'en-US' })
+    await projectSetup({ uiCulture: 'en-US' })
+    expect(leaving).toEqual(['navigation'])
+    expect(dialogs.error.error.message).toBe(strings.InvalidPageLanguageErrorMessage)
+    expect(dialogs.setup).toBeUndefined()
+    expect(removal.deleteCustomizer).not.toHaveBeenCalled()
+  })
+
+  it("sets up when the page is in the site's language, also after a reload into it", async () => {
+    await projectSetup({ uiCulture: 'en-US' })
+    await projectSetup({ uiCulture: 'nb-NO' })
+    expect(dialogs.setup.data.templates).toHaveLength(TEMPLATES.length)
+    expect(sessionStorage.getItem('pp_languageReload_site-2')).toBeNull()
   })
 
   it('logs the language change on the first load after it', async () => {

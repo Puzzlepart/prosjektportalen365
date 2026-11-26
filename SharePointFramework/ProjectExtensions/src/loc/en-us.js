@@ -103,6 +103,8 @@ define([], function () {
     GetSetupDataErrorStack: 'An error occurred while retrieving data from the hub site. If the Project Portal has recently been installed, this may be the reason. Try again a little later.',
     InvalidLanguageErrorMessage: 'Invalid language for the site. The site must be the same language as the hub site.',
     InvalidLanguageErrorStack: 'The language set for the site is not supported. The site must be created with Norwegian language.',
+    InvalidPageLanguageErrorMessage: 'The page is not shown in the language of the site',
+    InvalidPageLanguageErrorStack: 'The setup cannot start while the page is shown in another language than the site was created with. Wait a little, and reload the page.',
     IsHubSiteErrorMessage: 'Cannot apply the project template on a hub site',
     IsHubSiteErrorStack: 'It is not possible to add site designs for projects to a hub site. Operation aborted.',
     Library: 'Library',

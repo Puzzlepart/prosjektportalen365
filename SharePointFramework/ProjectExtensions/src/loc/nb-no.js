@@ -89,6 +89,8 @@ define([], function () {
     IdeaDecisionStatusApprovedAndSynced: 'Godkjent og synkronisert',
     InvalidLanguageErrorMessage: 'Ugyldig språk for området. Språket må være det samme som på hubområdet.',
     InvalidLanguageErrorStack: 'Språket som er satt for området støttes ikke. Området må være opprettet med norsk språk.',
+    InvalidPageLanguageErrorMessage: 'Siden vises ikke på områdets språk',
+    InvalidPageLanguageErrorStack: 'Oppsettet kan ikke starte mens siden vises på et annet språk enn området er opprettet med. Vent litt, og last siden på nytt.',
     IsHubSiteErrorMessage: 'Kan ikke legge prosjektmalen på et hubområde',
     IsHubSiteErrorStack: 'Det er ikke mulig å legge områdedesign for prosjekt på et hubområde. Operasjon avbrutt.',
     Library: 'Bibliotek',
