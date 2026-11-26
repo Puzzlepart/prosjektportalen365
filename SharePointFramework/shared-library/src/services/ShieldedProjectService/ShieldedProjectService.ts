@@ -2,12 +2,31 @@ import { Logger, LogLevel } from '@pnp/logging'
 import { IList } from '@pnp/sp/lists'
 import '@pnp/sp/presets/all'
 import { IWeb } from '@pnp/sp/webs'
+import strings from 'SharedLibraryStrings'
 import initJsom, { ExecuteJsomQuery as executeQuery, JsomContext } from 'spfx-jsom'
 import { ISPContentType } from '../../interfaces'
-import { transformFieldXml } from '../../util'
+import { format, transformFieldXml } from '../../util'
 import { getContentTypeLineage, isListContentTypeOf } from './contentTypeLineage'
 import { getMissingListFields, IListFieldSchema } from './listFields'
 import { EnsureProjectDataListParams, EnsureProjectDataListResult } from './types'
+
+/**
+ * `SP.ContentTypeCreationInformation` with the ID of the content type to make. SharePoint
+ * Online's `sp.js` has `set_id`; the typings (`@types/sharepoint`) are older.
+ */
+type ContentTypeCreationInformationWithId = SP.ContentTypeCreationInformation & {
+  set_id(value: string): void
+}
+
+/**
+ * What a step failed with, as text for the log. A JSOM query rejects with `{ sender, args }`,
+ * which has no `message`: SharePoint's own is in `args`.
+ *
+ * @param error The caught value
+ */
+function failureText(error: any): string {
+  return error?.message ?? error?.args?.get_message?.() ?? String(error)
+}
 
 /**
  * Sets up the lists a shielded project keeps its project data in, on its own site: the lists have
@@ -94,7 +113,40 @@ export class ShieldedProjectService {
         `(ShieldedProjectService) (ensureContentType) Adding content type [${Name}] (${id}) to the project site.`,
         LogLevel.Info
       )
-      await this._projectWeb.contentTypes.add(id, Name, Description ?? '', Group)
+      await this._addContentType(id, Name, Description ?? '', Group)
+    }
+  }
+
+  /**
+   * Makes the content type on the project site with the given ID, through JSOM. The REST API
+   * (`web.contentTypes.add`) leaves the ID out: it makes a child of Item with an ID of its own,
+   * which no list can be given under the hub's ID, and no search for the hub's ID finds.
+   *
+   * @param id Content type ID, as on the hub
+   * @param name Name
+   * @param description Description
+   * @param group Group
+   */
+  private async _addContentType(
+    id: string,
+    name: string,
+    description: string,
+    group: string
+  ): Promise<void> {
+    const { jsomContext } = await initJsom(this._projectUrl)
+    const information =
+      new SP.ContentTypeCreationInformation() as ContentTypeCreationInformationWithId
+    // No parent: SharePoint reads it out of the ID, and refuses an ID together with a parent.
+    information.set_id(id)
+    information.set_name(name)
+    information.set_description(description)
+    information.set_group(group)
+    const created = jsomContext.web.get_contentTypes().add(information)
+    jsomContext.clientContext.load(created, 'StringId')
+    await executeQuery(jsomContext)
+    const storedId = created.get_stringId()
+    if (storedId?.toLowerCase() !== id.toLowerCase()) {
+      throw new Error(format(strings.ShieldedProjectContentTypeIdErrorText, name, storedId, id))
     }
   }
 
@@ -122,7 +174,7 @@ export class ShieldedProjectService {
         await list.roleAssignments.add(group.Id, reader.Id)
       } catch (error) {
         Logger.write(
-          `(ShieldedProjectService) (grantRead) Could not give the group [${groupName}] read access: ${error?.message}`,
+          `(ShieldedProjectService) (grantRead) Could not give the group [${groupName}] read access: ${failureText(error)}`,
           LogLevel.Warning
         )
       }
@@ -185,7 +237,7 @@ export class ShieldedProjectService {
           await list.contentTypes.getById(id).delete()
         } catch (error) {
           Logger.write(
-            `(ShieldedProjectService) (_bindContentType) Could not remove content type ${id}: ${error?.message}`,
+            `(ShieldedProjectService) (_bindContentType) Could not remove content type ${id}: ${failureText(error)}`,
             LogLevel.Warning
           )
         }
@@ -246,7 +298,7 @@ export class ShieldedProjectService {
         await executeQuery(jsomContext)
       } catch (error) {
         Logger.write(
-          `(ShieldedProjectService) (_ensureFields) Could not add the field [${field.InternalName}] to [${listName}]: ${error?.message}`,
+          `(ShieldedProjectService) (_ensureFields) Could not add the field [${field.InternalName}] to [${listName}]: ${failureText(error)}`,
           LogLevel.Warning
         )
       }
@@ -287,14 +339,14 @@ export class ShieldedProjectService {
           await this._addListField(jsomContext, spList, field, onSite)
         } catch (error) {
           Logger.write(
-            `(ShieldedProjectService) (_ensureListFields) Could not add the field [${field.InternalName}] to [${listName}]: ${error?.message}`,
+            `(ShieldedProjectService) (_ensureListFields) Could not add the field [${field.InternalName}] to [${listName}]: ${failureText(error)}`,
             LogLevel.Warning
           )
         }
       }
     } catch (error) {
       Logger.write(
-        `(ShieldedProjectService) (_ensureListFields) Could not read the fields of [${listName}] on the hub, so its own columns are not added to the project site's list: ${error?.message}`,
+        `(ShieldedProjectService) (_ensureListFields) Could not read the fields of [${listName}] on the hub, so its own columns are not added to the project site's list: ${failureText(error)}`,
         LogLevel.Warning
       )
     }

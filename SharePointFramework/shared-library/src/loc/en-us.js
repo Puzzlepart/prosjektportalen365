@@ -165,6 +165,8 @@ define([], function () {
     ShieldedProjectUnresolvedErrorText:
       'Could not determine whether the project is shielded. Project data is not shown or saved until this is resolved. Reload the page, or contact an administrator.',
     ShieldedProjectHubListErrorText:
-      'The project is shielded, and its data is not stored in the list "{0}" on the portfolio site.'
+      'The project is shielded, and its data is not stored in the list "{0}" on the portfolio site.',
+    ShieldedProjectContentTypeIdErrorText:
+      'The content type "{0}" was created with the ID {1} on the project site, not {2} as on the portfolio site.'
   }
 })

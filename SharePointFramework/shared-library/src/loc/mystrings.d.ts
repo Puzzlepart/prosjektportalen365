@@ -157,6 +157,7 @@ declare interface ISharedLibraryStrings {
   ShieldedProjectUnresolvedErrorTitle: string
   ShieldedProjectUnresolvedErrorText: string
   ShieldedProjectHubListErrorText: string
+  ShieldedProjectContentTypeIdErrorText: string
 }
 
 declare module 'SharedLibraryStrings' {

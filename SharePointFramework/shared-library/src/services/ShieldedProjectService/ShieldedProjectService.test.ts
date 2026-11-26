@@ -1,3 +1,58 @@
+// jest.mock must come before the imports: Heft runs Jest on TypeScript's CommonJS output without
+// Babel, so mocks are not hoisted. JSOM is a stand-in: `jsom.created` records the content types
+// it was asked to make and `jsom.urls` on which site, `jsom.storedId` is the ID SharePoint gives
+// a new content type when it is not the one asked for, and `jsom.refusal` what a query is
+// refused with.
+const jsom = {
+  created: [] as Record<string, any>[],
+  urls: [] as string[],
+  storedId: undefined as string | undefined,
+  refusal: undefined as unknown
+}
+jest.mock('spfx-jsom', () => ({
+  __esModule: true,
+  default: (url: string) => {
+    jsom.urls.push(url)
+    return Promise.resolve({
+      jsomContext: {
+        clientContext: { load: () => undefined },
+        web: {
+          get_contentTypes: () => ({
+            add: (information: { values: Record<string, any> }) => {
+              jsom.created.push(information.values)
+              return { get_stringId: () => jsom.storedId ?? information.values.id }
+            }
+          })
+        }
+      }
+    })
+  },
+  ExecuteJsomQuery: () => (jsom.refusal ? Promise.reject(jsom.refusal) : Promise.resolve())
+}))
+// What `sp.js` gives a page: the service fills in the same object there.
+;(globalThis as any).SP = {
+  ContentTypeCreationInformation: class {
+    public values: Record<string, any> = {}
+    public set_id(value: string) {
+      this.values.id = value
+    }
+    public set_name(value: string) {
+      this.values.name = value
+    }
+    public set_description(value: string) {
+      this.values.description = value
+    }
+    public set_group(value: string) {
+      this.values.group = value
+    }
+    public set_parentContentType(value: unknown) {
+      this.values.parent = value
+    }
+  }
+}
+
+import strings from 'SharedLibraryStrings'
+import { format } from '../../util'
 import { ShieldedProjectService } from './ShieldedProjectService'
 
 const PROJECT_URL = 'https://contoso.sharepoint.com/sites/skjermet'
@@ -9,7 +64,8 @@ const READER = 7
  * The hub and the project site through structural stand-ins for the parts of PnPjs the service
  * uses outside JSOM. The hub answers for its content types. The project site has the content
  * types in `siteContentTypes` and the groups in `groups`, by name and ID; its list inherits from
- * the site unless `unique` is set. What the service does is recorded in `did`.
+ * the site unless `unique` is set. What the service does is recorded in `did`: `contentTypes`
+ * is what it asked the REST API to make, which leaves the ID out.
  */
 function sites({
   siteContentTypes = [] as string[],
@@ -80,27 +136,67 @@ function sites({
   return { service, did, list }
 }
 
+beforeEach(() => {
+  jsom.created = []
+  jsom.urls = []
+  jsom.storedId = undefined
+  jsom.refusal = undefined
+})
+
 describe('ShieldedProjectService', () => {
   describe('ensureContentType', () => {
     it("makes the content types the site lacks with the hub's IDs, names and groups, the one a template's own is built on first", async () => {
       const { service, did } = sites()
       await service.ensureContentType(TEMPLATE)
-      expect(did.contentTypes).toEqual([
-        [PROJECT, 'Prosjekt', 'Et prosjekt', 'Prosjektportalen innholdstyper'],
+      // No parent: SharePoint reads it out of the ID, and refuses the two together.
+      expect(jsom.created).toEqual([
+        {
+          id: PROJECT,
+          name: 'Prosjekt',
+          description: 'Et prosjekt',
+          group: 'Prosjektportalen innholdstyper'
+        },
         // A content type without a description on the hub gets an empty one.
-        [TEMPLATE, 'Byggeprosjekt', '', 'Prosjektportalen innholdstyper']
+        {
+          id: TEMPLATE,
+          name: 'Byggeprosjekt',
+          description: '',
+          group: 'Prosjektportalen innholdstyper'
+        }
       ])
+      expect(jsom.urls).toEqual([PROJECT_URL, PROJECT_URL])
+      // Never through the REST API: there the content type gets an ID of its own, which no
+      // list can be given under the hub's ID.
+      expect(did.contentTypes).toEqual([])
     })
 
     it('keeps the content types the site has, however their IDs are written, and reads only the missing ones from the hub', async () => {
       const { service, did } = sites({ siteContentTypes: [PROJECT.toLowerCase()] })
       await service.ensureContentType(TEMPLATE)
-      expect(did.contentTypes.map(([id]) => id)).toEqual([TEMPLATE])
+      expect(jsom.created.map(({ id }) => id)).toEqual([TEMPLATE])
       expect(did.hubReads).toEqual([TEMPLATE])
+      jsom.created = []
       const all = sites({ siteContentTypes: [PROJECT, TEMPLATE] })
       await all.service.ensureContentType(TEMPLATE)
-      expect(all.did.contentTypes).toEqual([])
+      expect(jsom.created).toEqual([])
       expect(all.did.hubReads).toEqual([])
+    })
+
+    it("fails, naming both IDs, when SharePoint stores the content type under another ID than the hub's", async () => {
+      const { service } = sites()
+      jsom.storedId = '0x01002BAACE12293A264BBB6E77E84B50CD20'
+      await expect(service.ensureContentType(PROJECT)).rejects.toThrow(
+        format(strings.ShieldedProjectContentTypeIdErrorText, 'Prosjekt', jsom.storedId, PROJECT)
+      )
+    })
+
+    it('passes on what SharePoint refused the content type with, which the setup reads the message from', async () => {
+      const { service } = sites()
+      jsom.refusal = {
+        sender: {},
+        args: { get_message: () => 'Det finnes allerede en innholdstype med navnet "Prosjekt".' }
+      }
+      await expect(service.ensureContentType(PROJECT)).rejects.toBe(jsom.refusal)
     })
   })
 
@@ -141,7 +237,7 @@ describe('ShieldedProjectService', () => {
       expect(did.ensured).toEqual([
         ['Prosjektstatusvedlegg', '', 101, false, { Hidden: true, EnableVersioning: true }]
       ])
-      expect(did.contentTypes).toEqual([])
+      expect(jsom.created).toEqual([])
       expect(did.roleAssignments).toEqual([[31, READER]])
       expect(result.created).toBe(true)
       expect(result.listContentTypeId).toBeUndefined()

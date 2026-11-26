@@ -164,6 +164,8 @@ define([], function () {
     ShieldedProjectUnresolvedErrorText:
       'Kunne ikke avgjøre om prosjektet er skjermet. Prosjektdata vises og lagres ikke før dette er avklart. Last inn siden på nytt, eller ta kontakt med en administrator.',
     ShieldedProjectHubListErrorText:
-      'Prosjektet er skjermet, og data fra prosjektet lagres ikke i listen "{0}" på porteføljeområdet.'
+      'Prosjektet er skjermet, og data fra prosjektet lagres ikke i listen "{0}" på porteføljeområdet.',
+    ShieldedProjectContentTypeIdErrorText:
+      'Innholdstypen "{0}" ble opprettet med ID-en {1} på prosjektområdet, ikke {2} som på porteføljeområdet.'
   }
 })
