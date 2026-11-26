@@ -171,11 +171,14 @@ describe('ProjectList', () => {
     expect(complete).toHaveAttribute('href', '/sites/nytt prosjekt')
     expect(complete).toHaveTextContent(strings.CompleteSetupLabel)
     expect(screen.getByText(strings.AwaitingSetupLabel)).toBeInTheDocument()
-    // Ahead of the user's projects, whatever the sort; it has no project information to open.
-    expect(linkNames().indexOf('Nytt prosjekt')).toBeLessThan(linkNames().indexOf('Alfa'))
+    // Ahead of the user's project, the only card with project information to open.
+    const information = screen.getAllByRole('button', {
+      name: strings.ProjectInformationPanelButton
+    })
+    expect(information).toHaveLength(1)
     expect(
-      screen.getAllByRole('button', { name: strings.ProjectInformationPanelButton })
-    ).toHaveLength(1)
+      complete.compareDocumentPosition(information[0]) & Node.DOCUMENT_POSITION_FOLLOWING
+    ).toBeTruthy()
     await user.click(screen.getByRole('tab', { name: strings.ProjectsAccessHeaderText }))
     expect(screen.queryByText('Nytt prosjekt')).toBeNull()
     expect(screen.queryByText(strings.AwaitingSetupLabel)).toBeNull()
