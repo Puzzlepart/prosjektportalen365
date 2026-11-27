@@ -42,6 +42,64 @@ describe('useProjectListDataFetch', () => {
     expect(countedTelemetry()).toEqual({ usage: {}, errors: {}, timings: {} })
   })
 
+  it("hands over the sites that await the setup when they arrive, looked up with the web part's age limit", async () => {
+    const fetchProjectsAwaitingSetup = jest.fn(() => Promise.resolve([{ title: 'Nytt' }]))
+    const setState = jest.fn()
+    const Probe: React.FC = () => {
+      useProjectListDataFetch(
+        {
+          awaitingSetupMaxAgeDays: 60,
+          primaryField: 'GtProjectTypeText',
+          dataAdapter: {
+            fetchEnrichedProjects: () => Promise.resolve([]),
+            isUserInGroup: () => Promise.resolve(false),
+            fetchProjectsAwaitingSetup
+          }
+        } as any,
+        setState
+      )
+      return null
+    }
+    render(
+      <TelemetryProvider component='ProjectListWebPart'>
+        <Probe />
+      </TelemetryProvider>
+    )
+    await waitFor(() =>
+      expect(setState).toHaveBeenCalledWith({ awaitingSetup: [{ title: 'Nytt' }] })
+    )
+    expect(fetchProjectsAwaitingSetup).toHaveBeenCalledWith(
+      60,
+      expect.objectContaining({ primaryField: 'GtProjectTypeText' })
+    )
+  })
+
+  it('does not look for sites that await the setup when the age limit is 0', async () => {
+    const fetchProjectsAwaitingSetup = jest.fn(() => Promise.resolve([]))
+    const setState = jest.fn()
+    const Probe: React.FC = () => {
+      useProjectListDataFetch(
+        {
+          awaitingSetupMaxAgeDays: 0,
+          dataAdapter: {
+            fetchEnrichedProjects: () => Promise.resolve([]),
+            isUserInGroup: () => Promise.resolve(false),
+            fetchProjectsAwaitingSetup
+          }
+        } as any,
+        setState
+      )
+      return null
+    }
+    render(
+      <TelemetryProvider component='ProjectListWebPart'>
+        <Probe />
+      </TelemetryProvider>
+    )
+    await waitFor(() => expect(setState).toHaveBeenCalled())
+    expect(fetchProjectsAwaitingSetup).not.toHaveBeenCalled()
+  })
+
   it('hands over the error, with no projects, when the fetch fails, and counts it once by its code', async () => {
     const setState = fetchWith({
       fetchEnrichedProjects: () =>

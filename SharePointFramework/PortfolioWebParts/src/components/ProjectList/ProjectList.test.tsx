@@ -157,6 +157,54 @@ describe('ProjectList', () => {
     expect(linkNames()).toEqual(['Bravo'])
   })
 
+  it("shows a site that awaits the setup first among the user's own projects, with a link to complete it, and in no other vertical", async () => {
+    const user = setupUser()
+    const awaiting = project('Nytt prosjekt', {
+      isUserMember: true,
+      isAwaitingSetup: true,
+      phase: undefined
+    })
+    renderList({ projects: projects(), awaitingSetup: [awaiting] }, 'tiles')
+    const complete = await screen.findByRole('link', {
+      name: format(strings.CompleteSetupAriaLabel, 'Nytt prosjekt')
+    })
+    expect(complete).toHaveAttribute('href', '/sites/nytt prosjekt')
+    expect(complete).toHaveTextContent(strings.CompleteSetupLabel)
+    expect(screen.getByText(strings.AwaitingSetupLabel)).toBeInTheDocument()
+    // Ahead of the user's project, the only card with project information to open.
+    const information = screen.getAllByRole('button', {
+      name: strings.ProjectInformationPanelButton
+    })
+    expect(information).toHaveLength(1)
+    expect(
+      complete.compareDocumentPosition(information[0]) & Node.DOCUMENT_POSITION_FOLLOWING
+    ).toBeTruthy()
+    await user.click(screen.getByRole('tab', { name: strings.ProjectsAccessHeaderText }))
+    expect(screen.queryByText('Nytt prosjekt')).toBeNull()
+    expect(screen.queryByText(strings.AwaitingSetupLabel)).toBeNull()
+  })
+
+  it('tells that a site awaits the setup where the list shows the phase, and finds it by a search', async () => {
+    const user = setupUser()
+    const awaiting = project('Nytt prosjekt', {
+      isUserMember: true,
+      isAwaitingSetup: true,
+      phase: undefined
+    })
+    renderList({ projects: projects(), awaitingSetup: [awaiting] })
+    expect(await screen.findByRole('link', { name: 'Nytt prosjekt' })).toBeInTheDocument()
+    expect(linkNames()).toEqual(['Nytt prosjekt', 'Alfa'])
+    expect(screen.getByText(strings.AwaitingSetupLabel)).toBeInTheDocument()
+    await user.type(screen.getByRole('searchbox'), 'alf')
+    expect(linkNames()).toEqual(['Alfa'])
+  })
+
+  it('shows a site that awaits the setup on a hub with no projects yet', async () => {
+    const awaiting = project('Nytt prosjekt', { isUserMember: true, isAwaitingSetup: true })
+    renderList({ projects: [], awaitingSetup: [awaiting] })
+    expect(await screen.findByRole('link', { name: 'Nytt prosjekt' })).toBeInTheDocument()
+  })
+
   it('keeps its cards as the project information opens, so the button that opened it is there to take the focus back (WCAG 2.4.3)', async () => {
     renderList({ projects: projects() }, 'tiles')
     const [open] = await screen.findAllByRole('button', {

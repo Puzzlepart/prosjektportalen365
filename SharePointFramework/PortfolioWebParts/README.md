@@ -67,6 +67,18 @@ Fanene i `Prosjektutlisting` konfigureres i egenskapspanelet under **Vertikalkon
 
 Alle filtrene kjøres på klienten, og alle betingelser må være oppfylt (`OG`).
 
+### Prosjekter som venter på oppsett
+
+Et område som er opprettet for et prosjekt, men der oppsettet ikke er kjørt, har ingen rad i `Prosjekter`-lista. Webdelen viser det likevel til eierne, først i vertikaler med klientfilteret `{"isUserMember": true}` (`Mine prosjekter`), med merket «Venter på oppsett» og knappen «Fullfør oppsett».
+
+Et område regnes med når alt dette gjelder:
+
+- Brukeren eier Microsoft 365-gruppen, og gruppen er opprettet innenfor egenskapen **Vis prosjekter som venter på oppsett (dager tilbake)** (standard 60, 0 slår av). Bare de 10 nyeste gruppene sjekkes.
+- Ingen rad i `Prosjekter`-lista har gruppens id.
+- Området er tilknyttet denne huben og har fortsatt Oppsettveiviseren som utvidelse. Et område som er koblet til huben uten å være et prosjekt, har ikke veiviseren og vises ikke.
+
+Gruppene hentes fra Microsoft Graph (`/me/ownedObjects`, dekket av `Directory.Read.All`), så området vises før søkeindeksen kjenner det. Feiler oppslaget, vises prosjektlista uten disse områdene.
+
 #### Feltfilter
 
 Feltfilter sammenligner mot rå feltverdier fra `Prosjekter`-lista, f.eks. `GtProjectPhaseText` eller `GtIsParentProject`. En vanlig verdi betyr likhet:

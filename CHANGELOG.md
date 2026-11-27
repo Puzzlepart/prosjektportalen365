@@ -6,6 +6,8 @@ Sjekk ut [release notes](./releasenotes/1.15.0.md) for høydepunkter og mer deta
 
 ### Ny funksjonalitet
 
+- `Prosjektliste` viser områder som venter på prosjektoppsett. Områder brukeren eier som er opprettet for et prosjekt, men der oppsettet ikke er kjørt, vises først under `Mine prosjekter` med merket «Venter på oppsett» og knappen «Fullfør oppsett». Områdene hentes fra brukerens grupper i Microsoft Graph, så de vises før søkeindeksen kjenner dem, og krever ingen nye tilganger. Ny egenskap `Vis prosjekter som venter på oppsett (dager tilbake)` (standard 60, 0 slår av)
+
 ### Forbedringer
 
 ### Feilrettinger

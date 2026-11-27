@@ -1,7 +1,7 @@
 import { Avatar, AvatarProps, Link, TableCellLayout } from '@fluentui/react-components'
 import { GlobeLocationFilled, TagMultipleFilled } from '@fluentui/react-icons'
 import * as strings from 'PortfolioWebPartsStrings'
-import { OverflowTagMenu, ProjectLogo } from 'pp365-shared-library'
+import { OverflowTagMenu, ProjectListModel, ProjectLogo } from 'pp365-shared-library'
 import React, { useContext } from 'react'
 import _ from 'underscore'
 import { getFieldOptionKey } from '../getFieldOptionKey'
@@ -121,8 +121,11 @@ export const useColumns = (): IListColumn[] => {
       },
       renderCell: (item) => {
         return (
-          <TableCellLayout truncate title={item.phase}>
-            {item.phase || ''}
+          <TableCellLayout
+            truncate
+            title={item.isAwaitingSetup ? strings.AwaitingSetupLabel : item.phase}
+          >
+            {item.isAwaitingSetup ? strings.AwaitingSetupLabel : item.phase || ''}
           </TableCellLayout>
         )
       }
@@ -228,6 +231,8 @@ export const useColumns = (): IListColumn[] => {
         return null
       },
       renderCell: (item) => {
+        // The quick links lead to pages the setup has not made yet.
+        if (item.isAwaitingSetup) return null
         return (
           <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
             <ProjectMenu
@@ -249,8 +254,18 @@ export const useColumns = (): IListColumn[] => {
     secondaryUserRole: 'SecondaryUserField'
   }
 
-  return allColumns.filter((col) => {
-    const metadataKey = metadataKeyByColumnId[col.columnId as string]
-    return metadataKey ? shouldDisplay(metadataKey) : true
-  })
+  return allColumns
+    .filter((col) => {
+      const metadataKey = metadataKeyByColumnId[col.columnId as string]
+      return metadataKey ? shouldDisplay(metadataKey) : true
+    })
+    .map((col) => ({
+      ...col,
+      // The grid sorts the rows itself: a site that awaits the setup sorts ahead of the projects
+      // by any column, so it is first in the ascending order the list opens with.
+      compare: (a: ProjectListModel, b: ProjectListModel) => {
+        if (!!a.isAwaitingSetup !== !!b.isAwaitingSetup) return a.isAwaitingSetup ? -1 : 1
+        return col.compare(a, b)
+      }
+    }))
 }

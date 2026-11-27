@@ -3,7 +3,7 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, getHashCode, PnPClientStorage } from '@pnp/core'
 import { Logger, LogLevel } from '@pnp/logging'
-import { spfi, SPFx } from '@pnp/sp'
+import { spfi, SPFx, SPQueryable } from '@pnp/sp'
 import {
   ISearchResult,
   ISiteUserInfo,
@@ -58,6 +58,12 @@ import {
   ProgramItem,
   SPIdeaConfigurationItem
 } from '../models'
+import {
+  findSitesAwaitingSetup,
+  IGroupSiteProbe,
+  IOwnedGroup,
+  selectAwaitingSetupCandidates
+} from './awaitingSetup'
 import * as config from './config'
 import { fetchMergedViewData, replaceDepartmentId } from './mergedViewData'
 import {
@@ -877,6 +883,86 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
     projects = projects.sort((a, b) => (a.title ?? '').localeCompare(b.title ?? ''))
     return projects
+  }
+
+  /**
+   * The sites created for a project, in groups the current user owns, that the setup has not been
+   * run on, as projects marked `isAwaitingSetup`. The owned groups come from Microsoft Graph, so
+   * a new site is found before the search index knows it. Resolves none when the lookup fails:
+   * the project list shows without them.
+   */
+  public async fetchProjectsAwaitingSetup(
+    maxAgeDays: number,
+    fields?: IEnrichedProjectsFields
+  ): Promise<ProjectListModel[]> {
+    if (!(maxAgeDays > 0)) return []
+    try {
+      const hubSiteId = this._spfxContext.pageContext.site.id.toString()
+      const [items, groups] = await Promise.all([
+        this._fetchProjectItems(hubSiteId, fields),
+        msGraph.Get<IOwnedGroup[]>('/me/ownedObjects/$/microsoft.graph.group', [
+          'id',
+          'displayName',
+          'createdDateTime',
+          'groupTypes'
+        ])
+      ])
+      const candidates = selectAwaitingSetupCandidates(
+        groups ?? [],
+        items.map((item) => item.GtGroupId),
+        maxAgeDays
+      )
+      const sites = await findSitesAwaitingSetup(candidates, hubSiteId, (groupId) =>
+        this._probeGroupSite(groupId)
+      )
+      return sites.map((site) => {
+        const model = new ProjectListModel(site.title, {
+          GtSiteId: site.siteId,
+          GtGroupId: site.groupId,
+          GtSiteUrl: site.url
+        })
+        model.isAwaitingSetup = true
+        model.isUserMember = true
+        model.hasUserAccess = true
+        return model
+      })
+    } catch (error) {
+      Logger.log({
+        message: `(DataAdapter) could not look up projects awaiting setup: ${error?.message}`,
+        level: LogLevel.Warning
+      })
+      return []
+    }
+  }
+
+  /**
+   * Read a group's site: its URL from SharePoint's group site manager (Microsoft Graph's
+   * `groups/{id}/sites/root` needs `Sites.Read.All`, which the solution does not ask for), then
+   * its hub association and the custom actions on its web.
+   *
+   * @returns Nothing when the group has no ready site
+   */
+  private async _probeGroupSite(groupId: string): Promise<IGroupSiteProbe | undefined> {
+    const hubUrl = this._spfxContext.pageContext.web.absoluteUrl
+    const response = await SPQueryable([
+      this._sp.web,
+      `${hubUrl}/_api/GroupSiteManager/GetSiteStatus?groupId='${groupId}'`
+    ])<any>()
+    const status = response?.GetSiteStatus ?? response
+    // 2 is `Ready`: a site still being provisioned has no URL to read from.
+    if (status?.SiteStatus !== 2 || !status?.SiteUrl) return undefined
+    const sp = spfi(status.SiteUrl).using(SPFx(this._spfxContext))
+    const site = await sp.site.select('Id', 'HubSiteId')<{ Id: string; HubSiteId: string }>()
+    const customActions =
+      await sp.web.userCustomActions.select('ClientSideComponentId')<
+        { ClientSideComponentId?: string }[]
+      >()
+    return {
+      url: status.SiteUrl,
+      siteId: site.Id,
+      hubSiteId: site.HubSiteId,
+      customActionComponentIds: customActions.map((action) => action.ClientSideComponentId ?? '')
+    }
   }
 
   /**
