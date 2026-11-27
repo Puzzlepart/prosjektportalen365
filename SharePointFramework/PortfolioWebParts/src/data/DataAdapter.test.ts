@@ -22,6 +22,14 @@ jest.mock('@pnp/core', () => {
     get: (target, prop) => (prop === 'PnPClientStorage' ? PnPClientStorage : target[prop])
   })
 })
+// `clean-deep` is a function the adapter imports as a namespace. TypeScript's CommonJS output
+// wraps a namespace import in an object unless the module says it is an ES module, so the
+// function says so here and stays one, as it is in the bundle.
+jest.mock('clean-deep', () => {
+  const actual = jest.requireActual('clean-deep')
+  const cleanDeep = typeof actual === 'function' ? actual : actual.default
+  return Object.assign((...args: any[]) => cleanDeep(...args), { __esModule: true })
+})
 
 import strings from 'PortfolioWebPartsStrings'
 import { clearProjectsCache, format, groupLatestReportBySeries } from 'pp365-shared-library'
@@ -82,8 +90,9 @@ const CARD_FIELDS = {
  * `requests` records the selects and the field reads.
  *
  * @param fieldsReadable Whether the list's fields can be read
+ * @param hubHasEntry Whether the Projects list has the project's entry: not for a shielded one
  */
-function adapterOnHub(fieldsReadable = true) {
+function adapterOnHub(fieldsReadable = true, hubHasEntry = true) {
   const requests = { selects: [] as string[][], fieldReads: 0 }
   const isPerson = (name: string) => PROJECT_LIST_FIELDS[name] === 'User'
   const isSelectable = (name: string) =>
@@ -103,11 +112,13 @@ function adapterOnHub(fieldsReadable = true) {
       async *[Symbol.asyncIterator]() {
         const invalid = selected.find((name) => !isSelectable(name))
         if (invalid) throw new Error(`The field or property '${invalid}' cannot be selected.`)
-        yield [
-          Object.fromEntries(
-            selected.filter((name) => name in PROJECT).map((name) => [name, PROJECT[name]])
-          )
-        ]
+        yield hubHasEntry
+          ? [
+              Object.fromEntries(
+                selected.filter((name) => name in PROJECT).map((name) => [name, PROJECT[name]])
+              )
+            ]
+          : []
       }
     }
     return query
@@ -149,6 +160,29 @@ function adapterOnHub(fieldsReadable = true) {
 
 /** Every field the adapter has asked the Projects list's items for. */
 const selected = (requests: { selects: string[][] }) => ([] as string[]).concat(...requests.selects)
+
+/**
+ * Search as SharePoint answers a query: a row has the properties the query selects that the item
+ * has, each under the name the query gives it first. The site's address asked for as `SPWebURL`
+ * comes back as `SPWebURL`, and is not there as `SPWebUrl`.
+ *
+ * @param itemsOf The items a query template finds, by the index's names for their properties
+ */
+function searchAs(itemsOf: (queryTemplate: string) => Record<string, any>[]) {
+  return jest.fn((query: any) => {
+    const names: string[] = query.SelectProperties ?? []
+    const results = itemsOf(`${query.QueryTemplate}`).map((item) => {
+      const row: Record<string, any> = {}
+      for (const name of names) {
+        const property = Object.keys(item).find((key) => key.toLowerCase() === name.toLowerCase())
+        const given = Object.keys(row).some((key) => key.toLowerCase() === name.toLowerCase())
+        if (property && !given) row[name] = item[property]
+      }
+      return row
+    })
+    return Promise.resolve({ PrimarySearchResults: results, TotalRows: results.length })
+  })
+}
 
 beforeEach(() => {
   clearProjectsCache()
@@ -383,8 +417,7 @@ describe.each(ROW_BUILDERS)('%s, for the status report column', (builder) => {
 
   /**
    * Each row's title and report id, as the builder makes the rows of these projects and reports.
-   * `_fetchDataForView` is stubbed with what it would give: it searches, and the `clean-deep` it
-   * calls is a namespace import, which is no function in the CommonJS build Jest runs.
+   * `_fetchDataForView` is stubbed with what it would give: it searches.
    */
   const rowsOf = async (projects: Record<string, any>[], reports: Record<string, any>[]) => {
     const { adapter } = adapterOnHub()
@@ -454,5 +487,70 @@ describe.each(ROW_BUILDERS)('%s, for the status report column', (builder) => {
       ['Beta', undefined],
       ['Gamma', undefined]
     ])
+  })
+})
+
+// Search names a property in its answer as the query names it. The stand-ins above answer by the
+// names the code reads, so a query that asked for the site's address under another name passed
+// them: in a tenant the hub's project list found no shielded project.
+describe('shielded projects, as search answers the queries for them', () => {
+  const ALFA = 'aaaaaaaa-0000-0000-0000-000000000001'
+  const BETA = 'bbbbbbbb-0000-0000-0000-000000000002'
+  const hubUrl = 'https://contoso.sharepoint.com/sites/portefolje'
+  const alfaUrl = 'https://contoso.sharepoint.com/sites/alfa'
+  const shieldedUrl = 'https://contoso.sharepoint.com/sites/skjermet'
+
+  /** Beta is shielded: its properties item is on its own site. */
+  const BETA_ITEM = {
+    Title: 'Beta',
+    GtSiteIdOWSTEXT: BETA,
+    SiteId: BETA,
+    SPWebUrl: shieldedUrl,
+    Path: `${shieldedUrl}/Lists/Properties/DispForm.aspx?ID=1`
+  }
+
+  it("finds the sites of the hub's shielded projects, for the project list and the aggregations", async () => {
+    const { adapter } = adapterOnHub()
+    ;(adapter as any)._sp.search = searchAs(() => [BETA_ITEM])
+    expect(await (adapter as any)._findShieldedProjects('hub-1')).toEqual([shieldedUrl])
+  })
+
+  it("names a shielded project's own site in the insight group's rows, where the information panel reads the project", async () => {
+    const { adapter } = adapterOnHub()
+    ;(adapter as any)._sp.search = searchAs((query) => {
+      // The insight group may read Beta's lists for project data, and not open its site.
+      if (query.includes('contentclass:STS_Site')) {
+        return [{ Title: 'Alfa', SiteId: ALFA, Path: alfaUrl, SPWebUrl: alfaUrl }]
+      }
+      // No report is published.
+      if (query.includes('0x010022252E35737A413FB56A1BA53862F6D5')) return []
+      return [
+        { Title: 'Alfa', GtSiteIdOWSTEXT: ALFA, SiteId: 'hub-1', SPWebUrl: hubUrl },
+        BETA_ITEM
+      ]
+    })
+    const { items } = await adapter.fetchDataForManagerView(
+      { searchQuery: 'ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*' } as any,
+      { columns: [{ fieldName: 'Title' }], refiners: [] } as any,
+      'hub-1'
+    )
+    expect(items.map((item) => [item.Title, item.ProjectWebUrl, item.SPWebUrl])).toEqual([
+      ['Alfa', undefined, alfaUrl],
+      ['Beta', shieldedUrl, undefined]
+    ])
+  })
+
+  it("reads the card of a shielded project from its own site, which the hub's list has no entry for", async () => {
+    const { adapter } = adapterOnHub(true, false)
+    ;(adapter as any)._sp.search = searchAs(() => [
+      { Title: 'Beta', SiteId: BETA, SPWebUrl: shieldedUrl, Path: shieldedUrl }
+    ])
+    const readItem = jest
+      .spyOn(adapter as any, '_fetchShieldedProjectItem')
+      .mockResolvedValue({ Id: 1, Title: 'Beta', GtSiteId: BETA })
+    const project = await adapter.fetchEnrichedProject(BETA, undefined, CARD_FIELDS)
+    expect(readItem).toHaveBeenCalledWith(shieldedUrl, expect.any(Array))
+    expect(project.title).toBe('Beta')
+    expect(project.hasUserAccess).toBe(true)
   })
 })

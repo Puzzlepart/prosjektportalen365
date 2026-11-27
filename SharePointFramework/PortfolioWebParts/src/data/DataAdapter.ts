@@ -428,10 +428,13 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   ) {
     // eslint-disable-next-line prefer-const
     let [{ results: projects, managedProperties }, sites, statusReports] = await Promise.all([
+      // `SiteId` and `SPWebUrl` are the site the project's item is on: the hub for an entry in
+      // its list, the project's own site for a shielded project (`getShieldedProjectWebUrl`).
       this._fetchItemsForView(view, [
         ...configuration.columns.map((f) => f.fieldName),
         siteIdProperty,
-        'SiteId'
+        'SiteId',
+        'SPWebUrl'
       ]),
       this._fetchItems(`DepartmentId:{${siteId}} contentclass:STS_Site`, [
         'Path',
@@ -854,6 +857,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   /**
    * The sites of the shielded projects the user may read, found by their properties items, which
    * have the project content type. The hub's own entries have it too, and are left out by site.
+   * The site's address is asked for as `SPWebUrl`, the name it is read by (see `_fetchItems`).
    *
    * @param siteId The hub's site ID
    */
@@ -861,7 +865,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     try {
       const results = await this._fetchItems(
         `DepartmentId:{${siteId}} ContentTypeId:${PROJECT_CONTENT_TYPE_ID}* -SiteId:${siteId}`,
-        ['SiteId']
+        ['SiteId', 'SPWebUrl']
       )
       return _.uniq(results.map((result) => result.SPWebUrl).filter(Boolean))
     } catch (error) {
@@ -1116,7 +1120,12 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       async () =>
         await Promise.all([
           getAllItems(list.items.select(...selectFields).filter(`GtSiteId eq '${siteId}'`)),
-          this._fetchItems(`SiteId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId']),
+          // `SPWebUrl`: where a shielded project's properties item is read, below.
+          this._fetchItems(`SiteId:${siteId} contentclass:STS_Site`, [
+            'Title',
+            'SiteId',
+            'SPWebUrl'
+          ]),
           this.fetchMemberGroups(),
           spHub.web.siteUsers.select('Id', 'Title', 'Email')()
         ]),
@@ -1223,6 +1232,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
   /**
    * Page through all search results, adding the source URL and identity fields.
+   *
+   * Search names a property in its answer as the query names it, in the spelling the query gives
+   * first: the site's address added here comes back as `SPWebURL`. A caller that reads it as
+   * `SPWebUrl` asks for it by that name in `selectProperties`.
    */
   private async _fetchItems(
     queryTemplate: string,
