@@ -49,7 +49,7 @@ import { TelemetryResolvedSiteType } from '../../telemetry/siteInfo'
 import { readSiteType } from '../../telemetry/siteType'
 import { normalizeGuid, TelemetryUsageSnapshot } from '../../telemetry/validate'
 import { DataService } from '../DataService'
-import { resolveHubUrl } from './resolveHubUrl'
+import { hasHubId, resolveHubUrl } from './resolveHubUrl'
 import {
   GetStatusReportsOptions,
   IPortalDataServiceConfiguration,
@@ -96,18 +96,18 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   public hubSiteId: string
 
   /**
-   * Whether the portal data service has access to the hub site. Set to `false` when the hub's URL
-   * cannot be found, or when the hub denies access to `Globale innstillinger`, the list everyone
-   * with any access to the hub reads (e.g. external users outside the group «Minimum
-   * lesetilganger på hub»).
+   * Whether the portal data service has access to the hub site. Set to `false` when the site has
+   * no hub, when the hub's URL cannot be found, or when the hub denies access to `Globale
+   * innstillinger`, the list everyone with any access to the hub reads (e.g. external users
+   * outside the group «Minimum lesetilganger på hub»).
    */
   public isAvailable: boolean = true
 
   /**
    * The HTTP status of the answer that took the hub out of reach: 401 or 403 when the hub denied
    * access to `Globale innstillinger`, or the status of a lookup of the hub that failed. It is
-   * `undefined` while the hub is available, and when nothing answered with a status (the hub's
-   * URL was not found).
+   * `undefined` while the hub is available, and when nothing answered with a status (the site has
+   * no hub, or the hub's URL was not found).
    *
    * The service swallows that answer, so a consumer that throws its own error for a hub out of
    * reach has nothing to tell why. Given this status (`errorWithStatus`), the error is counted by
@@ -289,7 +289,19 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       const pageContext = this._configuration.spfxContext.pageContext
       this.hubSiteId = pageContext?.legacyPageContext?.hubSiteId || ''
       const storage = new PnPClientStorage().local
-      const key = `hubsite_${(this.hubSiteId ?? '').replace(/-/g, '')}_url`
+      if (!hasHubId(this.hubSiteId)) {
+        // A site without a hub has none to look up. Before 1.16.0 it was looked up all the same,
+        // search answered the empty id with any address, and that address was stored for a year
+        // as the hub of every site without one.
+        storage.delete('hubsite__url')
+        Logger.write(
+          '(PortalDataService) (onInit) The site has no hub. Marking portal as unavailable.',
+          LogLevel.Info
+        )
+        this._markUnavailable()
+        return
+      }
+      const key = `hubsite_${this.hubSiteId.replace(/-/g, '')}_url`
       const resolve = () =>
         resolveHubUrl({
           webUrl: pageContext.web.absoluteUrl,

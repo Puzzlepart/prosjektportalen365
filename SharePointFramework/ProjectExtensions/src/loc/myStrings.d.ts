@@ -90,6 +90,8 @@ declare interface IProjectExtensionsStrings {
   IdeaDecisionStatusApprovedAndSynced: string
   InvalidLanguageErrorMessage: string
   InvalidLanguageErrorStack: string
+  InvalidPageLanguageErrorMessage: string
+  InvalidPageLanguageErrorStack: string
   IsHubSiteErrorMessage: string
   IsHubSiteErrorStack: string
   Library: string

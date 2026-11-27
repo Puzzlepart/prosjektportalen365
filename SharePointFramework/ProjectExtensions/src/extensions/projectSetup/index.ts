@@ -21,6 +21,7 @@ import {
   format,
   getId,
   renderReact,
+  supportedLocalesMap,
   unmountReact
 } from 'pp365-shared-library'
 import {
@@ -46,7 +47,7 @@ import {
 } from '../../components'
 import { ITaskProgress } from '../../components/ProgressDialog/types'
 import { ProjectSetupError } from './ProjectSetupError'
-import { NAVIGATION_NODES_STORAGE_KEY } from './constants'
+import { NAVIGATION_NODES_STORAGE_KEY, SKIP_ALREADY_SETUP_KEY } from './constants'
 import { deleteCustomizer } from './deleteCustomizer'
 import { isAddedBefore } from './listContentRecord'
 import { siteTypeAfterSetup, trackSetupCheckFailure, trackSetupStopped } from './setupTelemetry'
@@ -87,6 +88,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     try {
       this._isSetup = await this._isProjectSetup()
       this._validation = await this._validateProjectSetup()
+      // Whether the session says the user asked for the setup of a project that is set up already.
+      let setUpAgain = false
 
       switch (this._validation) {
         case ProjectSetupValidation.NotSiteAdmin: {
@@ -137,9 +140,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           )
         }
         case ProjectSetupValidation.AlreadySetup: {
-          const skipViaSession = sessionStorage.getItem('pp_skipAlreadySetupCheck') === 'true'
+          const skipViaSession = sessionStorage.getItem(SKIP_ALREADY_SETUP_KEY) === 'true'
           if (skipViaSession) {
-            sessionStorage.removeItem('pp_skipAlreadySetupCheck')
+            sessionStorage.removeItem(SKIP_ALREADY_SETUP_KEY)
           }
           Logger.write(
             `(ProjectSetup) AlreadySetup check: forceTemplate='${this.properties.forceTemplate}', skipAlreadySetupCheck=${this.properties.skipAlreadySetupCheck}, skipViaSession=${skipViaSession}`,
@@ -156,23 +159,44 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
               strings.ProjectAlreadySetupStack
             )
           }
+          setUpAgain = skipViaSession
         }
       }
 
-      await this._removeAlternativeLanguages()
-
-      void this._initializeSetup({
-        sp: this.sp,
-        web: this.sp.web,
-        webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
-        templateExcludeHandlers: ['Hooks'],
-        context: this.context,
-        properties: this.properties
-      })
+      await this._startInSiteLanguage(setUpAgain)
     } catch (error) {
       trackSetupCheckFailure(error)
       this._renderErrorDialog({ error, showStackAsSubText: true })
     }
+  }
+
+  /**
+   * Starts the setup on a page whose strings are in the site's language. A page that is not
+   * there yet reloads instead (the alternative languages are removed first, when the site has
+   * them), and the setup starts on the page that comes back.
+   *
+   * @param setUpAgain Whether the user asked for the setup of a project that is set up already,
+   * on this page or on the one that reloaded into it. The session tells the page a reload comes
+   * back to, which would ask again, and keeps nothing of it when no page follows.
+   */
+  private async _startInSiteLanguage(setUpAgain = false): Promise<void> {
+    if (setUpAgain) sessionStorage.setItem(SKIP_ALREADY_SETUP_KEY, 'true')
+    let isReloading = false
+    try {
+      isReloading = (await this._removeAlternativeLanguages()) || this._reloadIntoSiteLanguage()
+    } finally {
+      if (setUpAgain && !isReloading) sessionStorage.removeItem(SKIP_ALREADY_SETUP_KEY)
+    }
+    if (isReloading) return
+
+    void this._initializeSetup({
+      sp: this.sp,
+      web: this.sp.web,
+      webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
+      templateExcludeHandlers: ['Hooks'],
+      context: this.context,
+      properties: this.properties
+    })
   }
 
   /**
@@ -548,15 +572,11 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       },
       intent: props.error['messageType'],
       onSetupClick: () => {
-        void this._initializeSetup({
-          sp: this.sp,
-          web: this.sp.web,
-          webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
-          templateExcludeHandlers: ['Hooks'],
-          context: this.context,
-          properties: this.properties
-        })
         this._unmount(placeholder)
+        // The way `onInit` starts it, and with what stops it shown the same way.
+        void this._startInSiteLanguage(true).catch((error) =>
+          this._renderErrorDialog({ error, showStackAsSubText: true })
+        )
       }
     })
     renderReact(element, placeholder)
@@ -861,16 +881,38 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     }
     if (!isSiteAdmin) return ProjectSetupValidation.NotSiteAdmin
     if (!groupId) return ProjectSetupValidation.NoGroupId
-    if (this.context.pageContext.web.language !== 1044) {
-      const { Language } = await this._portalDataService.web.select('Language')()
-      if (Language !== this.context.pageContext.web.language) {
-        return ProjectSetupValidation.InvalidWebLanguage
-      }
-    }
+    // Before the hub's language is read: a new site may not have its hub yet, and has no hub
+    // to compare its language with.
     if (!hubSiteId) return ProjectSetupValidation.NoHubConnection
     if (siteId.includes(hubSiteId)) return ProjectSetupValidation.IsHubSite
+    const hubLanguage = await this._getHubLanguage()
+    if (hubLanguage !== undefined && hubLanguage !== this.context.pageContext.web.language) {
+      return ProjectSetupValidation.InvalidWebLanguage
+    }
     if (this._isSetup) return ProjectSetupValidation.AlreadySetup
     return ProjectSetupValidation.Ready
+  }
+
+  /**
+   * Reads the language of the hub, which the site must share whatever the language is: the setup
+   * finds the hub's lists by their titles in the language of the site.
+   *
+   * @returns `undefined` when the hub is out of reach or does not answer, so the setup compares
+   * nothing and goes on
+   */
+  private async _getHubLanguage(): Promise<number | undefined> {
+    // Out of reach, the service's web is the site's own.
+    if (!this._portalDataService.isAvailable) return undefined
+    try {
+      const { Language } = await this._portalDataService.web.select('Language')()
+      return Language
+    } catch (error) {
+      Logger.write(
+        `(ProjectSetup) Could not read the language of the hub: ${error?.message}`,
+        LogLevel.Warning
+      )
+      return undefined
+    }
   }
 
   private _unmount(container: HTMLElement): void {
@@ -908,17 +950,62 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
+   * Makes sure the page's strings are in the site's language before the setup reads the hub. The
+   * setup finds the hub's lists by their titles from `SharedResources`, which SPFx loads in the
+   * page's UI language, and the hub has them in the language the site must have. A page of a new
+   * site can come in another UI language than the site's (seen right after the alternative
+   * languages are removed), and the hub then answers that «Project Extensions» does not exist.
+   * One reload is tried; a page still in another language gets an error that says so.
+   *
+   * The language of the strings is compared, not the page's: for a UI language the solution has
+   * no strings for, SPFx loads the English ones, and an English site sets up with those.
+   *
+   * @returns Whether the page is reloading, and the setup must not start
+   */
+  private _reloadIntoSiteLanguage(): boolean {
+    const { web, site, cultureInfo } = this.context.pageContext
+    const reloadedKey = `pp_languageReload_${site.id.toString()}`
+    const siteLocale = supportedLocalesMap.get(web.language)
+    const pageLocale = cultureInfo?.currentUICultureName?.toLowerCase()
+    // The manifest's `defaultPath` is the English file: SPFx takes it for every other language.
+    const stringsLocale = Array.from(supportedLocalesMap.values()).includes(pageLocale)
+      ? pageLocale
+      : 'en-us'
+    if (!siteLocale || !pageLocale || stringsLocale === siteLocale) {
+      sessionStorage.removeItem(reloadedKey)
+      return false
+    }
+    Logger.write(
+      `(ProjectSetup) The page is in ${pageLocale} with strings in ${stringsLocale}, the site in ${siteLocale}.`,
+      LogLevel.Warning
+    )
+    if (sessionStorage.getItem(reloadedKey) === 'true') {
+      sessionStorage.removeItem(reloadedKey)
+      throw new ProjectSetupError(
+        'InvalidPageLanguage',
+        strings.InvalidPageLanguageErrorMessage,
+        strings.InvalidPageLanguageErrorStack
+      )
+    }
+    sessionStorage.setItem(reloadedKey, 'true')
+    window.location.reload()
+    return true
+  }
+
+  /**
    * Disables multilingual features for site admins and reloads so setup uses the site's language.
    * A session flag allows the next run to record the operation in the hub log.
+   *
+   * @returns Whether the page is reloading, and the setup must not start
    */
-  private async _removeAlternativeLanguages(): Promise<void> {
+  private async _removeAlternativeLanguages(): Promise<boolean> {
     try {
       if (!this.context.pageContext.legacyPageContext.isSiteAdmin) {
         Logger.write(
           '(ProjectSetup) User is not a site admin, skipping alternative language removal.',
           LogLevel.Info
         )
-        return
+        return false
       }
 
       const webInfo = await this.sp.web.select('Language', 'IsMultilingual')()
@@ -933,7 +1020,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           '(ProjectSetup) Site is not configured as multilingual, no alternative languages to remove.',
           LogLevel.Info
         )
-        return
+        return false
       }
 
       this._renderProgressDialog({
@@ -969,6 +1056,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         LogLevel.Info
       )
       window.location.reload()
+      return true
     } catch (error) {
       Logger.write(
         `(ProjectSetup) Failed to remove alternative languages: ${error.message}`,
@@ -977,6 +1065,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
       const progressDialog = this._getPlaceholder('ProgressDialog')
       this._unmount(progressDialog)
+      return false
     }
   }
 

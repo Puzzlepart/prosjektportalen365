@@ -2,6 +2,22 @@
 
 Sjekk ut [release notes](./releasenotes/1.15.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
+## 1.16.0 - TBA
+
+### Ny funksjonalitet
+
+### Forbedringer
+
+### Feilrettinger
+
+- Rettet en feil i oppsettveiviseren hvor oppsettet av et nytt prosjektområde noen ganger stoppet med at listen «Project Extensions» ikke finnes på huben. Feilen kom når siden ble vist på et annet språk enn områdets. Oppsettet sjekker nå språket før det starter, laster siden på nytt én gang om nødvendig, og sier fra med en egen melding hvis siden fortsatt er på et annet språk [#1808](https://github.com/Puzzlepart/prosjektportalen365/pull/1808)
+- Rettet en feil i oppsettveiviseren hvor et norsk område knyttet til en engelsk hub ikke ble avvist, og oppsettet stoppet med at listen «Prosjekttillegg» ikke finnes på huben. Området får nå meldingen om at språket må være det samme som på hubområdet, og meldingen sier ikke lenger at området må være norsk [#1808](https://github.com/Puzzlepart/prosjektportalen365/pull/1808)
+- Rettet en feil hvor `Gå til maloppsett` i dialogen «Prosjektet er allerede satt opp» startet oppsettet uten å fjerne alternative språk og uten språksjekken, slik at oppsettet kunne stoppe med at en liste ikke finnes på huben [#1808](https://github.com/Puzzlepart/prosjektportalen365/pull/1808)
+- Rettet en feil i oppsettveiviseren hvor et engelsk område som ennå ikke var koblet til en hub, fikk «Unexpected token '<' … is not valid JSON» i stedet for advarselen om at området ikke er koblet til et hubområde [#1808](https://github.com/Puzzlepart/prosjektportalen365/pull/1808)
+- Rettet en feil hvor et område som ikke er koblet til et hubområde, fikk en tilfeldig adresse fra søk lagret som hubområde i nettleseren i ett år, slik at webdeler og utvidelser lette etter hubens lister på feil sted. Slike områder slår ikke lenger opp noe hubområde, og en adresse som er lagret fra før, fjernes [#1808](https://github.com/Puzzlepart/prosjektportalen365/pull/1808)
+
+---
+
 ## 1.15.0 - 19.11.2026
 
 ### Ny funksjonalitet
