@@ -1,35 +1,37 @@
-import { TableRowId } from '@fluentui/react-components'
+import strings from 'ProjectExtensionsStrings'
+import { format } from 'pp365-shared-library'
 import { useState } from 'react'
 import { useProjectSetupDialogContext } from '../context'
 import { ON_EXTENSIONS_CHANGED } from '../reducer'
-import { getSelectedCountText } from '../selectedCountText'
+import { SEARCH_MIN_ITEMS } from '../types'
+import { useItemOrder } from '../useItemOrder'
 import { useSearchAnnouncement } from '../useSearchAnnouncement'
-import { useColumns } from './useColumns'
 
 /** Filters and ranks available extensions while retaining mandatory selections. */
 export function useExtensionsSection() {
   const context = useProjectSetupDialogContext()
   const [searchTerm, setSearchTerm] = useState('')
 
-  const cloud = context.state.selectedTemplate?.isCloudTemplate
-    ? context.state.resolvedCloudTemplate
-    : undefined
-  const allItems = (cloud ? cloud.extensions : context.props.data.extensions).filter(
-    (ext) => !ext.hidden
-  )
+  const template = context.state.selectedTemplate
+  // A cloud template brings its own extensions, known once its package has been read.
+  const available = !template
+    ? []
+    : template.isCloudTemplate
+      ? (context.state.resolvedCloudTemplate?.extensions ?? [])
+      : (context.props.data.extensions ?? [])
+  const allItems = available.filter((ext) => !ext.hidden)
 
   const mandatoryKeys = new Set(
-    allItems
-      .filter((item) => item.isMandatoryForTemplate(context.state.selectedTemplate))
-      .map((item) => String(item.key))
+    allItems.filter((item) => item.isMandatoryForTemplate(template)).map((item) => String(item.key))
   )
 
   const selectedKeys = new Set(context.state.selectedExtensions.map((e) => String(e.key)))
 
-  const rank = (item: { key: string | number }) =>
-    mandatoryKeys.has(String(item.key)) ? 0 : selectedKeys.has(String(item.key)) ? 1 : 2
-  const sortedItems = [...allItems].sort(
-    (a, b) => rank(a) - rank(b) || a.text.localeCompare(b.text, 'nb')
+  const sortedItems = useItemOrder(
+    allItems,
+    (item) =>
+      mandatoryKeys.has(String(item.key)) ? 0 : selectedKeys.has(String(item.key)) ? 1 : 2,
+    `${template?.id}|${context.state.resolvedCloudTemplate?.templateId}`
   )
 
   const items = searchTerm
@@ -40,10 +42,6 @@ export function useExtensionsSection() {
       )
     : sortedItems
 
-  const selectedRowIds = new Set<TableRowId>(
-    context.state.selectedExtensions.map((e) => String(e.key))
-  )
-
   const onSelectionChange = (selectedIds: (string | number)[]) => {
     const newSelection = new Set(selectedIds.map(String))
     mandatoryKeys.forEach((key) => newSelection.add(key))
@@ -51,25 +49,27 @@ export function useExtensionsSection() {
     context.dispatch(ON_EXTENSIONS_CHANGED(selectedItems))
   }
 
-  const columns = useColumns(mandatoryKeys)
+  const onToggle = (key: string, checked: boolean) =>
+    onSelectionChange(
+      checked ? [...selectedKeys, key] : [...selectedKeys].filter((selected) => selected !== key)
+    )
 
   // Hidden selections are applied but never listed, so they are not counted.
-  const visibleSelectedCount = context.state.selectedExtensions.filter(
-    (item) => !item.hidden
-  ).length
+  const visibleSelectedCount = allItems.filter((item) => selectedKeys.has(String(item.key))).length
 
-  const selectedCountText = getSelectedCountText(visibleSelectedCount)
+  const countText = format(strings.SelectedOfTotalLabel, visibleSelectedCount, allItems.length)
   useSearchAnnouncement(searchTerm, items.length, allItems.length)
 
   return {
     items,
-    columns,
-    selectedRowIds,
+    selectedKeys,
     onSelectionChange,
+    onToggle,
     searchTerm,
     onSearch: setSearchTerm,
-    selectedCountText,
-    // What the template requires stays selected; Tab into the list starts after it.
+    showSearch: allItems.length > SEARCH_MIN_ITEMS,
+    countText,
+    // What the template requires stays selected.
     lockedKeys: mandatoryKeys
   }
 }

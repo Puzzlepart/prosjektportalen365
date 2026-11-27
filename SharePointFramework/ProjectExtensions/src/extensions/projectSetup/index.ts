@@ -515,7 +515,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
               )
             )
           },
-          validation: this._validation
+          validation: this._validation,
+          onCheckGroupMembership: () => this._isGroupMember()
         })
         renderReact(element, placeholder)
       }
@@ -838,6 +839,16 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     }
   }
 
+  /**
+   * Whether Microsoft 365 lists the current user as a member of the site's group. On a new site
+   * it takes some minutes to, so the setup dialog asks again on the user's request.
+   */
+  private async _isGroupMember(): Promise<boolean> {
+    const { groupId } = this.context.pageContext.legacyPageContext
+    const members = await msgraph.Get<any[]>(`groups/${groupId}/members`)
+    return members.some(({ mail }) => mail === this.context.pageContext.user.email)
+  }
+
   /** Determines setup eligibility from site type, group membership, language and hub connection. */
   private async _validateProjectSetup(): Promise<ProjectSetupValidation> {
     const { isSiteAdmin, groupId, hubSiteId, siteId } = this.context.pageContext.legacyPageContext
@@ -855,10 +866,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     })
     this._attachTelemetry()
 
-    const members = await msgraph.Get<any[]>(`groups/${groupId}/members`)
-    if (!members.some(({ mail }) => mail === this.context.pageContext.user.email)) {
-      return ProjectSetupValidation.UserNotGroupMember
-    }
+    if (!(await this._isGroupMember())) return ProjectSetupValidation.UserNotGroupMember
     if (!isSiteAdmin) return ProjectSetupValidation.NotSiteAdmin
     if (!groupId) return ProjectSetupValidation.NoGroupId
     if (this.context.pageContext.web.language !== 1044) {

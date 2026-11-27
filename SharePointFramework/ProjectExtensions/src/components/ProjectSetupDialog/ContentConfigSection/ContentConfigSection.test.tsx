@@ -1,111 +1,99 @@
 // The section's hook reads the setup dialog's context and data, so it is mocked before the
-// component is imported; the test controls the items, the selection and, in `mockAdded`, the items
-// the project has from an earlier run. The columns are the real ones, so a column that stops
-// rendering its text fails here.
-const mockOnSelectionChange = jest.fn()
-const mockOnSearch = jest.fn()
-const mockAdded = { keys: new Set<string>() }
+// component is imported; the test controls the items, the selection, the items the project has
+// from an earlier run and the Planner content waiting for the group membership. The group that
+// lists them is the real one.
+const mockOnToggle = jest.fn()
+const mockOnCheckMembership = jest.fn()
+const mockSection = {
+  added: new Set<string>(),
+  planner: new Set<string>(),
+  checking: false,
+  failed: false
+}
 jest.mock('./useContentConfigSection', () => ({
   useContentConfigSection: () => ({
     items: [
       { key: 'a', text: 'Alfa', subText: 'Beskrivelse av Alfa' },
       { key: 'b', text: 'Bravo', subText: 'Beskrivelse av Bravo' }
     ],
-    columns: jest.requireActual('./useColumns').useColumns(new Set(['a']), mockAdded.keys),
-    selectedRowIds: new Set(['a']),
-    onSelectionChange: mockOnSelectionChange,
+    selectedKeys: new Set(['a']),
+    onToggle: mockOnToggle,
     searchTerm: '',
-    onSearch: mockOnSearch,
-    selectedCountText: '1 valgt element',
+    onSearch: jest.fn(),
+    showSearch: false,
+    countText: '1 av 2 valgt',
     lockedKeys: new Set(['a']),
-    hasAddedItems: mockAdded.keys.size > 0
+    addedKeys: mockSection.added,
+    plannerKeys: mockSection.planner,
+    onCheckMembership: mockOnCheckMembership,
+    isCheckingMembership: mockSection.checking,
+    membershipCheckFailed: mockSection.failed
   })
 }))
 
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { axeComponent } from 'pp365-jest-config/lib/axe'
-import { layOutForTabster } from 'pp365-jest-config/lib/tabsterLayout'
 import strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
 import { ContentConfigSection } from './ContentConfigSection'
 
 describe('ContentConfigSection', () => {
   beforeEach(() => {
-    mockAdded.keys = new Set()
+    mockSection.added = new Set()
+    mockSection.planner = new Set()
+    mockSection.checking = false
+    mockSection.failed = false
+    mockOnCheckMembership.mockClear()
   })
 
-  it('lists the items with their descriptions', () => {
+  it('lists the items with their descriptions under its heading', () => {
     render(<ContentConfigSection />)
-    expect(screen.getByText('Alfa')).toBeInTheDocument()
-    expect(screen.getByText('Beskrivelse av Bravo')).toBeInTheDocument()
+    const group = screen.getByRole('group', { name: strings.ContentConfigSectionHeaderText })
+    expect(group).toHaveTextContent('Alfa')
+    expect(group).toHaveTextContent('Beskrivelse av Bravo')
+    expect(screen.getByRole('status')).toHaveTextContent('1 av 2 valgt')
     expect(screen.queryByText(strings.ContentConfigAddedText)).toBeNull()
     expect(screen.queryByText(strings.ContentConfigAddedInfoText)).toBeNull()
+    expect(screen.queryByText(strings.PlannerMembershipPendingMessage)).toBeNull()
   })
 
   it('marks the item the project has already, says why it is not selected, and breaks no rule axe can check', async () => {
-    mockAdded.keys = new Set(['b'])
+    mockSection.added = new Set(['b'])
     const { container } = render(<ContentConfigSection />)
     expect(screen.getAllByText(strings.ContentConfigAddedText)).toHaveLength(1)
     expect(screen.getByText(strings.ContentConfigAddedInfoText)).toBeInTheDocument()
     expect(await axeComponent(container)).toHaveNoViolations()
   })
 
-  it('shows the picked item as checked and reports a new pick by id', async () => {
+  it('reports a new pick by its key, and marks what cannot be left out as required', async () => {
     const user = userEvent.setup({ pointerEventsCheck: 0 })
     render(<ContentConfigSection />)
-    // The first checkbox selects all; the rest are one per row, in row order.
-    const checkboxes = screen.getAllByRole('checkbox')
-    expect(checkboxes[1]).toBeChecked()
-    expect(checkboxes[2]).not.toBeChecked()
-    await user.click(checkboxes[2])
-    expect(mockOnSelectionChange).toHaveBeenLastCalledWith(['a', 'b'])
+    expect(screen.getByTitle(strings.ContentConfigLockedTooltipText)).toHaveTextContent(
+      strings.RequiredItemLabel
+    )
+    await user.click(screen.getByRole('checkbox', { name: 'Bravo' }))
+    expect(mockOnToggle).toHaveBeenLastCalledWith('b', true)
   })
 
-  it('names its search box, and the lock on an item that cannot be left out (WCAG 1.1.1, 4.1.2)', () => {
-    render(<ContentConfigSection />)
-    expect(
-      screen.getByRole('searchbox', { name: strings.ContentConfigSectionSearchLabel })
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole('img', { name: strings.ContentConfigLockedTooltipText })
-    ).toBeInTheDocument()
-  })
-
-  it('tells how many are selected as a status, not as a button (WCAG 4.1.2, 4.1.3)', async () => {
+  it('says on the Planner content that the group membership is not registered, and asks again on request', async () => {
+    mockSection.planner = new Set(['b'])
+    const user = userEvent.setup({ pointerEventsCheck: 0 })
     const { container } = render(<ContentConfigSection />)
-    expect(screen.getByRole('status')).toHaveTextContent('1 valgt element')
-    expect(screen.queryByRole('button', { name: '1 valgt element' })).toBeNull()
+    expect(screen.getAllByText(strings.PlannerMembershipPendingMessage)).toHaveLength(1)
+    await user.click(
+      screen.getByRole('button', { name: strings.PlannerMembershipRecheckButtonText })
+    )
+    expect(mockOnCheckMembership).toHaveBeenCalledTimes(1)
     expect(await axeComponent(container)).toHaveNoViolations()
   })
 
-  it('takes Tab from the search box to the first item that can be changed, and the arrows on between the items (Puzzlepart/prosjektportalen365-testing#130)', async () => {
-    // Tab landed on «Velg alle» in the list's header, the next Tab left the list, and the items
-    // were reached only with the arrows. Alfa is required by the template, so the list starts at
-    // Bravo, the first item the user can change.
-    const restore = layOutForTabster()
-    try {
-      const user = userEvent.setup({ pointerEventsCheck: 0 })
-      render(<ContentConfigSection />)
-      screen.getByRole('searchbox').focus()
-      await user.tab()
-      expect(document.activeElement).toHaveAttribute('role', 'gridcell')
-      expect(document.activeElement).toHaveTextContent('Bravo')
-      await user.keyboard(' ')
-      expect(mockOnSelectionChange).toHaveBeenLastCalledWith(['a', 'b'])
-      await user.keyboard('{ArrowUp}')
-      expect(document.activeElement).toHaveTextContent('Alfa')
-      await user.keyboard('{ArrowDown}')
-      expect(document.activeElement).toHaveTextContent('Bravo')
-    } finally {
-      restore()
-    }
-  })
-
-  it('passes what is typed to the search', async () => {
-    const user = userEvent.setup({ pointerEventsCheck: 0 })
+  it('says so when the membership was asked for again and is still not registered', () => {
+    mockSection.planner = new Set(['b'])
+    mockSection.failed = true
     render(<ContentConfigSection />)
-    await user.type(screen.getByRole('searchbox'), 'A')
-    expect(mockOnSearch).toHaveBeenCalledWith('A')
+    expect(
+      screen.getByText((text) => text.includes(strings.PlannerMembershipStillPendingText))
+    ).toBeInTheDocument()
   })
 })

@@ -611,6 +611,11 @@ describe('ProjectSetup', () => {
     graph.members = [{ mail: 'ola@contoso.no' }]
     await projectSetup()
     expect(dialogs.setup.validation).toBe(ProjectSetupValidation.UserNotGroupMember)
+    // Microsoft 365 registers the membership of a new group after some minutes: asked again
+    // from the dialog, without loading the page.
+    expect(await dialogs.setup.onCheckGroupMembership()).toBe(false)
+    graph.members = [{ mail: USER }]
+    expect(await dialogs.setup.onCheckGroupMembership()).toBe(true)
   })
 
   it('offers the setup again, or the project, on a project that is set up already', async () => {

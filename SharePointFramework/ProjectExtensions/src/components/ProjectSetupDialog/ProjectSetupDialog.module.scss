@@ -4,65 +4,55 @@
   width: 850px !important;
   max-width: calc(100vw - 32px) !important;
 
+  // The one scrolling area: the template and both groups scroll together above the actions. With
+  // a height of its own on each group, the second row of a list was cut off without a scrollbar
+  // once the messages above had taken the room.
   .content {
-    min-height: auto;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-height: 0;
+    overflow-y: auto;
+    // Room for the focus outline of what lies against the scrolling area's edges.
+    padding: 2px 4px 2px 2px;
   }
 
   .subText {
-    margin-bottom: 12px;
-    color: #605e5c;
-    font-size: 14px;
-    font-weight: 400;
+    margin: 0;
+    color: var(--colorNeutralForeground2);
+    font-size: var(--fontSizeBase300);
   }
 
-  .configPane {
+  // Fluent gives the actions the body's last two columns; the summary beside the buttons needs
+  // the whole width.
+  :global(.fui-DialogActions) {
+    grid-column: 1 / 4;
+    justify-self: stretch;
+  }
+
+  .footer {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    min-height: 300px;
-    max-height: calc(70vh - 200px);
+    width: 100%;
+    // Marks where the scrolling area ends: a list cut off here goes on below.
+    padding-top: 12px;
+    border-top: 1px solid var(--colorNeutralStroke2);
 
-    .tabList {
-      flex-shrink: 0;
-      margin-bottom: 0;
-    }
-
-    .tabLabel {
-      display: inline-flex;
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      gap: 6px;
+      justify-content: flex-end;
+      gap: 8px;
+
+      .summary {
+        flex: 1 1 200px;
+        min-width: 0;
+        font-size: var(--fontSizeBase200);
+        color: var(--colorNeutralForeground2);
+      }
     }
-
-    .tabBadge {
-      margin-left: 4px;
-    }
-
-    .tabContent {
-      flex: 1;
-      overflow-y: auto;
-      position: relative;
-      min-height: 250px;
-      max-height: calc(70vh - 300px);
-    }
-
-    .emptyTabMessage {
-      padding: 20px 0;
-    }
-  }
-
-  .actions {
-    margin: 5px 0 0 0;
-    display: flex;
-    gap: 4px;
-  }
-
-  .hubAccessMessage {
-    margin: 0 0 10px 0;
-  }
-
-  .projectDataMessage {
-    margin: 0 0 10px 0;
   }
 }
 

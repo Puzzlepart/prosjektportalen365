@@ -23,10 +23,8 @@ interface ITemplateSelectDialogSectionProps extends HTMLProps<HTMLDivElement> {}
 /** Setup section accepting standard container attributes. */
 export type ProjectSetupDialogSectionComponent = FC<ITemplateSelectDialogSectionProps>
 
-/**
- * A tab of the setup's configuration: the extensions or the list content.
- */
-export type ProjectSetupConfigTab = 'extensions' | 'contentConfig'
+/** A group gets a search box only when it lists more items than this. */
+export const SEARCH_MIN_ITEMS = 8
 
 /** Available setup data, validation and submission handling for the wizard. */
 export interface IProjectSetupDialogProps extends IBaseDialogProps {
@@ -37,6 +35,12 @@ export interface IProjectSetupDialogProps extends IBaseDialogProps {
   tasks?: string[]
 
   validation?: ProjectSetupValidation
+
+  /**
+   * Asks again whether the user is a member of the site's group; Microsoft 365 takes some minutes
+   * to register it on a new site. Resolves to whether the user is a member now.
+   */
+  onCheckGroupMembership?: () => Promise<boolean>
 }
 
 /** Setup selections and asynchronous cloud-template resolution state. */

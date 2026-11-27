@@ -161,7 +161,6 @@ declare interface IProjectExtensionsStrings {
   SummaryTitle: string
   SummaryMessage: string
   SyncLocalProjectPropertiesListText: string
-  TemplateConfigMessage: string
   CloudTemplateBadgeText: string
   CloudTemplateBannerText: string
   CloudTemplateResolvingMessage: string
@@ -169,21 +168,15 @@ declare interface IProjectExtensionsStrings {
   CloudContentConfigKeyColumnMissing: string
   CloudTemplateResolveErrorMessage: string
   CloudTemplateNotCompatibleWarning: string
-  TemplateConfigConjunction: string
   DataGridSelectAllLabel: string
-  PlannerMemberWarningMessage: string
   ProjectSetupDialogInfoText: string
   ProjectSetupDialogSubmitButtonText: string
   ProjectSetupDialogTitle: string
   ProjectSetupDialogVersionTooltip: string
   ProjectTemplateSelectorSearchClearText: string
-  ProjectTemplateSelectorSearchPlaceholder: string
-  ProjectTemplateSelectorNoMatchText: string
   ProjectTemplateSelectorTitle: string
   ProjectTemplateSelectorNoTemplateLabel: string
   ProjectTemplateSelectorNoTemplateDescription: string
-  ProjectTemplateSelectorNoTemplateRadioLabel: string
-  ProjectTemplateSelectorSelectTemplateRadioLabel: string
   TemplateLibrarySelectModalTitle: string
   TemplateSelectorCommandTitle: string
   TemplateSelectorCommandDisabledTitle: string
@@ -194,8 +187,6 @@ declare interface IProjectExtensionsStrings {
   SaveButtonLabel: string
   CancelButtonLabel: string
   NoTemplateSelectedText: string
-  SelectedCountLabel: string
-  SelectedCountOneLabel: string
   MandatoryItemTooltipText: string
   ProgressAdvancedLogLabel: string
   ProgressTaskPendingText: string
@@ -205,8 +196,6 @@ declare interface IProjectExtensionsStrings {
   ProgressTaskWarningText: string
   ProgressStepCountText: string
   ProgressAdvancedLogDescription: string
-  ProjectTemplateSelectorModeLabel: string
-  ConfigTabSelectedLabel: string
   ExtensionsSectionSearchLabel: string
   ContentConfigSectionSearchLabel: string
   ContentConfigAddedText: string
@@ -238,6 +227,15 @@ declare interface IProjectExtensionsStrings {
   MigrateRiskActionsPartlyDone: string
   MigrateRiskActionsRefusedText: string
   MigrateRiskActionsRefusedAction: string
+  ProjectTemplateSelectorPlaceholder: string
+  SelectedOfTotalLabel: string
+  RequiredItemLabel: string
+  AboutSectionLabel: string
+  SetupSummaryLabel: string
+  PlannerMembershipPendingMessage: string
+  PlannerMembershipRecheckButtonText: string
+  PlannerMembershipConfirmedText: string
+  PlannerMembershipStillPendingText: string
 }
 
 declare module 'ProjectExtensionsStrings' {

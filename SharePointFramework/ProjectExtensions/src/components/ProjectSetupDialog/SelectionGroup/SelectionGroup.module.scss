@@ -1,0 +1,95 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+
+  .header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 8px;
+
+    .heading {
+      margin: 0;
+      font-size: var(--fontSizeBase400);
+      font-weight: var(--fontWeightSemibold);
+      line-height: var(--lineHeightBase400);
+    }
+
+    .info {
+      display: inline-flex;
+    }
+
+    .count {
+      margin-left: auto;
+      font-size: var(--fontSizeBase200);
+      color: var(--colorNeutralForeground2);
+      white-space: nowrap;
+    }
+  }
+
+  .empty,
+  .note {
+    margin: 0;
+    font-size: var(--fontSizeBase200);
+    color: var(--colorNeutralForeground2);
+  }
+
+  .search {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .items {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: 1px solid var(--colorNeutralStroke2);
+    border-radius: var(--borderRadiusMedium);
+
+    .item {
+      display: flex;
+      flex-direction: column;
+      padding: 4px 12px 8px 4px;
+
+      & + .item {
+        border-top: 1px solid var(--colorNeutralStroke2);
+      }
+
+      .checkbox {
+        align-self: flex-start;
+      }
+
+      // Fluent dims the label of a box that is not ticked, which reads as an item that cannot be
+      // chosen; the class twice to outrank its `:enabled:not(:checked) ~ label` rule.
+      .label.label {
+        color: var(--colorNeutralForeground1);
+        display: inline-flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px 8px;
+
+        .title {
+          font-weight: var(--fontWeightSemibold);
+        }
+      }
+
+      // Under the label's text: Fluent's indicator is 16px with 8px around it.
+      .description,
+      :global(.fui-MessageBar) {
+        margin: -4px 0 0 32px;
+      }
+
+      .description {
+        font-size: var(--fontSizeBase200);
+        line-height: var(--lineHeightBase200);
+        color: var(--colorNeutralForeground2);
+      }
+
+      :global(.fui-MessageBar) {
+        margin-top: 8px;
+      }
+    }
+  }
+}
